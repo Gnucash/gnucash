@@ -1,5 +1,9 @@
 ;;; $Id$
 ;;;;;;;;;;;  QIF Parsing  ;;;;;;;;;;;;;;
+
+(use-modules (ice-9 slib))
+(require 'hash-table)
+
 (define qif-txn-list '())
 
 (define qif-txn-structure 
@@ -79,14 +83,16 @@
     (display ")")
     (newline)
     (display "(define category-analysis '" outfile)
-    (hash-for-each (lambda (x) 
-		     (write x outfile)
+    (hash-for-each (lambda (key value)
+		     (write key outfile)
+                     (write value outfile)
 		     (newline outfile)) 
 		   category-analysis)
     (display ")" outfile)
     (display "(define category-analysis '")
-    (hash-for-each (lambda (x) 
-		     (write x)
+    (hash-for-each (lambda (key value)
+		     (write key)
+                     (write value)
 		     (newline)) 
 		   category-analysis)
     (display ")")

@@ -1,3 +1,307 @@
+2000-02-05  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/report/hello-world.scm: renamed from dummy.scm. Added
+	documentation to the source code and additional help text in the
+	report. This is intended to be an example for how to write reports.
+
+	* src/gnome/window-report.c (reportAnchorCB): use gnome_url_show
+	to display the anchors.
+
+	* src/gnome/window-help.c (helpAnchorCB): use gnome_url_show to
+	display the other anchor types.
+
+	* src/gnome/dialog-utils.c: removed tooltip setting function. I was
+	using tooltips the wrong way. Instead of having one tooltips object
+	for each tip, you use one tooltips object for each logical group of
+	tips, i.e., all the tips on a dialog. Also, changed the dialogs to
+	use this method.
+
+	* src/gnome/dialog-transfer.c: use labels with colons.
+
+2000-02-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/extensions.scm: removed cruft functions
+
+	* src/register/gnome/gnucash-item-list.c (gnc_item_list_select):
+ 	set the focus row to the selected row.
+
+	* src/register/gnome/combocell-gnome.c (ComboMV): auto-pop the
+ 	list on input, according to the option value below.
+
+	* src/scm/prefs.scm: added option to auto-raise register list on
+ 	input.
+
+2000-02-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/combocell-gnome.c (enterCombo): sort the list
+ 	before popping up.
+
+	* src/engine/Query.c: do num sorting using numerical values where
+ 	possible.
+
+	* src/register/gnome/gnucash-item-edit.c: added new functions for
+	cutting, copying, and pasting the clipboard. We have to do this
+	manually instead of relying in the gtk_entry, as it screws up the
+	selection handling.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_insert_cb):
+ 	fixed bug where new text was being copied incorrectly for
+ 	insertions longer than a character.
+
+2000-02-02  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c (compute_optimal_width):
+ 	return optimal width if possible
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_style_default_width): new function, compute optimal sheet
+ 	width
+
+	* src/gnome/option-util.c: interfaced with the guile option callback
+	mechanism.
+
+	* Changed all existing callbacks to use guile callbacks. Touched
+	many files.
+
+	* src/scm/options.scm: added an option change callback mechanism.
+
+2000-02-01  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/options.scm: new file. Moved the general options code
+	here. Modularized the options code.
+
+2000-01-31  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c: use the last date entered in the blank split
+	for the date of the new blank split.
+
+	* src/scm/prefs.scm: use hash for storing options
+
+2000-01-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/bootstrap.scm.in: deleted hash-for-each. This is defined
+	in slib2c6, which we are requiring anyway. Not the thunk for this
+	should accept two args: the key and the value.
+
+	* src/register/QuickFill.c: add sorting option to choose between
+	LIFO and alphabetic orders.
+
+2000-01-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/bootstrap.scm.in: Used Matt Martin's guile error catching
+	code to print errors from gnc:load.
+
+2000-01-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (xaccInitSplitRegister): set format of
+ 	price cell in stock registers to 4 decimal places.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_scroll_event):
+ 	new function. Do mouse wheel scrolling in gnome register.
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):
+ 	use printDate to find a date width using the current date style.
+	(gnucash_style_layout_init): use i18n'd string to set transfer
+	from field width.
+
+	* Removed uses of nana and dependencies on nana.
+
+	* src/scm/report/transaction-report.scm: change to handle new
+ 	reports.
+
+	* src/scm/report/dummy.scm: change to handle new reports.
+
+	* src/scm/report.scm: Change reports so that they have a function
+ 	which generates a new set of options. Change the report running
+ 	functions to accomodate this.
+
+	* src/FileDialog.c: avoid showing multiple error dialogs.
+
+	* src/guile/gfec.c (gfec_catcher): new file with functions for
+ 	running scheme code with error handlers. Grabbed this off the
+ 	guile faq and made a few mods.
+
+	* src/gnome/window-report.c: modify to use the new gfec routines.
+
+2000-01-27  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm
+	(tr-report-primary-key-op),(tr-report-primary-order-op)
+	(tr-report-secondary-key-op),(tr-report-secondary-order-op):
+	new options controlling sorting order for transaction report
+	display.
+	(gnc:tr-report-get-first-acc-name): get the name of the first
+	"other" account" of a split's transaction
+	(gnc:sort-predicate-component): return a predicate for comparing
+	two split-scm's on a certain component
+	(gnc:tr-report-make-sort-predicate): process sorting options,
+	return a corresponding sorting predicate
+	"Account Transactions" report: added sorting.
+
+2000-01-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (regRefresh): refresh the window name
+
+	* src/gnome/dialog-edit.c: Rob Merkel's patch to reparent accounts.
+
+	* src/engine/Account.c (xaccAccountHasAncestor): new function to
+	determine whether an account has another as an ancestor.
+
+	* src/gnome/account-tree.c (gnc_account_tree_set_filter): add a
+ 	filter function to an account tree to select a subset of accounts.
+
+	* src/engine/Query.c: some new functions for setting the date
+ 	ranges.
+
+	* src/gnome/window-register.c: add 'show earliest' and 'show
+ 	latest' options to the date range window.
+
+2000-01-25  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_init):
+ 	Initialize the fonts here.
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_sheet_style_compile): Use sheet->grid->normal_font for
+ 	all the computations.  style->fonts[][] is now only used for
+ 	drawing in gnucash-grid, etc. when it's non-NULL.
+
+2000-01-24  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c (xaccInitSplitRegister): make the action
+	cell accept strings not in the list.
+
+	* src/register/gnome/combocell-gnome.c (xaccComboCellSetStrict):
+	new function that determines whether the combo accepts strings
+	not in the list. Defaults to 'does not accept'.
+
+
+2000-01-23  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c: Many functions touched.
+  	Fairly extensive changes to how the layouts and dimensions are
+ 	handled.  We now lump together cursors which should have same
+ 	dimensions (e.g. all the single line cursors have the same layout
+ 	and dimension data).
+
+2000-01-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_key_press_event): oh, what a hack! The extra stuff
+ 	is to make sure the selection is changed appropriately according
+ 	to the key that is pressed. Some of the logic is extracted from
+ 	gtkentry.c so the behavior is similar. We have to do this because
+ 	the entry widget is not realized and thus does not change its
+ 	selection as usual. However, we can't realize it, see the
+ 	explanation below.
+
+	* src/register/gnome/combocell-gnome.c: added quickfilling
+
+	* src/register/quickfillcell.c (quick_modify): new code for gnome,
+	old code for motif. motif doesn't support the cursor position and
+	selection args.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_new): ok,
+ 	*don't* put the entry in a widget. We can't have it realized
+ 	because it screws up the selection changes during the insert/
+ 	delete callbacks. We're going to have to fake the other
+ 	functionality.
+
+	* src/register/QuickFill.c: make quickfill work on non-alphabet
+	characters.
+	(xaccGetQuickFillStr): new function search for a prefix match on
+	more than one character at a time.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_button_release_event): new function to track button
+ 	release for dragging purposes.
+	(gnucash_motion_event): new function for tracking mouse movement
+ 	and updating the selection region.
+	(gnucash_sheet_init): initialize top_block_offset
+	(gnucash_sheet_set_top_row): adjust the new top row to show as many
+	rows as possible.
+	(gnucash_sheet_vadjustment_value_changed): compute visible range
+	after adjusting top block in smooth scrolling.
+	(gnucash_sheet_compute_visible_range): start at the top_block_offset
+	(gnucash_sheet_update_adjustments): scroll faster
+
+2000-01-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_button_press_event):
+ 	if we're mousing in the current cell, don't bother going through
+ 	modify_update and all that jazz, but only if we are currently
+ 	editing. This makes sure the reconcile cell still gets its enters.
+
+	* src/register/gnome/gnucash-item-edit.c
+ 	(item_edit_set_cursor_pos): add option to extend selection.
+
+2000-01-20  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Fixed date bug, ensuring
+	"to" date is treated as a <= rather than a <.
+
+2000-01-20  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_new): put the
+	editing entry into a canvas item so it will get realized. It needs
+	to be realized for full functionality.
+	(gnucash_sheet_modify_current_cell): add new args to modify update.
+	(gnucash_sheet_insert_cb): new args for modify update
+	(gnucash_sheet_delete_cb): new args for modify update
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_destroy): only
+ 	disconnect if the editor hasn't been destroyed.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_activate_cursor_cell): added new args for enter
+ 	update. change entry widget appropriately.
+
+	* src/register/table-allgui.c (gnc_table_enter_update): added args
+ 	to set cursor position and highlited selection.
+
+	* src/scm/prefs.scm (gnc:save-options): truncate the options file
+ 	when opening.
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_draw_info):
+ 	calc regions for the highlited portion of the text.
+	(item_edit_draw): draw the hightlited portion of the text.
+
+2000-01-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/guile/gnucash.c (gnucash_lowlev_app_init): use DEBUG and PERR
+	instead of print(stderr, ...);
+
+	* src/scm/prefs.scm: new technique for saving options. Easier
+	to generalize to other option databases.
+
+	* src/gnome/window-html.c (gnc_html_load): set button states at
+	the beginning, in case report doesn't work.
+
+	* src/scm/report.scm: catch exceptions in executing the report
+
+	* src/gnome/window-report.c (reportJumpCB): report errors that occur
+	in executing the report.
+
+	* src/register/table-allgui.c (gnc_table_traverse_update): use the
+	return value consistently to indicate no move.
+
+	* src/scm/path.scm (gnc:make-home-dir): new function. creates gnc dir
+
+	* src/scm/main.scm: don't abort if user config file fails
+
+	* src/scm/prefs.scm: make options save to ~/.gnucash/config.auto
+
+	* src/gnome/dialog-options.c (gnc_option_create_account_widget):
+ 	if not multiple selection, use browse mode so user has to select
+ 	an account.
+	(gnc_option_set_ui_widget): when making account list widget, connect
+	the signals after the value has been set so the dialog isn't already
+	in a changed state.
+
+2000-01-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/bootstrap.scm.in: add a test for slib >= 2c6.
+
 2000-01-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-add.c (gnc_ui_accWindow_list_box_create): Put
@@ -32,6 +336,42 @@
  	the EXTRA-CMDS section of AC_OUTPUT so that config.status will
  	redo them. Don't bother defining GNC_RUNTIME_* vars as they are
 	not substituted using AC_OUTPUT.
+
+2000-01-15  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c (struct   _CellLayoutInfo):
+	Add new flags for attributes the user can change interactively.
+
+
+	* src/register/gnome/gnucash-style.c (compute_cell_origins_[xy]):
+	Precompute these since they stay fixed until dimensions change.
+
+	* src/register/gnome/gnucash-header.c (gnucash_header_draw):
+	Be sure rect.width is non-negative.  Also, we draw all the
+	rows in the header now.
+	(gnucash_header_set_arg): Remove the ARG_ROW argument.
+	For ARG_CURSOR_TYPE, only reconfigure the header
+	when the type changes.  This optimizes the drawing a bit.
+	(gnucash_header_reconfigure): We're drawing all rows now, so
+	use the proper height.  
+	(gnucash_header_event): Implement resizing of columns.  This is
+	a bit rough in places, because we have to take cell alignments
+	into account.  Need to work more on the styles.
+	(gnucash_header_draw): Support dynamic resizing in the header,
+	to give the user feedback during the resize.
+
+	* src/register/gnome/gnucash-grid.c (gnucash_grid_draw): Optimize
+	so it draws only the needed cells, not the entire row.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_init): Add a
+ 	compile time option for smooth vertical scrolling.  Later we can
+ 	add user selectable scrolling if we decide it's worth it.
+	(gnucash_sheet_make_cell_visible): support smooth scrolling.
+	(gnucash_sheet_update_adjustments): ditto
+	(gnucash_sheet_vadjustment_value_changed): ditto
+	(gnucash_sheet_create): ditto
+	(gnucash_sheet_y_pixel_to_block): New function.  Convert a canvas
+ 	y-coordinate to a virtual row.
 
 2000-01-14  Robert Graham Merkel  <rgmerk@mira.net>
 

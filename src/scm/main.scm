@@ -28,16 +28,20 @@
   ;;
   ;; Just load these since we might want to redefine them on the fly
   ;; and we're going to change this mechanism anyway...
-  (gnc:load "report/dummy.scm")
+  (gnc:load "report/hello-world.scm")
   (gnc:load "report/balance-and-pnl.scm")
   (gnc:load "report/transaction-report.scm")
+  (gnc:load "report/average-balance.scm")
 
-  ;; Load the system and user configs
+  ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))
       (gnc:shutdown 1))
 
-  (if (not (gnc:load-user-config-if-needed))
-      (gnc:shutdown 1))
+  ;; Load the user configs
+  (gnc:load-user-config-if-needed)
+
+  ;; Clear the change flags caused by loading the configs
+  (gnc:global-options-clear-changes)
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
@@ -51,6 +55,7 @@
       (begin
         (gnc:prefs-show-usage)
         (gnc:shutdown 0))))
+
 
 (define (gnc:shutdown exit-status)
   (gnc:debug "Shutdown -- exit-status: " exit-status)
@@ -85,6 +90,9 @@
   (if (pair? gnc:*command-line-files*)
       ;; You can only open single files right now...
       (gnc:ui-open-file (car gnc:*command-line-files*)))
+
+  ;; add a hook to save the user configs on shutdown
+  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
 
   (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
 

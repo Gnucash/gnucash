@@ -12,6 +12,9 @@
 (define (qif-split-update split field value)
 	((record-modifier qif-split-structure field) split value))
 
+(define (qif-split-get split field)
+        ((record-accessor qif-split-structure field) split))
+
 (define (create-qif-split-structure) 
   ((record-constructor qif-split-structure) #f #f #f #f))
 

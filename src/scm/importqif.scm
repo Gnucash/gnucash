@@ -37,8 +37,8 @@
 	  (display account-group) (newline)
 	  (let ((loadfun (lambda (x) (gnc:load x)))
 		(loadlist '("testbed.scm" "analytical-qifs.scm"
-			    "gc-import-qifs.scm"
-			    "qifutils.scm" "txn-create.scm"))) 
+			    "gc-import-qifs.scm" "qifutils.scm"
+			    "acc-create.scm" "txn-create.scm"))) 
 	    (for-each loadfun loadlist))
 	  (begin 
 	    (get-all-types)
@@ -57,9 +57,9 @@
 	  (display account-group) (newline)
 	  (let ((loadfun (lambda (x) (gnc:load x)))
 		(loadlist '("testbed.scm" "sstring-qif.scm"
+			    "qifutils.scm" "dates-qif.scm"
 			    "acc-create.scm"
 			    "txn-create.scm"
-			    "qifutils.scm" "dates-qif.scm"
 			    "split-qif.scm" "qifcats.scm"
 			    "parseqif.scm" "qifstate.scm"
 			    "qifstat.scm" "qif2gc.scm"

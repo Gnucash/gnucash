@@ -44,17 +44,21 @@ typedef struct _GNCOptionDB GNCOptionDB;
 
 typedef int GNCOptionDBHandle;
 
-typedef void (*OptionChangeCallback)(gpointer user_data);
+typedef void (*OptionChangeCallback)(void * user_data);
 
 /***** Prototypes ********************************************************/
 
-GNCOptionDB * gnc_option_db_new();
-void          gnc_option_db_init(GNCOptionDB *odb, SCM options);
+GNCOptionDB * gnc_option_db_new(SCM guile_options);
 void          gnc_option_db_destroy(GNCOptionDB *odb);
 
-void gnc_option_db_register_change_callback(GNCOptionDB *odb,
-                                            OptionChangeCallback callback,
-                                            gpointer data);
+SCM gnc_option_db_register_change_callback(GNCOptionDB *odb,
+                                           OptionChangeCallback callback,
+                                           void *data,
+                                           char *section,
+                                           char *name);
+
+void gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb,
+                                                 SCM callback_id);
 
 char * gnc_option_section(GNCOption *option);
 char * gnc_option_name(GNCOption *option);
@@ -108,6 +112,8 @@ char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
 
 void _gnc_option_db_register_option(GNCOptionDBHandle handle,
                                     SCM guile_option);
+
+void _gnc_option_invoke_callback(OptionChangeCallback callback, void *data);
 
 /* These should be in src/guile or src/g-wrap, but they use glib */
 

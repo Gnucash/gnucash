@@ -90,6 +90,7 @@
 \********************************************************************/
 
 #include <stdio.h>
+#include <time.h>
 
 #include "top-level.h"
 
@@ -118,6 +119,9 @@ struct _SRInfo
 
   /* The default account where new splits are added */
   Account *default_source_account;
+
+  /* The last date recorded in the blank split */
+  time_t last_date_entered;
 
   /* User data for users of SplitRegisters */
   void *user_data;
@@ -166,11 +170,17 @@ static Transaction * xaccSRGetTrans (SplitRegister *reg,
 static void
 xaccSRInitRegisterData(SplitRegister *reg)
 {
+  SRInfo *info;
+
   assert(reg != NULL);
 
   /* calloc initializes to 0 */
-  reg->user_data = calloc(1, sizeof(SRInfo));
-  assert(reg->user_data != NULL);
+  info = calloc(1, sizeof(SRInfo));
+  assert(info != NULL);
+
+  info->last_date_entered = time(NULL);
+
+  reg->user_data = info;
 }
 
 static void
@@ -1096,10 +1106,14 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 
    /* If the modified split is the "blank split", then it is now an
     * official part of the account. Set the blank split to NULL, so
-    * we can be sure of getting a new split.  */
+    * we can be sure of getting a new split. Also, save the date for
+    * the new blank split. */
    split = xaccTransGetSplit (trans, 0);
    if (split == info->blank_split)
+   {
      info->blank_split = NULL;
+     info->last_date_entered = xaccTransGetDate(trans);
+   }
 
    /* If the new transaction is different from the current,
     * commit the current and set the pending transaction to NULL. */
@@ -1583,7 +1597,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
       trans = xaccMallocTransaction ();
       xaccTransBeginEdit (trans, 1);
-      xaccTransSetDateToday (trans);
+      xaccTransSetDateSecs(trans, info->last_date_entered);
       xaccTransCommitEdit (trans);
       split = xaccTransGetSplit (trans, 0);
       info->blank_split = split;

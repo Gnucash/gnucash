@@ -36,13 +36,13 @@
 #include "dialog-utils.h"
 #include "messages.h"
 #include "util.h"
-
+#include "account-tree.h"
 
 /* From Account.c. One day, maybe this will be configurable. */
 extern int unsafe_ops;
 
 /* List of Open edit windows */
-static EditAccWindow ** editAccList   = NULL;
+static EditAccWindow ** editAccList = NULL;
 
 
 struct _editaccwindow
@@ -52,6 +52,11 @@ struct _editaccwindow
   Account * account;
 
   AccountEditInfo edit_info;
+
+  GtkWidget * parent_tree;
+
+  Account * current_parent;
+  Account * top_level_account;
 };
 
 
@@ -62,6 +67,9 @@ gnc_ui_EditAccWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
   Account *acc = editAccData->account;
 
   REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account); 
+
+  xaccFreeAccount(editAccData->top_level_account);
+  editAccData->top_level_account = NULL;
 
   free(editAccData);
 
@@ -78,14 +86,37 @@ gnc_ui_EditAccWindow_cancel_cb(GtkWidget * widget,
   gnome_dialog_close(GNOME_DIALOG(editAccData->dialog));
 }
 
+static gboolean
+gnc_filter_parent_accounts(Account *account, gpointer data)
+{
+  EditAccWindow *editAccData = data;
+
+  if (account == NULL)
+    return FALSE;
+
+  if (account == editAccData->top_level_account)
+    return TRUE;
+
+  if (account == editAccData->account)
+    return FALSE;
+
+  if (xaccAccountHasAncestor(account, editAccData->account))
+    return FALSE;
+
+  return xaccAccountTypesCompatible(xaccAccountGetType(account),
+                                    xaccAccountGetType(editAccData->account));
+}
+
 static void
 gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
 			   gpointer data)
 {
   EditAccWindow *editAccData = (EditAccWindow *) data; 
   AccountFieldStrings strings;
-  Account * acc;
-  char * old;
+  GNCAccountTree *tree;
+  Account *new_parent;
+  Account *account;
+  char *old;
 
   gnc_ui_extract_field_strings(&strings, &editAccData->edit_info);
 
@@ -99,10 +130,21 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
 
   /* fixme check for unique code, if entered */
 
-  acc = editAccData->account;
+  tree = GNC_ACCOUNT_TREE(editAccData->parent_tree);
+  new_parent = gnc_account_tree_get_current_account(tree);
+
+  /* Parent check, probably not needed, but be safe */
+  if (!gnc_filter_parent_accounts(new_parent, editAccData))
+  {
+    gnc_error_dialog(ACC_BAD_PARENT_MSG);
+    gnc_ui_free_field_strings(&strings);
+    return;
+  }
+
+  account = editAccData->account;
 
   /* currency check */
-  old = xaccAccountGetCurrency(acc);
+  old = xaccAccountGetCurrency(account);
   if (old == NULL)
     old = "";
   if ((safe_strcmp(old, strings.currency) != 0) &&
@@ -123,7 +165,7 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
   }
 
   /* security check */
-  old = xaccAccountGetSecurity(acc);
+  old = xaccAccountGetSecurity(account);
   if (old == NULL)
     old = "";
   if ((safe_strcmp(old, strings.security) != 0) &&
@@ -143,9 +185,16 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
     }
   }
 
-  xaccAccountBeginEdit(acc, 0);
-  gnc_ui_install_field_strings(acc, &strings, FALSE);
-  xaccAccountCommitEdit (acc);
+  xaccAccountBeginEdit(account, 0);
+  gnc_ui_install_field_strings(account, &strings, FALSE);
+  if (new_parent != editAccData->current_parent)
+  {
+    if (new_parent == editAccData->top_level_account)
+      xaccGroupInsertAccount(gncGetCurrentGroup(), account);
+    else
+      xaccInsertSubAccount(new_parent, account);
+  }
+  xaccAccountCommitEdit(account);
 
   gnc_ui_free_field_strings(&strings);
 
@@ -155,6 +204,44 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget,
   gnome_dialog_close(GNOME_DIALOG(editAccData->dialog));
 }
 
+static GtkWidget *
+gnc_ui_create_parent_acc_frame(EditAccWindow *editAccData)
+{
+  Account *current_parent;
+  GtkWidget *scroll_win;
+  GtkWidget *frame;
+  GtkWidget *tree;
+  
+  editAccData->top_level_account = xaccMallocAccount();
+  xaccAccountSetName(editAccData->top_level_account, TOP_ACCT_STR);
+  frame = gtk_frame_new(PARENT_ACC_STR);
+
+  scroll_win = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win), 
+				 GTK_POLICY_AUTOMATIC,  
+				 GTK_POLICY_AUTOMATIC);   
+  gtk_container_border_width(GTK_CONTAINER(frame), 5);    
+
+  tree = gnc_account_tree_new_with_root(editAccData->top_level_account); 
+  gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_BROWSE);
+  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(tree)); 
+  gtk_clist_column_titles_hide(GTK_CLIST(tree));
+  gnc_account_tree_set_filter(GNC_ACCOUNT_TREE(tree),
+                              gnc_filter_parent_accounts, editAccData);
+  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
+  editAccData->parent_tree = tree;
+
+  /* the initial setting should be the *parent* of the current account */
+  current_parent = xaccAccountGetParentAccount(editAccData->account);
+  if (current_parent == NULL)
+    current_parent = editAccData->top_level_account;
+  editAccData->current_parent = current_parent;
+
+  gtk_container_add(GTK_CONTAINER(scroll_win), tree); 
+  gtk_container_add(GTK_CONTAINER(frame), scroll_win);
+
+  return frame;
+}
 
 /********************************************************************\
  * editAccWindow                                                    *
@@ -193,7 +280,6 @@ editAccWindow(Account *acc)
   gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
 
   vbox = GNOME_DIALOG(editAccData->dialog)->vbox;
-  gtk_widget_show (vbox);
 
   /* Account field edit box */
   widget = gnc_ui_account_field_box_create_from_account
@@ -218,6 +304,10 @@ editAccWindow(Account *acc)
       (GTK_WIDGET(editAccData->edit_info.security_entry), FALSE);
   }
 
+  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
+
+  /* Parent Account entry */
+  widget = gnc_ui_create_parent_acc_frame(editAccData);
   gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
 
   /* source menu */
@@ -252,7 +342,10 @@ editAccWindow(Account *acc)
 		     GTK_SIGNAL_FUNC (gnc_ui_EditAccWindow_close_cb),
 		     editAccData);
 
-  gtk_widget_show(dialog);
+  gtk_widget_show_all(dialog);
+
+  gnc_account_tree_select_account(GNC_ACCOUNT_TREE(editAccData->parent_tree),
+                                  editAccData->current_parent, TRUE);
 
   return editAccData;
 }

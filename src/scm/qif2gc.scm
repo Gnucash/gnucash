@@ -57,11 +57,11 @@
   (hashv-set! gnc-txn-list txnref curtxn)
     ;;; Fill in gnc-txn-list, gnc-acc-list, gnc-split-list
     ;;; First, let's fill in curtxn with some values from txn
-  (gnc-txn-update curtxn 'num (txn 'get 'id))
-  (gnc-txn-update curtxn 'date-posted (txn 'get 'date))
+  (gnc-txn-update curtxn 'num (txnget txn 'id))
+  (gnc-txn-update curtxn 'date-posted (txnget txn 'date))
   (gnc-txn-update curtxn 'date-entered '(1999 0903)) ;;; Which should get replaced!
-  (gnc-txn-update curtxn 'description (txn 'get 'memo))
-  (gnc-txn-update curtxn 'docref (txn 'get 'id))
+  (gnc-txn-update curtxn 'description (txnget txn 'memo))
+  (gnc-txn-update curtxn 'docref (txnget txn 'id))
     ;;; Now, set up the list of splits...
   (let ((mainref (gensym))
 	(mainsplit ((record-constructor gnc-split-structure) 
@@ -76,7 +76,7 @@
     (gnc-split-update mainsplit 'parenttransaction txnref)
     (gnc-split-update mainsplit 'account accountname)
     (hashv-set! gnc-split-list mainref mainsplit))
-  
+
     ;;;; Chunk of missing code:
     ;;;; ---> Take a look at the split list in (txnget txn 'splitlist)
     ;;;;      Add a split for each one of these
@@ -163,10 +163,10 @@
 
 (define (gnc:set-split-values q-txn q-split)
   (let ((g:split (initialize-split))
-	(g:memo  (q-split 'get 'memo))
-	(g:amount (q-split 'get 'amount))
-	(g:docref (q-split 'get 'id))
-	(g:action (q-txn 'get 'status)))
+	(g:memo  (gnc-split-get q-split 'memo))
+	(g:amount (gnc-split-get q-split 'amount))
+	(g:docref (gnc-split-get q-split 'id))
+	(g:action (txnget q-txn 'status)))
     (if g:amount (gnc:split-set-value g:split g:amount))
     (if g:memo (gnc:split-set-memo g:split g:memo))
     (if g:action (gnc:split-set-action g:split g:action))

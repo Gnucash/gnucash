@@ -26,6 +26,18 @@
 #define __WINDOW_MAINP_H__
 
 
+typedef struct _GNCMainInfo GNCMainInfo;
+struct _GNCMainInfo
+{
+  GtkWidget *account_tree;
+  GtkWidget *balance_label;
+
+  SCM tree_change_callback_1;
+  SCM tree_change_callback_2;
+  SCM toolbar_change_callback;
+};
+
+
 /** PROTOTYPES ******************************************************/
 static void gnc_ui_refresh_statusbar(void);
 static void gnc_ui_exit_cb(GtkWidget *widget, gpointer data);
@@ -46,12 +58,17 @@ static void gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data);
 static void gnc_ui_options_cb(GtkWidget *widget, gpointer data);
 static void gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem);
 
+static GNCMainInfo * gnc_get_main_info();
+
 static gboolean gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
                                             GdkEvent *event,
                                             gpointer user_data);
 
-static gboolean gnc_ui_mainWindow_destroy_cb(GtkWidget *widget,
-                                             GdkEvent *event,
-                                             gpointer user_data);
+static gboolean gnc_ui_mainWindow_destroy_event_cb(GtkWidget *widget,
+                                                   GdkEvent *event,
+                                                   gpointer user_data);
+
+static void gnc_ui_mainWindow_destroy_cb(GtkObject *object,
+                                         gpointer user_data);
 
 #endif

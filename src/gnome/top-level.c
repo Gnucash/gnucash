@@ -47,9 +47,9 @@
 
 
 /** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format_cb(gpointer);
+static void gnc_configure_date_format_cb(void *);
 static void gnc_configure_date_format(void);
-static void gnc_configure_newacc_currency_cb(gpointer);
+static void gnc_configure_newacc_currency_cb(void *);
 static void gnc_configure_newacc_currency(void);
 
 /** GLOBALS *********************************************************/
@@ -61,6 +61,9 @@ static GtkWidget *app = NULL;
 static int gnome_is_running = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
+
+static SCM date_callback_id = SCM_UNDEFINED;
+static SCM currency_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -110,11 +113,15 @@ gnucash_ui_init()
     gnc_options_init();
 
     gnc_configure_date_format();
-    gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL);
+    date_callback_id =
+      gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
+                                          "International", "Date Format");
 
     gnc_configure_newacc_currency();
-    gnc_register_option_change_callback(gnc_configure_newacc_currency_cb,
-                                        NULL);
+    currency_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_newacc_currency_cb,
+                                          NULL, "International",
+                                          "Default Currency");
 
     mainWindow();
 
@@ -159,14 +166,17 @@ gnc_ui_destroy (void)
   if (!gnome_is_initialized)
     return;
 
-  gnc_options_shutdown();
-  gnc_extensions_shutdown();
+  gnc_unregister_option_change_callback_id(date_callback_id);
+  gnc_unregister_option_change_callback_id(currency_callback_id);
 
   if (app != NULL)
   {
     gtk_widget_destroy(app);
     app = NULL;
   }
+
+  gnc_options_shutdown();
+  gnc_extensions_shutdown();
 }
 
 /* ============================================================== */
@@ -220,7 +230,7 @@ gnucash_ui_select_file()
  * Returns: Nothing
  */
 static void 
-gnc_configure_date_format_cb(gpointer data)
+gnc_configure_date_format_cb(void *data)
 {
   gnc_configure_date_format();
   gnc_group_ui_refresh(gncGetCurrentGroup());
@@ -274,7 +284,9 @@ gnc_configure_date_format (void)
   }
 
   setDateFormat(df);
-  free(format_code);
+
+  if (format_code != NULL)
+    free(format_code);
 }
 
 /* gnc_configure_date_format_cb
@@ -285,7 +297,7 @@ gnc_configure_date_format (void)
  * Returns: Nothing
  */
 static void 
-gnc_configure_newacc_currency_cb(gpointer data)
+gnc_configure_newacc_currency_cb(void *data)
 {
   gnc_configure_newacc_currency();
 }
@@ -305,7 +317,9 @@ gnc_configure_newacc_currency(void)
                              "Default Currency",
                              "USD");
   xaccSetDefaultNewaccountCurrency(newacc_def_currency);
-  free(newacc_def_currency);
+
+  if (newacc_def_currency != NULL)
+    free(newacc_def_currency);
 }
-                                               
+
 /****************** END OF FILE **********************/

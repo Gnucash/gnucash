@@ -24,18 +24,22 @@
                   '())))))
     (apply append (map path-interpret new-path))))
 
+(define (gnc:make-home-dir)
+  (let ((home-dir (build-path (getenv "HOME") ".gnucash")))
+    (if (access? home-dir X_OK) #t (mkdir home-dir #o700))))
+
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
     (lambda ()
       (if (not user-config-loaded?)
           (begin
             (gnc:debug "loading user configuration")
-            
+
             (let ((user-file
                    (build-path (getenv "HOME") ".gnucash" "config.user"))
                   (auto-file
                    (build-path (getenv "HOME") ".gnucash" "config.auto")))
-              
+
               (if (access? user-file F_OK)
                   (if (false-if-exception (primitive-load user-file))
                       (set! user-config-loaded? #t)

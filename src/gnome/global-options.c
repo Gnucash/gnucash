@@ -34,8 +34,6 @@
 static short module = MOD_GUI;
 
 static GNCOptionDB *global_options = NULL;
-static SCM guile_global_options    = SCM_UNDEFINED;
-static SCM guile_global_options_id = SCM_UNDEFINED;
 
 
 /********************************************************************\
@@ -49,16 +47,17 @@ void
 gnc_options_init()
 {
   SCM func = gh_eval_str("gnc:send-global-options");
+  SCM options;
 
   if (gh_procedure_p(func))
-    gh_call0(func);
+    options = gh_call0(func);
   else
   {
     PERR("gnc_options_init: no guile options!");
+    return;
   }
 
-  global_options = gnc_option_db_new();
-  gnc_option_db_init(global_options, guile_global_options);
+  global_options = gnc_option_db_new(options);
 }
 
 
@@ -74,28 +73,44 @@ gnc_options_shutdown()
 {
   gnc_option_db_destroy(global_options);
   global_options = NULL;
-
-  if (guile_global_options_id != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr_id(guile_global_options_id);
-  guile_global_options = SCM_UNDEFINED;
-  guile_global_options_id = SCM_UNDEFINED;
 }
 
 
 /********************************************************************\
  * gnc_register_option_change_callback                              *
  *   register a callback to be called whenever an option changes    *
- *   this is rather heavy-weight, since all handlers will be called *
- *   whenever any option changes. We may need to refine it later.   *
  *                                                                  *
- * Args: callback - the callback function                           *
+ * Args: callback  - the callback function                          *
+ *       user_data - the user data for the callback                 *
+ *       section   - the section to get callbacks for.              *
+ *                   If NULL, get callbacks for any section changes.*
+ *       name      - the option name to get callbacks for.          *
+ *                   If NULL, get callbacks for any option in the   *
+ *                   section. Only used if section is non-NULL.     *
+ * Returns: SCM handle for unregistering                            *
+\********************************************************************/
+SCM
+gnc_register_option_change_callback(OptionChangeCallback callback,
+                                    void *user_data,
+                                    char *section,
+                                    char *name)
+{
+  return gnc_option_db_register_change_callback(global_options, callback,
+                                                user_data, section, name);
+}
+
+
+/********************************************************************\
+ * gnc_unregister_option_change_callback_id                         *
+ *   unregister the change callback associated with the given id    *
+ *                                                                  *
+ * Args: callback_id - the callback function id                     *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_register_option_change_callback(OptionChangeCallback callback,
-                                    gpointer user_data)
+gnc_unregister_option_change_callback_id(SCM callback_id)
 {
-  gnc_option_db_register_change_callback(global_options, callback, user_data);
+  gnc_option_db_unregister_change_callback_id(global_options, callback_id);
 }
 
 
@@ -201,21 +216,6 @@ _gnc_option_refresh_ui(SCM guile_option)
 
   option = gnc_option_db_get_option_by_SCM(global_options, guile_option);
   gnc_option_set_ui_value(option, FALSE);
-}
-
-
-/********************************************************************\
- * _gnc_register_global_options                                     *
- *   registers the global options. Intended to be called from guile.*
- *                                                                  *
- * Args: options - the guile global options                         *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-_gnc_register_global_options(SCM options)
-{
-  guile_global_options = options;
-  guile_global_options_id = gnc_register_c_side_scheme_ptr(options);
 }
 
 

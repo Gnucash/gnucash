@@ -39,10 +39,6 @@
 /* Enable debugging stuff */
 #define  USE_DEBUG           
 
-/* Turn on nana assertion checking */
-#define  HAVE_NANA_H
-#define  HAVE_LIBNANA
-
 /* check for stpcpy for Solaris */
 #undef HAVE_STPCPY
 

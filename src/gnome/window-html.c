@@ -29,6 +29,8 @@
 #include "top-level.h"
 
 #include "window-html.h"
+#include "dialog-utils.h"
+#include "global-options.h"
 #include "messages.h"
 #include "File.h"
 #include "util.h"
@@ -318,6 +320,7 @@ struct _HTMLWindow
   GtkWidget *back;
 
   GtkWidget *toolbar;
+  SCM toolbar_change_callback_id;
 
   HTMLHistory *history;
 
@@ -509,6 +512,18 @@ gnc_html_window_fill_toolbar(HTMLWindow *hw)
 }
 
 
+static void
+gnc_html_toolbar_change_cb(void *data)
+{
+  HTMLWindow *hw = data;
+  GtkToolbarStyle tbstyle;
+
+  tbstyle = gnc_get_toolbar_style();
+
+  gtk_toolbar_set_style(GTK_TOOLBAR(hw->toolbar), tbstyle);
+}
+
+
 /********************************************************************\
  * htmlWindow                                                       *
  *   opens up an html window, and displays html                     *
@@ -550,11 +565,12 @@ htmlWindow(GtkWidget   *parent,
     GtkWidget *dock;
     GtkWidget *dock_item;
     GtkWidget *toolbar;
+    SCM id;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    hw->window = window;
-    gtk_window_set_policy(GTK_WINDOW (window), TRUE, TRUE, FALSE);
+    gtk_window_set_policy(GTK_WINDOW(window), TRUE, TRUE, TRUE);
     gtk_window_set_default_size(GTK_WINDOW(window), 675, 400);
+    hw->window = window;
 
     dock = gnome_dock_new();
     gtk_container_add(GTK_CONTAINER(window), dock);
@@ -565,6 +581,10 @@ htmlWindow(GtkWidget   *parent,
     gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
     gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
     hw->toolbar = toolbar;
+
+    id = gnc_register_option_change_callback(gnc_html_toolbar_change_cb, hw,
+                                             "General", "Toolbar Buttons");
+    hw->toolbar_change_callback_id = id;
 
     gnome_dock_add_item (GNOME_DOCK(dock), GNOME_DOCK_ITEM(dock_item),
                          GNOME_DOCK_TOP, 0, 0, 0, TRUE);
@@ -589,6 +609,7 @@ htmlWindow(GtkWidget   *parent,
     gtk_widget_show_all(window);
   }
 
+  gnc_html_toolbar_change_cb(hw);
   htmlSetButtonStates(hw);
 }
 
@@ -624,9 +645,10 @@ htmlSetButtonStates(HTMLWindow *hw)
 /********************************************************************\
  * htmlKeyCB - called when user presses a key                       * 
  *                                                                  * 
- * Args:   widget - the back button                                 * 
+ * Args:   widget - the widget getting the key                      *
+ *         event  - the key event                                   *
  *         data   - html window structure                           * 
- * Return: none                                                     * 
+ * Return: boolean indicating whether we handled the event          * 
 \********************************************************************/
 static gboolean
 htmlKeyCB(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -635,9 +657,6 @@ htmlKeyCB(GtkWidget *widget, GdkEventKey *event, gpointer data)
   GtkXmHTML *html = GTK_XMHTML(hw->htmlwidget);
   GtkAdjustment *vadj, *hadj;
   gfloat v_value, h_value;
-
-  if (html->vsba == NULL)
-    return FALSE;
 
   vadj = GTK_ADJUSTMENT(html->vsba);
   hadj = GTK_ADJUSTMENT(html->hsba);
@@ -774,6 +793,8 @@ destroyHtmlWinCB(GtkWidget *widget, gpointer data)
 
   hw->htmlwidget = NULL;
 
+  gnc_unregister_option_change_callback_id(hw->toolbar_change_callback_id);
+
   g_free(hw);
   *hwp = NULL;
 
@@ -845,10 +866,15 @@ gnc_html_load(HTMLWindow *hw)
   gtk_window_set_title(GTK_WINDOW(hw->window), data->title);
   gnc_html_window_fill_toolbar(hw);
 
+  htmlSetButtonStates(hw);
+
   (hw->jump_cb)(data->user_data, &text, &label);
 
   if (text == NULL)
-    return;
+  {
+    text = "";
+    label = NULL;
+  }
 
   gtk_xmhtml_source(GTK_XMHTML(hw->htmlwidget), text);
 
@@ -856,8 +882,6 @@ gnc_html_load(HTMLWindow *hw)
     XmHTMLAnchorScrollToName(hw->htmlwidget, label);
   else
     XmHTMLTextScrollToLine(hw->htmlwidget, 0);
-
-  htmlSetButtonStates(hw);
 }
 
 

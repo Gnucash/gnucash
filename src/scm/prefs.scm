@@ -2,6 +2,7 @@
 
 (use-modules (ice-9 slib))
 (require 'sort)
+(require 'hash-table)
 
 ;; (define gnc:*double-entry-restriction*
 ;;   (gnc:make-config-var
@@ -39,225 +40,28 @@
 ;;    eq?
 ;;    #f))
 
-;; We'd rather use a hash table for this, but until hash-for-each or
-;; hash-keys is generally available, we can't...
-(define gnc:*options-entries* '())
 
-;; This will be an alist
-;;   (k v) -> (section-name list-of-option-items)
-
-(define (gnc:make-option
-	 ;; The category of this option
-         section
-         name
-	 ;; The sort-tag determines the relative ordering of options in
-	 ;; this category. It is used by the gui for display.
-         sort-tag
-         type
-         documentation-string
-         getter
-	 ;; The setter is responsible for ensuring that the value is valid.
-         setter
-         default-getter
-         generate-restore-form
-	 ;; Validation func should accept a value and return (#t value)
-	 ;; on success, and (#f "failure-message") on failure. If #t,
-	 ;; the supplied value will be used by the gui to set the option.
-         value-validator
-	 option-data)
-  (vector section
-          name
-          sort-tag
-          type
-          documentation-string
-          getter
-          setter
-          default-getter
-          generate-restore-form
-          value-validator
-	  option-data))
-
-(define (gnc:make-string-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-value)
-  (let ((option default-value))
-    (gnc:make-option section name sort-tag 'string documentation-string
-                     (lambda () option)
-                     (lambda (x) (set! option x))
-                     (lambda () default-value)
-                     #f
-                     (lambda (x)
-                       (cond ((string? x)(list #t x))
-                             (else (list #f "string-option: not a string"))))
-                     #f )))
-
-(define (gnc:make-simple-boolean-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-value)
-  (let ((option default-value))
-    (gnc:make-option section name sort-tag 'boolean documentation-string
-                     (lambda () option)
-                     (lambda (x) (set! option x))
-                     (lambda () default-value)
-                     #f
-                     (lambda (x)
-                       (if (boolean? x)
-                           (list #t x)
-                           (list #f "boolean-option: not a boolean")))
-                     #f )))
-
-
-;; date options use the option-data as a boolean value. If true,
-;; the gui should allow the time to be entered as well.
-(define (gnc:make-date-option
-         section
-         name
-         sort-tag
-         documentation-string
-         default-getter
-         show-time)
-  (let ((option (default-getter)))
-
-    (define (date-legal date)
-      (and (pair? date) (exact? (car date)) (exact? (cdr date))))
-
-    (gnc:make-option section name sort-tag 'date documentation-string
-                     (lambda () option)
-                     (lambda (date)
-                       (if (date-legal date)
-                           (set! option date)
-                           (gnc:error "Illegal date value set")))
-                     default-getter
-                     #f
-                     (lambda (date)
-                       (if (date-legal date)
-                           (list #t date)
-                           (list #f "date-option: illegal date")))
-                     show-time )))
-
-;; account-list options use the option-data as a boolean value.  If
-;; true, the gui should allow the user to select multiple accounts.
-;; values are always a list of accounts.
-(define (gnc:make-account-list-option
-         section
-         name
-         sort-tag
-         documentation-string
-         default-getter
-         value-validator
-         multiple-selection)
-  (let ((option (default-getter))
-        (option-set #f)
-        (validator
-         (if (not value-validator)
-             (lambda (account-list) (list #t account-list))
-             value-validator)))
-    (gnc:make-option
-     section name sort-tag 'account-list documentation-string
-     (lambda () (if option-set option (default-getter)))
-     (lambda (account-list)
-       (let* ((result (validator account-list))
-              (valid (car result))
-              (value (cadr result)))
-         (if valid
-             (begin
-               (set! option value)
-               (set! option-set #t))
-             (gnc:error "Illegal account list value set"))))
-     default-getter
-     #f
-     validator
-     multiple-selection )))
-
-;; multichoice options use the option-data as a list of vectors.
-;; Each vector contains a permissible value (scheme symbol) and
-;; a description string.
-(define (gnc:make-multichoice-option
-         section
-         name
-         sort-tag
-         documentation-string
-         default-value
-         ok-values)
-  (let ((option default-value))
-    (define (multichoice-legal val p-vals)
-      (cond ((null? p-vals) #f)
-            ((eq? val (vector-ref (car p-vals) 0)) #t)
-            (else multichoice-legal (cdr p-vals))))
-
-    (gnc:make-option
-     section name sort-tag 'multichoice documentation-string
-     (lambda () option)
-     (lambda (x)
-       (if (multichoice-legal x ok-values)
-           (set! option x)
-           (gnc:error "Illegal Multichoice option set")))
-     (lambda () default-value)
-     #f
-     (lambda (x)
-       (if (multichoice-legal x ok-values)
-           (list #t x)
-           (list #f "multichoice-option: illegal choice")))
-     ok-values)))
-
-(define (gnc:option-section option)
-  (vector-ref option 0))
-(define (gnc:option-name option)
-  (vector-ref option 1))
-(define (gnc:option-sort-tag option)
-  (vector-ref option 2))
-(define (gnc:option-type option)
-  (vector-ref option 3))
-(define (gnc:option-documentation option)
-  (vector-ref option 4))
-(define (gnc:option-getter option)
-  (vector-ref option 5))
-(define (gnc:option-setter option)
-  (vector-ref option 6))
-(define (gnc:option-default-getter option)
-  (vector-ref option 7))
-(define (gnc:option-generate-restore-form option)
-  (vector-ref option 8))
-(define (gnc:option-value-validator option)
-  (vector-ref option 9))
-(define (gnc:option-data option)
-  (vector-ref option 10))
-
-(define (gnc:register-option options new-option)
-  (let* ((section (gnc:option-section new-option))
-         (existing-entry (assoc-ref options section))
-         (new-entry (if existing-entry
-                        (cons new-option existing-entry)
-                        (list new-option))))
-    (assoc-set! options section new-entry)))
+(define gnc:*options-entries* (gnc:new-options))
 
 (define (gnc:register-configuration-option new-option)
-  (set! gnc:*options-entries*
-        (gnc:register-option gnc:*options-entries* new-option)))
+  (gnc:register-option gnc:*options-entries* new-option))
+
+(define (gnc:lookup-global-option section name)
+  (gnc:lookup-option gnc:*options-entries* section name))
+
+(define (gnc:send-global-options) gnc:*options-entries*)
+
+(define (gnc:global-options-clear-changes)
+  (gnc:options-clear-changes gnc:*options-entries*))
+
+(define (gnc:save-global-options)
+  (gnc:make-home-dir)
+  (gnc:save-options gnc:*options-entries*
+                    (symbol->string 'gnc:*options-entries*)
+                    (build-path (getenv "HOME") ".gnucash" "config.auto")))
 
 
-(define (gnc:send-option-section db_handle section-info)
-  ;; section-info is a pair (section-name . list-of-options)
-  (for-each
-   (lambda (option)
-     (gnc:option-db-register-option db_handle option))
-   (cdr section-info)))
-
-(define (gnc:send-options db_handle options)
-  (for-each
-   (lambda (section-info)
-     (gnc:send-option-section db_handle section-info))
-   options))
-
-(define (gnc:send-global-options)
-  (gnc:register-global-options gnc:*options-entries*))
-
+;;;;;; Create default options and config vars
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -392,9 +196,14 @@
         )))
 
 (gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Auto-Raise Lists"
+  "b" "Automatically raise the list of accounts or actions during input." #t))
+
+(gnc:register-configuration-option
  (gnc:make-multichoice-option
-  "Register" "Toolbar Buttons"
-  "b" "Choose whether to display icons, text, or both for toolbar buttons"
+  "General" "Toolbar Buttons"
+  "a" "Choose whether to display icons, text, or both for toolbar buttons"
   'icons_and_text
   (list #(icons_and_text "Icons and Text" "Show both icons and text")
         #(icons_only "Icons only" "Show icons only")

@@ -5,6 +5,7 @@
 
 (use-modules (ice-9 slib))
 (require 'printf)
+(require 'sort)
 
 ;hack alert - is this line necessary?
 (gnc:depend "text-export.scm")
@@ -30,8 +31,6 @@
     (set! gnc:total-outflow 0)
     #f))
 
-(define gnc:*transaction-report-options* '())
-
 ;;returns a list contains elements of the-list for which predictate is
 ;; true
 (define (gnc:filter-list the-list predicate)
@@ -56,15 +55,15 @@
 		    (gnc:inorder-map (cdr the-list) fn)))))
 
 ;; register a configuration option for the transaction report
+(define (trep-options-generator)
 
-(define (gnc:register-trep-option new-option)
-  (set! gnc:*transaction-report-options*
-	(gnc:register-option gnc:*transaction-report-options* new-option))
-  new-option)
+  (define gnc:*transaction-report-options* (gnc:new-options))
 
-;; from date
-;; hack alert - could somebody set this to an appropriate date?
-(define begindate
+  (define (gnc:register-trep-option new-option)
+    (gnc:register-option gnc:*transaction-report-options* new-option))
+
+  ;; from date
+  ;; hack alert - could somebody set this to an appropriate date?
   (gnc:register-trep-option
    (gnc:make-date-option
     "Report Options" "From"
@@ -78,27 +77,104 @@
         (set-tm:mon bdtime 0)
         (let ((time (car (mktime bdtime))))
           (cons time 0))))
-    #f)))
+    #f))
 
-;; to-date
-(define enddate
+  ;; to-date
   (gnc:register-trep-option
    (gnc:make-date-option
     "Report Options" "To"
     "b" "Report items up to and including this date"
     (lambda () (cons (current-time) 0))
-    #f)))
+    #f))
 
-;; account to do report on
-;; hack alert - default setting doesn't work!
-
-(define tr-report-account-op
+  ;; account to do report on
   (gnc:register-trep-option
    (gnc:make-account-list-option
     "Report Options" "Account"
     "c" "Do transaction report on this account"
-    (lambda () (list (gnc:group-get-account (gnc:get-current-group) 0)))
-    #f #f)))
+    (lambda ()
+      (let ((current-accounts (gnc:get-current-accounts))
+            (num-accounts (gnc:group-get-num-accounts (gnc:get-current-group)))
+            (first-account (gnc:group-get-account (gnc:get-current-group) 0)))
+        (cond ((not (null? current-accounts)) (list (car current-accounts)))
+              ((> num-accounts 0) (list first-account))
+              (else ()))))
+    #f #f))
+
+  ;; primary sorting criterion
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Primary Key"
+     "a" "Sort by this criterion first"
+     'date
+     (list #(date
+	     "Date"
+	     "Sort by date")
+	   #(time
+	     "Time"
+	     "Sort by EXACT entry time")
+	   #(corresponding-acc
+	     "Transfer from/to"
+	     "Sort by account transferred from/to's name")
+	   #(amount
+	     "Amount"
+	     "Sort by amount")
+	   #(description
+	     "Description"
+	     "Sort by description")
+	   #(number
+	     "Number"
+	     "Sort by check/transaction number")
+	   #(memo
+	     "Memo"
+	     "Sort by memo"))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Primary Sort Order"
+    "b" "Order of primary sorting"
+    'ascend
+    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
+	  #(descend "Descending" "largest to smallest, latest to earliest"))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Secondary Key"
+     "c"
+     "Sort by this criterion second"
+     'corresponding-acc
+     (list #(date
+	     "Date"
+	     "Sort by date")
+	   #(time
+	     "Time"
+	     "Sort by EXACT entry time")
+	   #(corresponding-acc
+	     "Transfer from/to"
+	     "Sort by account transferred from/to's name")
+	   #(amount
+	     "Amount"
+	     "Sort by amount")
+	   #(description
+	     "Description"
+	     "Sort by description")
+	   #(number
+	     "Number"
+	     "Sort by check/transaction number")
+	   #(memo
+	     "Memo"
+	     "Sort by memo"))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    "Sorting" "Secondary Sort Order"
+    "d" "Order of Secondary sorting"
+    'ascend
+    (list #(ascend "Ascending" "smallest to largest, earliest to latest")
+	  #(descend "Descending" "largest to smallest, latest to earliest"))))
+
+  gnc:*transaction-report-options*)
+
 
 ;; extract fields out of the scheme split representation
 
@@ -134,6 +210,13 @@
 
 (define (gnc:tr-report-get-other-splits split-scm)
   (vector-ref split-scm 10))
+
+
+
+(define (gnc:tr-report-get-first-acc-name split-scm)
+  (let ((other-splits (gnc:tr-report-get-other-splits split-scm)))
+    (cond ((= (length other-splits) 0) "")
+	  (else  (caar other-splits)))))
 
 ;;; something like 
 ;;; for(i = first; i < last; i+= step) { thunk(i);}
@@ -190,6 +273,7 @@
        0 num-splits 1)
       (reverse diff-list)))))
 
+
 ;; takes a C split, extracts relevant data and converts to a scheme 
 ;; representation
 
@@ -214,18 +298,114 @@
   (let ((bdtime (localtime (car tp))))
     (strftime "%x" bdtime)))
 
-(define (gnc:timepair-earlier-or-eq t1 t2)
-  (let ((time1 (car t1)) 
-        (time2 (car t2)))
+;; given a timepair contains any time on a certain day (local time)
+;; converts it to be midday that day.
+
+(define (gnc:timepair-canonical-day-time tp)
+  (let ((bdt (localtime (car tp))))
+    (set-tm:sec bdt 0)
+    (set-tm:min bdt 0)
+    (set-tm:hour bdt 12)
+    (let ((newtime (car (mktime bdt))))
+      (cons newtime (* 1000 newtime)))))
+
+(define (gnc:timepair-earlier-or-eq-date t1 t2)
+  (let ((time1 (car (gnc:timepair-canonical-day-time t1)))
+        (time2 (car (gnc:timepair-canonical-day-time t2))))
     (<= time1 time2)))
 
-(define (gnc:timepair-later t1 t2)
-  (let ((time1 (car t1)) 
-        (time2 (car t2)))
+(define (gnc:timepair-later-date t1 t2)
+  (let ((time1 (car (gnc:timepair-canonical-day-time t1))) 
+        (time2 (car (gnc:timepair-canonical-day-time t2))))
     (< time1 time2)))
 
-(define (gnc:timepair-later-or-eq t1 t2)
-  (gnc:timepair-earlier-or-eq t2 t1))
+(define (gnc:timepair-later-or-eq-date t1 t2)
+  (gnc:timepair-earlier-or-eq-date t2 t1))
+
+(define (gnc:sort-predicate-component component order)
+  (let ((ascending-order-comparator
+	(begin 
+;	  (display (symbol->string component))
+	(cond
+	 ((eq? component 'date) 
+	  (lambda (split-scm-a split-scm-b)
+	    (- 
+	     (car 
+	      (gnc:timepair-canonical-day-time 
+	       (gnc:tr-report-get-date split-scm-a)))
+	     (car
+	      (gnc:timepair-canonical-day-time
+	       (gnc:tr-report-get-date split-scm-b))))))
+
+	 ((eq? component 'time) 
+	  (lambda (split-scm-a split-scm-b)
+	    (-
+	     (car (gnc:tr-report-get-date split-scm-a))
+	     (car (gnc:tr-report-get-date split-scm-b)))))
+
+	 ((eq? component 'amount) 
+	  (lambda (split-scm-a split-scm-b)
+	    (-
+	     (gnc:tr-report-get-value split-scm-a)
+	     (gnc:tr-report-get-value split-scm-b))))
+
+	 ((eq? component 'description)
+	  (lambda (split-scm-a split-scm-b)
+	    (let ((description-a (gnc:tr-report-get-description split-scm-a))
+		  (description-b (gnc:tr-report-get-description split-scm-b)))
+	      (cond ((string<? description-a description-b) -1)
+		    ((string=? description-a description-b) 0)
+		    (else 1)))))
+	 
+	 ;; hack alert - should probably use something more sophisticated
+	 ;; here - perhaps even making it user-definable
+	 ((eq? component 'number)
+	  (lambda (split-scm-a split-scm-b)
+            (let ((num-a (gnc:tr-report-get-num split-scm-a))
+                  (num-b (gnc:tr-report-get-num split-scm-b)))
+              (cond ((string<? num-a num-b) -1)
+                    ((string=? num-a num-b) 0)
+                    (else 1)))))
+
+	 ((eq? component 'corresponding-acc)
+	  (lambda (split-scm-a split-scm-b)
+	   (let ((corr-acc-a (gnc:tr-report-get-first-acc-name split-scm-a))
+		 (corr-acc-b (gnc:tr-report-get-first-acc-name split-scm-b)))
+	     (cond ((string<? corr-acc-a corr-acc-b) -1)
+		   ((string=? corr-acc-a corr-acc-b) 0)
+		   (else 1)))))
+
+	 ((eq? component 'memo)
+	   (lambda (split-scm-a split-scm-b)
+	   (let ((memo-a (gnc:tr-report-get-memo split-scm-a))
+		 (memo-b (gnc:tr-report-get-memo split-scm-b)))
+	     (cond ((string<? memo-a memo-b) -1)
+		   ((string=? memo-a memo-b) 0)
+		   (else 1)))))
+	 (else (gnc:error (sprintf "illegal sorting option %s- bug in transaction-report.scm" (symbol->string (component)) )))))))
+	 (cond ((eq? order 'descend) 
+		 (lambda (my-split-a my-split-b)
+		   (- (ascending-order-comparator my-split-a my-split-b))))
+		(else ascending-order-comparator))))
+
+
+;; returns a predicate
+(define (gnc:tr-report-make-sort-predicate primary-key-op primary-order-op
+                                           secondary-key-op secondary-order-op)
+  (let ((primary-comp (gnc:sort-predicate-component
+		       (gnc:option-value primary-key-op)
+		       (gnc:option-value primary-order-op)))
+	  (secondary-comp (gnc:sort-predicate-component
+			   (gnc:option-value secondary-key-op)
+			   (gnc:option-value secondary-order-op))))
+    (lambda (split-a split-b)  
+      (let ((primary-comp-value (primary-comp split-a split-b)))
+	(cond ((< primary-comp-value 0) #t)
+	      ((> primary-comp-value 0) #f)
+	      (else 
+	       (let ((secondary-comp-value (secondary-comp split-a split-b)))
+		 (cond ((< secondary-comp-value 0) #t)
+		       (else #f)))))))))
 
 ;; returns a predicate that returns true only if a split-scm is
 ;; between early-date and late-date
@@ -233,8 +413,8 @@
 (define (gnc:tr-report-make-filter-predicate early-date late-date)
   (lambda (split-scm)
     (let ((split-date (gnc:tr-report-get-date split-scm)))
-      (and (gnc:timepair-later-or-eq split-date early-date)
-           (gnc:timepair-earlier-or-eq split-date late-date)))))
+      (and (gnc:timepair-later-or-eq-date split-date early-date)
+           (gnc:timepair-earlier-or-eq-date split-date late-date)))))
 
 ;; converts a scheme split representation to a line of HTML,
 ;; updates the values of total-inflow and total-outflow based
@@ -293,7 +473,7 @@
 (define (gnc:tr-report-get-starting-balance scm-split-list beginning-date)
   (cond ((or 
 	  (eq? scm-split-list '())
-	  (gnc:timepair-later
+	  (gnc:timepair-later-date
 	   (gnc:tr-report-get-date (car scm-split-list))
 	   beginning-date))
 	 0)
@@ -304,17 +484,31 @@
 	  (cdr scm-split-list) beginning-date))))
 
 
-
 (gnc:define-report
  ;; version
  1
  ;; Name
  "Account Transactions"
  ;; Options
- gnc:*transaction-report-options*
+ trep-options-generator
  ;; renderer
  (lambda (options)
-   (let* ((prefix  (list "<HTML>" "<BODY bgcolor=#99ccff>" "<TABLE>"
+   (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
+          (enddate (gnc:lookup-option options "Report Options" "To"))
+          (tr-report-account-op (gnc:lookup-option options
+                                                   "Report Options" "Account"))
+          (tr-report-primary-key-op (gnc:lookup-option options
+                                                       "Sorting"
+                                                       "Primary Key"))
+          (tr-report-primary-order-op (gnc:lookup-option options
+                                                         "Sorting"
+                                                         "Primary Sort Order"))
+          (tr-report-secondary-key-op (gnc:lookup-option options
+                                                         "Sorting"
+                                                         "Secondary Key"))
+          (tr-report-secondary-order-op
+           (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+          (prefix  (list "<HTML>" "<BODY bgcolor=#99ccff>" "<TABLE>"
 	                 "<TH>Date</TH>"
                          "<TH>Num</TH>"
                          "<TH>Description</TH>"
@@ -329,14 +523,14 @@
 	  (net-inflow-line '())
 	  (report-lines '())
 	  (date-filter-pred (gnc:tr-report-make-filter-predicate
-			     (op-value begindate) 
-			     (op-value enddate)))
+			     (gnc:option-value begindate) 
+			     (gnc:option-value enddate)))
 	  (starting-balance 0)
-          (accounts (op-value tr-report-account-op)))
+          (accounts (gnc:option-value tr-report-account-op)))
      gnc:tr-report-initialize-inflow-and-outflow!
      (if (null? accounts)
          (set! report-lines
-               (list "<TR><TD>You have not selected an account.</TD></TR>"))
+               (list "<TR><TD>There are no accounts to report on.</TD></TR>"))
 	 (begin
 	   
            (gnc:for-each-split-in-account
@@ -347,17 +541,23 @@
                              (list (gnc:make-split-scheme-data split))))))
            (set! starting-balance
                  (gnc:tr-report-get-starting-balance
-                  report-lines (op-value begindate)))
+                  report-lines (gnc:option-value begindate)))
 	   
            (set! report-lines (gnc:filter-list report-lines date-filter-pred))
+	   (set! report-lines
+                 (sort!
+                  report-lines 
+                  (gnc:tr-report-make-sort-predicate
+                   tr-report-primary-key-op tr-report-primary-order-op
+                   tr-report-secondary-key-op tr-report-secondary-order-op)))
 	   (let ((html-mapper (lambda (split-scm) (gnc:tr-report-split-to-html
 						  split-scm
 						  starting-balance))))
 	     (set! report-lines (gnc:inorder-map report-lines html-mapper)))
-	   (set! 
+	   (set!
 	    balance-line 
 	    (list "<TR><TD><STRONG>Balance at: "
-		  (gnc:timepair-to-datestring (op-value begindate))
+		  (gnc:timepair-to-datestring (gnc:option-value begindate))
 		  "</STRONG></TD>"
 		  "<TD></TD>" 
 		  "<TD></TD>"
@@ -393,5 +593,6 @@
 		  "<TD></TD>"
 		  "<TD><STRONG>"
 		  (sprintf #f "%.2f" (- gnc:total-inflow gnc:total-outflow))
-		  "</TD></STRONG></TR>"))
-	   (append prefix balance-line report-lines inflow-outflow-line net-inflow-line suffix))))))
+		  "</TD></STRONG></TR>"))))
+     (append prefix balance-line report-lines
+             inflow-outflow-line net-inflow-line suffix))))

@@ -337,18 +337,6 @@ LDFLAGS="$OLDLDFLAGS"
 AC_SUBST(GNOME_TARGET)
 AC_SUBST(GNOME_STATIC_TARGET)
 
-### --------------------------------------------------------------------------
-## Nana
-# XXX - There should probably be a --without-nana option (e.g., for
-# someone who happens to have it installed on his local machine, but
-# is building GnuCash for people who might not have it).
-
-# See if the <nana.h> header file can be found.
-AC_CHECK_HEADER(nana.h, ,
-                AC_MSG_ERROR([Can not find nana.h -- do you have nana installed?]))
-AC_CHECK_LIB(nana, L_buffer_create, ,
-             AC_MSG_ERROR([Can not find a valid nana library -- do you have nana installed?])) 
-
 
 ### --------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.

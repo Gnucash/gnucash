@@ -1,3 +1,5 @@
+(use-modules (ice-9 slib))
+(require 'hash-table)
 
 (gnc:support "report.scm")
 
@@ -15,7 +17,7 @@
 ;; The key is the string naming the report and the value is the
 ;; rendering thunk.
 
-(define (gnc:run-report report-name)
+(define (gnc:run-report report-name options)
   ;; Return a string consisting of the contents of the report.
 
   (define (display-report-list-item item port)
@@ -26,33 +28,38 @@
                         item))
      (else (gnc:warn "gnc:run-report - " item " is the wrong type."))))
 
+  (define (report-output->string lines)
+    (call-with-output-string
+     (lambda (port)
+       (for-each
+        (lambda (item) (display-report-list-item item port))
+        lines))))
+
+  (define (call-report rendering-thunk options)
+    (let ((lines (rendering-thunk options)))
+      (report-output->string lines)))
+
   (let ((report (hash-ref *gnc:_report-info_* report-name)))
     (if (not report)
         #f
-        (let ((options (gnc:report-options report))
-              (rendering-thunk (gnc:report-rendering-thunk report)))
-          (call-with-output-string
-           (lambda (port)
-             (for-each
-              (lambda (item) (display-report-list-item item port))
-              (rendering-thunk options))))))))
+        (let ((rendering-thunk (gnc:report-rendering-thunk report)))
+          (call-report rendering-thunk options)))))
 
 (define (gnc:report-menu-setup win)
   ;; This should be on a reports menu later...
   (hash-for-each
-   (lambda (report-info)
-     (let ((name (car report-info))
-           (report (cdr report-info)))
-       (gnc:extensions-menu-add-item
-        (string-append "Report: " name)
-        (string-append "Display the " name " report.")
-        (lambda ()
+   (lambda (name report)
+     (gnc:extensions-menu-add-item
+      (string-append "Report: " name)
+      (string-append "Display the " name " report.")
+      (lambda ()
+        (let ((options (false-if-exception (gnc:report-new-options report))))
           (gnc:report-window (string-append "Report: " name)
-                             (lambda () (gnc:run-report name))
-                             (gnc:report-options report))))))
+                             (lambda () (gnc:run-report name options))
+                             options)))))
    *gnc:_report-info_*))
 
-(define (gnc:define-report version name options rendering-thunk)
+(define (gnc:define-report version name option-generator rendering-thunk)
   ;; For now the version is ignored, but in the future it'll let us
   ;; change behaviors without breaking older reports.
   ;;
@@ -81,16 +88,22 @@
   ;; ("<html>" "</html>")
   ;; ("<html>" " some text " "</html>")
   ;; ("<html>" ("some" ("other" " text")) "</html>")
-  (let ((report (vector version name options rendering-thunk)))
+  (let ((report (vector version name option-generator rendering-thunk)))
     (hash-set! *gnc:_report-info_* name report)))
 
 (define (gnc:report-version report)
   (vector-ref report 0))
 (define (gnc:report-name report)
   (vector-ref report 1))
-(define (gnc:report-options report)
+(define (gnc:report-options-generator report)
   (vector-ref report 2))
 (define (gnc:report-rendering-thunk report)
   (vector-ref report 3))
+
+(define (gnc:report-new-options report)
+  (let ((generator (gnc:report-options-generator report)))
+    (if (procedure? generator)
+        (generator)
+        #f)))
 
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)

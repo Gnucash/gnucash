@@ -452,8 +452,6 @@ gnc_accWindow_create(AccWindow *accData)
   widget = gnc_ui_notes_frame_create(&accData->edit_info.notes_entry);
   gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
 
-  gnc_account_tree_select_account(accData->tree, accData->parentAccount, TRUE);
-
   return dialog;
 }
 
@@ -487,6 +485,8 @@ accWindow (AccountGroup *this_is_not_used)
     gtk_window_set_default_size(GTK_WINDOW(dialog), last_width, last_height);
 
   gtk_widget_show_all(dialog);
+
+  gnc_account_tree_select_account(accData->tree, accData->parentAccount, TRUE);
 
   while (1)
   {

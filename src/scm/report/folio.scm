@@ -6,7 +6,7 @@
  1
  ;; Menu name
  "Folio"
- ;; Options
+ ;; Options Generator
  #f
  ;; Rendering thunk.  See report.scm for details.
  (lambda (options)

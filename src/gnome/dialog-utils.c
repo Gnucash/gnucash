@@ -22,6 +22,7 @@
 
 #include "account-tree.h"
 #include "dialog-utils.h"
+#include "global-options.h"
 #include "messages.h"
 #include "util.h"
 
@@ -687,14 +688,6 @@ char * gnc_ui_get_account_field_value_string(Account *account, int field)
 }
 
 
-void gnc_set_tooltip(GtkWidget *w, const gchar *tip)
-{
-  GtkTooltips *t = gtk_tooltips_new();
-
-  gtk_tooltips_set_tip(t, w, tip, NULL);
-}
-
-
 static void
 gnc_option_menu_cb(GtkWidget *w, gpointer data)
 {
@@ -722,6 +715,7 @@ gnc_option_menu_cb(GtkWidget *w, gpointer data)
 GtkWidget *
 gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 {
+  GtkTooltips *tooltips;
   GtkWidget *omenu;
   GtkWidget *menu;
   GtkWidget *menu_item;
@@ -733,10 +727,12 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
   menu = gtk_menu_new();
   gtk_widget_show(menu);
 
+  tooltips = gtk_tooltips_new();
+
   for (i = 0; i < num_options; i++)
   {
     menu_item = gtk_menu_item_new_with_label(option_info[i].name);
-    gnc_set_tooltip(menu_item, option_info[i].tip);
+    gtk_tooltips_set_tip(tooltips, menu_item, option_info[i].tip, NULL);
     gtk_widget_show(menu_item);
 
     gtk_object_set_data(GTK_OBJECT(menu_item),
@@ -762,4 +758,35 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
   gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
 
   return omenu;
+}
+
+
+/********************************************************************\
+ * gnc_get_toolbar_style                                            *
+ *   returns the current toolbar style for gnucash toolbars         *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: toolbar style                                           *
+ \*******************************************************************/
+GtkToolbarStyle
+gnc_get_toolbar_style()
+{
+  GtkToolbarStyle tbstyle = GTK_TOOLBAR_BOTH;
+  char *style_string;
+
+  style_string = gnc_lookup_multichoice_option("General",
+                                               "Toolbar Buttons",
+                                               "icons_and_text");
+
+  if (safe_strcmp(style_string, "icons_and_text") == 0)
+    tbstyle = GTK_TOOLBAR_BOTH;
+  else if (safe_strcmp(style_string, "icons_only") == 0)
+    tbstyle = GTK_TOOLBAR_ICONS;
+  else if (safe_strcmp(style_string, "text_only") == 0)
+    tbstyle = GTK_TOOLBAR_TEXT;
+
+  if (style_string != NULL)
+    free(style_string);
+
+  return tbstyle;
 }

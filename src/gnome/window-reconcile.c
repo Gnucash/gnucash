@@ -567,10 +567,13 @@ recnWindow(GtkWidget *parent, Account *account)
                               NULL);
 
   {
+    GtkTooltips *tooltips;
     GtkWidget *main_area = gtk_vbox_new(FALSE, 10);
     GtkWidget *debcred_area = gtk_hbox_new(FALSE, 15);
     GtkWidget *debits_frame;
     GtkWidget *credits_frame;
+
+    tooltips = gtk_tooltips_new();
 
     debits_frame = gnc_reconcile_window_create_list_frame
       (account, RECLIST_DEBIT, recnData,
@@ -603,7 +606,7 @@ recnWindow(GtkWidget *parent, Account *account)
 
       button = gtk_button_new_with_label(NEW_STR);
       gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, TOOLTIP_NEW_TRANS);
+      gtk_tooltips_set_tip(tooltips, button, TOOLTIP_NEW_TRANS, NULL);
       gtk_signal_connect(GTK_OBJECT(button), "clicked",
                          GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_new_cb),
                          recnData);
@@ -611,7 +614,7 @@ recnWindow(GtkWidget *parent, Account *account)
       button = gtk_button_new_with_label(EDIT_STR);
       recnData->edit_button = button;
       gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, TOOLTIP_EDIT_TRANS);
+      gtk_tooltips_set_tip(tooltips, button, TOOLTIP_EDIT_TRANS, NULL);
       gtk_signal_connect(GTK_OBJECT(button), "clicked",
                          GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_edit_cb),
                          recnData);
@@ -619,7 +622,7 @@ recnWindow(GtkWidget *parent, Account *account)
       button = gtk_button_new_with_label(DELETE_STR);
       recnData->delete_button = button;
       gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gnc_set_tooltip(button, TOOLTIP_DEL_TRANS);
+      gtk_tooltips_set_tip(tooltips, button, TOOLTIP_DEL_TRANS, NULL);
       gtk_signal_connect(GTK_OBJECT(button), "clicked",
                          GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_delete_cb),
                          recnData);
@@ -629,7 +632,7 @@ recnWindow(GtkWidget *parent, Account *account)
 
         button = gtk_button_new_with_label(s);
         gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-        gnc_set_tooltip(button, TOOLTIP_ADJUST_END);
+        gtk_tooltips_set_tip(tooltips, button, TOOLTIP_ADJUST_END, NULL);
         gtk_signal_connect(GTK_OBJECT(button), "clicked",
                            GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_change_cb),
                            recnData);

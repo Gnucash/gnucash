@@ -43,18 +43,12 @@ struct _GNCOptionSection
 
 struct _GNCOptionDB
 {
+  SCM guile_options;
+  SCM guile_options_id;
+
   GSList *option_sections;
 
   gboolean options_dirty;
-
-  GSList *change_callbacks;
-};
-
-typedef struct _ChangeCBInfo ChangeCBInfo;
-struct _ChangeCBInfo
-{
-  OptionChangeCallback callback;
-  gpointer user_data;
 };
 
 typedef struct _Getters Getters;
@@ -99,42 +93,14 @@ gnc_option_db_get_handle(GNCOptionDB *odb)
 
 
 /********************************************************************\
- * gnc_option_db_new                                                *
- *   allocate a new option database and initialize its values       *
- *                                                                  *
- * Args: none                                                       *
- * Returns: a new option database                                   *
-\********************************************************************/
-GNCOptionDB *
-gnc_option_db_new()
-{
-  GNCOptionDB *odb;
-
-  odb = g_new0(GNCOptionDB, 1);
-
-  odb->option_sections = NULL;
-  odb->options_dirty = FALSE;
-  odb->change_callbacks = NULL;
-
-  if (option_dbs == NULL)
-    option_dbs = g_ptr_array_new();
-
-  g_ptr_array_add(option_dbs, odb);
-
-  return odb;
-}
-
-
-/********************************************************************\
  * gnc_option_db_init                                               *
  *   initialize the options structures from the guile side          *
  *                                                                  *
  * Args: odb     - the option database to initialize                *
- *       options - the guile options to initialize with             * 
  * Returns: nothing                                                 *
 \********************************************************************/
-void
-gnc_option_db_init(GNCOptionDB *odb, SCM options)
+static void
+gnc_option_db_init(GNCOptionDB *odb)
 {
   SCM func = gh_eval_str("gnc:send-options");
   GNCOptionDBHandle handle;
@@ -146,15 +112,40 @@ gnc_option_db_init(GNCOptionDB *odb, SCM options)
     return;
   }
 
-  gh_call2(func, gh_int2scm(handle), options);
+  gh_call2(func, gh_int2scm(handle), odb->guile_options);
 }
 
 
-static void
-gnc_option_free_cbinfo(gpointer data, gpointer not_used)
+/********************************************************************\
+ * gnc_option_db_new                                                *
+ *   allocate a new option database and initialize its values       *
+ *                                                                  *
+ * Args: guile_options - SCM handle to options                      *
+ * Returns: a new option database                                   *
+\********************************************************************/
+GNCOptionDB *
+gnc_option_db_new(SCM guile_options)
 {
-  g_free(data);
+  GNCOptionDB *odb;
+
+  odb = g_new0(GNCOptionDB, 1);
+
+  odb->guile_options = guile_options;
+  odb->guile_options_id = gnc_register_c_side_scheme_ptr(guile_options);
+
+  odb->option_sections = NULL;
+  odb->options_dirty = FALSE;
+
+  if (option_dbs == NULL)
+    option_dbs = g_ptr_array_new();
+
+  g_ptr_array_add(option_dbs, odb);
+
+  gnc_option_db_init(odb);
+
+  return odb;
 }
+
 
 /********************************************************************\
  * gnc_option_db_destroy                                            *
@@ -186,7 +177,6 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     {
       option = option_node->data;
 
-      /* Should we check return value? */
       gnc_unregister_c_side_scheme_ptr_id(option->guile_option_id);
 
       option_node = option_node->next;
@@ -199,13 +189,9 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     section_node = section_node->next;
   }
 
-  g_slist_foreach(odb->change_callbacks, gnc_option_free_cbinfo, NULL);
-
   g_slist_free(odb->option_sections);
-  g_slist_free(odb->change_callbacks);
 
   odb->option_sections = NULL;
-  odb->change_callbacks = NULL;
   odb->options_dirty = FALSE;
 
   if (!g_ptr_array_remove(option_dbs, odb))
@@ -219,6 +205,10 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     option_dbs = NULL;
   }
 
+  gnc_unregister_c_side_scheme_ptr_id(odb->guile_options_id);
+  odb->guile_options = SCM_UNDEFINED;
+  odb->guile_options_id = SCM_UNDEFINED;
+
   g_free(odb);
 }
 
@@ -226,43 +216,117 @@ gnc_option_db_destroy(GNCOptionDB *odb)
 /********************************************************************\
  * gnc_option_db_register_change_callback                           *
  *   register a callback to be called whenever an option changes    *
- *   this is rather heavy-weight, since all handlers will be called *
- *   whenever any option changes. We may need to refine it later.   *
+ *                                                                  *
+ * Args: odb       - the option database to register with           *
+ *       callback  - the callback function to register              *
+ *       user_data - the user data for the callback                 *
+ *       section   - the section to get callbacks for.              *
+ *                   If NULL, get callbacks for any section changes.*
+ *       name      - the option name to get callbacks for.          *
+ *                   If NULL, get callbacks for any option in the   *
+ *                   section. Only used if section is non-NULL.     *
+ * Returns: SCM handle for unregistering                            *
+\********************************************************************/
+SCM
+gnc_option_db_register_change_callback(GNCOptionDB *odb,
+                                       OptionChangeCallback callback,
+                                       void *data,
+                                       char *section,
+                                       char *name)
+{
+  POINTER_TOKEN pt;
+  SCM register_proc;
+  SCM arg;
+  SCM args;
+
+  /* Get the register procedure */
+  register_proc = gh_eval_str("gnc:options-register-c-callback");
+  if (!gh_procedure_p(register_proc))
+  {
+    PERR("gnc_option_db_register_change_callback2: not a procedure\n");
+    return SCM_UNDEFINED;
+  }
+
+  /* Now build the args list for apply */
+  args = gh_eval_str("()");
+
+  /* first the guile options database */
+  args = gh_cons(odb->guile_options, args);
+
+  /* next the data */
+  pt = make_POINTER_TOKEN("void*", data);
+  arg = POINTER_TOKEN_to_SCM(pt);
+  args = gh_cons(arg, args);
+
+  /* next the callback */
+  pt = make_POINTER_TOKEN("OptionChangeCallback", callback);
+  arg = POINTER_TOKEN_to_SCM(pt);
+  args = gh_cons(arg, args);
+
+  /* next the name */
+  if (name == NULL)
+    arg = SCM_BOOL_F;
+  else
+    arg = gh_str02scm(name);
+  args = gh_cons(arg, args);
+
+  /* next the section */
+  if (section == NULL)
+    arg = SCM_BOOL_F;
+  else
+    arg = gh_str02scm(section);
+  args = gh_cons(arg, args);
+
+  /* now apply the procedure */
+  return gh_apply(register_proc, args);
+}
+
+
+/********************************************************************\
+ * gnc_option_db_unregister_change_callback_id                      *
+ *   unregister the change callback associated with the given id    *
  *                                                                  *
  * Args: odb      - the option database to register with            *
  *       callback - the callback function to register               *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_option_db_register_change_callback(GNCOptionDB *odb,
-                                       OptionChangeCallback callback,
-                                       gpointer data)
+gnc_option_db_unregister_change_callback_id(GNCOptionDB *odb, SCM callback_id)
 {
-  ChangeCBInfo *cbinfo;
+  SCM proc;
 
-  assert(odb != NULL);
+  if (callback_id == SCM_UNDEFINED)
+    return;
 
-  cbinfo = g_new0(ChangeCBInfo, 1);
-  cbinfo->callback = callback;
-  cbinfo->user_data = data;
+  proc = gh_eval_str("gnc:options-unregister-callback-id");
+  if (!gh_procedure_p(proc))
+  {
+    PERR("gnc_option_db_unregister_change_callback_id: not a procedure\n");
+    return;
+  }
 
-  odb->change_callbacks = g_slist_prepend(odb->change_callbacks, cbinfo);
+  gh_call2(proc, callback_id, odb->guile_options);
 }
 
+void
+_gnc_option_invoke_callback(OptionChangeCallback callback, void *data)
+{
+  callback(data);
+}
 
 static void
 gnc_call_option_change_callbacks(GNCOptionDB *odb)
 {
-  GSList *node = odb->change_callbacks;
-  ChangeCBInfo *cbinfo;
+  SCM proc;
 
-  while (node != NULL)
+  proc = gh_eval_str("gnc:options-run-callbacks");
+  if (!gh_procedure_p(proc))
   {
-    cbinfo = node->data;
-    (cbinfo->callback)(cbinfo->user_data);
-
-    node = node->next;
+    PERR("gnc_call_option_change_callbacks: not a procedure\n");
+    return;
   }
+
+  gh_call1(proc, odb->guile_options);
 }
 
 

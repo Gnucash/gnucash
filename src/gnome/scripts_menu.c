@@ -31,6 +31,7 @@ typedef struct _ScriptInfo ScriptInfo;
 struct _ScriptInfo
 {
   SCM script;
+  SCM script_id;
 
   GnomeUIInfo info[2];
 };
@@ -60,7 +61,7 @@ gnc_extensions_create_script_info(char *name, char *hint, SCM script)
 
   si = g_new0(ScriptInfo, 1);
   si->script = script;
-  gnc_register_c_side_scheme_ptr(script);
+  si->script_id = gnc_register_c_side_scheme_ptr(script);
 
   script_list = g_slist_prepend(script_list, si);
 
@@ -106,7 +107,7 @@ cleanup_script_info(gpointer script_info, gpointer not_used)
 {
   ScriptInfo *si = (ScriptInfo *) script_info;
 
-  gnc_register_c_side_scheme_ptr(si->script);
+  gnc_unregister_c_side_scheme_ptr_id(si->script_id);
 
   g_free(si->info[0].label);
   g_free(si->info[0].hint);

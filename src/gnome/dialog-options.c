@@ -227,7 +227,7 @@ default_button_cb(GtkButton *button, gpointer data)
 }
 
 static GtkWidget *
-gnc_option_create_default_button(GNCOption *option)
+gnc_option_create_default_button(GNCOption *option, GtkTooltips *tooltips)
 {
   GtkWidget *default_button = gtk_button_new_with_label(SET_TO_DEFAULT_STR);
 
@@ -235,6 +235,8 @@ gnc_option_create_default_button(GNCOption *option)
 
   gtk_signal_connect(GTK_OBJECT(default_button), "clicked",
 		     GTK_SIGNAL_FUNC(default_button_cb), option);
+
+  gtk_tooltips_set_tip(tooltips, default_button, TOOLTIP_SET_DEFAULT, NULL);
 
   return default_button;
 }
@@ -388,11 +390,8 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
   if (multiple_selection)
     gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_MULTIPLE);
-
-  gtk_signal_connect(GTK_OBJECT(tree), "select_account",
-		     GTK_SIGNAL_FUNC(gnc_option_account_cb), option);
-  gtk_signal_connect(GTK_OBJECT(tree), "unselect_account",
-		     GTK_SIGNAL_FUNC(gnc_option_account_cb), option);
+  else
+    gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_BROWSE);
 
   scroll_win = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
@@ -436,7 +435,9 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
 }
 
 static void
-gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
+gnc_option_set_ui_widget(GNCOption *option,
+                         GtkBox *page_box,
+                         GtkTooltips *tooltips)
 {
   GtkWidget *enclosing = NULL;
   GtkWidget *value = NULL;
@@ -464,7 +465,7 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
 
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(enclosing),
-		     gnc_option_create_default_button(option),
+		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
   }
   else if (safe_strcmp(type, "string") == 0)
@@ -489,7 +490,7 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(enclosing),
-		     gnc_option_create_default_button(option),
+		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
   }
   else if (safe_strcmp(type, "multichoice") == 0)
@@ -510,7 +511,7 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(enclosing),
-		     gnc_option_create_default_button(option),
+		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
   }
   else if (safe_strcmp(type, "date") == 0)
@@ -538,14 +539,14 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     gnc_option_set_ui_value(option, FALSE);
 
     entry = GNOME_DATE_EDIT(value)->date_entry;
-    gnc_set_tooltip(entry, documentation);
+    gtk_tooltips_set_tip(tooltips, entry, documentation, NULL);
     gtk_signal_connect(GTK_OBJECT(entry), "changed",
 		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
 
     if (show_time)
     {
       entry = GNOME_DATE_EDIT(value)->time_entry;
-      gnc_set_tooltip(entry, documentation);
+      gtk_tooltips_set_tip(tooltips, entry, documentation, NULL);
       gtk_signal_connect(GTK_OBJECT(entry), "changed",
                          GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
     }
@@ -553,7 +554,7 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(enclosing),
-		     gnc_option_create_default_button(option),
+		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
   }
   else if (safe_strcmp(type, "account-list") == 0)
@@ -561,7 +562,7 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     enclosing = gnc_option_create_account_widget(option, name);
     value = option->widget;
 
-    gnc_set_tooltip(enclosing, documentation);
+    gtk_tooltips_set_tip(tooltips, enclosing, documentation, NULL);
 
     gtk_box_pack_start(page_box, enclosing, FALSE, FALSE, 5);
     packed = TRUE;
@@ -569,6 +570,11 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     gtk_widget_realize(value);
 
     gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "select_account",
+                       GTK_SIGNAL_FUNC(gnc_option_account_cb), option);
+    gtk_signal_connect(GTK_OBJECT(value), "unselect_account",
+                       GTK_SIGNAL_FUNC(gnc_option_account_cb), option);
 
     gtk_clist_set_row_height(GTK_CLIST(value), 0);
     gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
@@ -582,7 +588,7 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
     gtk_box_pack_start(page_box, enclosing, FALSE, FALSE, 0);
 
   if (value != NULL)
-    gnc_set_tooltip(value, documentation);
+    gtk_tooltips_set_tip(tooltips, value, documentation, NULL);
 
   if (enclosing != NULL)
     gtk_widget_show_all(enclosing);
@@ -595,14 +601,17 @@ gnc_option_set_ui_widget(GNCOption *option, GtkBox *page_box)
 }
 
 static void
-gnc_options_dialog_add_option(GtkWidget *page, GNCOption *option)
+gnc_options_dialog_add_option(GtkWidget *page,
+                              GNCOption *option,
+                              GtkTooltips *tooltips)
 {
-  gnc_option_set_ui_widget(option, GTK_BOX(page));
+  gnc_option_set_ui_widget(option, GTK_BOX(page), tooltips);
 }
 
 static void
 gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
-                               GNCOptionSection *section)
+                               GNCOptionSection *section,
+                               GtkTooltips *tooltips)
 {
   GNCOption *option;
   GtkWidget *page_label;
@@ -616,14 +625,14 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
   page_content_box = gtk_vbox_new(FALSE, 5);
   gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 5);
   gtk_widget_show(page_content_box);
-  
+
   gnome_property_box_append_page(propertybox, page_content_box, page_label);
 
   num_options = gnc_option_section_num_options(section);
   for (i = 0; i < num_options; i++)
   {
     option = gnc_get_option_section_option(section, i);
-    gnc_options_dialog_add_option(page_content_box, option);
+    gnc_options_dialog_add_option(page_content_box, option, tooltips);
   }
 }
 
@@ -641,13 +650,16 @@ void
 gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
                                   GNCOptionDB *odb)
 {
+  GtkTooltips *tooltips;
   GNCOptionSection *section;
   gint num_sections = gnc_option_db_num_sections(odb);
   gint i;
 
+  tooltips = gtk_tooltips_new();
+
   for (i = 0; i < num_sections; i++)
   {
     section = gnc_option_db_get_section(odb, i);
-    gnc_options_dialog_append_page(propertybox, section);
+    gnc_options_dialog_append_page(propertybox, section, tooltips);
   }
 }

@@ -38,6 +38,8 @@ typedef struct _GNCAccountTree      GNCAccountTree;
 typedef struct _GNCAccountTreeClass GNCAccountTreeClass;
 typedef struct _AccountViewInfo     AccountViewInfo;
 
+typedef gboolean (*AccountFilter) (Account *account, gpointer user_data);
+
 struct _AccountViewInfo
 {
   gboolean include_type[NUM_ACCOUNT_TYPES];
@@ -48,6 +50,9 @@ struct _AccountViewInfo
 struct _GNCAccountTree
 {
   GtkCTree ctree;
+
+  AccountFilter filter;
+  gpointer filter_data;
 
   AccountViewInfo avi;
 
@@ -125,6 +130,9 @@ void gnc_account_tree_set_view_info (GNCAccountTree *tree,
 void gnc_account_tree_get_view_info (GNCAccountTree *tree,
 				     AccountViewInfo *info);
 
+void gnc_account_tree_set_filter (GNCAccountTree *tree,
+                                  AccountFilter filter,
+                                  gpointer user_data);
 
 #ifdef __cplusplus
 }

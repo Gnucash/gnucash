@@ -206,18 +206,21 @@ gncPostFileOpen (const char * filename)
   /* check for session errors, put up appropriate dialog */
   SHOW_LOCK_ERR_MSG (newsess);
 
-  /* check for i/o error, put up appropriate error message */
-  io_error = xaccGetFileIOError();
-  SHOW_IO_ERR_MSG(io_error);
+  if (!uh_oh)
+  {
+    /* check for i/o error, put up appropriate error message */
+    io_error = xaccGetFileIOError();
+    SHOW_IO_ERR_MSG(io_error);
 
-  /* Umm, came up empty-handed, i.e. the file was not found. */
-  /* This is almost certainly not what the user wanted. */
-  if (!newgrp && !io_error) 
+    /* Umm, came up empty-handed, i.e. the file was not found. */
+    /* This is almost certainly not what the user wanted. */
+    if (!uh_oh && !newgrp && !io_error) 
     {
-    sprintf (buf, FILE_NOT_FOUND_MSG, newfile);	
-    gnc_error_dialog ( buf);
-    uh_oh = 1;
+      sprintf (buf, FILE_NOT_FOUND_MSG, newfile);	
+      gnc_error_dialog ( buf);
+      uh_oh = 1;
     }
+  }
  
   /* going down -- abandon ship */
   if (uh_oh) 
@@ -420,9 +423,12 @@ gncFileSaveAs (void)
   /* check for session errors (e.g. file locked by another user) */
   SHOW_LOCK_ERR_MSG (newsess);
 
-  /* check for i/o error, put up appropriate error message */
-  io_error = xaccGetFileIOError();
-  SHOW_IO_ERR_MSG(io_error);
+  if (!uh_oh)
+  {
+    /* check for i/o error, put up appropriate error message */
+    io_error = xaccGetFileIOError();
+    SHOW_IO_ERR_MSG(io_error);
+  }
 
   /* going down -- abandon ship */
   if (uh_oh) 

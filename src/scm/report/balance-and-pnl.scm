@@ -147,7 +147,7 @@
    1
    ;; Menu name
    "Balance sheet"
-   ;; Options (none currently)
+   ;; Options Generator (none currently)
    #f
    ;; Code to generate the report   
    (lambda (options)

@@ -29,7 +29,7 @@
 #include "window-reconcile.h"
 #include "query-user.h"
 #include "account-tree.h"
-#include "messages.h"
+#include "enriched-messages.h"
 #include "ui-callbacks.h"
 #include "util.h"
 
@@ -65,7 +65,8 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 
 static GtkWidget *
 gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
-				  GNCAccountTree **set_tree)
+				  GNCAccountTree **set_tree,
+                                  GtkTooltips *tooltips)
 {
   GtkWidget *frame, *scrollWin, *accountTree, *vbox, *button;
   gboolean is_category;
@@ -114,7 +115,7 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
   button = gtk_check_button_new_with_label(SHOW_CATEGORIES_STR);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), is_category);
   gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
-  gnc_set_tooltip(button, SHOW_CAT_MSG);
+  gtk_tooltips_set_tip(tooltips, button, SHOW_CAT_MSG, NULL);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
 		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb),
@@ -129,6 +130,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 		       XferDialog *xferData)
 {
   GtkWidget *dialog;
+  GtkTooltips *tooltips;
   
   dialog = gnome_dialog_new(TRANSFER_STR,
 			    GNOME_STOCK_BUTTON_OK,
@@ -148,6 +150,8 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 
   /* don't close on buttons */
   gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
+
+  tooltips = gtk_tooltips_new();
 
   /* contains amount, date, description, and notes */
   {
@@ -171,7 +175,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       GtkWidget *amount;
       gchar * string;
 
-      string = g_strconcat(AMT_STR, " ", CURRENCY_SYMBOL, NULL);
+      string = g_strconcat(AMOUNT_C_STR, " ", CURRENCY_SYMBOL, NULL);
       label = gtk_label_new(string);
       g_free(string);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
@@ -187,7 +191,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
     {
       GtkWidget *date;
 
-      label = gtk_label_new(DATE_STR);
+      label = gtk_label_new(DATE_C_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
       gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
@@ -213,11 +217,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       vbox = gtk_vbox_new(TRUE, 5);
       gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
-      label = gtk_label_new(DESC_STR);
+      label = gtk_label_new(DESC_C_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
-      label = gtk_label_new(MEMO_STR);
+      label = gtk_label_new(MEMO_C_STR);
       gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
       gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
     }
@@ -249,11 +253,11 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
 		       hbox, TRUE, TRUE, 0);
 
     tree = gnc_xfer_dialog_create_tree_frame(initial, XFRM_STR,
-                                             &xferData->from);
+                                             &xferData->from, tooltips);
     gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
 
     tree = gnc_xfer_dialog_create_tree_frame(initial, XFTO_STR,
-					     &xferData->to);
+					     &xferData->to, tooltips);
     gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
   }
 

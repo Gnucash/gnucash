@@ -66,7 +66,7 @@ enum {
 static void
 gnc_ui_refresh_statusbar()
 {
-  GtkWidget *label;
+  GNCMainInfo *main_info;
   double assets  = 0.0;
   double profits = 0.0;
   AccountGroup *group;
@@ -78,6 +78,10 @@ gnc_ui_refresh_statusbar()
   int num_accounts;
   int account_type;
   int i;
+
+  main_info = gnc_get_main_info();
+  if (main_info == NULL)
+    return;
 
   group = gncGetCurrentGroup ();
   num_accounts = xaccGroupGetNumAccounts(group);
@@ -119,11 +123,8 @@ gnc_ui_refresh_statusbar()
   label_string = g_strconcat(ASSETS_STR,  ": ", asset_string, "   ",
                              PROFITS_STR, ": ", profit_string, "  ",
                              NULL);
-   
-  label = gtk_object_get_data(GTK_OBJECT(gnc_get_ui_data()),
-			      "balance_label");
 
-  gtk_label_set_text(GTK_LABEL(label), label_string);
+  gtk_label_set_text(GTK_LABEL(main_info->balance_label), label_string);
 
   g_free(asset_string);
   g_free(profit_string);
@@ -382,9 +383,9 @@ gnc_ui_filemenu_cb(GtkWidget *widget, gpointer menuItem)
 }
 
 static gboolean
-gnc_ui_mainWindow_delete_cb(GtkWidget       *widget,
-			    GdkEvent        *event,
-			    gpointer         user_data)
+gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
+			    GdkEvent  *event,
+			    gpointer  user_data)
 {
   /* Don't allow deletes if we're in a modal dialog */
   if (gtk_main_level() == 1)
@@ -396,23 +397,35 @@ gnc_ui_mainWindow_delete_cb(GtkWidget       *widget,
 
 
 static gboolean
-gnc_ui_mainWindow_destroy_cb(GtkWidget       *widget,
-			     GdkEvent        *event,
-			     gpointer         user_data)
+gnc_ui_mainWindow_destroy_event_cb(GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   user_data)
 {
   return FALSE;
+}
+
+static void
+gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
+{
+  GNCMainInfo *main_info = user_data;
+
+  gnc_unregister_option_change_callback_id(main_info->tree_change_callback_1);
+  gnc_unregister_option_change_callback_id(main_info->tree_change_callback_2);
+  gnc_unregister_option_change_callback_id(main_info->toolbar_change_callback);
+
+  g_free(main_info);
 }
 
 GNCAccountTree *
 gnc_get_current_account_tree()
 {
-  GtkWidget *widget;
+  GNCMainInfo *main_info;
 
-  widget = gnc_get_ui_data();
-  if (widget == NULL)
+  main_info = gnc_get_main_info();
+  if (main_info == NULL)
     return NULL;
 
-  return gtk_object_get_data(GTK_OBJECT(widget), "account_tree");
+  return GNC_ACCOUNT_TREE(main_info->account_tree);
 }
 
 Account *
@@ -441,7 +454,7 @@ gnc_account_tree_activate_cb(GNCAccountTree *tree,
 }
 
 static void
-gnc_configure_account_tree(gpointer data)
+gnc_configure_account_tree(void *data)
 {
   GtkObject *app;
   GNCAccountTree *tree;
@@ -449,7 +462,7 @@ gnc_configure_account_tree(gpointer data)
   AccountViewInfo old_avi;
 
   app = GTK_OBJECT(gnc_get_ui_data());
-  tree = GNC_ACCOUNT_TREE(gtk_object_get_data(app, "account_tree"));
+  tree = gnc_get_current_account_tree();
 
   if (tree == NULL)
     return;
@@ -813,21 +826,57 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree)
   gnome_popup_menu_attach(popup, account_tree, NULL);
 }
 
+static GNCMainInfo *
+gnc_get_main_info()
+{
+  GtkObject *app = GTK_OBJECT(gnc_get_ui_data());
+
+  return gtk_object_get_data(app, "gnc_main_info");
+}
+
+static void
+gnc_configure_toolbar(void *data)
+{
+  GnomeApp *app = GNOME_APP(gnc_get_ui_data());
+  GnomeDockItem *di;
+  GtkWidget *toolbar;
+  GtkToolbarStyle tbstyle;
+
+  di = gnome_app_get_dock_item_by_name(app, GNOME_APP_TOOLBAR_NAME);
+  if (di == NULL)
+    return;
+
+  toolbar = gnome_dock_item_get_child(di);
+  if (toolbar == NULL)
+    return;
+
+  tbstyle = gnc_get_toolbar_style();
+
+  gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), tbstyle);
+}
+
 void
 mainWindow()
 {
+  GNCMainInfo *main_info;
   GtkWidget *app = gnc_get_ui_data();
   GtkWidget *scrolled_win;
   GtkWidget *statusbar;
-  GtkWidget *account_tree;
-  GtkWidget *label;
 
-  account_tree = gnc_account_tree_new();
-  gtk_object_set_data(GTK_OBJECT (app), "account_tree", account_tree);
-  gnc_configure_account_tree(NULL);
-  gnc_register_option_change_callback(gnc_configure_account_tree, NULL);
+  main_info = g_new0(GNCMainInfo, 1);
+  gtk_object_set_data(GTK_OBJECT(app), "gnc_main_info", main_info);
 
-  gtk_signal_connect(GTK_OBJECT (account_tree), "activate_account",
+  main_info->account_tree = gnc_account_tree_new();
+
+  main_info->tree_change_callback_1 =
+    gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
+                                        "Account Types", NULL);
+
+  main_info->tree_change_callback_2 =
+    gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
+                                        "Account Fields", NULL);
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
 		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
 
   /* create statusbar and add it to the application. */
@@ -837,13 +886,18 @@ mainWindow()
 
   gnome_app_set_statusbar(GNOME_APP(app), GTK_WIDGET(statusbar));
 
-  gnc_main_create_menus(GNOME_APP(app), account_tree);
+  gnc_main_create_menus(GNOME_APP(app), main_info->account_tree);
+
   gnc_main_create_toolbar(GNOME_APP(app));
+  gnc_configure_toolbar(NULL);
+  main_info->toolbar_change_callback =
+    gnc_register_option_change_callback(gnc_configure_toolbar, NULL,
+                                        "General", "Toolbar Buttons");
 
   /* create the label containing the account balances */
-  label = gtk_label_new("");
-  gtk_object_set_data (GTK_OBJECT (app), "balance_label", label);
-  gtk_box_pack_end(GTK_BOX(statusbar), label, GNC_F, GNC_F, 0);
+  main_info->balance_label = gtk_label_new("");
+  gtk_box_pack_end(GTK_BOX(statusbar), main_info->balance_label,
+                   GNC_F, GNC_F, 0);
 
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
@@ -853,7 +907,8 @@ mainWindow()
                                   GTK_POLICY_AUTOMATIC, 
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_container_add(GTK_CONTAINER(scrolled_win), GTK_WIDGET(account_tree));
+  gtk_container_add(GTK_CONTAINER(scrolled_win),
+                    GTK_WIDGET(main_info->account_tree));
 
   gtk_window_set_default_size(GTK_WINDOW(app), 0, 400);
 
@@ -870,18 +925,24 @@ mainWindow()
                       NULL);
 
   gtk_signal_connect (GTK_OBJECT (app), "destroy_event",
-                      GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_cb),
+                      GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_event_cb),
                       NULL);
 
+  gtk_signal_connect (GTK_OBJECT (app), "destroy",
+                      GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_cb),
+                      main_info);
+
   /* Show everything now that it is created */
-  gtk_widget_show(label);
+  gtk_widget_show(main_info->balance_label);
   gtk_widget_show(statusbar);
-  gtk_widget_show(account_tree);
+  gtk_widget_show(main_info->account_tree);
   gtk_widget_show(scrolled_win);
+
+  gnc_configure_account_tree(NULL);
 
   gnc_refresh_main_window();
 
-  gtk_widget_grab_focus(account_tree);
+  gtk_widget_grab_focus(main_info->account_tree);
 } 
 
 /********************* END OF FILE **********************************/

@@ -130,19 +130,13 @@ helpAnchorCB(XmHTMLAnchorCallbackStruct *acbs, HTMLUserData user_data)
 
       return html_data;
 
-    /* other types are unsupported, but it would be fun if they were ... */
+    /* other types use gnome_url_show */
     case ANCHOR_FTP:
-      PERR(" this help window doesn't support ftp: %s\n", acbs->href);
-      break;
     case ANCHOR_HTTP:
-      PERR (" this help window doesn't support http: %s\n", acbs->href);
-      break;
     case ANCHOR_MAILTO:
-      PERR(" this help window doesn't support email: %s\n", acbs->href);
-      break;
     case ANCHOR_UNKNOWN:
     default:
-      PERR(" don't know this type of url: %s\n", acbs->href);
+      gnome_url_show(acbs->href);
       break;
   }
 

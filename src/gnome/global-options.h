@@ -29,8 +29,12 @@ void gnc_options_init();
 void gnc_options_shutdown();
 void gnc_show_options_dialog();
 
-void gnc_register_option_change_callback(OptionChangeCallback callback,
-                                         gpointer user_data);
+SCM gnc_register_option_change_callback(OptionChangeCallback callback,
+                                        void *user_data,
+                                        char *section,
+                                        char *name);
+
+void gnc_unregister_option_change_callback_id(SCM callback_id);
 
 GNCOption * gnc_get_option_by_name(char *section_name, char *name);
 GNCOption * gnc_get_option_by_SCM(SCM guile_option);
@@ -47,7 +51,6 @@ char * gnc_lookup_multichoice_option(char *section, char *name,
 /* private */
 
 void _gnc_option_refresh_ui(SCM option);
-void _gnc_register_global_options(SCM options);
 
 
 #endif /* __GLOBAL_OPTIONS_H__ */

@@ -39,6 +39,7 @@
 #include "messages.h"
 #include "util.h"
 #include "FileBox.h"
+#include "gfec.h"
 
 static short module = MOD_HTML; 
 
@@ -56,9 +57,7 @@ struct _ReportData
 
   SCM rendering_thunk;
   SCM rendering_thunk_id;
-
-  SCM guile_options;
-  SCM guile_options_id;
+  SCM change_callback_id;
 };
 
 
@@ -69,11 +68,9 @@ report_data_new()
   
   report_data = g_new0(ReportData, 1);
 
-  report_data->guile_options = SCM_UNDEFINED;
-  report_data->guile_options_id = SCM_UNDEFINED;
-
   report_data->rendering_thunk = SCM_UNDEFINED;
   report_data->rendering_thunk_id = SCM_UNDEFINED;
+  report_data->change_callback_id = SCM_UNDEFINED;
 
   return report_data;
 }
@@ -86,17 +83,17 @@ report_data_destroy(HTMLUserData user_data)
   g_free(report_data->text);
   report_data->text = NULL;
 
+  if (report_data->change_callback_id != SCM_UNDEFINED)
+    gnc_option_db_unregister_change_callback_id
+      (report_data->odb, report_data->change_callback_id);
+  report_data->change_callback_id = SCM_UNDEFINED;
+
   gnc_option_db_destroy(report_data->odb);
   report_data->odb = NULL;
 
   if (report_data->option_dialog != NULL)
     gtk_widget_destroy(report_data->option_dialog);
   report_data->option_dialog = NULL;
-
-  if (report_data->guile_options_id != SCM_UNDEFINED)
-    gnc_unregister_c_side_scheme_ptr_id(report_data->guile_options_id);
-  report_data->guile_options = SCM_UNDEFINED;
-  report_data->guile_options_id = SCM_UNDEFINED;
 
   if (report_data->rendering_thunk_id != SCM_UNDEFINED)
     gnc_unregister_c_side_scheme_ptr_id(report_data->rendering_thunk_id);
@@ -141,35 +138,27 @@ gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
   gnome_ok_dialog("Set the report options you want using this dialog.");
 }
 
-
 static void
 report_data_set_guile_options(ReportData *report_data, const SCM guile_options)
 {
   GnomePropertyBox *prop_box;
 
-  if (report_data->guile_options_id != SCM_UNDEFINED)
+  if (report_data->odb != NULL)
   {
-    gnc_unregister_c_side_scheme_ptr_id(report_data->guile_options_id);
     gnc_option_db_destroy(report_data->odb);
+    report_data->odb = NULL;
   }
 
   if (report_data->option_dialog != NULL)
-    gtk_widget_destroy(report_data->option_dialog);
-
-  if (gh_scm2bool(gh_not(guile_options)))
   {
-    report_data->guile_options = SCM_UNDEFINED;
+    gtk_widget_destroy(report_data->option_dialog);
     report_data->option_dialog = NULL;
-    return;
   }
 
-  report_data->guile_options = guile_options;
-  report_data->guile_options_id =
-    gnc_register_c_side_scheme_ptr(guile_options);
+  if (guile_options == SCM_BOOL_F)
+    return;
 
-  report_data->odb = gnc_option_db_new();
-
-  gnc_option_db_init(report_data->odb, guile_options);
+  report_data->odb = gnc_option_db_new(guile_options);
 
   report_data->option_dialog = gnome_property_box_new();
   gnome_dialog_close_hides(GNOME_DIALOG(report_data->option_dialog), TRUE);
@@ -195,23 +184,13 @@ reportAnchorCB(XmHTMLAnchorCallbackStruct *acbs,
 {
   switch(acbs->url_type)
   {
-    /* a local file with a possible jump to label */
     case ANCHOR_FILE_LOCAL:
-      PERR(" this report window doesn't support ftp: %s\n", acbs->href);
-      break;
-    /* other types are unsupported, but it would be fun if they were ... */
     case ANCHOR_FTP:
-      PERR(" this report window doesn't support ftp: %s\n", acbs->href);
-      break;
     case ANCHOR_HTTP:
-      PERR (" this report window doesn't support http: %s\n", acbs->href);
-      break;
     case ANCHOR_MAILTO:
-      PERR(" this report window doesn't support email: %s\n", acbs->href);
-      break;
     case ANCHOR_UNKNOWN:
     default:
-      PERR(" don't know this type of url: %s\n", acbs->href);
+      gnome_url_show(acbs->href);
       break;
   }
 
@@ -219,11 +198,47 @@ reportAnchorCB(XmHTMLAnchorCallbackStruct *acbs,
 }
 
 static void
+gnc_report_error_dialog(const char *message)
+{
+  GtkWindow *parent;
+  gchar *text;
+
+  parent = GTK_WINDOW(gnc_html_window_get_window(reportwindow));
+
+  if (message == NULL)
+    text = REPORT_ERR_MSG;
+  else
+    text = g_strconcat(REPORT_ERR_MSG, "\n\n", message, NULL);
+
+  gnc_error_dialog_parented(parent, text);
+
+  if (message != NULL)
+    g_free(text);
+}
+
+static char *
+gnc_run_report(ReportData *report_data)
+{
+  SCM result, nil;
+
+  if (!gh_procedure_p(report_data->rendering_thunk))
+    return NULL;
+
+  nil = gh_eval_str("()");
+  result = gfec_apply(report_data->rendering_thunk, nil,
+                      gnc_report_error_dialog);
+
+  if (!gh_string_p(result))
+    return NULL;
+
+  return gh_scm2newstr(result, NULL);
+}
+
+static void
 reportJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
 {
   ReportData *report_data = user_data;
   char *text;
-  SCM text_scm;
 
   *set_text = NULL;
   *set_label = NULL;
@@ -234,15 +249,7 @@ reportJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
     return;
   }
 
-  if (!gh_procedure_p(report_data->rendering_thunk))
-    return;
-
-  text_scm = gh_call0(report_data->rendering_thunk);
-
-  if (!gh_string_p(text_scm))
-    return;
-
-  text = gh_scm2newstr(text_scm, NULL);
+  text = gnc_run_report(report_data);
   if (text == NULL)
     return;
 
@@ -254,7 +261,7 @@ reportJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
 
 
 static void
-gnc_report_options_changed_cb(gpointer data)
+gnc_report_options_changed_cb(void *data)
 {
   ReportData *report_data = data;
   ReportData *real_data;
@@ -383,9 +390,10 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
   report_data_set_guile_options(report_data, guile_options);
 
   if (report_data->odb != NULL)
-    gnc_option_db_register_change_callback(report_data->odb,
-                                           gnc_report_options_changed_cb,
-                                           report_data);
+    report_data->change_callback_id =
+      gnc_option_db_register_change_callback(report_data->odb,
+                                             gnc_report_options_changed_cb,
+                                             report_data, NULL, NULL);
 
   if (report_data->option_dialog != NULL)
   {

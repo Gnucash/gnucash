@@ -105,6 +105,8 @@ gnc_account_tree_init(GNCAccountTree *tree)
   tree->root_account     = NULL;
   tree->current_accounts = NULL;
   tree->ignore_unselect  = GNC_F;
+  tree->filter           = NULL;
+  tree->filter_data      = NULL;
 
   gnc_init_account_view_info(&tree->avi);
 
@@ -594,6 +596,27 @@ gnc_init_account_view_info(AccountViewInfo *avi)
   avi->show_field[ACCOUNT_BALANCE] = GNC_T;
 }
 
+/********************************************************************\
+ * gnc_account_tree_set_filter                                      *
+ *   sets the account filter to use with the tree                   *
+ *                                                                  *
+ * Args: tree      - the tree to set the filter on                  *
+ *       filter    - the filter function to use                     *
+ *       user_data - the user_data for the callback                 *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_set_filter(GNCAccountTree *tree,
+                            AccountFilter filter,
+                            gpointer user_data)
+{
+  g_return_if_fail(tree != NULL);
+  g_return_if_fail(GTK_IS_GNC_ACCOUNT_TREE(tree));
+
+  tree->filter = filter;
+  tree->filter_data = user_data;
+}
+
 static void
 gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 {
@@ -753,6 +776,11 @@ gnc_account_tree_fill(GNCAccountTree *tree,
         currentAccount++ )
   {
     account = xaccGroupGetAccount(accts, currentAccount);
+
+    if (tree->filter != NULL)
+      if (!tree->filter(account, tree->filter_data))
+        continue;
+
     type = xaccAccountGetType(account);
 
     if (!tree->avi.include_type[type])

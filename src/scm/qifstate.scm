@@ -56,6 +56,7 @@
   (let*
       ((QIFstates
 	'(("!Type:Cat" . category)
+	  ("!Type:Class" . class)   ;;; Additional classification feature
 	  ("!Option:AutoSwitch" . accounts)
 	  ("!Clear:AutoSwitch"  . accounts)
 	  ("!Account" . accounts)

@@ -9,6 +9,9 @@
 (define (qif-category-update cat field value)
   ((record-modifier qif-category-structure field) cat value))
 
+(define (qif-category-get cat field)
+  ((record-accessor qif-category-structure field) cat))
+
 (define (analyze-qif-categories)
   (define (analyze-qif-category item)
     (let* 
@@ -46,19 +49,19 @@
   qif-cat-list)
 
 (define (analyze-qif-split-category split)
-  (collect-cat-stats (split 'get 'category) (split 'get 'amount)))
+  (collect-cat-stats (qif-split-get split 'category)
+		     (qif-split-get split 'amount)))
 
 (define (collect-cat-stats category amount)
-  (let* ((s (hashv-ref qif-cat-list category)))
+  (let* ((s (hash-ref qif-cat-list category)))
     (if s   ;;; Did we find it in qif-cat-list?
-	(let ((sc (cdr s)))
-	  (qif-category-update sc 'value (+ amount (sc 'get 'value)))
-	  (qif-category-update sc 'count (+ 1 (sc 'get 'count))))
+	(begin   ;;; Yes; found an existing entry so update it's attributes
+	  (qif-category-update s 'value (+ amount (qif-category-get s 'value)))
+	  (qif-category-update s 'count (+ 1 (qif-category-get s 'count))))
 	(begin   ;;; Nope; need to add new entry to qif-cat-list
 	  (let ((nc ((record-constructor qif-category-structure) #f #f #f)))
 	    (qif-category-update nc 'name category)
 	    (qif-category-update nc 'count 1)
 	    (qif-category-update nc 'value amount)
-	    (hashv-set! qif-cat-list category nc))))))
-
+	    (hash-set! qif-cat-list category nc))))))
 
