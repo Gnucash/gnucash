@@ -2711,6 +2711,10 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
+/* 
+ * hack alert -- cancell is pretty broken. It should cancel the
+ * whole transaction, not just the currnetly edited cell!
+ */
 static void
 cancelCB( Widget mw, XtPointer cd, XtPointer cb )
   {
@@ -2895,6 +2899,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             regData->qf = getQuickFill( regData->qf, mvcbs->prev_text[i] );
           }
         
+        /* accept edit by default */
+        mvcbs->verify->doit = True;
         /* ptr will be NULL if the delete key or other 
          * non-alphanumeric key hit */
         if (mvcbs->verify->text->ptr) {
@@ -2916,17 +2922,6 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             XbaeMatrixSetCell( mw, row, col, str );
             XbaeMatrixRefreshCell( mw, row, col );
             XbaeMatrixSetCursorPosition( mw, regData->insert+1 );
-            }
-          else
-            {
-            char str[BUFSIZE];
-            strncpy( str, mvcbs->prev_text, regData->insert );
-            /* Need to make sure the string is terminated: */
-            str[regData->insert] = '\0';
-          
-            XbaeMatrixSetCell( mw, row, col, str );
-            XbaeMatrixRefreshCell( mw, row, col );
-            XbaeMatrixSetCursorPosition( mw, regData->insert );
             }
           }
         }
