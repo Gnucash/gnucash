@@ -1,3 +1,8 @@
+2003-04-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-system/options-utilities.scm: Fix missing i18n
+	markup on some option names.
+
 2003-03-31  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/test/test-employee.c:  fix the test
