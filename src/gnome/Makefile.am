@@ -14,7 +14,7 @@ libgw_gnc_la_LIBADD = ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
 libgw_gnc_la_LDFLAGS = -module
 
 libgncgnome_la_LDFLAGS = -module
-libgncgnome_la_LIBADD = ./libgncguile.la ${GNOMEUI_LIBS} ${GLIB_LIBS} ${GUILE_LIBS}
+libgncgnome_la_LIBADD = ./libgncguile.la ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS} ${GUILE_LIBS}
 
 libgncgnome_la_SOURCES = \
   argv-list-converters.c \

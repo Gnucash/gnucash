@@ -46,8 +46,8 @@ gnucash_LDADD = \
   gnome/libgncguile.la \
   gnome/libgncgnome.la \
   gnome/libgncguile.la \
-  ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
+  ${GNOMEUI_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
