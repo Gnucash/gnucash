@@ -716,11 +716,11 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
   };
   gchar *ver_string;
 
-  if (GNUCASH_MINOR_VERSION % 2) {
-    ver_string = g_strdup_printf("%s (built %s)", VERSION, GNUCASH_BUILD_DATE);
-  } else {
-    ver_string = strdup(VERSION);
-  }
+#ifdef GNUCASH_CVS
+  ver_string = g_strdup_printf("%s cvs (built %s)", VERSION, GNUCASH_BUILD_DATE);
+#else
+  ver_string = strdup(VERSION);
+#endif
   about = gnome_about_new ("GnuCash", ver_string, copyright,
                            authors, message, NULL);
   g_free(ver_string);

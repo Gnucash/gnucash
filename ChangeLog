@@ -1,3 +1,13 @@
+2003-05-11  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-commodity.c: Fix problem selecting quote
+	source.
+
+	* configure.in:
+	* src/gnome/gnc-splash.c:
+	* src/gnome/window-main.c: Give more control over what builds have
+	a version number and what builds hare labelled "cvs".
+
 2003-05-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: you have to declare

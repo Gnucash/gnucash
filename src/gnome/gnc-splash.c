@@ -70,12 +70,13 @@ gnc_show_splash_screen (void)
 
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
-  if (GNUCASH_MINOR_VERSION % 2) {
-    sprintf(ver_string, _("Version: Gnucash-cvs (built %s)"),
-	    GNUCASH_BUILD_DATE);
-  } else {
-    sprintf(ver_string, _("Version: Gnucash-%s"), VERSION);
-  }
+#ifdef GNUCASH_CVS
+  sprintf(ver_string, _("Version: Gnucash-%s cvs (built %s)"),
+	  VERSION, GNUCASH_BUILD_DATE);
+#else
+  sprintf(ver_string, _("Version: Gnucash-%s"), VERSION);
+#endif
+
   version = gtk_label_new (ver_string);
   separator = gtk_hseparator_new();
   progress = gtk_label_new(_("Loading..."));

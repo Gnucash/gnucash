@@ -31,6 +31,10 @@ AC_PREREQ(2.53)
 
 AC_PROG_CC
 
+# Comment out for production or semi-production builds.  I.E. Anything
+# that is explicitly tagged in cvs as a version.
+AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
+
 GNUCASH_MAJOR_VERSION=1
 GNUCASH_MINOR_VERSION=9
 GNUCASH_MICRO_VERSION=0
