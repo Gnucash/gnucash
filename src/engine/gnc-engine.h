@@ -153,6 +153,10 @@ typedef GList                  AccountGUIDList;
 /** GList of GUIDs of a GNCBook */
 typedef GList                  BookGUIDList;
 
+
+typedef  gint (*SplitCallback)(Split *s, gpointer data);
+typedef  gint (*TransactionCallback)(Transaction *t, void *data);
+
 /** Function type for init hooks in the engine.  */
 typedef void (* gnc_engine_init_hook_t)(int, char **);
 

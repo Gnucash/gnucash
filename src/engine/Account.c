@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- Account data structure implementation               *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1919,7 +1919,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
    * it doesn't exist yet and I'm uncertain of exactly how
    * it would work at this time, since it differs from
    * xaccAccountForEachTransaction by using gpointer return
-   * values rather than gbooleans.
+   * values rather than gints.
    */
   GList   *lp;
   Timespec ts, trans_ts;
@@ -3040,60 +3040,14 @@ xaccAccountGetReconcileChildrenStatus(Account *account)
 /********************************************************************\
 \********************************************************************/
 
-gboolean
-xaccAccountVisitUnvisitedTransactions(Account *acc,
-                                      gboolean (*proc)(Transaction *t,
-                                                       void *data),
-                                      void *data,
-                                      GHashTable *visited_txns) 
-{
-  gboolean keep_going = TRUE;
-  GList *lp;
-
-  if(!acc) return(FALSE);
-  if(!proc) return(FALSE);
-  if(!visited_txns) return(FALSE);
-
-  for(lp = acc->splits; lp && keep_going; lp = lp->next) {
-    Split *s = (Split *) lp->data;
-    Transaction *t = xaccSplitGetParent(s);
-
-    if(t) {
-      const GUID *guid = xaccTransGetGUID(t);
-      gpointer been_here = g_hash_table_lookup(visited_txns, guid);
-
-      if(!GPOINTER_TO_INT(been_here)) {
-        g_hash_table_insert(visited_txns, (gpointer) guid,
-                            GINT_TO_POINTER(TRUE));
-        if(!proc(t, data)) {
-          keep_going = FALSE;
-        }
-      }
-    }
-  }
-  return(keep_going);
-}
-
-gboolean
+gint
 xaccAccountForEachTransaction(Account *acc,
-                              gboolean (*proc)(Transaction *t, void *data),
+                              TransactionCallback proc,
                               void *data) 
 {
-  GHashTable *visited_txns = NULL;
-  gboolean result = FALSE;
-
-  if(!acc) return(FALSE);
-  if(!proc) return(FALSE);
-  
-  visited_txns = guid_hash_table_new();
-  if(visited_txns) {
-    result =
-      xaccAccountVisitUnvisitedTransactions(acc, proc, data, visited_txns);
-  }
-  
-  /* cleanup */
-  if(visited_txns) g_hash_table_destroy(visited_txns);  
-  return(result);
+  if(!acc || !proc) return 0;
+  xaccAccountBeginStagedTransactionTraversals (acc);
+  return xaccAccountStagedTransactionTraversal(acc, 42, proc, data);
 }
 
 /********************************************************************\

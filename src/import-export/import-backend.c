@@ -924,10 +924,10 @@ gnc_import_process_trans_clist (GtkCList *clist,
 /********************************************************************\
  * check_trans_online_id() Callback function to be used by
  * gnc_import_exists_online_id.  Takes pointers to two transaction and
- * returns TRUE if their online_id kvp_frame do NOT match, or if both
+ * returns 0 if their online_id kvp_frame do NOT match, or if both
  * pointers point to the same transaction.
  * \********************************************************************/
-static gboolean check_trans_online_id(Transaction *trans1, void *user_data)
+static gint check_trans_online_id(Transaction *trans1, void *user_data)
 {
   Transaction *trans2 = user_data;
   const gchar *online_id1 = gnc_import_get_trans_online_id(trans1);
@@ -936,12 +936,12 @@ static gboolean check_trans_online_id(Transaction *trans1, void *user_data)
   if ((trans1 == trans2) || (online_id1 == NULL) || 
       (online_id2 == NULL) || (strcmp(online_id1, online_id2) != 0))
     {
-      return TRUE;
+      return 0;
     }
   else
     {
       //printf("test_trans_online_id(): Duplicate found\n");
-      return FALSE;
+      return 1;
     }
 }
 
@@ -963,7 +963,7 @@ gboolean gnc_import_exists_online_id (Transaction *trans)
     {
       /* DEBUG("%s%d%s","Checking split ",i," for duplicates"); */
       dest_acct = xaccSplitGetAccount(source_split);
-      online_id_exists = !xaccAccountForEachTransaction(dest_acct,
+      online_id_exists = xaccAccountForEachTransaction(dest_acct,
 							check_trans_online_id,
 							trans);
     }

@@ -307,7 +307,7 @@ static void create_transactions_on( SchedXaction *sx,
                                     GDate *gd,
                                     toCreateInstance *tci,
                                     GList **createdGUIDs );
-static gboolean create_each_transaction_helper( Transaction *t, void *d );
+static gint create_each_transaction_helper( Transaction *t, void *d );
 /* External for what reason ... ? */
 void sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash );
 static void hash_to_sorted_list( GHashTable *hashTable, GList **gl );
@@ -2364,7 +2364,7 @@ gnc_sxsl_del_vars_table_ea( gpointer key,
                 g_free( (gnc_numeric*)value );
 }
 
-static gboolean
+static gint
 create_each_transaction_helper( Transaction *t, void *d )
 {
         Transaction *newT;
@@ -2409,7 +2409,7 @@ create_each_transaction_helper( Transaction *t, void *d )
                 PERR( "\tseen transaction w/o splits. :(" );
                 xaccTransDestroy( newT );
                 xaccTransCommitEdit( newT );
-                return FALSE;
+                return 13;
         }
 
         /* Setup the predefined variables for credit/debit formula
@@ -2596,7 +2596,7 @@ create_each_transaction_helper( Transaction *t, void *d )
                 xaccTransRollbackEdit( newT );
                 xaccTransDestroy( newT );
                 xaccTransCommitEdit( newT );
-                return FALSE;
+                return 13;
         }
 
         xaccTransCommitEdit( newT );
@@ -2607,7 +2607,7 @@ create_each_transaction_helper( Transaction *t, void *d )
                                        (gpointer)xaccTransGetGUID(newT) );
         }
 
-        return TRUE;
+        return 0;
 }
 
 /**

@@ -966,7 +966,7 @@ write_pricedb(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     xmlFreeNode(node);
 }
 
-static gboolean
+static int
 xml_add_trn_data(Transaction *t, gpointer data)
 {
     struct file_backend *be_data = data;
@@ -980,7 +980,7 @@ xml_add_trn_data(Transaction *t, gpointer data)
     xmlFreeNode(node);
     be_data->gd->counter.transactions_loaded++;
     run_callback(be_data->gd, "transaction");
-    return TRUE;
+    return 0;
 }
 
 static void

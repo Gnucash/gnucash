@@ -543,11 +543,11 @@ xaccAccountScrubCommodity (Account *account)
 
 /* ================================================================ */
 
-static gboolean
+static int
 scrub_trans_currency_helper (Transaction *t, gpointer data)
 {
   xaccTransScrubCurrency (t);
-  return TRUE;
+  return 0;
 }
 
 static gpointer

@@ -3216,11 +3216,11 @@ xaccSplitMakeStockSplit(Split *s)
 
 /* ====================================================================== */
 
-static gboolean
+static int
 counter_thunk(Transaction *t, void *data)
 {
     (*((guint*)data))++;
-    return TRUE;
+    return 0;
 }
 
 guint

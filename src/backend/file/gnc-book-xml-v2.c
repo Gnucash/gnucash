@@ -88,7 +88,7 @@ append_group (xmlNodePtr parent, AccountGroup *grp)
     }
 }
 
-static gboolean 
+static int
 traverse_txns (Transaction *txn, gpointer data)
 {
     xmlNodePtr node;
@@ -97,7 +97,7 @@ traverse_txns (Transaction *txn, gpointer data)
     node = gnc_transaction_dom_tree_create(txn);
     xmlAddChild (parent, node);
 
-    return TRUE;
+    return 0;
 }
 #endif
 

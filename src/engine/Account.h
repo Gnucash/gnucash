@@ -453,14 +453,6 @@ gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
 
 /* ------------------ */
 
-/* Doxygen note: if these typedefs are inside the member group, the
- * member group will show up at the top of the documentation, which is
- * probably not wanted. */
-/** \warning Unimplemented, for xaccAccountForEachSplit() */
-typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
-/** Callback prototype for xaccAccountForEachTransaction() */
-typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
-
 /** @name Account split/transaction list management */
 /*@{*/
 /** The xaccAccountInsertSplit() method will insert the indicated
@@ -486,7 +478,7 @@ gpointer xaccAccountForEachSplit(Account *account,
 /** The xaccAccountForEachTransaction() routine will traverse all of
    the transactions in the given 'account' and call the callback
    function 'proc' on each transaction.  Processing will continue
-   if-and-only-if 'proc' does not return FALSE. The user data pointer
+   if-and-only-if 'proc' returns 0. The user data pointer
    'data' will be passed on to the callback function 'proc'.
 
    This function does not descend recursively to traverse transactions
@@ -495,12 +487,9 @@ gpointer xaccAccountForEachSplit(Account *account,
    'proc' will be called exactly once for each transaction that is
    pointed to by at least one split in the given account.
 
-   Note too, that if you call this function on two separate accounts
-   and those accounts share transactions, proc will be called once per
-   account for the shared transactions.
-   
-   The result of this function will not be FALSE if-and-only-if
+   The result of this function will be 0 if-and-only-if
    every relevant transaction was traversed exactly once. 
+   Else the return value is the last non-zero value returned by proc.
 
    Note that the traversal occurs only over the transactions that 
    are locally cached in the local gnucash engine.  If the gnucash 
@@ -510,34 +499,16 @@ gpointer xaccAccountForEachSplit(Account *account,
    it will not traverse transactions present only in the remote
    database.
 */
-gboolean
-xaccAccountForEachTransaction(Account *account,
-                              TransactionCallback proc,
-                              void *data);
-
-/** The xaccAccountVisitUnvisitedTransactions() routine will
-   visit every transaction in the account that hasn't already been
-   visited exactly once.  visited_txns must be a hash table created
-   via guid_hash_table_new() and is the authority about which
-   transactions have already been visited.  Further, when this
-   procedure returns visited_txns will have been modified to reflect
-   all the newly visited transactions.
-
-   The result of this function will not be FALSE if-and-only-if 
-   every relevant transaction was traversed exactly once.  
-*/
-gboolean
-xaccAccountVisitUnvisitedTransactions(Account *account,
-                                      TransactionCallback,
-                                      void *data,
-                                      GHashTable *visited_txns);
+gint xaccAccountForEachTransaction(Account *account,
+                                   TransactionCallback proc,
+                                   void *data);
 
 /** Returns a pointer to the transaction, not a copy. */
-Transaction *
-xaccAccountFindTransByDesc(Account *account, const char *description);
+Transaction * xaccAccountFindTransByDesc(Account *account, 
+                                   const char *description);
+
 /** Returns a pointer to the split, not a copy. */
-Split *
-xaccAccountFindSplitByDesc(Account *account, const char *description);
+Split * xaccAccountFindSplitByDesc(Account *account, const char *description);
 
 /** The xaccAccountFixSplitDateOrder() subroutine checks to see if 
  *    a split is in proper sorted date order with respect 
