@@ -1,3 +1,8 @@
+2003-01-21  David Hampton  <hampton@employees.org>
+
+	* src/quotes/finance-quote-helper.in: Fix problem getting quotes
+	from trustnet.
+	
 2003-01-21  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: be more liberal in the use of AS_SCRUB_INCLUDE
