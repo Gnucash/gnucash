@@ -22,8 +22,8 @@
 
 /** @file kvp-util.h @brief GnuCash KVP utility functions */
 
-#ifndef GNC_ENGINE_UTIL_H
-#define GNC_ENGINE_UTIL_H
+#ifndef GNC_KVP_UTIL_H
+#define GNC_KVP_UTIL_H
 
 #include "config.h"
 
@@ -52,4 +52,4 @@ void g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data);
 
 /***********************************************************************/
 
-#endif
+#endif /* GNC_KVP_UTIL_H */

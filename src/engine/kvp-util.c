@@ -28,6 +28,7 @@
 #include "gnc-engine-util.h"
 
 #include "kvp_frame.h"
+#include "kvp-util.h"
 #include "kvp-util-p.h"
 
 /* ================================================================ */
@@ -88,4 +89,34 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
 }
 
 /* ================================================================ */
+/*
+ * See header for docs.
+ */
 
+static void
+kv_pair_helper(gpointer key, gpointer val, gpointer user_data)
+{
+  GSList **result = (GSList **) user_data;
+  GHashTableKVPair *kvp = g_new(GHashTableKVPair, 1);
+
+  kvp->key = key;
+  kvp->value = val;
+  *result = g_slist_prepend(*result, kvp);
+}
+
+GSList *
+g_hash_table_key_value_pairs(GHashTable *table)
+{
+  GSList *result_list = NULL;
+  g_hash_table_foreach(table, kv_pair_helper, &result_list);
+  return result_list;
+}
+
+void
+g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data)
+{
+  GHashTableKVPair *kvp = (GHashTableKVPair *) data;
+  g_free(kvp);
+}
+
+/*======================== END OF FILE =============================*/

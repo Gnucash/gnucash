@@ -83,6 +83,7 @@ gncinclude_HEADERS = \
   gncObject.h \
   kvp_frame.h \
   kvp-scm.h \
+  kvp-util.h \
   messages.h
 
 noinst_HEADERS = \

@@ -37,9 +37,6 @@
 
 #include "config.h"
 
-#include "gnc-commodity.h"
-#include "gnc-numeric.h"
-
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */
 
@@ -280,29 +277,5 @@ char * gnc_stpcpy (char *dest, const char *src);
 #define stpcpy gnc_stpcpy
 #endif
 
-/***********************************************************************\
-
-  g_hash_table_key_value_pairs(hash): Returns a GSList* of all the
-  keys and values in a given hash table.  Data elements of lists are
-  actual hash elements, so be careful, and deallocation of the
-  GHashTableKVPairs in the result list are the caller's
-  responsibility.  A typical sequence might look like this:
-
-    GSList *kvps = g_hash_table_key_value_pairs(hash);  
-    ... use kvps->data->key and kvps->data->val, etc. here ...
-    g_slist_foreach(kvps, g_hash_table_kv_pair_free_gfunc, NULL);
-    g_slist_free(kvps);
-
-*/
-
-typedef struct {
-  gpointer key;
-  gpointer value;
-} GHashTableKVPair;
-
-GSList *g_hash_table_key_value_pairs(GHashTable *table);
-void g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data);
-
-/***********************************************************************/
 
 #endif

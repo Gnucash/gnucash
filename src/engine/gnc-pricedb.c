@@ -35,6 +35,7 @@
 #include "gnc-event-p.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
+#include "kvp-util.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PRICE;
