@@ -32,7 +32,6 @@
 #define HBCI_ACCOUNTS "hbci-accounts"
 
 /* Account */
-#if 0
 char *gnc_hbci_get_account_accountid (Account *a)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
@@ -75,7 +74,6 @@ void gnc_hbci_set_account_countrycode (Account *a, gint code)
   kvp_frame_set_slot_nc (frame, HBCI_COUNTRY_CODE, value);
   xaccAccountCommitEdit (a);
 }
-#endif
 gint gnc_hbci_get_account_uid (Account *a)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);

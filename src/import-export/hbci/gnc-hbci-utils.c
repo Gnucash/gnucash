@@ -179,15 +179,28 @@ gnc_hbci_get_hbci_acc (const AB_BANKING *api, Account *gnc_acc)
 {
   int account_uid = 0;
   AB_ACCOUNT *hbci_acc = NULL;
+  const char *bankcode = NULL, *accountid = NULL;
 
+  bankcode = gnc_hbci_get_account_bankcode (gnc_acc);
+  accountid = gnc_hbci_get_account_accountid (gnc_acc);
   account_uid = gnc_hbci_get_account_uid (gnc_acc);
   if (account_uid > 0) {
     /*printf("gnc_hbci_get_hbci_acc: gnc_acc %s has blz %s and ccode %d\n",
       xaccAccountGetName (gnc_acc), bankcode, countrycode);*/
     hbci_acc = AB_Banking_GetAccount(api, account_uid);
+
+    if (!hbci_acc && bankcode && (strlen(bankcode)>0) &&
+	accountid && (strlen(accountid) > 0)) {
+      printf("gnc_hbci_get_hbci_acc: No AB_ACCOUNT found for UID %d, trying bank code\n", account_uid);
+      hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
+    }
     /*printf("gnc_hbci_get_hbci_acc: return HBCI_Account %p\n", hbci_acc);*/
     return hbci_acc;
+  } else if (bankcode && (strlen(bankcode)>0) && accountid && (strlen(accountid) > 0)) {
+    hbci_acc = AB_Banking_GetAccountByCodeAndNumber(api, bankcode, accountid);
+    return hbci_acc;
   }
+
   return NULL;
 }
 

@@ -63,12 +63,30 @@ accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
       AB_Account_GetUniqueId(hbci_acc))
     gnc_hbci_set_account_uid
       (gnc_acc, AB_Account_GetUniqueId(hbci_acc));
+
+  if (AB_Account_GetAccountNumber(hbci_acc) && 
+      ((gnc_hbci_get_account_accountid(gnc_acc) == NULL) ||
+       (strcmp(gnc_hbci_get_account_accountid(gnc_acc), 
+	       AB_Account_GetAccountNumber(hbci_acc)) != 0)))
+    gnc_hbci_set_account_accountid
+      (gnc_acc, AB_Account_GetAccountNumber(hbci_acc));
+
+  if (AB_Account_GetBankCode(hbci_acc) && 
+      ((gnc_hbci_get_account_bankcode(gnc_acc) == NULL) ||
+       (strcmp(gnc_hbci_get_account_bankcode(gnc_acc), 
+	       AB_Account_GetBankCode(hbci_acc)) != 0)))
+    gnc_hbci_set_account_bankcode
+      (gnc_acc, AB_Account_GetBankCode(hbci_acc));
 }
 
 static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
 {
   if (gnc_hbci_get_account_uid(gnc_acc))
     gnc_hbci_set_account_uid (gnc_acc, 0);
+  if (gnc_hbci_get_account_accountid(gnc_acc))
+    gnc_hbci_set_account_accountid (gnc_acc, "");
+  if (gnc_hbci_get_account_bankcode(gnc_acc))
+    gnc_hbci_set_account_bankcode (gnc_acc, "");
   return NULL;
 }
 

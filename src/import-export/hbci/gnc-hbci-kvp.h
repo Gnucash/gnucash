@@ -30,29 +30,27 @@
 
 /* Account */
 
-#if 0
-/** DEPRECATED. Returns a non-copied pointer to the accountid string in the
+/** Returns a non-copied pointer to the accountid string in the
  * Account a. The char* is still owned by the kvp_frame, so don't free
  * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_account_accountid (Account *a);
-/** DEPRECATED. Set the accountid string in the Account a. A copy of the string
+/** Set the accountid string in the Account a. A copy of the string
  * will be stored. The Account will be marked as "dirty". */
 void gnc_hbci_set_account_accountid (Account *a, const char *id);
 
-/** DEPRECATED. Returns a non-copied pointer to the bankcode string in the
+/** Returns a non-copied pointer to the bankcode string in the
  * Account a. The char* is still owned by the kvp_frame, so don't free
  * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_account_bankcode (Account *a);
-/** DEPRECATED. Set the bankcode string in the Account a. A copy of the string
+/** Set the bankcode string in the Account a. A copy of the string
  * will be stored. The Account will be marked as "dirty". */
 void gnc_hbci_set_account_bankcode (Account *a, const char *code);
 
-/** DEPRECATED. Returns the countrycode integer value from the Account a.  */
+/** Returns the countrycode integer value from the Account a.  */
 gint gnc_hbci_get_account_countrycode (Account *a);
-/** DEPRECATED. Set the countrycode integer value in the Account a.  The Account
+/** Set the countrycode integer value in the Account a.  The Account
  * will be marked as "dirty". */
 void gnc_hbci_set_account_countrycode (Account *a, gint code);
-#endif
 
 /** Returns the unique id for the AB_BANKING account in the Account
  * a. */
