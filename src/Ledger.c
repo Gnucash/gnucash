@@ -128,8 +128,8 @@ xaccSaveRegEntry (BasicRegister *reg)
    if (MOD_AMNT & changed) {
       double new_amount;
       new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
-      xaccSplitSetAmount (split, new_amount);
-      xaccTransRecomputeAmount (trans);
+      xaccSplitSetValue (split, new_amount);
+      xaccSplitRebalance (split);
    }
 
    if (MOD_SHRS & changed) {
@@ -191,7 +191,7 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    xaccSetComboCellValue (reg->xfrmCell, accname);
 
    xaccSetDebCredCellValue (reg->debitCell, 
-                            reg->creditCell, xaccSplitGetAmount (split));
+                            reg->creditCell, xaccSplitGetValue (split));
 
    xaccSetAmountCellValue (reg->balanceCell, xaccSplitGetBalance (split));
 
