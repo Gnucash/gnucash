@@ -551,6 +551,117 @@ gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
   LEAVE("sensitive=%d, default = %d", ok, ok ? 0 : 1);
 }
 
+/********************************************************************\
+ * gnc_ui_source_menu_create                                        *
+ *   create the menu of stock quote sources                         *
+ *                                                                  *
+ * Args:    account - account to use to set default choice          *
+ * Returns: the menu                                                *
+ \*******************************************************************/
+static GtkWidget *
+gnc_ui_source_menu_create(void)
+{
+  gint i;
+  GtkMenu   *menu;
+  GtkWidget *item;
+  GtkWidget *omenu;
+
+  menu = GTK_MENU(gtk_menu_new());
+  gtk_widget_show(GTK_WIDGET(menu));
+
+  for (i = 0; i < NUM_SOURCES; i++)
+  {
+    item = gtk_menu_item_new_with_label(gnc_price_source_enum2name(i));
+    gtk_widget_set_sensitive(item, gnc_price_source_sensitive(i));
+    gtk_widget_show(item);
+    gtk_menu_append(menu, item);
+  }
+
+  omenu = gtk_option_menu_new();
+  gtk_widget_show(omenu);
+  gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), GTK_WIDGET(menu));
+  gnc_option_menu_init(omenu);
+
+  return omenu;
+}
+
+/********************************************************************\
+ * price quote timezone handling
+ */
+
+static gchar *
+known_timezones[] =
+{
+  "Asia/Tokyo",
+  "Australia/Sydney",
+  "America/New_York",
+  "America/Chicago",
+  "Europe/London",
+  "Europe/Paris",
+  NULL
+};
+
+static guint
+gnc_find_timezone_menu_position(const gchar *timezone)
+{
+  /* returns 0 on failure, position otherwise. */
+  gboolean found = FALSE;
+  guint i = 0;
+  while(!found && known_timezones[i]) {
+    if(safe_strcmp(timezone, known_timezones[i]) != 0) {
+      i++;
+    } else {
+      found = TRUE;
+    }
+  }
+  if(found) return i + 1;
+  return 0;
+}
+
+static gchar *
+gnc_timezone_menu_position_to_string(guint pos)
+{
+  if(pos == 0) return NULL;
+  return known_timezones[pos - 1];
+}
+
+static GtkWidget *
+gnc_ui_quote_tz_menu_create(void)
+{
+  GtkMenu   *menu;
+  GtkWidget *item;
+  GtkWidget *omenu;
+  gchar     **itemstr;
+
+  /* add items here as needed, but bear in mind that right now these
+     must be timezones that GNU libc understands.  Also, I'd prefer if
+     we only add things here we *know* we need.  That's because in
+     order to be portable to non GNU OSes, we may have to support
+     whatever we add here manually on those systems. */
+
+  menu = GTK_MENU(gtk_menu_new());
+  gtk_widget_show(GTK_WIDGET(menu));
+
+  item = gtk_menu_item_new_with_label(_("Use local time"));
+  /* set user data to non NULL so we can detect this item specially. */
+  gtk_object_set_user_data(GTK_OBJECT(item), (gpointer) 1);
+  gtk_widget_show(item);
+  gtk_menu_append(menu, item);
+ 
+  for(itemstr = &known_timezones[0]; *itemstr; itemstr++) {
+    item = gtk_menu_item_new_with_label(*itemstr);
+    gtk_widget_show(item);
+    gtk_menu_append(menu, item);
+  }
+
+  omenu = gtk_option_menu_new();
+  gtk_widget_show(omenu);
+  gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), GTK_WIDGET(menu));
+  gnc_option_menu_init(omenu);
+
+  return omenu;
+}
+
 /** Build the new/edit commodity dialog box
  */
 static CommodityWindow *
