@@ -1,3 +1,9 @@
+2004-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.cm: applied Vasil's
+	  patch to improve the transaction report for HTML export
+	  purposes.  Fixes bug #142942.
+
 2004-05-17  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/locale-specific/us/taxtxf.scm: guile-1.6 complains
