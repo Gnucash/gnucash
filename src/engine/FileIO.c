@@ -141,7 +141,7 @@ static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
 static int           readTSDate( int fd, Timespec *, int token );
 
-static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
+static int writeAccountGroupToFile( const char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
 static int writeAccount( int fd, Account *account );
 static int writeAccInfo( int fd, AccInfo *accinfo );
@@ -268,7 +268,7 @@ long long xaccFlipLongLong (long long val)
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
 AccountGroup *
-xaccReadAccountGroupFile( char *datafile )
+xaccReadAccountGroupFile( const char *datafile )
   {
   int  fd;
   AccountGroup *grp = 0x0;
@@ -1346,7 +1346,7 @@ xaccResetWriteFlags (AccountGroup *grp)
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
-xaccWriteAccountGroupFile( char *datafile, AccountGroup *grp )
+xaccWriteAccountGroupFile( const char *datafile, AccountGroup *grp )
   {
   int err = 0;
   char * timestamp;
@@ -1386,7 +1386,7 @@ xaccWriteAccountGroupFile( char *datafile, AccountGroup *grp )
 \********************************************************************/
 
 static int 
-writeAccountGroupToFile( char *datafile, AccountGroup *grp )
+writeAccountGroupToFile( const char *datafile, AccountGroup *grp )
   {
   int err = 0;
   int fd;

@@ -50,7 +50,8 @@
  *    is replaced with the current year/month/day/hour/minute/second.
  *    Returns a negative number if an error occured.
  */
-AccountGroup *xaccReadAccountGroupFile  (char *datafile);
-int           xaccWriteAccountGroupFile (char *datafile, AccountGroup *grp);
+AccountGroup *xaccReadAccountGroupFile  (const char *datafile);
+int           xaccWriteAccountGroupFile (const char *datafile,
+                                         AccountGroup *grp);
 
 #endif /* __XACC_FILEIO_P_H__ */
