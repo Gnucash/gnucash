@@ -420,7 +420,7 @@ mainWindow( Widget parent )
       NULL,         NULL,                  (MenuItem *)NULL },
     { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_QUIT,  (MenuItem *)NULL },
-    { NULL, },
+    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
   };
 
   MenuItem accountMenu[] = {
@@ -444,7 +444,7 @@ mainWindow( Widget parent )
     { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_CAT,  (MenuItem *)NULL },
 #endif
-    { NULL, },
+    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
   };
   
   MenuItem helpMenu[] = {
@@ -458,7 +458,7 @@ mainWindow( Widget parent )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
-    { NULL, },
+    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
   };
   
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 

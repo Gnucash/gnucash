@@ -1721,7 +1721,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   MenuItem reportMenu[] = {
     { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       NULL, (XtPointer)0,  (MenuItem *)NULL },
-    { NULL, },
+    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
   };
   
   MenuItem activityMenu[] = {
@@ -1743,7 +1743,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       destroyShellCB, NULL, (MenuItem *)NULL },
-    { NULL, },
+    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
   };
 
   
@@ -1756,7 +1756,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
-    { NULL, },
+    { NULL, NULL, 0, NULL, NULL, False, NULL, (XtPointer)0, (MenuItem *)NULL},
   };
   
 
