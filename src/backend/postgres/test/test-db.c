@@ -562,7 +562,7 @@ test_trans_query (Transaction *trans, gpointer data)
     return FALSE;
   }
 
-  list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);
+  list = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
   if (g_list_length (list) != 1)
   {
     failure_args ("test num returned", __FILE__, __LINE__,
