@@ -4,6 +4,11 @@
 	  earnings" item under equity, and change the title to include
 	  the start date.  Fixes (finally!) bug #113196
 
+	* src/gnome-utils/dialog-transfer.c: if we've got the 'exch rate'
+	  button set, then make sure we update the to-amount before we use
+	  it.  Also be sure to use the values we just obtained.
+	  Fixes #115991.
+
 2003-06-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/dialog-transfer.h: Add callback handler that is
