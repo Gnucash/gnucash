@@ -490,6 +490,13 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
   gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
                       GTK_SIGNAL_FUNC(commodity_close), retval);
 
+  gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
+			       GTK_EDITABLE(retval->fullname_entry));
+  gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
+			       GTK_EDITABLE(retval->mnemonic_entry));
+  gnome_dialog_editable_enters(GNOME_DIALOG(retval->dialog),
+			       GTK_EDITABLE(retval->code_entry));
+
   namespace = gnc_ui_update_namespace_picker(retval->namespace_combo,
                                              selected_namespace,
                                              FALSE, TRUE);
