@@ -10,7 +10,6 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/lib \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
-  --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/gnome \
   --library-dir ${top_builddir}/src/gnome-utils \
