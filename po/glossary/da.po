@@ -3,13 +3,11 @@
 # Keld Simonsen <keld@dkuug.dk>, 2001.
 # Christian Rose <menthos@menthos.com>, 2001.
 #
-# $Id$
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
 "POT-Creation-Date: 2001-10-08 20:14-0400\n"
-"PO-Revision-Date: 2001-10-08 20:08+0200\n"
+"PO-Revision-Date: 2001-10-25 20:08+0200\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -26,11 +24,11 @@ msgstr "konto"
 
 #. "-"
 msgid "account code"
-msgstr "kontokode"
+msgstr "kontonummer"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr "kontohierarki"
+msgstr "kontoplan"
 
 #. "-"
 msgid "account name"
@@ -43,7 +41,7 @@ msgstr "kontotype: Aktiv"
 # src/prefs.c:210
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "kontotype: check"
+msgstr "kontotype: almindelig"
 
 #. "-"
 msgid "account type: currency"
@@ -51,15 +49,15 @@ msgstr "kontotype: valuta"
 
 #. "see: Equity"
 msgid "account type: Equity"
-msgstr "kontotype: Egenkapital"
+msgstr "kontotype: Kapital"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "kontotype: Udgift"
+msgstr "kontotype: Omkostning"
 
 #. "-"
 msgid "account type: Income"
-msgstr "kontotype: Indkomst"
+msgstr "kontotype: Salg"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
@@ -67,7 +65,7 @@ msgstr "kontotype: Gæld"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "kontotype: pengemarked"
+msgstr "kontotype: aftaleindskud"
 
 #. "-"
 msgid "account type: Mutual fund"
@@ -95,7 +93,7 @@ msgstr "konto: hovedkonto"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr "Hændelse (register)"
+msgstr "Hændelse (kassekladde)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
@@ -103,7 +101,7 @@ msgstr "hændelse: pengeautomat"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "hændelse: stående overføring"
+msgstr "hændelse: fast overføring"
 
 #. "-"
 msgid "action: buy"
@@ -123,11 +121,11 @@ msgstr "hændelse: dist"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "hændelse: uddelning"
+msgstr "hændelse: dividendeudbetaling"
 
 #. "-"
 msgid "action: fee"
-msgstr "hændelse: afgift"
+msgstr "hændelse: gebyr"
 
 #. "transaction comes from interest"
 msgid "action: int"
@@ -143,7 +141,7 @@ msgstr "hændelse: betaling"
 
 #. "-"
 msgid "action: POS"
-msgstr "hændelse: kortsalg"
+msgstr "hændelse: kasseapparat"
 
 #. "-"
 msgid "action: rebate"
@@ -163,7 +161,7 @@ msgstr "hændelse: overførsel"
 
 #. "-"
 msgid "action: wire"
-msgstr "hændelse: overfør elektronisk"
+msgstr "hændelse: elektronisk overførsel"
 
 #. "-"
 msgid "action: withdraw"
@@ -239,7 +237,7 @@ msgstr "varealternativ: Symbol"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Kredit (kolonne i register)"
+msgstr "Kredit (kolonne i kassekladde)"
 
 #. "-"
 msgid "Credit Card"
@@ -275,7 +273,7 @@ msgstr "datointerval"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Debet (kolonne i register)"
+msgstr "Debet (kolonne i kassekladde)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -291,7 +289,7 @@ msgstr "afskrivning"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "Beskrivelse (kolonne i register)"
+msgstr "Beskrivelse (kolonne i kassekladde)"
 
 #. "Important Buzzword :)"
 msgid "double entry"
@@ -395,11 +393,11 @@ msgstr "nettoværdi"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr "noter (register)"
+msgstr "noter (kassekladde)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Nr (kolonne i register)"
+msgstr "Nr (kolonne i kassekladde)"
 
 #. "to make accessible"
 msgid "open, to"
@@ -407,7 +405,7 @@ msgstr "åbne, at"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr "indgående saldo"
+msgstr "åbningssaldo"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
@@ -424,7 +422,7 @@ msgstr "adgangsfrase"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr "Betalinger/Fordringer"
+msgstr "Kreditorer/debitorer"
 
 #. "A person to whom sth is paid"
 msgid "payee"
@@ -468,7 +466,7 @@ msgstr "gevinst"
 
 #. "(rather: profit and loss account!?) A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Gevinst og tab"
+msgstr "Resultatopgørelse"
 
 #. "-"
 msgid "quick-fill"
@@ -476,7 +474,7 @@ msgstr "hurtigudfyldning"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr "ombalancere, at (en transaktion)"
+msgstr "ompostere, at (en transaktion)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
@@ -488,31 +486,31 @@ msgstr "bogføring"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "register"
+msgstr "kassekladde"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "registerpost: delt transaktion"
+msgstr "kassekladdepost: delt transaktion"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "registerpost: aktiedeling"
+msgstr "kassekladdepost: aktiedeling"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "register: autodelings bogføring"
+msgstr "kassekladde: autodelings bogføring"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "register: grundlæggende bogføring"
+msgstr "kassekladde: grundlæggende bogføring"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "register: generel bogføring"
+msgstr "kassekladde: generel bogføring"
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr "register: transaktionsjournal"
+msgstr "kassekladde: transaktionsjournal"
 
 #. "reload the current document"
 msgid "reload, to"
@@ -520,7 +518,7 @@ msgstr "genindlæse, at"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Realiserede indtægter"
+msgstr "Overført resultat"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -536,7 +534,7 @@ msgstr "værdipapir"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Aktiebalance (register)"
+msgstr "Aktiebalance (kassekladde)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -605,7 +603,7 @@ msgstr "overførselskonto"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "overføre, at (registerværktøjslinje)"
+msgstr "overføre, at (kassekladdeværktøjslinje)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -625,4 +623,5 @@ msgstr "værdi (i en deling)"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "hævelse (i afstemningsdialogen)"
+msgstr "hævning (i afstemningsdialogen)"
+
