@@ -1088,13 +1088,18 @@ xaccResolveURL (const char * pathfrag)
 void
 gnc_run_rpc_server (void)
 {
-  char * dll_err;
+  const char * dll_err;
   void * dll_handle;
   int (*rpc_run)(short);
   int ret;
  
   /* open and resolve all symbols now (we don't want mystery 
    * failure later) */
+#ifndef RTLD_NOW
+# ifdef RTLD_LAZY
+#  define RTLD_NOW RTLD_LAZY
+# endif
+#endif
   dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
   if (! dll_handle) 
   {
