@@ -721,6 +721,8 @@ AC_OUTPUT(
           src/import-export/qif-import/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
+          src/network-utils/Makefile
+          src/network-utils/test/Makefile
           src/optional/Makefile
           src/optional/swig/Makefile
           src/pixmaps/Makefile

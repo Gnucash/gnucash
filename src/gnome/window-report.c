@@ -845,7 +845,7 @@ gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
 static void
 gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
                            gpointer user_data) {
-  gnome_ok_dialog("Set the report options you want using this dialog.");
+  gnome_ok_dialog(_("Set the report options you want using this dialog."));
 }
 
 static void
@@ -936,4 +936,3 @@ gnc_report_raise_editor(SCM report) {
   SCM editor = gh_call1(get_editor, report);
   gdk_window_raise(GTK_WIDGET(gw_wcp_get_ptr(editor))->window);
 }
-

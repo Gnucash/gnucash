@@ -13,6 +13,7 @@ CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 INCLUDES = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
@@ -69,6 +70,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   -L../gnc-module -L../gnc-module/.libs -lgncmodule \
   -L../engine -L../engine/.libs -lgncmod-engine \
   -L../calculation -L../calculation/.libs -lgncmod-calculation \
+  -L../network-utils -L../network-utils/.libs -lgncmod-network-utils \
   -L../app-utils -L../app-utils/.libs -lgncmod-app-utils \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \

@@ -23,22 +23,14 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <gnome.h>
-#include <unistd.h>
 #include <glib.h>
+#include <gnome.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-#include <gtkhtml/gtkhtml.h>
-#include <gtkhtml/gtkhtml-embedded.h>
-
-#include "global-options.h"
-#include "gnc-ui.h"
-#include "gnc-html.h"
-#include "gnc-network.h"
 #include "gnc-gpg.h"
-
 
 /********************************************************************
  * gnc_gpg_transform(_async) : call GPG with specified input and args

@@ -42,4 +42,6 @@ app-utils                   utils for the gnucash app framework (component
 gnome-utils                 Extensions and utilities for using Gnome/Gtk
                             with GnuCash, including new widgets.
 
+network-utils               Utils for network communication.
+
 tax/us                      US tax information

@@ -28,8 +28,6 @@ libgncgnome_a_SOURCES = \
   druid-stock-split.c \
   file-history.c \
   file-utils.c \
-  gnc-gpg.c \
-  gnc-http.c \
   gnc-network.c \
   gnc-splash.c \
   mainwindow-account-tree.c \
@@ -72,8 +70,6 @@ noinst_HEADERS = \
   druid-commodity.h \
   druid-hierarchy.h \
   file-utils.h \
-  gnc-gpg.h \
-  gnc-http.h \
   gnc-network.h \
   gnc-splash.h \
   mainwindow-account-tree.h \
@@ -107,6 +103,7 @@ INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \

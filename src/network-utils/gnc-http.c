@@ -43,7 +43,6 @@
 #include <string.h>
 
 #include "gnc-http.h"
-#include "messages.h"
 
 
 struct _gnc_http {
@@ -179,9 +178,9 @@ ghttp_check_callback(gpointer data) {
 static int
 gnc_http_certificate_check_cb(ghttp_request * req, X509 * cert, 
                               void * user_data) {
-  printf(_("checking SSL certificate..."));
+  printf("checking SSL certificate...");
   X509_print_fp(stdout, cert);
-  printf(_(" ... done\n"));
+  printf(" ... done\n");
   return TRUE;
 }
 #endif

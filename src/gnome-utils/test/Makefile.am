@@ -12,6 +12,7 @@ LDADD = \
   -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
   -L${top_srcdir}/src/engine -L${top_srcdir}/src/engine/.libs \
   -L${top_srcdir}/src/calculation -L${top_srcdir}/src/calculation/.libs \
+  -L${top_srcdir}/src/network-utils -L${top_srcdir}/src/network-utils/.libs \
   -L${top_srcdir}/src/app-utils -L${top_srcdir}/src/app-utils/.libs \
    ${top_srcdir}/src/gnc-module/libgncmodule.la \
    ${top_srcdir}/src/engine/libgncmod-engine.la \

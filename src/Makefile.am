@@ -3,6 +3,7 @@ SUBDIRS = \
   doc \
   gnc-module \
   test-core \
+  network-utils \
   engine \
   backend \
   calculation \
@@ -32,6 +33,7 @@ gnucash_LDADD = \
   -Lengine -Lengine/.libs \
   -Lgnc-module -Lgnc-module/.libs \
   -Lcalculation -Lcalculation/.libs \
+  -Lnetwork-utils -Lnetwork-utils/.libs \
   -Lapp-utils -Lapp-utils/.libs \
   gnc-module/libgncmodule.la \
   gnome-utils/libgncmod-gnome-utils.la \

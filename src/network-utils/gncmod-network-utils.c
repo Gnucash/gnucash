@@ -1,6 +1,6 @@
 /*********************************************************************
- * gncmod-gnome-utils.c
- * module definition/initialization for the gnome utilities 
+ * gncmod-netword-utils.c
+ * module definition/initialization for network communication utilities
  * 
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
@@ -24,36 +24,16 @@ int gnc_module_age      = 0;
 
 char *
 gnc_module_path(void) {
-  return g_strdup("gnucash/gnome-utils");
+  return g_strdup("gnucash/network-utils");
 }
 
 char * 
 gnc_module_description(void) {
-  return g_strdup("Utilities for using Gnome/Gtk with GnuCash");
+  return g_strdup("Utilities for performing network communication");
 }
 
 int
 gnc_module_init(int refcount) {
-  /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
-    return FALSE;
-  }
-
-  /* load the calculation module (we depend on it) */
-  if(!gnc_module_load("gnucash/calculation", 0)) {
-    return FALSE;
-  }
-
-  /* load the calculation module (we depend on it) */
-  if(!gnc_module_load("gnucash/network-utils", 0)) {
-    return FALSE;
-  }
-
-  /* load the calculation module (we depend on it) */
-  if(!gnc_module_load("gnucash/app-utils", 0)) {
-    return FALSE;
-  }
-
   return TRUE;
 }
 

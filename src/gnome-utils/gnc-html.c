@@ -545,17 +545,17 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     
   case URL_TYPE_SECURE:
     if(!https_allowed()) {
-      gnc_error_dialog("Secure HTTP access is disabled.\n"
-                       "You can enable it in the Network section of\n"
-                       "the Preferences dialog.");
+      gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+                         "You can enable it in the Network section of\n"
+                         "the Preferences dialog."));
       break;
     }
     
   case URL_TYPE_HTTP:
     if(!http_allowed()) {
-      gnc_error_dialog("Network HTTP access is disabled.\n"
-                       "You can enable it in the Network section of\n"
-                       "the Preferences dialog.");
+      gnc_error_dialog(_("Network HTTP access is disabled.\n"
+                         "You can enable it in the Network section of\n"
+                         "the Preferences dialog."));
     }
     else {
       fullurl = rebuild_url(type, location, label);
