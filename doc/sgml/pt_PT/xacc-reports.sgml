@@ -10,16 +10,24 @@
     <itemizedlist>
 <listitem>
 <para><link linkend="xacc-balancesheet">Folha de Balanço:</link>Mostra 
-      Activos, Passívos e Saldos Iniciais.
-
-      </para>
+      Activos, Passívos e Saldos Iniciais.   </para>
+<para><link linkend="xacc-net-worth-barchart">Gráfico de Barras de Valor 
+Líquido</link>mostra o seu valor líquido num ambiente gráfico. Examinar 
+apenas <link linkend="xacc-asset-liability-barcharts">gráficos de barras
+</link> de activos ou passivos, mostrando dados ao longo do tempo, também 
+é possível, tal como o é em <link linkend="xacc-asset-liability-piecharts">
+gráficos circulares</link>.
+</para>
 </listitem>
+
 <listitem>
 <para><link linkend="xacc-pnl">Estado de Proveitos e Prejuizos:</link>mostra 
-      Receitas e Despesas ao longo de um período seleccionável.
-
-      </para>
+      Receitas e Despesas ao longo de um período seleccionável. </para>
+<para>
+Existem também gráficos de <link linkend="xacc-income-expense-barcharts">barras</link>
+e <link linkend="xacc-income-expense-piecharts">circulares</link>.</para>
 </listitem>
+
 <listitem>
 <para><link linkend="xacc-trans-report">Relatório de 
       Transacções:</link>mostra transacções sobre uma conta, apresentadas de 
@@ -30,31 +38,33 @@
 <listitem>
 <para><link linkend="xacc-portfolio-report">Portfólio de Acções:</link>
       disponibiliza um resumo rápido das suas acções, o seu valor actual e 
-      mais-valias obtidas.
+      mais-valias obtidas. O <link linkend="xacc-stock-price-report">Controlo de 
+Cotações de Acções </link> permite-lhe acompanhar a cotação de uma acção específica 
+ao longo do tempo.</para></listitem>
 
-      </para>
-</listitem>
 <listitem> <para><link linkend="xacc-tax-report">Relatório de Impostos / 
 Exportação TXF:</link> mostra Receitas e Despesas tributáveis ou dedutíveis. 
 Pode <link linkend="xacc-txf-export">exportar para um ficheiro .TXF</link> 
 que pode ser importado no TaxCut ou TurboTax.  </para>
 </listitem>
-<listitem>
-<para><application>Histórico de Saldos:</application> 
-      acompanha o saldo de uma ou mais contas ao longo do tempo, suportando 
-      gráficos representativos (se tiver o <application>gnuplot</application>
-      instalado).
-    </para>
+
+<listitem> <para><link linkend="xacc-balancereport">Histórico de Saldos</link> 
+acompanha o saldo de uma ou mais contas ao longo do tempo, 
+com a opção de apresentar tanto tabelas como gráficos de barras.</para>
 </listitem>
+
 </itemizedlist>
 
     </para>
 </sect1>
 <sect1 id="xacc-reportwindow">
 <title>A Janela de Relatório</title>
-<para>    Após ter seleccionado um relatório, uma janela de relatório surgirá: 
+<para>Após ter seleccionado um relatório, uma janela de relatório surgirá: 
+Esta poderá surgir como uma janela de topo, uma pasta tipo separador de dossier, 
+ou na janela principal, seleccionável para visualização através do menu "Janela". 
+Isto é controlável <link linkend="xacc-gnome-mdi">utilizando o interface 
+MDI.</link></para>
 
-    </para>
 <para><inlinemediaobject>
 <imageobject>
 <imagedata fileref="image/reportwin.png">
@@ -74,7 +84,7 @@ que pode ser importado no TaxCut ou TurboTax.  </para>
       </para>
 </listitem>
 <listitem>
-<para>        <emphasis>Parâmetros</emphasis> faz surgir uma janela que lhe permite 
+<para>        <emphasis>Opções</emphasis> faz surgir uma janela que lhe permite 
         modificar a informação apresentada no relatório: 
 
         </para>
@@ -107,6 +117,21 @@ que pode ser importado no TaxCut ou TurboTax.  </para>
     </para>
 </sect1>
 
+<sect1 id="xacc-multiple-reports">
+<title> Múltiplos relatórios numa Janela</title> <para>O GnuCash permite-lhe 
+colocar vários relatórios numa única janela, permitindo-lhe examinar um 
+conjunto de informação financeira num relance. Esta funcionalidade é 
+disponibilizada pelo relatório especial de <link linkend="xacc-multicolumn-view-report">
+Visualização Multi-coluna</link>.</para></sect1>
+
+<sect1 id="xacc-url-reports">
+<title>Páginas Web como Relatórios</title>
+<para>Você pode ver páginas web como uma espécie especial de relatórios - muito 
+útil para manter num único local toda a informação financeira de que necessita, 
+incluíndo a de outras fontes.  Utilize o <link linkend="xacc-gnucash-web-browser">
+Relatório de Endereço em Frame</link> para o fazer.
+</para></sect1>
+
 <sect1 id="xacc-customreports">
 <title> Construir relatórios personalizados</title>
 
@@ -130,9 +155,12 @@ outros relatórios em <filename> src/scm/report </filename> para uma indicação
 de como as funções são utilizadas.
 </para>
 
-<para>De momento, os relatórios são gerados criando internamente HTML e 
-renderizando-o num objecto de HTML. (Versões futuras do GnuCash irão suportar, 
-esperamos, um sistema mais flexível).  </para>
+<para>De momento, os relatórios são produzidos chamando uma API que gera HTML, 
+que retorna um dialecto de HTML e o apresenta utilizando um widget HTML.  Isto 
+tem limitações (particularmente quando se tenta alinhar com precisão objectos, 
+tal como pode ser necessário na impressão de facturas em papel pré-impresso, por 
+exemplo), pelo que futuramente poderá ser necessária uma nova interface de geração 
+de relatórios.</para>
 
 </sect1>
 </article>

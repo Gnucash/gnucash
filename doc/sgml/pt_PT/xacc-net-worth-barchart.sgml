@@ -1,0 +1,30 @@
+<ARTICLE ID="XACC-NET-WORTH-BARCHART">
+<ARTHEADER>
+<TITLE>Gráfico de Barras de Valor Líquido</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Gráfico de Barras de Valor Líquido</TITLE>
+
+<PARA>O seu valor líquido é a diferença entre o valor dos seus activos 
+e passívos - por outras palavras, uma medida da sua riqueza. Sendo assim, 
+é interessante e informativo acompanhar esta informação ao longo do 
+tempo.  Este gráfico de barras permite-lhe observar como (esperamos) cresce.</PARA>
+
+<para><emphasis>Opções</emphasis></para>
+<itemizedlist>
+<listitem><para>Contas</para></listitem>
+<listitem><para>Nome de Relatório</para></listitem>
+<listitem><para>Folha de Estilo</para></listitem>
+<listitem><para>De, Até</para></listitem>
+<listitem><para>Tamanho do Intrevalo</para></listitem>
+<listitem><para>Moeda de Relatório</para></listitem>
+<listitem><para>Altura e Largura do Gráfico</para></listitem>
+<listitem><para>Mostrar Barras dos Activos & Passivos</para>
+<para>Mostra um par de barras para cada intrevalo de tempo representando, 
+respectivamente, os seus activos e passivos</para></listitem>
+<listitem><para>Mostrar Barras de Valor Líquido</para>
+<para>Mostra uma barra para cada intrevalo de tempo que representa o 
+seu valor líquido global nesse preciso momento.</para></listitem>
+</itemizedlist>
+</sect1>
+</article>

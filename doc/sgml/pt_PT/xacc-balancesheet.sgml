@@ -12,14 +12,39 @@
 </INLINEMEDIAOBJECT> 
 
     </PARA>
-<PARA>Este relatório resume os seus activos, passivos e 
-    saldos iniciais.
-
-    </PARA>
-<PARA>Pode seleccionar a data até à qual a Folha de Saldos deve 
-    ser calculada utilizando o botão "preferências" na barra de 
-    ferramentas. O defeito é hoje.
-
+<PARA>Este relatório resume os seus activos, passivos e saldos 
+  iniciais. QUando a sua contabilidade é correctamente mantida, 
+  os seus activos deverão igualar a soma dos seus passivos e saldos 
+  iniciais.  Se não for esse o caso, existe um qualquer desequilíbrio
+  interno nas suas contas.
+      </para>
+      <para>As opções disponíveis para este relatório incluem:
+  <itemizedlist>
+    <listitem><para><emphasis><link linkend="xacc-options-accounts">
+      Contas</link></emphasis></para>
+    </listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-depth">
+      Profundidade</link></emphasis></para>
+    </listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-report-title">
+      Título do Relatório</link></emphasis></para></listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-date">
+      Data</link></emphasis></para></listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+      Folha de Estilos</link></emphasis></para>
+    </listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-price-source">
+      Fonte de Cotações</link></emphasis></para>
+    </listitem>
+    <listitem><para><emphasis>Adicionar Restantes!!!
+        </emphasis></para>
+    </listitem>
+  </itemizedlist>
+      </para>
+<PARA>Note que apesar de <EMPHASIS>poder</EMPHASIS> seleccionar 
+contas específicas para este relatório, a menos que saiba exactamente 
+o que está a fazer, não será correcto e muito provavelmente irá obter
+valores incorrectos e enganadores.
 </PARA>
 </SECT1>
 </ARTICLE>

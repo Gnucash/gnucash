@@ -1,0 +1,35 @@
+<article id="xacc-asset-liability-piecharts">
+<artheader>
+<title>Gráfico Circular de Activos e Passivos</title>
+</artheader>
+<sect1>
+<title>Gráfico Circular de Activos e Passivos</title>
+<para><emphasis>NECESSÁRIAS IMAGENS!!!!</emphasis> 
+</para>
+<para>Estes gráficos circulares são úteis para obter uma 
+visão de como os seus activos e passivos estão categorizados.
+Através da selecção apropriada de opções, poderá examinar, digamos, 
+a alocação do seu portfólio de acções, ou obter uma visão geral 
+da dispersão dos seus investimentos.  
+Note que os gráficos circulares podem ser rodados clicando neles e 
+arrastando o rato, e segmentos específicos podem ser "ampliados".</para>
+
+
+<para>As opções disponíveis para estes relatórios incluem:</para>
+<itemizedlist>
+    <listitem><para><emphasis><link linkend="xacc-options-accounts">
+    Contas</link></emphasis></para>
+    </listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-report-title">
+      Título do Relatório</link></emphasis></para></listitem>
+    <listitem><para><emphasis><link linkend="xacc-options-date">
+      Data</link></emphasis></para>
+    </listitem>
+    <listitem><para><emphasis>Adicionar Restantes!!!</emphasis></para></listitem>
+</itemizedlist>
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -45,7 +45,7 @@ transacções semelhantes regularmente.
 </para>
 </listitem>
 
-<listitem> <para> <emphasis>Portfolios de Acções/Títulos.</emphasis> </para>
+<listitem> <para> <emphasis>Portfólios de Acções/Títulos.</emphasis> </para>
 
 <para>Acompanhe acções individualmente (uma por conta) ou em
         portfólios e contas (um grupo de contas que pode ser 
@@ -78,11 +78,22 @@ automaticamente funde transacções duplicadas.
 </listitem>
 
 <listitem>
-<para><emphasis><link linkend="xacc-reports">Relatórios</link>.</emphasis> Visualização
-      ou exportação em HTML de relatórios de Saldos, Transacções e Lucros/Prejuizos, 
-      bem como acompanhamento gráfico de saldos de contas.
+<para><emphasis>Interface MDI Gnome</emphasis></para>
+<para>Tenha várias vistas dos seus dados financeiros, dispostos como o desejar, 
+numa ou várias janelas que persistem entre sessões de utilização do GnuCash.
+</para>
+</listitem>
+
+<listitem>
+<para><emphasis><link linkend="xacc-reports">Relatórios</link>.</emphasis> Visualize,
+exporte como HTML, ou imprima uma variedade de relatórios, incluindo Sumários de 
+Saldos, Sumários de Contas, Lucros e Prejuízos, Portfólios de Acções, e Relatórios de 
+Transacções. Os relatórios são gravados entre sessões, e relatórios deslizantes são 
+possíveis com datas relativas. O GnuCash também suporta uma variedade de gráficos de
+barras e circulares, customizáveis e passíveis de serem impressos.
  </para>
 </listitem>
+
 </itemizedlist>
 
  </para>
@@ -237,7 +248,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <glossentry>
 <glossterm><email>dave@krondo.com</email> Dave Peticolas</glossterm>
 <glossdef>
-<para>programa obsecivamente no GnuCash. Mas ele consegue parar assim que 
+<para>programa obsessivamente no GnuCash. Mas ele consegue parar assim que 
       queira. A sério.
       (Ele é agora o guardião da árvore de código CVS do GnuCash, pelo que 
       sejam simpáticos ou ele pode desistir de programar a meio do vosso patch).
@@ -420,8 +431,6 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <glossdef>
 <para>Tradução para Dinamarquês</para>
 </glossdef>
-</glossentry>
-
 <glossentry>
 <glossterm><email>jcollins@gnucash.org</email> Jeremey
       Collins</glossterm>
@@ -658,14 +667,12 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>conversão para SGI Irix</para>
 </glossdef>
 </glossentry>
-
 <glossentry>
 <glossterm><email>sk@xgm.de</email> Sven Kuenzler</glossterm>
 <glossdef>
 <para>pelo ficheiro README (Leia-me) para SuSE</para>
 </glossdef>
 </glossentry>
-
 <glossentry>
 <glossterm><email>blarsen@ada-works.com</email> Bryan
       Larsen</glossterm>
@@ -673,6 +680,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>relatório de orçamento em guile</para>
 </glossdef>
 </glossentry>
+<glossentry>
 
 <glossentry>
 <glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
@@ -681,14 +689,12 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossdef>
 </glossentry>
 
-<glossentry>
 <glossterm><email>mellon@andare.fugue.com</email> Ted
       Lemon</glossterm>
 <glossdef>
 <para>conversão para NetBSD</para>
 </glossdef>
 </glossentry>
-
 <glossentry>
 <glossterm><email>y-le-ny@ifrance.com</email> Yannick Le
       Ny</glossterm>

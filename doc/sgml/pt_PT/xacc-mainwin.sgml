@@ -1,17 +1,17 @@
 <ARTICLE ID="XACC-MAINWIN">
 
 <ARTHEADER>
-<TITLE>Janela Principal</TITLE>
+<TITLE>Janela de Contas</TITLE>
 </ARTHEADER>
 
-<PARA>Esta é a janela principal de contas. Você controla o conjunto das suas 
+<PARA>Esta é uma janela de contas. Você controla o conjunto das suas 
     contas a partir daqui.
 
     </PARA>
-<PARA>Abaixo encontra-se uma imagem da janela principal, apenas com as contas
+<PARA>Abaixo encontra-se uma imagem da janela de contas, apenas com as contas
     principais visíveis. Note como <EMPHASIS>Despesas de Negócios</EMPHASIS> foram 
     seleccionadas por destaque. A caixa com uma cruz lá dentro, imediatamente à 
-    esquerda, mostra que contem uma ou mais contas de detalhe que de momento 
+    esquerda, mostra que contém uma ou mais contas de detalhe que de momento 
     não estão visíveis. Para as mostrar, clique nesta caixa.
 
     </PARA>
@@ -23,7 +23,7 @@
     
 
     </PARA>
-<PARA>Aqui está a janela principal, com as contas de detalhe visíveis.
+<PARA>Aqui está a janela de contas, com as contas de detalhe visíveis.
 
     </PARA>
 <PARA>     <INLINEMEDIAOBJECT>
@@ -42,7 +42,7 @@
     janela com o plano de contas é aberta, que apresenta todas as transacções 
     para a conta pai e as contas de detalhe. Note que a janela de plano de
     contas é mais complicada e difícil de utilizar que os registos individuais 
-    de conta. A janela de plano de conas permite uma visão geral mais compreensiva 
+    de conta. A janela de plano de contas permite uma visão geral mais compreensiva 
     das contas num espaço mais reduzido. Devido à sua maior complexidade, a sua
     utilização é recomendada apenas a profissionais de contabilidade.
 

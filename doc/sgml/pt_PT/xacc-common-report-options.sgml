@@ -1,0 +1,92 @@
+<article ID="XACC-COMMON-REPORT-OPTIONS"
+<artheader>
+<title>Opções Comuns de Relatórios</title>
+</artheader>
+<sect1>
+<title> Opções Comuns de Relatórios</title>
+<para>Muitos dos relatórios partilham tipos semelhantes de opções.  Algumas das mais 
+comuns incluem:
+
+<itemizedlist>
+<listitem>
+<para><emphasis><anchor id="xacc-options-report-title">Título de Relatório</emphasis></para>
+<para>Definir o título do relatório.  Isto não afecta mais nada, 
+mas pode ser útil caso deseje mais tarde imprimir o relatório para 
+posterior análise.</para></listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-date">Opções de Datas</emphasis></para>
+<para>Normalmente os relatórios permitem-lhe definir ou uma data simples, ou 
+um intrevalo de datas.  As datas podem ser especificadas de duas formas:
+directamente (utilizando um selector de datas), ou seleccionando uma data "relativa" 
+a partir do menu.  Datas relativas permitem-lhe especificar datas tais como "o início 
+do ano corrente" ou "hoje", e são extremamente úteis para criar "relatórios 
+deslizantes".</para></listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-interval">Intrevalo/Incremento</emphasis></para>
+<para>Esta opção é utilizada em gráficos de barras para determinar o intrevalo 
+que cada barra representa.  Valores típicos são diariamente, semanalmente, 
+mensalmente, e anualmente.</para></listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-accounts">Contas</emphasis></para>
+<para>A maioria dos relatórios dão-lhe a oportunidade de seleccionar as contas 
+apropriadas.  Note que alguns relatórios apenas lhe permitem seleccionar alguns 
+tipos de contas - por exemplo, um gráfico circular de despesas apenas permitirá 
+que sejam seleccionadas contas de despesas.  </para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-include-subaccounts">
+Incluir Sub-contas?</emphasis></para>
+<para>Relatórios de resumo normalmente têm a opção de "incluir todas as sub-contas", 
+que se seleccionada assegura que todas as sub-contas são incluidas caso a conta-pai 
+também o seja.</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-depth">Profundidade</emphasis></para>
+<para>Esta opção permite definir até que "profundidade" o relatório 
+apresenta sub-contas.  Caso as sub-contas tenham um nível de profundidade 
+do que seleccionado, a maioria dos relatórios calculará um montante global 
+para todas as sub-contas e inclui-lo-á num total de maior nível. Caso se 
+queira assegurar de que todas as contas seleccionadas são apresentadas 
+individualmente, seleccione "Todas".</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-style-sheet">Folhas de Estilo</emphasis></para>
+<para>Seleccione uma Folha de Estilo.  Folhas de estilo definem como os relatórios 
+são formatados para visualização.  De momento, existem duas folhas de estilo,  
+"defeito" e "colorido".  Pode costumizar qualquer um deles a partir do item 
+principal de menu Folhas de Estilo.</para>
+</listitem>
+
+<listitem>
+  <para><emphasis><anchor id="xacc-options-plot-dimensions">Dimensões 
+  do Gráfico</emphasis></para> 
+    
+  <para>Existem opções de "Largura" e "Altura"
+    para a maioria dos gráficos, que especificam 
+    as dimensões de visualização 
+    (em pixels).</para>
+</listitem>
+  
+<listitem>
+<para><emphasis><anchor id="xacc-options-report-currency">Moeda de Relatório</emphasis></para>
+<para>A maioria dos relatórios permite-lhe seleccionar a moeda de relatório (por defeito 
+será a sua moeda "nacional").  Geralmente, os valores serão convertidos para esta 
+moeda para visualização gráfica ou em totais.</para>
+</listitem>
+
+<listitem>
+<para><emphasis><anchor id="xacc-options-price-source">Fonte de Cotações</emphasis></para>
+<para>Seleccione como as cotações de acções e câmbios são calculadas no relatório. 
+Poderá seleccionar uma média ponderada ou cotações sobre todas as transacções, 
+cotações a valores actuais, ou cotações à data de realização do relatório.</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect1>
+</article>

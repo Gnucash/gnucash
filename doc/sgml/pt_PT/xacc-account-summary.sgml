@@ -1,0 +1,55 @@
+<article id="xacc-account-summary-report">
+<artheader>
+<title>Relatório de Resumo de Contas</title>
+</artheader>
+<sect1>
+<title>Relatório de Resumo de Contas</title>
+<para>    <inlinemediaobject>
+<imageobject>
+<imagedata fileref="image/report-folio.png">
+</imageobject>
+</inlinemediaobject> 
+</para>
+<para>Este relatório é útil para dar uma visão geral 
+sobre um grupo de contas.  Note que estão disponíveis 
+relatórios de folhas de saldos e lucros-prejuízos que 
+proporcionam totais mais adequados a essas situações.
+
+    </para>
+<para>As opções que este relatório suporta são as seguintes:
+<itemizedlist>
+<listitem><para><emphasis><link linkend="xacc-options-accounts">
+      Contas</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-include-subaccounts">
+      Incluir Sub-contas?</emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-depth">
+      Nível de Visualização de Contas</emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-report-title">
+      Título de Relatório</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+      Folha de Estilo</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-date">
+      Data</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-report-currency">
+      Moeda de Relatório</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-price-source">
+      Fonte de Cotações</link></emphasis></para></listitem>
+<listitem><para>Mostrar Saldos para Contas Pai?</para>
+<para>Se esta opção for seleccionada, os saldos individuais para 
+contas pai (não-folha) são mostrados.  Muitas pessoas não utilizam 
+contas pai para transacções pelo que este saldo não é útil.</para>
+<listitem><para>Mostrar subtotais</para>
+<para>Mostrar totais para grupos de contas incluindo uma pai e todas 
+as suas contas-filho, bem como por tipo de conta.</para>
+<listitem><para><emphasis>
+<link linkend=xacc-options-show-foreign>Mostrar Moedas Estrangeiras
+</link></emphasis></para></listitem>
+
+</itemizedlist>
+</para>
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

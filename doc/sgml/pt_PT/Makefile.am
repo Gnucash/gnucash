@@ -2,7 +2,6 @@ gnucash_helpdir = $(GNC_HELPDIR)/pt_PT
 
 GNUCASH_SGML_FILES = \
 	bofa-mym.sgml \
-        gnucash.sgml \
 	xacc-about.sgml \
 	xacc-accountedit.sgml \
 	xacc-acctypes.sgml \
@@ -15,7 +14,6 @@ GNUCASH_SGML_FILES = \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
-        xacc-dochack.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-gpl.sgml \
@@ -33,15 +31,29 @@ GNUCASH_SGML_FILES = \
 	xacc-recnwin.sgml \
 	xacc-regwin-kbd.sgml \
 	xacc-regwin.sgml \
-        xacc-repdev.sgml \
 	xacc-reports.sgml \
-        xacc-scheme.sgml \
 	xacc-tax-report.sgml \
 	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
-	xacc-txf-export.sgml \
 	xacc-txf-export-anomalies.sgml \
+	xacc-txf-export.sgml \
 	xacc-userdocs.sgml \
+        gnucash.sgml \
+        xacc-account-summary.sgml \
+        xacc-asset-liability-barcharts.sgml \
+        xacc-asset-liability-piecharts.sgml \
+        xacc-common-report-options.sgml \
+        xacc-dochack.sgml \
+        xacc-gnome-mdi.sgml \
+        xacc-gnucash-web-browser.sgml \
+        xacc-income-expense-barcharts.sgml \
+        xacc-income-expense-piecharts.sgml \
+        xacc-multicolumn-view-reports.sgml \
+        xacc-net-worth-barchart.sgml \
+        xacc-repdev.sgml \
+        xacc-scheme.sgml \
+        xacc-stock-price-report.sgml \
+        xacc-whats-new.sgml \
 	xacc-y2k.sgml
 
 gnucash_html_dir = $(top_srcdir)/doc/html/C

@@ -1,0 +1,37 @@
+<article id="xacc-gnucash-web-browser">
+<artheader>
+<title>GnuCash como um Browser Web?</title>
+</artheader>
+<sect1>
+<title>GnuCash como um Browser Web?</title>
+<para><emphasis>Necessária uma Imagem!!!</emphasis></para>
+
+<para>O GnuCash tem a capacidade de apresentar a maioria das páginas web como 
+um relatório "Endereço Frame".
+Isto pode ser muito útil, particularmente como uma forma de apresentar informação 
+financeira baseada na web, combinada com dados gnucash privados como parte de 
+uma <link linkend="xacc-multicolumn-view-report">
+Visualização em Multi-coluna</link>.</para>
+<para>Note que o visualizador web do GnuCash não é tão sofisticado como os 
+browsers web dedicados, e poderá não apresentar total ou correctamente páginas 
+que contenham Javascript, animações em Flash, filmes, som, e por aí fora.  Se deseja 
+ver páginas assim, necessita de um browser dedicado como o <emphasis>Mozilla</emphasis>.
+</para>
+<para>Opções suportadas por este relatório incluem os seguintes pontos:
+<itemizedlist>
+
+<listitem><para><emphasis><link linkend="xacc-options-report-title">
+      Título de Relatório</link></emphasis></para></listitem>
+<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+      Folhas de Estilo</link></emphasis> (Note: esta opção praticamente não tem 
+efeito neste relatório em específico)</para></listitem>
+<listitem><para><emphasis>Endereço</emphasis>: O endereço a visualizar.</para></listitem>
+</itemizedlist>
+</para>
+
+</sect1>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->
