@@ -1,9 +1,15 @@
+2002-09-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-actions.[hc]: Initial code for
+	transaction download with usage of generic transaction
+	import. Requires OpenHBCI CVS update.
+
 2002-09-29  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/Transaction-matcher.c: Fix	segfault when
 	importing into a gnucash account which has no splits.
 
-	* src/import-export/gnc-ofx-import.c: Code simplification for
+	* src/import-export/ofx/gnc-ofx-import.c: Code simplification for
 	commodity autoselection.
 
 2002-09-28  Derek Atkins  <derek@ihtfp.com>
@@ -25,9 +31,9 @@
 	
 2002-09-26  Benoit Grégoire  <bock@step.polymtl.ca>
 
-	* src/import-export/gnc-ofx-import.c: The default commodity and
-	account type are now preselected from OFX provided information 
-	when user choses to creates a new gnucash account in the account 
+	* src/import-export/ofx/gnc-ofx-import.c: The default commodity
+	and account type are now preselected from OFX provided information
+	when user choses to creates a new gnucash account in the account
 	matcher dialog.  Fix a segfault when clicking cancel in the file
 	selection dialog.
 

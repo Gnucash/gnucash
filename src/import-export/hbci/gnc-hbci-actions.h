@@ -29,6 +29,9 @@
 void
 gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc);
 
+void
+gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc);
+
 void 
 gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc);
 
