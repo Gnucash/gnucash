@@ -1109,7 +1109,10 @@ _create_each_transaction_helper( Transaction *t, void *d )
                         GUID                *acct_guid;
                         Account                *acct;
                         /* contains the guid of the split's actual account. */
-                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_ACCOUNT );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                           GNC_SX_ID,
+                                                           GNC_SX_ACCOUNT,
+                                                           NULL );
                         if ( kvp_val == NULL ) {
                                 PERR( "Null kvp_val for account" );
                         }
@@ -1133,7 +1136,10 @@ _create_each_transaction_helper( Transaction *t, void *d )
                         gnc_numeric credit_num, debit_num, final;
                         int gncn_error;
 
-                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_CREDIT_FORMULA );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                           GNC_SX_ID,
+                                                           GNC_SX_CREDIT_FORMULA,
+                                                           NULL);
                         str = kvp_value_get_string( kvp_val );
                         credit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL
@@ -1151,7 +1157,10 @@ _create_each_transaction_helper( Transaction *t, void *d )
                                        gnc_numeric_to_string( gnc_numeric_reduce( credit_num ) ) );
                         }
                         
-                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_DEBIT_FORMULA );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                           GNC_SX_ID,
+                                                           GNC_SX_DEBIT_FORMULA,
+                                                           NULL);
                         str = kvp_value_get_string( kvp_val );
 
                         debit_num = gnc_numeric_create( 0, 1 );
@@ -1184,8 +1193,15 @@ _create_each_transaction_helper( Transaction *t, void *d )
                 }
 #if 0
 /* NOT [YET] USED */
-                kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_SHARES );
-                kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_AMNT );
+                kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_SHARES,
+                                                   NULL);
+
+                kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_AMNT,
+                                                   NULL);
 #endif /* 0 */
 
                 /* FIXME:
@@ -1330,7 +1346,10 @@ _sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
 
                 kvpf = xaccSplitGetSlots(s);
 
-                kvp_val = kvp_frame_get_slot_path( kvpf, GNC_SX_ID, GNC_SX_CREDIT_FORMULA );
+                kvp_val = kvp_frame_get_slot_path( kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_CREDIT_FORMULA,
+                                                   NULL);
                 if ( kvp_val != NULL ) {
                         str = kvp_value_get_string( kvp_val );
                         if ( str && strlen(str) != 0 ) {
@@ -1338,7 +1357,10 @@ _sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
                         }
                 }
 
-                kvp_val = kvp_frame_get_slot_path( kvpf, GNC_SX_ID, GNC_SX_DEBIT_FORMULA );
+                kvp_val = kvp_frame_get_slot_path( kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_DEBIT_FORMULA,
+                                                   NULL);
                 if ( kvp_val != NULL ) {
                         str = kvp_value_get_string( kvp_val );
                         if ( str && strlen(str) != 0 ) {

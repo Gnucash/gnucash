@@ -530,7 +530,8 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
   kvp_frame_set_slot_path(split_frame, 
 			  tmp_value,
 			  GNC_SX_ID,
-			  GNC_SX_CREDIT_FORMULA);
+			  GNC_SX_CREDIT_FORMULA,
+                          NULL);
   kvp_value_delete(tmp_value);
 		      
   tmp_value
@@ -539,7 +540,8 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
   kvp_frame_set_slot_path(split_frame,
 			  tmp_value,
 			  GNC_SX_ID,
-			  GNC_SX_DEBIT_FORMULA);
+			  GNC_SX_DEBIT_FORMULA,
+                          NULL);
 
   kvp_value_delete(tmp_value);
 
@@ -548,9 +550,10 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
   tmp_value = kvp_value_new_guid(acc_guid);
 
   kvp_frame_set_slot_path(split_frame,
-			tmp_value,
-			GNC_SX_ID,
-			GNC_SX_ACCOUNT);
+                          tmp_value,
+                          GNC_SX_ID,
+                          GNC_SX_ACCOUNT,
+                          NULL);
 
   kvp_value_delete(tmp_value);
 

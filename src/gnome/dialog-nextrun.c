@@ -319,7 +319,10 @@ create_each_transaction( Transaction *t, void *d )
                         GUID                *acct_guid;
                         Account                *acct;
                         /* contains the guid of the split's actual account. */
-                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_ACCOUNT );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                           GNC_SX_ID,
+                                                           GNC_SX_ACCOUNT,
+                                                           NULL);
                         if ( kvp_val == NULL ) {
                                 PERR( "Null kvp_val for account\n" );
                         }
@@ -338,7 +341,10 @@ create_each_transaction( Transaction *t, void *d )
                         gnc_numeric        final;
                         int                gncn_error;
 
-                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_CREDIT_FORMULA );
+                        kvp_val = kvp_frame_get_slot_path(split_kvpf,
+                                                          GNC_SX_ID,
+                                                          GNC_SX_CREDIT_FORMULA,
+                                                          NULL);
                         str = kvp_value_get_string( kvp_val );
                         credit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL ) {
@@ -354,7 +360,10 @@ create_each_transaction( Transaction *t, void *d )
                                         str, gnc_numeric_to_string( credit_num ) );
                         }
                         
-                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_DEBIT_FORMULA );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                           GNC_SX_ID,
+                                                           GNC_SX_DEBIT_FORMULA,
+                                                           NULL);
                         str = kvp_value_get_string( kvp_val );
 
                         debit_num = gnc_numeric_create( 0, 1 );
@@ -384,8 +393,14 @@ create_each_transaction( Transaction *t, void *d )
                         xaccSplitSetValue( split, final );
                 }
 #if 0
-                kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_SHARES );
-                kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_AMNT );
+                kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_SHARES,
+                                                   NULL);
+                kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_AMNT,
+                                                   NULL);
 #endif /* 0 */
         } while ( (sList = sList->next) && (osList = osList->next) );
 

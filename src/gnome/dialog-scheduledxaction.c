@@ -477,8 +477,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 { "cancel_button",  "clicked", editor_close_button_clicked, NULL },
 		{ "help_button",    "clicked", editor_help_button_clicked,  NULL}, 
 
-                { "rb_enddate",     "toggled", endgroup_rb_toggled,         (gpointer)END_OPTION },
-                { "rb_num_occur",   "toggled", endgroup_rb_toggled,         (gpointer)NUM_OCCUR_OPTION },
+                { "rb_enddate",     "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(END_OPTION) },
+                { "rb_num_occur",   "toggled", endgroup_rb_toggled,         GINT_TO_POINTER(NUM_OCCUR_OPTION) },
 
                 { "autocreate_opt", "toggled", autocreate_toggled,          NULL },
                 { "advance_opt",    "toggled", advance_toggle,              (gpointer)"advance_days" },
@@ -703,8 +703,9 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         /* configure... */
         /* don't use double-line */
         gnc_split_register_config(splitreg,
-                                splitreg->type, splitreg->style,
-                                FALSE );
+                                  splitreg->type, splitreg->style,
+                                  FALSE);
+
         /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
 
@@ -951,7 +952,8 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
         gint id;
 
         sxed = (SchedXactionEditorDialog*)d;
-        id = (gint)gtk_object_get_data( GTK_OBJECT(b), "whichOneAmI" );
+        id = GPOINTER_TO_INT(gtk_object_get_data( GTK_OBJECT(b),
+                                                  "whichOneAmI" ));
 
         /* FIXME: this can now be cleaned up with the help of
            set_endgroup_toggle_states(...) */
