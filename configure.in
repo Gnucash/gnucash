@@ -272,13 +272,16 @@ AC_SUBST(GNC_LIBEXECDIR)
 # We should always see these errors...
 CFLAGS="${CFLAGS} -Wall"
 
+# Enable error-on-warning by default -- I'm tired of fixing other
+# people's missing #includes, etc.
 AC_ARG_ENABLE(error-on-warning,
   [  --enable-error-on-warning    treat compile warnings as errors],
   [case "${enableval}" in
-     yes) CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ;;
+     yes) CFLAGS="${CFLAGS} -Werror -Wno-unused"; enable_compile_warnings=no ;;
      no)  ;;
      *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
-   esac])
+   esac]
+  [  CFLAGS="${CFLAGS} -Werror -Wno-unused"; enable_compile_warnings=no ])
 
 # This has to come after AC_PROG_CC
 if test ${GCC}x = yesx
