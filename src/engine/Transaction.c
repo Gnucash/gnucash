@@ -1528,6 +1528,11 @@ xaccTransCommitEdit (Transaction *trans)
       trans->editlevel = 0;
    }
 
+   /* We increment this for the duration of the call
+    * so other functions don't result in a recursive
+    * call to xaccTransCommitEdit. */
+   trans->editlevel++;
+
    /* At this point, we check to see if we have a valid transaction.
     * There are two possiblities:
     *   1) Its more or less OK, and needs a little cleanup
@@ -1612,7 +1617,6 @@ xaccTransCommitEdit (Transaction *trans)
         /* push error back onto the stack */
         xaccBackendSetError (be, errcode);
 
-        trans->editlevel++;
         xaccTransRollbackEdit (trans);
         return;
       }
@@ -1642,6 +1646,9 @@ xaccTransCommitEdit (Transaction *trans)
    xaccFreeTransaction (trans->orig);
    trans->orig = NULL;
 
+   /* Put back to zero. */
+   trans->editlevel--;
+
    LEAVE ("trans addr=%p\n", trans);
 }
 
@@ -1663,6 +1670,11 @@ xaccTransRollbackEdit (Transaction *trans)
       PERR ("unbalanced call - resetting (was %d)", trans->editlevel);
       trans->editlevel = 0;
    }
+
+   /* We increment this for the duration of the call
+    * so other functions don't result in a recursive
+    * call to xaccTransCommitEdit. */
+   trans->editlevel++;
 
    /* copy the original values back in. */
    orig = trans->orig;
@@ -1770,10 +1782,6 @@ xaccTransRollbackEdit (Transaction *trans)
    {
       GList *node;
 
-      /* prevent the transaction from being messed with
-       * while we make the changes. */
-      trans->editlevel++;
-
       /* In this loop, we tuck the fixed-up splits back into 
        * orig array, for temp safekeeping. */
       for (i = 0, node = trans->splits ;
@@ -1823,8 +1831,6 @@ xaccTransRollbackEdit (Transaction *trans)
          xaccAccountRecomputeBalance (account);
          gen_event (s);
       }
-
-      trans->editlevel--;
    }
 
    /* Now that the engine copy is back to its original version,
@@ -1849,7 +1855,6 @@ xaccTransRollbackEdit (Transaction *trans)
           * has deleted this transaction, and we haven't found
           * out about it until this user tried to edit it.
           */
-         trans->editlevel++;
          xaccTransDestroy (trans);
          xaccFreeTransaction (trans);
 
@@ -1872,6 +1877,9 @@ xaccTransRollbackEdit (Transaction *trans)
 
    trans->orig = NULL;
    trans->do_free = FALSE;
+
+   /* Put back to zero. */
+   trans->editlevel--;
 
    LEAVE ("trans addr=%p\n", trans);
 }

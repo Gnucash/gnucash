@@ -716,13 +716,9 @@ test_trans_update (Transaction *trans, gpointer data)
   guid = *xaccTransGetGUID (trans);
 
   xaccTransBeginEdit (trans);
-  xaccTransDestroy (trans);
-  xaccTransRollbackEdit (trans);
-
-  /*
   make_random_changes_to_transaction_and_splits (book_1, trans,
                                                  td->accounts_1);
-  */
+  xaccTransCommitEdit (trans);
 
   io_err = gnc_session_get_error (td->session_1);
   if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
@@ -738,11 +734,9 @@ test_trans_update (Transaction *trans, gpointer data)
   if (trans_2)
   {
     xaccTransBeginEdit (trans_2);
-    /*
     make_random_changes_to_transaction_and_splits (book_2, trans_2,
                                                    td->accounts_2);
-    */
-    xaccTransRollbackEdit (trans_2);
+    xaccTransCommitEdit (trans_2);
   }
 
   trans_2 = xaccTransLookup (&guid, book_2);
