@@ -49,6 +49,11 @@ default:
 	@cd lib;    $(MAKE)
 	@cd src;    $(MAKE)
 
+# link in motif libs statically
+static:
+	@cd lib;    $(MAKE)
+	@cd src;    $(MAKE) static
+
 depend:
 	@cd lib;    $(MAKE) depend
 	@cd src;    $(MAKE) depend

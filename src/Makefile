@@ -44,6 +44,7 @@ LFLAGS   = -O2
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/X11R6/lib/.
 TARGET   = ../xacc
+STATIC   = ../xacc-static
 
 # LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
 LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
@@ -64,6 +65,12 @@ default: $(TARGET)
 $(TARGET): $(OBJS)
 	@echo "++++++"
 	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@
+
+static: $(STATIC)
+
+$(STATIC): $(OBJS)
+	@echo "++++++"
+	$(CC) $(LFLAGS) $(OBJS) $(LIBPATH) $(LIBS) -o $@ -static
 
 .c.o:
 	@echo "+++"

@@ -67,16 +67,35 @@ http://www3.hmc.edu/~rclark/xacc/
 
 Running:
 --------
-If you have a binary version of xacc, just start xacc at the 
-command line with "xacc".   Sample accounts can be found in 
+The binary-only distribution includes two files: 'xacc' and
+'xacc-static'. The former requires a Motif shared library;
+the latter has Motif statically linked in.  If you have Motif,
+then just run xacc.  If you do not have Motif, then copy 
+'xacc-static' to 'xacc'.
+
+Access to the on-line help documentation requires the that
+the environment variable XACC_HELP be set to the 'Docs'
+directory.  For example, for csh/tcsh, 
+
+% setenv XACC_HELP /usr/local/share/xacc/Docs
+
+or, for bash/bsh/ksh/sh
+
+% set XACC_HELP=/usr/local/share/xacc/Docs
+% export XACC_HELP
+
+You can then start xacc at the command-line, with
+"xacc" or "xacc <filename>", where <filename> is an
+xacc account file.  Sample accounts can be found in 
 "data" subdirectory.  *.dat files are xacc accounts that can 
 opened with the "Open File" menu entry.  *.qif files are
 Quicken Import Format files that can be opened with the 
 "Import QIF" menu entry.
 
-To install:
------------
-This step does not apply to binary distributions; only to
+
+Building & Installing:
+----------------------
+These steps does not apply to binary distributions; only to
 source distributions.
 
 Normally, to build and install xacc, all you have to do is:
@@ -96,20 +115,6 @@ single copy of the source tree:
   # ../../configure --enable-debug
   # make
   # make install
-
-Post-install instructions:
-
-   You have to set the environment variable XACC_HELP to point
-   to the xacc help files.  For example:
-
-      % setenv XACC_HELP /usr/local/share/xacc
-
-   for the tcsh shell, or:
-
-      % set XACC_HELP=/usr/local/share/xacc
-
-   for csh.
-
 
 sorry, no "make install" yet.
 
