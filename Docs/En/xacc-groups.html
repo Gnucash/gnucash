@@ -10,13 +10,16 @@
 
   <body>
     <h1>Chart of Accounts</h1>
-    Typically accounts are arranged as a tree, in hierarchical
-    form. The main trunks represent entire categories or groups,
+
+    <p> Typically accounts are arranged as a tree, in hierarchical
+    form.</p>
+
+    <p> The main branches represent entire categories or groups,
     while the leaves of the tree denote individual bank accounts or
-    expense categories. 
+    expense categories.</p>
 
     <p> When a summary report is requested, typically only the main
-    branches are shown in the report, not each of the individual
+    branches are shown in the report, rather than the individual
     accounts. For example, a chart of accounts might look like the
     following:</p>
 <pre>
@@ -36,12 +39,14 @@
 </pre>
 
     <p> Note that accounts not only have names; they have <b>
-    codes;</b> when a report is generated, the <a name="SORTORDER">
-    sort order is determined entirely by the numbering. A sensible
-    hierarchy generally will have the "leaf" accounts end in
-    non-zero digits, whilst parent nodes have increasing numbers of
-    zeros. For instance, "cash" accounts might logically be
-    arranged thus:</a></p>
+    codes,</b> in order to provide <em> order.</em> When a report
+    is generated, the <a name="SORTORDER"> sort order is determined
+    by the numbering.</a></p>
+
+    <p> A sensible hierarchy generally will have the "leaf"
+    accounts end in non-zero digits, whilst parent nodes have
+    increasing numbers of zeros. For instance, "cash" accounts
+    might logically be arranged thus:</p>
 
     <ul>
       <li>
@@ -74,20 +79,21 @@
         </ul>
 
         <p> When you <a href="xacc-accwin.html">create a new
-        account</a>, GnuCash offers a guess at what it thinks the
+        account</a>, GnuCash offers a guess at what an appropriate
         account code might be; you are free to change this. GnuCash
         does not prevent duplicate numbering, although we would
         encourage you to avoid this. Account codes are treated as
         numbers in base-36, thus, if you run out of numbers, you
         can use the letters, <tt>a</tt> through <tt>z</tt>.</p>
 
-        <h2>A Sample Chart of Accounts</h2>
-        <a name="SAMPLECHART"></a>
+        <h1>A Sample Chart of Accounts</h1>
+        <a name="SAMPLECHART"></a> 
 
         <p> A "typical" chart of accounts is shown below. Each
         account is of a given <a href="xacc-acctypes.html">account
         type</a>. This example is a combination of some typical
         business and personal accounts.</p>
+        &gt;&gt;&gt;&gt;&gt;&gt;&gt; 1.2 
 
         <ul>
           <li>
@@ -321,7 +327,7 @@
               </li>
 
               <li>
-                Wages &amp; Salaries 
+                Wages and Salaries 
 
                 <ul>
                   <li>Consulting</li>
@@ -360,11 +366,12 @@
             </ul>
           </li>
         </ul>
-
-        <p> Return to <a href="xacc-main.html"> Main Documentation
-        Page.</a></p>
       </li>
     </ul>
+    <hr>
+
+    <p> Return to <a href="xacc-main.html"> Main Documentation
+    Page.</a></p>
   </body>
 </html>
 

@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
 <html>
   <head>
     <link rel="stylesheet" title="normal" type="text/css" href= 
@@ -9,13 +10,13 @@
 
   <body>
     <h1>About GnuCash</h1>
-    <hr>
-    GnuCash is a program to keep track of your finances. Its
-    features include: 
+
+    <p> GnuCash is a program to keep track of your finances. Its
+    features include:</p>
 
     <ul>
       <li><b> Multiple accounts,</b> which can be open at the same
-      time. Create an xacc account for each of your bank
+      time. Create an GnuCash account for each of your bank
       accounts.</li>
 
       <li>Each account maintains both a running balance and a
@@ -23,10 +24,10 @@
       have cleared your account.</li>
 
       <li>
-        <b>A simple interface.</b> 
+        <b>A simple user interface.</b> 
 
         <p> If you can use the register in the back of your
-        checkbook, you can use <tt>xacc.</tt></p>
+        checkbook, you can use <tt>GnuCash.</tt></p>
       </li>
 
       <li>
@@ -81,7 +82,7 @@
       </li>
 
       <li><b> <a href="xacc-reports.html">Reports</a>.</b> Display
-      or output as HTML Balance or Profit&amp;Loss reports.</li>
+      or output as HTML Balance or Profit/Loss reports.</li>
     </ul>
 
     <h2>Advanced Features</h2>
@@ -117,7 +118,7 @@
         <p> Intuit's <a href="xacc-quicken.html"> Quicken</a>
         product has what they call "categories" that are used to
         track incomes and expenses. These may be used to create
-        Profits &amp; Losses reports.</p>
+        Profit/Loss reports.</p>
       </li>
 
       <li>
@@ -134,13 +135,13 @@
       currencies</a></b></li>
     </ul>
 
-    <h2>Version</h2>
+    <h2>Versioning</h2>
 
-    <p> The versioning scheme for X-Accountant parallels that of
-    the Linux kernel, where "even" sub-versions indicate versions
-    that are intended to be stable, only seeing maintenance to fix
-    bugs, and "odd" sub-versions indicate an "experimental" stream
-    that seeks to add enhancement.</p>
+    <p> The versioning scheme for GnuCash parallels that of the
+    Linux kernel, where "even" sub-versions indicate versions that
+    are intended to be stable, only seeing maintenance to fix bugs,
+    and "odd" sub-versions indicate an "experimental" stream that
+    seeks to add enhancement.</p>
 
     <p> The present "experimental" stream is gnucash-1.3.x, which
     is somewhat unstable.</p>
@@ -154,15 +155,20 @@
     will be 1.4.x, and experimentation will likely continue on
     1.5.x.</p>
 
+    <p> If you wish to "hack" on the experimental version, you
+    should first start by reading through the <a href=
+    "projects.html"> GnuCash Project Goals</a> document in order to
+    get some perspective on the overall design.</p>
+
     <h2>Lead Developers</h2>
 
     <dl>
-      <dt>Robin Clark &lt;rclark@hmc.edu&gt;</dt>
+      <dt> <a href="mailto:rclark@hmc.edu> Robin Clark</a></dt>
 
       <dd>wrote the original X-Accountant in Motif as a school
       project, taking it to version 0.9 by October 1997.</dd>
 
-      <dt>Linas Vepstas &lt;linas@linas.org&gt;</dt>
+      <dt> <a href="mailto:linas@linas.org"> Linas Vepstas</a></dt>
 
       <dd>liked what he saw: the GUI was slick, the code was
       documented and well structured, and it was all GPL'ed. And so
@@ -172,104 +178,252 @@
       account heirarchy, split out a transaction mini-engine, add
       support for stocks, and spiff up the help menus. This was
       version 1.0 as of January 1998. Since then, for version 1.1,
-      the engine was expanded &amp; refined, and the register
-      window code completely redesigned and made mostly Motif-(and
+      the engine was expanded and refined, and the register window
+      code completely redesigned and made mostly Motif-(and
       GUI-)independent. Did some prototype OFX work.</dd>
 
-      <dt>Jeremy Collins &lt;jcollins@gnucash.org&gt;</dt>
+      <dt> <a href="mailto:jcollins@gnucash.org"> Jeremy Collins</a></dt>
 
       <dd>publicized the GnoMoney project widely and broadly, and
       then changed its name to GnuCash. Jeremy created the
       gnucash.org web site, registered the domain, got the initial
       GTK/gnome code working.</dd>
 
-      <dt>Rob Browning &lt;rlb@cs.utexas.edu&gt;</dt>
+      <dt> <a href="mailto:rlb@cs.utexas.edu"> Rob Browning</a></dt>
 
       <dd>abused everyone for not using perl, and then added
       guile/scheme support. Rob maintains the build infrastructure,
       is handling the whole guile/perl extension language thing,
-      and is dealing with configuration &amp; configurability.</dd>
+      and is dealing with configuration and configurability.</dd>
 
-      <dt>Dirk Schoenberger &lt;schoenberger@signsoft.com&gt;</dt>
+      <dt> <a href="mailto:schoenberger@signsoft.com"> Dirk
+      Schoenberger</a></dt>
 
       <dd>is working on the Qt/KDE port</dd>
 
-      <dt>Dave Peticolas &lt;peticola@cs.ucdavis.edu&gt;</dt>
+      <dt> <a href="mailto:peticola@cs.ucdavis.edu"> Dave
+      Peticolas</a></dt>
 
-      <dd>hacks obsessively on GnuCash. But he can stop anytime
-      he wants to. Really.</dd>
-
+      <dd>hacks obsessively on GnuCash. But he can stop anytime he
+      wants to. Really.</dd>
     </dl>
 
-    <h2>Fixes &amp; Patches</h2>
-    <br>
-     Andrew Arensburger &lt;arensb@cfar.umd.edu&gt; for FreeBSD
-    &amp; other patches <br>
-     Matt Armstrong &lt;matt_armstrong@bigfoot.com&gt; for misc
-    fixes <br>
-     Fred Baube &lt;fred@moremagic.com&gt; for attempted Java
-    port/MoneyDance <br>
-     <a href="http://www.hex.net/~cbbrowne"> Christopher B.
-    Browne</a> &lt;cbbrowne@hex.net&gt; for perl stock scripts,
-    Guile-based QIF import code <br>
-     Graham Chapman &lt;grahamc@zeta.org.au&gt; for the xacc-rpts
-    addon package <br>
-     George Chen &lt;georgec@sco.com&gt; for MS-Money QIF's &amp;
-    fixes <br>
-     Jeremey Collins &lt;jcollins@gnucash.org&gt; for GnoMoney
-    &amp; GTK port <br>
-     Patrick Condron &lt;pcondon@rackspace.com&gt; for webserver
-    and T1 connection. <br>
-     Ciaran Deignan &lt;Ciaran.Deignan@bull.net&gt; for AIX binary
-    version <br>
-     Tyson Dowd &lt;tyson@tyse.net&gt; for config/make patches
-    &amp; debian maint. <br>
-     Koen D'Hondt &lt;ripley@xs4all.nl&gt; for Solaris patches to
-    XmHTML <br>
-     Bob Drzyzgula &lt;bob@mostly.com&gt; for budgeting design
-    notes <br>
-     Jan-Uwe Finck &lt;ju_finck@mail.netwave.de&gt; for German
-    message translation <br>
-     Ron Forrester &lt;rjf@aracnet.com&gt; for gnome patches <br>
-     Dave Freese &lt;DFreese@osc.uscg.mil&gt; for leap-year fix
-    <br>
-     Otto Hammersmith &lt;otto@bug.redhat.com&gt; for RedHat RPM
-    version <br>
-     Alexandru Harsanyi &lt;haral@codec.ro&gt; for misc core dumps
-    &amp; lockups. <br>
-     Jon K}re Hellan &lt;jk@isdn-a33.itea.ntnu.no&gt; misc core
-    dump fixes <br>
-     Prakash Kailasa &lt;PrakashK@bigfoot.com&gt; for gnome build
-    fixes <br>
-     Tom Kludy &lt;tkludy@csd.sgi.com&gt; for SGI Irix port <br>
-     Sven Kuenzler &lt;sk@xgm.de&gt; for SuSE README file <br>
-     Ted Lemon &lt;mellon@andare.fugue.com&gt; for NetBSD port <br>
-     Yannick Le Ny &lt;y-le-ny@ifrance.com&gt; pour la traduction
-    en francais <br>
-     G. Allen Morris III &lt;gam3@ann.softgams.com&gt; for QIF core
-    dump <br>
-     Peter Norton &lt;spacey@inch.com&gt; for a valiant attempt at
-    a GTK port <br>
-     OmNiBuS &lt;webmaster@obsidian.uia.net&gt; web site graphics
-    &amp; content <br>
-     Myroslav Opyr &lt;mopyr@IPM.Lviv.UA&gt; for misc patches <br>
-     Alain Peyrat &lt;Alain.Peyrat@nmu.alcatel.fr&gt; for
-    configure.in patches <br>
-     Gavin Porter &lt;maufk@csv.warwick.ac.uk&gt; for euro style
-    dates <br>
-     Ron Record &lt;rr@sco.com&gt; for SCO Unixware &amp;
-    OpenServer binaries <br>
-     Christopher Seawood &lt;cls@seawood.org&gt; for XbaeMatrix
-    core dump <br>
-     Mike Simons &lt;msimons@fsimons01.erols.com&gt; misc
-    configure.in patches <br>
-     Richard Skelton &lt;rich@brake.demon.co.uk&gt; for Solaris
-    cleanup <br>
-     Henning Spruth &lt;spruth@bigfoot.com&gt; for German text
-    &amp; euro date rework <br>
-     Ken Yamaguchi &lt;gooch@ic.EECS.Berkeley.EDU&gt; QIF import
-    fixes; MYM import <br>
-     
+    <h2>Fixers and Patchers</h2>
+
+    <p> The <em> cast of thousands</em> includes:</p>
+
+    <dl>
+      <dt> <a href="mailto:arensb@cfar.umd.edu"> Andrew
+      Arensburger</a></dt>
+
+      <dd>for FreeBSD and other patches</dd>
+
+      <dt> <a href="mailto:matt_armstrong@bigfoot.com"> Matt
+      Armstrong</a></dt>
+
+      <dd>for misc fixes</dd>
+
+      <dt> <a href="mailto:fred@moremagic.com"> Fred Baube</a></dt>
+
+      <dd>for attempted Java port/MoneyDance</dd>
+
+      <dt> <a href="http://www.hex.net/~cbbrowne"> Christopher B.
+      Browne</a></dt>
+
+      <dd>for perl stock scripts, Guile-based QIF import code, lots
+      of changes to English documentation<br>
+      </dd>
+
+      <dt> <a href="mailto:grahamc@zeta.org.au"> Graham
+      Chapman</a></dt>
+
+      <dd>for the xacc-rpts addon package</dd>
+
+      <dt> <a href="mailto:georgec@sco.com"> George Chen</a></dt>
+
+      <dd>for MS-Money QIF support</dd>
+
+      <dt> <a href="mailtochina@thewrittenword.com">Albert
+      Chin-A-Young</a></dt>
+
+      <dd>configure.in patch</dd>
+
+      <dt> <a href="mailto:jcollins@gnucash.org"> Jeremey
+      Collins</a></dt>
+
+      <dd>for GnoMoney and GTK port</dd>
+
+      <dt> <a href="mailto:pcondon@rackspace.com"> Patrick
+      Condron</a></dt>
+
+      <dd>for webserver and T1 connection.</dd>
+
+      <dt> <a href="mailto:Ciaran.Deignan@bull.net"> Ciaran
+      Deignan</a></dt>
+
+      <dd>for AIX binary version</dd>
+
+      <dt> <a href="mailto:tyson@tyse.net"> Tyson Dowd</a></dt>
+
+      <dd>for config/make patches and debian maintenance</dd>
+
+      <dt> <a href="mailto:ripley@xs4all.nl"> Koen D'Hondt</a></dt>
+
+      <dd>for Solaris patches to XmHTML</dd>
+
+      <dt> <a href="mailto:bob@mostly.com"> Bob Drzyzgula</a></dt>
+
+      <dd>for budgeting design notes</dd>
+
+      <dt> <a href="mailto:ju_finck@mail.netwave.de"> Jan-Uwe
+      Finck</a></dt>
+
+      <dd>for German message translation</dd>
+
+      <dt> <a href="mailto:rjf@aracnet.com"> Ron Forrester</a></dt>
+
+      <dd>for gnome patches</dd>
+
+      <dt> <a href="mailto:DFreese@osc.uscg.mil"> Dave
+      Freese</a></dt>
+
+      <dd>for leap-year fix</dd>
+
+      <dt> <a href="mailto:otto@bug.redhat.com"> Otto
+      Hammersmith</a></dt>
+
+      <dd>for RedHat RPM packaging</dd>
+
+      <dt> <a href="mailto:haral@codec.ro"> Alexandru
+      Harsanyi</a></dt>
+
+      <dd>for fixing miscellaneous core dumps and lockups.</dd>
+
+      <dt> <a href="mailto:jk@isdn-a33.itea.ntnu.no"> Jon K}re
+      Hellan</a></dt>
+
+      <dd>for fixing miscellaneous core dumps and lockups.</dd>
+
+      <dt> <a href="mailto:PrakashK@bigfoot.com"> Prakash
+      Kailasa</a></dt>
+
+      <dd>for gnome build fixes</dd>
+
+      <dt> <a href="mailto:tkludy@csd.sgi.com"> Tom Kludy</a></dt>
+
+      <dd>for SGI Irix port</dd>
+
+      <dt> <a href="mailto:sk@xgm.de"> Sven Kuenzler</a></dt>
+
+      <dd>for SuSE README file</dd>
+
+      <dt> <a href="mailto:mellon@andare.fugue.com"> Ted
+      Lemon</a></dt>
+
+      <dd>for NetBSD port</dd>
+
+      <dt> <a href="mailto:y-le-ny@ifrance.com"> Yannick Le
+      Ny</a></dt>
+
+      <dd>pour la traduction en francais</dd>
+
+      <dt> <a href="mailto:glikely@nortelnetworks.com"> Grant
+      Likely</a></dt>
+
+      <dd>gnome and engine patches</dd>
+
+      <dt> <a href="mailto:martinh@pegasus.cc.ucf.edu"> Heath
+      Martin</a></dt>
+
+      <dd>gnome and register patches</dd>
+
+      <dt> <a href="mailto:rgmerk@mira.net"> Robert Graham
+      Merkel</a></dt>
+
+      <dd>reporting, gnome, and configuration patches.</dd>
+
+      <dt> <a href="mailto:mooney@dogbert.cc.ndsu.NoDak.edu"> Tim
+      Mooney</a></dt>
+
+      <dd>port to alpha-dec-osf4.0f</dd>
+
+      <dt> <a href="mailto:gam3@ann.softgams.com"> G. Allen Morris
+      III</a></dt>
+
+      <dd>for QIF core dump fix</dd>
+
+      <dt> <a href="mailto:spacey@inch.com"> Peter Norton</a></dt>
+
+      <dd>for a valiant attempt at a GTK port</dd>
+
+      <dt> <a href="mailto:webmaster@obsidian.uia.net">
+      OmNiBuS</a></dt>
+
+      <dd>web site graphics and content</dd>
+
+      <dt> <a href="mailto:mopyr@IPM.Lviv.UA"> Myroslav
+      Opyr</a></dt>
+
+      <dd>for misc patches</dd>
+
+      <dt> <a href="mailto:laurent.pelecq@wanadoo.fr"> Laurent
+      P{'e}lecq</a></dt>
+
+      <dd>i18n patches with gettext</dd>
+
+      <dt> <a href="mailto:Alain.Peyrat@nmu.alcatel.fr"> Alain
+      Peyrat</a></dt>
+
+      <dd>for <tt>configure.in</tt> patches</dd>
+
+      <dt> <a href="mailto:peter@wuzel.m.isar.de"> Peter
+      Pointner</a></dt>
+
+      <dd>motif and configuration patches</dd>
+
+      <dt> <a href="mailto:maufk@csv.warwick.ac.uk"> Gavin
+      Porter</a></dt>
+
+      <dd>for euro style dates</dd>
+
+      <dt> <a href="mailto:rr@sco.com"> Ron Record</a></dt>
+
+      <dd>for SCO Unixware and OpenServer binaries</dd>
+
+      <dt> <a href="mailto:jan.schrage@urz.uni-heidelberg.de"> Jan
+      Schrage</a></dt>
+
+      <dd>documentation patches</dd>
+
+      <dt> <a href="mailto:cls@seawood.org"> Christopher
+      Seawood</a></dt>
+
+      <dd>for XbaeMatrix core dump</dd>
+
+      <dt> <a href="mailto:msimons@fsimons01.erols.com"> Mike
+      Simons</a></dt>
+
+      <dd>misc <tt> configure.in</tt> patches</dd>
+
+      <dt> <a href="mailto:rich@brake.demon.co.uk"> Richard
+      Skelton</a></dt>
+
+      <dd>for Solaris cleanup</dd>
+
+      <dt> <a href="mailto:spruth@bigfoot.com"> Henning
+      Spruth</a></dt>
+
+      <dd>for German text and euro date rework</dd>
+
+      <dt> <a href="mailto:rob@valinux.com"> Rob Walker</a></dt>
+
+      <dd>guile and register patches</dd>
+
+      <dt> <a href="mailto:gooch@ic.EECS.Berkeley.EDU"> Ken
+      Yamaguchi</a></dt>
+
+      <dd>QIF import fixes; MYM import</dd>
+    </dl>
 
     <h2>Supported Operating Systems</h2>
     gnucash-1.0.18 (xacc-1.0.18) is known to work on the following
@@ -464,6 +618,7 @@
 
     <p> where KLOC == kilo-lines-of-code, as reported by <tt>
     wc</tt>.</p>
+    <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation
     Page.</a></p>

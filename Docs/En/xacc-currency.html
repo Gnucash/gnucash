@@ -1,6 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
 <html>
   <head>
+    <title></title>
     <link rel="stylesheet" title="normal" type="text/css" href= 
     "gnucash.css">
 
@@ -17,7 +19,7 @@
 
     <p> When we introduce the notion of having multiple currencies,
     or stocks that may vary in price, the identities get a little
-    more complicated, as we add in the following formulae:</p>
+    more complicated, and we introduce the following formulae:</p>
 
     <ul>
       <li><b>value=exch-rate*amount</b> (for currency
@@ -27,8 +29,8 @@
       stocks/mutual-funds)</li>
     </ul>
 
-    <p>Thus, buying a widget in Japan and using US Dollars to pay
-    for it would appear thus:</p>
+    <p>Thus, buying a widget in Japan (JPY) and using US Dollars
+    (USD) to pay for it would appear thus:</p>
 
     <ul>
       <li>
@@ -36,13 +38,13 @@
         USD)</i> 
 <pre>
 <i>Date      xfer from       memo                cost
-1/5/99    [YenAcct]       Buy widget          $1.00
+1/5/99    [JPYAcct]       Buy widget          $1.00
 </i>
 </pre>
       </li>
 
       <li>
-        <i> <b>YenAcct</b>: (a currency trading account valued in
+        <i> <b>JPYAcct</b>: (a currency trading account valued in
         yen)</i> 
 <pre>
 <i>Date      xfer from       memo                purchase   rate
@@ -55,10 +57,12 @@
     <p>The engine links together all three of these values <tt>
     (1.0, 150, 0.00667)</tt> permanently and makes it imposssible
     to change one without changing another, so that the grand total
-    is always zero.</p>
+    is always zero, thereby guaranteeing satisfaction of the <a
+    href="xacc-double.html#IDENTITY"> double entry accounting
+    identity.</a></p>
 
     <h1> ISO Currency Codes</h1>
-    <a name="ISOCURR"></a>
+    <a name="ISOCURR"></a> 
 
     <p> More currencies than you thought possible...</p>
 
@@ -1196,6 +1200,7 @@
         <td>Zimbabwean Dollar</td>
       </tr>
     </table>
+    <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation
     Page.</a></p>

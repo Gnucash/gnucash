@@ -11,12 +11,14 @@
   <body>
     <h1>Stock Pricing and Ticker Symbols</h1>
 
-    <p> GnuCash currently provides a somewhat rudimentary automated
-    stock quote gathering abilities. If an account is properly
-    configured, and the host computer is connected to the internet,
-    the binary <tt> gnc-prices</tt> may be used to load stock and
-    mutual fund price quotes from various web sites directly into
-    GnuCash.</p>
+    <p> GnuCash provides a somewhat rudimentary automated stock
+    quote gathering system.</p>
+
+    <p> If a GnuCash <a href="xacc-acctypes.html#stockacct"> stock
+    account</a> is suitably configured, and the host computer is
+    connected to the internet, the program <tt> gnc-prices</tt> may
+    be used to load stock and mutual fund price quotes from various
+    web sites directly into GnuCash.</p>
 
     <p> To make use of this facility, the following must be
     done:</p>
@@ -33,13 +35,15 @@
       Investments</b>, <b>T. Rowe Price</b> and the <b>Vanguard
       Group</b>. Note that Yahoo will provide price quotes for many
       mutual funds <em>including</em> Fidelity, T.Rowe Price and
-      Vanguard, and that the quoted prices/NAV should be identical
-      to those on the source sites.</li>
+      Vanguard, and that the quoted prices at Yahoo <em>
+      should</em> be identical to those that may be found at the
+      source sites. (Otherwise, somebody's reporting wrong
+      information!)</li>
     </ul>
 
     <p> A sample image is shown below:</p>
     <br>
-     <img src="ticker-a.gif"> 
+     <img src="ticker-a.gif" alt="Sample Diagram"> 
 
     <p> To update the prices stored in a gnucash account file, run
     the command line command <tt>gnc-price</tt>, specifying the
@@ -73,7 +77,7 @@
     <p> After running <tt>gnc-prices</tt> for a few days, your
     accounts will begin to resemble the following:</p>
     <br>
-     <img src="ticker-b.gif"> 
+     <img src="ticker-b.gif" alt="Later Ticker Listing"> 
     <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation

@@ -1,6 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
 <html>
   <head>
+    <title></title>
     <link rel="stylesheet" title="normal" type="text/css" href= 
     "gnucash.css">
 
@@ -8,17 +10,19 @@
   </head>
 
   <body>
-    <h2>What is Double Entry Accounting?</h2>
+    <h1>What is Double Entry Accounting?</h1>
 
-    <p> Double entry is an accounting methodology used by
-    professional accountants to make sure that all accounts and
-    indeed <em> each transaction</em> is properly balanced. When
-    these are all required to balance, the likelihood of data-entry
-    errors is greatly reduced. For large, complex sets of accounts
-    with many transactions, it is distressingly easy to make errors
-    that may go undetected for a long time. Double-entry is a
-    crucial technology that has been used since the 13th century to
-    avoid such errors.</p>
+    <p> Double entry bookkeeping is an accounting methodology
+    introduced in the 13th century to to make sure that each
+    accounts and indeed <em> each transaction</em> is properly
+    balanced.</p>
+
+    <p> When these are all required to balance, the likelihood of
+    data-entry errors is greatly reduced. For large, complex sets
+    of accounts with many transactions, it is distressingly easy to
+    make errors that may go undetected for a long time, and be
+    appallingly difficult to track down, even when double-entry
+    bookkeeping is used.</p>
 
     <p> A double-entry transaction is a transaction that contains
     entries for two (or more) accounts that balance against one
@@ -46,42 +50,73 @@
     <p> The perhaps less obvious extension is the notion that
     double entry can be used to represent income and expenses as
     well as bank transfers. See the <a href="xacc-expense.html">
-    Income/Expense</a> page for more information.</p>
+    Income/Expense</a> page for a more detailed discussion of
+    that.</p>
 
     <p> <a name="IDENTITY"> In a traditional system that records
     debits and credits separately, the identity that all
     transactions are required to satisfy is that <tt> Total of
     Debits = Total of Credits.</tt></a></p>
 
-    <p> X-Accountant treats "Debits" as positive values, and
-    "Credits" as negative values, so that this identity simplifies
-    to <tt> value<sub>1</sub> + value<sub>2</sub> +
-    value<sub>3</sub> + ... = 0</tt></p>
+    <p> The fact that the identity requires merely that the <em>
+    total</em> balances means that it is a little bit misleading to
+    call this <em> double</em>-entry bookkeeping; it would be
+    somewhat more accurate to call it <em> multiple-</em>entry
+    bookkeeping. Unfortunately, there's 700 years of history of use
+    of the term, which sufficiently discourages changing it. (And
+    some people think that UNIX has some crufty old bits of
+    oddness. Hah!)</p>
 
-    <h2>Using Double Entry</h2>
+    <p> GnuCash treats "Debits" as positive values, and "Credits"
+    as negative values, so that this identity simplifies to <tt>
+    value<sub>1</sub> + value<sub>2</sub> + value<sub>3</sub> + ...
+    = 0</tt></p>
 
-    <p> To use the double entry system, click on a box in the
-    column marked "Transfer From" on the left-hand side of the
-    register. A menu will drop down, listing all of the accounts
-    from which a transfer may be made. Select one. When you record
-    the transaction, the double-entry will automatically be made,
-    and the transaction automatically appear in all windows showing
-    the transfered-from and the transferred-to accounts.</p>
+    <h1>Using Double Entry</h1>
 
-    <p> To <em> change</em> a double-entry transaction, edit the
-    transaction in any window in which it appears. Any changes made
-    will be automatically reflected in both accounts and all
-    windows displaying the transaction. Similarly, when a
-    double-entry transaction is deleted, it will be deleted from
-    both accounts; balances are automatically recalculated for <em>
-    both</em> accounts.</p>
+    <h2> Creating Transactions</h2>
+
+    <p> To create a double-entry transaction:</p>
+
+    <ul>
+      <li>
+        Click on a box in the column marked <tt>Transfer From</tt>
+        on the left-hand side of the register. 
+
+        <p> A menu will drop down, listing all of the accounts from
+        which a transfer may be made.</p>
+      </li>
+
+      <li>
+        Select one. 
+
+        <p>When you record the transaction, the double-entry will
+        automatically be made, and the transaction automatically
+        appear in all windows showing the transferred-from and the
+        transferred-to accounts.</p>
+      </li>
+    </ul>
+
+    <h2> Changing Transactions</h2>
+
+    <p> To <em> change</em> a double-entry transaction:</p>
+
+    <p> Simply edit the transaction in any window in which it
+    appears.</p>
+
+    <p> Any changes made will be automatically reflected in both
+    accounts and all windows displaying the transaction.</p>
+
+    <p> Similarly, when a double-entry transaction is deleted, the
+    "splits" will be deleted from both accounts, and balances will
+    automatically be recalculated for <em> both</em> accounts.</p>
 
     <p> To change the transfer account, simply select a new account
     from the pull-down menu. When you record the transaction, it
     will automatically be selected from the old account, and
     inserted into the new account.</p>
 
-    <h2>Scrubbing Clean</h2>
+    <h1>Scrubbing Clean</h1>
 
     <p> GnuCash can be configured to be strict about double entry,
     or you may configure it to be "loose."</p>
@@ -112,6 +147,7 @@
     will be created and placed into an account named <b>
     Unbalanced.</b> You may then review these splits and move them
     to their proper accounts.</p>
+    <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation
     Page.</a></p>

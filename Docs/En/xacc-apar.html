@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+
 <html>
   <head>
     <link rel="stylesheet" title="normal" type="text/css" href= 
@@ -8,38 +9,41 @@
   </head>
 
   <body>
-    <h1>Accounts Payable &amp; Accounts Receivable</h1>
+    <h1>Accounts Payable and Accounts Receivable</h1>
 
     <p> A/R (Accounts Receivable) and A/P (Accounts Payable) are
-    somewhat deep to understand.</p>
+    somewhat deep, and require thought to fully understand
+    them.</p>
 
-    <p> Let us first examine A/R. After all, we really shouldn't
+    <h1> Accounts Receivable</h1>
+
+    <p> First, let us examine A/R. After all, we really shouldn't
     really <em>need</em> to relate to A/P because we always pay
     <em>our</em> bills on time, don't we ? :-)</p>
 
-    <p> So, as a first cut, let us assume we don't require
+    <p> As a first approximation, let us assume we don't require
     customers to pay <em> instantly,</em> in cash, but rather issue
-    them an invoice, and give them 30 days to pay the bills. (Then
-    we can start charging interest and sending out harassing
-    letters :-)).</p>
+    them an invoice, and give them 30 days to pay the bills. (After
+    30 days, we can start charging interest and sending out
+    harassing letters :-)).</p>
 
     <p> When we make a sale, the two accounts affected are <b>
     Sales</b> (an income account) and <b>Accounts Receivable.</b>
-    Accounts Receivable is an asset, but it's not liquid, and it's
-    not <em> quite</em> cash.</p>
+    Accounts Receivable is an asset, but it's not "liquid," as you
+    can't readily sell it, and it's certainly not cash.</p>
 
     <p> Then when they come by to pay their bill, dropping off a
     large sack of twenty-dollar bills (or, more likely, a
     check/cheque), we transfer the amount from A/R to Cash.</p>
 
-    <p> The reason we do this in two steps is that we've decided to
-    do our accounting on an accrual basis and not on a cash basis,
-    because most of our transactions are not solely based on cash
-    changing hands, but rather based on <em> establishing
-    obligations.</em></p>
+    <p> The reason we do this in two steps is that we have decided
+    we need to do our accounting on an accrual basis and not on a
+    cash basis, because most of our transactions are not solely
+    based on cash changing hands, but rather based on <em>
+    establishing obligations.</em></p>
 
-    <p> In more sophisticated systems, there may be a whole
-    sequence of documents generated and tracked:</p>
+    <p> In more sophisticated operations, there may be a much
+    larger sequence of documents generated and tracked:</p>
 
     <ul>
       <li>A customer sends in a <b>Purchase Order</b>, thus
@@ -56,45 +60,130 @@
     </ul>
 
     <p> We report sales in our sales figures as soon as we make
-    them, but if the auditor wants to know about whether we'll get
-    stuck with bad debts, we break down those A/R's based on the
-    "ages" of the debts, commonly segmented into three or four
-    periods, of 0-30 days, 31-60 days, etc.</p>
+    them. Unfortunately, we may wind up selling some product to
+    no-good shady operators that we didn't know were shady, and
+    thus may get stuck with some "bad debts."</p>
 
-    <p> At some point when a particular debt is "written off,"
-    perhaps when the cheesing bastards go bankrupt, we dock both
-    A/R and Sales, so we're going back and patching up (or rather,
-    less happily, "patching down") the Sales account to show that
-    the Sale was never made good. It is common to set up a <b> Bad
-    Debt Expense</b> account so that such incidences are recorded
-    in a way that makes it clearer that <em> sales went bad</em>
-    .</p>
+    <p> In order to determine which parts of Accounts Receivable
+    appear to be most at risk, it is typical to arrange AR based on
+    the "ages" of the debts, commonly segmenting it into several
+    aging periods, of payments outstanding 0-30 days, those that
+    outstanding 31-60 days, 61-90 days, and then those that are
+    <em> way overdue.</em></p>
 
-    <p> The above things, reversed, reflect how Accounts Payables
-    work; just switch customer with supplier, and see how the roles
-    reverse. If we buy materials "on account," accrual accounting
-    requires that we record that we incur the expense immediately,
-    and rather than reducing cash, we put the "credit" into the <b>
-    Accounts Payable</b> account. Three weeks later, the invoice
-    comes in, and we issue a payment, and so <em> Debit AP, Credit
-    Cash.</em></p>
+    <p> At some point, it may become clear that a customer is never
+    going to pay what they owe, and we have to write it off as a
+    <b> Bad Debt.</b></p>
 
-    <p> We can also use analagous techniques for expenses that we
-    prepay. If we have to pay out down six months of rent in
-    advance, that is treated as an "accrued asset," <b> Prepaid
-    Rent,</b> and while it puts an unfortunate dent in the Cash
-    account, it <em> does</em> show on the books as an asset that
-    will decline over time to zero. Each month, we draw the account
-    down via <em> Debit <b> Rent Expense</b>, Credit <b> Prepaid
-    Rent</b>.</em> Similarly, we've been collecting payroll taxes
-    from our employees and keeping them in a special bank account,
-    <em> that</em> money is not really ours, so we have a growth in
-    the Cash account on one side, and a growth in an Accrued
-    Liability, namely, <b>Payroll Taxes Payable</b>, on the other
-    side. When we send the quarterly check to the Government so
-    that they can make <em> their</em> payroll, our <b> Payroll
-    Taxes Payable</b> drops as does the balance in the <b>Checking
-    Account</b>.</p>
+    <p> At that point, it is typical to record an entry thus:</p>
+
+    <table summary="BADDEBT">
+      <tr>
+        <th>Account</th>
+
+        <th>DR</th>
+
+        <th>CR</th>
+      </tr>
+
+      <tr>
+        <td>Bad Debt Expense</td>
+
+        <td>$10,000</td>
+
+        <td>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Accounts Receivable</td>
+
+        <td>
+        </td>
+
+        <td>$10,000</td>
+      </tr>
+    </table>
+
+    <p> We could have reduced <b> Sales Income</b> instead, but
+    companies tend to prefer to specifically track the amount that
+    they're losing to bad customers.</p>
+
+    <p> <em> Warning: <b> Advanced Accounting Concept.</b> Bad Debt
+    is an example of a "contra-account." That doesn't refer to <b>
+    amounts paid to Nicaraguan rebels,</b> but rather the notion
+    that the account is an income account that is expected to hold
+    a balance opposite to what is normally expected, to be
+    counteract the balance in another income account. <a href= 
+    "xacc-apprdepr.html#depr"> Accumulated Depreciation,</a> used
+    to diminish the value of an asset over time, is another example
+    of a contra-account.</em></p>
+
+    <h1> Accounts Payable</h1>
+
+    <p> The scenario for Accounts Receivable, reversed, reflects
+    how Accounts Payables work; just switch customer with supplier,
+    and see how the roles reverse.</p>
+
+    <ul>
+      <li>If we buy materials "on account," accrual accounting
+      requires that we record that we incur the expense
+      immediately, and rather than reducing cash, we put the
+      "credit" into the <b> Accounts Payable</b> account.</li>
+
+      <li>Three weeks later, the invoice comes in, and we issue a
+      payment, and so <em> Debit AP, Credit Cash.</em><br>
+      <br>
+      </li>
+    </ul>
+
+    <h1> Prepaid Expenses</h1>
+
+    <p> Analagous techniques are also used for expenses that are
+    prepaid.</p>
+
+    <p> If you have to pay out down six months of rent in advance,
+    that is treated as an "accrued asset."</p>
+
+    <ul>
+      <li>
+        At the time of payment, you <em> Debit</em> <b> Prepaid
+        Rent</b> for the amount paid that is a <em> Credit</em> to
+        <b> Cash.</b> 
+
+        <p> While this puts an unfortunate dent in the Cash
+        account, it <em> does</em> show on the books as an asset,
+        and there are no more payments to make for the next six
+        months.</p>
+      </li>
+
+      <li>Each month, the balance in <b> Prepaid Rent</b> would be
+      down via <em> Debit</em> <b> Rent Expense</b>, <em>
+      Credit</em> <b> Prepaid Rent</b>.</li>
+    </ul>
+
+    <p> Similarly, companies collect payroll taxes on behalf of
+    employees, and keep them in a special bank account.</p>
+
+    <ul>
+      <li><em> That</em> money is not the company's, so there is a
+      <em> Debit</em> to the <b>Cash</b> account on one side, and a
+      <em> Credit</em> to an Accrued Liability, namely, <b>Payroll
+      Taxes Payable</b>, on the other side.</li>
+
+      <li>When the quarterly check to the Government so that they
+      can make <em> their</em> payroll, <b> Payroll Taxes
+      Payable</b> drops as does the balance in the <b>Checking
+      Account</b>.<br>
+      <br>
+      </li>
+    </ul>
+    <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation
     Page.</a></p>

@@ -4,4 +4,4 @@
 # the HTML files here.
 for i in *.html ; do
    tidy -m -i $i
-donediff -u 'pristine/gnucash/Docs/En/xacc-about.html' 'working/gnucash/Docs/En/xacc-about.html'
+done

@@ -11,34 +11,40 @@
   <body>
     <h1>GnuCash Y2K Readiness</h1>
 
-    <p> Gnucash version 1.1.25 and later store all dates as seconds
-    and nanoseconds, where the seconds are stored in a 64-bit
-    signed integer. This should suffice to store dates in the
-    distant past as well as the distant future, as long as they are
-    less than several dozen times the present estimates of the age
-    of the universe.</p>
+    <p> GnuCash versions 1.1.25 and later store all dates as
+    seconds and nanoseconds, where the seconds are stored in a
+    64-bit signed integer. This should suffice to store dates into
+    both the distant past as well as the distant future, so long as
+    they fall not <em> too</em> many orders of magnitude outside
+    cosmologists' estimations of the age of the universe.</p>
 
     <p> The file format for version 1.1.25 and later stores dates
     in the above-described fashion.</p>
 
     <p> Some internal routines use the <tt>time_t</tt> type to
     express seconds. Note that on most OSes, this is a 32-bit
-    quantity, and is limited to the Unix epoch, roughly December
-    1901 thru Jan 2038. It is reasonable to expect that this will
-    migrate to 64 bit values by that time.</p>
+    quantity, and is thus limited to the Unix epoch, roughly
+    December 1901 thru Jan 2038. It is reasonable to expect that
+    <tt> time_t</tt> will migrate to the use of 64 bit values by
+    that time.</p>
 
     <p> Backup and log files are time-stamped using the standard
     Unix <tt>ctime()</tt> routine, which takes a <tt>time_t</tt>
     argument. Thus, the backup and log mechanism may experience
-    trouble in 2038, assuming your Unix continues to be in service
-    at that time without remediation.</p>
+    trouble in 2038, assuming your present Unix continues to be in
+    service at that time without any remediation.</p>
 
     <p> Note that GnuCash also correctly recognizes February 29th,
     2000 as a "leap day," another of the "critical Y2K dates."</p>
 
+    <p> This is all highly suggestive that GnuCash should cope
+    reasonably well with the transition to the new millennium,
+    whether that take place in 2000 or in 2001...</p>
+
     <p>Y2K issues are described in more detail at <a href= 
     "http://www.ntlug.org/~cbbrowne/linuxy2k.html"> Linux and Year
     2000.</a></p>
+    <hr>
 
     <p> Return to <a href="xacc-main.html"> Main Documentation
     Page.</a></p>
