@@ -1,3 +1,11 @@
+2001-06-23  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* AUTHORS: credits
+
+	* configure.in: Bill Nottingham's guile configuration patch
+
 2001-06-20  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: better error messages. remove cruft.

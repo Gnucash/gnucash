@@ -760,6 +760,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>notting@redhat.com</email> Bill Nottingham</glossterm>
+<glossdef>
+<para>guile configure patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>webmaster@obsidian.uia.net</email> OmNiBuS
       </glossterm>
 <glossdef>
