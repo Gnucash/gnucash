@@ -26,6 +26,8 @@
 /** STRUCTS *********************************************************/
 typedef struct _ActionBox {
    Widget combobox;
+   int currow;
+   int curcol;
 } ActionBox;
 
 /** PROTOTYPES ******************************************************/
@@ -40,6 +42,13 @@ void selectCB (Widget w, XtPointer cd, XtPointer cb );
  * Args:   parent  - the parent of this window                      *
  * Return: actionData - the action GUI structure                    *
 \********************************************************************/
+
+#define ADD_MENU_ITEM(menustr) {					\
+   str = XmStringCreateLtoR (menustr, XmSTRING_DEFAULT_CHARSET);	\
+   XmComboBoxAddItem(combobox, str, 0); XmStringFree(str);		\
+}
+
+
 ActionBox *
 actionBox (Widget parent)
 {
@@ -49,29 +58,63 @@ actionBox (Widget parent)
 
    /* malloc the action GUI structure */
    actionData = (ActionBox *) _malloc (sizeof (ActionBox));
+   actionData->currow = -1;
+   actionData->curcol = -1;
 
+/* hack alert -- the width of the combobox should be relative to the font, should
+   be relative to the size of the cell in which it will fit. */
    /* create the action GUI */
-   combobox = XtVaCreateManagedWidget("combobox", xmComboBoxWidgetClass, parent, 
-                       XmNeditable, False,
-                       XmNsorted, True,  
+   combobox = XtVaCreateManagedWidget("actionbox", xmComboBoxWidgetClass, parent, 
+                       XmNshadowThickness, 0, /* don't draw a shadow, use bae shadows */
+                       XmNeditable, False,    /* user can only pick from list */
+                       XmNsorted, False,  
                        XmNshowLabel, False, 
+                       XmNmarginHeight, 0,
+                       XmNmarginWidth, 0,
+                       XmNwidth, 43,
                        NULL);
 
    actionData -> combobox = combobox;
 
    /* build the action menu */
-   str = XmStringCreateLtoR ("Buy", XmSTRING_DEFAULT_CHARSET);
-   XmComboBoxAddItem(combobox, str, 0); XmStringFree(str);
-
-   str = XmStringCreateLtoR ("Sell", XmSTRING_DEFAULT_CHARSET);
-   XmComboBoxAddItem(combobox, str, 0); XmStringFree(str);
+   ADD_MENU_ITEM("Buy");
+   ADD_MENU_ITEM("Sell");
+   ADD_MENU_ITEM("Div");
+   ADD_MENU_ITEM("LTCG");
+   ADD_MENU_ITEM("STCG");
+   ADD_MENU_ITEM("Dist");
+   ADD_MENU_ITEM("Split");
 
    /* add callbacks to detect a selection */
    XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)actionData);
 
-   XtManageChild (combobox);
 
    return actionData;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void SetActionBox (ActionBox *ab, Widget reg, int row, int col)
+{
+   /* if there is an old widget, remove it */
+   if ((0 <= ab->currow) && (0 <= ab->curcol)) {
+     XbaeMatrixSetCellWidget (reg, ab->currow, ab->curcol, NULL);
+   }
+   ab->currow = row;
+   ab->curcol = col;
+
+   /* if the new position is valid, go to it, otherwise, unmanage 
+    * the widget */
+   if ((0 <= ab->currow) && (0 <= ab->curcol)) {
+     XbaeMatrixSetCellWidget (reg, row, col, ab->combobox);
+
+     if (!XtIsManaged (ab->combobox)) {
+       XtManageChild (ab->combobox);
+     }
+   } else {
+     XtUnmanageChild (ab->combobox); 
+  }
 }
 
 /********************************************************************\
@@ -90,7 +133,7 @@ void selectCB (Widget w, XtPointer cd, XtPointer cb )
     XmComboBoxSelectionCallbackStruct *selection = 
                (XmComboBoxSelectionCallbackStruct *) cb;
 
-    printf (" choosed %s \n", selection->value);
+    printf (" choosed %s \n", XmCvtXmStringToCT(selection->value));
 
     /* text = XmComboBoxGetString(ComboBox1); */
 }

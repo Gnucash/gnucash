@@ -37,9 +37,9 @@ TARGET = ../xacc
 
 default: $(TARGET)
 
-$(TARGET): $(OBJS) ../libhtmlw/libhtmlw.a ../Xbae-4.6.2-linas/src/libXbae.a
+$(TARGET): $(OBJS) ../lib/libhtmlw.a ../lib/libComboBox.a ../Xbae-4.6.2-linas/src/libXbae.a
 	@echo "++++++"
-	$(CC) $(OBJS) $(LFLAGS) ../libhtmlw/libhtmlw.a \
+	$(CC) $(OBJS) $(LFLAGS) -lhtmlw -lComboBox \
         ../Xbae-4.6.2-linas/src/libXbae.a $(LIBS) -o $@
 
 .c.o: Makefile

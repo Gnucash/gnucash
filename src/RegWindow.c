@@ -24,26 +24,28 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
-#include <Xm/Form.h>
-#include <Xm/Text.h>
 #include <Xm/DialogS.h>
-#include <Xm/PanedW.h>
+#include <Xm/Form.h>
 #include <Xm/Frame.h>
-#include <Xm/RowColumn.h>
-#include <Xm/PushB.h>
 #include <Xm/LabelGP.h>
+#include <Xm/PanedW.h>
+#include <Xm/PushB.h>
+#include <Xm/RowColumn.h>
+#include <Xm/Text.h>
 #include <Xbae/Matrix.h>
-#include "main.h"
-#include "util.h"
-#include "date.h"
-#include "Data.h"
+
 #include "Account.h"
+#include "ActionBox.h"
+#include "AdjBWindow.h"
+#include "BuildMenu.h"
+#include "Data.h"
+#include "date.h"
+#include "main.h"
 #include "MainWindow.h"
 #include "QuickFill.h"
-#include "BuildMenu.h"
 #include "RecnWindow.h"
-#include "AdjBWindow.h"
 #include "Transaction.h"
+#include "util.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -60,6 +62,7 @@ typedef struct _RegWindow {
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
                                * a new transaction                       */
+  ActionBox      *ab;
 } RegWindow;
 
 
@@ -1056,6 +1059,12 @@ regWindow( Widget parent, Account *acc )
   XtManageChild(reg);
   XtManageChild(frame);
   
+
+  /* create action box for the first time */
+  regData->ab = actionBox (reg);
+  /* SetActionBox (regData->ab, reg, 1, 2);  hack laert -- need work on row counts*/
+ 
+
   /******************************************************************\
    * The button area... also contains balance fields                *
   \******************************************************************/
@@ -1358,7 +1367,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
   
   switch( cbs->reason )
     {
-    case XbaeEnterCellReason:
+    case XbaeEnterCellReason: {
       DEBUG("XbaeEnterCellReason");
       DEBUGCMD(printf(" row = %d\n col = %d\n",row,col));
       /* figure out if we are editing a different transaction... if we 
@@ -1411,7 +1420,17 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         XtVaSetValues( mw, XmNcells, data, NULL );
         XbaeMatrixRefreshCell( mw, row, RECN_CELL_C);
         }
+
+      /* otherwise, move the ACTN widget */
+      else if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
+               ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
+        {
+printf ("yoooo enter actin cell %d %d \n", row, col);
+           SetActionBox (regData->ab, reg, row, col);
+        }
       break;
+    }
+
     case XbaeModifyVerifyReason:
       DEBUG("XbaeModifyVerifyReason");
       {	
@@ -1573,9 +1592,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         regData->changed |= MOD_PRIC;
 
       if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) )
+          ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
         regData->changed |= MOD_ACTN;
-
+printf ("yooooo action %d %d \n", row, col);
+      }
       break;
     case XbaeTraverseCellReason:
       DEBUG("XbaeTraverseCellReason");
