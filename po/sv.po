@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
 "POT-Creation-Date: 2001-07-06 22:58-0700\n"
-"PO-Revision-Date: 2001-06-14 22:40+0200\n"
+"PO-Revision-Date: 2001-07-06 22:58-0700\n"
 "Last-Translator: Martin Norbäck <d95mback@dtek.chalmers.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -101,6 +101,8 @@ msgid ""
 "You do not have permission to access\n"
 "    %s\n"
 msgstr ""
+"Du har inte rättighet att komma åt\n"
+"    %s\n"
 
 #: src/FileDialog.c:125
 #, c-format
@@ -2114,7 +2116,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4247
 msgid "Click \"Back\" to cancel loading this file and choose another."
-msgstr ""
+msgstr "Tryck \"Bakåt\" för att avbryta inläsningen av filen och välja en annan."
 
 #: src/gnome/glade-gnc-dialogs.c:4263
 msgid "Set the default QIF account name"
@@ -2142,7 +2144,7 @@ msgstr "Kontonamn:"
 
 #: src/gnome/glade-gnc-dialogs.c:4302
 msgid "Click \"Back\" to cancel loading this file and select another."
-msgstr ""
+msgstr "Tryck \"Bakåt\" för att avbryta inläsningen av filen och välja en annan."
 
 #: src/gnome/glade-gnc-dialogs.c:4318
 msgid "QIF files you have loaded"
@@ -4809,9 +4811,8 @@ msgid "GNU GPL"
 msgstr "GNU GPL"
 
 #: src/scm/guile-strings.c:117
-#, fuzzy
 msgid "Report a bug"
-msgstr "Rapportnamn"
+msgstr "Rapportera ett programfel"
 
 #: src/scm/guile-strings.c:118
 msgid "URL Tests"
@@ -6636,7 +6637,7 @@ msgstr "Balansräkning vid %s"
 
 #: src/scm/report/guile-strings.c:234
 msgid "Unrealized Gains(Losses)"
-msgstr ""
+msgstr "Orealiserade vinster(förluster)"
 
 #: src/scm/report/guile-strings.c:236 src/scm/report/guile-strings.c:382
 msgid "Net Profit"
@@ -7587,14 +7588,12 @@ msgid "Sort by exact time"
 msgstr "Sortera efter exakt tid"
 
 #: src/scm/report/guile-strings.c:640
-#, fuzzy
 msgid "Register Order"
-msgstr "Registerrapport"
+msgstr "Registerordning"
 
 #: src/scm/report/guile-strings.c:641
-#, fuzzy
 msgid "Sort as with the register"
-msgstr "Typsnitt som ska användas i registret"
+msgstr "Sortera som i registret"
 
 #: src/scm/report/guile-strings.c:642
 msgid "Other Account Name"
@@ -7701,9 +7700,8 @@ msgstr ""
 "denna parameter)."
 
 #: src/scm/report/guile-strings.c:691
-#, fuzzy
 msgid "Display the shares price?"
-msgstr "Visa rapporten %s"
+msgstr "Visa aktiepriserna?"
 
 #: src/scm/report/guile-strings.c:699
 msgid "No amount display"
