@@ -87,7 +87,7 @@ char *
 xaccBackendGetMessage (Backend *be) {
    char * msg;
    
-   if (!be) return g_strdup(_("ERR_BACKEND_NO_BACKEND"));
+   if (!be) return g_strdup("ERR_BACKEND_NO_BACKEND");
    if (!be->error_msg) return NULL;
 
    /* 

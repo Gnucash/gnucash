@@ -1842,7 +1842,7 @@ pgend_session_begin (Backend *backend,
              PWARN ("the following message should be shown in a gui");
              PWARN ("unknown mode %s, will use multi-user mode",
                     start ? start : "(null)");
-             xaccBackendSetMessage(_("Unknown mode '%s', defaulting to multi-user mode"),
+             xaccBackendSetMessage(_("Unknown database access mode '%s'. Using default mode: multi-user."),
 			           start ? start : "(null)");
              be->session_mode = MODE_EVENT;
          } 
