@@ -67,7 +67,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/file \
-  $(GNOME_XML_CFLAGS) \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
 

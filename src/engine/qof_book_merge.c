@@ -1,6 +1,6 @@
 /*********************************************************************
  * qof_book_merge.c -- api for QoFBook merge with collision handling *
- * Copyright (C) 2004 Neil Williams <linux@codehelp.co.uk>           *
+ * Copyright (C) 2004-2005 Neil Williams <linux@codehelp.co.uk>      *
  *                                                                   *
  * This program is free software; you can redistribute it and/or     *
  * modify it under the terms of the GNU General Public License as    *
@@ -42,6 +42,8 @@ struct qof_book_mergeRuleIterate {
 */
 #define DEFAULT_MERGE_WEIGHT	1
 #define QOF_STRING_WEIGHT		3
+#define QOF_DATE_STRING_LENGTH	31
+#define QOF_UTC_DATE_FORMAT		"%Y-%m-%dT%H:%M:%SZ"
 
 /* ================================================================ */
 /* API functions. */
@@ -75,11 +77,12 @@ qof_book_mergeInit( QofBook *importBook, QofBook *targetBook)
 	while(check != NULL) {
 		currentRule = check->data;
 		if(currentRule->mergeResult == MERGE_INVALID) {
-			qof_book_merge_abort(mergeData);
+			mergeData->abort = TRUE;
 			return(NULL);
 		}
 		check = g_list_next(check);
 	}
+	g_list_free(check);
 	return mergeData;
 }
 
@@ -117,15 +120,26 @@ qof_book_merge_abort (qof_book_mergeData *mergeData)
 	qof_param_as_string(QofParam*, QofEntity*);
 	Useful? Worth transferring to qofclass.c?
 	Need to fix the KVP->string. How?
+
+	The QOF_TYPE_DATE output format from
+	qof_book_merge_param_as_string has been changed to QSF_XSD_TIME,
+	a UTC formatted timestring: 2005-01-01T10:55:23Z
+	If you change QOF_UTC_DATE_FORMAT, change 
+	backend/file/qsf-xml.c : qsf_entity_foreach to
+	reformat to QSF_XSD_TIME or the QSF XML will
+	FAIL the schema validation and QSF exports will become invalid.
+
+	The QOF_TYPE_BOOLEAN is lowercase for the same reason.
 */
 char*
 qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 {
-	gchar 		*param_string;
+	gchar 		*param_string, param_date[QOF_DATE_STRING_LENGTH];
 	char 		param_sa[GUID_ENCODING_LENGTH + 1];
 	KvpFrame 	*param_kvp;
 	QofType 	paramType;
 	const GUID *param_guid;
+	time_t 		param_t;
 	gnc_numeric param_numeric, 	(*numeric_getter)	(QofEntity*, QofParam*);
 	Timespec 	param_ts, 		(*date_getter)		(QofEntity*, QofParam*);
 	double 		param_double, 	(*double_getter)	(QofEntity*, QofParam*);
@@ -143,7 +157,9 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 		if(safe_strcmp(paramType, QOF_TYPE_DATE) == 0) { 
 			date_getter = (Timespec (*)(QofEntity*, QofParam*))qtparam->param_getfcn;
 			param_ts = date_getter(qtEnt, qtparam);
-			param_string = g_strdup_printf("%llu", param_ts.tv_sec);
+			param_t = timespecToTime_t(param_ts);
+			strftime(param_date, QOF_DATE_STRING_LENGTH, QOF_UTC_DATE_FORMAT, gmtime(&param_t));
+			param_string = g_strdup(param_date);
 			return param_string;
 		}
 		if((safe_strcmp(paramType, QOF_TYPE_NUMERIC) == 0)  ||
@@ -180,8 +196,9 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 		if(safe_strcmp(paramType, QOF_TYPE_BOOLEAN) == 0){ 
 			boolean_getter = (gboolean (*)(QofEntity*, QofParam*)) qtparam->param_getfcn;
 			param_boolean = boolean_getter(qtEnt, qtparam);
-			if(param_boolean == TRUE) { param_string = g_strdup("TRUE"); }
-			else { param_string = g_strdup("FALSE"); }
+			/* Boolean values need to be lowercase for QSF validation. */
+			if(param_boolean == TRUE) { param_string = g_strdup("true"); }
+			else { param_string = g_strdup("false"); }
 			return param_string;
 		}
 		/* "kvp" */
@@ -300,6 +317,7 @@ void qof_book_mergeRuleForeach( qof_book_mergeData *mergeData,
 	g_return_if_fail(mergeResult != MERGE_INVALID);
 	g_return_if_fail(mergeData->abort == FALSE);
 	iter.fcn = cb;
+	iter.data = mergeData;
 	matching_rules = NULL;
 	iter.ruleList = g_list_copy(mergeData->mergeList);
 	while(iter.ruleList!=NULL) {
@@ -309,7 +327,6 @@ void qof_book_mergeRuleForeach( qof_book_mergeData *mergeData,
 		}
 		iter.ruleList = g_list_next(iter.ruleList);
 	}
-	iter.data = mergeData;
 	iter.remainder = g_list_length(matching_rules);
 	g_list_foreach (matching_rules, qof_book_mergeRuleCB, &iter);
 	g_list_free(matching_rules);
@@ -579,9 +596,14 @@ qof_book_merge_match_orphans(qof_book_mergeData *mergeData)
 		rule = orphans->data;
 		g_return_if_fail(rule != NULL);
 		difference = g_slist_length(mergeData->mergeObjectParams);
+		if(rule->targetEnt == NULL) {
+			rule->mergeResult = MERGE_NEW;
+			rule->difference = 0;
+			mergeData->mergeList = g_list_prepend(mergeData->mergeList,rule);
+			orphans = g_slist_next(orphans);
+			continue;
+		}
 		mergeData->currentRule = rule;
-		while(targets != NULL) {
-			mergeData->currentRule->targetEnt = targets->data;
 			g_return_if_fail(qof_book_mergeCompare(mergeData) != -1);
 			if(difference > mergeData->currentRule->difference) {
 				best_matchEnt = currentRule->targetEnt;
@@ -590,15 +612,6 @@ qof_book_merge_match_orphans(qof_book_mergeData *mergeData)
 				mergeData->mergeList = g_list_prepend(mergeData->mergeList,rule);
 				qof_book_merge_orphan_check(difference, rule, mergeData);
 			}
-			targets = g_slist_next(targets);
-		}
-		if(rule->targetEnt == NULL) {
-			rule->mergeResult = MERGE_NEW;
-			rule->difference = 0;
-			mergeData->mergeList = g_list_prepend(mergeData->mergeList,rule);
-			orphans = g_slist_next(orphans);
-			continue;
-		}
 		orphans = g_slist_next(orphans);
 	}
 	g_slist_free(mergeData->orphan_list);

@@ -1,3 +1,18 @@
+2005-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Account.c:
+	  This patch fixes: (QofAccessFunc)xaccAccountSetNonStdSCU in
+	  src/engine/Account.c - that's a Set routine allocated as a
+	  QofAccessFunc - the patch changes it to the appropriate Get
+	  routine - the QofSetterFunc is OK.
+
+	Neil Williams' QOF sync patch:
+	* This patch updates the QOF merge code to current QOF to bring
+	  the HEAD branch into sync. This update also makes
+	  qof_book_merge_param_as_string output strings that are
+	  compatible with QSF: using false instead of FALSE in string
+	  output and using the QSF_XSD_TIME for the datestrings.
+	
 2005-01-29  Derek Atkins  <derek@ihtfp.com>
 
 	David Montenegro's patch for bugs #95551, #124367.

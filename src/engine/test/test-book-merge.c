@@ -1,6 +1,6 @@
 /*********************************************************************
  * test-book-merge.c -- test implementation api for QoFBook merge    *
- * Copyright (C) 2004 Neil Williams <linux@codehelp.co.uk>           *
+ * Copyright (C) 2004-2005 Neil Williams <linux@codehelp.co.uk>      *
  *                                                                   *
  * This program is free software; you can redistribute it and/or     *
  * modify it under the terms of the GNU General Public License as    *
@@ -213,7 +213,7 @@ obj_setAmount(myobj *g, gnc_numeric h)
 gnc_numeric
 obj_getAmount(myobj *g)
 {
-	if(!g) return double_to_gnc_numeric(0,0,GNC_HOW_DENOM_EXACT);
+	if(!g) return gnc_numeric_zero();
 	return g->Amount;
 }
 
@@ -413,6 +413,7 @@ test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint r
 	importstring = NULL;
 	targetstring = NULL;
 	skip_target = FALSE;
+	mergeData->currentRule = rule;
 	do_test ((rule != NULL), "loop:#1 Rule is NULL");
 	do_test (remainder > 0, "loop:#2 remainder error.");
 	do_test ((safe_strcmp(NULL, rule->mergeLabel) != 0), "loop:#3 object label\n");
@@ -449,11 +450,11 @@ test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint r
 		/* do NOT use as_string for calculations or set_fcn */
 		importstring = qof_book_merge_param_as_string(eachParam, rule->importEnt);
 		do_test ((importstring != NULL), "loop:#16 import param_as_string is null");
-//		printf("importstring %s\t%s Type\n", importstring, eachParam->param_type);
+/*		printf("importstring %s\t%s Type\n", importstring, eachParam->param_type);*/
 		if(!skip_target) {
 		targetstring = qof_book_merge_param_as_string(eachParam, rule->targetEnt);
 		do_test ((targetstring != NULL), "loop:#17 target param_as_string is null");
-//		printf("targetstring %s\t%s Type\n", targetstring, eachParam->param_type);
+/*		printf("targetstring %s\t%s Type\n", targetstring, eachParam->param_type);*/
 			}
 		/* add your own code for user involvement here. */
 		/* either store the importstring and targetstring values and display separately,

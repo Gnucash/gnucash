@@ -129,12 +129,13 @@ get_table_and_param (char * str, char **tab, char **param)
 static inline char * 
 dequote_string (char *str)
 {
+	size_t len;
 	/* strip out quotation marks ...  */
 	if (('\'' == str[0]) ||
 	    ('\"' == str[0]))
 	{
 		str ++;
-		size_t len = strlen(str);
+		len = strlen(str);
 		str[len-1] = 0;
 	}
 	return str;
@@ -145,7 +146,20 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 {
 	char tmpbuff[128];
 	GSList *param_list;
+	GList *guid_list;
 	QofQueryPredData *pred_data = NULL;
+	sql_field_item *sparam, *svalue;
+	char * qparam_name, *qvalue_name, *table_name, *param_name;
+	char *sep, *path,*str,*p;
+	QofQuery *qq;
+	KvpValue *kv, *kval;
+	KvpValueType kvt;
+	QofQueryCompare qop;
+	time_t exact;
+	int rc, len;
+	Timespec ts;
+	QofType param_type;
+	QofGuidMatch gm;
 	
 	if (NULL == cond)
 	{
@@ -161,14 +175,14 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		PWARN("missing left paramter");
 		return NULL;
 	}
-	sql_field_item * sparam = cond->d.pair.left->item;
+	sparam = cond->d.pair.left->item;
 	if (SQL_name != sparam->type)
 	{
 		PWARN("we support only paramter names at this time (parsed %d)",
           sparam->type);
 		return NULL;
 	}
-	char * qparam_name = sparam->d.name->data;
+	qparam_name = sparam->d.name->data;
 	if (NULL == qparam_name)
 	{
 		PWARN ("missing paramter name");
@@ -183,13 +197,13 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		PWARN ("missing right paramter");
 		return NULL;
 	}
-	sql_field_item * svalue = cond->d.pair.right->item;
+	svalue = cond->d.pair.right->item;
 	if (SQL_name != svalue->type)
 	{
 		PWARN("we support only simple values (parsed as %d)", svalue->type);
 		return NULL;
 	}
-	char * qvalue_name = svalue->d.name->data;
+	qvalue_name = svalue->d.name->data;
 	if (NULL == qvalue_name)
 	{
 		PWARN("missing value");
@@ -207,11 +221,11 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 			PWARN ("missing kvp frame");
 			return NULL;
 		}
-		KvpValue *kv = kvp_frame_get_value (query->kvp_join, qvalue_name+5);
+		kv = kvp_frame_get_value (query->kvp_join, qvalue_name+5);
 		/* If there's no value, its not an error; 
 		 * we just don't do this predicate */
 		if (!kv) return NULL;  
-		KvpValueType kvt = kvp_value_get_type (kv);
+		kvt = kvp_value_get_type (kv);
 
 		tmpbuff[0] = 0x0;
 		qvalue_name = tmpbuff;
@@ -251,7 +265,6 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	param_list = qof_query_build_param_list (qparam_name, NULL);
 
 	/* Get the where-term comparison operator */
-	QofQueryCompare qop;
 	switch (cond->op)
 	{
 		case SQL_eq:    qop = QOF_COMPARE_EQUAL; break;
@@ -270,8 +283,6 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	/* OK, need to know the type of the thing being matched 
 	 * in order to build the correct predicate.  Get the type 
 	 * from the object parameters. */
-	char *table_name;
-	char *param_name;
 	get_table_and_param (qparam_name, &table_name, &param_name);
 	if (NULL == table_name)
 	{
@@ -290,7 +301,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		return NULL;
 	}
 
-	QofType param_type = qof_class_get_parameter_type (table_name, param_name);
+	param_type = qof_class_get_parameter_type (table_name, param_name);
 	if (!param_type) 
 	{
 		PWARN ("The parameter \'%s\' on object \'%s\' is not known", 
@@ -339,14 +350,12 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		/* work around highly bogus locale setting */
 		qof_date_format_set(QOF_DATE_FORMAT_US);
 
-		time_t exact;
-		int rc = qof_scan_date_secs (qvalue_name, &exact);
+		rc= qof_scan_date_secs (qvalue_name, &exact);
 		if (0 == rc) 
 		{
 			PWARN ("unable to parse date: %s", qvalue_name);
 			return NULL;
 		}
-		Timespec ts;
 		ts.tv_sec = exact;
 		ts.tv_nsec = 0;
 		pred_data = qof_query_date_predicate (qop, QOF_DATE_MATCH_DAY, ts);
@@ -377,9 +386,9 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		// XXX less, than greater than don't make sense,
 		// should check for those bad conditions
 
-		QofGuidMatch gm = QOF_GUID_MATCH_ANY;
+		gm = QOF_GUID_MATCH_ANY;
 		if (QOF_COMPARE_NEQ == qop) gm = QOF_GUID_MATCH_NONE;
-		GList *guid_list = g_list_append (NULL, &guid);
+		guid_list = g_list_append (NULL, &guid);
 		pred_data = qof_query_guid_predicate (gm, guid_list);
 
 		g_list_free (guid_list);
@@ -389,12 +398,11 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		/* We are expecting an encoded value that looks like
 		 * /some/path/string:value
 		 */
-		char *sep = strchr (qvalue_name, ':');
+		sep = strchr (qvalue_name, ':');
 		if (!sep) return NULL;
 		*sep = 0;
-		char * path = qvalue_name;
-		char * str = sep +1;
-		char * p;
+		path = qvalue_name;
+		str = sep +1;
 		/* If str has only digits, we know its a plain number.
 		 * If its numbers and a decimal point, assume a float
 		 * If its numbers and a slash, assume numeric
@@ -402,8 +410,8 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		 * If it looks like an iso date ... 
 		 * else assume its a string.
 		 */
-		KvpValue *kval = NULL;
-		int len = strlen (str);
+		kval = NULL;
+		len = strlen (str);
 		if ((32 == len) && (32 == strspn (str, "0123456789abcdef")))
 		{
 			GUID guid;
@@ -455,7 +463,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		return NULL;
 	}
 
-	QofQuery *qq = qof_query_create();
+	qq = qof_query_create();
 	qof_query_add_term (qq, param_list, pred_data, QOF_QUERY_FIRST_TERM);
 	return qq;
 }
@@ -465,6 +473,9 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 static QofQuery *
 handle_where (QofSqlQuery *query, sql_where *swear)
 {
+	QofQueryOp qop;
+	QofQuery * qq;
+	
 	switch (swear->type)
 	{
 		case SQL_pair:
@@ -473,7 +484,6 @@ handle_where (QofSqlQuery *query, sql_where *swear)
 			QofQuery *qright = handle_where (query, swear->d.pair.right);
 			if (NULL == qleft) return qright;
 			if (NULL == qright) return qleft;
-			QofQueryOp qop;
 			switch (swear->d.pair.op)
 			{
 				case SQL_and: qop = QOF_QUERY_AND; break;
@@ -484,7 +494,7 @@ handle_where (QofSqlQuery *query, sql_where *swear)
 					qof_query_destroy (qright);
 					return NULL;
 			}
-			QofQuery * qq = qof_query_merge (qleft, qright, qop);
+			qq = qof_query_merge (qleft, qright, qop);
 			qof_query_destroy (qleft);
 			qof_query_destroy (qright);
 			return qq;
@@ -511,11 +521,14 @@ handle_where (QofSqlQuery *query, sql_where *swear)
 static void 
 handle_sort_order (QofSqlQuery *query, GList *sorder_list)
 {
-	if (!sorder_list) return;
-
 	GSList *qsp[3];
+	GList *n;
 	gboolean direction[3];
 	int i;
+	sql_order_field *sorder;
+	char * qparam_name;
+	
+	if (!sorder_list) return;
 
 	for (i=0; i<3; i++)
 	{
@@ -524,14 +537,14 @@ handle_sort_order (QofSqlQuery *query, GList *sorder_list)
 
 		if (sorder_list)
 		{
-			sql_order_field *sorder = sorder_list->data;
+			sorder = sorder_list->data;
 
 			/* Set the sort direction */
 			if (SQL_asc == sorder->order_type) direction[i] = TRUE;
 
 			/* Find the paramter name */
-			char * qparam_name = NULL;
-			GList *n = sorder->name;
+			qparam_name = NULL;
+			n = sorder->name;
 			if (n)
 			{
 				qparam_name = n->data;
@@ -559,6 +572,10 @@ handle_sort_order (QofSqlQuery *query, GList *sorder_list)
 void 
 qof_sql_query_parse (QofSqlQuery *query, const char *str)
 {
+	GList *tables;
+	sql_select_statement *sss;
+	sql_where *swear;
+	
 	if (!query) return;
 
 	/* Delete old query, if any */
@@ -590,14 +607,14 @@ qof_sql_query_parse (QofSqlQuery *query, const char *str)
 	 * user wrote "SELECT * FROM tableA, tableB WHERE ..."
 	 * then we don't have a single unique table-name.
 	 */
-	GList *tables = sql_statement_get_tables (query->parse_result);
+	tables = sql_statement_get_tables (query->parse_result);
 	if (1 == g_list_length (tables))
 	{
 		query->single_global_tablename = tables->data;
 	}
 
-	sql_select_statement *sss = query->parse_result->statement;
-	sql_where * swear = sss->where;
+	sss = query->parse_result->statement;
+	swear = sss->where;
 	if (swear)
 	{
 		/* Walk over the where terms, turn them into QOF predicates */
@@ -625,7 +642,7 @@ qof_sql_query_parse (QofSqlQuery *query, const char *str)
 GList * 
 qof_sql_query_run (QofSqlQuery *query, const char *str)
 {
-	GList *node;
+	GList *node, *results;
 
 	if (!query) return NULL;
 
@@ -635,7 +652,7 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 	qof_query_set_book (query->qof_query, query->book);
 
 	// qof_query_print (query->qof_query);
-	GList *results = qof_query_run (query->qof_query);
+	results = qof_query_run (query->qof_query);
 
 	return results;
 }
@@ -643,7 +660,7 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 GList * 
 qof_sql_query_rerun (QofSqlQuery *query)
 {
-	GList *node;
+	GList *node, *results;
 
 	if (!query) return NULL;
 
@@ -652,7 +669,7 @@ qof_sql_query_rerun (QofSqlQuery *query)
 	qof_query_set_book (query->qof_query, query->book);
 
 	// qof_query_print (query->qof_query);
-	GList *results = qof_query_run (query->qof_query);
+	results = qof_query_run (query->qof_query);
 
 	return results;
 }

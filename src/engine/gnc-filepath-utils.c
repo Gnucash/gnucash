@@ -21,7 +21,7 @@
 
 /*
  * @file gnc-filepath-utils.c
- * @breif file path resolutionutilities
+ * @brief file path resolutionutilities
  * @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  *

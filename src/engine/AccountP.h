@@ -62,6 +62,8 @@
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
 */
+
+/** \struct Account */
 struct account_s
 {
   QofInstance inst;

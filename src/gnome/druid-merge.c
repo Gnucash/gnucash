@@ -53,7 +53,6 @@ QofBook				*targetBook = NULL;
 gchar 				*buffer = "";
 
 void collision_rule_loop	( qof_book_mergeData*, qof_book_mergeRule*, 	guint );
-void progress_rule_loop 	( qof_book_mergeData*, qof_book_mergeRule*, 	guint );
 
 static GtkWidget*
 merge_get_widget (const char *name)
@@ -226,11 +225,6 @@ on_qof_book_merge_prepare (GnomeDruidPage  *gnomedruidpage,
 	g_return_if_fail(targetBook != NULL);
 	mergeData = qof_book_mergeInit(mergeBook, targetBook);
 	g_return_if_fail(mergeData != NULL);
-	qof_book_mergeRuleForeach(mergeData, progress_rule_loop, MERGE_NEW);
- 	qof_book_mergeRuleForeach(mergeData, progress_rule_loop, MERGE_ABSOLUTE);
- 	qof_book_mergeRuleForeach(mergeData, progress_rule_loop, MERGE_DUPLICATE);
- 	qof_book_mergeRuleForeach(mergeData, progress_rule_loop, MERGE_UPDATE);
-	gtk_label_set_text(progress, buffer);
  	qof_book_mergeRuleForeach(mergeData, collision_rule_loop, MERGE_REPORT);
 	gnc_resume_gui_refresh ();
 }
@@ -277,76 +271,6 @@ gnc_create_merge_druid ( void )
 	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
                       GTK_SIGNAL_FUNC(qof_book_merge_destroy_cb), NULL);
 	return dialog;
-}
-
-void progress_rule_loop(qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint remainder)
-{
-	GtkLabel *progress;
-	
-	g_return_if_fail(mergeData != NULL);
-	progress = GTK_LABEL(merge_get_widget("ResultsBox"));
-	buffer = "";
-	g_return_if_fail(rule != NULL);
-	if(rule->mergeResult == MERGE_NEW) {
-		if (remainder == 1) { 
-			buffer = g_strconcat(buffer, 
-				g_strdup_printf("%i %s tagged as NEW.\n", remainder, rule->mergeLabel), NULL);
-			gtk_label_set_text (progress, buffer);
-			}
-		else { 
-			buffer = g_strconcat(buffer, 
-				g_strdup_printf("%i entities of type %s are tagged as NEW.\n", 
-				remainder, rule->mergeLabel), NULL); 
-			gtk_label_set_text (progress, buffer);
-		}
-		gtk_widget_show(GTK_WIDGET(progress));
-		return;
-	}
-	if(rule->mergeResult ==  MERGE_ABSOLUTE) {
-		if (remainder == 1) { 
-			buffer = g_strconcat(buffer, 
-				g_strdup_printf("%i %s tagged as an absolute GUID match.\n", 
-				remainder, rule->mergeLabel), NULL); 
-			gtk_label_set_text (progress, buffer);
-		}
-		else { 
-			buffer = g_strconcat(buffer, 
-				g_strdup_printf("%i entities of type %s tagged as an absolute GUID match.\n", 
-				remainder, rule->mergeLabel), NULL);
-			gtk_label_set_text (progress, buffer);
-		}
-		gtk_widget_show(GTK_WIDGET(progress));
-		return;
-	}
-	if(rule->mergeResult == MERGE_DUPLICATE) {
-		if (remainder == 1) { 
-			buffer = g_strconcat(buffer, g_strdup_printf("%i %s tagged as a duplicate.\n", 
-				remainder, rule->mergeLabel), NULL); 
-			gtk_label_set_text (progress, buffer);
-		}
-		else { 
-			buffer = g_strconcat(buffer, g_strdup_printf("%i entities of type %s tagged as a duplicate.\n", 
-				remainder, rule->mergeLabel), NULL);
-			gtk_label_set_text (progress, buffer);
-		}
-		gtk_widget_show(GTK_WIDGET(progress));
-		return;
-	}
-	if(rule->mergeResult == MERGE_UPDATE) {
-		if (remainder == 1) { 
-			buffer = g_strconcat(buffer, g_strdup_printf("%i %s tagged as to be updated.\n", 
-				remainder, rule->mergeLabel), NULL); 
-			gtk_label_set_text (progress, buffer);
-		}
-		else { 
-			buffer = g_strconcat(buffer, g_strdup_printf("%i entities of type %s tagged as to be updated.\n", 
-				remainder, rule->mergeLabel), NULL);
-			gtk_label_set_text (progress, buffer);
-		}
-		gtk_widget_show(GTK_WIDGET(progress));
-		return;
-	}
-	g_free(buffer);
 }
 
 void collision_rule_loop(qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint remainder)

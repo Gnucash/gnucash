@@ -78,7 +78,13 @@ void          xaccAccountGroupDestroy (AccountGroup *grp);
 /** Return the book to which this account belongs */
 QofBook * xaccGroupGetBook (AccountGroup *group);
 
-/** DOCUMENT ME! */
+/** Compare two account groups
+
+warns if one is NULL, if one has no accounts or if the two
+groups have different numbers of accounts.
+
+@return TRUE if the two account groups are equal, FALSE otherwise.
+*/
 gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
                         gboolean check_guids);
 

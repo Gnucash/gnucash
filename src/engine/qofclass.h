@@ -82,7 +82,7 @@
 
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
-
+/** Type of QofParam */
 typedef struct _QofParam QofParam;
 
 /** The QofAccessFunc defines an arbitrary function pointer

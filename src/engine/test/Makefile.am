@@ -19,8 +19,7 @@ LDADD = \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
   ${GLIB_LIBS} \
-  -lltdl \
-  -lglib
+  -lltdl
 
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.

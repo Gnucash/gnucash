@@ -208,18 +208,30 @@ qof_kvp_value_to_xml (KvpValue *kval, xmlNodePtr topnode)
 static xmlNodePtr
 qof_query_pred_data_to_xml (QofQueryPredData *pd)
 {
+	GList *n;
+	GSList *ns;
+	xmlNodePtr topnode;
+	query_guid_t pdata_g;
+	query_string_t pdata_s;
+	query_numeric_t pdata_n;
+	query_kvp_t pdata_k;
+	query_date_t pdata_d;
+	query_int64_t pdata_i64;
+	query_int32_t pdata_i32;
+	query_double_t pdata_db;
+	query_boolean_t pdata_bool;
+	query_char_t pdata_c;
 
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-guid");
+		topnode = xmlNewNode (NULL, "qofquery:pred-guid");
 		/* GUID Predicate doesn't do a PUT_HOW */
 
-		GList *n;
-		query_guid_t pdata = (query_guid_t) pd;
-		PUT_MATCH5("qofquery:guid-match", pdata->options, 
+		pdata_g = (query_guid_t) pd;
+		PUT_MATCH5("qofquery:guid-match", pdata_g->options, 
 		                GUID_MATCH, ANY, ALL, NONE, NULL, LIST_ANY);
 
-		for (n = pdata->guids; n; n = n->next)
+		for (n = pdata_g->guids; n; n = n->next)
 		{
 			PUT_GUID ("qofquery:guid", n->data);
 		}
@@ -227,105 +239,103 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-string");
+		topnode = xmlNewNode (NULL, "qofquery:pred-string");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_string_t pdata = (query_string_t) pd;
-		PUT_MATCH2("qofquery:string-match", pdata->options,
+		pdata_s = (query_string_t) pd;
+		PUT_MATCH2("qofquery:string-match", pdata_s->options,
                        STRING_MATCH, NORMAL, CASEINSENSITIVE);
-		PUT_BOOL ("qofquery:is-regex", pdata->is_regex);
-		PUT_STR ("qofquery:string", pdata->matchstring);
+		PUT_BOOL ("qofquery:is-regex", pdata_s->is_regex);
+		PUT_STR ("qofquery:string", pdata_s->matchstring);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-numeric");
+		topnode = xmlNewNode (NULL, "qofquery:pred-numeric");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_numeric_t pdata = (query_numeric_t) pd;
-		PUT_MATCH3("qofquery:numeric-match", pdata->options,
+		pdata_n = (query_numeric_t) pd;
+		PUT_MATCH3("qofquery:numeric-match", pdata_n->options,
 		                 NUMERIC_MATCH, DEBIT, CREDIT, ANY);
 		
-		PUT_NUMERIC ("qofquery:numeric", pdata->amount);
+		PUT_NUMERIC ("qofquery:numeric", pdata_n->amount);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-kvp");
+		topnode = xmlNewNode (NULL, "qofquery:pred-kvp");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_kvp_t pdata = (query_kvp_t) pd;
-		
-		GSList *n;
-		for (n=pdata->path; n; n=n->next)
+		pdata_k = (query_kvp_t) pd;
+		for (ns=pdata_k->path; ns; ns=ns->next)
 		{
-			PUT_STR ("qofquery:kvp-path", n->data);
+			PUT_STR ("qofquery:kvp-path", ns->data);
 		}
-		qof_kvp_value_to_xml (pdata->value, topnode);
+		qof_kvp_value_to_xml (pdata_k->value, topnode);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-date");
+		topnode = xmlNewNode (NULL, "qofquery:pred-date");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_date_t pdata = (query_date_t) pd;
+		pdata_d = (query_date_t) pd;
 		
-		PUT_MATCH2("qofquery:date-match", pdata->options,
+		PUT_MATCH2("qofquery:date-match", pdata_d->options,
 		                 DATE_MATCH, NORMAL, ROUNDED);
 
-		PUT_DATE ("qofquery:date", pdata->date);
+		PUT_DATE ("qofquery:date", pdata_d->date);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-int64");
+		topnode = xmlNewNode (NULL, "qofquery:pred-int64");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_int64_t pdata = (query_int64_t) pd;
-		PUT_INT64 ("qofquery:int64", pdata->val);
+		pdata_i64 = (query_int64_t) pd;
+		PUT_INT64 ("qofquery:int64", pdata_i64->val);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-int32");
+		topnode = xmlNewNode (NULL, "qofquery:pred-int32");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_int32_t pdata = (query_int32_t) pd;
+		pdata_i32 = (query_int32_t) pd;
 		
-		PUT_INT32 ("qofquery:int32", pdata->val);
+		PUT_INT32 ("qofquery:int32", pdata_i32->val);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-double");
+		topnode = xmlNewNode (NULL, "qofquery:pred-double");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_double_t pdata = (query_double_t) pd;
+		pdata_db = (query_double_t) pd;
 		
-		PUT_DBL ("qofquery:double", pdata->val);
+		PUT_DBL ("qofquery:double", pdata_db->val);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_BOOLEAN))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-boolean");
+		topnode = xmlNewNode (NULL, "qofquery:pred-boolean");
 		PUT_HOW ("qofquery:compare", pd->how, LT, LTE, EQUAL, GT, GTE, NEQ);
 
-		query_boolean_t pdata = (query_boolean_t) pd;
+		pdata_bool = (query_boolean_t) pd;
 		
-		PUT_BOOL ("qofquery:boolean", pdata->val);
+		PUT_BOOL ("qofquery:boolean", pdata_bool->val);
 		return topnode;
 	}
 	if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR))
 	{
-		xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:pred-char");
+		topnode = xmlNewNode (NULL, "qofquery:pred-char");
 		/* There is no PUT_HOW for char-match */
-		query_char_t pdata = (query_char_t) pd;
+		pdata_c = (query_char_t) pd;
 		
-		PUT_MATCH2("qofquery:char-match", pdata->options,
+		PUT_MATCH2("qofquery:char-match", pdata_c->options,
 		                 CHAR_MATCH, ANY, NONE);
 		
-		PUT_STR ("qofquery:char-list", pdata->char_list);
+		PUT_STR ("qofquery:char-list", pdata_c->char_list);
 		return topnode;
 	}
 	return NULL;
@@ -336,11 +346,15 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
 static xmlNodePtr
 qof_query_param_path_to_xml (GSList *param_path)
 {
-	xmlNodePtr topnode = xmlNewNode (NULL, "qofquery:param-path");
-	GSList *n = param_path;
+	xmlNodePtr topnode;
+	GSList *n;
+	QofIdTypeConst path;
+	
+	n = param_path;
+	topnode = xmlNewNode (NULL, "qofquery:param-path");
 	for ( ; n; n=n->next)
 	{
-		QofIdTypeConst path = n->data;
+		path = n->data;
 		if (!path) continue;
 		PUT_STR ("qofquery:param", path);
 	}
@@ -353,13 +367,17 @@ static xmlNodePtr
 qof_query_one_term_to_xml (QofQueryTerm *qt)
 {
 	xmlNodePtr node;
-	xmlNodePtr term = xmlNewNode (NULL, "qofquery:term");
+	xmlNodePtr term;
+	xmlNodePtr topnode;
+	gboolean invert;
+	GSList *path;
+	QofQueryPredData *pd;
 
-	gboolean invert = qof_query_term_is_inverted (qt);
-	GSList *path = qof_query_term_get_param_path (qt);
-	QofQueryPredData *pd = qof_query_term_get_pred_data (qt);
-
-	xmlNodePtr topnode = term;
+	invert = qof_query_term_is_inverted (qt);
+	term = xmlNewNode (NULL, "qofquery:term");
+	topnode = term;
+	path = qof_query_term_get_param_path (qt);
+	pd = qof_query_term_get_pred_data (qt);
 	if (invert)
 	{
 		/* inverter becomes new top mode */
@@ -381,14 +399,19 @@ qof_query_one_term_to_xml (QofQueryTerm *qt)
 static xmlNodePtr
 qof_query_and_terms_to_xml (GList *and_terms)
 {
-	xmlNodePtr terms = xmlNewNode (NULL, "qofquery:and-terms");
-	GList *n = and_terms;
+	xmlNodePtr terms;
+	GList *n;
+	QofQueryTerm *qt;
+	xmlNodePtr t;
+	
+	terms = xmlNewNode (NULL, "qofquery:and-terms");
+	n = and_terms;
 	for ( ; n; n=n->next)
 	{
-		QofQueryTerm *qt = n->data;
+		qt = n->data;
 		if (!qt) continue;
 
-		xmlNodePtr t = qof_query_one_term_to_xml (n->data);
+		t = qof_query_one_term_to_xml (n->data);
 		if (t) xmlAddChild (terms, t);
 	}
 	return terms;
@@ -399,15 +422,18 @@ qof_query_and_terms_to_xml (GList *and_terms)
 static xmlNodePtr
 qof_query_terms_to_xml (QofQuery *q)
 {
-	xmlNodePtr terms = NULL;
-	GList *n = qof_query_get_terms (q);
+	xmlNodePtr terms;
+	GList *n;
+	xmlNodePtr andt;
 
+	terms = NULL;
+	n = qof_query_get_terms (q);
 	if (!n) return NULL;
 	terms = xmlNewNode (NULL, "qofquery:or-terms");
 
 	for ( ; n; n=n->next)
 	{
-		xmlNodePtr andt = qof_query_and_terms_to_xml (n->data);
+		andt = qof_query_and_terms_to_xml (n->data);
 		if (andt) xmlAddChild (terms, andt);
 	}
 	return terms;
@@ -419,31 +445,39 @@ static xmlNodePtr
 qof_query_sorts_to_xml (QofQuery *q)
 {
 	QofQuerySort *s[3];
+	xmlNodePtr sortlist;
+	GSList *plist;
+	xmlNodePtr sort;
+	xmlNodePtr topnode;
+	gboolean increasing;
+	gint opt;
+	xmlNodePtr pl;
+	int i;
+	
 	qof_query_get_sorts (q, &s[0], &s[1], &s[2]);
 
 	if (NULL == s[0]) return NULL;
 
-	xmlNodePtr sortlist = xmlNewNode (NULL, "qofquery:sort-list");
-	int i;
+	sortlist = xmlNewNode (NULL, "qofquery:sort-list");
 	for (i=0; i<3; i++)
 	{
 		if (NULL == s[i]) continue;
 
-		GSList *plist = qof_query_sort_get_param_path (s[i]);
+		plist = qof_query_sort_get_param_path (s[i]);
 		if (!plist) continue;
 
-		xmlNodePtr sort = xmlNewNode (NULL, "qofquery:sort");
+		sort = xmlNewNode (NULL, "qofquery:sort");
 		xmlAddChild (sortlist, sort);
 
-		xmlNodePtr topnode = sort;
+		topnode = sort;
 
-		gboolean increasing = qof_query_sort_get_increasing (s[i]);
+		increasing = qof_query_sort_get_increasing (s[i]);
 		PUT_STR ("qofquery:order", increasing ? "DESCENDING" : "ASCENDING");
 
-		gint opt = qof_query_sort_get_sort_options (s[i]);
+		opt = qof_query_sort_get_sort_options (s[i]);
 		PUT_INT32 ("qofquery:options", opt);
 
-		xmlNodePtr pl = qof_query_param_path_to_xml (plist);
+		pl = qof_query_param_path_to_xml (plist);
 		if (pl) xmlAddChild (sort, pl);
 	}
 
@@ -455,16 +489,21 @@ qof_query_sorts_to_xml (QofQuery *q)
 static void
 do_qof_query_to_xml (QofQuery *q, xmlNodePtr topnode)
 {
-	QofIdType search_for = qof_query_get_search_for (q);
+	QofIdType search_for;
+	xmlNodePtr terms;
+	xmlNodePtr sorts;
+	gint max_results;
+	
+	search_for = qof_query_get_search_for (q);
 	PUT_STR ("qofquery:search-for", search_for);
 
-	xmlNodePtr terms = qof_query_terms_to_xml(q);
+	terms = qof_query_terms_to_xml(q);
 	if (terms) xmlAddChild (topnode, terms);
 
-	xmlNodePtr sorts = qof_query_sorts_to_xml (q);
+	sorts = qof_query_sorts_to_xml (q);
 	if (sorts) xmlAddChild (topnode, sorts);
 
-	gint max_results = qof_query_get_max_results (q);
+	max_results = qof_query_get_max_results (q);
 	PUT_INT32 ("qofquery:max-results", max_results);
 }
 
@@ -499,6 +538,11 @@ int main (int argc, char * argv[])
 {
 	QofQuery *q;
 	QofSqlQuery *sq;
+	xmlDocPtr doc;
+	xmlNodePtr topnode;
+	xmlChar *xbuf;
+	int bufsz;
+	xmlOutputBufferPtr xbuf;
 
 	qof_query_init();
 	qof_object_initialize ();
@@ -523,12 +567,10 @@ int main (int argc, char * argv[])
 
 	qof_query_print (q);
 
-	xmlDocPtr doc = doc = xmlNewDoc("1.0");
-	xmlNodePtr topnode = qof_query_to_xml (q);
+	doc = doc = xmlNewDoc("1.0");
+	topnode = qof_query_to_xml (q);
 	xmlDocSetRootElement(doc,topnode);
 
-	xmlChar *xbuf;
-	int bufsz;
 	xmlDocDumpFormatMemory (doc, &xbuf, &bufsz, 1);
 
 	printf ("%s\n", xbuf);
@@ -538,7 +580,7 @@ int main (int argc, char * argv[])
 #if 0
 printf ("duude\n");
 	// xmlOutputBufferPtr xbuf = xmlAllocOutputBuffer (enc);
-	xmlOutputBufferPtr xbuf = xmlOutputBufferCreateFile (stdout, NULL);
+	xbuf = xmlOutputBufferCreateFile (stdout, NULL);
 printf ("duude\n");
 
 	xbuf = xmlOutputBufferCreateFd (1, NULL);

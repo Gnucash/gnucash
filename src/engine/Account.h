@@ -214,19 +214,6 @@ void xaccAccountSetNotes (Account *account, const char *notes);
 void xaccAccountSetLastNum (Account *account, const char *num);
 /** Set the account's type */
 GNCAccountType xaccAccountGetType (Account *account);
-/** \brief Special function only for qof_book_merge
-
-qofAccountSetParent uses a specific QofEntity that is
-set during a qof_book_merge and it refers to the
-corresponding QofEntity in the target book. This is used
-to link new accounts into an existing AccountGroup. The
-parent reference is only changed if no parent exists.
-
-Care is needed before this function can be used in any
-other manner.
-*/
-void qofAccountSetParent (Account *, QofEntity *);
-
 
 /** Get the account's name */
 const char *   xaccAccountGetName (Account *account);

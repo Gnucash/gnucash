@@ -345,6 +345,7 @@ qof_session_load_backend(QofSession * session, char * backend_name)
 static void
 load_backend_library (const char * libso, const char * loadfn)
 {
+	void (*initfn) (void);
 	void *dl_hand = dlopen (libso, RTLD_LAZY);
 	if (NULL == dl_hand)
 	{
@@ -352,7 +353,7 @@ load_backend_library (const char * libso, const char * loadfn)
 		PERR("Can't load %s backend, %s\n", libso, err_str);
 		return;
 	}
-	void (*initfn) (void)  = dlsym (dl_hand, loadfn);
+	initfn = dlsym (dl_hand, loadfn);
 	if (initfn)
 	{
 		 (*initfn)();
@@ -368,6 +369,7 @@ static void
 qof_session_load_backend(QofSession * session, char * access_method)
 {
 	GSList *p;
+	GList *node;
 	ENTER (" ");
 
 	/* If the provider list is null, try to register the 'well-known'
@@ -390,7 +392,6 @@ qof_session_load_backend(QofSession * session, char * access_method)
       	session->backend = (*(prov->backend_new))();
 
 			/* Tell the books about the backend that they'll be using. */
-			GList *node;
 			for (node=session->books; node; node=node->next)
 			{
 				QofBook *book = node->data;

@@ -9,8 +9,9 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
-  $(GNOME_XML_CFLAGS) \
+  ${GNOME_XML_CFLAGS} \
   ${GLIB_CFLAGS}
+
 
 libgncmod_backend_file_la_SOURCES = \
   gncmod-backend-file.c \
