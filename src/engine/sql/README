@@ -140,6 +140,16 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
+(none in this list are truly critical at this point, except possibly
+the username/password dialog, and its effect with regards to inital db
+access).
+
+-- Wire in the GUI to ask user for username/password to log onto the
+   server.  (GUI already implemented, just not yet used).  
+
+-- change code for initial db access. We should query the pg_database
+   table to see if the database already exists.
+
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
 
 -- clear up end/destroy semantics.  After book_end is called,
@@ -148,22 +158,9 @@ Core bugs/features that still need work:
    everything is hosed.  This is a generic backend design problem,
    not just an sql bckend problem, that needs fixing.
 
--- single-update mode pops up a gui dialog to user asking them
-   to save the data at the end of the sessino. But we've already done
-   this.  So something is marking the data 'not saved'. 
-   fix this (again  ...)  I think this is due to how the pricedb
-   sets the dirty flag.  single-update mode should reset the dirty
-   flag whenever a commit occurs.
-
 -- allow user to enter URL in GUI dialog.  User can currently type url
    into the file dialog window; it would be nice to have something 
    slightly nicer tan this.
-
--- change code for initial db access. We should query the pg_database
-   table to see if the database already exists.
-
--- Wire in the GUI to ask user for username/password to log onto the
-   server.  (GUI already implemented, just not yet used).
 
 -- error code should include strings passed back, to be shown in 
    GUI dialogs. This is because the backend needs to return things
@@ -201,6 +198,9 @@ Core bugs/features that still need work:
 To Be Done, Part II
 -------------------
 This list only affects the multi-user and advanced/optional features.
+
+Most of the items on this list are 'critical' in the sense that
+multi-user mode is fundamentally broken unless they are fixed. 
 
 -- checkpoint ending balance is showing up as starting balance
 
@@ -273,14 +273,14 @@ This list only affects the multi-user and advanced/optional features.
    part of the logging scheme.   Having 'audit trails' is considered 
    to be an important accounting feature.
 
--- let all attached client receive update events via SQL LISTEN/NOTIFY 
+-- let all attached clients receive update events via SQL LISTEN/NOTIFY 
    events.
 
 -- Implement various advanced database features, such as checking the
    user's permission to view/edit account by account ... (hmmm this
    done by the dbadmin... using SQL commands... which means if user
    tries to write to something they're not allowed to write to,
-   then they should be bounced back.
+   then they should be bounced back.)
 
 -- Review versioning verification in backend. The desired semantic for 
    updates should be like CVS: multiple nearly-simultaneous writers 
