@@ -1634,6 +1634,36 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
                  char **endstr)
 {
   struct lconv *lc = gnc_localeconv();
+
+  char negative_sign;
+  char decimal_point;
+  char group_separator;
+  char *group;
+
+  negative_sign = lc->negative_sign[0];
+  if (monetary)
+  {
+    group_separator = lc->mon_thousands_sep[0];
+    decimal_point = lc->mon_decimal_point[0];
+    group = lc->mon_grouping;
+  }
+  else
+  {
+    group_separator = lc->thousands_sep[0];
+    decimal_point = lc->decimal_point[0];
+    group = lc->grouping;
+  }
+
+  return xaccParseAmountExtended(in_str, monetary, negative_sign, decimal_point,
+				 group_separator, group, NULL, result, endstr);
+}
+
+gboolean
+xaccParseAmountExtended (const char * in_str, gboolean monetary,
+			 char negative_sign, char decimal_point,
+			 char group_separator, char *group, char *ignore_list,
+			 gnc_numeric *result, char **endstr)
+{
   gboolean is_negative;
   gboolean got_decimal;
   gboolean need_paren;
@@ -1643,10 +1673,6 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   int group_count;
 
   ParseState state;
-
-  char negative_sign;
-  char decimal_point;
-  char group_separator;
 
   const char *in;
   char *out_str;
@@ -1658,18 +1684,6 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 
   if (in_str == NULL)
     return FALSE;
-
-  negative_sign = lc->negative_sign[0];
-  if (monetary)
-  {
-    group_separator = lc->mon_thousands_sep[0];
-    decimal_point = lc->mon_decimal_point[0];
-  }
-  else
-  {
-    group_separator = lc->thousands_sep[0];
-    decimal_point = lc->decimal_point[0];
-  }
 
   /* 'out_str' will be used to store digits for numeric conversion.
    * 'out' will be used to traverse out_str. */
@@ -1693,6 +1707,12 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   while (TRUE)
   {
     ParseState next_state = state;
+
+    /* Ignore anything in the 'ignore list' */
+    if (ignore_list && *in != '\0' && strchr(ignore_list, *in) != NULL) {
+      in++;
+      continue;
+    }
 
     /* Note we never need to check for then end of 'in_str' explicitly.
      * The 'else' clauses on all the state transitions will handle that. */
@@ -1947,13 +1967,10 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   {
     gboolean good_grouping = TRUE;
     GList *node;
-    char *group;
-
-    group = monetary ? lc->mon_grouping : lc->grouping;
 
     /* The groups were built in reverse order. This
      * is the easiest order to verify them in. */
-    for (node = group_data; node; node = node->next)
+    for (node = group_data; group && node; node = node->next)
     {
       /* Verify group size */
       if (*group != GPOINTER_TO_INT(node->data))

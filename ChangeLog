@@ -6,6 +6,9 @@
 	  (pthread code is kept within some #ifdef's, just in case we decide to
 	   put it back in later).
 
+	* src/app-utils/gnc-ui-util.[ch]: add a function to parse a numeric
+	  with the caller providing all the locale-specific information
+
 2003-07-09  Christian Stimming  <stimming@tuhh.de>
 
 	* README: Added remark about gnucash-docs.

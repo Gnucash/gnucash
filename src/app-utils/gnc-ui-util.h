@@ -257,6 +257,19 @@ int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 gboolean xaccParseAmount (const char * in_str, gboolean monetary,
                           gnc_numeric *result, char **endstr);
 
+/*
+ * xaccParseAmountExtended is just like xaccParseAmount except the
+ * caller must provide all the locale-specific information.
+ *
+ * Note: if group is NULL, no group-size verification will take place.
+ * 	 ignore_list is a list of characters that are completely ignored
+ *	 while processing the input string.  If NULL, nothing is ignored.
+ */
+gboolean
+xaccParseAmountExtended (const char * in_str, gboolean monetary,
+			 char negative_sign, char decimal_point,
+			 char group_separator, char *group, char *ignore_list,
+			 gnc_numeric *result, char **endstr);
 
 /* Automatic decimal place conversion *******************************/
 
