@@ -194,6 +194,19 @@ Linux Debian
 
 That's all folks!
 
+Getting Source with CVS
+-----------------------
+A read-only version of the cvs tree is available on the net.
+To access it, first, login, as so:
+
+cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot login
+The password is "guest"
+
+To get a copy of the source, do a 
+
+cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
+
+
 Main Developers:
 ----------------
 Rob Browning <rlb@cs.utexas.edu> for GTK graphing
