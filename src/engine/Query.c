@@ -195,6 +195,7 @@ void
 xaccQuerySetMaxSplits (Query *q, int max)
 {
    if (!q) return;
+   q->changed = 1; 
    q->max_num_splits = max;
 }
 
@@ -204,6 +205,7 @@ void
 xaccQuerySetDateRange (Query *q, time_t early, time_t late)
 {
    if (!q) return;
+   q->changed = 1; 
    q->earliest.tv_sec = early;
    q->latest.tv_sec = late;
 }
@@ -449,6 +451,7 @@ void
 xaccQuerySetSortOrder (Query *q, int arga, int argb, int argc)
 {
    if (!q) return;
+   q->changed = 1; 
 
    DECIDE (DESC, MEMO, AMOUNT)
    DECIDE (DESC, MEMO, NUM)
@@ -634,6 +637,7 @@ xaccQueryGetSplits (Query *q)
    }
 
    /* gather some data about what we just found */
+   /* serious Y2K hack alert -- this should be ULONG_MAX not LONG_MAX */
    q->earliest_found.tv_sec = LONG_MAX; 
    q->earliest_found.tv_nsec = 0; 
    q->latest_found.tv_sec = 0;
