@@ -23,7 +23,7 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
-(export gnc:book-add-quotes)
+(export gnc:session-add-quotes)
 (export gnc:add-quotes-to-book-at-url)
 
 (use-modules (gnucash process))
