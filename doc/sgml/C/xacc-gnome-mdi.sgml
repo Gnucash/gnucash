@@ -2,8 +2,7 @@
 <artheader>
 <title>The Gnome MDI</title>
 </artheader>
-<sect1>
-<title>The Gnome MDI</title>
+
 <para><emphasis>PICTURES NEEDED!!!!</emphasis> 
 </para>
 <para>GnuCash can display multiple views of your finances at once, in 
@@ -15,7 +14,6 @@ or <link linkend="xacc-reports">report</link> using the file menu, the
 new view can be displayed in several ways.
 </para>
 
-</sect1>
 <sect1 id="xacc-notebook-view">
 <title>Notebook View</title>
 <para><emphasis>Picture Needed Here!</emphasis></para>
