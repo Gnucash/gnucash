@@ -153,16 +153,16 @@
 
   (define (blank-report)
     ((record-constructor <report-template>)
-     #f ;version
-     #f ;name
-     #f ;options-generator
-     gnc:default-options-editor ;options-editor
-     #f ;renderer
-     #t ;in-menu?
-     #f ;menu-path
-     #f ;menu-name
-     #f ;menu-tip
-     #f ;export-thunk
+     #f                         ;; version
+     #f                         ;; name
+     #f                         ;; options-generator
+     gnc:default-options-editor ;; options-editor
+     #f                         ;; renderer
+     #t                         ;; in-menu?
+     #f                         ;; menu-path
+     #f                         ;; menu-name
+     #f                         ;; menu-tip
+     #f                         ;; export-thunk
      ))
 
   (define (args-to-defn in-report-rec args)
@@ -361,17 +361,38 @@
            (gnc:report-unregister-display (gnc:find-report rep) window))
          (gnc:report-parents report)))))
 
+(define (gnc:report-edit-options report) 
+  (let* ((editor-widg (gnc:report-editor-widget report))
+         (displist (gnc:report-display-list report)))
+    (if editor-widg
+        (gnc:report-raise-editor report)
+        (begin
+          (if (gnc:report-options report) 
+              (begin 
+                (set! editor-widg
+                      ((gnc:report-options-editor report)
+                       (gnc:report-options report)
+                       report))
+                (gnc:report-set-editor-widget! report editor-widg)
+                (if (and editor-widg (not (null? displist)))
+                    (for-each 
+                     (lambda (repwin) 
+                       (gnc:report-window-add-edited-report repwin report))
+                     displist)))
+              (gnc:warning-dialog "This report has no options."))))))
+    
+
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
-            template-name ;type
-            #f ;id
-            #f ;options
-            '() ;parents
-            '() ;children
-            #t ;dirty
-            '() ;display-list
-            #f ;editor-widget
-            #f ;ctext
+            template-name ;; type
+            #f            ;; id
+            #f            ;; options
+            '()           ;; parents
+            '()           ;; children
+            #t            ;; dirty
+            '()           ;; display-list
+            #f            ;; editor-widget
+            #f            ;; ctext
             ))
         (template (hash-ref *gnc:_report-templates_* template-name))
         (id *gnc:_report-next-serial_*))
@@ -438,28 +459,6 @@
    (string->symbol 
     (gnc:html-style-sheet-name stylesheet))))
   
-;;; (define (gnc:report-default-options-editor)
-;;;   (let* ((option-db #f)
-;;;          (option-dlg #f))
-;;;     (define (editor options action report-win)
-;;;       (if (string? action)
-;;;           (cond 
-;;;            ;; open: start the options editor. 
-;;;            ((string=? action "open")
-;;;             (set! option-db 
-;;;                   (gnc:option-db-new options))
-;;;             (set! option-dlg 
-;;;                   (gnc:options-dialog-new #t))
-;;;             (gnc:build-options-dialog-contents 
-;;;              option-dlg option-db)
-;;;             ;; set up the default callbacks 
-;;;             (gnc:report-default-options-setup option-dlg report-win))
-           
-;;;            ;; close: shut it down, probably because the report window
-;;;            ;; is getting closed. 
-;;;            ((string=? action "close")
-;;;             (gnc:options-dialog-destroy option-dlg)))
-             
 (define (gnc:all-report-template-names)
   (sort 
    (hash-fold 

@@ -24,6 +24,7 @@
 
 #include <gnome.h>
 #include <guile/gh.h>
+#include <g-wrap-runtime-guile.h>
 
 #include "dialog-column-view.h"
 #include "dialog-options.h"
@@ -31,7 +32,7 @@
 #include "glade-gnc-dialogs.h"
 #include "messages.h"
 #include "option-util.h"
-
+#include "window-report.h"
 
 struct gncp_column_view_edit {
   GNCOptionWin * optwin;
@@ -138,6 +139,17 @@ gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data) {
 static void
 gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data) {
   gnc_column_view_edit * r = user_data;
+  SCM set_editor = gh_eval_str("gnc:report-set-editor-widget!");
+  SCM get_windows = gh_eval_str("gnc:report-display-list");
+  SCM windows;
+  
+  for(windows = gh_call1(get_windows, r->view);
+      !gh_null_p(windows); windows = gh_cdr(windows)) {
+    gnc_report_window_remove_edited_report(gw_wcp_get_ptr(gh_car(windows)),
+                                           r->view);
+  }
+  
+  gh_call2(set_editor, r->view, SCM_BOOL_F);
   gnc_column_view_edit_destroy(r);
 }
 
@@ -147,56 +159,68 @@ gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data) {
  * create the editor. 
  ********************************************************************/
 
-void
+GtkWidget * 
 gnc_column_view_edit_options(SCM options, SCM view) {
-  gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
+  SCM get_editor = gh_eval_str("gnc:report-editor-widget");
+  SCM ptr;
   GtkObject * tlo;
   GtkWidget * editor;
 
-  r->optwin = gnc_options_dialog_new(TRUE);
+  ptr = gh_call1(get_editor, view);
+  if(ptr != SCM_BOOL_F) {
+    GtkWidget * w = gw_wcp_get_ptr(ptr);
+    gdk_window_raise(GTK_WIDGET(w)->window);
+    return NULL;
+  }
+  else {
+    gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
 
-  tlo = GTK_OBJECT(create_Edit_Column_View_Page());
-  
-  editor       = gtk_object_get_data(tlo, "view_contents_hbox");
-  r->available = gtk_object_get_data(tlo, "available_list");
-  r->contents  = gtk_object_get_data(tlo, "contents_list");  
-  r->options   = options;
-  r->view      = view;
-  r->available_selected = 0;
-  r->available_list = SCM_EOL;
-  r->contents_selected = 0;
-  r->contents_list = SCM_EOL;
-  r->odb       = gnc_option_db_new(r->options);
-
-  gnc_build_options_dialog_contents(r->optwin, r->odb);
-
-  gtk_widget_ref(editor);
-  gtk_container_remove(GTK_CONTAINER(tlo), editor);
-  gtk_notebook_append_page(GTK_NOTEBOOK(gnc_options_dialog_notebook
-                                        (r->optwin)),
-                           editor, 
-                           gtk_label_new(_("Contents")));
-  
-  scm_protect_object(r->options);
-  scm_protect_object(r->view);
-  scm_protect_object(r->available_list);
-  scm_protect_object(r->contents_list);
-  
-  gtk_object_set_data(tlo, "view_edit_struct", (gpointer)r);
-
-  gtk_signal_connect(GTK_OBJECT(r->available), "select_row", 
-                     gnc_column_view_select_avail_cb, (gpointer)r);
-  gtk_signal_connect(GTK_OBJECT(r->contents), "select_row", 
-                     gnc_column_view_select_contents_cb, (gpointer)r);
-  
-  update_display_lists(r);
-
-  gnc_options_dialog_set_apply_cb(r->optwin, 
-                                  gnc_column_view_edit_apply_cb, r);
-  gnc_options_dialog_set_close_cb(r->optwin, 
-                                  gnc_column_view_edit_close_cb, r);
-
-  gtk_widget_show_all(gnc_options_dialog_widget(r->optwin));
+    r->optwin = gnc_options_dialog_new(TRUE);
+    
+    tlo = GTK_OBJECT(create_Edit_Column_View_Page());
+    
+    editor       = gtk_object_get_data(tlo, "view_contents_hbox");
+    r->available = gtk_object_get_data(tlo, "available_list");
+    r->contents  = gtk_object_get_data(tlo, "contents_list");  
+    r->options   = options;
+    r->view      = view;
+    r->available_selected = 0;
+    r->available_list = SCM_EOL;
+    r->contents_selected = 0;
+    r->contents_list = SCM_EOL;
+    r->odb       = gnc_option_db_new(r->options);
+    
+    gnc_build_options_dialog_contents(r->optwin, r->odb);
+    
+    gtk_widget_ref(editor);
+    gtk_container_remove(GTK_CONTAINER(tlo), editor);
+    gtk_notebook_append_page(GTK_NOTEBOOK(gnc_options_dialog_notebook
+                                          (r->optwin)),
+                             editor, 
+                             gtk_label_new(_("Contents")));
+    
+    scm_protect_object(r->options);
+    scm_protect_object(r->view);
+    scm_protect_object(r->available_list);
+    scm_protect_object(r->contents_list);
+    
+    gtk_object_set_data(tlo, "view_edit_struct", (gpointer)r);
+    
+    gtk_signal_connect(GTK_OBJECT(r->available), "select_row", 
+                       gnc_column_view_select_avail_cb, (gpointer)r);
+    gtk_signal_connect(GTK_OBJECT(r->contents), "select_row", 
+                       gnc_column_view_select_contents_cb, (gpointer)r);
+    
+    update_display_lists(r);
+    
+    gnc_options_dialog_set_apply_cb(r->optwin, 
+                                    gnc_column_view_edit_apply_cb, r);
+    gnc_options_dialog_set_close_cb(r->optwin, 
+                                    gnc_column_view_edit_close_cb, r);
+    
+    gtk_widget_show_all(gnc_options_dialog_widget(r->optwin));
+    return gnc_options_dialog_widget(r->optwin);
+  }
 }
 
 

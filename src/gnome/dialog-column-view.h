@@ -24,4 +24,4 @@
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 
-void gnc_column_view_edit_options(SCM options, SCM view);
+GtkWidget * gnc_column_view_edit_options(SCM options, SCM view);

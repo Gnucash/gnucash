@@ -47,7 +47,7 @@ void       gnc_report_window_create_menu(gnc_report_window * report,
 void       gnc_report_window_create_toolbar(gnc_report_window * report, 
                                             GNCMainChildInfo * child);
 
-void       gnc_report_window_default_params_editor(SCM options, SCM report);
+GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
 
 void       gnc_main_window_open_report (int report_id, gint toplevel);
 void       gnc_main_window_open_report_url (const char * url, gint toplevel);
@@ -56,4 +56,9 @@ GnomeMDIChild * gnc_report_window_create_child(const gchar * url);
 void       reportWindow(int id);
 void       gnc_print_report (int report_id);
 
+void      gnc_report_window_add_edited_report(gnc_report_window * win, 
+                                              SCM report);
+void      gnc_report_window_remove_edited_report(gnc_report_window * win, 
+                                                 SCM report);
+void      gnc_report_raise_editor(SCM report);
 #endif

@@ -1070,21 +1070,15 @@ gnc_html_open_register(gnc_html * html, const gchar * location) {
 static void
 gnc_html_open_options(gnc_html * html, const gchar * location) {
   int report_id;
-  SCM find_report = gh_eval_str("gnc:find-report");
-  SCM get_options = gh_eval_str("gnc:report-options");
-  SCM get_editor = gh_eval_str("gnc:report-options-editor");
-  
+  SCM find_report  = gh_eval_str("gnc:find-report");
+  SCM start_editor = gh_eval_str("gnc:report-edit-options");
   SCM report;
-  SCM options;
-  SCM editor;
-
+  
   /* href="gnc-options:report-id=2676" */
   if(!strncmp("report-id=", location, 10)) {
     sscanf(location+10, "%d", &report_id);
     report = gh_call1(find_report, gh_int2scm(report_id));
-    options = gh_call1(get_options, report);
-    editor = gh_call1(get_editor, report);
-    gh_call2(editor, options, report);
+    gh_call1(start_editor, report);
   }
   else {
     gnc_warning_dialog(_("Badly formed gnc-options: URL."));

@@ -1,3 +1,16 @@
+2001-04-20  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/dialog-column-view.c: maintain the report window
+	edited list when closing dialog.  raise an existing edit dialog.
+
+	* src/gnome/gnc-html.c: make sure we know about options editors 
+	launched from gnc-options: urls
+
+	* src/gnome/window-report.c: numerous changes to improve handling
+	of options dialogs.
+	
+	* src/scm/report.scm: new function, gnc:report-edit-options.  	
+
 2001-04-20  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/gnc-helpers.c: remove cruft. work on converting
