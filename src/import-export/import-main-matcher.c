@@ -69,7 +69,7 @@ struct _main_matcher_info
 static short module = MOD_IMPORT;
 
 /* Local prototypes */
-static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist);
+static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist, int starting_row);
 
 
 
@@ -272,7 +272,7 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
 					TRUE);
 
       /* Iterate through the transactions in a given clist to auto match them */
-      automatch_clist_transactions(info, (GtkCList*)info->clist);
+      automatch_clist_transactions(info, (GtkCList*)info->clist, row);
     }
 }
 
@@ -832,12 +832,12 @@ void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
 }/* end gnc_import_add_trans() */
 
 /* Iterate through the rows of the clist and try to automatch each of them */
-static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist)
+static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist, int starting_row)
 {
   int row;
   GNCImportTransInfo *trans_info;
   
-  for(row = 0; row < clist->rows; row++)
+  for(row = starting_row+1; row < clist->rows; row++)
     {
       trans_info = gtk_clist_get_row_data(clist, row);
       
