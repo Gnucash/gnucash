@@ -516,11 +516,8 @@ trans_clist_row_destroy_cb (gpointer data)
 static char ** gen_clist_row_text (GNCImportTransInfo *info)
 {
   static char *text[NUM_COLUMNS_DOWNLOADED_CLIST];
-  const char * AUTO_SELECTED_TEXT=_("Auto-Selected");
-  const char * MANUALY_SELECTED_TEXT=_("User-Selected");
   gint i;
   gchar *tmp;
-  const char *select_origin;
   DEBUG("Begin");
   g_assert (info);
   for(i = 0; i < NUM_COLUMNS_DOWNLOADED_CLIST; i++)
@@ -586,13 +583,12 @@ static char ** gen_clist_row_text (GNCImportTransInfo *info)
 		 gnc_get_account_separator ());
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
 		{
-		  select_origin=MANUALY_SELECTED_TEXT;
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (user-selected) account \"%s\""),tmp);
 		}
 	      else
 		{
-		  select_origin=AUTO_SELECTED_TEXT;
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (auto-selected) account \"%s\""),tmp);
 		}
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Add with balancing split into (%s) account \"%s\""),select_origin,tmp);
 	      free (tmp);
 	    }
 	  else
@@ -606,13 +602,12 @@ static char ** gen_clist_row_text (GNCImportTransInfo *info)
 	{
 	  if(gnc_import_TransInfo_get_match_selected_manually(info)==TRUE)
 	    {
-	      select_origin=MANUALY_SELECTED_TEXT;
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile the (user-selected) match"));
 	    }
 	  else
 	    {
-	      select_origin=AUTO_SELECTED_TEXT;
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile the (auto-selected) match"));
 	    }
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Reconcile the (%s) match"),select_origin);
 	}
       else
 	{
