@@ -1,3 +1,8 @@
+2002-07-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/new-user-callbacks.c (gnc_get_ea_locale_dir):
+	Back-ported fix for locale of new accounts.
+
 2002-07-02  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/fr_FR/*: Add french account hierarchy template by

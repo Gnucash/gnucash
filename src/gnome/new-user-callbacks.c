@@ -205,24 +205,36 @@ gnc_get_ea_locale_dir(const char *top_dir)
     gchar *ret;
     gchar *locale;
     struct stat buf;
-
+    int i;
+    
+#ifdef HAVE_LC_MESSAGES
     locale = g_strdup(setlocale(LC_MESSAGES, NULL));
+#else
+    /*
+     * Mac OS X 10.1 and earlier, not only doesn't have LC_MESSAGES
+     * setlocale can sometimes return NULL instead of "C"
+     */
+    locale = g_strdup(setlocale(LC_ALL, NULL) ? 
+		      setlocale(LC_ALL, NULL) : "C");
+#endif
 
+    i = strlen(locale);
     ret = g_strdup_printf("%s/%s", top_dir, locale);
 
-    if(stat(ret, &buf) != 0 && (strlen (locale) > 2))
-    {
-        g_free (ret);
-        locale[2] = '\0';
-        ret = g_strdup_printf("%s/%s", top_dir, locale);
+    while (stat(ret, &buf) != 0)
+    { 
+	i--;
+	if (i<1) 
+	{
+	    g_free(ret);
+	    ret = g_strdup_printf("%s/%s", top_dir, default_locale);
+	    break;
+	}
+	locale[i] = '\0';
+	g_free(ret);
+	ret = g_strdup_printf("%s/%s", top_dir, locale);
     }
-
-    if(stat(ret, &buf) != 0)
-    {
-        g_free (ret);
-        ret = g_strdup_printf("%s/%s", top_dir, default_locale);
-    }
-
+    
     g_free(locale);
 
     return ret;
