@@ -41,7 +41,7 @@
 #include "Transaction.h"
 
 #include "builder.h"
-#include "BackendP.h"
+#include "qofbackend-p.h"
 
 typedef struct _pgend PGBackend;
 
@@ -111,7 +111,7 @@ struct _pgend {
    /* engine data caches */
    QofSession *session;
    QofBook *book;  /* the currently open book -- XXX -- depricate ???*/
-   BookList *blist;  /* list of books in this db */
+   QofBookList *blist;  /* list of books in this db */
 
    GList *tmp_return;
 };
@@ -119,7 +119,7 @@ struct _pgend {
 /*
  * pgendNew creates a new postgres backend
  */
-Backend * pgendNew (void);
+QofBackend * pgendNew (void);
 
 Account * pgendAccountLookup (PGBackend *be, const GUID *acct_guid);
 Transaction * pgendTransLookup (PGBackend *be, const GUID *txn_guid);

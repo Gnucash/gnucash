@@ -32,12 +32,12 @@
 #include <libpq-fe.h>  
  
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"

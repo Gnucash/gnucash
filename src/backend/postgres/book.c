@@ -34,7 +34,7 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "book.h"
-#include "gnc-book-p.h"
+#include "qofbook-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "guid.h"

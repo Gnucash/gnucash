@@ -96,6 +96,7 @@ AM_CFLAGS = \
 	-I../.. -I${srcdir}/../.. \
 	-I../../engine -I${srcdir}/../../engine \
 	-I../../gnc-module -I${srcdir}/../../gnc-module \
+	-I/usr/include/postgresql \
 	${PGSQL_CFLAGS} \
 	${GLIB_CFLAGS}
 

@@ -40,12 +40,8 @@
 #include <libpq-fe.h>  
 
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -54,8 +50,12 @@
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "qofid.h"
 #include "qofid-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "TransactionP.h"
 
 #include "account.h"

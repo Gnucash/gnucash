@@ -25,7 +25,7 @@
 #define POSTGRES_ACCOUNT_H
 
 #include "Group.h"
-#include "gnc-book.h"
+#include "qofbook.h"
 #include "guid.h"
 
 #include "PostgresBackend.h"
