@@ -225,7 +225,8 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
 
   /* if this split belongs to another account, make sure that
    * the moving it is allowed by the currency denominations of 
-   * the old and new accounts
+   * the old and new accounts. Basically, both old and new accounts
+   * must be denominated in the same currency.
    */
   if (split->acc) {
     if (acc->currency) {
