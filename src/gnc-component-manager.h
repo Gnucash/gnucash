@@ -26,6 +26,8 @@
 #include "gnc-event.h"
 
 
+#define NO_COMPONENT (-1)
+
 typedef struct
 {
   GNCEngineEventType event_mask;
@@ -133,7 +135,7 @@ void gnc_component_manager_shutdown (void);
  *                  is not watching anything, and thus will
  *                  not receive refresh handlers.
  *
- * Return:          id of component
+ * Return:          id of component, or NO_COMPONENT, if error
  */
 gint gnc_register_gui_component (const char *component_class,
                                  GNCComponentRefreshHandler refresh_handler,

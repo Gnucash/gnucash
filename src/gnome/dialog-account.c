@@ -38,6 +38,7 @@
 #include "global-options.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-commodity.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
@@ -46,6 +47,9 @@
 #include "window-help.h"
 #include "window-main.h"
 
+
+#define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
+#define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
 
 typedef enum
 {
@@ -82,7 +86,7 @@ struct _AccountWindow
 
   GtkWidget * tax_related_button;
 
-  gint source;
+  gint component_id;
 };
 
 
@@ -93,9 +97,6 @@ static gint last_width = 0;
 static gint last_height = 0;
 
 static int last_used_account_type = BANK;
-
-static GList *new_account_windows = NULL;
-static AccountWindow ** editAccountList = NULL;
 
 
 /** Declarations *********************************************************/
@@ -297,7 +298,7 @@ gnc_finish_ok (AccountWindow *aw)
   /* so it doesn't get freed on close */
   aw->account = NULL;
 
-  gnome_dialog_close (GNOME_DIALOG(aw->dialog));
+  gnc_close_gui_component (aw->component_id);
 }
 
 
@@ -449,21 +450,19 @@ gnc_account_change_currency_security(Account *account,
 
   while (stack != NULL)
   {
-    Split *split;
     GSList *pop;
-    gint i;
+    GList *node;
 
     pop = stack;
     account = pop->data;
     stack = g_slist_remove_link(stack, pop);
     g_slist_free_1(pop);
 
-    i = 0;
-    while ((split = xaccAccountGetSplit(account, i++)) != NULL)
+    for (node = xaccAccountGetSplitList (account); node; node = node->next)
     {
+      Split *split = node->data;
       Transaction *trans;
-      Split *s;
-      gint j;
+      GList *n;
 
       trans = xaccSplitGetParent(split);
       if (trans == NULL)
@@ -475,14 +474,14 @@ gnc_account_change_currency_security(Account *account,
       if (xaccTransIsCommonExclSCurrency(trans, security, split))
         continue;
 
-      j = 0;
-      while ((s = xaccTransGetSplit(trans, j++)) != NULL)
+      for (n = xaccTransGetSplitList (trans); n; n = n->next)
       {
+        Split *s = n->data;
         gboolean add_it = FALSE;
         const gnc_commodity * commodity;
         Account * a;
 
-        a = xaccSplitGetAccount(s);
+        a = xaccSplitGetAccount (s);
 
         if ((a == NULL) || (a == account))
           continue;
@@ -1003,7 +1002,7 @@ gnc_account_window_cancel_cb(GtkWidget * widget, gpointer data)
 {
   AccountWindow *aw = data; 
 
-  gnome_dialog_close(GNOME_DIALOG(aw->dialog));
+  gnc_close_gui_component (aw->component_id);
 }
 
 
@@ -1037,8 +1036,6 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
   switch (aw->dialog_type)
   {
     case NEW_ACCOUNT:
-      new_account_windows = g_list_remove (new_account_windows, object);
-
       if (aw->account != NULL)
       {
         xaccFreeAccount (aw->account);
@@ -1046,17 +1043,17 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
       }
 
       DEBUG ("account add window destroyed\n");
-
       break;
 
     case EDIT_ACCOUNT:
-      REMOVE_FROM_LIST (AccountWindow, editAccountList, aw->account, account); 
       break;
 
     default:
       PERR ("unexpected dialog type\n");
       return FALSE;
   }
+
+  gnc_unregister_gui_component (aw->component_id);
 
   xaccFreeAccount (aw->top_level_account);
   aw->top_level_account = NULL;
@@ -1397,6 +1394,14 @@ gnc_account_window_set_name (AccountWindow *aw)
 }
 
 
+static void
+close_handler (gpointer user_data)
+{
+  AccountWindow *aw = user_data;
+
+  gnome_dialog_close (GNOME_DIALOG (aw->dialog));
+}
+
 static AccountWindow *
 gnc_ui_new_account_window_internal (Account *base_account,
                                     GList *subaccount_names)
@@ -1408,6 +1413,9 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   aw->dialog_type = NEW_ACCOUNT;
   aw->account = xaccMallocAccount ();
+
+  aw->component_id = gnc_register_gui_component (DIALOG_NEW_ACCOUNT_CM_CLASS,
+                                                 NULL, close_handler, aw);
 
   if (base_account)
     aw->type = xaccAccountGetType (base_account);
@@ -1431,8 +1439,6 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gnc_account_window_set_name (aw);
 
-  new_account_windows = g_list_prepend (new_account_windows, aw->dialog);
-
   commodity = gnc_lookup_currency_option ("International",
                                           "Default Currency",
                                           gnc_locale_default_currency ());
@@ -1450,12 +1456,13 @@ gnc_ui_new_account_window_internal (Account *base_account,
   return aw;
 }
 
+
 /********************************************************************\
  * gnc_ui_new_account_window                                        *
  *   opens up a window to create a new account.                     *
  *                                                                  * 
  * Args:   group - not used                                         *
- * Return: NewAccountWindow object                                  *
+ * Return: AccountWindow object                                     *
  \*******************************************************************/
 AccountWindow *
 gnc_ui_new_account_window (AccountGroup *this_is_not_used) 
@@ -1561,11 +1568,25 @@ gnc_ui_new_accounts_from_name_window (const char *name)
   gtk_signal_connect(GTK_OBJECT (aw->dialog), "close",
                      GTK_SIGNAL_FUNC (from_name_close_cb), &created_account);
 
+  gtk_window_set_modal (GTK_WINDOW (aw->dialog), TRUE);
+
   gtk_main ();
 
   return created_account;
 }
 
+
+static gboolean
+find_by_account (gpointer find_data, gpointer user_data)
+{
+  Account *account = find_data;
+  AccountWindow *aw = user_data;
+
+  if (!aw)
+    return FALSE;
+
+  return (aw->account == account);
+}
 
 /********************************************************************\
  * gnc_ui_edit_account_window                                       *
@@ -1583,11 +1604,20 @@ gnc_ui_edit_account_window(Account *account)
   if (account == NULL)
     return NULL;
 
-  FETCH_FROM_LIST (AccountWindow, editAccountList, account, account, aw);
+  aw = gnc_find_first_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
+                                     find_by_account, account);
+  if (aw)
+    return aw;
+
+  aw = g_new0 (AccountWindow, 1);
 
   aw->dialog_type = EDIT_ACCOUNT;
   aw->account = account;
   aw->subaccount_names = NULL;
+
+  aw->component_id = gnc_register_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
+                                                 NULL, close_handler, aw);
+
   gnc_account_window_create (aw);
 
   gnc_account_to_ui (aw);
@@ -1608,6 +1638,14 @@ gnc_ui_edit_account_window(Account *account)
 }
 
 
+static void
+destroy_new_helper (const char *component_class,
+                    gint component_id,
+                    gpointer iter_data)
+{
+  gnc_close_gui_component (component_id);
+}
+
 /********************************************************************\
  * Function: gnc_ui_destroy_account_add_windows - destroy all open  *
  *           account add windows.                                   *
@@ -1616,16 +1654,10 @@ gnc_ui_edit_account_window(Account *account)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_ui_destroy_account_add_windows(void)
+gnc_ui_destroy_account_add_windows (void)
 {
-  GnomeDialog *dialog;
-
-  while (new_account_windows != NULL)
-  {
-    dialog = GNOME_DIALOG(new_account_windows->data);
-
-    gnome_dialog_close(dialog);
-  }
+  gnc_forall_gui_components (DIALOG_NEW_ACCOUNT_CM_CLASS,
+                             destroy_new_helper, NULL);
 }
 
 
@@ -1637,11 +1669,12 @@ gnc_ui_destroy_account_add_windows(void)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_ui_refresh_edit_account_window(Account *account)
+gnc_ui_refresh_edit_account_window (Account *account)
 {
   AccountWindow *aw; 
 
-  FIND_IN_LIST (AccountWindow, editAccountList, account, account, aw);
+  aw = gnc_find_first_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
+                                     find_by_account, account);
   if (aw == NULL)
     return;
 
@@ -1654,12 +1687,12 @@ gnc_ui_destroy_edit_account_window (Account * account)
 {
   AccountWindow *aw;
 
-  FIND_IN_LIST (AccountWindow, editAccountList, account, account, aw); 
-
+  aw = gnc_find_first_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
+                                     find_by_account, account);
   if (aw == NULL)
     return;
- 
-  gnome_dialog_close(GNOME_DIALOG(aw->dialog));
+
+  gnc_close_gui_component (aw->component_id);
 }
 
 
@@ -1678,10 +1711,10 @@ gnc_ui_edit_account_window_raise(AccountWindow * aw)
   if (aw->dialog == NULL)
     return;
 
-  gtk_widget_show(aw->dialog);
+  gtk_widget_show (aw->dialog);
 
   if (aw->dialog->window == NULL)
     return;
 
-  gdk_window_raise(aw->dialog->window);
+  gdk_window_raise (aw->dialog->window);
 }

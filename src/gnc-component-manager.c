@@ -292,14 +292,15 @@ gnc_register_gui_component (const char *component_class,
   if (!component_class)
   {
     PERR ("no class specified");
-    return G_MININT;
+    return NO_COMPONENT;
   }
 
   /* look for a free handler id */
   component_id = next_component_id;
 
   while (find_component (component_id))
-    component_id++;
+    if (++component_id == NO_COMPONENT)
+      component_id++;
 
   /* found one, add the handler */
   ci = g_new0 (ComponentInfo, 1);

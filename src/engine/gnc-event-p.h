@@ -38,7 +38,7 @@
  *
  * entity:     the GUID of the entity generating the event
  * event_type: the type of event -- this should be one of the
- *             GNCEngineEventType values, not a combination.
+ *             single-bit GNCEngineEventType values, not a combination.
  */
 void gnc_engine_generate_event (GUID *entity, GNCEngineEventType event_type);
 

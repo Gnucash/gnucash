@@ -162,6 +162,9 @@ gnc_engine_generate_event (GUID *entity, GNCEngineEventType event_type)
 
   switch (event_type)
   {
+    case GNC_EVENT_NONE:
+      return;
+
     case GNC_EVENT_CREATE:
     case GNC_EVENT_MODIFY:
     case GNC_EVENT_DESTROY:

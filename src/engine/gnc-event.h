@@ -31,6 +31,7 @@
 
 typedef enum
 {
+  GNC_EVENT_NONE    = 0,
   GNC_EVENT_CREATE  = 1 << 0,
   GNC_EVENT_MODIFY  = 1 << 1,
   GNC_EVENT_DESTROY = 1 << 2,
@@ -42,7 +43,7 @@ typedef enum
  *   Callback invoked when an engine event occurs.
  *
  * entity:      GUID of entity generating event
- * event_type:  one of GNCEngineEventType, not a combination
+ * event_type:  one of the single-bit GNCEngineEventTypes, not a combination
  * user_data:   user_data supplied when callback was registered.
  */
 typedef void (*GNCEngineEventHandler) (GUID *entity,
