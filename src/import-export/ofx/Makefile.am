@@ -1,5 +1,11 @@
 SUBDIRS = . test
 
+# FIXME: this ought to be a configure option
+LIBOFX_PREFIX = /usr/local
+
+LIBOFX_LIBS = -L${LIBOFX_PREFIX}/lib -lofx -lstdc++
+LIBOFX_CFLAGS = -I${LIBOFX_PREFIX}/include
+
 pkglib_LTLIBRARIES=libgncmod-ofx.la
 
 libgncmod_ofx_la_SOURCES = \
@@ -16,7 +22,7 @@ libgncmod_ofx_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${GLIB_LIBS} \
-  -lofx -lstdc++
+  ${LIBOFX_LIBS}
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/ofx
 
@@ -35,7 +41,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${LIBOFX_CFLAGS}
 
 EXTRA_DIST = \
   .cvsignore 
