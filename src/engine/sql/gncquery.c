@@ -560,7 +560,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
-               "SELECT DISTINCT gncTransaction.transGuid ");
+               "SELECT DISTINCT gncTransaction.* ");
 
    /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetPrimarySortOrder(q));

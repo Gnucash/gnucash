@@ -291,77 +291,125 @@ static const char *table_drop_str =
 static gpointer
 query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GHashTable *xaction_hash = (GHashTable *) data;
-   GUID *trans_guid;
+   GList *xaction_list = (GList *) data;
+   GUID trans_guid;
    Transaction *trans;
+   gnc_commodity *currency;
+   Timespec ts;
 
    /* find the transaction this goes into */
-   trans_guid = xaccGUIDMalloc();
-   *trans_guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
+   trans_guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("transGUID",j), &trans_guid);
 
    /* use markers to avoid redundant traversals of transactions we've
     * already checked recently. */
-   trans = xaccTransLookup (trans_guid);
-   if (NULL != trans && 0 != trans->marker)
+   trans = xaccTransLookup (&trans_guid);
+   if (NULL != trans)
    {
-      xaccGUIDFree (trans_guid);
-      return xaction_hash;
+      if (0 != trans->marker)
+      {
+         return xaction_list;
+      }
+      else
+      {
+         gint32 db_version, cache_version;
+         db_version = atoi (DB_GET_VAL("version",j));
+         cache_version = xaccTransGetVersion (trans);
+         if (db_version <= cache_version) {
+            return xaction_list;
+         }
+         xaccTransBeginEdit (trans);
+      }
+   }
+   else 
+   {
+      trans = xaccMallocTransaction();
+      xaccTransBeginEdit (trans);
+      xaccTransSetGUID (trans, &trans_guid);
    }
 
-   /* don't put transaction into the list more than once ... */
-   if (g_hash_table_lookup (xaction_hash, trans_guid))
-   {
-      xaccGUIDFree (trans_guid);
-      return xaction_hash;
-   }
-   g_hash_table_insert (xaction_hash, trans_guid, 0);
+   xaccTransSetNum (trans, DB_GET_VAL("num",j));
+   xaccTransSetDescription (trans, DB_GET_VAL("description",j));
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
+   xaccTransSetDatePostedTS (trans, &ts);
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
+   xaccTransSetDateEnteredTS (trans, &ts);
+   xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
 
-   return xaction_hash;
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+   xaccTransSetCurrency (trans, currency);
+
+   trans->marker = 1;
+   xaction_list = g_list_prepend (xaction_list, trans);
+
+   return xaction_list;
 }
-
-typedef struct _ctxt {
-  PGBackend *be;
-  GList *acct_list;
-} ctxt;
 
 typedef struct acct_earliest {
    Account *acct;
    Timespec ts;
 } AcctEarliest;
 
+static int ncalls = 0;
+
 static void 
-for_each_txn (gpointer key, gpointer value, gpointer user_data)
+pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 {
-   GUID *trans_guid = (GUID *)key;
-   ctxt *ct = (ctxt *) user_data;
-   PGBackend *be = ct->be;
-   GList *anode, *acct_list = ct->acct_list;
+   int call_count = ncalls;
+   int nact=0;
+   GList *xaction_list = NULL;
+   GList *node, *anode, *acct_list = NULL;
 
-   Transaction *trans;
-   int engine_data_is_newer;
+   ENTER (" ");
+   if (!be) return;
 
-   /* use markers to avoid redundant traversals of transactions we've
-    * already checked recently. */
-   trans = xaccTransLookup (trans_guid);
-   if (NULL == trans || 0 == trans->marker)
+   if (0 == ncalls) {
+      START_CLOCK (9, "starting at level 0");
+   } 
+   else 
    {
-      engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
-      trans = xaccTransLookup (trans_guid);
-      trans->marker = 1;
-      PINFO ("copy result=%d", engine_data_is_newer);
+      REPORT_CLOCK (9, "call count %d", call_count);
    }
-   else
+   ncalls ++;
+
+   SEND_QUERY (be, query_string, );
+   xaction_list = pgendGetResults (be, query_cb, NULL);
+   REPORT_CLOCK (9, "fetched results at call %d", call_count);
+
+   /* restore the splits for these transactions */
+   for (node=xaction_list; node; node=node->next)
    {
-      PINFO ("avoided scan");
-      engine_data_is_newer = 1;
+      Transaction *trans = (Transaction *) node->data;
+      GList *engine_splits, *snode;
+      pgendCopySplitsToEngine (be, trans);
+      xaccTransCommitEdit (trans);
    }
 
-   /* if we restored this transaction from the db, scan over the accounts 
-    * it affects and see how far back the data goes.
-    */
-   if (0 > engine_data_is_newer) 
+#if 0
+/* hack alert !! deal with kvp later -- huge sucking sound ! */
+   /* restore any kvp data associated with the transaction and splits */
+   for (node=xaction_list; node; node=node->next)
    {
+      Transaction *trans = (Transaction *) node->data;
+      GList *engine_splits, *snode;
+
+      trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
+   
+      engine_splits = xaccTransGetSplitList(trans);
+      for (snode = engine_splits; snode; snode=snode->next)
+      {
+         Split *s = snode->data;
+         s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
+      }
+
+      xaccTransCommitEdit (trans);
+   }
+#endif
+
+   /* run the fill-out algorithm */
+   for (node=xaction_list; node; node=node->next)
+   {
+      Transaction *trans = (Transaction *) node->data;
       GList *split_list, *snode;
       Timespec ts;
 
@@ -379,7 +427,7 @@ for_each_txn (gpointer key, gpointer value, gpointer user_data)
          Account *acc = xaccSplitGetAccount (s);
 
          /* lets see if we have a record of this account already */
-         for (anode = ct->acct_list; anode; anode = anode->next)
+         for (anode = acct_list; anode; anode = anode->next)
          {
             AcctEarliest * ae = (AcctEarliest *) anode->data;
             if (ae->acct == acc) 
@@ -399,55 +447,12 @@ for_each_txn (gpointer key, gpointer value, gpointer user_data)
             AcctEarliest * ae = g_new (AcctEarliest, 1);
             ae->acct = acc;
             ae->ts = ts;
-            ct->acct_list = g_list_prepend (ct->acct_list, ae);
+            acct_list = g_list_prepend (acct_list, ae);
          }
       }
    }
-}
+   g_list_free (xaction_list);
 
-static gboolean
-for_each_remove (gpointer key, gpointer value, gpointer user_data)
-{
-   GUID *trans_guid = (GUID *)key;
-   xaccGUIDFree (trans_guid);
-   return TRUE;
-}
-
-static int ncalls = 0;
-
-static void 
-pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
-{
-   int call_count = ncalls;
-   int nact=0;
-   GHashTable *xaction_hash = NULL;
-   GList *node, *anode, *acct_list = NULL;
-   ctxt ct;
-
-   ENTER (" ");
-   if (!be) return;
-
-   if (0 == ncalls) {
-      START_CLOCK (9, "starting at level 0");
-   } 
-   else 
-   {
-      REPORT_CLOCK (9, "call count %d", call_count);
-   }
-   ncalls ++;
-
-   SEND_QUERY (be, query_string, );
-   xaction_hash = g_hash_table_new (g_direct_hash, (GCompareFunc) guid_equal);
-   pgendGetResults (be, query_cb, xaction_hash);
-   REPORT_CLOCK (9, "fetched results at call %d", call_count);
-
-   /* restore the transactions */
-   ct.be = be;
-   ct.acct_list = NULL;
-   g_hash_table_foreach (xaction_hash, for_each_txn, &ct);
-   g_hash_table_foreach_remove (xaction_hash, for_each_remove, NULL);
-   g_hash_table_destroy (xaction_hash);
-   acct_list = ct.acct_list;
 
    REPORT_CLOCK (9, "done gathering at call %d", call_count);
    if (NULL == acct_list) return;
@@ -468,8 +473,8 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
        * GetBalance goes to less-then-or-equal-to because of the BETWEEN
        * that appears in the gncSubTotalBalance sql function. */
       p = be->buff; *p = 0;
-      p = stpcpy (p, "SELECT DISTINCT gncEntry.transGuid from gncEntry, gncTransaction WHERE "
-                     "   gncEntry.transGuid = gncTransaction.transGuid AND accountGuid='");
+      p = stpcpy (p, "SELECT DISTINCT gncTransaction.* from gncEntry, gncTransaction WHERE "
+                     "   gncEntry.transGuid = gncTransaction.transGuid AND gncEntry.accountGuid='");
       p = guid_to_string_buff(xaccAccountGetGUID(ae->acct), p);
       p = stpcpy (p, "' AND gncTransaction.date_posted > '");
       p = gnc_timespec_to_iso8601_buff (ae->ts, p);

@@ -43,6 +43,8 @@
 #include "PostgresBackend.h"
 
 int pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid); 
+void pgendCopySplitsToEngine (PGBackend *be, Transaction *trans);
+
 void pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp);
 void pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans, gboolean do_check_version);
 

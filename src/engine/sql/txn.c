@@ -199,7 +199,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
  
       /* If this trans is marked for deletetion, use the 'orig' values
        * as the base for recording the audit.  This wouldn't be normally
-       * reqquired, except that otherwise one gets a trashed currency 
+       * required, except that otherwise one gets a trashed currency 
        * value.
        */
       pgendStoreAuditTransaction (be, trans->orig, SQL_DELETE);
@@ -340,159 +340,22 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
  *    probably be fixed.
  */
 
-int
-pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
+void 
+pgendCopySplitsToEngine (PGBackend *be, Transaction *trans)
 {
    char *pbuff;
-   Transaction *trans;
-   PGresult *result;
-   Account *acc, *previous_acc=NULL;
-   gboolean do_set_guid=FALSE;
-   int engine_data_is_newer = 0;
    int i, j, nrows;
+   PGresult *result;
    int save_state = 1;
+   const GUID *trans_guid;
+   Account *acc, *previous_acc=NULL;
    GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
    gnc_commodity *currency = NULL;
    gint64 trans_frac = 0;
-   
-   ENTER ("be=%p", be);
-   if (!be || !trans_guid) return 0;
 
-   /* disable callbacks into the backend, and events to GUI */
-   gnc_engine_suspend_events();
-   pgendDisable(be);
-
-   /* first, see if we already have such a transaction */
-   trans = xaccTransLookup (trans_guid);
-   if (!trans)
-   {
-      trans = xaccMallocTransaction();
-      do_set_guid=TRUE;
-      engine_data_is_newer = -1;
-   }
-   else 
-   {
-      /* save some performance, don't go to the backend if the data is recent. */
-      if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
-      {
-         PINFO ("fresh data, skip check");
-         pgendEnable(be);
-         gnc_engine_resume_events();
-         return 0;
-      }
-   }
-
-   /* build the sql query to get the transaction */
-   pbuff = be->buff;
-   pbuff[0] = 0;
-   pbuff = stpcpy (pbuff, 
-         "SELECT * FROM gncTransaction WHERE transGuid='");
-   pbuff = guid_to_string_buff(trans_guid, pbuff);
-   pbuff = stpcpy (pbuff, "';");
-
-   SEND_QUERY (be,be->buff, 0);
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         j = 0;
-         if (0 == nrows) 
-         {
-            PQclear (result);
-            /* I beleive its a programming error to get this case.
-             * Print a warning for now... */
-            PERR ("no such transaction in the database. This is unexpected ...\n");
-            xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
-            pgendEnable(be);
-            gnc_engine_resume_events();
-            return 0;
-         }
-
-         if (1 < nrows)
-         {
-             /* since the guid is primary key, this error is totally
-              * and completely impossible, theoretically ... */
-             PERR ("!!!!!!!!!!!SQL database is corrupt!!!!!!!\n"
-                   "too many transactions with GUID=%s\n",
-                    guid_to_string (trans_guid));
-             if (jrows != nrows) xaccTransCommitEdit (trans);
-             xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
-             pgendEnable(be);
-             gnc_engine_resume_events();
-             return 0;
-         }
-
-         /* First order of business is to determine whose data is
-          * newer: the engine cache, or the database.  If the 
-          * database has newer stuff, we update the engine. If the
-          * engine is equal or newer, we do nothing in this routine.
-          * Of course, we know the database has newer data if this
-          * transaction doesn't exist in the engine yet.
-          */
-         if (!do_set_guid)
-         {
-            gint32 db_version, cache_version;
-            db_version = atoi (DB_GET_VAL("version",j));
-            cache_version = xaccTransGetVersion (trans);
-            if (db_version == cache_version) {
-               engine_data_is_newer = 0;
-            } else 
-            if (db_version < cache_version) {
-               engine_data_is_newer = +1;
-            } else {
-               engine_data_is_newer = -1;
-            }
-         }
-
-         /* if the DB data is newer, copy it to engine */
-         if (0 > engine_data_is_newer)
-         {
-            Timespec ts;
-
-            xaccTransBeginEdit (trans);
-            if (do_set_guid) xaccTransSetGUID (trans, trans_guid);
-            xaccTransSetNum (trans, DB_GET_VAL("num",j));
-            xaccTransSetDescription (trans, DB_GET_VAL("description",j));
-            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
-            xaccTransSetDatePostedTS (trans, &ts);
-            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
-            xaccTransSetDateEnteredTS (trans, &ts);
-            xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
-
-            currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
-            trans_frac = gnc_commodity_get_fraction (currency);
-
-            xaccTransSetCurrency
-              (trans, gnc_string_to_commodity (DB_GET_VAL("currency",j)));
-         }
-      }
-      PQclear (result);
-      i++;
-   } while (result);
-
-   /* set timestamp as 'recent' for this data */
-   trans->version_check = be->version_check;
-
-   /* if engine data was newer, we are done */
-   if (0 <= engine_data_is_newer) 
-   {
-      pgendEnable(be);
-      gnc_engine_resume_events();
-      return engine_data_is_newer;
-   }
-
-   /* ------------------------------------------------- */
-   /* If we are here, then the sql database contains data that is
-    * newer than what we have in the engine.  And so, below, 
-    * we finish the job of yanking data out of the db.
-    */
+   trans_guid = xaccTransGetGUID (trans);
+   currency = xaccTransGetCurrency (trans);
+   trans_frac = gnc_commodity_get_fraction (currency);
 
    /* build the sql query the splits */
    pbuff = be->buff;
@@ -502,7 +365,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    pbuff = guid_to_string_buff(trans_guid, pbuff);
    pbuff = stpcpy (pbuff, "';");
 
-   SEND_QUERY (be,be->buff, 0);
+   SEND_QUERY (be,be->buff, );
    i=0; nrows=0;
    do {
       GET_RESULTS (be->connection, result);
@@ -627,6 +490,156 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    }
    g_list_free (delete_splits);
    g_list_free (db_splits);
+
+}
+
+int
+pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
+{
+   char *pbuff;
+   Transaction *trans;
+   PGresult *result;
+   gboolean do_set_guid=FALSE;
+   int engine_data_is_newer = 0;
+   int i, j, nrows;
+   GList *node, *engine_splits;
+   
+   ENTER ("be=%p", be);
+   if (!be || !trans_guid) return 0;
+
+   /* disable callbacks into the backend, and events to GUI */
+   gnc_engine_suspend_events();
+   pgendDisable(be);
+
+   /* first, see if we already have such a transaction */
+   trans = xaccTransLookup (trans_guid);
+   if (!trans)
+   {
+      trans = xaccMallocTransaction();
+      do_set_guid=TRUE;
+      engine_data_is_newer = -1;
+   }
+   else 
+   {
+      /* save some performance, don't go to the backend if the data is recent. */
+      if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
+      {
+         PINFO ("fresh data, skip check");
+         pgendEnable(be);
+         gnc_engine_resume_events();
+         return 0;
+      }
+   }
+
+   /* build the sql query to get the transaction */
+   pbuff = be->buff;
+   pbuff[0] = 0;
+   pbuff = stpcpy (pbuff, 
+         "SELECT * FROM gncTransaction WHERE transGuid='");
+   pbuff = guid_to_string_buff(trans_guid, pbuff);
+   pbuff = stpcpy (pbuff, "';");
+
+   SEND_QUERY (be,be->buff, 0);
+   i=0; nrows=0;
+   do {
+      GET_RESULTS (be->connection, result);
+      {
+         int jrows;
+         int ncols = PQnfields (result);
+         jrows = PQntuples (result);
+         nrows += jrows;
+         PINFO ("query result %d has %d rows and %d cols",
+            i, nrows, ncols);
+
+         j = 0;
+         if (0 == nrows) 
+         {
+            PQclear (result);
+            /* I beleive its a programming error to get this case.
+             * Print a warning for now... */
+            PERR ("no such transaction in the database. This is unexpected ...\n");
+            xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
+            pgendEnable(be);
+            gnc_engine_resume_events();
+            return 0;
+         }
+
+         if (1 < nrows)
+         {
+             /* since the guid is primary key, this error is totally
+              * and completely impossible, theoretically ... */
+             PERR ("!!!!!!!!!!!SQL database is corrupt!!!!!!!\n"
+                   "too many transactions with GUID=%s\n",
+                    guid_to_string (trans_guid));
+             if (jrows != nrows) xaccTransCommitEdit (trans);
+             xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+             pgendEnable(be);
+             gnc_engine_resume_events();
+             return 0;
+         }
+
+         /* First order of business is to determine whose data is
+          * newer: the engine cache, or the database.  If the 
+          * database has newer stuff, we update the engine. If the
+          * engine is equal or newer, we do nothing in this routine.
+          * Of course, we know the database has newer data if this
+          * transaction doesn't exist in the engine yet.
+          */
+         if (!do_set_guid)
+         {
+            gint32 db_version, cache_version;
+            db_version = atoi (DB_GET_VAL("version",j));
+            cache_version = xaccTransGetVersion (trans);
+            if (db_version == cache_version) {
+               engine_data_is_newer = 0;
+            } else 
+            if (db_version < cache_version) {
+               engine_data_is_newer = +1;
+            } else {
+               engine_data_is_newer = -1;
+            }
+         }
+
+         /* if the DB data is newer, copy it to engine */
+         if (0 > engine_data_is_newer)
+         {
+            Timespec ts;
+            gnc_commodity *currency;
+
+            xaccTransBeginEdit (trans);
+            if (do_set_guid) xaccTransSetGUID (trans, trans_guid);
+            xaccTransSetNum (trans, DB_GET_VAL("num",j));
+            xaccTransSetDescription (trans, DB_GET_VAL("description",j));
+            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
+            xaccTransSetDatePostedTS (trans, &ts);
+            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
+            xaccTransSetDateEnteredTS (trans, &ts);
+            xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
+            currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+            xaccTransSetCurrency (trans, currency);
+         }
+      }
+      PQclear (result);
+      i++;
+   } while (result);
+
+   /* set timestamp as 'recent' for this data */
+   trans->version_check = be->version_check;
+
+   /* if engine data was newer, we are done */
+   if (0 <= engine_data_is_newer) 
+   {
+      pgendEnable(be);
+      gnc_engine_resume_events();
+      return engine_data_is_newer;
+   }
+
+   /* ------------------------------------------------- */
+   /* If we are here, then the sql database contains data that is
+    * newer than what we have in the engine.  And so, below, 
+    * we finish the job of yanking data out of the db.
+    */
+   pgendCopySplitsToEngine (be, trans);
 
    /* ------------------------------------------------- */
    /* restore any kvp data associated with the transaction and splits */

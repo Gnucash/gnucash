@@ -218,7 +218,7 @@ In 'single-user-update' mode,  data loads from the sql database
 should be 1.5x faster than comparable loads from the XML flat file, 
 at least for medium datasets (measured at 3.5 seconds on a 700MHz 
 Athalon a dataset with 3K transactions and 150 accounts, vs. 4.8 
-seconds loading from file).  
+seconds loading from file; postgres version 7.1.2).  
 
 Hitting the 'save' button is a no-op and takes no cpu cycles.
 (date is saved as its modified, so a global save is not needed).
@@ -227,6 +227,10 @@ Hitting the 'save' button is a no-op and takes no cpu cycles.
 issued.  The 'vacuum' reclaims storage, and 'analyze' does some 
 performance tuning.  Doing this regularly improves performance 
 about 20% in the cases I looked at.
+
+---------
+Accounts are restored roughly at the rate of 50-75 per second
+(for above hardware/software config).
 
 ---------
 Performance in multi-user mode is still a can of worms, and will 
