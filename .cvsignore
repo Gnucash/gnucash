@@ -12,6 +12,9 @@ config.log
 config.status
 config.h
 config.h.in
+cscope.out
+cscope.files
+etags.files
 install-sh
 intl
 libtool
@@ -26,5 +29,3 @@ stamp-h.in
 *.diff
 *.diffs
 *.xac.*.xac
-cscope.out
-cscope.files
