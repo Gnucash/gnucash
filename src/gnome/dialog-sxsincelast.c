@@ -150,7 +150,7 @@ static int tcl_row = 0;
 
 
 static void sxsincelast_init( sxSinceLastData *sxsld );
-static void _create_autoCreate_gen_ledger( sxSinceLastData *sxsld );
+static void create_autoCreate_gen_ledger( sxSinceLastData *sxsld );
 static gncUIWidget _sxsld_ledger_get_parent( GNCLedgerDisplay *ld );
 
 static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
@@ -372,23 +372,20 @@ sxsincelast_init( sxSinceLastData *sxsld )
         clist_set_all_cols_autoresize(GTK_CLIST(w), TO_CREATE_CLIST_WIDTH);
         w = glade_xml_get_widget( sxsld->gxml_remind, REMINDER_CLIST );
 	clist_set_all_cols_autoresize(GTK_CLIST(w), REMINDER_CLIST_WIDTH);
-
-
-	w = glade_xml_get_widget( sxsld->gxml_obsolete, 
-				  SX_OBSOLETE_CLIST);
-
+	w = glade_xml_get_widget( sxsld->gxml_obsolete, SX_OBSOLETE_CLIST);
 	clist_set_all_cols_autoresize(GTK_CLIST(w), SX_OBSOLETE_CLIST_WIDTH);
 
         rl_row = tcl_row = 0;
 
 	sxsld->n_obsolete = 0;
 
-        _create_autoCreate_gen_ledger( sxsld );
+        create_autoCreate_gen_ledger( sxsld );
 
         /* FIXME: deal with neither dialog being displayed [read:
            nothing-to-do.] */
         if ( ! sxsincelast_populate( sxsld ) ) {
                 sxsincelast_close_handler( sxsld );
+                return;
         }
         gtk_widget_show_all( sxsld->sxsincelastDlg );
         sxsld->sincelast_displayed = TRUE;
@@ -397,7 +394,8 @@ sxsincelast_init( sxSinceLastData *sxsld )
 static void
 _generate_instances( SchedXaction *sx,
                      GDate *end,
-                     GList **instanceList )
+                     GList **instanceList,
+                     GList **deadList )
 {
         GDate gd, *gdToReturn;
         char tmpBuf[GNC_D_BUF_WIDTH];
@@ -415,8 +413,10 @@ _generate_instances( SchedXaction *sx,
 
                 gd = xaccSchedXactionGetInstanceAfter( sx, &gd );
         }
+
         if ( ! g_date_valid( &gd ) ) {
-                PERR( "Should be added to dead-list..." );
+                PINFO( "Should be added to dead-list..." );
+                *deadList = g_list_append( *deadList, sx );
         }
 }
 
@@ -587,42 +587,48 @@ processRemoveList(GList *removeList, sxSinceLastData *sxsld)
   GtkCList *cl;
   char *rowtext[3];
   int row;
-  GList *sx_listentry;
+  //GList *sx_listEntry;
   GString *tmp_str;
   SchedXaction *sx;
   FreqSpec *fs;
   rowtext[1] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
 
-  cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml_obsolete, SX_OBSOLETE_CLIST ));
+  cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml_obsolete,
+                                        SX_OBSOLETE_CLIST ));
 
 
   tmp_str = g_string_new(NULL);
 
   gtk_clist_freeze(cl);
-  for(row = 0; removeList != NULL; row++, removeList = removeList->next)
-  {
-    sx_listentry = (GList *) removeList->data;
-    sx = (SchedXaction *) sx_listentry->data;
+  for(row = 0; removeList != NULL; row++, removeList = removeList->next) {
+          /*sx_listEntry = (GList *) removeList->data;
+           *sx = (SchedXaction *) sx_listEntry->data;*/
+          sx = (SchedXaction*)removeList->data;
+          
 
-    rowtext[0] = xaccSchedXactionGetName( sx );
+          rowtext[0] = xaccSchedXactionGetName( sx );
   
 
-    g_date_strftime(rowtext[1], GNC_D_WIDTH, GNC_D_FMT,
-		    xaccSchedXactionGetEndDate( sx ));
+          g_date_strftime(rowtext[1], GNC_D_WIDTH, GNC_D_FMT,
+                          xaccSchedXactionGetEndDate( sx ));
 
-    fs = xaccSchedXactionGetFreqSpec( sx );
+          fs = xaccSchedXactionGetFreqSpec( sx );
 
     
-    xaccFreqSpecGetFreqStr(fs, tmp_str );
-    rowtext[2] = tmp_str->str;
+          xaccFreqSpecGetFreqStr(fs, tmp_str );
+          rowtext[2] = tmp_str->str;
 
-    gtk_clist_insert( cl, row, rowtext );
-    gtk_clist_set_row_data(cl, row, sx_listentry );
-    sxsld->n_obsolete++;
+          gtk_clist_insert( cl, row, rowtext );
+          /* gtk_clist_set_row_data(cl, row, sx_listEntry ); */
+          gtk_clist_set_row_data( cl, row, sx );
+          sxsld->n_obsolete++;
   }
+  gtk_clist_thaw( cl );
 
+  /* FIXME: This can't be right -- jsled
   g_string_free(tmp_str, TRUE);
   g_free(rowtext[1]);
+  */
 
   /* FIXME: THIS IS UGLY!!! */
 
@@ -752,23 +758,17 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                 }
 #endif /* 0 */
                 instanceList = NULL;
-                _generate_instances( sx, &endPlusReminders, &instanceList );
+                _generate_instances( sx, &endPlusReminders,
+                                     &instanceList, &removeList );
 
-                if ( instanceList == NULL )
-		{
-		  /* check to see whether sx can be removed */
-		  if( sx_obsolete(sx) )
-		  {
-		    removeList = g_list_prepend(removeList, sxList); /* note, list pointers rather 
-								      * than data pointers
-								      */
-		  }
-		}
-		else
-		{
-		  xaccSchedXactionGetAutoCreate( sx, &autocreateState, &notifyState );
-		  do {
-		    instDate = (GDate*)instanceList->data;
+                if ( instanceList == NULL ) {
+                        break;
+                }
+
+                xaccSchedXactionGetAutoCreate( sx, &autocreateState,
+                                               &notifyState );
+                do {
+                        instDate = (GDate*)instanceList->data;
 #if 0
 /* NOT USED */
 		    {
@@ -779,53 +779,53 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 		    }
 #endif /* 0 */
 		    
-		    if ( (g_date_compare( &end, &endPlusReminders ) != 0)
-			 && (g_date_compare( &end, instDate ) <= 0) ) {
-		      rt = g_new0( reminderTuple, 1 );
-		      rt->sx         = sx;
-		      rt->endDate    = &end;
-		      rt->occurDate  = instDate;
-		      rt->isSelected = FALSE;
-		      reminderList = g_list_append( reminderList, rt );
-		    } else {
-		      if ( autocreateState ) {
-			autoCreateList = g_list_append( autoCreateList,
-							instDate );
-		      } else {
-			toCreateList = g_list_append( toCreateList,
-						      instDate );
-		      }
-		    }
-		  } while ( (instanceList = instanceList->next) );
-
-		  /* Report RE:showing the dialog iff there's stuff in it to
-		   * show. */
-		  showIt |= (g_list_length( autoCreateList ) > 0);
-		  showIt |= (g_list_length( toCreateList ) > 0);
-		  
-		  processAutoCreateList( autoCreateList, sxsld, sx );
-		  processReminderList  ( reminderList,   sxsld, sx );
-		  processToCreateList  ( toCreateList,   sxsld, sx );
+               		if ( (g_date_compare( &end, &endPlusReminders ) != 0)
+                             && (g_date_compare( &end, instDate ) <= 0) ) {
+                                rt = g_new0( reminderTuple, 1 );
+                                rt->sx         = sx;
+                                rt->endDate    = &end;
+                                rt->occurDate  = instDate;
+                                rt->isSelected = FALSE;
+                                reminderList = g_list_append( reminderList, rt );
+                        } else {
+                                if ( autocreateState ) {
+                                        autoCreateList =
+                                                g_list_append( autoCreateList,
+                                                               instDate );
+                                } else {
+                                        toCreateList =
+                                                g_list_append( toCreateList,
+                                                               instDate );
+                                }
+                        }
+                } while ( (instanceList = instanceList->next) );
+                
+                /* Report RE:showing the dialog iff there's stuff in it to
+                 * show. */
+                showIt |= (g_list_length( autoCreateList ) > 0);
+                showIt |= (g_list_length( toCreateList ) > 0);
+                
+                processAutoCreateList( autoCreateList, sxsld, sx );
+                processReminderList  ( reminderList,   sxsld, sx );
+                processToCreateList  ( toCreateList,   sxsld, sx );
 		 
 
-		  g_list_foreach( autoCreateList, _free_gdate_list_elts, NULL );
-		  g_list_free( autoCreateList );
-		  autoCreateList = NULL;
+                g_list_foreach( autoCreateList, _free_gdate_list_elts, NULL );
+                g_list_free( autoCreateList );
+                autoCreateList = NULL;
 		  
 		  /* We have moved the GDates over to the toCreateData list in
 		     sxsld, so we don't free them here. */
-		  g_list_free( toCreateList );
-		  toCreateList = NULL;
+                g_list_free( toCreateList );
+                toCreateList = NULL;
 		  
 		  /* We have moved the reminderTuples over to the reminderData
 		     list in sxsld, so we don't free them here. */
-		  g_list_free( reminderList );
-		  reminderList = NULL;
-		}
-		
+                g_list_free( reminderList );
+                reminderList = NULL;
         } while ( (sxList = sxList->next) );
 
-	processRemoveList( removeList, sxsld);
+	processRemoveList( removeList, sxsld );
         return showIt;
 }
 
@@ -1932,7 +1932,7 @@ sx_obsolete_unselect_all_clicked(GtkButton *button, gpointer user_data)
 }
 
 static void
-_create_autoCreate_gen_ledger( sxSinceLastData *sxsld )
+create_autoCreate_gen_ledger( sxSinceLastData *sxsld )
 {
         GtkFrame         *autoCreate_frame;
         SplitRegister         *splitreg;

@@ -39,7 +39,8 @@ void row_select_handler( GtkCList *clist, gint row, gint col, GdkEventButton *ev
 
 SchedXactionEditorDialog *
 gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
-					       SchedXaction *sx );
+					       SchedXaction *sx,
+                                               int newP );
 void gnc_ui_scheduled_xaction_editor_dialog_destroy(SchedXactionEditorDialog *sxd);
 
 #endif

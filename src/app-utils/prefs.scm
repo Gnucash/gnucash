@@ -544,7 +544,7 @@ without one.")
   (N_ "Scheduled Transactions")
   (N_ "Run on GnuCash start")
   "a" (N_ "Should the Since-Last-Run window appear on GnuCash startup?")
-  #f ))
+  #t ))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -556,18 +556,18 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Scheduled Transactions")
-  (N_ "Notify on new, auto-created scheduled transactions")
+  (N_ "Notify on new, auto-created Scheduled Transactions")
   "c" (N_ "Should new SchedXactions with the 'AutoCreate' flag set also be set to notify?")
   #t ))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
-  (N_ "Number of days in advance to create")
+  (N_ "Default number of days in advance to create")
   "d" (N_ "Default number of days in advance to create new SXes")
   0 ; default
   0 ; min
-  99999999 ; max
+  99999 ; max
   0 ; num decimals
   1 ; step size
   ))
@@ -575,7 +575,7 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-number-range-option
   (N_ "Scheduled Transactions")
-  (N_ "Number of days in advance to remind")
+  (N_ "Default number of days in advance to remind")
   "e" (N_ "Default number of days in advance to remind on new SXes")
   0 ; default
   0 ; min
@@ -589,7 +589,7 @@ without one.")
   (N_ "Scheduled Transactions")
   (N_ "Template Register Lines")
   "f" (N_ "How many lines in the template register?")
-  4  ; default
+  6  ; default
   1  ; min
   50 ; max
   0  ; num-decimals

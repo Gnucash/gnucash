@@ -397,7 +397,7 @@ sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
   {
     adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
     adv_edit_dlg = gnc_ui_scheduled_xaction_editor_dialog_create(adv_dlg, 
-								 sxfti->sx);
+								 sxfti->sx, 1);
     
   }
 

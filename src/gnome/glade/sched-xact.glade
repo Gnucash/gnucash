@@ -574,46 +574,7 @@
 	    <spacing>0</spacing>
 
 	    <widget>
-	      <class>GtkHBox</class>
-	      <name>hbox143</name>
-	      <homogeneous>False</homogeneous>
-	      <spacing>0</spacing>
-	      <child>
-		<padding>0</padding>
-		<expand>True</expand>
-		<fill>True</fill>
-	      </child>
-
-	      <widget>
-		<class>GtkButton</class>
-		<name>rec_button</name>
-		<can_default>True</can_default>
-		<can_focus>True</can_focus>
-		<label>Record</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label847788</name>
-		<label>REPLACEME with the Register control box</label>
-		<justify>GTK_JUSTIFY_CENTER</justify>
-		<wrap>False</wrap>
-		<xalign>0.5</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-	      </widget>
+	      <class>Placeholder</class>
 	    </widget>
 
 	    <widget>

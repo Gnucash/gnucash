@@ -1,3 +1,28 @@
+2001-10-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (delete_button_clicked):
+	Fixed multiple bugs in deletion selection-handling.
+	(schedXact_editor_populate), (schedXact_editor_create_ledger):
+	Added code for respecting the user's Preferences.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_dialog_create): Added support for only a
+	single SX list to be up at any one time; if one already exists,
+	show and raise that window instead of creating a new one.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Only one editor
+	for any Scheduled Transaction open at a time; if one already
+	exists, show and raise it's window.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(schedXact_editor_create_ledger): Add [read: steal from
+	window-register.c] register toolbar, suitably modified for SXes.
+
+	* src/app-utils/prefs.scm: Updates to wording, defaults for
+	Scheduled Transaction preferences.
+
+
 2001-10-14  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/backend/file/test/Makefile.am
