@@ -437,7 +437,7 @@
        (gnc:make-multichoice-option
 	pagename-sorting optname-prime-date-subtotal
 	"d" (N_ "Do a date subtotal")
-	'none
+	'monthly
 	subtotal-choice-list))
       
       (gnc:register-trep-option
@@ -474,7 +474,7 @@
        (gnc:make-multichoice-option
 	pagename-sorting optname-sec-date-subtotal
 	"h" (N_ "Do a date subtotal")
-	'none
+	'monthly
 	subtotal-choice-list))
 
       (gnc:register-trep-option
@@ -797,7 +797,7 @@ and Income accounts")))))
 	       (car splits) table width primary-subtotal-style))
 	  (if secondary-subheading-renderer
 	      (secondary-subheading-renderer
-	       (car splits) table widthsecondary-subtotal-style)))
+	       (car splits) table width secondary-subtotal-style)))
 
       (do-rows-with-subtotals splits table used-columns width
 			      multi-rows? #t 
@@ -916,53 +916,77 @@ and Income accounts")))))
 	  (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
 	  (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
 	  (splits '())
-	  (table '())
 	  (query (gnc:malloc-query)))
 
-      (gnc:query-set-group query (gnc:get-current-group))
-      (gnc:query-add-account-match query
-				   (gnc:list->glist c_accounts)
-				   'acct-match-any 'query-and)
-      (gnc:query-add-date-match-timepair
-       query #t begindate #t enddate 'query-and)
-      (gnc:query-set-sort-order query
-				(get-query-sortkey primary-key)
-				(get-query-sortkey secondary-key)
-				'by-none)
-      (gnc:query-set-sort-increasing query
-				     (eq? primary-order 'ascend)
-				     (eq? secondary-order 'ascend)
-				     #t)
+      ;;(warn "accts in trep-renderer:" c_accounts) 
+      (if (not (or (null? c_accounts) (and-map not c_accounts)))
+	  (begin
+	    (gnc:query-set-group query (gnc:get-current-group))
+	    (gnc:query-add-account-match query
+					 (gnc:list->glist c_accounts)
+					 'acct-match-any 'query-and)
+	    (gnc:query-add-date-match-timepair
+	     query #t begindate #t enddate 'query-and)
+	    (gnc:query-set-sort-order query
+				      (get-query-sortkey primary-key)
+				      (get-query-sortkey secondary-key)
+				      'by-none)
+	    (gnc:query-set-sort-increasing query
+					   (eq? primary-order 'ascend)
+					   (eq? secondary-order 'ascend)
+					   #t)
 
-      (set! splits (gnc:glist->list (gnc:query-get-splits query)
-				    <gnc:Split*>))
-      ;; (gnc:warn "Splits in trep-renderer:" splits)
-      (set! table 
-	    (make-split-table 
-	     splits 
-	     options
-	     (get-subtotal-pred optname-prime-sortkey 
-				optname-prime-subtotal
-				optname-prime-date-subtotal)
-	     (get-subtotal-pred optname-sec-sortkey 
-				optname-sec-subtotal
-				optname-sec-date-subtotal)
-	     (get-subheading-renderer optname-prime-sortkey 
-				      optname-prime-subtotal
-				      optname-prime-date-subtotal)
-	     (get-subheading-renderer optname-sec-sortkey 
-				      optname-sec-subtotal
-				      optname-sec-date-subtotal)))
-      
-      (gnc:html-document-set-title! document (_ "Transaction Report"))
-      (gnc:html-document-add-object! 
-       document
-       (gnc:make-html-text
-	(gnc:html-markup-h3 (display-date-interval begindate enddate))))
-      (gnc:html-document-add-object!
-       document 
-       table)
-      (gnc:free-query query)
+	    (set! splits (gnc:glist->list (gnc:query-get-splits query)
+					  <gnc:Split*>))
+	    ;;(gnc:warn "Splits in trep-renderer:" splits)
+	    (if (not (null? splits))
+		(let ((table 
+		       (make-split-table 
+			splits 
+			options
+			(get-subtotal-pred optname-prime-sortkey 
+					   optname-prime-subtotal
+					   optname-prime-date-subtotal)
+			(get-subtotal-pred optname-sec-sortkey 
+					   optname-sec-subtotal
+					   optname-sec-date-subtotal)
+			(get-subheading-renderer optname-prime-sortkey 
+						 optname-prime-subtotal
+						 optname-prime-date-subtotal)
+			(get-subheading-renderer optname-sec-sortkey 
+						 optname-sec-subtotal
+						 optname-sec-date-subtotal))))
+	    
+		  (gnc:html-document-set-title! document
+						(_ "Transaction Report"))
+		  (gnc:html-document-add-object! 
+		   document
+		   (gnc:make-html-text
+		    (gnc:html-markup-h3 
+		     (display-date-interval begindate enddate))))
+		  (gnc:html-document-add-object!
+		   document 
+		   table)
+		  (gnc:free-query query))
+		;; error condition: no splits found
+		(let ((p (gnc:make-html-text)))
+		  (gnc:html-text-append! 
+		   p 
+		   (gnc:html-markup-h2 
+		    (_ "No matching transactions found"))
+		   (gnc:html-markup-p
+		    (_ "No transactions were found that \
+match the given time interval and account selection.")))
+		  (gnc:html-document-add-object! document p))))
+
+	  ;; error condition: no accounts specified
+          (let ((p (gnc:make-html-text)))
+            (gnc:html-text-append! 
+             p 
+             (gnc:html-markup-h2 (_ "No accounts selected"))
+             (gnc:html-markup-p
+              (_ "This report requires accounts to be selected.")))
+            (gnc:html-document-add-object! document p)))
 
       document))
 

@@ -1,3 +1,8 @@
+2001-04-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/transaction-report.scm: Make more sanity
+	checks. Fix bugs.
+
 2001-04-23  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Query.c (xaccQueryGetSplitsUniqueTrans): fix bug
