@@ -1,0 +1,57 @@
+
+QIF file format.
+
+Note that the WebConnect or QFX file format is very similar, and is the
+'new' standard for on-line bank statement downloads.
+
+Type of account identifiers
+----------------------------
+!Type:Bank
+!Type:Invst
+!Type:Cash
+!Type:Oth A
+!Type:CCard
+!Type:Oth L
+!Type:Invoice
+!Type:Tax
+!Type:Bill
+
+
+Investment account format
+-------------------------
+Letter Definition
+D Date (optional)
+N Action
+Y Security
+I Price
+Q Quantity (# of shares or split ratio)
+C Cleared status
+P first line text for transfers/reminders
+M Memo
+O Commission
+L Account for transfer
+T Amount of transaction
+U Amount of transaction (higher possible value than T)
+$ Amount transferred
+^ End of entry
+
+Non-investment format
+---------------------
+Letter
+                                                          Definition
+D Date
+T Amount
+U Transaction amount (higher possible value than T)
+C Cleared status
+N Number (check or reference)
+P Payee/description
+M Memo
+A Address (up to 5 lines; 6th line is an optional message) 
+L Category (category/transfer/class)
+S Category in split (category/transfer/class) 
+E Memo in split
+$ Dollar amount of split
+% Percentage of split if percentages are used
+F Reimbursable business expense flag
+^ End of entry
+X Small Business extensions
