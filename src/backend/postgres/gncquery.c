@@ -45,6 +45,7 @@
 #include "escape.h"
 #include "gnc-engine-util.h"
 #include "gncquery.h"
+#include "Transaction.h"
 
 static short module = MOD_BACKEND;
 
