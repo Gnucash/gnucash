@@ -610,8 +610,6 @@ make_random_changes_to_group (GNCSession *session, AccountGroup *group)
     if (!trans)
       continue;
 
-    g_warning ("got one");
-
     change_trans_helper (session, trans, accounts);
   }
 
