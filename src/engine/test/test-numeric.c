@@ -266,33 +266,62 @@ check_equality_operator (void)
 static void 
 check_rounding (void)
 {
-#if 0
-  printf("7/16 as 100ths (floor): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_FLOOR)));
-  printf("7/16 as 100ths (ceil): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_CEIL)));
-  printf("7/16 as 100ths (trunc): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_TRUNC)));
-  printf("7/16 as 100ths (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_ROUND)));
+	gnc_numeric val;
 
-  printf("1511/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1511, 1000),
-                                               100, GNC_RND_ROUND)));
-  printf("1516/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1516, 1000),
-                                               100, GNC_RND_ROUND)));
-  printf("1515/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1515, 1000),
-                                               100, GNC_RND_ROUND)));
-  printf("1525/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1525, 1000),
-                                               100, GNC_RND_ROUND)));
-#endif
+	val = gnc_numeric_create(7, 16);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (43,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_FLOOR),
+                   val, "expected %s = %s = (%s as 100th's floor)");
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (44,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_CEIL),
+                   val, "expected %s = %s = (%s as 100th's ceiling)");
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (43,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_TRUNC),
+                   val, "expected %s = %s = (%s as 100th's trunc)");
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (44,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
+
+	val = gnc_numeric_create(1511, 1000);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (151,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
+
+	val = gnc_numeric_create(1516, 1000);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (152,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
+
+	/* Half-values always get rounded to nearest even number */
+	val = gnc_numeric_create(1515, 1000);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (152,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
+
+	val = gnc_numeric_create(1525, 1000);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (152,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
+
+	val = gnc_numeric_create(1535, 1000);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (154,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
+
+	val = gnc_numeric_create(1545, 1000);
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (154,100),
+	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+                   val, "expected %s = %s = (%s as 100th's round)");
 }
 
 static void
