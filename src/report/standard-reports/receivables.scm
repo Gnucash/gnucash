@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; payables.scm : accounts payable aging report
+;; receivables.scm : accounts receivable aging report
 ;;  
 ;; By Derek Atkins <warlord@MIT.EDU>
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report payables))
+(define-module (gnucash report receivables))
 
 (use-modules (ice-9 slib))
 (use-modules (gnucash bootstrap))
@@ -32,7 +32,7 @@
 
 (use-modules (gnucash report aging))
 
-(define opt-pay-acc (N_ "Payables Account"))
+(define opt-rec-acc (N_ "Receivables Account"))
 (define sect-acc (N_ "Accounts"))
 
 (define (options-generator)    
@@ -43,12 +43,12 @@
 
     (add-option
      (gnc:make-account-list-option
-      sect-acc opt-pay-acc
-      "a" (N_ "Account where payables are stored.")
-      ;; FIXME: Have a global preference for the payables account??
+      sect-acc opt-rec-acc
+      "a" (N_ "Account where receivables are stored.")
+      ;; FIXME: Have a global preference for the receivables account??
       ;; default-getter
       (lambda ()
-	(define (find-first-payable current-group num-accounts this-account-ind)
+	(define (find-first-receivable current-group num-accounts this-account-ind)
 	  (if
 	   (>= this-account-ind num-accounts) 
 	   #f
@@ -60,24 +60,24 @@
 	     (begin 
 	       (gnc:debug "this-account" this-account)
 	       (gnc:debug "account-type" account-type)
-	       (if (eq? account-type 'payable)
+	       (if (eq? account-type 'receivable)
 		   (begin 
 		     (gnc:debug "this-account selected" this-account)
 		      this-account)
-		   (find-first-payable 
+		   (find-first-receivable 
 		    current-group num-accounts (+ this-account-ind 1)))))))
 
 	(let* ((current-group (gnc:get-current-group))
 	      (num-accounts (gnc:group-get-num-accounts
 			     current-group)))
 	  (if (> num-accounts 0)
-	      (let ((first-payable (find-first-payable
+	      (let ((first-receivable (find-first-receivable
 				      current-group
 				      num-accounts
 				      0)))
-		(gnc:debug "first-payable" first-payable)
-		(if first-payable
-		    (list first-payable)
+		(gnc:debug "first-receivable" first-receivable)
+		(if first-receivable
+		    (list first-receivable)
 		    (list (gnc:group-get-account current-group 0))))
 	      '())))
      ;; value-validator
@@ -87,10 +87,10 @@
 	  (if first-account
 	    (let ((account-type (gw:enum-<gnc:AccountType>-val->sym 
 				 (gnc:account-get-type first-account))))
-	      (if (eq? 'payable account-type) 
+	      (if (eq? 'receivable account-type) 
 	  
 		  (cons #t  (list first-account))
-		  (cons #f  (_ "The payables account must be a payable account"))))
+		  (cons #f  (_ "The receivables account must be a receivable account"))))
 	    ;; FIXME: until we can select a default account I need 
 	    ;; to catch this at the report-writing stage
 	    (#t '()))))
@@ -98,7 +98,7 @@
 
     (aging-options-generator options)))
 
-(define (payables-renderer report-obj)
+(define (receivables-renderer report-obj)
 
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
@@ -106,8 +106,8 @@
   (define (op-value section name)
     (gnc:option-value (get-op section name)))
 
-  (let* ((payables-account (car (op-value sect-acc opt-pay-acc))))
-    (aging-renderer report-obj payables-account #f)))
+  (let* ((receivables-account (car (op-value sect-acc opt-rec-acc))))
+    (aging-renderer report-obj receivables-account #t)))
 
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report
@@ -118,7 +118,7 @@
  ;; The name of this report. This will be used, among other things,
  ;; for making its menu item in the main menu. You need to use the
  ;; untranslated value here!
- 'name (N_ "Payable Aging")
+ 'name (N_ "Receivable Aging")
 
  ;; A tip that is used to provide additional information about the
  ;; report to the user.
@@ -132,4 +132,4 @@
  'options-generator options-generator
  
  ;; The rendering function defined above.
- 'renderer payables-renderer)
+ 'renderer receivables-renderer)
