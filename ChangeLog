@@ -1,3 +1,24 @@
+2003-09-04  Derek Atkins  <derek@ihtfp.com>
+
+	Apply Nigel Titley's patch to fix #103174:
+	* src/register/register-core/basiccell.c:
+	  - add some debugging messages
+	  - don't kill ourself if we're asked to set the value to our own value.
+
+	Description of the problem from Nigel:
+	
+	The problem is that the SX formula_cell stuff calls (via an
+	intermediate step) 
+
+	gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
+
+	with value pointing at cell->value. The overall effect of this as far
+	as gnc_basic_cell_set_value_internal is concerned is to trash the value
+	stored in cell->value *before* re-writing back to the same place (the
+	g_free() writes memory management stuff in the first few bytes of the
+	value). This is what trashes the debit/credit value in the SX register
+	entry.
+	
 2003-08-29  David Hampton  <hampton@employees.org>
 
 	* src/engine/Account.c: Fix bug in computing cleared balance.  The
