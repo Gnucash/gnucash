@@ -57,7 +57,6 @@ OTHER_OBJS += $(wildcard @top_srcdir@/src/engine/obj/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/register/obj/gnome/*.o)
 OTHER_OBJS += $(wildcard @top_srcdir@/src/reports/obj/*.o) 
 OTHER_OBJS += $(wildcard @top_srcdir@/src/guile/obj/*.o)
-OTHER_OBJS += @top_srcdir@/src/swig/guile/obj/gnome/gnucash-gnome-guile_wrap.o
 OTHER_OBJS += $(wildcard @top_srcdir@/src/swig/obj/*.o)
 
 ######################################################################
