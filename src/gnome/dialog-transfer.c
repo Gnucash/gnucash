@@ -116,10 +116,10 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
     }
   }
 
-  button = gtk_check_button_new_with_label(SHOW_CATEGORIES_STR);
+  button = gtk_check_button_new_with_label(SHOW_INC_EXP_STR);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), is_category);
   gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip(tooltips, button, SHOW_CAT_MSG, NULL);
+  gtk_tooltips_set_tip(tooltips, button, SHOW_INC_EXP_MSG, NULL);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
 		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb),

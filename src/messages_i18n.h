@@ -143,7 +143,7 @@
                             "currency.")
 #define REPORT_ERR_MSG    _("Error executing scheme report.")
 #define REPORT_NOPARM_MSG _("This report has no parameters.")
-#define SHOW_CAT_MSG      _("Show the income and expense accounts.")
+#define SHOW_INC_EXP_MSG  _("Show the income and expense accounts.")
 #define TRANS_CHANGED_MSG _("The current transaction has been changed.\n"\
                             "Would you like to record it?")
 #define TRANS_DEL_MSG     _("Are you sure you want to delete\n   %s\n"\
@@ -481,8 +481,7 @@
 #define SET_TO_DEFAULT_STR  _("Set to default")
 #define SETUP_ACCT_STR      _("Set Up Account")
 #define SHOW_ALL_STR        _("Show All")
-#define SHOW_INC_EXP_STR    _("Show Inc/Exp")
-#define SHOW_CATEGORIES_STR _("Show Categories")
+#define SHOW_INC_EXP_STR    _("Show Income/Expense")
 #define SHOW_EARLIEST_STR   _("Show Earliest")
 #define SHOW_LATEST_STR     _("Show Latest")
 #define SINGLE_LINE_STR_N  N_("Single Line")
