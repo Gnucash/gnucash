@@ -53,7 +53,7 @@
 #include "GNCIdP.h"
 
 #include "builder.h"
-#include "PostgresBackend.h"
+#include "checkpoint.h"
 
 #include "putil.h"
 
@@ -338,7 +338,8 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, gint64 as_of_date)
 
    xaccAccountSetStartingBalance (acc, baln,
                                      cleared_baln, reconciled_baln);
-   LEAVE("be=%p", be);
+   LEAVE("be=%p baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
+     chk.balance, deno, chk.cleared_balance, deno, chk.reconciled_balance, deno);
 }
 
 /* ============================================================= */

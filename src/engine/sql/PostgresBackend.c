@@ -68,6 +68,7 @@
 #include "TransactionP.h"
 
 #include "builder.h"
+#include "checkpoint.h"
 #include "gncquery.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
