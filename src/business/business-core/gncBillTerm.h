@@ -42,8 +42,9 @@ typedef struct _gncBillTerm GncBillTerm;
 #define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
 
 /*
- *  How to interpret the amount.
+ * How to interpret the amount.
  * You can interpret it as a VALUE or a PERCENT.
+ * ??? huh?
  */
 typedef enum {
   GNC_TERM_TYPE_DAYS = 1,

@@ -55,6 +55,8 @@
 struct _gncBillTerm 
 {
   QofInstance     inst;
+
+  /* 'visible' data fields directly manipulated by user */
   char *          name;
   char *          desc;
   GncBillTermType type;
@@ -63,6 +65,7 @@ struct _gncBillTerm
   gnc_numeric     discount;
   gint            cutoff;
 
+  /* Internal management fields */
   /* See src/doc/business.txt for an explanation of the following */
   /* Code that handles this is *identical* to that in gncTaxTable */
   gint64          refcount;
@@ -572,6 +575,7 @@ gboolean gncBillTermIsDirty (GncBillTerm *term)
 
 /* Based on the timespec and a proximo type, compute the month and
  * year this is due.  The actual day is filled in below.
+ * XXX explain this, the logic is totally opaque to me.
  */
 static void
 compute_monthyear (GncBillTerm *term, Timespec post_date,
@@ -603,6 +607,8 @@ compute_monthyear (GncBillTerm *term, Timespec post_date,
   if (month) *month = imonth;
   if (year) *year = iyear;
 }
+
+/* XXX explain this, the logic is totally opaque to me. */
 
 static Timespec
 compute_time (GncBillTerm *term, Timespec post_date, int days)
