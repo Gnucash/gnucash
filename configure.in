@@ -122,16 +122,10 @@ AC_ARG_WITH( locale-dir,
 AC_SUBST(LOCALE_DIR)
 
 
-
-# (rlb) As far as I can tell from the gettext info pages, this stuff...
-
-# We need the variable below defined for the gettext checks to work
-#ac_cv_header_locale_h=yes
-#AC_CAN_USE_GNU_GETTEXT
-
-# (rlb) should be replaced with this...
-
+### --------------------------------------------------------------------------
+### Check for gettext
 AM_GNU_GETTEXT
+
 
 ### --------------------------------------------------------------------------
 ### Check for perl
