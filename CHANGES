@@ -1,5 +1,13 @@
 Version history:
 ------- -------
+ 1.1.17 - 13 Sept 1998 
+         o working auto-expand register
+         o sort by date, num, amount, memo, descr.
+         o list all transactions between two dates.
+
+ 1.1.16 - 13 Sept 1998 
+         o busted.
+
  1.1.15 - 9 Aug 1998
          o Everybody's doin it: make xacc into a web server.
          
