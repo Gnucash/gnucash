@@ -28,6 +28,7 @@ libgncmod_dialog_tax_table_la_LDFLAGS = -module
 libgncmod_dialog_tax_table_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
+  ${GNOME_LIBDIR} \
   ${GNOMEUI_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
