@@ -337,7 +337,7 @@ string and 'directories' must be a list of strings."
     "\n\n"
     (_ "This is a development version. It may or may not work.\n")
     (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
-    (_ "The last stable version was ") "GnuCash 1.6.5" "\n"
+    (_ "The last stable version was ") "GnuCash 1.6.6" "\n"
     (_ "The next stable version will be ") "GnuCash 1.8.0"
     "\n\n")))
 
