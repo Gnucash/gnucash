@@ -109,14 +109,14 @@ gnc_options_dialog_get_apply_button (GtkWidget *widget)
 }
 
 static GtkWidget *
-gnc_options_dialog_get_cancel_button (GtkWidget *widget)
+gnc_options_dialog_get_ok_button (GtkWidget *widget)
 {
   while (widget)
   {
     GtkWidget *button;
 
     button = gtk_object_get_data (GTK_OBJECT (widget),
-                                  "gnc_option_cancel_button");
+                                  "gnc_option_ok_button");
     if (button)
       return button;
 
@@ -140,7 +140,7 @@ gnc_options_dialog_changed_internal (GtkWidget *widget)
   } while (FALSE);
 
   do {
-    button = gnc_options_dialog_get_cancel_button (widget);
+    button = gnc_options_dialog_get_ok_button (widget);
     if (!button)
       break;
 
@@ -162,7 +162,7 @@ gnc_options_dialog_clear_changed (GtkWidget *widget)
   } while (FALSE);
 
   do {
-    button = gnc_options_dialog_get_cancel_button (widget);
+    button = gnc_options_dialog_get_ok_button (widget);
     if (!button)
       break;;
 
@@ -1319,7 +1319,8 @@ gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
 }
 
 GNCOptionWin *
-gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
+gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
+{
   GNCOptionWin * retval = g_new0(GNCOptionWin, 1);
   GtkWidget * vbox;
   GtkWidget * hbox;
@@ -1366,13 +1367,13 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title) {
   reset_button = gtk_button_new_with_label (_("Defaults"));
 
   gtk_widget_set_sensitive (apply_button, FALSE);
-  gtk_widget_set_sensitive (cancel_button, FALSE);
+  gtk_widget_set_sensitive (ok_button, FALSE);
 
   gtk_object_set_data (GTK_OBJECT (retval->container),
                        "gnc_option_apply_button", apply_button);
 
   gtk_object_set_data (GTK_OBJECT (retval->container),
-                       "gnc_option_cancel_button", cancel_button);
+                       "gnc_option_ok_button", ok_button);
 
   gtk_signal_connect(GTK_OBJECT(apply_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_apply_stub_cb),
