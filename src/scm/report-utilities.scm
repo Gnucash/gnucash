@@ -310,36 +310,10 @@
 		  (thunk (gnc:account-get-split account x)))
 		0 (gnc:account-get-split-count account) 1))
 
-(define (gnc:split-list-total splits)
-  (let ((num-splits (gnc:count-splits splits)))
-    (let loop
-        ((total 0)
-         (index 0))
-      (if (>= index num-splits)
-          total
-          (loop (+ total (d-gnc:split-get-value (gnc:ith-split splits index)))
-                (+ index 1))))))
-
-(define (gnc:split-list-balance splits)
-  (if (= (gnc:count-splits splits) 0)
-      0
-      (let ((first-split (gnc:ith-split splits 0)))
-        (+ (gnc:split-list-total splits)
-           (d-gnc:split-get-balance first-split)
-           (- (d-gnc:split-get-value first-split))))))
-
 ;; get transaction date from split - needs to be done indirectly
 ;; as it's stored in the parent transaction
 (define (gnc:split-get-transaction-date split)
   (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
-
-;; ditto descriptions
-(define (gnc:split-get-description-from-parent split)
-  (gnc:transaction-get-description (gnc:split-get-parent split)))
-
-;; get the account name of a split
-(define (gnc:split-get-account-name split)  
-  (gnc:account-get-name (gnc:split-get-account split)))
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
