@@ -23,6 +23,7 @@ doc_DATA = \
   logo-skunkware.gif \
   newaccwin-code.gif \
   newaccwin-trade.gif \
+  recninfo.gif \
   recnwin.gif \
   regwin-double.gif \
   regwin-multi.gif \

@@ -337,10 +337,10 @@ gnc_verify_cancel_dialog_parented(GtkWidget *parent, const char *message,
  *                          "No" is the default button.             *
  * Return: true for "Yes", false for "No"                           *
 \********************************************************************/
-gncBoolean
-gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
+gboolean
+gnc_verify_dialog(const char *message, gboolean yes_is_default)
 {
-  return gnc_verify_dialog_parented(GTK_WINDOW(gnc_get_ui_data()),
+  return gnc_verify_dialog_parented(gnc_get_ui_data(),
                                     message, yes_is_default);
 }
 
@@ -356,12 +356,12 @@ gnc_verify_dialog(const char *message, gncBoolean yes_is_default)
  *                          "No" is the default button.             *
  * Return: true for "Yes", false for "No"                           *
 \********************************************************************/
-gncBoolean
-gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
-                           gncBoolean yes_is_default)
+gboolean
+gnc_verify_dialog_parented(gncUIWidget parent, const char *message,
+                           gboolean yes_is_default)
 {
   GtkWidget *verify_box = NULL;
-  
+
   verify_box = gnome_message_box_new(message,
 				     GNOME_MESSAGE_BOX_QUESTION,
 				     GNOME_STOCK_BUTTON_YES,
@@ -369,7 +369,7 @@ gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
 				     NULL);
 
   if (parent != NULL)
-    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), parent);
+    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
 
   gnome_dialog_set_default(GNOME_DIALOG(verify_box), yes_is_default ? 0 : 1);
 

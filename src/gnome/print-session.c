@@ -98,6 +98,7 @@ gnc_ui_print_dialog_create(PrintSession * ps) {
   gtk_object_set_data(GTK_OBJECT(pcd->toplevel), "print_struct",
                       pcd);
   
+#if 0
   if(ps->printer->driver) {
     if(ps->printer->filename) {
       asprintf(&printer_string, "(%s) %s",
@@ -110,9 +111,14 @@ gnc_ui_print_dialog_create(PrintSession * ps) {
   else {
     printer_string = _("(none)");
   }
+#endif
 
   gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), ps->paper);
+
+#if 0
   gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
+#endif
+
   gtk_widget_show_all(pcd->toplevel);
 
   return pcd;
@@ -183,6 +189,7 @@ gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
     printer = 
       gnome_printer_dialog_new_modal();
 
+#if 0
     if(printer) {
       pcd->session->printer = printer;
 
@@ -202,6 +209,7 @@ gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
 
       gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
     }
+#endif
   }
 }
 

@@ -835,6 +835,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     case CURSOR_TRANS: {
       Transaction *auto_trans;
       GList *refresh_accounts;
+      Timespec post_date;
       char *desc;
 
       /* we must be on the blank split */
@@ -873,6 +874,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       xaccTransBeginEdit(trans, GNC_F);
       gnc_copy_trans_onto_trans(auto_trans, trans, GNC_F);
+
+      xaccDateCellGetDate (reg->dateCell, &post_date);
+      xaccTransSetDateTS (trans, &post_date);
+
+      xaccTransSetNum (trans, reg->numCell->cell.value);
 
       if (info->default_source_account != NULL)
       {
@@ -940,7 +946,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     break;
 
     case CURSOR_SPLIT: {
-      SplitRegisterType typo = reg->type & REG_TYPE_MASK;
       char *memo, *fullname;
       gboolean unit_price;
       Split *auto_split;
@@ -998,29 +1003,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccSetComboCellValue (reg->xfrmCell, fullname);
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), GNC_T);
 
-      /* auto-complete the amounts */
-      if ((STOCK_REGISTER    == typo) ||
-          (CURRENCY_REGISTER == typo) ||
-          (PORTFOLIO_LEDGER  == typo)) 
-        amount = xaccSplitGetShareAmount (auto_split);
-      else
-        amount = xaccSplitGetValue (auto_split);
-
-      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amount);
-      xaccBasicCellSetChanged(&(reg->debitCell->cell), GNC_T);
-      xaccBasicCellSetChanged(&(reg->creditCell->cell), GNC_T);
+      amount = xaccSplitGetValue (auto_split);
 
       xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amount);
-      xaccBasicCellSetChanged(&(reg->ndebitCell->cell), GNC_T);
-      xaccBasicCellSetChanged(&(reg->ncreditCell->cell), GNC_T);
-
-      amount = xaccSplitGetSharePrice (auto_split);
-      xaccSetPriceCellValue (reg->priceCell, amount);
-      xaccBasicCellSetChanged(&(reg->priceCell->cell), GNC_T);
-
-      amount = xaccSplitGetValue (auto_split);
-      xaccSetPriceCellValue (reg->valueCell, amount);
-      xaccBasicCellSetChanged(&(reg->valueCell->cell), GNC_T);
+      xaccBasicCellSetChanged (&(reg->ndebitCell->cell), GNC_T);
+      xaccBasicCellSetChanged (&(reg->ncreditCell->cell), GNC_T);
 
       /* copy cursor contents into the table */
       xaccCommitCursor (reg->table);
@@ -1826,7 +1813,20 @@ xaccSRPasteCurrent (SplitRegister *reg)
     return;
 
   if (cursor_type == CURSOR_SPLIT) {
+    const char *message = _("You are about to overwrite an existing split.\n"
+                            "Are you sure you want to do that?");
+    gboolean result;
+
     if (copied_type == CURSOR_TRANS)
+      return;
+
+    if (split != NULL)
+      result = gnc_verify_dialog_parented(xaccSRGetParent(reg),
+                                          message, FALSE);
+    else
+      result = TRUE;
+
+    if (!result)
       return;
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);
@@ -1843,12 +1843,26 @@ xaccSRPasteCurrent (SplitRegister *reg)
     gnc_copy_split_scm_onto_split(copied_item, split);
   }
   else {
+    const char *message = _("You are about to overwrite an existing "
+                            "transaction.\n"
+                            "Are you sure you want to do that?");
+    gboolean result;
+
     const GUID *new_guid;
     int trans_split_index;
     int split_index;
     int num_splits;
 
     if (copied_type == CURSOR_SPLIT)
+      return;
+
+    if (split != blank_split)
+      result = gnc_verify_dialog_parented(xaccSRGetParent(reg),
+                                          message, FALSE);
+    else
+      result = TRUE;
+
+    if (!result)
       return;
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);
@@ -2575,11 +2589,11 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       const char *security = NULL;
 
       currency = xaccAccountGetCurrency(new_acc);
-      currency = xaccTransIsCommonCurrency(trans, currency);
+      currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
 
       if (currency == NULL) {
         security = xaccAccountGetSecurity(new_acc);
-        security = xaccTransIsCommonCurrency(trans, security);
+        security = xaccTransIsCommonExclSCurrency(trans, security, split);
       }
 
       if ((currency != NULL) || (security != NULL)) {
@@ -2626,8 +2640,6 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
         other_split = xaccMallocSplit ();
 
-        xaccSplitSetMemo (other_split, xaccSplitGetMemo (split));
-        xaccSplitSetAction (other_split, xaccSplitGetAction (split));
         xaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
 
         xaccTransAppendSplit (trans, other_split);
@@ -2649,11 +2661,13 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
         const char *security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
-        currency = xaccTransIsCommonCurrency(trans, currency);
+        currency = xaccTransIsCommonExclSCurrency(trans, 
+						  currency, other_split);
 
         if (currency == NULL) {
           security = xaccAccountGetSecurity(new_acc);
-          security = xaccTransIsCommonCurrency(trans, security);
+          security = xaccTransIsCommonExclSCurrency(trans, 
+						    security, other_split);
         }
 
         if ((currency != NULL) || (security != NULL)) {

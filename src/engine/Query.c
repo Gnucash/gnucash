@@ -1033,17 +1033,19 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
 
 void
 xaccQueryAddDateMatch(Query * q, 
-                      int sday, int smonth, int syear,
-                      int eday, int emonth, int eyear,
+                      int use_start, int sday, int smonth, int syear,
+                      int use_end, int eday, int emonth, int eyear,
                       QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-
+  
   qt->p      = & xaccDateMatchPredicate;
   qt->sense  = 1;
   qt->data.type           = PD_DATE;
+  qt->data.date.use_start = use_start;
   qt->data.date.start     = gnc_dmy2timespec(sday, smonth, syear);
+  qt->data.date.use_end   = use_end;
   qt->data.date.end       = gnc_dmy2timespec(eday, emonth, eyear);
 
   xaccInitQuery(qs, qt);
@@ -1067,7 +1069,9 @@ xaccQueryAddDateMatch(Query * q,
 
 void
 xaccQueryAddDateMatchTS(Query * q, 
+                        int use_start,
                         Timespec sts,
+                        int use_end,
                         Timespec ets,
                         QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
@@ -1077,6 +1081,8 @@ xaccQueryAddDateMatchTS(Query * q,
   qt->p      = & xaccDateMatchPredicate;
   qt->sense  = 1;
   qt->data.type           = PD_DATE;
+  qt->data.date.use_start = use_start;
+  qt->data.date.use_end   = use_end;
   qt->data.date.start     = sts;  
   qt->data.date.end       = ets;
   
@@ -1101,7 +1107,9 @@ xaccQueryAddDateMatchTS(Query * q,
 
 void
 xaccQueryAddDateMatchTT(Query * q, 
+                        int    use_start,
                         time_t stt,
+                        int    use_end,
                         time_t ett,
                         QueryOp op) {
   Query      * qs  = xaccMallocQuery(); 
@@ -1118,7 +1126,9 @@ xaccQueryAddDateMatchTT(Query * q,
   
   qt->p      = & xaccDateMatchPredicate;
   qt->sense  = 1;
-  qt->data.type           = PD_DATE;
+  qt->data.type           = PD_DATE;  
+  qt->data.date.use_start = use_start;
+  qt->data.date.use_end   = use_end;
   qt->data.date.start     = sts;
   qt->data.date.end       = ets;
   
@@ -1663,18 +1673,6 @@ xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
 
 
 /*******************************************************************
- *  xaccMiscMatchPredicate
- *  *** Bill, please complete! ***
- *******************************************************************/
-#if 0
-static int 
-xaccMiscMatchPredicate(Split * s, PredicateData * pd) {
-  return 0;
-}
-#endif
-
-
-/*******************************************************************
  *  xaccAmountMatchPredicate 
  *******************************************************************/
 static int
@@ -1760,9 +1758,20 @@ xaccDateMatchPredicate(Split * s, PredicateData * pd) {
   assert(pd->type == PD_DATE);
   
   xaccTransGetDateTS(xaccSplitGetParent(s), &transtime);
-  
-  return ((transtime.tv_sec >= pd->date.start.tv_sec) &&
-          (transtime.tv_sec <= pd->date.end.tv_sec));
+
+  if(pd->date.use_start && pd->date.use_end) {
+    return ((transtime.tv_sec >= pd->date.start.tv_sec) &&
+            (transtime.tv_sec <= pd->date.end.tv_sec));
+  }
+  else if(pd->date.use_start) {
+    return ((transtime.tv_sec >= pd->date.start.tv_sec));
+  }
+  else if(pd->date.use_end) {
+    return ((transtime.tv_sec <= pd->date.end.tv_sec));
+  }
+  else {
+    return 1;
+  }
 }
 
 /*******************************************************************
