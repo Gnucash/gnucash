@@ -33,6 +33,8 @@
 #ifndef GNC_BOOK_H
 #define GNC_BOOK_H
 
+#include <glib.h>
+
 #include "GNCId.h"
 #include "kvp_frame.h"
 
@@ -42,6 +44,9 @@
  */
 typedef struct gnc_book_struct       GNCBook;
                                                                                 
+/** GList of GNCBook */
+typedef GList                        BookList;
+
 /** Allocate, initialise and return a new GNCBook.  The new book will
     contain a newly allocated AccountGroup */
 GNCBook * gnc_book_new (void);
