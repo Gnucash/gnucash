@@ -41,7 +41,12 @@
             (gnc:register-option options new-option))))
 
     (add-option
-     (gnc:make-internal-option "__reg" this-acc #f))
+     (gnc:make-account-list-option
+      "__reg" this-acc
+      "" ""
+      (lambda () '())
+      #f
+      #f))
 
     (aging-options-generator options)))
 
@@ -74,8 +79,9 @@
   (let* ((payables-account (op-value "__reg" this-acc)))
     (gnc:debug "payables-account" payables-account)
 
-    (if (not payables-account)
-	(set! payables-account (find-first-payables-account)))
+    (if (null? payables-account)
+	(set! payables-account (find-first-payables-account))
+	(set! payables-account (car payables-account)))
 
     (aging-renderer report-obj payables-account #f)))
 
@@ -91,7 +97,7 @@
   (let* ((options (gnc:make-report-options "Payable Aging"))
 	 (acct-op (gnc:lookup-option options "__reg" this-acc)))
 
-    (gnc:option-set-value acct-op acct)
+    (gnc:option-set-value acct-op (list acct))
     (gnc:make-report "Payable Aging" options)))
 
 (export gnc:payables-report-create-internal)
