@@ -29,7 +29,9 @@ INCLPATH = \
 	   @PERLINCL@ \
            -I$(prefix)/include
 
-CFLAGS   = @CFLAGS@  ${INCLPATH} -Wno-unused
+# set -Dbool=char because the perl headers need this
+# use -fpic so that we can create loadable module
+CFLAGS   = @CFLAGS@  ${INCLPATH} -Dbool=char -fpic -Wno-unused
 
 SWIG_FLAGS := -stat -perl5 \
               -I.. -I@top_srcdir@/src/engine 
@@ -45,8 +47,10 @@ all:	default
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-default: ${OBJS}
-.PHONY: default
+default: gnucash.so 
+
+gnucash.so: ${OBJS} ../../engine/libengine.a
+	gcc -shared ${OBJS} ../../engine/libengine.a -lnana -o gnucash.so
 
 SWIG_FILTER    := %P.h %/util.h
 SWIG_ENGINE_HDRS := \
