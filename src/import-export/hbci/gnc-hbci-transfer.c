@@ -131,57 +131,15 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
       {
 	/* Description */
-	char *h_descr = 
-	  list_string_concat (HBCI_Transaction_description (h_trans));
-	char *othername = 
-	  list_string_concat (HBCI_Transaction_otherName (h_trans));
-	char *g_descr;
-
-	g_strstrip (h_descr);
-	g_strstrip (othername);
-	
-	g_descr = 
-	  g_strdup_printf ("%s %s", 
-			   othername, 
-			   h_descr);
-    
+	char *g_descr = gnc_hbci_descr_tognc (h_trans);
 	gnc_xfer_dialog_set_description (transdialog, g_descr);
-	
-	free (h_descr);
-	free (othername);
 	g_free (g_descr);
       }
 
       {
-	/* Memo. HBCI's transactionText contains strings like "STANDING
-	 * ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
-	char *h_transactionText = 
-	  g_strdup (HBCI_Transaction_transactionText (h_trans));
-	char *h_otherAccountId =
-	  g_strdup (HBCI_Transaction_otherAccountId (h_trans));
-	char *h_otherBankCode =
-	  g_strdup (HBCI_Transaction_otherBankCode (h_trans));
-	char *g_memo;
-
-	g_strstrip (h_transactionText);
-	g_strstrip (h_otherAccountId);
-	g_strstrip (h_otherBankCode);
-
-	g_memo = 
-	  ((strlen(h_transactionText) > 0) ?
-	   g_strdup_printf ("%s %s %s %s %s",
-			    h_transactionText,
-			    _("Account"), h_otherAccountId,
-			    _("Bank"), h_otherBankCode) :
-	   g_strdup_printf ("%s %s %s %s",
-			    _("Account"), h_otherAccountId,
-			    _("Bank"), h_otherBankCode));
-	   
+	/* Memo. */
+	char *g_memo = gnc_hbci_memo_tognc (h_trans);
 	gnc_xfer_dialog_set_memo (transdialog, g_memo);
-
-	g_free (h_transactionText);
-	g_free (h_otherAccountId);
-	g_free (h_otherBankCode);
 	g_free (g_memo);
       }
       /*gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time)*/

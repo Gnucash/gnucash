@@ -1,3 +1,9 @@
+2002-12-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c, gnc-hbci-gettrans.c,
+	gnc-hbci-transfer.c: Create common functions for filling of
+	description and memo fields.
+
 2002-12-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-model-save.c -- fix a bug

@@ -28,6 +28,7 @@
 #include <openhbci/account.h>
 #include <openhbci/api.h>
 #include "Account.h"
+#include "Transaction.h"
 #include "gnc-book.h"
 
 #include "hbci-interaction.h"
@@ -103,6 +104,16 @@ gboolean
 gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 		      HBCI_OutboxJob *job, GNCInteractor *inter);
 
+
+/* Create the appropriate description field for a Gnucash Transaction
+ * by the information given in the HBCI_Transaction h_trans. The
+ * returned string must be g_free'd by the caller. */
+char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans);
+
+/* Create the appropriate memo field for a Gnucash Split by the
+ * information given in the HBCI_Transaction h_trans. The returned
+ * string must be g_free'd by the caller. */
+char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans);
 
 
 #endif

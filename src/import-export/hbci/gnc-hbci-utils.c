@@ -30,8 +30,11 @@
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
 #include "gnc-ui-util.h"
+#include "gnc-engine-util.h" 
 
 #include "hbci-interaction.h"
+
+static short module = MOD_IMPORT;
 
 HBCI_API *
 gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
@@ -307,5 +310,103 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
 
   HBCI_Error_delete (err);
   return TRUE;
+}
+
+/* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */
+static void *gnc_list_string_cb (const char *string, void *user_data)
+{
+  gchar **res = user_data;
+  gchar *tmp1, *tmp2;
+
+  tmp1 = g_strdup (string);
+  g_strstrip (tmp1);
+
+  if (strlen (tmp1) > 0) {
+    if (*res != NULL) {
+      /* The " " is the separating string in between each two strings. */
+      tmp2 = g_strjoin (" ", *res, tmp1, NULL);
+      g_free (tmp1);
+      
+      g_free (*res);
+      *res = tmp2;
+    }
+    else {
+      *res = tmp1;
+    }
+  }
+  
+  return NULL;
+}
+
+
+char *gnc_hbci_descr_tognc (const HBCI_Transaction *h_trans)
+{
+  /* Description */
+  char *h_descr = NULL;
+  char *othername = NULL;
+  char *g_descr;
+
+  /* Don't use list_string_concat_delim here since we need to
+     g_strstrip every single element of the string list, which is
+     only done in our callback gnc_list_string_cb. The separator is
+     also set there. */
+  list_string_foreach (HBCI_Transaction_description (h_trans), 
+		       &gnc_list_string_cb,
+		       &h_descr);
+  list_string_foreach (HBCI_Transaction_otherName (h_trans), 
+		       &gnc_list_string_cb,
+		       &othername);
+  DEBUG("HBCI Description '%s'", h_descr);
+
+  if (othername && (strlen (othername) > 0))
+    g_descr = 
+      ((h_descr && (strlen (h_descr) > 0)) ?
+       g_strdup_printf ("%s; %s", 
+			h_descr,
+			othername) :
+       g_strdup (othername));
+  else
+    g_descr = 
+      ((h_descr && (strlen (h_descr) > 0)) ?
+       g_strdup (h_descr) : 
+       g_strdup (_("Unspecified")));
+
+  free (h_descr);
+  free (othername);
+  return g_descr;
+}
+
+char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans)
+{
+  /* Memo in the Split. HBCI's transactionText contains strings like
+   * "STANDING ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
+  char *h_transactionText = 
+    g_strdup (HBCI_Transaction_transactionText (h_trans));
+  char *h_otherAccountId =
+    g_strdup (HBCI_Transaction_otherAccountId (h_trans));
+  char *h_otherBankCode =
+    g_strdup (HBCI_Transaction_otherBankCode (h_trans));
+  char *g_memo;
+
+  g_strstrip (h_transactionText);
+  g_strstrip (h_otherAccountId);
+  g_strstrip (h_otherBankCode);
+
+  g_memo = 
+    (h_transactionText && (strlen(h_transactionText) > 0) ?
+     g_strdup_printf ("%s %s %s %s %s",
+		      h_transactionText,
+		      _("Account"), h_otherAccountId,
+		      _("Bank"), h_otherBankCode) :
+     (h_otherAccountId && (strlen (h_otherAccountId) > 0) ?
+      g_strdup_printf ("%s %s %s %s",
+		       _("Account"), h_otherAccountId,
+		       _("Bank"), h_otherBankCode) :
+      g_strdup ("")));
+    
+  g_free (h_transactionText);
+  g_free (h_otherAccountId);
+  g_free (h_otherBankCode);
+  return g_memo;
 }
 
