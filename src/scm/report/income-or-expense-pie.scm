@@ -217,16 +217,32 @@
                                (N_ "Income Piechart") 
 			       (N_ "Expense Piechart")))
 		     (options (gnc:make-report-options name))
-		     (account-op (gnc:lookup-option options
-						    pagename-general
-						    optname-accounts))
-		     (level-op (gnc:lookup-option options
-						  pagename-general
-						  optname-levels)))
+		     (account-op 
+		      (gnc:lookup-option options pagename-general
+					 optname-accounts)))
+		;; now copy all the options
+		(define (set-option! pagename optname value)
+		  (gnc:option-set-value
+		   (gnc:lookup-option options pagename optname)
+		   value))
+		(for-each
+		 (lambda (l) (set-option! (car l) (cadr l) (caddr l)))
+		 (list
+		  (list pagename-general optname-from-date
+			(cons 'absolute from-date-tp))
+		  (list pagename-general optname-to-date
+			(cons 'absolute to-date-tp))
+		  (list pagename-general optname-report-currency
+			report-currency)
+		  (list pagename-general optname-levels account-levels)
+		  (list pagename-display optname-fullname show-fullname?)
+		  (list pagename-display optname-show-total show-total?)
+		  (list pagename-display optname-slices max-slices)
+		  (list pagename-display optname-plot-height height) 
+		  (list pagename-display optname-plot-width width)))
 		(call-with-values (lambda () (unzip2 finish))
 				  (lambda (ds as)
 				    (gnc:option-set-value account-op as)))
-		(gnc:option-set-value level-op account-levels)
 		(set! other-anchor
 		      (gnc:report-anchor-text
 		       (gnc:make-report name options))))))
