@@ -159,8 +159,6 @@ configLayout (SplitRegister *reg)
    int show_recs = (reg->type) & REG_SHOW_RECS;
    int show_tdetail = (reg->type) & REG_SHOW_TDETAIL;
 
-/* hack alert -------------------- kill this */
-show_tdetail = 1;
    /* perform a bsic layout that's valid for most
     * of the ledgers; then customize with case 
     * statements. */
@@ -365,56 +363,29 @@ SplitRegister * xaccMallocSplitRegister (int type)
 
 
 #define FANCY(CN,CT,CL) {					\
-   reg->CN##Cell = xaccMalloc##CT##Cell();			\
+   /* reg->CN##Cell = xaccMalloc##CT##Cell(); */		\
    reg->CN##Cell->cell.width = CL##_CELL_W;			\
    xaccAddCell (curs, &(reg->CN##Cell->cell), CL##_CELL_R, CL##_CELL_C); \
 }
 
 #define BASIC(CN,CT,CL) {					\
-   reg->CN##Cell = xaccMalloc##CT##Cell();			\
+   /* reg->CN##Cell = xaccMalloc##CT##Cell(); */	 	\
    reg->CN##Cell->width = CL##_CELL_W;				\
    xaccAddCell (curs, reg->CN##Cell, CL##_CELL_R, CL##_CELL_C);	\
 }
    
 /* ============================================== */
 
-void xaccInitSplitRegister (SplitRegister *reg, int type)
+static void
+configCursors (SplitRegister *reg)
 {
-   Table * table;
-   CellBlock *curs, *header;
-   int phys_r, phys_c;
+   CellBlock *curs;
    int i;
 
-   reg->user_hook = NULL;
-   reg->destroy = NULL;
-   reg->type = type;
-
-   /* --------------------------- */
-   /* define the rows & columns where cells appear */
-   configLayout (reg);
-
-   /* --------------------------- */
-   /* define the header */
-   header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
-   reg->header = header;
-
-   HDR (DATE);
-   HDR (NUM);
-   HDR (XFRM);
-   HDR (DESC);
-   HDR (RECN);
-   HDR (CRED);
-   HDR (DEBT);
-   HDR (BALN);
-   HDR (PRIC);
-   HDR (SHRS);
-   HDR (VALU);
-   
    /* --------------------------- */
    /* define the ledger cursor that handles transactions */
    /* the cursor is 1 row tall */
-   curs = xaccMallocCellBlock (1, reg->num_cols);
-   reg->trans_cursor = curs;
+   curs = reg->trans_cursor;
    
   /* 
    * The Null Cell is used to make sure that "empty"
@@ -426,7 +397,6 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    * cells handles this for us.
    */
 
-   reg -> nullTransCell = xaccMallocBasicCell();
    reg -> nullTransCell -> input_output = XACC_CELL_ALLOW_NONE;
    reg -> nullTransCell -> width = 1;
    xaccSetBasicCellValue (reg->nullTransCell, "");
@@ -469,15 +439,13 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    /* --------------------------- */
    /* define the ledger cursor that handles splits */
    /* the cursor is 1 row tall */
-   curs = xaccMallocCellBlock (1, reg->num_cols);
-   reg->split_cursor = curs;
+   curs = reg->split_cursor;
    
   /* 
    * The Null Cell is used to make sure that "empty"
    * cells stay empty.  See above.
    */
 
-   reg -> nullSplitCell = xaccMallocBasicCell();
    reg -> nullSplitCell -> input_output = XACC_CELL_ALLOW_NONE;
    reg -> nullSplitCell -> width = 1;
    xaccSetBasicCellValue (reg->nullSplitCell, "");
@@ -498,6 +466,76 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    /* set the color of the cells in the split cursor */
    curs->active_bg_color = 0xffffdd; /* pale yellow */
    curs->passive_bg_color = 0xffffff; /* white */
+
+}
+
+/* ============================================== */
+
+void 
+xaccInitSplitRegister (SplitRegister *reg, int type)
+{
+   Table * table;
+   CellBlock *header;
+   int phys_r, phys_c;
+   int i;
+
+   reg->user_hook = NULL;
+   reg->destroy = NULL;
+   reg->type = type;
+
+   /* --------------------------- */
+   /* define the rows & columns where cells appear */
+   configLayout (reg);
+
+   /* --------------------------- */
+   /* define the header */
+   header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
+   reg->header = header;
+
+   HDR (DATE);
+   HDR (NUM);
+   HDR (XFRM);
+   HDR (DESC);
+   HDR (RECN);
+   HDR (CRED);
+   HDR (DEBT);
+   HDR (BALN);
+   HDR (PRIC);
+   HDR (SHRS);
+   HDR (VALU);
+   
+   /* --------------------------- */
+
+   /* cells that handle transaction stuff */
+   reg->nullTransCell = xaccMallocBasicCell();
+   reg->dateCell    = xaccMallocDateCell();
+   reg->numCell     = xaccMallocTextCell();
+   reg->descCell    = xaccMallocQuickFillCell();
+   reg->recnCell    = xaccMallocRecnCell();
+   reg->creditTransCell = xaccMallocPriceCell();  
+   reg->debitTransCell  = xaccMallocPriceCell();  
+   reg->priceTransCell  = xaccMallocPriceCell(); 
+   reg->valueTransCell  = xaccMallocPriceCell();
+   reg->shrsCell    = xaccMallocPriceCell();
+   reg->balanceCell = xaccMallocPriceCell();
+
+   /* cells that handle split stuff */
+   reg->nullSplitCell = xaccMallocBasicCell();
+   reg->xfrmCell    = xaccMallocComboCell();
+   reg->xtoCell     = xaccMallocComboCell();
+   reg->actionCell  = xaccMallocComboCell();
+   reg->memoCell    = xaccMallocTextCell();  
+   reg->recsCell    = xaccMallocRecnCell(); 
+   reg->creditCell  = xaccMallocPriceCell();
+   reg->debitCell   = xaccMallocPriceCell();
+   reg->priceCell   = xaccMallocPriceCell();
+   reg->valueCell   = xaccMallocPriceCell();
+   
+   /* the two cursors */
+   reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
+   reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
+
+   configCursors (reg);
 
    /* --------------------------- */
    /* do some misc cell config */
@@ -567,9 +605,11 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* -------------------------------- */   
    table = xaccMallocTable ();
-   phys_r = header->numRows + curs->numRows;
+   phys_r = header->numRows;
+   phys_r += reg->trans_cursor->numRows;
+   phys_r += reg->split_cursor->numRows;
    phys_c = header->numCols;
-   xaccSetTableSize (table, phys_r, phys_c, 2, 1);
+   xaccSetTableSize (table, phys_r, phys_c, 3, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
 
    /* hack alert -- document what call does, why we call it here, etc ??? ??? */
@@ -577,6 +617,16 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
+}
+
+/* ============================================== */
+
+void
+xaccConfigSplitRegister (SplitRegister *reg, int newtype)
+{
+   reg->type = newtype;
+   configLayout (reg);
+   configCursors (reg);
 }
 
 /* ============================================== */

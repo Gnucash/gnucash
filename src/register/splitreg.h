@@ -159,6 +159,7 @@ struct _SplitRegister {
 
 SplitRegister * xaccMallocSplitRegister (int type);
 void            xaccInitSplitRegister (SplitRegister *, int type);
+void            xaccConfigSplitRegister (SplitRegister *, int type);
 void            xaccDestroySplitRegister (SplitRegister *);
 
 /* returns non-zero value if updates have been made to data */
