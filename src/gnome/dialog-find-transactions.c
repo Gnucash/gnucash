@@ -168,7 +168,8 @@ close_handler (gpointer user_data)
 }
 
 FindTransactionsDialog * 
-gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg) {
+gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
+{
   FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);
   GtkWidget *box;
   GtkWidget *edit;
@@ -372,6 +373,24 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg) {
 
   gtk_signal_connect(GTK_OBJECT(ftd->dialog), "close",
                      GTK_SIGNAL_FUNC(gnc_find_dialog_close_cb), ftd);
+
+  /*
+   * Tie the editable wigets into the default button
+   */
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->description_entry));
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->number_entry));
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->value_edit));
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->memo_entry));
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->shares_edit));
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->price_edit));
+  gnome_dialog_editable_enters(GNOME_DIALOG(ftd->dialog),
+			       GTK_EDITABLE(ftd->action_entry));
 
   gtk_widget_show_all(ftd->dialog);
 

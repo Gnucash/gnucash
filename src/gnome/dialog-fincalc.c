@@ -305,7 +305,7 @@ close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
 static void
 fincalc_amount_clear_clicked(GtkButton *button, GNCAmountEdit *edit)
 {
-  gtk_entry_set_text(GTK_ENTRY (edit->amount_entry), "");
+  gtk_entry_set_text(GTK_ENTRY (edit), "");
 }
 
 static void
@@ -350,10 +350,7 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
   for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
     if (i != value)
     {
-      GtkWidget *entry;
-
-      entry = GNC_AMOUNT_EDIT (fcd->amounts[i])->amount_entry;
-      string = gtk_entry_get_text(GTK_ENTRY(entry));
+      string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[i]));
       if ((string == NULL) || (*string == '\0'))
       {
         *error_item = i;
@@ -431,7 +428,7 @@ calc_value(FinCalcDialog *fcd, FinCalcValue value)
     if (error_item == 0)
       entry = fcd->amounts[0];
     else
-      entry = GNC_AMOUNT_EDIT (fcd->amounts[error_item])->amount_entry;
+      entry = GTK_ENTRY (fcd->amounts[error_item]);
     gtk_widget_grab_focus (entry);
     return;
   }
@@ -523,7 +520,6 @@ gnc_ui_fincalc_dialog_create(void)
   FinCalcDialog *fcd;
   GtkObject *fcdo;
   GtkWidget *button;
-  GtkWidget *entry;
   GtkWidget *menu;
   GtkWidget *hbox;
   GtkWidget *edit;
@@ -560,8 +556,7 @@ gnc_ui_fincalc_dialog_create(void)
   hbox = glade_xml_get_widget (xml, "payment_periods_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
-  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
-  gtk_signal_connect(GTK_OBJECT(entry), "changed",
+  gtk_signal_connect(GTK_OBJECT(edit), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
@@ -576,8 +571,7 @@ gnc_ui_fincalc_dialog_create(void)
   hbox = glade_xml_get_widget (xml, "interest_rate_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
-  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
-  gtk_signal_connect(GTK_OBJECT(entry), "changed",
+  gtk_signal_connect(GTK_OBJECT(edit), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
@@ -594,8 +588,7 @@ gnc_ui_fincalc_dialog_create(void)
   hbox = glade_xml_get_widget (xml, "present_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
-  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
-  gtk_signal_connect(GTK_OBJECT(entry), "changed",
+  gtk_signal_connect(GTK_OBJECT(edit), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
@@ -610,8 +603,7 @@ gnc_ui_fincalc_dialog_create(void)
   hbox = glade_xml_get_widget (xml, "periodic_payment_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
-  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
-  gtk_signal_connect(GTK_OBJECT(entry), "changed",
+  gtk_signal_connect(GTK_OBJECT(edit), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 
@@ -626,8 +618,7 @@ gnc_ui_fincalc_dialog_create(void)
   hbox = glade_xml_get_widget (xml, "future_value_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
-  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
-  gtk_signal_connect(GTK_OBJECT(entry), "changed",
+  gtk_signal_connect(GTK_OBJECT(edit), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
 

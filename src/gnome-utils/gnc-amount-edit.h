@@ -43,9 +43,7 @@ BEGIN_GNOME_DECLS
 
 typedef struct
 {
-  GtkHBox hbox;
-
-  GtkWidget *amount_entry;
+  GtkEntry entry;
 
   gboolean need_to_parse;
 
@@ -61,7 +59,9 @@ typedef struct
 
 typedef struct
 {
-  GtkHBoxClass parent_class;
+  GtkEntryClass parent_class;
+
+  /* Signals for notification/filtering of changes */
   void (*amount_changed) (GNCAmountEdit *gae);
 } GNCAmountEditClass;
 

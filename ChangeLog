@@ -1,3 +1,16 @@
+2002-05-23  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-amount-edit.c: Reparent the amount editor
+	widget so it is based upon a GtkEntry.  This allows trivial
+	GtkEntry <-> GncAmountEdit conversions.
+
+	* src/gnome/dialog-fincalc.c: Clean up code that uses a
+	GncAmountEdit widget as a GtkEntry widget.
+
+	* src/gnome/dialog-find-transactions.c
+	(gnc_ui_find_transactions_dialog_create): Make all the editable
+	fields trigger the dialog default button when <enter> is pressed.
+
 2002-05-21  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sx-from-trans.c (sxftd_get_end_info): Changed

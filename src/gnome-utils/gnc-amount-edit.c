@@ -54,14 +54,12 @@ static gint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_amount_edit_init         (GNCAmountEdit      *gae);
 static void gnc_amount_edit_class_init   (GNCAmountEditClass *class);
-static void gnc_amount_edit_destroy      (GtkObject          *object);
-static void gnc_amount_edit_forall       (GtkContainer       *container,
-                                          gboolean	    include_internals,
-                                          GtkCallback	    callback,
-                                          gpointer	    callbabck_data);
+static void gnc_amount_edit_changed      (GtkEditable        *gae);
+static gint gnc_amount_edit_key_press    (GtkWidget          *widget,
+					  GdkEventKey        *event);
 
 
-static GtkHBoxClass *parent_class;
+static GtkEntryClass *parent_class;
 
 /**
  * gnc_amount_edit_get_type:
@@ -82,10 +80,10 @@ gnc_amount_edit_get_type (void)
       (GtkObjectInitFunc) gnc_amount_edit_init,
       NULL,
       NULL,
+      (GtkClassInitFunc) NULL,
     };
 
-    amount_edit_type = gtk_type_unique (gtk_hbox_get_type (),
-                                        &amount_edit_info);
+    amount_edit_type = gtk_type_unique (GTK_TYPE_ENTRY, &amount_edit_info);
   }
 
   return amount_edit_type;
@@ -94,12 +92,15 @@ gnc_amount_edit_get_type (void)
 static void
 gnc_amount_edit_class_init (GNCAmountEditClass *class)
 {
-  GtkObjectClass *object_class = (GtkObjectClass *) class;
-  GtkContainerClass *container_class = (GtkContainerClass *) class;
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkEditableClass *editable_class;
 
   object_class = (GtkObjectClass*) class;
+  widget_class = (GtkWidgetClass*) class;
+  editable_class = (GtkEditableClass*) class;
 
-  parent_class = gtk_type_class (gtk_hbox_get_type ());
+  parent_class = gtk_type_class (gtk_entry_get_type ());
 
   amount_edit_signals [AMOUNT_CHANGED] =
     gtk_signal_new ("amount_changed",
@@ -112,9 +113,9 @@ gnc_amount_edit_class_init (GNCAmountEditClass *class)
   gtk_object_class_add_signals (object_class, amount_edit_signals,
                                 LAST_SIGNAL);
 
-  container_class->forall = gnc_amount_edit_forall;
+  widget_class->key_press_event = gnc_amount_edit_key_press;
 
-  object_class->destroy = gnc_amount_edit_destroy;
+  editable_class->changed = gnc_amount_edit_changed;
 
   class->amount_changed = NULL;
 }
@@ -130,51 +131,20 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
 }
 
 static void
-gnc_amount_edit_destroy (GtkObject *object)
+gnc_amount_edit_changed (GtkEditable *editable)
 {
-  GNCAmountEdit *gae;
+  (* GTK_EDITABLE_CLASS (parent_class)->changed)(editable);
 
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_AMOUNT_EDIT (object));
-
-  gae = GNC_AMOUNT_EDIT (object);
-
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GNC_AMOUNT_EDIT(editable)->need_to_parse = TRUE;
 }
 
-static void
-gnc_amount_edit_forall (GtkContainer *container, gboolean include_internals,
-			GtkCallback callback, gpointer callback_data)
+static gint
+gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
 {
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GNC_IS_AMOUNT_EDIT (container));
-  g_return_if_fail (callback != NULL);
+  GNCAmountEdit *gae = GNC_AMOUNT_EDIT(widget);
+  gint result;
 
-  /* Let GtkBox handle things only if the internal widgets need
-   * to be poked. */
-  if (include_internals)
-    if (GTK_CONTAINER_CLASS (parent_class)->forall)
-      (* GTK_CONTAINER_CLASS (parent_class)->forall)
-        (container,
-         include_internals,
-         callback,
-         callback_data);
-}
-
-
-static void
-amount_entry_changed (GtkEditable *editable, gpointer data)
-{
-  GNCAmountEdit *gae = data;
-
-  gae->need_to_parse = TRUE;
-}
-
-static int
-amount_entry_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
-{
-  GNCAmountEdit *gae = data;
+  result = (* GTK_WIDGET_CLASS (parent_class)->key_press_event)(widget, event);
 
   switch (event->keyval)
   {
@@ -183,30 +153,16 @@ amount_entry_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
         break;
       if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK))
         break;
-      return FALSE;
+      return result;
     case GDK_KP_Enter:
       break;
     default:
-      return FALSE;
+      return result;
   }
-
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
 
   gnc_amount_edit_evaluate (gae);
 
   return TRUE;
-}
-
-static void
-create_children (GNCAmountEdit *gae)
-{
-  gae->amount_entry  = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (gae), gae->amount_entry, TRUE, TRUE, 0);
-  gtk_widget_show (gae->amount_entry);
-  gtk_signal_connect (GTK_OBJECT (gae->amount_entry), "changed",
-                      GTK_SIGNAL_FUNC(amount_entry_changed), gae);
-  gtk_signal_connect (GTK_OBJECT (gae->amount_entry), "key_press_event",
-                      GTK_SIGNAL_FUNC(amount_entry_key_press), gae);
 }
 
 /**
@@ -224,8 +180,6 @@ gnc_amount_edit_new (void)
   GNCAmountEdit *gae;
 
   gae = gtk_type_new (gnc_amount_edit_get_type ());
-
-  create_children (gae);
 
   return GTK_WIDGET (gae);
 }
@@ -255,7 +209,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
   if (!gae->need_to_parse)
     return TRUE;
 
-  string = gtk_entry_get_text(GTK_ENTRY(gae->amount_entry));
+  string = gtk_entry_get_text(GTK_ENTRY(gae));
   if (!string || *string == '\0')
   {
     gnc_numeric old_amount = gae->amount;
@@ -289,8 +243,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
 
   /* Not ok */
   if (error_loc != NULL)
-    gtk_editable_set_position (GTK_EDITABLE(gae->amount_entry),
-                               error_loc - string);
+    gtk_editable_set_position (GTK_EDITABLE(gae), error_loc - string);
 
   return FALSE;
 }
@@ -357,7 +310,7 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
 
   amount_string = xaccPrintAmount (amount, gae->print_info);
 
-  gtk_entry_set_text (GTK_ENTRY (gae->amount_entry), amount_string);
+  gtk_entry_set_text (GTK_ENTRY(gae), amount_string);
 }
 
 /**
@@ -436,7 +389,7 @@ gnc_amount_edit_gtk_entry (GNCAmountEdit *gae)
   g_return_val_if_fail(gae != NULL, NULL);
   g_return_val_if_fail(GNC_IS_AMOUNT_EDIT(gae), NULL);
 
-  return gae->amount_entry;
+  return (GtkWidget *)gae;
 }
 
 
