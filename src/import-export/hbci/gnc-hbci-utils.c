@@ -406,6 +406,8 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
     HBCI_Hbci_setDebugLevel (0);
 
   do {
+    if (inter)
+      GNCInteractor_show_nodelete (inter);
     err = HBCI_API_executeQueue (api, TRUE);
     g_assert (err);
   } while (gnc_hbci_error_retry (parent, err, inter));
