@@ -68,6 +68,9 @@ const char *void_time_str = "void-time";
 const char *void_former_amt_str = "void-former-amount";
 const char *void_former_val_str = "void-former-value";
 
+/* KVP entry for date-due value */
+#define TRANS_DATE_DUE_KVP	"trans-date-due"
+
 #define PRICE_SIGFIGS 6
 
 #define ISO_DATELENGTH 30 /* length of an iso 8601 date string.
@@ -2412,6 +2415,18 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
   xaccTransSetDateInternal(trans, TDATE_POSTED, ts.tv_sec, ts.tv_nsec);
 }
 
+void
+xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
+{
+  kvp_value *value;
+
+  if (!trans || !ts) return;
+
+  value = kvp_value_new_timespec (*ts);
+  kvp_frame_set_slot_path (trans->kvp_data, value, TRANS_DATE_DUE_KVP, NULL);
+  kvp_value_delete (value);
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -2537,6 +2552,20 @@ xaccTransRetDateEnteredTS (Transaction *trans)
    ts.tv_sec = 0; ts.tv_nsec = 0;
    if (!trans) return ts;
    return (trans->date_entered);
+}
+
+void
+xaccTransGetDateDueTS (Transaction *trans, Timespec *ts)
+{
+  kvp_value *value;
+
+  if (!trans || !ts) return;
+
+  value = kvp_frame_get_slot_path (trans->kvp_data, TRANS_DATE_DUE_KVP, NULL);
+  if (value)
+    *ts = kvp_value_get_timespec (value);
+  else
+    xaccTransGetDatePostedTS (trans, ts);
 }
 
 int

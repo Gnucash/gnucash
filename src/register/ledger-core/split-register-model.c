@@ -117,6 +117,13 @@ gnc_split_register_get_date_label (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_due_date_label (VirtualLocation virt_loc,
+				       gpointer user_data)
+{
+  return _("Due Date");
+}
+
+static const char *
 gnc_split_register_get_num_label (VirtualLocation virt_loc,
                                   gpointer user_data)
 {
@@ -600,6 +607,27 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
     if (virt_loc.phys_col_offset == vcell->cellblock->stop_col)
       borders->right = CELL_BORDER_LINE_LIGHT;
   }
+}
+
+static const char *
+gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
+				       gboolean translate,
+				       gboolean *conditionally_changed,
+				       gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Transaction *trans;
+  Split *split;
+  Timespec ts;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  trans = xaccSplitGetParent (split);
+  if (!trans)
+    return NULL;
+
+  xaccTransGetDateDueTS (trans, &ts);
+
+  return gnc_print_date (ts);
 }
 
 static const char *
@@ -1504,6 +1532,10 @@ gnc_split_register_model_new (void)
                                      DATE_CELL);
 
   gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_due_date_entry,
+                                     DDUE_CELL);
+
+  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_num_entry,
                                      NUM_CELL);
 
@@ -1575,6 +1607,10 @@ gnc_split_register_model_new (void)
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_date_label,
                                      DATE_CELL);
+
+  gnc_table_model_set_label_handler (model,
+                                     gnc_split_register_get_due_date_label,
+                                     DDUE_CELL);
 
   gnc_table_model_set_label_handler (model,
                                      gnc_split_register_get_num_label,
@@ -1661,6 +1697,10 @@ gnc_split_register_model_new (void)
                                     DATE_CELL);
 
   gnc_table_model_set_help_handler (model,
+                                    gnc_split_register_get_date_help,
+                                    DDUE_CELL);
+
+  gnc_table_model_set_help_handler (model,
                                     gnc_split_register_get_num_help,
                                     NUM_CELL);
 
@@ -1709,6 +1749,16 @@ gnc_split_register_model_new (void)
                                  (model,
                                   gnc_split_register_get_standard_io_flags,
                                   DATE_CELL);
+
+  /* FIXME: We really only need a due date for 'invoices', not for
+   * 'payments' or 'receipts'.  This implies we really only need the
+   * due-date for transactions that credit the RECEIVABLE or debit
+   * the PAYABLE account type.
+   */
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  DDUE_CELL);
 
   gnc_table_model_set_io_flags_handler
                                  (model,
@@ -1853,9 +1903,17 @@ gnc_template_register_model_new (void)
                                      gnc_split_register_get_inactive_date_entry,
                                      DATE_CELL );
 
+  gnc_table_model_set_entry_handler( model,
+                                     gnc_split_register_get_inactive_date_entry,
+                                     DDUE_CELL );
+
   gnc_table_model_set_io_flags_handler( model,
                                         gnc_split_register_get_inactive_io_flags,
                                         DATE_CELL );
+
+  gnc_table_model_set_io_flags_handler( model,
+                                        gnc_split_register_get_inactive_io_flags,
+                                        DDUE_CELL );
 
   gnc_table_model_set_entry_handler (model,
                                      gnc_template_register_get_xfrm_entry,

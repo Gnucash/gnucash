@@ -156,6 +156,9 @@ void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                          const Timespec *ts);
 
+/* Dates for A/R and A/P "invoice" postings */
+void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
+
 /* set the Num, Description, and Notes fields */
 void          xaccTransSetNum (Transaction *trans, const char *num);
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
@@ -211,6 +214,9 @@ void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
 Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
 Timespec      xaccTransRetDatePostedTS (Transaction *trans);
+
+/* Dates for A/R and A/P "invoice" postings */
+void	      xaccTransGetDateDueTS (Transaction *trans, Timespec *ts);
 
 /* The xaccTransCountSplits() method returns the number of splits
  * in a transaction.

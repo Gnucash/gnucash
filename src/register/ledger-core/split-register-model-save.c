@@ -81,6 +81,25 @@ gnc_split_register_save_cells (gpointer save_data,
     xaccTransSetDatePostedTS (trans, &ts);
   }
 
+  if (gnc_table_layout_get_cell_changed (reg->table->layout, DDUE_CELL, TRUE))
+  {
+    BasicCell *cell;
+    const char *value;
+    Timespec ts;
+
+    cell = gnc_table_layout_get_cell (reg->table->layout, DDUE_CELL);
+    value = gnc_basic_cell_get_value (cell);
+
+    /* commit any pending changes */
+    gnc_date_cell_commit ((DateCell *) cell);
+
+    DEBUG ("DATE: %s", value ? value : "(null)");
+
+    gnc_date_cell_get_date ((DateCell *) cell, &ts);
+
+    xaccTransSetDateDueTS (trans, &ts);
+  }
+
   if (gnc_table_layout_get_cell_changed (reg->table->layout, NUM_CELL, TRUE))
   {
     BasicCell *cell;
@@ -327,6 +346,8 @@ gnc_split_register_save_template_cells (gpointer save_data,
 
   if (gnc_table_layout_get_cell_changed (reg->table->layout,
                                          DATE_CELL, TRUE) ||
+      gnc_table_layout_get_cell_changed (reg->table->layout,
+                                         DDUE_CELL, TRUE)  ||
       gnc_table_layout_get_cell_changed (reg->table->layout,
                                          NUM_CELL, TRUE)  ||
       gnc_table_layout_get_cell_changed (reg->table->layout,
