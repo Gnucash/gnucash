@@ -878,11 +878,9 @@ gnc_account_tree_activate_cb(GNCMainWinAccountTree *tree,
 static void
 gnc_configure_account_tree(void *data)
 {
-  GtkObject *app;
   GNCMainInfo *info;
   GNCMainWinAccountTree *tree;
   AccountViewInfo new_avi;
-  AccountViewInfo old_avi;
   GSList *list, *node;
 
   memset(&new_avi, 0, sizeof(new_avi));
@@ -1100,7 +1098,6 @@ static void
 gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
                       GNCMainInfo *main_info)
 {
-  GtkWidget *popup;
   GSList *list;
 
   static GnomeUIInfo filemenu[] =
@@ -1300,7 +1297,8 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   list = g_slist_prepend(list, accountsmenu[6].widget);
   list = g_slist_prepend(list, accountsmenu[9].widget);
 
-  gnc_mainwin_account_tree_attach_popup(account_tree, accountsmenu);
+  gnc_mainwin_account_tree_attach_popup
+    (GNC_MAINWIN_ACCOUNT_TREE (account_tree), accountsmenu);
 
   list = g_slist_prepend(list, scrubmenu[0].widget);
   list = g_slist_prepend(list, scrubmenu[1].widget);
