@@ -381,6 +381,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
     return;
 
   cm = gtk_widget_get_colormap(GTK_WIDGET(label));
+  gtk_widget_ensure_style(GTK_WIDGET(label));
   style = gtk_widget_get_style(GTK_WIDGET(label));
 
   style = gtk_style_copy(style);
