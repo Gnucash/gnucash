@@ -161,13 +161,18 @@ gnc_history_update_menu()
   GnomeApp *app;
   GnomeUIInfo *menu;
   char *path;
+  char *file;
+  char *name;
+  char *p, *q;
+  int count;
   int i, n;
 
   app = GNOME_APP(gnc_get_ui_data());
   if (app == NULL)
     return;
 
-  gnome_app_remove_menu_range(app, _("_File/"), 7, 1+num_menu_entries);
+  gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
+                              7, 1 + num_menu_entries);
 
   if(history_list == NULL)
     __gnc_history_get_list();
@@ -183,9 +188,31 @@ gnc_history_update_menu()
 
   for(i = 1; i <= n; i++) {
     (menu+i)->type = GNOME_APP_UI_ITEM;
-    (menu+i)->label = g_strdup_printf("_%d. %s", i,
-				      (char *)g_slist_nth_data(history_list,
-                                                               i-1));
+
+    /* get the file name */
+    file = g_slist_nth_data(history_list, i - 1);
+    if (file == NULL)
+      file = "";
+
+    /* count the underscores */
+    count = 0;
+    for (p = file; *p != '\0'; p++)
+      if (*p == '_')
+        count++;
+
+    /* make the name, doubling the underscores to prevent underlining */
+    name = g_new(char, strlen(file) + count + 1);
+    for (p = file, q = name; *p != '\0'; p++) {
+      *q++ = *p;
+      if (*p == '_')
+        *q++ = '_';
+    }
+    *q = '\0';
+
+    (menu+i)->label = g_strdup_printf("_%d. %s", i, name);
+
+    g_free(name);
+
     (menu+i)->hint = NULL;
 
     (menu+i)->moreinfo = (gpointer)__gnc_history_file_cb;
