@@ -217,6 +217,7 @@ xaccSplitScrub (Split *split)
   int scu;
 
   if (!split) return;
+  ENTER ("(split=%p)", split);
 
   trans = xaccSplitGetParent (split);
   if (!trans) return;
@@ -251,8 +252,12 @@ xaccSplitScrub (Split *split)
   {
     xaccAccountScrubCommodity (account);
   }
-  if (!account->commodity || !gnc_commodity_equiv (account->commodity, currency))
+  if (!account->commodity || 
+      !gnc_commodity_equiv (account->commodity, currency))
+  {
+    LEAVE ("(split=%p) inequiv currency", split);
     return;
+  }
 
   scu = MIN (xaccAccountGetCommoditySCU (account),
              gnc_commodity_get_fraction (currency));
@@ -279,6 +284,7 @@ xaccSplitScrub (Split *split)
   xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
   xaccTransCommitEdit (trans);
+  LEAVE ("(split=%p)", split);
 }
 
 /* ================================================================ */
@@ -340,6 +346,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
   if (!trans) return;
 
+  ENTER ("()");
   xaccTransScrubSplits (trans);
 
   /* If the transaction is balanced, nothing more to do */
@@ -442,6 +449,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     xaccSplitScrub (balance_split);
     xaccTransCommitEdit (trans);
   }
+  LEAVE ("()");
 }
 
 /* ================================================================ */
