@@ -166,6 +166,11 @@ architectural goals.
     can be used to convert to RTF, Postscript, etc.  XML is the wave 
     of the future.
     <p>
+    The Report Generator should be a "dockable" subsystem of the 
+    whole.  Thus, it should be possible to run the report generator
+    in a stand-alone, read-only fashion without having to start up the main
+    application.
+    <p>
     Graphs, charts, etc. too ...
     <p>
     One hard part of reporting is designing a configurable interface,
@@ -175,6 +180,8 @@ architectural goals.
     <ul>
     <li>Simple HTML output is implemented. GnuCash will even act as a one-shot
         web server.
+    <li>Reports for profit & loss, balance sheet, & portfolio valuation
+        implemented as html-embedded perl scripts.
     </ul>
     <p>
 
@@ -370,6 +377,18 @@ architectural goals.
     SQL does NOT require locks to be held for long periods of time!
     <p>
 
+<dt><b>Network Banking</b>
+<dd>Add ability to do on-line banking, billpay, etc.
+    <p>
+    <b>Status:</b>  
+    <ul>
+    <li>Can obtain stock quotes from Yahoo (NYSE), Fidelity Investments,
+        T.Rowe Price, and do automated update of GnuCash data files
+        (with the gnc-price perl script).  Need to add more data sources.
+        See src/quotes/Quote.pm and src/quotes/gnc-price for details.
+    </ul>
+    <p>
+
 </dl>
 
 <h2>Incremental Development Goals</h2>
@@ -386,13 +405,17 @@ immediately, independent of the major goals.
         This primarily due to historical reasons, i.e. the Motif interface was
         inherited from X-Accountant.  Maintained by Linas Vepstas.
     <li>The gnome/gtk version is second in line. It frequently doesn't
-        compile, sometimes it runs.  I beleive that the current excuse :-) is 
-        that the gtk widget set is not quite as capable as the Motif widget
-        set.  Most of the work has been done by
+        compile, although sometimes it runs.  The #1 showstopper for this 
+        port is the lack of a suitable table widget that can be used
+        as a Ledger.  The ledger currently uses the gtk_clist widget,
+        but this isn't really powerful enough. Volunteers?
+        <p>
+        Most of the work has been done by
         Jeremy Collins, with considerable help from Rob Browning.
         Daniel R Risacher &lt;magnus@alum.mit.edu&gt; keeps threatening to 
         do something ...
-    <li>First draft of Qt code submitted by ...
+    <li>First draft of Qt code submitted by 
+        Dirk Schoenberger &lt;schoenberger@signsoft.com&gt;.
     <li>Jim Pick &lt;jimpick@jimpick.com&gt; may be working on an emacs version...
     </ul>
 
