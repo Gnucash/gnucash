@@ -8,7 +8,7 @@
  * ported to GTK, etc. 
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998,1999 Linas Vepstas
  */
 
 /********************************************************************\

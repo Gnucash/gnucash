@@ -32,7 +32,7 @@
  * in table-gtk.c and table-motif.c
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998,1999 Linas Vepstas
  */
 
 /********************************************************************\

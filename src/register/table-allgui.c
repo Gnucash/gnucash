@@ -6,7 +6,7 @@
  * Implements the gui-independent parts of the table infrastructure.
  *
  * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998,1999 Linas Vepstas
  */
 
 /********************************************************************\
