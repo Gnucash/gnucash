@@ -333,14 +333,36 @@ xaccSessionDestroy (Session *sess)
 
 
 /* ============================================================== */
-/* hack alert -- implement this function.
- * if $HOME/.gnucash/data directory doesn't exist, then create it
- * this helps us slide by install errors made by naive users. 
+/* 
+ * If $HOME/.gnucash/data directory doesn't exist, then create it.
  */
 
 static void 
 MakeHomeDir (void) 
-{}
+{
+   int rc;
+   struct stat statbuf;
+   char *home, *path;
+
+   /* Punt. Can't figure out where home is. */
+   home = getenv ("HOME");
+   if (!home) return;
+
+   path = alloca (strlen (home) +50);
+   strcpy (path, home);
+   strcat (path, "/.gnucash");
+
+   rc = stat (path, &statbuf);
+   if (rc) {
+      /* assume that the stat failed only because the dir is absent,
+       * and not because its read-protected or other error.
+       * Go ahead and make it. Don't bother much with checking mkdir 
+       * for errors; seems pointless ...  */
+      mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+      strcat (path, "/data");
+      mkdir (path, S_IRWXU);
+   }
+}
 
 /* ============================================================== */
 
@@ -378,6 +400,7 @@ xaccResolveFilePath (const char * filefrag)
 
    for (i=-2; 1 ; i++) 
    {
+
       switch (i) {
          case -2: {
             /* try to find a file by this name in the cwd ... */
@@ -402,13 +425,14 @@ xaccResolveFilePath (const char * filefrag)
          default: {
             /* OK, check the user-configured paths */
             path = searchpaths[i];
-            len = strlen (path) + namelen;
-            if (PATH_MAX <= len) continue;
-            strcpy (pathbuf, path);
-            path = pathbuf;
+            if (path) {
+               len = strlen (path) + namelen;
+               if (PATH_MAX <= len) continue;
+               strcpy (pathbuf, path);
+               path = pathbuf;
+            }
          }
       }
-
       if (!path) break;
 
       /* lets see if we found the file here ... */
