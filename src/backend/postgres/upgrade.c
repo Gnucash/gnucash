@@ -303,6 +303,7 @@ add_multiple_book_support (PGBackend *be)
  
    p = "CREATE TABLE gncBook (  \n"
        " bookGuid        CHAR(32) PRIMARY KEY, \n"
+       " book_open       CHAR DEFAULT 'n', \n"
        " version         INT4 NOT NULL, \n"
        " iguid           INT4 DEFAULT 0 \n"
        ");";
@@ -311,6 +312,7 @@ add_multiple_book_support (PGBackend *be)
  
    p = "CREATE TABLE gncBookTrail ( \n"
        " bookGuid        CHAR(32) NOT NULL, \n"
+       " book_open       CHAR DEFAULT 'n', \n"
        " version         INT4 NOT NULL, \n"
        " iguid           INT4 DEFAULT 0 \n"
        ") INHERITS (gncAuditTrail); \n\n"
@@ -338,10 +340,10 @@ add_multiple_book_support (PGBackend *be)
    FINISH_QUERY(be->connection);
 
    p = buff;
-   p = stpcpy (p, "INSERT INTO gncBook (bookGuid, version, iguid) "
+   p = stpcpy (p, "INSERT INTO gncBook (bookGuid, book_open, version, iguid) "
                   "VALUES ('");
    p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
-   p = stpcpy (p, "', 1, nextval('gnc_iguid_seq') );");
+   p = stpcpy (p, "', 'y', 1, nextval('gnc_iguid_seq') );");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 

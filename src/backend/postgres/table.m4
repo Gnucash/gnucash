@@ -17,6 +17,13 @@ define(`account', `gncAccount, Account, Account, a,
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
 
+define(`book', `gncBook, Book, GNCBook, b,
+       book_open,      , char,   ptr->book_open,
+       version,        , int32,  ptr->version,
+       iguid,          , int32,  ptr->idata,
+       bookGUID,    KEY, GUID *, gnc_book_get_guid(ptr),
+       ')
+
 define(`split', `gncEntry, Split, Split, e,
        accountGUID,     , GUID *,   xaccAccountGetGUID(xaccSplitGetAccount(ptr)),
        transGUID,       , GUID *,   xaccTransGetGUID(xaccSplitGetParent(ptr)),
@@ -245,7 +252,7 @@ define(`store_one_only',
    buf = sqlBuild_Query (be->builder);
    SEND_QUERY (be,buf, );
 
-   /* complete/commit the transaction, check the status */
+   /* flush the buffers, check the status */
    FINISH_QUERY(be->connection);
    LEAVE (" ");
 }
@@ -430,7 +437,7 @@ define(`store_audit',
    buf = sqlBuild_Query (be->builder);
    SEND_QUERY (be,buf, );
 
-   /* complete/commit the transaction, check the status */
+   /* flush the buffers, check the status */
    FINISH_QUERY(be->connection);
    LEAVE (" ");
 }
