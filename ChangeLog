@@ -1,3 +1,16 @@
+2001-04-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/report-list.scm: Renamed file.
+	
+	* src/scm/report/account-piecharts.scm: Renamed to this filename
+	(used to be: income-or-expense-pie.scm). Introduced some more
+	generality such that this file also has an asset and a liability
+	balance piechart.
+
+	* src/scm/report/category-barchart.scm: Introduced some
+	more generality such that this file also has a asset and liability
+	balance barchart.
+
 2001-04-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report-utilities.scm: Added function

@@ -137,7 +137,7 @@
   ;; *really* complicated.
 
   (define (category-barchart-renderer report-obj reportname 
-				      account-types report-title)
+				      account-types report-title do-intervals?)
     ;; A helper functions for looking up option values.
     (define (get-option section name)
       (gnc:option-value 
@@ -183,16 +183,23 @@
 			     (gnc:get-current-group-depth)
 			     account-levels))
 	     ;; This is the list of date intervals to calculate.
-	     (dates-list (gnc:make-date-interval-list
-			  (gnc:timepair-start-day-time from-date-tp) 
-			  (gnc:timepair-end-day-time to-date-tp)
-			  (eval interval)))
+	     (dates-list (if do-intervals?
+			     (gnc:make-date-interval-list
+			      (gnc:timepair-start-day-time from-date-tp) 
+			      (gnc:timepair-end-day-time to-date-tp)
+			      (eval interval))
+			     (gnc:make-date-list
+			      (gnc:timepair-end-day-time from-date-tp) 
+			      (gnc:timepair-end-day-time to-date-tp)
+			      (eval interval))))
 	     ;; Here the date strings for the x-axis labels are
 	     ;; created.
 	     (date-string-list
 	      (map (lambda (date-list-item)
 		     (gnc:timepair-to-datestring
-		      (car date-list-item)))
+		      (if do-intervals?
+			  (car date-list-item)
+			  date-list-item)))
 		   dates-list))
 	     (other-anchor "")
 	     (all-data '()))
@@ -219,11 +226,14 @@
 	  ((if (gnc:account-reverse-balance? account)
 	       - +)
 	   (collector->double
-	    (gnc:account-get-comm-balance-interval 
-	     account 
-	     (car date-list-entry) 
-	     (cadr date-list-entry) subacct?))))
-
+	    (if do-intervals?
+		(gnc:account-get-comm-balance-interval 
+		 account 
+		 (car date-list-entry) 
+		 (cadr date-list-entry) subacct?)
+		(gnc:account-get-comm-balance-at-date
+		 account date-list-entry subacct?)))))
+	
 	;; Creates the <balance-list> to be used in the function
 	;; below. 
 	(define (account->balance-list account subacct?)
@@ -290,7 +300,9 @@
 	(gnc:html-barchart-set-title! chart report-title)
 	(gnc:html-barchart-set-subtitle!
 	 chart (sprintf #f
-			(_ "%s to %s")
+			(if do-intervals?
+			    (_ "%s to %s")
+			    (_ "Balances %s to %s"))
 			(gnc:timepair-to-datestring from-date-tp) 
 			(gnc:timepair-to-datestring to-date-tp)))
 	(gnc:html-barchart-set-width! chart width)
@@ -388,14 +400,16 @@
 		  (category-barchart-renderer report-obj 
 					      (car l) 
 					      (cadr l)
-					      (caddr l)))))
+					      (caddr l)
+					      (cadddr l)))))
    (list 
-    (list reportname-income '(income) reporttitle-income)
-    (list reportname-expense '(expense) reporttitle-expense)
+    ;; reportname, account-types, reporttitle, do-intervals?
+    (list reportname-income '(income) reporttitle-income #t)
+    (list reportname-expense '(expense) reporttitle-expense #t)
     (list reportname-assets 
 	  '(asset bank cash checking savings money-market 
 		  stock mutual-fund currency)
-	  reporttitle-assets)
+	  reporttitle-assets #f)
     (list reportname-liabilities 
 	  '(liability credit credit-line equity)
-	  reporttitle-liabilities))))
+	  reporttitle-liabilities #f))))

@@ -1,19 +1,52 @@
-;; -*-scheme-*-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; account-piecharts.scm: shows piechart of accounts
+;;  
+;; By Robert Merkel (rgmerk@mira.net) 
+;; and Christian Stimming <stimming@tu-harburg.de>
+;;
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; income-or-expense-pie.scm
-;; Display expenses/incomes from various accounts as a pie chart
-;; by Robert Merkel (rgmerk@mira.net)
-
-(gnc:support "report/income-or-expense-pie.scm")
+(gnc:support "report/account-piecharts.scm")
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-(let ((pagename-general (N_ "General"))
+(let ((reportname-income (N_ "Income Piechart"))
+      (reportname-expense (N_ "Expense Piechart"))
+      (reportname-assets (N_ "Asset Piechart"))
+      (reportname-liabilities (N_ "Liability Piechart"))
+      ;; The names are used in the menu, as labels and as identifiers.
+
+      ;; The titels here are only printed as titles of the report.
+      (reporttitle-income (_ "Income Accounts"))
+      (reporttitle-expense (_ "Expense Accounts"))
+      (reporttitle-assets (_ "Assets"))
+      (reporttitle-liabilities (_ "Liabilities/Equity"))
+
+      (pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
+      (optname-report-currency (N_ "Report's currency"))
+
+      (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
       (optname-levels (N_ "Show Accounts until level"))
-      (optname-report-currency (N_ "Report's currency"))
 
       (pagename-display (N_ "Display"))
       (optname-fullname (N_ "Show long account names"))
@@ -22,44 +55,47 @@
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
 
-  ;; Note the options-generator has a boolean argument, which
-  ;; is true for income piecharts.  We use a lambda to wrap
-  ;; up this function in the define-reports.
-
-  (define (options-generator is-income?)    
+  ;; The option-generator. The only dependance on the type of piechart
+  ;; is the list of account types that the account selection option
+  ;; accepts.
+  (define (options-generator account-types do-intervals?)
     (let* ((options (gnc:new-options)) 
            (add-option 
             (lambda (new-option)
               (gnc:register-option options new-option))))
 
-      (gnc:options-add-date-interval!
-       options pagename-general
-       optname-from-date optname-to-date "a")
+      (if do-intervals?
+	  (gnc:options-add-date-interval!
+	   options pagename-general
+	   optname-from-date optname-to-date "a")
+	  (gnc:options-add-report-date!
+	   options pagename-general
+	   optname-to-date "a"))
 
+      (gnc:options-add-currency! 
+       options pagename-general optname-report-currency "b")
+      
       (add-option
        (gnc:make-account-list-option
-	pagename-general optname-accounts
-	"b"
+	pagename-accounts optname-accounts
+	"a"
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
 	  (gnc:filter-accountlist-type 
-	   (if is-income? '(income) '(expense))
+	   account-types
 	   (gnc:group-get-subaccounts (gnc:get-current-group))))
 	(lambda (accounts)
 	  (list #t
 		(gnc:filter-accountlist-type
-		 (if is-income? '(income) '(expense))
+		 account-types
 		 accounts)))
 	#t))
 
       (gnc:options-add-account-levels! 
-       options pagename-general optname-levels "c" 
+       options pagename-accounts optname-levels "b" 
        (N_ "Show accounts to this depth and not further") 
        2)
 
-      (gnc:options-add-currency! 
-       options pagename-general optname-report-currency "d")
-      
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-fullname
@@ -84,25 +120,31 @@
 
       options))
 
-  ;; Similar arrangement to the options-generator.
-  (define (income-or-expense-pie-renderer report-obj is-income?)
 
-    ;; These are some helper functions for looking up option values.
-    (define (get-op section name)
-      (gnc:lookup-option (gnc:report-options report-obj) section name))
-
+  ;; The rendering function. Since it works for a bunch of different
+  ;; account settings, you have to give the reportname, the
+  ;; report-title, and tthe account-types to work on as arguments.
+  (define (piechart-renderer report-obj reportname
+			     account-types report-title do-intervals?)
+    
+    ;; This is a helper function for looking up option values.
     (define (op-value section name)
-      (gnc:option-value (get-op section name)))
-
+      (gnc:option-value 
+       (gnc:lookup-option 
+	(gnc:report-options report-obj) section name)))
+    
     ;; Get all options
     (let ((to-date-tp (gnc:timepair-end-day-time 
 		       (vector-ref (op-value pagename-general
 					     optname-to-date) 1)))
-	  (from-date-tp (gnc:timepair-start-day-time 
-			 (vector-ref (op-value pagename-general
-					       optname-from-date) 1)))
-	  (accounts (op-value pagename-general optname-accounts))
-	  (account-levels (op-value pagename-general optname-levels))
+	  (from-date-tp (if do-intervals?
+			    (gnc:timepair-start-day-time 
+			     (vector-ref 
+			      (op-value pagename-general
+					optname-from-date) 1))
+			    '()))
+	  (accounts (op-value pagename-accounts optname-accounts))
+	  (account-levels (op-value pagename-accounts optname-levels))
 	  (report-currency (op-value pagename-general
 				     optname-report-currency))
 
@@ -115,7 +157,7 @@
 	  (document (gnc:make-html-document))
 	  (chart (gnc:make-html-piechart))
 	  (topl-accounts (gnc:filter-accountlist-type 
-			  (if is-income? '(income) '(expense))
+			  account-types
 			  (gnc:group-get-account-list 
 			   (gnc:get-current-group)))))
 
@@ -129,8 +171,12 @@
       ;; subaccount's balances are included as well. Returns a
       ;; commodity-collector.
       (define (profit-fn account subaccts?)
-	(gnc:account-get-comm-balance-interval
-	 account from-date-tp to-date-tp subaccts?))
+	(if do-intervals?
+	    (gnc:account-get-comm-balance-interval
+	     account from-date-tp to-date-tp subaccts?)
+	    (gnc:account-get-comm-balance-at-date
+	     account to-date-tp subaccts?)))
+
       
       ;; Define more helper variables.
       (let* ((exchange-alist (gnc:make-exchange-alist
@@ -192,6 +238,7 @@
 		 (list (collector->double (profit-fn a #t)) a))
 	       (filter show-acct? accts))))
 	
+	;; Now do the work here.
 	(set! combined
 	      (sort (filter (lambda (pair) (not (= 0.0 (car pair))))
 			    (traverse-accounts 
@@ -208,13 +255,11 @@
 	      (set! combined
 		    (append start
 			    (list (list sum (_ "Other")))))
-	      (let* ((name (if is-income?
-                               (N_ "Income Piechart") 
-			       (N_ "Expense Piechart")))
+	      (let* ((name reportname)
 		     (options (gnc:make-report-options name))
 		     (account-op 
-		      (gnc:lookup-option options pagename-general
-                                         optname-accounts)))
+		      (gnc:lookup-option options pagename-accounts
+					 optname-accounts)))
 		;; now copy all the options
 		(define (set-option! pagename optname value)
 		  (gnc:option-set-value
@@ -222,19 +267,22 @@
 		   value))
 		(for-each
 		 (lambda (l) (set-option! (car l) (cadr l) (caddr l)))
-		 (list
-		  (list pagename-general optname-from-date
-			(cons 'absolute from-date-tp))
-		  (list pagename-general optname-to-date
-			(cons 'absolute to-date-tp))
-		  (list pagename-general optname-report-currency
-			report-currency)
-		  (list pagename-general optname-levels account-levels)
-		  (list pagename-display optname-fullname show-fullname?)
-		  (list pagename-display optname-show-total show-total?)
-		  (list pagename-display optname-slices max-slices)
-		  (list pagename-display optname-plot-height height) 
-		  (list pagename-display optname-plot-width width)))
+		 (append
+		  (if do-intervals?
+		      (list (list pagename-general optname-from-date
+				  (cons 'absolute from-date-tp)))
+		      '())
+		  (list
+		   (list pagename-general optname-to-date
+			 (cons 'absolute to-date-tp))
+		   (list pagename-general optname-report-currency
+			 report-currency)
+		   (list pagename-accounts optname-levels account-levels)
+		   (list pagename-display optname-fullname show-fullname?)
+		   (list pagename-display optname-show-total show-total?)
+		   (list pagename-display optname-slices max-slices)
+		   (list pagename-display optname-plot-height height) 
+		   (list pagename-display optname-plot-width width))))
 		(call-with-values (lambda () (unzip2 finish))
 				  (lambda (ds as)
 				    (gnc:option-set-value account-op as)))
@@ -243,23 +291,25 @@
 		       (gnc:make-report name options))))))
 
 	(gnc:html-piechart-set-title!
-	 chart (if is-income? 
-		   (_ "Income by Account")
-		   (_ "Expenses by Account")))
+	 chart report-title)
 
 	(gnc:html-piechart-set-subtitle!
 	 chart (string-append
-                (sprintf #f
-                         (_ "%s to %s")
-                         (gnc:timepair-to-datestring from-date-tp) 
-                         (gnc:timepair-to-datestring to-date-tp))
-                (if show-total?
-                    (let ((total (apply + (unzip1 combined))))
-                      (sprintf #f ": %s"
-                               (gnc:amount->string total print-info)))
-                          
-                    "")))
-
+		(if do-intervals?
+		    (sprintf #f
+			     (_ "%s to %s")
+			     (gnc:timepair-to-datestring from-date-tp) 
+			     (gnc:timepair-to-datestring to-date-tp))
+		    (sprintf #f
+			     (_ "Balance at %s")
+			     (gnc:timepair-to-datestring to-date-tp)))
+		(if show-total?
+		    (let ((total (apply + (unzip1 combined))))
+		      (sprintf #f ": %s"
+			       (gnc:amount->string total print-info)))
+		    
+		    "")))
+	
 	(gnc:html-piechart-set-width! chart width)
 	(gnc:html-piechart-set-height! chart height)
 	(gnc:html-piechart-set-data! chart (unzip1 combined))
@@ -291,17 +341,28 @@
 	(gnc:html-document-add-object! document chart) 
 
 	document)))
-
-  (gnc:define-report
-   'version 1
-   'name (N_ "Income Piechart")
-   'options-generator (lambda () (options-generator #t))
-   'renderer (lambda (report-obj)
-               (income-or-expense-pie-renderer report-obj #t)))
-
-  (gnc:define-report
-   'version 1
-   'name (N_ "Expense Piechart")
-   'options-generator (lambda () (options-generator #f))
-   'renderer (lambda (report-obj)
-               (income-or-expense-pie-renderer report-obj #f))))
+  
+  (for-each 
+   (lambda (l)
+     (gnc:define-report
+      'version 1
+      'name (car l)
+      'options-generator (lambda () (options-generator (cadr l) 
+						       (cadddr l)))
+      'renderer (lambda (report-obj)
+		  (piechart-renderer report-obj 
+				     (car l) 
+				     (cadr l)
+				     (caddr l)
+				     (cadddr l)))))
+   (list 
+    ;; reportname, account-types, reporttitle, do-intervals?
+    (list reportname-income '(income) reporttitle-income #t)
+    (list reportname-expense '(expense) reporttitle-expense #t)
+    (list reportname-assets 
+	  '(asset bank cash checking savings money-market 
+		  stock mutual-fund currency)
+	  reporttitle-assets #f)
+    (list reportname-liabilities 
+	  '(liability credit credit-line equity)
+	  reporttitle-liabilities #f))))
