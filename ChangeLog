@@ -1,3 +1,13 @@
+2003-05-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, gnc-hbci-utils.h,
+	gnc-hbci-utils.c, hbci-interaction.h, hbci-interaction.c,
+	po/de.po: Add *much* better error checking -- the user now gets
+	almost always correct feedback if an online transfer cannot be
+	executed. Yeah well I know this introduced one more string even
+	though it's string freeze time -- but the feature itself is so
+	immensly useful for German users that I couldn't resist. ;-)
+
 2003-05-05  David Hampton  <hampton@employees.org>
 
 	* macros/openhbci.m4: Fix problem with latest versions of autoconf.

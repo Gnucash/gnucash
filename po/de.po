@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
-"POT-Creation-Date: 2003-05-03 13:26+0200\n"
-"PO-Revision-Date: 2003-05-03 13:33+0200\n"
+"POT-Creation-Date: 2003-05-05 23:28+0200\n"
+"PO-Revision-Date: 2003-05-05 23:31+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1644,10 +1644,10 @@ msgstr ""
 #: src/engine/FreqSpec.c:970 src/gnome/glade/price.glade.h:30
 #: src/import-export/hbci/druid-hbci-initial.c:827
 #: src/import-export/hbci/druid-hbci-initial.c:1237
-#: src/import-export/hbci/hbci-interaction.c:177
-#: src/import-export/hbci/hbci-interaction.c:178
-#: src/import-export/hbci/hbci-interaction.c:302
-#: src/import-export/hbci/hbci-interaction.c:388
+#: src/import-export/hbci/hbci-interaction.c:181
+#: src/import-export/hbci/hbci-interaction.c:182
+#: src/import-export/hbci/hbci-interaction.c:306
+#: src/import-export/hbci/hbci-interaction.c:392
 #: src/import-export/hbci/hbci-progressmon.c:189 intl-scm/guile-strings.c:3252
 msgid "Unknown"
 msgstr "Unbekannt"
@@ -2600,8 +2600,8 @@ msgstr ""
 
 #. src/scm/main-window.scm
 #: src/engine/Account.c:2478 src/import-export/hbci/glade/hbci.glade.h:12
-#: src/import-export/hbci/gnc-hbci-utils.c:459
-#: src/import-export/hbci/gnc-hbci-utils.c:463 intl-scm/guile-strings.c:107
+#: src/import-export/hbci/gnc-hbci-utils.c:511
+#: src/import-export/hbci/gnc-hbci-utils.c:515 intl-scm/guile-strings.c:107
 #: intl-scm/guile-strings.c:1412
 msgid "Bank"
 msgstr "Bank"
@@ -3304,8 +3304,8 @@ msgstr "1/1000000"
 #: src/gnome/glade/account.glade.h:8 src/gnome/glade/stocks.glade.h:1
 #: src/gnome-utils/dialog-account.c:709
 #: src/import-export/generic-import.glade.h:10
-#: src/import-export/hbci/gnc-hbci-utils.c:458
-#: src/import-export/hbci/gnc-hbci-utils.c:462
+#: src/import-export/hbci/gnc-hbci-utils.c:510
+#: src/import-export/hbci/gnc-hbci-utils.c:514
 #: src/import-export/qif-import/qif.glade.h:1
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:1838 intl-scm/guile-strings.c:1956
@@ -7939,7 +7939,7 @@ msgstr ""
 "Fehler beim Laden der OpenHBCI Konfigurations-Datei:\n"
 "  %s\n"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:261
+#: src/import-export/hbci/gnc-hbci-utils.c:305
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -7947,7 +7947,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:268
+#: src/import-export/hbci/gnc-hbci-utils.c:312
 msgid ""
 "The PIN you entered was wrong.\n"
 "ATTENTION: You have zero further wrong retries left!\n"
@@ -7957,7 +7957,7 @@ msgstr ""
 "VORSICHT: Es ist kein weiterer Fehlversuch möglich!\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:275
+#: src/import-export/hbci/gnc-hbci-utils.c:319
 msgid ""
 "The PIN you entered was wrong.\n"
 "You have one further wrong retry left.\n"
@@ -7967,7 +7967,7 @@ msgstr ""
 "Es ist genau ein weiterer Fehlversuch möglich.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:282
+#: src/import-export/hbci/gnc-hbci-utils.c:326
 msgid ""
 "The PIN you entered was wrong.\n"
 "You have two further wrong retries left.\n"
@@ -7977,7 +7977,7 @@ msgstr ""
 "Es sind zwei weitere Fehlversuche möglich.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:293
+#: src/import-export/hbci/gnc-hbci-utils.c:337
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7985,7 +7985,7 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:300
+#: src/import-export/hbci/gnc-hbci-utils.c:344
 msgid ""
 "Unfortunately you entered a wrong PIN for too many times.\n"
 "Your chip card is therefore destroyed. Aborting."
@@ -7993,7 +7993,7 @@ msgstr ""
 "Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist\n"
 "damit leider unbrauchbar geworden. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:311
+#: src/import-export/hbci/gnc-hbci-utils.c:355
 msgid ""
 "No chip card has been found in the chip card reader.\n"
 "Do you want to try again?"
@@ -8001,7 +8001,7 @@ msgstr ""
 "Im Kartenleser wurde keine Chipkarte erkannt.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:318
+#: src/import-export/hbci/gnc-hbci-utils.c:362
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -8009,7 +8009,7 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:326
+#: src/import-export/hbci/gnc-hbci-utils.c:370
 msgid ""
 "The server of your bank refused the HBCI connection.\n"
 "Please try again later. Aborting."
@@ -8018,7 +8018,7 @@ msgstr ""
 "versuchen Sie es später noch einmal. Aktion wird abgebrochen."
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
-#: src/import-export/hbci/gnc-hbci-utils.c:431 intl-scm/guile-strings.c:2980
+#: src/import-export/hbci/gnc-hbci-utils.c:483 intl-scm/guile-strings.c:2980
 #: intl-scm/guile-strings.c:3002
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
@@ -8072,7 +8072,7 @@ msgstr "Online Banking & Import"
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
 #. *
-#: src/import-export/hbci/hbci-interaction.c:191
+#: src/import-export/hbci/hbci-interaction.c:195
 #, c-format
 msgid ""
 "Please enter and confirm new PIN for \n"
@@ -8083,7 +8083,7 @@ msgstr ""
 "Benutzer '%s' der Bank '%s' eingeben\n"
 "und bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:200
+#: src/import-export/hbci/hbci-interaction.c:204
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN for \n"
@@ -8094,7 +8094,7 @@ msgstr ""
 "Benutzer '%s' einer unbekannten Bank eingeben\n"
 "und bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:207
+#: src/import-export/hbci/hbci-interaction.c:211
 #, c-format
 msgid ""
 "Please enter and confirm a new PIN\n"
@@ -8103,7 +8103,7 @@ msgstr ""
 "Bitte eine neue PIN eingeben und \n"
 "bestätigen. (Mindestens %d Zeichen)"
 
-#: src/import-export/hbci/hbci-interaction.c:228
+#: src/import-export/hbci/hbci-interaction.c:232
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -8113,7 +8113,7 @@ msgstr ""
 "Benutzer '%s' der Bank \n"
 "'%s' eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:235
+#: src/import-export/hbci/hbci-interaction.c:239
 #, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -8122,7 +8122,7 @@ msgstr ""
 "Bitte die PIN für \n"
 "Benutzer '%s' einer unbekannten Bank eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:241
+#: src/import-export/hbci/hbci-interaction.c:245
 msgid ""
 "Please enter PIN for \n"
 "unknown user at unknown bank."
@@ -8130,7 +8130,7 @@ msgstr ""
 "Bitte die PIN für unbekannten Benutzer\n"
 "einer unbekannten Bank eingeben."
 
-#: src/import-export/hbci/hbci-interaction.c:258
+#: src/import-export/hbci/hbci-interaction.c:262
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -8139,7 +8139,7 @@ msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/hbci-interaction.c:314
+#: src/import-export/hbci/hbci-interaction.c:318
 #, c-format
 msgid ""
 "Please make sure the key file for \n"
@@ -8149,7 +8149,7 @@ msgstr ""
 "für Benutzer '%s' der Bank '%s' \n"
 "zugegriffen werden kann."
 
-#: src/import-export/hbci/hbci-interaction.c:319
+#: src/import-export/hbci/hbci-interaction.c:323
 #, c-format
 msgid ""
 "Please make sure the key file for \n"
@@ -8159,7 +8159,7 @@ msgstr ""
 "für Benutzer '%s' einer unbekannten Bank\n"
 "zugegriffen werden kann."
 
-#: src/import-export/hbci/hbci-interaction.c:332
+#: src/import-export/hbci/hbci-interaction.c:336
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -8168,7 +8168,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:337
+#: src/import-export/hbci/hbci-interaction.c:341
 #, c-format
 msgid ""
 "Please insert chip card for \n"
@@ -8177,7 +8177,7 @@ msgstr ""
 "Bitte die Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:351
+#: src/import-export/hbci/hbci-interaction.c:355
 msgid ""
 "Please make sure the key file for \n"
 "unknown user at unknown bank can be accessed."
@@ -8186,7 +8186,7 @@ msgstr ""
 "für unbekannten Benutzer einer unbekannten Bank \n"
 "zugegriffen werden kann."
 
-#: src/import-export/hbci/hbci-interaction.c:361
+#: src/import-export/hbci/hbci-interaction.c:365
 msgid ""
 "Please insert chip card for \n"
 "unknown user at unknown bank."
@@ -8194,7 +8194,7 @@ msgstr ""
 "Bitte die Chipkarte für unbekannten Benutzer \n"
 "einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:400
+#: src/import-export/hbci/hbci-interaction.c:404
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
@@ -8205,7 +8205,7 @@ msgstr ""
 "Bank '%s' zu sein. Bitte stellen Sie sicher, daß auf die richtige\n"
 "Schlüsseldatei zugegriffen werden kann."
 
-#: src/import-export/hbci/hbci-interaction.c:406
+#: src/import-export/hbci/hbci-interaction.c:410
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
@@ -8216,7 +8216,7 @@ msgstr ""
 "unbekannten Bank zu sein. Bitte stellen Sie sicher, daß auf die\n"
 "richtige Schlüsseldatei zugegriffen werden kann."
 
-#: src/import-export/hbci/hbci-interaction.c:420
+#: src/import-export/hbci/hbci-interaction.c:424
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -8225,7 +8225,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' der Bank '%s' einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:425
+#: src/import-export/hbci/hbci-interaction.c:429
 #, c-format
 msgid ""
 "Please insert the correct chip card for \n"
@@ -8234,7 +8234,7 @@ msgstr ""
 "Bitte die korrekte Chipkarte für \n"
 "Benutzer '%s' einer unbekannten Bank einlegen."
 
-#: src/import-export/hbci/hbci-interaction.c:439
+#: src/import-export/hbci/hbci-interaction.c:443
 msgid ""
 "The key file does not seem to be the correct \n"
 "file for unknown user at unknown bank. Please make \n"
@@ -8244,7 +8244,7 @@ msgstr ""
 "einer unbekannten Bank zu sein. Bitte stellen Sie sicher, daß auf die\n"
 "richtige Schlüsseldatei zugegriffen werden kann."
 
-#: src/import-export/hbci/hbci-interaction.c:450
+#: src/import-export/hbci/hbci-interaction.c:454
 msgid ""
 "Please insert the correct chip card for \n"
 "unknown user at unknown bank."
@@ -8399,6 +8399,25 @@ msgstr "BLZ des Auftraggebers"
 #: src/import-export/hbci/dialog-hbcitrans.c:181
 msgid "(unknown)"
 msgstr "(unbekannt)"
+
+#. Translators: %s is the amount.
+#: src/import-export/hbci/dialog-hbcitrans.c:305
+msgid ""
+"The job was successfully sent to the bank, but the \n"
+"bank is refusing to execute the job. Please check \n"
+"the log window for the exact error message of the \n"
+"bank. The line with the error message contains a \n"
+"code number that is greater than 9000.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Der Auftrag wurde erfolgreich an die Bank geschickt, aber die Bank\n"
+"verweigert die Ausführung. Bitte überprüfen Sie die Ausgaben im\n"
+"Protokoll-Fenster, um die genaue Fehlermeldung zu lesen. Die Zeile mit\n"
+"der genauen Fehlermeldung enthält eine Code-Nummer, die größer als\n"
+"9000 ist.\n"
+"\n"
+"Wollen Sie den Auftrag erneut eingeben?"
 
 #. Translators: Strings from this file are really only
 #. * needed inside Germany (HBCI is not supported anywhere
