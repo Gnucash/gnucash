@@ -1,3 +1,8 @@
+2003-06-21  Christian Stimming  <stimming@tuhh.de>
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<lorenzo.cappelletti@email.it>.
+
 2003-06-19  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/help-topics-index.scm: add Jon Lapham's patch

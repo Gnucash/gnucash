@@ -19,10 +19,15 @@
 #   present (value)       ->  corrente
 #   post date             ->  data di emissione
 #   repayment             ->  estinzione, restituzione
+#   report                ->  resoconto
 #   (to) schedule         ->  pianificare
 #   tax                   ->  imposta
 #   tax related           ->  imponibile
 #
+# NOTE: some translations are marked as fuzzy not because I was unable
+#       to translate them, rather because GNOME 1 chooses common
+#       translations from its libraries first.  The application is
+#       mulfunctioning when mine and GNOME's translations don't match.
 #
 # Thanks for the reviews and help to:
 #   Andrea Celli <a.celli@iac.rm.cnr.it>
@@ -35,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.4\n"
 "POT-Creation-Date: 2003-05-25 21:05-0700\n"
-"PO-Revision-Date: 2003-06-03 17:38+0200\n"
+"PO-Revision-Date: 2003-06-18 18:44+0200\n"
 "Last-Translator: Lorenzo Cappelletti <lorenzo.cappelletti@email.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -47,6 +52,7 @@ msgstr ""
 #: src/app-file/gnome/gnc-file-dialog.c:77 src/app-file/gnc-file.c:530
 #: src/gnome/window-acct-tree.c:846 src/gnome/window-reconcile.c:1447
 #: src/gnome-utils/window-help.c:646
+#, fuzzy
 msgid "Open"
 msgstr "Apri"
 
@@ -263,7 +269,7 @@ msgstr "È avvenuto un errore di I/O sconosciuto."
 # messages-i18n.c:39
 #: src/app-file/gnc-file.c:308
 msgid "Changes have been made since the last Save. Save the data to file?"
-msgstr "Sono stati fatti dei cambiamenti dall'ultimo salvataggio. Salvare i dati sul file?"
+msgstr "Sono stati fatti dei cambiamenti dall'ultimo salvataggio. Salvare i dati nel file?"
 
 # messages-i18n.c:282 po/guile_strings.txt:8
 # src/gnome/glade-gnc-dialogs.c:650
@@ -344,6 +350,7 @@ msgstr "Sto scrivendo il file..."
 
 # messages-i18n.c:327
 #: src/app-file/gnc-file.c:727 src/gnome/window-main.c:971
+#, fuzzy
 msgid "Save"
 msgstr "Salva"
 
@@ -1199,7 +1206,7 @@ msgstr "Visualizza la barra degli strumenti"
 #: src/business/business-gnome/glade/invoice.glade:777
 #: src/gnome/glade/register.glade:248 src/gnome/window-main.c:810
 msgid "_Toolbar"
-msgstr "S_trumenti"
+msgstr "_Strumenti"
 
 # po/guile_strings.txt:219
 #: src/business/business-gnome/glade/invoice.glade:785
@@ -1371,17 +1378,17 @@ msgstr "_Vuoto"
 #: src/business/business-gnome/glade/invoice.glade:1012
 #: src/gnome/glade/register.glade:517 intl-scm/guile-strings.c:1435
 msgid "_Reports"
-msgstr "_Rapporti"
+msgstr "_Resoconti"
 
 # messages-i18n.c:104
 #: src/business/business-gnome/glade/invoice.glade:1022
 msgid "Open a company report window for the owner of this Invoice"
-msgstr "Apre una finestra di rapporto sulla ditta per l'intestatario di questa fattura"
+msgstr "Apre una finestra di resoconto sulla ditta per l'intestatario di questa fattura"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: src/business/business-gnome/glade/invoice.glade:1028
 msgid "_Company Report"
-msgstr "Rapporto _ditta"
+msgstr "Resoconto _ditta"
 
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/invoice.glade:1037
@@ -1420,7 +1427,7 @@ msgstr "Visualizza e modifica i titoli per le azioni ed i fondi comuni"
 #: src/business/business-gnome/glade/invoice.glade:1079
 #: src/gnome/glade/register.glade:597
 msgid "_Commodity Editor"
-msgstr "_Editor titoli"
+msgstr "Editor _titoli"
 
 #: src/business/business-gnome/glade/invoice.glade:1086
 #: src/gnome/glade/register.glade:604 src/gnome/window-main.c:895
@@ -3080,6 +3087,7 @@ msgstr "_Trova"
 
 # messages-i18n.c:303
 #: src/gnome/glade/register.glade:233
+#, fuzzy
 msgid "_View"
 msgstr "_Visualizza"
 
@@ -3142,7 +3150,7 @@ msgstr "_Non riconciliati"
 #: src/gnome/window-acct-tree.c:997 src/gnome/window-acct-tree.c:1334
 #: src/gnome/window-reconcile.c:1271
 msgid "_Transfer..."
-msgstr "Mo_vimenta..."
+msgstr "_Movimenta..."
 
 # messages-i18n.c:151
 #: src/gnome/glade/register.glade:460 src/gnome/glade/register.glade:778
@@ -3156,7 +3164,7 @@ msgstr "_Scissione azionaria..."
 
 #: src/gnome/glade/register.glade:479
 msgid "Chec_k & Repair"
-msgstr "Con_trolla e ripara"
+msgstr "_Controlla e ripara"
 
 # po/guile_strings.txt:267
 #: src/gnome/glade/register.glade:494
@@ -3171,17 +3179,17 @@ msgstr "_Questo movimento"
 # messages-i18n.c:104
 #: src/gnome/glade/register.glade:527 src/gnome/glade/register.glade:540
 msgid "Open a register report window for this transaction"
-msgstr "Apre una finestra di rapporto di registro per questo movimento"
+msgstr "Apre una finestra di resoconto di registro per questo movimento"
 
 # po/guile_strings.txt:9
 #: src/gnome/glade/register.glade:533
 msgid "_Account Report"
-msgstr "Rapporto _conto"
+msgstr "Resoconto _conto"
 
 # messages-i18n.c:346
 #: src/gnome/glade/register.glade:546
 msgid "_Transaction Report"
-msgstr "Rapporto _movimento"
+msgstr "Resoconto _movimento"
 
 # messages-i18n.c:85
 #: src/gnome/glade/register.glade:628 src/gnome/window-main.c:915
@@ -3205,6 +3213,7 @@ msgstr "Apre il manuale di GnuCash"
 # messages-i18n.c:143
 #: src/gnome/glade/register.glade:660 src/gnome/window-main.c:930
 #: src/gnome/window-reconcile.c:1319
+#, fuzzy
 msgid "_Help"
 msgstr "_Aiuto"
 
@@ -3281,7 +3290,7 @@ msgstr "_Suddividi movimento"
 #: src/gnome/glade/register.glade:906 src/gnome/glade/register.glade:2105
 #: src/gnome/glade/register.glade:2348
 msgid "Schedule..."
-msgstr "Calendarizza..."
+msgstr "Pianifica..."
 
 # messages-i18n.c:89
 #: src/gnome/glade/register.glade:913 src/gnome/glade/register.glade:1634
@@ -3374,11 +3383,11 @@ msgstr "[rtw] QUESTA FINESTRA NON DOVREBBE VENIR CREATA"
 
 #: src/gnome/glade/register.glade:1589
 msgid "Create a Scheduled Transaction with the current transaction as a template"
-msgstr "Crea un movimento calendarizzato con il movimento corrente come esempio"
+msgstr "Crea un movimento pianificato con il movimento corrente come esempio"
 
 #: src/gnome/glade/register.glade:1595 src/gnome/glade/fincalc.glade:66
 msgid "Schedule"
-msgstr "calendarizza"
+msgstr "pianifica"
 
 # messages-i18n.c:297
 #: src/gnome/glade/register.glade:1640
@@ -3486,7 +3495,7 @@ msgstr "Sti_le"
 # messages-i18n.c:114 po/guile_strings.txt:128
 #: src/gnome/glade/register.glade:1911 intl-scm/guile-strings.c:206
 msgid "Show transactions on one or two lines"
-msgstr "Mostra i movimenti su una o due linee"
+msgstr "Mostra i movimenti su una o due righe"
 
 # messages-i18n.c:183
 #: src/gnome/glade/register.glade:1917
@@ -3496,7 +3505,7 @@ msgstr "Libro mastro di _base"
 # messages-i18n.c:78 po/guile_strings.txt:124
 #: src/gnome/glade/register.glade:1926 intl-scm/guile-strings.c:210
 msgid "Show transactions on one or two lines and expand the current transaction"
-msgstr "Mostra i movimenti su una o due linee ed espande il movimento corrente"
+msgstr "Mostra i movimenti su una o due righe ed espande il movimento corrente"
 
 #: src/gnome/glade/register.glade:1932
 msgid "_Auto-Split Ledger"
@@ -3513,12 +3522,12 @@ msgstr "Libro giornale _movimenti"
 
 #: src/gnome/glade/register.glade:1962 intl-scm/guile-strings.c:220
 msgid "Show two lines of information for each transaction"
-msgstr "Mostra due linee informative per ogni movimento"
+msgstr "Mostra due righe informative per ogni movimento"
 
 # messages-i18n.c:177 po/guile_strings.txt:19
 #: src/gnome/glade/register.glade:1968
 msgid "_Double Line"
-msgstr "_Linea doppia"
+msgstr "_Riga doppia"
 
 #: src/gnome/glade/register.glade:2061
 msgid "Erase all splits except the one for this account."
@@ -3560,7 +3569,7 @@ msgstr "Cerca"
 #: src/report/report-gnome/window-report.c:116 intl-scm/guile-strings.c:1243
 #: intl-scm/guile-strings.c:3179
 msgid "Report"
-msgstr "Rapporto"
+msgstr "Resoconto"
 
 # messages-i18n.c:81
 #: src/gnome/glade/register.glade:2330
@@ -4336,7 +4345,7 @@ msgstr "%P %%"
 # messages-i18n.c:82
 #: src/gnome/glade/sched-xact.glade:24 src/gnome/glade/sched-xact.glade:2634
 msgid "Edit Scheduled Transaction"
-msgstr "Modifica il movimento calendarizzato"
+msgstr "Modifica il movimento pianificato"
 
 # po/guile_strings.txt:188
 #: src/gnome/glade/sched-xact.glade:135 src/gnome/glade/sched-xact.glade:2715
@@ -4444,7 +4453,7 @@ msgstr "Data inizio:"
 #: src/gnome/glade/sched-xact.glade:851
 #: src/gnome/dialog-scheduledxaction.c:1954
 msgid "Not scheduled"
-msgstr "Non calendarizzato"
+msgstr "Non pianificato"
 
 #: src/gnome/glade/sched-xact.glade:882
 msgid "Select occurrence date above."
@@ -4602,7 +4611,7 @@ msgstr "annuale"
 #: intl-scm/guile-strings.c:457 intl-scm/guile-strings.c:463
 #: intl-scm/guile-strings.c:469 intl-scm/guile-strings.c:3299
 msgid "Scheduled Transactions"
-msgstr "Movimenti calendarizzati"
+msgstr "Movimenti pianificati"
 
 #: src/gnome/glade/sched-xact.glade:2543 src/gnome/glade/sched-xact.glade:3749
 #: src/gnome/glade/sched-xact.glade:4217 src/gnome-utils/gnc-dense-cal.c:271
@@ -4650,7 +4659,7 @@ msgstr "Movimenti d'esempio"
 # messages-i18n.c:176
 #: src/gnome/glade/sched-xact.glade:3236
 msgid "Make Scheduled transaction"
-msgstr "Crea movimento calendarizzato"
+msgstr "Crea movimento pianificato"
 
 #: src/gnome/glade/sched-xact.glade:3288
 msgid "Advanced..."
@@ -4678,7 +4687,7 @@ msgstr "Data fine:"
 
 #: src/gnome/glade/sched-xact.glade:3607
 msgid "Since Last Run"
-msgstr "dall'ultima esecuzione"
+msgstr "Dall'ultima esecuzione"
 
 #: src/gnome/glade/sched-xact.glade:3622
 msgid "What to do, what to do?"
@@ -4704,14 +4713,14 @@ msgid ""
 "Select any which you would like to create now, and click\n"
 "\"Next\" to create them."
 msgstr ""
-"I movimenti calendarizzati elencati saranno creati fra poco.\n"
+"I movimenti pianificati elencati saranno creati fra poco.\n"
 "Selezionare quelli che si desidera creare ora e premere\n"
-"\"Succ\" per crearle."
+"\"Succ\" per crearli."
 
 # messages-i18n.c:176
 #: src/gnome/glade/sched-xact.glade:3736
 msgid "Scheduled Transaction"
-msgstr "Movimento calendarizzato"
+msgstr "Movimento pianificato"
 
 # po/guile_strings.txt:101
 #: src/gnome/glade/sched-xact.glade:3762
@@ -4772,14 +4781,14 @@ msgstr "Revisione movimenti creati"
 # messages-i18n.c:26
 #: src/gnome/glade/sched-xact.glade:4141
 msgid "Obsolete Scheduled Transactions"
-msgstr "Movimenti calendarizzati obsoleti"
+msgstr "Movimenti pianificati obsoleti"
 
 #: src/gnome/glade/sched-xact.glade:4161
 msgid ""
 "The following scheduled transactions have expired.\n"
 "Select those you wish to delete."
 msgstr ""
-"I movimenti calendarizzati seguenti sono scaduti.\n"
+"I movimenti pianificati seguenti sono scaduti.\n"
 "Selezionare quelli da cancellare."
 
 #: src/gnome/glade/sched-xact.glade:4230
@@ -4814,11 +4823,10 @@ msgstr ""
 "prestito in GnuCash. In questo druido è possibile immettere i\n"
 "parametri del proprio prestito e della sua estinzione e fornire i\n"
 "dettagli per la restituzione.  Utilizzando queste informazioni,\n"
-"saranno creati i movimenti calendarizzati opportuni.\n"
+"saranno creati i movimenti pianificati opportuni.\n"
 "\n"
 "Se si commette uno sbaglio o si desidera apportare dei cambiamenti in\n"
-"seguito, è possibile modificare direttamente i movimenti\n"
-"calendarizzati."
+"seguito, è possibile modificare direttamente i movimenti pianificati."
 
 # messages-i18n.c:231
 #: src/gnome/glade/sched-xact.glade:4316
@@ -5233,13 +5241,13 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically\n"
 "balance this transaction. Should it still be entered?"
 msgstr ""
-"L'editor dei movimenti calendarizzati non riesce a pareggiare\n"
+"L'editor dei movimenti pianificati non riesce a pareggiare\n"
 "automaticamente questo movimento.  Lo si vuole immettere comunque?"
 
 # messages-i18n.c:26
 #: src/gnome/dialog-scheduledxaction.c:785
 msgid "Please name the Scheduled Transaction."
-msgstr "Assegnare un nome al movimento calendarizzato."
+msgstr "Assegnare un nome al movimento pianificato."
 
 # messages-i18n.c:40
 #: src/gnome/dialog-scheduledxaction.c:809
@@ -5248,7 +5256,7 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists.\n"
 "Are you sure you want to name this one the same?"
 msgstr ""
-"Un movimento calendarizzato con nome \"%s\" esiste già.\n"
+"Un movimento pianificato con nome \"%s\" esiste già.\n"
 "Si è sicure di voler dare lo stesso nome a quello corrente?"
 
 #: src/gnome/dialog-scheduledxaction.c:835
@@ -5256,7 +5264,7 @@ msgid ""
 "Scheduled Transactions with variables\n"
 "cannot be automatically created."
 msgstr ""
-"I movimenti calendarizzati con variabili non possono essere creati\n"
+"I movimenti pianificati con variabili non possono essere creati\n"
 "automaticamente."
 
 #: src/gnome/dialog-scheduledxaction.c:849
@@ -5277,7 +5285,7 @@ msgid ""
 "You have attempted to create a Scheduled Transaction which will never run.\n"
 "Do you really want to do this?"
 msgstr ""
-"Si è tentato di creare un movimento calendarizzato che non verrà mai eseguito.\n"
+"Si è tentato di creare un movimento pianificato che non verrà mai eseguito.\n"
 "Si è sicuri di volerlo fare?"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
@@ -5297,7 +5305,7 @@ msgstr ""
 # messages-i18n.c:80
 #: src/gnome/dialog-scheduledxaction.c:1723
 msgid "Delete the selected Scheduled Transactions?"
-msgstr "Cancellare i movimenti calendarizzati selezionati?"
+msgstr "Cancellare i movimenti pianificati selezionati?"
 
 # messages-i18n.c:54
 #: src/gnome/dialog-scheduledxaction.c:2039
@@ -5317,10 +5325,10 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time.\n"
 "(%d transactions automatically created)"
 msgstr[0] ""
-"Non ci sono movimenti calendarizzati da immettere in questo momento.\n"
+"Non ci sono movimenti pianificati da immettere in questo momento.\n"
 "(%d movimento creato automaticamente)"
 msgstr[1] ""
-"Non ci sono movimenti calendarizzati da immettere in questo momento.\n"
+"Non ci sono movimenti pianificati da immettere in questo momento.\n"
 "(%d movimenti creati automaticamente)"
 
 #: src/gnome/dialog-sxsincelast.c:1370
@@ -5329,7 +5337,7 @@ msgid ""
 "Are you sure you want to lose all Scheduled Transaction changes?"
 msgstr ""
 "Cancellando il dialogo \"Dall'ultima esecuzione\" si annulleranno tutte le modifiche.\n"
-"Si è sicuri di voler perdere le modifiche a tutti i movimenti calendarizzati?"
+"Si è sicuri di voler perdere le modifiche di tutti i movimenti pianificati?"
 
 # messages-i18n.c:105
 #: src/gnome/dialog-sxsincelast.c:1799
@@ -5558,7 +5566,7 @@ msgstr "Errore nell'aggiungere il prezzo."
 # po/guile_strings.txt:167
 #: src/gnome/druid-stock-split.c:731
 msgid "You don't have any stock accounts with balances!"
-msgstr "Non si possiede nessun conto azionario con saldi!"
+msgstr "Non si possiede alcun conto azionario contenente saldi!"
 
 #: src/gnome/gnc-network.c:168
 msgid "Enter GnuCash Network passphrase:"
@@ -5778,7 +5786,7 @@ msgstr "Apri conto"
 # messages-i18n.c:148
 #: src/gnome/window-acct-tree.c:972
 msgid "Open _Subaccounts"
-msgstr "Apri _sottoconti"
+msgstr "Apri so_ttoconti"
 
 # messages-i18n.c:97
 #: src/gnome/window-acct-tree.c:973 src/gnome/window-acct-tree.c:1296
@@ -5792,22 +5800,22 @@ msgstr "Riconcilia il conto selezionato"
 
 #: src/gnome/window-acct-tree.c:1005 src/gnome/window-acct-tree.c:1350
 msgid "Stock S_plit..."
-msgstr "Sc_issione azionaria..."
+msgstr "_Scissione azionaria..."
 
 # messages-i18n.c:146
 #: src/gnome/window-acct-tree.c:1014 src/gnome/window-acct-tree.c:1275
 msgid "_New Account..."
-msgstr "_Nuovo conto..."
+msgstr "Nuovo _conto..."
 
 # messages-i18n.c:136
 #: src/gnome/window-acct-tree.c:1022 src/gnome/window-acct-tree.c:1316
 msgid "_Delete Account"
-msgstr "_Cancella conto"
+msgstr "Cance_lla conto"
 
 #: src/gnome/window-acct-tree.c:1029 src/gnome/window-acct-tree.c:1357
 #: src/gnome/window-reconcile.c:1279
 msgid "_Check & Repair"
-msgstr "Con_trolla e ripara"
+msgstr "_Controlla e ripara"
 
 # messages-i18n.c:130
 #: src/gnome/window-acct-tree.c:1036 src/gnome/window-reconcile.c:1330
@@ -5817,7 +5825,7 @@ msgstr "_Conto"
 # messages-i18n.c:147
 #: src/gnome/window-acct-tree.c:1287 src/gnome/window-reconcile.c:1256
 msgid "_Open Account"
-msgstr "_Apri conto"
+msgstr "Apri _conto"
 
 # messages-i18n.c:148
 #: src/gnome/window-acct-tree.c:1295
@@ -5840,7 +5848,7 @@ msgstr "Selezionare \"Esci\" per uscire da GnuCash."
 
 #: src/gnome/window-main.c:609
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "Non ci sono movimenti calendarizzati da immettere in questo momento."
+msgstr "Non ci sono movimenti pianificati da immettere in questo momento."
 
 # messages-i18n.c:11
 #: src/gnome/window-main.c:640
@@ -5849,6 +5857,10 @@ msgid ""
 "The GNU way to manage your money!\n"
 "http://www.gnucash.org/"
 msgstr ""
+"Traduzione italiana a cura di:\n"
+"(C) 2000 Alessandro Seveso <aleseveso@tiscalinet.it>\n"
+"(C) 2002-2003 Lorenzo Cappelletti <lorenzo.cappelletti@email.com>\n"
+" \n"
 "GnuCash, il gestore finanziario personale.\n"
 "Il GNUovo modo per gestire i tuoi soldi!\n"
 "http://www.gnucash.org/"
@@ -5884,7 +5896,7 @@ msgstr "Apre una nuova vista dell'albero dei conti"
 
 #: src/gnome/window-main.c:755
 msgid "Open in a New Window"
-msgstr "Apre in una nuova finestra"
+msgstr "Apri in una finestra nuova"
 
 # messages-i18n.c:85
 #: src/gnome/window-main.c:756
@@ -5909,12 +5921,12 @@ msgstr "_Esporta"
 # po/guile_strings.txt:127
 #: src/gnome/window-main.c:790
 msgid "Ta_x Options"
-msgstr "Opzioni ta_sse"
+msgstr "_Opzioni tasse"
 
 # messages-i18n.c:53
 #: src/gnome/window-main.c:791
 msgid "Setup tax information for all income and expense accounts"
-msgstr "Configura le informazioni delle imposte per tutti conti di entrata e spese"
+msgstr "Configura le informazioni riguardanti le imposte per tutti i conti di tipo entrate e uscite"
 
 # messages-i18n.c:326
 #: src/gnome/window-main.c:802
@@ -5928,7 +5940,7 @@ msgstr "Aggiorna questa finestra"
 
 #: src/gnome/window-main.c:811
 msgid "Show/hide the toolbar on this window"
-msgstr "Mostra/nascondi la barra degli strumenti su qeusta finestra"
+msgstr "Mostra/nascondi la barra degli strumenti su questa finestra"
 
 #: src/gnome/window-main.c:818
 msgid "Show/hide the summary bar on this window"
@@ -5941,12 +5953,12 @@ msgstr "Mostra/nascondi la barra di stato su questa finestra"
 # messages-i18n.c:176
 #: src/gnome/window-main.c:836
 msgid "_Scheduled Transaction Editor"
-msgstr "Editor movimenti _calendarizzati"
+msgstr "_Editor movimenti pianificati"
 
 # messages-i18n.c:80
 #: src/gnome/window-main.c:837
 msgid "The list of Scheduled Transactions"
-msgstr "La lista dei movimenti calendarizzati"
+msgstr "La lista dei movimenti pianificati"
 
 #: src/gnome/window-main.c:843
 msgid "_Since Last Run..."
@@ -5954,20 +5966,20 @@ msgstr "_Dall'ultima esecuzione..."
 
 #: src/gnome/window-main.c:844
 msgid "Create Scheduled Transactions since the last time run."
-msgstr "Crea i movimenti calendarizzati a partire dall'ultima esecuzione."
+msgstr "Crea i movimenti pianificati a partire dall'ultima esecuzione."
 
 #: src/gnome/window-main.c:851
 msgid "_Mortgage & Loan Repayment..."
-msgstr "_Estinzione ipoteche e prestiti..."
+msgstr "Estinzione _ipoteche e prestiti..."
 
 #: src/gnome/window-main.c:852
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Imposta movimenti calendarizzati per l'estinzione di un prestito"
+msgstr "Imposta movimenti pianificati per l'estinzione di un prestito"
 
 # po/guile_strings.txt:33
 #: src/gnome/window-main.c:862
 msgid "_Scheduled Transactions"
-msgstr "Movimenti _calendarizzati"
+msgstr "Movimenti _pianificati"
 
 # messages-i18n.c:262
 #: src/gnome/window-main.c:886
@@ -5981,7 +5993,7 @@ msgstr "_Calcolatrice finanziaria"
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: src/gnome/window-main.c:901
 msgid "_Find Transactions"
-msgstr "_Trova movimenti"
+msgstr "T_rova movimenti"
 
 #: src/gnome/window-main.c:902
 msgid "Find transactions with a search"
@@ -5992,8 +6004,9 @@ msgid "_Tips Of The Day"
 msgstr "_Suggerimento del giorno"
 
 #: src/gnome/window-main.c:954
+#, fuzzy
 msgid "_Windows"
-msgstr "_Finestre"
+msgstr "Fi_nestre"
 
 # messages-i18n.c:107
 #: src/gnome/window-main.c:972
@@ -6003,7 +6016,7 @@ msgstr "Salva il file su disco"
 # messages-i18n.c:105
 #: src/gnome/window-main.c:982
 msgid "Close the current notebook page"
-msgstr "Chiude la pagina corrente del libro note"
+msgstr "Chiude la pagina corrente del block-notes"
 
 # messages-i18n.c:283
 #: src/gnome/window-main.c:1004
@@ -6231,7 +6244,7 @@ msgstr "Libro mastro generale"
 # messages-i18n.c:183
 #: src/gnome/window-register.c:803
 msgid "General Ledger Report"
-msgstr "Rapporto libro mastro generale"
+msgstr "Resoconto libro mastro generale"
 
 # messages-i18n.c:313
 #: src/gnome/window-register.c:808
@@ -6241,7 +6254,7 @@ msgstr "Portfolio"
 # po/guile_strings.txt:127
 #: src/gnome/window-register.c:810
 msgid "Portfolio Report"
-msgstr "Rapporto portafoglio"
+msgstr "Resoconto portfolio"
 
 #: src/gnome/window-register.c:815
 msgid "Search Results"
@@ -6249,7 +6262,7 @@ msgstr "Risultati ricerca"
 
 #: src/gnome/window-register.c:817
 msgid "Search Results Report"
-msgstr "Rapporto sui risultati della ricerca"
+msgstr "Resoconto risultati ricerca"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: src/gnome/window-register.c:822 intl-scm/guile-strings.c:198
@@ -6263,7 +6276,7 @@ msgstr "Registro"
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: src/gnome/window-register.c:824 intl-scm/guile-strings.c:2063
 msgid "Register Report"
-msgstr "Rapporto di registro"
+msgstr "Resoconto di registro"
 
 #: src/gnome/window-register.c:1445
 #, c-format
@@ -6619,7 +6632,7 @@ msgstr "non soddisfa l'espressione regolare"
 
 #: src/gnome-search/search-string.c:344
 msgid "Case Insensitive?"
-msgstr "Maiuscolo e/o minuscolo?"
+msgstr "maiuscolo/minuscolo?"
 
 #: src/gnome-search/search.glade:23
 msgid "Search for..."
@@ -6828,7 +6841,7 @@ msgstr "Seleziona predefinito"
 # messages-i18n.c:210
 #: src/gnome-utils/dialog-options.c:1108
 msgid "Defaults"
-msgstr "Predefiniti"
+msgstr "Valori predefiniti"
 
 # po/guile_strings.txt:168
 #: src/gnome-utils/dialog-options.c:1576
@@ -8562,7 +8575,7 @@ msgstr "Operazione: cambio chiavi"
 
 #: src/import-export/hbci/hbci-progressmon.c:190
 msgid "Job: Get Status Reports"
-msgstr "Operazione: recupero rapporti di stato"
+msgstr "Operazione: recupero resoconti di stato"
 
 # po/guile_strings.txt:243
 #: src/import-export/hbci/hbci-progressmon.c:217
@@ -8648,7 +8661,7 @@ msgid ""
 msgstr ""
 "L'operazione è stata correttamente inviata alla banca, ma la banca si\n"
 "rifiuta di eseguirla. Verificare la finestra di log per il preciso\n"
-"messaggio d'errore della banca. La linea con il messaggio d'errore\n"
+"messaggio d'errore della banca. La riga con il messaggio d'errore\n"
 "contiene un codice numerico maggiore di 9000.\n"
 "\n"
 "Si desidera inviare nuovamente l'operazione?"
@@ -8721,7 +8734,7 @@ msgstr "Conto mercato monetario OFX sconosciuto"
 
 #: src/import-export/ofx/gnc-ofx-import.c:612
 msgid "Unknown OFX credit line account"
-msgstr "Conto linee di credito OFX sconosciuto"
+msgstr "Conto riga di credito OFX sconosciuto"
 
 #: src/import-export/ofx/gnc-ofx-import.c:616
 msgid "Unknown OFX CMA account"
@@ -9178,7 +9191,7 @@ msgstr ""
 "\n"
 "Nella pagina successiva si avrà la possibilità di visionare le\n"
 "corrispondenze fra le categorie QIF e i conti GnuCash. È possibile\n"
-"cambiare le corrispondenze non gradite facendo click sulla linea che\n"
+"cambiare le corrispondenze non gradite facendo click sulla riga che\n"
 "contiene il nome della categoria.\n"
 "\n"
 "Se in seguito si cambia idea, è possibile con GnuCash riorganizzare in\n"
@@ -9570,12 +9583,12 @@ msgstr "Formula credito"
 
 #: src/register/ledger-core/split-register-model.c:789
 msgid "Scheduled"
-msgstr "Calendarizzato"
+msgstr "Pianificato"
 
 # messages-i18n.c:125
 #: src/register/ledger-core/split-register-model.c:820
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "Immettere il riferimento del movimento, ad esempio il numero della fattura o dell'assegno"
+msgstr "Immettere il riferimento del movimento, ad esempio il numero della fattura o dell'assegno circolare"
 
 # messages-i18n.c:125
 #: src/register/ledger-core/split-register-model.c:824
@@ -9873,7 +9886,7 @@ msgstr "Opzioni foglio di stile"
 
 #: src/report/report-gnome/report.glade:380
 msgid "Available reports"
-msgstr "Rapporti disponibili"
+msgstr "Resoconti disponibili"
 
 #: src/report/report-gnome/report.glade:405
 msgid "                       "
@@ -9912,11 +9925,11 @@ msgstr "Righe"
 # po/guile_strings.txt:242
 #: src/report/report-gnome/report.glade:635
 msgid "Report Size"
-msgstr "Dimensione rapporto"
+msgstr "Dimensione resoconto"
 
 #: src/report/report-gnome/report.glade:694
 msgid "Enter report row/column span"
-msgstr "Immettere l'intervallo di righe/colonne per il rapporto"
+msgstr "Immettere l'intervallo di righe/colonne per il resoconto"
 
 #: src/report/report-gnome/report.glade:723
 msgid "Row span:"
@@ -9929,7 +9942,7 @@ msgstr "Intervallo colonne:"
 # po/guile_strings.txt:127
 #: src/report/report-gnome/window-report.c:110
 msgid "(Report not found)"
-msgstr "(Rapporto non trovato)"
+msgstr "(Resoconto non trovato)"
 
 #: src/report/report-gnome/window-report.c:372
 #: src/report/report-gnome/window-report.c:408
@@ -9943,7 +9956,7 @@ msgstr "Scegliere formato esportazione"
 
 #: src/report/report-gnome/window-report.c:376
 msgid "Choose the export format for this report:"
-msgstr "Scegliere il formato con il quale esportare questo rapporto:"
+msgstr "Scegliere il formato con il quale esportare questo resoconto:"
 
 #: src/report/report-gnome/window-report.c:417
 #, c-format
@@ -9980,41 +9993,41 @@ msgstr ""
 # messages-i18n.c:124
 #: src/report/report-gnome/window-report.c:524
 msgid "There are no options for this report."
-msgstr "Non ci sono opzioni per questo rapporto."
+msgstr "Non ci sono opzioni per questo resoconto."
 
 # messages-i18n.c:105
 #: src/report/report-gnome/window-report.c:857
 msgid "Reload the current report"
-msgstr "Ricarica rapporto corrente"
+msgstr "Ricarica resoconto corrente"
 
 # messages-i18n.c:84
 #: src/report/report-gnome/window-report.c:876
 msgid "Export HTML-formatted report to file"
-msgstr "Esporta su file il rapporto in formato HTML"
+msgstr "Esporta su file il resoconto in formato HTML"
 
 # po/guile_strings.txt:127
 #: src/report/report-gnome/window-report.c:885 intl-scm/guile-strings.c:1265
 #: intl-scm/guile-strings.c:1271
 msgid "Edit report options"
-msgstr "Modifica le opzioni per il rapporto"
+msgstr "Modifica le opzioni per il resoconto"
 
 # po/guile_strings.txt:31
 #: src/report/report-gnome/window-report.c:894
 msgid "Print report window"
-msgstr "Stampa la finestra di rapporto"
+msgstr "Stampa la finestra di resoconto"
 
 #: src/report/report-gnome/window-report.c:1046
 msgid "Set the report options you want using this dialog."
-msgstr "Imposta le opzioni del rapporto desiderate usando questo dialogo."
+msgstr "Imposta le opzioni del resoconto desiderate usando questo dialogo."
 
 # po/guile_strings.txt:242
 #: src/report/report-gnome/window-report.c:1159 intl-scm/guile-strings.c:3053
 msgid "Report error"
-msgstr "Errore di rapporto"
+msgstr "Errore resoconto"
 
 #: src/report/report-gnome/window-report.c:1160 intl-scm/guile-strings.c:3055
 msgid "An error occurred while running the report."
-msgstr "È avvenuto un errore nell'elaborazione del rapporto."
+msgstr "È avvenuto un errore nell'elaborazione del resoconto."
 
 #: src/report/report-gnome/window-report.c:1186
 #: src/report/report-gnome/window-report.c:1208
@@ -10025,7 +10038,7 @@ msgstr "URL di opzioni mal formata: %s"
 #: src/report/report-gnome/window-report.c:1196
 #, c-format
 msgid "Badly report id: %s"
-msgstr "Identificativo di rapporto erroneo: %s"
+msgstr "Identificativo di resoconto erroneo: %s"
 
 #: intl-scm/guile-strings.c:2
 msgid "Current Year Start"
@@ -10274,7 +10287,7 @@ msgstr "Stile UK: gg/mm/aaaa"
 
 #: intl-scm/guile-strings.c:162
 msgid "Europe (31.12.2001)"
-msgstr "Europe (31.12.2001)"
+msgstr "Europa (31.12.2001)"
 
 # po/guile_strings.txt:76
 #: intl-scm/guile-strings.c:164
@@ -10312,12 +10325,12 @@ msgstr "Valuta predefinita per i conti nuovi"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:182
 msgid "Default Report Currency"
-msgstr "Valuta predefinita rapporto"
+msgstr "Valuta predefinita resoconto"
 
 # po/guile_strings.txt:200
 #: intl-scm/guile-strings.c:184
 msgid "Default currency for reports"
-msgstr "Valuta predefinita per i rapporti"
+msgstr "Valuta predefinita per i resoconti"
 
 # po/guile_strings.txt:147
 #: intl-scm/guile-strings.c:188
@@ -10350,16 +10363,16 @@ msgstr "Stile predefinito per le finestre di registro"
 # messages-i18n.c:183
 #: intl-scm/guile-strings.c:204
 msgid "Basic Ledger"
-msgstr "Libro mastro di base"
+msgstr "libro mastro di base"
 
 #: intl-scm/guile-strings.c:208
 msgid "Auto-Split Ledger"
-msgstr "Libro mastro auto-suddiviso"
+msgstr "libro mastro auto-suddiviso"
 
 # messages-i18n.c:346
 #: intl-scm/guile-strings.c:212
 msgid "Transaction Journal"
-msgstr "Libro giornale movimenti"
+msgstr "libro giornale movimenti"
 
 # messages-i18n.c:177 po/guile_strings.txt:19
 #: intl-scm/guile-strings.c:218
@@ -10369,11 +10382,11 @@ msgstr "Modalità doppia riga"
 # messages-i18n.c:123
 #: intl-scm/guile-strings.c:224
 msgid "'Enter' moves to blank transaction"
-msgstr "'Invio' sposta sul movimento vuoto"
+msgstr "\"Invio\" sposta sul movimento vuoto"
 
 #: intl-scm/guile-strings.c:226
 msgid "If selected, move to the blank transaction after the user presses 'Enter'. Otherwise, move down one row."
-msgstr "Se selezionato, premendo 'Invio' ci si sposta sul movimento vuoto, altrimenti ci si sposta in giù di una riga"
+msgstr "Se selezionato, premendo \"Invio\" ci si sposta sul movimento vuoto, altrimenti ci si sposta in giù di una riga"
 
 #: intl-scm/guile-strings.c:230
 msgid "Confirm before changing reconciled"
@@ -10486,7 +10499,7 @@ msgstr "Colori modalità doppia alternati ai movimenti"
 # po/guile_strings.txt:131
 #: intl-scm/guile-strings.c:296
 msgid "Alternate the primary and secondary colors with each transaction, not each row"
-msgstr "Alterna i colori primario e secondario ad ogni movimento, non ogni riga"
+msgstr "Alterna i colori primario e secondario ad ogni movimento, non ad ogni riga"
 
 #: intl-scm/guile-strings.c:300
 msgid "Automatic interest transfer"
@@ -10497,8 +10510,8 @@ msgid ""
 "Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.\n"
 "Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
 msgstr ""
-"Prima di riconciliare un conto che costa o paga interessi, chiede all'utente di immettere un movimento per la richiesta o pagamento degli interessi.\n"
-"Al momento abilitato solo per i conti banca, credito, fondi d'investimento, attività, esigibile, pagabile e passività."
+"Prima di riconciliare un conto ad interesse positivo o negativo, all'utente è chiesto di immettere un movimento per la richiesta o il pagamento degli interessi.\n"
+"Al momento abilitato solo per i conti Banca, Credito, Fondi d'Investimento, Attività, Esigibile, Pagabile e Passività."
 
 #: intl-scm/guile-strings.c:307
 msgid "Automatic credit card payments"
@@ -10506,9 +10519,7 @@ msgstr "Pagamenti carta di credito automatici"
 
 #: intl-scm/guile-strings.c:309
 msgid "After reconciling a credit card statement, prompt the user to enter a credit card payment"
-msgstr ""
-"Dopo aver riconciliato un estratto conto della carta di credito,\n"
-"chiede all'utente di immettere un pagamento con la carta di credito"
+msgstr "Dopo aver riconciliato un estratto conto della carta di credito, all'utente è chiesto di immettere un pagamento con la carta di credito"
 
 # messages-i18n.c:80
 #: intl-scm/guile-strings.c:313
@@ -10555,12 +10566,12 @@ msgstr "Bottoni barra strumenti"
 # po/guile_strings.txt:229
 #: intl-scm/guile-strings.c:327
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
-msgstr "Sceglie se mostrare icone, testo o entrambi per i bottoni della barra strumenti"
+msgstr "Scegliere se mostrare i bottoni della barra strumenti usando le icone, il testo o entrambi"
 
 # po/guile_strings.txt:231
 #: intl-scm/guile-strings.c:329
 msgid "Icons and Text"
-msgstr "Icone e testo"
+msgstr "icone e testo"
 
 # po/guile_strings.txt:174
 #: intl-scm/guile-strings.c:331
@@ -10570,7 +10581,7 @@ msgstr "Mostra sia icone che testo"
 # po/guile_strings.txt:256
 #: intl-scm/guile-strings.c:333
 msgid "Icons only"
-msgstr "Solo icone"
+msgstr "solo icone"
 
 # po/guile_strings.txt:60
 #: intl-scm/guile-strings.c:335
@@ -10580,7 +10591,7 @@ msgstr "Mostra solo le icone"
 # po/guile_strings.txt:134
 #: intl-scm/guile-strings.c:337
 msgid "Text only"
-msgstr "Solo testo"
+msgstr "solo testo"
 
 # po/guile_strings.txt:230
 #: intl-scm/guile-strings.c:339
@@ -10615,7 +10626,7 @@ msgstr "/ (barra)"
 # po/guile_strings.txt:72
 #: intl-scm/guile-strings.c:353
 msgid "Income/Salary/Taxable"
-msgstr "Entrata/Salario/Imponibile"
+msgstr "Entrate/Salario/Imponibile"
 
 # po/guile_strings.txt:255
 #: intl-scm/guile-strings.c:355
@@ -10670,7 +10681,7 @@ msgstr "Conti Entrate e Uscite invertiti"
 # po/guile_strings.txt:89
 #: intl-scm/guile-strings.c:377 intl-scm/guile-strings.c:2499
 msgid "Credit Accounts"
-msgstr "Conti Credito"
+msgstr "conti Credito"
 
 # po/guile_strings.txt:297
 #: intl-scm/guile-strings.c:379
@@ -10688,7 +10699,7 @@ msgstr "Usa etichette contabili"
 
 #: intl-scm/guile-strings.c:389
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr "Utilizza solo 'dare' e 'avere' invece dei sinonimi informali"
+msgstr "Utilizza solo \"dare\" e \"avere\" invece dei sinonimi informali"
 
 # po/guile_strings.txt:219
 #: intl-scm/guile-strings.c:393
@@ -10710,7 +10721,7 @@ msgstr "Punto decimale automatico"
 
 #: intl-scm/guile-strings.c:407
 msgid "Automatically insert a decimal point into values that are entered without one."
-msgstr "Inserisce automaticamente un punto decimale nei valori immessi senza"
+msgstr "Inserisce automaticamente un punto decimale nei valori immessi che ne sono privi"
 
 #: intl-scm/guile-strings.c:411
 msgid "Auto Decimal Places"
@@ -10723,7 +10734,7 @@ msgstr "Indica quante cifre decimali saranno riempite automaticamente."
 # po/guile_strings.txt:275
 #: intl-scm/guile-strings.c:417
 msgid "No account list setup on new file"
-msgstr "Nessuna impostazione lista conti per nuovi file"
+msgstr "Nessuna impostazione lista conti per nuovo file"
 
 #: intl-scm/guile-strings.c:419
 msgid "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu"
@@ -10744,7 +10755,7 @@ msgstr "Giorni ritenzione file di log"
 
 #: intl-scm/guile-strings.c:431
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr "Cancella i file di log/copia dopo questo numero di giorni (0 = mai)."
+msgstr "Cancella i file di log/backup dopo questo numero di giorni (0 = mai)."
 
 #: intl-scm/guile-strings.c:435
 msgid "QIF Verbose documentation"
@@ -10760,23 +10771,23 @@ msgstr "Esegui all'avvio di GnuCash"
 
 #: intl-scm/guile-strings.c:443
 msgid "Should the Since-Last-Run window appear on GnuCash startup?"
-msgstr "La finestra dell'ultima esecuzione deve apparire all'avvio di GnuCash?"
+msgstr "La finestra \"Dall'ultima esecuzione\" deve apparire all'avvio di GnuCash?"
 
 #: intl-scm/guile-strings.c:447
 msgid "Auto-Create new Scheduled Transactions by default"
-msgstr "Crea automaticamente nuovi movimenti calendarizzati in modo predefinito"
+msgstr "Crea automaticamente nuovi movimenti pianificati in modo predefinito"
 
 #: intl-scm/guile-strings.c:449
 msgid "Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
-msgstr "I nuovi movimenti calendarizzati devono avere l'impostazione \"Crea automaticamente\" impostata in modo predefinito?"
+msgstr "I nuovi movimenti pianificati devono avere l'impostazione \"Crea automaticamente\" impostata in modo predefinito?"
 
 #: intl-scm/guile-strings.c:453
 msgid "Notify on new, auto-created Scheduled Transactions"
-msgstr "Notifica nuovi movimenti calendarizzati creati automaticamente"
+msgstr "Notifica nuovi movimenti pianificati creati automaticamente"
 
 #: intl-scm/guile-strings.c:455
 msgid "Should new Scheduled Transactions with the 'AutoCreate' flag set also be set to notify?"
-msgstr "I nuovi movimenti calendarizzati con l'impostazione \"Crea automaticamente\" impostata devono essere anche notificati?"
+msgstr "I nuovi movimenti pianificati con l'impostazione \"Crea automaticamente\" impostata devono essere anche notificati?"
 
 #: intl-scm/guile-strings.c:459
 msgid "Default number of days in advance to create"
@@ -10784,7 +10795,7 @@ msgstr "Numero predefinito di giorni in anticipo per creazione"
 
 #: intl-scm/guile-strings.c:461
 msgid "Default number of days in advance to create new Scheduled Transactions."
-msgstr "Numero predefinito di giorni di anticipo  sulla creazione di nuovi movimenti calendarizzati."
+msgstr "Numero predefinito di giorni di anticipo sulla creazione di nuovi movimenti pianificati."
 
 #: intl-scm/guile-strings.c:465
 msgid "Default number of days in advance to remind"
@@ -10792,17 +10803,17 @@ msgstr "Numero predefinito di giorni di anticipo per promemoria"
 
 #: intl-scm/guile-strings.c:467
 msgid "Default number of days in advance to remind on new Scheduled Transactions."
-msgstr "Numero predefinito di giorni di anticipo sul promemoria dei nuovi movimenti calendarizzati."
+msgstr "Numero predefinito di giorni di anticipo sul promemoria dei nuovi movimenti pianificati."
 
 # po/guile_strings.txt:258
 #: intl-scm/guile-strings.c:471
 msgid "Template Register Lines"
-msgstr "Linee registro d'esempio"
+msgstr "Righe registro d'esempio"
 
 # messages-i18n.c:87
 #: intl-scm/guile-strings.c:473
 msgid "How many lines in the template register?"
-msgstr "Quante linee nel registro d'esempio?"
+msgstr "Quante righe nel registro d'esempio?"
 
 #: intl-scm/guile-strings.c:475 intl-scm/guile-strings.c:481
 #: intl-scm/guile-strings.c:503 intl-scm/guile-strings.c:509
@@ -10828,7 +10839,7 @@ msgstr "Modalità MDI"
 
 #: intl-scm/guile-strings.c:485
 msgid "Choose how new windows are created for reports and account trees."
-msgstr "Sceglie come creare le nuove finestre dei rapporti e degli alberi dei conti."
+msgstr "Sceglie come creare le nuove finestre dei resoconti e degli alberi dei conti."
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: intl-scm/guile-strings.c:487
@@ -10846,7 +10857,7 @@ msgstr "Livello principale"
 
 #: intl-scm/guile-strings.c:493
 msgid "Create a new top-level window for each report or account tree"
-msgstr "Crea una nuova finestra principale per ogni rapporto o albero dei conti"
+msgstr "Crea una nuova finestra principale per ogni resoconto o albero dei conti"
 
 #: intl-scm/guile-strings.c:495
 msgid "Single window"
@@ -10908,12 +10919,12 @@ msgstr "Come predefinito, mostra tutti i movimenti in un conto"
 # po/guile_strings.txt:144
 #: intl-scm/guile-strings.c:529 intl-scm/guile-strings.c:1009
 msgid "Number of Rows"
-msgstr "Numero di linee"
+msgstr "Numero di righe"
 
 # po/guile_strings.txt:241
 #: intl-scm/guile-strings.c:531
 msgid "Default number of register rows to display."
-msgstr "Numero di linee predefinito di registro da visualizzare"
+msgstr "Numero di righe predefinito di registro da visualizzare"
 
 #: intl-scm/guile-strings.c:535
 msgid "New Search Limit"
@@ -10925,7 +10936,7 @@ msgstr "Imposta in modo predefinito una 'nuova ricerca' se viene restituito un n
 
 #: intl-scm/guile-strings.c:539
 msgid "_Business"
-msgstr "_Affari"
+msgstr "Affar_i"
 
 #: intl-scm/guile-strings.c:545
 msgid "The following bills are due:"
@@ -10990,7 +11001,7 @@ msgstr "Promemoria scadenza ricevute"
 
 #: intl-scm/guile-strings.c:639
 msgid "View the quick report of bills coming due soon."
-msgstr "Visualizza un rapido rapporto sulle ricevute che stanno per scadere."
+msgstr "Visualizza un rapido resoconto sulle ricevute che stanno per scadere."
 
 #: intl-scm/guile-strings.c:641 intl-scm/guile-strings.c:823
 msgid "Billing Terms"
@@ -11011,29 +11022,29 @@ msgstr "Dialogo di ricerca del test"
 # messages-i18n.c:105
 #: intl-scm/guile-strings.c:653
 msgid "Reload invoice report"
-msgstr "Ricarica rapporto fattura"
+msgstr "Ricarica resoconto fattura"
 
 #: intl-scm/guile-strings.c:655
 msgid "Reload invoice report scheme file"
-msgstr "Ricarica il file scheme di rapporto della fattura"
+msgstr "Ricarica il file scheme di resoconto della fattura"
 
 # messages-i18n.c:105
 #: intl-scm/guile-strings.c:657
 msgid "Reload owner report"
-msgstr "Ricarica rapporto intestatario"
+msgstr "Ricarica resoconto intestatario"
 
 #: intl-scm/guile-strings.c:659
 msgid "Reload owner report scheme file"
-msgstr "Ricarica il file scheme del rapporto sull'intestatario"
+msgstr "Ricarica il file scheme di resoconto sull'intestatario"
 
 # messages-i18n.c:105
 #: intl-scm/guile-strings.c:661
 msgid "Reload receivable report"
-msgstr "Ricarica rapporto esigibile"
+msgstr "Ricarica resoconto esigibile"
 
 #: intl-scm/guile-strings.c:663
 msgid "Reload receivable report scheme file"
-msgstr "Ricarica il file scheme del rapporto esigibile"
+msgstr "Ricarica il file scheme del resoconto esigibile"
 
 # messages-i18n.c:227
 #: intl-scm/guile-strings.c:665 intl-scm/guile-strings.c:667
@@ -11058,7 +11069,7 @@ msgstr "Ordinamento"
 #: intl-scm/guile-strings.c:1959 intl-scm/guile-strings.c:2549
 #: intl-scm/guile-strings.c:2593
 msgid "Report's currency"
-msgstr "Valuta rapporto"
+msgstr "Valuta resoconto"
 
 # messages-i18n.c:202
 #: intl-scm/guile-strings.c:677 intl-scm/guile-strings.c:1497
@@ -11078,7 +11089,7 @@ msgstr "Mostra totali multi-valuta?"
 #: intl-scm/guile-strings.c:681
 #, c-format
 msgid "Transactions relating to company  %d contain more than one currency.  This report is not designed to cope with this possibility."
-msgstr "I movimenti relativi alla ditta %d contengono più di una valuta. Questo rapporto non è stato pensato per soddisfare a questa possibilità."
+msgstr "I movimenti relativi alla ditta %d contengono più di una valuta. Questo resoconto non è stato pensato per soddisfare a questa possibilità."
 
 #: intl-scm/guile-strings.c:683
 msgid "Sort companys by"
@@ -11130,7 +11141,7 @@ msgstr "¤999.999,99 -> ¤0;  Z->A"
 
 #: intl-scm/guile-strings.c:707
 msgid "Show multi-currency totals.  If not selected, convert all totals to report currency"
-msgstr "Mostra totali multi-valuta. Se non selezionato, converte tutti i totali nella valuta del rapporto"
+msgstr "Mostra totali multi-valuta. Se non selezionato, converte tutti i totali nella valuta del resoconto"
 
 #: intl-scm/guile-strings.c:711 intl-scm/guile-strings.c:907
 msgid "0-30 days"
@@ -11151,7 +11162,7 @@ msgstr "91 giorni e più"
 # po/guile_strings.txt:179
 #: intl-scm/guile-strings.c:725 intl-scm/guile-strings.c:3269
 msgid "Business Reports"
-msgstr "Rapporti affari"
+msgstr "Resoconti affari"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -11377,7 +11388,7 @@ msgstr "Totale a debito"
 
 #: intl-scm/guile-strings.c:925
 msgid "The company for this report"
-msgstr "La ditta per questo rapporto"
+msgstr "La ditta per questo resoconto"
 
 # messages-i18n.c:80
 #: intl-scm/guile-strings.c:927
@@ -11408,26 +11419,26 @@ msgstr "Visualizzare la descrizione del movimento?"
 # src/gnome/glade-gnc-dialogs.c:647
 #: intl-scm/guile-strings.c:963
 msgid "Expense Report"
-msgstr "Rapporto spese"
+msgstr "Resoconto spese"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: intl-scm/guile-strings.c:975
 msgid " Report: "
-msgstr " Rapporto: "
+msgstr " Resoconto: "
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: intl-scm/guile-strings.c:981 intl-scm/guile-strings.c:987
 msgid "Customer Report"
-msgstr "Rapporto cliente"
+msgstr "Resoconto cliente"
 
 # messages-i18n.c:183
 #: intl-scm/guile-strings.c:983 intl-scm/guile-strings.c:989
 msgid "Vendor Report"
-msgstr "Rapporto venditore"
+msgstr "Resoconto venditore"
 
 #: intl-scm/guile-strings.c:985 intl-scm/guile-strings.c:991
 msgid "Employee Report"
-msgstr "Rapporto impieagto"
+msgstr "Resoconto impieagto"
 
 # messages-i18n.c:199
 #: intl-scm/guile-strings.c:993
@@ -11465,11 +11476,11 @@ msgstr "Numero predefinito di righe di registro da mostrare nelle fatture."
 
 #: intl-scm/guile-strings.c:1013
 msgid "Invoice Tax Included?"
-msgstr "Imposte fattura incluse?"
+msgstr "Imposte fattura comprese?"
 
 #: intl-scm/guile-strings.c:1015
 msgid "Bill Tax Included?"
-msgstr "Imposte ricevuta incluse?"
+msgstr "Imposte ricevuta comprese?"
 
 #: intl-scm/guile-strings.c:1017
 msgid "Notify Bills Due?"
@@ -11477,15 +11488,15 @@ msgstr "Notificare scadenza ricevuta?"
 
 #: intl-scm/guile-strings.c:1019
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "Se mostrare o meno all'avvio la lista scadenze delle ricevute."
+msgstr "Mostra o non mostra la lista delle scadenze per le ricevute all'avvio."
 
 #: intl-scm/guile-strings.c:1021
 msgid "Bills Due Days"
-msgstr "Giorni scadenze ricevute"
+msgstr "Giorni scadenza ricevute"
 
 #: intl-scm/guile-strings.c:1023
 msgid "How many days in the future to warn about Bills coming due."
-msgstr "Di quanti giorni preavvisare le scadenze delle fatture."
+msgstr "Numero di giorni di preavviso per le scadenze delle fatture."
 
 #: intl-scm/guile-strings.c:1025
 msgid "The name of your business"
@@ -11618,7 +11629,7 @@ msgstr "Soglia visualizzazione corrispondenza"
 
 #: intl-scm/guile-strings.c:1131
 msgid "The minimum score a potential match must have to be displayed in the match list."
-msgstr "Il punteggio minimo che una corrispondenza potenziale deve possedere per essere visualizzata nella lista delle corrispondenze."
+msgstr "Il punteggio minimo che una potenziale corrispondenza deve possedere per essere visualizzata nella lista delle corrispondenze."
 
 #: intl-scm/guile-strings.c:1135
 msgid "Auto-ADD threshold"
@@ -11634,7 +11645,7 @@ msgstr "Soglia auto-cancella"
 
 #: intl-scm/guile-strings.c:1143
 msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr "Un movimento il cui punteggio di corrispondenza migliore si trova nella zona verde (sopra o alla soglia di auto-cancella) sarà cancellato in modo predefinito."
+msgstr "Un movimento il cui punteggio di corrispondenza migliore si trova nella zona verde (sopra o uguale alla soglia di auto-cancella) sarà cancellato in modo predefinito."
 
 #: intl-scm/guile-strings.c:1147
 msgid "Commercial ATM fees threshold"
@@ -11642,12 +11653,12 @@ msgstr "Soglia commissioni POS commerciali"
 
 #: intl-scm/guile-strings.c:1149
 msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add its fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
-msgstr "In alcune zone, i POS commerciali (quelli non appartenenti ad istituzioni finanziarie) sono installati in posti come i centri commerciali. Questi POS aggiungono una propria commissione direttamente  sull'importo, invece di comparire come movimenti separati o come parte della propria commissione bancaria mensile. Per esempio, se si prelevano 100¤, la banca addebita 101,50¤ più le spese di prelievo. Si dovrebbe impostare questo campo al valore massimo di tale commissione (in unità della valuta locale), in modo che il movimento sia riconosciuto come corrispondente."
+msgstr "In alcune zone i POS commerciali (quelli non appartenenti ad istituzioni finanziarie) sono installati in posti come i centri commerciali. Questi POS aggiungono una propria commissione direttamente  sull'importo, invece di comparire come movimenti separati o come parte della propria commissione bancaria mensile. Per esempio, se si prelevano 100¤, la banca addebita 101,50¤ più le spese di prelievo. Si dovrebbe impostare questo campo al valore massimo di tale commissione (in unità della valuta locale), in modo che il movimento sia riconosciuto come corrispondente."
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: intl-scm/guile-strings.c:1151
 msgid "Tax Report / TXF Export"
-msgstr "Rapporto imposte / Esporta TXF"
+msgstr "Resoconto imposte / Esporta TXF"
 
 # po/guile_strings.txt:186
 #: intl-scm/guile-strings.c:1157
@@ -11788,7 +11799,7 @@ msgstr "Non è stato trovato alcun conto imponibile. Andare al dialogo Modifica->
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: intl-scm/guile-strings.c:1227
 msgid "Tax Report & TXF Export"
-msgstr "Rapporto imposte e Esportazione TXF"
+msgstr "Resoconto imposte ed esportazione TXF"
 
 # po/guile_strings.txt:66
 #: intl-scm/guile-strings.c:1229
@@ -11803,7 +11814,7 @@ msgstr "Entrate imponibili / Spese deducibili"
 # po/guile_strings.txt:66
 #: intl-scm/guile-strings.c:1233
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr "Questo rapporto visualizza le entrate imponibili e le spese deducibili."
+msgstr "Questo resoconto visualizza le entrate imponibili e le spese deducibili."
 
 #: intl-scm/guile-strings.c:1235
 msgid "TXF"
@@ -11817,13 +11828,13 @@ msgstr "Questa pagina visualizza le entrate imponibili e le spese dedubibili."
 # po/guile_strings.txt:127
 #: intl-scm/guile-strings.c:1241
 msgid "This report has no options."
-msgstr "Questo rapporto non ha opzioni."
+msgstr "Questo resoconto non ha opzioni."
 
 # po/guile_strings.txt:219
 #: intl-scm/guile-strings.c:1245
 #, c-format
 msgid "Display the %s report"
-msgstr "Visualizza il rapporto %s"
+msgstr "Visualizza il resoconto %s"
 
 # po/guile_strings.txt:127
 #: intl-scm/guile-strings.c:1247
@@ -11857,7 +11868,7 @@ msgstr "Nessun conto selezionato"
 
 #: intl-scm/guile-strings.c:1263
 msgid "This report requires accounts to be selected."
-msgstr "Questo rapporto richiede che siano selezionati dei conti."
+msgstr "Questo resoconto richiede che siano selezionati dei conti."
 
 # messages-i18n.c:344
 #: intl-scm/guile-strings.c:1267 intl-scm/guile-strings.c:2023
@@ -11870,17 +11881,17 @@ msgstr "I conti selezionati non contengono dati/movimento (o solo zeri) per il p
 
 #: intl-scm/guile-strings.c:1273
 msgid "Select a date to report on"
-msgstr "Selezionare una data per la quale generare un rapporto"
+msgstr "Selezionare una data per la quale generare un resoconto"
 
 # po/guile_strings.txt:107
 #: intl-scm/guile-strings.c:1275
 msgid "Start of reporting period"
-msgstr "Inizio del periodo del rapporto"
+msgstr "Inizio del periodo del resoconto"
 
 # po/guile_strings.txt:166
 #: intl-scm/guile-strings.c:1277
 msgid "End of reporting period"
-msgstr "Fine del periodo del rapporto"
+msgstr "Fine del periodo del resoconto"
 
 #: intl-scm/guile-strings.c:1279
 msgid "The amount of time between data points"
@@ -11923,19 +11934,19 @@ msgstr "tutti"
 # src/gnome/dialog-account-picker.c:93
 #: intl-scm/guile-strings.c:1311
 msgid "All accounts"
-msgstr "Tutti i conti"
+msgstr "tutti i conti"
 
 #: intl-scm/guile-strings.c:1315
 msgid "Second-level"
-msgstr "Secondo livello"
+msgstr "secondo livello"
 
 #: intl-scm/guile-strings.c:1317
 msgid "Third-level"
-msgstr "Terzo livello"
+msgstr "terzo livello"
 
 #: intl-scm/guile-strings.c:1319 intl-scm/guile-strings.c:1321
 msgid "Fourth-level"
-msgstr "Quarto livello"
+msgstr "quarto livello"
 
 #: intl-scm/guile-strings.c:1323
 msgid "Sixth-level"
@@ -11953,7 +11964,7 @@ msgstr "Sovrascrivere la selezione conti e mostrare i sottoconti di tutti i cont
 # po/guile_strings.txt:153
 #: intl-scm/guile-strings.c:1329
 msgid "Report on these accounts, if display depth allows."
-msgstr "Genera rapporti su questi conti, se la profondità di visualizzazione lo permette."
+msgstr "Genera resoconti su questi conti, se la profondità di visualizzazione lo permette."
 
 # po/guile_strings.txt:100
 #: intl-scm/guile-strings.c:1331
@@ -11966,7 +11977,7 @@ msgstr "Raggruppare i conti in categorie principali?"
 
 #: intl-scm/guile-strings.c:1335
 msgid "Select the currency to display the values of this report in."
-msgstr "Seleziona la valuta con la quale visualizzare i valori di questo rapporto."
+msgstr "Seleziona la valuta con la quale visualizzare i valori di questo resoconto."
 
 # po/guile_strings.txt:282
 #: intl-scm/guile-strings.c:1337 intl-scm/guile-strings.c:1561
@@ -12003,7 +12014,7 @@ msgstr "Più vicino nel tempo"
 
 #: intl-scm/guile-strings.c:1351 intl-scm/guile-strings.c:1587
 msgid "The price recorded nearest in time to the report date"
-msgstr "Il prezzo registrato alla distanza temporale minima dalla data del rapporto"
+msgstr "Il prezzo registrato alla distanza temporale minima dalla data del resoconto"
 
 #: intl-scm/guile-strings.c:1353
 msgid "Width of plot in pixels."
@@ -12148,17 +12159,17 @@ msgstr "Conti pagabili"
 # messages-i18n.c:173
 #: intl-scm/guile-strings.c:1429
 msgid "Credit Lines"
-msgstr "Linea di credito"
+msgstr "Riga di credito"
 
 #: intl-scm/guile-strings.c:1431
 #, c-format
 msgid "Building '%s' report ..."
-msgstr "Costruzione rapporto `%s'..."
+msgstr "Generazione resoconto `%s'..."
 
 #: intl-scm/guile-strings.c:1433
 #, c-format
 msgid "Rendering '%s' report ..."
-msgstr "Visualizzazione rapporto `%s'..."
+msgstr "Visualizzazione resoconto `%s'..."
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
@@ -12183,12 +12194,12 @@ msgstr "E_sempi e Personalizzazioni"
 # po/guile_strings.txt:242
 #: intl-scm/guile-strings.c:1451
 msgid "Report name"
-msgstr "Nome rapporto"
+msgstr "Nome resoconto"
 
 # messages-i18n.c:124
 #: intl-scm/guile-strings.c:1453
 msgid "Enter a descriptive name for this report"
-msgstr "Immettere un nome descrittivo per questo rapporto"
+msgstr "Immettere un nome descrittivo per questo resoconto"
 
 # messages-i18n.c:339
 #: intl-scm/guile-strings.c:1455 intl-scm/guile-strings.c:1463
@@ -12199,7 +12210,7 @@ msgstr "Foglio di stile"
 # messages-i18n.c:106
 #: intl-scm/guile-strings.c:1457
 msgid "Select a stylesheet for the report."
-msgstr "Scegliere un foglio di stile per il rapporto."
+msgstr "Scegliere un foglio di stile per il resoconto."
 
 # messages-i18n.c:339
 #: intl-scm/guile-strings.c:1461
@@ -12301,7 +12312,7 @@ msgstr "Metodo ordinamento"
 #: intl-scm/guile-strings.c:1515 intl-scm/guile-strings.c:1797
 #: intl-scm/guile-strings.c:1841 intl-scm/guile-strings.c:2617
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "Rapporto su questi conti, se il livello conti scelto lo permette."
+msgstr "Genera un resoconto per questi conti, se il livello conti scelto lo permette."
 
 #: intl-scm/guile-strings.c:1517 intl-scm/guile-strings.c:1799
 #: intl-scm/guile-strings.c:2619
@@ -12416,7 +12427,7 @@ msgstr "Includi conti senza quote"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:1577 intl-scm/guile-strings.c:1927
 msgid "Report Currency"
-msgstr "Valuta rapporto"
+msgstr "Valuta resoconto"
 
 #: intl-scm/guile-strings.c:1589 intl-scm/guile-strings.c:1929
 msgid "The number of decimal places to use for share numbers"
@@ -12482,7 +12493,7 @@ msgstr "Include i sottoconti di tutti i conti selezionati"
 # po/guile_strings.txt:153
 #: intl-scm/guile-strings.c:1637
 msgid "Do transaction report on this account"
-msgstr "Fare un rapporto movimenti per questo conto"
+msgstr "Fare un resoconto movimenti per questo conto"
 
 # messages-i18n.c:218
 #: intl-scm/guile-strings.c:1639 intl-scm/guile-strings.c:1689
@@ -12765,7 +12776,7 @@ msgstr "Profitti e perdite"
 # po/guile_strings.txt:15
 #: intl-scm/guile-strings.c:1917
 msgid "Investment Portfolio"
-msgstr "Portafoglio investimenti"
+msgstr "Portfolio investimenti"
 
 # src/gnome/glade-gnc-dialogs.c:1372
 #: intl-scm/guile-strings.c:1943
@@ -12854,7 +12865,7 @@ msgstr "Titoli identici"
 
 #: intl-scm/guile-strings.c:2029
 msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
-msgstr "Il titolo selezionato e la valuta del rapporto sono identici. Non c'è motivo di visualizzare i prezzi per prodotti identici."
+msgstr "Il titolo selezionato e la valuta del resoconto sono identici. Non è significativo visualizzare dei prezzi per prodotti identici."
 
 #: intl-scm/guile-strings.c:2033
 msgid "Price Scatterplot"
@@ -12868,7 +12879,7 @@ msgstr "Titolo"
 # po/guile_strings.txt:22
 #: intl-scm/guile-strings.c:2061
 msgid "The title of the report"
-msgstr "Il titolo del rapporto"
+msgstr "Il titolo del resoconto"
 
 # po/guile_strings.txt:219
 #: intl-scm/guile-strings.c:2075 intl-scm/guile-strings.c:2421
@@ -12928,7 +12939,7 @@ msgstr "Intestatario"
 # messages-i18n.c:346
 #: intl-scm/guile-strings.c:2139
 msgid "Transaction Report"
-msgstr "Rapporto movimenti"
+msgstr "Resoconto movimenti"
 
 # po/guile_strings.txt:59
 #: intl-scm/guile-strings.c:2141 intl-scm/guile-strings.c:2223
@@ -13031,30 +13042,30 @@ msgstr "Stile"
 # messages-i18n.c:326
 #: intl-scm/guile-strings.c:2263
 msgid "Report style"
-msgstr "Stile rapporto"
+msgstr "Stile resoconto"
 
 # messages-i18n.c:188 po/guile_strings.txt:51
 #: intl-scm/guile-strings.c:2265
 msgid "Multi-Line"
-msgstr "Multilinea"
+msgstr "Multi-riga"
 
 #: intl-scm/guile-strings.c:2267
 msgid "Display N lines"
-msgstr "Visualizza N linee"
+msgstr "Visualizza N righe"
 
 #: intl-scm/guile-strings.c:2271
 msgid "Display 1 line"
-msgstr "Visualizza 1 linea"
+msgstr "Visualizza 1 riga"
 
 # messages-i18n.c:186
 #: intl-scm/guile-strings.c:2273
 msgid "Report Accounts"
-msgstr "Conti per il rapporto"
+msgstr "Conti per il resoconto"
 
 # po/guile_strings.txt:153
 #: intl-scm/guile-strings.c:2275
 msgid "Report on these accounts"
-msgstr "Eseguire il rapporto su questi conti"
+msgstr "Genera il resoconto su questi conti"
 
 # messages-i18n.c:194
 #: intl-scm/guile-strings.c:2277
@@ -13430,11 +13441,11 @@ msgstr "Differenza"
 
 #: intl-scm/guile-strings.c:2577 intl-scm/guile-strings.c:2585
 msgid "Income vs. Day of Week"
-msgstr "Entarte / giorno della settimana"
+msgstr "Entrate per giorno della settimana"
 
 #: intl-scm/guile-strings.c:2579 intl-scm/guile-strings.c:2587
 msgid "Expenses vs. Day of Week"
-msgstr "Uscite / giorno della settimana"
+msgstr "Uscite per giorno della settimana"
 
 #: intl-scm/guile-strings.c:2581
 msgid "Shows a piechart with the total income for each day of the week"
@@ -13450,7 +13461,7 @@ msgstr "Preparatore"
 
 #: intl-scm/guile-strings.c:2643
 msgid "Name of person preparing the report"
-msgstr "Nome della persona che prepara il rapporto"
+msgstr "Nome della persona che prepara il resoconto"
 
 #: intl-scm/guile-strings.c:2647 intl-scm/guile-strings.c:2753
 msgid "Prepared for"
@@ -13476,7 +13487,7 @@ msgstr "Abilita collegamenti"
 
 #: intl-scm/guile-strings.c:2661
 msgid "Enable hyperlinks in reports"
-msgstr "Abilita i collegamenti ipertestuali nei rapporti"
+msgstr "Abilita i collegamenti ipertestuali nei resoconti"
 
 # po/guile_strings.txt:264
 #: intl-scm/guile-strings.c:2663 intl-scm/guile-strings.c:2669
@@ -13494,7 +13505,7 @@ msgstr "Mattonella di sfondo"
 # po/guile_strings.txt:70
 #: intl-scm/guile-strings.c:2667 intl-scm/guile-strings.c:2839
 msgid "Background tile for reports."
-msgstr "Mattonella di sfondo per i rapporti."
+msgstr "Mattonella di sfondo per i resoconti."
 
 # po/guile_strings.txt:212
 #: intl-scm/guile-strings.c:2671 intl-scm/guile-strings.c:2801
@@ -13503,7 +13514,7 @@ msgstr "Striscione intestazione"
 
 #: intl-scm/guile-strings.c:2673
 msgid "Banner for top of report."
-msgstr "Striscione per la testa del rapporto."
+msgstr "Striscione per la testa del resoconto."
 
 #: intl-scm/guile-strings.c:2677 intl-scm/guile-strings.c:2805
 msgid "Logo"
@@ -13522,7 +13533,7 @@ msgstr "Colore sfondo"
 # po/guile_strings.txt:217
 #: intl-scm/guile-strings.c:2685
 msgid "General background color for report."
-msgstr "Colore di sfondo generale per il rapporto."
+msgstr "Colore di sfondo generale per il resoconto."
 
 # po/guile_strings.txt:134
 #: intl-scm/guile-strings.c:2689 intl-scm/guile-strings.c:2769
@@ -13641,7 +13652,7 @@ msgstr "Technicolor"
 # po/guile_strings.txt:70
 #: intl-scm/guile-strings.c:2833
 msgid "Background color for reports."
-msgstr "Colore di sfondo per i rapporti."
+msgstr "Colore di sfondo per i resoconti."
 
 # po/guile_strings.txt:70
 #: intl-scm/guile-strings.c:2837
@@ -13650,7 +13661,7 @@ msgstr "Pixmap sfondo"
 
 #: intl-scm/guile-strings.c:2845
 msgid "Enable hyperlinks in reports."
-msgstr "Abilita collegamenti nei rapporti."
+msgstr "Abilita collegamenti nei resoconti."
 
 # po/guile_strings.txt:64
 #: intl-scm/guile-strings.c:2865
@@ -13860,23 +13871,23 @@ msgstr "Test"
 # po/guile_strings.txt:115
 #: intl-scm/guile-strings.c:2973
 msgid "Crash the report"
-msgstr "Manda in crash il rapporto"
+msgstr "Manda in crash il resoconto"
 
 # po/guile_strings.txt:102
 #: intl-scm/guile-strings.c:2975
 msgid "This is for testing. Your reports probably shouldn't have an option like this."
-msgstr "Questo è di prova. I propri rapporti non dovrebbero probabilmente avere un'opzione come questa."
+msgstr "Questo è di prova. I propri resoconti non dovrebbero probabilmente avere un'opzione come questa."
 
 # po/guile_strings.txt:216
 #: intl-scm/guile-strings.c:2979
 msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
-msgstr "Questo è un esempio di rapporto Gnucash. Vedere il codice guile (scheme) nella directory scm/report per i dettagli su come scrivere i propri rapporti o ampliare quelli esistenti."
+msgstr "Questo è un esempio di resoconto Gnucash. Vedere il codice guile (scheme) nella directory scm/report per i dettagli su come scrivere i propri resoconti o ampliare quelli esistenti."
 
 # po/guile_strings.txt:292
 #: intl-scm/guile-strings.c:2981
 #, c-format
 msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
-msgstr "Per l'aiuto nella scrittura di rapporti, o per contribuire con il proprio nuovo e favoloso rapporto, consultare la lista di distribuzione %s."
+msgstr "Per l'aiuto nella scrittura di resoconti, o per contribuire con il proprio nuovo e favoloso resoconto, consultare la lista di distribuzione %s."
 
 #: intl-scm/guile-strings.c:2983
 #, c-format
@@ -13989,11 +14000,11 @@ msgstr "Buona giornata!"
 
 #: intl-scm/guile-strings.c:3025
 msgid "Sample Report with Examples"
-msgstr "Rapporto campione con esempi"
+msgstr "Resoconto campione con esempi"
 
 #: intl-scm/guile-strings.c:3027
 msgid "A sample report with examples."
-msgstr "Un rapporto contenente esempi."
+msgstr "Un resoconto contenente esempi."
 
 #: intl-scm/guile-strings.c:3031 intl-scm/guile-strings.c:3037
 msgid "URL to frame"
@@ -14002,7 +14013,7 @@ msgstr "URL al riquadro"
 # po/guile_strings.txt:219
 #: intl-scm/guile-strings.c:3033
 msgid "URL to display in report"
-msgstr "URL da visualizzare nel rapporto"
+msgstr "URL da visualizzare nel resoconto"
 
 #: intl-scm/guile-strings.c:3039
 msgid "Frame URL"
@@ -14011,7 +14022,7 @@ msgstr "Riquadro URL"
 # src/gnome/glade-gnc-dialogs.c:1281
 #: intl-scm/guile-strings.c:3041
 msgid "Custom Web Report"
-msgstr "Rapporto web personalizzato"
+msgstr "Resoconto web personalizzato"
 
 # po/guile_strings.txt:144
 #: intl-scm/guile-strings.c:3045 intl-scm/guile-strings.c:3051
@@ -14030,7 +14041,7 @@ msgstr "Modifica opzioni"
 # po/guile_strings.txt:179
 #: intl-scm/guile-strings.c:3059
 msgid "Single Report"
-msgstr "Rapporto singolo"
+msgstr "Resoconto singolo"
 
 # messages-i18n.c:188 po/guile_strings.txt:51
 #: intl-scm/guile-strings.c:3061
@@ -14040,7 +14051,7 @@ msgstr "Vista multicolonna"
 # messages-i18n.c:188 po/guile_strings.txt:51
 #: intl-scm/guile-strings.c:3063
 msgid "Custom Multicolumn Report"
-msgstr "Rapporto multicolonna personalizzato"
+msgstr "Resoconto multicolonna personalizzato"
 
 #: intl-scm/guile-strings.c:3065 intl-scm/guile-strings.c:3071
 msgid "Welcome to GnuCash"
@@ -14227,7 +14238,7 @@ msgstr "Lista dei movimenti"
 # po/guile_strings.txt:31
 #: intl-scm/guile-strings.c:3175
 msgid "Report Window"
-msgstr "Finestra di rapporto"
+msgstr "Finestra di resoconto"
 
 #: intl-scm/guile-strings.c:3181
 msgid "Tool Windows"
@@ -14236,7 +14247,7 @@ msgstr "Finestre degli strumenti"
 # po/guile_strings.txt:33
 #: intl-scm/guile-strings.c:3183
 msgid "Scheduled Transactions Window"
-msgstr "Finestra dei movimenti calendarizzati"
+msgstr "Finestra dei movimenti pianificati"
 
 # messages-i18n.c:322
 #: intl-scm/guile-strings.c:3185 intl-scm/guile-strings.c:3221
@@ -14371,16 +14382,16 @@ msgstr "Copiare un movimento"
 # po/guile_strings.txt:33
 #: intl-scm/guile-strings.c:3249
 msgid "To Schedule Transactions"
-msgstr "Calendarizzare i movimenti"
+msgstr "Pianificare i movimenti"
 
 # messages-i18n.c:176
 #: intl-scm/guile-strings.c:3251
 msgid "Scheduled Transaction Editor"
-msgstr "Editor di movimenti calendarizzati"
+msgstr "Editor di movimenti pianificati"
 
 #: intl-scm/guile-strings.c:3253
 msgid "Since Last Run Druid"
-msgstr "Druido dell'ultima esecuzione"
+msgstr "Druido Dall'ultima esecuzione"
 
 #: intl-scm/guile-strings.c:3255
 msgid "Mortgage & Loan Repayment Druid"
@@ -14393,16 +14404,16 @@ msgstr "Stampare assegni"
 
 #: intl-scm/guile-strings.c:3259
 msgid "Using GnuCash Reports and Charts"
-msgstr "Utilizzo dei rapporti e dei diagrammi in GnuCash"
+msgstr "Utilizzo dei resoconti e dei diagrammi in GnuCash"
 
 #: intl-scm/guile-strings.c:3261
 msgid "Types of Reports and Graphs"
-msgstr "Tipi di rapporti e grafici"
+msgstr "Tipi di resoconti e grafici"
 
 # messages-i18n.c:183
 #: intl-scm/guile-strings.c:3263
 msgid "General Reports"
-msgstr "Rapporto generale"
+msgstr "Resoconto generale"
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
@@ -14412,16 +14423,16 @@ msgstr "Attività e passività"
 
 #: intl-scm/guile-strings.c:3271
 msgid "To Create Reports and Graphs"
-msgstr "Creare rapporti e grafici"
+msgstr "Creare resoconti e grafici"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: intl-scm/guile-strings.c:3273
 msgid "To Customize Reports and Graphs"
-msgstr "Personalizzare rapporti e grafici"
+msgstr "Personalizzare resoconti e grafici"
 
 #: intl-scm/guile-strings.c:3275
 msgid "To Print or Export Reports and Graphs"
-msgstr "Stampare ed esportare rapporti e grafici"
+msgstr "Stampare ed esportare resoconti e grafici"
 
 #: intl-scm/guile-strings.c:3277
 msgid "Customizing GnuCash"
@@ -14496,7 +14507,7 @@ msgstr "Campi di conto da visualizzare"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:3391
 msgid "Balance in Report Currency"
-msgstr "saldo in Rapporto valuta"
+msgstr "saldo in Resoconto valuta"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: intl-scm/guile-strings.c:3393
@@ -14506,7 +14517,7 @@ msgstr "Saldo attuale"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:3395
 msgid "Present Balance in Report Currency"
-msgstr "saldo corrente in Rapporto valuta"
+msgstr "saldo corrente in Resoconto valuta"
 
 # po/guile_strings.txt:263
 #: intl-scm/guile-strings.c:3397
@@ -14516,7 +14527,7 @@ msgstr "Saldo compensato"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:3399
 msgid "Cleared Balance in Report Currency"
-msgstr "saldo compensato in Rapporto valuta"
+msgstr "saldo compensato in Resoconto valuta"
 
 # messages-i18n.c:195
 #: intl-scm/guile-strings.c:3401
@@ -14526,7 +14537,7 @@ msgstr "Saldo riconciliato"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:3403
 msgid "Reconciled Balance in Report Currency"
-msgstr "saldo riconciliato in Rapporto valuta"
+msgstr "saldo riconciliato in Resoconto valuta"
 
 # messages-i18n.c:179
 #: intl-scm/guile-strings.c:3405
@@ -14536,12 +14547,12 @@ msgstr "Saldo minimo futuro"
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:3407
 msgid "Future Minimum Balance in Report Currency"
-msgstr "saldo minimo futuro in Rapporto valuto"
+msgstr "saldo minimo futuro in Resoconto valuta"
 
 # po/guile_strings.txt:152
 #: intl-scm/guile-strings.c:3411
 msgid "Total in Report Currency"
-msgstr "totale in Rapporto valuta"
+msgstr "totale in Resoconto valuta"
 
 #: intl-scm/guile-strings.c:3415
 msgid "Can't save window state"
@@ -14566,7 +14577,7 @@ msgstr "Riportare buchi ed altri problemi a gnucash-devel@gnucash.org.\n"
 
 #: intl-scm/guile-strings.c:3425
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr "È possibile anche cercare e compilare rapporti di errore all'indirizzo http://bugzilla.gnome.org\n"
+msgstr "È possibile anche cercare e compilare rapporti d'errore all'indirizzo http://bugzilla.gnome.org\n"
 
 # po/guile_strings.txt:34
 #: intl-scm/guile-strings.c:3427
@@ -14600,15 +14611,15 @@ msgstr "_Fogli di stile..."
 # po/guile_strings.txt:127
 #: intl-scm/guile-strings.c:3441
 msgid "Edit report style sheets."
-msgstr "Modifica i fogli di stile dei rapporti."
+msgstr "Modifica i fogli di stile dei resoconti."
 
 #: intl-scm/guile-strings.c:3443
 msgid "Welcome Sample Report"
-msgstr "Rapporto di benvenuto d'esempio"
+msgstr "Resoconto di benvenuto d'esempio"
 
 #: intl-scm/guile-strings.c:3445
 msgid "Welcome-to-GnuCash report screen"
-msgstr "Schermata di rapporto Welcome-to-GnuCash"
+msgstr "Schermata di resoconto Welcome-to-GnuCash"
 
 #: intl-scm/guile-strings.c:3447
 msgid "Loading data..."
@@ -14830,10 +14841,10 @@ msgid ""
 "To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" \n"
 "report."
 msgstr ""
-"Si possono raggruppare più rapporti in una sola finestra,\n"
+"Si possono raggruppare più resoconti in una sola finestra,\n"
 "visualizzando così tutte le informazioni finanziarie che si desidera\n"
-"avere a colpo d'occhio. A tal scopo, usare il rapporto Esempi e\n"
-"Personalizzazioni -> \"Rapporto multicolonna personalizzato\"."
+"avere a colpo d'occhio. A tal scopo, usare il resoconto Esempi e\n"
+"Personalizzazioni -> \"Resoconto multicolonna personalizzato\"."
 
 #: intl-scm/guile-strings.c:3561
 msgid ""
@@ -14842,8 +14853,8 @@ msgid ""
 "\"Custom Web Report\" report."
 msgstr ""
 "GnuCash può servire da semplice navigatore web! Per visualizzare una\n"
-"pagina web come rapporto, usare il rapporto Esempi e Personalizzazione ->\n"
-"\"Rapporto web personalizzato\"."
+"pagina web come resoconto, usare il resoconto Esempi e Personalizzazione ->\n"
+"\"Resoconto web personalizzato\"."
 
 #: intl-scm/guile-strings.c:3565
 msgid ""
@@ -14851,9 +14862,9 @@ msgid ""
 "a style sheet for your report as a report option, and use\n"
 "the Edit -> Style Sheets menu to customize style sheets."
 msgstr ""
-"I fogli di stile influenzano il modo in cui i rapporti sono\n"
-"visualizzati. Scegliere un foglio di stile per i propri rapporti tra\n"
-"le opzioni del rapporto e usare il menu Modifica -> Fogli di stile per\n"
+"I fogli di stile influenzano il modo in cui i resoconti sono\n"
+"visualizzati. Scegliere un foglio di stile per i propri resoconti tra\n"
+"le opzioni del resoconto e usare il menu Modifica -> Fogli di stile per\n"
 "personalizzare i fogli di stile."
 
 #: intl-scm/guile-strings.c:3569
@@ -14930,13 +14941,13 @@ msgstr ""
 #~ msgstr "Nome utente"
 
 #~ msgid "The name of the user. This is used in some reports."
-#~ msgstr "Il nome dell'utente usato in alcuni rapporti"
+#~ msgstr "Il nome dell'utente usato in alcuni resoconti"
 
 #~ msgid "User Address"
 #~ msgstr "Indirizzo utente"
 
 #~ msgid "The address of the user. This is used in some reports."
-#~ msgstr "L'indirizzo dell'utente. È usato in alcuni rapporti."
+#~ msgstr "L'indirizzo dell'utente. È usato in alcuni resoconti."
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #~ msgid "Tax Value"
@@ -15146,11 +15157,11 @@ msgstr ""
 
 # messages-i18n.c:104
 #~ msgid "Open a report window for this register"
-#~ msgstr "Apre una finestra di rapporto per questo registro"
+#~ msgstr "Apre una finestra di resoconto per questo registro"
 
 # messages-i18n.c:104
 #~ msgid "Print a report for this register"
-#~ msgstr "Stampa un rapporto per questo registro"
+#~ msgstr "Stampa un resoconto per questo registro"
 
 # messages-i18n.c:57
 #~ msgid "ReInitialize Transaction"
@@ -15656,7 +15667,7 @@ msgstr ""
 
 # messages-i18n.c:104
 #~ msgid "Open an invoice report window for this register"
-#~ msgstr "Apre una finestra di rapporto fattura per questo registro"
+#~ msgstr "Apre una finestra di resoconto fattura per questo registro"
 
 #~ msgid "_Check & Repair All"
 #~ msgstr "_Controlla e ripara tutto"
@@ -15763,11 +15774,11 @@ msgstr ""
 
 # messages-i18n.c:326
 #~ msgid "Reports"
-#~ msgstr "Rapporti"
+#~ msgstr "Resoconti"
 
 # po/guile_strings.txt:15
 #~ msgid "Stock Portfolio"
-#~ msgstr "Portafoglio azioni"
+#~ msgstr "Portfolio azioni"
 
 # po/guile_strings.txt:24
 #~ msgid "Balance Tracking"
