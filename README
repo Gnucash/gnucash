@@ -115,7 +115,7 @@ Upgrading from 1.4.x
 
 There are many, many changes from the 1.4 series - have a look at the
 NEWS file if you want more details. In particular, GnuCash now
-requires the gtkhtml and guppi libraries. See the "dependancies"
+requires the gtkhtml and guppi libraries. See the "dependencies"
 section of this file for more detail. The file format has changed
 from a binary format to XML. So backup your data!
 
@@ -132,31 +132,58 @@ The following packages are required to be installed to run GnuCash:
 
   guile: provides main extension language infrastructure, used
     extensively in GnuCash for initialization & startup. Requires
-    version 1.3.4 or later.
+    version 1.3.4 or later.  Version 1.4 is noticeably speedier and is
+    recommended if possible.  You can obtain source from
+    ftp://ftp.gnu.org/pub/gnu/guile/guile-1.4.tar.gz
 
   slib: scheme libraries for guile. Need version slib2c4 or later.
+    You can find source at
+    http://swissnet.ai.mit.edu/ftpdir/scm/slib2d1.zip
 
-  libpng: portable network graphics library. Any version.
+  libpng: portable network graphics library. Any version.  You can
+    find the source at
+    ftp://swrinde.nde.swri.edu/pub/png/src/libpng-1.0.9.tar.gz.
 
-  libjpeg: JPEG image handling library. Any version.
+  libjpeg: JPEG image handling library. Any version.  Sources can be
+    found at ftp://ftp.uu.net/graphics/jpeg/jpegsrc.v6b.tar.gz.
 
-  libz: compression library. Any version.
+  libz: compression library. Any version.  You can find source at
+    http://www.gzip.org/zlib.tar.gz.
 
-  xpm: X Pixmap extension. Any version.
+  xpm: X Pixmap extension. Any version.  Normally distributed with an
+   X installation.  By default this is part of XFree86 4.0 or better.
+   You can also find this at
+   ftp://ftp.x.org/contrib/libraries/xpm-3.4k.tar.gz.
 
-  gnome-libs: version 1.0.40 or higher should work. These libraries
+  gnome-libs: version 1.2.0 or higher should work.  The latest
+    version, 1.2.13, is of course recommended. These libraries
     require numerous other supporting libraries, such as gtk and glib.
+    All of these can be found at ftp.gnome.org.
 
   gnome-print: any recent version should work, however problems have
-    been reported with 0.28.
+    been reported with 0.28.  This is a part of GNOME as well. Sources
+    at ftp://ftp.gnome.org/pub/GNOME/stable/sources/gnome-print
 
-  gdk-pixbuf: any recent version should work.
+  gdk-pixbuf: any recent version should work.  This is typically
+   distributed with GNOME.  Sources at
+   ftp://ftp.gnome.org/pub/GNOME/stable/sources/gdk-pixbuf.
 
   gtkhtml: version 0.8 and later should work. You can obtain the latest
-    version of gtkhtml from Helix Code.  Note that this has changed since
-    1.4, which used the older gtkxmhtml library.
+    version of gtkhtml from Helix Code.  Note that this has changed
+    since 1.4, which used the older gtkxmhtml library.  Sources can be
+    found at ftp://ftp.gnome.org/pub/GNOME/unstable/sources/gtkhtml/.
 
-  guppi: version 0.35.3 should work
+  guppi: version 0.35.3 should work.  Version 0.35.5 is required for
+   some advanced functionality.  This can be found at
+   ftp://ftp.gnome.org/pub/GNOME/stable/sources/Guppi.
+
+  libgal: any recent version should work.  This is a GNOME related
+   library used by several different programs.  You can find it at
+   ftp://ftp.gnome.org/pub/GNOME/unstable/sources/gal/.
+
+The above urls are from June 5, 2001.  Source locations can change,
+but will likely be found near the same place (maybe moved from
+unstable to stable).
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
@@ -395,7 +422,7 @@ You can also download GnuCash from:
   - http://download.sourceforge.net/gnucash
   - ftp://ftp.krondo.com
 
-You can dowload GnuCash Solaris packages from:
+You can download GnuCash Solaris packages from:
 
   - http://www.unixrealm.com/downloads/
 
