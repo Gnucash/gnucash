@@ -1,3 +1,8 @@
+2001-04-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/net-worth-timeseries.scm,
+	income-expense-chart.scm: removed files.
+
 2001-04-29  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnc-ui-util.c (gnc_locale_default_currency): handle no

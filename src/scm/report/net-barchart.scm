@@ -331,14 +331,14 @@
   ;; Here we define the actual report
   (gnc:define-report
    'version 1
-   'name (N_ "Net Worth Barchart2")
+   'name (N_ "Net Worth Barchart")
    'menu-path (list gnc:menuname-asset-liability)
    'options-generator (lambda () (options-generator #f))
    'renderer (lambda (report-obj) (net-renderer report-obj #f)))
 
   (gnc:define-report
    'version 1
-   'name (N_ "Income/Expense Chart2")
+   'name (N_ "Income/Expense Chart")
    'menu-path (list gnc:menuname-income-expense)
    'options-generator (lambda () (options-generator #t))
    'renderer (lambda (report-obj) (net-renderer report-obj #t))))

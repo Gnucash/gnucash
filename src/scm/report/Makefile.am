@@ -9,9 +9,7 @@ gncscm_DATA = \
   category-barchart.scm \
   hello-world.scm \
   iframe-url.scm \
-  income-expense-graph.scm \
   net-barchart.scm \
-  net-worth-timeseries.scm \
   pnl.scm \
   portfolio.scm \
   register.scm \
