@@ -96,7 +96,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "date.h"
-#include "DateUtils.h"
 #include "io-gncbin.h"
 #include "Group.h"
 #include "GroupP.h"

@@ -13,6 +13,18 @@
 	Consolidate all the functions that convert time values to be the
 	beginning, middle, or end of a day.
 
+	* src/backend/file/gnc-backend-file.c:
+	* src/backend/file/io-gncbin-r.c:
+	* src/engine/Makefile.am:
+	* src/engine/TransLog.c:
+	* src/engine/date.c:
+	* src/engine/date.h:
+	* src/engine/gnc-book.c:
+	* src/engine/gnc-session-scm.c:
+	* src/engine/gnc-session.c:
+	* src/optional/swig/Makefile.am:
+	Collapse the DateUtils.[ch] files into date.[ch].
+
 2003-03-15  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-date-edit.c: Fix the keypress handlers so

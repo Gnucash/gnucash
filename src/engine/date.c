@@ -983,6 +983,27 @@ gnc_timet_get_day_end (time_t time_val)
   return mktime(&tm);
 }
 
+/* The xaccDateUtilGetStamp() routine will take the given time in
+ * seconds and return a buffer containing a textual for the date. */
+char *
+xaccDateUtilGetStamp (time_t thyme)
+{
+   struct tm *stm;
+
+   stm = localtime (&thyme);
+
+   return g_strdup_printf("%04d%02d%02d%02d%02d%02d",
+      (stm->tm_year + 1900),
+      (stm->tm_mon +1),
+      stm->tm_mday,
+      stm->tm_hour,
+      stm->tm_min,
+      stm->tm_sec
+   );
+}
+
+/* ======================================================== */
+
 void
 gnc_tm_get_today_start (struct tm *tm)
 {
@@ -1012,6 +1033,17 @@ gnc_timet_get_today_end (void)
   gnc_tm_get_day_end(&tm, time(NULL));
   return mktime(&tm);
 }
+
+/* The xaccDateUtilGetStampNow() routine returns the current time in
+ * seconds in textual format. */
+char *
+xaccDateUtilGetStampNow (void)
+{
+   time_t now;
+   time (&now);
+   return xaccDateUtilGetStamp (now);
+}
+
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

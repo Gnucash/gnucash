@@ -310,6 +310,15 @@ time_t gnc_timet_get_day_start(time_t time_val);
  *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_end(time_t time_val);
 
+/** The xaccDateUtilGetStamp() routine will take the given time in
+ *  seconds and return a buffer containing a textual for the date.
+ *  @param thyme The time in seconds to convert.
+ *  @return A pointer to the generated string.
+ *  @note The caller owns this buffer and must free it when done. */
+char *xaccDateUtilGetStamp (time_t thyme);
+
+/* ======================================================== */
+
 /** The gnc_tm_get_today_start() routine takes a pointer to a struct
  *  tm and fills it in with the first second of the today. */
 void   gnc_tm_get_today_start(struct tm *tm);
@@ -325,6 +334,13 @@ time_t gnc_timet_get_today_start(void);
 /** The gnc_timet_get_today_end() routine returns a time_t value
  *  corresponding to the last second of today. */
 time_t gnc_timet_get_today_end(void);
+
+/** The xaccDateUtilGetStampNow() routine returns the current time in
+ *  seconds in textual format.
+ *  @return A pointer to the generated string.
+ *  @note The caller owns this buffer and must free it when done. */
+char *xaccDateUtilGetStampNow (void);
+
 /** @} */
 
 #endif /* XACC_DATE_H */

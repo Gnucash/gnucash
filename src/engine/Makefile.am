@@ -11,7 +11,6 @@ AM_CFLAGS = \
 libgncmod_engine_la_SOURCES = \
   Account.c \
   Backend.c \
-  DateUtils.c \
   FreqSpec.c \
   GNCId.c \
   Group.c \
@@ -51,7 +50,6 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
   Backend.h \
-  DateUtils.h \
   FreqSpec.h \
   GNCId.h \
   Group.h \
