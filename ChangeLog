@@ -1,3 +1,8 @@
+2003-03-25  Christian Stimming  <stimming@tuhh.de>
+
+	* po/zh_TW.po: Updated traditional Chinese complete translation by
+	Chao-Hsiung Liao <pesder.liao@msa.hinet.net>.
+
 2003-03-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c (GNCInteractor_hide):
