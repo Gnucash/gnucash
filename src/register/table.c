@@ -68,6 +68,11 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
    table->num_tile_cols = tile_cols;
 
    /* create an empty table */
+   if (0 == num_phys_rows) {
+      table->entries = NULL;
+      return;
+   }
+
    table->entries = (char ***) malloc (num_phys_rows * sizeof (char **));
    for (i=0; i<num_phys_rows; i++) {
       table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
@@ -367,12 +372,9 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    } else {
       /* update data. bounds check done earlier */
       free (table->entries[row][col]);
-      table->entries[row][col] = strdup (newval);
+      table->entries[row][col] = newval;
    }
-
 }
- 
-
 
 /* ==================================================== */
 
@@ -385,6 +387,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    int row, col;
    int rel_row, rel_col;
    const char * (*leave) (struct _SingleCell *, const char *);
+   char * newval;
 
    table = (Table *) cd;
    arr = table->cursor;
@@ -411,12 +414,14 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
       val = cbs->value;
       retval = leave (arr->cells[rel_row][rel_col], val);
 
-      if (NULL == retval) retval = "";
+      newval = (char *) retval;
+      if (val == retval) newval = strdup (retval);
+      if (NULL == retval) newval = strdup ("");
 
       /* save whatever was returned */
       if (table->entries[row][col]) free (table->entries[row][col]);
-      table->entries[row][col] = (char *) retval;
-      cbs->value = strdup (retval);
+      table->entries[row][col] = newval;
+      cbs->value = strdup (newval);
    } else {
       if (table->entries[row][col]) free (table->entries[row][col]);
       table->entries[row][col] = strdup (cbs->value);
