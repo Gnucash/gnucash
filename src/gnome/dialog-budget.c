@@ -40,12 +40,14 @@ struct _BudgetDialog
 
   GtkWidget *entry_description_entry;
   GtkWidget *entry_type_menu;
+  GtkWidget *entry_frame;
 
-  GtkWidget *sub_description_entry;
-  GtkWidget *sub_amount_entry;
-  GtkWidget *sub_period_delta;
-  GtkWidget *sub_mechanism_menu;
-  GtkWidget *sub_grace_delta;
+  GtkWidget *subentry_description_entry;
+  GtkWidget *subentry_amount_entry;
+  GtkWidget *subentry_period_delta;
+  GtkWidget *subentry_mechanism_menu;
+  GtkWidget *subentry_grace_delta;
+  GtkWidget *subentry_frame;
 
   GtkWidget *apply_button;
 
@@ -58,6 +60,8 @@ struct _BudgetDialog
   gboolean budget_changed;
   gboolean entry_changed;
   gboolean subentry_changed;
+
+  gint ignore_changes;
 };
 
 typedef enum
@@ -214,6 +218,20 @@ destroy_entry(gpointer data)
 }
 
 static char *
+string_to_description(char *string, gboolean no_blank)
+{
+  if ((string == NULL) || (*string == '\0'))
+  {
+    if (no_blank)
+      return g_strconcat("<", NO_DESC_STR, ">", NULL);
+    else
+      return g_strdup("");
+  }
+
+  return g_strdup(string);
+}
+
+static char *
 SCM_to_description(SCM value, gboolean no_blank)
 {
   if (gh_string_p(value))
@@ -226,17 +244,14 @@ SCM_to_description(SCM value, gboolean no_blank)
       char *temp;
 
       temp = string;
-      string = g_strdup(temp);
+      string = string_to_description(string, no_blank);
       free(temp);
 
       return string;
     }
   }
 
-  if (no_blank)
-    return g_strconcat("<", NO_DESC_STR, ">", NULL);
-  else
-    return g_strdup("");
+  return string_to_description(NULL, no_blank);
 }
 
 static void
@@ -246,6 +261,7 @@ load_entry(BudgetDialog *bd)
   SCM entry;
 
   entry = bd->current_entry;
+  bd->ignore_changes++;
 
   if (entry != SCM_UNDEFINED)
   {
@@ -263,6 +279,8 @@ load_entry(BudgetDialog *bd)
   else
   {
   }
+
+  bd->ignore_changes--;
 }
 
 static GNCDateDeltaUnits
@@ -315,6 +333,7 @@ load_subentry(BudgetDialog *bd)
   SCM subentry;
 
   subentry = bd->current_subentry;
+  bd->ignore_changes++;
 
   if (subentry != SCM_UNDEFINED)
   {
@@ -327,32 +346,34 @@ load_subentry(BudgetDialog *bd)
 
     value = gh_call1(getters.subentry_description, subentry);
     string = SCM_to_description(value, FALSE);
-    gtk_entry_set_text(GTK_ENTRY(bd->sub_description_entry), string);
+    gtk_entry_set_text(GTK_ENTRY(bd->subentry_description_entry), string);
     g_free(string);
 
     value = gh_call1(getters.subentry_amount, subentry);
     amount = gh_scm2double(value);
     string = xaccPrintAmount(amount, PRTSEP, NULL);
-    gtk_entry_set_text(GTK_ENTRY(bd->sub_amount_entry), string);
+    gtk_entry_set_text(GTK_ENTRY(bd->subentry_amount_entry), string);
 
     value = gh_call1(getters.subentry_period, subentry);
     period = gh_scm2int(value);
-    gnc_date_delta_set_value(GNC_DATE_DELTA(bd->sub_period_delta), period);
+    gnc_date_delta_set_value(GNC_DATE_DELTA(bd->subentry_period_delta),
+                             period);
 
     value = gh_call1(getters.subentry_period_type, subentry);
     units = period_units(value);
-    gnc_date_delta_set_units(GNC_DATE_DELTA(bd->sub_period_delta), units);
+    gnc_date_delta_set_units(GNC_DATE_DELTA(bd->subentry_period_delta), units);
 
     mechanism = gh_call1(getters.subentry_mechanism, subentry);
     mech_type = mechanism_type(mechanism);
-    gtk_option_menu_set_history(GTK_OPTION_MENU(bd->sub_mechanism_menu),
+    gtk_option_menu_set_history(GTK_OPTION_MENU(bd->subentry_mechanism_menu),
                                 mech_type);
     switch (mech_type)
     {
       case MECHANISM_BILL:
         value = gh_call1(getters.bill_get_start, mechanism);
         period = gh_scm2int(value);
-        gnc_date_delta_set_value(GNC_DATE_DELTA(bd->sub_grace_delta), period);
+        gnc_date_delta_set_value(GNC_DATE_DELTA(bd->subentry_grace_delta),
+                                 period);
 
         allow_mechanism_edits(bd, TRUE);
         break;
@@ -364,6 +385,8 @@ load_subentry(BudgetDialog *bd)
   else
   {
   }
+
+  bd->ignore_changes--;
 }
 
 static void
@@ -451,20 +474,125 @@ fill_entry_tree(GtkWidget *entry_tree, SCM budget)
 static void
 load_budget(BudgetDialog *bd, SCM budget)
 {
+  bd->ignore_changes++;
   fill_entry_tree(bd->entry_tree, budget);
+  bd->ignore_changes--;
 }
 
 static void
 budget_changed(BudgetDialog *bd)
 {
+  if (bd->ignore_changes)
+    return;
+
   bd->budget_changed = TRUE;
 
   gtk_widget_set_sensitive(bd->apply_button, TRUE);
 }
 
+static GtkCTreeNode *
+get_selected_node(BudgetDialog *bd, EntryType type)
+{
+  GtkCTree *ctree;
+  GtkCTreeRow *row;
+  GtkCTreeNode *node;
+  BudgetItem *item;
+  int r;
+
+  ctree = GTK_CTREE(bd->entry_tree);
+  r = GTK_CLIST(ctree)->focus_row;
+  if (r < 0)
+    return NULL;
+
+  node = gtk_ctree_node_nth(ctree, r);
+  if (node == NULL)
+    return NULL;
+
+  item = gtk_ctree_node_get_row_data(ctree, node);
+  if (item->type == type)
+    return node;
+
+  row = GTK_CTREE_ROW(node);
+
+  switch (type)
+  {
+    case BUDGET_ENTRY:
+      return row->parent;
+      break;
+    case BUDGET_SUBENTRY:
+      return row->children;
+      break;
+    default:
+      g_warning("budget_dialog_get_selected_node: bad entry type");
+      return NULL;
+      break;
+  }
+}
+
+static void
+entry_description_entry_changed(GtkEditable *editable, BudgetDialog *bd)
+{
+  GtkCTreeNode *node;
+  BudgetEntry *be;
+  gchar *text;
+
+  if (bd->ignore_changes)
+    return;
+
+  budget_changed(bd);
+  bd->entry_changed = TRUE;
+
+  node = get_selected_node(bd, BUDGET_ENTRY);
+  if (node == NULL)
+    return;
+
+  be = gtk_ctree_node_get_row_data(GTK_CTREE(bd->entry_tree), node);
+  if ((be == NULL) || (be->type != BUDGET_ENTRY))
+    return;
+
+  text = gtk_entry_get_text(GTK_ENTRY(bd->entry_description_entry));
+  text = string_to_description(text, TRUE);
+
+  gtk_ctree_node_set_text(GTK_CTREE(bd->entry_tree), node, 0, text);
+
+  g_free(text);
+}
+
+static void
+subentry_description_entry_changed(GtkEditable *editable, BudgetDialog *bd)
+{
+  GtkCTreeNode *node;
+  BudgetSubEntry *bse;
+  gchar *text;
+
+  if (bd->ignore_changes)
+    return;
+
+  budget_changed(bd);
+  bd->subentry_changed = TRUE;
+
+  node = get_selected_node(bd, BUDGET_SUBENTRY);
+  if (node == NULL)
+    return;
+
+  bse = gtk_ctree_node_get_row_data(GTK_CTREE(bd->entry_tree), node);
+  if ((bse == NULL) || (bse->type != BUDGET_SUBENTRY))
+    return;
+
+  text = gtk_entry_get_text(GTK_ENTRY(bd->subentry_description_entry));
+  text = string_to_description(text, TRUE);
+
+  gtk_ctree_node_set_text(GTK_CTREE(bd->entry_tree), node, 0, text);
+
+  g_free(text);
+}
+
 static void
 budget_name_entry_changed(GtkEditable *editable, BudgetDialog *bd)
 {
+  if (bd->ignore_changes)
+    return;
+
   budget_changed(bd);
 }
 
@@ -649,15 +777,22 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
 
   bd->entry_description_entry =
     gtk_object_get_data(bdo, "entry_description_entry");
-  bd->entry_type_menu =
-    gtk_object_get_data(bdo, "entry_type_menu");
+  gtk_signal_connect(GTK_OBJECT(bd->entry_description_entry), "changed",
+                     GTK_SIGNAL_FUNC(entry_description_entry_changed), bd);
 
-  bd->sub_description_entry =
-    gtk_object_get_data(bdo, "sub_description_entry");
-  bd->sub_amount_entry =
-    gtk_object_get_data(bdo, "sub_amount_entry");
-  bd->sub_mechanism_menu =
-    gtk_object_get_data(bdo, "sub_mechanism_menu");
+  bd->entry_type_menu = gtk_object_get_data(bdo, "entry_type_menu");
+  bd->entry_frame = gtk_object_get_data(bdo, "entry_frame");
+
+  bd->subentry_description_entry =
+    gtk_object_get_data(bdo, "subentry_description_entry");
+  gtk_signal_connect(GTK_OBJECT(bd->subentry_description_entry), "changed",
+                     GTK_SIGNAL_FUNC(subentry_description_entry_changed), bd);
+
+  bd->subentry_amount_entry =
+    gtk_object_get_data(bdo, "subentry_amount_entry");
+  bd->subentry_mechanism_menu =
+    gtk_object_get_data(bdo, "subentry_mechanism_menu");
+  bd->entry_frame = gtk_object_get_data(bdo, "entry_frame");
 
   button = gtk_object_get_data(bdo, "up_button");
   arrow = gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_IN);
@@ -670,14 +805,14 @@ gnc_ui_budget_dialog_create(SCM budget, SCM apply_func)
   gtk_container_add(GTK_CONTAINER(button), arrow);
 
   box = gtk_object_get_data(bdo, "period_box");
-  bd->sub_period_delta = gnc_date_delta_new(FALSE);
-  gtk_box_pack_start(GTK_BOX(box), bd->sub_period_delta, FALSE, FALSE, 0);
-  gtk_widget_show(bd->sub_period_delta);
+  bd->subentry_period_delta = gnc_date_delta_new(FALSE);
+  gtk_box_pack_start(GTK_BOX(box), bd->subentry_period_delta, FALSE, FALSE, 0);
+  gtk_widget_show(bd->subentry_period_delta);
 
   box = gtk_object_get_data(bdo, "grace_box");
-  bd->sub_grace_delta = gnc_date_delta_new(FALSE);
-  gtk_box_pack_start(GTK_BOX(box), bd->sub_grace_delta, FALSE, FALSE, 0);
-  gtk_widget_show(bd->sub_grace_delta);
+  bd->subentry_grace_delta = gnc_date_delta_new(FALSE);
+  gtk_box_pack_start(GTK_BOX(box), bd->subentry_grace_delta, FALSE, FALSE, 0);
+  gtk_widget_show(bd->subentry_grace_delta);
 
   bd->apply_button = gtk_object_get_data(bdo, "apply_button");
   gtk_widget_set_sensitive(bd->apply_button, FALSE);

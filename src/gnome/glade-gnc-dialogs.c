@@ -2712,12 +2712,12 @@ create_Budget_Dialog (void)
   GtkWidget *label781;
   GtkWidget *label782;
   GtkWidget *vbox57;
-  GtkWidget *sub_description_entry;
-  GtkWidget *sub_amount_entry;
+  GtkWidget *subentry_description_entry;
+  GtkWidget *subentry_amount_entry;
   GtkWidget *period_box;
   GtkWidget *hbox37;
-  GtkWidget *sub_mechanism_menu;
-  GtkWidget *sub_mechanism_menu_menu;
+  GtkWidget *subentry_mechanism_menu;
+  GtkWidget *subentry_mechanism_menu_menu;
   GtkWidget *label784;
   GtkWidget *bill_day_box;
   GtkWidget *grace_box;
@@ -3085,19 +3085,19 @@ create_Budget_Dialog (void)
   gtk_widget_show (vbox57);
   gtk_box_pack_start (GTK_BOX (hbox35), vbox57, TRUE, TRUE, 0);
 
-  sub_description_entry = gtk_entry_new ();
-  gtk_widget_ref (sub_description_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "sub_description_entry", sub_description_entry,
+  subentry_description_entry = gtk_entry_new ();
+  gtk_widget_ref (subentry_description_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "subentry_description_entry", subentry_description_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (sub_description_entry);
-  gtk_box_pack_start (GTK_BOX (vbox57), sub_description_entry, FALSE, FALSE, 0);
+  gtk_widget_show (subentry_description_entry);
+  gtk_box_pack_start (GTK_BOX (vbox57), subentry_description_entry, FALSE, FALSE, 0);
 
-  sub_amount_entry = gtk_entry_new ();
-  gtk_widget_ref (sub_amount_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "sub_amount_entry", sub_amount_entry,
+  subentry_amount_entry = gtk_entry_new ();
+  gtk_widget_ref (subentry_amount_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "subentry_amount_entry", subentry_amount_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (sub_amount_entry);
-  gtk_box_pack_start (GTK_BOX (vbox57), sub_amount_entry, TRUE, TRUE, 0);
+  gtk_widget_show (subentry_amount_entry);
+  gtk_box_pack_start (GTK_BOX (vbox57), subentry_amount_entry, TRUE, TRUE, 0);
 
   period_box = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (period_box);
@@ -3113,26 +3113,26 @@ create_Budget_Dialog (void)
   gtk_widget_show (hbox37);
   gtk_box_pack_start (GTK_BOX (vbox57), hbox37, FALSE, FALSE, 0);
 
-  sub_mechanism_menu = gtk_option_menu_new ();
-  gtk_widget_ref (sub_mechanism_menu);
-  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "sub_mechanism_menu", sub_mechanism_menu,
+  subentry_mechanism_menu = gtk_option_menu_new ();
+  gtk_widget_ref (subentry_mechanism_menu);
+  gtk_object_set_data_full (GTK_OBJECT (Budget_Dialog), "subentry_mechanism_menu", subentry_mechanism_menu,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (sub_mechanism_menu);
-  gtk_box_pack_start (GTK_BOX (hbox37), sub_mechanism_menu, FALSE, FALSE, 0);
-  sub_mechanism_menu_menu = gtk_menu_new ();
+  gtk_widget_show (subentry_mechanism_menu);
+  gtk_box_pack_start (GTK_BOX (hbox37), subentry_mechanism_menu, FALSE, FALSE, 0);
+  subentry_mechanism_menu_menu = gtk_menu_new ();
   glade_menuitem = gtk_menu_item_new_with_label (_("Nominal"));
   gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (sub_mechanism_menu_menu), glade_menuitem);
+  gtk_menu_append (GTK_MENU (subentry_mechanism_menu_menu), glade_menuitem);
   glade_menuitem = gtk_menu_item_new_with_label (_("Bill"));
   gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (sub_mechanism_menu_menu), glade_menuitem);
+  gtk_menu_append (GTK_MENU (subentry_mechanism_menu_menu), glade_menuitem);
   glade_menuitem = gtk_menu_item_new_with_label (_("Recurring"));
   gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (sub_mechanism_menu_menu), glade_menuitem);
+  gtk_menu_append (GTK_MENU (subentry_mechanism_menu_menu), glade_menuitem);
   glade_menuitem = gtk_menu_item_new_with_label (_("Contingency"));
   gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (sub_mechanism_menu_menu), glade_menuitem);
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (sub_mechanism_menu), sub_mechanism_menu_menu);
+  gtk_menu_append (GTK_MENU (subentry_mechanism_menu_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (subentry_mechanism_menu), subentry_mechanism_menu_menu);
 
   label784 = gtk_label_new ("");
   gtk_widget_ref (label784);
