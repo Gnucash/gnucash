@@ -492,6 +492,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
     retval = TRUE;
   }
 
+#if 0
   if(widg) {
     gtk_signal_connect(GTK_OBJECT(eb), "draw_gdk",
                        GTK_SIGNAL_FUNC(gnc_html_guppi_redraw_cb),
@@ -500,7 +501,8 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
                        GTK_SIGNAL_FUNC(gnc_html_guppi_print_cb),
                        widg);
   }
-  
+#endif
+
   return retval;
 }
 
