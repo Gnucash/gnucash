@@ -263,7 +263,7 @@ gncFileNew (void)
   /* start a new book */
   gncGetCurrentBook ();
 
-  gnc_ui_show_new_user_window();
+  gnc_ui_show_new_user_window(0);
 
   /* leave this here for the moment.  Will add an option in which case
      this needs to run */
