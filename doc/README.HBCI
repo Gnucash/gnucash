@@ -25,6 +25,13 @@ through a bank-issued chip card or a self-generated file-based RSA key
 pair. (In the latter case, the user prints out his public key finger
 print on paper, signs it, and sends it to his bank.)
 
+Please note that the programmers of GnuCash cannot give warranties for
+anything. In particular, some banks are running a poorly implemented
+HBCI on their servers, which does not give you any proper feedback
+when a transfer order has been rejected and will not be
+executed. Please do not rely on time-critical money transfers through
+HBCI for now.
+
 2. Requirements
 ------------
 
@@ -82,6 +89,12 @@ cached in memory during your gnucash session, you can enable this by
 activating the appropriate button in the Edit->Preference dialog 
 ("Bearbeiten->Einstellungen") in the tab "Online Banking & Importing". 
 Of course the password/PIN is *never ever* stored on disk anywhere.
+
+* HBCI Connection window preference: The HBCI Connection window can
+either disappear once the connection is closed, or it can still be
+left open so that you can read the bank's feedback messages about the
+order. The setting of this respective checkbox in the Connection
+window is remembered from session to session.
 
 * Debug Preference: If HBCI connectivity does not work the way you
 expected it to work, you can enable a whole lot of HBCI debugging
