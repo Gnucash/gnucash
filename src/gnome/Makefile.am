@@ -135,6 +135,7 @@ EXTRA_DIST = \
 CFLAGS = @CFLAGS@ \
          ${G_WRAP_COMPILE_ARGS} \
          ${GNOME_PRINT_CFLAGS} \
+         ${GDK_PIXBUF_CFLAGS} \
          ${GTKHTML_CFLAGS} \
 	 ${GHTTP_CFLAGS} \
 	 ${GUPPI_CFLAGS} 
