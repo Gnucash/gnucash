@@ -1287,9 +1287,11 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
 
       HBCI_Job_setIntProperty(jjob, "open/signkey/key/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
       HBCI_Job_setProperty(jjob, "open/signkey/key/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      /*HBCI_Job_setProperty(jjob, "open/signkey/key/userid", "9999999999");*/
 
       HBCI_Job_setIntProperty(jjob, "open/cryptkey/key/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
       HBCI_Job_setProperty(jjob, "open/cryptkey/key/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      /*HBCI_Job_setProperty(jjob, "open/cryptkey/key/userid", "9999999999");*/
     }
     HBCI_Outbox_addJob (info->outbox, job);
 
@@ -1382,6 +1384,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     g_free (hash);
     
     gnc_html_show_data (info->server_html, res, strlen(res));
+    gnc_html_reload (info->server_html);
     
     g_free (res);
   }
@@ -1429,6 +1432,50 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     
     job = HBCI_OutboxJob_new("JobSendKeys", 
 			     (HBCI_Customer*)info->newcustomer, "");
+
+    {
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      const HBCI_Customer *customer = info->newcustomer;
+      const HBCI_User *user = HBCI_Customer_user(customer);
+      const HBCI_Bank *bank = HBCI_User_bank(user);
+      const HBCI_Medium *med = HBCI_User_medium (user);
+      const HBCI_MediumRDHBase *medr = HBCI_Medium_MediumRDHBase ((HBCI_Medium*)med);
+      const HBCI_RSAKey *signkey = HBCI_MediumRDHBase_userPubSignKey(medr);
+      const HBCI_RSAKey *cryptkey = HBCI_MediumRDHBase_userPubCryptKey(medr);
+#define MY_MAXBUF_SIZE 1024
+      unsigned tmp_bufsize = MY_MAXBUF_SIZE;
+      unsigned tmp_actual;
+      char tmp[MY_MAXBUF_SIZE];
+      g_assert (medr);
+      /* Copied from libaqmoney's JobSendKeys::JobSendKeys(Pointer<Customer> c) */
+
+      // prepare identification
+      HBCI_Job_setProperty(jjob, "open/ident/systemid", "0");
+      HBCI_Job_setIntProperty(jjob, "open/ident/country", HBCI_Bank_country(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/ident/customerid", HBCI_Customer_custId(customer));
+
+      // prepare sign key
+      HBCI_Job_setProperty(jjob, "open/signkey/keyname/bankCode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/signkey/keyname/userid", HBCI_User_userId(user));
+      HBCI_Job_setIntProperty(jjob, "open/signkey/keyname/keynum", HBCI_RSAKey_number(signkey));
+      HBCI_Job_setIntProperty(jjob, "open/signkey/keyname/keyversion", HBCI_RSAKey_version(signkey));
+      tmp_actual = HBCI_RSAKey_getModulusData(signkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/signkey/key/modulus", tmp, tmp_actual);
+      tmp_actual = HBCI_RSAKey_getExpData(signkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/signkey/key/exponent", tmp, tmp_actual);
+
+      // prepare crypt key
+      HBCI_Job_setProperty(jjob, "open/cryptkey/keyname/bankCode", HBCI_Bank_bankCode(bank));
+      HBCI_Job_setProperty(jjob, "open/cryptkey/keyname/userid", HBCI_User_userId(user));
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/keyname/keynum", HBCI_RSAKey_number(cryptkey));
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/keyname/keyversion", HBCI_RSAKey_version(cryptkey));
+      tmp_actual = HBCI_RSAKey_getModulusData(cryptkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/cryptkey/key/modulus", tmp, tmp_actual);
+      tmp_actual = HBCI_RSAKey_getExpData(cryptkey, tmp, tmp_bufsize);
+      HBCI_Job_setBinProperty(jjob, "open/cryptkey/key/exponent", tmp, tmp_actual);
+    }
+
     HBCI_Outbox_addJob (info->outbox, job);
 
     /* Execute Outbox. */
@@ -1505,6 +1552,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     g_free (hash);
   }
   gnc_html_show_data (info->user_html, res, strlen(res));
+  gnc_html_reload (info->user_html);
 
   g_free (res);
 

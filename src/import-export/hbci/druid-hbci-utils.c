@@ -431,8 +431,8 @@ gnc_hbci_evaluate_GetKeys(HBCI_Outbox *outbox, HBCI_OutboxJob *job,
     return FALSE;
   }
 
-  printf("JobGetKeys: Complete response:\n");
-  GWEN_DB_Dump(rsp, stderr, 1);
+  /*printf("JobGetKeys: Complete response:\n");
+    GWEN_DB_Dump(rsp, stderr, 1);*/
 
   n=GWEN_DB_GetFirstGroup(rsp);
   while(n) {
@@ -500,12 +500,18 @@ gnc_hbci_evaluate_GetKeys(HBCI_Outbox *outbox, HBCI_OutboxJob *job,
 	_cryptKey = HBCI_RSAKey_new(iscrypt, keydb);
       else
 	_signKey = HBCI_RSAKey_new(iscrypt, keydb);
-      fprintf(stderr, "Created %s key", iscrypt?"crypt":"sign");
+      fprintf(stderr, "gnc_hbci_evaluate_GetKeys: Created %s key\n", iscrypt?"crypt":"sign");
     } // if we have a key response
     n=GWEN_DB_GetNextGroup(n);
   } // while
 
   // Key creation finished. Now add them to the medium @§%$!!!
+
+  if (!_cryptKey) {
+    printf("gnc_hbci_evaluate_GetKeys: Oops, no cryptKey received.\n");
+    return FALSE;
+  }
+  
   
   {
     HBCI_MediumRDHBase *mrdh;

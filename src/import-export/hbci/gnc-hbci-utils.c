@@ -467,8 +467,10 @@ gnc_hbci_api_execute (GtkWidget *parent, HBCI_API *api,
     GNCInteractor_show (inter);
 
   if (gnc_lookup_boolean_option("_+Advanced", 
-				"HBCI Verbose Debug Messages", FALSE))
+				"HBCI Verbose Debug Messages", FALSE)) {
+    GWEN_Logger_SetLevel(0, GWEN_LoggerLevelDebug);
     HBCI_Hbci_setDebugLevel (4);
+  }
   else
     HBCI_Hbci_setDebugLevel (0);
 
