@@ -577,6 +577,7 @@ xaccConsolidateGrpTransactions (AccountGroup *grp)
 int     
 xaccGroupGetNumAccounts (AccountGroup *grp)
 {
+   if (!grp) return 0;
    return (grp->numAcc);
 }
 
