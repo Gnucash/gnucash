@@ -27,7 +27,6 @@
 #include <glib.h>
 #include <string.h>
 
-#include "gnc-be-utils.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -37,6 +36,7 @@
 #include "kvp-util.h"
 
 #include "qofbackend-p.h"
+#include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofclass.h"
@@ -154,7 +154,7 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
 void 
 gnc_price_begin_edit (GNCPrice *p)
 {
-  GNC_BEGIN_EDIT (&p->inst);
+  QOF_BEGIN_EDIT (&p->inst);
 }
 
 static inline void commit_err (QofInstance *inst, QofBackendError errcode) 
@@ -167,8 +167,8 @@ static inline void noop (QofInstance *inst) {}
 void 
 gnc_price_commit_edit (GNCPrice *p)
 {
-  GNC_COMMIT_EDIT_PART1 (&p->inst);
-  GNC_COMMIT_EDIT_PART2 (&p->inst, commit_err, noop, noop);
+  QOF_COMMIT_EDIT_PART1 (&p->inst);
+  QOF_COMMIT_EDIT_PART2 (&p->inst, commit_err, noop, noop);
 }
 
 /* ==================================================================== */
@@ -193,7 +193,7 @@ gnc_pricedb_begin_edit (GNCPriceDB *pdb)
   be = xaccPriceDBGetBackend (pdb);
   if (be && be->begin) 
   {
-    (be->begin) (be, GNC_ID_PRICEDB, pdb);
+    (be->begin) (be, &(pdb->inst));
   }
 
   LEAVE ("pdb=%p\n", pdb);

@@ -805,7 +805,7 @@ period_begin_edit (QofBook *src_book, QofBook *dest_book)
    be = src_book->backend;
    if (be && be->begin)
    {
-      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
+      // (*be->begin)(be, GNC_ID_PERIOD, dest_book);
    }
 }
    
@@ -816,7 +816,7 @@ period_commit_edit (QofBook *src_book, QofBook *dest_book)
    be = src_book->backend;
    if (be && be->commit)
    {
-      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
+      // (*be->commit)(be, GNC_ID_PERIOD, dest_book);
    }
 }
 

@@ -59,12 +59,8 @@ struct gnc_price_s
 
 struct gnc_price_db_s
 {
+  QofInstance inst;              /* globally unique object identifier */
   GHashTable *commodity_hash;
-  QofBook *book;          /* book holding this database and all its prices */
-
-  /* 'private' object management fields */
-  gint32   editlevel;            /* nesting level of begin/end edit calls */
-  gboolean dirty;
 };
 
 /* These structs define the kind of price lookup being done
