@@ -86,11 +86,6 @@ void                  gnc_plugin_page_removed         (GncPluginPage *plugin_pag
 void                  gnc_plugin_page_selected        (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_unselected      (GncPluginPage *plugin_page);
 
-/* Variables */
-GtkWidget            *gnc_plugin_page_get_window      (GncPluginPage *plugin_page);
-void                  gnc_plugin_page_set_window      (GncPluginPage *plugin_page,
-						       GtkWidget *window);
-
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_PAGE_H */
