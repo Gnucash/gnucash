@@ -103,8 +103,6 @@ gboolean gnc_get_username_password (gncUIWidget parent,
 
 /* Managing the GUI Windows *****************************************/
 
-void        gnc_ui_shutdown (void);
-void        gnc_ui_destroy_all_subwindows (void);
 gncUIWidget gnc_ui_get_toplevel (void);
 
 /* Changing the GUI Cursor ******************************************/
