@@ -104,7 +104,7 @@ void          kvp_frame_set_slot_path_gslist (kvp_frame *frame,
  * The kvp_frame_get_frame_slash() routine takes a single string
  *    where the keys are separated by slashes; thus, for example:
  *    /this/is/a/valid/path  and///so//is////this/
- *    Multiple slashes are compresed. leading slash is optional.
+ *    Multiple slashes are compresed.  Leading slash is optional.
  *    The pointers . and .. are *not* followed/obeyed.  (This is 
  *    arguably a bug that needs fixing).
  *
