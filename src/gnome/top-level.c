@@ -75,13 +75,14 @@ gnucash_lowlev_app_init()
   {
     int fake_argc = 1;
     char *fake_argv[] = {"gnucash"};
+    int fake_index;
    
     /* We're going to have to have other ways to handle X and GUI
        specific args...
 
        For now, use fake_argv and fake_argc...
     */
-    gnome_init("GnuCash", NULL, fake_argc, fake_argv);  
+    gnome_init("GnuCash", NULL, fake_argc, fake_argv, 0, &fake_index);  
     app = gnome_app_new ( "gnucash", "GnuCash" );
     
     {

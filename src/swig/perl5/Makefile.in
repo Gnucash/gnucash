@@ -19,6 +19,8 @@
 
 include @top_srcdir@/Makefile.init
 
+exec_prefix = @exec_prefix@
+
 INCLPATH = \
            -I. \
            -I@top_srcdir@/ \
@@ -50,7 +52,7 @@ include @top_srcdir@/Makefile.common
 default: gnucash.so 
 
 gnucash.so: ${OBJS} ../../engine/libengine.a
-	gcc -shared ${OBJS} ../../engine/libengine.a -lnana -o gnucash.so
+	gcc -shared ${OBJS} ../../engine/libengine.a -L@libdir@ -lnana -o gnucash.so
 
 SWIG_FILTER    := %P.h %/util.h
 SWIG_ENGINE_HDRS := \
