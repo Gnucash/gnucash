@@ -144,6 +144,14 @@ gnc_amount_edit_key_press(GtkWidget *widget, GdkEventKey *event)
   GNCAmountEdit *gae = GNC_AMOUNT_EDIT(widget);
   gint result;
 
+  if (event->keyval == GDK_KP_Decimal) {
+    if (gae->print_info.monetary) {
+      struct lconv *lc = gnc_localeconv ();
+      event->keyval = lc->decimal_point[0];
+      event->string[0] = lc->decimal_point[0];
+    }
+  }
+
   result = (* GTK_WIDGET_CLASS (parent_class)->key_press_event)(widget, event);
 
   switch (event->keyval)
