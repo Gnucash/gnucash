@@ -38,6 +38,7 @@
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
+#include "gnc-pricedb.h"
 #include "messages.h"
 #include "Transaction.h"
 #include "Account.h"
@@ -99,6 +100,9 @@ struct _xferDialog
 
   GtkTooltips *tips;
 
+  GNCBook *	book;
+  GNCPriceDB *	pricedb;
+
   /* Are the currencies swapped (in terms of looking up entries in pricedb?) */
   gboolean	swap_currencies;
 
@@ -126,6 +130,68 @@ static void gnc_xfer_update_to_amount (XferDialog *xferData);
 
 
 /** Implementations **********************************************/
+
+static void
+gnc_xfer_dialog_get_from_to_commodities (XferDialog *xferData, gnc_commodity **from,
+					 gnc_commodity **to)
+{
+  if (!xferData || !from || !to) return;
+
+  /* Figure out the "commodity" and "currency" for the pricedb.
+   * we may have swapped it around..
+   */
+  if (xferData->swap_currencies) {
+    *from = xferData->to_commodity;
+    *to = xferData->from_commodity;
+  } else {
+    *to = xferData->to_commodity;
+    *from = xferData->from_commodity;
+  }
+}
+
+/* (maybe) update the price from the pricedb. */
+static void
+gnc_xfer_dialog_update_price (XferDialog *xferData)
+{
+  GNCPrice *prc;
+  gnc_numeric price;
+  gnc_commodity *from, *to;
+  Timespec date;
+
+  if (!xferData) return;
+  if (!xferData->from_commodity || ! xferData->to_commodity) return;
+  if (gnc_commodity_equal (xferData->from_commodity, xferData->to_commodity))
+    return;
+  if (!xferData->pricedb) return;
+
+  /* when do we update, and when do we NOT update? */
+
+  /* XXX: I'm ALWAYS going to update whenver we get called */
+
+  /* Get the from/to commodities */
+  gnc_xfer_dialog_get_from_to_commodities (xferData, &from, &to);
+
+  /* grab the price nearest to the DATE out of the pricedb */
+  date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xferData->date_entry));
+  prc = gnc_pricedb_lookup_nearest_in_time (xferData->pricedb,
+					    to, from, date);
+
+  if (!prc) return;
+
+  /* grab the price from the pricedb */
+  price = gnc_price_get_value (prc);
+
+  /* maybe swap it.. */
+  if (xferData->swap_currencies && !gnc_numeric_zero_p (price))
+    price = gnc_numeric_div (gnc_numeric_create (1, 1), price,
+			     GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+
+  /* and set the price entry */
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->price_edit), price);
+
+  /* And then update the to_amount */
+  gnc_xfer_update_to_amount (xferData);
+}
 
 static void
 gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
@@ -165,13 +231,13 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
 
   if (!gnc_is_euro_currency (from_currency) ||
       !gnc_is_euro_currency (to_currency))
-    return;
+    return gnc_xfer_dialog_update_price (xferData);
 
   from_rate = gnc_euro_currency_get_rate (from_currency);
   to_rate = gnc_euro_currency_get_rate (to_currency);
 
   if (gnc_numeric_zero_p (from_rate) || gnc_numeric_zero_p (to_rate))
-    return;
+    gnc_xfer_dialog_update_price (xferData);
 
   price = gnc_numeric_div (from_rate, to_rate, GNC_DENOM_AUTO, 
                            GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
@@ -827,6 +893,16 @@ gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
   return FALSE;
 }
 
+static gboolean
+gnc_xfer_date_changed_cb(GtkWidget *widget, gpointer data)
+{
+  XferDialog *xferData = data;
+
+  if (xferData)
+    gnc_xfer_dialog_update_price (xferData);
+
+  return FALSE;
+}
 
 static gboolean
 gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
@@ -1201,7 +1277,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   gnc_commodity *to_commodity;
   gnc_numeric amount, to_amount;
   char * string;
-  time_t time;
+  Timespec ts;
 
   gboolean curr_trans;
 
@@ -1270,7 +1346,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
-  time = gnc_date_edit_get_date(GNC_DATE_EDIT(xferData->date_entry));
+  ts = gnc_date_edit_get_date_ts(GNC_DATE_EDIT(xferData->date_entry));
 
   if (curr_trans)
   {
@@ -1312,12 +1388,12 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   else
   {
     /* Create the transaction */
-    trans = xaccMallocTransaction(gnc_get_current_book ());
+    trans = xaccMallocTransaction(xferData->book);
 
     xaccTransBeginEdit(trans);
 
     xaccTransSetCurrency(trans, from_commodity);
-    xaccTransSetDateSecs(trans, time);
+    xaccTransSetDatePostedTS(trans, &ts);
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
     xaccTransSetNum(trans, string);
@@ -1326,11 +1402,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccTransSetDescription(trans, string);
 
     /* create from split */
-    from_split = xaccMallocSplit(gnc_get_current_book ());
+    from_split = xaccMallocSplit(xferData->book);
     xaccTransAppendSplit(trans, from_split); 
 
     /* create to split */
-    to_split = xaccMallocSplit(gnc_get_current_book ());
+    to_split = xaccMallocSplit(xferData->book);
     xaccTransAppendSplit(trans, to_split); 
 
     xaccAccountBeginEdit(from_account);
@@ -1354,7 +1430,57 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     xaccAccountCommitEdit(to_account);
   }
 
-  /* XXX: Maybe save this exchange to the pricedb */
+  /* try to save this to the pricedb */
+  if (xferData->pricedb) {
+    gnc_commodity *from = NULL, *to = NULL;
+
+    gnc_xfer_dialog_get_from_to_commodities (xferData, &from, &to);
+    
+    /* only continue if the currencies are DIFFERENT and are
+     * not both euroland currencies 
+     */
+    if (!gnc_commodity_equal (from, to) &&
+	!(gnc_is_euro_currency (from) && gnc_is_euro_currency (to)))
+    {
+      GNCPrice *price;
+      GList *prices;
+
+      /* First see if an entry exists at time ts */
+      prices = gnc_pricedb_lookup_at_time (xferData->pricedb, to, from, ts);
+
+      /* If so, do nothing (well, destroy the list).  if not, create one. */
+      if (prices) {
+	gnc_price_list_destroy (prices);
+      } else {
+	gnc_numeric value;
+
+	/* compute the price -- maybe we need to swap? */
+	if (xferData->swap_currencies)
+	{
+	  value = gnc_numeric_div (to_amount, amount, GNC_DENOM_AUTO,
+				   GNC_DENOM_REDUCE);
+	}
+	else
+	{
+	  value = gnc_numeric_div (amount, to_amount, GNC_DENOM_AUTO,
+				   GNC_DENOM_REDUCE);
+	}
+
+	value = gnc_numeric_abs (value);
+
+	price = gnc_price_create (xferData->book);
+	gnc_price_begin_edit (price);
+	gnc_price_set_commodity (price, to);
+	gnc_price_set_currency (price, from);
+	gnc_price_set_time (price, ts);
+	gnc_price_set_source (price, "user:xfer-dialog");
+	gnc_price_set_value (price, value);
+	gnc_pricedb_add_price (xferData->pricedb, price);
+	gnc_price_commit_edit (price);
+	gnc_price_unref (price);
+      }
+    }
+  }
 
   /* Refresh everything */
   gnc_resume_gui_refresh ();
@@ -1465,6 +1591,8 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
     gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
     xferData->date_entry = date;
+    gtk_signal_connect(GTK_OBJECT(date), "date_changed",
+		       GTK_SIGNAL_FUNC(gnc_xfer_date_changed_cb), xferData);
   }
 
   {
@@ -1591,6 +1719,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   XferDialog *xferData;
   GNCAmountEdit *gae;
   GtkWidget *amount_entry;
+  GNCBook *book = NULL;
 
   xferData = g_new0 (XferDialog, 1);
 
@@ -1598,6 +1727,15 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
   xferData->desc_start_selection = 0;
   xferData->desc_end_selection = 0;
   xferData->desc_didquickfill = FALSE;
+
+  if (initial) {
+    book = xaccAccountGetBook (initial);
+  } else {
+    book = gnc_get_current_book ();
+  }
+
+  xferData->book = book;
+  xferData->pricedb = gnc_book_get_pricedb (book);
 
   gnc_xfer_dialog_create(parent, xferData);
 

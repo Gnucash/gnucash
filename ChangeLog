@@ -1,3 +1,14 @@
+2002-12-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-transfer.c -- lookup and store entries in
+	  the pricedb, and use those entries when you change accounts and
+	  dates.  It will only save one entry per "date-time", so you need
+	  to use the price editor to remove/change entries in the pricedb.
+	  It may be a bit over-zealous of using the pricedb entries -- if
+	  you change the date or an account after typing in a number it will
+	  over-write your change with the nearest pricedb entry.
+	  Fixed Bug #100284.
+	
 2002-12-11  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/el_GR/acctchrt_common.gnucash-xea: Greek account
