@@ -294,7 +294,7 @@ DateLeave (BasicCell *_cell, const char * curr)
 /* ================================================ */
 /* for most practical purposes, the commit function
  * is identical to the DateLeave function, except that
- * it returns no value (and is publically visible)
+ * it returns no value (and is publicly visible)
  */
 
 void
