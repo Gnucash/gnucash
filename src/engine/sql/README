@@ -92,6 +92,10 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
+-- When importing to sql from file, the 'date entered' in the
+   transaction is not respected.  This is a bug, or a feature, 
+   figure out which & fix.
+
 -- allow user to enter URL in GUI dialog, get GUI to remember the URL 
 
 -- Implement GUI to ask user for username/password to log onto the
