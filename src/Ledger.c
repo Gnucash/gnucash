@@ -202,13 +202,13 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    Transaction *trans;
    char *accname;
    char buff[2];
-   Date *d;
+   time_t secs;
 
    if (!split) return;
    trans = xaccSplitGetParent (split);
 
-   d = xaccTransGetDate (trans);
-   xaccSetDateCellValue (reg->dateCell, d->day, d->month, d->year);
+   secs = xaccTransGetDate (trans);
+   xaccSetDateCellValueSecs (reg->dateCell, secs);
 
    xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
    xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
