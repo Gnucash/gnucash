@@ -215,6 +215,10 @@ static const char *table_create_str =
 #include "table-create.c"
 ;
 
+static const char *table_version_str = 
+#include "table-version.c"
+;
+
 static const char *sql_functions_str = 
 #include "functions.c"
 ;
@@ -1646,6 +1650,8 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
           * for postgres queries (which is 8192). 
           */
          SEND_QUERY (be,table_create_str, );
+         FINISH_QUERY(be->connection);
+         SEND_QUERY (be,table_version_str, );
          FINISH_QUERY(be->connection);
          SEND_QUERY (be,table_audit_str, );
          FINISH_QUERY(be->connection);

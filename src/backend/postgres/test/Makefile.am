@@ -17,6 +17,7 @@ LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
         ${top_srcdir}/src/gnc-module/libgncmodule.la \
         ${top_srcdir}/src/engine/libgncmod-engine.la \
         ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
+	${top_srcdir}/src/backend/postgres/libgncmod-backend-postgres.la \
         -lltdl
 
 CFLAGS = ${GLIB_CFLAGS}

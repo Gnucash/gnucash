@@ -29,8 +29,6 @@ CREATE TABLE gncVersion (
 	name	TEXT UNIQUE NOT NULL CHECK (name <> ''),
 	date	DATETIME DEFAULT 'NOW'
 );
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,0,0,'Version Table');
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,1,1,'iGUID in Main Tables');
 
 -- Commodity structure
 -- Store currency, security types.  Namespace includes
