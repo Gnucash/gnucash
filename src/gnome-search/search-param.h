@@ -40,6 +40,7 @@ GNCSearchParam *	gnc_search_param_clone (GNCSearchParam *param);
 void		gnc_search_param_set_param_path (GNCSearchParam *param,
 						 GNCIdTypeConst search_type,
 						 GSList *param_path);
+/* List is property of the caller */
 GSList *		gnc_search_param_get_param_path (GNCSearchParam *param);
 GNCIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
 void			gnc_search_param_set_title (GNCSearchParam *param,

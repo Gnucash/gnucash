@@ -292,7 +292,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     break;
   }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static GtkWidget *

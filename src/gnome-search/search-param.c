@@ -162,7 +162,7 @@ gnc_search_param_get_param_path (GNCSearchParam *param)
 {
   g_assert (IS_GNCSEARCH_PARAM (param));
 
-  return param->priv->param_path;
+  return g_slist_copy (param->priv->param_path);
 }
 
 GNCIdTypeConst

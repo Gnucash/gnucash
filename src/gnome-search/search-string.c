@@ -170,6 +170,13 @@ validate (GNCSearchCoreType *fe)
   g_return_val_if_fail (fi, FALSE);
   g_return_val_if_fail (IS_GNCSEARCH_STRING (fi), FALSE);
 	
+  if (!fi->value || *(fi->value) == '\0') {
+    GtkWidget *dialog;
+    dialog = gnome_ok_dialog (_("You need to enter a string value"));
+    gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+    return FALSE;
+  }
+
   if (fi->how == SEARCH_STRING_MATCHES_REGEX ||
       fi->how == SEARCH_STRING_NOT_MATCHES_REGEX) {
     regex_t regexpat;        /* regex patern */
@@ -228,11 +235,7 @@ entry_changed (GtkEntry *entry, GNCSearchString *fe)
   char *new;
 	
   new = gtk_entry_get_text(entry);
-	
-  if (fe->value)
-    g_free (fe->value);
-	
-  fe->value = new;
+  gnc_search_string_set_value (fe, new);
 }
 
 static GtkWidget *

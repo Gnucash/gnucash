@@ -141,7 +141,8 @@ typedef enum {
  * The param_list is a recursive list of parameters.  For example, you
  * can say 'split->memo' by creating a list of one element, "SPLIT_MEMO".
  * You can say 'split->account->name' by creating a list of two elements,
- * "SPLIT_ACCOUNT" and "ACCOUNT_NAME".
+ * "SPLIT_ACCOUNT" and "ACCOUNT_NAME".  The list becomes the property of
+ * the Query.
  *
  * For example:
  *
