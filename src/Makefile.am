@@ -10,11 +10,12 @@ SUBDIRS = \
   tax \
   app-utils \
   gnome-utils \
-  gnome \
   app-file \
-  register \
   import-export \
   report \
+  dialog-account \
+  register \
+  gnome \
   experimental \
   scm \
   quotes \
@@ -23,6 +24,7 @@ SUBDIRS = \
 
 # Engine Makefile.am file.
 bin_PROGRAMS = gnucash
+bin_SCRIPTS = gnucash-run-script gnucash-make-guids gnucash.sh
 
 # libraries show up twice because they both provide functions for
 # other libs and use functions from other libs.  These mutual
@@ -72,7 +74,8 @@ EXTRA_DIST = \
   .cvsignore \
   README.modules \
   gnucash-make-guids.in \
-  gnucash-run-script.in
+  gnucash-run-script.in \
+  gnucash.sh.in
 
 AM_CFLAGS = \
   -I./app-utils \
@@ -83,7 +86,6 @@ AM_CFLAGS = \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
 
-bin_SCRIPTS = gnucash-run-script gnucash-make-guids
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -110,3 +112,15 @@ gnucash-make-guids: gnucash-make-guids.in
 	mv $@.tmp $@
 BUILT_SOURCES += gnucash-make-guids
 CLEANFILES += gnucash-make-guids
+
+gnucash.sh: gnucash.sh.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+	    -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:g' \
+	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
+	    -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g' \
+	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
+	mv $@.tmp $@
+	chmod u+x $@
+BUILT_SOURCES += gnucash.sh
+CLEANFILES += gnucash.sh
