@@ -1,10 +1,12 @@
 /*
  * FILE:
- * gnc-server.c
+ * hello3.c
  *
  * FUNCTION:
  * experimental gnucash server
  * written as a demo, not real code.
+ * this file is here mostly as a simple intro to what 
+ * the server is doing.
  */
 
 #include <stdio.h>

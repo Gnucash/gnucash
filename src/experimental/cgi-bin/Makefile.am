@@ -1,7 +1,7 @@
 # cgi-bin Makefile.am file.
 
 
-bin_PROGRAMS = hello hello2 fastcgi-hello gnc-server
+bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} 
 
@@ -16,6 +16,9 @@ hello_SOURCES = \
 
 hello2_SOURCES = \
   hello2.c
+
+hello3_SOURCES = \
+  hello3.c
 
 fastcgi_hello_SOURCES = \
   fastcgi-hello.c
