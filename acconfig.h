@@ -74,8 +74,6 @@
 #undef HAVE_PNG             
 #undef HAVE_JPEG            
 
-#undef HAVE_PLOTUTILS
-
 /* Configure found the function malloc_usable_size */
 #define  HAVE_MALLOC_USABLE_SIZE  
 
