@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
-"POT-Creation-Date: 2003-08-05 21:12+0200\n"
-"PO-Revision-Date: 2003-08-05 21:14+0200\n"
+"POT-Creation-Date: 2003-08-12 21:30+0200\n"
+"PO-Revision-Date: 2003-08-12 23:17+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -6800,7 +6800,7 @@ msgstr "Aktuell"
 #. PRESENT_REPORT
 #: src/gnome-utils/gnc-account-tree.c:94
 msgid "Present (Report)"
-msgstr "Aktuell (Bericht)"
+msgstr "Aktuell (als Bericht)"
 
 #. BALANCE
 #: src/gnome-utils/gnc-account-tree.c:95
@@ -6814,21 +6814,18 @@ msgstr "Saldo"
 
 #. BALANCE_REPORT
 #: src/gnome-utils/gnc-account-tree.c:96
-#, fuzzy
 msgid "Balance (Report)"
-msgstr "Bilanz"
+msgstr "Bilanz (als Bericht)"
 
 #. CLEARED_REPORT
 #: src/gnome-utils/gnc-account-tree.c:98
-#, fuzzy
 msgid "Cleared (Report)"
-msgstr "Mitarbeiterbericht"
+msgstr "Bestätigt (als Bericht)"
 
 #. RECNCLD_REPORT
 #: src/gnome-utils/gnc-account-tree.c:100
-#, fuzzy
 msgid "Reconciled (Report)"
-msgstr "Reconciled:J"
+msgstr "Abgeglichen (als Bericht)"
 
 #. FUTURE_MIN
 #: src/gnome-utils/gnc-account-tree.c:101
@@ -6837,9 +6834,8 @@ msgstr "Zukünftiges Minimum"
 
 #. FUT_MIN_REPORT
 #: src/gnome-utils/gnc-account-tree.c:102
-#, fuzzy
 msgid "Future Minimum (Report)"
-msgstr "Zukünftiges Minimum"
+msgstr "Zukünftiges Minimum (als Bericht)"
 
 #. TOTAL
 #: src/gnome-utils/gnc-account-tree.c:103 intl-scm/guile-strings.c:167
@@ -6854,9 +6850,8 @@ msgstr "Betrag"
 
 #. TOTAL_REPORT
 #: src/gnome-utils/gnc-account-tree.c:104
-#, fuzzy
 msgid "Total (Report)"
-msgstr "Gesamter Ertrag"
+msgstr "Saldo (als Bericht)"
 
 #. TAX_INFO
 #: src/gnome-utils/gnc-account-tree.c:106 intl-scm/guile-strings.c:171
@@ -10632,62 +10627,53 @@ msgstr "GnuCash Kurs und Konzepte"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:305
-#, fuzzy
 msgid "Overview"
-msgstr "Kontrolle"
+msgstr "Übersicht (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:307
-#, fuzzy
 msgid "Introduction"
-msgstr "Einführung zu GnuCash"
+msgstr "Einführung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:309
-#, fuzzy
 msgid "Features"
-msgstr "Zukünftiger Wert:"
+msgstr "Features"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:311
-#, fuzzy
 msgid "Easy to Use"
-msgstr "%s bis %s"
+msgstr "Eingängige Bedienung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:313
-#, fuzzy
 msgid "Tracks Your Investments"
-msgstr "Investments"
+msgstr "Investment-Verwaltung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:315
-#, fuzzy
 msgid "International Support"
-msgstr "International"
+msgstr "Internationale Features"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:317
-#, fuzzy
 msgid "Business Support"
-msgstr "Geschäftliche Berichte"
+msgstr "Geschäftliche Features"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:319
-#, fuzzy
 msgid "Accounting"
-msgstr "Konto"
+msgstr "Buchführung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:321
-#, fuzzy
 msgid "Misc"
-msgstr "ist"
+msgstr "Sonstiges"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:323
 msgid "What's New in v1.8"
-msgstr ""
+msgstr "Was ist neu in Version 1.8"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:325
@@ -10706,26 +10692,23 @@ msgstr "Installation"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:331
-#, fuzzy
 msgid "The Basics"
-msgstr "Das Schlechte"
+msgstr "Grundlagen (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:333
-#, fuzzy
 msgid "Accounting Concepts"
 msgstr "Grundlagen der Kontoführung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:335
-#, fuzzy
 msgid "The 5 Basic Accounts"
-msgstr "Arten von Gnucash Konten"
+msgstr "Die 5 grundlegenden Kontoarten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:337
 msgid "The Principal Accounting Equation"
-msgstr ""
+msgstr "Kontogleichung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:339 intl-scm/guile-strings.c:345
@@ -10857,29 +10840,28 @@ msgstr "QIF-Dateien importieren"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:395
-#, fuzzy
 msgid "Backing Up and Recovering Data"
 msgstr "Sicherungskopien und Datensicherung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:397
 msgid "Backup file (.xac)"
-msgstr ""
+msgstr "Backup-Datei (.xac)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:399
 msgid "Log file (.log)"
-msgstr ""
+msgstr "Log-Datei (.log)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:401
 msgid "Lock files (.LNK and .LCK)"
-msgstr ""
+msgstr "Schreibzugriffs-Datei (.LNK und .LCK)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:403
 msgid "File Management"
-msgstr ""
+msgstr "Dateimanagement"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:405 intl-scm/guile-strings.c:423
@@ -10905,9 +10887,8 @@ msgstr "Ertrags- und Aufwandskonten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:415
-#, fuzzy
 msgid "Principle of Balance"
-msgstr "Abgeglichener Saldo"
+msgstr "Prinzip des ausgeglichenen Saldos"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:417
@@ -10916,21 +10897,18 @@ msgstr "Gnucash Konten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:425
-#, fuzzy
 msgid "Simple Example"
-msgstr "Beispielbericht"
+msgstr "Beispiel"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:427
-#, fuzzy
 msgid "The Basic Top Level Accounts"
-msgstr "Neues Top-Level-Konto"
+msgstr "Grundlegende Top-level Konten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:429
-#, fuzzy
 msgid "Making Sub-Accounts"
-msgstr "Unterkonten-Saldo einrechnen"
+msgstr "Unterkonten erstellen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:431
@@ -10943,9 +10921,8 @@ msgstr "Geschäftsvorgänge/Buchungen"
 #: intl-scm/guile-strings.c:553 intl-scm/guile-strings.c:575
 #: intl-scm/guile-strings.c:589 intl-scm/guile-strings.c:627
 #: intl-scm/guile-strings.c:659
-#, fuzzy
 msgid "Basic Concepts"
-msgstr "Grundlagen der Kontoführung"
+msgstr "Grundlegende Konzepte"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:435
@@ -10964,9 +10941,8 @@ msgstr "Mehrteiliger Geschäftsvorgang"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:441
-#, fuzzy
 msgid "Features of the Account Register"
-msgstr "Kontobuch-Fenster"
+msgstr "Eigenschaften des Kontobuch-Fenster"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:443
@@ -10985,9 +10961,8 @@ msgstr "Weitere Beispiele für Geschäftsvorgänge"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:453
-#, fuzzy
 msgid "Checkbook"
-msgstr "Scheck"
+msgstr "Scheckbuch (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:455 intl-scm/guile-strings.c:469
@@ -11012,15 +10987,13 @@ msgstr "EC-Karten Auszahlungen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:463
-#, fuzzy
 msgid "Reconciling Your Accounts"
 msgstr "Konten abgleichen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:467
-#, fuzzy
 msgid "Credit Cards"
-msgstr "Kreditkarte"
+msgstr "Kreditkarten (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:471
@@ -11034,25 +11007,23 @@ msgstr "Zahlungen eingeben"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:477
-#, fuzzy
 msgid "Loans"
-msgstr "Darlehen"
+msgstr "Darlehen (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:481 intl-scm/guile-strings.c:491
 msgid "Terminology"
-msgstr ""
+msgstr "Begrifflichkeiten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:483
-#, fuzzy
 msgid "Setting Up Accounts"
 msgstr "Konten erstellen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:485
 msgid "Mortgage (How-To)"
-msgstr ""
+msgstr "Hypothek (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:487
@@ -11061,15 +11032,13 @@ msgstr "Investments"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:493
-#, fuzzy
 msgid "Types of Investments"
-msgstr "Investments"
+msgstr "Arten von Investments"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:497
-#, fuzzy
 msgid "Predefined Accounts"
-msgstr "Habenkonten"
+msgstr "Vordefinierte Konten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:499
@@ -11078,43 +11047,38 @@ msgstr "Beispiel: selbsterstellte Kontenstruktur"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:501
-#, fuzzy
 msgid "Interest Bearing Accounts"
-msgstr "Konten erstellen"
+msgstr "Konten mit Verzinsung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:503 intl-scm/guile-strings.c:539
 #: intl-scm/guile-strings.c:555 intl-scm/guile-strings.c:581
 #: intl-scm/guile-strings.c:593 intl-scm/guile-strings.c:631
 #: intl-scm/guile-strings.c:661
-#, fuzzy
 msgid "Account Setup"
-msgstr "Konteneinrichten fertigstellen"
+msgstr "Konten einrichten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:505 intl-scm/guile-strings.c:529
 #: intl-scm/guile-strings.c:541 intl-scm/guile-strings.c:583
 #: intl-scm/guile-strings.c:673
-#, fuzzy
 msgid "Example"
-msgstr "sample:X"
+msgstr "Beispiel"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:507
 msgid "Setup Your Stock Portfolio"
-msgstr ""
+msgstr "Aktienportfolio einrichten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:509
-#, fuzzy
 msgid "Setup Your Preexisting Stocks"
-msgstr "GnuCash Einstellungen anpassen"
+msgstr "Einrichten der existierenden Aktienkonten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:511
-#, fuzzy
 msgid "Example Stock Account"
-msgstr "Aktiendepot"
+msgstr "Beispiel Aktienkonto"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:513
@@ -11123,32 +11087,28 @@ msgstr "Neue Investitionsanteile kaufen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:515
-#, fuzzy
 msgid "Setting Stock Price"
-msgstr "GnuCash Einstellungen anpassen"
+msgstr "Aktienkurs eintragen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:517
-#, fuzzy
 msgid "Initial Price Editor Setup"
-msgstr "Grundlegende HBCI Einrichtung"
+msgstr "Grundlegende Preiseditor-Einrichtung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:519
 msgid "Setting Stock Price Manually"
-msgstr ""
+msgstr "Aktienkurs manuell eintragen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:521
-#, fuzzy
 msgid "Setting Stock Price Automatically"
-msgstr "Automatisch erstellen"
+msgstr "Aktienkurs automatisch eintragen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:523
-#, fuzzy
 msgid "Display Stock Value"
-msgstr "Anzeigen des Datums?"
+msgstr "Aktienwert anzeigen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:525 intl-scm/guile-strings.c:3384
@@ -11158,135 +11118,118 @@ msgstr "Dividenden"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:527
-#, fuzzy
 msgid "Selling Stocks"
-msgstr "Investments verkaufen"
+msgstr "Aktien verkaufen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:531
-#, fuzzy
 msgid "Todo Investment Docs"
-msgstr "Investments"
+msgstr "Todo Investment Dokumentation"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:533
 msgid "Capital Gains"
-msgstr ""
+msgstr "Kapitalerträge (englisch)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:537 intl-scm/guile-strings.c:577
 msgid "Estimating Valuation"
-msgstr ""
+msgstr "Wert schätzen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:543
-#, fuzzy
 msgid "Unrealized Gains"
 msgstr "Noch nicht erzielter Gewinn/Verlust"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:545
-#, fuzzy
 msgid "Selling"
 msgstr "Verkauf"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:547
 msgid "Caution about Valuation"
-msgstr ""
+msgstr "Probleme bei Wertschätzung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:549
-#, fuzzy
 msgid "Taxation"
-msgstr "Geschäftsvorgänge/Buchungen"
+msgstr "Besteuerung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:551
-#, fuzzy
 msgid "Multiple Currencies"
-msgstr "Währungen"
+msgstr "Mehrere Währungen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:557
-#, fuzzy
 msgid "GnuCash Currency Support"
-msgstr "GnuCash Einstellungen"
+msgstr "GnuCash Währungsunterstützung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:559
-#, fuzzy
 msgid "Setting International Preferences"
-msgstr "GnuCash Einstellungen anpassen"
+msgstr "GnuCash Internationale Einstellungen anpassen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:561
-#, fuzzy
 msgid "Recording Currency Exchange (How-To)"
-msgstr "Dividenden und Zinsen buchen"
+msgstr "Währungsumtausch buchen (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:563
-#, fuzzy
 msgid "Recording Purchases in a Foreign Currency (How-To)"
-msgstr "Aktienteilung und Mergers buchen"
+msgstr "Einkäufe in fremden Währungen buchen (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:565
 msgid "Tracking Currency Investments (How-To)"
-msgstr ""
+msgstr "Währungskonten überwachen (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:567
-#, fuzzy
 msgid "Reconciling Statements in a Foreign Currency (How-To)"
-msgstr "Abgleichen mit Depot-Auszügen"
+msgstr "Konto Abgleichen mit fremden Währungen (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:569
-#, fuzzy
 msgid "Updating Exchange Rates (How-To)"
-msgstr "Kurse und Preise aktualisieren"
+msgstr "Kurse und Preise aktualisieren (Wie geht...)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:571
-#, fuzzy
 msgid "Putting It All Together (Examples)"
-msgstr "Alles Zusammensetzen"
+msgstr "Alles Zusammensetzen (Beispiele)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:573
-#, fuzzy
 msgid "Depreciation"
-msgstr "Beschreibung"
+msgstr "Abschreibung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:579
 msgid "Depreciation Schemes"
-msgstr ""
+msgstr "Abschreibungsarten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:587
-#, fuzzy
 msgid "Overview of Business Features"
-msgstr "GnuCash Übersicht"
+msgstr "GnuCash Geschäft-Übersicht"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:591 intl-scm/guile-strings.c:629
-#, fuzzy
 msgid "Initial Setup"
-msgstr "Grundlegende HBCI Einrichtung"
+msgstr "Grundlegende Einrichtung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:595 intl-scm/guile-strings.c:633
-#, fuzzy
 msgid "Register Your Company"
-msgstr "Schriftart Kontobuch"
+msgstr "Geschäft einrichten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:597 intl-scm/guile-strings.c:635
 msgid "System Components"
-msgstr ""
+msgstr "Systembestandteile"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:599 intl-scm/guile-strings.c:3488
@@ -11296,24 +11239,22 @@ msgstr "Kunden"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:603 intl-scm/guile-strings.c:641
 msgid "Find and Edit"
-msgstr ""
+msgstr "Suchen und bearbeiten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:617
-#, fuzzy
 msgid "Assign Starting Invoice Number"
-msgstr "Rechnungsnummer"
+msgstr "Erste Rechnungsnummer zuweisen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:619
-#, fuzzy
 msgid "Customer Jobs"
 msgstr "Aufträge des Kunden"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:623
 msgid "Changing the Invoice Appearance"
-msgstr ""
+msgstr "Aussehen der Rechnung ändern"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:637 intl-scm/guile-strings.c:3518
@@ -11322,83 +11263,78 @@ msgstr "Zulieferer"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:643
-#, fuzzy
 msgid "Bills"
-msgstr "Rechnung"
+msgstr "Rechnungen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:653
-#, fuzzy
 msgid "Vendor Jobs"
 msgstr "Aufträge Zulieferer"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:657
-#, fuzzy
 msgid "Payroll"
-msgstr "Rechnung zahlen"
+msgstr "Mitarbeiterverwaltung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:663
 msgid "Protocol"
-msgstr ""
+msgstr "Vorgehensweise"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:665
 msgid "Step 1: Deductions List"
-msgstr ""
+msgstr "Schritt 1: Liste der Lohnabzüge"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:667
-#, fuzzy
 msgid "Step 2: Create the Transaction Map"
-msgstr "Buchungsübersicht erstellt"
+msgstr "Schritt 2: Buchungszuordnung erstellen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:669
 msgid "Step 3: Pay the Employee"
-msgstr ""
+msgstr "Schritt 3: Zahlung an Mitarbeiter"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:671
 msgid "Step 4: Pay the Government"
-msgstr ""
+msgstr "Schritt 4: Zahlung an Fiskus"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:675
 msgid "Build Protocol"
-msgstr ""
+msgstr "Vorgehensweise erstellen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:677
-#, fuzzy
 msgid "Pay an Employee"
-msgstr "Mitarbeiter suchen"
+msgstr "Zahlung an Mitarbeiter"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:679
 msgid "Pay the Government"
-msgstr ""
+msgstr "Zahlung an Fiskus"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:681
 msgid "Appendix A: Migration Guide"
-msgstr ""
+msgstr "Anhang A: Aktualisieren von früheren Versionen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:683
 msgid "Appendix B: Frequently Asked Questions"
-msgstr ""
+msgstr "Anhang B: Häufige Fragen (FAQ)"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:685
 msgid "Appendix C: Contributed Account Trees"
-msgstr ""
+msgstr "Anhang C: Mitgelieferte Kontenhierarchien"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:687
 msgid "Appendix D: GNU Free Documentation License"
-msgstr ""
+msgstr "Anhang D: GNU Free Documentation License"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:691
