@@ -1,6 +1,7 @@
 2001-05-22  Dave Peticolas  <dave@krondo.com>
 
-	* src/gnome/druid-qif-import.c: fix scrollbar bug
+	* src/gnome/druid-qif-import.c: fix scrollbar bug. raise qif
+	window to top
 
 2001-05-21  Dave Peticolas  <dave@krondo.com>
 

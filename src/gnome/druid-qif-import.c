@@ -264,7 +264,8 @@ gnc_ui_qif_import_druid_make(void)  {
   }
 
   gtk_widget_show_all(retval->window);
-  
+  gdk_window_raise (retval->window->window);
+
   return retval;
 }
 
