@@ -45,11 +45,11 @@
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);
 
-const GUID * gnc_lot_get_guid (GNCLot *p);
 GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
 QofBook * gnc_lot_get_book (GNCLot *);		  
 
@@ -113,6 +113,8 @@ void gnc_lot_set_notes (GNCLot *, const char *);
  *     place. 
  * */
 KvpFrame * gnc_lot_get_slots (GNCLot *);
+
+#define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_ENTITY(X))
 
 #define LOT_IS_CLOSED	"is-closed?"
 #define LOT_BALANCE	"balance"

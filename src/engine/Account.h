@@ -404,6 +404,11 @@ gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
 gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 
 #define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
+
+/** killed for now, need to resurect this or something similar
+ * for transactional/dirty kvp.  Later.  Right now a place holder
+ */
+#define xaccAccountSetSlots_nc(A,S) qof_instance_set_slots(QOF_INSTANCE(A),S)
 /** @} */
 
 

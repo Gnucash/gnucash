@@ -574,8 +574,8 @@ xaccSplitGetCapGainsSplit (Split *split)
    gains_guid = kvp_value_get_guid (val);
    if (!gains_guid) return NULL;
 
-   gains_split = qof_entity_lookup (qof_book_get_entity_table(split->book),
-                   gains_guid, GNC_ID_SPLIT);
+   /* Both splits will be in the same collection, so seearch there. */
+   gains_split = (Split*) qof_collection_lookup_entity (split->entity.collection, gains_guid);
    PINFO ("split=%p has gains-split=%p", split, gains_split);
    return gains_split;
 }

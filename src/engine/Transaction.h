@@ -136,7 +136,11 @@ void          xaccTransCommitEdit (Transaction *trans);
 void          xaccTransRollbackEdit (Transaction *trans);
 
 /** The xaccTransIsOpen() method returns TRUE if the transaction
-    is open for editing. Otherwise, it returns false.  */
+    is open for editing. Otherwise, it returns false.  
+    XXX this routne should probably be deprecated.  its, umm,
+    hard to imagine legitamate uses (but it is used by
+    the import/export code for reasons I can't understand.)
+ */
 gboolean      xaccTransIsOpen (const Transaction *trans);
 
 /** The xaccTransLookup() subroutine will return the
@@ -167,9 +171,11 @@ void          xaccTransSortSplits (Transaction *trans);
 void          xaccTransDump (Transaction *trans, const char *tag);
 
 /** Set the KvpFrame slots of this transaction to the given frm by
- * directly using the frm pointer (i.e. non-copying). */
-void xaccTransSetSlots_nc(Transaction *t, KvpFrame *frm);
-
+ * directly using the frm pointer (i.e. non-copying). 
+ * XXX this is wrong, nedds to be replaced with a transactional thingy
+in kvp + qofinstance. for now, this is a quasi-unctional placeholder.
+ */
+#define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
 
 /** Set the  Transaction Type
  *

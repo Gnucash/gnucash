@@ -1243,7 +1243,7 @@ group_mark_clean(QofBook *book)
 static QofObject group_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
-  name:              GNC_ID_GROUP,
+  e_type:            GNC_ID_GROUP,
   type_label:        "AccountGroup",
   book_begin:        group_book_begin,
   book_end:          group_book_end,

@@ -49,7 +49,7 @@ typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
 struct _QofObject 
 {
   gint                interface_version; /* of this object interface */
-  QofIdType           name;              /* the Object's QOF_ID */
+  QofIdType           e_type;            /* the Object's QOF_ID */
   const char *        type_label;        /* "Printable" type-label string */
 
   /* book_begin is called from within the Book routines to create
