@@ -790,6 +790,15 @@ we've been, and where we're going.
         <ul>
           <li>
             <p>
+            <b>Hint-of-the-Day</b>. 
+            A collection of a some 50-100 hints-of-the-day:
+            short (2-4 sentance) hints/tips on how to use gnucash.
+            Every time the user starts gnucash, an new hint shows up ...
+            </p>
+          </li>
+
+          <li>
+            <p>
             <b>Themes</b>. 
             Some theme testing required.  The effect of themes on the
             register window needs to be reviewed.
@@ -906,6 +915,13 @@ we've been, and where we're going.
         <li>A mechanism to purge really old transactions from the 
             database.
         <li>Extensions to reporting infrastructure ...
+        <li>A user should be allowed to 'delete' an account *only* 
+            if it has no transactions in the currently open book.
+            Of course, its not deleted from the old books.
+            From this last, we conclude that every chart of accounts
+            should have a begining and ending date (that match the
+            book period), and the file format needs to support 
+            multiple charts ...
         </ul>
         </p>
 
@@ -1114,6 +1130,8 @@ we've been, and where we're going.
           <li>A design doc has been submitted by Bob Drzyzgula.
           Take a look at <tt>./src/budget.txt</tt> in the source
           directory.</li>
+          <li>Bryan Larsen has begun work ..  its scheme based ... 
+              Dave Peticolas has some gui roughed out ... 
         </ul>
         </p>
 
@@ -1795,15 +1813,12 @@ internationalized text rendering for gtk.
 
     </ul>
     <hr>
-    Draft version 0.36 -- March 2000
+    Draft version 0.37 -- May 2000
 
     <p>Linas Vepstas <a href="mailto:linas@linas.org">
     linas@linas.org</a><br>
     </p>
-    <hr>
-    Revised December 1999 
-
-    <p>Christopher Browne <a href="mailto:cbbrowne@ntlug.org">
+    <p>updates by Christopher Browne <a href="mailto:cbbrowne@ntlug.org">
     cbbrowne@ntlug.org</a><br>
     </p>
   </body>
