@@ -7,7 +7,9 @@
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  */
 
+#include "kvp-util-p.h"
 #include "qofbook.h"
+#include "qofbook-p.h"
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
@@ -49,5 +51,24 @@ qof_instance_get_slots (QofInstance *inst)
 {
   if (!inst) return NULL;
   return inst->kvp_data;
+}
+
+void
+qof_instance_gemini (QofInstance *to, QofInstance *from)
+{
+  time_t now;
+  now = time(0);
+                                                                                
+  /* Make a note of where the copy came from */
+  gnc_kvp_bag_add (to->kvp_data, "gemini", now,
+                                  "inst_guid", &from->guid,
+                                  "book_guid", &from->book->guid,
+                                  NULL);
+  gnc_kvp_bag_add (from->kvp_data, "gemini", now,
+                                  "inst_guid", &to->guid,
+                                  "book_guid", &to->book->guid,
+                                  NULL);
+
+  to->dirty = TRUE;
 }
 

@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <stdio.h>
-#include "gnc-engine-util.h"
 
 #include "kvp_frame.h"
 #include "kvp-util.h"
