@@ -172,7 +172,7 @@ printf ("save split is %p \n", split);
    if (MOD_AMNT & changed) {
       double new_amount;
       new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
-      xaccSplitSetValue (split, new_amount);
+      xaccSplitSetValue (split, -new_amount);
    }
 
    if (MOD_SHRS & changed) {
@@ -190,8 +190,14 @@ printf ("save split is %p \n", split);
       xaccSplitSetAction (split, reg->actionCell->cell.value);
 
    if (MOD_XFRM & changed) {
-      xaccMoveFarEndByName (split, reg->xfrmCell->cell.value);
+      Account *old_acc, *new_acc;
+
+      /* do some reparenting */
+      old_acc = xaccSplitGetAccount (split);
+      new_acc = xaccGetPeerAccountFromName (old_acc, reg->xfrmCell->cell.value);
+      xaccAccountInsertSplit (new_acc, split);
    }
+
 
    if (MOD_XTO & changed) {
       /* hack alert -- implement this */
@@ -261,7 +267,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetComboCellValue (reg->xfrmCell, accname);
    
       xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, xaccSplitGetValue (split));
+                               reg->creditCell, -xaccSplitGetValue (split));
    
       /* For income and expense acounts, we have to reverse
        * the meaning of balance, since, in a dual entry
@@ -277,7 +283,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
    
       xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
       xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));
-      xaccSetAmountCellValue (reg->valueCell, xaccSplitGetValue (split));
+      xaccSetAmountCellValue (reg->valueCell, -xaccSplitGetValue (split));
    }
 
    reg->table->current_cursor->user_data = (void *) split;
