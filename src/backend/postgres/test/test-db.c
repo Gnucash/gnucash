@@ -839,10 +839,9 @@ test_updates_2 (GNCSession *session_base,
   }
 #endif
 
-#if 1
   {
     Account * account = get_random_account (td.book_1);
-    Account * child = NULL; /* get_random_account (td.book_1); */
+    Account * child = get_random_account (td.book_1);
     Transaction * trans = get_random_transaction (td.book_1);
     Query * q = xaccMallocQuery ();
     int count = 0;
@@ -850,7 +849,7 @@ test_updates_2 (GNCSession *session_base,
     xaccAccountBeginEdit (account);
     xaccAccountBeginEdit (child);
     xaccGroupInsertAccount (td.group_1, account);
-    /* xaccAccountInsertSubAccount (account, child); */
+    xaccAccountInsertSubAccount (account, child);
     xaccAccountCommitEdit (child);
     xaccAccountCommitEdit (account);
 
@@ -859,12 +858,12 @@ test_updates_2 (GNCSession *session_base,
     {
       Split * split = node->data;
 
-      xaccAccountInsertSplit (account, split);
+      xaccAccountInsertSplit (child, split);
       count++;
     }
     xaccTransCommitEdit (trans);
 
-    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (account),
+    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (child),
                            GNC_ID_ACCOUNT, QUERY_AND);
 
     xaccQuerySetBook (q, td.book_2);
@@ -891,10 +890,9 @@ test_updates_2 (GNCSession *session_base,
     if (!do_test_args (ok,
                        "test new account",
                        __FILE__, __LINE__,
-                       "new account not loaded properly"))
+                       "new accounts not loaded properly"))
       return FALSE;
   }
-#endif
 
   gnc_session_end (td.session_1);
   gnc_session_end (td.session_2);

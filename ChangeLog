@@ -1,3 +1,13 @@
+2002-01-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/backend/postgres/test/test-db.c: test for new accounts
+
+	* src/backend/postgres/account.c: check for missing parent
+	account when loading accounts
+
+	* src/backend/postgres/PostgresBackend.c: check for bad
+	commodity string name
+
 2002-01-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/backend/postgres/account.c: check for missing currency

@@ -251,6 +251,8 @@ typedef struct
   Account * account;
 
   char * commodity_string; /* If non-NULL, need to load commodity */
+  gboolean need_parent;    /* If TRUE, need to load parent */
+  GUID parent_guid;        /* GUID of parent */
 } AccountResolveInfo;
 
 typedef struct
@@ -258,6 +260,13 @@ typedef struct
   GNCBook * book;
   GList * resolve_info;
 } GetAccountData;
+
+static AccountResolveInfo *
+get_resolve_info (AccountResolveInfo * ri)
+{
+  if (ri) return ri;
+  return g_new0 (AccountResolveInfo, 1);
+}
 
 static gpointer
 get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
@@ -269,6 +278,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    GUID acct_guid;
    char * commodity_string;
    gnc_commodity * commodity;
+   AccountResolveInfo *ri = NULL;
 
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
 
@@ -294,12 +304,10 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    commodity = gnc_string_to_commodity (commodity_string, book);
    if (!commodity)
    {
-     AccountResolveInfo *ri = g_new0 (AccountResolveInfo, 1);
+     ri = get_resolve_info (ri);
 
      ri->account = acc;
      ri->commodity_string = g_strdup (commodity_string);
-
-     gad->resolve_info = g_list_prepend (gad->resolve_info, ri);
    }
 
    xaccAccountSetName(acc, DB_GET_VAL("accountName",j));
@@ -324,23 +332,28 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    else
    {
       /* if we haven't restored the parent account, create
-       * an empty holder for it */
+       * a resolution node for it */
       parent = xaccAccountLookup (&acct_guid, book);
       if (!parent)
       {
-         parent = xaccMallocAccount(book);
-         xaccAccountBeginEdit(parent);
-         xaccAccountSetGUID(parent, &acct_guid);
+         ri = get_resolve_info (ri);
+
+         ri->account = acc;
+         ri->need_parent = TRUE;
+         ri->parent_guid = acct_guid;
       }
       else
       {
          xaccAccountBeginEdit(parent);
+         xaccAccountInsertSubAccount(parent, acc);
+         xaccAccountCommitEdit(parent);
       }
-      xaccAccountInsertSubAccount(parent, acc);
-      xaccAccountCommitEdit(parent);
    }
 
    xaccAccountCommitEdit(acc);
+
+   if (ri)
+     gad->resolve_info = g_list_prepend (gad->resolve_info, ri);
 
    return data;
 }
@@ -358,6 +371,8 @@ pgendGetAccounts (PGBackend *be, GNCBook *book)
   while (gad.resolve_info)
   {
     AccountResolveInfo *ri = gad.resolve_info->data;
+
+    gad.resolve_info = g_list_remove (gad.resolve_info, ri);
 
     xaccAccountBeginEdit (ri->account);
 
@@ -382,9 +397,29 @@ pgendGetAccounts (PGBackend *be, GNCBook *book)
       ri->commodity_string = NULL;
     }
 
-    xaccAccountCommitEdit (ri->account);
+    if (ri->need_parent)
+    {
+      Account * parent;
 
-    gad.resolve_info = g_list_remove (gad.resolve_info, ri);
+      /* parent could have been pulled in after node was inserted */
+      parent = xaccAccountLookup (&ri->parent_guid, gad.book);
+
+      if (!parent)
+        parent = pgendCopyAccountToEngine (be, &ri->parent_guid);
+
+      if (parent)
+      {
+        xaccAccountBeginEdit(parent);
+        xaccAccountInsertSubAccount(parent, ri->account);
+        xaccAccountCommitEdit(parent);
+      }
+      else
+      {
+        PERR ("no such account: %s", guid_to_string (&ri->parent_guid));
+      }
+    }
+
+    xaccAccountCommitEdit (ri->account);
 
     g_free (ri);
   }

@@ -251,6 +251,14 @@ gnc_string_to_commodity (const char *str, GNCBook *book)
 
    space = g_strdup(str);
    name = strchr (space, ':');
+
+   if (!name)
+   {
+     PERR ("bad commodity string: %s", str ? str : "(null)");
+     g_free (space);
+     return NULL;
+   }
+
    *name = 0;
    name += 2;
 
