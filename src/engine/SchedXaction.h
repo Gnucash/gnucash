@@ -198,10 +198,6 @@ void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
  * store the initial state of SXes before modification ... if it later
  * becomes necessary to revert an entire set of changes, we can 'revert' the
  * SX without having to rollback all the individual state changes.
- *
- * NOTE that this is similar to the above SequenceState interface, and
- * perhaps can be seen as entailing the above interface.  In fact, the above
- * interface is deprecated in favor of this one.
  **/
 void *gnc_sx_create_temporal_state( SchedXaction *sx );
 void gnc_sx_incr_temporal_state( SchedXaction *sx, void *stateData );

@@ -218,6 +218,7 @@ void
 sxd_close_handler ( gpointer user_data )
 {
         SchedXactionDialog        *sxd = user_data;
+        
         gnc_sxl_record_size( sxd );
         gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
 }
@@ -336,7 +337,6 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         gnc_sxed_save_sx( sxed );
 
         /* add to list */
-        putSchedXactionInDialog( sxed->sx, sxed->sxd );
         if ( sxed->newsxP ) {
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
@@ -344,6 +344,28 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 gnc_book_set_schedxactions( book, sxList );
                 sxed->sx = NULL;
                 sxed->newsxP = FALSE;
+        }
+
+        /* update lists */
+        /* We now do this by getting the list of SX Lists and updating them
+           [if they exist].  Otherwise, our pointer to our SXD might not be
+           valid; see Bug#103629. */
+        {
+                GList *listDialogs, *ldIter;
+                listDialogs =
+                        gnc_find_gui_components( DIALOG_SCHEDXACTION_CM_CLASS,
+                                                 NULL, NULL );
+                for ( ldIter = listDialogs;
+                      ldIter != NULL;
+                      ldIter = ldIter->next )
+                {
+                        gnc_sxd_list_refresh( (SchedXactionDialog*)ldIter
+                                              ->data );
+                }
+                if ( listDialogs != NULL )
+                {
+                        g_list_free( listDialogs );
+                }
         }
 
         /* cleanup */
@@ -1289,7 +1311,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_DATE_OPTION) },
                 { "rb_num_occur",   "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(NUM_OCCUR_OPTION) },
 
-                { REMAIN_ENTRY ,      "changed",      sxed_excal_update_adapt, NULL },
+                { REMAIN_ENTRY ,    "changed", sxed_excal_update_adapt, NULL },
 
                 { AUTOCREATE_OPT,   "toggled", autocreate_toggled,           NULL },
                 { ADVANCE_OPT,      "toggled", advance_toggle,               (gpointer)ADVANCE_DAYS_SPIN },
@@ -2234,10 +2256,10 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                 lastInst = xaccSchedXactionGetLastOccurDate( sxed->sx );
                 if ( g_date_valid( lastInst )
                      && g_date_valid( &d )
-                     && g_date_compare( lastInst, &d ) <= 0 ) {
+                     && g_date_compare( lastInst, &d ) != 0 ) {
                         d = *lastInst;
+                        xaccFreqSpecGetNextInstance( fs, &d, &d );
                 }
-                xaccFreqSpecGetNextInstance( fs, &d, &d );
         }
 
         if ( !g_date_valid( &d ) ) {

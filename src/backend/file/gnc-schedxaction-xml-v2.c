@@ -221,8 +221,11 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                     tsd = (temporalStateData*)l->data;
 
                     instNode = xmlNewNode( NULL, SX_DEFER_INSTANCE );
-                    xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
-                                                              &tsd->last_date ) );
+                    if ( g_date_valid( &tsd->last_date ) )
+                    {
+                      xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
+                                                                &tsd->last_date ) );
+                    }
                     xmlAddChild( instNode, int_to_dom_tree( SX_REM_OCCUR,
                                                             tsd->num_occur_rem ) );
                     xmlAddChild( instNode, int_to_dom_tree( SX_INSTANCE_COUNT,

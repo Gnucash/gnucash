@@ -442,9 +442,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
 
         if ( stateData != NULL ) {
                 temporalStateData *tsd = (temporalStateData*)stateData;
-                if ( g_date_valid( &tsd->last_date ) ) {
-                        last_occur = tsd->last_date;
-                }
+                last_occur = tsd->last_date;
         }
 
         if ( g_date_valid( &sx->start_date ) ) {
@@ -460,7 +458,7 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
                          * start date... one day should be good.
                          *
                          * This only holds for the first instance [read: if the
-                         * last[-occur]_date is invalid. */
+                         * last[-occur]_date is invalid] */
                         last_occur = sx->start_date;
                         g_date_subtract_days( &last_occur, 1 );
                 }
@@ -693,10 +691,6 @@ gnc_sx_create_temporal_state( SchedXaction *sx )
         temporalStateData *toRet =
                 g_new0( temporalStateData, 1 );
         toRet->last_date       = sx->last_date;
-        if ( !g_date_valid( &toRet->last_date ) ) {
-                toRet->last_date = sx->start_date;
-                g_date_subtract_days( &toRet->last_date, 1 );
-        }
         toRet->num_occur_rem   = sx->num_occurances_remain;
         toRet->num_inst        = sx->instance_num;
         return (void*)toRet;

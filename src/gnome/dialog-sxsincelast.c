@@ -1408,11 +1408,17 @@ cancel_check( GnomeDruidPage *druid_page,
                 for ( l = sxsld->createdTxnGUIDList; l; l = l->next ) {
                         t = xaccTransLookup( (GUID*)l->data,
                                              gnc_get_current_book() );
-                        g_assert( t );
-                        xaccTransBeginEdit( t );
-                        xaccTransDestroy( t );
-                        xaccTransCommitEdit( t );
-                        t = NULL;
+                        /* we used to assert, but since we allow the user a
+                         * register, they may have deleted 't' from their
+                         * view.  Thus, if we can't find it, don't die; fixes
+                         * Bug#103182. */
+                        if ( t != NULL )
+                        {
+                          xaccTransBeginEdit( t );
+                          xaccTransDestroy( t );
+                          xaccTransCommitEdit( t );
+                          t = NULL;
+                        }
                 }
         }
 

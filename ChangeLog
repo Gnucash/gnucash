@@ -1,3 +1,29 @@
+2003-01-25  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_update_cal): Fix
+	the Recurrence-Frequency example-calendar date calculation to show
+	upcoming instances correctly.
+
+	* src/engine/SchedXaction.c (xaccSchedXactionGetNextInstance):
+	Remove the validity check on the temporal-state-data's notion of
+	the last-occurance date; as invalidity means something important,
+	we must let it through; fixes Bug#103955.
+
+	* src/backend/file/gnc-schedxaction-xml-v2.c
+	(gnc_schedXaction_dom_tree_create): Make output of the 
+	deferred-instance last-date node optional on it's validity.
+
+	* src/gnome/dialog-sxsincelast.c (cancel_check): Change assertion
+	into conditional-activity, allowing rational use-case and fixing
+	Bug #103182.
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked):
+	Correctly update available SX lists instead of the one we were
+	spawned from, which may have disappeared in the mean time.  Fixes
+	Bug#103629 [and allows the future fix of not needing to open the
+	SX List Dialog when clicking "Advanced..." in the sx-from-transaction
+	SX Editor-open vector].
+
 2003-01-26  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci.scm, gnc-hbci-utils.c: Add
