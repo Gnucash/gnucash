@@ -313,9 +313,9 @@ string and 'directories' must be a list of strings."
     (if (null? dirs)
         #f
         (or (gnc:find-file file (map (lambda (prefix)
-                                       (build-path (list (car dirs) prefix)))
+                                       (build-path (car dirs) prefix))
                                      prefixes))
-            (gnc:find-file file (car dirs))
+            (gnc:find-file file (list (car dirs)))
             (loop prefixes (cdr dirs))))))
 
 (define (gnc:print-unstable-message)
