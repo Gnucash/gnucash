@@ -1548,7 +1548,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Print Check... (unfinished!)"),
+      N_("_Print Check..."),
       N_("Print a check using a standard format"),
       print_check_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
