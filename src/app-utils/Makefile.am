@@ -62,6 +62,7 @@ gncscm_DATA = \
   config-var.scm \
   date-utilities.scm \
   hooks.scm \
+  kvp-option-registry.scm \
   options.scm \
   prefs.scm \
   simple-obj.scm

@@ -1,3 +1,20 @@
+2002-07-08  Derek Atkins  <derek@ihtfp.com>
+
+	* kvp-option-registry.scm: create a registry of kvp-options
+	  generators for various objects.  This simplifies the distributed
+	  generation of kvp-option dialogs.
+	* app-utils.scm: export kvp-option-registry functions
+	* option-util: add option_db_changed() function
+	* business-gnome.scm: add "File -> File Preferences" menu item
+	  which is the kvp-option dialog for the Book.
+	* business-prefs.scm: register a kvp-option generator for gnc:id-book 
+	* gnc-book: add gnc_book_kvp_changed() function
+	* gw-engine-spec.scm: wrap gnc_book_kvp_changed
+	* dialog-options.c: only call the SCM apply_cb if the optiondb
+	  actually changed.
+	* gnome-utils.scm: create gnc:kvp-option-dialog procedure to create
+	  an kvp-option dialog for the speficied type.  Export this procedure.
+
 2002-07-07  Derek Atkins  <derek@ihtfp.com>
 
 	* options.scm: change gnc:make-option; add two new args, scm->kvp

@@ -44,6 +44,7 @@ struct gnc_book_struct
   /* The kvp_frame provides a place for top-level data associated 
    * with this book. */
   kvp_frame *kvp_data;
+  gboolean dirty;
   
   /* The entity table associates the GUIDs of all the objects
    * belonging to this book, with their pointers to the respective

@@ -326,21 +326,6 @@ book_sxns_mark_saved(GNCBook *book)
   return;
 }
 
-void
-gnc_book_mark_saved(GNCBook *book)
-{
-  if (!book) return;
-
-  xaccGroupMarkSaved(gnc_book_get_group(book));
-  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
-
-  xaccGroupMarkSaved(gnc_book_get_template_group(book));
-  book_sxns_mark_saved(book);
-
-  /* Mark everything as clean */
-  gncObjectMarkClean (book);
-}
-
 static gboolean
 book_sxlist_notsaved(GNCBook *book)
 {
@@ -362,18 +347,43 @@ book_sxlist_notsaved(GNCBook *book)
   return FALSE;
 }
   
+void
+gnc_book_mark_saved(GNCBook *book)
+{
+  if (!book) return;
+
+  book->dirty = FALSE;
+
+  xaccGroupMarkSaved(gnc_book_get_group(book));
+  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
+
+  xaccGroupMarkSaved(gnc_book_get_template_group(book));
+  book_sxns_mark_saved(book);
+
+  /* Mark everything as clean */
+  gncObjectMarkClean (book);
+}
+
 gboolean
 gnc_book_not_saved(GNCBook *book)
 {
   if (!book) return FALSE;
 
-  return(xaccGroupNotSaved(book->topgroup)
+  return(book->dirty
+	 ||
+	 xaccGroupNotSaved(book->topgroup)
          ||
          gnc_pricedb_dirty(book->pricedb)
          ||
          book_sxlist_notsaved(book)
          ||
          gncObjectIsDirty (book));
+}
+
+void gnc_book_kvp_changed (GNCBook *book)
+{
+  if (!book) return;
+  book->dirty = TRUE;
 }
 
 /* ====================================================================== */

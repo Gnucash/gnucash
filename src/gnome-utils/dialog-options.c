@@ -2746,9 +2746,11 @@ scm_apply_cb (GNCOptionWin *win, gpointer data)
 {
   struct scm_cb *cbdata = data;
 
-  gnc_option_db_commit (win->option_db);
-  if (cbdata->apply_cb != SCM_BOOL_F) {
-    gh_call0 (cbdata->apply_cb);
+  if (gnc_option_db_get_changed (win->option_db)) {
+    gnc_option_db_commit (win->option_db);
+    if (cbdata->apply_cb != SCM_BOOL_F) {
+      gh_call0 (cbdata->apply_cb);
+    }
   }
 }
 

@@ -136,6 +136,7 @@ GNCOption * gnc_option_db_get_option_by_SCM(GNCOptionDB *odb,
 gboolean gnc_option_db_dirty(GNCOptionDB *odb);
 void     gnc_option_db_clean(GNCOptionDB *odb);
 
+gboolean gnc_option_db_get_changed(GNCOptionDB *odb);
 void gnc_option_db_commit(GNCOptionDB *odb);
 
 char * gnc_option_db_get_default_section(GNCOptionDB *odb);

@@ -84,6 +84,11 @@ gpointer gnc_book_get_data (GNCBook *book, const char *key);
  */
 gboolean gnc_book_not_saved (GNCBook *book);
 
+/* Call this function when you change the book kvp, to make sure the book
+ * is marked 'dirty'.
+ */
+void gnc_book_kvp_changed (GNCBook *book);
+
 /* The gnc_book_equal() method returns TRUE if the engine data
  * in the two given books is equal. */
 gboolean gnc_book_equal (GNCBook *book_1, GNCBook *book_2);

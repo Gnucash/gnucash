@@ -44,3 +44,18 @@
 	   "This setting is inherited by new customers and vendors"))
   #f))
 
+(define (book-options-generator options)
+  (define (reg-option new-option)
+    (gnc:register-option options new-option))
+
+  (reg-option
+   (gnc:make-string-option
+    (N_ "Business") (N_ "Company Name")
+    "a" (N_ "The name of your business") ""))
+
+  (reg-option
+   (gnc:make-text-option
+    (N_ "Business") (N_ "Company Address")
+    "b" (N_ "The address of your business") "")))
+
+(gnc:register-kvp-option-generator gnc:id-book book-options-generator)

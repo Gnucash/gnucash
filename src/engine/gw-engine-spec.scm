@@ -1408,6 +1408,14 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
+ 'gnc:book-kvp-changed
+ '<gw:void>
+ "gnc_book_kvp_changed"
+ '((<gnc:Book*> book))
+ "Set the flag that the Book's kvp changed.")
+
+(gw:wrap-function
+ ws
  'gnc:session-get-error
  '<gnc:BackendError>
  "gnc_session_get_error"

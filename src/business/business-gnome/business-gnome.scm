@@ -196,6 +196,21 @@
 			 (gnc:tax-table-new (gnc:get-current-book)))))
   (add-vendor-items)
   (add-customer-items)
+
+  (gnc:add-extension
+    (gnc:make-menu-item (N_ "File Properties")
+			(N_ "View and edit the properties of this file.")
+			(list "File" "Save As...")
+			(lambda ()
+			  (let* ((book (gnc:get-current-book))
+				 (slots (gnc:book-get-slots book)))
+
+			    (define (changed_cb)
+			      (gnc:book-kvp-changed book))
+			    
+			    (gnc:kvp-option-dialog gnc:id-book
+						   slots "Book Options"
+						   changed_cb)))))
   )
 
 
@@ -353,54 +368,6 @@
 			    ))))
 
   
-  (define (test-book)
-    (define (book-options)
-      (let ((options (gnc:new-options)))
-	(define (reg-option new-option)
-	  (gnc:register-option options new-option))
-
-	(reg-option
-	 (gnc:make-string-option
-	  (N_ "Business") (N_ "Company Name")
-	  "a" (N_ "The name of your business") ""))
-
-	(reg-option
-	 (gnc:make-text-option
-	  (N_ "Business") (N_ "Company Address")
-	  "b" (N_ "The address of your business") ""))
-
-	options))
-
-    (gnc:make-menu-item (N_ "Test Option Stuff")
-			(N_ "Test Option Stuff")
-			(list "Extensions" "")
-			(lambda ()
-			  (let* ((book (gnc:get-current-book))
-				 (slots (gnc:book-get-slots book))
-				 (options (book-options))
-				 (optiondb (gnc:option-db-new options))
-				 (optionwin (gnc:option-dialog-new
-					     #t "Book Options")))
-
-			    (define (apply-cb)
-			      (gnc:debug "options =" options)
-			      (gnc:debug "slots =" slots)
-			      (gnc:options-scm->kvp options slots
-						    '("options") #t))
-
-			    (define (close-cb)
-			      (gnc:option-dialog-destroy optionwin)
-			      (gnc:option-db-destroy optiondb))
-
-			    (gnc:options-kvp->scm options slots '("options"))
-			    (gnc:option-dialog-set-callbacks optionwin
-							     apply-cb
-							     close-cb)
-			    (gnc:option-dialog-build-contents
-			     optionwin optiondb)))))
-				 
-
-  (gnc:add-extension (test-book))
   (gnc:add-extension init-data)
   (gnc:add-extension reload-receivable)
   (gnc:add-extension reload-invoice)

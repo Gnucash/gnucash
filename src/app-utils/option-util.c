@@ -1672,6 +1672,42 @@ gnc_commit_option(GNCOption *option)
 
 
 /********************************************************************\
+ * gnc_option_db_get_changed                                        *
+ *   returns a boolean value, TRUE if any option has changed,       *
+ *   FALSE is none of the options have changed                      *
+ *                                                                  *
+ * Args: odb - option database to check                             *
+ * Return: boolean                                                  *
+\********************************************************************/
+gboolean
+gnc_option_db_get_changed(GNCOptionDB *odb)
+{
+  GSList *section_node;
+  GSList *option_node;
+  GNCOptionSection *section;
+  GNCOption *option;
+
+  g_return_val_if_fail (odb, FALSE);
+
+  for (section_node = odb->option_sections; section_node;
+       section_node = section_node->next) {
+
+    section = section_node->data;
+
+    for (option_node = section->options; option_node;
+	 option_node = option_node->next) {
+
+      option = option_node->data;
+
+      if (option->changed)
+	return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+
+/********************************************************************\
  * gnc_option_db_commit                                             *
  *   commits the options which have changed, and which are valid    *
  *   for those which are not valid, error dialogs are shown.        *
