@@ -1462,7 +1462,9 @@ recnWindow(GtkWidget *parent, Account *account)
   recnRecalculateBalance(recnData);
 
   gnc_recn_refresh_toolbar(recnData);
-    
+
+  gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
+
   return recnData;
 }
 

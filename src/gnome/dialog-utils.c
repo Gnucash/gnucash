@@ -940,6 +940,17 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
     *height = h;
 }
 
+
+/********************************************************************\
+ * gnc_save_window_size                                             *
+ *   save the window size into options whose names are determined   *
+ *   by the string prefix.                                          *
+ *                                                                  *
+ * Args: prefix - determines the options used to save the values    *
+ *       width  - width of the window to save                       *
+ *       height - height of the window to save                      *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void
 gnc_save_window_size(const char *prefix, int width, int height)
 {
@@ -963,6 +974,16 @@ gnc_save_window_size(const char *prefix, int width, int height)
   g_free(name);
 }
 
+
+/********************************************************************\
+ * gnc_fill_menu_with_data                                          *
+ *   fill the user data values in the menu structure with the given *
+ *   value. The filling is done recursively.                        *
+ *                                                                  *
+ * Args: info - the menu to fill                                    *
+ *       data - the value to fill with                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void
 gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
 {
@@ -989,6 +1010,7 @@ gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
   }
 }
 
+
 void
 gnc_option_menu_init(GtkWidget * w)
 {
@@ -1010,6 +1032,7 @@ gnc_option_menu_init(GtkWidget * w)
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
 }
 
+
 int
 gnc_option_menu_get_active(GtkWidget * w)
 {
@@ -1020,4 +1043,44 @@ gnc_option_menu_get_active(GtkWidget * w)
   menuitem = gtk_menu_get_active(GTK_MENU(menu));
   return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
                                              "option_index"));
+}
+
+
+/********************************************************************\
+ * gnc_window_adjust_for_screen                                     *
+ *   adjust the window size if it is bigger than the screen size.   *
+ *                                                                  *
+ * Args: window - the window to adjust                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_window_adjust_for_screen(GtkWindow * window)
+{
+  gint screen_width;
+  gint screen_height;
+  gint width;
+  gint height;
+
+  if (window == NULL)
+    return;
+
+  g_return_if_fail(GTK_IS_WINDOW(window));
+  if (GTK_WIDGET(window)->window == NULL)
+    return;
+
+  screen_width = gdk_screen_width();
+  screen_height = gdk_screen_height();
+  gdk_window_get_size(GTK_WIDGET(window)->window, &width, &height);
+
+  if ((width <= screen_width) && (height <= screen_height))
+    return;
+
+  width = MIN(width, screen_width - 10);
+  width = MAX(width, 0);
+
+  height = MIN(height, screen_height - 10);
+  height = MAX(height, 0);
+
+  gdk_window_resize(GTK_WIDGET(window)->window, width, height);
+  gtk_widget_queue_resize(GTK_WIDGET(window));
 }

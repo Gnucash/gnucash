@@ -165,4 +165,6 @@ void gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data);
 void gnc_option_menu_init(GtkWidget * option_menu);
 int  gnc_option_menu_get_active(GtkWidget * option_menu);
 
+void gnc_window_adjust_for_screen(GtkWindow * window);
+
 #endif

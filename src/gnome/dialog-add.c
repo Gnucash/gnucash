@@ -633,6 +633,8 @@ accWindow (AccountGroup *this_is_not_used)
   current_account = gnc_get_current_account();
   gnc_account_tree_select_account(accData->tree, current_account, TRUE);
 
+  gnc_window_adjust_for_screen(GTK_WINDOW(accData->dialog));
+
   return accData;
 }
 

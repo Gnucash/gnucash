@@ -952,6 +952,8 @@ editAccWindow(Account *account)
   gnc_account_tree_select_account(GNC_ACCOUNT_TREE(editAccData->parent_tree),
                                   editAccData->current_parent, TRUE);
 
+  gnc_window_adjust_for_screen(GTK_WINDOW(editAccData->dialog));
+
   return editAccData;
 }
 

@@ -1690,6 +1690,8 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 
   gnc_register_jump_to_blank(regData);
 
+  gnc_window_adjust_for_screen(GTK_WINDOW(register_window));
+
   return regData;
 }
 
