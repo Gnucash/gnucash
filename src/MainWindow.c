@@ -488,7 +488,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     {
     case FMB_NEW:
       DEBUG("FMB_NEW");
-      if( (!(grp->saved)) && (datafile != NULL) )
+      if( xaccAccountGroupNotSaved (grp) && (NULL != datafile) )
         {
         char *msg = SAVE_MSG;
         if( verifyBox(toplevel,msg) )
@@ -505,7 +505,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case FMB_OPEN: {
       char * newfile;
       DEBUG("FMB_OPEN");
-      if( (!(grp->saved)) && (datafile != NULL) )
+      if( xaccAccountGroupNotSaved (grp) && (NULL != datafile) )
         {
         char *msg = SAVE_MSG;
         if( verifyBox(toplevel,msg) )
@@ -531,7 +531,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("FMB_SAVE");
       /* ??? Somehow make sure all in-progress edits get committed! */
       writeData( datafile, grp );
-      grp->saved = True;
+      xaccAccountGroupMarkSaved (grp);
       break;
 
     case FMB_SAVEAS: {

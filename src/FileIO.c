@@ -35,9 +35,13 @@
  *                                                                  *
  * Version 3 of the file format supports actions (Buy, Sell, etc.)  *
  *                                                                  *
+ * Version 4 of the file format adds account groups                 *
+ *                                                                  *
  *                                                                  *
  * the format of the data in the file:                              *
- *   file        ::== token numAccounts (Account)^numAccounts       *
+ *   file        ::== token Group                                   *
+ *   Group       ::== numGroups (Group)^numGroups                   *
+ *                    numAccounts (Account)^numAccounts             *
  *   Account     ::== num flags type accountName description notes  * 
  *                    numTran (Transaction)^numTrans                * 
  *   Transaction ::== num date description memo catagory reconciled *
@@ -71,12 +75,13 @@
  *   year        ::== int                                           * 
 \********************************************************************/
 
-#include <Xm/Xm.h>
 #include <fcntl.h>
-#include "main.h"
-#include "util.h"
+#include <Xm/Xm.h>
+
 #include "Account.h"
 #include "Data.h"
+#include "main.h"
+#include "util.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
@@ -87,10 +92,11 @@
 extern Widget toplevel;
 
 /** PROTOTYPES ******************************************************/
-int          readAccount( int fd, Account *, int token );
-Transaction *readTransaction( int fd, Account *, int token );
-char        *readString( int fd, int token );
-Date        *readDate( int fd, int token );
+AccountGroup *readAccountGroup( int fd, AccountGroup *, int token );
+int           readAccount( int fd, Account *, int token );
+Transaction  *readTransaction( int fd, Account *, int token );
+char         *readString( int fd, int token );
+Date         *readDate( int fd, int token );
 
 int writeAccount( int fd, Account *account );
 int writeTransaction( int fd, Account *, Transaction *trans );
@@ -166,13 +172,12 @@ readData( char *datafile )
   int  err=0;
   int  token=0;
   int  i;
-  AccountGroup *grp = mallocAccountGroup();
+  AccountGroup *grp = 0x0;
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )
     {
     ERROR();
-    freeAccountGroup (grp);
     return NULL;
     }
   
@@ -182,7 +187,6 @@ readData( char *datafile )
     {
     ERROR();
     close(fd);
-    freeAccountGroup (grp);
     return NULL;
     }
   XACC_FLIP_INT (token);
@@ -206,6 +210,27 @@ readData( char *datafile )
     if( !verifyBox( toplevel, msg ) )
       return NULL;
     }
+  
+  grp = readAccountGroup (fd, NULL, token);
+
+  close(fd);
+  return grp;
+  }
+
+/********************************************************************\
+ * readAccountGroup                                                 * 
+ *   reads in a group of accounts                                   *
+ *                                                                  * 
+ * Args:                                                            * 
+ * Return: the struct with the program data in it                   * 
+\********************************************************************/
+AccountGroup *
+readAccountGroup (int fd, AccountGroup *parent, int token)
+  {
+  int  numAcc;
+  int  err=0;
+  int  i;
+  AccountGroup *grp = mallocAccountGroup();
   
   /* read numAccs */
   err = read( fd, &numAcc, sizeof(int) );
