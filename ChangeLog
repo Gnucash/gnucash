@@ -9,6 +9,12 @@
 	  events are suspended.  Without such an API, events can be lost
 	  if the event system is suspended when the event comes in.
 	
+	* src/gnome-utils/print-session.[ch]: added gnucash wrappers
+	  around gnome-print's rotate, translate, gsave, and grestore
+	  APIs.  All to allow sideways printing (by rotating the image).
+	* src/gnome-utils/gw-gnome-utils-spec.scm: wrap the new print-session
+	  apis.
+
 2003-05-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-lot.[ch]: add LOT_IS_CLOSED and LOT_BALANCE
