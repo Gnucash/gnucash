@@ -31,37 +31,36 @@
 
 #define BUFSIZE   1024
 
-extern int loglevel;
-
 /** DEBUGGING MACROS ************************************************/
+/* The debuging macros enable the setting of trace messages */
+#include <nana.h>
 #include <stdio.h>
 
-#define PERR(x) { if (0 <=loglevel) { 			\
-                     fprintf (stderr, "Error: ");  	\
-                     fprintf (stderr, x);  }}
+#define MOD_ENGINE     1
+#define MOD_IO         2
+#define MOD_LEDGER     3
+#define MOD_GUI        4
+#define MODULE_MAX     5
 
-#define WARN(x) { if (1 <=loglevel) { 			\
-                     fprintf (stderr, "Warning: ");  	\
-                     fprintf (stderr, x);  }}
+extern int loglevel[MODULE_MAX];
 
-#define INFO(x) { if (2 <=loglevel) { 			\
-                     fprintf (stderr, "Info: ");  	\
-                     fprintf (stderr, x);  }}
+#define LERR    (1 <= loglevel[module])
+#define LWARN   (2 <= loglevel[module])
+#define LINFO   (3 <= loglevel[module])
+#define LDEBUG  (4 <= loglevel[module])
+#define LDETAIL (5 <= loglevel[module])
 
-#define INFO_2(x,y) { if (2 <=loglevel) { 		\
-                     fprintf (stderr, "Info: ");  	\
-                     fprintf (stderr, x, y);  }}
 
-#define DEBUG(x) { if (3 <=loglevel) { 			\
-                     fprintf (stderr, "Debug: ");  	\
-                     fprintf (stderr, x);  }}
+/* utility macros  */
+#define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
+#define PWARN(x...)    LG(LWARN,   "Waring: ");  LG(LWARN,   ##x);
+#define PINFO(x...)    LG(LINFO,   "Info: ");    LG(LINFO,   ##x);
+#define DEBUG(x...)    LG(LDEBUG,  "Debug: ");   LG(LDEBUG,  ##x);
+#define ENTER(x...)    LG(LDEBUG,  "Enter: ");   LG(LDEBUG,  ##x);
+#define LEAVE(x...)    LG(LDEBUG,  "Leave: ");   LG(LDEBUG,  ##x);
+#define DETAIL(x...)   LG(LDETAIL, "Detail: ");  LG(LDETAIL, ##x);
 
-#define ENTER(x) { if (3 <=loglevel) { 		\
-                     fprintf(stderr,"Entering: %s()\n", x);  }}
-#define LEAVE(x) { if (3 <=loglevel) { 		\
-                     fprintf(stderr,"Leaving: %s()\n", x);  }}
-#define DEBUGCMD(x) { if (3 <=loglevel) { x; }}
-
+#define DEBUGCMD(x) { if (INFO) { x; }}
 
 #include <errno.h>
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \

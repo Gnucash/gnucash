@@ -31,7 +31,13 @@
 #include "util.h"
 
 /** GLOBALS *********************************************************/
-int loglevel = 1;
+int loglevel[MODULE_MAX] =
+{0,      /* DUMMY */
+ 4,      /* ENGINE */
+ 1,      /* IO */
+ 3,      /* REGISTER */
+ 2,      /* GUI */
+};
 
 /********************************************************************\
  * DEBUGGING MEMORY ALLOCATION STUFF                                * 

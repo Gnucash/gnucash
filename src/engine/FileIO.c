@@ -117,6 +117,9 @@
  * new/improved account & transaction structures
  */
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_IO;
+
 /** GLOBALS *********************************************************/
 
 /* the default currency is used when importin old-style
@@ -365,7 +368,7 @@ readGroup (int fd, Account *aparent, int token)
     }
   XACC_FLIP_INT (numAcc);
   
-  INFO_2 ("readGroup(): expecting %d accounts \n", numAcc);
+  DEBUG ("readGroup(): expecting %d accounts \n", numAcc);
 
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
@@ -451,7 +454,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   
   tmp = readString( fd, token );
   if( NULL == tmp)  { free (tmp);  return NULL; }
-  INFO_2 ("readAccount(): reading acct %s \n", tmp);
+  DEBUG ("readAccount(): reading acct %s \n", tmp);
   xaccAccountSetName (acc, tmp);
   free (tmp);
   
@@ -494,7 +497,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
   
-  INFO_2 ("Info: readAccount(): expecting %d transactions \n", numTrans);
+  DEBUG ("Info: readAccount(): expecting %d transactions \n", numTrans);
   /* read the transactions */
   for( i=0; i<numTrans; i++ )
     {
@@ -846,7 +849,7 @@ readTransaction( int fd, Account *acc, int token )
       xaccSplitSetSharePriceAndAmount (s, share_price, num_shares);
     }  
   
-    INFO_2 ("readTransaction(): num_shares %f \n", num_shares);
+    DEBUG ("readTransaction(): num_shares %f \n", num_shares);
   
     /* Read the account numbers for double-entry */
     /* These are first used in Version 2 of the file format */
@@ -862,7 +865,7 @@ readTransaction( int fd, Account *acc, int token )
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
-      INFO_2 ("readTransaction(): credit %d\n", acc_id);
+      DEBUG ("readTransaction(): credit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
   
       /* insert the split part of the transaction into 
@@ -880,7 +883,7 @@ readTransaction( int fd, Account *acc, int token )
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
-      INFO_2 ("readTransaction(): debit %d\n", acc_id);
+      DEBUG ("readTransaction(): debit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
       if (peer_acc) {
          Split *split;
@@ -1061,7 +1064,7 @@ readSplit ( int fd, int token )
   XACC_FLIP_DOUBLE (share_price);
   xaccSplitSetSharePriceAndAmount (split, share_price, num_shares);
 
-  INFO_2 ("readSplit(): num_shares %f \n", num_shares);
+  DEBUG ("readSplit(): num_shares %f \n", num_shares);
 
   /* Read the account number */
 
@@ -1073,7 +1076,7 @@ readSplit ( int fd, int token )
     return NULL;
   }
   XACC_FLIP_INT (acc_id);
-  INFO_2 ("readSplit(): account id %d\n", acc_id);
+  DEBUG ("readSplit(): account id %d\n", acc_id);
   peer_acc = locateAccount (acc_id);
   xaccAccountInsertSplit (peer_acc, split);
 
@@ -1374,7 +1377,7 @@ writeAccount( int fd, Account *acc )
   int numChildren = 0;
   char * tmp;
   
-  INFO_2 ("writeAccount(): writing acct %s \n", xaccAccountGetName (acc));
+  DEBUG ("writeAccount(): writing acct %s \n", xaccAccountGetName (acc));
 
   acc_id = acc->id;
   XACC_FLIP_INT (acc_id);
@@ -1464,7 +1467,7 @@ writeAccount( int fd, Account *acc )
   if( err != sizeof(int) )
     return -1;
   
-  INFO_2 ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
+  DEBUG ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
   i=0;
   s = acc->splits[i];
   while (s) {
@@ -1595,7 +1598,7 @@ writeSplit ( int fd, Split *split )
   if( -1 == err ) return err;
   
   damount = xaccSplitGetShareAmount (split);
-  INFO_2 ("writeSplit: amount=%f \n", damount);
+  DEBUG ("writeSplit: amount=%f \n", damount);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
@@ -1611,7 +1614,7 @@ writeSplit ( int fd, Split *split )
   xfer_acc = split->acc;
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  INFO_2 ("writeSplit: credit %d \n", acc_id);
+  DEBUG ("writeSplit: credit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
