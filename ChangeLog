@@ -1,3 +1,14 @@
+2000-12-05  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/account-tree.[ch] (gnc_account_tree_unselect_account): Add unselect account functionality as required by mainwindow account tree
+
+2000-12-04  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/mainwindow-account-tree.[ch]: new file.  Widgetizes the current
+	contents of the main window in preparation for pane-ization.
+
+	* src/gnome/window-main.c: modified to take account of the above.
+
 2000-11-17  James LewisMoss  <dres@debian.org>
 
 	* src/doc/design/reports.texinfo (Reports): Reorder option

@@ -28,6 +28,7 @@ libgncgnome_a_SOURCES = \
   gnc-datedelta.c \
   gnc-dateedit.c \
   gtkselect.c \
+  mainwindow-account-tree.c \
   print-session.c \
   query-user.c \
   reconcile-list.c \

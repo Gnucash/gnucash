@@ -135,6 +135,7 @@ gnc_account_tree_new()
  *                                                                  *
  * Returns: the account tree widget, or NULL if there was a problem.*
 \********************************************************************/
+
 GtkWidget *
 gnc_account_tree_new_with_root(Account * root)
 {
@@ -526,7 +527,33 @@ gnc_account_tree_select_account(GNCAccountTree *tree,
 
   return TRUE;
 }
+/********************************************************************\
+ * gnc_account_tree_unselect_account                                *
+ *   unselect an account in the tree                                *
+ *                                                                  *
+ * Args: tree    - tree to be modified                              *
+ *       account - account to be selected                           *
+ *       show    - if true, scroll the tree                         *
+ * Returns: true if the account was found                           *
+\********************************************************************/
+gboolean
+gnc_account_tree_unselect_account(GNCAccountTree *tree,
+                                Account        *account)
+{
+  GtkCTree *ctree = GTK_CTREE(tree);
+  GtkCTreeNode *node;
 
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
+
+  if (node == NULL)
+    return FALSE;
+
+  /* unselect it */
+  gtk_ctree_unselect(ctree, node);
+
+  return TRUE;
+}
 
 /********************************************************************\
  * gnc_account_tree_select_accounts                                 *

@@ -149,14 +149,14 @@ po/gnucash.pot
 po/Makefile.in.in
 stamp-h.in
 rpm/gnucash.spec
-src/doc/design/gnucash-design.info
-src/doc/design/gnucash-design.info-1
-src/doc/design/gnucash-design.info-2
+src/doc/design/texinfo.tex
+src/doc/design/gnucash-design.info*
 src/doc/design/stamp-vti
 src/doc/design/version.texi
 src/gnome/glade-cb-gnc-dialogs.c
 src/gnome/glade-support-gnc-dialogs.c
 src/gnucash
+src/gnome/gnucash.keys
 src/guile/gnc.c
 src/guile/gnc.h
 src/guile/gnc.html

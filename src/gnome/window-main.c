@@ -53,6 +53,7 @@
 #include "gnucash.h"
 #include "gtkselect.h"
 #include "messages.h"
+#include "mainwindow-account-tree.h"
 #include "window-help.h"
 #include "window-main.h"
 #include "window-reconcile.h"
@@ -820,7 +821,7 @@ gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
   g_free(main_info);
 }
 
-GNCAccountTree *
+GNCMainWinAccountTree *
 gnc_get_current_account_tree(void)
 {
   GNCMainInfo *main_info;
@@ -829,25 +830,25 @@ gnc_get_current_account_tree(void)
   if (main_info == NULL)
     return NULL;
 
-  return GNC_ACCOUNT_TREE(main_info->account_tree);
+  return GNC_MAINWIN_ACCOUNT_TREE(main_info->account_tree);
 }
 
 Account *
 gnc_get_current_account(void)
 {
-  GNCAccountTree * tree = gnc_get_current_account_tree();
-  return gnc_account_tree_get_current_account(tree);
+  GNCMainWinAccountTree *list  = gnc_get_current_account_tree();
+  return gnc_mainwin_account_tree_get_current_account(list);
 }
 
 GList *
 gnc_get_current_accounts(void)
 {
-  GNCAccountTree * tree = gnc_get_current_account_tree();
-  return gnc_account_tree_get_current_accounts(tree);
-}
+  GNCMainWinAccountTree *tree  = gnc_get_current_account_tree();
+  return gnc_mainwin_account_tree_get_current_accounts(tree);
+} 
 
 static void
-gnc_account_tree_activate_cb(GNCAccountTree *tree,
+gnc_account_tree_activate_cb(GNCMainWinAccountTree *tree,
                              Account *account,
                              gpointer user_data)
 {
@@ -865,7 +866,7 @@ gnc_account_tree_activate_cb(GNCAccountTree *tree,
     group = xaccAccountGetChildren(account);
     if (xaccGroupGetNumAccounts(group) > 0)
     {
-      gnc_account_tree_toggle_account_expansion(tree, account);
+      gnc_mainwin_account_tree_toggle_account_expansion(tree, account);
       return;
     }
   }
@@ -878,18 +879,17 @@ static void
 gnc_configure_account_tree(void *data)
 {
   GtkObject *app;
-  GNCAccountTree *tree;
+  GNCMainInfo *info;
+  GNCMainWinAccountTree *tree;
   AccountViewInfo new_avi;
   AccountViewInfo old_avi;
   GSList *list, *node;
 
   memset(&new_avi, 0, sizeof(new_avi));
 
-  app = GTK_OBJECT(gnc_get_ui_data());
 
-  tree = gnc_get_current_account_tree();
-  if (tree == NULL)
-    return;
+  info = gnc_get_main_info();
+  tree = GNC_MAINWIN_ACCOUNT_TREE(info->account_tree);
 
   list = gnc_lookup_list_option("Main Window",
                                 "Account types to display",
@@ -978,10 +978,9 @@ gnc_configure_account_tree(void *data)
 
   new_avi.show_field[ACCOUNT_NAME] = TRUE;
 
-  gnc_account_tree_get_view_info(tree, &old_avi);
+  gnc_mainwin_account_tree_set_view_info(tree, new_avi);
 
-  if (memcmp(&old_avi, &new_avi, sizeof(AccountViewInfo)) != 0)
-    gnc_account_tree_set_view_info(tree, &new_avi);
+  return;
 }
 
 static void
@@ -1301,8 +1300,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   list = g_slist_prepend(list, accountsmenu[6].widget);
   list = g_slist_prepend(list, accountsmenu[9].widget);
 
-  popup = gnome_popup_menu_new(accountsmenu);
-  gnome_popup_menu_attach(popup, account_tree, NULL);
+  gnc_mainwin_account_tree_attach_popup(account_tree, accountsmenu);
 
   list = g_slist_prepend(list, scrubmenu[0].widget);
   list = g_slist_prepend(list, scrubmenu[1].widget);
@@ -1364,11 +1362,11 @@ gnc_account_set_sensititives(GNCMainInfo *main_info, gboolean sensitive)
 }
 
 static void
-gnc_account_cb(GNCAccountTree *tree, Account *account, gpointer data)
+gnc_account_cb(GNCMainWinAccountTree *tree, Account *account, gpointer data)
 {
   gboolean sensitive;
 
-  account = gnc_account_tree_get_current_account(tree);
+  account = gnc_mainwin_account_tree_get_current_account(tree);
   sensitive = account != NULL;
 
   gnc_account_set_sensititives(gnc_get_main_info(), sensitive);
@@ -1379,7 +1377,7 @@ mainWindow()
 {
   GNCMainInfo *main_info;
   GtkWidget *app = gnc_get_ui_data();
-  GtkWidget *scrolled_win;
+  GtkWidget *account_tree;
   GtkWidget *statusbar;
   int width = 0;
   int height = 0;
@@ -1392,8 +1390,6 @@ mainWindow()
   main_info = g_new0(GNCMainInfo, 1);
   gtk_object_set_data(GTK_OBJECT(app), "gnc_main_info", main_info);
 
-  main_info->account_tree = gnc_account_tree_new();
-
   main_info->main_window_change_callback_id =
     gnc_register_option_change_callback(gnc_configure_account_tree, NULL,
                                         "Main Window", NULL);
@@ -1403,14 +1399,6 @@ mainWindow()
                                         "International",
                                         "Enable EURO support");
 
-  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
-		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
-
-  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "select_account",
-                     GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
-
-  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "unselect_account",
-                     GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
 
   /* create statusbar and add it to the application. */
   statusbar = gnome_appbar_new(FALSE, /* no progress bar, maybe later? */
@@ -1419,7 +1407,7 @@ mainWindow()
 
   gnome_app_set_statusbar(GNOME_APP(app), GTK_WIDGET(statusbar));
 
-  gnc_main_create_menus(GNOME_APP(app), main_info->account_tree, main_info);
+  
 
   gnc_main_create_toolbar(GNOME_APP(app), main_info);
   gnc_configure_toolbar(NULL);
@@ -1449,15 +1437,23 @@ mainWindow()
   }
 
   /* create scrolled window */
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-  gnome_app_set_contents(GNOME_APP(app), scrolled_win);
 
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-                                  GTK_POLICY_AUTOMATIC, 
-                                  GTK_POLICY_AUTOMATIC);
+  account_tree = gnc_mainwin_account_tree_new();
+  main_info->account_tree = account_tree;
+  gnome_app_set_contents(GNOME_APP(app), account_tree);
 
-  gtk_container_add(GTK_CONTAINER(scrolled_win),
-                    GTK_WIDGET(main_info->account_tree));
+
+  gnc_main_create_menus(GNOME_APP(app), main_info->account_tree, main_info);
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "activate_account",
+		     GTK_SIGNAL_FUNC (gnc_account_tree_activate_cb), NULL);
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "select_account",
+                     GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
+
+  gtk_signal_connect(GTK_OBJECT(main_info->account_tree), "unselect_account",
+                     GTK_SIGNAL_FUNC(gnc_account_cb), NULL);
+
 
   /* Attach delete and destroy signals to the main window */  
   gtk_signal_connect (GTK_OBJECT (app), "delete_event",
@@ -1475,7 +1471,6 @@ mainWindow()
   /* Show everything now that it is created */
   gtk_widget_show_all(statusbar);
   gtk_widget_show(main_info->account_tree);
-  gtk_widget_show(scrolled_win);
 
   gnc_configure_account_tree(NULL);
 

@@ -149,7 +149,9 @@ void gnc_account_tree_get_view_info (GNCAccountTree *tree,
 void gnc_account_tree_set_filter (GNCAccountTree *tree,
                                   AccountFilter filter,
                                   gpointer user_data);
-
+gboolean
+gnc_account_tree_unselect_account(GNCAccountTree *tree,
+				  Account        *account);
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */

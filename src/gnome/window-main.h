@@ -23,14 +23,13 @@
 #ifndef __WINDOW_MAIN_H__
 #define __WINDOW_MAIN_H__
 
-#include "account-tree.h"
-
+#include "mainwindow-account-tree.h"
 
 /** PROTOTYPES ******************************************************/
 
 void mainWindow(void);
 
-GNCAccountTree * gnc_get_current_account_tree(void);
+GNCMainWinAccountTree * gnc_get_current_account_tree(void);
 
 void gnc_ui_mainWindow_save_size(void);
 
