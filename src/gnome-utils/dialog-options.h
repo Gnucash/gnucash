@@ -102,6 +102,7 @@ typedef struct gnc_option_def {
 
 
 /* Register a new option type in the UI */
+void gnc_options_ui_initialize (void);
 void gnc_options_ui_register_option (GNCOptionDef_t *option);
 GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name);
 
