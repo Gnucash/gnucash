@@ -1,14 +1,20 @@
-Name: gnucash
-Summary: GnuCash is an application to keep track of your finances.
-Version: @-VERSION-@
-Release: 1
-Copyright: Free Software Foundation
-Group: Applications/Finance
-Source: http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
-Packager: Dave Peticolas <dave@krondo.com>
-BuildRoot: /var/tmp/gnucash-%version
-Requires: gnome-libs >= 1.0.40
-
+Name:      	gnucash
+Summary:   	GnuCash is an application to keep track of your finances.
+Version:   	@-VERSION-@
+Release:  	1
+Copyright: 	Free Software Foundation
+Group:     	Applications/Finance
+Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
+BuildRoot: 	/var/tmp/gnucash-%version
+Requires:  	gnome-libs >= 1.2.0
+Requires:	gdk-pixbuf >= 0.2.5
+Requires:	gnome-print >= 0.21
+Requires:	guile >= 1.3.4
+Requires:	gtkhtml >= 0.8
+Requires:	Guppi >= 0.35.3
+Requires:	g-wrap >= 1.3.1
+Requires:	umb-scheme >= 3.2
+Requires:	gal >= 0.8
 
 %description
 GnuCash is a personal finance manager. A check-book like
@@ -17,45 +23,59 @@ stocks, income and even currency trades. The interface is
 designed to be simple and easy to use, but is backed with
 double-entry accounting principles to ensure balanced books.
 
+%package devel
+Summary: Header files for GnuCash development.
+Group: Development/Libraries
+Requires: gnucash = %{PACKAGE_VERSION}
+
+%description devel
+This package contains header files for GnuCash development.
+Install this package if you want to use GnuCash libraries
+in C programs.
 
 %prep
 %setup -q
 
-
 %build
-./configure --prefix=/usr --sysconfdir=/etc --enable-sql
+%configure
 make
 
-
 %install
-rm -rf $RPM_BUILD_ROOT
-make prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_BUILD_ROOT/etc install
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+LIBRARY_PATH="${LIBRARY_PATH}:${RPM_BUILD_ROOT}%{_libdir}"
+LIBRARY_PATH="${LIBRARY_PATH}:${RPM_BUILD_ROOT}%{_libdir}/gnucash"
+export LIBRARY_PATH
+%{makeinstall}
 
+%find_lang %name
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
-
-%files
+%files -f %{name}.lang
 %defattr(444,root,root,755)
-%attr(555,-,-) /usr/bin/gnucash
-%attr(555,-,-) /usr/bin/gnucash-make-guids
-%attr(555,-,-) /usr/bin/gnc-prices
-%attr(555,-,-) /usr/bin/update-finance-quote
-%attr(555,-,-) /usr/share/gnucash/finance-quote-helper
-/usr/info/*.gz
-/usr/lib/libgnc*
-/usr/share/gnucash/accounts
-/usr/share/gnucash/doc
-/usr/share/gnucash/glade
-/usr/share/gnucash/guile-modules
-/usr/share/gnucash/html
-/usr/share/gnucash/scm
-/usr/share/gnome/help/gnucash
-/usr/share/gnome/apps/Applications/gnucash.desktop
-/usr/share/locale/*/LC_MESSAGES/gnucash.*mo
-/usr/share/pixmaps/gnucash
-/usr/man/*
-%config /etc/gnucash
+%attr(555,root,root) %{_bindir}/*
+%dir %{_libexecdir}/gnucash
+%attr(555,root,root) %{_libexecdir}/gnucash
+%attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
+%{_mandir}/man1/*
+%{_infodir}/*.gz
+%{_libdir}/*
+%dir %{_datadir}/gnucash
+%{_datadir}/gnucash/accounts
+%{_datadir}/gnucash/doc
+%{_datadir}/gnucash/glade
+%{_datadir}/gnucash/guile-modules
+%{_datadir}/gnucash/html
+%{_datadir}/gnucash/scm
+%{_datadir}/gnome/help/gnucash
+%{_datadir}/gnome/apps/Applications/*
+%{_datadir}/pixmaps/gnucash
+%{_datadir}/mime-info/gnucash.*
+%config %{_sysconfdir}/gnucash
 %doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README README.patches
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt
+
+%files devel
+%dir %{_includedir}/gnucash
+%{_includedir}/gnucash
