@@ -122,8 +122,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define FATAL(format, args...) {                     \
   if (gnc_should_log (module, GNC_LOG_FATAL)) {      \
-    gnc_log (module, GNC_LOG_FATAL,                  \
-      "Fatal Error: %s: " format, FUNK, ## args);    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
       "Fatal Error: %s: " format, FUNK, ## args);    \
   }                                                  \
@@ -131,8 +129,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define PERR(format, args...) {                    \
   if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
-    gnc_log (module, GNC_LOG_ERROR,                \
-      "Error: %s: " format, FUNK, ## args);        \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
       "Error: %s: " format, FUNK, ## args);        \
   }                                                \
@@ -140,8 +136,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define PWARN(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
-    gnc_log (module, GNC_LOG_WARNING,              \
-      "Warning: %s: " format, FUNK, ## args);      \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
       "Warning: %s: " format, FUNK, ## args);      \
   }                                                \
@@ -153,8 +147,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
-    gnc_log (module, GNC_LOG_INFO,                 \
-      "Info: %s: " format, FUNK, ## args);         \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
       "Info: %s: " format, FUNK, ## args);         \
   }                                                \
@@ -162,8 +154,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
-    gnc_log (module, GNC_LOG_DEBUG,                \
-      "Debug: %s: " format, FUNK, ## args);        \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Debug: %s: " format, FUNK, ## args);        \
   }                                                \
@@ -171,8 +161,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define ENTER(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
-    gnc_log (module, GNC_LOG_DEBUG,                \
-      "Enter: %s: " format, FUNK, ## args);        \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Enter: %s: " format, FUNK, ## args);        \
   }                                                \
@@ -180,8 +168,6 @@ const char * gnc_log_prettify (const char *name);
 
 #define LEAVE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
-    gnc_log (module, GNC_LOG_DEBUG,                \
-      "Leave: %s: " format, FUNK, ## args);        \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Leave: %s: " format, FUNK, ## args);        \
   }                                                \
@@ -189,14 +175,12 @@ const char * gnc_log_prettify (const char *name);
 
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
-    gnc_log (module, GNC_LOG_TRACE,                \
-      "Trace: %s: " format, FUNK, ## args);        \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Trace: %s: " format, FUNK, ## args);        \
   }                                                \
 }
 
-#define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { x; }}
+#define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { (x); }}
 
 /* -------------------------------------------------------- */
 /* Infrastructure to send messages go to GUI popups, not to stderr! 
@@ -208,11 +192,6 @@ void gnc_set_error_message (GNCGuiMessage func);
 
 gboolean gnc_send_gui_warning (const char *format, ...);
 gboolean gnc_send_gui_error (const char *format, ...);
-
-/* -------------------------------------------------------- */
-/* XXX what is this shit? get rid of it! */
-#define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
-			    __FILE__, __LINE__, strerror(errno));
 
 /* -------------------------------------------------------- */
 /* Infrastructure to make timing measurements for critical peices 

@@ -67,12 +67,13 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 static FILE *fout = NULL;
 
 static void
-stdout_printer (const gchar   *log_domain,
-                GLogLevelFlags    log_level,
-                const gchar   *message,
-                gpointer    unused_data)
+fh_printer (const gchar   *log_domain,
+            GLogLevelFlags    log_level,
+            const gchar   *message,
+            gpointer    user_data)
 {
-  fprintf (stderr, "duude %s:", message);
+  FILE *fh = user_data;
+  fprintf (fh, "%s\n", message);
 }
 
 void 
@@ -80,7 +81,7 @@ gnc_log_init (void)
 {
    fout = stderr;
    fout = stdout;
-   g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, stdout_printer, NULL);
+   g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, fh_printer, fout);
 }
 
 /* Set the logging level of the given module. */
