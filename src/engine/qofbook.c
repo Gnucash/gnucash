@@ -167,8 +167,8 @@ qof_book_get_entity_table (QofBook *book)
   return book->entity_table;
 }
 
-Backend * 
-xaccQofBookGetBackend (QofBook *book)
+QofBackend * 
+qof_book_get_backend (QofBook *book)
 {
    if (!book) return NULL;
    return book->backend;

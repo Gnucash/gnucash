@@ -203,11 +203,11 @@ gnc_price_commit_edit (GNCPrice *p)
     Backend *be;
     be = xaccPriceDBGetBackend (p->db);
     if (be && be->commit) {
-      GNCBackendError errcode;
+      QofBackendError errcode;
 
       /* clear errors */
       do {
-        errcode = xaccBackendGetError (be);
+        errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
       /* if we haven't been able to call begin edit before, call it now */
@@ -218,7 +218,7 @@ gnc_price_commit_edit (GNCPrice *p)
       }
 
       (be->commit) (be, GNC_ID_PRICE, p);
-      errcode = xaccBackendGetError (be);
+      errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode) 
       {
         /* XXX hack alert FIXME implement price rollback */
@@ -226,7 +226,7 @@ gnc_price_commit_edit (GNCPrice *p)
               " handled yet. Return code=%d", errcode);
 
         /* push error back onto the stack */
-        xaccBackendSetError (be, errcode);
+        qof_backend_set_error (be, errcode);
       }
     }
     p->not_saved = FALSE;

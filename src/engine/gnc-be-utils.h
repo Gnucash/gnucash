@@ -95,7 +95,7 @@
  *	obj: the object being committed
  *	type: the type of the object
  *	on_error: a function called if there is a backend error.
- *		void (*on_error)(obj, GNCBackendError)
+ *		void (*on_error)(obj, QofBackendError)
  *	on_done: a function called after the commit is complete but before
  *		the object is freed.  This is where you clear the "dirty"
  *		flag, and perform any other operations after the commit.
@@ -110,20 +110,20 @@
   be = gnc_book_get_backend ((obj)->book); \
   if (be && be->commit) \
   { \
-    GNCBackendError errcode; \
+    QofBackendError errcode; \
     \
     /* clear errors */ \
     do { \
-      errcode = xaccBackendGetError (be); \
+      errcode = qof_backend_get_error (be); \
     } while (ERR_BACKEND_NO_ERR != errcode); \
     \
     (be->commit) (be, (type), (obj)); \
-    errcode = xaccBackendGetError (be); \
+    errcode = qof_backend_get_error (be); \
     if (ERR_BACKEND_NO_ERR != errcode) \
     { \
       (obj)->do_free = FALSE; \
       (on_error)((obj), errcode); \
-      xaccBackendSetError (be, errcode); \
+      qof_backend_set_error (be, errcode); \
     } \
   } \
   (on_done)(obj);\

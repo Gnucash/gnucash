@@ -50,7 +50,7 @@ struct _QofSession
    * and the backends should all be using (or making it look like)
    * there is only one stack.
    */
-  GNCBackendError last_err;
+  QofBackendError last_err;
   char *error_message;
 
   char *fullpath;
@@ -59,7 +59,7 @@ struct _QofSession
   /* ---------------------------------------------------- */
   /* Pointer to the backend that is actually used to move data
    * between the persistant store and the local engine.  */
-  Backend *backend;
+  QofBackend *backend;
 };
 
 
@@ -72,12 +72,12 @@ struct _QofSession
  */
 void qof_session_set_book (QofSession *session, QofBook *book);
 
-Backend * qof_session_get_backend (QofSession *session);
+QofBackend * qof_session_get_backend (QofSession *session);
 
-void qof_session_push_error (QofSession *session, GNCBackendError err,
+void qof_session_push_error (QofSession *session, QofBackendError err,
                              const char *message);
 
-Backend* gncBackendInit_file(const char *book_id, void *data);
+QofBackend* gncBackendInit_file(const char *book_id, void *data);
 
 #endif
 

@@ -43,10 +43,9 @@
 
 #include <glib.h>
 
-#include "Backend.h"
-#include "BackendP.h"
 #include "gnc-event.h"
 #include "gnc-trace.h"
+#include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofsession.h"
@@ -71,7 +70,7 @@ static short module = MOD_IO;
 static void
 qof_session_clear_error (QofSession *session)
 {
-  GNCBackendError err;
+  QofBackendError err;
 
   session->last_err = ERR_BACKEND_NO_ERR;
   g_free(session->error_message);
@@ -82,13 +81,13 @@ qof_session_clear_error (QofSession *session)
   {
     do
     {
-       err = xaccBackendGetError (session->backend);
+       err = qof_backend_get_error (session->backend);
     } while (ERR_BACKEND_NO_ERR != err);
   }
 }
 
 void
-qof_session_push_error (QofSession *session, GNCBackendError err,
+qof_session_push_error (QofSession *session, QofBackendError err,
                         const char *message)
 {
   if (!session) return;
@@ -99,10 +98,10 @@ qof_session_push_error (QofSession *session, GNCBackendError err,
   session->error_message = g_strdup (message);
 }
 
-GNCBackendError
+QofBackendError
 qof_session_get_error (QofSession * session)
 {
-  GNCBackendError err;
+  QofBackendError err;
 
   if (!session) return ERR_BACKEND_NO_BACKEND;
 
@@ -115,13 +114,13 @@ qof_session_get_error (QofSession * session)
   /* maybe we should return a no-backend error ??? */
   if (! session->backend) return ERR_BACKEND_NO_ERR;
 
-  err = xaccBackendGetError (session->backend);
+  err = qof_backend_get_error (session->backend);
   session->last_err = err;
   return err;
 }
 
 static const char *
-get_default_error_message(GNCBackendError err)
+get_default_error_message(QofBackendError err)
 {
     return "";
 }
@@ -135,10 +134,10 @@ qof_session_get_error_message(QofSession *session)
     return session->error_message;
 }
 
-GNCBackendError
+QofBackendError
 qof_session_pop_error (QofSession * session)
 {
-  GNCBackendError err;
+  QofBackendError err;
 
   if (!session) return ERR_BACKEND_NO_BACKEND;
 
@@ -237,7 +236,7 @@ qof_session_set_book (QofSession *session, QofBook *addbook)
   LEAVE (" ");
 }
 
-Backend * 
+QofBackend * 
 qof_session_get_backend (QofSession *session)
 {
    if (!session) return NULL;
@@ -288,7 +287,7 @@ static void
 qof_session_load_backend(QofSession * session, char * backend_name)
 {
   GNCModule  mod = 0;
-  Backend    *(* be_new_func)(void);
+  QofBackend    *(* be_new_func)(void);
   char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 
   /* FIXME : reinstate better error messages with gnc_module errors */
@@ -450,7 +449,7 @@ qof_session_begin (QofSession *session, const char * book_id,
                                   qof_session_get_url(session), ignore_lock,
                                   create_if_nonexistent);
       PINFO("Done running session_begin on backend");
-      err = xaccBackendGetError(session->backend);
+      err = qof_backend_get_error(session->backend);
       msg = xaccBackendGetMessage(session->backend);
       if (err != ERR_BACKEND_NO_ERR)
       {
@@ -487,8 +486,8 @@ qof_session_load (QofSession *session,
 {
   QofBook *newbook;
   QofBookList *oldbooks, *node;
-  Backend *be;
-  GNCBackendError err;
+  QofBackend *be;
+  QofBackendError err;
 
   if (!session) return;
   if (!qof_session_get_url(session)) return;
@@ -531,7 +530,7 @@ qof_session_load (QofSession *session,
       if (be->load) 
       {
           be->load (be, newbook);
-          qof_session_push_error (session, xaccBackendGetError(be), NULL);
+          qof_session_push_error (session, qof_backend_get_error(be), NULL);
       }
 
       /* we just got done loading, it can't possibly be dirty !! */
@@ -587,10 +586,10 @@ qof_session_save_may_clobber_data (QofSession *session)
 }
 
 static gboolean
-save_error_handler(Backend *be, QofSession *session)
+save_error_handler(QofBackend *be, QofSession *session)
 {
     int err;
-    err = xaccBackendGetError(be);
+    err = qof_backend_get_error(be);
     
     if (ERR_BACKEND_NO_ERR != err)
     {
@@ -611,7 +610,7 @@ qof_session_save (QofSession *session,
 		  QofPercentageFunc percentage_func)
 {
   GList *node;
-  Backend *be;
+  QofBackend *be;
 
   if (!session) return;
 
@@ -678,7 +677,7 @@ qof_session_export (QofSession *tmp_session,
 		    QofPercentageFunc percentage_func)
 {
   QofBook *book;
-  Backend *be;
+  QofBackend *be;
 
   if ((!tmp_session) || (!real_session)) return FALSE;
 

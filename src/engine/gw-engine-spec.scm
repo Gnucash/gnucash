@@ -24,8 +24,8 @@
     "#include <glib.h>\n"
     "#include <guid.h>\n"
     "#include <Query.h>\n"
-    "#include <Backend.h>\n"
     "#include <Group.h>\n"
+    "#include <qofbackend.h>\n"
     "#include <qofbook.h>\n"
     "#include <qofsession.h>\n"
     "#include <gnc-session-scm.h>\n"
@@ -214,7 +214,7 @@
   (gw:enum-add-value! we "CREDITLINE" 'credit-line)
   #t)
 
-(let ((we (gw:wrap-enumeration ws '<gnc:BackendError> "GNCBackendError")))
+(let ((we (gw:wrap-enumeration ws '<gnc:BackendError> "QofBackendError")))
 
   (gw:enum-add-value! we "ERR_BACKEND_NO_ERR" 'no-err)
   (gw:enum-add-value! we "ERR_BACKEND_NO_BACKEND" 'no-backend)

@@ -178,11 +178,20 @@ foreach (@files)
 
 		# s/foreachObjectCB/QofEntityForeachCB/g;
 
-		s/GNCSession/QofSession/g;
-		s/gnc_session/qof_session/g;
-		s/GNCPercentageFunc/QofPercentageFunc/g;
-		s/gnc_get_current_session/qof_session_get_current_session/g;
-		s/gnc_set_current_session/qof_session_set_current_session/g;
+		# s/GNCSession/QofSession/g;
+		# s/gnc_session/qof_session/g;
+		# s/GNCPercentageFunc/QofPercentageFunc/g;
+		# s/gnc_get_current_session/qof_session_get_current_session/g;
+		# s/gnc_set_current_session/qof_session_set_current_session/g;
+
+		s/GNCBackendError/QofBackendError/g;
+		s/GNCBePercentageFunc/QofBePercentageFunc/g;
+		s/xaccBackendSetError/qof_backend_set_error/g;
+		s/xaccBackendGetError/qof_backend_get_error/g;
+		s/xaccBackendSetMessage/qof_backend_set_message/g;
+		s/xaccBackendSetMessage/qof_backend_get_message/g;
+		s/xaccInitBackend/qof_backend_init/g;
+
 
 		print OF $_;
 	}

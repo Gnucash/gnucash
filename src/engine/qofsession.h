@@ -85,7 +85,7 @@
 #ifndef QOF_SESSION_H
 #define QOF_SESSION_H
 
-#include "Backend.h"
+#include "qofbackend.h"
 #include "qofbook.h"
 
 /* PROTOTYPES ******************************************************/
@@ -167,11 +167,11 @@ gboolean qof_session_export (QofSession *tmp_session,
  *    e.g. in a stack, where this routine pops the top value. The current 
  *    implementation has a stack that is one-deep.
  *
- *    See Backend.h for a listing of returned errors.
+ *    See qofbackend.h for a listing of returned errors.
  */
-GNCBackendError qof_session_get_error (QofSession *session);
+QofBackendError qof_session_get_error (QofSession *session);
 const char * qof_session_get_error_message(QofSession *session);
-GNCBackendError qof_session_pop_error (QofSession *session);
+QofBackendError qof_session_pop_error (QofSession *session);
 
 
 QofBook * qof_session_get_book (QofSession *session);
