@@ -48,7 +48,8 @@
 #include "gnc-address-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofobject.h"
+#include "qofinstance.h"
 
 #define _GNC_MOD_NAME	GNC_CUSTOMER_MODULE_NAME
 
@@ -140,7 +141,7 @@ customer_dom_tree_create (GncCustomer *cust)
 					  gncTaxTableGetGUID (taxtable)));
 
     kvpnode = kvp_frame_to_dom_tree (cust_slots_string, 
-                 gncCustomerGetSlots (cust));
+                 qof_instance_get_slots (QOF_INSTANCE(cust)));
     if (kvpnode) xmlAddChild (ret, kvpnode);
 
     return ret;
@@ -376,7 +377,8 @@ static gboolean
 customer_slots_handler (xmlNodePtr node, gpointer cust_pdata)
 {
   struct customer_pdata *pdata = cust_pdata;
-  return dom_tree_to_kvp_frame_given (node, gncCustomerGetSlots (pdata->customer));
+  return dom_tree_to_kvp_frame_given (node, 
+       qof_instance_get_slots (QOF_INSTANCE(pdata->customer)));
 }
 
 static struct dom_tree_handler customer_handlers_v2[] = {
@@ -494,7 +496,7 @@ static int
 customer_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -517,7 +519,7 @@ xml_add_customer (gpointer cust_p, gpointer out_p)
 static void
 customer_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
 }
 
 void
@@ -533,7 +535,7 @@ gnc_customer_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }
