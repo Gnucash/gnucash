@@ -1,17 +1,18 @@
 # Messages en francais pour Gnucash
 # Copyright (C) 1998,1999,2000,2001 Free Software Foundation, Inc.
-# Copyright (C) 1998,1999,2000,2001 Yannick LE NY <y-le-ny@ifrance.com>, 
+# Copyright (C) 1998,1999,2000,2001 Yannick LE NY <y-le-ny@ifrance.com>,
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-06-09 16:49-0700\n"
-"PO-Revision-Date: 2001-01-22 00:25+0200\n"
-"Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
-"Language-Team: FRENCH  <FR@li.org>\n"
+"POT-Creation-Date: 2001-06-10 23:32-0700\n"
+"PO-Revision-Date: 2001-06-27 22:01GMT\n"
+"Last-Translator: Paul POULAIN <paul.poulain@free.fr>\n"
+"Language-Team: francais <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.8\n"
 
 # po/guile_strings.txt:110
 #: src/FileDialog.c:62
@@ -26,18 +27,19 @@ msgid ""
 "    %s\n"
 "is not supported by this version of GnuCash."
 msgstr ""
+"L'adresse \n"
+"    %s\n"
+"n'est pas utilisée dans cette version de GnuCash."
 
 # messages-i18n.c:35
 #: src/FileDialog.c:78
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Can't parse the URL\n"
 "   %s\n"
 msgstr ""
-"Il y a une erreur d'ouverture du fichier\n"
+"Impossible d'ouvrir l'URL\n"
 "     %s\n"
-"\n"
-"%s"
 
 #: src/FileDialog.c:84
 #, c-format
@@ -46,6 +48,9 @@ msgid ""
 "   %s\n"
 "The host, username or password were incorrect."
 msgstr ""
+"Impossible de se connecter à \n"
+"   %s\n"
+",l'hote, l'utilisateur ou le mot de passe est incorrect."
 
 #: src/FileDialog.c:91
 #, c-format
@@ -141,14 +146,14 @@ msgstr ""
 
 #: src/FileDialog.c:156
 msgid "Unknown file type"
-msgstr ""
+msgstr "Type de fichier inconnu"
 
 #: src/FileDialog.c:163
 msgid "An unknown I/O error occurred."
 msgstr ""
 
 #: src/FileDialog.c:177
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for\n"
 "   %s.\n"
@@ -159,21 +164,21 @@ msgid ""
 msgstr ""
 "Gnucash ne peut pas obtenir le verrouillage pour\n"
 "   %s.\n"
-"ce fichier peut-être utiliser par un autre utilisateur,\n"
+"ce fichier peut-être utilisé par un autre utilisateur,\n"
 "dans ce cas vous devriez pas ouvrir le fichier.\n"
 "\n"
-"Voulez-vous procédez à l'ouverture du fichier?"
+"Voulez-vous procéder à l'ouverture du fichier?"
 
 # messages-i18n.c:54
 #: src/FileDialog.c:200
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The database\n"
 "   %s\n"
 "doesn't seem to exist. Do you want to create it?\n"
 msgstr ""
 "Le compte %s n'existe pas.\n"
-"Voulez vous le créer?"
+"Voulez vous le créer?\n"
 
 # messages-i18n.c:39
 #: src/FileDialog.c:299
@@ -190,7 +195,7 @@ msgid "Open"
 msgstr "Ouvrir"
 
 # messages-i18n.c:327
-#: src/FileDialog.c:565 src/gnome/window-main.c:1084
+#: src/FileDialog.c:565 src/gnome/window-main.c:1090
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -209,8 +214,8 @@ msgstr ""
 "Etes-vous sûr de vouloir l'écraser ?"
 
 # messages-i18n.c:346
-#: src/SplitLedger.c:125 src/engine/Transaction.c:2017
-#: src/engine/Transaction.c:2038 src/register/splitreg.c:739
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2016
+#: src/engine/Transaction.c:2037 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:344
 msgid "-- Split Transaction --"
 msgstr "-- Transaction répartie --"
@@ -218,39 +223,35 @@ msgstr "-- Transaction répartie --"
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
 #: src/SplitLedger.c:126 src/register/splitreg.c:747
-#, fuzzy
 msgid "-- Stock Split --"
-msgstr "Actions"
+msgstr "Actions réparties"
 
 # messages-i18n.c:57
 #: src/SplitLedger.c:822
-#, fuzzy
 msgid "Rebalance Transaction"
 msgstr "Recalculer la transaction"
 
 # messages-i18n.c:82
 #: src/SplitLedger.c:823
-#, fuzzy
 msgid "The current transaction is not balanced."
-msgstr "Editer la transaction en cours"
+msgstr "La transaction courante n'est pas équilibrée"
 
 #: src/SplitLedger.c:859
 msgid "Balance it manually"
-msgstr ""
+msgstr "Equilibrer manuellement"
 
 #: src/SplitLedger.c:861
 msgid "Let GnuCash add an adjusting split"
-msgstr ""
+msgstr "Laisser GnuCash ajouter une répartittion d'équilibre"
 
 # po/guile_strings.txt:275
 #: src/SplitLedger.c:866
-#, fuzzy
 msgid "Adjust current account split total"
-msgstr "Une option de liste de compte"
+msgstr "Ajuster le total réparti du compte courant"
 
 #: src/SplitLedger.c:870
 msgid "Adjust other account split total"
-msgstr ""
+msgstr "Ajuster le total réparti d'un autre compte"
 
 # messages-i18n.c:54
 #: src/SplitLedger.c:1468
@@ -353,7 +354,6 @@ msgstr ""
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
 #: src/SplitLedger.c:3322 src/SplitLedger.c:3403
-#, fuzzy
 msgid "(no name)"
 msgstr "(aucun)"
 
@@ -410,7 +410,7 @@ msgstr "Description"
 #: src/SplitLedger.c:4027 src/gnome/reconcile-list.c:151
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
-msgstr "Reconciled:R"
+msgstr ""
 
 # messages-i18n.c:191
 #: src/SplitLedger.c:4030 src/SplitLedger.c:4103
@@ -486,7 +486,6 @@ msgstr "Notes"
 
 # messages-i18n.c:48
 #: src/SplitLedger.c:4471
-#, fuzzy
 msgid ""
 "You are about to change a reconciled split.\n"
 "Are you sure you want to do that?"
@@ -588,7 +587,7 @@ msgid "Imbalance"
 msgstr "Non soldé"
 
 # messages-i18n.c:336
-#: src/engine/Transaction.c:2059 src/gnome/druid-stock-split.c:395
+#: src/engine/Transaction.c:2058 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
 msgstr "Répartition"
@@ -600,7 +599,7 @@ msgstr "Comptes perdus/abandonnés"
 
 #: src/gnc-exp-parser.c:482
 msgid "Unbalanced parenthesis"
-msgstr "Proposition irraisonnable"
+msgstr "Parenthèse non fermée"
 
 # po/guile_strings.txt:15
 #: src/gnc-exp-parser.c:484
@@ -610,7 +609,7 @@ msgstr "Débordement de pile"
 # po/guile_strings.txt:15
 #: src/gnc-exp-parser.c:486
 msgid "Stack underflow"
-msgstr "Non débordement de pile"
+msgstr "Débordement de pile"
 
 #: src/gnc-exp-parser.c:488
 msgid "Undefined character"
@@ -626,7 +625,7 @@ msgstr "Dépassement de mémoire"
 
 #: src/gnc-exp-parser.c:494
 msgid "Numeric error"
-msgstr ""
+msgstr "Erreur numérique"
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
@@ -663,9 +662,8 @@ msgstr "Total"
 
 # messages-i18n.c:231
 #: src/gnc-ui-util.c:148 src/scm/guile-strings.c:164
-#, fuzzy
 msgid "Tax Info"
-msgstr "Informations du transfert"
+msgstr "Informations de taxation"
 
 #: src/gnc-ui-util.c:365
 msgid "not cleared:n"
@@ -693,14 +691,13 @@ msgstr "(aucun)"
 
 # messages-i18n.c:195
 #: src/gnc-ui-util.c:462
-#, fuzzy
 msgid "Opening Balances"
 msgstr "Solde initial"
 
 #: src/gnc-ui-util.c:465 src/scm/qif-import/guile-strings.c:7
 #: src/scm/qif-import/guile-strings.c:8
 msgid "Retained Earnings"
-msgstr ""
+msgstr "Gains enregistrés"
 
 # messages-i18n.c:195
 #: src/gnc-ui-util.c:596 src/gnome/dialog-account.c:241
@@ -711,15 +708,13 @@ msgstr "Solde initial"
 
 # messages-i18n.c:123
 #: src/gnome/dialog-account-picker.c:165
-#, fuzzy
 msgid "Enter a name for the account"
-msgstr "Entrez des notes pour la transaction"
+msgstr "Entrez un nom pour la transaction"
 
 # messages-i18n.c:67
 #: src/gnome/dialog-account.c:407
-#, fuzzy
 msgid "Could not create opening balance."
-msgstr "Ajuster le solde final"
+msgstr "Impossible de créer la balance"
 
 # messages-i18n.c:288
 #: src/gnome/dialog-account.c:829
@@ -729,7 +724,7 @@ msgstr "Champ"
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/gnome/dialog-account.c:830
 msgid "Old Value"
-msgstr "Vieille valeur"
+msgstr "Ancienne valeur"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/gnome/dialog-account.c:831
@@ -776,17 +771,17 @@ msgstr "Il y a déjà un compte avec ce nom."
 
 # messages-i18n.c:13
 #: src/gnome/dialog-account.c:1176
-#, fuzzy
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr "Vous devez entrer une expression valide."
 
 # messages-i18n.c:20
 #: src/gnome/dialog-account.c:1201
-#, fuzzy
 msgid ""
 "You must select a transfer account or choose\n"
 "the opening balances equity account."
-msgstr "Vous devez sélectionner un compte à nettoyer."
+msgstr ""
+"Vous devez sélectionner un compte de transfert ou choisir\n"
+"la balance initiale du compte de capitaux propres"
 
 # messages-i18n.c:193
 #: src/gnome/dialog-account.c:1637
@@ -794,23 +789,23 @@ msgid "New top level account"
 msgstr "Nouveau compte de niveau supérieur/ de base."
 
 # po/guile_strings.txt:188
-#: src/gnome/dialog-account.c:1709
+#: src/gnome/dialog-account.c:1717
 msgid "<No name>"
 msgstr "<Pas de nom>"
 
 # messages-i18n.c:178
-#: src/gnome/dialog-account.c:1749
+#: src/gnome/dialog-account.c:1757
 msgid "Edit Account"
-msgstr "Afficher un compte"
+msgstr "Editer un compte"
 
 # messages-i18n.c:190
-#: src/gnome/dialog-account.c:1752
+#: src/gnome/dialog-account.c:1760
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Nouveaux comptes"
 
 # messages-i18n.c:190
-#: src/gnome/dialog-account.c:1763 src/gnome/glade-gnc-dialogs.c:3446
+#: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3446
 msgid "New Account"
 msgstr "Nouveau compte"
 
@@ -820,10 +815,9 @@ msgid "No description"
 msgstr "Pas de description"
 
 # src/gnome/glade-gnc-dialogs.c:1460
-#: src/gnome/dialog-column-view.c:243
-#, fuzzy
+#: src/gnome/dialog-column-view.c:242
 msgid "Contents"
-msgstr "Centimètres"
+msgstr "Contenu"
 
 #: src/gnome/dialog-commodities.c:264
 msgid ""
@@ -831,21 +825,22 @@ msgid ""
 "at least one of your accounts. You may\n"
 "not delete it."
 msgstr ""
+"Le type est actuellement utilisé par\n"
+"au moins un de vos comptes. Vous ne pouvez\n"
+"pas le détruire"
 
 # messages-i18n.c:56
 #: src/gnome/dialog-commodities.c:272
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the\n"
 "current commodity?"
-msgstr "Etes-vous sur de vouloir supprimer la transaction en cours?"
+msgstr "Etes-vous sur de vouloir supprimer le type de compte en cours?"
 
 # messages-i18n.c:334
 #: src/gnome/dialog-commodities.c:340 src/gnome/glade-gnc-dialogs.c:6555
 #: src/gnome/glade-gnc-dialogs.c:7823 src/scm/report/guile-strings.c:287
-#, fuzzy
 msgid "Symbol"
-msgstr "Vendu"
+msgstr "Symbole"
 
 # po/guile_strings.txt:188
 #: src/gnome/dialog-commodities.c:341 src/gnome/glade-gnc-dialogs.c:7830
@@ -860,26 +855,24 @@ msgstr "Code"
 
 # messages-i18n.c:346
 #: src/gnome/dialog-commodities.c:343 src/gnome/glade-gnc-dialogs.c:7844
-#, fuzzy
 msgid "Fraction"
-msgstr "Transaction"
+msgstr "Fraction"
 
 #: src/gnome/dialog-commodity.c:240
 msgid ""
 "You must select a commodity.\n"
 "To create a new one, click \"New\""
 msgstr ""
-"Vous devez sélectionner un produit.\n"
-"Pour créer un de nouveau, cliquez sur \"Nouveau\""
+"Vous devez sélectionner un type de compte.\n"
+"Pour créer un nouveau, cliquez sur \"Nouveau\""
 
 #: src/gnome/dialog-commodity.c:588
-#, fuzzy
 msgid "You may not create a new national currency."
-msgstr "Vous devez entrer un nom pour le produit."
+msgstr "Vous ne pouvez pas créer une nouvelle monnaie nationale."
 
 #: src/gnome/dialog-commodity.c:602
 msgid "That commodity already exists."
-msgstr ""
+msgstr "Le type de compte existe déjà"
 
 #: src/gnome/dialog-commodity.c:635
 msgid ""
@@ -887,7 +880,7 @@ msgid ""
 "and \"Type\" for the commodity."
 msgstr ""
 "Vous devez entrer un \"Nom complet\" non vide, \"Code/abbréviation\",\n"
-"et  \"Type\" pour le produit."
+"et  \"Type\" pour le type de compte."
 
 # messages-i18n.c:292
 #. GtkWidget             * dialog = GTK_WIDGET(user_data);
@@ -897,7 +890,7 @@ msgstr "Aide"
 
 #: src/gnome/dialog-fincalc.c:342
 msgid "You must enter values for the other quantities."
-msgstr "Vous devez entrer les valeurs des autres quantitées."
+msgstr "Vous devez entrer les valeurs des autres quantités."
 
 # messages-i18n.c:13
 #: src/gnome/dialog-fincalc.c:343
@@ -945,15 +938,13 @@ msgstr "Sélectionner par défaut"
 
 # messages-i18n.c:210
 #: src/gnome/dialog-options.c:1709
-#, fuzzy
 msgid "Select pixmap"
-msgstr "Sélectionner date"
+msgstr "Sélectionner image"
 
 # po/guile_strings.txt:168
 #: src/gnome/dialog-options.c:2118
-#, fuzzy
 msgid "No options!"
-msgstr "Bonne option"
+msgstr "Pas d'option !"
 
 # messages-i18n.c:291
 #: src/gnome/dialog-options.c:2138
@@ -962,25 +953,21 @@ msgstr "Préférences de GnuCash"
 
 # messages-i18n.c:21
 #: src/gnome/dialog-price-editor.c:347
-#, fuzzy
 msgid "You must select a commodity."
 msgstr "Vous devez sélectionner un type de compte."
 
 # src/gnome/dialog-qif-import.c:314
 #: src/gnome/dialog-price-editor.c:352
-#, fuzzy
 msgid "You must select a currency."
 msgstr "Vous devez choisir une monnaie."
 
 # messages-i18n.c:13
 #: src/gnome/dialog-price-editor.c:361 src/gnome/dialog-transfer.c:1074
-#, fuzzy
 msgid "You must enter a valid amount."
-msgstr "Vous devez entrer une expression valide."
+msgstr "Vous devez entrer un montant valide."
 
 # messages-i18n.c:56
 #: src/gnome/dialog-price-editor.c:510
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the\n"
 "current price?"
@@ -988,31 +975,28 @@ msgstr "Etes-vous sur de vouloir supprimer la transaction en cours?"
 
 # messages-i18n.c:105
 #: src/gnome/dialog-price-editor.c:537
-#, fuzzy
 msgid "Remove old prices"
-msgstr "Enregistrer la transaction en cours"
+msgstr "Supprimer l'ancienne valeur"
 
 #: src/gnome/dialog-price-editor.c:551
 msgid "All prices before the date below will be deleted."
-msgstr ""
+msgstr "Toutes les valeurs avant la date précédente seront supprimées"
 
 # messages-i18n.c:262
 #: src/gnome/dialog-price-editor.c:730 src/gnome/glade-gnc-dialogs.c:7386
 #: src/scm/guile-strings.c:82
-#, fuzzy
 msgid "Commodity"
-msgstr "Livrer"
+msgstr "Type de compte"
 
 #: src/gnome/dialog-price-editor.c:733 src/gnome/glade-gnc-dialogs.c:7407
 msgid "Source"
-msgstr ""
+msgstr "Source"
 
 #: src/gnome/dialog-progress.c:356 src/gnome/dialog-progress.c:359
 msgid "Complete"
 msgstr "Terminé"
 
 #: src/gnome/dialog-totd.c:89
-#, fuzzy
 msgid "Tip of the Day"
 msgstr "Astuce du jour:"
 
@@ -1036,7 +1020,7 @@ msgstr "Montrer les comptes de revenus et dépenses"
 
 #: src/gnome/dialog-transfer.c:513 src/gnome/druid-stock-split.c:224
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 # messages-i18n.c:65
 #: src/gnome/dialog-transfer.c:1057
@@ -1056,21 +1040,18 @@ msgstr "Vous ne pouvez pas transférer depuis et vers le même compte!"
 
 # messages-i18n.c:21
 #: src/gnome/dialog-transfer.c:1087
-#, fuzzy
 msgid "You must enter an amount to transfer."
-msgstr "Vous devez entrer un nom de compte."
+msgstr "Vous devez entrer une quantité à transférer"
 
 # messages-i18n.c:13
 #: src/gnome/dialog-transfer.c:1101
-#, fuzzy
 msgid "You must enter a valid price."
-msgstr "Vous devez entrer une expression valide."
+msgstr "Vous devez entrer un montant valide."
 
 # messages-i18n.c:13
 #: src/gnome/dialog-transfer.c:1112
-#, fuzzy
 msgid "You must enter a valid `to' amount."
-msgstr "Vous devez entrer une expression valide."
+msgstr "Vous devez entrer un montant 'vers' valide."
 
 #: src/gnome/dialog-transfer.c:1123
 #, c-format
@@ -1091,10 +1072,9 @@ msgstr ""
 
 #: src/gnome/dialog-utils.c:138
 msgid "Use local time"
-msgstr ""
+msgstr "Utiliser l'heure locale"
 
 #: src/gnome/druid-commodity.c:246
-#, fuzzy
 msgid ""
 "Pick the type of the currency or security. For national currencies, \n"
 "use \"CURRENCY\". Enter a new type in the box if the ones in the\n"
@@ -1113,7 +1093,6 @@ msgstr ""
 "\"Dollar US\" or \"Action Red Hat\""
 
 #: src/gnome/druid-commodity.c:287
-#, fuzzy
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\"), national currency symbol \n"
 "(such as \"USD\"), or other unique abbreviation for the name."
@@ -1138,9 +1117,8 @@ msgstr ""
 "et l'abbréviation de la monnaie/action."
 
 #: src/gnome/druid-commodity.c:401 src/gnome/druid-qif-import.c:1473
-#, fuzzy
 msgid "You must enter an existing national currency or enter a different type."
-msgstr "Vous devez entrer une abbréviation pour le produit."
+msgstr "Vous devez entrer une monnaie existante ou un type différent"
 
 # src/gnome/dialog-qif-import.c:221
 #: src/gnome/druid-qif-import.c:480
@@ -1180,7 +1158,7 @@ msgstr ""
 
 #: src/gnome/druid-qif-import.c:594
 msgid "An error occurred while loading the QIF file."
-msgstr ""
+msgstr "Une erreur est survenue lors du chargement du fichier QIF."
 
 # messages-i18n.c:44
 #: src/gnome/druid-qif-import.c:602
@@ -1194,7 +1172,7 @@ msgstr ""
 
 #: src/gnome/druid-qif-import.c:647
 msgid "An error occurred while parsing the QIF file."
-msgstr ""
+msgstr "Une erreur est survenue lors de l'analyse du fichier QIF"
 
 # messages-i18n.c:44
 #: src/gnome/druid-qif-import.c:657
@@ -1216,12 +1194,13 @@ msgid ""
 "An error occurred while importing QIF transactions into GnuCash. Your "
 "accounts are unchanged."
 msgstr ""
+"Une erreur est survenue lors de la récupération des transactions QIF dans GnuCash."
+"Vos comptes sont inchangés."
 
 # messages-i18n.c:336
 #: src/gnome/druid-qif-import.c:1290 src/gnome/druid-qif-import.c:1729
-#, fuzzy
 msgid "(split)"
-msgstr "Répartition"
+msgstr "(Répartition)"
 
 #: src/gnome/druid-qif-import.c:1454
 msgid "You must enter a Type for the commodity."
@@ -1229,11 +1208,11 @@ msgstr "Vous devez entrer un type pour le produit."
 
 #: src/gnome/druid-qif-import.c:1459
 msgid "You must enter a name for the commodity."
-msgstr "Vous devez entrer un nom pour le produit."
+msgstr "Vous devez entrer un nom pour le type de compte"
 
 #: src/gnome/druid-qif-import.c:1464
 msgid "You must enter an abbreviation for the commodity."
-msgstr "Vous devez entrer une abbréviation pour le produit."
+msgstr "Vous devez entrer une abbréviation pour le type de compte."
 
 #: src/gnome/druid-qif-import.c:1602
 #, c-format
@@ -1264,43 +1243,40 @@ msgstr "Cliquez sur \"Suivant\" pour accepter l'information et avancer."
 
 # messages-i18n.c:13
 #: src/gnome/druid-stock-split.c:243
-#, fuzzy
 msgid "You must enter a valid distribution amount."
-msgstr "Vous devez entrer une expression valide."
+msgstr "Vous devez entrer une répartition valide."
 
 # messages-i18n.c:21
 #: src/gnome/druid-stock-split.c:252
-#, fuzzy
 msgid "You must enter a distribution amount."
-msgstr "Vous devez entrer un nom de compte."
+msgstr "Vous devez entrer une répartition"
 
 # messages-i18n.c:13
 #: src/gnome/druid-stock-split.c:260
-#, fuzzy
 msgid ""
 "You must either enter a valid price\n"
 "or leave it blank."
-msgstr "Vous devez entrer une expression valide."
+msgstr ""
+"Vous devez entrer une expression valide \n"
+"ou laisser blanc."
 
 # messages-i18n.c:24
 #: src/gnome/druid-stock-split.c:269
-#, fuzzy
 msgid "The price must be positive."
-msgstr "Le solde doit être un nombre."
+msgstr "Le solde doit être positif."
 
 #: src/gnome/druid-stock-split.c:304
 msgid ""
 "You must either enter a valid cash amount\n"
 "or leave it blank."
-msgstr ""
+msgstr "Vous devez saisir un montant valide ou laisser blanc."
 
 #: src/gnome/druid-stock-split.c:313
 msgid "The cash distribution must be positive."
-msgstr ""
+msgstr "La répartition du liquide doit être positive"
 
 # messages-i18n.c:20
 #: src/gnome/druid-stock-split.c:326
-#, fuzzy
 msgid ""
 "You must select an income account\n"
 "for the cash distribution."
@@ -1308,7 +1284,6 @@ msgstr "Vous devez sélectionner un compte à nettoyer."
 
 # messages-i18n.c:20
 #: src/gnome/druid-stock-split.c:336
-#, fuzzy
 msgid ""
 "You must select an asset account\n"
 "for the cash distribution."
@@ -1316,23 +1291,21 @@ msgstr "Vous devez sélectionner un compte à nettoyer."
 
 #: src/gnome/druid-stock-split.c:427
 msgid "Error adding price."
-msgstr ""
+msgstr "Erreur d'ajout de prix"
 
 # po/guile_strings.txt:167
 #: src/gnome/druid-stock-split.c:729
-#, fuzzy
 msgid "You don't have any stock accounts with balances!"
-msgstr "N'inverser aucun comptes"
+msgstr "Vous n'avez par de compte d'action équilibré !"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: src/gnome/glade-gnc-dialogs.c:36
 msgid "Select Account"
-msgstr "Compte sélectionné"
+msgstr "Sélectionner un compte"
 
 #: src/gnome/glade-gnc-dialogs.c:52
-#, fuzzy
 msgid "Select or add a GnuCash account"
-msgstr "Mettre à jour vos compte Gnucash"
+msgstr "Selectionner ou ajouter un compte Gnucash"
 
 # messages-i18n.c:303
 #: src/gnome/glade-gnc-dialogs.c:84 src/gnome/glade-gnc-dialogs.c:4455
@@ -1341,9 +1314,8 @@ msgid "New?"
 msgstr "Nouveau?"
 
 #: src/gnome/glade-gnc-dialogs.c:91
-#, fuzzy
 msgid "New Account (child of selected) ..."
-msgstr "Aucun compte trouvé"
+msgstr "Nouveau compte (découle du sélectionné)"
 
 # src/gnome/glade-gnc-dialogs.c:1149
 #: src/gnome/glade-gnc-dialogs.c:200
@@ -1435,13 +1407,11 @@ msgstr "31/12/00"
 # po/guile_strings.txt:127
 #: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:744
 #: src/gnome/window-report.c:677
-#, fuzzy
 msgid "Options"
-msgstr "Options du rapport"
+msgstr "Options"
 
 # src/gnome/glade-gnc-dialogs.c:1281
 #: src/gnome/glade-gnc-dialogs.c:346
-#, fuzzy
 msgid "Custom check format"
 msgstr "Personnaliser les paramètres du chèque"
 
@@ -1519,9 +1489,8 @@ msgstr "                    "
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
 #: src/gnome/glade-gnc-dialogs.c:624
-#, fuzzy
 msgid "Custom format"
-msgstr "Format de date:"
+msgstr "Format personnalisé :"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: src/gnome/glade-gnc-dialogs.c:799
@@ -1544,7 +1513,7 @@ msgstr "Tous"
 
 #: src/gnome/glade-gnc-dialogs.c:854
 msgid "Any"
-msgstr "Aucun"
+msgstr "N'importe"
 
 # po/guile_strings.txt:243
 #: src/gnome/glade-gnc-dialogs.c:857 src/scm/guile-strings.c:370
@@ -1562,7 +1531,7 @@ msgstr "comptes sélectionnés:"
 # messages-i18n.c:227
 #: src/gnome/glade-gnc-dialogs.c:885
 msgid "Match Date"
-msgstr "Date trouvé"
+msgstr "Trouver date"
 
 #: src/gnome/glade-gnc-dialogs.c:900
 msgid "Find transactions occurring in the date range:"
@@ -1581,12 +1550,11 @@ msgstr "Finissant"
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: src/gnome/glade-gnc-dialogs.c:967 src/gnome/glade-gnc-dialogs.c:1025
 msgid "Match Description"
-msgstr "Description trouvé"
+msgstr "Trouver description"
 
 #: src/gnome/glade-gnc-dialogs.c:982
-#, fuzzy
 msgid "Find transactions whose Description contains:"
-msgstr "Trouver les transactions qui se trouvent dans cette Description:"
+msgstr "Trouver les transactions qui contiennent cette Description:"
 
 #: src/gnome/glade-gnc-dialogs.c:1004 src/gnome/glade-gnc-dialogs.c:1062
 #: src/gnome/glade-gnc-dialogs.c:1220 src/gnome/glade-gnc-dialogs.c:1418
@@ -1601,9 +1569,8 @@ msgid "Regular expression"
 msgstr "Expression régulière"
 
 #: src/gnome/glade-gnc-dialogs.c:1040
-#, fuzzy
 msgid "Find transactions whose Number contains:"
-msgstr "Trouver les transactions qui se trouvent dans ce Numéro:"
+msgstr "Trouver les transactions qui contiennent ce Numéro:"
 
 # po/guile_strings.txt:173
 #: src/gnome/glade-gnc-dialogs.c:1076 src/scm/report/guile-strings.c:636
@@ -1656,9 +1623,8 @@ msgid "Match Memo"
 msgstr "Trouver Mémo"
 
 #: src/gnome/glade-gnc-dialogs.c:1198
-#, fuzzy
 msgid "Find splits whose Memo contains:"
-msgstr "Trouver les répartitions qui se trouvent dans ce Mémo:"
+msgstr "Trouver les répartitions dont le Mémo contient :"
 
 # messages-i18n.c:127
 #: src/gnome/glade-gnc-dialogs.c:1241
@@ -1696,9 +1662,8 @@ msgstr "Action trouvée"
 
 # messages-i18n.c:114 po/guile_strings.txt:128
 #: src/gnome/glade-gnc-dialogs.c:1396
-#, fuzzy
 msgid "Find transactions whose Action contains:"
-msgstr "Trouver les transactions sur lesquels ces Actions se retrouvent:"
+msgstr "Trouver les transactions dont Actions contient :"
 
 # messages-i18n.c:227
 #: src/gnome/glade-gnc-dialogs.c:1439
@@ -2117,8 +2082,7 @@ msgid "Enter the full name of the commodity. Example: US Dollars"
 msgstr "Entrer le nom complet du produit . Exemple: Dollars US"
 
 #: src/gnome/glade-gnc-dialogs.c:3286
-msgid ""
-"Enter the ticker symbol or currency code for the commodity. Example: USD"
+msgid "Enter the ticker symbol or currency code for the commodity. Example: USD"
 msgstr "Entrez le code ticker ou le code monnaie pour le produit. Exemple: USD"
 
 #: src/gnome/glade-gnc-dialogs.c:3300
@@ -2127,23 +2091,26 @@ msgid ""
 "the stock is traded. You can choose an existing type from the list or enter "
 "a new type with the keyboard."
 msgstr ""
+"Entrer le type de produit. Pour les actions, c'est souvent un marché sur lequel l'action est gérée."
+"Vous pouvez choisir un type existant de la liste ou saisir un nouveau type au clavier"
 
 #: src/gnome/glade-gnc-dialogs.c:3308
 msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
-msgstr ""
+msgstr "Entrer un code unique pour identifier le type de compte. Vous pouvez le laisser blanc."
 
 #: src/gnome/glade-gnc-dialogs.c:3317
 msgid "1 /"
 msgstr "1 /"
 
 #: src/gnome/glade-gnc-dialogs.c:3331
-#, fuzzy
 msgid ""
 "Enter the smallest fraction of the commodity which can be traded. For stocks "
 "which can only be traded in whole numbers, enter 1."
-msgstr "Entrer la plus petite fraction du produit qui peut être vendus."
+msgstr ""
+"Entrer la plus petite fraction du produit qui peut être vendus. Pour les actions qui ne "
+"peuvent être gérées que par quantité entière, entrer 1."
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: src/gnome/glade-gnc-dialogs.c:3491
@@ -2188,7 +2155,7 @@ msgstr "Source des cours d'actions"
 
 #: src/gnome/glade-gnc-dialogs.c:3651
 msgid "Get Online Quotes"
-msgstr ""
+msgstr "Récupérer les cotations en ligne"
 
 # messages-i18n.c:46
 #: src/gnome/glade-gnc-dialogs.c:3672
@@ -2197,9 +2164,8 @@ msgstr "La source des cours des actions:"
 
 # messages-i18n.c:46
 #: src/gnome/glade-gnc-dialogs.c:3681
-#, fuzzy
 msgid "Timezone for these quotes:"
-msgstr "La source des cours des actions:"
+msgstr "Fuseau (timezone) pour ces cotations:"
 
 # messages-i18n.c:211
 #: src/gnome/glade-gnc-dialogs.c:3736 src/gnome/glade-gnc-dialogs.c:6050
@@ -2208,15 +2174,13 @@ msgstr "Relatif aux impôts"
 
 # messages-i18n.c:231
 #: src/gnome/glade-gnc-dialogs.c:3744
-#, fuzzy
 msgid "General Information"
-msgstr "Informations du transfert"
+msgstr "Informations générales"
 
 # messages-i18n.c:231
 #: src/gnome/glade-gnc-dialogs.c:3758
-#, fuzzy
 msgid "Balance Information"
-msgstr "Informations du transfert"
+msgstr "Information du solde"
 
 # messages-i18n.c:249 po/guile_strings.txt:12
 #: src/gnome/glade-gnc-dialogs.c:3781
@@ -2225,35 +2189,33 @@ msgstr "Solde:"
 
 # messages-i18n.c:234
 #: src/gnome/glade-gnc-dialogs.c:3820
-#, fuzzy
 msgid "Transfer Type"
-msgstr "Transferer vers"
+msgstr "Type de transfert"
 
 # messages-i18n.c:195
 #: src/gnome/glade-gnc-dialogs.c:3836
-#, fuzzy
 msgid "Use Opening Balances Equity account"
-msgstr "Solde initial"
+msgstr "Solde initial du compte de capitaux propres"
 
 #: src/gnome/glade-gnc-dialogs.c:3843
 msgid ""
 "Use an Equity account to transfer the opening balance. The Equity account "
 "will be created if it doesn't exist already."
 msgstr ""
+"Utiliser un compte de capitaux propres pour transférer le solde initial."
+"Le compte de capitaux sera créé s'il n'existe pas déjà"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: src/gnome/glade-gnc-dialogs.c:3845
-#, fuzzy
 msgid "Select Transfer Account"
-msgstr "Compte sélectionné"
+msgstr "Compte de transfert sélectionné"
 
 #: src/gnome/glade-gnc-dialogs.c:3852
 msgid "Use the account select below to transfer the opening balance."
-msgstr ""
+msgstr "Utiliser le compte sélectionné ci dessous pour transférer les capitaux propres"
 
 # messages-i18n.c:234
 #: src/gnome/glade-gnc-dialogs.c:3854
-#, fuzzy
 msgid "Transfer Account"
 msgstr "Transferer vers"
 
@@ -2266,7 +2228,6 @@ msgid "Import currency and stock information "
 msgstr "Importer information sur monnaie et action "
 
 #: src/gnome/glade-gnc-dialogs.c:3954
-#, fuzzy
 msgid ""
 "The file you are loading is from an older version of GnuCash. \n"
 "Information about currencies, stocks, and mutual funds needs to\n"
@@ -2323,7 +2284,6 @@ msgid "Import QIF files"
 msgstr "Importer fichiers QIF"
 
 #: src/gnome/glade-gnc-dialogs.c:4153
-#, fuzzy
 msgid ""
 "GnuCash can import financial data from QIF (Quicken \n"
 "Interchange Format) files written by Quicken/QuickBooks,\n"
@@ -2474,12 +2434,10 @@ msgid "Unload selected file"
 msgstr "Décharger le fichier sélectionné"
 
 #: src/gnome/glade-gnc-dialogs.c:4387
-#, fuzzy
 msgid "Accounts and stock holdings"
-msgstr "Vos comptes et actions possédées"
+msgstr "Comptes et actions possédés"
 
 #: src/gnome/glade-gnc-dialogs.c:4396
-#, fuzzy
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
 "funds\n"
@@ -2505,12 +2463,11 @@ msgstr ""
 "Sur la page suivante, les comptes dans vos fichiers QIF et tous les fonds\n"
 "communs ou actions que vous possédez seront mis en correspondance \n"
 "avec les comptes Gnucash. Si un compte GnuCash existe déjà avec le même\n"
-"nom, ou un nom similaire et un type compatible, ce compte sera utilisé\n"
-"comme une correspondance; autrement, GnuCash créra un nouveau compte\n"
-"avec le même nom et type que le compte QIF. Si vous n'aimez pas le compte\n"
-"Gnucash suggéré, cliquez pour le changer.\n"
+"nom, ou un nom similaire et un type compatible, ce compte sera utilisé.\n"
+"Sinon, GnuCash créra un nouveau compte avec le même nom et type "
+"que le compte QIF. Si vous n'aimez pas le compte Gnucash suggéré, cliquez pour le changer.\n"
 "\n"
-"Notez que Gnucash créra beaucoup de comptes qui n'existe pas sur votre\n"
+"Notez que Gnucash créra beaucoup de comptes qui n'existent pas sur votre\n"
 "autre programme de finances personnelles, incluant un compte séparé pour\n"
 "chaque action que vous possédez, des comptes séparés pour les comissions\n"
 "de courtage, comptes \"Capitaux propres\" spéciaux (sous-comptes de\n"
@@ -2520,7 +2477,6 @@ msgstr ""
 "changer si vous le voulez, mais il est plus sûr de les laisser seul.\n"
 
 #: src/gnome/glade-gnc-dialogs.c:4413
-#, fuzzy
 msgid "Match QIF accounts with GnuCash accounts"
 msgstr "Comptes QIF correspondant aux comptes Gnucash"
 
@@ -2532,7 +2488,6 @@ msgstr "Nom du compte QIF"
 # src/gnome/glade-gnc-dialogs.c:347 src/gnome/glade-gnc-dialogs.c:401
 #: src/gnome/glade-gnc-dialogs.c:4448 src/gnome/glade-gnc-dialogs.c:4539
 #: src/gnome/glade-gnc-dialogs.c:4630
-#, fuzzy
 msgid "GnuCash account name"
 msgstr "Nom du compte GNUCash"
 
@@ -2542,12 +2497,10 @@ msgstr "Cliquez sur \"Suivant\" pour vérifier les catégories QIF trouvées. "
 
 # po/guile_strings.txt:98
 #: src/gnome/glade-gnc-dialogs.c:4478
-#, fuzzy
 msgid "Income and Expense categories"
 msgstr "Catégories de revenus et dépenses"
 
 #: src/gnome/glade-gnc-dialogs.c:4487
-#, fuzzy
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories\n"
 "to classify your transactions. Each of the categories in your QIF file will "
@@ -2576,9 +2529,8 @@ msgstr ""
 "compte en toute sécurité au sein de GnuCash."
 
 #: src/gnome/glade-gnc-dialogs.c:4504
-#, fuzzy
 msgid "Match QIF categories with GnuCash accounts"
-msgstr "Catégories QIF trouvées avec les comptes Gnucash"
+msgstr "Catégories QIF rapprochées des comptes Gnucash"
 
 # src/gnome/glade-gnc-dialogs.c:387
 #: src/gnome/glade-gnc-dialogs.c:4532
@@ -2595,7 +2547,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4569
 msgid "Payees and memos"
-msgstr ""
+msgstr "Destinataires et mémos"
 
 #: src/gnome/glade-gnc-dialogs.c:4578
 msgid ""
@@ -2610,15 +2562,21 @@ msgid ""
 "If you select a different account, it will be remembered for future QIF \n"
 "files. "
 msgstr ""
+"Les fichiers QIF téléchargés des banques et institutions financières peuvent ne pas avoir\n"
+"les informations concernant les comptes et catégories qui permettent d'affecter correctement\n"
+"les comptes GnuCash\n"
+"A la page suivante, vous verrez le texte qui apparait dans la zone mémo et destinataire des"
+"transactions sans compte ni catégorie QIF.\n"
+"Par défaut, ces transactions sont assignées à un compte 'Unspécified' dans GnuCash\n"
+"Si vous sélectionnez un autre compte, il sera mémorisé pour les prochains téléchargements"
 
 #: src/gnome/glade-gnc-dialogs.c:4595
-#, fuzzy
 msgid "Match payees/memos to GnuCash accounts"
-msgstr "Catégories QIF trouvées avec les comptes Gnucash"
+msgstr "Mémos rapprochés des comptes Gnucash"
 
 #: src/gnome/glade-gnc-dialogs.c:4623
 msgid "QIF payee/memo"
-msgstr ""
+msgstr "destinataire/mémo QIF"
 
 # po/guile_strings.txt:200
 #: src/gnome/glade-gnc-dialogs.c:4653
@@ -2654,7 +2612,6 @@ msgid "Tradable commodities"
 msgstr "Produits boursiers"
 
 #: src/gnome/glade-gnc-dialogs.c:4709
-#, fuzzy
 msgid ""
 "In the next pages, you will be asked to provide information about stocks, \n"
 "mutual funds, and other tradable commodities that appear in the QIF file(s)\n"
@@ -2674,8 +2631,7 @@ msgstr ""
 "Dans les prochaines pages, il vous sera demandé de fournir des informations\n"
 "sur les actions, fonds communs et autres produits boursiers qui\n"
 "apparaissent dans le(s) fichier(s) QIF que vous importez. Gnucash requiert\n"
-"plus d'informations sur les produits boursiers que le format QIF peut\n"
-"en stocker.\n"
+"plus d'informations sur les produits boursiers que le format QIF peut en stocker.\n"
 "\n"
 "Chaque action, fond commun, et autre produit doit avoir un type, qui est\n"
 "le marché ou celui qui se trouve dans la liste (NASDAQ, NYSE, US Mutual\n"
@@ -2684,13 +2640,12 @@ msgstr ""
 "Vérifier pour voir s'il y a un type existant qui est approprié; sinon, vous\n"
 "pouvez entrer un nouveau nom de type manuellement dans la fenêtre.\n"
 "Soyez sûr que l'abbréviation que vous entrez correspond au code\n"
-"ticker utilisé pour les produits sur le marché ou listé pour ce type.\n"
+"ticker utilisé pour les produits sur le marché ou listé pour ce type."
 
 # messages-i18n.c:176
 #: src/gnome/glade-gnc-dialogs.c:4726
-#, fuzzy
 msgid "Match duplicate transactions"
-msgstr "Supprimer la transaction"
+msgstr "Rechercher les transactions dupliquées"
 
 #: src/gnome/glade-gnc-dialogs.c:4735
 msgid ""
@@ -2713,33 +2668,42 @@ msgid ""
 "\n"
 "Click \"Next\" to find duplicate transactions. "
 msgstr ""
+"Si vous importez un fichier QIF téléchargé d'une banque ou d'une institution financière\n"
+"Certaines informations dans le fichier peuvent être redondantes avec vos comptes GnuCash\n"
+"GnuCash va essayer de détecter les doublons\n"
+"Sur la page suivante, vous devrez confirmer les rapprochements faits entre les transactions\n"
+"importées et celles qui existent déjà. Les transactions importées sont affichées sur la gauche\n"
+"et les transactions existantes possibles sur la droite.\n"
+"Il peut y avoir plusieurs anciennes transaction qui peuvent correspondre. Vous pourrez\n"
+"sélectionner la bonne en cliquant sur la colonne \"Dup?\" de la transaction correcte.\n"
+"\n"
+"Vous pouvez controler les règles utilisées par GnuCash pour trouver les transactions\n"
+"dupliquées dans la section \"Import QIF\" de la boite de dialogue des préférences de GnuCash\n"
+"\n"
+"Cliquer sur \"Suivant\" pour trouver les transactions dupliquées."
 
 #: src/gnome/glade-gnc-dialogs.c:4752
 msgid "Select possible duplicates"
-msgstr ""
+msgstr "Sélection des doublons possibles"
 
 #: src/gnome/glade-gnc-dialogs.c:4768
-#, fuzzy
 msgid "Imported transactions with duplicates"
-msgstr "Montrer les transactions développées avec toutes les répartitions."
+msgstr "Transactions importées avec doublons"
 
 # messages-i18n.c:95
 #: src/gnome/glade-gnc-dialogs.c:4815
-#, fuzzy
 msgid "Possible duplicates for selected new transaction"
-msgstr "Copier la transaction sélectionnée."
+msgstr "Doublons possibles pour la transaction importée sélectionnée"
 
 #: src/gnome/glade-gnc-dialogs.c:4863
 msgid "Dup?"
-msgstr ""
+msgstr "Dup?"
 
 #: src/gnome/glade-gnc-dialogs.c:4881
-#, fuzzy
 msgid "Update your GnuCash accounts"
 msgstr "Mettre à jour vos compte Gnucash"
 
 #: src/gnome/glade-gnc-dialogs.c:4882
-#, fuzzy
 msgid ""
 "Click \"Finish\" to import data from the staging area and update\n"
 "your GnuCash accounts. The account and category matching\n"
@@ -2766,9 +2730,8 @@ msgstr ""
 
 # messages-i18n.c:233
 #: src/gnome/glade-gnc-dialogs.c:5079
-#, fuzzy
 msgid "Transfer Funds"
-msgstr "Transfert depuis"
+msgstr "Transferer fonds"
 
 # messages-i18n.c:231
 #: src/gnome/glade-gnc-dialogs.c:5094
@@ -2831,7 +2794,6 @@ msgid "Heading"
 msgstr "En-tête/Titre"
 
 #: src/gnome/glade-gnc-dialogs.c:5534
-#, fuzzy
 msgid "GnuCash Help"
 msgstr "Aide de Gnucash"
 
@@ -2845,26 +2807,20 @@ msgid "Topics"
 msgstr "Sujets"
 
 #: src/gnome/glade-gnc-dialogs.c:5615
-#, fuzzy
 msgid "Search GnuCash Help"
 msgstr "Recherche dans l'aide de Gnucash"
 
 #: src/gnome/glade-gnc-dialogs.c:5630
-#, fuzzy
 msgid "Search Term:"
-msgstr "Recherche"
+msgstr "Rechercher:"
 
 #: src/gnome/glade-gnc-dialogs.c:5645
-#, fuzzy
 msgid ""
 "Type a single term into the box and hit 'search'. At the moment, this search "
 "engine does not support complex searches, just single words."
 msgstr ""
-"Entrez un seul mot dans la boite\n"
-"et appuyez sur 'recherche'. Pour\n"
-"le moment, le moteur de recherche\n"
-"NE supporte PAS de recherches\n"
-"complexes, juste un seul mot.\n"
+"Entrez un seul mot dans la boite et appuyez sur 'recherche'. Pour le moment, le moteur de recherche"
+"NE supporte PAS de recherches complexes, juste un seul mot."
 
 #: src/gnome/glade-gnc-dialogs.c:5654 src/gnome/glade-gnc-dialogs.c:5697
 #: src/scm/guile-strings.c:91
@@ -2877,22 +2833,21 @@ msgstr "Résultats de la recherche"
 
 #: src/gnome/glade-gnc-dialogs.c:5802
 msgid "New Style Sheet"
-msgstr ""
+msgstr "Nouvelle feuille de style"
 
 #: src/gnome/glade-gnc-dialogs.c:5810
 msgid "New style sheet info"
-msgstr ""
+msgstr "Information sur la nouvelle feuille de style"
 
 #: src/gnome/glade-gnc-dialogs.c:5841
 msgid "Style sheet template:"
-msgstr ""
+msgstr "Modèle de la feuille de style"
 
 # messages-i18n.c:231
 #: src/gnome/glade-gnc-dialogs.c:5940 src/gnome/glade-gnc-dialogs.c:6034
 #: src/gnome/window-acct-tree.c:889
-#, fuzzy
 msgid "Tax Information"
-msgstr "Informations du transfert"
+msgstr "Information de taxation"
 
 # messages-i18n.c:237 src/gnome/glade-gnc-dialogs.c:361
 # src/gnome/glade-gnc-dialogs.c:521
@@ -2908,101 +2863,87 @@ msgid "Accounts"
 msgstr "Comptes"
 
 #: src/gnome/glade-gnc-dialogs.c:6011
-#, fuzzy
 msgid "Accounts Selected:"
-msgstr "Aucun compte trouvé"
+msgstr "Comptes sélectionnés"
 
 #: src/gnome/glade-gnc-dialogs.c:6019
 msgid "0"
-msgstr ""
+msgstr "0"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: src/gnome/glade-gnc-dialogs.c:6026
-#, fuzzy
 msgid "Select Subaccounts"
-msgstr "Sélectionner comptes"
+msgstr "Sélectionner sous-comptes"
 
 # src/gnome/glade-gnc-dialogs.c:415
 #: src/gnome/glade-gnc-dialogs.c:6064 src/scm/guile-strings.c:111
-#, fuzzy
 msgid "TXF Categories"
-msgstr "Catégories"
+msgstr "Catégories TXF"
 
 # messages-i18n.c:290 po/guile_strings.txt:106
 #: src/gnome/glade-gnc-dialogs.c:6099
-#, fuzzy
 msgid "Form"
-msgstr "Depuis"
+msgstr "Formulaire"
 
 #: src/gnome/glade-gnc-dialogs.c:6128
-#, fuzzy
 msgid "Payer Name Source"
-msgstr "< ^   Source du nom du payeur"
+msgstr "Source du nom du payeur"
 
 # messages-i18n.c:199
 #: src/gnome/glade-gnc-dialogs.c:6143
-#, fuzzy
 msgid "Current Account"
-msgstr "< Compte actuel"
+msgstr "Compte actuel"
 
 # messages-i18n.c:176
 #: src/gnome/glade-gnc-dialogs.c:6210
-#, fuzzy
 msgid "Duplicate Transaction"
-msgstr "Supprimer la transaction"
+msgstr "Dupliquer la transaction"
 
 # messages-i18n.c:231
 #: src/gnome/glade-gnc-dialogs.c:6220
-#, fuzzy
 msgid "Transaction Information"
-msgstr "Informations du transfert"
+msgstr "Informations de transaction"
 
 #: src/gnome/glade-gnc-dialogs.c:6322
 msgid "HTML Style Sheets"
-msgstr ""
+msgstr "Feuille de style HTML"
 
 # po/guile_strings.txt:195
 #: src/gnome/glade-gnc-dialogs.c:6332
-#, fuzzy
 msgid "Style sheets"
-msgstr "Bilan"
+msgstr "Feuille de style"
 
 #: src/gnome/glade-gnc-dialogs.c:6363
-#, fuzzy
 msgid "label847668"
-msgstr "label827"
+msgstr "label847668"
 
 # po/guile_strings.txt:127
 #: src/gnome/glade-gnc-dialogs.c:6391
-#, fuzzy
 msgid "Style sheet options"
-msgstr "Editer options du rapport"
+msgstr "Options de la feuille de style"
 
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
 #: src/gnome/glade-gnc-dialogs.c:6474 src/gnome/glade-gnc-dialogs.c:6661
-#, fuzzy
 msgid "Stock Split"
-msgstr "Actions"
+msgstr "Division d'actions"
 
 #: src/gnome/glade-gnc-dialogs.c:6494
 msgid "This druid will help you record a stock split or stock merger."
-msgstr ""
+msgstr "L'expert va vous aider à enregistrer une division ou une fusion d'action"
 
 # messages-i18n.c:206
 #: src/gnome/glade-gnc-dialogs.c:6505
-#, fuzzy
 msgid "Stock Account"
-msgstr "Nettoyer le compte"
+msgstr "Compte d'action"
 
 #: src/gnome/glade-gnc-dialogs.c:6514
-msgid ""
-"Select the account for which you want to record a stock split or merger."
-msgstr ""
+msgid "Select the account for which you want to record a stock split or merger."
+msgstr "Sélectionner le compte pour lequel vous voulez enregistrer une fusion ou division d'action"
 
 #: src/gnome/glade-gnc-dialogs.c:6578
 msgid "Stock Split Details"
-msgstr ""
+msgstr "Détail de la division d'action"
 
 #: src/gnome/glade-gnc-dialogs.c:6587
 msgid ""
@@ -3013,6 +2954,10 @@ msgid ""
 "You can also enter a description of the transaction, or accept the default "
 "one."
 msgstr ""
+"Entrer la date et le nombre de parts que vous avez gagné ou perdu lors de la division"
+"ou de la fusion\n"
+"Pour une fusion (division négative), utiliser une valeur négative pour une distribution de parts\n"
+"Vous pouvez aussi entrer une description pour la transaction ou valider celle proposée"
 
 #: src/gnome/glade-gnc-dialogs.c:6618
 msgid "Share Distribution:"
@@ -3499,8 +3444,7 @@ msgid "Canceling"
 msgstr "Annuler"
 
 #: src/gnome/new-user-interface.c:534
-msgid ""
-"Uncheck if you do not want this dialog to run if you start GnuCash up again. "
+msgid "Uncheck if you do not want this dialog to run if you start GnuCash up again. "
 msgstr ""
 
 #: src/gnome/new-user-interface.c:543
@@ -3650,8 +3594,7 @@ msgstr "Nettoyer les sous-comptes"
 # messages-i18n.c:110
 #: src/gnome/window-acct-tree.c:798
 msgid "Identify and fix problems in the account and its subaccounts"
-msgstr ""
-"Identifier et corriger les problèmes dans le compte et ces sous-comptes."
+msgstr "Identifier et corriger les problèmes dans le compte et ces sous-comptes."
 
 # messages-i18n.c:156
 #: src/gnome/window-acct-tree.c:806
@@ -3807,7 +3750,7 @@ msgid "Print Help window"
 msgstr "Imprimer fenêtre du rapport"
 
 # messages-i18n.c:261
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1094
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1100
 #: src/gnome/window-register.c:933 src/gnome/window-register.c:1374
 msgid "Close"
 msgstr "Fermer"
@@ -3861,178 +3804,178 @@ msgstr ""
 "La voie GNU pour gérer votre argent!"
 
 # messages-i18n.c:192
-#: src/gnome/window-main.c:922
+#: src/gnome/window-main.c:928
 #, fuzzy
 msgid "New _File"
 msgstr "Nouveau fichier"
 
 # messages-i18n.c:93
-#: src/gnome/window-main.c:923
+#: src/gnome/window-main.c:929
 msgid "Create a new file"
 msgstr "Créer un nouveau fichier."
 
 # messages-i18n.c:186
-#: src/gnome/window-main.c:930
+#: src/gnome/window-main.c:936
 #, fuzzy
 msgid "Export Accounts..."
 msgstr "Comptes perdus/abandonnés"
 
-#: src/gnome/window-main.c:931
+#: src/gnome/window-main.c:937
 msgid "Export the account hierarchy to a new file"
 msgstr ""
 
 # messages-i18n.c:185
-#: src/gnome/window-main.c:939
+#: src/gnome/window-main.c:945
 msgid "Import QIF..."
 msgstr "Importer QIF..."
 
 # messages-i18n.c:88
-#: src/gnome/window-main.c:940
+#: src/gnome/window-main.c:946
 msgid "Import a Quicken QIF file"
 msgstr "Importer un fichier QIF de Quicken."
 
 # messages-i18n.c:190
-#: src/gnome/window-main.c:948
+#: src/gnome/window-main.c:954
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "Nouveau compte"
 
 # messages-i18n.c:96
-#: src/gnome/window-main.c:949
+#: src/gnome/window-main.c:955
 #, fuzzy
 msgid "Open a new account tree view"
 msgstr "Ouvrir le compte."
 
 # messages-i18n.c:171
-#: src/gnome/window-main.c:956
+#: src/gnome/window-main.c:962
 #, fuzzy
 msgid "Move to New Window"
 msgstr "Fermer la fenêtre"
 
 # messages-i18n.c:85
-#: src/gnome/window-main.c:957
+#: src/gnome/window-main.c:963
 #, fuzzy
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "Ouvrir la fenêtre d'aide de Gnucash."
 
 # messages-i18n.c:74
-#: src/gnome/window-main.c:963
+#: src/gnome/window-main.c:969
 #, fuzzy
 msgid "Close _Window"
 msgstr "Fermer cette fenêtre de rapport"
 
 # messages-i18n.c:105
-#: src/gnome/window-main.c:964 src/gnome/window-main.c:1095
+#: src/gnome/window-main.c:970 src/gnome/window-main.c:1101
 #, fuzzy
 msgid "Close the current notebook page"
 msgstr "Enregistrer la transaction en cours"
 
 # messages-i18n.c:149
-#: src/gnome/window-main.c:976
+#: src/gnome/window-main.c:982
 msgid "_Preferences..."
 msgstr "_Préférences..."
 
 # messages-i18n.c:99
-#: src/gnome/window-main.c:977
+#: src/gnome/window-main.c:983
 msgid "Open the global preferences dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences globales."
 
 # messages-i18n.c:183
-#: src/gnome/window-main.c:989
+#: src/gnome/window-main.c:995
 #, fuzzy
 msgid "_General Ledger"
 msgstr "Registre général"
 
 # messages-i18n.c:85
-#: src/gnome/window-main.c:990
+#: src/gnome/window-main.c:996
 #, fuzzy
 msgid "Open a general ledger window"
 msgstr "Ouvrir la fenêtre d'aide de Gnucash."
 
 # messages-i18n.c:262
-#: src/gnome/window-main.c:997
+#: src/gnome/window-main.c:1003
 #, fuzzy
 msgid "Commodity _Editor"
 msgstr "Livrer"
 
-#: src/gnome/window-main.c:998
+#: src/gnome/window-main.c:1004
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:1005
+#: src/gnome/window-main.c:1011
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:1006
+#: src/gnome/window-main.c:1012
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:1013
+#: src/gnome/window-main.c:1019
 #, fuzzy
 msgid "Financial _Calculator"
 msgstr "Calculatrice financière"
 
-#: src/gnome/window-main.c:1014
+#: src/gnome/window-main.c:1020
 msgid "Use the financial calculator"
 msgstr "Utiliser la calculatrice financière"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: src/gnome/window-main.c:1020
+#: src/gnome/window-main.c:1026
 #, fuzzy
 msgid "_Find Transactions"
 msgstr "Chercher des transactions"
 
-#: src/gnome/window-main.c:1021 src/gnome/window-register.c:906
+#: src/gnome/window-main.c:1027 src/gnome/window-register.c:906
 msgid "Find transactions with a search"
 msgstr "Trouver des transactions avec une recherche."
 
 # src/gnome/glade-gnc-dialogs.c:638
-#: src/gnome/window-main.c:1033
+#: src/gnome/window-main.c:1039
 msgid "_Manual"
 msgstr "_Manuel"
 
 # messages-i18n.c:85
-#: src/gnome/window-main.c:1034
+#: src/gnome/window-main.c:1040
 msgid "Open the GnuCash Manual"
 msgstr "Ouvrir le manuel de Gnucash."
 
-#: src/gnome/window-main.c:1041
+#: src/gnome/window-main.c:1047
 msgid "_Tips Of The Day"
 msgstr "As_tuce du jour"
 
-#: src/gnome/window-main.c:1042
+#: src/gnome/window-main.c:1048
 msgid "View the Tips of the Day"
 msgstr "Voir les astuces du jour"
 
 # po/guile_strings.txt:264
-#: src/gnome/window-main.c:1061
+#: src/gnome/window-main.c:1067
 msgid "_Tools"
 msgstr "Ou_tils"
 
 # messages-i18n.c:332
-#: src/gnome/window-main.c:1062
+#: src/gnome/window-main.c:1068
 #, fuzzy
 msgid "_Settings"
 msgstr "Paramètres"
 
 # po/guile_strings.txt:31
-#: src/gnome/window-main.c:1063
+#: src/gnome/window-main.c:1069
 #, fuzzy
 msgid "_Windows"
 msgstr "Fenêtre principale"
 
 # messages-i18n.c:107
-#: src/gnome/window-main.c:1085
+#: src/gnome/window-main.c:1091
 msgid "Save the file to disk"
 msgstr "Sauvegarder le fichier sur le disque."
 
 # messages-i18n.c:283
-#: src/gnome/window-main.c:1110
+#: src/gnome/window-main.c:1116
 msgid "Exit"
 msgstr "Quitter"
 
 # messages-i18n.c:83
-#: src/gnome/window-main.c:1111
+#: src/gnome/window-main.c:1117
 msgid "Exit GnuCash"
 msgstr "Quitter GnuCash."
 
@@ -4102,8 +4045,7 @@ msgid "_Reconcile Information..."
 msgstr "Information de _rapprochement..."
 
 #: src/gnome/window-reconcile.c:1061
-msgid ""
-"Change the reconcile information including statement date and ending balance."
+msgid "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Changer l'information du rapprochement incluant l'état de la date et le "
 "solde final."
@@ -4413,6 +4355,7 @@ msgstr "Pointé:"
 
 # messages-i18n.c:322
 #: src/gnome/window-register.c:1035
+#, fuzzy
 msgid "Reconciled:"
 msgstr "Rapproché:"
 
@@ -4444,8 +4387,7 @@ msgstr "Grand livre avec répartition automatique"
 
 # messages-i18n.c:78 po/guile_strings.txt:124
 #: src/gnome/window-register.c:1261 src/scm/guile-strings.c:261
-msgid ""
-"Show transactions on one or two lines and expand the current transaction"
+msgid "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
 "Montrer les transactions sur une ou deux lignes et développer la transaction "
 "actuelle"
@@ -4608,8 +4550,7 @@ msgstr "Tout nettoyer"
 # messages-i18n.c:111
 #: src/gnome/window-register.c:1529
 #, fuzzy
-msgid ""
-"Identify and fix problems in the transactions displayed in this register"
+msgid "Identify and fix problems in the transactions displayed in this register"
 msgstr "Identifier et corriger les problèmes dans les comptes de ce registre."
 
 # messages-i18n.c:206
@@ -4816,27 +4757,24 @@ msgstr "Editer options du rapport"
 msgid "Print report window"
 msgstr "Imprimer fenêtre du rapport"
 
-#: src/guile/gnucash.c:143
+#: src/guile/gnucash.c:144
 msgid "This is a development version. It may or may not work."
-msgstr ""
-"C'est une version de développement. Elle peut ou ne peut pas fonctionner."
+msgstr "C'est une version de développement. Elle peut ou ne peut pas fonctionner."
 
 # po/guile_strings.txt:34
-#: src/guile/gnucash.c:147
+#: src/guile/gnucash.c:148
 #, c-format
 msgid "The last stable version was %s."
 msgstr "La dernière version stable était %s."
 
-#: src/guile/gnucash.c:149
+#: src/guile/gnucash.c:150
 #, c-format
 msgid "The next stable version will be %s."
 msgstr "La prochaine version stable sera %s."
 
 #: src/register/gnome/gnucash-style.c:887
-msgid ""
-"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-msgstr ""
-"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgid "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgstr "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 
 #: src/register/gnome/gnucash-style.c:893
 msgid "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
@@ -5021,13 +4959,11 @@ msgstr "Entrez le numéro de transaction, tel que le numéro de chèque"
 # messages-i18n.c:129
 #: src/register/splitreg.c:728
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr ""
-"Entrez le compte à transférer depuis, ou choisissez en un dans la liste."
+msgstr "Entrez le compte à transférer depuis, ou choisissez en un dans la liste."
 
 # messages-i18n.c:91
 #: src/register/splitreg.c:735
-msgid ""
-"This transaction has multiple splits; press the Split button to see them all"
+msgid "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Cette transaction a de multiples répartitions ; appuyez sur le bouton "
 "Répartition pour les voir toutes"
@@ -5035,8 +4971,7 @@ msgstr ""
 # messages-i18n.c:91
 #: src/register/splitreg.c:743
 #, fuzzy
-msgid ""
-"This transaction is a stock split; press the Split button to see details"
+msgid "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Cette transaction a de multiples répartitions ; appuyez sur le bouton "
 "Répartition pour les voir toutes"
@@ -5765,8 +5700,7 @@ msgstr "Il n'y a aucun comptes sur lesquels créer un rapport."
 # po/guile_strings.txt:100
 #: src/scm/guile-strings.c:192
 #, fuzzy
-msgid ""
-"Override account-selection and show sub-accounts of all selected accounts?"
+msgid "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr "Inclure les sous-comptes de tous les comptes sélectionnés"
 
 # po/guile_strings.txt:153
@@ -5969,8 +5903,7 @@ msgstr "Utiliser le format horaire de 24 heures"
 # po/guile_strings.txt:20
 #: src/scm/guile-strings.c:251
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr ""
-"Utiliser un format de date sur 24 heures (à la place de celui sur 12 heures)"
+msgstr "Utiliser un format de date sur 24 heures (à la place de celui sur 12 heures)"
 
 #: src/scm/guile-strings.c:253
 msgid "Enable EURO support"
@@ -6017,8 +5950,7 @@ msgstr "Listes auto-augmentable"
 # po/guile_strings.txt:232
 #: src/scm/guile-strings.c:269
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr ""
-"Augmenter automatiquement la liste de comptes ou d'actions durant l'entrée"
+msgstr "Augmenter automatiquement la liste de comptes ou d'actions durant l'entrée"
 
 # po/guile_strings.txt:267
 #: src/scm/guile-strings.c:271
@@ -6078,8 +6010,7 @@ msgid "Confirm before changing reconciled"
 msgstr "Confirmer avant de changer le rapprochement"
 
 #: src/scm/guile-strings.c:287
-msgid ""
-"If selected, use a dialog to confirm a change to a reconciled transaction."
+msgid "If selected, use a dialog to confirm a change to a reconciled transaction."
 msgstr ""
 "Si sélectionné, utilise une boite de dialogue pour confirmer un changement\n"
 "dans une transaction rapprochée."
@@ -6159,8 +6090,7 @@ msgstr "Couleur active secondaire"
 # po/guile_strings.txt:217
 #: src/scm/guile-strings.c:308
 msgid "The secondary background color for the current register row"
-msgstr ""
-"La couleur de l'arrière-plan secondaire pour la ligne du registre actuel"
+msgstr "La couleur de l'arrière-plan secondaire pour la ligne du registre actuel"
 
 # messages-i18n.c:336
 #: src/scm/guile-strings.c:310
@@ -6320,8 +6250,7 @@ msgid "Notebook"
 msgstr "Notes"
 
 #: src/scm/guile-strings.c:343
-msgid ""
-"New windows are created as notebook tabs in the current top-level window"
+msgid "New windows are created as notebook tabs in the current top-level window"
 msgstr ""
 
 #: src/scm/guile-strings.c:345
@@ -6335,8 +6264,7 @@ msgid "Single window"
 msgstr "Fermer la fenêtre"
 
 #: src/scm/guile-strings.c:347
-msgid ""
-"One window is used for all displays (select contents through Window menu)"
+msgid "One window is used for all displays (select contents through Window menu)"
 msgstr ""
 
 # messages-i18n.c:213
@@ -6452,8 +6380,7 @@ msgstr "Utiliser les étiquettes de comptabilité"
 
 #: src/scm/guile-strings.c:374
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
-msgstr ""
-"Utiliser seulement 'débit' et 'crédit' à la place de synonymes informels"
+msgstr "Utiliser seulement 'débit' et 'crédit' à la place de synonymes informels"
 
 #: src/scm/guile-strings.c:376
 msgid "Display \"Tip of the Day\""
@@ -6801,18 +6728,6 @@ msgid "Credit Lines"
 msgstr "Ligne de crédit"
 
 #: src/scm/guile-strings.c:470
-msgid ""
-"Warning!! This is a DEVELOPMENT version of GnuCash.\n"
-"It probably has lots of bugs and unstable features!\n"
-"If you are looking for a stable personal finance application,\n"
-"you should use the latest release of GnuCash 1.4."
-msgstr ""
-"Attention!! C'est une version de DEVELOPPEMENT de Gnucash.\n"
-"Elle a probablement beaucoup de bugs et de fonctions instables!\n"
-"Si vous recherchez une application de finances personnelles stable,\n"
-"vous devriez utiliser la dernière version de Gnucash 1.4."
-
-#: src/scm/guile-strings.c:474
 #, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information.  \n"
@@ -6823,7 +6738,7 @@ msgstr ""
 "Le manuel en ligne de Gnucash a beaucoup d'informations utiles.\n"
 "Vous pouvez accéder au manuel par le menu Aide."
 
-#: src/scm/guile-strings.c:478
+#: src/scm/guile-strings.c:474
 msgid ""
 "You can easily import your existing financial data from Quicken,\n"
 "MS Money or other programs that export QIF (Quicken Interchange\n"
@@ -6836,7 +6751,7 @@ msgstr ""
 "import dans la barre d'outils de la fenêtre principale et suivez les \n"
 "instructions fournies."
 
-#: src/scm/guile-strings.c:482
+#: src/scm/guile-strings.c:478
 msgid ""
 "If you are familiar with other financial programs such as Quicken,\n"
 "note that GnuCash uses accounts instead of categories to track\n"
@@ -6849,7 +6764,7 @@ msgstr ""
 "d'informations sur les comptes de revenus et dépenses, s'il vous \n"
 "plait regardez le manuel en ligne de GnuCash."
 
-#: src/scm/guile-strings.c:486
+#: src/scm/guile-strings.c:482
 msgid ""
 "Create new accounts by clicking the New button in the main window\n"
 "tool bar.  This will bring up a dialog box where you can enter\n"
@@ -6864,7 +6779,7 @@ msgstr ""
 "paramétrage d'un tableau de comptes, s'il vous plaît regarder le \n"
 "manuel en ligne de GnuCash."
 
-#: src/scm/guile-strings.c:491
+#: src/scm/guile-strings.c:487
 msgid ""
 "Click the right mouse button in the main window to bring up the\n"
 "account menu options. Within each register, clicking the right\n"
@@ -6875,7 +6790,7 @@ msgstr ""
 "de chaque registre, en cliquant sur le bouton droit de la souris \n"
 "fait apparaitre le menu d'options de la transaction."
 
-#: src/scm/guile-strings.c:494
+#: src/scm/guile-strings.c:490
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash\n"
 "calculator to add, subtract, multiply and divide .  Simply type\n"
@@ -6888,7 +6803,7 @@ msgstr ""
 "+', '-','*', ou '/'. Tapez la seconde valeur et appuyez sur Entrer \n"
 "pour enregistrer le montant calculé."
 
-#: src/scm/guile-strings.c:498
+#: src/scm/guile-strings.c:494
 msgid ""
 "Quick-fill makes it easy to enter common transactions.  When you\n"
 "type the first letter(s) of a common transaction description,\n"
@@ -6900,7 +6815,7 @@ msgstr ""
 "courante, GnuCash complètera automatiquement le restant \n"
 "de la transaction comme elle fût rentrée dernièrement."
 
-#: src/scm/guile-strings.c:502
+#: src/scm/guile-strings.c:498
 msgid ""
 "Type the first letter(s) of an existing account name in the\n"
 "Transfer register column, and GnuCash will complete the name from\n"
@@ -6914,7 +6829,7 @@ msgstr ""
 "/les première(s) lettre(s) du compte parent, suivie(s) par ':' et la/les \n"
 "première(s) lettre(s) du sous-compte ( exemple A:E pour Avoirs:Espèces.)"
 
-#: src/scm/guile-strings.c:507
+#: src/scm/guile-strings.c:503
 #, fuzzy
 msgid ""
 "To enter multiple-split transactions such as a paycheck with\n"
@@ -6928,7 +6843,7 @@ msgstr ""
 "Ou choisissez soit le grand livre avec répatitions automatiques ou \n"
 "le journal des transactions depuis l'option du menu Registre|Style."
 
-#: src/scm/guile-strings.c:511
+#: src/scm/guile-strings.c:507
 msgid ""
 "Want to see all your subaccount transactions in one register?\n"
 "From the main menu, highlight the parent account and select\n"
@@ -6939,7 +6854,7 @@ msgstr ""
 "le compte parent et sélectionnez Comptes|Ouvrir sous-comptes\n"
 "à partir du menu."
 
-#: src/scm/guile-strings.c:514
+#: src/scm/guile-strings.c:510
 msgid ""
 "In the reconcile window, you can press the spacebar\n"
 "to mark transactions as reconciled.\n"
@@ -6951,7 +6866,7 @@ msgstr ""
 "Vous pouvez aussi appuyez sur Tab et Shift-Tab pour vous\n"
 "déplacez entre les dépots et retraits."
 
-#: src/scm/guile-strings.c:518
+#: src/scm/guile-strings.c:514
 msgid ""
 "When entering check numbers in the register, you can\n"
 "type '+' to enter the next number or '-' to enter the previous\n"
@@ -6963,7 +6878,7 @@ msgstr ""
 "utiliser '+' et '-' respectivement pour incrémenter et décrémenter le\n"
 "numéro."
 
-#: src/scm/guile-strings.c:522
+#: src/scm/guile-strings.c:518
 #, fuzzy
 msgid ""
 "You should back up your files regularly.  Just copy\n"
@@ -6973,7 +6888,7 @@ msgstr ""
 "juste le fichier .xac de Gnucash vers une disquette ou tous\n"
 "autres périphériques de sauvegarde."
 
-#: src/scm/guile-strings.c:524
+#: src/scm/guile-strings.c:520
 #, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
@@ -6986,34 +6901,34 @@ msgstr ""
 "S'il vous plait regardez le manuel en ligne de Gnucash\n"
 "pour plus de détails"
 
-#: src/scm/guile-strings.c:528
+#: src/scm/guile-strings.c:524
 msgid ""
 "You can pack multiple reports into a single window, \n"
 "providing all the financial information you want at a glance.\n"
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:531
+#: src/scm/guile-strings.c:527
 msgid ""
 "GnuCash can act as a simple web browser!  To display\n"
 "a web page as a report, use the \"Frame URL\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:533
+#: src/scm/guile-strings.c:529
 msgid ""
 "Style Sheets affect how reports are displayed.  Choose\n"
 "a style sheet for your report as a report option, and use\n"
 "the Style Sheets menu to customize style sheets."
 msgstr ""
 
-#: src/scm/guile-strings.c:536
+#: src/scm/guile-strings.c:532
 msgid ""
 "The GnuCash developers are easy to contact.  As well\n"
 "as several mailing lists, you can chat to them live on IRC!\n"
 "Join them on #gnucash at irc.gnome.org"
 msgstr ""
 
-#: src/scm/guile-strings.c:539
+#: src/scm/guile-strings.c:535
 msgid ""
 "There is a theory that if ever anyone discovers what\n"
 "the Universe is for and why it is here, it will instantly\n"
@@ -9008,8 +8923,7 @@ msgstr "Inverser les comptes de revenus et dépenses."
 # po/guile_strings.txt:297
 #: src/scm/report/guile-strings.c:695
 #, fuzzy
-msgid ""
-"Reverse amount display for Liability, Equity, Credit Card,and Income accounts"
+msgid "Reverse amount display for Liability, Equity, Credit Card,and Income accounts"
 msgstr ""
 "Inverser les comptes carte de crédit, passif(dettes), capitaux propres, et "
 "revenus"
@@ -9075,1464 +8989,5 @@ msgstr ""
 msgid "Welcome to GnuCash 1.6"
 msgstr ""
 
-# po/guile_strings.txt:27
-#, fuzzy
-#~ msgid "Introduction"
-#~ msgstr "International"
 
-# po/guile_strings.txt:31
-#~ msgid "Main Window"
-#~ msgstr "Fenêtre principale"
 
-# messages-i18n.c:167
-#~ msgid "Adjust Balance"
-#~ msgstr "Ajuster le solde"
-
-# po/guile_strings.txt:246
-#, fuzzy
-#~ msgid "Stock Ticker"
-#~ msgstr "Code"
-
-# messages-i18n.c:190
-#, fuzzy
-#~ msgid "New User Account setup"
-#~ msgstr "Nouveau compte"
-
-# messages-i18n.c:166
-#, fuzzy
-#~ msgid "Account List Type"
-#~ msgstr "Type de compte"
-
-# po/guile_strings.txt:234
-#~ msgid "Net Gain"
-#~ msgstr "Gain net"
-
-# po/guile_strings.txt:263
-#, fuzzy
-#~ msgid "Avg Bal"
-#~ msgstr "Solde moyen"
-
-# po/guile_strings.txt:207
-#, fuzzy
-#~ msgid "Max Bal"
-#~ msgstr "Max"
-
-# po/guile_strings.txt:286
-#, fuzzy
-#~ msgid "Min Bal"
-#~ msgstr "Min"
-
-# messages-i18n.c:344
-#, fuzzy
-#~ msgid "Total In"
-#~ msgstr "Total"
-
-# messages-i18n.c:344
-#, fuzzy
-#~ msgid "Total Out"
-#~ msgstr "Total"
-
-# messages-i18n.c:256
-#, fuzzy
-#~ msgid "Net Change"
-#~ msgstr "Pas de changement"
-
-# messages-i18n.c:190
-#, fuzzy
-#~ msgid "New User Account Setup"
-#~ msgstr "Nouveau compte"
-
-# messages-i18n.c:179
-#, fuzzy
-#~ msgid "Starting Balance"
-#~ msgstr "Solde du début:"
-
-# messages-i18n.c:179
-#, fuzzy
-#~ msgid "Enter Starting Balance"
-#~ msgstr "Solde du début:"
-
-#~ msgid "OK"
-#~ msgstr "Ok"
-
-# messages-i18n.c:190
-#, fuzzy
-#~ msgid "Run New User Account Setup again?"
-#~ msgstr "Nouveau compte"
-
-# po/guile_strings.txt:179
-#, fuzzy
-#~ msgid "New _Report"
-#~ msgstr "_Rapports"
-
-# po/guile_strings.txt:224
-#, fuzzy
-#~ msgid "Investment Portfolio Report: %s"
-#~ msgstr "Affiche le rapport du Portefeuille d'actions"
-
-# messages-i18n.c:236 po/guile_strings.txt:56
-#, fuzzy
-#~ msgid "Account:"
-#~ msgstr "Compte"
-
-# messages-i18n.c:150
-#~ msgid "_Print Check... (unfinished!)"
-#~ msgstr "Im_primer chèques...(non terminé!)"
-
-# po/guile_strings.txt:9
-#, fuzzy
-#~ msgid "Account Chart"
-#~ msgstr "Séparateur de compte"
-
-# messages-i18n.c:189 po/guile_strings.txt:4
-#, fuzzy
-#~ msgid "Mutual-Funds"
-#~ msgstr "Fonds de placements"
-
-# messages-i18n.c:298 po/guile_strings.txt:165
-# src/gnome/glade-gnc-dialogs.c:632
-#, fuzzy
-#~ msgid "Liabilities/Equity"
-#~ msgstr "Passif(Dettes)"
-
-# po/guile_strings.txt:67
-#, fuzzy
-#~ msgid "Show net worth bars"
-#~ msgstr "Montrer les bordures verticales"
-
-# messages-i18n.c:298 po/guile_strings.txt:165
-# src/gnome/glade-gnc-dialogs.c:632
-#, fuzzy
-#~ msgid "Liability/Equity Chart"
-#~ msgstr "Passif(Dettes)"
-
-# po/guile_strings.txt:96
-#, fuzzy
-#~ msgid "Date to report on"
-#~ msgstr "Il n'y a aucun comptes sur lesquels créer un rapport."
-
-# po/guile_strings.txt:70
-#, fuzzy
-#~ msgid "Background color for total"
-#~ msgstr "Couleur d'arrière-plan"
-
-# po/guile_strings.txt:127
-#, fuzzy
-#~ msgid "TAX Report Options"
-#~ msgstr "Options du rapport d'Impôts"
-
-# po/guile_strings.txt:70
-#, fuzzy
-#~ msgid "Background color for primary subtotals and headings"
-#~ msgstr "Couleur d'arrière-plan"
-
-# po/guile_strings.txt:70
-#, fuzzy
-#~ msgid "Background color for secondary subtotals and headings"
-#~ msgstr "Couleur d'arrière-plan"
-
-#, fuzzy
-#~ msgid "Blue items were exported to file %s."
-#~ msgstr "Les éléments en bleus sont exporté vers le fichier: \""
-
-#, fuzzy
-#~ msgid "Blue items were <em>not</em> exported to txf file!"
-#~ msgstr ""
-#~ "Les éléments en bleus ne sont <b>PAS</b> exporté vers le fichier txf!"
-
-# messages-i18n.c:181
-#~ msgid "Export .TXF"
-#~ msgstr "Export en .TXF"
-
-#, fuzzy
-#~ msgid "Account Name(w/subtotal)"
-#~ msgstr "Compte (avec/sous-total)"
-
-#, fuzzy
-#~ msgid "Account Code (w/subtotal)"
-#~ msgstr "Compte (avec/sous-total)"
-
-#~ msgid "Date (subtotal monthly)"
-#~ msgstr "Date (sous-total mensuel)"
-
-# messages-i18n.c:116
-#~ msgid "Sort by date & subtotal each month"
-#~ msgstr "Trier par date et sous-total chaque mois"
-
-#~ msgid "Sort by date & subtotal each year"
-#~ msgstr "Trier par date et sous-total chaque année"
-
-# po/guile_strings.txt:133
-#~ msgid "Transfer from/to (w/subtotal)"
-#~ msgstr "Transfert depuis/vers (avec sous-total)"
-
-# po/guile_strings.txt:233
-#, fuzzy
-#~ msgid ""
-#~ "Sort and subtotal by account transferred\n"
-#~ " from/to's name"
-#~ msgstr "Tri et sous-total par nom de compte transféré depuis/vers"
-
-# po/guile_strings.txt:133
-#, fuzzy
-#~ msgid "Transfer from/to code"
-#~ msgstr "Transfert depuis/vers"
-
-# po/guile_strings.txt:133
-#, fuzzy
-#~ msgid "Transfer from/to (w/subtotal) by code"
-#~ msgstr "Transfert depuis/vers (avec sous-total)"
-
-# po/guile_strings.txt:233
-#, fuzzy
-#~ msgid ""
-#~ "Sort and subtotal by account\n"
-#~ " transferred from/to's code"
-#~ msgstr "Tri et sous-total par nom de compte transféré depuis/vers"
-
-# po/guile_strings.txt:127
-#, fuzzy
-#~ msgid "_Devel Options"
-#~ msgstr "Options du rapport"
-
-#~ msgid ""
-#~ "You have disabled \"Tip of the Day\"\n"
-#~ "You can re-enable tips from the General\n"
-#~ "section of the Preferences menu"
-#~ msgstr ""
-#~ "Vous avez sésactivé \"L'astuce du jour\"\n"
-#~ "Vous pouvez réactiver les astuces à partir de la\n"
-#~ "section Général du menu Préférences"
-
-# messages-i18n.c:261
-#, fuzzy
-#~ msgid "Choose"
-#~ msgstr "Fermer"
-
-#~ msgid "Untitled"
-#~ msgstr "Sans titre"
-
-# messages-i18n.c:130
-#, fuzzy
-#~ msgid "Write _Account Hierarchy"
-#~ msgstr "Réc_apitulatif du compte"
-
-# messages-i18n.c:131
-#~ msgid "_Accounts"
-#~ msgstr "Comptes"
-
-# messages-i18n.c:311
-#~ msgid "Parameters"
-#~ msgstr "Paramètres"
-
-# messages-i18n.c:74
-#, fuzzy
-#~ msgid "Open this report in a new window"
-#~ msgstr "Fermer cette fenêtre de rapport"
-
-# messages-i18n.c:74
-#~ msgid "Close this report window"
-#~ msgstr "Fermer cette fenêtre de rapport"
-
-# po/guile_strings.txt:244
-#~ msgid "Export data as text (Danger: Unfinished)"
-#~ msgstr "Exporter les données comme texte (Danger: Non terminé)"
-
-# po/guile_strings.txt:196
-#~ msgid "Export data as text."
-#~ msgstr "Exporter les données comme texte."
-
-# po/guile_strings.txt:100
-#, fuzzy
-#~ msgid "Include Sub-Account balances"
-#~ msgstr "Inclure les sous-comptes de chacun des comptes sélectionnés"
-
-# src/gnome/glade-gnc-dialogs.c:506
-#, fuzzy
-#~ msgid "Select accounts to calculate income on"
-#~ msgstr "Sélectionner Comptes (aucun= tous)"
-
-# messages-i18n.c:338 po/guile_strings.txt:298
-# src/gnome/glade-gnc-dialogs.c:635
-#, fuzzy
-#~ msgid "Stacked"
-#~ msgstr "Actions"
-
-# po/guile_strings.txt:295
-#, fuzzy
-#~ msgid "Income/Expense Graph"
-#~ msgstr "Revenus et dépenses"
-
-# po/guile_strings.txt:149
-#, fuzzy
-#~ msgid "Display Format"
-#~ msgstr "Format de date"
-
-# messages-i18n.c:106
-#, fuzzy
-#~ msgid "Select the display value for the currency"
-#~ msgstr "Mettre des paramètres pour ce rapport."
-
-# messages-i18n.c:190
-#, fuzzy
-#~ msgid "Income by Account"
-#~ msgstr "Nouveau compte"
-
-# po/guile_strings.txt:207
-#~ msgid "Tax"
-#~ msgstr "Taxes"
-
-# src/gnome/glade-gnc-dialogs.c:506
-#, fuzzy
-#~ msgid "Unselect Subaccounts"
-#~ msgstr "Sélectionner comptes"
-
-#, fuzzy
-#~ msgid "label847671"
-#~ msgstr "label773"
-
-# messages-i18n.c:323
-#~ msgid "Record"
-#~ msgstr "Enregistrer"
-
-# messages-i18n.c:152
-#~ msgid "_Record"
-#~ msgstr "En_registrer"
-
-#~ msgid "All other currencies will get converted to this currency."
-#~ msgstr "Toutes les autres monnaies seront converties vers cette monnaie."
-
-# po/guile_strings.txt:136
-#~ msgid "Report Items from this date"
-#~ msgstr "Eléments de rapports depuis cette date"
-
-# po/guile_strings.txt:290
-#~ msgid "Report items up to and including this date"
-#~ msgstr "Eléments du rapport jusqu'à et incluant cette date"
-
-# po/guile_strings.txt:163
-#~ msgid "Sub-Accounts"
-#~ msgstr "Sous-comptes"
-
-# messages-i18n.c:338 po/guile_strings.txt:298
-# src/gnome/glade-gnc-dialogs.c:635
-#, fuzzy
-#~ msgid "to"
-#~ msgstr "Actions"
-
-#~ msgid "Headers"
-#~ msgstr "En-têtes"
-
-# po/guile_strings.txt:219
-#~ msgid "Display the headers?"
-#~ msgstr "Afficher les en-têtes?"
-
-# po/guile_strings.txt:264
-#, fuzzy
-#~ msgid "Table test"
-#~ msgstr "Totaux"
-
-#~ msgid "Set/Reset Tax Status"
-#~ msgstr "Activer/Réinitialiser l'état des impôts"
-
-# messages-i18n.c:76
-#~ msgid "Set/Reset Selected Account Tax Status"
-#~ msgstr "Activer/Réinitialiser l'état des impôts du compte sélectionné."
-
-# messages-i18n.c:256
-#, fuzzy
-#~ msgid "No Change"
-#~ msgstr "Pas de changement"
-
-# messages-i18n.c:211
-#~ msgid "Set Tax Related"
-#~ msgstr "Activer comme relatifs aux impôts"
-
-# messages-i18n.c:76
-#~ msgid "Set Selected accounts as Tax Related"
-#~ msgstr "Activer les comptes sélectionnés comme relatifs aux impôts."
-
-#~ msgid "Reset Tax Related"
-#~ msgstr "Réinitialiser ceux relatifs aux impôts"
-
-#~ msgid "Reset Selected accounts as not Tax Related"
-#~ msgstr ""
-#~ "Réinitialiser les comptes sélectionnés comme non relatifs aux impôts"
-
-# messages-i18n.c:76
-#~ msgid "Set Tax Related & sub-accounts"
-#~ msgstr "Activer ceux relatifs aux impôts et les sous-comptes.."
-
-#~ msgid "Set Selected & sub-accounts as Tax Related"
-#~ msgstr ""
-#~ "Activer ceux sélectionnés et les sous-comptes comme relatifs aux impôts"
-
-# messages-i18n.c:76
-#~ msgid "Reset Tax Related & sub-accounts"
-#~ msgstr "Réinitialiser ceux relatifs aux impôts et les sous-comptes."
-
-#~ msgid "Reset Selected & sub-accounts as not Tax Related"
-#~ msgstr ""
-#~ "Réinitialiser ceux sélectionnés et les sous-comptes comme non relatifs "
-#~ "aux impôts"
-
-#~ msgid "TXF Export Init"
-#~ msgstr "Init export TXF"
-
-#~ msgid "Print extended TXF HELP messages"
-#~ msgstr "Imprimer messages de l'AIDE TXF étendue"
-
-#~ msgid "Print TXF HELP"
-#~ msgstr "Imprimer AIDE TXF"
-
-#~ msgid "For INCOME accounts, select here.   < ^ # see help"
-#~ msgstr "Pour les comptes REVENUS, sélectionner ici.   < ^ # voir aide"
-
-#~ msgid "Select a TXF Income catagory"
-#~ msgstr "Sélectionner une catégorie de revenues TXF"
-
-#~ msgid "For EXPENSE accounts, select here.   < ^ # see help"
-#~ msgstr "Pour les comptes de DEPENSES, selectionner ici.   < ^ # voir aide"
-
-#~ msgid "Select a TXF Expense catagory"
-#~ msgstr "Sélectionner une catégorie de dépenses TXF"
-
-#, fuzzy
-#~ msgid "< ^   Payer Name source"
-#~ msgstr "< ^   Source du nom du payeur"
-
-#~ msgid "Select the source of the Payer Name"
-#~ msgstr "Sélectionner la source du nom du payeur"
-
-# messages-i18n.c:210
-#~ msgid "Use Indicated Default"
-#~ msgstr "Utiliser celui indiqué par défaut"
-
-# messages-i18n.c:199
-#, fuzzy
-#~ msgid "< Current Account"
-#~ msgstr "< Compte actuel"
-
-# messages-i18n.c:199
-#~ msgid "^ Parent Account"
-#~ msgstr "^ Compte parent"
-
-# messages-i18n.c:199
-#~ msgid "Use Parent Account Name"
-#~ msgstr "Utiliser le nom du compte parent"
-
-#~ msgid "Extended TXF Help messages"
-#~ msgstr "Messages d'aide pour TXF étendu"
-
-# po/guile_strings.txt:216
-#, fuzzy
-#~ msgid ""
-#~ "This is a sample GnuCash report. See the guile (scheme) source code in "
-#~ msgstr ""
-#~ "C'est un exemple de rapport de Gnucash. Regardez le code source en Guile "
-#~ "(scheme) dans %s pour les détails sur l'écriture de vos propres rapports, "
-#~ "ou étendez les rapports existants."
-
-# po/guile_strings.txt:216
-#, fuzzy
-#~ msgid ""
-#~ "for details on writing your own reports, or extending existing reports."
-#~ msgstr ""
-#~ "C'est un exemple de rapport de Gnucash. Regardez le code source en Guile "
-#~ "(scheme) dans %s pour les détails sur l'écriture de vos propres rapports, "
-#~ "ou étendez les rapports existants."
-
-# messages-i18n.c:41
-#~ msgid ""
-#~ "The filepath \n"
-#~ "    %s\n"
-#~ "is not a valid location in the filesystem."
-#~ msgstr ""
-#~ "Le chemin du fichier \n"
-#~ "    %s\n"
-#~ "n'est pas un chemin valide dans le système de fichiers."
-
-# messages-i18n.c:34
-#~ msgid ""
-#~ "There was an error writing the file\n"
-#~ "     %s\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Il y a une erreur d'écriture du fichier\n"
-#~ "     %s\n"
-#~ "\n"
-#~ "%s"
-
-# messages-i18n.c:13
-#~ msgid ""
-#~ "You must enter a valid %s.\n"
-#~ "\n"
-#~ "Error: %s."
-#~ msgstr ""
-#~ "Vous devez entrer un valide %s.\n"
-#~ "\n"
-#~ "Erreur: %s."
-
-# src/gnome/glade-gnc-dialogs.c:564
-#~ msgid "Selected account:"
-#~ msgstr "Compte sélectionné:"
-
-# src/gnome/glade-gnc-dialogs.c:582
-#~ msgid "Account type:"
-#~ msgstr "Type de compte:"
-
-# src/gnome/glade-gnc-dialogs.c:638
-#~ msgid "Mutual"
-#~ msgstr "Mutuel"
-
-# messages-i18n.c:179
-#, fuzzy
-#~ msgid "Ending Shares:"
-#~ msgstr "Solde final:"
-
-# po/guile_strings.txt:263
-#, fuzzy
-#~ msgid "Average Balance Tracker"
-#~ msgstr "Solde moyen"
-
-#~ msgid ""
-#~ "Something went wrong during file IO,\n"
-#~ "but I'm not sure what."
-#~ msgstr ""
-#~ "Quelque chose s'est mal fait  durant IO de fichier,\n"
-#~ "mais je ne suis pas sûr de celà."
-
-#~ msgid "Apply"
-#~ msgstr "Appliquer"
-
-#~ msgid "_Financial Calculator"
-#~ msgstr "Calculatrice _financière"
-
-# po/guile_strings.txt:290
-#~ msgid "Report up to and including this date"
-#~ msgstr "Rapport jusqu'à et incluant cette date"
-
-# po/guile_strings.txt:38
-#~ msgid ""
-#~ "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s"
-#~ msgstr ""
-#~ "Date: %s<br>Rapport pour %s et tous les sous-comptes.<br>Total des "
-#~ "comptes: %s"
-
-#~ msgid "Date: %s<br>Report for %s.<br>Accounts Total: %s"
-#~ msgstr "Date: %s<br>Rapport pour %s.<br>Total des comptes: %s"
-
-# po/guile_strings.txt:271
-#~ msgid "Nothing"
-#~ msgstr "Rien"
-
-# po/guile_strings.txt:291
-#~ msgid "Beginning"
-#~ msgstr "Début"
-
-#~ msgid ""
-#~ "Please choose appropriate dates - the \"To\" date should be *after* the "
-#~ "\"From\" date."
-#~ msgstr ""
-#~ "S'il vous plait choisissez les dates appropriées - la date \"vers\" "
-#~ "devrait être *après* la date \"depuis\"."
-
-# po/guile_strings.txt:38
-#~ msgid "Report for %s and all subaccounts."
-#~ msgstr "Rapport pour %s et tous les sous-comptes."
-
-# po/guile_strings.txt:97
-#~ msgid "Report for %s."
-#~ msgstr "Rapport pour %s."
-
-# po/guile_strings.txt:126
-#~ msgid "Account Balance Tracker"
-#~ msgstr "Suivi du solde du compte"
-
-# messages-i18n.c:266 po/guile_strings.txt:112
-# src/gnome/glade-gnc-dialogs.c:641
-#~ msgid "Currency 1"
-#~ msgstr "Monnaie 1"
-
-# messages-i18n.c:266 po/guile_strings.txt:112
-# src/gnome/glade-gnc-dialogs.c:641
-#~ msgid "Currency 2"
-#~ msgstr "Monnaie 2"
-
-# messages-i18n.c:266 po/guile_strings.txt:112
-# src/gnome/glade-gnc-dialogs.c:641
-#~ msgid "Currency 3"
-#~ msgstr "Monnaie 3"
-
-# messages-i18n.c:266 po/guile_strings.txt:112
-# src/gnome/glade-gnc-dialogs.c:641
-#~ msgid "Currency 4"
-#~ msgstr "Monnaie 4"
-
-# messages-i18n.c:266 po/guile_strings.txt:112
-# src/gnome/glade-gnc-dialogs.c:641
-#~ msgid "Currency 5"
-#~ msgstr "Monnaie 5"
-
-#~ msgid "Other currencies' total"
-#~ msgstr "Total des autres monnaies"
-
-#~ msgid "Choose foreign currency to specify an exchange rate for"
-#~ msgstr "Choisir la monnaie étrangère à spécifier pour un taux de change"
-
-#~ msgid "Choose exchange rate for above currency"
-#~ msgstr "Choisir le taux de change de la monnaie au-dessus"
-
-# po/guile_strings.txt:283
-#~ msgid "Net"
-#~ msgstr "Net"
-
-# po/guile_strings.txt:163
-#~ msgid "(subaccounts)"
-#~ msgstr "(sous-comptes)"
-
-# po/guile_strings.txt:74
-#~ msgid "This page shows your net worth."
-#~ msgstr "Cete page montre votre valeur financière nette"
-
-# po/guile_strings.txt:66
-#~ msgid "This page shows your profits and losses."
-#~ msgstr "Cete page montre vos pertes et profits"
-
-# po/guile_strings.txt:251
-#~ msgid "Report start date"
-#~ msgstr "Date de début du rapport"
-
-# po/guile_strings.txt:52
-#~ msgid "View"
-#~ msgstr "Vue"
-
-# po/guile_strings.txt:120
-#~ msgid "A report useful for balancing the budget"
-#~ msgstr "Un rapport utile pour équilibrer le budget"
-
-# po/guile_strings.txt:5
-#~ msgid "Status"
-#~ msgstr "Etats"
-
-# po/guile_strings.txt:141
-#~ msgid "How are you doing on your budget?"
-#~ msgstr "Comment aller vous faire votre budget?"
-
-#~ msgid "Budget (Testing, Unfinished)"
-#~ msgstr "Budget (En test, non terminé)"
-
-#~ msgid "Test the budget dialog"
-#~ msgstr "Tester la boîte de dialogue du budget"
-
-# src/gnome/glade-gnc-dialogs.c:222
-#~ msgid "At"
-#~ msgstr "A"
-
-# po/guile_strings.txt:130
-#~ msgid "Calculate stock portfolio value at this date"
-#~ msgstr "Calculer la valeur du portefeuille d'actions à cette date"
-
-# po/guile_strings.txt:154
-#~ msgid "Recent Price"
-#~ msgstr "Prix recent"
-
-# po/guile_strings.txt:3
-#~ msgid "Cost"
-#~ msgstr "Coût"
-
-# po/guile_strings.txt:265
-#~ msgid "Profit/Loss"
-#~ msgstr "Pertes/Profits"
-
-# po/guile_strings.txt:14
-#~ msgid "Stock Portfolio Valuation"
-#~ msgstr "Evaluation du portefeuille d'actions"
-
-# po/guile_strings.txt:73
-#~ msgid "There are no selected accounts in the account list option."
-#~ msgstr ""
-#~ "Il n'y a aucun comptes selectionnés dans la liste d'options du compte."
-
-# po/guile_strings.txt:215
-#~ msgid "The accounts selected in the account list option are:"
-#~ msgstr "Les comptes sélectionnés dans la liste d'options du compte sont:"
-
-# po/guile_strings.txt:103
-#~ msgid "The items selected in the list option are:"
-#~ msgstr "Les éléments sélectionnés dans la liste d'options sont:"
-
-#~ msgid "Display only positive Entries?"
-#~ msgstr "Afficher les entrées positives seulement?"
-
-#~ msgid "Hierarchical Options"
-#~ msgstr "Options hiérarchiques"
-
-#~ msgid "Hierarchical Accounts Report"
-#~ msgstr "Rapport de comptes hierarchique"
-
-# src/gnome/glade-gnc-dialogs.c:914
-#~ msgid "To:"
-#~ msgstr "Vers:"
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Click \"Parameters\" to set some  "
-#~ "with the \"Set/Reset Tax Status:\" parameter."
-#~ msgstr ""
-#~ "Aucun compte relatif aux impôts n'a été trouvé.Cliquez sur\"Paramètres\"  "
-#~ "pour mettre quelques-uns avec le paramètre \"Activer/Réinitialiser l'état "
-#~ "des impots."
-
-#~ msgid "Hierarchical"
-#~ msgstr "Hierarchique"
-
-# po/guile_strings.txt:219
-#~ msgid "Display the shares price?"
-#~ msgstr "Afficher le cours des titres?"
-
-# po/guile_strings.txt:45
-#~ msgid "_Stock Portfolio"
-#~ msgstr "Portefeuille d'action_s"
-
-# po/guile_strings.txt:63
-#~ msgid "Display the Hello, World report."
-#~ msgstr "Affiche le rapport Bonjour,tout le monde"
-
-# po/guile_strings.txt:75
-#~ msgid "_Budget"
-#~ msgstr "_Budget"
-
-# po/guile_strings.txt:282
-#~ msgid "Display the Account Summary report."
-#~ msgstr "Affiche le rapport récapitulatif du compte."
-
-# po/guile_strings.txt:126
-#~ msgid "Acc_ount Balance Tracker"
-#~ msgstr "Suivi du s_olde du compte"
-
-#~ msgid ""
-#~ "GnuCash does not use categories like Quicken does.\n"
-#~ "Instead, you should use Income and Expense accounts.\n"
-#~ msgstr ""
-#~ "Gnucash n'utilise pas les catégories comme Quicken le fait.\n"
-#~ "A la place, vous devrez utiliser des comptes de Revenus et Dépenses.\n"
-
-# messages-i18n.c:69
-#~ msgid "Double line mode with a multi-line cursor"
-#~ msgstr "Mode ligne double avec un curseur multi-ligne"
-
-# messages-i18n.c:70
-#~ msgid "Single line mode with a multi-line cursor"
-#~ msgstr "Mode ligne simple avec un curseur multi-ligne"
-
-#~ msgid "Upper Limit"
-#~ msgstr "Limite supérieure"
-
-# messages-i18n.c:78 po/guile_strings.txt:124
-#~ msgid "Show transactions on two lines with more information"
-#~ msgstr "Montrer les transactions sur deux lignes avec plus d'informations"
-
-# messages-i18n.c:114 po/guile_strings.txt:128
-#~ msgid "Show transactions on single lines"
-#~ msgstr "Montrer les transactions sur des lignes simples"
-
-# po/guile_strings.txt:186
-#~ msgid "Period"
-#~ msgstr "Point"
-
-# po/guile_strings.txt:142
-#~ msgid "Save Translatable Strings"
-#~ msgstr "Sauvegarder les chaines traduisibles"
-
-# po/guile_strings.txt:143
-#~ msgid "Save strings that need to be translated"
-#~ msgstr "Sauvegarder les chaines qui ont besoin d'être traduites"
-
-# po/guile_strings.txt:9
-#~ msgid "A_ccount Summary"
-#~ msgstr "Réc_apitulatif du compte"
-
-# messages-i18n.c:346
-#~ msgid "_Transaction Report"
-#~ msgstr "Rapport de _transaction"
-
-# src/gnome/glade-gnc-dialogs.c:914
-#~ msgid "  To: "
-#~ msgstr "  Vers:"
-
-# messages-i18n.c:243
-#~ msgid "Appreciation"
-#~ msgstr "Appréciation"
-
-# src/gnome/glade-gnc-dialogs.c:638
-#~ msgid "Actual"
-#~ msgstr "Réel"
-
-# po/guile_strings.txt:219
-#~ msgid "Display the Budget report."
-#~ msgstr "Affiche le rapport du budget."
-
-# po/guile_strings.txt:220
-#~ msgid "_Hello, World"
-#~ msgstr "Bonjour, tout le monde"
-
-# po/guile_strings.txt:225
-#~ msgid ""
-#~ "Show transactions on multiple lines with one line for each split in the "
-#~ "transaction"
-#~ msgstr ""
-#~ "Montrer les transactions sur de multiples lignes avec une ligne pour "
-#~ "chaque répartition dans la transaction"
-
-# po/guile_strings.txt:282
-#~ msgid "Display the Transaction Report report."
-#~ msgstr "Affiche le rapport Rapport de transactions."
-
-# messages-i18n.c:168 po/guile_strings.txt:259
-#~ msgid "Auto Double"
-#~ msgstr "Double automatique"
-
-#~ msgid "Lower Limit"
-#~ msgstr "Limite inférieure"
-
-# po/guile_strings.txt:268
-#~ msgid "Display the Profit and Loss report."
-#~ msgstr "Affiche le rapport des pertes et profits"
-
-# po/guile_strings.txt:269
-#~ msgid "Display the Account Balance Tracker report."
-#~ msgstr "Affiche le rapport de suivi du solde du compte"
-
-# po/guile_strings.txt:281
-#~ msgid "Display the Balance sheet report."
-#~ msgstr "Affiche le rapport du bilan"
-
-# messages-i18n.c:286 po/guile_strings.txt:300
-#~ msgid "Extensions"
-#~ msgstr "Extensions"
-
-#~ msgid "Zoom in"
-#~ msgstr "Augmenter Zoom"
-
-#~ msgid "Zoom out"
-#~ msgstr "Diminuer Zoom"
-
-# src/gnome/glade-gnc-dialogs.c:808
-#~ msgid "Printer:"
-#~ msgstr "Imprimante:"
-
-# src/gnome/glade-gnc-dialogs.c:816
-#~ msgid "Paper size:"
-#~ msgstr "Taille papier:"
-
-# src/gnome/glade-gnc-dialogs.c:824
-#~ msgid "Pages to print:"
-#~ msgstr "Pages à imprimer:"
-
-# src/gnome/glade-gnc-dialogs.c:877
-#~ msgid "Selected"
-#~ msgstr "Sélectionné"
-
-# src/gnome/glade-gnc-dialogs.c:899
-#~ msgid "From:"
-#~ msgstr "Depuis:"
-
-# src/gnome/glade-gnc-dialogs.c:1036
-#~ msgid "Select Paper Size"
-#~ msgstr "Sélectionner taille papier"
-
-# src/gnome/print-session.c:230
-#~ msgid "You must select a printer first."
-#~ msgstr "Vous devez dabord sélectionner une imprimante."
-
-# messages-i18n.c:73
-#~ msgid "Close this HTML window"
-#~ msgstr "Fermer cette fenêtre HTML."
-
-# messages-i18n.c:51
-#~ msgid "Error executing scheme report."
-#~ msgstr "Erreur d'éxécution du rapport scheme"
-
-# messages-i18n.c:52
-#~ msgid "This report has no parameters."
-#~ msgstr "Ce rapport n'a pas de paramètres"
-
-# messages-i18n.c:36
-#~ msgid ""
-#~ "There was an error closing the file\n"
-#~ "     %s\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Il y a une erreur de fermeture du fichier\n"
-#~ "      %s\n"
-#~ "\n"
-#~ "%s"
-
-# messages-i18n.c:90
-#~ msgid "Show transactions on multiple lines with one line for each split"
-#~ msgstr ""
-#~ "Montrer les transactions sur de multiples lignes avec une ligne pour "
-#~ "chaque répartition"
-
-# messages-i18n.c:129
-#~ msgid "Enter the account to transfer to, or choose one from the list"
-#~ msgstr ""
-#~ "Entrez le compte à transférer vers, ou choisissez en un dans la liste."
-
-# po/guile_strings.txt:10
-#~ msgid ""
-#~ "The default background color for splits in multi-line mode and the auto "
-#~ "modes"
-#~ msgstr ""
-#~ "La couleur de l'arrière-plan par défaut pour les répartitions en mode "
-#~ "lignes multi et les modes auto"
-
-# po/guile_strings.txt:28
-#~ msgid ""
-#~ "The background color for an active split in multi-line mode and the auto "
-#~ "modes"
-#~ msgstr ""
-#~ "La couleur d'arrière-plan pour une répartition active dans le mode ligne "
-#~ "multi et les modes auto"
-
-# po/guile_strings.txt:29
-#~ msgid "Double mode active background"
-#~ msgstr "Arrière-plan actif en mode double"
-
-# po/guile_strings.txt:58
-#~ msgid "Header background"
-#~ msgstr "Arrière-plan de l'en-tête"
-
-# po/guile_strings.txt:61
-#~ msgid "The default background color for odd rows in single mode"
-#~ msgstr ""
-#~ "La couleur de l'arrière-plan par défaut pour les colonnes impaires en "
-#~ "mode simple"
-
-# po/guile_strings.txt:85
-#~ msgid "Multi mode default transaction background"
-#~ msgstr "Arrière-plan de la transaction en mode multi par défaut"
-
-# po/guile_strings.txt:105
-#~ msgid "A_ccount Balance Tracker"
-#~ msgstr "Suivi du solde du _compte"
-
-# po/guile_strings.txt:111
-#~ msgid "Multi mode default split background"
-#~ msgstr "Arrière-plan de la répartition en mode multi par défaut"
-
-# po/guile_strings.txt:137
-#~ msgid ""
-#~ "The default background color for transactions in multi-line mode and the "
-#~ "auto modes"
-#~ msgstr ""
-#~ "La couleur de l'arrière-plan par défaut pour les transactions en mode "
-#~ "ligne multi et les modes auto"
-
-# po/guile_strings.txt:156
-#~ msgid "Single mode default even row background"
-#~ msgstr "Arrière-plan des lignes paires en mode simple par défaut"
-
-# po/guile_strings.txt:157
-#~ msgid "Double mode default even row background"
-#~ msgstr "Arrière-plan des lignes paires en mode double par défaut"
-
-# po/guile_strings.txt:180
-#~ msgid "Single mode active background"
-#~ msgstr "Arrière-plan de la transaction active en mode simple"
-
-# po/guile_strings.txt:185
-#~ msgid "Multi mode active transaction background"
-#~ msgstr "Arrière-plan de la transaction active en mode multi"
-
-# po/guile_strings.txt:218
-#~ msgid "The default background color for even rows in double mode"
-#~ msgstr ""
-#~ "La couleur de l'arrière-plan par défaut pour les lignes paires en mode "
-#~ "double"
-
-# po/guile_strings.txt:248
-#~ msgid "Single mode default odd row background"
-#~ msgstr "Arrière-plan des lignes impaires en mode simple par défaut"
-
-# po/guile_strings.txt:249
-#~ msgid "Double mode default odd row background"
-#~ msgstr "Arrière-plan des lignes impaires en mode double par défaut"
-
-# po/guile_strings.txt:293
-#~ msgid ""
-#~ "The background color for an active transaction in multi-line mode and the "
-#~ "auto modes"
-#~ msgstr ""
-#~ "L'arrière-plan en couleur pour une répartition active en mode multi "
-#~ "lignes et en modes auto"
-
-# po/guile_strings.txt:301
-#~ msgid "Multi mode active split background"
-#~ msgstr "Arrière-plan de la répartition active en mode multi"
-
-#~ msgid ""
-#~ "You cannot transfer between those accounts.\n"
-#~ "They do not have a common currency.\n"
-#~ "To transfer funds between accounts with different currencies you\n"
-#~ "need an intermediate currency account.\n"
-#~ "Please see the GnuCash online manual"
-#~ msgstr ""
-#~ "Vous ne pouvez pas transférer entre ces comptes.\n"
-#~ "Ils n'ont pas une monnaie commune.\n"
-#~ "Pour transférer des fonds entre comptes avec différentes monnaies\n"
-#~ "vous avez besoin d'un compte de monnaie intermédiaire.\n"
-#~ "S'il vous plait regardez le manuel en ligne de Gnucash"
-
-# messages-i18n.c:10
-#~ msgid "$"
-#~ msgstr "F"
-
-# messages-i18n.c:12
-#~ msgid ""
-#~ "To adjust an account's balance, you must first\n"
-#~ "choose an account to adjust.\n"
-#~ msgstr ""
-#~ "Pour ajuster le solde d'un compte, vous devez d'abord \n"
-#~ "choisir un compte à ajuster.\n"
-
-# messages-i18n.c:14
-#~ msgid ""
-#~ "Do you want to create a new account?\n"
-#~ "If not, then please select an account\n"
-#~ "to open in the main window.\n"
-#~ msgstr ""
-#~ "Voulez-vous créer un nouveau compte?\n"
-#~ "Sinon, sélectionnez alors un compte\n"
-#~ "à ouvrir dans la fenêtre principale.\n"
-
-# messages-i18n.c:23
-#~ msgid "The amount must be a number."
-#~ msgstr "Le montant doit être un nombre."
-
-# messages-i18n.c:29
-#~ msgid ""
-#~ "It is dangerous to change the currency type\n"
-#~ "of an account. You asked to change it\n"
-#~ "from %s to %s.\n"
-#~ "Are You Sure?\n"
-#~ msgstr ""
-#~ "Il est dangereux de changer le type de monnaie\n"
-#~ "d'un compte.  Vous demandez à le changer\n"
-#~ "de %s vers %s\n"
-#~ "Etes-vous sur?\n"
-
-# messages-i18n.c:30
-#~ msgid ""
-#~ "It is dangerous to change the security\n"
-#~ "of an account. You asked to change it\n"
-#~ "from %s to %s.\n"
-#~ "Are You Sure?\n"
-#~ msgstr ""
-#~ "Il est dangereux de changer la valeur\n"
-#~ "d'un compte.  Vous demandez à le changer\n"
-#~ "de %s vers %s\n"
-#~ "Etes-vous sur?\n"
-
-# messages-i18n.c:42
-#~ msgid ""
-#~ "The file \n"
-#~ "    %s\n"
-#~ "appears to be in use by another user.\n"
-#~ "If this is not right, remove the .LCK file and try again."
-#~ msgstr ""
-#~ "Le fichier \n"
-#~ "    %s\n"
-#~ "apparait être utiliser par un autre utilisateur.\n"
-#~ "Si ce n'est pas le cas, supprimer le fichier .LCK et essayer de nouveau."
-
-# messages-i18n.c:43
-#~ msgid "You need to install the gnome-print library."
-#~ msgstr "Vous avez besoin d'installer la librairie gnome-print."
-
-# messages-i18n.c:44
-#~ msgid ""
-#~ "QIF file parse warning:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Alerte de traitement du fichier QIF:\n"
-#~ "%s"
-
-# messages-i18n.c:49
-#~ msgid "Warning! This is a reconciled transaction. Do you want do continue?"
-#~ msgstr ""
-#~ "Attention! Ceci est une transaction de rapprochement.\n"
-#~ "Voulez-vous continuer?"
-
-# messages-i18n.c:59
-#~ msgid ""
-#~ "The types of all the parent accounts and their subaccounts must be "
-#~ "changed to %s.\n"
-#~ "Is that what you want to do?"
-#~ msgstr ""
-#~ "Les types de tous les comptes parents et leurs sous-comptes doivent être "
-#~ "changés vers %s.\n"
-#~ "Est-ce celà que vous voulez faire?"
-
-# messages-i18n.c:60
-#~ msgid ""
-#~ "The types of all the subaccounts must be changed to %s.\n"
-#~ "Is that what you want to do?"
-#~ msgstr ""
-#~ "Les types de tous les sous-comptes doivent être changés vers %s.\n"
-#~ "Est-ce celà que vous voulez faire?"
-
-# messages-i18n.c:61
-#~ msgid ""
-#~ "There must be at least two accounts\n"
-#~ "created before you can transfer funds."
-#~ msgstr ""
-#~ "Il doit y avoir au moins deux comptes\n"
-#~ "créés avant que vous ne puissiez transférer des fonds."
-
-# messages-i18n.c:63
-#~ msgid ""
-#~ "The \"From\" and \"To\" accounts\n"
-#~ " must be different!"
-#~ msgstr ""
-#~ "Les comptes \"depuis\" et \"vers\" \n"
-#~ " doivent être différents!"
-
-#~ msgid "Enter the date you want the balance adjusted"
-#~ msgstr "Entrer la date dont vous voulez que le solde soit ajusté"
-
-# messages-i18n.c:68
-#~ msgid "Adjust the balance of the main account for this register"
-#~ msgstr "Ajuster le solde du compte principal pour ce registre."
-
-#~ msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
-#~ msgstr "Entrer un code de monnaie ISO à 3 lettres tel que USD (US Dollars)"
-
-# messages-i18n.c:132
-#~ msgid "_Adjust Balance"
-#~ msgstr "_Ajuster le solde"
-
-# messages-i18n.c:132
-#~ msgid "_Adjust Balance..."
-#~ msgstr "_Ajuster le solde..."
-
-# messages-i18n.c:141
-#~ msgid "_Ending Balance"
-#~ msgstr "Sold_e final"
-
-# messages-i18n.c:141
-#~ msgid "_Ending Balance..."
-#~ msgstr "Sold_e final..."
-
-# messages-i18n.c:146
-#~ msgid "_New Account"
-#~ msgstr "_Nouveau compte"
-
-# messages-i18n.c:149
-#~ msgid "_Preferences"
-#~ msgstr "_Préférences"
-
-# messages-i18n.c:158
-#~ msgid "Set _Range"
-#~ msgstr "Mett_re échelle"
-
-# messages-i18n.c:163
-#~ msgid "_Transfer"
-#~ msgstr "_Transférer"
-
-# messages-i18n.c:175
-#~ msgid "Delete Account"
-#~ msgstr "Supprimer le compte"
-
-#~ msgid "FIN_CALC_STR_N"
-#~ msgstr "FIN_CALC_STR_N"
-
-# messages-i18n.c:184
-#~ msgid "Hide Inc/Exp"
-#~ msgstr "Cacher Revenus/Dépenses"
-
-# messages-i18n.c:185
-#~ msgid "Import QIF"
-#~ msgstr "Importer QIF"
-
-# messages-i18n.c:196
-#~ msgid "Open File"
-#~ msgstr "Ouvrir fichier"
-
-# messages-i18n.c:197
-#~ msgid "Open Subaccounts"
-#~ msgstr "Ouvrir sous-comptes"
-
-# messages-i18n.c:198
-#~ msgid "Pick One"
-#~ msgstr "Choisissez en un"
-
-# messages-i18n.c:200
-#~ msgid "Previous Balance"
-#~ msgstr "Précédent solde"
-
-# messages-i18n.c:201
-#~ msgid "Purch Price"
-#~ msgstr "Prix d'achat"
-
-# messages-i18n.c:205
-#~ msgid "Save As"
-#~ msgstr "Enregistrer sous"
-
-# messages-i18n.c:208
-#~ msgid "Scrub Subaccounts"
-#~ msgstr "Nettoyer les sous-comptes"
-
-# messages-i18n.c:212
-#~ msgid "Set Range"
-#~ msgstr "Metre échelle"
-
-# messages-i18n.c:226
-#~ msgid "Sort Order"
-#~ msgstr "Ordre de tri"
-
-# messages-i18n.c:232
-#~ msgid "Transfer Money"
-#~ msgstr "Transfert d'argent"
-
-# messages-i18n.c:235
-#~ msgid "About"
-#~ msgstr "A propos de"
-
-# messages-i18n.c:241
-#~ msgid "Activities"
-#~ msgstr "Activitées"
-
-# messages-i18n.c:252
-#~ msgid "Bought"
-#~ msgstr "Acheté"
-
-# messages-i18n.c:263
-#~ msgid "Create"
-#~ msgstr "Créér"
-
-# messages-i18n.c:271
-#~ msgid "Deficit"
-#~ msgstr "Déficit"
-
-#~ msgid "EUR (total)"
-#~ msgstr "EUR (total)"
-
-# messages-i18n.c:288
-#~ msgid "File"
-#~ msgstr "Fichier"
-
-# messages-i18n.c:299
-#~ msgid "License"
-#~ msgstr "Licence"
-
-# messages-i18n.c:304
-#~ msgid "No"
-#~ msgstr "Non"
-
-# messages-i18n.c:308
-#~ msgid "Ok"
-#~ msgstr "Ok"
-
-# messages-i18n.c:319
-#~ msgid "Quit"
-#~ msgstr "Quitter"
-
-# messages-i18n.c:333
-#~ msgid "Simple"
-#~ msgstr "Simple"
-
-# messages-i18n.c:340
-#~ msgid "Surplus"
-#~ msgstr "Excédent"
-
-# messages-i18n.c:349
-#~ msgid "WARNING"
-#~ msgstr "ATTENTION"
-
-# messages-i18n.c:352
-#~ msgid "Yes"
-#~ msgstr "Oui"
-
-# src/gnome/dialog-qif-import.c:328 src/gnome/dialog-qif-import.c:664
-# src/gnome/dialog-qif-import.c:766 src/gnome/dialog-qif-import.c:864
-#~ msgid "QIF File scheme code not loaded properly."
-#~ msgstr ""
-#~ "Le code scheme pour les fichiers QIF ne s'est pas chargé correctement."
-
-# src/gnome/dialog-qif-import.c:351
-#~ msgid "QIF File already loaded. Reload with current settings?"
-#~ msgstr ""
-#~ "Le fichier QIF est déjà chargé.Recharger avec les paramètres actuels?"
-
-# src/gnome/dialog-qif-import.c:794 src/gnome/dialog-qif-import.c:892
-#~ msgid "Something is very wrong with QIF Importing."
-#~ msgstr "Il y a quelque chose d'errone dans l'importation du fichier QIF."
-
-# src/gnome/glade-gnc-dialogs.c:96
-#~ msgid "Loaded Files"
-#~ msgstr "Fichiers chargés"
-
-# src/gnome/glade-gnc-dialogs.c:307
-#~ msgid "Files"
-#~ msgstr "Fichiers"
-
-#~ msgid "/"
-#~ msgstr "/"
-
-#~ msgid "Display N-1 lines"
-#~ msgstr "Affiche N-1 lignes"
-
-# po/guile_strings.txt:33
-#~ msgid "_Account Transactions"
-#~ msgstr "Trans_actions du compte"
-
-# po/guile_strings.txt:79
-#~ msgid "Category"
-#~ msgstr "Catégorie"
-
-# po/guile_strings.txt:155
-#~ msgid "Net Inflow"
-#~ msgstr "Flux net"
-
-# messages-i18n.c:260
-#~ msgid "Merged"
-#~ msgstr "Fusionné"
-
-# messages-i18n.c:50
-#~ msgid ""
-#~ "You cannot transfer funds from the %s account.\n"
-#~ "It does not have a matching currency."
-#~ msgstr ""
-#~ "Vous ne pouvez pas transférer des fonds depuis le compte %s.\n"
-#~ "Il n'a pas une monnaie commune."
-
-# messages-i18n.c:62
-#~ msgid ""
-#~ "You cannot transfer between those accounts.\n"
-#~ "They do not have a common currency."
-#~ msgstr ""
-#~ "Vous ne pouvez pas transférer entre ces comptes.\n"
-#~ "Ils n'ont pas une monnaie commune."
-
-# messages-i18n.c:45
-#~ msgid "QIF file load failed. Check settings and reload."
-#~ msgstr ""
-#~ "Le chargement du fichier QIF a échoué.Vérifiez les paramètres et rechargez"
-
-# messages-i18n.c:115
-#~ msgid "Sort by Amount, then Date, then Num"
-#~ msgstr "Trier par Montant, puis Date, puis Num"
-
-# messages-i18n.c:116
-#~ msgid "Sort by Date, then Num, then Amount"
-#~ msgstr "Trier par Date, puis Num, puis Montant"
-
-# messages-i18n.c:117
-#~ msgid "Sort by Description, then Date, then Num"
-#~ msgstr "Trier par Description, puis Date, puis Num"
-
-# messages-i18n.c:118
-#~ msgid "Sort by Memo, then Date, then Num"
-#~ msgstr "Trier par Memo, puis Date, puis Num"
-
-# messages-i18n.c:119
-#~ msgid "Sort by Num, then Date, then Amount"
-#~ msgstr "Trier par Num, puis Date, puis Montant"
-
-# po/guile_strings.txt:78
-#~ msgid "Import QIF File - Scripted in Guile."
-#~ msgstr "Importer des fichiers QIF - écrit en Guile."
-
-# po/guile_strings.txt:91
-#~ msgid "largest to t, latest to earliest"
-#~ msgstr ""
-#~ "du plus grand vers le plus petit, du plus récent vers le plus ancien"
-
-# po/guile_strings.txt:278
-#~ msgid "QIF File Import (Danger: Unfinished)"
-#~ msgstr "Importation de fichier QIF (Danger: Non terminé)"
-
-# src/gnome/glade-gnc-dialogs.c:182
-#~ msgid "Radix format:"
-#~ msgstr "Format radix:"
-
-# src/gnome/glade-gnc-dialogs.c:251
-#~ msgid "Autodetect"
-#~ msgstr "Détection automatique"
-
-# src/gnome/glade-gnc-dialogs.c:254
-#~ msgid "Decimal (1,000.00)"
-#~ msgstr "Point (1,000.00)"
-
-# src/gnome/glade-gnc-dialogs.c:257
-#~ msgid "Comma (1.000,00)"
-#~ msgstr "Virgule (1.000,00)"
-
-# src/gnome/glade-gnc-dialogs.c:269
-#~ msgid "Autodetect           "
-#~ msgstr "Détection automatique"
-
-# src/gnome/glade-gnc-dialogs.c:272
-#~ msgid "MM/DD/YYYY"
-#~ msgstr "MM/JJ/AAAA"
-
-# src/gnome/glade-gnc-dialogs.c:275
-#~ msgid "DD/MM/YYYY"
-#~ msgstr "JJ/MM/AAAA"
-
-# src/gnome/glade-gnc-dialogs.c:278
-#~ msgid "YYYY/MM/DD"
-#~ msgstr "AAAA/MM/JJ"
-
-# src/gnome/glade-gnc-dialogs.c:281
-#~ msgid "YYYY/DD/MM"
-#~ msgstr "AAAA/JJ/MM"
-
-#~ msgid "Always use debit/credit labels"
-#~ msgstr "Toujours utiliser les libellés débit/crédit"
-
-# po/guile_strings.txt:89
-#~ msgid "Debit Accounts"
-#~ msgstr "Comptes de débit"
-
-#~ msgid ""
-#~ "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense "
-#~ "Accounts"
-#~ msgstr ""
-#~ "Inverser les comptes Banque, Espèces, Avoir, Actions, Fonds de placement, "
-#~ "Monnaie, et Dépenses"
-
-# src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#~ msgid "Transactions 2"
-#~ msgstr "Transactions 2"
-
-# messages-i18n.c:162
-#~ msgid "_Transactions 2"
-#~ msgstr "_Transactions 2"
-
-# po/guile_strings.txt:114
-#~ msgid "Get number at each one of these"
-#~ msgstr "Mettre un numéro à chacun de ceux-ci"
-
-# src/gnome/glade-gnc-dialogs.c:164
-#~ msgid "QIF Account:"
-#~ msgstr "Compte QIF:"
-
-# po/guile_strings.txt:222
-#~ msgid "Double line mode with multi-line cursor"
-#~ msgstr "Mode ligne double avec un curseur multi-ligne"
-
-# po/guile_strings.txt:223
-#~ msgid "Single line mode with multi-line cursor"
-#~ msgstr "Mode ligne simple avec un curseur multi-ligne"
-
-#~ msgid "Print Dialog"
-#~ msgstr "Dialogue d'impression"
-
-#~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
-#~ msgstr ""
-#~ "Erreur de chargement du fichier QIF. Etes-vous sûr que c'est un\n"
-#~ "fichier QIF?"

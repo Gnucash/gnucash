@@ -1,3 +1,11 @@
+2001-06-27  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* po/fr.po: Paul Poulain's french translations
+
 2001-06-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/sixtp-dom-parsers.c: same as below

@@ -845,6 +845,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>famille.p.poulain@free.fr</email> Paul Poulain</glossterm>
+<glossdef>
+<para>French translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>rr@sco.com</email> Ron Record</glossterm>
 <glossdef>
 <para>for SCO Unixware and OpenServer binaries</para>
