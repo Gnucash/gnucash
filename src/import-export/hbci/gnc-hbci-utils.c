@@ -26,6 +26,7 @@
 #include <gnome.h>
 #include <errno.h>
 #include <iconv.h>
+#include <langinfo.h>
 #include <gwenhywfar/directory.h>
 
 #include "gnc-ui.h"
@@ -486,18 +487,10 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
 {
   struct cb_struct *u = user_data;
   gchar **res = u->result;
-  gchar *tmp1, *tmp2, *outbuffer;
-  char *inbuffer = (char*)string;
-  size_t inbytes = strlen(string), outbytes = inbytes+2;
+  gchar *tmp1, *tmp2;
 
   if (!string) return NULL;
-  tmp1 = g_strndup (string, outbytes);
-  outbuffer = tmp1;
-
-  iconv(u->gnc_iconv_handler, &inbuffer, &inbytes,
-	&outbuffer, &outbytes);
-  if (outbytes > 0)
-    *outbuffer = '\0';
+  tmp1 = gnc_call_iconv(u->gnc_iconv_handler, string);
 
   g_strstrip (tmp1);
   if (strlen (tmp1) > 0) {
@@ -528,11 +521,8 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
   struct cb_struct cb_object;
 
-  /* FIXME: The internal target encoding is hard-coded so far. This
-     needs to be fixed for the gnome2 version; the target encoding is
-     then probably utf-8 as well. iconv is also used in
-     gnc_AB_BANKING_interactors() in hbci-interaction.c. */
-  cb_object.gnc_iconv_handler = iconv_open("ISO8859-15", "UTF-8");
+  cb_object.gnc_iconv_handler = 
+    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
   g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
 
   /* Don't use list_string_concat_delim here since we need to
@@ -872,4 +862,37 @@ char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
   else
     sprintf(tmp, "%.2f", 0.0);
   return g_strdup(tmp);
+}
+
+/* Returns a newly allocated gchar, converted according to the given
+   handler */
+gchar *gnc_call_iconv(iconv_t handler, const char* input)
+{
+  char *inbuffer = (char*)input;
+  char *outbuffer, *outbufferstart;
+  int inbytes, outbytes;
+
+  inbytes = strlen(inbuffer);
+  outbytes = inbytes + 2;
+  outbufferstart = g_strndup(inbuffer, outbytes);
+  outbuffer = outbufferstart;
+  iconv(handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
+  if (outbytes > 0) 
+    *outbuffer = '\0';
+  return outbufferstart;
+}
+
+const char *gnc_hbci_book_encoding()
+{
+#if HAVE_LANGINFO_CODESET
+  char* encoding = nl_langinfo(CODESET);
+#else
+  char* encoding = "ISO8859-15";
+#endif
+  return encoding;
+}
+
+const char *gnc_hbci_AQBANKING_encoding()
+{
+  return "UTF-8";
 }
