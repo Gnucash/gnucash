@@ -45,6 +45,7 @@
 #define GNC_QUERY_H
 
 #include "Query.h"
+#include "QueryP.h"
 #include "gnc-engine.h"
 
 typedef struct _gnc_query sqlQuery;
