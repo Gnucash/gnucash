@@ -90,8 +90,8 @@ struct account_s
 
   /* kvp_data is a key-value pair database for storing simple "extra"
    * information in splits, transactions, and accounts.  it's NULL
-   * until accessed.  See ??? for a list and description of the
-   * important keys. */
+   * until accessed.  See src/engine/kvp_doc.txt for a list and 
+   * description of the important keys. */
   kvp_frame * kvp_data;
 
   /* The type field is the account type, picked from the enumerated 
