@@ -1,5 +1,10 @@
 2001-07-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/splitreg.[hc]: same as below
+
+	* src/SplitLedger.c: remove share balance cells, they are now
+	redundant
+
 	* accounts/*/*: currency->commodity
 
 	* src/scm/engine-interface.scm: quantity->amount

@@ -88,7 +88,6 @@ typedef enum
   NUM_CELL,
   DESC_CELL,
   RECN_CELL,
-  SHRBALN_CELL,
   BALN_CELL,
   ACTN_CELL,
   XFRM_CELL,
@@ -101,7 +100,6 @@ typedef enum
   TCRED_CELL,     /* T* cells are transaction summary cells */
   TDEBT_CELL,
   TSHRS_CELL,
-  TSHRBALN_CELL,
   TBALN_CELL,
   NOTES_CELL,
   FCRED_CELL, // formula credit, used by the template ledger
@@ -192,7 +190,6 @@ struct _SplitRegister
   NumCell       * numCell;
   QuickFillCell * descCell;
   RecnCell      * recnCell;
-  PriceCell     * shrbalnCell;
   PriceCell     * balanceCell;
   ComboCell     * actionCell;
   ComboCell     * xfrmCell;
@@ -205,7 +202,6 @@ struct _SplitRegister
   PriceCell     * tcreditCell;
   PriceCell     * tdebitCell;
   PriceCell     * tsharesCell;
-  PriceCell     * tshrbalnCell;
   PriceCell     * tbalanceCell;
   QuickFillCell * notesCell;
 

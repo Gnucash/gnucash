@@ -3552,40 +3552,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 /* ======================================================== */
 
 static gnc_numeric
-get_trans_total_value (SplitRegister *reg, Transaction *trans)
-{
-  GList *node;
-  Account *account;
-  gnc_commodity *currency;
-  gnc_numeric total = gnc_numeric_zero ();
-
-  account = sr_get_default_account (reg);
-
-  if (!account)
-    return total;
-
-  currency = xaccTransGetCurrency (trans);
-  if (!currency)
-    currency = gnc_default_currency ();
-
-  total = gnc_numeric_convert (total, gnc_commodity_get_fraction (currency),
-                               GNC_RND_ROUND);
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
-  {
-    Split *split = node->data;
-
-    if (xaccSplitGetAccount (split) != account)
-      continue;
-
-    total = gnc_numeric_add_fixed (total, xaccSplitGetValue (split));
-  }
-
-  return total;
-}
-
-static gnc_numeric
-get_trans_total_shares (SplitRegister *reg, Transaction *trans)
+get_trans_total_amount (SplitRegister *reg, Transaction *trans)
 {
   GList *node;
   Account *account;
@@ -3923,26 +3890,6 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
       }
       break;
 
-    case SHRBALN_CELL:
-    case TSHRBALN_CELL:
-      {
-        SRInfo *info = xaccSRGetInfo(reg);
-        Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-        gnc_numeric balance;
-
-        if (split == blank_split)
-          return "";
-
-        if (cell_type == SHRBALN_CELL)
-          balance = xaccSplitGetBalance (split);
-        else
-          balance = get_trans_total_balance (reg, trans);
-
-        return xaccPrintAmount (balance,
-                                gnc_split_amount_print_info (split, FALSE));
-      }
-      break;
-
     case BALN_CELL:
     case TBALN_CELL:
       {
@@ -4080,7 +4027,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
       {
         gnc_numeric total;
 
-        total = get_trans_total_value (reg, trans);
+        total = get_trans_total_amount (reg, trans);
         if (gnc_numeric_zero_p (total))
           return "";
 
@@ -4093,7 +4040,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
         total = gnc_numeric_abs (total);
 
         return xaccPrintAmount (total,
-                                gnc_split_value_print_info (split, FALSE));
+                                gnc_split_amount_print_info (split, FALSE));
       }
       break;
 
@@ -4101,7 +4048,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
       {
         gnc_numeric total;
 
-        total = get_trans_total_shares (reg, trans);
+        total = get_trans_total_amount (reg, trans);
 
         return xaccPrintAmount (total,
                                 gnc_split_amount_print_info (split, FALSE));
@@ -4211,9 +4158,6 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
     case RECN_CELL:
       return _("Reconciled:R") + 11;
 
-    case SHRBALN_CELL:
-      return _("Share Balance");
-
     case BALN_CELL:
       return _("Balance");
 
@@ -4283,9 +4227,6 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
 
     case TSHRS_CELL:
       return _("Tot Shares");
-
-    case TSHRBALN_CELL:
-      return _("Share Balance");
 
     case TBALN_CELL:
       return _("Balance");
@@ -4403,30 +4344,13 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
         gnc_numeric shares;
 
         if (cell_type == TSHRS_CELL)
-          shares = get_trans_total_shares (reg, trans);
+          shares = get_trans_total_amount (reg, trans);
         else if (is_current)
           shares = xaccGetPriceCellValue (reg->sharesCell);
         else
           shares = xaccSplitGetAmount (split);
 
         if (gnc_numeric_negative_p (shares))
-          return red;
-
-        return black;
-      }
-      break;
-
-    case SHRBALN_CELL:
-    case TSHRBALN_CELL:
-      {
-        gnc_numeric balance;
-
-        if (cell_type == SHRBALN_CELL)
-          balance = xaccSplitGetBalance (split);
-        else
-          balance = get_trans_total_balance (reg, trans);
-
-        if (gnc_numeric_negative_p (balance))
           return red;
 
         return black;

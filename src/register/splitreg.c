@@ -69,7 +69,6 @@ struct _SplitRegisterBuffer
   CellBuffer numCell;
   CellBuffer descCell;
   CellBuffer recnCell;
-  CellBuffer shrbalnCell;
   CellBuffer balanceCell;
   CellBuffer actionCell;
   CellBuffer xfrmCell;
@@ -96,7 +95,6 @@ static sample_string cell_sample_strings[] =
   { N_("sample:99999"), 7},                          /* num cell */
   { N_("sample:Description of a transaction"), 7},   /* desc cell */
   { N_("Reconciled:R"), 11},                         /* recn cell */
-  { N_("sample:999,999.000"), 7},                    /* share balance cell */
   { N_("sample:999,999.000"), 7},                    /* balance cell */
   { N_("Transfer"), 0},                              /* action cell */
   { N_("sample:Expenses:Automobile:Gasoline"), 7},   /* xfrm cell */
@@ -109,7 +107,6 @@ static sample_string cell_sample_strings[] =
   { N_("sample:999,999.000"), 7},                    /* tcredit cell */
   { N_("sample:999,999.000"), 7},                    /* tdebit cell */
   { N_("sample:999,999.000"), 7},                    /* tshares cell */
-  { N_("sample:999,999.000"), 7},                    /* tshrbaln cell */
   { N_("sample:999,999.000"), 7},                    /* tbalance cell */
   { N_("sample:Notes field sample text string"), 7}, /* notes cell */
   { N_("sample:(x + 0.33 * y + (x+y) )"), 7 },       /* formula credit cell */
@@ -122,7 +119,6 @@ static CellAlignment cell_alignments[] =
   CELL_ALIGN_LEFT,   /* num cell */
   CELL_ALIGN_LEFT,   /* desc cell */
   CELL_ALIGN_CENTER, /* recn cell */
-  CELL_ALIGN_RIGHT,  /* share balance cell */
   CELL_ALIGN_RIGHT,  /* balance cell */
   CELL_ALIGN_LEFT,   /* action cell */
   CELL_ALIGN_RIGHT,  /* xfrm cell */
@@ -135,7 +131,6 @@ static CellAlignment cell_alignments[] =
   CELL_ALIGN_RIGHT,  /* tcredit cell */
   CELL_ALIGN_RIGHT,  /* tdebit cell */
   CELL_ALIGN_RIGHT,  /* tshares cell */
-  CELL_ALIGN_RIGHT,  /* tshrbaln cell */
   CELL_ALIGN_RIGHT,  /* tbalance cell */
   CELL_ALIGN_LEFT,   /* notes cell */
   CELL_ALIGN_LEFT,   /* formula credit cell */
@@ -476,16 +471,16 @@ configLayout (SplitRegister *reg)
     case CURRENCY_REGISTER:
       {
         curs = reg->cursor_ledger_single;
-        set_cell (reg, curs, DATE_CELL,    0,  0);
-        set_cell (reg, curs, NUM_CELL,     0,  1);
-        set_cell (reg, curs, DESC_CELL,    0,  2);
-        set_cell (reg, curs, MXFRM_CELL,   0,  3);
-        set_cell (reg, curs, RECN_CELL,    0,  4);
-        set_cell (reg, curs, SHRS_CELL,    0,  5);
-        set_cell (reg, curs, PRIC_CELL,    0,  6);
-        set_cell (reg, curs, DEBT_CELL,    0,  7);
-        set_cell (reg, curs, CRED_CELL,    0,  8);
-        set_cell (reg, curs, SHRBALN_CELL, 0,  9);
+        set_cell (reg, curs, DATE_CELL,  0,  0);
+        set_cell (reg, curs, NUM_CELL,   0,  1);
+        set_cell (reg, curs, DESC_CELL,  0,  2);
+        set_cell (reg, curs, MXFRM_CELL, 0,  3);
+        set_cell (reg, curs, RECN_CELL,  0,  4);
+        set_cell (reg, curs, SHRS_CELL,  0,  5);
+        set_cell (reg, curs, PRIC_CELL,  0,  6);
+        set_cell (reg, curs, DEBT_CELL,  0,  7);
+        set_cell (reg, curs, CRED_CELL,  0,  8);
+        set_cell (reg, curs, BALN_CELL,  0,  9);
 
         curs = reg->cursor_ledger_double;
         copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
@@ -494,13 +489,13 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
         curs = reg->cursor_journal_single;
-        set_cell (reg, curs, DATE_CELL,     0,  0);
-        set_cell (reg, curs, NUM_CELL,      0,  1);
-        set_cell (reg, curs, DESC_CELL,     0,  2);
-        set_cell (reg, curs, TSHRS_CELL,    0,  5);
-        set_cell (reg, curs, TDEBT_CELL,    0,  7);
-        set_cell (reg, curs, TCRED_CELL,    0,  8);
-        set_cell (reg, curs, TSHRBALN_CELL, 0,  9);
+        set_cell (reg, curs, DATE_CELL,  0,  0);
+        set_cell (reg, curs, NUM_CELL,   0,  1);
+        set_cell (reg, curs, DESC_CELL,  0,  2);
+        set_cell (reg, curs, TSHRS_CELL, 0,  5);
+        set_cell (reg, curs, TDEBT_CELL, 0,  7);
+        set_cell (reg, curs, TCRED_CELL, 0,  8);
+        set_cell (reg, curs, TBALN_CELL, 0,  9);
 
         curs = reg->cursor_journal_double;
         copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
@@ -708,7 +703,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (NUM,      num,      Num);
   NEW (DESC,     desc,     QuickFill);
   NEW (RECN,     recn,     Recn);
-  NEW (SHRBALN,  shrbaln,  Price);
   NEW (BALN,     balance,  Price);
   NEW (XFRM,     xfrm,     Combo);
   NEW (ACTN,     action,   Combo);
@@ -721,7 +715,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (TCRED,    tcredit,  Price);
   NEW (TDEBT,    tdebit,   Price);
   NEW (TSHRS,    tshares,  Price);
-  NEW (TSHRBALN, tshrbaln, Price);
   NEW (TBALN,    tbalance, Price);
   NEW (NOTES,    notes,    QuickFill);
   NEW (FCRED,    formCredit, QuickFill);
@@ -801,10 +794,6 @@ xaccInitSplitRegister (SplitRegister *reg,
     (reg->sharesCell, gnc_default_share_print_info ());
   xaccSetPriceCellPrintInfo
     (reg->tsharesCell, gnc_default_share_print_info ());
-  xaccSetPriceCellPrintInfo
-    (reg->shrbalnCell, gnc_default_share_print_info ());
-  xaccSetPriceCellPrintInfo
-    (reg->tshrbalnCell, gnc_default_share_print_info ());
 
   /* The action cell should accept strings not in the list */
   xaccComboCellSetStrict (reg->actionCell, FALSE);
@@ -928,7 +917,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyNumCell       (reg->numCell);
   xaccDestroyQuickFillCell (reg->descCell);
   xaccDestroyRecnCell      (reg->recnCell);
-  xaccDestroyPriceCell     (reg->shrbalnCell);
   xaccDestroyPriceCell     (reg->balanceCell);
   xaccDestroyComboCell     (reg->actionCell);
   xaccDestroyComboCell     (reg->xfrmCell);
@@ -941,7 +929,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyPriceCell     (reg->tcreditCell);
   xaccDestroyPriceCell     (reg->tdebitCell);
   xaccDestroyPriceCell     (reg->tsharesCell);
-  xaccDestroyPriceCell     (reg->tshrbalnCell);
   xaccDestroyPriceCell     (reg->tbalanceCell);
   xaccDestroyQuickFillCell (reg->notesCell);
   xaccDestroyQuickFillCell (reg->formCreditCell);
@@ -952,7 +939,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->numCell      = NULL;
   reg->descCell     = NULL;
   reg->recnCell     = NULL;
-  reg->shrbalnCell  = NULL;
   reg->balanceCell  = NULL;
   reg->actionCell   = NULL;
   reg->xfrmCell     = NULL;
@@ -965,7 +951,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->tcreditCell  = NULL;
   reg->tdebitCell   = NULL;
   reg->tsharesCell  = NULL;
-  reg->tshrbalnCell = NULL;
   reg->tbalanceCell = NULL;
   reg->notesCell    = NULL;
   reg->formCreditCell  = NULL;
@@ -1336,7 +1321,6 @@ xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
   destroyCellBuffer(&srb->numCell);
   destroyCellBuffer(&srb->descCell);
   destroyCellBuffer(&srb->recnCell);
-  destroyCellBuffer(&srb->shrbalnCell);
   destroyCellBuffer(&srb->balanceCell);
   destroyCellBuffer(&srb->actionCell);
   destroyCellBuffer(&srb->xfrmCell);
@@ -1378,7 +1362,6 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->numCell->cell, &srb->numCell);
   saveCell(&sr->descCell->cell, &srb->descCell);
   saveCell(&sr->recnCell->cell, &srb->recnCell);
-  saveCell(&sr->shrbalnCell->cell, &srb->shrbalnCell);
   saveCell(&sr->balanceCell->cell, &srb->balanceCell);
   saveCell(&sr->actionCell->cell, &srb->actionCell);
   saveCell(&sr->xfrmCell->cell, &srb->xfrmCell);
@@ -1443,7 +1426,6 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->numCell->cell, &srb->numCell, cursor);
   restoreCellChanged(&sr->descCell->cell, &srb->descCell, cursor);
   restoreCellChanged(&sr->recnCell->cell, &srb->recnCell, cursor);
-  restoreCellChanged(&sr->shrbalnCell->cell, &srb->shrbalnCell, cursor);
   restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell, cursor);
   restoreCellChanged(&sr->actionCell->cell, &srb->actionCell, cursor);
   restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell, cursor);
