@@ -2593,24 +2593,25 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   /* -------------------------------------------------------------- */
-  /* OK, the handling of transfers gets complicated because it 
-   * depends on what was displayed to the user.  For a multi-line
-   * display, we just reparent the indicated split, its it,
-   * and that's that.  For a two-line display, we want to reparent
-   * the "other" split, but only if there is one ...
-   * XFRM is the straight split, MXFRM is the mirrored split.
-   * XTO is the straight split, too :) Only one of XFRM or XTO
-   * should be in a given cursor.
-   */
-  if ((MOD_XFRM | MOD_XTO) & changed) {
+  /* OK, the handling of transfers gets complicated because it depends
+   * on what was displayed to the user.  For a multi-line display, we
+   * just reparent the indicated split, its it, and that's that. For
+   * a two-line display, we want to reparent the "other" split, but
+   * only if there is one.  XFRM is the straight split, MXFRM is the
+   * mirrored split.  XTO is the straight split, too :) Only one of
+   * XFRM or XTO should be in a given cursor. */
+  if ((MOD_XFRM | MOD_XTO) & changed)
+  {
     Account *old_acc=NULL, *new_acc=NULL;
     char *new_name;
 
-    if (MOD_XFRM & changed) {
+    if (MOD_XFRM & changed)
+    {
       DEBUG ("MOD_XFRM: %s\n",
              reg->xfrmCell->cell.value);
     }
-    else {
+    else
+    {
       DEBUG ("MOD_XTO: %s\n",
              reg->xtoCell->cell.value);
     }
@@ -2634,18 +2635,21 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       currency = xaccAccountGetCurrency(new_acc);
       currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
 
-      if (currency == NULL) {
+      if (currency == NULL)
+      {
         security = xaccAccountGetSecurity(new_acc);
         security = xaccTransIsCommonExclSCurrency(trans, security, split);
       }
 
-      if ((currency != NULL) || (security != NULL)) {
+      if ((currency != NULL) || (security != NULL))
+      {
         xaccAccountInsertSplit (new_acc, split);
 
         refresh_accounts = g_list_prepend(refresh_accounts, old_acc);
         refresh_accounts = g_list_prepend(refresh_accounts, new_acc);
       }
-      else {
+      else
+      {
         const char *format = _("You cannot transfer funds from the %s "
                                "account.\nIt does not have a matching "
                                "currency.\nTo transfer funds between "
@@ -2680,9 +2684,11 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
      * the user's request to transfer actually works out.
      */
 
-    if (!other_split) {
+    if (!other_split)
+    {
       other_split = xaccTransGetSplit (trans, 1);
-      if (!other_split) {
+      if (!other_split)
+      {
         gnc_numeric amount = xaccSplitGetShareAmount (split);
         gnc_numeric price = xaccSplitGetSharePrice (split);
 
@@ -2696,7 +2702,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       }
     }
 
-    if (other_split) {
+    if (other_split)
+    {
       Account *old_acc=NULL, *new_acc=NULL;
 
       /* do some reparenting. Insertion into new account will automatically
@@ -2714,19 +2721,22 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
         currency = xaccTransIsCommonExclSCurrency(trans, 
 						  currency, other_split);
 
-        if (currency == NULL) {
+        if (currency == NULL)
+        {
           security = xaccAccountGetSecurity(new_acc);
           security = xaccTransIsCommonExclSCurrency(trans, 
 						    security, other_split);
         }
 
-        if ((currency != NULL) || (security != NULL)) {
+        if ((currency != NULL) || (security != NULL))
+        {
           xaccAccountInsertSplit (new_acc, other_split);
 
           refresh_accounts = g_list_prepend(refresh_accounts, old_acc);
           refresh_accounts = g_list_prepend(refresh_accounts, new_acc);
         }
-        else {
+        else
+        {
           const char *format = _("You cannot transfer funds from the %s "
                                  "account.\nIt does not have a matching "
                                  "currency.\nTo transfer funds between "
@@ -2867,7 +2877,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     }
   }
 
-  if (MOD_SHRS & changed) {
+  if (MOD_SHRS & changed)
+  {
     gnc_numeric amount = xaccGetPriceCellValue(reg->sharesCell);
     gnc_numeric price  = xaccGetPriceCellValue(reg->priceCell);
     
@@ -2877,7 +2888,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     xaccSplitSetSharePrice (split, price);
   }
 
-  if (MOD_PRIC & changed) {
+  if (MOD_PRIC & changed)
+  {
     gnc_numeric price;
 
     price = xaccGetPriceCellValue(reg->priceCell);
@@ -2891,7 +2903,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
    * the split cursors show minus the quants that the single,
    * double and transaction cursors show, and so when updates
    * happen, the extra minus sign must also be handled. */
-  if (MOD_AMNT & changed) {
+  if (MOD_AMNT & changed)
+  {
     gnc_numeric new_amount;
     gnc_numeric credit;
     gnc_numeric debit;
@@ -2907,6 +2920,37 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
   
   return refresh_accounts;
+}
+
+/* ======================================================== */
+
+static gnc_numeric
+get_trans_total (SplitRegister *reg, Transaction *trans)
+{
+  GList *node;
+  Account *account;
+  gnc_numeric total = gnc_numeric_zero ();
+
+  SRInfo *info = xaccSRGetInfo(reg);
+  account = info->default_source_account;
+
+  if (!account)
+    return total;
+
+  total = gnc_numeric_convert (total, xaccAccountGetCurrencySCU (account),
+                               GNC_RND_ROUND);
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (xaccSplitGetAccount (split) != account)
+      continue;
+
+    total = gnc_numeric_add_fixed (total, xaccSplitGetValue (split));
+  }
+
+  return total;
 }
 
 /* ======================================================== */
@@ -3096,6 +3140,27 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
          return name;
       }
 
+    case TCRED_CELL:
+    case TDEBT_CELL:
+      {
+        gnc_numeric total;
+
+        total = get_trans_total (reg, trans);
+        if (gnc_numeric_zero_p (total))
+          return "";
+
+        if (gnc_numeric_negative_p (total) && (cell_type == TDEBT_CELL))
+          return "";
+
+        if (gnc_numeric_positive_p (total) && (cell_type == TCRED_CELL))
+          return "";
+
+        total = gnc_numeric_abs (total);
+
+        return xaccPrintAmount (total,
+                                gnc_split_value_print_info (split, FALSE));
+      }
+
     default:
       return "";
       break;
@@ -3172,9 +3237,9 @@ xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
         {
           Account *account;
 
-          account = xaccSplitGetAccount(split);
+          account = xaccSplitGetAccount (split);
 
-          if (reverse_balance(account))
+          if (reverse_balance (account))
             balance = gnc_numeric_neg (balance);
         }
         else if ((INCOME_REGISTER == reg->type) ||

@@ -1097,14 +1097,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo style_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Ledger"),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Basic Ledger"),
                                N_("Show transactions on one or two lines"),
                                gnc_register_style_ledger_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto Ledger"),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto-Split Ledger"),
                                N_("Show transactions on one or two lines and "
                                   "expand the current transaction"),
                                gnc_register_style_auto_ledger_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(N_("Journal"),
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Transaction Journal"),
                                N_("Show expanded transactions with all "
                                   "splits"),
                                gnc_register_style_journal_cb, NULL, NULL),
