@@ -33,6 +33,7 @@
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "pricecell.h"
+#include "datecell.h"
 #include "split-register-control.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"
@@ -972,13 +973,41 @@ gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_nam
   return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
 }
 
+static const char *
+gnc_split_register_get_cell_string (SplitRegister *reg, const char *cell_name)
+{
+  BasicCell *cell;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
+  if (!cell)
+    return "";
+
+  return gnc_basic_cell_get_value (cell);
+}
+
+static Timespec
+gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
+{
+  DateCell *cell;
+  Timespec ts;
+
+  cell = (DateCell*) gnc_table_layout_get_cell (reg->table->layout, cell_name);
+
+  if (cell)
+    gnc_date_cell_get_date (cell, &ts);
+  else
+    timespecFromTime_t (&ts, time (NULL));
+
+  return ts;
+}
+
 /* This function checks to see if we need to determine an exchange rate.
  * If we need to determine an exchange rate, then pop up the dialog.
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
  */
 static gboolean
-gnc_split_register_handle_exchange (SplitRegister *reg, VirtualLocation virt_loc)
+gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 {
   Transaction *txn;
   Account *xfer_acc;
@@ -995,7 +1024,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, VirtualLocation virt_loc
 
   /* See if we already have an exchange rate... */
   exch_rate = gnc_price_cell_get_value (rate_cell);
-  if (! gnc_numeric_zero_p (exch_rate))
+  if (! gnc_numeric_zero_p (exch_rate) && !force_dialog)
     return FALSE;
 
   /* Grab the xfer account */
@@ -1021,17 +1050,29 @@ gnc_split_register_handle_exchange (SplitRegister *reg, VirtualLocation virt_loc
   /* Ok, we need to grab the exchange rate */
   amount = gnc_split_register_debcred_cell_value (reg);
 
+  /* create the exchange-rate dialog */
   xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
   gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
 
+  /* enter the accounts */
   gnc_xfer_dialog_select_to_account (xfer, xfer_acc);
   gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
   gnc_xfer_dialog_hide_to_account_tree (xfer);
   gnc_xfer_dialog_hide_from_account_tree (xfer);
 
+  /* fill in the dialog entries */
   gnc_xfer_dialog_set_amount (xfer, amount);
-  gnc_xfer_dialog_set_description (xfer, "Test Desc");
+  gnc_xfer_dialog_set_description (xfer,
+				   gnc_split_register_get_cell_string (reg, DESC_CELL));
+  gnc_xfer_dialog_set_memo (xfer, 
+			    gnc_split_register_get_cell_string (reg, MEMO_CELL));
+  gnc_xfer_dialog_set_num (xfer, 
+			   gnc_split_register_get_cell_string (reg, NUM_CELL));
+  gnc_xfer_dialog_set_date (xfer,
+			    timespecToTime_t (
+			    gnc_split_register_get_cell_date (reg, DATE_CELL)));
 
+  /* and run it... */
   if (gnc_xfer_dialog_run_until_done (xfer) == FALSE)
     return TRUE;
 
@@ -1172,7 +1213,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
       break;
 
     /* Deal with the exchange-rate */
-    if (gnc_split_register_handle_exchange (reg, reg->table->current_cursor_loc))
+    if (gnc_split_register_handle_exchange (reg, FALSE))
       return TRUE;
 
     *p_new_virt_loc = reg->table->current_cursor_loc;
@@ -1224,7 +1265,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
      * transaction. */
 
     /* Deal with the exchange-rate */
-    if (gnc_split_register_handle_exchange (reg, reg->table->current_cursor_loc))
+    if (gnc_split_register_handle_exchange (reg, FALSE))
       return TRUE;
 
     info->cursor_hint_trans = trans;
@@ -1252,7 +1293,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     /* Did we change vertical position? */
     if (virt_loc.vcell_loc.virt_row != old_virt_row)
       /* Deal with the exchange-rate */
-      if (gnc_split_register_handle_exchange (reg, reg->table->current_cursor_loc))
+      if (gnc_split_register_handle_exchange (reg, FALSE))
 	return TRUE;
   }
 

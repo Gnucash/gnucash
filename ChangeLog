@@ -29,6 +29,10 @@
 
 	* src/register/ledger-core/split-register.c:
 	  initialize the RATE Cell print-info
+
+	* src/register/ledger-core/split-register-control.c:
+	  fill in the "exchange dialog" with entries from the current split/trans
+	  change the API to allow a menu-item to pop up the exchange dialog
 	
 2002-12-02  Chris Lyttle  <chris@wilddev.net>
 	
