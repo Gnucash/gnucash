@@ -6,9 +6,9 @@ TESTS = \
 
 TESTS_ENVIRONMENT= \
    GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
-   GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:../../engine:..:../../gnc-module:${top_srcdir}/lib \
+   GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:../../engine:..:../../gnc-module:${top_srcdir}/lib:${top_srcdir}/src/scm:${top_srcdir}/src/guile \
    LTDL_LIBRARY_PATH=.. \
-   LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/calculation:${top_srcdir}/src/calculation/.libs
+   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:../.libs:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/calculation:${top_srcdir}/src/calculation/.libs:${top_srcdir}/src/scm:${top_srcdir}/src/guile
 
 LDADD = \
   -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
@@ -30,10 +30,10 @@ bin_PROGRAMS = \
 
 EXTRA_DIST = test-load-module
 
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I..
-
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+  -I.. \
+  ${GLIB_CFLAGS}
