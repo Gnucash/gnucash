@@ -205,16 +205,18 @@ ledgerListAdd (Account * acc, struct _RegWindow *addreg)
                _malloc ((n+2) * sizeof (struct _RegWindow *));
 
    n = 0;
-   reg = oldlist[0];
-   while (reg) {
-      newlist[n] = reg;
-      n++;
-      reg = oldlist[n];
+   if (oldlist) {
+      reg = oldlist[0];
+      while (reg) {
+         newlist[n] = reg;
+         n++;
+         reg = oldlist[n];
+      }
+      _free (oldlist);
    }
    newlist[n] = addreg;
    newlist[n+1] = NULL;
 
-   _free (oldlist);
    acc->ledgerList = newlist;
 }
 
@@ -239,17 +241,19 @@ ledgerListRemove (Account * acc, struct _RegWindow *delreg)
 
    n = 0;
    i = 0;
-   reg = oldlist[0];
-   while (reg) {
-      newlist[i] = reg;
-      if (delreg == reg) i--;
-      i++;
-      n++;
-      reg = oldlist[n];
+   if (oldlist) {
+      reg = oldlist[0];
+      while (reg) {
+         newlist[i] = reg;
+         if (delreg == reg) i--;
+         i++;
+         n++;
+         reg = oldlist[n];
+      }
+      _free (oldlist);
    }
    newlist[i] = NULL;
 
-   _free (oldlist);
    acc->ledgerList = newlist;
 }
 
@@ -266,6 +270,7 @@ ledgerListIsMember (Account * acc, struct _RegWindow *memreg)
    if (!memreg) return 0;
 
    list = acc->ledgerList;
+   if (!list) return 0;
 
    n = 0;
    reg = list[0];

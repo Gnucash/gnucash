@@ -471,22 +471,45 @@ regRefresh( RegWindow *regData )
            Account * acc;
            int show;
            themount = trans->damount * trans->share_price;
-           sprintf( buf, "%.2f ", themount );
 
-           acc = (Account *) (trans->debit);
-           show = xaccIsAccountInList (acc, regData->blackacc);
-           if (show) {
-              newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+           /* attempt to keep all displayed quantities positive by
+            * flipping signs and columns for negative entries */
+           /* hack alert -- but does this really work ??? */
+           if (0.0 < themount) {
+              sprintf( buf, "%.2f ", themount );
+              acc = (Account *) (trans->debit);
+              show = xaccIsAccountInList (acc, regData->blackacc);
+              if (show) {
+                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+              } else {
+                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+              }
+   
+              acc = (Account *) (trans->credit);
+              show = xaccIsAccountInList (acc, regData->blackacc);
+              if (show) {
+                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
+              } else {
+                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+              }
            } else {
-              newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
-           }
-
-           acc = (Account *) (trans->credit);
-           show = xaccIsAccountInList (acc, regData->blackacc);
-           if (show) {
-              newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
-           } else {
-              newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+              themount = - themount;
+              sprintf( buf, "%.2f ", themount );
+              acc = (Account *) (trans->debit);
+              show = xaccIsAccountInList (acc, regData->blackacc);
+              if (show) {
+                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
+              } else {
+                 newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+              }
+          
+              acc = (Account *) (trans->credit);
+              show = xaccIsAccountInList (acc, regData->blackacc);
+              if (show) {
+                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+              } else {
+                 newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+              }
            }
         }  
           break;
@@ -1340,30 +1363,52 @@ regSaveTransaction( RegWindow *regData, int position )
            /* try to figure out which entry the user changed ! */
            if (DEQ (debit_amount, trans->damount)) themount = credit_amount;
            if (DEQ (credit_amount, trans->damount)) themount = debit_amount;
-        } else
-        if (show_debit) {
-           themount = debit_amount;
-        } else
-        if (show_credit) {
-           themount = credit_amount;
+        } else {
+           themount = credit_amount - debit_amount;
         }
         trans->damount = themount;
 
-        if (PORTFOLIO == regData->type) {
-          sprintf( buf, "%.3f ", themount );
-        } else {
-          sprintf( buf, "%.2f ", themount );
-        }
-        if (show_debit) {
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
-        } else {
-          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
-        }
+        /* attempt to keep all displayed quantities positive by
+         * flipping signs and columns for negative entries */
+        /* hack alert -- but does this really work ??? */
+        if (0.0 < themount) {
+           if (PORTFOLIO == regData->type) {
+             sprintf( buf, "%.3f ", themount );
+           } else {
+             sprintf( buf, "%.2f ", themount );
+           }
 
-        if (show_credit) {
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
+           if (show_debit) {
+              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
+           } else {
+              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+           }
+  
+           if (show_credit) {
+              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
+           } else {
+              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+           }
         } else {
-          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+           themount = - themount;
+
+           if (PORTFOLIO == regData->type) {
+             sprintf( buf, "%.3f ", themount );
+           } else {
+             sprintf( buf, "%.2f ", themount );
+           }
+
+           if (show_debit) {
+              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, buf );
+           } else {
+              XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+           }
+  
+           if (show_credit) {
+              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
+           } else {
+              XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+           }
         }
       }
         break;
@@ -1401,10 +1446,10 @@ regSaveTransaction( RegWindow *regData, int position )
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
-        (strcmp("",trans->action) == 0)      &&
-        (0 == trans->catagory)               &&
-        (NULL == trans->credit)              && 
-        (NULL == trans->debit)               &&
+        /* (strcmp("",trans->action) == 0)      && annoying! */
+        /* (0 == trans->catagory)               && not implemented ! */
+        /* (NULL == trans->credit)              && annoying! */
+        /* (NULL == trans->debit)               && annoying! */
         (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) ) {
       freeTransaction (trans);
@@ -1508,6 +1553,12 @@ regSaveTransaction( RegWindow *regData, int position )
      */
     regData->currEntry = (newrow-NUM_HEADER_ROWS)/NUM_ROWS_PER_TRANS;
   }
+
+  /* unmap the pop boxes, otherwise they get confused about
+   * which row/transaction they belong to */
+  SetPopBox (regData->actbox,  -1, -1);
+  SetPopBox (regData->xfrmbox, -1, -1);
+  SetPopBox (regData->xtobox,  -1, -1);
 
   /* reset the "changed" bitfield */
   regData->changed   = 0;
@@ -1665,7 +1716,6 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   regData->currEntry = 0;
   regData->insert    = 0;          /* the insert (cursor) position in
                                     * quickfill cells */
-
 
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
@@ -2438,12 +2488,20 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
       Account * cred = (Account *) (trans->credit);
       Account * deb = (Account *) (trans->debit);
       
+      /* unmanage the ComboBoxes, otherwise things get confusing */
+      SetPopBox (regData->actbox,  -1, -1);
+      SetPopBox (regData->xfrmbox, -1, -1);
+      SetPopBox (regData->xtobox,  -1, -1);
+
       /* remove the transaction from both accounts */
       REMOVE_TRANS (cred, trans);
       REMOVE_TRANS (deb, trans);
 
       RECALC_BALANCE (deb);
       RECALC_BALANCE (cred);
+
+      REFRESH_REGISTER (deb);
+      REFRESH_REGISTER (cred);
 
       /* Delete the transaction */
       freeTransaction (trans);
@@ -2524,14 +2582,12 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       
       /* If this is a cell which isn't editible, then don't
        * let the user enter! */
-      if( !IN_DATE_CELL(row,col) && !IN_NUM_CELL(row,col) &&
-          !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
-          !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
-          !IN_XFRM_CELL(row,col) && !IN_ACTN_CELL(row,col) &&
-          !((STOCK     == regData->type) && IN_PRCC_CELL(row,col)) &&
-          !((MUTUAL    == regData->type) && IN_PRCC_CELL(row,col)) &&
-          !((PORTFOLIO == regData->type) && IN_PRCC_CELL(row,col)) &&
-          !((PORTFOLIO == regData->type) && IN_PRCD_CELL(row,col)) &&
+      if( !IN_DATE_CELL(row,col) && !IN_NUM_CELL (row,col) &&
+          !IN_DESC_CELL(row,col) && !IN_PAY_CELL (row,col) &&
+          !IN_RECN_CELL(row,col) && !IN_DEP_CELL (row,col) &&
+          !IN_XFRM_CELL(row,col) && !IN_XTO_CELL (row,col) &&
+          !IN_ACTN_CELL(row,col) &&
+          !IN_PRCC_CELL(row,col) && !IN_PRCD_CELL(row,col) &&
           !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;

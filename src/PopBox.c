@@ -135,11 +135,15 @@ void SetPopBox (PopBox *ab, int row, int col)
       choice = XbaeMatrixGetCell (ab->reg, ab->currow, ab->curcol);
 
       /* do a menu selection only if the cell ain't empty. */
-      if (0x0 != choice[0]) {
-         /* convert String to XmString ... arghhh */
-         choosen = XmCvtCTToXmString (choice);
-         XmComboBoxSelectItem (ab->combobox, choosen, False);
-         XmStringFree (choosen);
+      if (choice) {
+         if (0x0 != choice[0]) {
+            /* convert String to XmString ... arghhh */
+            choosen = XmCvtCTToXmString (choice);
+            XmComboBoxSelectItem (ab->combobox, choosen, False);
+            XmStringFree (choosen);
+         } else {
+            XmComboBoxClearItemSelection (ab->combobox);
+         } 
       } else {
          XmComboBoxClearItemSelection (ab->combobox);
       }
