@@ -105,7 +105,7 @@ id_hash(gconstpointer key)
 static gboolean
 id_compare(gconstpointer key_1, gconstpointer key_2)
 {
-  return memcmp(key_1, key_2, sizeof(GUID)) == 0;
+  return guid_equal (key_1, key_2);
 }
 
 #if GNCID_DEBUG

@@ -448,3 +448,12 @@ string_to_guid(const char * string, GUID * guid)
 {
   return decode_md5_string(string, (guid != NULL) ? guid->data : NULL);
 }
+
+gboolean
+guid_equal(const GUID *guid_1, const GUID *guid_2)
+{
+  if (guid_1 && guid_2)
+    return (memcmp(guid_1, guid_2, sizeof(GUID)) == 0);
+  else
+    return FALSE;
+}
