@@ -48,8 +48,8 @@ The engine includes support for non-currency-denominated assets,
 such as stocks, bonds, mutual funds, inventory.  This is done with
 two values in the Split structure:
 
-double share_price;
-double damount;
+   double share_price;
+   double damount;
 
 "damount" is the number of shares/items.  It is an "immutable" quantity,
 in that it cannot change except by transfer (sale/purchase).  It is the
@@ -67,17 +67,83 @@ Currency accounts should use a share price of 1.0 for all splits.
 To maintain the double-entry consistency, one must have the following
 hold true:
 
-(source_split->damount) * (source_split->share_price) ==
-sum of all ((dest_split->damount) * (dest_split->share_price))
+   0.0 == 
+   (source_split->damount) * (source_split->share_price) +
+   sum of all ((dest_split->damount) * (dest_split->share_price))  
 
 Thus, for example, the purchase of shares can be represented as:
 
-source:
-debit ABC Bank for $1045  (1045 dollars * dollar "price" of 1.00)
+   source:
+   debit ABC Bank for $1045  (1045 dollars * dollar "price" of 1.00)
+   
+   destination:
+   credit PQR Stock for $1000 (100 shares at $10 per share)
+   credit StockBroker category $45 in fees
 
-destination:
-credit PQR Stock for $1000 (100 shares at $10 per share)
-credit StockBroker category $45 in fees
+
+Error Reporting
+---------------
+The error reporting architecture (partially implemented), uses a globally
+visible subroutine to return an error.  In the naivest possible implementation,
+the error reporting mechanism would look like this:
+
+    int error_num;   /* global error number */
+
+    int xaccGetError (void) { return error_num; }
+
+    void xaccSomeFunction (Args *various_args) {
+        if (bad_thing_happened) error_num = 42;
+    }  
+
+Many programmers are used to a different interface, e.g.
+
+    int xaccSomeFunction (Args *various_args) {
+        if (bad_thing_happened) return (42);
+    }  
+
+Because of this, it is important to explain why the former design was choosen over
+the latter.  Let us begin by listing how the choosen design is as good as, and in
+many ways can be better to the later design.
+
+ (1) Allows programmer to check for errors asynchronously, e.g. outside
+     of a performance critical loop, or far away, after the return of
+     several subroutines.
+ (2) (with the right implementation) Allows reporting of multiple, complex
+     errors.  For example, it can be used to implement a trace mechanism.
+ (3) (with the right implementation) Can be thread safe.
+ (4) Allows errors that occurred deep in the implementation to be reported
+     up to much higher levels without requireing bagagge inthe middle.
+
+The right implementation for (2) is to implement not a single variable, but a stack
+or a ring (circular queue) on which error codes are placed, and from which error
+codes can be retreived.  The right implementation for (3) is the use
+pthread_getspecific() to define a per-thread global and/or ring/queue.
+
+
+Engine Isolation
+----------------
+Some half-finished thoughts about the engine API:
+
+-- The engine structures should not be accessible to any code outside of the engine.
+   Thus, the engine structures have been moved to AccountP.h, TransactionP.h, etc.
+   The *P.h files should not be included by code outside of the engine.
+
+-- The goal of hiding the engine internals behind an API is to allow the engine 
+   to be replaced by a variety of back ends, e.g. an SQL and/or CORBA back-end.
+
+-- The down-side of hiding is that it can hurt performance.  Even trivial data 
+   accesses require a subroutine call.  Maybe a smarter idea would be to leave
+   the structures exposed, allow direct manipulation, and then "copy-in" and
+   "copy-out" the structures into parallel structures when a hidden back end
+   needs to be invoked.
+
+-- the upside of hiding behind an API is that the engine can be instrumented
+   with extension language (perl, scheme, tcl, python) hooks for pre/post processing
+   of the data.  To further enable such hooks, we should probably surround all
+   operations on structures with "begin-edit" and "end-edit" calls.
+
+-- begin/end braces could potentially be useful for two-phase commit schemes.
+   where "end-edit" is replaced by "commeit-edit" or "reject-edit".
 
 
 
@@ -89,4 +155,4 @@ big banks use this for various consistency reasons.
 
 
 
-
+March 1998
