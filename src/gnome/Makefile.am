@@ -84,6 +84,7 @@ noinst_HEADERS = \
   gnc-network.h \
   gnc-splash.h \
   gnucash.h \
+  gw-gnc.h \
   i18n.h \
   mainwindow-account-tree.h \
   reconcile-list.h \
