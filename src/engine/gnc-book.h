@@ -76,6 +76,10 @@ void      gnc_book_destroy (GNCBook *book);
  *       "file:somefile.xac"
  *    then a sequence of search paths are checked for a file of this name.
  *
+ *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
+ *    to ignore any file locks that it finds.  If set to FALSE, then
+ *    file locks will be tested and obeyed.
+ *
  *    If the file exists, can be opened and read, and a lock can be obtained
  *    then a lock will be obtained and the function returns TRUE. Otherwise
  *    the function returns FALSE.
@@ -83,16 +87,6 @@ void      gnc_book_destroy (GNCBook *book);
 gboolean gnc_book_begin (GNCBook *book, const char * book_id,
                              gboolean ignore_lock);
 
-/* The gnc_book_begin_file() routine is identical to the gnc_book_begin()
- *    routine, except that the argument is assumed to be a filename, not
- *    a URL.
- *
- *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
- *    to ignore any file locks that it finds.  If set to FALSE, then
- *    file locks will be tested and obeyed.
- */
-gboolean gnc_book_begin_file (GNCBook *book, const char * filename,
-                              gboolean ignore_lock);
 
 /* The gnc_book_load() method loads the data associated with the book.
  *    The function returns TRUE on success.
@@ -108,7 +102,8 @@ gboolean gnc_book_load (GNCBook *book);
  * 
  *    Some important error values:
  *       EINVAL  -- bad argument
- *       ETXTBSY -- book id is in use; it's locked by someone else.
+ *       ETXTBSY -- ???
+ *       EBUSY   -- book id is in use; it's locked by someone else.
  *       ENOSYS  -- unsupported URI type.
  *       ERANGE  -- file path too long
  *       ENOLCK  -- book not open when gnc_book_save() was called.

@@ -45,6 +45,7 @@
 #include "BackendP.h"
 #include "FileIO.h"
 #include "Group.h"
+#include "NetIO.h"
 #include "Scrub.h"
 #include "gnc-book.h"
 #include "gnc-engine-util.h"
@@ -175,66 +176,6 @@ gnc_book_get_file_path (GNCBook *book)
 
 /* ============================================================== */
 
-gboolean
-gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
-{
-  int rc;
-
-  if (!book) return FALSE;
-  ENTER (" book-id=%s\n", book_id);
-
-  /* clear the error condition of previous errors */
-  book->errtype = 0;
-  book->last_file_err = ERR_FILEIO_NONE;
-
-  /* check to see if this session is already open */
-  if (book->book_id)
-  {
-    book->errtype = ETXTBSY;
-    return FALSE;
-  }
-
-  /* seriously invalid */
-  if (!book_id)
-  {
-    book->errtype = EINVAL;
-    return FALSE;
-  }
-
-  /* check to see if this is a type we know how to handle */
-  if (!strncmp(book_id, "file:", 5))
-  {
-    /* add 5 to space past 'file:' */
-    rc = gnc_book_begin_file (book, book_id + 5, ignore_lock);
-    return rc;
-  }
-
-  if (!strncmp(book_id, "http://", 7))
-  {
-    book->errtype = ENOSYS;
-    return FALSE;
-  }
-
-  if (!strncmp(book_id, "https://", 8))
-  {
-    book->errtype = ENOSYS;
-    return FALSE;
-  }
-
-  if (!strncmp(book_id, "postgres://", 11))
-  {
-    book->errtype = ENOSYS;
-    return FALSE;
-  }
-
-
-  /* otherwise, lets just assume its a file. */
-  rc = gnc_book_begin_file (book, book_id, ignore_lock);
-  return rc;
-}
-
-/* ============================================================== */
-
 #if 0
 static AccountGroup *
 xaccSessionBeginSQL (Session *sess, const char * dbname)
@@ -340,33 +281,13 @@ gnc_book_get_file_lock (GNCBook *book)
 
 /* ============================================================== */
 
-gboolean
+static gboolean
 gnc_book_begin_file (GNCBook *book, const char * filefrag,
                      gboolean ignore_lock)
 {
-  if (!book) return FALSE;
   ENTER ("filefrag=%s\n", filefrag);
 
-  /* clear the error condition of previous errors */
-  book->errtype = 0;
-  book->last_file_err = ERR_FILEIO_NONE;
-
-  /* check to see if this session is already open */
-  if (book->book_id)
-  {
-    book->errtype = ETXTBSY;
-    return FALSE;
-  }
-
-  /* seriously invalid */
-  if (!filefrag)
-  {
-    book->errtype = EINVAL;
-    return FALSE;
-  }
-
-  /* ---------------------------------------------------- */
-  /* OK, now we try to find or build an absolute file path */
+  /* Try to find or build an absolute file path */
 
   book->fullpath = xaccResolveFilePath (filefrag);
   if (!book->fullpath)
@@ -397,12 +318,82 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
   return TRUE;
 }
 
-#ifdef SQLHACK
-  /* for testing the sql, just a hack, remove later ... */
-  /* this should never ever appear here ...  */
-  xaccSessionBeginSQL (sess, "postgres://localhost/gnc_bogus");
-#endif
+/* ============================================================== */
+/* URL mostly a noop --- maybe this would be a login dialog ??? */
+
+static gboolean
+gnc_book_begin_http (GNCBook *book, const char * pathfrag)
+{
+  ENTER ("pathfrag=%s\n", pathfrag);
+
+  /* Store the sessionid URL  */
+  book->book_id = g_strdup (pathfrag);
+
+  LEAVE ("\n");
+  return TRUE;
+}
+
+/* ============================================================== */
+
+gboolean
+gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
+{
+  int rc;
+
+  if (!book) return FALSE;
+  ENTER (" book-id=%s\n", book_id);
+
+  /* clear the error condition of previous errors */
+  book->errtype = 0;
+  book->last_file_err = ERR_FILEIO_NONE;
+
+  /* check to see if this session is already open */
+  if (book->book_id)
+  {
+    book->errtype = ETXTBSY;
+    return FALSE;
+  }
+
+  /* seriously invalid */
+  if (!book_id)
+  {
+    book->errtype = EINVAL;
+    return FALSE;
+  }
+
+  /* check to see if this is a type we know how to handle */
+  if (!strncmp(book_id, "file:", 5))
+  {
+    /* add 5 to space past 'file:' */
+    rc = gnc_book_begin_file (book, book_id + 5, ignore_lock);
+    return rc;
+  }
+
+  if (!strncmp(book_id, "http://", 7))
+  {
+    rc = gnc_book_begin_http (book, book_id);
+    return rc;
+  }
+
+  if (!strncmp(book_id, "https://", 8))
+  {
+    rc = gnc_book_begin_http (book, book_id);
+    return rc;
+  }
+
+  if (!strncmp(book_id, "postgres://", 11))
+  {
  
+    book->errtype = ENOSYS;
+    return FALSE;
+  }
+
+
+  /* otherwise, lets just assume its a file. */
+  rc = gnc_book_begin_file (book, book_id, ignore_lock);
+  return rc;
+}
+
 /* ============================================================== */
 
 gboolean
@@ -412,6 +403,7 @@ gnc_book_load (GNCBook *book)
   if (!book->book_id) return FALSE;
 
   ENTER ("book_id=%s\n", book->book_id);
+
   if (strncmp(book->book_id, "file:", 5) == 0)
   {
     /* file: */
@@ -422,8 +414,8 @@ gnc_book_load (GNCBook *book)
       return FALSE;
     }
       
-    /* At this point, we should have a valid book id and a lock on
-     * the file. */
+    /* At this point, we should are supposed to have a valid book 
+     * id and a lock on the file. */
 
     xaccFreeAccountGroup (book->topgroup);
     book->topgroup = NULL;
@@ -443,6 +435,34 @@ gnc_book_load (GNCBook *book)
 
     LEAVE("\n");
     return TRUE;
+  }
+  else if (strncmp(book->book_id, "http://", 7) == 0)
+  {
+    xaccFreeAccountGroup (book->topgroup);
+    book->topgroup = NULL;
+
+    book->errtype = 0;
+    book->last_file_err = ERR_FILEIO_NONE;
+    book->topgroup = xaccRecvAccountGroup (book->book_id);
+
+    if (!book->topgroup || (book->last_file_err != ERR_FILEIO_NONE))
+    {
+      book->errtype = EIO;
+      return FALSE;
+    }
+
+    LEAVE("\n");
+    return TRUE;
+  }
+  else if (strncmp(book->book_id, "postgres://", 11) == 0)
+  {
+#ifdef SQLHACK
+    /* for testing the sql, just a hack, remove later ... */
+    /* this should never ever appear here ...  */
+    xaccSessionBeginSQL (sess, book->book_id);
+#endif
+    book->errtype = ENOSYS;
+    return FALSE;
   }
   else
   {
@@ -466,12 +486,6 @@ gnc_book_save_may_clobber_data (GNCBook *book)
   if (stat(book->fullpath, &statbuf) == 0) return TRUE;
 
   return FALSE;
-
-#ifdef SQLHACK
-  /* for testing the sql, just a hack, remove later ... */
-  /* this should never ever appear here ...  */
-  xaccSessionBeginSQL (sess, "postgres://localhost/gnc_bogus");
-#endif
 }
 
 /* ============================================================== */
@@ -729,7 +743,11 @@ xaccResolveURL (const char * pathfrag)
 
   /* At this stage of checking, URL's are always, by definition,
    * resolved.  If there's an error connecting, we'll find out later.
+   *
+   * FIXME -- we should probably use  ghttp_uri_validate
+   * to make sure hte uri is in good form...
    */
+
   if (!strncmp (pathfrag, "http://", 7)) {
     return (char *) pathfrag;
   }

@@ -1,7 +1,5 @@
 /********************************************************************\
- * FileIO.c -- read and write binary format file for gnucash        *
- *             (GnuCash/X-Accountant)                               *
- * Copyright (C) 1997 Robin D. Clark                                *
+ * FileIO.c -- read and write file wrappers (old and new format)    *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 1999-2000 Rob Browning                             *
  *                                                                  *
@@ -24,17 +22,18 @@
  *                                                                  *
 \********************************************************************/
 
-#include "FileIO.h"
 
 #include <stdlib.h>
 #include <string.h>
 
+#include "DateUtils.h"
+#include "FileIO.h"
 #include "io-gncxml.h"
 #include "io-gncbin.h"
-#include "DateUtils.h"
 
 AccountGroup *
-xaccReadAccountGroupFile(const gchar *name, GNCFileIOError *error_result) {
+xaccReadAccountGroupFile(const gchar *name, GNCFileIOError *error_result) 
+{
   AccountGroup *result_grp;
   
   if(is_gncxml_file(name)) {
@@ -66,7 +65,8 @@ gboolean
 xaccWriteAccountGroupFile(const char *datafile,
                           AccountGroup *grp,
                           gboolean make_backup,
-                          GNCFileIOError *error_result) {
+                          GNCFileIOError *error_result) 
+{
 
   if(!datafile) {
     if(error_result) *error_result = ERR_FILEIO_MISC;

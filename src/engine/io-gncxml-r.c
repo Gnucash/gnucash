@@ -481,7 +481,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
      because this string is held by the parent parser's hash table. */
   end_tag = current_frame->tag;
 
-  PINFO("Finished with end of <%s>\n", end_tag);
+  PINFO("Finished with end of <%s>", end_tag);
 
   /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
@@ -542,15 +542,15 @@ sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data) {
   gpointer lookup_key;
   gpointer lookup_value;
 
-  PINFO ("Killing sixtp child under key <%s>\n", (char *) key); 
+  PINFO ("Killing sixtp child under key <%s>", (char *) key); 
   g_free(key);
 
   if(!corpses) {
-    PERR("BAD: no corpses in sixtp_destroy_child <%s>\n", (char *) key);
+    PERR("no corpses in sixtp_destroy_child <%s>\n", (char *) key);
     return;
   }
   if(!child) {
-    PERR("BAD: no child in sixtp_destroy_child <%s>\n", (char *) key);
+    PERR("no child in sixtp_destroy_child <%s>\n", (char *) key);
     return;
   }
 
