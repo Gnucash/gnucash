@@ -1634,6 +1634,7 @@ static void
 recnFinishCB(GtkWidget *w, gpointer data)
 {
   RecnWindow *recnData = data;
+  gboolean auto_payment;
   time_t date;
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
@@ -1648,7 +1649,12 @@ recnFinishCB(GtkWidget *w, gpointer data)
 
   recnData->delete_refresh = TRUE;
 
-  if ((xaccAccountGetType(recnData->account) == CREDIT) &&
+  auto_payment = gnc_lookup_boolean_option ("Reconcile",
+                                            "Automatic credit card payments",
+                                            TRUE);
+
+  if (auto_payment &&
+      (xaccAccountGetType(recnData->account) == CREDIT) &&
       (recnData->new_ending < 0.0) &&
       !DEQ(recnData->new_ending, 0.0))
   {

@@ -362,6 +362,15 @@ the account instead of opening a register." #f))
   #f))
 
 
+;; Reconcile Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Reconcile" "Automatic credit card payments"
+  "a" "After reconciling a credit card statement, prompt the user to enter a credit card payment"
+  #t))
+
+
 ;; General Options
 
 (gnc:register-configuration-option
