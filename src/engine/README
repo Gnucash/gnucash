@@ -1,0 +1,10 @@
+
+This directory contains code for the accounting engine.
+Its fairly clean but far from perfect, and it certainly
+lacks advanced features.
+
+There should be no GUI code in this subdirectory, and,
+ideally, it should build cleanly and independently of 
+any GUI elements or assumptions.
+
+February 1998
