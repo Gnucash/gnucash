@@ -1,3 +1,15 @@
+2003-07-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Add button for
+	manual adding of HBCI accounts. Fixes #117760. Requires latest
+	OpenHBCI CVS -- next openhbci-0.9.13 will be out this weekend.
+
+	* src/import-export/hbci/gnc-hbci-{getbalance,gettrans,transfer}.c:
+	Add saving of the HBCI_API so that bank's status changes will now
+	be remembered immediately. However this might save some
+	unnecessary information to disk, but hopefully we will have fixed
+	that in OpenHBCI soon.
+
 2003-07-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-date-edit.c: hide the calendar popup

@@ -161,6 +161,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
     /* Just to be on the safe side, clear queue once again. */
     HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    gnc_hbci_api_save (api);
     gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
     
