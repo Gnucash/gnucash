@@ -110,7 +110,7 @@
 ;; scheme split. Not all values are copied. The reconcile
 ;; status and date are not copied. The C split's guid is,
 ;; of course, unchanged.
-(define (gnc:split-scm-onto-split split-scm split session)
+(define (gnc:split-scm-onto-split split-scm split book)
   (if (not split)
       #f
       (begin
@@ -124,7 +124,7 @@
           (if value    (gnc:split-set-value split value)))
         (let ((account (gnc:account-lookup
                         (gnc:split-scm-get-account-guid split-scm)
-                        session)))
+                        book)))
           (if account
               (begin
                 (gnc:account-begin-edit account)
@@ -241,7 +241,7 @@
 ;; guid-mapping must be an alist, mapping guids to guids. This list is
 ;; used to use alternate account guids when creating splits.
 (define (gnc:transaction-scm-onto-transaction trans-scm trans guid-mapping
-                                              commit? session)
+                                              commit? book)
   (if (not trans)
       #f
       (begin
@@ -273,14 +273,14 @@
         ;; order as in the original transaction. This is important.
         (let loop ((split-scms (gnc:transaction-scm-get-split-scms trans-scm)))
           (if (pair? split-scms)
-              (let* ((new-split (gnc:split-create session))
+              (let* ((new-split (gnc:split-create book))
                      (split-scm (car split-scms))
                      (old-guid  (gnc:split-scm-get-account-guid split-scm))
                      (new-guid  (assoc-ref guid-mapping old-guid)))
                 (if (not new-guid)
                     (set! new-guid old-guid))
                 (gnc:split-scm-set-account-guid split-scm new-guid)
-                (gnc:split-scm-onto-split split-scm new-split session)
+                (gnc:split-scm-onto-split split-scm new-split book)
                 (gnc:split-scm-set-account-guid split-scm old-guid)
                 (gnc:transaction-append-split trans new-split)
                 (loop (cdr split-scms)))))

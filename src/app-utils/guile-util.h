@@ -55,7 +55,7 @@ gboolean gnc_is_trans_scm(SCM scm);
 
 SCM    gnc_copy_split(Split *split, gboolean use_cut_semantics);
 void   gnc_copy_split_scm_onto_split(SCM split_scm, Split *split,
-                                     GNCSession *session);
+                                     GNCBook *book);
 
 void   gnc_split_scm_set_account(SCM split_scm, Account *account);
 void   gnc_split_scm_set_memo(SCM split_scm, const char *memo);
@@ -71,13 +71,13 @@ gnc_numeric gnc_split_scm_get_value(SCM split_scm);
 
 SCM    gnc_copy_trans(Transaction *trans, gboolean use_cut_semantics);
 void   gnc_copy_trans_scm_onto_trans(SCM trans_scm, Transaction *trans,
-                                     gboolean do_commit, GNCSession *session);
+                                     gboolean do_commit, GNCBook *book);
 void   gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
                                                    Transaction *trans,
                                                    const GUID *guid_1,
                                                    const GUID *guid_2,
                                                    gboolean do_commit,
-                                                   GNCSession *session);
+                                                   GNCBook *book);
 
 void   gnc_trans_scm_set_date(SCM trans_scm, Timespec *ts);
 void   gnc_trans_scm_set_num(SCM trans_scm, const char *num);

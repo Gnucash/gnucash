@@ -487,7 +487,7 @@
 
   (define (convert-to-account item)
     (if (string? item)
-        (gnc:account-lookup item (gnc:get-current-session))
+        (gnc:account-lookup item (gnc:get-current-book))
         item))
 
   (let* ((option (map convert-to-guid (default-getter)))
@@ -511,7 +511,7 @@
        (set! account-list
              (filter (lambda (x) (if (string? x)
                                      (gnc:account-lookup
-                                      x (gnc:get-current-session))
+                                      x (gnc:get-current-book))
                                      x)) account-list))
        (let* ((result (validator account-list))
               (valid (car result))
