@@ -61,11 +61,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*stock-check-formats*
-  '((deluxe  . ((payee . (126.0 150.0))
+  '((deluxe  . ((payee . (126.0 147.0))
 		(amount-words . (90.0 125.0))
-		(amount-number . (400.0 150.0))
-		(date . (343.0 183.0))
-		(memo . (105.0 73.0))
+		(amount-number . (395.0 147.0))
+		(date . (343.0 178.0))
+		(memo . (100.0 73.0))
 		(rotate . 90.0)
 		(translate . (232.0 300.0))
 		(offset . 0.0)))
