@@ -31,7 +31,6 @@
 #include "messages.h"
 #include "gnc-query-list.h"
 #include "search-param.h"
-#include "QueryObject.h"
 
 /* Signal codes */
 enum

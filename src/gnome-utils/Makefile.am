@@ -46,6 +46,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-html.c \
   gnc-mdi-utils.c \
   gnc-menu-extensions.c \
+  gnc-query-list.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
   print-session.c \
@@ -80,6 +81,7 @@ gncinclude_HEADERS = \
   gnc-html.h \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
+  gnc-query-list.h \
   gtkselect.h \
   print-session.h \
   window-help.h
