@@ -395,100 +395,6 @@ void xaccParseQIFDate (Date * dat, char * str)
 }
 
 /********************************************************************\
- * xaccParseQIFAmount                                               * 
- *   parses dollar ammount of the form DDD,DDD,DDD.CC               *
- *                                                                  * 
- * Args:   str -- pointer to string rep of sum                      * 
- * Return: int -- in pennies                                        * 
-\********************************************************************/
-
-double xaccParseQIFAmount (char * str) 
-{
-   char * tok;
-   double dollars = 0.0;
-   int len;
-   int isneg = 0;
-
-   if (!str) return 0.0;
-
-   if ('-' == str[0]) {
-      isneg = 1;
-      str += sizeof(char);
-   }
-
-   tok = strchr (str, ',');
-   if (tok) {
-      *tok = 0x0;
-      dollars = ((double) (1000 * atoi (str)));
-      str = tok+sizeof(char);
-   }
-
-   tok = strchr (str, ',');
-   if (tok) {
-      *tok = 0x0;
-      dollars *= 1000.0;
-      dollars += ((double) (1000 * atoi (str)));
-      str = tok+sizeof(char);
-   }
-
-   tok = strchr (str, '.');
-   if (tok) {
-      *tok = 0x0;
-      dollars += ((double) (atoi (str)));
-      str = tok+sizeof(char);
-
-      tok = strchr (str, '\r');
-      if (!tok) {
-         tok = strchr (str, '\n');
-         if (!tok) return dollars;
-      }
-      *tok = 0x0;
-
-      /* strip off garbage at end of the line */
-      tok = strchr (str, '\n');
-      if (tok) *tok = 0x0;
-
-      tok = strchr (str, ' ');
-      if (tok) *tok = 0x0;
-
-      /* adjust for number of decimal places */
-      len = strlen(str);
-      if (6 == len) {
-         dollars += 0.000001 * ((double) atoi (str));
-      } else
-      if (5 == len) {
-         dollars += 0.00001 * ((double) atoi (str));
-      } else
-      if (4 == len) {
-         dollars += 0.0001 * ((double) atoi (str));
-      } else
-      if (3 == len) {
-         dollars += 0.001 * ((double) atoi (str));
-      } else
-      if (2 == len) {
-         dollars += 0.01 * ((double) atoi (str));
-      } else 
-      if (1 == len) {
-         dollars += 0.1 * ((double) atoi (str));
-      } 
-
-   } else {
-      tok = strchr (str, '\r');
-      if (tok) *tok = 0x0;
-      tok = strchr (str, '\n');
-      if (tok) *tok = 0x0;
-      tok = strchr (str, ' ');
-      if (tok) *tok = 0x0;
-
-      dollars += ((double) (atoi (str)));
-   }
-
-   if (isneg) dollars = -dollars;
-
-   return dollars;
-}
-
-/********************************************************************\
 \********************************************************************/
 
 Account *
@@ -623,7 +529,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* I == share price */
      if ('I' == qifline [0]) {   
-         trans -> credit_split.share_price = xaccParseQIFAmount (&qifline[1]); 
+         trans -> credit_split.share_price = xaccParseUSAmount (&qifline[1]); 
      } else 
 
      /* L == name of acount from which transfer occured */
@@ -666,7 +572,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       * math errors ... */
      if ('O' == qifline [0]) {   
         double pute;
-        adjust = xaccParseQIFAmount (&qifline[1]);
+        adjust = xaccParseUSAmount (&qifline[1]);
         pute = (trans->credit_split.damount) * (trans->credit_split.share_price);
         if (isneg) pute = -pute;
 
@@ -680,7 +586,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* Q == number of shares */
      if ('Q' == qifline [0]) {   
-         trans -> credit_split.damount = xaccParseQIFAmount (&qifline[1]);  
+         trans -> credit_split.damount = xaccParseUSAmount (&qifline[1]);  
          if (isneg) trans -> credit_split.damount = - (trans->credit_split.damount);
          got_share_quantity = 1;
      } else 
@@ -706,7 +612,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('T' == qifline [0]) {   
          /* ignore T for stock transactions, since T is a dollar amount */
          if (0 == got_share_quantity) {
-            trans -> credit_split.damount = xaccParseQIFAmount (&qifline[1]);  
+            trans -> credit_split.damount = xaccParseUSAmount (&qifline[1]);  
             if (isneg) trans -> credit_split.damount = - (trans->credit_split.damount);
          }
      } else 
@@ -727,7 +633,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('$' == qifline [0]) {   
         /* for splits, $ records the part of the total for each split */
         if (split) {
-           split -> damount = xaccParseQIFAmount (&qifline[1]);  
+           split -> damount = xaccParseUSAmount (&qifline[1]);  
         } else {
            /* Currently, it appears that the $ amount is a redundant 
             * number that we can safely ignore.  To get fancy,
@@ -738,7 +644,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
             */
            double parse, pute;
            int got, wanted;
-           parse = xaccParseQIFAmount (&qifline[1]);
+           parse = xaccParseUSAmount (&qifline[1]);
            pute = (trans->credit_split.damount) * (trans->credit_split.share_price);
            if (isneg) pute = -pute;
    
