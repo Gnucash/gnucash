@@ -1,0 +1,18 @@
+<article id="XACC-SXEDITOR">
+<artheader>
+<title>Schedules Transactions</title>
+</artheader>
+<sect1>
+<title></title>
+<para>
+      This dialog box is used to create and edit scheduled transactions.
+</para>
+
+<para>
+     <emphasis>FIXME: This feature is not yet documented</emphasis>
+</para>
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

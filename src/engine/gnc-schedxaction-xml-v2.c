@@ -99,6 +99,26 @@
  * bleh.
  **/
 
+/* 
+ * All tags should be #defined here 
+ */
+
+#define SX_ID                   "sx:id"
+#define SX_NAME                 "sx:name"
+#define SX_AUTOCREATE           "sx:autoCreate"
+#define SX_AUTOCREATE_NOTIFY    "sx:autoCreateNotify"
+#define SX_ADVANCE_CREATE_DAYS  "sx:advanceCreateDays"
+#define SX_ADVANCE_REMIND_DAYS  "sx:advanceRemindDays"
+#define SX_START                "sx:start"
+#define SX_LAST                 "sx:last"
+#define SX_NUM_OCCUR            "sx:num-occur"
+#define SX_REM_OCCUR            "sx:rem-occur"
+#define SX_END                  "sx:end"
+#define SX_TEMPL_ACCT           "sx:templ-acct" 
+#define SX_FREQSPEC             "sx:freqspec"
+#define SX_SLOTS                "sx:slots"
+
+
 const gchar *schedxaction_version_string = "1.0.0";
 
 xmlNodePtr
@@ -108,6 +128,9 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlNodePtr	fsNode;
     Timespec	ts;
     GDate	*date;
+    const GUID        *templ_acc_guid;
+
+    templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
     ret = xmlNewNode( NULL, "gnc:schedxaction" );
@@ -115,47 +138,55 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     xmlSetProp( ret, "version", schedxaction_version_string );
 
     xmlAddChild( ret,
-                 guid_to_dom_tree("sx:id",
+                 guid_to_dom_tree(SX_ID,
                                   xaccSchedXactionGetGUID(sx)) );
 
-    xmlNewTextChild( ret, NULL, "sx:name", xaccSchedXactionGetName(sx) );
+    xmlNewTextChild( ret, NULL, SX_NAME, xaccSchedXactionGetName(sx) );
 
     //xmlNewTextChild( ret, NULL, "sx:manual-conf",
     //(xaccSchedXactionGetManual(sx) == 1 ? "t" : "f") );
 
-    xmlNewTextChild( ret, NULL, "sx:autoCreate",
+    xmlNewTextChild( ret, NULL, SX_AUTOCREATE,
                      ( sx->autoCreateOption ? "y" : "n" ) );
-    xmlNewTextChild( ret, NULL, "sx:autoCreateNotify",
+    xmlNewTextChild( ret, NULL, SX_AUTOCREATE_NOTIFY,
                      ( sx->autoCreateNotify ? "y" : "n" ) );
-    xmlAddChild(ret, int_to_dom_tree("sx:advanceCreateDays",
+    xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_CREATE_DAYS,
                                      sx->advanceCreateDays));
-    xmlAddChild(ret, int_to_dom_tree("sx:advanceRemindDays",
+    xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
                                      sx->advanceRemindDays));
 
     xmlAddChild( ret,
-                 gdate_to_dom_tree( "sx:start",
+                 gdate_to_dom_tree( SX_START,
                                     xaccSchedXactionGetStartDate(sx) ) );
 
     date = xaccSchedXactionGetLastOccurDate(sx);
     if ( g_date_valid( date ) ) {
-            xmlAddChild( ret, gdate_to_dom_tree( "sx:last", date ) );
+            xmlAddChild( ret, gdate_to_dom_tree( SX_LAST, date ) );
     }
 
     if ( xaccSchedXactionHasOccurDef(sx) ) {
+
         xmlAddChild(ret, int_to_dom_tree(
-                        "sx:num-occur",
+                        SX_NUM_OCCUR,
                         (gint32)xaccSchedXactionGetNumOccur(sx)));
         xmlAddChild(ret, int_to_dom_tree(
-                        "sx:rem-occur",
+                        SX_REM_OCCUR,
                         (gint32)xaccSchedXactionGetRemOccur(sx)));
+
     } else if ( xaccSchedXactionHasEndDate(sx) ) {
             xmlAddChild( ret,
-                         gdate_to_dom_tree( "sx:end",
+                         gdate_to_dom_tree( SX_END,
                                             xaccSchedXactionGetEndDate(sx) ) );
     }
 
+    /* output template account GUID */
+
+    xmlAddChild( ret, 
+		 guid_to_dom_tree(SX_TEMPL_ACCT,
+				  templ_acc_guid));
+				  
     /* output freq spec */
-    fsNode = xmlNewNode(NULL, "sx:freqspec");
+    fsNode = xmlNewNode(NULL, SX_FREQSPEC);
     xmlAddChild( fsNode,
                  gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
@@ -164,7 +195,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     /* output kvp_frame */
     {
         xmlNodePtr kvpnode =
-                kvp_frame_to_dom_tree( "sx:slots",
+                kvp_frame_to_dom_tree( SX_SLOTS,
                                        xaccSchedXactionGetSlots(sx) );
         if ( kvpnode )
         {
@@ -303,7 +334,7 @@ sx_manualConf_handler( xmlNodePtr node, gpointer sx )
     g_return_val_if_fail( tmp, FALSE );
 
     xaccSchedXactionSetManual( (SchedXaction*)sx,
-                               safe_strcmp(tmp, "t") == 0 );
+                              safe_strcmp(tmp, "t") == 0 );
 
     g_free(tmp);
     return TRUE;
@@ -324,6 +355,26 @@ sx_numOccur_handler( xmlNodePtr node, gpointer sx )
     return TRUE;
 }
 
+
+static 
+gboolean
+sx_templ_acct_handler( xmlNodePtr node, gpointer p)
+{
+  SchedXaction *sx = (SchedXaction *) p;
+  GUID *templ_acct_guid 
+    = dom_tree_to_guid(node);
+
+  if( ! templ_acct_guid)
+  {
+    return FALSE;
+  }
+
+  sx->template_acct = xaccAccountLookup(templ_acct_guid);
+  g_free(templ_acct_guid);
+  return TRUE;
+}
+
+			
 static
 gboolean
 sx_remOccur_handler( xmlNodePtr node, gpointer sx )
@@ -346,19 +397,20 @@ sx_slots_handler( xmlNodePtr node, gpointer sx )
 }
 
 struct dom_tree_handler sx_dom_handlers[] = {
-    { "sx:id",                sx_id_handler,         1, 0 },
-    { "sx:name",              sx_name_handler,       1, 0 },
-    { "sx:autoCreate",        sx_autoCreate_handler, 1, 0 },
-    { "sx:autoCreateNotify",  sx_notify_handler,     1, 0 },
-    { "sx:advanceCreateDays", sx_advCreate_handler,  1, 0 },
-    { "sx:advanceRemindDays", sx_advRemind_handler,  1, 0 },
-    { "sx:start",             sx_start_handler,      1, 0 },
-    { "sx:last",              sx_last_handler,       0, 0 },
-    { "sx:num-occur",         sx_numOccur_handler,   0, 0 },
-    { "sx:rem-occur",         sx_remOccur_handler,   0, 0 },
-    { "sx:end",               sx_end_handler,        0, 0 },
-    { "sx:freqspec",          sx_freqspec_handler,   1, 0 },
-    { "sx:slots",             sx_slots_handler,      0, 0 },
+    { SX_ID,                  sx_id_handler,         1, 0 },
+    { SX_NAME,                sx_name_handler,       1, 0 },
+    { SX_AUTOCREATE,          sx_autoCreate_handler, 1, 0 },
+    { SX_AUTOCREATE_NOTIFY,   sx_notify_handler,     1, 0 },
+    { SX_ADVANCE_CREATE_DAYS, sx_advCreate_handler,  1, 0 },
+    { SX_ADVANCE_REMIND_DAYS, sx_advRemind_handler,  1, 0 },
+    { SX_START,               sx_start_handler,      1, 0 },
+    { SX_LAST,                sx_last_handler,       0, 0 },
+    { SX_NUM_OCCUR,           sx_numOccur_handler,   0, 0 },
+    { SX_REM_OCCUR,           sx_remOccur_handler,   0, 0 },
+    { SX_END,                 sx_end_handler,        0, 0 },
+    { SX_TEMPL_ACCT,          sx_templ_acct_handler, 1, 0 }, 
+    { SX_FREQSPEC,            sx_freqspec_handler,   1, 0 },
+    { SX_SLOTS,               sx_slots_handler,      0, 0 },
 };
 
 static gboolean
@@ -434,6 +486,11 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
         }
         return TRUE;
 }
+
+
+/*
+ * FIXME: These tags should be #defined elsewhere 
+ */
 
 struct dom_tree_handler tt_dom_handlers[] = {
         { "gnc:account",     tt_act_handler, 0, 0 },
