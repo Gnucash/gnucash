@@ -121,7 +121,7 @@ accWindow( Widget parent )
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
 				 xmDialogShellWidgetClass, parent,
-				 XmNtitle,            "Set Up Account",
+				 XmNtitle,            SETUP_ACCT_STR,
 				 XmNdeleteResponse,   XmDESTROY,
                                  /*
                                   * Let the window find it's own size,
@@ -411,7 +411,7 @@ editAccWindow( Widget parent, Account *account )
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
 				 xmDialogShellWidgetClass, parent,
-				 XmNtitle,            "Edit Account",
+				 XmNtitle,            EDIT_ACCT_STR,
 				 XmNdeleteResponse,   XmDESTROY,
                                  /*
                                   * Let the window find it's own size, 
@@ -506,7 +506,7 @@ editAccWindow( Widget parent, Account *account )
   /* The "Notes" button opens a window to a few lines of notes about
    * the account */
   widget = 
-    XtVaCreateManagedWidget( "Notes", 
+    XtVaCreateManagedWidget( NOTES_STR, 
 			     xmPushButtonWidgetClass, buttonform,
 			     XmNtopAttachment,      XmATTACH_FORM,
 			     XmNleftAttachment,     XmATTACH_POSITION,
@@ -521,7 +521,7 @@ editAccWindow( Widget parent, Account *account )
   
   /* The "Cancel" button */
   widget = 
-    XtVaCreateManagedWidget( "Cancel", 
+    XtVaCreateManagedWidget( CANCEL_STR, 
 			     xmPushButtonWidgetClass, buttonform,
 			     XmNtopAttachment,      XmATTACH_FORM,
 			     XmNleftAttachment,     XmATTACH_POSITION,
@@ -538,7 +538,7 @@ editAccWindow( Widget parent, Account *account )
   /* The "Create" button creates the new account with the data 
    * that the user entered */
   widget = 
-    XtVaCreateManagedWidget( "Ok",
+    XtVaCreateManagedWidget( OK_STR,
 			     xmPushButtonWidgetClass, buttonform,
 			     XmNtopAttachment,      XmATTACH_FORM,
 			     XmNleftAttachment,     XmATTACH_POSITION,

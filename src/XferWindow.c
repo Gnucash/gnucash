@@ -107,7 +107,7 @@ xferWindow( Widget parent )
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
                                  xmDialogShellWidgetClass, parent,
-                                 XmNtitle,            "Transfer Money",
+                                 XmNtitle,            XFER_MONEY_STR,
                                  XmNdeleteResponse,   XmDESTROY,
                                  /*
                                   * Let the window find its own size,
@@ -132,7 +132,7 @@ xferWindow( Widget parent )
    * Text fields....                                                *
   \******************************************************************/  
   label = 
-  XtVaCreateManagedWidget( "Date",
+  XtVaCreateManagedWidget( DATE_STR,
                            xmLabelGadgetClass, form,
                            XmNtopAttachment,   XmATTACH_FORM,
                            XmNtopOffset,       10,
@@ -160,7 +160,7 @@ xferWindow( Widget parent )
                  dateCB, (XtPointer)NULL );
   
   label = 
-  XtVaCreateManagedWidget( "Description",
+  XtVaCreateManagedWidget( DESC_STR,
                            xmLabelGadgetClass, form,
                            XmNtopAttachment,   XmATTACH_WIDGET,
                            XmNtopWidget,       xferData->date,
@@ -171,7 +171,7 @@ xferWindow( Widget parent )
   xferData->desc = 
   XtVaCreateManagedWidget( "text",
                            xmTextWidgetClass,  form,
-                           XmNvalue,           "Transfer",
+                           XmNvalue,           TRANSFER_STR,
                            XmNtopAttachment,   XmATTACH_WIDGET,
                            XmNtopWidget,       xferData->date,
                            XmNtopOffset,       10,
@@ -182,7 +182,7 @@ xferWindow( Widget parent )
                            NULL );
 
   label = 
-  XtVaCreateManagedWidget( "$",
+  XtVaCreateManagedWidget( CURRENCY_SYMBOL,
                            xmLabelGadgetClass, form,
                            XmNtopAttachment,   XmATTACH_WIDGET,
                            XmNtopWidget,       xferData->date,
@@ -207,7 +207,7 @@ xferWindow( Widget parent )
                  amountCB, (XtPointer)NULL );
   
   label = 
-  XtVaCreateManagedWidget( "Memo",
+  XtVaCreateManagedWidget( MEMO_STR,
                            xmLabelGadgetClass, form,
                            XmNtopAttachment,   XmATTACH_WIDGET,
                            XmNtopWidget,       xferData->desc,
@@ -338,7 +338,7 @@ xferWindow( Widget parent )
   position = 1;                    /* puts the buttons in the right place */
   
   /* The "Cancel" button */
-  widget = XtVaCreateManagedWidget( "Cancel", 
+  widget = XtVaCreateManagedWidget( CANCEL_STR,
                                     xmPushButtonWidgetClass, buttonform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -354,7 +354,7 @@ xferWindow( Widget parent )
   
   /* The "Transfer" button creates the transfer */
   position ++;
-  widget = XtVaCreateManagedWidget( "Transfer", 
+  widget = XtVaCreateManagedWidget( TRANSFER_STR,
                                     xmPushButtonWidgetClass, buttonform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,

@@ -37,7 +37,7 @@
 #include <Xbae/Matrix.h>
 
 #include "config.h"
-
+#include "main.h"
 #include "util.h"
 
 /** GLOBALS *********************************************************/
@@ -77,6 +77,51 @@ dcoresize(void)
   return core;
   }
 #endif
+
+/********************************************************************\
+ * currency & locale related stuff.
+ * first attempt at internationalization i18n of currency amounts
+\********************************************************************/
+
+char * xaccPrintAmount (double val, short shrs) 
+{
+   static char buf[BUFSIZE];
+
+   if (shrs & PRTSHR) {
+      if (shrs & PRTSYM) {
+         if (0.0 > val) {
+            sprintf( buf, "-%.3f shrs", DABS(val) );
+         } else {
+            sprintf( buf, " %.3f shrs", val );
+         }
+      } else {
+         if (0.0 > val) {
+            sprintf( buf, "-%.3f", DABS(val) );
+         } else {
+            sprintf( buf, "%.3f", val );
+         }
+      }
+   } else {
+
+      if (shrs & PRTSYM) {
+         if (0.0 > val) {
+            sprintf( buf, "-%s %.2f", CURRENCY_SYMBOL, DABS(val) );
+         } else {
+            sprintf( buf, "%s %.2f", CURRENCY_SYMBOL, val );
+         }
+      } else {
+         if (0.0 > val) {
+            sprintf( buf, "-%.2f", DABS(val) );
+         } else {
+            sprintf( buf, "%.2f", val );
+         }
+      }
+   }
+
+   /* its OK to reurn buf, since we declared it static */
+   return buf;
+}
+
 
 /********************************************************************\
  * dateCB -- ensures the data the user enters in the date field     * 
@@ -385,7 +430,7 @@ errorBox( Widget parent, char *message )
     
     /* Create the warning XmString */
     warning_msg = XmStringCreateLtoR( message, charset );
-    dialogname = XmStringCreateSimple( "WARNING" );
+    dialogname = XmStringCreateSimple( WARN_STR );
     XtVaSetValues( dialog,
 		   XmNdialogTitle,     dialogname,
 		   XmNmessageString,   warning_msg,

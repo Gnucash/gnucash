@@ -90,7 +90,7 @@ adjBWindow( Widget parent, Account *acc )
   adjBData->acc = acc;
   
   /* Create the dialog box... */
-  sprintf( buf, "%s: Adjust Balance", acc->accountName );
+  sprintf( buf, "%s: %s", acc->accountName, ADJ_BALN_STR);
   
   adjBData->dialog =
     XtVaCreatePopupShell( "dialog", 
@@ -122,7 +122,7 @@ adjBWindow( Widget parent, Account *acc )
                                   xmFormWidgetClass, pane,
                                   NULL );
   
-  widget = XtVaCreateManagedWidget( "Date",
+  widget = XtVaCreateManagedWidget( DATE_STR,
                                     xmLabelGadgetClass, controlform,
                                     XmNtopAttachment,   XmATTACH_FORM,
                                     XmNtopOffset,       10,
@@ -148,7 +148,8 @@ adjBWindow( Widget parent, Account *acc )
   XtAddCallback( adjBData->date, XmNmodifyVerifyCallback,
                  dateCB, (XtPointer)NULL );
   
-  widget = XtVaCreateManagedWidget( "New Balance $",
+  sprintf (buf, "%s %s", NEW_BALN_STR, CURRENCY_SYMBOL);
+  widget = XtVaCreateManagedWidget( buf,
                                     xmLabelGadgetClass, controlform,
                                     XmNtopAttachment,   XmATTACH_WIDGET,
                                     XmNtopWidget,       adjBData->date,
@@ -181,7 +182,7 @@ adjBWindow( Widget parent, Account *acc )
   
   /* The OK button is anchored to the form, between divider 1 & 2
    * (in the fraction base) */
-  widget = XtVaCreateManagedWidget( "Ok", 
+  widget = XtVaCreateManagedWidget( OK_STR, 
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -198,7 +199,7 @@ adjBWindow( Widget parent, Account *acc )
                  destroyShellCB, (XtPointer)(adjBData->dialog) );
   
   /* The cancel button! */
-  widget = XtVaCreateManagedWidget( "Cancel", 
+  widget = XtVaCreateManagedWidget( CANCEL_STR, 
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -213,7 +214,7 @@ adjBWindow( Widget parent, Account *acc )
                  destroyShellCB, (XtPointer)(adjBData->dialog) );  
   
   /* A help button will pop-up context sensitive help */
-  widget = XtVaCreateManagedWidget( "Help", 
+  widget = XtVaCreateManagedWidget( HELP_STR, 
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -305,7 +306,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   
   /* fill out the rest of the fields */
   XtFree (trans->description);
-  trans->description = XtNewString("Adjust Balance");
+  trans->description = XtNewString(ADJ_BALN_STR);
   trans->reconciled  = NREC;
   
   pos = insertTransaction( acc, trans );

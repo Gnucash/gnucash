@@ -170,14 +170,14 @@ recnRecalculateBalance( RecnWindow *recnData )
   {
   Transaction *trans;
   Account *acc = recnData ->acc;
-  char buf[BUFSIZE];
+  char *amt;
   int  i,nrows;
   double ddebit  = 0.0;
   double dcredit = 0.0;
   double ddiff   = 0.0;
   short shrs = 0;
 
-  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = 1;
+  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = PRTSHR|PRTSYM;
   
   /* Calculate the total debit: */
   ddebit = 0.0;
@@ -216,18 +216,15 @@ recnRecalculateBalance( RecnWindow *recnData )
     }
   
   /* Update the difference field, and the total fields */
-  sprintf( buf, " $ %.2f", DABS(ddebit) );
-  XmTextSetString( recnData->totDebit, buf );
+  amt = xaccPrintAmount (DABS(ddebit), shrs);
+  XmTextSetString( recnData->totDebit, amt );
   
-  sprintf( buf, " $ %.2f", dcredit );
-  XmTextSetString( recnData->totCredit, buf );
+  amt = xaccPrintAmount (dcredit, shrs);
+  XmTextSetString( recnData->totCredit, amt );
 
   ddiff = recnData->ddiff + dcredit + ddebit;
-  if( 0.0 > ddiff )
-    sprintf( buf, "-$ %.2f", DABS(ddiff) );
-  else
-    sprintf( buf, " $ %.2f", ddiff );    
-  XmTextSetString( recnData->difference, buf );
+  amt = xaccPrintAmount (ddiff, shrs);
+  XmTextSetString( recnData->difference, amt );
   }
 
 /********************************************************************\
@@ -264,8 +261,10 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
            widget, endB, newB;
   Transaction *trans;
   char   buf[BUFSIZE];
+  char * amt;
   double dendBalance;
   int    done=-1;
+  short shrs = 0;
   
   setBusyCursor( parent );
   
@@ -274,10 +273,11 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
    * may have to be adjusted for stock price fluctuations.
    */
   dendBalance = acc->reconciled_balance;
+  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = PRTSYM|PRTSHR;
   
   /* Create the dialog box... XmNdeleteResponse is set to
    * XmDESTROY so the dialog's memory is freed when it is closed */
-  sprintf( buf, "%s: Reconcile", acc->accountName );
+  sprintf( buf, "%s: %s", acc->accountName, RECONCILE_STR);
   dialog = XtVaCreatePopupShell( "dialog", 
                                  xmDialogShellWidgetClass,	parent,
                                  XmNdialogStyle,    XmDIALOG_APPLICATION_MODAL,
@@ -307,7 +307,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                                   xmFormWidgetClass, pane,
                                   NULL );
   
-  widget = XtVaCreateManagedWidget( "Previous Balance: $",
+  widget = XtVaCreateManagedWidget( PREV_BALN_STR,
                                     xmLabelGadgetClass, controlform,
                                     XmNtopAttachment,   XmATTACH_FORM,
                                     XmNtopOffset,       10,
@@ -315,10 +315,10 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                                     XmNrightPosition,   50,
                                     NULL );
   
-  sprintf( buf, "%.2f", dendBalance );
+  amt = xaccPrintAmount (dendBalance, shrs);
   endB = XtVaCreateManagedWidget( "text",
                                   xmTextWidgetClass,  controlform,
-                                  XmNvalue,           buf,
+                                  XmNvalue,           amt,
                                   XmNeditable,        False,
                                   XmNtopAttachment,   XmATTACH_FORM,
                                   XmNtopOffset,       10,
@@ -326,7 +326,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                                   XmNleftPosition,    50,
                                   NULL );
   
-  widget = XtVaCreateManagedWidget( "Ending Balance: $",
+  widget = XtVaCreateManagedWidget( END_BALN_STR,
                                     xmLabelGadgetClass, controlform,
                                     XmNtopAttachment,   XmATTACH_WIDGET,
                                     XmNtopWidget,       endB,
@@ -359,7 +359,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
   
   /* The OK button is anchored to the form, between divider 1 & 2
    * (in the fraction base) */
-  widget = XtVaCreateManagedWidget( "Ok", 
+  widget = XtVaCreateManagedWidget( OK_STR,
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -374,7 +374,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                  startRecnOkCB, (XtPointer)&done );
   
   /* The cancel button! */
-  widget = XtVaCreateManagedWidget( "Cancel", 
+  widget = XtVaCreateManagedWidget( CANCEL_STR, 
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -389,7 +389,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                  startRecnCancelCB, (XtPointer)&done );
 
   /* A help button will pop-up context sensitive help */
-  widget = XtVaCreateManagedWidget( "Help", 
+  widget = XtVaCreateManagedWidget( HELP_STR,
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -463,7 +463,7 @@ recnWindow( Widget parent, Account *acc )
   recnData->acc = acc;
   recnData->ddiff = ddiff;
   
-  sprintf( title, "%s: Reconcile", acc->accountName );
+  sprintf( title, "%s: %s", acc->accountName, RECONCILE_STR);
   
   /* force the size of the dialog so it is not resizable */
   recnData->dialog =
@@ -495,7 +495,7 @@ recnWindow( Widget parent, Account *acc )
     {
     Widget frame, rowcol;
     short  colWidths[] = {1,5,8,20,8};   /* the widths of columns */
-    String labels[]    = {"","Num","Date","Description","Amount"};
+    String labels[]    = {"", NUM_STR, DATE_STR, DESC_STR, AMT_STR };
     unsigned char alignments[] = {XmALIGNMENT_CENTER,
                                   XmALIGNMENT_END,
                                   XmALIGNMENT_CENTER,
@@ -515,7 +515,7 @@ recnWindow( Widget parent, Account *acc )
                              xmFormWidgetClass, rowcol,
                              NULL );
     
-    widget = XtVaCreateManagedWidget( "Debits:",
+    widget = XtVaCreateManagedWidget( DEBITS_C_STR,
                                       xmLabelGadgetClass, form,
                                       XmNtopAttachment,   XmATTACH_FORM,
                                       XmNleftAttachment,  XmATTACH_FORM,
@@ -552,7 +552,7 @@ recnWindow( Widget parent, Account *acc )
                    recnCB, (XtPointer)recnData );
     
     XtManageChild(recnData->debit);
-    widget = XtVaCreateManagedWidget( "Total:",
+    widget = XtVaCreateManagedWidget( TOTAL_C_STR,
                                       xmLabelGadgetClass, form,
                                       XmNtopAttachment,   XmATTACH_WIDGET,
                                       XmNtopWidget,       frame,
@@ -584,7 +584,7 @@ recnWindow( Widget parent, Account *acc )
                              xmFormWidgetClass, rowcol,
                              NULL );
     
-    widget = XtVaCreateManagedWidget( "Credits:",
+    widget = XtVaCreateManagedWidget( CREDITS_C_STR,
                                       xmLabelGadgetClass, form,
                                       XmNtopAttachment,   XmATTACH_FORM,
                                       XmNleftAttachment,  XmATTACH_FORM,
@@ -621,7 +621,7 @@ recnWindow( Widget parent, Account *acc )
                    recnCB, (XtPointer)recnData );
     
     XtManageChild(recnData->credit);
-    widget = XtVaCreateManagedWidget( "Total:",
+    widget = XtVaCreateManagedWidget( TOTAL_C_STR,
                                       xmLabelGadgetClass, form,
                                       XmNtopAttachment,   XmATTACH_WIDGET,
                                       XmNtopWidget,       frame,
@@ -659,7 +659,7 @@ recnWindow( Widget parent, Account *acc )
                            NULL );
   position=0;
   
-  widget = XtVaCreateManagedWidget( "Difference:",
+  widget = XtVaCreateManagedWidget( DIFF_C_STR,
                                     xmLabelGadgetClass, form,
                                     XmNtopAttachment,   XmATTACH_FORM,
                                     XmNbottomAttachment,XmATTACH_FORM,
@@ -689,7 +689,7 @@ recnWindow( Widget parent, Account *acc )
   position +=2;
   
   /* The "Ok" button: */
-  widget = XtVaCreateManagedWidget( "Ok", 
+  widget = XtVaCreateManagedWidget( OK_STR, 
                                     xmPushButtonWidgetClass, form,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -706,7 +706,7 @@ recnWindow( Widget parent, Account *acc )
                  destroyShellCB, (XtPointer)(recnData->dialog) );  
   /* The "Cancel" button: */
   position ++;
-  widget = XtVaCreateManagedWidget( "Cancel", 
+  widget = XtVaCreateManagedWidget( CANCEL_STR, 
                                     xmPushButtonWidgetClass, form,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -722,7 +722,7 @@ recnWindow( Widget parent, Account *acc )
   
   /* The "Help" button pops up the reconcile window help page: */
   position ++;
-  widget = XtVaCreateManagedWidget( "Help", 
+  widget = XtVaCreateManagedWidget( HELP_STR, 
                                     xmPushButtonWidgetClass, form,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,

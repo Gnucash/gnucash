@@ -38,7 +38,7 @@
 #include <Xbae/Matrix.h>
 
 #include "config.h"
-
+#include "main.h"
 #include "util.h"
 
 /********************************************************************\
@@ -155,7 +155,7 @@ textBox( Widget parent, char *title, char **pmodifytext,
   }
   /* The OK button is anchored to the form, between divider 1 & 2
    * (in the fraction base) */
-  widget = XtVaCreateManagedWidget( "Ok", 
+  widget = XtVaCreateManagedWidget( OK_STR,
                                     xmPushButtonWidgetClass, actionform,
                                     XmNtopAttachment,      XmATTACH_FORM,
                                     XmNbottomAttachment,   XmATTACH_FORM,
@@ -177,7 +177,7 @@ textBox( Widget parent, char *title, char **pmodifytext,
   if( editable )
     {
     /* If it is editable, provide a cancel button too! */
-    widget = XtVaCreateManagedWidget( "Cancel", 
+    widget = XtVaCreateManagedWidget( CANCEL_STR, 
                                       xmPushButtonWidgetClass, actionform,
                                       XmNtopAttachment,      XmATTACH_FORM,
                                       XmNbottomAttachment,   XmATTACH_FORM,

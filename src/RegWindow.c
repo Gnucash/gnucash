@@ -2241,65 +2241,65 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
        }
     }
 
-    regData -> columnLabels[0][DATE_CELL_C] = "Date";
-    regData -> columnLabels[0][NUM_CELL_C]  = "Num";
-    regData -> columnLabels[0][XFRM_CELL_C] = "Transfer From";
-    regData -> columnLabels[0][DESC_CELL_C] = "Description";
-    regData -> columnLabels[0][BALN_CELL_C] = "Balance";
+    regData -> columnLabels[0][DATE_CELL_C] = DATE_STR;
+    regData -> columnLabels[0][NUM_CELL_C]  = NUM_STR;
+    regData -> columnLabels[0][XFRM_CELL_C] = XFRM_STR;
+    regData -> columnLabels[0][DESC_CELL_C] = DESC_STR;
+    regData -> columnLabels[0][BALN_CELL_C] = BALN_STR;
 
     if (1 < NUM_HEADER_ROWS) {
-      regData -> columnLabels[1][ACTN_CELL_C] = "Action";
-      regData -> columnLabels[1][XTO_CELL_C]  = "Transfer To";
-      regData -> columnLabels[1][MEMO_CELL_C] = "Memo";
+      regData -> columnLabels[1][ACTN_CELL_C] = ACTION_STR;
+      regData -> columnLabels[1][XTO_CELL_C]  = XFTO_STR;
+      regData -> columnLabels[1][MEMO_CELL_C] = MEMO_STR;
     }
 
     switch(regData->type)
       {
       case BANK:
-        regData -> columnLabels[0][PAY_CELL_C] = "Payment";
-        regData -> columnLabels[0][DEP_CELL_C] = "Deposit";
+        regData -> columnLabels[0][PAY_CELL_C] = PAYMENT_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = DEPOSIT_STR;
         break;
       case CASH:
-        regData -> columnLabels[0][PAY_CELL_C] = "Spend";
-        regData -> columnLabels[0][DEP_CELL_C] = "Receive";
+        regData -> columnLabels[0][PAY_CELL_C] = SPEND_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = RECEIVE_STR;
         break;
       case ASSET:
-        regData -> columnLabels[0][PAY_CELL_C] = "Depreciation";
-        regData -> columnLabels[0][DEP_CELL_C] = "Appreciation";
+        regData -> columnLabels[0][PAY_CELL_C] = DEPR_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = APPR_STR;
         break;
       case CREDIT:
-        regData -> columnLabels[0][PAY_CELL_C] = "Charge";
-        regData -> columnLabels[0][DEP_CELL_C] = "Payment";
+        regData -> columnLabels[0][PAY_CELL_C] = CHARGE_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = PAYMENT_STR;
         break;
       case LIABILITY:
-        regData -> columnLabels[0][PAY_CELL_C] = "Increase";
-        regData -> columnLabels[0][DEP_CELL_C] = "Decrease";
+        regData -> columnLabels[0][PAY_CELL_C] = INCREASE_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = DECREASE_STR;
         break;
       case INCOME:
-        regData -> columnLabels[0][PAY_CELL_C] = "Income";
-        regData -> columnLabels[0][DEP_CELL_C] = "Charge";
+        regData -> columnLabels[0][PAY_CELL_C] = INCOME_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = CHARGE_STR;
         break;
       case EXPENSE:
-        regData -> columnLabels[0][PAY_CELL_C] = "Rebate";
-        regData -> columnLabels[0][DEP_CELL_C] = "Expense";
+        regData -> columnLabels[0][PAY_CELL_C] = REBATE_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = EXPENSE_STR;
         break;
       case EQUITY:
-        regData -> columnLabels[0][PAY_CELL_C] = "Surplus";
-        regData -> columnLabels[0][DEP_CELL_C] = "Deficit";
+        regData -> columnLabels[0][PAY_CELL_C] = SURPLUS_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = DEFICIT_STR;
         break;
       case STOCK:
       case MUTUAL:
       case PORTFOLIO:
-        regData -> columnLabels[0][PAY_CELL_C] = "Sold";
-        regData -> columnLabels[0][DEP_CELL_C] = "Bought";
+        regData -> columnLabels[0][PAY_CELL_C] = SOLD_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = BOUGHT_STR;
         break;
       case GEN_LEDGER:
-        regData -> columnLabels[0][PAY_CELL_C] = "Debit";
-        regData -> columnLabels[0][DEP_CELL_C] = "Credit";
+        regData -> columnLabels[0][PAY_CELL_C] = DEBIT_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = CREDIT_STR;
         break;
       case INC_LEDGER:
-        regData -> columnLabels[0][PAY_CELL_C] = "Credit";
-        regData -> columnLabels[0][DEP_CELL_C] = "Debit";
+        regData -> columnLabels[0][PAY_CELL_C] = CREDIT_STR;
+        regData -> columnLabels[0][DEP_CELL_C] = DEBIT_STR;
         break;
       }
     
@@ -2319,20 +2319,20 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case STOCK:
       case MUTUAL:
       case PORTFOLIO:
-        regData -> columnLabels[0][PRCC_CELL_C] = "Price";
-        regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
-        regData -> columnLabels[0][VCRD_CELL_C] = "Value";
+        regData -> columnLabels[0][PRCC_CELL_C] = PRICE_STR;
+        regData -> columnLabels[0][SHRS_CELL_C] = TOT_SHRS_STR;
+        regData -> columnLabels[0][VCRD_CELL_C] = VALUE_STR;
         if (1 < NUM_HEADER_ROWS) {
-          regData -> columnLabels[0][PRCC_CELL_C] = "Sale Price";
-          regData -> columnLabels[1][PRCC_CELL_C] = "Purch Price";
-          regData -> columnLabels[0][VCRD_CELL_C] = "Debit";
-          regData -> columnLabels[1][VCRD_CELL_C] = "Credit";
+          regData -> columnLabels[0][PRCC_CELL_C] = SALE_PRIC_STR;
+          regData -> columnLabels[1][PRCC_CELL_C] = PURCH_PRIC_STR;
+          regData -> columnLabels[0][VCRD_CELL_C] = DEBIT_STR;
+          regData -> columnLabels[1][VCRD_CELL_C] = CREDIT_STR;
           regData -> columnLabels[0][DEP_CELL_C] = "";
-          regData -> columnLabels[1][DEP_CELL_C] = "Bought";
+          regData -> columnLabels[1][DEP_CELL_C] = BOUGHT_STR;
           regData -> columnLabels[0][SHRS_CELL_C] = "";
-          regData -> columnLabels[1][SHRS_CELL_C] = "Tot Shrs";
+          regData -> columnLabels[1][SHRS_CELL_C] = TOT_SHRS_STR;
           regData -> columnLabels[0][BALN_CELL_C] = "";
-          regData -> columnLabels[1][BALN_CELL_C] = "Balance";
+          regData -> columnLabels[1][BALN_CELL_C] = BALN_STR;
         }
         break;
       }
@@ -2418,7 +2418,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   position = 0;                    /* puts the buttons in the right place */
   
   /* The "Record" button */
-  widget = XtVaCreateManagedWidget( "Record", 
+  widget = XtVaCreateManagedWidget( RECORD_STR,
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -2435,7 +2435,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   
   /* The "Cancel" button */
   position++;
-  widget = XtVaCreateManagedWidget( "Cancel", 
+  widget = XtVaCreateManagedWidget( CANCEL_STR, 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -2451,7 +2451,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   
   /* the "close" button */
   position++;
-  widget = XtVaCreateManagedWidget( "Close", 
+  widget = XtVaCreateManagedWidget( CLOSE_STR, 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -2477,7 +2477,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     }
     
   /* The balance field labels: */ 
-  widget = XtVaCreateManagedWidget( "Balance:",
+  widget = XtVaCreateManagedWidget( BALN_C_STR,
 				    xmLabelGadgetClass,    buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
@@ -2485,7 +2485,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+1,
 				    NULL );
-  widget = XtVaCreateManagedWidget( "Cleared:",
+  widget = XtVaCreateManagedWidget( CLEARED_C_STR,
 				    xmLabelGadgetClass,    buttonform,
 				    XmNtopAttachment,      XmATTACH_WIDGET,
 				    XmNtopWidget,          widget,

@@ -32,7 +32,7 @@
 #include <Xm/LabelGP.h>
 
 #include "config.h"
-
+#include "main.h"
 #include "Reports.h"
 #include "util.h"
 
@@ -103,7 +103,7 @@ simpleReportWindow( Widget parent )
   
   
   /* The "Ok" button */
-  widget = XtVaCreateManagedWidget( "Ok", 
+  widget = XtVaCreateManagedWidget( OK_STR, 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
