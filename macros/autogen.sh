@@ -224,6 +224,13 @@ do
       grep "intl/Makefile" configure.in > /dev/null &&
       ( sed -e 's#^AC_OUTPUT(.*intl/Makefile po/Makefile.in#AC_OUTPUT(#' \
 	  configure.in >configure.in.new && mv configure.in.new configure.in )
+      echo
+      echo "*** WARNING ***"
+      echo "*** We're about to run \"gettext\" which may spew a few paragraphs"
+      echo "*** of crap at you and ask you to acknowledge it.  If it does this,"
+      echo "*** just hit return to acknowledge gettext.  You DO NOT need to do"
+      echo "*** anything that it asks of you except hitting return."
+      echo
       if grep "^AM_GNU_GETTEXT" configure.in >/dev/null; then
 	if grep "sed.*POTFILES" configure.in >/dev/null; then
 	  : do nothing -- we still have an old unmodified configure.in
