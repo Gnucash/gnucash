@@ -1,3 +1,19 @@
+2002-08-06  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	The pre-defined variable 'i' no longer blocks transactions from
+	being created "auto-create".
+
+	* src/calculation/expression_parser.c: Added documentation for
+	function support in the expression parser.
+
+	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
+	Scrub created splits so they get setup correctly, fixing the
+	"incorrect-running-balance" problem [Bug#89879].
+	Wrote the oft-procrastinated memory-cleanup code; ensured [most]
+	other dynamic memory allocation is clean.  Removed some dead
+	code/debugging.
+
 2002-08-06  David Hampton  <hampton@employees.org>
 
 	* doc/sgml/*/Makefile.am: Tweak for newer versions of db2html.

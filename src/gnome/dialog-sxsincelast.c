@@ -53,10 +53,12 @@
 #include <gnome.h>
 #include <glib.h>
 
+#include "Account.h"
 #include "Group.h"
 #include "Query.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
+#include "Scrub.h"
 #include "dialog-utils.h"
 #include "finvar.h"
 #include "gnc-book.h"
@@ -166,8 +168,7 @@ typedef struct _sxSinceLastData {
         
         /** A HashTable of SX mapped to initial temporal data. */
         GHashTable /* <SchedXaction*,void*> */ *sxInitStates;
-        /** The list of removed SXes, in case we need to revert/cancel. */
-        GList /* <toDeleteTuple*> */   *removedList;
+
         /** The list of the GUIDs of _all_ transactions we've created. */
         GList /* <GUID*> */            *createdTxnGUIDList;
 
@@ -226,7 +227,6 @@ typedef struct reminderInstanceTuple_ {
 typedef struct toDeleteTuple_ {
         SchedXaction *sx;
         GDate *endDate;
-        gchar *freq_info;
         gboolean isSelected;
 } toDeleteTuple;
 
@@ -312,7 +312,11 @@ static void sx_obsolete_unselect_all_clicked( GtkButton *button,
                                               gpointer user_data );
 
 static void gnc_sxsld_free_tci( toCreateInstance *tci );
-
+static void gnc_sxsld_free_toCreateTuple_list( GList *l );
+static void gnc_sxsld_free_sxState( gpointer key,
+                                    gpointer value,
+                                    gpointer userdata );
+static void gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud );
 
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
@@ -987,27 +991,19 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
         if ( g_list_length( cl->selection ) > 0 ) {
                 sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
 
+                gnc_suspend_gui_refresh();
                 for ( toDelPtr = cl->selection;
                       toDelPtr;
                       toDelPtr = toDelPtr->next ) {
 
                         row = (gint)toDelPtr->data;
                         tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
-                        {
-                                elt = g_list_find( sxList, tdt->sx );
-                                sxList = g_list_remove_link( sxList, elt );
-                        
-                                sxsld->removedList = g_list_concat( sxsld->removedList, elt );
-                        }
-                        {
-                                elt = g_list_find( sxsld->toRemoveList, tdt );
-                                sxsld->toRemoveList =
-                                        g_list_remove_link( sxsld->toRemoveList, elt );
-                                g_list_free_1(elt);
-                        }
-                        g_date_free( tdt->endDate );
-                        g_free( tdt );
+                        elt = g_list_find( sxList, tdt->sx );
+                        sxList = g_list_remove_link( sxList, elt );
+
+                        xaccSchedXactionFree( (SchedXaction*)elt->data );
                 }
+                gnc_resume_gui_refresh();
 
                 gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
         }
@@ -1043,10 +1039,7 @@ cancel_check( GnomeDruidPage *druid_page,
              "Are you sure you want to lose all "
              "Scheduled Transaction changes?" );
 
-        DEBUG( "cancel_check" );
-
-        if ( g_list_length( sxsld->removedList ) == 0
-             && g_list_length( sxsld->createdTxnGUIDList ) == 0 ) {
+        if ( g_list_length( sxsld->createdTxnGUIDList ) == 0 ) {
                 /* There's nothing to cancel, so just do so... */
                 return FALSE;
         }
@@ -1056,7 +1049,6 @@ cancel_check( GnomeDruidPage *druid_page,
                 return TRUE;
         }
 
-        DEBUG( "reverting SX changes...\n" );
         /* Cancel policy:
          * . deleted SXes
          *   . reborn
@@ -1069,47 +1061,20 @@ cancel_check( GnomeDruidPage *druid_page,
          * . reminders -> created
          *   . Trans deleted
          *   . SXes reset
-         *
-         * SXes reset:
+         * SXes reset [we use the temporal-state-data to take care of this]
          *   . end_date || num_remain_instances
          *   . last_occur_date
          */
 
         gnc_suspend_gui_refresh();
-        /* rebirth deleted SXes */
-        DEBUG( "There are %d SXes on the 'removedList' to re-birth",
-               g_list_length( sxsld->removedList ) );
-        if ( g_list_length( sxsld->removedList ) > 0 ) {
-                GList *sxList =
-                        gnc_book_get_schedxactions( gnc_get_current_book () );
-                for ( l = sxsld->removedList; l; l = l->next ) {
-                        DEBUG( "re-birthing SX \"%s\"",
-                               xaccSchedXactionGetName( (SchedXaction*)l->data ) );
-                        sxList = g_list_append( sxList,
-                                                (SchedXaction*)l->data );
-                }
-                gnc_book_set_schedxactions( gnc_get_current_book(),
-                                            sxList );
-        }
-        /* delete created transactions */
-        DEBUG( "length( sxsld->createdTxnGUIDList ): %d",
-               g_list_length( sxsld->createdTxnGUIDList ) );
+
+        /* destroy created transactions */
         if ( g_list_length( sxsld->createdTxnGUIDList ) > 0 ) {
                 Transaction *t = NULL;
                 for ( l = sxsld->createdTxnGUIDList; l; l = l->next ) {
                         t = xaccTransLookup( (GUID*)l->data,
                                              gnc_get_current_book() );
-                        if ( t == NULL ) {
-                                char *guidStr;
-                                guidStr =
-                                        guid_to_string( (GUID*)l->data );
-                                PERR( "We thought we created Transaction "
-                                      "\"%s\", but can't "
-                                      "xaccTransLookup(...) it now.",
-                                      guidStr );
-                                free(guidStr);
-                                break;
-                        }
+                        g_assert( t );
                         xaccTransBeginEdit( t );
                         xaccTransDestroy( t );
                         xaccTransCommitEdit( t );
@@ -1255,7 +1220,6 @@ generate_instances( SchedXaction *sx,
         reminderTuple *rt;
         reminderInstanceTuple *rit;
         void *seqStateData;
-        char tmpBuf[GNC_D_BUF_WIDTH];
 
         g_assert( g_date_valid(end) );
         g_assert( g_date_valid(reminderEnd) );
@@ -1321,24 +1285,6 @@ generate_instances( SchedXaction *sx,
         xaccSchedXactionDestroySequenceState( seqStateData );
         seqStateData = NULL;
 }
-
-#if 0
-static void
-free_gdate_list_elts( gpointer data, gpointer user_data )
-{
-        g_date_free( (GDate*)data );
-}
-#endif
-
-#if 0
-static void
-_free_reminderTuple_list_elts( gpointer data, gpointer user_data )
-{
-        /* FIXME: endDate? */
-        g_date_free( ((reminderTuple*)data)->occurDate );
-        g_free( (reminderTuple*)data );
-}
-#endif
 
 static void
 _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
@@ -1413,8 +1359,9 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                         tci = (toCreateInstance*)instances->data;
                         thisGUID = createdGUIDs = NULL;
                         create_transactions_on( tct->sx,
-                                                (GDate*)tci->date,
-                                                NULL, &createdGUIDs );
+                                                tci->date,
+                                                tci,
+                                                &createdGUIDs );
 
                         count++;
                         gtk_progress_set_value( GTK_PROGRESS(sxsld->prog), count );
@@ -1449,7 +1396,6 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
         GtkCTreeNode *sxNode;
         char *rowText[ TO_CREATE_LIST_WIDTH ];
         GList *insts;
-        gpointer unusedkey, unusedvalue;
 
         ct = GTK_CTREE( glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ) );
 
@@ -1532,6 +1478,8 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                                                 NULL, NULL, NULL, NULL, /* pixmaps */
                                                 FALSE, /* leafP */
                                                 TRUE ); /* expandedP */
+                g_string_free( freqSpecStr, TRUE );
+
                 /* The SX node itself isn't selectable; only the
                  * instances. */
                 gtk_ctree_node_set_selectable( ctree, sxNode, FALSE );
@@ -1568,7 +1516,6 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         g_free( rowText[0] );
                         g_free( rowText[2] );
                 }
-                g_string_free( freqSpecStr, TRUE );
         }
 }
 
@@ -1581,18 +1528,18 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
         GString *tmp_str;
         toDeleteTuple *tdt;
         FreqSpec *fs;
-        rowtext[2] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
-
         cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
                                               SX_OBSOLETE_CLIST ));
 
         tmp_str = g_string_new(NULL);
+        rowtext[2] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
 
         gtk_clist_freeze( cl );
         gtk_clist_clear( cl );
         gtk_signal_handler_block_by_func( GTK_OBJECT(cl),
                                           sxsld_obsolete_row_toggle,
                                           sxsld );
+
         for ( row = 0; removeList;
               row++, removeList = removeList->next ) {
                 tdt = (toDeleteTuple*)removeList->data;
@@ -1608,6 +1555,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                  * last valid one. :(   Or, even better, the reason for
                  * obsolesence. */
                 /*g_date_strftime( rowtext[2], GNC_D_WIDTH, GNC_D_FMT, tdt->endDate ); */
+
                 strcpy( rowtext[2], "obsolete" );
 
                 gtk_clist_insert( cl, row, rowtext );
@@ -1672,7 +1620,8 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                 tci = g_new0( toCreateInstance, 1 );
                 tci->dirty       = FALSE;
                 tci->parentTCT   = tct;
-                tci->date        = rit->occurDate;
+                tci->date        = g_date_new();
+                *tci->date       = *rit->occurDate;
                 tci->varBindings = NULL;
                 tci->instanceNum = rit->instanceNum;
                 tci->node        = NULL;
@@ -1791,31 +1740,14 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 }
 
 static void
-clean_sincelast_dlg( sxSinceLastData *sxsld )
-{
-        GtkWidget *w;
-
-        /* . clean out to-create clist
-         * . free associated memories.
-         *
-         * FIXME: other dlg stuff to clean?
-         */
-        clean_variable_table( sxsld );
-
-        w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST );
-        gtk_clist_clear( GTK_CLIST(w) );
-}
-
-static void
 sxsincelast_close_handler( gpointer ud )
 {
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
         
         gtk_widget_hide( sxsld->sincelast_window );
         sxsincelast_save_size( sxsld );
-        clean_sincelast_dlg( sxsld );
         gtk_widget_destroy( sxsld->sincelast_window );
-        clean_sincelast_data( sxsld );
+        /* The data will be cleaned up in the destroy handler. */
 }
 
 static void
@@ -1858,8 +1790,10 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
                        "gnc_numeric-parseable", entryText );
                 num = NULL;
         } else {
+#if 0 /* 0 -- this is fine. */
                 DEBUG( "\"%s\" parses as \"%f\"", entryText,
                        gnc_numeric_to_double( *num ) );
+#endif /* 0 -- this is fine. */
         }
 
         g_hash_table_destroy( dummyVarHash );
@@ -1879,9 +1813,8 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
                         if ( maybeValue ) {
                                 g_free( maybeValue );
                         }
-                        /* FIXME: Does the maybeKey need to be freed? */
                 }
-                g_hash_table_insert( tci->varBindings, maybeKey, ourNum );
+                g_hash_table_insert( tci->varBindings, varName, ourNum );
                 tci->dirty = TRUE;
         }
 
@@ -1902,17 +1835,20 @@ sxsincelast_destroy( GtkObject *o, gpointer ud )
 {
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
-	gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,
-					      sxsld->sincelast_window );
-
         /* appropriate place to destroy data structures */
         clean_sincelast_data( sxsld );
+
+        /* FIXME: need more freeing for ledgers?  why do these result in
+         * "gnc_close_gui_component: component not found" messages? */
+
         gnc_ledger_display_close( sxsld->ac_ledger );
-        /* FIXME: need more freeing for ac_ledger? */
         sxsld->ac_ledger = NULL;
+
         gnc_ledger_display_close( sxsld->created_ledger );
-        /* FIXME: need more freeing for created_ledger? */
         sxsld->created_ledger = NULL;
+
+	gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,
+					      sxsld->sincelast_window );
 
         g_free( sxsld );
 }
@@ -1982,23 +1918,8 @@ create_each_transaction_helper( Transaction *t, void *d )
         /* FIXME: when we copy the trans_onto_trans, we don't want to copy
            the Split's kvp_frames... */
 
-        /* FIXME: This should setup the predefined variables 'i' and 'N' */
-
         createUD = (createData*)d;
         tci = createUD->tci;
-
-        actualVars = g_hash_table_new( g_str_hash, g_str_equal );
-        if ( tci->varBindings != NULL ) {
-                g_hash_table_foreach( tci->varBindings,
-                                      gnc_sxsl_copy_ea_hash, actualVars );
-        }
-        varIValue = g_new0( gnc_numeric, 1 );
-        *varIValue = gnc_numeric_create( tci->instanceNum, 1 );
-
-        /* It's really important that we strdup "i" here, so we can
-         * generically cleanup with a simple 'foreach' that blindly frees the
-         * keys, below. */
-        g_hash_table_insert( actualVars, g_strdup("i"), varIValue );
 
         newT = xaccMallocTransaction(gnc_get_current_book ());
         xaccTransBeginEdit( newT );
@@ -2015,26 +1936,41 @@ create_each_transaction_helper( Transaction *t, void *d )
         sList = xaccTransGetSplitList( newT );
         if ( (osList == NULL) || (sList == NULL) ) {
                 PERR( "\tseen transaction w/o splits. :(" );
-                /* FIXME: we've allocated things we need to cleanup... */
+                xaccTransDestroy( newT );
+                xaccTransCommitEdit( newT );
                 return FALSE;
         }
+
+        /* Setup the predefined variables for credit/debit formula
+         * processing. */
+        actualVars = g_hash_table_new( g_str_hash, g_str_equal );
+        if ( tci->varBindings != NULL ) {
+                g_hash_table_foreach( tci->varBindings,
+                                      gnc_sxsl_copy_ea_hash, actualVars );
+        }
+        varIValue = g_new0( gnc_numeric, 1 );
+        *varIValue = gnc_numeric_create( tci->instanceNum, 1 );
+        /* It's really important that we strdup "i" here, so we can
+         * generically cleanup with a simple 'foreach' that blindly frees the
+         * keys, below. */
+        g_hash_table_insert( actualVars, g_strdup("i"), varIValue );
+
         for ( ; sList && osList ;
               sList = sList->next, osList = osList->next ) {
                 split = (Split*)sList->data;
+
+                Account *acct;
+
                 /* FIXME: Ick.  This assumes that the split lists will be
                    ordered identically. :( I think it's fair to say they
                    will, but I'd rather not have to count on it. --jsled */
                 split_kvpf = xaccSplitGetSlots( (Split*)osList->data );
 
-
                 /* from-transaction of splits */
-                /* FIXME: is this true? -- seems like it should be the other
-                 * way around; perhaps this is the reason for Bug#89879? */
                 /* This needs to be before the value setting [below] so the
                  * balance calculations can work. */
                 {
                         GUID                *acct_guid;
-                        Account                *acct;
                         /* contains the guid of the split's actual account. */
                         kvp_val = kvp_frame_get_slot_path( split_kvpf,
                                                            GNC_SX_ID,
@@ -2060,9 +1996,7 @@ create_each_transaction_helper( Transaction *t, void *d )
                         commonCommodity = xaccAccountGetCommodity( acct );
                         xaccAccountBeginEdit( acct );
                         xaccAccountInsertSplit( acct, split );
-                        xaccAccountCommitEdit( acct );
                 }
-
 
                 /* commonCommodity = xaccTransGetCurrency( t ); */
                 /* credit/debit formulas */
@@ -2133,8 +2067,8 @@ create_each_transaction_helper( Transaction *t, void *d )
 #endif /* 0 -- debug */
 
                         xaccSplitSetValue( split, final );
+                        xaccSplitScrub( split );
                 }
-
 
 #if 0
 /* NOT [YET] USED */
@@ -2149,7 +2083,9 @@ create_each_transaction_helper( Transaction *t, void *d )
                                                    NULL);
 #endif /* 0 */
 
+                xaccAccountCommitEdit( acct );
         }
+
 
         /* Cleanup actualVars table. */
         {
@@ -2216,47 +2152,15 @@ create_transactions_on( SchedXaction *sx,
         toCreateTuple *tct;
         gboolean createdTCT;
 
-#if 0
-        {
-                char tmpBuf[GNC_D_WIDTH];
-                g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, gd );
-                DEBUG( "Creating transactions on %s for %s",
-                       tmpBuf, xaccSchedXactionGetName( sx ) );
-        }
-#endif /* 0 */
-
-        if ( tci != NULL
-             && g_date_compare( gd, tci->date ) != 0 ) {
-                PERR( "GDate and TCI date aren't equal, "
-                      "which isn't a Good Thing." );
-                return;
-        }
-
-        tct = NULL;
-        createdTCT = FALSE;
-        if ( tci == NULL ) {
-                /* Create a faux tct for the creation-helper. */
-                tct = g_new0( toCreateTuple, 1 );
-                tci = g_new0( toCreateInstance, 1 );
-                /* FIXME: add instance num */
-                tct->sx = sx;
-                tct->instanceList =
-                        g_list_append( tct->instanceList, tci );
-                tci->dirty     = FALSE;
-                tci->date      = gd;
-                tci->node      = NULL;
-                tci->parentTCT = tct;
-
-                createdTCT = TRUE;
+        if ( tci ) {
+                g_assert( g_date_compare( gd, tci->date ) == 0 );
         }
 
         ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
-	if(ag && id)
-	{
+	if ( ag && id ) {
                 acct = xaccGetAccountFromName( ag, id );
-                if(acct)
-                {
+                if ( acct ) {
                         createUD.tci = tci;
                         createUD.createdGUIDs = createdGUIDs;
                         xaccAccountForEachTransaction( acct,
@@ -2265,8 +2169,7 @@ create_transactions_on( SchedXaction *sx,
                 }
 	}
 
-	if (id)
-	{
+	if (id) {
                 g_free( id );
 	}
         
@@ -2281,14 +2184,6 @@ create_transactions_on( SchedXaction *sx,
                         tmp = xaccSchedXactionGetRemOccur(sx);
                         xaccSchedXactionSetRemOccur( sx, tmp-1 );
                 }
-        }
-
-        if ( createdTCT ) {
-                g_free( tci );
-                g_list_free( tct->instanceList );
-                g_free( tct );
-                tci = NULL;
-                tct = NULL;
         }
 }
 
@@ -2393,7 +2288,7 @@ tct_table_entry_key_handle( GtkWidget *widget, GdkEventKey *event, gpointer ud )
         gtk_entry_set_text( ent, str->str );
         g_string_free( str, TRUE );
 
-        /* Next, deal with tab-ordering in this page...  */
+        /* FIXME: Next, deal with tab-ordering in this page...  */
 
         // if ( entry isn't last in table )
         //    return (normal)FALSE
@@ -2514,6 +2409,9 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 gtk_signal_connect( GTK_OBJECT(entry), "changed",
                                     GTK_SIGNAL_FUNC( sxsincelast_entry_changed ),
                                     sxsld );
+                gtk_signal_connect( GTK_OBJECT(entry), "destroy",
+                                    GTK_SIGNAL_FUNC(gnc_sxsld_free_entry_numeric),
+                                    sxsld );
 
                 gtk_table_attach( varTable, label,
                                   0, 1, tableIdx, tableIdx + 1,
@@ -2531,19 +2429,15 @@ static void
 clean_variable_table( sxSinceLastData *sxsld )
 {
         GtkTable *table;
-        GList *children, *toFree;
+        GList *children, *toFree, *l;
         GtkTableChild *child;
         
         table = GTK_TABLE( glade_xml_get_widget( sxsld->gxml,
                                                  VARIABLE_TABLE ) );
         children = table->children;
-        toFree = NULL;
-        if ( children == NULL ) {
-                PERR( "The variable-binding table should always have at "
-                      "least 2 children... something's amiss." );
-                return;
-        }
+        g_assert( children );
 
+        toFree = NULL;
         for( ; children ; children = children->next ) {
                 /* Destroy all children after the first [label-continaing]
                    row... ie, leave the labels in place. */
@@ -2555,9 +2449,8 @@ clean_variable_table( sxSinceLastData *sxsld )
 
         gtk_table_resize( table, 1, 2 );
 
-        while ( toFree != NULL ) {
-                gtk_widget_destroy( (GtkWidget*)toFree->data );
-                toFree = toFree->next;
+        for ( l = toFree; l; l = l->next ) {
+                gtk_widget_destroy( (GtkWidget*)l->data );
         }
         g_list_free( toFree );
 }
@@ -2572,7 +2465,8 @@ sxsincelast_tc_row_unsel( GtkCTree *ct,
 
         sxsld = (sxSinceLastData*)user_data;
         clean_variable_table( sxsld );
-        /* FIXME: need to cleanup the gnc_numerics we allocated */
+        /* we cleanup the gnc_numerics we allocated in the "destroy" signal
+         * handler of the entry [where we attached them] */
 }
 
 void
@@ -2598,6 +2492,7 @@ parse_vars_from_formula( const char *formula,
                 num = g_new0( gnc_numeric, 1 );
         }
         
+        toRet = 0;
         if ( ! gnc_exp_parser_parse_separate_vars( formula, num,
                                                    &errLoc, varHash ) ) {
 #if 0 /* just too verbose, as "Numeric errors" are acceptable in this
@@ -2606,11 +2501,8 @@ parse_vars_from_formula( const char *formula,
                         errLoc, gnc_exp_parser_error_string() );
 #endif /* 0 */
                 toRet = -1;
-                goto cleanup;
         }
-        toRet = 0;
 
- cleanup:
         if ( !result ) {
                 g_free( num );
         }
@@ -2778,14 +2670,17 @@ gnc_sxsld_revert_reminders( sxSinceLastData *sxsld,
                         xaccSchedXactionGetAutoCreate( rit->parentRT->sx,
                                                        &autoCreateState,
                                                        &notifyState );
-                
+                        correctList = NULL;
                         if ( autoCreateState ) {
-                                correctList = &sxsld->autoCreateList;
+                                if ( notifyState ) {
+                                        correctList = &sxsld->autoCreateList;
+                                }
                         } else {
                                 correctList = &sxsld->toCreateList;
                         }
 
-                        *correctList = g_list_remove( *correctList, tct );
+                        if ( correctList ) 
+                                *correctList = g_list_remove( *correctList, tct );
                 }
 
                 /* destroy any created transactions. */
@@ -2793,18 +2688,22 @@ gnc_sxsld_revert_reminders( sxSinceLastData *sxsld,
                 for ( m = tci->createdTxnGUIDs; m; m = m->next ) {
                         Transaction *t;
 
+                        sxsld->createdTxnGUIDList =
+                                g_list_remove( sxsld->createdTxnGUIDList,
+                                               (GUID*)m->data );
                         t = xaccTransLookup( (GUID*)m->data,
                                              gnc_get_current_book() );
                         g_assert( t );
                         xaccTransBeginEdit(t);
                         xaccTransDestroy(t);
                         xaccTransCommitEdit(t);
+
                 }
                 gnc_resume_gui_refresh();
 
-                /* FIXME: Free the now-dead TCI; this is buggy and causing
+                /* Free the now-dead TCI; this is buggy and causing
                  * problems... */
-                //gnc_sxsld_free_tci( tci );
+                gnc_sxsld_free_tci( tci );
                 rit->resultantTCI = NULL;
         }
 }
@@ -2887,7 +2786,7 @@ inform_or_add( reminderTuple *rt, gboolean okFlag,
 
         if ( okFlag ) {
                 /* Add selected instances of this rt to
-                   okay-to-add-to-toCreateList list. */
+                 * okay-to-add-to-toCreateList list. */
                 for ( instances = rt->instanceList;
                       instances;
                       instances = instances->next ) {
@@ -2899,6 +2798,7 @@ inform_or_add( reminderTuple *rt, gboolean okFlag,
                 }
         } else {
                 /* [Add to list for later] dialog issuance to user. */
+
                 userMsg = g_string_sized_new( 128 );
                 g_string_sprintf( userMsg,
                                   "You cannot skip instances of Scheduled Transactions.\n"
@@ -2907,6 +2807,7 @@ inform_or_add( reminderTuple *rt, gboolean okFlag,
                                   xaccSchedXactionGetName( rt->sx ) );
                 g_list_foreach( badList, create_bad_reminders_msg, userMsg );
                 gnc_error_dialog( userMsg->str );
+                g_string_free( userMsg, TRUE );
         }
 
         return okFlag;
@@ -3040,25 +2941,59 @@ sxsld_ledger_get_parent( GNCLedgerDisplay *ld )
 static void
 clean_sincelast_data( sxSinceLastData *sxsld )
 {
-        /* FIXME: much more to go, here. */
-        g_list_foreach( sxsld->toCreateList, _free_toCreate_list_elts, NULL );
-        if ( sxsld->toCreateList ) {
-                g_list_free( sxsld->toCreateList );
-                sxsld->toCreateList = NULL;
+        GList *l, *m;
+
+        /* Free the reminder list */
+        for ( l = sxsld->reminderList; l; l = l->next ) {
+                reminderTuple *rt;
+                reminderInstanceTuple *rit;
+
+                rt = (reminderTuple*)l->data;
+                for ( m = rt->instanceList; m; m = m->next ) {
+                        rit = (reminderInstanceTuple*)m->data;
+                        g_date_free( rit->endDate );
+                        g_date_free( rit->occurDate );
+                        g_free( rit );
+                }
+                g_list_free( rt->instanceList );
+                rt->instanceList = NULL;
+                g_free( rt );
         }
-#if 0
-                g_list_foreach( autoCreateList, free_gdate_list_elts, NULL );
-                g_list_free( autoCreateList );
-                autoCreateList = NULL;
+        g_list_free( sxsld->reminderList );
 
-		  /* We have moved the GDates over to the toCreateList in
-                   * sxsld, so we don't free them here. */
-                g_list_free( toCreateList );
-                toCreateList = NULL;
 
-                g_list_free( instanceList );
-                instanceList = NULL;
-#endif /* 0 */
+        /* Free the auto-create and to-create lists */
+        gnc_sxsld_free_toCreateTuple_list( sxsld->autoCreateList );
+        g_list_free( sxsld->autoCreateList );
+        sxsld->autoCreateList = NULL;
+
+        gnc_sxsld_free_toCreateTuple_list( sxsld->toCreateList );
+        g_list_free( sxsld->toCreateList );
+        sxsld->toCreateList = NULL;
+
+        /* Free the to-remove list */
+        for ( l = sxsld->toRemoveList; l; l = l->next ) {
+                toDeleteTuple *tdt;
+
+                tdt = (toDeleteTuple*)l->data;
+                g_date_free( tdt->endDate );
+                tdt->endDate = NULL;
+
+                g_free( tdt );
+        }
+        g_list_free( sxsld->toRemoveList );
+        sxsld->toRemoveList = NULL;
+
+        /* free the created-txn-guid list */
+        g_list_free( sxsld->createdTxnGUIDList );
+        sxsld->createdTxnGUIDList = NULL;
+
+        /* Free the saved SX temporal states */
+        g_hash_table_foreach( sxsld->sxInitStates,
+                              gnc_sxsld_free_sxState,
+                              NULL );
+        g_hash_table_destroy( sxsld->sxInitStates );
+        sxsld->sxInitStates = NULL;
 
 }
 
@@ -3072,7 +3007,9 @@ gnc_sxsld_free_tci( toCreateInstance *tci )
         }
 
         if ( tci->varBindings ) {
-                /* FIXME: free keys/values, too. */
+                g_hash_table_foreach( tci->varBindings,
+                                      _free_varBindings_hash_elts,
+                                      NULL );
                 g_hash_table_destroy( tci->varBindings );
                 tci->varBindings = NULL;
         }
@@ -3085,4 +3022,45 @@ gnc_sxsld_free_tci( toCreateInstance *tci )
         }
 
         g_free( tci );
+}
+
+/**
+ * Frees a list of toCreateTuples, like the autoCreateList and
+ * toCreateList.
+ **/
+static
+void
+gnc_sxsld_free_toCreateTuple_list( GList *l )
+{
+        GList *m;
+        toCreateTuple *tct;
+
+        for ( ; l; l = l->next ) {
+                tct = (toCreateTuple*)l->data;
+                for ( m = tct->instanceList; m; m = m->next ) {
+                        gnc_sxsld_free_tci( (toCreateInstance*)m->data );
+                }
+                g_list_free( tct->instanceList );
+                tct->instanceList = NULL;
+                g_free( tct );
+        }
+
+}
+
+static
+void
+gnc_sxsld_free_sxState( gpointer key,
+                        gpointer value,
+                        gpointer userdata )
+{
+        gnc_sx_destroy_temporal_state_snapshot( (void*)value );
+}
+
+static
+void
+gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud )
+{
+        gnc_numeric *num;
+        num = (gnc_numeric*)gtk_object_get_data( o, "numeric" );
+        g_free( num );
 }

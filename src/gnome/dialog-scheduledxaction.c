@@ -458,7 +458,7 @@ static
 gboolean
 gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 {
-        gboolean ttHasVars;
+        gint ttVarCount;
         FreqSpec *fs;
 
         /* FIXMEs...
@@ -480,7 +480,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
          *   right... ]
          */
 
-        ttHasVars = FALSE;
+        ttVarCount = 0;
         {
                 static const int NUM_ITERS_WITH_VARS = 5;
                 static const int NUM_ITERS_NO_VARS = 1;
@@ -493,6 +493,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 Split *s;
                 gnc_numeric creditSum, debitSum, tmp;
                 gboolean unbalanceable;
+                gpointer unusedKey, unusedValue;
 
                 unbalanceable = FALSE; /* innocent until proven guilty */
                 vars = g_hash_table_new( g_str_hash, g_str_equal );
@@ -513,8 +514,8 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 /* numeric-formulas-get-balanced determination */
                 sxsl_get_sx_vars( sxed->sx, vars );
 
-                ttHasVars = (g_hash_table_size( vars ) != 0);
-                if ( g_hash_table_size( vars ) != 0 ) {
+                ttVarCount = g_hash_table_size( vars );
+                if ( ttVarCount != 0 ) {
                         /* balance with random variable bindings some number
                          * of times in an attempt to ferret out
                          * un-balanceable transactions.
@@ -585,6 +586,13 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                         }
 #endif /* DEBUG */
                 }
+
+                /* Subtract out pre-defined vars */
+                if ( g_hash_table_lookup_extended( vars, "i",
+                                                   &unusedKey, &unusedValue ) ) {
+                        ttVarCount -= 1;
+                }
+
                 g_hash_table_foreach( vars, free_var_numeric, (gpointer)vars );
                 g_hash_table_destroy( vars );
 
@@ -649,17 +657,17 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
         {
                 gboolean autocreateState, notifyState;
 
-                autocreateState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->autocreateOpt) );
-                notifyState = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
+                autocreateState =
+                        gtk_toggle_button_get_active(
+                                GTK_TOGGLE_BUTTON(sxed->autocreateOpt) );
+                notifyState =
+                        gtk_toggle_button_get_active(
+                                GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
 
-                if ( ttHasVars && autocreateState ) {
-                        /* FIXME: Wow... that's a mouthful.  Reword. */
+                if ( (ttVarCount > 0) && autocreateState ) {
                         gnc_warning_dialog_parented( sxed->dialog,
-                                                     _("You attempted to create a \"Create "
-                                                       "Automatically\" "
-                                                       "Scheduled Transaction which has Variables, "
-                                                       "which is not allowed.\nPlease remove the "
-                                                       "Create Automatically flag and try again.") );
+                                                     _("Scheduled Transactions with variables\n"
+                                                       "cannot be automatically created.") );
                         return FALSE;
                 }
         }

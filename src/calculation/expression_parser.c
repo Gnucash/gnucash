@@ -20,6 +20,8 @@
  *  6-21-2000
  */
 
+/* Modified to support functions - Summer, 2002 -- jsled@asynchronous.org */
+
 /* expression parser/evaluator use:
  *
  * Before describing the parser per se, I want to describe the
@@ -42,6 +44,9 @@
  * "variable name". If NULL, then this is a temporary value. The
  * "value" variable points to a user defined structure containing the
  * numeric value of the variable.
+ *
+ * As well, variables now have a VarStoreType, to distinguish between numeric
+ * and string values, as we want string arguments to functions.
  *
  * In designing and writing the parser, I decided early on that the
  * parser should be an "expression parser/evaluator" and that the
@@ -117,6 +122,8 @@
  * 4: free_numeric - this function is responsible for freeing memory
  * used by the internal numeric representation.
  *
+ * 5: func_op - this function is repsonsible for handling function calls.
+ *
  * I have included the file "numeric_ops.c" containing the above
  * functions for the usual "double" and "int" representation of
  * numerics. The functions perform integer or floating point
@@ -172,6 +179,12 @@
  * call. After the parser is eventually exited, the calling function
  * is responsible for freeing any memory used by the "pre-defined"
  * variables and their final numeric representation.
+ *
+ * There may also be strings in the expression, by quoting them in '"'
+ * characters.  These are intended to be passed literally into functions; the
+ * result of using a string in a numeric operation is undefined.  Presently,
+ * the expression-parser code does not check the variable types during
+ * parsing or evaluation.
  *
  * A second design goal of the parser was that it should be callable
  * concurrently by multiple modules independently. That each module
@@ -249,6 +262,14 @@
  * After parsing the above expressions the variables nni, jk, tyh and
  * tgh would all be defined.
  *
+ * Functiosn are invoked with expressions of the format
+ *
+ *   [_a-zA-Z]( <argument_0> : <argument_1> : ... : <argument_n> )
+ *
+ * where each argument can itself be a sub-expression [arithmetic operation
+ * or function call].
+ *
+ *
  * There are six parser functions needed to use the parser/evaluator:
  *
  * Note: in the last five functions, in the function paramter (void
@@ -265,7 +286,8 @@
  *                                              void          *left_value,
  *                                              void          *right_value),
  *                   void          *negate_numeric(void *value),
- *                   void           free_numeric(void *numeric_value));
+ *                   void           free_numeric(void *numeric_value),
+ *                   void          *func_op(const char *fname, int argc, void **argv));
  *
  *         This function is called by the module/function/whatever to
  *         initialize the parser. The parser returns a pointer to a
