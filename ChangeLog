@@ -1,3 +1,10 @@
+2004-10-30  Christian Stimming  <stimming@tuhh.de>
+
+	* doc/README.HBCI: Updated HBCI readme.
+	
+	* src/import-export/hbci/hbci-interaction.c: Fix problems with
+	user messages.
+
 2004-10-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.[ch]

@@ -545,7 +545,9 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
   gnome_dialog_set_close (GNOME_DIALOG (dialog), TRUE);
   label = gtk_label_new (text);
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start (GTK_BOX (GNOME_DIALOG (dialog)->vbox), label, TRUE, TRUE, 0);
+  gtk_widget_show (label);
 
   result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
   if (result<0 || result>2) {
