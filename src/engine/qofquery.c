@@ -1632,7 +1632,7 @@ static void
 qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
 {
 
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_GUID))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_GUID))
   {
     GList *node;
     query_guid_t pdata = (query_guid_t) pd;
@@ -1645,7 +1645,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     }
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_STRING))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
   {
     query_string_t pdata = (query_string_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1655,7 +1655,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        pdata->matchstring);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_NUMERIC))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC))
   {
     query_numeric_t pdata = (query_numeric_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1664,7 +1664,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        gnc_numeric_to_string (pdata->amount));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_KVP))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
   {
     GSList *node;
     query_kvp_t pdata = (query_kvp_t) pd;
@@ -1674,25 +1674,25 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
       return;
     }
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_INT64))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
   {
     query_int64_t pdata = (query_int64_t) pd;
     g_string_sprintfa (gs, " int64: %lld", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_INT32))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))
   {
     query_int32_t pdata = (query_int32_t) pd;
     g_string_sprintfa (gs, " int32: %d", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DOUBLE))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE))
   {
     query_double_t pdata = (query_double_t) pd;
     g_string_sprintfa (gs, " double: %20.16g", pdata->val);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_DATE))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
   {
     query_date_t pdata = (query_date_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1700,7 +1700,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " query_date: %s", gnc_print_date (pdata->date));
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_CHAR))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR))
   {
     query_char_t pdata = (query_char_t) pd;
     g_string_sprintfa (gs, "\n      Match type %s",
@@ -1708,7 +1708,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " char list: %s", pdata->char_list);
     return;
   }
-  if (!safe_strcmp (pd->type_name, QOF_QUERYCORE_BOOLEAN))
+  if (!safe_strcmp (pd->type_name, QOF_TYPE_BOOLEAN))
   {
     query_boolean_t pdata = (query_boolean_t) pd;
     g_string_sprintfa (gs, " boolean: %s", pdata->val?"TRUE":"FALSE");

@@ -64,7 +64,7 @@ static void qof_query_register_core_object (char const *type_name,
                                  QueryPredicateEqual pred_equal);
 /* An example:
  *
- * qof_query_register_core_object (QOF_QUERYCORE_STRING, string_match_predicate,
+ * qof_query_register_core_object (QOF_TYPE_STRING, string_match_predicate,
  *                               string_compare_fcn, string_free_pdata,
  *                               string_print_fcn, pred_equal_fcn);
  */
@@ -74,35 +74,35 @@ static QueryPredDataFree gncQueryCoreGetPredFree (char const *type);
 
 /* Core Type Predicate helpers */
 typedef const char * (*query_string_getter) (gpointer);
-static const char * query_string_type = QOF_QUERYCORE_STRING;
+static const char * query_string_type = QOF_TYPE_STRING;
 
 typedef Timespec (*query_date_getter) (gpointer);
-static const char * query_date_type = QOF_QUERYCORE_DATE;
+static const char * query_date_type = QOF_TYPE_DATE;
 
 typedef gnc_numeric (*query_numeric_getter) (gpointer);
-static const char * query_numeric_type = QOF_QUERYCORE_NUMERIC;
+static const char * query_numeric_type = QOF_TYPE_NUMERIC;
 
 typedef GList * (*query_glist_getter) (gpointer);
 typedef const GUID * (*query_guid_getter) (gpointer);
-static const char * query_guid_type = QOF_QUERYCORE_GUID;
+static const char * query_guid_type = QOF_TYPE_GUID;
 
 typedef gint32 (*query_int32_getter) (gpointer);
-static const char * query_int32_type = QOF_QUERYCORE_INT32;
+static const char * query_int32_type = QOF_TYPE_INT32;
 
 typedef gint64 (*query_int64_getter) (gpointer);
-static const char * query_int64_type = QOF_QUERYCORE_INT64;
+static const char * query_int64_type = QOF_TYPE_INT64;
 
 typedef double (*query_double_getter) (gpointer);
-static const char * query_double_type = QOF_QUERYCORE_DOUBLE;
+static const char * query_double_type = QOF_TYPE_DOUBLE;
 
 typedef gboolean (*query_boolean_getter) (gpointer);
-static const char * query_boolean_type = QOF_QUERYCORE_BOOLEAN;
+static const char * query_boolean_type = QOF_TYPE_BOOLEAN;
 
 typedef char (*query_char_getter) (gpointer);
-static const char * query_char_type = QOF_QUERYCORE_CHAR;
+static const char * query_char_type = QOF_TYPE_CHAR;
 
 typedef KvpFrame * (*query_kvp_getter) (gpointer);
-static const char * query_kvp_type = QOF_QUERYCORE_KVP;
+static const char * query_kvp_type = QOF_TYPE_KVP;
 
 /* Tables for predicate storage and lookup */
 static gboolean initialized = FALSE;
@@ -138,7 +138,7 @@ static GHashTable *predEqualTable = NULL;
 /********************************************************************/
 /* TYPE-HANDLING FUNCTIONS */
 
-/* QOF_QUERYCORE_STRING */
+/* QOF_TYPE_STRING */
 
 static int string_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                    QofQueryPredData *pd)
@@ -264,7 +264,7 @@ static char * string_to_string (gpointer object, QofAccessFunc get)
   return NULL;
 }
 
-/* QOF_QUERYCORE_DATE */
+/* QOF_TYPE_DATE */
 
 static int date_compare (Timespec ta, Timespec tb, QofDateMatch options)
 {
@@ -382,7 +382,7 @@ static char * date_to_string (gpointer object, QofAccessFunc get)
   return NULL;
 }
 
-/* QOF_QUERYCORE_NUMERIC */
+/* QOF_TYPE_NUMERIC */
 
 static int numeric_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                     QofQueryPredData* pd)
@@ -502,7 +502,7 @@ static char * debcred_to_string (gpointer object, QofAccessFunc get)
   return g_strdup (gnc_numeric_to_string (num));
 }
 
-/* QOF_QUERYCORE_GUID */
+/* QOF_TYPE_GUID */
 
 static int guid_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                  QofQueryPredData *pd)
@@ -662,7 +662,7 @@ qof_query_guid_predicate (QofGuidMatch options, GList *guids)
 }
 
 /* ================================================================ */
-/* QOF_QUERYCORE_INT32 */
+/* QOF_TYPE_INT32 */
 
 static int int32_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                  QofQueryPredData *pd)
@@ -749,7 +749,7 @@ static char * int32_to_string (gpointer object, QofAccessFunc get)
 }
 
 /* ================================================================ */
-/* QOF_QUERYCORE_INT64 */
+/* QOF_TYPE_INT64 */
 
 static int int64_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                  QofQueryPredData *pd)
@@ -836,7 +836,7 @@ static char * int64_to_string (gpointer object, QofAccessFunc get)
 }
 
 /* ================================================================ */
-/* QOF_QUERYCORE_DOUBLE */
+/* QOF_TYPE_DOUBLE */
 
 static int double_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                  QofQueryPredData *pd)
@@ -922,7 +922,7 @@ static char * double_to_string (gpointer object, QofAccessFunc get)
   return g_strdup_printf ("%f", num);
 }
 
-/* QOF_QUERYCORE_BOOLEAN */
+/* QOF_TYPE_BOOLEAN */
 
 static int boolean_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                  QofQueryPredData *pd)
@@ -1001,7 +1001,7 @@ static char * boolean_to_string (gpointer object, QofAccessFunc get)
   return g_strdup_printf ("%s", (num ? "X" : ""));
 }
 
-/* QOF_QUERYCORE_CHAR */
+/* QOF_TYPE_CHAR */
 
 static int char_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                  QofQueryPredData *pd)
@@ -1082,7 +1082,7 @@ static char * char_to_string (gpointer object, QofAccessFunc get)
   return g_strdup_printf ("%c", num);
 }
 
-/* QOF_QUERYCORE_KVP */
+/* QOF_TYPE_KVP */
 
 static int kvp_match_predicate (gpointer object, QofAccessFunc get_fcn,
                                 QofQueryPredData *pd)
@@ -1204,37 +1204,37 @@ static void init_tables (void)
     QueryToString toString;
     QueryPredicateEqual pred_equal;
   } knownTypes[] = {
-    { QOF_QUERYCORE_STRING, string_match_predicate, string_compare_func,
+    { QOF_TYPE_STRING, string_match_predicate, string_compare_func,
       string_copy_predicate, string_free_pdata, string_to_string, 
       string_predicate_equal },
-    { QOF_QUERYCORE_DATE, date_match_predicate, date_compare_func,
+    { QOF_TYPE_DATE, date_match_predicate, date_compare_func,
       date_copy_predicate, date_free_pdata, date_to_string,
       date_predicate_equal },
-    { QOF_QUERYCORE_DEBCRED, numeric_match_predicate, numeric_compare_func,
+    { QOF_TYPE_DEBCRED, numeric_match_predicate, numeric_compare_func,
       numeric_copy_predicate, numeric_free_pdata, debcred_to_string,
       numeric_predicate_equal },
-    { QOF_QUERYCORE_NUMERIC, numeric_match_predicate, numeric_compare_func,
+    { QOF_TYPE_NUMERIC, numeric_match_predicate, numeric_compare_func,
       numeric_copy_predicate, numeric_free_pdata, numeric_to_string,
       numeric_predicate_equal },
-    { QOF_QUERYCORE_GUID, guid_match_predicate, NULL,
+    { QOF_TYPE_GUID, guid_match_predicate, NULL,
       guid_copy_predicate, guid_free_pdata, NULL,
       guid_predicate_equal },
-    { QOF_QUERYCORE_INT32, int32_match_predicate, int32_compare_func,
+    { QOF_TYPE_INT32, int32_match_predicate, int32_compare_func,
       int32_copy_predicate, int32_free_pdata, int32_to_string,
       int32_predicate_equal },
-    { QOF_QUERYCORE_INT64, int64_match_predicate, int64_compare_func,
+    { QOF_TYPE_INT64, int64_match_predicate, int64_compare_func,
       int64_copy_predicate, int64_free_pdata, int64_to_string,
       int64_predicate_equal },
-    { QOF_QUERYCORE_DOUBLE, double_match_predicate, double_compare_func,
+    { QOF_TYPE_DOUBLE, double_match_predicate, double_compare_func,
       double_copy_predicate, double_free_pdata, double_to_string,
       double_predicate_equal },
-    { QOF_QUERYCORE_BOOLEAN, boolean_match_predicate, boolean_compare_func,
+    { QOF_TYPE_BOOLEAN, boolean_match_predicate, boolean_compare_func,
       boolean_copy_predicate, boolean_free_pdata, boolean_to_string,
       boolean_predicate_equal },
-    { QOF_QUERYCORE_CHAR, char_match_predicate, char_compare_func,
+    { QOF_TYPE_CHAR, char_match_predicate, char_compare_func,
       char_copy_predicate, char_free_pdata, char_to_string,
       char_predicate_equal },
-    { QOF_QUERYCORE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
+    { QOF_TYPE_KVP, kvp_match_predicate, NULL, kvp_copy_predicate,
       kvp_free_pdata, NULL, kvp_predicate_equal },
   };
 

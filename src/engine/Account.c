@@ -188,9 +188,9 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
 }
 
 Account *
-xaccCloneAccount (const Account *from, QofBook *book)
+xaccCloneAccount (const Account *from, QofBook *book, 
+                  const char * gemini_path)
 {
-    time_t now;
     Account *ret;
 
     if (!from || !book) return NULL;
@@ -199,7 +199,6 @@ xaccCloneAccount (const Account *from, QofBook *book)
     ret = g_new (Account, 1);
     g_return_val_if_fail (ret, NULL);
 
-    now = time(0);
     xaccInitAccount (ret, book);
 
     /* Do not Begin/CommitEdit() here; give the caller 
@@ -218,13 +217,21 @@ xaccCloneAccount (const Account *from, QofBook *book)
     ret->non_standard_scu = from->non_standard_scu;
     ret->core_dirty   = TRUE;
 
-    /* Make a note of where the copy came from */
-    gnc_kvp_gemini (ret->kvp_data, now, "acct_guid", &from->guid, 
-                                        "book_guid", &from->book->guid,
-                                        NULL);
-    gnc_kvp_gemini (from->kvp_data, now, "acct_guid", &ret->guid, 
-                                         "book_guid", &book->guid, 
-                                         NULL);
+    if (gemini_path)
+    {
+       time_t now;
+       now = time(0);
+
+       /* Make a note of where the copy came from */
+       gnc_kvp_bag_add (ret->kvp_data, gemini_path, now, 
+                                       "acct_guid", &from->guid, 
+                                       "book_guid", &from->book->guid,
+                                       NULL);
+       gnc_kvp_bag_add (from->kvp_data, gemini_path, now, 
+                                       "acct_guid", &ret->guid, 
+                                       "book_guid", &book->guid, 
+                                       NULL);
+    }
 
     LEAVE (" ");
     return ret;
@@ -3001,19 +3008,19 @@ static QofObject account_object_def = {
 gboolean xaccAccountRegister (void)
 {
   static QofQueryObject params[] = {
-    { ACCOUNT_KVP, QOF_QUERYCORE_KVP, (QofAccessFunc)xaccAccountGetSlots },
-    { ACCOUNT_NAME_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetName },
-    { ACCOUNT_CODE_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetCode },
-    { ACCOUNT_DESCRIPTION_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetDescription },
-    { ACCOUNT_NOTES_, QOF_QUERYCORE_STRING, (QofAccessFunc)xaccAccountGetNotes },
-    { ACCOUNT_PRESENT_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance },
-    { ACCOUNT_BALANCE_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance },
-    { ACCOUNT_CLEARED_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance },
-    { ACCOUNT_RECONCILED_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance },
-    { ACCOUNT_FUTURE_MINIMUM_, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance },
-    { ACCOUNT_TAX_RELATED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)xaccAccountGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)xaccAccountGetGUID },
+    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccAccountGetSlots },
+    { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName },
+    { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode },
+    { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription },
+    { ACCOUNT_NOTES_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetNotes },
+    { ACCOUNT_PRESENT_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance },
+    { ACCOUNT_BALANCE_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance },
+    { ACCOUNT_CLEARED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance },
+    { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance },
+    { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance },
+    { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccAccountGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)xaccAccountGetGUID },
     { NULL },
   };
 

@@ -37,6 +37,7 @@
  */
 #define QOF_OBJECT_VERSION 1
 
+
 typedef struct _QofObject QofObject;
 typedef void (*QofForeachTypeCB) (QofObject *type, gpointer user_data);
 typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,

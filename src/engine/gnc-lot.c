@@ -47,6 +47,7 @@
 #include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "qofquery.h"
 #include "qofqueryobject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
@@ -378,10 +379,10 @@ gnc_lot_get_latest_split (GNCLot *lot)
 void gnc_lot_register (void)
 {
   static const QofQueryObject params[] = {
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gnc_lot_get_book },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gnc_lot_get_guid },
-    { LOT_IS_CLOSED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed },
-    { LOT_BALANCE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gnc_lot_get_guid },
+    { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed },
+    { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance },
     { NULL },
   };
 

@@ -105,10 +105,15 @@ typedef enum
 /** Constructor */
 Account    * xaccMallocAccount (QofBook *book);
 
-/** The xaccCloneAccount() does the same as xaccCloneAccountSimple, except that it
- *    also uses the 'gemini' kvp value to mark the account from
- *    which it was copied. */
-Account    * xaccCloneAccount (const Account *from, QofBook *book);
+/** The xaccCloneAccount() does the same as xaccCloneAccountSimple(), 
+ *    except that it also also places a pair of GUID-pointers
+ *    of each account to the other, in the other's kvp slot.
+ *    The guid pointers are stored under the under the kvp
+ *    path "gemini_path".  If gemini_path is NULL, then this 
+ *    routine is identical to xaccCloneAccountSimple().
+ */
+Account    * xaccCloneAccount (const Account *from, QofBook *book,
+               const char * gemini_path);
 
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies

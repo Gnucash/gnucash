@@ -84,17 +84,6 @@ gnc_kvp_bag_add (KvpFrame *pwd, const char * path,
 }
 
 /* ================================================================ */
- 
-void 
-gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
-{
-   va_list ap;
-   va_start (ap, first_name);
-   gnc_kvp_array_va (kvp_root, "gemini", secs, first_name, ap);
-   va_end (ap);
-}
-
-/* ================================================================ */
 
 #define MATCH_GUID(elt) {                                       \
   KvpFrame *fr = kvp_value_get_frame (elt);                     \

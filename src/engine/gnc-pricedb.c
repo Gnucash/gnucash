@@ -2154,10 +2154,10 @@ gnc_pricedb_register (void)
   static QofQueryObject params[] = {
     { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity },
     { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency },
-    { PRICE_DATE, QOF_QUERYCORE_DATE, (QofAccessFunc)gnc_price_get_time },
-    { PRICE_SOURCE, QOF_QUERYCORE_STRING, (QofAccessFunc)gnc_price_get_source },
-    { PRICE_TYPE, QOF_QUERYCORE_STRING, (QofAccessFunc)gnc_price_get_type },
-    { PRICE_VALUE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gnc_price_get_value },
+    { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time },
+    { PRICE_SOURCE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_source },
+    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_type },
+    { PRICE_VALUE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_price_get_value },
     { NULL },
   };
 

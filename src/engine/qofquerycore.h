@@ -26,28 +26,17 @@
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
 */
 
-#ifndef QOF_QUERYCORE_H
-#define QOF_QUERYCORE_H
+#ifndef QOF_TYPE_H
+#define QOF_TYPE_H
 
 #include <glib.h>
 
 #include "gnc-numeric.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
-
-/** Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
-typedef const char * QofQueryCoreType;
+#include "qofqueryobject.h"
 
 typedef struct _QofQueryPredData QofQueryPredData;
-
-/** The QofAccessFunc type defines an arbitrary function pointer
- *  for access functions.  This is needed because C doesn't have
- *  templates, so we just cast a lot.  Real functions must be of
- *  the form:
- *
- * <param_type> function (object_type *obj);
- */
-typedef gpointer (*QofAccessFunc)(gpointer);
 
 /** Standard Query comparitors, for how to compare objects in a predicate.
  *  Note that not all core types implement all comparitors
@@ -64,27 +53,26 @@ typedef enum {
 /** List of known core query data-types... 
  *  Each core query type defines it's set of optional "comparitor qualifiers".
  */
-#define QOF_QUERYCORE_STRING	"string"
+/* Comparisons for QOF_TYPE_STRING */
 typedef enum {
   QOF_STRING_MATCH_NORMAL = 1,
   QOF_STRING_MATCH_CASEINSENSITIVE
 } QofStringMatch;
 
-#define QOF_QUERYCORE_DATE		"date"
+/* Comparisons for QOF_TYPE_DATE	*/
 typedef enum {
   QOF_DATE_MATCH_NORMAL = 1,
   QOF_DATE_MATCH_ROUNDED
 } QofDateMatch;
 
-#define QOF_QUERYCORE_NUMERIC	"numeric"
-#define QOF_QUERYCORE_DEBCRED	"debcred"
+/* Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED	*/
 typedef enum {
   QOF_NUMERIC_MATCH_DEBIT = 1,
   QOF_NUMERIC_MATCH_CREDIT,
   QOF_NUMERIC_MATCH_ANY
 } QofNumericMatch;
 
-#define QOF_QUERYCORE_GUID		"guid"
+/* Comparisons for QOF_TYPE_GUID */
 typedef enum {
   /** These expect a single object and expect the 
    * QofAccessFunc returns GUID* */
@@ -99,14 +87,12 @@ typedef enum {
   QOF_GUID_MATCH_LIST_ANY,
 } QofGuidMatch;
 
-#define QOF_QUERYCORE_INT32		"gint32"
-#define QOF_QUERYCORE_INT64		"gint64"
-#define QOF_QUERYCORE_DOUBLE	"double"
-#define QOF_QUERYCORE_BOOLEAN	"boolean"
-#define QOF_QUERYCORE_KVP		"kvp"
+/** No extended comparisons for QOF_TYPE_INT32, QOF_TYPE_INT64,
+ *  QOF_TYPE_DOUBLE, QOF_TYPE_BOOLEAN, QOF_TYPE_KVP
+ */
 
 /** A CHAR type is for a RECNCell */
-#define QOF_QUERYCORE_CHAR		"character"
+/* Comparisons for QOF_TYPE_CHAR */
 typedef enum {
   QOF_CHAR_MATCH_ANY = 1,
   QOF_CHAR_MATCH_NONE
@@ -114,7 +100,7 @@ typedef enum {
 
 /** Head of Predicate Data structures.  All PData must start like this. */
 struct _QofQueryPredData {
-  QofQueryCoreType      type_name;  /* QUERYCORE_* */
+  QofType               type_name;  /* QOF_TYPE_* */
   QofQueryCompare       how;
 };
 

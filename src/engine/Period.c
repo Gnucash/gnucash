@@ -583,8 +583,12 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 
    /* Make note of the sibling books */
    now = time(0);
-   gnc_kvp_gemini (src_book->kvp_data, now, "book_guid", &dest_book->guid, NULL);
-   gnc_kvp_gemini (dest_book->kvp_data, now, "book_guid", &src_book->guid, NULL);
+   gnc_kvp_bag_add (src_book->kvp_data, "gemini", now, 
+                          "book_guid", &dest_book->guid, 
+                           NULL);
+   gnc_kvp_bag_add (dest_book->kvp_data, "gemini", now, 
+                          "book_guid", &src_book->guid, 
+                           NULL);
    LEAVE (" ");
 }
 
@@ -819,7 +823,7 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
    if (!existing_book) return NULL;
    ENTER (" date=%s memo=%s", gnc_print_date(calve_date), memo);
 
-   /* Setup closuing book */
+   /* Setup closing book */
    closing_book = qof_book_new();
    qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';

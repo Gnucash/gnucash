@@ -816,7 +816,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
 
       /* This will copy the basic data and the KVP.  It will
        * not copy any splits/transactions. It will gemini. */
-      to_acc = xaccCloneAccount (from_acc, to->book);
+      to_acc = xaccCloneAccount (from_acc, to->book, "gemini");
 
       xaccAccountBeginEdit (to_acc);
       to->accounts = g_list_insert_sorted (to->accounts, to_acc,
@@ -825,7 +825,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
       to_acc->parent = to;
       to_acc->core_dirty = TRUE;
 
-      /* copy child accounts too. */
+      /* Copy child accounts too. */
       if (from_acc->children)
       {
          to_acc->children = xaccMallocAccountGroup (to->book);

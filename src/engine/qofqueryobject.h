@@ -28,8 +28,32 @@
 #ifndef QOF_QUERYOBJECT_H
 #define QOF_QUERYOBJECT_H
 
-#include "qofquery.h"
-#include "qofquerycore.h"
+// #include "qofquery.h"
+#include "qofid.h"
+
+#define QOF_TYPE_STRING    "string"
+#define QOF_TYPE_DATE    	"date"
+#define QOF_TYPE_NUMERIC   "numeric"
+#define QOF_TYPE_DEBCRED   "debcred"
+#define QOF_TYPE_GUID    	"guid"
+#define QOF_TYPE_INT32    	"gint32"
+#define QOF_TYPE_INT64    	"gint64"
+#define QOF_TYPE_DOUBLE    "double"
+#define QOF_TYPE_BOOLEAN   "boolean"
+#define QOF_TYPE_KVP    	"kvp"
+#define QOF_TYPE_CHAR    	"character"
+
+/** Type of Paramters (String, Date, Numeric, GUID, etc.) */
+typedef const char * QofType;
+
+/** The QofAccessFunc type defines an arbitrary function pointer
+ *  for access functions.  This is needed because C doesn't have
+ *  templates, so we just cast a lot.  Real functions must be of
+ *  the form:
+ *
+ * <param_type> function (object_type *obj);
+ */
+typedef gpointer (*QofAccessFunc)(gpointer);
 
 /** This structure is for each queriable parameter in an object
  *
@@ -41,8 +65,8 @@
 typedef struct _QofQueryObject 
 {
   const char       * param_name;
-  QofQueryCoreType   param_type;
-  QofAccessFunc param_getfcn;
+  QofType            param_type;
+  QofAccessFunc      param_getfcn;
 } QofQueryObject;
 
 /** This function is the default sort function for a particular object type */
@@ -67,19 +91,19 @@ void qof_query_object_register (QofIdTypeConst obj_name,
  * #define MY_QUERY_OBJ_TRANS	"trans"
  *
  * static QofQueryObject myQueryObjectParams[] = {
- * { MY_QUERY_OBJ_MEMO, QOF_QUERYCORE_STRING, myMemoGetter },
- * { MY_QUERY_OBJ_VALUE, QOF_QUERYCORE_NUMERIC, myValueGetter },
- * { MY_QUERY_OBJ_DATE, QOF_QUERYCORE_DATE, myDateGetter },
+ * { MY_QUERY_OBJ_MEMO, QOF_TYPE_STRING, myMemoGetter },
+ * { MY_QUERY_OBJ_VALUE, QOF_TYPE_NUMERIC, myValueGetter },
+ * { MY_QUERY_OBJ_DATE, QOF_TYPE_DATE, myDateGetter },
  * { MY_QUERY_OBJ_ACCOUNT, GNC_ID_ACCOUNT, myAccountGetter },
  * { MY_QUERY_OBJ_TRANS, GNC_ID_TRANS, myTransactionGetter },
  * NULL };
  *
- * qof_query_object_registerParamters ("myObjectName", myQueryObjectCompare,
+ * qof_query_object_register ("myObjectName", myQueryObjectCompare,
  *				    &myQueryObjectParams);
  */
 
 /** Return the core datatype of the specified object's parameter */
-QofQueryCoreType qof_query_object_parameter_type (QofIdTypeConst obj_name,
+QofType qof_query_object_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name);
 
 /** Return the registered Object Definition for the requested parameter */

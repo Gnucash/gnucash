@@ -286,8 +286,8 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 gboolean qof_book_register (void)
 {
   static QofQueryObject params[] = {
-    { QOF_BOOK_KVP, QOF_QUERYCORE_KVP, (QofAccessFunc)qof_book_get_slots },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)qof_book_get_guid },
+    { QOF_BOOK_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_book_get_slots },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_book_get_guid },
     { NULL },
   };
 

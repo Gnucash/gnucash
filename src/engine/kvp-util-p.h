@@ -70,10 +70,6 @@
 KvpFrame * gnc_kvp_bag_add (KvpFrame *kvp_root, const char *path, time_t secs, 
                      const char *first_name, ...);
 
-/* Equivalent to gnc_kvp_bag_add(kvp_root, "gemini", secs, firstname, ...); */
-void gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, 
-                     const char *first_name, ...);
-
 
 /** The gnc_kvp_bag_merge() routine will move the bag contents from
  *    the 'kvp_from', to the 'into' bag.  It will then delete the 

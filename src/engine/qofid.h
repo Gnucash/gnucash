@@ -32,8 +32,8 @@
 */
 
 /** This file defines an API that adds types to the GUID's.
- *  GUID's with types cna be used to identify and reference 
- * typed entities.
+ *  GUID's with types can be used to identify and reference 
+ *  typed entities.
  *
  * GUID Identifiers can be used to reference QOF Objects.
  * Identifiers are globally-unique and permanent, i.e., once
@@ -41,11 +41,8 @@
  * identifier for its lifetime.
  *
  * Identifiers can be encoded as hex strings. 
- */
-
-#include "guid.h"
-
-/** GUID Identifiers are 'typed' with strings. The native ids used 
+ *
+ * GUID Identifiers are 'typed' with strings.  The native ids used 
  * by QOF are defined below. An id with type QOF_ID_NONE does not 
  * refer to any entity, although that may change (???). An id with 
  * type QOF_ID_NULL does not refer to any entity, and will never refer
@@ -54,6 +51,8 @@
  * does refer to an entity, the type of the entity will match the 
  * type of the identifier. 
  */
+
+#include "guid.h"
 
 typedef const char * QofIdType;
 typedef const char * QofIdTypeConst;

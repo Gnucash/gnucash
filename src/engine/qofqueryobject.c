@@ -124,7 +124,7 @@ QofAccessFunc qof_query_object_get_parameter_getter (QofIdTypeConst obj_name,
   return NULL;
 }
 
-QofQueryCoreType qof_query_object_parameter_type (QofIdTypeConst obj_name,
+QofType qof_query_object_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name)
 {
   const QofQueryObject *obj;
