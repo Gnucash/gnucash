@@ -1457,9 +1457,10 @@ xaccTransCommitEdit (Transaction *trans)
           */
         /* XXX hack alert -- finish this */
         PWARN("Another user has modified the transaction\n"
-              "Please refresh your browser and try again.\n"
-              "(This dialog should be a gui dialog and \n"
-              "should check for errors)\n");
+              "\tPlease refresh your browser and try again.\n"
+              "\t(This dialog should be a gui dialog and \n"
+              "\tshould check for errors)\n"
+              "\t rc=%d\n", rc);
         /* hack alert -- we should check for i/o errors from 
          * the backend too ... 
          */
