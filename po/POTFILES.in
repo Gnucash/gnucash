@@ -166,6 +166,7 @@ src/calculation/fin.c
 src/calculation/gncmod-calculation.c
 src/calculation/numeric_ops.c
 src/core-utils/core-utils.c
+src/doc/doxygen_main_page.c
 src/engine/Account.c
 src/engine/Backend.c
 src/engine/DateUtils.c
@@ -251,7 +252,6 @@ src/gnome/glade/register.glade
 src/gnome/glade/sched-xact.glade
 src/gnome/glade/stocks.glade
 src/gnome/glade/tax.glade
-src/gnome/glade/transfer.glade
 src/gnome/glade/userpass.glade
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
@@ -266,7 +266,6 @@ src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sxsincelast.c
 src/gnome/dialog-tax-info.c
 src/gnome/dialog-totd.c
-src/gnome/dialog-transfer.c
 src/gnome/dialog-userpass.c
 src/gnome/druid-hierarchy.c
 src/gnome/druid-loan.c
@@ -331,6 +330,9 @@ src/gnome-utils/print-session.c
 src/gnome-utils/window-help.c
 src/gnome-utils/dialog-account-pick.c
 src/gnome-utils/exchange-dialog.glade
+src/gnome-utils/QuickFill.c
+src/gnome-utils/dialog-transfer.c
+src/gnome-utils/transfer.glade
 src/import-export/binary-import/test/test-link-module.c
 src/import-export/binary-import/binary-import.glade
 src/import-export/binary-import/druid-commodity.c
@@ -391,7 +393,6 @@ src/register/ledger-core/split-register-model.c
 src/register/ledger-core/split-register-util.c
 src/register/ledger-core/split-register.c
 src/register/register-core/test/test-link-module.c
-src/register/register-core/QuickFill.c
 src/register/register-core/basiccell.c
 src/register/register-core/cell-factory.c
 src/register/register-core/cellblock.c
