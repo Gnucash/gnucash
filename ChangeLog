@@ -1,3 +1,13 @@
+2002-08-23  Derek Atkins  <derek@ihtfp.com>
+
+	* rpm/*: revert Chris Lyttle's patches.  Make gnucash.spec depend
+	on Postgres however it will build two RPMS: gnucash and
+	gnucash-postgres.  The former does NOT depend on postgres and
+	should be installable on systems without it
+
+	* src/optional/Makefile.am: backport a change to allow 'make dist" to work
+	* src/optional/swig/makefile.am: don't require swig for "make dist"
+
 2002-08-21  Chris Lyttle  <chris@wilddev.net>
 
         * rpm/gnucash.spec.in: removed dependency on Postgres

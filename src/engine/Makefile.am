@@ -1,7 +1,7 @@
 # Engine Makefile.am file.
 
 # don't build sql or RPC subdirs by default, unless you want hurt
-SUBDIRS = ${SQL_DIR} ${RPC_DIR}
+SUBDIRS = . ${SQL_DIR} ${RPC_DIR}
 
 # but put them in the dist
 DIST_SUBDIRS = sql rpc

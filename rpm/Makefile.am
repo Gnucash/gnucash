@@ -1,10 +1,9 @@
 
 EXTRA_DIST = \
   .cvsignore \
-  gnucash.spec.in \
-  gnucash-sql.spec.in
+  gnucash.spec.in
 
-all-local: gnucash.spec gnucash-sql.spec
+all-local: gnucash.spec
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -16,10 +15,4 @@ gnucash.spec: gnucash.spec.in Makefile
             -e 's:@-VERSION-@:${VERSION}:'
 	mv $@.tmp $@
 
-gnucash-sql.spec: gnucash-sql.spec.in Makefile
-	rm -f $@.tmp
-	sed < $@.in > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:'
-	mv $@.tmp $@
-
-CLEANFILES = gnucash.spec gnucash-sql.spec
+CLEANFILES = gnucash.spec
