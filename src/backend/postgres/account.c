@@ -266,6 +266,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccAccountSetCommodity(acc, 
                  gnc_string_to_commodity (DB_GET_VAL("commodity",j)));
    xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
+   acc->idata = atoi(DB_GET_VAL("iguid",j));
 
    /* try to find the parent account */
    PINFO ("parent GUID=%s", DB_GET_VAL("parentGUID",j));
