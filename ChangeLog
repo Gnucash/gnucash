@@ -1,3 +1,11 @@
+2003-05-29  David Hampton  <hampton@employees.org>
+
+	* src/engine/iso-4217-currencies.scm: Update the Polish Zloty for
+	its new ISO currency code.
+
+	* src/engine/gnc-commodity.c: Convert from the old Zloty code to
+	the new one.
+
 2003-05-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/standard-reports/category-barchart.scm: Re-enable
