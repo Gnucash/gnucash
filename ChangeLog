@@ -1,3 +1,11 @@
+2001-02-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report-utilities.scm: add function for determining the
+	account tree depth (moved from account-summary)
+
+	* src/scm/report/account-summary.scm: changed semantics of account
+	selection option. 
+
 2001-02-01  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/gnc-html-history.{h,c}: add destroy callback. part of

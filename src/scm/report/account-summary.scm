@@ -59,22 +59,10 @@
 		  (car (mktime (localtime (current-time))))))))
         #f 'absolute #f))
       
-      ;; set of accounts to do report on 
-      (opt-register 
-       (gnc:make-account-list-option
-        (_ "General") (_ "Account")
-        "b" (_ "Report on these account(s)")
-        (lambda ()
-          (let ((current-accounts (gnc:get-current-accounts)))
-            (cond ((not (null? current-accounts)) current-accounts)
-                  (else
-                   (gnc:group-get-account-list (gnc:get-current-group))))))
-        #f #t))
-      
       (opt-register 
        (gnc:make-multichoice-option
         (_ "General") (_ "Account Display Depth")
-        "c" (_ "Show accounts to this depth.") 1
+        "b" (_ "Show accounts to this depth, overriding any other option.") 1
         (list (list->vector
 	       (list 'all
 		     (_ "All")
@@ -94,22 +82,50 @@
               (list->vector
                (list 4
                      "4"
-                     (_ "Fourth-level"))))))
+                     (_ "Fourth-level")))
+              (list->vector
+               (list 5
+                     "5"
+                     (_ "Fifth-level"))))))
+      
+      (opt-register 
+       (gnc:make-simple-boolean-option
+        (_ "General") (_ "Always show sub-accounts")
+        "c" 
+	(_ "Override account-selection and show sub-accounts of all selected accounts?") 
+	#t))
+
+      ;; Semantics of the account selection: An account shows up if (
+      ;; the tree-depth is large enough AND ( it is selected in the
+      ;; account selector OR ( always show sub-accounts is selected
+      ;; AND one of the parents is selected in the account
+      ;; selector. )))
+      (opt-register 
+       (gnc:make-account-list-option
+        (_ "General") (_ "Account")
+        "d" (_ "Report on these accounts, if display depth allows.")
+        (lambda ()
+          (let ((current-accounts (gnc:get-current-accounts)))
+            (cond ((not (null? current-accounts)) current-accounts)
+                  (else
+                   ;;(gnc:group-get-subaccounts (gnc:get-current-group))))))
+                   (gnc:group-get-account-list (gnc:get-current-group))))))
+        #f #t))
       
       (opt-register 
        (gnc:make-simple-boolean-option
         (_ "General") (_ "Include Sub-Account balances")
-        "d" (_ "Include sub-account balances in printed balance?") #t))
+        "e" (_ "Include sub-account balances in printed balance?") #t))
       
       (opt-register
        (gnc:make-simple-boolean-option
 	(_ "General") (_ "Show Foreign Currencies")
-	"da" (_ "Display the account's foreign currency amount?") #f))
+	"f" (_ "Display the account's foreign currency amount?") #f))
       
       (opt-register
        (gnc:make-currency-option 
 	(_ "General") (_ "Report's currency") 
-	"db" (_ "All other currencies will get converted to this currency.")
+	"g" (_ "All other currencies will get converted to this currency.")
 	(gnc:locale-default-currency)))
       
       options))
@@ -123,10 +139,23 @@
   ;; builds and returns the tree-shaped table
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (define (build-acct-table accounts end-date tree-depth do-subtot?
+  (define (build-acct-table end-date 
+			    tree-depth show-subaccts? accounts do-subtot?
 			    show-fcur? report-commodity exchange-fn)
-    (let ((table (gnc:make-html-table)))
-
+    (let ((table (gnc:make-html-table))
+	  (topl-accounts (gnc:group-get-account-list 
+			  (gnc:get-current-group))))
+      
+      ;; show this account? Check against the account selection and,
+      ;; if not selected, show-subaccts?==#t and any parent was
+      ;; selected. (Maybe the other way around is more effective?)
+      (define (show-acct? a)
+	(or (member a accounts)
+	    (and show-subaccts? 
+		 (let ((parent (gnc:account-get-parent-account a)))
+		   (and parent
+			(show-acct? parent))))))
+      
       ;; The following functions are defined inside build-acct-table
       ;; to avoid passing tons of arguments which are constant anyway
       ;; inside this function.
@@ -160,11 +189,12 @@
       ;; not shown.
       (define (traverse-accounts! accnts current-depth)
 	(if (<= current-depth tree-depth)
-	    (map (lambda (acct)
+	    (for-each (lambda (acct)
 		   (begin
-		     (gnc:html-table-append-row!
-		      table 
-		      (make-row acct current-depth))
+		     (if (show-acct? acct)
+			 (gnc:html-table-append-row!
+			  table 
+			  (make-row acct current-depth)))
 		     (let ((children 
 			     (gnc:account-get-immediate-subaccounts acct)))
 		       (if (not (null? children))
@@ -222,9 +252,10 @@
       ;; The same as above, but for showing foreign currencies/commodities.
       (define (traverse-accounts-fcur! accnts current-depth) 
 	(if (<= current-depth tree-depth)
-	    (map (lambda (acct)
+	    (for-each (lambda (acct)
 		   (begin
-		     (add-commodity-rows! acct current-depth)
+		     (if (show-acct? acct)
+			 (add-commodity-rows! acct current-depth))
 		     (let* ((children 
 			     (gnc:account-get-immediate-subaccounts acct)))
 		       (if (not (null? children))
@@ -236,8 +267,8 @@
 	
       ;; start the recursive account processing
       (if show-fcur?
-	  (traverse-accounts-fcur! accounts 1)
-	  (traverse-accounts! accounts 1))
+	  (traverse-accounts-fcur! topl-accounts 1)
+	  (traverse-accounts! topl-accounts 1))
       
       ;; set default alignment to right, and override for the name
       ;; columns
@@ -262,29 +293,6 @@
       
       table))
   
-  ;; returns the maximum integer>0 in the given list... I'm
-  ;; sure there is a predefined function for this task, but I don't
-  ;; know where to look for that.
-  (define (gnc:find-max-int l)
-    (if (null? l)
-	0
-	(let ((a (gnc:find-max-int (cdr l))))
-	  (if (> a (car l))
-	      a
-	      (car l)))))
-  
-  ;; return the number of children/depth of the given account tree
-  ;; (needed if no tree-depth was specified)
-  (define (gnc:accounts-get-children-depth tree)
-    (gnc:find-max-int
-     (map (lambda (acct)
-	    (let ((children 
-		   (gnc:account-get-immediate-subaccounts acct)))
-	      (if (null? children)
-		  1
-		  (+ 1 (gnc:accounts-get-children-depth children)))))
-	  tree)))
-  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; accsum-renderer
   ;; set up the document and add the table
@@ -296,8 +304,9 @@
        (gnc:lookup-option 
         (gnc:report-options report-obj) (_ "General") optname)))
     
-    (let ((accounts (get-option (_ "Account")))
-          (display-depth (get-option (_ "Account Display Depth")))
+    (let ((display-depth (get-option (_ "Account Display Depth")))
+	  (show-subaccts? (get-option (_ "Always show sub-accounts")))
+	  (accounts (get-option (_ "Account")))
           (do-subtotals? (get-option (_ "Include Sub-Account balances")))
 	  (show-fcur? (get-option (_ "Show Foreign Currencies")))
 	  (report-currency (get-option (_ "Report's currency")))
@@ -315,14 +324,15 @@
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
 	  (let* ((tree-depth (if (equal? display-depth 'all)
-				 (gnc:accounts-get-children-depth accounts)
+				 (gnc:get-current-group-depth)
 				 display-depth))
 		 (exchange-alist (gnc:make-exchange-alist 
 				  report-currency date-tp))
 		 (exchange-fn (gnc:make-exchange-function exchange-alist))
 		 ;; do the processing here
 		 (table (build-acct-table 
-			 accounts date-tp tree-depth do-subtotals?
+			 date-tp 
+			 tree-depth show-subaccts? accounts do-subtotals? 
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 

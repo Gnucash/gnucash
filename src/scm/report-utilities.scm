@@ -42,6 +42,23 @@
                #f)))
     (member type '(stock mutual-fund currency))))
 
+;; Returns the depth of the current account heirarchy, that is, the
+;; maximum level of subaccounts in the current-group.
+(define (gnc:get-current-group-depth)
+  ;; Given a list of accounts, this function determines the maximum
+  ;; sub-account level that there is.
+  (define (accounts-get-children-depth accounts)
+    (apply max
+	   (map (lambda (acct)
+		  (let ((children 
+			 (gnc:account-get-immediate-subaccounts acct)))
+		    (if (null? children)
+			1
+			(+ 1 (accounts-get-children-depth children)))))
+		accounts)))
+  (accounts-get-children-depth 
+   (gnc:group-get-account-list (gnc:get-current-group))))
+
 (define (gnc:account-separator-char)
   (let ((option (gnc:lookup-option gnc:*options-entries*
                                    "General" "Account Separator")))
