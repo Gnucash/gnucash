@@ -1,6 +1,6 @@
 --
 -- FILE:
--- table-dropt.sql
+-- table-drop.sql
 --
 -- FUNCTION:
 -- Drop the tables needed to run GnuCash database
@@ -21,5 +21,6 @@ DROP TABLE gncKVPvalue_dbl;
 DROP TABLE gncKVPvalue_numeric;
 DROP TABLE gncKVPvalue_str;
 DROP TABLE gncKVPvalue_guid;
+DROP TABLE gncKVPvalue_timespec;
 DROP TABLE gncKVPvalue_list;
 DROP TABLE gncKVPvalue_frame;

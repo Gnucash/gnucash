@@ -82,7 +82,7 @@ define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint, x,
        commodity,           , char *,   ptr->commodity,
        accountGuid,         , GUID *,   ptr->account_guid,
        ')
-       
+
 
 define(`session', `gncSession, Session, void, x,
        session_mode,        , char *, pgendSessionGetMode(be),
@@ -93,14 +93,13 @@ define(`session', `gncSession, Session, void, x,
        time_off,            , now,    "INFINITY",
        sessionGUID,      KEY, GUID *, be->sessionGuid,
        ')
-       
+
 define(`kvp_gint64', `gncKVPvalue_int64, KVPint64, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , int64,  ptr->u.ival,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
-       
 
 define(`kvp_double', `gncKVPvalue_dbl, KVPdouble, store_data_t, k,
        type,                , char *, ptr->stype,
@@ -108,7 +107,7 @@ define(`kvp_double', `gncKVPvalue_dbl, KVPdouble, store_data_t, k,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
-       
+
 define(`kvp_numeric', `gncKVPvalue_numeric, KVPnumeric, store_data_t, k,
        type,                , char *, ptr->stype,
        num,                 , int64,  ptr->u.numeric.num,
@@ -116,21 +115,28 @@ define(`kvp_numeric', `gncKVPvalue_numeric, KVPnumeric, store_data_t, k,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
-       
+
 define(`kvp_string', `gncKVPvalue_str, KVPstring, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , char *, ptr->u.str,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
-       
+
 define(`kvp_guid', `gncKVPvalue_guid, KVPguid, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , char *, ptr->u.str,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
-       
+
+define(`kvp_timespec', `gncKVPvalue_timespec, KVPtimespec, store_data_t, k,
+       type,                , char *,   ptr->stype,
+       data,                , Timespec, ptr->u.ts,
+       iguid,            KEY, int32,    ptr->iguid,
+       ipath,            KEY, int32,    ptr->ipath,
+       ')
+
 /* ------------------------------------------------------- */
 /* symbolic names for the table accessors */
 define(`tablename', $1)

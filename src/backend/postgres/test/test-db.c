@@ -717,7 +717,6 @@ guile_main (int argc, char **argv)
   /* The random double generator is making values
    * that postgres doesn't like. */
   kvp_exclude_type (KVP_TYPE_DOUBLE);
-  kvp_exclude_type (KVP_TYPE_TIMESPEC);
 
   set_max_kvp_depth (3);
   set_max_kvp_frame_elements (3);

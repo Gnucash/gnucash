@@ -207,9 +207,9 @@ static gpointer
 get_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    int version = atoi(DB_GET_VAL ("version", j));
-   int incoming = (int) data;
+   int incoming = GPOINTER_TO_INT (data);
    if (version < incoming) version = incoming;
-   return (gpointer) version;
+   return GINT_TO_POINTER (version);
 }
 
 /* ============================================================= */
@@ -1007,11 +1007,11 @@ pgendSessionCanStart (PGBackend *be, int break_lock)
 static gpointer 
 is_gnucash_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   if (TRUE == (gboolean) data) return (gpointer) TRUE;
+   if (TRUE == GPOINTER_TO_INT (data)) return GINT_TO_POINTER (TRUE);
 
    if (0 == strcmp ("gncsession", (DB_GET_VAL ("tablename", j)))) 
-      return (gpointer) TRUE;
-   return FALSE;
+      return GINT_TO_POINTER (TRUE);
+   return GINT_TO_POINTER (FALSE);
 }
 
 static gboolean
@@ -1027,7 +1027,9 @@ pgendSessionValidate (PGBackend *be, int break_lock)
     * GnuCash data... */
    p = "SELECT * FROM pg_tables; ";
    SEND_QUERY (be,p, FALSE);
-   retval = (gboolean) pgendGetResults (be, is_gnucash_cb, (gpointer) FALSE);
+   retval = GPOINTER_TO_INT (pgendGetResults (be,
+                                              is_gnucash_cb,
+                                              GINT_TO_POINTER (FALSE)));
    if (FALSE == retval) {
       xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return FALSE;
@@ -1322,7 +1324,7 @@ pgend_price_load_single (Backend *bend)
 static gpointer 
 db_exists_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   return (gpointer) TRUE;
+   return GINT_TO_POINTER (TRUE);
 }
 
 
@@ -1562,8 +1564,9 @@ pgend_session_begin (Backend *backend,
          p = stpcpy (p, "';");
 
          SEND_QUERY (be,be->buff, );
-         db_exists = (gboolean) pgendGetResults (be, db_exists_cb, FALSE);
-         
+         db_exists = GPOINTER_TO_INT(pgendGetResults(be, db_exists_cb,
+                                                     GINT_TO_POINTER (FALSE)));
+
          PQfinish (be->connection);
          be->connection = NULL;
 
@@ -1643,8 +1646,9 @@ pgend_session_begin (Backend *backend,
       p = stpcpy (p, "';");
 
       SEND_QUERY (be,be->buff, );
-      db_exists = (gboolean) pgendGetResults (be, db_exists_cb, FALSE);
-         
+      db_exists = GPOINTER_TO_INT (pgendGetResults (be, db_exists_cb,
+                                                    GINT_TO_POINTER (FALSE)));
+
       if (FALSE == db_exists)
       {
 
@@ -1656,7 +1660,7 @@ pgend_session_begin (Backend *backend,
          SEND_QUERY (be,be->buff, );
          FINISH_QUERY(be->connection);
          PQfinish (be->connection);
-   
+
          /* now connect to the newly created database */
          be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
@@ -1680,7 +1684,7 @@ pgend_session_begin (Backend *backend,
             xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);
             return;
          }
-         
+
          /* Finally, create all the tables and indexes.
           * We do this in pieces, so as not to exceed the max length
           * for postgres queries (which is 8192). 
@@ -1735,8 +1739,9 @@ pgend_session_begin (Backend *backend,
          rc = pgendDBVersionIsCurrent (be);
          if (0 > rc)
          {
-            /* The server is newer than we are, or another error occured,
-             * we don't know how to talk to it.  The err code is already set. */
+            /* The server is newer than we are, or another error
+             * occured, we don't know how to talk to it. The err
+             * code is already set. */
             PQfinish (be->connection);
             be->connection = NULL;
             return;
@@ -1750,7 +1755,9 @@ pgend_session_begin (Backend *backend,
                 "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
                 "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
             SEND_QUERY (be,p, );
-            someones_still_on = (gboolean) pgendGetResults (be, db_exists_cb, FALSE);
+            someones_still_on =
+              GPOINTER_TO_INT (pgendGetResults (be, db_exists_cb,
+                                                GINT_TO_POINTER (FALSE)));
             if (someones_still_on)
             {
                p = "COMMIT;\n";

@@ -500,6 +500,9 @@ kvp_table_name (kvp_value_t value_t)
     case KVP_TYPE_GUID:
       return "gnckvpvalue_guid";
 
+    case KVP_TYPE_TIMESPEC:
+      return "gnckvpvalue_timespec";
+
     default:
       PWARN ("kvp value not supported");
       return NULL;
@@ -567,6 +570,7 @@ kvp_left_operand (kvp_value *value)
     case KVP_TYPE_GINT64:
     case KVP_TYPE_DOUBLE:
     case KVP_TYPE_GUID:
+    case KVP_TYPE_TIMESPEC:
     case KVP_TYPE_STRING:
       return g_strdup_printf ("%s.data", kvptable);
 
@@ -608,6 +612,12 @@ kvp_right_operand (sqlQuery *sq, kvp_value *value)
       char *s = g_strdup_printf ("'%s'", guid);
       g_free (guid);
       return s;
+    }
+
+    case KVP_TYPE_TIMESPEC: {
+      char s[80];
+      gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (value), s);
+      return g_strdup_printf ("'%s'", s);
     }
 
     case KVP_TYPE_STRING: {

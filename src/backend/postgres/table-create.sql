@@ -220,6 +220,13 @@ CREATE TABLE gncKVPvalue_guid (
 
 -- CREATE INDEX gncKVPvalue_guid_iguid_idx ON gncKVPvalue_guid (iguid);
 
+CREATE TABLE gncKVPvalue_timespec (
+	data		DATETIME
+--        PRIMARY KEY (iguid, ipath)
+) INHERITS (gncKVPvalue);
+
+-- CREATE INDEX gncKVPvalue_timespec_iguid_idx ON gncKVPvalue_timespec (iguid);
+
 CREATE TABLE gncKVPvalue_list (
 	data		TEXT[]
 --        PRIMARY KEY (iguid, ipath)

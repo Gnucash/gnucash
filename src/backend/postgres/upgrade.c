@@ -37,7 +37,7 @@ static short module = MOD_BACKEND;
 /* ============================================================= */
 
 #define PGEND_CURRENT_MAJOR_VERSION  1
-#define PGEND_CURRENT_MINOR_VERSION  2
+#define PGEND_CURRENT_MINOR_VERSION  3
 #define PGEND_CURRENT_REV_VERSION    1
 
 /* ============================================================= */
@@ -248,6 +248,37 @@ fix_reconciled_balance_func (PGBackend *be)
    FINISH_QUERY(be->connection);
 }
 
+static void
+add_kvp_timespec_tables (PGBackend *be)
+{
+  char *p;
+
+  p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+      " (1,3,0,'Start Add kvp_timespec tables');";
+  SEND_QUERY (be,p, );
+  FINISH_QUERY(be->connection);
+
+  p = "CREATE TABLE gncKVPvalue_timespec ( "
+      "  data		DATETIME "
+      ") INHERITS (gncKVPvalue);";
+  SEND_QUERY (be,p, );
+  FINISH_QUERY(be->connection);
+
+  p = "CREATE TABLE gncKVPvalue_timespecTrail ( "
+      "  iguid		INT4, "
+      "  ipath		INT4, "
+      "  type		char(4), "
+      "  data		DATETIME "
+      ") INHERITS (gncAuditTrail);";
+  SEND_QUERY (be,p, );
+  FINISH_QUERY(be->connection);
+
+  p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+      " (1,3,1,'End Add kvp_timespec tables');";
+  SEND_QUERY (be,p, );
+  FINISH_QUERY(be->connection);
+}
+
 /* ============================================================= */
 /* Are we up to date ? */
 /* Return 0 if we are at db version. Return +1 if we are newer.
@@ -258,7 +289,7 @@ int
 pgendDBVersionIsCurrent (PGBackend *be)
 {
    pgendVersion vers;
-   
+
    pgendVersionTable(be);
    vers = pgendGetVersion(be);
 
@@ -267,6 +298,7 @@ pgendDBVersionIsCurrent (PGBackend *be)
       xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return -1;
    }
+
    if ((PGEND_CURRENT_MAJOR_VERSION == vers.major) &&
        (PGEND_CURRENT_MINOR_VERSION <= vers.minor)) return 0;
 
@@ -300,6 +332,10 @@ pgendUpgradeDB (PGBackend *be)
       if (2 > vers.minor)
       {
         fix_reconciled_balance_func (be);
+      }
+      if (3 > vers.minor)
+      {
+        add_kvp_timespec_tables (be);
       }
    }
 }

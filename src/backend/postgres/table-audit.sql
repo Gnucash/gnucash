@@ -146,6 +146,13 @@ CREATE TABLE gncKVPvalue_guidTrail (
 	data		CHAR(32)
 ) INHERITS (gncAuditTrail);
 
+CREATE TABLE gncKVPvalue_timespecTrail (
+	iguid		INT4,
+	ipath		INT4,
+	type		char(4),
+	data		DATETIME
+) INHERITS (gncAuditTrail);
+
 CREATE TABLE gncKVPvalue_listTrail (
 	iguid		INT4,
 	ipath		INT4,

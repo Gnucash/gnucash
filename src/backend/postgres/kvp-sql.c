@@ -194,6 +194,7 @@ typedef struct store_data_s {
       gnc_numeric numeric;
       const char *str;
       const GUID *guid;
+      Timespec ts;
       GList *list;
    } u;
 } store_data_t;
@@ -280,6 +281,15 @@ store_cb (const char *key, kvp_value *val, gpointer p)
                pgendPutOneKVPguidOnly (be, cb_data);
             }
             break;
+
+         case KVP_TYPE_TIMESPEC:
+           {
+             PINFO ("path=%s type=timespec", cb_data->path);
+             cb_data->stype = "timespec";
+             cb_data->u.ts = kvp_value_get_timespec (val);
+             pgendPutOneKVPtimespecOnly (be, cb_data);
+           }
+           break;
 
          case KVP_TYPE_BINARY:
             PERR ("Binary KVP Type not yet implemented\n");
@@ -455,6 +465,16 @@ guid_handler (PGBackend *be, PGresult *result, int j, gpointer data)
    KVP_HANDLER_TAKEDOWN;
 }
 
+static gpointer 
+timespec_handler (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   Timespec ts;
+   GUID guid;
+   KVP_HANDLER_SETUP;
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL ("data", j));
+   kv = kvp_value_new_timespec (ts);
+   KVP_HANDLER_TAKEDOWN;
+}
 
 static gpointer 
 list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
@@ -506,6 +526,7 @@ pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
    GET_KVP(numeric);
    GET_KVP(str);
    GET_KVP(guid);
+   GET_KVP(timespec);
    GET_KVP(list);
 
    LEAVE (" ");
@@ -541,6 +562,7 @@ pgendKVPDelete (PGBackend *be, guint32 iguid)
    CPY_KVP("");
    CPY_KVP("_dbl");
    CPY_KVP("_guid");
+   CPY_KVP("_timespec");
    CPY_KVP("_int64");
    CPY_KVP("_list");
    CPY_KVP("_numeric");
@@ -552,6 +574,8 @@ pgendKVPDelete (PGBackend *be, guint32 iguid)
    p = stpcpy (p, "DELETE FROM gncKVPValue_dbl WHERE iguid=");
    p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_guid WHERE iguid=");
+   p = stpcpy (p, iguid_str);
+   p = stpcpy (p, "DELETE FROM gncKVPValue_timespec WHERE iguid=");
    p = stpcpy (p, iguid_str);
    p = stpcpy (p, "DELETE FROM gncKVPValue_int64 WHERE iguid=");
    p = stpcpy (p, iguid_str);
