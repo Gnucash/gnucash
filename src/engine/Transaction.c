@@ -91,8 +91,8 @@ xaccInitSplit(Split * split)
   split->acc         = NULL;
   split->parent      = NULL;
 
-  split->action      = strdup("");
-  split->memo        = strdup("");
+  split->action      = g_strdup("");
+  split->memo        = g_strdup("");
   split->reconciled  = NREC;
   split->damount     = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -119,7 +119,7 @@ xaccInitSplit(Split * split)
 Split *
 xaccMallocSplit(void)
 {
-  Split *split = (Split *)_malloc(sizeof(Split));
+  Split *split = g_new(Split, 1);
   xaccInitSplit (split);
   return split;
 }
@@ -135,13 +135,13 @@ xaccMallocSplit(void)
 static Split *
 xaccCloneSplit (Split *s)
 {
-  Split *split = (Split *)_malloc(sizeof(Split));
+  Split *split = g_new(Split, 1);
 
   split->acc         = s->acc;
   split->parent      = s->parent;
-  
-  split->action      = strdup(s->action);
-  split->memo        = strdup(s->memo);
+
+  split->action      = g_strdup(s->action);
+  split->memo        = g_strdup(s->memo);
   split->reconciled  = s->reconciled;
   split->damount     = s->damount;
   split->value       = s->value;
@@ -173,12 +173,12 @@ xaccFreeSplit( Split *split )
 {
   if (!split) return;
 
-  if (split->memo) free (split->memo);
-  if (split->action) free (split->action);
+  g_free (split->memo);
+  g_free (split->action);
 
   /* just in case someone looks up freed memory ... */
-  split->memo        = 0x0;
-  split->action      = 0x0;
+  split->memo        = NULL;
+  split->action      = NULL;
   split->reconciled  = NREC;
   split->damount     = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -188,7 +188,7 @@ xaccFreeSplit( Split *split )
   split->date_reconciled.tv_sec = 0;
   split->date_reconciled.tv_nsec = 0;
 
-  _free(split);
+  g_free(split);
 }
 
 /********************************************************************
@@ -382,12 +382,12 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
                                  gnc_numeric amt)
 {
   if (!s) return;
-  
+
   MARK_SPLIT(s);
   s->damount = amt;
   s->value   = gnc_numeric_mul(s->damount, price, 
                                get_currency_denom(s), GNC_RND_ROUND);
-  
+
   /* force double entry to always balance */
   xaccSplitRebalance (s);
 }
@@ -401,9 +401,9 @@ DxaccSplitSetSharePrice (Split *s, double amt) {
 void 
 xaccSplitSetSharePrice (Split *s, gnc_numeric price) {
   if (!s) return;
-  
+
   MARK_SPLIT(s);
-  
+
   s->value = gnc_numeric_mul(s->damount, price, get_currency_denom(s),
                              GNC_RND_ROUND);
 
@@ -423,7 +423,7 @@ xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
   gnc_numeric old_price;
 
   if (!s) return;
-  
+
   MARK_SPLIT(s);
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
@@ -437,7 +437,7 @@ xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
                                    GNC_RND_NEVER);
   s->value   = gnc_numeric_mul(s->damount, old_price, 
                                get_currency_denom(s), GNC_RND_ROUND);
-                             
+
   /* force double entry to always balance */
   xaccSplitRebalance (s);
 }
@@ -454,9 +454,9 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) {
   gnc_numeric old_price;
   if (!s) return;
-  
+
   MARK_SPLIT(s);
-  
+
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
                                 GNC_DENOM_EXACT);
@@ -464,10 +464,10 @@ xaccSplitSetValue (Split *s, gnc_numeric amt) {
   else {
     old_price = gnc_numeric_create(PRICE_DENOM, PRICE_DENOM);
   }
-  
+
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), 
                                  GNC_RND_NEVER);
-  
+
   if(!gnc_numeric_zero_p(old_price)) {
     s->damount = gnc_numeric_div(s->value, old_price, get_currency_denom(s),
                                  GNC_RND_ROUND);
@@ -559,10 +559,10 @@ xaccInitTransaction( Transaction * trans )
   Split *split;
 
   /* Fill in some sane defaults */
-  trans->num         = strdup("");
-  trans->description = strdup("");
+  trans->num         = g_strdup("");
+  trans->description = g_strdup("");
 
-  trans->splits    = (Split **) _malloc (3* sizeof (Split *));
+  trans->splits    = g_malloc (3 * sizeof (Split *));
 
   /* Create a single split only.  As soon as the balance becomes
    * non-zero, additional splits will get created. 
@@ -594,7 +594,7 @@ xaccInitTransaction( Transaction * trans )
 Transaction *
 xaccMallocTransaction( void )
 {
-  Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
+  Transaction *trans = g_new(Transaction, 1);
   xaccInitTransaction (trans);
   return trans;
 }
@@ -613,13 +613,13 @@ xaccCloneTransaction (Transaction *t)
   Transaction *trans;
   int n;
 
-  trans = (Transaction *)_malloc(sizeof(Transaction));
+  trans = g_new(Transaction, 1);
 
-  trans->num         = strdup(t->num);
-  trans->description = strdup(t->description);
+  trans->num         = g_strdup(t->num);
+  trans->description = g_strdup(t->description);
 
   n=0; while (t->splits[n]) n++;
-  trans->splits = (Split **) _malloc ((n+1)* sizeof (Split *));
+  trans->splits = g_malloc ((n+1)* sizeof (Split *));
 
   n=0; 
   while (t->splits[n]) {
@@ -669,15 +669,15 @@ xaccFreeTransaction( Transaction *trans )
     }
   }
 
-  _free (trans->splits);
+  g_free (trans->splits);
 
   /* free up transaction strings */
-  if (trans->num) free (trans->num);
-  if (trans->description) free (trans->description);
+  g_free (trans->num);
+  g_free (trans->description);
 
   /* just in case someone looks up freed memory ... */
-  trans->num         = 0x0;
-  trans->description = 0x0;
+  trans->num         = NULL;
+  trans->description = NULL;
 
   trans->date_entered.tv_sec = 0;
   trans->date_entered.tv_nsec = 0;
@@ -692,7 +692,7 @@ xaccFreeTransaction( Transaction *trans )
     trans->orig = NULL;
   }
 
-  _free(trans);
+  g_free(trans);
 
   LEAVE ("addr=%p\n", trans);
 }
@@ -971,7 +971,7 @@ ComputeValue (Split **sarray, Split * skip_me,
      }
      i++; s = sarray [i];
    }
-   
+
    return value;
 }
 
@@ -1246,14 +1246,14 @@ xaccSplitRebalance (Split *split)
           xaccTransAppendSplit (trans, s); 
           xaccAccountInsertSplit (split->acc, s);
 
-          free (s->memo);
-          free (s->action);
+          g_free (s->memo);
+          g_free (s->action);
           
           xaccSplitSetValue(s, gnc_numeric_neg(split->value));
           xaccSplitSetShareAmount(s, gnc_numeric_neg(split->value));
 
-          s->memo    = strdup (split->memo);
-          s->action  = strdup (split->action);
+          s->memo    = g_strdup (split->memo);
+          s->action  = g_strdup (split->action);
           
         }
       }
@@ -1458,7 +1458,9 @@ xaccTransRollbackEdit (Transaction *trans)
     * the guid would have been unlisted. Restore that */
    xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 
-#define PUT_BACK(val) { free(trans->val); trans->val=orig->val; orig->val=0x0; }
+#define PUT_BACK(val) { g_free(trans->val); \
+                        trans->val=orig->val; orig->val=NULL; }
+
    PUT_BACK (num);
    PUT_BACK (description);
 
@@ -1486,7 +1488,8 @@ xaccTransRollbackEdit (Transaction *trans)
       while (s && so) {
          if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
    
-   #define HONKY_CAT(val) { free(s->val); s->val=so->val; so->val=0x0; }
+#define HONKY_CAT(val) { g_free(s->val); s->val=so->val; so->val=NULL; }
+
          HONKY_CAT (action);
          HONKY_CAT (memo);
    
@@ -1532,7 +1535,7 @@ xaccTransRollbackEdit (Transaction *trans)
          i++;
          s =  trans->splits[i];
       }
-      _free (trans->splits);
+      g_free (trans->splits);
 
       trans->splits = orig->splits;
       orig->splits = NULL;
@@ -1681,14 +1684,14 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    num = xaccCountSplits (trans->splits);
 
    oldarray = trans->splits;
-   trans->splits = (Split **) _malloc ((num+2)*sizeof(Split *));
+   trans->splits = (Split **) g_malloc ((num+2)*sizeof(Split *));
    for (i=0; i<num; i++) {
       (trans->splits)[i] = oldarray[i];
    }
    trans->splits[num] = split;
    trans->splits[num+1] = NULL;
 
-   if (oldarray) _free (oldarray);
+   g_free (oldarray);
 
    /* force double entry to always be consistent */
    xaccSplitRebalance (split);
@@ -1985,8 +1988,8 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
    if (!trans || !xnum) return;
    CHECK_OPEN (trans);
 
-   tmp = strdup (xnum);
-   if (trans->num) free (trans->num);
+   tmp = g_strdup (xnum);
+   g_free (trans->num);
    trans->num = tmp;
    MarkChanged (trans);
 }
@@ -1998,8 +2001,8 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    if (!trans || !desc) return;
    CHECK_OPEN (trans);
 
-   tmp = strdup (desc);
-   if (trans->description) free (trans->description);
+   tmp = g_strdup (desc);
+   g_free (trans->description);
    trans->description = tmp;
    MarkChanged (trans);
 }
@@ -2016,21 +2019,21 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 								\
    /* there must be two splits if value of one non-zero */	\
    if (force_double_entry) {					\
-     if (! gnc_numeric_zero_p(trans->splits[0]->damount)) {    \
+     if (! gnc_numeric_zero_p(trans->splits[0]->damount)) {     \
         assert (trans->splits[1]);				\
      }								\
    }								\
 								\
-   tmp = strdup (value);					\
-   free (trans->splits[0]->field);				\
+   tmp = g_strdup (value);					\
+   g_free (trans->splits[0]->field);				\
    trans->splits[0]->field = tmp;				\
    MARK_SPLIT (trans->splits[0]);				\
 								\
    /* If there are just two splits, then keep them in sync. */	\
-   if (0x0 != trans->splits[1]) {				\
-      if (0x0 == trans->splits[2]) {				\
-         free (trans->splits[1]->field);			\
-         trans->splits[1]->field = strdup (tmp);		\
+   if (NULL != trans->splits[1]) {				\
+      if (NULL == trans->splits[2]) {				\
+         g_free (trans->splits[1]->field);			\
+         trans->splits[1]->field = g_strdup (tmp);		\
          MARK_SPLIT (trans->splits[1]);				\
       }								\
    }								\
@@ -2120,8 +2123,8 @@ xaccSplitSetMemo (Split *split, const char *memo)
 {
    char * tmp;
    if (!split || !memo) return;
-   tmp = strdup (memo);
-   if (split->memo) free (split->memo);
+   tmp = g_strdup (memo);
+   g_free (split->memo);
    split->memo = tmp;
    MARK_SPLIT (split);
 }
@@ -2131,8 +2134,8 @@ xaccSplitSetAction (Split *split, const char *actn)
 {
    char * tmp;
    if (!split || !actn) return;
-   tmp = strdup (actn);
-   if (split->action) free (split->action);
+   tmp = g_strdup (actn);
+   g_free (split->action);
    split->action = tmp;
    MARK_SPLIT (split);
 }
