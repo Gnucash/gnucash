@@ -133,7 +133,6 @@ gnc_module_system_setup_load_path(void)
   {
     g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
   }
-  g_free (put_str);
   g_free(envt);
 }
 
