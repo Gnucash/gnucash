@@ -200,10 +200,12 @@ gnc_mainwin_account_tree_get_type ()
 \*******************************************************************************/
 
 void 
-gnc_mainwin_account_tree_attach_popup(GNCMainWinAccountTree *mwac_tree, GnomeUIInfo *popup_info)
+gnc_mainwin_account_tree_attach_popup(GNCMainWinAccountTree *mwac_tree,
+                                      GnomeUIInfo *popup_info,
+                                      gpointer user_data)
 {
   GtkWidget *popup = gnome_popup_menu_new(popup_info);
-  gnome_popup_menu_attach(popup, GTK_WIDGET(mwac_tree->acc_tree), NULL);
+  gnome_popup_menu_attach(popup, GTK_WIDGET(mwac_tree->acc_tree), user_data);
   return;
 }
 

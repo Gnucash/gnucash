@@ -1542,7 +1542,8 @@ recnWindow (GtkWidget *parent, Account *account)
   recn_set_watches (recnData);
 
   type = xaccAccountGetType(account);
-  recnData->use_shares = ((type == STOCK) || (type == MUTUAL) ||
+  recnData->use_shares = ((type == STOCK) ||
+                          (type == MUTUAL) ||
                           (type == CURRENCY));
 
   /* The last time reconciliation was attempted during the current
@@ -1555,7 +1556,8 @@ recnWindow (GtkWidget *parent, Account *account)
   else
      statement_date = last_statement_date;
 
-  gnc_get_reconcile_info (account, recnData->use_shares, &new_ending, &statement_date);
+  gnc_get_reconcile_info (account, recnData->use_shares,
+                          &new_ending, &statement_date);
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
@@ -1591,10 +1593,15 @@ recnWindow (GtkWidget *parent, Account *account)
 
   /* The menu bar */
   {
+    GnomeDockItemBehavior behavior;
     GtkWidget *dock_item;
     GtkWidget *menubar;
 
-    dock_item = gnome_dock_item_new("menu", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+    behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+    if (!gnome_preferences_get_menubar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    dock_item = gnome_dock_item_new("menu", behavior);
 
     menubar = gnc_recn_create_menu_bar(recnData, statusbar);
     gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
@@ -1606,11 +1613,16 @@ recnWindow (GtkWidget *parent, Account *account)
 
   /* The tool bar */
   {
+    GnomeDockItemBehavior behavior;
     GtkWidget *dock_item;
     GtkWidget *toolbar;
     SCM id;
 
-    dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+    behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+    if (!gnome_preferences_get_toolbar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    dock_item = gnome_dock_item_new("toolbar", behavior);
 
     toolbar = gnc_recn_create_tool_bar(recnData);
     gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);

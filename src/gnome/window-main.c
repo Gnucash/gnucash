@@ -124,32 +124,37 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   summarybar = gnc_main_window_summary_new();
 
   {
-     /* This is essentially gnome_app_add_docked, but without using
-      * gnome_app_add_dock_item because it emits the layout_changed
-      * signal which creates a new layout and writes it over the saved
-      * layout config before we've had a chance to read it.
-      */
+    GnomeDockItemBehavior behavior;
+    GtkWidget *item;
 
-     GtkWidget *item;
-     item = gnome_dock_item_new("Summary Bar",
-                                GNOME_DOCK_ITEM_BEH_EXCLUSIVE |
-                                GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL);
-     gtk_container_add( GTK_CONTAINER (item), summarybar );
+    /* This is essentially gnome_app_add_docked, but without using
+     * gnome_app_add_dock_item because it emits the layout_changed
+     * signal which creates a new layout and writes it over the saved
+     * layout config before we've had a chance to read it.
+     */
 
-     if( app->layout )
-     {
-       gnome_dock_layout_add_item( app->layout,
-                                   GNOME_DOCK_ITEM(item),
-                                   GNOME_DOCK_TOP,
-                                   2, 0, 0 );
-     }
-     else
-     {
-        gnome_dock_add_item( GNOME_DOCK(app->dock),
-                             GNOME_DOCK_ITEM(item),
-                             GNOME_DOCK_TOP,
-                             2, 0, 0, FALSE );
-     }
+    behavior = (GNOME_DOCK_ITEM_BEH_EXCLUSIVE |
+                GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL);
+    if (!gnome_preferences_get_toolbar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    item = gnome_dock_item_new("Summary Bar", behavior);
+    gtk_container_add( GTK_CONTAINER (item), summarybar );
+
+    if (app->layout)
+    {
+      gnome_dock_layout_add_item( app->layout,
+                                  GNOME_DOCK_ITEM(item),
+                                  GNOME_DOCK_TOP,
+                                  2, 0, 0 );
+    }
+    else
+    {
+      gnome_dock_add_item( GNOME_DOCK(app->dock),
+                           GNOME_DOCK_ITEM(item),
+                           GNOME_DOCK_TOP,
+                           2, 0, 0, FALSE );
+    }
   }
 
   /* add the statusbar */ 
@@ -266,11 +271,16 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
   GnomeUIInfo      * hintinfo;
   GtkWidget        * oldbar;
   GnomeApp         * new_app = NULL; 
+  GnomeDockItemBehavior behavior;
 
   if(mdi && mdi->active_child) {
     childwin = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
     new_app = gnome_mdi_get_app_from_view(childwin->contents);
   }
+
+  behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+  if (!gnome_preferences_get_toolbar_detachable ())
+    behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
 
   if(childwin && childwin->toolbar) {
     if(childwin->app && (childwin->app == new_app)) {
@@ -298,7 +308,7 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       childwin->app = new_app;
       gnome_app_add_toolbar(GNOME_APP(childwin->app), 
                             GTK_TOOLBAR(childwin->toolbar),
-                            "Toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE,
+                            "Toolbar", behavior,
                             GNOME_DOCK_TOP, 1, 0, 0);
       gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
                             gnc_get_toolbar_style());
@@ -312,7 +322,7 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       childwin->app = new_app;
       gnome_app_add_toolbar(GNOME_APP(childwin->app), 
                             GTK_TOOLBAR(childwin->toolbar),
-                            "Toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE,
+                            "Toolbar", behavior,
                             GNOME_DOCK_TOP, 1, 0, 0);
       gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
                             gnc_get_toolbar_style());

@@ -150,7 +150,7 @@ gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
  ********************************************************************/
 
 static GtkWidget *
-gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {  
+gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
   GNCMainInfo        * maininfo = user_data;
   GNCMainChildInfo   * mc = g_new0(GNCMainChildInfo, 1);
   GNCAcctTreeWin     * win = gnc_acct_tree_window_new(child->name);
@@ -184,14 +184,18 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
                                            N_("Name of account view"));
   scm_protect_object(win->name_change_callback_id);
 
-  gnc_acct_tree_window_create_menu(win, mc); 
+  gnc_acct_tree_window_create_menu(win, mc);
   gnc_acct_tree_window_create_toolbar(win, mc);
   gnc_main_window_create_child_toolbar(maininfo, mc);
-  
+
+  gnc_mainwin_account_tree_attach_popup
+    (GNC_MAINWIN_ACCOUNT_TREE (win->account_tree),
+     mc->menu_info->moreinfo, child);
+
   if(mc->menu_info) {
     gnome_mdi_child_set_menu_template(child, mc->menu_info);  
   }
-  
+
   return mc->contents;
 }
 

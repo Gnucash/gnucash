@@ -63,15 +63,20 @@ guint          gnc_mainwin_account_tree_get_type(void);
 GtkWidget*     gnc_mainwin_account_tree_new(void);
 
 void 
-gnc_mainwin_account_tree_attach_popup(GNCMainWinAccountTree *tree, GnomeUIInfo *popup_info);
+gnc_mainwin_account_tree_attach_popup(GNCMainWinAccountTree *tree,
+                                      GnomeUIInfo *popup_info,
+                                      gpointer user_data);
 
 void
-gnc_mainwin_account_tree_set_view_info(GNCMainWinAccountTree *tree, AccountViewInfo new_info);
+gnc_mainwin_account_tree_set_view_info(GNCMainWinAccountTree *tree,
+                                       AccountViewInfo new_info);
 Account *
 gnc_mainwin_account_tree_get_current_account(GNCMainWinAccountTree *tree);
 GList *
 gnc_mainwin_account_tree_get_current_accounts(GNCMainWinAccountTree *tree);
 
-void gnc_mainwin_account_tree_toggle_account_expansion(GNCMainWinAccountTree *tree, Account *account);
+void
+gnc_mainwin_account_tree_toggle_account_expansion (GNCMainWinAccountTree *tree,
+                                                   Account *account);
 
 #endif /* __GNC_MAINWINDOW_ACCOUNT_TREE_H */

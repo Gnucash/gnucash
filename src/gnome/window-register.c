@@ -2037,10 +2037,15 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
   /* The menu bar */
   {
+    GnomeDockItemBehavior behavior;
     GtkWidget *dock_item;
     GtkWidget *menubar;
 
-    dock_item = gnome_dock_item_new("menu", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+    behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+    if (!gnome_preferences_get_menubar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    dock_item = gnome_dock_item_new("menu", behavior);
 
     menubar = gnc_register_create_menu_bar(regData, statusbar);
     gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
@@ -2052,11 +2057,16 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
   /* The tool bar */
   {
+    GnomeDockItemBehavior behavior;
     GtkWidget *dock_item;
     GtkWidget *toolbar;
     SCM id;
 
-    dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+    behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+    if (!gnome_preferences_get_toolbar_detachable ())
+      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+    dock_item = gnome_dock_item_new("toolbar", behavior);
 
     toolbar = gnc_register_create_tool_bar(regData);
     gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
@@ -2077,10 +2087,14 @@ regWindowLedger (xaccLedgerDisplay *ledger)
     summarybar = gnc_register_create_summary_bar (regData);
     if (summarybar)
     {
+      GnomeDockItemBehavior behavior;
       GtkWidget *dock_item;
 
-      dock_item = gnome_dock_item_new ("summarybar",
-                                       GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+      behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
+      if (!gnome_preferences_get_toolbar_detachable ())
+        behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+
+      dock_item = gnome_dock_item_new ("summarybar", behavior);
 
       gtk_container_set_border_width (GTK_CONTAINER (summarybar), 2);
       gtk_container_add (GTK_CONTAINER (dock_item), summarybar);

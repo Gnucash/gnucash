@@ -515,8 +515,8 @@
       (list (N_ "Use Full Account Name?") "f" 
 	    (N_ "Display the full account name") #t)
       (list (N_ "Other Account")"g" 
-	    (N_ "Display the other account?
- (if this is a split transaction, this parameter is guessed).") #f)
+	    (N_ "Display the other account? \
+(if this is a split transaction, this parameter is guessed).") #f)
       (list (N_ "Shares") "h" (N_ "Display the number of shares?") #f)
       (list (N_ "Price") "i" "Display the shares price?" #f)
       ;; note the "Amount" multichoice option in between here

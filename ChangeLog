@@ -1,3 +1,18 @@
+2001-05-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-acct-tree.c: add popup menu to account tree
+
+	* src/gnome/mainwindow-account-tree.c
+	(gnc_mainwin_account_tree_attach_popup): add user_data argument
+	for popup menu
+
+	* src/gnome/window-register.c: same as below
+
+	* src/gnome/window-main.c: same as below
+
+	* src/gnome/window-register.c: obey gnome preferences for
+	menubar & toolbar detachability
+
 2001-05-01  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/average-balance.scm: moved from
