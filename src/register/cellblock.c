@@ -187,9 +187,15 @@ xaccNextRight (CellBlock *arr, int row,      int col,
    if ((row >= arr->numRows) || (col >= arr->numCols)) return;
 
    /* -1 is a valid value for next ... it signifies that traversal
-    * should go to next tab group, so do not check for neg values */
-   /* if ((0 > next_row) || (0 > next_col)) return; */
-   if ((next_row >= arr->numRows) || (next_col >= arr->numCols)) return;
+    * should go to next tab group, so do not check for neg values.
+    * if ((0 > next_row) || (0 > next_col)) return; 
+    */
+
+   /* if the "next" location to hop to is larger than the cursor, that
+    * just means that we should hop to the next cursor.  Thus, large
+    * values for next *are* valid.
+    * if ((next_row >= arr->numRows) || (next_col >= arr->numCols)) return; 
+    */
 
    (arr->right_traverse_r)[row][col] = next_row;
    (arr->right_traverse_c)[row][col] = next_col;
