@@ -163,6 +163,12 @@ Stock Split Dialog
 |               | - Probably more TODO but these are the main   |            |
 |               |     points.                                   |            |
 ------------------------------------------------------------------------------
+| Hierarchy     | - Doesn't let you complete the conflict       |            |
+| Merge         |     resolution process, thus you can never    |            |
+| BROKEN        |     complete the druid.                       |            |
+------------------------------------------------------------------------------
+|               |                                               |            |
+------------------------------------------------------------------------------
 
 ========================================
               ENHANCEMENTS
