@@ -1,5 +1,5 @@
 
-SUBDIRS = guile-www
+SUBDIRS = guile-www srfi
 
 EXTRA_DIST = \
   README
