@@ -2542,7 +2542,7 @@ egg_toolbar_insert_widget (EggToolbar *toolbar,
 
 GtkWidget*
 egg_toolbar_append_element (EggToolbar          *toolbar,
-			    GtkToolbarChildType  type,
+			    EggToolbarChildType  type,
 			    GtkWidget           *widget,
 			    const char          *text,
 			    const char          *tooltip_text,
@@ -2559,7 +2559,7 @@ egg_toolbar_append_element (EggToolbar          *toolbar,
 
 GtkWidget *
 egg_toolbar_prepend_element (EggToolbar          *toolbar,
-			     GtkToolbarChildType  type,
+			     EggToolbarChildType  type,
 			     GtkWidget           *widget,
 			     const char          *text,
 			     const char          *tooltip_text,
