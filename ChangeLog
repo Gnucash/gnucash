@@ -1,3 +1,9 @@
+2001-06-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/Makefile.am: remove glade cruft
+
+	* configure.in: better error messages. remove cruft.
+
 2001-06-17  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/cursors.c (gnc_set_busy_cursor): fix warning
