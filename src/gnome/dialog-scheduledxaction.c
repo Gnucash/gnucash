@@ -142,8 +142,8 @@ static void sxed_reg_xferCB( GtkWidget *w, gpointer d );
 
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
-gboolean _editor_component_sx_equality( gpointer find_data,
-                                        gpointer user_data );
+static gboolean _editor_component_sx_equality( gpointer find_data,
+                                               gpointer user_data );
 
 /** Implementations *****************************************************/
 
@@ -524,7 +524,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         if ( alreadyExists ) {
                 sxed = (SchedXactionEditorDialog*)alreadyExists->data;
                 gtk_widget_show( sxed->dialog );
-                gdk_window_raise( sxed->dialog );
+                gdk_window_raise( sxed->dialog->window );
                 g_list_free( alreadyExists );
                 return sxed;
         }
