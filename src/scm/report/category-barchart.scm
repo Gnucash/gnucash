@@ -359,7 +359,7 @@ developing over time"))
 		;; Set the URL to point to this report.
                 (set! id (gnc:make-report reportname options))
                 (gnc:report-add-child-by-id! report-obj id)
-                (gnc:report-add-parent! (gnc:find-report id) report-obj)
+                (gnc:report-set-parent! (gnc:find-report id) report-obj)
 		(set! other-anchor (gnc:report-anchor-text id)))))
         
 	

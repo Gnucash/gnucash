@@ -34,6 +34,7 @@ gnc_regular_scm_files = \
   html-utilities.scm \
   iso-4217-currencies.scm \
   main.scm \
+  main-window.scm \
   options.scm \
   options-utilities.scm \
   path.scm \

@@ -227,6 +227,10 @@ gncFileNew (void)
    * disable events so we don't get spammed by redraws. */
   gnc_engine_suspend_events ();
 
+  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+           gh_eval_str("gnc:*book-closed-hook*"),
+           gh_str02scm(gnc_book_get_url(book)));           
+  
   gnc_book_destroy (book);
   current_book = NULL;
 
@@ -235,6 +239,10 @@ gncFileNew (void)
   /* start a new book */
   gncGetCurrentBook ();
 
+  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+           gh_eval_str("gnc:*book-opened-hook*"),
+           gh_str02scm(gnc_book_get_url(current_book))); 
+  
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
 }
@@ -302,6 +310,10 @@ gncPostFileOpen (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
+  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+           gh_eval_str("gnc:*book-closed-hook*"),
+           gh_str02scm(gnc_book_get_url(current_book)));           
+  
   gnc_book_destroy (current_book);
   current_book = NULL;
 
@@ -354,7 +366,7 @@ gncPostFileOpen (const char * filename)
 
     new_group = gnc_book_get_group (new_book);
     if (uh_oh) new_group = NULL;
-
+    
     /* Umm, came up empty-handed, but no error: 
      * The backend forgot to set an error. So make one up. */
     if (!uh_oh && !new_group) 
@@ -389,20 +401,16 @@ gncPostFileOpen (const char * filename)
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   current_book = new_book;
-
+  
+  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+           gh_eval_str("gnc:*book-opened-hook*"),
+           gh_str02scm(gnc_book_get_url(current_book))); 
+  
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
   gncAddHistory (new_book);
 
-  /* run a file-opened hook. For now, the main thing it will do 
-   * is notice if legacy currencies are being imported. */
-  if (newfile)
-  {
-      gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-               gh_eval_str("gnc:*file-opened-hook*"),
-               gh_str02scm(newfile)); 
-  }
   g_free (newfile);
 
   gnc_engine_resume_events ();
@@ -620,6 +628,10 @@ gncFileQuit (void)
    * transactions during shutdown would cause massive redraws */
   gnc_engine_suspend_events ();
 
+  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+           gh_eval_str("gnc:*book-closed-hook*"),
+           gh_str02scm(gnc_book_get_url(book)));           
+  
   gnc_book_destroy (book);
   current_book = NULL;
 

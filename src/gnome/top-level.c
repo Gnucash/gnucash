@@ -336,13 +336,8 @@ static gboolean hasstarted = FALSE;
 void
 gnc_default_ui_start(void) {
   if(!hasstarted) {
-    if(!gnome_mdi_restore_state(app->mdi, "/GnuCash/MDI Session",
-                                gnc_main_window_create_child) ||
-       app->children == NULL) {
-      gnc_main_window_open_accounts(FALSE);
-      gh_eval_str("(gnc:make-welcome-report)");
-    }
     hasstarted = TRUE;
+    gncGetCurrentBook();
   }
 }
 
@@ -354,7 +349,7 @@ gnc_ui_shutdown (void)
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
-    gnc_main_window_save(app);
+    /*    gnc_main_window_save(app); */
     gnc_main_window_destroy(app);
     app = NULL;
     gtk_main_quit();

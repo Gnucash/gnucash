@@ -56,9 +56,9 @@ GnomeMDIChild * gnc_report_window_create_child(const gchar * url);
 void       reportWindow(int id);
 void       gnc_print_report (int report_id);
 
-void      gnc_report_window_add_edited_report(gnc_report_window * win, 
-                                              SCM report);
-void      gnc_report_window_remove_edited_report(gnc_report_window * win, 
-                                                 SCM report);
-void      gnc_report_raise_editor(SCM report);
+void       gnc_report_window_add_edited_report(gnc_report_window * win, 
+                                               SCM report);
+void       gnc_report_window_remove_edited_report(gnc_report_window * win, 
+                                                  SCM report);
+void       gnc_report_raise_editor(SCM report);
 #endif

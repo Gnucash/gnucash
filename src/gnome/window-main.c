@@ -129,8 +129,9 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
       */
 
      GtkWidget *item;
-     item = gnome_dock_item_new( "Summary Bar",
-                                 GNOME_DOCK_ITEM_BEH_EXCLUSIVE|GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL);
+     item = gnome_dock_item_new("Summary Bar",
+                                GNOME_DOCK_ITEM_BEH_EXCLUSIVE |
+                                GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL);
      gtk_container_add( GTK_CONTAINER (item), summarybar );
 
      if( app->layout )
@@ -392,18 +393,21 @@ gnc_main_window_create_child(const gchar * configstring) {
   URLType type;
   char * location;
   char * label;
-  
-  type = gnc_html_parse_url(NULL, configstring, &location, &label);
+  char * url;
+
+  url = gh_scm2newstr(gh_eval_str(configstring), NULL);
+
+  type = gnc_html_parse_url(NULL, url, &location, &label);
   g_free(location);
   g_free(label);
   
   switch(type) {
   case URL_TYPE_REPORT:
-    return gnc_report_window_create_child(configstring);
+    return gnc_report_window_create_child(url);
     break;
     
   case URL_TYPE_ACCTTREE:
-    return gnc_acct_tree_window_create_child(configstring);
+    return gnc_acct_tree_window_create_child(url);
     break;
     
   default:
@@ -411,6 +415,105 @@ gnc_main_window_create_child(const gchar * configstring) {
   }
 }
 
+
+/********************************************************************
+ * gnc_main_window_child_save_func()
+ * save a Scheme form that will allow the child to be restored.  This 
+ * is called at MDI session save time. 
+ ********************************************************************/
+
+static char * 
+gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
+
+  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  SCM  save_report = gh_eval_str("gnc:report-generate-restore-forms-complete");
+  SCM  save_acctree = gh_eval_str("gnc:acct-tree-generate-restore-forms");
+  URLType type;
+  char * location;
+  char * label;
+
+  type = gnc_html_parse_url(NULL, child->name, &location, &label);
+  g_free(location);
+  g_free(label);
+  
+  switch(type) {
+  case URL_TYPE_REPORT: {
+    gnc_report_window * win = mc->user_data;
+    SCM report = gnc_report_window_get_report(win);
+    if(report != SCM_BOOL_F) {
+      return gh_scm2newstr(gh_call1(save_report, report), NULL);
+    }
+    else {
+      return NULL;
+    }    
+    break;
+  }
+    
+  case URL_TYPE_ACCTTREE: {
+    GNCAcctTreeWin * win = mc->user_data;
+    SCM options          = gnc_acct_tree_window_get_options(win);    
+    int options_id       = gnc_acct_tree_window_get_id(win);
+
+    if(options != SCM_BOOL_F) {
+      return gh_scm2newstr(gh_call2(save_acctree, options, 
+                                    gh_int2scm(options_id)), NULL);
+    }
+    else {
+      return NULL;
+    }
+    break;
+  }
+  
+  default:
+    return NULL;
+  }
+}
+
+
+/********************************************************************
+ * gnc_main_window_save()
+ * save the status of the MDI session
+ ********************************************************************/
+
+void
+gnc_main_window_save(GNCMainInfo * wind, char * filename) {
+  char * session_name = g_strdup_printf("/GnuCash/MDI : %s",
+                                        gnc_html_encode_string(filename));
+  if(filename) {
+    gnome_mdi_save_state(GNOME_MDI(wind->mdi), session_name);
+  }
+  g_free(session_name);
+}
+
+
+/********************************************************************
+ * gnc_main_window_restore()
+ * save the status of the MDI session
+ ********************************************************************/
+
+void
+gnc_main_window_restore(GNCMainInfo * wind, char * filename) {
+  char * session_name = g_strdup_printf("/GnuCash/MDI : %s",
+                                        gnc_html_encode_string(filename));
+  GList * old_children = g_list_copy(wind->mdi->children);
+  GList * c;
+
+  if(!filename || !gnome_mdi_restore_state(GNOME_MDI(wind->mdi), session_name,
+                                           gnc_main_window_create_child)) {
+    gnc_main_window_open_accounts(0);
+  }
+  g_free(session_name);
+  
+  for(c = old_children; c ; c = c->next) {
+    gnome_mdi_remove_child(wind->mdi, GNOME_MDI_CHILD(c->data), TRUE);
+  }
+  g_list_free(old_children);
+}
+
+void
+gnc_main_window_close_children(GNCMainInfo * wind) {
+  gnome_mdi_remove_all(wind->mdi, FALSE);
+}
 
 /********************************************************************
  * gnc_main_window_new()
@@ -463,11 +566,6 @@ gnc_main_window_new(void) {
   return retval;
 }
 
-static char * 
-gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
-  return g_strdup(child->name);
-}
-
 /********************************************************************
  * gnc_main_window_add_child()
  ********************************************************************/
@@ -501,18 +599,6 @@ gnc_main_window_remove_child(GNCMainInfo * wind, GNCMainChildInfo * child) {
 void
 gnc_main_window_destroy(GNCMainInfo * wind) {
   g_free(wind);  
-}
-
-
-/********************************************************************
- * gnc_main_window_save()
- * save the status of the MDI session
- ********************************************************************/
-
-void
-gnc_main_window_save(GNCMainInfo * wind) {
-  gnome_mdi_save_state(GNOME_MDI(wind->mdi), 
-                       "/GnuCash/MDI Session");
 }
 
 

@@ -231,7 +231,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   SCM make_report = gh_eval_str("gnc:make-report");
   SCM find_report = gh_eval_str("gnc:find-report");
   SCM add_child = gh_eval_str("gnc:report-add-child-by-id!");
-  SCM add_parent = gh_eval_str("gnc:report-add-parent!");
+  SCM set_parent = gh_eval_str("gnc:report-set-parent!");
   SCM template_name;
   SCM set_value = gh_eval_str("gnc:option-set-value");
   SCM new_report;
@@ -246,7 +246,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
                                 gh_int2scm(r->available_selected));
     new_report = gh_call1(make_report, template_name);
     gh_call2(add_child, r->view, new_report);
-    gh_call2(add_parent, gh_call1(find_report, new_report), r->view);
+    gh_call2(set_parent, gh_call1(find_report, new_report), r->view);
     
     oldlength = gh_length(r->contents_list);
     

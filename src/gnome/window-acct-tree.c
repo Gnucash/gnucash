@@ -203,10 +203,10 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
  ********************************************************************/
 
 GnomeMDIChild * 
-gnc_acct_tree_window_create_child(const gchar * configstring) {
+gnc_acct_tree_window_create_child(const gchar * url) {
   GNCMainInfo          * maininfo = gnc_ui_get_data();
   GnomeMDIGenericChild * accountchild = 
-    gnome_mdi_generic_child_new(configstring);
+    gnome_mdi_generic_child_new(url);
   
   gnome_mdi_generic_child_set_label_func(accountchild, 
                                          gnc_acct_tree_view_labeler,
@@ -1048,6 +1048,15 @@ gnc_acct_tree_window_get_widget(GNCAcctTreeWin * win) {
   return win->account_tree;
 }
 
+SCM 
+gnc_acct_tree_window_get_options(GNCAcctTreeWin * w) {
+  return w->options;
+}
+
+int
+gnc_acct_tree_window_get_id(GNCAcctTreeWin * w) {
+  return w->options_id;
+}
 
 /********************************************************************
  * parameter editor handling 

@@ -40,7 +40,7 @@
      (lambda (child)
        (gnc:report-add-child! (gnc:find-report view) 
                               (gnc:find-report child))
-       (gnc:report-add-parent! (gnc:find-report child) 
+       (gnc:report-set-parent! (gnc:find-report child) 
                                (gnc:find-report view)))
      (list sub-welcome sub-accounts sub-expense-pie sub-income-pie sub-bar))
     

@@ -38,6 +38,7 @@
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
   (gnc:depend "report.scm")
+  (gnc:depend "main-window.scm")
   (gnc:depend "commodity-import.scm")
   (gnc:depend "report/report-list.scm")
   (gnc:depend "qif-import/qif-import.scm")
@@ -104,7 +105,8 @@
                   (car gnc:*command-line-remaining*)
                   (gnc:history-get-last))))
     (if (and ok (string? file))
-        (gnc:ui-open-file file))))
+        (gnc:ui-open-file file)
+        (gnc:hook-run-danglers gnc:*book-opened-hook* #f))))
 
 (define (gnc:main)
 

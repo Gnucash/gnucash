@@ -20,6 +20,6 @@
                                           "GNC_LEGACY_CURRENCIES")
       (gnc:import-legacy-commodities from-filename)))
 
-(gnc:hook-add-dangler gnc:*file-opened-hook* import-old-currencies)
+(gnc:hook-add-dangler gnc:*book-opened-hook* import-old-currencies)
 
 

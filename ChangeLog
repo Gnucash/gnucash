@@ -1,3 +1,25 @@
+2001-04-24  Bill Gribble  <grib@billgribble.com>
+
+	* src/FileDialog.c: call book-opened-hook and book-closed-hook
+	where appropriate
+
+	* src/gnome/dialog-column-view.c: change to single-parent model
+
+	* src/gnome/top-level.c: don't do MID state saving and restoring
+	here... do it in the book save/load hooks. 
+
+	* src/gnome/window-main.c: the configstring stored in MDI is now a
+	Scheme form which restores the window state.  save/restore it.
+	Also, change the MDI session name to encode the book URL
+	(have to encode it to escape some chars, notably /, which MDI
+	doesn't like in section names)
+
+	* src/scm/main-window.scm: new file.  get the main-window
+	save/restore functions out of prefs.scm
+
+	* src/scm/report/scm: only one parent per report; write save 
+	routines to save all parents and children.
+	
 2001-04-24  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-register.c: add additional warnings when

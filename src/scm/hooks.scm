@@ -95,11 +95,15 @@
    'ui-shutdown-hook
    "Functions to run at ui shutdown.  Hook args: ()"))
 
-(define gnc:*file-opened-hook*
+(define gnc:*book-opened-hook*
   (gnc:hook-define 
-   'file-opened-hook
-   "Run on file open.  Hook args: none."))
+   'book-opened-hook
+   "Run after book open.  Hook args: book URL."))
 
+(define gnc:*book-closed-hook*
+  (gnc:hook-define 
+   'book-closed-hook
+   "Run before file close.  Hook args: book URL"))
 
 ;;(let ((hook (gnc:hook-lookup 'startup-hook)))
 ;;  (display (gnc:hook-name-get hook))

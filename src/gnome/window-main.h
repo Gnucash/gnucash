@@ -53,7 +53,8 @@ typedef struct {
 
 GNCMainInfo   * gnc_main_window_new(void);
 void            gnc_main_window_destroy(GNCMainInfo * wind); 
-void            gnc_main_window_save(GNCMainInfo * wind);
+void            gnc_main_window_save(GNCMainInfo * wind, char * session);
+void            gnc_main_window_restore(GNCMainInfo * wind, char * session);
 GtkWidget     * gnc_main_window_get_toplevel(GNCMainInfo * wind);
 void            gnc_main_window_create_child_toolbar(GNCMainInfo * mi, 
                                                      GNCMainChildInfo * child);
@@ -63,5 +64,6 @@ void            gnc_main_window_remove_child(GNCMainInfo * main,
                                              GNCMainChildInfo * child);
 void            gnc_main_window_child_refresh(gpointer data);
 GnomeMDIChild * gnc_main_window_create_child(const gchar * configstring);
+void            gnc_main_window_close_children(GNCMainInfo * main);
 
 #endif
