@@ -81,31 +81,90 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       gnc_trans_templ_glist_from_kvp_glist
       ( gnc_hbci_get_book_template_list
 	( xaccAccountGetBook(gnc_acc)));
-    unsigned nr_templates = g_list_length(template_list);
+    unsigned nr_templates;
+    int result;
+    gboolean successful;
+    HBCITransDialog *td;
 
     /* Now open the HBCI_trans_dialog, which also calls
        HBCI_API_executeQueue. */
-    HBCI_Transaction *h_trans = gnc_hbci_trans (parent, api, interactor,
-						h_acc, customer, 
-						gnc_acc,
-						trans_type, &template_list);
+      
+    /* Create new HBCIDialogTrans */
+    td = gnc_hbci_dialog_new(parent, h_acc, customer, gnc_acc, 
+			     trans_type, template_list);
+	
+    /* Repeat until HBCI action was successful or user pressed cancel */
+    do {
 
-    /* New templates? If yes, store them */
-    if (nr_templates < g_list_length(template_list)) 
-      maketrans_save_templates(parent, gnc_acc, template_list, (h_trans != NULL));
+      nr_templates = g_list_length(template_list);
+
+      /* Let the user enter the values. If cancel is pressed, -1 is returned.  */
+      result = gnc_hbci_dialog_run_until_ok(td, h_acc);
+
+      /* Set the template list in case it got modified. */
+      template_list = gnc_hbci_dialog_get_templ(td);
+      /* New templates? If yes, store them */
+      if (nr_templates < g_list_length(template_list)) 
+	maketrans_save_templates(parent, gnc_acc, template_list, (result >= 0));
+
+      if (result < 0) {
+	break;
+      } 
+	
+      /* Make really sure the dialog is hidden now. */
+      gnc_hbci_dialog_hide(td);
+
+      {
+	HBCI_OutboxJob *job = 
+	  gnc_hbci_trans_dialog_enqueue(td, api, customer, 
+					(HBCI_Account *)h_acc, trans_type);
+      
+	/* HBCI Transaction has been created and enqueued, so now open
+	 * the gnucash transaction dialog and fill in all values. */
+	successful = gnc_hbci_maketrans_final (td, gnc_acc, trans_type);
+
+	/* User pressed cancel? Then go back to HBCI transaction */
+	if (!successful)
+	  continue;
+
+	if (result == 0) {
+
+	  /* If the user pressed "execute now", then execute this job
+	     now. This function already delete()s the job. */
+	  successful = gnc_hbci_trans_dialog_execute(td, api, job, interactor);
+
+	  if (!successful) {
+	    /* HBCI job failed -- then remove gnc txn from the books. */
+	    Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
+	    xaccTransBeginEdit(gtrans);
+	    xaccTransDestroy(gtrans);
+	    xaccTransCommitEdit(gtrans);
+	  }
+	  
+	} /* result == 0 */
+	else {
+	  /* huh? Only result == 0 should be possible. Simply ignore
+	     this case. */
+	  break;
+	} /* result == 0 */
+	  
+      } /* Create a do-transaction (transfer) job */
+	
+    } while (!successful);
+    
+    if (result >= 0) {
+      /* If we wanted to do something here with the gnc txn, we could. */
+      Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
+      printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
+	     xaccTransGetDescription(gtrans));
+    }
+
+    /* Just to be on the safe side, clear queue once again. */
+    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
     
-    if (!h_trans)
-      return;
-
     /* GNCInteractor_hide (interactor); */
-
-    /* HBCI Transaction has finished, so now open the gnucash
-       transaction dialog and fill in all values. */
-    gnc_hbci_maketrans_final (parent, gnc_acc, trans_type, h_trans, FALSE);
-
-    /* Everything finished. */
-    HBCI_Transaction_delete (h_trans);
   }
 }
 
@@ -132,17 +191,21 @@ void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc,
 }
 
 gboolean
-gnc_hbci_maketrans_final (GtkWidget *parent, Account *gnc_acc,
-			  GNC_HBCI_Transtype trans_type,   
-			  const HBCI_Transaction *h_trans,
-			  gboolean run_until_done)
+gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
+			  GNC_HBCI_Transtype trans_type)
 {
-  /* HBCI Transaction has finished, so now open the gnucash
-     transaction dialog and fill in all values. */
   gnc_numeric amount;
   XferDialog *transdialog;
+  const HBCI_Transaction *h_trans;
+  gboolean run_until_done = TRUE;
+  g_assert(td);
+
+  h_trans = gnc_hbci_dialog_get_htrans(td);
   
-  transdialog = gnc_xfer_dialog (parent, gnc_acc);
+  /* HBCI Transaction has finished, so now open the gnucash
+     transaction dialog and fill in all values. */
+  
+  transdialog = gnc_xfer_dialog (gnc_hbci_dialog_get_parent(td), gnc_acc);
   
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
@@ -181,6 +244,9 @@ gnc_hbci_maketrans_final (GtkWidget *parent, Account *gnc_acc,
   }
   /*gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time)*/
 
+  /* Set the callback for the Gnucash Transaction */
+  gnc_xfer_dialog_set_txn_cb(transdialog, gnc_hbci_dialog_xfer_cb, td);
+  
   /* Run the dialog until the user has either successfully completed the
    * transaction (just clicking OK doesn't always count) or clicked Cancel.
    * Return TRUE if the transaction was a success, FALSE otherwise.

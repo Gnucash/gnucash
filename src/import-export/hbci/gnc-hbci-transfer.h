@@ -33,13 +33,12 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		    GNC_HBCI_Transtype trans_type);
 
 /** Open a gnucash transfer dialog for gnucash Account gnc_acc and
- * fill in all the values from the HBCI_Transaction h_trans. Returns
- * TRUE if the gnucash transaction has been successfully created. */
+ * fill in all the values from the HBCI_Transaction inside the
+ * HBCITransDialog. Returns TRUE if the gnucash transaction has been
+ * successfully created, FALSE if e.g. the user pressed cancel. */
 gboolean
-gnc_hbci_maketrans_final (GtkWidget *parent, Account *gnc_acc,
-			  GNC_HBCI_Transtype trans_type,   
-			  const HBCI_Transaction *h_trans,
-			  gboolean run_until_done);
+gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
+			 GNC_HBCI_Transtype trans_type);
 
 
 #endif /* GNC_HBCI_TRANSFER_H */
