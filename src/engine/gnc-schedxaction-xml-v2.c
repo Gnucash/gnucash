@@ -31,7 +31,6 @@
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
-#include "sixtp-xml-write-utils.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"

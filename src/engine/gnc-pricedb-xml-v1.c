@@ -33,7 +33,6 @@
 #include "sixtp-parsers.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
-#include "sixtp-xml-write-utils.h"
 #include "io-gncxml-gen.h"
 
 #include "gnc-pricedb.h"

@@ -1,9 +1,16 @@
 2001-07-27  James LewisMoss  <jimdres@mindspring.com>
 
+	* src/engine/gnc-schedxaction-xml-v2.c: remove include of removed
+	file. 
+
+	* src/engine/gnc-freqspec-xml-v2.c: remove include of removed
+	file. 
+
 	* src/engine/gnc-pricedb-xml-v1.c: remove include of
 	sixtp-writers.h and remove func xml_add_gnc_pricedb (no longer
 	used anywhere)
 	(gnc_pricedb_parser_new): reorder functions.
+	remove include of removed file.
 
 	* src/engine/io-gncxml-v1.c: move v1 kvp parser code to this
 	file. 
