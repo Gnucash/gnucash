@@ -69,6 +69,7 @@ Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
 Bill Gribble <grib@billgribble.com> qif importation code
+Mitsuo Hamada <mhamada@redhat.com> Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work

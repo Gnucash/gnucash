@@ -491,6 +491,7 @@ provide an accurate Profit & Loss statement.
 <PARA>file i/o fix for 64-bit architectures</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>grib@billgribble.com</email> Bill
       Gribble</GLOSSTERM>
@@ -499,6 +500,15 @@ provide an accurate Profit & Loss statement.
       dialog</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>mhamada@redhat.com</email> Mitsuo
+      Hamada</GLOSSTERM>
+<GLOSSDEF>
+<PARA>Japanese translations</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>otto@bug.redhat.com</email> Otto
       Hammersmith</GLOSSTERM>
