@@ -340,8 +340,8 @@ gnc_scm_lookup(const char *module, const char *symbol)
 
   in_guard = gh_eval_str(in_guard_str);
   thunk = gh_eval_str(thunk_str);
-  out_guard = gh_eval_str("(let ((cm (current-module)))
-                             (lambda () (set-current-module cm)))");
+  out_guard = gh_eval_str("(let ((cm (current-module)))"
+                          "  (lambda () (set-current-module cm)))");
 
   result = scm_dynamic_wind(in_guard, thunk, out_guard);
 
