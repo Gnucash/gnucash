@@ -358,10 +358,68 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    int more_or = 0;
    int more_and = 0;
    int max_rows;
+   gboolean need_account = FALSE;
+   gboolean need_commodity = FALSE;
    sort_type_t sorter;
 
    if (!sq || !q) return NULL;
 
+   /* determine whther the query will need to reference the account
+    * or commodity tables.  If it doesn't need them, then we can gain
+    * a significant performance improvement by not specifying them.
+    * The exact reason why this affect performance is a bit of a 
+    * mystery to me ... */
+   qterms = xaccQueryGetTerms (q);
+
+   for (il=qterms; il; il=il->next)
+   {
+      /* andterms is GList of query terms that must be anded */
+      andterms = il->data;
+
+      for (jl=andterms; jl; jl=jl->next)
+      {
+         qt = (QueryTerm *)jl->data;
+         pd = &qt->data;
+         switch (pd->base.term_type) 
+         {
+            case PR_ACCOUNT: 
+            case PR_ACTION:
+            case PR_BALANCE:
+            case PR_CLEARED:
+            case PR_DATE:
+            case PR_DESC:
+            case PR_MEMO:
+            case PR_MISC:
+            case PR_NUM:
+            case PR_PRICE: 
+               break;
+            case PR_AMOUNT:
+               need_commodity = TRUE;
+               break;
+            case PR_GUID:
+               switch (xaccGUIDType (&pd->guid.guid))
+               {
+                  case GNC_ID_ACCOUNT:
+                     need_account = TRUE;
+                     break;
+                  case GNC_ID_NONE:
+                  case GNC_ID_NULL:
+                  case GNC_ID_TRANS:
+                  case GNC_ID_SPLIT:
+                  default:
+                     break;
+               }
+               break;
+            case PR_SHRS: 
+               need_commodity = TRUE;
+               need_account = TRUE;
+               break;
+            default:
+               break;
+         }
+      }
+   }
+   
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
@@ -372,11 +430,20 @@ sqlQuery_build (sqlQuery *sq, Query *q)
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetSecondarySortOrder(q));
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetTertiarySortOrder(q));
 
-   sq->pq = stpcpy(sq->pq, 
-               "  FROM gncEntry, gncTransaction, gncAccount, gncCommodity "
-               "  WHERE gncEntry.transGuid = gncTransaction.transGuid AND ( ");
+   sq->pq = stpcpy(sq->pq, "  FROM gncEntry, gncTransaction");
 
-   qterms = xaccQueryGetTerms (q);
+   /* add additional search tables, as needed for performance */
+   if (need_account)
+   {
+      sq->pq = stpcpy(sq->pq, ", gncAccount");
+   }
+   if (need_commodity)
+   {
+      sq->pq = stpcpy(sq->pq, ", gncCommodity");
+   }
+   sq->pq = stpcpy(sq->pq, 
+           "  WHERE gncEntry.transGuid = gncTransaction.transGuid AND ( ");
+
 
    /* qterms is a list of lists: outer list is a set of terms 
     * that must be OR'ed together, inner lists are a set of terms 
@@ -385,7 +452,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
     */
    for (il=qterms; il; il=il->next)
    {
-      /* andterms is GList of query terms that mustbe anded */
+      /* andterms is GList of query terms that must be anded */
       andterms = il->data;
 
       /* if there are andterms, open a brace */
