@@ -23,6 +23,8 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+;;(use-modules (ice-9 statprof))
+
 ;; A list of things to do when in batch mode after the initial
 ;; startup.  List items may be strings, in which case they're read and
 ;; evaluated or procedures, in which case they're just executed.
@@ -159,14 +161,14 @@
   (gnc:module-load "gnucash/report/locale-specific/us" 0)
 
   ;; Now we can load a bunch of files.
-  (gnc:depend "path.scm")
-  (gnc:depend "command-line.scm")
-  (gnc:depend "doc.scm")
-  (gnc:depend "extensions.scm")
-  (gnc:depend "main-window.scm")
-  (gnc:depend "printing/print-check.scm")
-  (gnc:depend "price-quotes.scm")
-  (gnc:depend "tip-of-the-day.scm")
+  (load-from-path "path.scm")
+  (load-from-path "command-line.scm")
+  (load-from-path "doc.scm")
+  (load-from-path "extensions.scm")
+  (load-from-path "main-window.scm")
+  (load-from-path "tip-of-the-day.scm")
+
+  (gnc:use-guile-module-here! '(gnucash price-quotes))
 
   (gnc:hook-add-dangler gnc:*book-opened-hook*
                         (lambda (file)
@@ -261,11 +263,16 @@
          (let loop ((next-form (read port)))
            (if (not (eof-object? next-form))
                (begin
-                 (eval next-form)
+                 ;; FIXME: is this where we want to eval these?
+                 ;; should we perhaps have a (gnucash user)?
+                 (eval next-form (resolve-module '(gnucash bootstrap)))
                  (loop (read port))))))))
      (else
       (display "gnucash: unknown batch-mode item - ignoring.")
       (newline))))
+
+;;  (statprof-reset 0 50000) ;; 20 times/sec
+;;  (statprof-start)
 
   ;; Now the fun begins.
   (gnc:startup)
