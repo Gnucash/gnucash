@@ -200,14 +200,15 @@ gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
 {
   GList *current;
   GNCCurrencyAcc *found;
-    
+
   for (current = g_list_first(*list); current;
        current = g_list_next(current)) {
     found = current->data;
     if (gnc_commodity_equiv(currency, found->currency)) {
       return found;
     }
-  } 
+  }
+
   found = g_new0(GNCCurrencyAcc, 1);
   found->currency = currency;
   found->assets = 0.0;
@@ -226,7 +227,8 @@ gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
  * the item into the list. */
 
 static GNCCurrencyItem *
-gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency, GtkWidget *holder)
+gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency,
+                         GtkWidget *holder)
 {
   GList *current;
   GNCCurrencyItem *found;
@@ -363,8 +365,9 @@ gnc_ui_refresh_statusbar (void)
 					      "Default Currency",
 					      "USD");
   default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                default_mnemonic,
-                                                GNC_COMMODITY_NS_ISO);
+                                                GNC_COMMODITY_NS_ISO,
+                                                default_mnemonic);
+
   euro = gnc_lookup_boolean_option("International",
 				   "Enable EURO support",
 				   FALSE);
@@ -420,7 +423,7 @@ gnc_ui_refresh_statusbar (void)
   while (current)
   {
     GList *next = current->next;
-    
+
     currency_item = current->data;
     if (currency_item->touched == 0
         && !gnc_commodity_equiv(currency_item->currency,
@@ -432,7 +435,7 @@ gnc_ui_refresh_statusbar (void)
       current->data = NULL;
       g_list_free_1(current);
     }
-    
+
     current = next;
   }
 
