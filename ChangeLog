@@ -1,3 +1,142 @@
+2001-10-14  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/backend/file/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/app-utils/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/tax/us/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/tax/us/us.scm (gnucash): added use-modules.
+
+	* src/scm/printing/print-check.scm: remove gnc:support and
+	gnc:depend calls.
+
+	* src/scm/gnumeric/gnumeric-utilities.scm: remove gnc:support and
+	gnc:depend calls.
+
+	* src/scm/xml-generator.scm: remove gnc:support call.
+
+	* src/scm/substring-search.scm: remove gnc:support call.
+
+	* src/scm/startup.scm: comment out everything -- if this works, we
+	should remove this file soon.
+
+	* src/scm/price-quotes.scm: make it a guile module -- add exports,
+	use-modules, etc.
+
+	* src/scm/path.scm (gnc:locale-prefixes): () -> '().
+
+	* src/scm/main.scm (gnc:startup): change gnc:depend calls to
+	load-from-path.
+	(gnc:main): add second arg to eval call to comply with standard.
+
+	* src/scm/main-window.scm: remove gnc:support call.
+
+	* src/scm/extensions.scm: remove gnc:support call.
+
+	* src/scm/doc.scm: remove gnc:support call.
+
+	* src/scm/command-line.scm
+	(gnc:*arg-defs*): use gnc:use-module-module-here!.
+
+	* src/scm/bootstrap.scm.in: remove slib compatability stuff.
+	Add many exports for stuff that used to be "global".
+	Load main.scm from here now.
+	(gnc:use-guile-module-here!): new function.
+
+	* src/scm/Makefile.am (gncscmmod_DATA): move bootstrap.scm here.
+
+	* src/report/utility-reports/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/report/utility-reports/welcome-to-gnucash.scm: added use-modules.
+
+	* src/report/utility-reports/view-column.scm: added use-modules.
+
+	* src/report/utility-reports/utility-reports.scm: added use-modules.
+
+	* src/report/utility-reports/iframe-url.scm: added use-modules.
+
+	* src/report/utility-reports/hello-world.scm: added use-modules.
+	(hello-world-renderer): use share-dir config var, not bare binding.
+
+	* src/report/stylesheets/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/report/stylesheets/stylesheets.scm: added use-modules.
+
+	* src/report/stylesheets/stylesheet-plain.scm: added use-modules.
+
+	* src/report/stylesheets/stylesheet-fancy.scm: added use-modules.
+
+	* src/report/standard-reports/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/report/standard-reports/transaction.scm: added use-modules.
+
+	* src/report/standard-reports/standard-reports.scm: added use-modules.
+
+	* src/report/standard-reports/register.scm: added use-modules.
+
+	* src/report/standard-reports/price-scatter.scm: added use-modules.
+
+	* src/report/standard-reports/portfolio.scm: added use-modules.
+
+	* src/report/standard-reports/pnl.scm: added use-modules.
+
+	* src/report/standard-reports/payables.scm: added use-modules.
+
+	* src/report/standard-reports/net-barchart.scm: added use-modules.
+
+	* src/report/standard-reports/category-barchart.scm: added use-modules.
+
+	* src/report/standard-reports/balance-sheet.scm: added use-modules.
+
+	* src/report/standard-reports/account-summary.scm: added use-modules.
+
+	* src/report/standard-reports/account-piecharts.scm: added use-modules.
+
+	* src/report/report-system/report-system.scm: added use-modules.
+
+	* src/report/locale-specific/us/test/Makefile.am
+	(TESTS_ENVIRONMENT): add paths.
+
+	* src/report/locale-specific/us/taxtxf.scm: added use-modules.
+
+	* src/import-export/qif-io-core/qif-io-core.scm: added
+	use-modules.
+
+	* src/import-export/qif-import/qif-import.scm: added use-modules.
+
+	* src/guile/gnucash.c.in
+	(GNC_BOOTSTRAP_SCM): now in gnucash module dir.
+	(gnc_gw_init): remove gw_init_module_gw_gnc call.
+	(gnucash_main_helper): don't mess with startup, just run gnc:main.
+
+	* src/guile/Makefile.am (gnucash): new symlink target.
+	(g-wrapped): new symlink target.
+
+	* src/gnc-module/gnc-module.c (gnc_module_system_init): add some
+	error checking -- may need a way to return errors.
+
+	* src/engine/test/Makefile.am (TESTS_ENVIRONMENT): add paths.
+
+	* src/engine/engine.scm: added use-modules.
+
+	* src/app-utils/guile-util.h: 
+	(gnc_depend): deleted.
+	(gnc_scm_lookup): new prototype.
+
+	* src/app-utils/guile-util.c
+	(gnc_depend): deleted.
+	(gnc_scm_lookup): new cross-guile function -- disabled until we
+	can test it.
+
+	* src/app-utils/app-utils.scm: added use-modules.
+
 2001-10-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/Makefile.am (libgncguile_la_LIBADD): remove gncgnome.la
