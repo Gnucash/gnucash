@@ -109,7 +109,6 @@
 #include "FileDialog.h"
 #include "MultiLedger.h"
 #include "Refresh.h"
-#include "Scrub.h"
 #include "SplitLedger.h"
 #include "global-options.h"
 #include "gnc-engine-util.h"
@@ -259,6 +258,8 @@ xaccSRInitRegisterData(SplitRegister *reg)
 
   info = g_new0(SRInfo, 1);
 
+  info->blank_split_guid = *xaccGUIDNULL ();
+  info->pending_trans_guid = *xaccGUIDNULL ();
   info->last_date_entered = time(NULL);
   info->first_pass = TRUE;
 
@@ -2201,18 +2202,18 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
 
   virt_loc = reg->table->current_cursor_loc;
 
-  changed = xaccSplitRegisterGetChangeFlag(reg);
+  changed = xaccSplitRegisterGetChangeFlag (reg);
   if (!changed)
     return;
 
   /* We're just cancelling the current split here, not the transaction.
    * When cancelling edits, reload the cursor from the transaction. */
-  xaccSplitRegisterClearChangeFlag(reg);
+  xaccSplitRegisterClearChangeFlag (reg);
 
-  if (gnc_table_find_close_valid_cell(reg->table, &virt_loc, FALSE))
-    gnc_table_move_cursor_gui(reg->table, virt_loc);
+  if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
+    gnc_table_move_cursor_gui (reg->table, virt_loc);
 
-  gnc_table_refresh_gui(reg->table);
+  gnc_table_refresh_gui (reg->table);
 }
 
 /* ======================================================== */
@@ -2222,32 +2223,31 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
-  Transaction *trans;
   GList *accounts;
 
   /* Get the currently open transaction, rollback the edits on it, and
    * then repaint everything. To repaint everything, make a note of
    * all of the accounts that will be affected by this rollback. */
-  trans = pending_trans;
-
-  if (!xaccTransIsOpen(trans))
+  if (!xaccTransIsOpen(pending_trans))
   {
-    xaccSRCancelCursorSplitChanges(reg);
+    xaccSRCancelCursorSplitChanges (reg);
     return;
   }
 
-  accounts = gnc_trans_prepend_account_list(trans, NULL);
+  if (!pending_trans)
+    return;
 
-  xaccTransRollbackEdit (trans);
+  accounts = gnc_trans_prepend_account_list (pending_trans, NULL);
 
-  accounts = gnc_trans_prepend_account_list(trans, accounts);
+  xaccTransRollbackEdit (pending_trans);
 
-  gnc_account_glist_ui_refresh(accounts);
+  accounts = gnc_trans_prepend_account_list (pending_trans, accounts);
 
-  g_list_free(accounts);
+  gnc_account_glist_ui_refresh (accounts);
 
-  info->pending_trans_guid = *xaccGUIDNULL();
-  pending_trans = NULL;
+  g_list_free (accounts);
+
+  info->pending_trans_guid = *xaccGUIDNULL ();
 
   gnc_refresh_main_window ();
 }
@@ -2538,7 +2538,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
     * transaction to NULL. */
    if (do_commit)
    {
-     xaccTransScrubImbalance (trans);
      xaccTransCommitEdit (trans);
      if (pending_trans == trans)
      {
