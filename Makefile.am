@@ -1,5 +1,5 @@
 
-SUBDIRS = debian doc intl lib po raw rpm src
+SUBDIRS = debian doc intl lib po rpm src
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -30,6 +30,8 @@ EXTRA_DIST = \
   gnucash.lsm \
   intl/.cvsignore \
   make-gnucash-patch.in \
+  old/country.sql \
+  old/currencynames \
   old/Gnucash.app-defaults \
   old/gnome/graph/Makefile \
   old/gnome/graph/colors.c \

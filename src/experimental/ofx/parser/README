@@ -1,0 +1,53 @@
+
+This directory contains some experimental code to handle
+OFX (Open Financial Exchange) messages. 
+
+The most interesting thing here is the DTD parser "parseOfx"
+which attempts to build a C++ interface that models the 
+structure of the OFX DTD's.   It *almost* works.  There
+are some exceptional cases that are not properly handled.
+
+Next on the list of work items is to extend the parser so
+that it will also generate an implementation for the interface.
+Specifically, it should automatically create code for constructors,
+destructors, as well as SGML input & output routines (parsers,
+of a sort).
+
+To check this out, run parseOfx like so:
+> parseOfx dtd/ofxmain.dtd
+
+It will print the C++ decls to stdout.
+
+--------------------------------------------------------------
+
+HTTP tool:
+http://www.inf.ufrgs.br/~sagula/urlget.html
+
+OFX financicial institution list:
+https://ofx-prod-filist.intuit.com/qw0700/filist.asp
+
+SSLeay rpm's:
+http://www.sabotage.net/redhat/ssl.html
+http://ftp.tu-clausthal.de/pub/TEXT/EXPERT/linux/redhat-security/i386
+http://ftp.tu-clausthal.de/pub/TEXT/EXPERT/linux/redhat-security/SRPMS
+
+--------------------------------------------------------------
+
+To build stuff in this directory, you will needs James Clark's
+SGML Parser.  This can be obtained at
+http://www.jclark.com/sp/index.htm
+Also:
+ftp.debian.org/pub/debian/dists/frozen/main/binary-i386/text/sp_1.3-1.1-4.deb
+
+This directory contains code from
+ftp://ftp.techno.com/TechnoTeacher/parseDtd/parseDtd.zip
+
+parseDtd.C: the sample parser from TechnoTeacher
+
+parseOfx.C: the mangled parser I'm hacking on.  
+
+dtd/ofxmain.dtd: a hacked version of the original dtd, with 
+      the intent of exposing the base types.
+
+--linas
+March 1998

@@ -1,0 +1,126 @@
+From: ueli (urutishauser@bigfoot.com)
+
+as example, a logon request. the result is something like that:
+
+---------------
+<OFX>
+<SIGNONMSGSRQV1>
+<SONRQ>
+<DTCLIENT>19980411101000 
+</DTCLIENT>
+<USERID>xxxxxx 
+</USERID>
+<USERPASS>xxxxxx 
+</USERPASS>
+<LANGUAGE>ENG 
+</LANGUAGE>
+<APPID>GNUCash_OFX  
+</APPID>
+<APPVER>0001 
+</APPVER>
+</SONRQ> 
+</SIGNONMSGSRQV1>
+[...something more like a investement statement download request...]
+</OFX>
+----------------------------------------------------------
+
+class hierarchy
+
+ OFX
+  ---> SIGNONMSGSRQV1
+         --> SONRQ 
+             -->DTCLIENT
+             -->USERID
+             -->USERPASS 
+             -->LANGUAGE
+             -->APPID
+             -->APPVER
+             
+
+----------------------------------------------------------
+(copy from junk.C)
+
+class cfxSignonmsgsrsv1;
+class cfxSonrs;
+
+class cfxSignonmsgsrsv1 
+{ 
+    public:
+        cfxSignonmsgsrsv1 (void);      // constructor 
+        virtual ~cfxSignonmsgsrsv1 (); // destructor 
+
+
+        // Sonrs *must* be present 
+        cfxSonrs *sonrs; 
+                     nchtrnrs *pinchtrnrs; 
+
+        // Challengetrnrs may be a null pointer 
+        cfxChallengetrnrs *challengetrnrs; 
+};
+
+
+class cfxSonrs 
+{ 
+    public:
+        cfxSonrs (void);      // constructor 
+        virtual ~cfxSonrs (); // destructor 
+
+
+        // Status *must* be present 
+        cfxStatus *status; 
+        bfxDttm *dtserver;
+        bfxStr *userkey;
+        bfxDttm *tskeyexpire;
+        bfxStr *language;
+        bfxDttm *dtprofup;
+        bfxDttm *dtacctup;
+
+        // Fi may be a null pointer 
+        cfxFi *fi; 
+        bfxStr *sesscookie;
+};
+
+class cfxOfx 
+{ 
+    public:
+    // Signonmsgsrsv1 *must* be present 
+    cfxSignonmsgsrsv1 *signonmsgsrsv1; 
+
+..
+}
+
+----------------------------------------------------------
+some pseudo-code to produce a login request:
+
+{
+  ofxrequest = new cfxOfx();
+  ofxreqeust->signonmsgsrsv1->sonrs->dtserver="199811111";
+
+  ...
+
+  //all needed variables
+
+
+  // ofx_request_type = login/investement statement
+  // download/billings/creditcard
+  if (ofxrequest->Valid(ofx_request_type))   
+  {
+      ofxrequest->ExportRequest(ofx_request_type);
+      
+      request = new HTTPRequest();
+      repuest->CreateHeader();
+      request->AddContent(ofxrequest->GetContent());
+      if (request->SendRequest())
+      {
+           //now read in the result in a new ofxrequest structure
+           ofxresponse = new cfxOfx(); 
+           //or not cfxOfx, cfxOfx i eventually only for request
+
+           request->ParseResponse( ofxresponse );
+
+      }
+      
+  }
+} 
+ 
+

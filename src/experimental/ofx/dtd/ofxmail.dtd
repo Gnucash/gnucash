@@ -1,0 +1,54 @@
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - mail module
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+
+-->
+<!-- Message sets -->
+<!ELEMENT EMAILMSGSRQV1     - - ((MAILTRNRQ | MAILSYNCRQ | GETMIMETRNRQ)+ )>
+<!ELEMENT EMAILMSGSRSV1     - - ((MAILTRNRS | MAILSYNCRS | GETMIMETRNRS)+ )>
+
+<!-- Profile entry for message set -->
+<!ELEMENT EMAILMSGSET       - - (EMAILMSGSETV1)>
+<!ELEMENT EMAILMSGSETV1     - - (MSGSETCORE , MAILSUP , GETMIMESUP)>
+<!ELEMENT MAILSUP           - o %BOOLTYPE>
+<!ELEMENT GETMIMESUP        - o %BOOLTYPE>
+
+<!-- Email Transactions -->
+
+<!ELEMENT MAILTRNRQ     - - (%TRNRQMACRO , MAILRQ)>
+<!ELEMENT MAILTRNRS     - - (%TRNRSMACRO , MAILRS?)>
+<!ELEMENT GETMIMETRNRQ  - - (%TRNRQMACRO , GETMIMERQ)>
+<!ELEMENT GETMIMETRNRS  - - (%TRNRSMACRO , GETMIMERS?)>
+
+<!-- Email Request -->
+
+<!ELEMENT MAILRQ        - - (MAIL)>
+<!ELEMENT MAIL          - - (USERID , DTCREATED , FROM , TO ,
+                             SUBJECT , MSGBODY , INCIMAGES ,
+                             USEHTML)>
+
+<!ELEMENT DTCREATED     - o %DTTMTYPE>
+<!ELEMENT FROM          - o %STRTYPE>
+<!ELEMENT TO            - o %STRTYPE>
+<!ELEMENT SUBJECT       - o %STRTYPE>
+<!ELEMENT USEHTML       - o %BOOLTYPE>
+
+<!ELEMENT MSGBODY       - - %STRTYPE>
+
+<!-- Email Response -->
+
+<!ELEMENT MAILRS        - - (MAIL)>
+
+<!-- Email sync -->
+
+<!ELEMENT MAILSYNCRQ    - - (%SYNCRQMACRO , INCIMAGES, USEHTML, MAILTRNRQ*)>
+<!ELEMENT MAILSYNCRS    - - (%SYNCRSMACRO , MAILTRNRS*)>
+
+<!-- HTML GET -->
+
+<!ELEMENT GETMIMERQ     - - (URL)>
+<!ELEMENT GETMIMERS     - - (URL)>
+

@@ -1,0 +1,71 @@
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - profile module
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+
+-->
+
+<!-- Profile message set -->
+<!ELEMENT PROFMSGSRQV1        - - (PROFTRNRQ+ )>
+<!ELEMENT PROFMSGSRSV1        - - (PROFTRNRS+ )>
+
+<!-- Profile entry for message set -->
+<!ELEMENT PROFMSGSET        - - (PROFMSGSETV1)>
+<!ELEMENT PROFMSGSETV1      - - (MSGSETCORE)>
+
+<!-- No synchronization in this module -->
+
+<!-- Transactions -->
+<!ELEMENT PROFTRNRQ     - - (%TRNRQMACRO , PROFRQ)>
+<!ELEMENT PROFTRNRS     - - (%TRNRSMACRO , PROFRS?)>
+
+<!-- Messages -->
+
+<!ELEMENT PROFRQ    - - (CLIENTROUTING , DTPROFUP)>
+<!ELEMENT CLIENTROUTING - o %STRTYPE>
+
+<!ELEMENT PROFRS    - - (MSGSETLIST , SIGNONINFOLIST , DTPROFUP,
+                        FINAME, ADDR1,ADDR2?,ADDR3?, CITY, STATE, POSTALCODE, COUNTRY,
+                        CSPHONE?, TSPHONE?, FAXPHONE?, URL?, EMAIL? )>
+                        
+<!ELEMENT FINAME        - o %STRTYPE>
+<!ELEMENT CSPHONE       - o %STRTYPE>
+<!ELEMENT TSPHONE       - o %STRTYPE>
+<!ELEMENT FAXPHONE      - o %STRTYPE>
+
+
+<!-- Message List -->
+<!-- Defined in terms of macro in ofxmain -->
+<!ELEMENT MSGSETLIST    - - ( (%MSGSETMACRO)* )>
+
+<!-- Message set core info - used by all XXXMSGSETVn -->
+<!ELEMENT MSGSETCORE    - - (VER , URL , OFXSEC ,
+                             TRANSPSEC , SIGNONREALM ,
+                             LANGUAGE+, SYNCMODE, RESPFILEER, SPNAME? )>
+
+<!ELEMENT VER           - o %INTTYPE>
+<!ELEMENT OFXSEC        - o %INTTYPE>
+<!ELEMENT TRANSPSEC     - o %BOOLTYPE> 
+<!ELEMENT SYNCMODE      - o %STRTYPE>
+<!ELEMENT RESPFILEER    - o %BOOLTYPE>
+<!ELEMENT SPNAME	- o %STRTYPE>
+                            
+
+<!-- Signon realm -->
+<!ELEMENT SIGNONINFOLIST    - - (SIGNONINFO*)>
+<!ELEMENT SIGNONINFO        - - (SIGNONREALM , MIN , MAX ,
+                                 CHARTYPE , CASESEN ,
+                                 SPECIAL , SPACES, PINCH, CHGPINFIRST)>
+
+<!ELEMENT SIGNONREALM       - o %STRTYPE>
+<!ELEMENT MIN               - o %INTTYPE>
+<!ELEMENT MAX               - o %INTTYPE>
+<!ELEMENT CHARTYPE          - o %STRTYPE>
+<!ELEMENT CASESEN           - o %BOOLTYPE>
+<!ELEMENT SPECIAL           - o %BOOLTYPE>
+<!ELEMENT SPACES            - o %BOOLTYPE>
+<!ELEMENT PINCH             - o %BOOLTYPE>
+<!ELEMENT CHGPINFIRST       - o %BOOLTYPE>
+

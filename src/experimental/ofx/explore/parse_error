@@ -1,0 +1,7 @@
+up result 0 
+HTTP/1.0 400 OFX Request Parsing Error
+Server: Netscape-Enterprise/2.01
+Date: Fri, 10 Apr 1998 18:26:55 GMT
+Content-type: application/x-ofx
+
+down result 0 1901 

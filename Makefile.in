@@ -116,7 +116,7 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
-SUBDIRS = debian doc intl lib po raw rpm src
+SUBDIRS = debian doc intl lib po rpm src
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -137,7 +137,7 @@ doc_DATA =    AUTHORS   COPYING   ChangeLog   INSTALL   NEWS   README
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST =    .cvsignore   gnucash.lsm   intl/.cvsignore   make-gnucash-patch.in   old/Gnucash.app-defaults   old/gnome/graph/Makefile   old/gnome/graph/colors.c   old/gnome/graph/design.txt   old/gnome/graph/plot-test.c   old/perl-reports/report-baln.phtml   old/perl-reports/report-folio.phtml   old/perl-reports/report-formtest.html   old/perl-reports/report-main.html   old/perl-reports/report-menu.html   old/perl-reports/report-null.html   old/perl-reports/report-pnl.phtml   old/xacc-shell.c   po/.cvsignore   po/extract-macros.perl.in   po/guile_strings.txt
+EXTRA_DIST =    .cvsignore   gnucash.lsm   intl/.cvsignore   make-gnucash-patch.in   old/country.sql   old/currencynames   old/Gnucash.app-defaults   old/gnome/graph/Makefile   old/gnome/graph/colors.c   old/gnome/graph/design.txt   old/gnome/graph/plot-test.c   old/perl-reports/report-baln.phtml   old/perl-reports/report-folio.phtml   old/perl-reports/report-formtest.html   old/perl-reports/report-main.html   old/perl-reports/report-menu.html   old/perl-reports/report-null.html   old/perl-reports/report-pnl.phtml   old/xacc-shell.c   po/.cvsignore   po/extract-macros.perl.in   po/guile_strings.txt
 
 
 CLEANFILES =  make-gnucash-patch

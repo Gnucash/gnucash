@@ -1,0 +1,33 @@
+<OFX> <!--Beginning of request data-->
+<SIGNONMSGSRQV1>
+<SONRQ> <!--Beginning of signon-->
+<DTCLIENT>19980410101000 <!--Datetime, 8/28/96, 10:10:00 am-->
+<USERID>FW5853 <!--User ID (e.g. SSN) -->
+<USERPASS>xxxxx <!--Password(SSL encrypts whole) -->
+<LANGUAGE>ENG <!--Use English for the response -->
+<APPID>GNUCash OFX Test <!--Client application ID-->
+<APPVER>0001 <!--Version 5.0-->
+</SONRQ> <!--End of signon-->
+</SIGNONMSGSRQV1>
+<INVSTMTMSGSRQV1>
+<INVSTMTTRNRQ> <!--First request in file-->
+<TRNUID>1001 <!--Unique ID for this request-->
+<INVSTMTRQ> <!--Beginning of statement download-->
+<INVACCTFROM> <!--Identify the account: -->
+<BROKERID>etrade.com <!--FI ID-->
+<ACCTID>5853 <!--Account number-->
+</INVACCTFROM> <!--End of account ID-->
+<INCTRAN> <!--Request transactions-->
+<DTSTART>19970824130105 <!--Send transactions posted after-->
+<!--Aug 24, 1996 1:01:05pm-->
+<INCLUDE>Y <!--Include transactions -->
+</INCTRAN>
+<INCOO>Y <!--Include open orders in response-->
+<INCPOS> <!--Request positions -->
+<INCLUDE>Y <!--Include current positions -->
+</INCPOS>
+<INCBAL>Y <!--Include balances in request-->
+</INVSTMTRQ>
+</INVSTMTTRNRQ> <!--End of first request-->
+</INVSTMTMSGSRQV1>
+</OFX> <!--End of Open Financial Exchangerequest data-->

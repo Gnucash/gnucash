@@ -1,0 +1,76 @@
+
+some notes about the OFX test implementation for GNUCash. 
+---------------------------------------------------------
+
+Ueli Rutishauser (urutishauser@bigfoot.com ) / 10.4.1998
+
+All the following informationen depends on version 1.5 and 1.0.2 of the
+Open Financial Exchange Specification (OFX).
+
+version notes
+-------------
+
+The actual OFXHEADER Version is 1.00 (100)
+
+The actual OFXSGML DTD Version is 1.02 (102)
+
+
+urlget
+------
+
+urlget -i -v http://localhost/
+
+urlget -i -v https://swww.etrade.com/
+
+urlget -i -v -T post2.ofx https://ofx.etrade.com/cgi-ofx/etradeofx/
+
+anonymous login
+---------------
+
+to login anonymous, USERID and/or USERPASS must be set to anonymous
+followed by 23 zeros.
+
+
+BROKERID
+--------
+
+BROKERID (page 102 and 256) must set to the domain of the broker eg. etrade.com
+
+general notes
+-------------
+
+-OFX-Files cannot contain comments (<-- not allowed)
+-All Tags must be written Uppercase (<OFX> not <ofx>)
+
+test files
+----------
+
+req1_orig Original Request for Investement Statements download (with comments)
+
+req1      ready to send request for a "Investement Statement download" 
+get1      response of such a request (not yet available)
+
+req5	  login anonymous
+get5      result of a anonymous login (not yet available)
+
+req6      login anonymous/get FI profile
+get6      result of a anonymous login with a profile request
+
+req7         Request for a "Investement Statement download"
+reply_req7   response when a false Account-ID is provided
+reply_req7_2 regular response
+
+post4.ofx   login 
+reply_post4 response to a valid login request
+ 
+PLEASE: do not test this examples with any OFX-server when you not
+really develop on the OFX-part. We have only one working OFX URL at the
+moment... 
+
+programs/code
+-------------
+
+length   the program length calculates the length (Content-Length) for the
+         HTTP Header of a file. 
+
+ 

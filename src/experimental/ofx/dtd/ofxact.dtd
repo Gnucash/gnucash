@@ -1,0 +1,118 @@
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - activation module
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+-->
+
+<!-- Message Sets -->
+
+<!ELEMENT SIGNUPMSGSRQV1      - - ((ENROLLTRNRQ | ACCTINFOTRNRQ | 
+                                    CHGUSERINFOTRNRQ | CHGUSERINFOSYNCRQ |
+                                    ACCTTRNRQ | ACCTSYNCRQ)+ )> 
+<!ELEMENT SIGNUPMSGSRSV1      - - ((ENROLLTRNRS | ACCTINFOTRNRS | 
+                                    CHGUSERINFOTRNRS | CHGUSERINFOSYNCRS |
+                                    ACCTTRNRS | ACCTSYNCRS)+ )>
+
+<!-- Profile entry for message set -->
+<!ELEMENT SIGNUPMSGSET        - - (SIGNUPMSGSETV1)>
+<!ELEMENT SIGNUPMSGSETV1      - - (MSGSETCORE , 
+                                   (CLIENTENROLL | WEBENROLL | OTHERENROLL),
+                                   CHGUSERINFO, AVAILACCTS, CLIENTACTREQ)>
+
+<!ELEMENT CLIENTENROLL          - - (ACCTREQUIRED)>
+<!ELEMENT WEBENROLL             - - (URL)>
+<!ELEMENT OTHERENROLL           - - (MESSAGE)>
+
+<!ELEMENT ACCTREQUIRED          - o %BOOLTYPE>
+<!ELEMENT CHGUSERINFO           - o %BOOLTYPE>
+<!ELEMENT AVAILACCTS            - o %BOOLTYPE>
+<!ELEMENT CLIENTACTREQ          - o %BOOLTYPE>
+
+<!-- Transactions -->
+
+<!ELEMENT ENROLLTRNRQ       - - (%TRNRQMACRO , ENROLLRQ)>
+<!ELEMENT ENROLLTRNRS       - - (%TRNRSMACRO , ENROLLRS?)>
+<!ELEMENT ACCTINFOTRNRQ     - - (%TRNRQMACRO , ACCTINFORQ)>
+<!ELEMENT ACCTTRNRQ         - - (%TRNRQMACRO , ACCTRQ)>
+<!ELEMENT ACCTINFOTRNRS     - - (%TRNRSMACRO , ACCTINFORS?)>
+<!ELEMENT ACCTTRNRS         - - (%TRNRSMACRO , ACCTRS?)>
+<!ELEMENT CHGUSERINFOTRNRQ  - - (%TRNRQMACRO, CHGUSERINFORQ)>
+<!ELEMENT CHGUSERINFOTRNRS  - - (%TRNRSMACRO, CHGUSERINFORS?)>
+
+<!-- ================== -->
+<!-- Enrollment         -->
+<!-- ==================  -->
+
+<!ELEMENT ENROLLRQ       - - (FIRSTNAME , MIDDLENAME ,
+                             LASTNAME , ADDR1,ADDR2?,ADDR3? ,
+                             CITY , STATE , POSTALCODE ,
+                             COUNTRY , DAYPHONE , EVEPHONE ,
+                             EMAIL , USERID? , TAXID ,
+                             SECURITYNAME , DATEBIRTH ,
+                             (%ACCTFROMMACRO)? )>
+
+<!-- most above name / addr elements in ofxmain.dtd -->
+                             
+<!ELEMENT TAXID         - o %STRTYPE>
+<!ELEMENT SECURITYNAME  - o %STRTYPE>
+<!ELEMENT DATEBIRTH     - o %DTTMTYPE>
+  
+<!ELEMENT ENROLLRS      - - (TEMPPASS? , USERID? , DTEXPIRE?)>
+    <!-- NOTE: could constrain  DTEXPIRE -->
+
+<!ELEMENT TEMPPASS      - o %STRTYPE>
+<!ELEMENT DTEXPIRE      - o %DTTMTYPE>
+
+<!-- Change User Info -->
+
+<!ELEMENT CHGUSERINFORQ - - (FIRSTNAME?, MIDDLENAME?, LASTNAME?,
+                             ADDR1?,ADDR2?,ADDR3?,
+                             CITY?, STATE?, POSTALCODE?, COUNTRY?,
+                             DAYPHONE?, EVEPHONE?, EMAIL?)>
+
+<!ELEMENT CHGUSERINFORS - - (FIRSTNAME?, MIDDLENAME?, LASTNAME?,
+                             ADDR1?,ADDR2?,ADDR3?,
+                             CITY?, STATE?, POSTALCODE?, COUNTRY?,
+                             DAYPHONE?, EVEPHONE?, EMAIL?,
+                             DTINFOCHG)>
+                             
+<!ELEMENT DTINFOCHG     - o %DTTMTYPE>                             
+
+<!ELEMENT CHGUSERINFOSYNCRQ    - - (%SYNCRQMACRO , CHGUSERINFOTRNRQ*)>
+<!ELEMENT CHGUSERINFOSYNCRS    - - (%SYNCRSMACRO , CHGUSERINFOTRNRS*)>
+  
+<!-- Top level request and response -->
+<!ELEMENT ACCTINFORQ    - - (DTACCTUP)>
+<!ELEMENT ACCTINFORS    - - (DTACCTUP , ACCTINFO*)>
+
+<!-- Account Info aggregate
+     Note: this refers to a macro in ofxmain that
+     list all of the account info aggregates
+-->
+<!ELEMENT ACCTINFO      - - (DESC? , PHONE? ,
+                             (%ACCTINFOMACRO)+ )>
+
+<!-- Service status - should be included as part of
+     the ACCTINFOMACRO aggregates.  Values
+     are AVAIL, PEND, ACTIVE -->
+<!ELEMENT SVCSTATUS     - o %STRTYPE>      
+<!-- -----------------
+  Service Activation
+  ----------------- -->
+
+<!ELEMENT ACCTRQ        - - ((SVCADD | SVCCHG | SVCDEL) ,
+                             SVC)>
+<!ELEMENT ACCTRS        - -  ((SVCADD | SVCCHG | SVCDEL) ,
+                             SVC, SVCSTATUS)>
+<!ELEMENT SVCADD        - - (%ACCTTOMACRO)>
+<!ELEMENT SVCDEL        - - (%ACCTFROMMACRO)>
+<!ELEMENT SVCCHG        - - (%ACCTFROMMACRO , %ACCTTOMACRO)>
+
+<!ELEMENT SVC           - o %STRTYPE>
+
+<!-- Synchronization -->
+
+<!ELEMENT ACCTSYNCRQ    - - (%SYNCRQMACRO , ACCTTRNRQ*)>
+<!ELEMENT ACCTSYNCRS    - - (%SYNCRSMACRO , ACCTTRNRS*)>

@@ -1,0 +1,556 @@
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - investments module
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+
+-->
+
+
+<!-- Investment Statement Messages -->
+<!ELEMENT INVSTMTMSGSRQV1  - - ((INVSTMTTRNRQ |
+                                 INVMAILTRNRQ | INVMAILSYNCRQ)+) >
+
+<!ELEMENT INVSTMTMSGSRSV1  - - ((INVSTMTTRNRS |
+                                 INVMAILTRNRS | INVMAILSYNCRS)+) >
+
+<!-- Security List Messages -->
+<!ELEMENT SECLISTMSGSRQV1  - - (SECLISTTRNRQ+) >
+
+<!ELEMENT SECLISTMSGSRSV1  - - (SECLISTTRNRS* , SECLIST?) >
+
+<!-- **** SECURITIES *** -->
+
+<!-- Security List Transaction Request/Response -->
+<!ELEMENT SECLISTTRNRQ  - - (%TRNRQMACRO , SECLISTRQ) >
+
+<!ELEMENT SECLISTTRNRS  - - (%TRNRSMACRO , SECLISTRS?) >
+
+<!-- Security List Request/Response -->
+<!ELEMENT SECLISTRQ  - - (SECRQ+)>
+
+<!ELEMENT SECRQ      - - (SECID | TICKER | FIID) >
+
+<!ELEMENT SECLISTRS  - - %STRTYPE >
+            
+<!-- Security Ticker Symbol -->
+<!ELEMENT TICKER  - O %STRTYPE >
+                      
+<!-- Financial Institution ID for the Security -->                      
+<!ELEMENT FIID  - O %STRTYPE >
+
+<!-- ** Security Identifier ** -->
+<!ELEMENT SECID  - - (UNIQUEID , UNIQUEIDTYPE) >
+
+<!-- Unique ID for the Security -->
+<!ELEMENT UNIQUEID  - O %STRTYPE >
+
+<!-- Standard used for Unique ID e.g. CUSIP -->
+<!ELEMENT UNIQUEIDTYPE  - O %STRTYPE >
+
+<!-- *** Security Information *** -->
+
+<!-- Security List -->
+<!ELEMENT SECLIST  - - ((MFINFO | STOCKINFO | OPTINFO | DEBTINFO | 
+               OTHERINFO)*) >
+
+<!-- ** Info all security types have in common ** -->
+<!ELEMENT SECINFO  - - (SECID , SECNAME , TICKER? , FIID? ,
+               RATING? , UNITPRICE? , DTASOF? ,
+               CURRENCY? , MEMO?) >
+
+<!ELEMENT SECNAME   - O %STRTYPE>
+              
+<!-- Rating for Security -->
+<!ELEMENT RATING  - O %STRTYPE >
+
+<!-- Unitprice for Security -->
+<!ELEMENT UNITPRICE  - O %UNITPRICETYPE >
+
+<!-- *** Debt Information *** -->
+<!ELEMENT DEBTINFO  - - (SECINFO , PARVALUE , DEBTTYPE , DEBTCLASS? ,
+               COUPONRT? , DTCOUPON? , COUPONFREQ? , CALLPRICE? , 
+               YIELDTOCALL? , DTCALL? , CALLTYPE? , YIELDTOMAT? , 
+               DTMAT? , ASSETCLASS? , FIASSETCLASS?) >
+
+<!ELEMENT PARVALUE  - O %AMTTYPE >
+
+<!ELEMENT DEBTTYPE  - O %STRTYPE >
+
+<!ELEMENT DEBTCLASS  - O %STRTYPE >
+
+<!ELEMENT COUPONRT  - O %AMTTYPE >
+
+<!ELEMENT DTCOUPON  - O %DTTMTYPE >
+
+<!ELEMENT COUPONFREQ  - O %STRTYPE >
+
+<!ELEMENT CALLPRICE  - O %UNITPRICETYPE >
+
+<!ELEMENT YIELDTOCALL  - O %AMTTYPE >
+
+<!ELEMENT DTCALL  - O %DTTMTYPE >
+
+<!ELEMENT CALLTYPE - O %STRTYPE >
+
+<!ELEMENT YIELDTOMAT  - O %AMTTYPE >
+
+<!ELEMENT DTMAT  - O %DTTMTYPE >
+
+<!-- Asset Class for Security -->
+<!ELEMENT ASSETCLASS  - O %STRTYPE >
+
+<!-- FI's Asset Class for Security -->
+<!ELEMENT FIASSETCLASS  - O %STRTYPE >
+
+<!-- *** Mutual Fund Information *** -->
+<!ELEMENT MFINFO  - - (SECINFO , MFTYPE? , YIELD? , DTYIELDASOF? , 
+               MFASSETCLASS? , FIMFASSETCLASS?) >
+
+<!ELEMENT MFTYPE  - O %STRTYPE >
+
+<!ELEMENT YIELD  - O %AMTTYPE >
+
+<!ELEMENT DTYIELDASOF  - O %DTTMTYPE >
+
+<!-- Asset Class for Mutual Funds -->
+<!ELEMENT MFASSETCLASS  - - (PORTION+) >
+
+<!-- Asset Class Portion -->
+<!ELEMENT PORTION  - - (ASSETCLASS , PERCENT) >
+
+<!ELEMENT PERCENT  - O %AMTTYPE >
+
+<!-- FI's Asset Class for Mutual Funds  -->
+<!ELEMENT FIMFASSETCLASS  - - (FIPORTION+) >
+
+<!-- FI's Asset Class Portion -->
+<!ELEMENT FIPORTION  - - (FIASSETCLASS , PERCENT) >
+
+<!-- *** Option Information *** -->
+<!ELEMENT OPTINFO  - - (SECINFO , OPTTYPE , STRIKEPRICE , DTEXPIRE , 
+               SHPERCTRCT , SECID? , ASSETCLASS? , FIASSETCLASS?) >
+
+<!ELEMENT OPTTYPE  - O %STRTYPE >
+
+<!ELEMENT STRIKEPRICE  - O %AMTTYPE >
+
+<!-- Number of shares per contract -->
+<!ELEMENT SHPERCTRCT  - O %INTTYPE >
+          
+<!-- *** Other Security Type Information *** -->
+<!ELEMENT OTHERINFO  - - (SECINFO , TYPEDESC?, ASSETCLASS? , FIASSETCLASS?) >
+
+<!ELEMENT TYPEDESC  - O %STRTYPE >
+
+
+<!-- *** Stock Information *** -->
+<!ELEMENT STOCKINFO  - - (SECINFO , STOCKTYPE? , YIELD? , DTYIELDASOF? , 
+               ASSETCLASS? , FIASSETCLASS?) >
+
+<!ELEMENT STOCKTYPE  - O %STRTYPE >
+
+
+<!-- ***** Investment Accounts ****** -->
+
+<!-- Investment Account From -->
+<!ELEMENT INVACCTFROM  - - (BROKERID , ACCTID) >
+
+<!-- Investment Account To -->
+<!ELEMENT INVACCTTO  - - (BROKERID , ACCTID) >
+
+<!ELEMENT BROKERID  - O %STRTYPE >
+
+<!-- ** Investment Account Information ** -->
+<!ELEMENT INVACCTINFO - - (INVACCTFROM , USPRODUCTTYPE , CHECKING , 
+                           SVCSTATUS, INVACCTTYPE? , OPTIONLEVEL?) >
+
+<!ELEMENT USPRODUCTTYPE - O %STRTYPE >
+
+<!ELEMENT CHECKING - O %BOOLTYPE >
+
+<!ELEMENT INVACCTTYPE - O %STRTYPE >
+
+<!ELEMENT OPTIONLEVEL - O %STRTYPE >  
+
+
+<!-- ****** INVESTMENT STATEMENT DOWNLOAD ****** -->
+
+<!-- Investment Statement Transaction Request/Response -->
+<!ELEMENT INVSTMTTRNRQ  - - (%TRNRQMACRO , INVSTMTRQ) >
+
+<!ELEMENT INVSTMTTRNRS  - - (%TRNRSMACRO , INVSTMTRS?) >
+
+<!-- *** Investment Statement Request *** -->
+<!ELEMENT INVSTMTRQ  - - (INVACCTFROM , INCTRAN , INCOO , INCPOS ,
+                          INCBAL) >
+
+<!-- ** Include Transactions ** -->
+<!ELEMENT INCTRAN  - - (DTSTART? , DTEND? , INCLUDE) >
+
+<!-- ** Include Open Orders ** -->
+<!ELEMENT INCOO  - O %BOOLTYPE >
+
+<!-- ** Include Positions ** -->
+<!ELEMENT INCPOS  - - (DTASOF? , INCLUDE) >
+
+<!-- Include Balances -->
+<!ELEMENT INCBAL  - O %BOOLTYPE >
+
+
+<!-- *** Investment Statement Response *** -->
+<!ELEMENT INVSTMTRS  - - (DTASOF , CURDEF , INVACCTFROM , INVTRANLIST? ,
+               INVPOSLIST? , INVBAL? , INVOOLIST? ,  MKTGINFO?) >
+
+<!-- Marketing Mesage -->
+<!ELEMENT MKTVAL  - O %AMTTYPE >
+
+<!-- ** Transaction List ** -->
+<!ELEMENT INVTRANLIST  - - (DTSTART , DTEND , (BUYDEBT | BUYMF | BUYOPT | BUYOTHER |
+               BUYSTOCK | CLOSUREOPT | INCOME | INVEXPENSE | JRNLFUND |
+               JRNLSEC | MARGININTEREST | REINVEST | RETOFCAP| SELLDEBT |
+               SELLMF | SELLOPT | SELLOTHER |  SELLSTOCK |
+               SPLIT | TRANSFER)* , INVBANKTRAN*) >
+
+<!-- ** Investment Banking Transaction ** -->
+<!ELEMENT INVBANKTRAN  - - (STMTTRN , SUBACCTFUND) >
+
+<!-- ** Transaction fields common to many types of transactions ** -->
+<!ELEMENT INVTRAN  - - (FITID , SRVRTID? , DTTRADE , DTSETTLE? , MEMO?) >
+
+<!-- Trade Date -->
+<!ELEMENT DTTRADE  - O %DTTMTYPE >
+
+<!-- Settlement Date -->
+<!ELEMENT DTSETTLE  - O %DTTMTYPE >
+
+<!-- ** Transaction fields common to BUY types of transactions ** -->
+<!ELEMENT INVBUY  - - (INVTRAN , SECID , UNITS , UNITPRICE , MARKUP? , 
+               COMMISSION? , TAXES? , FEES? , LOAD? , TOTAL , CURRENCY? ,
+               ORIGCURRENCY? , SUBACCTSEC , SUBACCTFUND) >
+
+<!ELEMENT UNITS  - O %AMTTYPE >
+
+<!ELEMENT MARKUP  - O %AMTTYPE >
+
+<!ELEMENT COMMISSION  - O %AMTTYPE >
+
+<!ELEMENT TAXES  - O %AMTTYPE >
+
+<!ELEMENT FEES  - O %AMTTYPE >
+
+<!ELEMENT LOAD  - O %AMTTYPE >
+
+<!ELEMENT TOTAL  - O %AMTTYPE >
+
+<!-- Sub-account for the security -->
+<!ELEMENT SUBACCTSEC  - O %STRTYPE >
+
+<!-- Sub-account for the funds involved in the trade: CASH, SHORT, MARGIN, OTHER -->
+<!ELEMENT SUBACCTFUND  - O %STRTYPE >
+
+<!-- ** Transaction fields common to SELL types of transactions ** -->
+<!ELEMENT INVSELL  - - (INVTRAN , SECID , UNITS , UNITPRICE , MARKDOWN? , 
+               COMMISSION? , TAXES? , FEES? , LOAD? , WITHHOLDING? ,
+               TAXEXEMPT? , TOTAL , GAIN? , CURRENCY? , ORIGCURRENCY? ,
+               SUBACCTSEC , SUBACCTFUND) >
+
+<!ELEMENT MARKDOWN  - O %AMTTYPE >
+
+<!ELEMENT WITHHOLDING  - O %AMTTYPE >
+
+<!ELEMENT GAIN  - O %AMTTYPE >
+
+<!-- ** Buy Debt Transaction ** -->
+<!ELEMENT BUYDEBT  - - (INVBUY , ACCRDINT?) >
+
+<!ELEMENT ACCRDINT  - O %AMTTYPE >
+
+<!-- ** Buy Mutual Fund Transaction ** -->
+<!ELEMENT BUYMF  - - (INVBUY , BUYTYPE , RELFITID?) >
+
+<!-- Buy Type: BUY or BUYTOCOVER -->
+<!ELEMENT BUYTYPE  - O %STRTYPE >
+
+<!-- Related Transaction ID -->
+<!ELEMENT RELFITID  - O %UUIDTYPE >
+
+<!-- ** Buy Option Transaction ** -->
+<!ELEMENT BUYOPT  - - (INVBUY , OPTBUYTYPE , SHPERCTRCT) >
+
+<!-- Option Buy Type -->
+<!ELEMENT OPTBUYTYPE  - O %STRTYPE >
+
+<!-- ** Buy Other Transaction ** -->
+<!ELEMENT BUYOTHER  - - (INVBUY) >
+
+<!-- ** Buy Stock Transaction ** -->
+<!ELEMENT BUYSTOCK  - - (INVBUY , BUYTYPE) >
+
+<!-- ** Closure of Option Transaction ** -->
+<!ELEMENT CLOSUREOPT  - - (INVTRAN , SECID , OPTACTION , UNITS , SHPERCTRCT ,
+               SUBACCTSEC , RELFITID? , GAIN?) >      
+               
+<!-- Closure of option action: EXPIRE,EXERCISE,ASSIGN -->
+<!ELEMENT OPTACTION  - O %STRTYPE >
+
+<!-- **Income Transaction ** -->
+<!ELEMENT INCOME  - - (INVTRAN , SECID , INCOMETYPE , TOTAL , SUBACCTSEC ,
+               SUBACCTFUND , TAXEXEMPT? , WITHHOLDING? ,CURRENCY? ,
+               ORIGCURRENCY? ) >
+
+<!-- Type of Income -->
+<!ELEMENT INCOMETYPE  - O %STRTYPE >
+
+<!ELEMENT TAXEXEMPT - O %BOOLTYPE >
+
+<!-- ** Investment Related Expense Transaction ** -->
+<!ELEMENT INVEXPENSE  - - (INVTRAN , SECID , TOTAL , SUBACCTSEC ,
+               SUBACCTFUND , CURRENCY? , ORIGCURRENCY?) >
+
+<!-- ** Journaling of Funds between sub-accounts Transaction ** -->
+<!ELEMENT JRNLFUND - - (INVTRAN , SUBACCTTO , SUBACCTFROM , TOTAL) >
+
+<!ELEMENT SUBACCTTO - O %STRTYPE >
+
+<!ELEMENT SUBACCTFROM - O %STRTYPE >
+
+<!-- ** Journaling of Security between sub-accounts Transaction ** -->
+<!ELEMENT JRNLSEC - - (INVTRAN , SECID, SUBACCTTO , SUBACCTFROM , UNITS) >
+
+<!-- ** Margin Interest Transaction ** -->
+<!ELEMENT MARGININTEREST  - - (INVTRAN , TOTAL , SUBACCTFUND , CURRENCY? ,
+               ORIGCURRENCY?) >
+
+<!-- ** Reinvest Transaction ** -->
+<!ELEMENT REINVEST  - - (INVTRAN , SECID , INCOMETYPE , TOTAL , SUBACCTSEC ,
+               UNITS , UNITPRICE , COMMISSION? , TAXES? , FEES? , LOAD? ,
+               TAXEXEMPT? , CURRENCY? , ORIGCURRENCY?) >
+
+<!-- ** Return Of Capital Transaction ** -->
+<!ELEMENT RETOFCAP - - (INVTRAN , SECID , TOTAL , SUBACCTSEC ,
+                        SUBACCTFUND , CURRENCY? , ORIGCURRENCY?) >
+
+<!-- ** Sell Debt Transaction ** -->
+<!ELEMENT SELLDEBT  - - (INVSELL , SELLREASON , ACCRDINT?) >
+
+<!-- Reason Sell of Debt generated: CALL, MATURITY, SELL -->
+<!ELEMENT SELLREASON - O %STRTYPE >
+
+<!-- ** Sell Mutual Fund Transaction ** -->
+<!ELEMENT SELLMF  - - (INVSELL , SELLTYPE , AVGCOSTBASIS? , RELFITID?) >
+
+<!-- Sell Type: SELL or SELLSHORT -->
+<!ELEMENT SELLTYPE  - O %STRTYPE >
+
+<!-- Average cost basis -->
+<!ELEMENT AVGCOSTBASIS  - O %AMTTYPE >
+
+<!-- ** Sell Option Transaction ** -->
+<!ELEMENT SELLOPT  - - (INVSELL , OPTSELLTYPE , SHPERCTRCT ,
+                        RELFITID? , RELTYPE?, SECURED?) >
+
+<!-- Option Sell Type: SELLTOCLOSE or SELLTOOPEN -->
+<!ELEMENT OPTSELLTYPE  - O %STRTYPE >
+
+<!-- Related option transaction type: SPREAD, STRADDLE, NONE -->
+<!ELEMENT RELTYPE  - O %STRTYPE >
+
+<!-- How the option is secured: NAKED or COVERED -->          
+<!ELEMENT SECURED  - O %STRTYPE >
+
+<!-- ** Sell Other Transaction ** -->
+<!ELEMENT SELLOTHER  - - (INVSELL) >
+
+<!-- ** Sell Stock Transaction ** -->
+<!ELEMENT SELLSTOCK  - - (INVSELL , SELLTYPE) >
+
+<!-- ** Split Transaction ** -->
+<!ELEMENT SPLIT  - - (INVTRAN , SECID , SUBACCTSEC ,
+               OLDUNITS , NEWUNITS , NUMERATOR , DENOMINATOR ,
+               CURRENCY? , ORIGCURRENCY? , FRACCASH? , SUBACCTFUND?) >
+
+<!ELEMENT OLDUNITS  - O %INTTYPE >
+
+<!ELEMENT NEWUNITS  - O %INTTYPE >
+
+<!ELEMENT NUMERATOR  - O %INTTYPE >
+
+<!ELEMENT DENOMINATOR  - O %INTTYPE >
+
+<!-- Amount of cash recieved from fractional shares -->
+<!ELEMENT FRACCASH  - O %AMTTYPE >
+
+<!-- ** Transfer Transaction ** -->
+<!ELEMENT TRANSFER  - - (INVTRAN, SECID , SUBACCTSEC , UNITS ,
+                        TFERACTION , POSTYPE , INVACCTFROM?,
+                        AVGCOSTBASIS?, UNITPRICE?, DTPURCHASE?) >
+<!-- Transfer action:IN or OUT -->
+<!ELEMENT TFERACTION  - O %STRTYPE >
+
+<!ELEMENT DTPURCHASE  - o %DTTMTYPE>
+
+<!-- ***** Open Orders List ***** -->
+<!ELEMENT INVOOLIST  - - ((OOBUYDEBT | OOBUYMF | OOBUYOPT | OOBUYOTHER |
+               OOBUYSTOCK | OOSELLDEBT | OOSELLMF | OOSELLOPT |
+               OOSELLOTHER | OOSELLSTOCK | OOSWITCHMF)*) >
+
+<!-- ** Open Order fields common to all open orders ** -->
+<!ELEMENT OO  - - (FITID , SRVRTID? , SECID , DTPLACED , UNITS , SUBACCT ,
+               DURATION , RESTRICTION , MINUNITS? , LIMITPRICE? ,
+               STOPPRICE? , MEMO? , CURRENCY?) >
+
+<!ELEMENT DTPLACED  - O %DTTMTYPE >
+
+<!ELEMENT SUBACCT  - O %STRTYPE >
+
+<!ELEMENT DURATION  - O %STRTYPE >
+
+<!ELEMENT RESTRICTION  - O %STRTYPE >
+
+<!ELEMENT MINUNITS  - O %AMTTYPE >
+
+<!ELEMENT LIMITPRICE  - O %UNITPRICETYPE >
+
+<!ELEMENT STOPPRICE  - O %UNITPRICETYPE >
+
+<!-- ** Buy Debt Open Order ** -->
+<!ELEMENT OOBUYDEBT  - - (OO , AUCTION , DTAUCTION?) >
+
+<!ELEMENT AUCTION  - O %BOOLTYPE >
+
+<!ELEMENT DTAUCTION  - O %DTTMTYPE >
+
+<!-- ** Buy Mutual Fund Open Order ** -->
+<!ELEMENT OOBUYMF  - - (OO , BUYTYPE , UNITTYPE) >
+
+<!-- Type of units: SHARES or CURRENCY -->
+<!ELEMENT UNITTYPE  - O %STRTYPE >
+
+<!-- ** Buy Option Open Order ** -->
+<!ELEMENT OOBUYOPT  - - (OO , OPTBUYTYPE) >
+
+<!-- ** Buy Other Open Order ** -->
+<!ELEMENT OOBUYOTHER  - - (OO , UNITTYPE) >
+
+<!-- ** Buy Stock Open Order ** -->
+<!ELEMENT OOBUYSTOCK  - - (OO , BUYTYPE) >
+
+<!-- ** Sell Debt Open Order ** -->
+<!ELEMENT OOSELLDEBT  - - (OO) >
+
+<!-- ** Sell Mutual Fund Open Order ** -->
+<!ELEMENT OOSELLMF  - - (OO , SELLTYPE , UNITTYPE , SELLALL) >
+
+<!ELEMENT SELLALL  - O %BOOLTYPE >
+
+<!-- ** Sell Option Open Order ** -->
+<!ELEMENT OOSELLOPT  - - (OO , OPTSELLTYPE) >
+
+<!-- ** Sell Other Security Type Open Order ** -->
+<!ELEMENT OOSELLOTHER  - - (OO , UNITTYPE) >
+
+<!-- ** Sell Stock Open Order ** -->
+<!ELEMENT OOSELLSTOCK  - - (OO , SELLTYPE) >
+
+<!-- ** Switch Mutual Fund Open Order ** -->
+<!ELEMENT OOSWITCHMF  - - (OO , SECID , UNITTYPE , SWITCHALL) >
+
+<!ELEMENT SWITCHALL  - O %BOOLTYPE >
+
+
+<!-- ***** Position List ***** -->
+<!ELEMENT INVPOSLIST  - - ((POSMF | POSSTOCK | POSDEBT| POSOPT |
+                           POSOTHER)*) >
+
+<!-- Position fields common to and types of positions -->
+<!ELEMENT INVPOS  - - (SECID , HELDINACCT , POSTYPE , UNITS , UNITPRICE , 
+               MKTVAL , DTPRICEASOF , CURRENCY? , MEMO?) >
+
+<!-- Which sub-account the position is held in: CASH, MARGIN, SHORT, OTHER -->
+<!ELEMENT HELDINACCT  - O %STRTYPE >
+
+<!-- Position Type: SHORT, LONG -->
+<!ELEMENT POSTYPE  - O %STRTYPE >
+
+<!ELEMENT DTPRICEASOF  - O %DTTMTYPE >
+
+<!-- ** Debt Position ** -->
+<!ELEMENT POSDEBT  - - (INVPOS) >
+
+<!-- ** Mutual Fund Position ** -->
+<!ELEMENT POSMF  - - (INVPOS , UNITSSTREET? , UNITSUSER? , REINVDIV? ,
+               REINVCG?) >
+
+<!ELEMENT UNITSSTREET  - O %INTTYPE >
+
+<!ELEMENT UNITSUSER  - O %INTTYPE >
+
+<!ELEMENT REINVDIV  - O %BOOLTYPE >
+
+<!ELEMENT REINVCG  - O %BOOLTYPE >
+
+<!-- ** Option Position ** -->
+<!ELEMENT POSOPT  - - (INVPOS , SECURED?) >
+
+<!-- ** Other Security Type Position ** -->
+<!ELEMENT POSOTHER  - - (INVPOS) >
+
+<!-- ** Stock Position ** -->
+<!ELEMENT POSSTOCK  - - (INVPOS , UNITSSTREET? , UNITSUSER? , REINVDIV?) >
+
+
+<!-- ** Balances ** -->
+<!ELEMENT INVBAL  - - (AVAILCASH , MARGINBALANCE , SHORTBALANCE ,
+                       BUYPOWER? , BALLIST?) >
+
+<!ELEMENT MARGINBALANCE  - O %AMTTYPE >
+
+<!ELEMENT SHORTBALANCE  - O %AMTTYPE >
+
+<!ELEMENT AVAILCASH  - O %AMTTYPE >
+
+<!ELEMENT BUYPOWER  - O %AMTTYPE >
+
+<!ELEMENT BALLIST  - - (BAL*) >
+
+<!-- **** Investment Statement Message Set *** -->
+
+<!-- Investment Message Set -->
+<!ELEMENT INVSTMTMSGSET  - - (INVSTMTMSGSETV1) >
+
+<!-- Investment Message Set: Version 1 -->
+<!ELEMENT INVSTMTMSGSETV1  - - (MSGSETCORE , TRANDNLD , OODNLD , POSDNLD , BALDNLD, CANEMAIL) >
+
+<!-- FI supports download of transactions -->
+<!ELEMENT TRANDNLD  - O %BOOLTYPE >
+
+<!-- FI supports download of open orders -->
+<!ELEMENT OODNLD  - O %BOOLTYPE >
+
+<!-- FI supports download of positions -->
+<!ELEMENT POSDNLD  - O %BOOLTYPE >
+
+<!-- FI supports download of balances -->
+<!ELEMENT BALDNLD  - O %BOOLTYPE >
+
+<!-- **** Security List Message Set *** -->
+
+<!-- Security List message Set -->
+<!ELEMENT SECLISTMSGSET  - - (SECLISTMSGSETV1) >
+
+<!-- Investment Message Set: Version 1 -->
+<!ELEMENT SECLISTMSGSETV1  - - (MSGSETCORE , SECLISTRQDNLD) >
+
+<!-- FI supports SECLISTRQ -->
+<!ELEMENT SECLISTRQDNLD  - O %BOOLTYPE >
+
+<!-- INVESTMENT EMAIL -->
+<!ELEMENT INVMAILTRNRQ      - - (%TRNRQMACRO, INVMAILRQ)>
+<!ELEMENT INVMAILTRNRS      - - (%TRNRSMACRO, INVMAILRS?)>
+<!ELEMENT INVMAILSYNCRQ     - - (%SYNCRQMACRO, INCIMAGES, USEHTML, INVACCTFROM, INVMAILTRNRQ*)>
+<!ELEMENT INVMAILSYNCRS     - - (%SYNCRSMACRO, INVACCTFROM, INVMAILTRNRS*)>
+
+<!ELEMENT INVMAILRQ         - - (INVACCTFROM, MAIL)>
+<!ELEMENT INVMAILRS         - - (INVACCTFROM, MAIL)>

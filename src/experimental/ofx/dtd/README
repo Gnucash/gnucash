@@ -1,0 +1,8 @@
+
+These are the Open Financial Exchange (OFX) DTD's
+
+They are *not* the original dtd's; they have been slightly
+hacked to fix a few bugs, and to simplify parsing ever so slightly.
+Hopefully the changes do not affect the correctness.
+
+

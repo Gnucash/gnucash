@@ -1,0 +1,601 @@
+<!--
+    $Revision$
+    $Date$
+    
+ Open Financial Exchange DTD - banking module
+ Copyright 1997 CheckFree Corp., Intuit Inc., Microsoft Corp.  All rights reserved
+
+-->
+
+<!-- ============================================================================= -->
+<!--            Message Entrys for Message Sets                                    -->
+<!-- ============================================================================= -->
+
+<!ELEMENT BANKMSGSET        - - (BANKMSGSETV1)>
+<!ELEMENT CREDITCARDMSGSET  - - (CREDITCARDMSGSETV1)>
+<!ELEMENT INTERXFERMSGSET   - - (INTERXFERMSGSETV1)>
+<!ELEMENT WIREXFERMSGSET    - - (WIREXFERMSGSETV1)>
+
+
+<!-- ============================================================================= -->
+<!--            Message Set Profile Data                                           -->
+<!-- ============================================================================= -->
+
+<!-- Banking Message Set -->
+<!ELEMENT BANKMSGSETV1     - - (MSGSETCORE , INVALIDACCTTYPE* , CLOSINGAVAIL , XFERPROF? ,
+                                STPCHKPROF? , EMAILPROF)>
+
+<!-- Credit Card Message Set -->
+<!ELEMENT CREDITCARDMSGSETV1  - - (MSGSETCORE , CLOSINGAVAIL)>
+
+<!-- Interbank Transfer Message Set -->
+<!ELEMENT INTERXFERMSGSETV1  - - (MSGSETCORE , XFERPROF , CANBILLPAY, CANCELWND , DOMXFERFEE , 
+                                  INTLXFERFEE)>
+
+<!-- Wire Transfer Message Set -->
+<!ELEMENT WIREXFERMSGSETV1  - - (MSGSETCORE , PROCDAYSOFF* , PROCENDTM , CANSCHED , DOMXFERFEE , 
+                                  INTLXFERFEE)>
+
+
+<!ELEMENT XFERPROF    - - (PROCDAYSOFF* , PROCENDTM , CANSCHED , CANRECUR , CANMODXFERS , 
+                           CANMODMDLS , MODELWND, DAYSWITH, DFLTDAYSTOPAY)>
+
+<!ELEMENT STPCHKPROF  - - (PROCDAYSOFF* , PROCENDTM , CANUSERANGE , CANUSEDESC, STPCHKFEE)>
+
+<!ELEMENT EMAILPROF  - - (CANEMAIL , CANNOTIFY)>
+
+
+<!--    Can schedule transfers -->
+<!ELEMENT CANSCHED	- o %BOOLTYPE>
+
+<!--    Can modify pending transfers -->
+<!ELEMENT CANMODXFERS	- o %BOOLTYPE>
+
+<!-- 	Can use description to stop a check -->
+<!ELEMENT CANUSEDESC	- o %BOOLTYPE>
+
+<!-- 	Can use range to stop checks -->
+<!ELEMENT CANUSERANGE	- o %BOOLTYPE>
+
+<!--    Default stop check fee -->
+<!ELEMENT STPCHKFEE     - o %AMTTYPE>
+
+<!-- 	Can handle email -->
+<!ELEMENT CANEMAIL	- o %BOOLTYPE>
+
+<!-- 	Can send notifications -->
+<!ELEMENT CANNOTIFY	- o %BOOLTYPE>
+
+<!--    Unsupported account types -->
+<!ELEMENT INVALIDACCTTYPE - o %STRTYPE>
+
+<!-- 	Can return closing statement info -->
+<!ELEMENT CLOSINGAVAIL	- o %BOOLTYPE>
+
+<!-- 	Can use interbank transfers for bill pay -->
+<!ELEMENT CANBILLPAY	- o %BOOLTYPE>
+
+<!-- Number of days after which a transfer is processed that it can be canceled -->
+<!ELEMENT CANCELWND	- o	%INTTYPE>	
+
+<!-- Fee for sending a domestic transfer transfer -->
+<!ELEMENT DOMXFERFEE	- o	%INTTYPE>	
+
+<!-- Fee for sending an international transfer -->
+<!ELEMENT INTLXFERFEE	- o	%INTTYPE>	
+
+
+<!-- ============================================================================= -->
+<!--             Message Sets                                                      -->
+<!-- ============================================================================= -->
+
+
+<!-- Banking Messages Request Sets and their contained TRN requests -->
+<!ELEMENT BANKMSGSRQV1        - - ((STMTTRNRQ   | STMTENDTRNRQ  | INTRATRNRQ | RECINTRATRNRQ | 
+                                   STPCHKTRNRQ  | BANKMAILTRNRQ | BANKMAILSYNCRQ |
+                                   STPCHKSYNCRQ | INTRASYNCRQ   | RECINTRASYNCRQ)+) >
+<!ELEMENT CREDITCARDMSGSRQV1  - - ((CCSTMTTRNRQ | CCSTMTENDTRNRQ)+)>
+<!ELEMENT INTERXFERMSGSRQV1   - - ((INTERTRNRQ  | RECINTERTRNRQ | INTERSYNCRQ | RECINTERSYNCRQ)+)>  
+<!ELEMENT WIREXFERMSGSRQV1    - - ((WIRETRNRQ   | WIRESYNCRQ)+)>
+
+<!-- Banking Message Set -->
+<!ELEMENT STMTTRNRQ     - - (%TRNRQMACRO , STMTRQ)>
+<!ELEMENT STMTENDTRNRQ  - - (%TRNRQMACRO , STMTENDRQ)>
+<!ELEMENT STPCHKTRNRQ   - - (%TRNRQMACRO , STPCHKRQ)>
+<!ELEMENT INTRATRNRQ    - - (%TRNRQMACRO , (INTRARQ | INTRAMODRQ | INTRACANRQ))>
+<!ELEMENT RECINTRATRNRQ - - (%TRNRQMACRO , (RECINTRARQ | RECINTRAMODRQ | RECINTRACANRQ))>
+<!ELEMENT BANKMAILTRNRQ - - (%TRNRQMACRO , BANKMAILRQ)>
+
+<!-- Credit Card Message Set -->
+<!ELEMENT CCSTMTTRNRQ      - - (%TRNRQMACRO , CCSTMTRQ)>
+<!ELEMENT CCSTMTENDTRNRQ   - - (%TRNRQMACRO , CCSTMTENDRQ)>
+
+<!-- Interbank Transfer Message Set -->
+<!ELEMENT INTERTRNRQ    - - (%TRNRQMACRO , (INTERRQ | INTERMODRQ | INTERCANRQ))>
+<!ELEMENT RECINTERTRNRQ - - (%TRNRQMACRO , (RECINTERRQ | RECINTERMODRQ | RECINTERCANRQ))>
+
+<!-- Wire Transfer Message Set -->
+<!ELEMENT WIRETRNRQ     - - (%TRNRQMACRO , (WIRERQ | WIRECANRQ))>
+
+<!-- Banking Messages Response Sets and their contained TRN responses -->
+<!ELEMENT BANKMSGSRSV1        - - ((STMTTRNRS   | STMTENDTRNRS  | INTRATRNRS | RECINTRATRNRS | 
+                                   STPCHKTRNRS  | BANKMAILTRNRS | BANKMAILSYNCRS |
+                                   STPCHKSYNCRS | INTRASYNCRS   | RECINTRASYNCRS)+)>
+<!ELEMENT CREDITCARDMSGSRSV1  - - ((CCSTMTTRNRS | CCSTMTENDTRNRS)+)>
+<!ELEMENT INTERXFERMSGSRSV1   - - ((INTERTRNRS  | RECINTERTRNRS | INTERSYNCRS | RECINTERSYNCRS)+)>  
+<!ELEMENT WIREXFERMSGSRSV1    - - ((WIRETRNRS   | WIRESYNCRS)+)>
+
+<!-- Banking TRN responses -->
+
+<!-- Banking Message Set -->
+<!ELEMENT STMTTRNRS     - - (%TRNRSMACRO , STMTRS?)>
+<!ELEMENT STMTENDTRNRS  - - (%TRNRSMACRO , STMTENDRS?)>
+<!ELEMENT STPCHKTRNRS   - - (%TRNRSMACRO , STPCHKRS?)>
+<!ELEMENT INTRATRNRS    - - (%TRNRSMACRO , (INTRARS | INTRAMODRS | INTRACANRS)?)>
+<!ELEMENT RECINTRATRNRS - - (%TRNRSMACRO , (RECINTRARS | RECINTRAMODRS | RECINTRACANRS)?)>
+<!ELEMENT BANKMAILTRNRS - - (%TRNRSMACRO , (BANKMAILRS | CHKMAILRS | DEPMAILRS)?)>
+
+<!-- Credit Card Message Set -->
+<!ELEMENT CCSTMTTRNRS    - - (%TRNRSMACRO , CCSTMTRS?)>
+<!ELEMENT CCSTMTENDTRNRS - - (%TRNRSMACRO , CCSTMTENDRS?)>
+
+<!-- Interbank Transfer Message Set -->
+
+<!ELEMENT INTERTRNRS    - - (%TRNRSMACRO , (INTERRS | INTERMODRS | INTERCANRS)?)>
+<!ELEMENT RECINTERTRNRS - - (%TRNRSMACRO , (RECINTERRS | RECINTERMODRS | RECINTERCANRS)?)>
+
+<!-- Wire Transfer Message Set -->
+<!ELEMENT WIRETRNRS     - - (%TRNRSMACRO , (WIRERS | WIRECANRS)?)>
+
+<!-- ============================================================================= -->
+<!--            Requests                                                           -->
+<!-- ============================================================================= -->
+
+<!-- statement request -->
+<!ELEMENT STMTRQ - - (BANKACCTFROM , INCTRAN?)>
+
+<!-- credit card statement request -->
+<!ELEMENT CCSTMTRQ - - (CCACCTFROM , INCTRAN?)>
+
+<!-- closing statement request request -->
+<!ELEMENT STMTENDRQ - - (BANKACCTFROM , DTSTART? , DTEND?)>
+
+<!-- credit card closing statement request  -->
+<!ELEMENT CCSTMTENDRQ - - (CCACCTFROM , DTSTART? , DTEND?)>
+
+<!-- stop check request -->
+<!ELEMENT STPCHKRQ - - (BANKACCTFROM , (CHKRANGE|CHKDESC))> 
+
+
+<!-- intrabank transfer request -->
+<!ELEMENT INTRARQ - - (XFERINFO)>
+
+
+<!-- intrabank transfer modification request -->
+<!ELEMENT INTRAMODRQ - - (SRVRTID , XFERINFO)> 
+
+
+<!-- intrabank transfer cancellation request -->
+<!ELEMENT INTRACANRQ - - (SRVRTID)>
+
+
+<!-- interbank transfer request -->
+<!ELEMENT INTERRQ - - (XFERINFO)> 
+
+
+<!-- interbank transfer modification request -->
+<!ELEMENT INTERMODRQ - - (SRVRTID , XFERINFO )>
+
+
+<!-- interbank transfer cancellation request -->
+<!ELEMENT INTERCANRQ - - (SRVRTID)>
+
+
+<!-- wire transfer request -->
+<!ELEMENT WIRERQ - - (BANKACCTFROM , WIREBENEFICIARY , WIREDESTBANK? , TRNAMT , DTDUE? , PAYINSTRUCT?)> 
+
+
+<!-- wire transfer cancellation request -->
+<!ELEMENT WIRECANRQ - - (SRVRTID)>
+
+
+<!-- recurring intra transfer request -->
+<!ELEMENT RECINTRARQ - - (RECURRINST , INTRARQ)>
+
+
+<!-- recurring intra transfer modification request -->
+<!ELEMENT RECINTRAMODRQ - - (RECSRVRTID , RECURRINST , INTRARQ , MODPENDING)>
+
+
+<!-- recurring intra transfer cancellation request -->
+<!ELEMENT RECINTRACANRQ - - (RECSRVRTID , CANPENDING)>
+
+
+<!-- recurring inter transfer request -->
+<!ELEMENT RECINTERRQ - - (RECURRINST , INTERRQ)>
+
+
+<!-- recurring inter transfer modification request -->
+<!ELEMENT RECINTERMODRQ - - (RECSRVRTID , RECURRINST , INTERRQ , MODPENDING)>
+
+<!-- recurring inter transfer cancellation request -->
+<!ELEMENT RECINTERCANRQ - - (RECSRVRTID , CANPENDING)>
+
+
+
+<!-- bank mail request -->
+<!ELEMENT BANKMAILRQ - - ((BANKACCTFROM | CCACCTFROM) , MAIL)>
+
+
+
+<!-- ============================================================================= -->
+<!--            Synchronization                                                    -->
+<!-- ============================================================================= -->
+
+<!-- stop check synchronization request -->
+<!ELEMENT STPCHKSYNCRQ - - (%SYNCRQMACRO , BANKACCTFROM, STPCHKTRNRQ*)>
+
+
+<!-- intrabank transfer sychronization request -->
+<!ELEMENT INTRASYNCRQ - - (%SYNCRQMACRO , BANKACCTFROM, INTRATRNRQ*)>
+
+
+<!-- interbank transfer synchronization request -->
+<!ELEMENT INTERSYNCRQ - - (%SYNCRQMACRO , BANKACCTFROM, INTERTRNRQ*)>
+
+<!-- wire transfer synchronization request -->
+<!ELEMENT WIRESYNCRQ - - (%SYNCRQMACRO , BANKACCTFROM, WIRETRNRQ*)>
+
+         
+<!--
+  recurring intra transfer synchronization request, 
+  for transactions <RECINTRARQ>,<RECINTRAMODRQ>, and/or <RECINTRACANRQ>
+-->
+<!ELEMENT RECINTRASYNCRQ - - (%SYNCRQMACRO, BANKACCTFROM, RECINTRATRNRQ*)>
+
+<!--
+  recurring inter transfer synchronization request, 
+  for transactions <RECINTERRQ>,<RECINTERMODRQ>, and/or <RECINTERCANRQ>
+-->
+<!ELEMENT RECINTERSYNCRQ - - (%SYNCRQMACRO, BANKACCTFROM, RECINTERTRNRQ*)>
+
+<!-- bank mail synchronization request -->
+<!ELEMENT BANKMAILSYNCRQ - - (%SYNCRQMACRO , INCIMAGES, USEHTML, (BANKACCTFROM | CCACCTFROM), BANKMAILTRNRQ*)>
+
+<!-- ============================================================================= -->
+<!--            Responses                                                          -->
+<!-- ============================================================================= -->
+
+<!-- statement response -->
+<!ELEMENT STMTRS - -	(CURDEF , BANKACCTFROM , BANKTRANLIST? , LEDGERBAL , AVAILBAL? , MKTGINFO?)>
+
+<!-- credit card statement response -->
+<!ELEMENT CCSTMTRS - -	(CURDEF , CCACCTFROM , BANKTRANLIST? , LEDGERBAL , AVAILBAL? , MKTGINFO?)>
+
+<!-- closing info response -->
+<!ELEMENT STMTENDRS - -	(CURDEF , BANKACCTFROM , CLOSING*)>
+
+<!-- credit card closing info response -->
+<!ELEMENT CCSTMTENDRS - -	(CURDEF , CCACCTFROM , CCCLOSING*)>
+
+<!-- stop check response -->
+<!ELEMENT STPCHKRS - - (CURDEF , BANKACCTFROM , STPCHKNUM+,
+                        FEE, FEEMSG)>
+ 
+
+<!-- intrabank transfer response -->
+<!ELEMENT INTRARS - - (CURDEF , SRVRTID , XFERINFO , (DTXFERPRJ|DTPOSTED)? , RECSRVRTID?, XFERPRCSTS?)>	
+
+
+<!-- intrabank transfer modification response -->
+<!ELEMENT INTRAMODRS - - (SRVRTID , XFERINFO , XFERPRCSTS?)>
+
+
+<!-- intrabank transfer transfer cancellation response -->
+<!ELEMENT INTRACANRS - - (SRVRTID)>
+
+
+<!-- interbank transfer response -->
+<!ELEMENT INTERRS - - (CURDEF , SRVRTID , XFERINFO,
+                      (DTXFERPRJ|DTPOSTED)? , REFNUM? , RECSRVRTID?, XFERPRCSTS?)>
+
+
+<!-- interbank transfer modification response -->
+<!ELEMENT INTERMODRS - - (SRVRTID , XFERINFO, XFERPRCSTS?)>
+
+
+<!-- interbank transfer cancellation request -->
+<!ELEMENT INTERCANRS - - (SRVRTID)>
+
+
+<!-- wire transfer response -->
+<!ELEMENT WIRERS - - (CURDEF , SRVRTID , BANKACCTFROM , WIREBENEFICIARY ,
+                      WIREDESTBANK? , TRNAMT , DTDUE? , PAYINSTRUCT? , (DTXFERPRJ|DTPOSTED)? , FEE? , CONFMSG?)>
+
+
+<!-- wire transfer cancellation request -->
+<!ELEMENT WIRECANRS	- - (SRVRTID)>
+
+
+<!-- recurring intra transfer response -->
+<!ELEMENT RECINTRARS - - (RECSRVRTID , RECURRINST , INTRARS)>
+
+
+<!-- recurring intra transfer modification request -->
+<!ELEMENT RECINTRAMODRS - - (RECSRVRTID , RECURRINST , INTRARS , MODPENDING)>
+
+
+<!-- recurring intra transfer cancellation response -->
+<!ELEMENT RECINTRACANRS	- - (RECSRVRTID , CANPENDING)>
+
+<!-- recurring inter transfer response -->
+<!ELEMENT RECINTERRS - - (RECSRVRTID , RECURRINST , INTERRS)>
+
+
+<!-- recurring inter transfer modification request -->
+<!ELEMENT RECINTERMODRS	- - (RECSRVRTID , RECURRINST , INTERRS , MODPENDING)>
+
+<!-- recurring inter transfer cancellation response -->
+<!ELEMENT RECINTERCANRS	- - (RECSRVRTID , CANPENDING)>
+
+
+<!-- bank mail response -->
+<!ELEMENT BANKMAILRS - - ((BANKACCTFROM | CCACCTFROM) , MAIL)>
+
+<!-- returned check mail response -->
+<!ELEMENT CHKMAILRS - - (BANKACCTFROM , MAIL , CHECKNUM , TRNAMT? , DTUSER? , FEE?)>
+
+<!-- returned deposit mail response -->
+<!ELEMENT DEPMAILRS - - (BANKACCTFROM , MAIL , TRNAMT , DTUSER? , FEE?)>
+
+<!-- stop check synchronization request -->
+<!ELEMENT STPCHKSYNCRS - - (%SYNCRSMACRO , BANKACCTFROM,  STPCHKTRNRS*)>
+
+<!-- intrabank transfer synchronization request -->
+<!ELEMENT INTRASYNCRS - - (%SYNCRSMACRO , BANKACCTFROM, INTRATRNRS*)>
+
+<!-- interbank transfer synchronization request -->
+<!ELEMENT INTERSYNCRS - - (%SYNCRSMACRO , BANKACCTFROM, INTERTRNRS*)>
+
+<!-- wire transfer synchronization request -->
+<!ELEMENT WIRESYNCRS - - (%SYNCRSMACRO , BANKACCTFROM, WIRETRNRS*)>
+
+<!-- 
+  recurring intra transfer synchronization request, 
+  for transactions <RECINTRARS>,<RECINTRARS>, and/or <RECINTRACANRS>
+-->
+<!ELEMENT RECINTRASYNCRS	- - (%SYNCRSMACRO , BANKACCTFROM, RECINTRATRNRS*)>
+
+<!-- 
+  recurring inter transfer synchronization request, 
+  for transactions <RECINTERRS>,<RECINTERRS>, and/or <RECINTERCANRS>
+-->
+<!ELEMENT RECINTERSYNCRS	- - (%SYNCRSMACRO , BANKACCTFROM, RECINTERTRNRS*)>
+
+<!-- wire transfer synchronization request -->
+<!ELEMENT BANKMAILSYNCRS - - (%SYNCRSMACRO , (BANKACCTFROM | CCACCTFROM), BANKMAILTRNRS*)>
+
+<!-- ============================================================================= -->
+<!--            Aggregates                                                         -->
+<!-- ============================================================================= -->
+
+
+
+<!-- BANKACCTINFO CCACCTINFO -->
+<!ELEMENT BANKACCTINFO  - - (BANKACCTFROM ,
+                             SUPTXDL, XFERSRC, XFERDEST, SVCSTATUS)>
+<!ELEMENT CCACCTINFO    - - (CCACCTFROM ,
+                             SUPTXDL, XFERSRC, XFERDEST, SVCSTATUS)>
+                             
+<!ELEMENT SUPTXDL       - o %BOOLTYPE>
+<!ELEMENT XFERSRC       - o %BOOLTYPE>
+<!ELEMENT XFERDEST      - o %BOOLTYPE>
+
+<!--
+	statement transaction data
+-->
+<!ELEMENT BANKTRANLIST    	- - (DTSTART , DTEND , STMTTRN*)>
+
+
+<!--
+	Ledger balance
+-->
+<!ELEMENT LEDGERBAL     - - (BALAMT , DTASOF)>
+
+
+<!--
+	Available balance
+-->
+<!ELEMENT AVAILBAL      - - (BALAMT , DTASOF)>
+
+
+
+
+<!--
+	credit card statement information
+-->
+<!ELEMENT CCCLOSING	- - (FITID , DTOPEN? , DTCLOSE , DTNEXT? ,
+						 BALOPEN? , BALCLOSE ,
+						 DTPMTDUE? , MINPMTDUE? ,
+						 FINCHG? , PAYANDCREDIT? , PURANDADV? , DEBADJ? , CREDITLIMIT? ,
+						 DTPOSTSTART , DTPOSTEND , MKTGINFO? ,
+						 (CURRENCY | ORIGCURRENCY)? )>
+
+<!--
+	non-Credit Card account types
+-->
+<!ELEMENT CLOSING	- -	(FITID , DTOPEN? , DTCLOSE , DTNEXT? ,
+						 BALOPEN? , BALCLOSE , BALMIN? ,
+						 DEPANDCREDIT? , CHKANDDEB? , TOTALFEES? , TOTALINT? ,
+						 DTPOSTSTART , DTPOSTEND , MKTGINFO? ,
+						 (CURRENCY | ORIGCURRENCY)? )>
+
+
+<!-- Opening statement date -->
+<!ELEMENT DTOPEN	- o	%DTTMTYPE>
+
+
+<!-- Closing statement date -->
+<!ELEMENT DTCLOSE	- o	%DTTMTYPE>
+
+
+<!-- Closing date of next statement -->
+<!ELEMENT DTNEXT	- o	%DTTMTYPE>
+	
+
+<!-- Opening statement balance -->
+<!ELEMENT BALOPEN	- o	%AMTTYPE>
+
+
+<!-- Closing statement balance -->
+<!ELEMENT BALCLOSE	- o %AMTTYPE>
+
+
+<!-- Payment due date -->
+<!ELEMENT DTPMTDUE	- o	%DTTMTYPE>
+
+<!-- Minimum amount due -->
+<!ELEMENT MINPMTDUE	- o	%AMTTYPE>
+
+
+<!-- Finance charges -->
+<!ELEMENT FINCHG	- o %AMTTYPE>
+
+
+<!-- Total of payments and credits -->
+<!ELEMENT PAYANDCREDIT	- o	%AMTTYPE>
+
+
+<!-- Total of purchases and cash advance -->
+<!ELEMENT PURANDADV	- o	%AMTTYPE>
+
+
+<!-- Debit adjustments -->
+<!ELEMENT DEBADJ	- o	%AMTTYPE>
+
+
+<!-- Current credit limit -->
+<!ELEMENT CREDITLIMIT		- o	%AMTTYPE>
+
+
+<!-- Minimum balance in statement period -->
+<!ELEMENT BALMIN	- o %AMTTYPE>
+
+
+<!-- Total of deposits and credits -->
+<!ELEMENT DEPANDCREDIT	- o %AMTTYPE>
+
+
+<!-- Total of checks and debits	-->
+<!ELEMENT CHKANDDEB	- o	%AMTTYPE>
+
+<!-- Total fees	-->
+<!ELEMENT TOTALFEES	- o	%AMTTYPE>
+
+<!-- Total interest	-->
+<!ELEMENT TOTALINT	- o	%AMTTYPE>
+
+<!-- Start date for posted transactions -->
+<!ELEMENT DTPOSTSTART - o %DTTMTYPE>
+
+<!-- End date for posted transactions -->
+<!ELEMENT DTPOSTEND - o %DTTMTYPE>
+
+<!-- statement transaction aggregate -->
+<!ELEMENT STMTTRN	- - (TRNTYPE , DTPOSTED , DTUSER? , DTAVAIL? , TRNAMT , FITID ,
+						 (CORRECTFITID , CORRECTACTION)? ,
+						 SRVRTID? , CHECKNUM? , REFNUM? , 
+						 SIC? , PAYEEID? , (NAME | PAYEE)?, (BANKACCTTO | CCACCTTO)?, MEMO? ,
+						 (CURRENCY | ORIGCURRENCY)?)> 
+
+
+<!-- Status of request - see section 5.5.1.4.1 for possible values -->
+<!ELEMENT TRNTYPE	- o %STRTYPE>	<!--TODO: attribute candidate -->
+	
+
+<!-- Date transaction was posted to account -->
+<!ELEMENT DTPOSTED	- o	%DTTMTYPE>
+
+
+<!-- Date user initiated transaction, if known -->	
+<!ELEMENT DTUSER	- o %DTTMTYPE>
+
+
+<!-- 	Date funds are available -->
+<!ELEMENT DTAVAIL	- o %DTTMTYPE>
+
+
+<!-- Standard Industrial Code -->
+<!ELEMENT SIC	- o	%INTTYPE>	
+
+
+<!-- Check range aggregate. See section 5.6.1.2.1 -->
+<!ELEMENT CHKRANGE	- -	(CHKNUMSTART , CHKNUMEND?)>
+
+
+<!-- Check description aggregate.  See section 5.6.1.2.2 -->
+<!ELEMENT CHKDESC	- - (NAME , CHECKNUM? , DTUSER? , TRNAMT?)>	
+
+
+<!-- Start check number -->
+<!ELEMENT CHKNUMSTART	- o %IDTYPE>
+
+
+<!-- Ending check number to cancel -->
+<!ELEMENT CHKNUMEND	- o %IDTYPE>
+
+<!-- Reference number -->
+<!ELEMENT REFNUM	- o	%STRTYPE>
+
+<!-- stopped check item -->
+<!ELEMENT STPCHKNUM	- -	(CHECKNUM , NAME? , DTUSER? , TRNAMT? , 
+                         CHKSTATUS , CHKERROR? , (CURRENCY | ORIGCURRENCY)?)>
+
+<!-- Status code for individual stop check request0 = OK1 = rejected100 = check not found101 = check already posted -->
+<!ELEMENT CHKSTATUS	- o	%INTTYPE>	<!-- TODO: attribute? -->	
+
+<!-- Further textual error explanation -->
+<!ELEMENT CHKERROR	- o %STRTYPE>	
+
+<!-- Transfer information aggregate -->
+<!ELEMENT XFERINFO	- -	((BANKACCTFROM | CCACCTFROM) , (BANKACCTTO | CCACCTTO) , TRNAMT , DTDUE?)>
+	
+<!-- Transfer processing status -->
+<!ELEMENT XFERPRCSTS	- -	(XFERPRCCODE , DTXFERPRC)>
+
+<!--  Transfers processing date; enum for processing date interpretation -->
+<!ELEMENT XFERPRCCODE	- o %STRTYPE>		
+
+<!-- Date transfer is expected to be processed -->
+<!ELEMENT DTXFERPRC - o	%DTTMTYPE>
+
+<!-- Date transaction is projected for posting to account -->
+<!ELEMENT DTXFERPRJ - o	%DTTMTYPE>
+
+<!-- Beneficiary of a wire transfer -- >
+<!ELEMENT WIREBENEFICIARY - - (NAME , BANKACCTTO , MEMO?)>
+
+<!-- Beneficiary's bank for a wire transfer -- >
+<!ELEMENT WIREDESTBANK - - (EXTBANKDESC)>
+
+<!-- Extended description of a bank for a wire transfer -- >
+<!ELEMENT EXTBANKDESC - - (NAME , BANKID , ADDR1,ADDR2?,ADDR3? , CITY , STATE , POSTALCODE , COUNTRY? , PHONE?)>
+
+<!-- Payment instructions for a wire transfer -->
+<!ELEMENT PAYINSTRUCT	- o	%STRTYPE>
+
+<!-- Fee assessed for the transfer -->
+<!ELEMENT FEE	- o	%AMTTYPE>
+
+<!-- Description of fee -->
+<!ELEMENT FEEMSG    - o %STRTYPE>
+
+<!-- Transfer confirmation message -->
+<!ELEMENT CONFMSG	- o	%STRTYPE>
+
+
+
+
+
+
+

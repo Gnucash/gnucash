@@ -6035,11 +6035,6 @@ trap 'rm -fr `echo "          Makefile
           intl/Makefile
           lib/Makefile
 	  po/Makefile.in
-          raw/Makefile
-          raw/ofx/Makefile
-          raw/ofx/dtd/Makefile
-          raw/ofx/explore/Makefile
-          raw/ofx/parser/Makefile
           rpm/Makefile
           src/Makefile
           src/doc/Makefile
@@ -6049,6 +6044,10 @@ trap 'rm -fr `echo "          Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile
           src/experimental/gg/Makefile
+          src/experimental/ofx/Makefile
+          src/experimental/ofx/dtd/Makefile
+          src/experimental/ofx/explore/Makefile
+          src/experimental/ofx/parser/Makefile
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile
@@ -6226,11 +6225,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           intl/Makefile
           lib/Makefile
 	  po/Makefile.in
-          raw/Makefile
-          raw/ofx/Makefile
-          raw/ofx/dtd/Makefile
-          raw/ofx/explore/Makefile
-          raw/ofx/parser/Makefile
           rpm/Makefile
           src/Makefile
           src/doc/Makefile
@@ -6240,6 +6234,10 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           src/experimental/cbb/Makefile
           src/experimental/cbb/cbb-engine/Makefile
           src/experimental/gg/Makefile
+          src/experimental/ofx/Makefile
+          src/experimental/ofx/dtd/Makefile
+          src/experimental/ofx/explore/Makefile
+          src/experimental/ofx/parser/Makefile
           src/gnome/Makefile
           src/guile/Makefile
           src/optional/Makefile
