@@ -2,6 +2,12 @@
 
 	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
 
+	* configure.in: add db-4.2 to the list of databases we search.
+	  We probably need a better mechanism to search for a working db
+	  library, like defining our own macro and just supplying a list.
+	  We probably can get rid of the prefer-db1 option as well, maybe?
+	  Fixes #131506
+
 2004-01-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/options.scm: Create two new functions to centralize
