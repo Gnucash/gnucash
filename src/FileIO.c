@@ -37,6 +37,8 @@
  *                                                                  *
  * Version 4 of the file format adds account groups                 *
  *                                                                  *
+ * Version 5 of the file format adds splits                         *
+ *                                                                  *
  *                                                                  *
  * the format of the data in the file:                              *
  *   file        ::== token Group                                   *
@@ -44,9 +46,10 @@
  *   Account     ::== accID flags type accountName description      * 
  *                    notes numTran (Transaction)^numTrans          * 
  *                    numGroups (Group)^numGroups                   *
- *   Transaction ::== num date description memo catagory reconciled *
- *                     amount share_price                           *
- *                     credit_account debit_account                 * 
+ *   Transaction ::== num date description credit_split             *
+ *                    numSplits (Split)^numSplits                   *
+ *   Split       ::== memo action reconciled                        *
+ *                     amount share_price account                   *
  *   token       ::== int  [the version of file format == VERSION]  * 
  *   numTrans    ::== int                                           * 
  *   numAccounts ::== int                                           * 
@@ -62,12 +65,10 @@
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
  *   action      ::== String                                        * 
- *   catagory    ::== int     (obsolete)                            * 
  *   reconciled  ::== char                                          * 
  *   amount      ::== double                                        * 
  *   share_price ::== double                                        * 
- *   credit_account ::= int                                         *
- *   debit_account  ::= int                                         *
+ *   account     ::= int                                            *
  *   String      ::== size (char)^size                              * 
  *   size        ::== int                                           * 
  *   Date        ::== year month day                                * 
@@ -107,12 +108,14 @@ static Account     *springAccount (int acc_id);
 static AccountGroup *readGroup( int fd, Account *, int token );
 static Account      *readAccount( int fd, AccountGroup *, int token );
 static Transaction  *readTransaction( int fd, Account *, int token );
+static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
 static Date         *readDate( int fd, int token );
 
 static int writeGroup( int fd, AccountGroup *grp );
 static int writeAccount( int fd, Account *account );
 static int writeTransaction( int fd, Transaction *trans );
+static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
 static int writeDate( int fd, Date *date );
 
@@ -481,17 +484,18 @@ readTransaction( int fd, Account *acc, int token )
   {
   int err=0;
   int acc_id;
+  int i;
   Date *date;
   int dummy_category;
+  int numSplits;
   Transaction *trans = 0x0;
-  Split *split;
   char *tmp;
   char recn;
+  double num_shares = 0.0;
+  double share_price = 0.0;
 
-  /* create a transaction structure with at least one split */
+  /* create a transaction structure */
   trans = mallocTransaction();
-  split = xaccMallocSplit();
-  xaccAppendSplit (trans, split);
   
   ENTER ("readTransaction");
 
@@ -521,152 +525,309 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
+  /* At version 5, most of the transaction stuff was 
+   * moved to splits. Thus, vast majority of stuff below 
+   * is skipped 
+   */
+  if (4 >= token) { 
+    tmp = readString( fd, token );
+    if( NULL == tmp )
+      {
+      PERR ("Premature end of Transaction at memo");
+      freeTransaction(trans);
+      return NULL;
+      }
+    xaccTransSetMemo (trans, tmp);
+    XtFree (tmp);
+    
+    /* action first introduced in version 3 of the file format */
+    if (3 <= token) {
+       tmp = readString( fd, token );
+       if( tmp == NULL )
+         {
+         PERR ("Premature end of Transaction at action");
+         freeTransaction(trans);
+         return NULL;
+         }
+       xaccTransSetAction (trans, tmp);
+      }
+    
+    /* category is now obsolete */
+    err = read( fd, &(dummy_category), sizeof(int) );
+    if( err != sizeof(int) )
+      {
+      PERR ("Premature end of Transaction at catagory");
+      freeTransaction(trans);
+      return NULL;
+      }
+    
+    err = read( fd, &recn, sizeof(char) );
+    if( err != sizeof(char) )
+      {
+      PERR ("Premature end of Transaction at reconciled");
+      freeTransaction(trans);
+      return NULL;
+      }
+    xaccTransSetReconcile (trans, recn);
+    
+    if( 1 >= token ) {
+      /* Note: this is for version 0 of file format only.
+       * What used to be reconciled, is now cleared... transactions
+       * aren't reconciled until you get your bank statement, and
+       * use the reconcile window to mark the transaction reconciled
+       */
+      if( YREC == trans->credit_split.reconciled == YREC ) {
+        xaccTransSetReconcile (trans, CREC);
+      }
+    }
+  
+    /* make sure the value of trans->reconciled is valid...
+     * I have to do this mainly for if I change what NREC and
+     * YREC are defined to be... this way it might loose all
+     * the reconciled data, but at least the field is valid */
+    if( (YREC != trans->credit_split.reconciled) && 
+        (FREC != trans->credit_split.reconciled) &&
+        (CREC != trans->credit_split.reconciled) ) {
+      xaccTransSetReconcile (trans, NREC);
+    }
+    
+    /* Version 1 files stored the amount as an integer,
+     * with the amount recorded as pennies.
+     * Version 2 and above store the share amounts and 
+     * prices as doubles. */
+    if (1 == token) {
+      int amount;
+      err = read( fd, &amount, sizeof(int) );
+      if( err != sizeof(int) )
+        {
+        PERR ("Premature end of Transaction at V1 amount");
+        freeTransaction(trans);
+        return NULL;
+        }
+      XACC_FLIP_INT (amount);
+      num_shares = 0.01 * ((double) amount); /* file stores pennies */
+      trans->credit_split.damount = num_shares;
+    } else {
+      double damount;
+  
+      /* first, read number of shares ... */
+      err = read( fd, &damount, sizeof(double) );
+      if( err != sizeof(double) )
+        {
+        PERR ("Premature end of Transaction at amount");
+        freeTransaction(trans);
+        return NULL;
+        }
+      XACC_FLIP_DOUBLE (damount);
+      num_shares  = damount;
+      trans->credit_split.damount = num_shares;
+  
+      /* ... next read the share price ... */
+      err = read( fd, &damount, sizeof(double) );
+      if( err != sizeof(double) )
+        {
+        PERR ("Premature end of Transaction at share_price");
+        freeTransaction(trans);
+        return NULL;
+        }
+      XACC_FLIP_DOUBLE (damount);
+      share_price = damount;
+      trans->credit_split.share_price = share_price;
+    }  
+  
+    INFO_2 ("readTransaction(): num_shares %f \n", num_shares);
+  
+    /* Read the account numbers for double-entry */
+    /* These are first used in Version 2 of the file format */
+    if (1 < token) {
+      Account *peer_acc;
+      /* first, read the credit account number */
+      err = read( fd, &acc_id, sizeof(int) );
+      if( err != sizeof(int) )
+        {
+        PERR ("Premature end of Transaction at credit");
+        freeTransaction(trans);
+        return NULL;
+        }
+      XACC_FLIP_INT (acc_id);
+      INFO_2 ("readTransaction(): credit %d\n", acc_id);
+      peer_acc = locateAccount (acc_id);
+      trans -> credit_split.acc = (struct _account *) peer_acc;
+  
+      /* insert the split part of the transaction into 
+       * the credited account */
+      if (peer_acc) xaccInsertSplit( peer_acc, &(trans->credit_split) );
+  
+      /* next read the debit account number */
+      err = read( fd, &acc_id, sizeof(int) );
+      if( err != sizeof(int) )
+        {
+        PERR ("Premature end of Transaction at debit");
+        freeTransaction(trans);
+        return NULL;
+        }
+      XACC_FLIP_INT (acc_id);
+      INFO_2 ("readTransaction(): debit %d\n", acc_id);
+      peer_acc = locateAccount (acc_id);
+      if (peer_acc) {
+         Split *split;
+         split = xaccMallocSplit ();
+         xaccAppendSplit (trans, split);
+         split -> acc = (struct _account *) peer_acc;
+         xaccInsertSplit (peer_acc, split);
+         split->damount = -num_shares;
+         split->share_price = share_price;
+      }
+  
+    } else {
+
+      /* Version 1 files did not do double-entry */
+      xaccInsertSplit( acc, &(trans->credit_split) );
+    }
+  } else { /* else, read version-5 files */
+     Split *split;
+
+     /* first, read the credit split, and copy it in place */
+     split = readSplit (fd, token);
+     xaccSplitSetMemo ( &(trans->credit_split), split->memo);
+     xaccSplitSetAction ( &(trans->credit_split), split->action);
+     xaccSplitSetReconcile ( &(trans->credit_split), split->reconciled);
+     trans->credit_split.damount = split->damount;
+     trans->credit_split.share_price = split->share_price;
+     trans->credit_split.acc = split->acc;
+     trans->credit_split.parent = trans;
+
+     /* then wire it into place */
+     xaccInsertSplit( ((Account *) (trans->credit_split.acc)), &(trans->credit_split) );
+     
+     /* free the thing that  the read returned */
+     split->acc = NULL;
+     split->parent = NULL;
+     xaccFreeSplit (split);
+
+    /* read number of splits */
+    err = read( fd, &(numSplits), sizeof(int) );
+    if( err != sizeof(int) )
+      {
+      PERR ("Premature end of Transaction at num-splits");
+      freeTransaction(trans);
+      return NULL;
+      }
+     XACC_FLIP_INT (numSplits);
+    
+     for (i=0; i<numSplits; i++) {
+        split = readSplit (fd, token);
+        split->parent = trans;
+        xaccAppendSplit( trans, split);
+        xaccInsertSplit( ((Account *) (split->acc)), split);
+     }
+  }
+    
+  return trans;
+}
+
+/********************************************************************\
+ * readSplit                                                        * 
+ *   reads in the data for a split from the datafile                *
+ *                                                                  * 
+ * Args:   fd    - the filedescriptor of the data file              * 
+ *         token - the datafile version                             * 
+ * Return: the transaction structure                                * 
+\********************************************************************/
+
+static Split *
+readSplit ( int fd, int token )
+  {
+  Account *peer_acc;
+  Split *split;
+  int err=0;
+  int acc_id;
+  char *tmp;
+  char recn;
+  double damount;
+
+  /* create a split structure */
+  split = xaccMallocSplit();
+  
+  ENTER ("readSplit");
+
   tmp = readString( fd, token );
   if( NULL == tmp )
     {
-    PERR ("Premature end of Transaction at memo");
-    freeTransaction(trans);
+    PERR ("Premature end of Split at memo");
+    xaccFreeSplit(split);
     return NULL;
     }
-  xaccTransSetMemo (trans, tmp);
+  xaccSplitSetMemo (split, tmp);
   XtFree (tmp);
   
-  /* action first introduced in version 3 of the file format */
-  if (3 <= token) {
-     trans->action = readString( fd, token );
-     if( trans->action == NULL )
-       {
-       PERR ("Premature end of Transaction at memo");
-       freeTransaction(trans);
-       return NULL;
-       }
-    }
-  
-  /* category is now obsolete */
-  err = read( fd, &(dummy_category), sizeof(int) );
-  if( err != sizeof(int) )
+  tmp = readString( fd, token );
+  if( tmp == NULL )
     {
-    PERR ("Premature end of Transaction at catagory");
-    freeTransaction(trans);
+    PERR ("Premature end of Split at action");
+    xaccFreeSplit (split);
     return NULL;
     }
+  xaccSplitSetAction (split, tmp);
   
   err = read( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
     {
-    PERR ("Premature end of Transaction at reconciled");
-    freeTransaction(trans);
+    PERR ("Premature end of Split at reconciled");
+    xaccFreeSplit (split);
     return NULL;
     }
-  xaccTransSetReconcile (trans, recn);
+  xaccSplitSetReconcile (split, recn);
   
-  if( 1 >= token ) {
-    /* Note: this is for version 0 of file format only.
-     * What used to be reconciled, is now cleared... transactions
-     * aren't reconciled until you get your bank statement, and
-     * use the reconcile window to mark the transaction reconciled
-     */
-    if( YREC == trans->credit_split.reconciled == YREC ) {
-      xaccTransSetReconcile (trans, CREC);
-    }
-  }
-
-  /* make sure the value of trans->reconciled is valid...
-   * I have to do this mainly for if I change what NREC and
+  /* make sure the value of split->reconciled is valid...
+   * Do this mainly in case we change what NREC and
    * YREC are defined to be... this way it might loose all
    * the reconciled data, but at least the field is valid */
-  if( (YREC != trans->credit_split.reconciled) && 
-      (CREC != trans->credit_split.reconciled) ) {
-    xaccTransSetReconcile (trans, NREC);
+  if( (YREC != split->reconciled) && 
+      (FREC != split->reconciled) &&
+      (CREC != split->reconciled) ) {
+    xaccSplitSetReconcile (split, NREC);
   }
-  
-  /* Version 1 files stored the amount as an integer,
-   * with the amount recorded as pennies.
-   * Version 2 and above store the share amounts and 
-   * prices as doubles. */
-  if (1 == token) {
-    int amount;
-    err = read( fd, &amount, sizeof(int) );
-    if( err != sizeof(int) )
-      {
-      PERR ("Premature end of Transaction at V1 amount");
-      freeTransaction(trans);
-      return NULL;
-      }
-    XACC_FLIP_INT (amount);
-    split->damount = 0.01 * ((double) amount); /* file stores pennies */
-  } else {
-    double damount;
 
-    /* first, read number of shares ... */
-    err = read( fd, &damount, sizeof(double) );
-    if( err != sizeof(double) )
-      {
-      PERR ("Premature end of Transaction at amount");
-      freeTransaction(trans);
-      return NULL;
-      }
-    XACC_FLIP_DOUBLE (damount);
-    split->damount = damount;
+  /* first, read number of shares ... */
+  err = read( fd, &damount, sizeof(double) );
+  if( err != sizeof(double) )
+    {
+    PERR ("Premature end of Split at amount");
+    xaccFreeSplit (split);
+    return NULL;
+    }
+  XACC_FLIP_DOUBLE (damount);
+  split -> damount = damount;
 
-    /* ... next read the share price ... */
-    err = read( fd, &damount, sizeof(double) );
-    if( err != sizeof(double) )
-      {
-      PERR ("Premature end of Transaction at share_price");
-      freeTransaction(trans);
-      return NULL;
-      }
-    XACC_FLIP_DOUBLE (damount);
-    split->share_price = damount;
-  }  
+  /* ... next read the share price ... */
+  err = read( fd, &damount, sizeof(double) );
+  if( err != sizeof(double) )
+    {
+    PERR ("Premature end of Split at share_price");
+    xaccFreeSplit (split);
+    return NULL;
+    }
+  XACC_FLIP_DOUBLE (damount);
+  split->share_price = damount;
 
-  INFO_2 ("readTransaction(): amount %f \n", trans->damount);
+  INFO_2 ("readSplit(): num_shares %f \n", damount);
 
-  /* Read the account numbers for double-entry */
-  /* These are first used in Version 2 of the file format */
-  if (1 < token) {
-    Account *peer_acc;
-    /* first, read the credit account number */
-    err = read( fd, &acc_id, sizeof(int) );
-    if( err != sizeof(int) )
-      {
-      PERR ("Premature end of Transaction at credit");
-      freeTransaction(trans);
-      return NULL;
-      }
-    XACC_FLIP_INT (acc_id);
-    INFO_2 ("readTransaction(): credit %d\n", acc_id);
-    peer_acc = locateAccount (acc_id);
-    trans -> credit_split.acc = (struct _account *) peer_acc;
+  /* Read the account number */
 
-    /* insert the transaction into both the debit and 
-     * the credit accounts; first the credit ... */
-    if (peer_acc) insertTransaction( peer_acc, trans );
+  err = read( fd, &acc_id, sizeof(int) );
+  if( err != sizeof(int) )
+    {
+    PERR ("Premature end of Split at account");
+    xaccFreeSplit (split);
+    return NULL;
+    }
+  XACC_FLIP_INT (acc_id);
+  INFO_2 ("readSplit(): account id %d\n", acc_id);
+  peer_acc = locateAccount (acc_id);
+  split -> acc = (struct _account *) peer_acc;
 
-    /* next read the debit account number */
-    err = read( fd, &acc_id, sizeof(int) );
-    if( err != sizeof(int) )
-      {
-      PERR ("Premature end of Transaction at debit");
-      freeTransaction(trans);
-      return NULL;
-      }
-    XACC_FLIP_INT (acc_id);
-    INFO_2 ("readTransaction(): debit %d\n", acc_id);
-    peer_acc = locateAccount (acc_id);
-    split -> acc = (struct _account *) peer_acc;
-
-    /* insert the transaction into both the debit and 
-     * the credit accounts; next, the debit ... */
-    if (peer_acc) insertTransaction( peer_acc, trans );
-  } else {
-
-    /* Version 1 files did not do double-entry */
-    insertTransaction( acc, trans );
-  }
-  
-  return trans;
+  return split;
 }
 
 /********************************************************************\
@@ -775,7 +936,9 @@ xaccResetWriteFlags (AccountGroup *grp)
     s = acc->splits[0];
     n=0;
     while (s) {
-      s -> write_flag = 0;
+      Transaction *trans;
+      trans = s->parent;
+      if (trans) trans -> write_flag = 0;
       n++;
       s = acc->splits[n];
     }
@@ -880,6 +1043,7 @@ static int
 writeAccount( int fd, Account *acc )
   {
   Transaction *trans;
+  Split *s;
   int err=0;
   int i, numUnwrittenTrans, ntrans;
   int acc_id;
@@ -918,13 +1082,24 @@ writeAccount( int fd, Account *acc )
   /* figure out numTrans -- it will be less than the total
    * number of transactions in this account, because some 
    * of the double entry transactions will already have been 
-   * written. */
+   * written.  write_flag values are:
+   * 0 == uncounted, unwritten
+   * 1 == counted, unwritten
+   * 2 == written
+   */
   numUnwrittenTrans = 0;
-  for( i=0; i<acc->numTrans; i++ ) {
-    trans = getTransaction(acc,i);
-    if (0 == trans->credit_split.write_flag) numUnwrittenTrans ++;
+  i=0;
+  s = acc->splits[i];
+  while (s) {
+    trans = s->parent;
+    if (0 == trans->write_flag) {
+       numUnwrittenTrans ++;
+       trans->write_flag = 1;
+    }
+    i++;
+    s = acc->splits[i];
   }
-
+  
   ntrans = numUnwrittenTrans;
   XACC_FLIP_INT (ntrans);
   err = write( fd, &ntrans, sizeof(int) );
@@ -932,12 +1107,16 @@ writeAccount( int fd, Account *acc )
     return -1;
   
   INFO_2 ("writeAccount(): will write %d trans\n", numUnwrittenTrans);
-  for( i=0; i<acc->numTrans; i++ ) {
-    trans = getTransaction(acc,i);
-    if (0 == trans->credit_split.write_flag) {
+  i=0;
+  s = acc->splits[i];
+  while (s) {
+    trans = s->parent;
+    if (1 == trans->write_flag) {
        err = writeTransaction( fd, trans );
+       if (-1 == err) return err;
     }
-    if( -1 == err ) return err;
+    i++;
+    s = acc->splits[i];
   }
 
   if (acc->children) {
@@ -948,8 +1127,7 @@ writeAccount( int fd, Account *acc )
 
   XACC_FLIP_INT (numChildren);
   err = write( fd, &numChildren, sizeof(int) );
-  if( err != sizeof(int) )
-    return -1;
+  if( err != sizeof(int) ) return -1;
 
   if (acc->children) {
     err = writeGroup (fd, acc->children);
@@ -963,89 +1141,113 @@ writeAccount( int fd, Account *acc )
  *   saves the data for a transaction to the datafile               *
  *                                                                  * 
  * Args:   fd       - the filedescriptor of the data file           * 
- *         acc      - the account that the trans came from          * 
  *         trans    - the transaction data to save                  * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
 writeTransaction( int fd, Transaction *trans )
   {
+  Split *s;
   int err=0;
-  int tmp, acc_id;
-  double damount;
-  Account *xfer_acc;
+  int i=0;
 
   ENTER ("writeTransaction");
   /* If we've already written this transaction, don't write 
    * it again.  That is, prevent double-entry transactions 
    * from being written twice 
    */
-  if (trans->credit_split.write_flag) return 4;
-  trans->credit_split.write_flag = 1;
+  if (2 == trans->write_flag) return 4;
+  trans->write_flag = 2;
   
   err = writeString( fd, trans->num );
-  if( -1 == err )
-    return err;
+  if( -1 == err ) return err;
   
   err = writeDate( fd, &(trans->date) );
-  if( -1 == err )
-    return err;
+  if( -1 == err ) return err;
   
   err = writeString( fd, trans->description );
+  if( -1 == err ) return err;
+  
+  err = writeSplit( fd, &(trans->credit_split) );
+  if( -1 == err ) return err;
+  
+  /* count the number of splits */
+  i = 0;
+  s = trans->debit_splits[i];
+  while (s) {
+    i++;
+    s = trans->debit_splits[i];
+  }
+  XACC_FLIP_INT (i);
+  err = write( fd, &i, sizeof(int) );
+  if( err != sizeof(int) ) return -1;
+  
+  /* now write the splits */
+  i = 0;
+  s = trans->debit_splits[i];
+  while (s) {
+    err = writeSplit (fd, s);
+    if( -1 == err ) return err;
+    i++;
+    s = trans->debit_splits[i];
+  }
+  
+  return err;
+  }
+
+/********************************************************************\
+ * writeSplit                                                       * 
+ *   saves the data for a split to the datafile                     *
+ *                                                                  * 
+ * Args:   fd       - the filedescriptor of the data file           * 
+ *         split    - the split data to save                        * 
+ * Return: -1 on failure                                            * 
+\********************************************************************/
+static int
+writeSplit ( int fd, Split *split )
+  {
+  int err=0;
+  int tmp, acc_id;
+  double damount;
+  Account *xfer_acc;
+
+  ENTER ("writeSplit");
+  
+  err = writeString( fd, split->memo );
   if( -1 == err )
     return err;
   
-  err = writeString( fd, trans->credit_split.memo );
+  err = writeString( fd, split->action );
   if( -1 == err )
     return err;
   
-  err = writeString( fd, trans->action );
-  if( -1 == err )
-    return err;
-  
-  /* category is now obsolete */
-  tmp = 0;
-  XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
-  if( err != sizeof(int) )
-    return -1;
-  
-  err = write( fd, &(trans->credit_split.reconciled), sizeof(char) );
+  err = write( fd, &(split->reconciled), sizeof(char) );
   if( err != sizeof(char) )
     return -1;
   
-  damount = trans->damount;
-  INFO_2 ("writeTransaction: amount=%f \n", damount);
+  damount = split->damount;
+  INFO_2 ("writeSplit: amount=%f \n", damount);
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
     return -1;
 
-  damount = trans->share_price;  
+  damount = split->share_price;  
   XACC_FLIP_DOUBLE (damount);
   err = write( fd, &damount, sizeof(double) );
   if( err != sizeof(double) )
     return -1;
 
-  /* write the double-entry values */
-  xfer_acc = (Account *) (trans->credit_split.acc);
+  /* write the credited/debted account */
+  xfer_acc = (Account *) (split->acc);
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
-  INFO_2 ("writeTransaction: credit %d \n", acc_id);
+  INFO_2 ("writeSplit: credit %d \n", acc_id);
   XACC_FLIP_INT (acc_id);
   err = write( fd, &acc_id, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
 
-  xfer_acc = (Account *) (trans->debit);
-  acc_id = -1;
-  if (xfer_acc) acc_id = xfer_acc -> id;
-  INFO_2 (" writeTransaction: debit %d \n", acc_id);
-  XACC_FLIP_INT (acc_id);
-  err = write( fd, &acc_id, sizeof(int) );
-  if( err != sizeof(int) )
-    return -1;
-  
   return err;
   }
 

@@ -164,24 +164,14 @@ initTransaction( Transaction * trans )
   {
   
   /* fill in some sane defaults */
-  trans->debit = 0x0;
-  
   trans->num         = XtNewString("");
   trans->description = XtNewString("");
-  trans->action      = XtNewString("");
 
   trans->debit_splits    = (Split **) _malloc (sizeof (Split *));
   trans->debit_splits[0] = NULL;
 
   xaccInitSplit ( &(trans->credit_split));
-
-  trans->damount     = 0.0;
-  trans->share_price = 1.0;
-
-  trans->credit_balance = 0.0;
-  trans->credit_cleared_balance = 0.0;
-  trans->debit_balance = 0.0;
-  trans->debit_cleared_balance = 0.0;
+  trans->credit_split->parent = trans;
 
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
@@ -219,19 +209,10 @@ implemented and tested.
   _free (trans->debit_splits);
   XtFree(trans->num);
   XtFree(trans->description);
-  XtFree(trans->action);
 
   /* just in case someone looks up freed memory ... */
   trans->num         = 0x0;
   trans->description = 0x0;
-  trans->action      = 0x0;
-  trans->damount     = 0.0;
-  trans->share_price = 1.0;
-
-  trans->credit_balance = 0.0;
-  trans->credit_cleared_balance = 0.0;
-  trans->debit_balance = 0.0;
-  trans->debit_cleared_balance = 0.0;
 
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
@@ -461,7 +442,6 @@ xaccTransSetDescription  (Transaction *trans, char *desc)
    trans->description = XtNewString (desc);
 }
 
-
 void
 xaccTransSetMemo (Transaction *trans, char *memo)
 {
@@ -470,11 +450,40 @@ xaccTransSetMemo (Transaction *trans, char *memo)
 }
 
 void
+xaccTransSetAction (Transaction *trans, char *actn)
+{
+   if (trans->credit_split.action) XtFree (trans->credit_split.action);
+   trans->credit_split.action = XtNewString (actn);
+}
+
+void
 xaccTransSetReconcile (Transaction *trans, char recn)
 {
    trans->credit_split.reconciled = recn;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccSplitSetMemo (Split *split, char *memo)
+{
+   if (split->memo) XtFree (split->memo);
+   split->memo = XtNewString (memo);
+}
+
+void
+xaccSplitSetAction (Split *split, char *actn)
+{
+   if (split->action) XtFree (split->action);
+   split->action = XtNewString (actn);
+}
+
+void
+xaccSplitSetReconcile (Split *split, char recn)
+{
+   split->reconciled = recn;
+}
+
 /************************ END OF ************************************\
 \************************* FILE *************************************/
-

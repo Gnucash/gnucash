@@ -1421,9 +1421,8 @@ regSaveTransaction( RegWindow *regData, int position )
     String  actn = NULL;
     DEBUG("MOD_ACTN\n");
     /* ... the action ... */
-    XtFree( trans->action );
     actn = XbaeMatrixGetCell(regData->reg,row+ACTN_CELL_R,ACTN_CELL_C);
-    trans->action = XtNewString( actn );
+    xaccTransSetAction (trans, actn);
     }
   
   if( regData->changed & MOD_RECN )
