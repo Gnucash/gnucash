@@ -28,6 +28,9 @@
 
 #include "config.h"
 
+#include <glib.h>
+
+
 /** STRUCTS *********************************************************/
 
 /* The way quickfill works is this: the decscription field of a transaction
@@ -47,29 +50,29 @@
  * when the end of the descriptions string is reached.
  */
 
-#define QFNUM 257     /* 256 characters + 1 */
-
 typedef enum
 {
   QUICKFILL_LIFO,
   QUICKFILL_ALPHA
 } QuickFillSort;
 
-typedef struct _quickfill {
-  char * text;                     /* the first matching text string     */
-  struct _quickfill *qf[QFNUM];    /* array of children in the tree      */
-} QuickFill;
+typedef struct _QuickFill QuickFill;
 
 
 /** PROTOTYPES ******************************************************/
 
-QuickFill *xaccMallocQuickFill( void );
-void       xaccFreeQuickFill( QuickFill *qf );
-QuickFill *xaccGetQuickFill( QuickFill *qf, char c );
-QuickFill *xaccGetQuickFillStr( QuickFill *qf, const char *str );
-QuickFill *xaccGetQuickFillStrLen( QuickFill *qf, const char *str, int len );
-QuickFill *xaccGetQuickFillUniqueLen( QuickFill *qf, int *len );
-void       xaccQFInsertText( QuickFill *qf, const char *text, QuickFillSort );
+QuickFill *  gnc_quickfill_new (void);
+void         gnc_quickfill_destroy (QuickFill *qf);
 
+const char * gnc_quickfill_string (QuickFill *qf);
+
+QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, char c);
+QuickFill *  gnc_quickfill_get_string_match (QuickFill *qf, const char *str);
+QuickFill *  gnc_quickfill_get_string_len_match (QuickFill *qf,
+                                                 const char *str, int len);
+QuickFill *  gnc_quickfill_get_unique_len_match (QuickFill *qf, int *len);
+
+void         gnc_quickfill_insert (QuickFill *qf, const char *text,
+                                   QuickFillSort sort_code);
 
 #endif /* __QUICKFILL_H__ */

@@ -62,15 +62,18 @@ typedef struct _QuickFillCell
 } QuickFillCell;
 
 QuickFillCell *  xaccMallocQuickFillCell (void);
-void             xaccInitQuickFillCell (QuickFillCell *);
-void             xaccDestroyQuickFillCell (QuickFillCell *);
+void             xaccInitQuickFillCell (QuickFillCell *cell);
+void             xaccDestroyQuickFillCell (QuickFillCell *cell);
 
-void             xaccSetQuickFillCellValue (QuickFillCell *, const char *);
-void             xaccSetQuickFillSort (QuickFillCell *, QuickFillSort);
-void             xaccSetQuickFillOriginal (QuickFillCell *, const char *);
+void             xaccSetQuickFillCellValue (QuickFillCell *cell,
+                                            const char *value);
+void             xaccSetQuickFillSort (QuickFillCell *cell,
+                                       QuickFillSort sort);
+void             xaccSetQuickFillOriginal (QuickFillCell *cell,
+                                           const char *original);
 
 /* GUI-dependent */
-void             xaccQuickFillGUIInit (QuickFillCell *);
+void             xaccQuickFillGUIInit (QuickFillCell *cell);
 
 #endif /* __QUICK_FILL_CELL_C__ */
 

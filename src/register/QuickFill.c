@@ -32,9 +32,16 @@
 #include "util.h"
 
 
+struct _QuickFill
+{
+  char * text;            /* the first matching text string     */
+  GHashTable *matches;    /* array of children in the tree      */
+};
+
+
 /** PROTOTYPES ******************************************************/
-static void qfInsertTextRec(QuickFill *qf, const char * text, int depth,
-                            QuickFillSort sort);
+static void quickfill_insert_recursive (QuickFill *qf, const char *text,
+                                        int depth, QuickFillSort sort);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
@@ -42,53 +49,55 @@ static short module = MOD_REGISTER;
 
 /********************************************************************\
 \********************************************************************/
-static int 
-CHAR_TO_INDEX(char c)
+static guint
+quickfill_hash (gconstpointer key)
 {
-  int index = toupper(c);
+  return GPOINTER_TO_UINT (key);
+}
 
-  if (index >= (QFNUM - 1))
-    return 0;
+static gint
+quickfill_compare (gconstpointer key1, gconstpointer key2)
+{
+  guint k1 = GPOINTER_TO_UINT (key1);
+  guint k2 = GPOINTER_TO_UINT (key2);
 
-  return index + 1;
+  return (k1 == k2);
 }
 
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccMallocQuickFill(void)
+gnc_quickfill_new (void)
 {
   QuickFill *qf;
-  int i;
 
-  qf = g_new(QuickFill, 1);
-
-  for(i = 0; i < QFNUM; i++) 
-    qf->qf[i] = NULL;
+  qf = g_new (QuickFill, 1);
 
   qf->text = NULL;
+  qf->matches = g_hash_table_new (quickfill_hash, quickfill_compare);
 
   return qf;
 }
 
 /********************************************************************\
 \********************************************************************/
-void
-xaccFreeQuickFill(QuickFill *qf)
+static void
+destroy_helper (gpointer key, gpointer value, gpointer data)
 {
-  int i;
+  gnc_quickfill_destroy (value);
+}
 
-  if (qf == NULL )
+void
+gnc_quickfill_destroy (QuickFill *qf)
+{
+  if (qf == NULL)
     return;
 
-  for(i = 0; i < QFNUM; i++)
-  {
-    xaccFreeQuickFill(qf->qf[i]);
-    qf->qf[i] = NULL;
-  }
+  g_hash_table_foreach (qf->matches, destroy_helper, NULL);
+  g_hash_table_destroy (qf->matches);
+  qf->matches = NULL;
 
-  if (qf->text != NULL)
-    g_free(qf->text);
+  g_free(qf->text);
   qf->text = NULL;
 
   g_free(qf);
@@ -96,21 +105,34 @@ xaccFreeQuickFill(QuickFill *qf)
 
 /********************************************************************\
 \********************************************************************/
-QuickFill *
-xaccGetQuickFill(QuickFill *qf, char c)
+const char *
+gnc_quickfill_string (QuickFill *qf)
 {
   if (qf == NULL)
     return NULL;
 
-  DEBUG("xaccGetQuickFill(): index = %d\n",CHAR_TO_INDEX(c));
-
-  return qf->qf[CHAR_TO_INDEX(c)];
+  return qf->text;
 }
 
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccGetQuickFillStrLen(QuickFill *qf, const char *str, int len)
+gnc_quickfill_get_char_match (QuickFill *qf, char c)
+{
+  guint key = toupper(c);
+
+  if (qf == NULL)
+    return NULL;
+
+  DEBUG ("xaccGetQuickFill(): index = %u\n", key);
+
+  return g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
+}
+
+/********************************************************************\
+\********************************************************************/
+QuickFill *
+gnc_quickfill_get_string_len_match (QuickFill *qf, const char *str, int len)
 {
   if (str == NULL)
     return NULL;
@@ -120,7 +142,8 @@ xaccGetQuickFillStrLen(QuickFill *qf, const char *str, int len)
     if (qf == NULL)
       return NULL;
 
-    qf = qf->qf[CHAR_TO_INDEX(*str)];
+    qf = gnc_quickfill_get_char_match (qf, *str);
+
     str++;
     len--;
   }
@@ -131,67 +154,66 @@ xaccGetQuickFillStrLen(QuickFill *qf, const char *str, int len)
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-xaccGetQuickFillStr(QuickFill *qf, const char *str)
+gnc_quickfill_get_string_match (QuickFill *qf, const char *str)
 {
   if (str == NULL)
     return NULL;
 
-  return xaccGetQuickFillStrLen(qf, str, strlen(str));
+  return gnc_quickfill_get_string_len_match (qf, str, strlen(str));
 }
 
 /********************************************************************\
 \********************************************************************/
-QuickFill *
-xaccGetQuickFillUniqueLen( QuickFill *qf, int * length )
+static void
+unique_len_helper (gpointer key, gpointer value, gpointer data)
 {
-  int last = 0;
-  int count;
-  int i;
+  QuickFill **qf_p = data;
 
-  *length = 0;
+  *qf_p = value;
+}
+
+QuickFill *
+gnc_quickfill_get_unique_len_match (QuickFill *qf, int * length)
+{
+  if (length != NULL)
+    *length = 0;
 
   if (qf == NULL)
     return NULL;
 
   while (1)
   {
-    count = 0;
-    for(i = 0; i < QFNUM; i++)
-    {
-      if (qf->qf[i] != NULL)
-      {
-        count++;
-        if (count > 1)
-          return qf;
+    guint count;
 
-        last = i;
-      }
-    }
+    count = g_hash_table_size (qf->matches);
 
-    if (count == 0)
+    if (count != 1)
       return qf;
 
-    qf = qf->qf[last];
-    (*length)++;
+    g_hash_table_foreach (qf->matches, unique_len_helper, &qf);
+
+    if (length != NULL)
+      (*length)++;
   }
 }
 
 /********************************************************************\
 \********************************************************************/
 void
-xaccQFInsertText(QuickFill *qf, const char * text, QuickFillSort sort)
+gnc_quickfill_insert (QuickFill *qf, const char * text, QuickFillSort sort)
 {
-  qfInsertTextRec(qf, text, 0, sort);
+  quickfill_insert_recursive (qf, text, 0, sort);
 }
 
 /********************************************************************\
 \********************************************************************/
 static void
-qfInsertTextRec( QuickFill *qf, const char *text, int depth,
-                 QuickFillSort sort )
+quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
+                            QuickFillSort sort)
 {
-  int index;
+  guint key;
   char *old_text;
+  QuickFill *match_qf;
 
   if (qf == NULL)
     return;
@@ -199,12 +221,16 @@ qfInsertTextRec( QuickFill *qf, const char *text, int depth,
   if ((text == NULL) || (text[depth] == '\0'))
     return;
 
-  index = CHAR_TO_INDEX(text[depth]);
+  key = toupper(text[depth]);
 
-  if( qf->qf[index] == NULL )
-    qf->qf[index] = xaccMallocQuickFill();
+  match_qf = g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
+  if (match_qf == NULL)
+  {
+    match_qf = gnc_quickfill_new ();
+    g_hash_table_insert (qf->matches, GUINT_TO_POINTER (key), match_qf);
+  }
 
-  old_text = qf->qf[index]->text;
+  old_text = match_qf->text;
 
   switch(sort)
   {
@@ -217,7 +243,7 @@ qfInsertTextRec( QuickFill *qf, const char *text, int depth,
       /* If there's no string there already, just put the new one in. */
       if (old_text == NULL)
       {
-        qf->qf[index]->text = g_strdup (text);
+        match_qf->text = g_strdup (text);
         break;
       }
 
@@ -227,11 +253,11 @@ qfInsertTextRec( QuickFill *qf, const char *text, int depth,
         break;
 
       g_free (old_text);
-      qf->qf[index]->text = g_strdup (text);
+      match_qf->text = g_strdup (text);
       break;
   }
 
-  qfInsertTextRec(qf->qf[index], text, ++depth, sort);
+  quickfill_insert_recursive (match_qf, text, ++depth, sort);
 }
 
 /********************** END OF FILE *********************************\

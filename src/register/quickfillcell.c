@@ -90,6 +90,7 @@ quick_modify (BasicCell *_cell,
               int *end_selection)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
+   const char *match_str;
    const char *retval;
    QuickFill *match;
 
@@ -133,9 +134,11 @@ quick_modify (BasicCell *_cell,
      cell->original = NULL;
    }
 
-   match = xaccGetQuickFillStr(cell->qfRoot, newval);
+   match = gnc_quickfill_get_string_match (cell->qfRoot, newval);
 
-   if ((match == NULL) || (match->text == NULL))
+   match_str = gnc_quickfill_string (match);
+
+   if ((match == NULL) || (match_str == NULL))
    {
      if (cell->original != NULL)
        retval = g_strdup(cell->original);
@@ -148,7 +151,7 @@ quick_modify (BasicCell *_cell,
      return retval;
    }
 
-   retval = g_strdup(match->text);
+   retval = g_strdup(match_str);
 
    *start_selection = strlen(newval);
    *end_selection = -1;
@@ -167,7 +170,8 @@ quick_leave (BasicCell *_cell, const char *val)
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
    cell->qf = cell->qfRoot;
-   xaccQFInsertText (cell->qfRoot, val, cell->sort);
+   gnc_quickfill_insert (cell->qfRoot, val, cell->sort);
+
    return val;
 }
 
@@ -192,7 +196,7 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 {
    xaccInitBasicCell (&(cell->cell));
 
-   cell->qfRoot = xaccMallocQuickFill();
+   cell->qfRoot = gnc_quickfill_new ();
    cell->qf = cell->qfRoot;
    cell->sort = QUICKFILL_LIFO;
    cell->original = NULL;
@@ -210,7 +214,7 @@ xaccInitQuickFillCell (QuickFillCell *cell)
 void
 xaccDestroyQuickFillCell (QuickFillCell *cell)
 {
-   xaccFreeQuickFill (cell->qfRoot);
+   gnc_quickfill_destroy (cell->qfRoot);
    cell->qfRoot = NULL;
    cell->qf = NULL;
 
@@ -230,7 +234,7 @@ xaccDestroyQuickFillCell (QuickFillCell *cell)
 void
 xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 {
-   xaccQFInsertText (cell->qfRoot, value, cell->sort);
+   gnc_quickfill_insert (cell->qfRoot, value, cell->sort);
    SET (&(cell->cell), value);
 }
 

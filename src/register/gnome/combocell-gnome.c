@@ -126,7 +126,7 @@ void xaccInitComboCell (ComboCell *cell)
 
 	cell->cell.gui_private = box;
 
-        box->qf = xaccMallocQuickFill();
+        box->qf = gnc_quickfill_new ();
         box->in_list_select = FALSE;
 
         box->strict = TRUE;
@@ -319,7 +319,7 @@ void xaccDestroyComboCell (ComboCell *cell)
 		g_list_free(box->menustrings);
                 box->menustrings = NULL;
 
-                xaccFreeQuickFill(box->qf);
+                gnc_quickfill_destroy (box->qf);
                 box->qf = NULL;
 
                 g_free(box->ignore_string);
@@ -355,8 +355,8 @@ xaccClearComboCellMenu (ComboCell * cell)
         g_list_free(box->menustrings);
         box->menustrings = NULL;
 
-        xaccFreeQuickFill(box->qf);
-        box->qf = xaccMallocQuickFill();
+        gnc_quickfill_destroy (box->qf);
+        box->qf = gnc_quickfill_new ();
 
         if (box->item_list != NULL)
         {
@@ -430,7 +430,7 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 	else
 		box->list_in_sync = FALSE;
 
-        xaccQFInsertText(box->qf, menustr, QUICKFILL_ALPHA);
+        gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
 
         box->list_sorted = FALSE;
 }
@@ -456,6 +456,7 @@ ComboMV (BasicCell *_cell,
 {
         ComboCell *cell = (ComboCell *) _cell;
 	PopBox *box = cell->cell.gui_private;
+        const char *match_str;
         const char *retval;
         QuickFill *match;
         gboolean pop_list;
@@ -485,9 +486,11 @@ ComboMV (BasicCell *_cell,
                 return newval;
         }
 
-        match = xaccGetQuickFillStr(box->qf, newval);
+        match = gnc_quickfill_get_string_match (box->qf, newval);
 
-        if ((match == NULL) || (match->text == NULL))
+        match_str = gnc_quickfill_string (match);
+
+        if ((match == NULL) || (match_str == NULL))
         {
                 xaccSetBasicCellValue (_cell, newval);
 
@@ -498,7 +501,7 @@ ComboMV (BasicCell *_cell,
                 return newval;
         }
 
-        retval = g_strdup(match->text);
+        retval = g_strdup(match_str);
 
         *start_selection = strlen(newval);
         *end_selection = -1;
@@ -541,6 +544,7 @@ ComboDirect (BasicCell *bcell,
         gboolean keep_on_going = FALSE;
         gboolean extra_colon;
         QuickFill *match;
+        const char *match_str;
         char *search;
         int prefix_len;
         int new_pos;
@@ -568,20 +572,21 @@ ComboDirect (BasicCell *bcell,
                             !keep_on_going)
                                 return FALSE;
 
-                        match = xaccGetQuickFillStrLen(box->qf, oldval,
-                                                       *cursor_position);
+                        match = gnc_quickfill_get_string_len_match (box->qf, oldval, *cursor_position);
                         if (match == NULL)
                                 return TRUE;
 
-                        match = xaccGetQuickFillUniqueLen(match, &prefix_len);
+                        match = gnc_quickfill_get_unique_len_match (match, &prefix_len);
                         if (match == NULL)
                                 return TRUE;
 
-                        if ((match->text != NULL) &&
-                            (strncmp(match->text, oldval, length) == 0) && 
-                            (strcmp(match->text, oldval) != 0))
+                        match_str = gnc_quickfill_string (match);
+
+                        if ((match_str != NULL) &&
+                            (strncmp(match_str, oldval, length) == 0) && 
+                            (strcmp(match_str, oldval) != 0))
                         {
-                                *newval_ptr = g_strdup(match->text);
+                                *newval_ptr = g_strdup(match_str);
                                 assert(*newval_ptr != NULL);
 
                                 xaccSetBasicCellValue(bcell, *newval_ptr);
@@ -637,24 +642,27 @@ ComboDirect (BasicCell *bcell,
                 extra_colon = TRUE;
         }
 
-        match = xaccGetQuickFillStrLen(box->qf, oldval, new_pos);
+        match = gnc_quickfill_get_string_len_match (box->qf, oldval, new_pos);
         if (match == NULL)
                 return FALSE;
 
         if (extra_colon)
         {
-                match = xaccGetQuickFill(match, box->complete_char);
+                match = gnc_quickfill_get_char_match (match,
+                                                      box->complete_char);
                 if (match == NULL)
                         return FALSE;
 
                 new_pos++;
         }
 
-        if ((match->text != NULL) &&
-            (strncmp(match->text, oldval, length) == 0) && 
-            (strcmp(match->text, oldval) != 0))
+        match_str = gnc_quickfill_string (match);
+
+        if ((match_str != NULL) &&
+            (strncmp(match_str, oldval, length) == 0) && 
+            (strcmp(match_str, oldval) != 0))
         {
-                *newval_ptr = g_strdup(match->text);
+                *newval_ptr = g_strdup(match_str);
                 assert(*newval_ptr != NULL);
 
                 xaccSetBasicCellValue(bcell, *newval_ptr);

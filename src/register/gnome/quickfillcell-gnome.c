@@ -44,6 +44,7 @@ QuickFillDirect (BasicCell *bcell,
 {
         QuickFillCell *cell = (QuickFillCell *) bcell;
         GdkEventKey *event = gui_data;
+        const char *match_str;
         QuickFill *match;
         int prefix_len;
 
@@ -71,19 +72,23 @@ QuickFillDirect (BasicCell *bcell,
                  (*start_selection >= *cursor_position))
                 *cursor_position = *end_selection;
 
-        match = xaccGetQuickFillStrLen(cell->qfRoot, oldval, *cursor_position);
+        match = gnc_quickfill_get_string_len_match (cell->qfRoot, oldval,
+                                                    *cursor_position);
+
         if (match == NULL)
                 return TRUE;
 
-        match = xaccGetQuickFillUniqueLen(match, &prefix_len);
+        match = gnc_quickfill_get_unique_len_match (match, &prefix_len);
         if (match == NULL)
                 return TRUE;
 
-        if ((match->text != NULL) &&
-            (strncmp(match->text, oldval, strlen(oldval)) == 0) && 
-            (strcmp(match->text, oldval) != 0))
+        match_str = gnc_quickfill_string (match);
+
+        if ((match_str != NULL) &&
+            (strncmp(match_str, oldval, strlen(oldval)) == 0) && 
+            (strcmp(match_str, oldval) != 0))
         {
-                *newval_ptr = g_strdup(match->text);
+                *newval_ptr = g_strdup(match_str);
                 assert(*newval_ptr != NULL);
                 xaccSetBasicCellValue(bcell, *newval_ptr);
         }
