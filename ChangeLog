@@ -4,6 +4,17 @@
 	gnc-hbci-transfer.c: Create common functions for filling of
 	description and memo fields.
 
+2002-12-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-split-reg.c (gsr_default_delete_handler): 
+	Convert the delete dialogs to follow the existing gnucash standard
+	where the cancel button is the rightmost button in the dialog box.
+	#98291
+
+	* src/register/register-core/table-allgui.c
+	(gnc_table_get_cell_location): Search the entire cellblock for a
+	cell. Don't bail if one of the entries isn't populated.  #93831
+
 2002-12-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-model-save.c -- fix a bug
