@@ -46,8 +46,8 @@
 
 /* GTK Windows - Common Response Codes */
 
-#define GNC_RESPONSE_ADD    1
-#define GNC_RESPONSE_REMOVE 2
+#define GNC_RESPONSE_NEW    1
+#define GNC_RESPONSE_DELETE 2
 #define GNC_RESPONSE_EDIT   3
 
 /* Dialog windows ***************************************************/

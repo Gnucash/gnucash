@@ -102,7 +102,6 @@ void gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data);
 void gnc_ui_commodity_quote_info_cb(GtkWidget *w, gpointer data);
 gboolean gnc_ui_commodity_dialog_to_object(CommodityWindow * w);
 
-#define GNC_RESPONSE_NEW 0
 #if 0
 static void gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer data);
 #endif

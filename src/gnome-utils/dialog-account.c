@@ -1775,7 +1775,7 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
 
     if (response == GTK_RESPONSE_OK)
       created_account = aw->created_account;
-  } while ((response == GTK_RESPONSE_HELP) || (response == GNC_RESPONSE_ADD));
+  } while ((response == GTK_RESPONSE_HELP) || (response == GNC_RESPONSE_NEW));
 
   close_handler(aw);
   LEAVE("created %s (%p)", xaccAccountGetName(created_account), created_account);

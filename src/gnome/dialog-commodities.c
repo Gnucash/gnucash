@@ -236,11 +236,11 @@ gnc_commodities_dialog_response (GtkDialog *dialog,
 				 CommoditiesDialog *cd)
 {
 	switch (response) {
-	 case GNC_RESPONSE_ADD:
+	 case GNC_RESPONSE_NEW:
 	  add_clicked (cd);
 	  return;
 
-	 case GNC_RESPONSE_REMOVE:
+	 case GNC_RESPONSE_DELETE:
 	  remove_clicked (cd);
 	  return;
 
