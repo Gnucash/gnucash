@@ -133,6 +133,8 @@ ultostr (unsigned long val, int base)
  * returned from the localconv() subroutine
 \********************************************************************/
 
+/* The PrtAmtComma() routine prints a comma-separated currency value */
+
 /* THOU_SEP is a comma in U.S. but a period in some parts of Europe */
 /* CENT_SEP is a period in U.S. but a comma in some parts of Europe */
 #define THOU_SEP  ','
@@ -158,7 +160,7 @@ PrtAmtComma (char * buf, double val, int prec)
 
       amt *= 1000.0;
       tmp = val;
-      for (j=i; j>0; j++) tmp *= 0.001;
+      for (j=i; j>0; j--) tmp *= 0.001;
       tmp -= amt;
       ival = tmp;  
       if (i !=ncommas) {
@@ -173,11 +175,12 @@ PrtAmtComma (char * buf, double val, int prec)
    /* place decimal point */
    buf --; *buf = CENT_SEP; buf++;
 
+   /* print two or three decimal places */
    if (3 == prec) {
-      ival = 1000.0 * (val-amt);
+      ival = 0.5 + 1000.0 * (val-amt);
       buf += sprintf (buf, "%03d", ival); 
    } else {
-      ival = 100.0 * (val-amt);
+      ival = 0.5 + 100.0 * (val-amt);
       buf += sprintf (buf, "%02d", ival); 
    }
 
@@ -193,7 +196,7 @@ xaccPrintAmount (double val, short shrs)
    if (0.0 > val) {
       buf[0] = '-';
       bufp ++;
-      val = DABS(val);
+      val = -val;
    }
 
    if (shrs & PRTSHR) {
@@ -208,7 +211,7 @@ xaccPrintAmount (double val, short shrs)
    } else {
 
       if (shrs & PRTSYM) {
-         bufp += sprintf( buf, "%s ", CURRENCY_SYMBOL);
+         bufp += sprintf( bufp, "%s ", CURRENCY_SYMBOL);
       }
       if (shrs & PRTSEP) {
          PrtAmtComma (bufp, val, 2);
