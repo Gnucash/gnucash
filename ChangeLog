@@ -1,5 +1,9 @@
 2001-12-10  Christian Stimming  <stimming@tuhh.de>
-                              
+
+	* po/sv.po: Fixed Swedish translation, by Christian Rose
+	<menthos@menthos.com>, who thanks Peter Karlsson
+	<peter@softwolves.pp.se> for his comments.
+
 	* po/pt.po: Updated portuguese translation by Duarte Loreto
 	<happyguy_pt@hotmail.com>
 

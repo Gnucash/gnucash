@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash\n"
 "POT-Creation-Date: 2001-12-08 22:22+0100\n"
-"PO-Revision-Date: 2001-12-09 23:19+0100\n"
+"PO-Revision-Date: 2001-12-10 15:50+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1032,7 +1032,7 @@ msgstr "Eurokonvertering"
 
 #: src/gnome/druid-euro-conv.c:391
 msgid "You don't have any accounts of Euroland currencies."
-msgstr "Du har inga konton med Eurolandvalutor."
+msgstr "Du har inga konton med valutor från euroländer."
 
 #: src/gnome/druid-qif-import.c:490
 msgid "Select QIF File"
@@ -2966,17 +2966,17 @@ msgid ""
 "of this druid."
 msgstr ""
 "Denna guide kommer att hjälpa dig att konvertera dina existerande\n"
-"konton till valutan Euro (EUR).\n"
+"konton till valutan euro (EUR).\n"
 "\n"
-"I fortsättningen kommer termen \"Eurolandvaluta\" att beteckna\n"
-"de valutor som ersätts med Euron.\n"
+"I fortsättningen kommer \"valutor från euroländer\" att beteckna\n"
+"de valutor som ersätts med euron.\n"
 "\n"
 "Inga ändringar kommer attgöras innan du trycker \"Slutför\" på den\n"
 "sista sidan av denna guide."
 
 #: src/gnome/glade-gnc-dialogs.c:7987
 msgid "Where to create the Euro accounts?"
-msgstr "Var ska Eurokontona skapas?"
+msgstr "Var ska eurokontona skapas?"
 
 #: src/gnome/glade-gnc-dialogs.c:8003
 msgid ""
@@ -2987,7 +2987,7 @@ msgid ""
 "like the EUR accounts to be created."
 msgstr ""
 "Guiden kommer att skapa ett nytt EUR-konto för vart och ett av dina "
-"Eurolandkonton.\n"
+"konton med valutor från euroländer.\n"
 "\n"
 "Välj var i kontohierarkin du vill att dina EUR-konton ska skapas."
 
@@ -3016,16 +3016,16 @@ msgid ""
 "Please choose a naming scheme for the new Euro accounts \n"
 "and the old Euroland accounts."
 msgstr ""
-"Välj ett namngivningsschema för de nya Eurokontona\n"
-"och de gamla Eurolandkontona."
+"Välj ett namngivningsschema för de nya eurokontona\n"
+"och de gamla kontona med valutor från euroländer."
 
 #: src/gnome/glade-gnc-dialogs.c:8085
 msgid ""
 "The name of each newly created Euro account is copied from\n"
 "the old Euroland account, plus an appended 'EUR'"
 msgstr ""
-"Namnet på varje nyskapat Eurokonto kopieras från det gamla\n"
-"Eurolandkontot, med ett \"EUR\" på slutet"
+"Namnet på varje nyskapat eurokonto kopieras från det gamla\n"
+"kontot med valuta från ett euroland, med ett \"EUR\" på slutet"
 
 #: src/gnome/glade-gnc-dialogs.c:8094
 msgid ""
@@ -3034,14 +3034,14 @@ msgid ""
 "The name of the newly created Euro account is copied from the\n"
 "old Euroland account."
 msgstr ""
-"Namnet på varje gammalt Eurolandkonto ändras genom att\n"
-"respektive valutasymbol för Eurolandvalutan läggs till.\n"
-"Namnet på det nyskapade Eurokontot kopieras från det gamla\n"
-"Eurolandkontot."
+"Namnet på varje gammalt konto med valuta från ett euroland ändras\n"
+"genom att respektive valutasymbol för eurolandsvalutan läggs till.\n"
+"Namnet på det nyskapade eurokontot kopieras från det gamla\n"
+"kontot med valuta från eurolandet."
 
 #: src/gnome/glade-gnc-dialogs.c:8112
 msgid "Finish Euro Conversion"
-msgstr "Slutför Eurokonvertering"
+msgstr "Slutför eurokonvertering"
 
 #: src/gnome/glade-gnc-dialogs.c:8113
 msgid ""
@@ -3058,15 +3058,15 @@ msgid ""
 "You may also press 'Back' to review your settings, or 'Cancel'\n"
 "to quit without making any changes."
 msgstr ""
-"Om du har valt färdigt dina Eurokonverteringsinställningar\n"
+"Om du har valt färdigt dina eurokonverteringsinställningar\n"
 "trycker du \"Slutför\".\n"
 "\n"
 "Guiden kommer sedan att gå igenom följande steg:\n"
 "\n"
 "1. Skapa nya konton enligt dina inställningar.\n"
 "2. Skapa nya valutaväxlingskonton.\n"
-"3. Växla alla belopp från Eurolandkonton till deras\n"
-"respektive Eurokonto.\n"
+"3. Växla alla belopp från konton med valutor från euroländer\n"
+"till deras respektive eurokonto.\n"
 "\n"
 "Du kan också välja \"Bakåt\" för att granska dina inställningar,\n"
 "eller \"Avbryt\" för att avsluta utan att göra några ändringar."
@@ -3482,7 +3482,7 @@ msgstr "_Eurokonvertering..."
 
 #: src/gnome/window-acct-tree.c:882
 msgid "Do the Euro conversion of the account hierarchy"
-msgstr "Konvertera kontohierarkin till Euro"
+msgstr "Konvertera kontohierarkin till euro"
 
 #: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
 msgid "_New Account..."
@@ -5331,11 +5331,11 @@ msgstr "Använd 24-timmars tidsformat (i stället för 12-timmars)."
 
 #: src/scm/guile-strings.c:253
 msgid "Enable EURO support"
-msgstr "Aktivera Eurostöd"
+msgstr "Aktivera stöd för euro"
 
 #: src/scm/guile-strings.c:254
 msgid "Enables support for the European Union EURO currency"
-msgstr "Aktiverar stöd för Europiska Unionens valuta Euro"
+msgstr "Aktiverar stöd för Europiska Unionens valuta euro"
 
 #: src/scm/guile-strings.c:256
 msgid "Default Register Style"
