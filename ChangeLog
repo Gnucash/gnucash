@@ -1,3 +1,9 @@
+2003-08-21  Christian Stimming  <stimming@tuhh.de>
+
+	* po/es.po, el.po, fr.po: Updated Spanish and Greek translation by
+	the respective translator. Added translator name to French
+	translation.
+
 2003-08-18  Chris Lyttle  <chris@wilddev.net>
 
 	* Release 1.8.5 re-tagged
