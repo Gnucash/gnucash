@@ -5,11 +5,45 @@
 #include "eggintl.h"
 
 #define NODE_INFO(node) ((EggMenuMergeNode *)node->data)
+//#define NODE_INFO(node) ((Node *)node->data)
 
 typedef struct {
   guint merge_id;
   GQuark action_quark;
 } NodeUIReference;
+
+typedef enum 
+{
+  NODE_TYPE_UNDECIDED,
+  NODE_TYPE_ROOT,
+  NODE_TYPE_MENUBAR,
+  NODE_TYPE_MENU,
+  NODE_TYPE_TOOLBAR,
+  NODE_TYPE_MENU_PLACEHOLDER,
+  NODE_TYPE_TOOLBAR_PLACEHOLDER,
+  NODE_TYPE_POPUP,
+  NODE_TYPE_MENUITEM,
+  NODE_TYPE_TOOLITEM,
+  NODE_TYPE_SEPARATOR,
+  NODE_TYPE_ACCELERATOR
+} NodeType;
+
+typedef struct _Node Node;
+
+struct _Node {
+  NodeType type;
+
+  gchar *name;
+
+  GQuark action_name;
+  EggAction *action;
+  GtkWidget *proxy;
+  GtkWidget *extra; /* second separator for placeholders */
+
+  GList *uifiles;
+
+  guint dirty : 1;
+};
 
 static void   egg_menu_merge_class_init    (EggMenuMergeClass *class);
 static void   egg_menu_merge_init          (EggMenuMerge *merge);
@@ -280,6 +314,12 @@ egg_menu_merge_get_node(EggMenuMerge *self, const gchar *path,
   if (NODE_INFO(node)->type == EGG_MENU_MERGE_UNDECIDED)
     NODE_INFO(node)->type = node_type;
   return node;
+}
+
+guint
+egg_menu_merge_new_merge_id( EggMenuMerge *self )
+{
+  return egg_menu_merge_next_merge_id( self );
 }
 
 static guint
@@ -724,6 +764,152 @@ egg_menu_merge_add_ui_from_file (EggMenuMerge *self,
 
   return res;
 }
+
+/**
+ * gtk_ui_manager_add_ui:
+ * @self: a #GtkUIManager
+ * @merge_id: the merge id for the merged UI, see gtk_ui_manager_new_merge_id()
+ * @path: a path
+ * @name: the name for the added UI element
+ * @action: the name of the action to be proxied, or %NULL to add a separator
+ * @type: the type of UI element to add.
+ * @top: if %TRUE, the UI element is added before its siblings, otherwise it 
+ *   is added after its siblings.
+ * 
+ * Adds a UI element to the current contents of @self. 
+ *
+ * If @type is %GTK_UI_MANAGER_AUTO, GTK+ inserts a menuitem, toolitem or 
+ * separator if such an element can be inserted at the place determined by 
+ * @path. Otherwise @type must indicate an element that can be inserted at 
+ * the place determined by @path.
+ * 
+ * Since: 2.4
+ **/
+void
+egg_menu_merge_add_ui (EggMenuMerge        *self,
+		       guint                merge_id,
+		       const gchar         *path,
+		       const gchar         *name,
+		       const gchar         *action,
+		       EggMenuMergeNodeType type,
+		       gboolean             top)
+{
+  GNode *node;
+  GNode *child;
+  EggMenuMergeNodeType node_type;
+  GQuark action_quark = 0;
+
+  g_return_if_fail (EGG_IS_MENU_MERGE (self));  
+  g_return_if_fail (merge_id > 0);
+  g_return_if_fail (name != NULL);
+
+  node = egg_menu_merge_get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
+  
+  if (node == NULL)
+    return;
+
+  node_type = NODE_TYPE_UNDECIDED;
+
+  switch (NODE_INFO (node)->type) 
+    {
+    case NODE_TYPE_MENUBAR:
+    case NODE_TYPE_MENU:
+    case NODE_TYPE_POPUP:
+    case NODE_TYPE_MENU_PLACEHOLDER:
+      switch (type) 
+	{
+	case EGG_MENU_MERGE_MENU:
+	  node_type = NODE_TYPE_MENU;
+	  break;
+	case EGG_MENU_MERGE_MENUITEM:
+	  node_type = NODE_TYPE_MENUITEM;
+	  break;
+	case EGG_MENU_MERGE_SEPARATOR:
+	  node_type = NODE_TYPE_SEPARATOR;
+	  break;
+	case EGG_MENU_MERGE_MENU_PLACEHOLDER:
+	  node_type = NODE_TYPE_MENU_PLACEHOLDER;
+	  break;
+	case EGG_MENU_MERGE_TOOLBAR_PLACEHOLDER:
+	  node_type = NODE_TYPE_TOOLBAR_PLACEHOLDER;
+	  break;
+	default: ;
+	  /* do nothing */
+	}
+      break;
+    case NODE_TYPE_TOOLBAR:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER:
+      switch (type) 
+	{
+          /*case EGG_MENU_MERGE_AUTO:
+	  if (action != NULL)
+	      node_type = NODE_TYPE_TOOLITEM;
+	  else
+	      node_type = NODE_TYPE_SEPARATOR;
+	  break;
+          */
+	case EGG_MENU_MERGE_TOOLITEM:
+	  node_type = NODE_TYPE_TOOLITEM;
+	  break;
+	case EGG_MENU_MERGE_SEPARATOR:
+	  node_type = NODE_TYPE_SEPARATOR;
+	  break;
+	case EGG_MENU_MERGE_MENU_PLACEHOLDER:
+	  node_type = NODE_TYPE_MENU_PLACEHOLDER;
+	  break;
+	case EGG_MENU_MERGE_TOOLBAR_PLACEHOLDER:
+	  node_type = NODE_TYPE_TOOLBAR_PLACEHOLDER;
+	  break;
+	default: ;
+	  /* do nothing */
+	}
+      break;
+    case NODE_TYPE_ROOT:
+      switch (type) 
+	{
+	case EGG_MENU_MERGE_MENUBAR:
+	  node_type = NODE_TYPE_MENUBAR;
+	  break;
+	case EGG_MENU_MERGE_TOOLBAR:
+	  node_type = NODE_TYPE_TOOLBAR;
+	  break;
+	case EGG_MENU_MERGE_POPUP:
+	  node_type = NODE_TYPE_POPUP;
+	  break;
+          /*case EGG_MENU_MERGE_ACCELERATOR:
+	  node_type = NODE_TYPE_ACCELERATOR;
+	  break;*/
+	default: ;
+	  /* do nothing */
+	}
+      break;
+    default: ;
+      /* do nothing */
+    }
+
+  if (node_type == NODE_TYPE_UNDECIDED)
+    return;
+   
+  child = get_child_node (self, node,
+			  name, strlen (name),
+			  node_type, TRUE, top);
+
+  if (action != NULL)
+    action_quark = g_quark_from_string (action);
+
+  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (child), 
+                                            merge_id, action_quark);
+
+  if (NODE_INFO (node)->action_name == 0)
+    NODE_INFO (child)->action_name = action_quark;
+
+  NODE_INFO (child)->dirty = TRUE;
+
+  egg_menu_merge_queue_update (self);
+
+  g_object_notify (G_OBJECT (self), "ui");      
+}
+
 
 static gboolean
 remove_ui (GNode *node, gpointer user_data)

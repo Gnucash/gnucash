@@ -91,6 +91,22 @@ guint         egg_menu_merge_add_ui_from_string  (EggMenuMerge *self,
 guint         egg_menu_merge_add_ui_from_file    (EggMenuMerge *self,
 						  const gchar *filename,
 						  GError **error);
+
+// +jsled; Moved over by jsled from 2.4.0 gtkuimanager.c .. totally useful
+// programatic function that will save us from having to create an XML
+// document just to place a menu item....
+void           egg_menu_merge_add_ui              (EggMenuMerge          *self,
+						   guint                  merge_id,
+						   const gchar           *path,
+						   const gchar           *name,
+						   const gchar           *action,
+                                                   EggMenuMergeNodeType   type,
+						   gboolean               top);
+
+guint egg_menu_merge_new_merge_id( EggMenuMerge *self );
+
+// -jsled
+
 void          egg_menu_merge_remove_ui           (EggMenuMerge *self,
 						  guint merge_id);
 

@@ -7,4 +7,6 @@
 
 #include <libgnome/gnome-i18n.h>
 
+#define P_(String) dgettext(GETTEXT_PACKAGE "-properties",String)
+
 #endif /* __EGG_INTL_H__ */
