@@ -2067,9 +2067,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     xaccTransBeginEdit (trans);
     xaccTransAppendSplit (trans, new_split);
-    xaccTransCommitEdit (trans);
-
     gnc_copy_split_onto_split (split, new_split, FALSE);
+    xaccTransCommitEdit (trans);
 
     return_split = new_split;
 
@@ -2117,9 +2116,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     new_trans = xaccMallocTransaction ();
 
-    gnc_copy_trans_onto_trans (trans, new_trans, FALSE, TRUE);
-
     xaccTransBeginEdit (new_trans);
+    gnc_copy_trans_onto_trans (trans, new_trans, FALSE, TRUE);
     xaccTransSetDateSecs (new_trans, date);
     xaccTransSetNum (new_trans, out_num);
     xaccTransCommitEdit (new_trans);
@@ -2345,16 +2343,15 @@ xaccSRPasteCurrent (SplitRegister *reg)
 
     gnc_suspend_gui_refresh ();
 
+    xaccTransBeginEdit(trans);
     if (split == NULL)
     { /* We are on a null split in an expanded transaction. */
       split = xaccMallocSplit();
-
-      xaccTransBeginEdit(trans);
       xaccTransAppendSplit(trans, split);
-      xaccTransCommitEdit(trans);
     }
 
     gnc_copy_split_scm_onto_split(copied_item, split);
+    xaccTransCommitEdit(trans);
   }
   else {
     const char *message = _("You are about to overwrite an existing "
