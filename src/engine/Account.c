@@ -433,11 +433,11 @@ xaccAccountRecomputeBalance( Account * acc )
 
 /********************************************************************\
  * xaccCheckDateOrder                                               *
- *   check this transaction to see if the date is in correct order  *
+ *   check this split to see if the date is in correct order        *
  *   If it is not, reorder the transactions ...                     *
  *                                                                  *
  * Args:   acc   -- the account to check                            *
- *         trans -- the transaction to check                        *
+ *         split -- the split to check                              *
  *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/

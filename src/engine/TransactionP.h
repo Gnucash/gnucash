@@ -157,6 +157,12 @@ struct _transaction
   /* the "open" flag indicates if the transaction has been 
    * opened for editing. */
   char open;
+
+  /* the orig pointer points at a copy of the original transaction,
+   * before editing was started.  This orig copy is used to rollback 
+   * any changes made if/when the edit is abandoned.
+   */
+  Transaction *orig;
 };
 
 

@@ -627,6 +627,7 @@ readTransaction( int fd, Account *acc, int token )
     {
     PERR ("Premature end of Transaction at num");
     xaccTransDestroy(trans);
+    xaccTransCommitEdit (trans);
     return NULL;
     }
   xaccTransSetNum (trans, tmp);
@@ -637,6 +638,7 @@ readTransaction( int fd, Account *acc, int token )
     {
     PERR ("Premature end of Transaction at date");
     xaccTransDestroy(trans);
+    xaccTransCommitEdit (trans);
     return NULL;
     }
   xaccTransSetDateSecs (trans, secs);
@@ -646,6 +648,7 @@ readTransaction( int fd, Account *acc, int token )
     {
     PERR ("Premature end of Transaction at description");
     xaccTransDestroy(trans);
+    xaccTransCommitEdit (trans);
     return NULL;
     }
   xaccTransSetDescription (trans, tmp);
@@ -670,6 +673,7 @@ readTransaction( int fd, Account *acc, int token )
       {
       PERR ("Premature end of Transaction at memo");
       xaccTransDestroy(trans);
+      xaccTransCommitEdit (trans);
       return NULL;
       }
     xaccTransSetMemo (trans, tmp);
@@ -683,6 +687,7 @@ readTransaction( int fd, Account *acc, int token )
          {
          PERR ("Premature end of Transaction at action");
          xaccTransDestroy (trans);
+         xaccTransCommitEdit (trans);
          return NULL;
          }
        xaccTransSetAction (trans, tmp);
@@ -695,6 +700,7 @@ readTransaction( int fd, Account *acc, int token )
       {
       PERR ("Premature end of Transaction at catagory");
       xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
       return NULL;
       }
     
@@ -703,6 +709,7 @@ readTransaction( int fd, Account *acc, int token )
       {
       PERR ("Premature end of Transaction at reconciled");
       xaccTransDestroy(trans);
+      xaccTransCommitEdit (trans);
       return NULL;
       }
     s = xaccTransGetSplit (trans, 0);
@@ -735,6 +742,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at V1 amount");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_INT (amount);
@@ -750,6 +758,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at amount");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_DOUBLE (damount);
@@ -761,6 +770,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at share_price");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_DOUBLE (damount);
@@ -781,6 +791,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at credit");
         xaccTransDestroy (trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
@@ -798,6 +809,7 @@ readTransaction( int fd, Account *acc, int token )
         {
         PERR ("Premature end of Transaction at debit");
         xaccTransDestroy(trans);
+        xaccTransCommitEdit (trans);
         return NULL;
         }
       XACC_FLIP_INT (acc_id);
@@ -844,6 +856,7 @@ readTransaction( int fd, Account *acc, int token )
     {
       PERR ("Premature end of Transaction at num-splits");
       xaccTransDestroy(trans);
+      xaccTransCommitEdit (trans);
       return NULL;
     }
     XACC_FLIP_INT (numSplits);

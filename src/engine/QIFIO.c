@@ -813,6 +813,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
     * transaction, and return */
    if ('!' == qifline[0]) {
       xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
       return qifline;
    }
 

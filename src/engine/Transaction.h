@@ -79,9 +79,14 @@ void          xaccTransDestroy (Transaction *);
  * The xaccTransCommitEdit() routine may result in the deletion of the
  * transaction, if the transaction is "empty" (has no splits, or
  * has a single split in it whose value is non-zero.)
+ *
+ * The xaccTransRollbackEdit() routine rejects all edits made, and 
+ * sets the transaction back to where it was before the editing 
+ * started. (Not yet implemented -- hack alert)
  */
 void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
+void          xaccTransRollbackEdit (Transaction *);
 
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *, time_t);

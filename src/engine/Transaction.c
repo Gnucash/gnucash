@@ -87,7 +87,7 @@ xaccInitSplit( Split * split )
   split->damount     = 0.0;
   split->share_price = 1.0;
 
-  split->date_reconciled.tv_sec = 0;
+  split->date_reconciled.tv_sec  = 0;
   split->date_reconciled.tv_nsec = 0;
 
   split->balance             = 0.0;
@@ -101,6 +101,7 @@ xaccInitSplit( Split * split )
 
 /********************************************************************\
 \********************************************************************/
+
 Split *
 xaccMallocSplit( void )
   {
@@ -108,6 +109,44 @@ xaccMallocSplit( void )
   xaccInitSplit (split);
   return split;
   }
+
+/********************************************************************\
+\********************************************************************/
+/* This routine is not exposed externally, since it does weird things, 
+ * like not really setting up the parent account correctly, and ditto 
+ * the parent transaction.  This routine is prone to programmer error
+ * if not used correctly.  It is used only by the edit-rollback code.
+ */
+
+static Split *
+xaccCloneSplit (Split *s)
+{
+  Split *split = (Split *)_malloc(sizeof(Split));
+
+  split->acc         = s ->acc;
+  split->parent      = s->parent;
+  
+  split->action      = strdup(s->action);
+  split->memo        = strdup(s->memo);
+  split->docref      = strdup(s->docref);
+  split->reconciled  = s->reconciled;
+  split->damount     = s->damount;
+  split->share_price = s->share_price;
+
+  split->date_reconciled.tv_sec  = s->date_reconciled.tv_sec;
+  split->date_reconciled.tv_nsec = s->date_reconciled.tv_nsec;
+
+  /* no need to futz with the balances;  these get wiped each time ... 
+   * split->balance             = s->balance;
+   * split->cleared_balance     = s->cleared_balance;
+   * split->reconciled_balance  = s->reconciled_balance;
+   * split->share_balance             = s->share_balance;
+   * split->share_cleared_balance     = s->share_cleared_balance;
+   * split->share_reconciled_balance  = s->share_reconciled_balance;
+   */
+
+  return (split);
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -269,13 +308,14 @@ xaccInitTransaction( Transaction * trans )
   trans->splits[0] = split;
   trans->splits[1] = NULL;
 
-  trans->date_entered.tv_sec = 0;
+  trans->date_entered.tv_sec  = 0;
   trans->date_entered.tv_nsec = 0;
 
-  trans->date_posted.tv_sec = 0;
+  trans->date_posted.tv_sec  = 0;
   trans->date_posted.tv_nsec = 0;
 
   trans->open        = 0;
+  trans->orig = NULL;
   }
 
 /********************************************************************\
@@ -291,6 +331,49 @@ xaccMallocTransaction( void )
 
 /********************************************************************\
 \********************************************************************/
+/* This routine is not exposed externally, since it does weird things, 
+ * like not really owning the splits correctly, and other weirdnesses. 
+ * This routine is prone to programmer snafu if not used correctly. 
+ * It is used only by the edit-rollback code.
+ */
+
+static Transaction *
+xaccCloneTransaction (Transaction *t)
+{
+  Transaction *trans;
+  int n;
+
+  trans = (Transaction *)_malloc(sizeof(Transaction));
+
+  trans->num         = strdup(t->num);
+  trans->description = strdup(t->description);
+  trans->docref      = strdup(t->docref);
+
+  n=0; while (t->splits[n]) n++;
+  trans->splits    = (Split **) _malloc ((n+1)* sizeof (Split *));
+
+  n=0; 
+  while (t->splits[n]) {
+    trans->splits[n] = xaccCloneSplit (t->splits[n]);
+    n++;
+  }
+  trans->splits[n] = NULL;
+
+  trans->date_entered.tv_sec  = t->date_entered.tv_sec;
+  trans->date_entered.tv_nsec = t->date_entered.tv_nsec;
+
+  trans->date_posted.tv_sec  = t->date_posted.tv_sec;
+  trans->date_posted.tv_nsec = t->date_posted.tv_nsec;
+
+  trans->open = 0;
+  trans->orig = NULL;
+
+  return (trans);
+}
+
+
+/********************************************************************\
+\********************************************************************/
 
 void
 xaccFreeTransaction( Transaction *trans )
@@ -301,12 +384,14 @@ xaccFreeTransaction( Transaction *trans )
   if (!trans) return;
 
   /* free up the destination splits */
-  i = 0;
-  s = trans->splits[i];
-  while (s) {
-    xaccFreeSplit (s);
-    i++;
+  if (trans->splits) {
+    i = 0;
     s = trans->splits[i];
+    while (s) {
+      xaccFreeSplit (s);
+      i++;
+      s = trans->splits[i];
+    }
   }
 
   _free (trans->splits);
@@ -665,6 +750,11 @@ xaccTransBeginEdit (Transaction *trans, int defer)
    if (defer) trans->open |= DEFER_REBALANCE;
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
+
+   /* make a clone of the transaction; we will use this 
+    * in case we need to roll-back the edit. 
+    */
+   trans->orig = xaccCloneTransaction (trans);
 }
 
 void
@@ -676,6 +766,12 @@ xaccTransCommitEdit (Transaction *trans)
 
    if (!trans) return;
    CHECK_OPEN (trans);
+
+   /* get rid of the copy we made. We won't be rolling back, 
+    * so we don't need i any more.
+    */
+   xaccFreeTransaction (trans->orig);
+   trans->orig = NULL;
 
    /* At this point, we check to see if we have a valid transaction.
     * As a result of editing, we could end up with a transaction that
@@ -737,6 +833,114 @@ xaccTransCommitEdit (Transaction *trans)
    xaccTransWriteLog (trans, 'C');
 }
 
+void
+xaccTransRollbackEdit (Transaction *trans)
+{
+   Transaction *orig;
+   Split *s, *so;
+   Account * acc;
+   int force_it=0, mismatch=0, i;
+
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   /* copy the original values back in. */
+   orig = trans->orig;
+
+#define PUT_BACK(val) { free(trans->val); trans->val=orig->val; orig->val=0x0; }
+   PUT_BACK (num);
+   PUT_BACK (description);
+   PUT_BACK (docref);
+
+   trans->date_entered.tv_sec  = orig->date_entered.tv_sec;
+   trans->date_entered.tv_nsec = orig->date_entered.tv_nsec;
+
+   trans->date_posted.tv_sec  = orig->date_posted.tv_sec;
+   trans->date_posted.tv_nsec = orig->date_posted.tv_nsec;
+
+   /* OK, we also have to restore the state of the splits.  Of course,
+    * we could brute-force our way through this, and just clobber all of the
+    * old splits, and insert all of the new splits, but this kind of brute
+    * forcing will suck memory cycles.  So instead we'll try the gentle 
+    * approach first.  Note that even in the gentle approach, the 
+    * CheckDateOrder routine could be cpu-cyle brutal, so it maybe 
+    * it could use some tuning ...
+    */
+   i=0; 
+   s = trans->splits[0];
+   so = orig->splits[0];
+   while (s && so) {
+      if (so->acc != s->acc) { force_it = 1;  mismatch=i; break; }
+
+#define HONKY_CAT(val) { free(s->val); s->val=so->val; so->val=0x0; }
+      HONKY_CAT (action);
+      HONKY_CAT (memo);
+      HONKY_CAT (docref);
+
+      s->reconciled  = so->reconciled;
+      s->damount     = so->damount;
+      s->share_price = so->share_price;
+
+      s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
+      s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
+
+      /* do NOT check date order until all of teh other fields 
+       * have beenproperly restored */
+      xaccCheckDateOrder (s->acc, s); 
+      MARK_SPLIT (s);
+      xaccAccountRecomputeBalance (s->acc);
+      i++;
+      s = trans->splits[i];
+      so = orig->splits[i];
+   }
+   if (so != s) { force_it = 1; mismatch=i; }
+
+   /* OK, if force_it got set, we'll have to tough it out and brute-force
+    * the rest of the way.  Clobber all the edited splits, add all new splits.
+    * Unfortunately, this can suck up CPU cycles in the Remove/Insert routines.
+    */  
+   if (force_it) {
+      i=0; s = trans->splits[i];
+      while (s && (i<mismatch)) {
+         xaccFreeSplit (orig->splits[i]);
+         orig->splits[i] = s;
+         i++;
+         s =  trans->splits[i];
+      }
+      i=mismatch; s = trans->splits[i];
+      while (s) {
+         acc = s->acc;
+         MARK_SPLIT (s);
+         xaccAccountRemoveSplit (acc, s);
+         xaccAccountRecomputeBalance (acc);
+         xaccFreeSplit (s);
+         i++;
+         s =  trans->splits[i];
+      }
+      _free (trans->splits);
+   
+      trans->splits = orig->splits;
+      orig->splits = NULL;
+   
+      i=mismatch; s = trans->splits[i];
+      while (s) {
+         acc = s->acc;
+         MARK_SPLIT (s);
+         xaccAccountInsertSplit (acc, s);
+         xaccAccountRecomputeBalance (acc);
+         i++;
+         s =  trans->splits[i];
+      }
+   }
+
+   xaccTransWriteLog (trans, 'R');
+
+   xaccFreeTransaction (trans->orig);
+   trans->orig = NULL;
+   trans->open = 0;
+}
+
+
 /********************************************************************\
 \********************************************************************/
 
@@ -758,11 +962,14 @@ xaccTransDestroy (Transaction *trans)
       acc = split ->acc;
       xaccAccountRemoveSplit (acc, split);
       xaccAccountRecomputeBalance (acc); 
+      xaccFreeSplit (split);
+      trans->splits[i] = NULL;
       i++;
       split = trans->splits[i];
    }
 
-   xaccFreeTransaction (trans);
+   /* the actual free is done with the commit call, else its rolled back */
+   /* xaccFreeTransaction (trans);  don't do this here ... */
 }
 
 /********************************************************************\
