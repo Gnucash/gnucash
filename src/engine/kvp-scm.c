@@ -1,7 +1,11 @@
+#include "config.h"
+
 #include <kvp_frame.h>
 #include <g-wrap-runtime-guile.h>
 #include <libguile.h>
 #include <engine-helpers.h>
+
+#include "kvp-scm.h"
 
 int
 gnc_kvp_value_ptr_p(SCM arg)

@@ -27,6 +27,6 @@
 char * gnc_module_path (void);
 char * gnc_module_description (void);
 int    gnc_module_init (int refcount);
-int    gnc_module_end(int refcount);
+int    gnc_module_end (int refcount);
 
 #endif

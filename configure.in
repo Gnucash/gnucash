@@ -681,6 +681,7 @@ AC_OUTPUT(
           src/scm/gnumeric/Makefile
           src/scm/printing/Makefile
           src/test/Makefile
+          src/test-core/Makefile
 
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here

@@ -2,6 +2,7 @@
 SUBDIRS = \
   doc \
   gnc-module \
+  test-core \
   engine \
   backend \
   app-utils \

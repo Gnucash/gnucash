@@ -8,7 +8,9 @@
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
+
 #include "gnc-module.h"
+#include "gnc-module-api.h"
 
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;
@@ -51,8 +53,7 @@ gnc_module_on_load(void) {
   gh_eval_str("(use-modules (gnucash qif-io core))");
 }
 
-void
-gnc_module_finish(void) {
-
+int
+gnc_module_end(void) {
+  return TRUE;
 }
-
