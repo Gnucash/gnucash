@@ -54,7 +54,7 @@ msgstr ""
 
 
 4) When you are ready to test out the strings you have translated,
-   save the file.
+   save the file in the 'po' directory of the gnucash source tree.
 
 
 5) Now, if you have the gettext package installed, you can compile your
@@ -65,6 +65,12 @@ msgfmt fr.po --output=./gnucash.mo
    This will create the file 'gnucash.mo' which you can copy to the
    appropriate locale directory for your installation. On a RedHat 6.1
    installation, the directory is /usr/share/locale/fr/LC_MESSAGES.
+
+   Alternatively, instead of creating and installing the gnucash.mo
+   file by hand, you can edit the file 'configure.in' and add your
+   language string ('it', 'fr', etc.) to the definition of the
+   ALL_LINGUAS variable. Now rerun 'make' and 'make install' to
+   build and install the gnucash.mo file.
 
 When running GnuCash, you must set the appropriate locale environment
 variables:
