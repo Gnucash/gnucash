@@ -1,5 +1,7 @@
 2001-03-22  Dave Peticolas  <dave@krondo.com>
 
+	* src/Makefile.am: compile src/test after compile src/
+
 	* src/guile/gnucash.c.in (gnc_main): change from main
 	function so other executables can link with this lib
 

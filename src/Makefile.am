@@ -11,6 +11,7 @@ SUBDIRS = \
   quotes \
   pixmaps \
   optional \
+  . \
   test
 
 # Engine Makefile.am file.
