@@ -1,5 +1,11 @@
 Version history:
 ------- -------
+ 1.5.96 - 20 May 2001
+         o second alpha release
+         o updated user documentation
+         o updated api documentation
+         o bug fixes
+
  1.5.95 - 13 May 2001
          o alpha release, string freeze
          o new user account hierarchy wizard
