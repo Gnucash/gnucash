@@ -212,6 +212,37 @@ shouldn't get wacky, but if you've been running a long time
 and something weird has happened, then a periodic cleanup 
 is good to have.  Maybe this should be automated ...)
 
+Performance
+-----------
+In 'single-user-update' mode,  data loads from the sql database 
+should be 1.5x faster than comparable loads from the XML flat file, 
+at least for medium datasets (measured at 3.5 seconds on a 700MHz 
+Athalon a dataset with 3K transactions and 150 accounts, vs. 4.8 
+seconds loading from file).  
+
+Hitting the 'save' button is a no-op and takes no cpu cycles.
+(date is saved as its modified, so a global save is not needed).
+
+'exit' will stall for a few seconds, while a 'vacuum analyze' is 
+issued.  The 'vacuum' reclaims storage, and 'analyze' does some 
+performance tuning.  Doing this regularly improves performance 
+about 20% in the cases I looked at.
+
+---------
+Performance in multi-user mode is still a can of worms, and will 
+be a good bit slower for now. The working assumptions are that
+there are millions of transactions, so you can't load all of them.  
+But to load only a subset is hard, in several ways. First, its
+technically hard to figure out what subset to load.  Then, once
+this is done, it takes about 12 millisecs to load one transaction 
+when loading them one at a time (on an Athalon 700MHz). This is
+about 75 transactions a second. Of this, 90% of the cpu cycles 
+are burned in the postgres server, so 'basic' tuning won't do 
+the trick ... some different algorithm is needed.
+
+Handy for raw-file-loading performance measurement is the the 
+script 'scan-acct.pl' in src/optional/swig/examples'
+
 
 To Be Done
 ----------
