@@ -149,6 +149,28 @@ getAccount( AccountGroup *grp, int num )
   }
 
 /********************************************************************\
+ * Get the number of accounts, including subaccounts                *
+\********************************************************************/
+
+int
+xaccGetNumAccounts ( AccountGroup *root )
+{
+  Account *acc;
+  int num_acc = 0;
+  int i;
+
+  if (NULL == root) return 0;
+
+  num_acc = root->numAcc;
+
+  for (i=0; i<root->numGroups; i++) {
+    num_acc += xaccGetNumAccounts (root->groups[i]);
+  }
+
+  return num_acc;
+}
+
+/********************************************************************\
  * Fetch an account, given only it's ID number                      *
 \********************************************************************/
 
