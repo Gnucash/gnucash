@@ -143,14 +143,15 @@
 			      subtotal-style)
       (let ((currency-totals (subtotal-collector
 			      'format gnc:make-gnc-monetary #f))
-	    (blanks (make-list (- width 1) #f)))
+	    (blanks (gnc:make-html-table-cell/size 1 (- width 1) #f)))
 	(gnc:html-table-append-row/markup!
 	 table
-	 subtotal-style
-	 (append (list subtotal-string) (make-list (- width 2) #f)
-		 (list (gnc:make-html-table-cell/markup 
+	 subtotal-style 
+	  (list (gnc:make-html-table-cell/size 1 (- width 1) 
+					       subtotal-string)
+		 (gnc:make-html-table-cell/markup 
 			"total-number-cell"
-			(car currency-totals)))))
+			(car currency-totals))))
         (for-each (lambda (currency)
 		    (gnc:html-table-append-row/markup! 
 		     table

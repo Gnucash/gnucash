@@ -18,10 +18,7 @@
 (gnc:support "doc.scm")
 
 (define (gnc:find-doc-file file)
-  (let ((doc-path (gnc:config-var-value-get gnc:*doc-path*)))
-    (gnc:debug "file" file)
-    (gnc:debug "doc-path" doc-path)
-    (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*))))
+  (gnc:find-in-directories file (gnc:config-var-value-get gnc:*doc-path*)))
 
 (define (remove-i18n-macros input)
   (cond ((null? input) input)

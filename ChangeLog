@@ -1,3 +1,11 @@
+2001-05-16  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: use colspan to make
+	room for long subtotal labels.
+
+	* src/scm/doc.scm: remove unnecessary debugging output inadvertantly
+	added.
+
 2001-05-15  Bill Gribble  <grib@billgribble.com>
 
 	* fix report updating problem.  should reload multicolumn reports
