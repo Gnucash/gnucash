@@ -308,7 +308,7 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml`
 AC_CHECK_LIB(gtkhtml, gtk_html_new,
              GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
              AC_DEFINE(HAVE_LIBGTKHTML),
-             ,
+             AC_MSG_ERROR([Cannot find gtkhtml.  See the README for more info.]),
              $EXTRALIBS)
 
 AC_SUBST(GNOME_TARGET)

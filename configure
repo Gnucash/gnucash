@@ -5612,6 +5612,7 @@ EOF
 
 else
   echo "$ac_t""no" 1>&6
+{ echo "configure: error: Cannot find gtkhtml.  See the README for more info." 1>&2; exit 1; }
 fi
 
 
@@ -5650,7 +5651,7 @@ G_WRAP_LINK_ARGS=""
 # Extract the first word of "g-wrap-config", so it can be a program name with args.
 set dummy g-wrap-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5654: checking for $ac_word" >&5
+echo "configure:5655: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_G_WRAP_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5694,7 +5695,7 @@ fi
 # Extract the first word of "g-wrap", so it can be a program name with args.
 set dummy g-wrap; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5698: checking for $ac_word" >&5
+echo "configure:5699: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_G_WRAP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5752,7 +5753,7 @@ GUILE_LINK_ARGS=""
 # Extract the first word of "guile-config", so it can be a program name with args.
 set dummy guile-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5756: checking for $ac_word" >&5
+echo "configure:5757: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GUILE_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5796,7 +5797,7 @@ fi
 # Extract the first word of "guile", so it can be a program name with args.
 set dummy guile; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5800: checking for $ac_word" >&5
+echo "configure:5801: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GUILE'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
