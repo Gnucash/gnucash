@@ -41,6 +41,7 @@
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 
