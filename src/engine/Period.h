@@ -99,13 +99,15 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
                                  const char *memo);
 
 /* The gnc_book_partition() uses the result of the indicated query
- *    to partition an existing book into two parts.  It returns 
- *    a newly created book, containing a copy of all of the accounts,
- *    and it moves all of the transactions returned by the query to 
- *    the copied accounts in the copied book.   Any query will work
- *    to partition a book; however, its expected that this routine 
- *    will mostly serve as a utility to break up a book into 
- *    accounting periods. 
+ *    to move a set of transactions from the "src" book to the "dest"
+ *    book.  Before moving the transactions, it will first place a 
+ *    copy of all of the accounts in "src" into "dest".  This is done 
+ *    in order to ensure that all of the moved transactions will have
+ *    the corrrect set of accounts to reference.  The transactions
+ *    that will be moved are precisely those specified by the query.
+ *    Any query will work to partition a book; however, its expected 
+ *    that this routine will mostly serve as a utility to break up a 
+ *    book into accounting periods. 
  *
  *    This routine intentionally does not copy scheduled/recurring 
  *    transactions.
@@ -117,8 +119,14 @@ GNCBook * gnc_book_close_period (GNCBook *, Timespec,
  *    are removed from one book's entity table and placed into the 
  *    other book:  Once moved, they won't be findable in the entity
  *    table of the old book.
+ * 
+ *    Known Bugs: 
+ *    When this routine copies accounts, it does not check to see
+ *    if they already exist in the 'dest' book; it should.  
+ *    For the current usage, this bug aint important, and I'm too 
+ *    lazy to fix it.
  */
-GNCBook * gnc_book_partition (GNCBook *, Query *);
+void gnc_book_partition (GNCBook *dest, GNCBook *src, Query *);
 
 /* The gnc_book_insert_trans() routine takes an existing transaction
  *    that is located in one book, and moves it to another book.

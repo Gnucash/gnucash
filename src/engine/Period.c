@@ -85,50 +85,53 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 
 /* ================================================================ */
 
-GNCBook * 
-gnc_book_partition (GNCBook *existing_book, Query *query)
+void 
+gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
 {
    time_t now;
    GList *split_list, *snode;
    GNCBook *partition_book;
    AccountGroup *part_topgrp;
 
-   if (!existing_book || !query) return NULL;
-
-   partition_book = gnc_book_new();
+   if (!src_book || !dest_book || !query) return;
 
    /* First, copy the book's KVP tree */
-   kvp_frame_delete (partition_book->kvp_data);
-   partition_book->kvp_data = kvp_frame_copy (existing_book->kvp_data);
+   /* hack alert -- FIXME -- this should really be a merge, not a
+    * clobber copy, but I am too lazy to write a kvp merge routine,
+    * and it is not needed for the current usage. */
+   kvp_frame_delete (dest_book->kvp_data);
+   dest_book->kvp_data = kvp_frame_copy (src_book->kvp_data);
 
    /* Next, copy all of the accounts */
-   xaccGroupCopyGroup (partition_book->topgroup, existing_book->topgroup);
+   /* hack alert -- FIXME -- this should really be a merge, not a
+    * clobber copy, but I am too lazy to write an account-group merge 
+    * routine, and it is not needed for the current usage. */
+   xaccAccountGroupBeginEdit (dest_book->topgroup);
+   xaccAccountGroupBeginEdit (src_book->topgroup);
+   xaccGroupCopyGroup (dest_book->topgroup, src_book->topgroup);
 
    /* Next, run the query */
-   xaccQuerySetGroup (query, existing_book->topgroup);
+   xaccQuerySetGroup (query, src_book->topgroup);
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
    /* And start moving transactions over */
-   xaccAccountGroupBeginEdit (partition_book->topgroup);
-   xaccAccountGroupBeginEdit (existing_book->topgroup);
    for (snode = split_list; snode; snode=snode->next)
    {
       GList *tnode;
       Split *s = snode->data;
       Transaction *trans = s->parent;
 
-      gnc_book_insert_trans (partition_book, trans);
+      gnc_book_insert_trans (dest_book, trans);
 
    }
-   xaccAccountGroupCommitEdit (existing_book->topgroup);
-   xaccAccountGroupCommitEdit (partition_book->topgroup);
+   xaccAccountGroupCommitEdit (src_book->topgroup);
+   xaccAccountGroupCommitEdit (dest_book->topgroup);
 
    /* make note of the sibling books */
    now = time(0);
-   gnc_kvp_gemini (existing_book->kvp_data, NULL, &partition_book->guid, now);
-   gnc_kvp_gemini (partition_book->kvp_data, NULL, &existing_book->guid, now);
+   gnc_kvp_gemini (src_book->kvp_data, NULL, &dest_book->guid, now);
+   gnc_kvp_gemini (dest_book->kvp_data, NULL, &src_book->guid, now);
 
-   return partition_book;
 }
 
 /* ================================================================ */
@@ -320,7 +323,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
                        const char * memo)
 {
    Query *query;
-   GNCBook *partition_book;
+   GNCBook *closing_book;
    kvp_frame *exist_cwd, *partn_cwd;
    kvp_value *vvv;
    Timespec ts;
@@ -333,14 +336,15 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
    xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
                                    TRUE, calve_date,
                                    QUERY_OR);
-   partition_book = gnc_book_partition (existing_book, query);
+   closing_book = gnc_book_new();
+   gnc_book_partition (closing_book, existing_book, query);
 
    xaccFreeQuery (query);
 
    /* Now add the various identifying kvp's */
    /* cwd == 'current working directory' */
    exist_cwd = kvp_frame_get_frame_slash (existing_book->kvp_data, "/book/");
-   partn_cwd = kvp_frame_get_frame_slash (partition_book->kvp_data, "/book/");
+   partn_cwd = kvp_frame_get_frame_slash (closing_book->kvp_data, "/book/");
    
    /* Mark the boundary date between the books */
    vvv = kvp_value_new_timespec (calve_date);
@@ -357,16 +361,16 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
    vvv = kvp_value_new_guid (&existing_book->guid);
    kvp_frame_set_slot_nc (partn_cwd, "next-book", vvv);
 
-   vvv = kvp_value_new_guid (&partition_book->guid);
+   vvv = kvp_value_new_guid (&closing_book->guid);
    kvp_frame_set_slot_nc (exist_cwd, "prev-book", vvv);
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */
-   add_closing_balances (gnc_book_get_group(partition_book), 
-                        existing_book, partition_book,
+   add_closing_balances (gnc_book_get_group(closing_book), 
+                        existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);
-   return partition_book;
+   return closing_book;
 }
 
 /* ============================= END OF FILE ====================== */
