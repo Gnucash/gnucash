@@ -951,20 +951,32 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
 /* walk account tree recursively, pulling out all the names */
 
 static void 
-LoadXferCell (ComboCell *cell,  AccountGroup *grp)
+LoadXferCell (ComboCell *cell,  
+              AccountGroup *grp,
+              char *base_currency)
 {
    Account * acc;
+   char * curr;
    int n;
 
    if (!grp) return;
 
-   /* build the xfer menu out of account names */
-   /* traverse sub-accounts recursively */
+   /* Build the xfer menu out of account names.
+    * Traverse sub-accounts recursively.
+    * Valid transfers can occur only between accounts
+    * with the same base currency.
+    */
    n = 0;
    acc = xaccGroupGetAccount (grp, n);
    while (acc) {
-      xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
-      LoadXferCell (cell, xaccAccountGetChildren (acc));
+      curr = xaccAccountGetCurrency (acc);
+      if ((!curr) && (!base_currency)) {
+         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      }
+      if (curr && base_currency && !strcmp (curr, base_currency)) {
+         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
+      }
+      LoadXferCell (cell, xaccAccountGetChildren (acc), base_currency);
       n++;
       acc = xaccGroupGetAccount (grp, n);
    }
@@ -972,10 +984,12 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
 
 /* ======================================================== */
 
-void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
+void xaccLoadXferCell (ComboCell *cell,  
+                       AccountGroup *grp, 
+                       char *base_currency)
 {
    xaccAddComboCellMenuItem (cell, "");
-   LoadXferCell (cell, grp);
+   LoadXferCell (cell, grp, base_currency);
 }
 
 /* =======================  end of file =================== */
