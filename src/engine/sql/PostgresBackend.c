@@ -1951,6 +1951,8 @@ pgend_session_end (Backend *bend)
 
    /* prevent further callbacks into backend */
    pgendDisable(be);
+   be->be.book_begin = NULL;
+   be->be.book_end = NULL;
 
    /* note the logoff time in the session directory */
    pgendSessionEnd (be);

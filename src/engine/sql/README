@@ -142,13 +142,21 @@ Core bugs/features that still need work:
 
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
 
--- single-update mode is asking to 'save' data  at end of session
-   fix this (again,  ...)
+-- clear up end/destroy semantics.  After book_end is called,
+   its not possible to start a new session, since there are
+   uninitialized pointers.  Unles to book is deleted immediately,
+   everything is hosed.  This is a generic backend design problem,
+   not just an sql bckend problem, that needs fixing.
+
+-- single-update mode pops up a gui dialog to user asking them
+   to save the data at the end of the sessino. But we've already done
+   this.  So something is marking teh data 'not saved'. 
+   fix this (again  ...)
 
 -- allow user to enter URL in GUI dialog, get GUI to remember the URL 
 
--- Implement GUI to ask user for username/password to log onto the
-   server. 
+-- Wire in the GUI to ask user for username/password to log onto the
+   server.  (GUI already implemented, just not yet used).
 
 -- add support for rlb's price db
 
