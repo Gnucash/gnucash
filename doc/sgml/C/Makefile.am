@@ -1,4 +1,4 @@
-SUBDIRS = 
+#SUBDIRS = 
 
 gnucash_helpdir = $(GNC_HELPDIR)/C
 
