@@ -286,7 +286,6 @@ void
 xaccAccountCommitEdit (Account *acc) 
 {
   Backend * be;
-  int rc;
 
   if (!acc) return;
 
@@ -342,16 +341,23 @@ xaccAccountCommitEdit (Account *acc)
   be = xaccAccountGetBackend (acc);
   if (be && be->account_commit_edit) 
   {
-    rc = (be->account_commit_edit) (be, acc);
-    /* hack alert -- we really really should be checking 
-     * for errors returned by the back end ... */
-    if (rc)
+    GNCBackendError errcode;
+
+    /* clear errors */
+    do {
+      errcode = xaccBackendGetError (be);
+    } while (ERR_BACKEND_NO_ERR != errcode);
+
+    (be->account_commit_edit) (be, acc);
+    errcode = xaccBackendGetError (be);
+
+    if (ERR_BACKEND_NO_ERR != errcode)
     {
       /* destroys must be rolled back as well ... ??? */
       acc->do_free = FALSE;
       /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
-            " handled yet. Return code=%d", rc);
+            " handled yet. Return code=%d", errcode);
     }
   }
   acc->core_dirty = FALSE;

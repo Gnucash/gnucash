@@ -1449,24 +1449,30 @@ xaccTransCommitEdit (Transaction *trans)
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_commit_edit) 
    {
-      int rc = 0;
-      rc = (be->trans_commit_edit) (be, trans, trans->orig);
+      GNCBackendError errcode;
 
-      if (rc) {
+      /* clear errors */
+      do {
+        errcode = xaccBackendGetError (be);
+      } while (ERR_BACKEND_NO_ERR != errcode);
+
+      (be->trans_commit_edit) (be, trans, trans->orig);
+
+      errcode = xaccBackendGetError (be);
+      if (ERR_BACKEND_NO_ERR != errcode)
+      {
          /* if the backend puked, then we must roll-back 
           * at this point, and let the user know that we failed.
           */
         /* XXX hack alert -- turn this into a gui dialog */
-        PWARN("Another user has modified this transaction\n"
-              "\tjust a moment ago.  Please look at thier changes,\n"
-              "\t and try again, if needed.\n"
-              "\t(This dialog should be a gui dialog and \n"
-              "\tshould check for errors)\n"
-              "\t rc=%d\n", rc);
-        /* hack alert -- we should check for i/o errors from 
-         * the backend too ... since an i/o error is not a true 
-         * rollback.  what to do ...
-         */
+        if (ERR_BACKEND_MODIFIED == errcode)
+        {
+           PWARN("Another user has modified this transaction\n"
+                 "\tjust a moment ago.  Please look at thier changes,\n"
+                 "\t and try again, if needed.\n"
+                 "\t(This dialog should be a gui dialog and \n"
+                 "\tshould check for errors)\n");
+        }
         trans->editlevel++;
         xaccTransRollbackEdit (trans);
         return;
@@ -1670,10 +1676,17 @@ xaccTransRollbackEdit (Transaction *trans)
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_rollback_edit) 
    {
-      int rc = 0;
-      rc = (be->trans_rollback_edit) (be, trans);
+      GNCBackendError errcode;
 
-      if (BACKEND_ROLLBACK_DESTROY == rc)
+      /* clear errors */
+      do {
+        errcode = xaccBackendGetError (be);
+      } while (ERR_BACKEND_NO_ERR != errcode);
+
+      (be->trans_rollback_edit) (be, trans);
+
+      errcode = xaccBackendGetError (be);
+      if (ERR_BACKEND_MOD_DESTROY == errcode)
       {
          /* The backend is asking us to delete this transaction.
           * This typically happens because another (remote) user
@@ -1686,7 +1699,8 @@ xaccTransRollbackEdit (Transaction *trans)
          LEAVE ("deleted trans addr=%p\n", trans);
          return;
       }
-      if (rc) {
+      if (ERR_BACKEND_NO_ERR != errcode) 
+      {
 	PERR ("Rollback Failed.  Ouch!");
       }
    }
