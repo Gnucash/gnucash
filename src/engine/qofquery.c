@@ -284,7 +284,6 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   QofAccessFunc get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
-  g_return_val_if_fail (default_sort, 0);
 
   /* See if this is a default sort */
   if (sort->use_default) 
@@ -763,9 +762,13 @@ GList * qof_query_run (QofQuery *q)
    * sortQuery is an unforgivable use of static global data...  
    * I just can't figure out how else to do this sanely.
    */
-  sortQuery = q;
-  matching_objects = g_list_sort(matching_objects, sort_func);
-  sortQuery = NULL;
+  if (q->primary_sort.comp_fcn || q->primary_sort.obj_cmp ||
+      (q->primary_sort.use_default && q->defaultSort))
+  {
+    sortQuery = q;
+    matching_objects = g_list_sort(matching_objects, sort_func);
+    sortQuery = NULL;
+  }
 
   /* Crop the list to limit the number of splits. */
   if((object_count > q->max_results) && (q->max_results > -1)) 
