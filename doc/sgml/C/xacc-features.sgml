@@ -78,7 +78,7 @@
       </listitem>
       
       <listitem>
-	<para><emphasis><link linkend="qif">Quicken File Import</link>.</emphasis> 
+	<para><emphasis><link linkend="XACC-QIF-IMPORT">Quicken File Import</link>.</emphasis> 
 	</para>
 	<para>Imports Quicken-style QIF files.  The import wizard automatically
 	  merges duplicate transactions.
