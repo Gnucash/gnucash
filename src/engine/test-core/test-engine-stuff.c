@@ -572,6 +572,9 @@ change_trans_helper (GNCSession *session, Transaction *trans, GList *accounts)
   switch (get_random_int_in_range (0, 3))
   {
     case 0: /* delete some splits, add some more */
+      if (xaccTransGetVoidStatus (trans))
+        break;
+
       do
       {
         split = xaccTransGetSplit (trans, 0);
@@ -584,6 +587,9 @@ change_trans_helper (GNCSession *session, Transaction *trans, GList *accounts)
       /* fall through */
 
     case 1: /* move the splits around */
+      if (xaccTransGetVoidStatus (trans))
+        break;
+
       splits = xaccTransGetSplitList (trans);
       for (node = splits; node; node = node->next)
       {
@@ -603,6 +609,12 @@ change_trans_helper (GNCSession *session, Transaction *trans, GList *accounts)
 
     default: /* do nothing */
       break;
+  }
+
+  if (xaccTransGetVoidStatus (trans))
+  {
+    xaccTransCommitEdit (trans);
+    return;
   }
 
   /* mess with the splits */
@@ -826,7 +838,8 @@ set_split_random_string(Split *spl,
     }
 }
 
-static char possible_chars[] = { 'c', 'y', 'f', 'n', 'v' };
+/* Don't do voiding here, it should be done by xaccTransVoid */
+static char possible_chars[] = { 'c', 'y', 'f', 'n' };
 
 Split*
 get_random_split(GNCSession *session, gnc_numeric num)
@@ -839,7 +852,7 @@ get_random_split(GNCSession *session, gnc_numeric num)
     set_split_random_string(ret, xaccSplitSetMemo);
     set_split_random_string(ret, xaccSplitSetAction);
 
-    xaccSplitSetReconcile(ret, possible_chars[get_random_int_in_range(0, 4)]);
+    xaccSplitSetReconcile(ret, possible_chars[get_random_int_in_range(0, 3)]);
 
     xaccSplitSetDateReconciledTS(ret, get_random_timespec());
 
@@ -945,8 +958,15 @@ get_random_transaction_with_currency(GNCSession *session,
 
     add_random_splits(session, ret);
 
+    if (get_random_int_in_range (1, 10) == 1)
+    {
+      char *reason = get_random_string ();
+      xaccTransVoid (ret, reason);
+      g_free (reason);
+    }
+
     xaccTransCommitEdit(ret);
-    
+
     return ret;
 }
 
@@ -963,6 +983,9 @@ make_random_changes_to_transaction (GNCSession *session, Transaction *trans)
   GList *node;
 
   g_return_if_fail (trans && session);
+
+  if (xaccTransGetVoidStatus (trans))
+    return;
 
   xaccTransBeginEdit (trans);
 
