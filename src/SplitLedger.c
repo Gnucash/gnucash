@@ -2350,7 +2350,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
      xaccTransSetDateEnteredSecs(trans, time(NULL));
    }
 
-   if (split == NULL) {
+   if (split == NULL)
+   {
      /* If we were asked to save data for a row for which there is no
       * associated split, then assume that this was a row that was
       * set aside for adding splits to an existing transaction.

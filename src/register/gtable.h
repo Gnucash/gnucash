@@ -57,4 +57,10 @@ gpointer g_table_index (GTable *gtable, int row, int col);
  * first. */
 void     g_table_resize (GTable *gtable, int rows, int cols);
 
+/* Return the number of table rows. */
+int      g_table_rows (GTable *gtable);
+
+/* Return the number of table columns. */
+int      g_table_cols (GTable *gtable);
+
 #endif

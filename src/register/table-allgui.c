@@ -332,9 +332,8 @@ gnc_table_set_size (Table * table, int virt_rows, int virt_cols)
 {
   /* Invalidate the current cursor position, if the array is
    * shrinking. This must be done since the table is probably
-   * shrinking because some rows were deleted, and there's a pretty
-   * good chance (100% with current design) that the cursor is
-   * located on the deleted rows. */
+   * shrinking because some rows were deleted, and the cursor
+   * could be on the deleted rows. */
   if ((virt_rows < table->num_virt_rows) ||
       (virt_cols < table->num_virt_cols))
   {

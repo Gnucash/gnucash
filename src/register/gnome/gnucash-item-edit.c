@@ -1047,6 +1047,8 @@ item_edit_show_list (ItemEdit *item_edit)
         gint list_x, list_y;
         gint list_height;
         gint view_height;
+        gint up_height;
+        gint down_height;
 
         g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
@@ -1060,15 +1062,22 @@ item_edit_show_list (ItemEdit *item_edit)
         item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
 	list_x = x;
-	list_y = y + h;
-	list_height = h * 6;
 
-	if ((list_y - y_offset) + list_height > view_height) {
+        up_height = y - y_offset;
+        down_height = view_height - (up_height + h);
+
+	if (up_height > down_height) {
 		list_y = y;
 		list_anchor = GTK_ANCHOR_SW;
+                list_height = up_height;
 	}
-	else
+	else {
+                list_y = y + h;
 		list_anchor = GTK_ANCHOR_NW;
+                list_height = down_height;
+        }
+
+        list_height = (list_height / h) * h;
 
         gnc_item_list_autosize(item_edit->item_list);
 

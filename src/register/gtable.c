@@ -140,3 +140,21 @@ g_table_resize (GTable *gtable, int rows, int cols)
   gtable->rows = rows;
   gtable->cols = cols;
 }
+
+int
+g_table_rows (GTable *gtable)
+{
+  if (gtable == NULL)
+    return 0;
+
+  return gtable->rows;
+}
+
+int
+g_table_cols (GTable *gtable)
+{
+  if (gtable == NULL)
+    return 0;
+
+  return gtable->cols;
+}
