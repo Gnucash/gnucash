@@ -811,7 +811,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    /* at this point, we should see an end-of-transaction marker
     * if we see something else, assume the worst, free the last 
     * transaction, and return */
-   if ('!' == qifline[0]) {
+   if (!qifline || ('!' == qifline[0])) {
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
       return qifline;
