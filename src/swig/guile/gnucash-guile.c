@@ -7,7 +7,7 @@
 static void
 guile_entry_point(int argc, char *argv[]) {
   char *input;
-  gnucash_swig_init();
+  // gnucash_swig_init();
   
   input = readline("gnucash> ");
   while(input) {
