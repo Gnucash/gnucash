@@ -124,6 +124,7 @@ Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Keld Simonsen <keld@dkuug.dk> Danish translation
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
+Ben Stanley <bds02@uow.edu.au> test infrastructure
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
 Christian Stimming <stimming@uclink.berkeley.edu> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
