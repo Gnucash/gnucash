@@ -23,7 +23,7 @@
 /** @file Scrub.h
  *
  * Provides a set of functions and utilities for checking and
- * repairing (formerly called 'scrubbing') clean single-entry accounts
+ * repairing (formerly called 'scrubbing clean') single-entry accounts
  * so that they can be promoted into self-consistent, clean
  * double-entry accounts. Basically and additionally, this file
  * collects all functions that turn old (deprecated) data structures
@@ -31,7 +31,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 1998, 1999, 2000 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_SCRUB_H
