@@ -288,6 +288,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 
         if ( sxList == NULL ) {
                 DEBUG( "No scheduled transactions to populate." );
+                return;
         }
 
         do {

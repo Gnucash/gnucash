@@ -564,12 +564,27 @@ write_transactions(FILE *out, GNCBook *book)
 static void
 write_template_transaction_data( FILE *out, GNCBook *book )
 {
-        fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-        write_account_group( out, gnc_book_get_template_group(book) );
-        xaccGroupForEachTransaction( gnc_book_get_template_group(book),
-                                     xml_add_trn_data,
-                                     (gpointer)out );
-        fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
+        AccountGroup *ag;
+        GList *gl;
+        gboolean hasTemplateTransactionData = FALSE;
+
+        ag = gnc_book_get_template_group(book);
+        gl = xaccGroupGetSubAccounts( ag );
+        while ( !hasTemplateTransactionData &&
+                (gl != NULL) ) {
+                hasTemplateTransactionData |=
+                        (xaccAccountGetSplitList( (Account*)gl->data ) != NULL);
+                gl = gl->next;
+        }
+
+        if ( hasTemplateTransactionData ) {
+                fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
+                write_account_group( out, gnc_book_get_template_group(book) );
+                xaccGroupForEachTransaction( ag,
+                                             xml_add_trn_data,
+                                             (gpointer)out );
+                fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
+        }
 }
 
 static void
