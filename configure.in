@@ -14,9 +14,6 @@ AC_ARG_ENABLE( debug,
 AC_DEFINE(USE_QUICKFILL,1)
 # USE_NO_COLOR ???  for now:
 AC_DEFINE(USE_NO_COLOR,0)
-# use the new XmHTML instead of the old htmlw
-AC_DEFINE(USE_HTMLW,0)
-AC_DEFINE(USE_XMHTML,1)
 
 AC_SUBST(cflags)
 AC_SUBST(lflags)
@@ -41,7 +38,29 @@ AC_PATH_X
 AC_PATH_XTRA
 AC_SUBST(x_includes)
 AC_SUBST(x_libraries)
-LIBS="-lXm -lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+
+
+# the XmHTML widget needs libz, libjpeg, libpng and libm
+LIBS="-lm"
+
+AC_CHECK_LIB(z, deflateEnd,
+        AC_DEFINE(HAVE_Z,1) LIBS="-lz $LIBS",
+        AC_DEFINE(HAVE_Z,0))
+AC_SUBST(LIBS)
+
+AC_CHECK_LIB(jpeg, jpeg_read_scanlines,
+        AC_DEFINE(HAVE_JPEG,1) LIBS="-ljpeg $LIBS",
+        AC_DEFINE(HAVE_JPEG,0))
+AC_SUBST(LIBS)
+
+AC_CHECK_LIB(png, png_read_image,
+        AC_DEFINE(HAVE_PNG,1) LIBS="-lpng $LIBS",
+        AC_DEFINE(HAVE_PNG,0))
+AC_SUBST(LIBS)
+
+LIBS="-lXm -lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $LIBS"
+AC_SUBST(LIBS)
+
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) LIBS="-lXpm $LIBS",
         AC_DEFINE(HAVE_XPM,0), -L $x_libraries)
