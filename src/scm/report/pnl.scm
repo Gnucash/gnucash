@@ -203,7 +203,7 @@
         
         (gnc:html-document-add-object!
          doc 
-	 (gnc:html-make-no-account-warning-link 
+	 (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
 
     doc))

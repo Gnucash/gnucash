@@ -685,10 +685,7 @@
     
     table))
 
-(define (gnc:html-make-no-account-warning report-title-string)
-  (gnc:html-make-no-account-warning-link report-title-string #f))
-
-(define (gnc:html-make-no-account-warning-link
+(define (gnc:html-make-no-account-warning
 	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 
@@ -708,10 +705,7 @@
 	   (_ "Edit report options")))))
     p))
 
-(define (gnc:html-make-empty-data-warning report-title-string)
-  (gnc:html-make-empty-data-warning-link report-title-string #f))
-
-(define (gnc:html-make-empty-data-warning-link 
+(define (gnc:html-make-empty-data-warning 
 	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))
     (gnc:html-text-append! 

@@ -224,7 +224,7 @@
                                         ;if no accounts selected.
         (gnc:html-document-add-object!
          document 
-	 (gnc:html-make-no-account-warning-link 
+	 (gnc:html-make-no-account-warning 
 	  report-title (gnc:report-id report-obj))))
     
     document))

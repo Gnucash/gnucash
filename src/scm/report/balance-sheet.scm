@@ -356,7 +356,7 @@
         
         (gnc:html-document-add-object! 
          doc 
-         (gnc:html-make-no-account-warning-link 
+         (gnc:html-make-no-account-warning 
 	  (_ "Balance Sheet") (gnc:report-id report-obj))))
 
     doc))
