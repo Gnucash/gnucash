@@ -196,10 +196,9 @@ configLayout (SplitRegister *reg)
    for (i=0; i<reg->num_cols; i++) {
       reg->split_cursor->cells[0][i] = reg->nullCell;
       reg->trans_cursor->cells[0][i] = reg->nullCell;
-      reg->lead_cursor->cells[0][i] = reg->nullCell;
-      if (2 == reg->lead_cursor->numRows) {
-         reg->lead_cursor->cells[1][i] = reg->nullCell;
-      }
+      reg->single_cursor->cells[0][i] = reg->nullCell;
+      reg->double_cursor->cells[0][i] = reg->nullCell;
+      reg->double_cursor->cells[1][i] = reg->nullCell;
    }
 
    /* define header for macros */
@@ -219,20 +218,33 @@ configLayout (SplitRegister *reg)
       case GENERAL_LEDGER:    /* hack alert do xto cell too */
 
          /* basic common 8 column config */
-         curs = reg->lead_cursor;
-         FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
-         FANCY (DESC,   desc,     3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
-         FANCY (BALN,   balance,  7,  0);
+         if ((REG_SINGLE_LINE == style) ||
+             (REG_SINGLE_DYNAMIC == style)) 
+         {
+            curs = reg->single_cursor;
+            FANCY (DATE,   date,     0,  0);
+            BASIC (NUM,    num,      1,  0);
+            FANCY (XFRM,   xfrm,     2,  0);
+            FANCY (DESC,   desc,     3,  0);
+            BASIC (RECN,   recn,     4,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
+            FANCY (BALN,   balance,  7,  0);
+         }
 
-         /* prep the second row of the double style */
          if ((REG_DOUBLE_LINE == style) ||
              (REG_DOUBLE_DYNAMIC == style)) 
          {
+            curs = reg->double_cursor;
+            FANCY (DATE,   date,     0,  0);
+            BASIC (NUM,    num,      1,  0);
+            FANCY (XFRM,   xfrm,     2,  0);
+            FANCY (DESC,   desc,     3,  0);
+            BASIC (RECN,   recn,     4,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
+            FANCY (BALN,   balance,  7,  0);
+   
             FANCY (ACTN,   action,   1,  1);
             FANCY (XFRM,   xfrm,     2,  1);
             BASIC (MEMO,   memo,     3,  1);
@@ -261,23 +273,40 @@ configLayout (SplitRegister *reg)
       case STOCK_REGISTER:
       case PORTFOLIO:
          /* 11 column config */
-         curs = reg->lead_cursor;
-         FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
-         FANCY (DESC,   desc,     3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
-         FANCY (PRIC,   price,    7,  0);
-         FANCY (VALU,   value,    8,  0);
-         FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
+         if ((REG_SINGLE_LINE == style) ||
+             (REG_SINGLE_DYNAMIC == style)) 
+         {
+            curs = reg->single_cursor;
+            FANCY (DATE,   date,     0,  0);
+            BASIC (NUM,    num,      1,  0);
+            FANCY (XFRM,   xfrm,     2,  0);
+            FANCY (DESC,   desc,     3,  0);
+            BASIC (RECN,   recn,     4,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
+            FANCY (PRIC,   price,    7,  0);
+            FANCY (VALU,   value,    8,  0);
+            FANCY (SHRS,   shrs,     9,  0);
+            FANCY (BALN,   balance,  10, 0);
+         }
 
          /* prep the second row of the double style */
          if ((REG_DOUBLE_LINE == style) ||
              (REG_DOUBLE_DYNAMIC == style)) 
          {
+            curs = reg->double_cursor;
+            FANCY (DATE,   date,     0,  0);
+            BASIC (NUM,    num,      1,  0);
+            FANCY (XFRM,   xfrm,     2,  0);
+            FANCY (DESC,   desc,     3,  0);
+            BASIC (RECN,   recn,     4,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
+            FANCY (PRIC,   price,    7,  0);
+            FANCY (VALU,   value,    8,  0);
+            FANCY (SHRS,   shrs,     9,  0);
+            FANCY (BALN,   balance,  10, 0);
+
             FANCY (ACTN,   action,   1,  1);
             FANCY (XFRM,   xfrm,     2,  1);
             BASIC (MEMO,   memo,     3,  1);
@@ -337,7 +366,7 @@ configTraverse (SplitRegister *reg)
    int prev_r, prev_c;
    CellBlock *curs = NULL;
 
-   curs = reg->lead_cursor;
+   curs = reg->single_cursor;
    FIRST_RIGHT (0, 0);  /* a bit of a hack ... */
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
@@ -479,8 +508,11 @@ configCursors (SplitRegister *reg)
    /* set the color of the cells in the cursors */
    /* hack alert -- the actual color should depend on the 
     * type of register. */
-   reg->lead_cursor->active_bg_color = 0xffdddd; /* pale red */
-   reg->lead_cursor->passive_bg_color = 0xccccff; /* pale blue */
+   reg->single_cursor->active_bg_color = 0xffdddd; /* pale red */
+   reg->single_cursor->passive_bg_color = 0xccccff; /* pale blue */
+
+   reg->double_cursor->active_bg_color = 0xffdddd; /* pale red */
+   reg->double_cursor->passive_bg_color = 0xccccff; /* pale blue */
 
    reg->trans_cursor->active_bg_color = 0xffdddd; /* pale red */
    reg->trans_cursor->passive_bg_color = 0xccccff; /* pale blue */
@@ -496,7 +528,6 @@ static void
 mallocCursors (SplitRegister *reg)
 {
    int type = (reg->type) & REG_TYPE_MASK;
-   int style = (reg->type) & REG_STYLE_MASK;
 
    switch (type) {
       case BANK_REGISTER:
@@ -524,19 +555,9 @@ mallocCursors (SplitRegister *reg)
    reg->num_header_rows = 1;
    reg->header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
 
-   switch (style) {
-      case REG_DOUBLE_LINE:
-      case REG_DOUBLE_DYNAMIC:
-         reg->lead_cursor = xaccMallocCellBlock (2, reg->num_cols);
-         break;
-
-      case REG_SINGLE_LINE:
-      case REG_SINGLE_DYNAMIC:
-      case REG_MULTI_LINE:
-      default:
-         reg->lead_cursor = xaccMallocCellBlock (1, reg->num_cols);
-         break;
-   }
+   /* cursors used in the single & double line displays */
+   reg->single_cursor = xaccMallocCellBlock (1, reg->num_cols);
+   reg->double_cursor = xaccMallocCellBlock (2, reg->num_cols);
 
    /* the two cursors used for multi-line and dynamic displays */
    reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
@@ -730,11 +751,13 @@ xaccDestroySplitRegister (SplitRegister *reg)
    reg->table = NULL;
 
    xaccDestroyCellBlock (reg->header);
-   xaccDestroyCellBlock (reg->lead_cursor);
+   xaccDestroyCellBlock (reg->single_cursor);
+   xaccDestroyCellBlock (reg->double_cursor);
    xaccDestroyCellBlock (reg->trans_cursor);
    xaccDestroyCellBlock (reg->split_cursor);
    reg->header = NULL;
-   reg->lead_cursor = NULL;
+   reg->single_cursor = NULL;
+   reg->double_cursor = NULL;
    reg->trans_cursor = NULL;
    reg->split_cursor = NULL;
 

@@ -116,7 +116,8 @@ struct _SplitRegister {
    Table         * table;
 
    /* the cursors that define the currently edited row */
-   CellBlock     * lead_cursor;
+   CellBlock     * single_cursor;
+   CellBlock     * double_cursor;
    CellBlock     * trans_cursor;
    CellBlock     * split_cursor;
    CellBlock     * header;
