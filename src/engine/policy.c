@@ -22,7 +22,7 @@
 /** @file policy.c
  *  @breif Implement FIFO Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
  *  This file implements the FIFO Accounting Policy (and, in the 
  *  future, others as well).  The Accounting Polciy determines 

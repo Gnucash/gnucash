@@ -31,7 +31,7 @@
 /** @file policy.h
  *  @brief Implement Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_POLICY_H 
@@ -39,10 +39,25 @@
 
 typedef struct gncpolicy_s GNCPolicy;
 
-/** First-in, First-out Policy */
+/** First-in, First-out Policy 
+ *  This policy will create FIFO Lots.  FIFO Lots have the following
+ *  properties:
+ *  -- The lot is started with the earliest posted split that isn't
+ *     a part of another lot already.
+ *  -- Splits are added to the lot in date order, with earliest splits
+ *     added first.
+ *  -- All splits in the lot share the same transaction currency as
+ *     the split that opened the lot.
+ */
 GNCPolicy *xaccGetFIFOPolicy (void); 
 
-/** Last-in, First-out Policy */
+/** Last-in, First-out Policy
+ *  This policy will create LIFO Lots.  LIFO Lots have the following
+ *  properties:
+ *  -- XXX  I think the implementation is broken right now.
+ *  -- All splits in the lot share the same transaction currency as
+ *     the split that opened the lot.
+ */
 GNCPolicy *xaccGetLIFOPolicy (void); 
 
 #endif /* XACC_POLICY_H */
