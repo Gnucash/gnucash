@@ -1,5 +1,10 @@
 2001-05-30  Dave Peticolas  <dave@krondo.com>
 
+	* src/test/Makefile.am: add missing link lib
+
+	* src/engine/sixtp.c: include sys/types.h for ssize_t under
+	freebsd
+
 	* src/engine/sixtp-utils.c (timespec_secs_to_given_string): use
 	gnc_timezone
 

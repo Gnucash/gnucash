@@ -27,6 +27,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <sys/types.h>
 
 #include "sixtp.h"
 #include "sixtp-stack.h"
