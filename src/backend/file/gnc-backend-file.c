@@ -119,7 +119,7 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
             return;
         }
         rc = stat (be->fullpath, &statbuf);
-        if (rc != 0 || S_ISDIR(statbuf.st_mode))
+        if (rc == 0 && S_ISDIR(statbuf.st_mode))
         {
             xaccBackendSetError (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
             g_free (be->fullpath); be->fullpath = NULL;
