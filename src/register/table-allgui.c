@@ -31,11 +31,15 @@
 
 #include "cellblock.h"
 #include "table-allgui.h"
+#include "util.h"
 
 static void xaccFreeTableEntries (Table * table);
 static void xaccTableResize (Table * table,
                  int new_phys_rows, int new_phys_cols,
                  int new_virt_rows, int new_virt_cols);
+
+/* This static indicates the debugging module that this .o belongs to. */
+static short module = MOD_REGISTER;
 
 /* ==================================================== */
 
@@ -576,6 +580,8 @@ void xaccCommitCursor (Table *table)
          if (cell) {
             int iphys = i + phys_row_origin;
             int jphys = j + phys_col_origin;
+            PINFO ("xaccCommitCursor(): rowcol (%d,%d) oldval=%s newval=%s\n",
+               iphys, jphys, table->entries[iphys][jphys], cell->value);
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
             }
@@ -735,6 +741,8 @@ xaccRefreshCursorGUI (Table * table)
       table->current_cursor_phys_row,
       table->current_cursor_phys_col);
 }
+
+/* ==================================================== */
 
 int
 gnc_register_cell_valid(Table *table, const int row, const int col) {

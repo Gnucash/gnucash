@@ -110,7 +110,8 @@ xaccInitPriceCell (PriceCell *cell)
    xaccInitBasicCell( &(cell->cell));
    cell->amount = 0.0;
    cell->blank_zero = 1;
-   cell->prt_format = strdup ("%.2f");
+   // cell->prt_format = strdup ("%.2f");
+   cell->prt_format = strdup ("%m");
 
    SET ( &(cell->cell), "");
 
@@ -144,8 +145,8 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
 
       /* check for monetary-style format not natively supported by printf */
       /* hack alert -- this type of extended function should be abstracted
-       * out to a gnc_sprintf type function, however, thjis is much easier said
-       * than done */
+       * out to a gnc_sprintf type function, however, this is much
+       * easier said than done */
       monet = strstr (cell->prt_format, "%m");
       if (monet) {
          char tmpfmt[PRTBUF];
@@ -182,7 +183,6 @@ void xaccSetPriceCellFormat (PriceCell * cell, char * fmt)
 void xaccSetDebCredCellValue (PriceCell * deb, 
                               PriceCell * cred, double amt)
 {
-   char buff[PRTBUF];
    deb->amount = -amt;
    cred->amount = amt;
 
@@ -194,13 +194,11 @@ void xaccSetDebCredCellValue (PriceCell * deb,
       SET ( &(deb->cell), "");
    } else
    if (0.0 < amt) {
-      snprintf (buff, PRTBUF, cred->prt_format, amt);
-      SET ( &(cred->cell), buff);
+      xaccSetPriceCellValue (cred, amt);
       SET ( &(deb->cell), "");
    } else {
-      snprintf (buff, PRTBUF, deb->prt_format, -amt);
       SET ( &(cred->cell), "");
-      SET ( &(deb->cell), buff);
+      xaccSetPriceCellValue (deb, -amt);
    }
 }
 

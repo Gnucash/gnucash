@@ -182,8 +182,9 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-   PINFO("enterCB(): enter %d %d (relrow=%d relcol=%d) cell=%p\n", 
-      row, col, rel_row, rel_col, arr->cells[rel_row][rel_col]);
+   PINFO("enterCB(): enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+      row, col, rel_row, rel_col, 
+      arr->cells[rel_row][rel_col], table->entries[row][col]);
 
    /* since we are here, there must be a cell handler.
     * therefore, we accept entry into the cell by default, 
@@ -307,6 +308,10 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
       table->entries[row][col] = newval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
    }
+   PINFO("modifyCB(): updated %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+      row, col, rel_row, rel_col, 
+      arr->cells[rel_row][rel_col], table->entries[row][col]);
+
 }
 
 /* ==================================================== */
