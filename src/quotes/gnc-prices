@@ -42,6 +42,38 @@ sub account_flatlist
 }
 
 # --------------------------------------------------
+# &checkprice ($account, $date);
+# This routine checks to see if the account has already stored a
+# price for this day, returning 1 if yes otherwise 0/undefined.
+
+sub checkprice
+{
+   local ($acct)  = $_[0];
+   local ($dayte) = $_[1];
+   local ($query, $datesecs, $earliest, $latest);
+   local ($splitlist, $i, $split, $action);
+
+   $datesecs = gnucash::xaccScanDateS ($dayte);
+   $earliest = $datesecs - 16*3600;        # subtract 16 hours
+   $latest = $datesecs + 16*3600;          # add 16 hours
+   $query = gnucash::xaccMallocQuery();
+   gnucash::xaccQueryAddAccount ($query, $acct);
+   gnucash::xaccQuerySetDateRange ($query, $earliest, $latest);
+   $splitlist = gnucash::xaccQueryGetSplits ($query);
+
+   $i=0;
+   $split = gnucash::IthSplit ($splitlist, $i);
+   while ($split) {
+      $action = gnucash::xaccSplitGetAction ($split);
+      if ($action eq "Price") { return 1; }
+      $i++;
+      $split = gnucash::IthSplit ($splitlist, $i);
+   }
+   gnucash::xaccFreeQuery ($query);
+   0;
+}
+
+# --------------------------------------------------
 # &setprice ($account, $date, $price);
 # This routine stores the indicated price in the indicated account.
 # Handy little utility avoids the usual hassle.
@@ -51,6 +83,7 @@ sub setprice
    local ($acct)  = $_[0];
    local ($dayte) = $_[1];
    local ($price) = $_[2];
+   local ($trans, $split);
 
    $trans = gnucash::xaccMallocTransaction();
    gnucash::xaccTransBeginEdit ($trans, 1);
@@ -65,6 +98,7 @@ sub setprice
    gnucash::xaccAccountBeginEdit ($acct, 1);
    gnucash::xaccAccountInsertSplit ($acct, $split);
    gnucash::xaccAccountCommitEdit ($acct);
+   1;
 }
 
 # --------------------------------------------------
@@ -117,7 +151,9 @@ foreach $acct (@acctlist) {
          $prodname = $quotes {$security, "name"};
          if ($price) {
             print "Info: $security $prodname last price = $price at $dayte\n";
-            &setprice ($acct, $dayte, $price);
+            # This || construction will store the price if its not already 
+            # stored (in the 28 hour period surrounding "dayte")
+            &checkprice ($acct, $dayte) || &setprice ($acct, $dayte, $price);
          }
          print "\n";
       }
