@@ -1,3 +1,8 @@
+2001-06-13  Bill Gribble  <grib@billgribble.com>
+
+	* src/sc/qif-import/qif-guess-map.scm: fix bug in 
+	account name guessing 
+
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-price-editor.c: fix bug

@@ -329,8 +329,9 @@
    ;; the QIF name is a substring of the gnc full name.  
    ;; this happens if you have the same tree but a different 
    ;; top-level structure. (i.e. expenses:tax vs. QIF tax)
-   (string-match (string-downcase qif-acct-name) 
-                 (string-downcase (cadr gnc-acct)))))
+   (and (> (string-length qif-acct-name) 0)
+        (string-match (string-downcase qif-acct-name) 
+                      (string-downcase (cadr gnc-acct))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
