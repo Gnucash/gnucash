@@ -111,25 +111,25 @@
 
   (gw:wrap-function
    mod
-   'gnc:ui-init
-   '<gw:void>
-   "gnucash_ui_init"
-   '()
-   "Initialize the lower level ui parts.")
+   'gnc:gui-init
+   '<gw:scm>
+   "gnc_gui_init"
+   '((<gw:scm> command-line))
+   "Initialize the lower level ui parts. Returns remaining command line.")
 
   (gw:wrap-function
    mod
-   'gnc:ui-shutdown
+   'gnc:gui-shutdown
    '<gw:void>
-   "gnc_ui_shutdown"
+   "gnc_gui_shutdown"
    '()
    "Shutdown the UI.")
 
   (gw:wrap-function
    mod
-   'gnc:ui-destroy
+   'gnc:gui-destroy
    '<gw:void>
-   "gnc_ui_destroy"
+   "gnc_gui_destroy"
    '()
    "Destroy the UI.")
 

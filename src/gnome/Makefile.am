@@ -23,7 +23,6 @@ libgw_gnc_la_LDFLAGS = -module \
 libgw_gnc_la_LIBADD =
 
 libgncgnome_la_SOURCES = \
-  argv-list-converters.c \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
@@ -64,7 +63,6 @@ mimedir = $(datadir)/mime-info
 mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
-  argv-list-converters.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
@@ -155,6 +153,7 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
 	FLAVOR=gnome guile -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (set! %load-path (cons \"../engine\" %load-path)) \
+           (set! %load-path (cons \"../app-utils\" %load-path)) \
            (set! %load-path (cons \"../gnome-utils\" %load-path)) \
            (set! %load-path (cons \"../report/report-gnome\" %load-path)) \
            (primitive-load \"./gw-gnc-spec.scm\") \

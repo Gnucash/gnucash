@@ -24,16 +24,17 @@
 #define TOP_LEVEL_H
 
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "window-main.h"
 
-gboolean      gnucash_ui_is_running(void);
-gboolean      gnucash_ui_is_terminating(void);
-int           gnucash_ui_init(void);
-void          gnc_ui_shutdown(void);
-void          gnc_ui_destroy(void);
-int           gnc_ui_start_event_loop(void);
-gboolean      gnc_reverse_balance_type(GNCAccountType type);
-gboolean      gnc_reverse_balance(Account *account);
+gboolean      gnucash_ui_is_running (void);
+gboolean      gnucash_ui_is_terminating (void);
+SCM           gnc_gui_init (SCM command_line);
+void          gnc_gui_shutdown (void);
+void          gnc_gui_destroy (void);
+int           gnc_ui_start_event_loop (void);
+gboolean      gnc_reverse_balance_type (GNCAccountType type);
+gboolean      gnc_reverse_balance (Account *account);
 
 #endif

@@ -28,15 +28,11 @@
 #include <guile/gh.h>
 #include <popt.h>
 #include <stdlib.h>
-#ifdef GTKHTML_HAVE_GCONF
-#include <gconf/gconf.h>
-#endif
 #include <g-wrap-runtime-guile.h>
 #include <X11/Xlib.h>
 
 #include "AccWindow.h"
 #include "TransLog.h"
-#include "argv-list-converters.h"
 #include "combocell.h"
 #include "date.h"
 #include "dialog-commodity.h"
@@ -51,10 +47,8 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-network.h"
 #include "gnc-splash.h"
-#ifdef USE_GUPPI
-#include "gnc-html-guppi.h"
-#endif
 #include "gnc-html.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-gpg.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
@@ -126,50 +120,10 @@ gnucash_ui_is_terminating(void)
   return gnome_is_terminating;
 }
 
-static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
-
-static char**
-gnc_get_remaining_argv(int prelen, const char **prependargv)
-{
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  SCM rem = gh_eval_str ((char *) gnc_scheme_remaining_var);
-  return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, rem);
-}
-
-static void
-gnc_set_remaining_argv(int len, const char **rest)
-{
-  SCM toput = gnc_argvarr_to_scheme_list(len, rest);
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  gh_define((char *) gnc_scheme_remaining_var, toput);
-}
-
-
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
   helpWindow (NULL, NULL, HH_GLOBPREFS);
-}
-
-static gboolean
-gnc_html_file_stream_cb (const char *location, char ** data)
-{
-  return (gncReadFile (location, data) > 0);
-}
-
-static gboolean
-gnc_html_report_stream_cb (const char *location, char ** data)
-{
-  gboolean ok;
-
-  ok = gnc_run_report_id_string (location, data);
-
-  if (!ok)
-    *data = g_strdup (_("<html><body><h3>Report error</h3>"
-                        "<p>An error occurred while running the report.</p>"
-                        "</body></html>"));
-
-  return ok;
 }
 
 static gboolean
@@ -274,102 +228,6 @@ gnc_html_register_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
-static gboolean
-gnc_html_report_url_cb (const char *location, const char *label,
-                        gboolean new_window, GNCURLResult *result)
-{
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
-
-  /* make a new window if necessary */ 
-  if (new_window)
-  {
-    char *url;
-
-    url = gnc_build_url (URL_TYPE_REPORT, location, label);
-    gnc_main_window_open_report_url (url, FALSE);
-    g_free (url);
-
-    result->load_to_stream = FALSE;
-  }
-  else
-  {
-    result->load_to_stream = TRUE;
-  }
-
-  return TRUE;
-}
-
-static gboolean
-gnc_html_options_url_cb (const char *location, const char *label,
-                         gboolean new_window, GNCURLResult *result)
-{
-  SCM find_report  = gh_eval_str ("gnc:find-report");
-  SCM start_editor = gh_eval_str ("gnc:report-edit-options");
-  SCM report;
-  int report_id;
-
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
-
-  result->load_to_stream = FALSE;
-
-  /* href="gnc-options:report-id=2676" */
-  if (strncmp ("report-id=", location, 10) == 0)
-  {
-    if (sscanf (location + 10, "%d", &report_id) != 1)
-    {
-      result->error_message =
-        g_strdup_printf (_("Badly formed options URL: %s"), location);
-
-      return FALSE;
-    }
-
-    report = gh_call1 (find_report, gh_int2scm (report_id));
-    if (report == SCM_UNDEFINED ||
-        report == SCM_BOOL_F)
-    {
-      result->error_message =
-        g_strdup_printf (_("Badly report id: %s"), location);
-
-      return FALSE;
-    }
-
-    gh_call1 (start_editor, report);
-
-    return TRUE;
-  }
-  else
-  {
-    result->error_message =
-      g_strdup_printf (_("Badly formed options URL: %s"), location);
-
-    return FALSE;
-  }
-}
-
-static gboolean
-gnc_html_help_url_cb (const char *location, const char *label,
-                      gboolean new_window, GNCURLResult *result)
-{
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
-
-  if (new_window)
-  {
-    gnc_help_window * help;
-
-    help = gnc_help_window_new ();
-    gnc_help_window_show_help (help, location, label);
-
-    result->load_to_stream = FALSE;
-  }
-  else
-    result->load_to_stream = TRUE;
-
-  return TRUE;
-}
-
 static void
 gnc_commodity_help_cb (void)
 {
@@ -378,74 +236,20 @@ gnc_commodity_help_cb (void)
 
 /* ============================================================== */
 
-/* These gnucash_ui_init and gnucash_ui functions are just hacks to get
-   the guile stuff up and running.  Expect a more formal definition of
-   what they should do soon, and expect that the open/select functions
-   will be merged with the code in FMB_OPEN in MainWindow.c */
-
-static const char *default_argv[] = {"gnucash", 0};
-
-static const struct poptOption nullPoptTable[] = {
-  { NULL, 0, 0, NULL, 0 }
-};
-
-int
-gnucash_ui_init(void)
+SCM
+gnc_gui_init (SCM command_line)
 {
-  int restargc;
-  char **restargv;
-  char **restargv2;
-  poptContext returnedPoptContext;
-
-#ifdef GTKHTML_HAVE_GCONF
-  GError *gerror;
-#endif
+  SCM ret = command_line;
 
   ENTER (" ");
 
-  /* We're going to have to have other ways to handle X and GUI
-     specific args... */
   if (!gnome_is_initialized)
   {
-    restargv = gnc_get_remaining_argv(1, default_argv);
-    if(restargv == NULL)
-    {
-      restargv = g_new(char*, 2);
-      restargv[0] = g_strdup(default_argv[0]);
-      restargv[1] = NULL;
-    }
-
-    restargc = argv_length(restargv);
- 
-    gnome_init_with_popt_table("GnuCash", VERSION, restargc, restargv,
-                               nullPoptTable, 0, &returnedPoptContext);
+    ret = gnc_gnome_init ("gnucash", "GnuCash", VERSION, command_line);
     gnome_is_initialized = TRUE;
 
-    restargv2 = (char**)poptGetArgs(returnedPoptContext);
-    gnc_set_remaining_argv(argv_length(restargv2), (const char**)restargv2);
-
-#ifdef GTKHTML_HAVE_GCONF
-    if( !gconf_init(restargc, restargv, &gerror) )
-        g_error_free(gerror);
-    gerror = NULL;
-#endif
-
-    /* this must come after using the poptGetArgs return value */
-    poptFreeContext (returnedPoptContext);
-    gnc_free_argv (restargv);
-
-    /* initialization required for gtkhtml */
-    gdk_rgb_init ();    
-    gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
-    gtk_widget_set_default_visual (gdk_rgb_get_visual ());
-    
     /* load default HTML action handlers */ 
     gnc_network_init();
-
-#ifdef USE_GUPPI    
-    /* initialize guppi handling in gnc-html */
-    gnc_html_guppi_init();
-#endif
 
     /* put up splash screen */
     gnc_show_splash_screen ();
@@ -512,16 +316,8 @@ gnucash_ui_init(void)
     gnucash_style_init();
     gnucash_color_init();
 
-    gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
-    gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
-    gnc_html_register_stream_handler (URL_TYPE_REPORT,
-                                      gnc_html_report_stream_cb);
-
     gnc_html_register_url_handler (URL_TYPE_REGISTER,
                                    gnc_html_register_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
-    gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
@@ -543,13 +339,13 @@ gnucash_ui_init(void)
 
   LEAVE (" ");
 
-  return 0;
+  return ret;
 }
 
 /* ============================================================== */
 
 void
-gnc_ui_shutdown (void)
+gnc_gui_shutdown (void)
 {
   if (gnome_is_running && !gnome_is_terminating)
   {
@@ -557,16 +353,14 @@ gnc_ui_shutdown (void)
 
     gtk_main_quit();
 
-#ifdef USE_GUPPI    
-    gnc_html_guppi_shutdown();
-#endif
+    gnc_gnome_shutdown ();
   }
 }
 
 /* ============================================================== */
 
 void
-gnc_ui_destroy (void)
+gnc_gui_destroy (void)
 {
   if (!gnome_is_initialized)
     return;
