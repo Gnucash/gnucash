@@ -177,11 +177,8 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 
 
                         cell = gnc_cellblock_get_cell (cursor, row, col);
-                        if (!cell) {
-				if (cd->pixel_height == 0)
-					cd->pixel_height = default_height;
+                        if (!cell)
                                 continue;
-			}
 
                         text = cell->sample_text;
                         if (text)
@@ -222,6 +219,16 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 cd = g_table_index (dimensions->cell_dimensions, row, 0);
                 dimensions->height += max_height;
         }
+
+        for (row = 0; row < cursor->num_rows; row++)
+        {
+                for (col = 0; col < cursor->num_cols; col++)
+                {
+                        cd = g_table_index (dimensions->cell_dimensions,
+                                            row, col);
+			cd->pixel_height = max_height;
+		}
+	}
 }
 
 
