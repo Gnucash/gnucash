@@ -71,6 +71,7 @@
 
 #include "Backend.h"
 #include "gnc-engine.h"
+#include "kvp-frame.h"
 
 /** PROTOTYPES ******************************************************/
 
