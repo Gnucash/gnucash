@@ -152,69 +152,84 @@
       sum))
 
   (define (reduce-split-list deltas splits balance)
-    (let ((stat-accumulator (make-stats-collector))
-          (min-max-accumulator (make-stats-collector))
-          (gl-accumulator (makedrcr-collector))
-          (prevdate 0))
 
-      ;; accbal runs the accumulator
-      (define (accbal start end)
-        (stat-accumulator 'add
-                          (* (gnc:timepair-delta start end) balance))
-        (min-max-accumulator 'add balance))
+    ;; A hash table to store account balances
+    (define balances (make-hash-table 313))
 
-      (define (calc-in-interval delta splits)
-        (let ((start (car delta))
-              (end   (cadr delta)))
-          (if (null? splits)
-              (begin
-                (accbal prevdate end)
-                '())
-              (let* ((split (car splits))
-                     (now   (gnc:split-get-transaction-date split)))
+    (define (reduce-splits deltas splits)
+      (let ((stat-accumulator (make-stats-collector))
+            (min-max-accumulator (make-stats-collector))
+            (gl-accumulator (makedrcr-collector))
+            (prevdate 0))
 
-                (cond ((gnc:timepair-lt now start) ;split before interval
-                       (set! balance (+ balance (gnc:split-get-value split)))
-                       (calc-in-interval delta (cdr splits)))
+        ;; accbal runs the accumulator
+        (define (accbal start end)
+          (stat-accumulator 'add
+                            (* (gnc:timepair-delta start end) balance))
+          (min-max-accumulator 'add balance))
 
-                      ((gnc:timepair-lt now end) ;split is in the interval
-                       (accbal prevdate now)
-                       (set! prevdate now)
-                       (gl-accumulator 'add (gnc:split-get-value split))
-                       (set! balance (+ balance (gnc:split-get-value split)))
-                       (calc-in-interval delta (cdr splits)))
+        (define (update-balance split)
+          (let* ((account       (gnc:split-get-account split))
+                 (split-balance (gnc:split-get-balance split))
+                 (last-balance  (hash-ref balances account)))
+            (hash-set! balances account split-balance)
+            (if last-balance
+                (set! split-balance (- split-balance last-balance)))
+            (set! balance (+ balance split-balance))
+            split-balance))
 
-                      (else             ; split is past interval
-                       (accbal prevdate end)
-                       splits))))))
+        (define (calc-in-interval delta splits)
+          (let ((start (car delta))
+                (end   (cadr delta)))
+            (if (null? splits)
+                (begin
+                  (accbal prevdate end)
+                  '())
+                (let* ((split (car splits))
+                       (now (gnc:split-get-transaction-date split)))
+                  (cond ((gnc:timepair-lt now start) ;split before interval
+                         (update-balance split)
+                         (calc-in-interval delta (cdr splits)))
 
-      ;; Actual routine
-      (if (null? deltas)
-          '()                           ; end of recursion
-          (let* ((delta (car deltas))
-                 (start (car delta))
-                 (end   (cadr delta)))
+                        ((gnc:timepair-lt now end) ;split is in the interval
+                         (accbal prevdate now)
+                         (set! prevdate now)
+                         (gl-accumulator 'add (update-balance split))
+                         (calc-in-interval delta (cdr splits)))
 
-            ;; Reset accumulator values
-            (set! prevdate start)
-            (stat-accumulator 'reset #f)
-            (min-max-accumulator 'reset #f)
-            (gl-accumulator 'reset #f)
+                        (else           ; split is past interval
+                         (accbal prevdate end)
+                         splits))))))
 
-            (let ((rest (calc-in-interval delta splits)))
-              ;; list of values for report
-              (cons
-               (list start
-                     end
-                     (/ (stat-accumulator 'total #f)
-                        (gnc:timepair-delta start end))
-                     (min-max-accumulator 'getmax #f)
-                     (min-max-accumulator 'getmin #f)
-                     (- (gl-accumulator 'debits #f)
-                        (gl-accumulator 'credits #f))
-                     (gl-accumulator 'debits #f) 
-                     (gl-accumulator 'credits #f))
-               (reduce-split-list (cdr deltas) rest balance)))))))
+        ;; Actual routine
+        (if (null? deltas)
+            '()                         ; end of recursion
+            (let* ((delta (car deltas))
+                   (start (car delta))
+                   (end   (cadr delta)))
+
+              ;; Reset accumulator values
+              (set! prevdate start)
+              (stat-accumulator 'reset #f)
+              (min-max-accumulator 'reset #f)
+              (gl-accumulator 'reset #f)
+
+              (let ((rest (calc-in-interval delta splits)))
+                ;; list of values for report
+                (cons
+                 (list start
+                       end
+                       (/ (stat-accumulator 'total #f)
+                          (gnc:timepair-delta start end))
+                       (min-max-accumulator 'getmax #f)
+                       (min-max-accumulator 'getmin #f)
+                       (- (gl-accumulator 'debits #f)
+                          (gl-accumulator 'credits #f))
+                       (gl-accumulator 'debits #f) 
+                       (gl-accumulator 'credits #f))
+                 (reduce-splits (cdr deltas) rest)))))))
+
+    (reduce-splits deltas splits))
 
   (define (format-numbers-in-list list)
     (if (null? list)
@@ -275,7 +290,7 @@
   (define (get-averages indata)
     (let ((avglst '()))
       (set! avglst (map (lambda (x) 0.0) (car indata)))
-      (for-each (lambda (x) 
+      (for-each (lambda (x)
                   (set! avglst (accumvects x avglst)))
                 indata)
       (map (lambda (x) 
