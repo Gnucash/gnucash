@@ -40,3 +40,9 @@
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__gui" "hbci_close_on_finish" 1))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Online Banking & Importing") (N_ "HBCI Use generic import matcher")
+  "b" (N_ "Use the transaction matcher from the generic import infrastructure instead of the HBCI specific one")
+  #f))

@@ -41,7 +41,7 @@
 #include "import-backend.h"
 #include "import-account-matcher.h"
 
-struct _generic_transaction_info
+struct _main_matcher_info
 {
   GtkWidget *dialog;
   GtkWidget *clist;
@@ -211,10 +211,10 @@ static char * checkbox_unchecked_xpm[] = {
 "............"};
 
 static void
-refresh_clist_row (GNCGenTransaction *gui, 
+refresh_clist_row (GNCImportMainMatcher *gui, 
 		   int row_number, GNCImportTransInfo *info);
 
-void gnc_gen_trans_list_delete (GNCGenTransaction *info)
+void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
   if (info == NULL) 
     return;
@@ -228,7 +228,7 @@ static void
 on_matcher_ok_clicked (GtkButton *button,
 			   gpointer user_data)
 {
-  GNCGenTransaction *info = user_data;
+  GNCImportMainMatcher *info = user_data;
   g_assert (info);
   /*   DEBUG ("Begin") */
   gnc_import_process_trans_clist (GTK_CLIST (info->clist), NULL);
@@ -241,12 +241,12 @@ static void
 on_matcher_cancel_clicked (GtkButton *button,
 			   gpointer user_data)
 {
-  GNCGenTransaction *info = user_data;
+  GNCImportMainMatcher *info = user_data;
   gnc_gen_trans_list_delete (info);
 }
 
 static void 
-run_account_picker_dialog (GNCGenTransaction *info, 
+run_account_picker_dialog (GNCImportMainMatcher *info, 
 			   gint row, GNCImportTransInfo *trans_info)
 {
   Account *old_acc, *new_acc;
@@ -269,7 +269,7 @@ run_account_picker_dialog (GNCGenTransaction *info,
 }
 
 static void 
-run_match_dialog (GNCGenTransaction *info, 
+run_match_dialog (GNCImportMainMatcher *info, 
 		  gint row, GNCImportTransInfo *trans_info)
 {
   gnc_import_match_picker_run_and_close (trans_info);
@@ -282,7 +282,7 @@ clist_select_row_cb (GtkCList *clist,
 		     GdkEventButton *event,
 		     gpointer user_data) 
 {
-  GNCGenTransaction *gui = user_data; 
+  GNCImportMainMatcher *gui = user_data; 
   GNCImportTransInfo *trans_info;
   gboolean should_refresh = TRUE;
   DEBUG("row_number: %d%s%d",row_number,", column: ",column);
@@ -358,29 +358,29 @@ clist_select_row_cb (GtkCList *clist,
 			  column);
 }
 
-void gnc_gen_trans_list_freeze (GNCGenTransaction *gui)
+static void gnc_gen_trans_list_freeze (GNCImportMainMatcher *gui)
 {
   g_assert (gui);
   gtk_clist_freeze (GTK_CLIST (gui->clist));
 }
 
-void gnc_gen_trans_list_thaw (GNCGenTransaction *gui)
+static void gnc_gen_trans_list_thaw (GNCImportMainMatcher *gui)
 {
   g_assert (gui);
   gtk_clist_thaw (GTK_CLIST (gui->clist));
 }
 
-GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent, 
+GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent, 
 					   const gchar* heading,
 					   gboolean all_from_same_account)
 {
-  GNCGenTransaction *info;
+  GNCImportMainMatcher *info;
   GladeXML *xml;
   GtkWidget *heading_label;
   
   gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
 
-  info = g_new0 (GNCGenTransaction, 1);
+  info = g_new0 (GNCImportMainMatcher, 1);
 
   /* Initialize user Settings. */
   info->user_settings = gnc_import_Settings_new ();
@@ -483,7 +483,7 @@ GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent,
   return info;
 }
 
-gboolean gnc_gen_trans_list_run (GNCGenTransaction *info) 
+gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info) 
 {
   gboolean result;
   
@@ -522,7 +522,7 @@ static char ** gen_clist_row_text (GNCImportTransInfo *info)
 
 
 static void
-refresh_clist_row (GNCGenTransaction *gui, 
+refresh_clist_row (GNCImportMainMatcher *gui, 
 		   int row_number, GNCImportTransInfo *info)
 {
   char *text[NUM_COLUMNS_DOWNLOADED_CLIST];
@@ -759,7 +759,7 @@ refresh_clist_row (GNCGenTransaction *gui,
 }
 
 
-void gnc_gen_trans_list_add_trans(GNCGenTransaction *gui, Transaction *trans)
+void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
 {
   GNCImportTransInfo * transaction_info = NULL;
   gint row_number;

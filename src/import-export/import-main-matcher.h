@@ -24,13 +24,13 @@
    @author Christian Stimming    
 */
 
-#ifndef GNC_GEN_TRANSACTION_H
-#define GNC_GEN_TRANSACTION_H
+#ifndef GNC_IMPORT_MAIN_MATCHER_H
+#define GNC_IMPORT_MAIN_MATCHER_H
 
 #include <gnome.h>
 #include "Transaction.h"
 
-typedef struct _generic_transaction_info GNCGenTransaction;
+typedef struct _main_matcher_info GNCImportMainMatcher;
 
 /** Create a new generic transaction dialog window and return it. 
     @param parent The parent GtkWidget. May be NULL.
@@ -39,12 +39,12 @@ typedef struct _generic_transaction_info GNCGenTransaction;
     that will be added with gnc_gen_trans_list_add_trans are from the same
     source account.  This will cause the account column to be hidden.
 */
-GNCGenTransaction *gnc_gen_trans_list_new (GtkWidget *parent, 
+GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent, 
 					   const gchar* heading,
 					   gboolean all_from_same_account);
 
 /** Deletes the given object. */
-void gnc_gen_trans_list_delete (GNCGenTransaction *info);
+void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
 
 /** Add a newly imported Transaction to the Transaction Importer.
     @param gui The Transaction Importer to use.
@@ -53,23 +53,13 @@ void gnc_gen_trans_list_delete (GNCGenTransaction *info);
     Only the first split will be used for matching.  The 
     transaction must NOT be commited.
  */
-void gnc_gen_trans_list_add_trans(GNCGenTransaction *gui, Transaction *trans);
+void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans);
 
 /** Run this dialog and return only after the user pressed Ok, Cancel,
   or closed the window. This means that all actual importing will
   have been finished upon returning.
  */
-gboolean gnc_gen_trans_list_run (GNCGenTransaction *info);
-
-/** Freeze the underlying GtkCList. Do this before you add a lot of
-  transactions. */
-void gnc_gen_trans_list_freeze (GNCGenTransaction *gui);
-
-/** Thaw the underlying GtkCList. Do this after you added a lot of
-  transactions. */
-void gnc_gen_trans_list_thaw (GNCGenTransaction *gui);
-
-
+gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info);
 
 #endif
 /**@}*/

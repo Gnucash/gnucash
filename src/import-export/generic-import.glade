@@ -499,12 +499,13 @@
 -Select &quot;R&quot; to Reconcile a matching transaction
 -Select neither to Skip (The transaction won't be imported at all)
 -&quot;Select Import Action&quot; allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</label>
-	<justify>GTK_JUSTIFY_LEFT</justify>
+	<justify>GTK_JUSTIFY_FILL</justify>
 	<wrap>False</wrap>
 	<xalign>0.5</xalign>
 	<yalign>0.5</yalign>
 	<xpad>0</xpad>
 	<ypad>0</ypad>
+	<focus_target>matcher_ok</focus_target>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>

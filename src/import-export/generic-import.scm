@@ -6,11 +6,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Register Preferences
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Transaction Matcher") (N_ "Enable SKIP transaction action")
-  "b" (N_ "Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default.")
-  #t))
+;(gnc:register-configuration-option
+; (gnc:make-simple-boolean-option
+;  (N_ "Transaction Matcher") (N_ "Enable SKIP transaction action")
+;  "b" (N_ "Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default.")
+;  #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option

@@ -69,7 +69,7 @@ SCM  scm_gnc_file_ofx_import ()
 
 /* CS: Store the reference to the created importer gui so that the
    ofx_proc_transaction_cb can use it. */
-GNCGenTransaction *gnc_ofx_importer_gui = NULL;
+GNCImportMainMatcher *gnc_ofx_importer_gui = NULL;
 
 void gnc_file_ofx_import (void)
 {

@@ -144,8 +144,15 @@ build_acct_tree(struct _accountpickerdialog * picker) {
 
   acct_tree_add_accts(picker, picker->acct_group,  GTK_CTREE(picker->treeview), NULL);
   
-  gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
+
   gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
+  gtk_clist_set_column_auto_resize (GTK_CLIST (picker->treeview),
+				    CLIST_NAME,
+				    TRUE);
+  gtk_clist_set_column_auto_resize (GTK_CLIST (picker->treeview),
+				    CLIST_TYPE,
+				    TRUE);
+  gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
   gtk_clist_thaw (GTK_CLIST(picker->treeview));
 }
 

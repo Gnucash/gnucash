@@ -1,3 +1,9 @@
+2002-12-10  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/*: Add user pref to allow HBCI users
+	to select if they want Christian's matcher or mine.  
+	Update OFX readme.   
+	Update column width in account-picker.
+
 2002-12-09  Christian Stimming  <stimming@tuhh.de>
 
 	* po/nl.po: Updated translation by Hendrik-Jan Heins
