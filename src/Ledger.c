@@ -270,16 +270,18 @@ xaccLoadRegister (BasicRegister *reg, Split **slist,
 
    /* compute the corresponding number of physical & virtual rows. */
    /* number of virtual rows is number of splits,
-    * plus one for the header,
-    * plus one for the blank new entry split. */
-   num_virt_rows = i+2;
+    * plus one for the header  */
+   num_virt_rows = i+1;
+
+   /* plus one for the blank new entry split. */
+   if (!(reg->user_hook)) num_virt_rows ++;
 
    /* num_phys_cols is easy ... just the total number os cells */
    num_phys_cols = reg->header->numCols;
 
    /* num_phys_rows is the number of rows in all the cursors */
    num_phys_rows = reg->header->numRows;
-   num_phys_rows += (i+1) * (reg->cursor->numRows);
+   num_phys_rows += (num_virt_rows-1) * (reg->cursor->numRows);
 
    /* num_virt_cols is always one. */
    xaccSetTableSize (table, num_phys_rows, num_phys_cols, num_virt_rows, 1);
@@ -305,26 +307,24 @@ printf ("load reg of %d entries --------------------------- \n",i);
    }
 
    /* add the "blank split" at the end */
-   if (reg->user_hook) {
-      split = (Split *) (reg->user_hook);
-   } else {
+   if (!(reg->user_hook)) {
       trans = xaccMallocTransaction ();
       xaccTransSetDateToday (trans);
       split = xaccTransGetSourceSplit (trans);
       xaccAccountInsertSplit (default_source_acc, split);
       reg->user_hook =  (void *) split;
       reg->destroy = LedgerDestroy;
-   }
 
-   phys_row = reg->header->numRows;
-   phys_row += i * (reg->cursor->numRows);
-   xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
-   xaccMoveCursor (table, phys_row, 0);
-
-   xaccLoadRegEntry (reg, split);
+      phys_row = reg->header->numRows;
+      phys_row += i * (reg->cursor->numRows);
+      xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
+      xaccMoveCursor (table, phys_row, 0);
    
-   /* restore the cursor to it original location */
-   i++;
+      xaccLoadRegEntry (reg, split);
+      i++;
+   }
+   
+   /* restore the cursor to its original location */
    phys_row = reg->header->numRows;
    phys_row += i * (reg->cursor->numRows);
 
