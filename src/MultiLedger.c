@@ -198,7 +198,7 @@ xaccLedgerDisplaySimple (Account *acc)
   }
 
 /********************************************************************\
- * xaccLedgerDisplayAccGroup                                             *
+ * xaccLedgerDisplayAccGroup                                        *
  *   opens up a register window to display an account, and all      *
  *   of its children, in the same window                            *
  *                                                                  *
@@ -273,7 +273,7 @@ xaccLedgerDisplayAccGroup (Account *acc)
   }
 
 /********************************************************************\
- * xaccLedgerDisplayLedger                                               *
+ * xaccLedgerDisplayLedger                                          *
  *   opens up a ledger window for a list of accounts                *
  *                                                                  *
  * Args:   lead_acc - the account associated with this register     *
