@@ -594,6 +594,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       g_free(fdata);
 
       if(label) {
+	while (gtk_events_pending ())
+	  gtk_main_iteration ();
         gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
       }
 
