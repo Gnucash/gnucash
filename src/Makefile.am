@@ -1,25 +1,24 @@
-DIST_SUBDIRS = \
+NONGUI_SUBDIRS = \
   doc \
   pixmaps \
-  bin 
-
-NONGUI_SUBDIRS = \
   core-utils \
   gnc-module \
   test-core \
   engine \
   backend \
-  report \
   scm \
-  quotes 
+  quotes \
+  bin
 
-GUI_SUBDIRS = \
+GUI_SUBDIRS_1 = \
   network-utils \
   calculation \
   tax \
   app-utils \
   gnome-utils \
-  app-file \
+  app-file
+
+GUI_SUBDIRS_2 = \
   import-export \
   dialog-account \
   register \
@@ -28,10 +27,12 @@ GUI_SUBDIRS = \
   business \
   optional 
 
+DIST_SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS_1) report $(GUI_SUBDIRS_2)
+
 if GNUCASH_ENABLE_GUI
-SUBDIRS = $(DIST_SUBDIRS) $(NONGUI_SUBDIRS) $(GUI_SUBDIRS)
+SUBDIRS = $(DIST_SUBDIRS)
 else 
-SUBDIRS = $(DIST_SUBDIRS) $(NONGUI_SUBDIRS)
+SUBDIRS = $(NONGUI_SUBDIRS) report
 endif
 
 noinst_HEADERS = \

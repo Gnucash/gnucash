@@ -40,7 +40,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
-#include "gnc-ui.h"
+/* #include "gnc-ui.h" */
 #include "option-util.h"
 #include "window-report.h"
 
@@ -68,13 +68,6 @@ struct gnc_report_window_s
 
   gnc_html     * html;
 };
-
-
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_HTML;
-
-static gint last_width = 0;
-static gint last_height = 0;
 
 
 /********************************************************************
@@ -125,9 +118,9 @@ gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
 }
 
 static void
-gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data) {
+gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data)
+{
   GNCMDIChildInfo  * mc = user_data;
-  gnc_report_window * w = mc->user_data;
 
   gnc_mdi_remove_child(gnc_mdi_get_current(), mc);
   g_free(mc->toolbar_info);
@@ -361,13 +354,13 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
 
 
 static int
-gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
+gnc_report_window_params_cb(GtkWidget * w, gpointer data)
+{
   gnc_report_window * report = data;
-  SCM window_type = gh_eval_str("<gnc:report-window*>");
   SCM start_editor = gh_eval_str("gnc:report-edit-options");
-  SCM window = gw_wcp_assimilate_ptr(report, window_type);
 
-  if(report->cur_report != SCM_BOOL_F) {
+  if(report->cur_report != SCM_BOOL_F)
+  {
     if(gh_call1(start_editor, report->cur_report) == SCM_BOOL_F) {
       gnc_warning_dialog(_("There are no options for this report."));
     }
@@ -375,6 +368,7 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
       gnc_report_window_add_edited_report(report, report->cur_report);
     }
   }
+
   return TRUE;
 }
 
@@ -449,16 +443,14 @@ gnc_report_window_refresh (gpointer data)
 static void 
 gnc_report_window_load_cb(gnc_html * html, URLType type, 
                           const gchar * location, const gchar * label, 
-                          gpointer data) {
+                          gpointer data)
+{
   gnc_report_window * win = data;
   int  report_id;
   SCM  find_report = gh_eval_str("gnc:find-report");
   SCM  get_options = gh_eval_str("gnc:report-options");
-  SCM  get_editor  = gh_eval_str("gnc:report-options-editor");
   SCM  set_needs_save = gh_eval_str("gnc:report-set-needs-save?!");
   SCM  inst_report;
-  SCM  inst_options;
-  SCM  inst_options_ed;
   
   /* we get this callback if a new report is requested to be loaded OR
    * if any URL is clicked.  If an options URL is clicked, we want to
@@ -596,11 +588,10 @@ close_handler (gpointer user_data)
  ********************************************************************/
 
 gnc_report_window *
-gnc_report_window_new(GNCMDIChildInfo * mc) {
-
+gnc_report_window_new(GNCMDIChildInfo * mc)
+{
   gnc_report_window * report = g_new0(gnc_report_window, 1);
   GtkObject         * tlo; 
-  GtkWidget         * cframe = NULL;
 
   report->mc               = mc;
   report->html             = gnc_html_new();
@@ -743,7 +734,6 @@ gnc_report_window_destroy(gnc_report_window * win) {
 
   SCM  get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM  set_editor = gh_eval_str("gnc:report-set-editor-widget!");
-  SCM  disp_list; 
   SCM  edited, editor; 
 
   gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, win);
@@ -869,11 +859,11 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 
 
 GtkWidget * 
-gnc_report_window_default_params_editor(SCM options, SCM report) {
+gnc_report_window_default_params_editor(SCM options, SCM report)
+{
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM get_title = gh_eval_str("gnc:report-type");
   SCM ptr;
-  SCM new_edited;
   
   char *title = NULL;
 

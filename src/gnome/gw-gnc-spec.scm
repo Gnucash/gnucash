@@ -9,6 +9,9 @@
 
 (use-modules (g-wrapped gw-engine-spec))
 (use-modules (g-wrapped gw-glib-spec))
+(use-modules (g-wrapped gw-gnome-utils-spec))
+;; FIXME take out when finished creating report-gnome
+(use-modules (g-wrapped gw-report-gnome-spec))
 
 (let ((mod (gw:new-module "gw-gnc")))
   (define (standard-c-call-gen result func-call-code)
@@ -35,6 +38,9 @@
   (gw:module-depends-on mod "gw-runtime")
   (gw:module-depends-on mod "gw-engine")
   (gw:module-depends-on mod "gw-glib")
+  (gw:module-depends-on mod "gw-gnome-utils")
+  ;; FIXME take out when finished creating report-gnome
+  (gw:module-depends-on mod "gw-report-gnome")
 
   (gw:module-set-guile-module! mod '(g-wrapped gw-gnc))
 
@@ -70,18 +76,6 @@
       "#include <dialog-scheduledxaction.h>\n"
       "#include <dialog-sxsincelast.h>\n" )))
 
-  (let ((nnt (gw:wrap-non-native-type
-              mod
-              '<gnc:UIWidget>
-              "gncUIWidget" "const gncUIWidget")))
-    #t)
-  
-  (let ((nnt (gw:wrap-non-native-type
-              mod
-              '<gnc:report-window*>
-              "gnc_report_window*" "const gnc_report_window*")))
-    #t)
-    
   (let ((nnt (gw:wrap-non-native-type
               mod
               '<gnc:column-view-edit*>

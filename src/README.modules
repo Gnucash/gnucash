@@ -44,6 +44,7 @@ report/utility-reports      the multicolumn view, the iframe report, etc.
 report/locale-specific-reports  reports that should only be loaded in 
                                 certain locales. subdir per locale. 
 report/stylesheets          predefined style sheet templates 
+report/report-gnome         Gnome gui for displaying reports.
 
 app-utils                   utils for the gnucash app framework (component 
                             mgr, cmd line processing, gettext stuff, etc)

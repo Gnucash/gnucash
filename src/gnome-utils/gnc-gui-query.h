@@ -28,6 +28,7 @@ void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
 
 void gnc_warning_dialog(const char *message);
 
+void gnc_error_dialog(const char *message);
 void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
 
 #endif

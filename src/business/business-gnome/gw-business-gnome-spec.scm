@@ -8,7 +8,7 @@
   :use-module (g-wrap))
 
 (use-modules (g-wrapped gw-business-core-spec))
-(use-modules (g-wrapped gw-gnc-spec))
+(use-modules (g-wrapped gw-gnome-utils-spec))
 
 (let ((mod (gw:new-module "gw-business-gnome")))
   (define (standard-c-call-gen result func-call-code)
@@ -35,8 +35,8 @@
   (gw:module-depends-on mod "gw-runtime")
   (gw:module-depends-on mod "gw-business-core")
   (gw:module-depends-on mod "gw-engine")
-  (gw:module-depends-on mod "gw-gnc")
-  
+  (gw:module-depends-on mod "gw-gnome-utils")
+
   (gw:module-set-guile-module! mod '(g-wrapped gw-business-gnome))
 
   (gw:module-set-declarations-ccodegen!

@@ -1,4 +1,4 @@
-TESTS=test-load-module test-link-module 
+TESTS = test-load-module test-link-module 
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
@@ -12,7 +12,9 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
+  --guile-load-dir ${top_srcdir}/src/gnome-utils \
   --guile-load-dir ${top_srcdir}/src/gnome \
+  --library-dir    ${top_srcdir}/src/gnome-utils \
   --library-dir    ${top_srcdir}/src/gnome
 
 TESTS_ENVIRONMENT := \
@@ -20,14 +22,11 @@ TESTS_ENVIRONMENT := \
 
 EXTRA_DIST = test-load-module
 
-noinst_PROGRAMS=test-link-module
+noinst_PROGRAMS = test-link-module
 
 testit:
 	${TESTS_ENVIRONMENT} gdb guile
 
-test_link_module_SOURCES=test-link-module.c
+test_link_module_SOURCES = test-link-module.c
 test_link_module_LDADD= \
- ${top_srcdir}/src/report/locale-specific/us/libgncmod-locale-reports-us.la
-
-
- 
+  ${top_srcdir}/src/report/locale-specific/us/libgncmod-locale-reports-us.la

@@ -423,6 +423,7 @@ string and 'directories' must be a list of strings."
     (gnc:module-load "gnucash/report/standard-reports" 0)
     (gnc:module-load "gnucash/report/utility-reports" 0)
     (gnc:module-load "gnucash/report/locale-specific/us" 0)
+    (gnc:module-load "gnucash/report/report-gnome" 0)
     (gnc:module-load "gnucash/business-gnome" 0)
 
     ;; Now we can load a bunch of files.

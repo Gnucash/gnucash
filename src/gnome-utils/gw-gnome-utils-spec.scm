@@ -43,8 +43,15 @@
       "#include <print-session.h>\n"
       "#include <gnc-menu-extensions.h>\n"
       "#include <gnc-html.h>\n"
+      "#include <gnc-gui-query.h>\n"
       "#include <gnc-ui.h>\n"
       )))
+
+  (let ((nnt (gw:wrap-non-native-type
+              mod
+              '<gnc:UIWidget>
+              "gncUIWidget" "const gncUIWidget")))
+    #t)
 
   (let ((nnt (gw:wrap-non-native-type
               mod

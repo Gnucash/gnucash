@@ -12,7 +12,9 @@ GNC_TEST_DEPS := \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
+  --guile-load-dir ${top_srcdir}/src/gnome-utils \
   --guile-load-dir ${top_srcdir}/src/gnome \
+  --library-dir    ${top_srcdir}/src/gnome-utils \
   --library-dir    ${top_srcdir}/src/gnome
 
 TESTS_ENVIRONMENT := \

@@ -12,6 +12,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
   ${top_builddir}/src/import-export/qif-import/libgncmod-qif-import.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
 
@@ -51,8 +52,7 @@ libgncgnome_la_SOURCES = \
   window-main.c \
   window-main-summarybar.c \
   window-reconcile.c \
-  window-register.c \
-  window-report.c
+  window-register.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -91,8 +91,7 @@ noinst_HEADERS = \
   window-main.h \
   window-main-summarybar.h \
   window-reconcile.h \
-  window-register.h \
-  window-report.h
+  window-register.h
 
 EXTRA_DIST = \
   .cvsignore \
@@ -118,6 +117,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
+  -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/import-export/binary-import \
   -I${top_srcdir}/src/import-export/qif-import \
   ${GUILE_INCS} \
@@ -159,6 +159,8 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
 	FLAVOR=gnome guile -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (set! %load-path (cons \"../engine\" %load-path)) \
+           (set! %load-path (cons \"../gnome-utils\" %load-path)) \
+           (set! %load-path (cons \"../report/report-gnome\" %load-path)) \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-module \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
