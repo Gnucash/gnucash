@@ -13,7 +13,9 @@
 
 typedef struct _EggActionGroup      EggActionGroup;
 typedef struct _EggActionGroupClass EggActionGroupClass;
-typedef struct _EggActionGroupEntry EggActionGroupEntry;
+typedef struct _EggActionEntry      EggActionEntry;
+typedef struct _EggToggleActionEntry  EggToggleActionEntry;
+typedef struct _EggRadioActionEntry   EggRadioActionEntry;
 
 struct _EggActionGroup
 {
@@ -31,13 +33,7 @@ struct _EggActionGroupClass
 			     const gchar *action_name);
 };
 
-typedef enum {
-  NORMAL_ACTION,
-  TOGGLE_ACTION,
-  RADIO_ACTION
-} EggActionGroupEntryType;
-
-struct _EggActionGroupEntry {
+struct _EggActionEntry {
   gchar *name;
   gchar *label;
   gchar *stock_id;
@@ -45,10 +41,27 @@ struct _EggActionGroupEntry {
   gchar *tooltip;
 
   GCallback callback;
-  gpointer user_data;
+};
 
-  EggActionGroupEntryType entry_type;
-  gchar *extra_data;
+struct _EggToggleActionEntry 
+{
+  gchar     *name;
+  gchar     *stock_id;
+  gchar     *label;
+  gchar     *accelerator;
+  gchar     *tooltip;
+  GCallback  callback;
+  gboolean   is_active;
+};
+
+struct _EggRadioActionEntry 
+{
+  gchar *name;
+  gchar *stock_id;
+  gchar *label;
+  gchar *accelerator;
+  gchar *tooltip;
+  gint   value; 
 };
 
 GType           egg_action_group_get_type      (void);
@@ -65,7 +78,35 @@ void            egg_action_group_remove_action (EggActionGroup *action_group,
 						EggAction *action);
 
 void            egg_action_group_add_actions   (EggActionGroup *action_group,
-						EggActionGroupEntry *entries,
-						guint n_entries);
+						EggActionEntry *entries,
+						guint n_entries,
+						gpointer user_data);
+void            egg_action_group_add_toggle_actions      (EggActionGroup       *action_group,
+							  EggToggleActionEntry *entries,
+							  guint                 n_entries,
+							  gpointer              user_data);
+void            egg_action_group_add_radio_actions       (EggActionGroup       *action_group,
+							  EggRadioActionEntry  *entries,
+							  guint                 n_entries,
+							  gint                  value,
+							  GCallback             on_change,
+							  gpointer              user_data);
+void            egg_action_group_add_actions_full        (EggActionGroup       *action_group,
+							  EggActionEntry       *entries,
+							  guint                 n_entries,
+							  gpointer              user_data,
+							  GDestroyNotify        destroy);
+void            egg_action_group_add_toggle_actions_full (EggActionGroup       *action_group,
+							  EggToggleActionEntry *entries,
+							  guint                 n_entries,
+							  gpointer              user_data,
+							  GDestroyNotify        destroy);
+void            egg_action_group_add_radio_actions_full  (EggActionGroup       *action_group,
+							  EggRadioActionEntry  *entries,
+							  guint                 n_entries,
+							  gint                  value,
+							  GCallback             on_change,
+							  gpointer              user_data,
+							  GDestroyNotify        destroy);
 
 #endif

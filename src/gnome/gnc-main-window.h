@@ -75,7 +75,7 @@ GncPluginPage  *gnc_main_window_get_current_page  (GncMainWindow *window);
 
 void            gnc_main_window_merge_actions     (GncMainWindow *window,
 						   const gchar *group_name,
-						   EggActionGroupEntry *entries,
+						   EggActionEntry *entries,
 						   guint n_entries,
 						   const gchar *ui_file,
 						   gpointer user_data);

@@ -40,10 +40,10 @@ static GncPluginPage *gnc_plugin_qif_import_create_page (GncPlugin *plugin, cons
 /* Command callbacks */
 static void gnc_plugin_qif_import_cmd_new_qif_import (EggAction *action, gpointer data);
 
-static EggActionGroupEntry gnc_plugin_qif_import_actions [] = {
+static EggActionEntry gnc_plugin_qif_import_actions [] = {
 	{ "QIFImportAction", N_("Import _QIF..."), GTK_STOCK_CONVERT, "<control>i",
 	  N_("Import a Quicken QIF file"),
-	  G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import), NULL },
+	  G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import) },
 };
 static guint gnc_plugin_qif_import_n_actions = G_N_ELEMENTS (gnc_plugin_qif_import_actions);
 

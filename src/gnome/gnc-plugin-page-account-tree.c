@@ -107,56 +107,56 @@ static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPl
 static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
 static void gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePrivate *priv);
 
-static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
+static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
 	/* Toplevel */
-	{ "FakeToplevel", "", NULL, NULL, NULL, NULL, NULL },
+	{ "FakeToplevel", "", NULL, NULL, NULL, NULL },
 
 	/* File menu */
 	{ "FileNewAccountAction", N_("New Account..."), GNC_STOCK_NEW_ACCOUNT, NULL,
 	  N_("Create a new Account"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account) },
 	{ "FileOpenAccountAction", N_("Open Account"), GNC_STOCK_OPEN_ACCOUNT, "<control>o",
 	  N_("Open the selected account"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account) },
 	{ "FileOpenSubaccountsAction", N_("Open _Subaccounts"), GNC_STOCK_OPEN_ACCOUNT, NULL,
 	  N_("Open the selected account and all its subaccounts"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts) },
 
 	/* Edit menu */
 	{ "EditEditAccountAction", N_("_Edit Acount"), GNC_STOCK_EDIT_ACCOUNT, "<control>e",
 	  N_("Edit the selected account"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account) },
 	{ "EditDeleteAccountAction", N_("_Delete Acount"), GNC_STOCK_DELETE_ACCOUNT, NULL,
 	  N_("Delete selected account"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
 	{ "EditAccountViewOptionsAction", N_("Account Tree Options"), GTK_STOCK_PROPERTIES, NULL,
 	  N_("Edit the account view options"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 
 	/* Actions menu */
 	{ "ActionsReconcileAction", N_("_Reconcile..."), NULL, "<control>r",
 	  N_("Reconcile the selected account"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile) },
 	{ "ActionsTransferAction", N_("_Transfer..."), NULL, "<control>t",
 	  N_("Transfer funds from one account to another"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer) },
 	{ "ActionsStockSplitAction", N_("Stock S_plit..."), NULL, NULL,
 	  N_("Record a stock split or a stock merger"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split) },
 	{ "ActionsLotsAction", N_("_Lot Viewer..."), NULL, NULL,
 	  N_("Bring up the lot viewer/editor window"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots), NULL },
-	{ "ScrubMenuAction", N_("Check & Repair"), NULL, NULL, NULL, NULL, NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots) },
+	{ "ScrubMenuAction", N_("Check & Repair"), NULL, NULL, NULL, NULL },
 	{ "ScrubAction", N_("Check & Repair A_ccount"), NULL, NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },
 	{ "ScrubSubAction", N_("Check & Repair Su_baccount"), NULL, NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits "
              "in this account and its subaccounts"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub) },
 	{ "ScrubAllAction", N_("Check & Repair A_ll"), NULL, NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all), NULL },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all) },
 };
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
 
@@ -302,7 +302,6 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 {
 	EggActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
-	gint i;
 	const gchar *url = NULL;
 	int options_id;
 	SCM find_options;
@@ -313,15 +312,12 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	priv = plugin_page->priv = g_new0 (GncPluginPageAccountTreePrivate, 1);
 
 	/* Create menu and toolbar information */
-	for (i = 0; i < gnc_plugin_page_account_tree_n_actions; i++) {
-		gnc_plugin_page_account_tree_actions[i].user_data = plugin_page;
-	}
-
 	action_group = egg_action_group_new ("GncPluginPageAccountTreeActions");
 	priv->action_group = action_group;
 	egg_action_group_add_actions (action_group,
 				      gnc_plugin_page_account_tree_actions,
-				      gnc_plugin_page_account_tree_n_actions);
+				      gnc_plugin_page_account_tree_n_actions,
+				      plugin_page);
 	gnc_plugin_page_account_tree_init_short_names (action_group);
 
 	

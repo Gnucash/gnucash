@@ -1,3 +1,17 @@
+2003-09-27  David Hampton  <hampton@employees.org>
+
+	* lib/egg/egg-action-group.[ch]:
+	* lib/egg/egg-radio-action.[ch]:
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/gnome/gnc-main-window.[ch]:
+	* src/gnome/gnc-plugin-account-tree.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-register.c:
+	* src/gnome/window-acct-tree.c:
+	* src/import-export/qif-import/gnc-plugin-qif-import.c: Track
+	changes to 'actions' in gtk 2.4.
+
 2003-09-21  David Hampton  <hampton@employees.org>
 
 	* lib/egg/egg-menu-merge.c: Back port "smart separators" from the

@@ -45,10 +45,10 @@ static GncPluginPage *gnc_plugin_register_create_page (GncPlugin *plugin, const 
 /* Command callbacks */
 static void gnc_plugin_register_cmd_general_ledger (EggAction *action, GncMainWindowActionData *data);
 
-static EggActionGroupEntry gnc_plugin_register_actions [] = {
+static EggActionEntry gnc_plugin_register_actions [] = {
 	{ "ToolsGeneralLedgerAction", N_("_General Ledger"), NULL, NULL,
 	  N_("Open a general ledger window"),
-	  G_CALLBACK (gnc_plugin_register_cmd_general_ledger), NULL },
+	  G_CALLBACK (gnc_plugin_register_cmd_general_ledger) },
 };
 static guint gnc_plugin_register_n_actions = G_N_ELEMENTS (gnc_plugin_register_actions);
 

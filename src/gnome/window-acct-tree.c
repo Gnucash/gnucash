@@ -77,40 +77,40 @@ static void gnc_acct_tree_window_cmd_new_account (EggAction *action, gpointer da
 static void gnc_acct_tree_window_cmd_delete_account (EggAction *action, gpointer data);
 static void gnc_acct_tree_window_cmd_view_options (EggAction *action, gpointer data);
 
-static EggActionGroupEntry acct_tree_popups_entries [] = {
+static EggActionEntry acct_tree_popups_entries [] = {
 	/* Toplevel */
-	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL, NULL },
+	{ "FakeToplevel", (""), NULL, NULL, NULL, NULL },
 
 	/* Accounts */
 	{ "OpenAccount", N_("_Open"), GTK_STOCK_OPEN, "<control>o",
 	  N_("Open the selected account"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_open_account), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_open_account) },
 	{ "OpenSubaccounts", N_("Open _Subaccounts"), GTK_STOCK_OPEN, NULL,
 	  N_("Open the selected account and all its subaccounts"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_open_subaccounts), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_open_subaccounts) },
 	{ "EditAccount", N_("_Edit"), GTK_STOCK_PROPERTIES, "<control>e",
 	  N_("Edit the selected account"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_edit_account), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_edit_account) },
 	{ "Reconcile", N_("_Reconcile..."), NULL, "<control>r",
 	  N_("Reconcile the selected account"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_reconcile), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_reconcile) },
 	{ "Transfer", N_("_Transfer..."), NULL, "<control>t",
 	  N_("Transfer funds from one account to another"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_transfer), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_transfer) },
 	{ "StockSplit", N_("Stock S_plit..."), NULL, NULL,
 	  N_("Record a stock split or a stock merger"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_stock_split), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_stock_split) },
 	{ "NewAccount", N_("_New"), GTK_STOCK_NEW, NULL,
 	  N_("Create a new account"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_new_account), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_new_account) },
 	{ "DeleteAccount", N_("_Delete"), GTK_STOCK_DELETE, NULL,
 	  N_("Delete selected account"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_delete_account), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_delete_account) },
 
 	/* View Options */
 	{ "AccountViewOptions", N_("Options"), GTK_STOCK_PROPERTIES, NULL,
 	  N_("Edit the account view options"),
-	  G_CALLBACK (gnc_acct_tree_window_cmd_view_options), NULL },
+	  G_CALLBACK (gnc_acct_tree_window_cmd_view_options) },
 };
 static guint acct_tree_popups_n_entries = G_N_ELEMENTS (acct_tree_popups_entries);
 
@@ -1228,7 +1228,6 @@ gnc_acct_tree_window_new(const gchar * url)
   GNCAcctTreeWin * treewin = g_new0(GNCAcctTreeWin, 1);
   EggMenuMerge *merge;
   EggActionGroup *action_group;
-  gint i;
   gchar *fname;
   SCM find_options = scm_c_eval_string("gnc:find-acct-tree-window-options");
   SCM temp;
@@ -1243,15 +1242,11 @@ gnc_acct_tree_window_new(const gchar * url)
                                         "International",
                                         "Enable EURO support");
 
-  for (i = 0; i < acct_tree_popups_n_entries; i++) {
-    acct_tree_popups_entries[i].user_data = treewin;
-  }
-
   merge = egg_menu_merge_new ();
 
   action_group = egg_action_group_new ("PopupsActions");
   egg_action_group_add_actions (action_group, acct_tree_popups_entries,
-				acct_tree_popups_n_entries);
+				acct_tree_popups_n_entries, treewin);
   egg_menu_merge_insert_action_group (merge, action_group, 0);
 
   fname = g_strconcat (GNC_UI_DIR, "/", "acct-tree-ui.xml", NULL);

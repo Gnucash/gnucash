@@ -46,10 +46,10 @@ static GncPluginPage *gnc_plugin_account_tree_create_page (GncPlugin *plugin, co
 /* Command callbacks */
 static void gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncMainWindowActionData *data);
 
-static EggActionGroupEntry gnc_plugin_account_tree_actions [] = {
+static EggActionEntry gnc_plugin_account_tree_actions [] = {
 	{ "FileNewAccountTreeAction", N_("New Account Tree"), NULL, NULL,
 	  N_("Open a new Account Tree page"),
-	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree), NULL },
+	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree) },
 };
 static guint gnc_plugin_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_account_tree_actions);
 

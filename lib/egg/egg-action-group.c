@@ -209,67 +209,65 @@ egg_action_group_list_actions (EggActionGroup *action_group)
  * @action_group: the action group
  * @entries: an array of action descriptions
  * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
+ *
+ * This is a convenience function to create a number of actions and add them 
+ * to the action group.
+ *
+ * The "activate" signals of the actions are connected to the callbacks and 
+ * their accel paths are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * 
+ * Since: 2.4
+ */
+void
+egg_action_group_add_actions (EggActionGroup *action_group,
+			      EggActionEntry *entries,
+			      guint           n_entries,
+			      gpointer        user_data)
+{
+  egg_action_group_add_actions_full (action_group, 
+				     entries, n_entries, 
+				     user_data, NULL);
+}
+
+
+/**
+ * egg_action_group_add_actions:
+ * @action_group: the action group
+ * @entries: an array of action descriptions
+ * @n_entries: the number of entries
  *
  * This is a convenience routine to create a number of actions and add
  * them to the action group.  Each member of the array describes an
  * action to create.
  */
 void
-egg_action_group_add_actions (EggActionGroup *action_group,
-			      EggActionGroupEntry *entries,
-			      guint n_entries)
+egg_action_group_add_actions_full (EggActionGroup *action_group,
+				   EggActionEntry *entries,
+				   guint           n_entries,
+				   gpointer        user_data,
+				   GDestroyNotify  destroy)
 {
   guint i;
+
+  g_return_if_fail (EGG_IS_ACTION_GROUP (action_group));
 
   for (i = 0; i < n_entries; i++)
     {
       EggAction *action;
-      GType action_type;
       gchar *accel_path;
 
-      switch (entries[i].entry_type) {
-      case NORMAL_ACTION:
-	action_type = EGG_TYPE_ACTION;
-	break;
-      case TOGGLE_ACTION:
-	action_type = EGG_TYPE_TOGGLE_ACTION;
-	break;
-      case RADIO_ACTION:
-	action_type = EGG_TYPE_RADIO_ACTION;
-	break;
-      default:
-	g_warning ("unsupported action type");
-	action_type = EGG_TYPE_ACTION;
-      }
-
-      action = g_object_new (action_type,
+      action = g_object_new (EGG_TYPE_ACTION,
 			     "name", entries[i].name,
 			     "label", _(entries[i].label),
 			     "tooltip", _(entries[i].tooltip),
 			     "stock_id", entries[i].stock_id,
 			     NULL);
 
-      if (entries[i].entry_type == RADIO_ACTION &&
-	  entries[i].extra_data != NULL)
-	{
-	  EggAction *radio_action;
-	  GSList *group;
-
-	  radio_action =
-	    egg_action_group_get_action (EGG_ACTION_GROUP (action_group),
-					   entries[i].extra_data);
-	  if (radio_action)
-	    {
-	      group = egg_radio_action_get_group (EGG_RADIO_ACTION (radio_action));
-	      egg_radio_action_set_group (EGG_RADIO_ACTION (action), group);
-	    }
-	  else
-	    g_warning (G_STRLOC " could not look up `%s'", entries[i].extra_data);
-	}
-
       if (entries[i].callback)
 	g_signal_connect (action, "activate",
-			  entries[i].callback, entries[i].user_data);
+			  entries[i].callback, user_data);
 
       /* set the accel path for the menu item */
       accel_path = g_strconcat ("<Actions>/", action_group->name, "/",
@@ -292,3 +290,211 @@ egg_action_group_add_actions (EggActionGroup *action_group,
       g_object_unref (action);
     }
 }
+
+/**
+ * egg_action_group_add_toggle_actions:
+ * @action_group: the action group
+ * @entries: an array of toggle action descriptions
+ * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
+ *
+ * This is a convenience function to create a number of toggle actions and add them 
+ * to the action group.
+ *
+ * The "activate" signals of the actions are connected to the callbacks and 
+ * their accel paths are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * 
+ * Since: 2.4
+ */
+void
+egg_action_group_add_toggle_actions (EggActionGroup       *action_group,
+				     EggToggleActionEntry *entries,
+				     guint                 n_entries,
+				     gpointer              user_data)
+{
+  egg_action_group_add_toggle_actions_full (action_group, 
+					    entries, n_entries, 
+					    user_data, NULL);
+}
+
+
+/**
+ * egg_action_group_add_toggle_actions_full:
+ * @action_group: the action group
+ * @entries: an array of toggle action descriptions
+ * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
+ * @destroy: destroy notification callback for @user_data
+ *
+ * This variant of egg_action_group_add_toggle_actions() adds a 
+ * #GDestroyNotify callback for @user_data. 
+ * 
+ * Since: 2.4
+ */
+void
+egg_action_group_add_toggle_actions_full (EggActionGroup       *action_group,
+					  EggToggleActionEntry *entries,
+					  guint                 n_entries,
+					  gpointer              user_data,
+					  GDestroyNotify        destroy)
+{
+  guint i;
+
+  g_return_if_fail (EGG_IS_ACTION_GROUP (action_group));
+
+  for (i = 0; i < n_entries; i++)
+    {
+      EggAction *action;
+      gchar *accel_path;
+
+      action = g_object_new (EGG_TYPE_TOGGLE_ACTION,
+			     "name", entries[i].name,
+			     "label", entries[i].label,
+			     "tooltip", entries[i].tooltip,
+			     "stock_id", entries[i].stock_id,
+			     NULL);
+
+      egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), 
+				    entries[i].is_active);
+
+      if (entries[i].callback)
+	g_signal_connect_data (action, "activate",
+			       entries[i].callback, 
+			       user_data, (GClosureNotify)destroy, 0);
+
+      /* set the accel path for the menu item */
+      accel_path = g_strconcat ("<Actions>/", action_group->name, "/",
+				entries[i].name, NULL);
+      if (entries[i].accelerator)
+	{
+	  guint accel_key = 0;
+	  GdkModifierType accel_mods;
+
+	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
+				 &accel_mods);
+	  if (accel_key)
+	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+	}
+
+      egg_action_set_accel_path (action, accel_path);
+      g_free (accel_path);
+
+      egg_action_group_add_action (action_group, action);
+      g_object_unref (action);
+    }
+}
+
+/**
+ * egg_action_group_add_radio_actions:
+ * @action_group: the action group
+ * @entries: an array of radio action descriptions
+ * @n_entries: the number of entries
+ * @value: the value of the action to activate initially, or -1 if
+ *   no action should be activated
+ * @on_change: the callback to connect to the changed signal
+ * @user_data: data to pass to the action callbacks
+ * 
+ * This is a convenience routine to create a group of radio actions and
+ * add them to the action group. 
+ *
+ * The "changed" signal of the first radio action is connected to the 
+ * @on_change callback and the accel paths of the actions are set to 
+ * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
+ * 
+ * Since: 2.4
+ **/
+void            
+egg_action_group_add_radio_actions (EggActionGroup      *action_group,
+				    EggRadioActionEntry *entries,
+				    guint                n_entries,
+				    gint                 value,
+				    GCallback            on_change,
+				    gpointer             user_data)
+{
+  egg_action_group_add_radio_actions_full (action_group, 
+					   entries, n_entries, 
+					   value,
+					   on_change, user_data, NULL);
+}
+
+/**
+ * egg_action_group_add_radio_actions_full:
+ * @action_group: the action group
+ * @entries: an array of radio action descriptions
+ * @n_entries: the number of entries
+ * @value: the value of the action to activate initially, or -1 if
+ *   no action should be activated
+ * @on_change: the callback to connect to the changed signal
+ * @user_data: data to pass to the action callbacks
+ * @destroy: destroy notification callback for @user_data
+ *
+ * This variant of egg_action_group_add_radio_actions() adds a 
+ * #GDestroyNotify callback for @user_data. 
+ * 
+ * Since: 2.4
+ **/
+void            
+egg_action_group_add_radio_actions_full (EggActionGroup      *action_group,
+					 EggRadioActionEntry *entries,
+					 guint                n_entries,
+					 gint                 value,
+					 GCallback            on_change,
+					 gpointer             user_data,
+					 GDestroyNotify       destroy)
+{
+  guint i;
+  GSList *group = NULL;
+  EggAction *first_action = NULL;
+
+  g_return_if_fail (EGG_IS_ACTION_GROUP (action_group));
+
+  for (i = 0; i < n_entries; i++)
+    {
+      EggAction *action;
+      gchar *accel_path;
+
+      action = g_object_new (EGG_TYPE_RADIO_ACTION,
+			     "name", entries[i].name,
+			     "label", entries[i].label,
+			     "tooltip", entries[i].tooltip,
+			     "stock_id", entries[i].stock_id,
+			     "value", entries[i].value,
+			     NULL);
+
+      if (i == 0) 
+	first_action = action;
+
+      if (value == entries[i].value)
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION (action), TRUE);
+      
+      egg_radio_action_set_group (EGG_RADIO_ACTION (action), group);
+      group = egg_radio_action_get_group (EGG_RADIO_ACTION (action));
+
+      /* set the accel path for the menu item */
+      accel_path = g_strconcat ("<Actions>/", action_group->name, "/",
+				entries[i].name, NULL);
+      if (entries[i].accelerator)
+	{
+	  guint accel_key = 0;
+	  GdkModifierType accel_mods;
+
+	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
+				 &accel_mods);
+	  if (accel_key)
+	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+	}
+
+      egg_action_set_accel_path (action, accel_path);
+      g_free (accel_path);
+      
+      egg_action_group_add_action (action_group, action);
+      g_object_unref (action);
+    }
+
+  if (on_change)
+    g_signal_connect_data (first_action, "changed",
+			   on_change, user_data, 
+			   (GClosureNotify)destroy, 0);
+}
+

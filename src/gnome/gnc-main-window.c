@@ -136,120 +136,125 @@ typedef struct {
 	EggActionGroup *action_group;
 } MergedActionEntry;
 
-static EggActionGroupEntry gnc_menu_entries [] = {
-
+static EggActionEntry gnc_menu_entries [] =
+{
 	/* Toplevel */
-	{ "FileAction", N_("_File"), NULL, NULL, NULL, NULL, NULL },
-	{ "EditAction", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
-	{ "ViewAction", N_("_View"), NULL, NULL, NULL, NULL, NULL },
-	{ "ActionsAction", N_("_Actions"), NULL, NULL, NULL, NULL, NULL },
-	{ "ToolsAction", N_("_Tools"), NULL, NULL, NULL, NULL, NULL },
-	{ "HelpAction", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
+	{ "FileAction", N_("_File"), NULL, NULL, NULL, NULL, },
+	{ "EditAction", N_("_Edit"), NULL, NULL, NULL, NULL },
+	{ "ViewAction", N_("_View"), NULL, NULL, NULL, NULL },
+	{ "ActionsAction", N_("_Actions"), NULL, NULL, NULL, NULL },
+	{ "ToolsAction", N_("_Tools"), NULL, NULL, NULL, NULL },
+	{ "HelpAction", N_("_Help"), NULL, NULL, NULL, NULL },
 
 	/* File menu */
 	{ "FileNewAction", N_("_New File"), GTK_STOCK_NEW, "<control>n",
 	  N_("Create a new file"),
-	  G_CALLBACK (gnc_main_window_cmd_file_new), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_new) },
 	{ "FileOpenAction", N_("_Open"), GTK_STOCK_OPEN, NULL,
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_open), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_open) },
 	{ "FileOpenNewWindowAction", N_("Open in a New Window"), NULL, NULL,
 	  N_("Open a new top-level GnuCash window for the current view"),
-	  G_CALLBACK (gnc_main_window_cmd_file_open_new_window), NULL },
-	{ "FileOpenRecentAction", N_("Open _Recent"), NULL, NULL, NULL, NULL, NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_open_new_window) },
+	{ "FileOpenRecentAction", N_("Open _Recent"), NULL, NULL, NULL, NULL },
 	{ "FileSaveAction", N_("_Save"), GTK_STOCK_SAVE, "<control>s",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_save), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_save) },
 	{ "FileSaveAsAction", N_("Save _As..."), GTK_STOCK_SAVE_AS, "<shift><control>s",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_save_as), NULL },
-	{ "FileImportAction", N_("_Import"), NULL, NULL, NULL, NULL, NULL },
-	{ "FileExportAction", N_("_Export"), NULL, NULL, NULL, NULL, NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_save_as) },
+	{ "FileImportAction", N_("_Import"), NULL, NULL, NULL, NULL },
+	{ "FileExportAction", N_("_Export"), NULL, NULL, NULL, NULL },
 	{ "FileExportAccountsAction", N_("Export _Accounts..."), NULL, NULL,
 	   N_("Export the account hierarchy to a new file"),
-	   G_CALLBACK (gnc_main_window_cmd_file_export_accounts), NULL },
+	   G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
 	{ "FilePrintAction", N_("_Print..."), GTK_STOCK_PRINT, "<control>p",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_print), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_print) },
 	{ "FileCloseAction", N_("_Close"), GTK_STOCK_CLOSE, "<control>w",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_close), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_close) },
 	{ "FileQuitAction", N_("_Quit"), GTK_STOCK_QUIT, NULL,
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_quit), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_file_quit) },
 
 	/* Edit menu */
 	{ "EditCutAction", N_("Cu_t"), GTK_STOCK_CUT, "<control>x",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_cut), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_edit_cut) },
 	{ "EditCopyAction", N_("_Copy"), GTK_STOCK_COPY, "<control>c",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_copy), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_edit_copy) },
 	{ "EditPasteAction", N_("_Paste"), GTK_STOCK_PASTE, "<control>v",
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_paste), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_edit_paste) },
 	{ "EditPreferencesAction", N_("_Preferences"), GTK_STOCK_PREFERENCES, NULL,
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_preferences), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
 	{ "EditTaxOptionsAction", N_("Ta_x Options"), NULL, NULL,
 	  N_("Setup tax information for all income and expense accounts"),
-	  G_CALLBACK (gnc_main_window_cmd_edit_tax_options), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_edit_tax_options) },
 
 	/* View menu */
 	{ "ViewRefreshAction", N_("_Refresh"), GTK_STOCK_REFRESH, "<control>r",
 	  N_("Refresh this window"),
-	  G_CALLBACK (gnc_main_window_cmd_view_refresh), NULL },
-	{ "ViewToolbarAction", N_("_Toolbar"), NULL, "<shift><control>t",
-	  N_("Show/hide the toolbar on this window"),
-	  G_CALLBACK (gnc_main_window_cmd_view_toolbar), NULL, TOGGLE_ACTION },
-	{ "ViewSummaryAction", N_("S_ummary Bar"), NULL, NULL,
-	  N_("Show/hide the summary bar on this window"),
-	  G_CALLBACK (gnc_main_window_cmd_view_summary), NULL, TOGGLE_ACTION },
-	{ "ViewStatusbarAction", N_("_Status Bar"), NULL, NULL,
-	  N_("Show/hide the status bar on this window"),
-	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), NULL, TOGGLE_ACTION },
+	  G_CALLBACK (gnc_main_window_cmd_view_refresh) },
 
 	/* Actions menu */
-	{ "ActionsScheduledTransactionsAction", N_("_Scheduled Transactions"), NULL, NULL, NULL, NULL, NULL },
+	{ "ActionsScheduledTransactionsAction", N_("_Scheduled Transactions"), NULL, NULL, NULL, NULL },
 	{ "ActionsScheduledTransactionEditorAction", N_("_Scheduled Transaction Editor"), NULL, "NULL",
 	  N_("The list of Scheduled Transactions"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor) },
 	{ "ActionsSinceLastRunAction", N_("_Since Last Run..."), NULL, "NULL",
 	  N_("Create Scheduled Transactions since the last time run"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_since_last_run), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_actions_since_last_run) },
 	{ "ActionsMortgageLoanAction", N_("_Mortgage & Loan Repayment..."), NULL, "NULL",
 	  N_("Setup scheduled transactions for repayment of a loan"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
 	
 	/* Tools menu */
 	{ "ToolsPriceEditorAction", N_("_Price Editor"), NULL, NULL,
 	  N_("View and edit the prices for stocks and mutual funds"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_price_editor), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_tools_price_editor) },
 	{ "ToolsCommodityEditorAction", N_("Commodity _Editor"), NULL, NULL,
 	  N_("View and edit the commodities for stocks and mutual funds"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor) },
 	{ "ToolsFinancialCalculatorAction", N_("Financial _Calculator"), NULL, NULL,
 	  N_("Use the financial calculator"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator) },
 	{ "ToolsFindTransactionsAction", N_("_Find Transactions"), GTK_STOCK_FIND, "<control>f",
 	  N_("Find transactions with a search"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_find_transactions), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
 
 	/* Help menu */
 	{ "HelpTutorialAction", N_("Tutorial and Concepts _Guide"), GNOME_STOCK_BOOK_BLUE, NULL,
 	  N_("Open the GnuCash Tutorial"),
-	  G_CALLBACK (gnc_main_window_cmd_help_tutorial), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_help_tutorial) },
 	{ "HelpTipsOfTheDayAction", N_("_Tips Of The Day"), NULL, NULL,
 	  N_("View the Tips of the Day"),
-	  G_CALLBACK (gnc_main_window_cmd_help_totd), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_help_totd) },
 	{ "HelpContentsAction", N_("_Contents"), GTK_STOCK_HELP, NULL,
 	  N_("Open the GnuCash Help"),
-	  G_CALLBACK (gnc_main_window_cmd_help_contents), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_help_contents) },
 	{ "HelpAboutAction", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_help_about), NULL },
+	  G_CALLBACK (gnc_main_window_cmd_help_about) },
 };
 static guint gnc_menu_n_entries = G_N_ELEMENTS (gnc_menu_entries);
+
+static EggToggleActionEntry toggle_entries [] =
+{
+	{ "ViewToolbarAction", NULL, N_("_Toolbar"), "<shift><control>t",
+	  N_("Show/hide the toolbar on this window"),
+	  G_CALLBACK (gnc_main_window_cmd_view_toolbar), TRUE },
+	{ "ViewSummaryAction", NULL, N_("S_ummary Bar"), NULL,
+	  N_("Show/hide the summary bar on this window"),
+	  G_CALLBACK (gnc_main_window_cmd_view_summary), TRUE },
+	{ "ViewStatusbarAction", NULL, N_("_Status Bar"), NULL,
+	  N_("Show/hide the status bar on this window"),
+	  G_CALLBACK (gnc_main_window_cmd_view_statusbar),  },
+};
+static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 static GObjectClass *parent_class = NULL;
 
@@ -381,13 +386,12 @@ gnc_main_window_get_current_page (GncMainWindow *window)
 void
 gnc_main_window_merge_actions (GncMainWindow *window,
 			       const gchar *group_name,
-			       EggActionGroupEntry *actions,
+			       EggActionEntry *actions,
 			       guint n_actions,
 			       const gchar *ui_file,
 			       gpointer user_data)
 {
 	GncMainWindowActionData *data;
-	guint i;
 	MergedActionEntry *entry;
 	GError *error = NULL;
 
@@ -401,13 +405,9 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	data->window = window;
 	data->data = user_data;
 
-	for (i = 0; i < n_actions; i++) {
-		actions[i].user_data = data;
-	}
-
 	entry = g_new0 (MergedActionEntry, 1);
 	entry->action_group = egg_action_group_new (group_name);
-	egg_action_group_add_actions (entry->action_group, actions, n_actions);
+	egg_action_group_add_actions (entry->action_group, actions, n_actions, data);
 	egg_menu_merge_insert_action_group (window->ui_merge, entry->action_group, 0);
 	entry->merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, ui_file, &error);
 	g_assert(entry->merge_id || error);
@@ -532,7 +532,7 @@ static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
 	GtkWidget *main_vbox;
-	guint i, merge_id;
+	guint merge_id;
 	GncPluginManager *manager;
 	GList *plugins;
 	GError *error = NULL;
@@ -561,16 +561,15 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_box_pack_start (GTK_BOX (main_vbox), window->priv->statusbar,
 			    FALSE, TRUE, 0);
 
-	/* Create menu and toolbar information */
-	for (i = 0; i < gnc_menu_n_entries; i++) {
-		gnc_menu_entries[i].user_data = window;
-	}
-
 	window->ui_merge = egg_menu_merge_new ();
 
+	/* Create menu and toolbar information */
 	window->priv->action_group = egg_action_group_new ("MainWindowActions");
 	egg_action_group_add_actions (window->priv->action_group, gnc_menu_entries,
-				      gnc_menu_n_entries);
+				      gnc_menu_n_entries, window);
+	egg_action_group_add_toggle_actions (window->priv->action_group, 
+					     toggle_entries, n_toggle_entries, 
+					     window);
 	egg_menu_merge_insert_action_group (window->ui_merge, window->priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",

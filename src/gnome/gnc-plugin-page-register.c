@@ -28,6 +28,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkvbox.h>
 #include "egg-action-group.h"
+#include "egg-radio-action.h"
 #include "global-options.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-page-register.h"
@@ -40,7 +41,7 @@ static void gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *kla
 static void gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_finalize (GObject *object);
 
-/* atic Account *gnc_plugin_page_register_get_current_account (GncPluginPageRegister *page); */
+/* static Account *gnc_plugin_page_register_get_current_account (GncPluginPageRegister *page); */
 
 static void gnc_plugin_page_register_plugin_page_init (GncPluginPageIface *iface);
 
@@ -61,30 +62,41 @@ static gboolean gnc_plugin_page_register_button_press_cb (GtkWidget *widget,
 			       				      GncPluginPageRegister *page);
 #endif
 /* Command callbacks */
-static void gnc_plugin_page_register_cmd_record_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_enter_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cancel_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_delete_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
 
-static EggActionGroupEntry gnc_plugin_page_register_actions [] = {
+
+/************************************************************/
+/*                          Actions                         */
+/************************************************************/
+
+static EggActionEntry gnc_plugin_page_register_actions [] =
+{
 	/* Toplevel */
-	{ "FakeToplevel", "", NULL, NULL, NULL, NULL, NULL },
+	{ "FakeToplevel", "", NULL, NULL, NULL, NULL },
 
 	/* Actions menu */
-	{ "RecordTransactionAction", N_("_Enter Transaction"), GTK_STOCK_OK, NULL,
+	{ "RecordTransactionAction", N_("_Enter Transaction"), GTK_STOCK_ADD, NULL,
 	  N_("Record the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_record_transaction), NULL },
+	  G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction) },
 	{ "CancelTransactionAction", N_("_Cancel Transaction"), GTK_STOCK_CANCEL, NULL,
 	  N_("_Cancel the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction), NULL },
+	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction) },
 	{ "DeleteTransactionAction", N_("_Delete Transaction"), GTK_STOCK_DELETE, NULL,
 	  N_("Delete the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction), NULL },
+	  G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction) },
+
 	{ "DuplicateTransactionAction", N_("D_uplicate Transaction"), GTK_STOCK_COPY, NULL,
 	  N_("Make a copy of the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction), NULL },
+	  G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
+
+/************************************************************/
+/*                      Data Structures                     */
+/************************************************************/
 
 struct GncPluginPageRegisterPrivate
 {
@@ -98,6 +110,10 @@ struct GncPluginPageRegisterPrivate
 };
 
 static GObjectClass *parent_class = NULL;
+
+/************************************************************/
+/*                      Implementation                      */
+/************************************************************/
 
 GType
 gnc_plugin_page_register_get_type (void)
@@ -219,20 +235,17 @@ gnc_plugin_page_register_init_short_names (EggActionGroup *action_group)
 static void
 gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 {
+	GncPluginPageRegisterPrivate *priv;
 	EggActionGroup *action_group;
-	gint i;
 
-	plugin_page->priv = g_new0 (GncPluginPageRegisterPrivate, 1);
+	priv = g_new0 (GncPluginPageRegisterPrivate, 1);
+	plugin_page->priv = priv;
 
 	/* Create menu and toolbar information */
-	for (i = 0; i < gnc_plugin_page_register_n_actions; i++) {
-		gnc_plugin_page_register_actions[i].user_data = plugin_page;
-	}
-
 	action_group = egg_action_group_new ("GncPluginPageRegisterActions");
-	plugin_page->priv->action_group = action_group;
+	priv->action_group = action_group;
 	egg_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
-				      gnc_plugin_page_register_n_actions);
+				      gnc_plugin_page_register_n_actions, plugin_page);
 	gnc_plugin_page_register_init_short_names (action_group);
 }
 
@@ -329,24 +342,27 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 
 static void
 gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
-					    EggMenuMerge *ui_merge)
+					EggMenuMerge *ui_merge)
 {
-	GncPluginPageRegister *plugin_page_register = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+	GncPluginPageRegister *register_page;
+	GncPluginPageRegisterPrivate *priv;
 	GError *error = NULL;
 	
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page_register));
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
-	egg_menu_merge_insert_action_group (ui_merge, plugin_page_register->priv->action_group, 0);
+	register_page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+	priv = register_page->priv;
+	egg_menu_merge_insert_action_group (ui_merge, priv->action_group, 0);
 
-	plugin_page_register->priv->merge_id =
+	priv->merge_id =
 	  egg_menu_merge_add_ui_from_file (ui_merge,
 					   GNC_UI_DIR "/gnc-plugin-page-register-ui.xml",
 					   &error);
 
-	g_assert(plugin_page_register->priv->merge_id || error);
-	if (plugin_page_register->priv->merge_id) {
+	g_assert(priv->merge_id || error);
+	if (priv->merge_id) {
 	  egg_menu_merge_ensure_update (ui_merge);
-	  plugin_page_register->priv->ui_merge = ui_merge;
+	  priv->ui_merge = ui_merge;
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
 		     "gnc-plugin-page-register-ui.xml", error->message);
@@ -442,8 +458,8 @@ gnc_plugin_page_register_get_uri (GncPluginPage *plugin_page)
 #if 0
 static gboolean
 gnc_plugin_page_register_button_press_cb (GtkWidget *widget,
-					      GdkEventButton *event,
-	       				      GncPluginPageRegister *page)
+					  GdkEventButton *event,
+					  GncPluginPageRegister *page)
 {
 	const gchar *popup;
 	gchar *path;
@@ -468,24 +484,30 @@ gnc_plugin_page_register_button_press_cb (GtkWidget *widget,
 }
 #endif
 
-/* Command callbacks */
+/************************************************************/
+/*                     Command callbacks                    */
+/************************************************************/
+
 static void
-gnc_plugin_page_register_cmd_record_transaction (EggAction *action, GncPluginPageRegister *plugin_page)
+gnc_plugin_page_register_cmd_enter_transaction (EggAction *action,
+						GncPluginPageRegister *plugin_page)
 {
 }
 
 static void
-gnc_plugin_page_register_cmd_cancel_transaction (EggAction *action, GncPluginPageRegister *plugin_page)
+gnc_plugin_page_register_cmd_cancel_transaction (EggAction *action,
+						 GncPluginPageRegister *plugin_page)
 {
 }
 
 static void
-gnc_plugin_page_register_cmd_delete_transaction (EggAction *action, GncPluginPageRegister *plugin_page)
+gnc_plugin_page_register_cmd_delete_transaction (EggAction *action,
+						 GncPluginPageRegister *plugin_page)
 {
 }
 
 static void
-gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *action, GncPluginPageRegister *plugin_page)
+gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *action,
+						    GncPluginPageRegister *plugin_page)
 {
 }
-

@@ -19,10 +19,13 @@ struct _EggRadioAction {
   EggToggleAction parent;
 
   GSList *group;
+  gint    value;
 };
 
 struct _EggRadioActionClass {
   EggToggleActionClass parent_class;
+
+  void       (* changed) (EggRadioAction *action, EggRadioAction *current);
 };
 
 GType    egg_radio_action_get_type  (void);
@@ -30,5 +33,6 @@ GType    egg_radio_action_get_type  (void);
 GSList  *egg_radio_action_get_group (EggRadioAction *action);
 void     egg_radio_action_set_group (EggRadioAction *action,
 				     GSList *group);
+gint     egg_radio_action_get_current_value (EggRadioAction *action);
 
 #endif
