@@ -43,6 +43,12 @@
     crud has snuck in; there's several places where Gnucash Transactions
     and GnuCash Accounts are accessed directly, and that's wrong;
     these should be cleaned up.
+
+    This code is also theoretically independent of the actual GUI
+    toolkit/widget-set (it once worked with both Motif and Gnome).
+    The actual GUI-toolkit specific code is supposed to be in a 
+    GUI portability layer.  Over the years, some gnome-isms may 
+    have snuck in; these should also be cleaned up.
     @{ 
 
     @file split-register.h
