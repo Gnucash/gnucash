@@ -1,3 +1,8 @@
+2003-05-17  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* configure.in: Add Makefile.in to AC_OUTPUT targets.
+	* macros/autogen.sh: Add a AM_GLIB_GNU_GETTEXT section to generate a po/Makefile.in.in file.
+
 2003-05-16  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 	
 	* configure.in: Add gnucash.desktop, and gnucash.keys to the AC_OUTPUT targets.

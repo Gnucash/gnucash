@@ -97,7 +97,7 @@ fi
 if test -z "$*"; then
   echo "**Warning**: I am going to run \`configure' with no arguments."
   echo "If you wish to pass any to it, please specify them on the"
-  echo \`$0\'" command line."
+  echo \`$0"' command line."
   echo
 fi
 
@@ -140,56 +140,52 @@ do
         fi
       done
       if grep "^AM_GNU_GETTEXT" configure.in >/dev/null; then
-	if grep "sed.*POTFILES" configure.in >/dev/null; then
-	  : do nothing -- we still have an old unmodified configure.in
-	else
-	  echo "Creating $dr/aclocal.m4 ..."
-	  test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-	  echo "Running ${GETTEXTIZE}...  Ignore non-fatal messages."
-	  echo "no" | ${GETTEXTIZE} --force --copy $INTL
-	  echo "Making $dr/aclocal.m4 writable ..."
-	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+        if grep "sed.*POTFILES" configure.in >/dev/null; then
+          : do nothing -- we still have an old unmodified configure.in
+        else
+          echo "Creating $dr/aclocal.m4 ..."
+          test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+          echo "Running gettextize...  Ignore non-fatal messages."
+          echo "no" | gettextize --force --copy
+          echo "Making $dr/aclocal.m4 writable ..."
+          test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
         fi
       fi
       if grep "^AM_GNOME_GETTEXT" configure.in >/dev/null; then
-	echo "Creating $dr/aclocal.m4 ..."
-	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-	echo "Running ${GETTEXTIZE}...  Ignore non-fatal messages."
-	echo "no" | ${GETTEXTIZE} --force --copy $INTL
-	echo "Making $dr/aclocal.m4 writable ..."
-	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+        echo "Creating $dr/aclocal.m4 ..."
+        test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+        echo "Running gettextize...  Ignore non-fatal messages."
+        echo "no" | gettextize --force --copy
+        echo "Making $dr/aclocal.m4 writable ..."
+        test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
-#      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
-#        echo "Running ${INTLTOOLIZE} ..."
-#        ${INTLTOOLIZE} --copy --force --automake
-#      fi 
-#      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
-#	if test -z "$NO_LIBTOOLIZE" ; then 
-#	  echo "Running ${LIBTOOLIZE}..."
-#	  ${LIBTOOLIZE} --force --copy
-#	fi
-#      fi
-      echo "Running ${ACLOCAL} $aclocalinclude ..."
-      ${ACLOCAL} $aclocalinclude || {
-	echo
-	echo "**Error**: aclocal failed. This may mean that you have not"
-	echo "installed all of the packages you need, or you may need to"
-	echo "set ACLOCAL_FLAGS to include \"-I \$prefix/share/aclocal\""
-	echo "for the prefix where you installed the packages whose"
-	echo "macros were not found"
-	exit 1
-      }
-
+      if grep "^AM_GLIB_GNU_GETTEXT" configure.in >/dev/null; then
+        echo "Creating $dr/aclocal.m4 ..."
+        test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+        echo "Running gettextize...  Ignore non-fatal messages."
+        echo "no" | glib-gettextize --force --copy
+        echo "Making $dr/aclocal.m4 writable ..."
+        test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+      fi
+      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+        echo "Running intltoolize ..."
+        intltoolize --copy
+      fi
+      if grep "^A[CM]_PROG_LIBTOOL" configure.in >/dev/null; then
+        echo "Running libtoolize..."
+        libtoolize --force --copy
+      fi
+      echo "Running $ACLOCAL $aclocalinclude ..."
+      $ACLOCAL $aclocalinclude
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
-	echo "Running ${AUTOHEADER}..."
-	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
+        echo "Running autoheader..."
+        autoheader
       fi
-      echo "Running ${AUTOMAKE} --gnu $am_opt ..."
-      ${AUTOMAKE} --add-missing --gnu $am_opt ||
-	{ echo "**Error**: automake failed."; exit 1; }
-      echo "Running ${AUTOCONF} ..."
-      ${AUTOCONF} || { echo "**Error**: autoconf failed."; exit 1; }
-    ) || exit 1
+      echo "Running $AUTOMAKE --gnu $am_opt ..."
+      $AUTOMAKE --add-missing --gnu $am_opt
+      echo "Running autoconf ..."
+      autoconf
+    )
   fi
 done
 

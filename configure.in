@@ -1070,6 +1070,7 @@ AC_OUTPUT( m4/Makefile
           lib/srfi/Makefile
 	  lib/libc/Makefile
           macros/Makefile
+          po/Makefile.in
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile
