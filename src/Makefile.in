@@ -27,7 +27,7 @@
 srcdir   = @srcdir@
 VPATH    = @srcdir@
 CC       = @CC@
-INCLPATH = -I/usr/include \
+INCLPATH = \
            -I.. \
            -I/usr/local/include \
            -I@x_includes@/. \

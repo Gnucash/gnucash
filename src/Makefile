@@ -27,7 +27,7 @@
 
 srcdir   = .
 CC       = gcc
-INCLPATH = -I/usr/include \
+INCLPATH = \
            -I.. \
            -I/usr/local/include \
            -I/usr/X11R6/include/. \

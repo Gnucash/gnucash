@@ -3,6 +3,7 @@
 
 XACC_HELP=${XACC_HELP:-@prefix@/share/xacc/Docs}
 export XACC_HELP
+# hack alert -- we should really be using ldconmfig to find this library
 if [ -f /usr/X11R6/lib/libXm.so -o -L /usr/X11R6/lib/libXm.so ]; then 
   exec xacc.bin $@
 else
