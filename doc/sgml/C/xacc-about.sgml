@@ -1042,6 +1042,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>treacy@debian.org</email> James A. Treacy</glossterm>
+<glossdef>
+<para>doc patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>troeger@samart.co.th</email> Arnold Troeger</glossterm>
 <glossdef>
 <para>Mandrake packager</para>
