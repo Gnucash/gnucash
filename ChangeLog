@@ -16,6 +16,8 @@
 	  pretty Gnome implementation)
 
 	* use the checkbox cell in the EntryLedger
+
+	* make the Invoiced? cell mutable under limited conditions
 	
 2002-10-03  Christian Stimming  <stimming@tuhh.de>
 

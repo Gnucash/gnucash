@@ -748,7 +748,17 @@ static CellIOFlags get_inv_io_flags (VirtualLocation virt_loc,
 
   switch (ledger->type) {
   case GNCENTRY_INVOICE_ENTRY:
-    return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+  {
+    /* This cell should be mutably IFF this entry is attached to
+     * a bill, order, or something else.
+     */
+    GncEntry * entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+    if ((gncEntryGetOrder (entry) != NULL) || (gncEntryGetBill (entry) != NULL))
+      return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+
+  }
+  /* FALLTHROUGH */
   default:
     return XACC_CELL_ALLOW_SHADOW;
   }
