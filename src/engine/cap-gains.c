@@ -677,8 +677,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       split->gains_split = lot_split;
       lot_split->gains = GAINS_STATUS_GAINS;
       lot_split->gains_split = split;
-      gains_split->gains = GAINS_STATUS_GAINS;
-      gains_split->gains_split = split;
+      gain_split->gains = GAINS_STATUS_GAINS;
+      gain_split->gains_split = split;
 
       xaccTransCommitEdit (trans);
    }
