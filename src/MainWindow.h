@@ -29,7 +29,6 @@
 #include "config.h"
 #include "ui-callbacks.h"
 #include "gnc-common.h"
-#include "Session.h"
 
 /** GLOBALS *********************************************************/
 typedef enum {
@@ -46,6 +45,5 @@ typedef enum {
 
 void     mainWindow();
 void     gnc_show_help(const gncHelpTypes t);
-Session *gnc_main_window_get_session(gncUIWidget w);
 
 #endif
