@@ -52,11 +52,11 @@
 #define HAVE_JPEG 1            
 
 #if HAVE_XPM
-#define USE_HTMLW            0
+/* #undef  USE_HTMLW */   
 #define USE_XMHTML           1
 #else
 #define USE_HTMLW            1
-#define USE_XMHTML           0
+/* #undef USE_XMHTML */  
 #endif
 
 #endif
