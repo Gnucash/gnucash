@@ -300,7 +300,10 @@ qof_session_load_backend(QofSession * session, char * backend_name)
   /* FIXME: this needs to be smarter with version numbers. */
   /* FIXME: this should use dlopen(), instead of guile/scheme, 
    *    to load the modules.  Right now, this requires the engine to
-   *    link to scheme, which is an obvious architecture flaw. */
+   *    link to scheme, which is an obvious architecture flaw. 
+   *    XXX this is fexed below, in the non-gnucash version. Cut
+   *    over at some point.
+   */
   mod = gnc_module_load(mod_name, 0);
 
   if (mod) 

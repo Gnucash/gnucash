@@ -151,6 +151,11 @@ void qof_session_begin (QofSession *session, const char * book_id,
  *    backends, e.g. network or SQL, this would load only enough data
  *    to make the book actually usable; it would not cause *all* of the
  *    data to be loaded.
+ *
+ * XXX the current design tries to accomodate multiple calls to 'load'
+ * for each session, each time wiping out the old books; this seems 
+ * wrong to me, and should be restricted to allow only one load per 
+ * session.
  */
 typedef void (*QofPercentageFunc) (const char *message, double percent);
 void qof_session_load (QofSession *session,
