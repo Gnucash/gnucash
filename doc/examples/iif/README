@@ -1,0 +1,10 @@
+This directory contains sample data files in the 'iif'
+Intuit Interchange Format files.   Most of thise files
+have only one transaction in them, with only one or two 
+splits.  
+
+IIF does not seem to have anything that defines an account
+or chart of accounts. It seems only that transactions are 
+supported.
+
+
