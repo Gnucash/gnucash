@@ -100,7 +100,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (book, &employee->inst.entity.guid, _GNC_MOD_NAME);
+  employee->addr = gncAddressCreate (book, &employee->inst.entity);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;

@@ -113,14 +113,14 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->inst.entity.guid, _GNC_MOD_NAME);
+  cust->addr = gncAddressCreate (book, &cust->inst.entity);
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
 
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
-  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity.guid, _GNC_MOD_NAME);
+  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity);
 
   gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
 

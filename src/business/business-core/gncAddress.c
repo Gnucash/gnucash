@@ -20,8 +20,7 @@
 struct _gncAddress 
 {
   QofBook *	book;
-  const GUID *	parent_guid;
-  QofIdType	parent_type;
+  QofEntity * parent;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -44,13 +43,13 @@ mark_address (GncAddress *address)
 {
   address->dirty = TRUE;
 
-  gnc_engine_generate_event (address->parent_guid, address->parent_type, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (address->parent, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy functions */
 
 GncAddress * 
-gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype)
+gncAddressCreate (QofBook *book, QofEntity *prnt)
 {
   GncAddress *addr;
 
@@ -59,8 +58,7 @@ gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype)
   addr = g_new0 (GncAddress, 1);
   addr->book = book;
   addr->dirty = FALSE;
-  addr->parent_guid = parent;
-  addr->parent_type = ptype;
+  addr->parent = prnt;
 
   addr->name = CACHE_INSERT ("");
   addr->addr1 = CACHE_INSERT ("");
@@ -84,8 +82,7 @@ gncCloneAddress (GncAddress *from, QofBook *book)
   addr = g_new0 (GncAddress, 1);
   addr->book = book;
   addr->dirty = TRUE;
-  addr->parent_guid = from->parent_guid;
-  addr->parent_type = from->parent_type;
+  addr->parent = from->parent;
 
   addr->name = CACHE_INSERT (from->name);
   addr->addr1 = CACHE_INSERT (from->addr1);

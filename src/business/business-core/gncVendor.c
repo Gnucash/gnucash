@@ -103,7 +103,7 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->inst.entity.guid, _GNC_MOD_NAME);
+  vendor->addr = gncAddressCreate (book, &vendor->inst.entity);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
   vendor->jobs = NULL;

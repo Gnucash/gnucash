@@ -8,13 +8,14 @@
 #define GNC_ADDRESS_H_
 
 #include "qofbook.h"
+#include "qofid.h"
 
 #define GNC_ADDRESS_MODULE_NAME	"gncAddress"
 
 typedef struct _gncAddress GncAddress;
 
 /* Create/Destroy functions */
-GncAddress * gncAddressCreate (QofBook *book, const GUID *parent, QofIdType ptype);
+GncAddress * gncAddressCreate (QofBook *book, QofEntity *parent);
 
 /** make a copy of the address, but associate it with a different book */
 GncAddress * gncCloneAddress (GncAddress *from, QofBook *book);
