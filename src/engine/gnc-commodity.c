@@ -932,6 +932,27 @@ gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct)
   gnc_commodity_table_destroy (old_ct);
 }
 
+gnc_commodity *
+gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
+{
+  gnc_commodity *twin;
+  const char * ucom;
+  gnc_commodity_table * comtbl;
+
+  if (!from) return NULL;
+  comtbl = gnc_commodity_table_get_table (book);
+  if (!comtbl) return NULL;
+
+  ucom = gnc_commodity_get_unique_name (from);
+  twin = gnc_commodity_table_lookup_unique (comtbl, ucom);
+  if (!twin)
+  {
+    twin = gnc_commodity_clone (from);
+    twin = gnc_commodity_table_insert (comtbl, twin);
+  }
+  return twin;
+}
+
 /********************************************************************
  * gnc_commodity_get_size
  * get the size of the commodity table
