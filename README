@@ -1,15 +1,5 @@
 -*-text-*-
 
-************ BETA  RELEASE ******************
-The version 1.1.x series of gnucash are considered BETA development code.
-Things mopstly work these days; some things may still be broken. Feel 
-free to try it.  Please report bugs to http://www.gnucash.org/
-
-The last stable, production version was xacc-1.0.18
-The next stable, production version will be gnucash-1.2.x
-
-##############################################
-
 GnuCash
 -------
 GnuCash is a personal finance manager.  A check-book like 
@@ -259,19 +249,10 @@ Normally, to build and install GnuCash, all you have to do is:
   # make 
   # make install
 
-You can build Motif, Gnome, and Qt versions. Currently, the Motif version
-is the most stable, bug-free, correct, and feature rich.  The gtk/gnome
-version compiles and is being actively developed, but will take a while to
-reach the stibility level of the motif version. The Qt version may not 
-compile.
-
 Depending on your make target, you'll produce:
 
   gnucash.motif
   gnucash.motif.static
-  gnucash.gnome
-  gnucash.gnome.static
-  gnucash.qt
 
 Whichever one you produce last ends up the target of a local
 gnucash.bin symlink, so that you can always run the local ./gnucash
@@ -308,11 +289,6 @@ Examples of other funny configure options:
               --with-xmhtml-includes=/home/rlb/XmHTML-1.1.5/include\
               --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
 
-
-
-Flag --with-gtk-config.  The way gtk phiolosphy goes,
-you should *only* specify the config program location and
-rely on it to tell you the right CFLAGS and XLIBS values.
 
 Anyone who's having the same problem with the added termcap libs that
 I am can look in configure.in and comment out the TERMCAP_TMP line and
@@ -352,13 +328,11 @@ SGI IRIX              -- MIPS
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
+Solaris               -- Sparc
 
 See ftp://ftp.gnucash.org/pub/xacc (high-bandwdith)
 or  http://linas.org/linux/xacc (slowwww ) 
 for precompiled binaries for these platforms
-
-GnuCash seems to be having problems with:
-Solaris -- Sparc  -- won't compile due to va-args in XmHTML
 
 Additional Download Sites:
 --------------------------
@@ -442,6 +416,7 @@ Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation    
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
