@@ -3,8 +3,10 @@
  * pricecell.h
  *
  * FUNCTION:
- * The PriceCell object implements a cell handler that
- * knows about storing and displaying a price or amount.
+ * The PriceCell object implements a cell handler that stores
+ * a single double-precision value, and has the smarts to 
+ * display it as a price/amount as well as accepting monetary 
+ * or general numeric input.
  *
  * By default, the PriceCell is an input/output cell.
  *
@@ -12,12 +14,12 @@
  * and numeric punctuation.  The punctuation accepted is *not*
  * currently internationalized.  Read the source for details.
  *
- * On output, it can display numeric values with two or three 
- * decimal places.  A planned enhancement would be to store 
- * formating data with an instance of this cell. This is *not*
- * currently done.
+ * On output, it will display a numeric value using its current
+ * format string.  The default format string prints two decimal 
+ * places.  The format string can be set with the 
+ * xaccSetPriceCellFormat() method.
  *
- * hack alert -- implement the above formating & internationalization.
+ * hack alert -- implement internationalization.
  *
  * On output, it will display negative values in red text.
  * hack alert -- the actual color (red) should be user configurable.
@@ -65,7 +67,12 @@ void         xaccDestroyPriceCell (PriceCell *);
 /* updates amount, string format is three decimal places */
 void         xaccSetPriceCellValue (PriceCell *, double amount);
 
-/* use printf-style format to control display */
+/* The xaccSetPriceCellFormat() method is used to control how
+ *    the cell contents are displayed.   It accepts as an argument
+ *    a printf-style format.  The format must control the display
+ *    of a double-precision float.  See the printf() command for 
+ *    allowed syntax.  The default format is "%.2f".
+ */
 void         xaccSetPriceCellFormat (PriceCell *, char * fmt);
 
 /* updates two cells; the deb cell if amt is negative,
