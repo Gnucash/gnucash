@@ -24,6 +24,7 @@
 #include "dialog-customer.h"
 #include "business-chooser.h"
 #include "dialog-job-select.h"
+#include "dialog-job.h"
 
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"

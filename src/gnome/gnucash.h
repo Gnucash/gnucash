@@ -30,6 +30,8 @@
 
 int  gnc_main (int argc, char *argv[]);
 
+void gnc_sh_setup(void);
+
 void gnc_gw_init(void);
 
 int  gnucash_ui_init(void);
