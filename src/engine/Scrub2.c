@@ -162,7 +162,8 @@ restart_loop:
         {
            /* If the amount is smaller than open balance ... */
            gnc_numeric baln = gnc_lot_get_balance (lot);
-           int cmp = gnc_numeric_compare (split->amount, baln);
+           int cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount), 
+                                          gnc_numeric_abs(baln));
 
            PINFO ("found open lot with baln=%s", gnc_numeric_to_string (baln));
            /* cmp == +1 if amt > baln */
@@ -180,8 +181,10 @@ restart_loop:
               amt_tot = split->amount;
               amt_a = gnc_numeric_neg (baln);
               amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
+              PINFO ("++++++++++++++ splitting split into amt = %s + %s", 
+                      gnc_numeric_to_string(amt_a),
+                      gnc_numeric_to_string(amt_b) );
 
-              PINFO ("XXXXXXXXXXXXXXXX splitting split ");
               /* Compute the value so that it holds in the same proportion:
                * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
                */
