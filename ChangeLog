@@ -1,3 +1,7 @@
+2004-09-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofquerycore.c: Fix for x86_64.
+
 2004-09-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c: Finally fix the HBCI
