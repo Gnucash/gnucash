@@ -44,6 +44,7 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/tax/us \
   --gnc-module-dir ${top_builddir}/src/calculation \
   --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/gnome-search \
   --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/app-file \
   --gnc-module-dir ${top_builddir}/src/engine \
@@ -59,6 +60,8 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/backend/file \
   --gnc-module-dir ${top_builddir}/src/backend/postgres \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
+  --gnc-module-dir ${top_builddir}/src/business/business-core/file \
+  --gnc-module-dir ${top_builddir}/src/business/business-ledger \
   --gnc-module-dir ${top_builddir}/src/business/business-gnome \
   --gnc-module-dir ${top_builddir}/src/import-export/qif-io-core \
   --gnc-module-dir ${top_builddir}/src/import-export/qif-import \
