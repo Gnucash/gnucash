@@ -293,7 +293,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
           gnc_table_layout_set_cell (layout, curs, DEBT_CELL,  0, 5);
           gnc_table_layout_set_cell (layout, curs, CRED_CELL,  0, 6);
         }
-	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 8);
+	gnc_table_layout_set_cell (layout, curs, RATE_CELL, 0, 7);
 
         break;
       }

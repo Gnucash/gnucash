@@ -46,6 +46,7 @@ static void gnc_search_double_finalise	(GtkObject *obj);
 
 struct _GNCSearchDoublePrivate {
   GtkWidget * entry;
+  GNCAmountEdit *gae;
 };
 
 static GNCSearchCoreTypeClass *parent_class;
@@ -272,6 +273,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
   gtk_signal_connect (GTK_OBJECT (entry), "amount_changed", entry_changed, fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
   fi->priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
+  fi->priv->gae = GNC_AMOUNT_EDIT (entry);
 
   /* And return the box */
   return box;
@@ -283,6 +285,9 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_DOUBLE (fi), NULL);
+
+  /* force the computation of the entry, because we may not get the signal */
+  entry_changed (fi->priv->gae, fi);
 
   return gncQueryDoublePredicate (fi->how, fi->value);
 }

@@ -11,7 +11,18 @@
 
 	* src/gnome-utils/dialog-transfer.c: always set the exchange-rate
 	  as a positive value (use ABS).  Fixes the rest of #102163.
-	  
+
+	* src/register/ledger-core/split-register-layout.c: fix the
+	  rate_cell layout for general ledgers.  Fixed the critical
+	  failure from bug #101000
+
+	* src/gnome-search/search-numeric.c:
+	* src/gnome-search/search-double.c:
+	* src/gnome-search/search-int64.c:
+	  read the value out of the GNCAmountEdit entry when we create
+	  the Query Predicate, because we're not getting the amount_changed
+	  signal.  Fixes #101000.
+	
 2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c
 	* src/import-export/hbci/gnc-hbci-utils.c:
