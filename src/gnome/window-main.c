@@ -38,6 +38,8 @@
 #include "dialog-options.h"
 #include "AccWindow.h"
 
+#include "g-wrap.h"
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
@@ -153,11 +155,16 @@ static GnomeUIInfo helpmenu[] = {
      GNOMEUIINFO_END
 };
 
+static GnomeUIInfo scriptsmenu[] = {
+  GNOMEUIINFO_END
+};
+
 static GnomeUIInfo mainmenu[] = {
     GNOMEUIINFO_SUBTREE(N_("File"), filemenu),
     GNOMEUIINFO_SUBTREE(N_("Accounts"), accountsmenu),
     GNOMEUIINFO_SUBTREE(N_("Reports"), reportsmenu),
     GNOMEUIINFO_SUBTREE(N_("Options"), optionsmenu),
+    GNOMEUIINFO_SUBTREE(N_("Extensions"), scriptsmenu),
     GNOMEUIINFO_SUBTREE(N_("Help"), helpmenu),
     GNOMEUIINFO_END
 };
@@ -260,6 +267,13 @@ acct_ctree_unselect(GtkWidget *widget, GtkCTreeNode *row, gint column)
   gtk_object_set_data(GTK_OBJECT(app), "selected_account", NULL);
   
   return TRUE; 
+}
+
+Session *
+gnc_main_window_get_session(gncUIWidget w) {
+  /* FIXME: right now there's only one session.  Eventually we might
+     allow multiple windows open. */
+  return(current_session);
 }
 
 static void
@@ -629,6 +643,13 @@ mainWindow() {
   gtk_box_pack_start (GTK_BOX (main_vbox), statusbar, FALSE, FALSE, 0); 
 
   gtk_widget_set_usize ( GTK_WIDGET(app), 500, 400 );		      
+
+  {
+    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
+    SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
+    SCM window = POINTER_TOKEN_to_SCM(make_POINTER_TOKEN("gncUIWidget", app));
+    gh_call2(run_danglers, hook, window); 
+  }
   
   /* Show everything now that it is created */
 

@@ -33,6 +33,8 @@ INCLPATH := -I.. \
             -I../register \
             -I../reports \
             -I@srcdir@/../../include \
+            -I@top_srcdir@/lib/g-wrap-install/include \
+            -I@top_srcdir@/src/g-wrap \
             -I${includedir} \
             -I../../lib/gtkfilesel2
 
@@ -43,7 +45,7 @@ LDFLAGS  = @LDFLAGS@
 GUILELIBS = @GUILELIBS@
 LIBS     = -L$(prefix)/lib @LIBS@ -lgtkxmhtml \
            $(shell ${GNOME_CONFIG_BIN} --libs gnomeui) $(GUILELIBS) \
-            ../../lib/g-wrap-install/lib/libgwrapguile.a  
+           @top_srcdir@/lib/g-wrap-install/lib/libgwrapguile.a
 
 ifeq (${HAVE_PLOTUTILS},1)
   LIBS += @PLOTUTILS_LIBS@
@@ -68,7 +70,8 @@ GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
               window-help.c \
               ui-callbacks.c window-reconcile.c window-main-menu.c \
               dialog-options.c dialog-filebox.c \
-              dialog-add.c dialog-edit.c dialog-editnotes.c
+              dialog-add.c dialog-edit.c dialog-editnotes.c \
+              scripts_menu.c
 ######################################################################
 
 all: gnome
