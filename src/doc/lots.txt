@@ -1,0 +1,152 @@
+
+                           Lots
+									====
+						Implementation Proposal
+
+						Linas Vepstas April 2002
+
+
+'Lots' capture a fundamental accounting idea behind AR/AP, billing,
+inventory, captial gains, depreciation and the like.  The basic idea
+is that a set of items is tracked together as a 'lot'; the date of 
+creation of the lot helps determine when a bill is due, when depreciation
+starts, or the tax rate for capital gains on a stock market investment.
+
+Definition
+==========
+In GnuCash, a 'lot' will consist of a set of splits identified with 
+a unique lot number.  Any given split can belong to one lot and one 
+lot only.  All splits in a lot must also belong to the same account.
+Lots have a 'balance': the sum of all the splits in the lot.  A lot
+is 'opened' when the first split is assigned to it.  The date of that 
+split is the 'opening date' of the lot, and its quantity is the 
+'opening balance'.  A lot is 'closed' when its balance is zero;
+once closed, a lot cannot be re-opened.   Open lots are always carried
+forward into the current open book; closed lots are left behind in the 
+book in which they were closed.
+
+
+How Lots Are Used
+=================
+The following sections review how lots are used to implement various
+accounting devices, and some of the related issues.
+
+Billing:
+--------
+Tracking lots is the 'definition' of A/R and A/P.  You want to be able
+to say that this bill is 120 days old, and its balance has been partly
+paid off; and you want to be able to do this whether or not there are
+also other bills, of different ages, to the same company.  In GnuCash,
+a 'bill' is tracked as a lot:  The 'billing date' is the opening date
+of the lot, and the 'balance due' is the balance of the lot.  When the
+bill is 'paid in full', the lot is closed.  The average age of 
+receivables can be computed by traversing all lots, etc.  Additional 
+information about bills, such as a due date or payment terms, should
+be stored as kvp values associated with the lot.
+
+Inventory:
+----------
+The correct way of handling inventory under GnuCash is to have a 
+separate account for each widget type.  The account balance represents
+how many widgets there are in the warehouse.  Lots offer an additional
+level of detail that can be useful when, for example, the widgets have
+an expiration date (e.g. milk) or vary slightly from batch to batch 
+(e.g paint), and creating a new account to track these differences
+would be too heavyweight.
+
+In order to track widgets as single units (and prohibit fractional
+widgets), set the currency denominator to 1.  This will prevent
+fractional widgets from being transferred into/out of an account.
+
+Note that using accounts to track the inventory of a grocery store
+causes an explosion of accounts, and this explosion would overwhelm
+many of the account GUI's in GnuCash.  The GUI should probably be 
+modified to treat inventory accounts in a special way, e.g. by
+not listing them in account lists, and providing an alternate 
+management GUI.
+
+Capital Gains:
+--------------
+In the United States, gains on stock investments are taxed at different
+rates depending on how long they were held before being sold. By using
+lots with an investment account, it becomes easy to track when any given
+share was bought or sold, and thus, the length of time that share was 
+held.
+
+Note, however, that using lots might cause some confusion for naive
+users, since some transactions might be split across different lots.  
+For example, the user may have conceptually made the following 
+transactions:
+
+>        Date     Desc    Buy     Sell    Price    Value
+>        18/1/01  XCORP   500             $10.00   $5000.00
+>        21/3/01  XCORP   500             $12.00   $6000.00
+>        14/7/02  XCORP           750     $20.00  $15000.00   
+
+However, the two buy transactions create different lots (because
+you can't add to a stock-investment lot after its been created, because
+the purchases occured on different dates).  Thus, when the shares are 
+sold, the sale is split across two lots:
+
+>        Date     Desc    Lot     Buy     Sell    Price    Value
+>        18/1/01  XCORP   187     500             $10.00   $5000.00
+>        21/3/01  XCORP   188     500             $12.00   $6000.00
+>        14/7/02  XCORP   187             500     $20.00  $10000.00   
+>        14/7/02  XCORP   188             250     $20.00   $5000.00   
+
+In the above, lot 187 was closed, and lot 188 has a balance of 250 
+shares.  Note that we used a FIFO accounting method in this example:
+the oldest shares were sold first.
+
+Note also, that by using lots in this example, we are able to accurately
+compute the gains in this transaction: it is 500*($20-$10) + 250*($20-$12)
+= $5000+$2000 = $7000.  If we had used LIFO accounting, and sold the 
+youngest shares first, then the profits would have been 500*($20-$12)
++ 250*($20-$10) = $4000 + 2500 = $6500.  Thus, different accounting 
+methods do affect income, and thus the tax rate.
+
+Note that the two ledgers, the 'without-lots' and the 'with-lots'
+ledgers look different, even though the conceptual transactions are 
+the same.  If a naive user was expecting a 'without-lots' ledger,
+and is shown a 'with lots' ledger, they may get confused.  I don't
+know of any simple way of dealing with this. In order to have lots
+work (thereby allowing cap gains reports to work correctly), the GnuCash
+engine *must* use the 'with-lots' representation of the data.  If the
+GUI wants to hide the fact that there are lots under the covers, it
+muc\st figure out a way of doing this (i.e. re-combining splits) on
+its own.
+
+
+Closing of Books
+================
+A few words on lots and the closing of books.  Without implementing
+lots in the GnuCash engine, there is really no way of correctly 
+implementing book closing.  That is because some reports, such as
+the capital-gains report, need to know not only the account balance,
+but also the purchase dates.  Lots provide the natural mechanism for 
+storing this information.  
+
+When a book is closed, any open lots must be moved into/kept with
+the open book.  Since the splits in a lot belong to transactions,
+and transactions are 'atomic', this means that the associated 
+transactions must be moved into the open book as well.  A lot
+is considered closed when its balance is zero; when a book is closed,
+all of the lots that were closed stay with that book.  That is,
+closed lots are not propageted forward into the currently open book.
+
+
+Implementation 
+==============
+Every split has a pointer to a lot (which may be null).   A lot has a list
+of splits in it (so that the other splits in the lot can be easily found).
+A lot does not need to maintain a balance (this is easy enough to calculate 
+on the fly).  A lot has a kvp tree (for storage of lot-related date, such
+as due dates for invoices, etc.  A lot has a GUID. 
+
+
+
+Status
+======
+Implementation not started.
+
+-------------------------- end of file ------------------------------
