@@ -52,12 +52,16 @@
 #define TABLE_PRIVATE_DATA					\
   /* Motif specific private data */				\
   Widget table_widget;          /* the XbaeMatrix */		\
-  Widget next_tab_group;        /* where to traverse in the end */ 
+  Widget next_tab_group;        /* where to traverse in the end */  \
+  unsigned int ncolors;         /* number of colors in colormap */ \
+  XColor *colors;               /* colormap entries */
 
 
 #define TABLE_PRIVATE_DATA_INIT(table) {		\
    table->table_widget = 0;				\
    table->next_tab_group = 0;				\
+   table->ncolors = 0;					\
+   table->colors = 0x0;					\
 }
 
 /* hack alert -- shouldn't destroy get rid of the widget? */

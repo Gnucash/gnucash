@@ -469,6 +469,46 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
 
 /* ==================================================== */
 
+static void
+SetupColorTable (Table *table)
+{
+
+   Display * dpy;
+   Window win;
+   XWindowAttributes wattr;
+   Colormap cmap;
+   XColor * colors;
+   int i, ncolors;
+
+   /* get the number of colors in our colormap */
+   dpy = XtDisplay (table->table_widget);
+   win = XtWindow (table->table_widget);
+   XGetWindowAttributes (dpy, win, &wattr);
+   ncolors = wattr.visual->map_entries;
+   cmap = wattr.colormap;
+   table->ncolors = ncolors;
+
+   /* If the class is TrueColor, then there is no colormap.
+    * Punt for now.
+    */
+   if (TrueColor == wattr.visual->class) return;
+
+   /* if ncolors is greater than 16K, then we probably
+    * have a true-color display, and don't have a colormap.
+    * Punt. Hack Alert
+    */
+   if (16384 < ncolors) return;
+
+   /* get the color values */
+   /* hack alert -- remember to free this memory somewhere. */
+   colors = (XColor *) malloc ( ncolors * sizeof (XColor));
+   table->colors = colors;
+   for (i=0; i<ncolors; i++) { colors[i].pixel = i; }
+   XQueryColors (dpy, cmap, colors, ncolors);
+}
+
+/* ==================================================== */
+
 Widget
 xaccCreateTable (Table *table, Widget parent, char * name) 
 {
@@ -566,6 +606,55 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 
 /* ==================================================== */
 
+static Pixel 
+GetColormapIndex (Table *table, int argb)
+{
+   XColor *colors = table->colors;
+   int ncolors = table->ncolors;
+   unsigned short r,g,b;
+   int i;
+   unsigned int metric;
+   Pixel idx = 0;
+
+   /* if there's no colormap, then assume True or Direct Color */
+   /* hack alert -- will the pixel format be simple argb ??? */
+   if (0x0 == colors) return argb;
+
+   r = (argb & 0xff0000) >> 8;
+   g = argb & 0xff00;
+   b = (argb & 0xff) << 8;
+
+   /* use a manhatten metric to find the closest color */
+   metric = 0xffffffff;
+   for (i=0; i<ncolors; i++) 
+   {
+      int pr, pg, pb;
+      unsigned int m;
+      pr = r - colors[i].red;
+      pg = g - colors[i].green;
+      pb = b - colors[i].blue;
+      if (0 > pr) pr = -pr; 
+      if (0 > pg) pg = -pg; 
+      if (0 > pb) pb = -pb; 
+      m = pr + pg + pb;
+      if (m < metric) {
+         metric = m;
+         idx = colors[i].pixel;
+      } 
+   }
+
+   /*
+    * printf ("Info: GetColormapIndex(): \n"
+    *   "\tRequested rgb=0x%x r=0x%x g=0x%x b=0x%x \n"
+    *   "\tfound idx=%d 0x%x 0x%x 0x%x\n", argb, r, g, b, idx, 
+    *   colors[idx].red, colors[idx].green, colors[idx].blue);
+    */
+
+   return idx;
+}
+
+/* ==================================================== */
+
 void        
 xaccRefreshTableGUI (Table * table)
 {
@@ -580,6 +669,11 @@ table->entries[i][3]);
                                       XmNcells,   table->entries, 
                                       /* XmNcellBackgrounds, table->?? */ 
                                       NULL);
+
+
+   SetupColorTable (table);
+{Pixel p=GetColormapIndex (table,0x99ee33);
+printf ("its %d\n", p); }
 }
 
 /* ================== end of file ======================= */
