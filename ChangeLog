@@ -7,6 +7,10 @@
 
 	* src/gnome/gnc-split-reg.c:  add a handler for
 	  exchange-rate menu items..  Partial fix for #100285
+
+	* README: fix references to g-wrap
+	* acinclude.m4: fix g-wrap test to fail properly if it cannot
+	  find g-wrap-config
 	
 2002-12-03  Derek Atkins  <derek@ihtfp.com>
 

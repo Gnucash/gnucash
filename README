@@ -270,7 +270,7 @@ following packages:
   libxml: available from ftp.gnome.org
 
   g-wrap: RPM's, debs, and source available at 
-          ftp://ftp.gnucash.org/pub/g-wrap.
+          http://www.gnucash.org/pub/g-wrap.
           You should use g-wrap 1.3.2 or later.
 
   texinfo: If you are building from CVS, you need the GNU texinfo
@@ -382,7 +382,7 @@ IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
 
-See ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
+See http://www.gnucash.org/pub/gnucash (high-bandwidth)
 or  http://linas.org/linux/gnucash (slow-www ) 
 for precompiled (but *very old*) binaries for these platforms
 

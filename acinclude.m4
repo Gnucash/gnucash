@@ -3957,6 +3957,8 @@ if test x${GUILE} = x ; then
    AC_PATH_PROG(GUILE, guile, no)
 fi
 
+CHECK_VERSION=yes
+
 dnl if prefix set, then set them explicitly
 if test x${gwrap_prefix} != x ; then
    G_WRAP_CONFIG=${gwrap_prefix}/bin/g-wrap-config
@@ -3964,9 +3966,9 @@ else
 
   AC_PATH_PROG(G_WRAP_CONFIG, g-wrap-config, no)
   if test x${G_WRAP_CONFIG} = xno ; then
-	CHECK_VERSION="no"
-	ifelse([$3], , true , [AC_MSG_WARN(g-wrap-config failed)
-	$3])
+	CHECK_VERSION=no
+	ifelse([$4], , true , [AC_MSG_WARN(g-wrap-config failed)
+	$4])
   fi
 fi
 
