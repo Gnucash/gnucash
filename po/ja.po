@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-07-06 22:58-0700\n"
+"POT-Creation-Date: 2001-08-12 14:39-0700\n"
 "PO-Revision-Date: 2001-1-18 14:00+0900\n"
 "Last-Translator: Mitsuo Hamada <mhamada@redhat.com>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
@@ -60,108 +60,27 @@ msgstr ""
 "接続が消失しました。データを送ることができません"
 
 #: src/FileDialog.c:98
-#, c-format
+#, fuzzy
 msgid ""
-"The URL \n"
-"    %s\n"
-"is in use by another user."
-msgstr ""
-"次の URL \n"
-"    %s\n"
-"は別のユーザに使われています。"
-
-#: src/FileDialog.c:105
-#, c-format
-msgid ""
-"The URL \n"
-"    %s\n"
-"does not contain GnuCash data or the data is corrupt."
-msgstr ""
-"URL \n"
-"    %s\n"
-"はGnuCashのデータではありません。またはデータが壊れています。"
-
-#: src/FileDialog.c:112
-#, c-format
-msgid ""
-"The server at URL \n"
-"    %s\n"
-"experienced an error or encountered bad or corrupt data."
-msgstr ""
-"次のURLにあるサーバ\n"
-"URL %s\n"
-"エラーに遭遇しました。あるいは不正/壊れたデータを検出しました"
-
-#: src/FileDialog.c:119
-#, c-format
-msgid ""
-"You do not have permission to access\n"
-"    %s\n"
-msgstr ""
-
-#: src/FileDialog.c:125
-#, fuzzy, c-format
-msgid ""
-"An error occurred while processing\n"
-"    %s\n"
-msgstr "処理中にエラーが発生しました\n"
-
-#: src/FileDialog.c:131
-msgid ""
-"There was an error reading the file.\n"
-"Do you want to continue?"
-msgstr ""
-"ファイル読み込み中にエラーが発生しました。\n"
-"このまま続行しますか?"
-
-#: src/FileDialog.c:137
-#, c-format
-msgid ""
-"The file \n"
-"    %s\n"
-" is empty."
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" は空です。"
-
-#: src/FileDialog.c:143
-#, c-format
-msgid ""
-"The file \n"
-"    %s\n"
-" could not be found."
-msgstr ""
-"ファイル \n"
-"    %s\n"
-" は見つかりませんでした。"
-
-#: src/FileDialog.c:149
-msgid ""
-"This file appears to be from a newer version\n"
-"of GnuCash. You must upgrade GnuCash to read\n"
-"this file."
+"This file/URL appears to be from a newer version\n"
+"of GnuCash. You must upgrade your version of GnuCash\n"
+"to work with this data."
 msgstr ""
 "このファイルはGnuCashの新しいバージョンによって作成されたもののようです。"
 "GnuCashをアップグレードしないと読み込めません。"
 
-#: src/FileDialog.c:156
+#: src/FileDialog.c:105
+#, c-format
 msgid ""
-"This file is from an older version of GnuCash.\n"
-"Do you want to continue?"
+"The database\n"
+"   %s\n"
+"doesn't seem to exist. Do you want to create it?\n"
 msgstr ""
-"このファイルはGnuCashの古いバージョン用です。\n"
-"このまま続行しますか?"
+"データベース\n"
+"   %s\n"
+"は存在しません。作成しますか?\n"
 
-#: src/FileDialog.c:162
-msgid "Unknown file type"
-msgstr "ファイルタイプを特定できません"
-
-#: src/FileDialog.c:169
-msgid "An unknown I/O error occurred."
-msgstr "未知のI/Oエラーが発生しました。"
-
-#: src/FileDialog.c:183
+#: src/FileDialog.c:113
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for\n"
@@ -178,32 +97,121 @@ msgstr ""
 "\n"
 "このままファイルを開きますか?"
 
-#: src/FileDialog.c:206
+#: src/FileDialog.c:123
+#, fuzzy, c-format
+msgid ""
+"The file/URL \n"
+"    %s\n"
+"does not contain GnuCash data or the data is corrupt."
+msgstr ""
+"URL \n"
+"    %s\n"
+"はGnuCashのデータではありません。またはデータが壊れています。"
+
+#: src/FileDialog.c:130
 #, c-format
 msgid ""
-"The database\n"
-"   %s\n"
-"doesn't seem to exist. Do you want to create it?\n"
+"The server at URL \n"
+"    %s\n"
+"experienced an error or encountered bad or corrupt data."
 msgstr ""
-"データベース\n"
-"   %s\n"
-"は存在しません。作成しますか?\n"
+"次のURLにあるサーバ\n"
+"URL %s\n"
+"エラーに遭遇しました。あるいは不正/壊れたデータを検出しました"
 
-#: src/FileDialog.c:305
+#: src/FileDialog.c:137
+#, c-format
+msgid ""
+"You do not have permission to access\n"
+"    %s\n"
+msgstr ""
+
+#: src/FileDialog.c:143
+#, fuzzy, c-format
+msgid ""
+"An error occurred while processing\n"
+"    %s\n"
+msgstr "処理中にエラーが発生しました\n"
+
+#: src/FileDialog.c:149
+msgid ""
+"There was an error reading the file.\n"
+"Do you want to continue?"
+msgstr ""
+"ファイル読み込み中にエラーが発生しました。\n"
+"このまま続行しますか?"
+
+#: src/FileDialog.c:155
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" is empty."
+msgstr ""
+"ファイル \n"
+"    %s\n"
+" は空です。"
+
+#: src/FileDialog.c:161
+#, c-format
+msgid ""
+"The file \n"
+"    %s\n"
+" could not be found."
+msgstr ""
+"ファイル \n"
+"    %s\n"
+" は見つかりませんでした。"
+
+#: src/FileDialog.c:167
+msgid ""
+"This file is from an older version of GnuCash.\n"
+"Do you want to continue?"
+msgstr ""
+"このファイルはGnuCashの古いバージョン用です。\n"
+"このまま続行しますか?"
+
+#: src/FileDialog.c:173
+msgid "Unknown file type"
+msgstr "ファイルタイプを特定できません"
+
+#: src/FileDialog.c:179
+#, fuzzy
+msgid ""
+"This database is from an older version of GnuCash.\n"
+"Do you want to upgrade the database to the current version?"
+msgstr ""
+"このファイルはGnuCashの古いバージョン用です。\n"
+"このまま続行しますか?"
+
+#: src/FileDialog.c:186
+msgid ""
+"The SQL database is in use by other users,and the upgrade cannot be "
+"performed until they logoff.\n"
+"If there are currently no other users, consult the \n"
+"documentation to learn how to clear out dangling login\n"
+"sessions."
+msgstr ""
+
+#: src/FileDialog.c:196
+msgid "An unknown I/O error occurred."
+msgstr "未知のI/Oエラーが発生しました。"
+
+#: src/FileDialog.c:288
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr "保存されていない変更があります。ファイルに保存しますか?"
 
-#: src/FileDialog.c:492 src/gnome/dialog-filebox.c:76
+#: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
 #: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:627
 #: src/gnome/window-reconcile.c:1359
 msgid "Open"
 msgstr "開く"
 
-#: src/FileDialog.c:583 src/gnome/window-main.c:1129
+#: src/FileDialog.c:574 src/gnome/window-main.c:1129
 msgid "Save"
 msgstr "保存"
 
-#: src/FileDialog.c:659 src/gnome/window-main.c:777
+#: src/FileDialog.c:651 src/gnome/window-main.c:777
 #, c-format
 msgid ""
 "The file \n"
@@ -216,8 +224,8 @@ msgstr ""
 " はすで存在します。\n"
 " 本当に上書きしてよろしいですか?"
 
-#: src/SplitLedger.c:125 src/engine/Transaction.c:2040
-#: src/engine/Transaction.c:2061 src/register/splitreg.c:739
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2043
+#: src/engine/Transaction.c:2064 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:472
 msgid "-- Split Transaction --"
 msgstr "-- 諸口の取引 --"
@@ -296,11 +304,11 @@ msgstr ""
 "この取引に入力された値は計算が合いません。\n"
 "どの値を再計算すればよろしいですか？"
 
-#: src/SplitLedger.c:3093 src/SplitLedger.c:3095 src/SplitLedger.c:4060
+#: src/SplitLedger.c:3093 src/SplitLedger.c:3095 src/SplitLedger.c:4067
 #: src/gnome/glade-gnc-dialogs.c:1304 src/gnome/glade-gnc-dialogs.c:6571
 #: src/scm/report/guile-strings.c:469 src/scm/report/guile-strings.c:501
 #: src/scm/report/guile-strings.c:597 src/scm/report/guile-strings.c:614
-#: src/scm/report/guile-strings.c:688
+#: src/scm/report/guile-strings.c:698
 msgid "Shares"
 msgstr "株式"
 
@@ -308,13 +316,13 @@ msgstr "株式"
 msgid "Changed"
 msgstr "変更済"
 
-#: src/SplitLedger.c:3100 src/SplitLedger.c:3102 src/SplitLedger.c:4054
+#: src/SplitLedger.c:3100 src/SplitLedger.c:3102 src/SplitLedger.c:4061
 #: src/gnome/dialog-price-editor.c:735 src/gnome/glade-gnc-dialogs.c:1374
 #: src/gnome/glade-gnc-dialogs.c:7430 src/register/splitreg.c:229
 #: src/scm/report/guile-strings.c:418 src/scm/report/guile-strings.c:425
 #: src/scm/report/guile-strings.c:462 src/scm/report/guile-strings.c:470
 #: src/scm/report/guile-strings.c:504 src/scm/report/guile-strings.c:599
-#: src/scm/report/guile-strings.c:615 src/scm/report/guile-strings.c:690
+#: src/scm/report/guile-strings.c:615 src/scm/report/guile-strings.c:700
 msgid "Price"
 msgstr "価格"
 
@@ -323,7 +331,7 @@ msgstr "価格"
 msgid "Value"
 msgstr "価値"
 
-#: src/SplitLedger.c:3312 src/SplitLedger.c:3393
+#: src/SplitLedger.c:3318 src/SplitLedger.c:3399
 #, c-format
 msgid ""
 "You cannot transfer funds from the %s account.\n"
@@ -338,119 +346,119 @@ msgstr ""
 "中間通貨を使用する必要があります。\n"
 "GnuCash のオンラインマニュアルを参照してください。"
 
-#: src/SplitLedger.c:3322 src/SplitLedger.c:3403
+#: src/SplitLedger.c:3328 src/SplitLedger.c:3409
 msgid "(no name)"
 msgstr "(名前なし)"
 
-#: src/SplitLedger.c:3982 src/gnome/glade-gnc-dialogs.c:1125
+#: src/SplitLedger.c:3989 src/gnome/glade-gnc-dialogs.c:1125
 #: src/guile/guile-util.c:1063 src/scm/report/guile-strings.c:473
 #: src/scm/report/guile-strings.c:617
 msgid "Debit"
 msgstr "借方"
 
-#: src/SplitLedger.c:4002 src/gnome/glade-gnc-dialogs.c:1122
+#: src/SplitLedger.c:4009 src/gnome/glade-gnc-dialogs.c:1122
 #: src/guile/guile-util.c:1108 src/register/splitreg.c:177
-#: src/register/splitreg.c:193 src/scm/guile-strings.c:143
+#: src/register/splitreg.c:193 src/scm/guile-strings.c:144
 #: src/scm/report/guile-strings.c:474 src/scm/report/guile-strings.c:618
 msgid "Credit"
 msgstr "貸方"
 
-#: src/SplitLedger.c:4018 src/gnome/dialog-price-editor.c:732
+#: src/SplitLedger.c:4025 src/gnome/dialog-price-editor.c:732
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4803
 #: src/gnome/glade-gnc-dialogs.c:4851 src/gnome/glade-gnc-dialogs.c:7409
 #: src/gnome/reconcile-list.c:148 src/scm/report/guile-strings.c:159
 #: src/scm/report/guile-strings.c:410 src/scm/report/guile-strings.c:464
 #: src/scm/report/guile-strings.c:489 src/scm/report/guile-strings.c:520
 #: src/scm/report/guile-strings.c:587 src/scm/report/guile-strings.c:608
-#: src/scm/report/guile-strings.c:636 src/scm/report/guile-strings.c:674
+#: src/scm/report/guile-strings.c:646 src/scm/report/guile-strings.c:684
 msgid "Date"
 msgstr "日付"
 
-#: src/SplitLedger.c:4021 src/gnome/reconcile-list.c:149
+#: src/SplitLedger.c:4028 src/gnome/reconcile-list.c:149
 #: src/scm/report/guile-strings.c:465 src/scm/report/guile-strings.c:492
 #: src/scm/report/guile-strings.c:589 src/scm/report/guile-strings.c:609
-#: src/scm/report/guile-strings.c:676
+#: src/scm/report/guile-strings.c:686
 msgid "Num"
 msgstr "番号"
 
-#: src/SplitLedger.c:4024 src/gnc-ui-util.c:124
+#: src/SplitLedger.c:4031 src/gnc-ui-util.c:124
 #: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4810
 #: src/gnome/glade-gnc-dialogs.c:4858 src/gnome/glade-gnc-dialogs.c:6115
 #: src/gnome/new-user-interface.c:222 src/gnome/reconcile-list.c:150
-#: src/scm/guile-strings.c:156 src/scm/report/guile-strings.c:466
+#: src/scm/guile-strings.c:157 src/scm/report/guile-strings.c:466
 #: src/scm/report/guile-strings.c:495 src/scm/report/guile-strings.c:591
-#: src/scm/report/guile-strings.c:610 src/scm/report/guile-strings.c:648
-#: src/scm/report/guile-strings.c:678
+#: src/scm/report/guile-strings.c:610 src/scm/report/guile-strings.c:658
+#: src/scm/report/guile-strings.c:688
 msgid "Description"
 msgstr "説明"
 
 #. desc cell
-#: src/SplitLedger.c:4027 src/gnome/reconcile-list.c:152
+#: src/SplitLedger.c:4034 src/gnome/reconcile-list.c:152
 #: src/register/splitreg.c:96
 msgid "Reconciled:R"
 msgstr "照合済み:R"
 
-#: src/SplitLedger.c:4030 src/SplitLedger.c:4103
+#: src/SplitLedger.c:4037 src/SplitLedger.c:4110
 msgid "Share Balance"
 msgstr "株式残高"
 
-#: src/SplitLedger.c:4033 src/SplitLedger.c:4106 src/gnc-ui-util.c:136
+#: src/SplitLedger.c:4040 src/SplitLedger.c:4113 src/gnc-ui-util.c:136
 #: src/gnc-ui-util.c:139 src/gnome/glade-gnc-dialogs.c:1527
-#: src/scm/guile-strings.c:125 src/scm/guile-strings.c:160
+#: src/scm/guile-strings.c:126 src/scm/guile-strings.c:161
 #: src/scm/report/guile-strings.c:471 src/scm/report/guile-strings.c:619
 msgid "Balance"
 msgstr "貸借/残高"
 
-#: src/SplitLedger.c:4036 src/gnome/glade-gnc-dialogs.c:1432
+#: src/SplitLedger.c:4043 src/gnome/glade-gnc-dialogs.c:1432
 msgid "Action"
 msgstr "取引内容"
 
-#: src/SplitLedger.c:4039 src/gnome/dialog-account.c:828
+#: src/SplitLedger.c:4046 src/gnome/dialog-account.c:828
 #: src/gnome/glade-gnc-dialogs.c:77 src/gnome/glade-gnc-dialogs.c:878
 #: src/gnome/glade-gnc-dialogs.c:6557 src/scm/report/guile-strings.c:218
 #: src/scm/report/guile-strings.c:394 src/scm/report/guile-strings.c:414
 #: src/scm/report/guile-strings.c:467 src/scm/report/guile-strings.c:498
 #: src/scm/report/guile-strings.c:593 src/scm/report/guile-strings.c:612
-#: src/scm/report/guile-strings.c:682
+#: src/scm/report/guile-strings.c:692
 msgid "Account"
 msgstr "勘定科目"
 
-#: src/SplitLedger.c:4042 src/gnome/glade-gnc-dialogs.c:1234
+#: src/SplitLedger.c:4049 src/gnome/glade-gnc-dialogs.c:1234
 #: src/scm/report/guile-strings.c:607 src/scm/report/guile-strings.c:611
-#: src/scm/report/guile-strings.c:652 src/scm/report/guile-strings.c:680
+#: src/scm/report/guile-strings.c:662 src/scm/report/guile-strings.c:690
 msgid "Memo"
 msgstr "摘要"
 
 #. balance cell
-#: src/SplitLedger.c:4063 src/gnome/window-register.c:896
+#: src/SplitLedger.c:4070 src/gnome/window-register.c:905
 #: src/register/splitreg.c:99 src/register/splitreg.c:179
 #: src/scm/report/guile-strings.c:468
 msgid "Transfer"
 msgstr "移動"
 
-#: src/SplitLedger.c:4072 src/SplitLedger.c:4089
+#: src/SplitLedger.c:4079 src/SplitLedger.c:4096
 #, c-format
 msgid "Tot %s"
 msgstr "合計 %s"
 
-#: src/SplitLedger.c:4078
+#: src/SplitLedger.c:4085
 msgid "Tot Credit"
 msgstr "貸方合計"
 
-#: src/SplitLedger.c:4095
+#: src/SplitLedger.c:4102
 msgid "Tot Debit"
 msgstr "借方合計"
 
-#: src/SplitLedger.c:4100
+#: src/SplitLedger.c:4107
 msgid "Tot Shares"
 msgstr "株式合計"
 
-#: src/SplitLedger.c:4109 src/gnc-ui-util.c:127
-#: src/gnome/glade-gnc-dialogs.c:3708 src/scm/guile-strings.c:157
+#: src/SplitLedger.c:4116 src/gnc-ui-util.c:127
+#: src/gnome/glade-gnc-dialogs.c:3708 src/scm/guile-strings.c:158
 msgid "Notes"
 msgstr "注釈"
 
-#: src/SplitLedger.c:4471
+#: src/SplitLedger.c:4478
 msgid ""
 "You are about to change a reconciled split.\n"
 "Are you sure you want to do that?"
@@ -458,7 +466,7 @@ msgstr ""
 "残高調整済みの諸口を変更しようとしています。\n"
 "本当に変更しますか？"
 
-#: src/SplitLedger.c:4498
+#: src/SplitLedger.c:4505
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -466,58 +474,58 @@ msgstr ""
 "この取引に未照合のマークをつけますか?\n"
 "この場合、後ほど照合するのが難しくなります。"
 
-#: src/engine/Account.c:1867 src/scm/guile-strings.c:141
-#: src/scm/guile-strings.c:456
+#: src/engine/Account.c:1868 src/scm/guile-strings.c:142
+#: src/scm/guile-strings.c:458
 msgid "Bank"
 msgstr "銀行"
 
-#: src/engine/Account.c:1868 src/scm/guile-strings.c:142
-#: src/scm/guile-strings.c:457
+#: src/engine/Account.c:1869 src/scm/guile-strings.c:143
+#: src/scm/guile-strings.c:459
 msgid "Cash"
 msgstr "現金"
 
-#: src/engine/Account.c:1869 src/scm/guile-strings.c:144
+#: src/engine/Account.c:1870 src/scm/guile-strings.c:145
 msgid "Asset"
 msgstr "資産"
 
-#: src/engine/Account.c:1870
+#: src/engine/Account.c:1871
 msgid "Credit Card"
 msgstr "クレジットカード"
 
-#: src/engine/Account.c:1871 src/scm/guile-strings.c:145
+#: src/engine/Account.c:1872 src/scm/guile-strings.c:146
 msgid "Liability"
 msgstr "負債"
 
-#: src/engine/Account.c:1872 src/scm/guile-strings.c:146
+#: src/engine/Account.c:1873 src/scm/guile-strings.c:147
 msgid "Stock"
 msgstr "株式"
 
-#: src/engine/Account.c:1873 src/scm/guile-strings.c:147
+#: src/engine/Account.c:1874 src/scm/guile-strings.c:148
 msgid "Mutual Fund"
 msgstr "投資信託"
 
-#: src/engine/Account.c:1874 src/gnc-ui-util.c:130
+#: src/engine/Account.c:1875 src/gnc-ui-util.c:130
 #: src/gnome/dialog-price-editor.c:731 src/gnome/glade-gnc-dialogs.c:7402
-#: src/scm/guile-strings.c:96 src/scm/guile-strings.c:148
-#: src/scm/guile-strings.c:158
+#: src/scm/guile-strings.c:96 src/scm/guile-strings.c:149
+#: src/scm/guile-strings.c:159
 msgid "Currency"
 msgstr "通貨"
 
-#: src/engine/Account.c:1875 src/gnome/glade-gnc-dialogs.c:5986
-#: src/register/splitreg.c:238 src/scm/guile-strings.c:149
-#: src/scm/guile-strings.c:228 src/scm/guile-strings.c:464
+#: src/engine/Account.c:1876 src/gnome/glade-gnc-dialogs.c:5986
+#: src/register/splitreg.c:238 src/scm/guile-strings.c:150
+#: src/scm/guile-strings.c:230 src/scm/guile-strings.c:466
 #: src/scm/report/guile-strings.c:378
 msgid "Income"
 msgstr "所得"
 
-#: src/engine/Account.c:1876 src/gnome/glade-gnc-dialogs.c:5994
-#: src/scm/guile-strings.c:150 src/scm/guile-strings.c:217
+#: src/engine/Account.c:1877 src/gnome/glade-gnc-dialogs.c:5994
+#: src/scm/guile-strings.c:151 src/scm/guile-strings.c:219
 #: src/scm/report/guile-strings.c:379
 msgid "Expense"
 msgstr "費用"
 
-#: src/engine/Account.c:1877 src/gnc-ui-util.c:539 src/register/splitreg.c:222
-#: src/scm/guile-strings.c:151 src/scm/report/guile-strings.c:235
+#: src/engine/Account.c:1878 src/gnc-ui-util.c:539 src/register/splitreg.c:222
+#: src/scm/guile-strings.c:152 src/scm/report/guile-strings.c:235
 msgid "Equity"
 msgstr "資本"
 
@@ -529,8 +537,8 @@ msgstr ""
 msgid "Imbalance"
 msgstr "貸借不一致"
 
-#: src/engine/Transaction.c:2082 src/gnome/druid-stock-split.c:395
-#: src/gnome/window-register.c:869 src/register/splitreg.c:241
+#: src/engine/Transaction.c:2085 src/gnome/druid-stock-split.c:395
+#: src/gnome/window-register.c:878 src/register/splitreg.c:241
 msgid "Split"
 msgstr "諸口"
 
@@ -569,31 +577,31 @@ msgstr "数値エラー"
 #: src/gnc-ui-util.c:115 src/gnome/dialog-commodities.c:339
 #: src/gnome/dialog-price-editor.c:734 src/gnome/glade-gnc-dialogs.c:7423
 #: src/gnome/glade-gnc-dialogs.c:7825 src/gnome/new-user-interface.c:398
-#: src/scm/guile-strings.c:154
+#: src/scm/guile-strings.c:155
 msgid "Type"
 msgstr "型"
 
 #: src/gnc-ui-util.c:118 src/gnome/new-user-interface.c:390
-#: src/scm/report/guile-strings.c:557 src/scm/report/guile-strings.c:632
+#: src/scm/report/guile-strings.c:557 src/scm/report/guile-strings.c:642
 msgid "Account Name"
 msgstr "勘定科目名"
 
-#: src/gnc-ui-util.c:121 src/scm/report/guile-strings.c:634
+#: src/gnc-ui-util.c:121 src/scm/report/guile-strings.c:644
 msgid "Account Code"
 msgstr "勘定科目コード"
 
-#: src/gnc-ui-util.c:133 src/scm/guile-strings.c:159
+#: src/gnc-ui-util.c:133 src/scm/guile-strings.c:160
 msgid "Security"
 msgstr "証券"
 
-#: src/gnc-ui-util.c:142 src/gnc-ui-util.c:145 src/scm/guile-strings.c:123
-#: src/scm/guile-strings.c:161 src/scm/report/guile-strings.c:174
+#: src/gnc-ui-util.c:142 src/gnc-ui-util.c:145 src/scm/guile-strings.c:124
+#: src/scm/guile-strings.c:162 src/scm/report/guile-strings.c:174
 #: src/scm/report/guile-strings.c:420 src/scm/report/guile-strings.c:518
 #: src/scm/report/guile-strings.c:558
 msgid "Total"
 msgstr "合計"
 
-#: src/gnc-ui-util.c:148 src/scm/guile-strings.c:162
+#: src/gnc-ui-util.c:148 src/scm/guile-strings.c:163
 msgid "Tax Info"
 msgstr "税金情報"
 
@@ -751,7 +759,7 @@ msgid "Name"
 msgstr "名前"
 
 #: src/gnome/dialog-commodities.c:342 src/gnome/glade-gnc-dialogs.c:7846
-#: src/scm/guile-strings.c:155
+#: src/scm/guile-strings.c:156
 msgid "Code"
 msgstr "コード"
 
@@ -1336,7 +1344,7 @@ msgstr "科目一致検索"
 msgid "Find transactions affecting"
 msgstr "検索を行う取引"
 
-#: src/gnome/glade-gnc-dialogs.c:851 src/scm/guile-strings.c:181
+#: src/gnome/glade-gnc-dialogs.c:851 src/scm/guile-strings.c:183
 msgid "All"
 msgstr "すべて"
 
@@ -1344,10 +1352,10 @@ msgstr "すべて"
 msgid "Any"
 msgstr "いずれか"
 
-#: src/gnome/glade-gnc-dialogs.c:857 src/scm/guile-strings.c:371
-#: src/scm/report/guile-strings.c:630 src/scm/report/guile-strings.c:658
-#: src/scm/report/guile-strings.c:659 src/scm/report/guile-strings.c:698
-#: src/scm/report/guile-strings.c:706
+#: src/gnome/glade-gnc-dialogs.c:857 src/scm/guile-strings.c:373
+#: src/scm/report/guile-strings.c:634 src/scm/report/guile-strings.c:640
+#: src/scm/report/guile-strings.c:668 src/scm/report/guile-strings.c:669
+#: src/scm/report/guile-strings.c:708 src/scm/report/guile-strings.c:716
 msgid "None"
 msgstr "なし"
 
@@ -1395,7 +1403,7 @@ msgstr "正規表現"
 msgid "Find transactions whose Number contains:"
 msgstr "数字が一致する処理を検索:"
 
-#: src/gnome/glade-gnc-dialogs.c:1076 src/scm/report/guile-strings.c:650
+#: src/gnome/glade-gnc-dialogs.c:1076 src/scm/report/guile-strings.c:660
 msgid "Number"
 msgstr "番号"
 
@@ -1433,7 +1441,7 @@ msgstr "等しい"
 #: src/gnome/glade-gnc-dialogs.c:4865 src/gnome/reconcile-list.c:151
 #: src/scm/report/guile-strings.c:506 src/scm/report/guile-strings.c:523
 #: src/scm/report/guile-strings.c:601 src/scm/report/guile-strings.c:616
-#: src/scm/report/guile-strings.c:646 src/scm/report/guile-strings.c:696
+#: src/scm/report/guile-strings.c:656 src/scm/report/guile-strings.c:706
 msgid "Amount"
 msgstr "合計"
 
@@ -1549,7 +1557,7 @@ msgstr "現在の検索に結果を追加する"
 msgid "Delete results from current search"
 msgstr "結果を現在の検索から削除する"
 
-#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-register.c:905
+#: src/gnome/glade-gnc-dialogs.c:1663 src/gnome/window-register.c:914
 msgid "Find"
 msgstr "検索"
 
@@ -1584,7 +1592,7 @@ msgstr "項目あるいはサブ項目を追加"
 
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
 #: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1351
-#: src/gnome/window-register.c:851
+#: src/gnome/window-register.c:860
 msgid "Delete"
 msgstr "削除"
 
@@ -1744,7 +1752,7 @@ msgstr "隔月"
 
 #: src/gnome/glade-gnc-dialogs.c:2654 src/gnome/glade-gnc-dialogs.c:2696
 #: src/gnome/glade-gnc-dialogs.c:2937 src/gnome/glade-gnc-dialogs.c:2979
-#: src/scm/report/guile-strings.c:660 src/scm/report/guile-strings.c:661
+#: src/scm/report/guile-strings.c:670 src/scm/report/guile-strings.c:671
 msgid "Monthly"
 msgstr "毎月"
 
@@ -2015,7 +2023,7 @@ msgstr ""
 "通貨の選択などを再確認するには\"戻る\"をクリックしてください。"
 
 #: src/gnome/glade-gnc-dialogs.c:4126 src/scm/guile-strings.c:73
-#: src/scm/guile-strings.c:391
+#: src/scm/guile-strings.c:393
 msgid "QIF Import"
 msgstr "QIF インポート"
 
@@ -2562,12 +2570,11 @@ msgstr "税金情報"
 #: src/gnome/glade-gnc-dialogs.c:5964 src/gnome/new-user-interface.c:298
 #: src/gnome/window-acct-tree.c:113 src/gnome/window-acct-tree.c:119
 #: src/gnome/window-acct-tree.c:170 src/gnome/window-main.c:704
-#: src/scm/guile-strings.c:77 src/scm/guile-strings.c:135
-#: src/scm/guile-strings.c:440 src/scm/report/guile-strings.c:144
+#: src/scm/guile-strings.c:77 src/scm/guile-strings.c:136
+#: src/scm/guile-strings.c:442 src/scm/report/guile-strings.c:144
 #: src/scm/report/guile-strings.c:165 src/scm/report/guile-strings.c:183
 #: src/scm/report/guile-strings.c:207 src/scm/report/guile-strings.c:258
 #: src/scm/report/guile-strings.c:363 src/scm/report/guile-strings.c:412
-#: src/scm/report/guile-strings.c:628
 msgid "Accounts"
 msgstr "勘定科目"
 
@@ -2756,9 +2763,9 @@ msgstr "下へ移動"
 msgid "Size..."
 msgstr "サイズ..."
 
-#: src/gnome/glade-gnc-dialogs.c:7147 src/gnome/window-register.c:914
+#: src/gnome/glade-gnc-dialogs.c:7147 src/gnome/window-register.c:923
 #: src/gnome/window-register.c:1349 src/gnome/window-report.c:113
-#: src/scm/guile-strings.c:443
+#: src/scm/guile-strings.c:445
 msgid "Report"
 msgstr "帳票"
 
@@ -2973,11 +2980,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/gnome/gnc-http.c:178
+#: src/gnome/gnc-http.c:182
 msgid "checking SSL certificate..."
 msgstr "SSL認証をチェック中..."
 
-#: src/gnome/gnc-http.c:180
+#: src/gnome/gnc-http.c:184
 msgid " ... done\n"
 msgstr "...終了\n"
 
@@ -3120,13 +3127,13 @@ msgstr "GnuCashドキュメントの印刷"
 msgid "Print Preview"
 msgstr "印刷プレビュー"
 
-#: src/gnome/window-acct-tree.c:188 src/scm/guile-strings.c:132
-#: src/scm/guile-strings.c:136 src/scm/guile-strings.c:139
-#: src/scm/guile-strings.c:152
+#: src/gnome/window-acct-tree.c:188 src/scm/guile-strings.c:133
+#: src/scm/guile-strings.c:137 src/scm/guile-strings.c:140
+#: src/scm/guile-strings.c:153
 msgid "Account Tree"
 msgstr "勘定科目型"
 
-#: src/gnome/window-acct-tree.c:189 src/scm/guile-strings.c:133
+#: src/gnome/window-acct-tree.c:189 src/scm/guile-strings.c:134
 msgid "Name of account view"
 msgstr "新規勘定科目一覧"
 
@@ -3252,7 +3259,7 @@ msgid "_Transfer..."
 msgstr "資金移動(_T)..."
 
 #: src/gnome/window-acct-tree.c:854 src/gnome/window-reconcile.c:1173
-#: src/gnome/window-register.c:897 src/gnome/window-register.c:1438
+#: src/gnome/window-register.c:906 src/gnome/window-register.c:1438
 msgid "Transfer funds from one account to another"
 msgstr "資金を別の勘定科目へ移動する"
 
@@ -3325,7 +3332,7 @@ msgstr "停止"
 msgid "Cancel outstanding HTML requests"
 msgstr "未解決のHTMLリクエストをキャンセル"
 
-#: src/gnome/window-help.c:646 src/gnome/window-register.c:923
+#: src/gnome/window-help.c:646 src/gnome/window-register.c:932
 #: src/gnome/window-register.c:1365 src/gnome/window-report.c:686
 msgid "Print"
 msgstr "印刷"
@@ -3335,7 +3342,7 @@ msgid "Print Help window"
 msgstr "ヘルプウィンドウを印刷"
 
 #: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
-#: src/gnome/window-register.c:933 src/gnome/window-register.c:1374
+#: src/gnome/window-register.c:835 src/gnome/window-register.c:1374
 msgid "Close"
 msgstr "閉じる"
 
@@ -3467,7 +3474,7 @@ msgstr "財務計算機を使用する"
 msgid "_Find Transactions"
 msgstr "取引検索(_F)"
 
-#: src/gnome/window-main.c:1066 src/gnome/window-register.c:906
+#: src/gnome/window-main.c:1066 src/gnome/window-register.c:915
 msgid "Find transactions with a search"
 msgstr "検索により取引を見つける"
 
@@ -3542,7 +3549,7 @@ msgid "Debits"
 msgstr "借方"
 
 #: src/gnome/window-reconcile.c:654 src/gnome/window-reconcile.c:1148
-#: src/scm/guile-strings.c:458
+#: src/scm/guile-strings.c:460
 msgid "Credits"
 msgstr "貸方"
 
@@ -3554,8 +3561,8 @@ msgstr "合計:"
 msgid "Are you sure you want to delete the current transaction?"
 msgstr "本当にこの取引を削除してもよろしいですか?"
 
-#: src/gnome/window-reconcile.c:872 src/scm/guile-strings.c:316
-#: src/scm/guile-strings.c:319
+#: src/gnome/window-reconcile.c:872 src/scm/guile-strings.c:318
+#: src/scm/guile-strings.c:321
 msgid "Reconcile"
 msgstr "照合"
 
@@ -3653,7 +3660,7 @@ msgid "_Delete"
 msgstr "削除(_D)"
 
 #: src/gnome/window-reconcile.c:1207 src/gnome/window-reconcile.c:1291
-#: src/gnome/window-reconcile.c:1351 src/gnome/window-register.c:852
+#: src/gnome/window-reconcile.c:1351 src/gnome/window-register.c:861
 #: src/gnome/window-register.c:1484 src/gnome/window-register.c:1673
 msgid "Delete the current transaction"
 msgstr "この取引を削除する"
@@ -3740,67 +3747,67 @@ msgstr "本日"
 msgid "Set Date Range"
 msgstr "日付範囲設定"
 
-#: src/gnome/window-register.c:835
+#: src/gnome/window-register.c:836 src/gnome/window-register.c:1375
+msgid "Close this register window"
+msgstr "この帳簿のウィンドウを閉じる"
+
+#: src/gnome/window-register.c:844
 msgid "Enter"
 msgstr "入力"
 
-#: src/gnome/window-register.c:836 src/gnome/window-register.c:1468
+#: src/gnome/window-register.c:845 src/gnome/window-register.c:1468
 #: src/gnome/window-register.c:1657
 msgid "Record the current transaction"
 msgstr "現在の取引を記録する"
 
-#: src/gnome/window-register.c:843
+#: src/gnome/window-register.c:852
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/gnome/window-register.c:844 src/gnome/window-register.c:1476
+#: src/gnome/window-register.c:853 src/gnome/window-register.c:1476
 #: src/gnome/window-register.c:1665
 msgid "Cancel the current transaction"
 msgstr "この取引をキャンセルする"
 
-#: src/gnome/window-register.c:860
+#: src/gnome/window-register.c:869
 msgid "Duplicate"
 msgstr "複製"
 
-#: src/gnome/window-register.c:861 src/gnome/window-register.c:1493
+#: src/gnome/window-register.c:870 src/gnome/window-register.c:1493
 #: src/gnome/window-register.c:1682
 msgid "Make a copy of the current transaction"
 msgstr "この取引のコピーを作成する"
 
-#: src/gnome/window-register.c:870 src/gnome/window-register.c:1502
+#: src/gnome/window-register.c:879 src/gnome/window-register.c:1502
 #: src/gnome/window-register.c:1691
 msgid "Show all splits in the current transaction"
 msgstr "この取引の諸口をすべて表示する"
 
-#: src/gnome/window-register.c:877
+#: src/gnome/window-register.c:886
 msgid "Blank"
 msgstr "空白"
 
-#: src/gnome/window-register.c:878 src/gnome/window-register.c:1510
+#: src/gnome/window-register.c:887 src/gnome/window-register.c:1510
 #: src/gnome/window-register.c:1699
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "帳簿の一番下の空白の取引に移動する"
 
-#: src/gnome/window-register.c:886
+#: src/gnome/window-register.c:895
 msgid "Jump"
 msgstr "飛ぶ"
 
-#: src/gnome/window-register.c:887 src/gnome/window-register.c:1519
+#: src/gnome/window-register.c:896 src/gnome/window-register.c:1519
 #: src/gnome/window-register.c:1708
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "他の勘定科目でこれに該当する取引に移動する"
 
-#: src/gnome/window-register.c:915 src/gnome/window-register.c:1350
+#: src/gnome/window-register.c:924 src/gnome/window-register.c:1350
 msgid "Open a report window for this register"
 msgstr "この帳簿に対する帳票ウィンドウを開く"
 
-#: src/gnome/window-register.c:924 src/gnome/window-register.c:1366
+#: src/gnome/window-register.c:933 src/gnome/window-register.c:1366
 msgid "Print a report for this register"
 msgstr "この帳簿の帳票を印刷する"
-
-#: src/gnome/window-register.c:934 src/gnome/window-register.c:1375
-msgid "Close this register window"
-msgstr "この帳簿のウィンドウを閉じる"
 
 #: src/gnome/window-register.c:1031
 msgid "Present:"
@@ -3830,7 +3837,7 @@ msgstr "現在価値:"
 msgid "Basic Ledger"
 msgstr "基本帳簿"
 
-#: src/gnome/window-register.c:1258 src/scm/guile-strings.c:257
+#: src/gnome/window-register.c:1258 src/scm/guile-strings.c:259
 msgid "Show transactions on one or two lines"
 msgstr "取引を一行あるいは二行で表示する"
 
@@ -3838,7 +3845,7 @@ msgstr "取引を一行あるいは二行で表示する"
 msgid "Auto-Split Ledger"
 msgstr "自動諸口表示"
 
-#: src/gnome/window-register.c:1261 src/scm/guile-strings.c:259
+#: src/gnome/window-register.c:1261 src/scm/guile-strings.c:261
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr "取引を一行あるいは二行で表示し、編集中の取引を拡張する"
@@ -3847,7 +3854,7 @@ msgstr "取引を一行あるいは二行で表示し、編集中の取引を拡張する"
 msgid "Transaction Journal"
 msgstr "取引出納帳"
 
-#: src/gnome/window-register.c:1265 src/scm/guile-strings.c:261
+#: src/gnome/window-register.c:1265 src/scm/guile-strings.c:263
 msgid "Show expanded transactions with all splits"
 msgstr "すべての諸口と共に拡張された取引を表示"
 
@@ -3855,7 +3862,7 @@ msgstr "すべての諸口と共に拡張された取引を表示"
 msgid "_Double Line"
 msgstr "二行(_D)"
 
-#: src/gnome/window-register.c:1276 src/scm/guile-strings.c:264
+#: src/gnome/window-register.c:1276 src/scm/guile-strings.c:266
 msgid "Show two lines of information for each transaction"
 msgstr "それぞれの取引の情報を二行で表示する"
 
@@ -4019,12 +4026,12 @@ msgstr "検索結果"
 msgid "Search Results Report"
 msgstr "検索結果レポート"
 
-#: src/gnome/window-register.c:1890 src/scm/guile-strings.c:253
-#: src/scm/guile-strings.c:262 src/scm/guile-strings.c:265
-#: src/scm/guile-strings.c:268 src/scm/guile-strings.c:271
-#: src/scm/guile-strings.c:274 src/scm/guile-strings.c:277
-#: src/scm/guile-strings.c:280 src/scm/guile-strings.c:283
-#: src/scm/guile-strings.c:286 src/scm/guile-strings.c:289
+#: src/gnome/window-register.c:1890 src/scm/guile-strings.c:255
+#: src/scm/guile-strings.c:264 src/scm/guile-strings.c:267
+#: src/scm/guile-strings.c:270 src/scm/guile-strings.c:273
+#: src/scm/guile-strings.c:276 src/scm/guile-strings.c:279
+#: src/scm/guile-strings.c:282 src/scm/guile-strings.c:285
+#: src/scm/guile-strings.c:288 src/scm/guile-strings.c:291
 #: src/scm/report/guile-strings.c:524
 msgid "Register"
 msgstr "帳簿"
@@ -4126,16 +4133,16 @@ msgstr "帳票オプションを編集する"
 msgid "Print report window"
 msgstr "帳票ウィンドウを印刷する"
 
-#: src/guile/gnucash.c:144
+#: src/guile/gnucash.c:149
 msgid "This is a development version. It may or may not work."
 msgstr "開発バージョンのため、動作しないかもしれません。"
 
-#: src/guile/gnucash.c:148
+#: src/guile/gnucash.c:153
 #, c-format
 msgid "The last stable version was %s."
 msgstr "最新の安定バージョンは %s です。"
 
-#: src/guile/gnucash.c:150
+#: src/guile/gnucash.c:155
 #, c-format
 msgid "The next stable version will be %s."
 msgstr "次の安定バージョンは %s です。"
@@ -4188,7 +4195,7 @@ msgstr "例:摘要のフィールドのサンプル文字列"
 msgid "sample:Notes field sample text string"
 msgstr "例:注釈フィールドのサンプル文字列"
 
-#: src/register/splitreg.c:164 src/scm/guile-strings.c:208
+#: src/register/splitreg.c:164 src/scm/guile-strings.c:210
 msgid "Deposit"
 msgstr "入金"
 
@@ -4244,8 +4251,8 @@ msgstr "直接引き落とし"
 #: src/register/splitreg.c:192 src/register/splitreg.c:200
 #: src/register/splitreg.c:208 src/register/splitreg.c:215
 #: src/register/splitreg.c:220 src/register/splitreg.c:227
-#: src/register/splitreg.c:244 src/scm/guile-strings.c:213
-#: src/scm/guile-strings.c:214 src/scm/guile-strings.c:215
+#: src/register/splitreg.c:244 src/scm/guile-strings.c:215
+#: src/scm/guile-strings.c:216 src/scm/guile-strings.c:217
 msgid "Buy"
 msgstr "購入"
 
@@ -4253,8 +4260,8 @@ msgstr "購入"
 #: src/register/splitreg.c:197 src/register/splitreg.c:201
 #: src/register/splitreg.c:209 src/register/splitreg.c:216
 #: src/register/splitreg.c:221 src/register/splitreg.c:228
-#: src/register/splitreg.c:245 src/scm/guile-strings.c:225
-#: src/scm/guile-strings.c:226 src/scm/guile-strings.c:227
+#: src/register/splitreg.c:245 src/scm/guile-strings.c:227
+#: src/scm/guile-strings.c:228 src/scm/guile-strings.c:229
 msgid "Sell"
 msgstr "売却"
 
@@ -4268,11 +4275,11 @@ msgid "Loan"
 msgstr "借入金"
 
 #: src/register/splitreg.c:204 src/register/splitreg.c:211
-#: src/scm/guile-strings.c:210
+#: src/scm/guile-strings.c:212
 msgid "Payment"
 msgstr "支払"
 
-#: src/register/splitreg.c:212 src/scm/guile-strings.c:229
+#: src/register/splitreg.c:212 src/scm/guile-strings.c:231
 msgid "Rebate"
 msgstr "リベート"
 
@@ -4767,52 +4774,57 @@ msgstr "gnumatic.com"
 msgid "slashdot.org"
 msgstr "slashdot.org"
 
-#: src/scm/guile-strings.c:122 src/scm/guile-strings.c:452
+#: src/scm/guile-strings.c:122
+#, fuzzy
+msgid "Can't save style sheet"
+msgstr "スタイルシートの帳票を編集する"
+
+#: src/scm/guile-strings.c:123 src/scm/guile-strings.c:454
 #: src/scm/report/guile-strings.c:115
 msgid "Default"
 msgstr "デフォルト"
 
-#: src/scm/guile-strings.c:124
+#: src/scm/guile-strings.c:125
 msgid "Account name"
 msgstr "勘定科目名"
 
-#: src/scm/guile-strings.c:126
+#: src/scm/guile-strings.c:127
 msgid "Exchange rate"
 msgstr "為替レート"
 
-#: src/scm/guile-strings.c:127
+#: src/scm/guile-strings.c:128
 msgid "Exchange rates"
 msgstr "為替レート"
 
-#: src/scm/guile-strings.c:128
+#: src/scm/guile-strings.c:129
 msgid "No accounts selected"
 msgstr "勘定科目が選択されていません"
 
-#: src/scm/guile-strings.c:129
+#: src/scm/guile-strings.c:130
 msgid "This report requires accounts to be selected."
 msgstr "この帳票を出力するには勘定科目が一つでも選択されなければなりません"
 
-#: src/scm/guile-strings.c:130 src/scm/report/guile-strings.c:458
+#: src/scm/guile-strings.c:131 src/scm/report/guile-strings.c:458
 msgid "No data"
 msgstr "データなし"
 
-#: src/scm/guile-strings.c:131
+#: src/scm/guile-strings.c:132
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
 msgstr ""
 
-#: src/scm/guile-strings.c:134
+#: src/scm/guile-strings.c:135
 msgid ""
 "If you keep multiple account views open, it may be helpful to give each one "
 "a descriptive name"
 msgstr ""
 
-#: src/scm/guile-strings.c:137
+#: src/scm/guile-strings.c:138
 msgid "Double click expands parent accounts"
 msgstr "ダブルクリックすると親勘定科目が展開される"
 
-#: src/scm/guile-strings.c:138
+#: src/scm/guile-strings.c:139
 msgid ""
 "Double clicking on an account with children expands the account instead of "
 "opening a register."
@@ -4820,343 +4832,347 @@ msgstr ""
 "子勘定を持つ勘定でダブルクリックすると、帳簿を開く代わりに勘定を拡張し、子勘"
 "定を開きます。"
 
-#: src/scm/guile-strings.c:140
+#: src/scm/guile-strings.c:141
 msgid "Account types to display"
 msgstr "表示する勘定科目"
 
-#: src/scm/guile-strings.c:153
+#: src/scm/guile-strings.c:154
 msgid "Account fields to display"
 msgstr "表示する勘定科目のフィールド"
 
-#: src/scm/guile-strings.c:163
+#: src/scm/guile-strings.c:164
+msgid "Can't save window state"
+msgstr ""
+
+#: src/scm/guile-strings.c:165
 msgid "Select a date to report on"
 msgstr "帳票のオプション"
 
-#: src/scm/guile-strings.c:164
+#: src/scm/guile-strings.c:166
 msgid "Start of reporting period"
 msgstr "帳票を作成する期間の開始日"
 
-#: src/scm/guile-strings.c:165
+#: src/scm/guile-strings.c:167
 msgid "End of reporting period"
 msgstr "帳票を作成する期間の終了日"
 
-#: src/scm/guile-strings.c:166
+#: src/scm/guile-strings.c:168
 msgid "The amount of time between data points"
 msgstr "データ点間の合計時間"
 
-#: src/scm/guile-strings.c:167 src/scm/guile-strings.c:168
+#: src/scm/guile-strings.c:169 src/scm/guile-strings.c:170
 msgid "Day"
 msgstr "日"
 
-#: src/scm/guile-strings.c:169 src/scm/guile-strings.c:170
+#: src/scm/guile-strings.c:171 src/scm/guile-strings.c:172
 msgid "Week"
 msgstr "週"
 
-#: src/scm/guile-strings.c:171
+#: src/scm/guile-strings.c:173
 msgid "2Week"
 msgstr "隔週"
 
-#: src/scm/guile-strings.c:172
+#: src/scm/guile-strings.c:174
 msgid "Two Week"
 msgstr "隔週"
 
-#: src/scm/guile-strings.c:173 src/scm/guile-strings.c:174
+#: src/scm/guile-strings.c:175 src/scm/guile-strings.c:176
 msgid "Month"
 msgstr "月"
 
-#: src/scm/guile-strings.c:175 src/scm/guile-strings.c:176
+#: src/scm/guile-strings.c:177 src/scm/guile-strings.c:178
 msgid "Quarter"
 msgstr "四半期"
 
-#: src/scm/guile-strings.c:177 src/scm/guile-strings.c:178
+#: src/scm/guile-strings.c:179 src/scm/guile-strings.c:180
 msgid "Half Year"
 msgstr "半年"
 
-#: src/scm/guile-strings.c:179 src/scm/guile-strings.c:180
+#: src/scm/guile-strings.c:181 src/scm/guile-strings.c:182
 msgid "Year"
 msgstr "年"
 
-#: src/scm/guile-strings.c:182
+#: src/scm/guile-strings.c:184
 msgid "All accounts"
 msgstr "全勘定科目"
 
-#: src/scm/guile-strings.c:183 src/scm/guile-strings.c:345
+#: src/scm/guile-strings.c:185 src/scm/guile-strings.c:347
 msgid "Top-level"
 msgstr "トップレベル"
 
-#: src/scm/guile-strings.c:184
+#: src/scm/guile-strings.c:186
 msgid "Second-level"
 msgstr "第二レベル"
 
-#: src/scm/guile-strings.c:185
+#: src/scm/guile-strings.c:187
 msgid "Third-level"
 msgstr "第三レベル"
 
-#: src/scm/guile-strings.c:186 src/scm/guile-strings.c:187
+#: src/scm/guile-strings.c:188 src/scm/guile-strings.c:189
 msgid "Fourth-level"
 msgstr "第四レベル"
 
-#: src/scm/guile-strings.c:188
+#: src/scm/guile-strings.c:190
 msgid "Sixth-level"
 msgstr "第六レベル"
 
-#: src/scm/guile-strings.c:189
+#: src/scm/guile-strings.c:191
 msgid "Show accounts to this depth, overriding any other option."
 msgstr "他のすべてのオプションを無視して、この深さまで科目を表示する"
 
-#: src/scm/guile-strings.c:190
+#: src/scm/guile-strings.c:192
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr ""
 "勘定科目選択をオーバライドして、すべての選択された科目の子勘定科目を表示しま"
 "すか?"
 
-#: src/scm/guile-strings.c:191
+#: src/scm/guile-strings.c:193
 msgid "Report on these accounts, if display depth allows."
 msgstr "表示の深さが許すならこれらの科目上に帳票を表示"
 
-#: src/scm/guile-strings.c:192
+#: src/scm/guile-strings.c:194
 msgid "Include sub-account balances in printed balance?"
 msgstr "印刷される残高に子勘定科目の残高を含めますか？"
 
-#: src/scm/guile-strings.c:193
+#: src/scm/guile-strings.c:195
 msgid "Group the accounts in main categories?"
 msgstr "主要カテゴリに科目をグループ分けしますか?"
 
-#: src/scm/guile-strings.c:194
+#: src/scm/guile-strings.c:196
 msgid "Select the currency to display the values of this report in."
 msgstr "この帳票の値をどの通貨で表示するかを選択してください"
 
-#: src/scm/guile-strings.c:195 src/scm/report/guile-strings.c:172
+#: src/scm/guile-strings.c:197 src/scm/report/guile-strings.c:172
 #: src/scm/report/guile-strings.c:227 src/scm/report/guile-strings.c:404
 msgid "Display the account's foreign currency amount?"
 msgstr "科目の海外通貨の合計金額を表示しますか?"
 
-#: src/scm/guile-strings.c:196 src/scm/report/guile-strings.c:438
+#: src/scm/guile-strings.c:198 src/scm/report/guile-strings.c:438
 msgid "The source of price information"
 msgstr "建値の元に関する情報"
 
-#: src/scm/guile-strings.c:197 src/scm/report/guile-strings.c:439
+#: src/scm/guile-strings.c:199 src/scm/report/guile-strings.c:439
 msgid "Weighted Average"
 msgstr "加重平均"
 
-#: src/scm/guile-strings.c:198 src/scm/report/guile-strings.c:440
+#: src/scm/guile-strings.c:200 src/scm/report/guile-strings.c:440
 msgid "The weighted average of all currency transactions of the past"
 msgstr "過去のすべての通貨の取引の加重平均"
 
-#: src/scm/guile-strings.c:199
+#: src/scm/guile-strings.c:201
 msgid "Most recent"
 msgstr "もっとも最近"
 
-#: src/scm/guile-strings.c:200
+#: src/scm/guile-strings.c:202
 msgid "The most recent recorded price"
 msgstr "もっとも最近に記録された価格"
 
-#: src/scm/guile-strings.c:201
+#: src/scm/guile-strings.c:203
 msgid "Nearest in time"
 msgstr "時間的にもっとも近い"
 
-#: src/scm/guile-strings.c:202
+#: src/scm/guile-strings.c:204
 msgid "The price recorded nearest in time to the report date"
 msgstr "帳票の記録された時間が時間的にもっとも近い価格"
 
-#: src/scm/guile-strings.c:203
+#: src/scm/guile-strings.c:205
 msgid "Width of plot in pixels."
 msgstr "プロットする幅のドット数"
 
-#: src/scm/guile-strings.c:204
+#: src/scm/guile-strings.c:206
 msgid "Height of plot in pixels."
 msgstr "プロットする高さのドット数"
 
-#: src/scm/guile-strings.c:205
+#: src/scm/guile-strings.c:207
 msgid "Choose the marker for each data point."
 msgstr ""
 
-#: src/scm/guile-strings.c:206
+#: src/scm/guile-strings.c:208
 msgid "GnuCash Configuration Options"
 msgstr "GnuCash 設定オプション"
 
-#: src/scm/guile-strings.c:207
+#: src/scm/guile-strings.c:209
 msgid "Funds In"
 msgstr "入資"
 
-#: src/scm/guile-strings.c:209
+#: src/scm/guile-strings.c:211
 msgid "Receive"
 msgstr "受取"
 
-#: src/scm/guile-strings.c:211 src/scm/guile-strings.c:224
-#: src/scm/guile-strings.c:230
+#: src/scm/guile-strings.c:213 src/scm/guile-strings.c:226
+#: src/scm/guile-strings.c:232
 msgid "Increase"
 msgstr "増加"
 
-#: src/scm/guile-strings.c:212 src/scm/guile-strings.c:218
-#: src/scm/guile-strings.c:223
+#: src/scm/guile-strings.c:214 src/scm/guile-strings.c:220
+#: src/scm/guile-strings.c:225
 msgid "Decrease"
 msgstr "減少"
 
-#: src/scm/guile-strings.c:216 src/scm/guile-strings.c:222
+#: src/scm/guile-strings.c:218 src/scm/guile-strings.c:224
 #: src/scm/report/guile-strings.c:522
 msgid "Charge"
 msgstr "請求"
 
-#: src/scm/guile-strings.c:219
+#: src/scm/guile-strings.c:221
 msgid "Funds Out"
 msgstr "出資"
 
-#: src/scm/guile-strings.c:220
+#: src/scm/guile-strings.c:222
 msgid "Withdrawal"
 msgstr "引出し"
 
-#: src/scm/guile-strings.c:221
+#: src/scm/guile-strings.c:223
 msgid "Spend"
 msgstr "費用"
 
-#: src/scm/guile-strings.c:231 src/scm/guile-strings.c:244
-#: src/scm/guile-strings.c:247 src/scm/guile-strings.c:250
+#: src/scm/guile-strings.c:233 src/scm/guile-strings.c:246
+#: src/scm/guile-strings.c:249 src/scm/guile-strings.c:252
 msgid "International"
 msgstr "国際"
 
-#: src/scm/guile-strings.c:232
+#: src/scm/guile-strings.c:234
 msgid "Date Format"
 msgstr "日付の書式"
 
-#: src/scm/guile-strings.c:233
+#: src/scm/guile-strings.c:235
 msgid "Date Format Display"
 msgstr "日付の書式の表示"
 
-#: src/scm/guile-strings.c:234
+#: src/scm/guile-strings.c:236
 msgid "US"
 msgstr "米国"
 
-#: src/scm/guile-strings.c:235
+#: src/scm/guile-strings.c:237
 msgid "US-style: mm/dd/yyyy"
 msgstr "アメリカ式: 月月/日日/年年年年"
 
-#: src/scm/guile-strings.c:236
+#: src/scm/guile-strings.c:238
 msgid "UK"
 msgstr "英国"
 
-#: src/scm/guile-strings.c:237
+#: src/scm/guile-strings.c:239
 msgid "UK-style dd/mm/yyyy"
 msgstr "イギリス式: 日日/月月/年年年年"
 
-#: src/scm/guile-strings.c:238
+#: src/scm/guile-strings.c:240
 msgid "Europe"
 msgstr "ヨーロッパ"
 
-#: src/scm/guile-strings.c:239
+#: src/scm/guile-strings.c:241
 msgid "Continental Europe: dd.mm.yyyy"
 msgstr "ヨーロッパ式: 日日.月月.年年年年"
 
-#: src/scm/guile-strings.c:240
+#: src/scm/guile-strings.c:242
 msgid "ISO"
 msgstr "ISO (国際基準)"
 
-#: src/scm/guile-strings.c:241
+#: src/scm/guile-strings.c:243
 msgid "ISO Standard: yyyy-mm-dd"
 msgstr "ISO国際基準: 年年年年-月月-日日"
 
-#: src/scm/guile-strings.c:242
+#: src/scm/guile-strings.c:244
 msgid "Locale"
 msgstr "ロケール"
 
-#: src/scm/guile-strings.c:243
+#: src/scm/guile-strings.c:245
 msgid "Default system locale format"
 msgstr "デフォルトのシステムロケール書式"
 
-#: src/scm/guile-strings.c:245
+#: src/scm/guile-strings.c:247
 msgid "Default Currency"
 msgstr "デフォルトの通貨"
 
-#: src/scm/guile-strings.c:246
+#: src/scm/guile-strings.c:248
 msgid "Default currency for new accounts"
 msgstr "新規勘定科目に使うデフォルトの通貨"
 
-#: src/scm/guile-strings.c:248
+#: src/scm/guile-strings.c:250
 msgid "Use 24-hour time format"
 msgstr "24時間形式を使用する"
 
-#: src/scm/guile-strings.c:249
+#: src/scm/guile-strings.c:251
 msgid "Use a 24 hour (instead of a 12 hour) time format."
 msgstr "12時間形式ではなく、24時間形式で時刻を表示する。"
 
-#: src/scm/guile-strings.c:251
+#: src/scm/guile-strings.c:253
 msgid "Enable EURO support"
 msgstr "ユーロを使用可能にする"
 
-#: src/scm/guile-strings.c:252
+#: src/scm/guile-strings.c:254
 msgid "Enables support for the European Union EURO currency"
 msgstr "ヨーロッパ連合のユーロ通貨を使用可能にする"
 
-#: src/scm/guile-strings.c:254
+#: src/scm/guile-strings.c:256
 msgid "Default Register Style"
 msgstr "デフォルトの帳簿スタイル"
 
-#: src/scm/guile-strings.c:255
+#: src/scm/guile-strings.c:257
 msgid "Default style for register windows"
 msgstr "帳簿ウィンドウ用のデフォルトのスタイル"
 
-#: src/scm/guile-strings.c:256
+#: src/scm/guile-strings.c:258
 msgid "Ledger"
 msgstr "元帳"
 
-#: src/scm/guile-strings.c:258
+#: src/scm/guile-strings.c:260
 msgid "Auto Ledger"
 msgstr "自動元帳"
 
-#: src/scm/guile-strings.c:260
+#: src/scm/guile-strings.c:262
 msgid "Journal"
 msgstr "出納帳"
 
-#: src/scm/guile-strings.c:263
+#: src/scm/guile-strings.c:265
 msgid "Double Line Mode"
 msgstr "二行モード"
 
-#: src/scm/guile-strings.c:266
+#: src/scm/guile-strings.c:268
 msgid "Auto-Raise Lists"
 msgstr "リストを自動的に前面に出す"
 
-#: src/scm/guile-strings.c:267
+#: src/scm/guile-strings.c:269
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "入力中勘定科目や処理のリストを自動的に前面に出す"
 
-#: src/scm/guile-strings.c:269
+#: src/scm/guile-strings.c:271
 msgid "Show All Transactions"
 msgstr "全取引を表示"
 
-#: src/scm/guile-strings.c:270
+#: src/scm/guile-strings.c:272
 msgid "By default, show every transaction in an account."
 msgstr "既定設定では、取引は全て勘定科目内で表示する。"
 
-#: src/scm/guile-strings.c:272
+#: src/scm/guile-strings.c:274
 msgid "Number of Rows"
 msgstr "行数"
 
-#: src/scm/guile-strings.c:273
+#: src/scm/guile-strings.c:275
 msgid "Default number of register rows to display."
 msgstr "表示するデフォルトの帳簿行番号"
 
-#: src/scm/guile-strings.c:275
+#: src/scm/guile-strings.c:277
 msgid "Show Vertical Borders"
 msgstr "縦の境界線を見せる"
 
-#: src/scm/guile-strings.c:276
+#: src/scm/guile-strings.c:278
 msgid "By default, show vertical borders on the cells."
 msgstr "デフォルトでセルに対して縦罫線を表示する"
 
-#: src/scm/guile-strings.c:278
+#: src/scm/guile-strings.c:280
 msgid "Show Horizontal Borders"
 msgstr "横の境界線を見せる"
 
-#: src/scm/guile-strings.c:279
+#: src/scm/guile-strings.c:281
 msgid "By default, show horizontal borders on the cells."
 msgstr "デフォルトでセルに対して横罫線を表示する"
 
-#: src/scm/guile-strings.c:281
+#: src/scm/guile-strings.c:283
 msgid "'Enter' moves to blank transaction"
 msgstr "'Enter'で空白の取引に移動する"
 
-#: src/scm/guile-strings.c:282
+#: src/scm/guile-strings.c:284
 msgid ""
 "If selected, move to the blank transaction after the user presses 'Enter'. "
 "Otherwise, move down one row."
@@ -5164,150 +5180,150 @@ msgstr ""
 "これを選択すると、'Enter'を押した際に空白の取引行へ移動します。選択しない場"
 "合、一行下へ移動します。"
 
-#: src/scm/guile-strings.c:284
+#: src/scm/guile-strings.c:286
 msgid "Confirm before changing reconciled"
 msgstr "照合済みのデータの変更する前に確認する"
 
-#: src/scm/guile-strings.c:285
+#: src/scm/guile-strings.c:287
 msgid ""
 "If selected, use a dialog to confirm a change to a reconciled transaction."
 msgstr ""
 "これを選択すると、照合済取引に対する変更を確認用ダイアログを表示します。"
 
-#: src/scm/guile-strings.c:287
+#: src/scm/guile-strings.c:289
 msgid "Register font"
 msgstr "帳簿用フォント"
 
-#: src/scm/guile-strings.c:288
+#: src/scm/guile-strings.c:290
 msgid "The font to use in the register"
 msgstr "帳簿ウィンドウで使用するフォント"
 
-#: src/scm/guile-strings.c:290
+#: src/scm/guile-strings.c:292
 msgid "Register hint font"
 msgstr "帳簿ヒント用フォント"
 
-#: src/scm/guile-strings.c:291
+#: src/scm/guile-strings.c:293
 msgid "The font used to show hints in the register"
 msgstr "帳簿ウィンドウのヒント表示用フォント"
 
-#: src/scm/guile-strings.c:292 src/scm/guile-strings.c:295
-#: src/scm/guile-strings.c:298 src/scm/guile-strings.c:301
-#: src/scm/guile-strings.c:304 src/scm/guile-strings.c:307
-#: src/scm/guile-strings.c:310 src/scm/guile-strings.c:313
+#: src/scm/guile-strings.c:294 src/scm/guile-strings.c:297
+#: src/scm/guile-strings.c:300 src/scm/guile-strings.c:303
+#: src/scm/guile-strings.c:306 src/scm/guile-strings.c:309
+#: src/scm/guile-strings.c:312 src/scm/guile-strings.c:315
 msgid "Register Colors"
 msgstr "帳簿の色"
 
-#: src/scm/guile-strings.c:293
+#: src/scm/guile-strings.c:295
 msgid "Header color"
 msgstr "ヘッダの色"
 
-#: src/scm/guile-strings.c:294
+#: src/scm/guile-strings.c:296
 msgid "The header background color"
 msgstr "ヘッダの背景色"
 
-#: src/scm/guile-strings.c:296
+#: src/scm/guile-strings.c:298
 msgid "Primary color"
 msgstr "第一の色"
 
-#: src/scm/guile-strings.c:297
+#: src/scm/guile-strings.c:299
 msgid "The default background color for register rows"
 msgstr "帳簿行のデフォルト背景色"
 
-#: src/scm/guile-strings.c:299
+#: src/scm/guile-strings.c:301
 msgid "Secondary color"
 msgstr "第二の色"
 
-#: src/scm/guile-strings.c:300
+#: src/scm/guile-strings.c:302
 msgid "The default secondary background color for register rows"
 msgstr "帳簿行のデフォルトの第二背景色"
 
-#: src/scm/guile-strings.c:302
+#: src/scm/guile-strings.c:304
 msgid "Primary active color"
 msgstr "第一編集行色"
 
-#: src/scm/guile-strings.c:303
+#: src/scm/guile-strings.c:305
 msgid "The background color for the current register row"
 msgstr "編集中の帳簿行の背景色"
 
-#: src/scm/guile-strings.c:305
+#: src/scm/guile-strings.c:307
 msgid "Secondary active color"
 msgstr "第二編集行色"
 
-#: src/scm/guile-strings.c:306
+#: src/scm/guile-strings.c:308
 msgid "The secondary background color for the current register row"
 msgstr "帳簿行のデフォルトの第二背景色"
 
-#: src/scm/guile-strings.c:308
+#: src/scm/guile-strings.c:310
 msgid "Split color"
 msgstr "諸口行の色"
 
-#: src/scm/guile-strings.c:309
+#: src/scm/guile-strings.c:311
 msgid "The default background color for split rows in the register"
 msgstr "帳簿の諸口の行に使われるデフォルト背景色"
 
-#: src/scm/guile-strings.c:311
+#: src/scm/guile-strings.c:313
 msgid "Split active color"
 msgstr "編集中の諸口行の色"
 
-#: src/scm/guile-strings.c:312
+#: src/scm/guile-strings.c:314
 msgid "The background color for the current split row in the register"
 msgstr "帳簿の編集中の諸口行のデフォルト背景色"
 
-#: src/scm/guile-strings.c:314
+#: src/scm/guile-strings.c:316
 msgid "Double mode colors alternate with transactions"
 msgstr "二行モードで取引ごとに色を交換する"
 
-#: src/scm/guile-strings.c:315
+#: src/scm/guile-strings.c:317
 msgid ""
 "Alternate the primary and secondary colors with each transaction, not each "
 "row"
 msgstr "第一の色と第二の色を、行毎ではなく取引ごとに替える"
 
-#: src/scm/guile-strings.c:317
+#: src/scm/guile-strings.c:319
 msgid "Automatic credit card payments"
 msgstr "自動クレジットカード支払"
 
-#: src/scm/guile-strings.c:318
+#: src/scm/guile-strings.c:320
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment"
 msgstr "クレジットカード明細の照合の後で、クレジットカードの支払を入力させる"
 
-#: src/scm/guile-strings.c:320
+#: src/scm/guile-strings.c:322
 #, fuzzy
 msgid "Check off cleared transactions"
 msgstr "選択されている取引を切り取る"
 
-#: src/scm/guile-strings.c:321
+#: src/scm/guile-strings.c:323
 msgid "Automatically check off cleared transactions when reconciling"
 msgstr ""
 
-#: src/scm/guile-strings.c:322 src/scm/guile-strings.c:325
+#: src/scm/guile-strings.c:324 src/scm/guile-strings.c:327
 msgid "User Info"
 msgstr "ユーザ情報"
 
-#: src/scm/guile-strings.c:323
+#: src/scm/guile-strings.c:325
 msgid "User Name"
 msgstr "ユーザ名"
 
-#: src/scm/guile-strings.c:324
+#: src/scm/guile-strings.c:326
 msgid "The name of the user. This is used in some reports."
 msgstr "ユーザの名前。いくつかの帳票で使用されます。"
 
-#: src/scm/guile-strings.c:326
+#: src/scm/guile-strings.c:328
 msgid "User Address"
 msgstr "ユーザの住所"
 
-#: src/scm/guile-strings.c:327
+#: src/scm/guile-strings.c:329
 msgid "The address of the user. This is used in some reports."
 msgstr "ユーザの住所。いくつかの帳票で使用されます。"
 
-#: src/scm/guile-strings.c:328 src/scm/guile-strings.c:331
-#: src/scm/guile-strings.c:340 src/scm/guile-strings.c:351
-#: src/scm/guile-strings.c:364 src/scm/guile-strings.c:373
-#: src/scm/guile-strings.c:376 src/scm/guile-strings.c:379
-#: src/scm/guile-strings.c:382 src/scm/guile-strings.c:385
-#: src/scm/guile-strings.c:388 src/scm/guile-strings.c:439
+#: src/scm/guile-strings.c:330 src/scm/guile-strings.c:333
+#: src/scm/guile-strings.c:342 src/scm/guile-strings.c:353
+#: src/scm/guile-strings.c:366 src/scm/guile-strings.c:375
+#: src/scm/guile-strings.c:378 src/scm/guile-strings.c:381
+#: src/scm/guile-strings.c:384 src/scm/guile-strings.c:387
+#: src/scm/guile-strings.c:390 src/scm/guile-strings.c:441
 #: src/scm/report/guile-strings.c:1 src/scm/report/guile-strings.c:4
 #: src/scm/report/guile-strings.c:7 src/scm/report/guile-strings.c:10
 #: src/scm/report/guile-strings.c:55 src/scm/report/guile-strings.c:57
@@ -5319,204 +5335,204 @@ msgstr "ユーザの住所。いくつかの帳票で使用されます。"
 msgid "General"
 msgstr "全般"
 
-#: src/scm/guile-strings.c:329
+#: src/scm/guile-strings.c:331
 msgid "Save Window Geometry"
 msgstr "ウィンドウの位置・大きさを保存する"
 
-#: src/scm/guile-strings.c:330
+#: src/scm/guile-strings.c:332
 msgid "Save window sizes and positions."
 msgstr "ウィンドウの大きさや位置を保存する。"
 
-#: src/scm/guile-strings.c:332
+#: src/scm/guile-strings.c:334
 msgid "Toolbar Buttons"
 msgstr "ツールバーボタン"
 
-#: src/scm/guile-strings.c:333
+#: src/scm/guile-strings.c:335
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
 msgstr "ツールバーボタンにアイコン、テキスト、またはその両方を表示するかを選択"
 
-#: src/scm/guile-strings.c:334
+#: src/scm/guile-strings.c:336
 msgid "Icons and Text"
 msgstr "アイコンとテキスト"
 
-#: src/scm/guile-strings.c:335
+#: src/scm/guile-strings.c:337
 msgid "Show both icons and text"
 msgstr "アイコンと文字の両方を表示"
 
-#: src/scm/guile-strings.c:336
+#: src/scm/guile-strings.c:338
 msgid "Icons only"
 msgstr "アイコンのみ"
 
-#: src/scm/guile-strings.c:337
+#: src/scm/guile-strings.c:339
 msgid "Show icons only"
 msgstr "アイコンのみ表示"
 
-#: src/scm/guile-strings.c:338
+#: src/scm/guile-strings.c:340
 msgid "Text only"
 msgstr "テキストのみ"
 
-#: src/scm/guile-strings.c:339
+#: src/scm/guile-strings.c:341
 msgid "Show text only"
 msgstr "テキストのみ表示"
 
-#: src/scm/guile-strings.c:341
+#: src/scm/guile-strings.c:343
 msgid "Application MDI mode"
 msgstr "アプリケーションMDIモード"
 
-#: src/scm/guile-strings.c:342
+#: src/scm/guile-strings.c:344
 msgid "Choose how new windows are created for reports and account trees."
 msgstr "新しいウィンドウが帳票や科目ツリーに対してどのように作成されるかを選択"
 
-#: src/scm/guile-strings.c:343
+#: src/scm/guile-strings.c:345
 msgid "Notebook"
 msgstr "ノート"
 
-#: src/scm/guile-strings.c:344
+#: src/scm/guile-strings.c:346
 msgid ""
 "New windows are created as notebook tabs in the current top-level window"
 msgstr ""
 "新しいウィンドウは現在のトップレベルウィンドウの中にノートタブとして作成"
 
-#: src/scm/guile-strings.c:346
+#: src/scm/guile-strings.c:348
 msgid "Create a new top-level window for each report or account tree"
 msgstr "新しいトップレベルウィンドウをそれぞれの帳票や科目ツリーに対して作成"
 
-#: src/scm/guile-strings.c:347
+#: src/scm/guile-strings.c:349
 msgid "Single window"
 msgstr "単一ウィンドウ"
 
-#: src/scm/guile-strings.c:348
+#: src/scm/guile-strings.c:350
 msgid ""
 "One window is used for all displays (select contents through Window menu)"
 msgstr "すべての表示に単一のウィンドウ(ウィンドウメニューで表示するものを選択)"
 
-#: src/scm/guile-strings.c:349
+#: src/scm/guile-strings.c:351
 msgid "Use GNOME default"
 msgstr "GNOMEのデフォルトを使用"
 
-#: src/scm/guile-strings.c:350
+#: src/scm/guile-strings.c:352
 msgid "Default MDI mode can be set in the GNOME Control Center"
 msgstr "デフォルトのMDIモードはGNOMEコントロールセンターで設定可能です"
 
-#: src/scm/guile-strings.c:352
+#: src/scm/guile-strings.c:354
 msgid "Account Separator"
 msgstr "勘定科目名分割記号"
 
-#: src/scm/guile-strings.c:353
+#: src/scm/guile-strings.c:355
 msgid "The character used to separate fully-qualified account names"
 msgstr "科目名のセパレータとして使われる文字"
 
-#: src/scm/guile-strings.c:354
+#: src/scm/guile-strings.c:356
 msgid ": (Colon)"
 msgstr ": (コロン)"
 
-#: src/scm/guile-strings.c:355
+#: src/scm/guile-strings.c:357
 msgid "Income:Salary:Taxable"
 msgstr "所得：給与：課税"
 
-#: src/scm/guile-strings.c:356
+#: src/scm/guile-strings.c:358
 msgid "/ (Slash)"
 msgstr "/ (スラッシュ)"
 
-#: src/scm/guile-strings.c:357
+#: src/scm/guile-strings.c:359
 msgid "Income/Salary/Taxable"
 msgstr "所得/給料/課税"
 
-#: src/scm/guile-strings.c:358
+#: src/scm/guile-strings.c:360
 msgid "\\ (Backslash)"
 msgstr "\\ (バックスラッシュ)"
 
-#: src/scm/guile-strings.c:359
+#: src/scm/guile-strings.c:361
 msgid "Income\\Salary\\Taxable"
 msgstr "所得\\給料\\課税"
 
-#: src/scm/guile-strings.c:360
+#: src/scm/guile-strings.c:362
 msgid "- (Dash)"
 msgstr "- (ダッシュ)"
 
-#: src/scm/guile-strings.c:361
+#: src/scm/guile-strings.c:363
 msgid "Income-Salary-Taxable"
 msgstr "所得-給料-課税"
 
-#: src/scm/guile-strings.c:362
+#: src/scm/guile-strings.c:364
 msgid ". (Period)"
 msgstr ". (ピリオド)"
 
-#: src/scm/guile-strings.c:363
+#: src/scm/guile-strings.c:365
 msgid "Income.Salary.Taxable"
 msgstr "所得.給料.課税"
 
-#: src/scm/guile-strings.c:365
+#: src/scm/guile-strings.c:367
 msgid "Reversed-balance account types"
 msgstr "残高を逆にする勘定科目の型"
 
-#: src/scm/guile-strings.c:366
+#: src/scm/guile-strings.c:368
 msgid "The types of accounts for which balances are sign-reversed"
 msgstr "残高が正負逆になる勘定科目の型"
 
-#: src/scm/guile-strings.c:367
+#: src/scm/guile-strings.c:369
 msgid "Income & Expense"
 msgstr "所得・費用"
 
-#: src/scm/guile-strings.c:368
+#: src/scm/guile-strings.c:370
 msgid "Reverse Income and Expense Accounts"
 msgstr "所得と費用の勘定科目を逆にする"
 
-#: src/scm/guile-strings.c:369 src/scm/report/guile-strings.c:710
+#: src/scm/guile-strings.c:371 src/scm/report/guile-strings.c:720
 msgid "Credit Accounts"
 msgstr "貸方勘定科目"
 
-#: src/scm/guile-strings.c:370
+#: src/scm/guile-strings.c:372
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
 msgstr "クレジットカード、負債、資本、所得の各勘定科目をそれぞれ逆にする"
 
-#: src/scm/guile-strings.c:372
+#: src/scm/guile-strings.c:374
 msgid "Don't reverse any accounts"
 msgstr "どの勘定科目も逆勘定にしない"
 
-#: src/scm/guile-strings.c:374
+#: src/scm/guile-strings.c:376
 msgid "Use accounting labels"
 msgstr "勘定ラベルを使う"
 
-#: src/scm/guile-strings.c:375
+#: src/scm/guile-strings.c:377
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
 msgstr "非公式な同義語の代わりに「借方」と「貸方」だけを使用する"
 
-#: src/scm/guile-strings.c:377
+#: src/scm/guile-strings.c:379
 msgid "Display \"Tip of the Day\""
 msgstr "「今日のヒント」を表示する"
 
-#: src/scm/guile-strings.c:378
+#: src/scm/guile-strings.c:380
 msgid "Display hints for using GnuCash at startup"
 msgstr "起動時に Gnucash を使うためのヒントを表示する"
 
-#: src/scm/guile-strings.c:380 src/scm/guile-strings.c:381
+#: src/scm/guile-strings.c:382 src/scm/guile-strings.c:383
 msgid "Display negative amounts in red"
 msgstr "負の金額を赤色で表示する"
 
-#: src/scm/guile-strings.c:383
+#: src/scm/guile-strings.c:385
 msgid "Automatic Decimal Point"
 msgstr "自動小数点付加"
 
-#: src/scm/guile-strings.c:384
+#: src/scm/guile-strings.c:386
 msgid ""
 "Automatically insert a decimal point into values that are entered without "
 "one."
 msgstr "入力された数字に自動的に小数点を挿入する"
 
-#: src/scm/guile-strings.c:386
+#: src/scm/guile-strings.c:388
 msgid "Auto Decimal Places"
 msgstr "小数点以下の桁数"
 
-#: src/scm/guile-strings.c:387
+#: src/scm/guile-strings.c:389
 msgid "How many automatic decimal places will be filled in."
 msgstr "小数点以下に自動で挿入される桁数"
 
-#: src/scm/guile-strings.c:389
+#: src/scm/guile-strings.c:391
 msgid "No account list setup on new file"
 msgstr "新しいファイルには勘定一覧がありません"
 
-#: src/scm/guile-strings.c:390
+#: src/scm/guile-strings.c:392
 msgid ""
 "Don't popup the new account list dialog when you choose \"New File\" from "
 "the \"File\" menu"
@@ -5524,80 +5540,80 @@ msgstr ""
 "\"新規ファイル\"を\"ファイル\"メニューから選択したときに、新規科目リストダイ"
 "アログをポップアップしない"
 
-#: src/scm/guile-strings.c:392
+#: src/scm/guile-strings.c:394
 msgid "Verbose documentation"
 msgstr "冗長なドキュメント"
 
-#: src/scm/guile-strings.c:393
+#: src/scm/guile-strings.c:395
 msgid "Show some documentation-only pages in QIF Import druid"
 msgstr "QIFインポートドルイドでドキュメントのみのページを表示する"
 
-#: src/scm/guile-strings.c:394 src/scm/guile-strings.c:397
-#: src/scm/guile-strings.c:400 src/scm/guile-strings.c:403
+#: src/scm/guile-strings.c:396 src/scm/guile-strings.c:399
+#: src/scm/guile-strings.c:402 src/scm/guile-strings.c:405
 msgid "Network"
 msgstr "ネットワーク"
 
-#: src/scm/guile-strings.c:395
+#: src/scm/guile-strings.c:397
 msgid "Allow http network access"
 msgstr "http ネットワークアクセスを許可"
 
-#: src/scm/guile-strings.c:396
+#: src/scm/guile-strings.c:398
 msgid "Enable GnuCash's HTTP client support."
 msgstr "GnuCashのHTTPクライアントサポートを有効にする"
 
-#: src/scm/guile-strings.c:398
+#: src/scm/guile-strings.c:400
 msgid "Allow https connections using OpenSSL"
 msgstr "OpenSSLによるhttpsコネクションを許可"
 
-#: src/scm/guile-strings.c:399
+#: src/scm/guile-strings.c:401
 msgid "Enable secure HTTP connections using OpenSSL"
 msgstr "OpenSSLによるセキュアなhttpコネクションを許可"
 
-#: src/scm/guile-strings.c:401
+#: src/scm/guile-strings.c:403
 msgid "Enable GnuCash Network"
 msgstr "GnuCash Networkを有効にする"
 
-#: src/scm/guile-strings.c:402
+#: src/scm/guile-strings.c:404
 msgid "The GnuCash Network server provides support and other services"
 msgstr "GnuCash Networkサーバはサポートやその他のサービスを提供します"
 
-#: src/scm/guile-strings.c:404
+#: src/scm/guile-strings.c:406
 msgid "GnuCash Network server"
 msgstr "GnuCash Networkサーバ"
 
-#: src/scm/guile-strings.c:405
+#: src/scm/guile-strings.c:407
 msgid "Host to connect to for user registration and support services"
 msgstr "ユーザ登録、サポートサービスのために接続されるホスト"
 
-#: src/scm/guile-strings.c:406
+#: src/scm/guile-strings.c:408
 msgid "Show version."
 msgstr "バージョンを表示"
 
-#: src/scm/guile-strings.c:407 src/scm/guile-strings.c:408
+#: src/scm/guile-strings.c:409 src/scm/guile-strings.c:410
 msgid "Generate an argument summary."
 msgstr "引数のサマリを生成"
 
-#: src/scm/guile-strings.c:409
+#: src/scm/guile-strings.c:411
 msgid "Don't load any file, including autoloading the last file."
 msgstr "最後に自動ロードしたファイルも含めていかなるファイルも読み込まない"
 
-#: src/scm/guile-strings.c:410
+#: src/scm/guile-strings.c:412
 msgid "Configuration directory."
 msgstr "設定ディレクトリ"
 
-#: src/scm/guile-strings.c:411
+#: src/scm/guile-strings.c:413
 msgid "Shared files directory."
 msgstr "共有ファイルディレクトリ"
 
-#: src/scm/guile-strings.c:412
+#: src/scm/guile-strings.c:414
 msgid "Enable debugging code."
 msgstr "デバッグコードを有効にする"
 
-#: src/scm/guile-strings.c:413
+#: src/scm/guile-strings.c:415
 msgid "Logging level from 0 (least logging) to 5 (most logging)."
 msgstr "ログ作成レベル0(最小のログ)から5(最大のログ)"
 
-#: src/scm/guile-strings.c:414
+#: src/scm/guile-strings.c:416
 msgid ""
 "A list of strings indicating the load path for (gnc:load name).\n"
 "Each element must be a string representing a directory or a symbol\n"
@@ -5605,7 +5621,7 @@ msgid ""
 "the current value of the path."
 msgstr ""
 
-#: src/scm/guile-strings.c:418
+#: src/scm/guile-strings.c:420
 msgid ""
 "A list of strings indicating where to look for html and parsed-html files. "
 "Each element must be a string representing a directory or a symbol where "
@@ -5613,7 +5629,7 @@ msgid ""
 "value of the path."
 msgstr ""
 
-#: src/scm/guile-strings.c:419 src/scm/guile-strings.c:421
+#: src/scm/guile-strings.c:421 src/scm/guile-strings.c:423
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'update-finance-quote' as root to install them."
@@ -5621,56 +5637,56 @@ msgstr ""
 "必要なPerlのライブラリのいくつかが見つかりません\n"
 "root権限で'update-finance-quote'を実行すればインストールされます"
 
-#: src/scm/guile-strings.c:423 src/scm/guile-strings.c:424
+#: src/scm/guile-strings.c:425 src/scm/guile-strings.c:426
 msgid "Unable to get quotes or diagnose the problem."
 msgstr "見積を取得できないか、あるいは問題を診断できません"
 
-#: src/scm/guile-strings.c:425 src/scm/guile-strings.c:427
-#: src/scm/guile-strings.c:428
+#: src/scm/guile-strings.c:427 src/scm/guile-strings.c:429
+#: src/scm/guile-strings.c:430
 msgid "Unable to retrieve quotes for these items:"
 msgstr "これらの項目に対する見積を検索できません:"
 
-#: src/scm/guile-strings.c:426
+#: src/scm/guile-strings.c:428
 msgid "Continue using only the good quotes?"
 msgstr "良い見積だけを使いつづけますか?"
 
-#: src/scm/guile-strings.c:429
+#: src/scm/guile-strings.c:431
 msgid "Continuing with good quotes."
 msgstr "良い見積とともに続ける"
 
-#: src/scm/guile-strings.c:430 src/scm/guile-strings.c:432
+#: src/scm/guile-strings.c:432 src/scm/guile-strings.c:434
 msgid "Unable to create prices for these items:"
 msgstr "これらの項目に対して価格を作成することができません:"
 
-#: src/scm/guile-strings.c:431
+#: src/scm/guile-strings.c:433
 msgid "Add remaining good quotes?"
 msgstr "残りの良い見積を追加しますか?"
 
-#: src/scm/guile-strings.c:433
+#: src/scm/guile-strings.c:435
 msgid "Adding remaining good quotes."
 msgstr "残りの良い見積を追加します"
 
-#: src/scm/guile-strings.c:434
+#: src/scm/guile-strings.c:436
 msgid "_Reports"
 msgstr "帳票(_R)"
 
-#: src/scm/guile-strings.c:435
+#: src/scm/guile-strings.c:437
 msgid "_Assets & Liabilities"
 msgstr "資産および負債(_A)"
 
-#: src/scm/guile-strings.c:436
+#: src/scm/guile-strings.c:438
 msgid "_Income & Expense"
 msgstr "所得および費用(_I)"
 
-#: src/scm/guile-strings.c:437
+#: src/scm/guile-strings.c:439
 msgid "_Taxes"
 msgstr "税金(_T)"
 
-#: src/scm/guile-strings.c:438
+#: src/scm/guile-strings.c:440
 msgid "_Utility"
 msgstr "ユーティリティ(_U)"
 
-#: src/scm/guile-strings.c:441 src/scm/report/guile-strings.c:488
+#: src/scm/guile-strings.c:443 src/scm/report/guile-strings.c:488
 #: src/scm/report/guile-strings.c:491 src/scm/report/guile-strings.c:494
 #: src/scm/report/guile-strings.c:497 src/scm/report/guile-strings.c:500
 #: src/scm/report/guile-strings.c:503 src/scm/report/guile-strings.c:505
@@ -5680,101 +5696,101 @@ msgstr "ユーティリティ(_U)"
 #: src/scm/report/guile-strings.c:594 src/scm/report/guile-strings.c:596
 #: src/scm/report/guile-strings.c:598 src/scm/report/guile-strings.c:600
 #: src/scm/report/guile-strings.c:602 src/scm/report/guile-strings.c:604
-#: src/scm/report/guile-strings.c:606 src/scm/report/guile-strings.c:723
+#: src/scm/report/guile-strings.c:606 src/scm/report/guile-strings.c:733
 msgid "Display"
 msgstr "表示"
 
-#: src/scm/guile-strings.c:442
+#: src/scm/guile-strings.c:444
 msgid "Report name"
 msgstr "帳票名"
 
-#: src/scm/guile-strings.c:444
+#: src/scm/guile-strings.c:446
 #, c-format
 msgid "Display the %s report"
 msgstr "%s 帳票を表示。"
 
-#: src/scm/guile-strings.c:445
+#: src/scm/guile-strings.c:447
 msgid "Style Sheets..."
 msgstr "スタイルシート..."
 
-#: src/scm/guile-strings.c:446
+#: src/scm/guile-strings.c:448
 msgid "Edit report style sheets."
 msgstr "スタイルシートの帳票を編集する"
 
-#: src/scm/guile-strings.c:447
+#: src/scm/guile-strings.c:449
 msgid "Welcome Extravaganza"
 msgstr "Welcome Extravangaza"
 
-#: src/scm/guile-strings.c:448
+#: src/scm/guile-strings.c:450
 msgid "Welcome-to-GnuCash screen"
 msgstr "\"GnuCashへようこそ\"の画面"
 
-#: src/scm/guile-strings.c:449
+#: src/scm/guile-strings.c:451
 msgid "Enter a descriptive name for this report"
 msgstr "この帳票の説明的な名前を入力する"
 
-#: src/scm/guile-strings.c:450 src/scm/guile-strings.c:454
-#: src/scm/guile-strings.c:455
+#: src/scm/guile-strings.c:452 src/scm/guile-strings.c:456
+#: src/scm/guile-strings.c:457
 msgid "Stylesheet"
 msgstr "スタイルシート"
 
-#: src/scm/guile-strings.c:451
+#: src/scm/guile-strings.c:453
 msgid "Select a stylesheet for the report."
 msgstr "帳票に使用するスタイルシートを選択する"
 
-#: src/scm/guile-strings.c:453
+#: src/scm/guile-strings.c:455
 msgid " Stylesheet"
 msgstr "スタイルシート"
 
-#: src/scm/guile-strings.c:459 src/scm/report/guile-strings.c:138
+#: src/scm/guile-strings.c:461 src/scm/report/guile-strings.c:138
 #: src/scm/report/guile-strings.c:230 src/scm/report/guile-strings.c:231
 #: src/scm/report/guile-strings.c:380
 msgid "Assets"
 msgstr "資産"
 
-#: src/scm/guile-strings.c:460 src/scm/report/guile-strings.c:139
+#: src/scm/guile-strings.c:462 src/scm/report/guile-strings.c:139
 #: src/scm/report/guile-strings.c:232 src/scm/report/guile-strings.c:233
 #: src/scm/report/guile-strings.c:381
 msgid "Liabilities"
 msgstr "負債"
 
-#: src/scm/guile-strings.c:461
+#: src/scm/guile-strings.c:463
 msgid "Stocks"
 msgstr "株式"
 
-#: src/scm/guile-strings.c:462
+#: src/scm/guile-strings.c:464
 msgid "Mutual Funds"
 msgstr "投資信託"
 
-#: src/scm/guile-strings.c:463
+#: src/scm/guile-strings.c:465
 msgid "Currencies"
 msgstr "通貨"
 
-#: src/scm/guile-strings.c:465
+#: src/scm/guile-strings.c:467
 msgid "Expenses"
 msgstr "費用"
 
-#: src/scm/guile-strings.c:466
+#: src/scm/guile-strings.c:468
 msgid "Equities"
 msgstr "資本"
 
-#: src/scm/guile-strings.c:467
+#: src/scm/guile-strings.c:469
 msgid "Checking"
 msgstr "当座預金"
 
-#: src/scm/guile-strings.c:468
+#: src/scm/guile-strings.c:470
 msgid "Savings"
 msgstr "預金"
 
-#: src/scm/guile-strings.c:469
+#: src/scm/guile-strings.c:471
 msgid "Money Market"
 msgstr "マネーマーケット"
 
-#: src/scm/guile-strings.c:470
+#: src/scm/guile-strings.c:472
 msgid "Credit Lines"
 msgstr "貸方行"
 
-#: src/scm/guile-strings.c:471
+#: src/scm/guile-strings.c:473
 msgid ""
 "The GnuCash online manual has lots of helpful information.  \n"
 "If you are upgrading from GnuCash 1.4, the section \"What's new in\n"
@@ -5785,7 +5801,7 @@ msgstr ""
 "GnuCash 1.4からアップグレードしたのならば、\"What's new in GnuCash 1.6\"\n"
 "をご覧ください。マニュアルにはヘルプメニューからアクセスすることができます。"
 
-#: src/scm/guile-strings.c:475
+#: src/scm/guile-strings.c:477
 msgid ""
 "You can easily import your existing financial data from Quicken,\n"
 "MS Money or other programs that export QIF (Quicken Interchange\n"
@@ -5797,7 +5813,7 @@ msgstr ""
 "簡単に読み込むことができます。メインウィンドウのツールバーの\n"
 "インポートボタンをクリックし、指示に従ってください。"
 
-#: src/scm/guile-strings.c:479
+#: src/scm/guile-strings.c:481
 msgid ""
 "If you are familiar with other financial programs such as Quicken,\n"
 "note that GnuCash uses accounts instead of categories to track\n"
@@ -5809,7 +5825,7 @@ msgstr ""
 "注意してください。所得、費用の科目に関する詳細情報については、\n"
 "Gnucash のオンラインマニュアルをご覧ください。"
 
-#: src/scm/guile-strings.c:483
+#: src/scm/guile-strings.c:485
 msgid ""
 "Create new accounts by clicking the New button in the main window\n"
 "tool bar.  This will bring up a dialog box where you can enter\n"
@@ -5822,7 +5838,7 @@ msgstr ""
 "科目のタイプの選択や科目表の設定に関する詳細情報に関しては、Gnucash の\n"
 "オンラインマニュアルをご覧ください。"
 
-#: src/scm/guile-strings.c:488
+#: src/scm/guile-strings.c:490
 msgid ""
 "Click the right mouse button in the main window to bring up the\n"
 "account menu options. Within each register, clicking the right\n"
@@ -5832,7 +5848,7 @@ msgstr ""
 "オプションが表示されます。帳簿ウィンドウ内で右ボタンをクリックすると、\n"
 "取引メニューオプションが表示されます。"
 
-#: src/scm/guile-strings.c:491
+#: src/scm/guile-strings.c:493
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash\n"
 "calculator to add, subtract, multiply and divide .  Simply type\n"
@@ -5843,7 +5859,7 @@ msgstr ""
 "を行うことができ金額。通常の電卓と同様に、最初の数字を入力、'+', '-',\n"
 " '*', '/' を選択、二つ目の数字を入力し、Enter を押します。"
 
-#: src/scm/guile-strings.c:495
+#: src/scm/guile-strings.c:497
 msgid ""
 "Quick-fill makes it easy to enter common transactions.  When you\n"
 "type the first letter(s) of a common transaction description,\n"
@@ -5854,7 +5870,7 @@ msgstr ""
 "最初の文字を入力すると、GnuCash は以前に入力した取引と同じものの\n"
 "続きを自動的に補完します。"
 
-#: src/scm/guile-strings.c:499
+#: src/scm/guile-strings.c:501
 msgid ""
 "Type the first letter(s) of an existing account name in the\n"
 "Transfer register column, and GnuCash will complete the name from\n"
@@ -5867,7 +5883,7 @@ msgstr ""
 "入力し、':'に続けて、子科目の最初の文字を入力してください。\n"
 "例: A:C は Assets:Cash"
 
-#: src/scm/guile-strings.c:504
+#: src/scm/guile-strings.c:506
 msgid ""
 "To enter multiple-split transactions such as a paycheck with\n"
 "multiple deductions, click the Split button in the tool bar.\n"
@@ -5875,7 +5891,7 @@ msgid ""
 "Transaction Journal from the Register|Style menu option."
 msgstr ""
 
-#: src/scm/guile-strings.c:508
+#: src/scm/guile-strings.c:510
 msgid ""
 "Want to see all your subaccount transactions in one register?\n"
 "From the main menu, highlight the parent account and select\n"
@@ -5885,7 +5901,7 @@ msgstr ""
 "親勘定科目を選択し、メインメニューから勘定(A)|子勘定科目を開く\n"
 "を選択してください。"
 
-#: src/scm/guile-strings.c:511
+#: src/scm/guile-strings.c:513
 msgid ""
 "In the reconcile window, you can press the spacebar\n"
 "to mark transactions as reconciled.\n"
@@ -5893,7 +5909,7 @@ msgid ""
 "deposits and withdrawals."
 msgstr ""
 
-#: src/scm/guile-strings.c:515
+#: src/scm/guile-strings.c:517
 msgid ""
 "When entering check numbers in the register, you can\n"
 "type '+' to enter the next number or '-' to enter the previous\n"
@@ -5905,7 +5921,7 @@ msgstr ""
 "の場合には、一つ前の番号を使用します。同様にして、日付も '+',\n"
 "'-'を使用して入力することができます。"
 
-#: src/scm/guile-strings.c:519
+#: src/scm/guile-strings.c:521
 msgid ""
 "You should back up your files regularly.  Just copy\n"
 "your GnuCash data file to a floppy or other backup device."
@@ -5914,7 +5930,7 @@ msgstr ""
 "単純に Gnucash の .xac ファイルをフロッピーやその他のメディアに\n"
 "コピーするだけです。"
 
-#: src/scm/guile-strings.c:521
+#: src/scm/guile-strings.c:523
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "you need an intermediate currency trading account. Click the Transfer\n"
@@ -5925,34 +5941,34 @@ msgstr ""
 "必要になります。詳細については Gnucash オンラインマニュアルを\n"
 "ご覧ください。"
 
-#: src/scm/guile-strings.c:525
+#: src/scm/guile-strings.c:527
 msgid ""
 "You can pack multiple reports into a single window, \n"
 "providing all the financial information you want at a glance.\n"
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:528
+#: src/scm/guile-strings.c:530
 msgid ""
 "GnuCash can act as a simple web browser!  To display\n"
 "a web page as a report, use the \"Frame URL\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:530
+#: src/scm/guile-strings.c:532
 msgid ""
 "Style Sheets affect how reports are displayed.  Choose\n"
 "a style sheet for your report as a report option, and use\n"
 "the Style Sheets menu to customize style sheets."
 msgstr ""
 
-#: src/scm/guile-strings.c:533
+#: src/scm/guile-strings.c:535
 msgid ""
 "The GnuCash developers are easy to contact.  As well\n"
 "as several mailing lists, you can chat to them live on IRC!\n"
 "Join them on #gnucash at irc.gnome.org"
 msgstr ""
 
-#: src/scm/guile-strings.c:536
+#: src/scm/guile-strings.c:538
 msgid ""
 "There is a theory that if ever anyone discovers what\n"
 "the Universe is for and why it is here, it will instantly\n"
@@ -6073,9 +6089,9 @@ msgstr "会社のロゴ画像"
 #: src/scm/report/guile-strings.c:67 src/scm/report/guile-strings.c:69
 #: src/scm/report/guile-strings.c:71 src/scm/report/guile-strings.c:73
 #: src/scm/report/guile-strings.c:75 src/scm/report/guile-strings.c:77
-#: src/scm/report/guile-strings.c:713 src/scm/report/guile-strings.c:715
-#: src/scm/report/guile-strings.c:717 src/scm/report/guile-strings.c:719
-#: src/scm/report/guile-strings.c:721
+#: src/scm/report/guile-strings.c:723 src/scm/report/guile-strings.c:725
+#: src/scm/report/guile-strings.c:727 src/scm/report/guile-strings.c:729
+#: src/scm/report/guile-strings.c:731
 msgid "Colors"
 msgstr "色"
 
@@ -7121,61 +7137,61 @@ msgstr "タイトル"
 msgid "The title of the report"
 msgstr "帳票のタイトル"
 
-#: src/scm/report/guile-strings.c:490 src/scm/report/guile-strings.c:675
+#: src/scm/report/guile-strings.c:490 src/scm/report/guile-strings.c:685
 msgid "Display the date?"
 msgstr "日付を表示しますか?"
 
-#: src/scm/report/guile-strings.c:493 src/scm/report/guile-strings.c:677
+#: src/scm/report/guile-strings.c:493 src/scm/report/guile-strings.c:687
 msgid "Display the check number?"
 msgstr "小切手番号を表示しますか?"
 
-#: src/scm/report/guile-strings.c:496 src/scm/report/guile-strings.c:679
+#: src/scm/report/guile-strings.c:496 src/scm/report/guile-strings.c:689
 msgid "Display the description?"
 msgstr "説明を表示しますか?"
 
-#: src/scm/report/guile-strings.c:499 src/scm/report/guile-strings.c:683
+#: src/scm/report/guile-strings.c:499 src/scm/report/guile-strings.c:693
 msgid "Display the account?"
 msgstr "勘定科目を表示しますか?"
 
-#: src/scm/report/guile-strings.c:502 src/scm/report/guile-strings.c:689
+#: src/scm/report/guile-strings.c:502 src/scm/report/guile-strings.c:699
 msgid "Display the number of shares?"
 msgstr "株数を表示しますか?"
 
-#: src/scm/report/guile-strings.c:507 src/scm/report/guile-strings.c:697
+#: src/scm/report/guile-strings.c:507 src/scm/report/guile-strings.c:707
 msgid "Display the amount?"
 msgstr "金額を表示しますか?"
 
 #: src/scm/report/guile-strings.c:508 src/scm/report/guile-strings.c:626
-#: src/scm/report/guile-strings.c:700
+#: src/scm/report/guile-strings.c:710
 msgid "Single"
 msgstr "1列"
 
-#: src/scm/report/guile-strings.c:509 src/scm/report/guile-strings.c:701
+#: src/scm/report/guile-strings.c:509 src/scm/report/guile-strings.c:711
 msgid "Single Column Display"
 msgstr "1列表示"
 
-#: src/scm/report/guile-strings.c:510 src/scm/report/guile-strings.c:702
+#: src/scm/report/guile-strings.c:510 src/scm/report/guile-strings.c:712
 msgid "Double"
 msgstr "2列"
 
-#: src/scm/report/guile-strings.c:511 src/scm/report/guile-strings.c:703
+#: src/scm/report/guile-strings.c:511 src/scm/report/guile-strings.c:713
 msgid "Two Column Display"
 msgstr "2列表示"
 
 #: src/scm/report/guile-strings.c:513 src/scm/report/guile-strings.c:603
-#: src/scm/report/guile-strings.c:692
+#: src/scm/report/guile-strings.c:702
 msgid "Running Balance"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:514 src/scm/report/guile-strings.c:693
+#: src/scm/report/guile-strings.c:514 src/scm/report/guile-strings.c:703
 msgid "Display a running balance"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:516 src/scm/report/guile-strings.c:694
+#: src/scm/report/guile-strings.c:516 src/scm/report/guile-strings.c:704
 msgid "Totals"
 msgstr "合計"
 
-#: src/scm/report/guile-strings.c:517 src/scm/report/guile-strings.c:695
+#: src/scm/report/guile-strings.c:517 src/scm/report/guile-strings.c:705
 msgid "Display the totals?"
 msgstr "合計を表示しますか?"
 
@@ -7397,15 +7413,15 @@ msgstr "日付キーに対する第二の小計"
 msgid "Total For "
 msgstr "合計"
 
-#: src/scm/report/guile-strings.c:585 src/scm/report/guile-strings.c:718
+#: src/scm/report/guile-strings.c:585 src/scm/report/guile-strings.c:728
 msgid "Grand Total"
 msgstr "総合計"
 
-#: src/scm/report/guile-strings.c:595 src/scm/report/guile-strings.c:686
+#: src/scm/report/guile-strings.c:595 src/scm/report/guile-strings.c:696
 msgid "Other Account"
 msgstr "他の勘定科目"
 
-#: src/scm/report/guile-strings.c:605 src/scm/report/guile-strings.c:684
+#: src/scm/report/guile-strings.c:605 src/scm/report/guile-strings.c:694
 msgid "Use Full Account Name?"
 msgstr "勘定科目名をすべて使いますか?"
 
@@ -7413,7 +7429,7 @@ msgstr "勘定科目名をすべて使いますか?"
 msgid "Transfer from/to"
 msgstr "転送元/先"
 
-#: src/scm/report/guile-strings.c:622 src/scm/report/guile-strings.c:725
+#: src/scm/report/guile-strings.c:622 src/scm/report/guile-strings.c:735
 msgid "Style"
 msgstr "スタイル"
 
@@ -7433,141 +7449,191 @@ msgstr "N行表示"
 msgid "Display 1 line"
 msgstr "1行表示"
 
+#: src/scm/report/guile-strings.c:628
+#, fuzzy
+msgid "Report Accounts"
+msgstr "勘定科目を書き出し..."
+
 #: src/scm/report/guile-strings.c:629
-msgid "Do transaction report on these accounts"
+#, fuzzy
+msgid "Report on these accounts"
 msgstr "この勘定科目について取引帳票を実行する"
 
+#: src/scm/report/guile-strings.c:630
+#, fuzzy
+msgid "Filter Accounts"
+msgstr "他の勘定科目"
+
 #: src/scm/report/guile-strings.c:631
+#, fuzzy
+msgid "Filter on these accounts"
+msgstr "勘定科目のグループ化"
+
+#: src/scm/report/guile-strings.c:632
+#, fuzzy
+msgid "Filter Type"
+msgstr "プロット形式"
+
+#: src/scm/report/guile-strings.c:633
+#, fuzzy
+msgid "Filter account"
+msgstr "他の勘定科目"
+
+#: src/scm/report/guile-strings.c:635
+msgid "Do not do any filtering"
+msgstr ""
+
+#: src/scm/report/guile-strings.c:636
+#, fuzzy
+msgid "Include Transactions to/from Filter Accounts"
+msgstr "選択された勘定科目全ての補助科目を含む"
+
+#: src/scm/report/guile-strings.c:637
+#, fuzzy
+msgid "Include transactions to/from filter accounts only"
+msgstr "勘定科目に新しい取引を追加"
+
+#: src/scm/report/guile-strings.c:638
+#, fuzzy
+msgid "Exclude Transactions to/from Filter Accounts"
+msgstr "勘定科目に新しい取引を追加"
+
+#: src/scm/report/guile-strings.c:639
+#, fuzzy
+msgid "Exclude transactions to/from all filter accounts"
+msgstr "選択された勘定科目全ての補助科目を含む"
+
+#: src/scm/report/guile-strings.c:641
 msgid "Do not sort"
 msgstr "ソートしない"
 
-#: src/scm/report/guile-strings.c:633
+#: src/scm/report/guile-strings.c:643
 msgid "Sort & subtotal by account name"
 msgstr "ソートし勘定科目別に小計"
 
-#: src/scm/report/guile-strings.c:635
+#: src/scm/report/guile-strings.c:645
 msgid "Sort & subtotal by account code"
 msgstr "ソートし勘定コード別に小計"
 
-#: src/scm/report/guile-strings.c:637
+#: src/scm/report/guile-strings.c:647
 msgid "Sort by date"
 msgstr "日付順にソート"
 
-#: src/scm/report/guile-strings.c:638
+#: src/scm/report/guile-strings.c:648
 msgid "Exact Time"
 msgstr "正確な時間"
 
-#: src/scm/report/guile-strings.c:639
+#: src/scm/report/guile-strings.c:649
 msgid "Sort by exact time"
 msgstr "正確な時間順にソート"
 
-#: src/scm/report/guile-strings.c:640
+#: src/scm/report/guile-strings.c:650
 #, fuzzy
 msgid "Register Order"
 msgstr "帳票"
 
-#: src/scm/report/guile-strings.c:641
+#: src/scm/report/guile-strings.c:651
 #, fuzzy
 msgid "Sort as with the register"
 msgstr "帳簿ウィンドウで使用するフォント"
 
-#: src/scm/report/guile-strings.c:642
+#: src/scm/report/guile-strings.c:652
 msgid "Other Account Name"
 msgstr "その他の勘定科目名"
 
-#: src/scm/report/guile-strings.c:643
+#: src/scm/report/guile-strings.c:653
 msgid "Sort by account transferred from/to's name"
 msgstr "転送元/先の勘定科目名でソート"
 
-#: src/scm/report/guile-strings.c:644
+#: src/scm/report/guile-strings.c:654
 msgid "Other Account Code"
 msgstr "その他の勘定科目コード"
 
-#: src/scm/report/guile-strings.c:645
+#: src/scm/report/guile-strings.c:655
 msgid "Sort by account transferred from/to's code"
 msgstr "転送元/先の勘定コードでソート"
 
-#: src/scm/report/guile-strings.c:647
+#: src/scm/report/guile-strings.c:657
 msgid "Sort by amount"
 msgstr "金額順にソート"
 
-#: src/scm/report/guile-strings.c:649
+#: src/scm/report/guile-strings.c:659
 msgid "Sort by description"
 msgstr "説明順にソート"
 
-#: src/scm/report/guile-strings.c:651
+#: src/scm/report/guile-strings.c:661
 msgid "Sort by check/transaction number"
 msgstr "小切手番号/取引番号でソート"
 
-#: src/scm/report/guile-strings.c:653
+#: src/scm/report/guile-strings.c:663
 msgid "Sort by memo"
 msgstr "摘要順にソート"
 
-#: src/scm/report/guile-strings.c:654
+#: src/scm/report/guile-strings.c:664
 msgid "Ascending"
 msgstr "昇順"
 
-#: src/scm/report/guile-strings.c:655
+#: src/scm/report/guile-strings.c:665
 msgid "smallest to largest, earliest to latest"
 msgstr "小さい方から大きい方へ、古い方から新しい方へ"
 
-#: src/scm/report/guile-strings.c:656
+#: src/scm/report/guile-strings.c:666
 msgid "Descending"
 msgstr "降順"
 
-#: src/scm/report/guile-strings.c:657
+#: src/scm/report/guile-strings.c:667
 msgid "largest to smallest, latest to earliest"
 msgstr "大きい方から小さい方へ、新しい方から古い方へ"
 
-#: src/scm/report/guile-strings.c:662 src/scm/report/guile-strings.c:663
+#: src/scm/report/guile-strings.c:672 src/scm/report/guile-strings.c:673
 msgid "Yearly"
 msgstr "毎年"
 
-#: src/scm/report/guile-strings.c:664
+#: src/scm/report/guile-strings.c:674
 msgid "Sort by this criterion first"
 msgstr "最初にこのクライテリアでソート"
 
-#: src/scm/report/guile-strings.c:665
+#: src/scm/report/guile-strings.c:675
 msgid "Subtotal according to the primary key?"
 msgstr "一次キーにしたがって小計を行いますか?"
 
-#: src/scm/report/guile-strings.c:666 src/scm/report/guile-strings.c:671
+#: src/scm/report/guile-strings.c:676 src/scm/report/guile-strings.c:681
 msgid "Do a date subtotal"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:667
+#: src/scm/report/guile-strings.c:677
 msgid "Primary Sort Order"
 msgstr "一次ソート順"
 
-#: src/scm/report/guile-strings.c:668
+#: src/scm/report/guile-strings.c:678
 msgid "Order of primary sorting"
 msgstr "一次ソート順"
 
-#: src/scm/report/guile-strings.c:669
+#: src/scm/report/guile-strings.c:679
 msgid "Sort by this criterion second"
 msgstr "このクライテリアを二番目に使ってソート"
 
-#: src/scm/report/guile-strings.c:670
+#: src/scm/report/guile-strings.c:680
 msgid "Subtotal according to the secondary key?"
 msgstr "二番目のキーにしたがって小計を行いますか?"
 
-#: src/scm/report/guile-strings.c:672
+#: src/scm/report/guile-strings.c:682
 msgid "Secondary Sort Order"
 msgstr "二次ソート順"
 
-#: src/scm/report/guile-strings.c:673
+#: src/scm/report/guile-strings.c:683
 msgid "Order of Secondary sorting"
 msgstr "二次ソート順"
 
-#: src/scm/report/guile-strings.c:681
+#: src/scm/report/guile-strings.c:691
 msgid "Display the memo?"
 msgstr "摘要を表示しますか?"
 
-#: src/scm/report/guile-strings.c:685
+#: src/scm/report/guile-strings.c:695
 msgid "Display the full account name"
 msgstr "勘定科目名をフルに表示する"
 
-#: src/scm/report/guile-strings.c:687
+#: src/scm/report/guile-strings.c:697
 msgid ""
 "Display the other account? (if this is a split transaction, this parameter "
 "is guessed)."
@@ -7575,76 +7641,85 @@ msgstr ""
 "他の科目を表示しますか?(もしこれが諸口の取引の場合には、パラメータを推測しま"
 "す)"
 
-#: src/scm/report/guile-strings.c:691
+#: src/scm/report/guile-strings.c:701
 #, fuzzy
 msgid "Display the shares price?"
 msgstr "%s 帳票を表示。"
 
-#: src/scm/report/guile-strings.c:699
+#: src/scm/report/guile-strings.c:709
 msgid "No amount display"
 msgstr "金額表示なし"
 
-#: src/scm/report/guile-strings.c:704 src/scm/report/guile-strings.c:724
+#: src/scm/report/guile-strings.c:714 src/scm/report/guile-strings.c:734
 msgid "Sign Reverses?"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:705
+#: src/scm/report/guile-strings.c:715
 #, fuzzy
 msgid "Reverse amount display for certain account types"
 msgstr "所得と費用の金額の表示を逆にする"
 
-#: src/scm/report/guile-strings.c:707
+#: src/scm/report/guile-strings.c:717
 msgid "Don't change any displayed amounts"
 msgstr "どの表示された金額も変更してはいけません"
 
-#: src/scm/report/guile-strings.c:708
+#: src/scm/report/guile-strings.c:718
 msgid "Income and Expense"
 msgstr "所得および費用"
 
-#: src/scm/report/guile-strings.c:709
+#: src/scm/report/guile-strings.c:719
 msgid "Reverse amount display for Income and Expense Accounts"
 msgstr "所得と費用の金額の表示を逆にする"
 
-#: src/scm/report/guile-strings.c:711
+#: src/scm/report/guile-strings.c:721
 msgid ""
 "Reverse amount display for Liability, Equity, Credit Card,and Income accounts"
 msgstr "クレジットカード、負債、資本、所得の各勘定科目をそれぞれ逆にする"
 
-#: src/scm/report/guile-strings.c:712
+#: src/scm/report/guile-strings.c:722
 #, c-format
 msgid "From %s To %s"
 msgstr "%s から %s まで"
 
-#: src/scm/report/guile-strings.c:714
+#: src/scm/report/guile-strings.c:724
 msgid "Primary Subtotals/headings"
 msgstr "第一の小計/見出し"
 
-#: src/scm/report/guile-strings.c:716
+#: src/scm/report/guile-strings.c:726
 msgid "Secondary Subtotals/headings"
 msgstr "第二の小計/見出し"
 
-#: src/scm/report/guile-strings.c:720
+#: src/scm/report/guile-strings.c:730
 msgid "Split Odd"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:722
+#: src/scm/report/guile-strings.c:732
 msgid "Split Even"
 msgstr ""
 
-#: src/scm/report/guile-strings.c:726
+#: src/scm/report/guile-strings.c:736
 msgid "No matching transactions found"
 msgstr "一致する取引はありませんでした"
 
-#: src/scm/report/guile-strings.c:727
+#: src/scm/report/guile-strings.c:737
 msgid ""
 "No transactions were found that match the given time interval and account "
 "selection."
 msgstr ""
 "指定されたインターバル時間および科目選択に一致する取引は見つかりませんでした"
 
-#: src/scm/report/guile-strings.c:728
+#: src/scm/report/guile-strings.c:738
 msgid "Transaction Report"
 msgstr "取引出納帳"
+
+#~ msgid ""
+#~ "The URL \n"
+#~ "    %s\n"
+#~ "is in use by another user."
+#~ msgstr ""
+#~ "次の URL \n"
+#~ "    %s\n"
+#~ "は別のユーザに使われています。"
 
 #~ msgid ""
 #~ "Use an Equity account to transfer the opening balance. The Equity account "
