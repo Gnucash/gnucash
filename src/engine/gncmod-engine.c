@@ -43,6 +43,8 @@ gnc_module_init(int refcount)
   }
   
   gh_eval_str("(use-modules (gnucash engine))");
+  gh_eval_str("(use-modules (g-wrapped gw-glib))");
+  gh_eval_str("(use-modules (g-wrapped gw-kvp))");
   gh_eval_str("(use-modules (g-wrapped gw-engine))");
 
   return TRUE;
