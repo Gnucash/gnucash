@@ -100,7 +100,7 @@ gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
   GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
   GNCAcctTreeWin   * win = NULL;
   char             * name = NULL;
-  
+
   if(mc) {
     win = mc->user_data;
     if(win) {
@@ -110,13 +110,13 @@ gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
                                                 NULL);
     }
     else {
-      name = strdup("Accounts");
+      name = strdup(_("Accounts"));
     }
     g_free(mc->title);
     mc->title = g_strdup(name);
   }
   else {
-    name = strdup("Accounts");
+    name = strdup(_("Accounts"));
   }
   
   if(current == NULL) {    
@@ -162,7 +162,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
   mc->component_id = gnc_register_gui_component(WINDOW_ACCT_TREE_CM_CLASS,
                                                 NULL, NULL, mc);
   mc->user_data    = win;
-  mc->title        = g_strdup("Accounts");
+  mc->title        = g_strdup(_("Accounts"));
 
   gtk_object_set_user_data(GTK_OBJECT(child), mc);
 
@@ -893,9 +893,7 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
     GNOMEUIINFO_END
   };
   
-  child->menu_info = 
-    g_memdup(menucontainer, sizeof(menucontainer));
-
+  child->menu_info = g_memdup(menucontainer, sizeof(menucontainer));
 }
 
 
@@ -1112,5 +1110,4 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
                                     (gpointer)win);    
   }
 }
-
 

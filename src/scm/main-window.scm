@@ -45,7 +45,7 @@
      (gnc:make-string-option
       (N_ "Account Tree") (N_ "Name of account view")
       "a" (N_ "If you keep multiple account views open, it may be helpful \
-to give each one a descriptive name") (N_ "Accounts")))
+to give each one a descriptive name") (_ "Accounts")))
 
     (add-option
      (gnc:make-simple-boolean-option
