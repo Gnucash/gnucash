@@ -49,6 +49,7 @@ translation approved by the Free Software Foundation.
 @subtitle Edition @value{EDITION} for Version @value{VERSION}
 @author Rob Browning
 @author Bill Gribble
+@author Robert Graham Merkel
 @author Dave Peticolas
 @author Linas Vepstas
 @page
@@ -96,13 +97,14 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 
 Engine
 
+* Engine Introduction::         
 * Globally Unique Identifiers::  
 * Key-Value Pair Frames::       
-* Sessions::                    
-* Account Groups::              
-* Accounts::                    
-* Transactions::                
 * Splits::                      
+* Transactions::                
+* Accounts::                    
+* Account Groups::              
+* Sessions::                    
 
 Key-Value Pair Frames
 

@@ -1,7 +1,8 @@
 @node Engine, Register, Top Level, Top
 @chapter Engine
+@cindex The Engine
 
-The Enging provides an interface to a financial engine with three basic
+The Engine provides an interface to a financial engine with three basic
 financial entities: Accounts, Transactions (known as Journal Entries in
 accounting practice), and Splits (known as Ledger Entries). These three
 entities are the central data structures of the GnuCash financial data
@@ -16,22 +17,87 @@ The Engine code contains no GUI code whatsoever and is designed to
 be created as a shared library for use by other programs.
 
 @menu
+* Engine Introduction::         
 * Globally Unique Identifiers::  
 * Key-Value Pair Frames::       
-* Sessions::                    
-* Account Groups::              
-* Accounts::                    
-* Transactions::                
 * Splits::                      
+* Transactions::                
+* Accounts::                    
+* Account Groups::              
+* Sessions::                    
 @end menu
 
 
-@node Globally Unique Identifiers, Key-Value Pair Frames, Engine, Engine
+@node Engine Introduction, Globally Unique Identifiers, Engine, Engine
+@section Introduction
+
+Splits (@pxref{Splits}), or "Journal Entries" are the fundamental
+accounting units. Each Split consists of a quantity (number of dollar
+bills, number of shares, etc.), the price of that quantity (the price of
+one dollar is 1.00 dollars, etc.), a Memo, a pointer to the parent
+Transaction, a pointer to the debited Account, a reconciled flag and
+timestamp, an "Action" field, and a key-value frame which can store
+arbitrary data (@pxref{Key-Value Pair Frames}).
+
+Transactions (@pxref{Transactions}) embody the notion of "double entry"
+accounting. A Transaction consists of a date, a description, a number, a
+list of one or more Splits, and a key-value frame. When double-entry
+rules are properly enabled in the engine (they are settable with various
+flags), the total value of the splits is forced to be zero.  Note that
+if there is just one split, its value must be zero; this is useful
+because a zero-valued split can store a price (useful for e.g. tracking
+stocks). If there are two splits, then the value of one must be
+positive, the other negative: this denotes that one account is credited,
+and another is debited by an equal amount. Positive Split values are
+'debits' and negative Split values are 'credits'. Forcing the Splits to
+'add up' to zero causes a double-entry accounting system to always
+balance.
+
+Through various flags, forced double-entry can be disabled; this is
+often desirable for novice, home-oriented users. As an alternative, it
+may be better to leave double-entry enabled, but credit all dangling
+splits to some dummy account, and then simply not show that dummy
+account to the user.
+
+Note the sum of the values of Splits in a Transaction is always computed
+with respect to a currency; thus splits can be balanced even when they
+are in different currencies, as long as they share a common currency.
+The conversion price is simply the price stored in the Split. This
+feature allows currency-trading accounts to be established.
+
+Every Split must point at its parent Transaction, and that Transaction
+must in turn include that Split in the Transaction's list of Splits. A
+Split can belong to at most one Transaction. These relationships are
+forced by the engine. The engine user cannnot accidentally destroy this
+relationship as long as they stick to using the API and never access
+internal structures directly.
+
+Splits are grouped into Accounts (@pxref{Accounts}). Each Account
+consists of a list of Splits that debit that Account. To ensure
+consistency, if a Split points at an Account, then the Account must
+point at the Split, and vice-versa.  A Split can belong to at most one
+Account. Besides merely containing a list of Splits, the Account
+structure also give the Account a name, a code number, description and
+notes fields, a key-value frame, a pointer to the currency that is used
+for all splits in this account, and a pointer to the "security" used for
+all splits in this account.  The "security" can be the name of a stock
+(e.g. "IBM", "McDonald's"), or another currency (e.g. "USD", "GBP").
+The security is used during Transaction balancing to enable trading
+between accounts denominated in different currencies, or to, for
+example, move stocks from one Account to another.
+
+Accounts can be arranged in a hierarchical tree. The nodes of the tree
+are called "Account Groups" (@pxref{Account Groups}). By accounting
+convention, the value of an Account is equal to the value of all of its
+Splits plus the value of all of its sub-Accounts.
+
+
+@node Globally Unique Identifiers, Key-Value Pair Frames, Engine Introduction, Engine
 @section Globally Unique Identifiers
 @tindex GUID
 
 
-@node Key-Value Pair Frames, Sessions, Globally Unique Identifiers, Engine
+@node Key-Value Pair Frames, Splits, Globally Unique Identifiers, Engine
 @section Key-Value Pair Frames
 @cindex Key-Value Pairs
 
@@ -268,7 +334,27 @@ should rather be accessed through specific API calls.
 @end itemize
 
 
-@node Sessions, Account Groups, Key-Value Pair Frames, Engine
+@node Splits, Transactions, Key-Value Pair Frames, Engine
+@section Splits
+@tindex Split
+
+
+@node Transactions, Accounts, Splits, Engine
+@section Transactions
+@tindex Transaction
+
+
+@node Accounts, Account Groups, Transactions, Engine
+@section Accounts
+@tindex Account
+
+
+@node Account Groups, Sessions, Accounts, Engine
+@section Account Groups
+@tindex AccountGroup
+
+
+@node Sessions,  , Account Groups, Engine
 @section Sessions
 @tindex Session
 
@@ -293,23 +379,3 @@ The current implementation assumes the use of files and file locks;
 however, the API was designed to be general enough to allow the use
 of generic URL's, and/or implementation on top of SQL or other
 database/persistant object technology.
-
-
-@node Account Groups, Accounts, Sessions, Engine
-@section Account Groups
-@tindex AccountGroup
-
-
-@node Accounts, Transactions, Account Groups, Engine
-@section Accounts
-@tindex Account
-
-
-@node Transactions, Splits, Accounts, Engine
-@section Transactions
-@tindex Transaction
-
-
-@node Splits,  , Transactions, Engine
-@section Splits
-@tindex Split
