@@ -1,3 +1,20 @@
+2002-09-16  Derek Atkins  <derek@ihtfp.com>
+	Fix bug #91413 -- Add TaxTable defaults to Customers and Vendors
+
+	* business-core/gncCustomer.[ch] -- add API for TaxTable and TaxTableOverride
+	* business-core/gncVendor.[ch] -- add API for TaxTable and TaxTableOverride
+	* business-core/file/gnc-customer-xml-v2.c -- store TaxTable and TTOverride
+	* business-core/file/gnc-vendor-xml-v2.c -- store TaxTable and TTOverride
+	* business-gnome/dialog-customer.c -- display/choose TaxTable and TTOverride
+	* business-gnome/dialog-vendor.c -- display/choose TaxTable and TTOverride
+	* business-gnome/glade/customer.glade -- add TaxTable Menu and Override button
+	* business-gnome/glade/vendor.glade -- add TaxTable Menu and Override button
+	* business-ledger/gncEntryLedger.c -- set traverse_to_new = TRUE when
+	  you create a new ledger.
+	* business-ledger/gncEntryLedgerLoad.c -- don't load the ledger the
+	  first time through (e.g. when there is no invoice and no entries).
+	  Pull in the default TaxTable, TaxIncluded, and Discount flags.
+
 2002-09-16  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/search-owner.c:

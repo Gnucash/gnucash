@@ -34,6 +34,8 @@ struct _gncVendor {
   GncTaxIncluded taxincluded;
   gboolean	active;
   GList *	jobs;
+  GncTaxTable*	taxtable;
+  gboolean	taxtable_override;
   gboolean	dirty;
 };
 
@@ -180,6 +182,26 @@ void gncVendorSetActive (GncVendor *vendor, gboolean active)
   mark_vendor (vendor);
 }
 
+void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override)
+{
+  if (!vendor) return;
+  if (vendor->taxtable_override == override) return;
+  vendor->taxtable_override = override;
+  mark_vendor (vendor);
+}
+
+void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
+{
+  if (!vendor) return;
+  if (vendor->taxtable == table) return;
+  if (vendor->taxtable)
+    gncTaxTableDecRef (vendor->taxtable);
+  if (table)
+    gncTaxTableIncRef (table);
+  vendor->taxtable = table;
+  mark_vendor (vendor);
+}
+
 /* Get Functions */
 
 GNCBook * gncVendorGetBook (GncVendor *vendor)
@@ -240,6 +262,18 @@ gboolean gncVendorGetActive (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
   return vendor->active;
+}
+
+gboolean gncVendorGetTaxTableOverride (GncVendor *vendor)
+{
+  if (!vendor) return FALSE;
+  return vendor->taxtable_override;
+}
+
+GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor)
+{
+  if (!vendor) return NULL;
+  return vendor->taxtable;
 }
 
 /* Note that JobList changes do not affect the "dirtiness" of the vendor */

@@ -208,6 +208,7 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
   ledger = g_new0 (GncEntryLedger, 1);
   ledger->type = type;
   ledger->book = book;
+  ledger->traverse_to_new = TRUE;
 
   /* Orders and Invoices are "invoices" for lookups */
   switch (type) {

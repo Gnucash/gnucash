@@ -38,6 +38,9 @@ struct _gncCustomer {
   GncTaxIncluded taxincluded;
   gboolean	active;
   GList *	jobs;
+
+  GncTaxTable*	taxtable;
+  gboolean	taxtable_override;
   gboolean	dirty;
 };
 
@@ -203,6 +206,26 @@ void gncCustomerSetCommodity (GncCustomer *cust, gnc_commodity *com)
   mark_customer (cust);
 }
 
+void gncCustomerSetTaxTableOverride (GncCustomer *customer, gboolean override)
+{
+  if (!customer) return;
+  if (customer->taxtable_override == override) return;
+  customer->taxtable_override = override;
+  mark_customer (customer);
+}
+
+void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table)
+{
+  if (!customer) return;
+  if (customer->taxtable == table) return;
+  if (customer->taxtable)
+    gncTaxTableDecRef (customer->taxtable);
+  if (table)
+    gncTaxTableIncRef (table);
+  customer->taxtable = table;
+  mark_customer (customer);
+}
+
 /* Note that JobList changes do not affect the "dirtiness" of the customer */
 void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
 {
@@ -323,6 +346,18 @@ gnc_numeric gncCustomerGetCredit (GncCustomer *cust)
 {
   if (!cust) return gnc_numeric_zero();
   return cust->credit;
+}
+
+gboolean gncCustomerGetTaxTableOverride (GncCustomer *customer)
+{
+  if (!customer) return FALSE;
+  return customer->taxtable_override;
+}
+
+GncTaxTable* gncCustomerGetTaxTable (GncCustomer *customer)
+{
+  if (!customer) return NULL;
+  return customer->taxtable;
 }
 
 GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)

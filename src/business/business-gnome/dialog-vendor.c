@@ -65,6 +65,9 @@ struct _vendor_window {
   GtkWidget *	taxincluded_menu;
   GtkWidget *	notes_text;
 
+  GtkWidget *	taxtable_check;
+  GtkWidget *	taxtable_menu;
+
   GncTaxIncluded taxincluded;
   GncBillTerm *	terms;
   VendorDialogType	dialog_type;
@@ -73,7 +76,20 @@ struct _vendor_window {
   GNCBook *	book;
   GncVendor *	created_vendor;
 
+  GncTaxTable *	taxtable;
 };
+
+static void
+gnc_vendor_taxtable_check_cb (GtkToggleButton *togglebutton,
+				gpointer user_data)
+{
+  VendorWindow *vw = user_data;
+
+  if (gtk_toggle_button_get_active (togglebutton))
+    gtk_widget_set_sensitive (vw->taxtable_menu, TRUE);
+  else
+    gtk_widget_set_sensitive (vw->taxtable_menu, FALSE);
+}
 
 static GncVendor *
 vw_get_vendor (VendorWindow *vw)
@@ -120,6 +136,10 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
   gncVendorSetNotes (vendor, gtk_editable_get_chars
 		       (GTK_EDITABLE (vw->notes_text), 0, -1));
   gncVendorSetTerms (vendor, vw->terms);
+
+  gncVendorSetTaxTableOverride
+    (vendor, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (vw->taxtable_check)));
+  gncVendorSetTaxTable (vendor, vw->taxtable);
 
   gncVendorCommitEdit (vendor);
   gnc_resume_gui_refresh ();
@@ -337,6 +357,9 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   vw->notes_text = glade_xml_get_widget (xml, "notes_text");
   vw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
 
+  vw->taxtable_check = glade_xml_get_widget (xml, "taxtable_button");
+  vw->taxtable_menu = glade_xml_get_widget (xml, "taxtable_menu");
+
   /* Setup Dialog for Editing */
   gnome_dialog_set_default (vwd, 0);
 
@@ -372,6 +395,9 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   gtk_signal_connect(GTK_OBJECT (vw->company_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_vendor_name_changed_cb), vw);
+
+  gtk_signal_connect(GTK_OBJECT (vw->taxtable_check), "toggled",
+		     GTK_SIGNAL_FUNC(gnc_vendor_taxtable_check_cb), vw);
 
   /* Setup initial values */
   if (vendor != NULL) {
@@ -438,6 +464,11 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   gnc_ui_taxincluded_optionmenu (vw->taxincluded_menu, &vw->taxincluded);
   gnc_ui_billterms_optionmenu (vw->terms_menu, bookp, TRUE, &vw->terms);
 
+  vw->taxtable = gncVendorGetTaxTable (vendor);
+  gnc_ui_taxtables_optionmenu (vw->taxtable_menu, bookp, TRUE, &vw->taxtable);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->taxtable_check),
+                                gncVendorGetTaxTableOverride (vendor));
+  gnc_vendor_taxtable_check_cb (vw->taxtable_check, vw);
 
   gnc_gui_component_watch_entity_type (vw->component_id,
 				       GNC_VENDOR_MODULE_NAME,

@@ -191,7 +191,10 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   blank_entry = gnc_entry_ledger_get_blank_entry (ledger);
 
-  if (blank_entry == NULL) {
+  if (blank_entry == NULL && ledger->invoice == NULL && entry_list == NULL)
+    return;
+
+  if (blank_entry == NULL && ledger->invoice) {
     switch (ledger->type) {
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_INVOICE_ENTRY:
@@ -200,13 +203,14 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
       gncEntrySetDate (blank_entry, ledger->last_date_entered);
       ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
 
-      if (ledger->type == GNCENTRY_INVOICE_ENTRY) {
+      {
 	GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
-	GncTaxTable *table = NULL;
+	GncTaxTable *table;
 	GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
 	gboolean taxincluded = FALSE;
 	gnc_numeric discount = gnc_numeric_zero ();
 
+	/* Determine the TaxIncluded and Discount values */
 	owner = gncOwnerGetEndOwner (owner);
 	switch (gncOwnerGetType (owner)) {
 	case GNC_OWNER_CUSTOMER:
@@ -218,8 +222,6 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  break;
 	default:
 	}
-
-	/* XXX: Get the default tax-table */
 
 	/* Compute the default taxincluded */
 	switch (taxincluded_p) {
@@ -235,6 +237,22 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 						    "Invoice Tax Included?" :
 						    "Bill Tax Included?"), FALSE);
 	  break;
+	}
+
+	/* XXX: Get the default tax-table */
+	table = NULL;
+
+	/* Maybe override the global taxtable */
+	switch (gncOwnerGetType (owner)) {
+	case GNC_OWNER_CUSTOMER:
+	  if (gncCustomerGetTaxTableOverride (owner->owner.customer))
+	    table = gncCustomerGetTaxTable (owner->owner.customer);
+	  break;
+	case GNC_OWNER_VENDOR:
+	  if (gncVendorGetTaxTableOverride (owner->owner.vendor))
+	    table = gncVendorGetTaxTable (owner->owner.vendor);
+	  break;
+	default:
 	}
 
 	if (ledger->is_invoice) {

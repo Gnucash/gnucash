@@ -43,6 +43,7 @@
 
 #include "gncBillTermP.h"
 #include "gncVendorP.h"
+#include "gncTaxTableP.h"
 #include "gnc-vendor-xml-v2.h"
 #include "gnc-address-xml-v2.h"
 #include "gnc-engine-util.h"
@@ -66,6 +67,8 @@ const gchar *vendor_version_string = "2.0.0";
 #define vendor_taxincluded_string "vendor:taxincluded"
 #define vendor_active_string "vendor:active"
 #define vendor_commodity_string "vendor:commodity"
+#define vendor_taxtable_string "vendor:taxtable"
+#define vendor_taxtableoverride_string "vendor:use-tt"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -79,6 +82,7 @@ vendor_dom_tree_create (GncVendor *vendor)
 {
     xmlNodePtr ret;
     GncBillTerm *term;
+    GncTaxTable *taxtable;
 
     ret = xmlNewNode(NULL, gnc_vendor_string);
     xmlSetProp(ret, "version", vendor_version_string);
@@ -114,6 +118,13 @@ vendor_dom_tree_create (GncVendor *vendor)
        commodity_ref_to_dom_tree(vendor_commodity_string,
 				 gncVendorGetCommodity (vendor)));
 
+    xmlAddChild (ret, int_to_dom_tree (vendor_taxtableoverride_string,
+				       gncVendorGetTaxTableOverride (vendor)));
+    taxtable = gncVendorGetTaxTable (vendor);
+    if (taxtable)
+      xmlAddChild (ret, guid_to_dom_tree (vendor_taxtable_string,
+					  gncTaxTableGetGUID (taxtable)));
+
     return ret;
 }
 
@@ -137,6 +148,20 @@ set_string(xmlNodePtr node, GncVendor* vendor,
   g_free(txt);
     
   return TRUE;
+}
+
+static gboolean
+set_boolean(xmlNodePtr node, GncVendor* vendor,
+	    void (*func)(GncVendor* vendor, gboolean b))
+{
+    gint64 val;
+    gboolean ret;
+
+    ret = dom_tree_to_integer(node, &val);
+    if (ret)
+      func(vendor, (gboolean)val);
+
+    return ret;
 }
 
 static gboolean
@@ -239,14 +264,7 @@ static gboolean
 vendor_active_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    gint64 val;
-    gboolean ret;
-
-    ret = dom_tree_to_integer(node, &val);
-    if (ret)
-      gncVendorSetActive(pdata->vendor, (gboolean)val);
-
-    return ret;
+    set_boolean (node, pdata->vendor, gncVendorSetActive);
 }
 
 static gboolean
@@ -263,6 +281,34 @@ vendor_commodity_handler (xmlNodePtr node, gpointer vendor_pdata)
     return TRUE;
 }
 
+static gboolean
+vendor_taxtable_handler (xmlNodePtr node, gpointer vendor_pdata)
+{
+    struct vendor_pdata *pdata = vendor_pdata;
+    GUID *guid;
+    GncTaxTable *taxtable;
+
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
+    taxtable = gncTaxTableLookup (pdata->book, guid);
+    if (!taxtable) {
+      taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableSetGUID (taxtable, guid);
+    } else
+      gncTaxTableDecRef (taxtable);
+
+    gncVendorSetTaxTable (pdata->vendor, taxtable);
+    g_free(guid);
+    return TRUE;
+}
+
+static gboolean
+vendor_taxtableoverride_handler (xmlNodePtr node, gpointer vendor_pdata)
+{
+    struct vendor_pdata *pdata = vendor_pdata;
+    return set_boolean (node, pdata->vendor, gncVendorSetTaxTableOverride);
+}
+
 static struct dom_tree_handler vendor_handlers_v2[] = {
     { vendor_name_string, vendor_name_handler, 1, 0 },
     { vendor_guid_string, vendor_guid_handler, 1, 0 },
@@ -273,6 +319,8 @@ static struct dom_tree_handler vendor_handlers_v2[] = {
     { vendor_taxincluded_string, vendor_taxincluded_handler, 1, 0 },
     { vendor_active_string, vendor_active_handler, 1, 0 },
     { vendor_commodity_string, vendor_commodity_handler, 1, 0 },
+    { vendor_taxtable_string, vendor_taxtable_handler, 0, 0 },
+    { vendor_taxtableoverride_string, vendor_taxtableoverride_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

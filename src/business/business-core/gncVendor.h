@@ -32,6 +32,9 @@ void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl);
 void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
+void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override);
+void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table);
+
 void gncVendorAddJob (GncVendor *vendor, GncJob *job);
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job);
 
@@ -49,6 +52,9 @@ GncBillTerm * gncVendorGetTerms (GncVendor *vendor);
 GncTaxIncluded gncVendorGetTaxIncluded (GncVendor *vendor);
 gnc_commodity * gncVendorGetCommodity (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
+
+gboolean gncVendorGetTaxTableOverride (GncVendor *vendor);
+GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
 
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 

@@ -78,6 +78,9 @@ struct _customer_window {
   GtkWidget *	taxincluded_menu;
   GtkWidget *	notes_text;
 
+  GtkWidget *	taxtable_check;
+  GtkWidget *	taxtable_menu;
+
   GncTaxIncluded taxincluded;
   GncBillTerm *	terms;
   CustomerDialogType	dialog_type;
@@ -86,7 +89,20 @@ struct _customer_window {
   GNCBook *	book;
   GncCustomer *	created_customer;
 
+  GncTaxTable *	taxtable;
 };
+
+static void
+gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
+				gpointer user_data)
+{
+  CustomerWindow *cw = user_data;
+
+  if (gtk_toggle_button_get_active (togglebutton))
+    gtk_widget_set_sensitive (cw->taxtable_menu, TRUE);
+  else
+    gtk_widget_set_sensitive (cw->taxtable_menu, FALSE);
+}
 
 static GncCustomer *
 cw_get_customer (CustomerWindow *cw)
@@ -157,6 +173,10 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 			  (GNC_AMOUNT_EDIT (cw->discount_amount)));
   gncCustomerSetCredit (cust, gnc_amount_edit_get_amount
 			(GNC_AMOUNT_EDIT (cw->credit_amount)));
+
+  gncCustomerSetTaxTableOverride
+    (cust, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (cw->taxtable_check)));
+  gncCustomerSetTaxTable (cust, cw->taxtable);
 
   gncCustomerCommitEdit (cust);
   gnc_resume_gui_refresh ();
@@ -425,6 +445,9 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   cw->terms_menu = glade_xml_get_widget (xml, "terms_menu");
 
+  cw->taxtable_check = glade_xml_get_widget (xml, "taxtable_button");
+  cw->taxtable_menu = glade_xml_get_widget (xml, "taxtable_menu");
+
   /* DISCOUNT: Percentage Value */
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
@@ -496,6 +519,9 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   gtk_signal_connect(GTK_OBJECT (cw->company_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_customer_name_changed_cb), cw);
+
+  gtk_signal_connect(GTK_OBJECT (cw->taxtable_check), "toggled",
+		     GTK_SIGNAL_FUNC(gnc_customer_taxtable_check_cb), cw);
 
   /* Setup initial values */
   if (cust != NULL) {
@@ -572,6 +598,11 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   gnc_ui_taxincluded_optionmenu (cw->taxincluded_menu, &cw->taxincluded);
   gnc_ui_billterms_optionmenu (cw->terms_menu, bookp, TRUE, &cw->terms);
 
+  cw->taxtable = gncCustomerGetTaxTable (cust);
+  gnc_ui_taxtables_optionmenu (cw->taxtable_menu, bookp, TRUE, &cw->taxtable);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cw->taxtable_check),
+                                gncCustomerGetTaxTableOverride (cust));
+  gnc_customer_taxtable_check_cb (cw->taxtable_check, cw);
 
   /* Set the Discount, and Credit amounts */
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (cw->discount_amount),

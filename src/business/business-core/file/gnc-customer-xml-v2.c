@@ -43,6 +43,7 @@
 
 #include "gncBillTermP.h"
 #include "gncCustomerP.h"
+#include "gncTaxTableP.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-address-xml-v2.h"
 #include "gnc-engine-util.h"
@@ -69,6 +70,8 @@ const gchar *customer_version_string = "2.0.0";
 #define cust_discount_string "cust:discount"
 #define cust_credit_string "cust:credit"
 #define cust_commodity_string "cust:commodity"
+#define cust_taxtable_string "cust:taxtable"
+#define cust_taxtableoverride_string "cust:use-tt"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -83,6 +86,7 @@ customer_dom_tree_create (GncCustomer *cust)
     xmlNodePtr ret;
     gnc_numeric num;
     GncBillTerm *term;
+    GncTaxTable *taxtable;
 
     ret = xmlNewNode(NULL, gnc_customer_string);
     xmlSetProp(ret, "version", customer_version_string);
@@ -127,6 +131,13 @@ customer_dom_tree_create (GncCustomer *cust)
        commodity_ref_to_dom_tree(cust_commodity_string,
 				 gncCustomerGetCommodity (cust)));
 
+    xmlAddChild (ret, int_to_dom_tree (cust_taxtableoverride_string,
+				       gncCustomerGetTaxTableOverride (cust)));
+    taxtable = gncCustomerGetTaxTable (cust);
+    if (taxtable)
+      xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
+					  gncTaxTableGetGUID (taxtable)));
+
     return ret;
 }
 
@@ -150,6 +161,20 @@ set_string(xmlNodePtr node, GncCustomer* cust,
   g_free(txt);
     
   return TRUE;
+}
+
+static gboolean
+set_boolean(xmlNodePtr node, GncCustomer* cust,
+	    void (*func)(GncCustomer* cust, gboolean b))
+{
+    gint64 val;
+    gboolean ret;
+
+    ret = dom_tree_to_integer(node, &val);
+    if (ret)
+      func(cust, (gboolean)val);
+
+    return ret;
 }
 
 static gboolean
@@ -262,14 +287,7 @@ static gboolean
 customer_active_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
-    gint64 val;
-    gboolean ret;
-
-    ret = dom_tree_to_integer(node, &val);
-    if (ret)
-      gncCustomerSetActive(pdata->customer, (gboolean)val);
-
-    return ret;
+    return set_boolean (node, pdata->customer, gncCustomerSetActive);
 }
 
 static gboolean
@@ -316,6 +334,34 @@ customer_commodity_handler (xmlNodePtr node, gpointer customer_pdata)
     return TRUE;
 }
 
+static gboolean
+customer_taxtable_handler (xmlNodePtr node, gpointer cust_pdata)
+{
+    struct customer_pdata *pdata = cust_pdata;
+    GUID *guid;
+    GncTaxTable *taxtable;
+
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
+    taxtable = gncTaxTableLookup (pdata->book, guid);
+    if (!taxtable) {
+      taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableSetGUID (taxtable, guid);
+    } else
+      gncTaxTableDecRef (taxtable);
+
+    gncCustomerSetTaxTable (pdata->customer, taxtable);
+    g_free(guid);
+    return TRUE;
+}
+
+static gboolean
+customer_taxtableoverride_handler (xmlNodePtr node, gpointer cust_pdata)
+{
+    struct customer_pdata *pdata = cust_pdata;
+    return set_boolean (node, pdata->customer, gncCustomerSetTaxTableOverride);
+}
+
 static struct dom_tree_handler customer_handlers_v2[] = {
     { cust_name_string, customer_name_handler, 1, 0 },
     { cust_guid_string, customer_guid_handler, 1, 0 },
@@ -329,6 +375,8 @@ static struct dom_tree_handler customer_handlers_v2[] = {
     { cust_discount_string, customer_discount_handler, 1, 0 },
     { cust_credit_string, customer_credit_handler, 1, 0 },
     { cust_commodity_string, customer_commodity_handler, 1, 0 },
+    { cust_taxtable_string, customer_taxtable_handler, 0, 0 },
+    { cust_taxtableoverride_string, customer_taxtableoverride_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 

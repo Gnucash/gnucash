@@ -670,6 +670,23 @@
 		  <fill>False</fill>
 		</child>
 	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<name>label35</name>
+		<label>Tax Table:</label>
+		<justify>GTK_JUSTIFY_RIGHT</justify>
+		<wrap>False</wrap>
+		<xalign>1</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<child>
+		  <padding>0</padding>
+		  <expand>False</expand>
+		  <fill>False</fill>
+		</child>
+	      </widget>
 	    </widget>
 
 	    <widget>
@@ -710,6 +727,48 @@
 		  <expand>False</expand>
 		  <fill>False</fill>
 		</child>
+	      </widget>
+
+	      <widget>
+		<class>GtkHBox</class>
+		<name>hbox7</name>
+		<homogeneous>False</homogeneous>
+		<spacing>0</spacing>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>True</fill>
+		</child>
+
+		<widget>
+		  <class>GtkCheckButton</class>
+		  <name>taxtable_button</name>
+		  <tooltip>Override the global Tax Table?</tooltip>
+		  <can_focus>True</can_focus>
+		  <label></label>
+		  <active>False</active>
+		  <draw_indicator>True</draw_indicator>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+		</widget>
+
+		<widget>
+		  <class>GtkOptionMenu</class>
+		  <name>taxtable_menu</name>
+		  <tooltip>What Tax Table should be applied to this vendor?</tooltip>
+		  <can_focus>True</can_focus>
+		  <items>(taxtables)
+</items>
+		  <initial_choice>0</initial_choice>
+		  <child>
+		    <padding>0</padding>
+		    <expand>True</expand>
+		    <fill>True</fill>
+		  </child>
+		</widget>
 	      </widget>
 	    </widget>
 	  </widget>
