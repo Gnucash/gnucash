@@ -1,3 +1,7 @@
+2003-05-18  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/autogen.sh: comment out intltoolize and libtoolize again
+
 2003-05-17  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	* configure.in: Add Makefile.in to AC_OUTPUT targets.
