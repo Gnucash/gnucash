@@ -1,3 +1,9 @@
+2003-06-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/balance-sheet.scm: Add a "retained
+	  earnings" item under equity, and change the title to include
+	  the start date.  Fixes (finally!) bug #113196
+
 2003-06-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/dialog-transfer.h: Add callback handler that is
