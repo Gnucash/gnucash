@@ -26,6 +26,8 @@ The CM also provides the ability to search for existing components.
 * Registering and Unregistering Components::  
 * Watching Engine Objects::     
 * Controlling Refreshes::       
+* Finding Components::          
+* Iterating over Components::   
 @end menu
 
 
@@ -307,7 +309,7 @@ Clear all watches for the component with id @var{component_id}.
 @end deftypefun
 
 
-@node Controlling Refreshes,  , Watching Engine Objects, Component Manager
+@node Controlling Refreshes, Finding Components, Watching Engine Objects, Component Manager
 @section Controlling Refreshes
 
 @deftypefun void gnc_suspend_gui_refresh (void)
@@ -332,4 +334,54 @@ with a @code{NULL} value for @var{changes}.
 
 This routine may only be invoked when the suspend counter is zero. It
 should never be mixed with the suspend/resume refresh routines.
+@end deftypefun
+
+
+@node Finding Components, Iterating over Components, Controlling Refreshes, Component Manager
+@section Finding Components
+
+The Component Manager API provides two functions that allow components
+to be searched for. Each function uses a find handler to perform the
+actual search work. A find handler is a function with the following
+signature:
+
+@deftypefun gboolean (*GNCComponentFindHandler) (gpointer @var{find_data}, gpointer @var{user_data})
+A find handler is invoked with the @var{find_data} specified in the search
+API call, and the @var{user_data} of a particular component. The handler
+should return TRUE if the component matches the search criteria and FALSE
+otherwise.
+@end deftypefun
+
+@deftypefun {GList *} gnc_find_gui_components (const char * @var{component_class}, GNCComponentFindHandler @var{find_handler}, gpointer @var{find_data})
+Search for all components in class @var{component_class} using @var{find_handler}. Return a @code{GList} of the user data pointers of matching components.
+@end deftypefun
+
+@deftypefun gpointer gnc_find_first_gui_component (const char * @var{component_class}, GNCComponentFindHandler @var{find_handler}, gpointer @var{find_data})
+Like @code{gnc_find_gui_components} above, but return the user data pointer
+of the first matching component, or @code{NULL} if there are no matching
+components.
+@end deftypefun
+
+
+@node Iterating over Components,  , Finding Components, Component Manager
+@section Iterating over Components
+
+The Component Manager API provides a function for iterating over all
+components in a class as well as all registered components regardless
+of class.
+
+In either case, a generic component handler is invoked for each
+component. The handler has the following signature:
+
+@deftypefun void (*GNCComponentHandler) (const char * @var{class}, gint @var{component_id}, gpointer @var{iter_data})
+The component handler is invoked with the @var{class},
+@var{component_id} of a particular component, as well as the
+@var{iter_data} supplied in the iteration API call.
+@end deftypefun
+
+@deftypefun void gnc_forall_gui_components (const char * @var{component_class}, GNCComponentHandler @var{handler}, gpointer @var{iter_data})
+Apply @var{handler} to every component in @var{component_class}. If
+@var{component_class} is @code{NULL}, then iteration is performed over
+every registered component. @var{iter_data} is supplied to @var{handler}
+as the third argument.
 @end deftypefun
