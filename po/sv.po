@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash\n"
-"POT-Creation-Date: 2001-12-08 22:22+0100\n"
+"POT-Creation-Date: 2001-12-16 21:58-0800\n"
 "PO-Revision-Date: 2001-12-10 15:50+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -213,12 +213,12 @@ msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr "Det har gjorts ändringar som inte sparats. Spara data till fil?"
 
 #: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
-#: src/gnome/window-acct-tree.c:733 src/gnome/window-help.c:627
+#: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:627
 #: src/gnome/window-reconcile.c:1361
 msgid "Open"
 msgstr "Öppna"
 
-#: src/FileDialog.c:574 src/gnome/window-main.c:1129
+#: src/FileDialog.c:574 src/gnome/window-main.c:1143
 msgid "Save"
 msgstr "Spara"
 
@@ -1021,16 +1021,19 @@ msgstr ""
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "Du måste ange en existerande nationell valuta eller ange en annan typ."
 
-#: src/gnome/druid-euro-conv.c:205
+#. Base name for the Euro exchange account. The currency
+#. mnemonics get appended, e.g. 'Exchange DEM - EUR'.
+#: src/gnome/druid-euro-conv.c:245
 msgid "Exchange"
 msgstr "Växling"
 
-#: src/gnome/druid-euro-conv.c:213 src/gnome/druid-euro-conv.c:267
-#: src/gnome/druid-euro-conv.c:286
+#. Account description for the Euro-related currency exchange accounts.
+#: src/gnome/druid-euro-conv.c:254 src/gnome/druid-euro-conv.c:323
+#: src/gnome/druid-euro-conv.c:344
 msgid "Euro conversion"
 msgstr "Eurokonvertering"
 
-#: src/gnome/druid-euro-conv.c:391
+#: src/gnome/druid-euro-conv.c:456
 msgid "You don't have any accounts of Euroland currencies."
 msgstr "Du har inga konton med valutor från euroländer."
 
@@ -1288,7 +1291,7 @@ msgstr "31/12/2000"
 msgid "31/12/00"
 msgstr "31/12/00"
 
-#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:754
+#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:744
 #: src/gnome/window-report.c:677
 msgid "Options"
 msgstr "Alternativ"
@@ -1619,7 +1622,7 @@ msgid "Add a new entry or subentry"
 msgstr "Lägg till ny post eller delpost"
 
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
-#: src/gnome/window-acct-tree.c:775 src/gnome/window-reconcile.c:1353
+#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1353
 #: src/gnome/window-register.c:862
 msgid "Delete"
 msgstr "Ta bort"
@@ -2619,7 +2622,7 @@ msgid "Style sheet template:"
 msgstr "Stilmall"
 
 #: src/gnome/glade-gnc-dialogs.c:5949 src/gnome/glade-gnc-dialogs.c:6043
-#: src/gnome/window-acct-tree.c:909
+#: src/gnome/window-acct-tree.c:891
 msgid "Tax Information"
 msgstr "Skatteinformation"
 
@@ -2890,7 +2893,7 @@ msgid "Remove prices older than a user-entered date"
 msgstr "Ta bort priser äldre än ett specifikt datum"
 
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
-#: src/gnome/window-acct-tree.c:743 src/gnome/window-reconcile.c:1346
+#: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1346
 msgid "Edit"
 msgstr "Redigera"
 
@@ -2986,8 +2989,8 @@ msgid ""
 "Please choose the place in your account hierarchy where you would\n"
 "like the EUR accounts to be created."
 msgstr ""
-"Guiden kommer att skapa ett nytt EUR-konto för vart och ett av dina "
-"konton med valutor från euroländer.\n"
+"Guiden kommer att skapa ett nytt EUR-konto för vart och ett av dina konton "
+"med valutor från euroländer.\n"
 "\n"
 "Välj var i kontohierarkin du vill att dina EUR-konton ska skapas."
 
@@ -3331,7 +3334,7 @@ msgid "Name of account view"
 msgstr "Namn på kontovyn"
 
 #: src/gnome/window-acct-tree.c:262 src/gnome/window-acct-tree.c:352
-#: src/gnome/window-acct-tree.c:560
+#: src/gnome/window-acct-tree.c:550
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
@@ -3347,12 +3350,12 @@ msgstr ""
 "För att ändra ett konto så måste du först\n"
 "välja det konto som ska ändras.\n"
 
-#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:457
+#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:447
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Är du säker på att du vill ta bort kontot %s?"
 
-#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:479
+#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:469
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -3368,40 +3371,40 @@ msgstr ""
 "För att avstämma ett konto så måste du först\n"
 "välja ett konto att avstämma."
 
-#: src/gnome/window-acct-tree.c:503 src/gnome/window-acct-tree.c:525
+#: src/gnome/window-acct-tree.c:493 src/gnome/window-acct-tree.c:515
 msgid "You must select an account to check and repair."
 msgstr "Du måste välja ett konto att kontrollera och reparera."
 
-#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:833
+#: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:823
 msgid "Open the selected account"
 msgstr "Öppna det valda kontot"
 
-#: src/gnome/window-acct-tree.c:744 src/gnome/window-acct-tree.c:849
+#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
 msgid "Edit the selected account"
 msgstr "Redigera det valda kontot"
 
-#: src/gnome/window-acct-tree.c:755
+#: src/gnome/window-acct-tree.c:745
 msgid "Edit the account view options"
 msgstr "Redigera alternativen för kontovyn"
 
-#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1339
+#: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1339
 msgid "New"
 msgstr "Nytt"
 
-#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:891
+#: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:873
 #: src/gnome/window-register.c:1457
 msgid "Create a new account"
 msgstr "Skapa ett nytt konto"
 
-#: src/gnome/window-acct-tree.c:776 src/gnome/window-acct-tree.c:899
+#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:881
 msgid "Delete selected account"
 msgstr "Ta bort det valda kontot"
 
-#: src/gnome/window-acct-tree.c:799
+#: src/gnome/window-acct-tree.c:789
 msgid "Check & Repair A_ccount"
 msgstr "_Kontrollera och reparera konto"
 
-#: src/gnome/window-acct-tree.c:800 src/gnome/window-reconcile.c:1182
+#: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1182
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -3409,11 +3412,11 @@ msgstr ""
 "Leta efter och reparera obalanserade transaktioner och föräldralösa "
 "delningar i detta konto"
 
-#: src/gnome/window-acct-tree.c:808
+#: src/gnome/window-acct-tree.c:798
 msgid "Check & Repair Su_baccounts"
 msgstr "Kontrollera och reparera u_nderkonton"
 
-#: src/gnome/window-acct-tree.c:809
+#: src/gnome/window-acct-tree.c:799
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -3421,11 +3424,11 @@ msgstr ""
 "Leta efter och reparera obalanserade transaktioner och föräldralösa "
 "delningar i detta konto och dess underkonton"
 
-#: src/gnome/window-acct-tree.c:817
+#: src/gnome/window-acct-tree.c:807
 msgid "Check & Repair A_ll"
 msgstr "Kontrollera och reparera a_lla"
 
-#: src/gnome/window-acct-tree.c:818
+#: src/gnome/window-acct-tree.c:808
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -3433,74 +3436,66 @@ msgstr ""
 "Leta efter och reparera obalanserade transaktioner och föräldralösa "
 "delningar i alla konton"
 
-#: src/gnome/window-acct-tree.c:832 src/gnome/window-reconcile.c:1158
+#: src/gnome/window-acct-tree.c:822 src/gnome/window-reconcile.c:1158
 msgid "_Open Account"
 msgstr "_Öppna konto"
 
-#: src/gnome/window-acct-tree.c:840
+#: src/gnome/window-acct-tree.c:830
 msgid "Open S_ubaccounts"
 msgstr "Öppna _Underkonton"
 
-#: src/gnome/window-acct-tree.c:841
+#: src/gnome/window-acct-tree.c:831
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öppna det valda kontot och alla dess underkonton"
 
-#: src/gnome/window-acct-tree.c:848 src/gnome/window-reconcile.c:1165
+#: src/gnome/window-acct-tree.c:838 src/gnome/window-reconcile.c:1165
 #: src/gnome/window-register.c:1422
 msgid "_Edit Account"
 msgstr "_Redigera konto"
 
-#: src/gnome/window-acct-tree.c:857 src/gnome/window-register.c:1431
+#: src/gnome/window-acct-tree.c:847 src/gnome/window-register.c:1431
 msgid "_Reconcile..."
 msgstr "_Avstämma..."
 
-#: src/gnome/window-acct-tree.c:858
+#: src/gnome/window-acct-tree.c:848
 msgid "Reconcile the selected account"
 msgstr "Avstämma det valda kontot"
 
-#: src/gnome/window-acct-tree.c:865 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:855 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:1439
 msgid "_Transfer..."
 msgstr "_Överför..."
 
-#: src/gnome/window-acct-tree.c:866 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:856 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
 msgid "Transfer funds from one account to another"
 msgstr "Överför pengar från ett konto till ett annat"
 
-#: src/gnome/window-acct-tree.c:873 src/gnome/window-register.c:1447
+#: src/gnome/window-acct-tree.c:863 src/gnome/window-register.c:1447
 msgid "Stock S_plit..."
 msgstr "Aktie_delning..."
 
-#: src/gnome/window-acct-tree.c:874 src/gnome/window-register.c:1448
+#: src/gnome/window-acct-tree.c:864 src/gnome/window-register.c:1448
 msgid "Record a stock split or a stock merger"
 msgstr "Mata in en aktiedelning eller aktiesammanslagning"
 
-#: src/gnome/window-acct-tree.c:881
-msgid "_Euro Conversion..."
-msgstr "_Eurokonvertering..."
-
-#: src/gnome/window-acct-tree.c:882
-msgid "Do the Euro conversion of the account hierarchy"
-msgstr "Konvertera kontohierarkin till euro"
-
-#: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
+#: src/gnome/window-acct-tree.c:872 src/gnome/window-register.c:1456
 msgid "_New Account..."
 msgstr "_Nytt konto..."
 
-#: src/gnome/window-acct-tree.c:898
+#: src/gnome/window-acct-tree.c:880
 msgid "_Delete Account"
 msgstr "_Ta bort konto"
 
-#: src/gnome/window-acct-tree.c:905 src/gnome/window-reconcile.c:1181
+#: src/gnome/window-acct-tree.c:887 src/gnome/window-reconcile.c:1181
 msgid "_Check & Repair"
 msgstr "_Kontrollera och reparera"
 
-#: src/gnome/window-acct-tree.c:910
+#: src/gnome/window-acct-tree.c:892
 msgid "Setup tax information for all income and expense accounts"
 msgstr "Ställ in skatteinformation för alla intäkts- och utgiftskonton"
 
-#: src/gnome/window-acct-tree.c:921 src/gnome/window-reconcile.c:1233
+#: src/gnome/window-acct-tree.c:903 src/gnome/window-reconcile.c:1233
 #: src/gnome/window-register.c:1583
 msgid "_Account"
 msgstr "_Konto"
@@ -3554,7 +3549,7 @@ msgstr "Utskrift"
 msgid "Print Help window"
 msgstr "Skriv ut hjälpfönster"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1153
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
 msgid "Close"
 msgstr "Stäng"
@@ -3587,7 +3582,7 @@ msgstr "Ett fel inträffade vid filsparning."
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr "Välj \"Avsluta\" för att avsluta GnuCash."
 
-#: src/gnome/window-main.c:910
+#: src/gnome/window-main.c:916
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -3595,139 +3590,147 @@ msgstr ""
 "GnuCash tar hand om dina personliga finanser.\n"
 "GNU-sättet att hantera dina pengar!"
 
-#: src/gnome/window-main.c:967
+#: src/gnome/window-main.c:973
 msgid "New _File"
 msgstr "Ny _fil"
 
-#: src/gnome/window-main.c:968
+#: src/gnome/window-main.c:974
 msgid "Create a new file"
 msgstr "Skapa en ny fil"
 
-#: src/gnome/window-main.c:975
+#: src/gnome/window-main.c:981
 msgid "Export Accounts..."
 msgstr "Exportera konton..."
 
-#: src/gnome/window-main.c:976
+#: src/gnome/window-main.c:982
 msgid "Export the account hierarchy to a new file"
 msgstr "Exportera kontohierarkin till en ny fil"
 
-#: src/gnome/window-main.c:984
+#: src/gnome/window-main.c:990
 msgid "Import QIF..."
 msgstr "Importera QIF..."
 
-#: src/gnome/window-main.c:985
+#: src/gnome/window-main.c:991
 msgid "Import a Quicken QIF file"
 msgstr "Importera en Quicken QIF fil."
 
-#: src/gnome/window-main.c:993
+#: src/gnome/window-main.c:999
 msgid "New _Account Tree"
 msgstr "Nytt _kontoträd"
 
-#: src/gnome/window-main.c:994
+#: src/gnome/window-main.c:1000
 msgid "Open a new account tree view"
 msgstr "Öppna en ny kontoträdsvy"
 
-#: src/gnome/window-main.c:1001
+#: src/gnome/window-main.c:1007
 msgid "Move to New Window"
 msgstr "Flytta till nytt fönster"
 
-#: src/gnome/window-main.c:1002
+#: src/gnome/window-main.c:1008
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "Öppna ett nytt toppnivåfönster för den nuvarande vyn"
 
-#: src/gnome/window-main.c:1008
+#: src/gnome/window-main.c:1014
 msgid "Close _Window"
 msgstr "Stäg _fönstret"
 
-#: src/gnome/window-main.c:1009 src/gnome/window-main.c:1140
+#: src/gnome/window-main.c:1015 src/gnome/window-main.c:1154
 msgid "Close the current notebook page"
 msgstr "Stäng den nuvarande fliken"
 
-#: src/gnome/window-main.c:1021
+#: src/gnome/window-main.c:1027
 msgid "_Preferences..."
 msgstr "_Inställningar..."
 
-#: src/gnome/window-main.c:1022
+#: src/gnome/window-main.c:1028
 msgid "Open the global preferences dialog"
 msgstr "Öppna de dialogrutan för globala inställningar"
 
-#: src/gnome/window-main.c:1034
+#: src/gnome/window-main.c:1040
 msgid "_General Ledger"
 msgstr "_Allmän liggare"
 
-#: src/gnome/window-main.c:1035
+#: src/gnome/window-main.c:1041
 msgid "Open a general ledger window"
 msgstr "Öppna ett fönster för allmänn liggare"
 
-#: src/gnome/window-main.c:1042
+#: src/gnome/window-main.c:1048
 msgid "Commodity _Editor"
 msgstr "_Varuredigerare"
 
-#: src/gnome/window-main.c:1043
+#: src/gnome/window-main.c:1049
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Visa och redigera varor för aktier och fonder."
 
-#: src/gnome/window-main.c:1050
+#: src/gnome/window-main.c:1056
 msgid "_Price Editor"
 msgstr "_Prisredigerare"
 
-#: src/gnome/window-main.c:1051
+#: src/gnome/window-main.c:1057
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Visa och redigera priser för aktier och fonder"
 
-#: src/gnome/window-main.c:1058
+#: src/gnome/window-main.c:1064
 msgid "Financial _Calculator"
 msgstr "Finans_kalkylator"
 
-#: src/gnome/window-main.c:1059
+#: src/gnome/window-main.c:1065
 msgid "Use the financial calculator"
 msgstr "Använd finanskalkylatorn"
 
-#: src/gnome/window-main.c:1065
+#: src/gnome/window-main.c:1071
 msgid "_Find Transactions"
 msgstr "_Sök transaktioner"
 
-#: src/gnome/window-main.c:1066 src/gnome/window-register.c:917
+#: src/gnome/window-main.c:1072 src/gnome/window-register.c:917
 msgid "Find transactions with a search"
 msgstr "Sök transaktioner med en sökning."
 
-#: src/gnome/window-main.c:1078
+#: src/gnome/window-main.c:1079
+msgid "_Euro Conversion..."
+msgstr "_Eurokonvertering..."
+
+#: src/gnome/window-main.c:1080
+msgid "Do the Euro conversion of the account hierarchy"
+msgstr "Konvertera kontohierarkin till euro"
+
+#: src/gnome/window-main.c:1092
 msgid "_Manual"
 msgstr "_Manual"
 
-#: src/gnome/window-main.c:1079
+#: src/gnome/window-main.c:1093
 msgid "Open the GnuCash Manual"
 msgstr "Öppna GnuCash manual"
 
-#: src/gnome/window-main.c:1086
+#: src/gnome/window-main.c:1100
 msgid "_Tips Of The Day"
 msgstr "Dagens _tips"
 
-#: src/gnome/window-main.c:1087
+#: src/gnome/window-main.c:1101
 msgid "View the Tips of the Day"
 msgstr "Visa dagens tips"
 
-#: src/gnome/window-main.c:1106
+#: src/gnome/window-main.c:1120
 msgid "_Tools"
 msgstr "_Verktyg"
 
-#: src/gnome/window-main.c:1107
+#: src/gnome/window-main.c:1121
 msgid "_Settings"
 msgstr "_Inställningar"
 
-#: src/gnome/window-main.c:1108
+#: src/gnome/window-main.c:1122
 msgid "_Windows"
 msgstr "_Fönster"
 
-#: src/gnome/window-main.c:1130
+#: src/gnome/window-main.c:1144
 msgid "Save the file to disk"
 msgstr "Spara filen till disk"
 
-#: src/gnome/window-main.c:1155
+#: src/gnome/window-main.c:1169
 msgid "Exit"
 msgstr "Avsluta"
 
-#: src/gnome/window-main.c:1156
+#: src/gnome/window-main.c:1170
 msgid "Exit GnuCash"
 msgstr "Avsluta GnuCash"
 

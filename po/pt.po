@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 1.6.3\n"
-"POT-Creation-Date: 2001-12-08 22:22+0100\n"
+"POT-Creation-Date: 2001-12-16 21:58-0800\n"
 "PO-Revision-Date: 2001-12-10 00:45-0700\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: NONE \n"
@@ -228,13 +228,13 @@ msgstr ""
 # src/gnome/window-help.c:505 src/gnome/window-main.c:1041
 # src/gnome/window-reconcile.c:1259
 #: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
-#: src/gnome/window-acct-tree.c:733 src/gnome/window-help.c:627
+#: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:627
 #: src/gnome/window-reconcile.c:1361
 msgid "Open"
 msgstr "Abrir"
 
 # src/FileDialog.c:477 src/gnome/window-main.c:1020
-#: src/FileDialog.c:574 src/gnome/window-main.c:1129
+#: src/FileDialog.c:574 src/gnome/window-main.c:1143
 msgid "Save"
 msgstr "Gravar"
 
@@ -1226,17 +1226,20 @@ msgstr ""
 "Tem de introduzir uma abreviatura nacional existente ou um tipo diferente."
 
 # src/scm/guile-strings.c:44
-#: src/gnome/druid-euro-conv.c:205
+#. Base name for the Euro exchange account. The currency
+#. mnemonics get appended, e.g. 'Exchange DEM - EUR'.
+#: src/gnome/druid-euro-conv.c:245
 msgid "Exchange"
 msgstr "Taxa de Câmbio"
 
-#: src/gnome/druid-euro-conv.c:213 src/gnome/druid-euro-conv.c:267
-#: src/gnome/druid-euro-conv.c:286
+#. Account description for the Euro-related currency exchange accounts.
+#: src/gnome/druid-euro-conv.c:254 src/gnome/druid-euro-conv.c:323
+#: src/gnome/druid-euro-conv.c:344
 msgid "Euro conversion"
 msgstr "Conversão Euro"
 
 # src/gnome/druid-stock-split.c:664
-#: src/gnome/druid-euro-conv.c:391
+#: src/gnome/druid-euro-conv.c:456
 msgid "You don't have any accounts of Euroland currencies."
 msgstr "Não possui contas de moedas da zona Euro."
 
@@ -1547,7 +1550,7 @@ msgid "31/12/00"
 msgstr "31/12/00"
 
 # src/gnome/glade-gnc-dialogs.c:339
-#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:754
+#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:744
 #: src/gnome/window-report.c:677
 msgid "Options"
 msgstr "Opções"
@@ -1971,7 +1974,7 @@ msgstr "Adicionar nova entrada ou sub-entrada"
 # src/gnome/window-main.c:1072 src/gnome/window-reconcile.c:1251
 # src/gnome/window-register.c:839
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
-#: src/gnome/window-acct-tree.c:775 src/gnome/window-reconcile.c:1353
+#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1353
 #: src/gnome/window-register.c:862
 msgid "Delete"
 msgstr "Apagar"
@@ -3168,7 +3171,7 @@ msgstr "Base de folha de estilos"
 # src/gnome/glade-gnc-dialogs.c:5701 src/gnome/glade-gnc-dialogs.c:5755
 # src/gnome/window-main.c:1266
 #: src/gnome/glade-gnc-dialogs.c:5949 src/gnome/glade-gnc-dialogs.c:6043
-#: src/gnome/window-acct-tree.c:909
+#: src/gnome/window-acct-tree.c:891
 msgid "Tax Information"
 msgstr "Informação de Impostos"
 
@@ -3491,7 +3494,7 @@ msgstr "Remover cotações anteriores à data introduzida"
 
 # src/gnome/window-main.c:1051 src/gnome/window-reconcile.c:1244
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
-#: src/gnome/window-acct-tree.c:743 src/gnome/window-reconcile.c:1346
+#: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1346
 msgid "Edit"
 msgstr "Editar"
 
@@ -3607,7 +3610,8 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:8019
 msgid "Create a new toplevel account hierarchy as a copy of the existing one"
-msgstr "Criar uma nova hierarquia de contas de topo como uma cópia da existente"
+msgstr ""
+"Criar uma nova hierarquia de contas de topo como uma cópia da existente"
 
 #: src/gnome/glade-gnc-dialogs.c:8028
 msgid "Use same toplevel accounts. Create a copy of the rest of the accounts"
@@ -3683,7 +3687,8 @@ msgstr ""
 "3. Converter todos os montantes de contas Eurolândia nas suas\n"
 "respectivas contas Euro.\n"
 "\n"
-"Pode também primir 'Regressar' para rever as suas configurações, ou 'Cancelar'\n"
+"Pode também primir 'Regressar' para rever as suas configurações, ou "
+"'Cancelar'\n"
 "para sair sem realizar quaisquer alterações."
 
 #: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
@@ -3984,7 +3989,7 @@ msgstr "Nome da visualização de contas"
 
 # src/gnome/window-main.c:597 src/gnome/window-main.c:617
 #: src/gnome/window-acct-tree.c:262 src/gnome/window-acct-tree.c:352
-#: src/gnome/window-acct-tree.c:560
+#: src/gnome/window-acct-tree.c:550
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
@@ -4002,13 +4007,13 @@ msgstr ""
 "seleccionar a conta a editar.\n"
 
 # src/gnome/window-main.c:562
-#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:457
+#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:447
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Tem a certeza que deseja apagar a conta %s?"
 
 # src/gnome/window-main.c:577
-#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:479
+#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:469
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -4026,48 +4031,48 @@ msgstr ""
 "seleccionar a conta a reconciliar."
 
 # src/gnome/window-main.c:686 src/gnome/window-main.c:706
-#: src/gnome/window-acct-tree.c:503 src/gnome/window-acct-tree.c:525
+#: src/gnome/window-acct-tree.c:493 src/gnome/window-acct-tree.c:515
 msgid "You must select an account to check and repair."
 msgstr "Tem de seleccionar uma conta a verificar e reparar."
 
 # src/gnome/window-main.c:1042 src/gnome/window-main.c:1198
-#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:833
+#: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:823
 msgid "Open the selected account"
 msgstr "Abrir a conta seleccionada"
 
 # src/gnome/window-main.c:1052 src/gnome/window-main.c:1214
-#: src/gnome/window-acct-tree.c:744 src/gnome/window-acct-tree.c:849
+#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
 msgid "Edit the selected account"
 msgstr "Editar a conta seleccionada"
 
 # src/gnome/window-report.c:399
-#: src/gnome/window-acct-tree.c:755
+#: src/gnome/window-acct-tree.c:745
 msgid "Edit the account view options"
 msgstr "Editar opções de visualização de contas"
 
 # src/gnome/window-main.c:1062 src/gnome/window-reconcile.c:1237
-#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1339
+#: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1339
 msgid "New"
 msgstr "Nova"
 
 # src/gnome/window-main.c:1063 src/gnome/window-main.c:1248
 # src/gnome/window-register.c:1402
-#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:891
+#: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:873
 #: src/gnome/window-register.c:1457
 msgid "Create a new account"
 msgstr "Criar uma nova conta"
 
 # src/gnome/window-main.c:1073 src/gnome/window-main.c:1256
-#: src/gnome/window-acct-tree.c:776 src/gnome/window-acct-tree.c:899
+#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:881
 msgid "Delete selected account"
 msgstr "Apagar a conta seleccionada"
 
 # src/engine/io-gncbin-r.c:480
-#: src/gnome/window-acct-tree.c:799
+#: src/gnome/window-acct-tree.c:789
 msgid "Check & Repair A_ccount"
 msgstr "Verificar & Reparar _Conta"
 
-#: src/gnome/window-acct-tree.c:800 src/gnome/window-reconcile.c:1182
+#: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1182
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -4076,12 +4081,12 @@ msgstr ""
 "conta"
 
 # src/gnome/window-main.c:1175
-#: src/gnome/window-acct-tree.c:808
+#: src/gnome/window-acct-tree.c:798
 msgid "Check & Repair Su_baccounts"
 msgstr "Verificar & Reparar Su_b-contas"
 
 # src/gnome/window-main.c:1176
-#: src/gnome/window-acct-tree.c:809
+#: src/gnome/window-acct-tree.c:799
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -4089,11 +4094,11 @@ msgstr ""
 "Identificar e corrigir transacções não balanceadas e parcelas orfãs nesta "
 "conta e suas sub-contas"
 
-#: src/gnome/window-acct-tree.c:817
+#: src/gnome/window-acct-tree.c:807
 msgid "Check & Repair A_ll"
 msgstr "Verificar & Reparar T_odas"
 
-#: src/gnome/window-acct-tree.c:818
+#: src/gnome/window-acct-tree.c:808
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -4102,92 +4107,83 @@ msgstr ""
 "as contas"
 
 # src/gnome/window-main.c:1197 src/gnome/window-reconcile.c:1058
-#: src/gnome/window-acct-tree.c:832 src/gnome/window-reconcile.c:1158
+#: src/gnome/window-acct-tree.c:822 src/gnome/window-reconcile.c:1158
 msgid "_Open Account"
 msgstr "Abrir C_onta"
 
 # src/gnome/window-main.c:1205
-#: src/gnome/window-acct-tree.c:840
+#: src/gnome/window-acct-tree.c:830
 msgid "Open S_ubaccounts"
 msgstr "Abrir S_ub-conta"
 
 # src/gnome/window-main.c:1206
-#: src/gnome/window-acct-tree.c:841
+#: src/gnome/window-acct-tree.c:831
 msgid "Open the selected account and all its subaccounts"
 msgstr "Abrir a conta seleccionada e todas as suas sub-contas"
 
 # src/gnome/window-main.c:1213 src/gnome/window-reconcile.c:1065
 # src/gnome/window-register.c:1367
-#: src/gnome/window-acct-tree.c:848 src/gnome/window-reconcile.c:1165
+#: src/gnome/window-acct-tree.c:838 src/gnome/window-reconcile.c:1165
 #: src/gnome/window-register.c:1422
 msgid "_Edit Account"
 msgstr "_Editar Conta"
 
 # src/gnome/window-main.c:1222 src/gnome/window-register.c:1376
-#: src/gnome/window-acct-tree.c:857 src/gnome/window-register.c:1431
+#: src/gnome/window-acct-tree.c:847 src/gnome/window-register.c:1431
 msgid "_Reconcile..."
 msgstr "_Reconciliar..."
 
 # src/gnome/window-main.c:1223
-#: src/gnome/window-acct-tree.c:858
+#: src/gnome/window-acct-tree.c:848
 msgid "Reconcile the selected account"
 msgstr "Reconciliar a conta seleccionada"
 
 # src/gnome/window-main.c:1230 src/gnome/window-reconcile.c:1073
 # src/gnome/window-register.c:1384
-#: src/gnome/window-acct-tree.c:865 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:855 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:1439
 msgid "_Transfer..."
 msgstr "_Transferir..."
 
 # src/gnome/window-main.c:1231 src/gnome/window-reconcile.c:1073
 # src/gnome/window-register.c:885 src/gnome/window-register.c:1385
-#: src/gnome/window-acct-tree.c:866 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:856 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
 msgid "Transfer funds from one account to another"
 msgstr "Transferir fundos de uma conta para outra"
 
 # src/gnome/window-main.c:1238 src/gnome/window-register.c:1392
-#: src/gnome/window-acct-tree.c:873 src/gnome/window-register.c:1447
+#: src/gnome/window-acct-tree.c:863 src/gnome/window-register.c:1447
 msgid "Stock S_plit..."
 msgstr "\"S_plit\" de Acções..."
 
 # src/gnome/window-main.c:1239 src/gnome/window-register.c:1393
-#: src/gnome/window-acct-tree.c:874 src/gnome/window-register.c:1448
+#: src/gnome/window-acct-tree.c:864 src/gnome/window-register.c:1448
 msgid "Record a stock split or a stock merger"
 msgstr "Registar um \"split\" ou \"merger\" de acções"
 
-#: src/gnome/window-acct-tree.c:881
-msgid "_Euro Conversion..."
-msgstr "Conversão _Euro..."
-
-# src/gnome/window-reconcile.c:983
-#: src/gnome/window-acct-tree.c:882
-msgid "Do the Euro conversion of the account hierarchy"
-msgstr "Realizar a conversão Euro da sua hierarquia de contas"
-
 # src/gnome/window-main.c:1247 src/gnome/window-register.c:1401
-#: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
+#: src/gnome/window-acct-tree.c:872 src/gnome/window-register.c:1456
 msgid "_New Account..."
 msgstr "_Nova Conta..."
 
 # src/gnome/window-main.c:1255
-#: src/gnome/window-acct-tree.c:898
+#: src/gnome/window-acct-tree.c:880
 msgid "_Delete Account"
 msgstr "_Apagar Conta"
 
-#: src/gnome/window-acct-tree.c:905 src/gnome/window-reconcile.c:1181
+#: src/gnome/window-acct-tree.c:887 src/gnome/window-reconcile.c:1181
 msgid "_Check & Repair"
 msgstr "Verificar & _Corrigir"
 
 # src/gnome/window-main.c:1267
-#: src/gnome/window-acct-tree.c:910
+#: src/gnome/window-acct-tree.c:892
 msgid "Setup tax information for all income and expense accounts"
 msgstr ""
 "Definir informação de impostos para todas as contas de receitas e despesas"
 
 # src/gnome/window-reconcile.c:1131 src/gnome/window-register.c:1520
-#: src/gnome/window-acct-tree.c:921 src/gnome/window-reconcile.c:1233
+#: src/gnome/window-acct-tree.c:903 src/gnome/window-reconcile.c:1233
 #: src/gnome/window-register.c:1583
 msgid "_Account"
 msgstr "Cont_a"
@@ -4255,7 +4251,7 @@ msgstr "Janela de Ajuda de Impressão"
 
 # src/gnome/window-help.c:534 src/gnome/window-register.c:903
 # src/gnome/window-register.c:1321 src/gnome/window-report.c:417
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1153
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
 msgid "Close"
 msgstr "Fechar"
@@ -4292,7 +4288,7 @@ msgid "Select \"Exit\" to exit GnuCash."
 msgstr "Seleccione \"Sair\" para sair do GnuCash."
 
 # src/gnome/window-main.c:511
-#: src/gnome/window-main.c:910
+#: src/gnome/window-main.c:916
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -4301,168 +4297,177 @@ msgstr ""
 "O modo GNU de gerir o seu dinheiro!"
 
 # src/gnome/window-main.c:1125
-#: src/gnome/window-main.c:967
+#: src/gnome/window-main.c:973
 msgid "New _File"
 msgstr "Novo _Ficheiro"
 
 # src/gnome/window-main.c:1126
-#: src/gnome/window-main.c:968
+#: src/gnome/window-main.c:974
 msgid "Create a new file"
 msgstr "Criar um ficheiro novo"
 
 # src/engine/io-gncbin-r.c:480
-#: src/gnome/window-main.c:975
+#: src/gnome/window-main.c:981
 msgid "Export Accounts..."
 msgstr "Exportar Contas..."
 
-#: src/gnome/window-main.c:976
+#: src/gnome/window-main.c:982
 msgid "Export the account hierarchy to a new file"
 msgstr "Exportar a hierarquia de contas para um novo ficheiro"
 
 # src/gnome/window-main.c:1138
-#: src/gnome/window-main.c:984
+#: src/gnome/window-main.c:990
 msgid "Import QIF..."
 msgstr "Importar QIF..."
 
 # src/gnome/window-main.c:1031 src/gnome/window-main.c:1139
-#: src/gnome/window-main.c:985
+#: src/gnome/window-main.c:991
 msgid "Import a Quicken QIF file"
 msgstr "Importar um ficheiro QIF do Quicken"
 
 # src/gnome/dialog-account.c:1431 src/gnome/glade-gnc-dialogs.c:3415
-#: src/gnome/window-main.c:993
+#: src/gnome/window-main.c:999
 msgid "New _Account Tree"
 msgstr "Nova _Árvore de Contas"
 
 # src/gnome/window-help.c:506
-#: src/gnome/window-main.c:994
+#: src/gnome/window-main.c:1000
 msgid "Open a new account tree view"
 msgstr "Abrir uma nova vista de árvore de contas"
 
 # src/scm/guile-strings.c:88 src/scm/guile-strings.c:91
-#: src/gnome/window-main.c:1001
+#: src/gnome/window-main.c:1007
 msgid "Move to New Window"
 msgstr "Ir para Nova Janela"
 
 # src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1508
-#: src/gnome/window-main.c:1002
+#: src/gnome/window-main.c:1008
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "Abre uma nova janela de topo no GnuCash para a visualização actual"
 
 # src/gnome/window-help.c:535
-#: src/gnome/window-main.c:1008
+#: src/gnome/window-main.c:1014
 msgid "Close _Window"
 msgstr "Fechar _Janela"
 
 # src/gnome/window-report.c:371
-#: src/gnome/window-main.c:1009 src/gnome/window-main.c:1140
+#: src/gnome/window-main.c:1015 src/gnome/window-main.c:1154
 msgid "Close the current notebook page"
 msgstr "Fechar página de registo actual"
 
 # src/gnome/window-main.c:1154
-#: src/gnome/window-main.c:1021
+#: src/gnome/window-main.c:1027
 msgid "_Preferences..."
 msgstr "_Preferências..."
 
 # src/gnome/window-main.c:1155
-#: src/gnome/window-main.c:1022
+#: src/gnome/window-main.c:1028
 msgid "Open the global preferences dialog"
 msgstr "Abre a janela global de preferêcnias"
 
 # src/gnome/window-main.c:1279
-#: src/gnome/window-main.c:1034
+#: src/gnome/window-main.c:1040
 msgid "_General Ledger"
 msgstr "Plano _de Contas"
 
 # src/gnome/window-main.c:1280
-#: src/gnome/window-main.c:1035
+#: src/gnome/window-main.c:1041
 msgid "Open a general ledger window"
 msgstr "Abrir uma janela de plano de contas"
 
-#: src/gnome/window-main.c:1042
+#: src/gnome/window-main.c:1048
 msgid "Commodity _Editor"
 msgstr "_Editor de Activos"
 
-#: src/gnome/window-main.c:1043
+#: src/gnome/window-main.c:1049
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Visualize e edite os activos de acções e outros títulos"
 
-#: src/gnome/window-main.c:1050
+#: src/gnome/window-main.c:1056
 msgid "_Price Editor"
 msgstr "Editor de _Cotações"
 
-#: src/gnome/window-main.c:1051
+#: src/gnome/window-main.c:1057
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Visualize e edite as cotações de acções e outros títulos"
 
 # src/gnome/window-main.c:1287
-#: src/gnome/window-main.c:1058
+#: src/gnome/window-main.c:1064
 msgid "Financial _Calculator"
 msgstr "_Calculadora Financeira"
 
 # src/gnome/window-main.c:1288
-#: src/gnome/window-main.c:1059
+#: src/gnome/window-main.c:1065
 msgid "Use the financial calculator"
 msgstr "Utilizar a calculadora financeira"
 
 # src/gnome/window-main.c:1294
-#: src/gnome/window-main.c:1065
+#: src/gnome/window-main.c:1071
 msgid "_Find Transactions"
 msgstr "Proc_urar Transacção"
 
 # src/gnome/window-main.c:1084 src/gnome/window-main.c:1295
 # src/gnome/window-register.c:894
-#: src/gnome/window-main.c:1066 src/gnome/window-register.c:917
+#: src/gnome/window-main.c:1072 src/gnome/window-register.c:917
 msgid "Find transactions with a search"
 msgstr "Encontrar transacções"
 
+#: src/gnome/window-main.c:1079
+msgid "_Euro Conversion..."
+msgstr "Conversão _Euro..."
+
+# src/gnome/window-reconcile.c:983
+#: src/gnome/window-main.c:1080
+msgid "Do the Euro conversion of the account hierarchy"
+msgstr "Realizar a conversão Euro da sua hierarquia de contas"
+
 # src/gnome/window-main.c:1307
-#: src/gnome/window-main.c:1078
+#: src/gnome/window-main.c:1092
 msgid "_Manual"
 msgstr "_Manual"
 
 # src/gnome/window-main.c:1308
-#: src/gnome/window-main.c:1079
+#: src/gnome/window-main.c:1093
 msgid "Open the GnuCash Manual"
 msgstr "Abrir o Manual do GnuCash"
 
 # src/gnome/window-main.c:1315
-#: src/gnome/window-main.c:1086
+#: src/gnome/window-main.c:1100
 msgid "_Tips Of The Day"
 msgstr "_Dicas do Dia"
 
 # src/gnome/window-main.c:1316
-#: src/gnome/window-main.c:1087
+#: src/gnome/window-main.c:1101
 msgid "View the Tips of the Day"
 msgstr "Ver as Dicas do Dia"
 
 # src/gnome/window-main.c:1331
-#: src/gnome/window-main.c:1106
+#: src/gnome/window-main.c:1120
 msgid "_Tools"
 msgstr "_Ferramentas"
 
 # src/gnome/glade-gnc-dialogs.c:923
-#: src/gnome/window-main.c:1107
+#: src/gnome/window-main.c:1121
 msgid "_Settings"
 msgstr "_Definições"
 
 # src/scm/guile-strings.c:88 src/scm/guile-strings.c:91
-#: src/gnome/window-main.c:1108
+#: src/gnome/window-main.c:1122
 msgid "_Windows"
 msgstr "_Janelas"
 
 # src/gnome/window-main.c:1021
-#: src/gnome/window-main.c:1130
+#: src/gnome/window-main.c:1144
 msgid "Save the file to disk"
 msgstr "Gravar o ficheiro para disco"
 
 # src/gnome/window-main.c:1094
-#: src/gnome/window-main.c:1155
+#: src/gnome/window-main.c:1169
 msgid "Exit"
 msgstr "Sair"
 
 # src/gnome/window-main.c:1095
-#: src/gnome/window-main.c:1156
+#: src/gnome/window-main.c:1170
 msgid "Exit GnuCash"
 msgstr "Sair do GnuCash"
 

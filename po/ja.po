@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-09-23 23:16-0700\n"
+"POT-Creation-Date: 2001-12-16 21:58-0800\n"
 "PO-Revision-Date: 2001-1-18 14:00+0900\n"
 "Last-Translator: Mitsuo Hamada <mhamada@redhat.com>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
@@ -207,7 +207,7 @@ msgstr "保存されていない変更があります。ファイルに保存しますか?"
 msgid "Open"
 msgstr "開く"
 
-#: src/FileDialog.c:574 src/gnome/window-main.c:1129
+#: src/FileDialog.c:574 src/gnome/window-main.c:1143
 msgid "Save"
 msgstr "保存"
 
@@ -1005,6 +1005,25 @@ msgstr ""
 #: src/gnome/druid-commodity.c:401 src/gnome/druid-qif-import.c:1487
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "既存の国際通貨あるいはそれ以外のタイプを入力してください"
+
+#. Base name for the Euro exchange account. The currency
+#. mnemonics get appended, e.g. 'Exchange DEM - EUR'.
+#: src/gnome/druid-euro-conv.c:245
+#, fuzzy
+msgid "Exchange"
+msgstr "為替レート"
+
+#. Account description for the Euro-related currency exchange accounts.
+#: src/gnome/druid-euro-conv.c:254 src/gnome/druid-euro-conv.c:323
+#: src/gnome/druid-euro-conv.c:344
+#, fuzzy
+msgid "Euro conversion"
+msgstr "バージョンを表示"
+
+#: src/gnome/druid-euro-conv.c:456
+#, fuzzy
+msgid "You don't have any accounts of Euroland currencies."
+msgstr "残高の存在する株勘定科目は一つもありません"
 
 #: src/gnome/druid-qif-import.c:490
 msgid "Select QIF File"
@@ -2731,7 +2750,7 @@ msgstr "ユーザ名:"
 msgid "Password:"
 msgstr "パスワード:"
 
-#: src/gnome/glade-gnc-dialogs.c:7021
+#: src/gnome/glade-gnc-dialogs.c:7021 src/gnome/glade-gnc-dialogs.c:7955
 msgid "window1"
 msgstr "window1"
 
@@ -2886,6 +2905,95 @@ msgstr "金融商品"
 #: src/gnome/glade-gnc-dialogs.c:7795
 msgid "Show National Currencies"
 msgstr "国際通貨を表示"
+
+#: src/gnome/glade-gnc-dialogs.c:7975
+msgid "Euro Conversion Druid"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7976
+msgid ""
+"This druid will help you converting your existing accounts to the\n"
+"currency Euro (EUR). \n"
+"\n"
+"In the following, the term 'Euroland currency' will denote \n"
+"the currencies that are being replaced by the Euro.\n"
+"\n"
+"No changes will be made until you press 'Finish' on the last page\n"
+"of this druid."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:7987
+#, fuzzy
+msgid "Where to create the Euro accounts?"
+msgstr "新しい勘定科目セットを作成する"
+
+#: src/gnome/glade-gnc-dialogs.c:8003
+msgid ""
+"For each of your Euroland accounts, the druid will create a new EUR "
+"account. \n"
+"\n"
+"Please choose the place in your account hierarchy where you would\n"
+"like the EUR accounts to be created."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8019
+msgid "Create a new toplevel account hierarchy as a copy of the existing one"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8028
+msgid "Use same toplevel accounts. Create a copy of the rest of the accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8036
+msgid ""
+"Use existing account hierarchy. Create only a copy of those \n"
+"accounts that have no subaccounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8053
+#, fuzzy
+msgid "How to name the new accounts?"
+msgstr "この勘定科目について取引帳票を実行する"
+
+#: src/gnome/glade-gnc-dialogs.c:8068
+msgid ""
+"Please choose a naming scheme for the new Euro accounts \n"
+"and the old Euroland accounts."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8085
+msgid ""
+"The name of each newly created Euro account is copied from\n"
+"the old Euroland account, plus an appended 'EUR'"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8094
+msgid ""
+"The name of each old Euroland account is modified by appending \n"
+"the respective currency symbol of the Euroland currency. \n"
+"The name of the newly created Euro account is copied from the\n"
+"old Euroland account."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8112
+msgid "Finish Euro Conversion"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:8113
+msgid ""
+"If you have finished choosing your Euro conversion settings,\n"
+"press 'Finish'.\n"
+"\n"
+"The druid will then perform the following steps:\n"
+"\n"
+"1. Create new accounts according to your settings.\n"
+"2. Create currency exchange accounts.\n"
+"3. Exchange all amounts from Euroland accounts to their\n"
+"respective Euro account.\n"
+"\n"
+"You may also press 'Back' to review your settings, or 'Cancel'\n"
+"to quit without making any changes."
+msgstr ""
 
 #: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
 #, c-format
@@ -3351,7 +3459,7 @@ msgstr "印刷"
 msgid "Print Help window"
 msgstr "ヘルプウィンドウを印刷"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1153
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
 msgid "Close"
 msgstr "閉じる"
@@ -3384,7 +3492,7 @@ msgstr "ファイル保存中にエラー"
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr "GnuCashを終了するには\"終了\"を選択してください"
 
-#: src/gnome/window-main.c:910
+#: src/gnome/window-main.c:916
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -3392,139 +3500,149 @@ msgstr ""
 "GnuCash 個人用財務管理\n"
 "GNU でお金を管理しよう!"
 
-#: src/gnome/window-main.c:967
+#: src/gnome/window-main.c:973
 msgid "New _File"
 msgstr "新規ファイル"
 
-#: src/gnome/window-main.c:968
+#: src/gnome/window-main.c:974
 msgid "Create a new file"
 msgstr "新しいファイルを作成する"
 
-#: src/gnome/window-main.c:975
+#: src/gnome/window-main.c:981
 msgid "Export Accounts..."
 msgstr "勘定科目を書き出し..."
 
-#: src/gnome/window-main.c:976
+#: src/gnome/window-main.c:982
 msgid "Export the account hierarchy to a new file"
 msgstr "勘定科目の階層を新しいファイルに書き出す"
 
-#: src/gnome/window-main.c:984
+#: src/gnome/window-main.c:990
 msgid "Import QIF..."
 msgstr "QIF のインポート..."
 
-#: src/gnome/window-main.c:985
+#: src/gnome/window-main.c:991
 msgid "Import a Quicken QIF file"
 msgstr "Quicken QIF ファイルを読み込む"
 
-#: src/gnome/window-main.c:993
+#: src/gnome/window-main.c:999
 msgid "New _Account Tree"
 msgstr "新しい勘定科目ツリー"
 
-#: src/gnome/window-main.c:994
+#: src/gnome/window-main.c:1000
 msgid "Open a new account tree view"
 msgstr "新しい勘定科目ツリー一覧を開く"
 
-#: src/gnome/window-main.c:1001
+#: src/gnome/window-main.c:1007
 msgid "Move to New Window"
 msgstr "新しいウィンドウへ移動"
 
-#: src/gnome/window-main.c:1002
+#: src/gnome/window-main.c:1008
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "現在の一覧用に新しいGnuCashトップレベルウィンドウを開く"
 
-#: src/gnome/window-main.c:1008
+#: src/gnome/window-main.c:1014
 msgid "Close _Window"
 msgstr "ウィンドウを閉じる"
 
-#: src/gnome/window-main.c:1009 src/gnome/window-main.c:1140
+#: src/gnome/window-main.c:1015 src/gnome/window-main.c:1154
 msgid "Close the current notebook page"
 msgstr "このノートページを閉じる"
 
-#: src/gnome/window-main.c:1021
+#: src/gnome/window-main.c:1027
 msgid "_Preferences..."
 msgstr "初期設定(_P)..."
 
-#: src/gnome/window-main.c:1022
+#: src/gnome/window-main.c:1028
 msgid "Open the global preferences dialog"
 msgstr "全体の初期設定ダイアログを開く"
 
-#: src/gnome/window-main.c:1034
+#: src/gnome/window-main.c:1040
 msgid "_General Ledger"
 msgstr "総勘定元帳(_G)"
 
-#: src/gnome/window-main.c:1035
+#: src/gnome/window-main.c:1041
 msgid "Open a general ledger window"
 msgstr "総勘定元帳を開く"
 
-#: src/gnome/window-main.c:1042
+#: src/gnome/window-main.c:1048
 msgid "Commodity _Editor"
 msgstr "金融商品エディタ(_E)"
 
-#: src/gnome/window-main.c:1043
+#: src/gnome/window-main.c:1049
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "株式や投資信託などの金融商品を見るまたは編集する"
 
-#: src/gnome/window-main.c:1050
+#: src/gnome/window-main.c:1056
 msgid "_Price Editor"
 msgstr "価格エディタ(_P)"
 
-#: src/gnome/window-main.c:1051
+#: src/gnome/window-main.c:1057
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "株式や投資信託などの価格を見るまたは編集する"
 
-#: src/gnome/window-main.c:1058
+#: src/gnome/window-main.c:1064
 msgid "Financial _Calculator"
 msgstr "財務計算機(_C)"
 
-#: src/gnome/window-main.c:1059
+#: src/gnome/window-main.c:1065
 msgid "Use the financial calculator"
 msgstr "財務計算機を使用する"
 
-#: src/gnome/window-main.c:1065
+#: src/gnome/window-main.c:1071
 msgid "_Find Transactions"
 msgstr "取引検索(_F)"
 
-#: src/gnome/window-main.c:1066 src/gnome/window-register.c:917
+#: src/gnome/window-main.c:1072 src/gnome/window-register.c:917
 msgid "Find transactions with a search"
 msgstr "検索により取引を見つける"
 
-#: src/gnome/window-main.c:1078
+#: src/gnome/window-main.c:1079
+#, fuzzy
+msgid "_Euro Conversion..."
+msgstr "バージョンを表示"
+
+#: src/gnome/window-main.c:1080
+#, fuzzy
+msgid "Do the Euro conversion of the account hierarchy"
+msgstr "この勘定科目の照合を延期する"
+
+#: src/gnome/window-main.c:1092
 msgid "_Manual"
 msgstr "マニュアル(_M)"
 
-#: src/gnome/window-main.c:1079
+#: src/gnome/window-main.c:1093
 msgid "Open the GnuCash Manual"
 msgstr "GnuCashマニュアルを開く"
 
-#: src/gnome/window-main.c:1086
+#: src/gnome/window-main.c:1100
 msgid "_Tips Of The Day"
 msgstr "今日のヒント(_T)"
 
-#: src/gnome/window-main.c:1087
+#: src/gnome/window-main.c:1101
 msgid "View the Tips of the Day"
 msgstr "「今日のヒント」を見る"
 
-#: src/gnome/window-main.c:1106
+#: src/gnome/window-main.c:1120
 msgid "_Tools"
 msgstr "ツール(_T)"
 
-#: src/gnome/window-main.c:1107
+#: src/gnome/window-main.c:1121
 msgid "_Settings"
 msgstr "設定(_S)"
 
-#: src/gnome/window-main.c:1108
+#: src/gnome/window-main.c:1122
 msgid "_Windows"
 msgstr "ウィンドウ(_W)"
 
-#: src/gnome/window-main.c:1130
+#: src/gnome/window-main.c:1144
 msgid "Save the file to disk"
 msgstr "ファイルをディスクに保存する"
 
-#: src/gnome/window-main.c:1155
+#: src/gnome/window-main.c:1169
 msgid "Exit"
 msgstr "終了"
 
-#: src/gnome/window-main.c:1156
+#: src/gnome/window-main.c:1170
 msgid "Exit GnuCash"
 msgstr "GnuCash を終了する"
 
