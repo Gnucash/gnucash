@@ -1398,6 +1398,13 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (xferData->exch_rate)
   {
+    /* If the to_amount is active, then call the callback, just in case the
+     * user hit "return" -- because the exit-focus signal handler was probably
+     * not executed.
+     */
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (xferData->amount_radio)))
+      gnc_xfer_to_amount_update_cb(xferData->to_amount_edit, NULL, xferData);
+
     *(xferData->exch_rate) =
       gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
   }
