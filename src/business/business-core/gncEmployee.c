@@ -38,6 +38,8 @@ struct _gncEmployee {
   gboolean	active;
   gboolean	dirty;
 
+  Account *	ccard_acc;
+
   int		editlevel;
   gboolean	do_free;
 };
@@ -215,6 +217,16 @@ void gncEmployeeSetActive (GncEmployee *employee, gboolean active)
   gncEmployeeCommitEdit (employee);
 }
 
+void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
+{
+  if (!employee) return;
+  if (ccard_acc == employee->ccard_acc) return;
+  gncEmployeeBeginEdit (employee);
+  employee->ccard_acc = ccard_acc;
+  mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
+}
+
 /* Get Functions */
 
 GNCBook * gncEmployeeGetBook (GncEmployee *employee)
@@ -281,6 +293,12 @@ gboolean gncEmployeeGetActive (GncEmployee *employee)
 {
   if (!employee) return FALSE;
   return employee->active;
+}
+
+Account * gncEmployeeGetCCard (GncEmployee *employee)
+{
+  if (!employee) return NULL;
+  return employee->ccard_acc;
 }
 
 GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid)

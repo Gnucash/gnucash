@@ -1,3 +1,10 @@
+2003-03-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncEmployee.[ch]: added APIs to
+	  store a Credit Card account for the employee.
+	* src/business/business-core/file/gnc-employee-xml-v2.c:
+	  store the employee's CC Account in the XML file.
+
 2003-03-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/import-backend.c:

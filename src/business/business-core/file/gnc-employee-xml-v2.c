@@ -66,6 +66,7 @@ const gchar *employee_version_string = "2.0.0";
 #define employee_workday_string "employee:workday"
 #define employee_rate_string "employee:rate"
 #define employee_currency_string "employee:currency"
+#define employee_ccard_string "employee:ccard"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -79,6 +80,7 @@ employee_dom_tree_create (GncEmployee *employee)
 {
     xmlNodePtr ret;
     gnc_numeric num;
+    Account* ccard_acc;
 
     ret = xmlNewNode(NULL, gnc_employee_string);
     xmlSetProp(ret, "version", employee_version_string);
@@ -112,6 +114,12 @@ employee_dom_tree_create (GncEmployee *employee)
       (ret,
        commodity_ref_to_dom_tree(employee_currency_string,
 				 gncEmployeeGetCurrency (employee)));
+
+    ccard_acc = gncEmployeeGetCCard (employee);
+    if (ccard_acc)
+      xmlAddChild(ret, guid_to_dom_tree(employee_ccard_string,
+					xaccAccountGetGUID (ccard_acc)));
+
     return ret;
 }
 
@@ -258,6 +266,25 @@ employee_currency_handler (xmlNodePtr node, gpointer employee_pdata)
     return TRUE;
 }
 
+static gboolean
+employee_ccard_handler (xmlNodePtr node, gpointer employee_pdata)
+{
+    struct employee_pdata *pdata = employee_pdata;
+    GUID *guid;
+    Account *ccard_acc;
+
+    guid = dom_tree_to_guid(node);
+    g_return_val_if_fail(guid, FALSE);
+
+    ccard_acc = xaccAccountLookup (guid, pdata->book);
+    g_free(guid);
+
+    g_return_val_if_fail (ccard_acc, FALSE);
+    gncEmployeeSetCCard (pdata->employee, ccard_acc);
+
+    return TRUE;
+}
+
 static struct dom_tree_handler employee_handlers_v2[] = {
     { employee_username_string, employee_username_handler, 1, 0 },
     { employee_guid_string, employee_guid_handler, 1, 0 },
@@ -270,6 +297,7 @@ static struct dom_tree_handler employee_handlers_v2[] = {
     { employee_rate_string, employee_rate_handler, 1, 0 },
     { employee_currency_string, employee_currency_handler, 0, 0 }, /* XXX */
     { "employee:commodity", employee_currency_handler, 0, 0 }, /* XXX */
+    { employee_ccard_string, employee_ccard_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
