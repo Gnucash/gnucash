@@ -61,10 +61,26 @@
  */
 
 static void
-LedgerMoveCursor  (Table *table, void * client_data)
+LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * client_data)
 {
    SplitRegister *reg = (SplitRegister *) client_data;
+
+   /* commit the contents of the cursor into the database */
    xaccSRSaveRegEntry (reg);
+
+   /* if auto-expansion is enabled, we need to redraw the register
+    * to expand out the splits at the new location.  We do some
+    * tomfoolery here to trick the code into expanding the new location.
+    * This little futz is sleazy, but it does suceed in getting the 
+    * LoadRegister code into expanding the appropriate split.
+    * 
+    */   
+   if ((reg->type) & REG_DYNAMIC) {
+      Split * split;
+      split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
+      reg->table->current_cursor->user_data = (void *) split;
+      xaccRegisterRefresh (reg);
+   }
 }
 
 /* ======================================================== */
@@ -478,14 +494,15 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    int num_virt_rows;
    int phys_row;
    int vrow;
-   int double_line, multi_line;
+   int double_line, multi_line, dynamic;
 
    table = reg->table;
    double_line = (reg->type) & REG_DOUBLE_LINE;
    multi_line  = (reg->type) & REG_MULTI_LINE;
+   dynamic = (reg->type) & REG_DYNAMIC;
 
    /* save the current cursor location; we do this by saving
-    * a pointer to the currently eduited split; we restore the 
+    * a pointer to the currently edited split; we restore the 
     * cursor to this location when we are done. */
    if (reg->table->current_cursor) {
       save_current_split = (Split *) (reg->table->current_cursor->user_data);
@@ -534,17 +551,26 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       num_phys_rows += reg->trans_cursor->numRows; 
       
       if (double_line) {
-         /* add one row */
+         /* add one split row for each transaction */
          num_virt_rows ++;
          num_phys_rows += reg->split_cursor->numRows; 
       }
-      if (multi_line) {
+
+      /* if multi-line, then show all splits.  If dynamic then
+       * show all splits only if this is the hot split. 
+       */
+      if (multi_line || (dynamic && (split == save_current_split))) {
          /* add a row for each split, minus one, plus one */
          j = xaccTransCountSplits (trans);
          num_virt_rows += j;
          num_phys_rows += j * reg->split_cursor->numRows; 
-      }
-
+         if (double_line) {
+            /* fix prior double-counting */
+            num_virt_rows --;
+            num_phys_rows -= reg->split_cursor->numRows; 
+         }
+      } 
+      
       i++;
       split = slist[i];
    }
@@ -625,7 +651,7 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
             phys_row += reg->split_cursor->numRows; 
          }
 
-         if (multi_line) {
+         if (multi_line || (dynamic && (split == save_current_split))) {
             /* loop over all of the splits in the transaction */
             /* the do..while will automaticaly put a blank (null) split at the end */
             trans = xaccSplitGetParent (split);
