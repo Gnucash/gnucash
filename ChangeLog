@@ -16,6 +16,10 @@
 	* dialog-account.[ch] -- add "destroy-window" callback registration.
 	  remove dependencies on register/ledger
 	* split-register.c -- register "destroy-window" callback
+
+	* move dialog-account.[ch] from src/dialog-account to src/gnome-utils
+	  fix all references (Makefile.am) to remove src/dialog-account
+	* configure.in: remove src/account-dialog/Makefile
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 

@@ -19,7 +19,6 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/dialog-account/libdialog-account.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${GLADE_LIBS} \
   ${GLIB_LIBS}
@@ -35,7 +34,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
-  -I${top_srcdir}/src/dialog-account \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

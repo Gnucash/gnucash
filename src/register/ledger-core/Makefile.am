@@ -30,8 +30,7 @@ libgncmod_ledger_core_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
-  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
-  ${top_builddir}/src/dialog-account/libdialog-account.la
+  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -39,7 +38,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
-  -I${top_srcdir}/src/dialog-account \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   ${GUILE_INCS} \

@@ -320,7 +320,7 @@ src/gnome-utils/gnc-dense-cal.c
 src/gnome-utils/dialog-utils.c
 src/gnome-utils/gnc-html.c
 src/gnome-utils/commodity.glade
-src/dialog-account/dialog-account.c
+src/gnome-utils/dialog-account.c
 src/business/dialog-tax-table/gncmod-dialog-tax-table.c
 src/business/dialog-tax-table/dialog-tax-table.c
 src/business/dialog-tax-table/tax-tables.glade

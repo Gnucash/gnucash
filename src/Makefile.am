@@ -20,7 +20,6 @@ GUI_SUBDIRS_1 = \
   app-file
 
 GUI_SUBDIRS_2 = \
-  dialog-account \
   register \
   import-export \
   gnome \

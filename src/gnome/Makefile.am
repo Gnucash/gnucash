@@ -106,7 +106,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/calculation \
-  -I${top_srcdir}/src/dialog-account \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \

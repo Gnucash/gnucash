@@ -942,7 +942,6 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/core-utils/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile 
-          src/dialog-account/Makefile
           src/doc/Makefile
           src/doc/design/Makefile
           src/doc/xml/Makefile
