@@ -170,13 +170,6 @@ void          xaccTransSortSplits (Transaction *trans);
  */
 void          xaccTransDump (Transaction *trans, const char *tag);
 
-/** Set the KvpFrame slots of this transaction to the given frm by
- * directly using the frm pointer (i.e. non-copying). 
- * XXX this is wrong, nedds to be replaced with a transactional thingy
-in kvp + qofinstance. for now, this is a quasi-unctional placeholder.
- */
-#define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
-
 /** Set the  Transaction Type
  *
  * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
@@ -865,12 +858,12 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
 /** deprecated rouitines */
-#define xaccSplitGetGUID(X) qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccSplitReturnGUID(X) qof_entity_return_guid(QOF_ENTITY(X))
-#define xaccTransGetBook(X) qof_instance_get_book (QOF_INSTANCE(X))
-#define xaccTransGetGUID(X) qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccTransReturnGUID(X) qof_entity_return_guid(QOF_ENTITY(X))
-#define xaccTransGetSlots(X)  qof_instance_get_slots (QOF_INSTANCE(X))
+#define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSplitReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
+#define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccTransReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */
 /** @} */

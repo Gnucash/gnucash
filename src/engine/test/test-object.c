@@ -13,7 +13,7 @@
 #define TEST_MODULE_NAME "object-test"
 #define TEST_MODULE_DESC "Test Object"
 
-static void foreach (QofBook *, QofEntityForeachCB, gpointer);
+static void foreach (QofBook *, QofForeachCB, gpointer);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
 static void test_foreach (QofBook *, const char *);
@@ -52,7 +52,7 @@ static void test_object (void)
 }
 
 static void
-foreach (QofBook *book, QofEntityForeachCB cb, gpointer u_d)
+foreach (QofBook *book, QofForeachCB cb, gpointer u_d)
 {
   int *foo = u_d;
 

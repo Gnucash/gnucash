@@ -161,7 +161,7 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 /** deprecated */
 #define xaccAccountGetBook(X)     qof_entity_get_book(QOF_ENTITY(X))
 #define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccAccountReturnGUID(X)  qof_entity_return_guid(QOF_ENTITY(X))
+#define xaccAccountReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
 
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
@@ -405,10 +405,6 @@ gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 
 #define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
-/** killed for now, need to resurect this or something similar
- * for transactional/dirty kvp.  Later.  Right now a place holder
- */
-#define xaccAccountSetSlots_nc(A,S) qof_instance_set_slots(QOF_INSTANCE(A),S)
 /** @} */
 
 

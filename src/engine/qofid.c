@@ -101,13 +101,6 @@ qof_entity_get_guid (QofEntity *ent)
   return &ent->guid;
 }
 
-GUID 
-qof_entity_return_guid (QofEntity *ent)
-{
-  if (!ent) return guid_null();
-  return ent->guid;
-}
-
 /* =============================================================== */
 
 static guint

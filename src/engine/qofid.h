@@ -82,8 +82,8 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
  * the memory associated with the instance. */
 void qof_entity_release (QofEntity *);
 
+/* Return the GUID of this entity */
 GUID * qof_entity_get_guid (QofEntity *);
-GUID qof_entity_return_guid (QofEntity *);
 
 /** collections of entities */
 QofCollection * qof_collection_new (QofIdType type);

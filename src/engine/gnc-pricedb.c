@@ -161,7 +161,8 @@ static inline void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
-static inline void noop (QifInstance *inst) {}
+
+static inline void noop (QofInstance *inst) {}
 
 void 
 gnc_price_commit_edit (GNCPrice *p)
@@ -254,16 +255,6 @@ gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 
 /* ==================================================================== */
 /* setters */
-
-void 
-gnc_price_set_guid (GNCPrice *p, const GUID *guid)
-{
-   if (!p || !guid) return;
-   qof_entity_remove (p->entity_table, &p->guid);
-   p->guid = *guid;
-   if(p->db) p->db->dirty = TRUE;
-   qof_entity_store(p->entity_table, p, &p->guid, GNC_ID_PRICE);
-}
 
 void
 gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
@@ -394,31 +385,11 @@ gnc_price_set_version(GNCPrice *p, gint32 vers)
 GNCPrice *
 gnc_price_lookup (const GUID *guid, QofBook *book)
 {
-  if (!guid) return NULL;
-  g_return_val_if_fail (book, NULL);
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           guid, GNC_ID_PRICE);
-}
-
-const GUID *
-gnc_price_get_guid (GNCPrice *p)
-{
-  if (!p) return guid_null();
-  return &p->guid;
-}
-
-const GUID
-gnc_price_return_guid (GNCPrice *p)
-{
-  if (!p) return *guid_null();
-  return p->guid;
-}
-
-QofBook *
-gnc_price_get_book (GNCPrice *p)
-{
-  if (!p) return NULL;
-  return p->book;
+  QofCollection *col;
+  
+  if (!guid || !book) return NULL;
+  col = qof_book_get_collection (book, GNC_ID_PRICE);
+  return (GNCPrice *) qof_collection_lookup_entity (col, guid);
 }
 
 gnc_commodity *
@@ -853,12 +824,12 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
-         db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
+         db, p, p->inst.dirty, p->inst.do_free);
 
-  /* initialize the book pointer for teh first time, if needed */
-  if (NULL == db->book) db->book = p->book;
-  if (db->book != p->book)
+  /* initialize the book pointer for the first time, if needed */
+  if (NULL == db->book) db->book = p->inst.book;
+  if (db->book != p->inst.book)
   {
      PERR ("attempted to mix up prices across different books");
      return FALSE;
@@ -888,8 +859,8 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
 
-  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d commodity=%s/%s currency_hash=%p",
-         db, p, p->not_saved, p->do_free,
+  LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
+         db, p, p->inst.dirty, p->inst.do_free,
 	 gnc_commodity_get_namespace(p->commodity),
 	 gnc_commodity_get_mnemonic(p->commodity),
 	 currency_hash);
@@ -903,20 +874,21 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 {
   if(!db || !p) return FALSE;
 
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
-         db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
+         db, p, p->inst.dirty, p->inst.do_free);
 
   if (FALSE == add_price(db, p)) return FALSE;
 
-  /* if we haven't been able to call the backend before, call it now */
-  if (TRUE == p->not_saved) {
+  /* If we haven't been able to call the backend before, call it now */
+  if (TRUE == p->inst.dirty) 
+  {
     gnc_price_begin_edit(p);
     db->dirty = TRUE;
     gnc_price_commit_edit(p);
   }
 
-  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d",
-         db, p, p->not_saved, p->do_free);
+  LEAVE ("db=%p, pr=%p dirty=%d do-free=%d",
+         db, p, p->inst.dirty, p->inst.do_free);
 
   return TRUE;
 }
@@ -934,8 +906,8 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
-         db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
+         db, p, p->inst.dirty, p->inst.do_free);
 
   commodity = gnc_price_get_commodity(p);
   if(!commodity) return FALSE;
@@ -982,8 +954,8 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 {
   gboolean rc;
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
-         db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
+         db, p, p->inst.dirty, p->inst.do_free);
 
   gnc_price_ref(p);
   rc = remove_price (db, p, TRUE);
@@ -991,7 +963,7 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
   /* invoke the backend to delete this price */
   gnc_price_begin_edit (p);
   db->dirty = TRUE;
-  p->do_free = TRUE;
+  p->inst.do_free = TRUE;
   gnc_price_commit_edit (p);
 
   p->db = NULL;
@@ -2030,7 +2002,7 @@ void_unstable_price_traversal(GNCPriceDB *db,
 }
 
 static void 
-pricedb_foreach(QofBook *book, QofEntityForeachCB cb, gpointer data)
+pricedb_foreach(QofBook *book, QofForeachCB cb, gpointer data)
 {
   GNCPriceDB *db = gnc_pricedb_get_db(book);
   void_unstable_price_traversal(db, 
@@ -2039,6 +2011,7 @@ pricedb_foreach(QofBook *book, QofEntityForeachCB cb, gpointer data)
 }
 
 /* ==================================================================== */
+
 static const char *
 pricedb_printable(gpointer obj)
 {
@@ -2068,7 +2041,7 @@ pricedb_printable(gpointer obj)
 static QofObject pricedb_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
-  name:              GNC_ID_PRICE,
+  e_type:            GNC_ID_PRICE,
   type_label:        "Price",
   book_begin:        pricedb_book_begin,
   book_end:          pricedb_book_end,

@@ -97,13 +97,14 @@ typedef struct gnc_price_lookup_helper_s
   Timespec time;
 } GNCPriceLookupHelper;
 
+#define  gnc_price_set_guid(P,G)  qof_entity_set_guid(QOF_ENTITY(P),&(G))
+
 void     gnc_pricedb_set_db(QofBook *book, GNCPriceDB *db);
 
 void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                           gnc_commodity *old_c,
                                           gnc_commodity *new_c);
-void     gnc_price_set_guid (GNCPrice *p, const GUID *guid);
 
 /** register the pricedb object with the gncObject system */
 gboolean gnc_pricedb_register (void);

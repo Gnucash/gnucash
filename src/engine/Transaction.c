@@ -3176,12 +3176,12 @@ xaccTransReverse (Transaction *trans)
 /* gncObject function implementation */
 
 static void
-split_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
+split_foreach (QofBook *book, QofForeachCB fcn, gpointer user_data)
 {
   QofCollection *col;
   g_return_if_fail (book);
   col = qof_book_get_collection (book, GNC_ID_SPLIT);
-  qof_collection_foreach (col, fcn, user_data);
+  qof_collection_foreach (col, (QofEntityForeachCB) fcn, user_data);
 }
 
 /* Hook into the gncObject registry */
@@ -3279,12 +3279,12 @@ gboolean xaccSplitRegister (void)
 }
 
 static void
-trans_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
+trans_foreach (QofBook *book, QofForeachCB fcn, gpointer user_data)
 {
   QofCollection *col;
   g_return_if_fail (book);
   col = qof_book_get_collection (book, GNC_ID_TRANS);
-  qof_collection_foreach (col, fcn, user_data);
+  qof_collection_foreach (col, (QofEntityForeachCB) fcn, user_data);
 }
 
 static QofObject trans_object_def = {

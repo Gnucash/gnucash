@@ -290,6 +290,14 @@ void         DxaccSplitSetSharePriceAndAmount (Split *split,
                                                double amount);
 void         DxaccSplitSetShareAmount (Split *split, double amount);
 
+
+/** Set the KvpFrame slots of this transaction to the given frm by
+ *  * directly using the frm pointer (i.e. non-copying).
+ *   * XXX this is wrong, nedds to be replaced with a transactional thingy
+ *   in kvp + qofinstance. for now, this is a quasi-unctional placeholder.
+ *    */
+#define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
+
 /*@}*/
 
 
