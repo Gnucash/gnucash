@@ -52,7 +52,7 @@ int          xaccGetAccountID (Account *);
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 
- *    belongs to anothe account, it will be removed from that
+ *    belongs to another account, it will be removed from that
  *    account first. 
  */
 void         xaccAccountInsertSplit (Account *, Split *);
@@ -101,11 +101,13 @@ void xaccAccountSetType (Account *, int);
 void xaccAccountSetName (Account *, char *);
 void xaccAccountSetDescription (Account *, char *);
 void xaccAccountSetNotes (Account *, char *);
+void xaccAccountSetCurrency (Account *, char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
 char *         xaccAccountGetDescription (Account *);
 char *         xaccAccountGetNotes (Account *);
+char *         xaccAccountGetCurrency (Account *);
 AccountGroup * xaccAccountGetChildren (Account *);
 AccountGroup * xaccAccountGetParent (Account *);
 

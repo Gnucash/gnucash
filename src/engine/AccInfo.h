@@ -89,13 +89,13 @@ enum
   MONEYMRKT = 12,
   CREDITLINE = 13,     /* line of credit */
 
-  /* CURRENCY = 20, */
+  CURRENCY = 14, 
   /* The currency account type indicates that the account is a currency trading 
    * account.  In many ways, a currency trading account is like a stock trading
    * account, where both quantities and prices are set.
    */
 
-  NUM_ACCOUNT_TYPES = 14
+  NUM_ACCOUNT_TYPES = 15
 };
 
 /* hack alert -- we need a better way of dealing with

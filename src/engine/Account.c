@@ -674,7 +674,16 @@ xaccAccountSetType (Account *acc, int tip)
    if (!acc) return;
    CHECK (acc);
 
-   /* hack alert -- check for a valid type */
+   /* After an account type has been set, it cannot be changed */
+   if (-1 < acc->type) {
+      printf ("Error: xaccAccountSetType(): "
+              "the type of the account cannot be changed "
+              "after its been set! \n"
+             );
+      return;
+   }
+
+   /* hack alert -- check to make sure type is valid ... */
    acc->type = tip;
 }
 
@@ -682,7 +691,7 @@ void
 xaccAccountSetName (Account *acc, char *str)
 {
    char * tmp;
-   if (!acc) return;
+   if ((!acc) || (!str)) return;
    CHECK (acc);
 
    /* make strdup before freeing */
@@ -695,7 +704,7 @@ void
 xaccAccountSetDescription (Account *acc, char *str)
 {
    char * tmp;
-   if (!acc) return;
+   if ((!acc) || (!str)) return;
    CHECK (acc);
 
    /* make strdup before freeing */
@@ -715,6 +724,22 @@ xaccAccountSetNotes (Account *acc, char *str)
    tmp = strdup (str);
    if (acc->notes) free (acc->notes);
    acc->notes = tmp;
+}
+
+void 
+xaccAccountSetCurrency (Account *acc, char *str)
+{
+   if ((!acc) || (!str)) return;
+   CHECK (acc);
+
+   if (acc->currency) {
+      printf ("Error: xacAccountSetCurrency(): "
+              "the currency denomination of an account "
+              "cannot be changed!\n"
+             );
+      return;
+   }
+   acc->currency = strdup (str);
 }
 
 /********************************************************************\
@@ -757,6 +782,13 @@ xaccAccountGetDescription (Account *acc)
 
 char * 
 xaccAccountGetNotes (Account *acc)
+{
+   if (!acc) return NULL;
+   return (acc->notes);
+}
+
+char * 
+xaccAccountGetCurrency (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->notes);
