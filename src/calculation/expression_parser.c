@@ -254,19 +254,18 @@
  * Note: in the last five functions, in the function paramter (void
  * *vp), "vp" is the pointer returned by the "init_parser" function.
  *
- * void                    *init_parser(
- *                                      var_store_ptr  predefined_vars,
- *                                      char  radix_point,
- *                                      char  group_char,
- *                                      void          *trans_numeric(char  *digit_str,
- *                                                                   char   radix_point,
- *                                                                   char   group_char,
- *                                                                   char **rstr),
- *                                      void          *numeric_ops(char  op_sym,
- *                                                                 void          *left_value,
- *                                                                 void          *right_value),
- *                                      void          *negate_numeric(void *value),
- *                                      void           free_numeric(void *numeric_value));
+ * void *init_parser(var_store_ptr  predefined_vars,
+ *                   char  radix_point,
+ *                   char  group_char,
+ *                   void          *trans_numeric(char  *digit_str,
+ *                                                char   radix_point,
+ *                                                char   group_char,
+ *                                                char **rstr),
+ *                   void          *numeric_ops(char  op_sym,
+ *                                              void          *left_value,
+ *                                              void          *right_value),
+ *                   void          *negate_numeric(void *value),
+ *                   void           free_numeric(void *numeric_value));
  *
  *         This function is called by the module/function/whatever to
  *         initialize the parser. The parser returns a pointer to a
@@ -371,38 +370,36 @@
 
 /* structure to hold parser environment - environment particular to
  * each caller */
-typedef struct parser_env {
-    unsigned       stack_cnt;
-    unsigned       stack_size;
-    var_store_ptr *stack;
+typedef struct parser_env
+{
+  unsigned stack_cnt;
+  unsigned stack_size;
+  var_store_ptr *stack;
 
-    var_store_ptr  predefined_vars;
+  var_store_ptr predefined_vars;
 
-    var_store_ptr  named_vars;
+  var_store_ptr named_vars;
 
-    var_store_ptr  unnamed_vars;
+  var_store_ptr unnamed_vars;
 
-    const char *parse_str;
-    char  radix_point;
-    char  group_char;
-    char  name[50];
+  const char *parse_str;
+  char radix_point;
+  char group_char;
+  char name[50];
 
-    char  Token;
-    char  asn_op;
+  char Token;
+  char asn_op;
 
-    ParseError error_code;
+  ParseError error_code;
 
-    void          *numeric_value;
-    void         *(*trans_numeric)(const char *digit_str,
-                                   char   radix_point,
-                                   char   group_char,
-                                   char **rstr);
-    void         *(*numeric_ops)(char  op_sym,
-                                 void *left_value,
-                                 void *right_value);
-    void         *(*negate_numeric)(void *value);
-    void          (*free_numeric)(void *numeric_value);
-} parser_env;
+  void *numeric_value;
+  void *(*trans_numeric) (const char *digit_str,
+			  char radix_point, char group_char, char **rstr);
+  void *(*numeric_ops) (char op_sym, void *left_value, void *right_value);
+  void *(*negate_numeric) (void *value);
+  void (*free_numeric) (void *numeric_value);
+}
+parser_env;
 
 #include "finproto.h"
 #include "fin_static_proto.h"
@@ -420,301 +417,335 @@ typedef struct parser_env {
 static char allowed_operators[] = "+-*/()=";
 
 parser_env_ptr
-init_parser(var_store_ptr  predefined_vars,
-            char  radix_point,
-            char  group_char,
-            void          *trans_numeric(const char *digit_str,
-                                         char   radix_point,
-                                         char   group_char,
-                                         char **rstr),
-            void          *numeric_ops(char  op_sym,
-                                       void *left_value,
-                                       void *right_value),
-            void          *negate_numeric(void *value),
-            void           free_numeric(void *numeric_value))
+init_parser (var_store_ptr predefined_vars,
+	     char radix_point,
+	     char group_char,
+	     void *trans_numeric (const char *digit_str,
+				  char radix_point,
+				  char group_char,
+				  char **rstr),
+	     void *numeric_ops (char op_sym,
+				void *left_value,
+				void *right_value),
+	     void *negate_numeric (void *value),
+	     void free_numeric (void *numeric_value))
 {
-    parser_env_ptr pe = g_new0(parser_env, 1);
+  parser_env_ptr pe = g_new0 (parser_env, 1);
 
-    pe->predefined_vars = predefined_vars;
+  pe->predefined_vars = predefined_vars;
 
-    pe->stack = g_new0(var_store_ptr, STACK_INIT);
-    pe->stack_size = STACK_INIT;
+  pe->stack = g_new0 (var_store_ptr, STACK_INIT);
+  pe->stack_size = STACK_INIT;
 
-    pe->radix_point = radix_point;
-    pe->group_char  = group_char;
+  pe->radix_point = radix_point;
+  pe->group_char = group_char;
 
-    pe->trans_numeric = trans_numeric;
-    pe->numeric_ops = numeric_ops;
-    pe->negate_numeric = negate_numeric;
-    pe->free_numeric = free_numeric;
+  pe->trans_numeric = trans_numeric;
+  pe->numeric_ops = numeric_ops;
+  pe->negate_numeric = negate_numeric;
+  pe->free_numeric = free_numeric;
 
-    return pe;
-} /* init_parser */
+  return pe;
+}				/* init_parser */
 
-void  exit_parser(parser_env_ptr pe)
+void
+exit_parser (parser_env_ptr pe)
 {
   var_store_ptr vars, bv;
 
   if (pe == NULL)
     return;
 
-  for ( vars = pe->named_vars ; vars ; vars = bv ) {
-    g_free(vars->variable_name);
+  for (vars = pe->named_vars; vars; vars = bv)
+  {
+    g_free (vars->variable_name);
     vars->variable_name = NULL;
 
-    if ( vars->value ) (pe->free_numeric)(vars->value);
+    if (vars->value)
+      (pe->free_numeric) (vars->value);
     vars->value = NULL;
 
     bv = vars->next_var;
-    g_free(vars);
-  } /* endfor */
+    g_free (vars);
+  }				/* endfor */
 
   pe->named_vars = NULL;
 
-  g_free(pe->stack);
+  g_free (pe->stack);
   pe->stack = NULL;
 
-  g_free(pe);
-} /* exit_parser */
+  g_free (pe);
+}				/* exit_parser */
 
 /* return parser error code */
-ParseError get_parse_error(parser_env_ptr pe)
+ParseError get_parse_error (parser_env_ptr pe)
 {
   if (pe == NULL)
     return PARSER_NO_ERROR;
 
   return pe->error_code;
-} /* get_parse_error */
+}				/* get_parse_error */
 
 /* return linked list of named variables which have been defined */
-var_store_ptr parser_get_vars(parser_env_ptr pe)
+var_store_ptr parser_get_vars (parser_env_ptr pe)
 {
   if (pe == NULL)
     return NULL;
 
   return pe->named_vars;
-} /* get_vars */
+}				/* get_vars */
 
 /* function to delete variable with specified name from named variables
  * if it exists. If it exists return TRUE, 1, else return FALSE, 0 */
-unsigned       delete_var(char *var_name,
-                          parser_env_ptr pe)
+unsigned
+delete_var (char *var_name, parser_env_ptr pe)
 {
-	unsigned       ret = FALSE;
-	var_store_ptr  nv, tv;
+  unsigned ret = FALSE;
+  var_store_ptr nv, tv;
 
-        if (pe == NULL)
-          return FALSE;
+  if (pe == NULL)
+    return FALSE;
 
-	for ( nv = pe->named_vars , tv = NULL ; nv ; tv = nv , nv = nv->next_var ) {
-        if ( strcmp(nv->variable_name,var_name) == 0 ) {
-            if ( tv ) {
-                tv->next_var = nv->next_var;
-              } else {
-                pe->named_vars = nv->next_var;
-            } /* endif */
-            g_free(nv->variable_name);
-            (pe->free_numeric)(nv->value);
-            g_free(nv);
-            ret = TRUE;
-            break;
-        } /* endif */
-    } /* endfor */
+  for (nv = pe->named_vars, tv = NULL; nv; tv = nv, nv = nv->next_var)
+  {
+    if (strcmp (nv->variable_name, var_name) == 0)
+    {
+      if (tv)
+	tv->next_var = nv->next_var;
+      else
+	pe->named_vars = nv->next_var;
 
-	return ret;
-} /* delete_var */
+      g_free (nv->variable_name);
+      nv->variable_name = NULL;
+
+      (pe->free_numeric) (nv->value);
+      nv->value = NULL;
+
+      g_free (nv);
+
+      ret = TRUE;
+      break;
+    }				/* endif */
+  }				/* endfor */
+
+  return ret;
+}				/* delete_var */
 
 /* parse string passed using parser environment passed return
  * evaluated value in numeric structure passed, return NULL if no
  * parse error if parse error, return pointer to character at which
  * error occured. */
 char *
-parse_string(var_store_ptr value,
-             const char *string,
-             parser_env_ptr pe)
+parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
 {
-    var_store_ptr  retv;
-    var_store      unnamed_vars[UNNAMED_VARS];
+  var_store_ptr retv;
+  var_store unnamed_vars[UNNAMED_VARS];
 
-    if (pe == NULL)
-      return NULL;
+  if (pe == NULL)
+    return NULL;
 
-    pe->unnamed_vars = unnamed_vars;
-    memset(unnamed_vars,0,UNNAMED_VARS * sizeof(var_store));
+  pe->unnamed_vars = unnamed_vars;
+  memset (unnamed_vars, 0, UNNAMED_VARS * sizeof (var_store));
 
-    pe->parse_str = string;
+  pe->parse_str = string;
+  pe->error_code = PARSER_NO_ERROR;
 
-    next_token(pe);
-    assignment_op(pe);
+  next_token (pe);
 
-    if ( pe->Token == EOS ) {
-        if ( (pe->stack_cnt) && (retv = pop(pe)) ) {
-            if (value != NULL)
-              *value = *retv;
-            pe->parse_str = NULL;
-          } else {
-            pe->error_code = STACK_UNDERFLOW;
-        } /* endif */
-    } /* endif */
-    pe->stack_cnt = 0;
+  if (!pe->error_code)
+    assignment_op (pe);
 
-    pe->unnamed_vars = NULL;
+  if (pe->Token == EOS)
+  {
+    if ((pe->stack_cnt) && (retv = pop (pe)))
+    {
+      if (value != NULL)
+	*value = *retv;
+      pe->parse_str = NULL;
+    }
+    else
+      pe->error_code = STACK_UNDERFLOW;
+  }
 
-    return (char *) pe->parse_str;
-} /* expression */
+  pe->stack_cnt = 0;
+  pe->unnamed_vars = NULL;
+
+  return (char *) pe->parse_str;
+}				/* expression */
 
 /* pop value off value stack */
-static var_store_ptr pop(parser_env_ptr pe)
+static var_store_ptr
+pop (parser_env_ptr pe)
 {
-    var_store_ptr val;
+  var_store_ptr val;
 
-    if ( pe->stack_cnt ) val = pe->stack[--(pe->stack_cnt)];
-      else {
-        val = NULL;
-        pe->error_code = STACK_OVERFLOW;
-    } /* endif */
+  if (pe->stack_cnt)
+    val = pe->stack[--(pe->stack_cnt)];
+  else
+  {
+    val = NULL;
+    pe->error_code = STACK_UNDERFLOW;
+  }				/* endif */
 
-    return val;
-} /* pop */
+  return val;
+}				/* pop */
 
 /* push value onto value stack */
-static var_store_ptr push(var_store_ptr        push_value,
-                          parser_env_ptr       pe)
+static var_store_ptr
+push (var_store_ptr push_value, parser_env_ptr pe)
 {
-    if ( pe->stack_cnt > pe->stack_size ) {
-        pe->stack_size += STACK_INIT;
-        pe->stack = g_realloc(pe->stack,
-                              pe->stack_size * sizeof(var_store_ptr));
-    } /* endif */
-    pe->stack[(pe->stack_cnt)++] = push_value;
+  if (pe->stack_cnt > pe->stack_size)
+  {
+    pe->stack_size += STACK_INIT;
+    pe->stack = g_realloc (pe->stack,
+			   pe->stack_size * sizeof (var_store_ptr));
+  }				/* endif */
 
-    return push_value;
-} /* push */
+  pe->stack[(pe->stack_cnt)++] = push_value;
 
-/* get/set variable with specified name - nothing fancy
- * just scan each variable in linked list checking for a string match
- * return variable found if match
- * create new variable if none found
- */
-static var_store_ptr  get_named_var(parser_env_ptr        pe)
+  return push_value;
+}				/* push */
+
+/* get/set variable with specified name - nothing fancy just scan each
+ * variable in linked list checking for a string match return variable
+ * found if match create new variable if none found */
+static var_store_ptr
+get_named_var (parser_env_ptr pe)
 {
-    var_store_ptr retp = NULL, bv;
+  var_store_ptr retp = NULL, bv;
 
-    for ( retp = pe->predefined_vars , bv = NULL ; retp ; retp = retp->next_var ) {
-        if ( strcmp(retp->variable_name,pe->name) == 0 ) {
-            break;
-        } /* endif */
-    } /* endfor */
+  for (retp = pe->predefined_vars, bv = NULL; retp; retp = retp->next_var)
+    if (strcmp (retp->variable_name, pe->name) == 0)
+      break;
 
-    if ( !retp && pe->named_vars ) {
-        for ( retp = pe->named_vars ; retp ; bv = retp , retp = retp->next_var ) {
-            if ( strcmp(retp->variable_name,pe->name) == 0 ) {
-                break;
-            } /* endif */
-        } /* endfor */
-    } /* endif */
+  if (!retp && pe->named_vars)
+    for (retp = pe->named_vars; retp; bv = retp, retp = retp->next_var)
+      if (strcmp (retp->variable_name, pe->name) == 0)
+	break;
 
-    if ( !retp ) {
-        retp = g_new0(var_store, 1);
-        if ( !pe->named_vars ) {
-            pe->named_vars = retp;
-          } else {
-            bv->next_var = retp;
-        } /* endif */
-        retp->variable_name = g_strdup(pe->name);
-        retp->value = (pe->trans_numeric)("0",pe->radix_point,pe->group_char,NULL);
-    } /* endif */
+  if (!retp)
+  {
+    retp = g_new0 (var_store, 1);
+    if (!pe->named_vars)
+      pe->named_vars = retp;
+    else
+      bv->next_var = retp;
+    retp->variable_name = g_strdup (pe->name);
+    retp->value =
+      (pe->trans_numeric) ("0", pe->radix_point, pe->group_char, NULL);
+  }
 
-    return retp;
-} /* get_var */
+  return retp;
+}				/* get_var */
 
-/* get un-named temporary variable
- */
-static var_store_ptr get_unnamed_var(parser_env_ptr       pe)
+/* get un-named temporary variable */
+static var_store_ptr
+get_unnamed_var (parser_env_ptr pe)
 {
-    var_store_ptr retp = NULL;
-    unsigned      cntr;
+  var_store_ptr retp = NULL;
+  unsigned cntr;
 
-    for ( cntr = 0 ; cntr < UNNAMED_VARS ; cntr++ ) {
-        if ( pe->unnamed_vars[cntr].use_flag == UNUSED_VAR ) {
-            retp = &(pe->unnamed_vars[cntr]);
-            retp->variable_name = NULL;
-            retp->use_flag = USED_VAR;
-            if ( retp->value ) {
-                (pe->free_numeric)(retp->value);
-            } /* endif */
-            break;
-        } /* endif */
-    } /* endfor */
+  for (cntr = 0; cntr < UNNAMED_VARS; cntr++)
+    if (pe->unnamed_vars[cntr].use_flag == UNUSED_VAR)
+    {
+      retp = &(pe->unnamed_vars[cntr]);
+      retp->variable_name = NULL;
+      retp->use_flag = USED_VAR;
+      if (retp->value)
+      {
+	(pe->free_numeric) (retp->value);
+        retp->value = NULL;
+      }				/* endif */
+      break;
+    }				/* endif */
 
-    return retp;
-} /* get_unnamed_var */
+  if (retp == NULL)
+    pe->error_code = PARSER_OUT_OF_MEMORY;
 
-/* mark un-named temporary variable unused
- */
-static void    free_var(var_store_ptr  value,
-                        parser_env_ptr pe)
+  return retp;
+}				/* get_unnamed_var */
+
+/* mark un-named temporary variable unused */
+static void
+free_var (var_store_ptr value, parser_env_ptr pe)
 {
-    /* first check that not a named variable
-     */
-    if ( !value->variable_name ) {
-        value->use_flag = UNUSED_VAR;
-        if ( value->value ) {
-            (pe->free_numeric)(value->value);
-            value->value = NULL;
-        } /* endif */
-    } /* endif */
-} /* free_var */
+  if (value == NULL)
+    return;
 
-/* parse next token from string
- */
-static void next_token(parser_env_ptr       pe)
+  /* first check that not a named variable */
+  if (value->variable_name != NULL)
+    return;
+
+  value->use_flag = UNUSED_VAR;
+  if (value->value)
+  {
+    (pe->free_numeric) (value->value);
+    value->value = NULL;
+  }
+}				/* free_var */
+
+/* parse next token from string */
+static void
+next_token (parser_env_ptr pe)
 {
-    char *nstr;
-    const char *str_parse = pe->parse_str;
-    void *number;
+  char *nstr;
+  const char *str_parse = pe->parse_str;
+  void *number;
 
-    while ( isspace(*str_parse) ) str_parse++;
+  while (isspace (*str_parse))
+    str_parse++;
 
-    pe->asn_op = EOS;
+  pe->asn_op = EOS;
 
-    /* test for end of string
-     */
-    if ( !*str_parse ) {
-        pe->Token = EOS;
-      /* test for name
-       */
-      } else if ( isalpha(*str_parse) || (*str_parse == '_') ) {
-        pe->Token = VAR_TOKEN;
-        nstr = pe->name;
-        do {
-            *nstr++ = *str_parse++;
-        } while ( (*str_parse == '_') || isalpha(*str_parse) || isdigit(*str_parse) ); /* enddo */
-        *nstr = EOS;
-      /* test for possible operator
-       */
-      } else if ( strchr(allowed_operators,*str_parse) ) {
-        pe->Token = *str_parse++;
-        if ( *str_parse == '=' ) {
-            str_parse++;
-            pe->asn_op = pe->Token;
-            pe->Token = '=';
-        } /* endif */
-      /* test for numeric token
-       */
-      } else if ( (number = (pe->trans_numeric)(str_parse,pe->radix_point,pe->group_char,&nstr)) ) {
-        pe->Token         = NUM_TOKEN;
-        pe->numeric_value = number;
-        str_parse         = nstr;
-       /* unrecognized character - error
-        */
-      } else {
-        pe->Token = *str_parse;
-        pe->error_code = UNDEFINED_CHARACTER;
-    } /* endif */
+  /* test for end of string */
+  if (!*str_parse)
+  {
+    pe->Token = EOS;
+    /* test for name */
+  }
+  else if (isalpha (*str_parse) || (*str_parse == '_'))
+  {
+    pe->Token = VAR_TOKEN;
+    nstr = pe->name;
+    do
+    {
+      *nstr++ = *str_parse++;
+    }
+    while ((*str_parse == '_') ||
+           isalpha (*str_parse) ||
+           isdigit (*str_parse));
 
-    pe->parse_str = str_parse;
-} /* next_token */
+    *nstr = EOS;
+    /* test for possible operator */
+  }
+  else if (strchr (allowed_operators, *str_parse))
+  {
+    pe->Token = *str_parse++;
+    if (*str_parse == '=')
+    {
+      str_parse++;
+      pe->asn_op = pe->Token;
+      pe->Token = '=';
+    }				/* endif */
+    /* test for numeric token */
+  }
+  else if ((number =
+            (pe->trans_numeric) (str_parse, pe->radix_point,
+                                 pe->group_char, &nstr)))
+  {
+    pe->Token = NUM_TOKEN;
+    pe->numeric_value = number;
+    str_parse = nstr;
+    /* unrecognized character - error */
+  }
+  else
+  {
+    pe->Token = *str_parse;
+    pe->error_code = UNDEFINED_CHARACTER;
+  }				/* endif */
+
+  pe->parse_str = str_parse;
+}				/* next_token */
 
 /* evaluate assignment operators,
  * =
@@ -723,93 +754,197 @@ static void next_token(parser_env_ptr       pe)
  * \=
  * *=
  */
-static void    assignment_op(parser_env_ptr pe)
+static void
+assignment_op (parser_env_ptr pe)
 {
-    var_store_ptr  vl,  /* left value       */
-                   vr;  /* right value      */
-    void          *sp;  /* for swapping values */
-    char           ao;
+  var_store_ptr vl;		/* left value       */
+  var_store_ptr vr;		/* right value      */
+  void *sp;			/* for swapping values */
+  char ao;
 
-    add_sub_op(pe);
-    while ( pe->Token == '=' ) {
-        vl = pop(pe);
-        ao = pe->asn_op;
-        if ( vl->variable_name ) {
-            next_token(pe);
-            assignment_op(pe);
-            vr = pop(pe);
-            vl->assign_flag = ASSIGNED_TO;
-            if ( ao ) {
-     			sp = vl->value;
-                vl->value = (pe->numeric_ops)(ao,vl->value,vr->value);
-                (pe->free_numeric)(sp);
-              } else if ( vl != vr ) {
-                if ( !vr->variable_name ) {
-                    (pe->free_numeric)(vl->value);
-                    vl->value = vr->value;
-                    vr->value = NULL;
-                  } else {
-                  	vl->value = (pe->numeric_ops)(ASN_OP,vl->value,vr->value);
-                } /* endif */
+  add_sub_op (pe);
+  if (pe->error_code)
+    return;
 
-                free_var(vr,pe);
-            } /* endif */
+  while (pe->Token == '=')
+  {
+    vl = pop (pe);
+    if (pe->error_code)
+      return;
 
-            push(vl,pe);
-          } else {
-            pe->Token = EOS;  /* error !!!!!!!!!! */
-            pe->error_code = NOT_A_VARIABLE;
-        } /* endif */
-    } /* endwhile */
-} /* assignment_op */
+    ao = pe->asn_op;
+
+    if (vl->variable_name)
+    {
+      next_token (pe);
+      if (pe->error_code)
+      {
+        free_var (vl, pe);
+        return;
+      }
+
+      assignment_op (pe);
+      if (pe->error_code)
+      {
+        free_var (vl, pe);
+        return;
+      }
+
+      vr = pop (pe);
+      if (pe->error_code)
+      {
+        free_var (vl, pe);
+        return;
+      }
+
+      vl->assign_flag = ASSIGNED_TO;
+
+      if (ao)
+      {
+	sp = vl->value;
+	vl->value = (pe->numeric_ops) (ao, vl->value, vr->value);
+	(pe->free_numeric) (sp);
+      }
+      else if (vl != vr)
+      {
+	if (!vr->variable_name)
+	{
+	  (pe->free_numeric) (vl->value);
+	  vl->value = vr->value;
+	  vr->value = NULL;
+	}
+	else
+	  vl->value = (pe->numeric_ops) (ASN_OP, vl->value, vr->value);
+
+	free_var (vr, pe);
+      }				/* endif */
+
+      push (vl, pe);
+    }
+    else
+    {
+      pe->Token = EOS;		/* error !!!!!!!!!! */
+      pe->error_code = NOT_A_VARIABLE;
+    }				/* endif */
+  }				/* endwhile */
+}				/* assignment_op */
 
 /* evaluate addition, subtraction operators */
-static void    add_sub_op(parser_env_ptr pe)
+static void
+add_sub_op (parser_env_ptr pe)
 {
-    var_store_ptr vl,     /* left value   */
-                  vr,     /* right value  */
-                  rslt;
-    char op;
+  var_store_ptr vl;	/* left value   */
+  var_store_ptr vr;	/* right value  */
+  var_store_ptr rslt;   /* result       */
+  char op;
 
-    multiply_divide_op(pe);
-    while ( (pe->Token == '+') || (pe->Token == '-') ) {
-        op = pe->Token;
-        vl = pop(pe);
-        next_token(pe);
-        multiply_divide_op(pe);
-        vr = pop(pe);
-        rslt = get_unnamed_var(pe);
-        rslt->value = (pe->numeric_ops)(op,vl->value,vr->value);
-        free_var(vl,pe);
-        free_var(vr,pe);
-        push(rslt,pe);
-    } /* endwhile */
-} /* add_sub_op */
+  multiply_divide_op (pe);
+  if (pe->error_code)
+    return;
+
+  while ((pe->Token == '+') || (pe->Token == '-'))
+  {
+    op = pe->Token;
+
+    vl = pop (pe);
+    if (pe->error_code)
+      return;
+
+    next_token (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    multiply_divide_op (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    vr = pop (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    rslt = get_unnamed_var (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    rslt->value = (pe->numeric_ops) (op, vl->value, vr->value);
+
+    free_var (vl, pe);
+    free_var (vr, pe);
+
+    push (rslt, pe);
+  }				/* endwhile */
+}				/* add_sub_op */
 
 /* evaluate multiplication, division operators
  */
-static void    multiply_divide_op(parser_env_ptr pe)
+static void
+multiply_divide_op (parser_env_ptr pe)
 {
-    var_store_ptr vl,     /* left value   */
-                  vr,     /* right value  */
-                  rslt;
-    char op;
+  var_store_ptr vl;	/* left value   */
+  var_store_ptr vr;	/* right value  */
+  var_store_ptr rslt;   /* result       */
+  char op;
 
-    primary_exp(pe);
-    while ( (pe->Token == '*') || (pe->Token == '/') ) {
-        op = pe->Token;
-        vl = pop(pe);
-        next_token(pe);
-        primary_exp(pe);
-        vr = pop(pe);
-        rslt = get_unnamed_var(pe);
-        rslt->value = (pe->numeric_ops)(op,vl->value,vr->value);
+  primary_exp (pe);
+  if (pe->error_code)
+    return;
 
-        free_var(vl,pe);
-        free_var(vr,pe);
-        push(rslt,pe);
-    } /* endwhile */
-} /* multiply_divide_op */
+  while ((pe->Token == '*') || (pe->Token == '/'))
+  {
+    op = pe->Token;
+
+    vl = pop (pe);
+    if (pe->error_code)
+      return;
+
+    next_token (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    primary_exp (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    vr = pop (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    rslt = get_unnamed_var (pe);
+    if (pe->error_code)
+    {
+      free_var (vl, pe);
+      return;
+    }
+
+    rslt->value = (pe->numeric_ops) (op, vl->value, vr->value);
+
+    free_var (vl, pe);
+    free_var (vr, pe);
+
+    push (rslt, pe);
+  }				/* endwhile */
+}				/* multiply_divide_op */
 
 /* evaluate:
  *  unary '+' and '-'
@@ -817,41 +952,71 @@ static void    multiply_divide_op(parser_env_ptr pe)
  *  numerics
  *  grouped expressions, "()"
  */
-static void    primary_exp(parser_env_ptr pe)
+static void
+primary_exp (parser_env_ptr pe)
 {
-    var_store_ptr rslt = NULL;
-    char LToken = pe->Token;
+  var_store_ptr rslt = NULL;
+  char LToken = pe->Token;
 
-    next_token(pe);
-    switch ( LToken ) {
-        case '(':
-            /*add_sub_op(pe);   */
-            assignment_op(pe);
-            if ( pe->Token == ')' ) {
-                rslt = pop(pe);
-                next_token(pe);
-              } else {
-                pe->Token = EOS; /* error here */
-                pe->error_code = UNBALANCED_PARENS;
-            } /* endif */
-            break;
-        case '-':
-        case '+':
-            primary_exp(pe);
-            rslt = pop(pe);
-            if ( LToken == '-' ) {
-                (void)(pe->negate_numeric)(rslt->value);
-            } /* endif */
-            break;
-        case NUM_TOKEN:
-            rslt = get_unnamed_var(pe);
-            rslt->value = pe->numeric_value;
-            pe->numeric_value = NULL;
-            break;
-        case VAR_TOKEN:
-            rslt = get_named_var(pe);
-            break;
-    } /* endswitch */
+  next_token (pe);
+  if (pe->error_code)
+    return;
 
-    push(rslt,pe);
-} /* primary_exp */
+  switch (LToken)
+  {
+    case '(':
+      /*add_sub_op(pe);   */
+      assignment_op (pe);
+      if (pe->error_code)
+        return;
+
+      if (pe->Token == ')')
+      {
+        rslt = pop (pe);
+        if (pe->error_code)
+          return;
+
+        next_token (pe);
+        if (pe->error_code)
+          return;
+      }
+      else
+      {
+        pe->Token = EOS;		/* error here */
+        pe->error_code = UNBALANCED_PARENS;
+      }				/* endif */
+
+      break;
+
+    case '-':
+    case '+':
+      primary_exp (pe);
+      if (pe->error_code)
+        return;
+
+      rslt = pop (pe);
+      if (pe->error_code)
+        return;
+
+      if (LToken == '-')
+        (pe->negate_numeric) (rslt->value);
+
+      break;
+
+    case NUM_TOKEN:
+      rslt = get_unnamed_var (pe);
+      if (pe->error_code)
+        return;
+
+      rslt->value = pe->numeric_value;
+      pe->numeric_value = NULL;
+      break;
+
+    case VAR_TOKEN:
+      rslt = get_named_var (pe);
+      break;
+  }				/* endswitch */
+
+  if (rslt != NULL)
+    push (rslt, pe);
+}				/* primary_exp */

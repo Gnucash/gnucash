@@ -22,7 +22,7 @@
 #ifndef __NUMERIC_OPS_H__
 #define __NUMERIC_OPS_H__
 
-void *trans_numeric(char *str, /* pointer to string to translate */
+void *trans_numeric(const char *str, /* pointer to string to translate */
                     char radix_point, /* radix character */
                     char group_char, /* grouping character to left of radix */
                     char **endstr); /* where to return pointer to first

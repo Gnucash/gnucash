@@ -444,6 +444,7 @@
 #define PARSER_STACK_UNDERFLOW     _("Stack underflow")
 #define PARSER_UNDEFINED_CHARACTER _("Undefined character")
 #define PARSER_NOT_A_VARIABLE      _("Not a variable")
+#define PARSER_OUT_OF_MEMORY_STR   _("Out of memory")
 
 
 /** MISC INTERNATIONALIZATION STRINGS: ******************************/

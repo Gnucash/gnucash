@@ -26,8 +26,8 @@
  *
  * This version for use WITH ANSI.SYS display driver
  *
- *  This is  a complete  financial computation  utility to  solve for  the five
- * standard financial values: n, %i, PV, PMT and FV
+ *  This is a complete financial computation utility to solve for the
+ *  five * standard financial values: n, %i, PV, PMT and FV
  *
  *    n   == number of payment periods
  *    %i  == nominal interest rate, NAR, charged
@@ -37,17 +37,20 @@
  *
  *  In addition, two additional parameters may be specified:
  *
- *    1) Compounding Frequency per year, CF. The compounding frequency per year may be discrete
- *        or continuous and may be different from the Payment Frequency per year
+ *    1) Compounding Frequency per year, CF. The compounding frequency
+ *    per year may be discrete or continuous and may be different from
+ *    the Payment Frequency per year
  *
- *    2) Payment Frequency per year, PF. Payments may be made at the beginning or the end
- *       of the payment period.
+ *    2) Payment Frequency per year, PF. Payments may be made at the
+ *    beginning or the end of the payment period.
  *
- *  When an amortization schedule is desired, the financial transaction Effective Date, ED,
- *   and Initial Payment Date, IP, must also be entered.
+ *  When an amortization schedule is desired, the financial
+ *  transaction Effective Date, ED, and Initial Payment Date, IP, must
+ *  also be entered.
  *
- *  Canadian  and  European  style  mortgages  can  be  handled  in  a simple,
- * straight-forward manner. Standard financial sign conventions are used:
+ *  Canadian and European style mortgages can be handled in a simple,
+ *  straight-forward manner. Standard financial sign conventions are
+ *  used:
  *
  *          "Money paid out is Negative, Money received is Positive"
  *
@@ -126,23 +129,23 @@
  *
  * Standard Financial Conventions Are:
  *
- *  Money RECEIVED is a  POSITIVE value and is  represented by an arrow  above
- * the line
+ *  Money RECEIVED is a POSITIVE value and is represented by an arrow
+ *  above * the line
  *
- *  Money PAID OUT is  a NEGATIVE value and  is represented by an  arrow below
- * the line.
+ *  Money PAID OUT is a NEGATIVE value and is represented by an arrow
+ *  below * the line.
  *
- *  If payments are  a part of  the transaction, the  number of payments  must
- * equal the number of periods (n).
+ *  If payments are a part of the transaction, the number of payments
+ *  must * equal the number of periods (n).
  *
- *  Payments may be  represented as occuring  at the end  or beginning of  the
- * periods.
+ *  Payments may be represented as occuring at the end or beginning of
+ *  the * periods.
  *
- *  Diagram  to  visualize  the  positive  and  negative cash flows (cash flow
- * diagrams):
+ *  Diagram to visualize the positive and negative cash flows (cash
+ *  flow * diagrams):
  *
- *  Amounts shown above the line are positve, received, and amounts shown below the
- *   line are negative, paid out.
+ *  Amounts shown above the line are positve, received, and amounts
+ *  shown below the line are negative, paid out.
  *
  * 1)
  *                                                                 FV*
@@ -157,7 +160,7 @@
  *     Compound Growth
  *     Savings Account
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  * 2)                                                               FV
  *     PV = 0
@@ -172,7 +175,7 @@
  *     Savings Plan
  *     Sinking Fund
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  * 3)
  *     PV
@@ -186,7 +189,7 @@
  *     Direct Reduction Loan
  *     Mortgage (fully amortized)
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  * 4)
  *                                                                 FV*
@@ -202,26 +205,30 @@
  *     Lease (with buy back or residual)*
  *     Loan or Mortgage (with balloon)*
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
- *   First lets discuss interest before discussing the financial equation. Most
- * financial transactions utilize a nominal interest rate, NAR, i.e., the interest
- * rate per year. The NAR must be converted to the interest rate per payment
- * interval and the compounding accounted for before it can be used in computing
- * an interest payment. After this conversion process, the interest used is the
- * effective interest rate, EIR. In converting NAR to EIR, there are two concepts
- * to discuss first, the Compounding Frequency and the Payment Frequency and
- * whether the interest is coumpounded in discrete intervals or continuously.
- *   The compounding Frequency, CF, is simply the number of times per year, the
- *   monies in the financial transaction are compounded. In the U.S., monies
- *   are usually compounded daily on bank deposits, and monthly on loans. Somtimes
- *   Long term deposits are compounded quarterly or weekly.
+ *   First lets discuss interest before discussing the financial
+ *   equation. Most financial transactions utilize a nominal interest
+ *   rate, NAR, i.e., the interest rate per year. The NAR must be
+ *   converted to the interest rate per payment interval and the
+ *   compounding accounted for before it can be used in computing an
+ *   interest payment. After this conversion process, the interest
+ *   used is the effective interest rate, EIR. In converting NAR to
+ *   EIR, there are two concepts to discuss first, the Compounding
+ *   Frequency and the Payment Frequency and * whether the interest is
+ *   coumpounded in discrete intervals or continuously. The
+ *   compounding Frequency, CF, is simply the number of times per
+ *   year, the monies in the financial transaction are compounded. In
+ *   the U.S., monies are usually compounded daily on bank deposits,
+ *   and monthly on loans. Somtimes Long term deposits are compounded
+ *   quarterly or weekly.
  *
- *   The Payment Frequency, PF, is simply how often during a year payments are
- *   made in the transaction. Payments are usually scheduled on a regular basis
- *   and can be made at the beginning or end of the payment period. If made at
- *   the beginning of the payment period, interest must be applied to the payment
- *   as well as any previous money paid or money still owed.
+ *   The Payment Frequency, PF, is simply how often during a year
+ *   payments are made in the transaction. Payments are usually
+ *   scheduled on a regular basis and can be made at the beginning or
+ *   end of the payment period. If made at the beginning of the
+ *   payment period, interest must be applied to the payment as well
+ *   as any previous money paid or money still owed.
  *
  *   Normal values for CF and PF are:
  *   1   == annual
@@ -236,16 +243,18 @@
  *   360 == daily
  *   365 == daily
  *
- *  a)  the  Compounding  Frequency per year,  CF,  need not be identical  to the
- * Payment Frequency per year, PF, and/or,
+ *  a) the Compounding Frequency per year, CF, need not be identical
+ *  to the Payment Frequency per year, PF, and/or,
  *
  *  b) Interest may be compounded in either discrete intervals or continuously
  *     compounded.
- *  c) Also, payments may be made at the beginning of the payment period or at the
- *     end of the payment period.
  *
- *  CF and PF are defaulted to  1. The default is for discrete interest intervals
- *  and payments are defaulted to the end of the payment period.
+ *  c) Also, payments may be made at the beginning of the payment
+ *  period or at the end of the payment period.
+ *
+ *  CF and PF are defaulted to 1. The default is for discrete interest
+ *  intervals and payments are defaulted to the end of the payment
+ *  period.
  *
  *  When a solution  for n, PV,  PMT or FV  is required, the  nominal interest
  * rate, i, must first be converted to the effective interest rate per payment
@@ -273,13 +282,13 @@
  *
  *     i = ln[(1+ieff)^PF]
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
- *   NOTE: in the equations below for the financial transaction, all interest rates
- *   are the effective interest rate, ieff. The symbol will be shortned to just
- *   'i'.
+ *   NOTE: in the equations below for the financial transaction, all
+ *   interest rates are the effective interest rate, ieff. The symbol
+ *   will be shortned to just 'i'.
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  * The basic financial equation used is:
  *
@@ -287,13 +296,14 @@
  *   Where: X = 0 for end of period payments, and
  *          X = 1 for beginning of period payments
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  *   NOTE: this equation is derived in the following manner:
  *
- *   Start with the basic equation to find the balance or Present Value, PV[1], after
- *   one payment period. Note PV[1] is the Present value after on payment and PV[0]
- *   is the initial Present Value. PV[0] will be shortened to just PV.
+ *   Start with the basic equation to find the balance or Present
+ *   Value, PV[1], after one payment period. Note PV[1] is the Present
+ *   value after on payment and PV[0] is the initial Present
+ *   Value. PV[0] will be shortened to just PV.
  *
  *   The interest due at the end of the first payment period is:
  *
@@ -306,11 +316,13 @@
  *         = PV + (PMT + (PV + X * PMT) * i)
  *         = PV * (1 + i) + PMT * (1 + Xi)
  *
- *   This equation works for all of the money diagrams shown above. The Present Value,
- *   money received or paid, is modified by a payment made at the beginning of a payment
- *   period and multiplied by the effective interest rate to compute the interest
- *   due during the payment period. The interest due is then added to the payment
- *   to obtain the amount to be added to the Present Value to compute the new Present Value.
+ *   This equation works for all of the money diagrams shown
+ *   above. The Present Value, money received or paid, is modified by
+ *   a payment made at the beginning of a payment period and
+ *   multiplied by the effective interest rate to compute the interest
+ *   due during the payment period. The interest due is then added to
+ *   the payment to obtain the amount to be added to the Present Value
+ *   to compute the new Present Value.
  *
  *   For diagram 1): PV <  0, PMT == 0, PV[1] < 0
  *   For diagram 2): PV == 0, PMT <  0, PV[1] < 0
@@ -319,11 +331,12 @@
  *
  *   X may be 0 or 1 for any diagram.
  *
- *   For the standard loan, PV is the money borrowed, PMT is the periodic payment to repay
- *   the loan and i is the effective interest rate agreed upon.
+ *   For the standard loan, PV is the money borrowed, PMT is the
+ *   periodic payment to repay the loan and i is the effective
+ *   interest rate agreed upon.
  *
- *   To calculate the Present Value after the second payment period, the above calculation
- *   is applied iteratively to PV_1:
+ *   To calculate the Present Value after the second payment period,
+ *   the above calculation is applied iteratively to PV_1:
  *
  *   PV[2] = PV[1] + (PMT + (PV[1] + X * PMT) * i)
  *         = PV[1] * (1 + i) + PMT * (1 + iX)
@@ -353,9 +366,10 @@
  *                          .
  *                          + PMT * (1 + iX) * (1 + i)
  *                          + PMT * (1 + iX)
- *   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^(n-1) + ... + (1 + i) + 1]
+ *   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^(n-1) + ...
+ *           + (1 + i) + 1]
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  *       The sum of the finite series:
  *
@@ -369,9 +383,10 @@
  *
  *       S(n) = [1-k^(n+1)]/[1-k] = 1 + k + (k^2) + (k^3) + ... + (k^n)
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
- *   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^(n-1) + ... + (1 + i) + 1]
+ *   PV[n] = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^(n-1) + ...
+ *           + (1 + i) + 1]
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [1 - (1 + i)^n]/[1 - (1 + i)]
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [1 - (1 + i)^n]/[-i]
  *         = PV * (1 + i)^n + PMT * (1 + iX) * [(1 + i)^n - 1]/i
@@ -382,19 +397,19 @@
  *
  *   PV * (1 + i)^n + PMT * [(1 + i)^n - 1]/i - PV[n] = 0
  *
- *   If after n payments, the remaining balance is repaid as a lump sum, the lump sum
- *   is known as the Future Value, FV[n]. Since FV[n] is negative if paid and positive
- *   if received, FV[n] is the negative of PV[n]. Since n is assumed to be the last payment,
+ *   If after n payments, the remaining balance is repaid as a lump
+ *   sum, the lump sum is known as the Future Value, FV[n]. Since
+ *   FV[n] is negative if paid and positive if received, FV[n] is the
+ *   negative of PV[n]. Since n is assumed to be the last payment,
  *   FV[n] will be shortened to simply FV.
  *
  *   Setting: FV = -PV[N]
  *
  *   1)  PV*(1 + i)^n + PMT*(1 + iX)*[(1 + i)^n - 1]/i + FV = 0
  *
- *
- *
- *   Up to this point, we have said nothing about the value of PMT. PMT can be any value mutually
- *   agreed upon by the lender and the borrower. From the equation for PV[1]:
+ *   Up to this point, we have said nothing about the value of
+ *   PMT. PMT can be any value mutually agreed upon by the lender and
+ *   the borrower. From the equation for PV[1]:
  *
  *   PV[1] = PV + (PMT + (PV + X * PMT) * i),
  *
@@ -402,23 +417,31 @@
  *
  *   1. If PMT = PV * i, and X = 0 (end of period payments):
  *
- *      The payment is exactly equal to the interest due and PV[1] = PV. In this case, the borrower
- *      must make larger future payments to reduce the balance due, or make a single payment, after
- *      some agreed upon number of payments, with PMT = PV to completely pay off the loan. This is
- *      an interest only payment with a balloon payment at the end.
+ *      The payment is exactly equal to the interest due and PV[1] =
+ *      PV. In this case, the borrower must make larger future
+ *      payments to reduce the balance due, or make a single payment,
+ *      after some agreed upon number of payments, with PMT = PV to
+ *      completely pay off the loan. This is an interest only payment
+ *      with a balloon payment at the end.
  *
  *   2. If PMT < PV * i, and X = 0
- *      The payment is insufficient to cover even the interest charged and the balance due grows
+ *
+ *      The payment is insufficient to cover even the interest charged
+ *      and the balance due grows
  *
  *   3. If PMT > PV * i, and X = 0
- *      The payment is sufficient to cover the interest charged with a residual amount to be
- *      applied to reduce the balance due. The larger the residual amount, the faster the loan is
- *      repaid. For most mortgages or other loans made today, the lender and borrower agree upon
- *      a certain number of repayment periods and the interest to be charged per payment period.
- *      The interest may be multiplied by 12 and stated as an annual interest rate. Then the
- *      lender and borrower want to compute a periodic payment, PMT, which will reduce the balance
- *      due to zero after the agreed upon number of payment have been made. If N is the agreed
- *      upon number of periodic payments, then we want to use:
+ *
+ *      The payment is sufficient to cover the interest charged with a
+ *      residual amount to be applied to reduce the balance due. The
+ *      larger the residual amount, the faster the loan is repaid. For
+ *      most mortgages or other loans made today, the lender and
+ *      borrower agree upon a certain number of repayment periods and
+ *      the interest to be charged per payment period.  The interest
+ *      may be multiplied by 12 and stated as an annual interest
+ *      rate. Then the lender and borrower want to compute a periodic
+ *      payment, PMT, which will reduce the balance due to zero after
+ *      the agreed upon number of payment have been made. If N is the
+ *      agreed upon number of periodic payments, then we want to use:
  *
  *      PV * (1 + i)^N + PMT*(1 +iX)*[(1 + i)^N - 1]/i + FV = 0
  *
@@ -426,9 +449,10 @@
  *
  *      PMT = -[PV * i * (1 + i)^(N - X)]/[(1 + i)^N - 1]
  *
- *      The value of PMT computed will reduce the balance due to zero after N periodic payments.
+ *      The value of PMT computed will reduce the balance due to zero
+ *      after N periodic payments.
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
  *
  * With a simple alegebraic re-arrangement, The financial Equation becomes:
@@ -478,10 +502,11 @@
  *       i = [FV/PV]^(1/n) - 1
  *
  *  PMT != 0
- *       Since equation 3) cannot be solved explicitly for i in this case, an
- *       iterative technique must be employed. Newton's method, using exact
- *       expressions for the function of i and its derivative, are employed. The
- *       expressions are:
+ *
+ *       Since equation 3) cannot be solved explicitly for i in this
+ *       case, an iterative technique must be employed. Newton's
+ *       method, using exact expressions for the function of i and its
+ *       derivative, are employed. The expressions are:
  *
  * 12) i[k+1] = i[k] - f(i[k])/f'(i[k])
  *       where: i[k+1] == (k+1)st iteration of i
@@ -526,16 +551,20 @@
  *
  *                  = abs[(FV+n*PMT)/(3*(PMT*(n-1)^2+PV-FV))]
  *
- * *****************************************************************************
- #   Constant payment to principal loan
- *   In this loan, each total payment is different, with each succeeding payment
- *   less than the preceeding payment. Each payment is the total of the constant
- *   ammount to the principal plus the interest for the period. The constant payment
- *   to the principal is computed as:
+ * ****************************************************************************
+ * Constant payment to principal loan
+ *
+ *   In this loan, each total payment is different, with each
+ *   succeeding payment less than the preceeding payment. Each payment
+ *   is the total of the constant ammount to the principal plus the
+ *   interest for the period. The constant payment to the principal is
+ *   computed as:
+ *
  *           C = -PV / N
- *   Where PV is the loan amount to be repaid in N payments (periods). Note that the
- *   constant payment to principal could be any value agreed to by the two parties
- *   involved.
+ *
+ *   Where PV is the loan amount to be repaid in N payments
+ *   (periods). Note that the constant payment to principal could be
+ *   any value agreed to by the two parties involved.
  *
  *   Thus the principal after the first payment is:
  *       PV[1] = PV[0] + C = PV + C
@@ -543,8 +572,10 @@
  *       PV[2] = PV[1] + C = PV[0] + 2C
  *   In general, the remaining principal after n payments is:
  *       PV[n] = PV[0] + nC = PV + nC
- *   If the effective interest per payment period is i, then the interest for the
- *   first payment is:
+ *
+ *   If the effective interest per payment period is i, then the
+ *   interest for the first payment is:
+ *
  *       I[1] = -i*PV[0] = -i*PV
  *   and for the second:
  *       I[2] = -i * PV[1]
@@ -565,19 +596,22 @@
  *       T[n] = -i*n*(PV + C) - i*C*n(n+1)/2
  *       T[n] = -i*n*(PV + (C*(n - 1)/2))
  *
- #   Note: substituing for C = -PV/N, in the equations for PV[n], I[n], P[n], and T[n]
- *   would give the following equations:
+ * Note: substituing for C = -PV/N, in the equations for PV[n], I[n],
+ *   P[n], and T[n] would give the following equations:
+ *
  *       PV[n] = PV*(1 - n/N)
  *       I[n]  = -i*PV*(1 + N - n)/N
  *       P[n]  = -i*PV*(2 + N - n)/N
  *       T[n]  = -i*n*PV*(2*N - n + 1)/(2*N)
- *   Using thses equations for the calculations would eliminate the dependence
- *   on C, but only if C is always defined as above and would eliminate the
- *   possibility of another value for C. If the value of C was less than -PV/N
- *   then a balloon payment would be due at the final payment and this is a possible
- *   alternative for some people.
  *
- * *****************************************************************************
+ *   Using these equations for the calculations would eliminate the
+ *   dependence on C, but only if C is always defined as above and
+ *   would eliminate the possibility of another value for C. If the
+ *   value of C was less than -PV/N then a balloon payment would be
+ *   due at the final payment and this is a possible alternative for
+ *   some people.
+ *
+ * ****************************************************************************
  *
  *   Amortization Schedules.
  *
@@ -587,11 +621,11 @@
  *   IP is equal to ED for beginning of period payments or at the end of the
  *   first payment period for end of period payments.
  *
- *   This is not always true. IP may be delayed for financial reasons such as cash
- *   flow or accounting calender. The subsequent payments then follow the
- *   agreed upon periodicity. Since money has a time value, the "delayed" IP
- *   must be accounted for. Computing an "Effective PV", pve, is one means of
- *   handling a delayed IP.
+ *   This is not always true. IP may be delayed for financial reasons
+ *   such as cash flow or accounting calender. The subsequent payments
+ *   then follow the agreed upon periodicity. Since money has a time
+ *   value, the "delayed" IP must be accounted for. Computing an
+ *   "Effective PV", pve, is one means of handling a delayed IP.
  *
  *   EDj == the Julian Day Number of ED, and
  *   IPj == the Julian Day Number of IP in the following.
@@ -617,22 +651,25 @@
  *
  *   PV[n] = PV[n-1] + PMT + ID[n]
  *
- *   For those cases where a yearly summary only is desired, it is not necessary
- *   to compute each transaction for each payment period, rather the PV may be
- *   be computed for the beginning of each year, PV[yr], and the FV computed for
- *   the end of the year, FV[yr]. The interest paid during the year is the computed as:
+ *   For those cases where a yearly summary only is desired, it is not
+ *   necessary to compute each transaction for each payment period,
+ *   rather the PV may be be computed for the beginning of each year,
+ *   PV[yr], and the FV computed for the end of the year, FV[yr]. The
+ *   interest paid during the year is the computed as:
  *
  *   ID[yr] = (NP * PMT) + PV[yr] + FV[yr]
  *
- *   Since the final payment may not be equal to the periodic payment, the final
- *   payment must be computed separately as follows. Two derivations are given below
- *   for the final payment equation. Both derivations are given below since one or
- *   the other may be clearer to some readers. Both derivations are essentially
- *   the same, they just have different starting points. The first is the fastest.
+ *   Since the final payment may not be equal to the periodic payment,
+ *   the final payment must be computed separately as follows. Two
+ *   derivations are given below for the final payment equation. Both
+ *   derivations are given below since one or the other may be clearer
+ *   to some readers. Both derivations are essentially the same, they
+ *   just have different starting points. The first is the fastest.
  *
  *   1) final_pmt == final payment @ payment n == int(n)
  *       from above the basic financial equation:
- *       PV[n] = PV[n-1]*(1 + i) + final_pmt * (1 + iX), i == effective interest rate
+ *       PV[n] = PV[n-1]*(1 + i) + final_pmt * (1 + iX),
+ *       i == effective interest rate
  *
  *       solving for final_pmt, we have:
  *
@@ -640,16 +677,21 @@
  *                            = FV[n-1]*(1 + i) - FV[n]
  *       final_pmt = FV[n-1]*(1+i)/(1 + iX) - FV[n]/(1 + iX)
  *
- *       final_pmt = FV[n-1]*(1 + i) - FV[n], for X == 0, end of period payments
- *                 = FV[n-1] - FV[n]/(1 + i), for X == 1, beginning of period payments
+ *       final_pmt = FV[n-1]*(1 + i) - FV[n],
+ *                   for X == 0, end of period payments
+ *
+ *                 = FV[n-1] - FV[n]/(1 + i),
+ *                   for X == 1, beginning of period payments
  *
  *   2) final_pmt == final payment @ payment n == int(n)
  *       i[n] == interest due @ payment n
  *       i[n] = (PV[n-1] + X * final_pmt) * i, i == effective interest rate
  *            = (X * final_pmt - FV[n]) * i
  *
- *       Now the final payment is the sum of the interest due, plus the present value
- *       at the next to last payment plus any residual future value after the last payment:
+ *       Now the final payment is the sum of the interest due, plus
+ *       the present value at the next to last payment plus any
+ *       residual future value after the last payment:
+ *
  *       final_pmt = -i[n] - PV[n-1] - FV[n]
  *                 = FV[n-1] - i[n] - FV[n]
  *                 = FV[n-1] - (X *final_pmt - FV[n-1])*i - FV[n]
@@ -659,46 +701,62 @@
  *       final_pmt*(1 + iX) = FV[n-1]*(1 + i) - FV[n]
  *       final_pmt = FV[n-1]*(1 + i)/(1 + iX) - FV[n]/(1 + iX)
  *
- *       final_pmt = FV[n-1]*(1 + i) - FV[n], for X == 0, end of period payments
- *                 = FV[n-1] - FV[n]/(1 + i), for X == 1, beginning of period payments
+ *       final_pmt = FV[n-1]*(1 + i) - FV[n],
+ *                   for X == 0, end of period payments
  *
- *================================================================================
+ *                 = FV[n-1] - FV[n]/(1 + i),
+ *                   for X == 1, beginning of period payments
+ *
+ *============================================================================
  *
  *   The amortization schedule is computed for four different situations:
- *   1) The original financial data is used. This ignores any possible agjustment to
- *       the Present value due to any delay in the initial payment. This is quite
- *       common in mortgages where end of period payments are used and the first
- *       payment is scheduled for the end of the first whole period, i.e., any
- *       partial payment period from ED to the beginning of the next payment period
- *       is ignored.
- *   2) The original periodic payment is used, the Present Value is adjusted for the
- *       delayed Initial Payment. The total number of payments remains the same. The
- *       final payment is adjusted to bring the balance into agreement with the
- *       agreed upon final Future Value.
- *   3) A new periodic payment is computed based upon the adjusted Present Value, the
- *       agreed originally upon number of total payments and the agreed upon Future Value.
- *       The new periodic payments are computed to minimize the final payment in accordance
- *       with the Future Value after the last payment.
- *   4) The original periodic payment is retained and a new number of total payments is computed
- *       based upon the adjusted Present Value and the agreed upon Future Value.
+ *
+ *   1) The original financial data is used. This ignores any possible
+ *   agjustment to the Present value due to any delay in the initial
+ *   payment. This is quite common in mortgages where end of period
+ *   payments are used and the first payment is scheduled for the end
+ *   of the first whole period, i.e., any partial payment period from
+ *   ED to the beginning of the next payment period is ignored.
+ *
+ *   2) The original periodic payment is used, the Present Value is
+ *   adjusted for the delayed Initial Payment. The total number of
+ *   payments remains the same. The final payment is adjusted to bring
+ *   the balance into agreement with the agreed upon final Future
+ *   Value.
+ *
+ *   3) A new periodic payment is computed based upon the adjusted
+ *   Present Value, the agreed originally upon number of total
+ *   payments and the agreed upon Future Value.  The new periodic
+ *   payments are computed to minimize the final payment in accordance
+ *   with the Future Value after the last payment.
+ *
+ *   4) The original periodic payment is retained and a new number of
+ *   total payments is computed based upon the adjusted Present Value
+ *   and the agreed upon Future Value.
  *
  *   The amortization schedule may be computed and displayed in three manners:
- *   1. The payment *, interest paid, principal paid and remaining PV for each payment period
- *       are computed and displayed. At the end of each year a summary is computed and displayed
- *       and the total interest paid is diplayed at the end.
- *   2. A summary is computed and displayed for each year. The interest paid during the
- *       year is computed and displayed as well as the remaining balance at years end.
- *       The total interest paid is diplayed at the end.
- *   3. An amortization schedule is computed for a common method of advanced payment of
- *       principal is computed and displayed. In this amortization, the principal for the
- *       next payment is computed and added into the current payment. This method will
- *       cut the number of total payments in half and will cut the interest paid almost
- *       in half. For mortgages, this method of prepayment has the advantage of keeping
- *       the total payments small during the initial payment periods
- *       The payments grow until the last payment period when presumably the borrower
- *       can afford larger payments.
  *
- *================================================================================
+ *   1. The payment *, interest paid, principal paid and remaining PV
+ *   for each payment period are computed and displayed. At the end of
+ *   each year a summary is computed and displayed and the total
+ *   interest paid is diplayed at the end.
+ *
+ *   2. A summary is computed and displayed for each year. The
+ *   interest paid during the year is computed and displayed as well
+ *   as the remaining balance at years end.  The total interest paid
+ *   is diplayed at the end.
+ *
+ *   3. An amortization schedule is computed for a common method of
+ *   advanced payment of principal is computed and displayed. In this
+ *   amortization, the principal for the next payment is computed and
+ *   added into the current payment. This method will cut the number
+ *   of total payments in half and will cut the interest paid almost
+ *   in half. For mortgages, this method of prepayment has the
+ *   advantage of keeping the total payments small during the initial
+ *   payment periods The payments grow until the last payment period
+ *   when presumably the borrower can afford larger payments.
+ *
+ * ===========================================================================
  *   NOTE: For Payment Frequencies, PF, semi-monthly or less, i.e., PF
  *   == 12 or PF == 24, a 360 day calender year and 30 day month are
  *   used. For Payment Frequencies, PF, greater than semi-monthly, PF
@@ -706,15 +764,14 @@
  *   are used. The actual values are computed using the built-in
  *   'julian_day_number' function
  *
- * *****************************************************************************
+ * ****************************************************************************
  *
- * Note: in the following examples, the user input is preceeded by the prompt
- * "<>". The result of evaluating the input expression is then displayed.
- * I have taken the liberty of including comments in the example
- * input/output sessions by preceeding with ' *'. Thus, for the line:
- * <>n=5          *set number of periods
- * the comment that setting the number of periods is not really input and the true
- * input is only:
+ * Note: in the following examples, the user input is preceeded by the
+ * prompt "<>". The result of evaluating the input expression is then
+ * displayed.  I have taken the liberty of including comments in the
+ * example input/output sessions by preceeding with ' *'. Thus, for
+ * the line: <>n=5 *set number of periods the comment that setting the
+ * number of periods is not really input and the true input is only:
  * <>n=5
  *
  * Example 1: Simple Interest
@@ -755,9 +812,11 @@
  *        71.08
  *
  * Example 4: Conventional Mortgage
- * Find the number of monthly payments necessary to fully amortize a loan of
- * $100,000 at a nominal rate of 13.25% compounded monthly, if monthly end-of-period
- * payments of $1125.75 are made.
+ *
+ * Find the number of monthly payments necessary to fully amortize a
+ * loan of $100,000 at a nominal rate of 13.25% compounded monthly, if
+ * monthly end-of-period payments of $1125.75 are made.
+ *
  * <>d
  * <>i=13.25
  *         13.25
@@ -781,10 +840,12 @@
  * <>pmt+fv
  *        -1,234.62
  *
- *  Using the data from this loan, compute the amortization schedule when the
- *   Effective date of the loan is June 6, 1996 and the initial payment is
- *   made on August 1, 1996. Ignore any change in the PV due to the delayed
- *   initial payment caused by the partial payment period from June 6 to July 1.
+ * Using the data from this loan, compute the amortization schedule
+ *   when the Effective date of the loan is June 6, 1996 and the
+ *   initial payment is made on August 1, 1996. Ignore any change in
+ *   the PV due to the delayed initial payment caused by the partial
+ *   payment period from June 6 to July 1.
+ *
  * <>ED = 06/06/1996
  *   Effective Date set: 06/06/1996 ( 2450241 )
  * <>IP = 08/01/1996
@@ -1053,12 +1114,15 @@
  *         12.94
  *
  * Example 12: Mortgage with "Points"
- * What is the true APR of a 30 year, $75,000 loan at a nominal rate of 13.25%
- * compounded monthly, with monthly end-of-period payments, if 3 "points"
- * are charged? The pv must be reduced by the dollar value of the points
- * and/or any lenders fees to establish an effective pv. Because payments remain
- * the same, the true APR will be higher than the nominal rate. Note, first
- * compute the payments on the pv of the loan amount.
+ *
+ * What is the true APR of a 30 year, $75,000 loan at a nominal rate
+ * of 13.25% compounded monthly, with monthly end-of-period payments,
+ * if 3 "points" are charged? The pv must be reduced by the dollar
+ * value of the points and/or any lenders fees to establish an
+ * effective pv. Because payments remain the same, the true APR will
+ * be higher than the nominal rate. Note, first compute the payments
+ * on the pv of the loan amount.
+ *
  * <>d
  * <>CF=PF=1
  *         1.00
@@ -1128,7 +1192,7 @@
  * 1. PPC ROM User's Manual
  *    pages 148 - 164
  *
- * */
+ */
 
 #include <time.h>
 #include <stdio.h>
@@ -1141,77 +1205,71 @@
 #include "finproto.h"
 #include "fin_static_proto.h"
 
-/* return 'x' rounded to 'places' past decimal
- * if 'places' < 0, return 'x'
- */
-static double rnd(
-double        x,
-unsigned      places)
+/* return 'x' rounded to 'places' past decimal if 'places' < 0, return
+ * 'x' */
+static double
+rnd (double x, unsigned places)
 {
-    double        r;
-    char buf[50]; /* make buffer large enough */
+  double r;
+  char buf[50];			/* make buffer large enough */
 
-    if ( places >= 0 ) {
-        sprintf(buf,"%.*f",(int)places,x);
-        sscanf(buf,"%lf",&r);
-    } else r = x;
+  if (places >= 0)
+  {
+    sprintf (buf, "%.*f", (int) places, x);
+    sscanf (buf, "%lf", &r);
+  }
+  else
+    r = x;
 
-    return r;
-} /* rnd */
+  return r;
+}				/* rnd */
 
-/* return absolute value of 'x'
- *  this function is provided by a macro in C
- */
-static double dabs(
-double        x)
+/* return absolute value of 'x' this function is provided by a macro
+ * in C */
+static double
+dabs (double x)
 {
-    return (x >= 0.0) ? x : -x;
-} /* dabs */
+  return (x >= 0.0) ? x : -x;
+}				/* dabs */
 
-/* Compute constant used in calculations
- */
-static double _A(
-double        eint,
-unsigned      per)
+/* Compute constant used in calculations */
+static double
+_A (double eint, unsigned per)
 {
-    return pow((1.0 + eint),(double)per) - 1.0;
-} /* _A */
+  return pow ((1.0 + eint), (double) per) - 1.0;
+}				/* _A */
 
-/* Compute constant used in calculations
- */
-static double _B(
-double        eint,
-unsigned      beg)
+/* Compute constant used in calculations */
+static double
+_B (double eint, unsigned beg)
 {
-    /* the following should call an error routine
-     * to report the error
-     */
-#if defined( NEVER_DEFINE )
-    if ( eint == 0.0 {
-        fprintf(stderr,"Zero Interest.\n");
-        exit;
-    } /* endif */
-#endif /* NEVER_DEFINE */
+  /* the following should call an error routine to report the error */
+  if (eint == 0.0)
+  {
+    fprintf (stderr, "Zero Interest.\n");
+    exit (1);
+  }				/* endif */
 
-    return (1.0 + eint * (double)beg)/eint;
-} /* _B */
+  return (1.0 + eint * (double) beg) / eint;
+}				/* _B */
 
-/* Compute constant used in calculations
- */
-static double _C(
-double        eint,
-double        pmt,
-unsigned      beg) {
-    return pmt * _B(eint,beg);
-} /* _C */
-
-/* compute Number of Periods from preset data
- */
-unsigned fi_calc_num_payments(
-fi_ptr   fi)
+/* Compute constant used in calculations */
+static double
+_C (double eint, double pmt, unsigned beg)
 {
-    return fi->npp = (unsigned)rnd(_fi_calc_num_payments(fi->ir,fi->pv,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),0);
-} /* fi_calc_num_payments */
+  return pmt * _B (eint, beg);
+}				/* _C */
+
+/* compute Number of Periods from preset data */
+unsigned
+fi_calc_num_payments (fi_ptr fi)
+{
+  return fi->npp =
+    (unsigned)
+    rnd (_fi_calc_num_payments
+	 (fi->ir, fi->pv, fi->pmt, fi->fv, fi->CF, fi->PF, fi->disc, fi->bep),
+	 0);
+}				/* fi_calc_num_payments */
 
 /* Compute number of periods from:
  *   1. Nominal Interest
@@ -1219,33 +1277,33 @@ fi_ptr   fi)
  *   3. Periodic Payment
  *   4. Future Value
  */
-double   _fi_calc_num_payments(
-double   nint,  /* nominal interest rate    */
-double   pv,    /* present value            */
-double   pmt,   /* periodic payment         */
-double   fv,    /* future value             */
-unsigned CF,    /* compounding frequency    */
-unsigned PF,    /* payment frequency        */
-unsigned disc,  /* discrete/continuous compounding flag */
-unsigned bep)   /* beginning/end of period payment flag */
+double
+_fi_calc_num_payments (double nint,	/* nominal interest rate    */
+		       double pv,	/* present value            */
+		       double pmt,	/* periodic payment         */
+		       double fv,	/* future value             */
+		       unsigned CF,	/* compounding frequency    */
+		       unsigned PF,	/* payment frequency        */
+		       unsigned disc,	/* discrete/continuous compounding */
+		       unsigned bep)	/* beginning/end of period payment */
 {
-    double eint = eff_int(nint/100.0,CF,PF,disc);
-    double CC = _C(eint,pmt,bep);
+  double eint = eff_int (nint / 100.0, CF, PF, disc);
+  double CC = _C (eint, pmt, bep);
 
-    CC = (CC - fv)/(CC + pv);
-    return (CC > 0.0) ? log(CC)/log(1.0 + eint) : 0.0;
-} /* _fi_calc_num_payments */
+  CC = (CC - fv) / (CC + pv);
+  return (CC > 0.0) ? log (CC) / log (1.0 + eint) : 0.0;
+}				/* _fi_calc_num_payments */
 
-/* compute Interest from preset data
- */
-double fi_calc_interest(
-fi_ptr fi)
+/* compute Interest from preset data */
+double
+fi_calc_interest (fi_ptr fi)
 {
-    if ( fi->npp ) fi->ir = _fi_calc_interest(fi->npp,fi->pv,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep);
-/*     else print "Number of periods is zero, probably not specified";  */
+  if (fi->npp)
+    fi->ir = _fi_calc_interest (fi->npp, fi->pv, fi->pmt, fi->fv,
+				fi->CF, fi->PF, fi->disc, fi->bep);
 
-    return  fi->ir;
-} /* fi_calc_interest */
+  return fi->ir;
+}				/* fi_calc_interest */
 
 double ratio = 1e4; /* ratio used in iterative solution for interest */
 
@@ -1255,53 +1313,71 @@ double ratio = 1e4; /* ratio used in iterative solution for interest */
  *   3. Periodic Payment
  *   4. Future Value
  */
-double   _fi_calc_interest(
-unsigned per,   /* number of periods        */
-double   pv,    /* present value            */
-double   pmt,   /* periodic payment         */
-double   fv,    /* future value             */
-unsigned CF,    /* compounding frequency    */
-unsigned PF,    /* payment frequency        */
-unsigned disc,  /* discrete/continuous compounding flag */
-unsigned bep)   /* beginning/end of period payment flag */
+double
+_fi_calc_interest (unsigned per,/* number of periods        */
+		   double pv,	/* present value            */
+		   double pmt,	/* periodic payment         */
+		   double fv,	/* future value             */
+		   unsigned CF,	/* compounding frequency    */
+		   unsigned PF,	/* payment frequency        */
+		   unsigned disc, /* discrete/continuous compounding */
+		   unsigned bep)  /* beginning/end of period payment */
 {
-    double eint;
-    double a,
-           dik;
-    int    ri;
+  double eint;
+  double a, dik;
+  int ri;
 
-    if ( pmt == 0.0 ) {
-        eint = pow((dabs(fv)/dabs(pv)),(1.0/(double)per)) - 1.0;
-      } else {
-        if ( (pmt * fv) < 0.0 ) {
-            if ( pv ) a = -1.0; else a = 1.0;
-            eint = dabs((fv + a * (double)per * pmt)/(3.0 * (((double)per - 1.0) * ((double)per - 1.0) * pmt + pv - fv)));
-          } else {
-            if ( (pv * pmt) < 0.0 ) {
-                eint = dabs(((double)per * pmt + pv + fv)/((double)per * pv));
-              } else {
-                a = dabs(pmt/(dabs(pv) + dabs(fv)));
-                eint = a + 1.0/(a * (double)per * (double)per * (double)per);
-            }
-        }
-        do {
-            dik = fi(per,eint,pv,pmt,fv,bep)/fip(per,eint,pv,pmt,fv,bep);
-            eint -= dik;
-            (void)modf(ratio * (dik/eint),&a);
-            ri = (unsigned)a;
-        } while ( ri );
-    } /* endif */
+  if (pmt == 0.0)
+    eint = pow ((dabs (fv) / dabs (pv)), (1.0 / (double) per)) - 1.0;
+  else
+  {
+    if ((pmt * fv) < 0.0)
+    {
+      if (pv)
+	a = -1.0;
+      else
+	a = 1.0;
+      eint =
+	dabs ((fv + a * (double) per * pmt) /
+	      (3.0 *
+	       (((double) per - 1.0) * ((double) per - 1.0) * pmt + pv -
+		fv)));
+    }
+    else
+    {
+      if ((pv * pmt) < 0.0)
+      {
+	eint = dabs (((double) per * pmt + pv + fv) / ((double) per * pv));
+      }
+      else
+      {
+	a = dabs (pmt / (dabs (pv) + dabs (fv)));
+	eint = a + 1.0 / (a * (double) per * (double) per * (double) per);
+      }
+    }
+    do
+    {
+      dik =
+	fi (per, eint, pv, pmt, fv, bep) / fip (per, eint, pv, pmt, fv, bep);
+      eint -= dik;
+      (void) modf (ratio * (dik / eint), &a);
+      ri = (unsigned) a;
+    }
+    while (ri);
+  }				/* endif */
 
-    return 100.0 * nom_int(eint,CF,PF,disc);
-} /* _fi_calc_interest */
+  return 100.0 * nom_int (eint, CF, PF, disc);
+}				/* _fi_calc_interest */
 
-/* compute Present value from preset data
- */
-double fi_calc_present_value(
-fi_ptr fi)
+/* compute Present value from preset data */
+double
+fi_calc_present_value (fi_ptr fi)
 {
-    return fi->pv = rnd(_fi_calc_present_value(fi->npp,fi->ir,fi->pmt,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
-} /* fi_calc_present_value */
+  return fi->pv =
+    rnd (_fi_calc_present_value
+	 (fi->npp, fi->ir, fi->pmt, fi->fv, fi->CF, fi->PF, fi->disc,
+	  fi->bep), fi->prec);
+}				/* fi_calc_present_value */
 
 /* Compute Present Value from:
  *   1. Number of periods
@@ -1309,30 +1385,32 @@ fi_ptr fi)
  *   3. Periodic Payment
  *   4. Future Value
  */
-double   _fi_calc_present_value(
-unsigned per,   /* number of periods        */
-double   nint,  /* nominal interest rate    */
-double   pmt,   /* periodic payment         */
-double   fv,    /* future value             */
-unsigned CF,    /* compounding frequency    */
-unsigned PF,    /* payment frequency        */
-unsigned disc,  /* discrete/continuous compounding flag */
-unsigned bep)   /* beginning/end of period payment flag */
+double
+_fi_calc_present_value (unsigned per,	/* number of periods        */
+			double nint,	/* nominal interest rate    */
+			double pmt,	/* periodic payment         */
+			double fv,	/* future value             */
+			unsigned CF,	/* compounding frequency    */
+			unsigned PF,	/* payment frequency        */
+			unsigned disc,	/* discrete/continuous compounding */
+			unsigned bep)	/* beginning/end of period payment */
 {
-    double eint = eff_int(nint/100.0,CF,PF,disc);
-    double AA = _A(eint,per);
-    double CC = _C(eint,pmt,bep);
+  double eint = eff_int (nint / 100.0, CF, PF, disc);
+  double AA = _A (eint, per);
+  double CC = _C (eint, pmt, bep);
 
-    return -(fv + (AA * CC))/(AA + 1.0);
-} /* _fi_calc_present_value */
+  return -(fv + (AA * CC)) / (AA + 1.0);
+}				/* _fi_calc_present_value */
 
-/* compute Periodic Payment from preset data
- */
-double fi_calc_payment(
-fi_ptr fi)
+/* compute Periodic Payment from preset data */
+double
+fi_calc_payment (fi_ptr fi)
 {
-    return fi->pmt = rnd(_fi_calc_payment(fi->npp,fi->ir,fi->pv,fi->fv,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
-} /* fi_calc_payment */
+  return fi->pmt =
+    rnd (_fi_calc_payment
+	 (fi->npp, fi->ir, fi->pv, fi->fv, fi->CF, fi->PF, fi->disc, fi->bep),
+	 fi->prec);
+}				/* fi_calc_payment */
 
 /* Compute Periodic Payment from:
  *   1. Number of periods
@@ -1340,30 +1418,32 @@ fi_ptr fi)
  *   3. Present Value
  *   4. Future Value
  */
-double   _fi_calc_payment(
-unsigned per,   /* number of periods        */
-double   nint,  /* nominal interest rate    */
-double   pv,    /* present value            */
-double   fv,    /* future value             */
-unsigned CF,    /* compounding frequency    */
-unsigned PF,    /* payment frequency        */
-unsigned disc,  /* discrete/continuous compounding flag */
-unsigned bep)   /* beginning/end of period payment flag */
+double
+_fi_calc_payment (unsigned per,	/* number of periods        */
+		  double nint,	/* nominal interest rate    */
+		  double pv,	/* present value            */
+		  double fv,	/* future value             */
+		  unsigned CF,	/* compounding frequency    */
+		  unsigned PF,	/* payment frequency        */
+		  unsigned disc,/* discrete/continuous compounding */
+		  unsigned bep)	/* beginning/end of period payment */
 {
-    double eint = eff_int(nint/100.0,CF,PF,disc);
-    double AA = _A(eint,per);
-    double BB = _B(eint,bep);
+  double eint = eff_int (nint / 100.0, CF, PF, disc);
+  double AA = _A (eint, per);
+  double BB = _B (eint, bep);
 
-    return -(fv + pv * (AA + 1.0))/(AA * BB);
-} /* _fi_calc_payment */
+  return -(fv + pv * (AA + 1.0)) / (AA * BB);
+}				/* _fi_calc_payment */
 
-/* compute Future Value from preset data
- */
-double fi_calc_future_value(
-fi_ptr fi)
+/* compute Future Value from preset data */
+double
+fi_calc_future_value (fi_ptr fi)
 {
-    return fi->fv = rnd(_fi_calc_future_value(fi->npp,fi->ir,fi->pv,fi->pmt,fi->CF,fi->PF,fi->disc,fi->bep),fi->prec);
-} /* fi_calc_future_value*/
+  return fi->fv =
+    rnd (_fi_calc_future_value
+	 (fi->npp, fi->ir, fi->pv, fi->pmt, fi->CF, fi->PF, fi->disc,
+	  fi->bep), fi->prec);
+}				/* fi_calc_future_value */
 
 /* Compute Future Value from:
  *   1. Number of periods
@@ -1371,988 +1451,1027 @@ fi_ptr fi)
  *   3. Present Value
  *   4. Periodic Payments
  */
-double   _fi_calc_future_value(
-unsigned per,   /* number of periods        */
-double   nint,  /* nominal interest rate    */
-double   pv,    /* present value            */
-double   pmt,   /* periodic payment         */
-unsigned CF,    /* compounding frequency    */
-unsigned PF,    /* payment frequency        */
-unsigned disc,  /* discrete/continuous compounding flag */
-unsigned bep)   /* beginning/end of period payment flag */
+double
+_fi_calc_future_value (unsigned per,	/* number of periods        */
+		       double nint,	/* nominal interest rate    */
+		       double pv,	/* present value            */
+		       double pmt,	/* periodic payment         */
+		       unsigned CF,	/* compounding frequency    */
+		       unsigned PF,	/* payment frequency        */
+		       unsigned disc,	/* discrete/continuous compounding */
+		       unsigned bep)	/* beginning/end of period payment */
 {
-    double eint = eff_int(nint/100.0,CF,PF,disc);
-    double AA = _A(eint,per);
-    double CC = _C(eint,pmt,bep);
+  double eint = eff_int (nint / 100.0, CF, PF, disc);
+  double AA = _A (eint, per);
+  double CC = _C (eint, pmt, bep);
 
-    return -(pv + AA * (pv + CC));
-} /* _fi_calc_future_value */
+  return -(pv + AA * (pv + CC));
+}				/* _fi_calc_future_value */
 
-/* compute Nominal Interest Rate from Effective Interest Rate
- */
-static double nom_int(
-double        eint,
-unsigned      CF,
-unsigned      PF,
-unsigned      disc)
+/* compute Nominal Interest Rate from Effective Interest Rate */
+static double
+nom_int (double eint, unsigned CF, unsigned PF, unsigned disc)
 {
-    double nint;
+  double nint;
 
-    if ( disc ) {
-        if ( CF == PF  ) {
-            nint = CF * eint;
-          } else {
-            nint = CF * (pow((1.0 + eint),((double)PF/(double)CF)) - 1.0);
-        }  /* * endif   */
-    } else nint = log(pow(1.0 + eint,PF));
+  if (disc)
+  {
+    if (CF == PF)
+    {
+      nint = CF * eint;
+    }
+    else
+    {
+      nint = CF * (pow ((1.0 + eint), ((double) PF / (double) CF)) - 1.0);
+    }				/* * endif   */
+  }
+  else
+    nint = log (pow (1.0 + eint, PF));
 
-    return nint;
-} /* nom_int */
+  return nint;
+}				/* nom_int */
 
-/* Compute Effective Interest Rate from Nominal Interest Rate
- */
-static double eff_int(
-double        nint,
-unsigned      CF,
-unsigned      PF,
-unsigned      disc)
+/* Compute Effective Interest Rate from Nominal Interest Rate */
+static double
+eff_int (double nint, unsigned CF, unsigned PF, unsigned disc)
 {
-    double eint;
+  double eint;
 
-    if ( disc ) {
-        if ( CF == PF ) {
-            eint = nint / (double)CF;
-          } else {
-            eint = pow((1.0 + nint/(double)CF),((double)CF/(double)PF)) - 1.0;
-        }  /* endif */
-    } else eint = exp(nint/(double)PF) - 1.0;
+  if (disc)
+  {
+    if (CF == PF)
+    {
+      eint = nint / (double) CF;
+    }
+    else
+    {
+      eint =
+	pow ((1.0 + nint / (double) CF), ((double) CF / (double) PF)) - 1.0;
+    }				/* endif */
+  }
+  else
+    eint = exp (nint / (double) PF) - 1.0;
 
-    return eint;
-} /* eff_int */
+  return eint;
+}				/* eff_int */
+
+/* calculation used in interest computation */
+static double
+fi (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
+{
+  return _A (eint, per) * (pv + _C (eint, pmt, bep)) + pv + fv;
+}				/* fi */
 
 /* calculation used in interest computation
  */
-static double fi(
-unsigned      per,
-double        eint,
-double        pv,
-double        pmt,
-double        fv,
-unsigned      bep)
+static double
+fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
 {
-    return _A(eint,per) * (pv + _C(eint,pmt,bep)) + pv + fv;
-} /* fi */
+  double AA = _A (eint, per);
+  double CC = _C (eint, pmt, bep);
+  double D = (AA + 1.0) / (1.0 + eint);
 
-/* calculation used in interest computation
- */
-static double fip(
-unsigned      per,
-double        eint,
-double        pv,
-double        pmt,
-double        fv,
-unsigned      bep)
+  return (double) per *(pv + CC) * D - (AA * CC) / eint;
+}				/* fip */
+
+void
+set_default (fi_ptr fi)
 {
-    double AA = _A(eint,per);
-    double CC = _C(eint,pmt,bep);
-    double D = (AA + 1.0)/(1.0 + eint);
+  /* flag whether accrueing interest at beginning or end of period
+   * FALSE --> end
+   * TRUE  --> beginning
+   * default to end of period payment s
+   */
+  fi->bep = FALSE;
 
-    return (double)per * (pv + CC) * D  - (AA * CC)/eint;
-} /* fip */
+  /* flag for discrete or continuous interest
+   * TRUE  --> discrete
+   * FALSE --> continuous
+   * default to discrete interest
+   */
+  fi->disc = TRUE;
 
-void   set_default(
-fi_ptr fi)
-{
-    /* flag whether accrueing interest at beginning or end of period
-     * FALSE --> end
-     * TRUE  --> beginning
-     * default to end of period payment s
-     */
-    fi->bep = FALSE;
+  /* set compounding, CF, and payment, PF, frequency per year
+   * default to monthly payments and compounding
+   */
+  fi->CF = fi->PF = 12;
 
-    /* flag for discrete or continuous interest
-     * TRUE  --> discrete
-     * FALSE --> continuous
-     * default to discrete interest
-     */
-    fi->disc = TRUE;
+  /* standard loan quantities:
+   * number of periods: n
+   */
+  fi->npp = 0;
 
-    /* set compounding, CF, and payment, PF, frequency per year
-     * default to monthly payments and compounding
-     */
-    fi->CF = fi->PF = 12;
+  /* annual interest: i
+   */
+  fi->ir = 0.0;
 
-    /* standard loan quantities:
-     * number of periods: n
-     */
-    fi->npp = 0;
+  /* Present Value: pv
+   */
+  fi->pv = 0.0;
 
-    /* annual interest: i
-     */
-    fi->ir = 0.0;
+  /* Payment: pmt
+   */
+  fi->pmt = 0.0;
 
-    /* Present Value: pv
-     */
-    fi->pv = 0.0;
+  /* Future Value: fv
+   */
+  fi->fv = 0.0;
 
-    /* Payment: pmt
-     */
-    fi->pmt = 0.0;
-
-    /* Future Value: fv
-     */
-    fi->fv = 0.0;
-
-} /* set_default */
+}				/* set_default */
 
 /* compute Julian Day Number from calender date
  */
-unsigned long julian_day_number(
-unsigned      year,
-unsigned      month,
-unsigned      day)
+unsigned long
+julian_day_number (unsigned year, unsigned month, unsigned day)
 {
-    /*  Gregorian/Julian Calender Flag.
-     *  TRUE  == Julian
-     *  FALSE == Gregorian
+  /*  Gregorian/Julian Calender Flag.
+   *  TRUE  == Julian
+   *  FALSE == Gregorian
+   */
+  unsigned gregorian = TRUE; /* assume we are dealing with current dates */
+  double yr;
+  double pfac = 0.6;
+  unsigned long ljdn;
+
+  yr = year + (month - 3.0) / 12.0;
+  ljdn = (long) (367.0 * yr + pfac) - (2 * (long) (yr)) + (long) (yr / 4.0)
+    + (long) day + 1721117L;
+  if (gregorian)
+    ljdn += -(long) (yr / 100.0) + (long) (yr / 400.0) + 2;
+
+  return ljdn;
+}				/* julian_day_number */
+
+amort_sched_ptr
+Amortization_init (amort_sched_ptr amortsched)
+{
+  unsigned n = amortsched->n;
+  double nint = amortsched->nint;
+  double pv = amortsched->pv;
+  double pmt = amortsched->pmt;
+  double fv = amortsched->fv;
+  double eint;
+  double new_pmt;
+  double pve;
+  unsigned CF = amortsched->CF;
+  unsigned PF = amortsched->PF;
+  unsigned disc = amortsched->disc;
+  unsigned bep = amortsched->bep;
+  unsigned new_n;
+  unsigned prec = amortsched->prec;
+  unsigned long s,
+    d,
+    days_to_yr_end,
+    Eff_Date_jdn =
+    julian_day_number (amortsched->year_E, amortsched->month_E,
+		       amortsched->day_E), Init_Date_jdn =
+    julian_day_number (amortsched->year_I, amortsched->month_I,
+		       amortsched->day_I);
+
+  amortsched->Eff_Date_jdn = Eff_Date_jdn;
+  amortsched->Init_Date_jdn = Init_Date_jdn;
+  amortsched->yday_E =
+    Eff_Date_jdn - julian_day_number (amortsched->year_E, 1, 1);
+  amortsched->yday_I =
+    Init_Date_jdn - julian_day_number (amortsched->year_I, 1, 1);
+  amortsched->eint = eint = eff_int (nint / 100.0, CF, PF, disc);
+  amortsched->fv_case = dabs (fv) > dabs (pv);
+  amortsched->bp = bep ? 1.0 : 0.0;
+
+  if (PF > 24)
+  {
+    /* Payment frequency per year greater than bi-monthly
+     * use actual number of days
      */
-    unsigned      gregorian = TRUE; /* assume we are dealing ONLY with current dates */
-    double        yr;
-    double        pfac = 0.6;
-    unsigned long ljdn;
+    s = Init_Date_jdn - Eff_Date_jdn;
+    days_to_yr_end =
+      julian_day_number (amortsched->year_I + 1, 1, 0) - Init_Date_jdn;
+    d = 366 / PF;
+  }
+  else
+  {
+    /* Payment frequency per year bi-monthly or less
+     * use 30 days/month, 360 days/year
+     */
+    if (Eff_Date_jdn == Init_Date_jdn)
+    {
+      s = 0;
+    }
+    else
+    {
+      s =
+	((amortsched->year_I - amortsched->year_E) * 360) +
+	((amortsched->month_I - amortsched->month_E) * 30) +
+	amortsched->day_I - amortsched->day_E;
+    }				/* endif */
+    days_to_yr_end = 390 - (amortsched->month_I * 30) - amortsched->day_I;
+    d = 360 / PF;
+  }				/* endif */
 
-    yr = year + (month - 3.0) / 12.0;
-    ljdn = (long)(367.0*yr + pfac) - (2 * (long)(yr)) + (long)(yr/4.0)
-           + (long)day + 1721117L;
-    if ( gregorian ) ljdn += -(long)(yr/100.0) + (long)(yr/400.0) + 2;
+  if (!bep)
+  {
+    /* ordinary annuity
+     */
+    s -= d;
+  }				/* endif */
 
-    return ljdn;
-} /* julian_day_number */
+  amortsched->yr_pmt = (days_to_yr_end + d) / d;
 
-amort_sched_ptr Amortization_init(
-amort_sched_ptr amortsched)
-{
-    unsigned        n = amortsched->n;
-    double          nint = amortsched->nint;
-    double          pv = amortsched->pv;
-    double          pmt = amortsched->pmt;
-    double          fv = amortsched->fv;
-    double          eint;
-    double          new_pmt;
-    double          pve;
-    unsigned        CF = amortsched->CF;
-    unsigned        PF = amortsched->PF;
-    unsigned        disc = amortsched->disc;
-    unsigned        bep = amortsched->bep;
-    unsigned        new_n;
-    unsigned        prec = amortsched->prec;
-    unsigned long   s,
-                    d,
-                    days_to_yr_end,
-                    Eff_Date_jdn = julian_day_number(amortsched->year_E,amortsched->month_E,amortsched->day_E),
-                    Init_Date_jdn = julian_day_number(amortsched->year_I,amortsched->month_I,amortsched->day_I);
+  if (pmt == 0.0)
+  {
+    s = 0;
+    amortsched->pve = pv;
+  }
+  else
+  {
+    amortsched->pve =
+      rnd (pv * pow ((1.0 + eint), ((double) (s * PF) / (double) (d * CF))),
+	   prec);
+  }				/* endif */
 
-    amortsched->Eff_Date_jdn  = Eff_Date_jdn;
-    amortsched->Init_Date_jdn = Init_Date_jdn;
-    amortsched->yday_E        = Eff_Date_jdn - julian_day_number(amortsched->year_E,1,1);
-    amortsched->yday_I        = Init_Date_jdn - julian_day_number(amortsched->year_I,1,1);
-    amortsched->eint          = eint = eff_int(nint/100.0,CF,PF,disc);
-    amortsched->fv_case       = dabs(fv) > dabs(pv);
-    amortsched->bp            = bep ? 1.0 : 0.0;
-
-    if ( PF > 24 ) {
-        /* Payment frequency per year greater than bi-monthly
-         * use actual number of days
-         */
-        s = Init_Date_jdn - Eff_Date_jdn;
-        days_to_yr_end = julian_day_number(amortsched->year_I + 1,1,0) - Init_Date_jdn;
-        d = 366 / PF;
-      } else {
-        /* Payment frequency per year bi-monthly or less
-         * use 30 days/month, 360 days/year
-         */
-        if ( Eff_Date_jdn == Init_Date_jdn ) {
-            s = 0;
-          } else {
-            s = ((amortsched->year_I - amortsched->year_E) * 360) + ((amortsched->month_I - amortsched->month_E) * 30) + amortsched->day_I - amortsched->day_E;
-        }  /* endif */
-        days_to_yr_end = 390 - (amortsched->month_I * 30) - amortsched->day_I;
-        d = 360 / PF;
-    }  /* endif */
-
-    if ( !bep ) {
-        /* ordinary annuity
-         */
-        s -= d;
-    }  /* endif */
-
-    amortsched->yr_pmt = (days_to_yr_end + d)/d;
-
-    if ( pmt == 0.0 ) {
-        s = 0;
-        amortsched->pve = pv;
-      } else {
-        amortsched->pve = rnd(pv * pow((1.0 + eint),((double)(s * PF) / (double)(d * CF))),prec);
-    }  /* endif */
-
-    pve = amortsched->pve;
+  pve = amortsched->pve;
 
 /*   compute new data to fully amortize loan:
  *       new periodic payment, new_pmt
- *   option 1: Amortize with original transaction - ignore interest due to delayed initial payment
- *   option 2: Amortize with new pv, pve == original pv adjusted for delayed initial payment,
- *               original payment, original fv and original total number of payments,
- *               adjust final payment
- *   option 3: amortize with new pv, pve, and new payments adjusted to minimize final payment
- *               keep original number of payments and original fv
- *   option 4: amortize with new pv, pve, original payments and new number of payments to
- *               keep original final fv
- */
+ *
+ *   option 1: Amortize with original transaction - ignore interest
+ *   due to delayed initial payment
+ *
+ *   option 2: Amortize with new pv, pve == original pv adjusted for
+ *   delayed initial payment, original payment, original fv and
+ *   original total number of payments, adjust final payment
+ *
+ *   option 3: amortize with new pv, pve, and new payments adjusted to
+ *   minimize final payment, keep original number of payments and
+ *   original fv
+ *
+ *   option 4: amortize with new pv, pve, original payments and new
+ *   number of payments to keep original final fv */
 
-/*
- *   option 3, compute new periodic payment
- */
-    amortsched->new_pmt = new_pmt = rnd(_fi_calc_payment(n,nint,pve,fv,CF,PF,disc,bep),prec);
-/*
- *   option 4: compute new number of total payments, new_n
- */
-    amortsched->new_n = new_n = (unsigned)rnd(_fi_calc_num_payments(nint,pve,pmt,fv,CF,PF,disc,bep),0);
+/* option 3, compute new periodic payment */
+  amortsched->new_pmt = new_pmt =
+    rnd (_fi_calc_payment (n, nint, pve, fv, CF, PF, disc, bep), prec);
 
-    /* following used in QTAwk to insure integer value, not needed in C
-     */
-/*    n = int(n); */
+/* option 4: compute new number of total payments, new_n */
+  amortsched->new_n = new_n =
+    (unsigned)
+    rnd (_fi_calc_num_payments (nint, pve, pmt, fv, CF, PF, disc, bep), 0);
 
-    /* compute payment for constant payment to principal loan
-     * and final payment for original loan amount include
-     * interest due
-     */
-    amortsched->cpmt1 = rnd(-pv / n,prec);
-    amortsched->final_pmt_opt_1 = -pv - amortsched->cpmt1 * (n - 1);
-    amortsched->final_pmt_opt_1 *= eint + 1;
+  /* following used in QTAwk to insure integer value, not needed in C */
+  /*    n = int(n); */
 
-    /* compute payment for constant payment to principal loan
-     * and final payment for delayed loan amount include
-     * interest due
-     */
-    amortsched->cpmt2 = rnd(-pve / n,prec);
-    amortsched->final_pmt_opt_2 = -pve - amortsched->cpmt2 * (n - 1);
-    amortsched->final_pmt_opt_2 *= eint + 1;
+  /* compute payment for constant payment to principal loan and final
+   * payment for original loan amount include interest due */
+  amortsched->cpmt1 = rnd (-pv / n, prec);
+  amortsched->final_pmt_opt_1 = -pv - amortsched->cpmt1 * (n - 1);
+  amortsched->final_pmt_opt_1 *= eint + 1;
 
+  /* compute payment for constant payment to principal loan and final
+   * payment for delayed loan amount include interest due */
+  amortsched->cpmt2 = rnd (-pve / n, prec);
+  amortsched->final_pmt_opt_2 = -pve - amortsched->cpmt2 * (n - 1);
+  amortsched->final_pmt_opt_2 *= eint + 1;
 
-    if ( bep ) {
-        amortsched->final_pmt_opt_3 = rnd(_fi_calc_future_value(n - 1,nint,pv,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-        amortsched->final_pmt_opt_4 = rnd(_fi_calc_future_value(n - 1,nint,pve,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-        amortsched->final_pmt_opt_5 = rnd(_fi_calc_future_value(n - 1,nint,pve,new_pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-        if ( new_n ) amortsched->final_pmt_opt_6 = rnd(_fi_calc_future_value(new_n - 1,nint,pve,pmt,CF,PF,disc,bep) - (fv/(1.0 + eint)),prec);
-          else amortsched->final_pmt_opt_6 = 0.0;
-      } else {
-        amortsched->final_pmt_opt_3 = rnd(_fi_calc_future_value(n - 1,nint,pv,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-        amortsched->final_pmt_opt_4 = rnd(_fi_calc_future_value(n - 1,nint,pve,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-        amortsched->final_pmt_opt_5 = rnd(_fi_calc_future_value(n - 1,nint,pve,new_pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-        if ( new_n ) amortsched->final_pmt_opt_6 = rnd(_fi_calc_future_value(new_n - 1,nint,pve,pmt,CF,PF,disc,bep) * (1.0 + eint) - fv,prec);
-          else amortsched->final_pmt_opt_6 = 0.0;
-    } /* endif */
+  if (bep)
+  {
+    amortsched->final_pmt_opt_3 =
+      rnd (_fi_calc_future_value (n - 1, nint, pv, pmt, CF, PF, disc, bep) -
+	   (fv / (1.0 + eint)), prec);
+    amortsched->final_pmt_opt_4 =
+      rnd (_fi_calc_future_value (n - 1, nint, pve, pmt, CF, PF, disc, bep) -
+	   (fv / (1.0 + eint)), prec);
+    amortsched->final_pmt_opt_5 =
+      rnd (_fi_calc_future_value
+	   (n - 1, nint, pve, new_pmt, CF, PF, disc,
+	    bep) - (fv / (1.0 + eint)), prec);
+    if (new_n)
+      amortsched->final_pmt_opt_6 =
+	rnd (_fi_calc_future_value
+	     (new_n - 1, nint, pve, pmt, CF, PF, disc,
+	      bep) - (fv / (1.0 + eint)), prec);
+    else
+      amortsched->final_pmt_opt_6 = 0.0;
+  }
+  else
+  {
+    amortsched->final_pmt_opt_3 =
+      rnd (_fi_calc_future_value (n - 1, nint, pv, pmt, CF, PF, disc, bep) *
+	   (1.0 + eint) - fv, prec);
+    amortsched->final_pmt_opt_4 =
+      rnd (_fi_calc_future_value (n - 1, nint, pve, pmt, CF, PF, disc, bep) *
+	   (1.0 + eint) - fv, prec);
+    amortsched->final_pmt_opt_5 =
+      rnd (_fi_calc_future_value
+	   (n - 1, nint, pve, new_pmt, CF, PF, disc, bep) * (1.0 + eint) - fv,
+	   prec);
+    if (new_n)
+      amortsched->final_pmt_opt_6 =
+	rnd (_fi_calc_future_value
+	     (new_n - 1, nint, pve, pmt, CF, PF, disc,
+	      bep) * (1.0 + eint) - fv, prec);
+    else
+      amortsched->final_pmt_opt_6 = 0.0;
+  }				/* endif */
 
-    /* compute delayed interest
-     */
-    amortsched->delayed_int = pv - amortsched->pve;
+  /* compute delayed interest */
+  amortsched->delayed_int = pv - amortsched->pve;
 
-    return amortsched;
-} /* Amortization_init */
+  return amortsched;
+}				/* Amortization_init */
 
-amort_sched_ptr Amortization_Schedule(
-amort_sched_ptr amortsched)
+amort_sched_ptr
+Amortization_Schedule (amort_sched_ptr amortsched)
 {
-    unsigned           n = amortsched->n;
-    double             nint = amortsched->nint;
-    double             pv = amortsched->pv;
-    double             pmt = amortsched->pmt;
-    double             fv = amortsched->fv;
-    double             eint = amortsched->eint;
-    unsigned           CF = amortsched->CF;
-    unsigned           PF = amortsched->PF;
-    unsigned           disc = amortsched->disc;
-    unsigned           bep = amortsched->bep;
-    double             cpmt = 0;
-    double             final_pmt = 0;
-    double             delayed_int = amortsched->delayed_int;
-    char               summary = amortsched->summary;
-    unsigned           option = amortsched->option;
-    unsigned           yr_pmt = amortsched->yr_pmt;
-    unsigned           fv_case = amortsched->fv_case;
-    unsigned           prec = amortsched->prec;
-    unsigned           j,
-                       s,
-                       yr,
-                       per_cnt,
-                       pmt_cnt = 0,
-                       k = 0,
-                       sum_prt;
-
-    int                jj;
-
-    unsigned long      d;
-
-    double             yr_fv,
-                       sum_int,
-                       yr_int,
-                       prin,
-                       adv_pmt,
-                       pmt_int,
-                       hpv = 0.0;
-    yearly_summary_ptr yrly_sum;
-    amort_sched_yr_ptr amortyr;
-    sched_pmt_ptr      pmtsched = NULL;
-
-    sum_int = yr_int = 0.0;
-
-    switch ( option ) {
-        case 1:
-            amortsched->cpmt = cpmt = amortsched->cpmt1;
-            /* re-compute final payment without interest
-             */
-            amortsched->final_pmt = final_pmt = -pv - cpmt * (n - 1);
-            summary = (summary == 'y') ? 'x' : 'o';
-            break;
-        case 2:
-            amortsched->cpmt = cpmt = amortsched->cpmt2;
-            pv = amortsched->pve;
-            /* re-compute final payment without interest
-             */
-            amortsched->final_pmt = final_pmt = -pv - cpmt * (n - 1);
-            summary = (summary == 'y') ? 'x' : 'o';
-            break;
-        case 3:
-            delayed_int = 0.0;
-            amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_3;
-            break;
-        case 4:
-            pv = amortsched->pve;
-            amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_4;
-            break;
-        case 5:
-            pv = amortsched->pve;
-            pmt = amortsched->new_pmt;
-            amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_5;
-            break;
-        case 6:
-            n = amortsched->new_n;
-            pv = amortsched->pve;
-            amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_6;
-            break;
-    }  /* endswitch */
-
-    yr = amortsched->year_I;
-    sum_prt = TRUE;
-    switch ( summary ) {
-        case 'a':
-            /* variable advanced prepayment schedule.
-             * prepayment equals next period principal.
-             */
-            amortsched->schedule.first_yr =
-              amortyr                     = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-
-            d = pv;
-
-            for ( per_cnt = 0 , s = 1 , j = n ; pv != fv ; j -= 2 , per_cnt++ ) {
-                /* basic equation to compute interest this payment period
-                 */
-                pmt_int = -rnd((pv + (amortsched->bp * pmt)) * eint,prec);
-
-                /* sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-
-                /* sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-                /* compute principal paid this payment period and round to nearest cent
-                 */
-                if ( dabs(pmt) > dabs(pv) ) {
-                    prin = -pv;
-                    pmt = prin + pmt_int;
-                    adv_pmt = 0.0;
-                    pv = fv;
-                  } else {
-                    prin = rnd(pmt - pmt_int,prec);
-
-                    /* # compute remaining pv and round to nearest cent
-                     */
-                    pv = rnd(pv + prin,prec);
-
-                    /* # compute principal for next payment cycle and round to nearest cent
-                     */
-                    adv_pmt = rnd(pmt + (pv + (amortsched->bp * pmt)) * eint,prec);
-
-                    if ( dabs(pv) >= dabs(adv_pmt) ) {
-                        /*# remaining pv greater than advanced principal payment
-                         *# compute remaining pv and round to nearest cent
-                         */
-                        pv = rnd(pv + adv_pmt,prec);
-                      } else {
-                        /*# remaining pv less than advanced principal payment
-                         *# reduce advanced pricipla payment to remaining pv
-                         */
-                        adv_pmt = -pv;
-
-                        /*# and set remaining pv to fv
-                         */
-                        pv = fv;
-                    } /* ## endif   */
-                } /* # endif */
-
-                if ( sum_prt ) {
-                    jj = (j < yr_pmt) ? j + 1 : yr_pmt;
-                    amortyr->payments =
-                      pmtsched        = (sched_pmt_ptr)calloc(jj,sizeof(sched_pmt));
-                    pmt_cnt = 0;
-
-                    sum_prt = FALSE;
-                }  /* * endif */
-
-                pmtsched->period_num   = s++;
-                pmtsched->interest     = pmt_int;
-                pmtsched->principal    = prin;
-                pmtsched->advanced_pmt = adv_pmt;
-                pmtsched->total_pmt    = pmt + adv_pmt;
-                pmtsched->balance      = pv;
-                pmtsched++;
-                pmt_cnt++;
-
-                if ( !--yr_pmt ) {
-                    yr_pmt = PF;
-
-                    amortyr->year              = yr++;
-                    amortyr->interest_pd       = yr_int;
-                    amortyr->principal_pd      = pv - hpv;
-                    amortyr->yr_end_balance    = pv;
-                    amortyr->total_interest_pd = sum_int;
-                    amortyr->num_periods       = pmt_cnt;
-                    amortyr->next_yr           = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-                    amortyr                    = amortyr->next_yr;
-
-                    hpv = pv;
-                    yr_int = 0.0;
-                    sum_prt = TRUE;
-                }  /* endif */
-            }  /* endfor */
-
-            if ( dabs(pv) > 0.0 ) {
-                /* basic equation to compute interest this payment period
-                 */
-                pmt_int = -rnd((pv + (amortsched->bp * pmt)) * eint,prec);
-
-                /* sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-
-                /* sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-                /* compute principal paid this payment period and round to nearest cent
-                 */
-                prin = rnd(pmt - pmt_int,prec);
-                final_pmt = pmt;
-
-                /* compute remaining pv and round to nearest cent
-                 */
-                pv = rnd(pv + prin,prec);
-
-                /* Set advanced principal payment to remaining pv
-                 */
-                adv_pmt = -pv;
-                amortyr->final_pmt = final_pmt += adv_pmt;
-
-                /* and set remaining pv to fv
-                 */
-                pv = fv;
-
-                pmtsched->period_num   = s++;
-                pmtsched->interest     = pmt_int;
-                pmtsched->principal    = prin;
-                pmtsched->advanced_pmt = adv_pmt;
-                pmtsched->total_pmt    = final_pmt;
-                pmtsched->balance      = pv;
-
-                per_cnt++;
-                pmt_cnt++;
-            } /* endif */
-
-            if ( dabs(yr_int) > 0.0 ) {
-                amortyr->year          = yr++;
-                amortyr->interest_pd   = yr_int;
-                amortyr->principal_pd  = pv - hpv;
-                amortyr->total_interest_pd = sum_int;
-                amortyr->num_periods   = pmt_cnt;
-            } /* endif */
-
-            amortsched->total_periods = per_cnt;
-            break;
-        case 'f':
-            /* fixed prepaymet schedule
-             * prepayment specified by user
-             */
-            amortsched->schedule.first_yr =
-              amortyr                     = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-
-            d = pv;
-
-            /*  set advnaced payment
-             */
-            adv_pmt = amortsched->fixed_pmt;
-
-            for ( per_cnt =  0 , s = 1 , j = n ; j && (pv != fv) ; j-- , per_cnt++ ) {
-                /* basic equation to compute interest this payment period
-                 */
-                pmt_int = -rnd((pv + (amortsched->bp * pmt)) * eint,prec);
-                /*  sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-                /*  sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-                /* compute principal paid this payment period and round to nearest cent
-                 */
-                if ( dabs(pmt) > dabs(pv) ) {
-                    prin = -pv;
-                    pmt = prin + pmt_int;
-                    adv_pmt = 0.0;
-                    pv = 0.0;
-                  } else {
-                    prin = rnd(pmt - pmt_int,prec);
-
-                    /*  compute remaining pv and round to nearest cent
-                     */
-                    pv = rnd(pv + prin,prec);
-
-                    if ( dabs(pv) >= dabs(adv_pmt) ) {
-                        /* remaining pv greater than advanced principal payment
-                         * compute remaining pv and round to nearest cent
-                         */
-                        pv = rnd(pv + adv_pmt,prec);
-                      } else {
-                        /* remaining pv less than advanced principal payment
-                         * reduce advanced pricipal payment to remaining pv
-                         * and set remaining pv to fv
-                         */
-                        adv_pmt = -pv;
-                        pv = fv;
-                    } /*## endif */
-                } /* # endif */
-
-                if ( sum_prt ) {
-                    jj = (j < yr_pmt) ? j + 1 : yr_pmt;
-                    amortyr->payments =
-                      pmtsched        = (sched_pmt_ptr)calloc(jj,sizeof(sched_pmt));
-                    pmt_cnt = 0;
-
-                    sum_prt = FALSE;
-                  } else {
-                    (amortyr->num_periods)++;
-                } /* ## endif */
-
-                pmtsched->period_num = s++;
-                pmtsched->interest   = pmt_int;
-                pmtsched->principal  = prin;
-                pmtsched->advanced_pmt = adv_pmt;
-                pmtsched->total_pmt    = pmt + adv_pmt;
-                pmtsched->balance    = pv;
-                pmt_cnt++;
-                pmtsched++;
-
-                if ( !--yr_pmt ) {
-                    yr_pmt = PF;
-
-                    amortyr->year              = yr++;
-                    amortyr->interest_pd       = yr_int;
-                    amortyr->principal_pd      = pv - hpv;
-                    amortyr->yr_end_balance    = pv;
-                    amortyr->total_interest_pd = sum_int;
-                    amortyr->num_periods       = pmt_cnt;
-                    amortyr->next_yr           = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-                    amortyr                    = amortyr->next_yr;
-
-                    hpv = pv;
-                    yr_int = 0.0;
-                    sum_prt = TRUE;
-                } /* ## endif */
-            } /* ## endfor */
-
-            if ( pv != fv ) {
-                /* # basic equation to compute interest this payment period
-                 */
-                pmt_int = -rnd((pv + (amortsched->bp * pmt)) * eint,prec);
-
-                /* # sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-                /* # sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-                /* # compute principal paid this payment period and round to nearest cent
-                 */
-                prin = rnd(pmt - pmt_int,prec);
-                final_pmt = pmt;
-
-                /* # compute remaining pv and round to nearest cent
-                 */
-                pv = rnd(pv + prin,prec);
-
-                /* # Set advanced principal payment to remaining pv
-                 */
-                adv_pmt = -pv;
-                amortyr->final_pmt = final_pmt += adv_pmt;
-
-                /* # and set remaining pv to fv
-                 */
-                pv = fv;
-
-                pmtsched->period_num   = s++;
-                pmtsched->interest     = pmt_int;
-                pmtsched->principal    = prin;
-                pmtsched->advanced_pmt = adv_pmt;
-                pmtsched->total_pmt    = final_pmt;
-                pmtsched->balance      = pv;
-
-                per_cnt++;
-                pmt_cnt++;
-            } /* # endif */
-
-            if ( dabs(yr_int) > 0.0 ) {
-                amortyr->year          = yr++;
-                amortyr->interest_pd   = yr_int;
-                amortyr->principal_pd  = pv - hpv;
-                amortyr->total_interest_pd = sum_int;
-                amortyr->num_periods   = pmt_cnt;
-            } /* endif */
-
-            amortsched->total_periods = per_cnt;
-            break;
-        case 'o':
-            /* Constant payment to principal
-             * use constant payment equal to original pv divided by number of periods.
-             * constant payment to pricipal could be amount specified by user.
-             */
-            amortsched->schedule.first_yr =
-              amortyr                     = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-            amortsched->total_periods = n;
-
-            d = yr_pmt;
-            for ( s = 1 , j = n - 1 ; j ; j-- , k++ ) {
-                pmt_int = -rnd(pv * eint,prec);
-
-                /* sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-
-                /* sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-                pv = rnd(pv + cpmt,prec);
-
-                if ( sum_prt ) {
-                    jj = (j < yr_pmt) ? j + 1 : yr_pmt;
-                    amortyr->payments =
-                      pmtsched           = (sched_pmt_ptr)calloc(jj,sizeof(sched_pmt));
-                    amortyr->num_periods = jj;
-                    k = 0;
-
-                    sum_prt = FALSE;
-                } /* endif */
-
-                pmtsched->period_num = s++;
-                pmtsched->interest   = pmt_int;
-                pmtsched->total_pmt  = cpmt + pmt_int;
-                pmtsched->balance    = pv;
-                pmtsched++;
-
-                if ( !--yr_pmt ) {
-                    yr_pmt = PF;
-
-                    amortyr->year              = yr++;
-                    amortyr->interest_pd       = yr_int;
-                    amortyr->principal_pd      = d * cpmt;
-                    amortyr->yr_end_balance    = pv;
-                    amortyr->total_interest_pd = sum_int;
-                    amortyr->next_yr           = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-                    amortyr                    = amortyr->next_yr;
-
-                    d = PF;
-                    yr_int = 0.0;
-                    sum_prt = TRUE;
-                } /* endif */
-            } /* endfor */
-
-            if ( pv ){
-                pmt_int = -rnd(pv * eint,prec);
-
-                /* sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-
-                /* sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-				pmtsched->period_num = s++;
-                pmtsched->interest   = -pmt_int;
-                pmtsched->total_pmt  = -pv + pmt_int;
-                pmtsched->balance    = 0.0;
-
-                amortyr->final_pmt = -pv - pmt_int;
-            } /* endif */
-
-            if ( dabs(yr_int) > 0.0 ) {
-                amortyr->year              = yr++;
-                amortyr->interest_pd       = yr_int;
-                amortyr->principal_pd      = -pv + k * cpmt;
-                amortyr->total_interest_pd = sum_int;
-            } /* endif */
-            break;
-        case 'p':
-            /* normal amortization schedule
-             * interest, principal and balance per payment period
-             */
-            amortsched->schedule.first_yr =
-              amortyr                     = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-            amortsched->total_periods = n;
-
-            hpv = pv;
-            for ( s = 1 , j = n - 1 ; j ; j-- ) {
-                /* basic equation for computing interest paid in payment period
-                 */
-                pmt_int = -rnd((pv + (amortsched->bp * pmt)) * eint,prec);
-
-                /* sum yearly interest paid
-                 */
-                yr_int += pmt_int;
-
-                /* sum total interest paid
-                 */
-                sum_int += pmt_int;
-
-                /* compute principal paid this payment period
-                 */
-                prin = rnd(pmt - pmt_int,prec);
-
-                /* compute remaining pv and round to nearest cent
-                 */
-                pv = rnd(pv + prin,prec);
-
-                if ( sum_prt ) {
-                    jj = (j < yr_pmt) ? j + 1 : yr_pmt;
-                    amortyr->payments =
-                      pmtsched           = (sched_pmt_ptr)calloc(jj,sizeof(sched_pmt));
-                    amortyr->num_periods = jj;
-
-                    sum_prt = FALSE;
-                }  /* endif */
-
-                if ( fv_case  ) {
-                    pmtsched->period_num = s++;
-                    pmtsched->interest   = pmt_int;
-                    pmtsched->balance    = pv;
-                    pmtsched++;
-                  } else {
-                    pmtsched->period_num = s++;
-                    pmtsched->interest   = pmt_int;
-                    pmtsched->principal  = prin;
-                    pmtsched->balance    = pv;
-                    pmtsched++;
-                }  /* endif */
-
-                if ( !--yr_pmt ) {
-                    yr_pmt = PF;
-
-                    amortyr->year              = yr++;
-                    amortyr->interest_pd       = yr_int;
-                    if ( !fv_case ) {
-                        amortyr->principal_pd       = pv - hpv;
-                    } /* endif */
-                    amortyr->yr_end_balance    = pv;
-                    amortyr->total_interest_pd = sum_int;
-                    amortyr->next_yr           = (amort_sched_yr_ptr)calloc(1,sizeof(amort_sched_yr));
-                    amortyr                    = amortyr->next_yr;
-
-                    hpv = pv;
-                    yr_int = 0.0;
-                    sum_prt = TRUE;
-                }  /* * endif */
-            }  /* * endfor */
-
-            /* determine if payment due at beginning or end of period
-             * in order to correctly compute final payment, interest and principal
-             */
-            if ( bep ) {
-                /* paying remainder at beginning of period
-                 * compute final payment
-                 */
-                final_pmt = -pv - fv/(1 + eint);
-
-                /* then compute interest paid with final final payment
-                 */
-                pmt_int = -rnd((pv + final_pmt) * eint,prec);
-
-                /* then compute the principal paid
-                 */
-                prin = final_pmt + pmt_int;
-              } else {
-                /* basic equation for computing interest paid in payment period for payment
-                 * at end of period
-                 */
-                pmt_int = -rnd(pv * eint,prec);
-
-                /* compute principal paid this payment period
-                 */
-                prin = -pv;
-
-                /* compute the final payment
-                 * note the final payment may be computed either of two ways
-                 * both are equivalent
-                 */
-                final_pmt = prin + pmt_int;
-            }  /* * endif   */
-
-            pv = -fv;
-
-            /* sum yearly interest paid
-             */
-            yr_int += pmt_int;
-
-            /* sum total interest paid
-             */
-            sum_int += pmt_int;
-
-            if ( sum_prt ) {
-             	amortyr->payments =
-              	  pmtsched        = (sched_pmt_ptr)calloc(1,sizeof(sched_pmt));
-            	amortyr->num_periods = 1;
-             }  /* endif */
-
-            amortyr->final_pmt = final_pmt;
-
-            if ( fv_case ) {
-                pmtsched->period_num = s++;
-                pmtsched->interest   = pmt_int;
-                pmtsched->balance    = pv;
-              } else {
-                pmtsched->period_num = s++;
-                pmtsched->interest   = pmt_int;
-                pmtsched->principal  = prin;
-                pmtsched->balance    = pv;
-            }  /* endif */
-
-            if ( dabs(yr_int) > 0.0 ) {
-                amortyr->year              = yr++;
-                amortyr->interest_pd       = yr_int;
-                amortyr->total_interest_pd = sum_int;
-                if ( !bep ) {
-                    amortyr->principal_pd       = -hpv;
-                } /* endif */
-            } /* endif */
-
-            break;
-        case 'x':
-            /* constant payment to principal - annual summary
-             */
-            /* compute number of years to summarize
-             */
-            j = n / PF;
-            if ( yr_pmt < PF ) j++;
-            amortsched->total_periods = j;
-            amortsched->schedule.summary =
-              yrly_sum                   = (yearly_summary_ptr)calloc(j,sizeof(yearly_summary));
-
-            jj = 0;
-            for ( j = n , sum_prt = 0 ; j > 0 ; j -= yr_pmt , yr_pmt = PF , sum_prt++ ) {
-                if ( j <= PF ) {
-                    s = jj + j;
-                    yr_pmt = j;
-                    yr_fv = rnd(pv + cpmt * (s - 1),prec) + final_pmt;
-                  } else {
-                    s = jj + yr_pmt;
-                    yr_fv = rnd(pv + cpmt * s,prec);
-                } /* endif */
-                prin = -eint * jj * (pv + (cpmt * (jj - 1)/2.0));
-                yr_int = -eint * s * (pv + (cpmt * (s - 1)/2.0));
-                yr_int = rnd(yr_int - prin,prec);
-                jj += yr_pmt;
-
-                sum_int += yr_int;
-
-                yrly_sum[sum_prt].year        = yr++;
-                yrly_sum[sum_prt].interest    = yr_int;
-                yrly_sum[sum_prt].end_balance = yr_fv;
-            } /* endfor */
-
-            break;
-        case 'y':
-            /* normal amortization - annual summary
-             */
-            /* compute number of years to summarize
-             */
-            j = n / PF;
-            if ( yr_pmt < PF ) j++;
-            if ( n > (j * PF) ) j++;
-            amortsched->total_periods = j;
-            amortsched->schedule.summary =
-              yrly_sum                   = (yearly_summary_ptr)calloc(j,sizeof(yearly_summary));
-
-            hpv = pv;
-
-            for ( jj = n , j = 0 ; jj > 0 ; jj -= yr_pmt , yr_pmt = PF , j++ ) {
-                if ( jj <= PF ) {
-                    yr_fv = fv;
-                    yr_int = rnd(((jj - 1) * pmt) + hpv + final_pmt,prec);
-                  } else {
-                    yr_fv = -rnd(_fi_calc_future_value(yr_pmt,nint,hpv,pmt,CF,PF,disc,bep),prec);
-                    yr_int = rnd((yr_pmt * pmt) + hpv - yr_fv,prec);
-                }  /* * endif */
-
-                sum_int += yr_int;
-
-                yrly_sum[j].year        = yr++;
-                yrly_sum[j].interest    = yr_int;
-                yrly_sum[j].end_balance = yr_fv;
-                hpv = yr_fv;
-            }  /* * endfor */
-
-            break;
-    }  /* * endswitch */
-
-    amortsched->total_interest = sum_int;
-
-    return amortsched;
-} /* Amortization_Schedule */
-
-/* function to free dynamically allocated memory used for amortization schedule
- */
-void            Amortization_free(
-amort_sched_ptr amortsched)
+  unsigned n = amortsched->n;
+  double nint = amortsched->nint;
+  double pv = amortsched->pv;
+  double pmt = amortsched->pmt;
+  double fv = amortsched->fv;
+  double eint = amortsched->eint;
+  unsigned CF = amortsched->CF;
+  unsigned PF = amortsched->PF;
+  unsigned disc = amortsched->disc;
+  unsigned bep = amortsched->bep;
+  double cpmt = 0;
+  double final_pmt = 0;
+  double delayed_int = amortsched->delayed_int;
+  char summary = amortsched->summary;
+  unsigned option = amortsched->option;
+  unsigned yr_pmt = amortsched->yr_pmt;
+  unsigned fv_case = amortsched->fv_case;
+  unsigned prec = amortsched->prec;
+  unsigned j, s, yr, per_cnt, pmt_cnt = 0, k = 0, sum_prt;
+
+  int jj;
+
+  unsigned long d;
+
+  double yr_fv, sum_int, yr_int, prin, adv_pmt, pmt_int, hpv = 0.0;
+  yearly_summary_ptr yrly_sum;
+  amort_sched_yr_ptr amortyr;
+  sched_pmt_ptr pmtsched = NULL;
+
+  sum_int = yr_int = 0.0;
+
+  switch (option)
+  {
+  case 1:
+    amortsched->cpmt = cpmt = amortsched->cpmt1;
+    /* re-compute final payment without interest
+     */
+    amortsched->final_pmt = final_pmt = -pv - cpmt * (n - 1);
+    summary = (summary == 'y') ? 'x' : 'o';
+    break;
+  case 2:
+    amortsched->cpmt = cpmt = amortsched->cpmt2;
+    pv = amortsched->pve;
+    /* re-compute final payment without interest
+     */
+    amortsched->final_pmt = final_pmt = -pv - cpmt * (n - 1);
+    summary = (summary == 'y') ? 'x' : 'o';
+    break;
+  case 3:
+    delayed_int = 0.0;
+    amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_3;
+    break;
+  case 4:
+    pv = amortsched->pve;
+    amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_4;
+    break;
+  case 5:
+    pv = amortsched->pve;
+    pmt = amortsched->new_pmt;
+    amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_5;
+    break;
+  case 6:
+    n = amortsched->new_n;
+    pv = amortsched->pve;
+    amortsched->final_pmt = final_pmt = amortsched->final_pmt_opt_6;
+    break;
+  }				/* endswitch */
+
+  yr = amortsched->year_I;
+  sum_prt = TRUE;
+  switch (summary)
+  {
+  case 'a':
+    /* variable advanced prepayment schedule.  prepayment equals next
+     * period principal.  */
+    amortsched->schedule.first_yr =
+      amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+
+    d = pv;
+
+    for (per_cnt = 0, s = 1, j = n; pv != fv; j -= 2, per_cnt++)
+    {
+      /* basic equation to compute interest this payment period */
+      pmt_int = -rnd ((pv + (amortsched->bp * pmt)) * eint, prec);
+
+      /* sum yearly interest paid */
+      yr_int += pmt_int;
+
+      /* sum total interest paid */
+      sum_int += pmt_int;
+
+      /* compute principal paid this payment period and round to
+       nearest cent */
+      if (dabs (pmt) > dabs (pv))
+      {
+	prin = -pv;
+	pmt = prin + pmt_int;
+	adv_pmt = 0.0;
+	pv = fv;
+      }
+      else
+      {
+	prin = rnd (pmt - pmt_int, prec);
+
+	/* compute remaining pv and round to nearest cent */
+	pv = rnd (pv + prin, prec);
+
+	/* compute principal for next payment cycle and round to
+	 nearest cent */
+	adv_pmt = rnd (pmt + (pv + (amortsched->bp * pmt)) * eint, prec);
+
+	if (dabs (pv) >= dabs (adv_pmt))
+	{
+	  /* remaining pv greater than advanced principal payment
+	   * compute remaining pv and round to nearest cent */
+	  pv = rnd (pv + adv_pmt, prec);
+	}
+	else
+	{
+	  /* remaining pv less than advanced principal payment reduce
+	   * advanced pricipla payment to remaining pv */
+	  adv_pmt = -pv;
+
+	  /* and set remaining pv to fv */
+	  pv = fv;
+	}			/* ## endif   */
+      }				/* # endif */
+
+      if (sum_prt)
+      {
+	jj = (j < yr_pmt) ? j + 1 : yr_pmt;
+	amortyr->payments =
+	  pmtsched = (sched_pmt_ptr) calloc (jj, sizeof (sched_pmt));
+	pmt_cnt = 0;
+
+	sum_prt = FALSE;
+      }				/* endif */
+
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->principal = prin;
+      pmtsched->advanced_pmt = adv_pmt;
+      pmtsched->total_pmt = pmt + adv_pmt;
+      pmtsched->balance = pv;
+      pmtsched++;
+      pmt_cnt++;
+
+      if (!--yr_pmt)
+      {
+	yr_pmt = PF;
+
+	amortyr->year = yr++;
+	amortyr->interest_pd = yr_int;
+	amortyr->principal_pd = pv - hpv;
+	amortyr->yr_end_balance = pv;
+	amortyr->total_interest_pd = sum_int;
+	amortyr->num_periods = pmt_cnt;
+	amortyr->next_yr =
+	  (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+	amortyr = amortyr->next_yr;
+
+	hpv = pv;
+	yr_int = 0.0;
+	sum_prt = TRUE;
+      }				/* endif */
+    }				/* endfor */
+
+    if (dabs (pv) > 0.0)
+    {
+      /* basic equation to compute interest this payment period */
+      pmt_int = -rnd ((pv + (amortsched->bp * pmt)) * eint, prec);
+
+      /* sum yearly interest paid */
+      yr_int += pmt_int;
+
+      /* sum total interest paid */
+      sum_int += pmt_int;
+
+      /* compute principal paid this payment period and round to
+       nearest cent */
+      prin = rnd (pmt - pmt_int, prec);
+      final_pmt = pmt;
+
+      /* compute remaining pv and round to nearest cent */
+      pv = rnd (pv + prin, prec);
+
+      /* Set advanced principal payment to remaining pv */
+      adv_pmt = -pv;
+      amortyr->final_pmt = final_pmt += adv_pmt;
+
+      /* and set remaining pv to fv */
+      pv = fv;
+
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->principal = prin;
+      pmtsched->advanced_pmt = adv_pmt;
+      pmtsched->total_pmt = final_pmt;
+      pmtsched->balance = pv;
+
+      per_cnt++;
+      pmt_cnt++;
+    }				/* endif */
+
+    if (dabs (yr_int) > 0.0)
+    {
+      amortyr->year = yr++;
+      amortyr->interest_pd = yr_int;
+      amortyr->principal_pd = pv - hpv;
+      amortyr->total_interest_pd = sum_int;
+      amortyr->num_periods = pmt_cnt;
+    }				/* endif */
+
+    amortsched->total_periods = per_cnt;
+    break;
+  case 'f':
+    /* fixed prepaymet schedule prepayment specified by user */
+    amortsched->schedule.first_yr =
+      amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+
+    d = pv;
+
+    /*  set advnaced payment */
+    adv_pmt = amortsched->fixed_pmt;
+
+    for (per_cnt = 0, s = 1, j = n; j && (pv != fv); j--, per_cnt++)
+    {
+      /* basic equation to compute interest this payment period */
+      pmt_int = -rnd ((pv + (amortsched->bp * pmt)) * eint, prec);
+      /*  sum yearly interest paid
+       */
+      yr_int += pmt_int;
+      /*  sum total interest paid */
+      sum_int += pmt_int;
+
+      /* compute principal paid this payment period and round to
+       nearest cent */
+      if (dabs (pmt) > dabs (pv))
+      {
+	prin = -pv;
+	pmt = prin + pmt_int;
+	adv_pmt = 0.0;
+	pv = 0.0;
+      }
+      else
+      {
+	prin = rnd (pmt - pmt_int, prec);
+
+	/*  compute remaining pv and round to nearest cent */
+	pv = rnd (pv + prin, prec);
+
+	if (dabs (pv) >= dabs (adv_pmt))
+	{
+	  /* remaining pv greater than advanced principal payment
+	   * compute remaining pv and round to nearest cent */
+	  pv = rnd (pv + adv_pmt, prec);
+	}
+	else
+	{
+	  /* remaining pv less than advanced principal payment reduce
+	   * advanced pricipal payment to remaining pv and set
+	   * remaining pv to fv */
+	  adv_pmt = -pv;
+	  pv = fv;
+	}			/*## endif */
+      }				/* # endif */
+
+      if (sum_prt)
+      {
+	jj = (j < yr_pmt) ? j + 1 : yr_pmt;
+	amortyr->payments =
+	  pmtsched = (sched_pmt_ptr) calloc (jj, sizeof (sched_pmt));
+	pmt_cnt = 0;
+
+	sum_prt = FALSE;
+      }
+      else
+      {
+	(amortyr->num_periods)++;
+      }				/* ## endif */
+
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->principal = prin;
+      pmtsched->advanced_pmt = adv_pmt;
+      pmtsched->total_pmt = pmt + adv_pmt;
+      pmtsched->balance = pv;
+      pmt_cnt++;
+      pmtsched++;
+
+      if (!--yr_pmt)
+      {
+	yr_pmt = PF;
+
+	amortyr->year = yr++;
+	amortyr->interest_pd = yr_int;
+	amortyr->principal_pd = pv - hpv;
+	amortyr->yr_end_balance = pv;
+	amortyr->total_interest_pd = sum_int;
+	amortyr->num_periods = pmt_cnt;
+	amortyr->next_yr =
+	  (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+	amortyr = amortyr->next_yr;
+
+	hpv = pv;
+	yr_int = 0.0;
+	sum_prt = TRUE;
+      }				/* ## endif */
+    }				/* ## endfor */
+
+    if (pv != fv)
+    {
+      /* # basic equation to compute interest this payment period */
+      pmt_int = -rnd ((pv + (amortsched->bp * pmt)) * eint, prec);
+
+      /* # sum yearly interest paid */
+      yr_int += pmt_int;
+      /* # sum total interest paid */
+      sum_int += pmt_int;
+
+      /* # compute principal paid this payment period and round to
+       nearest cent */
+      prin = rnd (pmt - pmt_int, prec);
+      final_pmt = pmt;
+
+      /* # compute remaining pv and round to nearest cent */
+      pv = rnd (pv + prin, prec);
+
+      /* # Set advanced principal payment to remaining pv */
+      adv_pmt = -pv;
+      amortyr->final_pmt = final_pmt += adv_pmt;
+
+      /* # and set remaining pv to fv */
+      pv = fv;
+
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->principal = prin;
+      pmtsched->advanced_pmt = adv_pmt;
+      pmtsched->total_pmt = final_pmt;
+      pmtsched->balance = pv;
+
+      per_cnt++;
+      pmt_cnt++;
+    }				/* # endif */
+
+    if (dabs (yr_int) > 0.0)
+    {
+      amortyr->year = yr++;
+      amortyr->interest_pd = yr_int;
+      amortyr->principal_pd = pv - hpv;
+      amortyr->total_interest_pd = sum_int;
+      amortyr->num_periods = pmt_cnt;
+    }				/* endif */
+
+    amortsched->total_periods = per_cnt;
+    break;
+  case 'o':
+    /* Constant payment to principal use constant payment equal to
+     * original pv divided by number of periods.  constant payment to
+     * pricipal could be amount specified by user.  */
+    amortsched->schedule.first_yr =
+      amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+    amortsched->total_periods = n;
+
+    d = yr_pmt;
+    for (s = 1, j = n - 1; j; j--, k++)
+    {
+      pmt_int = -rnd (pv * eint, prec);
+
+      /* sum yearly interest paid */
+      yr_int += pmt_int;
+
+      /* sum total interest paid */
+      sum_int += pmt_int;
+
+      pv = rnd (pv + cpmt, prec);
+
+      if (sum_prt)
+      {
+	jj = (j < yr_pmt) ? j + 1 : yr_pmt;
+	amortyr->payments =
+	  pmtsched = (sched_pmt_ptr) calloc (jj, sizeof (sched_pmt));
+	amortyr->num_periods = jj;
+	k = 0;
+
+	sum_prt = FALSE;
+      }				/* endif */
+
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->total_pmt = cpmt + pmt_int;
+      pmtsched->balance = pv;
+      pmtsched++;
+
+      if (!--yr_pmt)
+      {
+	yr_pmt = PF;
+
+	amortyr->year = yr++;
+	amortyr->interest_pd = yr_int;
+	amortyr->principal_pd = d * cpmt;
+	amortyr->yr_end_balance = pv;
+	amortyr->total_interest_pd = sum_int;
+	amortyr->next_yr =
+	  (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+	amortyr = amortyr->next_yr;
+
+	d = PF;
+	yr_int = 0.0;
+	sum_prt = TRUE;
+      }				/* endif */
+    }				/* endfor */
+
+    if (pv)
+    {
+      pmt_int = -rnd (pv * eint, prec);
+
+      /* sum yearly interest paid */
+      yr_int += pmt_int;
+
+      /* sum total interest paid */
+      sum_int += pmt_int;
+
+      pmtsched->period_num = s++;
+      pmtsched->interest = -pmt_int;
+      pmtsched->total_pmt = -pv + pmt_int;
+      pmtsched->balance = 0.0;
+
+      amortyr->final_pmt = -pv - pmt_int;
+    }				/* endif */
+
+    if (dabs (yr_int) > 0.0)
+    {
+      amortyr->year = yr++;
+      amortyr->interest_pd = yr_int;
+      amortyr->principal_pd = -pv + k * cpmt;
+      amortyr->total_interest_pd = sum_int;
+    }				/* endif */
+    break;
+  case 'p':
+    /* normal amortization schedule interest, principal and balance
+     * per payment period */
+    amortsched->schedule.first_yr =
+      amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+    amortsched->total_periods = n;
+
+    hpv = pv;
+    for (s = 1, j = n - 1; j; j--)
+    {
+      /* basic equation for computing interest paid in payment period */
+      pmt_int = -rnd ((pv + (amortsched->bp * pmt)) * eint, prec);
+
+      /* sum yearly interest paid */
+      yr_int += pmt_int;
+
+      /* sum total interest paid */
+      sum_int += pmt_int;
+
+      /* compute principal paid this payment period */
+      prin = rnd (pmt - pmt_int, prec);
+
+      /* compute remaining pv and round to nearest cent */
+      pv = rnd (pv + prin, prec);
+
+      if (sum_prt)
+      {
+	jj = (j < yr_pmt) ? j + 1 : yr_pmt;
+	amortyr->payments =
+	  pmtsched = (sched_pmt_ptr) calloc (jj, sizeof (sched_pmt));
+	amortyr->num_periods = jj;
+
+	sum_prt = FALSE;
+      }				/* endif */
+
+      if (fv_case)
+      {
+	pmtsched->period_num = s++;
+	pmtsched->interest = pmt_int;
+	pmtsched->balance = pv;
+	pmtsched++;
+      }
+      else
+      {
+	pmtsched->period_num = s++;
+	pmtsched->interest = pmt_int;
+	pmtsched->principal = prin;
+	pmtsched->balance = pv;
+	pmtsched++;
+      }				/* endif */
+
+      if (!--yr_pmt)
+      {
+	yr_pmt = PF;
+
+	amortyr->year = yr++;
+	amortyr->interest_pd = yr_int;
+	if (!fv_case)
+	{
+	  amortyr->principal_pd = pv - hpv;
+	}			/* endif */
+	amortyr->yr_end_balance = pv;
+	amortyr->total_interest_pd = sum_int;
+	amortyr->next_yr =
+	  (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
+	amortyr = amortyr->next_yr;
+
+	hpv = pv;
+	yr_int = 0.0;
+	sum_prt = TRUE;
+      }				/* * endif */
+    }				/* * endfor */
+
+    /* determine if payment due at beginning or end of period in order
+     * to correctly compute final payment, interest and principal */
+    if (bep)
+    {
+      /* paying remainder at beginning of period compute final payment */
+      final_pmt = -pv - fv / (1 + eint);
+
+      /* then compute interest paid with final final payment */
+      pmt_int = -rnd ((pv + final_pmt) * eint, prec);
+
+      /* then compute the principal paid */
+      prin = final_pmt + pmt_int;
+    }
+    else
+    {
+      /* basic equation for computing interest paid in payment period
+       * for payment at end of period */
+      pmt_int = -rnd (pv * eint, prec);
+
+      /* compute principal paid this payment period */
+      prin = -pv;
+
+      /* compute the final payment note the final payment may be
+       * computed either of two ways both are equivalent */
+      final_pmt = prin + pmt_int;
+    }				/* * endif   */
+
+    pv = -fv;
+
+    /* sum yearly interest paid */
+    yr_int += pmt_int;
+
+    /* sum total interest paid */
+    sum_int += pmt_int;
+
+    if (sum_prt)
+    {
+      amortyr->payments =
+	pmtsched = (sched_pmt_ptr) calloc (1, sizeof (sched_pmt));
+      amortyr->num_periods = 1;
+    }				/* endif */
+
+    amortyr->final_pmt = final_pmt;
+
+    if (fv_case)
+    {
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->balance = pv;
+    }
+    else
+    {
+      pmtsched->period_num = s++;
+      pmtsched->interest = pmt_int;
+      pmtsched->principal = prin;
+      pmtsched->balance = pv;
+    }				/* endif */
+
+    if (dabs (yr_int) > 0.0)
+    {
+      amortyr->year = yr++;
+      amortyr->interest_pd = yr_int;
+      amortyr->total_interest_pd = sum_int;
+      if (!bep)
+      {
+	amortyr->principal_pd = -hpv;
+      }				/* endif */
+    }				/* endif */
+
+    break;
+  case 'x':
+    /* constant payment to principal - annual summary */
+    /* compute number of years to summarize */
+    j = n / PF;
+    if (yr_pmt < PF)
+      j++;
+    amortsched->total_periods = j;
+    amortsched->schedule.summary =
+      yrly_sum = (yearly_summary_ptr) calloc (j, sizeof (yearly_summary));
+
+    jj = 0;
+    for (j = n, sum_prt = 0; j > 0; j -= yr_pmt, yr_pmt = PF, sum_prt++)
+    {
+      if (j <= PF)
+      {
+	s = jj + j;
+	yr_pmt = j;
+	yr_fv = rnd (pv + cpmt * (s - 1), prec) + final_pmt;
+      }
+      else
+      {
+	s = jj + yr_pmt;
+	yr_fv = rnd (pv + cpmt * s, prec);
+      }				/* endif */
+      prin = -eint * jj * (pv + (cpmt * (jj - 1) / 2.0));
+      yr_int = -eint * s * (pv + (cpmt * (s - 1) / 2.0));
+      yr_int = rnd (yr_int - prin, prec);
+      jj += yr_pmt;
+
+      sum_int += yr_int;
+
+      yrly_sum[sum_prt].year = yr++;
+      yrly_sum[sum_prt].interest = yr_int;
+      yrly_sum[sum_prt].end_balance = yr_fv;
+    }				/* endfor */
+
+    break;
+  case 'y':
+    /* normal amortization - annual summary */
+    /* compute number of years to summarize */
+    j = n / PF;
+    if (yr_pmt < PF)
+      j++;
+    if (n > (j * PF))
+      j++;
+    amortsched->total_periods = j;
+    amortsched->schedule.summary =
+      yrly_sum = (yearly_summary_ptr) calloc (j, sizeof (yearly_summary));
+
+    hpv = pv;
+
+    for (jj = n, j = 0; jj > 0; jj -= yr_pmt, yr_pmt = PF, j++)
+    {
+      if (jj <= PF)
+      {
+	yr_fv = fv;
+	yr_int = rnd (((jj - 1) * pmt) + hpv + final_pmt, prec);
+      }
+      else
+      {
+	yr_fv =
+	  -rnd (_fi_calc_future_value
+		(yr_pmt, nint, hpv, pmt, CF, PF, disc, bep), prec);
+	yr_int = rnd ((yr_pmt * pmt) + hpv - yr_fv, prec);
+      }				/* * endif */
+
+      sum_int += yr_int;
+
+      yrly_sum[j].year = yr++;
+      yrly_sum[j].interest = yr_int;
+      yrly_sum[j].end_balance = yr_fv;
+      hpv = yr_fv;
+    }				/* * endfor */
+
+    break;
+  }				/* * endswitch */
+
+  amortsched->total_interest = sum_int;
+
+  return amortsched;
+}				/* Amortization_Schedule */
+
+/* function to free dynamically allocated memory used for amortization
+   schedule */
+void
+Amortization_free (amort_sched_ptr amortsched)
 {
-	amort_sched_yr_ptr  amortyr,
-	                    prst_yr;
+  amort_sched_yr_ptr amortyr, prst_yr;
 
-    switch ( amortsched->summary ) {
-        case 'a':
-        case 'f':
-        case 'o':
-        case 'p':
-            for ( amortyr = amortsched->schedule.first_yr ; amortyr ; amortyr = prst_yr ) {
-                if ( amortyr->payments ) free(amortyr->payments);
-                prst_yr = amortyr->next_yr;
-                free(amortyr);
-            } /* endfor */
-            break;
-        case 'y':
-            free(amortsched->schedule.summary);
-            break;
-    } /* endswitch */
+  switch (amortsched->summary)
+  {
+  case 'a':
+  case 'f':
+  case 'o':
+  case 'p':
+    for (amortyr = amortsched->schedule.first_yr; amortyr; amortyr = prst_yr)
+    {
+      if (amortyr->payments)
+	free (amortyr->payments);
+      prst_yr = amortyr->next_yr;
+      free (amortyr);
+    }				/* endfor */
+    break;
+  case 'y':
+    free (amortsched->schedule.summary);
+    break;
+  }				/* endswitch */
 
-    amortsched->schedule.first_yr = NULL;
-} /* amort_free */
+  amortsched->schedule.first_yr = NULL;
+}				/* amort_free */

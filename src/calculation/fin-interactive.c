@@ -475,7 +475,7 @@ int             main(int argc, char **argv, char **env)
 			        	        stdout);
     				break;
     			case 'v':
-    			    for ( value_list = get_vars(parse_env) ; value_list ; value_list = value_list->next_var ) {
+    			    for ( value_list = parser_get_vars(parse_env) ; value_list ; value_list = value_list->next_var ) {
     			        printf("%s: ",value_list->variable_name);
     			        nval = (numeric_ptr)(value_list->value);
     			        switch ( nval->type ) {

@@ -140,37 +140,41 @@ gnc_xfer_dialog_create_tree_frame(gchar *title,
 }
 
 
+static void
+gnc_parse_error_dialog (XferDialog *xferData)
+{
+  const char *error_string;
+  char * error_phrase;
+
+  error_string = gnc_exp_parser_error_string ();
+  if (error_string == NULL)
+    error_string = "";
+
+  error_phrase = g_strdup_printf(ERROR_IN_AMOUNT, error_string);
+
+  gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), error_phrase);
+
+  g_free(error_phrase);
+}
+
+
 static gboolean
 gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
-  GtkEntry *entry = GTK_ENTRY(widget);
   XferDialog *xferData = data;
-  Account *account;
-  const char *new_string;
   const char *currency;
-  const char *string;
-  double value;
+  Account *account;
 
   account = gnc_account_tree_get_current_account(xferData->from);
   if (account == NULL)
     account = gnc_account_tree_get_current_account(xferData->to);
 
-  string = gtk_entry_get_text(entry);
-
-  if ((string == NULL) || (*string == 0))
-    return FALSE;
-
-  value = 0.0;
-  xaccParseAmount(string, TRUE, &value, NULL);
-
   currency = xaccAccountGetCurrency(account);
 
-  new_string = xaccPrintAmount(value, PRTSEP, currency);
+  gnc_amount_edit_set_currency (GNC_AMOUNT_EDIT (xferData->amount_edit),
+                                currency);
 
-  if (safe_strcmp(string, new_string) == 0)
-    return FALSE;
-
-  gtk_entry_set_text(entry, new_string);
+  gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
 
   return FALSE;
 }
@@ -329,18 +333,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
   {
-    const char *error_string;
-    char * error_phrase;
-
-    error_string = gnc_exp_parser_error_string ();
-    if (error_string == NULL)
-      error_string = "";
-
-    error_phrase = g_strdup_printf(ERROR_IN_AMOUNT, error_string);
-
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), error_phrase);
-
-    g_free(error_phrase);
+    gnc_parse_error_dialog (xferData);
+    return;
   }
 
   amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));

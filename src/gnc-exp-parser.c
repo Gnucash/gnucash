@@ -366,7 +366,7 @@ gnc_exp_parser_parse (const char * expression, double *value_p,
 
   exit_parser (pe);
 
-  return (error_loc == NULL);
+  return last_error == PARSER_NO_ERROR;
 }
 
 const char *
@@ -387,5 +387,7 @@ gnc_exp_parser_error_string (void)
       return PARSER_UNDEFINED_CHARACTER;
     case NOT_A_VARIABLE:
       return PARSER_NOT_A_VARIABLE;
+    case PARSER_OUT_OF_MEMORY:
+      return PARSER_OUT_OF_MEMORY_STR;
   }
 }
