@@ -67,7 +67,7 @@
 	<para>Support for <emphasis><link linkend="xacc-currencyhandling">multiple
 	      currencies</link></emphasis> and <emphasis>currency trading accounts.
 	  </emphasis>
-	  (partial, still broken). 
+	  (partial, still limited). 
 	  Bank accounts may be established in different
 	  currencies, and trades at varying exchange rates may be
 	  made, in much the same way stocks trade at varying

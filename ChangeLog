@@ -1,4 +1,14 @@
+2001-05-25  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-about.sgml: fix warnings
+
+	* doc/sgml/C/xacc-quickstart.sgml: fix warnings
+
 2001-05-24  Dave Peticolas  <dave@krondo.com>
+
+	* doc/sgml/C/xacc-features.sgml: fix docs
+
+	* doc/sgml/C/xacc-account-summary.sgml: fix spelling
 
 	* src/gnome/new-user-funs.c (gnc_ui_show_new_user_choice_window):
 	jump to new user quickstart help when appropriate

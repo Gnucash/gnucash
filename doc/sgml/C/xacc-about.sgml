@@ -14,10 +14,12 @@ To get straight to work recording your finances, try the
 For more information about the many features that GnuCash
 offers, have a look at the <link linkend="xacc-features">Features
 </link> page.
+</para>
+</sect1>
 
 <sect1 id="xacc-versioning">
 <title>Versioning</title>
-<para> </para>
+
 <para>The versioning scheme for GnuCash parallels that of the
     Linux kernel, where "even" sub-versions indicate versions that
     are intended to be stable, only seeing maintenance to fix bugs,

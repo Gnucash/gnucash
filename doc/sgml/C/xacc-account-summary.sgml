@@ -39,7 +39,7 @@ purposes.
 <para>If this option is selected, the individual balances for
 parent (non-leaf) accounts are shown.  Many people do not use
 parent accounts for transactions and thus this balance is not
-usefu.</para>
+useful.</para>
 <listitem><para>Show subtotals</para>
 <para>Show totals for groups of accounts including a parent and 
 all their children, as well as by account type.</para>
