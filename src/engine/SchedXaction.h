@@ -31,7 +31,7 @@
 #include "FreqSpec.h"
 #include "date.h"
 #include "kvp_frame.h"
-#include "gnc-book.h"
+#include "gnc-engine.h"
 
 /* 
  * #defines for kvp_frame strings
@@ -53,7 +53,7 @@ typedef struct gncp_SchedXaction SchedXaction;
 /**
  * Creates and initializes a scheduled transaction.
  **/
-SchedXaction *xaccSchedXactionMalloc(GNCSession *session);
+SchedXaction *xaccSchedXactionMalloc(GNCBook *book);
 
 /*
  * returns true if the scheduled transaction is dirty and needs to
@@ -197,6 +197,6 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
  * the edit dialog doesn't use this mechanism.  Maybe it should
  */
 void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                      GNCSession *session);
+                                      GNCBook *book);
 
 #endif /* XACC_SCHEDXACTION_H */

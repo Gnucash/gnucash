@@ -27,14 +27,14 @@
 #include <string.h>
 
 #include "FreqSpec.h"
-#include "GNCIdP.h"
+#include "GNCId.h"
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
-#include "TransactionP.h"
 #include "date.h"
+#include "gnc-book-p.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-session-p.h"
 #include "guid.h"
 #include "messages.h"
 
@@ -47,19 +47,16 @@ void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
+xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
 {
-        GNCBook             *book;
         AccountGroup        *ag;
         char                *name;
 
-        sx->entity_table = gnc_session_get_entity_table (session);
+        sx->entity_table = gnc_book_get_entity_table (book);
 
-        sx->freq = xaccFreqSpecMalloc(session);
+        sx->freq = xaccFreqSpecMalloc(book);
 
-        book = gnc_session_get_book (session);
-
-        xaccGUIDNew( &sx->guid, session );
+        xaccGUIDNew( &sx->guid, book );
         xaccStoreEntity( sx->entity_table, sx,
                          &sx->guid, GNC_ID_SCHEDXACTION );
         g_date_clear( &sx->last_date, 1 );
@@ -75,7 +72,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
 	sx->dirty = TRUE;
 
         /* create a new template account for our splits */
-        sx->template_acct = xaccMallocAccount(session);
+        sx->template_acct = xaccMallocAccount(book);
         name = guid_to_string( &sx->guid );
         xaccAccountSetName( sx->template_acct, name );
         xaccAccountSetCommodity
@@ -89,14 +86,14 @@ xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
 }
 
 SchedXaction*
-xaccSchedXactionMalloc(GNCSession *session)
+xaccSchedXactionMalloc(GNCBook *book)
 {
         SchedXaction *sx;
 
-        g_return_val_if_fail (session, NULL);
+        g_return_val_if_fail (book, NULL);
 
         sx = g_new0( SchedXaction, 1 );
-        xaccSchedXactionInit( sx, session );
+        xaccSchedXactionInit( sx, book );
         gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
 
         return sx;
@@ -531,14 +528,14 @@ xaccSchedXactionIsDirty(SchedXaction *sx)
 
 static Split *
 pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
-                 Transaction *parent_trans, GNCSession *session)
+                 Transaction *parent_trans, GNCBook *book)
 {
   Split *split;
   kvp_frame *split_frame, *sx_frame;
   kvp_value *tmp_value;
   const GUID *acc_guid; 
   
-  split = xaccMallocSplit(session);
+  split = xaccMallocSplit(book);
 
   xaccSplitSetMemo(split, 
 		   gnc_ttsplitinfo_get_memo(s_info));
@@ -591,7 +588,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
 void
 xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                 GNCSession *session)
+                                 GNCBook *book)
 {
   Transaction *new_trans;
   TTInfo *tti;
@@ -599,7 +596,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
   Split *new_split;
   GList *split_list;
 
-  g_return_if_fail (session);
+  g_return_if_fail (book);
 
   /* delete any old transactions, if there are any */
   delete_template_trans( sx );
@@ -608,7 +605,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
   {
     tti = t_t_list->data;
 
-    new_trans = xaccMallocTransaction(session);
+    new_trans = xaccMallocTransaction(book);
 
     xaccTransBeginEdit(new_trans);
 
@@ -626,7 +623,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
     {
       s_info = split_list->data;
       new_split = pack_split_info(s_info, sx->template_acct,
-                                  new_trans, session);
+                                  new_trans, book);
       xaccTransAppendSplit(new_trans, new_split);
     }
     xaccTransCommitEdit(new_trans);

@@ -69,7 +69,7 @@ int    xaccConfigGetForceDoubleEntry (void);
  *    Once created, it is usually unsafe to merely "free" this memory;
  *    the xaccTransDestroy() method should be called.
  */ 
-Transaction * xaccMallocTransaction (GNCSession *session); 
+Transaction * xaccMallocTransaction (GNCBook *book); 
 
 gboolean xaccTransEqual(const Transaction *ta,
                         const Transaction *tb,
@@ -123,7 +123,7 @@ gboolean      xaccTransIsOpen (Transaction *trans);
  */
 const GUID  * xaccTransGetGUID (Transaction *trans);
 GUID          xaccTransReturnGUID (Transaction *trans);
-Transaction * xaccTransLookup (const GUID *guid, GNCSession *session);
+Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
 
 
 /* Transaction slots are used to store arbitrary strings, numbers, and
@@ -236,7 +236,7 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 gnc_numeric xaccTransGetImbalance (Transaction * trans);
 
 /* ------------- splits --------------- */
-Split       * xaccMallocSplit (GNCSession *session);
+Split       * xaccMallocSplit (GNCBook *book);
 
 gboolean xaccSplitEqual(const Split *sa, const Split *sb,
                         gboolean check_guids,
@@ -261,7 +261,7 @@ void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
  */
 const GUID * xaccSplitGetGUID (Split *split);
 GUID         xaccSplitReturnGUID (Split *split);
-Split      * xaccSplitLookup (const GUID *guid, GNCSession *session);
+Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
 
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.

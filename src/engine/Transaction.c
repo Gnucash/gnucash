@@ -38,11 +38,11 @@
 #include "TransactionP.h"
 #include "TransLog.h"
 #include "date.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-event-p.h"
-#include "gnc-session-p.h"
 #include "messages.h"
 
 
@@ -139,10 +139,10 @@ xaccMallocSplitEntityTable (GNCEntityTable *entity_table)
 }
 
 Split *
-xaccMallocSplit(GNCSession *session)
+xaccMallocSplit(GNCBook *book)
 {
-  g_return_val_if_fail (session, NULL);
-  return xaccMallocSplitEntityTable (gnc_session_get_entity_table (session));
+  g_return_val_if_fail (book, NULL);
+  return xaccMallocSplitEntityTable (gnc_book_get_entity_table (book));
 }
 
 /********************************************************************\
@@ -500,11 +500,10 @@ xaccSplitLookupEntityTable (const GUID *guid, GNCEntityTable *entity_table)
 }
 
 Split *
-xaccSplitLookup (const GUID *guid, GNCSession *session)
+xaccSplitLookup (const GUID *guid, GNCBook *book)
 {
-  if (!guid) return NULL;
-  g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity(gnc_session_get_entity_table (session),
+  if (!guid || !book) return NULL;
+  return xaccLookupEntity(gnc_book_get_entity_table (book),
                           guid, GNC_ID_SPLIT);
 }
 
@@ -761,7 +760,7 @@ xaccSplitGetReconciledBalance (Split *s)  {
 \********************************************************************/
 
 static void
-xaccInitTransaction (Transaction * trans, GNCSession *session)
+xaccInitTransaction (Transaction * trans, GNCBook *book)
 {
   /* Fill in some sane defaults */
   trans->num         = g_cache_insert(gnc_engine_get_string_cache(), "");
@@ -786,9 +785,9 @@ xaccInitTransaction (Transaction * trans, GNCSession *session)
   trans->kvp_data = kvp_frame_new();
   trans->idata = 0;
 
-  trans->entity_table = gnc_session_get_entity_table (session);
+  trans->entity_table = gnc_book_get_entity_table (book);
 
-  xaccGUIDNew (&trans->guid, session);
+  xaccGUIDNew (&trans->guid, book);
   xaccStoreEntity (trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
@@ -796,11 +795,11 @@ xaccInitTransaction (Transaction * trans, GNCSession *session)
 \********************************************************************/
 
 Transaction *
-xaccMallocTransaction (GNCSession *session)
+xaccMallocTransaction (GNCBook *book)
 {
   Transaction *trans = g_new(Transaction, 1);
 
-  xaccInitTransaction (trans, session);
+  xaccInitTransaction (trans, book);
 
   gnc_engine_generate_event (&trans->guid, GNC_EVENT_CREATE);
 
@@ -1129,11 +1128,10 @@ xaccTransLookupEntityTable (const GUID *guid,
 }
 
 Transaction *
-xaccTransLookup (const GUID *guid, GNCSession *session)
+xaccTransLookup (const GUID *guid, GNCBook *book)
 {
-  if (!guid) return NULL;
-  g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (gnc_session_get_entity_table (session),
+  if (!guid || !book) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
                            guid, GNC_ID_TRANS);
 }
 
@@ -1358,16 +1356,14 @@ xaccTransGetImbalance (Transaction * trans)
 \********************************************************************/
 
 static gnc_commodity *
-FindCommonExclSCurrency (GList *splits,
+FindCommonExclSCurrency (SplitList *splits,
                          gnc_commodity * ra, gnc_commodity * rb,
                          Split *excl_split,
-                         GNCSession *session)
+                         GNCBook *book)
 {
   GList *node;
 
-  if (!splits) return NULL;
-
-  g_return_val_if_fail (session, NULL);
+  if (!splits || !book) return NULL;
 
   for (node = splits; node; node = node->next)
   {
@@ -1387,8 +1383,8 @@ FindCommonExclSCurrency (GList *splits,
     else if (xaccSplitGetAccount(s) == NULL)
       continue;
 
-    sa = DxaccAccountGetCurrency (xaccSplitGetAccount(s), session);
-    sb = DxaccAccountGetSecurity (xaccSplitGetAccount(s), session);
+    sa = DxaccAccountGetCurrency (xaccSplitGetAccount(s), book);
+    sb = DxaccAccountGetSecurity (xaccSplitGetAccount(s), book);
 
     if (ra && rb) {
        int aa = !gnc_commodity_equiv(ra,sa);
@@ -1427,13 +1423,13 @@ FindCommonExclSCurrency (GList *splits,
  */
 static gnc_commodity *
 FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb,
-                    GNCSession *session)
+                    GNCBook *book)
 {
-  return FindCommonExclSCurrency(splits, ra, rb, NULL, session);
+  return FindCommonExclSCurrency(splits, ra, rb, NULL, book);
 }
 
 gnc_commodity *
-xaccTransFindOldCommonCurrency (Transaction *trans, GNCSession *session)
+xaccTransFindOldCommonCurrency (Transaction *trans, GNCBook *book)
 {
   gnc_commodity *ra, *rb, *retval;
   Split *split;
@@ -1442,16 +1438,16 @@ xaccTransFindOldCommonCurrency (Transaction *trans, GNCSession *session)
 
   if (trans->splits == NULL) return NULL;
 
-  g_return_val_if_fail (session, NULL);
+  g_return_val_if_fail (book, NULL);
 
   split = trans->splits->data;
 
   if (xaccSplitGetAccount(split) == NULL) return NULL;
 
-  ra = DxaccAccountGetCurrency (xaccSplitGetAccount(split), session);
-  rb = DxaccAccountGetSecurity (xaccSplitGetAccount(split), session);
+  ra = DxaccAccountGetCurrency (xaccSplitGetAccount(split), book);
+  rb = DxaccAccountGetSecurity (xaccSplitGetAccount(split), book);
 
-  retval = FindCommonCurrency (trans->splits, ra, rb, session);
+  retval = FindCommonCurrency (trans->splits, ra, rb, book);
 
   /* compare this value to what we think should be the 'right' value */
   if (!trans->common_currency)
