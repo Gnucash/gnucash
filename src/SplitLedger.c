@@ -800,11 +800,43 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     int choice;
     int default_value;
     Account *default_account;
-    char *radio_list[4] = { NULL, NULL, NULL, NULL };
+    Account *other_account;
+    char *radio_list[5] = { NULL, NULL, NULL, NULL, NULL };
     const char *title   = _("Rebalance Transaction");
     const char *message = _("The current transaction is not balanced.");
+    Split *split;
+    Split *other_split;
+    gboolean two_accounts;
+    
+    split = xaccTransGetSplit (trans, 0);
+    other_split = xaccGetOtherSplit (split);
+  
+    if (other_split == NULL)
+    {
+      two_accounts = FALSE;
+      other_account = NULL;
+    }
+    else
+    {
+      two_accounts = TRUE;
+      other_account = xaccSplitGetAccount (other_split);
+    }
 
     default_account = sr_get_default_account (reg);
+    
+    /* If the two pointers are the same, the account from other_split
+     * is actually the default account. We must make other_account
+     * the account from split instead.   */
+     
+    if (default_account == other_account)
+      other_account = xaccSplitGetAccount (split);
+
+    /*  If the two pointers are still the same, we have two splits, but
+     *  they both refer to the same account. While non-sensical, we don't
+     *  object.   */
+
+    if (default_account == other_account)
+      two_accounts = FALSE;
 
     radio_list[0] = _("Balance it manually");
     radio_list[1] = _("Let GnuCash add an adjusting split");
@@ -812,6 +844,10 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     if (reg->type < NUM_SINGLE_REGISTER_TYPES)
     {
       radio_list[2] = _("Adjust current account split total");
+      
+      if (two_accounts)
+        radio_list[3] = _("Adjust other account split total");
+
       default_value = 2;
     }
     else
@@ -836,6 +872,11 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
       case 2:
         xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
                                  default_account);
+        break;
+        
+      case 3:
+        xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
+                                 other_account);
         break;
     }
 
@@ -2780,9 +2821,11 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    gnc_suspend_gui_refresh ();
 
    /* determine whether we should commit the pending transaction */
-   if (pending_trans != trans) {
+   if (pending_trans != trans)
+   {
      if (xaccTransIsOpen (pending_trans))
        xaccTransCommitEdit (pending_trans);
+
      xaccTransBeginEdit (trans);
      pending_trans = trans;
      info->pending_trans_guid = *xaccTransGetGUID(trans);
