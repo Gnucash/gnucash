@@ -1,5 +1,12 @@
 Version history:
 ------- -------
+ 1.1.4 - 1 March 98
+         o gui-independent engine code moved to src/engine
+         o main motif app code moved to src/motif
+         o merged in bug fixes from 1.0.x branch
+         o ofx  dtd's  in lib/ofx/dtd
+         o misc raw info in raw (e.g. currency codes, country codes)
+
  1.1.1 - 24 Jan 1998
          o  Alpha level code.  Very broken.
             All new register design -- modularized. 
