@@ -43,15 +43,16 @@ typedef struct {
   GSList *	param_list;
   gint		options;
   gboolean	increasing;
-  gboolean	use_default;
 
   /* These values are filled in during "compilation" of the query
    * term, based upon the obj_name, param_name, and searched-for
    * object type.  If conv_fcn is NULL, then we don't know how to
    * convert types.
    */
+  gboolean	use_default;
   GSList *	param_fcns;
-  QueryCompare	comp_fcn;
+  QuerySort	obj_cmp;	/* In case you are comparing objects */
+  QueryCompare	comp_fcn;	/* When you are comparing core types */
 } QuerySort_t;
 
 /* The QUERY structure */
@@ -249,7 +250,7 @@ static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
 {
   GSList *node;
   gpointer conva, convb;
-  QueryAccess get_fcn;
+  QueryAccess get_fcn = NULL;	/* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
   g_return_val_if_fail (default_sort, 0);
@@ -264,8 +265,8 @@ static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
   /* If no parameters, consider them equal */
   if (!sort->param_fcns) return 0;
 
-  /* no compare function, consider them equal */
-  if (!sort->comp_fcn) return 0;
+  /* no compare function, consider the two objects equal */
+  if (!sort->comp_fcn && !sort->obj_cmp) return 0;
   
   /* Do the list of conversions */
   conva = (gpointer)a;
@@ -273,8 +274,9 @@ static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
   for (node = sort->param_fcns; node; node = node->next) {
     get_fcn = node->data;
 
-    /* The last term is really the "parameter getter" */
-    if (!node->next)
+    /* The last term is really the "parameter getter",
+     * unless we're comparing objects ;) */
+    if (!node->next && !sort->obj_cmp)
       break;
 
     /* Do the converstions */
@@ -282,8 +284,11 @@ static int cmp_func (QuerySort_t *sort, QuerySort default_sort,
     convb = get_fcn (convb);
   }
 
-  /* And now return the compare */
-  return sort->comp_fcn (conva, convb, sort->options, get_fcn);
+  /* And now return the (appropriate) compare */
+  if (sort->comp_fcn)
+    return sort->comp_fcn (conva, convb, sort->options, get_fcn);
+
+  return sort->obj_cmp (conva, convb);
 }
 
 static QueryNew * sortQuery = NULL;
@@ -398,6 +403,8 @@ static void compile_sort (QuerySort_t *sort, GNCIdType obj)
 
   g_slist_free (sort->param_fcns);
   sort->param_fcns = NULL;
+  sort->comp_fcn = NULL;
+  sort->obj_cmp = NULL;
 
   /* An empty param_list implies "no sort" */
   if (!sort->param_list)
@@ -407,12 +414,16 @@ static void compile_sort (QuerySort_t *sort, GNCIdType obj)
   sort->param_fcns = compile_params (sort->param_list, obj, &resObj);
 
   /* If we have valid parameters, grab the compare function,
-   * If not, see if this is the default sort.
+   * If not, check if this is the default sort.
    */
-  if (sort->param_fcns)
+  if (sort->param_fcns) {
     sort->comp_fcn = gncQueryCoreGetCompare (resObj->param_type);
 
-  else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
+    /* Hrm, perhaps this is an object compare, not a core compare? */
+    if (sort->comp_fcn == NULL)
+      sort->obj_cmp = gncQueryObjectDefaultSort (resObj->param_type);
+
+  } else if (!safe_strcmp (sort->param_list->data, QUERY_DEFAULT_SORT))
     sort->use_default = TRUE;
 }
 
@@ -935,10 +946,24 @@ int gncQueryGetMaxResults (QueryNew *q)
   return q->max_results;
 }
 
+void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
+			       GList *guid_list, guid_match_t options,
+			       QueryOp op)
+{
+  QueryPredData_t pdata;
+
+  if (!q || !param_list) return;
+
+  if (!guid_list)
+    g_return_if_fail (options == GUID_MATCH_NULL);
+
+  pdata = gncQueryGUIDPredicate (options, guid_list);
+  gncQueryAddTerm (q, param_list, COMPARE_EQUAL, pdata, op);
+}
+
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
 			   const GUID *guid, QueryOp op)
 {
-  QueryPredData_t pdata;
   GList *g = NULL;
 
   if (!q || !param_list) return;
@@ -946,10 +971,10 @@ void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
   if (guid)
     g = g_list_prepend (g, (gpointer)guid);
 
-  pdata = gncQueryGUIDPredicate (guid ? GUID_MATCH_ANY : GUID_MATCH_NULL, g);
-  g_list_free (g);
+  gncQueryAddGUIDListMatch (q, param_list, g,
+			    g ? GUID_MATCH_ANY : GUID_MATCH_NULL, op);
 
-  gncQueryAddTerm (q, param_list, COMPARE_EQUAL, pdata, op);
+  g_list_free (g);
 }
 
 void gncQuerySetBook (QueryNew *q, GNCBook *book)

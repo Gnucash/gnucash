@@ -25,6 +25,17 @@ static GHashTable *paramTable = NULL;
 static GHashTable *sortTable = NULL;
 static gboolean initialized = FALSE;
 
+static gpointer split_account_guid_getter (gpointer obj)
+{
+  Split *s = obj;
+  Account *acc;
+
+  if (!s) return NULL;
+  acc = xaccSplitGetAccount (s);
+  if (!acc) return NULL;
+  return ((gpointer)xaccAccountGetGUID (acc));
+}
+
 static void init_split (void)
 {
   static const QueryObjectDef params[] = {
@@ -51,6 +62,7 @@ static void init_split (void)
       (QueryAccess)xaccSplitVoidFormerValue },
     { SPLIT_TRANS, GNC_ID_TRANS, (QueryAccess)xaccSplitGetParent },
     { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QueryAccess)xaccSplitGetAccount },
+    { SPLIT_ACCOUNT_GUID, QUERYCORE_GUID, split_account_guid_getter },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccSplitGetBook },
     { NULL },
   };
@@ -72,6 +84,7 @@ static void init_txn (void)
     { TRANS_VOID_STATUS, QUERYCORE_BOOLEAN, (QueryAccess)xaccTransGetVoidStatus },
     { TRANS_VOID_REASON, QUERYCORE_STRING, (QueryAccess)xaccTransGetVoidReason },
     { TRANS_VOID_TIME, QUERYCORE_DATE, (QueryAccess)xaccTransGetVoidTime },
+    { TRANS_SPLITLIST, GNC_ID_SPLIT, (QueryAccess)xaccTransGetSplitList },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccTransGetBook },
     { NULL },
   };

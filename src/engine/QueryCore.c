@@ -406,11 +406,43 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 
   VERIFY_PREDICATE (query_guid_type);
 
-  /* See if the guid is in the list */
-  guid = ((query_guid_getter)get_fcn) (object);
-  for (node = pdata->guids; node; node = node->next) {
-    if (guid_equal (node->data, guid))
-      break;
+  /* object is a GList of objects; get_gcn must be called on each one.
+   * See if every guid in the predicate is accounted-for in the
+   * object list
+   */
+  if (pdata->options == GUID_MATCH_ALL) {
+    for (node = pdata->guids; node; node = node->next) {
+      GList *o_list;
+
+      /* See if this GUID matches the object's guid */
+      for (o_list = object; o_list; o_list = o_list->next) {
+	guid = ((query_guid_getter)get_fcn) (o_list->data);
+	if (guid_equal (node->data, guid))
+	  break;
+      }
+
+      /* 
+       * If o_list is NULL, we've walked the whole list without finding
+       * a match.  Therefore break out now, the match has failed.
+       */
+      if (o_list == NULL)
+	break;
+    }
+
+    /* 
+     * The match is complete.  If node == NULL then we've succesfully
+     * found a match for all the guids in the predicate.  Return
+     * appropriately below.
+     */
+
+  } else {			/* ! MATCH_ALL */
+
+    /* See if the guid is in the list */
+    guid = ((query_guid_getter)get_fcn) (object);
+    for (node = pdata->guids; node; node = node->next) {
+      if (guid_equal (node->data, guid))
+	break;
+    }
   }
 
   switch (pdata->options) {
@@ -422,6 +454,9 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
     break;
   case GUID_MATCH_NULL:
     return (guid == NULL);
+    break;
+  case GUID_MATCH_ALL:
+    return (node == NULL);
     break;
   default:
     PWARN ("bad match type");

@@ -55,6 +55,7 @@ typedef enum {
 #define SPLIT_VOIDED_VALUE	"voided-value"
 #define SPLIT_TRANS		"trans"
 #define SPLIT_ACCOUNT		"account"
+#define SPLIT_ACCOUNT_GUID	"account-guid" /* for guid_match_all */
 
 #define TRANS_KVP		"kvp"
 #define TRANS_GUID		"guid"
@@ -67,6 +68,7 @@ typedef enum {
 #define TRANS_VOID_STATUS	"void-p"
 #define TRANS_VOID_REASON	"void-reason"
 #define TRANS_VOID_TIME		"void-time"
+#define TRANS_SPLITLIST		"split-list" /* for guid_match_all */
 
 #define ACCOUNT_KVP		"kvp"
 #define ACCOUNT_GUID		"guid"
@@ -112,7 +114,8 @@ typedef enum {
 typedef enum {
   GUID_MATCH_ANY = 1,
   GUID_MATCH_NONE,
-  GUID_MATCH_NULL
+  GUID_MATCH_NULL,
+  GUID_MATCH_ALL		/* You _must_ pass a GList of objects! */
 } guid_match_t;
 
 #define QUERYCORE_INT64		"gint64"
@@ -156,6 +159,9 @@ void gncQueryAddTerm (QueryNew *query, GSList *param_list,
 void gncQuerySetBook (QueryNew *q, GNCBook *book);
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
 			   const GUID *guid, QueryOp op);
+void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
+			       GList *guid_list, guid_match_t options,
+			       QueryOp op);
 
 /* Run the query:
  *
