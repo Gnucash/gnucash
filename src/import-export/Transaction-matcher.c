@@ -606,7 +606,8 @@ on_matcher_apply_clicked (GtkButton *button,
 		{
 		  /* Reconcile the matching transaction */
 		  xaccTransBeginEdit(transaction_info->selected_match_info->trans);
-		  xaccSplitSetReconcile(transaction_info->selected_match_info->split,CREC);
+		  if (xaccSplitGetReconcile (transaction_info->selected_match_info->split) == NREC)
+		      xaccSplitSetReconcile(transaction_info->selected_match_info->split,CREC);
 		  /*Set reconcile date to today*/
 		  xaccSplitSetDateReconciledSecs(transaction_info->selected_match_info->split,time(NULL));
 		  /* Copy the online id to the reconciled transaction, so the match will be remembered */ 
