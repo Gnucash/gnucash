@@ -1701,7 +1701,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, "\n      Match type %s",
                        qof_query_printNumericMatch (pdata->options));
     g_string_sprintfa (gs, " gnc_numeric: %s",
-                       gnc_numeric_to_string (pdata->amount));
+                       gnc_num_dbg_to_string (pdata->amount));
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
