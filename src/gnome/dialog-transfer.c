@@ -115,20 +115,21 @@ gnc_xfer_dialog_list_curr_accts(AccountGroup *group,
 				const gnc_commodity *from_curr,
 				const gnc_commodity *to_curr)
 {
-  Account *acct;
   char *name;
   char separator_char;
   acct_list_item *list_element;
-  int n;
+  GList *acct_list;
+  GList *node;
 
   if (!group) return;
 
   separator_char = gnc_get_account_separator();
 
-  n = 0;
-  acct = xaccGroupGetAccount(group, n);
-  while (acct)
+  acct_list = xaccGroupGetAccountList (group);
+  for (node = acct_list; node; node = node->next)
   {
+    Account *acct = node->data;
+
     if (xaccAccountGetType(acct) == CURRENCY)
     {
       const gnc_commodity *curr, *secu;
@@ -153,8 +154,6 @@ gnc_xfer_dialog_list_curr_accts(AccountGroup *group,
     }
     gnc_xfer_dialog_list_curr_accts(xaccAccountGetChildren(acct),
 				    list, from_curr, to_curr);
-    n++;
-    acct = xaccGroupGetAccount(group, n);
   }
 }
 
