@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
-"POT-Creation-Date: 2000-09-01 21:34-0700\n"
+"POT-Creation-Date: 2000-09-05 00:29-0700\n"
 "PO-Revision-Date: 2000-08-26 20:20+0100\n"
 "Last-Translator: Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -373,12 +373,12 @@ msgstr ""
 "Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
 
 #: messages-i18n.c:58
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "You cannot transfer funds from the %s account.\n"
 "It does not have a matching currency.\n"
 "To transfer funds between accounts with different currencies\n"
-" youneed an intermediate currency account.\n"
+"you need an intermediate currency account.\n"
 "Please see the GnuCash online manual"
 msgstr ""
 "Sie können keine Beträge vom Konto %s transferieren.Die Währungen stimmen "
