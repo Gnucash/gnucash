@@ -241,18 +241,18 @@ long long xaccFlipLongLong (long long val)
 }
 
 /* if we are running on a little-endian system, we need to
- * do some endian flipping, because the xacc native data
+ * do some endian flipping, because the xacc/gnucash native data
  * format is big-endian. In particular, Intel x86 is little-endian. */
-#ifndef WORDS_BIGENDIAN
-  #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
-  #define XACC_FLIP_LONG_LONG(x) { (x) = xaccFlipLongLong (x); }
-  #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
-  #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
-#else
+#if WORDS_BIGENDIAN
   #define XACC_FLIP_DOUBLE(x)
   #define XACC_FLIP_LONG_LONG(x) 
   #define XACC_FLIP_INT(x) 
   #define XACC_FLIP_SHORT(x) 
+#else
+  #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
+  #define XACC_FLIP_LONG_LONG(x) { (x) = xaccFlipLongLong (x); }
+  #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
+  #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
 #endif /* WORDS_BIGENDIAN */
 
 
