@@ -122,7 +122,7 @@ Christian Stimming <stimming@uclink.berkeley.edu> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Diane Trout <detrout@earthlink.net> scheme qif import patch
-Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report
+Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> Great Britain translations
