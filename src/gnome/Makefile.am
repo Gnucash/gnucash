@@ -1,8 +1,8 @@
 SUBDIRS = glade
 
-noinst_LIBRARIES = libgncgnome.a
+lib_LTLIBRARIES = libgncgnome.la
 
-libgncgnome_a_SOURCES = \
+libgncgnome_la_SOURCES = \
   argv-list-converters.c \
   dialog-account.c \
   dialog-column-view.c \
