@@ -275,7 +275,7 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
 
     commodity = gnc_scm_to_commodity (value);
     if (commodity)
-      gnc_general_select_set_selected(GNC_GENERAL_SELECT(widget), commodity);
+      gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(widget), commodity);
     else
       bad_value = TRUE;
   }
@@ -564,7 +564,7 @@ gnc_option_get_ui_value_internal (GNCOption *option)
     gnc_commodity *commodity;
 
     commodity =
-      gnc_general_select_get_selected(GNC_GENERAL_SELECT(widget));
+      gnc_currency_edit_get_currency(GNC_CURRENCY_EDIT(widget));
 
     result = gnc_commodity_to_scm (commodity);
   }
