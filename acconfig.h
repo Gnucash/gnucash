@@ -57,6 +57,11 @@
 /* is guile available */
 #undef HAVE_GUILE
 
+/* Guile version number. Needed because guile < 1.6 doesn't provide this. */
+#undef GNC_GUILE_MAJOR_VERSION
+#undef GNC_GUILE_MINOR_VERSION
+#undef GNC_GUILE_MICRO_VERSION
+
 /* New or old Guile Smob for G-wrap */
 #undef GWRAP_OLD_GUILE_SMOB
 

@@ -1,3 +1,14 @@
+2003-02-18  David Hampton  <hampton@employees.org>
+
+	* acconfig.h: 
+	* configure.in: Export the guile version number so it can be used
+	in the code.  Add new variable for conditionally including the
+	SRFI directory when doing 'make check'.  Should be null when using
+	guile 1.6.
+
+	* Various Makefile.am files: Use new conditional include for the
+	SRFI directory when running 'make check'.
+
 2003-02-17  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-transfer.c: don't round the exchange
