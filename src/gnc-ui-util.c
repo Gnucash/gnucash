@@ -204,7 +204,9 @@ gnc_account_get_balance_in_currency (Account *account,
 }
 
 gnc_numeric
-gnc_ui_convert_balance_to_currency(gnc_numeric balance, gnc_commodity *balance_currency, gnc_commodity *currency)
+gnc_ui_convert_balance_to_currency(gnc_numeric balance,
+                                   gnc_commodity *balance_currency,
+                                   gnc_commodity *currency)
 {
   GNCBook *book;
   GNCPriceDB *pdb;
@@ -232,7 +234,7 @@ gnc_ui_convert_balance_to_currency(gnc_numeric balance, gnc_commodity *balance_c
 
 static gnc_numeric
 gnc_account_get_reconciled_balance_in_currency (Account *account,
-                                     gnc_commodity *currency)
+                                                gnc_commodity *currency)
 {
   GNCBook *book;
   GNCPriceDB *pdb;
@@ -259,7 +261,8 @@ gnc_account_get_reconciled_balance_in_currency (Account *account,
     balance_currency = xaccAccountGetCurrency (account);
   }
 
-  return gnc_ui_convert_balance_to_currency (balance, balance_currency, currency);
+  return gnc_ui_convert_balance_to_currency (balance,
+                                             balance_currency, currency);
 }
 
 typedef struct
@@ -290,7 +293,8 @@ reconciled_balance_helper (Account *account, gpointer data)
   CurrencyBalance *cb = data;
   gnc_numeric balance;
 
-  balance = gnc_account_get_reconciled_balance_in_currency (account, cb->currency);
+  balance = gnc_account_get_reconciled_balance_in_currency (account,
+                                                            cb->currency);
 
   cb->balance = gnc_numeric_add (cb->balance, balance,
                                  gnc_commodity_get_fraction (cb->currency),
@@ -333,6 +337,7 @@ gnc_ui_account_get_balance (Account *account, gboolean include_children)
 
 gnc_numeric
 gnc_ui_account_get_reconciled_balance (Account *account,
+                                       gboolean use_shares,
                                        gboolean include_children)
 {
   gnc_numeric balance;
@@ -341,7 +346,9 @@ gnc_ui_account_get_reconciled_balance (Account *account,
   if (account == NULL)
     return gnc_numeric_zero ();
 
-  currency = xaccAccountGetCurrency (account);
+  currency =
+    use_shares ? xaccAccountGetSecurity (account) :
+                 xaccAccountGetCurrency (account);
 
   balance = gnc_account_get_reconciled_balance_in_currency (account, currency);
 
@@ -375,10 +382,11 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
   if (account == NULL)
     return gnc_numeric_zero ();
 
-  currency = xaccAccountGetCurrency (account);
-  balance = use_shares ?
-                         xaccAccountGetBalanceAsOfDate (account, date)
-                       : xaccAccountGetShareBalanceAsOfDate (account, date);
+  currency = use_shares ? xaccAccountGetSecurity (account)
+                        : xaccAccountGetCurrency (account);
+
+  balance = use_shares ? xaccAccountGetShareBalanceAsOfDate (account, date)
+                       : xaccAccountGetBalanceAsOfDate (account, date);
 
   if (include_children)
   {

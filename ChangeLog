@@ -1,3 +1,10 @@
+2002-01-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-reconcile.c: fix bugs when reconciling
+	share accounts
+
+	* src/gnc-ui-util.c: fix bugs in get_balance functions
+
 2002-01-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/commodity-utilities.scm: Tweaked the exchange rate

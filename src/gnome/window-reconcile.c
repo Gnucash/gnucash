@@ -200,8 +200,10 @@ recnRecalculateBalance (RecnWindow *recnData)
   reverse_balance = gnc_reverse_balance(account);
 
   /* update the starting balance */
-  include_children = xaccAccountGetReconcileChildrenStatus(account);
-  starting = gnc_ui_account_get_reconciled_balance(account, include_children);
+  include_children = xaccAccountGetReconcileChildrenStatus (account);
+  starting = gnc_ui_account_get_reconciled_balance (account,
+                                                    recnData->use_shares,
+                                                    include_children);
   if (recnData->use_shares)
     print_info = gnc_account_quantity_print_info (account, TRUE);
   else
@@ -369,16 +371,17 @@ gnc_start_recn_date_changed (GtkWidget *widget, gpointer data)
  * Return: True, if the user presses "Ok", else False               *
 \********************************************************************/
 static gboolean
-startRecnWindow(GtkWidget *parent, Account *account,
-                gnc_numeric *new_ending, time_t *statement_date)
+startRecnWindow (GtkWidget *parent, Account *account,
+                 gnc_numeric *new_ending, time_t *statement_date)
 {
   GtkWidget *dialog, *end_value, *date_value, *include_children;
+  gboolean include_children_state;
   GNCAccountType account_type;
   GNCPrintAmountInfo print_info;
+  gboolean use_shares;
   gnc_numeric ending;
   char *title;
   int result;
-  gboolean include_children_state;
 
   /* This is a new startRecnWindow, so enable automatic
    * updates of the ending balance amount edit widget.
@@ -389,10 +392,15 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   include_children_state = xaccAccountGetReconcileChildrenStatus(account);
 
-  ending = gnc_ui_account_get_reconciled_balance(account,
-                                                 include_children_state);
-  if ((account_type == STOCK) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
+  use_shares = ((account_type == STOCK) ||
+                (account_type == MUTUAL) ||
+                (account_type == CURRENCY));
+
+  ending = gnc_ui_account_get_reconciled_balance (account,
+                                                  use_shares,
+                                                  include_children_state);
+
+  if (use_shares)
     print_info = gnc_account_quantity_print_info (account, TRUE);
   else
     print_info = gnc_account_value_print_info (account, TRUE);
