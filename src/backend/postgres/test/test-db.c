@@ -105,7 +105,8 @@ save_db_file (GNCSession *session, const char *db_name, const char *mode)
 }
 
 static gboolean
-load_db_file (GNCSession *session, const char *db_name, const char *mode)
+load_db_file (GNCSession *session, const char *db_name, const char *mode,
+              gboolean end_session)
 {
   GNCBackendError io_err;
   char *filename;
@@ -132,16 +133,19 @@ load_db_file (GNCSession *session, const char *db_name, const char *mode)
                      db_name, mode))
     return FALSE;
 
-  gnc_session_end (session);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Ending db session",
-                     __FILE__, __LINE__,
-                     "can't end session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+  if (end_session)
+  {
+    gnc_session_end (session);
+    io_err = gnc_session_get_error (session);
+    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                       "Ending db session",
+                       __FILE__, __LINE__,
+                       "can't end session for %s in mode %s",
+                       db_name, mode))
+      return FALSE;
 
-  do_test (gnc_session_get_url (session) == NULL, "session url not NULL");
+    do_test (gnc_session_get_url (session) == NULL, "session url not NULL");
+  }
 
   g_free (filename);
 
@@ -173,7 +177,7 @@ test_access (const char *db_name, const char *mode, gboolean multi_user)
 
   session_2 = gnc_session_new ();
 
-  gnc_session_begin (session_1, filename, FALSE, FALSE);
+  gnc_session_begin (session_2, filename, FALSE, FALSE);
   io_err = gnc_session_get_error (session_1);
 
   if (multi_user)
@@ -289,6 +293,35 @@ remove_unneeded_commodities (GNCSession *session)
   g_hash_table_destroy (cdi.hash);
 }
 
+static void
+multi_user_get_everything (GNCSession *session, GNCSession *base)
+{
+  Query *q;
+
+  g_return_if_fail (session);
+
+  q = xaccMallocQuery ();
+
+  xaccQueryAddClearedMatch (q,
+                            CLEARED_NO |
+                            CLEARED_CLEARED |
+                            CLEARED_RECONCILED |
+                            CLEARED_FROZEN |
+                            CLEARED_VOIDED,
+                            QUERY_AND);
+
+  xaccQuerySetGroup (q, gnc_book_get_group (gnc_session_get_book (session)));
+
+  xaccQueryGetSplits (q);
+
+  xaccFreeQuery (q);
+
+  /* load in prices from base */
+  if (base)
+    gnc_pricedb_equal (gnc_book_get_pricedb (gnc_session_get_book (base)),
+                       gnc_book_get_pricedb (gnc_session_get_book (session)));
+}
+
 static gboolean
 test_updates (GNCSession *session, const char *db_name, const char *mode,
               gboolean multi_user)
@@ -327,8 +360,11 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
 
   session_2 = gnc_session_new ();
 
-  if (!load_db_file (session_2, db_name, mode))
+  if (!load_db_file (session_2, db_name, mode, !multi_user))
     return FALSE;
+
+  if (multi_user)
+    multi_user_get_everything (session_2, session);
 
   remove_unneeded_commodities (session);
   remove_unneeded_commodities (session_2);
@@ -340,12 +376,6 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
                 "Books not equal for session %s in mode %s",
                 db_name, mode);
 
-  if (!ok)
-  {
-    save_xml_files (session, session_2);
-    return FALSE;
-  }
-
   if (multi_user)
   {
     gnc_session_end (session);
@@ -356,6 +386,21 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
                        "can't end session for %s in mode %s",
                        db_name, mode))
       return FALSE;
+
+    gnc_session_end (session_2);
+    io_err = gnc_session_get_error (session_2);
+    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                       "Ending db session",
+                       __FILE__, __LINE__,
+                       "can't end session for %s in mode %s",
+                       db_name, mode))
+      return FALSE;
+  }
+
+  if (!ok)
+  {
+    save_xml_files (session, session_2);
+    return FALSE;
   }
 
   gnc_session_destroy (session_2);
@@ -380,8 +425,11 @@ test_mode (const char *db_name, const char *mode,
 
   session_db = gnc_session_new ();
 
-  if (!load_db_file (session_db, db_name, mode))
+  if (!load_db_file (session_db, db_name, mode, !multi_user))
     return FALSE;
+
+  if (multi_user)
+    multi_user_get_everything (session_db, session);
 
   ok = gnc_book_equal (gnc_session_get_book (session),
                        gnc_session_get_book (session_db));
@@ -390,13 +438,28 @@ test_mode (const char *db_name, const char *mode,
                 "Books not equal for session %s in mode %s",
                 db_name, mode);
 
+  if (multi_user)
+  {
+    GNCBackendError io_err;
+
+    gnc_session_end (session_db);
+    io_err = gnc_session_get_error (session_db);
+    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                       "Ending db session",
+                       __FILE__, __LINE__,
+                       "can't end session for %s in mode %s",
+                       db_name, mode))
+      return FALSE;
+  }
+
   if (!ok)
   {
     save_xml_files (session, session_db);
     return FALSE;
   }
 
-  ok = test_access (db_name, mode, multi_user);
+  if (!test_access (db_name, mode, multi_user))
+    return FALSE;
 
   if (updates && !test_updates (session_db, db_name, mode, multi_user))
     return FALSE;
@@ -410,12 +473,15 @@ test_mode (const char *db_name, const char *mode,
 static void
 run_test (void)
 {
-#if 1
+#if 0
   if (!test_mode ("single_file", "single-file", FALSE, FALSE))
+    return;
+
+  if (!test_mode ("single_update", "single-update", TRUE, FALSE))
     return;
 #endif
 
-  if (!test_mode ("single_update", "single-update", TRUE, FALSE))
+  if (!test_mode ("multi_user", "multi-user", TRUE, TRUE))
     return;
 }
 
