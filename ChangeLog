@@ -7,6 +7,11 @@
 
 	* fix bug #95844 -- fix qif-import/qif-parse.scm to match
 	  qif-io-core/qif-parse.scm w.r.t. parsing the numbers.
+
+	* src/dialog-account/dialog-account.c,Makefile.am
+	  prove to myself that there is no real dependency on src/gnome
+	  by removing top-level.h and window-main.h and recompiling....
+	  no warnings were output by the compiler.
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 
