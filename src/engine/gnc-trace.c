@@ -26,6 +26,11 @@
 #include "config.h"
 
 #include <glib.h>
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#else
+  /* What to do? */
+#endif
 #include <stdarg.h>
 #include <string.h>
 #include <sys/time.h>
@@ -65,6 +70,7 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 };
 
 static FILE *fout = NULL;
+static const int MAX_TRACE_FILENAME = 100;
 
 static void
 fh_printer (const gchar   *log_domain,
@@ -74,14 +80,24 @@ fh_printer (const gchar   *log_domain,
 {
   FILE *fh = user_data;
   fprintf (fh, "%s\n", message);
+  fflush(fh);
 }
 
 void 
 gnc_log_init (void)
 {
-   fout = stderr;
-   fout = stdout;
+   char *filename;
+
    fout = fopen ("/tmp/gnucash.trace", "w");
+
+   if(!fout && (filename = (char *)malloc(MAX_TRACE_FILENAME))) {
+      snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/gnucash.trace.%d", getpid());
+      fout = fopen (filename, "w");
+   }
+
+   if(!fout)
+      fout = stderr;
+
    g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK, fh_printer, fout);
 }
 

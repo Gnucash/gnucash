@@ -3,6 +3,9 @@
 	* src/business/business-ledger/Makefile.am: add explicit
 	  dependency on business-utils.
 
+	* src/engine/gnc-trace.c: Try a few different filenames for
+	  the trace log and if all else fails fall back to stderr.
+
 2004-11-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-backend.c
