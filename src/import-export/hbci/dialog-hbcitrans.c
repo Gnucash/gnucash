@@ -32,6 +32,7 @@
 #include "dialog-utils.h"
 #include "gnc-ui.h"
 #include "gnc-amount-edit.h"
+#include "dialog-transfer.h"
 
 #include "gnc-hbci-utils.h"
 #include "gnc-hbci-trans-templ.h"
@@ -45,7 +46,10 @@
 /* -------------------------------------- */
 struct _trans_data 
 {
+  /* The dialog itself */
+  GtkWidget *dialog;
   GtkWidget *parent;
+
   /* Recipient */
   GtkWidget *recp_name_entry;
   GtkWidget *recp_account_entry;
@@ -67,17 +71,29 @@ struct _trans_data
   /* GList of GNCTransTempl */
   GList *templ;
 
+  /* The HBCI transaction that got created here */
+  HBCI_Transaction *hbci_trans;
+  
+  /* The gnucash transaction dialog where the user specifies the gnucash transaction. */
+  XferDialog *gnc_trans_dialog;
+  
+  /* The Gnucash transaction that got created here */
+  Transaction *gnc_trans;
+  
 #if HAVE_KTOBLZCHECK_H
   /* object for Account number checking */
   AccountNumberCheck *blzcheck;
 #endif
 };
-typedef struct _trans_data TransData;
 
 
-static void TransData_delete_helper(TransData *td)
+void gnc_hbci_dialog_delete(HBCITransDialog *td)
 {
   if (!td) return;
+  /* Unregister handler for transaction creation callback */
+  if (td->gnc_trans_dialog)
+    gnc_xfer_dialog_set_txn_cb(td->gnc_trans_dialog, NULL, NULL);
+  gtk_widget_destroy (GTK_WIDGET (td->dialog));
 #if HAVE_KTOBLZCHECK_H
   AccountNumberCheck_delete(td->blzcheck);
 #endif    
@@ -89,34 +105,29 @@ static void TransData_delete_helper(TransData *td)
 /* Prototypes; callbacks for dialog function */
 /* -------------------------------------- */
 
+int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
+				 const HBCI_Account *h_acc);
 HBCI_Transaction *
-hbci_trans_fill_values(const HBCI_Account *h_acc, TransData *td);
+hbci_trans_fill_values(const HBCI_Account *h_acc, HBCITransDialog *td);
 gboolean
-check_ktoblzcheck(GtkWidget *parent, const TransData *td, 
+check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td, 
 		  const HBCI_Transaction *trans);
 HBCI_OutboxJob *
-hbci_trans_create_outboxjob(const HBCI_Customer *customer,
-			    HBCI_Account *h_acc, 
-			    const HBCI_Transaction *trans, 
-			    GNC_HBCI_Transtype trans_type);
+gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
+			      const HBCI_Customer *customer, 
+			      HBCI_Account *h_acc, 
+			      GNC_HBCI_Transtype trans_type) ;
 
 void template_selection_cb(GtkButton *b, gpointer user_data);
 void add_template_cb(GtkButton *b, gpointer user_data);
 void blz_changed_cb(GtkEditable *e, gpointer user_data);
 
-static void fill_template_menu_func(gpointer data, gpointer user_data)
-{
-  GNCTransTempl *templ = data;
-  GtkMenu *menu = user_data;
-  GtkWidget *item = gtk_menu_item_new_with_label(gnc_trans_templ_get_name(templ));
-  gtk_object_set_user_data(GTK_OBJECT(item), templ);
-  gtk_menu_append(menu, item);
-}
 
 
 /* -------------------------------------- */
 /* Main dialog function */
 /* -------------------------------------- */
+
 
 HBCI_Transaction *
 gnc_hbci_trans (GtkWidget *parent,
@@ -128,31 +139,108 @@ gnc_hbci_trans (GtkWidget *parent,
 		GNC_HBCI_Transtype trans_type,
 		GList **templ)
 {
-  GtkWidget *dialog;
-  GladeXML *xml;
-  HBCI_Transaction *trans = NULL;
-  gint result;
-  const HBCI_Bank *bank;
+  int result;
   gboolean successful;
-  TransData td;
+  HBCITransDialog *td;
 
-  td.parent = parent;
-  td.templ = *templ;
-  g_assert (api);
+  /* Create new HBCIDialogTrans */
+  td = gnc_hbci_dialog_new(parent, h_acc, customer, gnc_acc, trans_type, templ);
+  
+  /* Repeat until HBCI action was successful or user pressed cancel */
+  do {
+
+    /* Let the user enter the values. If cancel is pressed, -1 is returned.  */
+    result = gnc_hbci_dialog_run_until_ok(td, h_acc);
+
+    /* Set the template list in case the dialog got cancelled. */
+    *templ = td->templ;
+
+    if (result < 0) {
+      gnc_hbci_dialog_delete(td);
+      return NULL;
+    }
+    
+    /* Make really sure the dialog is hidden now. */
+    gtk_widget_hide_all (td->dialog);
+
+    {
+      HBCI_OutboxJob *job = 
+	gnc_hbci_trans_dialog_enqueue(td, api, customer, 
+				      (HBCI_Account *)h_acc, trans_type);
+      
+      if (result == 0) {
+
+	/* If the user pressed "execute now", then execute this job
+	   now. This function already delete()s the job. */
+	successful = gnc_hbci_trans_dialog_execute(td, api, job, interactor);
+
+      } /* result == 0 */
+      else {
+	/* huh? Only result == 0 should be possible. Simply ignore
+	   this case. */
+	break;
+      } /* result == 0 */
+	  
+    } /* Create a do-transaction (transfer) job */
+	
+  } while (!successful);
+    
+
+  /* Just to be on the safe side, clear queue once again. */
+  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+  {
+    HBCI_Transaction *trans = td->hbci_trans;
+    gnc_hbci_dialog_delete(td);
+    return trans;
+  }
+}
+
+
+
+
+/* ************************************************************
+ * constructor 
+ */
+
+static void fill_template_menu_func(gpointer data, gpointer user_data)
+{
+  GNCTransTempl *templ = data;
+  GtkMenu *menu = user_data;
+  GtkWidget *item = gtk_menu_item_new_with_label(gnc_trans_templ_get_name(templ));
+  gtk_object_set_user_data(GTK_OBJECT(item), templ);
+  gtk_menu_append(menu, item);
+}
+
+HBCITransDialog *
+gnc_hbci_dialog_new (GtkWidget *parent,
+		const HBCI_Account *h_acc,
+		const HBCI_Customer *customer,
+		Account *gnc_acc,
+		GNC_HBCI_Transtype trans_type,
+		GList **templ)
+{
+  GladeXML *xml;
+  const HBCI_Bank *bank;
+  HBCITransDialog *td;
+
+  td = g_new0(HBCITransDialog, 1);
+  
+  td->parent = parent;
+  td->templ = *templ;
   g_assert (h_acc);
   g_assert (customer);
   bank = HBCI_Account_bank (h_acc);
   g_assert (bank);
 #if HAVE_KTOBLZCHECK_H
-  td.blzcheck = AccountNumberCheck_new();
+  td->blzcheck = AccountNumberCheck_new();
 #endif
   
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI_trans_dialog");
 
-  dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
+  td->dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gnome_dialog_set_parent (GNOME_DIALOG (td->dialog), GTK_WINDOW (parent));
   
   {
     GtkWidget *heading_label;
@@ -174,25 +262,25 @@ gnc_hbci_trans (GtkWidget *parent,
     g_assert 
       (heading_label = glade_xml_get_widget (xml, "heading_label"));
     g_assert 
-      (td.recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
+      (td->recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
     g_assert 
       (recp_name_heading = glade_xml_get_widget (xml, "recp_name_heading"));
     g_assert
-      (td.recp_account_entry = glade_xml_get_widget (xml, "recp_account_entry"));
+      (td->recp_account_entry = glade_xml_get_widget (xml, "recp_account_entry"));
     g_assert
       (recp_account_heading = glade_xml_get_widget (xml, "recp_account_heading"));
     g_assert
-      (td.recp_bankcode_entry = glade_xml_get_widget (xml, "recp_bankcode_entry"));
+      (td->recp_bankcode_entry = glade_xml_get_widget (xml, "recp_bankcode_entry"));
     g_assert
       (recp_bankcode_heading = glade_xml_get_widget (xml, "recp_bankcode_heading"));
     g_assert
-      (td.recp_bankname_label = glade_xml_get_widget (xml, "recp_bankname_label"));
+      (td->recp_bankname_label = glade_xml_get_widget (xml, "recp_bankname_label"));
     g_assert
       (amount_hbox = glade_xml_get_widget (xml, "amount_hbox"));
     g_assert
-      (td.purpose_entry = glade_xml_get_widget (xml, "purpose_entry"));
+      (td->purpose_entry = glade_xml_get_widget (xml, "purpose_entry"));
     g_assert
-      (td.purpose_cont_entry = glade_xml_get_widget (xml, "purpose_cont_entry"));
+      (td->purpose_cont_entry = glade_xml_get_widget (xml, "purpose_cont_entry"));
     g_assert
       (orig_name_label = glade_xml_get_widget (xml, "orig_name_label"));
     g_assert
@@ -212,15 +300,15 @@ gnc_hbci_trans (GtkWidget *parent,
     g_assert
       (exec_later_button = glade_xml_get_widget (xml, "exec_later_button"));
     g_assert
-      (td.template_option = glade_xml_get_widget (xml, "template_optionmenu"));
+      (td->template_option = glade_xml_get_widget (xml, "template_optionmenu"));
     g_assert
       (add_templ_button = glade_xml_get_widget (xml, "add_templ_button"));
 
-    td.amount_edit = gnc_amount_edit_new();
-    gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td.amount_edit);
-    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (td.amount_edit), 
+    td->amount_edit = gnc_amount_edit_new();
+    gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), td->amount_edit);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (td->amount_edit), 
       TRUE);
-    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (td.amount_edit),
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (td->amount_edit),
 				  xaccAccountGetCommoditySCU (gnc_acc));
 
     /* Check for what kind of transaction this should be, and change
@@ -275,161 +363,103 @@ gnc_hbci_trans (GtkWidget *parent,
 			HBCI_Bank_bankCode (bank));
 
     /* fill OptionMenu for choosing a transaction template */
-    g_list_foreach(td.templ, fill_template_menu_func, 
+    g_list_foreach(td->templ, fill_template_menu_func, 
 		   gtk_option_menu_get_menu 
-		   ( GTK_OPTION_MENU (td.template_option)));
+		   ( GTK_OPTION_MENU (td->template_option)));
     
     /* Connect signals */
-    gnc_option_menu_init_w_signal (td.template_option, 
+    gnc_option_menu_init_w_signal (td->template_option, 
 				   GTK_SIGNAL_FUNC(template_selection_cb),
 				   &td);
     gtk_signal_connect(GTK_OBJECT (add_templ_button), "clicked",
 		       GTK_SIGNAL_FUNC(add_template_cb), &td);
-    gtk_signal_connect(GTK_OBJECT (td.recp_bankcode_entry), "changed",
+    gtk_signal_connect(GTK_OBJECT (td->recp_bankcode_entry), "changed",
 		       GTK_SIGNAL_FUNC(blz_changed_cb), &td);
 
     /* Default button */
-    gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
+    gnome_dialog_set_default (GNOME_DIALOG (td->dialog), 0);
     
-    gtk_widget_grab_focus (td.recp_name_entry);
+    gtk_widget_grab_focus (td->recp_name_entry);
 
     /* Hide on close instead of destroy since we still need the values
        from the boxes. */
-    gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+    gnome_dialog_close_hides (GNOME_DIALOG (td->dialog), TRUE);
 
-    /* Repeat until HBCI action was successful or user pressed cancel */
-    do {
-      gboolean values_ok;
-
-      /* Repeat until entered values make sense */
-      do {
-
-	/* Make sure to show the dialog here */
-	gtk_widget_show_all (dialog); 
-
-	/* Now run the dialog until it gets closed by a button press. */
-	result = gnome_dialog_run (GNOME_DIALOG (dialog));
-	/* printf("hbci_trans: result button was %d.\n", result); */
-
-	/* The dialog gets hidden anyway as soon as any button is pressed. */
-	gtk_widget_hide_all (dialog);
-
-	/* Set the template list in case the dialog got cancelled. */
-	*templ = td.templ;
-
-	/* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
-	   scheduled for later execution (currently unimplemented) */
-	if ((result != 0) && (result != 1)) {
-	  gtk_widget_destroy (GTK_WIDGET (dialog));
-	  TransData_delete_helper(&td);
-	  return NULL;
-	}
-
-	/* Now fill in the values from the entry fields into a new
-	   HBCI_Transaction. */
-	trans = hbci_trans_fill_values(h_acc, &td);
-	values_ok = TRUE;
-
-	/*printf("dialog-hbcitrans: Got value as %s .\n", 
-	  HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
-	if (HBCI_Value_getValue (HBCI_Transaction_value (trans)) == 0.0) {
-	  gtk_widget_show_all (dialog); 
-	  values_ok = !gnc_verify_dialog_parented
-	    (GTK_WIDGET (dialog),
-	     TRUE,
-	     "%s",
-	     _("The amount is zero or the amount field could not be \n"
-	       "interpreted correctly. You might have mixed up decimal \n"
-	       "point and comma, compared to your locale settings. \n"
-	       "\n"
-	       "This does not result in a valid online transfer job.\n"
-	       "Do you want to enter the job again?"));
-	  if (values_ok) {
-	    gtk_widget_destroy (GTK_WIDGET (dialog));
-	    HBCI_Transaction_delete (trans);
-	    TransData_delete_helper(&td);
-	    return NULL;
-	  }
-	  continue;
-	} /* check Transaction_value */
-
-	/* And finally check the account code, if ktoblzcheck is available. */
-	values_ok = check_ktoblzcheck(GTK_WIDGET (dialog), &td, trans);
-
-      } while (!values_ok);
-
-      /* Make really sure the dialog is hidden now. */
-      gtk_widget_hide_all (dialog);
-
-      {
-	HBCI_OutboxJob *job;
-
-	/* Create a Do-Transaction (Transfer) job. */
-	job = hbci_trans_create_outboxjob(customer, (HBCI_Account *)h_acc, 
-					  trans, trans_type);
-	g_assert (job);
-
-	/* Make really sure there is no other job in the queue */
-	HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
-
-	/* Add job to queue */
-	HBCI_API_addJob (api, job);
-
-	if (result == 0) {
-
-	  /* If the user pressed "execute now", then execute this job now. */
-	  successful = gnc_hbci_api_execute (parent, api, job, interactor);
-
-	  /*printf("dialog-hbcitrans: Ok, result of api_execute was %d.\n", 
-	    successful);*/
-	  
-	  if (!successful) {
-	    /* HBCI_API_executeOutbox failed. */
-	    if ((HBCI_OutboxJob_status (job) == HBCI_JOB_STATUS_DONE) &&
-		(HBCI_OutboxJob_result (job) == HBCI_JOB_RESULT_FAILED)) 
-	      	successful = !gnc_verify_dialog_parented
-		  (parent, 
-		   FALSE,
-		   "%s",
-		   _("The job was successfully sent to the bank, but the \n"
-		     "bank is refusing to execute the job. Please check \n"
-		     "the log window for the exact error message of the \n"
-		     "bank. The line with the error message contains a \n"
-		     "code number that is greater than 9000.\n"
-		     "\n"
-		     "Do you want to enter the job again?"));
-
-	    HBCI_Transaction_delete (trans);
-	    trans = NULL;
-	    /* Watch out! The job *has* to be removed from the queue
-	       here because otherwise it might be executed again. */
-	    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
-	  }
-	} /* result == 0 */
-	else {
-	  /* huh? Only result == 0 should be possible. Simply ignore
-	     this case. */
-	  break;
-	} /* result == 0 */
-	  
-      } /* Create a do-transaction (transfer) job */
-	
-    } while (!successful);
-    
   } /* GtkWidget declarations/definitions */
   
-  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
-  gtk_widget_destroy (GTK_WIDGET (dialog));
-  TransData_delete_helper(&td);
-  return trans;
+  return td;
 }
 
 
+/* ************************************************************
+ * Now all the functions where the action happens.
+ */
 
-/** Fills the values from the entry fields into a new HBCI_Transaction
-    and returns it. The caller must delete() it when finished. */
+int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
+				 const HBCI_Account *h_acc)
+{
+  int result;
+  gboolean values_ok;
+
+  /* Repeat until entered values make sense */
+  do {
+
+    /* Make sure to show the dialog here */
+    gtk_widget_show_all (td->dialog); 
+
+    /* Now run the dialog until it gets closed by a button press. */
+    result = gnome_dialog_run (GNOME_DIALOG (td->dialog));
+    /* printf("hbci_trans: result button was %d.\n", result); */
+
+    /* The dialog gets hidden anyway as soon as any button is pressed. */
+    gtk_widget_hide_all (td->dialog);
+
+    /* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
+       scheduled for later execution (currently unimplemented) */
+    if ((result != 0) && (result != 1)) {
+      return -1;
+    }
+
+    /* Now fill in the values from the entry fields into a new
+       HBCI_Transaction. */
+    td->hbci_trans = hbci_trans_fill_values(h_acc, td);
+    values_ok = TRUE;
+
+    /*printf("dialog-hbcitrans: Got value as %s .\n", 
+      HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
+    if (HBCI_Value_getValue (HBCI_Transaction_value (td->hbci_trans)) == 0.0) {
+      gtk_widget_show_all (td->dialog); 
+      values_ok = !gnc_verify_dialog_parented
+	(GTK_WIDGET (td->dialog),
+	 TRUE,
+	 "%s",
+	 _("The amount is zero or the amount field could not be \n"
+	   "interpreted correctly. You might have mixed up decimal \n"
+	   "point and comma, compared to your locale settings. \n"
+	   "\n"
+	   "This does not result in a valid online transfer job.\n"
+	   "Do you want to enter the job again?"));
+      if (values_ok) {
+	HBCI_Transaction_delete (td->hbci_trans);
+	return -1;
+      }
+      continue;
+    } /* check Transaction_value */
+
+    /* And finally check the account code, if ktoblzcheck is available. */
+    values_ok = check_ktoblzcheck(GTK_WIDGET (td->dialog), td, td->hbci_trans);
+
+  } while (!values_ok);
+
+  return result;
+}
+
+
+/** Create a new HBCI_Transaction, fill the values from the entry
+    fields into it and return it. The caller must
+    HBCI_Transaction_delete() it when finished. */
 HBCI_Transaction *
-hbci_trans_fill_values(const HBCI_Account *h_acc, TransData *td)
+hbci_trans_fill_values(const HBCI_Account *h_acc, HBCITransDialog *td)
 {
   /* Fill in the user-entered values */
   HBCI_Transaction *trans = HBCI_Transaction_new();
@@ -473,7 +503,7 @@ hbci_trans_fill_values(const HBCI_Account *h_acc, TransData *td)
     ktoblzcheck package is available. Returns TRUE if everything is
     fine, or FALSE if this transaction should be entered again. */
 gboolean
-check_ktoblzcheck(GtkWidget *parent, const TransData *td, 
+check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td, 
 		  const HBCI_Transaction *trans)	
 {
 #if HAVE_KTOBLZCHECK_H
@@ -519,28 +549,27 @@ check_ktoblzcheck(GtkWidget *parent, const TransData *td,
 #endif    
 }
 
-/** Create and return the HBCI_OutboxJob according to the given
-    trans_type. */
 HBCI_OutboxJob *
-hbci_trans_create_outboxjob(const HBCI_Customer *customer,
-			    HBCI_Account *h_acc, 
-			    const HBCI_Transaction *trans, 
-			    GNC_HBCI_Transtype trans_type) 
+gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
+			      const HBCI_Customer *customer, 
+			      HBCI_Account *h_acc, 
+			      GNC_HBCI_Transtype trans_type) 
 {
-  HBCI_OutboxJob *job = NULL;
-    
+  HBCI_OutboxJob *job;
+      
+  /* Create a Do-Transaction (Transfer) job. */
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
     {
       HBCI_OutboxJobDebitNote *debit_job =
-	HBCI_OutboxJobDebitNote_new (customer, h_acc, trans);
+	HBCI_OutboxJobDebitNote_new (customer, h_acc, td->hbci_trans);
       job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
     }
     break;
   case SINGLE_TRANSFER:
     {
       HBCI_OutboxJobTransfer *transfer_job = 
-	HBCI_OutboxJobTransfer_new (customer, h_acc, trans);
+	HBCI_OutboxJobTransfer_new (customer, h_acc, td->hbci_trans);
       job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
     }
     break;
@@ -549,13 +578,59 @@ hbci_trans_create_outboxjob(const HBCI_Customer *customer,
       printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
 	     trans_type);
       HBCI_OutboxJobTransfer *transfer_job = 
-	HBCI_OutboxJobTransfer_new (customer, h_acc, trans);
+	HBCI_OutboxJobTransfer_new (customer, h_acc, td->hbci_trans);
       job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
     }
   }
+  g_assert (job);
+
+  /* Make really sure there is no other job in the queue */
+  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+
+  /* Add job to queue */
+  HBCI_API_addJob (api, job);
+
   return job;
 }
 
+gboolean 
+gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api, 
+			      HBCI_OutboxJob *job, GNCInteractor *interactor)
+{
+  gboolean successful;
+  g_assert(td);
+  g_assert(api);
+  g_assert(job);
+
+  successful = gnc_hbci_api_execute (td->parent, api, job, interactor);
+
+  /*printf("dialog-hbcitrans: Ok, result of api_execute was %d.\n", 
+    successful);*/
+	  
+  if (!successful) {
+    /* HBCI_API_executeOutbox failed. */
+    if ((HBCI_OutboxJob_status (job) == HBCI_JOB_STATUS_DONE) &&
+	(HBCI_OutboxJob_result (job) == HBCI_JOB_RESULT_FAILED)) 
+      successful = !gnc_verify_dialog_parented
+	(td->parent, 
+	 FALSE,
+	 "%s",
+	 _("The job was successfully sent to the bank, but the \n"
+	   "bank is refusing to execute the job. Please check \n"
+	   "the log window for the exact error message of the \n"
+	   "bank. The line with the error message contains a \n"
+	   "code number that is greater than 9000.\n"
+	   "\n"
+	   "Do you want to enter the job again?"));
+
+    HBCI_Transaction_delete (td->hbci_trans);
+    td->hbci_trans = NULL;
+  }
+  /* Watch out! The job *has* to be removed from the queue
+     here because otherwise it might be executed again. */
+  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+  return successful;
+}
 
 
 /* -------------------------------------- */
@@ -568,7 +643,7 @@ static void fill_entry(const char *str, GtkWidget *entry) {
 void template_selection_cb(GtkButton *b,
 			   gpointer user_data)
 {
-  TransData *td = user_data;
+  HBCITransDialog *td = user_data;
   g_assert(td);
   unsigned index = gnc_option_menu_get_active (td->template_option);
   /*printf("template_selection_cd: %d is active \n", index);*/
@@ -592,7 +667,7 @@ void template_selection_cb(GtkButton *b,
 void blz_changed_cb(GtkEditable *e, gpointer user_data)
 {
 #if HAVE_KTOBLZCHECK_H
-  TransData *td = user_data;
+  HBCITransDialog *td = user_data;
   const AccountNumberCheck_Record *record;
   g_assert(td);
 
@@ -635,7 +710,7 @@ goto_string_cb(char * string, gpointer data)
 void add_template_cb(GtkButton *b,
 		     gpointer user_data)
 {
-  TransData *td = user_data;
+  HBCITransDialog *td = user_data;
   GtkWidget *dlg;
   char *name;
   int retval = -1;
@@ -672,5 +747,23 @@ void add_template_cb(GtkButton *b,
 				   GTK_SIGNAL_FUNC(template_selection_cb),
 				   td);
   }
+}
+
+void gnc_hbci_dialog_xfer_cb(Transaction *trans, gpointer user_data)
+{
+  HBCITransDialog *td = user_data;
+  g_assert(td);
+  if (trans) {
+    td->gnc_trans = trans;
+    /* Unregister handler for transaction creation callback */
+    if (td->gnc_trans_dialog)
+      gnc_xfer_dialog_set_txn_cb(td->gnc_trans_dialog, NULL, NULL);
+    td->gnc_trans_dialog = NULL;
+  }
+  else {
+    gnc_xfer_dialog_set_txn_cb(td->gnc_trans_dialog, NULL, NULL);
+    td->gnc_trans_dialog = NULL;
+  }
+  return;
 }
 
