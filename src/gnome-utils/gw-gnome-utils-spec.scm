@@ -150,7 +150,8 @@
    "gnc_print_session_print"
    '((<gnc:PrintSession*> p))
    "Show the GNOME print dialog to start printing.")
- (gw:wrap-function
+
+  (gw:wrap-function
    mod
    'gnc:error-dialog
    '<gw:void>
