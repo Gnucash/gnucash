@@ -48,6 +48,11 @@
 	* src/gnome/gnc-split-reg.[ch]:
 	* src/gnome/window-register.[ch]: Remove some no-longer-used code.
 
+	* src/gnome/gnc-plugin-account-tree.[ch]:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/scm/main-window.scm: Automatically open the account tree
+	page at startup.
+
 2003-09-28  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-main-window.c:

@@ -194,6 +194,7 @@ the account instead of opening a register.") #f))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
+    (gnc:new-account-tree #f)
 ;;    (gnc:mdi-restore (gnc:mdi-get-current) book-url)
     ))
 

@@ -29,7 +29,6 @@ Account Tree: - FUNCTIONAL
 	- select an account and run a command
 	- Some menu/toolbar items functional
 
-	- Account tree doesn't open automatically
 	- importing qif produces errors
 
 

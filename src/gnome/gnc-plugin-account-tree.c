@@ -191,13 +191,18 @@ gnc_plugin_account_tree_create_page (GncPlugin *plugin,
 
 
 /* Command callbacks */
-static void
-gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncMainWindowActionData *data)
+void
+gnc_new_account_tree (GncMainWindow *window)
 {
 	GncPluginPage *page;
 
-	g_return_if_fail (data != NULL);
-
 	page = gnc_plugin_page_account_tree_new ();
-	gnc_main_window_open_page (data->window, page);
+	gnc_main_window_open_page (window, page);
+}
+
+static void
+gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncMainWindowActionData *data)
+{
+	g_return_if_fail (data != NULL);
+	gnc_new_account_tree (data->window);
 }

@@ -44,6 +44,8 @@
       "#include <druid-hierarchy.h>\n"
       "#include <top-level.h>\n"
       "#include <gnc-html.h>\n"
+      "#include <gnc-main-window.h>\n"
+      "#include <gnc-plugin-account-tree.h>\n"
       "#include <gnc-splash.h>\n"
       "#include <dialog-find-transactions.h>\n"
       "#include <dialog-scheduledxaction.h>\n"
@@ -136,6 +138,18 @@
    "gnc_gui_destroy"
    '()
    "Destroy the UI.")
+
+  (gw:wrap-as-wct ws
+                  '<gnc:MainWindow*>
+                  "GncMainWindow *" "const GncMainWindow *")
+
+  (gw:wrap-function
+   ws
+   'gnc:new-account-tree
+   '<gw:void>
+   "gnc_new_account_tree"
+   '((<gnc:MainWindow*> window))
+   "Create a new account tree window.")
 
   (gw:wrap-function
    ws
