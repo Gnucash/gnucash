@@ -252,6 +252,13 @@ to my brazilian broker (who will sell them for cruzeiros).
 Is the correct answer to just 'punt' in these cases? 
 How is teh closing of books to be handled in such a case?
 
+GUI Elements:
+-- The user should be able to specify a default 'realized-gain'
+   account that is associated witha a stock account.
+-- The user should be able to specify a default 'unrealized-gain'
+   account that is associated witha a stock account.
+	
+
 
 Implementation 
 ==============
