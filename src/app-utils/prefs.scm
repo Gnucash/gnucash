@@ -767,3 +767,7 @@ Control Center"))))))
   "__gui" "search_for_active_only"
   "" ""
   #t))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "commodity_include_iso" 0))

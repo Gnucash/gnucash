@@ -1,5 +1,9 @@
 2003-05-11  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-commodities.c: 
+	* src/app-utils/prefs.scm: Remember the state of the "show
+	currencies" check box from one time to the next.
+
 	* src/gnome-utils/dialog-transfer.c: Fix transfer dialog to not
 	hang if OK button is clicked w/o filling in dialog properly.
 	#109497

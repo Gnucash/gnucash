@@ -33,6 +33,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
+#include "global-options.h"
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
@@ -47,8 +48,7 @@ typedef struct
   GtkWidget * commodity_list;
   GtkWidget * edit_button;
   GtkWidget * remove_button;
-
-  gboolean show_currencies;
+  GtkWidget * show_currencies;
 
   gnc_commodity *commodity;
   gboolean new;
@@ -106,7 +106,8 @@ gnc_load_namespace (gpointer data, gpointer user_data)
   GList *commodities;
   GList *node;
 
-  if (!cd->show_currencies && gnc_commodity_namespace_is_iso (namespace))
+  if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cd->show_currencies)) &&
+      gnc_commodity_namespace_is_iso (namespace))
     return;
 
   ct = gnc_get_current_commodities ();
@@ -203,7 +204,10 @@ static void
 close_clicked (GtkWidget *widget, gpointer data)
 {
   CommoditiesDialog *cd = data;
+  gboolean active;
 
+  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(cd->show_currencies));
+  gnc_set_boolean_option ("__gui", "commodity_include_iso", active);
   gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 }
 
@@ -353,8 +357,6 @@ show_currencies_toggled (GtkToggleButton *toggle, gpointer data)
 {
   CommoditiesDialog *cd = data;
 
-  cd->show_currencies = gtk_toggle_button_get_active (toggle);
-
   gnc_commodities_load_commodities (cd);
 }
 
@@ -363,6 +365,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 {
   GtkWidget *dialog;
   GladeXML *xml;
+  gboolean active;
 
   xml = gnc_glade_xml_new ("commodities.glade", "Commodities Dialog");
 
@@ -418,7 +421,9 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
                         GTK_SIGNAL_FUNC (add_clicked), cd);
 
     button = glade_xml_get_widget (xml, "show_currencies_button");
-
+    cd->show_currencies = button;
+    active = gnc_lookup_boolean_option ("__gui", "commodity_include_iso", FALSE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), active);
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
                         GTK_SIGNAL_FUNC (show_currencies_toggled), cd);
   }
