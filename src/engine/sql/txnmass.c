@@ -218,15 +218,18 @@ pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
 
    /* restore the transactions */
    xaccAccountGroupBeginEdit (grp);
-   pgendGetResults (be, get_mass_trans_cb, NULL);
+   xaction_list = pgendGetResults (be, get_mass_trans_cb, NULL);
 
    SEND_QUERY (be, "SELECT * FROM gncEntry;", );
    pgendGetResults (be, get_mass_entry_cb, NULL);
 
+   /* hack alert !!!!  not restoring transaction/split slots for now !!!! */
+   /* this has a huge sucking sound, fix later!! */
+   xaction_list = NULL;
    for (node=xaction_list; node; node=node->next)
    {
       Transaction *trans = (Transaction *)node->data;
-      GList *splits;
+      GList *splits, *snode;
 
       /* ------------------------------------------------- */
       /* Restore any kvp data associated with the transaction and splits.
@@ -236,9 +239,9 @@ pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
       trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
    
       splits = xaccTransGetSplitList(trans);
-      for (node = splits; node; node=node->next)
+      for (snode = splits; snode; snode=snode->next)
       {
-         Split *s = node->data;
+         Split *s = snode->data;
          s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
       }
 
