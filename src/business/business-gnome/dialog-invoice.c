@@ -12,6 +12,7 @@
 
 #include "gncObject.h"
 #include "QueryCore.h"
+#include "QueryNew.h"
 
 #include "dialog-utils.h"
 #include "global-options.h"
