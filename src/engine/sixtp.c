@@ -631,6 +631,12 @@ sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
       }
     }
 
+    if((*stack)->next == NULL) {
+      /* This is the top of the stack. The top frame seems to want to
+       * be destroyed by sixtp_context_destroy. */
+      break;
+    }
+
     *stack = sixtp_pop_and_destroy_frame(*stack);
   }
 }
