@@ -141,10 +141,12 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    int invalid = 0;
 
    table = (Table *) cd;
+   arr = table->cursor;
    cbs = (XbaeMatrixDefaultActionCallbackStruct *) cb;
 
    row = cbs->row;
    col = cbs->column;
+printf ("cell cb %d %d %d \n", row, col, cbs->reason);
 
    /* can't edit outside of the physical space */
    invalid = (0 > row) || (0 > col) ;
@@ -161,9 +163,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    /* remove offset for the header rows */
    rel_row -= table->num_header_rows;
 
-   /* prepare to call the cell callback */
-   arr = table->cursor;
-   if (arr) {
+   /* check for a cell handler, but only if cell adress is valid */
+   if (arr && !invalid) {
       rel_row %= (arr->numRows);
       rel_col %= (arr->numCols);
       if (! (arr->cells[rel_row][rel_col])) invalid = TRUE;
@@ -191,14 +192,13 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
          case XbaeTraverseCellReason: {
             XbaeMatrixTraverseCellCallbackStruct *tcbs;
             tcbs = (XbaeMatrixTraverseCellCallbackStruct *) cbs;
-            tcbs->next_row = 0;
-            tcbs->next_column = 0;
             break;
          }
          case XbaeLeaveCellReason: {
             XbaeMatrixLeaveCellCallbackStruct *lcbs;
             lcbs = (XbaeMatrixLeaveCellCallbackStruct *) cbs;
-            lcbs->doit = False;
+            /* must set doit to true in order to be able to leave the cell */
+            lcbs->doit = True;
             break;
          }
       }
