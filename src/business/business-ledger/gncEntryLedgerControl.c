@@ -28,8 +28,8 @@
 #include <glib.h>
 
 #include "Account.h"
-#include "AccWindow.h"
 #include "combocell.h"
+#include "dialog-account.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"

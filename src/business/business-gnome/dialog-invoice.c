@@ -60,7 +60,7 @@
 #include "dialog-payment.h"
 #include "dialog-tax-table.h"
 #include "dialog-billterms.h"
-#include "AccWindow.h"
+#include "dialog-account.h"
 #include "guile-mappings.h"
 
 #include "dialog-query-list.h"

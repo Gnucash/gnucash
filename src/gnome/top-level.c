@@ -31,10 +31,10 @@
 #include <g-wrap-wct.h>
 #include <X11/Xlib.h>
 
-#include "AccWindow.h"
 #include "TransLog.h"
 #include "backend/gnc-backend-api.h"
 #include "combocell.h"
+#include "dialog-account.h"
 #include "dialog-commodity.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"

@@ -28,7 +28,7 @@
 #include <glib.h>
 
 #include "Account.h"
-#include "AccWindow.h"
+#include "dialog-account.h"
 #include "gnc-ui-util.h"
 #include "combocell.h"
 #include "pricecell.h"

@@ -36,9 +36,9 @@
 
 #include "window-register.h"
 #include "Account.h"
-#include "AccWindow.h"
 #include "QueryNew.h"
 #include "SX-book.h"
+#include "dialog-account.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "global-options.h"

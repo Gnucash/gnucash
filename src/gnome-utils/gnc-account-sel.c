@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "AccWindow.h"
+#include "dialog-account.h"
 #include "GNCId.h"
 #include "gnc-account-sel.h"
 #include "gnc-exp-parser.h"
