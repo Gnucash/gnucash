@@ -22,6 +22,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/dialog-utils.c				    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated function.				    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <glade/glade.h>
@@ -176,7 +183,7 @@ option_menu_destroy_cb (GtkObject *obj, gpointer data)
 {
   GtkTooltips *tips = data;
 
-  gtk_object_unref (GTK_OBJECT (tips));
+  g_object_unref (GTK_OBJECT (tips));
 }
 
 /********************************************************************\
@@ -204,7 +211,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
   tooltips = gtk_tooltips_new();
 
-  gtk_object_ref (GTK_OBJECT (tooltips));
+  g_object_ref (GTK_OBJECT (tooltips));
   gtk_object_sink (GTK_OBJECT (tooltips));
 
   for (i = 0; i < num_options; i++)
@@ -399,7 +406,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 
   gtk_widget_set_style(label, style);
 
-  gtk_style_unref(style);
+  g_object_unref(style);
 }
 
 

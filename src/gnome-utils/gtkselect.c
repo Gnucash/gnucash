@@ -25,6 +25,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/*
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch
+ * * src/gnome-utils/gtkselect.c
+ *   Change gtk_*_ref to g_object_ref, same for unref,
+ *   to replace deprecated functions.
+ */
+
 #include <string.h>
 
 #include "gtk/gtkarrow.h"
@@ -103,8 +110,8 @@ static void
 gtk_select_destroy (GtkObject * select)
 {
   gtk_widget_destroy (GTK_SELECT (select)->popwin);
-  gtk_widget_unref (GTK_SELECT (select)->popwin);
-  gtk_widget_unref (GTK_SELECT (select)->empty);
+  g_object_unref (GTK_SELECT (select)->popwin);
+  g_object_unref (GTK_SELECT (select)->empty);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (*GTK_OBJECT_CLASS (parent_class)->destroy) (select);
@@ -333,21 +340,21 @@ gtk_select_update_entry (GtkList * list, GtkSelect * select)
     if (old_selected) {
       items = g_list_append(NULL, old_selected);
       posn = g_list_index(select->entries, old_selected);
-      gtk_widget_ref(old_selected);
+      g_object_ref(old_selected);
       gtk_container_remove(GTK_CONTAINER(select->entry), old_selected);
       if (old_selected != select->empty)
 	gtk_list_insert_items(list, items, posn);
-      gtk_widget_unref(old_selected);
+      g_object_unref(old_selected);
     } else {
       gtk_container_remove(GTK_CONTAINER(select->entry), select->empty);
     }
     if (selected) {
       select->selected = selected;
       items = g_list_append(NULL, selected);
-      gtk_widget_ref(selected);
+      g_object_ref(selected);
       gtk_list_remove_items(list, items);
       gtk_container_add(GTK_CONTAINER(select->entry), selected);
-      gtk_widget_unref(selected);
+      g_object_unref(selected);
     } else {
       gtk_container_add(GTK_CONTAINER(select->entry), select->empty);
       select->selected = NULL;
@@ -533,7 +540,7 @@ gtk_select_init (GtkSelect * select)
   select->selected = NULL;
   arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
   gtk_widget_show (arrow);
-  gtk_widget_ref(select->empty);
+  g_object_ref(select->empty);
   gtk_widget_show (select->empty);
   gtk_container_add(GTK_CONTAINER(select->entry), select->empty);
   gtk_container_add (GTK_CONTAINER (select->button), arrow);
@@ -553,7 +560,7 @@ gtk_select_init (GtkSelect * select)
      (GtkSignalFunc)prelight_bug, select); */
 
   select->popwin = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_ref (select->popwin);
+  g_object_ref (select->popwin);
   gtk_window_set_policy (GTK_WINDOW (select->popwin), 1, 1, 0);
   
   gtk_widget_set_events (select->popwin, GDK_KEY_PRESS_MASK);
@@ -768,7 +775,7 @@ gtk_select_remove_items_internal (GtkSelect *select, GList *items,
     items = g_list_remove(items, select->selected);
     do_free = 1;
     if (!unref)
-      gtk_widget_ref(select->selected);
+      g_object_ref(select->selected);
     gtk_container_remove(GTK_CONTAINER(select->entry), select->selected);
     gtk_container_add(GTK_CONTAINER(select->entry), select->empty);
     select->selected = NULL;

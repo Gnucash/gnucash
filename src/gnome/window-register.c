@@ -25,6 +25,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome/window-register.c				    *
+ *   Change gtk_object_ref to g_object_ref, same for unref, 	    *
+ *   to replace deprecated function.				    *
+\********************************************************************/
+
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -1068,15 +1075,15 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   regMenu = glade_xml_get_widget( xml, "gnc_register_edit_menu_menu" );
   gtk_menu_shell_insert( GTK_MENU_SHELL(menu), gtk_menu_item_new(), (3 + adj));
   tmpMi = glade_xml_get_widget( xml, "gnc_register_edit_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_shell_insert( GTK_MENU_SHELL(menu), tmpMi, (4 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_find_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_shell_append( GTK_MENU_SHELL(menu), tmpMi );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(regMenuItem) );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(regMenuItem), menu );
 
@@ -1085,26 +1092,26 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   regMenuItem = glade_xml_get_widget( xml, "gnc_register_view_menu" );
   regMenu = glade_xml_get_widget( xml, "gnc_register_view_menu_menu" );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_toolbar_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (0 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_summary_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (1 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_statusbar_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (2 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (3 + adj) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_select_trans_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (4 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(regMenuItem) );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(regMenuItem), menu );
 
@@ -1113,28 +1120,28 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
   regMenuItem = glade_xml_get_widget( xml, "gnc_register_actions_menu" );
   regMenu = glade_xml_get_widget( xml, "gnc_register_actions_menu_menu" );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_xfer_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (0 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_recn_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (1 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_stock_split_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_insert( GTK_MENU(menu), tmpMi, (2 + adj) );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   gtk_menu_insert( GTK_MENU(menu), gtk_menu_item_new(), (3 + adj) );
   /* Base this off the end of the list for a bit more flexibility. */
   gtk_menu_append( GTK_MENU(menu), gtk_menu_item_new() );
   tmpMi = glade_xml_get_widget( xml, "gnc_register_scrub_mi" );
-  gtk_object_ref( GTK_OBJECT(tmpMi) );
+  g_object_ref( GTK_OBJECT(tmpMi) );
   gtk_container_remove( GTK_CONTAINER(regMenu), tmpMi );
   gtk_menu_append( GTK_MENU(menu), tmpMi );
-  gtk_object_unref( GTK_OBJECT(tmpMi) );
+  g_object_unref( GTK_OBJECT(tmpMi) );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(regMenuItem) );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(regMenuItem), menu );
 

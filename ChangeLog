@@ -1,3 +1,37 @@
+
+2003-03-16 TomF changes for gnucash-gnome2-dev, 8th batch
+	* src/gnome-utils/cursors.c
+	  Replace calls of deprecated gtk_container_get_toplevels by
+	  gtk_window_list_toplevels
+
+2003-03-14 TomF changes for Gnome-2 branch, 7th batch
+
+	  Change gtk_*_ref to g_object_ref, same for unref, 
+	  to replace deprecated functions in the following files.
+
+	* src/business/business-gnome/dialog-billterms.c
+	* src/gnome/dialog-price-edit-db.c
+	* src/gnome/gnc-split-reg.c
+	* src/gnome/window-register.c
+	* src/gnome-utils/dialog-options.c
+	* src/gnome-utils/dialog-transfer.c
+	* src/gnome-utils/dialog-utils.c				    *
+	* src/gnome-utils/gnc-account-tree.c
+	* src/gnome-utils/dialog-utils.c
+	* src/gnome-utils/gnc-html.c
+	* src/gnome-utils/gnc-mdi-utils.c
+	* src/gnome-utils/gtkselect.c
+	* src/gnome-utils/print-session.c
+	* src/gnome-utils/window-help.c
+	* src/gnome-utils/dialog-search.c
+	* src/import-export/hbci/hbci-interaction.c
+	* src/import-export/hpci/hbci-progressmon.c
+	* src/register/register-gnome/combocell-gnome.c
+	* src/register/register-gnome/datecell-gnome.c
+	* src/register/register-gnome/gnucash.sheet.c
+	* src/register/register-gnome/table-gnome.c
+	* src/report/report-gnome/dialog-style-sheet.c
+
 2003-03-12 TomF changes for Gnome-2 branch, 6th batch
 
 	* src/network-utils/test/Makefile.am:

@@ -25,6 +25,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome/gnc-split-reg.c					    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -431,12 +438,12 @@ gsr_create_menus( GNCSplitReg *gsr )
   gtk_widget_hide( mbar );
 
   gsr->edit_menu = glade_xml_get_widget( xml, "menu_edit_menu" );
-  gtk_object_ref( GTK_OBJECT(gsr->edit_menu) );
+  g_object_ref( GTK_OBJECT(gsr->edit_menu) );
   mi = glade_xml_get_widget( xml, "menu_edit" );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM( mi ) );
 
   gsr->view_menu = glade_xml_get_widget( xml, "menu_view_menu" );
-  gtk_object_ref( GTK_OBJECT(gsr->view_menu) );
+  g_object_ref( GTK_OBJECT(gsr->view_menu) );
   mi = glade_xml_get_widget( xml, "menu_view" );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(mi) );
 
@@ -444,7 +451,7 @@ gsr_create_menus( GNCSplitReg *gsr )
   gsr->sort_submenu = glade_xml_get_widget( xml, "menu_sort_order_menu" );
 
   gsr->action_menu = glade_xml_get_widget( xml, "menu_actions_menu" );
-  gtk_object_ref( GTK_OBJECT(gsr->action_menu) );
+  g_object_ref( GTK_OBJECT(gsr->action_menu) );
   mi = glade_xml_get_widget( xml, "menu_actions" );
   gtk_menu_item_remove_submenu( GTK_MENU_ITEM(mi) );
 

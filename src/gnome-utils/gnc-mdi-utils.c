@@ -21,6 +21,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/gnc-mdi-utils.c				    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <gnome.h>
@@ -525,7 +532,7 @@ gnc_mdi_app_destroyed_cb (GnomeApp * app, gpointer user_data)
     GList * child; 
 
     if (toolbar)
-      gtk_widget_unref (toolbar);
+      g_object_unref (toolbar);
 
     gtk_object_set_user_data (GTK_OBJECT (app), NULL);
 
@@ -536,7 +543,7 @@ gnc_mdi_app_destroyed_cb (GnomeApp * app, gpointer user_data)
       if (mc && mc->toolbar && mc->app && (mc->app == app))
       {
         /* we need to pull the toolbar out to prevent its being destroyed */
-        gtk_widget_ref (mc->toolbar);
+        g_object_ref (mc->toolbar);
         gtk_container_remove (GTK_CONTAINER(mc->toolbar->parent), mc->toolbar);
       }
     }
@@ -703,7 +710,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
        * changed) */
       if (GTK_WIDGET(childwin->toolbar)->parent)
       {
-        gtk_widget_ref (GTK_WIDGET(childwin->toolbar));
+        g_object_ref (GTK_WIDGET(childwin->toolbar));
         gtk_container_remove (GTK_CONTAINER
                               (GTK_WIDGET(childwin->toolbar)->parent),
                               GTK_WIDGET(childwin->toolbar));
@@ -739,10 +746,10 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
 
     oldbar = gtk_object_get_user_data (GTK_OBJECT(new_app));
     if (oldbar)
-      gtk_widget_unref (oldbar);
+      g_object_unref (oldbar);
 
     if (childwin->toolbar)
-      gtk_widget_ref (childwin->toolbar);
+      g_object_ref (childwin->toolbar);
 
     gtk_object_set_user_data (GTK_OBJECT(new_app), childwin->toolbar);
   }

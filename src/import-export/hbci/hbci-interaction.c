@@ -20,6 +20,13 @@
  *                                                                         *
  ***************************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/import-export/hbci/hbci-interaction.c			    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <stdio.h>
@@ -104,7 +111,7 @@ void GNCInteractor_delete(GNCInteractor *data)
     gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
 			    gtk_toggle_button_get_active 
 			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
-    gtk_object_unref (GTK_OBJECT (data->dialog));
+    g_object_unref (GTK_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
   

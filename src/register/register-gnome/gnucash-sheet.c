@@ -18,6 +18,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/register/register-gnome/gnucash.sheet.c		    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 /*
  * The Gnucash Sheet widget
  *
@@ -151,10 +158,10 @@ static void
 gnucash_sheet_set_popup (GnucashSheet *sheet, GtkWidget *popup, gpointer data)
 {
         if (popup)
-                gtk_widget_ref (popup);
+                g_object_ref (popup);
 
         if (sheet->popup)
-                gtk_widget_unref (sheet->popup);
+                g_object_unref (sheet->popup);
 
         sheet->popup = popup;
         sheet->popup_data = data;
@@ -599,7 +606,7 @@ gnucash_sheet_destroy (GtkObject *object)
 
 	/* This has to come after the parent destroy, so the item edit
 	   destruction can do its disconnects. */
-        gtk_widget_unref (sheet->entry);
+        g_object_unref (sheet->entry);
 }
 
 
@@ -2337,7 +2344,7 @@ gnucash_sheet_new (Table *table)
 
         /* The entry widget */
         sheet->entry = gtk_entry_new ();
-        gtk_widget_ref(sheet->entry);
+        g_object_ref(sheet->entry);
         gtk_object_sink(GTK_OBJECT(sheet->entry));
 
         /* set up the editor */

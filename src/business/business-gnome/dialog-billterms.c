@@ -4,6 +4,12 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
+/* 2003-03-12 TomF changes for Gnome-2 branch, 7th batch
+ * * src/business/business-gnome/dialog-billterms.c:
+ *   Change gtk_object_ref to g_object_ref, same for unref, 
+ *   to replace deprecated function.
+ */
+
 #include "config.h"
 
 #include <gnome.h>
@@ -108,7 +114,7 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
   notebook->prox_cutoff = read_widget (xml, "prox:cutoff_day", read_only);
 
   /* Disconnect the notebook from the window */
-  gtk_object_ref (GTK_OBJECT (notebook->notebook));
+  g_object_ref (GTK_OBJECT (notebook->notebook));
   gtk_container_remove (GTK_CONTAINER (parent), notebook->notebook);
   gtk_widget_destroy (parent);
 
@@ -408,7 +414,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term)
   /* Attach the notebook */
   box = glade_xml_get_widget (xml, "notebook_box");
   gtk_box_pack_start (GTK_BOX (box), nbt->notebook.notebook, TRUE, TRUE, 0);
-  gtk_object_unref (GTK_OBJECT (nbt->notebook.notebook));
+  g_object_unref (GTK_OBJECT (nbt->notebook.notebook));
 
   /* Fill in the widgets appropriately */
   if (term)
@@ -724,7 +730,7 @@ gnc_ui_billterms_window_new (GNCBook *book)
   widget = glade_xml_get_widget (xml, "notebook_box");
   gtk_box_pack_start (GTK_BOX (widget), btw->notebook.notebook,
 		      TRUE, TRUE, 0);
-  gtk_object_unref (GTK_OBJECT (btw->notebook.notebook));
+  g_object_unref (GTK_OBJECT (btw->notebook.notebook));
 
   /* Connect all the buttons */
   button = glade_xml_get_widget (xml, "new_term_button");

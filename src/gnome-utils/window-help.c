@@ -25,6 +25,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/window-help.c				    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <errno.h>
@@ -781,7 +788,7 @@ gnc_help_window_destroy(gnc_help_window * help)
   }
 
   /* take care of the gnc-html object specially */
-  gtk_widget_ref(gnc_html_get_widget(help->html));
+  g_object_ref(gnc_html_get_widget(help->html));
   gnc_html_destroy(help->html);
 
   gtk_widget_destroy(GTK_WIDGET(help->toplevel)); 

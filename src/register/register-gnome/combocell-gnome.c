@@ -20,6 +20,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/register/register-gnome/combocell-gnome.c		    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 /*
  * FILE: combocell-gnome.c
  *
@@ -266,7 +273,7 @@ gnc_combo_cell_gui_destroy (BasicCell *bcell)
 		if (box != NULL && box->item_list != NULL)
                 {
 			combo_disconnect_signals(cell);
-			gtk_object_unref(GTK_OBJECT(box->item_list));
+			g_object_unref(GTK_OBJECT(box->item_list));
 			box->item_list = NULL;
 		}
 
@@ -669,7 +676,7 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 	box->sheet = sheet;
 	box->item_edit = item_edit;
 	box->item_list = item_edit_new_list(box->item_edit);
-	gtk_object_ref (GTK_OBJECT(box->item_list));
+	g_object_ref (GTK_OBJECT(box->item_list));
 	gtk_object_sink (GTK_OBJECT(box->item_list));
 
 	/* to mark cell as realized, remove the realize method */

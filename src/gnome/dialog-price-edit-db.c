@@ -21,6 +21,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome/dialog-price-edit-db.c				    *
+ *   Change gtk_object_ref to g_object_ref, same for unref, 	    *
+ *   to replace deprecated function.				    *
+\********************************************************************/
+
+
 #include "config.h"
 
 #include <gnome.h>
@@ -356,7 +364,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
   gtk_widget_show (label);
 
   date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-  gtk_object_ref (GTK_OBJECT (date));
+  g_object_ref (GTK_OBJECT (date));
   gtk_object_sink (GTK_OBJECT (date));
 
   gtk_box_pack_start (GTK_BOX (vbox), date, FALSE, FALSE, 0);
@@ -385,7 +393,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
     gnc_gui_refresh_all ();
   }
 
-  gtk_object_unref (GTK_OBJECT (date));
+  g_object_unref (GTK_OBJECT (date));
 }
 
 static void

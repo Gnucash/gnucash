@@ -20,6 +20,14 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/register/register-gnome/table-gnome.c			    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
+
 /*
  * FILE:
  * table-gnome.c
@@ -133,7 +141,7 @@ table_destroy_cb (Table *table)
 
         sheet = GNUCASH_SHEET (table->ui_data);
 
-        gtk_widget_unref (GTK_WIDGET(sheet));
+        g_object_unref (GTK_WIDGET(sheet));
 
         table->ui_data = NULL;
 }
@@ -159,7 +167,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         table->gui_handlers.destroy = table_destroy_cb;
         table->ui_data = sheet;
 
-        gtk_widget_ref (GTK_WIDGET(sheet));
+        g_object_ref (GTK_WIDGET(sheet));
 
         /* config the cell-block styles */
 

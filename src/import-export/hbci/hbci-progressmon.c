@@ -20,6 +20,13 @@
  *                                                                         *
  ***************************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/import-export/hpci/hbci-progressmon.c			    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #include "config.h"
 #include <stdio.h>
 #include <string.h>
@@ -361,7 +368,7 @@ gnc_hbci_new_pmonitor(GNCInteractor *data)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
   //gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);
 
-  gtk_object_ref (GTK_OBJECT (dialog));
+  g_object_ref (GTK_OBJECT (dialog));
   gtk_widget_hide_all (dialog);
 
   pmon = HBCI_ProgressMonitorCB_new(&destr,

@@ -20,6 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/dialog-options.c				    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated function.				    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <gnome.h>
@@ -624,7 +631,7 @@ radiobutton_destroy_cb (GtkObject *obj, gpointer data)
 {
   GtkTooltips *tips = data;
 
-  gtk_object_unref (GTK_OBJECT (tips));
+  g_object_unref (GTK_OBJECT (tips));
 }
 
 static GtkWidget *
@@ -651,7 +658,7 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 
   /* Create the tooltips */
   tooltips = gtk_tooltips_new ();
-  gtk_object_ref (GTK_OBJECT (tooltips));
+  g_object_ref (GTK_OBJECT (tooltips));
   gtk_object_sink (GTK_OBJECT (tooltips));
 
   /* Iterate over the options and create a radio button for each one */
@@ -1177,7 +1184,7 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
   propertybox->tips = gtk_tooltips_new();
   propertybox->option_db = odb;
 
-  gtk_object_ref (GTK_OBJECT (propertybox->tips));
+  g_object_ref (GTK_OBJECT (propertybox->tips));
   gtk_object_sink (GTK_OBJECT (propertybox->tips));
 
   num_sections = gnc_option_db_num_sections(odb);
@@ -1272,7 +1279,7 @@ gnc_options_dialog_cancel_stub_cb(GtkWidget * w, gpointer data)
 
   container = window->container;
 
-  gtk_widget_ref (container);
+  g_object_ref (container);
 
   gtk_signal_handler_block_by_func(GTK_OBJECT(container),
                                    GTK_SIGNAL_FUNC
@@ -1291,7 +1298,7 @@ gnc_options_dialog_cancel_stub_cb(GtkWidget * w, gpointer data)
                                        (gnc_options_dialog_destroy_stub_cb),
                                        data);
 
-  gtk_widget_unref (container);
+  g_object_unref (container);
 }
 
 static void
@@ -1359,7 +1366,7 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   }
   else {
     retval->container = vbox;
-    gtk_widget_ref(vbox);
+    g_object_ref(vbox);
     gtk_object_sink(GTK_OBJECT(vbox));
   }
 
@@ -1479,14 +1486,14 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
                                 (gnc_options_dialog_destroy_stub_cb),
                                 win);
   if(!win->toplevel) {
-    gtk_widget_unref(win->container);
+    g_object_unref(win->container);
   }
   else {
     gtk_widget_destroy(win->container);
   }
 
   if(win->tips) {
-    gtk_object_unref (GTK_OBJECT(win->tips));
+    g_object_unref (GTK_OBJECT(win->tips));
   }
 
   win->container = NULL;

@@ -22,6 +22,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/dialog-transfer.c				    *
+ *   Change gtk_object_ref to g_object_ref, same for unref, 	    *
+ *   to replace deprecated function.				    *
+\********************************************************************/
+
+
 #include "config.h"
 
 #include <gnome.h>
@@ -1558,7 +1566,7 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
   entry = xferData->description_entry;
   gtk_signal_disconnect_by_data(GTK_OBJECT(entry), xferData);
 
-  gtk_object_unref (GTK_OBJECT (xferData->tips));
+  g_object_unref (GTK_OBJECT (xferData->tips));
 
   gnc_unregister_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 
@@ -1604,7 +1612,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
   xferData->tips = gtk_tooltips_new();
 
-  gtk_object_ref (GTK_OBJECT (xferData->tips));
+  g_object_ref (GTK_OBJECT (xferData->tips));
   gtk_object_sink (GTK_OBJECT (xferData->tips));
 
   /* amount & date widgets */

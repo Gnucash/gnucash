@@ -22,6 +22,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-16 TomF changes for gnucash-gnome2-dev, 8th batch	    *
+ * * src/gnome-utils/cursors.c					    *
+ *   Replace calls of deprecated gtk_container_get_toplevels by	    *
+ *   gtk_window_list_toplevels					    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <gnome.h>
@@ -87,7 +94,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
   {
     GList *node;
 
-    for (node = gtk_container_get_toplevels (); node; node = node->next)
+    for (node = gtk_window_list_toplevels (); node; node = node->next)
     {
       w = node->data;
 
@@ -95,6 +102,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
         continue;
 
       gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY, update_now);
+      g_list_free (node);
     }
   }
 }
@@ -117,7 +125,7 @@ gnc_unset_busy_cursor (GtkWidget *w)
   {
     GList *node;
 
-    for (node = gtk_container_get_toplevels (); node; node = node->next)
+    for (node = gtk_window_list_toplevels (); node; node = node->next)
     {
       w = GTK_WIDGET (node->data);
 
@@ -125,6 +133,7 @@ gnc_unset_busy_cursor (GtkWidget *w)
         continue;
 
       gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL, FALSE);
+      g_list_free (node);
     }
   }
 }

@@ -20,6 +20,13 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/register/register-gnome/datecell-gnome.c		    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 /*
  * FILE: datecell-gnome.c
  *
@@ -314,7 +321,7 @@ gnc_date_cell_gui_destroy (BasicCell *bcell)
     if (box != NULL && box->date_picker != NULL)
     {
       date_picker_disconnect_signals (cell);
-      gtk_object_unref (GTK_OBJECT (box->date_picker));
+      g_object_unref (GTK_OBJECT (box->date_picker));
       box->date_picker = NULL;
     }
 
@@ -559,7 +566,7 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
   box->sheet = sheet;
   box->item_edit = item_edit;
   box->date_picker = item_edit_new_date_picker (box->item_edit);
-  gtk_object_ref (GTK_OBJECT(box->date_picker));
+  g_object_ref (GTK_OBJECT(box->date_picker));
   gtk_object_sink (GTK_OBJECT(box->date_picker));
 
   /* to mark cell as realized, remove the realize method */

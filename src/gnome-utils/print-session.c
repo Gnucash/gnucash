@@ -20,6 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/print-session.c				    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -54,9 +61,9 @@ gnc_print_session_create(gboolean hand_built_pages) {
 
 void 
 gnc_print_session_destroy(PrintSession * ps) {
-  gtk_object_unref(GTK_OBJECT(ps->meta));
-  gtk_object_unref(GTK_OBJECT(ps->master));
-  gtk_object_unref(GTK_OBJECT(ps->default_font));
+  g_object_unref(GTK_OBJECT(ps->meta));
+  g_object_unref(GTK_OBJECT(ps->master));
+  g_object_unref(GTK_OBJECT(ps->default_font));
 
   g_free(ps);
 }
@@ -93,7 +100,7 @@ gnc_print_session_print(PrintSession * ps) {
   case 0: 
     /* print button */
     if(ps->master) {
-      gtk_object_unref(GTK_OBJECT(ps->master));
+      g_object_unref(GTK_OBJECT(ps->master));
       ps->master = NULL;
     }
     ps->master = 
@@ -104,7 +111,7 @@ gnc_print_session_print(PrintSession * ps) {
     
   case 1:
     if(ps->master) {
-      gtk_object_unref(GTK_OBJECT(ps->master));
+      g_object_unref(GTK_OBJECT(ps->master));
       ps->master = NULL;
     }
     ps->master = 

@@ -22,6 +22,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+/********************************************************************\
+ * 2003-03-14 TomF changes for Gnome-2 branch, 7th batch	    *
+ * * src/gnome-utils/gnc-html.c					    *
+ *   Change gtk_*_ref to g_object_ref, same for unref,	 	    *
+ *   to replace deprecated functions.				    *
+\********************************************************************/
+
 #include "config.h"
 
 #include <sys/types.h>
@@ -1185,7 +1192,7 @@ gnc_html_new(void)
   retval->http         = gnc_http_new();
   retval->history      = gnc_html_history_new();
 
-  gtk_widget_ref (retval->container);
+  g_object_ref (retval->container);
   gtk_object_sink (GTK_OBJECT (retval->container));
 
   /* signals */
@@ -1262,7 +1269,7 @@ gnc_html_destroy(gnc_html * html)
   gnc_html_history_destroy(html->history);
 
   gtk_widget_destroy(html->container);
-  gtk_widget_unref(html->container);
+  g_object_unref(html->container);
 
   g_free(html->current_link);
   g_free(html->base_location);
