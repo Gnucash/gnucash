@@ -16,8 +16,6 @@
 (use-modules (g-wrap gw-glib))
 
 (require 'hash-table)
-(if (not (defined? 'simple-format))
-    (require 'format))
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
