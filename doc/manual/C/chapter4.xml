@@ -1,6 +1,3 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
-]>
-
 <!--
       (Do not remove this comment block.)
   Version: 1.6.5
@@ -11,66 +8,6 @@
   Translators:
                (translators put your name and email here)
 -->
-
-<book id="index">
- <bookinfo>
-  <title>GnuCash User Guide</title>
-  <edition>v1.6.5</edition>
-  <authorgroup>
-
-    <author>
-     <firstname>Carol</firstname>
-     <surname>Champagne</surname>
-     <authorblurb>
-      <para>
-       <email>carol@io.com</email>
-      </para>
-     </authorblurb>
-    </author>
-
-    <author>
-     <firstname>Chris</firstname>
-     <surname>Lyttle</surname>
-     <authorblurb>
-      <para>
-       <email>chris@wilddev.net</email>
-      </para>
-     </authorblurb>
-    </author>
-
-  </authorgroup>
-
-  <copyright>
-   <year>2001</year>
-   <holder>Carol Champagne and Chris Lyttle</holder>
-  </copyright>
-
- <!-- translators: uncomment this:
-
-  <copyright>
-   <year>2000</year>
-   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
-  </copyright>
-
-   -->
-
-  <legalnotice id="legalnotice">
-   <para>
-    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
-   </para>
-   <para>
-    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
-   </para>
-  </legalnotice>
-
-
-  <!-- this is the version of manual, not application --> 
-  <releaseinfo>
-   This is version 1.6.5 of the GnuCash User Guide.
-  </releaseinfo>
-
-</bookinfo>
 
  <chapter id="chapter4">
   <title>Chapter 4 Entering Transactions</title>
@@ -87,7 +24,22 @@ To view an account register, highlight the account name in the main window and d
     </para>
     <para>
 For example, here is a checking account register:
-(?insert register.png)
+<screenshot id="register">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/register.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The Checking Account Register</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Checking Account Register.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
     </para>
     <para>
 The title bar of the register displays the account name, which in this case is "Checking."   Below the title bar, the menu bar displays the menu options available within the register, and the tool bar contains handy buttons that help you work with the register.
@@ -97,7 +49,22 @@ Although each transaction has at least two splits, all you see in the basic regi
     </para>
     <para>
 For example, if you highlight the (?"Paycheck") register line above and click the "Split" button, you get an expanded transaction that looks like this:
-(?insert registersplit.png)
+<screenshot id="registersplit">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/registersplit.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>A Split Transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows a Split Transaction.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
     </para>
     <para>
 The first line of the transaction is the <emphasis> transaction line </emphasis>.   It contains a date, optional number (such as a check number), transaction description, total amount affecting the current account, and updated account balance after the current transaction.  Note that in the expanded view, the "Transfer" column heading disappears, and there is no account name listed in that field.  This line shows you only a summary of the transaction's effect on the current account.  For more detailed information, you need to look below at the individual splits that make up the transaction.
@@ -105,7 +72,22 @@ The first line of the transaction is the <emphasis> transaction line </emphasis>
     <para>
 The partial lines below the transaction line are the <emphasis> split lines </emphasis>, and they are separated by gray lines.   As you highlight one of the split lines, the column headings change to show the split-related  fields:
 
-(insert registersplit2.png)
+<screenshot id="registersplit2">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/registersplit2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>How Split Headings change</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows how Split Headings change.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
     </para>
     <para>
 Each split contains an optional action, or type of split, which you can either type in or choose from a pull-down list. The split also contains an optional memo which describes the split.  Each split affects an account, which can be selected from a pull-down list of your accounts.  The "R" field indicates whether the split has been reconciled.  The last two columns show the amount of the split and whether money is coming into or oing out of the account.
@@ -116,7 +98,22 @@ As we discussed in section (?2.1), total debits (left-column entries) must equal
     <para>
 In this example, if you jump to the "Salary" account, GnuCash brings up the same transaction in the Salary account register:
 
-(?insert registersplit3.png)
+<screenshot id="registersplit3">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/registersplit3.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>A jump to the Salary account</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows a jump to the Salary account.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
     </para>
     <para>
 Note that the transaction line total now summarizes the effect on the Salary account instead of the Checking account, because you are looking at the Salary account register.    The splits are exactly the same, but the transaction line now reflects the credit to the Salary account.
@@ -163,7 +160,22 @@ Open the register of one of the accounts affected by the transaction.
     <listitem>
      <para>
 On a blank line of the register, enter the date of the transaction.  You can either type the date in the date 	 field or click the down-arrow to select the date from a calendar:
-(?insert date.png)
+<screenshot id="date">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/date.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The Date dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Date Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
     </para>
     </listitem>
     <listitem>
@@ -179,7 +191,22 @@ Tab to the Description field and enter a description of the transaction.   This 
     <listitem>
      <para>
 Tab to the Transfer field and enter the other account affected by this transaction.  You can either type in 	the name or select it from a drop-down list of your accounts:
-(?insert transferacct.png) 
+<screenshot id="transferacct">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/transferacct.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The Transfer Account dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Transfer Account Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
 
 
 	Press TAB to accept the account name. 
@@ -202,7 +229,22 @@ Click Enter to record the transaction.
    <title>4.3.2 Using the Transfer Dialog</title>
      <para>
 You can also enter transactions from the Transfer dialog box.  From the main window, select 	Accounts|Transfer... from the menu.    You  should then get a dialog like this:
-(?insert transfer.png)
+<screenshot id="transfer">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/transfer.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The Transfer dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Transfer Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
      </para>
    <orderedlist>
     <listitem>
@@ -242,13 +284,41 @@ Open the register of one of the accounts involved.
     <listitem>
      <para>
 Click on a blank line of the register.  If you are using the default Basic Ledger register style, click the Splits button on the tool bar to expand the transaction.  If you are in either Auto-Split Ledger or Transaction Journal register styles, the transaction is already expanded for you.   The blank transaction, regardless of register style, should look like this:
-(?insert splittxn.png)
+<screenshot id="splittxn">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/splittxn.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The dialog for entering a split</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the dialog for entering a split.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     </listitem>
     <listitem>
      <para>
 Enter the date, transaction number, and description on the transaction line, just as you would for a basic transaction.  Tab out of the description field and note that the cursor automatically moves to the first split line below the transaction line:
-(?insert splittxn2.png)
+<screenshot id="splittxn2">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/splittxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The first split line</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the first split.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     </listitem>
     <listitem>
@@ -269,18 +339,42 @@ Enter the amount of this split in either the debit or credit column (in this cas
     <listitem>
      <para>
 Tab to complete the split, and notice that a new split line appears:
-(?insert splittxn3.png)
-
-
+<screenshot id="splittxn3">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/splittxn3.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The second split line</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the second split line.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 Enter the second split on this line.  GnuCash automatically keeps a running tab of any transaction remaining balance on the last split line of the transaction, and it marks unbalanced transactions with small gray diagonal marks in the upper left corner of the amount fields.  Choose the account from the pull-down list, and enter the amount of the second split.
     </para>
     </listitem>
     <listitem>
      <para>
 Continue entering splits until you have a balanced transaction.  When the gray marks disappear, the transaction is balanced.  The total of debit splits should now equal the total of credit splits:
-(?insert splittxn4.png)
-
-
+<screenshot id="splittxn4">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/splittxn4.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The finished split</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the finished split.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 Notice that GnuCash reorders the splits so that all of the debit splits are first, followed by the credit splits.
     </para>
     </listitem>
@@ -413,7 +507,21 @@ Open the register of the account you wish to reconcile.
     <listitem>
      <para>
 Select Account|Reconcile from the menu.  A dialog box like this will appear:
-(?insert reconcile.png)
+<screenshot id="reconcile">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/reconcile.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The reconcile dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Reconcile Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     </listitem>
     <listitem>
@@ -429,7 +537,21 @@ GnuCash automatically fills in the starting balance for you.   From your bank st
     <listitem>
      <para>
 Click OK to proceed to the Reconcile window:
-(?insert reconcile2.png)
+<screenshot id="reconcile2">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/reconcile2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The Reconcile Window</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Reconcile Window.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     </listitem>
     <listitem>
@@ -492,11 +614,22 @@ As you finish reconciling your accounts, you will probably find transactions tha
   <sect2 id="deleting2">
   <title>4.7.2 Deleting Transactions</title>
   <para>
-  To delete a transaction, highlight the transaction line and click  the Delete button on the tool bar.  GnuCash 	displays this dialog:
-
-(?insert delete.png)
-
-
+  To delete a transaction, highlight the transaction line and click  the Delete button on the tool bar. GnuCash displays this dialog:
+<screenshot id="delete">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/delete.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The delete dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Delete Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 	You should choose the default option, "Delete the whole transaction."  (Choosing the other option will 	delete all of the splits except the one affecting the current account, and this will cause your transaction to 	become unbalanced.)
   </para>
   </sect2>
@@ -504,7 +637,21 @@ As you finish reconciling your accounts, you will probably find transactions tha
   <title>4.7.3 Finding Transactions</title>
   <para>
   To search for transactions,  click the Find button on the tool bar of either the main window or the register 	window.   You will see a dialog that offers several search options:
-(?insert find.png)
+<screenshot id="find">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/find.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The find dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Find Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
   </para>
   <orderedlist>
   <listitem>
@@ -564,11 +711,26 @@ As you finish reconciling your accounts, you will probably find transactions tha
   (??Tip:  The actual amounts of recurring transactions often vary slightly from the estimate.  It's a good idea to flag the recurring transactions that have been updated with actual amounts, so you can keep track of which amounts are still estimates.  One way to do this is to enter a flag in the Num field when you update the transaction with actual amounts.  For example, if you have entered several recurring paycheck deposits,  you might enter "DEP" (or some other abbreviation)  in the Num field when you update a deposit with actual amounts.)
   </para>
   </sect1>
-  <sect1 id="together1">
+  <sect1 id="puttoget1">
   <title>4.9 Putting It All Together (Example of entering an opening balance in checking,  entering a paycheck with deductions, entering a second paycheck using QuickFill, and scheduling a recurring paycheck transaction)</title>
   <para>
   Start by opening your (?gcashdata) file that you last worked on in (?Chapter 3).  As a refresher, your main window should look something  like this:
-(insert chartaccts.png)
+  FIXME:This section needs redoing
+<screenshot id="gcashdata2b">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/gcashdata2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The dialog for a New Account</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the New Account Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
   </para>
   <orderedlist>
   <listitem>
@@ -579,16 +741,42 @@ As you finish reconciling your accounts, you will probably find transactions tha
   <listitem>
   <para>
   From the Checking register window, enter a basic transaction to deposit your net pay of $800 into your checking account.  (Remember, basic transactions transfer money from a source account to a destination account.  Your source in this case is the Salary account, and your destination is the Checking account.)   The transaction should look like this:
-(?insert transactex.png)
-
-
+<screenshot id="transactex">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/transactex.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering a Paycheck transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering a Paycheck transaction.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 Record the transaction.
   </para>
   </listitem>
   <listitem>
   <para>
   Now duplicate this transaction using the Duplicate button in the tool bar.    Schedule the transaction date a week out in the future, and notice the blue line separator that GnuCash uses to separate future transactions from current ones:
-(?insert transactex2.png)
+<screenshot id="transactex2">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/transactex2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The duplicated transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the duplicated transaction.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
   </para>
   </listitem>
   <listitem>
@@ -598,11 +786,11 @@ Record the transaction.
   <para>
   <table>
   <title>Split Example</title>
-  <tgroup cols=4 align=left>
-  <colspec colname=c1 >
-  <colspec colname=c2 >
-  <colspec colname=c3 >
-  <colspec colname=c4 >
+  <tgroup cols="4" align="left">
+  <colspec colname="c1" />
+  <colspec colname="c2" />
+  <colspec colname="c3" />
+  <colspec colname="c4" />
   <tbody>
   <row>
   <entry>Debit</entry>
@@ -622,7 +810,7 @@ Record the transaction.
   <row>
   <entry>Credit</entry>
   <entry>Salary</entry>
-  <entry colname=c4 >1050</entry>
+  <entry colname="c4">1050</entry>
   </row>
   </tbody>
   </tgroup>
@@ -633,9 +821,21 @@ Record the transaction.
   </para>
   <para>
   Here's what the transaction should look like:
-(?insert transactex3.png)
-
-
+<screenshot id="transactex3">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/transactex3.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The split transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the split transaction.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 Press Enter to record the transaction.
   </para>
   </listitem>
@@ -652,8 +852,21 @@ Press Enter to record the transaction.
   <listitem>
   <para>
   Let's look at another account register to see how this last paycheck transaction affected it.  In the expanded transaction, select the Salary account split, and click the Jump button in the tool bar.  You should now see the same transaction in the Salary account register:
-
-(?insert transactex4.png)
+<screenshot id="transactex4">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/transactex4.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The split transaction in the Salary Account</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the split transaction in the Salary Account.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
   </para>
   <para>
   Notice the transaction line is different, but all of the split lines are exactly the same.  You are now looking at this transaction in the Salary account, so the transaction line shows a summary of the effect on this account.
@@ -663,6 +876,23 @@ Press Enter to record the transaction.
   <para>
   You now know all you need to know to enter your transactions in GnuCash.  Return to the main window by closing the register windows, and note that some of your accounts now have balances.  Your chart of accounts should now look like this:
 (?insert chartaccts2.png)
+FIXME:
+<screenshot id="gcashdata2c">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/gcashdata.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>The dialog for a New Account</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the New Account Dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+
   </para>
   </listitem>
   </orderedlist>
@@ -671,4 +901,3 @@ Press Enter to record the transaction.
   </para>
   </sect1>
  </chapter>
-</book>

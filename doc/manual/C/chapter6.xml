@@ -1,6 +1,3 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
-]>
-
 <!--
       (Do not remove this comment block.)
   Version: 1.6.5
@@ -11,66 +8,6 @@
   Translators:
                (translators put your name and email here)
 -->
-
-<book id="index">
- <bookinfo>
-  <title>GnuCash User Guide</title>
-  <edition>v1.6.5</edition>
-  <authorgroup>
-
-    <author>
-     <firstname>Carol</firstname>
-     <surname>Champagne</surname>
-     <authorblurb>
-      <para>
-       <email>carol@io.com</email>
-      </para>
-     </authorblurb>
-    </author>
-
-    <author>
-     <firstname>Chris</firstname>
-     <surname>Lyttle</surname>
-     <authorblurb>
-      <para>
-       <email>chris@wilddev.net</email>
-      </para>
-     </authorblurb>
-    </author>
-
-  </authorgroup>
-
-  <copyright>
-   <year>2001</year>
-   <holder>Carol Champagne and Chris Lyttle</holder>
-  </copyright>
-
- <!-- translators: uncomment this:
-
-  <copyright>
-   <year>2000</year>
-   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
-  </copyright>
-
-   -->
-
-  <legalnotice id="legalnotice">
-   <para>
-    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
-   </para>
-   <para>
-    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
-   </para>
-  </legalnotice>
-
-
-  <!-- this is the version of manual, not application --> 
-  <releaseinfo>
-   This is version 1.6.5 of the GnuCash User Guide.
-  </releaseinfo>
-
-</bookinfo>
  <chapter id="chapter6">
  <title>Chapter 6 Managing Credit Cards</title>
  <para>
@@ -82,7 +19,7 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  The other level of detail allows you to track your balance and purchases, but it requires more entry.  Using the credit card account register, you enter your receipts throughout the month.  When your credit card statement arrives, you reconcile the credit card account to the statement, and you enter your payment as a transfer of money from your checking account to your credit card account.   This method, in addition to giving you more information about your balance during the month, also points out any discrepancies quickly during reconciliation.
  </para>
- <sect1 id="setupacct1">
+ <sect1 id="settingupacct1">
  <title>6.1 Setting Up Accounts (Discussion)</title>
  <para>
  To begin managing your credit cards in GnuCash, you should set up a credit card type account for each credit card you use.   If you are tracking only the payments you make to the credit card company, then all you need is a bank account and a credit card account to enter your transactions. Skip to section (?6.3.1) for information on entering monthly payments.
@@ -132,14 +69,26 @@ A copy of this license was provided with this software in the file <filename>COP
  <listitem>
  <para>
  If you entered a Transfer account, Tab to the Charge column and enter the amount.  Press Enter to record the transaction.
- (insert credpur.png)
+<screenshot id="credpur">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/credpur.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>A Credit Card Purchase</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows a Credit Card Purchase.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
  </para>
  </listitem>
  <listitem>
  <para>
  If you clicked the Split button, Tab to the first split, which affects the credit card account.  Enter an optional action and memo, then enter the receipt total in the Charge column.  In this transaction, you are transferring money *from* the credit card account *to* multiple other accounts.  For each other account involved in this transaction, enter a split and a payment amount.  When you have finished entering your splits, the total payments to other accounts should equal your total charge on the credit card account for this transaction.  Press Enter to record the transaction.
-
-(?insert credmult.png)
  </para>
  </listitem>
  </orderedlist>
@@ -188,8 +137,21 @@ A copy of this license was provided with this software in the file <filename>COP
  <listitem>
  <para>
  Record the payment amount in the Payment column and hit Enter to complete the transaction.  This should decrease your outstanding credit card balance.
-
-(?insert creditpmt.png)
+<screenshot id="creditpmt">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/creditpmt.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>A Credit Card Payment</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows a Credit Card Payment.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
  </para>
  </listitem>
  </orderedlist>
@@ -224,8 +186,21 @@ A copy of this license was provided with this software in the file <filename>COP
  <listitem>
  <para>
  Record the amount of the refund in the Payment column, and hit Enter to complete the transaction. (NOTE:  Your original purchase amount was recorded in the Charge column, so the amounts cancel each other out.)
-
-(?insert credrefund.png)
+<screenshot id="credrefund">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/credrefund.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>A Credit Card Refund</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows a Credit Card Refund.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
  </para>
  </listitem>
  </orderedlist>
@@ -244,16 +219,42 @@ A copy of this license was provided with this software in the file <filename>COP
  </para>
  <para>
  To reconcile your credit card account, follow the same procedures outlined in Section (?4.6) for reconciliation of accounts.    The reconcile dialog should look the same for credit card accounts as it does for bank accounts.  Once you enter the ending balance, your reconcile window should look something like this:
-
-(?insert credrecon.png)
+<screenshot id="credrecon">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/credrecon.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Reconciled Credit Card Account</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows a Reconciled Credit Card Account.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
  </para>
  <para>
  ?Funds In? are the payments and refunds to your credit card.  ?Funds Out? are the credit card purchases.  When you have finished reconciling the account, the difference amount should be 0.  If it is not, check to see if any finance charges need to be added or if you forgot to record some credit card purchases.
  </para>
  <para>
  Once the difference is 0, select the [Finish] button to complete the reconcile.  If you selected the ?Automatic credit card payment? option and you have a credit card balance to pay, you should now get the following Transfer dialog:
-
-(?insert autopmt.png)
+<screenshot id="autopmt">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/autopmt.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Automatic Payment Prompt</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the Automatic Payment Prompt.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
  </para>
  <para>
  Enter the amount you wish to pay on the credit card bill and a transaction description, and select the account that money will transfer from.  Your credit card account should already be selected as the ?Transfer To? account.   Click [OK] to complete the transaction.
@@ -262,7 +263,7 @@ A copy of this license was provided with this software in the file <filename>COP
  Your credit card account register should now show the reconciled transactions marked as reconciled (?"y? or check mark in the R field), and it should contain a credit card bill payment transaction for the current month?s  bill.
  </para>
  </sect1>
- <sect1 id="adjust1">
+ <sect1 id="adjustbal1">
  <title>6.5 Adjusting the Balance (How-To)</title>
  <para>
  So what if you just can?t get the account to reconcile?  First, check over all the transactions and make sure that all have been entered with the correct amounts.   Review (? the Sidebar in Section 4.6) and check for any of the common errors listed there.  If necessary, postpone the reconciliation by selecting Reconcile|Postpone from the Reconcile menu.
@@ -303,14 +304,46 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  (?Chapter 5) looked at bank and cash account transactions.   In this section, we will add some credit card transactions and reconcile the credit card account.   Go ahead and open your  (?gcashdata) file saved in the last chapter.  As a review, your chart of accounts should now look like this:
 
-(?insert chartaccts3.png)
+(?insert chartaccts3.png)FIXME
+<screenshot id="chartaccts3a">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/gcashdata2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  <orderedlist>
  <listitem>
  <para>
  Open the Credit Card account register.  To start tracking your credit card account,  you first need an opening balance.  For this example, assume your ending balance from your last Credit Card statement was $1000.   Enter an Opening Balance transaction with Transfer account of Opening Balances and Charge amount of $1000.  The transaction should look like this:
 
-(?insert openbal.png)
+(?insert openbal.png)FIXME
+<screenshot id="openbal">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  </listitem>
  <listitem>
@@ -320,7 +353,7 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  <table>
  <title>Credit Card Example</title>
- <tgroup cols=4>
+ <tgroup cols="4">
  <tbody>
  <row>
  <entry>2/1/01</entry>
@@ -359,21 +392,69 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  Your register should now look like this:
 
-(?insert ex_purch.png)
+(?insert ex_purch.png)FIXME
+<screenshot id="ex_purch">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  </listitem>
  <listitem>
  <para>
  Now suppose you return the clothes you bought on 2/3 from Faux Pas Fashions.  Enter a transaction for the credit card refund for the full $100 amount.   (?Note: Remember to use the same transfer account you used for the original purchase, and enter the amount under the Payment column.  GnuCash will automatically complete the name and transfer account for you, but it will also automatically enter the $100 in the Charge column.  You will need to reenter the amount in the Payment column.)  The transaction looks like this:
 
-(?insert ex_refund.png)
+(?insert ex_refund.png)FIXME
+<screenshot id="ex_refund">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  </listitem>
  <listitem>
  <para>
  When you receive the monthly statement, it shows a finance charge of $20.   Enter that charge in the register, with a transfer account of Finance Charge (type expense).   The transaction looks like this:
 
-(?insert ex_fincharge.png)
+(?insert ex_fincharge.png)FIXME
+<screenshot id="ex_fincharge">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  </listitem>
  <listitem>
@@ -383,7 +464,7 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  <table>
  <title>Statement Balance Example</title>
- <tgroup cols=2>
+ <tgroup cols="2">
  <tbody>
  <row>
  <entry>Previous Balance:</entry>
@@ -416,11 +497,11 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  <table>
  <title>Statement Transactions Example</title>
- <tgroup cols=4 align=left>
-  <colspec colname=c1 >
-  <colspec colname=c2 >
-  <colspec colname=c3 >
-  <colspec colname=c4 >
+ <tgroup cols="4" align="left">
+  <colspec colname="c1" />
+  <colspec colname="c2" />
+  <colspec colname="c3" />
+  <colspec colname="c4" />
  <tbody>
  <row>
  <entry>Date</entry>
@@ -442,8 +523,8 @@ A copy of this license was provided with this software in the file <filename>COP
  </row>
  <row>
  <entry>2/5/01</entry>
- <entry colname=c3>Payment received</entry>
- <entry colname=c4>-300</entry>
+ <entry colname="c3">Payment received</entry>
+ <entry colname="c4">-300</entry>
  </row>
  <row>
  <entry>2/15/01</entry>
@@ -471,8 +552,8 @@ A copy of this license was provided with this software in the file <filename>COP
  </row>
  <row>
  <entry>2/28/01</entry>
- <entry colname=c3>Finance Charge</entry>
- <entry colname=c4>20</entry>
+ <entry colname="c3">Finance Charge</entry>
+ <entry colname="c4">20</entry>
  </row>
  </tbody>
  </tgroup>
@@ -487,7 +568,23 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  Check over the sample statement to see which transaction is missing.  You should find a payment for $300 that was not entered in the register---that is the difference amount.  In the Reconcile window, click the [New] button on the tool bar.  This brings you to the account register, where you can now enter a transaction for that $300 payment.  (Hint: Be sure to enter the correct date, and use Checking as the transfer account.)  The transaction should look like this:
 
-(?insert ex_pmt.png)
+(?insert ex_pmt.png)FIXME
+<screenshot id="ex_pmt">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  <para>
  Record the transaction, then return to the Reconcile window.  You should see the payment transaction listed in the ?Funds In? panel.  Select it to check it off.   Now the difference should be 0, so click the [Finish] button to complete the reconcile process.
@@ -497,7 +594,23 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  You should now see the Transfer dialog with an amount of 955, the ending balance.   You decide to pay $300 again this month, so change the amount to $300.   Enter a check number for the payment in the Num field, and enter a description.    Your Transfer From account should be Checking, and your Transfer To account should be Credit Card.    The Transfer dialog should look like this:
 
-(?insert ex_transf.png)
+(?insert ex_transf.png)FIXME
+<screenshot id="ex_transf">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  <para>
  Click [OK] to accept the transfer.  Your credit card account should now show the new transaction.  All of the transactions you reconciled should now show up with (?y) in the ?R? column.   The only unreconciled transaction should be the newest payment transaction.
@@ -507,8 +620,23 @@ A copy of this license was provided with this software in the file <filename>COP
  <para>
  If you haven?t already done so, save your file.  We will be using it again in the next chapter, which addresses investments.    Your main window chart of accounts  should now look like this:
 
-(?insert chartaccts4.png)
+(?insert chartaccts4.png)FIXME
+<screenshot id="chartaccts4">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="figures/basictxn2.png"
+      srccredit="Chris Lyttle" format="PNG"/>
+            </imageobject>
+	    <textobject>
+	        <phrase>Entering Net Pay</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows Entering Net Pay.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+  To enter a net pay transaction, you should:
  </para>
  </sect1>
  </chapter>
-</book>
