@@ -47,6 +47,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <assert.h>
 #include <stdio.h>
 
 #include "SplitLedger.h"
@@ -98,7 +99,8 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
 
    /* get the handle to the current split and transaction */
    cursor = reg->table->current_cursor;
-   split = (Split *) cursor->user_data;
+   assert (cursor);
+   split = (Split *) (cursor->user_data);
 
    return split;
 }
@@ -149,11 +151,12 @@ printf ("save split is %p \n", split);
          printf ("Internal Error: SaveRegEntry(): no parent \n");
          return;
       }
-      split = xaccMallocSplit ();
       trans = xaccSplitGetParent (s);
+      acc = xaccSplitGetAccount (s);
+
+      split = xaccMallocSplit ();
       xaccTransBeginEdit (trans);
       xaccTransAppendSplit (trans, split);
-      acc = xaccSplitGetAccount (s);
       xaccAccountInsertSplit (acc, split);
    } else {
       trans = xaccSplitGetParent (split);
@@ -224,6 +227,7 @@ xaccTransGetDescription(trans));
     * Set user_hook to null, so that we can be sure of 
     * getting a new split.
     */
+   split = xaccTransGetSplit (trans, 0);
    if (split == ((Split *) (reg->user_hook))) {
       reg->user_hook = NULL;
    }
@@ -390,12 +394,19 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       split = slist[i];
    }
 
-   /* plus two: one blank transaction, one blank split. */ 
+   /* If user_hook is null, then we haven'tet up the blank split yet,
+    * so add two lines for it: one blank transaction, one blank split.  
+    * But if we have set it up yet, then we've counted one split too 
+    * many: the blank-blank at the very end.  Subtract it back out.
+    */
    if (!(reg->user_hook)) {
       i++;
       num_virt_rows += 2; 
       num_phys_rows += reg->trans_cursor->numRows;
       num_phys_rows += reg->split_cursor->numRows;
+   } else {
+      num_virt_rows -= 1; 
+      num_phys_rows -= reg->split_cursor->numRows;
    }
 
    /* num_virt_cols is always one. */
@@ -451,7 +462,9 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       split = slist[i];
    }
 
-   /* add the "blank split" at the end */
+   /* add the "blank split" at the end.  We use either the blank
+    * split we've cached away previously in "user_hook", or we create
+    * a new one, as needed. */
    if (reg->user_hook) {
       split = (Split *) reg->user_hook;
    } else {
@@ -466,16 +479,24 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       reg->destroy = LedgerDestroy;
    }
 
+   /* do the transaction row of the blank split */
    xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
    xaccSRLoadRegEntry (reg, split);
    vrow ++;
    phys_row += reg->trans_cursor->numRows; 
    
+   /* do the split row of the blank split */
+   {
+   Transaction *trans;
+   trans = xaccSplitGetParent (split);
+   split = xaccTransGetSplit (trans, 1);
    xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
-// hack alert something busted, this staement cause a core dump. why ??
-   // xaccSRLoadRegEntry (reg, split);
+   xaccSRLoadRegEntry (reg, split);
+   vrow ++;
+   phys_row += reg->split_cursor->numRows; 
+   }
    
    /* restore the cursor to its original location */
    if (phys_row <= save_cursor_phys_row) {
