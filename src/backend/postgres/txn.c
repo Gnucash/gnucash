@@ -79,6 +79,7 @@ is_trans_empty (Transaction *trans)
    if ('n' != xaccSplitGetReconcile(s)) return FALSE;
    if (0 != (xaccSplitGetMemo(s))[0]) return FALSE;
    if (0 != (xaccSplitGetAction(s))[0]) return FALSE;
+   if (TRUE != (kvp_frame_is_empty (xaccSplitGetSlots(s)))) return FALSE;
    return TRUE;
 }
 
