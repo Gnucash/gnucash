@@ -26,12 +26,12 @@ void menus_create(GtkMenuEntry * entries, int nmenu_entries);
 static GtkMenuEntry menu_items[] =
 {
         {"<Main>/File/New", "<control>N", NULL, NULL},
-        {"<Main>/File/Open", "<control>O", NULL, NULL},
+        {"<Main>/File/Open", "<control>O", file_cmd_open, NULL},
         {"<Main>/File/Save", "<control>S", NULL, NULL},
         {"<Main>/File/Save as", NULL, NULL, NULL},
         {"<Main>/File/<separator>", NULL, NULL, NULL},
-        {"<Main>/File/Quit", "<control>Q", NULL, "OK, I'll quit"},
-        {"<Main>/Options/General..", NULL, NULL, NULL},
+        {"<Main>/File/Quit", "<control>Q", gtk_main_quit, "OK, I'll quit"},
+        {"<Main>/Account/General..", "<control>A", NULL, NULL},
 	{"<Main>/Help/About..", NULL, NULL, NULL}
 };
 

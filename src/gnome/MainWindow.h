@@ -27,14 +27,15 @@
 #define __MAINWINDOW_H__
 
 #include <gtk/gtk.h>
-
+#include "Group.h"
+#include "Account.h"
 #include "config.h"
 
 
 /** PROTOTYPES ******************************************************/
 void refreshMainWindow( void );
 void main_window_init( );
-
+void xaccMainWindowAddAccount ( GtkWidget * );
 
 
 /** GLOBALS *********************************************************/

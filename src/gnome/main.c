@@ -33,23 +33,18 @@
 #include "util.h"
 #include "MainWindow.h"
 
-/* Motif GUI includes 
-#include "FileBox.h"
-
-*/
-
 /** PROTOTYPES ******************************************************/
 
 /** GLOBALS *********************************************************/
-char    *datafile = NULL;
-char    *helpPath = NULL;
+char        *datafile = NULL;
+char        *helpPath = NULL;
 GtkWidget   *toplevel;
-GtkWidget *filebox;
+GtkWidget   *filebox;
 
 /* The names of the different types of accounts.  For resource
  * specification. Must match the enums in Account.h */
-/*
-String accRes[] ={
+
+gchar *accRes[] ={
   "bank",
   "cash",
   "asset",
@@ -61,32 +56,28 @@ String accRes[] ={
   "expense",
   "equity"
 };
-*/
 
 
-/* Get the selected filename and print it to the console */
-/* This function should eventually get the filename, and */
-/* close the filebox. 				         */
 void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
 {
   datafile = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
-  if( datafile != NULL ) 
+
+  /* Check to see if this is a valid datafile */
+  if ( datafile != NULL )
   {
-   /* load the accounts data from datafile*/
-    topgroup = xaccReadAccountGroup (datafile); 
-
-   /* Close the filebox */
-    gtk_widget_destroy(filebox);
-
-  /* Create main window */
-    main_window_init();
+    topgroup = xaccReadAccountGroup (datafile);   
+    gtk_widget_destroy ( filebox );
   }
-  
+ 
   if( NULL == topgroup )
-    {
+  {
+    /* load the accounts data from datafile*/
     topgroup = xaccMallocAccountGroup(); 
     topgroup->new = TRUE;
-    }
+  } 
+
+  main_window_init ();
+  
 }
 
 void destroy (GtkWidget *widget, gpointer *data)
@@ -94,6 +85,10 @@ void destroy (GtkWidget *widget, gpointer *data)
   gtk_main_quit ();
 }
 
+void file_cmd_open ()
+{
+  g_print ( "Menu Command: file open\n" );
+}
 
 /********************************************************************\
  * main                                                             *
@@ -106,41 +101,63 @@ void destroy (GtkWidget *widget, gpointer *data)
  * Return:                                                          * 
  * Global: topgroup - the data from the datafile                    *
  *         datafile - the name of the user's datafile               *
- *         toplevel - the toplevel widget, for creating new windows *
- *         app      - the XtAppContext                              *
 \********************************************************************/
 int 
 main( int argc, char *argv[] )
-  {
-#if DEBUG_MEMORY
-  char *blk;
-  DEBUG("Initializing memory");
-  blk = (char *)_malloc(8192);
-  _free(blk);
-  printf(" coresize = %d\n",_coresize());
-  DEBUG("Done initializing memory");
-#endif
-  
+{   
   gtk_init (&argc, &argv);
+ 
+  filebox = gtk_file_selection_new ( "Open..." );
   
-  filebox = gtk_file_selection_new ("File selection");
-
   /* read in the filename (should be the first arg after all
    * the X11 stuff */
   if( argc > 1 )
   {
     datafile = argv[1];
 
+    if( datafile != NULL ) 
+    {
+   
+      /* load the accounts data from datafile*/
+      topgroup = xaccReadAccountGroup (datafile); 
+
+      if ( topgroup == NULL )
+      {
+      	GtkWidget *dialog;
+      	GtkWidget *button;
+      	GtkWidget *label;
+      	
+      	dialog = gtk_dialog_new ();
+      	
+      	button = gtk_button_new_with_label ( "Ok" );
+        gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area), button,
+                            TRUE, TRUE, 0);
+        gtk_widget_show ( button );
+
+        label = gtk_label_new (" \nInvalid filename \nNew file started.\n ");
+        gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE,
+                            TRUE, 0);
+        gtk_widget_show ( label );
+        gtk_widget_show ( dialog );
+        
+	topgroup = xaccMallocAccountGroup(); 
+        topgroup->new = TRUE;
+      }
+    }
     /* Create main window */
     main_window_init();
   }
   else
   {
-    gtk_file_selection_set_filename (GTK_FILE_SELECTION(filebox), "*");
-    gtk_widget_show(filebox);
+    /* Filebox code here */
+    gtk_widget_show ( filebox );
   }
   
- 
+  /* Check to see if this is a valid datafile */
+  if ( datafile != NULL )
+    topgroup = xaccReadAccountGroup (datafile);   
+
+
   /* Callbacks for File Box and Stuff */
 
   gtk_signal_connect (GTK_OBJECT (filebox), "delete_event",
@@ -151,14 +168,15 @@ main( int argc, char *argv[] )
   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filebox)->ok_button),
                      "clicked", (GtkSignalFunc) file_ok_sel, filebox );
          
-  /* Connect the cancel_button to destroy the widget */
-  gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(filebox)->cancel_button),                                     
-                            "clicked", (GtkSignalFunc) gtk_widget_destroy,                                    
-                            GTK_OBJECT (filebox));
+  /* Connect the cancel_button to also kill the app */
+  gtk_signal_connect_object ( GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
+ 			     "clicked", (GtkSignalFunc) gtk_exit, NULL );
+ 		  
+
 
   /* Enter event loop */
   gtk_main();
 
   return 0;
-  }
+}
 

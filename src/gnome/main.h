@@ -29,6 +29,13 @@
 
 #include "config.h"
 
+#include "main.h"
+#include "FileIO.h"
+#include "Group.h"
+#include "util.h"
+#include "MainWindow.h" 
+
+
 /** HELP STUFF: *****************************************************/
 #define HELP_VAR     "XACC_HELP"
 #define HELP_ROOT    "./Docs/"
@@ -44,7 +51,7 @@
 
 /** PROTOTYPES ******************************************************/
 void destroy (GtkWidget *widget, gpointer *data);
-
+void file_cmd_open (void);
 
 /** GLOBALS *********************************************************/
 extern char  *helpPath;
