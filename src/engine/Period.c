@@ -223,90 +223,141 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
 }
 
 /* ================================================================ */
-/* Return TRUE if any of the splits in the transaction belong 
- * to an open lot. */
+/* The following routines determine whether a given lot or 
+ * transaction is linked or related to another lot that is 'open'.
+ * These return true if so.
+ *
+ * An 'open transaction' is a transaction that has a split 
+ * that belongs to an 'open lot'.  An 'open lot' is one that
+ * is not closed, OR ONE THAT HAS a split in it that belongs to 
+ * an open transaction. 
+ *
+ * The need for this recursive definition is that some lots, 
+ * even though themselves closed, are participants in transactions
+ * that cannot be moved to a closed book, and thus, by association 
+ * can't be moved either.
+ *
+ * Lots contain pointers to splits, and transactions contain 
+ * pointers to splits.  Together, these form a graph, which may
+ * be cyclic.  We want to walk the entire graph, and determine
+ * whether there are any open lots in it.  The walk must be 
+ * recursive,  and because it might be cyclic, we use a marker
+ * to break the cycles.  
+ */
+
+static gboolean trans_has_open_lot_tree (Transaction *trans);
+static gboolean lot_has_open_trans_tree (GNCLot *lot);
 
 static gboolean
-trans_has_open_lot (Transaction *trans)
+trans_has_open_lot_tree (Transaction *trans)
 {
    SplitList *split_list, *node;
 
+   if (trans->marker) return FALSE;
    split_list = xaccTransGetSplitList (trans);
    for (node = split_list; node; node=node->next)
    {
       Split *s = node->data;
       GNCLot *lot = xaccSplitGetLot(s);
       if (NULL == lot) continue;
-      if (gnc_lot_is_closed(lot)) continue;
-      return TRUE;
+      if (FALSE == gnc_lot_is_closed(lot)) return TRUE;
+      if (lot_has_open_trans_tree (lot)) return TRUE;
    }
-
+   trans->marker = 1;
    return FALSE;
 }
 
-/* Remove any transactions that have associated open lots. 
- * These transactions cannot be moved to a closed book.
- */
-
-static TransList *
-remove_open_lots_from_trans_list (TransList *trans_list)
+static gboolean 
+lot_has_open_trans_tree (GNCLot *lot)
 {
-   GList *node;
+   SplitList *split_list, *snode;
 
-   for (node=trans_list; node; )
+   if (lot->marker) return FALSE;
+   if (FALSE == gnc_lot_is_closed(lot)) return TRUE;
+
+   split_list = gnc_lot_get_split_list (lot);
+   for (snode = split_list; snode; snode=snode->next)
    {
-      Transaction *trans = node->data;
-      GList *next = node->next;
-      if (trans_has_open_lot (trans))
-      {
-         trans_list = g_list_remove_link (trans_list, node);
-         g_list_free_1 (node);
-      }
-      node = next;
+      Split *s = snode->data;
+      Transaction *trans = s->parent;
+      if (trans_has_open_lot_tree (trans)) return TRUE;
    }
-
-   return trans_list;
+   lot->marker = 1;
+   return FALSE;
 }
 
-/* Remove any lots that have associated open transactions,
- * where by 'open transaction' we mean a transaction that has
- * a split in an open lot.
- * These lots, even though closed, are participants in transactions
- * that cannot be moved to a closed book, and thus, by association 
- * can't be moved either.
+/* ================================================================ */
+/* The following routines remove 'open lots' and 'open transactions'
+ * from the lists passed in.
  */
 
 static LotList *
-remove_open_trans_from_lot_list (LotList *lot_list)
+lot_list_preen_open_lots (LotList *lot_list)
 {
-   LotList *node;
+   LotList *lnode;
 
-   for (node=lot_list; node; )
+   for (lnode=lot_list; lnode; lnode=lnode->next)
    {
-      GNCLot *lot = node->data;
-      LotList *next = node->next;
-      SplitList *split_list = gnc_lot_get_split_list (lot);
-      SplitList *snode;
-      gboolean do_remove = FALSE;
-      for (snode = split_list; snode; snode=snode->next)
-      {
-         Split *s = snode->data;
-         Transaction *trans = s->parent;
-         if (trans_has_open_lot (trans))
-         {
-            do_remove = TRUE;
-            break;
-         }
-      }
-      if (do_remove)
-      {
-         lot_list = g_list_remove_link (lot_list, node);
-         g_list_free_1 (node);
-      }
-      node = next;
-   }
+      GNCLot *lot = lnode->data;
+      LotList *lnext = lnode->next;
 
+      if (lot_has_open_trans_tree (lot))
+      {
+         lot_list = g_list_remove_link (lot_list, lnode);
+         g_list_free_1 (lnode);
+      }
+      lnode = lnext;
+   }
    return lot_list;
+}
+
+static TransList *
+trans_list_preen_open_lots (TransList *trans_list)
+{
+   TransList *tnode;
+
+   for (tnode=trans_list; tnode; tnode=tnode->next)
+   {
+      Transaction *trans = tnode->data;
+      TransList *tnext = tnode->next;
+
+      if (trans_has_open_lot_tree (trans))
+      {
+         trans_list = g_list_remove_link (trans_list, tnode);
+         g_list_free_1 (tnode);
+      }
+      tnode = tnext;
+   }
+   return trans_list;
+}
+
+/* ================================================================ */
+/* clear the markers for the above routines */
+
+static void
+clear_markers (AccountGroup *grp)
+{
+   GList *node;
+
+   if (!grp) return;
+                                                                                
+   for (node = grp->accounts; node; node = node->next)
+   {
+      Account *account = node->data;
+      GList *lp;
+                                                                                
+      /* recursively do sub-accounts */
+      clear_markers (account->children);
+                                                                                
+      for (lp = account->splits; lp; lp = lp->next)
+      {
+        Split *s = lp->data;
+        Transaction *trans = s->parent;
+        GNCLot *lot = s->lot;
+        trans->marker = 0;
+        if (lot) lot->marker = 0;
+      }
+   }
 }
 
 /* ================================================================ */
@@ -382,12 +433,14 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    qof_query_set_book (query, src_book);
    trans_list = qof_query_run (query);
 
+   /* Preen: remove open lots/ open trnasactions */
+   clear_markers (src_grp);
+   trans_list = trans_list_preen_open_lots (trans_list);
+   lot_list = create_lot_list_from_trans_list (trans_list);
+   lot_list = lot_list_preen_open_lots (lot_list);
+
    /* Move closed lots over to destination. Do this before 
     * moving transactions, which should avoid damage to lots. */
-   trans_list = remove_open_lots_from_trans_list (trans_list);
-   lot_list = create_lot_list_from_trans_list (trans_list);
-   lot_list = remove_open_trans_from_lot_list (lot_list);
-
    for (lnode = lot_list; lnode; lnode = lnode->next)
    {
       GNCLot *lot = lnode->data;
