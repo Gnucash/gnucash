@@ -17,10 +17,7 @@
     <p>
     Some internal routines use the <tt>time_t</tt> type to express
     seconds.  Note that on most OS'es, this is a 32-bit quantity, and 
-    is limited to the Unix era (Jan 1970 to August 2038).  We beleive
-    that a signed int (31-bits) is never used internally to represent time.
-    Note that 31-bit quantities experience a crisis in April 2004.
-    We beleive that GnuCash will survive the 2004 crisis.
+    is limited to the Unix era (Dec 1901 to Jan 2038).  
     <p>
     Backup and log files are time-stamped using the standard Unix
     <tt>ctime()</tt> routine, which takes a <tt>time_t</tt> argument.
