@@ -8,19 +8,17 @@
 
 (define (gnc:default-doc-dirs)
   (let ((user-paths (list
-                     (list (getenv "HOME") ".gnucash" "doc")))
+                     (list (getenv "HOME") ".gnucash" "html")))
         (locale-paths (map (lambda (prefix)
-                             (list gnc:_share-dir-default_ "Docs" prefix))
+                             (list gnc:_share-dir-default_ "html" prefix))
                            (gnc:locale-prefixes)))
         (pix-paths (map (lambda (prefix)
-                          (list gnc:_share-dir-default_ "Docs" prefix "pix"))
+                          (list gnc:_share-dir-default_ "html" prefix "pix"))
                         (gnc:locale-prefixes)))
         (base-paths (list
-                     (list gnc:_share-dir-default_ "Docs")))
-        (report-paths (list
-                       (list gnc:_share-dir-default_ "Reports"))))
+                     (list gnc:_share-dir-default_ "html"))))
     (map (lambda (paths) (apply build-path paths))
-         (append user-paths locale-paths pix-paths base-paths report-paths))))
+         (append user-paths locale-paths pix-paths base-paths))))
 
 (define (gnc:_expand-doc-path_ new-path)
   ;; FIXME: Bad items should probably cause this to abort with #f or

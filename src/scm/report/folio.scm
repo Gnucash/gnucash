@@ -74,7 +74,7 @@
               (gnc:amount->string (- value cost) #f #t #f))))
 
     (define (report-rows-main)
-      (gnc:group-map-accounts
+      (gnc:group-map-all-accounts
        (lambda (account)
          (let ((type (gnc:account-type->symbol
                       (gnc:account-get-type account))))

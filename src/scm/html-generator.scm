@@ -117,12 +117,7 @@
 (define (html-end-table)
   (list "</table>"))
 
-;;;; Here's functions defined in average-balance.scm
-;;;; The point to this is twofold:
-;;;; 1.  It doesn't break anything because if the functions get
-;;;;     redefined somewhere here, things were *already broken.*
-;;;; 2.  It pushes all HTML stuff into *this* file, and encourages
-;;;;     fixing any resulting mess.
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; HTML Table
 ;;;;;;;;;;;;;;;;;;;;
@@ -139,14 +134,26 @@
 (define (html-table-col val)
   (string-append "<TD align=right>" (tostring val) "</TD>"))
 
+(define (html-table-col-align val align)
+  (string-append "<TD align=" align ">" (tostring val) "</TD>"))
+
 ; Create an html table row from a list of entries
 (define (html-table-row lst)
   (cond ((string? lst) lst)
 	(else
 	 (string-append
-	  (sprintf #f "<TR>")
+	  "<TR>"
 	  (apply string-append (map html-table-col lst))
-	  (sprintf #f "</TR>\n")))))
+	  "</TR>"))))
+
+; Create an html table row from a list of entries
+(define (html-table-row-align lst align-list)
+  (cond ((string? lst) lst)
+	(else
+	 (string-append
+	  "<TR>"
+	  (apply string-append (map html-table-col-align lst align-list))
+	  "</TR>"))))
 
 ; Create an html table from a list of rows, each containing 
 ;   a list of column entries
@@ -164,4 +171,4 @@
           (map html-table-headcol vec)))
 
 (define (html-table-footer)
-   (sprintf #f "</TABLE>"))
+  "</TABLE>")

@@ -45,28 +45,24 @@
 	       separator
 	       (gnc:account-get-name account)))))))
 
+;; returns a list contains elements of the-list for which predicate is true
 (define (gnc:filter-list the-list predicate)
-  (cond 
-   ((not (list? the-list))
-    (gnc:error("Attempted to filter a non-list object")))
-   ((null? the-list) 
-    '())
-   ((predicate (car the-list))
-    (cons (car the-list)
-	  (gnc:filter-list (cdr the-list) predicate)))
-   (else (gnc:filter-list (cdr the-list) predicate))))
+  (let loop ((rest the-list)
+             (collected '()))
+    (cond ((null? rest) (reverse collected))
+          (else (loop (cdr rest)
+                      (if (predicate (car rest))
+                          (cons (car rest) collected)
+                          collected))))))
 
 ;; like map, but restricted to one dimension, and
 ;; guaranteed to have inorder semantics.
 (define (gnc:inorder-map the-list fn)
-  (cond 
-   ((not (list? the-list))
-    (gnc:error("Attempted to map a non-list object")))
-   ((not (procedure? fn))
-    (gnc:error("Attempted to map a non-function object to a list")))
-   ((eq? the-list '()) '())
-   (else (cons (fn (car the-list))
-	       (gnc:inorder-map (cdr the-list) fn)))))
+  (let loop ((rest the-list)
+             (collected '()))
+    (cond ((null? rest) (reverse collected))
+          (else (loop (cdr rest)
+                      (cons (fn (car rest)) collected))))))
 
 (define (gnc:for-loop thunk first last step)
   (if (< first last) 
@@ -79,16 +75,46 @@
 (define (gnc:for-each-split-in-account account thunk)
   (gnc:for-loop (lambda (x) 
 		  (thunk (gnc:account-get-split account x)))
-		0 (gnc:account-get-split-count account) 1))
+                0 (gnc:account-get-split-count account) 1))
 
 (define (gnc:group-map-accounts thunk group)
-  (let loop 
-      ((num-accounts (gnc:group-get-num-accounts group))
-       (i 0))
-    (if (= i num-accounts)
-        '()
-        (cons (thunk (gnc:group-get-account group i))
-              (loop num-accounts (+ i 1))))))
+  (let ((num-accounts (gnc:group-get-num-accounts group)))
+    (let loop 
+        ((i 0)
+         (collected '()))
+      (if (>= i num-accounts)
+          (reverse collected)
+          (loop (+ i 1)
+                (cons (thunk (gnc:group-get-account group i)) collected))))))
+
+;; Pull a scheme list of splits from a C array
+(define (gnc:convert-split-list split-array)
+  (let loop ((index 0)
+             (split (gnc:ith-split split-array 0))
+             (slist '()))
+    (if (pointer-token-null? split)
+        (reverse slist)
+        (loop (+ index 1) 
+              (gnc:ith-split split-array (+ index 1))
+              (cons split slist)))))
+
+;; Pull a scheme list of accounts (including subaccounts) from group grp
+(define (gnc:group-get-account-list grp)
+  (if (pointer-token-null? grp)
+      '()
+      (let ((account-array (gnc:get-accounts grp)))
+        (let loop ((index 0)
+                   (account (gnc:account-nth-account account-array 0))
+                   (account-list '()))
+          (if (pointer-token-null? account)
+              (reverse account-list)
+              (loop (+ index 1)
+                    (gnc:account-nth-account account-array (+ index 1))
+                    (cons account account-list)))))))
+
+;; map over all accounts (including subaccounts) in a group
+(define (gnc:group-map-all-accounts thunk group)
+  (map thunk (gnc:group-get-account-list group)))
 
 ; (define (gnc:account-transactions-for-each thunk account)
 ;   ;; You must call gnc:group-reset-write-flags on the account group

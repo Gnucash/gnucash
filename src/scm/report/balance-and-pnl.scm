@@ -76,21 +76,25 @@
       (html-table-row
        (list
 	account-name type-name (gnc:amount->formatted-string l2-value #f)))))
+;       (list "left" "center" "right"))))
 
   (define (render-level-1-account account l1-value l2-value)
     (let ((name (gnc:account-get-name account))
           (type (gnc:account-get-type-string (gnc:account-get-type account))))
-      (html-table-row 
+      (html-table-row
        (list name type
              (gnc:amount->formatted-string l2-value #f)
              (gnc:amount->formatted-string l1-value #f)
 	     "&nbsp;" "&nbsp;"))))
+;       (list "left" "center" "right" "right" "right" "right"))))
 
   (define (render-total l0-value)
-    (html-table-row (list "&nbsp;" "&nbsp;" "&nbsp;"
-                          (html-strong (string-db 'lookup 'net))
-                          "&nbsp;"
-                          (gnc:amount->formatted-string l0-value #f))))
+    (html-table-row
+     (list "&nbsp;" "&nbsp;" "&nbsp;"
+           (html-strong (string-db 'lookup 'net))
+           "&nbsp;"
+           (gnc:amount->formatted-string l0-value #f))))
+;     (list "left" "center" "right" "right" "right" "right")))
 
   (define (is-it-on-balance-sheet? type balance?)
     (eq? 

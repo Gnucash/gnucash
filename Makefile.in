@@ -134,8 +134,12 @@ install-bin: gnucash.${FLAVOR}
 	(cd ${GNC_BINDIR} && ln -sf gnucash.${FLAVOR} gnucash)
 
 install:
-	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR} ${GNC_SHAREDIR}
+	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR}
 	$(INSTALL) -d ${GNC_DOCDIR}/examples ${GNC_MANDIR}/man1
+	$(INSTALL) -d ${GNC_SHAREDIR} ${GNC_SHAREDIR}/html
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/C ${GNC_SHAREDIR}/html/C/pix
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/fr ${GNC_SHAREDIR}/html/fr/pix
+	$(INSTALL) -d ${GNC_SHAREDIR}/html/logos
 
   # Put these in the opposite order of precedence.  Final bin/gnucash link will
   # point to the last one that exists...
@@ -191,18 +195,12 @@ install:
 		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
   done
 
-	@mkdir -p ${GNC_SHAREDIR}/Docs
-	@mkdir -p ${GNC_SHAREDIR}/Docs/C
-	@mkdir -p ${GNC_SHAREDIR}/Docs/C/pix
-	@mkdir -p ${GNC_SHAREDIR}/Docs/fr
-	@mkdir -p ${GNC_SHAREDIR}/Docs/fr/pix
-	$(INSTALL_DATA) Docs/C/*.html ${GNC_SHAREDIR}/Docs/C
-	$(INSTALL_DATA) Docs/fr/*.html ${GNC_SHAREDIR}/Docs/fr
-	$(INSTALL_DATA) Docs/C/pix/*.* ${GNC_SHAREDIR}/Docs/C/pix
-	$(INSTALL_DATA) Docs/fr/pix/*.* ${GNC_SHAREDIR}/Docs/fr/pix
-	$(INSTALL_DATA) Docs/*.css ${GNC_SHAREDIR}/Docs
-	@mkdir -p ${GNC_SHAREDIR}/Docs/logos
-	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/logos
+	$(INSTALL_DATA) doc/html/C/*.html ${GNC_SHAREDIR}/html/C
+	$(INSTALL_DATA) doc/html/fr/*.html ${GNC_SHAREDIR}/html/fr
+	$(INSTALL_DATA) doc/html/C/pix/*.* ${GNC_SHAREDIR}/html/C/pix
+	$(INSTALL_DATA) doc/html/fr/pix/*.* ${GNC_SHAREDIR}/html/fr/pix
+	$(INSTALL_DATA) doc/html/*.css ${GNC_SHAREDIR}/html
+	$(INSTALL_DATA) doc/html/logos/*.* ${GNC_SHAREDIR}/html/logos
 
   # ------------------------------------------------------------------
   # hack alert -- the config dir stuff is messed up in configure.in as well 

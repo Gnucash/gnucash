@@ -25,25 +25,6 @@
     (set! gnc:total-inflow 0)
     (set! gnc:total-outflow 0))
 
-  ;; returns a list contains elements of the-list for which predicate is true
-  (define (gnc:filter-list the-list predicate)
-    (let loop ((rest the-list)
-               (collected '()))
-      (cond ((null? rest) (reverse collected))
-            (else (loop (cdr rest)
-                        (if (predicate (car rest))
-                            (cons (car rest) collected)
-                            collected))))))
-
-  ;; like map, but restricted to one dimension, and
-  ;; guaranteed to have inorder semantics.
-  (define (gnc:inorder-map the-list fn)
-    (let loop ((rest the-list)
-               (collected '()))
-      (cond ((null? rest) (reverse collected))
-            (else (loop (cdr rest)
-                        (cons (fn (car rest)) collected))))))
-
   ;; extract fields out of the scheme split representation
 
   (define (gnc:tr-report-get-memo split-scm)
