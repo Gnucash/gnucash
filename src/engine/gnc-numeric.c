@@ -1,6 +1,7 @@
 /********************************************************************
  * gnc-numeric.c -- an exact-number library for accounting use      *
  * Copyright (C) 2000 Bill Gribble                                  *
+ * Copyright (C) 2004 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -220,6 +221,16 @@ reduce128(gncint128 n, gint64 d)
   return out;
 }
 
+/** Return true of two numbers are equal */
+static inline gboolean
+equal128 (gncint128 a, gncint128 b)
+{
+	if (a.lo != b.lo) return 0;
+	if (a.hi != b.hi) return 0;
+	if (a.isneg != b.isneg) return 0;
+	return 1;
+}
+
 #ifdef TEST_128_BIT_MULT
 static void pr (gint64 a, gint64 b)
 {
@@ -293,8 +304,6 @@ static const char * _numeric_error_strings[] =
 };
 #endif
 
-static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
-
 /* =============================================================== */
 /* This function is small, simple, and used everywhere below, 
  * lets try to inline it.
@@ -318,6 +327,84 @@ gnc_numeric_check(gnc_numeric in)
   {
     return GNC_ERROR_ARG;
   }
+}
+
+/********************************************************************
+ *  gnc_numeric_lcd
+ *  Find the least common multiple of the denominators of 
+ *  a and b
+ *  XXX FIXME this is a stunningly bad, ill-informed algorithm!!
+ ********************************************************************/
+
+static gint64
+gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) 
+{
+  gint64 current_divisor = 2;
+  gint64 max_square;
+  gint64 three_count = 0;
+  gint64 small_denom;
+  gint64 big_denom;
+
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+    return GNC_ERROR_ARG;
+  }
+  
+  if(b.denom < a.denom) {
+    small_denom = b.denom;
+    big_denom = a.denom;
+  }
+  else {
+    small_denom = a.denom;
+    big_denom = b.denom;
+  }
+
+  /* special case: smaller divides smoothly into larger */
+  if((big_denom % small_denom) == 0) {
+    return big_denom;
+  }
+  
+  max_square = small_denom;
+  
+  /* the LCM algorithm : factor out the union of the prime factors of the
+   * two args and then multiply the remainders together. 
+   *
+   * To do this, we find the successive prime factors of the smaller
+   * denominator and eliminate them from both the smaller and larger
+   * denominator (so we only count factors on a one-on-one basis),
+   * then multiply the original smaller by the remains of the larger.
+   *
+   * I.e. LCM 100,96875 == 2*2*5*5,31*5*5*5*5 = 2*2,31*5*5
+   *      answer: multiply 100 by 31*5*5 == 387500
+   */
+  while(current_divisor * current_divisor <= max_square) {
+    if(((small_denom % current_divisor) == 0) &&
+       ((big_denom % current_divisor) == 0)) {
+      big_denom = big_denom / current_divisor;
+      small_denom = small_denom / current_divisor;
+    }
+    else {
+      if(current_divisor == 2) {
+        current_divisor++;
+      }
+      else if(three_count == 3) { 
+        current_divisor += 4;
+        three_count = 1;
+      }
+      else {
+        current_divisor += 2;
+        three_count++;
+      }
+    }
+    
+    if((current_divisor > small_denom) ||
+       (current_divisor > big_denom)) {
+      break;
+    }
+  }
+  
+  /* max_sqaure is the original small_denom */
+  return max_square * big_denom;
+
 }
 
 /********************************************************************
@@ -409,8 +496,9 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b) {
  *  gnc_numeric_eq
  ********************************************************************/
 
-int
-gnc_numeric_eq(gnc_numeric a, gnc_numeric b) {
+gboolean
+gnc_numeric_eq(gnc_numeric a, gnc_numeric b) 
+{
   return ((a.num == b.num) && (a.denom == b.denom));
 }
 
@@ -419,13 +507,25 @@ gnc_numeric_eq(gnc_numeric a, gnc_numeric b) {
  *  gnc_numeric_equal
  ********************************************************************/
 
-int
-gnc_numeric_equal(gnc_numeric a, gnc_numeric b) {
-  if(((a.denom > 0) && (b.denom > 0)) ||
-     ((a.denom < 0) && (b.denom < 0))) {    
+gboolean
+gnc_numeric_equal(gnc_numeric a, gnc_numeric b) 
+{
+  if ((a.denom == b.denom) && (a.denom > 0))
+  {
+    return (a.num == b.num);
+  }
+  if ((a.denom > 0) && (b.denom > 0))
+  {
+    gncint128 l = mult128 (a.num, b.denom);
+    gncint128 r = mult128 (b.num, a.denom);
+    return equal128 (l, r);
+  }
+  if ((a.denom < 0) && (b.denom < 0))
+  {    
     return ((a.num * b.denom) == (a.denom * b.num));
   }
-  else {
+  else 
+  {
     return 0;
   }
 }
@@ -496,7 +596,8 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     sum.denom = a.denom;
   }
   else {
-    /* ok, convert to the lcd and compute from there... */
+    /* Computing the LCD minimizes likelyhood of overflow */
+    /* XXX although we should check for overflow ... */
     lcd = gnc_numeric_lcd(a,b);
     sum.num   = a.num*(lcd/a.denom) + b.num*(lcd/b.denom);
     sum.denom = lcd;
@@ -953,83 +1054,6 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   return out;
 }
 
-
-/********************************************************************
- *  gnc_numeric_lcd
- *  Find the least common multiple of the denominators of 
- *  a and b
- ********************************************************************/
-
-gint64
-gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) {
-  gint64 current_divisor = 2;
-  gint64 max_square;
-  gint64 three_count = 0;
-  gint64 small_denom;
-  gint64 big_denom;
-
-  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
-    return GNC_ERROR_ARG;
-  }
-  
-  if(b.denom < a.denom) {
-    small_denom = b.denom;
-    big_denom = a.denom;
-  }
-  else {
-    small_denom = a.denom;
-    big_denom = b.denom;
-  }
-
-  /* special case: smaller divides smoothly into larger */
-  if((big_denom % small_denom) == 0) {
-    return big_denom;
-  }
-  
-  max_square = small_denom;
-  
-  /* the LCM algorithm : factor out the union of the prime factors of the
-   * two args and then multiply the remainders together. 
-   *
-   * To do this, we find the successive prime factors of the smaller
-   * denominator and eliminate them from both the smaller and larger
-   * denominator (so we only count factors on a one-on-one basis),
-   * then multiply the original smaller by the remains of the larger.
-   *
-   * I.e. LCM 100,96875 == 2*2*5*5,31*5*5*5*5 = 2*2,31*5*5
-   *      answer: multiply 100 by 31*5*5 == 387500
-   */
-  while(current_divisor * current_divisor <= max_square) {
-    if(((small_denom % current_divisor) == 0) &&
-       ((big_denom % current_divisor) == 0)) {
-      big_denom = big_denom / current_divisor;
-      small_denom = small_denom / current_divisor;
-    }
-    else {
-      if(current_divisor == 2) {
-        current_divisor++;
-      }
-      else if(three_count == 3) { 
-        current_divisor += 4;
-        three_count = 1;
-      }
-      else {
-        current_divisor += 2;
-        three_count++;
-      }
-    }
-    
-    if((current_divisor > small_denom) ||
-       (current_divisor > big_denom)) {
-      break;
-    }
-  }
-  
-  /* max_sqaure is the original small_denom */
-  return max_square * big_denom;
-
-}
-  
 
 /********************************************************************
  ** reduce a fraction by GCF elimination.  This is NOT done as a
