@@ -5,9 +5,12 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
+#include <locale.h>
+#include <string.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -49,17 +52,30 @@ libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
     return FALSE;
   }
 
+  const char *report_taxtxf;
+  /* This is a very simple hack that loads the (new, special) German
+     tax definition file in a German locale, or (default) loads the
+     previous US tax file. */
+  const char *thislocale = setlocale(LC_ALL, NULL);
+  if (strncmp(thislocale, "de_DE", 5) == 0) {
+    report_taxtxf = "(use-modules (gnucash report taxtxf-de_DE))";
+  } else {
+    report_taxtxf = "(use-modules (gnucash report taxtxf))";
+  }
+
   /* load the report generation scheme code */
-  if(gh_eval_str("(use-modules (gnucash report taxtxf))") 
+  if(gh_eval_str(report_taxtxf) 
      == SCM_BOOL_F) {
     printf("failed to load (gnucash report taxtxf)\n");
     return FALSE;
   }
 
+  /* This is unused and therefore no longer installed and/or loaded */
+  /*
   if(gh_eval_str("(use-modules (gnucash report locale-specific us))") 
      == SCM_BOOL_F) {
     return FALSE;
-  }
+    }*/
 
   return TRUE;
 }

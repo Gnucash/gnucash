@@ -5,9 +5,12 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
+#include <locale.h>
+#include <string.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -47,7 +50,14 @@ lmod(char * mn)
 
 int
 libgncmod_tax_us_LTX_gnc_module_init(int refcount) {
-  lmod("(gnucash tax us)");
+  /* This is a very simple hack that loads the (new, special) German
+     tax definition file in a German locale, or (default) loads the
+     previous US tax file. */
+  const char *thislocale = setlocale(LC_ALL, NULL);
+  if (strncmp(thislocale, "de_DE", 5) == 0)
+    lmod("(gnucash tax de_DE)");
+  else
+    lmod("(gnucash tax us)");
   return TRUE;
 }
 

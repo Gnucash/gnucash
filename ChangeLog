@@ -1,3 +1,17 @@
+2004-12-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/tax/us/txf-de_DE.scm: Add Tax TXF categories for the de_DE
+	locale, i.e. the German tax report. If the current locale begins
+	with de_DE, the new German tax categories will be loaded,
+	otherwise the conventional U.S. ones. This is the easiest method
+	to allow other (non-U.S.) tax categories to be selected in the
+	accounts' tax settings.
+	
+	* src/report/locale-specific/us/taxtxf-de_DE.scm: Add Tax report
+	for de_DE locale. If the current locale begins with de_DE, the new
+	German tax report will be loaded, otherwise the conventional
+	U.S. report.
+
 2004-12-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
