@@ -901,6 +901,8 @@ gnc_table_enter_update(Table *table,
       if (table->entries[row][col]) free (table->entries[row][col]);
       table->entries[row][col] = retval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+    } else {
+       retval = NULL;
     }
   }
   PINFO(")\n");
@@ -940,6 +942,8 @@ gnc_table_leave_update(Table *table, int row, int col,
      */
     if (retval && (retval != callback_text)) {
        newval = (char *) retval;
+    } else {
+       retval = NULL;
     }
   }
 
