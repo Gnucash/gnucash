@@ -29,12 +29,14 @@
 #include <libgnomeui/gnome-window-icon.h>
 
 #include "FreqSpec.h"
+#include "Group.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
 #include "druid-acct-period.h"
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-frequency.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -55,152 +57,11 @@ typedef struct
 
   time_t earliest;
   char * earliest_str;
-  GDate *closing_date;
+  GDate closing_date;
   FreqSpec *period;
 
 } AcctPeriodInfo;
 
-
-/** implementations ****************************************************/
-static void
-ap_window_destroy_cb (GtkObject *object, gpointer data)
-{
-  AcctPeriodInfo *info = data;
-
-  gnc_unregister_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
-
-  // gnc_frequency_destory ??
-  xaccFreqSpecFree (info->period);
-  g_date_free (info->closing_date);
-  g_free (info->earliest_str);
-  g_free (info);
-}
-
-static void
-ap_finish (GnomeDruidPage *druidpage,
-                    GtkWidget *druid,
-                    gpointer user_data)
-{
-  AcctPeriodInfo *info = user_data;
-
-  gnc_suspend_gui_refresh ();
-  printf ("finished with acct periods\n");
-
-  gnc_resume_gui_refresh ();
-  gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
-}
-
-static void
-ap_druid_cancel (GnomeDruid *druid, gpointer user_data)
-{
-  AcctPeriodInfo *info = user_data;
-  gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
-}
-
-/* =============================================================== */
-
-static void
-prepare_remarks (AcctPeriodInfo *info)
-{
-  int nperiods;
-  GDate *period_begin, *period_end, *date_now;
-  const char *remarks_text;
-  char * str;
-
-  remarks_text = 
-    _("The earliest transaction date found in this book is %s.\n"
-      "Based on the selection made above, this book will be split\n"
-      "into %d books.  Click on 'Next' to start closing the\n"
-      "earliest book.\n");
-
-  /* Pull info from widget, push into freq spec */
-  gnc_frequency_save_state (info->period_menu, info->period, NULL);
-
-  /* Count the number of periods that would be generated */
-  period_begin = g_date_new();
-  g_date_set_time (period_begin, info->earliest);
-  nperiods = 0;
-  date_now = g_date_new();
-  g_date_set_time (date_now, time(0));
-  period_end = g_date_new();
-  do 
-  {
-    GDate *tmp;
-
-    xaccFreqSpecGetNextInstance (info->period, period_begin, period_end);
-    nperiods ++;
-printf ("duude np=%d end=%d/%d/%d\n", nperiods,
-g_date_month(period_end),
-g_date_day(period_end),
-g_date_year(period_end));
-    tmp = period_begin;
-    period_begin = period_end;
-    period_end = tmp;
-  } 
-  while (0 > g_date_compare(period_begin, date_now ));
-
-  g_date_free (period_begin);
-  g_date_free (period_end);
-  g_date_free (date_now);
-
-  
-  /* Display the results */
-  str = g_strdup_printf (remarks_text, info->earliest_str, nperiods);
-  gtk_label_set_text (info->remarks, str);
-  g_free (str);
-}
-
-/* =============================================================== */
-
-static void
-show_book_details (AcctPeriodInfo *info)
-{
-  const char *period_text;
-  char *str;
-
-  /* Pull info from widget, push into freq spec */
-  gnc_frequency_save_state (info->period_menu, info->period, NULL);
-  printf ("duude gwanna show period info=%p\n", info);
-
-  period_text = 
-    _("You have asked for a book to be created.  This book\n"
-      "will contain all transactions between midnight %s\n"
-      "and midnight %s (for a total of\n"
-      "%d transactions spread over %d accounts).\n"
-      "Click on 'Next' to create this book.\n"
-      "Click on 'Back' to adjust the dates.\n");
-
-  /* Display the results */
-  str = g_strdup_printf (period_text, 
-      "asdf", "asdf", 0, 0);
-
-  gtk_label_set_text (info->book_details, str);
-  g_free (str);
-}
-
-/* =============================================================== */
-
-static void
-ap_changed (GtkWidget *widget, gpointer user_data)
-{
-  AcctPeriodInfo *info = user_data;
-
-  printf ("duude something changed info=%p\n", info);
-  prepare_remarks (info);
-}
-
-/* =============================================================== */
-
-static void
-ap_show_period (GnomeDruidPage *druidpage,
-                GtkWidget *druid,
-                gpointer user_data)
-{
-  AcctPeriodInfo *info = user_data;
-
-  printf ("duude gwanna show period info=%p\n", info);
-  show_book_details (info);
-}
 
 /* =============================================================== */
 /* Find the earliest date occuring in the book.  Do this by making
@@ -237,6 +98,186 @@ get_earliest_in_book (QofBook *book)
 }
 
 /* =============================================================== */
+/* Find the number of transactions occuring before the indicated date.  
+ * Do this by making a query and counting the results. 
+ */
+
+static int
+get_num_xactions_before_date(QofBook *book, time_t close_date)
+{
+  QofQuery *q;
+  GSList *param;
+  QofQueryPredData *pred;
+  Timespec ts;
+  GList *res, *n;
+  int cnt = 0;
+
+  q = qof_query_create_for(GNC_ID_TRANS);
+  qof_query_set_max_results(q, -1);
+  qof_query_set_book (q, book);
+
+  /* Look for transactions earlier than the closing date */
+  param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
+  // param = g_slist_prepend (param, SPLIT_TRANS);   // ????
+  timespecFromTime_t (&ts, close_date);
+  pred = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ts);
+  qof_query_add_term (q,  param, pred, QOF_QUERY_FIRST_TERM);
+
+  /* Run the query, find how many transactions there are */
+  res = qof_query_run (q);
+
+  cnt = 0;
+  for (n=res; n; n=n->next) cnt ++;
+
+  qof_query_destroy (q);
+  return cnt;
+}
+
+/* =============================================================== */
+static void
+ap_window_destroy_cb (GtkObject *object, gpointer data)
+{
+  AcctPeriodInfo *info = data;
+
+  gnc_unregister_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
+
+  // gnc_frequency_destory ??
+  xaccFreqSpecFree (info->period);
+  g_free (info->earliest_str);
+  g_free (info);
+}
+
+static void
+ap_finish (GnomeDruidPage *druidpage,
+                    GtkWidget *druid,
+                    gpointer user_data)
+{
+  AcctPeriodInfo *info = user_data;
+
+  gnc_suspend_gui_refresh ();
+  printf ("finished with acct periods\n");
+
+  gnc_resume_gui_refresh ();
+  gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
+}
+
+static void
+ap_druid_cancel (GnomeDruid *druid, gpointer user_data)
+{
+  AcctPeriodInfo *info = user_data;
+  gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
+}
+
+/* =============================================================== */
+
+static void
+prepare_remarks (AcctPeriodInfo *info)
+{
+  int nperiods;
+  GDate period_begin, period_end, date_now;
+  const char *remarks_text;
+  char * str;
+
+  remarks_text = 
+    _("The earliest transaction date found in this book is %s.\n"
+      "Based on the selection made above, this book will be split\n"
+      "into %d books.  Click on 'Next' to start closing the\n"
+      "earliest book.\n");
+
+  /* Pull info from widget, push into freq spec */
+  gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+
+  /* Count the number of periods that would be generated */
+  g_date_clear (&period_begin, 1);
+  g_date_clear (&period_end, 1);
+  g_date_clear (&date_now, 1);
+  nperiods = 1;
+  period_begin = info->closing_date;
+  g_date_set_time (&date_now, time(0));
+  do 
+  {
+    xaccFreqSpecGetNextInstance (info->period, &period_begin, &period_end);
+    nperiods ++;
+printf ("duude np=%d ender=%d/%d/%d\n", nperiods,
+g_date_month(&period_end),
+g_date_day(&period_end),
+g_date_year(&period_end));
+    period_begin = period_end;
+  } 
+  while (0 > g_date_compare(&period_begin, &date_now ));
+
+  /* Display the results */
+  str = g_strdup_printf (remarks_text, info->earliest_str, nperiods);
+  gtk_label_set_text (info->remarks, str);
+  g_free (str);
+}
+
+/* =============================================================== */
+
+static void
+show_book_details (AcctPeriodInfo *info)
+{
+  QofBook *currbook;
+  char close_date_str[MAX_DATE_LENGTH];
+  const char *period_text;
+  char *str;
+  int ntrans, nacc;
+
+  /* Pull info from widget, push into freq spec */
+  gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
+  printf ("duude gwanna show period info=%p\n", info);
+
+  period_text = 
+    _("You have asked for a book to be created.  This book\n"
+      "will contain all transactions up to midnight %s\n"
+      "(for a total of %d transactions spread over %d accounts).\n"
+      "Click on 'Next' to create this book.\n"
+      "Click on 'Back' to adjust the dates.\n");
+
+  qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
+                           g_date_day(&info->closing_date),
+                           g_date_month(&info->closing_date),
+                           g_date_year(&info->closing_date));
+
+  currbook = gnc_get_current_book();
+  ntrans = get_num_xactions_before_date(currbook,
+                   gnc_timet_get_day_end_gdate (&info->closing_date));
+
+  nacc = xaccGroupGetNumSubAccounts (xaccGetAccountGroup (currbook));
+
+  /* Display the results */
+  str = g_strdup_printf (period_text, 
+      close_date_str, ntrans, nacc);
+
+  gtk_label_set_text (info->book_details, str);
+  g_free (str);
+}
+
+/* =============================================================== */
+
+static void
+ap_changed (GtkWidget *widget, gpointer user_data)
+{
+  AcctPeriodInfo *info = user_data;
+
+  printf ("duude something changed info=%p\n", info);
+  prepare_remarks (info);
+}
+
+/* =============================================================== */
+
+static void
+ap_show_period (GnomeDruidPage *druidpage,
+                GtkWidget *druid,
+                gpointer user_data)
+{
+  AcctPeriodInfo *info = user_data;
+
+  printf ("duude gwanna show period info=%p\n", info);
+  show_book_details (info);
+}
+
+/* =============================================================== */
 
 static void
 ap_druid_create (AcctPeriodInfo *info)
@@ -256,21 +297,21 @@ ap_druid_create (AcctPeriodInfo *info)
   info->earliest = get_earliest_in_book (gnc_get_current_book());
   info->earliest_str = qof_print_date(info->earliest); 
 printf ("duude the earliest is %ld %s\n", info->earliest, ctime (&info->earliest));
-  info->closing_date = g_date_new();
-  g_date_set_time (info->closing_date, info->earliest);
-  g_date_add_years (info->closing_date, 1);
-  g_date_subtract_days (info->closing_date, 1);
+
+  g_date_clear (&info->closing_date, 1);
+  g_date_set_time (&info->closing_date, info->earliest);
+  g_date_add_years (&info->closing_date, 1);
 
   info->period = xaccFreqSpecMalloc( gnc_get_current_book() );
-  xaccFreqSpecSetMonthly (info->period, info->closing_date, 12);
+  xaccFreqSpecSetMonthly (info->period, &info->closing_date, 12);
   xaccFreqSpecSetUIType (info->period, UIFREQ_YEARLY);
 
   info->period_menu = GNC_FREQUENCY (
-          gnc_frequency_new (info->period, info->closing_date));
+          gnc_frequency_new (info->period, &info->closing_date));
 
   /* Change the text so that its more mainingful for this druid */
   gnc_frequency_set_frequency_label_text(info->period_menu, _("Period:"));
-  gnc_frequency_set_startdate_label_text(info->period_menu, _("Closing Date:"));
+  gnc_frequency_set_date_label_text(info->period_menu, _("Closing Date:"));
 
   /* Reparent to the correct location */
   w = glade_xml_get_widget (xml, "period box");
