@@ -52,7 +52,7 @@ noinst_HEADERS = \
   gnc-account-tree.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
-  gnc-currency-edit.c \
+  gnc-currency-edit.h \
   gnc-date-delta.h \
   gnc-date-edit.h \
   gnc-dir.h \

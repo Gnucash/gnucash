@@ -16,8 +16,8 @@ libgncmod_network_utils_la_SOURCES = \
   gncmod-network-utils.c
 
 noinst_HEADERS = \
-  gnc-gpg.c \
-  gnc-http.c
+  gnc-gpg.h \
+  gnc-http.h
 
 libgncmod_network_utils_la_LDFLAGS = -module
 
