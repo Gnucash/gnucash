@@ -304,7 +304,7 @@ printf ("save split is %p \n", split);
       acc = xaccSplitGetAccount (s);
 
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans, 0);
+      xaccTransBeginEdit (trans, 0);   
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (acc, split);
 
@@ -313,7 +313,7 @@ printf ("save split is %p \n", split);
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans, 1);
+      xaccTransBeginEdit (trans, 0);
    }
 
    /* copy the contents from the cursor to the split */
