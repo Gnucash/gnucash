@@ -1,4 +1,4 @@
-AC_INIT(src/main.c)
+AC_INIT(src/motif/main.c)
 
 # *******************************************
 # * figure out the configure options:
@@ -23,11 +23,11 @@ AC_ARG_ENABLE( color,
 AC_ARG_WITH( motif, 
        [  --with-motif=PATH       specify where to look for motif includes and libs],
        lflags="-L$with_motif/lib $lflags" cflags="-I$with_motif/include $cflags" )
-AC_ARG_WITH( motif-incl, 
-       [  --with-motif-includes=PATH    specify where to look for motif includes],
+AC_ARG_WITH( motif-includes, 
+       [  --with-motif-includes=DIR    specify where to look for motif includes],
        cflags="-I$with_motif_includes $cflags" )
-AC_ARG_WITH( motif-lib, 
-       [  --with-motif-libraries=PATH   specify where to look for motif libs],
+AC_ARG_WITH( motif-libraries, 
+       [  --with-motif-libraries=DIR   specify where to look for motif libs],
        lflags="-L$with_motif_libraries $lflags" )
 
 
@@ -77,7 +77,7 @@ AC_SUBST(LIBS)
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(xacc Makefile src/Makefile src/engine/Makefile src/motif/Makefile src/regsiter/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(xacc Makefile src/Makefile src/engine/Makefile src/motif/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
 
 chmod +x xacc
 

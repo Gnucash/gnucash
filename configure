@@ -18,9 +18,9 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-motif=PATH       specify where to look for motif includes and libs"
 ac_help="$ac_help
-  --with-motif-includes=PATH    specify where to look for motif includes"
+  --with-motif-includes=DIR    specify where to look for motif includes"
 ac_help="$ac_help
-  --with-motif-libraries=PATH   specify where to look for motif libs"
+  --with-motif-libraries=DIR   specify where to look for motif libs"
 ac_help="$ac_help
 help-string , action-if-given [, action-if-not-given]"
 ac_help="$ac_help
@@ -459,7 +459,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=src/main.c
+ac_unique_file=src/motif/main.c
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -582,15 +582,15 @@ if test "${with_motif+set}" = set; then
   lflags="-L$with_motif/lib $lflags" cflags="-I$with_motif/include $cflags" 
 fi
 
-# Check whether --with-motif-incl or --without-motif-incl was given.
-if test "${with_motif_incl+set}" = set; then
-  withval="$with_motif_incl"
+# Check whether --with-motif-includes or --without-motif-includes was given.
+if test "${with_motif_includes+set}" = set; then
+  withval="$with_motif_includes"
   cflags="-I$with_motif_includes $cflags" 
 fi
 
-# Check whether --with-motif-lib or --without-motif-lib was given.
-if test "${with_motif_lib+set}" = set; then
-  withval="$with_motif_lib"
+# Check whether --with-motif-libraries or --without-motif-libraries was given.
+if test "${with_motif_libraries+set}" = set; then
+  withval="$with_motif_libraries"
   lflags="-L$with_motif_libraries $lflags" 
 fi
 
@@ -1774,7 +1774,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "xacc Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "xacc Makefile src/Makefile src/engine/Makefile src/motif/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -1823,7 +1823,7 @@ CEOF
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"xacc Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile"}
+CONFIG_FILES=\${CONFIG_FILES-"xacc Makefile src/Makefile src/engine/Makefile src/motif/Makefile src/register/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
