@@ -4,6 +4,9 @@
 	(on_chooseAccountTypesPage_prepare): use pointer<->int conversion
 	macros
 	(gnc_get_ea_locale_dir): take out debugging messages
+	(on_newAccountTypesList_unselect_row): fix bug
+	(on_newAccountTypesList_select_row): fix bug
+	(add_each_gea_to_clist): fix mem leak
 
 	* src/SplitLedger.c (xaccSRGetEntryHandler): handle reconcile
 	cell string as appropriate for translate flag.

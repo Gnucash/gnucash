@@ -183,10 +183,9 @@ add_each_gea_to_clist(gpointer data, gpointer user_data)
 {
     GncExampleAccount *gea = (GncExampleAccount*)data;
     GtkCList *clist = (GtkCList*)user_data;
+    gchar *rowdata[2];
     int row = 0;
-    gchar **rowdata;
 
-    rowdata = g_new(gchar*, 2);
     rowdata[0] = gea->title;
     rowdata[1] = gea->short_description;
 
@@ -314,7 +313,7 @@ on_newAccountTypesList_select_row      (GtkCList        *clist,
         gtk_label_set_text(datext, gea->long_description);
     }
 
-    gtk_tree_clear_items(datree, 0, g_list_length (datree->children) - 1);
+    gtk_tree_clear_items(datree, 0, g_list_length (datree->children));
     add_to_tree(datree, gea->group);
 }
 
@@ -333,7 +332,7 @@ on_newAccountTypesList_unselect_row    (GtkCList        *clist,
 
     gtk_label_set_text(datext, "");
 
-    gtk_tree_clear_items(datree, 0, g_list_length (datree->children) - 1);
+    gtk_tree_clear_items(datree, 0, g_list_length (datree->children));
 }
 
 
