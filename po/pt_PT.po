@@ -5625,31 +5625,28 @@ msgstr "Manual do GnuCash"
 
 #: src/scm/guile-strings.c:64
 msgid "Getting Started"
-msgstr ""
+msgstr "Iniciar-se"
 
 # src/engine/Account.c:1683 src/register/splitreg.c:238
 # src/scm/guile-strings.c:85 src/scm/guile-strings.c:101
 # src/scm/guile-strings.c:259
 #: src/scm/guile-strings.c:65
-#, fuzzy
 msgid "Welcome"
-msgstr "Receita"
+msgstr "Bem Vindo"
 
 #: src/scm/guile-strings.c:66
 msgid "Remedial Accounting 101"
-msgstr ""
+msgstr "Princípios Contabilísticos"
 
 # src/gnome/glade-gnc-dialogs.c:36
 #: src/scm/guile-strings.c:67
-#, fuzzy
 msgid "Setting up Accounts"
-msgstr "Seleccione Conta"
+msgstr "Definir Contas"
 
 # src/gnome/window-main.c:1030
 #: src/scm/guile-strings.c:68
-#, fuzzy
 msgid "Importing Data"
-msgstr "Importar"
+msgstr "Importar Dados"
 
 # src/gnome/window-register.c:1229
 #: src/scm/guile-strings.c:69
@@ -5658,7 +5655,7 @@ msgstr "Configuração Básica"
 
 #: src/scm/guile-strings.c:70
 msgid "Gnome MDI"
-msgstr ""
+msgstr "MDI Gnome"
 
 # src/SplitLedger.c:3943 src/gnome/dialog-account.c:669
 # src/gnome/glade-gnc-dialogs.c:77 src/gnome/glade-gnc-dialogs.c:878
@@ -5667,9 +5664,8 @@ msgstr ""
 # src/scm/report/guile-strings.c:299 src/scm/report/guile-strings.c:314
 # src/scm/report/guile-strings.c:384
 #: src/scm/guile-strings.c:71
-#, fuzzy
 msgid "Account Window"
-msgstr "Conta: "
+msgstr "Janela de Contas"
 
 # src/gnome/glade-gnc-dialogs.c:2055
 #: src/scm/guile-strings.c:72
