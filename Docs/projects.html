@@ -31,18 +31,23 @@ available only via CVS.   There are precompiled versions available, but these
 are usually only for the stable releases.  Don't use the unstable versions 
 unless you are looking for excitement and adventure.
 <p>
-This document is divided into several sections.  The first deals with 
-archititectural and philosophical design issues. The second deals with 
-interesting technologies.  The third deals with desirable features and
-functions. 
+This document is divided into several sections.  
+<ol>
+<li><a href="#arch">Archititectural Goals</a>
+<li><a href="#reqs">Feature Requirements</a>
+<li><a href="#feats">Features</a>
+</ol>
 <p>
 
+<hr>
 
+<a name="arch">
 <h2>Architectural Goals</h2>
 There are some over-reaching design principles and philosophies that
 we hope to maintain.  Some of these concepts and terms are introduced
 in this section.
 <p>
+<h3>Separation of GUI and Data</h3>
 First, one must maintain a clean separation between the data structures 
 and the GUI that manipulates them, along the lines of a 
 <b>Model-View-Controller</b>
@@ -74,6 +79,7 @@ is immediately present and being displayed, reported, and manipulated.
 The Model is the abstraction of that data that the GUI (the controller)
 can act on.
 <p>
+<h3>The Financial Engine</h3>
 In GnuCash, the Model is implemented via the <b>Engine</b> API, and
 the View is the data that is currently in the <b>Engine</b>.  Thus,
 the Engine is a set of programming API's that the GUI (or a script,
@@ -99,6 +105,7 @@ or closer to home, Linux Kontor.  In particular, it should
 be possible to use GnuCash not only to view data from these sources,
 but also to manipulate it and send it back.  
 <p>
+<h3>Modularity, Extensibility and Customization</h3>
 The above structure then leads one to view GnuCash not so much as
 a tightly integrated application, but a loose federation of parts
 objects, libraries and interfaces.  In order to facilitate the 
@@ -108,303 +115,90 @@ of an extension language to glue the pieces together. The extension
 language that is most central to Gnucash is Scheme, although some
 of the interfaces are also available through Perl.
 <p>
-
-<hr>
-<hr>
-<hr>
-<h2>Under construction</h2>
-The stuff below dates back to Summer 1998 and is hrribly out of date. 
-
-<h2>Feature Requirements</h2>
-Create both a personal-financial accounting system, as well as a
-business accounting framework.  Although these two goals may seem at
-odds with each other, there is no reason why they could not share
-a considerable amount of framework.  The goals of a personal finance
-system is a system that is easy to use, has a simple yet powerful menu
-system, provides graphs, charts, and interfaces to on-line banking and
-stock systems.  The goals of a business system is multi-user
-capabilities built on an SQL database and/or CORBA objects for 
-multi-user use,  with support for inventory control, shipping &
-receiving, billing, accounts payable & receivable.  A pie-in-the-sky
-system might even include interfaces to on-line shopping carts, 
-credit-card clearing interfaces, or even a subset of SAP R/3 (TM)
-functions.  Note that all of these systems require at their base
-both a strong model of a "financial transaction", as well as 
-a ledger window, and a report generation mechanism.   The tools
-created to allow one should be portable enough to be deployed in the
-other application as well.
+<h3>Markets and Users</h3>
+Implicit in this desire for extensibility is the need to build
+two different types of finacial applications: one for the home
+user, and one for the small business.  These two types of systems 
+use much of the same financial lingo, and can share a lot of code, 
+but in fact are quite different.
+<p>
+A personal finance system needs to be easy to use, have a simple 
+'intuitive', yet powerful, menu system, and provide graphs, charts, 
+net-worth reports, mortgage calculators, budget planners, and
+and interfaces to on-line banking, shoping and stock systems.  
+<p>
+A business system needs to run over the network, allowing multiple
+simultaneous users.  It needs support for payroll, inventory control,
+shipping & receiving, billing, accounts payable & receivable.  
+Pie-in-the-sky might include interfaces to on-line shopping carts, 
+credit-card clearing interfaces, interfaces into ERP systems.
 <p>
 
+<!--=============================================================-->
+<!--=============================================================-->
+<!--=============================================================-->
+<a name="reqs">
+<h2>Feature Requirements</h2>
 
+
+
+
+<h3>Personal Financial Application</h3>
+Below are listed the technical work items needed to implement 
+the features that home might need or expect.  They are listed
+in approximate order of priority.
+
+<ul>
+<li><a href="#i18n">Internationalization</a>
+<li><a href="#graphs">Graphs, Reports</a>
+<li><a href="#stock">Simplified Stock Ledger</a>
+<li><a href="#glitz">Themes, Icons, Glitz</a>
+<li><a href="#book">Books, Accounting Periods</a>
+<li><a href="#check">Check Printing</a>
+<li><a href="#userpref">User Preferences</a>
+<li><a href="#ext">Extension Language Support</a>
+<li><a href="#bond">Bonds & Interest Bearing Instruments</a>
+<li><a href="#401K">401K etc.</a>
+<li><a href="#note">Annotate with Investment News</a>
+<li><a href="#loan">Loan and Mortgage Calculators</a>
+<li><a href="#budget">Budgeting</a>
+<li><a href="#alerts">Alerts, Recurring Transactions</a>
+<li><a href="#quick">Quicken(TM) Export</a>
+<li><a href="#quote">Stock Quotes, Price Quotes</a>
+<li><a href="#ofx">OFX, Online Banking, Trading, Billpay</a>
+<li><a href="#currency">Multiple Currencies</a>
+<li><a href="#double">Double Entry Accounting</a>
+<li><a href="#tab">Tab-delimited ASCII export</a>
+<li><a href="#tax">Tax Preparation</a>
+<li><a href="#palm">Sync with Palm Pilot &c. organizers</a>
+<li><a href="#emerg">Emergency Records Organizer</a>
+</ul>
+
+<h3>Small Business Features</h3>
+Features that small/medium businesses expect.
+
+<ul>
+<li><a href="#engine">Enhanced Engine, Financial Objects</a>
+<li><a href="#sql">SQL I/O</a>
+<li><a href="#multiuser">Multi-User Support</a>
+<li><a href="#arap">A/R, A/P Accounts Payable, Receivable</a>
+<li><a href="#payroll">Payroll</a>
+<li><a href="#invoice">Invoicing</a>
+<li><a href="#estimate">Job Costing</a>
+<li><a href="#expense">Expense Accounts</a>
+</ul>
+
+
+
+<!--=============================================================-->
+<!--=============================================================-->
+<!--=============================================================-->
+
+<a name="feats">
 <h2>Features and Functions</h2>
 
 <dl>
-<dt><b>Graphs, Reports</b>
-<dd>Add the whole host of reports, including Net Worth statements,
-    Balance Sheets, and Profit & Loss statements.  These should be
-    printable: it might be best to create them as ordinary HTML pages,
-    and use the printing abilities of the browser.  In an ideal
-    situation, the user should be able to create custom reports.
-    <p>
-    Other output format possibilities include SGML and XML.  In the
-    long run, these are preferable to HTML, since DSSSL and 
-    <a href="http://www.jclark.com/jade/"> Jade (James DSSSL Engine</a>
-    can be used to convert to RTF, Postscript, etc.  XML is the wave 
-    of the future.
-    <p>
-    The Report Generator should be a "dockable" subsystem of the 
-    whole.  Thus, it should be possible to run the report generator
-    in a stand-alone, read-only fashion without having to start up the main
-    application.
-    <p>
-    Graphs, charts, etc. too ...
-    <p>
-    One hard part of reporting is designing a configurable interface,
-    so that people can build custom reports.  
-    <p>
-    <b>Status:</b>
-    <ul>
-    <li>Simple HTML output is implemented. GnuCash will even act as a one-shot
-        web server.
-    <li>Reports for profit & loss, balance sheet, & portfolio valuation
-        implemented as html-embedded perl scripts.
-    </ul>
-    <p>
-
-<dt><b>Web Site Maintenance & Marketing</b>
-<dd>Put together an active, relevent web site.  Mailing list archives.
-    Screen shots.  Announces on c.o.l.a, freshmeat.  Put minor news items, 
-    etc. on web site news.  Bug tracker. Maintain repository of 
-    co-requisite tools & packages.
-    <p>
-    <b>Status:</b>
-    <ul>
-    <li>Jeremy Collins 
-        <a href="mailto:jcollins@gnucash.org">jcollins@gnucash.org</a> 
-        has put together the web site and is the current maintainer.
-        Almost everything on the list above is now available. Thanks Jeremy!
-    <li>Dec 1998 -- Yannick LE NY has provided French tranlations of the 
-        lead web pages.
-    <li>Nov 1998 -- Many thanks to Patrick Condron 
-         &lt;pcondon@rackspace.com&gt;
-         and <b><tt>rackspace.com</tt></b> forgh-bandwidth hosting of the web 
-        site.
-    </ul>
-    <p>
-
-<dt><b>OFX support</b>
-<dd>Provide the SGML DTD parsers to handle the OFX reports that many
-    banking institutions are providing, or will soon be providing, to
-    retail customers.  See below for OFX references.  OFX is an open spec
-    from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
-    The OFX DTD's are included in the 1.1 distributions. See 
-    <a href="http://www.ofx.net">OFX HomePage</a> for details.
-    <p>
-    <b>Status:</b>
-    <ul>
-    <li>Work on an OFX DTD parser has begun.  headers generated
-        correctly.  Constrcutors generated almost correctly.
-        Parser work done by Linas.
-    <li>Simple scripts have been run against real-live OFX servers.
-        Ueli Rutishauser &lt;urutishauser@bigfoot.com&gt;
-        has been able to do e*trade transactions to a real account.
-    <li> how it will intereact with the GUI is a wide-open question.
-    </ul>
-    <p>
-
-<dt><b>Budgeting</b>
-<dd>Ability to handle budgeted future transactions.
-    <p>
-    <b>Status:</b>
-    <ul>
-    <li>A design doc has been submitted by Bob Drzyzgula.  
-        Take a look at <tt>./src/budget.txt</tt> in the source directory.
-    <p>
-
-<dt><b>Ledger Widget</b>
-<dd>Create a more powerful ledger widget.  Currently, the X-Accountant
-    uses the powerful XbaeMatrix widget to display the ledger windows.
-    This is a good widget for displaying and maintaining tables.  
-    However, it could, and should, be further customized to handle 
-    the needs of accounting use.  Thus, it should be possible to
-    designate cells as being date cells, and provide completely
-    automated handling of date entry within these cells. Similarly,
-    it should be possible to designate monetary cells which can handle
-    input.  General text fields, for the description and the memo,
-    should be endowed with quick-fill abilities, allowing completion
-    by comparing the current types text to previous entries.  Finally,
-    there should be pull-down (combo-box) cells that can contain
-    pull-down item lists.  Each of these functions are currently
-    implemented in X-Accountant; however, there is no separation between
-    these features and the specific accounting functions.  A clean
-    separation would make the design and implementation of new ledger
-    windows much simpler and easier.
-    <p>
-    <b>Current Status:</b> the latest beta-development releases (version 
-    1.1.x) contain such an object.  
-    <ul>
-    <li>Currently Motif-based
-    <li>GTK port mostly work, but is hung up on the inadequacies of 
-        underlying table widget.
-    <li>No Qt port yet of the register.
-    <li>the simple single-account ledgers (incl. stock ledgers) seem 
-        to be working correctly, but no heavy testing yet.
-    <li>The multiple-account ledger is very broken.
-    <li>The multi-split ledger seems to work.  One can display
-        one line per transaction, two lines per transaction, one line 
-        per split, or a dynamic-expansion version of these.
-    <li>GTK version published, thanks to Rob Browning.
-        (other comments above are for motif version).
-    <li>No curses or emacs version yet.
-    <li>Taxes: For handling e.g. new zealand GST tax (12.5%) or british VAT,
-        it would be enough to add a checkbox to say y/n, add tax ...
-        (of course other schemes would be more sophisticated.)
-    <li>Linas Vepstas &lt;linas@linas.org&gt; is handling the "GUI-independent" 
-        parts of the register, as well as the Motif code.
-    <li>Ted Lemon &lt;mellon@hoffman.vix.com&gt;
-        is creating/fixing/extending
-        the underlying gtk widget to have the features that GnuCash needs.
-    </ul>
-    <p>
-
-<dt><b>Engine, Financial Objects</b>
-<dd>The current system makes a distinction between the data (account,
-    transaction) and they GUI that displays it.  The data is embeded 
-    within and controlled by the "Engine", which is a set of routines
-    to access accounts, transactions, etc.  The flexibility and features 
-    of the engine can be improved, and in particular, the sophistication of 
-    the query generator, and the level of multiple-currency support.
-    But possibly the most important task is to review the paradigm
-    and adjust it to bring it in line with a transaction-processing 
-    model.
-    <p>
-    <b>Current Status:</b> 
-    <ul>
-    <li>The basic engine has been detangled from 
-        the GUI elements, as of version gnucash-1.1.4.  
-    <li>Binary file I/O mostly detangled into a separate module.
-    <li>Crude transaction logging in place; should be suitable
-        for error/crash recovery but has not been tried by fire.
-    <li>Backup files automatically created & timestamped.
-    <li>BeginEdit()/RoolbackEdit()/CommitEdit() routines mostly in place,
-        These "Transaction processing constructs" 
-        should simplify creation of an SQL back end.
-    <li>Multiple currency support is present but shaky/untested.
-    <li>Query engine is minimal/sparse in capabilities.
-    <li>Linas &lt;linas@linas.org&gt; is maintaining the engine code.
-    </ul>
-
-    <p>
-
-<dt><b>Extension Language Support</b>
-<dd>Currently, the application is wired together entirely with 
-    C code.  A goal of the project is to replace this wiring with
-    a highly-configurable extension-language interface.
-    <p>
-    The overall architecture is envisioned to be as so:
-    All code, including the transaction engine, the file I/O routines,
-    the menus, and the ledger, will be abstracted into
-    compact modules that can function independently of each other.
-    At the highest level, there will be a infrastructure with
-    extension language interfaces that will "wire together" the
-    various modules.
-    <p>
-    Such "wiring together" will consist of a dispatch infrastructure
-    that will allow arbitrary menu entries to be hooked to arbitrary
-    modules.  The configuration for menu entries, and thier associated
-    callbacks, will be specified in an ext-lang configuration file.
-    At the final stages, it is hoped that new modules can be imported
-    without requiring that the application itself be recompiled & relinked.
-    <p>
-    <b>Status:</b>  
-    <ul>
-    <li>Work has begun.  
-    <li>The transaction engine interfaces are avaialable via 
-        <a href="http://starship.skyport.net/crew/beazley/swig.html">
-        SWIG</a>.
-    <li>The main loop is controlled by the Guile scheme interpreter.
-    <li>Rob Browning is the reigning expert.
-    </ul>
-    <p>
-
-<dt><b>Multi-user Support</b>
-<dd>Multi-user support should be added with either an SQL backend 
-    to the engine, and/or through CORBA interfaces to the engine. 
-    Project Kontor and also FreeMoney is working on SQL schemas;
-    Kontor is also working on Java RMI/CORBA interfaces.
-    <p>
-    The following industrial-strength features are still needed:
-    <ul>
-    <li>transaction-oriented queuing of updates
-    <li>event subscription channel for updates
-    <li>user authentication
-    <li>user authorization
-    <li>non-repudiability 
-    <li>encryption of network connections
-    </ul>
-    <p>
-    <ul>
-    <li>Stephan Lichtenauer &lt;s_lichtenauer@muenchen.org&gt;
-        is working on corba interfaces.
-    <li>"Alexander L. Belikoff" &lt;abel@bfr.co.il&gt; may start work on corba
-    </ul>
-  
-    <p>
-
-<dt><b>SQL I/O</b>
-<dd>A module is necessary to allow data to be fetched from an SQL
-    database, and for that database to be updated.  Some thoughts:
-    SQL databases do not need to be locked during editing: instead,
-    an optimistic approach, similar to that employed by CVS (concurrent
-    version system, a mechanism for storing versions of source code)
-    could be used: if the edits conflict with changes made by others,
-    the edit could be rejected en-masse, allowing the user to merge and
-    correct their changes.  This is a very important note: updating
-    SQL does NOT require locks to be held for long periods of time!
-    <p>
-
-<dt><b>Network Banking</b>
-<dd>Add ability to do on-line banking, billpay, etc.
-    <p>
-    <b>Status:</b>  
-    <ul>
-    <li>Can obtain stock quotes from Yahoo (NYSE), Fidelity Investments,
-        T.Rowe Price, and do automated update of GnuCash data files
-        (with the gnc-price perl script).  Need to add more data sources.
-        See src/quotes/Quote.pm and src/quotes/gnc-price for details.
-    </ul>
-    <p>
-
-</dl>
-<h2> More ...</h2>
-
-
-<dl>
-<dt><b>User Interface Ports</b>
-<dd>Port the package as a whole to gtk/gnome, Qt, Emacs.
-    <p>
-    <b>Status:</b>
-    <ul>
-    <li>Currently, the most functional interface is the Motif interface.
-        This primarily due to historical reasons, i.e. the Motif interface was
-        inherited from X-Accountant.  Maintained by Linas Vepstas.
-    <li>The gnome/gtk version is second in line. It frequently doesn't
-        compile, although sometimes it runs.  The #1 showstopper for this 
-        port is the lack of a suitable table widget that can be used
-        as a Ledger.  The ledger currently uses the gtk_clist widget,
-        but this isn't really powerful enough. Volunteers?
-        <p>
-        Most of the work has been done by
-        Jeremy Collins, with considerable help from Rob Browning.
-        Daniel R Risacher &lt;magnus@alum.mit.edu&gt; keeps threatening to 
-        do something ...
-    <li>First draft of Qt code submitted by 
-        Dirk Schoenberger &lt;schoenberger@signsoft.com&gt;.
-    <li>Jim Pick &lt;jimpick@jimpick.com&gt; may be working on an emacs version...
-    </ul>
-
-    <p>
-
+<a name="i18n">
 <dt><b>Internationalization</b>
 <dd>All menus, markup and help-text should be internationalized,
     so that GnuCash could be usable in any country.  This
@@ -427,13 +221,128 @@ other application as well.
     </ul>
     <p>
 
-<dt><b>Icons, Glitz, Icons, Glitz</b>
-<dd>A set of pretty icons and button pixmaps should be created for
-    minimized windows, and for the various buttons.  A user-configurable
-    button-bar would be nice too.  This should probably be coupled with
-    the creation of an X resource file, which does not currently exist.
+<a name="graphs">
+<dt><b>Graphs, Reports</b>
+<dd>Add a variety of reports, including Net Worth,
+    Balance Sheets, and Profit & Loss statements.  These should be
+    printable: it might be best to create them as ordinary HTML pages,
+    and use the printing abilities of the browser.  These should be 
+    easy to customoize. Ideally, even novice users should be able to 
+    create custom reports.
+    <p>
+    Other output format possibilities include SGML and XML.  In the
+    long run, these are preferable to HTML, since DSSSL and 
+    <a href="http://www.jclark.com/jade/"> Jade (James DSSSL Engine</a>
+    can be used to convert to RTF, Postscript, etc.  XML is the wave 
+    of the future.
+    <p>
+    The Report Generator should be a "dockable" subsystem of the 
+    whole.  Thus, it should be possible to run the report generator
+    in a stand-alone, read-only fashion without having to start up the main
+    application.
+    <p>
+    Graphs, charts, etc. too ...
+    Asset allocation pie chart.
+    Graph portfolio value vs. cost
+    <p>
+    One hard part of reporting is designing a configurable interface,
+    so that people can build custom reports.  
+    <p>
+    Stock portfolio tools should include a cost-averaging report.
+    Market Index report.  Stock Option values.  Estimate capital gains taxes.
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>Simple HTML output is implemented. GnuCash will even act as a one-shot
+        web server.
+    <li>Reports for profit & loss, balance sheet, & portfolio valuation
+        implemented as html-embedded perl scripts.  Being re-written in 
+        scheme.
+    </ul>
     <p>
 
+<a name="stock">
+<dt><b>Simplified Stock Ledger</b>
+<dd>Stocks and Mutual funds are handled by placing them each in their
+    own account.  Each account can be viewed individually.  If all of
+    the stock accounts are children of a master trading account, then
+    the trading account can be viewed and modified in a General Ledger 
+    window.  The current stock general ledger window is a bit obtuse,
+    and difficult to understand and use.  A simplified but still
+    powerful ledger window is desperately needed.
+    <p>
+    Question: how to most simply allow the user to enter loads and fees?
+    Answer: through splits. However, some users may not understand splits,
+    at least not initially. Thus, a little popup that allows the user to
+    type in the sales load or fee, & etc, and then auto-creates the needed 
+    splits.  
+    <p>
+    Note the current transfer window does NOT allow a share price to 
+    be specified !!  Needs fixin ...
+    <p>
+
+<a name="glitz">
+<dt><b>Themes, Icons, Glitz</b>
+<dd>A variety of finer touches need work:
+    <ul>
+    <li><b>Themes</b>.  A set of themes for the gnome version.
+    <li><b>Button Bar</b> A user-configurable button-bar would be nice too. 
+    <li><b>Categories</b>
+        Provide a default list of "Categories" (Income/Expense Accounts).
+        These are categories such as "Automobile Expense", "Bank Interest
+        Income", and "Employment Income".  The user should be able to 
+        select a default set of accounts, and have those be created.
+        To actually implement this, it might be best to simple create
+        a file with these in them, and load that file.  A mechanism should
+        be provided to allow the user to weed-out the unwanted accounts
+        without hampering their ability to use them at a later date, if
+        desired. 
+    <li><b>Household Assets</b>
+        Add an example showing how regular household assets (house, car,
+        jewelry, etc.) should be treated.  In particular, show how
+        appreciation and depreciation should be treated.
+    <li><b>Navigation</b>
+        Menu navigation using the keyboard should be possible.  
+        Although menu mnomenics exist, they seem to be broken.
+        Similarly, tab-key navigation should be possible.   Currently,
+        it is possible to use the tab key to navigate from field to 
+        field in the register window, to user arrow keys to navigate menus,
+        and quick-fill to automatically complete fields.  However,
+        it is not possible to tab over to the "Commit" button. It should be.
+    <li><b>Folder Tabs</b>
+        Currently, Income/Expense accounts can be shown or hidden by
+        selecting from a menu.  It would be nice to be able to examine
+        different account types (Asset, Liability, Income, Expense,
+        Payables, Receivables, Inventory) by selecting a tab folder.
+    <li><b>Fly-Over Help</b>
+        When the user pauses the mouse over a button, "fly-over" pop-up
+        help windows should appear. 
+    <li><b>Grayed-out Form Help</b>
+        Create grayed out entries in the ledger, titled "Memo",
+        "Description", etc, helping users understand what should be typed into
+        each field.
+    <li><b>emacs, vi, motif, kde, gnome Key Bindings for Text Fields</b>
+        Make sure that text fields can handle the vi & emacs key bindings,
+        so that e.g. emacs-style ctrl-a, ctrl-k does the right thing.
+    </ul>
+    <p>
+
+<a name="book">
+<dt><b>Books, Accounting Periods</b>
+<dd>Ability to close the book at end of the fiscal year.
+    I.E. Ability to permanently lock records as non-editable.  This should
+    be straight-forward by using the "reconciled" field to hold
+    "locked", and not allowing the GUI to edit locked records.
+    Also need to report closed books slightly differently.  Need 
+    to bring balances forward too... 
+    <p>
+
+<a name="check">
+<dt><b>Check Printing</b>
+<dd>Create a check-printing ability.
+    <p>
+
+<a name="userpref">
 <dt><b>User Preferences</b>
 <dd>Create menu system & file format for manipulating user
     preferences.  Preferences include things like showing/not
@@ -447,32 +356,84 @@ other application as well.
     </ul>
     <p>
 
-<dt><b>Categories</b>
-<dd>Provide a default list of "Categories" (Income/Expense Accounts).
-    These are categories such as "Automobile Expense", "Bank Interest
-    Income", and "Employment Income".  The user should be able to 
-    select a default set of accounts, and have those be created.
-    To actually implement this, it might be best to simple create
-    a file with these in them, and load that file.  A mechanism should
-    be provided to allow the user to weed-out the unwanted accounts
-    without hampering their ability to use them at a later date, if
-    desired. 
-    <p> 
-    <b>Current status:</b>
+
+<a name="ext">
+<dt><b>Extension Language Support</b>
+<dd>The application is wired together partly with C, partly 
+    with Scheme. The architecture of the wiring and how scheme 
+    is fit in needs to be reviewed, with a general overview
+    created so that additional extensions & etc. can be added
+    in a straightforward manner.
+    <p>
+    The overall architecture is envisioned to be as so:
+    All code, including the transaction engine, the file I/O routines,
+    the menus, and the ledger, will be abstracted into
+    compact modules that can function independently of each other.
+    At the highest level, there will be a infrastructure with
+    extension language interfaces that will "wire together" the
+    various modules.
+    <p>
+    Such "wiring together" will consist of a dispatch infrastructure
+    that will allow arbitrary menu entries to be hooked to arbitrary
+    modules.  The configuration for menu entries, and thier associated
+    callbacks, will be specified in an ext-lang configuration file.
+    At the final stages, it is hoped that new modules can be imported
+    without requiring that the application itself be recompiled & relinked.
+    <p>
+    <b>Status:</b>  
     <ul>
-    <li>There exists the ability to merge 
-        accounts from multiple files, and the ability to hide/show
-        Income/Expense Account types.
+    <li>Scheme/guile is the central extension language.
+    <li>Optional interfaces to the data engine can be genn'd 
+        with 
+        <a href="http://starship.skyport.net/crew/beazley/swig.html">
+        SWIG</a>.
+    <li>Rob Browning is the reigning expert.
     </ul>
     <p>
 
-<dt><b>Recurring Transactions</b>
-<dd>Add support for automatic, recurring transactions, e.g. 
+<a name="bond">
+<dt><b>Bonds & Interest Bearing Instruments</b>
+<dd>Support should be added for Mortgages, Bonds, CD's and other
+    instruments (e.g. savings accounts) that pay interest on a regular
+    basis.  It should be possible to specify the interest rate,
+    the payment schedule, and other regularly recurring transactions.
+    <p>
+
+<a name="401K">
+<dt><b>401K & etc.</b>
+<dd>401K & etc. 
+    <p>
+
+<a name="note">
+<dt><b>Annotate with News Stories</b>
+<dd>Download, save, annotate investment news & research.
+    Provide a way of storing news stories with accounts, and pssibly 
+    annotating individual transactions in the same way.
+    <p>
+
+<a name="loan">
+<dt><b>Loan and Mortgage Calculators</b>
+<dd>Provide a variety of simple GUI utilities to allow user to calculate
+    the future value of loans, mortgage payments, interst payments, etc.
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>Not Started.
+    </ul>
+    <p>
+
+<a name="alerts">
+<dt><b>Alerts, Recurring Transactions</b>
+<dd>Provide pup-up notification of deadlines, events, upcoming payments.
+    Add support for automatic, recurring transactions, e.g. 
     mortgage payments, fixed-interest bonds, bank accounts, etc.
     Note that the design for this could be very different, depending on
     whether the multi-user functions are available or not.
-    Note also, maybe the engine needs to support two dates per
-    transaction: expected, and actual ??
+    <p>
+    Design/implementation for this is tricky.  It should probably leverage
+    <tt>crontab</tt>, but this can lead to difficulties &amp; bugs.  
+    May need interfaces to email for emailed alerts.  Interfaces into 
+    calendering systems? 
     <b>Current status:</b>
     <ul>
     <li>April 1998 -- Design Doc contributed by Bob Drzyzgula.  See 
@@ -480,38 +441,93 @@ other application as well.
     </ul>
     <p>
 
-<dt><b>Navigation</b>
-<dd>Menu navigation using the keyboard should be possible.  
-    Although menu mnomenics exist, they seem to be broken.
-    Similarly, tab-key navigation should be possible.   Currently,
-    it is possible to use the tab key to navigate from field to 
-    field in the register window, to user arrow keys to navigate menus,
-    and quick-fill to automatically complete fields.  However,
-    it is not possible to tab over to the "Commit" button. It should be.
+<a name="budget">
+<dt><b>Budgeting</b>
+<dd>Ability to create a budget (i.e. estimates of future expenditures).
+    Reconcile actual expoenditures against future expenditures.
+    Create simple, step-by-step 'financial plan' budgeting GUI's:
+    <ul>
+    <li>Home purchase planner
+    <li>Retirement planner	
+    <li>College tuition planner
+    <li>Debt reduction planner
+    <li>Scrimp-n-Save planner
+    <li>Special purchase planner (big ticket items)
+    </ul>
+    Create a summary budget/track-record budget report that a 
+    professional financial planner/advisor could use.
+    <p>
+    Note that the above 'step-by-step' budgeters will have a very 
+    very different GUI than what e.g. a small-business budget might 
+    look like.
+
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>A design doc has been submitted by Bob Drzyzgula.  
+        Take a look at <tt>./src/budget.txt</tt> in the source directory.
+    </ul>
     <p>
 
-<dt><b>Folder Tabs</b>
-<dd>Currently, Income/Expense accounts can be shown or hidden by
-    selecting from a menu.  It would be nice to be able to examine
-    different account types (Asset, Liability, Income, Expense,
-    Payables, Receivables, Inventory) by selecting a tab folder.
+<a name="quick">
+<dt><b>Quicken(TM) Export</b>
+<dd>Ability to export Quicken QIF files.  Quicken import is implemented
+    and mostly works.
     <p>
 
-<dt><b>Fly-Over Help</b>
-<dd>When the user pauses the mouse over a button, "fly-over" pop-up
-    help windows should appear. 
+<a name="quote">
+<dt><b>Stock Quotes, Price Quotes</b>
+<dd>Add ability to download stock quotes, other price quotes.
+    Add ability to download historical prices as well.  
+    (e.g. get 5-year history of mutual fund performance vs. djia).
+    <p>
+    <b>Status:</b>  
+    <ul>
+    <li>Can obtain stock quotes from Yahoo (NYSE), Fidelity Investments,
+        T.Rowe Price, and do automated update of GnuCash data files
+        (with the gnc-price perl script).  Need to add more data sources.
+        See src/quotes/Quote.pm and src/quotes/gnc-price for details.
+    <li>Need to integrate with GUI. Right now, this is a stand-alone 
+        perl script run from crontab.
+    </ul>
     <p>
 
-<dt><b>Simplified Stock Ledger</b>
-<dd>Stocks and Mutual funds are handled by placing them each in their
-    own account.  Each account can be viewed individually.  If all of
-    the stock accounts are children of a master trading account, then
-    the trading account can be viewed and modified in a General Ledger 
-    window.  The current stock general ledger window is a bit obtuse,
-    and difficult to understand and use.  A simplified but still
-    powerful ledger window is desperately needed.
+<a name="ofx">
+<dt><b>OFX support</b>
+<dd>Provide the SGML DTD parsers to handle the OFX reports that many
+    banking institutions are providing, or will soon be providing, to
+    retail customers.  See below for OFX references.  OFX is an open spec
+    from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
+    The OFX DTD's are included in the 1.1 distributions. See 
+    <a href="http://www.ofx.net">OFX HomePage</a> for details.
+    <p>
+    There are two ways to build an OFX parser. One way is to build 
+    a compile-time DTD parser that treats the DTD as if it were an IDL, 
+    and generates C language stubs for a parser.  This approach was 
+    attempted and abandoned because it leads to fragile C code and 
+    a very large binary.  Its fragile because minor DTD non-compliances 
+    are hard to parse, handle and recover from.  Its huge because the
+    DTD  results in hundreds of (C++) objects being generated.  
+    The other way is to perform run-time DTD parsing.  This is nice
+    because this is the more popular approach: there are a variety of 
+    XML tools available that provide this function.  Its slower, but
+    on the OFX client side, this is not a bottleneck.
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>A compile-time parser was developed & abandoned.
+    </ul>
     <p>
 
+<a name="currency">
+<dt><b>Multiple Currencies</b>
+<dd>Need to support multiple currencies.  Work is needed in the
+    and the GUI.  The engine currently supports multple currencies 
+    by treating them as securities, and thus allowing currency trading.
+    The currency-trading register needs a complete overhaul.
+    <p>
+
+<a name="double">
 <dt><b>Forced Double-Entry</b>
 <dd>The system supports double-entry: every transaction
     indicates a pair of accounts: one is debited, and one is credited.
@@ -530,86 +546,12 @@ other application as well.
         double-entry behaviour: it can be made lax, or strict: 
         however, they are compiled in, there is no way to change them
         from the gui.
-    <li> Dec 1998 -- Scruber functions implemented to crawl through data,
+    <li>Dec 1998 -- Scruber functions implemented to crawl through data,
         and find all unbalanced or orphaned transactions.
     </ul>
     <p>
 
-<dt><b>emacs, vi, motif, kde, gnome Key Bindings for Text Fields</b>
-<dd>Make sure that text fields can handle the vi & emacs key bindings,
-    so that e.g. emacs-style ctrl-a, ctrl-k does the right thing.
-    <p>
-
-<dt><b>Bonds & Interest Bearing Instruments</b>
-<dd>Support should be added for Mortgages, Bonds, CD's and other
-    instruments (e.g. savings accounts) that pay interest on a regular
-    basis.  It should be possible to specify the interest rate,
-    the payment schedule, and other regularly recurring transactions.
-    <p>
-
-<dt><b>Household Assets</b>
-<dd>Add an example showing how regular household assets (house, car,
-    jewelry, etc.) should be treated.  In particular, show how
-    appreciation and depreciation should be treated.
-    <p>
-
-<dt><b>Inventory, Job Costing</b>
-<dd>Add the business features needed to maintain a stock of items for
-    sale, estimating jobs.
-    <p>
-
-<dt><b>Payables & Receivables</b>
-<dd>Add features to track sales receipts and other pending sources
-    of income, as well as owed sums.
-    <p>
-
-<dt><b>Check Printing</b>
-<dd>Create a check-printing ability.
-    <p>
-
-<dt><b>Locks</b>
-<dd>When splits are implemented, and the parent transaction has been
-    marked as cleared, the record should be locked, so that further
-    modifications to the amount can't be performed (or at least, a warning
-    is generated.  This prevents accidental garbaging up of old
-    transactions.)
-    <p>
-
-<dt><b>Grayed-out Form Help</b>
-<dd>Create grayed out entries in the ledger, titled "Memo",
-    "Description", etc, helping users understand what should be typed into
-    each field.
-    <p>
-
-<dt><b>Accounting Periods</b>
-<dd>Ability to permanently lock records as non-editable.  This should
-    be straight-forward by using the "reconciled" field to hold
-    "locked", and not allowing the GUI to edit locked records.
-    <p>
-
-<dt><b>Quicken(TM) Export</b>
-<dd>Ability to export Quicken QIF files.  Quicken import is implemented
-    and mostly works.
-    (Note: Quicken import worked in v 1.0, but got slightly broken in v 1.1
-    It no longer merges duplicate transactions when importing two or
-    more QIF files.  This should be easy to fix, as the "merge" routine
-    is there in the code somewhere; its just not called because it was
-    never restructured for the vv 1.1 engine.)
-    <p>
-
-<dt><b>Transaction Window Fixes</b>
-<dd>The transaction window should allow the user to specify a share
-    price (when purchasing/selling shares) as well as the load
-    and/or fees associated with the purchase.   Fees, of course,
-    are handled as separate transactions: however, it should
-    still be possible to specify the fees, the transfer, and other
-    details from a single window.
-    <p>
-    <b>Status</b>: Some basic reorganization of register was done to
-       support mixed multi-line split display.  However, the actual 
-       display of such things remaions unimplemented.
-    <p>
-
+<a name="tab">
 <dt><b>Tab-delimited ASCII file format</b>
 <dd>People *like* to be able to read file contents in ASCII. There are
     many Unix tools for manipulating ASCII.  An ASCII equivalent of the
@@ -627,32 +569,147 @@ other application as well.
     the SQL schemas in order to minimize I/O complexity and incompatibility.
     <p>
 
+<a name="tax">
+<dt><b>Tax Preparation</b>
+<dd>Gotta prepare those taxes. TurboTax -- categorize items according 
+    to differnt tazx schedules -- VAT -- estimate income taxes -- 
+    estimate itemized deductions -- find potential deductions, categorize
+    them -- 
+    <p>
+
+<a name="palm">
+<dt><b>Sync with Palm Pilot &c. organizers</b>
+<dd>Like it sez...
+    <p>
+
+<a name="emerg">
+<dt><b>Emergency Records Organizer</b>
+<dd>Put together a single-page report showing critical info about 
+    accounts, etc.
+    <p>
+
+<a name="engine">
+<dt><b>Enriched Engine, Financial Objects</b>
+<dd>The current system makes a distinction between the data (account,
+    transaction) and they GUI that displays it.  The data is embeded 
+    within and controlled by the "Engine", which is a set of routines
+    to access accounts, transactions, etc.  The engine serves as a 
+    kind of a dynamic cache between the permanent data repository 
+    (file, sql db) and the GUI.
+    <p>
+    The current engine is rather simple: it provides support for
+    accounts, account heirarchies and transactions consisting of 
+    multiple entries.  Many of the features described elsewhere 
+    need the engine to have a far richer, more sophisticated data 
+    model: parties (names, addresses), transaction id's & part numbers, 
+    budgets, interest rates, A/R, A/P, etc. 
+    <p>
+    Note: it makes no sense to make the engine API richer than what 
+    the GUI can currently support.
+    <ul>
+    <li><b>Locks</b>
+        When splits are implemented, and the parent transaction has been
+        marked as cleared, the record should be locked, so that further
+        modifications to the amount can't be performed (or at least, a warning
+        is generated.  This prevents accidental garbaging up of old
+        transactions.)
+    <li><b>Books</b>
+        Ability to close a book at the end of the fiscal year.
+    </ul>
+
+    <p>
+    <b>Current Status:</b> 
+    <ul>
+    <li>The basic engine has been detangled from 
+        the GUI elements, as of version gnucash-1.1.4.  
+    <li>Binary file I/O mostly detangled into a separate module.
+    <li>Crude transaction logging in place; should be suitable
+        for error/crash recovery but has not been tried by fire.
+    <li>Backup files automatically created & timestamped.
+    <li>BeginEdit()/RoolbackEdit()/CommitEdit() routines mostly in place,
+        These "Transaction processing constructs" 
+        should simplify creation of an SQL back end.
+    <li>Multiple currency support is present but raw.
+    <li>Query engine is minimal/sparse in capabilities.
+    <li>Linas &lt;linas@linas.org&gt; is maintaining the engine code.
+    </ul>
+
+    <p>
+
+<a name="sql">
+<dt><b>SQL I/O</b>
+<dd>A module is necessary to allow data to be fetched from an SQL
+    database, and for that database to be updated.  Some thoughts:
+    SQL databases do not need to be locked during editing: instead,
+    an optimistic approach, similar to that employed by CVS (concurrent
+    version system, a mechanism for storing versions of source code)
+    could be used: if the edits conflict with changes made by others,
+    the edit could be rejected en-masse, allowing the user to merge and
+    correct their changes.  This is a very important note: updating
+    SQL does NOT require locks to be held for long periods of time!
+    <p>
+
+<a name="multiuser">
+<dt><b>Multi-user Support</b>
+<dd>Multi-user support should be added with either an SQL backend 
+    to the engine, and/or through CORBA interfaces to the engine. 
+    Project Kontor and also FreeMoney is working on SQL schemas;
+    Kontor is also working on Java RMI/CORBA interfaces.
+    Another possibility is to create a web-application-server, and have
+    users do much/most of i/o with a web interface, possibly using 
+    the register object as a browser plugin.  
+    <p>
+    The following industrial-strength features are needed:
+    <ul>
+    <li>transaction-oriented queuing of updates
+    <li>event subscription channel for updates
+    <li>user authentication
+    <li>user authorization
+    <li>non-repudiability 
+    <li>encryption of network connections
+    </ul>
+    <p>
+    <ul>
+    <li>Stephan Lichtenauer &lt;s_lichtenauer@muenchen.org&gt;
+        is working on corba interfaces.
+    <li>"Alexander L. Belikoff" &lt;abel@bfr.co.il&gt; may start work on corba
+    </ul>
+  
+    <p>
+
+<a name="arap">
+<dt><b>Accounts Payable, Receivable</b>
+<dd>Add features to track sales receipts and other pending sources
+    of income, as well as owed sums.
+    <p>
+
+<a name="payroll">
+<dt><b>Payroll</b>
+<dd>Payroll.
+    <p>
+
+<a name="invoice">
+<dt><b>Invoicing</b>
+<dd>Invoicing.
+    <p>
+
+<a name="estimate">
+<dt><b>Job Costing</b>
+<dd>Ability to prepare estimates.
+    <p>
+
+<a name="expense">
+<dt><b>Expense Accounts</b>
+<dd>Expense Account Automation, including air, car, hotel, dining.
+    Receipts, reservations, cancellations.
+    <p>
 
 </dl>
 </p>
 
-<h2>Volunteers</h2>
-Your name here as project contributor!
-<ul>
-<li>Linas Vepstas &lt;linas@linas.org&gt; is maintaining the current GnuCash
-    and is attempting to coordinate the project work.
-<li>Jeremy Collins &lt;jcollins@gnucash.org&gt;, originated the GnoMoney
-    project, created the intial GTK port, and set up the GnuCash web site.
-<li><a href="mailto:rlb@cs.utexas.edu">Rob Browning (rlb@cs.utexas.edu)</a>
-    ex-cbb'er, has ported the register to gtk, built a generic preferences
-    infrastructure, got the extension language pieces to work.
-    and has done some work on a GTK-based graphing package.
-<li>Robin Clark &lt;rclark@cs.hmc.edu&gt; wrote the *original* X-Accountant,
-    which was later renamed as GnuCash.
-</ul>
-This list only mentions some of the recently active developers; many, 
-many others have contributed fixes and patches both large and small.  
-I've tried to credit them in the README.
-<p>
-
 <h2>References</h2>
 <ul>
-<li><a href="http://gnucash.ml.org/">GnuCash Home Page</a>
+<li><a href="http://gnucash.org/">GnuCash Home Page</a>
 <li><a href="http://www3.hmc.edu/~rclark/xacc/">X-Accountant Home Page</a>
 <li><a href="http://www.hex.net/~cbbrowne/finances.html">CBBrowne's List
     of GNU/Linux Accounting Software</a>
@@ -721,7 +778,7 @@ I've tried to credit them in the README.
 </ul>
 
 <hr>
-Draft version 0.25 -- October 1998<br>
+Draft version 0.35 -- November 1999<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 </body>
 </html>
