@@ -1,5 +1,7 @@
 2003-02-02  Christian Stimming  <stimming@tuhh.de>
 
+	* configure.in: Fix libofx test.
+
 	* src/import-export/hbci/gnc-hbci-utils.c, po/de.po: Recognize
 	even more error codes from OpenHBCI. Yes, I know this breaks
 	string freeze -- but these strings *really* *only* apply to German
