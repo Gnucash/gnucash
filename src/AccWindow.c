@@ -59,7 +59,7 @@ typedef struct _accwindow {
 } AccWindow;
 
 /* NOTE: notes has to be at the beginning of the struct!  Order is 
- *       important */
+ *       important -- hack alert -- why is order important ?? */
 typedef struct _editaccwindow {
   String notes;          /* The text from the "Notes" window        */
                          /* The text fields:                        */
@@ -73,11 +73,12 @@ typedef struct _editaccwindow {
 extern Widget toplevel;
 
 /** PROTOTYPES ******************************************************/
-void closeAccWindow( Widget mw, XtPointer cd, XtPointer cb );
-void closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb );
-void notesCB( Widget mw, XtPointer cd, XtPointer cb );
-void createCB( Widget mw, XtPointer cd, XtPointer cb );
-void editCB( Widget mw, XtPointer cd, XtPointer cb );
+void closeAccWindow         ( Widget mw, XtPointer cd, XtPointer cb );
+void closeEditAccWindow     ( Widget mw, XtPointer cd, XtPointer cb );
+static void notesCB         ( Widget mw, XtPointer cd, XtPointer cb );
+static void createCB        ( Widget mw, XtPointer cd, XtPointer cb );
+static void editCB          ( Widget mw, XtPointer cd, XtPointer cb );
+static void selectAccountCB ( Widget mw, XtPointer cd, XtPointer cb );
 
 /********************************************************************\
  * accWindow                                                        *
@@ -237,8 +238,10 @@ accWindow( Widget parent )
 			     XmNrightPosition,   35,        /* 35% */
 			     NULL );
   
+  /* put up a pulldown menu to let user choose an account */
   accData->accMenu = xaccBuildAccountMenu (grp, form, "Pick One");
   group_menu = xaccGetAccountMenuWidget (accData->accMenu);
+  xaccAccountMenuAddCallback (accData->accMenu, selectAccountCB, (XtPointer) accData);
 
   /* account subroups are not implemented, so grey this out */
 /*
@@ -560,7 +563,7 @@ closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     * 
  * Global: toplevel    - the toplevel widget                        *
 \********************************************************************/
-void
+static void
 notesCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
@@ -580,7 +583,7 @@ notesCB( Widget mw, XtPointer cd, XtPointer cb )
  * Global: data        - the data from the datafile                 *
  *         toplevel    - the toplevel widget                        *
 \********************************************************************/
-void
+static void
 createCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   int i, num, acc_id;
@@ -624,8 +627,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   /* once the account is set up, add it to account group 
    * If the user indicated a parent acccount, make it a 
    * sub account of that */
-  acc_id = xaccGetAccountMenuSelection (accData->accMenu);
-  parent_acc = xaccGetAccountFromID (topgroup, acc_id);
+  parent_acc = xaccGetAccountMenuSelection (accData->accMenu);
   if (parent_acc) {
     xaccInsertSubAccount (parent_acc, acc);
   } else {
@@ -643,7 +645,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   }
 
 /********************************************************************\
- * editCB -- records the edits made by in the editAccWindow         * 
+ * editCB -- records the edits made in the editAccWindow            * 
  *                                                                  * 
  * Args:   mw - the widget that called us                           * 
  *         cd - editAccData - the struct of data associated with    *
@@ -652,7 +654,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     * 
  * Global: data        - the data from the datafile                 *
 \********************************************************************/
-void
+static void
 editCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
@@ -671,6 +673,176 @@ editCB( Widget mw, XtPointer cd, XtPointer cb )
   
   refreshMainWindow();
   }
+
+/********************************************************************\
+ * selectAccountCB -- checks the use account selection              * 
+ * 
+ * Basically, sub-account *must* be of the same category as thier 
+ * parent accounts, otherwise chaos will errupt.  The five basic 
+ * categories are asset, liability, income,. expense, and equity.
+ *
+ * Currently, there are four subcategories for asset accounts:
+ * banks, cash, stocks, bonds, mutual funds.
+ *
+ *                                                                  * 
+\********************************************************************/
+static void
+selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
+{
+  int i, but;
+  Boolean set;
+  AccWindow *menu = (AccWindow *) cd;
+  Account *acc = (Account *) cb;
+
+  /* unset any pressed radio buttons in preparation for 
+   * setting insensitive of some of them. 
+   */
+
+  /* figure out which radio button might be set */
+  for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+    XtVaGetValues( menu->type_widgets[i], XmNset, &set, NULL );
+    if(set) but = i;
+  }
+
+  if (acc) {
+    switch (acc->type) {
+       case BANK:
+       case CASH:
+       case ASSET:
+       case PORTFOLIO:
+       case MUTUAL:
+          XtSetSensitive (menu->type_widgets[BANK],      True);
+          XtSetSensitive (menu->type_widgets[CASH],      True);
+          XtSetSensitive (menu->type_widgets[ASSET],     True);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    True);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          XtVaSetValues (menu->type_widgets[LIABILITY], XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[CREDIT],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[INCOME],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EXPENSE],   XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EQUITY],    XmNset, False, NULL);
+
+          /* set a default, if an inapporpriate button is pushed */
+          if ((BANK   != but) && (CASH      != but) &&
+              (ASSET  != but) && (PORTFOLIO != but) &&
+              (MUTUAL != but) ) {
+             XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          }
+          break;
+
+       case LIABILITY:
+       case CREDIT:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], True);
+          XtSetSensitive (menu->type_widgets[CREDIT],    True);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          XtVaSetValues (menu->type_widgets[BANK],      XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[CASH],      XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[ASSET],     XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[PORTFOLIO], XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[MUTUAL],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[INCOME],    XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EXPENSE],   XmNset, False, NULL);
+          XtVaSetValues (menu->type_widgets[EQUITY],    XmNset, False, NULL);
+
+          /* set a default, if an inapporpriate button is pushed */
+          if ((LIABILITY != but) && (CREDIT != but)) {
+             XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          }
+          break;
+
+       case INCOME:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    True);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+             XtVaSetValues (menu->type_widgets[i],      XmNset, False, NULL);
+          }
+
+          /* set a default, if an inapporpriate button is pushed */
+          XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          break;
+
+       case EXPENSE:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   True);
+          XtSetSensitive (menu->type_widgets[EQUITY],    False);
+
+          /* unset unavailable buttons */
+          for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+             XtVaSetValues (menu->type_widgets[i],      XmNset, False, NULL);
+          }
+
+          /* set a default, if an inapporpriate button is pushed */
+          XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          break;
+
+       case EQUITY:
+          XtSetSensitive (menu->type_widgets[BANK],      False);
+          XtSetSensitive (menu->type_widgets[CASH],      False);
+          XtSetSensitive (menu->type_widgets[ASSET],     False);
+          XtSetSensitive (menu->type_widgets[PORTFOLIO], False);
+          XtSetSensitive (menu->type_widgets[MUTUAL],    False);
+          XtSetSensitive (menu->type_widgets[LIABILITY], False);
+          XtSetSensitive (menu->type_widgets[CREDIT],    False);
+          XtSetSensitive (menu->type_widgets[INCOME],    False);
+          XtSetSensitive (menu->type_widgets[EXPENSE],   False);
+          XtSetSensitive (menu->type_widgets[EQUITY],    True);
+
+          /* unset unavailable buttons */
+          for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+             XtVaSetValues (menu->type_widgets[i],      XmNset, False, NULL);
+          }
+
+          /* set a default, if an inapporpriate button is pushed */
+          XtVaSetValues (menu->type_widgets[acc->type], XmNset, True, NULL);
+          break;
+
+    }
+  } else {
+     XtSetSensitive (menu->type_widgets[BANK],      True);
+     XtSetSensitive (menu->type_widgets[CASH],      True);
+     XtSetSensitive (menu->type_widgets[ASSET],     True);
+     XtSetSensitive (menu->type_widgets[CREDIT],    True);
+     XtSetSensitive (menu->type_widgets[LIABILITY], True);
+     XtSetSensitive (menu->type_widgets[PORTFOLIO], True);
+     XtSetSensitive (menu->type_widgets[MUTUAL],    True);
+     XtSetSensitive (menu->type_widgets[INCOME],    True);
+     XtSetSensitive (menu->type_widgets[EXPENSE],   True);
+     XtSetSensitive (menu->type_widgets[EQUITY],    True);
+  }
+}
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

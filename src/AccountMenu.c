@@ -34,7 +34,7 @@
 
 typedef struct _accMenuEntry
 {
-  int option;
+  Account *option;
   char * label;
   struct _accountMenu *am;
 } AccMenuEntry;
@@ -43,9 +43,13 @@ typedef struct _accountMenu
 {
   Widget menu_widget;
   Widget pulldown_widget;
-  int choice;
+  Account *choice;
   int numMenuEntries;
   AccMenuEntry **menuEntry;
+
+  /* user callbacks */
+  XtCallbackProc callback;
+  XtPointer client_data;
 } AccountMenu;
 
 /********************************************************************\
@@ -75,13 +79,13 @@ xaccGetAccountMenuWidget (AccountMenu *menu) {
    return (menu->menu_widget);
 }
 
-int
+Account *
 xaccGetAccountMenuSelection (AccountMenu *menu) {
    return (menu->choice);
 }
 
 /********************************************************************\
- * menuCB -- keeps track of the to and from menues                  * 
+ * menuCB -- keeps track of the menu choice                         * 
  *                                                                  * 
  * Args:   mw - the widget that called us                           * 
  *         cd - menuEntry - has the menu option and a pointer to    *
@@ -106,6 +110,10 @@ xaccAccountMenuCB( Widget mw, XtPointer cd, XtPointer cb )
                  XmNlabelString, labelStr,
                  NULL );
   XmStringFree (labelStr);
+
+  if (menu->callback) {
+    (*(menu->callback)) (menu->menu_widget, menu->client_data, (XtPointer) menu->choice);
+  }
 
 }
 
@@ -133,7 +141,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
   for( i=0; i<pad; i++ )
     {
     accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
-    accData->menuEntry[*offset]->option = -1;
+    accData->menuEntry[*offset]->option = NULL;
     accData->menuEntry[*offset]->label = "(none)";
     accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
     
@@ -155,7 +163,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     Account *acc = getAccount( grp, i );
     
     accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
-    accData->menuEntry[*offset]->option = xaccGetAccountID (acc);
+    accData->menuEntry[*offset]->option = acc;
     accData->menuEntry[*offset]->label = acc->accountName;
     accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
     
@@ -174,7 +182,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     if (acc->children) {
        pad ++;
        accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
-       accData->menuEntry[*offset]->option = xaccGetAccountID (acc);
+       accData->menuEntry[*offset]->option = acc;
        accData->menuEntry[*offset]->label = acc->accountName;
        accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
        
@@ -224,6 +232,17 @@ xaccFreeAccountSubMenu (MenuItem *menuList)
 
 /********************************************************************\
 \********************************************************************/
+void
+xaccAccountMenuAddCallback (AccountMenu *menu, 
+                            XtCallbackProc cb,
+                            XtPointer cd )
+{
+  menu -> callback = cb;
+  menu -> client_data = cd;
+}
+
+/********************************************************************\
+\********************************************************************/
 
 AccountMenu *
 xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label) 
@@ -243,7 +262,9 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
   nacc *= 2;  /* quick hack to make room for doubled account labels. */
 
   accData = (AccountMenu *) _malloc (sizeof (AccountMenu));
-  accData ->choice = -1;
+  accData -> choice = NULL;
+  accData -> callback = NULL;
+  accData -> client_data = NULL;
   
   accData->menuEntry = (AccMenuEntry **)_malloc((nacc+pad)*sizeof(AccMenuEntry *));
   accData->numMenuEntries = nacc+pad;
@@ -259,6 +280,7 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
 
   XtVaSetValues (bar_widget,
                  XmNorientation, XmVERTICAL,
+                 /* XmNshadowThickness, 0, */
                  NULL );
 
   XtManageChild (bar_widget);
@@ -268,6 +290,11 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
   
   accData->pulldown_widget = 
         BuildMenu( bar_widget, XmMENU_PULLDOWN, label, 'F', False, 0, menuList );
+
+  XtVaSetValues (accData->pulldown_widget,
+                 XmNshadowThickness, 0,
+                 NULL );
+
   
   xaccFreeAccountSubMenu (menuList);
   
