@@ -331,7 +331,7 @@ transaction.") #t))
  (gnc:make-color-option
   (N_ "Register Colors") (N_ "Split color")
   "f" (N_ "The default background color for split rows in the register")
-  (list #xff #xfa #xd9 0)
+  (list #xed #xe8 #xd4 0)
   255
   #f))
 
