@@ -1,3 +1,8 @@
+2003-05-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: you have to declare
+	  your variables before you g_assert() anything.
+
 2003-05-10  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-commodity-xml-v2.c:

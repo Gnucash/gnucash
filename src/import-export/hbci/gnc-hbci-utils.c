@@ -207,8 +207,8 @@ get_resultcode_error_cb (int value, void *user_data)
 static int
 get_resultcode_error (const list_int *list)
 {
-  g_assert (list);
   int tmp_result = 0, cause = 0;
+  g_assert (list);
   cause = (int) list_int_foreach (list, &get_resultcode_error_cb, &tmp_result);
   return MAX(tmp_result, cause);
 }
