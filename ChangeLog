@@ -8,7 +8,10 @@
 	  handler during certain paths of the ok_cb because the focus-out
 	  signal may not get handled in all cases -- so force the issue.
 	  Fixes bug #102163
-	
+
+	* src/gnome-utils/dialog-transfer.c: always set the exchange-rate
+	  as a positive value (use ABS).  Fixes the rest of #102163.
+	  
 2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c
 	* src/import-export/hbci/gnc-hbci-utils.c:

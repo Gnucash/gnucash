@@ -1406,7 +1406,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       gnc_xfer_to_amount_update_cb(xferData->to_amount_edit, NULL, xferData);
 
     *(xferData->exch_rate) =
-      gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit));
+      gnc_numeric_abs(gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->price_edit)));
   }
   else
   {
