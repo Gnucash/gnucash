@@ -298,6 +298,10 @@ void gncOrderBeginEdit (GncOrder *order)
 void gncOrderCommitEdit (GncOrder *order)
 {
   if (!order) return;
+
+  if (order->dirty)
+    gncBusinessSetDirtyFlag (order->book, _GNC_MOD_NAME, TRUE);
+  order->dirty = FALSE;
 }
 
 int gncOrderCompare (GncOrder *a, GncOrder *b)
@@ -347,6 +351,11 @@ static gboolean _gncOrderIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncOrderMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncOrderForeach (GNCBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
@@ -377,6 +386,7 @@ static GncObject_t gncOrderDesc = {
   _gncOrderCreate,
   _gncOrderDestroy,
   _gncOrderIsDirty,
+  _gncOrderMarkClean,
   _gncOrderForeach,
   _gncOrderPrintable,
 };

@@ -32,6 +32,7 @@ struct _gncCustomer {
   char *	terms;
   GncAddress *	addr;
   GncAddress *	shipaddr;
+  gnc_commodity	* commodity;
   gnc_numeric	discount;
   gnc_numeric	credit;
   gboolean	taxincluded;
@@ -191,6 +192,13 @@ void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
   mark_customer (cust);
 }
 
+void gncCustomerSetCommodity (GncCustomer *cust, gnc_commodity *com)
+{
+  if (!cust || !com) return;
+  cust->commodity = com;
+  mark_customer (cust);
+}
+
 /* Note that JobList changes do not affect the "dirtiness" of the customer */
 void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
 {
@@ -223,8 +231,14 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
+  if (!cust) return;
+
   /* XXX COMMIT TO DATABASE */
+  if (cust->dirty)
+    gncBusinessSetDirtyFlag (cust->book, _GNC_MOD_NAME, TRUE);
   cust->dirty = FALSE;
+  gncAddressClearDirty (cust->addr);
+  gncAddressClearDirty (cust->shipaddr);
 }
 
 /* Get Functions */
@@ -281,6 +295,12 @@ gboolean gncCustomerGetTaxIncluded (GncCustomer *cust)
 {
   if (!cust) return FALSE;
   return cust->taxincluded;
+}
+
+gnc_commodity * gncCustomerGetCommodity (GncCustomer *cust)
+{
+  if (!cust) return NULL;
+  return cust->commodity;
 }
 
 gboolean gncCustomerGetActive (GncCustomer *cust)
@@ -371,6 +391,11 @@ static gboolean _gncCustomerIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncCustomerMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncCustomerForeach (GNCBook *book, foreachObjectCB cb,
 				 gpointer user_data)
 {
@@ -394,6 +419,7 @@ static GncObject_t gncCustomerDesc = {
   _gncCustomerCreate,
   _gncCustomerDestroy,
   _gncCustomerIsDirty,
+  _gncCustomerMarkClean,
   _gncCustomerForeach,
   _gncCustomerPrintable,
 };

@@ -18,5 +18,6 @@ void gncObjectBookBegin (GNCBook *book);
 void gncObjectBookEnd (GNCBook *book);
 
 gboolean gncObjectIsDirty (GNCBook *book);
+void gncObjectMarkClean (GNCBook *book);
 
 #endif /* GNC_OBJECTP_H_ */

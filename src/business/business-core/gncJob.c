@@ -186,7 +186,11 @@ void gncJobSetActive (GncJob *job, gboolean active)
 
 void gncJobCommitEdit (GncJob *job)
 {
+  if (!job) return;
+
   /* XXX: COMMIT TO DATABASE */
+  if (job->dirty)
+    gncBusinessSetDirtyFlag (job->book, _GNC_MOD_NAME, TRUE);
   job->dirty = FALSE;
 }
 
@@ -285,6 +289,11 @@ static gboolean _gncJobIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncJobMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncJobForeach (GNCBook *book, foreachObjectCB cb,
 			    gpointer user_data)
 {
@@ -308,6 +317,7 @@ static GncObject_t gncJobDesc = {
   _gncJobCreate,
   _gncJobDestroy,
   _gncJobIsDirty,
+  _gncJobMarkClean,
   _gncJobForeach,
   _gncJobPrintable
 };

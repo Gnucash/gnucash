@@ -30,6 +30,7 @@ void gncInvoiceSetDateDue (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetDatePaid (GncInvoice *invoice, Timespec date);
 void gncInvoiceSetTerms (GncInvoice *invoice, const char *terms);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
+void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
@@ -47,6 +48,7 @@ Timespec gncInvoiceGetDateDue (GncInvoice *invoice);
 Timespec gncInvoiceGetDatePaid (GncInvoice *invoice);
 const char * gncInvoiceGetTerms (GncInvoice *invoice);
 const char * gncInvoiceGetNotes (GncInvoice *invoice);
+gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);

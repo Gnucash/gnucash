@@ -21,6 +21,8 @@ void gncBusinessForeach (GNCBook *book, GNCIdType mod_name,
 void gncBusinessCreate (GNCBook *book, GNCIdType mod_name);
 void gncBusinessDestroy (GNCBook *book, GNCIdType mod_name);
 gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name);
+void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
+			      gboolean is_dirty);
 void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
 			   gpointer obj, const GUID *guid);
 void gncBusinessRemoveObject (GNCBook *book, GNCIdType mod_name,

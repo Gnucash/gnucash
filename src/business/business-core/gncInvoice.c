@@ -41,6 +41,8 @@ struct _gncInvoice {
   Timespec 	date_due;
   Timespec 	date_paid;
 
+  gnc_commodity * common_commodity;
+
   Account * 	posted_acc;
   Transaction * posted_txn;
   Transaction * paid_txn;
@@ -195,6 +197,13 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
   mark_invoice (invoice);
 }
 
+void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com)
+{
+  if (!invoice || !com) return;
+  invoice->common_commodity = com;
+  mark_invoice (invoice);
+}
+
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty)
 {
   if (!invoice) return;
@@ -316,6 +325,12 @@ const char * gncInvoiceGetNotes (GncInvoice *invoice)
   return invoice->notes;
 }
 
+gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice)
+{
+  if (!invoice) return NULL;
+  return invoice->common_commodity;
+}
+
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
@@ -325,7 +340,7 @@ Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice)
 Transaction * gncInvoiceGetPaidTxn (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
-  return invoice->posted_txn;
+  return invoice->paid_txn;
 }
 
 Account * gncInvoiceGetPostedAcc (GncInvoice *invoice)
@@ -407,15 +422,12 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   GList *iter;
   GList *splitinfo = NULL;
   gnc_numeric total;
-  gnc_commodity *commonCommodity = NULL; /* XXX: FIXME */
   struct acct_val {
     Account *	acc;
     gnc_numeric val;
   } *acc_val;
 
   if (!invoice || !acc) return NULL;
-
-  /* XXX: Figure out the common currency */
 
   txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
@@ -425,7 +437,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     (txn, gncOwnerGetName (gncInvoiceGetOwner (invoice)));
 			   
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
-  xaccTransSetCurrency (txn, commonCommodity);
+  xaccTransSetCurrency (txn, invoice->common_commodity);
 
   /* Entered and Posted at date */
   if (date) {
@@ -484,7 +496,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->val)
 				   : acc_val->val),
-			   commonCommodity);
+			   invoice->common_commodity);
     xaccAccountBeginEdit (acc_val->acc);
     xaccAccountInsertSplit (acc_val->acc, split);
     xaccAccountCommitEdit (acc_val->acc);
@@ -496,7 +508,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split = xaccMallocSplit (invoice->book);
     /* Set action/memo */
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
-			   commonCommodity);
+			   invoice->common_commodity);
     xaccAccountBeginEdit (acc);
     xaccAccountInsertSplit (acc, split);
     xaccAccountCommitEdit (acc);
@@ -518,7 +530,6 @@ gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
 {
   Transaction *txn;
   gnc_numeric total;
-  gnc_commodity *commonCommodity = NULL; /* XXX: FIXME */
   Account *acct;
 
   if (!invoice || !acc) return NULL;
@@ -548,8 +559,6 @@ gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
     g_return_val_if_fail (l, NULL);
   }
 
-  /* XXX: Figure out the common currency */
-
   txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
 
@@ -558,7 +567,7 @@ gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
     (txn, gncOwnerGetName (gncInvoiceGetOwner (invoice)));
 			   
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
-  xaccTransSetCurrency (txn, commonCommodity);
+  xaccTransSetCurrency (txn, invoice->common_commodity);
 
   /* Entered and Posted at date */
   if (paid_date) {
@@ -571,7 +580,7 @@ gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
   {
     Split *split = xaccMallocSplit (invoice->book);
     /* Set action/memo */
-    xaccSplitSetBaseValue (split, total, commonCommodity);
+    xaccSplitSetBaseValue (split, total, invoice->common_commodity);
     xaccAccountBeginEdit (acc);
     xaccAccountInsertSplit (acc, split);
     xaccAccountCommitEdit (acc);
@@ -583,7 +592,8 @@ gncInvoicePayToAccount (GncInvoice *invoice, Account *acc,
     Split *split = xaccMallocSplit (invoice->book);
 
     /* Set action/memo */
-    xaccSplitSetBaseValue (split, gnc_numeric_neg (total), commonCommodity);
+    xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
+			   invoice->common_commodity);
     xaccAccountBeginEdit (acct);
     xaccAccountInsertSplit (acct, split);
     xaccAccountCommitEdit (acct);
@@ -651,6 +661,9 @@ void gncInvoiceBeginEdit (GncInvoice *invoice)
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
   if (!invoice) return;
+  if (invoice->dirty)
+    gncBusinessSetDirtyFlag (invoice->book, _GNC_MOD_NAME, TRUE);
+  invoice->dirty = FALSE;
 }
 
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
@@ -703,6 +716,11 @@ static gboolean _gncInvoiceIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncInvoiceMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncInvoiceForeach (GNCBook *book, foreachObjectCB cb,
 				gpointer user_data)
 {
@@ -734,6 +752,7 @@ static GncObject_t gncInvoiceDesc = {
   _gncInvoiceCreate,
   _gncInvoiceDestroy,
   _gncInvoiceIsDirty,
+  _gncInvoiceMarkClean,
   _gncInvoiceForeach,
   _gncInvoicePrintable,
 };

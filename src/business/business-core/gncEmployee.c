@@ -31,6 +31,7 @@ struct _gncEmployee {
   char *	language;
   char *	acl;
   GncAddress *	addr;
+  gnc_commodity * commodity;
   gnc_numeric	workday;
   gnc_numeric	rate;
   gboolean	active;
@@ -167,6 +168,13 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate)
   mark_employee (employee);
 }
 
+void gncEmployeeSetCommodity (GncEmployee *employee, gnc_commodity *com)
+{
+  if (!employee || !com) return;
+  employee->commodity = com;
+  mark_employee (employee);
+}
+
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active)
 {
   if (!employee) return;
@@ -231,6 +239,12 @@ gnc_numeric gncEmployeeGetRate (GncEmployee *employee)
   return employee->rate;
 }
 
+gnc_commodity * gncEmployeeGetCommodity (GncEmployee *employee)
+{
+  if (!employee) return NULL;
+  return employee->commodity;
+}
+
 gboolean gncEmployeeGetActive (GncEmployee *employee)
 {
   if (!employee) return FALSE;
@@ -252,9 +266,13 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
 
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
+  if (!employee) return;
 
   /* XXX COMMIT TO DATABASE */
+  if (employee->dirty)
+    gncBusinessSetDirtyFlag (employee->book, _GNC_MOD_NAME, TRUE);
   employee->dirty = FALSE;
+  gncAddressClearDirty (employee->addr);
 }
 
 /* Other functions */
@@ -296,6 +314,11 @@ static gboolean _gncEmployeeIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncEmployeeMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncEmployeeForeach (GNCBook *book, foreachObjectCB cb,
 				 gpointer user_data)
 {
@@ -319,6 +342,7 @@ static GncObject_t gncEmployeeDesc = {
   _gncEmployeeCreate,
   _gncEmployeeDestroy,
   _gncEmployeeIsDirty,
+  _gncEmployeeMarkClean,
   _gncEmployeeForeach,
   _gncEmployeePrintable
 };

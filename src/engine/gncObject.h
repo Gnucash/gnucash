@@ -16,10 +16,15 @@
  */
 #define GNC_OBJECT_VERSION 1
 
+typedef struct _gncObjectDef GncObject_t;
 typedef void (*foreachObjectCB) (gpointer object, gpointer user_data);
+typedef void (*foreachTypeCB) (GncObject_t *type, gpointer user_data);
+typedef void (*foreachBackendTypeCB) (GNCIdTypeConst type,
+				      gpointer backend_data,
+				      gpointer user_data);
 
 /* This is the Object Object descriptor */
-typedef struct _gncObjectDef {
+struct _gncObjectDef {
   gint		version;	/* of the object interface */
   GNCIdType	name;		/* the Object's GNC_ID */
   const char *	type_label;	/* "Printable" type-label string */
@@ -35,6 +40,9 @@ typedef struct _gncObjectDef {
   /* Determine if there are any dirty items in this book */
   gboolean	(*is_dirty)(GNCBook *);
 
+  /* Mark this object's book clean (for after a load) */
+  void		(*mark_clean)(GNCBook *);
+
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
@@ -43,7 +51,9 @@ typedef struct _gncObjectDef {
   /* Given a particular object, return a printable string */
   const char *	(*printable)(gpointer obj);
 
-} GncObject_t;
+};
+
+void gncObjectForeachType (foreachTypeCB cb, gpointer user_data);
 
 void gncObjectForeach (GNCIdTypeConst type_name, GNCBook *book, 
 		       foreachObjectCB cb, gpointer user_data);
@@ -62,5 +72,17 @@ const char * gncObjectGetTypeLabel (GNCIdTypeConst type_name);
 /* Lookup a object definition */
 const GncObject_t * gncObjectLookup (GNCIdTypeConst type_name);
 
+
+/* Register and lookup backend-specific data for this particular object */
+gboolean gncObjectRegisterBackend (GNCIdTypeConst type_name,
+				   const char *backend_name,
+				   gpointer be_data);
+
+gpointer gncObjectLookupBackend (GNCIdTypeConst type_name,
+				 const char *backend_name);
+
+void gncObjectForeachBackend (const char *backend_name,
+			      foreachBackendTypeCB cb,
+			      gpointer user_data);
 
 #endif /* GNC_OBJECT_H_ */

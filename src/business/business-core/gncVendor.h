@@ -27,6 +27,7 @@ void gncVendorSetName (GncVendor *vendor, const char *name);
 void gncVendorSetNotes (GncVendor *vendor, const char *notes);
 void gncVendorSetTerms (GncVendor *vendor, const char *terms);
 void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl);
+void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
 void gncVendorAddJob (GncVendor *vendor, GncJob *job);
@@ -44,6 +45,7 @@ GncAddress * gncVendorGetAddr (GncVendor *vendor);
 const char * gncVendorGetNotes (GncVendor *vendor);
 const char * gncVendorGetTerms (GncVendor *vendor);
 gboolean gncVendorGetTaxIncluded (GncVendor *vendor);
+gnc_commodity * gncVendorGetCommodity (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
 
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);

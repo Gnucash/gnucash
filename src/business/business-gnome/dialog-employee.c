@@ -463,6 +463,7 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
 				  ew);
   } else {
     employee = gncEmployeeCreate (bookp);
+    gncEmployeeSetCommodity (employee, commodity);
     ew->employee_guid = *gncEmployeeGetGUID (employee);
 
     ew->dialog_type = NEW_EMPLOYEE;

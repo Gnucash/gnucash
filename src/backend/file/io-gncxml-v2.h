@@ -41,6 +41,8 @@
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
+#include "sixtp.h"
+
 typedef struct
 {
     int accounts_total;
@@ -68,6 +70,36 @@ typedef struct
     load_counter counter;
     void (*countCallback)(const char *type, load_counter counter);
 } sixtp_gdv2;
+
+/**
+ * Struct used to pass in a new data type for XML storage.  This contains
+ * the set of callbacks to read and write XML for new data objects..  New
+ * types should register an instance of this object with the engine.
+ *
+ * The create_parser() method will create a new sixtp parser for this
+ *   data type.
+ *
+ * The add_item() method takes a local state and a new object of this type
+ *   and the method implementation should do whatever is necessary to cleanup
+ *   the object and (maybe) add it into the book stored in the local-state.
+ *
+ * The get_count() method returns the number of items of this type.
+ *
+ * The write() method writes out all the objects of this particular type
+ *   in the book and stores the XML in the FILE.
+ */
+#define GNC_FILE_BACKEND	"gnc:file:2"
+#define GNC_FILE_BACKEND_VERS	2
+typedef struct
+{
+  int		version;	/* backend version number */
+  const char *	type_name;	/* The XML tag for this type */
+
+  sixtp *	(*create_parser) (void);
+  gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
+  int		(*get_count) (GNCBook *);
+  void		(*write) (FILE*, GNCBook*);
+} GncXmlDataType_t;
 
 /**
  * Struct used to pass the account group/accounts and trasnactions in

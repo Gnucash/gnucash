@@ -334,6 +334,9 @@ gnc_book_mark_saved(GNCBook *book)
 
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
   book_sxns_mark_saved(book);
+
+  /* Mark everything as clean */
+  gncObjectMarkClean (book);
 }
 
 static gboolean

@@ -891,6 +891,7 @@ AC_OUTPUT(
           src/business/Makefile
           src/business/business-core/Makefile
           src/business/business-core/test/Makefile
+          src/business/business-core/file/Makefile
           src/business/business-gnome/Makefile
           src/business/business-ledger/Makefile
 

@@ -1,3 +1,26 @@
+2002-03-04  Derek Atkins <warlord@MIT.EDU>
+
+	* Plug-in Extensions for backends, so pluggable objects can
+	provide backend-support without changing the core backend
+	implementation.
+
+	* src/engine/gncObject: Add a 'mark_clean' data-type method()
+				add backend extension registration.
+
+	* src/engine/gnc-book.c: use mark_clean object interface
+
+	* src/backend/file/io-gncxml-v2: use the backend extensions
+
+	* src/business/business-core/gnc*: add the mark_clean methods
+					   add commodities to many objects
+
+	* src/business/business-core/gncInvoice.c: fix GetPaidTxn() bug
+
+	* src/business/business-core/file: the XML backend extensions for
+	business objects.
+
+	* src/business/business-gnome/dialog-*: supply default commodities
+
 2002-02-17  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-system/html-utilities.scm: Added support for

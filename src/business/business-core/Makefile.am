@@ -1,4 +1,4 @@
-SUBDIRS = . test
+SUBDIRS = . test file
 
 pkglib_LTLIBRARIES = libgw-business-core.la libgncmod-business-core.la
 

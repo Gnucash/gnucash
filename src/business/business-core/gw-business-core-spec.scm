@@ -213,6 +213,14 @@
    '((<gnc:GncCustomer*> customer) ((<gw:mchars> callee-owned const) name))
    "Set the customer Name")
 
+  (gw:wrap-function
+   ws
+   'gnc:customer-set-commodity
+   '<gw:void>
+   "gncCustomerSetCommodity"
+   '((<gnc:GncCustomer*> customer) (<gnc:commodity*> commodity))
+   "Set the Customer Commodity")
+
   ; Get Functions
 
   (gw:wrap-function
@@ -254,6 +262,14 @@
    "gncCustomerGetNotes"
    '((<gnc:GncCustomer*> customer))
    "Return the Customer's Notes")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-commodity
+   '<gnc:commodity*>
+   "gncCustomerGetCommodity"
+   '((<gnc:GncCustomer*> customer))
+   "Get the Customer Commodity")
 
   ;;
   ;; gncEmployee.h
@@ -429,6 +445,14 @@
    '((<gnc:GncInvoice*> invoice) ((<gw:mchars> callee-owned const) id))
    "Set the Invoice Terms")
 
+  (gw:wrap-function
+   ws
+   'gnc:invoice-set-common-commodity
+   '<gw:void>
+   "gncInvoiceSetCommonCommodity"
+   '((<gnc:GncInvoice*> invoice) (<gnc:commodity*> commodity))
+   "Set the Invoice Commodity")
+
   ; Get Functions
 
   (gw:wrap-function
@@ -502,6 +526,14 @@
    "gncInvoiceGetNotes"
    '((<gnc:GncInvoice*> invoice))
    "Return the invoice's Notes")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-common-commodity
+   '<gnc:commodity*>
+   "gncInvoiceGetCommonCommodity"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's commodity")
 
   (gw:wrap-function
    ws

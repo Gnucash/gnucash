@@ -670,6 +670,7 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
 
   if (type == NEW_INVOICE) {
     invoice = gncInvoiceCreate (bookp);
+    gncInvoiceSetCommonCommodity (invoice, gnc_default_currency ()); /* XXX */
     gncInvoiceSetOwner (invoice, owner);
   }
 

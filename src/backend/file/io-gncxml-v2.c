@@ -35,6 +35,7 @@
 #include "Scrub.h"
 #include "Transaction.h"
 #include "TransLog.h"
+#include "gncObject.h"
 
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
@@ -49,6 +50,16 @@
 
 static short module = MOD_IO;
 
+/* Callback structure */
+struct file_backend {
+  gboolean	ok;
+  gpointer	data;
+  sixtp_gdv2 *	gd;
+  const char *	tag;
+  sixtp *	parser;
+  FILE *	out;
+  GNCBook *	book;
+};
 
 #define GNC_V2_STRING "gnc-v2"
 const gchar *book_version_string;
@@ -354,6 +365,24 @@ add_pricedb_local(sixtp_gdv2 *data, GNCPriceDB *db)
     return TRUE;
 }
 
+static void
+do_counter_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (be_data->ok == TRUE)
+    return;
+
+  if (!safe_strcmp (be_data->tag, data->type_name))
+    be_data->ok = TRUE;
+
+  /* XXX: should we do anything with this counter? */
+}
+
 static gboolean
 gnc_counter_end_handler(gpointer data_for_children,
                         GSList* data_from_children, GSList* sibling_data,
@@ -415,10 +444,19 @@ gnc_counter_end_handler(gpointer data_for_children,
     }
     else
     {
-        PERR("Unknown type: %s",
-                  type ? type : "(null)");
-        xmlFree (type);
-        return FALSE;
+      struct file_backend be_data;
+
+      be_data.ok = FALSE;
+      be_data.tag = type;
+
+      gncObjectForeachBackend (GNC_FILE_BACKEND, do_counter_cb, &be_data);
+
+      if (be_data.ok == FALSE)
+      {
+	PERR("Unknown type: %s", type ? type : "(null)");
+	xmlFree (type);
+	return FALSE;
+      }
     }
 
     xmlFree (type);
@@ -461,6 +499,26 @@ static const char *TRANSACTION_TAG = "gnc:transaction";
 static const char *SCHEDXACTION_TAG = "gnc:schedxaction";
 static const char *TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
 
+static void
+add_item_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (be_data->ok)
+    return;
+
+  if (!safe_strcmp (be_data->tag, data->type_name)) {
+    if (data->add_item)
+      (data->add_item)(be_data->gd, be_data->data);
+
+    be_data->ok = TRUE;
+  }
+}
+
 static gboolean
 book_callback(const char *tag, gpointer globaldata, gpointer data)
 {
@@ -492,7 +550,19 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
     }
     else
     {
-        PWARN ("unexpected tag %s", tag);
+      struct file_backend be_data;
+
+      be_data.ok = FALSE;
+      be_data.tag = tag;
+      be_data.gd = gd;
+      be_data.data = data;
+
+      gncObjectForeachBackend (GNC_FILE_BACKEND, add_item_cb, &be_data);
+
+      if (be_data.ok == FALSE)
+      {
+	PWARN ("unexpected tag %s", tag);
+      }
     }
     return TRUE;
 }
@@ -515,6 +585,26 @@ generic_callback(const char *tag, gpointer globaldata, gpointer data)
     return TRUE;
 }
 
+static void
+add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (be_data->ok == FALSE)
+    return;
+
+  if (data->create_parser)
+    if(!sixtp_add_some_sub_parsers(
+           be_data->parser, TRUE,
+	   data->type_name, (data->create_parser)(),
+	   NULL, NULL))
+      be_data->ok = FALSE;
+}
+
 gboolean
 gnc_session_load_from_xml_file_v2(
     GNCSession *session,
@@ -525,6 +615,7 @@ gnc_session_load_from_xml_file_v2(
     sixtp *top_parser;
     sixtp *main_parser;
     sixtp *book_parser;
+    struct file_backend be_data;
 
     gd = g_new0(sixtp_gdv2, 1);
 
@@ -593,6 +684,12 @@ gnc_session_load_from_xml_file_v2(
         return FALSE;
     }
 
+    be_data.ok = TRUE;
+    be_data.parser = book_parser;
+    gncObjectForeachBackend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
+    if (be_data.ok == FALSE)
+      return FALSE;
+
     /* stop logging while we load */
     xaccLogDisable ();
 
@@ -610,13 +707,8 @@ gnc_session_load_from_xml_file_v2(
     if (!gnc_book_get_pricedb (book))
       gnc_book_set_pricedb (book, gnc_pricedb_create (book));
 
-    /* mark the newly read group as saved, since the act of putting 
-     * it together will have caused it to be marked up as not-saved. 
-     */
-    xaccGroupMarkSaved (gnc_book_get_group(book));
-
-    /* also mark the pricedb as saved for the same reasons */
-    gnc_pricedb_mark_clean (gnc_book_get_pricedb (book));
+    /* Mark the book as saved */
+    gnc_book_mark_saved (book);
 
     /* Fix account and transaction commodities */
     xaccGroupScrubCommodities (gnc_book_get_group(book), book);
@@ -704,8 +796,37 @@ static void write_template_transaction_data (FILE *out, GNCBook *book);
 static void write_schedXactions(FILE *out, GNCBook *book);
 
 static void
+write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (data->get_count)
+    write_counts (be_data->out, data->type_name,
+		  (data->get_count) (be_data->book),
+		  NULL);
+}
+
+static void
+write_data_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (data->write)
+    (data->write)(be_data->out, be_data->book);
+}
+
+static void
 write_book(FILE *out, GNCBook *book)
 {
+    struct file_backend be_data;
 
 #ifdef IMPLEMENT_BOOK_DOM_TREES_LATER
     /* We can't just blast out the dom tree, because the dom tree
@@ -728,6 +849,9 @@ write_book(FILE *out, GNCBook *book)
     xmlFreeNode(node);
 #endif
 
+    be_data.out = out;
+    be_data.book = book;
+
     fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, book_version_string );
     write_book_parts (out, book);
 
@@ -743,12 +867,16 @@ write_book(FILE *out, GNCBook *book)
                  g_list_length( gnc_book_get_schedxactions(book) ),
                  NULL);
 
+    gncObjectForeachBackend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
+
     write_commodities(out, book);
     write_pricedb(out, book);
     write_accounts(out, book);
     write_transactions(out, book);
     write_template_transaction_data(out, book);
     write_schedXactions(out, book);
+
+    gncObjectForeachBackend (GNC_FILE_BACKEND, write_data_cb, &be_data);
 
     fprintf( out, "</%s>\n", BOOK_TAG );
 }

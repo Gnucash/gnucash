@@ -27,6 +27,7 @@ void gncEmployeeSetLanguage (GncEmployee *employee, const char *language);
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl);
 void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday);
 void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
+void gncEmployeeSetCommodity (GncEmployee *employee, gnc_commodity * com);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 
 /* Get Functions */
@@ -40,6 +41,7 @@ const char * gncEmployeeGetLanguage (GncEmployee *employee);
 const char * gncEmployeeGetAcl (GncEmployee *employee);
 gnc_numeric gncEmployeeGetWorkday (GncEmployee *employee);
 gnc_numeric gncEmployeeGetRate (GncEmployee *employee);
+gnc_commodity * gncEmployeeGetCommodity (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
 
 GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);

@@ -548,6 +548,7 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
 				  cw);
   } else {
     cust = gncCustomerCreate (bookp);
+    gncCustomerSetCommodity (cust, commodity);
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
     cw->dialog_type = NEW_CUSTOMER;

@@ -417,6 +417,7 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 				  vw);
   } else {
     vendor = gncVendorCreate (bookp);
+    gncVendorSetCommodity (vendor, gnc_default_currency ());
     vw->vendor_guid = *gncVendorGetGUID (vendor);
 
     vw->dialog_type = NEW_VENDOR;

@@ -30,6 +30,7 @@ struct _gncVendor {
   char *	notes;
   char *	terms;
   GncAddress *	addr;
+  gnc_commodity * commodity;
   gboolean	taxincluded;
   gboolean	active;
   GList *	jobs;
@@ -158,6 +159,13 @@ void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl)
   mark_vendor (vendor);
 }
 
+void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com)
+{
+  if (!vendor || !com) return;
+  vendor->commodity = com;
+  mark_vendor (vendor);
+}
+
 void gncVendorSetActive (GncVendor *vendor, gboolean active)
 {
   if (!vendor) return;
@@ -216,6 +224,12 @@ gboolean gncVendorGetTaxIncluded (GncVendor *vendor)
   return vendor->taxincluded;
 }
 
+gnc_commodity * gncVendorGetCommodity (GncVendor *vendor)
+{
+  if (!vendor) return NULL;
+  return vendor->commodity;
+}
+
 gboolean gncVendorGetActive (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
@@ -255,9 +269,13 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 
 void gncVendorCommitEdit (GncVendor *vendor)
 {
+  if (!vendor) return;
 
   /* XXX COMMIT TO DATABASE */
+  if (vendor->dirty)
+    gncBusinessSetDirtyFlag (vendor->book, _GNC_MOD_NAME, TRUE);
   vendor->dirty = FALSE;
+  gncAddressClearDirty (vendor->addr);
 }
 
 /* Other functions */
@@ -328,6 +346,11 @@ static gboolean _gncVendorIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncVendorMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncVendorForeach (GNCBook *book, foreachObjectCB cb,
 			       gpointer user_data)
 {
@@ -351,6 +374,7 @@ static GncObject_t gncVendorDesc = {
   _gncVendorCreate,
   _gncVendorDestroy,
   _gncVendorIsDirty,
+  _gncVendorMarkClean,
   _gncVendorForeach,
   _gncVendorPrintable
 };

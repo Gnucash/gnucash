@@ -450,6 +450,9 @@ void gncEntryCommitEdit (GncEntry *entry)
 {
   if (!entry) return;
   /* XXX */
+  if (entry->dirty)
+    gncBusinessSetDirtyFlag (entry->book, _GNC_MOD_NAME, TRUE);
+  entry->dirty = FALSE;
 }
 
 int gncEntryCompare (GncEntry *a, GncEntry *b)
@@ -502,6 +505,11 @@ static gboolean _gncEntryIsDirty (GNCBook *book)
   return gncBusinessIsDirty (book, _GNC_MOD_NAME);
 }
 
+static void _gncEntryMarkClean (GNCBook *book)
+{
+  gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
+}
+
 static void _gncEntryForeach (GNCBook *book, foreachObjectCB cb,
 			      gpointer user_data)
 {
@@ -515,6 +523,7 @@ static GncObject_t gncEntryDesc = {
   _gncEntryCreate,
   _gncEntryDestroy,
   _gncEntryIsDirty,
+  _gncEntryMarkClean,
   _gncEntryForeach,
   NULL				/* printable */
 };

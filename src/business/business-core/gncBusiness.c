@@ -72,6 +72,17 @@ gboolean gncBusinessIsDirty (GNCBook *book, GNCIdType mod_name)
   return bi->is_dirty;
 }
 
+void gncBusinessSetDirtyFlag (GNCBook *book, GNCIdType mod_name,
+			      gboolean is_dirty)
+{
+  GncBookInfo *bi;
+
+  if (!book) return;
+
+  bi = gnc_book_get_data (book, mod_name);
+  bi->is_dirty = is_dirty;
+}
+
 void gncBusinessAddObject (GNCBook *book, GNCIdType mod_name,
 			   gpointer obj, const GUID *guid)
 {

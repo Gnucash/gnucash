@@ -32,6 +32,7 @@ void gncCustomerSetTaxIncluded (GncCustomer *customer, gboolean taxincl);
 void gncCustomerSetActive (GncCustomer *customer, gboolean active);
 void gncCustomerSetDiscount (GncCustomer *customer, gnc_numeric discount);
 void gncCustomerSetCredit (GncCustomer *customer, gnc_numeric credit);
+void gncCustomerSetCommodity (GncCustomer *customer, gnc_commodity *com);
 
 void gncCustomerAddJob (GncCustomer *customer, GncJob *job);
 void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
@@ -52,6 +53,7 @@ gboolean gncCustomerGetTaxIncluded (GncCustomer *customer);
 gboolean gncCustomerGetActive (GncCustomer *customer);
 gnc_numeric gncCustomerGetDiscount (GncCustomer *customer);
 gnc_numeric gncCustomerGetCredit (GncCustomer *customer);
+gnc_commodity * gncCustomerGetCommodity (GncCustomer *customer);
 
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 

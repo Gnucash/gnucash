@@ -5,6 +5,7 @@
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/business-core" 0)
 (gnc:module-load "gnucash/gnome-search" 0)
+(gnc:module-load "gnucash/business-core-file" 0)
 
 (define (add-customer-extensions)
   (let ((last-cust (gnc:owner-create)))
@@ -244,6 +245,8 @@
 			    ;; Create Customer
 			    (gnc:customer-set-id customer "000001")
 			    (gnc:customer-set-name customer "Test Customer")
+			    (gnc:customer-set-commodity customer
+							(gnc:default-currency))
 			    (gnc:address-set-name address "Contact Person")
 			    (gnc:address-set-addr1 address
 						   "20 Customer Lane")
@@ -259,6 +262,8 @@
 			    (gnc:invoice-set-terms invoice "Net-30")
 			    (gnc:invoice-set-date-opened
 			     invoice (cons (current-time) 0))
+			    (gnc:invoice-set-common-commodity
+			     invoice (gnc:default-currency))
 
 			    ;; Create the Job
 			    (gnc:job-set-id job "000025")
