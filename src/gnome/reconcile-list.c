@@ -213,6 +213,7 @@ widget_realize (GtkWidget *widget)
 {
   GNCReconcileList *list = GNC_RECONCILE_LIST (widget);
   GdkGCValues gc_values;
+  GdkColormap *cm;
   GtkStyle *style;
   GdkGC *gc;
   gint i;
@@ -247,7 +248,15 @@ widget_realize (GtkWidget *widget)
   gdk_draw_rectangle (list->off_pixmap, gc, TRUE, 0, 0,
                       list->check_size, list->check_size);
 
-  gc = style->text_gc[GTK_STATE_NORMAL];
+  cm = gtk_widget_get_colormap (widget);
+
+  gc_values.foreground.red = 0;
+  gc_values.foreground.green = 65535 / 2;
+  gc_values.foreground.blue = 0;
+
+  gdk_colormap_alloc_color (cm, &gc_values.foreground, FALSE, TRUE);
+
+  gc = gdk_gc_new_with_values (widget->window, &gc_values, GDK_GC_FOREGROUND);
 
   gdk_draw_line (list->on_pixmap, gc,
                  1, list->check_size / 2,
@@ -262,6 +271,8 @@ widget_realize (GtkWidget *widget)
   gdk_draw_line (list->on_pixmap, gc,
                  list->check_size / 3, list->check_size - 4,
                  list->check_size - 3, 1);
+
+  gdk_gc_unref (gc);
 
   for (i = 0; i < GTK_CLIST (list)->rows; i++)
     set_toggle (list, i);
