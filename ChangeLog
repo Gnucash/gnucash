@@ -1,5 +1,9 @@
 2001-07-09  Dave Peticolas  <dave@krondo.com>
 
+	* doc/sgml/C/xacc-whats-new.sgml: fix spelling
+
+	* doc/sgml/C/xacc-about.sgml: fix version
+
 	* src/Makefile.am: link intl libs with gnucash-make-guids
 
 	* src/register/QuickFill.c: same as below
