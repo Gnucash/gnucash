@@ -1,4 +1,6 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 ]>
 <BOOK ID="TOC"><TITLE>GnuCash User Guide Outline</TITLE>
 <ARTICLE><SECT1><TITLE>PART ONE: GETTING STARTED</TITLE>
