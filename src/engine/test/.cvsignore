@@ -11,6 +11,7 @@ test-guid
 test-group-vs-book
 test-link
 test-lots
+test-numeric
 test-object
 test-period
 test-print-queries
