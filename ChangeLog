@@ -1,3 +1,9 @@
+2002-11-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/gnc-import-match-map.[ch]
+	  Implement a generic Account Mapper for the import routines.
+	  Still needs a GUI.
+
 2002-11-12  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-control.c

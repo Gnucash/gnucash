@@ -7,7 +7,12 @@ libgncmod_generic_import_la_SOURCES = \
 	Commodity-matcher.c \
 	Transaction-matcher.c \
 	Utilities.c \
+	gnc-import-match-map.c \
 	gncmod-generic-import.c
+
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
+  gnc-import-match-map.h
 
 noinst_HEADERS = \
   gnc-generic-import.h
