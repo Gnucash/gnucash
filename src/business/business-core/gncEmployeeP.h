@@ -29,7 +29,7 @@
 #define GNC_EMPLOYEEP_H_
 
 #include "gncEmployee.h"
-#inlcude "qofid-p.h"
+#include "qofid-p.h"
 
 gboolean gncEmployeeRegister (void);
 gint64 gncEmployeeNextID (QofBook *book);
