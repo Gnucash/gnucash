@@ -485,7 +485,7 @@ table_deactivate_cell_cb(GtkSheet *s,
                          gpointer data) {
 
   Table *table = (Table *) data;
-  char * new_text = NULL;
+  const char * new_text = NULL;
   int valid_cell = gnc_register_cell_valid(table, row, col);
 
   PINFO("DEACTIVATE START ************************\n");
@@ -527,7 +527,7 @@ table_activate_cell_cb(GtkSheet *s,
                        gpointer data) {
 
   Table *table = (Table *) data;
-  char *new_text = NULL;
+  const char *new_text = NULL;
 
 
   PINFO("ACTIVATE START ************************\n");
