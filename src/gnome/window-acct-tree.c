@@ -130,7 +130,7 @@ gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
   GNCMDIChildInfo * mc = user_data;
   GNCAcctTreeWin * w = mc->user_data;
 
-  gnc_main_window_remove_child(gnc_ui_get_data(), mc);
+  gnc_mdi_remove_child(gnc_mdi_get_current (), mc);
   gnc_acct_tree_window_destroy(w);
   g_free(mc->toolbar_info);
   g_free(mc->menu_info);
@@ -143,6 +143,12 @@ gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
  * acct_tree_view_new
  * create a new account view.  
  ********************************************************************/
+
+static void
+gnc_acct_tree_view_refresh (gpointer data)
+{
+  gnc_mdi_child_refresh (data);
+}
 
 static GtkWidget *
 gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
@@ -170,11 +176,11 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
   gtk_signal_connect(GTK_OBJECT(child), "destroy", 
                      gnc_acct_tree_view_destroy, mc);
 
-  gnc_main_window_add_child(maininfo, mc);
+  gnc_mdi_add_child (maininfo, mc);
 
   win->name_change_callback_id = 
     gnc_option_db_register_change_callback(win->odb, 
-                                           gnc_main_window_child_refresh,
+                                           gnc_acct_tree_view_refresh,
                                            mc, 
                                            N_("Account Tree"),
                                            N_("Name of account view"));
@@ -204,10 +210,10 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data) {
 
 GnomeMDIChild * 
 gnc_acct_tree_window_create_child(const gchar * url) {
-  GNCMDIInfo          * maininfo = gnc_ui_get_data();
+  GNCMDIInfo          * maininfo = gnc_mdi_get_current ();
   GnomeMDIGenericChild * accountchild = 
     gnome_mdi_generic_child_new(url);
-  
+
   gnome_mdi_generic_child_set_label_func(accountchild, 
                                          gnc_acct_tree_view_labeler,
                                          maininfo);
@@ -225,7 +231,7 @@ gnc_acct_tree_window_create_child(const gchar * url) {
 
 void
 gnc_main_window_open_accounts(gint toplevel) {
-  GNCMDIInfo * maininfo = gnc_ui_get_data();
+  GNCMDIInfo * maininfo = gnc_mdi_get_current ();
   GnomeMDIChild * accountchild = gnc_acct_tree_window_create_child(NULL);
   gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
                       GNOME_MDI_CHILD(accountchild));  

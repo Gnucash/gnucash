@@ -101,8 +101,6 @@ static void gnc_configure_register_hint_font(void);
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GNCMDIInfo * app = NULL;
-
 static int gnome_is_running = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
@@ -131,16 +129,10 @@ gnucash_ui_is_terminating(void)
   return gnome_is_terminating;
 }
 
-GNCMDIInfo *
-gnc_ui_get_data (void)
-{
-  return app;
-}
-
 static gboolean
 gnc_ui_can_cancel_save (void)
 {
-  return gnc_main_window_can_cancel_save (app);
+  return gnc_main_window_can_cancel_save (gnc_mdi_get_current ());
 }
 
 
@@ -553,7 +545,9 @@ gnucash_ui_init(void)
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     /* initialize gnome MDI and set up application window defaults  */
-    app = gnc_main_window_new();
+    if (!gnc_mdi_get_current ())
+      gnc_main_window_new ();
+
     /* Run the ui startup hooks. */
     {
       SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
@@ -575,10 +569,9 @@ gnc_ui_shutdown (void)
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
-    /*    gnc_main_window_save(app); */
-    gnc_main_window_destroy(app);
-    app = NULL;
+
     gtk_main_quit();
+
 #ifdef USE_GUPPI    
     gnc_html_guppi_shutdown();
 #endif
@@ -602,11 +595,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(register_font_callback_id);
   gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
 
-  if (app != NULL)
-  {
-    gnc_main_window_destroy(app);
-    app = NULL;
-  }
+  gnc_mdi_destroy (gnc_mdi_get_current ());
 
   gnc_extensions_shutdown ();
 

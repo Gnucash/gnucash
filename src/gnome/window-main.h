@@ -38,11 +38,6 @@ void            gnc_main_window_restore(GNCMDIInfo * wind,
                                         const char * session);
 void            gnc_main_window_create_child_toolbar(GNCMDIInfo * mi, 
                                                      GNCMDIChildInfo * child);
-void            gnc_main_window_add_child(GNCMDIInfo * main,
-                                          GNCMDIChildInfo * child);
-void            gnc_main_window_remove_child(GNCMDIInfo * main,
-                                             GNCMDIChildInfo * child);
-void            gnc_main_window_child_refresh(gpointer data);
 GnomeMDIChild * gnc_main_window_create_child(const gchar * configstring);
 void            gnc_main_window_close_children(GNCMDIInfo * main);
 

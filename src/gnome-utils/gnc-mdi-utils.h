@@ -25,19 +25,25 @@
 #define GNC_MDI_UTILS_H
 
 #include <gnome.h>
+#include <guile/gh.h>
+
+typedef void (*GNCShutdownFunc) (int exit_status);
 
 typedef struct
 {
   GnomeMDI * mdi;
+  char     * title;
   int      component_id;
   SCM      toolbar_change_callback_id;
   SCM      mdi_change_callback_id;
   GList    * children;
+  GNCShutdownFunc shutdown;
 } GNCMDIInfo;
 
 typedef struct
 {
   GnomeMDIChild   * child;
+  GNCMDIInfo      * gnc_mdi;
   GtkWidget       * contents;
   GnomeApp        * app;
 
@@ -50,5 +56,19 @@ typedef struct
   void            * user_data;
   char            * title;
 } GNCMDIChildInfo;
+
+
+GNCMDIInfo * gnc_mdi_new (const char *app_name, const char *title,
+                          GNCShutdownFunc shutdown);
+void gnc_mdi_destroy (GNCMDIInfo * gnc_mdi);
+
+void gnc_mdi_add_child (GNCMDIInfo * wind, GNCMDIChildInfo * child);
+void gnc_mdi_remove_child (GNCMDIInfo * gnc_mdi, GNCMDIChildInfo * child);
+void gnc_mdi_child_refresh (GNCMDIChildInfo *child);
+
+GNCMDIInfo * gnc_mdi_get_current (void);
+gboolean gnc_mdi_has_apps (void);
+
+void gnc_app_set_title (GnomeApp *app);
 
 #endif

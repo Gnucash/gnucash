@@ -72,50 +72,6 @@
 
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 
-/********************************************************************
- * gnc_main_window_destroy_cb()
- * Shut down the Gnucash ui windows 
- ********************************************************************/
-
-static void
-gnc_main_window_destroy_cb(GtkObject * w, gpointer data) {
-  gnc_shutdown (0);
-}
-
-
-/********************************************************************
- * gnc_main_window_app_destroyed_cb()
- * called when a top-level GnomeApp is destroyed.
- ********************************************************************/
-
-static void 
-gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
-  GNCMDIInfo * mainwin = user_data;
-  GNCMDIChildInfo * mc = NULL;
-  GnomeMDI * mdi = mainwin->mdi;
-  GtkWidget *toolbar;
-  GList * child; 
-
-  if(g_list_length(mdi->windows) == 0) {
-    gnc_shutdown(0);
-  }
-  else {
-    toolbar = gtk_object_get_user_data (GTK_OBJECT (app));
-    if (toolbar)
-      gtk_widget_unref (toolbar);
-    gtk_object_set_user_data (GTK_OBJECT (app), NULL);
-    
-    for(child = mainwin->children; child; child = child->next) {
-      mc = child->data;
-      if(mc && mc->toolbar && mc->app && (mc->app == app)) {
-        /* we need to pull the toolbar out to prevent its being
-         * destroyed */
-        gtk_widget_ref(mc->toolbar);
-        gtk_container_remove(GTK_CONTAINER(mc->toolbar->parent), mc->toolbar);
-      }
-    }
-  }
-}
 
 /********************************************************************
  * gnc_main_window_app_created_cb()
@@ -128,12 +84,6 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   GNCMDIInfo * mainwin = data;
   GtkWidget * summarybar;
   GtkWidget * statusbar;
-
-  /* enable save and restore of menubar positions */
-  gnome_app_enable_layout_config( app, TRUE );
-
-  /* flag the app as gnc mdi created */
-  gtk_object_set_data (GTK_OBJECT (app), "gnc_mdi", mdi);
 
   /* add the summarybar */
   summarybar = gnc_main_window_summary_new();
@@ -174,70 +124,11 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   statusbar = gnome_appbar_new(FALSE, TRUE, GNOME_PREFERENCES_USER);
   gnome_app_set_statusbar(app, statusbar);
 
-  /* add a signal to preserve the toolbar on destroy */ 
-  gtk_signal_connect(GTK_OBJECT(app), "destroy", 
-                     GTK_SIGNAL_FUNC (gnc_main_window_app_destroyed_cb),
-                     mainwin);
-
   /* set up extensions menu and hints */
   gnc_extensions_menu_setup (app);
 
   /* make sure the file history is shown */ 
   gnc_history_update_menu (GTK_WIDGET (app));
-}
-
-static void
-gnc_main_window_child_set_title (GNCMDIChildInfo *childwin)
-{
-  GNCBook *book;
-  const char *filename;
-  char *title;
-
-  if (!childwin || !childwin->app)
-    return;
-
-  filename = gnc_book_get_url (gnc_get_current_book ());
-
-  if (!filename)
-    filename = _("<no file>");
-  else if (strncmp ("file:", filename, 5) == 0)
-    filename += 5;
-
-  if (!childwin->title)
-    title = g_strdup_printf("GnuCash (%s)", filename);
-  else
-    title = g_strdup_printf("%s - GnuCash (%s)", childwin->title, filename);
-
-  gtk_window_set_title(GTK_WINDOW(childwin->app), title);
-
-  g_free(title);
-}
-
-static void
-gnc_app_set_title (GnomeApp *app)
-{
-  GNCMDIChildInfo *childwin;
-  GNCMDIInfo *mainwin;
-  GnomeMDIChild *child;
-  GtkWidget *view;
-
-  if (!app)
-    return;
-
-  mainwin = gnc_ui_get_data ();
-  if (!mainwin || !mainwin->mdi)
-    return;
-
-  view = gnome_mdi_get_view_from_window (mainwin->mdi, app);
-  if (!view) return;
-
-  child = gnome_mdi_get_child_from_view (view);
-  if (!child) return;
-
-  childwin = gtk_object_get_user_data (GTK_OBJECT (child));
-  if (!childwin) return;
-
-  gnc_main_window_child_set_title (childwin);
 }
 
 static void
@@ -256,119 +147,6 @@ gnc_refresh_main_window_info (void)
     }
 
     containers = containers->next;
-  }
-}
-
-/********************************************************************
- * gnc_main_window_child_remove_cb()
- * called when a child is removed
- ********************************************************************/
-
-static gboolean
-gnc_main_window_child_remove_cb(GnomeMDI * mdi, GnomeMDIChild * child,
-                                gpointer data) {
-  GNCMDIInfo * mainwin = data;
-
-  return TRUE;
-}
-
-/********************************************************************
- * gnc_main_window_child_changed_cb()
- * called when the active child changes.  Not sure what this means 
- * with top-level windows.  focus, maybe?  
- ********************************************************************/
-
-static void
-gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used, 
-                                 gpointer data) {
-  GNCMDIInfo      * mainwin = data;
-  GNCMDIChildInfo * childwin = NULL;
-  GnomeUIInfo      * hintinfo;
-  GtkWidget        * oldbar;
-  GnomeApp         * new_app = NULL; 
-  GnomeDockItemBehavior behavior;
-
-  if(mdi && mdi->active_child) {
-    childwin = gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
-    new_app = gnome_mdi_get_app_from_view(childwin->contents);
-  }
-
-  behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
-  if (!gnome_preferences_get_toolbar_detachable ())
-    behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
-
-  if(childwin && childwin->toolbar) {
-    if(childwin->app && (childwin->app == new_app)) {
-      oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
-      if(oldbar && (oldbar != childwin->toolbar)) {
-        if (oldbar->parent)
-          gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
-        gtk_widget_show(GTK_WIDGET(childwin->toolbar)->parent);
-      }
-    }
-    else if(childwin->app) {
-      oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
-      if(oldbar && oldbar->parent && (oldbar != childwin->toolbar)) {
-        gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
-      }
-
-      /* we need to move the toolbar to a new App (mdi mode probably
-       * changed) */
-      if(GTK_WIDGET(childwin->toolbar)->parent) {
-        gtk_widget_ref(GTK_WIDGET(childwin->toolbar));
-        gtk_container_remove(GTK_CONTAINER
-                             (GTK_WIDGET(childwin->toolbar)->parent),
-                             GTK_WIDGET(childwin->toolbar));
-      }
-      childwin->app = new_app;
-      gnome_app_add_toolbar(GNOME_APP(childwin->app), 
-                            GTK_TOOLBAR(childwin->toolbar),
-                            "Toolbar", behavior,
-                            GNOME_DOCK_TOP, 1, 0, 0);
-      gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
-                            gnc_get_toolbar_style());
-    }
-    else {
-      oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
-      if(oldbar && oldbar->parent && (oldbar != childwin->toolbar)) {
-        gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
-      }
-
-      childwin->app = new_app;
-      gnome_app_add_toolbar(GNOME_APP(childwin->app), 
-                            GTK_TOOLBAR(childwin->toolbar),
-                            "Toolbar", behavior,
-                            GNOME_DOCK_TOP, 1, 0, 0);
-      gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
-                            gnc_get_toolbar_style());
-    }
-
-    oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
-    if (oldbar)
-      gtk_widget_unref (oldbar);
-
-    if (childwin->toolbar)
-      gtk_widget_ref (childwin->toolbar);
-
-    gtk_object_set_user_data(GTK_OBJECT(new_app), childwin->toolbar);
-  }
-
-  /* set the window title */ 
-  gnc_main_window_child_set_title (childwin);
-
-  /* install menu hints if relevant */
-  if(mdi->active_child) {
-    /* the arg to this callback is SUPPOSED to be the last active child, 
-     * but it gets to be NULL under some circumstances */
-    hintinfo = gnome_mdi_get_menubar_info(new_app);
-    if(hintinfo) {
-      gnome_app_install_menu_hints(new_app, hintinfo);
-    }
-    
-    hintinfo = gnome_mdi_get_child_menu_info(new_app);
-    if(hintinfo) { 
-      gnome_app_install_menu_hints(new_app, hintinfo);
-    }
   }
 }
 
@@ -445,45 +223,16 @@ gnc_main_window_create_child(const gchar * configstring) {
   return child;
 }
 
-
-/********************************************************************
- * gnc_main_window_child_save_func()
- ********************************************************************/
-
-static char * 
-gnc_main_window_child_save_func(GnomeMDIChild * child, gpointer user_data) {
-  return g_strdup(child->name);
-}
-
-
 /********************************************************************
  * gnc_main_window_can_*()
  ********************************************************************/
-
-static gboolean
-gnc_main_window_has_apps (GNCMDIInfo * wind)
-{
-  GList *toplevels;
-
-  toplevels = gtk_container_get_toplevels ();
-  while (toplevels)
-  {
-    if (GNOME_IS_APP (toplevels->data) &&
-        !GTK_OBJECT_DESTROYED (toplevels->data))
-      return TRUE;
-
-    toplevels = toplevels->next;
-  }
-
-  return FALSE;
-}
 
 gboolean
 gnc_main_window_can_save (GNCMDIInfo * wind)
 {
   if (!wind) return FALSE;
 
-  return gnc_main_window_has_apps (wind);
+  return gnc_mdi_has_apps ();
 }
 
 gboolean
@@ -491,9 +240,8 @@ gnc_main_window_can_cancel_save (GNCMDIInfo *wind)
 {
   if (!wind) return FALSE;
 
-  return gnc_main_window_has_apps (wind);
+  return gnc_mdi_has_apps ();
 }
-
 
 /********************************************************************
  * gnc_main_window_save()
@@ -504,6 +252,9 @@ void
 gnc_main_window_save(GNCMDIInfo * wind, char * filename) {
   char * encoded;
   char * session_name;
+
+  if (!wind)
+    return;
 
   encoded = gnc_html_encode_string(filename);
   session_name = g_strdup_printf("/GnuCash/MDI : %s",
@@ -569,16 +320,18 @@ gnc_main_window_close_children(GNCMDIInfo * wind) {
 
 GNCMDIInfo * 
 gnc_main_window_new(void) {
-  GNCMDIInfo * retval = g_new0(GNCMDIInfo, 1);
+  GNCMDIInfo * retval;
 
-  retval->mdi = GNOME_MDI(gnome_mdi_new("GnuCash", "GnuCash"));
+  retval = gnc_mdi_new ("GnuCash", "GnuCash", gnc_shutdown);
+  g_return_val_if_fail (retval != NULL, NULL);
+
   retval->component_id = 
     gnc_register_gui_component (WINDOW_MAIN_CM_CLASS, NULL, NULL, 
                                 retval);
 
   /* these menu and toolbar options are the ones that are always 
    * available */ 
-  gnc_main_window_create_menus(retval);
+  gnc_main_window_create_menus (retval);
   
   /* set up the position where the child menus/toolbars will be 
    * inserted  */
@@ -600,76 +353,12 @@ gnc_main_window_new(void) {
   gnome_mdi_set_mode(retval->mdi, gnc_get_mdi_mode ());
 
   /* handle top-level signals */
-  gtk_signal_connect(GTK_OBJECT(retval->mdi), "destroy",
-                     GTK_SIGNAL_FUNC(gnc_main_window_destroy_cb),
-                     retval);
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
                      retval);
-  gtk_signal_connect(GTK_OBJECT(retval->mdi), "remove_child",
-                     GTK_SIGNAL_FUNC(gnc_main_window_child_remove_cb),
-                     retval);
-  gtk_signal_connect(GTK_OBJECT(retval->mdi), "child_changed",
-                     GTK_SIGNAL_FUNC(gnc_main_window_child_changed_cb),
-                     retval);
+
   return retval;
 }
-
-/********************************************************************
- * gnc_main_window_add_child()
- ********************************************************************/
-
-void
-gnc_main_window_add_child(GNCMDIInfo * wind, GNCMDIChildInfo * child) {
-  wind->children = g_list_append(wind->children, child);
-
-  if(GNOME_IS_MDI_GENERIC_CHILD(child->child)) {
-    gnome_mdi_generic_child_set_config_func
-      (GNOME_MDI_GENERIC_CHILD(child->child),
-       gnc_main_window_child_save_func, NULL);
-  }
-}
-
-
-/********************************************************************
- * gnc_main_window_remove_child()
- ********************************************************************/
-
-void
-gnc_main_window_remove_child(GNCMDIInfo * wind, GNCMDIChildInfo * child) {
-  wind->children = g_list_remove(wind->children, child);
-}
-
-/********************************************************************
- * gnc_main_window_destroy()
- * free MDI toplevel resources 
- ********************************************************************/
-
-void
-gnc_main_window_destroy(GNCMDIInfo * wind) {
-  g_free(wind);  
-}
-
-
-/********************************************************************
- * gnc_main_window_child_refresh(GNCMDIChildInfo * child)
- * send an update event to the child 
- ********************************************************************/
-
-void
-gnc_main_window_child_refresh(gpointer data) {
-  GNCMDIChildInfo *child = data;
-
-  gnome_mdi_child_set_name(child->child, child->child->name);
-  gnome_mdi_update_child(gnc_ui_get_data()->mdi, child->child);
-  
-  /* pesky child_set_name tries to change the window title... set 
-   * it back. */
-  if((gnc_ui_get_data()->mdi->active_child == child->child) && child->app) {
-    gnc_main_window_child_set_title (child);
-  }
-}
-
 
 /********************************************************************
  * menu/toolbar data structures and callbacks 
@@ -845,7 +534,7 @@ gnc_main_window_file_close_cb(GtkWidget * widget, GnomeMDI * mdi) {
   {
     GNCMDIInfo *main_info;
 
-    main_info = gnc_ui_get_data ();
+    main_info = gnc_mdi_get_current ();
     if (!main_info) return;
 
     mdi = main_info->mdi;

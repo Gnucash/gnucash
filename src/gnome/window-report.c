@@ -129,7 +129,8 @@ static void
 gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data) {
   GNCMDIChildInfo  * mc = user_data;
   gnc_report_window * w = mc->user_data;
-  gnc_main_window_remove_child(gnc_ui_get_data(), mc);
+
+  gnc_mdi_remove_child(gnc_mdi_get_current(), mc);
   g_free(mc->toolbar_info);
   g_free(mc->menu_info);
   g_free(mc->title);
@@ -157,7 +158,7 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data) {
   mc->child        = child; 
   mc->title        = g_strdup("Report");
 
-  gnc_main_window_add_child(maininfo, mc);
+  gnc_mdi_add_child (maininfo, mc);
 
   type = gnc_html_parse_url(gnc_report_window_get_html(win),
                             child->name, &url_location, &url_label);
@@ -197,7 +198,7 @@ GnomeMDIChild *
 gnc_report_window_create_child(const gchar * configstring) {
   GnomeMDIGenericChild * reportchild = 
     gnome_mdi_generic_child_new(configstring);
-  GNCMDIInfo * maininfo = gnc_ui_get_data();
+  GNCMDIInfo * maininfo = gnc_mdi_get_current();
   
   gnome_mdi_generic_child_set_label_func(reportchild, 
                                          gnc_report_window_view_labeler,
@@ -224,7 +225,7 @@ gnc_main_window_open_report(int report_id, gint toplevel) {
 void
 gnc_main_window_open_report_url(const char * url, gint toplevel) {
   GnomeMDIChild * reportchild = gnc_report_window_create_child(url);
-  GNCMDIInfo   * maininfo = gnc_ui_get_data();
+  GNCMDIInfo   * maininfo = gnc_mdi_get_current();
   
   gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
                       GNOME_MDI_CHILD(reportchild));  
@@ -440,6 +441,12 @@ gnc_report_window_option_change_cb(gpointer data) {
  * called after a report is loaded into the gnc_html widget 
  ********************************************************************/
 
+static void
+gnc_report_window_refresh (gpointer data)
+{
+  gnc_mdi_child_refresh (data);
+}
+
 static void 
 gnc_report_window_load_cb(gnc_html * html, URLType type, 
                           const gchar * location, const gchar * label, 
@@ -491,7 +498,7 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
     win->initial_odb = gnc_option_db_new(gh_call1(get_options, inst_report));  
     win->name_change_cb_id = 
       gnc_option_db_register_change_callback(win->initial_odb,
-                                             gnc_main_window_child_refresh,
+                                             gnc_report_window_refresh,
                                              win->mc,
                                              "General", "Report name");
   }

@@ -131,7 +131,7 @@ the account instead of opening a register.") #f))
     (if (not save-file?) (gnc:warn (_ "Can't save window state")))
 
     (if (and save-file? conf-file-name
-             (gnc:main-window-can-save? (gnc:get-ui-data)))
+             (gnc:main-window-can-save? (gnc:mdi-get-current)))
         (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
                                      conf-file-name)))
           (with-output-to-port (open-output-file book-path)
@@ -149,7 +149,7 @@ the account instead of opening a register.") #f))
                #t gnc:*acct-tree-options*)
 
               (force-output)))
-          (gnc:main-window-save (gnc:get-ui-data) book-url)))))
+          (gnc:main-window-save (gnc:mdi-get-current) book-url)))))
 
 (define (gnc:main-window-book-close-handler book-url)
     (gnc:main-window-save-state book-url)
@@ -182,7 +182,7 @@ the account instead of opening a register.") #f))
         (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
-    (gnc:main-window-restore (gnc:get-ui-data) book-url)))
+    (gnc:main-window-restore (gnc:mdi-get-current) book-url)))
 
 (gnc:hook-add-dangler gnc:*book-opened-hook* 
                       gnc:main-window-book-open-handler)

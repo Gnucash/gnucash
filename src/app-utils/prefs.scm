@@ -71,8 +71,8 @@
 
 (define gnc:*save-options-hook*
   (gnc:hook-define 
-   'ui-shutdown-hook
-   "Functions to run at ui shutdown.  Hook args: ()"))
+   'save-options-hook
+   "Functions to run when saving options.  Hook args: ()"))
 
 ;; save-all-options: this is the actual hook that gets called at
 ;; shutdown.  right now, we put all the options in the same file so

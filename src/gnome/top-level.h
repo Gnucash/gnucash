@@ -30,8 +30,6 @@
 gboolean      gnucash_ui_is_running(void);
 gboolean      gnucash_ui_is_terminating(void);
 int           gnucash_ui_init(void);
-
-GNCMDIInfo *  gnc_ui_get_data(void);
 void          gnc_ui_shutdown(void);
 void          gnc_ui_destroy(void);
 int           gnc_ui_start_event_loop(void);
