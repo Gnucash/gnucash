@@ -74,17 +74,6 @@
   <act:description>Liabilities</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Credit Cards</act:name>
-  <act:id type="new">a8186db64d71dc2ca5fdccb3234b531b</act:id>
-  <act:type>LIABILITY</act:type>
-  <act:commodity>
-    <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
-  </act:commodity>
-  <act:description>Credit Cards</act:description>
-  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
-</gnc:account>
-<gnc:account version="2.0.0">
   <act:name>Credit Card</act:name>
   <act:id type="new">efc3caac2619666c53e6e27f02d5e716</act:id>
   <act:type>CREDIT</act:type>
@@ -93,7 +82,7 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Credit Card</act:description>
-  <act:parent type="new">a8186db64d71dc2ca5fdccb3234b531b</act:parent>
+  <act:parent type="new">19a911feed9b41b8b01be036a2aed9fe</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Income</act:name>

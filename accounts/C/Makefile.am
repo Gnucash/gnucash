@@ -3,6 +3,7 @@ accountdir = ${GNC_ACCOUNTS_DIR}/C
 
 account_DATA = \
   acctchrt_brokerage.gnucash-xea \
+  acctchrt_business.gnucash-xea \
   acctchrt_carloan.gnucash-xea \
   acctchrt_cdmoneymkt.gnucash-xea \
   acctchrt_childcare.gnucash-xea \
