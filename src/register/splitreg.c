@@ -816,12 +816,11 @@ xaccInitSplitRegister (SplitRegister *reg,
     xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, help);
   }
 
-  xaccComboCellSetIgnoreString (reg->mxfrmCell, _("Split"));
+  xaccComboCellSetIgnoreString (reg->mxfrmCell, _("-- Split Transaction --"));
 
   {
     const char *help = _("This transaction has multiple splits; "
-                         "switch to auto-split or transaction "
-                         "mode to see them all");
+                         "press the Split button to see them all");
     xaccComboCellSetIgnoreHelp (reg->mxfrmCell, help);
   }
 

@@ -3499,12 +3499,12 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
          else
          {
            /* determine whether s is null because threre are three
-            * or more splits, or whether there is only one ... */
+            * or more splits, or whether there is only one */
            s = xaccTransGetSplit (xaccSplitGetParent(split), 1);
            if (s)
-             name = g_strdup (_("Split")); /* three or more */
+             name = g_strdup (_("-- Split Transaction --"));
            else
-             name = g_strdup ("");         /* none */
+             name = g_strdup ("");
          }
 
          return name;
@@ -4385,8 +4385,8 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
   if (group == NULL)
     return;
 
-  xaccLoadXferCell(reg->xfrmCell, group, base_account);
-  xaccLoadXferCell(reg->mxfrmCell, group, base_account);
+  xaccLoadXferCell (reg->xfrmCell, group, base_account);
+  xaccLoadXferCell (reg->mxfrmCell, group, base_account);
 }
 
 /* ======================================================== */
