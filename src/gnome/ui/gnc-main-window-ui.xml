@@ -63,7 +63,7 @@
     </menu>
   
     <placeholder name="AdditionalMenusPlaceholder"/>
-  
+
     <menu name="Tools" action="ToolsAction">
       <placeholder name="ToolsPlaceholder"/>
       <menuitem name="ToolsPriceEditor" action="ToolsPriceEditorAction"/>
@@ -71,13 +71,18 @@
       <menuitem name="ToolsFinancialCalculator" action="ToolsFinancialCalculatorAction"/>
       <menuitem name="ToolsFindTransactions" action="ToolsFindTransactionsAction"/>
     </menu>
-  
+
     <menu name="Help" action="HelpAction">
       <menuitem name="HelpTutorial" action="HelpTutorialAction"/>
       <menuitem name="HelpTipsOfTheDay" action="HelpTipsOfTheDayAction"/>
       <menuitem name="HelpContents" action="HelpContentsAction"/>
       <menuitem name="HelpAbout" action="HelpAboutAction"/>
     </menu>
+
+    <menu name="Misc" action="MiscAction">
+      <menuitem name="MiscTest" action="MiscTestAction"/>
+    </menu>
+
   </menubar>
 
   <toolbar name="DefaultToolbar">

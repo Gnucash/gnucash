@@ -1,3 +1,35 @@
+2004-05-02  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.[ch]: Plugin-Page
+	  for a report instance; yet to be finished.
+
+	* src/report/report-gnome/report-gnome.scm
+	  (gnc:add-report-template-menu-items): Update menu path
+	  constructors to have the correct gnome2-ui-merging menu path
+	  value. 
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]: Partially-completed
+	  changes for using the menu/UI merging code for setting up
+	  extensions menu.
+
+	* src/gnome-utils/gnc-html.[ch]: Revert gtkhtml2 changes; restoring
+	  gtkhtml1 version of the gnc-html.c code allows compatability
+	  with gtkhtml3.
+
+	* src/gnome/ui/gnc-main-window-ui.xml: Add testing MiscAction,
+	  MiscTestAction. 
+
+	* src/gnome/gnc-main-window.c (gnc_main_window_cmd_test): Add test
+	  menu item for GtkHtml3-window display.
+	* src/gnome/gnc-main-window.c (gnc_main_window_setup_window): Add
+	  testing code to merge/display menu item, call the
+	  extensions_menu setup routine.
+
+	* configure.in (DB_LIBS): move from gtkhtml2 to gtkhtml3.
+
+	* lib/egg/egg-menu-merge.c (egg_menu_merge_add_ui):
+	  Merge egg_menu_merge_add_ui from gtk-2.4.0 GtkUIManager.
+
 2004-04-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc.h: add a comment about

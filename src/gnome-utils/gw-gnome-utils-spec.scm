@@ -28,6 +28,8 @@
   (gw:wrap-value ws 'gnc:window-name-invoice '(<gw:mchars> callee-owned const) "WINDOW_NAME_INVOICE")
   (gw:wrap-value ws 'gnc:window-name-all '(<gw:mchars> callee-owned const) "WINDOW_NAME_ALL")
 
+  (gw:wrap-value ws 'gnc:additional-menus-placeholder '(<gw:mchars> callee-owned const) "ADDITIONAL_MENUS_PLACEHOLDER")
+
   (gw:wrapset-add-cs-declarations!
    ws
    (lambda (wrapset client-wrapset) 

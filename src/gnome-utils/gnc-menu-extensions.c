@@ -22,12 +22,14 @@
 
 #include "config.h"
 
+#include <ctype.h>
 #include <gnome.h>
 
 #include "guile-util.h"
 #include "gnc-engine-util.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
+// #include "egg-menu-merge.h"
 
 typedef struct _ExtensionInfo ExtensionInfo;
 struct _ExtensionInfo
@@ -36,7 +38,10 @@ struct _ExtensionInfo
   gchar *window;
   gchar *path;
 
-  GnomeUIInfo info[2];
+  EggMenuMergeNodeType type;
+
+  // GnomeUIInfo info[2];
+  // EggActionEntry action;
 
   gpointer extra_info;
 };
@@ -75,10 +80,11 @@ initialize_getters()
 }
 
 
-static GnomeUIInfoType
+//static GnomeUIInfoType
+static EggMenuMergeNodeType
 gnc_extension_type(ExtensionInfo *ext_info)
 {
-  GnomeUIInfoType type;
+  EggMenuMergeNodeType type;
   char *string;
 
   initialize_getters();
@@ -87,26 +93,24 @@ gnc_extension_type(ExtensionInfo *ext_info)
   if (string == NULL)
   {
     PERR("bad type");
-    return GNOME_APP_UI_ENDOFINFO;
+    return EGG_MENU_MERGE_UNDECIDED;
   }
 
-  if (safe_strcmp(string, "menu-item") == 0)
-    type = GNOME_APP_UI_ITEM;
-  else if (safe_strcmp(string, "menu") == 0)
-    type = GNOME_APP_UI_SUBTREE;
-  else if (safe_strcmp(string, "separator") == 0)
-    type = GNOME_APP_UI_SEPARATOR;
-  else
-  {
+  if (safe_strcmp(string, "menu-item") == 0) {
+    type = EGG_MENU_MERGE_MENUITEM;
+  } else if (safe_strcmp(string, "menu") == 0) {
+    type = EGG_MENU_MERGE_MENU;
+  } else if (safe_strcmp(string, "separator") == 0) {
+    type = EGG_MENU_MERGE_SEPARATOR;
+  } else {
     PERR("bad type");
-    type = GNOME_APP_UI_ENDOFINFO;
+    type = EGG_MENU_MERGE_UNDECIDED;
   }
 
   free(string);
 
   return type;
 }
-
 
 /* returns malloc'd name */
 static char *
@@ -125,6 +129,50 @@ gnc_extension_documentation(ExtensionInfo *ext_info)
   initialize_getters();
 
   return gnc_guile_call1_to_string(getters.documentation, ext_info->extension);
+}
+
+/** @return A GSList of copies of the path elts [gchar*s]. **/
+static GSList*
+gnc_extension_path_elts( ExtensionInfo *extInfo )
+{
+  SCM path;
+  GSList *pathElts = NULL;
+
+  initialize_getters();
+
+  path = gnc_guile_call1_to_list( getters.path, extInfo->extension );
+  if (path == SCM_UNDEFINED) {
+    return NULL;
+  }
+
+  if (SCM_NULLP(path)) {
+    return NULL;
+  }
+
+  while (!SCM_NULLP(path))
+  {
+    SCM item;
+
+    item = SCM_CAR(path);
+    path = SCM_CDR(path);
+
+    if (SCM_STRINGP(item))
+    {
+      char *pathEltStr = gh_scm2newstr(item, NULL);
+      pathElts = g_slist_append( pathElts, (gpointer)pathEltStr );
+    }
+    else
+    {
+      for ( ; pathElts; pathElts = pathElts->next )
+        free( pathElts->data );
+      g_slist_free( pathElts );
+      pathElts = NULL;
+
+      return NULL;
+    }
+  }
+
+  return pathElts;
 }
 
 
@@ -179,6 +227,8 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
     i++;
   }
 
+  //GSList pathElts = 
+
   if (i > 0) {
     *window = g_strdup(strings[0]);
     *fullpath = g_strjoinv("/", strings+1);
@@ -211,9 +261,9 @@ gnc_extension_run_script(ExtensionInfo *ext_info)
   scm_call_0(script);
 }
 
-
 static void
-gnc_extension_cb(GtkWidget *w, gpointer data)
+//gnc_main_window_cmd_test( EggAction *action, GncMainWindow *window )
+gnc_extension_action_cb( EggAction *action, /* GtkWindow *window */ gpointer data )
 {
   ExtensionInfo *ext_info = data;
 
@@ -223,23 +273,52 @@ gnc_extension_cb(GtkWidget *w, gpointer data)
   gnc_extension_run_script(ext_info);
 }
 
+#if 0
+static void
+gnc_extension_cb(GtkWidget *w, ExtensionInfo *data )
+{
+  ExtensionInfo *ext_info = data;
+
+  if (ext_info == NULL)
+    return;
+
+  gnc_extension_run_script(ext_info);
+}
+#endif // 0
+
 
 static ExtensionInfo *
 gnc_create_extension_info(SCM extension)
 {
-  GnomeUIInfo *info;
+  // GnomeUIInfo *info;
+  
   ExtensionInfo *ext_info;
-  char *string;
+  //char *string;
 
   ext_info = g_new0(ExtensionInfo, 1);
   ext_info->extension = extension;
   gnc_extension_path(extension, &ext_info->window, &ext_info->path);
 
-  ext_info->info[0].type = gnc_extension_type(ext_info);
+  //ext_info->info[0].type = gnc_extension_type(ext_info);
+  ext_info->type = gnc_extension_type( ext_info );
 
-  switch (ext_info->info[0].type)
+  // FIXME: convert this over to GtkAction / new UI-builder framework.
+  // http://developer.gnome.org/doc/API/2.0/gtk/migrating-gnomeuiinfo.html
+  // 1/ Define our own enum-values for the three types of widgets:
+  //    MENU, MENU_ITEM, SEPERATOR
+  //
+  // 2/ Figure out and use egg-menu-merge to auto-merge/unmerge menus
+  // together.
+  //    * get a merge-id
+  //    * overlay the new menu
+  //    * ensure_update
+
+  //switch (ext_info->info[0].type)
+  switch ( ext_info->type )
   {
-    case GNOME_APP_UI_ITEM:
+    //case GNOME_APP_UI_ITEM:
+  case EGG_MENU_MERGE_MENUITEM:
+    /*
       ext_info->info[0].moreinfo = gnc_extension_cb;
 
       string = gnc_extension_documentation(ext_info);
@@ -251,10 +330,14 @@ gnc_create_extension_info(SCM extension)
       ext_info->info[0].label = string;
       if (string != NULL)
         free(string);
+    */
+    DEBUG( "menuitem" );
 
       break;
 
-    case GNOME_APP_UI_SUBTREE:
+      //case GNOME_APP_UI_SUBTREE:
+  case EGG_MENU_MERGE_MENU:
+    /*
       info = g_new(GnomeUIInfo, 1);
       info->type = GNOME_APP_UI_ENDOFINFO;
       ext_info->info[0].moreinfo = info;
@@ -264,11 +347,17 @@ gnc_create_extension_info(SCM extension)
       ext_info->info[0].label = string;
       if (string != NULL)
         free(string);
+    */
+    DEBUG( "menu" );
 
       break;
 
-    case GNOME_APP_UI_SEPARATOR:
+      //case GNOME_APP_UI_SEPARATOR:
+  case EGG_MENU_MERGE_SEPARATOR:
+    /*
       ext_info->info[0].type = GNOME_APP_UI_SEPARATOR;
+    */
+    DEBUG( "sep" );
       break;
 
     default:
@@ -277,9 +366,11 @@ gnc_create_extension_info(SCM extension)
       return NULL;
   }
 
+  /*
   ext_info->info[0].user_data = ext_info;
   ext_info->info[0].pixmap_type = GNOME_APP_PIXMAP_NONE;
   ext_info->info[1].type = GNOME_APP_UI_ENDOFINFO;
+  */
 
   scm_protect_object(extension);
   
@@ -316,6 +407,7 @@ gnc_add_scm_extension(SCM extension)
   }
 }
 
+#if 0 /* -- unused.*/
 void
 gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
 {
@@ -336,11 +428,10 @@ gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
   ext_info->info[0].label = info->label;
   ext_info->info[0].hint  = info->hint;
   ext_info->info[1].type  = GNOME_APP_UI_ENDOFINFO;
-
   /* need to append so we can run them in order */
   extension_list = g_slist_append(extension_list, ext_info);
 }
-
+#endif // 0
 
 /* This code is directly copied from libgnomeui's gnome-app-helper.c
  * without modifications. */
@@ -496,23 +587,161 @@ gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path, GnomeUIInfo *menui
 			 app->accel_group, TRUE, pos);
 }
 
-void
-gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
+static GString*
+gnc_ext_gen_action_name( gchar *name )
 {
+  //gchar *extName;
+  gchar *extChar;
+  GString *actionName;
+
+  //extName = gnc_extension_name(extInf);
+  actionName = g_string_sized_new( strlen( name ) + 7 );
+
+  // 'Mum & ble' => 'Mumble'
+  for ( extChar = name; *extChar != '\0'; extChar++ ) {
+    if ( ! isalpha( *extChar ) )
+      continue;
+    g_string_append_c( actionName, *extChar );
+  }
+
+  // 'Mumble + 'Action' => 'MumbleAction'
+  g_string_append_printf( actionName, "Action" );
+
+  return actionName;
+}
+
+/**
+ * @return A GTK-2.4-UiManager style path through the applicaiton window for
+ * this specific extension.
+ **/
+static GString*
+gnc_ext_gen_ui_path( ExtensionInfo *extInfo )
+{
+  GString *path;
+  GSList *pathElts;
+
+  path = g_string_new( "" );
+  g_string_append_printf( path, "/menubar/AdditionalMenusPlaceholder" );
+  
+  for ( pathElts = gnc_extension_path_elts( extInfo );
+        pathElts; pathElts = pathElts->next ) {
+    GString *eltActionName;
+
+    eltActionName = gnc_ext_gen_action_name( (gchar*)pathElts->data );
+
+    if ( safe_strcmp( (gchar*)pathElts->data, "Main" ) != 0 )
+    {
+      g_string_append_printf( path, "/%s", eltActionName->str );
+    }
+    g_string_free( eltActionName, TRUE );
+    // free the copied-from-scheme strings as we're going over the list.
+    free( pathElts->data );
+  }
+  g_slist_free( pathElts );
+  pathElts = NULL;
+  
+  return path;
+}
+
+void
+gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge )
+{
+  //char *windowTmp;
+  //char *pathTmp;
   GSList        * l = NULL;
   ExtensionInfo * info;
 
-  for(l=extension_list; l; l=l->next) {
+  for (l = extension_list; l; l = l->next) {
     info = l->data;
-    if ((strcmp(info->window, window) != 0) &&
-	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
+    if ((strcmp(info->window, window) != 0)
+        && (strcmp(info->window, WINDOW_NAME_ALL) != 0)) {
       continue;
-    /* fprintf(stderr, "Inserting extension menu at path '%s'\n", info->path); */
-    gnc_gnome_app_insert_menus(app, info->path, info->info);
-    gnome_app_install_menu_hints(app, info->info); 
+    }
+
+    {
+      guint new_merge_id;
+      EggActionGroup *eag;
+      GString *extActionName;
+      GString *extUIPath;
+      gchar *docString;
+      GCallback gcb;
+      //EggMenuMergeType extType;
+
+      extActionName = gnc_ext_gen_action_name( gnc_extension_name(info) );
+      extUIPath = gnc_ext_gen_ui_path( info );
+      docString = gnc_extension_documentation( info );
+
+      DEBUG( "extension [%s]: %s / %s [%s]\n",
+             gnc_extension_name( info ),
+             extUIPath->str, extActionName->str,
+             docString );
+
+      //gnc_extension_path( info->extension, (char**)&windowTmp, (char**)&pathTmp );
+      /*printf( "extension [%s] path: %s:%s\n",
+        gnc_extension_name( info ), windowTmp, pathTmp );*/
+      switch ( gnc_extension_type( info ) )
+      {
+      case EGG_MENU_MERGE_MENUITEM:
+        gcb = G_CALLBACK( gnc_extension_action_cb );
+        break;
+      default:
+        gcb = NULL;
+        break;
+      }
+
+      {
+        //EggMenuMerge *ui_merge;
+        EggActionEntry newEntry[] = 
+          {
+            { extActionName->str,
+              gnc_extension_name( info ), 
+              NULL,
+              "", // NULL /*FIXME: accel*/,
+              docString,
+              gcb
+            }
+          };
+        
+
+        // ui_merge = egg_menu_merge_new();
+
+        eag = egg_action_group_new ("MainWindowActionsN" );
+        egg_action_group_add_actions( eag, newEntry, G_N_ELEMENTS (newEntry), info );
+        egg_menu_merge_insert_action_group( uiMerge, eag, 0 );
+        new_merge_id = egg_menu_merge_new_merge_id( uiMerge );
+
+        {
+          gchar *typeStr;
+
+          switch ( gnc_extension_type( info ) )
+          {
+          case EGG_MENU_MERGE_MENU: typeStr = "menu"; break;
+          case EGG_MENU_MERGE_MENUITEM: typeStr = "menuitem"; break;
+          default: typeStr = "unk"; break;
+          }
+        
+          DEBUG( "Adding [%s]/[%s] as [%s]\n",
+                 extUIPath->str,
+                 extActionName->str,
+                 typeStr );
+        }
+
+        egg_menu_merge_add_ui( uiMerge,
+                               new_merge_id,
+                               extUIPath->str, //"/menubar/AdditionalMenusPlaceholder/ReportAction",
+                               extActionName->str, // "BarAction",
+                               extActionName->str, // "BarAction",
+                               gnc_extension_type( info ), //EGG_MENU_MERGE_MENUITEM,
+                               FALSE );
+        
+        egg_menu_merge_ensure_update( uiMerge );
+        
+      }
+    }
   }
 }
 
+#if 0 /* re-add */
 void
 gnc_extensions_menu_setup_with_data(GnomeApp * app, 
 				    gchar *window, gpointer user_data)
@@ -526,10 +755,11 @@ gnc_extensions_menu_setup_with_data(GnomeApp * app,
 	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
       continue;
     /* fprintf(stderr, "Inserting extension menu/w/d at path '%s'\n", info->path); */
-    gnome_app_insert_menus_with_data(app, info->path, info->info, user_data);
-    gnome_app_install_menu_hints(app, info->info); 
+    /*gnome_app_insert_menus_with_data(app, info->path, info->info, user_data);
+      gnome_app_install_menu_hints(app, info->info); */
   }
 }
+#endif /* 0; re-add */
 
 void
 gnc_extensions_shutdown(void)
@@ -540,3 +770,4 @@ gnc_extensions_shutdown(void)
 
   extension_list = NULL;
 }
+

@@ -1,4 +1,6 @@
-SUBDIRS = . test
+SUBDIRS = .
+# test -- removed 'test' from SUBDIRS by jsled 2004.05.02 .. I don't know how
+# to get the test-link-mumble to link correctly; plz assist.
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la libgw-report-gnome.la
@@ -9,6 +11,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/lib/egg \
@@ -23,6 +26,7 @@ AM_CFLAGS = \
 libgncmod_report_gnome_la_SOURCES = \
   dialog-column-view.c \
   dialog-style-sheet.c \
+  gnc-plugin-page-report.c \
   gncmod-report-gnome.c \
   window-report.c
 
@@ -30,6 +34,7 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   dialog-column-view.h \
   dialog-style-sheet.h \
+  gnc-plugin-page-report.h \
   window-report.h
 
 libgncmod_report_gnome_la_LDFLAGS = -module

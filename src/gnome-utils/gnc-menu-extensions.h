@@ -26,13 +26,18 @@
 #include <gnome.h>
 #include <libguile.h>
 #include "guile-mappings.h"
+#include "egg-menu-merge.h"
 
 #define WINDOW_NAME_MAIN     "Main"
 #define WINDOW_NAME_REGISTER "Register"
 #define WINDOW_NAME_INVOICE  "Invoice"
 #define WINDOW_NAME_ALL      "All"
 
-void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
+#define ADDITIONAL_MENUS_PLACEHOLDER "AdditionalMenusPlaceholder"
+
+// unused -- 
+//void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
+
 void gnc_add_scm_extension(SCM extension);
 
 /* Replacement for gnome_app_insert_menus, since the original one will
@@ -54,10 +59,12 @@ gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path,
  * menu items stored by the above functions should now be inserted in
  * the menu of the GnomeApp app.
  *
- * app - The GnomeApp to add the stored menu items
- * prefix - The prefix of the window that is currently being set up.
+ * @param app The GnomeApp to add the stored menu items
+ * @param prefix The prefix of the window that is currently being set up.
+ * @param uiMerge The EggMenuMerge [GtkUIManager] object to use for merging.
  */
-void gnc_extensions_menu_setup(GnomeApp * app, gchar *prefix);
+void gnc_extensions_menu_setup( GtkWindow *app, gchar *prefix, EggMenuMerge *uiMerge );
+
 /* This is called from the window initializing code, when the actual
  * menu items stored by the above functions should now be inserted in
  * the menu of the GnomeApp app.
@@ -69,9 +76,11 @@ void gnc_extensions_menu_setup(GnomeApp * app, gchar *prefix);
  * prefix - The prefix of the window that is currently being set up.
  * user_data - The user data to be passed on to menu item's callback functions.
  */
+#if 0 /* re-add */
 void gnc_extensions_menu_setup_with_data(GnomeApp * app, 
 					 gchar *prefix, 
 					 gpointer user_data);
+#endif /* 0; re-add */
 void gnc_extensions_shutdown(void);
 
 #endif

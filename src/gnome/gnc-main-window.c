@@ -35,6 +35,8 @@
 
 #include "gnc-main-window.h"
 
+#include "gnc-menu-extensions.h"
+
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-options.h"
@@ -58,6 +60,8 @@
 #include "window-main.h"
 #include "messages.h"
 
+// +JSLED
+#include "gnc-html.h"
 
 enum {
   PAGE_ADDED,
@@ -119,6 +123,8 @@ static void gnc_main_window_cmd_help_totd (EggAction *action, GncMainWindow *win
 static void gnc_main_window_cmd_help_contents (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window);
 
+static void gnc_main_window_cmd_test( EggAction *action, GncMainWindow *window );
+
 struct GncMainWindowPrivate
 {
 	GtkWidget *menu_dock;
@@ -152,6 +158,7 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "ActionsAction", N_("_Actions"), NULL, NULL, NULL, NULL },
 	{ "ToolsAction", N_("_Tools"), NULL, NULL, NULL, NULL },
 	{ "HelpAction", N_("_Help"), NULL, NULL, NULL, NULL },
+	{ "MiscAction", N_("_Misc"), NULL, NULL, NULL, NULL },
 
 	/* File menu */
 	{ "FileNewAction", N_("_New File"), GTK_STOCK_NEW, "<control>n",
@@ -223,7 +230,7 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "ActionsCloseBooksAction", N_("Close Books"), NULL, "NULL",
 	  N_("Archive old data using accounting periods"),
 	  G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
-	
+
 	/* Tools menu */
 	{ "ToolsPriceEditorAction", N_("_Price Editor"), NULL, NULL,
 	  N_("View and edit the prices for stocks and mutual funds"),
@@ -251,6 +258,11 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "HelpAboutAction", N_("_About"), GNOME_STOCK_ABOUT, NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_help_about) },
+
+        /* Misc menu */
+        { "MiscTestAction", N_("TEST"), NULL, "NULL",
+          N_("Testing stuff"), G_CALLBACK (gnc_main_window_cmd_test) },
+
 };
 static guint gnc_menu_n_entries = G_N_ELEMENTS (gnc_menu_entries);
 
@@ -788,6 +800,36 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	  g_assert(merge_id != 0);
 	}
 
+        /* Testing */
+        {
+                guint new_merge_id;
+                EggActionGroup *eag;
+                EggActionEntry newEntry[] =
+                        {
+                          { "BarAction", N_("_GtkHtml3 test"), NULL, "<control>3", NULL, G_CALLBACK (gnc_main_window_cmd_test) }
+                        };
+
+                eag = egg_action_group_new ("MainWindowActions2");
+
+                egg_action_group_add_actions (eag, newEntry,
+                                              G_N_ELEMENTS (newEntry), window);
+                egg_menu_merge_insert_action_group( window->ui_merge, eag, 0 );
+
+                new_merge_id = egg_menu_merge_new_merge_id( window->ui_merge );
+
+                egg_menu_merge_add_ui( window->ui_merge, new_merge_id,
+                                       //"/menubar/Actions",
+                                       //"/menubar/Actions/ActionsPlaceholder",
+                                       // "/menubar/AdditionalMenusPlaceholder/AReportAction",
+                                       "/menubar/AdditionalMenusPlaceholder",
+                                       "BarAction",
+                                       "BarAction", EGG_MENU_MERGE_MENUITEM, FALSE );
+                egg_menu_merge_ensure_update( window->ui_merge );
+        }
+
+        /* Now update the extension-menus */
+        gnc_extensions_menu_setup( GTK_WINDOW(window), WINDOW_NAME_MAIN, window->ui_merge );
+
 	/* GncPluginManager stuff */
 	manager = gnc_plugin_manager_get ();
 	plugins = gnc_plugin_manager_get_plugins (manager);
@@ -797,6 +839,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 			  G_CALLBACK (gnc_main_window_plugin_removed), window);
 	g_list_foreach (plugins, gnc_main_window_add_plugin, window);
 	g_list_free (plugins);
+
 }
 
 static void
@@ -1149,6 +1192,19 @@ static void
 gnc_main_window_cmd_help_contents (EggAction *action, GncMainWindow *window)
 {
 	gnc_gnome_help (HF_HELP, NULL);
+}
+
+static void
+gnc_main_window_cmd_test( EggAction *action, GncMainWindow *window )
+{
+        GtkWindow *w = GTK_WINDOW(gtk_window_new( GTK_WINDOW_TOPLEVEL ));
+        gnc_html *gnchtml = gnc_html_new( w );
+        gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(gnc_html_get_widget(gnchtml)) );
+
+        gchar *html = "<html><head><title>testing</title></head><body><h1>testing</h1><h2>testing 2</h2> <p>Testing</p></body></html>";
+        gnc_html_show_data( gnchtml, html, strlen( html ) );
+        
+        gtk_widget_show_all( GTK_WIDGET(w) );
 }
 
 static void

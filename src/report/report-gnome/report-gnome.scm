@@ -51,10 +51,10 @@
               (menu-tip (gnc:report-template-menu-tip template))
               (item #f))
 
-          (if (not menu-path)
-              (set! menu-path '(""))
-              (set! menu-path
-                    (append menu-path '(""))))
+          ;;(if (not menu-path)
+              ;;(set! menu-path '(""))
+              ;;(set! menu-path
+              ;; (append menu-path '(""))))
 
           (set! menu-path (append (list gnc:window-name-main gnc:menuname-reports) menu-path))
 
@@ -87,26 +87,25 @@
      (add-template-menu-item (car item) (cdr item)))
    (sort *template-items* sort-templates)))
 
-
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
-  ;; comes after the "_Actions" menu. 
+  ;; comes after the "_Actions" menu;
   (define menu (gnc:make-menu gnc:menuname-reports
-			      (list gnc:window-name-main "_Actions")))
+			      (list gnc:window-name-main)))
   (define menu-namer (gnc:new-menu-namer))
   (define tax-menu (gnc:make-menu gnc:menuname-taxes
-                                  (list gnc:window-name-main
-					gnc:menuname-reports "")))
+                                  (list gnc:window-name-main gnc:menuname-reports)))
   (define income-expense-menu
     (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+                   (list gnc:window-name-main gnc:menuname-reports)))
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+                   (list gnc:window-name-main gnc:menuname-reports)))
   (define utility-menu
     (gnc:make-menu gnc:menuname-utility
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+                   (list gnc:window-name-main gnc:menuname-reports)))
 
+  (gnc:warn "report-menu-setup")
   (gnc:add-extension menu)
 
   ;; (gnc:add-extension tax-menu)

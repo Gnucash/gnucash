@@ -235,6 +235,8 @@ gnc_report_window_create_child(const gchar * configstring)
 void
 gnc_main_window_open_report(int report_id, gint toplevel)
 {
+  // [+JSLED] id_name=[id=1]
+  // [+JSLED] url: gnc-report:id=1
   char * id_name = g_strdup_printf("id=%d", report_id);  
   char * child_name = gnc_build_url (URL_TYPE_REPORT, id_name, NULL);
   g_free (id_name);
@@ -789,7 +791,7 @@ gnc_report_window_new(GNCMDIChildInfo * mc)
   GtkObject         * tlo; 
 
   report->mc               = mc;
-  report->html             = gnc_html_new(gnc_ui_get_toplevel());
+  report->html             = gnc_html_new( GTK_WINDOW(gnc_ui_get_toplevel()) );
   report->cur_report       = SCM_BOOL_F;
   report->initial_report   = SCM_BOOL_F;
   report->edited_reports   = SCM_EOL;
@@ -923,7 +925,6 @@ gnc_report_window_create_menu(gnc_report_window * report,
   child->menu_info = NULL;
 }
 
-
 /********************************************************************
  * gnc_report_window_destroy 
  * free and destroy a window 
@@ -1008,7 +1009,7 @@ gnc_print_report (int report_id)
   gnc_html *html;
   char * location;
 
-  html = gnc_html_new (gnc_ui_get_toplevel());
+  html = gnc_html_new( GTK_WINDOW(gnc_ui_get_toplevel()) );
 
   gnc_set_busy_cursor (NULL, TRUE);
   location = g_strdup_printf("id=%d", report_id);  

@@ -939,8 +939,10 @@ regWindowLedger( GNCLedgerDisplay *ledger )
 
   /* The menu bar. Menu extension setup needs to come *after* that. */
   gnc_register_setup_menu_widgets( regData, xml );
+  /* -JSLED: this file is dead; avoid making calls to dead methods.
   gnc_extensions_menu_setup_with_data( GNOME_APP(register_window),
                                        WINDOW_NAME_REGISTER, regData );
+  */
 
   /* The tool bar */
   {

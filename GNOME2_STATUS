@@ -90,8 +90,11 @@ View Summarybar - Summarybar not ported yet. Where should it go?
 
 Business functions - Somewhat Functional
 	- Everything works but the New Invoice/Bill code.  The dialog
-	seems to function properly but then gnucash crashes when the
-	dialog is closed.
+          seems to function properly but then gnucash crashes when the
+          dialog is closed.
+        - The dialog-invoice.c needs to switch over to using GtkActions /
+          menu-merging so that it can call
+          gnc_extensions_menu_setup( GtkWindow, char*, EggMenuMerge )
 
 IMPORTING
 

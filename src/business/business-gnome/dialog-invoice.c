@@ -1913,8 +1913,10 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   /* libglade should do this next line */
   GNOME_APP(iw->dialog)->menubar = glade_xml_get_widget (xml, "menubar1");
-  gnc_extensions_menu_setup(GNOME_APP(iw->dialog), WINDOW_NAME_INVOICE);
 
+  // FIXME:GNOME2 -- going to have to move this dialog over to using the
+  // GtkActions.
+  //gnc_extensions_menu_setup(GNOME_APP(iw->dialog), WINDOW_NAME_INVOICE);
 
   /* Grab the widgets */
   iw->id_entry = glade_xml_get_widget (xml, "id_entry");
