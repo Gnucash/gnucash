@@ -18,10 +18,21 @@ TESTS = \
   test-scm-dynload \
   test-scm-init
 
-TESTS_ENVIRONMENT = \
-  GNC_MODULE_PATH=mod-foo:mod-bar:mod-baz:misc-mods \
-  GUILE_LOAD_PATH=..:${G_WRAP_MODULE_DIR}:mod-foo:mod-bar:mod-baz \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:mod-foo:mod-bar:mod-baz:misc-mods:..:
+GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/gnc-module \
+  --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-foo \
+  --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-bar \
+  --gnc-module-dir ${top_builddir}/src/gnc-module/test/mod-baz \
+  --gnc-module-dir ${top_builddir}/src/gnc-module/test/misc-mods \
+  --guile-load-dir ${G_WRAP_MODULE_DIR}
+
+TESTS_ENVIRONMENT := \
+  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+
+#TESTS_ENVIRONMENT = \
+#  GNC_MODULE_PATH=
+#  GUILE_LOAD_PATH=..:${G_WRAP_MODULE_DIR}:mod-foo:mod-bar:mod-baz \
+#  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:mod-foo:mod-bar:mod-baz:misc-mods:..:
 
 noinst_PROGRAMS = \
   test-load-c \
@@ -39,5 +50,7 @@ EXTRA_DIST = \
   test-scm-dynload \
   test-scm-init \
   test-scm-module \
-  test-scm-multi \
-  test-scm-multi.scm
+  test-scm-multi
+
+foo:
+	${TESTS_ENVIRONMENT} strace -f -o xxx ./test-load-c
