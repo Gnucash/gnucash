@@ -14,6 +14,16 @@
 
 /* ======================================================== */
 
+static void
+LedgerMoveCursor  (struct _Table *_table, void * client_data)
+{
+   Table * table =  (Table *)_table;
+   BasicRegister *reg = (BasicRegister *) client_data;
+   xaccSaveRegEntry (reg);
+}
+
+/* ======================================================== */
+
 Split * xaccGetCurrentSplit (BasicRegister *reg)
 {
    CellBlock *cursor;
@@ -99,6 +109,9 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
 
    table = reg->table;
 
+   /* disable callback */
+   table->move_cursor = NULL;
+
    /* set table size to number of items in list */
    i=0;
    while (slist[i]) i++;
@@ -116,6 +129,10 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
       split = slist[i];
    }
    xaccRefreshTableGUI (table);
+
+   /* enable callback for cursor moves */
+   table->move_cursor = LedgerMoveCursor;
+   table->client_data = (void *) reg;
 }
 
 /* ======================================================== */

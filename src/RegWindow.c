@@ -735,6 +735,7 @@ cancelCB( Widget mw, XtPointer cd, XtPointer cb )
   /* when cancelling edits, reload the cursor from the transaction */
   split = xaccGetCurrentSplit (regData->ledger);
   xaccLoadRegEntry (regData->ledger, split);
+  xaccRefreshTableGUI (regData->ledger->table);
 }
 
 /************************** END OF FILE *************************/

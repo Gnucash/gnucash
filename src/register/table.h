@@ -34,6 +34,11 @@ typedef struct _Table {
   int current_cursor_row;
   int current_cursor_col;
 
+  /* callback that is called when the cursor is moved */
+  /* hack alert -- this should be a callback list, actually */
+  void (*move_cursor) (struct _Table *, void *client_data);
+  void * client_data;
+
   /* string values for each cell, 
    * of dimension num_phys_rows * num_phys_cols */
   char ***entries;

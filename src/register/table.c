@@ -54,6 +54,9 @@ xaccInitTable (Table * table)
    table->current_cursor_row = -1;
    table->current_cursor_col = -1;
 
+   table->move_cursor = NULL;
+   table->client_data = NULL;
+
    table->header = NULL;
    table->cursor = NULL;
    table->entries = NULL;
@@ -327,6 +330,11 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
    int iphys,jphys;
    BasicCell *cell;
 
+   /* call the callback, allowing the app to commit any changes */
+   if (table->move_cursor) {
+      (table->move_cursor) (table, table->client_data);
+   }
+
    table->current_cursor_row = virt_row;
    table->current_cursor_col = virt_col;
 
@@ -359,6 +367,11 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
    int i,j;
    int iphys,jphys;
    BasicCell *cell;
+
+   /* call the callback, allowing the app to commit any changes */
+   if (table->move_cursor) {
+      (table->move_cursor) (table, table->client_data);
+   }
 
    table->current_cursor_row = virt_row;
    table->current_cursor_col = virt_col;
