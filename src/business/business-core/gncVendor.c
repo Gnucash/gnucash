@@ -84,7 +84,7 @@ G_INLINE_FUNC void
 mark_vendor (GncVendor *vendor)
 {
   vendor->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (vendor->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (vendor->inst.entity.collection);
   gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 

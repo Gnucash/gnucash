@@ -77,7 +77,7 @@ G_INLINE_FUNC void
 mark_job (GncJob *job)
 {
   job->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (job->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (job->inst.entity.collection);
   gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_MODIFY);
 }
 

@@ -109,8 +109,7 @@ static void
 mark_invoice (GncInvoice *invoice)
 {
   invoice->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (invoice->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (invoice->inst.entity.collection);
   gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -283,13 +282,6 @@ void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount)
   invoice->to_charge_amount = amount;
   mark_invoice (invoice);
   gncInvoiceCommitEdit (invoice);
-}
-
-/* XXX the existance of this very routine is wrong !! */
-void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty)
-{
-  if (!invoice) return;
-  invoice->inst.dirty = dirty;
 }
 
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)

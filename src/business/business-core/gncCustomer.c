@@ -94,8 +94,7 @@ G_INLINE_FUNC void
 mark_customer (GncCustomer *customer)
 {
   customer->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (customer->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (customer->inst.entity.collection);
   gnc_engine_gen_event (&customer->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -189,7 +188,7 @@ void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
   cust->inst.do_free = TRUE;
-  // ??? why not?? gncBusinessSetDirtyFlag (table->book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (cust->inst.entity.collection);
   gncCustomerCommitEdit (cust);
 }
 

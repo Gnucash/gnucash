@@ -189,8 +189,7 @@ G_INLINE_FUNC void
 mark_entry (GncEntry *entry)
 {
   entry->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (entry->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (entry->inst.entity.collection);
   gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
 }
 

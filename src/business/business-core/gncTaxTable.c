@@ -165,7 +165,7 @@ static inline void
 mark_table (GncTaxTable *table)
 {
   table->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (table->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (table->inst.entity.collection);
   gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -310,7 +310,7 @@ gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
   table->inst.do_free = TRUE;
-  gncBusinessSetDirtyFlag (table->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (table->inst.entity.collection);
   gncTaxTableCommitEdit (table);
 }
 

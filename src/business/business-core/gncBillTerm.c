@@ -104,8 +104,7 @@ static inline void
 mark_term (GncBillTerm *term)
 {
   term->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (term->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (term->inst.entity.collection);
   gnc_engine_gen_event (&term->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -186,7 +185,7 @@ void gncBillTermDestroy (GncBillTerm *term)
 {
   if (!term) return;
   term->inst.do_free = TRUE;
-  gncBusinessSetDirtyFlag (term->inst.book, _GNC_MOD_NAME, TRUE);
+  qof_collection_mark_dirty (term->inst.entity.collection);
   gncBillTermCommitEdit (term);
 }
 

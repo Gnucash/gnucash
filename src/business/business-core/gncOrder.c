@@ -92,8 +92,7 @@ G_INLINE_FUNC void
 mark_order (GncOrder *order)
 {
   order->inst.dirty = TRUE;
-  gncBusinessSetDirtyFlag (order->inst.book, _GNC_MOD_NAME, TRUE);
-
+  qof_collection_mark_dirty (order->inst.entity.collection);
   gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -208,13 +207,6 @@ void gncOrderSetActive (GncOrder *order, gboolean active)
   order->active = active;
   mark_order (order);
   gncOrderCommitEdit (order);
-}
-
-/* XXX the existance of this routie is wrong */
-void gncOrderSetDirty (GncOrder *order, gboolean dirty)
-{
-  if (!order) return;
-  order->inst.dirty = dirty;
 }
 
 /* Add an Entry to the Order */
