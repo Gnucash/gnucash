@@ -1,3 +1,31 @@
+2002-12-08  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/SchedXaction.h: Doxygen-related changes.
+	
+	* src/register/ledger-core/split-register-layout.c
+	(gnc_split_register_layout_add_cells): Change F(DEBT|CRED)_CELL
+	types to FORMULA_CELL from QUICKFILL_CELL.
+
+	* src/register/register-gnome/gncmod-register-gnome.c
+	(libgncmod_register_gnome_LTX_gnc_module_init): Add
+	formulacell-gnome override to gnc_register setup.
+
+	* src/register/register-core/formulacell.c: 
+	* src/register/register-gnome/formulacell-gnome.c: Filled in a
+	long-thought of idea for a formula cell: can contain text unlike a
+	pricecell, but doesn't really want to do auto-complete like a
+	quickfill cell [what we had been using].  This allows us to
+	provide the gnome formula cell which can remap the keypad '.'
+	character based on locale; addresses Bug#97065, which is the
+	cause of Bugs#97063 and #97062.
+
+	* src/gnome/glade/sched-xact.glade: Remove "[Last Day]" option;
+	add "/last day" to 29/30/31 options in gnc-frequnecy month-based
+	selections.
+
+	* src/gnome/dialog-scheduledxaction.c (new_button_clicked): Change
+	default new SX frequency to monthly; fixes Bug#100615.
+
 2002-12-08  Derek Atkins  <derek@ihtfp.com>
 
 	* README.cvs: mention gettextize breakage and "cvs up -C"

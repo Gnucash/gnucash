@@ -1856,8 +1856,36 @@ ld_calc_current_instance_num( int monthsPassed, FreqSpec *fs )
 }
 
 /**
- * Actually does the work of creating the SXes from the LoanDruidData.
+ * Actually does the heavy-lifting of creating the SXes from the
+ * LoanDruidData.
+ *
+ * Rules:
+ * - There is at least one SX created, with at least one txn, for the loan
+ *   payment itself.
+ * - A new SX is created for each repayment with a different frequency.
+ * - Non-unique repayment From-accounts cause a "summed (src-)split", unique
+ *   repayment From-accounts cause new (src-)splits.
+ * - Each repayment causes a new (dst-)split [the To-account].
+ * - Escrow-diverted repayments cause new Txns w/in their
+ *   SX. [Assets->Escrow, Escrow->(Expense|Liability)]
  **/
+static
+void
+new_ld_create_sxes( LoanDruidData *ldd )
+{
+        /* Plan:
+         * . Create SX/ttinfo's for payment; create the summed src-split string.
+         * . Process repayments
+         *   . if ( uniq freq ) { thisSX <- create new SX } else { thisSX <- payment SX }
+         *   . if ( uniq from-acct ) {  txn += new src_ttinfo } else { src_ttinfo.debcred += val }
+         *   . new dst_ttinfo += rep->toAcct
+         *   . if ( escrow ) { new txn( src_ttinfo, escrow_dst_ttinfo ),
+         *                     new txn( escrow_src_ttinfo, dst_ttinfo ) }
+         *   . thisSX += txns
+         */
+}
+
+
 static
 void
 ld_create_sxes( LoanDruidData *ldd )

@@ -15,6 +15,7 @@ libgncmod_register_core_la_SOURCES = \
   basiccell.c \
   cell-factory.c \
   cellblock.c \
+  formulacell.c \
   gtable.c \
   numcell.c \
   pricecell.c \
@@ -35,6 +36,7 @@ gncinclude_HEADERS = \
   cellblock.h \
   combocell.h \
   datecell.h \
+  formulacell.h \
   gtable.h \
   numcell.h \
   pricecell.h \

@@ -11,6 +11,7 @@
 #include "datecell.h"
 #include "gnc-module-api.h"
 #include "gnc-module.h"
+#include "formulacell-gnome.h"
 #include "pricecell-gnome.h"
 #include "quickfillcell-gnome.h"
 #include "register-common.h"
@@ -61,6 +62,9 @@ libgncmod_register_gnome_LTX_gnc_module_init(int refcount) {
 
     gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
                                 gnc_quickfill_cell_gnome_new);
+
+    gnc_register_add_cell_type( FORMULA_CELL_TYPE_NAME,
+                                gnc_formula_cell_gnome_new );
 
     gnc_table_gnome_init ();
   }

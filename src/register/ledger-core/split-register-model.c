@@ -1847,7 +1847,8 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     amount = gnc_numeric_abs (amount);
 
     /* FIXME: This should be fixed to be correct for the "fake" account. */
-    return xaccPrintAmount (amount, gnc_default_print_info (FALSE));
+    return xaccPrintAmount( amount,
+                            gnc_split_value_print_info( split, FALSE ) );
   }
 
   return NULL;

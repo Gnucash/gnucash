@@ -1235,13 +1235,13 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 return sxed;
         }
 
-        sxed = g_new0( SchedXactionEditorDialog, 1 );
-        sxed->gxml = gnc_glade_xml_new( "sched-xact.glade",
+        sxed         = g_new0( SchedXactionEditorDialog, 1 );
+        sxed->gxml   = gnc_glade_xml_new( "sched-xact.glade",
                                         SX_EDITOR_GLADE_NAME );
         sxed->dialog = glade_xml_get_widget( sxed->gxml, SX_EDITOR_GLADE_NAME );
 
-        sxed->sxd = sxd;
-        sxed->sx = sx;
+        sxed->sxd    = sxd;
+        sxed->sx     = sx;
         sxed->newsxP = newSX;
         /* Setup dense-cal local mark storage */
         {
@@ -1580,7 +1580,8 @@ new_button_clicked( GtkButton *b, gpointer d )
         fs = xaccSchedXactionGetFreqSpec( tmpSX );
         gd = g_date_new();
         g_date_set_time( gd, time(NULL) );
-        xaccFreqSpecSetOnceDate( fs, gd );
+        xaccFreqSpecSetMonthly( fs, gd, 1 );
+        xaccFreqSpecSetUIType ( fs, UIFREQ_MONTHLY );
         g_date_free( gd );
         
         sxd = (SchedXactionDialog*)d;

@@ -1,6 +1,4 @@
 /********************************************************************\
- * formulacell.h -- Formula entry/display cell                      *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -17,48 +15,17 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
-/**
- * FILE:
- * formulacell.h
+/* formulacell-gnome.h
  *
- * FUNCTION:
- * 
- * The FormulaCell is a register-table cell which can contain a formula
- * involving numbers, formula markup and strings denoting either functions or
- * variables.
- *
- * Copyright (c) 2002 Joshua Sled <jsled@asynchronous.org>
- **/
- 
-#ifndef FORMULA_CELL_H
-#define FORMULA_CELL_H
+ * Implements gnome dependent formula cell functions.
+ */
 
-#include <time.h>
+#ifndef FORMULACELL_GNOME_H
+#define FORMULACELL_GNOME_H
 
-#include "gnc-ui-util.h"
+BasicCell * gnc_formula_cell_gnome_new( void );
 
-#include "basiccell.h"
-#include "date.h"
-
-typedef struct _FormulaCell
-{
-  BasicCell cell;
-
-  /** The print-info for numeric values. **/
-  GNCPrintAmountInfo print_info;
-
-  /** The user-entered formula. **/
-  GdkWChar *formula;
-} FormulaCell;
-
-/* installs a callback to handle date recording */
-BasicCell* gnc_formula_cell_new (void);
-
-void gnc_formula_cell_set_value( FormulaCell *fc, const char *newVal );
-
-#endif /* FORMULA_CELL_H */
-
-/* --------------- end of file ---------------------- */
-
+#endif /* !FORMULACELL_GNOME_H */

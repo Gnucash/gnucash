@@ -21,6 +21,14 @@
  *                                                                  *
 \********************************************************************/
 
+/**
+ * @addtogroup Engine
+ * @{ */
+/**
+ * @file SchedXaction.h
+ * @brief Scheduled Transactions public handling routines.
+ **/
+
 #ifndef XACC_SCHEDXACTION_H
 #define XACC_SCHEDXACTION_H
 
@@ -48,6 +56,9 @@
 #define GNC_SX_AMOUNT                "amnt"
 #define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"
 
+/**
+ * The SchedXaction data.
+ **/
 typedef struct gncp_SchedXaction SchedXaction;
 
 /**
@@ -55,23 +66,22 @@ typedef struct gncp_SchedXaction SchedXaction;
  **/
 SchedXaction *xaccSchedXactionMalloc(GNCBook *book);
 
-/*
- * returns true if the scheduled transaction is dirty and needs to
- * be saved
- */
-
+/**
+ * @return True if the scheduled transaction is dirty and needs to
+ * be saved.
+ **/
 gboolean xaccSchedXactionIsDirty(SchedXaction *sx);
 
-/*
+/**
  * Set dirtyness state.  Only save/load code should modify this outside
  * SX engine CODE . . . 
  * (set it to FALSE after backend completes reading in data 
  *
  * FIXME: put this into a private header . . . .
- */
-
+ **/
 void xaccSchedXactionSetDirtyness(SchedXaction *sx, gboolean dirty_p);
-/*
+
+/**
  * Cleans up and frees a SchedXaction and it's associated data.
  **/
 void xaccSchedXactionFree( SchedXaction *sx );
@@ -249,3 +259,5 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
 #endif /* XACC_SCHEDXACTION_H */
+
+/** @} */

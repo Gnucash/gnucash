@@ -1512,10 +1512,9 @@ Yearly
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	      <initial_choice>0</initial_choice>
 	      <child>
@@ -1586,10 +1585,9 @@ Yearly
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	      <initial_choice>0</initial_choice>
 	      <child>
@@ -1761,10 +1759,9 @@ Yearly
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	      <initial_choice>0</initial_choice>
 	      <child>
@@ -1903,10 +1900,9 @@ Mar, Jun, Sep, Dec
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	    <initial_choice>0</initial_choice>
 	    <child>
@@ -2045,10 +2041,9 @@ Apr, Jul, Dec
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	    <initial_choice>0</initial_choice>
 	    <child>
@@ -2189,10 +2184,9 @@ Jun, Dec
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	    <initial_choice>0</initial_choice>
 	    <child>
@@ -2409,10 +2403,9 @@ December
 26th
 27th
 28th
-[29th]
-[30th]
-[31st]
-[last day]
+[29th/last]
+[30th/last]
+[31st/last]
 </items>
 	    <initial_choice>0</initial_choice>
 	    <child>
