@@ -1294,7 +1294,6 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 
   if (trans->common_currency)
   {
-    PWARN ("currency already set\n");
     if (!gnc_commodity_equiv (curr,trans->common_currency))
     {
       PWARN ("asked to change from common currency %s to %s\n"
