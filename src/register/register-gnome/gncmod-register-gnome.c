@@ -9,6 +9,9 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "register-common.h"
+#include "combocell.h"
+#include "datecell.h"
 
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;
@@ -30,11 +33,16 @@ gnc_module_description(void) {
 
 int
 gnc_module_init(int refcount) {
-  if(refcount == 0) 
+  if (refcount == 0) 
   {
     if(!gnc_module_load("gnucash/register/register-core", 0)) {
       return FALSE;
     }
+
+    gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, gnc_combo_cell_new);
+
+    gnc_register_add_cell_type (DATE_CELL_TYPE_NAME, gnc_date_cell_new);
   }
+
   return TRUE;
 }
