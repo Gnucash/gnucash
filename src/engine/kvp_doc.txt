@@ -29,7 +29,7 @@ Example:
 
 Name: my-favorite-thing
 Type: string
-Entities: Accounts
+Entities: Account
 Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
       This key stores a text description of the user's
       favorite thing. Do not use this key to store things
@@ -48,35 +48,35 @@ Use: Identifies that the Transaction was created from a ScheduledTransaction,
 
 Name: /gemini/
 Type: kvp_frame
-Entities: Accounts
+Entities: Account, Book
 Use:  subdirectory holding identification of accounts that are copies
       of this account.
 
 Name: /gemini/ncopies
 Type: int64
-Entities: Accounts
+Entities: Account, Book
 Use:  number of subdirectories containing copy info.
 
 Name: /gemini/0/
 Type: kvp_frame
-Entities: Accounts
+Entities: Account, Book
 Use:  subdirectory holding identification of the first copied account.
       Other copies would appear in directories /gemini/1/, /gemini/2/,
       etc.
 
 Name: /gemini/0/acct_guid
 Type: guid
-Entities: Accounts
+Entities: Account
 Use:  guid of another account that is a copy of this one.
 
 Name: /gemini/0/book_guid
 Type: guid
-Entities: Accounts
+Entities: Account, Book
 Use:  guid of the book that the other account belongs to.
 
 Name: /gemini/0/date
 Type: timespec
-Entities: Accounts
+Entities: Account, Book
 Use:  date that the copy was created.
 
 Name: last-num
