@@ -108,7 +108,7 @@
 				     optname-display-depth))
 	  (show-subaccts? (get-option gnc:pagename-accounts
 				      optname-show-subaccounts))
-	  (accounts (filter gnc:account-is-inc-exp
+	  (accounts (filter gnc:account-is-inc-exp?
                             (get-option gnc:pagename-accounts
                                         optname-accounts)))
           (do-grouping? (get-option gnc:pagename-display
