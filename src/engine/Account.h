@@ -327,8 +327,9 @@ void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
 const char * xaccAccountGetQuoteTZ (Account *account);
 
 
+typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
 gpointer xaccAccountForEachSplit(Account *account,
-                                 gpointer (*thunk)(Split *s, gpointer data),
+                                 SplitCallback,
                                  gpointer data);
 
 /* Traverse all of the transactions in the given account.  Continue
@@ -344,9 +345,10 @@ gpointer xaccAccountForEachSplit(Account *account,
    
    The result of this function will not be FALSE IFF every relevant
    transaction was traversed exactly once.  */
+typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
 gboolean
 xaccAccountForEachTransaction(Account *account,
-                              gboolean (*proc)(Transaction *t, void *data),
+                              TransactionCallback,
                               void *data);
 
 /* Visit every transaction in the account that hasn't already been
@@ -360,8 +362,7 @@ xaccAccountForEachTransaction(Account *account,
    transaction was traversed exactly once.  */
 gboolean
 xaccAccountVisitUnvisitedTransactions(Account *account,
-                                      gboolean (*proc)(Transaction *t,
-                                                       void *data),
+                                      TransactionCallback,
                                       void *data,
                                       GHashTable *visited_txns);
 
