@@ -90,6 +90,7 @@
 #define __XACC_DATE_H__
 
 #include "config.h"
+#include "Transaction.h"
 
 typedef struct _date {
   int year;
@@ -121,6 +122,12 @@ Date*  todaysDate( Date *date );
 **/
 int    daysInMonth( int month , int year );
 int    datecmp( Date *date1, Date *date2 );
+
+char * xaccTransGetDateStr (Transaction *trans);
+void   xaccTransSetDateStr (Transaction *trans, char *str);
+
+time_t xaccDateToSec (Date *);
+time_t xaccDMYToSec (int day, int month, int year);
 
 /** GLOBALS *********************************************************/
 

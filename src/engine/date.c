@@ -388,6 +388,72 @@ datecmp( Date *date1, Date *date2 )
   }
 
 
+/********************************************************************\
+\********************************************************************/
+
+char *
+xaccTransGetDateStr (Transaction *trans)
+{
+   char buf [MAX_DATE_LENGTH];
+   time_t secs;
+   struct tm *date;
+
+   secs = xaccTransGetDate (trans);
+
+   date = localtime (&secs);
+
+   printDate(buf, date->tm_mday, date->tm_mon+1, (date->tm_year)%100);
+   return strdup (buf);
+}
+
+void
+xaccTransSetDateStr (Transaction *trans, char *str)
+{
+   Date d;
+
+   /* hack alert -- the date string should be parsed for time values */
+   scanDate(str, &(d.day), &(d.month), &(d.year));
+   xaccTransSetDate (trans, d.day, d.month, d.year);
+}
+
+time_t 
+xaccDateToSec (Date *date)
+{
+   struct tm stm;
+   time_t secs;
+
+   stm.tm_year = date->year - 1900;
+   stm.tm_mon = date->month - 1;
+   stm.tm_mday = date->day;
+   stm.tm_hour = 11;
+   stm.tm_min = 0;
+   stm.tm_sec = 0;
+
+   /* compute number of seconds */
+   secs = mktime (&stm);
+
+   return (secs);
+}
+
+time_t 
+xaccDMYToSec (int day, int month, int year)
+{
+   struct tm stm;
+   time_t secs;
+
+   stm.tm_year = year - 1900;
+   stm.tm_mon = month - 1;
+   stm.tm_mday = day;
+   stm.tm_hour = 11;
+   stm.tm_min = 0;
+   stm.tm_sec = 0;
+
+   /* compute number of seconds */
+   secs = mktime (&stm);
+
+   return (secs);
+}
+
 
 /********************** END OF FILE *********************************\
 \********************************************************************/

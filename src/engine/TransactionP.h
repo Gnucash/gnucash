@@ -45,8 +45,9 @@
 #ifndef __XACC_TRANSACTION_P_H__
 #define __XACC_TRANSACTION_P_H__
 
+#include <time.h>
+
 #include "config.h"
-#include "date.h"   /* for Date */
 #include "Transaction.h"   /* for typedefs */
 
 
@@ -66,18 +67,24 @@
  * between "dining", "tips" and "taxes" categories.
  */
 
+typedef struct timespec Timespec;
+
 struct _split 
 {
-  Account *acc;     /* back-pointer to debited/credited account   */
-  Transaction *parent; /* parent of split                         */
+  Account *acc;              /* back-pointer to debited/credited account  */
+  Transaction *parent;       /* parent of split                           */
   char  * memo;
   char  * action;            /* Buy, Sell, Div, etc.                      */
   char    reconciled;
   double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
   double  share_price;       /* the share price, ==1.0 for bank account   */
 
-  /* the various "balances" are the sum of all of the values of 
-   * all the splits in the account, up to and including this split */
+  Timespec date_reconciled;  /* date split was reconciled                 */
+
+  /* The various "balances" are the sum of all of the values of 
+   * all the splits in the account, up to and including this split.
+   * These belances apply to a sorting order by date posted
+   * (not by date entered). */
   double  balance;
   double  cleared_balance;
   double  reconciled_balance;
@@ -91,8 +98,9 @@ struct _split
 
 struct _transaction 
 {
+  Timespec date_entered;     /* date register entry was made              */
+  Timespec date_posted;      /* date transaction was posted at bank       */
   char  * num;               /* transaction id                            */
-  Date    date;              /* transaction date                          */
   char  * description;        
 
   Split   **splits;          /* list of splits, null terminated           */

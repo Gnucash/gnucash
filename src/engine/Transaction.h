@@ -27,7 +27,8 @@
 #define __XACC_TRANSACTION_H__
 
 #include "config.h"
-#include "date.h"   /* for Date */
+
+#include <time.h>
 
 /* Values for the reconciled field in Transaction: */
 #define CREC 'c'              /* The transaction has been cleared        */
@@ -75,7 +76,7 @@ void          xaccTransBeginEdit (Transaction *);
 void          xaccTransCommitEdit (Transaction *);
 
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
-void          xaccTransSetDateStr (Transaction *, char *);
+void          xaccTransSetDateSecs (Transaction *, time_t);
 
 /* set the transaction date to the current system time. */
 void          xaccTransSetDateToday (Transaction *);
@@ -117,8 +118,7 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 
 char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
-Date *        xaccTransGetDate (Transaction *);
-char *        xaccTransGetDateStr (Transaction *);
+time_t        xaccTransGetDate (Transaction *);
 
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);

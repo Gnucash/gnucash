@@ -39,6 +39,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "date.h"
 #include "Group.h"
 #include "FileIO.h"
 #include "Transaction.h"

@@ -30,7 +30,6 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "date.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -70,6 +69,10 @@ xaccInitSplit( Split * split )
   split->reconciled  = NREC;
   split->damount     = 0.0;
   split->share_price = 1.0;
+
+  split->date_reconciled.tv_sec = 0;
+  split->date_reconciled.tv_nsec = 0;
+
   split->balance             = 0.0;
   split->cleared_balance     = 0.0;
   split->reconciled_balance  = 0.0;
@@ -107,6 +110,9 @@ xaccFreeSplit( Split *split )
   split->share_price = 1.0;
   split->parent      = NULL;
   split->acc         = NULL;
+
+  split->date_reconciled.tv_sec = 0;
+  split->date_reconciled.tv_nsec = 0;
 
   _free(split);
 }
@@ -304,9 +310,12 @@ xaccInitTransaction( Transaction * trans )
 
   trans->splits[2] = NULL;
 
-  trans->date.year   = 1900;        
-  trans->date.month  = 1;        
-  trans->date.day    = 1;        
+  trans->date_entered.tv_sec = 0;
+  trans->date_entered.tv_nsec = 0;
+
+  trans->date_posted.tv_sec = 0;
+  trans->date_posted.tv_nsec = 0;
+
   trans->open        = 0;
   }
 
@@ -351,9 +360,11 @@ xaccFreeTransaction( Transaction *trans )
   trans->num         = 0x0;
   trans->description = 0x0;
 
-  trans->date.year   = 1900;        
-  trans->date.month  = 1;        
-  trans->date.day    = 1;        
+  trans->date_entered.tv_sec = 0;
+  trans->date_entered.tv_nsec = 0;
+
+  trans->date_posted.tv_sec = 0;
+  trans->date_posted.tv_nsec = 0;
 
   trans->open = 0;
 
@@ -650,8 +661,24 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   if ( !(*ta) && !(*tb) ) return 0;
 
   /* if dates differ, return */
-  retval = datecmp (&((*ta)->date), &((*tb)->date));
-  if (retval) return retval;
+  if ( ((*ta)->date_posted.tv_sec) <
+       ((*tb)->date_posted.tv_sec)) {
+    return -1;
+  } else
+  if ( ((*ta)->date_posted.tv_sec) >
+       ((*tb)->date_posted.tv_sec)) {
+    return +1;
+  }
+
+  /* else, seconds match. check nanoseconds */
+  if ( ((*ta)->date_posted.tv_nsec) <
+       ((*tb)->date_posted.tv_nsec)) {
+    return -1;
+  } else
+  if ( ((*ta)->date_posted.tv_nsec) >
+       ((*tb)->date_posted.tv_nsec)) {
+    return +1;
+  }
 
   /* otherwise, sort on transaction strings */
   da = (*ta)->num;
@@ -709,15 +736,17 @@ xaccCountTransactions (Transaction **tarray)
 \********************************************************************/
 
 void
-xaccTransSetDate (Transaction *trans, int day, int mon, int year)
+xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
    Split *split;
    Account *acc;
    int i=0;
 
-   trans->date.year = year;
-   trans->date.month = mon;
-   trans->date.day = day;
+   /* hack alert -- for right now, keep the posted and the entered
+    * dates in sync.  Later, we'll have to split these up. */
+
+   trans->date_entered.tv_sec = secs;
+   trans->date_posted.tv_sec = secs;
 
    /* since the date has changed, we need to be careful to 
     * make sure all associated splits are in proper order
@@ -742,26 +771,36 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 }
 
 void
-xaccTransSetDateToday (Transaction *trans)
+xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
-   Date d;
+   struct tm date;
+   time_t secs;
 
-   todaysDate (&d);
-   xaccTransSetDate (trans, d.day, d.month, d.year);
+   date.tm_year = year - 1900;
+   date.tm_mon = mon - 1;
+   date.tm_mday = day;
+   date.tm_hour = 11;
+   date.tm_min = 0;
+   date.tm_sec = 0;
+
+   /* compute number of seconds */
+   secs = mktime (&date);
+
+   xaccTransSetDateSecs (trans, secs);
 }
 
 void
-xaccTransSetDateStr (Transaction *trans, char *str)
+xaccTransSetDateToday (Transaction *trans)
 {
-   Date d;
+   time_t secs;
 
-   scanDate(str, &(d.day), &(d.month), &(d.year));
-   xaccTransSetDate (trans, d.day, d.month, d.year);
+   secs = time (0);
+   xaccTransSetDateSecs (trans, secs);
 }
+
 
 /********************************************************************\
 \********************************************************************/
-
 
 void
 xaccTransSetNum (Transaction *trans, const char *xnum)
@@ -846,18 +885,10 @@ xaccTransGetDescription (Transaction *trans)
    return (trans->description);
 }
 
-Date *
+time_t
 xaccTransGetDate (Transaction *trans)
 {
-   return (&(trans->date));
-}
-
-char *
-xaccTransGetDateStr (Transaction *trans)
-{
-   char buf [MAX_DATE_LENGTH];
-   printDate(buf, trans->date.day, trans->date.month, trans->date.year%100);
-   return strdup (buf);
+   return (trans->date_posted.tv_sec);
 }
 
 int 

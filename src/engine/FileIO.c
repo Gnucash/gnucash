@@ -86,10 +86,12 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "date.h"
 #include "FileIO.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "messages.h"
+#include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
 
@@ -116,14 +118,14 @@ static Account      *readAccount( int fd, AccountGroup *, int token );
 static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
-static Date         *readDate( int fd, int token );
+static time_t        readDate( int fd, int token );
 
 static int writeGroup( int fd, AccountGroup *grp );
 static int writeAccount( int fd, Account *account );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
-static int writeDate( int fd, Date *date );
+static int writeDate( int fd, time_t secs );
 
 /*******************************************************/
 
@@ -491,7 +493,6 @@ readTransaction( int fd, Account *acc, int token )
   int err=0;
   int acc_id;
   int i;
-  Date *date;
   int dummy_category;
   int numSplits;
   Transaction *trans = 0x0;
@@ -499,6 +500,7 @@ readTransaction( int fd, Account *acc, int token )
   char recn;
   double num_shares = 0.0;
   double share_price = 0.0;
+  time_t secs;
 
   /* create a transaction structure */
   trans = xaccMallocTransaction();
@@ -513,15 +515,14 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
-  date = readDate( fd, token );
-  if( date == NULL )
+  secs = readDate( fd, token );
+  if( 0 == secs )
     {
     PERR ("Premature end of Transaction at date");
     xaccTransDestroy(trans);
     return NULL;
     }
-  trans->date = *date;
-  _free(date);
+  xaccTransSetDateSecs (trans, secs);
   
   trans->description = readString( fd, token );
   if( trans->description == NULL )
@@ -869,37 +870,36 @@ readString( int fd, int token )
  *         token - the datafile version                             * 
  * Return: the Date struct                                          * 
 \********************************************************************/
-static Date *
+static time_t
 readDate( int fd, int token )
   {
   int  err=0;
-  Date *date = (Date *)_malloc(sizeof(Date));
+  int day, month, year;
+  time_t secs;
   
-  err = read( fd, &(date->year), sizeof(int) );
+  err = read( fd, &year, sizeof(int) );
   if( err != sizeof(int) )
     {
-    _free(date);
-    return NULL;
+    return 0;
     }
-  XACC_FLIP_INT (date->year);
+  XACC_FLIP_INT (year);
   
-  err = read( fd, &(date->month), sizeof(int) );
+  err = read( fd, &month, sizeof(int) );
   if( err != sizeof(int) )
     {
-    _free(date);
-    return NULL;
+    return 0;
     }
-  XACC_FLIP_INT (date->month);
+  XACC_FLIP_INT (month);
   
-  err = read( fd, &(date->day), sizeof(int) );
+  err = read( fd, &day, sizeof(int) );
   if( err != sizeof(int) )
     {
-    _free(date);
-    return NULL;
+    return 0;
     }
-  XACC_FLIP_INT (date->day);
+  XACC_FLIP_INT (day);
   
-  return date;
+  secs = xaccDMYToSec (day, month, year);
+  return secs;
   }
 
 /********************************************************************\
@@ -1149,6 +1149,7 @@ writeTransaction( int fd, Transaction *trans )
   Split *s;
   int err=0;
   int i=0;
+  time_t secs;
 
   ENTER ("writeTransaction");
   /* If we've already written this transaction, don't write 
@@ -1161,7 +1162,8 @@ writeTransaction( int fd, Transaction *trans )
   err = writeString( fd, trans->num );
   if( -1 == err ) return err;
   
-  err = writeDate( fd, &(trans->date) );
+  secs = xaccTransGetDate (trans);
+  err = writeDate( fd, secs );
   if( -1 == err ) return err;
   
   err = writeString( fd, trans->description );
@@ -1291,24 +1293,27 @@ writeString( int fd, char *str )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
-writeDate( int fd, Date *date )
+writeDate( int fd, time_t secs )
   {
   int err=0;
   int tmp;
+  struct tm *stm;
+
+  stm = localtime (&secs);
   
-  tmp = date->year;
+  tmp = stm->tm_year +1900;
   XACC_FLIP_INT (tmp);
   err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  tmp = date->month;
+  tmp = stm->tm_mon+1;
   XACC_FLIP_INT (tmp);
   err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
     return -1;
   
-  tmp = date->day;
+  tmp = stm->tm_mday;
   XACC_FLIP_INT (tmp);
   err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )
