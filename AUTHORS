@@ -84,6 +84,7 @@ Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump 
+Steven Murdoch <sjmurdoch@linuxfan.com> gnc-prices fix for London exchange
 Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
