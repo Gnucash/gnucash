@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>GnuCash Project Goals</title>
-<meta name="description" content="The Linux GnuCash (X-Accountant)
+<meta name="description" content="The Linux GnuCash
     project aims at creating a world-class personal finance package.
     Goals include ease-of use, double entry, OFX support, charts,
     and reports, and multi-user support.">
@@ -12,121 +12,110 @@
 
 <body bgcolor="#eeeeee"> 
 <h1>GnuCash Project Goals</h1>
-<a href="http://gnucash.org">GnuCash</a> 
-(previously known as X-Accountant) is a personal finance 
-accounting application.  The project goals are to create a world-class
-GPL'ed Open Source personal financial application for GNU/Linux and other 
-Unix's.  The project is the result of a merger 
-of the GnoMoney project with X-Accountant development.  There are currently
-two versions: xacc-1.0.18, and gnucash-1.1.x.  Version <tt>xacc-1.0.18</tt>
-is written in Motif, and is considered to be stable/production quality.  
-You can read more about X-Accountant at its home page 
-<a href="http://www.cs.hmc.edu/~rclark/xacc/index.html">
-http://www.cs.hmc.edu/~rclark/xacc/index.html</a>. Versions 
-numbered as <tt>gnucash-1.1.x</tt> are the current development 
-versions, and are unstable.  GnuCash is in active development;
-this page is an effort to summarize the project goals and status.
 
+The people behind <a href="http://gnucash.org">GnuCash</a> 
+aim to create a world-class GPL'ed Open Source Personal Financial 
+Application for GNU/Linux and other Unix's.   This page aims to review
+some of the technical and development issues surrounding this product,
+to be a kind of 'FAQ' for developers and contributors.
+To get a better idea of what <a href="http://gnucash.org">GnuCash</a> 
+is and what it does, visit it's <a href="http://gnucash.org">home page</a>.
 <p>
-The <a href="http://gnucash.org/">GnuCash</a> pages
-provide overview & introductory material about GnuCash, and in 
-general present a glossier, more accessilbe format.  This page is 
-aimed at developers, not users.
+There are currently several different versions of GnuCash.  The current 
+stable, production release is gnucash-1.2.x and is Motif based.  However,
+development has all but switched entirely over to Gnome; the Motif version
+will probably eventually fall to the wayside.  (Note that other versions, such as KDE,
+Java or PalmPilot have been discussed and/or started. More about this below).
+The latest Gnome version, and any latest version in general, is currently 
+available only via CVS.   There are precompiled versions available, but these
+are usually only for the stable releases.  Don't use the unstable versions 
+unless you are looking for excitement and adventure.
 <p>
-We believe that a GNU GPL project should provide goals and motivations
-at both the large and the small scales, in order to focus and motivate
-the developers.  Over-arching and grand goals are difficult to grasp
-and carry out; yet their lack serves only to dissuade the grand
-thinkers.  A list of detailed goals may be mind-numbing to the casual
-reader; yet, without them, the roll-up-your-sleeves-and-do-it
-coder cannot know where to begin.  Detailed goals lend a concreteness 
-to the discussion: they can be architected, designed and coded at any time
-by coders of any ability.  Thus, we present a list of goals, large and
-small, with the hope that the small goals will fall quickly, and the
-large ones shall turn into a multitude of small ones.
+This document is divided into several sections.  The first deals with 
+archititectural and philosophical design issues. The second deals with 
+interesting technologies.  The third deals with desirable features and
+functions. 
 <p>
 
-<h2>News</h2>
-<dl>
-<dt><b>September 1998</b>
-<dd>Version 1.1.18 is begining to get stable; most things work the way they're
-    supposed to. New features include variety of ways of viewing an account,
-    a simple query engine, and support for multiple currencies.
-    <p>
 
-<dt><b>April 1998</b>
-<dd>The domain "gnucash.org" has been registered; web site is up.
-    <p>
-
-<dt><b>10 April 1998</b>
-<dd>Work on OFX support, and user-prefrences, has begun in earnest.
-    <p>
-
-<dt><b>10 March 1998</b>
-<dd>Source is available with CVS. See instructions at bottom.
-    <p>
-
-<dt><b>4 March 1998</b>
-<dd>The folks involved with 
-    <a href="http://www.dnaco.net/~bcooper/watermark/index.html">
-    WaterMark</a>,
-    <a href="http://gnomoney.ml.org/gnomoney/index.hts">GnoMoney</a>,
-    and 
-    <a href="http://www.cs.hmc.edu/~rclark/xacc">
-    X-Accountant</a>
-    have tentatively agreed to join forces to work on a unified 
-    personal-finance project.  Subscribe to the xacc mailing list 
-    for more info.
-    <p>
-</dl>
-
-<h2>Meta-Architecture Goals</h2>
-
-<ul>
-<li>
-Create and maintain a clean separation between the data structures and the
-GUI that manipulates them, along the lines of a <b>Model-View-Controller</b>
+<h2>Architectural Goals</h2>
+There are some over-reaching design principles and philosophies that
+we hope to maintain.  Some of these concepts and terms are introduced
+in this section.
+<p>
+First, one must maintain a clean separation between the data structures 
+and the GUI that manipulates them, along the lines of a 
+<b>Model-View-Controller</b>
 paradigm.   Lists of accounts and the transactions in
 them can be thought of as a representation of financial data,
 a <b>Model</b>.   The GUI that adds, modifies and deletes these should 
 be thought of as a manipulator of the data, a <b>Controller</b>.  
-The current Motif GUI is just
-one possible manipulator of the data; other GUI's,
-some simple, some complex, some possibly based on other graphical
-toolkits (Qt, gtk, emacs) should be possible.  
-The <b>View</b> of the data is a modern way of saying "report". 
-One typically does not view, or want to view all of the data, 
-but only a subset: say, only the transactions for the month of May, 
-or only the account totals for certain accounts.  The concept of "View"
-in fact consists of two very separate ideas: the <b>Query Engine</b>
-and the <b>Report Generator</b>.  The Query Engine is used to extract 
-a list of transactions from the Model database, based on a set of dates,
-a set of types, or other criteria.  This list is then typically 
-edited by the controller, or possibly printed.  The Report Generator
-is used to create summary reports about average account balances, 
-or profit&loss statements, or cash-flow statements, or may be graphed
-as pie charts of asset allocations, or graphs asset value over time.
+The Motif or Gnome GUI's are just two
+possible manipulators of the data; others, based on <i>e.g.</i> Qt/KDE,
+emacs, Java applets or Java servlets should be possible.
+<p>
+The <b>View</b> of the data is a subset or slice of the data described
+by the Model.  The View may consist of only the transactions for the 
+month of May, or only the account totals for certain accounts.  The 
+View is used in part to generate the reports and graphs, but it is 
+also that which the Controller interacts with.
+<p>
+However, GnuCash also needs to deal with multiple distributed data 
+sources: stock quotations from the net or transaction confirmations
+from online banks and brokerage houses,  or more mundane sources, 
+such as file imports, or merger of data from several users.  In this 
+language, the concept of a global Model-View is dated, and somewhat 
+inappropriate.  Rather, one is worried about how data is represented
+in the local address space of the GUI, how the GUI manipulates it,
+how date is brought in and merged from external sources, and how that
+data is again output, whether to a file or a local or remote database.
+Thus, the View is essentially a local data cache: its the data that
+is immediately present and being displayed, reported, and manipulated.
+The Model is the abstraction of that data that the GUI (the controller)
+can act on.
+<p>
+In GnuCash, the Model is implemented via the <b>Engine</b> API, and
+the View is the data that is currently in the <b>Engine</b>.  Thus,
+the Engine is a set of programming API's that the GUI (or a script,
+or even a clever command-line-addict) can use to manipulate the data.
+Currently, the Engine is fairly poor, and matches the data types and 
+formats that the GUI can manipulate.  These include transactions, 
+transaction entires (splits), accounts and account heirarchies.
+The Engine has a very simple apply/commit model, and a simple 
+query mechanism for generating reports and views.
+The Engine currently handles only a small set of data sources: 
+it can import and merge in QIF's, it can read and write its own 
+binary byte stream, and can get stock quotes from the net. 
+However, since the Engine is meant to be the interface between 
+the GUI and the financial data, it is meant to be able to do much more.
+<p>
+In particular, it should be possible to back the Engine onto an 
+SQL dataabase, and thereby enable multiple users and/or intrface 
+to more complex accounting ssytems.  The engine should also be 
+expandable to handle other sources of data, such os OFX, 
+Integrion GOLD, the Open Trading Protocol, the OMG CORBA
+General Ledger submission, the IBM San Francisco business objects, 
+or closer to home, Linux Kontor.  In particular, it should
+be possible to use GnuCash not only to view data from these sources,
+but also to manipulate it and send it back.  
+<p>
+The above structure then leads one to view GnuCash not so much as
+a tightly integrated application, but a loose federation of parts
+objects, libraries and interfaces.  In order to facilitate the 
+glueing together of these parts, as well as simplify the questions 
+of customizablity, change and rapid development, GnuCash makes use 
+of an extension language to glue the pieces together. The extension
+language that is most central to Gnucash is Scheme, although some
+of the interfaces are also available through Perl.
 <p>
 
-<li>
-Create a mechanism for obtaining data from multiple financial sources.
-Currently, GnuCash stores data in its own file format; it can also
-import Quicken(TM) QIF files.   However, other sources & sinks of data
-might be stock-quote web sites, on-line banking interfaces such as OFX, 
-access to SQL databases, such as those of Linux-Kontor, or CORBA interfaces, 
-such as the GL Ledger submission to the OMG.  It should be possible to have
-any of these at as data sources, and with the appropriate security mechanisms,
-it should also be possible for a user of GnuCash to manipulate the data
-at the other end.
-<p>
-In particular, with respect to OFX & online banking, one should be able to think
-of GnuCash as a very special browser, capable of browsing financial web sites.
-Instead of talking HTML/HTTP, it would talk OFX or Gold with the remote
-server.  Besides just statically viewing ones bank account, it should also
-allow bill payment and other account manipulation.
-<p>
+<hr>
+<hr>
+<hr>
+<h2>Under construction</h2>
+The stuff below dates back to Summer 1998 and is hrribly out of date. 
 
-<li>
+<h2>Feature Requirements</h2>
 Create both a personal-financial accounting system, as well as a
 business accounting framework.  Although these two goals may seem at
 odds with each other, there is no reason why they could not share
@@ -145,12 +134,9 @@ a ledger window, and a report generation mechanism.   The tools
 created to allow one should be portable enough to be deployed in the
 other application as well.
 <p>
-</ul>
 
 
-<h2>Concrete Architectural and Development Goals</h2>
-The following is a list of the larger, more abstract, and more difficult 
-architectural goals.  
+<h2>Features and Functions</h2>
 
 <dl>
 <dt><b>Graphs, Reports</b>
@@ -390,10 +376,8 @@ architectural goals.
     <p>
 
 </dl>
+<h2> More ...</h2>
 
-<h2>Incremental Development Goals</h2>
-The following is a list of goals and "bug fixes" that should be solved
-immediately, independent of the major goals.
 
 <dl>
 <dt><b>User Interface Ports</b>
@@ -647,82 +631,6 @@ immediately, independent of the major goals.
 </dl>
 </p>
 
-<h2>Status</h2>
-Well, just to show that we are getting things done.
-
-<dl>
-<dt><b>Getting Source with CVS</b>
-<dd> A read-only version of the cvs tree is available on the net.
-     To access it, first, login, as so:
-     <pre>
-     cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot login
-     </pre>
-     The password is "guest".  To get a copy of the source, do a
-     <pre>
-     cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
-     </pre>
-     Note that various versions can be accessed with tags.
-     For example, the tag <tt>xacc-10b17</tt> will get you version
-     1.0.17 and the tag <tt>xacc-11b6</tt> will get you version 1.1.6
-     In particular, the latest code in the 1.0.x series (the stable series)
-     is available on the branch <tt>xacc-10-patch</tt>.  For historical 
-     record, you can view Robin Clark's original source from October 1997
-     at <tt>xacc-09a</tt>.  Things have changed a *lot* since then.
-     <p>
-     (March 1988)
-     <p>
-
-
-<dt><b>Version 1.1 Alpha</b>
-<dd>The Alpha development version 1.1 is out.  Features include:
-    <ul>
-    <li>Data engine cleanly separated from GUI
-    <li>Redesigned register infrastructure will make it much easier to
-        create new/customer register displays, and to port to other GUI's.
-    <li>Splits have been added to the engine; the GUI does not yet expose them.
-    <li>Source available via anonymous CVS
-    <li>Work on GTK ports have begun (thanks to Jeremy Collins & Rob
-        Browning)
-    </ul>
-    (January 1998)
-    <p>
-
-<dt><b>New Improved Web Site</b>
-<dd>We now have a spiffy web site, with good graphics and
-    exciting text, a mailing list, mailing list archives, and a read-only
-    CVS tree. (December 1997)
-    <p>
-
-<dt><b>Splits</b>
-<dd>When performing a transfer, it is well-useful to allow the transfer
-    to be "split" between several accounts.  To implement a split,
-    the best direction might be to have each transaction be a pointer
-    to a set of splits, with each split having its own distinct
-    credited account, memo field and currency value.  Suggestion is to
-    leave the debited account pointer in the main transaction, and have one
-    credited account pointer in each of the splits.  Also, suggest
-    leaving a "cleared" flag in the main transaction, *and* putting a
-    separate cleared flag in each split as well.  This allows the
-    cleared flag to be independently set for both the debited & credited
-    accounts.
-    <p>
-    <b>Status:</b> Essentially more-or-less done (July/August 1998)
-    <p>
-
-</dl>
-
-<h2>Misc Bugs</h2>
-<ul>
-<li>Allow command line to specify qif
-<li>motif -- register colors are bogus
-<li>place num trans in account in the main window.
-<li> cbb-export.qif seems to come in with the wrong sign
-<li>Ability to change bank account name -- check for prexist & merge?
-<li> ability to reparent bank account,
-<li> ability to merge accounts
-<li>ability to change account type.
-</ul>
-
 <h2>Volunteers</h2>
 Your name here as project contributor!
 <ul>
@@ -736,8 +644,6 @@ Your name here as project contributor!
     and has done some work on a GTK-based graphing package.
 <li>Robin Clark &lt;rclark@cs.hmc.edu&gt; wrote the *original* X-Accountant,
     which was later renamed as GnuCash.
-<li>Daniel R Risacher &lt;risacher@worldnet.att.net&gt; is working on a
-    GTK ledger/register/spread-sheet infrastructure.
 </ul>
 This list only mentions some of the recently active developers; many, 
 many others have contributed fixes and patches both large and small.  
