@@ -29,6 +29,7 @@
 
 #include <ctype.h>
 #include <dirent.h>
+#include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -443,7 +444,8 @@ badstring:
 char *
 guid_to_string(const GUID * guid)
 {
-  char *string = malloc(GUID_ENCODING_LENGTH+1);
+  char *string = g_malloc(GUID_ENCODING_LENGTH+1);
+
   if (!string) return NULL;
 
   if(!guid) return(NULL);
