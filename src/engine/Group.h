@@ -193,9 +193,13 @@ Account * xaccGroupGetParentAccount (AccountGroup *);
 /*
  * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
  *    candidate for the next unused account code in this group.
+ *    The returned string is malloced, you must free the returned 
+ *    pointer when done.
  *
  * The xaccAccountGetNextChildCode() method does same as above,
  *    except that it returns a value appropriate for a child account.
+ *    The returned string is malloced, you must free the returned 
+ *    pointer when done.
  *
  * The xaccGroupAutoCode() method will traverse the group, automatically
  *    inserting account codes into those accounts whose account codes 
@@ -207,8 +211,8 @@ Account * xaccGroupGetParentAccount (AccountGroup *);
  *    code.
  */
 
-const char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
-const char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
+char * xaccGroupGetNextFreeCode (AccountGroup *grp, int num_digits);
+char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
