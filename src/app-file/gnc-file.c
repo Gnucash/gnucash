@@ -390,8 +390,8 @@ gnc_post_file_open (const char * filename)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err)
   {
-    const char *buttons[] = { N_("Quit Gnucash"), N_("Open Anyway"),
-			      N_("Don't Open"), NULL };
+    const char *buttons[] = { N_("Quit"), N_("Open Anyway"),
+			      N_("Create New File"), NULL };
     char *fmt = _("GnuCash could not obtain the lock for\n"
 		  "   %s.\n"
 		  "That database may be in use by another user,\n"
