@@ -1,8 +1,27 @@
-AC_INIT(src/guile/gnucash.h.in)
+#
+# FILE:
+# configure.in
+#
+# FUNCTION:
+# implements checks vfor a variety of system-specific functions
+#
+# Contents:
+#   Headers   - Autoconf header stuff
+#   Variables - Hardcoded variables
+#   Programs  - Check for programs binaries
+#   Functions - Check for functions
+#   With      - Check for --with/without options
+#   Enable    - Check for --enable/disable options
+#   Libraries - Check for libraries
+#   Footer    - Autoconf footer stuff
 
+
+### ------------------------------------------------------------------------------
+### Headers
 ### check for various programs, and stuff (do this first because later
 ### commands depend on them):
 
+AC_INIT(src/guile/gnucash.h.in)
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PROG_CC
@@ -10,27 +29,8 @@ AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
-# Check for 'swig'
-AC_PATH_PROG(SWIG,swig,no)	# Sets @SWIG@
-if test x"$SWIG" = xno; then
-	AC_MSG_ERROR(Can't find swig.)
-fi
-
-## Check for Perl
-AC_CHECK_PROGS(PERL,perl5 perl)		# Sets @PERL@
-
-# Make sure Perl was found
-if test x"$PERL" = x; then
-	AC_MSG_ERROR(Can't find Perl.)
-fi
-
-# Make sure it's version 5 or later
-if "$PERL" -e 'exit 1 if $] < 5.0'; then
-	:
-else
-	AC_MSG_ERROR(You need Perl version 5 or later.)
-fi
-
+### ------------------------------------------------------------------------------
+### Variables
 ### Set up all the initial variable values...
 
 CFLAGS="${CFLAGS} -O2 -Wall"
@@ -39,6 +39,108 @@ CFLAGS="${CFLAGS} -O2 -Wall"
 #       CFLAGS="-g -Wall -ansi -pedantic -Wwrite-strings -Wtraditional  -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Winline" 
 #       CFLAGS="-g -Wall -ansi -pedantic"
 
+
+# USE_QUICKFILL:
+AC_DEFINE(USE_QUICKFILL,1)
+
+# Should we uses color (red/black) balances?
+AC_ARG_ENABLE( color,
+       [  --disable-color         don't use color (red/black) balances],
+       AC_DEFINE(USE_NO_COLOR,1),
+       AC_DEFINE(USE_NO_COLOR,0) )
+
+AC_ARG_WITH( opt-style-install,
+  [  --with-opt-style-install   install everything in subdirs of --prefix],
+  OPT_STYLE_INSTALL=1,
+  OPT_STYLE_INSTALL=0)
+AC_SUBST(OPT_STYLE_INSTALL)
+
+AC_ARG_ENABLE( debug,
+       [  --enable-debug          compile with debugging flags set],
+       CFLAGS="${CFLAGS} -g -Wall"
+       LDFLAGS="${LDFLAGS} -g -Wall"
+       AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1),
+       AC_DEFINE(DEBUG_MEMORY,0) AC_DEFINE(USE_DEBUG,0) )
+
+AC_ARG_ENABLE( warnings,
+       [  --enable-warnings         compile with lots of warnings generated],
+       CFLAGS="${CFLAGS} -g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects"
+       LDFLAGS="${LDFLAGS} -g -Wall"
+       AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1) )
+
+### ------------------------------------------------------------------------------
+### Programs
+
+# Check for perl, force version 5
+# AC_CHECK_PROGS(PERL,perl5 perl)		# Sets @PERL@
+AC_PATH_PROG(PERL, perl)
+AC_ARG_WITH(perl,
+  [  --with-perl=FILE              which perl executable to use ],
+  PERL="${with_perl}")
+
+# Make sure Perl was found
+if test x"$PERL" = x; then
+    AC_MSG_ERROR([Cannot find Perl. Try using the --with-perl flag.])
+fi
+
+# Make sure it's version 5 or later
+if "$PERL" -e 'exit 1 if $] < 5.0'; then
+	:
+else
+    AC_MSG_ERROR([Found ${PERL} reports version ]
+                 [`${PERL} -e 'print $]'`, need version 5.*])
+fi
+AC_SUBST(PERL)
+
+# Now check for perl headers
+# This appears to be what Perl's ExtUtils::MakeMaker module does, so
+# I'm reasonably sure it's correct.
+# PERLINCL="/usr/lib/perl5/i386-linux/5.00404"
+#
+PERLINCL=`perl -MConfig -e 'print $Config{"archlibexp"}'`
+AC_ARG_WITH( perl-includes, 
+       [  --with-perl-includes=DIR    specify where to look for perl includes],
+       PERLINCL="$with_perl_includes" )
+
+if test ! -d ${PERLINCL}/CORE; then
+  AC_MSG_ERROR([Missing directory ${PERLINCL}/CORE in the perl include directory])
+fi
+AC_SUBST(PERLINCL)
+
+# Check for 'swig'
+AC_PATH_PROG(SWIG,swig,no)	# Sets @SWIG@
+AC_ARG_WITH(swig,
+  [  --with-swig=FILE              which swig executable to use ],
+  SWIG="${with_swig}")
+
+if test x"$SWIG" = xno; then
+    AC_MSG_ERROR([Cannot find Swig. Try using the --with-swig flag.])
+fi
+
+# Let the user specify gnome paths:
+GNOME_CONFIG_BIN="gnome-config"
+AC_ARG_WITH( gnome-config, 
+  [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
+  GNOME_CONFIG_BIN="$with_gnome_config")
+AC_SUBST(GNOME_CONFIG_BIN)
+
+# Let the user specify a guile-config executable.
+# XXX My guile-1.3 doesn't have a guile-config, but maybe I'm
+# downlevel... are there guile 1.3 .rpms or .debs that have
+# guilec-config in them?  if so we need to publish them.
+# AC_ARG_WITH( guile-config, 
+#   [  --with-guile-config=executable
+#                           which guile-config to use to find guile ],
+#   GUILE_CONFIG="$with_guile_config")
+# AC_PATH_PROG(GUILE_CONFIG,guile-config,no)
+# if test x"$GUILE_CONFIG" = xno; then
+# 	AC_MSG_ERROR([Can't find guile-config.
+#   Install Guile 1.3, then specify the path to guile-config with
+#   --with-guile-config=...])
+# fi
+
+### ------------------------------------------------------------------------------
+### Libraries
 LIBS="$LIBS -lm"
 
 # We're going to set up our own X configure variables.  These are only
@@ -60,59 +162,8 @@ X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
 # XXX - Ask Motif what it wants
 MOTIF_LIBS="-lXm"
 
-# Let the user specify gnome paths:
-GNOME_CONFIG_BIN="gnome-config"
-AC_ARG_WITH( gnome-config, 
-  [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
-  GNOME_CONFIG_BIN="$with_gnome_config")
-AC_SUBST(GNOME_CONFIG_BIN)
-
-# Let the user specify imlib paths:
-AC_ARG_WITH( imlib, 
-       [  --with-imlib=PATH       specify where to look for imlib includes and libs],
-       X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
-
-# Let the user specify a guile-config executable.
-# XXX My guile-1.3 doesn't have a guile-config, but maybe I'm
-# downlevel... are there guile 1.3 .rpms or .debs that have
-# guilec-config in them?  if so we need to publish them.
-# AC_ARG_WITH( guile-config, 
-#   [  --with-guile-config=executable
-#                           which guile-config to use to find guile ],
-#   GUILE_CONFIG="$with_guile_config")
-# AC_PATH_PROG(GUILE_CONFIG,guile-config,no)
-# if test x"$GUILE_CONFIG" = xno; then
-# 	AC_MSG_ERROR([Can't find guile-config.
-#   Install Guile 1.3, then specify the path to guile-config with
-#   --with-guile-config=...])
-# fi
-
-# *******************************************
-# * figure out the configure options:
-
-AC_ARG_ENABLE( debug,
-       [  --enable-debug          compile with debugging flags set],
-       CFLAGS="${CFLAGS} -g -Wall"
-       LDFLAGS="${LDFLAGS} -g -Wall"
-       AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1),
-       AC_DEFINE(DEBUG_MEMORY,0) AC_DEFINE(USE_DEBUG,0) )
-
-AC_ARG_ENABLE( warnings,
-       [  --enable-warnings         compile with lots of warnings generated],
-       CFLAGS="${CFLAGS} -g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects"
-       LDFLAGS="${LDFLAGS} -g -Wall"
-       AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1) )
-
-
-# USE_QUICKFILL:
-AC_DEFINE(USE_QUICKFILL,1)
-
-# Should we uses color (red/black) balances?
-AC_ARG_ENABLE( color,
-       [  --disable-color         don't use color (red/black) balances],
-       AC_DEFINE(USE_NO_COLOR,1),
-       AC_DEFINE(USE_NO_COLOR,0) )
-
+### ------------------------------------------------------------------------------
+### Motif libs -- these are needed for the motif builds only
 # Let the user specify motif paths:
 AC_ARG_WITH( motif, 
        [  --with-motif=PATH       specify where to look for motif includes and libs],
@@ -126,14 +177,8 @@ AC_ARG_WITH( motif-libraries,
        [  --with-motif-libraries=DIR   specify where to look for motif libs],
        X_LIBS="${X_LIBS} -L$with_motif_libraries" )
 
-AC_ARG_WITH( xmhtml-includes, 
-       [  --with-xmhtml-includes=DIR   specify where to look for xmhtml headers],
-       X_CFLAGS="${X_CFLAGS} -I$with_xmhtml_includes" )
-
-AC_ARG_WITH( xmhtml-libraries, 
-       [  --with-xmhtml-libraries=DIR   specify where to look for xmhtml libs],
-       X_LIBS="${X_LIBS} -L$with_xmhtml_libraries" )
-
+### ------------------------------------------------------------------------------
+### Gnome libs -- these are needed for the gnome builds only
 # Let the user specify gnome paths:
 # -I...libgnomesupport is to fix bug in gnome-1.3 release
 AC_ARG_WITH( gnome, 
@@ -148,24 +193,22 @@ AC_ARG_WITH( gnome-libraries,
        [  --with-gnome-libraries=DIR   specify where to look for gnome libs],
        X_LIBS="${X_LIBS} -L$with_gnome_libraries" )
 
-AC_ARG_WITH( opt-style-install,
-  [  --with-opt-style-install   install everything in subdirs of --prefix],
-  OPT_STYLE_INSTALL=1,
-  OPT_STYLE_INSTALL=0)
-AC_SUBST(OPT_STYLE_INSTALL)
+# Let the user specify imlib paths:
+AC_ARG_WITH( imlib, 
+       [  --with-imlib=PATH       specify where to look for imlib includes and libs],
+       X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
 
-# This appears to be what Perl's ExtUtils::MakeMaker module does, so
-# I'm reasonably sure it's correct.
-# PERLINCL="-I/usr/lib/perl5/i386-linux/5.00404/CORE"
-# XXX - However, 'configure' should still find the proper version of Perl.
-#
-PERLINCL=-I`perl -MConfig -e 'print $Config{"archlibexp"},"/CORE"'`
-AC_ARG_WITH( perl-includes, 
-       [  --with-perl-includes=DIR    specify where to look for perl CORE includes],
-       PERLINCL="-I$with_perl_includes -I$with_perl_includes/CORE" )
-AC_SUBST(PERLINCL)
+### ------------------------------------------------------------------------------
+# The XmHTML widget is used by motif and gnome alike.
 
-# *******************************************
+AC_ARG_WITH( xmhtml-includes, 
+       [  --with-xmhtml-includes=DIR   specify where to look for xmhtml headers],
+       X_CFLAGS="-I$with_xmhtml_includes ${X_CFLAGS}" )
+
+AC_ARG_WITH( xmhtml-libraries, 
+       [  --with-xmhtml-libraries=DIR   specify where to look for xmhtml libs],
+       X_LIBS="-L$with_xmhtml_libraries ${X_LIBS}" )
+
 # the XmHTML widget needs libz, libjpeg, libpng and libm
 # it also uses #ifdef's not #if's so DONT #def to zero.
 AC_CHECK_LIB(z, deflateEnd,
@@ -174,17 +217,6 @@ AC_CHECK_LIB(jpeg, jpeg_read_scanlines,
         AC_DEFINE(HAVE_JPEG,1) LIBS="-ljpeg $LIBS")
 AC_CHECK_LIB(png, png_read_image,
         AC_DEFINE(HAVE_PNG,1) LIBS="-lpng $LIBS")
-
-## Nana
-# XXX - There should probably be a --without-nana option (e.g., for
-# someone who happens to have it installed on his local machine, but
-# is building GnuCash for people who might not have it).
-
-# See if the <nana.h> header file can be found.
-AC_CHECK_HEADERS(nana.h)
-AC_CHECK_LIB(nana,L_buffer_create,
-	LIBNANA="-lnana")
-AC_SUBST(LIBNANA)
 
 # This should be done in the OTHER_LIBRARIES argument to AC_CHECK_LIB
 # if it's actually needed and Makefile.in's should be using
@@ -205,6 +237,19 @@ AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
 AC_SUBST(XMHTML_TARGET)
 AC_SUBST(XMHTML_INC)
 
+### ------------------------------------------------------------------------------
+## Nana
+# XXX - There should probably be a --without-nana option (e.g., for
+# someone who happens to have it installed on his local machine, but
+# is building GnuCash for people who might not have it).
+
+# See if the <nana.h> header file can be found.
+AC_CHECK_HEADERS(nana.h)
+AC_CHECK_LIB(nana,L_buffer_create,
+	LIBNANA="-lnana")
+AC_SUBST(LIBNANA)
+
+### ------------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.
 AC_CHECK_LIB(readline, readline)
 
@@ -218,25 +263,30 @@ AC_CHECK_LIB(readline, readline)
 AC_MSG_CHECKING([for guile])
 
 GNC_LIBS_SAFE=${LIBS}
-for GNC_TEST_LIBS in "-lguile" "-lguile -ldl" "-lguile -lqthreads" \
-  "-lguile -ltermcap" "-lguile -lqthreads -ltermcap"; do
-  if test x"${GUILELIBS}" != x; then
-    AC_MSG_RESULT([found in ${GUILELIBS}])
-    break
-  else
-    LIBS="${GNC_TEST_LIBS} ${GNC_LIBS_SAFE}"
-    AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
-      GUILELIBS="${GNC_TEST_LIBS}")
-  fi
-done
+AC_CACHE_CHECK([for guile], ac_cv_lib_guile,    
+    for GNC_TEST_LIBS in "-lguile" "-lguile -ldl" "-lguile -lqthreads" \
+        "-lguile -ltermcap" "-lguile -lqthreads -ltermcap"; do
+        if test x"${GUILELIBS}" != x; then
+#           AC_MSG_RESULT([found in ${GUILELIBS}])
+            ac_cv_lib_guile=${GUILELIBS}
+            break
+        else
+            LIBS="${GNC_TEST_LIBS} ${GNC_LIBS_SAFE}"
+            AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
+            GUILELIBS="${GNC_TEST_LIBS}")
+        fi
+    done
+)
+GUILELIBS=${ac_cv_lib_guile}
             
 if test x"${GUILELIBS}" = x; then
-  AC_MSG_ERROR(Cannot link with guile.  Do you have guile 1.3 installed?)
+  AC_MSG_ERROR([Cannot link with guile.  Do you have guile 1.3 installed?])
 fi
 
 AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
 
+### ------------------------------------------------------------------------------
 ### Plotutils
 
 AC_CHECK_LIB(plot, openpl,
@@ -252,6 +302,7 @@ AC_SUBST(HAVE_PLOTUTILS)
 
 AC_SUBST(MOTIF_LIBS)
 
+### ------------------------------------------------------------------------------
 #############################################################
 ### Set up the install style and all the default paths... ###
 

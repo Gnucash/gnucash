@@ -28,7 +28,7 @@ INCLPATH = \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/include \
-				   @PERLINCL@ \
+           -I@PERLINCL@/CORE \
            -I$(prefix)/include
 
 # set -Dbool=char because the perl headers need this
@@ -53,7 +53,7 @@ include @top_srcdir@/Makefile.common
 default: gnucash.so 
 
 gnucash.so: ${OBJS} ../../engine/libengine.a
-	gcc -shared ${OBJS} ../../engine/libengine.a -L@libdir@ -lnana -o gnucash.so
+	gcc -shared ${OBJS} ../../engine/libengine.a -L@libdir@ ${LIBNANA} -o gnucash.so
 
 SWIG_FILTER    := %P.h %/util.h
 SWIG_ENGINE_HDRS := \

@@ -6,12 +6,18 @@ srcdir  = @srcdir@
 VPATH   = @srcdir@
 
 prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+
+# datadir is usually /usr/share/
 datadir=@datadir@
-  # i.e. /usr/share
+
+# localstatedir is usually /var/
 localstatedir=@localstatedir@
-  # i.e. /var/
+
+# sysconfdir is usually /etc/
 sysconfdir=@sysconfdir@
-  # i.e. /etc/
+
 includedir=@includedir@
 
 CC           = @CC@

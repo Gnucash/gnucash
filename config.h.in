@@ -36,7 +36,7 @@
 #define  USE_DEBUG           
 
 /* Turn on nana assertion checking */
-#undef  HAVE_NANA_H
+#undef  HAVE_LIBNANA
 
 /* Enable quickfill in register window */
 #define  USE_QUICKFILL       
@@ -49,21 +49,16 @@
 #define  HAVE_XPM            
 
 /* Use the new XmHTML widdget instead of the old htmlw widget */
+#define  HAVE_LIBXMHTML 1
+
+/* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               
 #undef HAVE_PNG             
 #undef HAVE_JPEG            
 
-/* The XmHTML widget requires XPM to be installed */
-#if HAVE_XPM
-#undef  USE_HTMLW   
-#define USE_XMHTML           1
-#else
-/* NCSA Mosaic htmlw widget is no longer distributed with xacc,
- * due to license restrictions, and overall broken-ness */
-/* #define USE_HTMLW            1 */
-#undef USE_XMHTML  
-#endif
-
 #undef HAVE_PLOTUTILS
+
+/* Configure found the function malloc_usable_size */
+#define  HAVE_MALLOC_USABLE_SIZE  
 
 #endif
