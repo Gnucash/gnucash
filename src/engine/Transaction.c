@@ -44,9 +44,9 @@
  *
  * The following values have significance:
  * 0 -- anything goes
- * 1 -- The sum of all splits in a transaction will be'
+ * 1 -- The sum of all splits in a transaction will be
  *      forced to be zero, even if this requires the
- *      creation of additonal splits.  Note that a split
+ *      creation of additional splits.  Note that a split
  *      whose value is zero (e.g. a stock price) can exist
  *      by itself. Otherwise, all splits must come in at 
  *      least pairs.
@@ -777,32 +777,37 @@ xaccTransCommitEdit (Transaction *trans)
    /* At this point, we check to see if we have a valid transaction.
     * As a result of editing, we could end up with a transaction that
     * has no splits in it, in which case we delete the transaction and
-    * return.  Alternately the transaction may have only one split in 
-    * it, in which case ... that's OK if and only if the split has no 
-    * value (i.e. is only recording a price).  Otherwise, a single
-    * split with a value can't possibly balance, thus violating the 
-    * rules of double-entry, and that's way bogus. So delete 
-    * the split, delete the transaction.  I suppose we could 
-    * generate an error or something like that at this point,
-    * to let the user know that we blew away a split.
+    * return.  
     */
-
    split = trans->splits[0];
-   if (!split ||
-       ((NULL == trans->splits[1]) && (!(DEQ(0.0, split->damount)))))
+   if (!split)
    {
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
-      if (split) {
-         acc = split->acc;
-         MARK_SPLIT (split);
-         xaccAccountRemoveSplit (acc, split);
-         xaccAccountRecomputeBalance (acc);
-         xaccFreeSplit (split);
-         trans->splits[0] = NULL;
-      }
       xaccFreeTransaction (trans);
       return;
+   }
+
+   /* Alternately the transaction may have only one split in 
+    * it, in which case ... that's OK if and only if the split has no 
+    * value (i.e. is only recording a price).  Otherwise, a single
+    * split with a value can't possibly balance, thus violating the 
+    * rules of double-entry, and that's way bogus. So create 
+    * a matching opposite and place it either here (if force==1), 
+    * or in some dummy account (if force==2).
+    */
+   if ((1 == force_double_entry) &&
+       (NULL == trans->splits[1]) && (!(DEQ(0.0, split->damount))))
+   {
+      Split * s = xaccMallocSplit();
+      xaccSplitSetMemo  (s, split->memo);
+      xaccSplitSetAction (s, split->action);
+      s->damount     = -(split->damount);
+      s->share_price = split->share_price;
+
+      xaccTransAppendSplit (trans, s);
+      s->acc = NULL;
+      xaccAccountInsertSplit (split->acc, s);
    }
 
    trans->open &= ~DEFER_REBALANCE;
