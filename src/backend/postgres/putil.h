@@ -284,7 +284,7 @@ int finishQuery(PGBackend *be);
  */
 #define COMP_DATE(sqlname,fun,ndiffs) { 			\
     Timespec eng_time = fun;					\
-    Timespec sql_time = gnc_iso8601_to_timespec_local(		\
+    Timespec sql_time = gnc_iso8601_to_timespec_gmt(		\
                      DB_GET_VAL(sqlname,0)); 			\
     if (eng_time.tv_sec != sql_time.tv_sec) {			\
        char buff[80];						\
@@ -302,7 +302,7 @@ int finishQuery(PGBackend *be);
  */
 #define COMP_NOW(sqlname,fun,ndiffs) { 	 			\
     Timespec eng_time = xaccTransRetDateEnteredTS(ptr);		\
-    Timespec sql_time = gnc_iso8601_to_timespec_local(		\
+    Timespec sql_time = gnc_iso8601_to_timespec_gmt(		\
                      DB_GET_VAL(sqlname,0)); 			\
     if (eng_time.tv_sec > sql_time.tv_sec) {			\
        char buff[80];						\
