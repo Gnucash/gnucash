@@ -319,8 +319,7 @@
            (append 
             (or
              (gnc:group-get-subaccounts
-              (gnc:account-get-children
-               (car accounts)))
+              (gnc:account-get-children (car accounts)))
              '())
             (allsubaccounts (cdr accounts))))))
 
