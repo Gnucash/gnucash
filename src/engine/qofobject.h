@@ -39,8 +39,8 @@
 #define GNC_OBJECT_VERSION 1
 
 typedef struct _QofObject QofObject;
-typedef void (*foreachTypeCB) (QofObject *type, gpointer user_data);
-typedef void (*foreachBackendTypeCB) (GNCIdTypeConst type,
+typedef void (*QofForeachTypeCB) (QofObject *type, gpointer user_data);
+typedef void (*QofForeachBackendTypeCB) (GNCIdTypeConst type,
 				      gpointer backend_data,
 				      gpointer user_data);
 
@@ -74,7 +74,7 @@ struct _QofObject {
 
 };
 
-void qof_object_foreach_type (foreachTypeCB cb, gpointer user_data);
+void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 void qof_object_foreach (GNCIdTypeConst type_name, QofBook *book, 
 		       foreachObjectCB cb, gpointer user_data);
@@ -105,7 +105,7 @@ gpointer qof_object_lookup_backend (GNCIdTypeConst type_name,
 				 const char *backend_name);
 
 void qof_object_foreach_backend (const char *backend_name,
-			      foreachBackendTypeCB cb,
+			      QofForeachBackendTypeCB cb,
 			      gpointer user_data);
 
 #endif /* QOF_OBJECT_H_ */

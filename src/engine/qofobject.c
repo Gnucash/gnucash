@@ -94,7 +94,7 @@ void qof_object_mark_clean (QofBook *book)
   }
 }
 
-void qof_object_foreach_type (foreachTypeCB cb, gpointer user_data)
+void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data)
 {
   GList *l;
 
@@ -267,7 +267,7 @@ gpointer qof_object_lookup_backend (GNCIdTypeConst type_name,
 }
 
 struct foreach_data {
-  foreachBackendTypeCB	cb;
+  QofForeachBackendTypeCB	cb;
   gpointer 		user_data;
 };
 
@@ -283,7 +283,7 @@ static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
 }
 
 void qof_object_foreach_backend (const char *backend_name,
-			      foreachBackendTypeCB cb,
+			      QofForeachBackendTypeCB cb,
 			      gpointer user_data)
 {
   GHashTable *ht;

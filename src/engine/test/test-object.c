@@ -18,13 +18,13 @@ static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
 static void test_foreach (QofBook *, const char *);
 
-static GncObject_t bus_obj = {
+static QofObject bus_obj = {
   GNC_OBJECT_VERSION,
   TEST_MODULE_NAME,
   TEST_MODULE_DESC,
   NULL,				/* create */
   NULL,				/* destroy */
-  NULL,                         /* is dirty */
+  NULL,           /* is dirty */
   NULL,				/* mark_clean */
   foreach,
   printable,
