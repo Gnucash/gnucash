@@ -106,7 +106,7 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
     break;
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
-    num_cols = 9;
+    num_cols = 8;
     break;
   default:
     g_assert (FALSE);
@@ -163,7 +163,6 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, 5);
     gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, 6);
     gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 7);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXVAL_CELL, 0, 8);
 
     break;
 
