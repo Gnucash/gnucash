@@ -1,6 +1,5 @@
 /********************************************************************\
  * split-register.h -- split register api                           *
- * Copyright (C) 1998-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,6 +19,36 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Register
+    The register is the spread-sheet-like area that looks like a 
+    checkbook register.  It displays transactions, and allows the 
+    user to edit transactions in-place.  The register does *not*
+    contain any of the other window decorations that one might want 
+    to have for a fre-standing window (e.g. menubars, toolbars, etc.)
+
+    All user input to the register is handled by the 'cursor', which
+    is mapped onto one of the displayed rows in the register.
+
+    The layout of the register is configurable.  There's a broad
+    variety of cell types to choose from:  date cells, which know 
+    how to parse dates; price cells, which know how to parse prices,
+    etc.  These cells can be laid out in any column; even a multi-row
+    layout is supported.  The name 'split-register' is derived from
+    the fact that this register can display multiple rows of 
+    transaction splits underneath a transaction title/summary row.
+
+    This code is almost, but not quite, independent of the GnuCash
+    financial object definitions, and thus can be almost, but not 
+    quite, be used in software other than GnuCash.  Unfortunately, 
+    crud has snuck in; there's several places where Gnucash Transactions
+    and GnuCash Accounts are accessed directly, and that's wrong;
+    these should be cleaned up.
+    @{ 
+
+    @file split-register.h
+    @brief Checkbook Register Display Area
+    @author Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>
+*/
 
 #ifndef SPLIT_REGISTER_H
 #define SPLIT_REGISTER_H
@@ -30,10 +59,7 @@
 #include "Transaction.h"
 #include "table-allgui.h"
 
-
-/** Datatypes *******************************************************/
-
-/* Register types.
+/** Register types.
  * "registers" are single-account display windows.
  * "ledgers" are multiple-account display windows */
 typedef enum
@@ -67,7 +93,7 @@ typedef enum
   REG_STYLE_JOURNAL
 } SplitRegisterStyle;
 
-/* Cell Names. T* cells are transaction summary cells */
+/** Cell Names. T* cells are transaction summary cells  */
 #define ACTN_CELL  "action"
 #define BALN_CELL  "balance"
 #define CRED_CELL  "credit"
@@ -93,14 +119,15 @@ typedef enum
 #define XFRM_CELL  "account"
 #define VNOTES_CELL "void-notes"
 
-/* Cursor Names */
+/** Cursor Names  */
 #define CURSOR_SINGLE_LEDGER  "cursor-single-ledger"
 #define CURSOR_DOUBLE_LEDGER  "cursor-double-ledger"
 #define CURSOR_SINGLE_JOURNAL "cursor-single-journal"
 #define CURSOR_DOUBLE_JOURNAL "cursor-double-journal"
 #define CURSOR_SPLIT          "cursor-split"
 
-/* Types of cursors */
+
+/** Types of cursors */
 typedef enum
 {
   CURSOR_CLASS_NONE = -1,
@@ -131,7 +158,7 @@ typedef struct sr_info SRInfo;
 
 struct split_register
 {
-  /* the table itself that implements the underlying GUI. */
+  /** The table itself that implements the underlying GUI. */
   Table * table;
 
   SplitRegisterType type;
@@ -140,67 +167,67 @@ struct split_register
   gboolean use_double_line;
   gboolean is_template;
 
-  /* private data; outsiders should not access this */
+  /** private data; outsiders should not access this */
   SRInfo * sr_info;
 };
 
-/* Callback function type */
+/** Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
 
 
-/** Prototypes ******************************************************/
+/* Prototypes ******************************************************/
 
-/* Create and return a new split register. */
+/** Create and return a new split register. */
 SplitRegister * gnc_split_register_new (SplitRegisterType type,
                                         SplitRegisterStyle style,
                                         gboolean use_double_line,
                                         gboolean is_template);
 
-/* Configure the split register. */
+/** Configure the split register. */
 void gnc_split_register_config (SplitRegister *reg,
                                 SplitRegisterType type,
                                 SplitRegisterStyle style,
                                 gboolean use_double_line);
 
-/* Destroy the split register. */
+/** Destroy the split register. */
 void gnc_split_register_destroy (SplitRegister *reg);
 
-/* Make a register window read-only. */
+/** Make a register window read-only. */
 void gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only);
 
-/* Set the template account used by template registers */
+/** Set the template account used by template registers */
 void gnc_split_register_set_template_account (SplitRegister *reg,
                                               Account *template_account);
 
-/* Returns the class of the current cursor */
+/** Returns the class of the current cursor */
 CursorClass gnc_split_register_get_current_cursor_class (SplitRegister *reg);
 
-/* Returns the class of the cursor at the given virtual cell location. */
+/** Returns the class of the cursor at the given virtual cell location. */
 CursorClass gnc_split_register_get_cursor_class
                                               (SplitRegister *reg,
                                                VirtualCellLocation vcell_loc);
 
-/* Sets the user data and callback hooks for the register. */
+/** Sets the user data and callback hooks for the register. */
 void gnc_split_register_set_data (SplitRegister *reg, gpointer user_data,
                                   SRGetParentCallback get_parent);
 
-/* Returns the transaction which is the parent of the current split. */
+/** Returns the transaction which is the parent of the current split. */
 Transaction * gnc_split_register_get_current_trans (SplitRegister *reg);
 
-/* Returns the split at which the cursor is currently located. */
+/** Returns the split at which the cursor is currently located. */
 Split * gnc_split_register_get_current_split (SplitRegister *reg);
 
-/* Returns the blank split or NULL if there is none. */
+/** Returns the blank split or NULL if there is none. */
 Split * gnc_split_register_get_blank_split (SplitRegister *reg);
 
-/*  Searches the split register for the given split. If found, it
+/**  Searches the split register for the given split. If found, it
  *    returns TRUE and vcell_loc is set to the location of the
  *    split. Otherwise, returns FALSE. */
 gboolean
 gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
                                        VirtualCellLocation *vcell_loc);
 
-/* Searches the split register for the given split. If found, it
+/** Searches the split register for the given split. If found, it
  *    returns TRUE and virt_loc is set to the location of either the
  *    debit or credit column in the split, whichever one is
  *    non-blank. Otherwise, returns FALSE. */
@@ -208,64 +235,64 @@ gboolean
 gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
                                               VirtualLocation *virt_loc);
 
-/* Given the current virtual location, find the split that anchors
+/** Given the current virtual location, find the split that anchors
  * this transaction to the current register. Otherwise, returns NULL.
  */
 Split *
 gnc_split_register_get_current_trans_split (SplitRegister *reg,
                                             VirtualCellLocation *vcell_loc);
 
-/* Duplicates either the current transaction or the current split
+/** Duplicates either the current transaction or the current split
  *    depending on the register mode and cursor position. Returns the
  *    split just created, or the 'main' split of the transaction just
  *    created, or NULL if nothing happened. */
 Split * gnc_split_register_duplicate_current (SplitRegister *reg);
 
-/* Makes a copy of the current entity, either a split or a
+/** Makes a copy of the current entity, either a split or a
  *    transaction, so that it can be pasted later. */
 void gnc_split_register_copy_current (SplitRegister *reg);
 
-/* Equivalent to copying the current entity and the deleting it with
+/** Equivalent to copying the current entity and the deleting it with
  *    the approriate delete method. */
 void gnc_split_register_cut_current (SplitRegister *reg);
 
-/* Pastes a previous copied entity onto the current entity, but only
+/** Pastes a previous copied entity onto the current entity, but only
  *    if the copied and current entity have the same type. */
 void gnc_split_register_paste_current (SplitRegister *reg);
 
-/* Deletes the split associated with the current cursor, if both are
+/** Deletes the split associated with the current cursor, if both are
  *    non-NULL. Deleting the blank split just clears cursor values. */
 void gnc_split_register_delete_current_split (SplitRegister *reg);
 
-/* Deletes the transaction associated with the current cursor, if both
+/** Deletes the transaction associated with the current cursor, if both
  *    are non-NULL. */
 void gnc_split_register_delete_current_trans (SplitRegister *reg);
 
-/* Voids the transaction associated with the current cursor, if
+/** Voids the transaction associated with the current cursor, if
  *    non-NULL. */
 void gnc_split_register_void_current_trans (SplitRegister *reg,
 					    const char *reason);
 
-/* Unvoids the transaction associated with the current cursor, if
+/** Unvoids the transaction associated with the current cursor, if
  *    non-NULL. */
 void gnc_split_register_unvoid_current_trans (SplitRegister *reg);
 
-/* Deletes the non-transaction splits associated wih the current
+/** Deletes the non-transaction splits associated wih the current
  *    cursor, if both are non-NULL. */
 void gnc_split_register_empty_current_trans_except_split  (SplitRegister *reg, Split *split);
 void gnc_split_register_empty_current_trans  (SplitRegister *reg);
 
-/* Cancels any changes made to the current cursor, reloads the cursor
+/** Cancels any changes made to the current cursor, reloads the cursor
  *    from the engine, reloads the table from the cursor, and updates
  *    the GUI. The change flags are cleared. */
 void gnc_split_register_cancel_cursor_split_changes (SplitRegister *reg);
 
-/* Cancels any changes made to the current pending transaction,
+/** Cancels any changes made to the current pending transaction,
  *    reloads the table from the engine, and updates the GUI. The
  *    change flags are cleared. */
 void gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg);
 
-/* Copy transaction information from a list of splits to the rows of
+/** Copy transaction information from a list of splits to the rows of
  *    the register GUI.  The third argument, default_source_acc, will
  *    be used to initialize the source account of a new, blank split
  *    appended to the tail end of the register.  This "blank split" is
@@ -274,7 +301,7 @@ void gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg);
 void gnc_split_register_load (SplitRegister *reg, GList * split_list,
                               Account *default_source_acc);
 
-/* Copy the contents of the current cursor to a split. The split and
+/** Copy the contents of the current cursor to a split. The split and
  *    transaction that are updated are the ones associated with the
  *    current cursor (register entry) position. If the do_commit flag
  *    is set, the transaction will also be committed. If it is the
@@ -283,46 +310,49 @@ void gnc_split_register_load (SplitRegister *reg, GList * split_list,
  *    something was changed. */
 gboolean gnc_split_register_save (SplitRegister *reg, gboolean do_commit);
 
-/* Causes a redraw of the register window associated with reg. */
+/** Causes a redraw of the register window associated with reg. */
 void gnc_split_register_redraw (SplitRegister *reg);
 
-/* Returns TRUE if the register has changed cells. */
+/** Returns TRUE if the register has changed cells. */
 gboolean gnc_split_register_changed (SplitRegister *reg);
 
-/* If TRUE, visually indicate the demarcation between splits with post
+/** If TRUE, visually indicate the demarcation between splits with post
  * dates prior to the present, and after. This will only make sense if
  * the splits are ordered primarily by post date. */
 void gnc_split_register_show_present_divider (SplitRegister *reg,
                                               gboolean show_present);
 
-/* Set the colors used by SplitRegisters */
+/** Set the colors used by SplitRegisters */
 void gnc_split_register_set_colors (SplitRegisterColors reg_colors);
 
-/* If use_red is TRUE, negative amounts will be printed in red. */
+/** If use_red is TRUE, negative amounts will be printed in red. */
 void gnc_split_register_colorize_negative (gboolean use_red);
 
-/* Expand the current transaction if it is collapsed. */
+/** Expand the current transaction if it is collapsed. */
 void gnc_split_register_expand_current_trans (SplitRegister *reg,
                                               gboolean expand);
 
-/* Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
+/** Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
 gboolean gnc_split_register_current_trans_expanded (SplitRegister *reg);
 
-/* Return the debit and credit strings used in the register. */
+/** Return the debit and credit strings used in the register. */
 const char * gnc_split_register_get_debit_string (SplitRegister *reg);
 const char * gnc_split_register_get_credit_string (SplitRegister *reg);
 
-/* Private functions */
+/** Private function -- outsiders must not use this */
 gboolean gnc_split_register_full_refresh_ok (SplitRegister *reg);
+
+/** Private function -- outsiders must not use this */
 void     gnc_split_register_load_xfer_cells (SplitRegister *reg,
                                              Account *base_account);
 
+/** Private function -- outsiders must not use this */
 void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,
                                 gboolean use_cut_semantics,
                                 gboolean do_commit);
 
-/* (maybe) pop up the exchange-rate dialog for the current split.
- * if force_dialog is TRUE, the forces the dialog to to be called.
+/** Pop up the exchange-rate dialog, maybe, for the current split.
+ * If force_dialog is TRUE, the forces the dialog to to be called.
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
  */
@@ -330,3 +360,5 @@ gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 
 #endif
+
+/** @} */
