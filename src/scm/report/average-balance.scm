@@ -49,8 +49,8 @@
       ;; from date  
       (gnc:register-runavg-option
        (gnc:make-date-option
-        "Report Options" "From"
-        "a" "Report Items from this date" 
+        (N_ "Report Options") (N_ "From")
+        "a" (N_ "Report Items from this date") 
         (lambda ()
           (let ((bdtime (localtime (current-time))))
             (set-tm:sec bdtime 0)
@@ -65,8 +65,8 @@
       ;; to-date
       (gnc:register-runavg-option
        (gnc:make-date-option
-        "Report Options" "To"
-        "c" "Report items up to and including this date"
+        (N_ "Report Options") (N_ "To")
+        "c" (N_ "Report items up to and including this date")
         (lambda ()
           (let ((bdtime (localtime (current-time))))
             (set-tm:sec bdtime 59)
@@ -79,8 +79,8 @@
 
       (gnc:register-runavg-option
        (gnc:make-account-list-option
-        "Report Options" "Account"
-        "d" "Do transaction report on this account"
+        (N_ "Report Options") (N_ "Account")
+        "d" (N_ "Do transaction report on this account")
         (lambda ()
           (let ((current-accounts (gnc:get-current-accounts)))
             (cond ((not (null? current-accounts)) current-accounts)
@@ -90,8 +90,8 @@
 
       (gnc:register-runavg-option
        (gnc:make-multichoice-option
-        "Report Options" "Step Size"
-        "b" "The amount of time between data points" 'WeekDelta
+        (N_ "Report Options") (N_ "Step Size")
+        "b" (N_ "The amount of time between data points") 'WeekDelta
         (list #(DayDelta "Day" "Day")
               #(WeekDelta "Week" "Week")
               #(TwoWeekDelta "2Week" "Two Week")
@@ -101,17 +101,22 @@
 
       (gnc:register-runavg-option
        (gnc:make-simple-boolean-option
-        "Report Options" "Sub-Accounts"
-        "e" "Include sub-accounts of all selected accounts" #f))
+        (N_ "Report Options") (N_ "Sub-Accounts")
+        "e" (N_ "Include sub-accounts of all selected accounts") #f))
 
       (gnc:register-runavg-option
        (gnc:make-multichoice-option
-        "Report Options" "Plot Type"
-        "f" "The type of graph to generate" 'NoPlot
-        (list #(NoPlot "Nothing" "Make No Plot")
-              #(AvgBalPlot "Average" "Average Balance")
-              #(GainPlot "Net Gain" "Net Gain")
-              #(GLPlot "Gain/Loss" "Gain And Loss"))))
+        (N_ "Report Options") (N_ "Plot Type")
+        "f" (N_ "The type of graph to generate") 'NoPlot
+        (list (list->vector
+               (list 'NoPlot (N_ "Nothing") (N_ "Make No Plot")))
+              (list->vector
+               (list 'AvgBalPlot (N_ "Average") (N_ "Average Balance")))
+              (list->vector
+               (list 'GainPlot (N_ "Net Gain") (N_ "Net Gain")))
+              (list->vector
+               (list 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss"))))))
+
       gnc:*runavg-track-options*))
 
   ;; Text table 
@@ -311,11 +316,9 @@
              '())
             (allsubaccounts (cdr accounts))))))
 
-  (define string-db (gnc:make-string-database))
-
   (define (column-list)
-    (map (lambda (key) (string-db 'lookup key))
-         (list 'beginning 'ending 'average 'max 'min 'net-gain 'gain 'loss)))
+    (list (_ "Beginning") (_ "Ending") (_ "Average") (_ "Max") (_ "Min")
+          (_ "Net Gain") (_ "Gain") (_ "Loss")))
 
   (define (average-balance-renderer options)
     (let ((gov-fun (lambda (value)
@@ -343,12 +346,12 @@
         (cond ((null? accounts)
 	       (set! rept-text
                   (list "<TR><TD>"
-                        (string-db 'lookup 'no-account)
+                        (_ "You have not selected an account.")
                         "</TD></TR>")))
 	      ((gnc:timepair-le enddate begindate)
 	       (set! rept-text
 		    (list "<TR><TD><EM>"
-			  (string-db 'lookup 'dates-reversed)
+                          (_ "Please choose appropriate dates - the \"To\" date should be *after* the \"From\" date.")
 			  "</EM></TD></TR>")))
             (else (begin
 
@@ -403,7 +406,7 @@
                                   "set title '" acctname "'\n"
                                   "set ylabel '" acctcurrency "'\n"
                                   "set xlabel '"
-                                  (string-db 'lookup 'period-ending)
+                                  (_ "Period Ending")
                                   "'\n")))
 
                     (data-to-gpfile columns (gnuplot-reduced-list rept-data)
@@ -413,33 +416,19 @@
                                     fn "'" plotstr
                                     "\"|gnuplot -persist " )))))))
 
-        (append prefix
-                (if (null? accounts)
-                    '()
-                    (list (sprintf #f
-                                   (string-db 'lookup
-                                              (if dosubs
-                                                  'report-for-and
-                                                  'report-for))
-                                   acctname)
-                          "<p>\n"))
-                (list rept-text)
-                suffix))))
-  
-  ;; Define the strings
-  (string-db 'store 'beginning "Beginning")
-  (string-db 'store 'ending "Ending")
-  (string-db 'store 'average "Average")
-  (string-db 'store 'max "Max")
-  (string-db 'store 'min "Min")
-  (string-db 'store 'net-gain "Net Gain")
-  (string-db 'store 'gain "Gain")
-  (string-db 'store 'loss "Loss")
-  (string-db 'store 'no-account "You have not selected an account.")
-  (string-db 'store 'dates-reversed "Please choose appropriate dates - the \"To\" date should be *after* the \"From\" date.")
-  (string-db 'store 'period-ending "Period Ending")
-  (string-db 'store 'report-for "Report for %s.")
-  (string-db 'store 'report-for-and "Report for %s and all subaccounts.")
+        (append
+         prefix
+         (if (null? accounts)
+             '()
+             (list
+              (sprintf #f
+                       (if dosubs
+                           (_ "Report for %s and all subaccounts.")
+                           (_ "Report for %s."))
+                       acctname)
+              "<p>\n"))
+         (list rept-text)
+         suffix))))
 
   (gnc:define-report
    'version 1

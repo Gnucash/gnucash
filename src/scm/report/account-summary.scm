@@ -30,8 +30,8 @@
       ;; to-date
       (gnc:register-accsum-option
        (gnc:make-date-option
-        "Report Options" "To"
-        "a" "Report up to and including this date"
+        (N_ "Report Options") (N_ "To")
+        "a" (N_ "Report up to and including this date")
         (lambda ()
           (let ((bdtime (localtime (current-time))))
             (set-tm:sec bdtime 59)
@@ -43,8 +43,8 @@
       ;; account(s) to do report on
       (gnc:register-accsum-option
        (gnc:make-account-list-option
-        "Report Options" "Account"
-        "b" "Report on these account(s)"
+        (N_ "Report Options") (N_ "Account")
+        "b" (N_ "Report on these account(s)")
         (lambda ()
           (let ((current-accounts (gnc:get-current-accounts)))
             (cond ((not (null? current-accounts)) current-accounts)
@@ -54,8 +54,8 @@
 
       (gnc:register-accsum-option
        (gnc:make-simple-boolean-option
-        "Report Options" "Sub-Accounts"
-        "c" "Include Sub-Accounts of each selected Account" #f))
+        (N_ "Report Options") (N_ "Sub-Accounts")
+        "c" (N_ "Include Sub-Accounts of each selected Account") #f))
 
       gnc:*accsum-track-options*))
 

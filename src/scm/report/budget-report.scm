@@ -793,8 +793,8 @@
   ;; hack alert - could somebody set this to an appropriate date?
   (gnc:register-budget-report-option
    (gnc:make-date-option
-    "Report Options" "From"
-    "a" "Report start date" 
+    (N_ "Report Options") (N_ "From")
+    "a" (N_ "Report start date") 
     (lambda ()
       (let ((bdtime (localtime (current-time))))
 	(set-tm:sec bdtime 0)
@@ -809,26 +809,30 @@
   ;; to-date
   (gnc:register-budget-report-option
    (gnc:make-date-option
-    "Report Options" "To"
-    "b" "Report end date"
+    (N_ "Report Options") (N_ "To")
+    "b" (N_ "Report end date")
     (lambda () (cons 'absolute (cons (current-time) 0)))
     #f 'absolute #f))
 
   ;; view
   (gnc:register-budget-report-option
    (gnc:make-multichoice-option
-    "Report Options" "View"
-    "c" "Type of budget report"
+    (N_ "Report Options") (N_ "View")
+    "c" (N_ "Type of budget report")
     'status
-    (list #(full
-	    "Full"
-	    "Show all columns")
-	  #(balancing
-	    "Balancing"
-	    "A report useful for balancing the budget")
-	  #(status
-	    "Status"
-	    "How are you doing on your budget?"))))
+    (list (list->vector
+           (list 'full
+                 (N_ "Full")
+                 (N_ "Show all columns")))
+	  (list->vector
+           (list 'balancing
+                 (N_ "Balancing")
+                 (N_ "A report useful for balancing the budget")))
+          (list->vector
+           (list 'status
+                 (N_ "Status")
+                 (N_ "How are you doing on your budget?"))))))
+
   gnc:*budget-report-options*)
 
 (define (gnc:date-to-N-fraction caltime type)

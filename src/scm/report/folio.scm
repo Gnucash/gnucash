@@ -4,8 +4,6 @@
 
 (let ()
 
-  (define string-db (gnc:make-string-database))
-
   (define (folio-options-generator)
 
     (define gnc:*folio-report-options* (gnc:new-options))
@@ -14,8 +12,8 @@
 
     (gnc:register-folio-option
      (gnc:make-date-option
-      "Portfolio Options" "At"
-      "a" "Calculate stock portfolio value at this date"
+      (N_ "Portfolio Options") (N_ "At")
+      "a" (N_ "Calculate stock portfolio value at this date")
       (lambda ()
         (let ((bdtime (localtime (current-time))))
           (set-tm:sec bdtime 59)
@@ -28,8 +26,8 @@
     gnc:*folio-report-options*)
 
   (define (titles)
-    (map (lambda (key) (string-db 'lookup key))
-         '(name ticker shares recent value cost profit-loss)))
+    (list (_ "Name") (_ "Ticker") (_ "Shares") (_ "Recent Price")
+          (_ "Value") (_ "Cost") (_ "Profit/Loss")))
 
   (define (gnc:account-get-last-split account)
     (let ((num-splits (gnc:account-get-split-count account)))
@@ -74,7 +72,7 @@
       (let ((value (total-value 'total #f))
             (cost (total-cost 'total #f))
             (print-info (gnc:default-print-info #f)))
-        (list (html-strong (string-db 'lookup 'net))
+        (list (html-strong (_ "Net"))
               "&nbsp" "&nbsp" "&nbsp"
               (gnc:amount->string value print-info)
               (gnc:amount->string cost print-info)
@@ -104,19 +102,9 @@
 
   (define (folio-renderer options)
     (list
-     (html-start-document-title (string-db 'lookup 'title) "#bfdeba")
-     (html-table (string-db 'lookup 'title) (titles) (report-rows))
+     (html-start-document-title (_ "Stock Portfolio Valuation") "#bfdeba")
+     (html-table (_ "Stock Portfolio Valuation") (titles) (report-rows))
      (html-end-document)))
-
-  (string-db 'store 'title "Stock Portfolio Valuation")
-  (string-db 'store 'name "Name")
-  (string-db 'store 'ticker "Ticker")
-  (string-db 'store 'shares "Shares")
-  (string-db 'store 'recent "Recent Price")
-  (string-db 'store 'value "Value")
-  (string-db 'store 'cost "Cost")
-  (string-db 'store 'profit-loss "Profit/Loss")
-  (string-db 'store 'net "Net")
 
   (gnc:define-report
    'version 1

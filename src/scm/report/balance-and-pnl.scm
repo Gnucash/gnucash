@@ -35,22 +35,21 @@
      (l2-collector (make-currency-collector))
      (default-exchange-rate 0) ;; if there is no user-specified exchange rate
      (currency-pref-options 
-      '(("Currency 1" "USD")
-	("Currency 2" "EUR")
-	("Currency 3" "DEM")
-	("Currency 4" "GBP")
-	("Currency 5" "FRF")))
-     (currency-option-value-prefix "Exchange rate for ")
+      (list
+       (list (N_ "Currency 1") "USD")
+       (list (N_ "Currency 2") "EUR")
+       (list (N_ "Currency 3") "DEM")
+       (list (N_ "Currency 4") "GBP")
+       (list (N_ "Currency 5") "FRF")))
+     (currency-option-value-prefix (N_ "Exchange rate for "))
      (EMPTY_ROW "<tr></tr>"))
-  
-  (define string-db (gnc:make-string-database))
 
   (define (register-common-options option-registerer)
     (begin 
       (option-registerer
        (gnc:make-date-option
-	"Report" "To"
-	"b" "Calculate balance sheet up to this date"
+	(N_ "Report") (N_ "To")
+	"b" (N_ "Calculate balance sheet up to this date")
 	(lambda ()
 	  (let ((bdtime (localtime (current-time))))
 	    (set-tm:sec bdtime 59)
@@ -86,8 +85,8 @@
       
       (option-registerer
        (gnc:make-simple-boolean-option
-	"Display" "Type"
-	"b" "Display the account type?" #f))
+	(N_ "Display") (N_ "Type")
+	"b" (N_ "Display the account type?") #f))
 
 ;      (option-registerer
 ;       (gnc:make-simple-boolean-option
@@ -96,33 +95,33 @@
 
       (option-registerer
        (gnc:make-simple-boolean-option
-	"Display" "Foreign Currency"
-	"b" "Display the account's foreign currency amount?" #t))
+	(N_ "Display") (N_ "Foreign Currency")
+	"b" (N_ "Display the account's foreign currency amount?") #t))
 
       (option-registerer
        (gnc:make-currency-option 
-	"Currencies" "Report's currency" 
-	"AA" "All other currencies will get converted to this currency."
+	(N_ "Currencies") (N_ "Report's currency") 
+	"AA" (N_ "All other currencies will get converted to this currency.")
 	(gnc:locale-default-currency)))
 
       (option-registerer
        (gnc:make-simple-boolean-option
-	"Currencies" "Other currencies' total"
-	"AB" "Show the total amount of other currencies?" #f))
-      
+	(N_ "Currencies") (N_ "Other currencies' total")
+	"AB" (N_ "Show the total amount of other currencies?") #f))
+
       (for-each 
        (lambda(x)(begin (option-registerer
 			 (gnc:make-currency-option 
-			  "Currencies" (car x) 
+			  (N_ "Currencies") (car x) 
 			  (string-append (car x) "a") 
-			  "Choose foreign currency to specify an exchange rate for"
+			  (N_ "Choose foreign currency to specify an exchange rate for")
 			  (cadr x)))
 			(option-registerer
 			 (gnc:make-string-option
-			  "Currencies" 
+			  (N_ "Currencies")
 			  (string-append currency-option-value-prefix (car x)) 
 			  (string-append (car x) "b") 
-			  "Choose exchange rate for above currency"
+			  (N_ "Choose exchange rate for above currency")
 			  (number->string default-exchange-rate)))))
        currency-pref-options)))
 
@@ -146,8 +145,8 @@
 
     (gnc:register-pnl-option
      (gnc:make-date-option
-      "Report" "From"
-      "a" "Start of reporting period"
+      (N_ "Report") (N_ "From")
+      "a" (N_ "Start of reporting period")
       (lambda ()
         (let ((bdtime (localtime (current-time))))
           (set-tm:sec bdtime 0)
@@ -245,7 +244,7 @@
 			balance-currency exchange-alist 
 			other-currency-total? show-fcur?
 			row-aligner)
-    (let ((account-name (string-html-strong (string-db 'lookup 'net)))
+    (let ((account-name (string-html-strong (_ "Net")))
 	  (exchanged-total 0))
       (list
        EMPTY_ROW
@@ -503,15 +502,15 @@
 
        "<table cellpadding=0>"
        "<tr>"
-       "<th>" (string-db 'lookup 'account-name) "</th>"
-       (if show-type? (string-append "<th align=center>" 
-				     (string-db 'lookup 'type)  "</th>")
+       "<th>" (_ "Account Name") "</th>"
+       (if show-type?
+           (string-append "<th align=center>" (_ "Type") "</th>")
 	   "")
        "<th "
        (if show-fcur? "colspan=2 " "")
-       "align=right>" (string-db 'lookup 'subaccounts) "</th>"
+       "align=right>" (_ "(subaccounts)") "</th>"
        (if show-fcur? "<th></th>" "")
-       "<th align=right>" (string-db 'lookup 'balance) "</th>"
+       "<th align=right>" (_ "Balance") "</th>"
        "</tr>"
 
        output
@@ -520,24 +519,14 @@
        "</body>"
        "</html>"))))
 
-  (string-db 'store 'net "Net")
-  (string-db 'store 'type "Type")
-  (string-db 'store 'account-name "Account Name")
-  (string-db 'store 'subaccounts "(subaccounts)")
-  (string-db 'store 'balance "Balance")
-  (string-db 'store 'bal-title "Balance Sheet")
-  (string-db 'store 'bal-desc "This page shows your net worth.")
-  (string-db 'store 'pnl-title "Profit and Loss")
-  (string-db 'store 'pnl-desc "This page shows your profits and losses.")
-
   (gnc:define-report
    'version 1
    'name "Balance sheet"
    'options-generator balsht-options-generator
    'renderer (lambda (options)
                (generate-balance-sheet-or-pnl
-                (string-db 'lookup 'bal-title)
-                (string-db 'lookup 'bal-desc)
+                (_ "Balance Sheet")
+                (_ "This page shows your net worth.")
                 options
                 #t)))
 
@@ -546,8 +535,8 @@
    'name "Profit and Loss"
    'options-generator pnl-options-generator
    'renderer (lambda (options)
-               (generate-balance-sheet-or-pnl 
-                (string-db 'lookup 'pnl-title)
-                (string-db 'lookup 'pnl-desc)
+               (generate-balance-sheet-or-pnl
+                (_ "Profit and Loss")
+                (_"This page shows your profits and losses.")
                 options
                 #f))))

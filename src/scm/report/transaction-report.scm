@@ -10,12 +10,12 @@
 (gnc:depend "html-generator.scm")
 
 (let ()
- (define string-db (gnc:make-string-database))
 
  (define (gnc:split-get-sign-adjusted-value split)
    (let ((acc (gnc:split-get-account split))
 	 (unsigned-value (d-gnc:split-get-value split)))
-     (gnc:debug "Adjusting value" unsigned-value (gnc:account-reverse-balance? acc))     
+     (gnc:debug "Adjusting value"
+                unsigned-value (gnc:account-reverse-balance? acc))     
      (if (gnc:account-reverse-balance? acc)
 	 (- unsigned-value)
 	 unsigned-value)))
@@ -33,10 +33,10 @@
 	  (signed-balance (if (gnc:account-reverse-balance? acc)
 			      (- unsigned-balance)
 			      unsigned-balance)))
-			  
+
      (string-append acc-name
 		    " ("
-		    (string-db 'lookup 'open-bal-string) 
+                    (_ "Opening Balance")
 		    " "
 		    (gnc:amount->string signed-balance
                                         (gnc:account-value-print-info acc #f))
@@ -50,8 +50,8 @@
       (if 
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Date"))
-       (make-report-spec 
-	(string-db 'lookup 'date-string)
+       (make-report-spec
+        (_ "Date")
 	(lambda (split) 
 	  (gnc:transaction-get-date-posted 
 	   (gnc:split-get-parent split)))
@@ -64,12 +64,12 @@
 	#f ; subs-list-proc
 	#f)
        #f)
- 
+
       (if 
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Num"))
-       (make-report-spec 
-	(string-db 'lookup 'num-string)
+       (make-report-spec
+        (_ "Num")
 	(lambda (split)
 	  (gnc:transaction-get-num
 	   (gnc:split-get-parent split)))
@@ -86,7 +86,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Description"))
        (make-report-spec 
-	(string-db 'lookup 'desc-string)
+        (_ "Description")
 	(lambda (split)
 	  (gnc:transaction-get-description
 	   (gnc:split-get-parent split)))
@@ -103,7 +103,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Memo"))
        (make-report-spec 
-	(string-db 'lookup 'memo-string)
+        (_ "Memo")
 	gnc:split-get-memo
 	(lambda (memo) (html-left-cell (html-string memo)))
 	#f ; total-proc
@@ -119,7 +119,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Account"))
        (make-report-spec 
-	(string-db 'lookup 'acc-string)
+        (_ "Account")
 	(lambda (split) 
 	  (gnc:account-get-full-name 
 	   (gnc:split-get-account split)))
@@ -140,7 +140,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Other Account"))
        (make-report-spec 
-	(string-db 'lookup 'other-acc-string)
+        (_ "Other Account")
 	(lambda (split)
 	  (let ((others (gnc:split-get-other-splits split)))
 	    (if (null? others)
@@ -160,7 +160,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Shares"))
        (make-report-spec 
-	(string-db 'lookup 'shares-string)
+        (_ "Shares")
 	(lambda (split)
 	  (d-gnc:split-get-share-amount split))
 	(lambda (num) (html-right-cell (html-string num)))
@@ -176,7 +176,7 @@
        (gnc:option-value
 	(gnc:lookup-option options "Display" "Price"))
        (make-report-spec 
-	(string-db 'lookup 'price-string)
+        (_ "Price")
 	(lambda (split)
 	  (d-gnc:split-get-share-price split))
 	(lambda (num) (html-right-cell (html-string num)))
@@ -192,7 +192,7 @@
        (eq? (gnc:option-value
 	(gnc:lookup-option options "Display" "Amount")) 'single)
        (make-report-spec
-	(string-db 'lookup 'amount-string)
+        (_ "Amount")
 	gnc:split-get-sign-adjusted-value
 	(lambda (value) (html-right-cell (html-currency value)))
 	+ ; total-proc
@@ -202,21 +202,22 @@
 	  (html-right-cell (html-strong (html-currency value))))
 	#t ; first-last-preference
 	(lambda (split)
-	  (map gnc:split-get-sign-adjusted-value (gnc:split-get-other-splits split)))
+	  (map gnc:split-get-sign-adjusted-value
+               (gnc:split-get-other-splits split)))
 	(lambda (value) 
 	  (html-right-cell (html-ital (html-currency value)))))
        #f)
       
       (if
         (eq? (gnc:option-value
- 	(gnc:lookup-option options "Display" "Amount")) 'double)
+              (gnc:lookup-option options "Display" "Amount")) 'double)
         (make-report-spec
- 	(string-db 'lookup 'debit-string)
- 	(lambda (split)
-	  (max 0 (gnc:split-get-sign-adjusted-value split)))
- 	(lambda (value)
- 	  (cond ((> value 0.0) (html-right-cell (html-currency value)))
-	  (else (html-right-cell (html-ital (html-string " "))))))
+         (_ "Debit")
+         (lambda (split)
+           (max 0 (gnc:split-get-sign-adjusted-value split)))
+         (lambda (value)
+           (cond ((> value 0.0) (html-right-cell (html-currency value)))
+                 (else (html-right-cell (html-ital (html-string " "))))))
 ;	(lambda (value)
 ; 	  (if (> value 0) (html-right-cell (html-currency value)))
 ;	  (html-right-cell (html-ital (html-string " "))))  
@@ -227,12 +228,14 @@
  	  (html-right-cell (html-strong (html-currency value))))
  	#t ; first-last-preference
  	(lambda (split)
- 	  (map gnc:split-get-sign-adjusted-value (gnc:split-get-other-splits split)))
+ 	  (map gnc:split-get-sign-adjusted-value
+               (gnc:split-get-other-splits split)))
  ;	(lambda (value)
 ; 	  (if (> value 0) (html-right-cell (html-ital (html-currency value)))
 ; 	      (html-right-cell (html-ital (html-string " ")))))
 	(lambda (value)
- 	  (cond ((> value 0.0) (html-right-cell (html-ital(html-currency value))))
+ 	  (cond ((> value 0.0) (html-right-cell
+                                (html-ital(html-currency value))))
 	  (else (html-right-cell (html-ital (html-string " ")))))))
         #f)
 
@@ -240,7 +243,7 @@
         (eq? (gnc:option-value
   	(gnc:lookup-option options "Display" "Amount")) 'double)
         (make-report-spec
-	 (string-db 'lookup 'credit-string)
+         (_ "Credit")
 	 (lambda (split)
 	   (max  0 (- (gnc:split-get-sign-adjusted-value split))))
 ;	 (lambda (value) (html-right-cell (html-currency value)))
@@ -257,18 +260,19 @@
  	  (html-right-cell (html-strong (html-currency value))))
  	#t ; first-last-preference
  	(lambda (split)
- 	  (map gnc:split-get-sign-adjusted-value (gnc:split-get-other-splits split)))
+ 	  (map gnc:split-get-sign-adjusted-value
+               (gnc:split-get-other-splits split)))
  	(lambda (value)
- 	  (cond  ((< value 0) (html-right-cell (html-ital (html-currency (- value)))))
- 	      (else (html-right-cell (html-ital (html-string " ")))))))
+ 	  (cond  ((< value 0)
+                  (html-right-cell (html-ital (html-currency (- value)))))
+                 (else (html-right-cell (html-ital (html-string " ")))))))
         #f)
 
-       
        (if 
        (eq? (gnc:option-value
 	(gnc:lookup-option options "Display" "Amount")) 'double)
        (make-report-spec
-	(string-db 'lookup 'total-string)
+        (_ "Total")
 	gnc:split-get-sign-adjusted-value
 	;(lambda (value) (html-right-cell (html-currency value)))
 	;(lambda (value) (html-right-cell (html-string "hello")))
@@ -442,8 +446,8 @@
     ;; hack alert - could somebody set this to an appropriate date?
     (gnc:register-trep-option
      (gnc:make-date-option
-      "Report Options" "From"
-      "a" "Report Items from this date" 
+      (N_ "Report Options") (N_ "From")
+      "a" (N_ "Report Items from this date") 
       (lambda ()
         (let ((bdtime (localtime (current-time))))
           (set-tm:sec bdtime 0)
@@ -459,16 +463,16 @@
 
     (gnc:register-trep-option
      (gnc:make-date-option
-      "Report Options" "To"
-      "b" "Report items up to and including this date"
+      (N_ "Report Options") (N_ "To")
+      "b" (N_ "Report items up to and including this date")
       (lambda () (cons 'absolute (cons (current-time) 0)))
       #f 'absolute #f))
 
     ;; account to do report on
     (gnc:register-trep-option
      (gnc:make-account-list-option
-      "Report Options" "Account"
-      "c" "Do transaction report on these accounts"
+      (N_ "Report Options") (N_ "Account")
+      "c" (N_ "Do transaction report on these accounts")
       (lambda ()
         (let ((current-accounts (gnc:get-current-accounts))
               (num-accounts (gnc:group-get-num-accounts
@@ -482,8 +486,8 @@
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      "Report Options" "Style"
-      "d" "Report style"
+      (N_ "Report Options") (N_ "Style")
+      "d" (N_ "Report style")
 ;; XXX: merged style currently disabled because it breaks double-column
 ;; amounts.  If somebody wants it back just uncomment the commented code
 ;; below
@@ -492,151 +496,178 @@
       (list ;#(merged
 	    ;  "Merged"
 	    ;  "Display N-1 lines")
-	    #(multi-line
-	      "Multi-Line"
-	      "Display N lines")
-	    #(single
-	      "Single"
-	      "Display 1 line"))))
+            (list->vector
+             (list 'multi-line
+                   (N_ "Multi-Line")
+                   (N_ "Display N lines")))
+            (list->vector
+             (list 'single
+                   (N_ "Single")
+                   (N_ "Display 1 line"))))))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Report Options" "Only positive Entries"
-      "da" "Display only positive Entries?" #f))
-    
-    
+      (N_ "Report Options") (N_ "Only positive Entries")
+      "da" (N_ "Display only positive Entries?") #f))
+
     (let ((key-choice-list 
-	   (list #(account
-		   "Account (w/subtotal)"
-		   "Sort & subtotal by account")
-		 #(date
-		   "Date"
-		   "Sort by date")
-		 #(date-monthly
-		   "Date (subtotal monthly)"
-		   "Sort by date & subtotal each month")
-		 #(date-yearly
-		   "Date (subtotal yearly)"
-		   "Sort by date & subtotal each year")
-		 #(time
-		   "Time"
-		   "Sort by exact entry time")
-		 #(corresponding-acc
-		   "Transfer from/to"
-		   "Sort by account transferred from/to's name")
-		 #(corresponding-acc-subtotal
-		   "Transfer from/to (w/subtotal)"
-		   "Sort and subtotal by account transferred from/to's name")
-		 #(amount
-		   "Amount"
-		   "Sort by amount")
-		 #(description
-		   "Description"
-		   "Sort by description")
-		 #(number
-		   "Number"
-		   "Sort by check/transaction number")
-		 #(memo
-		   "Memo"
-		   "Sort by memo")
-		 #(none
-		   "None"
-		   "Do not sort"))))
+	   (list (list->vector
+                  (list 'account
+                        (N_ "Account (w/subtotal)")
+                        (N_ "Sort & subtotal by account")))
+		 (list->vector
+                  (list 'date
+                        (N_ "Date")
+                        (N_ "Sort by date")))
+		 (list->vector
+                  (list 'date-monthly
+                        (N_ "Date (subtotal monthly)")
+                        (N_ "Sort by date & subtotal each month")))
+		 (list->vector
+                  (list 'date-yearly
+                        (N_ "Date (subtotal yearly)")
+                        (N_ "Sort by date & subtotal each year")))
+		 (list->vector
+                  (list 'time
+                        (N_ "Time")
+                        (N_ "Sort by exact entry time")))
+		 (list->vector
+                  (list 'corresponding-acc
+                        (N_ "Transfer from/to")
+                        (N_ "Sort by account transferred from/to's name")))
+		 (list->vector
+                  (list 'corresponding-acc-subtotal
+                        (N_ "Transfer from/to (w/subtotal)")
+                        (N_ "Sort and subtotal by account transferred from/to's name")))
+		 (list->vector
+                  (list 'amount
+                        (N_ "Amount")
+                        (N_ "Sort by amount")))
+		 (list->vector
+                  (list 'description
+                        (N_ "Description")
+                        (N_ "Sort by description")))
+		 (list->vector
+                  (list 'number
+                        (N_ "Number")
+                        (N_ "Sort by check/transaction number")))
+		 (list->vector
+                  (list 'memo
+                        (N_ "Memo")
+                        (N_ "Sort by memo")))
+		 (list->vector
+                  (list 'none
+                        (N_ "None")
+                        (N_ "Do not sort"))))))
 
       ;; primary sorting criterion
       (gnc:register-trep-option
        (gnc:make-multichoice-option
-	"Sorting" "Primary Key"
-	"a" "Sort by this criterion first"
+	(N_ "Sorting") (N_ "Primary Key")
+	"a" (N_ "Sort by this criterion first")
 	'account
 	key-choice-list))
 
       (gnc:register-trep-option
        (gnc:make-multichoice-option
-	"Sorting" "Primary Sort Order"
-	"b" "Order of primary sorting"
+	(N_ "Sorting") (N_ "Primary Sort Order")
+	"b" (N_ "Order of primary sorting")
 	'ascend
 	(list
-	 #(ascend "Ascending" "smallest to largest, earliest to latest")
-	 #(descend "Descending" "largest to smallest, latest to earliest"))))
+         (list->vector
+          (list 'ascend
+                (N_ "Ascending")
+                (N_ "smallest to largest, earliest to latest")))
+         (list->vector
+          (list 'descend
+                (N_ "Descending")
+                (N_ "largest to smallest, latest to earliest"))))))
 
       (gnc:register-trep-option
        (gnc:make-multichoice-option
-	"Sorting" "Secondary Key"
+	(N_ "Sorting") (N_ "Secondary Key")
 	"c"
-	"Sort by this criterion second"
+	(N_ "Sort by this criterion second")
 	'date
 	key-choice-list))
-      
+
       (gnc:register-trep-option
        (gnc:make-multichoice-option
-	"Sorting" "Secondary Sort Order"
-	"d" "Order of Secondary sorting"
+	(N_ "Sorting") (N_ "Secondary Sort Order")
+	"d" (N_ "Order of Secondary sorting")
 	'ascend
 	(list
-	 #(ascend "Ascending" "smallest to largest, earliest to latest")
-	 #(descend "Descending" "largest to smallest, latest to earliest")))))
-    
-  
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      "Display" "Date"
-      "b" "Display the date?" #t))
+         (list->vector
+          (list 'ascend
+                (N_ "Ascending")
+                (N_ "smallest to largest, earliest to latest")))
+         (list->vector
+          (list 'descend
+                (N_ "Descending")
+                (N_ "largest to smallest, latest to earliest")))))))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Num"
-      "c" "Display the cheque number?" #t))
+      (N_ "Display") (N_ "Date")
+      "b" (N_ "Display the date?") #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Description"
-      "d" "Display the description?" #t))
+      (N_ "Display") (N_ "Num")
+      "c" (N_ "Display the cheque number?") #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Memo"
-      "f" "Display the memo?" #t))
+      (N_ "Display") (N_ "Description")
+      "d" (N_ "Display the description?") #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Account"
-      "g" "Display the account?" #t))
+      (N_ "Display") (N_ "Memo")
+      "f" (N_ "Display the memo?") #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Other Account"
-      "h" "Display the other account?  (if this is a split transaction, this parameter is guessed)." #f))
+      (N_ "Display") (N_ "Account")
+      "g" (N_ "Display the account?") #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Shares"
-      "ha" "Display the number of shares?" #f))
+      (N_ "Display") (N_ "Other Account")
+      "h" (N_ "Display the other account?  (if this is a split transaction, this parameter is guessed).") #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Price"
+      (N_ "Display") (N_ "Shares")
+      "ha" (N_ "Display the number of shares?") #f))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      (N_ "Display") (N_ "Price")
       "hb" "Display the shares price?" #f))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      "Display" "Amount"
-      "i" "Display the amount?"  
-
+      (N_ "Display") (N_ "Amount")
+      "i" (N_ "Display the amount?")  
       'single
-      (list #(none "None" "No amount display")
-	    #(single "Single" "Single Column Display")
-	    #(double "Double" "Two Column Display"))))
+      (list
+       (list->vector
+        (list 'none (N_ "None") (N_ "No amount display")))
+       (list->vector
+        (list 'single (N_ "Single") (N_ "Single Column Display")))
+       (list->vector
+        (list 'double (N_ "Double") (N_ "Two Column Display"))))))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Headers" "j" "Display the headers?" #t))
- 
+      (N_ "Display") (N_ "Headers")
+      "j" (N_ "Display the headers?") #t))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      "Display" "Totals"
-      "k" "Display the totals?" #t))
+      (N_ "Display") (N_ "Totals")
+      "k" (N_ "Display the totals?") #t))
 
     (gnc:options-set-default-section gnc:*transaction-report-options*
                                      "Report Options")
@@ -699,7 +730,7 @@
  	   (split-report-specs (make-split-report-spec options)))
        
        (list
-        (html-start-document-title (string-db 'lookup 'title) #f)
+        (html-start-document-title (_ "Transaction Report") #f)
         (html-start-table)
         (if (gnc:option-value (gnc:lookup-option options "Display" "Headers"))
             (html-table-headers split-report-specs)
@@ -725,24 +756,8 @@
         (html-end-table)
         (html-end-document))))
 
-
-  (string-db 'store 'title "Transaction Report")
-  (string-db 'store 'date-string "Date")
-  (string-db 'store 'num-string "Num")
-  (string-db 'store 'desc-string "Description")
-  (string-db 'store 'memo-string "Memo")
-  (string-db 'store 'acc-string "Account")
-  (string-db 'store 'other-acc-string "Other Account")
-  (string-db 'store 'shares-string "Shares")
-  (string-db 'store 'price-string "Price")
-  (string-db 'store 'amount-string "Amount")
-  (string-db 'store 'debit-string "Debit")
-  (string-db 'store 'credit-string "Credit")
-  (string-db 'store 'total-string "Total")
-  (string-db 'store 'open-bal-string "Opening Balance")
-
   (gnc:define-report
    'version 1
-   'name (string-db 'lookup 'title)
+   'name (_ "Transaction Report")
    'options-generator trep-options-generator
    'renderer gnc:trep-renderer))

@@ -32,8 +32,8 @@
     ;; the mouse pointer over the option.
     (gnc:register-hello-world-option
      (gnc:make-simple-boolean-option
-      "Hello, World!" "Boolean Option"
-      "a" "This is a boolean option." #t))
+      (N_ "Hello, World!") (N_ "Boolean Option")
+      "a" (N_ "This is a boolean option.") #t))
 
     ;; This is a multichoice option. The user can choose between
     ;; the values 'first, 'second, 'third, or 'fourth. These are guile
@@ -42,12 +42,24 @@
     ;; value is 'third.
     (gnc:register-hello-world-option
      (gnc:make-multichoice-option
-      "Hello, World!" "Multi Choice Option"
-      "b" "This is a multi choice option." 'third
-      (list #(first  "First Option"   "Help for first option")
-            #(second "Second Option"  "Help for second option")
-            #(third  "Third Option"   "Help for third option")
-            #(fourth "Fourth Options" "The fourth option rules!"))))
+      (N_ "Hello, World!") (N_ "Multi Choice Option")
+      "b" (N_ "This is a multi choice option.") 'third
+      (list (list->vector
+             (list 'first
+                   (N_ "First Option")
+                   (N_ "Help for first option")))
+            (list->vector
+             (list 'second
+                   (N_ "Second Option")
+                   (N_ "Help for second option")))
+            (list->vector
+             (list 'third
+                   (N_ "Third Option")
+                   (N_ "Help for third option")))
+            (list->vector
+             (list 'fourth
+                   (N_ "Fourth Options")
+                   (N_ "The fourth option rules!"))))))
 
     ;; This is a string option. Users can type anything they want
     ;; as a value. The default value is "Hello, World". This is
@@ -56,8 +68,8 @@
     ;; other key is 'a'.
     (gnc:register-hello-world-option
      (gnc:make-string-option
-      "Hello, World!" "String Option"
-      "c" "This is a string option" "Hello, World"))
+      (N_ "Hello, World!") (N_ "String Option")
+      "c" (N_ "This is a string option") (N_ "Hello, World")))
 
     ;; This is a date/time option. The user can pick a date and,
     ;; possibly, a time. Times are stored as a pair
@@ -67,8 +79,8 @@
     ;; time.
     (gnc:register-hello-world-option
      (gnc:make-date-option
-      "Hello, World!" "Just a Date Option"
-      "d" "This is a date option"
+      (N_ "Hello, World!") (N_ "Just a Date Option")
+      "d" (N_ "This is a date option")
       (lambda () (cons 'absolute (cons (current-time) 0)))
       #f 'absolute #f ))
 
@@ -76,22 +88,22 @@
     ;; the time.
     (gnc:register-hello-world-option
      (gnc:make-date-option
-      "Hello, World!" "Time and Date Option"
-      "e" "This is a date option with time"
+      (N_ "Hello, World!") (N_ "Time and Date Option")
+      "e" (N_ "This is a date option with time")
       (lambda () (cons 'absolute (cons (current-time) 0)))
       #t 'absolute #f ))
 
     (gnc:register-hello-world-option
      (gnc:make-date-option
-      "Hello, World!" "Combo Date Option"
-      "y" "This is a combination date option"
+      (N_ "Hello, World!") (N_ "Combo Date Option")
+      "y" (N_ "This is a combination date option")
       (lambda () (cons 'relative 'start-cal-year))
       #f 'both '(start-cal-year start-prev-year end-prev-year) ))
 
     (gnc:register-hello-world-option
      (gnc:make-date-option
-      "Hello, World!" "Relative Date Option"
-      "x" "This is a relative date option"
+      (N_ "Hello, World!") (N_ "Relative Date Option")
+      "x" (N_ "This is a relative date option")
       (lambda () (cons 'relative 'start-cal-year))
       #f 'relative '(start-cal-year start-prev-year end-prev-year) ))
 
@@ -101,8 +113,8 @@
     ;; by a single click is given by the step size.
     (gnc:register-hello-world-option
      (gnc:make-number-range-option
-      "Hello, World!" "Number Option"
-      "ee" "This is a number option."
+      (N_ "Hello, World!") (N_ "Number Option")
+      "ee" (N_ "This is a number option.")
       1500.0  ;; default
       0.0     ;; lower bound
       10000.0 ;; upper bound
@@ -119,8 +131,8 @@
     ;; which will scale the values appropriately according the range.
     (gnc:register-hello-world-option
      (gnc:make-color-option
-      "Hello, World!" "Background Color"
-      "f" "This is a color option"
+      (N_ "Hello, World!") (N_ "Background Color")
+      "f" (N_ "This is a color option")
       (list #xf6 #xff #xdb 0)
       255
       #f))
@@ -142,8 +154,8 @@
     ;; selected account in the main window, if any.
     (gnc:register-hello-world-option
      (gnc:make-account-list-option
-      "Hello Again" "An account list option"
-      "g" "This is an account list option"
+      (N_ "Hello Again") (N_ "An account list option")
+      "g" (N_ "This is an account list option")
       (lambda () (gnc:get-current-accounts))
       #f #t))
 
@@ -153,21 +165,30 @@
     ;; option is a list of symbols.
     (gnc:register-hello-world-option
      (gnc:make-list-option
-      "Hello Again" "A list option"
-      "h" "This is a list option"
+      (N_ "Hello Again") (N_ "A list option")
+      "h" (N_ "This is a list option")
       (list 'good)
-      (list #(good  "The Good" "Good option")
-            #(bad   "The Bad"  "Bad option")
-            #(ugly  "The Ugly" "Ugly option"))))
+      (list (list->vector
+             (list 'good
+                   (N_ "The Good")
+                   (N_ "Good option")))
+            (list->vector
+             (list 'bad
+                   (N_ "The Bad")
+                   (N_ "Bad option")))
+            (list->vector
+             (list 'ugly
+                   (N_ "The Ugly")
+                   (N_ "Ugly option"))))))
 
     ;; This option is for testing. When true, the report generates
     ;; an exception.
     (gnc:register-hello-world-option
      (gnc:make-simple-boolean-option
-      "Testing" "Crash the report"
-      "a" (string-append "This is for testing. "
-                         "Your reports probably shouldn't have an "
-                         "option like this.") #f))
+      (N_ "Testing") (N_ "Crash the report")
+      "a" (N_ "This is for testing. \
+Your reports probably shouldn't have an \
+option like this.") #f))
 
     (gnc:options-set-default-section gnc:*hello-world-options*
                                      "Hello, World!")
