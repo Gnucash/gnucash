@@ -12,3 +12,4 @@ config.h
 *.diffs
 xacc
 *.xac.*.xac
+errs*
