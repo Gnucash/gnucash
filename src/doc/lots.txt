@@ -310,22 +310,27 @@ See the file Scrub2.h for details.
 
 GUI
 ===
-GUI forr handling Lots is needed:
-GUI support to attach a split to a Lot, or
-to view an account in lot-mode...
+A GUI for handling Lots is needed: ability to view a lot, and to cut/paste
+or move a split from one lot to another.  Need a GUI to create a lot,
+maybe append some notes to it.  Need ability to view account in lot-mode.
 
+For automatically managing accounts, need to implement a variety of 
+different accounting policies (of which the FIFO policy is currently 
+implemented in the 'Scrub' routines).
 
 Status
 ======
-Core support for Lots in the engine is complete (April 2002).  
-See src/engine/gnc-lot.h for the public API.
-The XML backend support for lot is complete (April 2002).
-The Postgres backend does not yet support lots.
-FIFO's have not been started.
-Scrub routines to automatically take old gnucash datasets and
+ o Core support for Lots in the engine is complete (April 2002, ships in 
+   version 1.8.x, used by business backend).  
+ o See src/engine/gnc-lot.h for the public API.
+ o The XML backend support for lot is complete (April 2002,  ships in 
+   version 1.8.x).
+ o The Postgres backend does not yet support lots.
+ o Scrub routines to automatically take old gnucash datasets and
    transition them to double-balanced lots have been implemented.
+   These implement a FIFO accounting policy (April 2003)
 
-No GUI yet.
+ o No GUI yet.
 
 
 -------------------------- end of file ------------------------------
