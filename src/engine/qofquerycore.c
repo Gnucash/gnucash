@@ -26,9 +26,9 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
+#include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
-#include "QofQuery.h"
 
 static short module = MOD_QUERY;
 

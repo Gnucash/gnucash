@@ -1233,10 +1233,10 @@ free_random_guids(GList *guids)
   g_list_free (guids);
 }
 
-static QueryOp
+static QofQueryOp
 get_random_queryop(void)
 {
-  return get_random_int_in_range (1, QUERY_XOR);
+  return get_random_int_in_range (1, QOF_QUERY_XOR);
 }
 
 static GSList *
@@ -1345,7 +1345,7 @@ set_query_sort (Query *q, sort_type_t sort_code)
       g_return_if_fail (FALSE);
   }
 
-  gncQuerySetSortOrder (q, p1, p2, p3);
+  qof_query_set_sort_order (q, p1, p2, p3);
 }
 
 Query *
@@ -1640,7 +1640,7 @@ add_kvp_value_query (const char *key, kvp_value *value, gpointer data)
   else
     xaccQueryAddKVPMatch (kqd->q, kqd->path, value,
                           QOF_COMPARE_EQUAL, kqd->where,
-                          QUERY_AND);
+                          QOF_QUERY_AND);
 
   node = g_slist_last (kqd->path);
   kqd->path = g_slist_remove_link (kqd->path, node);
@@ -1699,38 +1699,38 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 
   if (query_types & SIMPLE_QT)
   {
-    xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QUERY_AND);
+    xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QOF_QUERY_AND);
 
     xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                  TRUE, FALSE, QUERY_AND);
+                                  TRUE, FALSE, QOF_QUERY_AND);
 
     xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
-                             TRUE, FALSE, QUERY_AND);
+                             TRUE, FALSE, QOF_QUERY_AND);
 
     xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
-                             TRUE, FALSE, QUERY_AND);
+                             TRUE, FALSE, QOF_QUERY_AND);
 
     n = xaccSplitGetValue (s);
     xaccQueryAddValueMatch (q, n, QOF_NUMERIC_MATCH_ANY,
-                              QOF_COMPARE_EQUAL, QUERY_AND);
+                              QOF_COMPARE_EQUAL, QOF_QUERY_AND);
 
     n = xaccSplitGetAmount (s);
-    xaccQueryAddSharesMatch (q, n, QOF_COMPARE_EQUAL, QUERY_AND);
+    xaccQueryAddSharesMatch (q, n, QOF_COMPARE_EQUAL, QOF_QUERY_AND);
 
     if (include_price)
     {
       n = xaccSplitGetSharePrice (s);
-      xaccQueryAddSharePriceMatch (q, n, QOF_COMPARE_EQUAL, QUERY_AND);
+      xaccQueryAddSharePriceMatch (q, n, QOF_COMPARE_EQUAL, QOF_QUERY_AND);
     }
 
     {
       Timespec ts;
 
       xaccTransGetDatePostedTS (trans, &ts);
-      xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QUERY_AND);
+      xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QOF_QUERY_AND);
     }
 
-    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QUERY_AND);
+    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
 
     {
       cleared_match_t how;
@@ -1758,7 +1758,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
           return NULL;
       }
 
-      xaccQueryAddClearedMatch (q, how, QUERY_AND);
+      xaccQueryAddClearedMatch (q, how, QOF_QUERY_AND);
     }
   }
 
@@ -1774,7 +1774,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       Split * split = node->data;
       list = g_list_prepend (list, xaccSplitGetAccount (split));
     }
-    xaccQueryAddAccountMatch (q, list, QOF_GUID_MATCH_ALL, QUERY_AND);
+    xaccQueryAddAccountMatch (q, list, QOF_GUID_MATCH_ALL, QOF_QUERY_AND);
     g_list_free (list);
 
     /* GUID_MATCH_NONE */
@@ -1782,7 +1782,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
     list = g_list_prepend (list, get_random_guid ());
-    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_NONE, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_NONE, QOF_QUERY_AND);
 
     /* GUID_MATCH_ANY */
     {
@@ -1790,7 +1790,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       *guid = *xaccAccountGetGUID (a);
       list = g_list_prepend (list, guid);
     }
-    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, QUERY_AND);
+    xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
 
     for (node = list; node; node = node->next)
       g_free (node->data);
@@ -1800,13 +1800,13 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
   if (query_types & GUID_QT)
   {
     xaccQueryAddGUIDMatch (q, xaccSplitGetGUID (s),
-                           GNC_ID_SPLIT, QUERY_AND);
+                           GNC_ID_SPLIT, QOF_QUERY_AND);
 
     xaccQueryAddGUIDMatch (q, xaccTransGetGUID (trans),
-                           GNC_ID_TRANS, QUERY_AND);
+                           GNC_ID_TRANS, QOF_QUERY_AND);
 
     xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (a),
-                           GNC_ID_ACCOUNT, QUERY_AND);
+                           GNC_ID_ACCOUNT, QOF_QUERY_AND);
   }
 
   if (query_types & SPLIT_KVP_QT)
