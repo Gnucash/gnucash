@@ -1,3 +1,22 @@
+2001-08-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/register-core/table-allgui.[ch]: update for
+	api changes. Move some layout code to table-layout.c.
+
+	* src/register/register-core/splitreg.[ch]: update for api changes
+
+	* src/register/register-core/cellblock.[ch]: move cursor
+	changed functions here
+
+	* src/register/register-core/Makefile.am: add new files
+
+	* src/register/ledger-core/SplitLedger.c: update for api changes
+
+	* src/register/register-core/table-layout.[ch]: new file.
+	table layout object encapsulates table structure.
+
+	* src/scm/main.scm: add lib path to LD_LIBRARY_PATH
+
 2001-08-10  Christian Stimming  <stimming@tuhh.de>
 
 	* po/gnc-glossary.txt: Updated explanation for "to scrub" to clear

@@ -42,6 +42,7 @@
 
   ;; first make sure the search paths are reasonable. probably shouldn't
   ;; need to do this.
+  (append-path "LD_LIBRARY_PATH" gnc:_lib-dir-default_)
   (append-path "LD_LIBRARY_PATH" gnc:_pkglib-dir-default_)
   (append-path "GNC_MODULE_PATH" gnc:_pkglib-dir-default_)
 

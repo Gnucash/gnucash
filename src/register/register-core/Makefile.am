@@ -16,6 +16,7 @@ libgncmod_register_core_la_SOURCES = \
   register-common.c \
   splitreg.c \
   table-allgui.c \
+  table-layout.c \
   table-model.c \
   textcell.c
 
@@ -34,6 +35,7 @@ noinst_HEADERS = \
   register-common.h \
   splitreg.h \
   table-allgui.h \
+  table-layout.h \
   table-model.h \
   textcell.h
 

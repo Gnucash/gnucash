@@ -65,22 +65,23 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 Table * 
 gnc_table_new (TableModel *model)
 {
-   Table *table;
+  Table *table;
 
-   g_return_val_if_fail (model != NULL, NULL);
-   g_return_val_if_fail (model->entry_handler, NULL);
+  g_return_val_if_fail (model != NULL, NULL);
+  g_return_val_if_fail (model->entry_handler, NULL);
 
-   table = g_new0 (Table, 1);
+  table = g_new0 (Table, 1);
 
-   table->model = model;
+  table->layout = gnc_table_layout_new ();
+  table->model = model;
 
-   gnc_table_init (table);
+  gnc_table_init (table);
 
-   table->virt_cells = g_table_new (sizeof (VirtualCell),
-                                    gnc_virtual_cell_construct,
-                                    gnc_virtual_cell_destroy, table);
+  table->virt_cells = g_table_new (sizeof (VirtualCell),
+                                   gnc_virtual_cell_construct,
+                                   gnc_virtual_cell_destroy, table);
 
-   return table;
+  return table;
 }
 
 /* ==================================================== */
@@ -88,30 +89,28 @@ gnc_table_new (TableModel *model)
 static void
 gnc_table_init (Table * table)
 {
-   table->num_virt_rows = -1;
-   table->num_virt_cols = -1;
+  table->num_virt_rows = -1;
+  table->num_virt_cols = -1;
 
-   table->num_header_phys_rows = -1;
+  table->num_header_phys_rows = -1;
 
-   table->current_cursor = NULL;
+  table->current_cursor = NULL;
 
-   gnc_virtual_location_init (&table->current_cursor_loc);
+  gnc_virtual_location_init (&table->current_cursor_loc);
 
-   table->move_cursor = NULL;
-   table->traverse = NULL;
-   table->set_help = NULL;
-   table->user_data = NULL;
+  table->move_cursor = NULL;
+  table->traverse = NULL;
+  table->set_help = NULL;
+  table->user_data = NULL;
 
-   table->alternate_bg_colors = FALSE;
+  table->dividing_row = -1;
 
-   table->dividing_row = -1;
+  /* initialize private data */
 
-   /* initialize private data */
+  table->virt_cells = NULL;
 
-   table->virt_cells = NULL;
-
-   table->ui_data = NULL;
-   table->destroy = NULL;
+  table->ui_data = NULL;
+  table->destroy = NULL;
 }
 
 /* ==================================================== */
@@ -119,23 +118,63 @@ gnc_table_init (Table * table)
 void 
 gnc_table_destroy (Table * table)
 {
-   /* invoke destroy callback */
-   if (table->destroy)
-     table->destroy(table);
+  /* invoke destroy callback */
+  if (table->destroy)
+    table->destroy(table);
 
-   /* free the dynamic structures */
-   gnc_table_free_data (table);
+  /* free the dynamic structures */
+  gnc_table_free_data (table);
 
-   /* free the cell tables */
-   g_table_destroy(table->virt_cells);
+  /* free the cell tables */
+  g_table_destroy (table->virt_cells);
 
-   /* intialize vars to null value so that any access is voided. */
-   gnc_table_init (table);
+  gnc_table_layout_destroy (table->layout);
+  table->layout = NULL;
 
-   g_free (table);
+  /* intialize vars to null value so that any access is voided. */
+  gnc_table_init (table);
+
+  g_free (table);
 }
 
-/* ==================================================== */
+gboolean
+gnc_table_current_cursor_changed (Table *table,
+                                  gboolean include_conditional)
+{
+  if (!table)
+    return FALSE;
+
+  return gnc_cellblock_changed (table->current_cursor, include_conditional);
+}
+
+void
+gnc_table_clear_current_cursor_changes (Table *table)
+{
+  if (!table)
+    return;
+
+  gnc_cellblock_clear_changes (table->current_cursor);
+}
+
+void
+gnc_table_save_current_cursor (Table *table, CursorBuffer *buffer)
+{
+  if (!table || !buffer)
+    return;
+
+  gnc_table_layout_save_cursor (table->layout, table->current_cursor, buffer);
+}
+
+void
+gnc_table_restore_current_cursor (Table *table,
+                                  CursorBuffer *buffer)
+{
+  if (!table || !buffer)
+    return;
+
+  gnc_table_layout_restore_cursor (table->layout,
+                                   table->current_cursor, buffer);
+}
 
 gboolean
 gnc_table_virtual_cell_out_of_bounds (Table *table,

@@ -33,12 +33,12 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
+#include "config.h"
+
 #include "cellblock.h"
 
 static void gnc_cellblock_init (CellBlock *cellblock, int rows, int cols);
 
-
-/* =================================================== */
 
 CellBlock *
 gnc_cellblock_new (int rows, int cols, int cursor_type)
@@ -54,8 +54,6 @@ gnc_cellblock_new (int rows, int cols, int cursor_type)
   return cellblock;
 }
 
-/* =================================================== */
-
 static void
 gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
 {
@@ -69,8 +67,6 @@ gnc_cellblock_cell_construct (gpointer _cb_cell, gpointer user_data)
   cb_cell->expandable = FALSE;
   cb_cell->span = FALSE;
 }
-
-/* =================================================== */
 
 static void
 gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
@@ -86,8 +82,6 @@ gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
   g_free(cb_cell->sample_text);
   cb_cell->sample_text = NULL;
 }
-
-/* =================================================== */
 
 static void        
 gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
@@ -106,8 +100,6 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   g_table_resize (cellblock->cb_cells, rows, cols);
 }
 
-/* =================================================== */
-
 void        
 gnc_cellblock_destroy (CellBlock *cellblock)
 {
@@ -119,8 +111,6 @@ gnc_cellblock_destroy (CellBlock *cellblock)
    g_free (cellblock);
 }
 
-/* =================================================== */
-
 CellBlockCell *
 gnc_cellblock_get_cell (CellBlock *cellblock, int row, int col)
 {
@@ -128,6 +118,56 @@ gnc_cellblock_get_cell (CellBlock *cellblock, int row, int col)
     return NULL;
 
   return g_table_index (cellblock->cb_cells, row, col);
+}
+
+gboolean
+gnc_cellblock_changed (CellBlock *cursor, gboolean include_conditional)
+{
+  int r, c;
+
+  if (!cursor)
+    return FALSE;
+
+  for (r = 0; r < cursor->num_rows; r++)
+    for (c = 0; c < cursor->num_cols; c++)
+    {
+      CellBlockCell *cb_cell;
+
+      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
+      if (cb_cell == NULL)
+        continue;
+
+      if (gnc_basic_cell_get_changed (cb_cell->cell))
+        return TRUE;
+
+      if (include_conditional &&
+          gnc_basic_cell_get_conditionally_changed (cb_cell->cell))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+void
+gnc_cellblock_clear_changes (CellBlock *cursor)
+{
+  int r, c;
+
+  if (!cursor)
+    return;
+
+  for (r = 0; r < cursor->num_rows; r++)
+    for (c = 0; c < cursor->num_cols; c++)
+    {
+      CellBlockCell *cb_cell;
+
+      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
+      if (cb_cell == NULL)
+        continue;
+
+      gnc_basic_cell_set_changed (cb_cell->cell, FALSE);
+      gnc_basic_cell_set_conditionally_changed (cb_cell->cell, FALSE);
+    }
 }
 
 /* --------------- end of file ----------------- */

@@ -57,26 +57,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
-typedef struct cell_node
-{
-  CellType cell_type;
-  BasicCell *cell;
-} CellNode;
-
-typedef struct _CellBuffer CellBuffer;
-struct _CellBuffer
-{
-  CellType cell_type;
-  char * value;
-  guint32 changed;
-  guint32 conditionally_changed;
-};
-
-struct _RegisterBuffer
-{
-  GList *buffers;
-};
-
 typedef struct
 {
   const char *string;
@@ -147,37 +127,22 @@ gnc_register_add_cell (SplitRegister *sr,
                        const char *cell_type_name)
 {
   BasicCell *cell;
-  CellNode *node;
 
   g_return_if_fail (sr != NULL);
   g_return_if_fail (cell_type_name != NULL);
 
   cell = gnc_register_make_cell (cell_type_name);
 
-  node = g_new0 (CellNode, 1);
-
-  node->cell_type = cell_type;
-  node->cell = cell;
-
-  sr->cells = g_list_prepend (sr->cells, node);
+  gnc_table_layout_add_cell (sr->table->layout, cell_type, cell);
 }
 
 BasicCell *
 gnc_register_get_cell (SplitRegister *sr, CellType cell_type)
 {
-  GList *node;
-
   g_return_val_if_fail (sr != NULL, NULL);
+  g_return_val_if_fail (sr->table != NULL, NULL);
 
-  for (node = sr->cells; node; node = node->next)
-  {
-    CellNode *cn = node->data;
-
-    if (cn->cell_type == cell_type)
-      return cn->cell;
-  }
-
-  return NULL;
+  return gnc_table_layout_get_cell (sr->table->layout, cell_type);
 }
 
 const char *
@@ -189,29 +154,6 @@ gnc_register_get_cell_value (SplitRegister *sr, CellType cell_type)
   if (!cell) return NULL;
 
   return gnc_basic_cell_get_value (cell);
-}
-
-gboolean
-gnc_register_get_cursor_changed (SplitRegister *sr,
-                                 gboolean include_conditional)
-{
-  GList *node;
-
-  if (!sr) return FALSE;
-
-  for (node = sr->cells; node; node = node->next)
-  {
-    CellNode *cn = node->data;
-
-    if (gnc_basic_cell_get_changed (cn->cell))
-      return TRUE;
-
-    if (include_conditional &&
-        gnc_basic_cell_get_conditionally_changed (cn->cell))
-      return TRUE;
-  }
-
-  return FALSE;
 }
 
 gboolean
@@ -231,22 +173,6 @@ gnc_register_get_cell_changed (SplitRegister *sr,
   else
     return (gnc_basic_cell_get_changed (cell) ||
             gnc_basic_cell_get_conditionally_changed (cell));
-}
-
-void
-gnc_register_clear_changes (SplitRegister *sr)
-{
-  GList *node;
-
-  if (!sr) return;
-
-  for (node = sr->cells; node; node = node->next)
-  {
-    CellNode *cn = node->data;
-
-    gnc_basic_cell_set_changed (cn->cell, FALSE);
-    gnc_basic_cell_set_conditionally_changed (cn->cell, FALSE);
-  }
 }
 
 /* ============================================== */
@@ -730,9 +656,8 @@ xaccInitSplitRegister (SplitRegister *reg,
                        TableModel *model,
                        gboolean templateMode)
 {
-  Table * table;
+  reg->table = gnc_table_new (model);
 
-  reg->table = NULL;
   reg->user_data = NULL;
   reg->destroy = NULL;
 
@@ -868,18 +793,14 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  table = gnc_table_new (model);
-
-  reg->table = table;
-
   /* Set up header */
   {
     VirtualCellLocation vcell_loc = { 0, 0 };
 
-    gnc_table_set_vcell (table, reg->cursor_header,
+    gnc_table_set_vcell (reg->table, reg->cursor_header,
                          NULL, TRUE, TRUE, vcell_loc);
 
-    table->num_header_phys_rows = use_double_line ? 2 : 1;
+    reg->table->num_header_phys_rows = use_double_line ? 2 : 1;
   }
 
   /* Set up first and only initial row */
@@ -891,9 +812,9 @@ xaccInitSplitRegister (SplitRegister *reg,
     vloc.phys_row_offset = 0;
     vloc.phys_col_offset = 0;
 
-    gnc_table_set_vcell (table, reg->cursor_ledger_single,
+    gnc_table_set_vcell (reg->table, reg->cursor_ledger_single,
                          NULL, TRUE, TRUE, vloc.vcell_loc);
-    gnc_table_move_cursor (table, vloc);
+    gnc_table_move_cursor (reg->table, vloc);
   }
 }
 
@@ -956,17 +877,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->cursor_journal_single = NULL;
   reg->cursor_journal_double = NULL;
   reg->cursor_split = NULL;
-
-  for (node = reg->cells; node; node = node->next)
-  {
-    CellNode *cn = node->data;
-
-    gnc_basic_cell_destroy (cn->cell);
-    g_free (cn);
-  }
-
-  g_list_free (reg->cells);
-  reg->cells = NULL;
 
   g_free (reg->debit_str);
   g_free (reg->tdebit_str);
@@ -1065,27 +975,6 @@ xaccCursorTypeToClass (CursorType cursor_type)
 
 /* ============================================== */
 
-static CellType
-sr_cell_type (SplitRegister *reg, void * cell)
-{
-  GList *node;
-
-  if (reg == NULL)
-    return NO_CELL;
-
-  for (node = reg->cells; node; node = node->next)
-  {
-    CellNode *cn = node->data;
-
-    if (cell == cn->cell)
-      return cn->cell_type;
-  }
-
-  return NO_CELL;
-}
-
-/* ============================================== */
-
 CellType
 xaccSplitRegisterGetCurrentCellType (SplitRegister *reg)
 {
@@ -1145,7 +1034,7 @@ xaccSplitRegisterGetCellType (SplitRegister *reg, VirtualLocation virt_loc)
   if (cell == NULL)
     return NO_CELL;
 
-  return sr_cell_type (reg, cell);
+  return gnc_table_layout_get_cell_type (reg->table->layout, cell);
 }
 
 /* ============================================== */
@@ -1177,10 +1066,12 @@ xaccSplitRegisterGetCellLoc (SplitRegister *reg, CellType cell_type,
     for (cell_col = 0; cell_col < cellblock->num_cols; cell_col++)
     {
       CellBlockCell *cb_cell;
+      CellType ctype;
 
       cb_cell = gnc_cellblock_get_cell (cellblock, cell_row, cell_col);
+      ctype = gnc_table_layout_get_cell_type (table->layout, cb_cell->cell);
 
-      if (sr_cell_type (reg, cb_cell->cell) == cell_type)
+      if (ctype == cell_type)
       {
         if (virt_loc != NULL)
         {
@@ -1215,162 +1106,6 @@ xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg, CellType cell_type,
   return xaccSplitRegisterGetCellLoc (reg, cell_type,
                                       table->current_cursor_loc.vcell_loc,
                                       virt_loc);
-}
-
-/* ============================================== */
-
-RegisterBuffer *
-gnc_register_buffer_new (void)
-{
-  RegisterBuffer *rb;
-
-  rb = g_new0 (RegisterBuffer, 1);
-
-  return rb;
-}
-
-/* ============================================== */
-
-static void
-destroy_cell_buffer (CellBuffer *cb)
-{
-  if (cb == NULL)
-    return;
-
-  g_free (cb->value);
-  cb->value = NULL;
-
-  g_free (cb);
-}
-
-static void
-gnc_register_buffer_clear (RegisterBuffer *rb)
-{
-  GList *node;
-
-  if (!rb) return;
-
-  for (node = rb->buffers; node; node = node->next)
-  {
-    CellBuffer *cb = node->data;
-
-    destroy_cell_buffer (cb);
-  }
-
-  g_list_free (rb->buffers);
-  rb->buffers = NULL;
-}
-
-void
-gnc_register_buffer_destroy (RegisterBuffer *rb)
-{
-  if (!rb) return;
-
-  gnc_register_buffer_clear (rb);
-
-  g_free (rb);
-}
-
-/* ============================================== */
-
-static CellBuffer *
-save_cell (BasicCell *bcell)
-{
-  CellBuffer *cb;
-
-  if (!bcell)
-    return NULL;
-
-  cb = g_new0 (CellBuffer, 1);
-
-  cb->value = g_strdup (bcell->value);
-  cb->changed = bcell->changed;
-  cb->conditionally_changed = bcell->conditionally_changed;
-
-  return cb;
-}
-
-void
-gnc_register_save_cursor (SplitRegister *sr, RegisterBuffer *rb)
-{
-  GList *node;
-
-  if ((sr == NULL) || (rb == NULL))
-    return;
-
-  gnc_register_buffer_clear (rb);
-
-  for (node = sr->cells; node; node = node->next)
-  {
-    CellNode *cn = node->data;
-    CellBuffer *cb;
-
-    if (!gnc_basic_cell_get_changed (cn->cell) &&
-        !gnc_basic_cell_get_conditionally_changed (cn->cell))
-      continue;
-
-    cb = save_cell (cn->cell);
-    cb->cell_type = cn->cell_type;
-
-    rb->buffers = g_list_prepend (rb->buffers, cb);
-  }
-}
-
-/* ============================================== */
-
-static void
-restore_cell (BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
-{
-  int r, c;
-
-  if ((bcell == NULL) || (cb == NULL))
-    return;
-
-  if (!cb->changed && !cb->conditionally_changed)
-    return;
-
-  /* only restore if it's in the current cursor */
-  for (r = 0; r < cursor->num_rows; r++)
-    for (c = 0; c < cursor->num_cols; c++)
-    {
-      CellBlockCell *cb_cell;
-
-      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
-      if (cb_cell == NULL)
-        continue;
-
-      if (cb_cell->cell == bcell)
-      {
-        xaccSetBasicCellValue(bcell, cb->value);
-        bcell->changed = cb->changed;
-        bcell->conditionally_changed = cb->conditionally_changed;
-        return;
-      }
-    }
-}
-
-void
-gnc_register_restore_cursor (SplitRegister *sr, RegisterBuffer *rb)
-{
-  CellBlock *cursor;
-  GList *node;
-
-  if ((sr == NULL) || (sr->table == NULL) || (rb == NULL))
-    return;
-
-  cursor = sr->table->current_cursor;
-  if (cursor == NULL)
-    return;
-
-  for (node = rb->buffers; node; node = node->next)
-  {
-    CellBuffer *cb = node->data;
-    BasicCell *cell;
-
-    cell = gnc_register_get_cell (sr, cb->cell_type);
-
-    restore_cell (cell, cb, cursor);
-  }
 }
 
 /* keep in sync with CellType enum */

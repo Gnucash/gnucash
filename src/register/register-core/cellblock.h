@@ -107,4 +107,10 @@ void        gnc_cellblock_destroy (CellBlock *cellblock);
 CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
                                         int row, int col);
 
-#endif /* XACC_CELL_BLOCK_H */
+gboolean gnc_cellblock_changed (CellBlock *cursor,
+                                gboolean include_conditional);
+
+void     gnc_cellblock_clear_changes (CellBlock *cursor);
+
+#endif
+

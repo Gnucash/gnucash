@@ -96,6 +96,7 @@
 #include "gnc-common.h"
 #include "gtable.h"
 #include "register-common.h"
+#include "table-layout.h"
 #include "table-model.h"
 
 
@@ -136,6 +137,8 @@ typedef void (*TableDestroyFunc) (Table *table);
 
 struct _Table
 {
+  TableLayout *layout;
+
   short num_virt_rows;
   short num_virt_cols;
 
@@ -157,12 +160,6 @@ struct _Table
   /* This value is initialized to NULL and never touched afterwards.
    * It can be used by higher-level code. */
   gpointer user_data;
-
-  /* Determines whether the passive background
-   * colors alternate between odd and even virt
-   * rows, or between the first and non-first
-   * physical rows within cellblocks. */
-  gboolean alternate_bg_colors;
 
   /* If positive, denotes a row that marks a boundary that should
    * be visually distinguished. */
@@ -189,8 +186,20 @@ Table *     gnc_table_new (TableModel *model);
 void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);
 
-/* Thi function checks the bounds of virtal locations in the table
- * and returns TRUE if they are out of bounds. */
+
+/* Functions to work with current cursor */
+gboolean    gnc_table_current_cursor_changed (Table *table,
+                                              gboolean include_conditional);
+
+void        gnc_table_clear_current_cursor_changes (Table *table);
+
+void        gnc_table_save_current_cursor (Table *table, CursorBuffer *buffer);
+void        gnc_table_restore_current_cursor (Table *table,
+                                              CursorBuffer *buffer);
+
+
+/* This function checks the given location and returns true
+ * if it is out of bounds of the table. */
 gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
                                                VirtualCellLocation vcell_loc);
 
@@ -359,5 +368,3 @@ gboolean     gnc_table_traverse_update(Table *table,
                                        VirtualLocation *dest_loc);
 
 #endif /* TABLE_ALLGUI_H */
-
-/* ================== end of file ======================= */

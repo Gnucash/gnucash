@@ -139,7 +139,6 @@ typedef enum
   NUM_CURSOR_TYPES
 } CursorType;
 
-typedef struct _RegisterBuffer RegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
 
 typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
@@ -163,12 +162,10 @@ struct _SplitRegister
 
   /* some private data; outsiders should not access this */
 
-  GList *cells;
-
   /**
    * A flag indicating a "template" register.
    **/
-  gboolean	template;
+  gboolean	template; /* FIXME: this should not be here! */
 
   /**
    * The template account which the transactions in a template
@@ -210,12 +207,9 @@ BasicCell *     gnc_register_get_cell (SplitRegister *sr, CellType cell_type);
 const char *    gnc_register_get_cell_value (SplitRegister *sr,
                                              CellType cell_type);
 
-gboolean        gnc_register_get_cursor_changed (SplitRegister *sr,
-                                                 gboolean include_conditional);
 gboolean        gnc_register_get_cell_changed (SplitRegister *sr,
                                                CellType cell_type,
                                                gboolean include_conditional);
-void            gnc_register_clear_changes (SplitRegister *sr);
 
 /* Returns the type of the current cursor */
 CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
@@ -244,13 +238,6 @@ gboolean   xaccSplitRegisterGetCellLoc (SplitRegister *reg,
 gboolean   xaccSplitRegisterGetCurrentCellLoc (SplitRegister *reg,
                                                CellType cell_type,
                                                VirtualLocation *virt_loc);
-
-/* Functions for working with split register buffers */
-RegisterBuffer * gnc_register_buffer_new (void);
-void gnc_register_buffer_destroy (RegisterBuffer *rb);
-
-void gnc_register_save_cursor (SplitRegister *sr, RegisterBuffer *srb);
-void gnc_register_restore_cursor (SplitRegister *sr, RegisterBuffer *srb);
 
 const char * xaccSplitRegisterGetCellTypeName (CellType type);
 CellType     xaccSplitRegisterGetCellTypeFromName (const char *name);

@@ -1425,7 +1425,7 @@ LedgerTraverse (Table *table,
     return FALSE;
 
   /* no changes, make sure we aren't going off the end */
-  changed = gnc_register_get_cursor_changed (reg, FALSE);
+  changed = gnc_table_current_cursor_changed (table, FALSE);
   if (!changed && (pending_trans != trans))
   {
     gnc_table_find_close_valid_cell (table, &virt_loc, info->exact_traversal);
@@ -2036,7 +2036,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
     return NULL;
 
-  changed = gnc_register_get_cursor_changed (reg, FALSE);
+  changed = gnc_table_current_cursor_changed (reg->table, FALSE);
 
   /* See if we were asked to duplicate an unchanged blank split.
    * There's no point in doing that! */
@@ -2197,7 +2197,7 @@ xaccSRCopyCurrentInternal (SplitRegister *reg, gboolean use_cut_semantics)
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
     return;
 
-  changed = gnc_register_get_cursor_changed (reg, FALSE);
+  changed = gnc_table_current_cursor_changed (reg->table, FALSE);
 
   /* See if we were asked to copy an unchanged blank split. Don't. */
   if (!changed && ((split == NULL) || (split == blank_split)))
@@ -2294,7 +2294,7 @@ xaccSRCutCurrent (SplitRegister *reg)
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
     return;
 
-  changed = gnc_register_get_cursor_changed (reg, FALSE);
+  changed = gnc_table_current_cursor_changed (reg->table, FALSE);
 
   /* See if we were asked to cut an unchanged blank split. Don't. */
   if (!changed && ((split == NULL) || (split == blank_split)))
@@ -2636,12 +2636,12 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
 
   virt_loc = reg->table->current_cursor_loc;
 
-  if (!gnc_register_get_cursor_changed (reg, FALSE))
+  if (!gnc_table_current_cursor_changed (reg->table, FALSE))
     return;
 
   /* We're just cancelling the current split here, not the transaction.
    * When cancelling edits, reload the cursor from the transaction. */
-  gnc_register_clear_changes (reg);
+  gnc_table_clear_current_cursor_changes (reg->table);
 
   if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
     gnc_table_move_cursor_gui (reg->table, virt_loc);
@@ -2702,7 +2702,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   /* use the changed flag to avoid heavy-weight updates
    * of the split & transaction fields. This will help
    * cut down on uneccessary register redraws. */
-  if (!gnc_register_get_cursor_changed (reg, FALSE))
+  if (!gnc_table_current_cursor_changed (reg->table, FALSE))
     return FALSE;
 
   /* get the handle to the current split and transaction */
@@ -2904,7 +2904,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws. */
-   if (!gnc_register_get_cursor_changed (reg, FALSE))
+   if (!gnc_table_current_cursor_changed (reg->table, FALSE))
    {
      if (!do_commit)
        return FALSE;
@@ -3027,7 +3027,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
      }
    }
 
-   gnc_register_clear_changes (reg);
+   gnc_table_clear_current_cursor_changes (reg->table);
 
    gnc_resume_gui_refresh ();
 
@@ -4940,7 +4940,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   SRInfo *info = xaccSRGetInfo (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
-  RegisterBuffer *reg_buffer;
+  CursorBuffer *cursor_buffer;
   GHashTable *trans_table = NULL;
   CellBlock *lead_cursor;
   Transaction *blank_trans;
@@ -5023,14 +5023,14 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
   /* If the current cursor has changed we save the values for later
    * possible restoration. */
-  if (gnc_register_get_cursor_changed (reg, TRUE) &&
+  if (gnc_table_current_cursor_changed (table, TRUE) &&
       (find_split == xaccSRGetCurrentSplit (reg)))
   {
-    reg_buffer = gnc_register_buffer_new ();
-    gnc_register_save_cursor (reg, reg_buffer);
+    cursor_buffer = gnc_cursor_buffer_new ();
+    gnc_table_save_current_cursor (table, cursor_buffer);
   }
   else
-    reg_buffer = NULL;
+    cursor_buffer = NULL;
 
   /* disable move callback -- we don't want the cascade of 
    * callbacks while we are fiddling with loading the register */
@@ -5239,13 +5239,11 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
       new_split_row = save_loc.vcell_loc.virt_row;
 
       if (find_split == xaccSRGetCurrentSplit (reg))
-        gnc_register_restore_cursor (reg, reg_buffer);
+        gnc_table_restore_current_cursor (table, cursor_buffer);
     }
 
-    if (reg_buffer != NULL)
-      gnc_register_buffer_destroy (reg_buffer);
-
-    reg_buffer = NULL;
+    gnc_cursor_buffer_destroy (cursor_buffer);
+    cursor_buffer = NULL;
   }
 
   /* If we didn't find the pending transaction, it was removed
@@ -5363,16 +5361,16 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
 gboolean
 xaccSRHasPendingChanges (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
-  Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  SRInfo *info = xaccSRGetInfo (reg);
+  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
 
   if (reg == NULL)
     return FALSE;
 
-  if (gnc_register_get_cursor_changed (reg, FALSE))
+  if (gnc_table_current_cursor_changed (reg->table, FALSE))
     return TRUE;
 
-  return xaccTransIsOpen(pending_trans);
+  return xaccTransIsOpen (pending_trans);
 }
 
 /* ======================================================== */
