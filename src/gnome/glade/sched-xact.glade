@@ -4723,9 +4723,8 @@ Select any which you would like to create now, and click
 
 	<widget>
 	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow15</name>
-	  <border_width>3</border_width>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	  <name>scrolledwindow19</name>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
@@ -4736,20 +4735,20 @@ Select any which you would like to create now, and click
 	  </child>
 
 	  <widget>
-	    <class>GtkCList</class>
-	    <name>reminder_clist</name>
+	    <class>GtkCTree</class>
+	    <name>reminders_list</name>
 	    <can_focus>True</can_focus>
 	    <columns>3</columns>
-	    <column_widths>147,198,80</column_widths>
+	    <column_widths>80,80,80</column_widths>
 	    <selection_mode>GTK_SELECTION_EXTENDED</selection_mode>
 	    <show_titles>True</show_titles>
 	    <shadow_type>GTK_SHADOW_IN</shadow_type>
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847863</name>
-	      <label>Name</label>
+	      <child_name>CTree:title</child_name>
+	      <name>label847882</name>
+	      <label>Scheduled Transaction</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0.5</xalign>
@@ -4760,9 +4759,9 @@ Select any which you would like to create now, and click
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847864</name>
-	      <label>Next Date</label>
+	      <child_name>CTree:title</child_name>
+	      <name>label847883</name>
+	      <label>Frequency</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0.5</xalign>
@@ -4773,9 +4772,9 @@ Select any which you would like to create now, and click
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label847865</name>
-	      <label>Days</label>
+	      <child_name>CTree:title</child_name>
+	      <name>label847884</name>
+	      <label>Days Away</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>0.5</xalign>
@@ -4853,7 +4852,7 @@ Select any which you would like to create now, and click
 	  <widget>
 	    <class>GtkScrolledWindow</class>
 	    <name>scrolledwindow16</name>
-	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	    <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	    <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
@@ -4863,19 +4862,19 @@ Select any which you would like to create now, and click
 	    </child>
 
 	    <widget>
-	      <class>GtkCList</class>
-	      <name>to_create_clist</name>
+	      <class>GtkCTree</class>
+	      <name>to_create_list</name>
 	      <can_focus>True</can_focus>
-	      <columns>3</columns>
-	      <column_widths>80,123,80</column_widths>
+	      <columns>2</columns>
+	      <column_widths>80,80</column_widths>
 	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
 	      <show_titles>True</show_titles>
 	      <shadow_type>GTK_SHADOW_IN</shadow_type>
 
 	      <widget>
 		<class>GtkLabel</class>
-		<child_name>CList:title</child_name>
-		<name>label847866</name>
+		<child_name>CTree:title</child_name>
+		<name>label847893</name>
 		<label>Name</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>
@@ -4887,21 +4886,8 @@ Select any which you would like to create now, and click
 
 	      <widget>
 		<class>GtkLabel</class>
-		<child_name>CList:title</child_name>
-		<name>label847867</name>
-		<label>Date</label>
-		<justify>GTK_JUSTIFY_CENTER</justify>
-		<wrap>False</wrap>
-		<xalign>0.5</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<child_name>CList:title</child_name>
-		<name>label847868</name>
+		<child_name>CTree:title</child_name>
+		<name>label847894</name>
 		<label>Ready?</label>
 		<justify>GTK_JUSTIFY_CENTER</justify>
 		<wrap>False</wrap>

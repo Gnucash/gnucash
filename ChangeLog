@@ -1,3 +1,10 @@
+2002-06-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c: Lists of SX instances [the
+	Reminders and To-Create] are now trees instead of clists.
+	Better structure of internal state.
+	Fixed multiple-SX-reminder selection/processing bug [Bug#85997].
+
 2002-06-22  David Hampton  <hampton@employees.org>
 
 	* src/gnc-module/gnc-module.{c,h,scm} :
