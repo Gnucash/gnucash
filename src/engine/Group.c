@@ -57,7 +57,8 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   
   grp->parent      = NULL;
   grp->numAcc      = 0;
-  grp->account     = NULL;
+  grp->account     = _malloc (sizeof (Account *));
+  grp->account[0]  = NULL;   /* null-terminated array */
   
   grp->balance     = 0.0;
   }
@@ -90,7 +91,10 @@ xaccFreeAccountGroup( AccountGroup *grp )
 
   /* null everything out, just in case somebody 
    * tries to traverse freed memory */
-  xaccInitializeAccountGroup (grp);
+  grp->parent      = NULL;
+  grp->numAcc      = 0;
+  grp->account     = NULL;
+  grp->balance     = 0.0;
 
   _free(grp);
 }
@@ -281,36 +285,29 @@ xaccGetPeerAccountFromName ( Account *acc, const char * name )
 \********************************************************************/
 Account *
 removeAccount( AccountGroup *grp, int num )
-  {
+{
+  int i,j, nacc;
+  Account **arr;
   Account *acc = NULL;
   
-  if( NULL != grp )
-    {
-    int i,j;
-    Account **oldAcc = grp->account;
+  if (!grp) return NULL;
 
-    grp->saved = FALSE;
-    
-    grp->numAcc--;
-    grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
-    
-    acc = oldAcc[grp->numAcc];    /* In case we are deleting last in
-				    * old array */
-    for( i=0,j=0; i<grp->numAcc; i++,j++ )
-      {
-      if( j != num )
-        grp->account[i] = oldAcc[j];
-      else
-        {
-        acc = oldAcc[j];
-        i--;
-        }
-      }
-    
-    _free(oldAcc);
+  arr = grp->account;
+
+  grp->saved = FALSE;
+  
+  nacc = grp->numAcc;
+  for( i=0,j=0; i<nacc; i++,j++ )
+    {
+    arr[i] = arr[j];
+    if (j == num) { acc = arr[j]; i--; }
     }
+
+  grp->numAcc--;
+  arr[grp->numAcc] = NULL;
+
   return acc;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -344,7 +341,7 @@ xaccRemoveAccount (Account *acc)
 {
    int i,j;
    AccountGroup *grp;
-   Account **oldAcc;
+   Account **arr;
 
    if (NULL == acc) return;
    grp = acc->parent;
@@ -354,21 +351,17 @@ xaccRemoveAccount (Account *acc)
     * are not yet parented. */
    if (NULL == grp) return;
 
-   oldAcc = grp->account;
+   arr = grp->account;
 
    grp->saved = FALSE;
     
    grp->numAcc--;
 
    if (0 < grp->numAcc) {
-      grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
        
       for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
-         if( acc != oldAcc[j] ) {
-            grp->account[i] = oldAcc[j];
-         } else {
-            i--;
-         }
+         arr[i] = arr[j];
+         if( acc == arr[j] ) { i--; }
       }
    } else {
       grp->account = NULL;
@@ -378,10 +371,9 @@ xaccRemoveAccount (Account *acc)
       if (grp->parent) {
          xaccRemoveGroup (grp);
          xaccFreeAccountGroup (grp);
-       }
-    }
-    
-   _free(oldAcc);
+      }
+   }
+   arr[grp->numAcc] = NULL;
 }
 
 /********************************************************************\
@@ -420,24 +412,22 @@ insertAccount( AccountGroup *grp, Account *acc )
   if (NULL == acc) return -1;
 
   /* set back-pointer to the accounts parent */
-  acc->parent = (struct _account_group *) grp;
+  acc->parent = grp;
 
   oldAcc = grp->account;
     
   grp->saved = FALSE;
   
   grp->numAcc++;
-  grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
+  grp->account = (Account **)_malloc(((grp->numAcc)+1)*sizeof(Account *));
 
-  if (1 < grp->numAcc) {
-    for( i=0; i<(grp->numAcc-1); i++ ) {
-      grp->account[i] = oldAcc[i];
-    }
-    _free(oldAcc);
-  } else {
-    i = 0;
+  for( i=0; i<(grp->numAcc-1); i++ ) {
+    grp->account[i] = oldAcc[i];
   }
-  grp->account[i] = acc;
+  _free(oldAcc);
+
+  grp->account[(grp->numAcc)-1] = acc;
+  grp->account[(grp->numAcc)] = NULL;
 
   return i;
   }
@@ -550,8 +540,7 @@ xaccMergeAccounts (AccountGroup *grp)
                Split *split;
                split = acc_b->splits[k];
                acc_b->splits[k] = NULL;
-               if (acc_b == (Account *) split->acc) 
-                   split->acc = (struct _account *) acc_a;
+               split->acc = NULL;
                xaccAccountInsertSplit (acc_a, split);
             }
 
@@ -608,6 +597,7 @@ xaccGroupGetAccount (AccountGroup *grp, int i)
 double
 xaccGroupGetBalance (AccountGroup * grp)
 {
+   if (!grp) return 0.0;
    return (grp->balance);
 }
 
