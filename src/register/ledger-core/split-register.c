@@ -2101,14 +2101,12 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
 
-  /* Initialize the rate cells */
-  gnc_price_cell_set_fraction
-    ((PriceCell *)
-     gnc_table_layout_get_cell (reg->table->layout, RATE_CELL), 1000000);
-
+  /* Initialize the rate cell
+   * use a share_print_info to make sure we don't have rounding errors
+   */
   gnc_price_cell_set_print_info
     ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL),
-     gnc_default_price_print_info());
+     gnc_default_share_print_info());
 
   /* The action cell should accept strings not in the list */
   gnc_combo_cell_set_strict

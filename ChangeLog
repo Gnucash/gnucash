@@ -8,6 +8,15 @@
 	* src/gnome-utils/Makefile.am: added search-param.[ch]
 	* po/POTFILES.in: fix for the search-param.c move
 
+	Pull up from HEAD
+	* src/gnome-utils/dialog-transfer.c: don't round the exchange
+	  rate when returning it to callers...  Compute it from the
+	  from_amount and to_amount.
+	* src/register/ledger-core/split-register.c: change the rate-cell
+	  to a shares_print_info so we don't lose accuracy due to rounding
+	  errors.
+	  Fixes bug #106332
+
 2003-02-16  Herbert Thoma  <herbie@hthoma.de>
 
 	Pull up from HEAD:
