@@ -28,7 +28,6 @@
      y2k-threshold
      currency             ;; this is a string.. no checking 
      xtns                
-     markable-xtns        ;; we prune xtns to speed up marking.  
      accounts 
      cats
      classes)))
@@ -83,12 +82,6 @@
 
 (define qif-file:set-xtns!
   (simple-obj-setter <qif-file> 'xtns))
-
-(define qif-file:markable-xtns 
-  (simple-obj-getter <qif-file> 'markable-xtns))
-
-(define qif-file:set-markable-xtns!
-  (simple-obj-setter <qif-file> 'markable-xtns))
 
 (define qif-file:accounts 
   (simple-obj-getter <qif-file> 'accounts))

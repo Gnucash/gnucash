@@ -147,6 +147,7 @@
          (gnc-acct-hash (make-hash-table 20))
          (existing-gnc-accounts #f)
          (sorted-accounts-list '())
+         (markable-xtns '())
          (sorted-qif-files-list 
           (sort qif-files-list 
                 (lambda (a b)
@@ -212,17 +213,25 @@
     ;; ones to match. 
     (for-each 
      (lambda (qif-file)
-       (let ((markable-xtns '()))
-         (for-each 
-          (lambda (xtn)
-            (let splitloop ((splits (qif-xtn:splits xtn)))             
-              (if (qif-split:category-is-account? (car splits))
-                  (set! markable-xtns (cons xtn markable-xtns))
-                  (if (not (null? (cdr splits)))
-                      (splitloop (cdr splits))))))
-          (qif-file:xtns qif-file))
-         (qif-file:set-markable-xtns! qif-file markable-xtns)))
+       (for-each 
+        (lambda (xtn)
+          (let splitloop ((splits (qif-xtn:splits xtn)))             
+            (if (qif-split:category-is-account? (car splits))
+                (set! markable-xtns (cons xtn markable-xtns))
+                (if (not (null? (cdr splits)))
+                    (splitloop (cdr splits))))))
+        (qif-file:xtns qif-file)))
      qif-files-list)
+    
+    ;; now run through the markable transactions marking any
+    ;; duplicates.  marked transactions/splits won't get imported.
+    (if (> (length markable-xtns) 1)
+        (let xloop ((xtn (car markable-xtns))
+                    (rest (cdr markable-xtns)))
+          (if (not (qif-xtn:mark xtn))
+              (qif-import:mark-matching-xtns xtn rest))
+          (if (not (null? (cdr rest)))
+              (xloop (car rest) (cdr rest)))))
     
     ;; iterate over files. Going in the sort order by number of 
     ;; transactions should give us a small speed advantage.
@@ -232,11 +241,6 @@
         (lambda (xtn)
           (if (not (qif-xtn:mark xtn))
               (begin 
-                ;; mark the transaction and find any other QIF 
-                ;; xtns that refer to the same xtn 
-                (qif-xtn:set-mark! xtn #t)
-                (qif-import:mark-matching-xtns xtn qif-file qif-files-list)
-                
                 ;; create and fill in the GNC transaction
                 (let ((gnc-xtn (gnc:transaction-create)))
                   (gnc:transaction-init gnc-xtn)
@@ -257,7 +261,6 @@
                   
                   ;; rebalance and commit everything
                   (gnc:transaction-commit-edit gnc-xtn)))))
-        
         (qif-file:xtns qif-file)))
      sorted-qif-files-list)
     
@@ -327,46 +330,48 @@
           ;; end" for the transaction.
           (for-each 
            (lambda (qif-split)
-             (let ((gnc-far-split (gnc:split-create))
-                   (far-acct-info #f)
-                   (far-acct-name #f)
-                   (far-acct-type #f)
-                   (far-acct #f)
-                   (split-amt (qif-split:amount qif-split))
-                   (memo (qif-split:memo qif-split)))
-
-               (if (not split-amt) (set! split-amt 0.0))
-               
-               ;; fill the splits in (near first).  This handles files in
-               ;; multiple currencies by pulling the currency value from the
-               ;; file import.
-               (set! near-split-total (+ near-split-total split-amt))
-               (gnc:split-set-base-value gnc-far-split (- split-amt) currency)
-               
-               (if memo (gnc:split-set-memo gnc-far-split memo))
-               
-               (if (qif-split:category-is-account? qif-split)
-                   (set! far-acct-info
-                         (hash-ref qif-acct-map 
-                                   (qif-split:category qif-split)))
-                   (set! far-acct-info
-                         (hash-ref qif-cat-map 
-                                   (qif-split:category qif-split))))
-               (set! far-acct-name 
-                     (list-ref far-acct-info 1))
-               (set! far-acct (hash-ref gnc-acct-hash far-acct-name))
-               
-               ;; set the reconcile status.  I thought I could set using 
-               ;; the quicken type, but it looks like #\r reconcile
-               ;; states aren't preserved across gnucash save/restores.
-               (let ((cleared (qif-split:matching-cleared qif-split)))
-                 (if (or (eq? 'cleared cleared)
-                         (eq? 'reconciled cleared))
-                     (gnc:split-set-reconcile gnc-far-split #\c)))
-               
-               ;; finally, plug the split into the account 
-               (gnc:transaction-append-split gnc-xtn gnc-far-split)
-               (gnc:account-insert-split far-acct gnc-far-split)))
+             (if (not (qif-split:mark qif-split))
+                 (let ((gnc-far-split (gnc:split-create))
+                       (far-acct-info #f)
+                       (far-acct-name #f)
+                       (far-acct-type #f)
+                       (far-acct #f)
+                       (split-amt (qif-split:amount qif-split))
+                       (memo (qif-split:memo qif-split)))
+                   
+                   (if (not split-amt) (set! split-amt 0.0))
+                   
+                   ;; fill the splits in (near first).  This handles
+                   ;; files in multiple currencies by pulling the
+                   ;; currency value from the file import.
+                   (set! near-split-total (+ near-split-total split-amt))
+                   (gnc:split-set-base-value gnc-far-split 
+                                             (- split-amt) currency)
+                   
+                   (if memo (gnc:split-set-memo gnc-far-split memo))
+                   
+                   (if (qif-split:category-is-account? qif-split)
+                       (set! far-acct-info
+                             (hash-ref qif-acct-map 
+                                       (qif-split:category qif-split)))
+                       (set! far-acct-info
+                             (hash-ref qif-cat-map 
+                                       (qif-split:category qif-split))))
+                   (set! far-acct-name 
+                         (list-ref far-acct-info 1))
+                   (set! far-acct (hash-ref gnc-acct-hash far-acct-name))
+                   
+                   ;; set the reconcile status.  I thought I could set using 
+                   ;; the quicken type, but it looks like #\r reconcile
+                   ;; states aren't preserved across gnucash save/restores.
+                   (let ((cleared (qif-split:matching-cleared qif-split)))
+                     (if (or (eq? 'cleared cleared)
+                             (eq? 'reconciled cleared))
+                         (gnc:split-set-reconcile gnc-far-split #\c)))
+                   
+                   ;; finally, plug the split into the account 
+                   (gnc:transaction-append-split gnc-xtn gnc-far-split)
+                   (gnc:account-insert-split far-acct gnc-far-split))))
            splits)
           
           ;; the value of the near split is the total of the far splits.
@@ -474,10 +479,12 @@
              (gnc:split-set-base-value gnc-far-split (- num-shares)
                                        qif-security))
             
-            ;; stock splits are a pain in the butt: QIF just specifies 
-            ;; the split ratio, not the number of shares in and out, 
-            ;; so we have to fetch the number of shares from the 
-            ;; security account             
+            ;; stock splits: QIF just specifies the split ratio, not
+            ;; the number of shares in and out, so we have to fetch
+            ;; the number of shares from the security account 
+
+            ;; FIXME : this could be wrong.  Make sure the
+            ;; share-amount is at the correct time.
             ((stksplit)
              (let* ((splitratio (/ num-shares 10))
                     (in-shares 
@@ -537,24 +544,29 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:mark-matching-xtns 
+;;  find transactions that are the "opposite half" of xtn and 
+;;  mark them so they won't be imported. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:mark-matching-xtns xtn qif-file qif-files)
+(define (qif-import:mark-matching-xtns xtn candidate-xtns)
   (for-each 
    (lambda (split)
      (if (not (qif-split:mark split))
          (if (qif-split:category-is-account? split)
              (begin 
-               (qif-split:set-mark! split #t)
                (qif-split:set-matching-cleared! 
                 split
                 (qif-import:mark-matching-split 
-                 split xtn qif-file qif-files))
-               (qif-split:set-mark! split #t)))))
-   (qif-xtn:splits xtn))
-  (qif-xtn:set-mark! xtn #t))
+                 split xtn candidate-xtns))))))
+   (qif-xtn:splits xtn)))
 
-(define (qif-import:mark-matching-split split xtn qif-file qif-files)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; qif-import:mark-matching-split
+;; find split(s) matching 'split' and mark them so they don't get
+;; imported.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-import:mark-matching-split split xtn candidate-xtns)
   (let* ((near-acct-name #f)
          (far-acct-name (qif-split:category split))
          (date (qif-xtn:date xtn))
@@ -574,9 +586,11 @@
               (set! near-acct-name (qif-file:default-account qif-file))))
         
         (let ((qif-accts 
-               (qif-split:accounts-affected split xtn)))          
+               (qif-split:accounts-affected split xtn))
+              (commission (qif-xtn:commission xtn)))
           (set! near-acct-name (car qif-accts))
           (set! far-acct-name (cadr qif-accts))
+          (if (not commission) (set! commission 0.0))
           (if action
               ;; we need to do some special massaging to get
               ;; transactions to match up.  Quicken thinks the near
@@ -587,40 +601,31 @@
                  (set! near-acct-name (qif-xtn:from-acct xtn))
                  (set! far-acct-name (qif-split:category split)))
                 ((xout sellx)
-                 (set! amount (- amount)))))))
+                 (set! amount (- amount)))))
+          (set! amount (- amount commission))))
     
     ;; this is the grind loop.  Go over every unmarked split of every
-    ;; unmarked transaction of every file that has any transactions from
-    ;; the far-acct-name.
-    (let file-loop ((files qif-files))
-      (let xtn-loop ((xtns (qif-file:markable-xtns (car files))))
-        (if (not (qif-xtn:mark (car xtns)))
-            (let split-loop ((splits (qif-xtn:splits (car xtns))))
-              (if (qif-split:split-matches?
-                   (car splits) (car xtns) 
-                   near-acct-name date amount memo)
-                  (begin
-                    (qif-split:set-mark! (car splits) #t)
-                    (set! cleared? (qif-xtn:cleared (car xtns)))
-                    (set! done #t)
-                    (qif-xtn:merge-xtns xtn split (car xtns) (car splits))
-                    (let ((all-marked #t))
-                      (for-each 
-                       (lambda (s) (if (not (qif-split:mark s))
-                                       (set! all-marked #f)))
-                       (qif-xtn:splits (car xtns)))
-                      (if all-marked (qif-xtn:set-mark! 
-                                      (car xtns) #t)))))
-              (if (and (not done)
-                       (not (null? (cdr splits))))
-                  (split-loop (cdr splits)))))
-        
-        (if (and (not done)
-                 (not (null? (cdr xtns))))
-            (xtn-loop (cdr xtns))))
+    ;; unmarked transaction in the candidate-xtns list.
+    (let xtn-loop ((xtns candidate-xtns))
+      (if (not (qif-xtn:mark (car xtns)))
+          (let split-loop ((splits (qif-xtn:splits (car xtns))))
+            (if (qif-split:split-matches?
+                 (car splits) (car xtns) 
+                 near-acct-name date amount memo)
+                (begin
+                  (qif-xtn:merge-and-mark-xtns xtn split 
+                                               (car xtns) (car splits))
+                  (set! cleared? (qif-xtn:cleared (car xtns)))
+                  (set! done #t)))
+            ;; iterate with the next split
+            (if (and (not done)
+                     (not (null? (cdr splits))))
+                (split-loop (cdr splits)))))
+      
+      ;; iterate with the next transaction
       (if (and (not done)
-               (not (null? (cdr files))))
-          (file-loop (cdr files))))
+               (not (null? (cdr xtns))))
+          (xtn-loop (cdr xtns))))
     cleared?))
 
 
@@ -645,7 +650,7 @@
            (case action 
              ((xout sellx intincx divx cglongx cgshortx miscincx miscexpx)
               (set! this-amt (- this-amt))))))
-     (eqv? amount this-amt))
+     (= amount this-amt))
    
    ;; is the date the same?
    (let ((self-date (qif-xtn:date xtn)))
@@ -653,9 +658,9 @@
           (pair? date)
           (eq? (length self-date) 3)
           (eq? (length date) 3)
-          (eqv? (car self-date) (car date))
-          (eqv? (cadr self-date) (cadr date))
-          (eqv? (caddr self-date) (caddr date))))
+          (= (car self-date) (car date))
+          (= (cadr self-date) (cadr date))
+          (= (caddr self-date) (caddr date))))
   
    ;; is the memo the same? (is this true?)
    ;; ignore it for now
@@ -734,12 +739,12 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; qif-xtn:merge-xtns 
-;; merge-xtns merges any additional information from other-xtn into
-;; xtn.  this needs to be fleshed out a bit. 
+;; qif-xtn:merge-and-mark-xtns 
+;; we know that the splits match.  Pick one to mark and 
+;; merge the information into the other one.  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-xtn:merge-xtns xtn split other-xtn other-split)
+(define (qif-xtn:merge-and-mark-xtns xtn split other-xtn other-split)
   ;; merge transaction fields 
   (let ((action (qif-xtn:action xtn))
         (o-action (qif-xtn:action other-xtn))
@@ -748,41 +753,38 @@
      ;; this is a transfer involving a security xtn.  Let the 
      ;; security xtn dominate the way it's handled. 
      ((and (not action) o-action security)
-      (qif-xtn:set-action! xtn o-action)
-      (qif-xtn:set-security-name! xtn (qif-xtn:security-name other-xtn))
-      (qif-xtn:set-num-shares! xtn (qif-xtn:num-shares other-xtn))
-      (qif-xtn:set-share-price! xtn (qif-xtn:share-price other-xtn))
-      (qif-xtn:set-commission! xtn (qif-xtn:commission other-xtn))
-      (qif-xtn:set-from-acct!
-       xtn (qif-xtn:from-acct other-xtn))
-      (qif-split:set-amount! split (qif-split:amount other-split))
-      (qif-split:set-class! split (qif-split:class other-split))
-      (qif-split:set-category-is-account?! 
-       split (qif-split:category-is-account? other-split)) 
-      (qif-split:set-category-private! 
-       split (qif-split:category other-split)))
-
-     ;; this is a security transaction from one brokerage to another.
-     ;; The "foox" xtn has the most information about what went on, so
-     ;; use it.
+      (qif-xtn:mark-split xtn split)
+      (qif-xtn:set-number! other-xtn 
+                           (qif-xtn:number xtn)))
+     ;; this is a security transaction from one brokerage to another
+     ;; or within a brokerage.  The "foox" xtn has the most
+     ;; information about what went on, so use it.
      ((and action o-action security)
       (case o-action
         ((buyx sellx cgshortx cglongx intincx divx)
-         (qif-xtn:set-action! xtn o-action)
-         (qif-xtn:set-security-name! xtn 
-                                     (qif-xtn:security-name other-xtn))
-         (qif-xtn:set-num-shares! xtn (qif-xtn:num-shares other-xtn))
-         (qif-xtn:set-share-price! xtn (qif-xtn:share-price other-xtn))
-         (qif-xtn:set-commission! xtn (qif-xtn:commission other-xtn))
-         (qif-split:set-amount! split (qif-split:amount other-split))
-         (qif-split:set-class! split (qif-split:class other-split)) 
-         (qif-xtn:set-from-acct!
-          xtn (qif-xtn:from-acct other-xtn))
-         (qif-split:set-category-is-account?! 
-          split (qif-split:category-is-account? other-split)) 
-         (qif-split:set-category-private! 
-          split (qif-split:category other-split))))))))
+         (qif-xtn:mark-split xtn split))
+        (else 
+         (qif-xtn:mark-split other-xtn other-split))))
+     
+     ;; otherwise, this is a normal no-frills split match.  if one
+     ;; transaction has more splits than the other one,
+     ;; (heuristically) mark the one with less splits.
+     (#t 
+      (if (< (length (qif-xtn:splits xtn))
+             (length (qif-xtn:splits other-xtn)))
+          (qif-xtn:mark-split xtn split)
+          (qif-xtn:mark-split other-xtn other-split))))))
 
+(define (qif-xtn:mark-split xtn split)
+  (qif-split:set-mark! split #t)
+  (let ((all-marked #t))
+    (let loop ((splits (qif-xtn:splits xtn)))
+      (if (not (qif-split:mark (car splits)))
+          (set! all-marked #f)
+          (if (not (null? (cdr splits)))
+              (loop (cdr splits)))))
+    (if all-marked
+        (qif-xtn:set-mark! xtn #t))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:set-share-price split 
