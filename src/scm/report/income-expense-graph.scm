@@ -9,14 +9,15 @@
 (gnc:depend  "date-utilities.scm")
 
 (let ((pagename-general (N_ "General"))
-      (optname-show-net (N_ "Show Net Profit"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-accounts (N_ "Accounts"))
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (pagename-display (N_ "Display Format"))
+      (pagename-display (N_ "Display"))
+      (optname-inc-exp (N_ "Show Income/Expense"))
+      (optname-show-profit (N_ "Show Net Profit"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
 
@@ -28,15 +29,9 @@
             (lambda (new-option)
               (gnc:register-option options new-option))))
 
-      (add-option
-       (gnc:make-simple-boolean-option
-        pagename-general optname-show-net
-        "a" (N_ "Show a single bar with net profit instead of
- side-by-side bars with income and expense") #f))
-
       (gnc:options-add-date-interval!
        options pagename-general
-       optname-from-date optname-to-date "aa")
+       optname-from-date optname-to-date "a")
 
       (add-option
        (gnc:make-multichoice-option
@@ -73,15 +68,25 @@
 				   "Default Currency"))))
       
       (add-option
+       (gnc:make-simple-boolean-option
+        pagename-display optname-inc-exp
+        "a" (_ "Show Income and Expenses?") #t))
+
+      (add-option
+       (gnc:make-simple-boolean-option
+        pagename-display optname-show-profit
+        "b" (_ "Show the net profit?") #f))
+
+      (add-option
        (gnc:make-number-range-option
         pagename-display optname-plot-width 
-        "a" (_ "Width of plot in pixels.") 400
+        "c" (_ "Width of plot in pixels.") 400
         100 1000 0 1))
       
       (add-option
        (gnc:make-number-range-option
         pagename-display optname-plot-height
-        "b" (_ "Height of plot in pixels.") 400
+        "d" (_ "Height of plot in pixels.") 400
         100 1000 0 1))
 
       (gnc:options-set-default-section options pagename-general)
@@ -125,8 +130,7 @@
                                        report-currency 
                                        exchange-fn)))))
 
-    (let* ((show-net? (op-value pagename-general optname-show-net))
-           (to-date-tp (gnc:timepair-end-day-time 
+    (let* ((to-date-tp (gnc:timepair-end-day-time 
 			(vector-ref (op-value pagename-general
 					      optname-to-date) 1)))
 	   (from-date-tp (gnc:timepair-start-day-time 
@@ -137,6 +141,8 @@
            (report-currency (op-value pagename-general
                                       optname-report-currency))
 
+	   (show-net? (op-value pagename-display optname-show-profit))
+	   (show-incexp? (op-value pagename-display optname-inc-exp))
 	   (height (op-value pagename-display optname-plot-height))
 	   (width (op-value pagename-display optname-plot-width))
 
@@ -147,7 +153,8 @@
 	   (exchange-fn-internal (gnc:make-exchange-function exchange-alist))
 	   (exchange-fn (lambda (foreign)
                           (exchange-fn-internal foreign report-currency)))
-	   (dates-list (gnc:dateloop
+	   (dates-list (gnc:dateloop 
+			;; FIXME: gnc:dateloop is toast (see ML)
                         (gnc:timepair-start-day-time from-date-tp) 
                         (gnc:timepair-end-day-time 
                          (decdate to-date-tp DayDelta))
@@ -181,20 +188,26 @@
        chart (gnc:commodity-get-mnemonic report-currency))
       (gnc:html-barchart-set-row-labels-rotated?! chart #t)
 
-      (if show-net?
-          (begin
-            (gnc:html-barchart-append-column! chart
-                                              (map + income-list expense-list))
-            (gnc:html-barchart-set-col-labels! chart (list (_ "Net Profit")))
-            (gnc:html-barchart-set-col-colors! chart (list "red")))
+      (if show-incexp?
           (begin
             (gnc:html-barchart-append-column! chart income-list)
-            (gnc:html-barchart-append-column! chart (map - expense-list))
-            (gnc:html-barchart-set-col-labels! chart
-                                               (list (_ "Income")
-                                                     (_ "Expense")))
-            (gnc:html-barchart-set-col-colors! chart (list "blue" "red"))))
-
+            (gnc:html-barchart-append-column! chart (map - expense-list))))
+      (if show-net?
+	  (gnc:html-barchart-append-column! 
+	   chart (map + income-list expense-list)))
+      (gnc:html-barchart-set-col-labels! 
+       chart (append
+	      (if show-incexp?
+		  (list (_ "Income") (_ "Expense")) '())
+	      (if show-net?
+		  (list (_ "Net Profit")) '())))
+      (gnc:html-barchart-set-col-colors! 
+       chart (append
+	      (if show-incexp?
+		  '("blue" "red") '())
+	      (if show-net?
+		  '("green") '())))
+      
       (gnc:html-document-add-object! document chart) 
 
 ;      (gnc:html-document-add-object! 
