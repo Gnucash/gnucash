@@ -310,7 +310,7 @@ the account instead of opening a register." #f))
   "d" "The types of accounts for which balances are sign-reversed"
   'default
   (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
-        #(credit "Credit Accounts" "Reverse Liability, Equity, and Income Accounts")
+        #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
         #(none "None" "Don't reverse any accounts"))))
 
 
