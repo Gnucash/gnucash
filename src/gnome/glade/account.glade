@@ -715,6 +715,7 @@
 	      <label>Use Opening Balances Equity account</label>
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
+	      <group>transfer_type_group</group>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
@@ -729,6 +730,7 @@
 	      <label>Select Transfer Account</label>
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
+	      <group>transfer_type_group</group>
 	      <child>
 		<padding>0</padding>
 		<expand>False</expand>
