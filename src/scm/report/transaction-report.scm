@@ -696,28 +696,48 @@ and Income accounts")))))
 	    (total-collector 'add
 			     (gnc:gnc-monetary-commodity split-value)
 			     (gnc:gnc-monetary-amount split-value))
-	    (if (and secondary-subtotal-pred
+
+	    (if (and primary-subtotal-pred
+		     (or (not next)
+			 (and next
+			      (not (primary-subtotal-pred current next)))))
+                (begin 
+                   (if secondary-subtotal-pred
+
+                    (begin
+                       (add-subtotal-row table width
+                                         secondary-subtotal-collector
+                                         def:secondary-subtotal-style)
+                       (secondary-subtotal-collector 'reset #f #f)))
+
+	           (add-subtotal-row table width 
+			             primary-subtotal-collector
+				     def:primary-subtotal-style)
+
+		   (primary-subtotal-collector 'reset #f #f)
+
+		   (if next
+                     (begin 
+		       (primary-subheading-renderer
+		        next table width def:primary-subtotal-style)
+
+                       (if secondary-subtotal-pred
+                           (secondary-subheading-renderer
+                            next 
+                            table 
+                            width def:secondary-subtotal-style)))))
+
+                 (if (and secondary-subtotal-pred
 		     (or (not next)
 			 (and next
 			      (not (secondary-subtotal-pred current next)))))
-		(begin (add-subtotal-row table width
+		     (begin (add-subtotal-row table width
 					 secondary-subtotal-collector
 					 def:secondary-subtotal-style)
 		       (secondary-subtotal-collector 'reset #f #f)
 		       (if next
 			   (secondary-subheading-renderer
-			    next table width def:secondary-subtotal-style))))
-	    (if (and primary-subtotal-pred
-		     (or (not next)
-			 (and next
-			      (not (primary-subtotal-pred current next)))))
-		(begin (add-subtotal-row table width 
-					 primary-subtotal-collector
-					 def:primary-subtotal-style)
-		       (primary-subtotal-collector 'reset #f #f)
-		       (if next
-			   (primary-subheading-renderer
-			    next table width def:primary-subtotal-style))))
+			    next table width def:secondary-subtotal-style)))))
 	    (do-rows-with-subtotals rest 
 				    table 
 				    used-columns

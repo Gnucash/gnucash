@@ -1,3 +1,8 @@
+2001-05-03  Robert Graham Merkel <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: fix bug with secondary
+	subheadings.
+
 2001-05-03  Dave Peticolas  <dave@krondo.com>
 
 	* many files: fix spelling errors
