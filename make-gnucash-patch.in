@@ -123,6 +123,7 @@ gnucash.engine.i
 gnucash.pm
 gnucash.pot
 intl/libintl.h
+intl/po2tbl.sed
 lib/gtkhtml/ABOUT-NLS
 lib/gtkhtml/config.guess
 lib/gtkhtml/config.sub
