@@ -5,6 +5,12 @@
 	* src/business/business-gnome/dialog-invoice.c:
 	  Add strings to be translated for expense vouchers
 
+	* src/import-export/import-backend.c:
+	* src/import-export/import-match-map.c:
+	* src/import-export/import-match-map.h:
+          Chris Morgan's Baysian Matching code, to match transactions
+          based on Bayesian filtering of previously matched transactions.
+	
 2003-03-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main-window.scm:  turn off the report-total by default
