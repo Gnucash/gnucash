@@ -842,8 +842,6 @@ gint
 double_compare(double d1, double d2)
 {
   if(isnan(d1) && isnan(d2)) return 0;
-  if((isinf(d1) == 1) && (isinf(d2) == 1)) return 0;
-  if((isinf(d1) == -1) && (isinf(d2) == -1)) return 0;
   if(d1 < d2) return -1;
   if(d1 > d2) return 1;
   return 0;
