@@ -472,14 +472,14 @@ xaccSplitGetCapGainsSplit (Split *split)
 {
    KvpValue *val;
    GUID *gains_guid;
-   Split * gains_split;
+   Split *gains_split;
    
    if (!split) return NULL;
 
-   val = kvp_frame_get_slot (split->kvp_data, "/gains-split");
+   val = kvp_frame_get_slot (split->kvp_data, "gains-split");
    if (!val) return NULL;
    gains_guid = kvp_value_get_guid (val);
-   if (!val) return NULL;
+   if (!gains_guid) return NULL;
 
    gains_split = qof_entity_lookup (qof_book_get_entity_table(split->book),
                    gains_guid, GNC_ID_SPLIT);
@@ -641,9 +641,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
           * that this is the gains transaction that corresponds
           * to the gains source.
           */
-         kvp_frame_set_guid (split->kvp_data, "/gains-split", 
+         kvp_frame_set_guid (split->kvp_data, "gains-split", 
                      xaccSplitGetGUID (lot_split));
-         kvp_frame_set_guid (lot_split->kvp_data, "/gains-source", 
+         kvp_frame_set_guid (lot_split->kvp_data, "gains-source", 
                      xaccSplitGetGUID (split));
       }
       else
