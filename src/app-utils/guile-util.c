@@ -29,7 +29,7 @@
 #include "guile-util.h"
 #include "messages.h"
 
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 #include <libguile/version.h>
 
 /* This static indicates the debugging module this .o belongs to.  */
