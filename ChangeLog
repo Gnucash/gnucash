@@ -1,5 +1,8 @@
 2005-01-10  Christian Stimming  <stimming@tuhh.de>
 
+	* src/engine/guid.h: Fix gcc4 warnings as pointed out by bug
+	#162635
+
 	* src/report/locale-specific/us/gncmod-locale-reports-us.c,
 	src/tax/us/gncmod-tax-us.c: For German tax categories, make sure
 	the module name will match the de_DE locale or will fall back to

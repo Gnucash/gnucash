@@ -131,7 +131,7 @@ void guid_new(GUID *guid);
  *  The memory pointed to is owned by this routine and the guid must
  *  be copied out.
  */
-const GUID guid_new_return(void);
+GUID guid_new_return(void);
 
 /** Returns a GUID which is guaranteed to never reference any entity. */
 const GUID * guid_null (void);
