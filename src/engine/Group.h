@@ -105,11 +105,13 @@ int     xaccGroupGetDepth (AccountGroup *grp);
  *
  * The xaccGetAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
- *    in the indicated AccountGroup group.
+ *    in the indicated AccountGroup group.  It returns NULL if the
+ *    account was not found.
  *
  * The xaccGetPeerAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
- *    in the same AccountGroup anchor group.
+ *    in the same AccountGroup anchor group. It returns NULL if the
+ *    account was not found.
  */
 
 Account *xaccGetAccountFromID       (AccountGroup *, int);
