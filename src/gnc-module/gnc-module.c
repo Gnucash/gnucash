@@ -17,9 +17,6 @@
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
 
-#include <guile/gh.h>
-#include <libguile/list.h>
-
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
 
