@@ -102,6 +102,7 @@ struct _RegWindow
   GtkWidget *voided_menu_item;
   GtkWidget *frozen_menu_item;
   GtkWidget *unreconciled_menu_item;
+  gint component_id;
 };
 
 GtkWidget *gnc_RegWindow_window (RegWindow *data)
@@ -732,6 +733,8 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
 
+  gnc_unregister_gui_component (regData->component_id);
+
   if (regData->date_window != NULL)
   {
     if (regData->date_window->window != NULL)
@@ -843,6 +846,26 @@ gnc_register_size_allocate (GtkWidget *widget,
 
   regData->width = allocation->width;
   gtk_window_set_default_size( GTK_WINDOW(regData->window), regData->width, 0 );
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  gnc_reg_set_window_name (regData);
+}
+
+static void
+close_handler (gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  if (!regData)
+    return;
+
+  gnc_register_delete_cb(NULL, NULL, regData);
+  gnc_register_destroy_cb(NULL, regData);
 }
 
 /********************************************************************\
@@ -1015,6 +1038,14 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     gnc_ledger_display_refresh( regData->ledger );
   }
 
+  /* Get event updates so we can check the window title */
+  regData->component_id = gnc_register_gui_component ("register-window",
+						      refresh_handler,
+						      close_handler, regData);
+
+  gnc_gui_component_watch_entity_type (regData->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY);
   return regData;
 }
 

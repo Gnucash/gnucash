@@ -1,3 +1,11 @@
+2003-06-16  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-register.c: Register with the component manager
+	for ACCOUNT events.  Redo the window title when an event is
+	received. Fixes #113164.
+
+	* src/app-utils/gnc-component-manager.c: Enhance debugging.
+
 2003-06-15  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-split-reg.c:
