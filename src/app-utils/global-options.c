@@ -108,6 +108,8 @@ gnc_register_option_change_callback(GNCOptionChangeCallback callback,
 void
 gnc_unregister_option_change_callback_id(SCM callback_id)
 {
+  if (callback_id == 0)
+    return;
   gnc_option_db_unregister_change_callback_id(global_options, callback_id);
 }
 
