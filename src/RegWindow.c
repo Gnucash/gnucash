@@ -920,7 +920,7 @@ regWindow( Widget parent, Account *acc )
   activityMenu[2].callback_data=(XtPointer)regData;
   activityMenu[3].callback_data=(XtPointer)regData;
   activityMenu[6].callback_data=(XtPointer)regData;
-  activityMenu[8].callback_data=(XtPointer)(regData->dialog);
+  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
 
   menubar = XmCreateMenuBar( pane, "menubar", NULL, 0 );  
   
@@ -1276,14 +1276,15 @@ void
 closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
-  Account   *acc = regData->acc;
+  Account   *acc;
+
+  acc = regData->acc;
   
   /* Save any unsaved changes */
   XbaeMatrixCommitEdit( regData->reg, False );
   regSaveTransaction( regData, regData->lastTrans );
   
-  /* hack alert -- free the popup boxes too */
-  /* be sure to destroy the ComboBox widgets too */
+  /* hack alert -- free the ComboBox popup boxes data structures too */
 
   _free(regData);
   acc->regData = NULL;
