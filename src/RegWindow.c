@@ -55,21 +55,29 @@
 /* The RegWindow struct contains info needed by an instance of an open 
  * register.  Any state info for the regWindow goes here. */
 typedef struct _RegWindow {
-  Account *acc;               /* The account associated with this regwin */
+  Account *blackacc;          /* The account associated with this regwin */
   Widget   dialog;
   Widget   reg;               /* The matrix widget...                    */
   Widget   balance;           /* The balance text field                  */
   unsigned short changed;     /* bitmask of fields that have changed in  *
                                * transaction currEntry                   */
   unsigned short currEntry;   /* to keep track of last edited transaction*/
+
+  char type;                  /* register display type, usually equal to *
+                               * account type                            */
+
+  /* quick-fill stuff */
   XmTextPosition insert;      /* used by quickfill for detecting deletes */
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
                                * a new transaction                       */
+
+  /* pull-down (combo) box stuff */
   PopBox         *actbox;     /* ComboBox for actions                    */
   PopBox         *xferbox;    /* ComboBox for transfers                  */
 
-  short          numCols;     /* number of dolumns in the register       */
+  /* structures for controlling the column layout */
+  short          numCols;     /* number of columns in the register       */
   short columnLocation [XACC_NUM_COLS];  /* column ordering              */
   short columnWidths   [XACC_NUM_COLS];  /* widths (in chars not pixels) */
   String columnLabels  [3][XACC_NUM_COLS]; /* column labels              */
@@ -180,6 +188,9 @@ extern Pixel negPixel;
 /********************************************************************/
 
 /********************************************************************\
+ * xaccDestroyRegWindow()
+ * It is enought to call just XtDestroy Widget.  Any allocated
+ * memory will be freed by the close callbacks.
 \********************************************************************/
 
 void
@@ -214,10 +225,10 @@ regRefresh( RegWindow *regData )
     XtVaGetValues( regData->reg, XmNcells, &data, NULL );
     
     /* The number of rows we need to add/subtract (ie, delta-rows :) */
-    nnrows = (regData->acc->numTrans)*2 + 3; 
+    nnrows = (regData->blackacc->numTrans)*2 + 3; 
     drows  = (nnrows-1) - (nrows-1);
     ncols  = regData->numCols; 
-    acc = regData->acc;
+    acc = regData->blackacc;
 
     /* allocate a new matrix: */
     newData = (String **)_malloc(nnrows*sizeof(String *));
@@ -426,7 +437,7 @@ regRecalculateBalance( RegWindow *regData )
   if( NULL == regData ) return 0.0;
 
   reg = regData->reg;
-  acc = regData->acc;
+  acc = regData->blackacc;
 
   xaccRecomputeBalance (acc);
   
@@ -596,7 +607,7 @@ regSaveTransaction( RegWindow *regData, int position )
    * that has changed */
   char buf[BUFSIZE];
   int  row = (position * 2) + 1;
-  Account *acc = regData->acc;
+  Account *acc = regData->blackacc;
   Transaction *trans;
 
   /* If nothing has changed, we have nothing to do */
@@ -842,7 +853,7 @@ regSaveTransaction( RegWindow *regData, int position )
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindow( Widget parent, Account *acc )
+regWindow( Widget parent, Account *accly )
   {
   AccountGroup *grp;
   Transaction *trans;
@@ -865,18 +876,20 @@ regWindow( Widget parent, Account *acc )
     }
   
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
-  acc -> regData = regData;        /* avoid having two open registers for one account */
-  regData->acc       = acc;
+  accly -> regData   = regData;    /* avoid having two open registers for one account */
+  regData->blackacc  = accly;
   regData->changed   = 0;          /* Nothing has changed yet! */
   regData->currEntry = 0;
-  regData->qf = acc->qfRoot;
+  regData->qf        = accly->qfRoot;
   regData->insert    = 0;          /* the insert (cursor) position in
                                     * quickfill cells */
+  regData->type      = accly->type;
+
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
                           xmDialogShellWidgetClass, parent,
                           XmNdeleteResponse,   XmDESTROY,
-                          XmNtitle,            acc->accountName,
+                          XmNtitle,            accly->accountName,
 /*
                           XmNwidth,            395,
                           XmNheight,           400,
@@ -987,7 +1000,7 @@ regWindow( Widget parent, Account *acc )
     /* ----------------------------------- */
     /* define where each column shows up, and total number of columns. */
     /* the number on the right hand side is the physical location of the column */
-    switch(acc->type)
+    switch(regData->type)
       {
       case BANK:
       case CASH:
@@ -1022,7 +1035,7 @@ regWindow( Widget parent, Account *acc )
         regData -> numCols = 10;
         break;
       default:
-        fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
+        fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", regData->type);
       }
 
     /* ----------------------------------- */
@@ -1036,7 +1049,7 @@ regWindow( Widget parent, Account *acc )
     regData -> columnWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
     regData -> columnWidths[BALN_CELL_C] = 12;  /* dollar balance */
 
-    switch(acc->type)
+    switch(regData->type)
       {
       case BANK:
       case CASH:
@@ -1066,7 +1079,7 @@ regWindow( Widget parent, Account *acc )
     regData -> alignments[DEP_CELL_C]  = XmALIGNMENT_END;
     regData -> alignments[BALN_CELL_C] = XmALIGNMENT_END;
 
-    switch(acc->type)
+    switch(regData->type)
       {
       case BANK:
       case CASH:
@@ -1098,7 +1111,7 @@ regWindow( Widget parent, Account *acc )
     regData -> columnLabels[0][NUM_CELL_C]  = "Num";
     regData -> columnLabels[0][DESC_CELL_C] = "Description";
     regData -> columnLabels[0][BALN_CELL_C] = "Balance";
-    switch(acc->type)
+    switch(regData->type)
       {
       case BANK:
       case CASH:
@@ -1117,7 +1130,7 @@ regWindow( Widget parent, Account *acc )
         break;
       }
     
-    switch(acc->type)
+    switch(regData->type)
       {
       case BANK:
         regData -> columnLabels[0][PAY_CELL_C] = "Payment";
@@ -1163,7 +1176,7 @@ regWindow( Widget parent, Account *acc )
     data[1] = &(regData -> columnLabels[1][0]);
     data[2] = &(regData -> columnLabels[2][0]);
     sprintf( buf, "reg" );
-    reg = XtVaCreateWidget( strcat(buf,accRes[acc->type]),
+    reg = XtVaCreateWidget( strcat(buf,accRes[regData->type]),
                             xbaeMatrixWidgetClass,  frame,
                             XmNcells,               data,
                             XmNfixedRows,           1,
@@ -1200,7 +1213,7 @@ regWindow( Widget parent, Account *acc )
 
   /* create the xfer account box for the first time */
   /* but first, find the topmost group */
-  grp = xaccGetRootGroupOfAcct (acc);
+  grp = xaccGetRootGroupOfAcct (accly);
   regData->xferbox = xferBox (reg, grp);
 
   /******************************************************************\
@@ -1344,7 +1357,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   RegWindow *regData = (RegWindow *)cd;
   Account   *acc;
 
-  acc = regData->acc;
+  acc = regData->blackacc;
   
   /* Save any unsaved changes */
   XbaeMatrixCommitEdit( regData->reg, False );
@@ -1371,8 +1384,8 @@ void startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
   
-  if( regData->acc->adjBData == NULL )
-    regData->acc->adjBData = adjBWindow( toplevel, regData->acc );
+  if( regData->blackacc->adjBData == NULL )
+    regData->blackacc->adjBData = adjBWindow( toplevel, regData->blackacc );
   }
 
 /********************************************************************\
@@ -1388,8 +1401,8 @@ void startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
   
-  if( regData->acc->recnData == NULL )
-    regData->acc->recnData = recnWindow( toplevel, regData->acc );
+  if( regData->blackacc->recnData == NULL )
+    regData->blackacc->recnData = recnWindow( toplevel, regData->blackacc );
   }
 
 /********************************************************************\
@@ -1422,7 +1435,6 @@ void
 deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
-  Account   *acc     = regData->acc;
   Transaction *trans;
   int currow;
   
@@ -1490,7 +1502,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
     (XbaeMatrixDefaultActionCallbackStruct *)cb;
   
   RegWindow *regData = (RegWindow *)cd;
-  Account   *acc = regData->acc;
+  Account   *acc = regData->blackacc;
   
   reg = regData->reg;
   
