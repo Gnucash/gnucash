@@ -43,7 +43,6 @@
 #include "Backend.h"
 #include "BackendP.h"
 #include "QueryObject.h"
-#include "TransLog.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-event.h"
@@ -108,8 +107,6 @@ gnc_book_destroy (GNCBook *book)
 
   /* FIXME: Make sure the data_table is empty */
   g_hash_table_destroy (book->data_tables);
-
-  xaccLogEnable();
 
   g_free (book);
   LEAVE ("book=%p", book);
