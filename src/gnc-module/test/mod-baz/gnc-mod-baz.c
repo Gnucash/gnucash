@@ -29,7 +29,7 @@ gnc_module_init(int refcount) {
   /* load libfoo */
   if(gnc_module_load("gnucash/foo", 0)) {
     /* publish the g-wrapped Scheme bindings for libbaz */
-    gw_init_module_baz_gwrap();
+    gw_init_wrapset_baz_gwrap();
     
     /* use the scheme module */
     gh_eval_str("(use-modules (gnucash baz))");
