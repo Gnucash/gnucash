@@ -312,8 +312,7 @@
     (define (minus-commodity-clist clist)
       (cond ((null? clist) '())
 	    (else (add-commodity-value (caar clist) 
-				       (gnc:numeric-sub-fixed 
-					gnc:numeric-zero 
+				       (gnc:numeric-neg
 					((cadar clist) 'total #f)))
 		  (minus-commodity-clist (cdr clist)))))
 

@@ -110,24 +110,97 @@
       
       options))
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; In progress: A suggested function to calculate the weighted
   ;; average exchange rate between all commodities and the
   ;; report-commodity. Returns an alist.
-  (define (make-exchange-alist report-commodity)
-    (let* ((all-accounts (gnc:group-get-subaccounts
-			 (gnc:get-current-group)))
-	   (curr-accounts 
-	    (filter 
-	     (lambda (a) (let ((t (gw:enum-<gnc:AccountType>-val->sym
-				    (gnc:account-get-type a) #f)))
-			   (member t '(stock mutual-fund currency))))
-	     all-accounts)))
-      ;;(gnc:free-account-group all-accounts)
-      (for-each (lambda (a)
-		  (warn a (gnc:account-get-name a)))
-		curr-accounts)))
-  ;; Unfinished.
-
+  (define (make-exchange-alist report-commodity end-date)
+    (let ((curr-accounts 
+	   (filter gnc:account-has-shares? (gnc:group-get-subaccounts
+					    (gnc:get-current-group))))
+	  (query (gnc:malloc-query))
+	  (splits #f)
+	  ;; an association list. each element has a commodity as key,
+	  ;; and a pair of two value-collectors as value, e.g. ( (USD
+	  ;; (400 .  1000)) (FRF (300 . 100)) ) whers USD is a
+	  ;; <gnc:commodity> and the numbers are a value-collector
+	  ;; which in turn store a <gnc:numeric>.
+	  (sumlist '()))
+      
+      (if (not (null? curr-accounts))
+	  (begin
+	    (gnc:query-set-group query (gnc:get-current-group))
+	    (gnc:query-add-account-match 
+	     query (gnc:list->glist curr-accounts)
+	     'acct-match-any 'query-and)
+	    (gnc:query-add-date-match-timepair 
+	     query #f end-date #t end-date 'query-and) 
+	    
+	    (set! splits (filter 
+			  ;; Filter such that we get only those splits
+			  ;; which have two *different* commodities
+			  ;; involved.
+			  (lambda (s) (not (gnc:commodity-equiv? 
+					    (gnc:transaction-get-commodity 
+					     (gnc:split-get-parent s))
+					    (gnc:account-get-commodity 
+					     (gnc:split-get-account s)))))
+			  ;; Get the query result, i.e. all splits in
+			  ;; currency accounts.
+			  (gnc:glist->list 
+			   (gnc:query-get-splits query) 
+			   <gnc:Split*>)))
+	    (gnc:free-query query);
+	    
+	    (for-each 
+	     (lambda (a)
+	       (let* ((transaction-comm (gnc:transaction-get-commodity 
+					 (gnc:split-get-parent a)))
+		      (account-comm (gnc:account-get-commodity 
+				     (gnc:split-get-account a)))
+		      (foreignlist 
+		       (if (gnc:commodity-equiv? transaction-comm
+						 report-commodity)
+			   (list account-comm 
+				 (gnc:numeric-neg
+				  (gnc:split-get-share-amount a))
+				 (gnc:numeric-neg
+				  (gnc:split-get-value a))) 
+			   (list transaction-comm 
+				 (gnc:split-get-value a) 
+				 (gnc:split-get-share-amount a))))
+		      (pair (assoc (car foreignlist) sumlist)))
+		 (if (not pair)
+		     (begin
+		       (set! 
+			pair (list (car foreignlist)
+				   (cons (make-numeric-collector) 
+					 (make-numeric-collector))))
+		       (set! sumlist (cons pair sumlist))))
+		 ((caadr pair) 'add (cadr foreignlist))
+		 ((cdadr pair) 'add (caddr foreignlist))))
+		   ;(warn 
+		    ;(commodity-value->string 
+		     ;(list (car foreignlist) (cadr foreignlist)))
+		    ;(commodity-value->string 
+		    ; (list report-commodity (caddr foreignlist)))))))
+	     splits)
+	    (map 
+	     (lambda (e)
+	       (begin
+		 ;(warn 		    
+		 ; (commodity-value->string 
+		 ;  (list (car e) ((caadr e) 'total #f)))
+		 ; (commodity-value->string 
+		 ;  (list report-commodity ((cdadr e) 'total #f))))
+		 (list (car e) 
+		       (gnc:numeric-div ((cdadr e) 'total #f) 
+					((caadr e) 'total #f)
+					;; 0 stands for GNC_DENOM_AUTO
+					0
+					GNC-DENOM-REDUCE))))
+	     sumlist)))))
+  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Start of report generating code
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -334,15 +407,17 @@
           (do-subtotals? (get-option (_ "Include Sub-Account balances")))
 	  (show-fcur? (get-option (_ "Show Foreign Currencies")))
 	  (report-currency (get-option (_ "Report's currency")))
-	  ;; DIRTY BUGFIX! Without this +[one day] only those splits
-	  ;; which have a date <= the first second of the desired
-	  ;; end-date are returned. Permanent repair: Change the
-	  ;; semantics of the date-option to return not the first but
-	  ;; the last second of the desired day.
+	  ;; FIXME: Without this +[one day] only those splits which
+	  ;; have a date <= the first second of the desired end-date
+	  ;; are returned. Permanent repair: Change the semantics of
+	  ;; the date-option to return not the first but the last
+	  ;; second of the desired day. However, this bugfix will lead
+	  ;; to wrong results for the (current-time)
           (date-tp (cons (+ 86399 
 			    (car (vector-ref (get-option (_ "Date")) 1)))
 			 0))
-          (doc (gnc:make-html-document)))
+          (doc (gnc:make-html-document))
+	  (txt (gnc:make-html-text)))
       
       (gnc:html-document-set-title! doc "Account Summary")
       (if (not (null? accounts))
@@ -351,16 +426,27 @@
 	  (let* ((tree-depth (if (equal? display-depth 'all)
 				(find-depth accounts)
 				display-depth))
-		 ;; temporary replacement for the real function
-		 (exchange-fn (lambda(foreign-pair domestic)
-				(list domestic (cadr foreign-pair))))
-		 ;; do the (recursive) processing here
-		 (table (build-acct-table accounts date-tp 
-					  tree-depth do-subtotals?
-					  show-fcur? report-currency
-					  exchange-fn)))
-	    ;; TEST
-	    ;;(make-exchange-alist report-currency)
+		 (exchange-alist (make-exchange-alist 
+				  report-currency date-tp))
+
+		 ;; proposed exchange rate calculation function
+		 (exchange-fn 
+		  (lambda (foreign-pair domestic)
+		    (list domestic 
+			  (let ((pair (assoc (car foreign-pair) 
+					     exchange-alist)))
+			    (if (not pair)
+				(gnc:numeric-zero)
+				(gnc:numeric-mul 
+				 (cadr foreign-pair) (cadr pair)
+				 ;; FIXME: the constant 100 here is
+				 ;; not a durable solution
+				 100 GNC-RND-ROUND))))))
+		 
+		 ;; do the processing here
+		 (table (build-acct-table 
+			 accounts date-tp tree-depth do-subtotals?
+			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 
 	    (gnc:html-table-set-col-headers!
@@ -374,8 +460,27 @@
 		    (_ "Balance"))))
 	    
 	    ;; add the table 
-	    (gnc:html-document-add-object! doc table))
-      
+	    (gnc:html-document-add-object! doc table)
+
+	    ;; add the currency information
+	    (for-each 
+	     (lambda (pair)
+	       (gnc:html-text-append! 
+		txt
+		"Exchange rate " 
+		(commodity-value->string 
+		 (list (car pair) (gnc:numeric-create 1 1)))
+		" = "
+		(commodity-value->string 
+		 (list report-currency 
+		       (gnc:numeric-convert 
+			;; FIXME: remove the constant 1000000
+			(cadr pair) 1000000 GNC-RND-ROUND)))))
+	     exchange-alist)
+
+	    (if show-fcur?
+		(gnc:html-document-add-object! doc txt)))
+	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))
             (gnc:html-text-append! 
