@@ -72,7 +72,8 @@ void guid_new(GUID *guid);
  * characters '0' through '9' and 'a' through 'f'. The encoding will
  * always be 32 characters long. The returned string should not be
  * modified. A subsequent call to guid_to_string() will overwrite
- * the result of a previous call. */
+ * the result of a previous call.  hack alert -- this means that
+ * this routine is *not* thread safe! ... needs fixing. */
 const char * guid_to_string(const GUID * guid);
 
 
