@@ -1,0 +1,64 @@
+Hacking Guidelines
+==================
+
+This document is an introduction to hacking on GnuCash.
+
+Related Documents
+-----------------
+
+In addition to this file, you should read the README file, which
+explains the details of getting the CVS source, building GnuCash,
+and creating patches for submission.
+
+The src/doc/design directory contains a preliminary design document
+which you should read as well. You should also feel free to hack on
+the design document.
+
+
+Coding Style Conventions
+------------------------
+
+General:
+
+ * When modifying a file, the style convention in that file should be
+   followed.
+
+ * When creating a new file, the style of existing files should be
+   followed.
+
+ * When creating lots of new files in a new directory, use the GNU
+
+ * Do not submit patches that consist of (gratuitous) stylistic changes.
+
+
+C:
+
+ * Use ISO C.
+
+ * Use glib memory routines where possible. This means you should be
+   using g_malloc(), g_new(), g_free(), etc., instead of malloc(),
+   free(), etc. Do not mix glib memory calls with libc calls!
+
+ * All gnucash functions and global variables are prefixed with gnc_
+
+ * All private functions are enclosed in __ (i.e. _gnc_do_not_call_)
+
+ * Use static functions whenever possible
+
+ * Use const whenever possible
+
+
+Scheme:
+
+ * All gnucash functions and global variables are prefixed with gnc:
+
+ * All global variables are enclosed in ** (i.e. gnc:*load-path*)
+
+ * All private functions are enclosed in __ (i.e. gnc:_do-not-call_)
+
+ * All C functions wrapped with g-wrap have dashes in place of underscores.
+   (xaccSplitGetBalance --> gnc:split-get-balance).
+
+
+Dave Peticolas <dave@krondo.com>
+August 22, 2000

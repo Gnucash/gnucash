@@ -9,6 +9,7 @@ doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  HACKING \
   INSTALL \
   NEWS \
   README

@@ -53,5 +53,5 @@ rm -rf $RPM_BUILD_ROOT
 /usr/man/man1/gnucash.1
 /usr/man/man1/gnc-prices.1
 %config /etc/gnucash
-%doc AUTHORS COPYING ChangeLog NEWS README
+%doc AUTHORS COPYING ChangeLog HACKING NEWS README
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt

@@ -118,7 +118,7 @@ l = @l@
 SUBDIRS =    design
 
 
-EXTRA_DIST =    backup.txt   budget.txt   coding-style.txt   plugin.txt   tax.txt
+EXTRA_DIST =    backup.txt   budget.txt   constderv.html   finderv.html   finutil.html   plugin.txt   tax.txt
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h

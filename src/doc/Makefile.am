@@ -5,6 +5,8 @@ SUBDIRS = \
 EXTRA_DIST = \
   backup.txt \
   budget.txt \
-  coding-style.txt \
+  constderv.html \
+  finderv.html \
+  finutil.html \
   plugin.txt \
   tax.txt
