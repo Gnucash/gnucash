@@ -37,6 +37,7 @@
 #include "cellblock.h"
 #include "table-allgui.h"
 #include "table-motif.h"
+#include "util.h"
 
 static void enterCB (Widget mw, XtPointer cd, XtPointer cb);
 static void leaveCB (Widget mw, XtPointer cd, XtPointer cb);
@@ -241,8 +242,8 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-printf ("enter %d %d (relrow=%d relcol=%d) cell=%p\n", row, col, rel_row, rel_col,
-arr->cells[rel_row][rel_col]);
+   DEBUGCMD (printf ("enter %d %d (relrow=%d relcol=%d) cell=%p\n", 
+      row, col, rel_row, rel_col, arr->cells[rel_row][rel_col]));
 
    /* since we are here, there must be a cell handler.
     * therefore, we accept entry into the cell by default, 
@@ -391,7 +392,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-printf ("leave %d %d \n", row, col);
+   DEBUGCMD (printf ("leave %d %d \n", row, col));
 
    /* by default, accept whatever the final proposed edit is */
    cbs->doit = True;
@@ -863,16 +864,16 @@ xaccRefreshTableGUI (Table * table)
   if (!table) return;
   if (!(table->table_widget)) return;
 
-{int i;
-printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 
-table->num_phys_rows,table->num_phys_cols);
-for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tpay: %s\n", i, 
-table->bg_colors[i][3], 
-table->entries[i][2],
-table->entries[i][3],
-table->entries[i][5]);
-}}
+  DEBUGCMD ({int i;
+     printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 
+     table->num_phys_rows,table->num_phys_cols);
+     for (i=0; i<table->num_phys_rows; i++) {
+     printf ("cell %d\tcolor: 0x%x\tact:%s\tdescr: %s\tpay: %s\n", i, 
+     table->bg_colors[i][3], 
+     table->entries[i][2],
+     table->entries[i][3],
+     table->entries[i][5]);
+     }});
 
   RefreshColors (table, 0, table->num_phys_rows, 0, table->num_phys_cols);
 
