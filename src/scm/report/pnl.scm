@@ -180,5 +180,6 @@
   (gnc:define-report 
    'version 1
    'name (N_ "Profit And Loss")
+   'menu-path (list "_Income & Expense")
    'options-generator pnl-options-generator
    'renderer pnl-renderer))

@@ -726,7 +726,8 @@ Go the the Tax Information dialog to set up tax-related accounts.")))))
 
   (gnc:define-report
    'version 1
-   'name (N_ "Tax")
+   'name (N_ "Tax Report")
+   'menu-path (list (N_ "_Taxes"))
    'options-generator tax-options-generator
    'renderer (lambda (report-obj)
                (generate-tax-or-txf
@@ -739,6 +740,7 @@ Deductable Expenses.")
   (gnc:define-report
    'version 1
    'name (N_ "Export .TXF")
+   'menu-path (list (N_ "_Taxes"))
    'options-generator tax-options-generator
    'renderer (lambda (report-obj)
                (generate-tax-or-txf

@@ -40,18 +40,32 @@
 
 (define (gnc:report-menu-setup win)
   (define menu (gnc:make-menu "_Reports" (list "_Accounts")))
+  (define tax-menu (gnc:make-menu (N_ "_Taxes") (list "_Reports" "")))
+  (define income-expense-menu
+    (gnc:make-menu (N_ "_Income & Expense") (list "_Reports" "")))
+  (define asset-liability-menu
+    (gnc:make-menu (N_ "_Assets & Liabilities") (list "_Reports" "")))
   (define menu-namer (gnc:new-menu-namer))
+  (define menu-hash (make-hash-table 23))
 
   (define (add-report-menu-item name report)
     (if (gnc:report-in-menu? report)
-        (let* ((title (string-append (_ "Report") ": " (_ name)))
-               (item #f))
+        (let ((title (string-append (_ "Report") ": " (_ name)))
+              (menu-path (gnc:report-menu-path report))
+              (item #f))
+
+          (if (not menu-path)
+              (set! menu-path '(""))
+              (set! menu-path
+                    (append menu-path '(""))))
+
+          (set! menu-path (cons "_Reports" menu-path))
 
           (set! item
                 (gnc:make-menu-item
                  ((menu-namer 'add-name) name)
                  (sprintf #f (_ "Display the %s report") name)
-                 (list "_Reports" "")
+                 menu-path
                  (lambda ()
                    (gnc:backtrace-if-exception 
                     (lambda ()
@@ -77,6 +91,10 @@
   (gnc:add-extension 
    (gnc:make-separator (list "_Reports" "")))
 
+  (gnc:add-extension tax-menu)
+  (gnc:add-extension income-expense-menu)
+  (gnc:add-extension asset-liability-menu)
+
   ;; push reports (new items added on top of menu)
   (hash-for-each add-report-menu-item *gnc:_report-templates_*))
 
@@ -84,7 +102,7 @@
   (make-record-type "<report-template>"
                     ;; The data items in a report record
                     '(version name options-generator options-editor
-                              renderer in-menu?)))
+                              renderer in-menu? menu-path)))
 
 (define (gnc:define-report . args) 
   ;; For now the version is ignored, but in the future it'll let us
@@ -96,7 +114,8 @@
 
   (define (blank-report)
     ;; Number of #f's == Number of data members
-    ((record-constructor <report-template>) #f #f #f gnc:default-options-editor #f #t))
+    ((record-constructor <report-template>)
+     #f #f #f gnc:default-options-editor #f #t #f))
 
   (define (args-to-defn in-report-rec args)
     (let ((report-rec (if in-report-rec
@@ -129,6 +148,8 @@
   (record-accessor <report-template> 'renderer))
 (define gnc:report-in-menu?
   (record-accessor <report-template> 'in-menu?))
+(define gnc:report-menu-path
+  (record-accessor <report-template> 'menu-path))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
