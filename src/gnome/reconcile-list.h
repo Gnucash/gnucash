@@ -71,7 +71,7 @@ struct _GNCReconcileList
   GNCReconcileList *sibling;
 
   /* Sorting info */
-  gint key;
+  guint key;
   gboolean increasing;
   GtkWidget *title_arrow[5];
 

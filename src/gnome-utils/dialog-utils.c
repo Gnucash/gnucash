@@ -518,7 +518,7 @@ gnc_option_menu_init(GtkWidget * w)
 {
   GtkWidget * menu;
   GtkWidget * active;
-  int i;
+  unsigned int i;
 
   menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
 
@@ -1115,13 +1115,14 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				gpointer user_data)
 {
   GtkSignalFunc func;
+  GtkSignalFunc *p_func = &func;
 
   if (allsymbols == NULL) {
     /* get a handle on the main executable -- use this to find symbols */
     allsymbols = g_module_open(NULL, 0);
   }
 
-  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)&func)) {
+  if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func)) {
     g_warning("could not find signal handler '%s'.", handler_name);
     return;
   }

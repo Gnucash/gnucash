@@ -186,7 +186,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
 
     result = snprintf(filename, sizeof(filename),
                       "%s/%s", dirname, de->d_name);
-    if ((result < 0) || (result >= sizeof(filename)))
+    if ((result < 0) || (result >= (int)sizeof(filename)))
       continue;
 
     if (stat(filename, &stats) != 0)
@@ -548,7 +548,7 @@ guid_hash_to_guint (gconstpointer ptr)
   else
   {
     guint hash = 0;
-    int i, j;
+    unsigned int i, j;
 
     for (i = 0, j = 0; i < sizeof(guint); i++, j++) {
       if (j == 16) j = 0;
