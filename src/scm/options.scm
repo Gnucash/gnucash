@@ -418,7 +418,7 @@
      (lambda (date)
        (if (date-legal date)
            (set! value date)
-           (gnc:error "Illegal date value set")))
+           (gnc:error "Illegal date value set:" date)))
      default-getter
      (gnc:restore-form-generator value->string)
      (lambda (date)
