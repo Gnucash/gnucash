@@ -330,3 +330,22 @@ gnc_entry_ledger_changed (GncEntryLedger *ledger)
 
   return FALSE;
 }
+
+void
+gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
+				gnc_numeric *value, gnc_numeric *tax_value)
+{
+  gnc_numeric qty, price, discount, tax;
+  gint disc_type, tax_type;
+
+  gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &qty);
+  gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &price);
+  gnc_entry_ledger_get_numeric (ledger, ENTRY_DISC_CELL, &discount);
+  gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &tax);
+
+  disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
+  tax_type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+
+  gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
+			  value, tax_value);
+}

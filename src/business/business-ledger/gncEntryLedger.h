@@ -88,4 +88,6 @@ gboolean gnc_entry_ledger_changed (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger);
 
+gboolean gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGER_H */

@@ -53,5 +53,8 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger);
 void gnc_entry_ledger_display_init (GncEntryLedger *ledger);
 void gnc_entry_ledger_display_fini (GncEntryLedger *ledger);
 
+void gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
+				     gnc_numeric *value,
+				     gnc_numeric *tax_value);
 
 #endif /* GNC_ENTRY_LEDGERP_H */
