@@ -211,6 +211,9 @@ xaccInsertSplit (Transaction *trans, Split *split)
 {
    int i, num;
    Split **oldarray;
+
+   if (!trans) return;
+   if (!split) return;
    
    num = xaccCountSplits (trans->splits);
 
@@ -222,7 +225,27 @@ xaccInsertSplit (Transaction *trans, Split *split)
    trans->splits[num] = split;
    trans->splits[num+1] = NULL;
 
-   _free (oldarray);
+   if (oldarray) _free (oldarray);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccRemoveSplit (Transaction *trans, Split *split) 
+{
+   int i=0, n=0;
+   Split *s;
+
+   s = trans->splits[0];
+   while (s) {
+     trans->splits[i] = trans->splits[n];
+     if (split == s) { i--; }
+     i++;
+     n++;
+     s = trans->splits[n];
+   }
+   trans->splits[i] = NULL;
 }
 
 /********************************************************************\
