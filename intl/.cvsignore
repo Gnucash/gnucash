@@ -1,4 +1,5 @@
 ChangeLog
+Makefile
 Makefile.in
 VERSION
 bindtextdom.c
