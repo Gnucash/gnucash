@@ -404,11 +404,10 @@
                   (gnc:tr-report-make-sort-predicate
                    tr-report-primary-key-op tr-report-primary-order-op
                    tr-report-secondary-key-op tr-report-secondary-order-op)))
-	   (let ((html-mapper (lambda (split-scm) (display "in!") (newline)
+	   (let ((html-mapper (lambda (split-scm)
                                 (gnc:tr-report-split-to-html
-						  split-scm
-						  starting-balance)
-                                (display "out!") (newline))))
+                                 split-scm
+                                 starting-balance))))
 	     (set! report-lines (gnc:inorder-map report-lines html-mapper)))
 	   (set!
 	    balance-line 

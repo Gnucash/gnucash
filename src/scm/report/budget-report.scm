@@ -39,16 +39,16 @@
 ;; 5 - triggers:  as yet undefined
 
 (define (make-budget-entry desc amt acct per ptype trigger)
-  (list->vector  desc amt acct per ptype trigger))
+  (vector desc amt acct per ptype trigger))
 
 (define gnc:budget
-  (list->vector 
-   (make-budget-entry "lunch" 8 ("Food:Lunch") 1 
-		      gnc:budget-day gnc:budget-recurring)
-   (make-budget-entry "junk food" 0.50 ("Food:Junk") 1 
-		      gnc:budget-day gnc:budget-recurring)
-   (make-budget-entry "car repairs" 2500 ("Car:Repairs") 5
-		      gnc:budget-year gnc:budget-contingency)))
+  (vector 
+   (make-budget-entry "lunch" 8 '("Food:Lunch") 1 
+		      'gnc:budget-day gnc:budget-recurring)
+   (make-budget-entry "junk food" 0.50 '("Food:Junk") 1 
+		      'gnc:budget-day gnc:budget-recurring)
+   (make-budget-entry "car repairs" 2500 '("Car:Repairs") 5
+		      'gnc:budget-year gnc:budget-contingency)))
 
 ;;; For future: make-budget-entry should create a structure.
 ;;; And gnc:budget should be a list, not a vector.

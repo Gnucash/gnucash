@@ -38,8 +38,8 @@
         (set-tm:hour bdtime 0)
         (set-tm:mday bdtime 1)
         (set-tm:mon bdtime 0)
-          (cons (car (mktime bdtime)) 0))))
-   #f))
+        (cons (car (mktime bdtime)) 0)))
+    #f))
 
   ;; to-date
   (gnc:register-runavg-option
@@ -66,14 +66,12 @@
 		 (gnc:for-loop 
 		  (lambda(x)
 		    (set! acctlist 
-		       (append! 
-			acctlist
-			(list (gnc:group-get-account 
-			       (gnc:get-current-group) x)))))
+                          (append! 
+                           acctlist
+                           (list (gnc:group-get-account 
+                                  (gnc:get-current-group) x)))))
 		  0 (eval num-accounts) 1)
-	    acctlist
-		    )
-	       ))))
+                 acctlist)))))
     #f #t))
 
   (gnc:register-runavg-option
@@ -382,7 +380,8 @@
 	 (prefix  (list "<HTML>" "<BODY>"))
 	 (suffix  (list "</BODY>" "</HTML>"))
 	 (collist
-	  (list "Beginning" "Ending" "Average" "Max" "Min" "Net Gain" "Gain" "Loss"))
+	  (list "Beginning" "Ending" "Average" "Max"
+                "Min" "Net Gain" "Gain" "Loss"))
 
 	 (report-lines '())
 	 (rept-data '())
@@ -401,7 +400,7 @@
 	(begin
 					; Grab account names
 	  (set! acctname (string-join 
-			  (map gnc-account-getname accounts) 
+			  (map gnc:account-get-name accounts) 
 			  " , "))
 	  (cond ((equal? dosubs #t)
 		 (map (lambda (a)
@@ -439,7 +438,7 @@
 		 (dateloop begindate
 			   enddate
 			   (eval stepsize))
-		 report-lines zdate tempstruct))
+		 report-lines (make-zdate) tempstruct))
 
 	  (set! sum-data (get-averages rept-data))
 
@@ -472,7 +471,7 @@
 	    (if (null? accounts)
 		()
 		(list "Report for " acctname "<p>\n"))
-	    (list rept-text) suffix))))
+	    (list rept-text) suffix)))
 
 (gnc:define-report
  ;; version
@@ -482,4 +481,4 @@
  ;; Options
  runavg-options-generator
  ;; renderer
-average-balance-renderer)
+ average-balance-renderer)
