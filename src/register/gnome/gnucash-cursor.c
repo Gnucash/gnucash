@@ -28,6 +28,8 @@
  *     Dave Peticolas <dave@krondo.com>
  */
 
+#include "config.h"
+
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"
 #include "gnucash-grid.h"
