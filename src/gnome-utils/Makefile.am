@@ -17,6 +17,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/egg \
   -I${top_srcdir}/lib/goffice \
   -I${top_srcdir}/lib/goffice/split \
+  -I${top_srcdir}/lib \
   -I${top_srcdir}/src \
   ${GUILE_INCS} \
   ${LIBGUPPI_CFLAGS} \
