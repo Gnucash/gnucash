@@ -44,6 +44,8 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-event-p.h"
+
 
 /* 
  * The "force_double_entry" flag determines how 
@@ -292,11 +294,13 @@ xaccConfigGetForceDoubleEntry (void)
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void mark_split (Split *split);
+G_INLINE_FUNC void mark_split_internal (Split *split,
+                                        gboolean generate_events);
 G_INLINE_FUNC void
-mark_split (Split *split)
+mark_split_internal (Split *split, gboolean generate_events)
 {
   Account *account = split->acc;
+  Transaction *trans;
 
   if (account)
   {
@@ -304,7 +308,21 @@ mark_split (Split *split)
     account->sort_dirty = TRUE;
 
     xaccGroupMarkNotSaved (account->parent);
+
+    if (generate_events)
+      gnc_engine_generate_event (&account->guid, GNC_EVENT_MODIFY);
   }
+
+  trans = split->parent;
+  if (trans && generate_events)
+    gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
+}
+
+G_INLINE_FUNC void mark_split (Split *split);
+G_INLINE_FUNC void
+mark_split (Split *split)
+{
+  mark_split_internal (split, TRUE);
 }
 
 G_INLINE_FUNC void mark_trans (Transaction *trans);
@@ -314,7 +332,9 @@ mark_trans (Transaction *trans)
   GList *node;
 
   for (node = trans->splits; node; node = node->next)
-    mark_split (node->data);
+    mark_split_internal (node->data, FALSE);
+
+  gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -557,10 +577,14 @@ xaccInitTransaction (Transaction * trans)
 \********************************************************************/
 
 Transaction *
-xaccMallocTransaction( void )
+xaccMallocTransaction (void)
 {
   Transaction *trans = g_new(Transaction, 1);
+
   xaccInitTransaction (trans);
+
+  gnc_engine_generate_event (&trans->guid, GNC_EVENT_CREATE);
+
   return trans;
 }
 
@@ -1457,6 +1481,8 @@ xaccTransDestroy (Transaction *trans)
    g_list_free (trans->splits);
    trans->splits = NULL;
 
+   gnc_engine_generate_event (&trans->guid, GNC_EVENT_DESTROY);
+
    xaccRemoveEntity(&trans->guid);
 
    /* the actual free is done with the commit call, else its rolled back */
@@ -1690,13 +1716,13 @@ xaccTransSetDateInternal(Transaction *trans, int which, time_t secs,
     dadate->tv_nsec = nsecs;
 
     mark_trans(trans);
-   /* Because the date has changed, we need to make sure that each of the
-    * splits is properly ordered in each of their accounts.  We could do that
-    * here, simply by reinserting each split into its account.  However, in
-    * some ways this is bad behaviour, and it seems much better/nicer to defer
-    * that until the commit phase, i.e. until the user has called the
-    * xaccTransCommitEdit() routine.  So, for now, we are done.
-    */
+   /* Because the date has changed, we need to make sure that each of
+    * the splits is properly ordered in each of their accounts. We
+    * could do that here, simply by reinserting each split into its
+    * account. However, in some ways this is bad behaviour, and it
+    * seems much better/nicer to defer that until the commit phase,
+    * i.e. until the user has called the xaccTransCommitEdit()
+    * routine. So, for now, we are done. */
 }
 
 void
