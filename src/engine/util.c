@@ -124,6 +124,10 @@ char * xaccPrintAmount (double val, short shrs)
  * doing.  Don't break it!
 \********************************************************************/
 
+/* The following tokens are used to define the US-style monetary
+ * strings.  With a bit of cleverness, it should be possible to modify
+ * these to handle various international styles ... maybe ... */
+
 #define MINUS_SIGN '-'
 #define K_SEP      ','      /* thousands separator */
 #define DEC_SEP    '.'      /* decimal point */
@@ -159,6 +163,7 @@ double xaccParseUSAmount (const char * instr)
       dollars *= 1000.0;
       dollars += ((double) (1000 * atoi (str)));
       str = tok+sizeof(char);
+      tok = strchr (str, K_SEP);
    }
 
    /* search for a decimal point */
