@@ -1,3 +1,14 @@
+2001-10-02  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/es.po: Added Spanish translation by Raúl Miró
+	<cotin@geocities.com>
+
+	* po/no.po: Updated Norwegian translation by Kjartan Maraas
+	<kmaraas@gnome.org>
+	
+	* po/es.po: Updated Spanish translation by Raúl Miró
+	<cotin@geocities.com>
+
 2001-09-25  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/de.po, po/de.po: Add professional German accounting

@@ -10,7 +10,7 @@
 if [ $# -eq 0 ]
 then
 	cat <<!
-Usage: `basename $0` gnc-glossary.txt > glossary.pot
+Usage: `basename $0` gnc-glossary.txt > gnucash-glossary.pot
 !
 	exit 1;
 fi
