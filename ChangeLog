@@ -1,3 +1,11 @@
+2003-11-17  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.am, Makefile.DEPS:
+	  remove Makefile.DEPS because we don't support automake-1.4 anymore
+	* src/bin/Makefile.am, strsub.c:
+	  remove strsub.c because we don't need it now that we've dropped 1.4
+	Fixes #120207
+
 2003-11-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test-core/test-engine-stuff.c:  don't make a timespec
