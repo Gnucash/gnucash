@@ -1,3 +1,42 @@
+2005-03-07  Neil Williams  <linux@codehelp.co.uk>
+	* ./HACKING: Add a tip for using gdb with opt
+	style builds.
+	* ./src/app-file/gnc-file.c: New error message
+	to direct users to merge QSF, not open directly.
+	* ./src/backend/file/gnc-backend-file.c: Debug
+	aids.
+	* ./src/backend/qsf/qsf-backend.c: Fix object 
+	count and validation; add to KVP read support.
+	* ./src/backend/qsf/qsf-xml.c: Fix object count
+	validation bug.
+	* ./src/engine/qof_book_merge.c: Fix char merge
+	bug.
+	* ./src/engine/qofbackend.h: New error message
+	support.
+	* ./src/engine/qofsession.c: Fix entity copy 
+	parameter list handling. Fix library name error.
+	* ./src/engine/qofsession.h: Doxygen update.
+	* ./src/gnome/Makefile.am: New dialog support.
+	* ./src/gnome/dialog-chart-export.c: New dialog
+	to export the Chart of Accounts to QSF XML.
+	* ./src/gnome/dialog-chart-export.h: Header for
+	new dialog.
+	* ./src/gnome/druid-merge.c: Adding code to
+	support the new dialog.
+	* ./src/gnome/druid-merge.h: New dialog.
+	* ./src/gnome/glade/Makefile.am: New glade file.
+	* ./src/gnome/glade/chart-export.glade: New glade
+	file for Chart of Account export dialog.
+	* ./src/gnome/gnc-main-window.c: Menu commands for
+	new dialog.
+	* ./src/gnome/gnc-plugin-page-account-tree.c: 
+	Minor tweak.
+	* ./src/gnome/ui/gnc-main-window-ui.xml: Adding
+	menu option for new dialog.
+	* ./src/gnome/window-main.c: Removing old merge
+	druid commands.
+
+
 2005-02-28  Neil Williams  <linux@codehelp.co.uk>
 	
 	* ./src/app-utils/gnc-ui-util.h:

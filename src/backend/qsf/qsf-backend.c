@@ -51,7 +51,7 @@ qsf_param_init(qsf_param *params)
 	gchar *qsf_time_precision;
 
 	g_return_if_fail(params != NULL);
-	params->count = 1;
+	params->count = 0;
 	params->supported_types = NULL;
 	params->file_type = QSF_UNDEF;
 	params->qsf_ns = NULL;
@@ -148,16 +148,18 @@ qof_session_load_our_qsf_object(QofSession *first_session, const char *path)
 {
 	QofSession *qsf_session;
 	
-	first_session = qof_session_get_current_session();
 	qsf_session = qof_session_new();
 	qof_session_begin(qsf_session, path, FALSE, FALSE);
 	qof_session_load(qsf_session, NULL);
-	return qof_session_get_error(qsf_session);
+	PINFO (" path=%s", path);
+	/* FIXME: This needs to return success and set the open not merge error in file_open */
+	return ERR_QSF_OPEN_NOT_MERGE;
 }
 
 QofBackendError 
 qof_session_load_qsf_object(QofSession *first_session, const char *path)
 {
+	DEBUG (" ERR_QSF_NO_MAP");
 	return ERR_QSF_NO_MAP;
 }
 
@@ -269,6 +271,17 @@ qsf_supported_parameters(gpointer type, gpointer user_data)
 	qof_class_param_foreach(params->qof_obj_type, qsf_object_sequence, params);
 }
 
+static KvpValueType
+qsf_to_kvp_helper(const char *type_string)
+{
+	if(0 == safe_strcmp(QOF_TYPE_STRING, type_string)) { return KVP_TYPE_STRING; }
+	if(0 == safe_strcmp(QOF_TYPE_GUID, type_string)) { return KVP_TYPE_GUID; }
+	if(0 == safe_strcmp(QOF_TYPE_INT64, type_string)) { return KVP_TYPE_GINT64; }
+	if(0 == safe_strcmp(QOF_TYPE_DOUBLE, type_string)) { return KVP_TYPE_DOUBLE; }
+	if(0 == safe_strcmp(QOF_TYPE_NUMERIC, type_string)) { return KVP_TYPE_NUMERIC; }
+	return 0;
+}
+
 static void
 qsf_from_kvp_helper(gpointer key, gpointer value, gpointer data)
 {
@@ -323,22 +336,22 @@ qsf_from_kvp_helper(gpointer key, gpointer value, gpointer data)
 static void
 qsf_entity_foreach(QofEntity *ent, gpointer data)
 {
-	qsf_param *params;
-	GSList *param_list;
-	xmlNodePtr node, object_node;
-	xmlNsPtr ns;
-	gchar *string_buffer, qsf_guid[GUID_ENCODING_LENGTH + 1];
-	GString *buffer;
-	QofParam *qof_param;
 	QofEntityReference *reference;
-	KvpFrame 	*qsf_kvp;
+	qsf_param  *params;
+	GSList     *param_list;
+	xmlNodePtr node, object_node;
+	xmlNsPtr   ns;
+	gchar      *string_buffer, qsf_guid[GUID_ENCODING_LENGTH + 1];
+	GString    *buffer;
+	QofParam   *qof_param;
+	KvpFrame   *qsf_kvp;
 	GHashTable *kvp_hash;
-	int param_count;
-	gboolean own_guid;
-	
+	int        param_count;
+	gboolean   own_guid;
+
 	g_return_if_fail(data != NULL);
 	params = (qsf_param*)data;
-	param_count = params->count;
+	param_count = ++params->count;
 	ns = params->qsf_ns;
 	own_guid = FALSE;
 	object_node = xmlNewChild(params->book_node, params->qsf_ns, QSF_OBJECT_TAG, NULL);
@@ -501,7 +514,7 @@ qsf_write_file(QofBackend *be, QofBook *book)
 	fclose(out);
 }
 
-/** \brief QofBackend routine to load from file - needs a map.
+/* QofBackend routine to load from file - needs a map.
 */
 gboolean
 load_qsf_object(QofBook *book, const char *fullpath, qsf_param *params)
@@ -517,7 +530,7 @@ load_qsf_object(QofBook *book, const char *fullpath, qsf_param *params)
 	qsf_root = xmlDocGetRootElement(params->input_doc);
 	params->qsf_ns = qsf_root->ns;
 	params->book = book;
-	/** \todo Create a QofBook from the QSF document <b>using a QSF map</b>.
+	/* Create a QofBook from the QSF document <b>using a QSF map</b>.
 	
 	May seem strange, but I think we can do this by using the map handlers to
 	create the output_doc in memory as OUR_QSF_OBJ, then pass to the same routine!
@@ -609,43 +622,44 @@ string_to_kvp_value(const char *content, KvpValueType type)
 void
 qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 {
-	qsf_param 		*params;
-	qsf_objects		*object_set;
-	xmlNodePtr		node;
-	QofEntityReference 	*reference;
-	QofEntity		*qsf_ent;
-	GSList			*linkedEntList;
-	QofBook			*targetBook;
-	const char		*qof_type, *parameter_name;
-	QofIdType		obj_type, reference_type;
-	struct tm		qsf_time;
-	time_t			qsf_time_t;
-	char			*tail;
+	qsf_param          *params;
+	qsf_objects        *object_set;
+	xmlNodePtr         node;
+	QofEntityReference *reference;
+	QofEntity          *qsf_ent;
+	QofBook            *targetBook;
+	const char         *qof_type, *parameter_name;
+	QofIdType          obj_type, reference_type;
+	struct tm          qsf_time;
+	time_t             qsf_time_t;
+	char               *tail;
 	/* cm_ prefix used for variables that hold the data to commit */
-	char 		    cm_sa[GUID_ENCODING_LENGTH + 1];
-	gchar 			*cm_string;
-	gnc_numeric 	cm_numeric;
-	double 			cm_double;
-	gboolean 		cm_boolean;
-	gint32 			cm_i32;
-	gint64 			cm_i64;
-	Timespec 		cm_date;
-	gchar 			*cm_char;
-	GUID 			*cm_guid;
-	const GUID      *cm_const_guid;
-//	KvpFrame 		*cm_kvp;
-//	KvpValue        *cm_value;
-	QofSetterFunc 	cm_setter;
-	void	(*string_setter)	(QofEntity*, const char*);
-	void	(*date_setter)		(QofEntity*, Timespec);
-	void	(*numeric_setter)	(QofEntity*, gnc_numeric);
-	void	(*double_setter)	(QofEntity*, double);
-	void	(*boolean_setter)	(QofEntity*, gboolean);
-	void	(*i32_setter)		(QofEntity*, gint32);
-	void	(*i64_setter)		(QofEntity*, gint64);
-	void	(*char_setter)		(QofEntity*, char*);
-//	void	(*kvp_frame_setter)	(QofEntity*, KvpFrame*);
-	
+	char           cm_sa[GUID_ENCODING_LENGTH + 1];
+	gchar          *cm_string;
+	gnc_numeric    cm_numeric;
+	double         cm_double;
+	gboolean       cm_boolean;
+	gint32         cm_i32;
+	gint64         cm_i64;
+	Timespec       cm_date;
+	char           cm_char,    (*char_getter)  (xmlNodePtr);
+	GUID           *cm_guid;
+	const GUID     *cm_const_guid;
+	KvpFrame       *cm_kvp;
+	KvpValue       *cm_value;
+	KvpValueType   cm_type;
+	QofSetterFunc  cm_setter;
+	const QofParam *cm_param;
+	void (*string_setter)    (QofEntity*, const char*);
+	void (*date_setter)      (QofEntity*, Timespec);
+	void (*numeric_setter)   (QofEntity*, gnc_numeric);
+	void (*double_setter)    (QofEntity*, double);
+	void (*boolean_setter)   (QofEntity*, gboolean);
+	void (*i32_setter)       (QofEntity*, gint32);
+	void (*i64_setter)       (QofEntity*, gint64);
+	void (*char_setter)      (QofEntity*, char);
+	void (*kvp_frame_setter) (QofEntity*, KvpFrame*);
+
 	g_return_if_fail(data != NULL);
 	g_return_if_fail(value != NULL);
 	params = (qsf_param*)data;
@@ -654,10 +668,11 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	qof_type = node->name;
 	qsf_ent = params->qsf_ent;
 	targetBook = params->book;
-	linkedEntList = NULL;
 	obj_type = xmlGetProp(node->parent, QSF_OBJECT_TYPE);
+	ENTER (" ");
 	if(0 == safe_strcasecmp(obj_type, parameter_name)) { return; }
 	cm_setter = qof_class_get_parameter_setter(obj_type, parameter_name);
+	cm_param = qof_class_get_parameter(obj_type, parameter_name);
 	object_set = params->object_set;
 	if(safe_strcmp(qof_type, QOF_TYPE_STRING) == 0)  { 
 		string_setter = (void(*)(QofEntity*, const char*))cm_setter;
@@ -681,6 +696,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		if(TRUE != string_to_guid(xmlNodeGetContent(node), cm_guid))
 		{
 			qof_backend_set_error(params->be, ERR_QSF_BAD_OBJ_GUID);
+			LEAVE (" string to guid failed for %s", xmlNodeGetContent(node));
 			return;
 		}
 		reference_type = xmlGetProp(node, QSF_OBJECT_TYPE);
@@ -736,19 +752,19 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		if(boolean_setter != NULL) { boolean_setter(qsf_ent, cm_boolean); }
 	}
 		if(safe_strcmp(qof_type, QOF_TYPE_KVP) == 0) { 
-			// build the KVP frame from xml <kvp type="" path="">values</kvp>
-			// conditional on "value" and use kvp_value_new.
-			//if(0 == safe_strcmp(
-	
-/*			cm_kvp = kvp_frame_copy(cm_param->param_getfcn(rule->importEnt,cm_param));
-			kvp_frame_setter = (void(*)(QofEntity*, KvpFrame*))cm_param->param_setfcn;
-			if(kvp_frame_setter != NULL) { kvp_frame_setter(rule->targetEnt, cm_kvp); }
-			registered_type = TRUE;*/
+			cm_type = qsf_to_kvp_helper(xmlGetProp(node, QSF_OBJECT_VALUE));
+			if(!cm_type) { return; }
+			cm_value = string_to_kvp_value(xmlNodeGetContent(node), cm_type);
+			cm_kvp = kvp_frame_copy(cm_param->param_getfcn(qsf_ent, cm_param));
+			cm_kvp = kvp_frame_set_value(cm_kvp, xmlGetProp(node, QSF_OBJECT_KVP), cm_value);
+			kvp_frame_setter = (void(*)(QofEntity*, KvpFrame*))cm_setter;
+			if(kvp_frame_setter != NULL) { kvp_frame_setter(qsf_ent, cm_kvp); }
 		}
-
 	if(safe_strcmp(qof_type, QOF_TYPE_CHAR) == 0) { 
-		cm_char = xmlNodeGetContent(node);
-		char_setter = (void(*)(QofEntity*, char*))cm_setter;
+		char_getter = (char (*)(xmlNodePtr))xmlNodeGetContent;
+		cm_char = char_getter(node);
+		LEAVE (" cm_char=%c", cm_char);
+		char_setter = (void(*)(QofEntity*, char))cm_setter;
 		if(char_setter != NULL) { char_setter(qsf_ent, cm_char); }
 	}
 }

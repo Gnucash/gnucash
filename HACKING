@@ -107,6 +107,12 @@ To run gdb on the version in your build tree:
     [gdb output]
     % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
 
+To run gdb on an opt-style-install from your build tree:
+
+   $ ./gnucash-env gdb /usr/bin/guile
+   [gdb output]
+   gdb> run -e main -s ../libexec/overrides/gnucash --g-fatal-warning
+
 
 Using Electric Fence with GnuCash
 ---------------------------------

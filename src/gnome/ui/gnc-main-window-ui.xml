@@ -14,11 +14,13 @@
       <placeholder name="FileSavePlaceholder"/>
       <separator name="FileSep3"/>
       <menu name="FileImport" action="FileImportAction">
-      	<placeholder name="FileImportPlaceholder"/>
+        <menuitem name="FileImportQSF" action="FileImportQSFAction"/>
+        <placeholder name="FileImportPlaceholder"/>
       </menu>
       <menu name="FileExport" action="FileExportAction">
-      	<menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
-      	<placeholder name="FileExportPlaceholder"/>
+        <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
+        <menuitem name="FileExportChart" action="FileExportChartAction"/>
+        <placeholder name="FileExportPlaceholder"/>
       </menu>
       <separator name="FileSep4"/>
       <menuitem name="FilePrint" action="FilePrintAction"/>

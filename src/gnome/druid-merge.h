@@ -23,6 +23,8 @@
 
 #ifndef DRUID_MERGE_H
 #define DRUID_MERGE_H
+#include "qofsession.h"
+
 /** @addtogroup GUI
 	@{ */
 /** @addtogroup NewHierarchy Merging a new account tree into an existing file
@@ -73,6 +75,9 @@ any error values to the calling process.
 */
 
 void gnc_ui_qof_book_merge_druid (void);
+
+void gnc_ui_qsf_import_merge_druid(QofSession *original, QofSession *import);
+
 GtkWidget* qof_book_merge_running (void);
 
 /** \brief 	gncCommodity is not QOF enabled, need to set a default commodity before the merge */

@@ -99,7 +99,7 @@ show_session_error (QofBackendError io_error, const char *newfile)
     case ERR_BACKEND_NO_ERR:
       uh_oh = FALSE;
       break;
-
+	
 	case ERR_BACKEND_NO_HANDLER: {
 		fmt = _("No suitable backend was found for\n%s.");
 		gnc_error_dialog(parent, fmt, newfile);
@@ -243,6 +243,17 @@ show_session_error (QofBackendError io_error, const char *newfile)
 			"has been detected. The QSF object file\n%s\n contains invalid "
 			"data in a field that is meant to hold a number.");
 		gnc_error_dialog(parent, fmt, newfile);
+		break;
+	}
+	case ERR_QSF_OPEN_NOT_MERGE : {
+		fmt = _("The QSF object file\n%s\nis valid and contains GnuCash "
+			"objects. However, GnuCash cannot open the file directly because "
+			"the data needs to be merged into an existing GnuCash data book. "
+			"Please open a GnuCash file or create a new one, then import "
+			"this QSF object file so that the data can be merged into the "
+			"main data book.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break;
 	}
     case ERR_FILEIO_FILE_BAD_READ:
       fmt = _("There was an error reading the file.\n"
@@ -461,7 +472,6 @@ gnc_post_file_open (const char * filename)
 
   qof_session_begin (new_session, newfile, FALSE, FALSE);
   io_err = qof_session_get_error (new_session);
-
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
@@ -509,7 +519,10 @@ gnc_post_file_open (const char * filename)
       gnc_file_new ();
     }
   }
-
+  if(ERR_QSF_OPEN_NOT_MERGE == io_err)
+  {
+	uh_oh = TRUE;
+  }
   /* if the database doesn't exist, ask the user ... */
   else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))

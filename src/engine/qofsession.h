@@ -272,15 +272,6 @@ see \ref BookMerge
 
 */
 
-/** Used as the key value for the QofBook data hash.
-
-Retrieved later by QSF (or any other suitable backend) to
-rebuild the references from the QofEntityReference struct
-that contains the QofIdType and GUID of the referenced entity
-of the original QofBook.
-*/
-#define ENTITYREFERENCE "QofEntityReference"
-
 /** \brief Copy a single QofEntity to another session
  
 Checks first that no entity in the session book contains
@@ -368,6 +359,15 @@ typedef struct qof_entity_reference {
 	GUID      *guid;
 }QofEntityReference;
 
+/** Used as the key value for the QofBook data hash.
+ *
+ * Retrieved later by QSF (or any other suitable backend) to
+ * rebuild the references from the QofEntityReference struct
+ * that contains the QofIdType and GUID of the referenced entity
+ * of the original QofBook.
+ * */
+#define ENTITYREFERENCE "QofEntityReference"
+
 /** \brief Flag indicating a partial QofBook.
 
 When set in the book data with a gboolean value of TRUE,
@@ -399,7 +399,7 @@ backends may return a ::QofBackendError.
 
 /** @name Event Handling
 
- @{ */
+  @{ */
 /** The qof_session_events_pending() method will return TRUE if the backend
  *    has pending events which must be processed to bring the engine
  *    up to date with the backend.

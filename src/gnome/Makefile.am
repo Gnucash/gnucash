@@ -27,6 +27,7 @@ libgncgnome_la_SOURCES = \
   dialog-budget-category.c \
   dialog-budget-list.c \
   dialog-budget-workbench.c \
+  dialog-chart-export.c  \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \

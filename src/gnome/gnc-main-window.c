@@ -61,7 +61,8 @@
 #include "window-main.h"
 #include "window-main-summarybar.h"
 #include "messages.h"
-
+#include "druid-merge.h"
+#include "dialog-chart-export.h"
 // +JSLED
 #include "gnc-html.h"
 
@@ -98,7 +99,9 @@ static void gnc_main_window_cmd_file_open (EggAction *action, GncMainWindow *win
 static void gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_save (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_save_as (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_file_qsf_import (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_export_accounts (EggAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_chart_export (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_print (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_properties (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (EggAction *action, GncMainWindow *window);
@@ -135,8 +138,8 @@ struct GncMainWindowPrivate
 	GtkWidget *notebook;
 	GtkWidget *statusbar;
 	GtkWidget *progressbar;
-
-        GtkWidget *gncSummaryBar;
+	
+	GtkWidget *gncSummaryBar;
 
 	EggActionGroup *action_group;
 
@@ -183,10 +186,19 @@ static EggActionEntry gnc_menu_entries [] =
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_save_as) },
 	{ "FileImportAction", N_("_Import"), NULL, NULL, NULL, NULL },
+	{ "FileImportQSFAction", N_("_QSF Import"),
+		GTK_STOCK_CONVERT, NULL,
+		N_("Import a QSF object file"),
+		G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
 	{ "FileExportAction", N_("_Export"), NULL, NULL, NULL, NULL },
-	{ "FileExportAccountsAction", N_("Export _Accounts..."), NULL, NULL,
-	   N_("Export the account hierarchy to a new file"),
-	   G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
+	{ "FileExportAccountsAction", N_("Export _Accounts"), 
+		GTK_STOCK_CONVERT, NULL,
+		N_("Export the account hierarchy to a new file"),
+		G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
+	{ "FileExportChartAction", N_("Export _Chart of Accounts"), 
+		GTK_STOCK_CONVERT, NULL,
+		N_("Export the chart of accounts for a date with balances"),
+		G_CALLBACK (gnc_main_window_cmd_chart_export) },
 	{ "FilePrintAction", N_("_Print..."), GTK_STOCK_PRINT, "<control>p",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_print) },
@@ -770,7 +782,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	priv->statusbar = gtk_statusbar_new ();
 	gtk_widget_show (priv->statusbar);
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
-			    FALSE, TRUE, 0);
+	                           FALSE, TRUE, 0);
         gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
 
         priv->gncSummaryBar = gnc_main_window_summary_new();
@@ -1026,10 +1038,56 @@ gnc_main_window_cmd_file_save_as (EggAction *action, GncMainWindow *window)
 }
 
 static void
+qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
+{
+	QofSession *qsf_session, *first_session;
+	const gchar *filename;
+	QofBook *original;
+
+	ENTER (" ");
+	gnc_engine_suspend_events();
+	filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
+	gtk_widget_destroy((GtkWidget*) fs);
+	first_session = qof_session_get_current_session();
+	original = qof_session_get_book(first_session);
+	qsf_session = qof_session_new();
+	qof_session_begin(qsf_session, filename, TRUE, FALSE);
+	qof_session_load(qsf_session, NULL);
+	gnc_engine_resume_events();
+	gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
+	LEAVE (" ");
+}
+
+static void
+gnc_main_window_cmd_file_qsf_import (EggAction *action, GncMainWindow *window)
+{
+	GtkWidget *file_select;
+
+	gnc_window_set_progressbar_window(GNC_WINDOW(window));
+	file_select = gtk_file_selection_new("Select the QSF file to import into GnuCash");
+	g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (file_select)->ok_button),
+		"clicked", G_CALLBACK (qsf_file_select_ok), (gpointer) file_select);
+	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (file_select)->cancel_button),
+		"clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (file_select));
+	gtk_widget_show (file_select);
+	gnc_window_set_progressbar_window(NULL);
+}
+
+static void
 gnc_main_window_cmd_file_export_accounts (EggAction *action, GncMainWindow *window)
 {
 	gnc_window_set_progressbar_window (GNC_WINDOW(window));
 	gnc_file_export_file (NULL);
+	gnc_window_set_progressbar_window (NULL);
+	/* FIXME GNOME 2 Port (update the title etc.) */
+	/* gnc_refresh_main_window_info (); */
+}
+
+static void
+gnc_main_window_cmd_chart_export (EggAction *action, GncMainWindow *window)
+{
+	gnc_window_set_progressbar_window (GNC_WINDOW(window));
+	gnc_main_window_chart_export();
 	gnc_window_set_progressbar_window (NULL);
 	/* FIXME GNOME 2 Port (update the title etc.) */
 	/* gnc_refresh_main_window_info (); */

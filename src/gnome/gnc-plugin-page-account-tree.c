@@ -127,7 +127,7 @@ static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "FileNewAccountAction", N_("New Account..."), GNC_STOCK_NEW_ACCOUNT, NULL,
 	  N_("Create a new Account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account) },
-	{ "FileAddAccountHierarchyDruidAction", N_("Add New Account Hierarchy..."), NULL, NULL,
+	{ "FileAddAccountHierarchyDruidAction", N_("Add New Account _Hierarchy..."), NULL, NULL,
 	  N_("Extend the current book by merging with new account type categories"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_hierarchy_merge) },
 	{ "FileOpenAccountAction", N_("Open Account"), GNC_STOCK_OPEN_ACCOUNT, "<control>o",

@@ -27,6 +27,8 @@
 #include "qsf-dir.h"
 #include "qsf-xml.h"
 #include "qofbook-p.h"
+#include "gnc-trace.h"
+static short int module = MOD_BACKEND;
 
 void qsf_free_params(qsf_param *params)
 {
@@ -124,14 +126,18 @@ qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *vali
 {
 	xmlNodePtr cur_node;
 	xmlChar *object_declaration;
+	guint count;
 
+	count = 0;
 	for(cur_node = child->children; cur_node != NULL;
 		cur_node = cur_node->next)
 	{
 		if(qsf_is_element(cur_node, ns, QSF_OBJECT_TAG)) {
 			object_declaration = xmlGetProp(cur_node, QSF_OBJECT_TYPE);
+			count = g_hash_table_size(valid->validation_table);
 			g_hash_table_insert(valid->validation_table, object_declaration, xmlNodeGetContent(cur_node));
-			if(TRUE == qof_class_is_registered((QofIdTypeConst) object_declaration))
+			if((g_hash_table_size(valid->validation_table) > count) &&
+				(TRUE == qof_class_is_registered((QofIdTypeConst) object_declaration)))
 			{
 				valid->qof_registered_count++;
 			}
@@ -148,6 +154,7 @@ gboolean is_our_qsf_object(const char *path)
 	gint table_count;
 
 	g_return_val_if_fail((path != NULL),FALSE);
+	ENTER (" ");
 	if(path == NULL) { return FALSE; }
 	doc = xmlParseFile(path);
 	if(doc == NULL)  { return FALSE; }
@@ -164,9 +171,11 @@ gboolean is_our_qsf_object(const char *path)
 	if(table_count == valid.qof_registered_count)
 	{
 		g_hash_table_destroy(valid.validation_table);
+		LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
 		return TRUE;
 	}
 	g_hash_table_destroy(valid.validation_table);
+	LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
 	return FALSE;
 }
 
@@ -179,6 +188,7 @@ gboolean is_qsf_object(const char *path)
 	doc = xmlParseFile(path);
 	if(doc == NULL) { return FALSE; }
 	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { return FALSE; }
+	ENTER (" implement a way of finding more than one map");
 	/** \todo implement a way of finding more than one map */
 	/** \todo set the map xmlDocPtr in params for later processing. */
 	return TRUE;
@@ -194,6 +204,7 @@ gboolean is_our_qsf_object_be(qsf_param *params)
 	char *path;
 
 	g_return_val_if_fail((params != NULL),FALSE);
+	ENTER (" ");
 	path = g_strdup(params->filepath);
 	if(path == NULL) {
 		qof_backend_set_error(params->be, ERR_FILEIO_FILE_NOT_FOUND);
@@ -223,10 +234,12 @@ gboolean is_our_qsf_object_be(qsf_param *params)
 	{
 		g_hash_table_destroy(valid.validation_table);
 		qof_backend_set_error(params->be, ERR_BACKEND_NO_ERR);
+		LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
 		return TRUE;
 	}
 	g_hash_table_destroy(valid.validation_table);
 	qof_backend_set_error(params->be, ERR_QSF_NO_MAP);
+	LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
 	return FALSE;
 }
 

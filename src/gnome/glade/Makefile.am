@@ -3,6 +3,7 @@ glade_DATA = \
 	account.glade \
 	acctperiod.glade \
 	budget.glade \
+	chart-export.glade \
 	commodities.glade \
 	fincalc.glade \
 	lots.glade \

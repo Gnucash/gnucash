@@ -391,7 +391,7 @@ is_gzipped_file(const gchar *name)
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
-    if(gnc_is_xml_data_file_v2(path)) {
+	if(gnc_is_xml_data_file_v2(path)) {
         return GNC_BOOK_XML2_FILE;
     } else if(gnc_is_xml_data_file(path)) {
         return GNC_BOOK_XML1_FILE;
@@ -399,10 +399,10 @@ gnc_file_be_determine_file_type(const char *path)
         return GNC_BOOK_XML2_FILE;
     } else if(is_our_qsf_object(path)) {
         return QSF_GNC_OBJECT;  /**< QSF object file using only GnuCash QOF objects */
-	} else if(is_qsf_object(path)) {
-		return QSF_OBJECT;  	/**< QSF object file that needs a QSF map */
-	} else if(is_qsf_map(path)) {
-		return QSF_MAP;  		/**< QSF map file */
+    } else if(is_qsf_object(path)) {
+		return QSF_OBJECT;   /**< QSF object file that needs a QSF map */
+    } else if(is_qsf_map(path)) {
+		return QSF_MAP;      /**< QSF map file */
     } else {
         return GNC_BOOK_BIN_FILE;
     }
@@ -832,17 +832,20 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
-	case QSF_GNC_OBJECT:
+    case QSF_GNC_OBJECT:
 		error = qof_session_load_our_qsf_object(qof_session_get_current_session(), be->fullpath);
+		PINFO (" QSF_GNC_OBJECT error=%d", error);
 		break;
 
-	case QSF_OBJECT:
+    case QSF_OBJECT:
 		/* a QSF object file needs a QSF map to convert external objects */
 		error = qof_session_load_qsf_object(qof_session_get_current_session(), be->fullpath);
+		PINFO (" QSF_OBJECT error=%d", error);
 		break;
 
-	case QSF_MAP:
+    case QSF_MAP:
 		error = ERR_QSF_MAP_NOT_OBJ;
+		PINFO (" QSF_MAP error=%d", error);
 		break;
 
     case GNC_BOOK_BIN_FILE:
