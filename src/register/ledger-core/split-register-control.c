@@ -171,6 +171,38 @@ gnc_trans_has_reconciled_splits (Transaction *trans)
   return FALSE;
 }
 
+static gboolean
+gnc_split_register_old_split_empty_p (SplitRegister *reg, Split *split)
+{
+  BasicCell *cell;
+  gnc_numeric amount;
+  const char *string;
+
+  string = gnc_table_layout_get_cell_value (reg->table->layout, MEMO_CELL);
+  if ((string != NULL) && (*string != '\0'))
+    return FALSE;
+
+  string = gnc_table_layout_get_cell_value (reg->table->layout, XFRM_CELL);
+  if ((string != NULL) && (*string != '\0'))
+    return FALSE;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, CRED_CELL);
+  if (cell) {
+    amount = gnc_price_cell_get_value ((PriceCell *) cell);
+    if (!gnc_numeric_zero_p (amount))
+      return FALSE;
+  }
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, DEBT_CELL);
+  if (cell) {
+    amount = gnc_price_cell_get_value ((PriceCell *) cell);
+    if (!gnc_numeric_zero_p (amount))
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 static void
 gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                 gpointer user_data)
@@ -253,25 +285,45 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
   /* commit the contents of the cursor into the database */
   saved = gnc_split_register_save (reg, old_trans != new_trans);
-  if ((pending_trans != NULL)      &&
-      (pending_trans == old_trans) &&
-      (old_trans != new_trans))
+  if ((old_class == CURSOR_CLASS_SPLIT) &&
+      old_split &&
+      gnc_split_register_old_split_empty_p(reg, old_split)) {
+    int current_row;
+
+    xaccSplitDestroy(old_split);
+    old_split = NULL;
+
+    /*
+     * If the user is moving down a row, we've just thrown off the
+     * numbers by deleting a split. Correct for that.
+     */
+    current_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
+    if (new_virt_loc.vcell_loc.virt_row > current_row)
+      new_virt_loc.vcell_loc.virt_row--;
+  }
+  else if ((pending_trans != NULL)      &&
+	   (pending_trans == old_trans) &&
+	   (old_trans != new_trans))
   {
     if (gnc_split_register_balance_trans (reg, old_trans))
     {
+      /* Trans was unbalanced. */
       new_trans = old_trans;
       new_split = old_split;
       new_trans_split = old_trans_split;
       new_class = old_class;
       new_virt_loc = reg->table->current_cursor_loc;
     }
+    else
+    {
+      /* Trans was balanced. Let it go. */
+      if (xaccTransIsOpen (old_trans))
+	xaccTransCommitEdit (old_trans);
 
-    if (xaccTransIsOpen (old_trans))
-      xaccTransCommitEdit (old_trans);
-
-    info->pending_trans_guid = *xaccGUIDNULL ();
-    pending_trans = NULL;
-    saved = TRUE;
+      info->pending_trans_guid = *xaccGUIDNULL ();
+      pending_trans = NULL;
+      saved = TRUE;
+    }
   }
   else if (old_trans &&
            (old_trans != new_trans) &&
