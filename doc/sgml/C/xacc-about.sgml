@@ -511,6 +511,7 @@ Motif as a school project, taking it to version 0.9 by October
 <PARA>for fixing miscellaneous core dumps and lockups.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email> PrakashK@bigfoot.com</email> Prakash
       Kailasa</GLOSSTERM>
@@ -518,6 +519,15 @@ Motif as a school project, taking it to version 0.9 by October
 <PARA>for gnome build fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email> small@arcadia.spb.ru</email> Alexey
+      Kakunin</GLOSSTERM>
+<GLOSSDEF>
+<PARA>quickfill patch for cyrillic</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email> tkludy@csd.sgi.com</email> Tom Kludy</GLOSSTERM>
 <GLOSSDEF>
