@@ -14,6 +14,8 @@
 	  wrong-number-of-arguments fatal crash when trying to reparse
 	  dates.
 
+	* src/scm/main.scm: fix "development version" message in head
+	
 2003-02-02  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: change to 1.9.0 version
