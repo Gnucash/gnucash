@@ -582,8 +582,8 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
     break;
   default:
     {
-      printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
-	     trans_type);
+	/*printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
+	  trans_type);*/
       HBCI_OutboxJobTransfer *transfer_job = 
 	HBCI_OutboxJobTransfer_new (customer, h_acc, td->hbci_trans);
       job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
