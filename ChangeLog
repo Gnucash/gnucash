@@ -1,3 +1,7 @@
+2004-01-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/test/Makefile.am: don't explicitly add -lglib.
+
 2004-12-23  Derek Atkins  <derek@ihtfp.com>
 
 	Chris Shoemaker's patch to silence gtk errors in dialog-budget-category.c:
