@@ -3018,8 +3018,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_SHRS & changed)
   {
-    gnc_numeric amount = xaccGetPriceCellValue(reg->sharesCell);
-    gnc_numeric price  = xaccGetPriceCellValue(reg->priceCell);
+    gnc_numeric amount = xaccGetPriceCellValue (reg->sharesCell);
+    gnc_numeric price  = xaccGetPriceCellValue (reg->priceCell);
 
     DEBUG ("MOD_SHRS");
 
@@ -3031,7 +3031,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   {
     gnc_numeric price;
 
-    price = xaccGetPriceCellValue(reg->priceCell);
+    price = xaccGetPriceCellValue (reg->priceCell);
 
     DEBUG ("MOD_PRIC");
 
@@ -3055,7 +3055,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if ((MOD_AMNT | MOD_PRIC | MOD_SHRS) & changed)
   {
-    xaccSplitScrubImbalance (split);
+    xaccSplitScrub (split);
 
     if (other_split)
     {
@@ -3065,7 +3065,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       amount = gnc_numeric_neg (amount);
 
       xaccSplitSetSharePriceAndAmount (other_split, price, amount);
-      xaccSplitScrubImbalance (other_split);
+      xaccSplitScrub (other_split);
     }
   }
 

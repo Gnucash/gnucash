@@ -63,9 +63,12 @@
 int force_double_entry = 0;
 
 /* bit-field flags for controlling transaction commits */
-#define BEGIN_EDIT 0x1
-#define DEFER_REBALANCE 0x2
-#define BEING_DESTROYED 0x4
+typedef enum
+{
+  BEGIN_EDIT      = 1 << 0,
+  DEFER_REBALANCE = 1 << 1,
+  BEING_DESTROYED = 1 << 2,
+} TransFlags;
 
 /* arbitrary price per share increment FIXME */
 #define PRICE_DENOM 1000000
@@ -1332,7 +1335,7 @@ xaccTransCommitEdit (Transaction *trans)
      xaccSplitSetValue(s, gnc_numeric_neg(split->value));
    }
 
-   xaccTransScrubSplitImbalance (trans);
+   /*   xaccTransScrubSplits (trans); */
 
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);

@@ -57,13 +57,20 @@ void xaccAccountScrubOrphans (Account *acc);
 void xaccAccountTreeScrubOrphans (Account *acc);
 void xaccGroupScrubOrphans (AccountGroup *grp);
 
+/* The ScrubSplit methods ensure that splits with the same currency
+ *   and security have the same share quantity and value.
+ */
+void xaccSplitScrub (Split *split);
+void xaccTransScrubSplits (Transaction *trans);
+void xaccAccountScrubSplits (Account *account);
+void xaccAccountTreeScrubSplits (Account *account);
+void xaccGroupScrubSplits (AccountGroup *group);
+
 /* The xaccScrubImbalance() method searches for transactions that do
  *    not balance to zero. If any such transactions are found, a split
  *    is created to offset this amount and is added to an "imbalance"
  *    account.
  */
-void xaccSplitScrubImbalance (Split *split);
-void xaccTransScrubSplitImbalance (Transaction *trans);
 void xaccTransScrubImbalance (Transaction *trans);
 void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);

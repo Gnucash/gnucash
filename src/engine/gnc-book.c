@@ -43,6 +43,7 @@
 #include "BackendP.h"
 #include "FileIO.h"
 #include "Group.h"
+#include "Scrub.h"
 #include "gnc-book.h"
 #include "gnc-engine-util.h"
 
@@ -410,6 +411,8 @@ gnc_book_load (GNCBook *book)
       book->errtype = EIO;
       return FALSE;
     }
+
+    xaccGroupScrubSplits (book->topgroup);
 
     return TRUE;
   }

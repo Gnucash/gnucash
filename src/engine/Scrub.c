@@ -106,6 +106,94 @@ xaccAccountScrubOrphans (Account *acc)
 /* ================================================================ */
 
 void
+xaccGroupScrubSplits (AccountGroup *group)
+{
+  int i;
+
+  if (!group) return;
+
+  assert ((0 == group->numAcc) || (group->account));
+
+  for (i = 0; i < group->numAcc; i++)
+    xaccAccountTreeScrubSplits (group->account[i]);
+}
+
+void
+xaccAccountTreeScrubSplits (Account *account)
+{
+  xaccGroupScrubSplits (xaccAccountGetChildren(account));
+  xaccAccountScrubSplits (account);
+}
+
+void
+xaccAccountScrubSplits (Account *account)
+{
+  GList *node;
+
+  for (node = xaccAccountGetSplitList (account); node; node = node->next)
+    xaccSplitScrub (node->data);
+}
+
+void
+xaccTransScrubSplits (Transaction *trans)
+{
+  GList *node;
+
+  if (!trans)
+    return;
+
+  for (node = trans->splits; node; node = node->next)
+    xaccSplitScrub (node->data);
+}
+
+void
+xaccSplitScrub (Split *split)
+{
+  Account *account;
+  Transaction *trans;
+  gboolean trans_was_open;
+  int scu;
+
+  if (!split)
+    return;
+
+  trans = xaccSplitGetParent (split);
+  if (!trans)
+    return;
+
+  account = xaccSplitGetAccount (split);
+  if (!account)
+    return;
+
+  if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
+                            xaccAccountGetEffectiveSecurity (account)))
+    return;
+
+  scu = MIN (xaccAccountGetCurrencySCU (account),
+             xaccAccountGetSecuritySCU (account));
+
+  if (gnc_numeric_same (xaccSplitGetShareAmount (split),
+                        xaccSplitGetValue (split),
+                        scu, GNC_RND_ROUND))
+    return;
+
+  PINFO ("split with mismatched values: %s",
+         guid_to_string (xaccSplitGetGUID (split)));
+
+  trans_was_open = xaccTransIsOpen (trans);
+
+  if (!trans_was_open)
+    xaccTransBeginEdit (trans, TRUE);
+
+  xaccSplitSetShareAmount (split, xaccSplitGetValue (split));
+
+  if (!trans_was_open)
+    xaccTransCommitEdit (trans);
+}
+
+/* ================================================================ */
+
+void
 xaccGroupScrubImbalance (AccountGroup *grp)
 {
   int i;
@@ -150,7 +238,7 @@ xaccTransScrubImbalance (Transaction *trans)
   if (!trans)
     return;
 
-  xaccTransScrubSplitImbalance (trans);
+  xaccTransScrubSplits (trans);
 
   {
     GList *node;
@@ -228,63 +316,6 @@ xaccTransScrubImbalance (Transaction *trans)
     if (!trans_was_open)
       xaccTransCommitEdit (trans);
   }
-}
-
-void
-xaccTransScrubSplitImbalance (Transaction *trans)
-{
-  GList *node;
-
-  if (!trans)
-    return;
-
-  for (node = trans->splits; node; node = node->next)
-    xaccSplitScrubImbalance (node->data);
-}
-
-void
-xaccSplitScrubImbalance (Split *split)
-{
-  Account *account;
-  Transaction *trans;
-  gboolean trans_was_open;
-  int scu;
-
-  if (!split)
-    return;
-
-  trans = xaccSplitGetParent (split);
-  if (!trans)
-    return;
-
-  account = xaccSplitGetAccount (split);
-  if (!account)
-    return;
-
-  if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
-                            xaccAccountGetEffectiveSecurity (account)))
-    return;
-
-  scu = MIN (xaccAccountGetCurrencySCU (account),
-             xaccAccountGetSecuritySCU (account));
-
-  if (gnc_numeric_same (xaccSplitGetShareAmount (split),
-                        xaccSplitGetValue (split),
-                        scu, GNC_RND_ROUND))
-    return;
-
-  PINFO ("split with mismatched values: %s",
-         guid_to_string (xaccSplitGetGUID (split)));
-
-  trans_was_open = xaccTransIsOpen (trans);
-
-  if (!trans_was_open)
-    xaccTransBeginEdit (trans, TRUE);
-
-  xaccSplitSetShareAmount (split, xaccSplitGetValue (split));
-
-  if (!trans_was_open)
-    xaccTransCommitEdit (trans);
 }
 
 /* ================================================================ */
