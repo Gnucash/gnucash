@@ -28,17 +28,15 @@ include @top_srcdir@/Makefile.init
 # Description of targets:
 #
 #   default      -- make the application
+#   motif        -- dynamically linked motif version
+#   motif-static -- statically linked motif version
 #   depend       -- generate the dependencies
 #   clean        -- remove *.a, *.o, *.bak, and *~
 #   distclean    -- get rid of config files too...
 #   install      -- installs everything
 
-default:
-	@echo " "
-	@echo "Please choose one of the following targets:"
-	@echo "motif           dynamically linked motif version"
-	@echo "motif-static    statically linked motif version"
-	@echo " "
+default: motif
+
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
