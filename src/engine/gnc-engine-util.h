@@ -25,7 +25,7 @@
     @brief GnuCash engine utility functions 
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
-    @author Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 1997-2002,2004 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef QOF_UTIL_H
@@ -67,42 +67,50 @@
 
 /** Prototypes *************************************************/
 
-/* The safe_strcmp compares strings a and b the same way that strcmp()
+/** The safe_strcmp compares strings a and b the same way that strcmp()
  * does, except that either may be null.  This routine assumes that
  * a non-null string is always greater than a null string.
  */
 int safe_strcmp (const char * da, const char * db);
 int safe_strcasecmp (const char * da, const char * db);
 
-/* The null_strcmp compares strings a and b the same way that strcmp()
+/** The null_strcmp compares strings a and b the same way that strcmp()
  * does, except that either may be null.  This routine assumes that
  * a null string is equal to the empty string.
  */
 int null_strcmp (const char * da, const char * db);
 
-/* Search for str2 in first nchar chars of str1, ignore case. Return
+/** Search for str2 in first nchar chars of str1, ignore case. Return
  * pointer to first match, or null. These are just like that strnstr
  * and the strstr functions, except that they ignore the case. */
 extern char *strncasestr(const char *str1, const char *str2, size_t len);
 extern char *strcasestr(const char *str1, const char *str2);
 
-/* The ultostr() subroutine is the inverse of strtoul(). It accepts a
+/** The ultostr() subroutine is the inverse of strtoul(). It accepts a
  * number and prints it in the indicated base.  The returned string
  * should be g_freed when done.  */
 char * ultostr (unsigned long val, int base);
 
-/* Returns true if string s is a number, possibly surrounded by
+/** Returns true if string s is a number, possibly surrounded by
  * whitespace. */
 gboolean gnc_strisnum(const char *s);
 
-/* Define a gnucash stpcpy */
+/** Local copy of stpcpy, used wtih libc's that don't have one. */
 char * gnc_stpcpy (char *dest, const char *src);
 
 #ifndef HAVE_STPCPY
 #define stpcpy gnc_stpcpy
 #endif
 
+/** Return NULL if the field is whitespace (blank, tab, formfeed etc.)  
+ *  Else return pointer to first non-whitespace character. 
+ */
+const char * qof_util_whitespace_filter (const char * val);
 
+/** Return integer 1 if the string starts with 't' or 'T' or 
+ *  contains the word 'true' or 'TRUE'; if string is a number, 
+ *  return that number. (Leading whitespace is ignored). */
+int qof_util_bool_to_int (const char * val);
 
 /** Many strings used throughout the engine are likely to be duplicated.
  * So we provide a reference counted cache system for the strings, which

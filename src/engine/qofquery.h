@@ -188,8 +188,8 @@ QofQuery * qof_query_invert(QofQuery *q);
  */
 QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op);
 
-/** Like qof_query_merge, but this will merge q2 into q1.  q2 remains
- * unchanged.
+/** Like qof_query_merge, but this will merge a copy of q2 into q1.  
+ *   q2 remains unchanged.
  */
 void qof_query_merge_in_place(QofQuery *q1, QofQuery *q2, QofQueryOp op);
 

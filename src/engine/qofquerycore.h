@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofquerycore.h -- API for providing core Query data types           *
+ * qofquerycore.h -- API for providing core Query data types        *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -114,28 +114,40 @@ struct _QofQueryPredData {
 
 
 /** Core Data Type Predicates */
-QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, char *str,
-					 QofStringMatch options,
-					 gboolean is_regex);
+QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, 
+                                              const char *str,
+                                              QofStringMatch options,
+                                              gboolean is_regex);
+
 QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
-				       QofDateMatch options, Timespec date);
+                                            QofDateMatch options, 
+                                            Timespec date);
+
 QofQueryPredData *qof_query_numeric_predicate (QofQueryCompare how,
-					  QofNumericMatch options,
-					  gnc_numeric value);
+                                               QofNumericMatch options,
+                                               gnc_numeric value);
+
 QofQueryPredData *qof_query_guid_predicate (QofGuidMatch options, GList *guids);
 QofQueryPredData *qof_query_int32_predicate (QofQueryCompare how, gint32 val);
 QofQueryPredData *qof_query_int64_predicate (QofQueryCompare how, gint64 val);
 QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
-				       const char *chars);
+                                            const char *chars);
 
 /** The qof_query_kvp_predicate() matches the object that has
  *  the value 'value' located at the path 'path'.  In a certain
  *  sense, the 'path' is handled as if it were a paramter.
  */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-				      GSList *path, const KvpValue *value);
+                                           GSList *path, 
+                                           const KvpValue *value);
+
+/** Same predicate as above, except that 'path' is assumed to be 
+ * a string containing slash-separated pathname. */
+QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
+                                                const char *path, 
+                                                const KvpValue *value);
 
 /** Copy a predicate. */
 QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);

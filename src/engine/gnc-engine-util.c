@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-engine-util.c -- GnuCash engine utility functions            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001,2004 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -177,6 +177,41 @@ gnc_stpcpy (char *dest, const char *src)
 {
   strcpy (dest, src);
   return (dest + strlen (src));
+}
+
+/* =================================================================== */
+/* Return NULL if the field is whitespace (blank, tab, formfeed etc.)  
+ * Else return pointer to first non-whitespace character. */
+
+const char *
+qof_util_whitespace_filter (const char * val)
+{
+	size_t len;
+	if (!val) return NULL;
+
+	len = strspn (val, "\a\b\t\n\v\f\r ");
+	if (0 == val[len]) return NULL;
+	return val+len;
+}
+
+/* =================================================================== */
+/* Return integer 1 if the string starts with 't' or 'T' or contains the 
+ * word 'true' or 'TRUE'; if string is a number, return that number. */
+
+int
+qof_util_bool_to_int (const char * val)
+{
+	const char * p = qof_util_whitespace_filter (val);
+	if (!p) return 0;
+	if ('t' == p[0]) return 1;
+	if ('T' == p[0]) return 1;
+	if ('y' == p[0]) return 1;
+	if ('Y' == p[0]) return 1;
+	if (strstr (p, "true")) return 1;
+	if (strstr (p, "TRUE")) return 1;
+	if (strstr (p, "yes")) return 1;
+	if (strstr (p, "YES")) return 1;
+	return atoi (val);
 }
 
 /********************************************************************\

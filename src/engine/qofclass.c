@@ -51,23 +51,31 @@ qof_class_register (QofIdTypeConst obj_name,
                     QofSortFunc default_sort_function,
                     const QofParam *params)
 {
+  GHashTable *ht;
   int i;
 
   if (!obj_name) return;
 
   if (default_sort_function)
+  {
     g_hash_table_insert (sortTable, (char *)obj_name, default_sort_function);
+  }
 
-  if (params) {
-    GHashTable *ht = g_hash_table_lookup (paramTable, obj_name);
+  ht = g_hash_table_lookup (paramTable, obj_name);
 
-    /* If it doesn't already exist, create a new table for this object */
-    if (!ht) {
-      ht = g_hash_table_new (g_str_hash, g_str_equal);
-      g_hash_table_insert (paramTable, (char *)obj_name, ht);
-    }
+  /* If it doesn't already exist, create a new table for this object */
+  if (!ht) 
+  {
+    ht = g_hash_table_new (g_str_hash, g_str_equal);
+    g_hash_table_insert (paramTable, (char *)obj_name, ht);
+  }
 
-    /* Now insert all the parameters */
+  /* At least right now, we allow dummy, paramterless objects, 
+   * for testing purposes.  Although I suppose that should be 
+   * an error..  */
+  /* Now insert all the parameters */
+  if (params) 
+  {
     for (i = 0; params[i].param_name; i++)
       g_hash_table_insert (ht,
                (char *)params[i].param_name,
@@ -96,6 +104,15 @@ qof_class_shutdown (void)
   g_hash_table_destroy (sortTable);
 }
 
+gboolean
+qof_class_is_registered (QofIdTypeConst obj_name)
+{
+  if (!obj_name) return FALSE;
+
+  if (g_hash_table_lookup (paramTable, obj_name)) return TRUE;
+
+  return FALSE;
+}
 
 const QofParam * 
 qof_class_get_parameter (QofIdTypeConst obj_name,

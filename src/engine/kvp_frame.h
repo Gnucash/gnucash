@@ -74,9 +74,16 @@ typedef struct _KvpValue KvpValue;
 /** Enum to enumerate possible types in the union KvpValue 
  *  XXX FIXME TODO: People have asked for boolean values, 
  *  e.g. in xaccAccountSetAutoInterestXfer
+ *
+ * XXX In the long run, this should be synchronized with the 
+ * core QOF types, which in turn should be synced to the g_types
+ * in GLib.  Unfortuantely, this requies writing a pile of code
+ * to handle all of the different cases.
+ * An alternative might be to make kvp values inherit from the 
+ * core g_types (i.e. add new core g_types) ??
  */
 typedef enum {
-  KVP_TYPE_GINT64,
+  KVP_TYPE_GINT64=1,
   KVP_TYPE_DOUBLE,
   KVP_TYPE_NUMERIC,
   KVP_TYPE_STRING,

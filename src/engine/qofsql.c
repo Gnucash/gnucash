@@ -27,6 +27,8 @@
 
 */
 
+#include <stdlib.h>   /* for working atoll */
+
 #include <glib.h>
 #include <libsql/sql_parser.h>
 #include <qof/kvp_frame.h>
@@ -36,7 +38,9 @@
 #include <qof/guid.h>
 #include <qof/qofbook.h>
 #include <qof/qofquery.h>
+#include <qof/qofquerycore.h>
 #include <qof/qofsql.h>
+#include <qof/gnc-engine-util.h>
 
 static short module = MOD_QUERY;
 
@@ -56,7 +60,7 @@ struct _QofSqlQuery
 QofSqlQuery *
 qof_sql_query_new(void)
 {
-	QofSqlQuery * sqn = (QofSqlQuery *) g_new (QofSqlQuery, 1);
+	QofSqlQuery * sqn = (QofSqlQuery *) g_new0 (QofSqlQuery, 1);
 	
 	sqn->qof_query = NULL;
 	sqn->parse_result = NULL;
@@ -80,6 +84,15 @@ qof_sql_query_destroy (QofSqlQuery *q)
 
 /* ========================================================== */
 
+QofQuery * 
+qof_sql_query_get_query (QofSqlQuery *q)
+{
+	if (!q) return NULL;
+	return q->qof_query;
+}
+
+/* ========================================================== */
+
 void 
 qof_sql_query_set_book (QofSqlQuery *q, QofBook *book)
 {
@@ -94,41 +107,6 @@ qof_sql_query_set_kvp (QofSqlQuery *q, KvpFrame *kvp)
 {
 	if (!q) return;
 	q->kvp_join = kvp;
-}
-
-/* =================================================================== */
-/* Return NULL if the field is whitespace (blank, tab, formfeed etc.)  
- * Else return pointer to first non-whitespace character. */
-
-static const char *
-whitespace_filter (const char * val)
-{
-	size_t len;
-	if (!val) return NULL;
-
-	len = strspn (val, "\a\b\t\n\v\f\r ");
-	if (0 == val[len]) return NULL;
-	return val+len;
-}
-
-/* =================================================================== */
-/* Return integer 1 if the string starts with 't' or 'T" or contians the 
- * word 'true' or 'TRUE'; if string is a number, return that number. */
-
-static int
-util_bool_to_int (const char * val)
-{
-	const char * p = whitespace_filter (val);
-	if (!p) return 0;
-	if ('t' == p[0]) return 1;
-	if ('T' == p[0]) return 1;
-	if ('y' == p[0]) return 1;
-	if ('Y' == p[0]) return 1;
-	if (strstr (p, "true")) return 1;
-	if (strstr (p, "TRUE")) return 1;
-	if (strstr (p, "yes")) return 1;
-	if (strstr (p, "YES")) return 1;
-	return atoi (val);
 }
 
 /* ========================================================== */
@@ -218,7 +196,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		return NULL;
 	}
 	qvalue_name = dequote_string (qvalue_name);
-	qvalue_name = whitespace_filter (qvalue_name);
+	qvalue_name = (char *) qof_util_whitespace_filter (qvalue_name);
 
 	/* Look to see if its the special KVP value holder.
 	 * If it is, look up the value. */
@@ -305,9 +283,20 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 		PWARN ("Need to specify an object class to query");
 		return NULL;
 	}
-			
+
+	if (FALSE == qof_class_is_registered (table_name)) 
+	{
+		PWARN ("The query object \'%s\' is not known", table_name);
+		return NULL;
+	}
+
 	QofType param_type = qof_class_get_parameter_type (table_name, param_name);
-	if (!param_type) return NULL;  /* Can't happen */
+	if (!param_type) 
+	{
+		PWARN ("The parameter \'%s\' on object \'%s\' is not known", 
+		       param_name, table_name);
+		return NULL;
+	}
 
 	if (!strcmp (param_type, QOF_TYPE_STRING))
 	{
@@ -319,7 +308,9 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	}
 	else if (!strcmp (param_type, QOF_TYPE_CHAR))
 	{
-		pred_data = qof_query_char_predicate (qop, qvalue_name);
+		QofCharMatch cm = QOF_CHAR_MATCH_ANY;
+		if (QOF_COMPARE_NEQ == qop) cm = QOF_CHAR_MATCH_NONE;
+		pred_data = qof_query_char_predicate (cm, qvalue_name);
 	}
 	else if (!strcmp (param_type, QOF_TYPE_INT32))
 	{
@@ -338,7 +329,7 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	}
 	else if (!strcmp (param_type, QOF_TYPE_BOOLEAN))
 	{
-		gboolean ival = util_bool_to_int (qvalue_name);
+		gboolean ival = qof_util_bool_to_int (qvalue_name);
 		pred_data = qof_query_boolean_predicate (qop, ival);
 	}
 	else if (!strcmp (param_type, QOF_TYPE_DATE))
@@ -375,29 +366,89 @@ handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 	}
 	else if (!strcmp (param_type, QOF_TYPE_GUID))
 	{
-		GUID *guid = guid_malloc();
-		gboolean rc = string_to_guid (qvalue_name, guid);
+		GUID guid;
+		gboolean rc = string_to_guid (qvalue_name, &guid);
 		if (0 == rc)
 		{
 			PWARN ("unable to parse guid: %s", qvalue_name);
 			return NULL;
 		}
 
-		// XXX match any means eqal, what about not equal ?? 
 		// XXX less, than greater than don't make sense,
 		// should check for those bad conditions
-		GList *guid_list = g_list_append (NULL, guid);
-		pred_data = qof_query_guid_predicate (QOF_GUID_MATCH_ANY, guid_list);
-		// XXX FIXME the above is a memory leak! we leak both guid and glist.
+
+		QofGuidMatch gm = QOF_GUID_MATCH_ANY;
+		if (QOF_COMPARE_NEQ == qop) gm = QOF_GUID_MATCH_NONE;
+		GList *guid_list = g_list_append (NULL, &guid);
+		pred_data = qof_query_guid_predicate (gm, guid_list);
+
+		g_list_free (guid_list);
 	}
-#if 0
 	else if (!strcmp (param_type, QOF_TYPE_KVP))
 	{
-xxxxxhd
-		xxxx gboolean ival = 
-		pred_data = qof_query_kvp_predicate (qop, ival);
+		/* We are expecting an encoded value that looks like
+		 * /some/path/string:value
+		 */
+		char *sep = strchr (qvalue_name, ':');
+		if (!sep) return NULL;
+		*sep = 0;
+		char * path = qvalue_name;
+		char * str = sep +1;
+		char * p;
+		/* If str has only digits, we know its a plain number.
+		 * If its numbers and a decimal point, assume a float
+		 * If its numbers and a slash, assume numeric
+		 * If its 32 bytes of hex, assume GUID
+		 * If it looks like an iso date ... 
+		 * else assume its a string.
+		 */
+		KvpValue *kval = NULL;
+		int len = strlen (str);
+		if ((32 == len) && (32 == strspn (str, "0123456789abcdef")))
+		{
+			GUID guid;
+			string_to_guid (str, &guid);
+			kval = kvp_value_new_guid (&guid);
+		}
+		else
+		if (len == strspn (str, "0123456789"))
+		{
+			kval = kvp_value_new_gint64 (atoll(str));
+		}
+		else
+		if ((p=strchr (str, '.')) && 
+		    ((len-1) == (strspn (str, "0123456789") + 
+		                 strspn (p+1, "0123456789"))))
+		{
+			kval = kvp_value_new_double (atof(str));
+		}
+
+		else
+		if ((p=strchr (str, '/')) && 
+		    ((len-1) == (strspn (str, "0123456789") + 
+		                 strspn (p+1, "0123456789"))))
+		{
+			gnc_numeric num;
+			string_to_gnc_numeric (str, &num);
+			kval = kvp_value_new_gnc_numeric (num);
+		}
+		else
+		if ((p=strchr (str, '-')) && 
+		    (p=strchr (p+1, '-')) && 
+		    (p=strchr (p+1, ' ')) && 
+		    (p=strchr (p+1, ':')) && 
+		    (p=strchr (p+1, ':')))
+		{
+			kval = kvp_value_new_timespec (gnc_iso8601_to_timespec_gmt(str));
+		}
+
+		/* The default handler is a string */
+		if (NULL == kval)
+		{
+			kval = kvp_value_new_string (str);
+		}
+		pred_data = qof_query_kvp_predicate_path (qop, path, kval);
 	}
-#endif
 	else
 	{
 		PWARN ("The predicate type \"%s\" is unsupported for now", param_type);
@@ -505,25 +556,33 @@ handle_sort_order (QofSqlQuery *query, GList *sorder_list)
 
 /* ========================================================== */
 
-GList * 
-qof_sql_query_run (QofSqlQuery *query, const char *str)
+void 
+qof_sql_query_parse (QofSqlQuery *query, const char *str)
 {
-	GList *node;
+	if (!query) return;
 
-	if (!query) return NULL;
+	/* Delete old query, if any */
+   /* XXX FIXME we should also delete the parse_result as well */
+	if (query->qof_query)
+	{
+		qof_query_destroy (query->qof_query);
+		query->qof_query = NULL;
+	}
+
+	/* Parse the SQL string */
 	query->parse_result = sql_parse (str);
 
 	if (!query->parse_result) 
 	{
 		PWARN ("parse error"); 
-		return NULL;
+		return;
 	}
 
 	if (SQL_select != query->parse_result->type)
 	{
 		PWARN("currently, only SELECT statements are supported, "
 		                     "got type=%d", query->parse_result);
-		return NULL;
+		return;
 	}
 
 	/* If the user wrote "SELECT * FROM tablename WHERE ..."
@@ -543,7 +602,7 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 	{
 		/* Walk over the where terms, turn them into QOF predicates */
 		query->qof_query = handle_where (query, swear);
-		if (NULL == query->qof_query) return NULL;
+		if (NULL == query->qof_query) return;
 	}
 	else
 	{
@@ -559,6 +618,37 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 	 * XXX all this needs fixing.
 	 */
 	qof_query_search_for (query->qof_query, query->single_global_tablename);
+}
+
+/* ========================================================== */
+
+GList * 
+qof_sql_query_run (QofSqlQuery *query, const char *str)
+{
+	GList *node;
+
+	if (!query) return NULL;
+
+	qof_sql_query_parse (query, str);
+	if (NULL == query->qof_query) return NULL;
+
+	qof_query_set_book (query->qof_query, query->book);
+
+	// qof_query_print (query->qof_query);
+	GList *results = qof_query_run (query->qof_query);
+
+	return results;
+}
+
+GList * 
+qof_sql_query_rerun (QofSqlQuery *query)
+{
+	GList *node;
+
+	if (!query) return NULL;
+
+	if (NULL == query->qof_query) return NULL;
+
 	qof_query_set_book (query->qof_query, query->book);
 
 	// qof_query_print (query->qof_query);

@@ -145,6 +145,11 @@ void qof_class_register (QofIdTypeConst obj_name,
  * qof_class_register ("myObjectName", myObjectCompare, &myParams);
  */
 
+/** Return true if the the indicated type is registered, 
+ *  else return FALSE.
+ */
+gboolean qof_class_is_registered (QofIdTypeConst obj_name);
+
 /** Return the core datatype of the specified object's parameter */
 QofType qof_class_get_parameter_type (QofIdTypeConst obj_name,
 					   const char *param_name);
