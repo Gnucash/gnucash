@@ -437,6 +437,7 @@ static gpointer
 list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    KVP_HANDLER_SETUP;
+   PERR ("not implemented");
    // kv = kvp_value_new_glist ();
    KVP_HANDLER_TAKEDOWN;
 }
@@ -451,6 +452,14 @@ list_handler (PGBackend *be, PGresult *result, int j, gpointer data)
    kf = pgendGetResults (be, TYPE##_handler, kf);	\
 }
 
+static gpointer 
+count_handler (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   int *cnt = (int *) data;
+   *cnt += atoi (DB_GET_VAL ("count", j));
+   return data;
+}
+
 
 kvp_frame * 
 pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
@@ -458,6 +467,7 @@ pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
    char * p;
    char iguid_str[40];
    int iguid = 0;
+   int count = 0;
    if (!be || !guid) return kf;
 
    ENTER (" ");
@@ -469,6 +479,15 @@ pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
    iguid = pgendGetGUIDCacheID (be, guid);
    if (0 == iguid) return kf;
    snprintf (iguid_str, 40, "%d;", iguid);
+
+   /* save on some sql queries by avoiding kvp data fetches when 
+    * tehre is no data */
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "SELECT count(*) FROM gncKVPValue WHERE iguid="); 
+   p = stpcpy (p, iguid_str);
+   SEND_QUERY (be,be->buff, kf);
+   pgendGetResults (be, count_handler, &count);	
+   if (0 == count) return kf;
 
    /* now troll the individual tables for data */
    GET_KVP(int64);
