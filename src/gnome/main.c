@@ -22,7 +22,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <gtk/gtk.h>
+#include <config.h>
+#include <gnome.h>
 
 #include <stdlib.h>
 
@@ -40,6 +41,9 @@ char        *datafile = NULL;
 char        *helpPath = NULL;
 GtkWidget   *toplevel;
 GtkWidget   *filebox;
+
+GtkWidget   *app;
+
 
 /* The names of the different types of accounts.  For resource
  * specification. Must match the enums in Account.h */
@@ -88,6 +92,11 @@ void file_cmd_open (GtkWidget *widget, gpointer data)
   g_print ( "Menu Command: file open\n" );
 }
 
+void file_cmd_quit (GtkWidget *widget, gpointer data)
+{
+  gtk_main_quit();
+}
+
 /********************************************************************\
  * main                                                             *
  *  the entry point for the program... sets up the top level widget * 
@@ -103,8 +112,13 @@ void file_cmd_open (GtkWidget *widget, gpointer data)
 int 
 main( int argc, char *argv[] )
 {   
-  gtk_init (&argc, &argv);
+ // gtk_init ( &argc, &argv );
  
+  gnome_init ("GnuCash", NULL, argc, argv,
+              0, NULL);
+  
+  prepare_app(); 
+
   {
     /* Use a nicer font IMO, if available */
     char font[] = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*";
@@ -179,13 +193,26 @@ main( int argc, char *argv[] )
   gtk_signal_connect_object ( GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
                               "clicked", (GtkSignalFunc) gtk_exit, NULL );
   
-  
+
   
   /* Enter event loop */
   gtk_main();
 
   return 0;
 }
+
+void
+prepare_app()
+{
+  app = gnome_app_new ( "gnucash", "GnuCash" );
+  gtk_widget_realize (app);
+/*  gtk_signal_connect (GTK_OBJECT (app), "delete_event",
+                      GTK_SIGNAL_FUNC (quit_cb),
+                      NULL); */
+
+}
+
+/****************** END OF FILE **********************/
 
 /*
   Local Variables:

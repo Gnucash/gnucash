@@ -1,4 +1,4 @@
-/********************************************************************\
+ /********************************************************************\
  * MainWindow.c -- the main window, and associated helper functions * 
  *                 and callback functions for xacc (X-Accountant)   *
  * Copyright (C) 1998 Jeremy Collins				    *
@@ -16,12 +16,9 @@
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
- *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
+
+#include <gnome.h>
 
 #include "MainWindow.h"
 #include "MenuBar.h"
@@ -47,6 +44,7 @@ cram_accts_into_tree(GtkTree *maintree, AccountGroup *accts) {
   int count = xaccGetNumAccounts(accts);
   int i;
   
+  
   for(i=0; i<count; i++) 
   {
     Account *acc = xaccGroupGetAccount(accts, i);
@@ -66,20 +64,44 @@ cram_accts_into_tree(GtkTree *maintree, AccountGroup *accts) {
   }
 }
 
+/* Function: 	add_account				
+ * Arguments:	AccountGroup *accts <- AccountGroup to add account to.
+ * Description:	Opens a dialog box and excepts input for adding
+ *		a new account.  
+ *
+ * Stuff:  	A lot of work still needs to be done on the layout
+ *		of this dialog.  Also, a structure needs to be 
+ *		defined that will hold all info from the dialog that
+ *		will be passed to the callback function of the "OK"
+ * 		button.
+ *
+ *		Also the box2, box3, box4 should be renamed to be
+ *		more descriptive of what their for.  I even get 
+ *		confused and I wrote it! hehe =)
+ *	
+ * TODO:	A little routine to make a glist out of all of the parent
+ *		accounts.  This will be used for the combo box selection.
+ */
+static void
+add_account ( AccountGroup *accts )
+{
+  g_print ( "Add Account Button clicked\n" );  
+}
+
 void
 main_window_init(AccountGroup *accts)
 {
 
-  GtkWidget *window;
   GtkWidget *scrolled_win;
   GtkWidget *toolBar[5];
   GtkTooltips *tooltip; 
   GtkWidget *main_vbox;
-  GtkWidget *treebox;
+  GtkWidget *clist_vbox;
   GtkWidget *button_bar;
   GtkWidget *menubar;
   GtkWidget *maintree;
   GtkWidget *clist;
+  GtkWidget *notebook;
   
   GtkAcceleratorTable *accel;
 
@@ -97,9 +119,11 @@ main_window_init(AccountGroup *accts)
     {"<Main>/File/Save", "<control>S", NULL, NULL},
     {"<Main>/File/Save as", NULL, NULL, NULL},
     {"<Main>/File/<separator>", NULL, NULL, NULL},
-    {"<Main>/File/Quit", "<control>Q", gtk_main_quit, NULL },
+    {"<Main>/File/Quit", "<control>Q", file_cmd_quit, NULL },
     {"<Main>/Options/General..", "<control>A", NULL, NULL},
-    {"<Main>/Help/About..", NULL, NULL, NULL}
+    {"<Main>/Help/Help", NULL, NULL, NULL},
+    {"<Main>/Help/<separator>", NULL, NULL, NULL},
+    {"<Main>/Help/About..", NULL, about_cb, NULL}
   };
   
   /* calculate the number of menu_item's */
@@ -109,19 +133,32 @@ main_window_init(AccountGroup *accts)
 
   maintree = gtk_tree_new ( );
 
-
   /* Cram accounts into the tree widget */
   cram_accts_into_tree(GTK_TREE(maintree), accts);
 
-  /* Create main window */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW(window), "GnoMoney");
-
-  /* Create main vbox */
-  main_vbox = gtk_vbox_new(FALSE, 1);
-  gtk_container_border_width(GTK_CONTAINER(main_vbox), 2);
-  gtk_container_add(GTK_CONTAINER(window), main_vbox);
+  /* Create the notebook */
+  notebook = gtk_notebook_new ();
+  gtk_notebook_set_tab_pos ( GTK_NOTEBOOK( notebook ), GTK_POS_TOP );
+  gtk_widget_show ( notebook );
   
+  /* Create main vbox */
+  main_vbox = gtk_vbox_new( FALSE, 1 );
+  gtk_container_border_width( GTK_CONTAINER( main_vbox ), 2 );
+  gnome_app_set_contents ( GNOME_APP ( app ), main_vbox );
+
+  /* Create main hbox which will hold the clist widget */
+  clist_vbox = gtk_vbox_new( FALSE, 1 );
+
+  /* Now create clist, and pack it in the hbox we just created */
+  clist = gtk_clist_new_with_titles ( 3, clist_titles );
+  gtk_box_pack_start ( GTK_BOX( clist_vbox ), clist, TRUE, TRUE, 1 );
+  
+  /* Fix the column widths */
+  gtk_clist_set_column_width ( GTK_CLIST(clist), 1, 85 );
+  gtk_clist_set_column_width ( GTK_CLIST(clist), 0, 85 );
+  
+  gtk_widget_show ( clist );
+      
   /* create scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
@@ -179,10 +216,24 @@ main_window_init(AccountGroup *accts)
   }
 #endif
 
-  gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
+//gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
   gtk_box_pack_start(GTK_BOX(main_vbox), menubar, FALSE, TRUE, 0);     
-  gtk_box_pack_start (GTK_BOX (main_vbox), scrolled_win, TRUE, TRUE, 0);
+  gtk_container_add( GTK_CONTAINER( main_vbox ), notebook );
+//  gtk_box_pack_start (GTK_BOX (main_vbox), scrolled_win, TRUE, TRUE, 0);
   gtk_container_add(GTK_CONTAINER(scrolled_win), maintree);
+//  gtk_container_add(GTK_CONTAINER(notebook), clist_vbox );
+
+  /* Append some pages to notebook */
+  {
+    GtkWidget *label;
+    label = gtk_label_new ( " All Accounts " );
+    gtk_notebook_append_page (GTK_NOTEBOOK(notebook), clist_vbox, label);
+    
+    label = gtk_label_new ( " Bank Accounts " );
+    gtk_notebook_append_page (GTK_NOTEBOOK(notebook), scrolled_win, label);
+  }
+  
+  gtk_widget_show(clist_vbox);
   gtk_widget_show(menubar);
 
   /* create a bunch of buttons */
@@ -194,7 +245,6 @@ main_window_init(AccountGroup *accts)
   toolBar[3] = gtk_button_new_with_label ( DELETE_STR );
 
   /* Initilize ToolTips */
-	
 
   tooltip = gtk_tooltips_new ();
   gtk_tooltips_set_tip (tooltip, toolBar[open], TOOLTIP_OPEN, NULL);
@@ -202,8 +252,6 @@ main_window_init(AccountGroup *accts)
   gtk_tooltips_set_tip (tooltip, toolBar[button3], TOOLTIP_EDIT, NULL);
   gtk_tooltips_set_tip (tooltip, toolBar[button4], TOOLTIP_DELETE, NULL); 
 
-
-    
   /* Pack the buttons into the toolbar */ 
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[0], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[1], FALSE, FALSE, 0);
@@ -211,7 +259,6 @@ main_window_init(AccountGroup *accts)
   gtk_box_pack_start(GTK_BOX(button_bar), toolBar[3], FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(main_vbox), button_bar, FALSE, TRUE, 1);
 
-    
   gtk_widget_show(toolBar[open]);
   gtk_widget_show(toolBar[close]);
   gtk_widget_show(toolBar[button3]);
@@ -219,26 +266,43 @@ main_window_init(AccountGroup *accts)
   gtk_widget_show(button_bar);
   gtk_widget_show(maintree);
 
-  gtk_widget_set_usize ( window, 400, 400 );
-    
   /* Setup some callbacks */
 	
-  gtk_signal_connect (GTK_OBJECT(window), "destroy",
-                      GTK_SIGNAL_FUNC (destroy), NULL);
+  gtk_signal_connect (GTK_OBJECT (toolBar[1]), "clicked",
+		      GTK_SIGNAL_FUNC (add_account), accts);
 
-  //gtk_signal_connect(GTK_OBJECT(window), "destroy",
-  //                   GTK_SIGNAL_FUNC(file_quit_cmd_callback),
-  //                   "WM destroy");
-    
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (gtk_exit), NULL);		       
-
+  gtk_widget_set_usize ( app, 400, 400 );		      
+		      
   /* Show everything now that it is created */
+
   gtk_widget_show(main_vbox);
-  gtk_container_border_width (GTK_CONTAINER (window), 2);
-  gtk_widget_show(window);
+  gtk_widget_show ( app );
+
 } 
 
+/* Standard Gnome About Dialog, need I say more? */
+void
+about_cb (GtkWidget *widget, void *data)
+{
+  GtkWidget *about;
+  gchar *authors[] = {
+  /* Here should be your names */
+          "Rob Clark",
+          "Linas Vepsta",
+          "Jeremy Collins",
+          "Rob Browning",
+          "For more see http://gnucash.ml.org/developers.html",
+          NULL
+          };
+
+  about = gnome_about_new ( "GnuCash", "1.1.9",
+                            "(C) 1998 The GnuCash Project",
+                            authors,
+                            "GnuCash: The GNU way to manage your money!",
+                            NULL);
+  gtk_widget_show (about);
+
+}                          
 
 /********************* END OF FILE **********************************/
 
