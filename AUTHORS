@@ -113,6 +113,7 @@ Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
 Christian Stimming <stimming@uclink.berkeley.edu> report patch
+Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Diane Trout <detrout@earthlink.net> scheme qif import patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
