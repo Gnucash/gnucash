@@ -59,6 +59,7 @@ sub setprice
 
    $split = gnucash::xaccTransGetSplit ($trans, 0);
    gnucash::xaccSplitSetSharePriceAndAmount ($split, $price, 0.0);
+   gnucash::xaccSplitSetAction ($split, "Price");
    gnucash::xaccTransCommitEdit ($trans);
 
    gnucash::xaccAccountBeginEdit ($acct, 1);
@@ -113,10 +114,12 @@ foreach $acct (@acctlist) {
             }
          }
          $dayte = $quotes {$security, "date"};
+         $prodname = $quotes {$security, "name"};
          if ($price) {
-            print "Info: $security last price = $price at $dayte\n";
+            print "Info: $security $prodname last price = $price at $dayte\n";
             &setprice ($acct, $dayte, $price);
          }
+         print "\n";
       }
    }
 }
