@@ -89,10 +89,10 @@ Stock Split Dialog
 
     - Offset for non-LEFT_ALIGN'ed fields not correct.
 
-    - Probably need to...
-      1. check if it's a RIGHT [or CENTER] align.
-      2. determine pango-layout width of the cell, plus the "indent".
-      3. subtract the indent as well as the cell's x-offset from the x-coord.
+      - Probably need to...
+        1. check if it's a RIGHT [or CENTER] align.
+        2. determine pango-layout width of the cell, plus the "indent".
+        3. subtract the indent as well as the cell's x-offset from the x-coord.
 
     - finer points of gtk_entry selection+position setting not correct, yet.
 
