@@ -1664,7 +1664,6 @@ xaccTransCommitEdit (Transaction *trans)
          /* if the backend puked, then we must roll-back 
           * at this point, and let the user know that we failed.
           */
-        /* XXX hack alert -- turn this into a gui dialog */
         if (ERR_BACKEND_MODIFIED == errcode)
         {
            PWARN_GUI(_("Another user has modified this transaction\n"
