@@ -581,7 +581,7 @@ tt_act_handler( xmlNodePtr node, gpointer data )
                            SchedXaction.c:xaccSchedXactionInit... */
                         com = gnc_commodity_new( "template", "template",
                                                  "template", "template",
-                                                 1, txd->book );
+                                                 1 );
                         xaccAccountSetCommodity( acc, com );
                 }
 

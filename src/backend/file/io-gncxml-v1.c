@@ -1961,8 +1961,7 @@ commodity_restore_end_handler(gpointer data_for_children,
                              cpi->space,
                              cpi->id,
                              cpi->xcode,
-                             cpi->fraction,
-                             pstatus->book);
+                             cpi->fraction);
     if(comm)
     {
       gnc_commodity_table *ctab;

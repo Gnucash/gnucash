@@ -714,7 +714,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *book)
   } else {
     g_strstrip(space_str);
     g_strstrip(id_str);
-    c = gnc_commodity_new(NULL, space_str, id_str, NULL, 0, book);
+    c = gnc_commodity_new(NULL, space_str, id_str, NULL, 0);
   }
 
   g_free(space_str);

@@ -178,8 +178,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
     
-    com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0, 
-                            (GNCBook *)gdata->bookdata);
+    com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0); 
 
     for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {
