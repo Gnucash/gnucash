@@ -54,6 +54,8 @@ typedef struct
   GtkWidget * dialog;
   GtkWidget * price_dialog;
 
+  guint       price_dialog_destroy_signal;
+
   GtkWidget * sort_radio;
 
   GtkWidget * price_list;
@@ -388,6 +390,9 @@ window_destroy_cb (GtkObject *object, gpointer data)
     pdb_dialog->price = NULL;
   }
 
+  gtk_signal_disconnect (GTK_OBJECT (pdb_dialog->price_dialog),
+                         pdb_dialog->price_dialog_destroy_signal);
+
   gtk_widget_destroy (pdb_dialog->price_dialog);
   pdb_dialog->price_dialog = NULL;
 
@@ -404,12 +409,10 @@ window_destroy_cb (GtkObject *object, gpointer data)
   g_free (pdb_dialog);
 }
 
-static gboolean
-price_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
+static void
+price_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-
-  gtk_widget_hide (pdb_dialog->price_dialog);
 
   if (pdb_dialog->price && pdb_dialog->new)
   {
@@ -422,9 +425,6 @@ price_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data)
   gnc_price_dialog_create (pdb_dialog);
 
   gnc_prices_load_prices (pdb_dialog);
-
-  /* delete the window */
-  return FALSE;
 }
 
 static void
@@ -785,9 +785,10 @@ gnc_price_dialog_create (PricesDialog *pdb_dialog)
                                GTK_SIGNAL_FUNC (price_cancel_clicked),
                                pdb_dialog);
 
-  gtk_signal_connect (GTK_OBJECT (price_dialog), "delete_event",
-                      GTK_SIGNAL_FUNC (price_window_delete_cb),
-                      pdb_dialog);
+  pdb_dialog->price_dialog_destroy_signal =
+    gtk_signal_connect (GTK_OBJECT (price_dialog), "destroy",
+                        GTK_SIGNAL_FUNC (price_window_destroy_cb),
+                        pdb_dialog);
 
   box = glade_xml_get_widget (xml, "commodity_box");
 
