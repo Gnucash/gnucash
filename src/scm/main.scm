@@ -44,8 +44,7 @@
   
   (if (pair? gnc:*command-line-files*)
       ;; You can only open single files right now...
-      (gnc:ui-open-file (car gnc:*command-line-files*))
-      (gnc:ui-select-file))
+      (gnc:ui-open-file (car gnc:*command-line-files*)))
   
   (gnc:lowlev-app-main)
   
