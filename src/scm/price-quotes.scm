@@ -361,9 +361,9 @@
        mnemonic
        (cons fq-method-sym (list commodity tz)))))
   
-  (let ((cmd-list (map account->fq-cmd account-list))
+  (let ((cmd-list (delete #f (map account->fq-cmd account-list)))
 	(cmd-hash (make-hash-table 31)))
-    
+
     ;; Now collect symbols going to the same backend.
     (item-list->hash! cmd-list cmd-hash car cdr hashq-ref hashq-set! #t)
     ;; Now translate to just what finance-quote-helper expects.
