@@ -1140,7 +1140,7 @@ static QofObject commodity_table_object_def =
 gboolean 
 gnc_commodity_table_register (void)
 {
-  return gncObjectRegister (&commodity_table_object_def);
+  return qof_object_register (&commodity_table_object_def);
 }
 
 /* ========================= END OF FILE ============================== */

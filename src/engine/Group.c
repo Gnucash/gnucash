@@ -1331,7 +1331,7 @@ static QofObject group_object_def =
 gboolean 
 xaccGroupRegister (void)
 {
-  return gncObjectRegister (&group_object_def);
+  return qof_object_register (&group_object_def);
 }
 
 /* ========================= END OF FILE ======================== */

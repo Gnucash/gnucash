@@ -1965,7 +1965,7 @@ static GncObject_t pricedb_object_def =
 gboolean 
 gnc_pricedb_register (void)
 {
-  return gncObjectRegister (&pricedb_object_def);
+  return qof_object_register (&pricedb_object_def);
 }
 
 /* ========================= END OF FILE ============================== */

@@ -3208,7 +3208,7 @@ gboolean xaccAccountRegister (void)
 
   gncQueryObjectRegister (GNC_ID_ACCOUNT, (QuerySort)xaccAccountOrder, params);
 
-  return gncObjectRegister (&account_object_def);
+  return qof_object_register (&account_object_def);
 }
 
 /* ======================= END OF FILE =========================== */

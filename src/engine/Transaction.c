@@ -3638,7 +3638,7 @@ gboolean xaccSplitRegister (void)
 			  (QuerySort)xaccSplitCompareOtherAccountCodes,
 			  NULL);
 
-  return gncObjectRegister (&split_object_def);
+  return qof_object_register (&split_object_def);
 }
 
 static void
@@ -3691,7 +3691,7 @@ gboolean xaccTransRegister (void)
 
   gncQueryObjectRegister (GNC_ID_TRANS, (QuerySort)xaccTransOrder, params);
 
-  return gncObjectRegister (&trans_object_def);
+  return qof_object_register (&trans_object_def);
 }
 
 /************************ END OF ************************************\

@@ -221,7 +221,7 @@ static QofObject sxtt_object_def =
 gboolean 
 gnc_sxtt_register (void)
 {
-  return gncObjectRegister (&sxtt_object_def);
+  return qof_object_register (&sxtt_object_def);
 }
 
 /* ========================== END OF FILE =============================== */
