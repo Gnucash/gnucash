@@ -1508,14 +1508,15 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   }
   else if (auto_decimal_enabled && !got_decimal)
   {
-    /* No decimal point and auto decimal point enabled, so assume
-     * that the value is an integer number of cents or a cent-type
-     * unit. For each auto decimal place requested, move the final
-     * decimal point one place to the left. */
     if ((auto_decimal_places > 0) && (auto_decimal_places < 9))
     {
       denom = multiplier(auto_decimal_places);
-      numer *= denom;
+
+      /* No need to multiply numer by denom at this point,
+       * since by specifying the auto decimal places the
+       * user has effectively determined the scaling factor
+       * for the numerator they entered.
+       */
     }
   }
 
