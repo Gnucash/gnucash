@@ -1,5 +1,11 @@
 2001-06-13  Dave Peticolas  <dave@krondo.com>
 
+	* src/experimental/cgi-bin/Makefile.am: add .cvsignore to dist
+
+	* src/scm/report/account-summary.scm: fix string
+
+	* src/guile/gnc-helpers.c (gnc_scm_list_to_glist): fix bug
+
 	* src/scm/extensions.scm: fix bug
 
 	* src/gnome/dialog-progress.c: use libglade

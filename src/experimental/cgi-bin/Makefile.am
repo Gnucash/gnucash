@@ -3,6 +3,8 @@
 
 bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
+EXTRA_DIST = .cvsignore
+
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} 
 
 LDADD = 			\

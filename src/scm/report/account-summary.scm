@@ -43,7 +43,7 @@
       (optname-price-source (N_ "Price Source"))
 
       (optname-show-subaccounts (N_ "Always show sub-accounts"))
-      (optname-accounts (N_ "Account"))
+      (optname-accounts (N_ "Accounts"))
 
       (optname-group-accounts (N_ "Group the accounts"))
       (optname-show-parent-balance (N_ "Show balances for parent accounts"))
