@@ -1,7 +1,8 @@
 
-/* Test file created by Linas Vepstas <linas@linas.org>
- * Minimal test to see if automatic lot scrubbing works.
- * April 2003
+/** 
+ * @file test-lots.c
+ * @brief Minimal test to see if automatic lot scrubbing works.
+ * @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * License: GPL
  */
 
@@ -31,7 +32,7 @@ run_test (void)
    * without crashing.  We don't check to see if data is good. */
   sess = get_random_session ();
   book = qof_session_get_book (sess);
-  do_test ((NULL != book), "book not created");
+  do_test ((NULL != book), "create random data");
 
   add_random_transactions_to_book (book, 720);
 
@@ -42,7 +43,7 @@ run_test (void)
   /* In the second test, we create an account with unrealized gains,
    * and see if that gets fixed correctly, with the correct balances,
    * and etc.
-   * XXX not inplemented 
+   * XXX not implemented 
    */
   success ("automatic lot scrubbing lightly tested and seem to work");
 }
@@ -50,8 +51,13 @@ run_test (void)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
+  /* Any tests that cause an error or warning to be printed
+   * automatically fail! */
   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
-  do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "couldn't load engine");
+
+  set_success_print (TRUE);
+
+  do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "load engine");
 
   run_test ();
 
