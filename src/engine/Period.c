@@ -30,13 +30,14 @@
  *
  * HISTORY:
  * created by Linas Vepstas November 2001
- * Copyright (c) 2001, 2002 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 200-2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "AccountP.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
+#include "gnc-lot-p.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
@@ -150,12 +151,12 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Account *twin;
       Split *s = node->data;
 
-      /* move the split into the new book ... */
+      /* Move the split into the new book ... */
       qof_entity_remove (s->book->entity_table, &s->guid);
       s->book = book;
       qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
 
-      /* find the twin account, and re-parent to that. */
+      /* Find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
       if (!twin)
       {
@@ -175,13 +176,60 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
 }
 
 /* ================================================================ */
+/* Reparent lot to new book.  This routine does this by 
+ * completely deleting and recreating the lot.
+ */
+
+void
+gnc_book_insert_lot_clobber (QofBook *book, GNCLot *lot)
+{
+   PERR ("Not Implemented");
+}
+
+/* ================================================================ */
+/* Reparent lot to new book.  This routine does this by 
+ * moving GUID's to the new book's entity tables.
+ */
+
+void
+gnc_book_insert_lot (QofBook *book, GNCLot *lot)
+{
+   Account *twin;
+   if (!lot || !book) return;
+   
+   /* If this is the same book, its a no-op. */
+   if (lot->book == book) return;
+
+   if (book->backend != lot->book->backend)
+   {
+      gnc_book_insert_lot_clobber (book, lot);
+      return;
+   }
+   ENTER ("lot=%p", lot);
+   qof_entity_remove (lot->book->entity_table, &lot->guid);
+   lot->book = book;
+   qof_entity_store(book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+
+   twin = xaccAccountLookupTwin (lot->account, book);
+   if (!twin)
+   {
+      PERR ("near-fatal: twin account not found");
+   }
+   else
+   {
+      xaccAccountInsertLot (twin, lot);
+   }
+   LEAVE ("lot=%p", lot);
+}
+
+/* ================================================================ */
 /* Return TRUE if any of the splits in the transaction belong 
  * to an open lot. */
 
 static gboolean
 trans_has_open_lot (Transaction *trans)
 {
-   GList *split_list, *node;
+   SplitList *split_list, *node;
 
    split_list = xaccTransGetSplitList (trans);
    for (node = split_list; node; node=node->next)
@@ -200,8 +248,8 @@ trans_has_open_lot (Transaction *trans)
  * These transactions cannot be moved to a closed book.
  */
 
-static GList *
-remove_open_lots_from_trans_list (GList *trans_list)
+static TransList *
+remove_open_lots_from_trans_list (TransList *trans_list)
 {
    GList *node;
 
@@ -221,6 +269,34 @@ remove_open_lots_from_trans_list (GList *trans_list)
 }
 
 /* ================================================================ */
+/* Return a unique list of lots that are involved with the listed
+ * transactions.
+ */
+
+static LotList *
+create_lot_list_from_trans_list (TransList *trans_list)
+{
+   LotList *lot_list = NULL;
+   TransList *tnode;
+
+   for (tnode=trans_list; tnode; tnode=tnode->next)
+   {
+      Transaction *trans = tnode->data;
+      SplitList *split_list = xaccTransGetSplitList (trans);
+      SplitList *snode;
+      for (snode = split_list; snode; snode=snode->next)
+      {
+         Split *s = snode->data;
+         GNCLot *lot = xaccSplitGetLot(s);
+         if (NULL == lot) continue;
+         if (g_list_find (lot_list, lot)) continue;
+         lot_list = g_list_prepend (lot_list, lot);
+      }
+   }
+   return lot_list;
+}
+
+/* ================================================================ */
 
 void 
 gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
@@ -228,7 +304,8 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    AccountGroup *src_grp, *dst_grp;
    QofBackend *be;
    time_t now;
-   GList *trans_list, *tnode;
+   TransList *trans_list, *tnode;
+   LotList *lot_list, *lnode;
 
    if (!src_book || !dest_book || !query) return;
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
@@ -264,17 +341,27 @@ gnc_book_partition (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    qof_query_set_book (query, src_book);
    trans_list = qof_query_run (query);
 
-   /* And start moving transactions over */
+   /* Move closed lots over to destination. Do this before 
+    * moving transactions, which should avoid damage to lots. */
    trans_list = remove_open_lots_from_trans_list (trans_list);
+   lot_list = create_lot_list_from_trans_list (trans_list);
+   for (lnode = lot_list; lnode; lnode = lnode->next)
+   {
+      GNCLot *lot = lnode->data;
+      gnc_book_insert_lot (dest_book, lot);
+   }
+
+   /* Move the transactions over */
    for (tnode = trans_list; tnode; tnode=tnode->next)
    {
       Transaction *trans = tnode->data;
       gnc_book_insert_trans (dest_book, trans);
    }
+
    xaccAccountGroupCommitEdit (src_grp);
    xaccAccountGroupCommitEdit (dst_grp);
 
-   /* make note of the sibling books */
+   /* Make note of the sibling books */
    now = time(0);
    gnc_kvp_gemini (src_book->kvp_data, NULL, &dest_book->guid, now);
    gnc_kvp_gemini (dest_book->kvp_data, NULL, &src_book->guid, now);

@@ -1048,20 +1048,21 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   acc->balance_dirty = TRUE;
   acc->sort_dirty = TRUE;
 
-  /* convert the split to the new account's denominator */
-  /* if the denominator can't be exactly converted, it's an error */
+  /* Convert the split to the new account's denominator */
+  /* If the denominator can't be exactly converted, it's an error */
   /* FIXME : need to enforce ordering of insertion/value */
   split->amount = gnc_numeric_convert(split->amount, 
                                       xaccAccountGetCommoditySCU(acc),
                                       GNC_RND_ROUND);
 
-  /* if this split belongs to another account, remove it from there
-     * first.  We don't want to ever leave the system in an inconsistent
-     * state.  Note that it might belong to the current account if we're
-     * just using this call to re-order.  */
-  if (xaccSplitGetAccount(split) &&
-      xaccSplitGetAccount(split) != acc)
-    xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
+  /* If this split belongs to another account, remove it from there
+   * first.  We don't want to ever leave the system in an inconsistent
+   * state.  Note that it might belong to the current account if we're
+   * just using this call to re-order.  */
+  if (split->acc && split->acc != acc)
+  {
+    xaccAccountRemoveSplit (split->acc, split);
+  }
 
   split->acc = acc;
   if (split->lot && (NULL == split->lot->account))
@@ -1078,7 +1079,9 @@ xaccAccountInsertSplit (Account *acc, Split *split)
           acc->sort_dirty = FALSE;
       }
       else
+      {
           acc->splits = g_list_prepend(acc->splits, split);
+      }
 
       mark_account (acc);
       if (split->parent)
@@ -1098,6 +1101,8 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 {
   if (!acc) return;
   if (!split) return;
+  if (split->acc && split->acc != acc) return;
+
   ENTER ("(acc=%p, split=%p)", acc, split);
 
   xaccAccountBeginEdit(acc);
@@ -1120,7 +1125,9 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       xaccTransBeginEdit (trans);
       split->acc = NULL;
-      if (split->lot)
+
+      /* Remove from lot (but only if it hasn't been moved to new lot already) */
+      if (split->lot && split->lot->account == acc)
       {
         gnc_lot_remove_split (split->lot, split);
       }
@@ -1278,7 +1285,7 @@ xaccTransFixSplitDateOrder (Transaction *trans)
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
-    xaccAccountFixSplitDateOrder (xaccSplitGetAccount(s), s);
+    xaccAccountFixSplitDateOrder (s->acc, s);
   }
   gnc_engine_resume_events();
 }

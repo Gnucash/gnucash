@@ -22,9 +22,9 @@
     @{ */
 /** @file Period.h
  *  @breif Implement accounting periods.
- *  @author Copyright (c) 2001 Linas Vepstas <linas@linas.org>
+ *  @author Copyright (c) 2001,2003 Linas Vepstas <linas@linas.org>
  *
- *  @note CAUTION: this is currently a semi-functional, untested
+ *  @note CAUTION: this is currently a semi-functional, poorly
  *    implementation of the design described in src/doc/book.txt
  *
  */
@@ -156,14 +156,25 @@ void gnc_book_partition (QofBook *dest, QofBook *src, QofQuery *);
  *    both books (and can be located with the standard twining 
  *    proceedure).
  *
+ *    Note that this routine does *not* move the lots that any
+ *    of the splits might belong to.  These must be moved sepearately.
+ *    Note that one must take care when moving a transaction, so
+ *    that any associated lots don't end up hamstrung across two
+ *    different books.
+ *
  * The gnc_book_insert_trans() routine does the same as the above,
  *    except that it doesn't actually clobber the transaction: it
  *    merely moves the transaction and split GUID's to the new
  *    books' entity tables, and not much else.
+ *
+ * The gnc_book_insert_lot() routine, as above, but for lots ... 
  */
 
 void gnc_book_insert_trans (QofBook *book, Transaction *trans);
 void gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans);
+
+void gnc_book_insert_lot (QofBook *book, GNCLot *lot);
+void gnc_book_insert_lot_clobber (QofBook *book, GNCLot *lot);
 
 #endif /* XACC_PERIOD_H */
 /** @} */
