@@ -1,3 +1,14 @@
+2001-12-30  Christian Stimming  <stimming@tuhh.de>
+
+	* po/el.po, po/glossary/el.po: Added initial Greek translation by
+	Simos Xenitellis <simos@hellug.gr>
+
+	* po/glossary/pt.po: Added portugese translation by Duarte Loreto
+	<happyguy_pt@hotmail.com>
+
+	* po/az.po: Added Azerbaijani Turkic translation by
+	<azerb_linux@hotmail.com>.
+
 2001-12-18  Christian Stimming  <stimming@tuhh.de>
 
 	* po/sk.po: Updated Slovak translation from Zdenko Podobny
