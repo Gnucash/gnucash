@@ -118,7 +118,8 @@ GNC_EXPANDED_LOCALE_DIR=`gnc_recursively_expand_var "${LOCALE_DIR}"`
 AC_SUBST(LOCALE_DIR)
 AC_SUBST(GNC_EXPANDED_LOCALE_DIR)
 
-AC_CHECK_HEADER(locale.h, ac_cv_header_locale_h=yes, ac_cv_header_locale_h=no)
+# We need the variable below defined for the gettext checks to work
+ac_cv_header_locale_h=yes
 AC_CAN_USE_GNU_GETTEXT
 
 
@@ -580,7 +581,6 @@ AC_OUTPUT(Makefile
           Makefile.init
           make-gnucash-patch
           src/Makefile
-          src/messages_i18n.h
           src/engine/Makefile
           src/guile/Makefile
           src/guile/gnucash.h

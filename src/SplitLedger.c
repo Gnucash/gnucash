@@ -95,19 +95,21 @@
 
 #define _GNU_SOURCE
 
+#include <config.h>
+
 #include <stdio.h>
 #include <time.h>
 
 #include "top-level.h"
 
 #include "ui-callbacks.h"
-#include "messages.h"
 #include "SplitLedger.h"
 #include "MultiLedger.h"
 #include "FileDialog.h"
 #include "Refresh.h"
 #include "splitreg.h"
 #include "table-allgui.h"
+#include "messages.h"
 #include "util.h"
 
 #define BUFSIZE 1024

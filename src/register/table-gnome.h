@@ -30,6 +30,8 @@
 #ifndef __XACC_TABLE_GNOME_H__
 #define __XACC_TABLE_GNOME_H__
 
+#include "config.h"
+
 #include <gnome.h>
 
 #include "gnc-common.h"

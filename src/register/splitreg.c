@@ -30,14 +30,16 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "messages.h"
 #include "recncell.h"
 #include "splitreg.h"
 #include "table-allgui.h"
 #include "textcell.h"
+#include "messages.h"
 #include "util.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

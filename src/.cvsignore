@@ -6,4 +6,3 @@ obj
 *.patch
 *.log
 *.xac.*.xac
-messages_i18n.h

@@ -1,5 +1,14 @@
 2000-05-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/guile/i18n.h.in: always include locale.h
+
+	* src/messages_i18n.h: no longer needs to be configured.
+
+	* configure.in: don't bother checking for locale.h, we have
+	to have it anyway.
+
+	* aclocal.m4: always include locale.h
+
 	* src/gnome/window-register.c (deleteCB): use g_strdup_printf
 	instead of asprintf.
 

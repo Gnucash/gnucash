@@ -29,28 +29,29 @@
 #ifndef __XACC_MESSAGES_I18N_H__
 #define __XACC_MESSAGES_I18N_H__
 
-#if defined(HAVE_GETTEXT)		/* HAVE_GETTEXT */
+#if defined(HAVE_GETTEXT)             /* HAVE_GETTEXT */
 
 #include <libintl.h>
-@INCLUDE_LOCALE_H@
+#include <locale.h>
 
 #undef _
 
 #ifdef DISABLE_GETTEXT_UNDERSCORE
-#define _(String)	(String)
-#else		/* ENABLE_GETTEXT_UNDERSCORE */
-#define _(String)	gettext (String)
-#endif		/* End ENABLE_GETTEXT_UNDERSCORE */
+#define _(String) (String)
+#else                                 /* ENABLE_GETTEXT_UNDERSCORE */
+#define _(String) gettext(String)
+#endif		                      /* End ENABLE_GETTEXT_UNDERSCORE */
 
-#else 					/* Not HAVE_GETTEXT */
+#else                                 /* Not HAVE_GETTEXT */
 
-#define _(String)	(String)
-#define gettext(String)	(String)
+#define _(String)       (String)
+#define gettext(String) (String)
 
-#endif					/* End Not HAVE_GETTEXT */
+#endif                                /* End Not HAVE_GETTEXT */
 
-#undef N_
-#define N_(String)	(String)
+#undef  N_
+#define N_(String) (String)
+
 
 /** MISC INTERNATIONALIZATION PIECES-PARTS: ******************************/
 

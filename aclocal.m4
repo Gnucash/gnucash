@@ -321,12 +321,13 @@ AC_DEFUN(AC_CAN_USE_GNU_GETTEXT,
    dnl The reference to <locale.h> in the installed <libintl.h> file
    dnl must be resolved because we cannot expect the users of this
    dnl to define HAVE_LOCALE_H.
-   if test "$ac_cv_header_locale_h" = yes; then
-     INCLUDE_LOCALE_H="#include <locale.h>"
-   else
-     INCLUDE_LOCALE_H="\
-/* The system does not provide the header <locale.h>.  Take care yourself.  */"
-   fi
+   dnl if test "$ac_cv_header_locale_h" = yes; then
+   dnl Gnucash requires locale.h, so just hard-code it in -- Dave Peticolas
+   INCLUDE_LOCALE_H="#include <locale.h>"
+   dnl else
+   dnl   INCLUDE_LOCALE_H="\
+dnl /* The system does not provide the header <locale.h>.  Take care yourself.  */"
+   dnl fi
    AC_SUBST(INCLUDE_LOCALE_H)
 
    dnl If the AC_CONFIG_AUX_DIR macro for autoconf is used we possibly
