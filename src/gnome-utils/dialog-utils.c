@@ -63,7 +63,8 @@ gnc_ui_source_menu_create(Account *account)
 
   for (i = 0; i < NUM_SOURCES; i++)
   {
-    item = gtk_menu_item_new_with_label(gnc_get_source_name(i));
+    item = gtk_menu_item_new_with_label(gnc_price_source_enum2name(i));
+    gtk_widget_set_sensitive(item, gnc_price_source_sensitive(i));
     gtk_widget_show(item);
     gtk_menu_append(menu, item);
   }

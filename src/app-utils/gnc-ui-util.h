@@ -116,23 +116,49 @@ char * gnc_account_get_full_name (Account *account);
 typedef enum
 {
   SOURCE_NONE = 0,
+  SPECIFIC_SOURCES,
+  SOURCE_AEX,
+  SOURCE_ASX,
+  SOURCE_DWS,
+  SOURCE_FIDELITY_DIRECT,
+  SOURCE_FOOL,
+  SOURCE_FUNDLIBRARY,
+  SOURCE_TDWATERHOUSE,
+  SOURCE_TIAA_CREF,
+  SOURCE_TROWEPRICE_DIRECT,
+  SOURCE_TRUSTNET,
+  SOURCE_UNION,
+  SOURCE_VANGUARD,
+  SOURCE_VWD,
   SOURCE_YAHOO,
+  SOURCE_YAHOO_ASIA,
+  SOURCE_YAHOO_AUSTRALIA,
   SOURCE_YAHOO_EUROPE,
+  SOURCE_ZUERICH,
+  GENERAL_SOURCES,
+  SOURCE_ASIA,
+  SOURCE_AUSTRALIA,
+  SOURCE_CANADA,
+  SOURCE_CANADAMUTUAL,
+  SOURCE_DUTCH,
+  SOURCE_EUROPE,
   SOURCE_FIDELITY,
   SOURCE_TROWEPRICE,
-  SOURCE_VANGUARD,
-  SOURCE_ASX,
-  SOURCE_TIAA_CREF,
-  SOURCE_TRUSTNET,
-  SOURCE_VWD,
+  SOURCE_UKUNITTRUSTS,
+  SOURCE_USA,
   NUM_SOURCES
 } PriceSourceCode;
 /* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
    as well. */
 
-const char * gnc_get_source_name (PriceSourceCode source);
-const char * gnc_get_source_code_name (PriceSourceCode source);
-PriceSourceCode gnc_get_source_code (const char * codename);
+const char * gnc_price_source_enum2name (PriceSourceCode source);
+const char * gnc_price_source_enum2internal (PriceSourceCode source);
+const char * gnc_price_source_internal2fq (const char * codename);
+PriceSourceCode gnc_price_source_internal2enum (const char * internal_name);
+PriceSourceCode gnc_price_source_fq2enum (const char * fq_name);
+gboolean gnc_price_source_sensitive (PriceSourceCode source);
+void gnc_price_source_set_fq_installed (GList *sources_list);
+gboolean gnc_price_source_have_fq (void);
 
 
 /* Locale functions *************************************************/

@@ -2,7 +2,7 @@
 gncsharedir = ${GNC_SHAREDIR}
 
 bin_SCRIPTS = gnc-prices update-finance-quote
-gncshare_SCRIPTS = finance-quote-helper
+gncshare_SCRIPTS = finance-quote-helper finance-quote-check
 
 EXTRA_DIST = \
   .cvsignore \
@@ -23,7 +23,14 @@ finance-quote-helper: finance-quote-helper.in
             -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-CLEANFILES = finance-quote-helper
+
+finance-quote-check: finance-quote-check.in
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
 
 update-finance-quote: update-finance-quote.in
 	rm -f $@.tmp
@@ -32,4 +39,5 @@ update-finance-quote: update-finance-quote.in
             -e 's:@-PERLINCL-@:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-CLEANFILES += update-finance-quote
+
+CLEANFILES = finance-quote-helper finance-quote-check update-finance-quote

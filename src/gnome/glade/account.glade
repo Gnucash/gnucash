@@ -427,7 +427,7 @@
 
 		<widget>
 		  <class>GtkLabel</class>
-		  <name>label813</name>
+		  <name>source_label</name>
 		  <label>The source for price quotes:</label>
 		  <justify>GTK_JUSTIFY_RIGHT</justify>
 		  <wrap>False</wrap>
@@ -444,7 +444,7 @@
 
 		<widget>
 		  <class>GtkLabel</class>
-		  <name>label847713</name>
+		  <name>quote_tz_label</name>
 		  <label>Timezone for these quotes:</label>
 		  <justify>GTK_JUSTIFY_RIGHT</justify>
 		  <wrap>False</wrap>
@@ -503,6 +503,24 @@
 		  </widget>
 		</widget>
 	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>finance_quote_warning</name>
+	      <sensitive>False</sensitive>
+	      <label>Warning: Finance::Quote not installed properly.</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
 	    </widget>
 	  </widget>
 	</widget>

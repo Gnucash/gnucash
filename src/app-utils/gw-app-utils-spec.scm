@@ -8,6 +8,7 @@
 
 (use-modules (g-wrap gw-standard-spec))
 (use-modules (g-wrap gw-wct-spec))
+(use-modules (g-wrap gw-glib-spec))
 
 (use-modules (g-wrapped gw-engine-spec))
 
@@ -15,6 +16,7 @@
 
   (gw:wrapset-depends-on ws "gw-standard")
   (gw:wrapset-depends-on ws "gw-wct")
+  (gw:wrapset-depends-on ws "gw-glib")
 
   (gw:wrapset-depends-on ws "gw-engine")
 
@@ -427,6 +429,22 @@ determines formatting details.")
    "gnc_get_euro"
    '()
    "Returns the commodity EURO")
+
+  (gw:wrap-function
+   ws
+   'gnc:price-source-internal2fq
+   '(<gw:mchars> callee-owned const)
+   "gnc_price_source_internal2fq"
+   '(((<gw:mchars> caller-owned const) str))
+   "Returns a string with the Finace::Quote identifier correspopnding to the internal name.")
+
+  (gw:wrap-function
+   ws
+   'gnc:price-source-set-fq-installed
+   '<gw:void>
+   "gnc_price_source_set_fq_installed"
+   '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
+   "Takes a list of installed Finance::Quote souces and records it internally.")
 
   (gw:wrap-function
    ws

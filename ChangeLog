@@ -1,3 +1,37 @@
+2002-12-07  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-ui-util.c: Consolidate all knowledge about
+	Finance::Quote sources into one place. New and renamed functions
+	for mapping back and forth from Finance::Quote name to internal
+	name to user visible name. Functions to record whether or not F::Q
+	is installed properly, and if so, whether a particular source is
+	available.
+
+	* src/app-utils/gw-app-utils-spec.scm:
+	* src/gnome-utils/dialog-utils.c:
+	* src/scm/price-quotes.scm:
+	Removed all knowledge about Finance::Quote sources and now use the
+	common database.
+
+	* src/quotes/finance-quote-helper.in: Collapse all stock price
+	retrieval into a single call using the F::Q->fetch method instead
+	of individual per-source calls.
+
+	* src/quotes/finance-quote-check.in: New helper program to read
+	and return a list of all available F::Q methods.
+
+	* src/scm/price-quotes.scm: Code to call new finance-quote-check
+	program.
+
+	* src/scm/main.scm: Check for available F::Q methods when starting
+	up.
+
+	* src/gnome/glade/account.glade:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/dialog-utils.c:
+	When not retrieving stock quotes for an account, dim the price
+	source labels as well as the option menus.
+
 2002-12-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-control.c:
@@ -25,7 +59,7 @@
 	  gnc_commodity_equal(), because the average user doesn't need
 	  to know why commodities are not equal.
 
-2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>	
+2002-12-07  Benoit Grégoire  <bock@step.polymtl.ca>	
 	More Doxygenification.  Created an Engine module, and a 
 	Deprecated list.  Unfortunately, unless we turn on EXTRACT_ALL
 	(not very practical currently) not all functions will appear 
@@ -60,7 +94,7 @@
 	* po/nl.po: Fix use of msgid_plural by adding the appropriate
 	header entry.
 
-2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/ofx/gnc-ofx-import.c:  Do the "right" 
 	thing for setting split amount and value.
@@ -76,7 +110,7 @@
 
 	* po/nl.po -- don't use msgid_plural -- it fails to work.
 		
-2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-backend.c:  Fix for gcc2
 

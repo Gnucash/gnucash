@@ -57,7 +57,49 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
+static gboolean fq_is_installed = FALSE;
 
+typedef struct quote_source_t {
+  gboolean supported;
+  gboolean translate;
+  char *user_name;	/* User friendly name */
+  char *internal_name;	/* Name used internally. */
+  char *fq_name;	/* Name used by finance::quote. */
+} quote_source;
+
+static quote_source quote_sources[NUM_SOURCES] = {
+  { TRUE,  TRUE,  N_("(none)"), NULL, NULL },
+  { FALSE, TRUE,  N_("-- Single Sources --"), NULL, NULL },
+  { FALSE, FALSE, "AEX", "AEX", "aex" },
+  { FALSE, FALSE, "ASX", "ASX", "asx" },
+  { FALSE, FALSE, "DWS", "DWS", "dwsfunds" },
+  { FALSE, FALSE, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
+  { FALSE, FALSE, "Motley Fool", "FOOL", "fool" },
+  { FALSE, FALSE, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
+  { FALSE, FALSE, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
+  { FALSE, FALSE, "TIAA-CREF", "TIAACREF", "tiaacref" },
+  { FALSE, FALSE, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" }, /* Not Implemented */
+  { FALSE, FALSE, "Trustnet", "TRUSTNET", "trustnet" },
+  { FALSE, FALSE, "Union Investments", "UNIONFUNDS", "unionfunds" },
+  { FALSE, FALSE, "Vanguard", "VANGUARD", "vanguard" },
+  { FALSE, FALSE, "VWD", "VWD", "vwd" },
+  { FALSE, FALSE, "Yahoo", "YAHOO", "yahoo" },
+  { FALSE, FALSE, "Yahoo Asia", "YAHOO_ASIA", "yahoo_asia" },
+  { FALSE, FALSE, "Yahoo Australia", "YAHOO_AUSTRALIA", "yahoo_australia" },
+  { FALSE, FALSE, "Yahoo Europe", "YAHOO_EUROPE", "yahoo_europe" },
+  { FALSE, FALSE, "Zuerich Investments", "ZIFUNDS", "zifunds" },
+  { FALSE, TRUE,  N_("-- Multiple Sources --"), NULL, NULL },
+  { FALSE, FALSE, "Asia (Yahoo, ...)", "ASIA", "asia" },
+  { FALSE, FALSE, "Australia (ASX, Yahoo, ...)", "AUSTRALIA", "australia" },
+  { FALSE, FALSE, "Canada (Yahoo, ...)", "CANADA", "canada" },
+  { FALSE, FALSE, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
+  { FALSE, FALSE, "Dutch (AEX, ...)", "DUTCH", "dutch" },
+  { FALSE, FALSE, "Europe (Yahoo, ...)", "EUROPE", "europe" },
+  { FALSE, FALSE, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
+  { FALSE, FALSE, "T. Rowe Price", "TRPRICE", "troweprice" },
+  { FALSE, FALSE, "U.K. Unit Trusts", "UKUNITTRUSTS", "uk_unit_trusts" },
+  { FALSE, FALSE, "USA (Yahoo, Fool ...)", "USA", "usa" },
+};
 
 /********************************************************************\
  * gnc_color_deficits                                               *
@@ -721,90 +763,127 @@ gnc_get_reconcile_flag_order (void)
 
 /* Get the full name of a quote source */
 const char *
-gnc_get_source_name (PriceSourceCode source)
+gnc_price_source_enum2name (PriceSourceCode source)
 {
-  switch (source)
-  {
-    case SOURCE_NONE :
-      return _("(none)");
-    case SOURCE_YAHOO :
-      return "Yahoo";
-    case SOURCE_YAHOO_EUROPE :
-      return "Yahoo Europe";
-    case SOURCE_FIDELITY :
-      return "Fidelity";
-    case SOURCE_TROWEPRICE :
-      return "T. Rowe Price";
-    case SOURCE_VANGUARD :
-      return "Vanguard";
-    case SOURCE_ASX :
-      return "ASX";
-    case SOURCE_TIAA_CREF :
-      return "TIAA-CREF";
-    case SOURCE_TRUSTNET :
-      return "Trustnet";
-    case SOURCE_VWD :
-      return "VWD";
-    default:
-      break;
+  if (source >= NUM_SOURCES) {
+    PWARN("Unknown source %d", source);
+    return NULL;
   }
-
-  PWARN("Unknown source");
-  return NULL;
+  return quote_sources[source].user_name;
 }
 
 /* Get the codename string of a quote source */
 const char *
-gnc_get_source_code_name (PriceSourceCode source)
+gnc_price_source_enum2internal (PriceSourceCode source)
 {
-  switch (source)
-  {
-    case SOURCE_NONE :
-      return NULL;
-    case SOURCE_YAHOO :
-      return "YAHOO";
-    case SOURCE_YAHOO_EUROPE :
-      return "YAHOO_EUROPE";
-    case SOURCE_FIDELITY :
-      return "FIDELITY";
-    case SOURCE_TROWEPRICE :
-      return "TRPRICE";
-    case SOURCE_VANGUARD :
-      return "VANGUARD";
-    case SOURCE_ASX :
-      return "ASX";
-    case SOURCE_TIAA_CREF :
-      return "TIAACREF";
-    case SOURCE_TRUSTNET :
-      return "TRUSTNET";
-    case SOURCE_VWD :
-      return "VWD";
-    default:
-      break;
+  if (source >= NUM_SOURCES) {
+    PWARN("Unknown source %d", source);
+    return NULL;
   }
-
-  PWARN("Unknown source");
-  return NULL;
+  return quote_sources[source].internal_name;
 }
 
 /* Get the codename string of a source */
 PriceSourceCode
-gnc_get_source_code (const char * codename)
+gnc_price_source_internal2enum (const char * internal_name)
+{
+  gint i;
+
+  if (internal_name == NULL)
+    return SOURCE_NONE;
+
+  if (safe_strcmp(internal_name, "") == 0)
+    return SOURCE_NONE;
+
+  for (i = 1; i < NUM_SOURCES; i++)
+    if (safe_strcmp(internal_name, quote_sources[i].internal_name) == 0)
+      return i;
+
+  PWARN("Unknown source %s", internal_name);
+  return SOURCE_NONE;
+}
+
+/* Get the codename string of a source */
+PriceSourceCode
+gnc_price_source_fq2enum (const char * fq_name)
+{
+  gint i;
+
+  if (fq_name == NULL)
+    return SOURCE_NONE;
+
+  if (safe_strcmp(fq_name, "") == 0)
+    return SOURCE_NONE;
+
+  for (i = 1; i < NUM_SOURCES; i++)
+    if (safe_strcmp(fq_name, quote_sources[i].fq_name) == 0)
+      return i;
+
+//  NYSE and Nasdaq have deliberately been left out. Don't always print them.
+//  PWARN("Unknown source %s", fq_name);
+  return SOURCE_NONE;
+}
+
+/* Get the codename string of a source */
+const char *
+gnc_price_source_internal2fq (const char * codename)
 {
   gint i;
 
   if (codename == NULL)
-    return SOURCE_NONE;
+    return NULL;
 
   if (safe_strcmp(codename, "") == 0)
-    return SOURCE_NONE;
+    return NULL;
+
+  if (safe_strcmp(codename, "CURRENCY") == 0)
+    return "currency";
 
   for (i = 1; i < NUM_SOURCES; i++)
-    if (safe_strcmp(codename, gnc_get_source_code_name(i)) == 0)
-      return i;
+    if (safe_strcmp(codename, quote_sources[i].internal_name) == 0)
+      return quote_sources[i].fq_name;
 
-  PWARN("Unknown source");
-  return SOURCE_NONE;
+  PWARN("Unknown source %s", codename);
+  return NULL;
+}
+
+/* Get whether or not a quote source should be sensitive in the menu */
+void
+gnc_price_source_set_fq_installed (GList *sources_list)
+{
+  GList *node;
+  PriceSourceCode code;
+  char *source;
+
+  if (!sources_list)
+    return;
+
+  fq_is_installed = TRUE;
+  for (node = sources_list; node; node = node->next) {
+    source = node->data;
+    code = gnc_price_source_fq2enum (source);
+    if ((code != SOURCE_NONE) && (code < NUM_SOURCES)) {
+      quote_sources[code].supported = TRUE;
+    }
+  }
+}
+
+gboolean
+gnc_price_source_have_fq (void)
+{
+  return fq_is_installed;
+}
+
+/* Get whether or not a quote source should be sensitive in the menu */
+gboolean
+gnc_price_source_sensitive (PriceSourceCode source)
+{
+  if (source >= NUM_SOURCES) {
+    PWARN("Unknown source");
+    return FALSE;
+  }
+
+  return quote_sources[source].supported;
 }
 
 static const char *

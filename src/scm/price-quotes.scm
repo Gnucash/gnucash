@@ -23,6 +23,7 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
+(export gnc:fq-check-sources)
 (export gnc:book-add-quotes)
 (export gnc:add-quotes-to-book-at-url)
 
@@ -211,6 +212,47 @@
             #f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define gnc:*finance-quote-check*
+  (gnc:find-file "finance-quote-check"
+                 (gnc:config-var-value-get gnc:*share-path*)))
+
+(define (gnc:fq-check-sources)
+  (let ((program #f))
+
+    (define (start-program)
+      (set! program (gnc:run-sub-process #f
+                                        gnc:*finance-quote-check*
+                                        gnc:*finance-quote-check*)))
+
+    (define (get-sources)
+      (and program
+           (let ((from-child (cadr program))
+                 (results #f))
+	     (catch
+	      #t
+	      (lambda ()
+		(write (list 'checking-sources))
+		(newline)
+		(set! results (read from-child))
+;;		(write (list 'results results)) (newline)
+		results)
+	      (lambda (key . args)
+		key)))))
+
+    (define (kill-program)
+      (and program
+           (let ((pid (car program)))
+             (close-input-port (cadr program))
+             (close-output-port (caddr program))
+             (gnc:cleanup-sub-process (car program) 1))))
+
+    (dynamic-wind
+        start-program
+        get-sources
+        kill-program)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Finance::Quote based instantaneous quotes -- used by the
 ;; --add-price-quotes command line option, etc.
@@ -356,35 +398,6 @@
     ;;                     (commodity-4 currency-4 tz-4) ...)
     ;;  ...)
 
-  (define (src->fq-method-sym src)
-    (cond
-     ((string=? "YAHOO" src) 'yahoo)
-     ((string=? "YAHOO_EUROPE" src) 'yahoo-europe)
-     ((string=? "FIDELITY" src) 'fidelity)
-     ((string=? "TRPRICE" src) 'troweprice)
-     ((string=? "VANGUARD" src) 'vanguard)
-     ((string=? "ASX" src) 'asx)
-     ((string=? "TIAACREF" src) 'tiaacref)
-     ((string=? "TRUSTNET" src) 'trustnet)
-     ((string=? "VWD" src) 'vwd)
-     ((string=? "CURRENCY" src) 'currency)
-     (else #f)))
-
-  ;; NOTE: If you modify this, please update finance-quote-helper.in as well.
-  (define (fq-method-sym->str src-sym)
-    (case src-sym
-     ((yahoo) "yahoo")
-     ((yahoo-europe) "yahoo_europe")
-     ((fidelity) "fidelity_direct")
-     ((troweprice) "troweprice_direct")
-     ((vanguard) "vanguard")
-     ((asx) "asx")
-     ((tiaacref) "tiaacref")
-     ((trustnet) "trustnet")
-     ((vwd) "vwd")
-     ((currency) "currency")
-     (else #f)))
-
   (define (account->fq-cmd account)
     ;; Returns (cons fq-method-sym
     ;;               (list commodity currency assumed-timezone-str))
@@ -392,7 +405,7 @@
            (currency (gnc:default-currency))
            (src (and account (gnc:account-get-price-src account)))
            (tz (gnc:account-get-quote-tz account))
-	   (fq-method-sym (and src (src->fq-method-sym src)))
+	   (fq-method-sym (and src (gnc:price-source-internal2fq src)))
            (mnemonic (and commodity (gnc:commodity-get-mnemonic commodity))))
       (and
        commodity
@@ -406,23 +419,23 @@
          (currency-cmd-list (call-with-values 
                              (lambda () (partition!
                                          (lambda (cmd)
-                                           (not (eq? (car cmd) 'currency)))
+                                           (not (equal? (car cmd) "currency")))
                                          big-list))
                              (lambda (a b) (set! cmd-list a) b)))
          (cmd-hash (make-hash-table 31)))
 
     ;; Now collect symbols going to the same backend.
-    (item-list->hash! cmd-list cmd-hash car cdr hashq-ref hashq-set! #t)
+    (item-list->hash! cmd-list cmd-hash car cdr hash-ref hash-set! #t)
 
     ;; Now translate to just what finance-quote-helper expects.
     (append
      (hash-fold
       (lambda (key value prior-result)
-        (cons (cons (fq-method-sym->str key) value)
+        (cons (cons key value)
               prior-result))
       '()
       cmd-hash)
-     (map (lambda (cmd) (cons (fq-method-sym->str (car cmd)) (list (cdr cmd))))
+     (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
           currency-cmd-list))))
 
   (define (fq-call-data->fq-calls fq-call-data)

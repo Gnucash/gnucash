@@ -94,8 +94,11 @@ struct _AccountWindow
 
   /* These probably don't belong here anymore, but until we figure out
      what we want, we'll leave them alone. */
+  GtkWidget * price_quote_frame;
   GtkWidget * get_quote_check;
+  GtkWidget * source_label;
   GtkWidget * source_menu;
+  GtkWidget * quote_tz_label;
   GtkWidget * quote_tz_menu;
 
   GtkWidget * tax_related_button;
@@ -205,7 +208,7 @@ gnc_account_to_ui(AccountWindow *aw)
 
     if (price_src && aw->type != CURRENCY)
       gtk_option_menu_set_history (GTK_OPTION_MENU (aw->source_menu),
-                                   gnc_get_source_code (price_src));
+                                   gnc_price_source_internal2enum (price_src));
   }
 
   {
@@ -353,7 +356,7 @@ gnc_ui_to_account(AccountWindow *aw)
       gint code;
 
       code = gnc_option_menu_get_active (aw->source_menu);
-      string = gnc_get_source_code_name (code);
+      string = gnc_price_source_enum2internal (code);
       old_string = xaccAccountGetPriceSrc (account);
       if (safe_strcmp (string, old_string) != 0)
         xaccAccountSetPriceSrc (account, string);
@@ -1153,11 +1156,13 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
 
   gtk_widget_set_sensitive(aw->get_quote_check, sensitive);
   gtk_widget_set_sensitive(aw->quote_tz_menu, sensitive && get_quote);
+  gtk_widget_set_sensitive(aw->quote_tz_label, sensitive && get_quote);
 
   sensitive = (aw->type == STOCK    ||
 	       aw->type == MUTUAL);
 
   gtk_widget_set_sensitive(aw->source_menu, sensitive && get_quote);
+  gtk_widget_set_sensitive(aw->source_label, sensitive && get_quote);
 
   sensitive = (aw->type != EQUITY &&
                aw->type != CURRENCY &&
@@ -1183,7 +1188,9 @@ gnc_type_list_unselect_cb(GtkCList * type_list, gint row, gint column,
   aw->type = BAD_TYPE;
 
   gtk_widget_set_sensitive(aw->get_quote_check, FALSE);
+  gtk_widget_set_sensitive(aw->source_label, FALSE);
   gtk_widget_set_sensitive(aw->source_menu, FALSE);
+  gtk_widget_set_sensitive(aw->quote_tz_label, FALSE);
   gtk_widget_set_sensitive(aw->quote_tz_menu, FALSE);
 }
 
@@ -1423,11 +1430,13 @@ get_quote_check_cb (GtkWidget *w, gpointer data)
 	       aw->type == MUTUAL   ||
 	       aw->type == CURRENCY);
 
+  gtk_widget_set_sensitive(aw->quote_tz_label, sensitive && get_quote);
   gtk_widget_set_sensitive(aw->quote_tz_menu, sensitive && get_quote);
 
   sensitive = (aw->type == STOCK    ||
 	       aw->type == MUTUAL);
 
+  gtk_widget_set_sensitive(aw->source_label, sensitive && get_quote);
   gtk_widget_set_sensitive(aw->source_menu, sensitive && get_quote);
 }
 
@@ -1493,14 +1502,23 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_signal_connect (GTK_OBJECT (aw->commodity_edit), "changed",
                       GTK_SIGNAL_FUNC (commodity_changed_cb), aw);
 
+  if (gnc_price_source_have_fq()) {
+    gtk_widget_destroy(glade_xml_get_widget (xml, "finance_quote_warning"));
+  } else {
+    gtk_widget_set_sensitive(glade_xml_get_widget (xml, "price_quote_frame"),
+			     FALSE);
+  }
+
   aw->get_quote_check = glade_xml_get_widget (xml, "get_quote_check");
   gtk_signal_connect (GTK_OBJECT (aw->get_quote_check), "toggled",
                       GTK_SIGNAL_FUNC (get_quote_check_cb), aw);
 
+  aw->source_label = glade_xml_get_widget (xml, "source_label");
   box = glade_xml_get_widget (xml, "source_box");
   aw->source_menu = gnc_ui_source_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->source_menu, TRUE, TRUE, 0);
 
+  aw->quote_tz_label = glade_xml_get_widget (xml, "quote_tz_label");
   box = glade_xml_get_widget (xml, "quote_tz_box");
   aw->quote_tz_menu = gnc_ui_quote_tz_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->quote_tz_menu, TRUE, TRUE, 0);

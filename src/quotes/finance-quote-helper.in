@@ -334,63 +334,24 @@ while(<>) {
   my($quote_method_name, $symbols) = @$result;
   my %quote_data;
 
- SWITCH:
-  {
-    if($quote_method_name =~ m/^yahoo$/) {
-      %quote_data = $quoter->yahoo(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^yahoo_europe$/) {
-      %quote_data = $quoter->yahoo_europe(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^fidelity_direct$/) {
-      %quote_data = $quoter->fidelity_direct(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^troweprice_direct$/) {
-      %quote_data = $quoter->troweprice_direct(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^vanguard$/) {
-      %quote_data = $quoter->vanguard(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^asx$/) {
-      %quote_data = $quoter->asx(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^tiaacref$/) {
-      %quote_data = $quoter->tiaacref(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^trustnet$/) {
-      %quote_data = $quoter->trustnet(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^vwd/) {
-      %quote_data = $quoter->vwd(@$symbols);
-      last SWITCH;
-    }
-    if($quote_method_name =~ m/^currency$/) {
-      my ($from_currency, $to_currency) = @$symbols;
+  if($quote_method_name =~ m/^currency$/) {
+    my ($from_currency, $to_currency) = @$symbols;
 
-      last SWITCH unless $from_currency;
-      last SWITCH unless $to_currency;
+    last SWITCH unless $from_currency;
+    last SWITCH unless $to_currency;
 
-      my $price = $quoter->currency($from_currency, $to_currency);
-      last SWITCH unless $price;
+    my $price = $quoter->currency($from_currency, $to_currency);
+    last SWITCH unless $price;
 
-      $quote_data{$from_currency, "success"} = 1;
-      $quote_data{$from_currency, "symbol"} = $from_currency;
-      $quote_data{$from_currency, "currency"} = $to_currency;
-      $quote_data{$from_currency, "last"} = $price;
+    $quote_data{$from_currency, "success"} = 1;
+    $quote_data{$from_currency, "symbol"} = $from_currency;
+    $quote_data{$from_currency, "currency"} = $to_currency;
+    $quote_data{$from_currency, "last"} = $price;
 
-      my @new_symbols = ($from_currency);
-      $symbols = \@new_symbols;
-
-      last SWITCH;
-    }
+    my @new_symbols = ($from_currency);
+    $symbols = \@new_symbols;
+  } else {
+    %quote_data = $quoter->fetch($quote_method_name, @$symbols);
   }
 
   if(!%quote_data) {

@@ -433,10 +433,16 @@ string and 'directories' must be a list of strings."
     ;; +jsled - 2002.07.08
     (load-from-path "fin.scm")
 
+    (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
+    (gnc:use-guile-module-here! '(gnucash price-quotes))
+;    (gnc:price-source-set-fq-installed (gnc:fq-check-sources))
+    (let ((sources (gnc:fq-check-sources)))
+      (if (list? sources)
+	  (gnc:price-source-set-fq-installed sources)))
+
     (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
     (gnc:initialize-tip-of-the-day)
 
-    (gnc:use-guile-module-here! '(gnucash price-quotes))
     (set-current-module original-module))
 
   (gnc:hook-add-dangler gnc:*book-opened-hook*
