@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-engine-util.h -- GnuCash engine utility functions            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1998-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -146,6 +146,25 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE))      \
     gnc_log (module, GNC_LOG_TRACE, "Trace",       \
+             __FUNCTION__, format, ## args);       \
+}
+
+void gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
+        const char *function_name, const char *format, ...);
+
+void gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
+        const char *function_name, const char *format, ...);
+
+
+#define START_CLOCK(clockno,format, args...) {     \
+  if (gnc_should_log (module, GNC_LOG_INFO))       \
+    gnc_start_clock (clockno, module, GNC_LOG_INFO,\
+             __FUNCTION__, format, ## args);       \
+}
+
+#define REPORT_CLOCK(clockno,format, args...) {    \
+  if (gnc_should_log (module, GNC_LOG_INFO))       \
+    gnc_report_clock (clockno, module, GNC_LOG_INFO,\
              __FUNCTION__, format, ## args);       \
 }
 

@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-engine-util.c -- GnuCash engine utility functions            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -34,6 +34,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 
 #include "gnc-engine-util.h"
 #include "gnc-common.h"
@@ -151,6 +152,71 @@ gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
   fprintf (stderr, "\n");
 }
 
+
+/********************************************************************\
+\********************************************************************/
+
+#define NUM_CLOCKS 10
+
+static
+struct timeval gnc_clock[NUM_CLOCKS] = {
+   {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
+   {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, 
+};
+
+void
+gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
+        const char *function_name, const char *format, ...)
+{
+  struct timezone tz;
+  va_list ap;
+
+  if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
+  gettimeofday (&gnc_clock[clockno], &tz);
+
+  fprintf (stderr, "Clock %d Start: %s: ",
+           clockno, prettify (function_name));
+
+  va_start (ap, format);
+
+  vfprintf (stderr, format, ap);
+
+  va_end (ap);
+
+  fprintf (stderr, "\n");
+}
+
+void
+gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
+        const char *function_name, const char *format, ...)
+{
+  struct timezone tz;
+  struct timeval now;
+  va_list ap;
+
+  if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
+  gettimeofday (&now, &tz);
+
+  /* need to borrow to make differnce */
+  if (now.tv_usec < gnc_clock[clockno].tv_usec)
+  {
+    now.tv_sec --;
+    now.tv_usec -= 1000000;
+  }
+  now.tv_sec -= gnc_clock[clockno].tv_sec;
+  now.tv_usec -= gnc_clock[clockno].tv_usec;
+
+  fprintf (stderr, "Clock %d Elapsed: %ld.%06ld  %s: ",
+           clockno, now.tv_sec, now.tv_usec, prettify (function_name));
+
+  va_start (ap, format);
+
+  vfprintf (stderr, format, ap);
+
+  va_end (ap);
+
+  fprintf (stderr, "\n");
+}
 
 /********************************************************************\
 \********************************************************************/
