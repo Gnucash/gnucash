@@ -20,7 +20,7 @@ XbaeMatrix:
      row/column/cell user data.
   -- modified by deleting examples, other non-essential stuff.
 
-libhtmlw:
+libhtmlw: *OBSOLETE*
   -- eliminated due to license restrictions and overall brokeness.
      Use XmHTML instead.
 
@@ -28,13 +28,16 @@ ComboBox:
   -- variety of assorted bug fixes & enhancements.
   -- modified by deleting examples, other non-essential stuff.
 
-XmHTML:
+XmHTML: *OBSOLETE* Use newer version
   -- modified by deleting examples, other non-essential stuff.
 
-urlget:
+urlget: *OBSOLETE*
   -- you'll do a let better by gettig the latest from
      http://www.fts.frontec.se/~dast/curl/
      Its now called "curl", not "urlget".
 
-gtksheet:
-  -- This is the basis for the GNOME version's register.
+gtksheet: *OBSOLETE*
+  -- This was the basis for the GNOME version's register.
+
+gtkfilesel2: *OBSOLETE*
+  -- Was used as a gnome file box. No longer used.
