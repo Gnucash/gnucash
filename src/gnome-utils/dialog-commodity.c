@@ -76,9 +76,9 @@ static SelectCommodityWindow *gnc_ui_select_commodity_create (const gnc_commodit
 
 static void gnc_ui_select_commodity_namespace_changed_cb (GtkEditable * entry, gpointer user_data);
 static void gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer data);
-static void gnc_ui_commodity_ok_cb (GtkButton * button, gpointer user_data);
-static void gnc_ui_commodity_cancel_cb (GtkButton * button, gpointer user_data);
-static void gnc_ui_commodity_help_cb (GtkButton * button, gpointer user_data);
+void gnc_ui_commodity_ok_cb (GtkButton * button, gpointer user_data);
+void gnc_ui_commodity_cancel_cb (GtkButton * button, gpointer user_data);
+void gnc_ui_commodity_help_cb (GtkButton * button, gpointer user_data);
 
 #define GNC_RESPONSE_NEW 0
 
@@ -462,15 +462,7 @@ gnc_ui_new_commodity_create (const char *selected_namespace,
 	char *namespace;
 
 	xml = gnc_glade_xml_new ("commodity.glade", "Commodity Dialog");
-
-	glade_xml_signal_connect_data
-		(xml, "gnc_ui_commodity_ok_cb", G_CALLBACK (gnc_ui_commodity_ok_cb), retval);
-
-	glade_xml_signal_connect_data
-		(xml, "gnc_ui_commodity_cancel_cb", G_CALLBACK (gnc_ui_commodity_cancel_cb), retval);
-
-	glade_xml_signal_connect_data
-		(xml, "gnc_ui_commodity_help_cb", G_CALLBACK (gnc_ui_commodity_help_cb), retval);
+	glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, retval);
 
 	help_button = glade_xml_get_widget (xml, "help_button");
 	if (!help_callback)
@@ -628,7 +620,7 @@ gnc_ui_commodity_destroy (CommodityWindow * w)
  * gnc_ui_commodity_ok_cb()
  ********************************************************************/
 
-static void
+void
 gnc_ui_commodity_ok_cb (GtkButton * button, gpointer user_data)
 {
 	CommodityWindow *w = user_data;
@@ -692,7 +684,7 @@ gnc_ui_commodity_ok_cb (GtkButton * button, gpointer user_data)
  * gnc_ui_commodity_help_cb()
  ********************************************************************/
 
-static void
+void
 gnc_ui_commodity_help_cb (GtkButton * button, gpointer user_data)
 {
 	if (help_callback)
@@ -704,7 +696,7 @@ gnc_ui_commodity_help_cb (GtkButton * button, gpointer user_data)
  * gnc_ui_commodity_cancel_cb()
  ********************************************************************/
 
-static void
+void
 gnc_ui_commodity_cancel_cb (GtkButton * button, gpointer user_data)
 {
 	CommodityWindow *w = user_data;
