@@ -37,17 +37,6 @@ AccountGroup *xaccMallocAccountGroup( void );
 void          xaccFreeAccountGroup( AccountGroup *account_group );
 
 /*
- * The xaccGroupGetGUID() subroutine will return the
- *    globally unique id associated with that group.
- *
- * The xaccGroupLookup() subroutine will return the
- *    group associated with the given id, or NULL
- *    if there is no such group.
- */
-const GUID   * xaccGroupGetGUID (AccountGroup *group);
-AccountGroup * xaccGroupLookup (const GUID *guid);
-
-/*
  * The xaccConcatGroups() subroutine will move all accounts
  *    from the "from" group to the "to" group
  *

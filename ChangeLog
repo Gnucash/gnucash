@@ -1,5 +1,12 @@
 2000-06-19  Dave Peticolas  <dave@krondo.com>
 
+	* src/guile/gnc.gwp: take out GUIDs for Groups.
+
+	* src/engine/Group.c: take out GUIDs for Groups. Groups are really
+	just lists with no additional structure, and giving them GUIDs
+	complicates matters without adding any utility. You can always use
+	the parent account GUID instead.
+
 	* src/gnome/top-level.c: configure list auto-popping from here.
 
 	* src/register/gnome/combocell-gnome.c: determine whether or not

@@ -61,9 +61,6 @@ xaccInitializeAccountGroup (AccountGroup *grp)
 
   grp->balance     = 0.0;
 
-  xaccGUIDNew(&grp->guid);
-  xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
-
   grp->backend     = NULL;
 
 }
@@ -90,8 +87,6 @@ xaccFreeAccountGroup( AccountGroup *grp )
   int i;
 
   if (NULL == grp) return;
-
-  xaccRemoveEntity(&grp->guid);
 
   for( i=0; i<grp->numAcc; i++ )
     xaccFreeAccount( grp->account[i] );
@@ -151,44 +146,6 @@ xaccGroupNotSaved (AccountGroup *grp)
       if (not_saved) return 1;
    }
    return 0;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-const GUID *
-xaccGroupGetGUID (AccountGroup *group)
-{
-  if (!group)
-    return xaccGUIDNULL();
-
-  return &group->guid;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void 
-xaccGroupSetGUID (AccountGroup *group, GUID *guid)
-{
-  if (!group || !guid) return;
-
-  xaccRemoveEntity(&group->guid);
-
-  group->guid = *guid;
-
-  xaccStoreEntity(group, &group->guid, GNC_ID_GROUP);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-AccountGroup *
-xaccGroupLookup (const GUID *guid)
-{
-  if (!guid) return NULL;
-
-  return xaccLookupEntity(guid, GNC_ID_GROUP);
 }
 
 /********************************************************************\
