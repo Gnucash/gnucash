@@ -55,3 +55,5 @@ INCLUDES = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I..
+
+EXTRA_DIST = test-load-module
