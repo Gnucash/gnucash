@@ -81,7 +81,7 @@
     (gnc:options-add-account-selection! 
      options gnc:pagename-accounts 
      optname-display-depth optname-show-subaccounts
-     optname-accounts "a" 3
+     optname-accounts "a" 2
      (lambda ()
        ;; FIXME : gnc:get-current-accounts disappeared
        (let ((current-accounts '()))
