@@ -36,6 +36,7 @@
 #include "glade-support.h"
 #include "gnc-book.h"
 #include "gnc-commodity-edit.h"
+#include "gnc-component-manager.h"
 #include "gnc-dir.h"
 #include "gnc-ui-util.h"
 #include "io-example-account.h"
@@ -238,7 +239,9 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
         GtkCList *clist;
         gchar *locale_dir = gnc_get_ea_locale_dir(GNC_ACCOUNTS_DIR);
 
+        gnc_suspend_gui_refresh ();
         list = gnc_load_example_account_list(locale_dir);
+        gnc_resume_gui_refresh ();
 
         clist = gnc_new_user_get_clist();
 

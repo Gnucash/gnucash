@@ -1,5 +1,9 @@
 2001-06-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/new-user-callbacks.c
+	(on_chooseAccountTypesPage_prepare): suspend & resume gui
+	refreshes while loading accounts
+
 	* src/gnome/new-user-funs.c (gnc_create_newUserDialog): make clist
 	column titles passive
 
