@@ -1,3 +1,93 @@
+2001-12-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/tax/us/test/Makefile.am: remove report-gnome from dirs
+
+	* src/tax/us/us.scm: don't use gw-gnc
+
+	* src/report/utility-reports/test/Makefile.am: remove report-gnome
+	from dirs
+
+	* src/report/utility-reports/welcome-to-gnucash.scm: don't use gw-gnc
+
+	* src/report/utility-reports/view-column.scm: don't use gw-gnc
+
+	* src/report/utility-reports/utility-reports.scm: don't use gw-gnc
+
+	* src/report/utility-reports/iframe-url.scm: don't use gw-gnc
+
+	* src/report/utility-reports/hello-world.scm: don't use gw-gnc
+
+	* src/report/stylesheets/test/Makefile.am: remove report-gnome
+	from dirs
+
+	* src/report/stylesheets/stylesheets.scm: don't use gw-gnc
+
+	* src/report/stylesheets/stylesheet-plain.scm: don't use gw-gnc
+
+	* src/report/stylesheets/stylesheet-fancy.scm: don't use gw-gnc
+
+	* src/report/standard-reports/test/Makefile.am: remove report-gnome
+	from dirs
+
+	* src/report/standard-reports/transaction.scm: don't use gw-gnc
+
+	* src/report/standard-reports/standard-reports.scm: don't use gw-gnc
+
+	* src/report/standard-reports/register.scm: don't use gw-gnc
+
+	* src/report/standard-reports/price-scatter.scm: don't use gw-gnc
+
+	* src/report/standard-reports/portfolio.scm: don't use gw-gnc
+
+	* src/report/standard-reports/pnl.scm: don't use gw-gnc
+
+	* src/report/standard-reports/net-barchart.scm: don't use gw-gnc
+
+	* src/report/standard-reports/category-barchart.scm: don't use gw-gnc
+
+	* src/report/standard-reports/balance-sheet.scm: don't use gw-gnc
+
+	* src/report/standard-reports/account-summary.scm: don't use gw-gnc
+
+	* src/report/standard-reports/account-piecharts.scm: don't use gw-gnc
+
+	* src/report/report-system/test/Makefile.am: remove report-gnome
+	dir
+
+	* src/report/report-system/report.scm: don't use gw-gnc
+
+	* src/report/report-system/report-system.scm: don't use gw-gnc
+
+	* src/report/report-gnome/window-report.c: implement report
+	export handling gui here instead of in reports
+
+	* src/report/report-gnome/report-gnome.scm: don't use gw-gnc
+
+	* src/report/locale-specific/us/test/Makefile.am: remove
+	report-gnome from dirs
+
+	* src/report/locale-specific/us/taxtxf.scm: don't use gw-gnc.
+	take out gui code.
+
+	* src/import-export/qif-io-core/qif-io-core.scm: don't use gw-gnc
+
+	* src/import-export/qif-import/qif-parse.scm: fix i18n
+
+	* src/import-export/qif-import/qif-import.scm: don't use gw-gnc
+
+	* src/gnome/gw-gnc-spec.scm: remove remaining gnome-utils wrapping
+
+	* src/gnome-utils/test/Makefile.am: remove report-gnome from dirs
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: add more wrapping
+	from gw-gnc
+
+	* src/gnome-utils/gnome-utils.scm: don't use gw-gnc
+
+	* src/app-utils/test/Makefile.am: remove report-gnome from dirs
+
+	* src/app-file/test/Makefile.am: remove report-gnome from dirs
+
 2001-12-11  Christian Stimming  <stimming@tuhh.de>
 
 	* src/app-utils/gnc-euro.c (gnc_convert_to_euro): Fixed rounding
