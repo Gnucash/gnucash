@@ -1242,7 +1242,7 @@ gnc_ui_qif_import_convert_cb(GnomeDruidPage * gpage,
                              gpointer user_data) {
   SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
   SCM   find_duplicates = gh_eval_str("gnc:group-find-duplicates");
-  SCM   retval, matches;
+  SCM   retval;
   SCM   current_xtn;
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
