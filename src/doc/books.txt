@@ -4,14 +4,14 @@
                  Implementation Overview
 
                 Linas Vepstas December 2001
+                 Last Updated July 2003
 
 
 A top, unimplemented request for GnuCash is the ability to 'close 
 the books', that is, to add support for 'accounting periods'.
-Support for books has been added to the GnuCash engine; however, 
-it has not yet been exposed to the user via the GUI.  This file
-reviews the implementation design choices and the current design 
-status.
+Partial support for books has been added to the GnuCash engine; 
+and a GUI is partially finished.  This file reviews the 
+implementation design choices and the current design status.
 
 Definition
 ----------
@@ -95,8 +95,6 @@ con: impossible to generate 5 year reports, multi-year graphs.  This
 
 I think this last one is the Achilles heel, the torpedo in the rudder
 that sinks the boat.
-
-
 
 
 Plan D:
@@ -231,15 +229,19 @@ I am not aware of any con's to plan A at this point.
 Implementation Notes:
 ---------------------
 Plan A has been implemented in the engine. 
--- src/engine/Period.c,h
+-- src/engine/Period.[ch]
       Implements the main logic to split one book into two, and populate
       it with the appropriate keys, markup, etc. and to carry balances 
       forward, etc.
 
    src/engine/gemini
-   src/engine/lots
-   src/gnome/druid-acct-period.c,h 
-      Implements a druid interface to specifying book closing dates, etc.
+   src/engine/gnc-lot.[ch]
+
+   src/gnome/druid-acct-period.[ch] 
+      Implements a druid interface to allow user to specify book closing 
+      dates, add a title and notes to a book, and walk through the process.
+      Uses FreqSpec.[ch] and the widget in gnc-frequency.[ch] to allow
+      the user to specify the frequency of book closings.
 
 -- The Postgres backend has been modified to support multiple books.
    All books are stored in the same database; there is no performance
