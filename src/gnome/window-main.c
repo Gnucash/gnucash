@@ -106,9 +106,6 @@ gnc_ui_refresh_statusbar()
 	if (children != NULL)
 	  amount += xaccGroupGetBalance(children);
 
-        if (gnc_reverse_balance(account))
-          amount = -amount;
-
         assets += amount;
 	break;
       case INCOME:
@@ -117,10 +114,7 @@ gnc_ui_refresh_statusbar()
 	if (children != NULL)
 	  amount += xaccGroupGetBalance(children);
 
-        if (gnc_reverse_balance(account))
-          amount = -amount;
-
-        profits += amount;
+        profits -= amount;
 	break;
       case EQUITY:
       case CURRENCY:

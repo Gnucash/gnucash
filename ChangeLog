@@ -1,5 +1,8 @@
 2000-03-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): revise the
+ 	profit and asset calculation.
+
 	* src/MultiLedger.c (xaccLedgerDisplayRefresh): don't reverse the
  	balances ever -- let the GUI do it.
 

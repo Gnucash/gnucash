@@ -850,9 +850,9 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
     affected_accounts[i] = xaccSplitGetAccount (split);
   }
   affected_accounts[num_splits] = NULL;
-   
+
   xaccTransRollbackEdit (trans);
-     
+
   /* and do some more redraw, for the new set of accounts .. */
   more_splits = xaccTransCountSplits (trans);
   affected_accounts = (Account **) realloc (affected_accounts, 
@@ -1049,7 +1049,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
 #endif
         }
 
-
         /* make sure any open windows of the old account get redrawn */
         gnc_account_ui_refresh(old_acc);
         gnc_refresh_main_window();
@@ -1140,8 +1139,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
    /* The AMNT and NAMNT updates only differ by sign.  Basically, 
     * the split and transaction cursors show minus the quants that
     * the single and double cursors show, and so when updates happen,
-    * the extra minus sign must also be handled.
-    */
+    * the extra minus sign must also be handled. */
    if ((MOD_AMNT | MOD_NAMNT) & changed) {
       double new_amount;
       double credit;
@@ -1186,7 +1184,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *newtrans)
        * will automatically fix itself once the user closes the window,
        * or if they start editing the second split, and so we don't
        * really have to do this.  This is more of a feel-good thing,
-       * so that they won't see even breifly what looks like bad values, 
+       * so that they won't see even briefly what looks like bad values, 
        * and that might give them the willies.  We want them to feel good.
        */
       acc = xaccSplitGetAccount (split);
@@ -1763,7 +1761,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       xaccSRLoadRegEntry (reg, split);
       vrow ++;
       phys_row += reg->trans_cursor->numRows; 
-   
+
       trans = xaccSplitGetParent (split);
       split = xaccTransGetSplit (trans, 1);
       xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
