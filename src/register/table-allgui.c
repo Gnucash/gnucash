@@ -476,6 +476,25 @@ gnc_table_set_virt_cell_visible (Table *table,
 
 /* ==================================================== */
 
+void
+gnc_table_set_virt_cell_cursor (Table *table,
+                                VirtualCellLocation vcell_loc,
+                                CellBlock *cursor)
+{
+  VirtualCell *vcell;
+
+  if (table == NULL)
+    return;
+
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+  if (vcell == NULL)
+    return;
+
+  vcell->cellblock = cursor;
+}
+
+/* ==================================================== */
+
 static void 
 gnc_table_move_cursor_internal (Table *table,
                                 VirtualLocation new_virt_loc,

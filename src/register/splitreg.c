@@ -403,7 +403,6 @@ configLayout (SplitRegister *reg)
         SET_CELL (DATE,   date,     0,  0);
         SET_CELL (NUM,    num,      1,  0);
         SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (XTO,    xto,      3,  0);
         SET_CELL (RECN,   recn,     4,  0);
         SET_CELL (DEBT,   debit,    5,  0);
         SET_CELL (CRED,   credit,   6,  0);
@@ -452,7 +451,6 @@ configLayout (SplitRegister *reg)
         SET_CELL (NUM,    num,      1,  0);
         SET_CELL (DESC,   desc,     2,  0);
         SET_CELL (XTO,    mxfrm,    3,  0);
-        SET_CELL (XFRM,   xto,      4,  0);
         SET_CELL (RECN,   recn,     5,  0);
         SET_CELL (DEBT,   debit,    6,  0);
         SET_CELL (CRED,   credit,   7,  0);
@@ -501,7 +499,6 @@ configLayout (SplitRegister *reg)
         SET_CELL (DATE,    date,     0,  0);
         SET_CELL (NUM,     num,      1,  0);
         SET_CELL (DESC,    desc,     2,  0);
-        SET_CELL (XTO,     xto,      3,  0);
         SET_CELL (RECN,    recn,     4,  0);
         SET_CELL (SHRS,    shares,   5,  0);
         SET_CELL (PRIC,    price,    6,  0);
@@ -557,7 +554,6 @@ configLayout (SplitRegister *reg)
         SET_CELL (NUM,     num,      1,  0);
         SET_CELL (DESC,    desc,     2,  0);
         SET_CELL (XTO,     mxfrm,    3,  0);
-        SET_CELL (XFRM,    xto,      4,  0);
         SET_CELL (RECN,    recn,     5,  0);
         SET_CELL (SHRS,    shares,   6,  0);
         SET_CELL (PRIC,    price,    7,  0);

@@ -91,7 +91,7 @@
  *
  *    The callback may change the value of the cell. The callback
  *    should return true if the cell should allow direct editing
- *    by the user, FALES otherwise.
+ *    by the user, FALSE otherwise.
  *
  *    The callback is also passed pointers to the cursor position
  *    and the start and end of the highlited region. If the callback

@@ -231,7 +231,8 @@ static gboolean xaccSRFindTransSplit (SplitRegister *reg,
                                       Transaction *trans,
                                       Split *trans_split, Split *split,
                                       VirtualCellLocation *vcell_loc);
-static Split * sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc);
+static Split * sr_get_split (SplitRegister *reg,
+                             VirtualCellLocation vcell_loc);
 static void xaccSRSetTransVisible (SplitRegister *reg,
                                    VirtualCellLocation vcell_loc,
                                    gboolean visible,
@@ -756,8 +757,9 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
                      VirtualLocation *p_new_virt_loc)
 {
   SRInfo *info = xaccSRGetInfo(reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+  Transaction *blank_trans = xaccSplitGetParent (blank_split);
   VirtualLocation new_virt_loc;
   CursorClass cursor_class;
   CellType cell_type;
@@ -786,8 +788,12 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       GList *refresh_accounts;
       char *desc;
 
+      /* there must be a blank transaction * */
+      if (blank_trans == NULL)
+        return;
+
       /* we must be on the blank split */
-      if (split != blank_split)
+      if (trans != blank_trans)
         return;
 
       /* and leaving the description cell */
@@ -1079,7 +1085,7 @@ LedgerTraverse (Table *table,
         
         gnc_table_find_close_valid_cell (table, &virt_loc,
                                          info->exact_traversal);
-        
+
         *p_new_virt_loc = virt_loc;
       }
 
@@ -3082,6 +3088,7 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
     case CURSOR_TYPE_HEADER:
       return reg_colors.header_bg_color;
 
+    case CURSOR_TYPE_TRANS:
     case CURSOR_TYPE_SINGLE:
       if (is_current)
         return vcell->start_primary_color ?
@@ -3242,9 +3249,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                 (REG_DOUBLE_DYNAMIC == reg->style));
 
   if ((REG_SINGLE_LINE    == reg->style) ||
-      (REG_SINGLE_DYNAMIC == reg->style) ||
-      (REG_MULTI_LINE     == reg->style))
+      (REG_SINGLE_DYNAMIC == reg->style))
     lead_cursor = reg->single_cursor;
+  else if (REG_MULTI_LINE == reg->style)
+    lead_cursor = reg->trans_cursor;
   else
     lead_cursor = reg->double_cursor;
 
@@ -3278,6 +3286,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     virt_loc.vcell_loc.virt_col = -1;
     virt_loc.phys_row_offset = -1;
     virt_loc.phys_col_offset = -1;
+
     gnc_table_move_cursor_gui (table, virt_loc);
   }
 

@@ -277,6 +277,11 @@ void        gnc_table_set_virt_cell_visible (Table *table,
                                              VirtualCellLocation vcell_loc,
                                              gboolean visible);
 
+/* Set the cellblock handler for a virtual cell. */
+void        gnc_table_set_virt_cell_cursor (Table *table,
+                                            VirtualCellLocation vcell_loc,
+                                            CellBlock *cursor);
+
 /* The gnc_table_move_cursor() method will move the cursor (but not
  *   the cursor GUI) to the indicated location. This function is
  *   useful when loading the table from the cursor: data can be loaded
