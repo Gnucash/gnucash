@@ -103,7 +103,7 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename)
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
   kvp_value *value = kvp_value_new_string (filename);
   kvp_frame_set_slot_nc (frame, HBCI_CONFIGFILE, value);
-  gnc_book_kvp_changed (b);
+  qof_book_kvp_changed (b);
 }
 GList *gnc_hbci_get_book_template_list (GNCBook *b)
 {
@@ -116,7 +116,7 @@ void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
   kvp_value *value = kvp_value_new_glist_nc (template_list);
   kvp_frame_set_slot_nc (frame, HBCI_TEMPLATES, value);
-  gnc_book_kvp_changed (b);
+  qof_book_kvp_changed (b);
 }
 
 
