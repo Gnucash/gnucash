@@ -35,6 +35,7 @@
 #include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
