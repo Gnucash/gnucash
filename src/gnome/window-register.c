@@ -80,6 +80,8 @@ struct _RegWindow
   /* Top level window */
   GtkWidget * window;
 
+  gint width;
+
   GtkWidget * toolbar;
   SCM toolbar_change_callback_id;
 
@@ -1815,6 +1817,25 @@ gnc_toolbar_change_cb (void *data)
   gnc_reg_refresh_toolbar (regData);
 }
 
+static void
+size_allocate (GtkWidget *widget,
+               GtkAllocation *allocation,
+               gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  /* HACK ALERT. this seems to be the only thing to get the
+   * freekin register window to stop freekin resizing itself
+   * all the freekin time. */
+
+  if (regData->width == allocation->width)
+    return;
+
+  regData->width = allocation->width;
+
+  gtk_window_set_default_size (GTK_WINDOW(regData->window), regData->width, 0);
+}
+
 /********************************************************************\
  * regWindowLedger                                                  *
  *   opens up a ledger window for the account list                  *
@@ -1861,15 +1882,19 @@ regWindowLedger (xaccLedgerDisplay *ledger)
   regData->ledger = ledger;
   regData->window = register_window;
   regData->sort_type = BY_STANDARD;
+  regData->width = -1;
 
   gnc_reg_set_window_name(regData);
 
   /* Invoked when window is being destroyed. */
-  gtk_signal_connect(GTK_OBJECT(regData->window), "destroy",
-		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb), regData);
+  gtk_signal_connect (GTK_OBJECT(regData->window), "destroy",
+                      GTK_SIGNAL_FUNC (gnc_register_destroy_cb), regData);
 
-  gtk_signal_connect(GTK_OBJECT(regData->window), "delete-event",
-		     GTK_SIGNAL_FUNC (gnc_register_delete_cb), regData);
+  gtk_signal_connect (GTK_OBJECT(regData->window), "delete-event",
+                      GTK_SIGNAL_FUNC (gnc_register_delete_cb), regData);
+
+  gtk_signal_connect (GTK_OBJECT(regData->window), "size_allocate",
+                      GTK_SIGNAL_FUNC (size_allocate), regData);
 
   show_all = gnc_lookup_boolean_option ("Register",
                                         "Show All Transactions",
