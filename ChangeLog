@@ -1,5 +1,10 @@
 2004-12-04  Derek Atkins  <derek@ihtfp.com>
 
+	* src/business/business-core/gncInvoice.c:
+	  send an event when a payment is processed so the invoice gets
+	  updated as "paid" in the search window.
+	  Fixes #139092.
+
 	* src/business/business-gnome/dialog-vendor.c:
 	  Make sure we set the proper search-type when we create the
 	  query, otherwise the search will fail later.

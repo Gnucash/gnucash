@@ -1084,6 +1084,7 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   Split *split;
   GList *lot_list, *fifo = NULL;
   GNCLot *lot, *prepay_lot = NULL;
+  GncInvoice *invoice;
   const char *name;
   gnc_commodity *commodity;
   gnc_numeric split_amt;
@@ -1181,6 +1182,11 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
     xaccAccountInsertSplit (posted_acc, split);
     xaccTransAppendSplit (txn, split);
     gnc_lot_add_split (lot, split);
+
+    /* Now send an event for the invoice so it gets updated as paid */
+    invoice = gncInvoiceGetInvoiceFromLot(lot);
+    if (invoice)
+      gnc_engine_generate_event (&invoice->guid, GNC_EVENT_MODIFY);
 
     if (gnc_numeric_zero_p (amount))
       break;
