@@ -141,14 +141,20 @@ fileBox (const char * title, const char * filter, const char *default_name)
  * Return: none                                                     * 
 \********************************************************************/
 static void
-store_filename(GtkWidget *w, gpointer data)
+store_filename (GtkWidget *w, gpointer data)
 {
-  FileBoxInfo *fb_info = (FileBoxInfo *) data;
+  FileBoxInfo *fb_info = data;
+  GtkFileSelection *fs;
   char *file_name;
 
-  file_name = gtk_file_selection_get_filename(fb_info->file_box);
+  fs = GTK_FILE_SELECTION (fb_info->file_box);
 
-  fb_info->file_name = g_strdup(file_name);
+  file_name = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+
+  if (!strstr (file_name, "://"))
+    file_name = gtk_file_selection_get_filename (fb_info->file_box);
+
+  fb_info->file_name = g_strdup (file_name);
 }
 
 static void
