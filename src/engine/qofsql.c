@@ -24,16 +24,20 @@
     @file qofsql.c
     @breif QOF client-side SQL parser.
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
+
+    XXX: todo: replace printf error with proper error
+        handling/reporting.
 */
 
 #include <glib.h>
 #include <libsql/sql_parser.h>
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-#include "qofbook.h"
-#include "qofquery.h"
-#include "qofsql.h"
+#include <qof/kvp_frame.h>
+#include <qof/gnc-date.h>
+#include <qof/gnc-numeric.h>
+#include <qof/guid.h>
+#include <qof/qofbook.h>
+#include <qof/qofquery.h>
+#include <qof/qofsql.h>
 
 struct _QofSqlQuery
 {
@@ -41,6 +45,7 @@ struct _QofSqlQuery
 	QofQuery *qof_query;
 	QofBook *book;
 	char * single_global_tablename;
+	KvpFrame *kvp_join;
 };
 
 /* ========================================================== */
@@ -54,6 +59,7 @@ qof_sql_query_new(void)
 	sqn->parse_result = NULL;
 	sqn->book = NULL;
 	sqn->single_global_tablename = NULL;
+	sqn->kvp_join = NULL;
 
 	return sqn;
 }
@@ -78,8 +84,17 @@ qof_sql_query_set_book (QofSqlQuery *q, QofBook *book)
 	q->book = book;
 }
 
+/* ========================================================== */
+
+void 
+qof_sql_query_set_kvp (QofSqlQuery *q, KvpFrame *kvp)
+{
+	if (!q) return;
+	q->kvp_join = kvp;
+}
+
 /* =================================================================== */
-/* return NULL if the field is whitespace (blank, tab, formfeed etc.)  */
+/* Return NULL if the field is whitespace (blank, tab, formfeed etc.)  */
 
 static const char *
 whitespace_filter (const char * val)
@@ -93,7 +108,7 @@ whitespace_filter (const char * val)
 }
 
 /* =================================================================== */
-/* return integer 1 if the string starts with 't' or 'T" or contians the 
+/* Return integer 1 if the string starts with 't' or 'T" or contians the 
  * word 'true' or 'TRUE'; if string is a number, return that number. */
 
 static int
@@ -130,8 +145,9 @@ get_table_and_param (char * str, char **tab, char **param)
 }
 
 static QofQuery *
-handle_single_condition (sql_condition * cond, char *globalname)
+handle_single_condition (QofSqlQuery *query, sql_condition * cond)
 {
+	char tmpbuff[128];
 	GSList *param_list;
 	QofQueryPredData *pred_data = NULL;
 	
@@ -143,7 +159,7 @@ handle_single_condition (sql_condition * cond, char *globalname)
 			
 	/* -------------------------------- */
 	/* field to match, assumed, for now to be on the left */
-	/* XXX fix the left-right thing */
+	/* XXX fix this so it can be either left or right */
 	if (NULL == cond->d.pair.left)
 	{
 		printf ("Error: missing left paramter\n");
@@ -164,7 +180,7 @@ handle_single_condition (sql_condition * cond, char *globalname)
 
 	/* -------------------------------- */
 	/* value to match, assumed, for now, to be on the right. */
-	/* XXX fix the left-right thing */
+	/* XXX fix this so it can be either left or right */
 	if (NULL == cond->d.pair.right)
 	{
 		printf ("duude missing right paramter\n");
@@ -183,6 +199,48 @@ handle_single_condition (sql_condition * cond, char *globalname)
 		return NULL;
 	}
 
+	/* Look to see if its the special KVP value holder.
+	 * If it is, look up the value. */
+	if (0 == strncasecmp (qvalue_name, "kvp:/", 5))
+	{
+		if (NULL == query->kvp_join)
+		{
+			printf ("Error: missing kvp frame\n");
+			return NULL;
+		}
+		KvpValue *kv = kvp_frame_get_value (query->kvp_join, qvalue_name+4);
+		KvpValueType kvt = kvp_value_get_type (kv);
+
+		tmpbuff[0] = 0x0;
+		qvalue_name = tmpbuff;
+		switch (kvt)
+		{
+			case KVP_TYPE_GINT64:
+			{
+				gint64 ival = kvp_value_get_gint64(kv);
+				sprintf (tmpbuff, "%lld\n", ival);
+				break;
+			}
+			case KVP_TYPE_DOUBLE:
+			{
+				double ival = kvp_value_get_double(kv);
+				sprintf (tmpbuff, "%26.18g\n", ival);
+				break;
+			}
+			case KVP_TYPE_STRING:
+				qvalue_name = kvp_value_get_string (kv);
+				break;
+			case KVP_TYPE_GUID:
+			case KVP_TYPE_TIMESPEC:
+			case KVP_TYPE_BINARY:
+			case KVP_TYPE_GLIST:
+			case KVP_TYPE_NUMERIC:
+			case KVP_TYPE_FRAME:
+				printf ("Error: unhandled kvp type=%d\n", kvt);
+				return NULL;
+		}
+	}
+
 	/* -------------------------------- */
 	/* Now start building the QOF paramter */
 	param_list = qof_query_build_param_list (qparam_name, NULL);
@@ -191,13 +249,15 @@ handle_single_condition (sql_condition * cond, char *globalname)
 	QofQueryCompare qop;
 	switch (cond->op)
 	{
-		case SQL_eq: qop = QOF_COMPARE_EQUAL; break;
-		case SQL_gt: qop = QOF_COMPARE_GT; break;
-		case SQL_lt: qop = QOF_COMPARE_LT; break;
-		case SQL_geq: qop = QOF_COMPARE_GTE; break;
+		case SQL_eq:    qop = QOF_COMPARE_EQUAL; break;
+		case SQL_gt:    qop = QOF_COMPARE_GT; break;
+		case SQL_lt:    qop = QOF_COMPARE_LT; break;
+		case SQL_geq:   qop = QOF_COMPARE_GTE; break;
 		case SQL_leq:   qop = QOF_COMPARE_LTE; break;
 		case SQL_diff:  qop = QOF_COMPARE_NEQ; break;
 		default:
+			/* XXX for string-type queries, we should be able to
+			 * support 'IN' for substring search.  Also regex. */
 			printf ("Error: unsupported compare op for now\n");
 			return NULL;
 	}
@@ -210,7 +270,7 @@ handle_single_condition (sql_condition * cond, char *globalname)
 	get_table_and_param (qparam_name, &table_name, &param_name);
 	if (NULL == table_name)
 	{
-		table_name = globalname;
+		table_name = query->single_global_tablename;
 	}
 		
 	if (NULL == table_name)
@@ -234,8 +294,8 @@ handle_single_condition (sql_condition * cond, char *globalname)
 		pred_data = 
 		    qof_query_string_predicate (qop, /* comparison to make */
 		          qvalue_name,                 /* string to match */
-                QOF_STRING_MATCH_CASEINSENSITIVE,  /* case matching */
-       	       FALSE);                            /* use_regexp */
+		          QOF_STRING_MATCH_CASEINSENSITIVE,  /* case matching */
+		          FALSE);                            /* use_regexp */
 	}
 	else if (!strcmp (param_type, QOF_TYPE_CHAR))
 	{
@@ -366,7 +426,7 @@ handle_where (QofSqlQuery *query, sql_where *swear)
 		case SQL_single:
 		{
 			sql_condition * cond = swear->d.single;
-			return handle_single_condition (cond, query->single_global_tablename);
+			return handle_single_condition (query, cond);
 		}
 	}
 	return NULL;
