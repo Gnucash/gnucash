@@ -1421,6 +1421,12 @@ xaccWriteAccountGroup (int fd, AccountGroup *grp )
 
   ENTER ("xaccWriteAccountGroup");
   
+  if( 0 > fd )
+    {
+    ERROR();
+    return -1;
+    }
+  
   XACC_FLIP_INT (token);
   err = write( fd, &token, sizeof(int) );
   if( err != sizeof(int) )
