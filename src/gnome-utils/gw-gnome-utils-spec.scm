@@ -105,7 +105,7 @@
    'gnc:print-session-create
    '<gnc:PrintSession*>
    "gnc_print_session_create"
-   '()
+   '((<gw:bool> yes_is_default))
    "Start a new print session.")
 
   (gw:wrap-function
@@ -137,7 +137,8 @@
    'gnc:print-session-done
    '<gw:void>
    "gnc_print_session_done"
-   '((<gnc:PrintSession*> p))
+   '((<gnc:PrintSession*> p)
+     (<gw:bool> yes_is_default))
    "Let the print context know you're finished with it.")
 
   (gw:wrap-function

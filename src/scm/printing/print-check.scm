@@ -78,7 +78,7 @@
            (frac-part (inexact->exact 
                      (truncate 
                       (+ (/ .5 100) (* 100 (- amount int-part))))))
-           (ps (gnc:print-session-create))
+           (ps (gnc:print-session-create #t))
            (format #f)
            (offset #f)
            (date-string ""))
@@ -131,8 +131,8 @@
         (gnc:print-session-moveto ps (cadr words-pos) 
                                   (+ offset (caddr words-pos)))
         (gnc:print-session-text ps (number-to-words amount 100)))
-      
-      (gnc:print-session-done ps)       
+
+      (gnc:print-session-done ps #t)
       (gnc:print-session-print ps)))
 
   (gnc:print-check-dialog-create print-check-callback))

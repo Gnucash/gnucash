@@ -1,3 +1,19 @@
+2002-05-31  David Hampton  <hampton@employees.org>
+
+	* src/gnome/reconcile-list.c: Fix the direction of the sort
+	arrows.
+
+	* src/gnome-utils/dialog-options.c: Preferences dialogs will now
+	switch over from a tabbed notebook to a list/notebook pair if
+	there are more than four pages.  Put radio buttons in a horizontal
+	box instead of a vertical one.
+
+	* src/gnome-utils/gnc-html.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/print-session.[ch]:
+	* src/scm/printing/print-check.scm: Eliminate warning messages
+	while printing.
+	
 2002-05-27  Derek Atkins   <derek@ihtfp.com>
 
 	* src/app-utils/option-util.c: Add a function to reset all the gui
