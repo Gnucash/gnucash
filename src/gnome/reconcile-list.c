@@ -395,7 +395,9 @@ gnc_reconcile_list_refresh (GNCReconcileList *list)
   GtkCList *clist = GTK_CLIST(list);
   GtkAdjustment *adjustment;
   gfloat save_value = 0.0;
+  Split *old_focus_split;
   Split *old_split;
+  gint old_focus_row;
   gint new_row;
 
   g_return_if_fail (list != NULL);
@@ -404,6 +406,9 @@ gnc_reconcile_list_refresh (GNCReconcileList *list)
   adjustment = gtk_clist_get_vadjustment (GTK_CLIST(list));
   if (adjustment != NULL)
     save_value = adjustment->value;
+
+  old_focus_row = clist->focus_row;
+  old_focus_split = gtk_clist_get_row_data (clist, old_focus_row);
 
   gtk_clist_freeze (clist);
 
@@ -418,13 +423,13 @@ gnc_reconcile_list_refresh (GNCReconcileList *list)
 
   gtk_clist_columns_autosize (clist);
 
-  if (adjustment != NULL)
+  if (adjustment)
   {
     save_value = CLAMP (save_value, adjustment->lower, adjustment->upper);
     gtk_adjustment_set_value (adjustment, save_value);
   }
 
-  if (old_split != NULL)
+  if (old_split)
   {
     new_row = gtk_clist_find_row_from_data (clist, old_split);
     if (new_row >= 0)
@@ -434,6 +439,17 @@ gnc_reconcile_list_refresh (GNCReconcileList *list)
       list->no_toggle = FALSE;
       list->current_split = old_split;
     }
+  }
+
+  if (old_focus_split)
+  {
+    new_row = gtk_clist_find_row_from_data (clist, old_focus_split);
+
+    if (new_row < 0)
+      new_row = old_focus_row;
+
+    if (new_row >= 0)
+      clist->focus_row = new_row;
   }
 
   gtk_clist_thaw (clist);
@@ -626,7 +642,10 @@ gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
   if (list->list_type == RECLIST_DEBIT)
     return;
 
-  xaccQuerySetSortIncreasing (list->query, !(key == BY_AMOUNT), !(key == BY_AMOUNT), !(key == BY_AMOUNT));
+  xaccQuerySetSortIncreasing (list->query,
+                              !(key == BY_AMOUNT),
+                              !(key == BY_AMOUNT),
+                              !(key == BY_AMOUNT));
 }
 
 static void

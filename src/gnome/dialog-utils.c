@@ -753,7 +753,7 @@ gnc_clist_add_check (GtkCList *list)
 
   check_info = g_new0 (GNCCListCheckInfo, 1);
 
-  gtk_object_set_data (object, "gnc-check_info", check_info);
+  gtk_object_set_data (object, "gnc-check-info", check_info);
 
   gtk_signal_connect (object, "realize",
                       GTK_SIGNAL_FUNC (check_realize), check_info);
@@ -761,6 +761,9 @@ gnc_clist_add_check (GtkCList *list)
                       GTK_SIGNAL_FUNC (check_unrealize), check_info);
   gtk_signal_connect (object, "destroy",
                       GTK_SIGNAL_FUNC (check_destroy), check_info);
+
+  if (GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
+    check_realize (GTK_WIDGET (list), check_info);
 
   return check_info;
 }
@@ -774,7 +777,7 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
 
   g_return_if_fail (GTK_IS_CLIST (list));
 
-  check_info = gtk_object_get_data (GTK_OBJECT (list), "gnc-check_info");
+  check_info = gtk_object_get_data (GTK_OBJECT (list), "gnc-check-info");
   if (!check_info)
     check_info = gnc_clist_add_check (list);
 

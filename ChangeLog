@@ -1,5 +1,10 @@
 2001-06-09  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_refresh): fix
+	bugs
+
+	* src/gnome/dialog-utils.c (gnc_clist_add_check): fix bugs
+
 	* doc/sgml/pt_PT/Makefile.am: remove adjust balance docs
 
 	* doc/sgml/C/Makefile.am: remove adjust balance docs
