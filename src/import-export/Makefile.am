@@ -1,4 +1,4 @@
-SUBDIRS = qif-import
+SUBDIRS = binary-import qif-import
 
 # FIXME remove this when qif-io-core is finished
-DIST_SUBDIRS = qif-import qif-io-core
+DIST_SUBDIRS = binary-import qif-import qif-io-core

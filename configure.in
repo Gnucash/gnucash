@@ -741,6 +741,7 @@ AC_OUTPUT(
           src/gnome-utils/test/Makefile
           src/guile/Makefile
           src/import-export/Makefile
+          src/import-export/binary-import/Makefile
           src/import-export/qif-import/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile

@@ -139,7 +139,8 @@ gnc_ui_commodity_druid_create(const char * filename) {
   GnomeDruidPage * back_page;
   GladeXML       * xml;
 
-  xml = gnc_glade_xml_new ("commodity.glade", "New Commodity Format Druid");
+  xml = gnc_glade_xml_new ("binary-import.glade",
+                           "New Commodity Format Druid");
 
   d->window = glade_xml_get_widget (xml, "New Commodity Format Druid");
   dobj = GTK_OBJECT(d->window);

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<GTK-Interface>
+
+<project>
+  <name>Glade</name>
+  <program_name>glade</program_name>
+  <directory></directory>
+  <source_directory></source_directory>
+  <pixmaps_directory></pixmaps_directory>
+  <language>C</language>
+  <gnome_support>True</gnome_support>
+  <gettext_support>True</gettext_support>
+  <output_main_file>False</output_main_file>
+  <output_support_files>False</output_support_files>
+  <output_build_files>False</output_build_files>
+  <backup_source_files>False</backup_source_files>
+</project>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>New Commodity Format Druid</name>
+  <title>Import currency and stock information</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>True</auto_shrink>
+
+  <widget>
+    <class>GnomeDruid</class>
+    <name>commodity_druid</name>
+
+    <widget>
+      <class>GnomeDruidPageStart</class>
+      <name>start_page</name>
+      <signal>
+	<name>cancel</name>
+	<handler>gnc_ui_commodity_druid_cancel_cb</handler>
+	<data>New_Commodity_Format_Druid</data>
+	<last_modification_time>Fri, 11 Aug 2000 21:12:16 GMT</last_modification_time>
+      </signal>
+      <title>Import currency and stock information </title>
+      <text>The file you are loading is from an older version of GnuCash. 
+Information about currencies, stocks, and mutual funds needs to
+be updated for the new version. 
+
+This dialog will prompt you for some additional information about 
+each currency, stock, and mutual fund that appear in your
+accounts.  After you have entered this information, you can
+update your accounts for the new version of GnuCash.
+
+Hit &quot;Cancel&quot; now to stop loading the file. </text>
+      <title_color>255,255,255</title_color>
+      <text_color>0,0,0</text_color>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>finish_page</name>
+      <signal>
+	<name>finish</name>
+	<handler>gnc_ui_commodity_druid_finish_cb</handler>
+	<data>New_Commodity_Format_Druid</data>
+	<last_modification_time>Fri, 11 Aug 2000 21:17:16 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>cancel</name>
+	<handler>gnc_ui_commodity_druid_cancel_cb</handler>
+	<data>New_Commodity_Format_Druid</data>
+	<last_modification_time>Fri, 11 Aug 2000 21:17:46 GMT</last_modification_time>
+      </signal>
+      <title>Update your accounts with the new information</title>
+      <text>Click &quot;Finish&quot; to update your accounts to use the new 
+information you have entered.
+
+Click &quot;Cancel&quot; to cancel the file-loading process.  
+
+Click &quot;Back&quot; to review your currency selections.</text>
+      <background_color>155,191,156</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
+</GTK-Interface>

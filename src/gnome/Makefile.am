@@ -23,7 +23,6 @@ libgncgnome_a_SOURCES = \
   dialog-transfer.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
-  druid-commodity.c \
   druid-hierarchy.c \
   druid-stock-split.c \
   file-history.c \
@@ -69,7 +68,6 @@ noinst_HEADERS = \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-scheduledxaction.h \
-  druid-commodity.h \
   druid-hierarchy.h \
   file-utils.h \
   gnc-network.h \

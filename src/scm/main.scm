@@ -149,6 +149,7 @@
   (gnc:module-load "gnucash/register/ledger-core" 0)
   (gnc:module-load "gnucash/register/register-core" 0)
   (gnc:module-load "gnucash/register/register-gnome" 0)
+  (gnc:module-load "gnucash/import-export/binary-import" 0)
   (gnc:module-load "gnucash/import-export/qif-import" 0)
   (gnc:module-load "gnucash/report/report-system" 0)
   (gnc:module-load "gnucash/report/stylesheets" 0)
@@ -168,8 +169,6 @@
   (gnc:depend "printing/print-check.scm")
   (gnc:depend "price-quotes.scm")
   (gnc:depend "tip-of-the-day.scm")
-
-  (gnc:hook-add-dangler gnc:*book-opened-hook* gnc:import-legacy-commodities)
 
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))

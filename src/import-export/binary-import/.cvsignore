@@ -1,0 +1,8 @@
+Makefile
+Makefile.in
+.deps
+*.diff
+.scm-links
+gw-binary-import.c
+gw-binary-import.h
+gw-binary-import.html
