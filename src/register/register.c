@@ -8,39 +8,47 @@
 
 #define DATE_CELL_C  0
 #define DATE_CELL_R  0
+#define DATE_CELL_W  11
 
 #define NUM_CELL_C  1
 #define NUM_CELL_R  0
+#define NUM_CELL_W  7
 
 #define ACTN_CELL_C  1
 #define ACTN_CELL_R  1
+#define ACTN_CELL_W  7
 
 #define XFRM_CELL_C  2
 #define XFRM_CELL_R  0
+#define XFRM_CELL_W  11
 
 #define XTO_CELL_C  -1
 #define XTO_CELL_R  -1
-
-#define XTO_CELL_C  2
-#define XTO_CELL_R  1
+#define XTO_CELL_W  11
 
 #define DESC_CELL_C  3
 #define DESC_CELL_R  0
+#define DESC_CELL_W  29
 
 #define MEMO_CELL_C  3
 #define MEMO_CELL_R  1
+#define MEMO_CELL_W  29
 
 #define RECN_CELL_C  4
 #define RECN_CELL_R  0
+#define RECN_CELL_W  1
 
 #define CRED_CELL_C  5
 #define CRED_CELL_R  0
+#define CRED_CELL_W  9
 
 #define DEBT_CELL_C  6
 #define DEBT_CELL_R  0
+#define DEBT_CELL_W  9
 
 #define BALN_CELL_C  7
 #define BALN_CELL_R  0
+#define BALN_CELL_W  9
 
 #define MAX_COLS 8
 
@@ -68,42 +76,42 @@ void xaccInitBasicRegister (BasicRegister *reg)
    reg->header = header;
 
    cell = xaccMallocTextCell();
-   cell->width = 11;
+   cell->width = DATE_CELL_W;
    xaccAddCell (header, cell, 0, DATE_CELL_C);
    xaccSetBasicCellValue (cell, DATE_STR);
    
    cell = xaccMallocTextCell();
-   cell->width = 7;
+   cell->width = NUM_CELL_W;
    xaccAddCell (header, cell, 0, NUM_CELL_C);
    xaccSetBasicCellValue (cell, NUM_STR);
 
    cell = xaccMallocTextCell();
-   cell->width = 11;
+   cell->width = XFRM_CELL_W;
    xaccAddCell (header, cell, XFRM_CELL_R, XFRM_CELL_C);
    xaccSetBasicCellValue (cell, XFRM_STR);
    
    cell = xaccMallocTextCell();
-   cell->width = 29;
+   cell->width = DESC_CELL_W;
    xaccAddCell (header, cell, 0, DESC_CELL_C);
    xaccSetBasicCellValue (cell, DESC_STR);
 
    cell = xaccMallocTextCell();
-   cell->width = 1;
+   cell->width = RECN_CELL_W;
    xaccAddCell (header, cell, 0, RECN_CELL_C);
    xaccSetBasicCellValue (cell, "R");
 
    cell = xaccMallocTextCell();
-   cell->width = 9;
+   cell->width = CRED_CELL_W;
    xaccAddCell (header, cell, 0, CRED_CELL_C);
    xaccSetBasicCellValue (cell, CREDIT_STR);
    
    cell = xaccMallocTextCell();
-   cell->width = 9;
+   cell->width = DEBT_CELL_W;
    xaccAddCell (header, cell, 0, DEBT_CELL_C);
    xaccSetBasicCellValue (cell, DEBIT_STR);
 
    cell = xaccMallocTextCell();
-   cell->width = 9;
+   cell->width = BALN_CELL_W;
    xaccAddCell (header, cell, 0, BALN_CELL_C);
    xaccSetBasicCellValue (cell, BALN_STR);
 
@@ -113,46 +121,46 @@ void xaccInitBasicRegister (BasicRegister *reg)
    reg->cursor = curs;
    
    reg->dateCell = xaccMallocDateCell();
-   reg->dateCell->cell.width = 9;
+   reg->dateCell->cell.width = DATE_CELL_W;
    xaccAddCell (curs, &(reg->dateCell->cell), DATE_CELL_R, DATE_CELL_C);
    
    cell = xaccMallocTextCell();
-   cell->width = 7;
+   cell->width = NUM_CELL_W;
    xaccAddCell (curs, cell, NUM_CELL_R, NUM_CELL_C);
    reg->numCell = cell;
    
    reg->actionCell = xaccMallocComboCell();
-   reg->actionCell->cell.width = 7;
+   reg->actionCell->cell.width = ACTN_CELL_W;
    xaccAddCell (curs, &(reg->actionCell->cell), ACTN_CELL_R, ACTN_CELL_C);
    
    reg->xfrmCell = xaccMallocComboCell();
-   reg->xfrmCell->cell.width = 11;
+   reg->xfrmCell->cell.width = XFRM_CELL_W;
    xaccAddCell (curs, &(reg->xfrmCell->cell), XFRM_CELL_R, XFRM_CELL_C);
    
    reg->descCell = xaccMallocQuickFillCell();
-   reg->descCell->cell.width = 9;
+   reg->descCell->cell.width = DESC_CELL_W;
    xaccAddCell (curs, &(reg->descCell->cell), DESC_CELL_R, DESC_CELL_C);
    
    cell = xaccMallocTextCell();
-   cell->width = 9;
+   cell->width = MEMO_CELL_W;
    xaccAddCell (curs, cell, MEMO_CELL_R, MEMO_CELL_C);
    reg->memoCell = cell;
 
    cell = xaccMallocRecnCell();
-   cell->width = 1;
+   cell->width = RECN_CELL_W;
    xaccAddCell (curs, cell, RECN_CELL_R, RECN_CELL_C);
    reg->recnCell = cell;
 
    reg->creditCell = xaccMallocPriceCell();
-   reg->creditCell->cell.width = 9;
+   reg->creditCell->cell.width = CRED_CELL_W;
    xaccAddCell (curs, &(reg->creditCell->cell), CRED_CELL_R, CRED_CELL_C);
    
    reg->debitCell = xaccMallocPriceCell();
-   reg->debitCell->cell.width = 9;
+   reg->debitCell->cell.width = DEBT_CELL_W;
    xaccAddCell (curs, &(reg->debitCell->cell), DEBT_CELL_R, DEBT_CELL_C);
    
    reg->balanceCell = xaccMallocPriceCell();
-   reg->balanceCell->cell.width = 9;
+   reg->balanceCell->cell.width = BALN_CELL_W;
    reg->balanceCell->cell.input_output = 0;
    xaccAddCell (curs, &(reg->balanceCell->cell), BALN_CELL_R, BALN_CELL_C);
 
