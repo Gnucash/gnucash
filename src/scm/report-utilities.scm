@@ -21,7 +21,10 @@
 (gnc:depend "engine-utilities.scm")
 
 (define (gnc:amount->string amount info)
-  (gnc:amount->string-helper (exact->inexact amount) info))
+  (d-gnc:amount->string-helper (exact->inexact amount) info))
+
+(define (gnc:commodity-amount->string amount info)
+  (gnc:amount->string-helper amount info))
 
 (define (gnc:account-has-shares? account)
   (let ((type (gw:enum-GNCAccountType-val->sym
@@ -236,79 +239,109 @@
 	('total value)
 	(else (gnc:warn "bad value-collector action: " action))))))
 
-;; A currency collector. This is intended to handle multiple currencies' 
-;; amounts. The amounts are accumulated via 'add, the result can be 
-;; fetched via 'format.
-;; Example: (define a (make-currency-collector)) ... (a 'add 'USD 12) ...
-;; (a 'format (lambda(x y)(list x y)) #f) 
-;; gives you something like ((USD 123.4) (DEM 12.21) (FRF -23.32))
+;; Same as above but with gnc:numeric
+(define (make-numeric-collector)
+  (let ;;; values
+      ((value (gnc:numeric-zero)))
+    (lambda (action amount)  ;;; Dispatch function
+      (case action
+	('add (if (gnc:gnc-numeric? amount) 
+		  (set! value (gnc:numeric-add-fixed amount value))))
+	('total value)
+	(else (gnc:warn "bad numeric-collector action: " action))))))
+
+;; A commodity collector. This is intended to handle multiple
+;; currencies' amounts. The amounts are accumulated via 'add, the
+;; result can be fetched via 'format.  Used to work with strings as
+;; currencies and doubles as values, but now it uses <gnc:commodity*>
+;; as commodity and <gnc:numeric> as value. 
+;; Old Example: (define a (make-commodity-collector)) ... 
+;; (a 'add 'USD 12) ...  (a 'format (lambda(x y)(list x y)) #f) 
+;; used to give you something like 
+;; ((USD 123.4) (DEM 12.21) (FRF -23.32))
 ;;
 ;; The functions:
-;;   'add <currency> <amount>: Add the given amount to the 
+;;   'add <commodity> <amount>: Add the given amount to the 
 ;;       appropriate currencies' total amount.
-;;   'format <fn> #f: Call the function <fn> (where fn takes two arguments) for 
-;;       each currency with the arguments <currency> and the corresponding 
-;;       total <amount>. The results is a list of each call's result.
-;;   'merge <currency-collector> #f: Merge the given other currency-collector into
-;;       this one, adding all currencies' amounts, respectively.
-;;   'minusmerge <currency-collector> #f: Merge the given other 
-;;       currency-collector into this one (like above) but subtract the other's
-;;       currencies' amounts from this one's amounts, respectively.
+;;   'format <fn> #f: Call the function <fn> (where fn takes two
+;;       arguments) for each commodity with the arguments <commodity>
+;;       and the corresponding total <amount>. The results is a list
+;;       of each call's result.
+;;   'merge <commodity-collector> #f: Merge the given other
+;;       commodity-collector into this one, adding all currencies'
+;;       amounts, respectively.
+;;   'minusmerge <commodity-collector> #f: Merge the given other 
+;;       commodity-collector into this one (like above) but subtract
+;;       the other's currencies' amounts from this one's amounts,
+;;       respectively.
 ;;   'reset #f #f: Delete everything that has been accumulated 
-;;       (even the fact that any currency showed up at all).
-;;   (internal) 'list #f #f: get the association list of currency->value-collector
+;;       (even the fact that any commodity showed up at all).
+;;   (internal) 'list #f #f: get the association list of 
+;;        commodity->numeric-collector
 
-(define (make-currency-collector)
+(define (make-commodity-collector)
   (let 
-      ;; the association list of (currency -> value-collector) pairs.
-      ((currencylist '()))
+      ;; the association list of (commodity -> value-collector) pairs.
+      ((commoditylist '()))
     
-    ;; helper function to add a currency->value pair to our list. 
-    ;; If no pair with this currency exists, we will create one.
-    (define (add-currency-value currency value)
+    ;; helper function to add a commodity->value pair to our list. 
+    ;; If no pair with this commodity exists, we will create one.
+    (define (add-commodity-value commodity value)
       ;; lookup the corresponding pair
-      (let ((pair (assoc currency currencylist)))
+      (let ((pair (assoc commodity commoditylist)))
 	(if (not pair)
 	    (begin
-	      ;; create a new pair, using the value-collector
-	      (set! pair (list currency (make-value-collector)))
+	      ;; create a new pair, using the gnc:numeric-collector
+	      (set! pair (list commodity (make-numeric-collector)))
 	      ;; and add it to the alist
-	      (set! currencylist (cons pair currencylist))))
+	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
 	((cadr pair) 'add value)))
     
     ;; helper function to walk an association list, adding each
-    ;; (currency -> collector) pair to our list
-    (define (add-currency-clist clist)
+    ;; (commodity -> collector) pair to our list at the appropriate 
+    ;; place
+    (define (add-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-currency-value (caar clist) 
-				      ((cadar clist) 'total #f))
-		  (add-currency-clist (cdr clist)))))
+	    (else (add-commodity-value (caar clist) 
+				       ((cadar clist) 'total #f))
+		  (add-commodity-clist (cdr clist)))))
 
-    (define (minus-currency-clist clist)
+    (define (minus-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-currency-value (caar clist) 
-				      (* -1 
-					 ((cadar clist) 'total #f)))
-		  (minus-currency-clist (cdr clist)))))
+	    (else (add-commodity-value (caar clist) 
+				       (gnc:numeric-sub-fixed 
+					gnc:numeric-zero 
+					((cadar clist) 'total #f)))
+		  (minus-commodity-clist (cdr clist)))))
 
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
-    (define (process-currency-list fn clist)
+    (define (process-commodity-list fn clist)
       (cond ((null? clist) '())
 	    (else (cons (fn (caar clist) ((cadar clist) 'total #f))
-			(process-currency-list fn (cdr clist))))))
+			(process-commodity-list fn (cdr clist))))))
+
+    ;; helper function which is given a commodity and returns, if
+    ;; existing, a list (gnc-commodity gnc:numeric) 
+    (define (getpair c)
+      (let ((pair (assoc c commoditylist)))
+	(list c 
+	      (if (not pair)
+		  (gnc:numeric-zero)
+		  ((cadr pair) 'total #f)))))
 
     ;; Dispatch function
-    (lambda (action currency amount)
+    (lambda (action commodity amount)
       (case action
-	('add (add-currency-value currency amount))
-	('merge (add-currency-clist (currency 'list #f #f)))
-	('minusmerge (minus-currency-clist (currency 'list #f #f)))
-	('format (process-currency-list currency currencylist))
-	('reset (set! currencylist '()))
-	('list currencylist) ; this one is only for internal use
-	(else (gnc:warn "bad currency-collector action: " action))))))
+	('add (add-commodity-value commodity amount))
+	('merge (add-commodity-clist (commodity 'list #f #f)))
+	('minusmerge (minus-commodity-clist (commodity 'list #f #f)))
+	('format (process-commodity-list commodity commoditylist))
+	('reset (set! commoditylist '()))
+	('getpair (getpair commodity))
+	('list commoditylist) ; this one is only for internal use
+	(else (gnc:warn "bad commodity-collector action: " action))))))
 
 ;; Add x to list lst if it is not already in there
 (define (addunique lst x)
@@ -360,27 +393,34 @@
         (+ balance children-balance)
         balance)))    
 
-;; This works similar as above but returns a currency-collector, 
+;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
-(define (gnc:account-get-curr-balance-at-date account 
+;;
+;; Note that the commodity-collector contains <gnc:numeric> values
+;; rather than double values.
+(define (gnc:account-get-comm-balance-at-date account 
 					      date include-children?)
   (let ((balance-collector
          (if include-children?
-             (gnc:group-get-curr-balance-at-date
+             (gnc:group-get-comm-balance-at-date
               (gnc:account-get-children account) date)
-             (make-currency-collector))))
-    (let loop ((index 0)
-	       (balance 0)
-	       (split (gnc:account-get-split account 0)))
-      (if (not split)
-	  (balance-collector 'add (gnc:account-get-currency account)
-			     balance)
-	  (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))
-	      (balance-collector 'add (gnc:account-get-currency account)
-				 balance)
-	      (loop (+ index 1)
-		    (d-gnc:split-get-balance split)
-		    (gnc:account-get-split account (+ index 1))))))
+             (make-commodity-collector)))
+        (query (gnc:malloc-query))
+        (splits #f))
+
+    (gnc:query-set-group query (gnc:get-current-group))
+    (gnc:query-add-single-account-match query account 'query-and)
+    (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
+    (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
+    (gnc:query-set-sort-increasing query #t)
+    (gnc:query-set-max-splits query 1)
+
+    (set! splits (gnc:glist->list 
+                  (gnc:query-get-splits query) 
+                  <gnc:Split*>))
+    (if (and splits (not (null? splits)))
+	(balance-collector 'add (gnc:account-get-commodity account)
+			   (gnc:split-get-balance (car splits))))
     balance-collector))
 
 ;; get the balance of a group of accounts at the specified date.
@@ -392,14 +432,16 @@
             (gnc:account-get-balance-at-date account date #t)) 
           group)))
 
-;; returns a currency-collector
-(define (gnc:group-get-curr-balance-at-date group date)
-  (let ((this-collector (make-currency-collector)))
+;; returns a commodity-collector
+(define (gnc:group-get-comm-balance-at-date group date)
+  (let ((this-collector (make-commodity-collector)))
     (for-each (lambda (x) (this-collector 'merge x #f))
 	      (gnc:group-map-accounts
 	       (lambda (account)
-		 (gnc:account-get-curr-balance-at-date account date #t)) group))
-      this-collector))
+		 (gnc:account-get-comm-balance-at-date 
+		  account date #t)) 
+	       group))
+    this-collector))
 
 ;; get the change in balance from the 'from' date to the 'to' date.
 ;; this isn't quite as efficient as it could be, but it's a whole lot
@@ -408,12 +450,12 @@
   (- (d-gnc:account-get-balance-at-date account to include-children?)
      (d-gnc:account-get-balance-at-date account from include-children?)))
 
-;; the version which returns a currency-collector
-(define (gnc:account-get-curr-balance-interval 
+;; the version which returns a commodity-collector
+(define (gnc:account-get-comm-balance-interval 
 	 account from to include-children?)
-  (let ((this-collector (gnc:account-get-curr-balance-at-date 
+  (let ((this-collector (gnc:account-get-comm-balance-at-date 
 			 account to include-children?)))
-    (this-collector 'minusmerge (gnc:account-get-curr-balance-at-date 
+    (this-collector 'minusmerge (gnc:account-get-comm-balance-at-date 
 				 account from include-children?) #f)
     this-collector))
 
@@ -423,13 +465,13 @@
           (lambda (account)
             (d-gnc:account-get-balance-interval account from to #t)) group)))
 
-;; the version which returns a currency-collector
-(define (gnc:group-get-curr-balance-interval group from to)
-  (let ((this-collector (make-currency-collector)))
+;; the version which returns a commodity-collector
+(define (gnc:group-get-comm-balance-interval group from to)
+  (let ((this-collector (make-commodity-collector)))
     (for-each (lambda (x) (this-collector 'merge x #f))
 	      (gnc:group-map-accounts
 	       (lambda (account)
-		 (gnc:account-get-curr-balance-interval 
+		 (gnc:account-get-comm-balance-interval 
 		  account from to #t)) group))
     this-collector))
 

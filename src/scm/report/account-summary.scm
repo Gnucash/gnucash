@@ -119,8 +119,16 @@
       (gnc:html-table-append-column! 
        table
        (map (lambda (acct)
-              (gnc:account-get-balance-at-date acct end-date sub-balances?))
-            accounts))
+              (let ((pair 
+		     ((gnc:account-get-comm-balance-at-date 
+		       acct end-date sub-balances?) 
+		      'getpair (gnc:account-get-commodity acct) #f)))
+		;; pair is a list of one gnc:commodity and 
+		;; one gnc:numeric value
+		 (gnc:commodity-amount->string 
+		  (cadr pair) 
+		  (gnc:commodity-print-info (car pair) #t))))
+	    accounts))
       
       ;; set column and table styles 
       (let ((bal-col (- (gnc:html-table-num-columns table) 1)))
