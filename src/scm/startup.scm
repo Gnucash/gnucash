@@ -15,8 +15,6 @@
                      "/usr/share/guile/1.3a/ice-9/boot-9.scm")))
   (primitive-load boot-file))
 
-
-
 (define gnc:*command-line-files* #f)
 
 ;;;; Warning functions...
@@ -158,7 +156,12 @@
             (gnc:_load-path-expand_ other-items))))))
 
 (define (gnc:_load-path-update_ items)
-  (set! gnc:_load-path-directories_ (gnc:_load-path-expand_ items)))
+  (let ((result (gnc:_load-path-expand_ items)))
+    (if result
+        (begin
+          (set! gnc:_load-path-directories_ result)
+          result)
+        #f)))
 
 ;; It may make sense to dump this in favor of guile's load-path later,
 ;; but for now this works, and having gnc things separate may be less
@@ -300,12 +303,16 @@ Any path element enclosed in parentheses will automatically be
 expanded to that directory and all its subdirectories whenever this
 variable is modified.  The symbol element default will expand to the default directory.  i.e. (gnc:config-var-value-set! gnc:*load-path* '(\"/my/dir/\" default))"
    (lambda (var value)
-     (let ((result (gnc:_load-path-update_ value)))
-       (if (list? result)
-           (list result)
-           #f)))
+     (if (not (list? value))
+         #f
+         (let ((result (gnc:_load-path-update_ value)))
+           (if (list? result)
+               (list result)
+               #f))))
    equal?
-   gnc:_load-path-default_))
+   (list 
+    (string-append "(" (getenv "HOME") "/.gnucash/scm)")
+    (string-append "(" gnc:_share-dir-default_ "/scm)"))))
 
 (define gnc:*prefs*
   (list
@@ -493,8 +500,6 @@ variable is modified.  The symbol element default will expand to the default dir
     (gnucash:shutdown 1))
 
 ;;; Now we can load a bunch of files.
-
-;; (gnc:load "test.scm")
 ;; (gnc:load 'hooks)
 
 ;;; Load the system and user configs
