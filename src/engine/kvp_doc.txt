@@ -162,7 +162,7 @@ Use:  date that the copy was created.
 
 -----------------------
 
-Name: /hbci
+Name: /hbci/
 Type: frame
 Entitites: Account, Book
 Use: subdirectory for information related to the German online banking
@@ -205,13 +205,38 @@ Use: xaccAccountGetLastNum, xaccAccountSetLastNum
      Store the last number used in an account's transactions.
      Used in auto-filling the Num field.
 
+-----------------------
+
+Name: /lot-mgmt/
+Type: kvp_frame
+Entities: Account
+Use: Frame holding info regarding how lots should be managed in this
+     account, including what accounting policy to use, where realized
+     gains should be reported, and etc. 
+
+Name: /lot-mgmt/gains-acct/
+Type: frame
+Entities: Account
+Use: When a lot in this account is double-balanced, this frame 
+     holds per-currency accounts to which realized gains are to 
+     be posted.
+
+Name: /lot-mgmt/gains-acct/xxxxx
+Type: guid
+Entities: Account
+Use: When a lot in this account is double-balanced, this key specifies
+     the account to which realized gains are to be posted.
+
+
+-----------------------
+
 Name: notes
 Type: string
-Entities: Account, Transaction
-Use: xaccAccountGetNotes, xaccAccountSetNotes,
-     xaccTransGetNotes, xaccTransSetNotes
-     Store the 'Notes' string which was previously stored in
-     the Account structure directly.
+Entities: Account, Lot, Transaction
+Use: xaccAccountGetNotes(), xaccAccountSetNotes(),
+     xaccTransGetNotes(), xaccTransSetNotes(),
+     gnc_lot_get_notes(), gnc_lot_set_notes()
+     Store the 'Notes' string.
 
 Name: old-currency
 Type: string
