@@ -1,3 +1,8 @@
+2002-02-08  Christian Stimming  <stimming@tuhh.de>
+
+	* po/fr.po: Updated French translation from work of Jérôme Sautret
+	<jerome@sautret.org>.
+
 2002-01-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-reconcile.c: fix bugs when reconciling
