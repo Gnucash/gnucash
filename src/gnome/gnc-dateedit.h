@@ -5,7 +5,7 @@
  * All rights reserved.
  *
  * This file was part of the Gnome Library. It was modifed by
- * Dave Peticolas <peticola@cs.ucdavis.edu> for use in GnuCash.
+ * Dave Peticolas <dave@krondo.com> for use in GnuCash.
  *
  * 2001.05.13T1647 [PDT], #gnucash:
  * <jsled> dave_p: So the header for gnc-dateedit.h is a bit light
@@ -34,8 +34,8 @@
   @NOTATION@
  */
 
-#ifndef __GNC_DATE_EDIT_H_
-#define __GNC_DATE_EDIT_H_ 
+#ifndef GNC_DATE_EDIT_H
+#define GNC_DATE_EDIT_H 
 
 #include <gnome.h>
 
