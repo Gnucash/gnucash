@@ -1,3 +1,7 @@
+2003-11-17  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.8 release
+
 2003-11-17  Derek Atkins  <derek@ihtfp.com>
 
 	* Makefile.am, Makefile.DEPS:
