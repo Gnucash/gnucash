@@ -13,7 +13,7 @@ model of GnuCash or of the workings of the main application. The
 register should not be specific to a particular GUI (such as Gnome/GTK).
 It should be possible to use the register in a stand-alone fashion.
 
-The register is built from sever types of components: Cells,
+The register is built from several types of components: Cells,
 Cellblocks, Cursors, the Table, and the Split Register.
 
 @menu
@@ -22,6 +22,7 @@ Cellblocks, Cursors, the Table, and the Split Register.
 * Table::                       
 * Split Register::              
 @end menu
+
 
 @node Cells, Cellblocks, Register, Register
 @section Cells
@@ -35,13 +36,74 @@ mouse-clicking elsewhere, or tabbing away).
 
 Special-purpose cells can be created by "inheriting" from the basic cell
 object. Thus, there are special-purpose cells for handling dates,
-pull-down menus, text fields, monetary amounts, etc.
+pull-down menus, text fields with auto-completion from a list of
+alternatives, monetary amounts, etc.
 
 Cells implementations may or may not contain GUI code. Cells which
 require only that text be displayed are completely "GUI-independent",
 that is, they depend on the underlying table to display the text. Cells
 which require additional GUI elements (such as pull-down menus) must
 implement the proper GUI handling on their own (using, e.g., GTK).
+
+@menu
+* BasicCell::                   
+@end menu
+
+
+@node BasicCell,  , Cells, Cells
+@subsection BasicCell
+@tindex BasicCell
+
+The @dfn{BasicCell} interface defines the core functionality that all
+cells must implement. A BasicCell contains the following data members.
+
+@table @code
+
+@item char *value
+The 'value' of the cell stored as a character string.
+
+@item char input_output
+This is a bit field used for storing flag values. The following flag
+values are defined.
+
+  @table @code
+
+  @item XACC_CELL_ALLOW_INPUT
+  If set, the cell will may accept keyboard and mouse input from the
+  user. Otherwise, the cell is for display only.
+
+  @item XACC_CELL_ALLOW_SHADOW
+  If set, the cell will 'shadow' the contents of the register which it
+  is contained in. In other words, as the cell is moved to new locations,
+  the value of the register at that location will be copied into the cell.
+
+  @item XACC_CELL_ALLOW_EXACT_ONLY
+  If set, the cell may only be entered by 'exact' indication of the
+  user. Currently, this means the user must click on the cell with the
+  mouse. This flag will prevent the cell from being tabbed into.
+
+  @end table
+
+@item guint32 changed
+This member is set to have all 1-bits (2^32 - 1) to indicate the
+cell contents have been changed from the register value.
+
+@item char * blank_help
+This member is a text string which may be used by a GUI implementation
+to display an informative help string when the value of a cell is empty
+(perhaps prompting the user to enter a particular kind of value).
+
+@item guint32 bg_color
+@itemx guint32 fg_color
+An RGB value indicating the background (foreground) color to render the
+cell with.
+
+@item gboolean use_bg_color
+@itemx gboolean use_fg_color
+A boolean value indicating whether to use the @code{bg_color}
+(@code{fg_color}) member.
+
+@end table
 
 
 @node Cellblocks, Table, Cells, Register

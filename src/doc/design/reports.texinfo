@@ -1,2 +1,2 @@
-@node Reports, Concept Index, Register, Top
+@node Reports, Data Type Index, Register, Top
 @chapter Reports

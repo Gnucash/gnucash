@@ -1,4 +1,4 @@
-@node Concept Index, , Reports, Top
+@node Concept Index, , Data Type Index, Top
 @unnumbered Concept Index
 
 @printindex cp
