@@ -1138,6 +1138,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
              * windows, if they are open */
             xaccAccountWindowDestroy (selected_acc);
             xaccRemoveAccount (selected_acc);
+            xaccRemoveTransactions (selected_acc);
             /* freeAccount (selected_acc); hack alert -- see note at top */
             selected_acc = NULL;
             refreshMainWindow();

@@ -157,6 +157,46 @@ freeAccount( Account *acc )
 /********************************************************************\
 \********************************************************************/
 
+void
+xaccRemoveTransactions( Account *acc )
+{
+  int i;
+
+  if (NULL == acc) return;
+    
+  /* recursively remove transactions in children too */
+  if (acc->children) {
+    AccountGroup *grp = (AccountGroup *) (acc->children);
+    for (i=0; i<grp->numAcc; i++) {
+       xaccRemoveTransactions (grp->account[i]);
+    }
+  }
+
+  for( i=0; i<acc->numTrans; i++ ) {
+    Transaction *trans = acc->transaction[i];
+    struct _account * _acc = (struct _account *) acc; 
+
+    if (!trans) continue;
+    /* free the transaction only if its not 
+     * a part of a double entry */
+    if (_acc == trans->credit) trans->credit = NULL;
+    if (_acc == trans->debit) trans->debit  = NULL;
+    if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
+      freeTransaction( trans );
+    }
+  }
+  
+  /* free the array of pointers */
+  /* _free( acc->transaction ); hack alert */
+  /* acc->transaction = NULL;  */
+  
+  acc->numTrans    = 0;
+  
+}
+
+/********************************************************************\
+\********************************************************************/
+
 int
 xaccGetAccountID (Account *acc)
 {
