@@ -445,7 +445,7 @@ gnc_localeconv(void)
   gnc_lconv_set(&lc.decimal_point, ".");
   gnc_lconv_set(&lc.thousands_sep, ",");
   gnc_lconv_set(&lc.grouping, "\003");
-  gnc_lconv_set(&lc.int_curr_symbol, "USD");
+  gnc_lconv_set(&lc.int_curr_symbol, "USD ");
   gnc_lconv_set(&lc.currency_symbol, "$");
   gnc_lconv_set(&lc.mon_decimal_point, ".");
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
@@ -467,18 +467,34 @@ gnc_localeconv(void)
 }
 
 gnc_commodity *
-gnc_locale_default_currency(void) {
+gnc_locale_default_currency(void)
+{
   static gnc_commodity * currency;
   struct lconv         * lc;
   static gboolean      got_it = FALSE;
 
-  if(got_it == FALSE) {
+  if (got_it == FALSE)
+  {
+    char *symbol;
+
     lc = gnc_localeconv();
-    currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                          GNC_COMMODITY_NS_ISO,
-                                          lc->int_curr_symbol);
+
+    symbol = g_strdup (lc->int_curr_symbol);
+
+    /* The int_curr_symbol includes a space at the end! Note: you
+     * can't just change "USD " to "USD" in gnc_localeconv, because
+     * that is only used if int_curr_symbol was not defined in the
+     * current locale. If it was, it will have the space! */
+    g_strstrip (symbol);
+
+    currency = gnc_commodity_table_lookup (gnc_engine_commodities(),
+                                           GNC_COMMODITY_NS_ISO,
+                                           symbol);
+
+    g_free (symbol);
     got_it = TRUE;
   }
+
   return currency;
 }
 
