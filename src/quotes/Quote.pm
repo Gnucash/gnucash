@@ -5,6 +5,7 @@
 #    Copyright (C) 2000, Yannick LE NY <y-le-ny@ifrance.com>
 #    Copyright (C) 2000, Paul Fenwick <pjf@schools.net.au>
 #    Copyright (C) 2000, Brent Neal <brentn@users.sourceforge.net>
+#    Copyright (C) 2001, Leigh Wedding <lwedding@bigpond.com>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -93,7 +94,7 @@ $FIDELITY_ASSET_URL = ("http://personal441.fidelity.com/gen/prices/asset.csv");
 $TROWEPRICE_URL = ("http://www.troweprice.com/funds/prices.csv");
 $VANGUARD_QUERY_URL = ("http://www.vanguard.com/cgi-bin/Custom/daily/custom/CustRpt?");
 $VANGUARD_CSV_URL = ("http://www.vanguard.com/cgi-bin/Custom?ACTION=Download&FileName=");
-$ASX_URL = ('http://www3.asx.com.au/nd50/nd_isapi_50.dll/JSP/EquitySearchResults.jsp?method=post&template=F1001&ASXCodes=');
+$ASX_URL = ('http://www.asx.com.au/scripts/nd_ISAPI_50.dll/asx/markets/EquitySearchResults.jsp?method=post&template=F1001&ASXCodes=');
 $TIAACREF_URL = ("http://www.tiaa-cref.org/financials/selection/ann-select.cgi?");
 
 undef $TIMEOUT;
@@ -719,6 +720,7 @@ sub vanguard
 # The ASX provides free delayed quotes through their webpage.
 #
 # Maintainer of this section is Paul Fenwick <pjf@schools.net.au>
+# 30/Apr/2001 Updated by Leigh Wedding <lwedding@bigpond.com>
 #
 # TODO: It's possible to fetch multiple stocks in one operation.  It would
 #       be nice to do this, and should not be hard.
@@ -731,9 +733,21 @@ sub asx {
     my $ua = LWP::UserAgent->new;
     $ua->timeout($TIMEOUT) if defined $TIMEOUT;
     $ua->env_proxy();
+    $ua->agent('Gnucash/1.4');
 
     foreach my $stock (@stocks) {
+
+	# Just use current date because ASX no longer provides the date
+	# in stock prices results.
+	# TODO:  should account for timezone somehow!
+	my ($sec, $min, $hour, $day, $month, $year, $wday, $yday, $isdst) =
+		localtime(time);
+	$month += 1;
+	$year += 1900;
+	$info{$stock,"date"} = "$month/$day/$year"; # Silly 'merkin format.
+
         my $response = $ua->request(GET $ASX_URL.$stock);
+
 	unless ($response->is_success) {
 	    $info{$stock,"success"} = 0;
 	    $info{$stock,"errormsg"} = "HTTP session failed";
@@ -741,59 +755,53 @@ sub asx {
 	}
 	my $reply = $response->content;
 
-	# Grab the date.  This is a pretty clunky way of doing it, but
-	# my mind's still in brain-saver mode.
-
-	my ($day, $month, $year) = $reply =~ /(\d\d?) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})/;
-
-	unless ($month) {
-	    $info{$stock,"sucess"} = 0;
-	    $info{$stock,"errormsg"} = "Symbol Lookup failed";
-	    next;
-	}
-
-	$_ = $month;
-	(s/January/1/    or
-	 s/February/2/   or
-	 s/March/3/      or
-	 s/April/4/      or
-	 s/May/5/        or
-	 s/June/6/       or
-	 s/July/7/       or
-	 s/August/8/     or
-	 s/September/9/  or
-	 s/October/10/   or
-	 s/November/11/ or
-	 s/December/12/  or (warn "Bizarre month $_ from ASX. Skipped $stock\n"
-	                          and return undef));
-
-	$info{$stock,"date"} = "$_/$day/$year"; # Silly 'merkin format.
-
-	# These first two steps aren't really needed, but are done for
-	# safety.
-	# Remove the bottom part of the page.
-	$reply =~ s#</table>\s*\n<table>.*$##s;
 	# Remove top of page.
-	$reply =~ s#.*<table##s;
+	$reply =~ s#.*Share Price Results##s;
+	# Remove the bottom part of the page.
+	$reply =~ s#</table>.*##s;
+	# Remove all the '&nbsp;'
+	$reply =~ s#&nbsp;##sg;
+        # Remove all multiple white space.
+        $reply =~ s#\s{2,}##g;
 
-        # Now pluck out the headings.
+	my $i;
+	my $j;
 	my @headings;
-	while ($reply =~ m#<FONT +SIZE=2><B>([%\w ]*).*?</B>#g) {
-	    push @headings, $1;
-	}
-
-	# Now grab the values
 	my @values;
-	while ($reply =~ m#<td align=(left|right)><Font Size=2>(.*?)</Font>#g) {
-	    push @values, $2;
+        # Now parse the table
+	# First split the table into rows
+ 	foreach $i (split /<\/tr><tr>/, $reply) {
+	    # Check for headings row
+	    if ($i =~ /Code.*Company Name/) {
+		# Then split the row into cells.
+		@headings = split /<\/td>/, $i;
+		# Get rid of extraneous format tags.
+		foreach $j (@headings)
+		{
+		    $j =~ s/<.+?>//g;
+		}
+	    }
+	    # Else we have a data row
+	    else {
+		# Then split the row into cells.
+		@values = split /<\/td>/, $i;
+		# Get rid of extraneous format tags.
+		foreach $j (@values)
+		{
+		    $j =~ s/<.+?>//g;
+		}
+	    }
 	}
 
-	# Put the two together and we get shares information.
+	# Put headings and values together and we get shares information.
 	foreach my $heading (@headings) {
 	    my $value = shift @values;
 
 	    # Check the code that we got back.
-	    if ($heading =~ /ASX CODE/) {
+	    if ($heading =~ /Code/) {
+		# Remove '*' which is sometimes placed after stock code.
+		$value =~ s/\*//;
+
 		if ($value ne $stock) {
 		    # Oops!  We got back a stock that we didn't want?
 		    warn "Bad stocks returned from the ASX.  ".
@@ -805,16 +813,20 @@ sub asx {
 
 	    # Convert ASX headings to labels we want to return.
 	    $_ = $heading;
-	    (s/LAST/last/)  or
-	    (s/BID/bid/)    or
-	    (s/OFFER/ask/)  or
-	    (s/OPEN/open/)  or
-	    (s/HIGH/high/)  or
-	    (s/LOW/low/)    or
-	    (s/LAST/last/)  or
-	    (s/PDC/close/)  or
+
+	    (s/Company Name/name/)  or
+	    (s/\$ \+\/\-/change/)	or
+	    (s/Last/last/)  or
+	    (s/Bid/bid/)    or
+	    (s/Offer/ask/)  or
+	    (s/Open/open/)  or
+	    (s/High/high/)  or
+	    (s/Low/low/)    or
 	    (s/%/p_change/) or
-	    (s/VOLUME/volume/) or (warn "Unknown heading from ASX: $_.  Skipped"
+	    (s/Options/options/) or
+	    (s/Warrants/warrants/) or
+	    (s/Chart/chart/) or
+	    (s/Vol/volume/) or (warn "Unknown heading from ASX: $_.  Skipped"
 	                           and next);
 
 	    # Clean the value
@@ -828,12 +840,8 @@ sub asx {
 	    # Put the info into our hash.
 	    $info{$stock,$_} = $value;
 	}
-	$info{$stock,"name"} = $stock;	# ASX doesn't give names.  :(
 
-	# Outside of business hours, the last price is the same as the
-	# previous day's close.
-	$info{$stock,"last"} ||= $info{$stock,"close"};
-        $info{$stock, "price"} = $info{$stock,"last"};
+        $info{$stock,"price"} = $info{$stock,"last"};
 	$info{$stock,"success"} = 1;
     }
     return %info;

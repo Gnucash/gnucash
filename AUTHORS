@@ -125,6 +125,7 @@ Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Diane Trout <detrout@earthlink.net> scheme qif import patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
+Leigh Wedding <lwedding@bigpond.com> Quote.pm patches for ASX
 David Woodhouse <dwmw2@infradead.org> Great Britain translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> Japanese translation
