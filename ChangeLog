@@ -1,3 +1,12 @@
+2002-10-13  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/ledger-core/gnc-regwidget.c
+	(gnc_register_create_tool_bar): Added support for tooltips to the
+	toolbar of the gnc-regwidget
+	(gnc_regWidget_new): Added support for conditionally disallowing
+	various capabilities of the reg-widget, as scheduled transactions
+	use of the regwidget requires.  Fixes Bug#95009.
+
 2002-10-12  David Hampton  <hampton@employees.org>
 
 	* src/scm/printing/print-check.scm (gnc:*stock-check-positions*):

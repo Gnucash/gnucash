@@ -3330,7 +3330,8 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
 
         sxsld->ac_regWidget =
                 GNC_REGWIDGET(gnc_regWidget_new( sxsld->ac_ledger,
-                                                 GTK_WINDOW( sxsld->sincelast_window ) ));
+                                                 GTK_WINDOW( sxsld->sincelast_window ),
+                                                 CAP_SCHEDULE ));
 
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
         toolbar = gnc_regWidget_get_toolbar( sxsld->ac_regWidget );
@@ -3377,7 +3378,8 @@ create_created_ledger( sxSinceLastData *sxsld )
 
         sxsld->created_regWidget =
           GNC_REGWIDGET(gnc_regWidget_new( sxsld->created_ledger,
-                                           GTK_WINDOW( sxsld->sincelast_window ) ));
+                                           GTK_WINDOW( sxsld->sincelast_window ),
+                                           CAP_SCHEDULE ));
 
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
         toolbar = gnc_regWidget_get_toolbar( sxsld->created_regWidget );

@@ -1356,7 +1356,8 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gnucash_register_set_initial_rows(numLedgerLines);
 
         regWidget = gnc_regWidget_new( sxed->ledger,
-                                       GTK_WINDOW(sxed->dialog) );
+                                       GTK_WINDOW(sxed->dialog),
+                                       CAP_SCHEDULE | CAP_JUMP );
         gtk_box_pack_start( GTK_BOX(vbox),
                             gnc_regWidget_get_toolbar( GNC_REGWIDGET(regWidget) ),
                             FALSE, TRUE, 2 );

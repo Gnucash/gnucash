@@ -70,6 +70,8 @@ struct _GNCRegWidget {
   /* The actual sheet widget */
   GnucashRegister *reg;
 
+  gint disallowedCaps;
+
   gint sort_type;
 };
 
@@ -81,14 +83,29 @@ struct _GNCRegWidgetClass {
   void (*cancel_ent_cb)( GNCRegWidget *w, gpointer user_data );
   void (*delete_ent_cb)( GNCRegWidget *w, gpointer user_data );
   void (*dup_ent_cb)( GNCRegWidget *w, gpointer user_data );
+  void (*schedule_ent_cb)( GNCRegWidget *w, gpointer user_data );
   void (*expand_ent_cb)( GNCRegWidget *w, gpointer user_data );
   void (*blank_cb)( GNCRegWidget *w, gpointer user_data );
   void (*jump_cb)( GNCRegWidget *w, gpointer user_data );
 };
 
+#define CAP_DELETE   (1 << 0)
+#define CAP_JUMP     (1 << 1)
+#define CAP_SCHEDULE (1 << 2)
+
 guint gnc_regWidget_get_type( void );
 
-GtkWidget *gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *parent );
+/**
+ * Create a new GNCRegWidget for the given ledger display, parent window and
+ * disallowing the given capabilities.  Disallowed capabilities result in
+ * inactive widgets.
+ *
+ * @param disallowCapabilities A bit-mask of 'CAP_' values to disallow access
+ * to; use 0 to allow everything.
+ **/
+GtkWidget *gnc_regWidget_new( GNCLedgerDisplay *ld,
+                              GtkWindow *parent,
+                              int disallowCapabilities );
 
 GnucashRegister *gnc_regWidget_get_register( GNCRegWidget *rw );
 

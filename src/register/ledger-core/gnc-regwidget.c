@@ -1,5 +1,10 @@
 /********************************************************************\
  * gnc-regwidget.c -- A widget for the common register look-n-feel. *
+ * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
+ * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
+ * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,12 +25,60 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#define _GNU_SOURCE
+
+#include "config.h"
+
+#include <gnome.h>
+#include <time.h>
+
+#include "AccWindow.h"
+#include "Scrub.h"
+#include "global-options.h"
+#include "gnc-component-manager.h"
+#include "gnc-date-edit.h"
+#include "gnc-engine-util.h"
+#include "gnc-euro.h"
+#include "gnc-gui-query.h"
+#include "gnc-ledger-display.h"
+#include "gnc-pricedb.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "gnucash-sheet.h"
+#include "messages.h"
+#include "table-allgui.h"
+
 #include <libguile.h>
 #include "gnc-regwidget.h"
 #include "gnc-engine-util.h"
 #include "dialog-utils.h"
 
 static short module = MOD_SX;
+
+/** PROTOTYPES ******************************************************/
+static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
+static void gnc_register_redraw_help_cb (GnucashRegister *g_reg,
+                                         gpointer data);
+static void gnc_reg_refresh_toolbar(GNCRegWidget *regData);
+static void regDestroy(GNCLedgerDisplay *ledger);
+static void gnc_register_check_close(GNCRegWidget *regData);
+
+static void cutCB(GtkWidget *w, gpointer data);
+static void copyCB(GtkWidget *w, gpointer data);
+static void pasteCB(GtkWidget *w, gpointer data);
+static void cutTransCB(GtkWidget *w, gpointer data);
+static void copyTransCB(GtkWidget *w, gpointer data);
+static void pasteTransCB(GtkWidget *w, gpointer data);
+
+static void deleteCB(GNCRegWidget *rw, gpointer data);
+static void duplicateCB(GNCRegWidget *rw, gpointer data);
+static void recordCB(GNCRegWidget *rw, gpointer data);
+static void cancelCB(GNCRegWidget *rw, gpointer data);
+static void expand_ent_cb(GNCRegWidget *rw, gpointer data);
+static void new_trans_cb(GNCRegWidget *rw, gpointer data);
+static void jump_cb(GNCRegWidget *rw, gpointer data );
+
+static void gnc_register_jump_to_blank (GNCRegWidget *rw);
 
 static void gnc_regWidget_class_init (GNCRegWidgetClass *);
 static void gnc_regWidget_init (GNCRegWidget *);
@@ -36,6 +89,7 @@ static void emit_enter_ent_cb( GtkWidget *widget, gpointer data );
 static void emit_cancel_ent_cb( GtkWidget *widget, gpointer data );
 static void emit_delete_ent_cb( GtkWidget *widget, gpointer data );
 static void emit_dup_ent_cb( GtkWidget *widget, gpointer data );
+static void emit_schedule_ent_cb( GtkWidget *widget, gpointer data );
 static void emit_expand_ent_cb( GtkWidget *widget, gpointer data );
 static void emit_blank_cb( GtkWidget *widget, gpointer data );
 static void emit_jump_cb( GtkWidget *widget, gpointer data );
@@ -83,6 +137,7 @@ enum gnc_regWidget_signal_enum {
   CANCEL_ENT_SIGNAL,
   DELETE_ENT_SIGNAL,
   DUP_ENT_SIGNAL,
+  SCHEDULE_ENT_SIGNAL,
   EXPAND_ENT_SIGNAL,
   BLANK_SIGNAL,
   JUMP_SIGNAL,
@@ -95,12 +150,6 @@ enum gnc_regWidget_signal_enum {
 };
 
 static gint gnc_regWidget_signals[LAST_SIGNAL] = { 0 };
-
-static void
-default_cancel( GNCRegWidget *rw, gpointer ud )
-{
-  printf( "default_cancel\n" );
-}
 
 static void
 gnc_regWidget_class_init (GNCRegWidgetClass *class)
@@ -116,6 +165,7 @@ gnc_regWidget_class_init (GNCRegWidgetClass *class)
     { CANCEL_ENT_SIGNAL, "cancel_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, cancel_ent_cb ) },
     { DELETE_ENT_SIGNAL, "delete_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, delete_ent_cb ) },
     { DUP_ENT_SIGNAL, "dup_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, dup_ent_cb ) },
+    { SCHEDULE_ENT_SIGNAL, "schedule_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, schedule_ent_cb ) },
     { EXPAND_ENT_SIGNAL, "expand_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, expand_ent_cb ) },
     { BLANK_SIGNAL, "blank", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, blank_cb ) },
     { JUMP_SIGNAL, "jump", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, jump_cb ) },
@@ -138,17 +188,16 @@ gnc_regWidget_class_init (GNCRegWidgetClass *class)
   }
 
   gtk_object_class_add_signals (object_class, gnc_regWidget_signals, LAST_SIGNAL);
-
-  /* FIXME: set all fn pointers to NULL */
-  class->enter_ent_cb = NULL;
-  class->cancel_ent_cb = default_cancel;
 }
 
 GtkWidget*
-gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *win )
+gnc_regWidget_new( GNCLedgerDisplay *ld,
+                   GtkWindow *win,
+                   int disallowCapabilities )
 {
   GNCRegWidget *rw;
   rw = GNC_REGWIDGET( gtk_type_new( gnc_regWidget_get_type() ) );
+  rw->disallowedCaps = disallowCapabilities;
   /* IMPORTANT: If we set this to anything other than GTK_RESIZE_QUEUE, we
    * enter into a very bad back-and-forth between the sheet and a containing
    * GnomeDruid [in certain conditions and circumstances not detailed here],
@@ -161,82 +210,6 @@ gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *win )
   return GTK_WIDGET( rw );
 }
 
-/*******************************************************************\
- * window-register.c -- the register window for GnuCash             *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-1998 Linas Vepstas <linas@linas.org>          *
- * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
- * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
- * Copyright (C) 2001 Gnumatic, Inc.                                *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
- *                                                                  *
-\********************************************************************/
-
-#define _GNU_SOURCE
-
-#include "config.h"
-
-#include <gnome.h>
-#include <time.h>
-
-#include "AccWindow.h"
-#include "Scrub.h"
-#include "global-options.h"
-#include "gnc-component-manager.h"
-#include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
-#include "gnc-euro.h"
-#include "gnc-gui-query.h"
-#include "gnc-ledger-display.h"
-#include "gnc-pricedb.h"
-#include "gnc-ui-util.h"
-#include "gnc-ui.h"
-#include "gnucash-sheet.h"
-#include "messages.h"
-#include "table-allgui.h"
-
-/** PROTOTYPES ******************************************************/
-static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
-static void gnc_register_redraw_help_cb (GnucashRegister *g_reg,
-                                         gpointer data);
-static void gnc_reg_refresh_toolbar(GNCRegWidget *regData);
-static void regDestroy(GNCLedgerDisplay *ledger);
-static void gnc_register_check_close(GNCRegWidget *regData);
-
-static void cutCB(GtkWidget *w, gpointer data);
-static void copyCB(GtkWidget *w, gpointer data);
-static void pasteCB(GtkWidget *w, gpointer data);
-static void cutTransCB(GtkWidget *w, gpointer data);
-static void copyTransCB(GtkWidget *w, gpointer data);
-static void pasteTransCB(GtkWidget *w, gpointer data);
-
-static void deleteCB(GNCRegWidget *rw, gpointer data);
-static void duplicateCB(GNCRegWidget *rw, gpointer data);
-static void recordCB(GNCRegWidget *rw, gpointer data);
-static void cancelCB(GNCRegWidget *rw, gpointer data);
-static void expand_ent_cb(GNCRegWidget *rw, gpointer data);
-static void new_trans_cb(GNCRegWidget *rw, gpointer data);
-static void jump_cb(GNCRegWidget *rw, gpointer data );
-
-static void gnc_register_jump_to_blank (GNCRegWidget *rw);
-
-#if 0
 /********************************************************************\
  * gnc_register_raise                                               *
  *   raise an existing register window to the front                 *
@@ -275,20 +248,19 @@ gnc_register_jump_to_split(GNCRegWidget *rw, Split *split)
 
   trans = xaccSplitGetParent(split);
   if (trans != NULL)
-    /* jsled: If we don't know about dates, what do we do? */
+#if 0   /* jsled: If we don't know about dates, what do we do? */
     if (gnc_register_include_date(rw, xaccTransGetDate(trans)))
     {
       gnc_ledger_display_refresh (rw->ledger);
     }
+#endif /* 0 -- we don't know about dates.  */
 
   reg = gnc_ledger_display_get_split_register (rw->ledger);
 
   if (gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
     gnucash_register_goto_virt_cell(rw->reg, vcell_loc);
 }
-#endif /* 0 */
 
-/* jsled: style changing. */
 static void
 gnc_register_change_style (GNCRegWidget *rw, SplitRegisterStyle style)
 {
@@ -335,7 +307,6 @@ gnc_register_style_journal_cb (GtkWidget *w, gpointer data)
   gnc_register_change_style (rw, REG_STYLE_JOURNAL);
 }
 
-/* jsled: relates to style */
 static void
 gnc_register_double_line_cb (GtkWidget *w, gpointer data)
 {
@@ -496,7 +467,7 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Enter"),
-      N_("Record the current FOO"),
+      N_("Record the current transaction"),
       emit_enter_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
@@ -504,7 +475,7 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Cancel"),
-      N_("Cancel the current FOO"),
+      N_("Cancel the current transaction"),
       emit_cancel_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
       0, 0, NULL
@@ -512,7 +483,7 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Delete"),
-      N_("Delete the current FOO"),
+      N_("Delete the current transaction"),
       emit_delete_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
       0, 0, NULL
@@ -521,8 +492,17 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Duplicate"),
-      N_("Make a copy of the current FOO for editing"),
+      N_("Make a copy of the current transaction for editing"),
       emit_dup_ent_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Schedule..."),
+      N_("Create a Schedule Transaction with the current "
+         "transaction as a template"),
+      emit_schedule_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
       0, 0, NULL
     },
@@ -530,7 +510,7 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_TOGGLEITEM,
       N_("Split"),
-      N_("Show all splits in the current FOO"),
+      N_("Show all splits in the current transaction"),
       emit_expand_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_OPEN,
       0, 0, NULL
@@ -538,7 +518,7 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Blank"),
-      N_("Move to the blank FOO at the "
+      N_("Move to the blank transaction at the "
          "bottom of the register"),
       emit_blank_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
@@ -547,8 +527,8 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
     {
       GNOME_APP_UI_ITEM,
       N_("Jump"),
-      N_("Jump to the corresponding FOO in "
-         "the other BAR"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       emit_jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
       0, 0, NULL
@@ -561,13 +541,34 @@ gnc_register_create_tool_bar ( GNCRegWidget *rw )
   gnome_app_fill_toolbar_with_data (GTK_TOOLBAR(toolbar), toolbar_info,
                                       NULL, rw);
 
-  rw->split_button = toolbar_info[6].widget;
+  if ( rw->disallowedCaps & CAP_DELETE ) {
+          gtk_widget_set_sensitive( toolbar_info[2].widget, FALSE );
+  }
+  if ( rw->disallowedCaps & CAP_SCHEDULE ) {
+          gtk_widget_set_sensitive( toolbar_info[5].widget, FALSE );
+  }
+  if ( rw->disallowedCaps & CAP_JUMP ) {
+          gtk_widget_set_sensitive( toolbar_info[9].widget, FALSE );
+  }
 
-#if 0
-  /* FIXME_jsled: we want something like this, but it doesn't seem to exist... :( */
-  gnome_app_install_appbar_toolbar_hints( GNOME_APPBAR(rw->statusbar),
-                                          toolbar_info );
-#endif /* 0 */
+  rw->split_button = toolbar_info[7].widget;
+
+  /* Attach tooltips to the toolbar buttons */
+  {
+          int i;
+          GtkTooltips *tips;
+
+          tips = gtk_tooltips_new();
+
+          for ( i=0; toolbar_info[i].type != GNOME_APP_UI_ENDOFINFO; i++ ) {
+                  if ( ! toolbar_info[i].widget ) {
+                          continue;
+                  }
+                  gtk_tooltips_set_tip( tips, toolbar_info[i].widget,
+                                        toolbar_info[i].hint, NULL );
+          }
+          
+  }
 
   return toolbar;
 }
@@ -657,6 +658,13 @@ emit_dup_ent_cb( GtkWidget *widget, gpointer data )
   emit_cb( (GNCRegWidget*)data, "dup_ent", widget );
 }
 
+static
+void
+emit_schedule_ent_cb( GtkWidget *widget, gpointer data )
+{
+  emit_cb( (GNCRegWidget*)data, "schedule_ent", widget );
+}
+
 static void
 emit_expand_ent_cb( GtkWidget *widget, gpointer data )
 {
@@ -678,13 +686,13 @@ emit_jump_cb( GtkWidget *widget, gpointer data )
 static void
 emit_cb( GNCRegWidget *rw, const char *signal_name, gpointer ud )
 {
-  PINFO( "emitting signal: \"%s\"\n", signal_name );
   gtk_signal_emit_by_name( GTK_OBJECT(rw), signal_name, NULL );
 }
 
 static void
 jump_cb(GNCRegWidget *rw, gpointer data)
 {
+  RegWindow *regData;
   SplitRegister *reg;
   Account *account;
   Account *leader;
@@ -715,15 +723,12 @@ jump_cb(GNCRegWidget *rw, gpointer data)
       return;
   }
 
-#if 0
-  /* jsled: what to do, here...? [window-knowledge issues] */
   regData = regWindowSimple(account);
   if (regData == NULL)
     return;
 
   gnc_register_raise (rw);
   gnc_register_jump_to_split (rw, split);
-#endif /* 0 */
 }
 
 static void
@@ -864,6 +869,15 @@ gnc_register_create_menus(GNCRegWidget *rw, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Schedule..."),
+      N_("Create a Scheduled Transaction with the current "
+         "transaction as a template"),
+      emit_schedule_ent_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_TOGGLEITEM,
@@ -925,12 +939,20 @@ gnc_register_create_menus(GNCRegWidget *rw, GtkWidget *statusbar)
                        accel_group, TRUE, 0 );
   gnome_app_install_appbar_menu_hints( GNOME_APPBAR(rw->statusbar),
                                        txn_menu );
+  if ( rw->disallowedCaps & CAP_DELETE ) {
+          gtk_widget_set_sensitive( txn_menu[2].widget, FALSE );
+  }
+  if ( rw->disallowedCaps & CAP_SCHEDULE ) {
+          gtk_widget_set_sensitive( txn_menu[5].widget, FALSE );
+  } 
+  if ( rw->disallowedCaps & CAP_JUMP ) {
+          gtk_widget_set_sensitive( txn_menu[9].widget, FALSE );
+  }
 
   rw->double_line_check = style_menu[2].widget;
-  rw->split_menu_check = txn_menu[6].widget;
+  rw->split_menu_check = txn_menu[7].widget;
 
   /* Make sure the right style radio item is active */
-  /* jsled: okP */
   {
     SplitRegister *reg;
     GtkWidget *widget;
@@ -980,7 +1002,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Enter"),
-      N_("Record the current FOO"),
+      N_("Record the current transaction"),
       emit_enter_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -988,7 +1010,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Cancel"),
-      N_("Cancel the current FOO"),
+      N_("Cancel the current transaction"),
       emit_cancel_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -996,7 +1018,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Delete"),
-      N_("Delete the current FOO"),
+      N_("Delete the current transaction"),
       emit_delete_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1005,7 +1027,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("D_uplicate"),
-      N_("Make a copy of the current FOO"),
+      N_("Make a copy of the current transaction"),
       emit_dup_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1013,8 +1035,9 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Schedule..."), 
-      N_("Create a scheduled FOO using the current FOO as a template"),
-      emit_cb, "schedule", NULL,
+      N_("Create a Scheduled Transaction using the current "
+         "transaction as a template"),
+      emit_schedule_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL, 
       0, 0, NULL
     },
@@ -1022,7 +1045,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_TOGGLEITEM,
       N_("_Split"),
-      N_("Show all SFOO in the current FOO"),
+      N_("Show all Stransaction in the current transaction"),
       emit_expand_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1030,7 +1053,7 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Blank"),
-      N_("Move to the blank FOO at the "
+      N_("Move to the blank transaction at the "
          "bottom of the register"),
       emit_blank_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
@@ -1039,8 +1062,8 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
     {
       GNOME_APP_UI_ITEM,
       N_("_Jump"),
-      N_("Jump to the corresponding FOO in "
-         "the other BAR"),
+      N_("Jump to the corresponding transaction in "
+         "the other account."),
       emit_jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1052,6 +1075,16 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
 
   popup = gnome_popup_menu_new (transaction_menu);
 
+  if ( rw->disallowedCaps & CAP_DELETE ) {
+          gtk_widget_set_sensitive( transaction_menu[2].widget, FALSE );
+  }
+  if ( rw->disallowedCaps & CAP_SCHEDULE ) {
+          gtk_widget_set_sensitive( transaction_menu[5].widget, FALSE );
+  }
+  if ( rw->disallowedCaps & CAP_JUMP ) {
+          gtk_widget_set_sensitive( transaction_menu[9].widget, FALSE );
+  }
+
   rw->split_popup_check = transaction_menu[7].widget;
 
   gnome_app_install_appbar_menu_hints( GNOME_APPBAR(rw->statusbar),
@@ -1060,7 +1093,6 @@ gnc_register_create_popup_menu (GNCRegWidget *rw)
   return popup;
 }
 
-/* jsled: record helper */
 static void
 gnc_register_record (GNCRegWidget *rw)
 {
@@ -1099,7 +1131,6 @@ gnc_register_goto_next_trans_row (GNCRegWidget *rw)
                                            rw);
 }
 
-/* jsled: default 'enter' handler */
 static void
 gnc_register_enter (GNCRegWidget *rw, gboolean next_transaction)
 {
@@ -1158,7 +1189,6 @@ gnc_register_record_cb (GnucashRegister *reg, gpointer data)
   gnc_register_enter (rw, FALSE);
 }
 
-/* jsled: default 'delete' handler */
 static gboolean
 gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
@@ -1168,7 +1198,6 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
   return FALSE; /* let the user handle correctly. */
 }
 
-/* jsled: widget cleanup */
 static void
 gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 {
@@ -1180,7 +1209,6 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
   gnc_unregister_option_change_callback_id(id);
 }
 
-/* jsled: what to do? */
 static gncUIWidget
 gnc_register_get_parent(GNCLedgerDisplay *ledger)
 {
@@ -1209,6 +1237,7 @@ gnc_regWidget_init( GNCRegWidget *rw )
   rw->sort_type = BY_STANDARD;
   rw->width = -1;
   rw->height = -1;
+  rw->disallowedCaps = 0;
 
   gtk_signal_connect (GTK_OBJECT(rw), "destroy",
                       GTK_SIGNAL_FUNC (gnc_register_destroy_cb), NULL);
@@ -1251,7 +1280,6 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
   }
 
   rw->statusbar = gnc_regWidget_create_status_bar(rw);
-  /*gtk_box_pack_end(GTK_BOX(rw), rw->statusbar, FALSE, FALSE, 0);*/
 
   /* The tool bar */
   {
@@ -1259,11 +1287,9 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
 
     rw->toolbar = gnc_register_create_tool_bar(rw);
     gtk_container_set_border_width(GTK_CONTAINER(rw->toolbar), 2);
-    /*gtk_box_pack_start( GTK_BOX(rw), rw->toolbar, FALSE, TRUE, 0 );*/
 
     id = gnc_register_option_change_callback(gnc_toolbar_change_cb, rw,
                                              "General", "Toolbar Buttons");
-    /* jsled: FIXME */
     rw->toolbar_change_callback_id = id;
   }
 
@@ -1276,7 +1302,6 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
   gtk_signal_connect (GTK_OBJECT(rw->window), "delete-event",
                       GTK_SIGNAL_FUNC (gnc_register_delete_cb), rw);
 
-  /* jsled: we actaully want these, but later */
   gnc_ledger_display_set_handlers (rw->ledger,
                                    regDestroy,
                                    gnc_register_get_parent);
@@ -1317,7 +1342,7 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
 
     rw->reg = GNUCASH_REGISTER (register_widget);
 
-    /* jsled: FIXME: do we _really_ need the window?
+    /* do we _really_ need the window? [--jsled]
      *
      * Seems like we do ... some magic regarding gnucash-sheet sizing is
      * going on with the window's width and height. -- 2002.04.14
@@ -1749,7 +1774,6 @@ gnc_transaction_delete_query (GtkWindow *parent, Transaction *trans)
   return return_value;
 }
 
-/* jsled: old cbs */
 /* This is really tied to the SplitRegister, but that's fine for now. */
 
 /********************************************************************\
