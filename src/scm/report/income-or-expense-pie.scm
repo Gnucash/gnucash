@@ -15,6 +15,8 @@
       (optname-report-currency (N_ "Report's currency"))
 
       (pagename-display (N_ "Display Format"))
+      (optname-fullname (N_ "Show long account names"))
+      (optname-show-total (N_ "Show Totals"))
       (optname-slices (N_ "Maximum Slices"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
@@ -59,21 +61,31 @@
 				   "Default Currency"))))
 
       (add-option
+       (gnc:make-simple-boolean-option
+        pagename-display optname-fullname
+        "a" (_ "Show the full account name in legend?") #f))
+
+      (add-option
+       (gnc:make-simple-boolean-option
+        pagename-display optname-show-total
+        "b" (_ "Show the total balance in legend?") #t))
+
+      (add-option
        (gnc:make-number-range-option
         pagename-display optname-slices
-        "a" (N_ "Maximum number of slices in pie") 7
+        "c" (N_ "Maximum number of slices in pie") 7
         2 20 0 1))
 
       (add-option
        (gnc:make-number-range-option
         pagename-display optname-plot-width 
-        "b" (N_ "Width of plot in pixels.") 500
+        "d" (N_ "Width of plot in pixels.") 500
         100 1000 0 1))
 
       (add-option
        (gnc:make-number-range-option
         pagename-display optname-plot-height
-        "c" (N_ "Height of plot in pixels.") 250
+        "e" (N_ "Height of plot in pixels.") 250
         100 1000 0 1))
 
       (gnc:options-set-default-section options pagename-general)      
@@ -100,6 +112,8 @@
            (report-currency (op-value pagename-general
                                       optname-report-currency))
 
+	   (show-fullname? (op-value pagename-display optname-fullname))
+	   (show-total? (op-value pagename-display optname-show-total))
 	   (max-slices (op-value pagename-display optname-slices))
 	   (height (op-value pagename-display optname-plot-height))
 	   (width (op-value pagename-display optname-plot-width))
@@ -190,9 +204,14 @@
               (string-append
                (if (string? (cadr pair))
                    (cadr pair)
-                   (gnc:account-get-full-name (cadr pair)))
-               " - "
-               (gnc:amount->string (car pair) print-info)))
+                   ((if show-fullname?
+			gnc:account-get-full-name
+			gnc:account-get-name) (cadr pair)))
+	       (if show-total?
+		   (string-append 
+		    " - "
+		    (gnc:amount->string (car pair) print-info))
+		   "")))
             combined))
       (gnc:html-piechart-set-colors! chart
                                      (gnc:assign-colors (length combined)))
