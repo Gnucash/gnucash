@@ -11,6 +11,8 @@ LDADD = \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${top_srcdir}/src/test-core/libgncmod-test.la \
   ../libgncmod-engine.la \
+  ../libgw-engine.la \
+  ../libgw-glib.la \
   ../test-core/libgncmod-test-engine.la \
   ${GLIB_LIBS} \
   -lltdl
@@ -21,6 +23,7 @@ TESTS = \
   test-commodities \
   test-freq-spec \
   test-resolve-file-path \
+  test-scm-query \
   test-split-vs-account
 
 TESTS_ENVIRONMENT = \
@@ -34,4 +37,5 @@ bin_PROGRAMS = \
   test-freq-spec \
   test-load-engine \
   test-resolve-file-path \
+  test-scm-query \
   test-split-vs-account

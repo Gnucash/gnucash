@@ -6,4 +6,5 @@ test-load-engine
 test-commodities
 test-freq-spec
 test-resolve-file-path
+test-scm-query
 test-split-vs-account
