@@ -248,7 +248,7 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 \********************************************************************/
 
 Account *
-xaccGetAccountFromName ( AccountGroup *root, char * name )
+xaccGetAccountFromName ( AccountGroup *root, const char * name )
 {
   Account *acc;
   int i;
@@ -277,7 +277,7 @@ xaccGetAccountFromName ( AccountGroup *root, char * name )
 \********************************************************************/
 
 Account *
-xaccGetPeerAccountFromName ( Account *acc, char * name )
+xaccGetPeerAccountFromName ( Account *acc, const char * name )
 {
   AccountGroup * root;
   Account *peer_acc;
