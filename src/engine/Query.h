@@ -30,7 +30,6 @@
 
 #include "gnc-date.h" 
 #include "gnc-engine.h" 
-#include "GNCId.h" 
 #include "guid.h" 
 #include "kvp_frame.h" 
 

@@ -31,9 +31,9 @@
 #include "gnc-engine.h"
 #include "gnc-session.h"
 #include "Account.h"
-#include "GNCId.h"
 #include "Query.h"
 #include "Transaction.h"
+#include "guid.h"
 #include "guile-mappings.h"
 #include "qofbook.h"
 

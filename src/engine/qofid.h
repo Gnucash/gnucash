@@ -1,7 +1,5 @@
 /********************************************************************\
- * qofid.h -- QOF entity identifier API                             *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
- * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
+ * qofid.h -- QOF entity type identification system                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,6 +22,14 @@
 
 #ifndef QOF_ID_H
 #define QOF_ID_H 
+
+/** @addtogroup Engine
+    @{ */
+/** @file qofid.h
+    @brief QOF entity type identification system 
+    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu> 
+    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+*/
 
 /** This file defines an API that adds types to the GUID's.
  *  GUID's with types cna be used to identify and reference 
@@ -67,3 +73,5 @@ QofIdType qof_entity_type (QofEntityTable *entity_table, const GUID * guid);
 typedef void (*QofEntityForeachCB) (gpointer object, gpointer user_data);
 
 #endif /* QOF_ID_H */
+/** @} */
+

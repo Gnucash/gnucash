@@ -29,7 +29,7 @@
 #ifndef QOF_QUERYNEW_H
 #define QOF_QUERYNEW_H
 
-#include "GNCId.h"
+#include "guid.h"
 #include "qofquerycore.h"
 #include "qofbook.h"
 

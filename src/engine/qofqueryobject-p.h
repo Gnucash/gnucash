@@ -24,7 +24,6 @@
 #ifndef QOF_QUERYOBJECTP_H
 #define QOF_QUERYOBJECTP_H
 
-#include "GNCId.h"
 #include "qofqueryobject.h"
 
 void qof_query_object_init(void);

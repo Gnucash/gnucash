@@ -29,7 +29,6 @@
 #ifndef QOF_OBJECT_H_
 #define QOF_OBJECT_H_
 
-#include "GNCId.h"
 #include "qofbook.h"
 
 /* Defines the version of the core object object registration

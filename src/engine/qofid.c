@@ -190,25 +190,6 @@ qof_entity_guid_new (QofEntityTable *entity_table, GUID *guid)
   } while(1);
 }
 
-const GUID *
-guid_null(void)
-{
-  static int null_inited = (0 == 1);
-  static GUID null_guid;
-
-  if (!null_inited)
-  {
-    int i;
-
-    for (i = 0; i < 16; i++)
-      null_guid.data[i] = 0;
-
-    null_inited = (0 == 0);
-  }
-
-  return &null_guid;
-}
-
 gpointer
 qof_entity_lookup (QofEntityTable *entity_table,
                   const GUID * guid, QofIdType entity_type)

@@ -36,7 +36,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "Account.h"
-#include "GNCId.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "TransactionP.h"
