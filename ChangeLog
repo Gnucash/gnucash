@@ -185,7 +185,6 @@
 
 	* src/scm/tip-list.scm: update tip
 
->>>>>>> 1.619
 	* src/register/register-common.h: move function defs to
 	register-common.c
 
