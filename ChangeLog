@@ -1,3 +1,13 @@
+2001-05-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/price-scatter.scm: use a commodity option
+	so stocks/mutuals can be selected.
+
+	* src/engine/gnc-book.c (gnc_book_begin_file): check for missing
+	directory
+
+	* src/gnome/file-history.c (gnc_history_add_file): fix bug
+
 2001-05-13  Kevin Finn  <kevinfinn@mediaone.net>
 
    * src/gnome/window-register.c:  flag summarybar as NEVER_VERTICAL
