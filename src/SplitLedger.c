@@ -2708,7 +2708,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     else
       new_amount = xaccSplitGetShareAmount(split);
 
-    if (value != price*new_amount) {
+    if (!DEQEPS(value, price * new_amount, 1.0e-15)) {
       int i;
       int choice;
       int default_value;
@@ -2763,10 +2763,10 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
           changed |= MOD_AMNT;
           break;
         case 1: /* Modify the share price */
-          if (new_amount == 0)
+          if (DEQEPS(0.0, new_amount, 1.0e-15))
             break;
 
-          price = value/new_amount;
+          price = value / new_amount;
 
           if (price < 0) {
             price = -price;
@@ -2777,7 +2777,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
           changed |= MOD_PRIC;
           break;
         case 2: /* Modify total value */
-          value = price*new_amount;
+          value = price * new_amount;
 
           xaccSetPriceCellValue(reg->valueCell, value);
           changed |= MOD_VALU;

@@ -436,10 +436,14 @@
      (gnc:make-multichoice-option
       "Report Options" "Style"
       "d" "Report style"
-      'merged
-      (list #(merged
-	      "Merged"
-	      "Display N-1 lines")
+;; XXX: merged style currently disabled because it breaks double-column
+;; amounts.  If somebody wants it back just uncomment the commented code
+;; below
+      ; 'merged
+      'single
+      (list ;#(merged
+	    ;  "Merged"
+	    ;  "Display N-1 lines")
 	    #(multi-line
 	      "Multi-Line"
 	      "Display N lines")
