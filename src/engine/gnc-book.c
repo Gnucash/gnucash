@@ -123,9 +123,7 @@ gnc_book_destroy (GNCBook *book)
   if (!book) return;
 
   ENTER ("book=%p", book);
-#if 0
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
-#endif
 
   gncObjectBookEnd (book);
 
