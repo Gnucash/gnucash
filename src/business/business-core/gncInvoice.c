@@ -366,6 +366,12 @@ gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice)
   return invoice->common_commodity;
 }
 
+GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice)
+{
+  if (!invoice) return NULL;
+  return invoice->posted_lot;
+}
+
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
@@ -475,12 +481,41 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
 			   guid, _GNC_MOD_NAME);
 }
 
+struct lotmatch {
+  GncOwner *owner;
+  gboolean reverse;
+};
+
+static gboolean
+gnc_lot_match_owner_payment (GNCLot *lot, gpointer user_data)
+{
+  struct lotmatch *lm = user_data;
+  GncOwner owner_def, *owner;
+  gnc_numeric balance = gnc_lot_get_balance (lot);
+
+  /* Is this a payment lot */
+  if (gnc_numeric_positive_p (lm->reverse ? balance :
+			      gnc_numeric_neg (balance)))
+    return FALSE;
+
+  /* Is there an invoice attached? */
+  if (gncInvoiceGetInvoiceFromLot (lot))
+    return FALSE;
+
+  /* Is it ours? */
+  if (!gncOwnerGetOwnerFromLot (lot, &owner_def))
+    return FALSE;
+  owner = gncOwnerGetEndOwner (&owner_def);
+
+  return gncOwnerEqual (owner, lm->owner);
+}
+
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *post_date, Timespec *due_date,
 				       const char * memo)
 {
   Transaction *txn;
-  GNCLot *lot;
+  GNCLot *lot = NULL;
   GList *iter;
   GList *splitinfo = NULL;
   gnc_numeric total;
@@ -497,8 +532,25 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Figure out if we need to "reverse" the numbers. */
   reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
-  /* Create a new lot for this invoice */
-  lot = gnc_lot_new (invoice->book);
+  /* Find an existing payment-lot for this owner */
+  {
+    LotList *lot_list;
+    struct lotmatch lm;
+
+    lm.reverse = reverse;
+    lm.owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+
+    lot_list = xaccAccountFindOpenLots (acc, gnc_lot_match_owner_payment,
+					&lm, NULL);
+    if (lot_list)
+      lot = lot_list->data;
+
+    g_list_free (lot_list);
+  }
+
+  /* Create a new lot for this invoice, if we need to do so */
+  if (!lot)
+    lot = gnc_lot_new (invoice->book);
 
   /* Create a new transaction */
   txn = xaccMallocTransaction (invoice->book);
@@ -583,9 +635,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   {
     Split *split = xaccMallocSplit (invoice->book);
 
-    /* add this split to the lot */
-    gnc_lot_add_split (lot, split);
-
     /* Set action/memo */
     xaccSplitSetMemo (split, memo);
     xaccSplitSetAction (split, gncInvoiceGetType (invoice));
@@ -596,6 +645,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountInsertSplit (acc, split);
     xaccAccountCommitEdit (acc);
     xaccTransAppendSplit (txn, split);
+
+    /* add this split to the lot */
+    gnc_lot_add_split (lot, split);
   }
 
   /* Now attach this invoice to the txn, lot, and account */
@@ -606,6 +658,59 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   xaccTransCommitEdit (txn);
 
   gncAccountValueDestroy (splitinfo);
+
+  /* check the lot -- if we still look like a payment lot, then that
+   * means we need to create a balancing split and create a new payment
+   * lot for the next invoice
+   */
+  total = gnc_lot_get_balance (lot);
+  if (!reverse)
+    total = gnc_numeric_neg (total);
+
+  if (gnc_numeric_negative_p (total)) {
+    Transaction *t2;
+    GNCLot *lot2;
+    Split *split;
+    char *memo2 = _("Automatic Payment Forward");
+
+    t2 = xaccMallocTransaction (invoice->book);
+    lot2 = gnc_lot_new (invoice->book);
+    gncOwnerAttachToLot (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)),
+			 lot2);
+    
+    xaccTransBeginEdit (t2);
+    xaccAccountBeginEdit (acc);
+
+    /* Set Transaction Description (Owner Name), Currency */
+    xaccTransSetDescription (t2, name);
+    xaccTransSetCurrency (t2, invoice->common_commodity);
+
+    /* Entered and Posted at date */
+    if (post_date) {
+      xaccTransSetDateEnteredTS (t2, post_date);
+      xaccTransSetDatePostedTS (t2, post_date);
+    }
+
+    /* Balance out this lot */
+    split = xaccMallocSplit (invoice->book);
+    xaccSplitSetMemo (split, memo2);
+    xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
+			   invoice->common_commodity);
+    xaccAccountInsertSplit (acc, split);
+    xaccTransAppendSplit (t2, split);
+    gnc_lot_add_split (lot, split);
+
+    /* And apply the pre-payment to a new lot */
+    split = xaccMallocSplit (invoice->book);
+    xaccSplitSetMemo (split, memo2);
+    xaccSplitSetBaseValue (split, total, invoice->common_commodity);
+    xaccAccountInsertSplit (acc, split);
+    xaccTransAppendSplit (t2, split);
+    gnc_lot_add_split (lot2, split);
+
+    xaccTransCommitEdit (t2);
+    xaccAccountCommitEdit (acc);
+  }
 
   return txn;
 }

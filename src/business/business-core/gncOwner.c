@@ -16,6 +16,10 @@
 
 #define _GNC_MOD_NAME	GNC_OWNER_MODULE_NAME
 
+#define GNC_OWNER_ID	"gncOwner"
+#define GNC_OWNER_TYPE	"owner-type"
+#define GNC_OWNER_GUID	"owner-guid"
+
 GncOwner * gncOwnerCreate (void)
 {
   GncOwner *o = g_new0 (GncOwner, 1);
@@ -201,6 +205,68 @@ const GUID * gncOwnerGetEndGUID (GncOwner *owner)
   if (!owner) return NULL;
   owner = gncOwnerGetEndOwner (owner);
   return gncOwnerGetGUID (owner);
+}
+
+void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot)
+{
+  kvp_frame *kvp;
+  kvp_value *value;
+  
+  if (!owner || !lot)
+    return;
+
+  kvp = gnc_lot_get_slots (lot);
+
+  value = kvp_value_new_gint64 (gncOwnerGetType (owner));
+  kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_TYPE, NULL);
+  kvp_value_delete (value);
+
+  value = kvp_value_new_guid (gncOwnerGetGUID (owner));
+  kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_GUID, NULL);
+  kvp_value_delete (value);
+
+}
+
+gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
+{
+  kvp_frame *kvp;
+  kvp_value *value;
+  GUID *guid;
+  GNCBook *book;
+  GncOwnerType type;
+
+  if (!lot) return FALSE;
+
+  book = gnc_lot_get_book (lot);
+  kvp = gnc_lot_get_slots (lot);
+
+  value = kvp_frame_get_slot_path (kvp, GNC_OWNER_ID, GNC_OWNER_TYPE, NULL);
+  if (!value) return FALSE;
+
+  type = kvp_value_get_gint64 (value);
+
+  value = kvp_frame_get_slot_path (kvp, GNC_OWNER_ID, GNC_OWNER_GUID, NULL);
+  if (!value) return FALSE;
+
+  guid = kvp_value_get_guid (value);
+  if (!guid)
+    return FALSE;
+
+  switch (type) {
+  case GNC_OWNER_CUSTOMER:
+    gncOwnerInitCustomer (owner, gncCustomerLookup (book, guid));
+    break;
+  case GNC_OWNER_VENDOR:
+    gncOwnerInitVendor (owner, gncVendorLookup (book, guid));
+    break;
+  case GNC_OWNER_JOB:
+    gncOwnerInitJob (owner, gncJobLookup (book, guid));
+    break;
+  default:
+    return FALSE;
+  }
+  
+  return (owner->owner.undefined != NULL);
 }
 
 gboolean gncOwnerRegister (void)

@@ -1,3 +1,19 @@
+2002-06-25  Derek Atkins   <derek@ihtfp.com>
+
+	* gncOwner.[ch]: Provide functions to store/lookup an owner in a
+	Lot's kvp_frame.
+
+	* gncInvoice.c: add implemention of GetPostedLot(); when posting
+	to an Account, look for any pre-payment Lots and post to that.  If
+	the Invoice total < pre-payment, then autmatically forward the
+	payments to a future Lot.  If no pre-payment Lot is found, then
+	create a new one.
+
+	* dialog-payment.c: force payment amounts to be positive values
+	(you cannot un-pay via this dialog).  Apply payments to open
+	Invoice Lots in a FIFO manner (by Due Date).  If there is anything
+	left over, then create a pre-payment Lot.
+
 2002-06-24  David Hampton  <hampton@employees.org>
 
 	* src/import-export/ofx/Makefile.am:

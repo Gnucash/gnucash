@@ -14,6 +14,7 @@ typedef struct gnc_owner_s GncOwner;
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
+#include "gnc-lot.h" 
 
 typedef enum {
   GNC_OWNER_NONE,
@@ -60,6 +61,14 @@ const GUID * gncOwnerGetGUID (GncOwner *owner);
  */
 GncOwner * gncOwnerGetEndOwner (GncOwner *owner);
 const GUID * gncOwnerGetEndGUID (GncOwner *owner);
+
+/* attach an owner to a lot */
+void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
+
+/* Get the owner from the lot.  If an owner is found in the lot,
+ * fill in "owner" and return TRUE.  Otherwise return FALSE.
+ */
+gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
 #define OWNER_TYPE	"type"
 #define OWNER_CUSTOMER	"customer"
