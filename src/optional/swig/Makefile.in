@@ -430,6 +430,7 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 install-data-local: libgncswig.la
+	cd ${perllibdir} && rm -f gnucash.so
 	cd ${perllibdir} && ln libgncswig.so gnucash.so
 
 uninstall-local:

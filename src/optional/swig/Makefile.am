@@ -45,6 +45,7 @@ SWIG_INPUT_HDRS := \
 ## same as the .pm file, and automake won't tolerate libraries that
 ## aren't named lib*.so...
 install-data-local: libgncswig.la
+	cd ${perllibdir} && rm -f gnucash.so
 	cd ${perllibdir} && ln libgncswig.so gnucash.so
 
 uninstall-local:
