@@ -15,24 +15,28 @@
 #include "test-engine-stuff.h"
 #include "gnc-numeric.h"
 
-#define NREPS 3000
-
+#define NREPS 1000
 
 static char *
-gnc_numeric_print(gnc_numeric in) {
+gnc_numeric_print(gnc_numeric in) 
+{
   char * retval;
-  if(gnc_numeric_check(in)) {
+  if(gnc_numeric_check(in)) 
+  {
     retval = g_strdup_printf("<ERROR> [%lld / %lld]",
                              (long long int) in.num,
                              (long long int) in.denom); 
   }
-  else {
+  else 
+  {
     retval = g_strdup_printf("[%lld / %lld]",
                              (long long int) in.num,
                              (long long int) in.denom); 
   }
   return retval;
 }
+
+/* ======================================================= */
 
 static void
 check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric), 
@@ -53,6 +57,8 @@ check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric),
 	g_free (e);
 	g_free (str);
 }
+
+/* ======================================================= */
 
 static void
 check_binary_op (gnc_numeric expected, 
@@ -76,70 +82,15 @@ check_binary_op (gnc_numeric expected,
 	g_free (str);
 }
 
-#ifdef XXX_GNC_NUMERIC_TEST
-int
-main(int argc, char ** argv) {
-  gnc_numeric a = gnc_numeric_create(1, 3);
-  gnc_numeric b = gnc_numeric_create(1, 4);
-  gnc_numeric d = gnc_numeric_create(1, 2);
-  
-  gnc_numeric err;
-  int i;
-  gint64 v;
-
-  printf("7/16 as float: %e\n",
-         gnc_numeric_to_double(gnc_numeric_create(7, 16)));
-  
-  printf("add LCM: %s + %s = %s\n",
-         gnc_numeric_print(b), gnc_numeric_print(d),
-         gnc_numeric_print(gnc_numeric_add(b, d, GNC_DENOM_AUTO,
-                                           GNC_DENOM_LCD)));
- 
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(1.1234567890123, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(.011234567890123, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(1123.4567890123, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(1.1234567890123e-5, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("add to 4 sigfigs: %s + %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_add(a, b, 
-                                           GNC_DENOM_AUTO, 
-                                           GNC_DENOM_SIGFIGS(4) |
-                                           GNC_RND_ROUND)));
-  
-   
-  v = 1000000;
-  a = gnc_numeric_create(1*v, v);
-  b = gnc_numeric_create(10000000*v, v);
-  printf("multiply (LCD): %s * %s = %s\n",
-	 gnc_numeric_print(a), gnc_numeric_print(b),
-	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD)));
-
-
-  return 0;
-}
-#endif
+/* ======================================================= */
 
 static gboolean
 gnc_numeric_unequal (gnc_numeric a, gnc_numeric b)
 {
 	return (0 == gnc_numeric_equal (a,b));
 }
+
+/* ======================================================= */
 
 /* Make sure that the equivalence operator we use for 
  * later tests actually works */
@@ -156,6 +107,7 @@ check_eq_operator (void)
 	do_test (0 == gnc_numeric_eq(a, c), "expected inequivalence");
 }
 
+/* ======================================================= */
 
 static void
 check_reduce (void)
@@ -192,6 +144,8 @@ check_reduce (void)
 	                rval,
                    val, "expected %s = %s = reduce(%s)");
 }
+
+/* ======================================================= */
 
 static void
 check_equality_operator (void)
@@ -275,6 +229,8 @@ check_equality_operator (void)
 	}
 }
 	
+/* ======================================================= */
+
 static void 
 check_rounding (void)
 {
@@ -336,12 +292,57 @@ check_rounding (void)
                    val, "expected %s = %s = (%s as 100th's round)");
 }
 
+/* ======================================================= */
+
+static void
+check_double (void)
+{
+	gnc_numeric val = gnc_numeric_create (0,1);
+
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (112346,100000),
+                   double_to_gnc_numeric(1.1234567890123, 
+                                         GNC_DENOM_AUTO, 
+                                         GNC_DENOM_SIGFIGS(6) |
+                                         GNC_RND_ROUND),
+                   val, "expected %s = %s double 6 figs");
+
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (112346,10000000),
+                   double_to_gnc_numeric(0.011234567890123, 
+                                         GNC_DENOM_AUTO, 
+                                         GNC_DENOM_SIGFIGS(6) |
+                                         GNC_RND_ROUND),
+                   val, "expected %s = %s double 6 figs");
+
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (112346,100),
+                   double_to_gnc_numeric(1123.4567890123, 
+                                         GNC_DENOM_AUTO, 
+                                         GNC_DENOM_SIGFIGS(6) |
+                                         GNC_RND_ROUND),
+                   val, "expected %s = %s double 6 figs");
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (112346,10000000000LL),
+                   double_to_gnc_numeric(1.1234567890123e-5, 
+                                         GNC_DENOM_AUTO, 
+                                         GNC_DENOM_SIGFIGS(6) |
+                                         GNC_RND_ROUND),
+                   val, "expected %s = %s double 6 figs");
+
+	double flo = gnc_numeric_to_double(gnc_numeric_create(7, 16));
+	do_test ((0.4375 == flo), "float pt conversion");
+}
+
+/* ======================================================= */
+
 static void
 check_add_subtract (void)
 {
-  gnc_numeric a = gnc_numeric_create(1, 3);
+  gnc_numeric a = gnc_numeric_create(2, 6);
   gnc_numeric b = gnc_numeric_create(1, 4);
 
+  /* Well, actually 14/24 would be acceptable/better in this case */
   check_binary_op (gnc_numeric_create(7,12), 
                    gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s + %s for add exact");
@@ -350,17 +351,34 @@ check_add_subtract (void)
                    gnc_numeric_add(a, b, 100, GNC_RND_ROUND),
 						 a, b, "expected %s got %s = %s + %s for add 100ths (banker's)");
   
+  check_binary_op (gnc_numeric_create(5833,10000), 
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
+                                         GNC_DENOM_SIGFIGS(4) |
+                                         GNC_RND_ROUND),
+						 a, b, "expected %s got %s = %s + %s for add 4 sig figs");
+  
+  check_binary_op (gnc_numeric_create(583333,1000000), 
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
+                                         GNC_DENOM_SIGFIGS(6) |
+                                         GNC_RND_ROUND),
+						 a, b, "expected %s got %s = %s + %s for add 6 sig figs");
+  
   check_binary_op (gnc_numeric_create(1,12), 
                    gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s - %s for sub exact");
   
+  /* We should try something trickier for reduce & lcd */
   check_binary_op (gnc_numeric_create(1,12), 
                    gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
-						 a, b, "expected %s got %s = %s - %s for sub least");
+						 a, b, "expected %s got %s = %s - %s for sub reduce");
+  
+  check_binary_op (gnc_numeric_create(1,12), 
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD),
+						 a, b, "expected %s got %s = %s - %s for sub reduce");
   
   check_binary_op (gnc_numeric_create(8,100), 
                    gnc_numeric_sub(a, b, 100, GNC_RND_ROUND),
-						 a, b, "expected %s got %s = %s - %s for add 100ths (banker's)");
+						 a, b, "expected %s got %s = %s - %s for sub 100ths (banker's)");
   
 #if CHECK_ERRORS_TOO
   gnc_numeric c;
@@ -411,6 +429,8 @@ check_add_subtract (void)
 	}
 }
 
+/* ======================================================= */
+
 static void
 check_mult_div (void)
 {
@@ -457,8 +477,53 @@ check_mult_div (void)
   
 #endif
   
+  /* Check for math with 2^63 < num*num < 2^64 which previously failed 
+   * see http://bugzilla.gnome.org/show_bug.cgi?id=144980 
+   */
+  gint64 v = 1000000;
+  a = gnc_numeric_create(1*v, v);
+  b = gnc_numeric_create(10000000*v, v);
+
+  check_binary_op (b,
+	                gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD),
+						 a, b, "expected %s got %s = %s * %s for multiply");
+
+	/* Multiply some random numbers.  This test presumes that
+	 * RAND_MAX is less than 2^32 
+    */
+	int i;
+	for (i=0; i<NREPS; i++)
+	{
+		gint64 deno = 1;
+		gint64 na = rand();
+		gint64 nb = rand();
+		gint64 ne;
+
+		/* avoid overflow; */
+		na /= 2;
+		nb /= 2;
+		ne = na*nb;
+		
+		a = gnc_numeric_create(na, deno);
+		b = gnc_numeric_create(nb, deno);
+
+		check_binary_op (gnc_numeric_create(ne,1), 
+                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s * %s for mult exact");
+		int j;
+		for (j=1; j<31; j++)
+		{
+			a = gnc_numeric_create(na << j, 1<<j);
+			b = gnc_numeric_create(nb << j, 1<<j);
+			check_binary_op (gnc_numeric_create(ne, 1), 
+                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s * %s for mult exact");
+		}
+	}
+
 }
   
+/* ======================================================= */
 
 static void
 run_test (void)
@@ -467,6 +532,7 @@ run_test (void)
 	check_reduce ();
 	check_equality_operator ();
 	check_rounding();
+	check_double();
 	check_add_subtract();
 	check_mult_div ();
 }
@@ -489,3 +555,5 @@ main (int argc, char **argv)
   scm_boot_guile(argc, argv, main_helper, NULL);
   return 0;
 }
+
+/* ======================== END OF FILE ====================== */
