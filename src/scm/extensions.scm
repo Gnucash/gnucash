@@ -89,30 +89,31 @@
   (define letter-hash (make-hash-table 23))
   (define name-hash (make-hash-table 23))
 
-  (define (add-name name)
+  (define (add-name raw-name)
+    (let* ((name (gnc:_ raw-name))
+           (length (string-length name)))
 
-    (define length (string-length name))
+      (define (try-at-k k)
+        (if (>= k length)
+            (begin
+              (hash-set! name-hash raw-name name)
+              name)
+            (let* ((char (char-upcase (string-ref name k)))
+                   (used (hash-ref letter-hash char)))
+              (if (not used)
+                  (let ((new-name (string-append
+                                   (substring name 0 k)
+                                   "_"
+                                   (substring name k length))))
+                    (hash-set! letter-hash char #t)
+                    (hash-set! name-hash raw-name new-name)
+                    new-name)
+                  (try-at-k (+ k 1))))))
 
-    (define (try-at-k k)
-      (if (>= k length)
-          (begin
-            (hash-set! name-hash name name)
-            name)
-          (let* ((char (char-upcase (string-ref name k)))
-                 (used (hash-ref letter-hash char)))
-            (if (not used)
-                (let ((new-name (string-append
-                                 (substring name 0 k)
-                                 "_"
-                                 (substring name k length))))
-                  (hash-set! letter-hash char #t)
-                  (hash-set! name-hash name new-name)
-                  (if (gnc:debugging?)
-                      (gnc:register-translatable-strings new-name))
-                  new-name)
-                (try-at-k (+ k 1))))))
+      (if (gnc:debugging?)
+          (gnc:register-translatable-strings raw-name))
 
-    (try-at-k 0))
+      (try-at-k 0)))
 
   (define (lookup name)
     (hash-ref name-hash name))

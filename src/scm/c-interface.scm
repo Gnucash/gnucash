@@ -35,7 +35,7 @@
                 (display tag port)
                 (display "\n\n" port)))))
     (false-if-exception
-     (apply display-error #f port args))
+     (apply display-error (fluid-ref the-last-stack) port args))
     (display-backtrace (fluid-ref the-last-stack) port))
 
   (false-if-exception
@@ -71,10 +71,37 @@
   (set! gnc:save-translatable-strings save))
 
 (if (gnc:debugging?)
-    (begin
-      (define (gnc:gettext string)
-        (gnc:register-translatable-strings string)
-        (gnc:gettext-helper string)))
+    (define (gnc:gettext string)
+      (gnc:register-translatable-strings string)
+      (gnc:gettext-helper string))
     (define gnc:gettext gnc:gettext-helper))
 
 (define gnc:_ gnc:gettext)
+
+
+;; This database can be used to store and retrieve translatable
+;; strings. If debugging is true, the stored strings are registered so
+;; they can be saved to a string database. Strings that are returned
+;; by the lookup function are translated with gettext.
+(define (gnc:make-string-database)
+
+  (define string-hash (make-hash-table 23))
+
+  (define (lookup key)
+    (hash-ref string-hash key))
+
+  (define (store key string)
+    (if (gnc:debugging?)
+        (gnc:register-translatable-strings string))
+    (hash-set! string-hash key (gnc:_ string)))
+
+  (define (dispatch message . args)
+    (let ((func (case message
+                  ((lookup) lookup)
+                  ((store) store)
+                  (else #f))))
+      (if func
+          (apply func args)
+          (gnc:warn "string-database: bad message" message "\n"))))
+
+  dispatch)

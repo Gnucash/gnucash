@@ -49,12 +49,17 @@
   (define menu (gnc:make-menu "_Reports" (list "_Settings")))
   (define menu-namer (gnc:new-menu-namer))
   (define (add-report-menu-item name report)
-    (let ((item #f))
+
+    (let* ((report-string "Report")
+           (title (string-append (gnc:_ report-string) ": " (gnc:_ name)))
+           (item #f))
+
       (if (gnc:debugging?)
           (let ((options (false-if-exception (gnc:report-new-options report))))
             (if options
-                (gnc:options-register-translatable-strings options))))
-      
+                (gnc:options-register-translatable-strings options))
+            (gnc:register-translatable-strings report-string name)))
+
       (set! item
             (gnc:make-menu-item
              ((menu-namer 'add-name) name)
@@ -63,13 +68,13 @@
              (lambda ()
                (let ((options (false-if-exception
                                (gnc:report-new-options report))))
-                 (gnc:report-window (string-append "Report: " name)
+                 (gnc:report-window title
                                     (lambda () (gnc:run-report name options))
                                     options)))))
       (gnc:add-extension item)))
-  
+
   (gnc:add-extension menu)
-  
+
   (hash-for-each add-report-menu-item *gnc:_report-info_*))
 
 (define (gnc:define-report version name option-generator rendering-thunk)
