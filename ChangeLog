@@ -6,6 +6,9 @@
 	  Chris Morgan's Baysian Matching code, to match transactions
 	  based on Bayesian filtering of previously matched transactions.
 
+	* src/business/business-ledger/gncEntryLedger.c: allow the user
+	  to enter any Action they wish.
+
 2003-03-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Include a latest
