@@ -151,6 +151,62 @@
  *    by the events_pending() routine. It should return TRUE if
  *    the engine was changed while engine events were suspended.
  *
+ * The book_transfer_begin() routine is called at the begining of 
+ *    a book partitioning.   A 'partitioning' is the splitting off 
+ *    of a chunk of the current book into a second book by means 
+ *    of a query.  Every transaction in that query is to be moved
+ *    ('transfered') to the second book from the existing book. 
+ *    The argument of this routine is a pointer to the second book, 
+ *    where the results of the query should go.
+ *
+ * The book_transfer_commit() routine is called to complete the
+ *    book partitioning.  
+ *
+ *    After the book_transfer_begin(), there will be a call
+ *    to run_query(),  followed probably by a string of account
+ *    and transaction calls, and completed by book_transfer_end().
+ *    It should be explicitly understood that the results of that
+ *    run_query() precisely constitute the set of transactions 
+ *    that are to be moved between the initial and the new 
+ *    book. This specification can be used by a clever backend
+ *    to avoid excess data movement between the server and the
+ *    gnucash client, as explained below.
+ *
+ *    There are several possible ways in which a backend may choose
+ *    to implement the book splitting process.  A 'file-type' 
+ *    backend may choose to ignore this call, and the subsequent
+ *    query, and simply write out the new book to a file when
+ *    the book_transfer_commit() call is made.  By that point,
+ *    the engine will have performed all of the nitty-gritty
+ *    of moving transactions from one book to the other.
+ * 
+ *    A 'database-type' backend has several interesting choices.
+ *    One simple choice is to simply perform the run_query() as
+ *    it normally would, and likewise treat the account and 
+ *    transaction edits as usual.  In this scenario, the 
+ *    book_transfer_commit() is more or less a no-op.  This 
+ *    implementation has a drawback, however:  the run_query()
+ *    may cause the transfer of a *huge* amount of data between
+ *    the backend and the engine.   For a large dataset, this 
+ *    is quite undesirable.  In addition, there are risks 
+ *    associated with the loss of network connectivity during
+ *    the transfer; thus a partition might terminate half-finished,
+ *    in some indeterminate state, due to network errors.  That
+ *    might be difficult to recover from: the engine does not 
+ *    take any special transactional safety measures during 
+ *    the transfer.
+ *
+ *    Thus, for a large database, an alternate implementation 
+ *    might be to use the run_query() call as an opportunity to 
+ *    transfer transactions between the two books in the database,
+ *    and not actually return any new data to the engine.  In
+ *    this scenario, the engine will attempt to transfer those 
+ *    transactions that it does know about.  It does not, however,
+ *    need to know about all the other transactions that also would  
+ *    be transfered over.  In this way, a backend could perform
+ *    a mass transfer of transactions between books without having
+ *    to actually move much (or any) data to the engine.
+ *
  * The last_err member indicates the last error that occurred.
  *    It should probably be implemented as an array (actually,
  *    a stack) of all the errors that have occurred.
@@ -167,6 +223,9 @@ struct backend_s
   void (*price_load) (Backend *);
   void (*session_end) (Backend *);
   void (*destroy_backend) (Backend *);
+
+  void (*book_transfer_begin) (Backend *, GNCBook*);
+  void (*book_transfer_commit) (Backend *, GNCBook*);
 
   void (*account_begin_edit) (Backend *, Account *);
   void (*account_commit_edit) (Backend *, Account *);

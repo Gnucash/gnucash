@@ -125,6 +125,9 @@ xaccInitBackend(Backend *be)
     be->events_pending = NULL;
     be->process_events = NULL;
 
+    be->book_transfer_begin = NULL;
+    be->book_transfer_commit = NULL;
+
     be->last_err = ERR_BACKEND_NO_ERR;
 }
 
