@@ -17,6 +17,7 @@
 
 typedef struct _ComboCell {
    BasicCell cell;
+   char **   menuitems;
 } ComboCell;
 
 ComboCell *  xaccMallocComboCell (void);

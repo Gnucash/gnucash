@@ -7,6 +7,7 @@
 #define __XACC_REGISTER_H__
 
 #include "basiccell.h"
+#include "combocell.h"
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
@@ -20,8 +21,8 @@ typedef struct _BasicRegister {
    CellBlock     * header;
    BasicCell     * dateCell;
    BasicCell     * numCell;
-   BasicCell     * actionCell;
-   BasicCell     * xferCell;
+   ComboCell     * actionCell;
+   ComboCell     * xfrmCell;
    QuickFillCell * descCell;
    BasicCell     * memoCell;
    BasicCell     * recnCell;

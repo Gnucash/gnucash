@@ -3,7 +3,7 @@
  * register.c
  */
 
-#include "actioncell.h"
+#include "messages.h"
 #include "register.h"
 
 #define DATE_CELL_C  0
@@ -67,22 +67,22 @@ void xaccInitBasicRegister (BasicRegister *reg)
    cell = (BasicCell *) xaccMallocDateCell();
    cell->width = 11;
    xaccAddCell (header, cell, 0, DATE_CELL_C);
-   xaccSetBasicCellValue (cell, "Date");
+   xaccSetBasicCellValue (cell, DATE_STR);
    
    cell = xaccMallocTextCell();
    cell->width = 7;
    xaccAddCell (header, cell, 0, NUM_CELL_C);
-   xaccSetBasicCellValue (cell, "Num");
+   xaccSetBasicCellValue (cell, NUM_STR);
 
    cell = xaccMallocTextCell();
    cell->width = 11;
    xaccAddCell (header, cell, XFRM_CELL_R, XFRM_CELL_C);
-   xaccSetBasicCellValue (cell, "Transfer From");
+   xaccSetBasicCellValue (cell, XFRM_STR);
    
    cell = xaccMallocTextCell();
    cell->width = 29;
    xaccAddCell (header, cell, 0, DESC_CELL_C);
-   xaccSetBasicCellValue (cell, "Description");
+   xaccSetBasicCellValue (cell, DESC_STR);
 
    cell = xaccMallocRecnCell();
    cell->width = 1;
@@ -92,17 +92,17 @@ void xaccInitBasicRegister (BasicRegister *reg)
    cell = (BasicCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, CRED_CELL_C);
-   xaccSetBasicCellValue (cell, "Credit");
+   xaccSetBasicCellValue (cell, CREDIT_STR);
    
    cell = (BasicCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, DEBT_CELL_C);
-   xaccSetBasicCellValue (cell, "Debit");
+   xaccSetBasicCellValue (cell, DEBIT_STR);
 
    cell = (BasicCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, BALN_CELL_C);
-   xaccSetBasicCellValue (cell, "Balance");
+   xaccSetBasicCellValue (cell, BALN_STR);
 
    
    /* --------------------------- */
@@ -119,15 +119,13 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccAddCell (curs, cell, NUM_CELL_R, NUM_CELL_C);
    reg->numCell = cell;
    
-   cell = (BasicCell *) xaccMallocActionCell();
-   cell->width = 7;
-   xaccAddCell (curs, cell, ACTN_CELL_R, ACTN_CELL_C);
-   reg->actionCell = cell;
+   reg->actionCell = xaccMallocComboCell();
+   reg->actionCell->cell.width = 7;
+   xaccAddCell (curs, &(reg->actionCell->cell), ACTN_CELL_R, ACTN_CELL_C);
    
-   cell = xaccMallocTextCell();
-   cell->width = 11;
-   xaccAddCell (curs, cell, XFRM_CELL_R, XFRM_CELL_C);
-   reg->xferCell = cell;
+   reg->xfrmCell = xaccMallocComboCell();
+   reg->xfrmCell->cell.width = 11;
+   xaccAddCell (curs, &(reg->xfrmCell->cell), XFRM_CELL_R, XFRM_CELL_C);
    
    reg->descCell = xaccMallocQuickFillCell();
    reg->descCell->cell.width = 9;
@@ -168,6 +166,21 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
    xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
 
+
+   /* -------------------------------- */   
+   /* add menu items for the action cell */
+
+   xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, PRICE_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, DIV_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, LTCG_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, STCG_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, DIST_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, SPLIT_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, DEPOSIT_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
 
    /* -------------------------------- */   
    table =  xaccMallocTable (0, 0);

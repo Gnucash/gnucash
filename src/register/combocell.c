@@ -42,6 +42,8 @@ void xaccInitComboCell (ComboCell *cell)
 {
    xaccInitBasicCell ( &(cell->cell));
    cell->cell.realize = realizeCombo;
+   cell->menuitems = (char **) malloc (sizeof (char *));
+   cell->menuitems[0] = NULL;
 }
 
 /* =============================================== */
@@ -49,15 +51,26 @@ void xaccInitComboCell (ComboCell *cell)
 void 
 xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 {
-   PopBox *box;
-   XmString str;
-   box = (PopBox *) (cell->cell.gui_private);
+   int n = 0;
+   char ** oldarr;
 
-   if (!box) return;
+   if (!cell) return;
+   if (!menustr) return;
 
-   str = XmStringCreateLtoR (menustr, XmSTRING_DEFAULT_CHARSET);
-   XmComboBoxAddItem (box->combobox, str, 0); 
-   XmStringFree (str);
+   oldarr = cell->menuitems;
+   while (oldarr[n]) n ++;
+
+   cell->menuitems = (char **) malloc ((n+2) *sizeof (char *));      
+
+   n = 0;
+   while (oldarr[n]) {
+      cell->menuitems[n] = oldarr[n];
+      n++;
+   }
+   cell->menuitems[n] = strdup (menustr);
+   cell->menuitems[n+1] = NULL;
+
+   free (oldarr);
 }
 
 /* =============================================== */
@@ -100,7 +113,7 @@ void realizeCombo (struct _BasicCell *bcell, void *w, int pixel_width)
 
    /* create the pop GUI */
    combobox = XtVaCreateManagedWidget
-                      ("popbox", xmComboBoxWidgetClass, parent, 
+                      ("combocell", xmComboBoxWidgetClass, parent, 
                        XmNshadowThickness, 0, /* don't draw a shadow, 
                                                * use bae shadows */
                        XmNeditable, False,    /* user can only pick from list */
@@ -121,7 +134,24 @@ void realizeCombo (struct _BasicCell *bcell, void *w, int pixel_width)
    XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)cell);
    XtAddCallback (combobox, XmNdropDownCallback, dropDownCB, (XtPointer)box);
 
+   /* unmap the widget by moving it to an invlid location */
    moveCombo (bcell, -1, -1);
+
+   /* add menu items */
+   if (cell->menuitems) {
+      char * menustr;
+      int i=0;
+      
+      menustr = cell->menuitems[i];
+      while (menustr) {
+         XmString str;
+         str = XmStringCreateLtoR (menustr, XmSTRING_DEFAULT_CHARSET);
+         XmComboBoxAddItem (box->combobox, str, 0); 
+         XmStringFree (str);
+         i++;
+         menustr = cell->menuitems[i];
+      }
+   }
 }
 
 /* =============================================== */

@@ -35,7 +35,7 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
       xaccSetBasicCellValue (reg->dateCell, buff);
 
       xaccSetBasicCellValue (reg->numCell, trans->num);
-      xaccSetBasicCellValue (reg->actionCell, split->action);
+      xaccSetBasicCellValue (&(reg->actionCell->cell), split->action);
       xaccSetQuickFillCellValue (reg->descCell, trans->description);
       xaccSetBasicCellValue (reg->memoCell, split->memo);
 

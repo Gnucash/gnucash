@@ -671,7 +671,6 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
   
-  XbaeMatrixCommitEdit( regData->reg, False );
   /* hack alert */
   /* regSaveTransaction( regData, regData->currEntry ); */
   regData->changed = MOD_NONE;
@@ -733,7 +732,6 @@ static void
 cancelCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
-  XbaeMatrixCancelEdit( regData->reg, False );
   }
 
 /************************** END OF FILE *************************/
