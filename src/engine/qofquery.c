@@ -360,6 +360,7 @@ check_object (QofQuery *q, gpointer object)
   QofQueryTerm * qt;
   int       and_terms_ok=1;
   
+  ENTER (" object=%p terms=%p\n", object, q->terms);
   for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) 
   {
     and_terms_ok = 1;
@@ -422,6 +423,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
   const QofQueryObject *objDef = NULL;
   GSList *fcns = NULL;
 
+  ENTER (" ");
   g_return_val_if_fail (param_list, NULL);
   g_return_val_if_fail (start_obj, NULL);
   g_return_val_if_fail (final, NULL);
@@ -444,6 +446,7 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
     start_obj = (QofIdType) objDef->param_type;
   }
 
+  LEAVE (" ");
   return (g_slist_reverse (fcns));
 }
 
@@ -484,6 +487,7 @@ static void compile_terms (QofQuery *q)
 {
   GList *or_ptr, *and_ptr, *node;
 
+  ENTER (" query=%p", q);
   /* Find the specific functions for this Query.  Note that the
    * Query's search_for should now be set to the new type.
    */
@@ -528,6 +532,7 @@ static void compile_terms (QofQuery *q)
         g_hash_table_insert (q->be_compiled, book, result);
     }
   }
+  LEAVE (" query=%p", q);
 }
 
 static void check_item_cb (gpointer object, gpointer user_data)
@@ -679,20 +684,21 @@ GList * qof_query_run (QofQuery *q)
   GList *node;
   int        object_count = 0;
 
+  ENTER (" q=%p", q);
   if (!q) return NULL;
   g_return_val_if_fail (q->search_for, NULL);
 
   /* XXX: Prioritize the query terms? */
 
   /* prepare the Query for processing */
-  if (q->changed) {
+  if (q->changed) 
+  {
     query_clear_compiles (q);
     compile_terms (q);
   }
 
   /* Maybe log this sucker */
-  if (gnc_should_log (module, GNC_LOG_DETAIL))
-    qof_query_print (q);
+  if (gnc_should_log (module, GNC_LOG_DETAIL)) qof_query_print (q);
 
   /* Now run the query over all the objects and save the results */
   {
@@ -702,16 +708,20 @@ GList * qof_query_run (QofQuery *q)
     qcb.query = q;
 
     /* For each book */
-    for (node=q->books; node; node=node->next) {
+    for (node=q->books; node; node=node->next) 
+    {
       QofBook *book = node->data;
       QofBackend *be = book->backend;
 
       /* run the query in the backend */
-      if (be) {
+      if (be) 
+      {
         gpointer compiled_query = g_hash_table_lookup (q->be_compiled, book);
 
         if (compiled_query && be->run_query)
+        {
           (be->run_query) (be, compiled_query);
+        }
       }
 
       /* and then iterate over all the objects */
@@ -721,6 +731,7 @@ GList * qof_query_run (QofQuery *q)
     matching_objects = qcb.list;
     object_count = qcb.count;
   }
+  PINFO ("matching objects=%p count=%d", matching_objects, object_count);
 
   /* There is no absolute need to reverse this list, since it's being
    * sorted below. However, in the common case, we will be searching
@@ -730,9 +741,9 @@ GList * qof_query_run (QofQuery *q)
    */
   matching_objects = g_list_reverse(matching_objects);
 
-  /* now sort the matching objects based on the search criteria
-   * sortQuery is an unforgivable use of static global data...  I just
-   * can't figure out how else to do this sanely.
+  /* Now sort the matching objects based on the search criteria
+   * sortQuery is an unforgivable use of static global data...  
+   * I just can't figure out how else to do this sanely.
    */
   sortQuery = q;
   matching_objects = g_list_sort(matching_objects, sort_func);
@@ -770,6 +781,7 @@ GList * qof_query_run (QofQuery *q)
   g_list_free(q->results);
   q->results = matching_objects;
   
+  LEAVE (" q=%p", q);
   return matching_objects;
 }
 
