@@ -1,3 +1,6 @@
+2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
+	* Investment transactions now create two accounts, one is for the stock, the other is the account defined by the FI, where the cash is swaped.
+
 2002-10-19  Derek Atkins  <derek@ihtfp.com>
 	* gnome/gw-gnc-spec.scm -- add "#include <gnc-splash.h>"
 	* configure.in -- don't let GNOME_COMPILE_WARNINGS overwrite our list
