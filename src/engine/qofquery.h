@@ -55,11 +55,16 @@ typedef enum {
 /** "Known" Object Parameters -- all objects must support these */
 #define QOF_QUERY_PARAM_BOOK    "book"
 #define QOF_QUERY_PARAM_GUID    "guid"
-#define QOF_QUERY_PARAM_ACTIVE  "active" /* it's ok if an object does
-                                           * not support this */
+
+/** "Known" Object Parameters -- some objects might support these */
+#define QOF_QUERY_PARAM_ACTIVE  "active" 
 
 /* --------------------------------------------------------- */
-/** Startup and Shutdown */
+/** Subsystem initialization and shutdown. Call init() once 
+ *  to initalize the query subsytem; call shutdown() to free
+ *  up any resources associated with the query subsystem. 
+ *  Typically called during application startup, shutdown.
+ */
 
 void qof_query_init (void);
 void qof_query_shutdown (void);
@@ -106,17 +111,28 @@ void qof_query_set_book (QofQuery *q, QofBook *book);
  * param_list = make_list (SPLIT_ACCOUNT, ACCOUNT_NAME, NULL);
  * qof_query_add_term (query, param_list, QOF_COMPARE_EQUAL,
  *                    acct_name_pred_data, QOF_QUERY_AND);
+ *
+ * Please note that QofQuery does not, at this time, support joins.
+ * That is, one cannot specify a predicate that is a parameter list.
+ * Put another way, one cannot search for objects where 
+ *   obja->thingy == objb->stuff
  */
 
 void qof_query_add_term (QofQuery *query, GSList *param_list,
                       QofQueryPredData *pred_data, QofQueryOp op);
 
+/** DOCUMENT ME !! */
 void qof_query_add_guid_match (QofQuery *q, GSList *param_list,
                            const GUID *guid, QofQueryOp op);
+/** DOCUMENT ME !! */
 void qof_query_add_guid_list_match (QofQuery *q, GSList *param_list,
                                GList *guid_list, QofGuidMatch options,
                                QofQueryOp op);
 
+/** Handy-dandy convenience routines, avoids having to create 
+ * a separate predicate for boolean matches.  We might want to 
+ * create handy-dandy sugar routines for the other predicate types 
+ * as well. */
 void qof_query_add_boolean_match (QofQuery *q, 
                                   GSList *param_list, 
                                   gboolean value,
@@ -151,9 +167,17 @@ int qof_query_has_terms (QofQuery *q);
 /** Return the number of terms in thq query. */
 int qof_query_num_terms (QofQuery *q);
 
+/** DOCUMENT ME !! */
 gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param);
 
+/** Make a copy of the indicated query */
 QofQuery * qof_query_copy (QofQuery *q);
+
+/** Make a copy of the indicated query, inverting the sense
+ * of the search.  In other words, if the original query search 
+ * for all objects with a certain condition, the inverted query
+ * will search for all object with NOT that condition.
+ */
 QofQuery * qof_query_invert(QofQuery *q);
 
 /** Merges two queries together.  Both queries must be compatible
@@ -232,15 +256,15 @@ void qof_query_set_max_results (QofQuery *q, int n);
  */
 gboolean qof_query_equal (QofQuery *q1, QofQuery *q2);
 
-/* Print the Query in human-readable format.
+/** Print the Query in human-readable format.
  * Useful for debugging and development.
  */
 void qof_query_print (QofQuery *query);
 
-/* Return the type of data we're querying for */
+/** Return the type of data we're querying for */
 QofIdType qof_query_get_search_for (QofQuery *q);
 
-/* Return the list of books we're using */
+/** Return the list of books we're using */
 GList * qof_query_get_books (QofQuery *q);
 
 #endif /* QOF_QUERYNEW_H */

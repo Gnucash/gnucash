@@ -129,6 +129,11 @@ QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
 				       const char *chars);
+
+/** The qof_query_kvp_predicate() matches the object that has
+ *  the value 'value' located at the path 'path'.  In a certain
+ *  sense, the 'path' is handled as if it were a paramter.
+ */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
 				      GSList *path, const KvpValue *value);
 
