@@ -1,3 +1,10 @@
+2001-10-01  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/Transaction.{ch} (xaccTransVoid), (xaccTransGetVoidStatus),
+	(xaccTransGetVoidReason), (xaccSplitVoidFormerAmount): new functions.
+
+	* src/engine/kvp_doc.txt: add new entries related to transaction voiding.
+
 2001-09-30  Josh Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c: Displays

@@ -65,6 +65,9 @@
  */
 int force_double_entry = 0;
 
+const char *void_reason_str = "void-reason";
+const char *void_former_amt_str = "void-former-amount";
+
 #define PRICE_SIGFIGS 6
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -2548,5 +2551,105 @@ xaccIsPeerSplit (Split *sa, Split *sb)
    return 0;
 }
 
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransVoid(Transaction *transaction,
+	      const char *reason)
+{
+  kvp_frame *frame;
+  kvp_value *val;
+  gnc_numeric amt, zero;
+  GList *split_list;
+  Split *split;
+  g_return_if_fail(transaction && reason);
+
+  zero = gnc_numeric_zero();
+  frame = xaccTransGetSlots(transaction);
+
+  val = kvp_value_new_string(reason);
+
+  kvp_frame_set_slot_nc(frame, 
+			void_reason_str,
+			val);
+
+  
+  for(  split_list = xaccTransGetSplitList(transaction); 
+	split_list; 
+	split_list = g_list_next(split_list))
+  {
+    split = split_list->data;
+    
+    amt = xaccSplitGetAmount(split);
+
+    val = kvp_value_new_gnc_numeric(amt);
+
+    frame = xaccSplitGetSlots(split);
+    
+    kvp_frame_set_slot_nc(frame, void_former_amt_str, val);
+    
+    xaccSplitSetAmount(split, zero);
+    xaccSplitSetReconcile(split, VREC);
+  }
+
+  return;
+}
+
+gboolean 
+xaccTransGetVoidStatus(Transaction *trans)
+{
+  kvp_frame *frame;
+
+  
+  g_return_val_if_fail(trans, FALSE);
+
+  frame = xaccTransGetSlots(trans);
+
+  return (gboolean) kvp_frame_get_slot(frame, void_reason_str);
+
+}
+
+char *
+xaccTransGetVoidReason(Transaction *trans)
+{
+  kvp_frame *frame;
+  kvp_value *val;
+  char *reason;
+  g_return_val_if_fail(trans, NULL);
+
+  frame = xaccTransGetSlots(trans);
+
+  val = kvp_frame_get_slot(frame, void_reason_str);
+  
+  if(val)
+  {
+    reason = kvp_value_get_string(val);
+    return reason;
+  }
+
+  return NULL;
+}
+
+gnc_numeric xaccSplitVoidFormerAmount(Split *split)
+{
+  kvp_frame *frame;
+  kvp_value *val;
+  gnc_numeric amt = gnc_numeric_zero();
+  g_return_val_if_fail(split, amt);
+
+  frame = xaccSplitGetSlots(split);
+
+  val = kvp_frame_get_slot(frame, void_former_amt_str);
+  
+  if(val)
+  {
+    amt = kvp_value_get_numeric(val);
+  }
+
+  return amt;
+  
+}
 /************************ END OF ************************************\
 \************************* FILE *************************************/

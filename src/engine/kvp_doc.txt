@@ -187,3 +187,17 @@ Entities: All
 Use: This frame is used to store keys which are editable directly by
      the user. The program should not attach any semantics to keys
      under this frame.
+
+Name: void-reason
+Type: string
+Entities: Transaction
+Use: This string is used to store the reason why a transaction has been 
+voided.  Note that it should only exist if the transaction has been voided.
+
+Name: void-former-amount
+Type: gnc_numeric
+Entities: Split
+Use: To store the amount of the this split before it was voided.  Note
+that it should only exist if the parent transaction has been voided (but
+checking the reconcile status of the split is a more direct way of finding
+out a split has been voided).

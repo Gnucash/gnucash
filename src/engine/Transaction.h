@@ -39,6 +39,7 @@
 #define YREC 'y'              /* The Split has been reconciled     */
 #define FREC 'f'              /* frozen into accounting period     */
 #define NREC 'n'              /* not reconciled or cleared         */
+#define VREC 'v'              /* split is void                     */
 
 /** STRUCTS *********************************************************/
 
@@ -475,5 +476,24 @@ Split * xaccSplitGetOtherSplit (Split *split);
  *    parent transaction, else it returns zero.
  */
 int xaccIsPeerSplit (Split *split_1, Split *split_2);
+
+
+/*
+ * xaccTransactionVoid voids a transaction.  A void transaction
+ * has no values, is unaffected by reconciliation, and, by default
+ * is not included in any queries.  A voided transaction 
+ * should not be altered (and we'll try to make it so it can't be).
+ * voiding is irreversible.  Once voided, a transaction cannot be
+ * un-voided.
+ */
+
+void xaccTransVoid(Transaction *transaction, 
+			 const char *reason);
+
+gboolean xaccTransGetVoidStatus(Transaction *transaction);
+
+char *xaccTransGetVoidReason(Transaction *transaction);
+
+gnc_numeric xaccSplitVoidFormerAmount(Split *split);
 
 #endif /* XACC_TRANSACTION_H */
