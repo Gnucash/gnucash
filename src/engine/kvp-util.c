@@ -29,8 +29,6 @@
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
 
-void gnc_kvp_gemini (kvp_frame *, const GUID *, const GUID *, time_t);
-
 /* ================================================================ */
 /* mark the guid and date of the copy, using kvp.  The info will be
  * places in /gemini/ncopies, /gemini/<n>/acct_guid, /gemini/<n>/book_guid,
@@ -68,7 +66,7 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
    --ncopies;
    sprintf (buff, "%lld", ncopies);
    cwd = kvp_frame_new();
-   kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame(cwd));
+   kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame_nc(cwd));
 
    if (acct_guid)
    {
