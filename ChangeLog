@@ -1,3 +1,8 @@
+2001-09-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/standard-reports/average-balance.scm: Ben Stanley
+	<bds02@uow.edu.au>'s report fix.
+
 2001-08-31  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Scrub.c: don't create accounts with no currency
