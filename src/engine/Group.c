@@ -990,8 +990,6 @@ xaccGroupGetAccount (AccountGroup *grp, int i)
 {
    if (!grp) return NULL;
 
-   PWARN ("try to avoid this function, it's O(accounts)");
-
    return g_list_nth_data (grp->accounts, i);
 }
 

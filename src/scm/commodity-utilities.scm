@@ -288,10 +288,8 @@
 		 (gnc:numeric-zero)
 		 (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
 				  (cadr pair)
-				  ;; FIXME: the constant 100 here is
-				  ;; not a durable solution --
-				  ;; anyone has a better idea?
-				  100 GNC-RND-ROUND))))
+                                  (gnc:commodity-get-fraction domestic)
+				  GNC-RND-ROUND))))
 	  #f))))
 
 ;; Adds all different commodities in the commodity-collector <foreign>
