@@ -1,0 +1,84 @@
+! /********************************************************************\
+!  * main.c -- main for xacc (X-Accountant)                           *
+!  * Copyright (C) 1997 Robin D. Clark                                *
+!  *                                                                  *
+!  * This program is free software; you can redistribute it and/or    *
+!  * modify it under the terms of the GNU General Public License as   *
+!  * published by the Free Software Foundation; either version 2 of   *
+!  * the License, or (at your option) any later version.              *
+!  *                                                                  *
+!  * This program is distributed in the hope that it will be useful,  *
+!  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+!  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+!  * GNU General Public License for more details.                     *
+!  *                                                                  *
+!  * You should have received a copy of the GNU General Public License*
+!  * along with this program; if not, write to the Free Software      *
+!  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+!  *                                                                  *
+!  *   Author: Rob Clark                                              *
+!  * Internet: rclark@cs.hmc.edu                                      *
+!  *  Address: 609 8th Street                                         *
+!  *           Huntington Beach, CA 92648-4632                        *
+! \********************************************************************/
+
+xacc*fontList:                 -*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*
+xacc*Background:               grey
+xacc*text.fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
+
+! Help stuff:
+xacc*help*geometry:            530x480-0-0
+! xacc*help*View*Background:     #ffffff 
+
+!
+!  MenuBar stuff:
+xacc*menubar*marginHeight:     1
+xacc*menubar*marginWidth:      1
+
+! Register window account type specific stuff: 
+xacc*regbank.oddRowBackground:      #aaccff
+xacc*regcash.oddRowBackground:      #ccffcc
+xacc*regasset.oddRowBackground:     #aaffcc
+xacc*regcredit.oddRowBackground:    #ffffaa
+xacc*regliability.oddRowBackground: #ffcccc
+xacc*regportfolio.oddRowBackground: #ccffff
+xacc*regmutual.oddRowBackground:    #ccffff
+xacc*regincome.oddRowBackground:    #aaccff
+xacc*regexpense.oddRowBackground:   #ffcccc
+xacc*regequity.oddRowBackground:    #ffffaa
+xacc*regportfolio.evenRowBackground:grey
+xacc*regmutual.evenRowBackground:   grey
+
+! pop-down box (combobox stuff)
+! combobox -- don't want the cell to be outlined 
+xacc*reg*popbox*shadowThickness:     0
+
+! we *do* want the combobox scroll bar to show, thoguh 
+xacc*reg*popbox*list*shadowThickness:     1  
+
+! slider width ignored ... why ??? 
+xacc*reg*popbox*list*thickness:     24  
+xacc*reg*popbox*list*VertScrollBar*width:     24  
+
+! Other register window account stuff: 
+xacc*reg*fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
+xacc*reg*evenRowBackground:   white
+xacc*reg*shadowType:          SHADOW_IN
+xacc*reg*shadowThickness:     1
+xacc*reg*cellShadowThickness: 1
+xacc*reg*cellShadowType:      SHADOW_IN
+xacc*reg*cellMarginWidth:     1
+xacc*reg*cellMarginHeight:    0
+
+! Reconcile window matrices stuff: 
+xacc*recn*fontList:            -*-helvetica-medium-r-normal--*-100-*-*-*-*-*-*
+xacc*recn*.oddRowBackground:   white
+xacc*recn*.evenRowBackground:  white
+xacc*recn*shadowType:          SHADOW_ETCHED_IN
+xacc*recn*shadowThickness:     1
+xacc*recn*cellShadowThickness: 1
+xacc*recn*cellShadowType:      SHADOW_ETCHED_IN
+xacc*recn*cellMarginWidth:     0
+xacc*recn*cellMarginHeight:    0
+
+
