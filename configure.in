@@ -346,13 +346,17 @@ AC_CHECK_FUNC(dbopen, [],
 if test "$prefer_db1" = "yes"; then
  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
   AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-   AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   AC_CHECK_LIB(db-3, __db185_open, DB_LIB="-ldb-3",
+    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   )
   )
  )
 else
  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
   AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-   AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   AC_CHECK_LIB(db-3, __db185_open, DB_LIB="-ldb-3",
+    AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+   )
   )
  )
 fi
