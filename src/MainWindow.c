@@ -910,7 +910,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );
           }
         }
-      newfile = fileBox(toplevel,OPEN, "*.dat");
+      newfile = fileBox(toplevel,OPEN, "*.xac");
       if (newfile) {
         datafile = newfile;
 
@@ -975,7 +975,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       char * newfile;
       DEBUG("FMB_SAVEAS\n");
 
-      newfile = fileBox(toplevel,OPEN, "*.dat");
+      newfile = fileBox(toplevel,OPEN, "*.xac");
       if ( newfile ) {
          datafile = newfile;
          fileMenubarCB( mw, (XtPointer)FMB_SAVE, cb );

@@ -152,7 +152,7 @@ main( int argc, char *argv[] )
   if( argc > 1 )
     datafile = argv[1];
   else
-    datafile = fileBox( toplevel, OPEN, "*.dat" );
+    datafile = fileBox( toplevel, OPEN, "*.xac" );
   
   if( datafile != NULL )
     topgroup = readData(datafile);     /* load the accounts data from datafile*/
