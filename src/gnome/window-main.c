@@ -1715,7 +1715,7 @@ gnc_report_in_main_window (int report_id) {
   page_num = gtk_notebook_page_num(GTK_NOTEBOOK(mainwin->notebook), fr);
   gtk_notebook_set_page(GTK_NOTEBOOK(mainwin->notebook), page_num);
 
-  gnc_set_busy_cursor (NULL);
+  gnc_set_busy_cursor (NULL, TRUE);
   gnc_report_window_show_report(reptwin, report_id);
   gnc_unset_busy_cursor (NULL);
 }

@@ -1,5 +1,18 @@
 2001-04-01  Dave Peticolas  <dave@krondo.com>
 
+	* src/FileDialog.c: update for api change
+
+	* src/gnome/window-report.c: update for api change
+
+	* src/gnome/gnc-html.c: update for api change
+
+	* src/gnome/window-main.c: update for api change
+
+	* src/gnome/cursors.c (gnc_set_busy_cursor): add extra arg
+	to determine whether to update cursor immediately
+
+	* src/gnome/druid-qif-import.c: update for api change
+
 	* src/gnome/window-help.c: expand the top nodes initially
 	(gnc_help_show_topic): show the topic in the tree when it
 	can be found

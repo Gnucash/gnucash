@@ -299,7 +299,7 @@ gncPostFileOpen (const char * filename)
   gnc_engine_suspend_events ();
 
   /* Change the mouse to a busy cursor */
-  gnc_set_busy_cursor (NULL);
+  gnc_set_busy_cursor (NULL, TRUE);
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
@@ -464,7 +464,7 @@ gncFileSave (void)
   }
 
   /* use the current session to save to file */
-  gnc_set_busy_cursor(NULL);
+  gnc_set_busy_cursor(NULL, TRUE);
   gnc_book_save (book);
   gnc_unset_busy_cursor(NULL);
 

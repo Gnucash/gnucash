@@ -486,7 +486,7 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
   g_hash_table_insert(html->request_info, uri, handles);
   
   if(need_request) {
-    gnc_set_busy_cursor (html->html);
+    gnc_set_busy_cursor (html->html, FALSE);
     gnc_http_start_request(html->http, uri, gnc_html_http_request_cb, 
                            (gpointer)html);
   }

@@ -111,7 +111,7 @@ void gnc_ui_destroy_all_subwindows (void);
 
 /* Changing the GUI Cursor ******************************************/
 
-void gnc_set_busy_cursor(gncUIWidget w);
+void gnc_set_busy_cursor(gncUIWidget w, gboolean update_now);
 void gnc_unset_busy_cursor(gncUIWidget w);
 
 

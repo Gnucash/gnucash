@@ -550,7 +550,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     }
     
     /* turn on the busy cursor */
-    gnc_set_busy_cursor(NULL);
+    gnc_set_busy_cursor(NULL, TRUE);
     
     /* create the <qif-file> object */
     scm_qiffile          = gh_call0(make_qif_file);    
@@ -1193,7 +1193,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
 
   /* busy cursor */
   gnc_suspend_gui_refresh ();
-  gnc_set_busy_cursor(NULL);
+  gnc_set_busy_cursor(NULL, TRUE);
 
   /* get any changes to the imported stocks */
   for(pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next) {
@@ -1239,7 +1239,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
     scm_protect_object(wind->imported_account_group);
 
     /* now detect duplicate transactions */ 
-    gnc_set_busy_cursor(NULL);
+    gnc_set_busy_cursor(NULL, TRUE);
     retval = gh_call2(find_duplicates, 
                       gh_eval_str("(gnc:get-current-group)"),
                       wind->imported_account_group);
