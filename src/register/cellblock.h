@@ -30,6 +30,9 @@
  * MEMBERS:
  * The right_traverse array indicates which cell chould be
  * traversed to when the tab key is pressed.
+ *
+ * HISTORY:
+ * Copyright (c) 1988 Linas Vepstas
  */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
