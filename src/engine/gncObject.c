@@ -28,9 +28,8 @@
 
 #include <glib.h>
 
-#include "messages.h"
 #include "gnc-engine-util.h"
-
+#include "gncObject.h"
 #include "gncObjectP.h"
 
 static gboolean object_is_initialized = FALSE;
@@ -147,7 +146,7 @@ const char * gncObjectGetTypeLabel (GNCIdTypeConst type_name)
   obj = gncObjectLookup (type_name);
   if (!obj) return NULL;
 
-  return _(obj->type_label);
+  return (obj->type_label);
 }
 
 static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
