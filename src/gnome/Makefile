@@ -2,7 +2,7 @@
 #
 ######################################################################
 #********************************************************************
-#* Makefile -- makefile for xacc/src                                *
+#* Makefile -- makefile for xacc/src/gtk                            *
 #* Copyright (C) 1997 Robin Clark                                   *
 #*                                                                  *
 #* This program is free software; you can redistribute it and/or    *

@@ -70,14 +70,16 @@ depend:
 clean:
 	rm -f *.o *~ *.bak
 	@cd engine;            $(MAKE) clean
-	@cd register;          $(MAKE) clean
+	@cd gtk;               $(MAKE) clean
 	@cd motif;             $(MAKE) clean
+	@cd register;          $(MAKE) clean
 
 
 distclean: clean
 	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
 	@cd engine;            $(MAKE) distclean
-	@cd register;          $(MAKE) distclean
+	@cd gtk;               $(MAKE) distclean
 	@cd motif;             $(MAKE) distclean
+	@cd register;          $(MAKE) distclean
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
