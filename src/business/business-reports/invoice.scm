@@ -273,6 +273,11 @@
     "tb" (N_ "Display the invoice notes?") #f))
 
   (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Payments")
+    "tc" (N_ "Display the payments applied to this invoice?") #f))
+
+  (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
      "u" (N_ "Extra notes to put on the invoice")
@@ -288,120 +293,164 @@
 
   gnc:*report-options*)
 
-(define (make-entry-table entries options add-order)
+(define (make-entry-table invoice options add-order)
+  (let ((show-payments (gnc:option-value
+			(gnc:lookup-option options (N_ "Display")
+					   (N_ "Payments"))))
+	(lot (gnc:invoice-get-posted-lot invoice))
+	(txn (gnc:invoice-get-posted-txn invoice)))
+
                           
-  (define (add-subtotal-row leader table used-columns
-                            subtotal-collector subtotal-style subtotal-label)
-    (let ((currency-totals (subtotal-collector
-                            'format gnc:make-gnc-monetary #f)))
+    (define (colspan monetary used-columns)
+      (cond
+       ((value-col used-columns) (value-col used-columns))
+       ((taxvalue-col used-columns) (taxvalue-col used-columns))
+       (else (price-col used-columns))))
 
-      (define (colspan monetary)
-        (cond
-	 ((value-col used-columns) (value-col used-columns))
-         ((taxvalue-col used-columns) (taxvalue-col used-columns))
-         (else (price-col used-columns))))
+    (define (display-subtotal monetary used-columns)
+      (if (value-col used-columns)
+	  monetary
+	  (let ((amt (gnc:gnc-monetary-amount monetary)))
+	    (if amt
+		(if (gnc:numeric-negative-p amt)
+		    (gnc:monetary-neg monetary)
+		    monetary)
+		monetary))))
 
-      (define (display-subtotal monetary)
-        (if (value-col used-columns)
-            (if (and leader (gnc:account-reverse-balance? leader))
-                (gnc:monetary-neg monetary)
-                monetary)
-	    (let ((amt (gnc:gnc-monetary-amount monetary)))
-	      (if amt
-		  (if (gnc:numeric-negative-p amt)
-		      (gnc:monetary-neg monetary)
-		      monetary)
-		  monetary))))
+    (define (add-subtotal-row table used-columns
+			      subtotal-collector subtotal-style subtotal-label)
+      (let ((currency-totals (subtotal-collector
+			      'format gnc:make-gnc-monetary #f)))
 
-      (for-each (lambda (currency)
-                  (gnc:html-table-append-row/markup! 
-                   table
-                   subtotal-style
-                   (append (cons (gnc:make-html-table-cell/markup
-                                  "total-label-cell" subtotal-label)
-                                 '())
-                           (list (gnc:make-html-table-cell/size/markup
-                                  1 (colspan currency)
-                                  "total-number-cell"
-                                  (display-subtotal currency))))))
-                currency-totals)))
+	(for-each (lambda (currency)
+		    (gnc:html-table-append-row/markup! 
+		     table
+		     subtotal-style
+		     (append (cons (gnc:make-html-table-cell/markup
+				    "total-label-cell" subtotal-label)
+				   '())
+			     (list (gnc:make-html-table-cell/size/markup
+				    1 (colspan currency used-columns)
+				    "total-number-cell"
+				    (display-subtotal currency used-columns))))))
+		  currency-totals)))
 
-  (define (do-rows-with-subtotals leader
-                                  entries
-                                  table
-                                  used-columns
-                                  width
-                                  odd-row?
-				  value-collector
-                                  tax-collector
-				  total-collector)
-    (if (null? entries)
-	(for-each
-	 (lambda (this)
-	   (add-subtotal-row leader table used-columns (car this)
-			     "grand-total" (cdr this)))
-	 (list (cons value-collector (_ "Subtotal"))
-	       (cons tax-collector (_ "Tax"))
-	       (cons total-collector (_"Amount Due"))))
+    (define (add-payment-row table used-columns split total-collector)
+      (let* ((t (gnc:split-get-parent split))
+	     (currency (gnc:transaction-get-currency t))
+	     ;; XXX Need to know when to reverse the value
+	     (amt (gnc:make-gnc-monetary currency (gnc:split-get-value split)))
+	     (payment-style "grand-total")
+	     (row '()))
+	
+	(total-collector 'add 
+			 (gnc:gnc-monetary-commodity amt)
+			 (gnc:gnc-monetary-amount amt))
 
-        (let* ((current (car entries))
-               (current-row-style (if odd-row? "normal-row" "alternate-row"))
-               (rest (cdr entries))
-               (next (if (null? rest) #f
-                         (car rest)))
-               (entry-values (add-entry-row table
-					    current
-					    used-columns
-					    current-row-style)))
+	(if (date-col used-columns)
+	    (addto! row
+		    (gnc:print-date (gnc:transaction-get-date-posted t))))
 
-          (value-collector 'add
-                           (gnc:gnc-monetary-commodity (car entry-values))
-                           (gnc:gnc-monetary-amount (car entry-values)))
+	(if (description-col used-columns)
+	    (addto! row (_ "Payment, thank you")))
+		    
+	(gnc:html-table-append-row/markup! 
+	 table
+	 payment-style
+	 (append (reverse row)
+		 (list (gnc:make-html-table-cell/size/markup
+			1 (colspan currency used-columns)
+			"total-number-cell"
+			(display-subtotal amt used-columns)))))))
 
-          (tax-collector 'add
+    (define (do-rows-with-subtotals entries
+				    table
+				    used-columns
+				    width
+				    odd-row?
+				    value-collector
+				    tax-collector
+				    total-collector)
+      (if (null? entries)
+	  (begin
+	    (add-subtotal-row table used-columns value-collector
+			      "grand-total" (_ "Subtotal"))
+	    (add-subtotal-row table used-columns tax-collector
+			      "grand-total" (_ "Tax"))
+
+	    (if (and show-payments lot)
+		(let ((splits (sort-list!
+			       (gnc:lot-get-splits lot)
+			       (lambda (s1 s2)
+				 (let ((t1 (gnc:split-get-parent s1))
+				       (t2 (gnc:split-get-parent s2)))
+				   (< (gnc:transaction-order t1 t2) 0))))))
+		  (for-each
+		   (lambda (split)
+		     (if (not (equal? (gnc:split-get-parent split) txn))
+			 (add-payment-row table used-columns
+					  split total-collector)))
+		   splits)))
+
+	    (add-subtotal-row table used-columns total-collector
+			      "grand-total" (_ "Amount Due")))
+	  
+	  (let* ((current (car entries))
+		 (current-row-style (if odd-row? "normal-row" "alternate-row"))
+		 (rest (cdr entries))
+		 (next (if (null? rest) #f
+			   (car rest)))
+		 (entry-values (add-entry-row table
+					      current
+					      used-columns
+					      current-row-style)))
+
+	    (value-collector 'add
+			     (gnc:gnc-monetary-commodity (car entry-values))
+			     (gnc:gnc-monetary-amount (car entry-values)))
+
+	    (tax-collector 'add
                            (gnc:gnc-monetary-commodity (cdr entry-values))
                            (gnc:gnc-monetary-amount (cdr entry-values)))
 
-          (total-collector 'add
-                           (gnc:gnc-monetary-commodity (car entry-values))
-                           (gnc:gnc-monetary-amount (car entry-values)))
-          (total-collector 'add
-                           (gnc:gnc-monetary-commodity (cdr entry-values))
-                           (gnc:gnc-monetary-amount (cdr entry-values)))
+	    (total-collector 'add
+			     (gnc:gnc-monetary-commodity (car entry-values))
+			     (gnc:gnc-monetary-amount (car entry-values)))
+	    (total-collector 'add
+			     (gnc:gnc-monetary-commodity (cdr entry-values))
+			     (gnc:gnc-monetary-amount (cdr entry-values)))
 
-	  (let ((order (gnc:entry-get-order current)))
-	    (if order (add-order order)))
+	    (let ((order (gnc:entry-get-order current)))
+	      (if order (add-order order)))
 
-          (do-rows-with-subtotals leader
-                                  rest
-                                  table
-                                  used-columns
-                                  width
-                                  (not odd-row?)
-				  value-collector
-				  tax-collector
-                                  total-collector))))
+	    (do-rows-with-subtotals rest
+				    table
+				    used-columns
+				    width
+				    (not odd-row?)
+				    value-collector
+				    tax-collector
+				    total-collector))))
 
-  (define (entries-leader entries) #f)
+    (let* ((table (gnc:make-html-table))
+	   (used-columns (build-column-used options))
+	   (width (num-columns-required used-columns))
+	   (entries (gnc:invoice-get-entries invoice))
+	   (totals (gnc:make-commodity-collector)))
 
-  (let* ((table (gnc:make-html-table))
-         (used-columns (build-column-used options))
-         (width (num-columns-required used-columns)))
+      (gnc:html-table-set-col-headers!
+       table
+       (make-heading-list used-columns))
 
-    (gnc:html-table-set-col-headers!
-     table
-     (make-heading-list used-columns))
-
-    (do-rows-with-subtotals (entries-leader entries)
-                            entries
-                            table
-                            used-columns
-                            width
-                            #t
-                            (gnc:make-commodity-collector)
-			    (gnc:make-commodity-collector)
-			    (gnc:make-commodity-collector))
-    table))
+      (do-rows-with-subtotals entries
+			      table
+			      used-columns
+			      width
+			      #t
+			      (gnc:make-commodity-collector)
+			      (gnc:make-commodity-collector)
+			      totals)
+      table)))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
@@ -509,7 +558,6 @@
 	 (orders '())
 	 (invoice (opt-val invoice-page invoice-name))
 	 (owner #f)
-	 (entries #f)
 	 (references? (opt-val "Display" "References"))
 	 (title (_ "Invoice")))
 
@@ -520,7 +568,6 @@
     (if invoice
 	(begin
 	  (set! owner (gnc:invoice-get-owner invoice))
-	  (set! entries (gnc:invoice-get-entries invoice))
 	  (set! title (string-append title " #"
 				     (gnc:invoice-get-id invoice)))))
 
@@ -528,7 +575,7 @@
 
     (if invoice
 	(begin
-	  (set! table (make-entry-table entries
+	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order))
 
