@@ -44,7 +44,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_ENGINE; */
 
-gncLogLevel loglevel[MOD_LAST + 1] =
+static gncLogLevel loglevel[MOD_LAST + 1] =
 {
   GNC_LOG_FATAL,        /* DUMMY */
   GNC_LOG_WARNING,      /* ENGINE */
@@ -106,19 +106,28 @@ prettify (const char *name)
   return bf;
 }
 
+gboolean
+gnc_should_log (gncModuleType module, gncLogLevel log_level)
+{
+  if (module < 0 || module > MOD_LAST)
+  {
+    PERR ("Bad module: %d", module);
+    return FALSE;
+  }
+
+  if (log_level > loglevel[module])
+    return FALSE;
+
+  return TRUE;
+}
+
 void
 gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
          const char *function_name, const char *format, ...)
 {
   va_list ap;
 
-  if (module < 0 || module > MOD_LAST)
-  {
-    PERR ("Bad module: %d", module);
-    return;
-  }
-
-  if (log_level > loglevel[module])
+  if (!gnc_should_log (module, log_level))
     return;
 
   fprintf (stderr, "%s: %s: ", prefix, prettify (function_name));

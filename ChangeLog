@@ -1,15 +1,21 @@
+2001-02-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gnc-engine-util.h: don't evaluate debug macro
+	arguments unless it's going to be printed.
+
 2001-02-25  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/engine/Query.[ch]: added support for sorting by account names and
-	codes, as well as names and codes for the "other" split in the transaction.
-	also, modified (xaccQuerySetSortIncreasing) so you can sort in different 
-	orders for the three criteria specified.
+	* src/engine/Query.[ch]: added support for sorting by account
+	names and codes, as well as names and codes for the "other" split
+	in the transaction.  also, modified (xaccQuerySetSortIncreasing)
+	so you can sort in different orders for the three criteria
+	specified.
 
-	* src/engine/Transaction.[ch]: Added new functions for comparing splits
-	on account names and codes.
+	* src/engine/Transaction.[ch]: Added new functions for comparing
+	splits on account names and codes.
 
-	* src/engine/reconcile-list.c (gnc_reconcile_list_set_sort_order): modified
-	to use new query sorting interface.
+	* src/engine/reconcile-list.c (gnc_reconcile_list_set_sort_order):
+	modified to use new query sorting interface.
 	
 	* src/scm/report/transaction-report-2.scm: New file.  Transaction
 	report rewritten for our new improved HTML generator.  Most 
@@ -21,7 +27,8 @@
 
 	* src/scm/report/report-list.scm: added new transaction report.
 
-	* src/scm/report-utilities.scm: modified for new query sorting interface.
+	* src/scm/report-utilities.scm: modified for new query sorting
+	interface.
 
 	* src/doc/design/multicurrency.discussion.txt: The log of an IRC
 	discussion between cstim and myself about his currency-collector
