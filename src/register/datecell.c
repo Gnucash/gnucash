@@ -347,6 +347,26 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
 
 /* ================================================ */
 
+void 
+xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
+{
+   char buff[30];
+   struct tm * stm;
+
+   stm = localtime (&secs);
+   cell->date = *stm;
+
+   printDate (buff, cell->date.tm_mday, 
+                    cell->date.tm_mon+1, 
+                    cell->date.tm_year+1900);
+
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
+
+}
+
+/* ================================================ */
+
 static void 
 setDateCellValue (BasicCell *_cell, const char *str)
 {

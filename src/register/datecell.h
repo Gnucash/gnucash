@@ -73,6 +73,7 @@ void       xaccInitDateCell (DateCell *);
 void       xaccDestroyDateCell (DateCell *);
 
 void       xaccSetDateCellValue (DateCell *, int day, int mon, int year);  
+void       xaccSetDateCellValueSecs (DateCell *, time_t secs);
 
 #endif /* __XACC_DATE_CELL_C__ */
 
