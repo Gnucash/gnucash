@@ -724,8 +724,9 @@ gnc_file_quit (void)
   gnc_session_destroy (session);
   current_session = NULL;
 
+  gnc_get_current_session_internal ();
+
   gnc_engine_resume_events ();
-  gnc_gui_refresh_all ();
 }
 
 void
