@@ -57,39 +57,6 @@
 #define TXN_TYPE_PAYMENT 'P'  /**< Transaction is a payment  */
 /**@}*/
 
-
-/** @name Configuration ForceDoubleEntry getters/setters
- */
-/**@{*/
-/**
- * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
- *    set and get the "force_double_entry" flag.  This flag determines how
- *    the splits in a transaction will be balanced.
- *
- *    The following values have significance:
- *
- *    0 -- anything goes
- *
- *    1 -- The sum of all splits in a transaction will be
- *         forced to be zero, even if this requires the
- *         creation of additional splits.  Note that a split
- *         whose value is zero (e.g. a stock price) can exist
- *         by itself. Otherwise, all splits must come in at
- *         least pairs.
- *
- *    2 -- splits without parents will be forced into a
- *         lost & found account.  (Not implemented)
- */
-void   xaccConfigSetForceDoubleEntry (int force);
-/**
- * The xaccConfigSetForceDoubleEntry() and xaccConfigGetForceDoubleEntry()
- *    set and get the "force_double_entry" flag.  This flag determines how
- *    the splits in a transaction will be balanced.
- */
-int    xaccConfigGetForceDoubleEntry (void);
-/**@}*/
-
-
 /***************************************************************
  * Transaction
  */
