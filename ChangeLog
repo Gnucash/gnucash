@@ -1,3 +1,16 @@
+2001-03-04  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: Added different printing of stock
+	accounts. Started a new layout/ordering for sub-totals.
+
+	* src/scm/commodity-utilities.scm (gnc:sum-collector-stocks):
+	added such that stock prices are no longer shown but foreign
+	currencies are. Rounding precision increased. Added sanity checks
+	for arguments of various funtions.
+
+	* src/scm/report-utilities.scm (gnc:account-is-stock?): added
+	function
+
 2001-03-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-help.c: save & restore window size

@@ -49,6 +49,13 @@
                #f)))
     (member type '(stock mutual-fund currency))))
 
+;; True if the account is of type stock or mutual-fund
+(define (gnc:account-is-stock? account)
+  (let ((type (gw:enum-<gnc:AccountType>-val->sym
+               (gnc:account-get-type account)
+               #f)))
+    (member type '(stock mutual-fund))))
+
 ;; True if the account is of type income or expense
 (define (gnc:account-is-inc-exp? account)
   (let ((type (gw:enum-<gnc:AccountType>-val->sym
@@ -408,8 +415,12 @@
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
 ;;
-;; Note that the commodity-collector contains <gnc:numeric> values
-;; rather than double values.
+;; Note that this uses the gnc:split-get-share-balance rather than
+;; gnc:split-get-balance as above, which means that results for both
+;; may differ especially for stock accounts.
+;;
+;; Also note that the commodity-collector contains <gnc:numeric>
+;; values rather than double values.
 (define (gnc:account-get-comm-balance-at-date account 
 					      date include-children?)
   (let ((balance-collector

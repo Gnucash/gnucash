@@ -45,7 +45,7 @@
       (pagename-accounts (N_ "Accounts"))
       (optname-show-subaccounts (N_ "Always show sub-accounts"))
       (optname-accounts (N_ "Account"))
-      (optname-group-accounts (N_ "Group the accouts"))
+      (optname-group-accounts (N_ "Group the accounts"))
       (optname-include-subbalances (N_ "Include Sub-Account balances")))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

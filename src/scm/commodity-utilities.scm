@@ -23,6 +23,12 @@
 (gnc:support "commodity-utilities.scm")
 (gnc:depend "report-utilities.scm")
 
+;; Returns true if the commodity comm represents a currency, false if
+;; it represents a stock or mutual-fund.
+(define (gnc:commodity-is-currency? comm)
+  (equal? GNC_COMMODITY_NS_ISO
+	  (gnc:commodity-get-namespace comm)))
+
 ;; All the functions below up to gnc:make-exchange-fn are calculating
 ;; the exchange rate for different commodities by determining the
 ;; weighted average of all currency transactions.
@@ -80,16 +86,16 @@
 	    (b (gnc:make-numeric-collector)))
 	(a 'add (unknown-coll 'total #f))
 	(b 'add 
-	   ;; round to (at least) 6 significant digits
+	   ;; round to (at least) 8 significant digits
 	   (gnc:numeric-div
 	    (gnc:numeric-mul 
 	     (un->known-coll 'total #f) 
 	     ((cdadr known-pair) 'total #f)
 	     GNC-DENOM-AUTO 
-	     (logior (GNC-DENOM-SIGFIGS 7) GNC-RND-ROUND))
+	     (logior (GNC-DENOM-SIGFIGS 9) GNC-RND-ROUND))
 	    ((caadr known-pair) 'total #f)
 	    GNC-DENOM-AUTO 
-	    (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))
+	    (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))
 	;; in other words: (/ (* (caadr un->known-coll) (cdadr
 	;; known-pair)) (caadr known-pair) ))
 	(cons a b)))
@@ -263,7 +269,7 @@
 	    (gnc:numeric-div ((cdadr e) 'total #f) 
 			     ((caadr e) 'total #f)
 			     GNC-DENOM-AUTO 
-			     (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))))
+			     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
 ;; This one returns the ready-to-use function for calculation of the
@@ -273,35 +279,60 @@
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
     (lambda (foreign domestic)
-      (gnc:make-gnc-monetary 
-       domestic
-       (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
-			  exchangelist)))
-	 (if (not pair)
-	     (gnc:numeric-zero)
-	     (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
-			      (cadr pair)
-			      ;; FIXME: the constant 100 here is
-			      ;; not a durable solution --
-			      ;; anyone has a better idea?
-			      100 GNC-RND-ROUND)))))))
+      (if foreign
+	  (gnc:make-gnc-monetary 
+	   domestic
+	   (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
+			      exchangelist)))
+	     (if (not pair)
+		 (gnc:numeric-zero)
+		 (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
+				  (cadr pair)
+				  ;; FIXME: the constant 100 here is
+				  ;; not a durable solution --
+				  ;; anyone has a better idea?
+				  100 GNC-RND-ROUND))))
+	  #f))))
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the
 ;; exchange rates to the commodity <domestic>. Returns a
 ;; <gnc-monetary> with the domestic commodity and its corresponding
-;; balance.
+;; balance. If the foreign balance is #f, it returns #f.
 (define (gnc:sum-collector-commodity foreign domestic exchange-fn)
-  (let ((balance (gnc:make-commodity-collector)))
-    (foreign
-     'format 
-     (lambda (curr val) 
-       (if (gnc:commodity-equiv? domestic curr)
-	   (balance 'add domestic val)
-	   (balance 'add domestic 
-		    (gnc:gnc-monetary-amount 
-		     (exchange-fn (gnc:make-gnc-monetary curr val) 
-				  domestic)))))
-     #f)
-    (balance 'getmonetary domestic #f)))
+  (if foreign
+      (let ((balance (gnc:make-commodity-collector)))
+	(foreign
+	 'format 
+	 (lambda (curr val) 
+	   (if (gnc:commodity-equiv? domestic curr)
+	       (balance 'add domestic val)
+	       (balance 'add domestic 
+			(gnc:gnc-monetary-amount 
+			 (exchange-fn (gnc:make-gnc-monetary curr val) 
+				      domestic)))))
+	 #f)
+	(balance 'getmonetary domestic #f))
+      #f))
 
+;; As above, but adds only the commodities of other stocks and
+;; mutual-funds. Returns a commodity-collector which (still) may have
+;; several different commodities in it -- if there have been different
+;; *currencies*, not only stocks.
+(define (gnc:sum-collector-stocks foreign domestic exchange-fn)
+  (if foreign
+      (let ((balance (gnc:make-commodity-collector)))
+	(foreign
+	 'format 
+	 (lambda (curr val) 
+	   (if (gnc:commodity-equiv? domestic curr)
+	       (balance 'add domestic val)
+	       (if (gnc:commodity-is-currency? curr)
+		   (balance 'add curr val)
+		   (balance 'add domestic 
+			    (gnc:gnc-monetary-amount 
+			     (exchange-fn (gnc:make-gnc-monetary curr val) 
+					  domestic))))))
+	 #f)
+	balance)
+      #f))

@@ -39,7 +39,7 @@
        (optname-display-depth (N_ "Account Display Depth"))
        (optname-show-subaccounts (N_ "Always show sub-accounts"))
        (optname-accounts (N_ "Account"))
-       (optname-group-accounts (N_ "Group the accouts"))
+       (optname-group-accounts (N_ "Group the accounts"))
        (optname-include-subbalances (N_ "Include Sub-Account balances"))
        
 ;;      (pagename-currencies (N_ "Currencies")) too little options :)

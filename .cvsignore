@@ -25,6 +25,7 @@ ltmain.sh
 make-gnucash-patch
 stamp-h
 stamp-h.in
+tags
 *.tar.gz
 *.log
 *.patch

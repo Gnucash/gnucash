@@ -133,17 +133,19 @@
     ;; balance column, and if reverse-balance? is #t the balance will
     ;; be displayed with the sign reversed.
     (define (add-row-helper! 
-	     current-depth my-name my-balance reverse-balance?)
+	     current-depth my-name my-balance reverse-balance? boldface?)
       (gnc:html-table-append-row! 
        table
        (append
 	(gnc:html-make-empty-cells (- current-depth 1))
 	(list (gnc:make-html-table-cell/size 
 	       1 (+ 1 (- tree-depth current-depth)) 
+	       ;; FIXME: (if boldface? (gnc:html-markup-b my-name)
+	       ;; but this doesn't seen to work
 	       my-name))
 	(gnc:html-make-empty-cells (- tree-depth current-depth))
 	;; the account balance
-	(list (if reverse-balance? 
+	(list (if (and my-balance reverse-balance?)
 		  (gnc:monetary-neg my-balance) 
 		  my-balance))
 	(gnc:html-make-empty-cells (- current-depth 1)))))
@@ -161,7 +163,8 @@
     ;; printed. If reverse-balance? == #t then the balance's signs get
     ;; reversed.
     (define (add-commodity-rows! 
-	     current-depth my-name my-commodity balance reverse-balance?) 
+	     current-depth my-name my-commodity balance 
+	     reverse-balance? is-stock-account? boldface?) 
       ;; Adds one row to the table. my-name is the html-object
       ;; displayed in the name column; foreign-balance is the
       ;; <gnc-monetary> for the foreign column or #f if to be left
@@ -177,28 +180,30 @@
 		 1 (+ 1 (- tree-depth current-depth)) 
 		 my-name))
 	  (gnc:html-make-empty-cells (* 2 (- tree-depth current-depth)))
-	  (list (if (not foreign-balance)
-		    (car (gnc:html-make-empty-cells 1))
-		    foreign-balance)
-		domestic-balance)
+	  (list foreign-balance	domestic-balance)
 	  (gnc:html-make-empty-cells (* 2 (- current-depth 1))))))
       
       ;;;;;;;;;;
       ;; the first row for each account: shows the name and the
       ;; balance in the report-commodity
-      (if (or do-subtot? 
-	      (gnc:commodity-equiv? my-commodity report-commodity))
+      (if (and (not is-stock-account?)
+	       (or (gnc:commodity-equiv? my-commodity report-commodity)
+		   do-subtot?))
 	  ;; usual case: the account balance in terms of report
 	  ;; commodity
 	  (commodity-row-helper! 
 	   my-name #f
-	   (balance 'getmonetary report-commodity reverse-balance?))
+	   (if balance 
+	       (balance 'getmonetary report-commodity reverse-balance?)
+	       #f))
 	  ;; special case if do-subtot? was false and it is in a
-	  ;; different commodity than the report: then the
-	  ;; foreign commodity gets displayed in this line
-	  ;; rather then the following lines (loop below).
-	  (let ((my-balance (balance 'getmonetary 
-				     my-commodity reverse-balance?)))
+	  ;; different commodity than the report: then the foreign
+	  ;; commodity gets displayed in this line rather then the
+	  ;; following lines (loop below). Is also used if
+	  ;; is-stock-account? is true.
+	  (let ((my-balance 
+		 (if balance (balance 'getmonetary 
+				      my-commodity reverse-balance?) #f)))
 	    (commodity-row-helper! 
 	     my-name
 	     my-balance
@@ -209,7 +214,7 @@
       ;; report-currency. One row for each non-report-currency. Is
       ;; only used when do-subtot? == #f (otherwise this balance has
       ;; only one commodity).
-      (if do-subtot?
+      (if (and do-subtot? (and balance (not is-stock-account?)))
 	  (balance 
 	   'format 
 	   (lambda (curr val)
@@ -237,13 +242,16 @@
 				     (gnc:html-account-anchor acct)
 				     (gnc:account-get-commodity acct) 
 				     (my-get-balance acct)
-				     (gnc:account-reverse-balance? acct))
+				     (gnc:account-reverse-balance? acct)
+				     (gnc:account-has-shares? acct)
+				     #f)
 	  (add-row-helper! 
 	   current-depth 
 	   (gnc:html-account-anchor acct)
 	   (gnc:sum-collector-commodity (my-get-balance acct) 
 					report-commodity exchange-fn)
-	   (gnc:account-reverse-balance? acct))))
+	   (gnc:account-reverse-balance? acct)
+	   #f)))
   
     ;; Adds rows to the table. Therefore it goes through the list of
     ;; accounts, runs add-account-rows! on each account.  If
@@ -262,16 +270,19 @@
     
     ;; Generalization for a subtotal or the total balance.
     (define (add-subtotal-row! 
-	     current-depth subtotal-name balance)
+	     current-depth subtotal-name balance boldface?)
       (if show-other-curr?
 	  (add-commodity-rows! current-depth subtotal-name 
-			       report-commodity balance #f)
+			       report-commodity 
+			       (gnc:sum-collector-stocks 
+				balance report-commodity exchange-fn)
+			       #f #f boldface?)
 	  ;; Show no other currencies. Therefore just calculate
 	  ;; one total via sum-collector-commodity and show it.
 	  (add-row-helper! current-depth subtotal-name 
 			   (gnc:sum-collector-commodity 
 			    balance report-commodity exchange-fn)
-			   #f)))
+			   #f boldface?)))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
@@ -281,12 +292,18 @@
 	(for-each 
 	 (lambda (accts) 
 	   (if (and (not (null? accts)) (not (null? (cdr accts))))
-	       (begin
+	       (let ((groupname (car accts))
+		     (gaccts (cdr accts)))
+		 ;; first the group name
+		 (add-subtotal-row! 1 groupname #f #f)
+		 (traverse-accounts! gaccts 2)
 		 (add-subtotal-row! 
-		  1 (car accts)
+		  1 (string-append (_ "Total") " " groupname)
 		  (gnc:accounts-get-balance-helper 
-		   (cdr accts) my-get-balance gnc:account-reverse-balance?))
-		 (traverse-accounts! (cdr accts) 2))))
+		   gaccts my-get-balance gnc:account-reverse-balance?) 
+		  #t)
+		 ;; and an empty line
+		 (add-subtotal-row! 1 #f #f #f))))
 	 (gnc:decompose-accountlist (lset-intersection 
 				     equal? accounts topl-accounts)))
 	;; No extra grouping.
@@ -295,8 +312,9 @@
     ;; Show the total sum.
     (if show-total?
 	(add-subtotal-row! 
-	 1 total-name (get-total-fn (filter show-acct? topl-accounts) 
-				    my-get-balance)))
+	 1 total-name 
+	 (get-total-fn (filter show-acct? topl-accounts) my-get-balance)
+	 #t))
     
     ;; set default alignment to right, and override for the name
     ;; columns
