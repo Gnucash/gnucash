@@ -85,11 +85,11 @@ void        xaccConsolidateTransactions (Account *);
 /* The xaccMoveFarEnd() method changes the account to which the 
  *    "far end" of the split belongs.  The "far end" is as follows:
  *    Double-entry transactions by thier nature consist of a set of 
- *    splits, each split indicating a debited or credited account.
- *    Given a debit split, the "far end" is the account indicated 
- *    by the credit split.  Given a credit split, the "far end"
- *    is the debit split, if there is only one debit split, otherwise
- *    there is no far end.  This subroutine will change the "far end".
+ *    two or more splits. If the transaction has precisely two splits,
+ *    then the "far end" is the "other split" of the pair.  If
+ *    the transaction consists of three or more splits, then the 
+ *    "far end" is undefined.  All that the xaccMoveFareEnd() method
+ *    does is reparent the "other split" to the indicated account.
  *    The first argument is the split whose fare end will be changed,
  *    the second argument is the new far-end account.
  */

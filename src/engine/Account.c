@@ -132,14 +132,14 @@ xaccFreeAccount( Account *acc )
     Transaction *trans =  (Transaction *) s->parent;
 
     j=0;
-    debit_s = trans->dest_splits[0];
+    debit_s = trans->splits[0];
     while (debit_s) {
       if (debit_s->acc) { dont_free_transaction = 1; break; }
       j++;
-      debit_s = trans->dest_splits[j];
+      debit_s = trans->splits[j];
     }
 
-    if ( (!dont_free_transaction) && (NULL == trans->source_split.acc) ) {
+    if (!dont_free_transaction) {
       xaccFreeTransaction( trans );
     }
 
@@ -490,16 +490,13 @@ xaccCheckTransDateOrder (Transaction *trans )
 
   if (NULL == trans) return 0;
 
-  acc = (Account *) (trans->source_split.acc);
-  outOfOrder += xaccCheckDateOrder (acc, &(trans->source_split));
-
   i=0;
-  s = trans->dest_splits[0];
+  s = trans->splits[0];
   while (s) {
     acc = (Account *) (s->acc);
     outOfOrder += xaccCheckDateOrder (acc, s);
     i++;
-    s = trans->dest_splits[i];
+    s = trans->splits[i];
   }
 
   if (outOfOrder) return 1;
@@ -573,48 +570,46 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
    Split *partner_split = 0x0;
    Transaction *trans;
    Account * acc;
-   int create_far_end = 0;
+   int numsplits = 0;
 
    if (!split) return;
    
-   /* if the new desitnation does not match the current dest,
+   /* if the transaction has two splits, then the "far end" 
+    * is the other one. Otherwise, fare end is undefined. 
+    * If the new destination does not match the current dest,
     * then move the far end of the split to the new location.
     */
    trans = (Transaction *) (split->parent);
-   if (split != &(trans->source_split)) {
-      partner_split = &(trans->source_split);
-   } else {
-      /* perform that transfer *only* if there is one split */
-      if (trans->dest_splits) {
-         if (0x0 != trans->dest_splits[0]) {
-            if (0x0 == trans->dest_splits[1]) {
-               partner_split = trans->dest_splits[0];
-            }
-         } else {
-            /* Gosh, the far end doesn't exist! create it! */
-            create_far_end = 1;
-         }
-      } else {
-         /* Gosh, the far end doesn't exist! create it! */
-         create_far_end = 1;
-      }
-   }
+   assert (trans);
+   assert (trans->splits);
 
-   /* Gosh, the far end doesn't exist! create it! */
-   if (create_far_end && new_acc) {
+   numsplits = xaccCountSplits (trans->splits);
+   if (2 < numsplits) return;
+
+   if (split == trans->splits[0]) {
+      partner_split = trans->splits [1];
+   } else
+
+   if (split == trans->splits[1]) {
+      partner_split = trans->splits [0];
+   } else 
+
+   if (new_acc) {
+      /* Gosh, the far end doesn't exist! create it! */
       partner_split = xaccMallocSplit ();
       xaccTransAppendSplit (trans, partner_split);
       xaccAccountInsertSplit (new_acc, partner_split);
       return;
+   } else {
+      /* no partner split, AND no far-end accouont. return */
+      return;
    }
 
-   if (partner_split) {
-      /* remove the partner split from the old account */
-      acc = (Account *) (partner_split->acc);
-      if (acc != new_acc) {
-         xaccAccountRemoveSplit (acc, partner_split);
-         xaccAccountInsertSplit (new_acc, partner_split);
-      }
+   /* remove the partner split from the old account */
+   acc = (Account *) (partner_split->acc);
+   if (acc != new_acc) {
+      xaccAccountRemoveSplit (acc, partner_split);
+      xaccAccountInsertSplit (new_acc, partner_split);
    }
 }
 
