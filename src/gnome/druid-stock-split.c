@@ -25,7 +25,6 @@
 
 #include <gnome.h>
 
-#include "FileDialog.h"
 #include "Group.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
@@ -38,6 +37,7 @@
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
 
 
@@ -94,7 +94,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
 
   gtk_clist_clear (clist);
 
-  accounts = xaccGroupGetSubAccounts (gncGetCurrentGroup ());
+  accounts = xaccGroupGetSubAccounts (gnc_get_current_group ());
   for (node = accounts; node; node = node->next)
   {
     Account *account = node->data;
@@ -420,7 +420,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     gnc_price_set_value (price, amount);
     gnc_price_commit_edit (price);
 
-    book = gncGetCurrentBook ();
+    book = gnc_get_current_book ();
     pdb = gnc_book_get_pricedb (book);
 
     if (!gnc_pricedb_add_price (pdb, price))

@@ -25,13 +25,13 @@
 
 #include <gnome.h>
 
-#include "FileDialog.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
 
 
@@ -236,7 +236,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
   if (!cd->commodity)
     return;
 
-  accounts = xaccGroupGetSubAccounts (gncGetCurrentGroup ());
+  accounts = xaccGroupGetSubAccounts (gnc_get_current_group ());
   can_delete = TRUE;
   do_delete = FALSE;
 

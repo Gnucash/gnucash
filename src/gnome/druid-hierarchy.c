@@ -27,7 +27,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "FileDialog.h"
 #include "Group.h"
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
@@ -38,6 +37,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-dir.h"
 #include "gnc-gui-query.h"
+#include "gnc-ui-util.h"
 #include "io-example-account.h"
 #include "top-level.h"
 
@@ -826,10 +826,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
   gnc_set_first_startup (FALSE);
 
   if (our_final_group)
-  {
-    xaccGroupConcatGroup (gnc_book_get_group (gncGetCurrentBook ()),
-                          our_final_group);
-  }
+    xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
 
   gnc_resume_gui_refresh ();
 }

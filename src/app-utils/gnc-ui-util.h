@@ -28,13 +28,12 @@
 #include <glib.h>
 #include <locale.h>
 
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
-#include "Account.h"
-#include "Transaction.h"
 
 
-typedef AccountGroup * (*GNCGroupCB) (void);
+typedef GNCBook * (*GNCBookCB) (void);
 
 
 /* User Settings ****************************************************/
@@ -50,8 +49,10 @@ const char * gnc_register_default_hint_font(void);
 
 
 /* Engine enhancements & i18n ***************************************/
+void gnc_set_current_book_handler (GNCBookCB cb);
+
+GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
-void gnc_set_current_group_handler (GNCGroupCB cb);
 
 typedef enum
 {

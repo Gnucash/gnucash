@@ -27,25 +27,23 @@
 #include <locale.h>
 #include <time.h>
 
-#include "gnc-ui.h"
-
 #include "FreqSpec.h"
 #include "SchedXaction.h"
-#include "gnc-book.h"
-#include "FileDialog.h"
-#include "gnucash-sheet.h"
-
-#include "window-register.h"
-#include "window-help.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
+#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
+#include "gnc-ui.h"
+#include "gnc-ui-util.h"
+#include "gnucash-sheet.h"
 #include "messages.h"
+#include "window-help.h"
+#include "window-register.h"
 
 static short module = MOD_SX;
 
@@ -274,7 +272,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         /* add to list */
         putSchedXactionInClist( sxed->sx, sxed->sxd );
         if ( sxed->new ) {
-                book = gncGetCurrentBook();
+                book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
                 sxList = g_list_append( sxList, sxed->sx );
                 gnc_book_set_schedxactions( book, sxList );
@@ -446,12 +444,13 @@ schedXact_populate( SchedXactionDialog *sxd )
         time_t tmpTime;
         int i;
 
-        book = gncGetCurrentBook();
+        book = gnc_get_current_book ();
         sxList = gnc_book_get_schedxactions( book );
 
         g_list_foreach( sxList, putSchedXactionInClist, sxd );
 
-        sx_clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml,  "sched_xact_list" ) );
+        sx_clist = GTK_CLIST( glade_xml_get_widget( sxd->gxml,
+                                                    "sched_xact_list" ) );
         for ( i=0; i<3; i++ ) {
                 gtk_clist_set_column_auto_resize( sx_clist, i, TRUE );
         }
@@ -830,7 +829,7 @@ new_button_clicked( GtkButton *b, gpointer d )
 {
         SchedXactionDialog        *sxd;
         SchedXaction        *tmpSX =
-                xaccSchedXactionMalloc( gncGetCurrentBook());
+                xaccSchedXactionMalloc( gnc_get_current_book ());
         SchedXactionEditorDialog *sxed;
 
         sxd = (SchedXactionDialog*)d;
@@ -919,14 +918,15 @@ delete_button_clicked( GtkButton *b, gpointer d )
         switch ( confirmSel ) {
         case 0:
                 sel = cl->selection;
-                book = gncGetCurrentBook();
+                book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
                 gtk_clist_freeze( cl );
                 /* delete back-to-front so clist index numbers aren't
                    invalidated */
                 sel = g_list_last( sel );
                 do {
-                        sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
+                        sx = (SchedXaction*)
+                          gtk_clist_get_row_data( cl, (int)sel->data );
                         sxList = g_list_remove( sxList, (gpointer)sx );
                         gtk_clist_remove( cl, (int)sel->data );
                         xaccSchedXactionFree( sx );
@@ -939,8 +939,6 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 return;
                 break;
         }
-
-        return;
 }
 
 static

@@ -61,7 +61,6 @@ src/backend/postgres/price.c
 src/backend/postgres/txn.c
 src/backend/postgres/txnmass.c
 src/backend/postgres/upgrade.c
-src/FileDialog.c
 src/app-utils/test/test-link-module.c
 src/app-utils/test/test-exp-parser.c
 src/app-utils/test/test-print-parse-amount.c
@@ -83,8 +82,8 @@ src/gnome-utils/druid-utils.c
 src/gnome-utils/gncmod-gnome-utils.c
 src/gnome-utils/test/test-link-module.c
 src/gnome-utils/gnc-amount-edit.c
-src/gnome-utils/gnc-commodity-edit.c
 src/gnome-utils/gnc-account-tree.c
+src/gnome-utils/gnc-commodity-edit.c
 src/gnome-utils/cursors.c
 src/gnome-utils/gnc-html.c
 src/gnome-utils/gnc-menu-extensions.c
@@ -150,6 +149,8 @@ src/engine/SX-ttinfo.c
 src/engine/kvp-scm.c
 src/engine/test-core/test-engine-stuff.c
 src/engine/test-core/gncmod-test-engine.c
+src/app-file/gnc-file.c
+src/app-file/gncmod-app-file.c
 src/experimental/cgi-bin/fastcgi-hello.c
 src/experimental/cgi-bin/gnc-server.c
 src/experimental/cgi-bin/hello.c
@@ -223,9 +224,9 @@ src/gnome/window-reconcile.c
 src/gnome/window-register.c
 src/gnome/window-report.c
 src/gnome/gnucash.desktop.in
+src/gnome/dialog-sx-from-trans.c
 src/gnome/argv-list-converters.c
 src/gnome/file-utils.c
-src/gnome/dialog-sx-from-trans.c
 src/guile/tip-of-the-day.c
 src/guile/guile-util.c
 src/import-export/qif-import/dialog-account-picker.c
@@ -235,6 +236,7 @@ src/import-export/qif-import/qif.glade
 src/import-export/qif-io-core/gncmod-qifiocore.c
 src/import-export/binary-import/druid-commodity.c
 src/import-export/binary-import/gncmod-binary-import.c
+src/import-export/binary-import/test/test-link-module.c
 src/import-export/binary-import/binary-import.glade
 src/optional/swig/gnucash-swig-defines.c
 src/optional/swig/helperfuncs.c

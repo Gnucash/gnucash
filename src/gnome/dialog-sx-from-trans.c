@@ -26,14 +26,14 @@
 
 #include <gnome.h>
 
-#include "dialog-utils.h"
-#include "SchedXaction.h"
-#include "dialog-sx-from-trans.h"
-#include "dialog-scheduledxaction.h"
 #include "SX-ttinfo.h"
+#include "SchedXaction.h"
+#include "dialog-scheduledxaction.h"
+#include "dialog-sx-from-trans.h"
+#include "dialog-utils.h"
 #include "gnc-book.h"
 #include "gnc-engine-util.h"
-#include "FileDialog.h"
+#include "gnc-ui-util.h"
 
 #define SX_GLADE_FILE "sched-xact.glade"
 #define SXFTD_DIALOG_GLADE_NAME "sx_from_real_trans"
@@ -359,7 +359,7 @@ sxftd_ok_clicked(GtkWidget *w, gpointer user_data)
 
   if (sx_error == 0)
   {
-    book = gncGetCurrentBook();
+    book = gnc_get_current_book ();
     sx_list = gnc_book_get_schedxactions(book);
     sx_list = g_list_append(sx_list, sxfti->sx);
     gnc_book_set_schedxactions(book, sx_list);
@@ -418,7 +418,7 @@ gnc_sx_create_from_trans(Transaction *trans)
 
   sxfti->trans = trans;
   
-  sxfti->sx = xaccSchedXactionMalloc(gncGetCurrentBook());
+  sxfti->sx = xaccSchedXactionMalloc(gnc_get_current_book ());
 
   sxfti_attach_callbacks(sxfti);
 

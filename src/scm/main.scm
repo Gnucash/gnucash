@@ -146,6 +146,7 @@
   ;; Hopefully we can gradually make them autoloading.
   (gnc:module-load "gnucash/engine" 0)
   (gnc:module-load "gnucash/app-utils" 0)
+  (gnc:module-load "gnucash/app-file" 0)
   (gnc:module-load "gnucash/register/ledger-core" 0)
   (gnc:module-load "gnucash/register/register-core" 0)
   (gnc:module-load "gnucash/register/register-gnome" 0)

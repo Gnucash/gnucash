@@ -13,6 +13,7 @@ INCLUDES = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
@@ -42,6 +43,9 @@ libgncmod_binary_import_la_LIBADD = \
   -L${top_srcdir}/src/app-utils \
   -L${top_srcdir}/src/app-utils/.libs \
   -lgncmod-app-utils \
+  -L${top_srcdir}/src/app-file \
+  -L${top_srcdir}/src/app-file/.libs \
+  -lgncmod-app-file \
   -L${top_srcdir}/src/gnome-utils \
   -L${top_srcdir}/src/gnome-utils/.libs \
   -lgncmod-gnome-utils \
@@ -66,6 +70,7 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = binary-import.glade
 
 EXTRA_DIST = \
+  .cvsignore \
   ${gncmod_DATA} \
   ${gwmod_DATA} \
   ${glade_DATA}
@@ -86,6 +91,3 @@ gw-binary-import.c gw-binary-import.h: .scm-links gw-binary-import-spec.scm
 BUILT_SOURCES += gw-binary-import.c gw-binary-import.h
 CLEANFILES += gw-binary-import.c gw-binary-import.h gw-binary-import.html \
               gnucash g-wrapped .scm-links
-
-EXTRA_DIST = \
-  .cvsignore

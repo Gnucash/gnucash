@@ -26,11 +26,11 @@
 
 #include <gnome.h>
 
-#include "FileBox.h"
-#include "file-history.h"
-#include "messages.h"
 #include "gnc-engine-util.h"
+#include "gnc-file-dialog.h"
+#include "gnc-file-history.h"
 #include "gnc-ui.h"
+#include "messages.h"
 
 typedef struct _FileBoxInfo FileBoxInfo;
 struct _FileBoxInfo
@@ -54,7 +54,7 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
 
 
 /********************************************************************\
- * fileBox                                                          * 
+ * gnc_file_dialog                                                  * 
  *   Pops up a file selection dialog (either a "Save As" or an      * 
  *   "Open"), and returns the name of the file the user selected.   *
  *   (This function does not return until the user selects a file   * 
@@ -67,7 +67,9 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
 \********************************************************************/
 
 const char *
-fileBox (const char * title, const char * filter, const char *default_name)
+gnc_file_dialog (const char * title,
+                 const char * filter,
+                 const char *default_name)
 {
   ENTER("\n");
 
@@ -169,5 +171,3 @@ gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
   /* Don't delete the window, we'll handle things ourselves. */
   return TRUE;
 }
-
-/* ======================== END OF FILE ======================== */

@@ -39,7 +39,6 @@
 #include "Group.h"
 #include "guid.h"
 #include "gnc-book.h"
-#include "FileDialog.h"
 #include "SX-ttinfo.h"
 
 static short module = MOD_SX;

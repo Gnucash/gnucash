@@ -44,7 +44,6 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "FileDialog.h"
 #include "dialog-utils.h"
 #include "print-session.h"
 #include "global-options.h"

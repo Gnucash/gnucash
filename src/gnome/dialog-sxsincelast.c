@@ -25,7 +25,6 @@
 #include <gnome.h>
 #include <glib.h>
 
-#include "FileDialog.h"
 #include "Group.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
@@ -691,7 +690,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
         autoCreateList = toCreateList = reminderList = NULL;
         autoCreateRow  = toCreateRow  = remindersRow = 0;
 
-        sxList = gnc_book_get_schedxactions( gncGetCurrentBook() );
+        sxList = gnc_book_get_schedxactions( gnc_get_current_book () );
 
         if ( sxList == NULL ) {
                 DEBUG( "No scheduled transactions to populate." );
@@ -1275,7 +1274,7 @@ _create_transactions_on( SchedXaction *sx, GDate *gd, toCreateTuple *tct )
                 tct->clistRow = -1;
         }
 
-        ag = gnc_book_get_template_group( gncGetCurrentBook() );
+        ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
 	if(ag && id)
 	{
@@ -1329,7 +1328,7 @@ _sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
                 Account *acct;
                 char *id;
 
-                ag = gnc_book_get_template_group( gncGetCurrentBook() );
+                ag = gnc_book_get_template_group( gnc_get_current_book () );
                 id = guid_to_string( xaccSchedXactionGetGUID(sx) );
                 acct = xaccGetAccountFromName( ag, id );
                 g_free( id );
@@ -1786,7 +1785,7 @@ sx_obsolete_ok_clicked(GtkButton *button, gpointer user_data)
   SchedXaction *sx;
   GList *actual_sx_list, *actual_sx_listref, *removelist_ref;
   
-  GNCBook *book = gncGetCurrentBook();
+  GNCBook *book = gnc_get_current_book ();
 
   actual_sx_list = gnc_book_get_schedxactions(book);
   for(removelist_ref = sxsld->actual_to_remove;

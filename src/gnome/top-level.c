@@ -35,8 +35,6 @@
 #include <X11/Xlib.h>
 
 #include "AccWindow.h"
-#include "FileBox.h"
-#include "FileDialog.h"
 #include "TransLog.h"
 #include "argv-list-converters.h"
 #include "combocell.h"
@@ -49,6 +47,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-file.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-network.h"
 #include "gnc-splash.h"
@@ -201,7 +200,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
   /* href="gnc-register:account=My Bank Account" */
   if (strncmp("account=", location, 8) == 0)
   {
-    account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+    account = xaccGetAccountFromFullName (gnc_get_current_group (),
                                           location + 8, 
                                           gnc_get_account_separator ());
     reg = regWindowSimple (account);
@@ -544,8 +543,6 @@ gnucash_ui_init(void)
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
-    gnc_set_current_group_handler (gncGetCurrentGroup);
-
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();
     /* Run the ui startup hooks. */
@@ -563,10 +560,12 @@ gnucash_ui_init(void)
 
 static gboolean hasstarted = FALSE;
 void
-gnc_default_ui_start(void) {
-  if(!hasstarted) {
+gnc_default_ui_start(void)
+{
+  if (!hasstarted)
+  {
     hasstarted = TRUE;
-    gncGetCurrentBook();
+    gnc_get_current_book ();
   }
 }
 
@@ -641,7 +640,7 @@ gnc_ui_check_events (gpointer not_used)
   if (gtk_main_level() != 1)
     return TRUE;
 
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book ();
   if (!book)
     return TRUE;
 
@@ -722,7 +721,7 @@ gnc_ui_main(void)
 gboolean
 gnucash_ui_open_file(const char name[])
 {
-  return gncFileOpenFile(name);
+  return gnc_file_open_file (name);
 }
 
 /* ============================================================== */
@@ -730,7 +729,7 @@ gnucash_ui_open_file(const char name[])
 int
 gnucash_ui_select_file(void)
 {
-  gncFileOpen();
+  gnc_file_open ();
   return 1;
 }
 

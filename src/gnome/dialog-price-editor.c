@@ -27,7 +27,6 @@
 #include <guile/gh.h>
 #include <time.h>
 
-#include "FileDialog.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
@@ -38,6 +37,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "guile-util.h"
 #include "engine-helpers.h"
 #include "messages.h"
@@ -181,7 +181,7 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
   GList *node;
   int new_row;
 
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book ();
   old_price = pdb_dialog->price;
   prices = NULL;
   new_row = 0;
@@ -430,7 +430,7 @@ static void
 price_ok_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-  GNCBook *book = gncGetCurrentBook ();
+  GNCBook *book = gnc_get_current_book ();
   GNCPriceDB *pdb = gnc_book_get_pricedb (book);
   const char *error_str;
 
@@ -514,7 +514,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
 
   if (gnc_verify_dialog_parented (pdb_dialog->dialog, message, TRUE))
   {
-    GNCBook *book = gncGetCurrentBook ();
+    GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
 
     gnc_pricedb_remove_price (pdb, pdb_dialog->price);
@@ -563,7 +563,7 @@ remove_old_clicked (GtkWidget *widget, gpointer data)
   result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
   if (result == 0)
   {
-    GNCBook *book = gncGetCurrentBook ();
+    GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
     GList *node;
     Timespec ts;
@@ -614,7 +614,7 @@ static void
 get_quotes_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-  GNCBook *book = gncGetCurrentBook ();
+  GNCBook *book = gnc_get_current_book ();
   SCM quotes_func;
   SCM book_scm;
 

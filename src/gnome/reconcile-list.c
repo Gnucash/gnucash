@@ -26,7 +26,6 @@
 
 #include <gnome.h>
 
-#include "FileDialog.h"
 #include "date.h"
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -110,7 +109,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 
   list->query = xaccMallocQuery();
 
-  xaccQuerySetGroup(list->query, gncGetCurrentGroup());
+  xaccQuerySetGroup(list->query, gnc_get_current_group ());
 
   /* match the account */
   xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);

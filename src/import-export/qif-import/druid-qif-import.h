@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __DIALOG_QIF_IMPORT_H_
-#define __DIALOG_QIF_IMPORT_H_
+#ifndef DIALOG_QIF_IMPORT_H
+#define DIALOG_QIF_IMPORT_H
 
 #include <guile/gh.h>
 
@@ -31,4 +31,12 @@
 QIFImportWindow * gnc_ui_qif_import_druid_make(void);
 void              gnc_ui_qif_import_druid_destroy (QIFImportWindow * window);
 SCM               gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w);
+
+/* The gnc_file_qif_import() routine will pop up a standard file
+ *     selection dialogue asking the user to pick a QIF file. If one
+ *     is selected the the QIF file is opened and read. It's contents
+ *     are merged into the existing session (if any). The current
+ *     session continues to remain open for editing. */
+void              gnc_file_qif_import (void);
+
 #endif

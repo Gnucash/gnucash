@@ -26,18 +26,19 @@
 #include <string.h>
 
 #include "Backend.h"
-#include "FileBox.h"
-#include "FileDialog.h"
 #include "Group.h"
-#include "file-history.h"
+#include "global-options.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-event.h"
+#include "gnc-file-dialog.h"
+#include "gnc-file-history.h"
+#include "gnc-file-p.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
-#include "global-options.h"
 
 /* FIXME: this is wrong.  This file should not need this include. */
 #include "gnc-book-p.h"
@@ -49,7 +50,20 @@ static short module = MOD_GUI;
 static GNCBook *current_book = NULL;
 
 
-/* ======================================================== */
+static GNCBook *
+gnc_get_current_book_internal (void)
+{
+  if (!current_book)
+    current_book = gnc_book_new ();
+
+  return current_book;
+}
+
+void
+gnc_file_init (void)
+{
+  gnc_set_current_book_handler (gnc_get_current_book_internal);
+}
 
 static gboolean
 show_book_error (GNCBackendError io_error, const char *newfile)
@@ -201,10 +215,8 @@ show_book_error (GNCBackendError io_error, const char *newfile)
   return uh_oh;
 }
 
-/* ======================================================== */
-
 static void
-gncAddHistory (GNCBook *book)
+gnc_add_history (GNCBook *book)
 {
   char *url;
 
@@ -222,19 +234,17 @@ gncAddHistory (GNCBook *book)
   g_free (url);
 }
 
-/* ======================================================== */
-
 void
-gncFileNew (void)
+gnc_file_new (void)
 {
   GNCBook *book;
 
   /* If user attempts to start a new session before saving results of
    * the last one, prompt them to clean up their act. */
-  if (!gncFileQuerySave ())
+  if (!gnc_file_query_save ())
     return;
 
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book_internal ();
 
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
@@ -250,31 +260,29 @@ gncFileNew (void)
   gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
 
   /* start a new book */
-  gncGetCurrentBook ();
+  gnc_get_current_book_internal ();
 
   if(gnc_lookup_boolean_option("General",
                                "No account list setup on new file",
                                TRUE))
   {
-      gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-               gh_eval_str("gnc:*book-opened-hook*"),
-               gh_str02scm(gnc_book_get_url(current_book))); 
+    gh_call2(gh_eval_str("gnc:hook-run-danglers"),
+             gh_eval_str("gnc:*book-opened-hook*"),
+             gh_str02scm(gnc_book_get_url(current_book))); 
   }
   else
   {
-      gnc_ui_hierarchy_druid ();
+    gnc_ui_hierarchy_druid ();
   }
 
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
 }
 
-/* ======================================================== */
-
 gboolean
-gncFileQuerySave (void)
+gnc_file_query_save (void)
 {
-  GNCBook * book = gncGetCurrentBook();
+  GNCBook * book = gnc_get_current_book_internal ();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -282,7 +290,8 @@ gncFileQuerySave (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (gnc_book_not_saved(book)) {
+  while (gnc_book_not_saved(book))
+  {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
@@ -302,17 +311,16 @@ gncFileQuerySave (void)
     if (result == GNC_VERIFY_NO)
       return TRUE;
 
-    gncFileSave ();
+    gnc_file_save ();
   }
 
   return TRUE;
 }
 
-/* ======================================================== */
 /* private utilities for file open; done in two stages */
 
 static gboolean
-gncPostFileOpen (const char * filename)
+gnc_post_file_open (const char * filename)
 {
   GNCBook *new_book;
   gboolean uh_oh = FALSE;
@@ -325,8 +333,8 @@ gncPostFileOpen (const char * filename)
   newfile = xaccResolveURL (filename); 
   if (!newfile)
   {
-     show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
-     return FALSE;
+    show_book_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
+    return FALSE;
   }
 
   /* disable events while moving over to the new set of accounts; 
@@ -360,30 +368,30 @@ gncPostFileOpen (const char * filename)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err)
   {
-     if (FALSE == show_book_error (io_err, newfile))
-     {
-        /* user told us to ignore locks. So ignore them. */
-        gnc_book_begin (new_book, newfile, TRUE, FALSE);
-     }
-     else
-     {
-        /* Can't use the given file, so just create a new
-         * database so that the user will get a window that
-         * they can click "Exit" on.
-         */
-        gncFileNew();
-     }
+    if (FALSE == show_book_error (io_err, newfile))
+    {
+      /* user told us to ignore locks. So ignore them. */
+      gnc_book_begin (new_book, newfile, TRUE, FALSE);
+    }
+    else
+    {
+      /* Can't use the given file, so just create a new
+       * database so that the user will get a window that
+       * they can click "Exit" on.
+       */
+      gnc_file_new ();
+    }
   }
 
   /* if the database doesn't exist, ask the user ... */
   else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
-     if (FALSE == show_book_error (io_err, newfile))
-     {
-        /* user told us to create a new database. Do it. */
-        gnc_book_begin (new_book, newfile, FALSE, TRUE);
-     }
+    if (FALSE == show_book_error (io_err, newfile))
+    {
+      /* user told us to create a new database. Do it. */
+      gnc_book_begin (new_book, newfile, FALSE, TRUE);
+    }
   }
 
   /* Check for errors again, since above may have cleared the lock.
@@ -433,7 +441,7 @@ gncPostFileOpen (const char * filename)
      * reason, we don't want to leave them high & dry without a
      * topgroup, because if the user continues, then bad things will
      * happen. */
-    current_book = gncGetCurrentBook ();
+    current_book = gnc_get_current_book_internal ();
 
     g_free (newfile);
 
@@ -458,7 +466,7 @@ gncPostFileOpen (const char * filename)
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
-  gncAddHistory (current_book);
+  gnc_add_history (current_book);
 
   g_free (newfile);
 
@@ -468,45 +476,43 @@ gncPostFileOpen (const char * filename)
   return TRUE;
 }
 
-/* ======================================================== */
-
 gboolean
-gncFileOpen (void)
+gnc_file_open (void)
 {
   const char * newfile;
   gboolean result;
 
-  if (!gncFileQuerySave ())
+  if (!gnc_file_query_save ())
     return FALSE;
 
-  newfile = fileBox(_("Open"), NULL, gnc_history_get_last());
-  result = gncPostFileOpen (newfile);
+  newfile = gnc_file_dialog (_("Open"), NULL, gnc_history_get_last ());
+  result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
-  gncGetCurrentBook ();
+  gnc_get_current_book_internal ();
 
   return result;
 }
 
 gboolean
-gncFileOpenFile (const char * newfile)
+gnc_file_open_file (const char * newfile)
 {
   if (!newfile) return FALSE;
 
-  if (!gncFileQuerySave ())
+  if (!gnc_file_query_save ())
     return FALSE;
 
-  return gncPostFileOpen (newfile);
+  return gnc_post_file_open (newfile);
 }
 
-/* ======================================================== */
+
 static gboolean been_here_before = FALSE;
 
 void
-gncFileSave (void)
+gnc_file_save (void)
 {
   GNCBackendError io_err;
   const char * newfile;
@@ -516,18 +522,18 @@ gncFileSave (void)
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* If we don't have a filename/path to save to get one. */
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book_internal ();
 
   if (!gnc_book_get_file_path (book))
   {
-    gncFileSaveAs();
+    gnc_file_save_as ();
     return;
   }
 
   /* use the current session to save to file */
-  gnc_set_busy_cursor(NULL, TRUE);
+  gnc_set_busy_cursor (NULL, TRUE);
   gnc_book_save (book);
-  gnc_unset_busy_cursor(NULL);
+  gnc_unset_busy_cursor (NULL);
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
@@ -539,26 +545,24 @@ gncFileSave (void)
 
     if (been_here_before) return;
     been_here_before = TRUE;
-    gncFileSaveAs();   /* been_here prevents infinite recursion */
+    gnc_file_save_as ();   /* been_here prevents infinite recursion */
     been_here_before = FALSE;
     return;
   }
 
-  gncAddHistory (book);
+  gnc_add_history (book);
 
-  gnc_book_mark_saved(book);
+  gnc_book_mark_saved (book);
 
   /* save the main window state */
-  gh_call1(gh_eval_str("gnc:main-window-save-state"),
-           gh_str02scm(gnc_book_get_url(current_book))); 
+  gh_call1 (gh_eval_str("gnc:main-window-save-state"),
+            gh_str02scm(gnc_book_get_url(current_book))); 
 
   LEAVE (" ");
 }
 
-/* ======================================================== */
-
 void
-gncFileSaveAs (void)
+gnc_file_save_as (void)
 {
   AccountGroup *group;
   GNCPriceDB *pdb;
@@ -572,7 +576,7 @@ gncFileSaveAs (void)
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
   ENTER(" ");
-  filename = fileBox(_("Save"), "*.gnc", NULL);
+  filename = gnc_file_dialog (_("Save"), "*.gnc", NULL);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current
@@ -585,12 +589,12 @@ gncFileSaveAs (void)
      return;
   }
 
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book_internal ();
   oldfile = gnc_book_get_file_path (book);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
     g_free (newfile);
-    gncFileSave ();
+    gnc_file_save ();
     return;
   }
 
@@ -679,20 +683,19 @@ gncFileSaveAs (void)
   gnc_book_set_pricedb(new_book, pdb);
   gnc_book_set_schedxactions(new_book, sxList);
   gnc_book_set_template_group(new_book, templateGroup);
-  gncFileSave ();
+
+  gnc_file_save ();
 
   g_free (newfile);
   LEAVE (" ");
 }
 
-/* ======================================================== */
-
 void
-gncFileQuit (void)
+gnc_file_quit (void)
 {
   GNCBook *book;
 
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book_internal ();
 
   /* disable events; otherwise the mass deletetion of accounts and
    * transactions during shutdown would cause massive redraws */
@@ -708,30 +711,3 @@ gncFileQuit (void)
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
 }
-
-/* ======================================================== */
-
-AccountGroup *
-gncGetCurrentGroup (void)
-{
-  AccountGroup *grp;
-  GNCBook *book;
-
-  book = gncGetCurrentBook ();
-
-  grp = gnc_book_get_group (book);
-  return grp;
-}
-
-/* ======================================================== */
-
-GNCBook *
-gncGetCurrentBook (void) 
-{
-  if (!current_book)
-    current_book = gnc_book_new ();
-
-  return current_book;
-}
-
-/********************* END OF FILE **********************************/

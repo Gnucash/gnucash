@@ -28,7 +28,6 @@
 
 #include <gnome.h>
 
-#include "FileDialog.h"
 #include "Group.h"
 #include "dialog-utils.h"
 #include "gnc-account-tree.h"

@@ -1,5 +1,5 @@
 /********************************************************************\
- * file-history.h -- functions to maintain file-history menu        *
+ * gnc-file-history.h -- functions to maintain file-history menu    *
  * Copyright (C) 2000 Robby Stephenson         	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,14 +20,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef HISTORY_H
-#define HISTORY_H
+#ifndef GNC_FILE_HISTORY_H
+#define GNC_FILE_HISTORY_H
 
-#include <gnome.h>
+#include "gnc-ui-common.h"
+
 #define MAX_HISTORY 4
 
 void gnc_history_add_file (const char *filename);
-void gnc_history_update_menu (GnomeApp * app);
+void gnc_history_update_menu (gncUIWidget app);
 const char * gnc_history_get_last (void);
 
 #endif

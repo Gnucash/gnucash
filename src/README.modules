@@ -26,6 +26,8 @@ register/register-core      Toolkit independent register code, formerly in
 register/register-gnome     Gnome-specific register code, formerly in 
                             src/register/gnome
 
+import-export/binary-import utils for importing old GnuCash binary files
+
 import-export/qif-import    the old qif importer with Gnome druid 
 import-export/qif-io-core   new qif import/export module.  unfinished.
 
@@ -38,6 +40,8 @@ report/stylesheets          predefined style sheet templates
 
 app-utils                   utils for the gnucash app framework (component 
                             mgr, cmd line processing, gettext stuff, etc)
+
+app-file                    application-level file handling
 
 gnome-utils                 Extensions and utilities for using Gnome/Gtk
                             with GnuCash, including new widgets.

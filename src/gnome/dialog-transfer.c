@@ -26,7 +26,6 @@
 
 #include <gnome.h>
 
-#include "FileDialog.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "global-options.h"

@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "AccWindow.h"
-#include "FileDialog.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -42,6 +41,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
 #include "top-level.h"
 #include "window-help.h"
@@ -368,7 +368,7 @@ gnc_ui_to_account(AccountWindow *aw)
       xaccAccountInsertSubAccount (parent_account, account);
   }
   else
-    xaccGroupInsertAccount (gncGetCurrentGroup(), account);
+    xaccGroupInsertAccount (gnc_get_current_group (), account);
 
   xaccAccountCommitEdit (parent_account);
   xaccAccountCommitEdit (account);
@@ -907,7 +907,7 @@ gnc_new_account_ok (AccountWindow *aw)
     AccountGroup *group;
     char separator;
 
-    group = gncGetCurrentGroup();
+    group = gnc_get_current_group ();
 
     separator = gnc_get_account_separator();
 
@@ -1697,7 +1697,7 @@ gnc_split_account_name (const char *in_name, Account **base_account)
   names = NULL;
   name = g_strdup (in_name);
   *base_account = NULL;
-  group = gncGetCurrentGroup ();
+  group = gnc_get_current_group ();
 
   separator = gnc_get_account_separator ();
 

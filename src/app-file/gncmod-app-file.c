@@ -1,6 +1,6 @@
 /*********************************************************************
- * gncmod-binary-import.c
- * module definition/initialization for importing gnucash binary files
+ * gncmod-app-file.c
+ * module definition/initialization app-level file interface 
  * 
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
@@ -11,6 +11,7 @@
 #include <libguile/strports.h>
 #include <libguile/modules.h>
 
+#include "gnc-file-p.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
@@ -24,12 +25,12 @@ int gnc_module_age      = 0;
 
 char *
 gnc_module_path(void) {
-  return g_strdup("gnucash/import-export/binary-import");
+  return g_strdup("gnucash/app-file");
 }
 
 char * 
 gnc_module_description(void) {
-  return g_strdup("Utilities importing GnuCash binary files");
+  return g_strdup("Application level file interface");
 }
 
 static void
@@ -54,20 +55,7 @@ gnc_module_init(int refcount) {
       return FALSE;
     }
 
-    /* load the calculation module (we depend on it) */
-    if(!gnc_module_load("gnucash/app-file", 0)) {
-      return FALSE;
-    }
-
-    /* load the calculation module (we depend on it) */
-    if(!gnc_module_load("gnucash/gnome-utils", 0)) {
-      return FALSE;
-    }
-
-    /* publish g-wrapped bindings */
-    /* load the scheme code */
-    lmod("(g-wrapped gw-binary-import)");
-    lmod("(gnucash import-export binary-import)");
+    gnc_file_init ();
   }
 
   return TRUE;

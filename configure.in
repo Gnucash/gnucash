@@ -41,21 +41,20 @@ AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MINOR_VERSION, $GNUCASH_MINOR_VERSION)
 AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION)
 
+AC_CANONICAL_HOST
+AM_MAINTAINER_MODE
+AM_ACLOCAL_INCLUDE(macros)
+
+AC_PROG_CC
+
 dnl Set of available languages.
 ALL_LINGUAS="da de en_GB es fr it ja no pt_PT ru sv"
 AM_GNU_GETTEXT
 
 AM_PROG_XML_I18N_TOOLS
 
-AC_CANONICAL_HOST
-AM_MAINTAINER_MODE
-AM_ACLOCAL_INCLUDE(macros)
-
 AC_PROG_INSTALL
-AC_PROG_CC
 AM_PROG_LIBTOOL
-
-AC_ARG_PROGRAM
 
 AC_ISC_POSIX
 AC_C_BIGENDIAN
@@ -709,6 +708,7 @@ AC_OUTPUT(
           po/Makefile
           rpm/Makefile
           src/Makefile
+          src/app-file/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile

@@ -52,7 +52,7 @@ static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
-static GNCGroupCB group_cb = NULL;
+static GNCBookCB book_cb = NULL;
 
 
 /********************************************************************\
@@ -197,19 +197,31 @@ gnc_reverse_balance (Account *account)
   return reverse_type[type];
 }
 
-AccountGroup *
-gnc_get_current_group (void)
+void
+gnc_set_current_book_handler (GNCBookCB cb)
 {
-  if (group_cb)
-    return group_cb ();
+  book_cb = cb;
+}
+
+GNCBook *
+gnc_get_current_book (void)
+{
+  GNCBook *book;
+
+  if (book_cb)
+    return book_cb ();
 
   return NULL;
 }
 
-void
-gnc_set_current_group_handler (GNCGroupCB cb)
+AccountGroup *
+gnc_get_current_group (void)
 {
-  group_cb = cb;
+  GNCBook *book;
+
+  book = gnc_get_current_book ();
+
+  return gnc_book_get_group (book);
 }
 
 const char *

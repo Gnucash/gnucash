@@ -4,7 +4,7 @@ pkglib_LTLIBRARIES = libgncmod-engine.la
 
 CFLAGS = @CFLAGS@ ${GNUCASH_ENGINE_BASE_CFLAGS}
 
-INCLUDES = -I${top_srcdir}/src/gnc-module -I../
+INCLUDES = -I${top_srcdir}/src/gnc-module
 
 libgncmod_engine_la_SOURCES = \
   Account.c \

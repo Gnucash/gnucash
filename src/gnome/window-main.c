@@ -33,42 +33,39 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "dialog-account.h"
+#include "dialog-fincalc.h"
+#include "dialog-find-transactions.h"
+#include "dialog-nextrun.h"
+#include "dialog-options.h"
+#include "dialog-scheduledxaction.h"
+#include "dialog-sxsincelast.h"
+#include "dialog-totd.h"
+#include "dialog-transfer.h"
+#include "dialog-utils.h"
+#include "druid-qif-import.h"
 #include "gfec.h"
+#include "global-options.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "gnc-file-dialog.h"
+#include "gnc-file-history.h"
+#include "gnc-file.h"
+#include "gnc-gui-query.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 #include "gnucash.h"
 #include "io-utils.h"
+#include "mainwindow-account-tree.h"
+#include "option-util.h"
 #include "top-level.h"
-
-#include "FileBox.h"
-#include "FileDialog.h"
-
-#include "dialog-account.h"
-#include "dialog-fincalc.h"
-#include "dialog-find-transactions.h"
-#include "dialog-options.h"
-#include "dialog-totd.h"
-#include "dialog-transfer.h"
-#include "dialog-utils.h"
-#include "dialog-scheduledxaction.h"
-#include "dialog-nextrun.h"
-#include "dialog-sxsincelast.h"
-
-#include "window-help.h"
-#include "window-main.h"
-#include "window-main-summarybar.h"
 #include "window-acct-tree.h"
+#include "window-help.h"
+#include "window-main-summarybar.h"
+#include "window-main.h"
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-report.h"
-
-#include "file-history.h"
-#include "global-options.h"
-#include "gnc-component-manager.h"
-#include "gnc-gui-query.h"
-#include "mainwindow-account-tree.h"
-#include "option-util.h"
 
 #define WINDOW_MAIN_CM_CLASS "window-main"
 
@@ -182,10 +179,10 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
                      mainwin);
 
   /* set up extensions menu and hints */
-  gnc_extensions_menu_setup(app);  
+  gnc_extensions_menu_setup (app);
 
   /* make sure the file history is shown */ 
-  gnc_history_update_menu(app);
+  gnc_history_update_menu (GTK_WIDGET (app));
 }
 
 static void
@@ -198,7 +195,7 @@ gnc_main_window_child_set_title (GNCMainChildInfo *childwin)
   if (!childwin || !childwin->app)
     return;
 
-  filename = gnc_book_get_url (gncGetCurrentBook ());
+  filename = gnc_book_get_url (gnc_get_current_book ());
 
   if (!filename)
     filename = _("<no file>");
@@ -246,15 +243,17 @@ static void
 gnc_refresh_main_window_info (void)
 {
   GList *containers = gtk_container_get_toplevels ();
-  
-  while (containers) {
+
+  while (containers)
+  {
     GtkWidget *w = containers->data;
-    
-    if (GNOME_IS_APP (w)) {
+
+    if (GNOME_IS_APP (w))
+    {
       gnc_app_set_title (GNOME_APP (w));
-      gnc_history_update_menu(GNOME_APP(w));
+      gnc_history_update_menu (w);
     }
-      
+
     containers = containers->next;
   }
 }
@@ -684,8 +683,8 @@ gnc_main_window_options_cb(GtkWidget *widget, gpointer data) {
 
 static void
 gnc_main_window_file_new_file_cb(GtkWidget * widget) {
-  gncFileNew();
-  gnc_refresh_main_window_info();
+  gnc_file_new ();
+  gnc_refresh_main_window_info ();
 }
 
 static void
@@ -704,25 +703,25 @@ gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
 
 static void
 gnc_main_window_file_open_cb(GtkWidget * widget) {
-  gncFileOpen();
-  gnc_refresh_main_window_info();
+  gnc_file_open ();
+  gnc_refresh_main_window_info ();
 }
 
 static void
 gnc_main_window_file_save_cb(GtkWidget * widget) {
-  gncFileSave();
-  gnc_refresh_main_window_info();
+  gnc_file_save ();
+  gnc_refresh_main_window_info ();
 }
 
 static void
 gnc_main_window_file_save_as_cb(GtkWidget * widget) {
-  gncFileSaveAs();
-  gnc_refresh_main_window_info();
+  gnc_file_save_as ();
+  gnc_refresh_main_window_info ();
 }
 
 static void
 gnc_main_window_file_import_cb(GtkWidget * widget) {
-  gncFileQIFImport();
+  gnc_file_qif_import ();
 }
 
 static void
@@ -733,7 +732,7 @@ gnc_main_window_file_export_cb(GtkWidget * widget) {
   FILE *file;
   int rc;
 
-  filename =  fileBox (_("Export"), NULL, NULL);
+  filename =  gnc_file_dialog (_("Export"), NULL, NULL);
   if (!filename)
     return;
 
@@ -803,8 +802,8 @@ gnc_main_window_file_export_cb(GtkWidget * widget) {
     if (rc == EOF)
       break;
 
-    write_commodities (file, gncGetCurrentBook ());
-    write_accounts (file, gncGetCurrentBook ());
+    write_commodities (file, gnc_get_current_book ());
+    write_accounts (file, gnc_get_current_book ());
 
     rc = fputs ("<\\gnc-v2>\n", file);
     if (rc == EOF)

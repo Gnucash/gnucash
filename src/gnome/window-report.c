@@ -32,11 +32,11 @@
 
 #include <g-wrap-runtime-guile.h>
 
-#include "FileBox.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-file-dialog.h"
 #include "gnc-gui-query.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
@@ -339,7 +339,7 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
   {
     const char *filepath;
 
-    filepath = fileBox (_("Save HTML To File"), NULL, NULL);
+    filepath = gnc_file_dialog (_("Save HTML To File"), NULL, NULL);
     if (!filepath)
       return TRUE;
 

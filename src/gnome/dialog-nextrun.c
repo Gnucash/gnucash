@@ -22,10 +22,8 @@
 
 #include "config.h"
 
-#include <glib.h>
 #include <gnome.h>
 
-#include "FileDialog.h"
 #include "Group.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
@@ -199,7 +197,7 @@ nr_next_clicked( GtkButton *b, gpointer ud )
                 sxsld->transList = NULL;
         }
 
-        book = gncGetCurrentBook();
+        book = gnc_get_current_book ();
         sxList = gnc_book_get_schedxactions( book );
         if ( sxList == NULL ) {
                 PERR( "No scheduled transactions to play with\n" );
@@ -423,7 +421,7 @@ slr_create_transactions( SchedXaction *sx, GDate *gd )
         char                *id;
 
         /* get template account group */
-        ag = gnc_book_get_template_group( gncGetCurrentBook() );
+        ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
         acct = xaccGetAccountFromName( ag, id );
         DEBUG( "Got account \"%s\"\n",
@@ -433,7 +431,6 @@ slr_create_transactions( SchedXaction *sx, GDate *gd )
         xaccAccountForEachTransaction( acct,
                                        create_each_transaction,
                                        gd );
-
 }
 
 #if 0

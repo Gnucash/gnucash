@@ -105,6 +105,7 @@ INCLUDES = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \
@@ -113,6 +114,7 @@ INCLUDES = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
+  -I${top_srcdir}/src/import-export/binary-import \
   -I${top_srcdir}/src/import-export/qif-import \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}

@@ -29,16 +29,13 @@
 #include <string.h>
 
 #include "AccWindow.h"
-#include "FileBox.h"
-#include "FileDialog.h"
 #include "Scrub.h"
-
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "file-history.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -46,8 +43,9 @@
 #include "gnc-ui.h"
 #include "gnucash.h"
 #include "gtkselect.h"
-#include "messages.h"
+#include "io-gncxml-v2.h"
 #include "mainwindow-account-tree.h"
+#include "messages.h"
 #include "option-util.h"
 #include "top-level.h"
 #include "window-acct-tree.h"
@@ -56,9 +54,6 @@
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-report.h"
-
-#include "io-gncxml-v2.h"
-#include "gnc-book.h"
 
 static short module = MOD_GUI;
 #define WINDOW_ACCT_TREE_CM_CLASS "window-acct-tree"
@@ -524,7 +519,7 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
 static void
 gnc_acct_tree_window_menu_scrub_all_cb(GtkWidget * widget, 
                                        GnomeMDIChild * child) {
-  AccountGroup *group = gncGetCurrentGroup ();
+  AccountGroup *group = gnc_get_current_group ();
 
   gnc_suspend_gui_refresh ();
 

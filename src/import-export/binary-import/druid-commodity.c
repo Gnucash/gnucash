@@ -31,7 +31,6 @@
 #include <glib.h>
 #include <assert.h>
 
-#include "FileDialog.h"
 #include "Scrub.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
@@ -40,6 +39,7 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb-p.h"
 #include "gnc-ui-util.h"
@@ -114,7 +114,7 @@ window_delete_cb(GtkWidget *widget,
   CommodityDruid *cd = user_data;
 
   /* unload the current file (can't have out-of-date commodities) */
-  gncFileQuit();
+  gnc_file_quit ();
 
   gnc_ui_commodity_druid_destroy (cd);
 
@@ -382,8 +382,8 @@ gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
   gnc_ui_commodity_druid_destroy(cd);
 
   /* unload the current file (can't have out-of-date commodities) */
-  gncFileQuit();
-  gncFileNew();
+  gnc_file_quit ();
+  gnc_file_new ();
 
   return TRUE;
 }

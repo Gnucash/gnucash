@@ -32,8 +32,6 @@
 #include <unistd.h>
 
 #include "Account.h"
-#include "FileBox.h"
-#include "FileDialog.h"
 #include "dialog-account-picker.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
@@ -42,6 +40,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-file-dialog.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -340,7 +339,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   QIFImportWindow * wind = user_data;
   const char * new_file_name;
 
-  new_file_name = fileBox(_("Select QIF File"), "*.qif", "");
+  new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", "");
 
   /* set the filename entry for what was selected */
   if(wind->filename_entry) {
@@ -1665,7 +1664,7 @@ gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w) {
 /* ======================================================== */
 
 void
-gncFileQIFImport (void) 
+gnc_file_qif_import (void) 
 {
   /* pop up the QIF File Import dialog box */
   gnc_ui_qif_import_druid_make();

@@ -24,15 +24,14 @@
 
 #include <gnome.h>
 
-#include "file-history.h"
-#include "FileDialog.h"
-#include "gnc-ui.h"
+#include "gnc-file-history.h"
+#include "gnc-file.h"
 
 static GSList *history_list = NULL;
 static gint num_menu_entries = -1;
 
 static void
-__gnc_history_config_write(void)
+gnc_history_config_write (void)
 {
   int max_files, i = 0;
   char *key;
@@ -61,7 +60,7 @@ __gnc_history_config_write(void)
 }
 
 static void
-__gnc_history_get_list(void)
+gnc_history_get_list (void)
 {
   int max_files, i;
   char *key, *filename;
@@ -90,13 +89,13 @@ __gnc_history_get_list(void)
 }
 
 static void
-__gnc_history_file_cb(GtkWidget *w, char *data)
+gnc_history_file_cb (GtkWidget *w, char *data)
 {
-  gncFileOpenFile(data);
+  gnc_file_open_file (data);
 }
 
 void
-gnc_history_add_file(const char *newfile)
+gnc_history_add_file (const char *newfile)
 {
   int i, max_files;
   gboolean used_default, matched = FALSE;
@@ -115,19 +114,23 @@ gnc_history_add_file(const char *newfile)
     gnome_config_set_int("MaxFiles", max_files);
 
   if(history_list == NULL)
-    __gnc_history_get_list();
+    gnc_history_get_list ();
 
   i = 0;
   tmp = history_list;
-  while(tmp != NULL && i < max_files) {
+  while(tmp != NULL && i < max_files)
+  {
     if(!matched &&                                     /* no match yet */
        ((i == max_files - 1) ||                        /* last entry */
 	(strcmp(newfile, (char *)tmp->data) == 0)) ) { /* filename match */
       g_free(tmp->data);
       matched = TRUE;
-    } else {
+    }
+    else
+    {
       new_list = g_slist_prepend(new_list, tmp->data);
     }
+
     i++;
     tmp = tmp->next;
   }
@@ -137,7 +140,7 @@ gnc_history_add_file(const char *newfile)
   g_slist_free(history_list);
   history_list = new_list;
 
-  __gnc_history_config_write();
+  gnc_history_config_write ();
 
   /* Update apps immediately */
   {
@@ -148,7 +151,7 @@ gnc_history_add_file(const char *newfile)
       GtkWidget *w = containers->data;
 
       if (GNOME_IS_APP (w))
-        gnc_history_update_menu (GNOME_APP(w));
+        gnc_history_update_menu (w);
 
       containers = containers->next;
     }
@@ -156,10 +159,10 @@ gnc_history_add_file(const char *newfile)
 }
 
 const char *
-gnc_history_get_last(void)
+gnc_history_get_last (void)
 {
   if(history_list == NULL)
-    __gnc_history_get_list();
+    gnc_history_get_list ();
 
   if(history_list == NULL)
     return NULL;
@@ -168,12 +171,12 @@ gnc_history_get_last(void)
 }
 
 void
-gnc_history_update_menu(GnomeApp * app)
+gnc_history_update_menu (GtkWidget * app_w)
 {
-  GtkWidget *app_w;
   GnomeUIInfo *menu;
   GnomeDockItem *di;
   GtkWidget *menushell;
+  GnomeApp *app;
   gpointer data;
   char *path;
   char *file;
@@ -183,8 +186,12 @@ gnc_history_update_menu(GnomeApp * app)
   int i, n;
   int pos;
 
-  if (!app)
+  if (!app_w)
     return;
+
+  g_return_if_fail (GNOME_IS_APP (app_w));
+
+  app = GNOME_APP (app_w);
 
   di = gnome_app_get_dock_item_by_name(app, GNOME_APP_MENUBAR_NAME);
   if (di == NULL)
@@ -215,9 +222,9 @@ gnc_history_update_menu(GnomeApp * app)
   }
 
   if(history_list == NULL)
-    __gnc_history_get_list();
+    gnc_history_get_list();
 
-  if(history_list == NULL)
+  if (history_list == NULL)
     return;
 
   n = g_slist_length(history_list);
@@ -256,7 +263,7 @@ gnc_history_update_menu(GnomeApp * app)
 
     (menu+i)->hint = NULL;
 
-    (menu+i)->moreinfo = (gpointer)__gnc_history_file_cb;
+    (menu+i)->moreinfo = gnc_history_file_cb;
     (menu+i)->user_data = file;
     (menu+i)->unused_data = NULL;
     (menu+i)->pixmap_type = 0;

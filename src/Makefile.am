@@ -10,6 +10,7 @@ SUBDIRS = \
   tax \
   app-utils \
   gnome-utils \
+  app-file \
   register \
   import-export \
   report \
@@ -35,9 +36,11 @@ gnucash_LDADD = \
   -Lcalculation -Lcalculation/.libs \
   -Lnetwork-utils -Lnetwork-utils/.libs \
   -Lapp-utils -Lapp-utils/.libs \
+  -Lapp-file -Lapp-file/.libs \
   gnc-module/libgncmodule.la \
   gnome-utils/libgncmod-gnome-utils.la \
   app-utils/libgncmod-app-utils.la \
+  app-file/libgncmod-app-file.la \
   engine/libgncmod-engine.la \
   engine/libgw-engine.la \
   engine/libgw-glib.la \
@@ -65,15 +68,11 @@ gnucash_LDADD = \
   -lltdl
 
 gnucash_SOURCES = \
-  FileDialog.c \
   gnc-main.c
 
 noinst_HEADERS = \
   AccWindow.h \
-  FileBox.h \
-  FileDialog.h \
   RecnWindow.h \
-  file-history.h \
   gnc-ui.h
 
 EXTRA_DIST = \

@@ -29,7 +29,6 @@
 #include <string.h>
 
 #include "Account.h"
-#include "FileDialog.h"
 #include "Group.h"
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -383,7 +382,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   /* Make sure there's at least one accumulator in the list. */
   gnc_ui_get_currency_accumulator (&currency_list, default_currency);
 
-  group = gncGetCurrentGroup ();
+  group = gnc_get_current_group ();
   gnc_ui_accounts_recurse(group, &currency_list, euro);
 
   for (current = g_list_first(summary->totals_list); current;

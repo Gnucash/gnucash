@@ -34,7 +34,6 @@
 #include <time.h>
 
 #include "AccWindow.h"
-#include "FileDialog.h"
 #include "Scrub.h"
 #include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
@@ -1221,7 +1220,7 @@ gnc_register_scrub_all_cb (GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  root = gncGetCurrentGroup ();
+  root = gnc_get_current_group ();
 
   for (node = xaccQueryGetSplits (query); node; node = node->next)
   {
@@ -1251,7 +1250,7 @@ gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  root = gncGetCurrentGroup ();
+  root = gnc_get_current_group ();
 
   xaccTransScrubOrphans (trans, root);
   xaccTransScrubImbalance (trans, root, NULL);
@@ -2318,7 +2317,7 @@ account_latest_price (Account *account)
   commodity = xaccAccountGetCommodity (account);
   currency = gnc_default_currency ();
 
-  book = gncGetCurrentBook ();
+  book = gnc_get_current_book ();
   pdb = gnc_book_get_pricedb (book);
 
   return gnc_pricedb_lookup_latest (pdb, commodity, currency);
@@ -3334,7 +3333,7 @@ invoiceTransCB (GtkWidget *widget, gpointer data)
 
   query = xaccMallocQuery ();
 
-  xaccQuerySetGroup (query, gncGetCurrentGroup ());
+  xaccQuerySetGroup (query, gnc_get_current_group ());
 
   xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split), QUERY_AND);
 

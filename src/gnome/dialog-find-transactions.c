@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "FileDialog.h"
 #include "Query.h"
 #include "dialog-find-transactions.h"
 #include "dialog-utils.h"
@@ -41,6 +40,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
 #include "window-help.h"
 #include "window-register.h"
@@ -511,7 +511,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   assert(ftd->q);
 
   q = xaccMallocQuery();
-  xaccQuerySetGroup(q, gncGetCurrentGroup());
+  xaccQuerySetGroup(q, gnc_get_current_group ());
 
   /* account selections */
   selected_accounts = 
