@@ -1,5 +1,8 @@
 2003-03-13  Derek Atkins  <derek@ihtfp.com>
 
+	* src/engine/Makefile.am: make sure to add INTLLIBS in case
+	  we're compiling against an external -lintl (like on Solaris)
+
 	* src/calculation/Makefile.am: fix to build on systems that don't
 	  have GUILE installed in the system path or in the same place
 	  as GLIB.
