@@ -2546,14 +2546,17 @@ if test ${OPT_STYLE_INSTALL} = 1
 then
   GNC_DOCDIR='${prefix}/doc'
   GNC_BINDIR='${prefix}/bin'
+  GNC_LIBDIR='${prefix}/lib'
   GNC_CONFIGDIR=${sysconfdir}
   GNC_SHAREDIR=${datadir}
 else
   GNC_DOCDIR='${prefix}/doc/gnucash'
   GNC_BINDIR='${prefix}/bin'
+  GNC_LIBDIR='${prefix}/lib'
   GNC_CONFIGDIR=${sysconfdir}/gnucash
   GNC_SHAREDIR=${datadir}/gnucash
 fi
+
 
 
 
@@ -2748,6 +2751,7 @@ s%@HAVE_PLOTUTILS@%$HAVE_PLOTUTILS%g
 s%@MOTIF_LIBS@%$MOTIF_LIBS%g
 s%@GNC_DOCDIR@%$GNC_DOCDIR%g
 s%@GNC_BINDIR@%$GNC_BINDIR%g
+s%@GNC_LIBDIR@%$GNC_LIBDIR%g
 s%@GNC_CONFIGDIR@%$GNC_CONFIGDIR%g
 s%@GNC_SHAREDIR@%$GNC_SHAREDIR%g
 s%@GNC_RUNTIME_SHAREDIR@%$GNC_RUNTIME_SHAREDIR%g

@@ -252,17 +252,20 @@ if test ${OPT_STYLE_INSTALL} = 1
 then
   GNC_DOCDIR='${prefix}/doc'
   GNC_BINDIR='${prefix}/bin'
+  GNC_LIBDIR='${prefix}/lib'
   GNC_CONFIGDIR=${sysconfdir}
   GNC_SHAREDIR=${datadir}
 else
   GNC_DOCDIR='${prefix}/doc/gnucash'
   GNC_BINDIR='${prefix}/bin'
+  GNC_LIBDIR='${prefix}/lib'
   GNC_CONFIGDIR=${sysconfdir}/gnucash
   GNC_SHAREDIR=${datadir}/gnucash
 fi
 
 AC_SUBST(GNC_DOCDIR)
 AC_SUBST(GNC_BINDIR)
+AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_SHAREDIR)
 
