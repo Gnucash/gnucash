@@ -49,7 +49,6 @@
 #include "gnc-date.h"
 #include "gnc-event.h"
 #include "gnc-lot.h"
-#include "kvp_frame.h"
 #include "messages.h"
 #include "Scrub3.h"
 #include "Transaction.h"
@@ -213,18 +212,16 @@ lv_select_row_cb (GtkCList       *clist,
    GNCLotViewer *lv = user_data;
    GNCLot *lot;
    const char * str;
-   KvpFrame *kvp;
 
    lot = gtk_clist_get_row_data (clist, row);
-   kvp = gnc_lot_get_slots (lot);
 
-   str = kvp_frame_get_string (kvp, "/title");
+   str = gnc_lot_get_title (lot);
    if (!str) str = "";
    gtk_entry_set_text (lv->title_entry, str);
    gtk_entry_set_editable (lv->title_entry, TRUE);
    
    /* Set the notes field */
-   str = kvp_frame_get_string (kvp, "/notes");
+   str = gnc_lot_get_notes (lot);
    if (!str) str = "";
    xxxgtk_text_set_text (lv->lot_notes, str);
    gtk_text_set_editable (lv->lot_notes, TRUE);
@@ -277,12 +274,11 @@ lv_unselect_row_cb (GtkCList       *clist,
 
    if (lot)
    {
-      KvpFrame *kvp = gnc_lot_get_slots (lot);
-      kvp_frame_set_str (kvp, "/title", str);
+      gnc_lot_set_title (lot, str);
 
       /* Get the notes, save the notes */
       str = xxxgtk_text_get_text (lv->lot_notes);
-      kvp_frame_set_str (kvp, "/notes", str);
+      gnc_lot_set_notes (lot, str);
    }
 
    lv_unset_lot (lv);
@@ -427,11 +423,10 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       Split *esplit = gnc_lot_get_earliest_split (lot);
       Transaction *etrans = xaccSplitGetParent (esplit);
       time_t open_date = xaccTransGetDate (etrans);
-      KvpFrame *kvp = gnc_lot_get_slots (lot);
       gnc_numeric amt_baln = gnc_lot_get_balance (lot);
       gnc_commodity *currency = find_first_currency (lot);
       gnc_numeric gains_baln = get_realized_gains (lot, currency);
-      char *row_vals[NUM_COLS];
+      const char *row_vals[NUM_COLS];
 
       /* Opening date */
       qof_print_date_buff (obuff, MAX_DATE_LENGTH, open_date);
@@ -453,7 +448,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       }
 
       /* Title */
-      row_vals[TITLE_COL] = kvp_frame_get_string (kvp, "/title");
+      row_vals[TITLE_COL] = gnc_lot_get_title (lot);
       
       /* Amount */
       xaccSPrintAmount (baln_buff, amt_baln, 
@@ -466,7 +461,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
       row_vals[GAINS_COL] = gain_buff;
 
       /* Self-reference */
-      row = gtk_clist_append (lv->lot_clist, row_vals);
+      row = gtk_clist_append (lv->lot_clist, (char **)row_vals);
       gtk_clist_set_row_data (lv->lot_clist, row, lot);
       if (lot == selected_lot) selected_row = row;
    }
@@ -503,15 +498,14 @@ lv_close_handler (gpointer user_data)
    if (lot)
    {
       const char * str;
-      KvpFrame *kvp = gnc_lot_get_slots (lot);
 
       /* Get the title, save the title */
       str = gtk_entry_get_text (lv->title_entry);
-      kvp_frame_set_str (kvp, "/title", str);
+      gnc_lot_set_title (lot, str);
 
       /* Get the notes, save the notes */
       str = xxxgtk_text_get_text (lv->lot_notes);
-      kvp_frame_set_str (kvp, "/notes", str);
+      gnc_lot_set_notes (lot, str);
    }
 
    gtk_widget_destroy (lv->window);
