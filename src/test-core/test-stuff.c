@@ -234,13 +234,13 @@ gchar
 get_random_character(void)
 {
     if (!rcend)
-      random_character_include_funky_chars (FALSE);
+      random_character_include_funky_chars (TRUE);
 
     return random_chars[get_random_int_in_range(0, rcend)];
 }
 
-gchar*
-get_random_string(void)
+gchar *
+get_random_string_without(const char *exclude_chars)
 {
     gchar *ret;
     int len;
@@ -264,12 +264,25 @@ get_random_string(void)
     }
     ret = g_new0(gchar, len);
 
-    for(i = 0; i < len - 1; i++)
+    for (i = 0; i < len - 1; i++)
     {
-        ret[i] = get_random_character();
+        char c;
+
+        do
+        {
+            c = get_random_character ();
+        } while (exclude_chars && strchr (exclude_chars, c));
+
+        ret[i] = c;
     }
 
     return g_strstrip (ret);
+}
+
+gchar *
+get_random_string(void)
+{
+  return get_random_string_without (NULL);
 }
 
 gint64

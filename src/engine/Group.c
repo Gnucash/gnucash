@@ -125,7 +125,14 @@ xaccGroupEqual(AccountGroup *ga,
 
     if (!xaccAccountEqual(aa, ab, check_guids))
     {
-      PWARN ("accounts differ");
+      char sa[GUID_ENCODING_LENGTH + 1];
+      char sb[GUID_ENCODING_LENGTH + 1];
+
+      guid_to_string_buff (xaccAccountGetGUID (aa), sa);
+      guid_to_string_buff (xaccAccountGetGUID (ab), sb);
+
+      PWARN ("accounts %s and %s differ", sa, sb);
+
       return(FALSE);
     }
 

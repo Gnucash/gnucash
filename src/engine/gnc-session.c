@@ -238,7 +238,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 
 gboolean
 gnc_session_begin (GNCSession *session, const char * book_id, 
-                gboolean ignore_lock, gboolean create_if_nonexistent)
+                   gboolean ignore_lock, gboolean create_if_nonexistent)
 {
   int rc;
 
@@ -278,6 +278,18 @@ gnc_session_begin (GNCSession *session, const char * book_id,
 
   session->logpath = xaccResolveFilePath(session->fullpath);
   PINFO ("logpath=%s", session->logpath ? session->logpath : "(null)");
+
+  /* destroy the old backend */
+  if (session->backend && session->backend->destroy_backend)
+  {
+      session->backend->destroy_backend(session->backend);
+  }
+  else
+  {
+      g_free(session->backend);
+  }
+
+  session->backend = NULL;
 
   /* check to see if this is a type we know how to handle */
   if (!g_strncasecmp(book_id, "file:", 5) ||

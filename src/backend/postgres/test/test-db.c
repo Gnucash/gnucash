@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "Backend.h"
 #include "TransLog.h"
@@ -13,33 +14,68 @@
 #include "test-engine-stuff.h"
 
 static void
+save_xml_file (GNCSession *session, const char *filename_base)
+{
+  GNCBackendError io_err;
+  char cwd[1024];
+  char *filename;
+
+  g_return_if_fail (session && filename);
+
+  getcwd (cwd, sizeof (cwd));
+
+  filename = g_strdup_printf ("file:/%s/%s", cwd, filename_base);
+
+  gnc_session_begin (session, filename, FALSE, TRUE);
+
+  io_err = gnc_session_get_error (session);
+  g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
+
+  gnc_session_save (session);
+  io_err = gnc_session_get_error (session);
+  g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
+
+  gnc_session_end (session);
+  io_err = gnc_session_get_error (session);
+  g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
+
+  g_free (filename);
+}
+
+static void
+save_xml_files (GNCSession *session_1, GNCSession *session_2)
+{
+  g_return_if_fail (session_1 && session_2);
+
+  save_xml_file (session_1, "test_file_1");
+  save_xml_file (session_2, "test_file_2");
+}
+
+static void
 run_test (void)
 {
-  GNCBook *book;
-  GNCBook *book_db;
   GNCSession *session;
   GNCSession *session_db;
   GNCBackendError io_err;
   char *filename;
+  gboolean ok;
 
-  session = gnc_session_new ();
-
-  book = get_random_book (session);
-
-  gnc_session_set_book (session, book);
+  session = get_random_session ();
 
   filename = g_strdup ("postgres://localhost:7777/gnc_test?mode=single-file");
-  gnc_session_begin (session, filename, FALSE, TRUE);
 
+  gnc_session_begin (session, filename, FALSE, TRUE);
   io_err = gnc_session_get_error (session);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning gnc_test"))
     return;
 
   gnc_session_save (session);
+  io_err = gnc_session_get_error (session);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Saving gnc_test"))
     return;
 
   gnc_session_end (session);
+  io_err = gnc_session_get_error (session);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending gnc_test"))
     return;
 
@@ -49,23 +85,29 @@ run_test (void)
   session_db = gnc_session_new ();
 
   gnc_session_begin (session_db, filename, FALSE, FALSE);
-  g_free (filename);
-
   io_err = gnc_session_get_error (session_db);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning gnc_test load"))
     return;
 
   gnc_session_load (session_db);
+  io_err = gnc_session_get_error (session_db);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Loading gnc_test"))
     return;
 
   gnc_session_end (session_db);
+  io_err = gnc_session_get_error (session_db);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending gnc_test load"))
     return;
 
-  book_db = gnc_session_get_book (session_db);
+  ok = gnc_book_equal (gnc_session_get_book (session),
+                       gnc_session_get_book (session_db));
 
-  do_test (gnc_book_equal (book, book_db), "Books not equal");
+  do_test (ok, "Books not equal");
+
+  if (!ok)
+    save_xml_files (session, session_db);
+
+  g_free (filename);
 }
 
 static void
@@ -86,8 +128,6 @@ guile_main (int argc, char **argv)
 
   set_max_group_depth (3);
   set_max_group_accounts (5);
-
-  random_character_include_funky_chars (FALSE);
 
   xaccLogDisable ();
 

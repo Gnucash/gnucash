@@ -65,13 +65,17 @@ void  gnc_commodity_set_fraction(gnc_commodity * cm, int smallest_fraction);
 void  gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark);
 
 gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
-
+gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
 
 /* gnc_commodity_table functions : operate on a database of commodity
  * info */
 
 gnc_commodity_table * gnc_commodity_table_new(void);
 void          gnc_commodity_table_destroy(gnc_commodity_table * table);
+
+gboolean gnc_commodity_table_equal(gnc_commodity_table *t_1,
+                                   gnc_commodity_table *t_2);
+
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
                                            const char * namespace, 
                                            const char * mnemonic);

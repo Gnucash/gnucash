@@ -262,8 +262,8 @@ get_random_kvp_frame_depth (gint depth)
     {
         gchar *key;
         kvp_value *val;
-        
-        key = get_random_string();
+
+        key = get_random_string_without("/");
         val = get_random_kvp_value_depth (-1, depth + 1);
 
         if(!key)
@@ -836,4 +836,19 @@ get_random_book (GNCSession *session)
   /* make_random_pricedb (gnc_book_get_pricedb (book)); */
 
   return book;
+}
+
+GNCSession *
+get_random_session (void)
+{
+  GNCSession *session;
+  GNCBook *book;
+
+  session = gnc_session_new ();
+
+  book = gnc_session_get_book (session);
+
+  gnc_book_set_group (book, get_random_group (session));
+
+  return session;
 }

@@ -33,7 +33,9 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "guid.h"
 
+static short module = MOD_ENGINE; 
 
 /* parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many
@@ -314,6 +316,51 @@ gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b) {
   if(!a || !b) return FALSE;
   if(safe_strcmp(a->namespace, b->namespace) != 0) return FALSE;
   if(safe_strcmp(a->mnemonic, b->mnemonic) != 0) return FALSE;
+  return TRUE;
+}
+
+gboolean
+gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
+{
+  if (a == b) return TRUE;
+
+  if (!a || !b)
+  {
+    PWARN ("one is NULL");
+    return FALSE;
+  }
+
+  if (safe_strcmp(a->namespace, b->namespace) != 0)
+  {
+    PWARN ("namespaces differ: %s vs %s", a->namespace, b->namespace);
+    return FALSE;
+  }
+
+  if (safe_strcmp(a->mnemonic, b->mnemonic) != 0)
+  {
+    PWARN ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic);
+    return FALSE;
+  }
+
+  if (safe_strcmp(a->fullname, b->fullname) != 0)
+  {
+    PWARN ("fullnames differ: %s vs %s", a->fullname, b->fullname);
+    return FALSE;
+  }
+
+  if (safe_strcmp(a->exchange_code, b->exchange_code) != 0)
+  {
+    PWARN ("exchange codes differ: %s vs %s",
+           a->exchange_code, b->exchange_code);
+    return FALSE;
+  }
+
+  if (a->fraction != b->fraction)
+  {
+    PWARN ("fractions differ: %d vs %d", a->fraction, b->fraction);
+    return FALSE;
+  }
+
   return TRUE;
 }
 
@@ -765,6 +812,42 @@ gnc_commodity_table_destroy(gnc_commodity_table * t) {
   g_hash_table_foreach_remove(t->table, ct_helper, t);
   g_hash_table_destroy(t->table);
   g_free(t);
+}
+
+static gboolean 
+table_equal_helper (gnc_commodity *cm_1, gpointer user_data)
+{
+  gnc_commodity_table *t_2 = user_data;
+  gnc_commodity *cm_2;
+
+  cm_2 = gnc_commodity_table_lookup (t_2,
+                                     gnc_commodity_get_namespace (cm_1),
+                                     gnc_commodity_get_mnemonic (cm_1));
+
+  if (!cm_2)
+  {
+    PWARN ("one has commodity %s, the other does not",
+           gnc_commodity_get_unique_name (cm_1));
+    return FALSE;
+  }
+
+  return gnc_commodity_equal (cm_1, cm_2);
+}
+
+gboolean
+gnc_commodity_table_equal(gnc_commodity_table *t_1,
+                          gnc_commodity_table *t_2)
+{
+  gboolean ok;
+
+  if (t_1 == t_2) return TRUE;
+  if (!t_1 || !t_2) return FALSE;
+
+  ok = gnc_commodity_table_foreach_commodity (t_1, table_equal_helper, t_2);
+  if (!ok)
+    return FALSE;
+
+  return gnc_commodity_table_foreach_commodity (t_2, table_equal_helper, t_1);
 }
 
 /* ========================= END OF FILE ============================== */

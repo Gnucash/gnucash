@@ -862,7 +862,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     }
   }
 
-  if(!gnc_commodity_equiv(ta->common_currency, tb->common_currency))
+  if(!gnc_commodity_equal(ta->common_currency, tb->common_currency))
   {
     PWARN ("commodities differ %s vs %s",
            gnc_commodity_get_unique_name (ta->common_currency),

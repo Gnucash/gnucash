@@ -1,3 +1,39 @@
+2001-10-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/test-core/test-stuff.c (get_random_string_without): new func
+
+	* src/engine/test-core/test-engine-stuff.c
+	(get_random_kvp_frame_depth): fix bug
+	(get_random_session): new func
+
+	* src/engine/Account.c (xaccAccountEqual): more warnings, use
+	gnc_commodity_equal
+
+	* src/engine/Group.c (xaccGroupEqual): more warnings
+
+	* src/engine/Transaction.c: use gnc_commodity_equal
+
+	* src/engine/gnc-book.c (gnc_book_equal): compare commodity tables
+
+	* src/engine/gnc-commodity.c (gnc_commodity_equal): new func
+	(gnc_commodity_table_equal): new func
+
+	* src/engine/gnc-session.c (gnc_session_begin): destroy old backend
+
+	* src/backend/postgres/test/.cvsignore: ignore test files
+
+	* src/backend/postgres/test/Makefile.am: add file backend .la
+	to get symbols for gdb
+
+	* src/backend/postgres/test/run-tests.sh: remove test files
+	before starting test
+
+	* src/backend/postgres/test/test-db.c: when books differ, write
+	out xml files
+
+	* src/backend/file/test/test-xml-account.c (test_add_account):
+	fix for strong commodity equal test
+
 2001-10-11  Rob Browning  <rlb@defaultvalue.org>
 
 	* configure.in: require at least g-wrap 1.3.1.

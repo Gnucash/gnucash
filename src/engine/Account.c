@@ -403,7 +403,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
 
   if (aa->type != ab->type)
   {
-    PWARN ("types differ");
+    PWARN ("types differ: %d vs %d", aa->type, ab->type);
     return FALSE;
   }
 
@@ -425,7 +425,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
     return FALSE;
   }
 
-  if (!gnc_commodity_equiv(aa->commodity, ab->commodity))
+  if (!gnc_commodity_equal(aa->commodity, ab->commodity))
   {
     PWARN ("commodities differ");
     return FALSE;

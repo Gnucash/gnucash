@@ -194,7 +194,22 @@ typedef struct act_data_struct act_data;
 static gboolean
 test_add_account(const char *tag, gpointer globaldata, gpointer data)
 {
+    Account *account = data;
     act_data *gdata = (act_data*)globaldata;
+    gnc_commodity * com;
+    gnc_commodity * new_com;
+    gnc_commodity_table *t;
+
+    com = xaccAccountGetCommodity (account);
+
+    t = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+    new_com = gnc_commodity_table_lookup (t,
+                                          gnc_commodity_get_namespace (com),
+                                          gnc_commodity_get_mnemonic (com));
+
+    if (new_com)
+      xaccAccountSetCommodity (account, new_com);
 
     do_test_args(xaccAccountEqual((Account*)data, (Account*)(gdata->act),
                                   TRUE),

@@ -326,6 +326,13 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
     return FALSE;
   }
 
+  if (!gnc_commodity_table_equal (gnc_book_get_commodity_table (book_1),
+                                  gnc_book_get_commodity_table (book_2)))
+  {
+    PWARN ("commodity tables differ");
+    return FALSE;
+  }
+
   /* FIXME: do scheduled transactions and template group */
 
   return TRUE;

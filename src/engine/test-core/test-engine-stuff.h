@@ -50,5 +50,6 @@ const char *get_random_commodity_namespace(void);
 Query* get_random_query(void);
 
 GNCBook * get_random_book (GNCSession *session);
+GNCSession * get_random_session (void);
 
 #endif
