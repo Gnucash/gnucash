@@ -213,7 +213,7 @@ obj_setAmount(myobj *g, gnc_numeric h)
 gnc_numeric
 obj_getAmount(myobj *g)
 {
-	if(!g) return double_to_gnc_numeric(0,0,GNC_HOW_DENOM_EXACT);
+	if(!g) return gnc_numeric_zero();
 	return g->Amount;
 }
 
@@ -413,6 +413,7 @@ test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint r
 	importstring = NULL;
 	targetstring = NULL;
 	skip_target = FALSE;
+	mergeData->currentRule = rule;
 	do_test ((rule != NULL), "loop:#1 Rule is NULL");
 	do_test (remainder > 0, "loop:#2 remainder error.");
 	do_test ((safe_strcmp(NULL, rule->mergeLabel) != 0), "loop:#3 object label\n");

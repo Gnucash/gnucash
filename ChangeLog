@@ -1,3 +1,9 @@
+2005-02-02  Derek Atkins  <derek@ihtfp.com>
+
+	Neil Williams' patch to clean up the test-book-merge:
+	* src/engine/test/test-book-merge.c:
+	  The first change is just simplification, the second change is the fix.
+
 2005-01-30  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' QOF sync patch:
