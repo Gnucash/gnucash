@@ -1,3 +1,17 @@
+2001-12-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/report/report-gnome/test/test-load-module: add
+
+	* src/report/report-gnome/test/test-link-module.c: add
+
+	* src/report/report-gnome/test/Makefile.am: add
+
+	* src/report/report-gnome/test/.cvsignore: add
+
+	* src/report/report-gnome/Makefile.am: add test dir
+
+	* configure.in: configure report-gnome/test directory
+
 2001-12-11  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/scm/command-line.scm: reorganize a little to remove some of
