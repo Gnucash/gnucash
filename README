@@ -175,11 +175,13 @@ Lesstif 0.82: broken
 Lesstif 0.86.0: works
 Lesstif 0.86.5: broken
 Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
-Lesstif 0.87.0: (see below) (missing symbols for XmeDrawShadows, etc.)
+Lesstif 0.87.0: works ... "" ?
+Lesstif 0.88.1: works ... "" ?
 
-The missing symbols in lesstif aren't really "missing"; they're there
-when lesstif is built for motif-2.0 compatibility, and are absent when
-built for motif-1.2 compatibility.  
+Note: some versions of XmHTML have been compiled with Motif, and these
+need XmeDrawShadows to link and run.  However, this is an undefined symbol
+in most versions of lesstif. Solution: download XmHTML source and 
+compile/install it.
 
 These core dumps do not occur with RedHat Motif (or other commercial
 versions of Motif).
