@@ -166,9 +166,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         }
 
                         rect.x = xpaint + CELL_HPADDING;
-                        rect.y = ypaint + CELL_VPADDING;
-                        rect.width = MAX(0, w - 2*CELL_HPADDING);
-                        rect.height = h;
+                        rect.y = ypaint + 1;
+                        rect.width = MAX (0, w - (2 * CELL_HPADDING));
+                        rect.height = h - 2;
 
                         gdk_gc_set_clip_rectangle (header->gc, &rect);
 

@@ -482,9 +482,9 @@ draw_cell (GnucashGrid *grid,
                 }
 
         rect.x      = x + CELL_HPADDING;
-        rect.y      = y + CELL_VPADDING;
-        rect.width  = width - (2 * CELL_HPADDING);
-        rect.height = height;
+        rect.y      = y + 1;
+        rect.width  = MAX (0, width - (2 * CELL_HPADDING));
+        rect.height = height - 2;
 
         gdk_gc_set_clip_rectangle (grid->gc, &rect);
 

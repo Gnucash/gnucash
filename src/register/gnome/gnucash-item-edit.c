@@ -204,17 +204,17 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         dy = yd - y;
 
         info->bg_rect.x      = dx + CELL_HPADDING;
-        info->bg_rect.y      = dy + CELL_VPADDING;
+        info->bg_rect.y      = dy + 1;
         info->bg_rect.width  = wd - (2 * CELL_HPADDING);
-        info->bg_rect.height = hd - (2 * CELL_VPADDING);
+        info->bg_rect.height = hd - 2;
 
         toggle_space = item_edit->is_popup ? 
                 item_edit->popup_toggle.toggle_offset : 0;
 
         info->text_rect.x      = dx;
-        info->text_rect.y      = dy + CELL_VPADDING;
+        info->text_rect.y      = dy + 1;
         info->text_rect.width  = wd - toggle_space;
-        info->text_rect.height = hd - (2 * CELL_VPADDING);
+        info->text_rect.height = hd - 2;
 
         switch (gnc_table_get_align (table, item_edit->virt_loc))
         {
@@ -425,7 +425,7 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 
         item_edit->popup_toggle.toggle_offset = toggle_width + 3;
 
-	item_edit_show_popup_toggle (item_edit, toggle_x, toggle_y,
+        item_edit_show_popup_toggle (item_edit, toggle_x, toggle_y,
                                      toggle_width, toggle_height,
                                      GTK_ANCHOR_NW);
 
