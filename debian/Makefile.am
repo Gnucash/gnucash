@@ -9,4 +9,7 @@ EXTRA_DIST = \
   copyright \
   dirs \
   gnucash.menu \
-  rules
+  rules \
+  postinst
+
+

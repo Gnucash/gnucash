@@ -1,0 +1,33 @@
+
+   bust this file up into several. Its *way* too big to deal with.
+
+   create common funcs for repeated "types" of parsers.  i.e. a common
+   func for handling guid, gnc_numeric, etc. parsers - just pass in
+   string->data and data->string funcs.
+
+   change sixtp_child_result to sixtp_result?
+
+   add generic accumulate chars node constructor - takes end_handler
+   as argument - same as for timespec parser...
+
+   document that right now parsing is *extremely* anal - no whitespace
+   surrounding data.
+
+   need to add a way to propagate error data upward...
+
+   do we need a way to pass an object up through the tree along with
+   its lower level destructor?
+
+   CHECK TO SEE IF WE ALWAYS DTRT IN THE END TAG HANDLER - IE DO WE
+   CLEANUP PROPERLY SINCE AT THAT POINT THE FRAME CLEANUP HANDLER WILL
+   **NOT** BE CALLED.
+
+   CHECK TO SEE THAT WE'RE SETTING SHOULD CLEANUP TO FALSE EVERYWHERE
+   WE SHOULD (i.e. when we use the result)!
+
+   DAMN, why didn't I think of this before.  I should have added a
+   parent "after-child" hook.  I think that might have greatly
+   simplified some of the nodes...
+
+   Do we also want "before/after" chars handlers?
+

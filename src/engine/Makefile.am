@@ -32,7 +32,16 @@ libgncengine_la_SOURCES = \
   gnc-engine.c \
   gnc-engine-util.c \
   gnc-event.c \
-  gnc-numeric.c
+  gnc-numeric.c \
+  sixtp-kvp-parser.c \
+  sixtp-stack.c \
+  sixtp-utils.c \
+  sixtp.c \
+  Account-xml-parser-v1.c \
+  Commodity-xml-parser-v1.c \
+  Ledger-xml-parser-v1.c \
+  Query-xml-parser-v1.c \
+  Transaction-xml-parser-v1.c
 
 libgncengine_la_LDFLAGS = -version-info 2:1:1
 
@@ -67,7 +76,10 @@ noinst_HEADERS = \
   gnc-engine-util.h \
   gnc-event.h \
   gnc-event-p.h \
-  gnc-numeric.h
+  gnc-numeric.h \
+  sixtp-parsers.h \
+  sixtp-stack.h \
+  sixtp.h
 
 EXTRA_DIST = \
   .cvsignore \
