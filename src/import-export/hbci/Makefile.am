@@ -18,6 +18,11 @@ libgncmod_hbci_la_SOURCES = \
   hbci-progressmon.c \
   druid-hbci-initial.c 
 
+# Must be included in tarball because they are listed in POTFILES.in
+libgncmod_hbci_la_empty = \
+  druid-hbci-final.c \
+  gnc-hbci-actions.c
+
 noinst_HEADERS = \
   dialog-daterange.h \
   dialog-hbcitrans.h \
@@ -80,6 +85,6 @@ AM_CFLAGS = \
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 
 
-EXTRA_DIST = ${gncscm_DATA}
+EXTRA_DIST = ${gncscm_DATA} ${libgncmod_hbci_la_empty}
 
 CLEANFILES = hbci import-export gnucash g-wrapped .scm-links

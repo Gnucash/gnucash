@@ -5,18 +5,27 @@ TESTS = test-version test-run-script test-guile-env-override
 # to make sure we're testing in a setup as close to the install
 # arrangement as possible.
 
+GNC_TEST_DEPS := \
+  --guile-load-dir ${top_srcdir}/lib \
+  --guile-load-dir ${top_srcdir}/src/engine \
+  --guile-load-dir ${top_srcdir}/src/scm \
+  --guile-load-dir ${top_srcdir}/src/app-utils \
+  --guile-load-dir ${G_WRAP_MODULE_DIR} \
+  --library-dir    ${G_WRAP_LIB_DIR}
+
 TEST_PWD := $(shell pwd)
 TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \
-  PATH="${TEST_PWD}/overrides:${PATH}"
+  PATH="${TEST_PWD}/overrides:${PATH}" \
+  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_DATA = overrides.stamp
 
 overrides.stamp:
 	rm -rf overrides
 	mkdir overrides
-	cd overrides && ln -s ${top_srcdir}/src/bin/overrides/gnucash .
-	cd overrides && ln -s ${top_srcdir}/src/bin/overrides/gnucash-run-script .
+	cd overrides && ln -s ../${top_srcdir}/src/bin/overrides/gnucash .
+	cd overrides && ln -s ../${top_srcdir}/src/bin/overrides/gnucash-run-script .
 	cd overrides && ln -s ../../overrides/gnucash-make-guids .
 	cd overrides && ln -s ../../overrides/guile .
 	cd overrides && ln -s ../../overrides/gnucash-build-env gnucash-env

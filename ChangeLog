@@ -3,6 +3,11 @@
 	* src/gnome-utils/dialog-transfer.c: Revert pricedb lookup at
 	warlord's request.
 
+	* src/bin/test/Makefile.am:
+	* src/doc/Makefile.am:
+	* src/import-export/hbci/Makefile.am: 
+	* src/import-export/ofx/Makefile.am: Get 'make distcheck' working again.
+
 2002-12-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/main.scm: Patch by Peter O'Gorman <peter@pogma.com> for

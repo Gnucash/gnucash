@@ -11,6 +11,7 @@ EXTRA_DIST = \
   finutil.html \
   plugin.txt \
   tax.txt \
+  doxygen_main_page.c \
   doxygen.cfg.in
 
 docdir = ${GNC_DOC_INSTALL_DIR}
@@ -24,19 +25,14 @@ doc: doxygen.cfg
 #	$(MAKE) -C latex/ 
 #	mv latex/refman.pdf ./refman.pdf
 
-dist-hook: doxygen.cfg
+dist-hook: doc
 	echo "dist-hook: " && pwd
-	cd $(srcdir) && pwd && rm -rf html refman.pdf && $(DOXYGEN) doxygen.cfg
 	cp -rp html ${distdir}
 
 clean-local:
 	echo "clean-local: " && pwd
-	rm -rf latex/
-	rm -f doxygen.log
-
-maintainer-clean-local: clean-local
-	echo "maintainer-clean-local: " && pwd
-	rm -rf html refman.pdf
+	rm -rf html latex
+	rm -f doxygen.cfg doxygen.log refman.pdf
 
 install-data-hook:
 	$(mkinstalldirs) $(DESTDIR)$(docdir)/html

@@ -44,6 +44,7 @@ AM_CFLAGS = \
 
 EXTRA_DIST = \
   .cvsignore \
+  ofx.glade \
   ${gncscm_DATA}
 
 CLEANFILES = ofx import-export gnucash g-wrapped .scm-links
