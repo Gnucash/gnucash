@@ -20,6 +20,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include "config.h"
 #include "gnc-hbci-gettrans.h"
 
 #include <openhbci/api.h>

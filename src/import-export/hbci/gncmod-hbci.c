@@ -5,6 +5,7 @@
  * Copyright (c) 2002 Christian <stimming@tuhh.de>
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
@@ -15,7 +16,6 @@
 
 #include "gnc-hbci-cb.h"
 #include "druid-hbci-initial.h"
-//#include "druid-hbci-final.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_hbci_LTX_gnc_module_system_interface = 0;

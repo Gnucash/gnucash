@@ -1,5 +1,12 @@
 2002-10-27  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/*.c: add #include config.h for correct
+	i18n.
+
+	* src/app-utils/prefs.scm, src/import-export/hbci/hbci.scm: Move
+	preference creation into hbci module. Renamed that preference tab
+	into "Online Banking & Importing".
+
 	* src/import-export/hbci/*: Add Direct Debit HBCI action. More
 	work on error handling and user feedback. Make the caching of the
 	PIN a user preference.

@@ -20,6 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "config.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
@@ -36,6 +38,8 @@
 
 #include "dialog-pass.h"
 
+#define PREF_TAB_ONLINE_BANKING "Online Banking & Importing"
+
 
 /** Adds the interactor and progressmonitor classes to the api. */
 GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
@@ -46,12 +50,10 @@ GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
   data->parent = parent;
   data->keepAlive = TRUE;
   data->cache_pin = 
-    gnc_lookup_boolean_option("Importing/Online",
+    gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
 			      "HBCI Remember PIN in memory",
                               FALSE);
 
-  /*   setlocale (LC_ALL, ""); */
-  
   // set HBCI_Interactor
   HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
 			  gnc_hbci_new_interactor(data), TRUE);
@@ -69,7 +71,7 @@ gboolean GNCInteractor_aborted(const GNCInteractor *i)
 void GNCInteractor_show(GNCInteractor *i)
 {
   gboolean cache_pin = 
-    gnc_lookup_boolean_option("Importing/Online",
+    gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
 			      "HBCI Remember PIN in memory",
 			      FALSE);
   g_assert(i);
@@ -137,10 +139,9 @@ static int msgInputPin(const HBCI_User *user,
 	bank = HBCI_User_bank (user);
 	if (bank != NULL) {
 	  /* xgettext:c-format */	    
-	  const char *format =  _("Please enter and confirm new PIN for \n"
-				  "user '%s' at bank '%s',\n"
-				  "with at least %d characters.");
-	  msgstr = g_strdup_printf (format,
+	  msgstr = g_strdup_printf (_("Please enter and confirm new PIN for \n"
+				      "user '%s' at bank '%s',\n"
+				      "with at least %d characters."),
 				    username, 
 				    HBCI_Bank_bankCode(bank),
 				    minsize);
@@ -174,15 +175,16 @@ static int msgInputPin(const HBCI_User *user,
 	if (user != NULL) {
 	  bank = HBCI_User_bank (user);
 	  if (bank != NULL) {
-	    msgstr = g_strdup_printf ( data->format_pin_user_bank, 
-				       username, 
-				       HBCI_Bank_bankCode(bank));
+	    /* xgettext:c-format */	    
+	    msgstr = g_strdup_printf (_("Please enter PIN for \n"
+					"user '%s' at bank '%s'."),
+				      username, 
+				      HBCI_Bank_bankCode(bank));
 	  }
 	  else {
 	    /* xgettext:c-format */	    
-	    const char *format = _("Please enter PIN for \n"
-				   "user '%s' at unknown bank.");
-	    msgstr = g_strdup_printf ( format, 
+	    msgstr = g_strdup_printf ( _("Please enter PIN for \n"
+					 "user '%s' at unknown bank."),
 				       username);
 	  }
 	}
@@ -203,7 +205,10 @@ static int msgInputPin(const HBCI_User *user,
     
     if (strlen(passwd) < minsize) {
       gboolean retval;
-      char *msg = g_strdup_printf (data->format_pin_min_char, minsize);
+      char *msg = 
+	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"
+			     "long. Do you want to try again?"),
+			   minsize);
       retval = gnc_verify_dialog_parented (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -360,17 +365,5 @@ gnc_hbci_new_interactor(GNCInteractor *data)
 				&keepAlive,
 				data);
 
-  /*   setlocale (LC_ALL, ""); */
-  
-  /* xgettext:c-format */	    
-  data->format_pin_user_bank  = _("Please enter PIN for \n"
-				  "user '%s' at bank '%s'.");
-  /* xgettext:c-format */	    
-  data->format_pin_min_char = _("The PIN needs to be at least %d characters \n"
-				"long. Do you want to try again?");
-
   return HBCI_InteractorCB_Interactor(inter);
 }
-
-
-

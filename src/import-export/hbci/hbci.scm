@@ -16,6 +16,7 @@
 		       (lambda ()
 			 (gnc:hbci-initial-setup))))
 
+
 ;  (gnc:add-extension
 ;   (gnc:make-menu "Online" (list gnc:window-name-register "Actions" "")))
 
@@ -25,19 +26,13 @@
 ;		       (list gnc:window-name-register "Actions" "Online" "")
 ;		       (lambda ()
 ;			 (gnc:hbci-initial-setup))))
-;  (gnc:add-extension
-;   (gnc:make-menu-item (N_ "Get Transactions")
-;		       (N_ "Get Transactions")
-;		       (list gnc:window-name-register "Actions" "Online" "")
-;		       (lambda ()
-;			 (gnc:hbci-initial-setup))))
 )
-;  (gnc:add-extension
-;   (gnc:make-menu-item (N_ "Final HBCI Setup")
-;		       (N_ "Finish the HBCI Setup")
-;		       (list gnc:window-name-main "Tools" "HBCI" "")
-;		       (lambda ()
-;			 (gnc:hbci-finish-setup)))))
 
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-hbci-menu-items)
 
+;; Register Preferences
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Online Banking & Importing") (N_ "HBCI Remember PIN in memory")
+  "b" (N_ "Remember the PIN for HBCI in memory during a session")
+  #f))
