@@ -12,12 +12,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.0\n"
 "POT-Creation-Date: 2003-02-02 23:37-0800\n"
-"PO-Revision-Date: 2003-02-05 23:19+0100\n"
+"PO-Revision-Date: 2003-02-11 21:26+0100\n"
 "Last-Translator: Lorenzo Cappelletti <L.Cappelletti@mail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 # messages-i18n.c:310
 #: src/app-file/gnome/gnc-file-dialog.c:77 src/app-file/gnc-file.c:530
@@ -561,11 +562,11 @@ msgstr "Conto"
 
 #: src/business/business-core/gncInvoice.c:793
 msgid "Generated from an invoice.  Try unposting the invoice."
-msgstr ""
+msgstr "Generato da una fattura. Provare a ritirare la fattura."
 
 #: src/business/business-core/gncInvoice.c:811
 msgid "Automatic Payment Forward"
-msgstr ""
+msgstr "Inoltro automatico di pagamento"
 
 # messages-i18n.c:312
 #: src/business/business-core/gncInvoice.c:1042
@@ -580,7 +581,7 @@ msgstr "Pagamento"
 
 #: src/business/business-core/gncInvoice.c:1205
 msgid " (posted)"
-msgstr ""
+msgstr " (emesso)"
 
 #: src/business/business-core/gncOrder.c:416
 msgid " (closed)"
@@ -740,55 +741,52 @@ msgstr "Cancella"
 #: src/business/business-gnome/glade/billterms.glade:188
 #: src/business/business-gnome/glade/billterms.glade:498
 msgid "Term Definition"
-msgstr ""
+msgstr "Definizione termini"
 
 # src/gnome/glade-gnc-dialogs.c:573
 #: src/business/business-gnome/glade/billterms.glade:229
 #: src/business/business-gnome/glade/billterms.glade:539
-#, fuzzy
 msgid "Description: "
-msgstr "Descrizione:"
+msgstr "Descrizione: "
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 #: src/business/business-gnome/glade/billterms.glade:246
 #: src/business/business-gnome/glade/billterms.glade:556
 #: src/business/dialog-tax-table/tax-tables.glade:475
-#, fuzzy
 msgid "Type: "
-msgstr "Tipo:"
+msgstr "Tipo: "
 
 #: src/business/business-gnome/glade/billterms.glade:275
 #: src/business/business-gnome/glade/billterms.glade:585
 #, fuzzy
 msgid "The description of the Billing Term, printed on invoices"
-msgstr "L'indirizzo dell'intestatario da mettere nella ricevuta"
+msgstr "Descrizione dei termini di pagamento stampati sulle fatture"
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 #: src/business/business-gnome/glade/billterms.glade:303
-#, fuzzy
 msgid "(type)"
-msgstr "Tipo"
+msgstr "(tipo)"
 
 # messages-i18n.c:105
 #: src/business/business-gnome/glade/billterms.glade:351
 #, fuzzy
 msgid "Edit the current Billing Term"
-msgstr "Modifica il prezzo corrente"
+msgstr "Modifica i termini di pagamento correnti"
 
 # messages-i18n.c:281
 #: src/business/business-gnome/glade/billterms.glade:353
 #: src/business/business-gnome/business-gnome-utils.c:49
 #: src/business/dialog-tax-table/tax-tables.glade:279
 #: src/gnome-utils/gnc-general-select.c:187
-#, fuzzy
 msgid "Edit..."
-msgstr "Modifica"
+msgstr "Modifica..."
 
 #: src/business/business-gnome/glade/billterms.glade:412
+#, fuzzy
 msgid "Commit this Billing Term"
-msgstr ""
+msgstr "Rendere effettivi i termini di pagamento"
 
 #: src/business/business-gnome/glade/billterms.glade:421
 msgid "Cancel your changes"
@@ -796,7 +794,7 @@ msgstr "Annulla i cambiamenti"
 
 #: src/business/business-gnome/glade/billterms.glade:443
 msgid "New Billing Terms"
-msgstr ""
+msgstr "Nuovi termini di pagamento"
 
 # po/guile_strings.txt:188
 #: src/business/business-gnome/glade/billterms.glade:462
@@ -812,11 +810,12 @@ msgstr "Nome: "
 #: src/business/business-gnome/glade/billterms.glade:479
 #, fuzzy
 msgid "The internal name of the Billing Term."
-msgstr "Il titolo del rapporto"
+msgstr "Nome interno dei termini di pagamento."
 
 #: src/business/business-gnome/glade/billterms.glade:613
+#, fuzzy
 msgid "Choose the type of Billing Term"
-msgstr ""
+msgstr "Scegliere il tipo di termine di pagamento"
 
 # po/guile_strings.txt:144
 #: src/business/business-gnome/glade/billterms.glade:656
@@ -842,7 +841,7 @@ msgstr "giorno del mese assoluto"
 #: src/business/business-gnome/dialog-billterms.c:481
 #, fuzzy
 msgid "Proximo"
-msgstr "Portafoglio"
+msgstr "prossimo"
 
 #: src/business/business-gnome/glade/billterms.glade:684
 msgid "window1"
@@ -850,7 +849,7 @@ msgstr "window1"
 
 #: src/business/business-gnome/glade/billterms.glade:734
 msgid "Due Days: "
-msgstr ""
+msgstr "Entro giorni: "
 
 #: src/business/business-gnome/glade/billterms.glade:751
 msgid "Discount Days: "
@@ -863,11 +862,11 @@ msgstr "% sconto:"
 
 #: src/business/business-gnome/glade/billterms.glade:797
 msgid "The number of days to pay the bill after the post date."
-msgstr ""
+msgstr "Numero di giorni per pagare la ricevuta dalla data di emissione."
 
 #: src/business/business-gnome/glade/billterms.glade:821
 msgid "The number of days after the post date during which a discount will be applied for early payment."
-msgstr ""
+msgstr "Numero di giorni dalla data di emissione durante i quali sarà applicato uno sconto per un pagamento anticipato."
 
 #: src/business/business-gnome/glade/billterms.glade:845
 msgid "The percentage discount applied for early payment."
@@ -875,11 +874,11 @@ msgstr "La percentuale di sconto applicata per il pagamento anticipato."
 
 #: src/business/business-gnome/glade/billterms.glade:913
 msgid "Due Day: "
-msgstr ""
+msgstr "Giorno scadenza: "
 
 #: src/business/business-gnome/glade/billterms.glade:930
 msgid "Discount Day: "
-msgstr ""
+msgstr "Giorno sconto: "
 
 #: src/business/business-gnome/glade/billterms.glade:964
 msgid "Cutoff Day: "
@@ -887,15 +886,15 @@ msgstr ""
 
 #: src/business/business-gnome/glade/billterms.glade:993
 msgid "The day of the month bills are due"
-msgstr ""
+msgstr "Giorno del mese entro il quale i pagamenti sono dovuti"
 
 #: src/business/business-gnome/glade/billterms.glade:1017
 msgid "The last day of the month for the early payment discount."
-msgstr ""
+msgstr "Ultimo giorno del mese per lo sconto sul pagamento anticipato."
 
 #: src/business/business-gnome/glade/billterms.glade:1041
 msgid "The discount percentage applied if paid early."
-msgstr ""
+msgstr "Percentuale di sconto applicata per il pagamento anticipato."
 
 #: src/business/business-gnome/glade/billterms.glade:1065
 msgid "The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month."
@@ -938,9 +937,8 @@ msgstr "Nome compagnia: "
 #: src/business/business-gnome/glade/order.glade:279
 #: src/business/business-gnome/glade/order.glade:1115
 #: src/business/business-gnome/glade/vendor.glade:179
-#, fuzzy
 msgid "Active"
-msgstr "Operazione"
+msgstr "Attivo"
 
 #: src/business/business-gnome/glade/customer.glade:204
 msgid "The customer ID number.  If left blank a reasonable number will be chosen for you"
@@ -949,7 +947,7 @@ msgstr "Numero di identificazione del cliente. Se lasciato vuoto, sarà scelto un
 #: src/business/business-gnome/glade/customer.glade:257
 #, fuzzy
 msgid "Billing Address"
-msgstr "Indirizzo intestatario"
+msgstr "Indirizzo pagamenti"
 
 #: src/business/business-gnome/glade/customer.glade:305
 #: src/business/business-gnome/glade/customer.glade:951
@@ -1000,7 +998,7 @@ msgstr "Cliente"
 #: src/business/business-gnome/glade/order.glade:1132
 #, fuzzy
 msgid "Billing Information"
-msgstr "Informazioni bilancio"
+msgstr "Informazioni pagamenti"
 
 # src/gnome/glade-gnc-dialogs.c:173
 #: src/business/business-gnome/glade/customer.glade:643
@@ -1012,7 +1010,7 @@ msgstr "Valuta: "
 #: src/business/business-gnome/glade/customer.glade:660
 #: src/business/business-gnome/glade/vendor.glade:661
 msgid "Terms: "
-msgstr ""
+msgstr "Termini: "
 
 #: src/business/business-gnome/glade/customer.glade:677
 msgid "Discount: "
@@ -1020,9 +1018,8 @@ msgstr "Sconto: "
 
 # messages-i18n.c:173
 #: src/business/business-gnome/glade/customer.glade:694
-#, fuzzy
 msgid "Credit Limit: "
-msgstr "Linea di credito"
+msgstr "Limiti di credito: "
 
 #: src/business/business-gnome/glade/customer.glade:711
 msgid "Tax Included: "
@@ -1035,11 +1032,11 @@ msgstr "Tabella tasse: "
 #: src/business/business-gnome/glade/customer.glade:845
 #: src/business/business-gnome/glade/vendor.glade:780
 msgid "Override the global Tax Table?"
-msgstr ""
+msgstr "Sovrascrivere la tabella tasse globale?"
 
 #: src/business/business-gnome/glade/customer.glade:860
 msgid "What Tax Table should be applied to this customer?"
-msgstr ""
+msgstr "Quale tabella tasse deve essere applicata a questo cliente?"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/customer.glade:904
@@ -1060,17 +1057,17 @@ msgstr "Domanda"
 #: src/business/business-gnome/glade/date-close.glade:321
 #, fuzzy
 msgid "postd"
-msgstr "Deposito"
+msgstr "emesso"
 
 # messages-i18n.c:180
 #: src/business/business-gnome/glade/date-close.glade:338
 #, fuzzy
 msgid "duedate"
-msgstr "Data fine:"
+msgstr "Data scadenza"
 
 #: src/business/business-gnome/glade/date-close.glade:372
 msgid "acct"
-msgstr ""
+msgstr "conto"
 
 #: src/business/business-gnome/glade/employee.glade:22
 #: src/business/business-gnome/dialog-employee.c:272
@@ -1108,19 +1105,17 @@ msgstr "Lingua: "
 #: src/business/business-gnome/glade/employee.glade:628
 #, fuzzy
 msgid "Billing"
-msgstr "Conto"
+msgstr "Pagamento"
 
 # po/guile_strings.txt:152
 #: src/business/business-gnome/glade/employee.glade:658
-#, fuzzy
 msgid "Default Hours per Day: "
-msgstr "Valuta predefinita"
+msgstr "Orario giornaliero normale: "
 
 # messages-i18n.c:210
 #: src/business/business-gnome/glade/employee.glade:703
-#, fuzzy
 msgid "Default Rate: "
-msgstr "Predefinito"
+msgstr "Retribuzione normale: "
 
 #: src/business/business-gnome/glade/employee.glade:786
 msgid "Employee"
@@ -1128,36 +1123,33 @@ msgstr "Impiegato"
 
 #: src/business/business-gnome/glade/employee.glade:805
 msgid "Access Control List"
-msgstr ""
+msgstr "Lista controllo accessi"
 
 #: src/business/business-gnome/glade/employee.glade:831
 msgid "Access Control"
-msgstr ""
+msgstr "Controllo accessi"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/glade/invoice.glade:22
 #: src/business/business-gnome/dialog-invoice.c:1602
 #: intl-scm/guile-strings.c:565 intl-scm/guile-strings.c:567
-#, fuzzy
 msgid "New Invoice"
-msgstr "Fattura"
+msgstr "Nuova fattura"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/invoice.glade:101
 #: src/business/business-gnome/glade/invoice.glade:1433
-#, fuzzy
 msgid "Invoice Information"
-msgstr "Dati prezzo"
+msgstr "Informazioni fattura"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/glade/invoice.glade:131
 #: src/business/business-gnome/glade/invoice.glade:1462
 #: src/business/business-gnome/dialog-invoice.c:2130
-#, fuzzy
 msgid "Invoice ID"
-msgstr "Fattura"
+msgstr "ID fattura"
 
 # messages-i18n.c:135
 #: src/business/business-gnome/glade/invoice.glade:148
@@ -1167,20 +1159,19 @@ msgstr "Fattura"
 #: src/business/business-gnome/glade/order.glade:1005
 #: src/business/business-gnome/dialog-invoice.c:2125
 #: src/business/business-gnome/dialog-order.c:847
-#, fuzzy
 msgid "Date Opened"
-msgstr "_Intervallo date"
+msgstr "Data apertura"
 
 #: src/business/business-gnome/glade/invoice.glade:178
 msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Numero di identificazione della fattura. Se lasciato vuoto, sarà scelto un numero ragionevole automaticamente."
 
 #: src/business/business-gnome/glade/invoice.glade:261
 #: src/business/business-gnome/glade/invoice.glade:437
 #: src/business/business-gnome/glade/invoice.glade:1724
 #: src/business/business-gnome/search-owner.c:236
 msgid "Job"
-msgstr ""
+msgstr "Lavoro"
 
 #: src/business/business-gnome/glade/invoice.glade:278
 #: src/business/business-gnome/glade/invoice.glade:1741
@@ -1192,7 +1183,7 @@ msgstr ""
 #: src/business/business-gnome/dialog-order.c:857 intl-scm/guile-strings.c:821
 #, fuzzy
 msgid "Billing ID"
-msgstr "Conto del Giorno:"
+msgstr "ID pagamento"
 
 # po/guile_strings.txt:152
 #: src/business/business-gnome/glade/invoice.glade:389
@@ -1203,20 +1194,17 @@ msgstr "Valuta predefinita"
 
 # messages-i18n.c:93
 #: src/business/business-gnome/glade/invoice.glade:590
-#, fuzzy
 msgid "Create a new invoice"
-msgstr "Crea un nuovo file"
+msgstr "Crea una nuova fattura"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/glade/invoice.glade:596
-#, fuzzy
 msgid "_New Invoice"
-msgstr "Fattura"
+msgstr "_Nuova fattura"
 
 # messages-i18n.c:92
 #: src/business/business-gnome/glade/invoice.glade:604
-#, fuzzy
 msgid "Create a new Account"
 msgstr "Crea un nuovo conto"
 
@@ -1230,16 +1218,14 @@ msgstr "Nuovo conto"
 # messages-i18n.c:105
 #: src/business/business-gnome/glade/invoice.glade:741
 #: src/business/business-gnome/glade/invoice.glade:1236
-#, fuzzy
 msgid "Edit this Invoice"
-msgstr "Modifica il prezzo corrente"
+msgstr "Modifica questa fattura"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/glade/invoice.glade:747
-#, fuzzy
 msgid "_Edit Invoice"
-msgstr "Fattura"
+msgstr "_Modifica fattura"
 
 # po/guile_strings.txt:219
 #: src/business/business-gnome/glade/invoice.glade:771
@@ -1249,7 +1235,6 @@ msgstr "Visualizza la barra degli strumenti"
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/invoice.glade:777
 #: src/gnome/glade/register.glade:248 src/gnome/window-main.c:869
-#, fuzzy
 msgid "_Toolbar"
 msgstr "S_trumenti"
 
@@ -1281,9 +1266,8 @@ msgstr "_Ordinamento"
 
 # messages-i18n.c:120
 #: src/business/business-gnome/glade/invoice.glade:829
-#, fuzzy
 msgid "Keep normal invoice order"
-msgstr "Mantiene l'ordinamento normale del conto"
+msgstr "Mantiene l'ordinamento normale delle fatture"
 
 # messages-i18n.c:228
 #: src/business/business-gnome/glade/invoice.glade:835
@@ -1317,25 +1301,22 @@ msgstr "Data di _immissione"
 
 # messages-i18n.c:221
 #: src/business/business-gnome/glade/invoice.glade:880
-#, fuzzy
 msgid "Sort by quantity"
-msgstr "Ordina per importo"
+msgstr "Ordina per quantità"
 
 #: src/business/business-gnome/glade/invoice.glade:886
 msgid "_Quantity"
-msgstr ""
+msgstr "_Quantità"
 
 # messages-i18n.c:222
 #: src/business/business-gnome/glade/invoice.glade:895
-#, fuzzy
 msgid "Sort by price"
-msgstr "Ordina per data"
+msgstr "Ordina per prezzo"
 
 # messages-i18n.c:316
 #: src/business/business-gnome/glade/invoice.glade:901
-#, fuzzy
 msgid "_Price"
-msgstr "Prezzo"
+msgstr "_Prezzo"
 
 # po/guile_strings.txt:90
 #: src/business/business-gnome/glade/invoice.glade:910
@@ -1345,9 +1326,8 @@ msgstr "Ordina per descrizione"
 
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: src/business/business-gnome/glade/invoice.glade:916
-#, fuzzy
 msgid "_Description"
-msgstr "Descrizione"
+msgstr "_Descrizione"
 
 # messages-i18n.c:240
 #: src/business/business-gnome/glade/invoice.glade:929
@@ -1360,9 +1340,8 @@ msgstr "_Operazioni"
 #: src/business/business-gnome/glade/invoice.glade:939
 #: src/business/business-gnome/glade/invoice.glade:1259
 #: src/business/business-gnome/glade/invoice.glade:2047
-#, fuzzy
 msgid "Record the current entry"
-msgstr "Ricarica il documento corrente"
+msgstr "Registra l'immissione corrente"
 
 #: src/business/business-gnome/glade/invoice.glade:945
 #: src/gnome/glade/register.glade:810 src/gnome/glade/register.glade:1996
@@ -1374,9 +1353,8 @@ msgstr "_Immetti"
 #: src/business/business-gnome/glade/invoice.glade:952
 #: src/business/business-gnome/glade/invoice.glade:1274
 #: src/business/business-gnome/glade/invoice.glade:2060
-#, fuzzy
 msgid "Cancel the current entry"
-msgstr "Annulla il movimento corrente"
+msgstr "Annulla l'immissione corrente"
 
 # messages-i18n.c:134
 #: src/business/business-gnome/glade/invoice.glade:958
@@ -1389,9 +1367,8 @@ msgstr "_Annulla"
 #: src/business/business-gnome/glade/invoice.glade:965
 #: src/business/business-gnome/glade/invoice.glade:1289
 #: src/business/business-gnome/glade/invoice.glade:2073
-#, fuzzy
 msgid "Delete the current entry"
-msgstr "Cancella il movimento corrente"
+msgstr "Cancella l'immissione corrente"
 
 # messages-i18n.c:137
 #: src/business/business-gnome/glade/invoice.glade:971
@@ -1405,23 +1382,20 @@ msgstr "_Cancella"
 #: src/business/business-gnome/glade/invoice.glade:984
 #: src/business/business-gnome/glade/invoice.glade:1312
 #: src/business/business-gnome/glade/invoice.glade:2092
-#, fuzzy
 msgid "Make a copy of the current entry"
 msgstr "Produce una copia del movimento corrente"
 
 # messages-i18n.c:280
 #: src/business/business-gnome/glade/invoice.glade:990
-#, fuzzy
 msgid "Dup_licate"
-msgstr "Duplica"
+msgstr "Dup_lica"
 
 # messages-i18n.c:71
 #: src/business/business-gnome/glade/invoice.glade:997
 #: src/business/business-gnome/glade/invoice.glade:1327
 #: src/business/business-gnome/glade/invoice.glade:2105
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "Sposta il movimento vuoto in fondo al registro"
+msgstr "Si sposta all'immissione vuota in fondo alla fattura"
 
 # messages-i18n.c:133
 #: src/business/business-gnome/glade/invoice.glade:1003
@@ -1438,15 +1412,13 @@ msgstr "_Rapporti"
 
 # messages-i18n.c:104
 #: src/business/business-gnome/glade/invoice.glade:1022
-#, fuzzy
 msgid "Open a company report window for the owner of this Invoice"
-msgstr "Apre una finestra di rapporto per questo registro"
+msgstr "Apre una finestra di rapporto sulla compagnia del proprietario di questa fattura"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: src/business/business-gnome/glade/invoice.glade:1028
-#, fuzzy
 msgid "_Company Report"
-msgstr "Rapporto tasse"
+msgstr "Rapporto _compagnia"
 
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/invoice.glade:1037
@@ -1498,39 +1470,38 @@ msgid "_Financial Calculator"
 msgstr "Calcolatrice _finanziaria"
 
 #: src/business/business-gnome/glade/invoice.glade:1099
-#, fuzzy
 msgid "View and edit the list of Tax Tables"
-msgstr "Visualizza e modifica i prezzi per le azioni ed i fondi comuni"
+msgstr "Visualizza e modifica la lista delle tabelle delle tasse"
 
 #: src/business/business-gnome/glade/invoice.glade:1105
-#, fuzzy
 msgid "_Tax Table Editor"
-msgstr "Editor _prezzi"
+msgstr "Editor _tabelle tasse"
 
 #: src/business/business-gnome/glade/invoice.glade:1112
+#, fuzzy
 msgid "View and edit the list of Billing Terms"
-msgstr ""
+msgstr "Visualizza e modifica la lista dei termini di pagamento"
 
 #: src/business/business-gnome/glade/invoice.glade:1118
+#, fuzzy
 msgid "_Billing Terms Editor"
-msgstr ""
+msgstr "Editor termini di _pagamento"
 
 # messages-i18n.c:123
 #: src/business/business-gnome/glade/invoice.glade:1125
-#, fuzzy
 msgid "Enter a payment for the owner of this Invoice"
-msgstr "Immettere un nome per il conto"
+msgstr "Immettere un pagamento per il proprietario di questa fattura"
 
 # messages-i18n.c:312
 #: src/business/business-gnome/glade/invoice.glade:1131
 #, fuzzy
 msgid "Process Pa_yment"
-msgstr "Rateo"
+msgstr "Pagamento di pro_cesso"
 
 # messages-i18n.c:85
 #: src/business/business-gnome/glade/invoice.glade:1154
 msgid "_Gnucash Users Manual"
-msgstr "Manuale utente GnuCash"
+msgstr "Manuale utente _GnuCash"
 
 #: src/business/business-gnome/glade/invoice.glade:1166
 #: src/gnome/glade/register.glade:647
@@ -1539,9 +1510,8 @@ msgstr "_Suggerimento del giorno"
 
 # messages-i18n.c:74
 #: src/business/business-gnome/glade/invoice.glade:1221
-#, fuzzy
 msgid "Close this invoice window"
-msgstr "Chiudi questa finestra d'aiuto"
+msgstr "Chiudi questa finestra di fatturazione"
 
 # messages-i18n.c:261
 #: src/business/business-gnome/glade/invoice.glade:1228
@@ -1586,9 +1556,8 @@ msgid "Blank"
 msgstr "Vuoto"
 
 #: src/business/business-gnome/glade/invoice.glade:1350
-#, fuzzy
 msgid "Make a printable Invoice"
-msgstr "Genera una ricevuta"
+msgstr "Genera una fattura stampabile"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 #: src/business/business-gnome/glade/invoice.glade:1357
@@ -1601,202 +1570,182 @@ msgstr "Stampa"
 
 #: src/business/business-gnome/glade/invoice.glade:1365
 msgid "Post this Invoice to your Chart of Accounts"
-msgstr ""
+msgstr "Emette questa fattura aggiungendola al grafico dei conti"
 
 #: src/business/business-gnome/glade/invoice.glade:1372
-#, fuzzy
 msgid "Post"
-msgstr "_Posticipa"
+msgstr "Emetti"
 
 #: src/business/business-gnome/glade/invoice.glade:1380
 msgid "Unpost this Invoice and make it editable"
-msgstr ""
+msgstr "Ritira questa fattura e rendila modificabile"
 
 # messages-i18n.c:273
 #: src/business/business-gnome/glade/invoice.glade:1387
-#, fuzzy
 msgid "Unpost"
-msgstr "Deposito"
+msgstr "Ritira"
 
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
 # src/gnome/glade-gnc-dialogs.c:1364
 #: src/business/business-gnome/glade/invoice.glade:1496
 #: src/business/business-gnome/dialog-invoice.c:2121
-#, fuzzy
 msgid "Date Posted"
-msgstr "Formato data:"
+msgstr "Data emissione"
 
 # messages-i18n.c:186
 #: src/business/business-gnome/glade/invoice.glade:1513
-#, fuzzy
 msgid "Posted Account"
-msgstr "Conti persi"
+msgstr "Conto emissione"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
 #: src/business/business-gnome/glade/invoice.glade:1942
-#, fuzzy
 msgid "Customer: "
-msgstr "Personalizzato"
+msgstr "Cliente: "
 
 #: src/business/business-gnome/glade/invoice.glade:1975
 msgid "Job: "
-msgstr ""
+msgstr "Lavoro: "
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/glade/invoice.glade:2010
-#, fuzzy
 msgid "Invoice Entries"
-msgstr "Fattura"
+msgstr "Immissioni fattura"
 
 #: src/business/business-gnome/glade/job.glade:22
 msgid "Job Dialog"
-msgstr ""
+msgstr "Dialogo lavoro"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/job.glade:101
-#, fuzzy
 msgid "Job Information"
-msgstr "Informazioni tasse"
+msgstr "Informazioni lavoro"
 
 # po/guile_strings.txt:173
 #: src/business/business-gnome/glade/job.glade:132
 #: src/business/business-gnome/dialog-job.c:534
-#, fuzzy
 msgid "Job Number"
-msgstr "Numero"
+msgstr "Numero lavoro"
 
 # po/guile_strings.txt:188
 #: src/business/business-gnome/glade/job.glade:150
 #: src/business/business-gnome/dialog-job.c:536
 #: src/business/business-gnome/dialog-job.c:546
-#, fuzzy
 msgid "Job Name"
-msgstr "Nome"
+msgstr "Nome lavoro"
 
 #: src/business/business-gnome/glade/job.glade:181
 msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Numero di identificazione lavoro. Se lasciato vuoto, sarà scelto un numero ragionevole automaticamente."
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/job.glade:216
-#, fuzzy
 msgid "Owner Information"
-msgstr "Informazioni generali"
+msgstr "Informazioni proprietario"
 
 #: src/business/business-gnome/glade/job.glade:343
+#, fuzzy
 msgid "Job Active"
-msgstr ""
+msgstr "Lavoro attivo"
 
 #: src/business/business-gnome/glade/order.glade:22
-#, fuzzy
 msgid "Order Entry"
-msgstr "Immissione"
+msgstr "Immissione ordine"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/glade/order.glade:83
-#, fuzzy
 msgid "Invoices"
-msgstr "Fattura"
+msgstr "Fatture"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: src/business/business-gnome/glade/order.glade:91
-#, fuzzy
 msgid "Close Order"
-msgstr "Ordine registri"
+msgstr "Chiudi ordine"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/order.glade:120
 #: src/business/business-gnome/glade/order.glade:618
 #: src/business/business-gnome/glade/order.glade:957
-#, fuzzy
 msgid "Order Information"
-msgstr "Dati prezzo"
+msgstr "Informazioni ordine"
 
 #: src/business/business-gnome/glade/order.glade:151
 #: src/business/business-gnome/glade/order.glade:648
 #: src/business/business-gnome/glade/order.glade:988
 #: src/business/business-gnome/dialog-order.c:851
 msgid "Order ID"
-msgstr ""
+msgstr "ID ordine"
 
 # messages-i18n.c:261
 #: src/business/business-gnome/glade/order.glade:185
 #: src/business/business-gnome/glade/order.glade:1022
 #: src/business/business-gnome/dialog-order.c:843
-#, fuzzy
 msgid "Date Closed"
-msgstr "Chiudi"
+msgstr "Data chiusura"
 
 # messages-i18n.c:315
 #: src/business/business-gnome/glade/order.glade:343
 #: src/business/business-gnome/glade/order.glade:777
 #: src/business/business-gnome/glade/order.glade:1179
 #: intl-scm/guile-strings.c:869 intl-scm/guile-strings.c:889
-#, fuzzy
 msgid "Reference"
-msgstr "Preferenze"
+msgstr "Riferimento"
 
 # po/guile_strings.txt:228
 #: src/business/business-gnome/glade/order.glade:507
 #: src/business/business-gnome/glade/order.glade:1343
-#, fuzzy
 msgid "Order Entries"
-msgstr "Entrate budget"
+msgstr "Immissioni ordini"
 
 #: src/business/business-gnome/glade/order.glade:539
-#, fuzzy
 msgid "New Order"
-msgstr "Nuova ricerca"
+msgstr "Nuovo ordine"
 
 #: src/business/business-gnome/glade/order.glade:695
 msgid "The order ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Numero di identificazione dell'ordine. Se lasciato vuoto, sarà scelto un numero ragionevole automaticamente."
 
 # messages-i18n.c:160
 #: src/business/business-gnome/glade/order.glade:876
-#, fuzzy
 msgid "Order"
-msgstr "_Ordinamento"
+msgstr "Ordine"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/business/business-gnome/glade/vendor.glade:22
 #: src/business/business-gnome/dialog-vendor.c:260
 #: intl-scm/guile-strings.c:587 intl-scm/guile-strings.c:589
-#, fuzzy
 msgid "New Vendor"
-msgstr "Nuovo valore"
+msgstr "Nuovo venditore"
 
 #: src/business/business-gnome/glade/vendor.glade:144
 msgid "Vendor Number: "
-msgstr ""
+msgstr "Numero venditore: "
 
 #: src/business/business-gnome/glade/vendor.glade:205
 msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Numero di identificazione del venditore. Se lasciato vuoto, sarà scelto un numero ragionevole automaticamente."
 
 #: src/business/business-gnome/glade/vendor.glade:596
 #: src/business/business-gnome/search-owner.c:235
 #: src/register/ledger-core/split-register-model.c:151
 #: intl-scm/guile-strings.c:953
 msgid "Vendor"
-msgstr ""
+msgstr "Venditore"
 
 #: src/business/business-gnome/glade/vendor.glade:678
 msgid "Tax Included:"
-msgstr ""
+msgstr "Tasse incluse:"
 
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/vendor.glade:695
-#, fuzzy
 msgid "Tax Table:"
-msgstr "Tabelle"
+msgstr "Tabella tasse:"
 
 #: src/business/business-gnome/glade/vendor.glade:795
 msgid "What Tax Table should be applied to this vendor?"
-msgstr ""
+msgstr "Quale tabella tasse deve essere applicata a questo venditore?<"
 
 #: src/business/business-gnome/business-urls.c:41
 #: src/business/business-gnome/business-urls.c:91
@@ -1820,7 +1769,7 @@ msgstr "Nessuna entità come: %s"
 #: src/business/business-gnome/business-urls.c:60
 #, c-format
 msgid "Entity type does not match Customer: %s"
-msgstr ""
+msgstr "Tipo di entità non corrispondente al cliente: %s"
 
 #: src/business/business-gnome/business-urls.c:67
 #: src/business/business-gnome/business-urls.c:117
@@ -1834,55 +1783,54 @@ msgstr "URL mal formato: %s"
 #: src/business/business-gnome/business-urls.c:110
 #, c-format
 msgid "Entity type does not match Vendor: %s"
-msgstr ""
+msgstr "Tipo di entità non corrispondente al venditore: %s"
 
 #: src/business/business-gnome/business-urls.c:160
 #, c-format
 msgid "Entity type does not match Invoice: %s"
-msgstr ""
+msgstr "Tipo di entità non corrispondente alla fattura: %s"
 
 #: src/business/business-gnome/business-urls.c:228
 #, c-format
 msgid "No such owner entity: %s"
-msgstr ""
+msgstr "Entità proprietario inesistente: %s"
 
 #: src/business/business-gnome/business-urls.c:255
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr ""
+msgstr "Tipo di entità non corrispondente a %s: %s"
 
 #: src/business/business-gnome/business-urls.c:265
 #, c-format
 msgid "Bad URL %s"
-msgstr ""
+msgstr "URL errato %s"
 
 #: src/business/business-gnome/business-urls.c:277
 #, c-format
 msgid "No such Account entity: %s"
-msgstr ""
+msgstr "Entità conto inesistente: %s"
 
 #: src/business/business-gnome/business-urls.c:285
 #, c-format
 msgid "Entity is not Account entity: %s"
-msgstr ""
+msgstr "L'entità non è un'entità conto: %s"
 
 # messages-i18n.c:96
 #: src/business/business-gnome/dialog-billterms.c:230
 #: src/business/dialog-tax-table/dialog-tax-table.c:88
-#, fuzzy
 msgid "Negative amounts are not allowed."
-msgstr "Mostra importi negativi in rosso"
+msgstr "I valori negativi non sono permessi."
 
 #: src/business/business-gnome/dialog-billterms.c:235
 #: src/business/dialog-tax-table/dialog-tax-table.c:95
 msgid "Percentage amount must be between 0 and 100."
-msgstr ""
+msgstr "Il vaore percentuale deve essere compreso fra 0 e 100."
 
 # messages-i18n.c:13
 #: src/business/business-gnome/dialog-billterms.c:259
 #, fuzzy
 msgid "You must provide a name for this Billing Term."
-msgstr "È necessario immettere un nome per il titolo."
+msgstr "È necessario immettere un nome questo termine di pagamento."
 
 #: src/business/business-gnome/dialog-billterms.c:265
 #, c-format
@@ -1890,6 +1838,8 @@ msgid ""
 "You must provide a unique name for this Billing Term.\n"
 "Your choice \"%s\" is already in use."
 msgstr ""
+"È necessario immettere un nome univoco per questo termine di pagamento.\n"
+"La scelta \"%s\" è già in uso."
 
 #: src/business/business-gnome/dialog-billterms.c:484
 #: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:807
@@ -1904,21 +1854,20 @@ msgstr "Sconosciuto"
 #: src/business/business-gnome/dialog-billterms.c:608
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "Il termine \"%s\" è in uso. Non è possibile cancellarlo."
 
 # messages-i18n.c:17
 #: src/business/business-gnome/dialog-billterms.c:616
 #: src/business/dialog-tax-table/dialog-tax-table.c:518
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "Si è sicuri di voler cancellare il conto %s?"
+msgstr "Si è sicuri di voler cancellare \"%s\"?"
 
 # messages-i18n.c:21
 #: src/business/business-gnome/dialog-customer.c:234
 #: src/business/business-gnome/dialog-vendor.c:172
-#, fuzzy
 msgid "You must enter a company name."
-msgstr "È necessario immettere un nome per il conto."
+msgstr "È necessario immettere un nome per la compagnia."
 
 # messages-i18n.c:13
 #: src/business/business-gnome/dialog-customer.c:242
@@ -1928,14 +1877,11 @@ msgstr "È necessario immettere un'espressione valida."
 
 #: src/business/business-gnome/dialog-customer.c:252
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr ""
+msgstr "La percentuale di sconto deve essere compresa fra 0 e 100 o non specificata."
 
 #: src/business/business-gnome/dialog-customer.c:257
-#, fuzzy
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr ""
-"È necessario immettere un importo in contanti valido\n"
-"o lasciare il campo vuoto."
+msgstr "L'importo deve essere un valore positivo o non specificato."
 
 # po/guile_strings.txt:188
 #: src/business/business-gnome/dialog-customer.c:328
@@ -1949,21 +1895,20 @@ msgstr "<Nessun nome>"
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
 #: src/business/business-gnome/dialog-customer.c:335
-#, fuzzy
 msgid "Edit Customer"
-msgstr "Personalizzato"
+msgstr "Modifica cliente"
 
 #: src/business/business-gnome/dialog-customer.c:793
 msgid "View/Edit Customer"
-msgstr ""
+msgstr "Visualizza/modifica cliente"
 
 #: src/business/business-gnome/dialog-customer.c:794
 msgid "Customer's Jobs"
-msgstr ""
+msgstr "Lavori cliente"
 
 #: src/business/business-gnome/dialog-customer.c:796
 msgid "Customer's Invoices"
-msgstr ""
+msgstr "Fatture cliente"
 
 # messages-i18n.c:312
 #: src/business/business-gnome/dialog-customer.c:797
@@ -1973,16 +1918,17 @@ msgstr ""
 #: intl-scm/guile-strings.c:613
 #, fuzzy
 msgid "Process Payment"
-msgstr "Rateo"
+msgstr "Pagamento di processo"
 
 #: src/business/business-gnome/dialog-customer.c:806
 msgid "Shipping Contact"
-msgstr ""
+msgstr "Contatto spedizioni"
 
 #: src/business/business-gnome/dialog-customer.c:808
 #: src/business/business-gnome/dialog-vendor.c:665
+#, fuzzy
 msgid "Billing Contact"
-msgstr ""
+msgstr "Contatto pagamenti"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
@@ -1994,16 +1940,14 @@ msgstr "ID cliente"
 #: src/business/business-gnome/dialog-customer.c:812
 #: src/business/business-gnome/dialog-vendor.c:669
 #: intl-scm/guile-strings.c:1013
-#, fuzzy
 msgid "Company Name"
-msgstr "Immagine logo della società."
+msgstr "Nome compagnia"
 
 # src/gnome/glade-gnc-dialogs.c:1460
 #: src/business/business-gnome/dialog-customer.c:818
 #: src/business/business-gnome/dialog-vendor.c:675
-#, fuzzy
 msgid "Contact"
-msgstr "Contenuti"
+msgstr "Contatto"
 
 #: src/business/business-gnome/dialog-customer.c:820
 #: src/business/business-gnome/dialog-invoice.c:2138
@@ -2012,60 +1956,54 @@ msgstr "Contenuti"
 #: src/business/business-gnome/dialog-vendor.c:677
 #: intl-scm/guile-strings.c:551 intl-scm/guile-strings.c:701
 #: intl-scm/guile-strings.c:883
-#, fuzzy
 msgid "Company"
-msgstr "Apertura di colonna:"
+msgstr "Compagnia"
 
 #: src/business/business-gnome/dialog-customer.c:822
 #: src/business/business-gnome/dialog-employee.c:620
 #: src/business/business-gnome/dialog-job.c:548
 #: src/business/business-gnome/dialog-vendor.c:679
 msgid "ID #"
-msgstr ""
+msgstr "N. ID"
 
 #: src/business/business-gnome/dialog-date-close.c:49
-#, fuzzy
 msgid "No Account selected.  Please try again."
-msgstr "Nessun conto selezionato"
+msgstr "Nessun conto selezionato. Riprovare."
 
 # messages-i18n.c:21
 #: src/business/business-gnome/dialog-employee.c:178
-#, fuzzy
 msgid "You must enter a username."
-msgstr "È necessario immettere un nome per il conto."
+msgstr "È necessario immettere un nome utente."
 
 # messages-i18n.c:21
 #: src/business/business-gnome/dialog-employee.c:183
-#, fuzzy
 msgid "You must enter the employee's name."
-msgstr "È necessario immettere un nome per il conto."
+msgstr "È necessario immettere un nome per l'impiegato."
 
 # messages-i18n.c:13
 #: src/business/business-gnome/dialog-employee.c:191
-#, fuzzy
 msgid "You must enter an address."
-msgstr "È necessario immettere un'espressione valida."
+msgstr "È necessario immettere un indirizzo."
 
 #: src/business/business-gnome/dialog-employee.c:270
 msgid "Edit Employee"
-msgstr ""
+msgstr "Modifica impiegato"
 
 #: src/business/business-gnome/dialog-employee.c:598
 msgid "View/Edit Employee"
-msgstr ""
+msgstr "Visualizza/modifica impiegato"
 
 #: src/business/business-gnome/dialog-employee.c:606
 msgid "Employee ID"
-msgstr ""
+msgstr "ID impiegato"
 
 #: src/business/business-gnome/dialog-employee.c:608
 msgid "Employee Name"
-msgstr ""
+msgstr "Nome impieagto"
 
 #: src/business/business-gnome/dialog-employee.c:610
-#, fuzzy
 msgid "Employee Username"
-msgstr "Utente:"
+msgstr "Nome utente impiegato"
 
 # po/guile_strings.txt:188
 #: src/business/business-gnome/dialog-employee.c:616
@@ -2077,36 +2015,32 @@ msgid "Name"
 msgstr "Nome"
 
 #: src/business/business-gnome/dialog-employee.c:618
-#, fuzzy
 msgid "Username"
-msgstr "Utente:"
+msgstr "Nome utente"
 
 #: src/business/business-gnome/dialog-invoice.c:274
 #: src/business/business-gnome/dialog-order.c:142
+#, fuzzy
 msgid "You need to supply Billing Information."
-msgstr ""
+msgstr "È necessario fornire le informazioni pagamenti."
 
 # messages-i18n.c:17
 #: src/business/business-gnome/dialog-invoice.c:428
-#, fuzzy
 msgid "Are you sure you want to delete the selected entry?"
-msgstr "Si è sicuri di voler cancellare il conto %s?"
+msgstr "Si è sicuri di voler cancellare l'elemento selezionato?"
 
 #: src/business/business-gnome/dialog-invoice.c:430
 msgid "This entry is attached to an order and will be deleted from that as well!"
-msgstr ""
+msgstr "Questo elemento è collegato ad un ordine e sarà cancellato anche da quello!"
 
 #: src/business/business-gnome/dialog-invoice.c:537
 msgid "The Invoice must have at least one Entry."
-msgstr ""
+msgstr "La fattura deve avere almeno un elemento."
 
 # messages-i18n.c:56
 #: src/business/business-gnome/dialog-invoice.c:544
-#, fuzzy
 msgid "Do you really want to post the invoice?"
-msgstr ""
-"Si è sicuri di voler cancellare\n"
-"il prezzo corrente?"
+msgstr "Si è sicuri di voler emettere la fattura?"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: src/business/business-gnome/dialog-invoice.c:545
@@ -2115,27 +2049,22 @@ msgstr ""
 #: intl-scm/guile-strings.c:887
 #, fuzzy
 msgid "Due Date"
-msgstr "Data"
+msgstr "Scadenza"
 
 # messages-i18n.c:222
 #: src/business/business-gnome/dialog-invoice.c:546
-#, fuzzy
 msgid "Post Date"
-msgstr "Ordina per data"
+msgstr "Data emissione"
 
 # messages-i18n.c:186
 #: src/business/business-gnome/dialog-invoice.c:547
-#, fuzzy
 msgid "Post to Account"
-msgstr "Conti persi"
+msgstr "Emissione sul conto"
 
 # messages-i18n.c:48
 #: src/business/business-gnome/dialog-invoice.c:601
-#, fuzzy
 msgid "Unposting this Invoice will delete the posted transaction.  Are you sure you want to unpost it?"
-msgstr ""
-"Si sta per sovrascrivere un movimento esistente.\n"
-"Si è sicuri di voler procedere?"
+msgstr "Il ritiro di questa fattura cancellerà il movimento relativo. Si è sicuri di volerla ritirare?"
 
 # messages-i18n.c:344
 #: src/business/business-gnome/dialog-invoice.c:913
@@ -2157,131 +2086,114 @@ msgstr "Seleziona..."
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/dialog-invoice.c:1606
-#, fuzzy
 msgid "Edit Invoice"
-msgstr "Fattura"
+msgstr "Modifica fattura"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/dialog-invoice.c:1609
-#, fuzzy
 msgid "View Invoice"
-msgstr "Fattura"
+msgstr "Visualizza fattura"
 
 # messages-i18n.c:192
 #: src/business/business-gnome/dialog-invoice.c:1617
 #: intl-scm/guile-strings.c:595 intl-scm/guile-strings.c:597
-#, fuzzy
 msgid "New Bill"
-msgstr "Nuovo _file"
+msgstr "Nuova ricevuta"
 
 #: src/business/business-gnome/dialog-invoice.c:1621
-#, fuzzy
 msgid "Edit Bill"
-msgstr "Cerca le suddivisioni "
+msgstr "Modifica ricevuta"
 
 # messages-i18n.c:192
 #: src/business/business-gnome/dialog-invoice.c:1624
-#, fuzzy
 msgid "View Bill"
-msgstr "Nuovo _file"
+msgstr "Visualizza ricevuta"
 
 #: src/business/business-gnome/dialog-invoice.c:2106
 msgid "View/Edit Invoice"
-msgstr ""
+msgstr "Visualizza/modifica ricevuta"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/dialog-invoice.c:2115
-#, fuzzy
 msgid "Invoice Owner"
-msgstr "Fattura"
+msgstr "Proprietario fattura"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/dialog-invoice.c:2117
 #: intl-scm/guile-strings.c:827
-#, fuzzy
 msgid "Invoice Notes"
-msgstr "Fattura"
+msgstr "Note fattura"
 
 #: src/business/business-gnome/dialog-invoice.c:2123
 msgid "Is Posted?"
-msgstr ""
+msgstr "È stata emessa?"
 
 #: src/business/business-gnome/dialog-invoice.c:2127
-#, fuzzy
 msgid "Company Name "
-msgstr "Immagine logo della società."
+msgstr "Nome compagnia"
 
 #: src/business/business-gnome/dialog-invoice.c:2143
-#, fuzzy
 msgid "Posted"
-msgstr "_Posticipa"
+msgstr "_Emessa"
 
 # messages-i18n.c:310
 #: src/business/business-gnome/dialog-invoice.c:2145
 #: src/business/business-gnome/dialog-order.c:864
-#, fuzzy
 msgid "Opened"
-msgstr "Apri"
+msgstr "Aperta"
 
 # messages-i18n.c:18
 #: src/business/business-gnome/dialog-job.c:104
-#, fuzzy
 msgid "The Job must be given a name."
-msgstr "È necessario dare un nome al conto."
+msgstr "È necessario dare un nome al lavoro."
 
 # messages-i18n.c:13
 #: src/business/business-gnome/dialog-job.c:113
-#, fuzzy
 msgid "You must choose an owner for this job."
-msgstr "È necessario scegliere un certificato."
+msgstr "È necessario scegliere un proprietario per questo lavoro."
 
 # messages-i18n.c:281
 #: src/business/business-gnome/dialog-job.c:210
-#, fuzzy
 msgid "Edit Job"
-msgstr "Modifica"
+msgstr "Modifica lavoro"
 
 # messages-i18n.c:303
 #: src/business/business-gnome/dialog-job.c:212 intl-scm/guile-strings.c:573
 #: intl-scm/guile-strings.c:575 intl-scm/guile-strings.c:603
 #: intl-scm/guile-strings.c:605
-#, fuzzy
 msgid "New Job"
-msgstr "Nuovo"
+msgstr "Nuovo lavoro"
 
 #: src/business/business-gnome/dialog-job.c:518
 msgid "View/Edit Job"
-msgstr ""
+msgstr "Visualizza/modifica lavoro"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-gnome/dialog-job.c:519
-#, fuzzy
 msgid "View Invoices"
-msgstr "Fattura"
+msgstr "Visualizza fatture"
 
 # po/guile_strings.txt:188
 #: src/business/business-gnome/dialog-job.c:528
-#, fuzzy
 msgid "Owner's Name"
-msgstr "Nome utente"
+msgstr "Nome proprietario"
 
 #: src/business/business-gnome/dialog-job.c:530
 msgid "Only Active?"
-msgstr ""
+msgstr "Solo attivo?"
 
 # messages-i18n.c:18
 #: src/business/business-gnome/dialog-order.c:133
-#, fuzzy
 msgid "The Order must be given an ID."
-msgstr "È necessario dare un nome al conto."
+msgstr "È necessario dare un ID all'ordine."
 
 #: src/business/business-gnome/dialog-order.c:238
 msgid "The Order must have at least one Entry."
-msgstr ""
+msgstr "L'ordine deve contenere almeno un elemento."
 
 #: src/business/business-gnome/dialog-order.c:257
 msgid ""
@@ -2289,115 +2201,103 @@ msgid ""
 "Are you sure you want to close it out before\n"
 "you invoice all the entries?"
 msgstr ""
+"Questo ordine contiene degli elementi che non sono stati fatturati.\n"
+"Si è sicuri di volerlo chiudere prima di fatturare tutti gli elementi?"
 
 # messages-i18n.c:56
 #: src/business/business-gnome/dialog-order.c:266
-#, fuzzy
 msgid "Do you really want to close the order?"
-msgstr ""
-"Si è sicuri di voler cancellare\n"
-"il prezzo corrente?"
+msgstr "Si è sicuri di voler chiudere l'ordine?"
 
 # messages-i18n.c:261
 #: src/business/business-gnome/dialog-order.c:267
-#, fuzzy
 msgid "Close Date"
-msgstr "Chiudi"
+msgstr "Data chiusura"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: src/business/business-gnome/dialog-order.c:833
-#, fuzzy
 msgid "View/Edit Order"
-msgstr "Ordine registri"
+msgstr "Visualizza/modifica ordine"
 
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: src/business/business-gnome/dialog-order.c:841
-#, fuzzy
 msgid "Order Notes"
-msgstr "Note"
+msgstr "Note ordine"
 
 # messages-i18n.c:261
 #: src/business/business-gnome/dialog-order.c:845
-#, fuzzy
 msgid "Is Closed?"
-msgstr "Chiudi"
+msgstr "È chiuso?"
 
 # po/guile_strings.txt:188
 #: src/business/business-gnome/dialog-order.c:849
-#, fuzzy
 msgid "Owner Name "
-msgstr "Nome utente"
+msgstr "Nome proprietario"
 
 # messages-i18n.c:261
 #: src/business/business-gnome/dialog-order.c:862
-#, fuzzy
 msgid "Closed"
-msgstr "Chiudi"
+msgstr "Chiuso"
 
 #: src/business/business-gnome/dialog-payment.c:88
 msgid "You must enter the amount of the payment.  The payment amount must be greater than zero."
-msgstr ""
+msgstr "È necessario immettere l'ammontare del pagamento. L'ammontare del pagamento deve essere maggiore di zero."
 
 # messages-i18n.c:21
 #: src/business/business-gnome/dialog-payment.c:97
-#, fuzzy
 msgid "You must select a company for payment processing."
-msgstr "È necessario scegliere un titolo."
+msgstr "È necessario scegliere una compagnia per elaborare il pagamento."
 
 # messages-i18n.c:20
 #: src/business/business-gnome/dialog-payment.c:105
-#, fuzzy
 msgid "You must select a transfer account from the account tree."
-msgstr "È necessario selezionare un conto da controllare e riparare."
+msgstr "È necessario selezionare un conto di destinazione dall'albero dei conti."
 
 # messages-i18n.c:21
 #: src/business/business-gnome/dialog-payment.c:113
-#, fuzzy
 msgid "You must enter an account name for posting."
-msgstr "È necessario immettere un nome per il conto."
+msgstr "È necessario immettere un nome di conto per l'emissione."
 
 # po/guile_strings.txt:48
 #: src/business/business-gnome/dialog-payment.c:123
-#, fuzzy, c-format
+#, c-format
 msgid "Your selected post account, %s, does not exist"
-msgstr "Non è stato selezionato alcun conto."
+msgstr "Il conto emissione selezionato, %s, non esiste"
 
 # messages-i18n.c:21
 #: src/business/business-gnome/dialog-vendor.c:180
-#, fuzzy
 msgid "You must enter a payment address."
-msgstr "È necessario immettere un nome per il conto."
+msgstr "È necessario immettere un indirizzo per il pagamento."
 
 #: src/business/business-gnome/dialog-vendor.c:258
 msgid "Edit Vendor"
-msgstr ""
+msgstr "Modifica venditore"
 
 #: src/business/business-gnome/dialog-vendor.c:652
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "Visualizza/modifica venditore"
 
 #: src/business/business-gnome/dialog-vendor.c:653
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "Lavori venditore"
 
 #: src/business/business-gnome/dialog-vendor.c:655
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "Ricevute venditore"
 
 #: src/business/business-gnome/dialog-vendor.c:656
 #, fuzzy
 msgid "Pay Bill"
-msgstr "Conto"
+msgstr "Ricevute di pagamento"
 
 #: src/business/business-gnome/dialog-vendor.c:667
 msgid "Vendor ID"
-msgstr ""
+msgstr "ID venditore"
 
 # po/guile_strings.txt:48
 #: src/business/business-gnome/search-owner.c:151
-#, fuzzy
 msgid "You have not selected an owner"
-msgstr "Non è stato selezionato alcun conto."
+msgstr "Non è stato selezionato alcun proprietario"
 
 # messages-i18n.c:278
 #: src/business/business-gnome/search-owner.c:282
@@ -2424,15 +2324,13 @@ msgstr "nessuno"
 
 # po/guile_strings.txt:182
 #: src/business/business-gnome/business-gnome-utils.c:480
-#, fuzzy
 msgid "Yes"
-msgstr "Anni"
+msgstr "sì"
 
 # po/guile_strings.txt:243
 #: src/business/business-gnome/business-gnome-utils.c:485
-#, fuzzy
 msgid "No"
-msgstr "nessuno"
+msgstr "no"
 
 #: src/business/business-gnome/business-gnome-utils.c:490
 #, fuzzy
@@ -2442,11 +2340,9 @@ msgstr "Usa l'ora locale"
 # messages-i18n.c:54
 #: src/business/business-ledger/gncEntryLedger.c:65
 #: src/register/ledger-core/split-register.c:1488
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s does not allow transactions.\n"
-msgstr ""
-"Il conto %s non esiste.\n"
-"Si desidera crearlo?"
+msgstr "Il conto %s non permette movimenti.\n"
 
 # messages-i18n.c:54
 #: src/business/business-ledger/gncEntryLedger.c:66
@@ -2461,22 +2357,20 @@ msgstr ""
 
 #: src/business/business-ledger/gncEntryLedger.c:201
 msgid "Hours"
-msgstr ""
+msgstr "ore"
 
 # messages-i18n.c:318
 #: src/business/business-ledger/gncEntryLedger.c:202
-#, fuzzy
 msgid "Project"
-msgstr "Profitti"
+msgstr "Progetto"
 
 #: src/business/business-ledger/gncEntryLedger.c:203
 msgid "Material"
-msgstr ""
+msgstr "Materiale"
 
 # messages-i18n.c:54
 #: src/business/business-ledger/gncEntryLedger.c:746
 #: src/business/business-ledger/gncEntryLedgerControl.c:579
-#, fuzzy
 msgid ""
 "The current entry has been changed.\n"
 "Would you like to save it?"
@@ -2487,28 +2381,26 @@ msgstr ""
 #: src/business/business-ledger/gncEntryLedgerControl.c:123
 #, c-format
 msgid "Invalid Entry:  You need to supply %s."
-msgstr ""
+msgstr "Immissione non valida: è necessario fornire %s."
 
 # messages-i18n.c:199
 #: src/business/business-ledger/gncEntryLedgerControl.c:147
 #: src/business/business-ledger/gncEntryLedgerControl.c:152
-#, fuzzy
 msgid "an Account"
-msgstr "Conto padre"
+msgstr "un conto"
 
 # messages-i18n.c:54
 #: src/business/business-ledger/gncEntryLedgerControl.c:353
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The tax table %s does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"Il conto %s non esiste.\n"
-"Si desidera crearlo?"
+"La tabella tasse %s non esiste.\n"
+"Si desidera crearla?"
 
 # messages-i18n.c:54
 #: src/business/business-ledger/gncEntryLedgerControl.c:487
-#, fuzzy
 msgid ""
 "The current entry has been changed.\n"
 "However, this entry is part of an existing order.\n"
@@ -2516,95 +2408,86 @@ msgid ""
 "effectively change your order?"
 msgstr ""
 "Il movimento corrente è stato modificato.\n"
-"Si desidera registrarlo?"
+"L'immissione è però parte di un conte esistente.\n"
+"Si desidera registrare la modifica ed\n"
+"effettivamente modificare l'ordine?"
 
 # messages-i18n.c:54
 #: src/business/business-ledger/gncEntryLedgerControl.c:495
-#, fuzzy
 msgid ""
 "The current entry has been changed.\n"
 "Would you like to record the change?"
 msgstr ""
-"Il movimento corrente è stato modificato.\n"
-"Si desidera registrarlo?"
+"L'immissione corrente è stata modificata.\n"
+"Si desidera registrare la modifica?"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:58
-#, fuzzy
 msgid "sample:X"
-msgstr "sample:99999"
+msgstr "sample:X"
 
 # src/gnome/glade-gnc-dialogs.c:1264
 #: src/business/business-ledger/gncEntryLedgerLayout.c:60
 #: src/register/ledger-core/split-register-layout.c:503
 #: src/register/ledger-core/split-register-layout.c:511
-#, fuzzy
 msgid "sample:12/12/2000"
-msgstr "sample: 12/12/2000"
+msgstr "sample:12/12/2000"
 
 # messages-i18n.c:123
 #: src/business/business-ledger/gncEntryLedgerLayout.c:63
-#, fuzzy
 msgid "sample:Description of an Entry"
-msgstr "sample:Descrizione di un movimento"
+msgstr "sample:Descrizione di un'immissione"
 
 # messages-i18n.c:240
 #: src/business/business-ledger/gncEntryLedgerLayout.c:65
-#, fuzzy
 msgid "sample:Action"
-msgstr "Operazione"
+msgstr "sample:operaz"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:67
 #: src/business/business-ledger/gncEntryLedgerLayout.c:71
-#, fuzzy
 msgid "sample:9,999.00"
-msgstr "sample:999,999.000"
+msgstr "sample:9,999.00"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:69
 #: src/business/business-ledger/gncEntryLedgerLayout.c:89
-#, fuzzy
 msgid "sample:999,999.00"
-msgstr "sample:999,999.000"
+msgstr "sample:999,999.00"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:74
 #, no-c-format
 msgid "sample(DT):+%"
-msgstr ""
+msgstr "sample(DT):+%"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:77
 #, no-c-format
 msgid "sample(DH):+%"
-msgstr ""
+msgstr "sample(DH):+%"
 
 # messages-i18n.c:234
 #: src/business/business-ledger/gncEntryLedgerLayout.c:79
 #: src/business/business-ledger/gncEntryLedgerLayout.c:81
-#, fuzzy
 msgid "sample:Xfer:Account"
-msgstr "Conto destinazione"
+msgstr "sample:mov:conto"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:83
-#, fuzzy
 msgid "sample:T?"
-msgstr "sample:99999"
+msgstr "sample:T?"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:85
-#, fuzzy
 msgid "sample:TI"
-msgstr "sample:99999"
+msgstr "sample:TI"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:87
 msgid "sample:Tax Table 1"
-msgstr ""
+msgstr "sample:Tabella tasse 1"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:91
-#, fuzzy
 msgid "sample:999.00"
-msgstr "sample:999,999.000"
+msgstr "sample:999.00"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:93
 #, fuzzy
 msgid "sample:BI"
-msgstr "sample:99999"
+msgstr "sample:BI"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:32
 msgid "$"
@@ -2617,15 +2500,15 @@ msgstr "%"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:42
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:43
 msgid "="
-msgstr ""
+msgstr "="
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:44
 msgid ">"
-msgstr ""
+msgstr ">"
 
 # messages-i18n.c:190
 #: src/business/business-ledger/gncEntryLedgerModel.c:39
@@ -2635,9 +2518,8 @@ msgstr "Conto entrate"
 
 # messages-i18n.c:194
 #: src/business/business-ledger/gncEntryLedgerModel.c:44
-#, fuzzy
 msgid "Expense Account"
-msgstr "Conti Uscite"
+msgstr "Conto uscite"
 
 # messages-i18n.c:240
 #: src/business/business-ledger/gncEntryLedgerModel.c:49
@@ -2649,15 +2531,13 @@ msgstr "Operazione"
 # messages-i18n.c:236 po/guile_strings.txt:56
 #: src/business/business-ledger/gncEntryLedgerModel.c:64
 #: intl-scm/guile-strings.c:731 intl-scm/guile-strings.c:773
-#, fuzzy
 msgid "Discount"
-msgstr "Conto"
+msgstr "Sconto"
 
 # messages-i18n.c:166
 #: src/business/business-ledger/gncEntryLedgerModel.c:69
-#, fuzzy
 msgid "Discount Type"
-msgstr "Tipo conto"
+msgstr "Tipo sconto"
 
 # messages-i18n.c:236 po/guile_strings.txt:56
 #: src/business/business-ledger/gncEntryLedgerModel.c:74
@@ -2668,52 +2548,47 @@ msgstr "Finestra conti"
 # messages-i18n.c:316
 #: src/business/business-ledger/gncEntryLedgerModel.c:79
 #: intl-scm/guile-strings.c:729
-#, fuzzy
 msgid "Unit Price"
-msgstr "Prezzo"
+msgstr "Prezzo unità"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:84
 #: intl-scm/guile-strings.c:727 intl-scm/guile-strings.c:763
 msgid "Quantity"
-msgstr ""
+msgstr "Quantità"
 
 # po/guile_strings.txt:264
 #: src/business/business-ledger/gncEntryLedgerModel.c:89
 #: src/business/dialog-tax-table/tax-tables.glade:380
 #, fuzzy
 msgid "Tax Table"
-msgstr "Tabelle"
+msgstr "Tabella tasse"
 
 # po/guile_strings.txt:264
 #: src/business/business-ledger/gncEntryLedgerModel.c:94
-#, fuzzy
 msgid "Taxable?"
-msgstr "Tabelle"
+msgstr "Tassabile?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:99
 msgid "Tax Included?"
-msgstr ""
+msgstr "Tasse incluse?"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: src/business/business-ledger/gncEntryLedgerModel.c:104
-#, fuzzy
 msgid "Invoiced?"
-msgstr "Fattura"
+msgstr "Fattura?"
 
 # messages-i18n.c:344
 #: src/business/business-ledger/gncEntryLedgerModel.c:109
 #: intl-scm/guile-strings.c:851
-#, fuzzy
 msgid "Subtotal"
-msgstr "totale"
+msgstr "Subtotale"
 
 # po/guile_strings.txt:264
 #: src/business/business-ledger/gncEntryLedgerModel.c:114
 #: intl-scm/guile-strings.c:853
-#, fuzzy
 msgid "Tax"
-msgstr "_Tasse"
+msgstr "Tasse"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:119
 #, fuzzy
@@ -9588,12 +9463,12 @@ msgstr "Tot %s"
 # src/gnome/glade-gnc-dialogs.c:629
 #: src/register/ledger-core/split-register-model.c:277
 msgid "Tot Credit"
-msgstr "Tot dare"
+msgstr "Tot avere"
 
 # messages-i18n.c:268 po/guile_strings.txt:32
 #: src/register/ledger-core/split-register-model.c:301
 msgid "Tot Debit"
-msgstr "Tot avere"
+msgstr "Tot dare"
 
 # messages-i18n.c:230
 #: src/register/ledger-core/split-register-model.c:310
