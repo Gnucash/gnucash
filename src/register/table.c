@@ -238,7 +238,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixEnterCellCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*enter) (const char *);
+   const char * (*enter) (struct _SingleCell *, const char *);
 
    table = (Table *) cd;
    arr = table->cursor;
@@ -266,7 +266,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
       const char *val, *retval;
 
       val = table->entries[row][col];
-      retval = enter (val);
+      retval = enter (arr->cells[rel_row][rel_col], val);
       if (val != retval) {
          if (table->entries[row][col]) free (table->entries[row][col]);
          table->entries[row][col] = (char *) retval;
@@ -291,7 +291,10 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixModifyVerifyCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*mv) (const char *, const char *, const char *);
+   const char * (*mv) (struct _SingleCell *, 
+                       const char *, 
+                       const char *, 
+                       const char *);
    const char *oldval, *change;
    char *newval;
    const char *retval;
@@ -331,7 +334,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    /* OK, if there is a callback for this cell, call it */
    mv = arr->cells[rel_row][rel_col]->modify_verify;
    if (mv) {
-      retval = (*mv) (oldval, change, newval);
+      retval = (*mv) (arr->cells[rel_row][rel_col], oldval, change, newval);
 
       /* if the callback returned a non-null value, allow the edit */
       if (retval) {
@@ -381,7 +384,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixLeaveCellCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*leave) (const char *);
+   const char * (*leave) (struct _SingleCell *, const char *);
 
    table = (Table *) cd;
    arr = table->cursor;
@@ -406,7 +409,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
       const char *val, *retval;
 
       val = cbs->value;
-      retval = leave (val);
+      retval = leave (arr->cells[rel_row][rel_col], val);
 
       if (NULL == retval) retval = "";
 

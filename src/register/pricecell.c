@@ -11,26 +11,29 @@
  * decimal point in them */
 
 static const char * 
-PriceMV (const char * old, const char *change, const char *new)
+PriceMV (struct _SingleCell *_cell, 
+         const char * oldval, 
+         const char *change, 
+         const char *newval)
 {
    if (change) {
       /* if change is a decimal point, then count decimal points */
       if (DECIMAL_PT == change[0]) {
          int i, count=0;
-         for (i=0; 0 != new[i]; i++) {
-            if (DECIMAL_PT == new[i]) count ++;
+         for (i=0; 0 != newval[i]; i++) {
+            if (DECIMAL_PT == newval[i]) count ++;
          }
-         if (1 >= count) return new;
+         if (1 >= count) return newval;
          return NULL;
 
       } else {
          /* accept numeric, reject non-alpha edits */
-         if (isdigit (change[0])) return new;
+         if (isdigit (change[0])) return newval;
          return NULL;
       }
    } else {
-      /* accept the new string if user action was delete, etc. */
-      return new; 
+      /* accept the newval string if user action was delete, etc. */
+      return newval; 
    }
 }
 

@@ -71,7 +71,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    header = xaccMallocCellBlock (1, MAX_COLS);
    reg->header = header;
 
-   cell = xaccMallocDateCell();
+   cell = (SingleCell *) xaccMallocDateCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, DATE_CELL_C);
    xaccSetSingleCellValue (cell, "Date");
@@ -106,7 +106,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    curs = xaccMallocCellBlock (2, MAX_COLS);
    reg->cursor = curs;
    
-   cell = xaccMallocDateCell();
+   cell = (SingleCell *) xaccMallocDateCell();
    cell->width = 9;
    xaccAddCell (curs, cell, DATE_CELL_R, DATE_CELL_C);
    reg->dateCell = cell;

@@ -12,7 +12,7 @@
 /* ================================================ */
 
 static const char * 
-ToggleRecn (const char *cur_val)
+ToggleRecn (struct _SingleCell *_cell, const char *cur_val)
 {
    char buff[2];
 

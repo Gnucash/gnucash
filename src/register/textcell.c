@@ -9,9 +9,12 @@
  * all modifications */
 
 static const char * 
-TextMV (const char * old, const char *change, const char *new)
+TextMV (struct _SingleCell *_cell,
+        const char *oldval, 
+        const char *change, 
+        const char *newval)
 {
-   return new;
+   return newval;
 }
 
 /* ================================================ */

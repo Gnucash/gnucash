@@ -63,11 +63,14 @@ typedef struct _SingleCell {
   /* private data */
   char * value;   /* current value */
 
-  const char * (*enter_cell) (const char * current);
-  const char * (*modify_verify) (const char *old, 
+  const char * (*enter_cell) (struct _SingleCell *,
+                              const char * current);
+  const char * (*modify_verify) (struct _SingleCell *,
+                                 const char *old, 
                                  const char *add, 
                                  const char *new); 
-  const char * (*leave_cell) (const char * current);
+  const char * (*leave_cell) (struct _SingleCell *,
+                              const char * current);
 
   struct _CellBlock *block;  /* back-pointer to parent container */
 } SingleCell;

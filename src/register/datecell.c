@@ -68,19 +68,18 @@ void xaccParseDate (struct tm *parsed, const char * datestr)
 /* ================================================ */
 
 static const char * 
-DateEnter (const char * curr)
+DateEnter (struct _SingleCell *_cell, const char * curr)
 {
-   char * sep;
-   struct tm celldate;
+   DateCell *cell = (DateCell *) _cell;
 
    /* OK, we just entered a newval cell.  Find out
     * what date that cell thinks it has. 
     */
 
-   xaccParseDate (&celldate, curr);
+   xaccParseDate (&(cell->date), curr);
 
-printf ("parse %d %d %d \n", celldate.tm_mday, celldate.tm_mon+1,
-celldate.tm_year+1900);
+printf ("parse %d %d %d \n", cell->date.tm_mday, cell->date.tm_mon+1,
+cell->date.tm_year+1900);
 
    return curr;
 }
@@ -88,8 +87,12 @@ celldate.tm_year+1900);
 /* ================================================ */
 
 static const char * 
-DateMV (const char * oldval, const char *change, const char *newval)
+DateMV (struct _SingleCell *_cell, 
+        const char * oldval, 
+        const char *change, 
+        const char *newval)
 {
+   DateCell *cell = (DateCell *) _cell;
    int accel=0;
    short day, month, year;
    char * datestr;
