@@ -779,6 +779,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   gncInvoiceAttachInvoiceToTxn (invoice, txn);
   gncInvoiceSetPostedAcc (invoice, acc);
 
+  xaccTransSetReadOnly (txn, "Generated from an invoice");
   xaccTransCommitEdit (txn);
 
   gncAccountValueDestroy (splitinfo);

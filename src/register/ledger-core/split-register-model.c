@@ -1434,6 +1434,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 {
   SplitRegister *reg = user_data;
   SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *trans;
   Split *split;
   char recn;
 
@@ -1446,6 +1447,9 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   if (!split)
     return TRUE;
 
+  trans = xaccSplitGetParent (split);
+  if (xaccTransWarnReadOnly(trans))
+    return FALSE;
   if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
     recn = gnc_recn_cell_get_flag
       ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));

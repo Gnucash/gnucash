@@ -961,6 +961,8 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
   trans = gnc_split_register_get_current_trans (reg);
+  if (xaccTransWarnReadOnly(trans))
+    return;
   if (xaccTransHasReconciledSplits (trans)) {
     buf = g_strconcat (message, "\n\n", recn_warn, NULL);
     result =
@@ -1036,6 +1038,9 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   }
 
   if (cursor_class == CURSOR_CLASS_NONE)
+    return;
+
+  if (xaccTransWarnReadOnly(trans))
     return;
 
   /* On a split cursor, just delete the one split. */

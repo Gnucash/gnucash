@@ -74,6 +74,7 @@ const char *void_former_val_str = "void-former-value";
 /* KVP entry for date-due value */
 #define TRANS_DATE_DUE_KVP	"trans-date-due"
 #define TRANS_TXN_TYPE_KVP	"trans-txn-type"
+#define TRANS_READ_ONLY_REASON	"trans-read-only"
 
 #define PRICE_SIGFIGS 6
 
@@ -1965,6 +1966,26 @@ xaccTransGetVersion (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
+gboolean
+xaccTransWarnReadOnly (Transaction *trans)
+{
+  const gchar *reason;
+
+  if (!trans) return FALSE;
+
+  reason = xaccTransGetReadOnly (trans);
+  if (reason) {
+    gnc_send_gui_error("Cannot modify or delete this transaction.\n"
+		       "This transaction is marked read-only because:\n\n'%s'",
+		       reason);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccTransDestroy (Transaction *trans)
 {
@@ -1972,6 +1993,10 @@ xaccTransDestroy (Transaction *trans)
 
   if (!trans) return;
   check_open (trans);
+
+  if (xaccTransWarnReadOnly (trans))
+    return;
+
   trans->do_free = TRUE;
   xaccTransWriteLog (trans, 'D');
 
@@ -2017,15 +2042,19 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
 /********************************************************************\
 \********************************************************************/
 
-void
+gboolean
 xaccSplitDestroy (Split *split)
 {
    Account *acc;
    Transaction *trans;
 
-   if (!split) return;
+   if (!split) return TRUE;
 
+   acc = split->acc;
    trans = split->parent;
+   if (!acc->do_free && xaccTransWarnReadOnly (trans))
+       return FALSE;
+
    check_open (trans);
 
    mark_split (split);
@@ -2043,13 +2072,13 @@ xaccSplitDestroy (Split *split)
    }
 
    /* Note: split is removed from lot when its removed from accoount */
-   acc = split->acc;
    xaccAccountRemoveSplit (acc, split);
    xaccAccountRecomputeBalance (acc);
 
    gen_event (split);
    xaccRemoveEntity (split->book->entity_table, &split->guid);
    xaccFreeSplit (split);
+   return TRUE;
 }
 
 /********************************************************************\
@@ -2500,6 +2529,14 @@ xaccTransSetTxnType (Transaction *trans, char type)
   kvp_value_delete (value);
 }
 
+void
+xaccTransSetReadOnly (Transaction *trans, const char *reason)
+{
+  if (!trans || !reason) return;
+
+  kvp_frame_set_slot_nc (trans->kvp_data, TRANS_READ_ONLY_REASON, 
+			 kvp_value_new_string (reason));
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -2666,6 +2703,20 @@ xaccTransGetTxnType (Transaction *trans)
     return *s;
   }
   return TXN_TYPE_NONE;
+}
+
+const char * 
+xaccTransGetReadOnly (Transaction *trans)
+{
+  kvp_value *v;
+
+  if (!trans) return NULL;
+
+  v = kvp_frame_get_slot (trans->kvp_data, TRANS_READ_ONLY_REASON);
+  if (!v)
+    return NULL;
+
+  return kvp_value_get_string (v);
 }
 
 int

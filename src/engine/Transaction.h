@@ -201,7 +201,7 @@ void          xaccTransAppendSplit (Transaction *trans, Split *split);
  *    will not be deleted until the xaccTransCommitEdit() routine is
  *    called.)
  */
-void          xaccSplitDestroy (Split *split);
+gboolean      xaccSplitDestroy (Split *split);
 
 /* ------------- gets --------------- */
 /* The xaccTransGetSplit() method returns a pointer to each of the 
@@ -239,6 +239,10 @@ Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
 Timespec      xaccTransRetDateDueTS (Transaction *trans);
 void	      xaccTransGetDateDueTS (Transaction *trans, Timespec *ts);
 char	      xaccTransGetTxnType (Transaction *trans);
+
+void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
+const char *  xaccTransGetReadOnly (Transaction *trans);
+gboolean      xaccTransWarnReadOnly (Transaction *trans);
 
 /* The xaccTransCountSplits() method returns the number of splits
  * in a transaction.

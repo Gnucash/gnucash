@@ -1,3 +1,22 @@
+2002-11-04  David Hampton  <hampton@employees.org>
+
+	* src/engine/Transaction.c: New functions to get/set read-only
+	status on a transaction, and to print a warning message if a
+	transaction is read-only.  The engine will not let you delete a
+	transaction (or split in a transaction) that is marked read-only.
+
+	* src/business/business-core/gncInvoice.c
+	(gncInvoicePostToAccount): Mark as read-only transactions that are
+	generated from an invoice.
+
+	* src/gnome/gnc-split-reg.c (gsr_default_delete_handler): 
+	(gsr_default_reinit_handler): Honor the read-only setting on a
+	transaction.
+
+	* src/register/ledger-core/split-register-model.c
+	(gnc_split_register_confirm): Honor the read-only setting on a
+	transaction.
+
 2002-11-04  Herbert Thoma  <herbie@hthoma.de>
 
 	* /src/report/standard-reports/cash-flow.scm: new report
