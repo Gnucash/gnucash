@@ -87,6 +87,7 @@
 #include "Account.h"
 #include "AccountP.h"
 #include "date.h"
+#include "DateUtils.h"
 #include "FileIO.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -120,6 +121,7 @@ static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDate( int fd, int token );
 
+static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
 static int writeAccount( int fd, Account *account );
 static int writeTransaction( int fd, Transaction *trans );
@@ -973,14 +975,53 @@ xaccResetWriteFlags (AccountGroup *grp)
 }
 
 /********************************************************************\
- * xaccWriteAccountGroup                                                    * 
- *   flattens the program data and saves it in a file               * 
+ * xaccWriteAccountGroup                                            * 
+ * writes account date to two files: the current file, and a        *
+ * backup log.                                                      *
  *                                                                  * 
  * Args:   datafile - the file to store the data in                 * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int 
 xaccWriteAccountGroup( char *datafile, AccountGroup *grp )
+  {
+  int err = 0;
+  char * timestamp;
+  int filenamelen;
+  char * backup;
+
+  if (!datafile) return -1;
+
+  err = writeAccountGroupToFile (datafile, grp);
+  if (0 > err) return err;
+
+  /* also, write a time-stamped backup file */
+  /* tag each filename with a timestamp */
+  timestamp = xaccDateUtilGetStampNow ();
+
+  filenamelen = strlen (datafile) + strlen (timestamp) +5;
+  
+  backup = (char *) malloc (filenamelen);
+  strcpy (backup, datafile);
+  strcat (backup, timestamp);
+  strcat (backup, ".xac");
+  
+  err = writeAccountGroupToFile (backup, grp);
+  free (backup);
+  free (timestamp);
+
+  return err;
+  }
+
+/********************************************************************\
+ * writeAccountGroupToFile                                          * 
+ *   flattens the program data and saves it in a file               * 
+ *                                                                  * 
+ * Args:   datafile - the file to store the data in                 * 
+ * Return: -1 on failure                                            * 
+\********************************************************************/
+static int 
+writeAccountGroupToFile( char *datafile, AccountGroup *grp )
   {
   int err = 0;
   int token = VERSION;    /* The file format version */
@@ -1019,6 +1060,7 @@ xaccWriteAccountGroup( char *datafile, AccountGroup *grp )
   err = writeGroup (fd, grp);
 
   close(fd);
+
   return err;
   }
 
