@@ -7,4 +7,8 @@ There should be no GUI code in this subdirectory, and,
 ideally, it should build cleanly and independently of 
 any GUI elements or assumptions.
 
+To Be Done:
+----------
+Provide detailed documentation for the architecture & design here.
+
 February 1998
