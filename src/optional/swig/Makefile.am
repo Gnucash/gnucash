@@ -27,9 +27,7 @@ EXTRA_DIST = \
   perl5_typemaps.i \
   gnucash-swig-defines.c
 
-# CFLAGS = @CFLAGS@ -Dbool=char
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I@PERLINCL@/CORE \
   ${GNOME_INCLUDEDIR} \
   -I${top_srcdir}/src/engine
@@ -40,7 +38,7 @@ CFLAGS = \
 
 libgncswig_la_LIBADD = \
   -lgncengine -lxml -lgnc_postgres \
-  @GLIB_LIBS@ 
+  ${GLIB_LIBS} 
 
 
 SWIG_INPUT_HDRS := \

@@ -1,6 +1,6 @@
 SUBDIRS = . test
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
+AM_CFLAGS = ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
 
 lib_LTLIBRARIES = libgncmodule.la 
 pkglib_LTLIBRARIES = libgw-gnc-module.la

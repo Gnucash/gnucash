@@ -40,8 +40,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/guile \

@@ -84,8 +84,7 @@ EXTRA_DIST = \
   gnucash-make-guids.in \
   gnucash-run-script.in
 
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I./app-utils \
   -I./engine \
   -I./guile \

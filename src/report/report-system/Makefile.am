@@ -17,11 +17,7 @@ libgncmod_report_system_la_LIBADD = \
   ${GUILE_LIBS} 
 
 
-CFLAGS = \
-  @CFLAGS@ \
-  -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS} \
-  ${GUILE_INCS}
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
 
 .scm-links:
 	rm -f gnucash report

@@ -29,4 +29,4 @@ noinst_PROGRAMS = \
 
 #EXTRA_DIST = test-load-module
 
-CFLAGS = @CFLAGS@ -I${top_srcdir}/src/test-core -I.. ${GLIB_CFLAGS}
+AM_CFLAGS = -I${top_srcdir}/src/test-core -I.. ${GLIB_CFLAGS}

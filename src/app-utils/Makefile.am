@@ -2,8 +2,7 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-app-utils.la libgw-app-utils.la
 
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \

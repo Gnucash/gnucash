@@ -2,8 +2,7 @@ SUBDIRS = . #test
 
 pkglib_LTLIBRARIES = libgncmod-app-file-gnome.la
 
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \

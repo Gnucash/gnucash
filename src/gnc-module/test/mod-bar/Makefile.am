@@ -1,5 +1,4 @@
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I../.. \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \

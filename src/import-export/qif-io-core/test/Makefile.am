@@ -1,5 +1,6 @@
 LDADD=${top_srcdir}/src/gnc-module/libgncmodule.la ${GLIB_LIBS} -lltdl
-CFLAGS=@CFLAGS@ -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS} 
+
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS} 
 
 TESTS=test-load-module test-parser test-reader test-file-formats \
 test-import-phase-1

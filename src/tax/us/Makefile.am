@@ -7,7 +7,7 @@ libgncmod_tax_us_la_SOURCES = \
 
 libgncmod_tax_us_la_LDFLAGS = -module
 
-CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
 
 .scm-links:
 	rm -f gnucash tax

@@ -1,4 +1,5 @@
 #include <glib.h>
+#include <guile/gh.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>

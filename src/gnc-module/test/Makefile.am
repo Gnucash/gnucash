@@ -1,7 +1,8 @@
 SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
 LDADD = ../libgncmodule.la ${GLIB_LIBS} -lltdl
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} -I../ ${GUILE_INCS}
+
+AM_CFLAGS = ${GLIB_CFLAGS} -I../ ${GUILE_INCS}
 
 TESTS = \
   test-load-c \

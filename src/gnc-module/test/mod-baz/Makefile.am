@@ -1,4 +1,9 @@
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} -I../mod-foo -I../.. ${GUILE_INCS}
+AM_CFLAGS = \
+  -I../.. \
+  -I../mod-foo \
+  ${GLIB_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GUILE_INCS}
 
 checklibdir = ${PWD}
 checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la

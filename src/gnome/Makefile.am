@@ -87,7 +87,7 @@ EXTRA_DIST = \
   gnucash.keys.in \
   gnucash.mime
 
-CFLAGS = @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/calculation \
   -I${top_srcdir}/src/engine \

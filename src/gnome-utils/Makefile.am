@@ -2,8 +2,7 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \

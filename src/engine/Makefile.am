@@ -3,7 +3,7 @@ SUBDIRS = . test-core test
 pkglib_LTLIBRARIES = \
   libgncmod-engine.la libgw-glib.la libgw-engine.la libgw-kvp.la
 
-CFLAGS = @CFLAGS@ -I${top_srcdir}/src/gnc-module ${GNUCASH_ENGINE_BASE_CFLAGS}
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GNUCASH_ENGINE_BASE_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \

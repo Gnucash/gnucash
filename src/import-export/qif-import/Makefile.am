@@ -36,7 +36,7 @@ gncscm_DATA = \
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
-CFLAGS = @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \

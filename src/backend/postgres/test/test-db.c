@@ -1,4 +1,5 @@
 #include <glib.h>
+#include <guile/gh.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -7,6 +8,7 @@
 #include "Backend.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "gnc-session.h"
 

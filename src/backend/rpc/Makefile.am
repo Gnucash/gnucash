@@ -43,8 +43,8 @@ EXTRA_DIST = \
   $(RPCGEN_SRCS)
 
 LDADD = -lpthread
-CFLAGS = \
-  @CFLAGS@ \
+
+AM_CFLAGS = \
   -I.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS} -DGNCACCT_COMMODITY
 
 #RPCGEN=rpcgen -M

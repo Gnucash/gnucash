@@ -27,7 +27,7 @@ LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
 	${top_srcdir}/src/backend/file/libgncmod-backend-file.la \
         -lltdl
 
-CFLAGS = \
+AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \

@@ -1,1 +1,1 @@
-SUBDIRS=us
+SUBDIRS = us

@@ -1,6 +1,5 @@
 
-CFLAGS = \
-  @CFLAGS@ \
+AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I.. \

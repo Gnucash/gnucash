@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <guile/gh.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -9,6 +10,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#include "gnc-module.h"
 #include "gnc-xml-helper.h"
 #include "gnc-xml.h"
 #include "gnc-engine-util.h"

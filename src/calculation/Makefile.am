@@ -24,4 +24,4 @@ EXTRA_DIST = \
   numeric_ops.c \
   numeric_ops.h
 
-CFLAGS = @CFLAGS@ -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
