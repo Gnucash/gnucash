@@ -1067,7 +1067,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
 double
 gnc_numeric_to_double(gnc_numeric in) 
 {
-  if(in.denom >= 0) 
+  if(in.denom > 0) 
   {
     return (double)in.num/(double)in.denom;
   }
