@@ -1,3 +1,22 @@
+2001-12-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/report/report-system/report.scm: move a gnome function
+	to report-gnome module
+
+	* src/report/report-system/report-system.scm: remove export
+
+	* src/report/report-gnome/report-gnome.scm: new file.
+
+	* src/report/report-gnome/gw-report-gnome-spec.scm: wrap some more
+	report bindings.
+
+	* src/report/report-gnome/gncmod-report-gnome.c: load g-wrapped
+	and gnucash report-gnome modules.
+
+	* src/report/report-gnome/Makefile.am: add report-gnome.scm module
+
+	* src/gnome/gw-gnc-spec.scm: remove some report bindings
+
 2001-12-05  Bill Gribble  <grib@billgribble.com>
 
 	* use AM_PATH_LIBGLADE instead of gnome-config for libglade paths 
