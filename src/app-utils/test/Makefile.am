@@ -8,7 +8,7 @@ TESTS_ENVIRONMENT= \
    GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
    GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:../../engine:..:../../gnc-module:${top_srcdir}/lib:${top_srcdir}/src/scm:${top_srcdir}/src/guile \
    LTDL_LIBRARY_PATH=.. \
-   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:../.libs:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/calculation:${top_srcdir}/src/calculation/.libs:${top_srcdir}/src/scm:${top_srcdir}/src/guile
+   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:../.libs:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/calculation:${top_srcdir}/src/calculation/.libs:${top_srcdir}/src/scm:${top_srcdir}/src/guile:${top_srcdir}/src/guile/.libs
 
 LDADD = \
   -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
