@@ -358,6 +358,8 @@ regWindowLedger( xaccLedgerDisplay *ledger)
     grp = xaccGetAccountRoot (ledger->leader);
     if (!grp) grp = xaccGetAccountRoot (ledger->displayed_accounts[0]);
     xaccLoadXferCell (ledger->ledger->xfrmCell, grp);
+    /* xaccLoadXferCell (ledger->ledger->xtoCell, grp);  */
+    xaccLoadXferCell (ledger->ledger->xfrmTransCell, grp);
   }
 
 #if 0
