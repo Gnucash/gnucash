@@ -236,7 +236,8 @@ int RpcAccept (RPCSock *master, RPCSock **client)
 
   memset (new, 0, sizeof (*new));
   len = sizeof (new->peer);
-  if ((new->sock = accept (master->sock, &(new->peer), &len)) < 0) {
+  if ((new->sock = accept (master->sock,
+                           (struct sockaddr *) &(new->peer), &len)) < 0) {
     g_free (new);
     return ERR_RPC_CANT_ACCEPT;
   }
