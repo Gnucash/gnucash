@@ -28,6 +28,7 @@
 \********************************************************************/
 
 #include <limits.h>
+#include <stdlib.h>
 #include <strings.h>
 
 #include "config.h"
@@ -48,6 +49,9 @@ struct _Query {
    /* the earliest, and the latest transaction dates to include */
    Timespec earliest;
    Timespec latest;
+
+   Timespec earliest_found;
+   Timespec latest_found;
 
    int (*sort_func)(const void*, const void *);
 
@@ -86,6 +90,12 @@ xaccInitQuery (Query *q)
    /* q->latest.tv_sec = ULONG_MAX; */
    q->latest.tv_sec = LONG_MAX;
    q->latest.tv_nsec = 0; 
+
+   q->earliest_found.tv_sec = LONG_MAX; 
+   q->earliest_found.tv_nsec = 0; 
+
+   q->latest_found.tv_sec = 0;
+   q->latest_found.tv_nsec = 0; 
 
    q->sort_func = (int (*)(const void*, const void *)) Sort_DATE_NUM_AMOUNT;
 }
@@ -299,11 +309,11 @@ static int Sort_##ONE##_##TWO##_##THREE		\
 
 /* ================================================== */
 /*
-
 #!/usr/bin/perl
 #
 # This is a short perl script that prints all permutations 
 # of three out of five objects; should be easy to generalize to more.
+# It was used to generate the code below.
 
 sub rotate {
   local ($n, $i);
@@ -335,9 +345,10 @@ sub recur {
 @arr=(DESC,MEMO,AMOUNT,NUM,DATE);
 
 &recur (6);
-
 */
+
 /* ================================================== */
+/* Define the sorting comparison functions */
 
 DECLARE (DESC, MEMO, AMOUNT)
 DECLARE (DESC, MEMO, NUM)
@@ -487,6 +498,9 @@ SortSplits (Query *q, Split **slist)
 {
   int nsplits =0;
   
+  if (!q) return;
+  if (!q->sort_func) return;
+
   nsplits = 0;
   while (slist[nsplits]) nsplits ++;
 
@@ -593,10 +607,26 @@ xaccQueryGetSplits (Query *q)
       /* avoid excess mallocs, copies, etc. */
       q->split_list = slist;
    }
+
+   /* gather some data about what we just found */
+   q->earliest_found.tv_sec = LONG_MAX; 
+   q->earliest_found.tv_nsec = 0; 
+   q->latest_found.tv_sec = 0;
+   q->latest_found.tv_nsec = 0; 
+
+   slist =  q->split_list;
+   i=0; s=slist[0];
+   while (s) {
+      if (q->earliest_found.tv_sec > s->parent->date_posted.tv_sec) {
+         q->earliest_found.tv_sec = s->parent->date_posted.tv_sec;
+      }
+      if (q->latest_found.tv_sec < s->parent->date_posted.tv_sec) {
+         q->latest_found.tv_sec = s->parent->date_posted.tv_sec;
+      }
+      i++; s=slist[i];
+   }
    
    return q->split_list;
 }
 
-/* ================================================== */
-
-
+/* ================ END OF FILE  ==================== */
