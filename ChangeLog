@@ -1,3 +1,20 @@
+2001-10-29  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c: Unused pages are skipped,
+	initial version.
+
+	* src/gnome/dialog-sx-from-trans.c: Added start date handling; as
+	well, correctly update the start date when the frequency option
+	changes.  Added using FreqSpecs for start date calculation.  Added
+	correctly
+
+	* src/gnome-utils/gnc-account-tree.c (gnc_account_tree_init): Make
+	account-tree description column auto-resize.
+
+	* src/engine/SchedXaction.c (xaccSchedXactionSetEndDate): Removed
+	end date validity check; an invalid end date is how we signal "no
+	end date".
+
 2001-10-25  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/Makefile.am: remove slib-backup.scm and startup.scm

@@ -168,6 +168,8 @@ gnc_account_tree_new_with_root (Account * root)
 static void
 gnc_account_tree_init (GNCAccountTree *tree)
 {
+  gint i;
+
   tree->root_account     = *xaccGUIDNULL ();
   tree->current_accounts = NULL;
   tree->ignore_unselect  = FALSE;
@@ -187,6 +189,9 @@ gnc_account_tree_init (GNCAccountTree *tree)
   gtk_clist_set_shadow_type(GTK_CLIST(tree), GTK_SHADOW_IN);
   gtk_clist_column_titles_passive(GTK_CLIST(tree));
   gtk_clist_set_column_auto_resize(GTK_CLIST(tree), 0, TRUE);
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->description_column, TRUE );
+
   gtk_clist_set_column_justification(GTK_CLIST(tree),
 				     tree->balance_column,
 				     GTK_JUSTIFY_RIGHT);
@@ -942,6 +947,8 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
   tree->column_fields[i++] = ACCOUNT_TYPE;
   tree->column_fields[i++] = ACCOUNT_COMMODITY;
   tree->column_fields[i++] = ACCOUNT_CODE;
+
+  tree->description_column = i;
   tree->column_fields[i++] = ACCOUNT_DESCRIPTION;
 
   tree->balance_column = i;

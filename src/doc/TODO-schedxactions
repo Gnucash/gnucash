@@ -33,13 +33,57 @@ X create a template register
     . this is going to be: a tabbed notebook in which the tabs contain
       the number of transactions the GL they hold contain.
 
+. register macro-widget
+  . should support
+    . toolbar
+      . Close
+
+      . Enter
+      . Cancel
+      . Delete
+      . Duplicate
+      . Schedule
+      . Split
+      . Blank
+      . Jump
+
+      . Transfer
+      . Find
+      . Report
+      . Print
+    . popup menu
+      . elts
+        . Enter
+        . Cancel
+        . Delete
+        . Duplicate
+        . Schedule
+        . Split
+        . Blank
+        . Jump
+      . extended to support previously-menu-accessible options in embedded case
+      
+    . status bar
+    . configurable UI elts [menu, toolbar, status]
+    . default callbacks
+      . override-able
+    . bitmask of supported functionality
+      . !"Schedule..." for the embedded-in-SX-editor case, gray-out
+  . shouldn't [necessarily] support
+    . date range [may be fixed/irrelevant by caller]
+    . style changes [caller may enforce]
+  . NOTES/ISSUES
+    . pass in prefix for gnc_reg_save_size(...)
+
 ? Hook into 'book data changed' save-on-exit decision 
 
 . SX list
   . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
+  . tab order
 
 . SX editor
   . 'Cancel' button should auto-cancel ledger changes
+  . tab order
 
 . make-from-transaction
   X credit/debit pull-over issues
@@ -55,6 +99,7 @@ X create a template register
   . match existing transactions for long-time users
     . based off template-transaction data, some big existing-transaction
       scanning code.
+  . tab-order
 
 . need "since-last-run" UI for instanatiation.
   X Change from dialogs to druid
@@ -71,6 +116,7 @@ X create a template register
     X Is it sufficient to look at the next instance of ea. transaction only?
       I think not... we probably want to look out until the transaction is
       outside the reminder range.
+  . tab-order
   . need some configuration for constantly-running GnuCash users of when to
     pop up the 'new scheduled transactions' dialog [option, time-of-day]
   . Should deal with "nothing-to-do" better [not even show up in the worst
@@ -184,7 +230,7 @@ X General
   . Size/space issues.
   . Un-selecting "End Date" leaves calendar widget sensitive
   . 'ESC' while editing template register causes window to go away [badly].
-  . why does the accounts tab go crazy when we change the FreqSpec parameters?
+  . why does the accounts window go crazy when we change the FreqSpec parameters?
 
 . Scheduled Transaction List
 
@@ -195,6 +241,10 @@ X General
   . tab-order on variable-entry window isn't always correct.
   ? credit and debit seem reversed at instantiation time...
     . this is fixed, but is the fix correct?
+
+. SX-from-trans
+  . you can delete a freshly-from-trans'd SX from the list with the
+    from-trans dlg still open, then 'ok' the dlg to get a segfault.
 
 ##################################################
 ### Enhancements
@@ -329,3 +379,106 @@ conrad wants to use this to remind him to pay his bills.  He runs GnuCash
 continuously, and thus wants an option to "pop-up on day change [at time
 HH:MM]".  He's interested in seeing future transactions as well as what's
 being created ATM.
+
+--------------------
+
+window-register notes:
+
+. RegWindow *regWindowSimple (Account *account)
+. RegWindow *regWindowAccGroup (Account *account)
+  . functionality should remain, probably in reg mwidget
+
+
+. void gnc_register_raise (RegWindow *regData)
+  . probably should remain here; if the reg mwidget has knowledge of it's
+    containing window, then it can go there.
+
+. void gnc_register_jump_to_split(RegWindow *regData, Split *split)
+. void gnc_register_jump_to_split_amount(RegWindow *regData, Split *split)
+  . should be part of mwidget
+
+. static void gnc_register_change_style (RegWindow *regData, SplitRegisterStyle style)
+. static void gnc_register_style_(ledger|auto_ledger|journal|double_line_cb (GtkWidget *w, gpointer data)
+  . mwidget
+
+. static void gnc_register_sort_(standard|date|date_entered|date_reconciled|num|amount|memo|desc)_cb(GtkWidget *w, gpointer data)
+. static void gnc_register_sort (RegWindow *regData, sort_type_t sort_code)
+  . mwidget
+  . some of these may not make sense in embedded applications
+
+. static time_t gnc_register_(min|max)_day_time(time_t time_val)
+  . eh?  This should probably be a util function somewhere
+
+. static void gnc_date_range_set_sensitivities(RegWindow *regData)
+. static void gnc_register_set_date_range(RegWindow *regData)
+. static void gnc_register_date_cb(GtkWidget *widget, gpointer data)
+. static void show_all_cb(GtkWidget *widget, gpointer data)
+. static void gnc_register_today_cb(GtkWidget *widget, gpointer data)
+. static void gnc_register_date_toggle_cb(GtkToggleButton *toggle, gpointer data)
+. static void gnc_register_date_changed_cb(GtkWidget *widget, gpointer data)
+. static void gnc_register_show_date_window(RegWindow *regData)
+. static RegDateWindow *gnc_register_date_window (RegWindow *regData, gboolean show_all)
+  . need DateWindow policy/decision.
+
+. static GtkWidget *gnc_register_create_tool_bar (RegWindow *regData)
+  . mwidget
+
+. static void gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
+  . necessary for embedded applications?
+
+. static GtkWidget *add_summary_label (GtkWidget *summarybar, const char *label_str)
+  . mwidget [option]
+
+. static GtkWidget *gnc_register_create_summary_bar (RegWindow *regData)
+. static GtkWidget *gnc_register_create_status_bar (RegWindow *regData)
+  . mwidget [options]
+
+. void gnc_register_jump_to_blank (RegWindow *regData)
+  . helper for various callbacks
+  . mwidget
+
+. static void expand_trans_check_cb (GtkWidget *widget, gpointer data)
+. static void new_trans_cb (GtkWidget *widget, gpointer data)
+. static void jump_cb(GtkWidget *widget, gpointer data)
+
+. static GtkWidget *gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
+  . mwidget
+  . should take menubar as param
+
+. static GtkWidget *gnc_register_create_popup_menu (RegWindow *regData)
+  . mwidget
+  . should take popup as param
+
+. static void gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
+  . needs to integrate more nicely
+
+. RegWindow *regWindowLedger (GNCLedgerDisplay *ledger)
+  . Creates the ledger :)
+  . Sets up the data struct :)
+  . Creates a gtk_window_new :(
+  . Creates a gnc_register_date_window :I
+  . Creates the statusbar, toolbar, popup, menubar :/
+  . recalls saved window_size from prefix [param]
+
+. static gnc_numeric gnc_account_present_balance (Account *account)
+. static GNCPrice *account_latest_price (Account *account)
+  . mwidget?
+
+. static void startRecnCB(GtkWidget * w, gpointer data)
+  . recn: configurable behavior
+
+. static gboolean gnc_register_include_date(RegWindow *regData, time_t date)
+  . date-range stuff.
+
+. static gboolean trans_has_reconciled_splits (Transaction *trans)
+  . util
+
+. static DeleteType gnc_transaction_delete_query (GtkWindow *parent, Transaction *trans)
+  . default is probably good; mwidget
+  . ideally have way to customize text
+
+. static void gnc_register_check_close(RegWindow *regData)
+  . should be mwidget util fn
+
+. static void report_helper (RegWindow *regData, SCM func, Query *query)
+  . mwidget util

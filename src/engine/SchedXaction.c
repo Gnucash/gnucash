@@ -245,26 +245,19 @@ xaccSchedXactionGetEndDate( SchedXaction *sx )
 void
 xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
 {
-  if ( g_date_valid( newEnd ) ) {
-    if ( g_date_compare( newEnd, &sx->start_date ) < 0 ) {
-      /* XXX: I reject the bad data - is this the right 
-       * thing to do <rgmerk>.
-       * This warning is only human readable - the caller
-       * doesn't know the call failed.  This is bad
-       */
-      PWARN( "New end date before start date" ); 
-    }
-    else
-    {
-      sx->end_date = *newEnd;
-      sx->dirty = TRUE;
-    }
-   
+  if ( g_date_valid( newEnd )
+       && g_date_compare( newEnd, &sx->start_date ) < 0 ) {
+    /* XXX: I reject the bad data - is this the right 
+     * thing to do <rgmerk>.
+     * This warning is only human readable - the caller
+     * doesn't know the call failed.  This is bad
+     */
+    PWARN( "New end date before start date" ); 
+    return;
   }
-  else
-  {
-    PWARN("New end date invalid");
-  }
+
+  sx->end_date = *newEnd;
+  sx->dirty = TRUE;
   return;
 }
 
@@ -314,9 +307,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
 {
   /* FIXME This condition can be tightened up */
   if ( numRemain > sx->num_occurances_total ) {
-    PWARN("The number remaining is greater than the \
-total occurrences");
-    
+    PWARN("The number remaining is greater than the total occurrences");
   }
   else
   {

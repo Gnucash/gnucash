@@ -61,6 +61,7 @@ static short module = MOD_SX;
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
 #define END_GNOME_NUMENTRY "end_gnome_nentry"
+#define REMAIN_GNOME_NUMENTRY "remain_gnome_nentry"
 
 #define END_OPTION 0
 #define NUM_OCCUR_OPTION 1
@@ -243,6 +244,11 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
                 num = (gint)gnome_number_entry_get_number( GNOME_NUMBER_ENTRY(w) );
                 xaccSchedXactionSetNumOccur( sxed->sx, num );
+
+                w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
+                num = (gint)gnome_number_entry_get_number( GNOME_NUMBER_ENTRY(w) );
+                xaccSchedXactionSetRemOccur( sxed->sx, num );
+
                 g_date_clear( gdate, 1 );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
         } else if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(optNoEnd) ) ) {
@@ -637,6 +643,8 @@ schedXact_editor_init( SchedXactionEditorDialog *sxed )
         GtkWidget *w;
         w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
         gtk_widget_set_sensitive( w, FALSE );
+        w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
+        gtk_widget_set_sensitive( w, FALSE );
 
         /* Allow grow, allow shrink, auto-shrink */
         gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
@@ -998,14 +1006,25 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 set_endgroup_toggle_states( sxed, END_DATE );
         } else if ( xaccSchedXactionHasOccurDef( sxed->sx ) ) {
                 gint numOccur = xaccSchedXactionGetNumOccur( sxed->sx );
+                gint numRemain = xaccSchedXactionGetRemOccur( sxed->sx );
+
                 w = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(w), TRUE );
+
                 w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
                 w = gnome_number_entry_gtk_entry( GNOME_NUMBER_ENTRY(w) );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", numOccur );
                 gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
+
+                w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );;
+                w = gnome_number_entry_gtk_entry( GNOME_NUMBER_ENTRY(w) );
+                tmpgStr = g_string_sized_new(5);
+                g_string_sprintf( tmpgStr, "%d", numRemain );
+                gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
+                g_string_free( tmpgStr, TRUE );
+
                 set_endgroup_toggle_states( sxed, END_OCCUR );
         } else {
                 w = glade_xml_get_widget( sxed->gxml, "rb_noend" );
@@ -1097,6 +1116,9 @@ set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType type )
         gtk_widget_set_sensitive( GTK_WIDGET(dateCtl), (type == END_DATE) );
 
         occurCtl = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
+        gtk_widget_set_sensitive( GTK_WIDGET(occurCtl), (type == END_OCCUR) );
+
+        occurCtl = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
         gtk_widget_set_sensitive( GTK_WIDGET(occurCtl), (type == END_OCCUR) );
 }
 

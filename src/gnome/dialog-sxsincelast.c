@@ -68,6 +68,7 @@
 #define DIALOG_SXSINCELAST_OBSOLETE_CM_CLASS "dialog-sxsincelast-obsolete"
 
 #define DIALOG_SXSINCELAST_GLADE_NAME "Since Last Run Druid"
+#define SXSLD_DRUID_GLADE_NAME "sincelast_druid"
 
 #define SINCELAST_DRUID   "sincelast_druid"
 #define REMINDERS_PG "reminders_page"
@@ -94,6 +95,8 @@
 #define SX_OBSOLETE_CLIST_WIDTH 3
 
 
+#define COERCE_VOID_TO_GBOOLEAN(x) ((gboolean)(*#x))
+
 #ifdef HAVE_LANGINFO_D_FMT
 #  define GNC_D_FMT (nl_langinfo (D_FMT))
 #else
@@ -106,17 +109,30 @@
 static short module = MOD_SX;
 
 /**
- * There are two dialogs controled in this file: the since-last-run dialog,
- * and the reminder-dialog.  They cooperate and inter-relate, so they're both
- * handled here.
+ * The since-last-run dialog is a Gnome Druid which steps through the various
+ * parts of scheduled transaction since-last-run processing; these parts are:
+ *
+ * 1. Display and select SX reminders for creation
+ * 2. Show/allow editing of auto-created + notification-request SXes
+ * 3. Show to-create SXes, allowing variable binding
+ * 4. Show created SXes, allowing editing
+ * 5. Allow deletion of any obsolete SXes
+ *
+ * Pages which aren't relevant are skipped; this is handled in the 'prep'
+ * signal handler: e.g., a since-last dialog with only obsolete SXes would go
+ * through the 'prep' methods of all it's pages to reach the Obsolete page.
  **/
+
 typedef struct _sxSinceLastData {
-        GtkWidget *druid_sincelast;
+        GtkWidget *sincelast_window;
+        GnomeDruid *sincelast_druid;
         GladeXML *gxml;
   
         GList /* <toCreateTuple*> */ *toCreateData;
         GList /* <reminderTuple*> */ *reminderList;
         GList /* <toDeleteTuple*> */ *toRemoveList;
+
+        gboolean autoCreatedSomething;
 
         GNCLedgerDisplay *ac_ledger;
         GnucashRegister *reg;
@@ -256,9 +272,12 @@ gnc_ui_sxsincelast_dialog_create(void)
 
         sxsld->gxml = gnc_glade_xml_new( SX_GLADE_FILE,
                                          DIALOG_SXSINCELAST_GLADE_NAME );
-        sxsld->druid_sincelast =
+        sxsld->sincelast_window =
                 glade_xml_get_widget( sxsld->gxml,
                                       DIALOG_SXSINCELAST_GLADE_NAME );
+        sxsld->sincelast_druid =
+                GNOME_DRUID( glade_xml_get_widget( sxsld->gxml,
+                                                   SXSLD_DRUID_GLADE_NAME ) );
 
         sxsincelast_init( sxsld );
 }
@@ -281,8 +300,11 @@ typedef struct {
 
 typedef struct {
         char *pageName;
-        char *signal;
-        gboolean (*handlerFn)();
+        void (*prepareHandlerFn)();
+        gboolean (*backHandlerFn)();
+        gboolean (*nextHandlerFn)();
+        void (*finishHandlerFn)();
+        gboolean (*cancelHandlerFn)();
 } druidSignalHandlerTuple;
    
 static void
@@ -309,14 +331,38 @@ druid_pages_attach_handlers( GladeXML *dialog_xml,
 {
         int i;
         GtkWidget *w;
+        static char *HANDLER_NAMES[] = {
+                "prepare", "back", "next", "finish", "cancel"
+        };
 
         for(i = 0; handler_info[i].pageName != NULL; i++)
         {
                 w = glade_xml_get_widget(dialog_xml, handler_info[i].pageName);
-                gtk_signal_connect( GTK_OBJECT(w),
-                                    handler_info[i].signal, 
-                                    GTK_SIGNAL_FUNC(handler_info[i].handlerFn),
-                                    sxsld);
+                if ( handler_info[i].prepareHandlerFn ) {
+                        gtk_signal_connect( GTK_OBJECT(w), "prepare",
+                                            GTK_SIGNAL_FUNC(handler_info[i].prepareHandlerFn),
+                                            sxsld);
+                }
+                if ( handler_info[i].backHandlerFn ) {
+                        gtk_signal_connect( GTK_OBJECT(w), "back",
+                                            GTK_SIGNAL_FUNC(handler_info[i].backHandlerFn),
+                                            sxsld);
+                }
+                if ( handler_info[i].nextHandlerFn ) {
+                        gtk_signal_connect( GTK_OBJECT(w), "next",
+                                            GTK_SIGNAL_FUNC(handler_info[i].nextHandlerFn),
+                                            sxsld);
+                }
+                if ( handler_info[i].finishHandlerFn ) {
+                        gtk_signal_connect( GTK_OBJECT(w), "finish",
+                                            GTK_SIGNAL_FUNC(handler_info[i].finishHandlerFn),
+                                            sxsld);
+                }
+                if ( handler_info[i].cancelHandlerFn ) {
+                        gtk_signal_connect( GTK_OBJECT(w), "cancel",
+                                            GTK_SIGNAL_FUNC(handler_info[i].cancelHandlerFn),
+                                            sxsld);
+                }
         }
 }
 
@@ -337,12 +383,21 @@ theres_no_turning_back_bang( GnomeDruidPage *druid_page,
         return TRUE;
 }
 
-static gboolean 
+static void 
 reminders_prep( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
 {
-        DEBUG( "reminders_prep" );
-        return FALSE;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+        GtkWidget *w;
+        DEBUG( "begin" );
+        if ( g_list_length( sxsld->reminderList ) == 0 ) {
+                DEBUG( "reminders." );
+                w = glade_xml_get_widget( sxsld->gxml,
+                                          AUTO_CREATE_NOTIFY_PG );
+                gnome_druid_set_page( sxsld->sincelast_druid,
+                                      GNOME_DRUID_PAGE(w) );
+        }
+        DEBUG( "done" );
 }
 
 static gboolean 
@@ -366,7 +421,7 @@ reminders_back( GnomeDruidPage *druid_page,
         return FALSE;
 }
 
-static gboolean 
+static void
 reminders_finish( GnomeDruidPage *druid_page,
                   gpointer arg1, gpointer ud )
 {
@@ -382,16 +437,62 @@ reminders_cancel( GnomeDruidPage *druid_page,
         return FALSE;
 }
 
-static gboolean
+static void
+auto_create_prep( GnomeDruidPage *druid_page,
+                  gpointer arg1, gpointer ud )
+{
+        GtkWidget *w;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+
+        if ( ! sxsld->autoCreatedSomething ) {
+                w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_PG );
+                gnome_druid_set_page( sxsld->sincelast_druid,
+                                      GNOME_DRUID_PAGE(w) );
+                return;
+        }
+}
+
+static void
+to_create_prep( GnomeDruidPage *druid_page,
+                gpointer arg1, gpointer ud )
+{
+        GtkWidget *w;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+        if ( g_list_length( sxsld->toCreateData ) == 0 ) {
+                w = glade_xml_get_widget( sxsld->gxml, CREATED_PG );
+                gnome_druid_set_page( sxsld->sincelast_druid,
+                                      GNOME_DRUID_PAGE(w) );
+                return;
+        }
+}
+
+static void
+created_prep( GnomeDruidPage *druid_page,
+              gpointer arg1, gpointer ud )
+{
+        GtkWidget *w;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+
+        if ( /* FIXME: signal that we had to create a bunch of stuff from the
+                previous page. */ 1 ) {
+                w = glade_xml_get_widget( sxsld->gxml, OBSOLETE_PG );
+                gnome_druid_set_page( sxsld->sincelast_druid, GNOME_DRUID_PAGE(w) );
+                return;
+        }
+}
+
+static void
 obsolete_prep( GnomeDruidPage *druid_page,
                gpointer arg1, gpointer ud )
 {
+        GtkWidget *w;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        DEBUG( "obsolete_prep" );
-        if ( g_list_length( sxsld->toRemoveList ) > 0 ) {
-                processRemoveList( sxsld->toRemoveList, sxsld );
+        if ( g_list_length( sxsld->toRemoveList ) == 0 ) {
+                w = glade_xml_get_widget( sxsld->gxml, FINISH_PG );
+                gnome_druid_set_page( sxsld->sincelast_druid, GNOME_DRUID_PAGE(w) );
+                return;
         }
-        return FALSE;
+        processRemoveList( sxsld->toRemoveList, sxsld );
 }
 
 static gboolean
@@ -509,32 +610,36 @@ sxsincelast_init( sxSinceLastData *sxsld )
         };
 
         static druidSignalHandlerTuple pages[] = {
-                { REMINDERS_PG, "prepare", reminders_prep },
-                { REMINDERS_PG, "next",    reminders_next },
-                { REMINDERS_PG, "finish",  reminders_finish },
-                { REMINDERS_PG, "cancel",  reminders_cancel },
+                { REMINDERS_PG,
+                  reminders_prep, theres_no_turning_back_bang, reminders_next,
+                  reminders_finish, reminders_cancel },
 
-                { TO_CREATE_PG, "next", to_create_next },
+                { TO_CREATE_PG,
+                  to_create_prep, theres_no_turning_back_bang, to_create_next,
+                  NULL, NULL },
 
-                { REMINDERS_PG, "back",    theres_no_turning_back_bang },
-                { AUTO_CREATE_NOTIFY_PG, "back", theres_no_turning_back_bang },
-                { TO_CREATE_PG, "back", theres_no_turning_back_bang },
-                { CREATED_PG, "back", theres_no_turning_back_bang },
-                { OBSOLETE_PG, "back",     theres_no_turning_back_bang },
+                { AUTO_CREATE_NOTIFY_PG,
+                  auto_create_prep, theres_no_turning_back_bang, NULL,
+                  NULL, NULL },
 
-                { OBSOLETE_PG, "prepare",  obsolete_prep },
-                { OBSOLETE_PG, "next",     obsolete_next },
+                { CREATED_PG,
+                  created_prep, theres_no_turning_back_bang, NULL,
+                  NULL, NULL },
 
-                { NULL, NULL, NULL }
+                { OBSOLETE_PG,
+                  obsolete_prep, theres_no_turning_back_bang, obsolete_next,
+                  NULL, NULL},
+
+                { NULL, NULL, NULL, NULL, NULL, NULL }
         };
 
 
         gnc_register_gui_component( DIALOG_SXSINCELAST_CM_CLASS,
                                     NULL,
                                     sxsincelast_close_handler,
-                                    sxsld->druid_sincelast );
+                                    sxsld->sincelast_window );
 
-        gtk_signal_connect( GTK_OBJECT(sxsld->druid_sincelast), "destroy",
+        gtk_signal_connect( GTK_OBJECT(sxsld->sincelast_window), "destroy",
                             GTK_SIGNAL_FUNC( sxsincelast_destroy ), sxsld );
 
 	dialog_widgets_attach_handlers(sxsld->gxml, widgets, sxsld);
@@ -557,7 +662,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
                 sxsincelast_close_handler( sxsld );
                 return;
         }
-        gtk_widget_show_all( sxsld->druid_sincelast );
+        gtk_widget_show_all( sxsld->sincelast_window );
 }
 
 static void
@@ -679,6 +784,7 @@ processAutoCreateList( GList *autoCreateList, sxSinceLastData *sxsld, SchedXacti
                                                &notifyState );
                 create_transactions_on( sx, (GDate*)autoCreateList->data,
                                         NULL, &createdGUIDs );
+                sxsld->autoCreatedSomething |= TRUE;
                 if ( notifyState ) {
                         thisGUID = createdGUIDs;
                         for ( ; thisGUID ; (thisGUID = thisGUID->next) ) {
@@ -964,6 +1070,8 @@ clean_sincelast_dlg( sxSinceLastData *sxsld )
 
         /* . clean out to-create clist
          * . free associated memories.
+         *
+         * FIXME: other dlg stuff to clean?
          */
         clean_variable_table( sxsld );
 
@@ -1010,12 +1118,10 @@ sxsincelast_close_handler( gpointer ud )
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
         DEBUG( "sxsincelast_close_handler" );
+        gtk_widget_hide( sxsld->sincelast_window );
         clean_sincelast_dlg( sxsld );
-        gtk_widget_hide( sxsld->druid_sincelast );
-        gtk_widget_destroy( sxsld->druid_sincelast );
+        gtk_widget_destroy( sxsld->sincelast_window );
         clean_sincelast_data( sxsld );
-
-        /* gtk_widget_destroy( sxsld->druid_sincelast ); */
 }
 
 static void
@@ -2035,7 +2141,7 @@ create_autoCreate_gen_ledger( sxSinceLastData *sxsld )
         gnc_table_init_gui( regWidget, splitreg );
         sxsld->reg = GNUCASH_REGISTER(regWidget);
         GNUCASH_SHEET(sxsld->reg->sheet)->window =
-                GTK_WIDGET( sxsld->druid_sincelast );
+                GTK_WIDGET( sxsld->sincelast_druid );
         
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
         toolbar = gtk_label_new( "foo ... toolbar...uh... fooo" );
@@ -2094,242 +2200,3 @@ clean_sincelast_data( sxSinceLastData *sxsld )
                 sxsld->toCreateData = NULL;
         }
 }
-
-#if 0
-allocation: x: 15, y: 107, w: 719, h: 195, sheet_width: 195, sheet_height: 719
-size_request: returning 719 x 195
-size_request: returning 719 x 195
-
-Breakpoint 2, gnucash_sheet_size_allocate (widget=0x839b708, 
-    allocation=0xbfffd6c4) at gnucash-sheet.c:1013
-(gdb) bt
-#0  gnucash_sheet_size_allocate (widget=0x839b708, allocation=0xbfffd6c4)
-    at gnucash-sheet.c:1013
-#1  0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x839b708, 
-    func=0x403b8b1c <gnucash_sheet_size_allocate>, func_data=0x0, 
-    args=0xbfffd418) at gtkmarshal.c:193
-#2  0x40a4486b in gtk_signal_real_emit (object=0x839b708, signal_id=18, 
-    params=0xbfffd418) at gtksignal.c:1440
-#3  0x40a42c40 in gtk_signal_emit (object=0x839b708, signal_id=18)
-    at gtksignal.c:552
-#4  0x40a7689b in gtk_widget_size_allocate (widget=0x839b708, 
-    allocation=0xbfffd718) at gtkwidget.c:2496
-#5  0x40a55652 in gtk_table_size_allocate_pass2 (table=0x839b4d0)
-    at gtktable.c:1551
-#6  0x40a54342 in gtk_table_size_allocate (widget=0x839b4d0, 
-    allocation=0xbfffda88) at gtktable.c:832
-#7  0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x839b4d0, 
-    func=0x40a54288 <gtk_table_size_allocate>, func_data=0x0, args=0xbfffd7dc)
-    at gtkmarshal.c:193
-#8  0x40a4486b in gtk_signal_real_emit (object=0x839b4d0, signal_id=18, 
-    params=0xbfffd7dc) at gtksignal.c:1440
-#9  0x40a42c40 in gtk_signal_emit (object=0x839b4d0, signal_id=18)
-    at gtksignal.c:552
-#10 0x40a7689b in gtk_widget_size_allocate (widget=0x839b4d0, 
-    allocation=0xbfffdafc) at gtkwidget.c:2496
-#11 0x40a6c668 in gtk_vbox_size_allocate (widget=0x82e8e30, 
-    allocation=0xbfffde48) at gtkvbox.c:329
-#12 0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x82e8e30, 
-    func=0x40a6c174 <gtk_vbox_size_allocate>, func_data=0x0, args=0xbfffdb9c)
-    at gtkmarshal.c:193
-#13 0x40a4486b in gtk_signal_real_emit (object=0x82e8e30, signal_id=18, 
-    params=0xbfffdb9c) at gtksignal.c:1440
-#14 0x40a42c40 in gtk_signal_emit (object=0x82e8e30, signal_id=18)
-    at gtksignal.c:552
-#15 0x40a7689b in gtk_widget_size_allocate (widget=0x82e8e30, 
-    allocation=0xbfffdeb8) at gtkwidget.c:2496
-#16 0x40a03c3b in gtk_hbox_size_allocate (widget=0x82e8de8, 
-    allocation=0xbfffe204) at gtkhbox.c:275
-#17 0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x82e8de8, 
-    func=0x40a038e0 <gtk_hbox_size_allocate>, func_data=0x0, args=0xbfffdf58)
-    at gtkmarshal.c:193
-#18 0x40a4486b in gtk_signal_real_emit (object=0x82e8de8, signal_id=18, 
-    params=0xbfffdf58) at gtksignal.c:1440
-#19 0x40a42c40 in gtk_signal_emit (object=0x82e8de8, signal_id=18)
-    at gtksignal.c:552
-#20 0x40a7689b in gtk_widget_size_allocate (widget=0x82e8de8, 
-    allocation=0xbfffe278) at gtkwidget.c:2496
-#21 0x40a6c4e1 in gtk_vbox_size_allocate (widget=0x82e8da0, 
-    allocation=0xbfffe5c4) at gtkvbox.c:273
-#22 0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x82e8da0, 
-    func=0x40a6c174 <gtk_vbox_size_allocate>, func_data=0x0, args=0xbfffe318)
-    at gtkmarshal.c:193
-#23 0x40a4486b in gtk_signal_real_emit (object=0x82e8da0, signal_id=18, 
-    params=0xbfffe318) at gtksignal.c:1440
-#24 0x40a42c40 in gtk_signal_emit (object=0x82e8da0, signal_id=18)
-    at gtksignal.c:552
-#25 0x40a7689b in gtk_widget_size_allocate (widget=0x82e8da0, 
-    allocation=0xbfffe5f0) at gtkwidget.c:2496
-#26 0x408afe24 in gnome_druid_page_size_allocate (widget=0x82e8d08, 
-    allocation=0xbfffe960) at gnome-druid-page.c:189
-#27 0x408b2148 in gnome_druid_page_standard_size_allocate (widget=0x82e8d08, 
-    allocation=0xbfffe960) at gnome-druid-page-standard.c:237
-#28 0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x82e8d08, 
-    func=0x408b2118 <gnome_druid_page_standard_size_allocate>, func_data=0x0, 
-    args=0xbfffe6b4) at gtkmarshal.c:193
-#29 0x40a4486b in gtk_signal_real_emit (object=0x82e8d08, signal_id=18, 
-    params=0xbfffe6b4) at gtksignal.c:1440
-#30 0x40a42c40 in gtk_signal_emit (object=0x82e8d08, signal_id=18)
-    at gtksignal.c:552
-#31 0x40a7689b in gtk_widget_size_allocate (widget=0x82e8d08, 
-    allocation=0xbfffe990) at gtkwidget.c:2496
-#32 0x408ae034 in gnome_druid_size_allocate (widget=0x82f2b48, 
-    allocation=0xbfffecdc) at gnome-druid.c:334
-#33 0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x82f2b48, 
-    func=0x408addc8 <gnome_druid_size_allocate>, func_data=0x0, 
-    args=0xbfffea30) at gtkmarshal.c:193
-#34 0x40a4486b in gtk_signal_real_emit (object=0x82f2b48, signal_id=18, 
-    params=0xbfffea30) at gtksignal.c:1440
-#35 0x40a42c40 in gtk_signal_emit (object=0x82f2b48, signal_id=18)
-    at gtksignal.c:552
-#36 0x40a7689b in gtk_widget_size_allocate (widget=0x82f2b48, 
-    allocation=0xbfffed00) at gtkwidget.c:2496
-#37 0x40a7e72a in gtk_window_size_allocate (widget=0x82f1998, 
-    allocation=0xbffff04c) at gtkwindow.c:1180
-#38 0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x82f1998, 
-    func=0x40a7e604 <gtk_window_size_allocate>, func_data=0x0, args=0xbfffeda0)
-    at gtkmarshal.c:193
-#39 0x40a4486b in gtk_signal_real_emit (object=0x82f1998, signal_id=18, 
-    params=0xbfffeda0) at gtksignal.c:1440
-#40 0x40a42c40 in gtk_signal_emit (object=0x82f1998, signal_id=18)
-    at gtksignal.c:552
-#41 0x40a7689b in gtk_widget_size_allocate (widget=0x82f1998, 
-    allocation=0xbffff094) at gtkwidget.c:2496
-#42 0x40a7f944 in gtk_window_move_resize (window=0x82f1998) at gtkwindow.c:1750
-#43 0x40a7f21e in gtk_window_check_resize (container=0x82f1998)
-    at gtkwindow.c:1523
-#44 0x40a18c3f in gtk_marshal_NONE__NONE (object=0x82f1998, 
-    func=0x40a7f178 <gtk_window_check_resize>, func_data=0x0, args=0xbffff1c4)
-    at gtkmarshal.c:312
-#45 0x40a449e8 in gtk_signal_real_emit (object=0x82f1998, signal_id=63, 
-    params=0xbffff1c4) at gtksignal.c:1492
-#46 0x40a42c40 in gtk_signal_emit (object=0x82f1998, signal_id=63)
-    at gtksignal.c:552
-#47 0x409d9398 in gtk_container_check_resize (container=0x82f1998)
-    at gtkcontainer.c:928
-#48 0x409d908f in gtk_container_idle_sizer (data=0x0) at gtkcontainer.c:847
-#49 0x40bdd948 in g_idle_dispatch (source_data=0x409d9030, 
-    dispatch_time=0xbffff4f8, user_data=0x0) at gmain.c:1367
-#50 0x40bdc9f6 in g_main_dispatch (dispatch_time=0xbffff4f8) at gmain.c:656
-#51 0x40bdcfb1 in g_main_iterate (block=1, dispatch=1) at gmain.c:877
-#52 0x40bdd129 in g_main_run (loop=0x83903e8) at gmain.c:935
-#53 0x40a1748a in gtk_main () at gtkmain.c:524
-#54 0x403fedd8 in gnc_ui_start_event_loop () at top-level.c:676
-#55 0x4001b7c9 in gwrap_gnc_ui_start_event_loop () at gw-gnc.c:257
-#56 0x40b1bcb8 in scm_deval (x=1088180304, env=1088218144) at eval.c:2636
-#57 0x40b19df3 in scm_deval (x=1088180272, env=1088218144) at eval.c:1954
-#58 0x40b19df3 in scm_deval (x=1088180032, env=1088218144) at eval.c:1954
-#59 0x40b1d885 in scm_dapply (proc=1088179888, arg1=10612, args=1088218344)
-    at eval.c:3473
-#60 0x40b18585 in scm_apply (proc=1088179864, arg1=10612, args=10612)
-    at eval.c:3283
-#61 0x40b23cfe in gh_call0 (proc=1088179864) at gh_funcs.c:150
-#62 0x40424de1 in gnucash_main_helper (argc=1, argv=0xbffff9b4)
-    at gnucash.c:125
-#63 0x40b23dc3 in gh_launch_pad (closure=0x40424bb0, argc=1, argv=0xbffff9b4)
-    at gh_init.c:60
-#64 0x40b270a2 in invoke_main_func (body_data=0xbffff8f8) at init.c:625
-#65 0x40b4834b in scm_internal_lazy_catch (tag=9076, 
-    body=0x40b2707c <invoke_main_func>, body_data=0xbffff8f8, 
-    handler=0x40b4866c <scm_handle_by_message>, handler_data=0x0)
-    at throw.c:283
-#66 0x40b2705c in scm_boot_guile_1 (base=0xbffff8f4, closure=0xbffff8f8)
-    at init.c:600
-#67 0x40b26d8d in scm_boot_guile (argc=1, argv=0xbffff9b4, 
-    main_func=0x40b23da8 <gh_launch_pad>, closure=0x40424bb0) at init.c:443
-#68 0x40b23df1 in gh_enter (argc=1, argv=0xbffff9b4, 
-    c_main_prog=0x40424bb0 <gnucash_main_helper>) at gh_init.c:70
-#69 0x40424e94 in gnc_main (argc=1, argv=0xbffff9b4) at gnucash.c:176
-#70 0x8048c36 in main (argc=1, argv=0xbffff9b4) at gnc-main.c:30
-#71 0x40c4f9cb in __libc_start_main (main=0x8048c28 <main>, argc=1, 
-    argv=0xbffff9b4, init=0x8048aec <_init>, fini=0x8048c6c <_fini>, 
-    rtld_fini=0x4000ae60 <_dl_fini>, stack_end=0xbffff9ac)
-    at ../sysdeps/generic/libc-start.c:92
-(gdb) c
-Continuing.
-allocation: x: 15, y: 107, w: 727, h: 199, sheet_width: 195, sheet_height: 719
-
-Breakpoint 2, gnucash_sheet_size_allocate (widget=0x839b708, 
-    allocation=0xbfffec64) at gnucash-sheet.c:1013
-(gdb) bt
-#0  gnucash_sheet_size_allocate (widget=0x839b708, allocation=0xbfffec64)
-    at gnucash-sheet.c:1013
-#1  0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x839b708, 
-    func=0x403b8b1c <gnucash_sheet_size_allocate>, func_data=0x0, 
-    args=0xbfffe9b8) at gtkmarshal.c:193
-#2  0x40a4486b in gtk_signal_real_emit (object=0x839b708, signal_id=18, 
-    params=0xbfffe9b8) at gtksignal.c:1440
-#3  0x40a42c40 in gtk_signal_emit (object=0x839b708, signal_id=18)
-    at gtksignal.c:552
-#4  0x40a7689b in gtk_widget_size_allocate (widget=0x839b708, 
-    allocation=0xbfffecb8) at gtkwidget.c:2496
-#5  0x40a55652 in gtk_table_size_allocate_pass2 (table=0x839b4d0)
-    at gtktable.c:1551
-#6  0x40a54342 in gtk_table_size_allocate (widget=0x839b4d0, 
-    allocation=0xbffff028) at gtktable.c:832
-#7  0x40a18ae9 in gtk_marshal_NONE__POINTER (object=0x839b4d0, 
-    func=0x40a54288 <gtk_table_size_allocate>, func_data=0x0, args=0xbfffed7c)
-    at gtkmarshal.c:193
-#8  0x40a4486b in gtk_signal_real_emit (object=0x839b4d0, signal_id=18, 
-    params=0xbfffed7c) at gtksignal.c:1440
-#9  0x40a42c40 in gtk_signal_emit (object=0x839b4d0, signal_id=18)
-    at gtksignal.c:552
-#10 0x40a7689b in gtk_widget_size_allocate (widget=0x839b4d0, 
-    allocation=0x839b4f0) at gtkwidget.c:2496
-#11 0x409d9640 in gtk_container_resize_children (container=0x82f1998)
-    at gtkcontainer.c:1087
-#12 0x40a7fa8c in gtk_window_move_resize (window=0x82f1998) at gtkwindow.c:1856
-#13 0x40a7f21e in gtk_window_check_resize (container=0x82f1998)
-    at gtkwindow.c:1523
-#14 0x40a18c3f in gtk_marshal_NONE__NONE (object=0x82f1998, 
-    func=0x40a7f178 <gtk_window_check_resize>, func_data=0x0, args=0xbffff1c4)
-    at gtkmarshal.c:312
-#15 0x40a449e8 in gtk_signal_real_emit (object=0x82f1998, signal_id=63, 
-    params=0xbffff1c4) at gtksignal.c:1492
-#16 0x40a42c40 in gtk_signal_emit (object=0x82f1998, signal_id=63)
-    at gtksignal.c:552
-#17 0x409d9398 in gtk_container_check_resize (container=0x82f1998)
-    at gtkcontainer.c:928
-#18 0x409d908f in gtk_container_idle_sizer (data=0x0) at gtkcontainer.c:847
-#19 0x40bdd948 in g_idle_dispatch (source_data=0x409d9030, 
-    dispatch_time=0xbffff4f8, user_data=0x0) at gmain.c:1367
-#20 0x40bdc9f6 in g_main_dispatch (dispatch_time=0xbffff4f8) at gmain.c:656
-#21 0x40bdcfb1 in g_main_iterate (block=1, dispatch=1) at gmain.c:877
-#22 0x40bdd129 in g_main_run (loop=0x83903e8) at gmain.c:935
-#23 0x40a1748a in gtk_main () at gtkmain.c:524
-#24 0x403fedd8 in gnc_ui_start_event_loop () at top-level.c:676
-#25 0x4001b7c9 in gwrap_gnc_ui_start_event_loop () at gw-gnc.c:257
-#26 0x40b1bcb8 in scm_deval (x=1088180304, env=1088218144) at eval.c:2636
-#27 0x40b19df3 in scm_deval (x=1088180272, env=1088218144) at eval.c:1954
-#28 0x40b19df3 in scm_deval (x=1088180032, env=1088218144) at eval.c:1954
-#29 0x40b1d885 in scm_dapply (proc=1088179888, arg1=10612, args=1088218344)
-    at eval.c:3473
-#30 0x40b18585 in scm_apply (proc=1088179864, arg1=10612, args=10612)
-    at eval.c:3283
-#31 0x40b23cfe in gh_call0 (proc=1088179864) at gh_funcs.c:150
-#32 0x40424de1 in gnucash_main_helper (argc=1, argv=0xbffff9b4)
-    at gnucash.c:125
-#33 0x40b23dc3 in gh_launch_pad (closure=0x40424bb0, argc=1, argv=0xbffff9b4)
-    at gh_init.c:60
-#34 0x40b270a2 in invoke_main_func (body_data=0xbffff8f8) at init.c:625
-#35 0x40b4834b in scm_internal_lazy_catch (tag=9076, 
-    body=0x40b2707c <invoke_main_func>, body_data=0xbffff8f8, 
-    handler=0x40b4866c <scm_handle_by_message>, handler_data=0x0)
-    at throw.c:283
-#36 0x40b2705c in scm_boot_guile_1 (base=0xbffff8f4, closure=0xbffff8f8)
-    at init.c:600
-#37 0x40b26d8d in scm_boot_guile (argc=1, argv=0xbffff9b4, 
-    main_func=0x40b23da8 <gh_launch_pad>, closure=0x40424bb0) at init.c:443
-#38 0x40b23df1 in gh_enter (argc=1, argv=0xbffff9b4, 
-    c_main_prog=0x40424bb0 <gnucash_main_helper>) at gh_init.c:70
-#39 0x40424e94 in gnc_main (argc=1, argv=0xbffff9b4) at gnucash.c:176
-#40 0x8048c36 in main (argc=1, argv=0xbffff9b4) at gnc-main.c:30
-#41 0x40c4f9cb in __libc_start_main (main=0x8048c28 <main>, argc=1, 
-    argv=0xbffff9b4, init=0x8048aec <_init>, fini=0x8048c6c <_fini>, 
-    rtld_fini=0x4000ae60 <_dl_fini>, stack_end=0xbffff9ac)
-    at ../sysdeps/generic/libc-start.c:92
-(gdb) quit
-The program is running.  Exit anyway? (y or n) y
-
-Debugger finished
-#endif /* 0 */

@@ -53,6 +53,7 @@
 static short module = MOD_SX;
 
 static void sxftd_ok_clicked(GtkWidget *w, gpointer user_data);
+static void sxftd_freq_option_changed( GtkWidget *w, gpointer user_data );
 static void sxftd_advanced_clicked(GtkWidget *w, gpointer user_data);
 static void sxftd_cancel_clicked(GtkWidget *w, gpointer user_data);
 
@@ -98,10 +99,10 @@ sxfti_attach_callbacks(SXFromTransInfo *sxfti)
 
   widgetSignalHandlerTuple callbacks[] =
     {
-      {SXFTD_OK_BUTTON, "clicked", sxftd_ok_clicked},
-      {SXFTD_ADVANCED_BUTTON, "clicked", sxftd_advanced_clicked},
-      {SXFTD_CANCEL_BUTTON, "clicked", sxftd_cancel_clicked},
-      {NULL, NULL, NULL}
+      { SXFTD_OK_BUTTON,       "clicked", sxftd_ok_clicked },
+      { SXFTD_ADVANCED_BUTTON, "clicked", sxftd_advanced_clicked },
+      { SXFTD_CANCEL_BUTTON,   "clicked", sxftd_cancel_clicked },
+      { NULL,                  NULL,      NULL }
     };
   
   int i;
@@ -139,14 +140,14 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
 
   if(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w)))
   {
-    time_t end_t_jul;
+    time_t end_tt;
     retval.type = END_ON_DATE;
     g_date_clear( &(retval.end_date), 1 );
 
     w = glade_xml_get_widget(sxfti->gxml, SXFTD_END_DATE_EDIT);
-    end_t_jul = gnome_date_edit_get_date(GNOME_DATE_EDIT(w));
+    end_tt = gnome_date_edit_get_date(GNOME_DATE_EDIT(w));
 
-    g_date_set_julian( &(retval.end_date), end_t_jul);
+    g_date_set_time( &(retval.end_date), end_tt);
     return retval;
   }
     
@@ -229,12 +230,64 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
   return 0;
 }
 
+static void
+sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
+{
+  gint index;
+  GtkWidget *w;
+  FreqSpec *tmpfs;
+
+  /* Note that we make the start date the *NEXT* instance, not the
+   * present one. */
+  w = glade_xml_get_widget(sxfti->gxml, SXFTD_FREQ_OPTION_MENU);
+  index = gnc_option_menu_get_active(w);
+
+  switch(index)
+  {
+  case FREQ_DAILY:
+    xaccFreqSpecSetDaily(fs, date, 1);
+    xaccFreqSpecSetUIType(fs, UIFREQ_DAILY);
+    break;
+
+  case FREQ_WEEKLY:
+    tmpfs = xaccFreqSpecMalloc(gnc_get_current_session ());
+    xaccFreqSpecSetComposite(fs);
+    xaccFreqSpecSetWeekly(tmpfs, date, 1);
+    xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
+    xaccFreqSpecCompositeAdd(fs,tmpfs);
+    break;
+
+  case FREQ_MONTHLY:
+    xaccFreqSpecSetMonthly(fs, date, 1);
+    xaccFreqSpecSetUIType(fs, UIFREQ_MONTHLY);
+    break;
+
+  case FREQ_QUARTERLY:
+    xaccFreqSpecSetMonthly(fs, date, 3);
+    xaccFreqSpecSetUIType(fs, UIFREQ_QUARTERLY);
+    break;
+
+  case FREQ_ANNUALLY:
+    xaccFreqSpecSetMonthly(fs, date, 12);
+    xaccFreqSpecSetUIType(fs, UIFREQ_YEARLY);
+    break;
+
+  default:
+    PERR("Nonexistent frequency selected.  This is a bug.");
+    break;
+  }
+}
+
 static gint
 sxftd_init( SXFromTransInfo *sxfti )
 {
   GtkWidget *w;
   const char *transName;
   gint pos;
+  FreqSpec *fs;
+  time_t start_tt;
+  struct tm *tmpTm;
+  GDate date, nextDate;
 
   if ( ! sxfti->sx ) {
     return -1;
@@ -249,6 +302,23 @@ sxftd_init( SXFromTransInfo *sxfti )
   transName = xaccTransGetDescription( sxfti->trans );
   xaccSchedXactionSetName( sxfti->sx, transName );
 
+  /* Setup the initial start date for user display/confirmation */
+  w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
+
+  /* compute good initial date. */
+  start_tt = xaccTransGetDate( sxfti->trans );
+  g_date_set_time( &date, start_tt );
+  fs = xaccFreqSpecMalloc( gnc_get_current_session() );
+  sxftd_update_fs( sxfti, &date, fs );
+  xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
+
+  w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
+  tmpTm = g_new0( struct tm, 1 );
+  g_date_to_struct_tm( &nextDate, tmpTm );
+  start_tt = mktime( tmpTm );
+  g_free( tmpTm );
+  gnome_date_edit_set_time( GNOME_DATE_EDIT(w), start_tt );
+
   w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
   pos = 0;
   gtk_editable_insert_text( GTK_EDITABLE(w), transName,
@@ -257,6 +327,10 @@ sxftd_init( SXFromTransInfo *sxfti )
   w = glade_xml_get_widget(sxfti->gxml,
 			   SXFTD_FREQ_OPTION_MENU);
   gnc_option_menu_init(w);
+  w = gtk_option_menu_get_menu( GTK_OPTION_MENU(w) );
+  gtk_signal_connect( GTK_OBJECT(w), "selection-done",
+                      GTK_SIGNAL_FUNC(sxftd_freq_option_changed),
+                      sxfti );
   
   return 0;
 }
@@ -267,18 +341,14 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   GtkWidget *w;
   gchar *name;
   GDate date;
-  time_t trans_t;
   int index;
-
+  FreqSpec *fs, *tmpfs;
   getEndTuple end_info;
   guint sxftd_errno = 0; /* 0 == OK, > 0 means dialog needs to be run again */
-
-  FreqSpec *fs, *tmpfs;
 
   SchedXaction *sx = sxfti->sx;
 
   /* get the name */
-
   w = glade_xml_get_widget(sxfti->gxml, SXFTD_NAME_ENTRY);
   
   name = gtk_editable_get_chars(GTK_EDITABLE(w), 0, -1);
@@ -286,72 +356,15 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   xaccSchedXactionSetName(sx, name);
   g_free(name);
 
-  /* get the date (basis for start date) */
-  trans_t = xaccTransGetDate(sxfti->trans);
-
-  g_date_set_time(&date, trans_t);
+  w = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
+  g_date_set_time( &date, gnome_date_edit_get_date( GNOME_DATE_EDIT(w) ) );
  
   fs = xaccFreqSpecMalloc(gnc_get_current_session ());
-
-  /* get the frequency */
-
-  w = glade_xml_get_widget(sxfti->gxml, SXFTD_FREQ_OPTION_MENU);
-  index = gnc_option_menu_get_active(w);
-
-  /* Note that we make the start date the *NEXT* instance, not the
-   * present one
-   */
-
-  /* Methinks this should use the FreqSpec to do the calculation... --jsled */
-  switch(index)
-  {
-  case FREQ_DAILY:
-
-    g_date_add_days(&date, 1); 
-    xaccFreqSpecSetDaily(fs, &date, 1);
-    xaccFreqSpecSetUIType(fs, UIFREQ_DAILY);
-    break;
-
-  case FREQ_WEEKLY:
-    g_date_add_days(&date, 7);
-    
-    tmpfs = xaccFreqSpecMalloc(gnc_get_current_session ());
-    xaccFreqSpecSetComposite(fs);
-    xaccFreqSpecSetWeekly(tmpfs, &date, 1);
-    xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
-    xaccFreqSpecCompositeAdd(fs,tmpfs);
-
-    break;
-
-  case FREQ_MONTHLY:
-    g_date_add_months(&date, 1);
-    xaccFreqSpecSetMonthly(fs, &date, 1);
-    xaccFreqSpecSetUIType(fs, UIFREQ_MONTHLY);
-    break;
-
-  case FREQ_QUARTERLY:
-    g_date_add_months(&date, 3);
-    xaccFreqSpecSetMonthly(fs, &date, 3);
-    xaccFreqSpecSetUIType(fs, UIFREQ_QUARTERLY);
-    break;
-
-  case FREQ_ANNUALLY:
-    g_date_add_years(&date, 1);
-    xaccFreqSpecSetMonthly(fs, &date, 12);
-    xaccFreqSpecSetUIType(fs, UIFREQ_YEARLY);
-    break;
-
-  default:
-
-    PERR("Nonexistent frequency selected.  This is a bug.");
-    
-    break;
-  }
-
+  sxftd_update_fs( sxfti, &date, fs );
   if (sxftd_errno == 0)
   {
     xaccSchedXactionSetFreqSpec( sx, fs);
-    xaccSchedXactionSetStartDate(sx, &date);
+    xaccSchedXactionSetStartDate( sx, &date );
   }
 
   end_info = sxftd_get_end_info(sxfti);
@@ -416,6 +429,35 @@ sxftd_ok_clicked(GtkWidget *w, gpointer user_data)
   return;
 }
   
+/**
+ * Update start date... right now we always base this off the transaction
+ * start date, but ideally we want to respect what the user has in the field,
+ * somehow.
+ **/
+static void
+sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
+{
+  SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
+  GtkWidget *start_date;
+  GDate date, nextDate;
+  time_t tmp_tt;
+  struct tm *tmpTm;
+  FreqSpec *fs;
+
+  tmp_tt = xaccTransGetDate( sxfti->trans );
+  g_date_set_time( &date, tmp_tt );
+  
+  fs = xaccFreqSpecMalloc( gnc_get_current_session() );
+  sxftd_update_fs( sxfti, &date, fs );
+  xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
+
+  start_date = glade_xml_get_widget( sxfti->gxml, SXFTD_START_DATE_EDIT );
+  tmpTm = g_new0( struct tm, 1 );
+  g_date_to_struct_tm( &nextDate, tmpTm );
+  tmp_tt = mktime( tmpTm );
+  g_free( tmpTm );
+  gnome_date_edit_set_time( GNOME_DATE_EDIT(start_date), tmp_tt );
+}
 
 static void
 sxftd_cancel_clicked(GtkWidget *w, gpointer user_data)

@@ -65,6 +65,7 @@ struct GNCAccountTree_s
   AccountViewInfo avi;
 
   gint num_columns;
+  gint description_column;
   gint balance_column;
   gint total_column;
   AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
