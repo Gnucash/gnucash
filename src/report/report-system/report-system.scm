@@ -13,7 +13,7 @@
 (use-modules (srfi srfi-19))
 (use-modules (gnucash gnc-module))
 
-(use-modules (g-wrapped gw-glib))
+(use-modules (g-wrap gw-glib))
 
 (require 'hash-table)
 (if (not (defined? 'simple-format))
