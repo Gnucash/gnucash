@@ -65,11 +65,14 @@ static void ArrowEventCallback (Widget w, XtPointer pClientData,
                                 XEvent *event, Boolean *ContDispatch);
 
 /** GLOBALS *********************************************************/
-extern char   *datafile;
+/* hack alert -- most of these globals should be moved to a struct! */
 extern Widget toplevel;
+extern char   *datafile;
 static Account *selected_acc = NULL;          /* The selected account */
 static Widget accountlist;
 static Widget baln_widget;
+static Widget show_widget;
+short show_categories = 1;
 
 /* the english-language names here should match 
  * the enumerated types in Account.h */
@@ -113,6 +116,8 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
     Account *acc = getAccount( grp, i );
     double dbalance;
     
+    if ((0 == show_categories) && 
+       ((INCOME == acc->type) || (EXPENSE == acc->type))) continue;
     /* fill in the arrow and the account type fileds */
     cols[XACC_MAIN_ACC_ARRW] = XtNewString("");
     cols[XACC_MAIN_ACC_TYPE] = XtNewString(account_type_name[acc->type]);
@@ -456,6 +461,8 @@ mainWindow( Widget parent )
       accountMenubarCB, (XtPointer)AMB_TRNS, (MenuItem *)NULL, 0 },
     { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
       accountMenubarCB, (XtPointer)AMB_RPRT, (MenuItem *)NULL, 0 },
+    { "Hide Inc/Exp...",    &xmPushButtonWidgetClass, 'I', NULL, NULL, True,
+      accountMenubarCB, (XtPointer)AMB_SHOW, (MenuItem *)NULL, 0 },
 #if 0
     { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_CAT,  (MenuItem *)NULL, 0 },
@@ -499,6 +506,9 @@ mainWindow( Widget parent )
   BuildMenu( menubar, XmMENU_PULLDOWN, "File",   'F', False, 0, fileMenu );
   BuildMenu( menubar, XmMENU_PULLDOWN, "Account",'A', False, 0, accountMenu );
   BuildMenu( menubar, XmMENU_PULLDOWN, "Help",   'H', False, 0, helpMenu );
+
+  /* hack alert -- 8 is very sensitive to menu changes! */
+  show_widget = accountMenu[8].widget;
 
   XtManageChild( menubar );
   
@@ -1034,6 +1044,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
    *   AMB_LEDGER -  Open account and subaccounts in one register
    *   AMB_EDIT   -  Edit account
    *   AMB_DEL    -  Delete account
+   *   AMB_SHOW   -  Show catagories
    *   AMB_CAT    -  Edit catagories
    */
   
@@ -1118,6 +1129,22 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case AMB_RPRT:
       DEBUG("AMB_RPRT\n");
       simpleReportWindow(toplevel);
+      break;
+
+    case AMB_SHOW: {
+      XmString str;
+      DEBUG("AMB_SHOW\n");
+      if (show_categories) {
+         show_categories = 0;
+         str = XmStringCreateLtoR ("Show Inc/Exp...", XmSTRING_DEFAULT_CHARSET);
+      } else {
+         show_categories = 1;
+         str = XmStringCreateLtoR ("Hide Inc/Exp...", XmSTRING_DEFAULT_CHARSET);
+      }
+      XtVaSetValues (show_widget, XmNlabelString, str, NULL);
+      XmStringFree (str);
+      refreshMainWindow();
+      }
       break;
 
     case AMB_CAT:
