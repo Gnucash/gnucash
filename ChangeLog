@@ -5,6 +5,19 @@
           Remove double calls to gdc_free_all_mark_data 
           in object cleanup,
 
+	Stephen Evanchik's patch to Update scheduled transaction dialog:
+        * src/gnome/dialog-sx-from-trans.c:
+          - Removed per-button callbacks in favor of a 
+            dialog response callback
+	  - Changed per-button callback functions to 
+	    simple 'action' functions that are called
+	    in the response handler.
+          - Migrated away from gtk_signal_connect
+          - Removed references to GNOME 1.x dialog
+          - C Style changes: 'open curly brace on same line'
+          - Moved 'public' function gnc_sx_create_from_trans
+	    to the bottom of the file
+
 2004-12-19  Derek Atkins  <derek@ihtfp.com>
 
 	Stephen Evanchik's Minor touch-ups to GNCCurrencyEdit:
