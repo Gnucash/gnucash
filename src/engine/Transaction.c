@@ -1454,7 +1454,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-   GNC_BEGIN_EDIT(&trans->inst, GNC_ID_TRANS)
+   GNC_BEGIN_EDIT(&trans->inst)
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -1544,7 +1544,6 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    QofBackend *be;
-
    GNC_COMMIT_EDIT_PART1 (&trans->inst);
 
    /* We increment this for the duration of the call
@@ -1583,7 +1582,11 @@ xaccTransCommitEdit (Transaction *trans)
 
    /* Sort the splits. Why do we need to do this ?? */
    xaccTransSortSplits(trans);
+   if (!trans->splits) trans->inst.do_free = TRUE;
 
+   /* XXX the code below is almost identical to 
+    * GNC_COMMIT_EDIT_PART1 (&trans->inst);
+    * except for the rollback bits */
    /* See if there's a backend.  If there is, invoke it. */
    be = qof_book_get_backend (trans->inst.book);
    if (be && be->commit) 
@@ -1619,8 +1622,7 @@ xaccTransCommitEdit (Transaction *trans)
       }
    }
 
-   /* ------------------------------------------------- */
-   if (trans->inst.do_free || !trans->splits)
+   if (trans->inst.do_free)
    {
       PINFO ("delete trans at addr=%p", trans);
       do_destroy (trans);
@@ -1633,7 +1635,6 @@ xaccTransCommitEdit (Transaction *trans)
     * in their accounts with the correct balances. */
    xaccTransFixSplitDateOrder (trans);
 
-   trans->inst.do_free = FALSE;
    xaccTransWriteLog (trans, 'C');
 
    /* Get rid of the copy we made. We won't be rolling back, 

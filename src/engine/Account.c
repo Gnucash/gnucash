@@ -70,22 +70,12 @@ static void xaccAccountBringUpToDate (Account *);
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void account_event (Account *account);
-G_INLINE_FUNC void
-account_event (Account *account)
-{
-  gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
-}
-
-
 G_INLINE_FUNC void mark_account (Account *account);
 G_INLINE_FUNC void
 mark_account (Account *account)
 {
-  if (account->parent)
-    account->parent->saved = FALSE;
-
-  account_event (account);
+  if (account->parent) account->parent->saved = FALSE;
+  account->inst.dirty = TRUE;
 }
 
 /********************************************************************\
@@ -336,16 +326,27 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  GNC_BEGIN_EDIT (&acc->inst, GNC_ID_ACCOUNT);
+  GNC_BEGIN_EDIT (&acc->inst);
+}
+
+static inline void noop(QofInstance *inst) {}
+
+static inline void on_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR("commit error: %d", errcode);
+}
+
+static inline void acc_free (QofInstance *inst)
+{
+  Account *acc = (Account *) inst;
+  xaccGroupRemoveAccount(acc->parent, acc);
+  xaccFreeAccount(acc);
 }
 
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  QofBackend * be;
-
   GNC_COMMIT_EDIT_PART1 (&acc->inst);
-  ENTER (" ");
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -392,39 +393,9 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  /* See if there's a backend.  If there is, invoke it. */
-  be = acc->inst.book->backend;
-  if (be && be->commit) 
-  {
-    QofBackendError errcode;
+  GNC_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
 
-    /* clear errors */
-    do {
-      errcode = qof_backend_get_error (be);
-    } while (ERR_BACKEND_NO_ERR != errcode);
-
-    (be->commit) (be, GNC_ID_ACCOUNT, acc);
-    errcode = qof_backend_get_error (be);
-
-    if (ERR_BACKEND_NO_ERR != errcode)
-    {
-      /* Destroys must be rolled back as well ... */
-      acc->inst.do_free = FALSE;
-
-      /* XXX hack alert FIXME implement account rollback */
-      PERR ("Backend asked engine to rollback, but this isn't"
-            " handled yet. Return code=%d", errcode);
-    }
-  }
-  acc->inst.dirty = FALSE;
-
-  /* final stages of freeing the account */
-  if (acc->inst.do_free)
-  {
-    xaccGroupRemoveAccount(acc->parent, acc);
-    xaccFreeAccount(acc);
-  }
-  LEAVE (" ");
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void 
@@ -1067,7 +1038,7 @@ xaccAccountRecomputeBalance (Account * acc)
   acc->reconciled_balance = reconciled_balance;
 
   acc->balance_dirty = FALSE;
-  account_event (acc);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\

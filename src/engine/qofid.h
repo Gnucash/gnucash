@@ -78,7 +78,7 @@ struct QofEntity_s
 /** Initialise the memory associated with an entity */
 void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
                                                                                 
-/** release the data associated with this entity. Dont actually free
+/** Release the data associated with this entity. Dont actually free
  * the memory associated with the instance. */
 void qof_entity_release (QofEntity *);
 

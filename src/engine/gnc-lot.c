@@ -61,6 +61,7 @@ static short module = MOD_LOT;
 static void
 gnc_lot_init (GNCLot *lot, QofBook *book)
 {
+   QofCollection *col;
    ENTER ("(lot=%p, book=%p)", lot, book);
    lot->kvp_data = kvp_frame_new();
    lot->account = NULL;
@@ -69,7 +70,8 @@ gnc_lot_init (GNCLot *lot, QofBook *book)
    lot->marker = 0;
   
    lot->book = book;
-   qof_entity_init (&lot->entity);
+   col = qof_book_get_collection (book, GNC_ID_LOT);
+   qof_entity_init (&lot->entity, GNC_ID_LOT, col);
    LEAVE ("(lot=%p, book=%p)", lot, book);
 }
 
@@ -120,7 +122,7 @@ gnc_lot_lookup (const GUID *guid, QofBook *book)
   QofCollection *col;
   if (!guid || !book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_LOT);
-  return qof_collection_lookup_entity (col, guid);
+  return (GNCLot *) qof_collection_lookup_entity (col, guid);
 }
 
 QofBook *
@@ -272,7 +274,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
     /* for recomputation of is-closed */
    lot->is_closed = -1;
 
-   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+   gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
 }
 
 void
@@ -290,7 +292,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
-   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+   gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
 }
 
 /* ============================================================== */
@@ -359,8 +361,8 @@ gnc_lot_get_latest_split (GNCLot *lot)
 void gnc_lot_register (void)
 {
   static const QofParam params[] = {
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gnc_lot_get_guid, NULL },
     { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
     { LOT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_lot_get_balance, NULL },
     { NULL },

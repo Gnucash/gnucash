@@ -32,6 +32,9 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofinstance-p.h"
 
 struct gnc_price_s
 {

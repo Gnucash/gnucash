@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <string.h>
 
+#include "gnc-be-utils.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
@@ -34,6 +35,7 @@
 #include "gnc-trace.h"
 #include "guid.h"
 #include "kvp-util.h"
+
 #include "qofbackend-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
@@ -62,21 +64,14 @@ gnc_price_create (QofBook *book)
   p = g_new0(GNCPrice, 1);
 
   p->refcount = 1;
-  p->editlevel = 0;
-  p->not_saved = FALSE;
-  p->do_free = FALSE;
   p->version = 0;
   p->version_check = 0;
   p->value = gnc_numeric_zero();
   p->type = NULL;
   p->source = NULL;
 
-  p->book = book;
-  p->entity_table = qof_book_get_entity_table (book);
-
-  qof_entity_guid_new (p->entity_table, &p->guid);
-  qof_entity_store (p->entity_table, p, &p->guid, GNC_ID_PRICE); 
-  gnc_engine_generate_event (&p->guid, GNC_ID_PRICE, GNC_EVENT_CREATE);
+  qof_instance_init (&p->inst, GNC_ID_PRICE, book);
+  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_CREATE);
 
   return p;
 }
@@ -85,12 +80,12 @@ static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
-  gnc_engine_generate_event (&p->guid, GNC_ID_PRICE, GNC_EVENT_DESTROY);
-  qof_entity_remove(p->entity_table, &p->guid);
+  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_DESTROY);
 
   if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
   if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
 
+  qof_instance_release (&p->inst);
   memset(p, 0, sizeof(GNCPrice));
   g_free(p);
 }
@@ -159,85 +154,20 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
 void 
 gnc_price_begin_edit (GNCPrice *p)
 {
-  if (!p) return;
-  p->editlevel++;
-  if (1 < p->editlevel) return;
-  ENTER ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
-
-  if (0 >= p->editlevel)
-  {
-    PERR ("unbalanced call - resetting (was %d)", p->editlevel);
-    p->editlevel = 1;
-  }
-
-  /* See if there's a backend.  If there is, invoke it. */
-  /* We may not be able to find the backend, so make not of that .. */
-  if (p->db) {
-    QofBackend *be;
-    be = xaccPriceDBGetBackend (p->db);
-    if (be && be->begin) {
-       (be->begin) (be, GNC_ID_PRICE, p);
-    }
-    p->not_saved = FALSE;
-  } else {
-    p->not_saved = TRUE;
-  }
-
-  LEAVE ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
+  GNC_BEGIN_EDIT (&p->inst);
 }
+
+static inline void commit_err (QofInstance *inst, QofBackendError errcode) 
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+static inline void noop (QifInstance *inst) {}
 
 void 
 gnc_price_commit_edit (GNCPrice *p)
 {
-  if (!p) return;
-
-  p->editlevel--;
-  if (0 < p->editlevel) return;
-
-  ENTER ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
-  if (0 > p->editlevel)
-  {
-    PERR ("unbalanced call - resetting (was %d)", p->editlevel);
-    p->editlevel = 0;
-  }
-
-  /* See if there's a backend.  If there is, invoke it. */
-  /* We may not be able to find the backend, so make not of that .. */
-  if (p->db) {
-    QofBackend *be;
-    be = xaccPriceDBGetBackend (p->db);
-    if (be && be->commit) {
-      QofBackendError errcode;
-
-      /* clear errors */
-      do {
-        errcode = qof_backend_get_error (be);
-      } while (ERR_BACKEND_NO_ERR != errcode);
-
-      /* if we haven't been able to call begin edit before, call it now */
-      if (TRUE == p->not_saved) {
-        if (be->begin) {
-          (be->begin) (be, GNC_ID_PRICE, p);
-        }
-      }
-
-      (be->commit) (be, GNC_ID_PRICE, p);
-      errcode = qof_backend_get_error (be);
-      if (ERR_BACKEND_NO_ERR != errcode) 
-      {
-        /* XXX hack alert FIXME implement price rollback */
-        PERR (" backend asked engine to rollback, but this isn't"
-              " handled yet. Return code=%d", errcode);
-
-        /* push error back onto the stack */
-        qof_backend_set_error (be, errcode);
-      }
-    }
-    p->not_saved = FALSE;
-  } else {
-    p->not_saved = TRUE;
-  }
-  LEAVE ("pr=%p, not-saved=%d do-free=%d", p, p->not_saved, p->do_free);
+  GNC_COMMIT_EDIT_PART1 (&p->inst);
+  GNC_COMMIT_EDIT_PART2 (&p->inst, commit_err, noop, noop);
 }
 
 /* ==================================================================== */
