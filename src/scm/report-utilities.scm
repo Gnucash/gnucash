@@ -682,7 +682,7 @@
      (gnc:account-get-comm-balance-at-date
       account 
       (gnc:timepair-end-day-time (gnc:timepair-previous-day from))
-      include-children?) #f)
+      include-children?))
     this-collector))
 
 (define (gnc:group-get-balance-interval group from to)
