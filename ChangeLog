@@ -1,3 +1,10 @@
+2002-12-03  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/split-register-control.c
+	(gnc_split_register_move_cursor): Don't delete an empty split if
+	its the current transaction split. Dangling pointers are no
+	fun. #99774
+
 2002-12-02  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: update to new version 1.7.5

@@ -289,6 +289,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   saved = gnc_split_register_save (reg, old_trans != new_trans);
   if ((old_class == CURSOR_CLASS_SPLIT) &&
       old_split &&
+      (old_split != new_split) &&
       gnc_split_register_old_split_empty_p(reg, old_split)) {
     int current_row;
 
