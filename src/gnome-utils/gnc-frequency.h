@@ -84,11 +84,11 @@ void gnc_frequency_init( GNCFrequency *gf );
 void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate );
 
 /**
- * Saves the state of the GNCFrequenecy widget into the given FreqSpec
- * and UIFreqSpec.
- * Places the start date in outStartDate, if it's not null.
+ * Saves the state of the GNCFrequenecy widget.
+ * Updates the given FreqSpec if it's not NULL.
+ * Places the date in outDate, if it's not NULL.
  **/
-void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate );
+void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate);
 
 /**
  * Set the label text for the frequency option menu.  In the current
@@ -96,10 +96,10 @@ void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDa
  */
 void gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt);
 /**
- * Set the label text for the start-date entry widget. In the current
+ * Set the label text for the date entry widget. In the current
  * impelmentation, the default label text is "Start Date:"
  */
-void gnc_frequency_set_startdate_label_text (GNCFrequency *gf, const gchar *txt);
+void gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt);
 
 END_GNOME_DECLS
 

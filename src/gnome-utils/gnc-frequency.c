@@ -564,7 +564,7 @@ gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate )
 }
 
 void
-gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
+gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
 {
         gint page;
         struct tm *tmpTm;
@@ -578,24 +578,27 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
         GDate *gd2;
         time_t tmpTimeT;
 
-        /* get the current tab */
-        page = gtk_notebook_get_current_page( gf->nb );
-        /* save into UIFreqSpec */
+        tmpTimeT = gnc_date_edit_get_date( gf->startDate );
+        if ( NULL != outDate ) 
+        {
+                g_date_set_time( outDate, tmpTimeT );
+        }
 
-        /* We're going to be creating/destroying FreqSpecs, which will cause GUI
-           refreshes. :( */
+        if (NULL == fs) return;
+
+        /* Get the current tab */
+        page = gtk_notebook_get_current_page( gf->nb );
+
+        /* We're going to be creating/destroying FreqSpecs, 
+         * which will cause GUI refreshes. :( */
         gnc_suspend_gui_refresh();
 
-        tmpTimeT = gnc_date_edit_get_date( gf->startDate );
         gd = g_date_new();
         g_date_set_time( gd, tmpTimeT );
-        if ( outStartDate != NULL ) {
-                g_date_set_time( outStartDate, tmpTimeT );
-        }
         /*uift = xaccFreqSpecGetUIType( fs );*/
         uift = PAGES[page].uiFTVal;
 
-        /* based on value, parse widget values into FreqSpec */
+        /* Based on value, parse widget values into FreqSpec */
         switch ( uift ) {
         case UIFREQ_NONE:
                 /* hmmm... shouldn't really be allowed. */
@@ -1142,7 +1145,7 @@ gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt)
 }
 
 void 
-gnc_frequency_set_startdate_label_text (GNCFrequency *gf, const gchar *txt)
+gnc_frequency_set_date_label_text (GNCFrequency *gf, const gchar *txt)
 {
    GtkLabel *lbl;
 	if (!gf || !txt) return;
