@@ -57,12 +57,13 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
   if (!gnc_module_load ("gnucash/report/report-gnome", 0)) {
     return FALSE;
   }
-  if (!gnc_module_load ("gnucash/report/standard-reports", 0)) {
-    return FALSE;
-  }
+  //  if (!gnc_module_load ("gnucash/report/standard-reports", 0)) {
+  //    return FALSE;
+  //  }
 
   gh_eval_str("(use-modules (g-wrapped gw-business-gnome))");
   gh_eval_str("(use-modules (gnucash business-gnome))");
+  gh_eval_str("(use-modules (gnucash report business-reports))");
 
   if (refcount == 0) {
     /* Register the Owner search type */

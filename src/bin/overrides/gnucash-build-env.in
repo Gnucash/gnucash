@@ -61,8 +61,10 @@ eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --gnc-module-dir ${top_builddir}/src/backend/postgres \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
   --gnc-module-dir ${top_builddir}/src/business/business-core/file \
+  --gnc-module-dir ${top_builddir}/src/business/dialog-tax-table \
   --gnc-module-dir ${top_builddir}/src/business/business-ledger \
   --gnc-module-dir ${top_builddir}/src/business/business-gnome \
+  --guile-load-dir ${top_builddir}/src/business/business-reports \  
   --gnc-module-dir ${top_builddir}/src/import-export/qif-io-core \
   --gnc-module-dir ${top_builddir}/src/import-export/qif-import \
   --gnc-module-dir ${top_builddir}/src/import-export/binary-import \

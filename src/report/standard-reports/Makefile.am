@@ -25,7 +25,6 @@ gncscmmod_DATA = \
    average-balance.scm \
    balance-sheet.scm \
    category-barchart.scm \
-   invoice.scm \
    net-barchart.scm \
    payables.scm \
    pnl.scm \

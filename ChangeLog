@@ -5,6 +5,11 @@
 	files to their own directory.  Create a business-reports directory
 	for the current and future business reports.
 
+	* Move to invoice report into business-reports (it _IS_ a business
+	report after all).  Add a business-reports guile module, and get
+	it all to work.  Fix the gnucash-build-env script to look in the
+	new directories.
+
 2002-06-16  Derek Atkins   <derek@ihtfp.com>
 
 	Integrate the tax table into the gncEntry object; change how taxes

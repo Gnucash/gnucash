@@ -8,7 +8,6 @@
 (define-module (gnucash report standard-reports))
 
 (export gnc:register-report-create)
-(export gnc:invoice-report-create)
 (export gnc:payables-report-create)
 (export gnc:receivables-report-create)
 
@@ -18,7 +17,6 @@
 (use-modules (gnucash report average-balance))
 (use-modules (gnucash report balance-sheet))
 (use-modules (gnucash report category-barchart))
-(use-modules (gnucash report invoice))
 (use-modules (gnucash report net-barchart))
 (use-modules (gnucash report pnl))
 (use-modules (gnucash report portfolio))
@@ -29,6 +27,5 @@
 (use-modules (gnucash report transaction))
 
 (define gnc:register-report-create gnc:register-report-create-internal)
-(define gnc:invoice-report-create gnc:invoice-report-create-internal)
 (define gnc:payables-report-create gnc:payables-report-create-internal)
 (define gnc:receivables-report-create gnc:receivables-report-create-internal)
