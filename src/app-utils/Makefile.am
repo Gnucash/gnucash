@@ -90,7 +90,7 @@ i18n.h: i18n.h.in
 	mv $@.tmp $@
 # This has to be in BUILT_SOURCES because other files depend on it,
 # but it's never a target itself.
-BUILT_SOURCES += i18n.h
+BUILT_SOURCES = i18n.h
 
 .scm-links: 
 	rm -f gnucash g-wrapped
