@@ -260,6 +260,8 @@ gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
      pricedb.   Returns TRUE if successful, FALSE otherwise. */
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
+gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff);
+
 /** gnc_pricedb_lookup_latest - find the most recent price for the
      given commodity in the given currency.  Returns NULL on
      failure. */
@@ -272,6 +274,13 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
      returned as a GNCPrice list (see above). */
 GList      *gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
                                                    gnc_commodity *commodity);
+
+/** gnc_pricedb_has_prices - return an indication of whether or not
+    there are any prices for a given commodity in the given currency.
+    Returns TRUE if there are prices, FALSE otherwise. */
+gboolean     gnc_pricedb_has_prices(GNCPriceDB *db,
+                                    gnc_commodity *commodity,
+                                    gnc_commodity *currency);
 
 /** gnc_pricedb_get_prices - return all the prices for a given
      commodity in the given currency.  Returns NULL on failure.  The

@@ -872,6 +872,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   if(!price_list) return FALSE;
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
+  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_ADD);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
          db, p, p->inst.dirty, p->inst.do_free,
@@ -932,6 +933,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) return FALSE;
 
+  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_REMOVE);
   price_list = g_hash_table_lookup(currency_hash, currency);
   gnc_price_ref(p);
   if(!gnc_price_list_remove(&price_list, p)) {
@@ -984,6 +986,50 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
   gnc_price_unref(p);
   LEAVE ("db=%p, pr=%p", db, p);
   return rc;
+}
+
+typedef struct {
+  GNCPriceDB *db;
+  Timespec cutoff;
+  GSList *list;
+} remove_info;
+
+static gboolean
+check_one_price_date (GNCPrice *price, gpointer user_data)
+{
+  remove_info *data = user_data;
+  Timespec pt;
+
+  pt = gnc_price_get_time (price);
+  if (timespec_cmp (&pt, &data->cutoff) < 0)
+    data->list = g_slist_prepend(data->list, price);
+  return TRUE;
+}
+
+gboolean
+gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
+{
+  remove_info data;
+  GSList *item;
+
+  data.db = db;
+  data.cutoff = cutoff;
+  data.list = NULL;
+
+  /* Traverse the database once building up an external list of prices
+   * to be deleted */
+  gnc_pricedb_foreach_price(db, check_one_price_date, &data, FALSE);
+
+  if (data.list == NULL)
+    return FALSE;
+
+  /* Now run this external list deleting prices */
+  for (item = data.list; item; item = g_slist_next(item)) {
+    gnc_pricedb_remove_price(db, item->data);
+  }
+
+  g_slist_free(data.list);
+  return TRUE;
 }
 
 /* ==================================================================== */
@@ -1082,6 +1128,50 @@ hash_values_helper(gpointer key, gpointer value, gpointer data)
   GList ** l = data;
   *l = g_list_concat(*l, g_list_copy (value));
 }
+
+gboolean
+gnc_pricedb_has_prices(GNCPriceDB *db,
+                       gnc_commodity *commodity,
+                       gnc_commodity *currency)
+{
+  GList *price_list;
+  GHashTable *currency_hash;
+  gint size;
+
+  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
+  if(!db || !commodity) return FALSE;
+
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_ALL;
+     pl.prdb = db;
+     pl.commodity = commodity;
+     pl.currency = currency;
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
+  }
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+  if(!currency_hash) {
+    LEAVE("no, no currency_hash table");
+    return FALSE;
+  }
+
+  if (currency) {
+    price_list = g_hash_table_lookup(currency_hash, currency);
+    if (price_list) {
+      LEAVE("yes");
+      return TRUE;
+    }
+    LEAVE("no, no price list");
+    return FALSE;
+  }
+
+  size = g_hash_table_size (currency_hash);
+  LEAVE("%s", size > 0 ? "yes" : "no");
+  return size > 0;
+}
+
 
 GList *
 gnc_pricedb_get_prices(GNCPriceDB *db,
