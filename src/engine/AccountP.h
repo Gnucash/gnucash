@@ -64,9 +64,13 @@ struct _account {
   int numSplits;                /* length of splits array below   */
   Split **splits;               /* ptr to array of ptrs to splits */
 
-  /* the modified flag helps the gui keep track of 
+  /* the "changed" flag helps the gui keep track of 
    * changes to this account */
   short changed;
+
+  /* the "open" flag indicates if the account has been 
+   * opened for editing. */
+  short open;
 };
 
 

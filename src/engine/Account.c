@@ -82,6 +82,7 @@ xaccInitAccount (Account * acc)
   acc->splits[0]   = NULL;
   
   acc->changed     = 0;
+  acc->open        = 0;
 }
 
 /********************************************************************\
@@ -165,7 +166,28 @@ xaccFreeAccount( Account *acc )
   acc->description = NULL;
   acc->notes       = NULL;
   
+  acc->changed     = 0;
+  acc->open        = 0;
+
   _free(acc);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void 
+xaccAccountBeginEdit (Account *acc)
+{
+   if (!acc) return;
+   acc->open = 1;
+}
+
+void 
+xaccAccountCommitEdit (Account *acc)
+{
+   if (!acc) return;
+   acc->changed = 1;
+   acc->open = 0;
 }
 
 /********************************************************************\
@@ -181,6 +203,16 @@ xaccGetAccountID (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+#define CHECK(acc) {					\
+   if (0 == acc->open) {				\
+      printf ("Error: Account not open for editing\n");	\
+      return;						\
+   }							\
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccInsertSplit ( Account *acc, Split *split )
   {
@@ -191,6 +223,7 @@ xaccInsertSplit ( Account *acc, Split *split )
 
   if (!acc) return;
   if (!split) return;
+  CHECK (acc);
 
   /* mark the account as having changed, and
    * the account group as requiring a save */
@@ -250,6 +283,7 @@ xaccRemoveSplit ( Account *acc, Split *split )
 
   if (!acc) return;
   if (!split) return;
+  CHECK (acc);
 
   /* mark the account as having changed, and
    * the account group as requiring a save */
@@ -593,6 +627,7 @@ xaccConsolidateTransactions (Account * acc)
    int i,j;
 
    if (!acc) return;
+   CHECK (acc);
 
    for (i=0; i<acc->numSplits; i++) {
       sa = acc->splits[i];
@@ -630,6 +665,9 @@ void
 xaccAccountSetType (Account *acc, int tip)
 {
    if (!acc) return;
+   CHECK (acc);
+
+   /* hack alert -- check for a valid type */
    acc->type = tip;
 }
 
@@ -637,6 +675,8 @@ void
 xaccAccountSetName (Account *acc, char *str)
 {
    if (!acc) return;
+   CHECK (acc);
+
    if (acc->accountName) free (acc->accountName);
    acc->accountName = strdup (str);
 }
@@ -645,6 +685,8 @@ void
 xaccAccountSetDescription (Account *acc, char *str)
 {
    if (!acc) return;
+   CHECK (acc);
+
    if (acc->description) free (acc->description);
    acc->description = strdup (str);
 }
@@ -653,6 +695,8 @@ void
 xaccAccountSetNotes (Account *acc, char *str)
 {
    if (!acc) return;
+   CHECK (acc);
+
    if (acc->notes) free (acc->notes);
    acc->notes = strdup (str);
 }

@@ -58,6 +58,16 @@ Account     *xaccMallocAccount( void );
 void         xaccInitAccount( Account * );
 void         xaccFreeAccount( Account * );
 
+/* 
+ * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
+ * provide a pseudo-two-phase-commit wrapper for account updates. 
+ * They are mildly useful for detecting attempted updates outside
+ * of thier scope. However, they do not provide any true two-phase-anything
+ * in the current implementation.
+ */
+void         xaccAccountBeginEdit (Account *);
+void         xaccAccountCommitEdit (Account *);
+
 int          xaccGetAccountID (Account *);
 
 void         xaccInsertSplit (Account *, Split *);
