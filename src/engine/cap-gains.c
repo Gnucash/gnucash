@@ -327,6 +327,7 @@ xaccSplitAssignToLot (Split *split,
   while (split)
   {
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
+     split->gains |= GAINS_STATUS_VDIRTY;
      lot = policy (acc, split, user_data);
      if (lot)
      {
@@ -645,13 +646,13 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
                      xaccSplitGetGUID (lot_split));
          kvp_frame_set_guid (lot_split->kvp_data, "gains-source", 
                      xaccSplitGetGUID (split));
+
       }
       else
       {
          trans = lot_split->parent;
          gain_split = xaccSplitGetOtherSplit (lot_split);
          xaccTransBeginEdit (trans);
-         xaccTransClearReadOnly (trans);
 
          /* Make sure the existing gains trans has the correct currency,
           * just in case someone screwed with it! */
@@ -671,10 +672,15 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       xaccSplitSetAmount (gain_split, value);
       xaccSplitSetValue (gain_split, value);
 
-      /* XXX this is wrong; we want to make amount read-only only */
-      xaccTransSetReadOnly (trans, _("Capital Gains"));
-      xaccTransCommitEdit (trans);
+      /* Some short-cuts to help avoid the above kvp lookup. */
+      split->gains = GAINS_STATUS_CLEAN;
+      split->gains_split = lot_split;
+      lot_split->gains = GAINS_STATUS_GAINS;
+      lot_split->gains_split = split;
+      gain_split->gains = GAINS_STATUS_GAINS;
+      gain_split->gains_split = split;
 
+      xaccTransCommitEdit (trans);
    }
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }

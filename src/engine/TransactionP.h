@@ -76,6 +76,14 @@
  * A "split" is more commonly refered to as a "entry" in a "transaction".
  */
 
+/* Flags for handling cap-gains status */
+#define GAINS_STATUS_UNKNOWN        0xff
+#define GAINS_STATUS_CLEAN           0x0
+#define GAINS_STATUS_GAINS           0x3
+#define GAINS_STATUS_DATE_DIRTY     0x10
+#define GAINS_STATUS_VALU_DIRTY     0x20
+#define GAINS_STATUS_LOT_DIRTY      0x40
+#define GAINS_STATUS_VDIRTY    (GAINS_STATUS_VALU_DIRTY|GAINS_STATUS_LOT_DIRTY)
 
 struct split_s
 {
@@ -108,10 +116,23 @@ struct split_s
    * it's NULL until accessed. */
   KvpFrame * kvp_data;
 
-  char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
+  char    reconciled;        /* The reconciled field                      */
 
-  /* 'value' is the amount of the transaction balancing commodity
+  /* gains is a flag used to track the relationship between 
+   * capital-gains splits. Depending on its value, this flag indicates
+   * if this split is the source of gains, if this split is a record
+   * of the gains, and if values are 'dirty' and need to be recomputed.
+   */
+  unsigned char  gains;      
+
+  /* 'gains_split' is a convenience pointer used to track down the
+   * other end of a cap-gains transaction pair.  NULL if this split
+   * doesn't involve cap gains.
+   */
+  Split *gains_split;
+
+  /* 'value' is the quantity of the transaction balancing commodity
    * (i.e. currency) involved, 'amount' is the amount of the account's
    * commodity involved. */
   gnc_numeric  value;
