@@ -563,8 +563,6 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
         string = gtk_entry_get_text (GTK_ENTRY (widget));
 
-        gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
-
         tm = gnc_date_edit_get_date_internal (gde);
 
         g_date_set_dmy (&gdate, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
@@ -692,6 +690,8 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), tm.tm_mon,
                                    1900 + tm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
+
+        gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
 
         return TRUE;
 }

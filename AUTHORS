@@ -123,6 +123,7 @@ Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
 Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch

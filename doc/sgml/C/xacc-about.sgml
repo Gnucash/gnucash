@@ -152,7 +152,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossterm><email>dres@debian.org</email> James LewisMoss</glossterm>
 <glossdef>
 <para>
    design doc patches, XML refactoring, 
@@ -162,7 +162,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>stimming@tuhh.de</email>Christian
+<glossterm><email>stimming@tuhh.de</email> Christian
    Stimming</glossterm>
 <glossdef>
 <para>
@@ -174,7 +174,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>jsled@asynchronous.org</email>Joshua Sled</glossterm>
+<glossterm><email>jsled@asynchronous.org</email> Joshua Sled</glossterm>
 <glossdef>
 <para>
   works on scheduled transactions and budgeting.
@@ -250,16 +250,16 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><ulink url="simon.britnell@peace.com">Simon
-      Britnell</ulink></glossterm>
+<glossterm><email>simon.britnell@peace.com</email> Simon
+      Britnell</glossterm>
 <glossdef>
 <para>patch to RPM spec</para>
 </glossdef>
 </glossentry>
 
 <glossentry>
-<glossterm><ulink url="http://www.hex.net/~cbbrowne">Christopher B.
-      Browne</ulink></glossterm>
+<glossterm><email>cbbrowne@acm.org</email> Christopher B.
+      Browne</glossterm>
 <glossdef>
 <para>for perl stock scripts, Guile-based QIF import code, lots
       of changes to English documentation, and lots of guile
@@ -307,7 +307,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>china@thewrittenword.com</email>Albert
+<glossterm><email>china@thewrittenword.com</email> Albert
       Chin-A-Young</glossterm>
 <glossdef>
 <para>configure.in patch</para>
@@ -315,7 +315,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
-<glossterm><email>kenneth@gnome.org</email>Kenneth
+<glossterm><email>kenneth@gnome.org</email> Kenneth
 Christiansen</glossterm>
 <glossdef>
 <para>Danish translation</para>
@@ -323,7 +323,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>jcollins@gnucash.org</email> Jeremey
+<glossterm><email>jcollins@gnucash.org</email> Jeremy
       Collins</glossterm>
 <glossdef>
 <para>for GnoMoney and GTK port</para>
@@ -533,14 +533,14 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>claus_h@image.dk</email>Claus Hindsgaul</glossterm>
+<glossterm><email>claus_h@image.dk</email> Claus Hindsgaul</glossterm>
 <glossdef>
 <para>Danish translation</para>
 </glossdef>
 </glossentry>
 
 <glossentry>
-<glossterm><email>jjvmjv@mundomail.net</email>Miquel Jordana
+<glossterm><email>jjvmjv@mundomail.net</email> Miquel Jordana
       Vilamitjana</glossterm>
 <glossdef>
 <para>Spanish translation of manual</para>
@@ -564,7 +564,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossterm><email>ben.kelly@ieee.org</email> Ben Kelly</glossterm>
 <glossdef>
 <para>for Motif menu bug fix, core dump fixes</para>
 </glossdef>
@@ -574,6 +574,14 @@ Christiansen</glossterm>
 <glossterm><email>tkludy@csd.sgi.com</email> Tom Kludy</glossterm>
 <glossdef>
 <para>for SGI Irix port</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kraai@alumni.carnegiemellon.edu</email> Matt
+      Kraai</glossterm>
+<glossdef>
+<para>date accelerator bug fix</para>
 </glossdef>
 </glossentry>
 
@@ -608,7 +616,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossterm><email>minfrin@sharp.fm</email> Graham Leggett</glossterm>
 <glossdef>
 <para>for fixing a hang</para>
 </glossdef>
@@ -654,7 +662,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossterm><email>kmaraas@gnome.org</email> Kjartan Maraas</glossterm>
 <glossdef>
 <para>Norwegian translations</para>
 </glossdef>
@@ -742,7 +750,7 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>j.e.nielsen@iname.com</email>Johnny Ernst
+<glossterm><email>j.e.nielsen@iname.com</email> Johnny Ernst
 Nielsen</glossterm>
 <glossdef>
 <para>Danish translation</para>
@@ -914,7 +922,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>keld@dkuug.dk</email>Keld Simonsen</glossterm>
+<glossterm><email>keld@dkuug.dk</email> Keld Simonsen</glossterm>
 <glossdef>
 <para>Danish translation</para>
 </glossdef>
@@ -983,7 +991,7 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
-<glossterm><email>troeger@samart.co.th</email>Arnold Troeger</glossterm>
+<glossterm><email>troeger@samart.co.th</email> Arnold Troeger</glossterm>
 <glossdef>
 <para>Mandrake packager</para>
 </glossdef>
