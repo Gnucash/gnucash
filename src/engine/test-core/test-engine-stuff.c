@@ -216,7 +216,7 @@ price_accumulator (GNCPrice *p, gpointer data)
 
   *list = g_list_prepend (*list, p);
 
-  return FALSE;
+  return TRUE;
 }
 
 void
