@@ -110,6 +110,7 @@ CREATE TABLE gncCheckpoint (
 -- The price table stores the price of 'commodity' valued
 -- in units of 'currency'
 CREATE TABLE gncPrice (
+	priceGuid	CHAR(32) PRIMARY KEY,
 	commodity	TEXT NOT NULL CHECK (commodity <>''),
 	currency	TEXT NOT NULL CHECK (commodity <>''),
 	time		DATETIME,
