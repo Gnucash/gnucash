@@ -1,3 +1,111 @@
+ 2000-03-31  Rob Browning  <rlb@cs.utexas.edu>
+
+ 	* src/scm/bootstrap.scm.in: use new GNC_EXPANDED_ vars.
+
+ 	* src/scm/Makefile.in: set top_srcdir and include Makefile.init
+
+ 	* src/reports/pathconfig.h.in: use new GNC_EXPANDED_ vars.
+
+ 	* src/quotes/gnc-prices.in: new file.
+
+ 	* src/quotes/gnc-prices: deleted.
+
+ 	* src/guile/gnucash.h.in: use new GNC_EXPANDED_ vars.
+
+ 	* src/guile/i18n.h.in: use new GNC_EXPANDED_ vars.
+
+ 	* src/guile/Makefile.in (top_srcdir): set.
+
+ 	* src/Makefile.in: minor cleanups and safety code.
+
+ 	* make-gnucash-patch.in: new file.
+
+ 	* make-gnucash-patch: deleted.
+
+ 	* lib/Makefile.in: re-configure g-wrap after every distclean and
+ 	rebuild/install it on every build.
+
+ 	* gnucash: fix the doc-path to match the new structure.  This
+ 	fixes things back the way they were, but now we need to add
+ 	runtime locale detection.
+
+ 	* doc/build-system: new file - should eventually cover
+ 	build-system info and justifications.
+
+ 	* configure.in: changes to accomodate the new GNC_EXPANDED_*
+ 	vars.  See doc/build-system for a summary.
+
+ 	* Makefile.init.in (ABSOLUTE_TOP_SRCDIR): set
+ 	(top_srcdir): don't set (it has to be set in each separate Makefile.in)
+
+ 	* Makefile.config.finish: deleted.
+
+ 	* Makefile.in: minor cleanup -- some safety checks.
+
+ 	* Makefile.common: Clear all the .SUFFIXES rules.  They were
+ 	causing weird behaviors when I was trying to create some new
+ 	implicit rules.
+
+ 	* src/scm/printing/number-to-words.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/printing/print-check.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-dialog-utils.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-file.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-guess-map.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-import.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-objects.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-parse.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-to-gnc.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/qif-utils.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/qif-import/simple-obj.scm: scope gnc:depend and
+ 	gnc:support calls. 
+
+ 	* src/scm/main.scm: fix load-path problems.
+
+2000-03-31  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-register.c (gnc_transaction_delete_query): ok, we
+	can't destroy the dialog on close, because we need the widgets to be
+	there afterwards. gtk_widget_destroy() the dialog instead.
+
+	* src/register/splitreg.c: add a SEARCH_LEDGER register type. Don't
+	include the balance field in 'ledger' style registers.
+
+	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):
+ 	new layouts for ledgers -- they don't have a balance field. We'll
+ 	probably need to redo them if we add a xto field. Broke out the
+	actual layout construction into separate functions.
+
+2000-03-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRSaveRegEntry): remove the 'special
+ 	case' for setting the price. It is no longer needed.
+
+	* src/gnome/window-register.c (gnc_reg_set_window_name): set the
+ 	name regardless of whether there is a leader.
+
+	* src/SplitLedger.c (xaccSRLoadRegister): fixed a possible memory
+ 	leak in destroying the buffer
+
 2000-03-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/report/transaction-report.scm: bug fixes and speed

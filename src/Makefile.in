@@ -53,30 +53,33 @@ include @top_srcdir@/Makefile.common
 default: $(OBJS)
 
 motif motif.static: ${MOTIF_OBJS}
-	@cd engine;            $(MAKE) default
-	@cd register;          $(MAKE) motif
-	@cd reports;           $(MAKE) default
-	@cd g-wrap;            $(MAKE) motif
-	@cd swig;              $(MAKE) motif
-	@cd guile;             $(MAKE) default
-	@cd motif;             $(MAKE) $@
+	@cd scm             && $(MAKE) default
+	@cd engine          && $(MAKE) default
+	@cd register        && $(MAKE) motif
+	@cd reports         && $(MAKE) default
+	@cd g-wrap          && $(MAKE) motif
+	@cd swig            && $(MAKE) motif
+	@cd guile           && $(MAKE) default
+	@cd motif           && $(MAKE) $@
 
 gnome gnome.static: ${GNOME_OBJS}
-	@cd engine;            $(MAKE) default
-	@cd register;          $(MAKE) gnome
-	@cd reports;           $(MAKE) default
-	@cd g-wrap;            $(MAKE) gnome
-	@cd swig;              $(MAKE) gnome
-	@cd guile;             $(MAKE) default
-	@cd gnome;             $(MAKE) $@
+	@cd scm             && $(MAKE) default
+	@cd engine          && $(MAKE) default
+	@cd register        && $(MAKE) gnome
+	@cd reports         && $(MAKE) default
+	@cd g-wrap          && $(MAKE) gnome
+	@cd swig            && $(MAKE) gnome
+	@cd guile           && $(MAKE) default
+	@cd gnome           && $(MAKE) $@
 
 qt qt.static: $(QT_OBJS)
-	@cd engine;            $(MAKE) default
-	@cd register;          $(MAKE) qt
-	@cd reports;           $(MAKE) default
-	@cd g-wrap;            $(MAKE) qt
-	@cd swig;              $(MAKE) qt
-	@cd guile;             $(MAKE) default 	
-	@cd qt;                $(MAKE) $@
+	@cd scm             && $(MAKE) default
+	@cd engine          && $(MAKE) default
+	@cd register        && $(MAKE) qt
+	@cd reports         && $(MAKE) default
+	@cd g-wrap          && $(MAKE) qt
+	@cd swig            && $(MAKE) qt
+	@cd guile           && $(MAKE) default 	
+	@cd qt              && $(MAKE) $@
 
 .PHONY: default qt qt.static gnome gnome.static motif motif.static all

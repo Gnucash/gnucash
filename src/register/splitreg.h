@@ -70,7 +70,9 @@
 
 #define GENERAL_LEDGER      11
 #define INCOME_LEDGER       12
-#define PORTFOLIO           13
+#define PORTFOLIO_LEDGER    13
+#define SEARCH_LEDGER       14
+
 #define REG_TYPE_MASK       0xff
 
 /*

@@ -49,11 +49,20 @@ all:
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-g-wrap-install:
+
+# Right now we only configure g-wrap once per make distclean, but we
+# try and re-build every make.
+g-wrap.configure:
+	(cd g-wrap && ./configure --prefix=${PWD}/g-wrap-install)
+	touch g-wrap.configure
+DIST_TRASH += g-wrap.configure
+
+g-wrap-install: g-wrap.configure
 	(cd g-wrap && ${MAKE})
 	(cd g-wrap && ${MAKE} install)
-
 TRASH += g-wrap-install
+
+.PHONY: g-wrap-install
 
 # this make dist is a quick hack to avoid build problems that
 # # naive builders are suffering from.  Doing a 'make dist' makes

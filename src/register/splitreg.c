@@ -226,10 +226,14 @@ configLabels (SplitRegister *reg)
          LABEL (CRED,  DEFICIT_STR);
          break;
       case STOCK_REGISTER:
-      case PORTFOLIO:
+      case PORTFOLIO_LEDGER:
       case CURRENCY_REGISTER:
          LABEL (DEBT,  SOLD_STR);
          LABEL (CRED,  BOUGHT_STR);
+         break;
+      case SEARCH_LEDGER:
+         LABEL (DEBT, DEBIT_STR);
+         LABEL (CRED, CREDIT_STR);
          break;
       default:
          break;
@@ -244,7 +248,7 @@ configLabels (SplitRegister *reg)
 
 /* ============================================== */
 /* configAction strings into the action cell */
-/* hack alert -- this stuf really, really should be in a config file ... */
+/* hack alert -- this stuff really, really should be in a config file ... */
 
 static void
 configAction (SplitRegister *reg)
@@ -254,6 +258,7 @@ configAction (SplitRegister *reg)
    /* setup custom labels for the debit/credit columns */
    switch (type) {
       case BANK_REGISTER:
+      case SEARCH_LEDGER:  /* broken ! FIXME bg */
          xaccAddComboCellMenuItem ( reg->actionCell, DEPOSIT_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, CHECK_STR);
@@ -308,7 +313,7 @@ configAction (SplitRegister *reg)
          xaccAddComboCellMenuItem ( reg->actionCell, EQUITY_STR);
          break;
       case STOCK_REGISTER:
-      case PORTFOLIO:
+      case PORTFOLIO_LEDGER:
       case CURRENCY_REGISTER:
          xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
          xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
@@ -368,7 +373,7 @@ configLayout (SplitRegister *reg)
 {
    CellBlock *curs, *header;
    int type = (reg->type) & REG_TYPE_MASK;
-   // int style = (reg->type) & REG_STYLE_MASK;
+   gncBoolean include_balance = GNC_T;
    int i;
 
    /* define header for macros */
@@ -385,6 +390,11 @@ configLayout (SplitRegister *reg)
    }
 
    switch (type) {
+      case INCOME_LEDGER:
+      case GENERAL_LEDGER:
+      case SEARCH_LEDGER:
+        include_balance = GNC_F;
+        /* fall through */
       case BANK_REGISTER:
       case CASH_REGISTER:
       case ASSET_REGISTER:
@@ -393,9 +403,6 @@ configLayout (SplitRegister *reg)
       case INCOME_REGISTER:
       case EXPENSE_REGISTER:
       case EQUITY_REGISTER:
-
-      case INCOME_LEDGER:     /* hack alert do xto cell too */
-      case GENERAL_LEDGER:    /* hack alert do xto cell too */
       {
          curs = reg->double_cursor;
          FANCY (DATE,   date,     0,  0);
@@ -405,7 +412,10 @@ configLayout (SplitRegister *reg)
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
-         FANCY (BALN,   balance,  7,  0);
+
+         if (include_balance) {
+           FANCY (BALN,   balance,  7,  0);
+         }
 
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
@@ -417,7 +427,10 @@ configLayout (SplitRegister *reg)
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
-         FANCY (BALN,   balance,  7,  0);
+
+         if (include_balance) {
+           FANCY (BALN,   balance,  7,  0);
+         }
 
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
@@ -435,14 +448,19 @@ configLayout (SplitRegister *reg)
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
-         FANCY (BALN,   balance,  7,  0);
+
+         if (include_balance) {
+           FANCY (BALN,   balance,  7,  0);
+         }
 
          break;
       }
 
       /* --------------------------------------------------------- */
+      case PORTFOLIO_LEDGER:
+        include_balance = GNC_F;
+        /* fall through */
       case STOCK_REGISTER:
-      case PORTFOLIO:
       case CURRENCY_REGISTER:
       {
          /* prep the second row of the double style */
@@ -457,7 +475,10 @@ configLayout (SplitRegister *reg)
          FANCY (PRIC,   price,    7,  0);
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
+
+         if (include_balance) {
+           FANCY (BALN,   balance,  10, 0);
+         }
 
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
@@ -473,8 +494,11 @@ configLayout (SplitRegister *reg)
          FANCY (PRIC,   price,    7,  0);
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
-    
+
+         if (include_balance) {
+           FANCY (BALN,   balance,  10, 0);
+         }
+
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
          FANCY (MEMO,   memo,     2,  0);
@@ -494,25 +518,22 @@ configLayout (SplitRegister *reg)
          FANCY (PRIC,   price,    7,  0);
          FANCY (VALU,   value,    8,  0);
          FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
+
+         if (include_balance) {
+           FANCY (BALN,   balance,  10, 0);
+         }
 
          break;
       }
       /* --------------------------------------------------------- */
       default:
-         PERR ("configLayout(): "
-           "unknown register type %d \n", type);
+         PERR ("configLayout(): unknown register type %d \n", type);
          break;
    }
 }
 
 /* ============================================== */
-/* define the traversal order */
-/* negative cells mean "traverse out of table" */
-/* hack alert -- redesign so that we hop from one row to the next, if desired. */
-/* hack alert -- if show_tamount or show_samount is set then don't traverse there */
-/* hack alert -- fix show_txfrm also ... */
-
+/* define the traversal order -- negative cells mean "traverse out of table" */
 
 /* Right Traversals */
 
@@ -840,43 +861,46 @@ configCursors (SplitRegister *reg)
 static void
 mallocCursors (SplitRegister *reg)
 {
-   int type = (reg->type) & REG_TYPE_MASK;
+  int type = (reg->type) & REG_TYPE_MASK;
 
-   switch (type) {
-      case BANK_REGISTER:
-      case CASH_REGISTER:
-      case ASSET_REGISTER:
-      case CREDIT_REGISTER:
-      case LIABILITY_REGISTER:
-      case INCOME_REGISTER:
-      case EXPENSE_REGISTER:
-      case EQUITY_REGISTER:
+  switch (type) {
+    case BANK_REGISTER:
+    case CASH_REGISTER:
+    case ASSET_REGISTER:
+    case CREDIT_REGISTER:
+    case LIABILITY_REGISTER:
+    case INCOME_REGISTER:
+    case EXPENSE_REGISTER:
+    case EQUITY_REGISTER:
+      reg->num_cols = 8;
+      break;
 
-      case INCOME_LEDGER:     /* hack alert do xto cell too */
-      case GENERAL_LEDGER:    /* hack alert do xto cell too */
-         reg->num_cols = 8;
-         break;
+    case INCOME_LEDGER:
+    case GENERAL_LEDGER:
+    case SEARCH_LEDGER:
+      reg->num_cols = 7;
+      break;
 
-      case STOCK_REGISTER:
-      case PORTFOLIO:
-      case CURRENCY_REGISTER:
-         reg->num_cols = 11;
-         break;
-      default:
-         break;
-   }
+    case STOCK_REGISTER:
+    case CURRENCY_REGISTER:
+      reg->num_cols = 11;
+      break;
+    case PORTFOLIO_LEDGER:
+      reg->num_cols = 10;
+    default:
+      break;
+  }
 
-   reg->num_header_rows = 1;
-   reg->header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
+  reg->num_header_rows = 1;
+  reg->header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
 
-   /* cursors used in the single & double line displays */
-   reg->single_cursor = xaccMallocCellBlock (1, reg->num_cols);
-   reg->double_cursor = xaccMallocCellBlock (2, reg->num_cols);
+  /* cursors used in the single & double line displays */
+  reg->single_cursor = xaccMallocCellBlock (1, reg->num_cols);
+  reg->double_cursor = xaccMallocCellBlock (2, reg->num_cols);
 
-   /* the two cursors used for multi-line and dynamic displays */
-   reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
-   reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
-
+  /* the two cursors used for multi-line and dynamic displays */
+  reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
+  reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
 }
 
 /* ============================================== */
@@ -1024,7 +1048,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    /* number format for share quantities in stock ledgers */
    switch (type & REG_TYPE_MASK) {
       case STOCK_REGISTER:
-      case PORTFOLIO:
+      case PORTFOLIO_LEDGER:
       case CURRENCY_REGISTER:
          xaccSetPriceCellSharesValue (reg->debitCell, GNC_T);
          xaccSetPriceCellSharesValue (reg->creditCell, GNC_T);
@@ -1093,7 +1117,7 @@ xaccConfigSplitRegister (SplitRegister *reg, int newtype)
    reg->type = newtype;
 
    /* Make sure that any GUI elements associated with this reconfig 
-    * are properly initialized.  */
+    * are properly initialized. */
    xaccCreateCursor (reg->table, reg->single_cursor);
    xaccCreateCursor (reg->table, reg->double_cursor);
    xaccCreateCursor (reg->table, reg->trans_cursor);

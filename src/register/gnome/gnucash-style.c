@@ -251,197 +251,417 @@ style_layout_info_destroy (CellLayoutInfo *li)
 }
 
 
+static void
+layout_init_normal(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[1][8] = {{0.10, 0.07, 0.25, 0.20, 0.02, 0.12, 0.12, 0.12}};
+
+        CellLayoutData ld[1][8] =
+        {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,10,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+        }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (1, 8);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_ledger(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[1][7] = {{0.10, 0.07, 0.32, 0.25, 0.02, 0.12, 0.12}};
+
+        CellLayoutData ld[1][7] =
+        {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,10,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+        }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (1, 7);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_double(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[2][8] = {{0.10, 0.07, 0.25, 0.20, 0.02, 0.12, 0.12, 0.12},
+                             {0.10, 0.07, 0.83, 0.0, 0.0, 0.0, 0.0, 0.0}};
+
+        CellLayoutData ld[2][8] =
+        {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL}},
+         {{LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,1,0,1,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,2,0,7,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+         }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (2, 8);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[2][7] = {{0.10, 0.07, 0.32, 0.25, 0.02, 0.12, 0.12},
+                             {0.10, 0.07, 0.83, 0.0, 0.0, 0.0, 0.0}};
+
+        CellLayoutData ld[2][7] =
+        {{{STRING_FIXED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL}},
+         {{LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,1,0,1,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,2,0,7,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+         }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (2, 7);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_stock(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[1][11] = {{0.09, 0.06, 0.20, 0.14, 0.01, 0.10,
+                               0.10, 0.07, 0.07, 0.07, 0.09}};
+
+        CellLayoutData ld[1][11] =
+        {{{STRING_FIXED,RESIZABLE, 0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+        }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (1, 11);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_stock_ledger(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[1][10] = {{0.09, 0.06, 0.24, 0.19, 0.01, 0.10,
+                               0.10, 0.07, 0.07, 0.07}};
+
+        CellLayoutData ld[1][10] =
+        {{{STRING_FIXED,RESIZABLE, 0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN | FILL,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED,0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+        }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (1, 10);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_stock_double(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[2][11] = {{0.09, 0.06, 0.20, 0.14, 0.01,
+                               0.10, 0.10, 0.07, 0.07, 0.07, 0.09},
+                              {0.0, 0.15, 0.11, 0.74, 0.0,
+                               0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+
+        CellLayoutData ld[2][11] =
+        {{{STRING_FIXED, RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN | FILL,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED, 0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL}},
+         {{LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,1,0,1,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,2,0,10,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+         }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (2, 11);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
+static void
+layout_init_stock_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
+{
+        CellLayoutInfo *layout_info;
+        char date_str[128];
+        int i, j;
+
+        double perc[2][10] = {{0.09, 0.06, 0.24, 0.19, 0.01,
+                               0.10, 0.10, 0.07, 0.07, 0.07},
+                              {0.0, 0.15, 0.11, 0.74, 0.0,
+                               0.0, 0.0, 0.0, 0.0, 0.0}};
+
+        CellLayoutData ld[2][10] =
+        {{{STRING_FIXED, RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,date_str},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,3,0,5,0,0,0,0,0,0,0,NULL},
+          {CHARS_MIN,RESIZABLE,0,0,20,0,0,0,0,0,0,0,0,0,NULL},
+          {STRING_MIN | FILL,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,XFRM_STR},
+          {STRING_FIXED, 0,1,0,0,0,0,0,0,0,0,0,0,0,"R"},
+          {CHARS_MIN | CHARS_MAX,RESIZABLE,0,0,9,0,10,0,0,0,0,0,0,0,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL},
+          {SAME_SIZE,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,5,NULL}},
+         {{LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,1,0,1,0,0,NULL},
+          {LEFT_ALIGNED|RIGHT_ALIGNED,RESIZABLE,0,0,0,0,0,0,0,2,0,10,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+          {PIXELS_FIXED,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL},
+         }};
+
+        printDate(date_str, 29, 12, 2000);
+        strcat(date_str, "0");
+
+        layout_info = style_layout_info_new (style);
+
+        SET_CELL_LAYOUT_DATA (2, 10);
+
+        g_hash_table_insert (sheet->layout_info_hash_table,
+                             style_get_key (style), layout_info);
+
+        style->layout_info = layout_info;
+        layout_info->refcount++;
+}
+
 /* FIXME:  read this from a config file */
 /* keep this in sync with splitreg.c */
 void
 gnucash_style_layout_init (GnucashSheet *sheet, SheetBlockStyle *style)
 {
         CellLayoutInfo *layout_info;
-        char date_str[128];
 
-        printDate(date_str, 29, 12, 2000);
-        strcat(date_str, "0");
+        layout_info = g_hash_table_lookup (sheet->layout_info_hash_table,
+                                           style_get_key (style));
+
+        if (layout_info != NULL)
+        {
+                style->layout_info = layout_info;
+                layout_info->refcount++;
+
+                return;
+        }
 
         switch (style->reg_type) {
-        case BANK_REGISTER:
-        case CASH_REGISTER:
-        case ASSET_REGISTER:
-        case CREDIT_REGISTER:
-        case LIABILITY_REGISTER:
-        case INCOME_REGISTER:
-        case EXPENSE_REGISTER:
-        case EQUITY_REGISTER:
-        case INCOME_LEDGER: 
-        case GENERAL_LEDGER:
-                switch (style->cursor_type) {
-                case GNUCASH_CURSOR_HEADER:
-                case GNUCASH_CURSOR_SINGLE:
-                case GNUCASH_CURSOR_TRANS:
-                case GNUCASH_CURSOR_SPLIT:
-                        {
-                                int i, j;
-                                double perc[1][8] = {{0.10, 0.07, 0.25, 0.20, 0.02, 0.12, 0.12, 0.12}};
-                                CellLayoutData ld[1][8] =
-                                {{{STRING_FIXED, RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_MIN,  RESIZABLE, 0, 0, 0 ,0, 10 ,0,0,0,0,0, 0, 0, XFRM_STR},
-                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                }};
-
-                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
-
-                                if (!layout_info) {
-                                        layout_info = style_layout_info_new (style);
-
-                                        SET_CELL_LAYOUT_DATA (1, 8);
-
-                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
-                                }
-
-                                style->layout_info = layout_info;
-                                layout_info->refcount++;
+                case BANK_REGISTER:
+                case CASH_REGISTER:
+                case ASSET_REGISTER:
+                case CREDIT_REGISTER:
+                case LIABILITY_REGISTER:
+                case INCOME_REGISTER:
+                case EXPENSE_REGISTER:
+                case EQUITY_REGISTER:
+                        switch (style->cursor_type) {
+                                case GNUCASH_CURSOR_HEADER:
+                                case GNUCASH_CURSOR_SINGLE:
+                                case GNUCASH_CURSOR_TRANS:
+                                case GNUCASH_CURSOR_SPLIT:
+                                        layout_init_normal(sheet, style);
+                                        break;
+                                case GNUCASH_CURSOR_DOUBLE:
+                                        layout_init_double(sheet, style);
+                                        break;
+                                default:
+                                        break;
                         }
-                        
-                break;
-                case GNUCASH_CURSOR_DOUBLE:
-                        {
-                                int i, j;
-                                double perc[2][8] = {{0.10, 0.07, 0.25, 0.20, 0.02, 0.12, 0.12, 0.12},
-                                                     {0.10, 0.07, 0.83, 0.0, 0.0, 0.0, 0.0, 0.0}};
-                                CellLayoutData ld[2][8] =
-                                {{{STRING_FIXED,  RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_MIN,  RESIZABLE, 0, 0, 0 ,0,0 ,0,0,0,0,0, 0, 0, XFRM_STR},
-                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL}},
-                                  {{LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,1,0,1, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,2,0,7, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                }};
-
-                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
-
-                                if (!layout_info) {
-                                        layout_info = style_layout_info_new (style);
-
-                                        SET_CELL_LAYOUT_DATA (2, 8);
-
-                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
-                                }
-
-                                style->layout_info = layout_info;
-                                layout_info->refcount++;
-                        }
-
                         break;
-
+                case INCOME_LEDGER: 
+                case GENERAL_LEDGER:
+                case SEARCH_LEDGER:
+                        switch (style->cursor_type) {
+                                case GNUCASH_CURSOR_HEADER:
+                                case GNUCASH_CURSOR_SINGLE:
+                                case GNUCASH_CURSOR_TRANS:
+                                case GNUCASH_CURSOR_SPLIT:
+                                        layout_init_ledger(sheet, style);
+                                        break;
+                                case GNUCASH_CURSOR_DOUBLE:
+                                        layout_init_ledger_double(sheet, style);
+                                        break;
+                                default:
+                                        break;
+                        }
+                        break;
+                case STOCK_REGISTER:
+                case CURRENCY_REGISTER:
+                        switch (style->cursor_type) {
+                                case GNUCASH_CURSOR_HEADER:
+                                case GNUCASH_CURSOR_SINGLE:
+                                case GNUCASH_CURSOR_TRANS:
+                                case GNUCASH_CURSOR_SPLIT:
+                                        layout_init_stock(sheet, style);
+                                        break;
+                                case GNUCASH_CURSOR_DOUBLE:
+                                        layout_init_stock_double(sheet, style);
+                                        break;
+                        }
+                case PORTFOLIO_LEDGER:
+                        switch (style->cursor_type) {
+                                case GNUCASH_CURSOR_HEADER:
+                                case GNUCASH_CURSOR_SINGLE:
+                                case GNUCASH_CURSOR_TRANS:
+                                case GNUCASH_CURSOR_SPLIT:
+                                        layout_init_stock_ledger(sheet, style);
+                                        break;
+                                case GNUCASH_CURSOR_DOUBLE:
+                                        layout_init_stock_ledger_double(sheet, style);
+                                        break;
+                        }
                 default:
                         break;
-                }
-                break;
-        case STOCK_REGISTER:
-        case PORTFOLIO:
-        case CURRENCY_REGISTER:
-                switch (style->cursor_type)
-                {
-                case GNUCASH_CURSOR_HEADER:
-                case GNUCASH_CURSOR_SINGLE:
-                case GNUCASH_CURSOR_TRANS:
-                case GNUCASH_CURSOR_SPLIT:
-                {
-                                int i, j;
-                                double perc[1][11] = {{0.09, 0.06, 0.20, 0.14, 0.01, 0.10, 0.10, 0.07, 0.07, 0.07, 0.09}};
-                                CellLayoutData ld[1][11] =
-                                {{{STRING_FIXED,  RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {CHARS_MIN | FILL,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_MIN,  RESIZABLE, 0, 0, 0 ,0, 0 ,0,0,0,0,0, 0, 0, XFRM_STR},
-                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},                                  
-                                }};
-
-                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
-
-                                if (!layout_info) {
-                                        layout_info = style_layout_info_new (style);
-
-                                        SET_CELL_LAYOUT_DATA (1, 11);
-
-                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
-                                }
-
-                                style->layout_info = layout_info;
-                                layout_info->refcount++;
-
-                }
-                
-                break;
-                
-                case GNUCASH_CURSOR_DOUBLE:                        
-                        {
-                                int i, j;
-                                double perc[2][11] = {{0.09, 0.06, 0.20, 0.14, 0.01, 0.10, 0.10, 0.07, 0.07, 0.07, 0.09},
-                                {0.0, 0.15, 0.11, 0.74, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
-                                CellLayoutData ld[2][11] =
-                                {{{STRING_FIXED,  RESIZABLE, 0, 0,0,0,0,0,0,0,0,0, 0, 0, date_str},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 3, 0, 5,0,0,0,0,0, 0, 0, NULL},
-                                  {CHARS_MIN,  RESIZABLE, 0, 0,20,0,0,0,0,0,0,0, 0,0, NULL},
-                                  {STRING_MIN | FILL,  RESIZABLE, 0, 0, 0 ,0, 0 ,0,0,0,0,0, 0, 0, XFRM_STR},
-                                  {STRING_FIXED,  0, 1, 0,0,0,0,0,0,0,0,0, 0, 0, "R"},
-                                  {CHARS_MIN | CHARS_MAX,  RESIZABLE, 0, 0, 9,0, 10,0,0,0,0,0, 0, 0, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5, NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL},
-                                  {SAME_SIZE,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,5,  NULL}},                                  
-                                  {{LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,1,0,1, 0,0, NULL},
-                                   {LEFT_ALIGNED|RIGHT_ALIGNED,  RESIZABLE, 0, 0, 0,0,0,0,0,2,0,10, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                   {PIXELS_FIXED, 0, 0, 0, 0,0,0,0,0,0,0,0, 0,0, NULL},
-                                }};
-
-                                layout_info = g_hash_table_lookup (sheet->layout_info_hash_table, style_get_key (style));
-
-                                if (!layout_info) {
-                                        layout_info = style_layout_info_new (style);
-
-                                        SET_CELL_LAYOUT_DATA (2, 11);
-
-                                        g_hash_table_insert (sheet->layout_info_hash_table, style_get_key (style), layout_info);
-                                }
-
-                                style->layout_info = layout_info;
-                                layout_info->refcount++;
-                        }
-                        
-                        break;
-                }
-        default:
-                break;
         }
 }
 

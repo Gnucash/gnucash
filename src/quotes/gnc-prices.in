@@ -13,15 +13,13 @@
 
 # hack alert -- this pathname should *NOT* be hard-coded, nor should the
 #               ones below it.
-use lib '/usr/lib/gnucash';
-use lib '/usr/local/lib/gnucash';
-use lib '/opt/gnucash/lib/gnucash';
+use lib '@GNC_EXPANDED_LIBDIR@';
 use Quote;
 use gnucash;
 
 # --------------------------------------------------
 # @account_list = &account_flatlist ($account_group);
-# This routine accepts a pointer to a group, returns 
+# This rouine accepts a pointer to a group, returns 
 # a flat list of all of the children in the group.
 
 sub account_flatlist 
@@ -59,7 +57,6 @@ sub checkprice
   my $dayte = $_[1];
   my ($query, $datesecs, $earliest, $latest);
   my ($splitlist, $i, $split, $action);
-  my $retn_value = 0;
 
   $datesecs = gnucash::xaccScanDateS ($dayte);
   $earliest = $datesecs - 16*3600;        # subtract 16 hours
@@ -71,17 +68,17 @@ sub checkprice
 
   $i = 0;
   $split = gnucash::IthSplit ($splitlist, $i);
-  while ($split && ($retn_value == 0))
+  while ($split)
   {
     $action = gnucash::xaccSplitGetAction ($split);
-    if ($action eq "Price") { $retn_value = 1; }
+    if ($action eq "Price") { return 1; }
     $i++;
     $split = gnucash::IthSplit ($splitlist, $i);
   }
 
   gnucash::xaccFreeQuery ($query);
 
-  return $retn_value;
+  return 0;
 }
 
 # --------------------------------------------------
