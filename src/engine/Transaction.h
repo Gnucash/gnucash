@@ -522,9 +522,9 @@ int  xaccSplitDateOrder (Split *sa, Split *sb);
  * of comparisons also induces guile slowdowns.
  */
 
-int xaccSplitCompareAccountNames(Split *sa, Split *sb);
+int xaccSplitCompareAccountFullNames(Split *sa, Split *sb);
 int xaccSplitCompareAccountCodes(Split *sa, Split *sb);
-int xaccSplitCompareOtherAccountNames(Split *sa, Split *sb);
+int xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb);
 int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
 
 
@@ -538,6 +538,7 @@ int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
  * is silly. 
  */
 
+char * xaccSplitGetCorrAccountFullName(Split *sa, char seperator);
 const char * xaccSplitGetCorrAccountName(Split *sa);
 const char * xaccSplitGetCorrAccountCode(Split *sa);
 

@@ -811,16 +811,15 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
     }
     break;
 
-  case BY_ACCOUNT_NAME:
-    return xaccSplitCompareAccountCodes(sa,sb);
-    break;
-
+  case BY_ACCOUNT_FULL_NAME:
+    return xaccSplitCompareAccountFullNames(sa, sb);
+    
   case BY_ACCOUNT_CODE:
-    return xaccSplitCompareAccountNames(sa, sb);
+    return xaccSplitCompareAccountCodes(sa, sb);
     break;
 
-  case BY_CORR_ACCOUNT_NAME:
-    return xaccSplitCompareOtherAccountNames(sa, sb);
+  case BY_CORR_ACCOUNT_FULL_NAME:
+    return xaccSplitCompareOtherAccountFullNames(sa, sb);
 
   case BY_CORR_ACCOUNT_CODE:
     return xaccSplitCompareOtherAccountCodes(sa, sb);

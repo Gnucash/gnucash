@@ -161,6 +161,11 @@
 	       separator
 	       (gnc:account-get-name account)))))))
 
+(define (gnc:split-get-corr-account-full-name split)
+  (let ((separator (string-ref (gnc:account-separator-char) 0)))
+    (gnc:split-get-corr-account-full-name-internal split separator)))
+
+
 ;; get children that are the direct descendant of this acct
 (define (gnc:account-get-immediate-subaccounts acct)
   (define (acctptr-eq? a1 a2)

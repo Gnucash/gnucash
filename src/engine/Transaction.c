@@ -2006,6 +2006,27 @@ xaccSplitGetCorrAccountName(Split *sa)
   }
 }
 
+char *
+xaccSplitGetCorrAccountFullName(Split *sa, char separator)
+{
+  static const char *split_const = NULL;
+  Split *other_split;
+  Account *other_split_acc;
+
+  if(get_corr_account_split(sa, &other_split))
+  {
+    if (!split_const)
+      split_const = _("-- Split Transaction --");
+
+    return g_strdup(split_const);
+  }
+  else
+  {
+    other_split_acc = xaccSplitGetAccount(other_split);
+    return xaccAccountGetFullName(other_split_acc, separator);
+  }
+}
+
 const char *
 xaccSplitGetCorrAccountCode(Split *sa)
 {
@@ -2028,18 +2049,27 @@ xaccSplitGetCorrAccountCode(Split *sa)
 }
 
 int 
-xaccSplitCompareAccountNames(Split *sa, Split *sb)
+xaccSplitCompareAccountFullNames(Split *sa, Split *sb)
 {
   Account *aa, *ab;
+  char *full_a, *full_b;
+  int retval;
   if (!sa && !sb) return 0;
   if (!sa) return -1;
   if (!sb) return 1;
 
   aa = xaccSplitGetAccount(sa);
   ab = xaccSplitGetAccount(sb);
-  
-  return safe_strcmp(xaccAccountGetName(aa), xaccAccountGetName(ab));
+  full_a = xaccAccountGetFullName(aa, ':');
+  full_b = xaccAccountGetFullName(ab, ':');
+  /* for comparison purposes it doesn't matter what we use as a separator */
+  retval = safe_strcmp(full_a, full_b);
+  g_free(full_a);
+  g_free(full_b);
+  return retval;
+
 }
+
 
 int 
 xaccSplitCompareAccountCodes(Split *sa, Split *sb)
@@ -2056,16 +2086,24 @@ xaccSplitCompareAccountCodes(Split *sa, Split *sb)
 }
 
 int 
-xaccSplitCompareOtherAccountNames(Split *sa, Split *sb)
+xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb)
 {
-  const char *ca, *cb; 
+  char *ca, *cb; 
+  int retval;
   if (!sa && !sb) return 0;
   if (!sa) return -1;
   if (!sb) return 1;
 
-  ca = xaccSplitGetCorrAccountName(sa);
-  cb = xaccSplitGetCorrAccountName(sb);
-  return safe_strcmp(ca, cb);
+  /* doesn't matter what separator we use
+   * as long as they are the same 
+   */
+
+  ca = xaccSplitGetCorrAccountFullName(sa, ':');
+  cb = xaccSplitGetCorrAccountFullName(sb, ':');
+  retval = safe_strcmp(ca, cb);
+  g_free(ca);
+  g_free(cb);
+  return retval;
 }
 
 int

@@ -1,3 +1,21 @@
+2001-04-12  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/Transaction.[ch] (xaccSplitGetCorrAccountFullName): new
+	functions.  (xaccSplitCompareAccountNames): rename
+	to xaccSplitCompareAccountFullNames and compare using full names.
+	(xaccSplitCompareOtherAccountNames): renaming as above.
+
+	* src/engine/Query.[ch]: rename sort enumeration values.
+
+	* src/guile/gnc.gwp: update to match above changes.
+
+	* src/scm/report-utilities.scm (gnc:split-get-corr-account-full-name):
+	new function.
+
+	* src/scm/report/transaction-report.scm: use above changes to sort
+	and optionally display full account names.  Fix unrelated bugs with 
+	sorting options.
+
 2001-04-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/hello-world.scm: add a menu tip as an example
