@@ -483,7 +483,13 @@ readTransaction( int fd, Account *acc, int token )
   int acc_id;
   Date *date;
   int dummy_category;
-  Transaction *trans = mallocTransaction();
+  Transaction *trans = 0x0;
+  Split *split;
+
+  /* create a transaction structure with at least one split */
+  trans = mallocTransaction();
+  split = mallocSplit();
+  xaccAppendSplit (trans, split);
   
   ENTER ("readTransaction");
 
@@ -579,7 +585,7 @@ readTransaction( int fd, Account *acc, int token )
       return NULL;
       }
     XACC_FLIP_INT (amount);
-    trans->damount = 0.01 * ((double) amount); /* file stores pennies */
+    split->damount = 0.01 * ((double) amount); /* file stores pennies */
   } else {
     double damount;
 
@@ -592,7 +598,7 @@ readTransaction( int fd, Account *acc, int token )
       return NULL;
       }
     XACC_FLIP_DOUBLE (damount);
-    trans->damount = damount;
+    split->damount = damount;
 
     /* ... next read the share price ... */
     err = read( fd, &damount, sizeof(double) );
@@ -603,8 +609,13 @@ readTransaction( int fd, Account *acc, int token )
       return NULL;
       }
     XACC_FLIP_DOUBLE (damount);
-    trans->share_price = damount;
+    split->share_price = damount;
   }  
+
+  /* temp hack till splits fully implemented */
+  trans->damount = split->damount;
+  trans->share_price = split->share_price;
+
   INFO_2 ("readTransaction(): amount %f \n", trans->damount);
 
   /* Read the account numbers for double-entry */
@@ -639,7 +650,7 @@ readTransaction( int fd, Account *acc, int token )
     XACC_FLIP_INT (acc_id);
     INFO_2 ("readTransaction(): debit %d\n", acc_id);
     peer_acc = locateAccount (acc_id);
-    trans -> debit = (struct _account *) peer_acc;
+    split -> debit = (struct _account *) peer_acc;
 
     /* insert the transaction into both the debit and 
      * the credit accounts; next, the debit ... */
