@@ -10,6 +10,10 @@
 	  of an item.
 	* src/gnome-utils/search-param.[ch]: fix the spelling of resizeable
 
+	* src/gnome-utils/gnc-query-list.c: we can't use a reversed list
+	  and prepend() because then we're always adding row 0 so the
+	  saved checkmarks fail.  So, use the slow way and use 'append()'.
+	
 2003-05-12  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-check.in: 

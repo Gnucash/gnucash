@@ -767,7 +767,6 @@ gnc_query_list_fill(GNCQueryList *list)
 
   /* Reverse the list now because 'append()' takes too long */
   entries = gncQueryRun(list->query);
-  entries = g_list_reverse(entries);
   
   for (item = entries; item; item = item->next)
   {
@@ -809,7 +808,7 @@ gnc_query_list_fill(GNCQueryList *list)
 	strings[i++] = gncQueryCoreToString (type, res, fcn);
     }
 
-    row = gtk_clist_prepend (GTK_CLIST(list), (gchar **) strings);
+    row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);
     gtk_clist_set_row_data (GTK_CLIST(list), row, item->data);
 
     /* Free up our strings */
@@ -828,9 +827,6 @@ gnc_query_list_fill(GNCQueryList *list)
 
     list->num_entries++;
   }
-
-  /* Reverse the list again for the query code */
-  g_list_reverse(entries);
 }
 
 /********************************************************************\
