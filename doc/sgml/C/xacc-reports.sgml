@@ -113,7 +113,7 @@ Multicolumn View</link> special report.</para></sect1>
 <title>Web Pages as reports</title>
 <para>You can view web pages as a special sort of report - very convenient
 for keeping all the financial information you need, including from external
-sources, in the one place.  Use the <link linkend="xacc-frame-urlreport">
+sources, in the one place.  Use the <link linkend="xacc-gnucash-web-browser">
 Frame URL Report</link> to do so.
 </para></sect1>
 

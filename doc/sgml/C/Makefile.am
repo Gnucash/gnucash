@@ -56,6 +56,7 @@ GNUCASH_SGML_FILES = \
 	xacc-txf-export.sgml \
 	xacc-txf-export-anomalies.sgml \
 	xacc-userdocs.sgml \
+	xacc-whats-new.sgml \
 	xacc-y2k.sgml
 
 gnucash_html_dir = $(top_srcdir)/doc/html/C

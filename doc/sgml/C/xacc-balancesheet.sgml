@@ -1,43 +1,43 @@
-<ARTICLE ID="XACC-BALANCESHEET">
-<ARTHEADER>
-<TITLE>Balance Sheet</TITLE>
-</ARTHEADER>
-<SECT1>
-<TITLE> Balance Sheet</TITLE>
-<PARA>    <INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/report-baln.png">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT> 
-
-    </PARA>
-<PARA>This report summarizes your assets, liabilities, and
-    equity.  When your books are properly maintained, your assets
-should equal the sum of your liabilities and equity.  If that 
-is not the case, there is some kind of internal imbalance in 
-your accounts.
-<para>Options available for this report include:
-<itemizedlist>
-	<listitem><para><emphasis><link linkend="xacc-options-accounts">
+  <ARTICLE ID="XACC-BALANCESHEET">
+    <ARTHEADER>
+      <TITLE>Balance Sheet</TITLE>
+    </ARTHEADER>
+    <SECT1>
+      <TITLE> Balance Sheet</TITLE>
+      <PARA>    <INLINEMEDIAOBJECT>
+	  <IMAGEOBJECT>
+	    <IMAGEDATA FILEREF="image/report-baln.png">
+	  </IMAGEOBJECT>
+	</INLINEMEDIAOBJECT> 
+	
+      </PARA>
+      <PARA>This report summarizes your assets, liabilities, and
+	equity.  When your books are properly maintained, your assets
+	should equal the sum of your liabilities and equity.  If that 
+	is not the case, there is some kind of internal imbalance in 
+	your accounts.
+      <para>Options available for this report include:
+	<itemizedlist>
+	  <listitem><para><emphasis><link linkend="xacc-options-accounts">
 		  Accounts</link></emphasis></para>
 	  </listitem>
 	  <listitem><para><emphasis><link linkend="xacc-options-depth">
 		  Depth</link></emphasis></para>
 	  </listitem>
-	<listitem><para><emphasis><link linkend="xacc-options-report-title">
-		Report Title</link></emphasis></para></listitem>
-	<listitem><para><emphasis><link linkend="xacc-options-date">
+	  <listitem><para><emphasis><link linkend="xacc-options-report-title">
+		  Report Title</link></emphasis></para></listitem>
+	  <listitem><para><emphasis><link linkend="xacc-options-date">
 		  Date</link></emphasis></para></listitem>
-	<listitem><para><emphasis><link linkend="xacc-options-style-sheet">
-		Style Sheet</link></emphasis></para>
-	</listitem>
-	<listitem><para><emphasis><link linkend="xacc-options-price-source">
-		Price Source</link></emphasis></para>
-	</listitem>
-	<listitem><para><emphasis>Add More!!!
+	  <listitem><para><emphasis><link linkend="xacc-options-style-sheet">
+		  Style Sheet</link></emphasis></para>
+	  </listitem>
+	  <listitem><para><emphasis><link linkend="xacc-options-price-source">
+		  Price Source</link></emphasis></para>
+	  </listitem>
+	  <listitem><para><emphasis>Add More!!!
 	      </emphasis></para>
-	</listitem>
-
+	  </listitem>
+	</itemizedlist>
 <PARA>Note that while you <EMPHASIS>can</EMPHASIS> select specific
 accounts for this report, unless you know exactly what you are 
 doing it is unwise and highly likely to give you misleading and

@@ -5,6 +5,8 @@
 
 2001-05-21  Robert Graham Merkel  <rgmerk@mira.net>
 
+	* doc/sgml/C/xacc-whats-new.sgml: New file.
+	
 	* doc/sgml/C/xacc-multicolumn-view-reports.sgml: preliminary
 	description.
 

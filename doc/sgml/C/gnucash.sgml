@@ -48,6 +48,7 @@
 <!entity xacctxfexport system "xacc-txf-export.sgml">
 <!entity xaccdochack system "xacc-dochack.sgml">
 <!entity xaccscheme system "xacc-scheme.sgml">
+<!entity xaccwhatsnew system "xacc-whats-new.sgml">
 <!entity xaccy2k system "xacc-y2k.sgml">
 <!entity xaccgpl system "xacc-gpl.sgml">
 <!entity bofamym system "bofa-mym.sgml">
@@ -104,6 +105,7 @@
 &xaccscheme;
 &xaccstockpricereport;
 &xaccrepdev;
+&xaccwhatsnew;
 &xaccy2k;
 &xaccgpl;
 &bofamym;
