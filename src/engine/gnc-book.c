@@ -66,24 +66,6 @@ static short module = MOD_ENGINE;
 
 /* ====================================================================== */
 
-#define GNC_COMMODITY_TABLE "gnc_commodity_table"
-gnc_commodity_table *
-gnc_book_get_commodity_table(GNCBook *book)
-{
-  if (!book) return NULL;
-printf ("duude get commodity table\n");
-  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
-}
-
-static void
-gnc_book_set_commodity_table(GNCBook *book, gnc_commodity_table *ct)
-{
-  if (!book) return;
-  gnc_book_set_data (book, GNC_COMMODITY_TABLE, ct);
-}
-
-/* ====================================================================== */
-
 #define GNC_TOP_GROUP "gnc_top_group"
 AccountGroup * 
 gnc_book_get_group (GNCBook *book)
@@ -229,7 +211,7 @@ gnc_book_populate (GNCBook *book)
   {
     PWARN("unable to initialize book's commodity_table");
   }
-  gnc_book_set_commodity_table (book, ct);
+  gnc_commodity_table_set_table (book, ct);
   
   gnc_book_set_group (book, xaccMallocAccountGroup(book));
   
@@ -246,7 +228,6 @@ gnc_book_depopulate (GNCBook *book)
 {
   AccountGroup *grp;
   gnc_commodity_table *ct;
-  GNCPriceDB *db;
 
   /* unhook the top-level group */
   grp = gnc_book_get_group (book);
@@ -255,13 +236,11 @@ gnc_book_depopulate (GNCBook *book)
   gnc_book_set_group (book, NULL);
 
   /* unhook the prices */
-  db = gnc_book_get_pricedb (book);
-  gnc_pricedb_destroy (db);
   gnc_pricedb_set_db (book, NULL);
 
-  ct = gnc_book_get_commodity_table (book);
+  ct = gnc_commodity_table_get_table (book);
   gnc_commodity_table_destroy (ct);
-  gnc_book_set_commodity_table (book, NULL);
+  gnc_commodity_table_set_table (book, NULL);
 
   /* FIXME: destroy SX data members here, too */
 }

@@ -1,7 +1,7 @@
 /********************************************************************
  * gnc-commodity.c -- api for tradable commodities (incl. currency) *
  * Copyright (C) 2000 Bill Gribble                                  *
- * Copyright (C) 2001 Linas Vepstas                                 *
+ * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <glib.h>
 
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "guid.h"
@@ -508,6 +509,26 @@ gnc_commodity_table_new(void)
   gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
   retval->table = g_hash_table_new(&g_str_hash, &g_str_equal);
   return retval;
+}
+
+/********************************************************************
+ * book anchor functons
+ ********************************************************************/
+
+#define GNC_COMMODITY_TABLE "gnc_commodity_table"
+gnc_commodity_table *
+gnc_commodity_table_get_table(GNCBook *book)
+{
+  if (!book) return NULL;
+printf ("duude get commodity table\n");
+  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
+}
+
+void
+gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct)
+{
+  if (!book) return;
+  gnc_book_set_data (book, GNC_COMMODITY_TABLE, ct);
 }
 
 /********************************************************************

@@ -1,6 +1,5 @@
 /********************************************************************
  * gnc-commodity.h -- API for tradable commodities (incl. currency) *
- * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -41,6 +40,7 @@
 #define GNC_COMMODITY_H
 
 #include <glib.h>
+#include "gnc-book.h"
 #include "gnc-engine.h"
 
 /** The commodity namespace definitions are used to tag a commodity by
@@ -408,16 +408,34 @@ gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
 /** @} */
 
 
+/* =============================================================== */
 /** @name Commodity Table Creation */
 /** @{ */
 
 /* gnc_commodity_table functions : operate on a database of commodity
  * info */
 
+/** You proably shouldn't be using gnc_commodity_table_new() directly,
+ * its for internal use only. You should probably be using
+ * gnc_commodity_table_get_table()
+ */
 gnc_commodity_table * gnc_commodity_table_new(void);
 void          gnc_commodity_table_destroy(gnc_commodity_table * table);
+
+/** Returns the commodity table assoicated with a book.
+ */
+gnc_commodity_table * gnc_commodity_table_get_table(GNCBook *book);
+
+/** You should probably not be using gnc_commodity_table_set_table()
+ * directly.  Its for internal use only.
+ */
+void gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct);
+
 /** @} */
 
+
+/* XXX backwards compat function; remove me someday */
+#define gnc_book_get_commodity_table gnc_commodity_table_get_table
 
 
 /** @name Commodity Table Comparison */
