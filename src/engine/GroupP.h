@@ -61,17 +61,6 @@ struct account_group_s
   gint32 editlevel;
 };
 
-/* 
- * The xaccGroupSetBook() routine merely sets the 'book' member
- *    in the structure above.  It does not actually invoke the
- *    backend to physically move the group from one book to another,
- *    and thus is a 'dangerous' routine, because it may not have
- *    the effect that the user was intending (of actually moving 
- *    the book).  
- */
-
-void xaccGroupSetBook (AccountGroup *group, GNCBook *book);
-
 /*
  * The xaccAccountRemoveGroup() subroutine will remove the indicated
  *    account group from its parent account. It will NOT free the

@@ -182,13 +182,26 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
   if (!book) return;
 
   /* Do not free the old topgroup here unless you also fix
-   * all the other uses of gnc_book_set_group! */
+   * all the other uses of gnc_book_set_group! 
+   */
 
   if (book->topgroup == grp)
     return;
 
-  xaccGroupSetBook (book->topgroup, NULL);
-  xaccGroupSetBook (grp, book);
+  if (grp->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+  /* Note: code that used to be here to set/reset the book
+   * a group belonged to was removed, mostly because it 
+   * was wrong: You can't just change the book a group
+   * belongs to without also dealing with the entity
+   * tables.  The previous code would have allowed entity
+   * tables to reside in one book, while the groups were 
+   * in another.  Note: please remove this comment sometime 
+   * after gnucash-1.8 goes out.
+   */
 
   book->topgroup = grp;
 }
@@ -268,8 +281,11 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
   if (book->template_group == templateGroup)
     return;
 
-  xaccGroupSetBook (book->template_group, NULL);
-  xaccGroupSetBook (templateGroup, book);
+  if (templateGroup->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
 
   book->template_group = templateGroup;
 }

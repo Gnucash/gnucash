@@ -466,6 +466,13 @@ xaccAccountGetVersion (Account *acc)
   return (acc->version);
 }
 
+GNCBook *
+xaccAccountGetBook (Account *account)
+{
+  if (!account) return NULL;
+  return account->book;
+}
+
 /********************************************************************\
 \********************************************************************/
 

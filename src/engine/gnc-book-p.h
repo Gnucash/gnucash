@@ -72,6 +72,14 @@ struct gnc_book_struct
   Backend *backend;
 };
 
+/*
+ * These gnc_book_set_*() routines are used by backends to 
+ *    initialize the pointers in the book structure to 
+ *    soemthing that contains actual data.  These routines 
+ *    should not be used otherwise.  (Its somewhat questionable
+ *    if the backends should even be doing this much, but for
+ *    backwards compatibility, we leave these here.)
+ */
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 void gnc_book_set_schedxactions( GNCBook *book, GList *newList );

@@ -212,36 +212,6 @@ xaccGroupGetBook (AccountGroup *group)
   return group->book;
 }
 
-void
-xaccGroupSetBook (AccountGroup *group, GNCBook *book)
-{
-  GList *node;
-
-  if (!group) return;
-
-  group->book = book;
-
-  for (node = group->accounts; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    xaccGroupSetBook (account->children, book); 
-  }
-}
-
-GNCBook *
-xaccAccountGetBook (Account *account)
-{
-  AccountGroup *group;
-
-  if (!account) return NULL;
-
-  group = xaccAccountGetParent (account);
-  if (!group) return NULL;
-
-  return group->book;
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -653,8 +623,6 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
-  xaccGroupSetBook (acc->children, NULL);
-
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
@@ -716,7 +684,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
     {
       xaccGroupRemoveAccount (acc->parent, acc);
 
-      /* switch over betwen books, if needed */
+      /* switch over between books, if needed */
       if (grp->book != acc->book)
       {
 // xxxxxxxxxxxxxxxxxxxxxxx
@@ -728,6 +696,8 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           *  
           * A 'correct' implementation similar to this is in Period.c
           * except its for transactions ...
+          *
+          * Note also, we need to reparent the children to the new book as well.
           */
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
@@ -750,8 +720,6 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   }
 
   grp->saved = 0;
-
-  xaccGroupSetBook (acc->children, grp->book);
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }

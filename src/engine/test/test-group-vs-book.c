@@ -90,11 +90,14 @@ run_test (void)
 
   gnc_book_set_group (book, group2);
 
+#if 0
+  /* a group cannot have a 'null' book; this test is nonsense. */
   if (!group_has_book (group1, NULL))
   {
     failure("gnc_book_set_group didn't clear old");
     exit(get_rv());
   }
+#endif
 
   if (!group_has_book (group2, book))
   {
@@ -137,11 +140,14 @@ run_test (void)
     exit(get_rv());
   }
 
+#if 0
+  /* a group cannot have a 'null' book; this test is nonsense. */
   if (!group_has_book (xaccAccountGetParent (account2), NULL))
   {
     failure("remove group didn't clear book");
     exit(get_rv());
   }
+#endif
 }
 
 static void
