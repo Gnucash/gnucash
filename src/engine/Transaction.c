@@ -749,7 +749,7 @@ void
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("split=%p old amt=%lld/%lld new amt=%lld/%lld", s,
+  ENTER ("(split=%p) old amt=%lld/%lld new amt=%lld/%lld", s,
         s->amount.num, s->amount.denom, amt.num, amt.denom);
 
   check_open (s->parent);
@@ -764,7 +764,7 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("split=%p old val=%lld/%lld new val=%lld/%lld", s,
+  ENTER ("(split=%p) old val=%lld/%lld new val=%lld/%lld", s,
         s->value.num, s->value.denom, amt.num, amt.denom);
 
   check_open (s->parent);
@@ -1006,7 +1006,7 @@ xaccFreeTransaction (Transaction *trans)
 
   if (!trans) return;
 
-  ENTER ("addr=%p", trans);
+  ENTER ("(addr=%p)", trans);
   if (((char *) 1) == trans->num)
   {
     PERR ("double-free %p", trans);
@@ -1044,7 +1044,7 @@ xaccFreeTransaction (Transaction *trans)
   qof_instance_release (&trans->inst);
   g_free(trans);
 
-  LEAVE ("addr=%p", trans);
+  LEAVE ("(addr=%p)", trans);
 }
 
 /********************************************************************
@@ -1379,11 +1379,20 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 gnc_numeric
 xaccTransGetImbalance (const Transaction * trans)
 {
-  if (!trans)
-    return gnc_numeric_zero ();
+  GList *node;
+  gnc_numeric imbal = gnc_numeric_zero();
+  if (!trans) return imbal;
 
-  return xaccSplitsComputeValue (trans->splits, NULL, 
-        trans->common_currency);
+  ENTER("(trans=%p)", trans);
+
+  for (node=trans->splits; node; node=node->next)
+  {
+    Split *s = node->data;
+    imbal = gnc_numeric_add(imbal, xaccSplitGetValue(s),
+                              GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+  }
+  LEAVE("(trans=%p) imbal=%s", trans, gnc_num_dbg_to_string(imbal));
+  return imbal;
 }
 
 gnc_numeric
@@ -1402,7 +1411,7 @@ xaccTransGetAccountValue (const Transaction *trans,
     Account *a = xaccSplitGetAccount (s);
     if (a == account)
       total = gnc_numeric_add (total, xaccSplitGetValue (s),
-                               GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+                               GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
   }
   return total;
 }
@@ -1654,7 +1663,7 @@ xaccTransCommitEdit (Transaction *trans)
    trans->inst.editlevel--;
 
    gen_event_trans (trans);
-   LEAVE ("trans addr=%p\n", trans);
+   LEAVE ("(trans=%p)", trans);
 }
 
 /* Ughhh. The Rollback function is terribly complex, and, what's worse,
