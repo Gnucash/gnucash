@@ -6,7 +6,6 @@ include(`table.m4')
 divert
 
 store_one_only(account)
-store_one_only(checkpoint)
 store_one_only(modity)
 store_one_only(session)
 store_one_only(split)

@@ -218,7 +218,7 @@ define(`store_one_only',
  * It just pokes the data in.
  */
 
-static void 
+void 
 pgendStoreOne`'func_name($@)`'Only (PGBackend *be,
                      xacc_type($@) *ptr,
                      sqlBuild_QType update)
@@ -250,7 +250,7 @@ define(`compare_one_only',
  * It does not do any traversals, it does not lock.  
  */
 
-static int
+int
 pgendCompareOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
 {
    const char *buf;
@@ -295,7 +295,7 @@ define(`put_one_only',
  * It just updates.
  */
 
-static void 
+void 
 pgendPutOne`'func_name($@)`'Only (PGBackend *be, xacc_type($@) *ptr)
 {
    int ndiffs;
@@ -328,7 +328,7 @@ define(`compare_version',
  * two are equal.
  */
 
-static int 
+int 
 pgend`'func_name($@)`'CompareVersion (PGBackend *be, xacc_type($@) *ptr)
 {
    char *p;
@@ -356,7 +356,7 @@ define(`is_deleted',
  * otherwise it returns -1.
  */ 
 
-static int 
+int 
 pgend`'func_name($@)`'GetDeletedVersion (PGBackend *be, xacc_type($@) *ptr)
 {
    char *p;
@@ -382,7 +382,7 @@ define(`store_audit',
  * It just pokes the data in. 
  */
 
-static void 
+void 
 pgendStoreAudit`'func_name($@)`' (PGBackend *be,
                      xacc_type($@) *ptr,
                      sqlBuild_QType update)

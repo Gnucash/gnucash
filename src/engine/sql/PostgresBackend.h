@@ -110,5 +110,18 @@ struct _pgend {
  */
 Backend * pgendNew (void);
 
+void pgendDisable (PGBackend *be);
+void pgendEnable (PGBackend *be);
+
+void pgendStoreOneTransactionOnly (PGBackend *be, Transaction *ptr, sqlBuild_QType update);
+void pgendPutOneSplitOnly (PGBackend *be, Split *ptr);
+void pgendPutOneTransactionOnly (PGBackend *be, Transaction *ptr);
+
+int pgendTransactionCompareVersion (PGBackend *be, Transaction *ptr);
+
+void pgendStoreAuditSplit (PGBackend *be, Split *ptr, sqlBuild_QType update);
+void pgendStoreAuditTransaction (PGBackend *be, Transaction *ptr, sqlBuild_QType update);
+
+int pgendTransactionGetDeletedVersion (PGBackend *be, Transaction *ptr);
 
 #endif /* __POSTGRES_BACKEND_H__ */
