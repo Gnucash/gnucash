@@ -125,7 +125,7 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
 	    gnc_numeric val = xaccSplitGetValue(spl);
 
-            if(!gnc_numeric_eq(*num, val))
+            if(!gnc_numeric_equal(*num, val))
             {
                 g_free(num);
                 return g_strdup_printf ("values differ: %lld/%lld v %lld/%lld",
@@ -139,12 +139,12 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
             gnc_numeric *num = dom_tree_to_gnc_numeric(mark);
 	    gnc_numeric val = xaccSplitGetAmount(spl);
 
-            if ( gnc_numeric_equal(*num, val)) {
+            if (!gnc_numeric_equal(*num, val)) {
               return g_strdup_printf( "quantities differ under _equal: %lld/%lld v %lld/%lld",
                                       (*num).num, (*num).denom,
                                       val.num, val.denom );
             }
-            if(!gnc_numeric_eq(*num, val))
+            if(!gnc_numeric_equal(*num, val))
             {
                 g_free(num);
                 return g_strdup_printf ("quantities differ: %lld/%lld v %lld/%lld",

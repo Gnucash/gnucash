@@ -1,3 +1,8 @@
+2002-10-14  Derek Atkins  <derek@ihtfp.com>
+	* src/backend/file/test-xml-transaction.c -- use gnc_numeric_equal()
+	  to compare split value and quantities in tests, because Splits can
+	  adjust those values based on the commodity.
+
 2002-10-14  Chris Lyttle  <chris@wilddev.net>
 
 	* src/import-export/Makefile.am: fix make dist breakage
