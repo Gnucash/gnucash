@@ -51,7 +51,8 @@ static gpointer
 iguid_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
   int iguid = atoi (DB_GET_VAL ("iguid", 0));
-  return (gpointer) iguid;
+  guint32 ret = iguid;
+  return GUINT_TO_POINTER (ret);
 }
 
 
@@ -62,7 +63,9 @@ pgendNewGUIDidx (PGBackend *be)
    char * p;
 
    p = "SELECT nextval('gnc_iguid_seq') AS iguid;";
-   iguid = (guint32) pgendGetResults (be, iguid_cb, (gpointer) 0);
+   SEND_QUERY (be, p, 0);
+   iguid = GPOINTER_TO_UINT (pgendGetResults (be, iguid_cb,
+                                              GUINT_TO_POINTER (0)));
    return iguid;
 }
 
