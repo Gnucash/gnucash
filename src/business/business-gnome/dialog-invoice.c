@@ -50,10 +50,13 @@ typedef struct _invoice_window {
 
   GtkWidget *	id_entry;
   GtkWidget *	terms_entry;
-  GtkWidget *	owner_choice;
   GtkWidget *	notes_text;
   GtkWidget *	opened_date;
   GtkWidget *	active_check;
+
+  GtkWidget *	owner_box;
+  GtkWidget *	owner_label;
+  GtkWidget *	owner_choice;
 
   GnucashRegister *	reg;
   GncEntryLedger *	ledger;
@@ -295,10 +298,10 @@ gnc_invoice_window_pay_invoice_cb (GtkWidget *widget, gpointer data)
   acct_label = _("Pay to Account");
 
   /* Add "appropriate" accounts */
-  acct_types = g_list_prepend (NULL, BANK);
-  acct_types = g_list_prepend (acct_types, CASH);
-  acct_types = g_list_prepend (acct_types, ASSET);
-  acct_types = g_list_prepend (acct_types, LIABILITY);
+  acct_types = g_list_prepend (NULL, (gpointer)BANK);
+  acct_types = g_list_prepend (acct_types, (gpointer)CASH);
+  acct_types = g_list_prepend (acct_types, (gpointer)ASSET);
+  acct_types = g_list_prepend (acct_types, (gpointer)LIABILITY);
 
   timespecFromTime_t (&paid_date, time(NULL));
   if (!gnc_dialog_date_acct_parented (iw->dialog, message, date_label,
@@ -445,6 +448,29 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   invoice = iw_get_invoice (iw);
   owner = gncInvoiceGetOwner (invoice);
 
+  if (iw->owner_choice) {
+    gtk_container_remove (GTK_CONTAINER (iw->owner_box), iw->owner_choice);
+    gtk_object_destroy (GTK_OBJECT (iw->owner_choice));
+  }
+
+  switch (iw->dialog_type) {
+  case VIEW_INVOICE:
+  case EDIT_INVOICE:
+    iw->owner_choice =
+      gnc_owner_edit_create (iw->owner_label, iw->owner_box, iw->book,
+			     owner);
+    break;
+  case NEW_INVOICE:
+    iw->owner_choice =
+      gnc_owner_select_create (iw->owner_label, iw->owner_box, iw->book,
+			       owner);
+    break;
+  }
+
+  gtk_signal_connect (GTK_OBJECT (iw->owner_choice), "changed",
+		      GTK_SIGNAL_FUNC (gnc_invoice_owner_changed_cb),
+		      iw);
+
   gtk_widget_show_all (iw->dialog);
 
   paid_date = glade_xml_get_widget (iw->xml, "paid_date");
@@ -587,7 +613,7 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
 {
   InvoiceWindow *iw;
   GladeXML *xml;
-  GtkWidget *label, *hbox, *vbox, *regWidget;
+  GtkWidget *vbox, *regWidget;
   GncEntryLedger *entry_ledger = NULL;
   GnomeDialog *iwd;
 
@@ -618,9 +644,8 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   iw->notes_text = glade_xml_get_widget (xml, "notes_text");
   iw->opened_date = glade_xml_get_widget (xml, "opened_date");
   iw->active_check = glade_xml_get_widget (xml, "active_check");
-
-  hbox = glade_xml_get_widget (xml, "owner_hbox");
-  label = glade_xml_get_widget (xml, "owner_label");
+  iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
+  iw->owner_label = glade_xml_get_widget (xml, "owner_label");
 
   /* default to ok */
   gnome_dialog_editable_enters (iwd, GTK_EDITABLE (iw->id_entry));
@@ -694,7 +719,6 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
       class_name = DIALOG_VIEW_INVOICE_CM_CLASS;
       /* FALLTHROUGH */
     case EDIT_INVOICE:
-      iw->owner_choice = gnc_owner_edit_create (label, hbox, bookp, owner);
       gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
       
       if (class_name == NULL)
@@ -702,7 +726,6 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
       break;
 
     case NEW_INVOICE:
-      iw->owner_choice = gnc_owner_select_create (label, hbox, bookp, owner);
       gtk_entry_set_text (GTK_ENTRY (iw->id_entry),
 			  g_strdup_printf ("%.6d", gncInvoiceNextID(bookp)));
       
@@ -720,10 +743,6 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  gtk_signal_connect (GTK_OBJECT (iw->owner_choice), "changed",
-		      GTK_SIGNAL_FUNC (gnc_invoice_owner_changed_cb),
-		      iw);
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 

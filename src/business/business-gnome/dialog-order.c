@@ -51,11 +51,14 @@ typedef struct _order_window {
 
   GtkWidget *	id_entry;
   GtkWidget *	ref_entry;
-  GtkWidget *	owner_choice;
   GtkWidget *	notes_text;
   GtkWidget *	opened_date;
   GtkWidget *	closed_date;
   GtkWidget *	active_check;
+
+  GtkWidget *	owner_box;
+  GtkWidget *	owner_label;
+  GtkWidget *	owner_choice;
 
   GnucashRegister *	reg;
   GncEntryLedger *	ledger;
@@ -416,6 +419,29 @@ gnc_order_update_window (OrderWindow *ow)
   order = ow_get_order (ow);
   owner = gncOrderGetOwner (order);
 
+  if (ow->owner_choice) {
+    gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
+    gtk_object_destroy (GTK_OBJECT (ow->owner_choice));
+  }
+
+  switch (ow->dialog_type) {
+    case VIEW_ORDER:
+    case EDIT_ORDER:
+      ow->owner_choice =
+	gnc_owner_edit_create (ow->owner_label, ow->owner_box, ow->book,
+			       owner);
+      break;
+    case NEW_ORDER:
+      ow->owner_choice =
+	gnc_owner_select_create (ow->owner_label, ow->owner_box, ow->book,
+				 owner);
+      break;
+    }
+
+  gtk_signal_connect (GTK_OBJECT (ow->owner_choice), "changed",
+		      GTK_SIGNAL_FUNC (gnc_order_owner_changed_cb),
+		      ow);
+
   gtk_widget_show_all (ow->dialog);
 
   {
@@ -495,7 +521,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 {
   OrderWindow *ow;
   GladeXML *xml;
-  GtkWidget *label, *hbox, *vbox, *regWidget;
+  GtkWidget *vbox, *regWidget;
   GncEntryLedger *entry_ledger = NULL;
   GnomeDialog *owd;
 
@@ -527,9 +553,8 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   ow->opened_date = glade_xml_get_widget (xml, "opened_date");
   ow->closed_date = glade_xml_get_widget (xml, "closed_date");
   ow->active_check = glade_xml_get_widget (xml, "active_check");
-
-  hbox = glade_xml_get_widget (xml, "owner_hbox");
-  label = glade_xml_get_widget (xml, "owner_label");
+  ow->owner_box = glade_xml_get_widget (xml, "owner_hbox");
+  ow->owner_label = glade_xml_get_widget (xml, "owner_label");
 
   /* default to ok */
   gnome_dialog_editable_enters (owd, GTK_EDITABLE (ow->id_entry));
@@ -600,7 +625,6 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
       class_name = DIALOG_VIEW_ORDER_CM_CLASS;
       /* FALLTHROUGH */
     case EDIT_ORDER:
-      ow->owner_choice = gnc_owner_edit_create (label, hbox, bookp, owner);
       gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
       
       if (class_name == NULL)
@@ -608,7 +632,6 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
       break;
 
     case NEW_ORDER:
-      ow->owner_choice = gnc_owner_select_create (label, hbox, bookp, owner);
       gtk_entry_set_text (GTK_ENTRY (ow->id_entry),
 			  g_strdup_printf ("%.6d", gncOrderNextID(bookp)));
       
@@ -623,17 +646,13 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 				  ow);
   }
 
-  gtk_signal_connect (GTK_OBJECT (ow->owner_choice), "changed",
-		      GTK_SIGNAL_FUNC (gnc_order_owner_changed_cb),
-		      ow);
-
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
-
-  /* Set the Reference */
-  gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
   /* Now fill in a lot of the pirces and display properly */
   gnc_order_update_window (ow);
+
+  /* Set the Reference */
+  gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
   return ow;
 }
