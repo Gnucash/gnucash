@@ -258,11 +258,11 @@ test_month_relative (void)
 					g_date_set_julian( &date2, start_julian + i );
 					xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
 					do_test_args(
-						g_date_weekday( &next_date ) == g_date_weekday( &date1 ),
+						g_date_get_weekday( &next_date ) == g_date_get_weekday( &date1 ),
 						"month relative repeats - check weekday",
 						__FILE__, __LINE__,
 						"monthday = %d, month = %d, interval = %d months, days from start = %d, weekday = %d",
-						monthday, month, interval, i, g_date_weekday( &date1 ) );
+						monthday, month, interval, i, g_date_get_weekday( &date1 ) );
 					do_test_args(
 						(g_date_day( &next_date )-1)/7 == (g_date_day( &date1 )-1)/7,
 						"month relative repeats - check occurrence",
@@ -301,15 +301,15 @@ test_month_relative (void)
 			do_test_args( g_date_month( &date2 ) == g_date_month( &next_date ),
 				"month_relative repeats end up in the right place - month",
 				__FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
-				interval, j, g_date_weekday( &date1 ) );
-			do_test_args( g_date_weekday( &date1 ) == g_date_weekday( &next_date ),
+				interval, j, g_date_get_weekday( &date1 ) );
+			do_test_args( g_date_get_weekday( &date1 ) == g_date_get_weekday( &next_date ),
 				"month_relative repeats end up in the right place - weekday",
 				__FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
-				interval, j, g_date_weekday( &date1 ) );
+				interval, j, g_date_get_weekday( &date1 ) );
 			do_test_args( (g_date_day( &date2 )-1)/7 == (g_date_day( &next_date )-1)/7,
 				"month_relative repeats end up in the right place - occurrence",
 				__FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
-				interval, j, g_date_weekday( &date1 ) );
+				interval, j, g_date_get_weekday( &date1 ) );
 		}
 	}
 	

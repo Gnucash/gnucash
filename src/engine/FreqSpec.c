@@ -376,7 +376,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
                 month = g_date_month( CONST_HACK in_date );
                 year = g_date_year( CONST_HACK in_date );
                 g_date_set_dmy( &date1, 1, month, year );
-                wday_of_1st = g_date_weekday( &date1 );
+                wday_of_1st = g_date_get_weekday( &date1 );
                 day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
                         ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
                 after_repeat_in_month_interval =
@@ -391,7 +391,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
                 month = next_repeat_months_from_epoch % 12 + 1;
                 year = next_repeat_months_from_epoch / 12 + 1;
                 g_date_set_dmy( &date1, 1, month, year );
-                wday_of_1st = g_date_weekday( &date1 );
+                wday_of_1st = g_date_get_weekday( &date1 );
                 /* This calculates the day of the month in the month which forms
                  * the next month in the cycle after the given input date.
                  * However, this day may be larger than the number of days in that month... */
@@ -409,7 +409,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
                         month = next_repeat_months_from_epoch % 12 + 1;
                         year = next_repeat_months_from_epoch / 12 + 1;
                         g_date_set_dmy( &date1, 1, month, year );
-                        wday_of_1st = g_date_weekday( &date1 );
+                        wday_of_1st = g_date_get_weekday( &date1 );
                         day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
                                 ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
                         /* Hmmm... It would be nice to know that this loop is
@@ -591,7 +591,7 @@ xaccFreqSpecSetMonthRelative( FreqSpec *fs,
                 g_date_month( CONST_HACK initial_date ) - 1;
         fs->s.month_relative.offset_from_epoch = months_since_epoch % interval_months;
         
-        fs->s.month_relative.weekday = g_date_weekday( CONST_HACK initial_date );
+        fs->s.month_relative.weekday = g_date_get_weekday( CONST_HACK initial_date );
         fs->s.month_relative.occurrence = (g_date_day( CONST_HACK initial_date )-1) / 7 + 1;
         
         g_return_if_fail( fs->s.month_relative.weekday > 0 );
