@@ -310,11 +310,12 @@ const char * xaccAccountGetPriceSrc (Account *acc);
 
 void xaccAccountSortSplits(Account *);
 
+#ifndef SWIG
+
 gpointer xaccAccountForEachSplit(Account *s,
                                  gpointer (*thunk)(Split *s, gpointer data),
                                  gpointer data);
 
-#ifndef SWIG
 
 /* Traverse all of the transactions in the given account.  Continue
    processing IFF proc does not return FALSE. This function does not

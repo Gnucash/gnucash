@@ -197,18 +197,21 @@ char * xaccAccountGetNextChildCode (Account *acc, int num_digits);
 void   xaccGroupAutoCode (AccountGroup *grp, int num_digits);
 void   xaccGroupDepthAutoCode (AccountGroup *grp);
 
+#ifndef SWIG
+
 /* if the function returns null for a given item, it won't show up in
    the result list */
 GSList *xaccGroupMapAccounts(AccountGroup *grp,
                              gpointer (*thunk)(Account *a, void *data),
                              gpointer data);
+
 gpointer xaccGroupForEachAccountDeeply(AccountGroup *grp,
-                                       gpointer (*thunk)(Account *a, void *data),
+                                       gpointer (*thunk)(Account *a,
+                                                         void *data),
                                        gpointer data);
 
-gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b, gboolean check_guids);
-
-#ifndef SWIG
+gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
+                        gboolean check_guids);
 
 /*
  * The following functions provide support for "staged traversals"
