@@ -29,6 +29,15 @@
 
 	* src/gnome-utils/gnc-druid-gnome.c: remove debugging printfs
 
+	* src/app-utils/gnc-druid.[ch]:
+	  Make sure the jump code CAN allow a recursive jump originating
+	  and ending in the same provider.  Put a counter around the
+	  jump function to make sure we don't walk the tree while we're
+	  jumping.  This will let the last jump win correctly.
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.c
+	  handle prev-page properly by not allowing you to jump
+	  back while you have any files in the list.
+
 2004-02-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-file.[ch]:

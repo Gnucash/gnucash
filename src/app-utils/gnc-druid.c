@@ -183,7 +183,7 @@ gnc_druid_change_page(GNCDruid *druid,
      * we wanted to do that.
      */
     if (!page) {
-      if (prov != druid->provider)
+      if (druid->jump_count)
 	return;
       prov = NULL;
     }
@@ -236,8 +236,10 @@ gnc_druid_jump_to_provider(GNCDruid* druid, GNCDruidProvider* prov)
   node = g_list_find(druid->providers, prov);
   g_return_if_fail(node);
 
+  druid->jump_count++;
   gnc_druid_set_provider_node(druid, node);
   gnc_druid_next_page_internal(druid, TRUE);
+  druid->jump_count--;
 }
 
 /* Other functions */

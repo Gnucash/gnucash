@@ -41,6 +41,7 @@ gnc_druid_provider_multifile_gnome_class_init (GNCDruidProviderMultifileGnomeCla
   gdp_class->first_page = gnc_dp_multifile_gnome_first_page;
   gdp_class->last_page = gnc_dp_multifile_gnome_last_page;
   gdp_class->next_page = gnc_dp_multifile_gnome_next_page;
+  gdp_class->prev_page = gnc_dp_multifile_gnome_last_page;
 }
 
 static void

@@ -41,6 +41,8 @@ struct _GNCDruid
   gpointer be_ctx;		/* backend context pointer */
   gboolean (*finish)(gpointer);	/* backend 'finish process' pointer */
   void (*cancel)(gpointer);	/* backend 'cancel process' pointer */
+
+  gint jump_count;
 };
 
 struct _GNCDruidClass
