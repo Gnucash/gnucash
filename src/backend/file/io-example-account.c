@@ -55,6 +55,7 @@ static short module = MOD_IO;
 #define GNC_ACCOUNT_LONG "gnc-act:long-description"
 #define GNC_ACCOUNT_TITLE "gnc-act:title"
 #define GNC_ACCOUNT_EXCLUDEP "gnc-act:exclude-from-select-all"
+#define GNC_ACCOUNT_SELECTED "gnc-act:start-selected"
 
 void
 gnc_destroy_example_account(GncExampleAccount *gea)
@@ -279,7 +280,7 @@ gnc_excludep_end_handler(gpointer data_for_children,
 {
     GncExampleAccount *gea =
     (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
-    gint64 val;
+    gint64 val = 0;
 
     dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
     gea->exclude_from_select_all = (dom_tree_to_integer ? TRUE : FALSE);
@@ -291,6 +292,28 @@ static sixtp*
 gnc_excludep_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_excludep_end_handler, NULL, NULL);
+}
+
+static gboolean
+gnc_selected_end_handler(gpointer data_for_children,
+                             GSList* data_from_children, GSList* sibling_data,
+                             gpointer parent_data, gpointer global_data,
+                             gpointer *result, const gchar *tag)
+{
+    GncExampleAccount *gea =
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+    gint64 val = 0;
+
+    dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
+    gea->start_selected = (dom_tree_to_integer ? TRUE : FALSE);
+    
+    return TRUE;
+}
+
+static sixtp*
+gnc_selected_sixtp_parser_create(void)
+{
+    return sixtp_dom_parser_new(gnc_selected_end_handler, NULL, NULL);
 }
 
 static gboolean
@@ -346,6 +369,7 @@ gnc_read_example_account(GNCBook *book, const gchar *filename)
            GNC_ACCOUNT_SHORT, gnc_short_descrip_sixtp_parser_create(),
            GNC_ACCOUNT_LONG, gnc_long_descrip_sixtp_parser_create(),
 	   GNC_ACCOUNT_EXCLUDEP, gnc_excludep_sixtp_parser_create(),
+	   GNC_ACCOUNT_SELECTED, gnc_selected_sixtp_parser_create(),
            "gnc:account", gnc_account_sixtp_parser_create(),
            NULL, NULL))
     {

@@ -353,6 +353,18 @@ add_each_gea_to_clist (gpointer data, gpointer user_data)
 }
 
 static void
+select_initial_geas (gpointer data, gpointer user_data)
+{
+  GncExampleAccount *gea = (GncExampleAccount*)data;
+  GtkCList *clist = GTK_CLIST (user_data);
+
+  if (gea->start_selected) {
+    gint row = gtk_clist_find_row_from_data (clist, gea);
+    gtk_clist_select_row (clist, row, 0);
+  }
+}
+
+static void
 on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
                                  gpointer         arg1,
                                  gpointer         user_data)
@@ -383,6 +395,17 @@ on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
     gtk_clist_sort (clist);
 
     gtk_clist_thaw (clist);
+
+    g_slist_foreach (list, select_initial_geas, (gpointer)clist);
+
+    /* clear out the description/tree */
+    {
+      GtkLabel *datext = GTK_LABEL (hierarchy_get_widget
+				    ("account_types_description_entry"));
+      GtkTree *datree = GTK_TREE (hierarchy_get_widget ("account_type_tree"));
+      gtk_label_set_text (datext, "");
+      gtk_tree_clear_items (datree, 0, g_list_length (datree->children));
+    }
 
     g_slist_free (list);
     g_free (locale_dir);

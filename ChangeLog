@@ -8,6 +8,13 @@
 	  marked for exclusion from "select-all".
 	* accounts/C/acctchrt_business.gnucash-xea: mark this account as
 	  "excluded from select-all"
+
+	* src/backend/file/io-example-account.[ch]: add a flag that signifies
+	  that an account-tree should start selected.
+	* src/gnome/druid-hierarchy.c: when loading the example accounts, go
+	  through the list and 'select' those that are marked as "start selected"
+	* accounts/C/acctchrt_common.gnucash-xea: mark this account tree as
+	  "start selected"
 	
 2003-01-04  David Hampton  <hampton@employees.org>
 
