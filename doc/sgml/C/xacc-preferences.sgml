@@ -1,63 +1,92 @@
-<ARTICLE ID="XACC-PREFERENCES">
-
-<ARTHEADER>
-<TITLE>Preferences</TITLE>
-</ARTHEADER>
-
+  <article id="XACC-PREFERENCES">
+    
+    <artheader>
+      <title>Preferences</title>
+    </artheader>
+    
     <sect1>
       <title></title>
-<PARA>You can customize the behavior of GnuCash by changing the
-    settings in this dialog box.All settings are automatically
-    saved so changes are preserved for future sessions.
+      <para>You can customize the behavior of GnuCash by changing the
+        settings in this dialog box.All settings are automatically
+        saved so changes are preserved for future sessions.
 
-    </PARA>
-<PARA>To change settings, simply click to select the appropriate
-    page, then make appropriate changes, and click the "Apply"
-    button to see your changes take effect. Clicking "OK" applies
-    changes, then closes the properties dialog box. them. The
-    "Close" button simply closes the dialog box without applying
-    the latest changes.
+      </para>
+      <para>To change settings, simply click to select the appropriate
+        page, then make appropriate changes, and click the "Apply"
+        button to see your changes take effect. Clicking "OK" applies
+        changes, then closes the properties dialog box. The
+        "Close" button simply closes the dialog box without applying
+        the latest changes.
 
-    </PARA>
-<PARA>The settings are grouped into the following categories:
+      </para>
+      
+      <para>The settings are grouped into the following categories:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>Account Fields:</EMPHASIS> sets which fields are displayed in
-      the account list of the main window.
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>General:</emphasis> anything that doesn't
+              fit anywhere else.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-general.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>International:</emphasis> Options relating
+              to date and time display formats.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-international.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Network:</emphasis> Options relating to
+              connecting to the network</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-network.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>QIF Import:</emphasis> Options relating to
+              importing QIF files.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-qif-import.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Reconcile:</emphasis> Options relating to
+              reconciling accounts.</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-reconcile.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Register:</emphasis> Options relating to
+              the default appearance of account registers.
+            </para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-register.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>Register Colors:</emphasis> Set the
+              colours to be used in the register</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-register-colors.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+          <listitem>
+            <para><emphasis>User Info:</emphasis> Set the user
+              info</para>
+            <para><inlinemediaobject><imageobject>
+                  <imagedata fileref="image/prefs-user-info.png">
+                </imageobject></inlinemediaobject></para>
+          </listitem>
+        </itemizedlist>
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Account Types:</EMPHASIS> sets which account types are
-      displayed in the main window.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>General:</EMPHASIS> anything that doesn't fit anywhere
-      else.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>International:</EMPHASIS> Options relating to date and time
-      display formats.
-
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Register:</EMPHASIS> Options relating to the default
-      appearance of account registers.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
-
-
-</PARA>
-      </sect1>
-</ARTICLE>
+      </para>
+    </sect1>
+  </article>
 
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->
 <!-- End: -->
+  
