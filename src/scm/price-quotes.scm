@@ -20,10 +20,11 @@
 ;;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash process))
+;(use-modules (gnucash process))
 
 (gnc:support "price-quotes.scm")
 
+(gnc:depend "process.scm")
 (gnc:depend "gnc-numeric.scm")
 (gnc:depend "utilities.scm")
 (gnc:depend "engine-utilities.scm")

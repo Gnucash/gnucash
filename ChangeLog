@@ -1,5 +1,12 @@
 2001-06-07  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/price-quotes.scm: same as below
+
+	* src/scm/Makefile.am: same as below
+
+	* src/scm/process.scm: un-modulize process.scm. Let's experiment
+	with this after 1.6.
+
 	* src/gnome/new-user-callbacks.c (gnc_get_ea_locale_dir): if first
 	check fails, see if 2-letter prefix succeeds
 
