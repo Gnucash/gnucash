@@ -1202,7 +1202,8 @@ xaccAccountOrder (Account **aa, Account **ab) {
 \********************************************************************/
 
 void 
-xaccAccountSetType (Account *acc, int tip) {
+xaccAccountSetType (Account *acc, GNCAccountType tip) 
+{
 
   if (!acc) return;
 

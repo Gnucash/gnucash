@@ -1263,11 +1263,11 @@ children to this account.")
 
   (gw:wrap-function
    mod
-   'gnc:free-account-group
+   'gnc:account-group-destroy
    '<gw:void>
-   "xaccFreeAccountGroup"
+   "xaccAccountGroupDestroy"
    '((<gnc:AccountGroup*> g))
-   "Free an account group.")
+   "Free an account group. (Must call gnc:account-group-begin-edit first)")
 
   (gw:wrap-function
    mod

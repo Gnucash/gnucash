@@ -68,10 +68,8 @@ gnc_destroy_example_account(GncExampleAccount *gea)
     }
     if(gea->group != NULL)
     {
-        /* mark the accounts as being freed
-         * to avoid tons of balance recomputations. */
-        xaccGroupMarkDoFree (gea->group);
-        xaccFreeAccountGroup(gea->group);
+        xaccAccountGroupBeginEdit (gea->group);
+        xaccAccountGroupDestroy(gea->group);
         gea->group = NULL;
     }
     if(gea->short_description != NULL)

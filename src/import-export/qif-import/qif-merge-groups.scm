@@ -140,5 +140,6 @@
 (define (gnc:group-catenate-and-merge old-group new-group)
   ;; stuff the new accounts into the old group and merge the accounts
   (gnc:group-concat-group old-group new-group)
-  (gnc:free-account-group new-group)
+  (gnc:account-group-begin-edit new-group)
+  (gnc:account-group-destroy new-group)
   (gnc:group-merge-accounts old-group))

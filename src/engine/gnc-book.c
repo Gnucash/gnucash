@@ -114,13 +114,9 @@ gnc_book_destroy (GNCBook *book)
   if (!book) return;
 
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
-  xaccRemoveEntity (book->entity_table, &book->guid);
 
-  /* mark the accounts as being freed
-   * to avoid tons of balance recomputations. */
-  xaccGroupMarkDoFree (book->topgroup);
-
-  xaccFreeAccountGroup (book->topgroup);
+  xaccAccountGroupBeginEdit (book->topgroup);
+  xaccAccountGroupDestroy (book->topgroup);
   book->topgroup = NULL;
 
   gnc_pricedb_destroy (book->pricedb);
@@ -131,6 +127,7 @@ gnc_book_destroy (GNCBook *book)
 
   /* FIXME: destroy SX data members here, too */
 
+  xaccRemoveEntity (book->entity_table, &book->guid);
   xaccEntityTableDestroy (book->entity_table);
   book->entity_table = NULL;
 

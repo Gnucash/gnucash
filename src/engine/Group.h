@@ -34,8 +34,14 @@
 
 
 /** PROTOTYPES ******************************************************/
+/*
+ * The xaccAccountDestroy() routine will destroy and free all 
+ *    the data associated with this account group.  The group
+ *    must have been opened for editing with 
+ *    xaccAccountGroupBeginEdit() first, before the Destroy is called.
+ */
 AccountGroup *xaccMallocAccountGroup (GNCBook *book);
-void          xaccFreeAccountGroup (AccountGroup *account_group);
+void          xaccAccountGroupDestroy (AccountGroup *grp);
 
 GNCBook * xaccGroupGetBook (AccountGroup *group);
 
@@ -76,32 +82,13 @@ void    xaccGroupMergeAccounts (AccountGroup *grp);
  *
  * The xaccGroupMarkNotSaved() subroutine will mark
  *    the given group as not having been saved.
- *
- * The xaccGroupMarkDoFree() subroutine will mark
- *    all accounts in the group as being destroyed.
  */
 
 gboolean xaccGroupNotSaved  (AccountGroup *grp);
 void     xaccGroupMarkSaved (AccountGroup *grp);
 void     xaccGroupMarkNotSaved (AccountGroup *grp);
 
-void     xaccGroupMarkDoFree (AccountGroup *grp);
-
 /*
- * The xaccGroupRemoveAccount() subroutine will remove the indicated
- *    account from its parent account group. It will NOT free the
- *    associated memory or otherwise alter the account: the account
- *    can now be reparented to a new location.
- *    Note, however, that it will mark the old parents as having 
- *    been modified.
- *
- * The xaccAccountRemoveGroup() subroutine will remove the indicated
- *    account group from its parent account. It will NOT free the
- *    associated memory or otherwise alter the account group: the 
- *    account group can now be reparented to a new location.
- *    Note, however, that it will mark the old parents as having 
- *    been modified.
- *
  * The xaccGroupInsertAccount() subroutine will insert the indicated
  *    account into the indicated group.  If it already is the child 
  *    of another group, it will be removed there first.  If the
@@ -115,8 +102,6 @@ void     xaccGroupMarkDoFree (AccountGroup *grp);
  *    the parent is specified as an account.
  */
 
-void    xaccGroupRemoveAccount (AccountGroup *grp, Account *account);
-void    xaccAccountRemoveGroup (Account *acc);
 void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 
@@ -194,10 +179,14 @@ AccountGroup * xaccAccountGetRoot (Account *account);
  */
 Account * xaccGroupGetParentAccount (AccountGroup *group);
 
-/* if the function returns null for a given item, it won't show up in
-   the result list */
+/* The xaccGroupMapAccounts() routine will traverse the account 
+      group, returning a list of accounts.  If teh callback
+      returns null for a given item, it won't show up in
+      the result list.  You should free the returned list when
+      you are done with it.
+*/
 typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
-GSList *xaccGroupMapAccounts(AccountGroup *grp,
+AccountList *xaccGroupMapAccounts(AccountGroup *grp,
                              AccountCallback,
                              gpointer data);
 

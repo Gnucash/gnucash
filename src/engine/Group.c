@@ -177,7 +177,7 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
 /********************************************************************\
 \********************************************************************/
 
-void
+static void
 xaccGroupMarkDoFree (AccountGroup *grp)
 {
   GList *node;
@@ -187,11 +187,16 @@ xaccGroupMarkDoFree (AccountGroup *grp)
   for (node = grp->accounts; node; node = node->next)
   {
     Account *account = node->data;
-
     account->do_free = TRUE;
-
     xaccGroupMarkDoFree (account->children); 
   }
+}
+
+void
+xaccAccountGroupDestroy (AccountGroup *grp)
+{
+   xaccGroupMarkDoFree (grp);
+   xaccFreeAccountGroup (grp);
 }
 
 /********************************************************************\
@@ -260,11 +265,9 @@ xaccFreeAccountGroup (AccountGroup *grp)
     while (grp->accounts->next)
     {
       account = grp->accounts->next->data;
-      xaccAccountBeginEdit (account);
       xaccAccountDestroy (account);
     }
     account = grp->accounts->data;
-    xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
 
     if (!root_grp) return;
@@ -719,6 +722,9 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           * will have a different backend than the 'to' book.  This means
           * that we should get the 'from' backend to destroy this account,
           * and the 'to' backend to save it.  Right now, this is broken.
+          *  
+          * A 'correct' implementation similar to this is in Period.c
+          * except its for transactions ...
           */
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
@@ -1184,12 +1190,12 @@ xaccGroupForEachTransaction (AccountGroup *g,
 /********************************************************************\
 \********************************************************************/
 
-GSList *
+AccountList *
 xaccGroupMapAccounts (AccountGroup *grp,
                       gpointer (*thunk)(Account *a, gpointer data),
                       gpointer data)
 {
-  GSList *result = NULL;
+  GList *result = NULL;
   GList *node;
 
   if (!grp) return(NULL);
@@ -1201,10 +1207,12 @@ xaccGroupMapAccounts (AccountGroup *grp,
     gpointer thunk_result = thunk (account, data);
 
     if (thunk_result)
-      result = g_slist_prepend (result, thunk_result);
+    {
+      result = g_list_append (result, thunk_result);
+    }
   }
 
-  return(g_slist_reverse (result));
+  return (result);
 }
 
 gpointer
@@ -1236,3 +1244,5 @@ xaccGroupForEachAccount (AccountGroup *grp,
 
   return(NULL);
 }
+
+/* ========================= END OF FILE ======================== */

@@ -228,7 +228,7 @@ void         xaccTransFixSplitDateOrder (Transaction *trans);
  */
 int          xaccAccountOrder (Account **account_1, Account **account_2);
 
-void xaccAccountSetType (Account *account, int);
+void xaccAccountSetType (Account *account, GNCAccountType);
 void xaccAccountSetName (Account *account, const char *name);
 void xaccAccountSetCode (Account *account, const char *code);
 void xaccAccountSetDescription (Account *account, const char *desc);

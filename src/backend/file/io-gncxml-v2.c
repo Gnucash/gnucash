@@ -31,6 +31,7 @@
 #include "gnc-pricedb-p.h"
 #include "gnc-session.h"
 #include "Group.h"
+#include "GroupP.h"
 #include "Scrub.h"
 #include "Transaction.h"
 #include "TransLog.h"
@@ -300,6 +301,10 @@ add_template_transaction_local( sixtp_gdv2 *data,
             xaccGetAccountFromName( acctGroup,
                                     xaccAccountGetName( (Account*)n->data ) );
             if ( tmpAcct != NULL ) {
+/* XXX hack alert FIXME .... Should the be 'Remove', or 'Destroy'?
+ * If we just remove, then this seems to be a memory leak to me, since
+ * it is never reparented.  Shouldn't it be a Destroy ???
+ */
                 xaccGroupRemoveAccount( acctGroup, tmpAcct );
             }
 

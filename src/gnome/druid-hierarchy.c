@@ -557,7 +557,8 @@ delete_our_final_group (void)
 {
   if (our_final_group != NULL)
   {
-    xaccFreeAccountGroup (our_final_group);
+    xaccAccountGroupBeginEdit (our_final_group);
+    xaccAccountGroupDestroy (our_final_group);
     our_final_group = NULL;
   }
 }

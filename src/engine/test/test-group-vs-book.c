@@ -2,7 +2,7 @@
 #include <glib.h>
 #include <guile/gh.h>
 
-#include "Group.h"
+#include "GroupP.h"
 #include "GNCIdP.h"
 #include "TransLog.h"
 #include "gnc-book.h"

@@ -389,7 +389,11 @@ gnc_session_load_from_xml_file(GNCSession *session)
 
       gnc_book_set_group(book, global_parse_status.account_group);
 
-      if(g) xaccFreeAccountGroup(g);
+      if(g) 
+      {
+        xaccAccountGroupBeginEdit(g);
+        xaccAccountGroupDestroy(g);
+      }
     }
 
     if(global_parse_status.pricedb)
@@ -1208,14 +1212,22 @@ ledger_data_fail_handler(gpointer data_for_children,
                          const gchar *tag)
 {
   AccountGroup *ag = (AccountGroup *) data_for_children;
-  if(ag) xaccFreeAccountGroup(ag);
+  if(ag) 
+  {
+    xaccAccountGroupBeginEdit(ag);
+    xaccAccountGroupDestroy(ag);
+  }
 }
 
 static void
 ledger_data_result_cleanup(sixtp_child_result *cr)
 {
   AccountGroup *ag = (AccountGroup *) cr->data;
-  if(ag) xaccFreeAccountGroup(ag);
+  if(ag) 
+  {
+    xaccAccountGroupBeginEdit(ag);
+    xaccAccountGroupDestroy(ag);
+  }
 }
 
 
@@ -1425,7 +1437,11 @@ account_restore_fail_handler(gpointer data_for_children,
                              const gchar *tag)
 {
   Account *acc = (Account *) *result;
-  if(acc) xaccFreeAccount(acc);
+  if(acc)
+  {
+    xaccAccountBeginEdit (acc);
+    xaccAccountDestroy(acc);
+  }
 }
 
 /****************************************************************************/
