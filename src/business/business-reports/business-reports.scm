@@ -82,6 +82,7 @@
 
 (export gnc:menuname-business-reports)
 
+(use-modules (gnucash report fancy-invoice))
 (use-modules (gnucash report invoice))
 (use-modules (gnucash report owner-report))
 (use-modules (gnucash report payables))

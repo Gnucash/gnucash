@@ -7,6 +7,14 @@
 	* src/backend/file/gnc-backend-file.c: Apply sam's patch:
 	  don't allow selection of directory for save file
 
+	* src/business/business-reports/Makefile.am: add fancy-invoice report
+	* src/business/business-reports/business-reports.scm: load the fancy-invoice
+	* src/business/business-reports/fancy-invoice.scm: a fancy invoice
+	  report, to show what else is possible.  It's not really useful per
+	  se, but it is another example for users.  To be useful it requires
+	  some custom editing.  Thanks to Oliver Jones for submitting the
+	  changes.
+
 2003-06-19  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/help-topics-index.scm: add Jon Lapham's patch
