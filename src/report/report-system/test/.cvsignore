@@ -1,3 +1,5 @@
 Makefile
 Makefile.in
 test-link-module
+.deps
+.libs
