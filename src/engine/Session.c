@@ -373,7 +373,7 @@ MakeHomeDir (void)
  * some config file 
  */
 static char * searchpaths[] = {
-   "/usr/share/gnucash/data",
+   "/usr/share/gnucash/data/",
    NULL,
 };
 
