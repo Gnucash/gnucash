@@ -1,3 +1,8 @@
+2003-05-30  Christian Stimming  <stimming@tuhh.de>
+
+	* po/cs.po: Updated complete (!) Czech translation by Miloslav
+	Trmac <mitr@volny.cz>.
+
 2003-05-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/glade/register.glade: add sort entries for Action and Notes
