@@ -91,8 +91,9 @@ http://linas.org/linux/xacc/
 Running:
 --------
 Only the Motif version of GnuCash is currently functional.  The Gnome version
-will give you a taste for Gnome, but most functions will not work.   See the 
-notes below for non-Linux support.
+will give you a taste for Gnome, but most functions will not work.   The qt
+version doesn't compile, most functions are missing.  See below for OS's other
+than Linux/*BSD support.
 
 To be able to use certain features of GnuCash, such as reports and network stock
 price downloads, you must have the following packages below installed.
