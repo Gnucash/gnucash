@@ -405,6 +405,8 @@ then
   g-wrap 1.1.x will not work with this version of GnuCash.])
 fi
 
+AC_GWRAP_CHECK_GUILE
+
 AC_SUBST(G_WRAP)
 AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)

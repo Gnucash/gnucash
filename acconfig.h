@@ -79,6 +79,10 @@
 /* Configure found the function malloc_usable_size */
 #define  HAVE_MALLOC_USABLE_SIZE  
 
+/* g-wrap define */
+#undef GWRAP_OLD_GUILE_SMOB
+
+
 /*** Begin i18n ***/
 
 /* internationalization with gettext */ 
