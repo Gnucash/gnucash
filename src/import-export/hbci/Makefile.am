@@ -3,21 +3,22 @@ SUBDIRS = . glade test
 pkglib_LTLIBRARIES = libgncmod-hbci.la
 
 libgncmod_hbci_la_SOURCES = \
-  gncmod-hbci.c \
-  druid-hbci-utils.c \
-  dialog-pass.c \
-  dialog-hbcitrans.c \
   dialog-daterange.c \
-  gnc-hbci-kvp.c \
-  gnc-hbci-utils.c \
+  dialog-hbcitrans.c \
+  dialog-pass.c \
   gnc-hbci-cb.c \
-  gnc-hbci-transfer.c \
-  gnc-hbci-trans-templ.c \
   gnc-hbci-getbalance.c \
   gnc-hbci-gettrans.c \
+  gnc-hbci-kvp.c \
+  gnc-hbci-trans-templ.c \
+  gnc-hbci-transfer.c \
+  gnc-hbci-utils.c \
   hbci-interaction.c \
-  hbci-progressmon.c \
-  druid-hbci-initial.c 
+  druid-hbci-utils.c \
+  druid-hbci-initial.c \
+  gncmod-hbci.c
+
+
 
 # Must be included in tarball because they are listed in POTFILES.in
 libgncmod_hbci_la_empty = \
@@ -29,7 +30,6 @@ noinst_HEADERS = \
   dialog-pass.h \
   druid-hbci-initial.h \
   druid-hbci-utils.h \
-  gnc-hbci-actions.h \
   gnc-hbci-cb.h \
   gnc-hbci-getbalance.h \
   gnc-hbci-gettrans.h \
@@ -51,7 +51,8 @@ libgncmod_hbci_la_LIBADD = \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
   ${GNOMEUI_LIBS} \
-  ${HBCI_LIBS}
+  ${HBCI_LIBS} \
+  ${GNOME_XML_LIB}
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/hbci
 
@@ -80,7 +81,8 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GTKHTML_CFLAGS} \
-  ${HBCI_CFLAGS}
+  ${HBCI_CFLAGS} \
+  ${GNOME_XML_CFLAGS}
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 

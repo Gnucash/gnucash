@@ -1,3 +1,13 @@
+2004-09-25  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, src/import-export/hbci/hbci-interaction.c: Major
+	change for HBCI, back-ported from HEAD. The HBCI online banking is
+	no longer based on the openhbci library but instead on the
+	aqbanking library http://sf.net/projects/aqbanking which is Martin
+	Preuss' successor of openhbci. This means that now aqbanking-0.9.5
+	is required instead of any openhbci package. This is almost ready
+	for production work but still should need extensive testing.
+
 2004-08-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Account.c: fix xaccAccountGetBalanceAsOfDate() to properly

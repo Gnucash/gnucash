@@ -23,13 +23,13 @@
 #ifndef HBCI_INTERACTION_H
 #define HBCI_INTERACTION_H
 
-#include <openhbci/api.h>
+#include <aqbanking/banking.h>
 #include <gnome.h>
 
 typedef struct _inter_data GNCInteractor;
 
 /** Adds the interactor and progressmonitor classes to the api. */
-GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent);
+GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent);
 
 gboolean GNCInteractor_aborted(const GNCInteractor *i);
 void GNCInteractor_show(GNCInteractor *i);
@@ -39,6 +39,8 @@ void GNCInteractor_delete(GNCInteractor *i);
 void GNCInteractor_erasePIN(GNCInteractor *i);
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent);
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value);
+GtkWidget *GNCInteractor_parent(GNCInteractor *i);
+void GNCInteractor_add_log_text (GNCInteractor *i, const char *msg);
 
 
 #endif
