@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 
+#include "foo.h"
+
 int
 foo_hello(void) {
   return 10;

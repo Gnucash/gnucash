@@ -11,7 +11,7 @@ TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH=${PWD}/mod-foo:${PWD}/mod-bar:${PWD}/mod-baz:${PWD}/misc-mods \
   GUILE_LOAD_PATH=..:${G_WRAP_MODULE_DIR} \
   LTDL_LIBRARY_PATH=../ \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:mod-foo:mod-foo/.libs:mod-bar:mod-bar/.libs:mod-baz:mod-baz/.libs
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:mod-foo:mod-foo/.libs:mod-bar:mod-bar/.libs:mod-baz:mod-baz/.libs:..:../.libs
 
 noinst_PROGRAMS=test-load-c test-modsysver test-incompatdep test-agedver \
 test-dynload

@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 
+#include "bar.h"
+
 int
 bar_hello(void) {
   return 1;
