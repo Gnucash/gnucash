@@ -15,42 +15,20 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(define (gnc:locale-prefixes)
-  (let* ((locale (setlocale LC_MESSAGES))
-         (strings (cond ((not (string? locale)) '())
-                        ((equal? locale "C") '())
-                        ((<= (string-length locale) 2) (list locale))
-                        (else (list (substring locale 0 2) locale)))))
-    (reverse (cons "C" strings))))
-
-(define (gnc:default-doc-dirs)
-  (let ((user-paths (list
-                     (list (getenv "HOME") ".gnucash" "html")))
-        (locale-paths (map (lambda (prefix)
-                             (list gnc:_install-help-dir_ prefix))
-                           (gnc:locale-prefixes)))
-        (base-paths (list
-                     (list gnc:_install-help-dir_))))
-    (map (lambda (paths) (apply build-path paths))
-         (append user-paths locale-paths base-paths))))
-
-(define (gnc:_expand-doc-path_ new-path)
-  (gnc:debug "expanding doc-path value " new-path)
-  (let ((path-interpret
-         (lambda (item)
-           (cond ((string? item) (list item))
-                 ((symbol? item)
-                  (case item
-                    ((default) (gnc:default-doc-dirs))
-                    ((current)
-                     (gnc:config-var-value-get gnc:*doc-path*))
-                    (else
-                     (gnc:warn "bad item " item " in doc-path. Ignoring.")
-                     '())))
-                 (else 
-                  (gnc:warn "bad item " item " in doc-path. Ignoring.")
-                  '())))))
-    (apply append (map path-interpret new-path))))
+(define (gnc:expand-path new-list current-list default-generator)
+  (define (expand-path-item item)
+    (cond ((string? item) (list item))
+          ((symbol? item)
+           (case item
+             ((default) (default-generator))
+             ((current) current-list)
+             (else
+              (gnc:warn "bad symbol " item " in gnc path. Ignoring.")
+              '())))
+          (else 
+           (gnc:warn "bad item " item " in gnc path. Ignoring.")
+           '())))
+  (apply append (map expand-path-item new-list)))
 
 (define (gnc:make-dir dir)
   (if (access? dir X_OK)
@@ -98,10 +76,9 @@
           (begin
             (gnc:debug "loading system configuration")
             
-            (let ((system-config (build-path
-                                  (gnc:config-var-value-get gnc:*config-dir*)
-                                  "config")))
-              
+            (let ((system-config (gnc:find-file
+                                  "config"
+                                  (gnc:config-var-value-get gnc:*config-path*))))
               (if (false-if-exception (primitive-load system-config))
                   (set! system-config-loaded? #t)        
                   (begin
