@@ -60,7 +60,8 @@ write_account_group(FILE *out, AccountGroup *grp)
 
     list = xaccGroupGetAccountList(grp);
 
-    for (node = list; node; node = node->next) {
+    for (node = list; node; node = node->next) 
+    {
         xmlNodePtr accnode;
         AccountGroup *newgrp;
         
@@ -73,7 +74,7 @@ write_account_group(FILE *out, AccountGroup *grp)
 
         newgrp = xaccAccountGetChildren((Account*)(node->data));
 
-        if(grp)
+        if (newgrp)
         {
             write_account_group(out, newgrp);
         }
