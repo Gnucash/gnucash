@@ -4,6 +4,7 @@ SUBDIRS = \
   xml
 
 EXTRA_DIST = \
+  README \
   backup.txt \
   budget.txt \
   constderv.html \
