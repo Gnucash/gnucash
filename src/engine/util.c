@@ -25,7 +25,7 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <locale.h>
