@@ -195,9 +195,11 @@ xaccSessionBeginSQL (Session *sess, const char * dbname)
    if (!sess) return NULL;
 
 #ifdef SQLHACK
-   /* for testing the sql, just a hack, remove later ... */
-   Backend * pgendNew (void);
-   be = pgendNew ();
+   {
+     /* for testing the sql, just a hack, remove later ... */
+     Backend * pgendNew (void);
+     be = pgendNew ();
+   }
 #endif
 
    sess->backend = be;
