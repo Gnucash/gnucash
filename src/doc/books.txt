@@ -1,13 +1,17 @@
 
                 Books / Accounting Periods
-		--------------------------
-                 Implementation Proposal
+                --------------------------
+                 Implementation Overview
 
-                Linas Vepstas 7 April 2001
+                Linas Vepstas December 2001
 
 
 A top, unimplemented request for gnucash is the ability to 'close 
 the books', that is, to add support for 'accounting periods'.
+Support for books has been added to the gnucash engine; however, 
+it has not yet been exposed to the user via the GUI.  This file
+reviews the implementation design choices and the current design 
+status.
 
 Definition
 ----------
@@ -28,7 +32,18 @@ of multi-year data (i.e. create reports spanning multiple books).
 
 Status
 ------
-The beginings of an implementation can be found in src/engine/Period.c
+A fair amount of what is required to support books can be found in
+the file src/engine/gnc-book.c.  The actual implementation used is 
+"Plan A" from the list of choices below.  See also "Implementation
+Notes" at bottom for the current status.
+
+Note that the correct handling of depreciation, capital gains and
+other similar accounting concepts requires that 'lots' be supported
+by the engine, and in turn, handled correctly by the 'books' 
+infrastructure.  Currently, 'lots' are *not* supported by the engine,
+and this causes the book implementation to be broken in a certain 
+fundamental sense.  See 'lots.txt' for details.
+
 
 Possible Solutions
 ------------------
@@ -93,7 +108,7 @@ part of a closed book.  Modify the Query GUI dialog to add 'book' as
 a query parameter. 
 
 pro: easy access to historical record
-con: slow loads.
+con: slow loads; file size not reduced.
 con: dealing with opening balances, equity, is icky.
 con: can't delete/hide old/stale accounts.
 
@@ -208,9 +223,6 @@ meta-information (as book-level kvp's):
 /book/previous-book-guids=(list 0xa 0xb 0xc)
 /book/accounting-period=enum {none, week, month, quarter, trimester, year}
 
-I don't know if the latest XML format provides for top-level 'global'
-data: but in principle, a top-level kvp is enough?
-
 Pro's & Con's
 -------------
 I am not aware of any con's to plan A at this point.
@@ -218,24 +230,42 @@ I am not aware of any con's to plan A at this point.
 
 Implementation Notes:
 ---------------------
-Plan F is the easiest to implement: a few days to a week; maybe two weeks
-if gnc-book.c needs serious overhaul.
+Plan A has been implemented in the engine. 
+-- The postgres backend has been modified to support multiple books.
+   All books are stored in the same database; there is no performance
+   penalty for storing all books together in the same SQL dataase,
+   because they can be easily picked apart by an appropirate SQL query.
+-- The xml-file backend can store multiple books, but there is currently
+   no support for spreading things out across multiple files (for
+   faster load, by not loading old books).  The XML format
+   fails to store the kvp's in a book structure ??
 
-Plan C is mostly just as easy as F (writing out the kvp is near trivial).
-The hard part of plan C is the wrapper/utility to allow searches of 
-current and/or old books.  The wrapper could be delicate, and needs 
-more thought.  Also, add another week to deal with the GUI tab/button 
-to search 'current book' or 'all books'.
 
-Plan A is only a little harder than Plan C: maybe another week or two 
-on top of C (??)
+The current implementation of books is broken by the lack of support of 
+'lots' in the engine.  The problem is that for stock accounts (and
+other non-currency accounts), it is not enough to supply merely the 
+opening balance.  In order to handle depreciation or cap gains properly, 
+the dates and quantities of a purchase need to be easily available.  
+See "lots.txt" for details.
 
 
 Open Issues
 -----------
-*) Naming convention for the different books?  Each book is really
-   written out as a backend: although it could be a file, it could
-   also be a database, and a naming convention is needed for that ...
+*) Naming convention for the different books?  When the XML file backend
+   is used, different books need to be stored as different files (in order
+   to avoid the performance penalty of a large file load).  This hasn't
+   been implemented yet ...
+
+*) Special considerations for scheduled transactions/recurring transactions?
+
+*) Trimming of price database ???
+
+*) handling of multi-book reports ???  Need to work out the recommended way
+   of making this happen....
+
+*) Lots ...
+   
+   
 
 =========================== end of file ========================
 
