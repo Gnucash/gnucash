@@ -186,15 +186,38 @@ configLabels (SplitRegister *reg)
 static void
 configLayout (SplitRegister *reg)
 {
+   CellBlock *curs, *header;
    int type = (reg->type) & REG_TYPE_MASK;
    int style = (reg->type) & REG_STYLE_MASK;
+   int i;
 
+   /* fill things up with null cells */
    for (i=0; i<reg->num_cols; i++) {
-      curs->cells[0][i] = reg->nullCell;
+      reg->split_cursor->cells[0][i] = reg->nullCell;
+      reg->trans_cursor->cells[0][i] = reg->nullCell;
+      reg->lead_cursor->cells[0][i] = reg->nullCell;
+      if (2 == reg->lead_cursor->numRows) {
+         reg->lead_cursor->cells[1][i] = reg->nullCell;
+      }
    }
-   switch (style) {
-      case REG_SINGLE_LINE:
-         /* only the transaction cursor gets used */
+
+   /* define header for macros */
+   header = reg->header;
+
+   switch (type) {
+      case BANK_REGISTER:
+      case CASH_REGISTER:
+      case ASSET_REGISTER:
+      case CREDIT_REGISTER:
+      case LIABILITY_REGISTER:
+      case INCOME_REGISTER:
+      case EXPENSE_REGISTER:
+      case EQUITY_REGISTER:
+
+      case INCOME_LEDGER:     /* hack alert do xto cell too */
+      case GENERAL_LEDGER:    /* hack alert do xto cell too */
+
+         /* basic common 8 column config */
          curs = reg->lead_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
@@ -203,42 +226,43 @@ configLayout (SplitRegister *reg)
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
-         FANCY (PRIC,   price,    7,  0);
-         FANCY (VALU,   value,    8,  0);
-         FANCY (SHRS,   shrs,     9,  0);
-         FANCY (BALN,   balance,  10, 0);
+         FANCY (BALN,   balance,  7,  0);
 
-         switch (type) {
-            case BANK_REGISTER:
-            case CASH_REGISTER:
-            case ASSET_REGISTER:
-            case CREDIT_REGISTER:
-            case LIABILITY_REGISTER:
-            case INCOME_REGISTER:
-            case EXPENSE_REGISTER:
-            case EQUITY_REGISTER:
-      
-            case INCOME_LEDGER:     /* hack alert do xto cell too */
-            case GENERAL_LEDGER:    /* hack alert do xto cell too */
-               reg->num_cols = 8;
-               FANCY (BALN,   balance,  7,  0);
-               break;
-      
-            case STOCK_REGISTER:
-            case PORTFOLIO:
-               reg->num_cols = 11;
-               break;
-            default:
-               break;
+         /* prep the second row of the double style */
+         if ((REG_DOUBLE_LINE == style) ||
+             (REG_DOUBLE_DYNAMIC == style)) 
+         {
+            FANCY (ACTN,   action,   1,  1);
+            FANCY (XFRM,   xfrm,     2,  1);
+            BASIC (MEMO,   memo,     3,  1);
          }
-         break;
+
+         if ((REG_MULTI_LINE == style) ||
+             (REG_SINGLE_DYNAMIC == style) ||
+             (REG_DOUBLE_DYNAMIC == style)) 
+         {
+            /* only the transaction cursor gets used */
+            curs = reg->trans_cursor;
+            FANCY (DATE,   date,     0,  0);
+            BASIC (NUM,    num,      1,  0);
+            FANCY (DESC,   desc,     3,  0);
+            BASIC (RECN,   recn,     4,  0);
+            FANCY (BALN,   balance,  7, 0);
+      
+            curs = reg->split_cursor;
+            FANCY (ACTN,   action,   1,  0);
+            FANCY (XFRM,   xfrm,     2,  0);
+            BASIC (MEMO,   memo,     3,  0);
+         }
 
       /* --------------------------------------------------------- */
-      case REG_DOUBLE_LINE:
-         /* only the transaction cursor gets used */
+      case STOCK_REGISTER:
+      case PORTFOLIO:
+         /* 11 column config */
          curs = reg->lead_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
+         FANCY (XFRM,   xfrm,     2,  0);
          FANCY (DESC,   desc,     3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -248,85 +272,37 @@ configLayout (SplitRegister *reg)
          FANCY (SHRS,   shrs,     9,  0);
          FANCY (BALN,   balance,  10, 0);
 
-         curs = reg->memo_cursor;
-         FANCY (ACTN,   action,   1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
-         BASIC (MEMO,   memo,     3,  0);
-
-         switch (type) {
-            case BANK_REGISTER:
-            case CASH_REGISTER:
-            case ASSET_REGISTER:
-            case CREDIT_REGISTER:
-            case LIABILITY_REGISTER:
-            case INCOME_REGISTER:
-            case EXPENSE_REGISTER:
-            case EQUITY_REGISTER:
-      
-            case INCOME_LEDGER:     /* hack alert do xto cell too */
-            case GENERAL_LEDGER:    /* hack alert do xto cell too */
-               reg->num_cols = 8;
-               curs = reg->lead_cursor;
-               FANCY (BALN,   balance,  7,  0);
-               break;
-      
-            case STOCK_REGISTER:
-            case PORTFOLIO:
-               reg->num_cols = 11;
-               break;
-            default:
-               break;
+         /* prep the second row of the double style */
+         if ((REG_DOUBLE_LINE == style) ||
+             (REG_DOUBLE_DYNAMIC == style)) 
+         {
+            FANCY (ACTN,   action,   1,  1);
+            FANCY (XFRM,   xfrm,     2,  1);
+            BASIC (MEMO,   memo,     3,  1);
          }
-         break;
 
-      /* --------------------------------------------------------- */
-      case REG_MULTI_LINE:
-      case REG_SINGLE_DYNAMIC:
-      case REG_DOUBLE_DYNAMIC:
-         /* only the transaction cursor gets used */
-         curs = reg->lead_cursor;
-         FANCY (DATE,   date,     0,  0);
-         BASIC (NUM,    num,      1,  0);
-         FANCY (DESC,   desc,     3,  0);
-         BASIC (RECN,   recn,     4,  0);
-         FANCY (BALN,   balance,  10, 0);
-
-         curs = reg->split_cursor;
-         FANCY (ACTN,   action,   1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
-         BASIC (MEMO,   memo,     3,  0);
-         FANCY (DEBT,   debit,    5,  0);
-         FANCY (CRED,   credit,   6,  0);
-         FANCY (PRIC,   price,    7,  0);
-         FANCY (VALU,   value,    8,  0);
-         FANCY (SHRS,   shrs,     9,  0);
-
-         switch (type) {
-            case BANK_REGISTER:
-            case CASH_REGISTER:
-            case ASSET_REGISTER:
-            case CREDIT_REGISTER:
-            case LIABILITY_REGISTER:
-            case INCOME_REGISTER:
-            case EXPENSE_REGISTER:
-            case EQUITY_REGISTER:
+         if ((REG_MULTI_LINE == style) ||
+             (REG_SINGLE_DYNAMIC == style) ||
+             (REG_DOUBLE_DYNAMIC == style)) 
+         {
+            /* only the transaction cursor gets used */
+            curs = reg->trans_cursor;
+            FANCY (DATE,   date,     0,  0);
+            BASIC (NUM,    num,      1,  0);
+            FANCY (DESC,   desc,     3,  0);
+            BASIC (RECN,   recn,     4,  0);
+            FANCY (BALN,   balance,  10, 0);
       
-            case INCOME_LEDGER:     /* hack alert do xto cell too */
-            case GENERAL_LEDGER:    /* hack alert do xto cell too */
-               reg->num_cols = 8;
-               curs = reg->lead_cursor;
-               FANCY (BALN,   balance,  7,  0);
-               break;
-      
-            case STOCK_REGISTER:
-            case PORTFOLIO:
-               reg->num_cols = 11;
-               break;
-            default:
-               break;
+            curs = reg->split_cursor;
+            FANCY (ACTN,   action,   1,  0);
+            FANCY (XFRM,   xfrm,     2,  0);
+            BASIC (MEMO,   memo,     3,  0);
+            FANCY (DEBT,   debit,    5,  0);
+            FANCY (CRED,   credit,   6,  0);
+            FANCY (PRIC,   price,    7,  0);
+            FANCY (VALU,   value,    8,  0);
+            FANCY (SHRS,   shrs,     9,  0);
          }
-         break;
-
       /* --------------------------------------------------------- */
       default:
          printf ("Internal Error!!!!! \n");
@@ -352,9 +328,25 @@ configLayout (SplitRegister *reg)
 static void
 configTraverse (SplitRegister *reg)
 {
-#ifdef FUTURE 
+   int i,j;
    int prev_r, prev_c;
    CellBlock *curs = NULL;
+
+   curs = reg->lead_cursor;
+   FIRST_RIGHT (0, 0);  /* a bit of a hack ... */
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         if ((reg->nullCell != curs->cells[i][j]) &&
+             (reg->recnCell != curs->cells[i][j]) &&
+             (XACC_CELL_ALLOW_INPUT & curs->cells[i][j]->input_output)) 
+         {
+            NEXT_RIGHT  (i, j);
+         }
+      }
+   }
+
+
+#ifdef FUTURE 
    int type = (reg->type) & REG_TYPE_MASK;
    int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
    int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
@@ -478,22 +470,6 @@ SplitRegister * xaccMallocSplitRegister (int type)
 static void
 configCursors (SplitRegister *reg)
 {
-   CellBlock *curs;
-   int i;
-
-  /* 
-   * The Null Cell is used to make sure that "empty"
-   * cells stay empty.  This solves the problem of 
-   * having the table be reformatted, the result of
-   * which is that an empty cell has landed on a cell
-   * that was previously non-empty.  We want to make 
-   * sure that we erase those cell contents. The null
-   * cells handles this for us.
-   */
-
-   reg -> nullCell -> input_output = XACC_CELL_ALLOW_NONE;
-   xaccSetBasicCellValue (reg->nullCell, "");
-
    /* --------------------------- */
    /* set the color of the cells in the cursors */
    /* hack alert -- the actual color should depend on the 
@@ -501,11 +477,65 @@ configCursors (SplitRegister *reg)
    reg->lead_cursor->active_bg_color = 0xffdddd; /* pale red */
    reg->lead_cursor->passive_bg_color = 0xccccff; /* pale blue */
 
-   reg->memo_cursor->active_bg_color = 0xffffdd; /* pale yellow */
-   reg->memo_cursor->passive_bg_color = 0xffffff; /* white */
+   reg->trans_cursor->active_bg_color = 0xffdddd; /* pale red */
+   reg->trans_cursor->passive_bg_color = 0xccccff; /* pale blue */
 
    reg->split_cursor->active_bg_color = 0xffffdd; /* pale yellow */
    reg->split_cursor->passive_bg_color = 0xffffff; /* white */
+
+}
+
+/* ============================================== */
+
+static void
+mallocCursors (SplitRegister *reg)
+{
+   int type = (reg->type) & REG_TYPE_MASK;
+   int style = (reg->type) & REG_STYLE_MASK;
+
+   switch (type) {
+      case BANK_REGISTER:
+      case CASH_REGISTER:
+      case ASSET_REGISTER:
+      case CREDIT_REGISTER:
+      case LIABILITY_REGISTER:
+      case INCOME_REGISTER:
+      case EXPENSE_REGISTER:
+      case EQUITY_REGISTER:
+
+      case INCOME_LEDGER:     /* hack alert do xto cell too */
+      case GENERAL_LEDGER:    /* hack alert do xto cell too */
+         reg->num_cols = 8;
+         break;
+
+      case STOCK_REGISTER:
+      case PORTFOLIO:
+         reg->num_cols = 11;
+         break;
+      default:
+         break;
+   }
+
+   reg->num_header_rows = 1;
+   reg->header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
+
+   switch (style) {
+      case REG_DOUBLE_LINE:
+      case REG_DOUBLE_DYNAMIC:
+         reg->lead_cursor = xaccMallocCellBlock (2, reg->num_cols);
+         break;
+
+      case REG_SINGLE_LINE:
+      case REG_SINGLE_DYNAMIC:
+      case REG_MULTI_LINE:
+      default:
+         reg->lead_cursor = xaccMallocCellBlock (1, reg->num_cols);
+         break;
+   }
+
+   /* the two cursors used for multi-line and dynamic displays */
+   reg->trans_cursor = xaccMallocCellBlock (1, reg->num_cols);
+   reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
 
 }
 
@@ -533,13 +563,12 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    reg->type = type;
 
    /* --------------------------- */
-   /* define the rows & columns where cells appear */
-   configLayout (reg);
+   /* define the number of columns in the display, malloc the cursors */
+   mallocCursors (reg);
 
    /* --------------------------- */
-   /* define the header */
-   header = xaccMallocCellBlock (reg->num_header_rows, reg->num_cols);
-   reg->header = header;
+   /* malloc the header (label) cells */
+   header = reg->header;
 
    HDR (DATE);
    HDR (NUM);
@@ -554,6 +583,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (BALN);
    
    /* --------------------------- */
+   /* malloc the workhorse cells */
 
    NEW (null,    Basic);
    NEW (date,    Date);
@@ -572,16 +602,27 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    NEW (price,   Price);
    NEW (value,   Price);
 
-
-   /* the two cursors */
-   reg->lead_cursor = xaccMallocCellBlock (1, reg->num_cols);
-   reg->memo_cursor = xaccMallocCellBlock (1, reg->num_cols);
-   reg->split_cursor = xaccMallocCellBlock (1, reg->num_cols);
-
-   configCursors (reg);
+   /* --------------------------- */
+   /* config the layout of the cells in the cursors */
+   configLabels (reg);
+   configLayout (reg);
 
    /* --------------------------- */
    /* do some misc cell config */
+   configCursors (reg);
+
+  /* 
+   * The Null Cell is used to make sure that "empty"
+   * cells stay empty.  This solves the problem of 
+   * having the table be reformatted, the result of
+   * which is that an empty cell has landed on a cell
+   * that was previously non-empty.  We want to make 
+   * sure that we erase those cell contents. The null
+   * cells handles this for us.
+   */
+
+   reg -> nullCell -> input_output = XACC_CELL_ALLOW_NONE;
+   xaccSetBasicCellValue (reg->nullCell, "");
 
    /* balance cell does not accept input; its display only.  */
    /* however, we *do* want it to shadow the true cell contents when 
@@ -682,11 +723,11 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    xaccDestroyCellBlock (reg->header);
    xaccDestroyCellBlock (reg->lead_cursor);
-   xaccDestroyCellBlock (reg->memo_cursor);
+   xaccDestroyCellBlock (reg->trans_cursor);
    xaccDestroyCellBlock (reg->split_cursor);
    reg->header = NULL;
    reg->lead_cursor = NULL;
-   reg->memo_cursor = NULL;
+   reg->trans_cursor = NULL;
    reg->split_cursor = NULL;
 
    xaccDestroyDateCell      (reg->dateCell);
