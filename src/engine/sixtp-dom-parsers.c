@@ -736,21 +736,3 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 
     return successful;
 }
-
-gboolean
-string_to_integer(const char *content, gint64 *to)
-{
-    long long int to_in;
-
-    if(sscanf(content, GNC_SCANF_LLD, &to_in) == 1)
-    {
-        if (to)
-          *to = to_in;
-
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
