@@ -1,5 +1,10 @@
 2001-03-27  Dave Peticolas  <dave@krondo.com>
 
+	* configure.in: add --enable-etags argument to turn on
+	automatic TAGS creation
+
+	* src/scm/report/register.scm: add notes field
+
 	* src/scm/report/stylesheet-plain.scm: more reports centered
 	by default
 

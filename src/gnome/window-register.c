@@ -3027,6 +3027,9 @@ report_helper (RegWindow *regData, SCM func)
   args = gh_cons (arg, args);
   g_free (str);
 
+  arg = gh_bool2scm (reg->use_double_line);
+  args = gh_cons (arg, args);
+
   arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
   args = gh_cons (arg, args);
 

@@ -193,11 +193,23 @@ AC_ARG_WITH( help-prefix,
 
 AC_SUBST(GNC_HELPDIR)
 
+
 ### --------------------------------------------------------------------------
 ### Check for etags
 
-AC_CHECK_PROG(GNC_TAGS_FILE, etags, TAGS)
+AC_ARG_ENABLE( etags,
+  [  --enable-etags               enable automatic create of TAGS file],
+  if test $enableval = yes; then
+     USE_ETAGS=1
+  fi,
+  USE_ETAGS=0)
+
+if test ${USE_ETAGS} = 1; then
+  AC_CHECK_PROG(GNC_TAGS_FILE, etags, TAGS)
+fi
+
 AM_CONDITIONAL(GNC_TAGS_FILE, test x${GNC_TAGS_FILE} = xTAGS)
+
 
 ### --------------------------------------------------------------------------
 ### Check for glade
@@ -364,7 +376,7 @@ AC_ARG_ENABLE( guppi,
   fi,
   USE_GUPPI=1 )
 
-if test $USE_GUPPI = 0; then
+if test ${USE_GUPPI} = 0; then
   AC_MSG_WARN([Compiling without guppi support])
 else
   AC_DEFINE(USE_GUPPI)

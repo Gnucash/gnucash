@@ -110,7 +110,7 @@
       (reverse heading-list)))
 
   (define (add-split-row table split column-vector row-style
-                         transaction-info? split-info?)
+                         transaction-info? split-info? double?)
     (let* ((row-contents '())
 	   (parent (gnc:split-get-parent split))
 	   (account (gnc:split-get-account split))
@@ -201,6 +201,24 @@
 
       (gnc:html-table-append-row! table (reverse row-contents))
       (apply set-last-row-style! (cons table (cons "tr" row-style)))
+      (if (and double? transaction-info? (description-col column-vector))
+          (begin
+            (let ((count 0))
+              (set! row-contents '())
+              (if (date-col column-vector)
+                  (begin
+                    (set! count (+ count 1))
+                    (addto! row-contents " ")))
+              (if (num-col column-vector)
+                  (begin
+                    (set! count (+ count 1))
+                    (addto! row-contents " ")))
+              (addto! row-contents
+                      (gnc:make-html-table-cell/size
+                       1 (- (num-columns-required column-vector) count)
+                       (gnc:transaction-get-notes parent)))
+              (gnc:html-table-append-row! table (reverse row-contents))
+              (apply set-last-row-style! (cons table (cons "tr" row-style))))))
       split-value))
 
   (define (lookup-sort-key sort-option)
@@ -219,6 +237,8 @@
      (gnc:make-internal-option "__reg" "query" #f))
     (gnc:register-reg-option
      (gnc:make-internal-option "__reg" "journal" #f))
+    (gnc:register-reg-option
+     (gnc:make-internal-option "__reg" "double" #f))
     (gnc:register-reg-option
      (gnc:make-internal-option "__reg" "debit-string" (_ "Debit")))
     (gnc:register-reg-option
@@ -361,12 +381,15 @@
     (define (reg-report-journal?)
       (opt-val "__reg" "journal"))
 
+    (define (reg-report-double?)
+      (opt-val "__reg" "double"))
+
     (define (add-other-split-rows split table used-columns row-style)
       (define (other-rows-driver split parent table used-columns i)
 	(let ((current (gnc:transaction-get-split parent i)))
           (if current
               (begin
-                (add-split-row table current used-columns row-style #f #t)
+                (add-split-row table current used-columns row-style #f #t #f)
                 (other-rows-driver split parent table
                                    used-columns (+ i 1))))))
 
@@ -378,6 +401,7 @@
                                     used-columns
                                     width
                                     multi-rows?
+                                    double?
                                     odd-row?
                                     main-row-style
                                     alternate-row-style
@@ -398,7 +422,8 @@
                                              used-columns 
                                              current-row-style
                                              #t
-                                             (not multi-rows?))))
+                                             (not multi-rows?)
+                                             double?)))
 
 	    (if multi-rows?
                 (add-other-split-rows 
@@ -413,6 +438,7 @@
 				    used-columns
                                     width 
 				    multi-rows?
+                                    double?
                                     (not odd-row?)
                                     main-row-style
                                     alternate-row-style
@@ -423,6 +449,7 @@
            (used-columns (build-column-used options))
            (width (num-columns-required used-columns))
            (multi-rows? (reg-report-journal?))
+           (double? (reg-report-double?))
            (grand-total-style 
             (get-grand-total-style options))
            (odd-row-style 
@@ -439,6 +466,7 @@
                               used-columns
                               width
                               multi-rows?
+                              double?
                               #t
                               odd-row-style
                               even-row-style
@@ -473,13 +501,7 @@
                                     debit-string credit-string))
 
       (gnc:html-document-set-title! document title)
-;      (gnc:html-document-add-object! 
-;       document
-;       (gnc:make-html-text
-;	(gnc:html-markup-h3 (display-date-interval begindate enddate))))
-      (gnc:html-document-add-object!
-       document 
-       table)
+      (gnc:html-document-add-object! document table)
 
       document))
 
@@ -490,17 +512,19 @@
    'renderer reg-renderer
    'in-menu? #f))
 
-(define (gnc:apply-register-report func query journal? title
-                                   debit-string credit-string)
+(define (gnc:apply-register-report func query journal? double?
+                                   title debit-string credit-string)
   (let* ((options (gnc:make-report-options "Register"))
          (query-op (gnc:lookup-option options "__reg" "query"))
          (journal-op (gnc:lookup-option options "__reg" "journal"))
+         (double-op (gnc:lookup-option options "__reg" "double"))
          (title-op (gnc:lookup-option options "Report Options" "Title"))
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
          (credit-op (gnc:lookup-option options "__reg" "credit-string")))
 
     (gnc:option-set-value query-op query)
     (gnc:option-set-value journal-op journal?)
+    (gnc:option-set-value double-op double?)
     (gnc:option-set-value title-op title)
     (gnc:option-set-value debit-op debit-string)
     (gnc:option-set-value credit-op credit-string)
