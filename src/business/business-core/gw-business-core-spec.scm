@@ -1,5 +1,4 @@
 ;;; -*-scheme-*-
-(use-modules (g-wrap))
 
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
@@ -7,38 +6,25 @@
 (define-module (g-wrapped gw-business-core-spec)
   :use-module (g-wrap))
 
+(use-modules (g-wrap))
+
+(use-modules (g-wrap gw-standard-spec))
+(use-modules (g-wrap gw-wct-spec))
+
 (use-modules (g-wrapped gw-engine-spec))
 
-(let ((mod (gw:new-module "gw-business-core")))
-  (define (standard-c-call-gen result func-call-code)
-    (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
+(let ((ws (gw:new-wrapset "gw-business-core")))
   
-  (define (add-standard-result-handlers! type c->scm-converter)
-    (define (standard-pre-handler result)
-      (let* ((ret-type-name (gw:result-get-proper-c-type-name result))
-             (ret-var-name (gw:result-get-c-name result)))
-        (list "{\n"
-              "    " ret-type-name " " ret-var-name ";\n")))
-    
-    (gw:type-set-pre-call-result-ccodegen! type standard-pre-handler)
-    
-    (gw:type-set-post-call-result-ccodegen!
-     type
-     (lambda (result)
-       (let* ((scm-name (gw:result-get-scm-name result))
-              (c-name (gw:result-get-c-name result)))
-         (list
-          (c->scm-converter scm-name c-name)
-          "  }\n")))))
+  (gw:wrapset-depends-on ws "gw-standard")
+  (gw:wrapset-depends-on ws "gw-wct")
+
+  (gw:wrapset-depends-on ws "gw-engine")
   
-  (gw:module-depends-on mod "gw-runtime")
-  (gw:module-depends-on mod "gw-engine")
-
-  (gw:module-set-guile-module! mod '(g-wrapped gw-business-core))
-
-  (gw:module-set-declarations-ccodegen!
-   mod
-   (lambda (client-only?)
+  (gw:wrapset-set-guile-module! ws '(g-wrapped gw-business-core))
+  
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset)
      (list
       "#include <gncBusiness.h>\n"
       "#include <gncAddress.h>\n"
@@ -48,42 +34,33 @@
       "#include <gncInvoice.h>\n"
       "#include <gncJob.h>\n"
       "#include <gncOrder.h>\n"
-      "#include <gncVendor.h>\n"
-      )))
+      "#include <gncVendor.h>\n")))
 
-  (gw:module-set-init-ccodegen!
-   mod
-   (lambda (client-only?) 
-     (if client-only? 
+  (gw:wrapset-add-cs-initializers!
+   ws
+   (lambda (wrapset client-wrapset status-var)
+     (if client-wrapset
          '()
          (gw:inline-scheme '(use-modules (gnucash business-core))))))
-
+  
   ;; The core Business Object Types
   ;; XXX: Need to add lists of all of these!
 
-  (gw:wrap-non-native-type mod '<gnc:GncAddress*> "GncAddress*"
-			   "const GncAddress*")
-  (gw:wrap-non-native-type mod '<gnc:GncCustomer*> "GncCustomer*"
-			   "const GncCustomer*")
-  (gw:wrap-non-native-type mod '<gnc:GncEmployee*> "GncEmployee*"
-			   "const GncEmployee*")
-  (gw:wrap-non-native-type mod '<gnc:GncEntry*> "GncEntry*"
-			   "const GncEntry*")
-  (gw:wrap-non-native-type mod '<gnc:GncInvoice*> "GncInvoice*"
-			   "const GncInvoice*")
-  (gw:wrap-non-native-type mod '<gnc:GncJob*> "GncJob*"
-			   "const GncJob*")
-  (gw:wrap-non-native-type mod '<gnc:GncOrder*> "GncOrder*"
-			   "const GncOrder*")
-  (gw:wrap-non-native-type mod '<gnc:GncVendor*> "GncVendor*"
-			   "const GncVendor*")
+  (gw:wrap-as-wct ws '<gnc:GncAddress*> "GncAddress*" "const GncAddress*")
+  (gw:wrap-as-wct ws '<gnc:GncCustomer*> "GncCustomer*" "const GncCustomer*")
+  (gw:wrap-as-wct ws '<gnc:GncEmployee*> "GncEmployee*" "const GncEmployee*")
+  (gw:wrap-as-wct ws '<gnc:GncEntry*> "GncEntry*" "const GncEntry*")
+  (gw:wrap-as-wct ws '<gnc:GncInvoice*> "GncInvoice*" "const GncInvoice*")
+  (gw:wrap-as-wct ws '<gnc:GncJob*> "GncJob*" "const GncJob*")
+  (gw:wrap-as-wct ws '<gnc:GncOrder*> "GncOrder*" "const GncOrder*")
+  (gw:wrap-as-wct ws '<gnc:GncVendor*> "GncVendor*" "const GncVendor*")
 
   ;;
   ;; gncBusiness.h
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:business-create-book
    '<gw:void>
    "gncBusinessCreateBook"
