@@ -4806,6 +4806,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   info->first_pass = FALSE;
   info->reg_loaded = TRUE;
 
+  sr_set_cell_fractions (reg, xaccSRGetCurrentSplit (reg));
+
   gnc_table_refresh_gui (table, TRUE);
 
   /* set the completion character for the xfer cells */
