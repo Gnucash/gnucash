@@ -1,3 +1,10 @@
+<<<<<<< ChangeLog
+2001-03-08  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: More colourization.
+	
+
+=======
 2001-03-07  Bill Gribble  <grib@billgribble.com>
 
 	* summary: separate the HTML and HTTP processing functions into
@@ -35,6 +42,7 @@
 	(html-markup/format "%a %a %a %a" 1 2 3 4) does what you'd expect,
 	even if the non-format args are html-markup objects.
 	
+>>>>>>> 1.251
 2001-03-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/top-level.c (gnc_ui_check_events): add timeout

@@ -54,50 +54,46 @@
               (cons (- (gnc:html-table-num-rows table) 1) (cons tag rest)))))
 	(apply gnc:html-table-set-row-style! arg-list)))
 
-    (define (render-account-name-subheading split table subheading-style)
-      (begin 
-	(gnc:html-table-append-row! 
-	 table 
-	 (list (gnc:account-get-name (gnc:split-get-account split))))
-     	(apply set-last-row-style! (cons table (cons "tr" subheading-style)))))
+    (define (add-subheading-row data table width subheading-style)
+      (let ((heading-cell (gnc:make-html-table-cell data)))
+;	(gnc:warn "width" width)
+	(gnc:html-table-cell-set-colspan! heading-cell width)
+	(gnc:html-table-append-row!
+	 table
+	 (list heading-cell))
+	 (apply set-last-row-style! (cons table (cons "tr" subheading-style)))))
 
-    (define (render-account-code-subheading split table subheading-style)
-      (begin (gnc:html-table-append-row! 
-	      table 
-	      (list (gnc:account-get-code (gnc:split-get-account split))))
-	     (apply set-last-row-style! (cons table (cons "tr" subheading-style)))))
+    (define (render-account-name-subheading split table width subheading-style)
+      (add-subheading-row (gnc:account-get-name 
+			    (gnc:split-get-account split))
+			  table width subheading-style))
+
+    (define (render-account-code-subheading split table width subheading-style)
+	(add-subheading-row (gnc:account-get-code (gnc:split-get-account split))
+			    table width subheading-style))
 
     (define (render-corresponding-account-name-subheading 
-             split table subheading-style)
-      (begin
-	(gnc:html-table-append-row!
-	 table (list (gnc:split-get-corr-account-name split)))
-	(apply set-last-row-style! (cons table (cons "tr" subheading-style)))))
-      
+             split table width subheading-style)
+      (add-subheading-row (gnc:split-get-corr-account-name split)
+			  table width subheading-style))
+     
     
     (define (render-corresponding-account-code-subheading 
-             split table subheading-style)
-      (begin 
-	(gnc:html-table-append-row!
-	 table (list (gnc:split-get-corr-account-code split)))
-	(apply set-last-row-style! (cons table (cons "tr" subheading-style)))))
+             split table width subheading-style)
+      (add-subheading-row (gnc:split-get-corr-account-code split)
+			  table width subheading-style))
     
-    (define (render-month-subheading split table subheading-style)
-      (begin (gnc:html-table-append-row!
-	      table (list (strftime "%B %Y" (gnc:timepair->date 
-					     (gnc:transaction-get-date-entered 
-					      (gnc:split-get-parent split))))))
-	     (apply set-last-row-style! (cons table 
-                                         (cons "tr" subheading-style)))))
+    (define (render-month-subheading split table width subheading-style)
+      (add-subheading-row (strftime "%B %Y" (gnc:timepair->date
+					     gnc:transaction-get-date-posted
+					     (gnc:split-get-parent split)))))
+  
+    (define (render-year-subheading split table width subheading-style)
+      (add-subheading-row (strftime "%Y" (gnc:timepair->date
+					  (gnc:transaction-get-date-posted
+					   (gnc:split-get-parent split))))
+			  table width subheading-style))
 
-
-    (define (render-year-subheading split table subheading-style)
-      (begin (gnc:html-table-append-row!
-	       table (list (strftime "%Y" (gnc:timepair->date
-					   (gnc:transaction-get-date-entered
-					    (gnc:split-get-parent split))))))
-	     (apply set-last-row-style! (cons table 
-                                         (cons "tr" subheading-style)))))
     (let ()
 
       (define comp-funcs-assoc-list
@@ -174,6 +170,13 @@
 	(vector-ref columns-used 10))	
 
       (define columns-used-size 11)
+      
+      (define (num-columns-required columns-used)  
+        (do ((i 0 (+ i 1)) 
+             (col-req 0 col-req)) 
+             ((>= i columns-used-size) col-req)
+             (if (vector-ref columns-used i) (set! col-req (+ col-req 1)))))
+
       (define (build-column-used options)   
 	(define (opt-val section name)
 	  (gnc:option-value 
@@ -554,6 +557,14 @@ transferred from/to's code"))
       255
       #f))
 
+    (gnc:register-trep-option
+     (gnc:make-color-option
+      (N_ "Colors") (N_ "Grand Total")
+      "e" (N_ "Background color for total")
+      (list #xff #xff #xff 0)
+      255
+      #f))
+
     (gnc:options-set-default-section gnc:*transaction-report-options*
                                      "Report Options")
 
@@ -598,6 +609,12 @@ transferred from/to's code"))
                                      (N_ "Secondary Subtotals/headings"))))
         (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
 
+  (define (get-grand-total-style options)
+   (let ((bgcolor (gnc:lookup-option options
+                                     (N_ "Colors")
+                                     (N_ "Grand Total"))))
+        (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
+
   (define (get-odd-row-style options)
     (let ((bgcolor (gnc:lookup-option options
                                      (N_ "Colors")
@@ -611,21 +628,20 @@ transferred from/to's code"))
          (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
               
   (define (make-split-table splits options)
-    (define (add-subtotal-row table split used-columns subtotal-collector)
-      (define (blank-columns-required columns-used)  
-        (do ((i 0 (+ i 1)) 
-             (col-req 0 col-req)) 
-             ((>= i columns-used-size) (- col-req 1))
-             (if (vector-ref columns-used i) (set! col-req (+ col-req 1)))))
+    (define (add-subtotal-row table width subtotal-collector 
+             subtotal-style)
      (let ((currency-totals (subtotal-collector
                               'format gnc:make-gnc-monetary #f))
-           (blanks (make-list (blank-columns-required used-columns) #f)))
+           (blanks (make-list (- width 1) #f)))
 ;	(gnc:warn "Subtotal-collector" subtotal-collector)
 ;	(gnc:warn "Currency-totals:" currency-totals)
 	(for-each (lambda (currency)
                     (gnc:html-table-append-row! 
                      table 
-                     (append blanks (list currency))))
+                     (append blanks (list currency)))
+                    (apply set-last-row-style! 
+                           (cons table (cons "tr" subtotal-style))))
+                                                
                   currency-totals)))
 
     (define (get-primary-subtotal-pred options)
@@ -687,6 +703,7 @@ transferred from/to's code"))
     (define (do-rows-with-subtotals splits 
                                     table 
                                     used-columns
+                                    width
                                     multi-rows?
                                     odd-row?
                                     primary-subtotal-pred
@@ -697,10 +714,13 @@ transferred from/to's code"))
                                     alternate-row-style
                                     primary-subtotal-style
                                     secondary-subtotal-style
+                                    grand-total-style
                                     primary-subtotal-collector 
                                     secondary-subtotal-collector 
                                     total-collector)
-      (if (null? splits) #f
+      (if (null? splits)
+          (add-subtotal-row table width total-collector grand-total-style)
+            
 	  (let* ((current (car splits))
                  (current-row-style (if multi-rows? main-row-style
                                         (if odd-row? main-row-style 
@@ -732,23 +752,26 @@ transferred from/to's code"))
                      (or (not next)
                          (and next
                               (not (secondary-subtotal-pred current next)))))
-		(begin (add-subtotal-row table current used-columns
-                                         secondary-subtotal-collector)
+		(begin (add-subtotal-row table width
+                                         secondary-subtotal-collector
+                                         secondary-subtotal-style)
 		       (secondary-subtotal-collector 'reset #f #f)
 		       (if next
-                           (secondary-subheading-renderer current table secondary-subtotal-style))))
+                           (secondary-subheading-renderer next table width secondary-subtotal-style))))
 	    (if (and primary-subtotal-pred
                      (or (not next)
                          (and next
                               (not (primary-subtotal-pred current next)))))
-		(begin (add-subtotal-row table current used-columns
-                                         primary-subtotal-collector)
+		(begin (add-subtotal-row table width 
+                                         primary-subtotal-collector
+                                         primary-subtotal-style)
 		       (primary-subtotal-collector 'reset #f #f)
 		       (if next
-		       (primary-subheading-renderer next table primary-subtotal-style))))
+		       (primary-subheading-renderer next table width primary-subtotal-style))))
 	    (do-rows-with-subtotals rest 
 				    table 
-				    used-columns 
+				    used-columns
+                                    width 
 				    multi-rows?
                                     (not odd-row?)
 				    primary-subtotal-pred 
@@ -759,12 +782,14 @@ transferred from/to's code"))
                                     alternate-row-style
                                     primary-subtotal-style
                                     secondary-subtotal-style
+                                    grand-total-style
 				    primary-subtotal-collector 
 				    secondary-subtotal-collector 
 				    total-collector))))
 
-    (let ((table (gnc:make-html-table))
+    (let* ((table (gnc:make-html-table))
 	  (used-columns (build-column-used options))
+          (width (num-columns-required used-columns))
 	  (multi-rows? (transaction-report-multi-rows-p options))
 	  (primary-subtotal-pred (get-primary-subtotal-pred options))
 	  (secondary-subtotal-pred (get-secondary-subtotal-pred options))
@@ -776,6 +801,8 @@ transferred from/to's code"))
            (get-primary-subtotal-style options))
           (secondary-subtotal-style
             (get-secondary-subtotal-style options))
+          (grand-total-style 
+            (get-grand-total-style options))
           (odd-row-style 
            (get-odd-row-style options))
           (even-row-style
@@ -787,11 +814,11 @@ transferred from/to's code"))
 ;     (gnc:warn "Splits:" splits)
      (if (not (null? splits))
       (if primary-subheading-renderer 
-        (primary-subheading-renderer (car splits) table primary-subtotal-style))
+        (primary-subheading-renderer (car splits) table width primary-subtotal-style))
       (if secondary-subheading-renderer
-        (secondary-subheading-renderer (car splits) table secondary-subtotal-style)))
+        (secondary-subheading-renderer (car splits) table widthsecondary-subtotal-style)))
      
-     (do-rows-with-subtotals splits table used-columns
+     (do-rows-with-subtotals splits table used-columns width
                              multi-rows? #t primary-subtotal-pred
                              secondary-subtotal-pred
 			     primary-subheading-renderer
@@ -800,6 +827,7 @@ transferred from/to's code"))
                              even-row-style
                              primary-subtotal-style
                              secondary-subtotal-style
+                             grand-total-style
  			     (gnc:make-commodity-collector)
                               (gnc:make-commodity-collector)
                               (gnc:make-commodity-collector))
