@@ -953,6 +953,21 @@ gnc_table_leave_update(Table *table, VirtualLocation virt_loc)
 
 /* ==================================================== */
 
+gboolean
+gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
+{
+  if (!table)
+    return TRUE;
+
+  if (!table->view.confirm_handler)
+    return TRUE;
+
+  return table->view.confirm_handler (virt_loc,
+                                      table->view.handler_user_data);
+}
+
+/* ==================================================== */
+
 /* returned result should not be touched by the caller.
  * NULL return value means the edit was rejected. */
 const char *

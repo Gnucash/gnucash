@@ -1,3 +1,14 @@
+2001-06-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c: fix spelling errors
+
+	* src/register/gnome/gnucash-item-edit.c: same as below
+
+	* src/register/gnome/gnucash-sheet.c: check change confirmation
+	before popping up combo list.
+
+	* src/register/table-allgui.c (gnc_table_confirm_change): new func
+
 2001-06-03  Christian Stimming  <stimming@tuhh.de>
 
 	* po/de.po: Massive update of the German translation according to

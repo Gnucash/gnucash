@@ -4449,7 +4449,7 @@ xaccSRConfirmHandler (VirtualLocation virt_loc,
   Split *split;
   char recn;
 
-  /* This assumes we reset the flag whenver we change splits.
+  /* This assumes we reset the flag whenever we change splits.
    * This happens in LedgerMoveCursor. */
   if (info->change_confirmed)
     return TRUE;

@@ -1119,8 +1119,32 @@ static void
 item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 {
 	ItemEdit *item_edit = ITEM_EDIT (data);
+        gboolean show_popup;
 
-	item_edit->show_popup = gtk_toggle_button_get_active (button);
+	show_popup = gtk_toggle_button_get_active (button);
+        if (show_popup)
+        {
+                Table *table;
+                VirtualLocation virt_loc;
+
+                table = item_edit->sheet->table;
+                virt_loc = table->current_cursor_loc;
+
+                if (!gnc_table_confirm_change (table, virt_loc))
+                {
+                        gtk_signal_handler_block_by_data
+                                (GTK_OBJECT (button), data);
+
+                        gtk_toggle_button_set_active (button, FALSE);
+
+                        gtk_signal_handler_unblock_by_data
+                                (GTK_OBJECT (button), data);
+
+                        return;
+                }
+        }
+
+        item_edit->show_popup = show_popup;
 
         if (!item_edit->show_popup)
                 item_edit_hide_popup (item_edit);
@@ -1499,10 +1523,10 @@ item_edit_hide_popup (ItemEdit *item_edit)
 	gtk_arrow_set (item_edit->popup_toggle.arrow,
                        GTK_ARROW_DOWN, GTK_SHADOW_IN);
 
-        gtk_widget_grab_focus (GTK_WIDGET (item_edit->sheet));
-
         gtk_toggle_button_set_active
                 (item_edit->popup_toggle.toggle_button, FALSE);
+
+        gtk_widget_grab_focus (GTK_WIDGET (item_edit->sheet));
 }
 
 void

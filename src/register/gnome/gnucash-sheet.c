@@ -1617,7 +1617,9 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
                                 item_edit = ITEM_EDIT (sheet->item_editor);
 
-                                item_edit_show_popup (item_edit);
+                                if (gnc_table_confirm_change (table,
+                                                              cur_virt_loc))
+                                        item_edit_show_popup (item_edit);
 
                                 return TRUE;
                         }

@@ -421,7 +421,9 @@ gboolean     gnc_table_enter_update(Table *table,
                                     int *start_selection,
                                     int *end_selection);
 
-void gnc_table_leave_update(Table *table, VirtualLocation virt_loc);
+void         gnc_table_leave_update(Table *table, VirtualLocation virt_loc);
+
+gboolean     gnc_table_confirm_change(Table *table, VirtualLocation virt_loc);
 
 const char * gnc_table_modify_update(Table *table,
                                      VirtualLocation virt_loc,
