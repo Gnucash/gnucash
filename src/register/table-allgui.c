@@ -822,60 +822,56 @@ int
 gnc_register_cell_valid(Table *table, int row, int col) 
 {
   int invalid = 0;
+  int io_flag;
   int rel_row, rel_col;
+  int virt_row, virt_col;
   CellBlock *arr, *header;
-  
+
   /* can't edit outside of the physical space */
   invalid = (0 > row) || (0 > col) ;
   invalid = invalid || (row >= table->num_phys_rows);
   invalid = invalid || (col >= table->num_phys_cols);
-  
-  /* gtksheet may call cell_changed after table has been destroyed.
-     Are we papering over a real bug here?
-     This is probably a good check anyway. */
+
+  /* In case we're called after table has been destroyed. */
   invalid = invalid || (table->handlers == NULL);
 
-  if(invalid) return(!invalid);
+  if(invalid) return GNC_F;
 
   /* header rows cannot be modified */
   /* hack alert -- assumes that header is first cell */
-  /* if 0,0 is not a headr  row, then trouble ... */
+  /* if 0,0 is not a header row, then trouble ... */
   header = table->handlers[0][0];
   invalid = invalid || (row < header->numRows);
 
-  /* GNOME needs this.  Trying to find out why... */
-  /* if(invalid) return(invalid); */
-    
   /* compute the cell location */
+  virt_row = table->locators[row][col]->virt_row;
+  virt_col = table->locators[row][col]->virt_col;
+
   rel_row = table->locators[row][col]->phys_row_offset;
   rel_col = table->locators[row][col]->phys_col_offset;
-  
-  /* verify that cursor offsets are valid.  This may occur if
-   * the app that is using the table has a paritally initialized
-   * cursor. (probably due to a prograing error, but maybe they
-   * meant to do this). */
+
+  /* verify that offsets are valid. This may occur if the app that is
+   * using the table has a paritally initialized cursor. (probably due
+   * to a programming error, but maybe they meant to do this). */
+  invalid = invalid || (0 > virt_row);
+  invalid = invalid || (0 > virt_col);
   invalid = invalid || (0 > rel_row);
   invalid = invalid || (0 > rel_col);
-  
-  /* check for a cell handler, but only if cell adress is valid */
-  arr = table->current_cursor;
-  if (arr && !invalid) {
-    if (! (arr->cells[rel_row][rel_col])) {
-      invalid = TRUE;
-    } else {
-      /* if cell is marked as output-only,
-       * then don't call callbacks */
-      if (0 == (XACC_CELL_ALLOW_INPUT &
-                ((arr->cells[rel_row][rel_col])->input_output))) 
-        {
-          invalid = TRUE;
-        }
-    }
-    
-  } else {
-    invalid = TRUE;
-  }
-  return(!invalid);
+
+  if (invalid) return GNC_F;
+
+  arr = table->handlers[virt_row][virt_col];
+
+  /* check for a cell handler, but only if cell address is valid */
+  if (arr == NULL) return GNC_F;
+  if (arr->cells[rel_row][rel_col] == NULL) return GNC_F;
+
+  /* if cell is marked as output-only, you can't enter */
+  io_flag = arr->cells[rel_row][rel_col]->input_output;
+  if (0 == (XACC_CELL_ALLOW_INPUT & io_flag)) return GNC_F;
+
+  if (invalid) return GNC_F;
+  return GNC_T;
 }
 
 /* ========================================================================
@@ -1041,6 +1037,7 @@ gnc_table_modify_update(Table *table, int row, int col,
     /* update data. bounds check done earlier */
     if (table->entries[row][col]) free (table->entries[row][col]);
     table->entries[row][col] = newval;
+    retval = newval;
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
   LEAVE ("gnc_table_modify_update(): "
@@ -1082,7 +1079,7 @@ gnc_table_traverse_update(Table *table, int row, int col,
       (col >= table->num_phys_cols) || (col < 0)) {
 
     PINFO("gnc_table_traverse_update: source (%d, %d) out of bounds (%d, %d)\n",
-      row, col, table->num_phys_rows, table->num_phys_cols);
+	  row, col, table->num_phys_rows, table->num_phys_cols);
     table->prev_phys_traverse_row = *dest_row;
     table->prev_phys_traverse_col = *dest_col;
     dir = GNC_TABLE_TRAVERSE_POINTER;
@@ -1092,47 +1089,101 @@ gnc_table_traverse_update(Table *table, int row, int col,
   switch(dir) {
     case GNC_TABLE_TRAVERSE_RIGHT:
       {
-        /* cannot compute the cell location until we have checked that
-         * row and colu have valid values.  compute the cell location
-         * */
-        const int rel_row = table->locators[row][col]->phys_row_offset;
-        const int rel_col = table->locators[row][col]->phys_col_offset;
-        
-        int next_row = arr->right_traverse_r[rel_row][rel_col];
-        int next_col = arr->right_traverse_c[rel_row][rel_col];
-        
-        /* if we are at the end of the traversal chain, hop out of this
-         * tab group, and into the next.  */
-        if ((0 > next_row) || (0 > next_col)) {
-          /* reverse the sign of next_row, col to be positive. */
-          *dest_row = row - rel_row - next_row - 1; 
-          *dest_col = col - rel_col - next_col - 1;
-          exit_register = TRUE;
-        } else {
-          *dest_row = row - rel_row + next_row; 
-          *dest_col = col - rel_col + next_col;
-        }
+	/* cannot compute the cell location until we have checked that
+	 * row and column have valid values. compute the cell location.
+	 */
+	const int rel_row = table->locators[row][col]->phys_row_offset;
+	const int rel_col = table->locators[row][col]->phys_col_offset;
+
+	int next_row = arr->right_traverse_r[rel_row][rel_col];
+	int next_col = arr->right_traverse_c[rel_row][rel_col];
+
+	/* if we are at the end of the traversal chain, hop out of this
+	 * tab group, and into the next.  */
+	if ((0 > next_row) || (0 > next_col)) {
+	  /* reverse the sign of next_row, col to be positive. */
+	  *dest_row = row - rel_row - next_row - 1; 
+	  *dest_col = col - rel_col - next_col - 1;
+	  exit_register = TRUE;
+	} else {
+	  *dest_row = row - rel_row + next_row; 
+	  *dest_col = col - rel_col + next_col;
+	}
       }
       break;
-  
-    default:
-         /* FIXME: Right now we don't handle anything but forward
-         traversals, but in the future, here's how it should go:
 
-         By default, we *accept* the proposed traversal.
-         
-         If its a left moving tab, you should move left.
-         If its an upwards moving tab you should move up, etc.
-         If its a mouse pointer, we should allow user to go to that cell.
-         All we are doing here is *not* overriding the proposed values.
-         
-         For right moving tab, we over-rode the proposed values to
-         make tabbing prettier.  But some day we may want to make
-         moving up and down prettier too.  */
+    case GNC_TABLE_TRAVERSE_UP:
+    case GNC_TABLE_TRAVERSE_DOWN:
+      {
+	CellBlock *header = table->handlers[0][0];
+	int new_row = *dest_row;
+	int increment;
+
+	/* Keep going in the specified direction until we find a valid
+	 * row to land on, or we hit the end of the table. At the end,
+	 * turn around and go back until we find a valid row or we get
+	 * to where we started.
+	 */
+	increment = (dir == GNC_TABLE_TRAVERSE_DOWN) ? 1 : -1;
+
+	while (!gnc_register_cell_valid(table, new_row, *dest_col))
+	{
+	  if (new_row == row)
+	    return TRUE;
+
+	  if ((new_row < header->numRows) || (new_row >= table->num_phys_rows))
+	  {
+	    increment *= -1;
+	    new_row = *dest_row;
+	  }
+
+	  new_row += increment;
+	}
+
+	*dest_row = new_row;
+      }
+
+      if (!gnc_register_cell_valid(table, *dest_row, *dest_col))
+	return TRUE;
 
       break;
+
+    case GNC_TABLE_TRAVERSE_POINTER:
+      /* Fan out right and left looking for a valid column to land on. */
+      if (!gnc_register_cell_valid(table, *dest_row, *dest_col))
+      {
+        int left = *dest_col - 1;
+        int right = *dest_col + 1;
+
+        while (left >= 0 || right < table->num_phys_cols)
+        {
+          if (gnc_register_cell_valid(table, *dest_row, right))
+          {
+            *dest_col = right;
+            break;
+          }
+
+          if (gnc_register_cell_valid(table, *dest_row, left))
+          {
+            *dest_col = left;
+            break;
+          }
+
+          left--;
+          right++;
+        }
+      }
+
+      if (!gnc_register_cell_valid(table, *dest_row, *dest_col))
+	return TRUE;
+
+      break;
+
+    default:
+      /* FIXME: Handle left-movement */
+      break;
   }
-  
+
   /* OK, now we do a fancy trick to get the auto-expanding registers
      to work right.  The trick is that as one transaction is expanded
      or collapsed, the rows all get renumbered.  Now, we can't tell

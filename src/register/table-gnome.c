@@ -86,26 +86,32 @@ xaccCreateTable (GtkWidget *widget, void *data)
 
         /* config the cell-block styles */
         
-        sheet->cursor_style[GNUCASH_CURSOR_HEADER] = gnucash_sheet_style_compile (sheet,
-                                                                            sr->header,
-                                                                            GNUCASH_CURSOR_HEADER);
-        sheet->cursor_style[GNUCASH_CURSOR_SINGLE] = gnucash_sheet_style_compile (sheet,
-                                                                            sr->single_cursor,
-                                                                            GNUCASH_CURSOR_SINGLE);
-        sheet->cursor_style[GNUCASH_CURSOR_DOUBLE] = gnucash_sheet_style_compile (sheet,
-                                                                            sr->double_cursor,
-                                                                            GNUCASH_CURSOR_DOUBLE);
-        sheet->cursor_style[GNUCASH_CURSOR_TRANS] = gnucash_sheet_style_compile (sheet,
-                                                                           sr->trans_cursor,
-                                                                           GNUCASH_CURSOR_TRANS);
-        sheet->cursor_style[GNUCASH_CURSOR_SPLIT] = gnucash_sheet_style_compile (sheet,
-                                                                           sr->split_cursor,
-                                                                           GNUCASH_CURSOR_SPLIT);
+        sheet->cursor_style[GNUCASH_CURSOR_HEADER] =
+		gnucash_sheet_style_compile (sheet,
+					     sr->header,
+					     GNUCASH_CURSOR_HEADER);
+
+        sheet->cursor_style[GNUCASH_CURSOR_SINGLE] =
+		gnucash_sheet_style_compile (sheet,
+					     sr->single_cursor,
+					     GNUCASH_CURSOR_SINGLE);
+
+        sheet->cursor_style[GNUCASH_CURSOR_DOUBLE] =
+		gnucash_sheet_style_compile (sheet,
+					     sr->double_cursor,
+					     GNUCASH_CURSOR_DOUBLE);
+
+        sheet->cursor_style[GNUCASH_CURSOR_TRANS] =
+		gnucash_sheet_style_compile (sheet,
+					     sr->trans_cursor,
+					     GNUCASH_CURSOR_TRANS);
+
+        sheet->cursor_style[GNUCASH_CURSOR_SPLIT] =
+		gnucash_sheet_style_compile (sheet,
+					     sr->split_cursor,
+					     GNUCASH_CURSOR_SPLIT);
 
         xaccRefreshHeader (table);
-        gnome_canvas_item_set (sheet->header_item,
-                               "type", GNUCASH_CURSOR_HEADER,
-                               NULL);
 
         gnucash_sheet_table_load (sheet);
         gnucash_sheet_cursor_set_from_table (sheet);

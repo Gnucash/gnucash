@@ -55,37 +55,21 @@
 
  */
 
-/* TABLE_PRIVATE_DATA:in_between_cells is used to detect real user
-   cell changes.  Otherwise we get a bunch of spurious changed,
-   insert_text, and delete_text events whenever the user clicks on a
-   new cell as the engine updates all the cell contents (in the
-   current cursor?)
-
-   This may not be strictly necessary, as the redundant "changes"
-   might not hurt anything, but for now I'm going to do this until I
-   figure out what's going on.  At the very least, this will be more
-   efficient.  I don't know yet if it's at all dangerous, but so far I
-   don't suspect it to be.  */
 
 #define TABLE_PRIVATE_DATA						\
   /* Gtk-only private table members  */					\
   GtkWidget *table_widget;          /* the Sheet */			\
-  gint insert_signal_tag;                                                 \
+  gint insert_signal_tag;                                               \
   gint delete_signal_tag;                                               \
-  gint entry_needs_reconnect;                                       \
-  /* see comments above */                                              \
-  gboolean in_between_cells;                                            \
-									\
-  GtkWidget *next_tab_group;        /* where to traverse in the end */	\
+  gint entry_needs_reconnect;
+
+
 
 #define TABLE_PRIVATE_DATA_INIT(table) {				\
    table->table_widget = NULL;						\
-									\
-   table->in_between_cells = TRUE;					\
-   									\
-   table->next_tab_group = 0;						\
-    table->insert_signal_tag = -1;            \
-     table->delete_signal_tag = -1;             \
+   table->insert_signal_tag = -1;                                       \
+   table->delete_signal_tag = -1;                                       \
+   table->entry_needs_reconnect = FALSE;                                \
 }
 
 
