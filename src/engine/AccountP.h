@@ -160,4 +160,8 @@ void         xaccAccountRemoveSplit (Account *, Split *);
 void         xaccAccountRecomputeBalance (Account *);
 void         xaccAccountRecomputeBalances (Account **);
 
+/** GLOBALS *********************************************************/
+
+extern int next_free_unique_account_id;
+ 
 #endif /* __XACC_ACCOUNT_P_H__ */

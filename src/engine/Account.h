@@ -23,8 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ACCOUNT_H__
-#define __ACCOUNT_H__
+#ifndef __XACC_ACCOUNT_H__
+#define __XACC_ACCOUNT_H__
 
 #include "config.h"
 #include "AccInfo.h"
@@ -148,9 +148,10 @@ Split *        xaccAccountGetSplit (Account *acc, int i);
 Split **       xaccAccountGetSplitList (Account *acc);
 int            xaccAccountGetNumSplits (Account *acc);
 
+/* The IthAccount() routine merely dereferences: the returned
+ *    value is just list[i].  This routine is needed for the perl 
+ *    swig wrappers, which cannot dereference a list.
+ */
 
-/** GLOBALS *********************************************************/
-
-extern int next_free_unique_account_id;
-
-#endif
+Account *      IthAccount (Account **list, int i);
+#endif /* __XACC_ACCOUNT_H__ */

@@ -445,4 +445,12 @@ Split * xaccGetOtherSplit (Split *);
  */
 int xaccIsPeerSplit (Split *, Split *);
 
+/* The IthSplit() and IthTransaction() routines merely dereference
+ *    the lists supplied as arguments; i.e. they return list[i].
+ *    These routines are needed by the perl swig wrappers, which
+ *    are unable to dereference on thier own.
+ */
+Transaction * IthTransaction (Transaction **tarray, int i);
+Split       * IthSplit       (Split **sarray,       int i);
+
 #endif /* __XACC_TRANSACTION_H__ */

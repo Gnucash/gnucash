@@ -1945,5 +1945,22 @@ xaccIsPeerSplit (Split *sa, Split *sb)
    return 0;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+Split *
+IthSplit (Split **list, int i)
+{
+   if (!list || 0 > i) return NULL;
+   return list[i];
+}
+
+Transaction *
+IthTransaction (Transaction **list, int i)
+{
+   if (!list || 0 > i) return NULL;
+   return list[i];
+}
+
 /************************ END OF ************************************\
 \************************* FILE *************************************/

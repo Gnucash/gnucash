@@ -1068,4 +1068,15 @@ xaccAccountGetNumSplits (Account *acc)
    return (acc->numSplits);
 }
 
+/********************************************************************\
+\********************************************************************/
+
+Account * 
+IthAccount (Account **list, int i)
+{
+   if (!list || 0 > i) return NULL;
+   return list[i];
+}
+   
+
 /*************************** END OF FILE **************************** */
