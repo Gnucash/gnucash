@@ -242,9 +242,13 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 
         /* FIXMEs: Do checks on validity and such, interrupting the user if
          * things aren't right.
+         * FIXME: We should do all validity checks before we change anything
+         * about the SX; for clarity as well as consistency.
          *
+         * . SX name is unique
          * . balancing the SX if contain numeric-only formula data.
          *   . agreement with create-automagically/notification controls
+         * X SX has a name
          * X "weekly" FS has some days set.
          * X "once" with reasonable start/end dates.
          *   X This doesn't work at the time the 'weekly' one was fixed with
@@ -299,11 +303,62 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         }
 #endif /* 0 */
 
-        gdate = g_date_new();
         /* read out data back into SchedXaction object. */
-        w = glade_xml_get_widget( sxed->gxml, "sxe_name" );
-        xaccSchedXactionSetName( sxed->sx, gtk_entry_get_text( GTK_ENTRY(w) ) );
 
+        /* FIXME: this is getting too deep; split out. */
+        {
+                char *name;
+                GList *sxList;
+                gboolean nameExists, nameHasChanged;
+
+                w = glade_xml_get_widget( sxed->gxml, "sxe_name" );
+                name = gtk_entry_get_text( GTK_ENTRY(w) );
+                if ( strlen(name) == 0 ) {
+                        char *sx_has_no_name_msg =
+                                _( "Please name the Scheduled Transaction." );
+                        gnc_error_dialog_parented( GTK_WINDOW(sxed->dialog),
+                                                   sx_has_no_name_msg );
+                        return;
+                        
+                }
+
+                nameExists = FALSE;
+                nameHasChanged =
+                        (xaccSchedXactionGetName(sxed->sx) == NULL)
+                        || (strcmp( xaccSchedXactionGetName(sxed->sx), name ) != 0);
+                sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+                for ( ; nameHasChanged && !nameExists && sxList ;
+                      sxList = sxList->next ) {
+                        char *existingName;
+                        existingName =
+                                xaccSchedXactionGetName( (SchedXaction*)sxList->
+                                                         data );
+                        nameExists |= ( g_strcasecmp(name, existingName) == 0 );
+                }
+                if ( nameHasChanged && nameExists ) {
+                        char *sx_has_existing_name_msg =
+                                _( "A Scheduled Transaction with this name \"%s\" already exists.\n"
+                                   "Are you sure you want to name this one the same?" );
+                        GString *realMsg;
+
+                        int len = strlen( sx_has_existing_name_msg)
+                                + strlen( name );
+
+                        realMsg = g_string_sized_new( len );
+                        g_string_sprintf( realMsg, sx_has_existing_name_msg, name );
+                        if ( ! gnc_verify_dialog_parented( sxed->dialog,
+                                                           realMsg->str,
+                                                           FALSE ) ) {
+                                /* They don't; so don't. */
+                                g_string_free( realMsg, TRUE );
+                                return;
+                        }
+                        g_string_free( realMsg, TRUE );
+                }
+                xaccSchedXactionSetName( sxed->sx, name );
+        }
+
+        gdate = g_date_new();
         optEndDate = glade_xml_get_widget( sxed->gxml, "rb_enddate" );
         optNoEnd = glade_xml_get_widget( sxed->gxml, "rb_noend" );
         optNumOccur = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
@@ -565,18 +620,20 @@ row_select_handler( GtkCList *clist,
                     GdkEventButton *event,
                     gpointer d )
 {
-        SchedXactionDialog                *sxd;
-        SchedXactionEditorDialog        *sxed;
-        SchedXaction                        *sx;
+        SchedXactionDialog *sxd;
+        SchedXaction *sx;
         
         sxd   = (SchedXactionDialog*)d;
 
-        g_return_if_fail( event );
+        if ( event == NULL ) {
+                /* it could be a keypress */
+                return;
+        }
 
         switch ( event->type ) {
         case GDK_2BUTTON_PRESS:
                 sx = (SchedXaction*)gtk_clist_get_row_data( clist, row );
-                sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, 0 );
+                gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx, 0 );
                 break;
         default:
                 /* noop */
@@ -727,6 +784,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         schedXact_editor_populate( sxed );
 
         gtk_widget_show_all(sxed->dialog);
+        
 
         return sxed;
 }

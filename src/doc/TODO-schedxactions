@@ -101,6 +101,7 @@ X create a template register
 . SX list
   . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
   . tab order
+  . "** CRITICAL **: file dialog-scheduledxaction.c: line 570 (row_select_handler): assertion `event' failed." when key-navigating sx list.
 
 . SX editor
   . tab order
@@ -118,15 +119,18 @@ X create a template register
 
 . make-from-transaction
   . bugs
-    . you can delete a freshly-from-trans'd SX from the list with the
-      from-trans dlg still open, then 'ok' the dlg to get a segfault.
-    . creating a SX from trans with the SX list open does not update it.
     . general: there's going to be all sorts of interaction issues like these
       between these things [SX-from-trans, SX list, SX editor] that should be
       handled.
+      . you can delete a freshly-from-trans'd SX from the list with the
+        from-trans dlg still open, then 'ok' the dlg to get a segfault.
+        . you can generally manipulate SXes into bad/weird states since both
+          dialogs are open.
+      . creating a SX from trans with the SX list open does not update the SX
+        list
   . tab-order
   . better frequency guess?
-  [related...]
+   [ related... ]
   . match existing transactions for long-time users
     . based off template-transaction data, some big existing-transaction
       scanning code.
@@ -139,7 +143,7 @@ X create a template register
        which may not be the Right Thing]
 
 . need "since-last-run" UI for instanatiation.
-  . need nifty visual style
+  . need nifty visual style for druid.
     . use color-setting code in src/gnome-utils/druid-utils.[ch]
   . support sorting in various clists
   . tab-order
@@ -156,8 +160,12 @@ X create a template register
   . bugs 
     . correct "Back" button behavior in Druid paradigm
     . tab-order on variable-entry window isn't always correct.
-    . created SXes are put in GL forever... :(
+    . created SXes are put in GL forever. :(
+      . But this is true of manually-created transactions, too ... is this
+        actually correct behavior?
     . inital "To-Create Transactions" varbinding table doesn't setup table correctly.
+    . creating/cancelling a bunch [FIXME:define "bunch"] of transactions
+      takes too long, with no progress indication.
     X twunder reports [2002.01.29] register growing a little bit at a time if
       tab is hit to switch between register fields -- started with update on
       1/21.
