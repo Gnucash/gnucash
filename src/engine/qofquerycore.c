@@ -26,9 +26,9 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"
+#include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
-#include "QueryNew.h"
 
 static short module = MOD_QUERY;
 
@@ -50,7 +50,7 @@ typedef char * (*QueryToString) (gpointer object, QofQueryAccess get_fcn);
 typedef gboolean (*QueryPredicateEqual) (QofQueryPredData *p1, 
 					 QofQueryPredData *p2);
 
-/* This function registers a new Core Object with the QueryNew
+/* This function registers a new Core Object with the QofQuery
  * subsystem.  It maps the "core_name" object to the given
  * query_predicate, predicate_copy, and predicate_data_free functions.
  */

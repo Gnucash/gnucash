@@ -457,7 +457,7 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
    query = xaccMallocQuery();
    xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
                                    TRUE, calve_date,
-                                   QUERY_AND);
+                                   QOF_QUERY_AND);
    closing_book = qof_book_new();
    qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';

@@ -1,5 +1,5 @@
 /********************************************************************\
- * QueryObject.c -- provide Gnucash Queriable data objects          *
+ * QueryObject.c -- provide QOF Queriable data objects              *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -27,7 +27,7 @@
 
 #include "gnc-engine-util.h"
 #include "QueryObjectP.h"
-#include "QueryNew.h"
+#include "qofquery.h"
 
 static short module = MOD_QUERY;
 

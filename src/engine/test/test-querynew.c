@@ -7,7 +7,7 @@
 #include "messages.h"
 
 #include "QueryObjectP.h"
-#include "QueryNew.h"
+#include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
 

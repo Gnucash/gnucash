@@ -3622,8 +3622,8 @@ gboolean xaccSplitRegister (void)
     { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op },
     { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op },
     { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccSplitGetBook },
-    { QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess) xaccSplitGetGUID },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccSplitGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess) xaccSplitGetGUID },
     { NULL },
   };
 
@@ -3684,8 +3684,8 @@ gboolean xaccTransRegister (void)
     { TRANS_VOID_REASON, QOF_QUERYCORE_STRING, (QofQueryAccess)xaccTransGetVoidReason },
     { TRANS_VOID_TIME, QOF_QUERYCORE_DATE, (QofQueryAccess)xaccTransGetVoidTime },
     { TRANS_SPLITLIST, GNC_ID_SPLIT, (QofQueryAccess)xaccTransGetSplitList },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccTransGetBook },
-    { QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)xaccTransGetGUID },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccTransGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)xaccTransGetGUID },
     { NULL },
   };
 

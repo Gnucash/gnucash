@@ -119,13 +119,13 @@
   (gw:enum-add-value! wt "GNC_EVENT_DESTROY" 'gnc-event-destroy)
   (gw:enum-add-value! wt "GNC_EVENT_ALL" 'gnc-event-all))
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QueryOp")))
+(let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QofQueryOp")))
 
-  (gw:enum-add-value! wt "QUERY_AND" 'query-and)
-  (gw:enum-add-value! wt "QUERY_OR" 'query-or)
-  (gw:enum-add-value! wt "QUERY_NAND" 'query-nand)
-  (gw:enum-add-value! wt "QUERY_NOR" 'query-nor)
-  (gw:enum-add-value! wt "QUERY_XOR" 'query-xor))
+  (gw:enum-add-value! wt "QOF_QUERY_AND" 'query-and)
+  (gw:enum-add-value! wt "QOF_QUERY_OR" 'query-or)
+  (gw:enum-add-value! wt "QOF_QUERY_NAND" 'query-nand)
+  (gw:enum-add-value! wt "QOF_QUERY_NOR" 'query-nor)
+  (gw:enum-add-value! wt "QOF_QUERY_XOR" 'query-xor))
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:query-compare-how> "QofQueryCompare")))
   (gw:enum-add-value! wt "QOF_COMPARE_LT" 'query-compare-lt)
@@ -1714,7 +1714,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-create
  '<gnc:Query*>
- "gncQueryCreate"
+ "qof_query_create"
  '()
  "Create a new (empty) Query structure.")
 
@@ -1722,7 +1722,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-create-for
  '<gnc:Query*>
- "gncQueryCreateFor"
+ "qof_query_create_for"
  '((<gnc:id-type> obj-type))
  "Create a new (empty) Query structure to search for the supplied type.")
 
@@ -1730,7 +1730,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-search-for
  '<gw:void>
- "gncQuerySearchFor"
+ "qof_query_search_for"
  '((<gnc:Query*> q) (<gnc:id-type> obj-type))
  "Set the object-type to search for.")
 
@@ -1778,7 +1778,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-purge-terms
  '<gw:void>
- "gncQueryPurgeTerms"
+ "qof_query_purge_terms"
  '((<gnc:Query*> q) ((gw:gslist-of <gnc:id-type> caller-owned) param-path))
  "Remove query terms of a particular parameter-path.")
 
@@ -1996,7 +1996,7 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:query-set-max-results
  '<gw:void>
- "gncQuerySetMaxResults"
+ "qof_query_set_max_results"
  '((<gnc:Query*> q) (<gw:int> n))
  "Set the max number of results to be returned by a query.")
 

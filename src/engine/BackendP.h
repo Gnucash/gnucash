@@ -37,15 +37,15 @@
  *
  */
 
-#ifndef XACC_BACKEND_P_H
-#define XACC_BACKEND_P_H
+#ifndef QOF_BACKEND_P_H
+#define QOF_BACKEND_P_H
 
 #include "config.h"
 
 #include "Backend.h"
-#include "QueryNew.h"
 #include "gnc-session.h"
 #include "qofbook.h"
+#include "qofquery.h"
 
 /*
  * The session_begin() routine gives the backend a second initialization
@@ -239,7 +239,7 @@ struct backend_s
   void (*commit) (Backend *, GNCIdTypeConst, gpointer);
   void (*rollback) (Backend *, GNCIdTypeConst, gpointer);
 
-  gpointer (*compile_query) (Backend *, QueryNew *);
+  gpointer (*compile_query) (Backend *, QofQuery *);
   void (*free_query) (Backend *, gpointer);
   void (*run_query) (Backend *, gpointer);
 
@@ -300,4 +300,4 @@ Backend * xaccQofBookGetBackend (QofBook *book);
 
 void xaccInitBackend(Backend *be);
 
-#endif /* XACC_BACKEND_P_H */
+#endif /* QOF_BACKEND_P_H */

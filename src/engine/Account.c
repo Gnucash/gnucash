@@ -3201,8 +3201,8 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_RECONCILED_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetReconciledBalance },
     { ACCOUNT_FUTURE_MINIMUM_, QOF_QUERYCORE_NUMERIC, (QofQueryAccess)xaccAccountGetProjectedMinimumBalance },
     { ACCOUNT_TAX_RELATED, QOF_QUERYCORE_BOOLEAN, (QofQueryAccess)xaccAccountGetTaxRelated },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccAccountGetBook },
-    { QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)xaccAccountGetGUID },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofQueryAccess)xaccAccountGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)xaccAccountGetGUID },
     { NULL },
   };
 

@@ -224,7 +224,7 @@ xaccQueryGetLots (Query * q, query_txn_match_t runtype)
 
 void
 xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
-			 QofGuidMatch how, QueryOp op)
+			 QofGuidMatch how, QofQueryOp op)
 {
   GList *list = NULL;
 
@@ -252,7 +252,7 @@ xaccQueryAddAccountMatch(Query *q, AccountList *acct_list,
 
 void
 xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
-			     QofGuidMatch how, QueryOp op)
+			     QofGuidMatch how, QofQueryOp op)
 {
   QofQueryPredData *pred_data;
   GSList *param_list = NULL;
@@ -266,21 +266,21 @@ xaccQueryAddAccountGUIDMatch(Query *q, AccountGUIDList *guid_list,
   switch (how) {
   case QOF_GUID_MATCH_ANY:
   case QOF_GUID_MATCH_NONE:
-    param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_QUERY_PARAM_GUID, NULL);
     break;
   case QOF_GUID_MATCH_ALL:
-    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_SPLITLIST,
+    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_SPLITLIST,
 					 SPLIT_ACCOUNT_GUID, NULL);
     break;
   default:
     PERR ("Invalid match type: %d", how);
   }
 
-  gncQueryAddTerm (q, param_list, pred_data, op);
+  qof_query_add_term (q, param_list, pred_data, op);
 }
 
 void
-xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QueryOp op)
+xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QofQueryOp op)
 {
   GList *list;
   const GUID *guid;
@@ -298,7 +298,7 @@ xaccQueryAddSingleAccountMatch(Query *q, Account *acc, QueryOp op)
 
 void
 xaccQueryAddStringMatch (Query* q, const char *matchstring,
-			 int case_sens, int use_regexp, QueryOp op,
+			 int case_sens, int use_regexp, QofQueryOp op,
 			 const char * path, ...)
 {
   QofQueryPredData *pred_data;
@@ -319,12 +319,12 @@ xaccQueryAddStringMatch (Query* q, const char *matchstring,
   param_list = build_param_list_internal (path, ap);
   va_end (ap);
 
-  gncQueryAddTerm (q, param_list, pred_data, op);
+  qof_query_add_term (q, param_list, pred_data, op);
 }
 
 void
 xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
-			  QofQueryCompare how, QueryOp op,
+			  QofQueryCompare how, QofQueryOp op,
 			  const char * path, ...)
 {
   QofQueryPredData *pred_data;
@@ -342,7 +342,7 @@ xaccQueryAddNumericMatch (Query *q, gnc_numeric amount, QofNumericMatch sign,
   param_list = build_param_list_internal (path, ap);
   va_end (ap);
 
-  gncQueryAddTerm (q, param_list, pred_data, op);
+  qof_query_add_term (q, param_list, pred_data, op);
 }
 
 /* The DateMatch queries match transactions whose posted date
@@ -358,7 +358,7 @@ void
 xaccQueryAddDateMatchTS (Query * q, 
 			 int use_start, Timespec sts, 
 			 int use_end, Timespec ets,
-			 QueryOp op)
+			 QofQueryOp op)
 {
   Query *tmp_q = NULL;
   QofQueryPredData *pred_data;
@@ -367,32 +367,32 @@ xaccQueryAddDateMatchTS (Query * q,
   if (!q || (!use_start && !use_end))
     return;
 
-  tmp_q = gncQueryCreate ();
+  tmp_q = qof_query_create ();
 
   if (use_start) {
     pred_data = qof_query_date_predicate (QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
     if (!pred_data) {
-      gncQueryDestroy (tmp_q);
+      qof_query_destroy (tmp_q);
       return;
     }
 
-    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-    gncQueryAddTerm (tmp_q, param_list, pred_data, QUERY_AND);
+    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    qof_query_add_term (tmp_q, param_list, pred_data, QOF_QUERY_AND);
   }
 
   if (use_end) {
     pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
     if (!pred_data) {
-      gncQueryDestroy (tmp_q);
+      qof_query_destroy (tmp_q);
       return;
     }
 
-    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-    gncQueryAddTerm (tmp_q, param_list, pred_data, QUERY_AND);
+    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    qof_query_add_term (tmp_q, param_list, pred_data, QOF_QUERY_AND);
   }
 
-  gncQueryMergeInPlace (q, tmp_q, op);
-  gncQueryDestroy (tmp_q);
+  qof_query_merge_in_place (q, tmp_q, op);
+  qof_query_destroy (tmp_q);
 }
 
 /********************************************************************
@@ -404,7 +404,7 @@ void
 xaccQueryAddDateMatch(Query * q, 
                       int use_start, int sday, int smonth, int syear,
                       int use_end, int eday, int emonth, int eyear,
-                      QueryOp op) 
+                      QofQueryOp op) 
 {
   /* gcc -O3 will auto-inline this function, avoiding a call overhead */
   xaccQueryAddDateMatchTS (q, use_start,
@@ -425,7 +425,7 @@ xaccQueryAddDateMatchTT(Query * q,
                         time_t stt,
                         int    use_end,
                         time_t ett,
-                        QueryOp op) 
+                        QofQueryOp op) 
 {
   Timespec   sts;
   Timespec   ets;
@@ -443,7 +443,7 @@ xaccQueryAddDateMatchTT(Query * q,
 }
 
 void
-xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
+xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QofQueryOp op)
 {
   QofQueryPredData *pred_data;
   GSList *param_list;
@@ -469,14 +469,14 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op)
   if (!pred_data)
     return;
 
-  param_list = gncQueryBuildParamList (SPLIT_RECONCILE, NULL);
+  param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
 
-  gncQueryAddTerm (q, param_list, pred_data, op);
+  qof_query_add_term (q, param_list, pred_data, op);
 }
 
 void
 xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
-		      GNCIdType id_type, QueryOp op)
+		      GNCIdType id_type, QofQueryOp op)
 {
   GSList *param_list = NULL;
 
@@ -484,20 +484,20 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
     return;
 
   if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
-    param_list = gncQueryBuildParamList (QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (QOF_QUERY_PARAM_GUID, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_TRANS))
-    param_list = gncQueryBuildParamList (SPLIT_TRANS, QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (SPLIT_TRANS, QOF_QUERY_PARAM_GUID, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
-    param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, QUERY_PARAM_GUID, NULL);
+    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_QUERY_PARAM_GUID, NULL);
   else
     PERR ("Invalid match type: %s", id_type);
 
-  gncQueryAddGUIDMatch (q, param_list, guid, op);
+  qof_query_add_guid_match (q, param_list, guid, op);
 }
 
 void
-xaccQueryAddGUIDMatchGL (QueryNew *q, GList *param_list,
-			 GUID guid, QueryOp op)
+xaccQueryAddGUIDMatchGL (QofQuery *q, GList *param_list,
+			 GUID guid, QofQueryOp op)
 {
   GSList *params = NULL;
   GList *node;
@@ -508,13 +508,13 @@ xaccQueryAddGUIDMatchGL (QueryNew *q, GList *param_list,
   params = g_slist_reverse (params);
   g_list_free (param_list);
 
-  gncQueryAddGUIDMatch (q, params, &guid, op);
+  qof_query_add_guid_match (q, params, &guid, op);
 }
 
 void
 xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
 		     QofQueryCompare how, GNCIdType id_type,
-		     QueryOp op)
+		     QofQueryOp op)
 {
   GSList *param_list = NULL;
   QofQueryPredData *pred_data;
@@ -527,15 +527,15 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
     return;
 
   if (!safe_strcmp (id_type, GNC_ID_SPLIT)) 
-    param_list = gncQueryBuildParamList (SPLIT_KVP, NULL);
+    param_list = qof_query_build_param_list (SPLIT_KVP, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_TRANS))
-    param_list = gncQueryBuildParamList (SPLIT_TRANS, TRANS_KVP, NULL);
+    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_KVP, NULL);
   else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
-    param_list = gncQueryBuildParamList (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
+    param_list = qof_query_build_param_list (SPLIT_ACCOUNT, ACCOUNT_KVP, NULL);
   else
     PERR ("Invalid match type: %s", id_type);
 
-  gncQueryAddTerm (q, param_list, pred_data, op);
+  qof_query_add_term (q, param_list, pred_data, op);
 }
 
 /*******************************************************************
@@ -550,7 +550,7 @@ xaccQueryGetEarliestDateFound(Query * q)
   time_t earliest = LONG_MAX;
 
   if (!q) return 0;
-  spl = gncQueryLastRun (q);
+  spl = qof_query_last_run (q);
   if (!spl) return 0;
 
   for(; spl; spl=spl->next) {
@@ -574,7 +574,7 @@ xaccQueryGetLatestDateFound(Query * q)
   time_t latest = 0;
 
   if(!q) return 0;
-  spl = gncQueryLastRun (q);
+  spl = qof_query_last_run (q);
   if(!spl) return 0;
 
   for(; spl; spl=spl->next) {
@@ -609,7 +609,7 @@ xaccQuerySetSortOrder(Query *q, GList *p1, GList *p2, GList *p3)
   if (p2) g_list_free (p2);
   if (p3) g_list_free (p3);
 
-  gncQuerySetSortOrder (q, l1, l2, l3);
+  qof_query_set_sort_order (q, l1, l2, l3);
 }
 
 /* ======================== END OF FILE ======================= */
