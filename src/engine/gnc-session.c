@@ -596,11 +596,16 @@ save_error_handler(Backend *be, GNCSession *session)
     {
         gnc_session_push_error (session, err, NULL);
       
-        /* we close the backend here ... isn't this a bit harsh ??? */
+        /* we close the backend here ... isn't this a bit harsh ??? 
+	 * Actually, yes, it is harsh, and causes bug #117657,
+	 * so let's NOT end the session just because it failed to save.
+	 */
+#if cause_crash_when_saves_fail
         if (be->session_end)
         {
             (be->session_end)(be);
         }
+#endif
         return TRUE;
     }
     return FALSE;

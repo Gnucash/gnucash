@@ -653,6 +653,7 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
     GNCBook *book;
     struct stat statbuf;
     int rc;
+    GNCBackendError be_err;
 
     book = gnc_session_get_book (be->session);
 
@@ -734,7 +735,17 @@ gnc_file_be_write_to_file(FileBackend *be, gboolean make_backup)
     {
         if(unlink(tmp_name) != 0)
         {
-            xaccBackendSetError((Backend*)be, ERR_BACKEND_MISC);
+	    switch (errno) {
+	    case ENOENT:	/* tmp_name doesn't exist?  Assume "RO" error */
+	    case EACCES:
+	    case EPERM:
+	    case EROFS:
+	      be_err = ERR_BACKEND_READONLY;
+	      break;
+	    default:
+	      be_err = ERR_BACKEND_MISC;
+	    }
+            xaccBackendSetError((Backend*)be, be_err);
             PWARN("unable to unlink temp_filename %s: %s", 
                    tmp_name ? tmp_name : "(null)", 
                    strerror(errno) ? strerror(errno) : ""); 
