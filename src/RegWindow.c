@@ -1500,23 +1500,40 @@ regSaveTransaction( RegWindow *regData, int position )
   /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
       ((MUTUAL    == regData->type) || 
-       (STOCK     == regData->type) ||
-       (PORTFOLIO == regData->type)) )
+       (STOCK     == regData->type) ))
     {
     String price;
     float val=0.0;  /* must be float for sscanf to work */
 
-    DEBUG("MOD_PRIC\n");
+    DEBUG("MOD_PRIC_mutual/stock\n");
     /* ...the price flag ... */
 
     price = XbaeMatrixGetCell(regData->reg,row+PRCC_CELL_R,PRCC_CELL_C);
     sscanf( price, "%f", &val );
     trans->share_price = val;
     
-    /* not needed -- the regRefresh will redraw all --
-     * sprintf( buf, "%.2f ", trans->share_price );
-     * XbaeMatrixSetCell( regData->reg, row+PRCC_CELL_R, PRCC_CELL_C, buf );
-     */ 
+    }
+  
+  /* ignore MOD_PRIC for non-stock accounts */
+  if( (regData->changed & MOD_PRIC) &&
+       (PORTFOLIO == regData->type) )
+    {
+    String price;
+    float val=0.0;  /* must be float for sscanf to work */
+    double prc, prd;
+
+    DEBUG("MOD_PRIC-portfolio\n");
+    /* ...the price flag ... */
+
+    price = XbaeMatrixGetCell(regData->reg,row+PRCC_CELL_R,PRCC_CELL_C);
+    sscanf( price, "%f", &val );
+    prc = val;
+
+    price = XbaeMatrixGetCell(regData->reg,row+PRCD_CELL_R,PRCD_CELL_C);
+    sscanf( price, "%f", &val );
+    prd = val;
+
+    trans->share_price = DMAX (prc, prd);
     }
   
   /* If this is a new transaction, and the user did not 
