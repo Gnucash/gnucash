@@ -186,7 +186,7 @@ struct _SplitRegister
   DateCell      * dateCell;
   NumCell       * numCell;
   QuickFillCell * descCell;
-  RecnCell      * recnCell;   /* main transaction line reconcile */
+  RecnCell      * recnCell;
   PriceCell     * shrbalnCell;
   PriceCell     * balanceCell;
   ComboCell     * actionCell;
@@ -215,24 +215,26 @@ struct _SplitRegister
 
   /* user_data allows users of this object to hang
    * private data onto it */
-  void *user_data;
+  gpointer user_data;
 
   /* The destroy callback gives user's a chance 
    * to free up any associated user_hook data */
   SplitRegisterDestroyCB destroy;
+
+  /* configured strings for debit/credit headers */
+  char *debit_str;
+  char *credit_str;
+  char *tdebit_str;
+  char *tcredit_str;
 };
 
-
-typedef char* (*SRStringGetter) (SplitRegisterType);
-
-void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
-void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
 SplitRegister *
 xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
                          TableGetEntryHandler entry_handler,
+                         TableGetLabelHandler label_handler,
                          TableGetCellIOFlags io_flag_handler,
                          TableGetFGColorHandler fg_color_handler,
                          TableGetBGColorHandler bg_color_handler,

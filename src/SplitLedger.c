@@ -3290,7 +3290,6 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
   GNCAccountType account_type;
   CursorClass cursor_class;
   Account *account;
-  guint32 changed;
   Split *split;
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
@@ -3302,20 +3301,23 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
   if (cursor_class != CURSOR_CLASS_SPLIT)
     return TRUE;
 
-  changed = xaccSplitRegisterGetChangeFlag (reg);
-  if (MOD_XFRM & changed)
+  account = NULL;
+
+  if (virt_cell_loc_equal (virt_loc.vcell_loc,
+                           reg->table->current_cursor_loc.vcell_loc))
   {
-    account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
-                                          reg->xfrmCell->cell.value,
-                                          account_separator);
-    if (!account)
-      account = xaccSplitGetAccount (split);
+    guint32 changed = xaccSplitRegisterGetChangeFlag (reg);
+    if (MOD_XFRM & changed)
+      account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                            reg->xfrmCell->cell.value,
+                                            account_separator);
   }
-  else
+
+  if (!account)
     account = xaccSplitGetAccount (split);
 
   if (!account)
-    return XACC_CELL_ALLOW_ALL;
+    return TRUE;
 
   account_type = xaccAccountGetType (account);
 
@@ -3600,6 +3602,196 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
   }
 }
 
+static GNCAccountType
+sr_type_to_account_type(SplitRegisterType sr_type)
+{
+  switch (sr_type)
+  {
+    case BANK_REGISTER:
+      return BANK;
+    case CASH_REGISTER:
+      return CASH;
+    case ASSET_REGISTER:
+      return ASSET;
+    case CREDIT_REGISTER:
+      return CREDIT;
+    case LIABILITY_REGISTER:
+      return LIABILITY;
+    case INCOME_LEDGER:  
+    case INCOME_REGISTER:
+      return INCOME;
+    case EXPENSE_REGISTER:
+      return EXPENSE;
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+      return STOCK;
+    case CURRENCY_REGISTER:
+      return CURRENCY;
+    case GENERAL_LEDGER:  
+      return NO_TYPE;
+    case EQUITY_REGISTER:
+      return EQUITY;
+    case SEARCH_LEDGER:
+      return NO_TYPE;
+    default:
+      return NO_TYPE;
+  }
+}
+
+static char *
+sr_get_debit_string (SplitRegister *reg)
+{
+  return gnc_get_debit_string (sr_type_to_account_type (reg->type));
+}
+
+static char *
+sr_get_credit_string (SplitRegister *reg)
+{
+  return gnc_get_credit_string (sr_type_to_account_type (reg->type));
+}
+
+const char *
+xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  CellType cell_type;
+
+  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+
+  switch (cell_type)
+  {
+    case DATE_CELL:
+      return _("Date");
+
+    case NUM_CELL:
+      return _("Num");
+
+    case DESC_CELL:
+      return _("Description");
+
+    case RECN_CELL:
+      return _("Reconciled:R"+11);
+
+    case SHRBALN_CELL:
+      return _("Share Balance");
+
+    case BALN_CELL:
+      return _("Balance");
+
+    case ACTN_CELL:
+      return _("Action");
+
+    case XFRM_CELL:
+      return _("Account");
+
+    case MEMO_CELL:
+      return _("Memo");
+
+    case CRED_CELL:
+      if (reg->credit_str)
+        return reg->credit_str;
+
+      reg->credit_str = sr_get_credit_string (reg);
+
+      if (reg->credit_str)
+        return reg->credit_str;
+
+      reg->credit_str = g_strdup (_("Credit"));
+
+      return reg->credit_str;
+
+    case DEBT_CELL:
+      if (reg->debit_str)
+        return reg->debit_str;
+
+      reg->debit_str = sr_get_debit_string (reg);
+
+      if (reg->debit_str)
+        return reg->debit_str;
+
+      reg->debit_str = g_strdup (_("Debit"));
+
+      return reg->debit_str;
+
+    case PRIC_CELL:
+      if (!use_security_cells (reg, virt_loc))
+        return "";
+
+      return _("Price");
+
+    case SHRS_CELL:
+      if (!use_security_cells (reg, virt_loc))
+        return "";
+
+      return _("Shares");
+
+    case MXFRM_CELL:
+      return _("Transfer");
+
+    case TCRED_CELL:
+      if (reg->tcredit_str)
+        return reg->tcredit_str;
+
+      {
+        char *string = sr_get_credit_string (reg);
+        if (string)
+        {
+          reg->tcredit_str = g_strdup_printf (_("Tot %s"), string);
+          g_free (string);
+        }
+      }
+
+      if (reg->tcredit_str)
+        return reg->tcredit_str;
+
+      reg->tcredit_str = g_strdup (_("Tot Credit"));
+
+      return reg->tcredit_str;
+
+    case TDEBT_CELL:
+      if (reg->tdebit_str)
+        return reg->tdebit_str;
+
+      {
+        char *string = sr_get_debit_string (reg);
+        if (string)
+        {
+          reg->tdebit_str = g_strdup_printf (_("Tot %s"), string);
+          g_free (string);
+        }
+      }
+
+      if (reg->tdebit_str)
+        return reg->tdebit_str;
+
+      reg->tdebit_str = g_strdup (_("Tot Debit"));
+
+      return reg->tdebit_str;
+
+    case TSHRS_CELL:
+      return _("Tot Shares");
+
+    case TSHRBALN_CELL:
+      return _("Share Balance");
+
+    case TBALN_CELL:
+      return _("Balance");
+
+    case NOTES_CELL:
+      return _("Notes");
+
+    case NO_CELL:
+      return "";
+
+    default:
+      break;
+  }
+
+  PERR ("bad cell type: %d", cell_type);
+
+  return "";
+}
+
 CellIOFlags
 xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
 {
@@ -3630,7 +3822,7 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
       if (use_security_cells (reg, virt_loc))
         return XACC_CELL_ALLOW_ALL;
 
-      return XACC_CELL_ALLOW_NONE;
+      return XACC_CELL_ALLOW_SHADOW;
 
     default:
       return XACC_CELL_ALLOW_NONE;

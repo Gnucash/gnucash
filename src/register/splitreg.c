@@ -54,9 +54,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
-static SRStringGetter debit_getter = NULL;
-static SRStringGetter credit_getter = NULL;
-
 typedef struct _CellBuffer CellBuffer;
 struct _CellBuffer
 {
@@ -139,6 +136,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
                        TableGetEntryHandler entry_handler,
+                       TableGetLabelHandler label_handler,
                        TableGetCellIOFlags io_flag_handler,
                        TableGetFGColorHandler fg_color_handler,
                        TableGetBGColorHandler bg_color_handler,
@@ -147,92 +145,6 @@ xaccInitSplitRegister (SplitRegister *reg,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy);
 
-
-/* ============================================== */
-
-#define LABEL(NAME,label)		   \
-{					   \
-   BasicCell *hcell;			   \
-   hcell = reg->header_cells[NAME##_CELL]; \
-   xaccSetBasicCellValue (hcell, label);   \
-}
-
-/* ============================================== */
-
-void
-xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter)
-{
-  debit_getter = getter;
-}
-
-void
-xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter)
-{
-  credit_getter = getter;
-}
-
-/* ============================================== */
-/* configLabels merely puts strings into the label cells 
- * it does *not* copy them to the header cursor */
-
-static void
-configLabels (SplitRegister *reg)
-{
-  LABEL (DATE,     _("Date"));
-  LABEL (NUM,      _("Num"));
-  LABEL (DESC,     _("Description"));
-  LABEL (RECN,     _("Reconciled:R"+11));
-  LABEL (SHRBALN,  _("Share Balance"));
-  LABEL (BALN,     _("Balance"));
-  LABEL (ACTN,     _("Action"));
-  LABEL (XFRM,     _("Account"));
-  LABEL (MEMO,     _("Memo"));
-  LABEL (CRED,     _("Credit"));
-  LABEL (DEBT,     _("Debit"));
-  LABEL (PRIC,     _("Price"));
-  LABEL (SHRS,     _("Shares"));
-  LABEL (MXFRM,    _("Transfer"));
-  LABEL (TCRED,    _("Tot Debit"));
-  LABEL (TDEBT,    _("Tot Credit"));
-  LABEL (TSHRS,    _("Tot Shares"));
-  LABEL (TSHRBALN, _("Share Balance"));
-  LABEL (TBALN,    _("Balance"));
-  LABEL (NOTES,    _("Notes"));
-
-  if (debit_getter != NULL)
-  {
-    char *string = debit_getter (reg->type);
-    if (string != NULL)
-    {
-      char *tstring;
-
-      LABEL (DEBT, string);
-
-      tstring = g_strdup_printf (_("Tot %s"), string);
-      LABEL (TDEBT, tstring);
-
-      g_free (tstring);
-      free (string);
-    }
-  }
-
-  if (credit_getter != NULL)
-  {
-    char *string = credit_getter (reg->type);
-    if (string != NULL)
-    {
-      char *tstring;
-
-      LABEL (CRED, string);
-
-      tstring = g_strdup_printf (_("Tot %s"), string);
-      LABEL (TCRED, tstring);
-
-      g_free (tstring);
-      free (string);
-    }
-  }
-}
 
 /* ============================================== */
 /* configAction strings into the action cell */
@@ -630,6 +542,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
                          TableGetEntryHandler entry_handler,
+                         TableGetLabelHandler label_handler,
                          TableGetCellIOFlags io_flag_handler,
                          TableGetFGColorHandler fg_color_handler,
                          TableGetBGColorHandler bg_color_handler,
@@ -650,6 +563,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          style,
                          use_double_line,
                          entry_handler,
+                         label_handler,
                          io_flag_handler,
                          fg_color_handler,
                          bg_color_handler,
@@ -732,6 +646,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterStyle style,
                        gboolean use_double_line,
                        TableGetEntryHandler entry_handler,
+                       TableGetLabelHandler label_handler,
                        TableGetCellIOFlags io_flag_handler,
                        TableGetFGColorHandler fg_color_handler,
                        TableGetBGColorHandler bg_color_handler,
@@ -790,10 +705,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (NOTES,    notes,    QuickFill);
 
   /* --------------------------- */
-
-  /* configLabels merely puts strings into the label cells. It does
-   * *not* copy them to the header cursor */
-  configLabels (reg);
 
   /* config the layout of the cells in the cursors */
   configLayout (reg);
@@ -888,6 +799,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   configAction (reg);
 
   table = gnc_table_new (entry_handler,
+                         label_handler,
                          io_flag_handler,
                          fg_color_handler,
                          bg_color_handler,
@@ -1033,6 +945,16 @@ xaccDestroySplitRegister (SplitRegister *reg)
       xaccDestroyTextCell (cell);
     reg->header_cells[i] = NULL;
   }
+
+  g_free (reg->debit_str);
+  g_free (reg->tdebit_str);
+  g_free (reg->credit_str);
+  g_free (reg->tcredit_str);
+
+  reg->debit_str = NULL;
+  reg->tdebit_str = NULL;
+  reg->credit_str = NULL;
+  reg->tcredit_str = NULL;
 
   /* free the memory itself */
   g_free (reg);

@@ -102,8 +102,9 @@ typedef enum
 {
   XACC_CELL_ALLOW_NONE       = 0,
   XACC_CELL_ALLOW_INPUT      = 1 << 0,
-  XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_INPUT,
-  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 1
+  XACC_CELL_ALLOW_SHADOW     = 1 << 1,
+  XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_INPUT | XACC_CELL_ALLOW_SHADOW,
+  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2
 } CellIOFlags;
 
 
@@ -166,6 +167,9 @@ typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
                                               gboolean *conditionally_changed,
                                               gpointer user_data);
 
+typedef const char * (*TableGetLabelHandler) (VirtualLocation virt_loc,
+                                              gpointer user_data);
+
 typedef CellIOFlags (*TableGetCellIOFlags) (VirtualLocation virt_loc,
                                             gpointer user_data);
 
@@ -226,6 +230,7 @@ struct _Table
   void * ui_data;
 
   TableGetEntryHandler entry_handler;
+  TableGetLabelHandler label_handler;
   TableGetCellIOFlags io_flag_handler;
   TableGetFGColorHandler fg_color_handler;
   TableGetBGColorHandler bg_color_handler;
@@ -243,6 +248,7 @@ struct _Table
 
 /* Functions to create and destroy Tables.  */
 Table *     gnc_table_new (TableGetEntryHandler entry_handler,
+                           TableGetLabelHandler label_handler,
                            TableGetCellIOFlags io_flag_handler,
                            TableGetFGColorHandler fg_color_handler,
                            TableGetBGColorHandler bg_color_handler,
@@ -281,9 +287,9 @@ VirtualCell *  gnc_table_get_virtual_cell (Table *table,
 
 const char *   gnc_table_get_entry (Table *table, VirtualLocation virt_loc);
 
-CellIOFlags    gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc);
-
 const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
+
+CellIOFlags    gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc);
 
 guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 

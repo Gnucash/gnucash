@@ -62,6 +62,7 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
 Table * 
 gnc_table_new (TableGetEntryHandler entry_handler,
+               TableGetLabelHandler label_handler,
                TableGetCellIOFlags io_flag_handler,
                TableGetFGColorHandler fg_color_handler,
                TableGetBGColorHandler bg_color_handler,
@@ -78,6 +79,7 @@ gnc_table_new (TableGetEntryHandler entry_handler,
    table = g_new0(Table, 1);
 
    table->entry_handler = entry_handler;
+   table->label_handler = label_handler;
    table->io_flag_handler = io_flag_handler;
    table->fg_color_handler = fg_color_handler;
    table->bg_color_handler = bg_color_handler;
@@ -238,20 +240,10 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 {
-  VirtualCell *vcell;
-  CellBlockCell *cb_cell;
-
-  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-  if (vcell == NULL)
+  if (!table->label_handler)
     return "";
 
-  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                    virt_loc.phys_row_offset,
-                                    virt_loc.phys_col_offset);
-  if (cb_cell == NULL)
-    return NULL;
-
-  return cb_cell->label;
+  return table->label_handler (virt_loc, table->handler_user_data);
 }
 
 /* ==================================================== */
@@ -618,7 +610,7 @@ gnc_table_move_cursor_internal (Table *table,
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
         io_flags = gnc_table_get_io_flags (table, virt_loc);
-        if (io_flags & XACC_CELL_ALLOW_INPUT)
+        if (io_flags & XACC_CELL_ALLOW_SHADOW)
         {
           const char *entry;
           gboolean conditionally_changed = FALSE;

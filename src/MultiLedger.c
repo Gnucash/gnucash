@@ -432,6 +432,7 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
    * but will not do the gui init */
   ld->reg = xaccMallocSplitRegister (type, style, FALSE,
                                      xaccSRGetEntryHandler,
+                                     xaccSRGetLabelHandler,
                                      xaccSRGetIOFlagsHandler,
                                      xaccSRGetFGColorHandler,
                                      xaccSRGetBGColorHandler,

@@ -208,6 +208,8 @@ gboolean xaccSRCurrentTransExpanded (SplitRegister *reg);
 const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
                                     gboolean *changed,
                                     gpointer user_data);
+const char * xaccSRGetLabelHandler (VirtualLocation virt_loc,
+                                    gpointer user_data);
 CellIOFlags  xaccSRGetIOFlagsHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
 guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
