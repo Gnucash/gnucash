@@ -131,6 +131,9 @@ xaccInitSplit(Split * split, QofBook *book)
 
   split->book = book;
 
+  split->gains = GAINS_STATUS_UNKNOWN;
+  split->gains_split = NULL;
+
   qof_entity_guid_new (book->entity_table, &split->guid);
   qof_entity_store(book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
@@ -571,6 +574,39 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
 
   gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
 }
+
+static void
+DetermineGainStatus (Split *split)
+{
+   Split *other;
+   KvpValue *val;
+   other = xaccSplitGetCapGainsSplit (split);
+   if (other) 
+   {
+      split->gains = GAINS_STATUS_DIRTY;
+      split->gains_split = other;
+      return;
+   }
+
+   val = kvp_frame_get_slot (split->kvp_data, "gains-source");
+   if (NULL == val)
+   {
+      other = xaccSplitGetOtherSplit (split);
+      val = kvp_frame_get_slot (other->kvp_data, "gains-source");
+   }
+   if (val)
+   {
+      split->gains = GAINS_STATUS_GAINS;
+      other = qof_entity_lookup (qof_book_get_entity_table(split->book),
+                  kvp_value_get_guid (val), GNC_ID_SPLIT);
+      split->gains_split = other;
+      return;
+   }
+   split->gains = GAINS_STATUS_CLEAN;
+}
+
+#define CHECK_GAINS_STATUS(s)                                     \
+   if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
 
 /********************************************************************\
 \********************************************************************/
