@@ -222,6 +222,11 @@ xaccSetCursor (Table *table, CellBlock *curs,
    /* hack alert -- should check to make sure that no null pointers
     * or bad values were passed in ... */
 
+   /* this cursor is the handler for this block */
+   table->handlers[virt_row][virt_col] = curs;
+
+   /* intialize the mapping so that we will be able to find
+    * the handler, given this range of physical cell addressses */
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
          Locator *loc;
