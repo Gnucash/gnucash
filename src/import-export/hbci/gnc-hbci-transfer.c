@@ -152,12 +152,12 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	
     } while (!successful);
     
-    if (result >= 0) {
-      /* If we wanted to do something here with the gnc txn, we could. */
+    /* If we wanted to do something here with the gnc txn, we could. */
+    /*if (result >= 0) {
       Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
       printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
-	     xaccTransGetDescription(gtrans));
-    }
+      xaccTransGetDescription(gtrans));
+      }*/
 
     /* Just to be on the safe side, clear queue once again. */
     HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
