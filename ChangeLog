@@ -1,12 +1,21 @@
 2003-05-11  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-transfer.c: Fix transfer dialog to not
+	hang if OK button is clicked w/o filling in dialog properly.
+	#109497
+
+	* src/gnome/window-reconcile.c: Button shouldn't take full width
+	of the window.
+
+	* src/app-utils/gnc-component-manager.c: Add some debugging.
+
 	* src/gnome-utils/dialog-commodity.c: Fix problem selecting quote
 	source.
 
 	* configure.in:
 	* src/gnome/gnc-splash.c:
 	* src/gnome/window-main.c: Give more control over what builds have
-	a version number and what builds hare labelled "cvs".
+	a version number and what builds are labelled "cvs".
 
 2003-05-11  Derek Atkins  <derek@ihtfp.com>
 

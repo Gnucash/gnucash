@@ -112,7 +112,9 @@ struct _xferDialog
   gnc_numeric * exch_rate;
 
   /* a place to store the result quality (ok or cancel) because gnome_dialog_run
-   * doesn't seem to work right for this function
+   * doesn't seem to work right for this function.  <-- That's probably because
+   * the dialog is being closed and deleted out from under the gnome_dialog_run
+   * function.
    */
   gboolean *	result_p;
 };
@@ -1302,6 +1304,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   Split *from_split;
   Split *to_split;
 
+  ENTER(" ");
   from_account = gnc_account_tree_get_current_account(xferData->from);
   to_account   = gnc_account_tree_get_current_account(xferData->to);
 
@@ -1313,6 +1316,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 			      "or to, or both, for this transaction.\n"
 			      "Otherwise, it will not be recorded.");
       gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      LEAVE("bad account");
       return;
     }
 
@@ -1321,6 +1325,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       const char *message = _("You can't transfer from and to the same "
 			      "account!");
       gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      LEAVE("same account");
       return;
     }
 
@@ -1339,6 +1344,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 				      gnc_get_account_separator ());
       gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), placeholder_format, name);
       g_free(name);
+      LEAVE("placeholder");
       return;
     }
 
@@ -1348,6 +1354,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 			      "Try reversing the \"from\" and \"to\" accounts "
 			      "and making the \"amount\" negative.");
       gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      LEAVE("non-currency");
       return;
     }
   }
@@ -1369,6 +1376,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   {
     const char *message = _("You must enter an amount to transfer.");
     gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+    LEAVE("invalid from amount");
     return;
   }
 
@@ -1382,6 +1390,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
           (GTK_TOGGLE_BUTTON(xferData->price_radio)))
       {
 	gnc_parse_error_dialog (xferData, _("You must enter a valid price."));
+	LEAVE("invalid price");
 	return;
       }
     }
@@ -1393,6 +1402,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       {
 	gnc_parse_error_dialog (xferData,
                                 _("You must enter a valid `to' amount."));
+	LEAVE("invalid to amount");
 	return;
       }
     }
@@ -1535,7 +1545,9 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   if (xferData->result_p)
     *(xferData->result_p) = TRUE;
 
+  DEBUG("close component");
   gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
+  LEAVE("ok");
 }
 
 
@@ -1544,6 +1556,7 @@ gnc_xfer_dialog_cancel_cb(GtkWidget * widget, gpointer data)
 {
   XferDialog *xferData = data; 
 
+  DEBUG("close component");
   gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 }
 
@@ -1568,6 +1581,7 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 
   gtk_object_unref (GTK_OBJECT (xferData->tips));
 
+  DEBUG("unregister component");
   gnc_unregister_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 
   gnc_quickfill_destroy (xferData->qf);
@@ -1575,7 +1589,7 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 
   g_free(xferData);
 
-  DEBUG("xfer dialog destroyed\n");
+  DEBUG("xfer dialog destroyed");
 
   return FALSE;
 }
@@ -1587,6 +1601,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
   GtkWidget *dialog;
   GladeXML  *xml;
 
+  ENTER(" ");
   xml = gnc_glade_xml_new ("transfer.glade", "Transfer Dialog");
 
   dialog = glade_xml_get_widget (xml, "Transfer Dialog");
@@ -1747,6 +1762,7 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
   /* default to quickfilling off of the "From" account. */
   xferData->quickfill_to = FALSE;
+  LEAVE(" ");
 }
 
 static void
@@ -1754,6 +1770,7 @@ close_handler (gpointer user_data)
 {
   XferDialog *xferData = user_data;
 
+  DEBUG(" ");
   gnome_dialog_close (GNOME_DIALOG (xferData->dialog));
 }
 
@@ -1791,6 +1808,7 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
 
   gnc_xfer_dialog_create(parent, xferData);
 
+  DEBUG("register component");
   gnc_register_gui_component (DIALOG_TRANSFER_CM_CLASS,
                               NULL, close_handler, xferData);
 
@@ -1814,8 +1832,10 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
 void
 gnc_xfer_dialog_close( XferDialog *xferData )
 {
-  if( xferData )
+  if( xferData ) {
+    DEBUG("close component");
     gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
+  }
 }
 
 void
@@ -1945,8 +1965,6 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     {
       gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
 
-      if( result_ok == TRUE )
-      {
         /* See if the dialog is still there.  For various reasons, the
          * user could have hit OK but remained in the dialog.  We don't
          * want to return processing back to anyone else until we clear
@@ -1954,19 +1972,14 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
          * run it again.
          */
   
-        if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
+      DEBUG("find component");
+      if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
                                            find_xfer, xferData ) )
         {
           /* no more dialog, and OK was clicked, so assume it's all good */
-          return( TRUE );
+          return( result_ok );
         }
         /* else run the dialog again */
-  
-      }
-      else   /* result was Cancel */
-      {
-        return( FALSE );
-      }
     }
   }
     
