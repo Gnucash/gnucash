@@ -36,11 +36,11 @@
 #include <string.h>
 #include <time.h>
 
-#include "../engine/date.h"  /* hack alert -- don't include from engine directory */
+#include "date.h"  /* hack alert -- don't include from engine directory */
+#include "util.h"
 
 #include "basiccell.h"
 #include "datecell.h"
-#include "util.h"
 
 static void setDateCellValue (BasicCell *, const char *);
 
@@ -68,60 +68,6 @@ xaccParseDate (struct tm *parsed, const char * datestr)
 }
 
 /* ================================================ */
-/* february default is 28, and patched below */
-static
-char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
-
-/* ================================================ */
-
-static void
-xaccValidateDate (struct tm *date, int recur)
-{
-   int day, month, year;
-
-   /* avoid infinite recursion */
-   if (1 < recur) return;
-
-   day = date->tm_mday;
-   month = date->tm_mon + 1;
-   year = date->tm_year + 1900;
-
-   /* adjust days in february for leap year */
-   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
-      days_in_month[1] = 29;
-   } else {
-      days_in_month[1] = 28;
-   }
-  
-   /* the "% 12" business is because month might not be valid!*/
-
-   while (day > days_in_month[(month+11) % 12]) {
-      day -= days_in_month[(month+11) % 12];
-      month++;
-   }
-   while (day < 1) {
-      month--;
-      day += days_in_month[(month+11) % 12];
-   }
-   while (month > 12) {
-      month -= 12;
-      year++;
-   }
-   while (month < 1) {
-      month += 12;
-      year--;
-   }
-
-   date->tm_mday = day;
-   date->tm_mon = month - 1;
-   date->tm_year = year - 1900;
-
-   /* do it again, in case leap-year scrolling messed things up */
-   xaccValidateDate (date, ++recur);
-}
-
-
-/* ================================================ */
 
 static char *
 DateCellHelpValue(BasicCell *bcell)
@@ -144,7 +90,7 @@ DateCellHelpValue(BasicCell *bcell)
       time.tm_year = cell->date.tm_year;
     }
 
-    xaccValidateDate(&time, GNC_F);
+    xaccValidateDate(&time);
     mktime(&time);
 
     strftime(string, sizeof(string), "%A %d %B %Y", &time);
@@ -177,6 +123,7 @@ DateEnter (BasicCell *_cell, const char * curr,
 
 /* ================================================ */
 
+/* This code should be kept in sync with src/gnome/gnc-dateedit.c */
 static const char * 
 DateMV (BasicCell *_cell, 
         const char *oldval, 
@@ -188,7 +135,6 @@ DateMV (BasicCell *_cell,
 {
    DateCell *cell = (DateCell *) _cell;
    gncBoolean accept = GNC_F;
-   gncBoolean accel = GNC_F;
    struct tm *date;
    char buff[30];
    char *datestr;
@@ -245,45 +191,42 @@ DateMV (BasicCell *_cell,
       case '=':
          /* increment day */
          date->tm_mday ++;
-         accel = GNC_T;
          break;
 
       case '_':
       case '-':
          /* decrement day */
          date->tm_mday --;
-         accel = GNC_T;
          break;
 
       case '}':
       case ']':
          /* increment month */
          date->tm_mon ++;
-         accel = GNC_T;
          break;
 
       case '{':
       case '[':
-         /* decrment month */
+         /* decrement month */
          date->tm_mon --;
-         accel = GNC_T;
          break;
 
       case 'M':
       case 'm':
-         /* begining of month */
+         /* beginning of month */
          date->tm_mday = 1;
          break;
 
       case 'H':
       case 'h':
          /* end of month */
-         date->tm_mday = days_in_month[date->tm_mon];
+         date->tm_mon ++;
+         date->tm_mday = 0;
          break;
 
       case 'Y':
       case 'y':
-         /* begining of year */
+         /* beginning of year */
          date->tm_mday = 1;
          date->tm_mon = 0;
          break;
@@ -312,9 +255,7 @@ DateMV (BasicCell *_cell,
          return NULL;
    }
 
-   if (accel) {
-      xaccValidateDate (date, 0);
-   }
+   xaccValidateDate (date);
 
    printDate (buff, date->tm_mday, date->tm_mon+1, date->tm_year+1900);
 
@@ -446,7 +387,7 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
    dada.tm_mon = mon-1;
    dada.tm_year = year - 1900;
 
-   xaccValidateDate (&dada, 0);
+   xaccValidateDate (&dada);
    cell->date.tm_mday = dada.tm_mday;
    cell->date.tm_mon = dada.tm_mon;
    cell->date.tm_year = dada.tm_year;
@@ -502,7 +443,7 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
       stm = localtime (&rem);
       cell->date = *stm;
       cell->date.tm_year += 32 * yrs;
-      xaccValidateDate (&(cell->date), 0);
+      xaccValidateDate (&(cell->date));
    } else {
       /* OK, time value is an unsigned 32-bit int */
       time_t sicko;

@@ -346,17 +346,61 @@ xaccScanDateS (const char *str)
    return (xaccDMYToSec (day,month,year));
 }
 
+/* ================================================ */
+/* february default is 28, and patched below */
+static char days_in_month[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+
+static void
+xaccValidateDateInternal (struct tm *date, int recur)
+{
+   int day, month, year;
+
+   /* avoid infinite recursion */
+   if (1 < recur) return;
+
+   day = date->tm_mday;
+   month = date->tm_mon + 1;
+   year = date->tm_year + 1900;
+
+   /* adjust days in february for leap year */
+   if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) {
+      days_in_month[1] = 29;
+   } else {
+      days_in_month[1] = 28;
+   }
+
+   /* the "% 12" business is because month might not be valid!*/
+
+   while (day > days_in_month[(month+11) % 12]) {
+      day -= days_in_month[(month+11) % 12];
+      month++;
+   }
+   while (day < 1) {
+      month--;
+      day += days_in_month[(month+11) % 12];
+   }
+   while (month > 12) {
+      month -= 12;
+      year++;
+   }
+   while (month < 1) {
+      month += 12;
+      year--;
+   }
+
+   date->tm_mday = day;
+   date->tm_mon = month - 1;
+   date->tm_year = year - 1900;
+
+   /* do it again, in case leap-year scrolling messed things up */
+   xaccValidateDateInternal (date, ++recur);
+}
+
+void
+xaccValidateDate (struct tm *date)
+{
+  xaccValidateDateInternal (date, 0);
+}
+
 /********************** END OF FILE *********************************\
 \********************************************************************/
-
-      
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
-      

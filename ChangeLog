@@ -1,3 +1,11 @@
+2000-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/date.c (xaccValidateDate): move this function from
+	src/register/datecell.c to here, so it can be used elsewhere.
+
+	* src/gnome/gnc-dateedit.c: make the widget respond to the same
+	accelerators as the register date cell.
+
 2000-06-28  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-budget.c (entry_down_button_clicked): bug fix.

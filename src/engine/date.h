@@ -110,4 +110,6 @@ void   xaccTransSetDateStr (Transaction *trans, char *str);
 time_t xaccDMYToSec (int day, int month, int year);
 time_t xaccScanDateS (const char *buff);
 
+void xaccValidateDate (struct tm *date);
+
 #endif /* __XACC_DATE_H__ */
