@@ -107,7 +107,7 @@ gnc_ui_accWindow_list_select_cb(GtkCList * type_list, gint row, gint column,
 
 
 /********************************************************************\
- * Function: gnc_ui_accWindow_list_unselect_cb -  a callback for the*
+ * Function: gnc_ui_accWindow_list_unselect_cb - a callback for the *
  *           list of account types window                           *
  *                                                                  *
  * Args:   type_list - the list widget                              *
@@ -530,6 +530,11 @@ accWindow (AccountGroup *this_is_not_used)
     break;
   }
 
+  g_free(accData);
+
+  if (result < 0)
+    return NULL;
+
   DEBUG("destroying account add window\n");
 
   gdk_window_get_geometry(dialog->window, NULL, NULL,
@@ -538,7 +543,6 @@ accWindow (AccountGroup *this_is_not_used)
   gnc_save_window_size("account_add_win", last_width, last_height);
 
   gtk_widget_destroy(dialog);
-  g_free(accData);
 
   return NULL;
 }
