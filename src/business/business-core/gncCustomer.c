@@ -23,7 +23,7 @@
 #include "qofid.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"

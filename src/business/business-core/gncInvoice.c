@@ -18,7 +18,7 @@
 #include "qofid.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-be-utils.h"

@@ -19,7 +19,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofquery.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"

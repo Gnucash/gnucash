@@ -10,7 +10,7 @@
 
 #include "gnc-engine-util.h"	/* safe_strcmp */
 #include "qofquerycore.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 #include "guid.h"
 #include "gnc-event-p.h"
 

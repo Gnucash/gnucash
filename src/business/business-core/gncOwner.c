@@ -11,7 +11,7 @@
 
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 #include "gncOwner.h"
 #include "gncOwnerP.h"
