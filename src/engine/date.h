@@ -50,7 +50,7 @@ typedef enum
   DATE_FORMAT_UK,       /**< Britain: dd/mm/yyyy */
   DATE_FORMAT_CE,       /**< Continental Europe: dd.mm.yyyy */
   DATE_FORMAT_ISO,      /**< ISO: yyyy-mm-dd */
-  DATE_FORMAT_LOCALE,    /**< Take from locale information */
+  DATE_FORMAT_LOCALE,   /**< Take from locale information */
   DATE_FORMAT_CUSTOM    /**< Used by the check printing code */
 } DateFormat;
 
@@ -63,7 +63,8 @@ typedef enum
 
 /** Datatypes *******************************************************/
 
-/** struct timespec64 is just like timespec except that we use a 64-bit
+/** struct timespec64 is just like the unix 'struct timespec' except 
+ * that we use a 64-bit
  * signed int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
  * they're not more than a couple dozen times the age of the universe.
@@ -81,8 +82,8 @@ struct timespec64
 };
 #endif /* SWIG */
 
-/** The Timespec is just like timespec (FIXME: huh? like what? 
- * probably: like time_t) except that we use a 64-bit signed int to
+/** The Timespec is just like the unix 'struct timespec' 
+ * except that we use a 64-bit signed int to
  * store the seconds.  This should adequately cover dates in the
  * distant future as well as the distant past, as long as they're not
  * more than a couple dozen times the age of the universe.  Note that
@@ -127,14 +128,14 @@ Timespec gnc_dmy2timespec (int day, int month, int year);
 /** Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (int day, int month, int year);
 
-/** The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
+/** The gnc_iso8601_to_timespec_local() routine converts an ISO-8601 style 
  *    date/time string to Timespec.
  *    For example: 1998-07-17 11:00:00.68-05 
  *    is 680 milliseconds after 11 o'clock, central daylight time 
  *    \return The time in local time.*/
 Timespec gnc_iso8601_to_timespec_local(const char *);
 
-/** The gnc_iso8601_to_timespec_xxx() routines converts an ISO-8601 style 
+/** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style 
  *    date/time string to Timespec.
  *    For example: 1998-07-17 11:00:00.68-05 
  *    is 680 milliseconds after 11 o'clock, central daylight time 
