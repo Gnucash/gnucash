@@ -1,4 +1,4 @@
-SUBDIRS = . #test
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
@@ -67,7 +67,15 @@ libgncmod_gnome_utils_la_LIBADD = \
   -L../gnc-module -L../gnc-module/.libs -lgncmodule \
   -L../engine -L../engine/.libs -lgncmod-engine \
   -L../calculation -L../calculation/.libs -lgncmod-calculation \
-  ${GUILE_LIBS} ${GLIB_LIBS}
+  -L../app-utils -L../app-utils/.libs -lgncmod-app-utils \
+  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBDIR} \
+  ${GNOME_PRINT_LIBS} \
+  ${GTKHTML_LIBS} \
+  ${GLADE_LIBS} \
+  ${GUILE_LIBS} \
+  ${GUPPI_LIBS} \
+  ${GLIB_LIBS}
 
 EXTRA_DIST = \
   .cvsignore \
