@@ -1,3 +1,20 @@
+2002-1-6  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/import-backend.c: Give a much higher importance
+	the date heuristics.   Exact date now worth +3, date within 
+	MATCH_DATE_THRESHOLD worth +2, and dates outside 
+	MATCH_DATE_NOT_THRESHOLD (now set to 25) are worth -100. 
+	The side effect it that any transaction outside a 25 day 
+	range can't be matched at all.
+	-Disable skipping transactions which already have an online id
+	during matching, untill a fix for the "transfer between two 
+	accounts" bug is properly fixed.
+	* src/import-export/generic-import.scm:
+	* src/import-export/import-settings.c:	
+	-Disable EDIT action enabling, (it won't be complete for 1.8.0).
+	-Fix typos reported by Bill Wohler.
+	-Adjust default ADD and RECONCILE threshold to account for above
+	change.
+	
 2003-01-05  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-component-manager.c: New functions for

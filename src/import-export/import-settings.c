@@ -42,10 +42,10 @@
 
 /** Transaction who's best match probability is equal or higher than
    this will reconcile their best match by default */
-#define DEFAULT_CLEAR_THRESHOLD 5
+#define DEFAULT_CLEAR_THRESHOLD 6
 /** Transaction who's best match probability is below or equal to 
    this will be added as new by default */
-#define DEFAULT_ADD_THRESHOLD 2
+#define DEFAULT_ADD_THRESHOLD 3
 /** Transaction's match probability must be at least this much to be 
    displayed in the match list.  Dont set this to 0 except for 
    debugging purposes, otherwise all transactions of every accounts 

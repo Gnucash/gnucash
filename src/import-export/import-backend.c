@@ -55,13 +55,13 @@ static short module = MOD_IMPORT;
 \********************************************************************/
 
 static const int MATCH_DATE_THRESHOLD=4; /*within 4 days*/
-static const int MATCH_DATE_NOT_THRESHOLD = 16;
+static const int MATCH_DATE_NOT_THRESHOLD = 25;
 /**Transaction's who have an online_id kvp frame have been downloaded 
   online can probably be skipped in the match list, since it is very 
   unlikely that they would match a transaction downloaded at a later
   date and yet not have the same online_id.  This also increases
   performance of the matcher. */
-static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = FALSE;
+static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE; /* DISABLE once account transfer bug is fixed! */
 
 /********************************************************************\
  *               Structures passed between the functions             *
@@ -477,20 +477,20 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       /*DEBUG("diff day %d", datediff_day);*/
       if (datediff_day == 0)
 	{
-	  prob = prob+2;
-	  /*DEBUG("heuristics:  probability + 2 (date)");*/
+	  prob = prob+3;
+	  /*DEBUG("heuristics:  probability + 3 (date)");*/
 	}
       else if (datediff_day <= MATCH_DATE_THRESHOLD)
 	{
-	  prob = prob+1;
-	  /*DEBUG("heuristics:  probability + 1 (date)");*/
+	  prob = prob+2;
+	  /*DEBUG("heuristics:  probability + 2 (date)");*/
 	}
       else if (datediff_day > MATCH_DATE_NOT_THRESHOLD)
 	{
 	  /* Extra penalty if that split lies awfully far away
 	     from the given one. */
-	  prob = prob-1;
-	  /* DEBUG("heuristics:  probability - 1 (date)"); */
+	  prob = prob-10;
+	  /* DEBUG("heuristics:  probability - 10 (date)"); */
 	}
       
     
