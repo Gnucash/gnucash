@@ -1,7 +1,14 @@
+2001-06-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/engine.texinfo: document commodity table API
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
 2001-05-31  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/sixtp-dom-parsers.c (string_to_binary): fix sanity
 	checks
+	(dom_tree_to_gnc_numeric): fix mem leak
 
 	* src/test/test-dom-converters1.c (test_dom_tree_to_gnc_numeric):
 	fix bug

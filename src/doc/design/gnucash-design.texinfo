@@ -87,6 +87,7 @@ Engine
 * Key-Value Pair Frames::       
 * Events::                      
 * Commodities::                 
+* Commodity Tables::            
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -130,6 +131,12 @@ Commodities
 * General Commodity API::       
 * Commodity Getters::           
 * Commodity Setters::           
+
+Commodity Tables
+
+* General Commodity Table API::  
+* Commodity Table Access API::  
+* Commodity Table Modification API::  
 
 Splits
 

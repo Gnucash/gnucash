@@ -26,6 +26,7 @@ be created as a shared library for use by other programs.
 * Key-Value Pair Frames::       
 * Events::                      
 * Commodities::                 
+* Commodity Tables::            
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -1193,7 +1194,7 @@ Resume engine event generation.
 @end deftypefun
 
 
-@node Commodities, Splits, Events, Engine
+@node Commodities, Commodity Tables, Events, Engine
 @section Commodities
 @tindex gnc_commodity
 
@@ -1319,7 +1320,111 @@ Set the fraction of @var{cm} to @var{fraction}.
 @end deftypefun
 
 
-@node Splits, Transactions, Commodities, Engine
+@node Commodity Tables, Splits, Commodities, Engine
+@section Commodity Tables
+@tindex gnc_commodity_table
+
+A Commodity Table holds a set of commodities and allows user code
+to add, remove, and access the commodities in the table.
+
+There is a single, global Commodity Table used by the Engine.
+
+@menu
+* General Commodity Table API::  
+* Commodity Table Access API::  
+* Commodity Table Modification API::  
+@end menu
+
+
+@node General Commodity Table API, Commodity Table Access API, Commodity Tables, Commodity Tables
+@subsection General Commodity Table API
+
+@deftypefun {gnc_commodity_table *} gnc_commodity_table_new (void)
+Allocate and initialize a @code{gnc_commodity_table}. The returned
+table must be destroyed with @code{gnc_commodity_table_destroy}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_destroy (gnc_commodity_table * @var{table})
+Destroy @var{table} and all associated resources, including all
+Commodity objects in the table.
+@end deftypefun
+
+@deftypefun {gnc_commodity_table *} gnc_engine_commodities (void)
+Return the global engine commodity table.
+@end deftypefun
+
+
+@node Commodity Table Access API, Commodity Table Modification API, General Commodity Table API, Commodity Tables
+@subsection Commodity Table Access API
+
+@deftypefun {gnc_commodity *} gnc_commodity_table_lookup (const gnc_commodity_table * @var{table}, const char * @var{namespace}, const char * @var{mnemonic})
+Look up a commodity in @var{table} given the namespace and the mnemonic.
+If no such commodity exists, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} gnc_commodity_table_find_full (const gnc_commodity_table * @var{table}, const char * @var{namespace}, const char * @var{fullnam}e)
+Look up a commodity in @var{table} given the namespace and the full name.
+If no such commodity exists, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun int gnc_commodity_table_has_namespace (const gnc_commodity_table * @var{table}, const char * @var{namespace})
+Return true if @var{table} has the namespace @var{namespace}.
+@end deftypefun
+
+@deftypefun guint gnc_commodity_table_get_size (gnc_commodity_table * @var{table})
+Return the total number of commodities stored in @var{table}.
+@end deftypefun
+
+@deftypefun guint gnc_commodity_table_get_number_of_namespaces (gnc_commodity_table * @var{table})
+Return the number of distinct namespaces in @var{table}.
+@end deftypefun
+
+@deftypefun {GList *} gnc_commodity_table_get_namespaces (const gnc_commodity_table * @var{table})
+Return a list of the distinct namespaces in @var{table}. The list should
+be freed with @code{g_list_free} but the namespaces should not be freed
+or modified.
+@end deftypefun
+
+@deftypefun {GList *} gnc_commodity_table_get_commodities (const gnc_commodity_table * @var{table}, const char * @var{namespace})
+Return a list of the commodities under @var{namespace} in @var{table}.
+The list should be freed with @code{g_list_free} but the commodities
+should not be freed.
+@end deftypefun
+
+
+@node Commodity Table Modification API,  , Commodity Table Access API, Commodity Tables
+@subsection Commodity Table Modification API
+
+@deftypefun {gnc_commodity *} gnc_commodity_table_insert (gnc_commodity_table * @var{table}, gnc_commodity * @var{comm})
+Add commodity @var{comm} to @var{table}. If @var{comm}'s namespace is
+not in @var{table}, the namespace will be added. This function has
+hand-over semantics, i.e., @var{table} assumes responsibility for
+@var{comm}.  @var{comm} may even be destroyed by this call! The function
+returns the actual commodity added as a result of the call. It may not
+be the same object as @var{comm}, but will be equivalent to @var{comm}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_remove (gnc_commodity_table * @var{table}, gnc_commodity * @var{comm})
+Remove the given commodity from @var{table}. @var{comm} is not modified
+or destroyed.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_add_namespace (gnc_commodity_table * @var{table}, const char * @var{namespace})
+Add @var{namespace} to @var{table}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_delete_namespace (gnc_commodity_table * @var{table}, const char * @var{namespace})
+Delete @var{namespace} from @var{table} including all associated
+commodities.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_remove_non_iso (gnc_commodity_table * @var{table})
+Remove and destroy all commodities in @var{table} which are not in the
+ISO4217 namespace.
+@end deftypefun
+
+
+@node Splits, Transactions, Commodity Tables, Engine
 @section Splits
 @tindex Split
 

@@ -466,6 +466,7 @@ dom_tree_to_gnc_numeric(xmlNodePtr node)
     }
     else
     {
+        g_free(content);
         g_free(ret);
         return NULL;
     }
