@@ -58,6 +58,8 @@ static void gnc_configure_account_separator_cb(void *);
 static void gnc_configure_account_separator(void);
 static void gnc_configure_register_colors_cb(void *);
 static void gnc_configure_register_colors(void);
+static void gnc_configure_register_borders_cb(void *);
+static void gnc_configure_register_borders(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -73,6 +75,7 @@ static SCM date_callback_id = SCM_UNDEFINED;
 static SCM currency_callback_id = SCM_UNDEFINED;
 static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
+static SCM register_borders_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -143,6 +146,12 @@ gnucash_ui_init()
       gnc_register_option_change_callback(gnc_configure_register_colors_cb,
                                           NULL, "Register Colors", NULL);
 
+    gnc_configure_register_borders();
+    register_borders_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_register_borders_cb,
+                                          NULL, "Register", NULL);
+    
+
     mainWindow();
 
     gnucash_style_init();
@@ -191,6 +200,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(currency_callback_id);
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
+  gnc_unregister_option_change_callback_id(register_borders_callback_id);  
 
   if (app != NULL)
   {
@@ -461,5 +471,45 @@ gnc_configure_register_colors(void)
 
   xaccSetSplitRegisterColors(reg_colors);
 }
+
+
+/* gnc_configure_register_borders_cb
+ *    Callback called when options change - sets
+ *    register borders to their guile values
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_register_borders_cb(void *data)
+{
+  gnc_configure_register_borders();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+}
+
+/* gnc_configure_register_colors_cb
+ *    sets register borders to their guile values
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_register_borders(void)
+{
+  RegisterBorders reg_borders = 0;
+
+  if (gnc_lookup_boolean_option("Register",
+                                "Show Vertical Borders",
+                                GNC_T))
+    reg_borders |= STYLE_BORDER_LEFT | STYLE_BORDER_RIGHT;
+  
+  if (gnc_lookup_boolean_option("Register",
+                                "Show Horizontal Borders",
+                                GNC_T))
+    reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
+  
+  gnucash_style_set_register_borders (reg_borders);
+}
+
 
 /****************** END OF FILE **********************/

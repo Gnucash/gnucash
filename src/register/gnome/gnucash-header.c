@@ -214,11 +214,12 @@ gnucash_header_destroy (GtkObject *object)
 		 (gnucash_header_parent_class)->destroy)(object);
 }
 
+
 void
 gnucash_header_reconfigure (GnucashHeader *header)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
-        double old_w, old_h;
+        GtkWidget *widget = GTK_WIDGET (header->sheet);
         int w, h;
 
         header->style = header->sheet->cursor_style[header->type];
@@ -231,18 +232,19 @@ gnucash_header_reconfigure (GnucashHeader *header)
         if (header->row < 0 || header->row >= header->style->nrows)
                 return;
 
-        w = header->style->dimensions->width;
+        w = MAX (widget->allocation.width, header->style->dimensions->width);
         h = header->style->dimensions->height;
 
-        gnome_canvas_get_scroll_region(canvas, NULL, NULL, &old_w, &old_h);
+        if (header->height != h || header->width != w) {
+                header->height = h;
+                header->width = w;
 
-        if ((int)old_w != w || (int)old_h != h) {
                 gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
 					       0, 0, w, h);
                 gtk_widget_set_usize (GTK_WIDGET(canvas), -1, h);
-        }
 
-        gnucash_header_request_redraw (header);
+                gnucash_header_request_redraw (header);
+        }
 }
 
 
@@ -514,6 +516,7 @@ gnucash_header_init (GnucashHeader *header)
         header->resize_col = -1;
         header->resize_cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
         header->normal_cursor = NULL;
+        header->height = 20;
 }
 
 

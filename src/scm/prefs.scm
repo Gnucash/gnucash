@@ -228,7 +228,17 @@
   200.0 ;; upper bound
     0.0 ;; number of decimals
     1.0 ;; step size
-    ))
+  ))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Show Vertical Borders"
+  "e" "By default, show vertical borders on the cells." #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register" "Show Horizontal Borders"
+  "f" "By default, show horizontal borders on the cells." #t))
 
 
 ;; Register Color options

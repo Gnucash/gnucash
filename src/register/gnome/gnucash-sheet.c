@@ -550,6 +550,8 @@ gnucash_sheet_update_adjustments (GnucashSheet *sheet)
                 hadj->step_increment = hadj->page_size / 50.0;
                 gtk_adjustment_changed (hadj);
         }
+
+        
 }
 
 

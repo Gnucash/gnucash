@@ -1,3 +1,30 @@
+2000-02-27  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/gnome/top-level.c (gnc_configure_register_borders): Add
+ 	options for setting cell borders.
+
+	* src/scm/prefs.scm: ditto
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_style_set_cell_borders):
+	(gnucash_style_set_register_borders):
+	(gnucash_style_set_borders):
+	(gnucash_sheet_set_borders): Functions to interactively set cell
+ 	borders.
+
+2000-02-26  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_sheet_style_compile): Support for turning horizontal and
+ 	vertical borders on and off.
+	(gnucash_sheet_style_recompile): Ditto
+
+	* src/register/gnome/gnucash-grid.c (draw_cell): ditto
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_reconfigure): Fix a bug in how the scroll region
+ 	was set.  Remove some outdated code.
+
 2000-02-27  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_create): use
@@ -23,6 +50,8 @@
 	* src/register/splitreg.h (struct _SplitRegisterColors): add color
  	for odd rows in single mode, and boolean argument determining
  	whether to alterative virtual or physical rows in double mode.
+
+2000-02-25  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_check_grab):
  	see if we need to release the grab.

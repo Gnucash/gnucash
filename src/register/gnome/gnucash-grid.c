@@ -254,13 +254,59 @@ draw_cell (GnucashGrid *grid, int block,
         sheet_block = gnucash_sheet_get_block (grid->sheet, block, 0);
 
         gdk_gc_set_foreground (grid->gc, sheet_block->bg_colors[i][j]);        
-        gdk_draw_rectangle (drawable, grid->gc, TRUE, x, y, width, height);
+        gdk_draw_rectangle (drawable, grid->gc, TRUE, x,  y, width, height);
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
 
-        /* draw the border */
-        gdk_draw_rectangle (drawable, grid->gc, FALSE, x, y, width, height);
+        /* top */
+        if (style->borders[i][j] & STYLE_BORDER_TOP)
+                gdk_draw_line (drawable, grid->gc, x, y, x+width, y);
 
+        /* right */
+        if (style->borders[i][j] & STYLE_BORDER_RIGHT)
+                gdk_draw_line (drawable, grid->gc, x+width, y, x+width, y+height);
+
+        /* bottom */
+        if (style->borders[i][j] & STYLE_BORDER_BOTTOM)
+                gdk_draw_line (drawable, grid->gc, x+width, y+height, x, y+height);
+
+        /* left */
+        if (style->borders[i][j] & STYLE_BORDER_LEFT)
+                gdk_draw_line (drawable, grid->gc, x, y+height, x, y);
+
+#undef ROUNDED_CORNERS        
+#ifdef ROUNDED_CORNERS        
+        gdk_gc_set_foreground (grid->gc, sheet_block->bg_colors[i][j]);        
+        gdk_draw_rectangle (drawable, grid->gc, TRUE, x+1,  y+1, width-1, height-1);
+
+        gdk_gc_set_foreground (grid->gc, &gn_black);
+
+        gdk_draw_line (drawable, grid->gc, x+5, y, x+width-5, y);
+        gdk_draw_line (drawable, grid->gc, x+width, y+5, x+width, y+height-5);
+        gdk_draw_line (drawable, grid->gc, x+width-5, y+height, x+5, y+height);
+        gdk_draw_line (drawable, grid->gc, x, y+height-5, x, y+5);        
+        
+        gdk_draw_arc (drawable, grid->gc, FALSE,
+                      x, y,
+                      10, 10,
+                      180*64, -90*64);
+
+        gdk_draw_arc (drawable, grid->gc, FALSE,
+                      x+width-10, y,
+                      10, 10,
+                      0*64, 90*64);
+
+        gdk_draw_arc (drawable, grid->gc, FALSE,
+                      x+width-10, y+height-10,
+                      10, 10,
+                      0*64, -100*64);
+
+        gdk_draw_arc (drawable, grid->gc, FALSE,
+                      x, y+height-10,
+                      10, 10,
+                      180*64, 90*64);
+#endif /* ROUNDED_CORNERS */
+        
         text = sheet_block->entries[i][j];
 
         if (style->fonts[i][j])
@@ -337,10 +383,10 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         table = sheet->table;
 
-        /* 1. The default background */
+        /* The default background */
         gdk_draw_rectangle (drawable, grid->fill_gc, TRUE,
                             0, 0, width, height);
-
+        
         /* compute our initial values where we start drawing */
         if (!gnucash_grid_find_block_origin_by_pixel (grid, x, y,
                                                       NULL, NULL,

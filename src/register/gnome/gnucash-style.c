@@ -104,6 +104,8 @@ typedef struct
         char *string;
 } CellLayoutData;
 
+static RegisterBorders reg_borders = 0;
+
 static char *
 style_get_key (SheetBlockStyle *style)
 {
@@ -1013,6 +1015,7 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
                 for (j = 0; j < style->ncols; j++)
                         g_free (style->labels[i][j]);
                 g_free (style->labels[i]);
+                g_free (style->borders[i]);
         }
 
         g_free(style->widths);
@@ -1021,6 +1024,7 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
         g_free(style->active_bg_color);
         g_free(style->inactive_bg_color);
         g_free(style->labels);
+        g_free (style->borders);
 
         style->layout_info->refcount--;
 
@@ -1053,14 +1057,16 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
         gint i, j, type;
         char *label;
 
-        for (i = 0; i < style->nrows; i++)
+        for (i = 0; i < style->nrows; i++) {
                 for (j = 0; j < style->ncols; j++) {
                         type = cellblock->cell_types[i][j];
-
+                        
                         style->widths[i][j] = cellblock->widths[j];
 
                         style->fonts[i][j] = NULL;
                         style->header_font = gnucash_default_font;
+
+                        gnucash_style_set_borders (style, reg_borders);
 
                         if (type > -1)
                                 label = sr->header_label_cells[type]->value;
@@ -1097,6 +1103,51 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
                                         break;
                         }
                 }
+        }
+}
+
+void
+gnucash_style_set_cell_borders (SheetBlockStyle *style,
+                                      int row, int col, int border)
+{
+        g_return_if_fail (style != NULL);
+
+        if (row >= 0 && row < style->nrows && col >= 0 && col < style->ncols) 
+                style->borders[row][col] = border;
+}
+
+void
+gnucash_style_set_register_borders (int reg_borders_new)
+{
+        reg_borders = reg_borders_new;
+}
+
+
+void
+gnucash_style_set_borders (SheetBlockStyle *style, int border)
+{
+        int row, col;
+
+        g_return_if_fail (style != NULL);
+
+        for (row  = 0; row < style->nrows; row++) {
+                for (col = 0; col < style->ncols; col++)
+                        gnucash_style_set_cell_borders (style, row, col, border);
+                
+                style->borders[row][0] |= STYLE_BORDER_LEFT;
+                style->borders[row][style->ncols - 1] |= STYLE_BORDER_RIGHT;
+        }
+}
+
+void
+gnucash_sheet_set_borders (GnucashSheet *sheet, int border)
+{
+        int i;
+
+        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
+
+        for (i = 0; i < GNUCASH_CURSOR_LAST; i++)
+                gnucash_style_set_borders (sheet->cursor_style[i], border);
 }
 
 
@@ -1123,12 +1174,13 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         style->nrows = cellblock->numRows;
         style->ncols = cellblock->numCols;
 
-        style->widths = g_new0(gint *, cellblock->numRows);
-        style->alignments = g_new0 (GtkJustification *, cellblock->numRows);
-        style->fonts = g_new0 (GdkFont **, cellblock->numRows);
-        style->active_bg_color = g_new0 (GdkColor **, cellblock->numRows);
-        style->inactive_bg_color = g_new0 (GdkColor **, cellblock->numRows);
-        style->labels = g_new0 (char **, cellblock->numRows);
+        style->widths = g_new0(gint *, style->nrows);
+        style->alignments = g_new0 (GtkJustification *, style->nrows);
+        style->fonts = g_new0 (GdkFont **, style->nrows);
+        style->active_bg_color = g_new0 (GdkColor **, style->nrows);
+        style->inactive_bg_color = g_new0 (GdkColor **, style->nrows);
+        style->labels = g_new0 (char **, style->nrows);
+        style->borders = g_new0 (int *, style->nrows);
 
         for ( i = 0; i < style->nrows; i++) {
                 style->widths[i] = g_new0(gint, style->ncols);
@@ -1137,6 +1189,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
                 style->active_bg_color[i] = g_new0 (GdkColor *, style->ncols);
                 style->inactive_bg_color[i] = g_new0(GdkColor *, style->ncols);
                 style->labels[i] = g_new0 (char *, style->ncols);
+                style->borders[i] = g_new0 (int, style->ncols);
         }
 
         gnucash_sheet_style_recompile(style, cellblock, sr, cursor_type);

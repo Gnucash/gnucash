@@ -40,6 +40,8 @@ typedef struct {
         int resize_x;
         int resize_col;
         int needs_ungrab;
+        int height;
+        int width;
 
         GdkGC *gc;
         GdkCursor *normal_cursor;

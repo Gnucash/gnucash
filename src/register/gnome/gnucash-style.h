@@ -22,6 +22,13 @@
 #include "splitreg.h"
 #include "gnucash-sheet.h"
 
+#define STYLE_BORDER_LEFT 1<<0
+#define STYLE_BORDER_RIGHT 1<<1
+#define STYLE_BORDER_TOP 1<<2
+#define STYLE_BORDER_BOTTOM 1<<3
+
+typedef int RegisterBorders;
+
 void gnucash_style_init (void);
 
 void gnucash_sheet_style_init(void);
@@ -64,6 +71,14 @@ void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 
 void gnucash_style_ref (SheetBlockStyle *style);
 void gnucash_style_unref (SheetBlockStyle *style);
+
+void gnucash_style_set_cell_borders (SheetBlockStyle *style,
+                                     int row, int col, int border);
+void gnucash_style_set_register_borders (int reg_borders_new);
+void gnucash_style_set_borders (SheetBlockStyle *style, int border);
+void gnucash_sheet_set_borders (GnucashSheet *sheet, int border);
+
+
 
 extern GdkFont *gnucash_default_font;
 extern GdkFont *gnucash_italic_font;

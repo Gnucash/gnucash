@@ -102,7 +102,7 @@ typedef struct
 
         GdkColor ***active_bg_color;
         GdkColor ***inactive_bg_color;
-
+        int **borders;
 
         gint refcount;
 } SheetBlockStyle;
