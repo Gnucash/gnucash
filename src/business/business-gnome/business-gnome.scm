@@ -4,6 +4,7 @@
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/business-core" 0)
+(gnc:module-load "gnucash/gnome-search" 0)
 
 (define (add-customer-extensions)
   (let ((last-cust (gnc:owner-create)))
@@ -167,9 +168,17 @@
 			(lambda ()
 			  (gnc:invoice-edit #f gnc:extensions-last-invoice))))
 
+  (define test-search
+    (gnc:make-menu-item (N_ "Test Search Dialog")
+			(N_ "Test Search Dialog")
+			(list "Extensions" "")
+			(lambda ()
+			  (gnc:search-dialog-test))))
+
 
 ;;  (gnc:add-extension edit-invoice-item)
 ;;  (gnc:add-extension edit-order-item)
+  (gnc:add-extension test-search)
   (gnc:add-extension select-employee-item)
   (gnc:add-extension new-employee-item)
   (gnc:add-extension select-job-item)

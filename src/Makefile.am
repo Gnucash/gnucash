@@ -16,6 +16,7 @@ GUI_SUBDIRS_1 = \
   tax \
   app-utils \
   gnome-utils \
+  gnome-search \
   app-file
 
 GUI_SUBDIRS_2 = \

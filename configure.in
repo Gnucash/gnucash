@@ -843,6 +843,7 @@ AC_OUTPUT(
           src/gnome/glade/Makefile
           src/gnome-utils/Makefile
           src/gnome-utils/test/Makefile
+          src/gnome-search/Makefile
           src/import-export/Makefile
           src/import-export/binary-import/Makefile
           src/import-export/binary-import/test/Makefile
