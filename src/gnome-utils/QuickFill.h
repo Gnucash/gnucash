@@ -29,8 +29,9 @@
 #include <glib.h>
 
 /** @addtogroup QuickFill
-   QuickFill is meant to be used to quickly auto-complete typed 
-   user input.  Quickfill is implemented as a heirarchical tree 
+   QuickFill is meant to be used by the GUI to auto-complete 
+   (e.g. tab-complete) typed user input.  
+   Quickfill is implemented as a heirarchical tree 
    of partial matching strings.  The root of the tree contains 
    all of the strings that user input should be matched to.  
    Then, given a short string segment, quickfill will return 
@@ -38,6 +39,9 @@
    substring.  As additional letters are added to the substring,
    Quickfill will thus narrow down to the unique matching string
    (or to nothing if no match).
+
+   QuickFill works with national-language i18n'ed/l10n'ed multi-byte 
+   and wide-char strings, as well as plain-old C-locale strings.
    @{
   
    @file QuickFill.h
@@ -91,8 +95,21 @@ QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, GdkWChar wc);
 QuickFill *  gnc_quickfill_get_string_match (QuickFill *qf,
                                              const GdkWChar *str);
 
+/** Same as gnc_quickfill_get_string_match(), except that the
+ *  string length is explicilty specified.
+ */
 QuickFill *  gnc_quickfill_get_string_len_match (QuickFill *qf,
                                                  const GdkWChar *str, int len);
+
+/** Same as gnc_quickfill_get_string_match(), except that the
+ *  desired match string is specified as a traditional string
+ *  (may be single or multi-byte).  The input string is converted
+ *  to wide-chars before the actual macthing is performed.
+ *  (This routine is a utility wrapper for
+ *  gnc_quickfill_get_string_match ()).
+ */
+QuickFill *  gnc_quickfill_get_string_match_mb (QuickFill *qf,
+                                                const char *str);
 
 /** Walk a 'unique' part of the quickfill tree.  This routine is
  *  typically used to assist in the tab-completion of strings.  
