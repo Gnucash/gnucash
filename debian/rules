@@ -9,31 +9,25 @@ package=gnucash
 
 id= $(shell pwd)/debian/tmp
 
-configure: configure.in
-	./autogen.sh --prefix=/usr \
+AUTOGEN_OPTS = --prefix=/usr \
 		--sysconfdir=/etc \
 		--infodir=/usr/share/info \
 		--mandir=/usr/share/man \
 		--enable-etags \
+		--enable-sql \
+		--enable-debug \
 		--enable-error-on-warnings
 
+configure: configure.in
+	./autogen.sh $(AUTOGEN_OPTS)
+
 Makefile.in: Makefile.am
-	./autogen.sh --prefix=/usr \
-		--sysconfdir=/etc \
-		--infodir=/usr/share/info \
-		--mandir=/usr/share/man \
-		--enable-etags \
-		--enable-error-on-warnings
+	./autogen.sh $(AUTOGEN_OPTS)
 
 Makefile: Makefile.in configure
 	dh_testdir
 	$(checkdir)
-	./autogen.sh --prefix=/usr \
-		--sysconfdir=/etc \
-		--infodir=/usr/share/info \
-		--mandir=/usr/share/man \
-		--enable-etags \
-		--enable-error-on-warnings
+	./autogen.sh $(AUTOGEN_OPTS)
 
 # --enable-efence \
 # --enable-profile \
@@ -42,7 +36,7 @@ build: build-stamp
 build-stamp: Makefile 
 	dh_testdir
 	$(checkdir)
-	make 
+	$(MAKE) check
 #	touch build-stamp
 
 clean:
