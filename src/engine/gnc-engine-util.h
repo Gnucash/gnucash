@@ -185,7 +185,6 @@ void gnc_set_logfile (FILE *outfile);
 #define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
 #define DEQ(x,y) DEQEPS(x,y,EPS)
 
-
 #define SAFE_STRCMP(da,db) {		\
   if ((da) && (db)) {			\
     int retval = strcmp ((da), (db));	\

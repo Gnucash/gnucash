@@ -1,3 +1,7 @@
+2002-01-09  Rob Browning  <rlb@defaultvalue.org>
+
+	* Makefile.am: handle conditional install inclusion of GUILE_WWW.
+
 2001-12-08  Dave Peticolas  <dave@krondo.com>
 
 	* Makefile.am (Repository): clean .scm-links

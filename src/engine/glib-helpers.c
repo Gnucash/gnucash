@@ -27,7 +27,7 @@
 #include <string.h>
 #include <glib.h>
 
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 
 #include "glib-helpers.h"
 
@@ -72,15 +72,16 @@ gnc_scm_list_to_glist(SCM rest)
     if (scm_item == SCM_BOOL_F)
     {
       result = g_list_prepend(result, NULL);
-      continue;
     }
-
-    if (!gw_wcp_p(scm_item))
-      scm_misc_error("gnc_scm_list_to_glist",
-                     "Item in list not a gw:wcp.", scm_item);
-
-    item = gw_wcp_get_ptr(scm_item);
-    result = g_list_prepend(result, item);
+    else
+    {
+      if (!gw_wcp_p(scm_item))
+        scm_misc_error("gnc_scm_list_to_glist",
+                       "Item in list not a gw:wcp.", scm_item);
+      
+      item = gw_wcp_get_ptr(scm_item);
+      result = g_list_prepend(result, item);
+    }
   }
 
   return g_list_reverse(result);
@@ -120,6 +121,9 @@ gnc_glist_scm_for_each(SCM wct, SCM thunk, GList *glist)
 
 /********************************************************************
  * gnc_glist_string_to_scm
+ * i.e. (glist-of (<gw:mchars> calee-owned) callee-owned)
+ * or equivalently
+ * i.e. (glist-of (<gw:gchars> calee-owned) callee-owned)
  ********************************************************************/
 SCM
 gnc_glist_string_to_scm(GList *glist)
@@ -138,6 +142,9 @@ gnc_glist_string_to_scm(GList *glist)
 
 /********************************************************************
  * gnc_scm_to_glist_string
+ * i.e. (glist-of (<gw:mchars> calee-owned) callee-owned)
+ * or equivalently
+ * i.e. (glist-of (<gw:gchars> calee-owned) callee-owned)
  ********************************************************************/
 
 GList *
