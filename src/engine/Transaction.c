@@ -674,12 +674,12 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
       }
    }
 
-   if(s->acc &&
-      s->acc->security &&
-      safe_strcmp(s->acc->security, s->acc->currency) &&
-      !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
+   if (s->acc &&
+       s->acc->security &&
+       *s->acc->security &&
+       safe_strcmp(s->acc->security, s->acc->currency) &&
+       !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE))
      adjust_price = 1;
-   }
 
    /* The value of a split depends on the currency we express the
     * value in.  This may or may not require a divide.
