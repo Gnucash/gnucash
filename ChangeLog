@@ -1,3 +1,8 @@
+2002-11-09  Herbert Thoma  <herbie@hthoma.de>
+
+	* /src/report/standard-reports/cash-flow.scm: bug fix for cash flow
+	  reports on stock accounts
+
 2002-11-09  Derek Atkins  <derek@ihtfp.com>
 	* gnome/dialog-new-user: don't call the qif-import-druid directly.
 	  Add a callback API for the qif-import druid.  Use that callback
