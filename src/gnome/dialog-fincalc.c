@@ -514,7 +514,7 @@ show_handler (const char *class, gint component_id,
   gtk_window_present (GTK_WINDOW(fcd->dialog));
 }
 
-FinCalcDialog *
+void
 gnc_ui_fincalc_dialog_create(void)
 {
   gnc_commodity *commodity;
@@ -719,8 +719,6 @@ gnc_ui_fincalc_dialog_create(void)
   gtk_widget_grab_focus(fcd->amounts[PAYMENT_PERIODS]);
 
   gtk_widget_show(fcd->dialog);
-
-  return fcd;
 }
 
 void

@@ -927,11 +927,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
       {
         const char *format = _("The account %s does not allow transactions.\n");
 	char *message;
-	gboolean result;
 
 	message = g_strdup_printf (format, name);
 
-	gnc_error_dialog_parented (gnc_split_register_get_parent (reg),
+	gnc_error_dialog_parented (GTK_WINDOW(gnc_split_register_get_parent (reg)),
 				   message);
 	g_free(message);
       }
