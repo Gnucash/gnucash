@@ -1,5 +1,8 @@
 2001-06-02  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/top-level.c (gnc_ui_start_event_loop): remove
+	debugging comment
+
 	* src/scm/report/register.scm: fix bugs
 
 	* src/scm/html-utilities.scm: fix bugs

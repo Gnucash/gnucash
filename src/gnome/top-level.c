@@ -466,7 +466,7 @@ gnc_ui_start_event_loop (void)
 
   gnome_is_running = TRUE;
 
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 1, // 0000, /* 10 secs */
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
                            gnc_ui_check_events, NULL, NULL);
 
   XSetErrorHandler (gnc_x_error);
