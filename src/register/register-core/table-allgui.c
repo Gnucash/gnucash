@@ -283,11 +283,20 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 CellIOFlags
 gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
-  if (!table || !table->model->io_flag_handler)
+  TableGetCellIOFlagsHandler io_flags_handler;
+  int cell_type;
+
+  if (!table || !table->model)
     return XACC_CELL_ALLOW_NONE;
 
-  return table->model->io_flag_handler (virt_loc,
-                                        table->model->handler_user_data);
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  io_flags_handler = gnc_table_model_get_io_flags_handler (table->model,
+                                                           cell_type);
+  if (!io_flags_handler)
+    return XACC_CELL_ALLOW_NONE;
+
+  return io_flags_handler (virt_loc, table->model->handler_user_data);
 }
 
 const char *

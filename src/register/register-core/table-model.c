@@ -80,7 +80,8 @@ gnc_table_model_handler_hash_insert (GHashTable *hash, int cell_type,
 {
   HandlerNode *node;
 
-  if (!hash) return;
+  g_return_if_fail (hash != NULL);
+  g_return_if_fail (cell_type >= 0);
 
   gnc_table_model_handler_hash_remove (hash, cell_type);
   if (!handler) return;
@@ -119,6 +120,7 @@ gnc_table_model_new (void)
 
   model->entry_handlers = gnc_table_model_handler_hash_new ();
   model->label_handlers = gnc_table_model_handler_hash_new ();
+  model->io_flags_handlers = gnc_table_model_handler_hash_new ();
 
   model->dividing_row = -1;
 
@@ -136,6 +138,9 @@ gnc_table_model_destroy (TableModel *model)
   gnc_table_model_handler_hash_destroy (model->label_handlers);
   model->label_handlers = NULL;
 
+  gnc_table_model_handler_hash_destroy (model->io_flags_handlers);
+  model->io_flags_handlers = NULL;
+
   g_free (model);
 }
 
@@ -145,7 +150,6 @@ gnc_table_model_set_entry_handler (TableModel *model,
                                    int cell_type)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
 
   gnc_table_model_handler_hash_insert (model->entry_handlers,
                                        cell_type,
@@ -178,7 +182,6 @@ gnc_table_model_set_label_handler (TableModel *model,
                                    int cell_type)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
 
   gnc_table_model_handler_hash_insert (model->label_handlers,
                                        cell_type,
@@ -202,5 +205,40 @@ gnc_table_model_get_label_handler (TableModel *model, int cell_type)
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->label_handlers,
+                                              cell_type);
+}
+
+void
+gnc_table_model_set_io_flags_handler
+                                  (TableModel *model,
+                                   TableGetCellIOFlagsHandler io_flags_handler,
+                                   int cell_type)
+{
+  g_return_if_fail (model != NULL);
+
+  gnc_table_model_handler_hash_insert (model->io_flags_handlers,
+                                       cell_type,
+                                       io_flags_handler);
+}
+
+void
+gnc_table_model_set_default_io_flags_handler
+                                  (TableModel *model,
+                                   TableGetCellIOFlagsHandler io_flags_handler)
+{
+  g_return_if_fail (model != NULL);
+
+  gnc_table_model_handler_hash_insert (model->io_flags_handlers,
+                                       DEFAULT_HANDLER,
+                                       io_flags_handler);
+}
+
+TableGetCellIOFlagsHandler
+gnc_table_model_get_io_flags_handler (TableModel *model,
+                                      int cell_type)
+{
+  g_return_val_if_fail (model != NULL, NULL);
+
+  return gnc_table_model_handler_hash_lookup (model->io_flags_handlers,
                                               cell_type);
 }

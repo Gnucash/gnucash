@@ -990,49 +990,44 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 }
 
 static CellIOFlags
-gnc_split_register_get_io_flags (VirtualLocation virt_loc, gpointer user_data)
+gnc_split_register_get_standard_io_flags (VirtualLocation virt_loc,
+                                          gpointer user_data)
+{
+  return XACC_CELL_ALLOW_ALL;
+}
+
+static CellIOFlags
+gnc_split_register_get_recn_io_flags (VirtualLocation virt_loc,
+                                      gpointer user_data)
+{
+  return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+}
+
+static CellIOFlags
+gnc_split_register_get_debcred_io_flags (VirtualLocation virt_loc,
+                                         gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  CellType cell_type;
   Split *split;
 
-  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
+  split = sr_get_split (reg, virt_loc.vcell_loc);
 
-  switch (cell_type)
-  {
-    case DATE_CELL:
-    case NUM_CELL:
-    case DESC_CELL:
-    case ACTN_CELL:
-    case XFRM_CELL:
-    case MEMO_CELL:
-    case MXFRM_CELL:
-    case NOTES_CELL:
-    case FCRED_CELL:
-    case FDEBT_CELL:
-      return XACC_CELL_ALLOW_ALL;
+  if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+    return XACC_CELL_ALLOW_NONE;
 
-    case CRED_CELL:
-    case DEBT_CELL:
-      split = sr_get_split (reg, virt_loc.vcell_loc);
-      if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
-        return XACC_CELL_ALLOW_NONE;
+  return XACC_CELL_ALLOW_ALL;
+}
 
-      return XACC_CELL_ALLOW_ALL;
+static CellIOFlags
+gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
+                                          gpointer user_data)
+{
+  SplitRegister *reg = user_data;
 
-    case RECN_CELL:
-      return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
+  if (use_security_cells (reg, virt_loc))
+    return XACC_CELL_ALLOW_ALL;
 
-    case PRIC_CELL:
-    case SHRS_CELL:
-      if (use_security_cells (reg, virt_loc))
-        return XACC_CELL_ALLOW_ALL;
-
-      return XACC_CELL_ALLOW_SHADOW;
-
-    default:
-      return XACC_CELL_ALLOW_NONE;
-  }
+  return XACC_CELL_ALLOW_SHADOW;
 }
 
 static gboolean
@@ -1393,10 +1388,75 @@ gnc_split_register_model_new (void)
                                      gnc_split_register_get_fcredit_label,
                                      FCRED_CELL);
 
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  DATE_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  NUM_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  DESC_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  ACTN_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  XFRM_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  MEMO_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  MXFRM_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  NOTES_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_debcred_io_flags,
+                                  CRED_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_debcred_io_flags,
+                                  DEBT_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_recn_io_flags,
+                                  RECN_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_security_io_flags,
+                                  PRIC_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_security_io_flags,
+                                  SHRS_CELL);
+
   model->fg_color_handler    = gnc_split_register_get_fg_color;
   model->bg_color_handler    = gnc_split_register_get_bg_color;
   model->cell_border_handler = gnc_split_register_get_border;
-  model->io_flag_handler     = gnc_split_register_get_io_flags;
   model->confirm_handler     = gnc_split_register_confirm;
 
   model->cell_data_allocator   = gnc_split_register_guid_malloc;
@@ -1434,6 +1494,16 @@ gnc_template_register_model_new (void)
   gnc_table_model_set_entry_handler (model,
                                      gnc_template_register_get_debcred_entry,
                                      CRED_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  FCRED_CELL);
+
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_standard_io_flags,
+                                  FDEBT_CELL);
 
   gnc_template_register_model_add_save_handlers (model);
 

@@ -64,8 +64,8 @@ typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
 typedef const char * (*TableGetLabelHandler) (VirtualLocation virt_loc,
                                               gpointer user_data);
 
-typedef CellIOFlags (*TableGetCellIOFlags) (VirtualLocation virt_loc,
-                                            gpointer user_data);
+typedef CellIOFlags (*TableGetCellIOFlagsHandler) (VirtualLocation virt_loc,
+                                                   gpointer user_data);
 
 typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
                                            gpointer user_data);
@@ -92,8 +92,8 @@ typedef struct
 {
   GHashTable *entry_handlers;
   GHashTable *label_handlers;
+  GHashTable *io_flags_handlers;
 
-  TableGetCellIOFlags io_flag_handler;
   TableGetFGColorHandler fg_color_handler;
   TableGetBGColorHandler bg_color_handler;
   TableGetCellBorderHandler cell_border_handler;
@@ -115,22 +115,37 @@ typedef struct
 TableModel * gnc_table_model_new (void);
 void         gnc_table_model_destroy (TableModel *model);
 
-void gnc_table_model_set_entry_handler (TableModel *model,
-                                        TableGetEntryHandler entry_handler,
-                                        int cell_type);
+void gnc_table_model_set_entry_handler
+                                     (TableModel *model,
+                                      TableGetEntryHandler entry_handler,
+                                      int cell_type);
 void gnc_table_model_set_default_entry_handler
-(TableModel *model,
- TableGetEntryHandler entry_handler);
-TableGetEntryHandler gnc_table_model_get_entry_handler (TableModel *model,
-                                                        int cell_type);
+                                     (TableModel *model,
+                                      TableGetEntryHandler entry_handler);
+TableGetEntryHandler gnc_table_model_get_entry_handler
+                                     (TableModel *model,
+                                      int cell_type);
 
-void gnc_table_model_set_label_handler (TableModel *model,
-                                        TableGetLabelHandler label_handler,
-                                        int cell_type);
+void gnc_table_model_set_label_handler
+                                     (TableModel *model,
+                                      TableGetLabelHandler label_handler,
+                                      int cell_type);
 void gnc_table_model_set_default_label_handler
-(TableModel *model,
- TableGetLabelHandler label_handler);
-TableGetLabelHandler gnc_table_model_get_label_handler (TableModel *model,
-                                                        int cell_type);
+                                     (TableModel *model,
+                                      TableGetLabelHandler label_handler);
+TableGetLabelHandler gnc_table_model_get_label_handler
+                                     (TableModel *model,
+                                      int cell_type);
+
+void gnc_table_model_set_io_flags_handler
+                                 (TableModel *model,
+                                  TableGetCellIOFlagsHandler io_flags_handler,
+                                  int cell_type);
+void gnc_table_model_set_default_io_flags_handler
+                                 (TableModel *model,
+                                  TableGetCellIOFlagsHandler io_flags_handler);
+TableGetCellIOFlagsHandler gnc_table_model_get_io_flags_handler
+                                 (TableModel *model,
+                                  int cell_type);
 
 #endif
