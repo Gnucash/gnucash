@@ -9,6 +9,8 @@
 #include "config.h"
 #include <gnome.h>
 
+#include "gnc-book.h"
+
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 

@@ -38,6 +38,7 @@
 #include "Account.h"
 #include "gnc-engine.h"
 #include "Group.h"
+#include "gnc-book.h"
 #include "gnc-session.h"
 
 

@@ -27,6 +27,7 @@
 #include <gnome.h>
 
 #include "SX-book.h"
+#include "SX-book-p.h"
 #include "SX-ttinfo.h"
 #include "SchedXaction.h"
 #include "gnc-component-manager.h"
@@ -35,7 +36,6 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
