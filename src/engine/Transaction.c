@@ -2492,7 +2492,7 @@ xaccTransSetDateInternal(Transaction *trans, int which, time_t secs,
     check_open(trans);
 
     PINFO ("addr=%p set %d date to %lu %li %s",
-           trans, which, secs, nsecs, ctime (&secs));
+	   trans, which, (long unsigned int)secs, nsecs, ctime (&secs));
     
     dadate = ((which == TDATE_POSTED)
               ? &trans->date_posted

@@ -1,3 +1,11 @@
+2003-03-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-session.c: OpenBSD fix by Todd T. Fries
+	<todd@flare.fries.net>
+
+	* src/engine/Transaction.c: OpenBSD fix by Todd T. Fries
+	<todd@flare.fries.net>: time_t is not long everywhere.
+
 2003-03-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c (GNCInteractor_hide): 
