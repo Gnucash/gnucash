@@ -1,6 +1,6 @@
 ;; engine-interface.scm -- support for working with the GnuCash
 ;;                         engine data structures
-;; Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+;; Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
 ;;                                                                  
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -24,7 +24,7 @@
   (make-record-type
    "gnc:split-structure"
    '(split-guid account-guid transaction-guid memo action
-                reconcile-state reconciled-date share-amount share-price)))
+                reconcile-state reconciled-date quantity value)))
 
 ;; constructor
 (define gnc:make-split-scm
@@ -56,11 +56,11 @@
 (define gnc:split-scm-get-reconciled-date
   (record-accessor gnc:split-structure 'reconciled-date))
 
-(define gnc:split-scm-get-share-amount
-  (record-accessor gnc:split-structure 'share-amount))
+(define gnc:split-scm-get-quantity
+  (record-accessor gnc:split-structure 'quantity))
 
-(define gnc:split-scm-get-share-price
-  (record-accessor gnc:split-structure 'share-price))
+(define gnc:split-scm-get-value
+  (record-accessor gnc:split-structure 'value))
 
 ;; modifiers
 (define gnc:split-scm-set-split-guid
@@ -84,11 +84,11 @@
 (define gnc:split-scm-set-reconciled-date
   (record-modifier gnc:split-structure 'reconciled-date))
 
-(define gnc:split-scm-set-share-amount
-  (record-modifier gnc:split-structure 'share-amount))
+(define gnc:split-scm-set-quantity
+  (record-modifier gnc:split-structure 'quantity))
 
-(define gnc:split-scm-set-share-price
-  (record-modifier gnc:split-structure 'share-price))
+(define gnc:split-scm-set-value
+  (record-modifier gnc:split-structure 'value))
 
 ;; This function take a C split and returns a representation
 ;; of it as a split-structure. Assumes the transaction is open
@@ -102,8 +102,8 @@
    (gnc:split-get-action split)
    (gnc:split-get-reconcile-state split)
    (gnc:split-get-reconciled-date split)
-   (d-gnc:split-get-share-amount split)
-   (d-gnc:split-get-share-price split)))
+   (gnc:split-get-share-amount split)
+   (gnc:split-get-value split)))
 
 ;; Copy a scheme representation of a split onto a C split.
 ;; If possible, insert the C split into the account of the
@@ -114,14 +114,14 @@
   (if (pointer-token-null? split)
       #f
       (begin
-        (let ((memo   (gnc:split-scm-get-memo split-scm))
-              (action (gnc:split-scm-get-action split-scm))
-              (price  (gnc:split-scm-get-share-price split-scm))
-              (amount (gnc:split-scm-get-share-amount split-scm)))
-          (if memo   (gnc:split-set-memo split memo))
-          (if action (gnc:split-set-action split action))
-          (if (and price amount)
-              (d-gnc:split-set-share-price-and-amount split price amount)))
+        (let ((memo     (gnc:split-scm-get-memo split-scm))
+              (action   (gnc:split-scm-get-action split-scm))
+              (quantity (gnc:split-scm-get-quantity split-scm))
+              (value    (gnc:split-scm-get-value split-scm)))
+          (if memo     (gnc:split-set-memo split memo))
+          (if action   (gnc:split-set-action split action))
+          (if quantity (gnc:split-set-share-amount split quantity))
+          (if value    (gnc:split-set-value split value)))
         (let ((account (gnc:account-lookup
                         (gnc:split-scm-get-account-guid split-scm))))
           (if (and account (gnc:account-can-insert-split? account split))

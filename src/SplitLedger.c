@@ -2278,8 +2278,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
       if (gnc_trans_scm_get_num_splits(trans_scm) == 1) {
         Split *temp_split;
         char *temp_string;
-        double price;
-        double amount;
+        gnc_numeric num;
 
         temp_split = xaccMallocSplit ();
         other_split_scm = gnc_copy_split(temp_split, use_cut_semantics);
@@ -2297,10 +2296,11 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
           free(temp_string);
         }
 
-        price = gnc_split_scm_get_share_price(other_split_scm);
-        amount = gnc_split_scm_get_share_amount(other_split_scm);
-        gnc_split_scm_set_share_price_and_amount(other_split_scm,
-                                                 price, amount);
+        num = gnc_split_scm_get_quantity (split_scm);
+        gnc_split_scm_set_quantity (other_split_scm, gnc_numeric_neg (num));
+
+        num = gnc_split_scm_get_value (split_scm);
+        gnc_split_scm_set_value (other_split_scm, gnc_numeric_neg (num));
 
         gnc_trans_scm_append_split_scm(trans_scm, other_split_scm);
       }
@@ -2318,48 +2318,25 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   }
 
   if (MOD_AMNT & changed) {
-    gnc_numeric new_amount;
+    gnc_numeric new_value;
     gnc_numeric credit;
     gnc_numeric debit;
-    gnc_numeric price;
 
     credit = xaccGetPriceCellValue(reg->creditCell);
     debit  = xaccGetPriceCellValue(reg->debitCell);
-    new_amount = gnc_numeric_sub_fixed (debit, credit);
+    new_value = gnc_numeric_sub_fixed (debit, credit);
 
-    price = double_to_gnc_numeric (gnc_split_scm_get_share_price(split_scm),
-                                   100000, GNC_RND_ROUND);
-
-    new_amount = gnc_numeric_div (new_amount, price, GNC_DENOM_AUTO,
-                                  GNC_RND_ROUND | GNC_DENOM_EXACT);
-
-    gnc_split_scm_set_share_price_and_amount(split_scm,
-                                             gnc_numeric_to_double (price),
-                                             gnc_numeric_to_double (new_amount));
+    gnc_split_scm_set_value (split_scm, new_value);
   }
 
   if (MOD_PRIC & changed) {
-    gnc_numeric price;
-    gnc_numeric amount;
-
-    price = xaccGetPriceCellValue(reg->priceCell);
-    amount = double_to_gnc_numeric (gnc_split_scm_get_share_amount(split_scm),
-                                    100000, GNC_RND_ROUND);
-
-    gnc_split_scm_set_share_price_and_amount(split_scm,
-                                             gnc_numeric_to_double (price),
-                                             gnc_numeric_to_double (amount));
+    /* do nothing for now */
   }
 
   if (MOD_SHRS & changed) {
     gnc_numeric shares = xaccGetPriceCellValue(reg->sharesCell);
-    gnc_numeric price =
-      double_to_gnc_numeric (gnc_split_scm_get_share_price(split_scm),
-                             100000, GNC_RND_ROUND);
 
-    gnc_split_scm_set_share_price_and_amount(split_scm,
-                                             gnc_numeric_to_double (price),
-                                             gnc_numeric_to_double (shares));
+    gnc_split_scm_set_quantity (split_scm, shares);
   }
 
   return TRUE;
