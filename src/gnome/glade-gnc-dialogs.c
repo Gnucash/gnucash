@@ -7911,3 +7911,207 @@ create_Commodities_Dialog (void)
   return Commodities_Dialog;
 }
 
+GtkWidget*
+create_Euro_Conversion_Druid (void)
+{
+  GtkWidget *Euro_Conversion_Druid;
+  GtkWidget *euro_conv_druid;
+  GtkWidget *druidpagestart1;
+  GdkColor druidpagestart1_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor druidpagestart1_textbox_color = { 0, 65535, 65535, 65535 };
+  GdkColor druidpagestart1_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor druidpagestart1_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *page_accountplace;
+  GdkColor page_accountplace_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountplace_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountplace_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox48;
+  GtkWidget *vbox130;
+  GtkWidget *label8477433;
+  GtkWidget *vbox134;
+  GSList *place_group_group = NULL;
+  GtkWidget *radiobutton_newtoplevel;
+  GtkWidget *radiobutton_sametoplevel;
+  GtkWidget *radiobutton_leafaccounts;
+  GtkWidget *page_accountname;
+  GdkColor page_accountname_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountname_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor page_accountname_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox49;
+  GtkWidget *vbox132;
+  GtkWidget *label8477434;
+  GtkWidget *vbox133;
+  GSList *name_group_group = NULL;
+  GtkWidget *radiobutton_new_eur;
+  GtkWidget *radiobutton_old_euroland;
+  GtkWidget *finish_page;
+  GdkColor finish_page_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor finish_page_textbox_color = { 0, 65535, 65535, 65535 };
+  GdkColor finish_page_logo_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor finish_page_title_color = { 0, 65535, 65535, 65535 };
+
+  Euro_Conversion_Druid = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (Euro_Conversion_Druid), "Euro_Conversion_Druid", Euro_Conversion_Druid);
+  gtk_window_set_title (GTK_WINDOW (Euro_Conversion_Druid), _("window1"));
+
+  euro_conv_druid = gnome_druid_new ();
+  gtk_widget_ref (euro_conv_druid);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "euro_conv_druid", euro_conv_druid,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (euro_conv_druid);
+  gtk_container_add (GTK_CONTAINER (Euro_Conversion_Druid), euro_conv_druid);
+
+  druidpagestart1 = gnome_druid_page_start_new ();
+  gtk_widget_ref (druidpagestart1);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "druidpagestart1", druidpagestart1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druidpagestart1);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (druidpagestart1));
+  gnome_druid_set_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (druidpagestart1));
+  gnome_druid_page_start_set_bg_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_bg_color);
+  gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_textbox_color);
+  gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_logo_bg_color);
+  gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (druidpagestart1), &druidpagestart1_title_color);
+  gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (druidpagestart1), _("Euro Conversion Druid"));
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (druidpagestart1), _("This druid will help you converting your existing accounts to the\ncurrency Euro (EUR). \n\nIn the following, the term 'Euroland currency' will denote \nthe currencies that are being replaced by the Euro.\n\nNo changes will be made until you press 'Finish' on the last page\nof this druid."));
+
+  page_accountplace = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (page_accountplace);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "page_accountplace", page_accountplace,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (page_accountplace);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (page_accountplace));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountplace), &page_accountplace_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountplace), &page_accountplace_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (page_accountplace), &page_accountplace_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (page_accountplace), _("Where to create the Euro accounts?"));
+
+  druid_vbox48 = GNOME_DRUID_PAGE_STANDARD (page_accountplace)->vbox;
+  gtk_widget_ref (druid_vbox48);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "druid_vbox48", druid_vbox48,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox48);
+  gtk_container_set_border_width (GTK_CONTAINER (druid_vbox48), 5);
+
+  vbox130 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox130);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox130", vbox130,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox130);
+  gtk_box_pack_start (GTK_BOX (druid_vbox48), vbox130, TRUE, TRUE, 0);
+
+  label8477433 = gtk_label_new (_("For each of your Euroland accounts, the druid will create a new EUR account. \n\nPlease choose the place in your account hierarchy where you would\nlike the EUR accounts to be created."));
+  gtk_widget_ref (label8477433);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "label8477433", label8477433,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477433);
+  gtk_box_pack_start (GTK_BOX (vbox130), label8477433, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label8477433), GTK_JUSTIFY_LEFT);
+
+  vbox134 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox134);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox134", vbox134,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox134);
+  gtk_box_pack_start (GTK_BOX (vbox130), vbox134, FALSE, FALSE, 10);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox134), 30);
+
+  radiobutton_newtoplevel = gtk_radio_button_new_with_label (place_group_group, _("Create a new toplevel account hierarchy as a copy of the existing one"));
+  place_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_newtoplevel));
+  gtk_widget_ref (radiobutton_newtoplevel);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_newtoplevel", radiobutton_newtoplevel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_newtoplevel);
+  gtk_box_pack_start (GTK_BOX (vbox134), radiobutton_newtoplevel, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_newtoplevel), TRUE);
+
+  radiobutton_sametoplevel = gtk_radio_button_new_with_label (place_group_group, _("Use same toplevel accounts. Create a copy of the rest of the accounts"));
+  place_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_sametoplevel));
+  gtk_widget_ref (radiobutton_sametoplevel);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_sametoplevel", radiobutton_sametoplevel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_sametoplevel);
+  gtk_box_pack_start (GTK_BOX (vbox134), radiobutton_sametoplevel, FALSE, FALSE, 0);
+
+  radiobutton_leafaccounts = gtk_radio_button_new_with_label (place_group_group, _("Use existing account hierarchy. Create only a copy of those \naccounts that have no subaccounts"));
+  place_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_leafaccounts));
+  gtk_widget_ref (radiobutton_leafaccounts);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_leafaccounts", radiobutton_leafaccounts,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_leafaccounts);
+  gtk_box_pack_start (GTK_BOX (vbox134), radiobutton_leafaccounts, FALSE, FALSE, 0);
+
+  page_accountname = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (page_accountname);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "page_accountname", page_accountname,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (page_accountname);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (page_accountname));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountname), &page_accountname_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (page_accountname), &page_accountname_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (page_accountname), &page_accountname_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (page_accountname), _("How to name the new accounts?"));
+
+  druid_vbox49 = GNOME_DRUID_PAGE_STANDARD (page_accountname)->vbox;
+  gtk_widget_ref (druid_vbox49);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "druid_vbox49", druid_vbox49,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox49);
+
+  vbox132 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox132);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox132", vbox132,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox132);
+  gtk_box_pack_start (GTK_BOX (druid_vbox49), vbox132, TRUE, TRUE, 0);
+
+  label8477434 = gtk_label_new (_("Please choose a naming scheme for the new Euro accounts \nand the old Euroland accounts."));
+  gtk_widget_ref (label8477434);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "label8477434", label8477434,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477434);
+  gtk_box_pack_start (GTK_BOX (vbox132), label8477434, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label8477434), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_padding (GTK_MISC (label8477434), 0, 5);
+
+  vbox133 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox133);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "vbox133", vbox133,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox133);
+  gtk_box_pack_start (GTK_BOX (vbox132), vbox133, FALSE, FALSE, 10);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox133), 30);
+
+  radiobutton_new_eur = gtk_radio_button_new_with_label (name_group_group, _("The name of each newly created Euro account is copied from\nthe old Euroland account, plus an appended 'EUR'"));
+  name_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_new_eur));
+  gtk_widget_ref (radiobutton_new_eur);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_new_eur", radiobutton_new_eur,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_new_eur);
+  gtk_box_pack_start (GTK_BOX (vbox133), radiobutton_new_eur, FALSE, FALSE, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_new_eur), TRUE);
+
+  radiobutton_old_euroland = gtk_radio_button_new_with_label (name_group_group, _("The name of each old Euroland account is modified by appending \nthe respective currency symbol of the Euroland currency. \nThe name of the newly created Euro account is copied from the\nold Euroland account."));
+  name_group_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton_old_euroland));
+  gtk_widget_ref (radiobutton_old_euroland);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "radiobutton_old_euroland", radiobutton_old_euroland,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton_old_euroland);
+  gtk_box_pack_start (GTK_BOX (vbox133), radiobutton_old_euroland, FALSE, FALSE, 0);
+
+  finish_page = gnome_druid_page_finish_new ();
+  gtk_widget_ref (finish_page);
+  gtk_object_set_data_full (GTK_OBJECT (Euro_Conversion_Druid), "finish_page", finish_page,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (finish_page);
+  gnome_druid_append_page (GNOME_DRUID (euro_conv_druid), GNOME_DRUID_PAGE (finish_page));
+  gnome_druid_page_finish_set_bg_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_bg_color);
+  gnome_druid_page_finish_set_textbox_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_textbox_color);
+  gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_logo_bg_color);
+  gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (finish_page), &finish_page_title_color);
+  gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (finish_page), _("Finish Euro Conversion"));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (finish_page), _("If you have finished choosing your Euro conversion settings,\npress 'Finish'.\n\nThe druid will then perform the following steps:\n\n1. Create new accounts according to your settings.\n2. Create currency exchange accounts.\n3. Exchange all amounts from Euroland accounts to their\nrespective Euro account.\n\nYou may also press 'Back' to review your settings, or 'Cancel'\nto quit without making any changes."));
+
+  return Euro_Conversion_Druid;
+}
+

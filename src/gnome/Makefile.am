@@ -24,6 +24,7 @@ libgncgnome_a_SOURCES = \
   dialog-transfer.c \
   dialog-userpass.c \
   dialog-utils.c \
+  druid-euro-conv.c \
   druid-commodity.c \
   druid-qif-import.c \
   druid-stock-split.c \

@@ -1,3 +1,14 @@
+2001-12-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-euro-conv.c, src/gnome/Makefile.am,
+	src/gnc-ui.h, src/gnome/gnc-dialogs.glade,
+	src/gnome/window-acct-tree.c, src/pixmaps/Makefile.am,
+	src/pixmaps/one-euro.png, src/pixmaps/euro-notes.png: Added Euro
+	conversion druid.
+
+	* src/gnome/druid-utils.h, src/gnome/druid-utils.c: added
+	gnc_druid_set_logo_image. 
+
 2001-12-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-main-summarybar.c (gnc_ui_accounts_recurse):
