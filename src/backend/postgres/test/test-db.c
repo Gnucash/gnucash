@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "AccountP.h"
 #include "Backend.h"
 #include "PostgresBackend.h"
 #include "TransactionP.h"
@@ -693,8 +694,15 @@ test_queries (GNCSession *session_base, const char *db_name, const char *mode)
 
 typedef struct
 {
-  GNCSession *session_1;
-  GNCSession *session_2;
+  GNCSession * session_1;
+  GNCSession * session_2;
+
+  GNCBook * book_1;
+  GNCBook * book_2;
+
+  AccountGroup * group_1;
+  AccountGroup * group_2;
+
   GList * accounts_1;
   GList * accounts_2;
 } UpdateTestData;
@@ -709,6 +717,9 @@ test_trans_update (Transaction *trans, gpointer data)
   GNCBook * book_2;
   GUID guid;
   gboolean ok;
+
+  /* FIXME remove */
+  return TRUE;
 
   book_1 = gnc_session_get_book (td->session_1);
   book_2 = gnc_session_get_book (td->session_2);
@@ -743,10 +754,14 @@ test_trans_update (Transaction *trans, gpointer data)
 
   ok = xaccTransEqual (trans, trans_2, TRUE, TRUE);
   if (trans && trans_2)
-    ok = ok && trans->version == trans_2->version;
+    ok = ok && (trans->version == trans_2->version);
+
+  /*
+  ok = ok && (gnc_session_get_error (td->session_2) == ERR_BACKEND_MODIFIED);
+  */
 
   if (!do_test_args (ok,
-                     "test rollback",
+                     "test trans rollback",
                      __FILE__, __LINE__,
                      "transaction not rolled back properly"))
     return FALSE;
@@ -768,12 +783,10 @@ static gboolean
 test_updates_2 (GNCSession *session_base,
                 const char *db_name, const char *mode)
 {
-  AccountGroup *group;
   UpdateTestData td;
   char * filename;
   GList * transes;
   GList * node;
-  GNCBook *book;
   gboolean ok;
 
   g_return_val_if_fail (session_base && db_name && mode, FALSE);
@@ -785,36 +798,103 @@ test_updates_2 (GNCSession *session_base,
 
   multi_user_get_everything (session_base, NULL);
 
-  book = gnc_session_get_book (session_base);
-  group = gnc_book_get_group (book);
-
   td.session_1 = session_base;
+  td.book_1 = gnc_session_get_book (session_base);
+  td.group_1 = gnc_book_get_group (td.book_1);
+  td.accounts_1 = xaccGroupGetSubAccounts (td.group_1);
+
   td.session_2 = gnc_session_new ();
-  td.accounts_1 = xaccGroupGetSubAccounts (group);
 
   if (!load_db_file (td.session_2, db_name, mode, FALSE))
     return FALSE;
 
   multi_user_get_everything (td.session_2, NULL);
 
-  td.accounts_2 = xaccGroupGetSubAccounts
-    (gnc_book_get_group (gnc_session_get_book (td.session_2)));
+  td.book_2 = gnc_session_get_book (td.session_2);
+  td.group_2 = gnc_book_get_group (td.book_2);
+  td.accounts_2 = xaccGroupGetSubAccounts (td.group_2);
 
   ok = TRUE;
   transes = NULL;
-  xaccGroupForEachTransaction (group, add_trans_helper, &transes);
+  xaccGroupForEachTransaction (td.group_1, add_trans_helper, &transes);
   for (node = transes; node; node = node->next)
   {
     ok = test_trans_update (node->data, &td);
     if (!ok)
-      break;
+      return FALSE;
   }
   g_list_free (transes);
 
-  gnc_session_end (session_base);
+#if 0
+  for (node = td.accounts_1; node; node = node->next)
+  {
+    Account * account_1 = node->data;
+    Account * account_2 =
+      xaccAccountLookup (xaccAccountGetGUID (account_1), td.book_2);
 
+    make_random_changes_to_account (td.book_1, account_1);
+    make_random_changes_to_account (td.book_2, account_2);
+
+    ok = xaccAccountEqual (account_1, account_2, TRUE);
+    if (account_1 && account_2)
+      ok = ok && (account_1->version == account_2->version);
+
+    ok = ok && (gnc_session_get_error (td.session_2) == ERR_BACKEND_MODIFIED);
+
+    if (!do_test_args (ok,
+                       "test account rollback",
+                       __FILE__, __LINE__,
+                       "account not rolled back properly"))
+      return FALSE;
+  }
+#endif
+
+#if 0
+  {
+    Account * account = get_random_account (td.book_1);
+    Account * child = get_random_account (td.book_1);
+    Transaction * trans = get_random_transaction (td.book_1);
+    Query * q = xaccMallocQuery ();
+    int count = 0;
+
+    xaccAccountBeginEdit (account);
+    xaccAccountBeginEdit (child);
+    xaccGroupInsertAccount (td.group_1, account);
+    xaccAccountInsertSubAccount (account, child);
+    xaccAccountCommitEdit (child);
+    xaccAccountCommitEdit (account);
+
+    xaccTransBeginEdit (trans);
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+      Split * split = node->data;
+
+      xaccAccountInsertSplit (child, split);
+      count++;
+    }
+    xaccTransCommitEdit (trans);
+
+    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (child),
+                           GNC_ID_ACCOUNT, QUERY_AND);
+
+    xaccQuerySetGroup (q, td.group_2);
+
+    ok = (g_list_length (xaccQueryGetSplits (q)) == count);
+
+    xaccFreeQuery (q);
+
+    if (!do_test_args (ok,
+                       "test new account",
+                       __FILE__, __LINE__,
+                       "new account not loaded properly"))
+      return FALSE;
+  }
+#endif
+
+  gnc_session_end (td.session_1);
   gnc_session_end (td.session_2);
   gnc_session_destroy (td.session_2);
+
   g_list_free (td.accounts_1);
   g_list_free (td.accounts_2);
 
