@@ -180,6 +180,7 @@ gnc_frequency_init( GNCFrequency *gf )
                 { "weekly_spin",      spin_changed_helper },
                 { "semimonthly_spin", spin_changed_helper },
                 { "monthly_spin",     spin_changed_helper },
+                { "yearly_spin",      spin_changed_helper },
                 { NULL,               NULL }
         };
 
