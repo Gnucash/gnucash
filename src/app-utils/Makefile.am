@@ -38,6 +38,7 @@ gncinclude_HEADERS = \
   file-utils.h \
   gfec.h \
   global-options.h \
+  gnc-basic-gobject.h \
   gnc-component-manager.h \
   gnc-druid.h \
   gnc-druid-cb.h \

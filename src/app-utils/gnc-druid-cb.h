@@ -20,12 +20,14 @@ typedef struct _GNCDruidCB GNCDruidCB;
 typedef struct _GNCDruidCBClass GNCDruidCBClass;
 
 #include "gnc-druid.h"
+#include "gnc-druid-provider.h"
 
 struct _GNCDruidCB
 {
   GObject obj;
 
   GNCDruid* druid_ctx;
+  GNCDruidProvider* prov_ctx;
   gpointer be_ctx;
 };
 

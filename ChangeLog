@@ -1,3 +1,27 @@
+2004-01-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/Makefile.am:
+	  Add basic gobject header.
+	* src/app-utils/gnc-basic-gobject.h: provide some macros to
+	  simplify some general gobject creation, for example simple
+	  objects with just a get_type() and new() methods.
+	* src/app-utils/gnc-druid-cb.h:
+	  need to include gnc-druid-provider.h directly
+	* src/app-utils/gnc-druid-cb.c:
+	  implement in terms of the new gnc-gobject macros
+	* src/app-utils/gnc-druid-provider.c:
+	* src/app-utils/gnc-druid-provider-desc.c:
+	* src/app-utils/gnc-druid-provider-desc-edge.c:
+	  implement in terms of the new gnc-gobject macros
+	* src/app-utils/gnc-druid-provider-desc.h:
+	  re-add the various callback routines in terms of a new typedef
+	* src/app-utils/gnc-druid-provider.h:
+	  need to include gnc-druid-provider-desc.h directly
+	* src/import-export/Makefile.am:
+	  Add new files to implement the format-chooser provider framework.
+	* src/import-export/import-prov-desc-format.[ch]:
+	* src/import-export/import-prov-format-cb.[ch]:
+
 2004-01-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc.h: add a pointer to the

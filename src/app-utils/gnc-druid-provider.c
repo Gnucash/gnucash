@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "gnc-druid-provider.h"
+#include "gnc-basic-gobject.h"
 
 static void gnc_druid_provider_class_init	(GNCDruidProviderClass *class);
 static void gnc_druid_provider_finalize		(GObject *obj);
@@ -10,29 +11,9 @@ static GNCDruidPage* invalid_page(GNCDruidProvider* provider);
 static GObjectClass *parent_class;
 static GHashTable *typeTable = NULL;
 
-GType
-gnc_druid_provider_get_type (void)
-{
-  static GType type = 0;
-
-  if (type == 0) {
-    GTypeInfo type_info = {
-      sizeof (GNCDruidProviderClass),
-      NULL,
-      NULL,
-      (GClassInitFunc)gnc_druid_provider_class_init,
-      NULL,
-      NULL,
-      sizeof (GNCDruidProvider),
-      0,
-      NULL,
-    };
-		
-    type = g_type_register_static (G_TYPE_OBJECT, "GNCDruidProvider", &type_info, 0);
-  }
-  
-  return type;
-}
+GNC_BASIC_GOBJECT_TYPE(GNCDruidProvider, GNCDruidProviderClass,
+		       G_TYPE_OBJECT, gnc_druid_provider_class_init, NULL,
+		       gnc_druid_provider_get_type)
 
 static void
 gnc_druid_provider_class_init (GNCDruidProviderClass *klass)

@@ -21,6 +21,7 @@ typedef struct _GNCDruidProvider GNCDruidProvider;
 typedef struct _GNCDruidProviderClass GNCDruidProviderClass;
 
 #include "gnc-druid.h"
+#include "gnc-druid-provider-desc.h"
 
 struct _GNCDruidProvider
 {

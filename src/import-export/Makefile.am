@@ -10,6 +10,8 @@ libgncmod_generic_import_la_SOURCES = \
 	import-format-dialog.c \
 	import-match-picker.c \
 	import-parse.c \
+	import-prov-format-cb.c \
+	import-prov-desc-format.c \
 	import-utilities.c \
 	import-settings.c \
 	import-match-map.c \
@@ -28,6 +30,8 @@ noinst_HEADERS = \
   import-main-matcher.h \
   import-match-map.h \
   import-match-picker.h \
+  import-prov-format-cb.h \
+  import-prov-desc-format.h \
   import-settings.h \
   import-utilities.h 
 

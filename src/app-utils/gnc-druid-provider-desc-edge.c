@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "gnc-druid-provider-desc-edge.h"
+#include "gnc-basic-gobject.h"
 
 static void gnc_druid_provider_desc_edge_class_init	(GNCDruidProviderDescEdgeClass *class);
 static void gnc_druid_provider_desc_edge_init		(GNCDruidProviderDescEdge *gspaper);
@@ -9,30 +10,12 @@ static void gnc_druid_provider_desc_edge_finalize	(GObject *obj);
 
 static GNCDruidProviderDescClass *parent_class;
 
-GType 
-gnc_druid_provider_desc_edge_get_type(void)
-{
-  static GType type = 0;
-
-  if (type == 0) {
-    GTypeInfo type_info = {
-      sizeof (GNCDruidProviderDescEdgeClass),
-      NULL,
-      NULL,
-      (GClassInitFunc)gnc_druid_provider_desc_edge_class_init,
-      NULL,
-      NULL,
-      sizeof (GNCDruidProviderDescEdge),
-      0,
-      (GInstanceInitFunc)gnc_druid_provider_desc_edge_init,
-    };
-
-    type = g_type_register_static (G_TYPE_GNC_DRUID_PROVIDER_DESC,
-				   "GNCDruidProviderDescEdge", &type_info, 0);
-  }
-  
-  return type;
-}
+GNC_BASIC_GOBJECT(GNCDruidProviderDescEdge, GNCDruidProviderDescEdgeClass,
+		  G_TYPE_GNC_DRUID_PROVIDER_DESC,
+		  gnc_druid_provider_desc_edge_class_init,
+		  gnc_druid_provider_desc_edge_init,
+		  gnc_druid_provider_desc_edge_get_type,
+		  gnc_druid_provider_desc_edge_new)
 
 static void
 gnc_druid_provider_desc_edge_class_init (GNCDruidProviderDescEdgeClass *klass)
@@ -60,12 +43,6 @@ static void
 gnc_druid_provider_desc_edge_init (GNCDruidProviderDescEdge *o)
 {
   o->parent.name = GNC_DRUID_PROVIDER_TYPE_EDGE;
-}
-
-GNCDruidProviderDescEdge*
-gnc_druid_provider_desc_edge_new(void)
-{
-  return GNC_DRUID_PROVIDER_DESC_EDGE(g_object_new(G_TYPE_GNC_DRUID_PROVIDER_DESC_EDGE, NULL));
 }
 
 GNCDruidProviderDescEdge*
