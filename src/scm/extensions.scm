@@ -1,18 +1,12 @@
 
 (define (gnc:extensions-menu-test-func)
-  (gnc:debug "Extension called from scheme.\n"))
+  (display "Extension called from scheme.\n"))
 
 (define (gnc:extensions-menu-setup win)
   ;; Should take window as a parameter?
   
   (gnc:debug "Setting up extensions menu " win "\n")
   
-  (gnc:extensions-menu-add-item
-   "Test Account creation"
-   "Creates three accounts and adds them to the top group"
-   (lambda ()
-     (gnc:test-creation)))
-
   (gnc:extensions-menu-add-item "Export data as text"
                                 "Export data as text hint"
                                 (lambda ()

@@ -1,15 +1,14 @@
 ;;; $Id$
 ;;; Import QIF File
+
 (define testing? #f)  ;;; Should we do testing?
 
 (define favorite-currency "USD")  ;;;; This may need to change...
 
 (define (gnc:extensions-qif-import win)
-  (let ((account-group #f)
-	(session (gnc:main-window-get-session)))
-    (if session (set! account-group (gnc:session-get-group session)))
+  (let ((account-group (gnc:get-current-group)))
     (if (not account-group)
-	(gnc:error-message-dialog 
+	(gnc:error-dialog 
 	 "No account group available for text export.")
 	(begin
 	  (display "account-group:") (display account-group) (newline)
@@ -33,7 +32,7 @@
 	    (display "Account type list:")
 	    (display gnc:account-types)
 	    (newline))
-	  (test-load account-group) ;;;;;  This tries to create some accounts
+	  (gnc:test-load account-group) ;  This tries to create some accounts
 	  (gnc:import-file-into-account-group account-group)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

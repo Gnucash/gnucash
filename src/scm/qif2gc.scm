@@ -35,7 +35,7 @@
 (define gnc-acc-list (initialize-lookup))
 (define gnc-split-list (initialize-lookup))
 
-(define (add-qif-transaction-to-gnc-lists txn curtxn cursplitlist)
+(define (add-qif-transaction-to-gnc-lists txn curtxn cursplitlist accountname)
   (define txnref (gensym))
   (set! gnc-txn-list (lookup-set! gnc-txn-list txnref curtxn))
     ;;; Fill in gnc-txn-list, gnc-acc-list, gnc-split-list
@@ -51,9 +51,9 @@
     (mainsplit 'put 'memo (txn 'get 'memo))
     (mainsplit 'put 'share-amount (txn 'get 'amount))
     (mainsplit 'put 'reconcile-state (txn 'get 'status))
-    (mainsplit 'put 'reconcile-state 
-	       (if  (string=? (txn 'get 'status) "*")
-		    '(1999 09 03) #f))
+    (mainsplit 'put 'reconciled-date
+ 	       (if  (string=? (txn 'get 'date) "*")
+ 		    '(1999 09 03) #f))
     (mainsplit 'put 'docref (txn 'get 'id))
     (mainsplit 'put 'parenttransaction txnref)
     (mainsplit 'put 'account accountname)
@@ -70,7 +70,7 @@
   (letrec 
       ((curtxn (build-mystruct-instance gnc-txn-structure))
        (cursplitlist (initialize-lookup))
-       (process-txn (lambda (x) (add-qif-transaction-to-gnc-lists x curtxn cursplitlist))))
+       (process-txn (lambda (x) (add-qif-transaction-to-gnc-lists x curtxn cursplitlist accountname))))
     (for-each process-txn txnlist)))
 
 ; QIF essentially provides a structure that sort of looks like
@@ -181,4 +181,4 @@
 (define (improve-qif-to-gnc-translation qif gnc)
   (set! qif-to-gnc-acct-xlation-table 
 	(lookup-set! qif-to-gnc-acct-xlation-table 
-		     qif gnc)))diff -u /dev/null 'gnucash/src/scm/qifcats.scm'
+		     qif gnc)))
