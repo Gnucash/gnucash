@@ -421,7 +421,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                 gint64 denom, gint how) 
 {
   gnc_numeric product, result;
-  qofint128 bigprod;
+  qofint128 bignume, bigdeno;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -453,19 +453,24 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     b.denom = 1;
   }
 
-  bigprod = mult128 (a.num, b.num);
+  bignume = mult128 (a.num, b.num);
+  bigdeno = mult128 (a.denom, b.denom);
   product.num   = a.num*b.num;
   product.denom = a.denom*b.denom;
 
   /* If it looks to be overflowing, try to reduce the fraction ... */
-  if (bigprod.isbig)
+  if (bignume.isbig || bigdeno.isbig)
   {
     /* If rounding allowed, then shift until there's no 
      * more overflow. The conversion at the end will fix 
-     * things up for the final value. */
+     * things up for the final value. Else overflow. */
     if ((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER)
     {
-      product = reduce128 (bigprod, product.denom);
+      if (bigdeno.isbig)
+      {
+        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+      }
+      product = reduce128 (bignume, product.denom);
       if (gnc_numeric_check (product))
       {
         return gnc_numeric_error (GNC_ERROR_OVERFLOW);
@@ -473,13 +478,15 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     } 
     else 
     {
-      while (bigprod.isbig)
+      while (bignume.isbig || bigdeno.isbig)
       {
-         bigprod = shift128 (bigprod);
-         product.denom >>= 1;
+         bignume = shift128 (bignume);
+         bigdeno = shift128 (bigdeno);
       }
-      product.num = bigprod.lo;
-      if (bigprod.isneg) product.num = -product.num;
+      product.num = bignume.lo;
+      if (bignume.isneg) product.num = -product.num;
+
+      product.denom = bigdeno.lo;
       if (0 == product.denom) 
       {
         return gnc_numeric_error (GNC_ERROR_OVERFLOW);
