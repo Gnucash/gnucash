@@ -1,5 +1,8 @@
 2003-06-25  David Hampton  <hampton@employees.org>
 
+	* src/scm/price-quotes.scm: Don't print the "handling-request"
+	messages when getting stock quotes. #110687
+
 	* src/report/report-system/html-document.scm: 
 	* src/report/report-system/html-text.scm: Correctly quote
 	attribute values. #115244
