@@ -57,16 +57,6 @@ void gnc_ui_print_check_format_changed_cb(GtkWidget *unused,
 					  gpointer user_data);
 
 
-static int gnc_ui_print_get_option_menu_item (GtkWidget *widget)
-{
-  GtkWidget  * menu, * menuitem;
-
-  menu     = gtk_option_menu_get_menu(GTK_OPTION_MENU(widget));
-  menuitem = gtk_menu_get_active(GTK_MENU(menu));
-  return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
-					     "option_index"));
-}
-
 static void
 gnc_ui_print_enable_month (PrintCheckDialog *pcd, gboolean sensitive)
 {
@@ -93,7 +83,7 @@ gnc_ui_print_enable_format (PrintCheckDialog *pcd, gboolean sensitive)
 static void
 gnc_ui_print_compute_new_format (PrintCheckDialog *pcd)
 {
-  int sel_option = gnc_ui_print_get_option_menu_item(pcd->dformat_picker);
+  int sel_option = gnc_option_menu_get_active(pcd->dformat_picker);
   gboolean enable_year, enable_month, enable_custom, check_modifiers;
   static gchar *format, *c;
   gchar date_string[MAX_DATE_LEN];
@@ -329,13 +319,13 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   char       * formats[]   = { "quicken", "deluxe", "custom" };
   char       * positions[] = { "top", "middle", "bottom", "custom" };
 
-  sel_option = gnc_ui_print_get_option_menu_item(pcd->format_picker);
+  sel_option = gnc_option_menu_get_active(pcd->format_picker);
   fmt        = scm_str2symbol(formats[sel_option]);
 
-  sel_option = gnc_ui_print_get_option_menu_item(pcd->position_picker);
+  sel_option = gnc_option_menu_get_active(pcd->position_picker);
   posn       = scm_str2symbol(positions[sel_option]);
 
-  sel_option = gnc_ui_print_get_option_menu_item(pcd->units_picker);
+  sel_option = gnc_option_menu_get_active(pcd->units_picker);
   switch(sel_option) {
   case 0:  multip = 72.0; break;   /* inches */
   case 1:  multip = 28.346; break; /* cm */
