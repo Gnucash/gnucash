@@ -53,6 +53,7 @@ libgncgnome_la_SOURCES = \
   gnc-plugin-page-register.c \
   gnc-plugin-page.c \
   gnc-split-reg.c \
+  gnc-window.c \
   lot-viewer.c \
   mainwindow-account-tree.c \
   reconcile-list.c \
@@ -101,6 +102,7 @@ noinst_HEADERS = \
   gnc-plugin-page-register.h \
   gnc-network.h \
   gnc-split-reg.h \
+  gnc-window.h \
   gw-gnc.h \
   lot-viewer.h \
   mainwindow-account-tree.h \

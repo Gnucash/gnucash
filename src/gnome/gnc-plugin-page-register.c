@@ -45,6 +45,7 @@
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "lot-viewer.h"
 #include "QueryNew.h"
 #include "window-reconcile.h"
@@ -107,6 +108,7 @@ static void gnc_plugin_page_register_cmd_exchange_rate (EggAction *action, GncPl
 static void gnc_plugin_page_register_cmd_jump (EggAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_schedule (EggAction *action, GncPluginPageRegister *plugin_page);
 
+static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 
 /************************************************************/
 /*                          Actions                         */
@@ -582,6 +584,9 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (gsr);
 	gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
 
+	g_signal_connect (G_OBJECT (gsr), "help-changed",
+			  G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
+			  page );
 	g_signal_connect (G_OBJECT (gsr), "button-press-event",
 			  G_CALLBACK (gnc_plugin_page_register_button_press_cb), page);
 
@@ -1503,3 +1508,30 @@ gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page)
 
 	return priv->gsr;
 }
+
+static void
+gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister *register_page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	SplitRegister *reg;
+	GncWindow *window;
+	GtkStatusbar *statusbar;
+	const char *status;
+	char *help;
+
+	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(register_page));
+
+	window = GNC_WINDOW(GNC_PLUGIN_PAGE(register_page)->window);
+
+	/* Get the text from the ledger */
+	priv = register_page->priv;
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+	help = gnc_table_get_help(reg->table);
+	status = help ? help : "";
+
+	statusbar = GTK_STATUSBAR(gnc_window_get_statusbar(window));
+	gtk_statusbar_pop(statusbar, 0);
+	gtk_statusbar_push(statusbar, 0, status);
+	g_free(help);
+}
+

@@ -5,6 +5,18 @@
 	* src/gnome/gnc-embedded-window.[ch]: Always provide a parent
 	window. Split the accelerators out into a separate argument.
 
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-window.[ch]: Add an interface for accessing the
+	status bar and progress bar, regardless of whether the window is a
+	main window or an embedded window.
+
+	* src/gnome/gnc-embedded-window.c:
+	* src/gnome/gnc-main-window.c: Implement the new window interface.
+	
+	* src/gnome/gnc-plugin-page-register.c: Use the new window
+	interface to update the status bar when moving through the
+	register.
+
 2003-10-11  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/gnc-plugin-business.[ch]:

@@ -53,6 +53,7 @@
 #include "gnc-totd-dialog.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
+#include "gnc-window.h"
 #include "window-main.h"
 #include "messages.h"
 
@@ -67,6 +68,7 @@ static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_dispose (GObject *object);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
+static void gnc_window_main_window_init (GncWindowIface *iface);
 
 /* Callbacks */
 static void gnc_main_window_add_widget (EggMenuMerge *merge, GtkWidget *widget, GncMainWindow *window);
@@ -348,9 +350,18 @@ gnc_main_window_get_type (void)
 			(GInstanceInitFunc) gnc_main_window_init
 		};
 
+		static const GInterfaceInfo plugin_info = {
+		  (GInterfaceInitFunc) gnc_window_main_window_init,
+		  NULL,
+		  NULL
+		};
+
 		gnc_main_window_type = g_type_register_static (GTK_TYPE_WINDOW,
 							       "GncMainWindow",
 							       &our_info, 0);
+		g_type_add_interface_static (gnc_main_window_type,
+					     GNC_TYPE_WINDOW,
+					     &plugin_info);
 	}
 
 	return gnc_main_window_type;
@@ -638,6 +649,7 @@ gnc_main_window_add_plugin (gpointer plugin,
 static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
 	GtkWidget *main_vbox;
 	guint merge_id;
 	GncPluginManager *manager;
@@ -650,35 +662,43 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (main_vbox);
 	gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
-	window->priv->menu_dock = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (window->priv->menu_dock);
-	gtk_box_pack_start (GTK_BOX (main_vbox), window->priv->menu_dock,
+	priv = window->priv;
+	priv->menu_dock = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (priv->menu_dock);
+	gtk_box_pack_start (GTK_BOX (main_vbox), priv->menu_dock,
 			    FALSE, TRUE, 0);
 
-	window->priv->notebook = gtk_notebook_new ();
-	gtk_widget_show (window->priv->notebook);
-	g_signal_connect (G_OBJECT (window->priv->notebook), "change-current-page",
+	priv->notebook = gtk_notebook_new ();
+	gtk_widget_show (priv->notebook);
+	g_signal_connect (G_OBJECT (priv->notebook), "change-current-page",
 			  G_CALLBACK (gnc_main_window_change_current_page), window);
-	g_signal_connect (G_OBJECT (window->priv->notebook), "switch-page",
+	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
-	gtk_box_pack_start (GTK_BOX (main_vbox), window->priv->notebook,
+	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
 			    TRUE, TRUE, 0);
 
-	window->priv->statusbar = gtk_statusbar_new ();
-	gtk_widget_show (window->priv->statusbar);
-	gtk_box_pack_start (GTK_BOX (main_vbox), window->priv->statusbar,
+	priv->statusbar = gtk_statusbar_new ();
+	gtk_widget_show (priv->statusbar);
+	gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
+			    FALSE, TRUE, 0);
+
+	priv->progressbar = gtk_progress_bar_new ();
+	gtk_widget_show (priv->progressbar);
+	gtk_progress_bar_set_text (GTK_PROGRESS_BAR(priv->progressbar),
+				   "<- Progress Bar ->");
+	gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
 			    FALSE, TRUE, 0);
 
 	window->ui_merge = egg_menu_merge_new ();
 
 	/* Create menu and toolbar information */
-	window->priv->action_group = egg_action_group_new ("MainWindowActions");
-	egg_action_group_add_actions (window->priv->action_group, gnc_menu_entries,
+	priv->action_group = egg_action_group_new ("MainWindowActions");
+	egg_action_group_add_actions (priv->action_group, gnc_menu_entries,
 				      gnc_menu_n_entries, window);
-	egg_action_group_add_toggle_actions (window->priv->action_group, 
+	egg_action_group_add_toggle_actions (priv->action_group, 
 					     toggle_entries, n_toggle_entries, 
 					     window);
-	egg_menu_merge_insert_action_group (window->ui_merge, window->priv->action_group, 0);
+	egg_menu_merge_insert_action_group (window->ui_merge, priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
 			  G_CALLBACK (gnc_main_window_add_widget), window);
@@ -1068,4 +1088,37 @@ gnc_main_window_update_title (GncMainWindow *window)
   title = g_strdup_printf ("Gnucash (%s)", filename);
   gtk_window_set_title (GTK_WINDOW(&window->parent), title);
   g_free(title);
+}
+
+static GtkWidget *
+gnc_main_window_get_statusbar (GncWindow *window_in)
+{
+  GncMainWindowPrivate *priv;
+  GncMainWindow *window;
+
+  g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window_in), NULL);
+
+  window = GNC_MAIN_WINDOW(window_in);
+  priv = window->priv;
+  return priv->statusbar;
+}
+
+static GtkWidget *
+gnc_main_window_get_progressbar (GncWindow *window_in)
+{
+  GncMainWindowPrivate *priv;
+  GncMainWindow *window;
+
+  g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window_in), NULL);
+
+  window = GNC_MAIN_WINDOW(window_in);
+  priv = window->priv;
+  return priv->progressbar;
+}
+
+static void
+gnc_window_main_window_init (GncWindowIface *iface)
+{
+	iface->get_statusbar   = gnc_main_window_get_statusbar;
+	iface->get_progressbar = gnc_main_window_get_progressbar;
 }

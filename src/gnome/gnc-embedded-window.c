@@ -44,6 +44,7 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
+#include "gnc-window.h"
 #include "messages.h"
 
 /** Static Globals *******************************************************/
@@ -54,6 +55,8 @@ static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_init (GncEmbeddedWindow *window);
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
+
+static void gnc_window_embedded_window_init (GncWindowIface *iface);
 
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
 
@@ -90,9 +93,18 @@ gnc_embedded_window_get_type (void)
       (GInstanceInitFunc) gnc_embedded_window_init
     };
 
+    static const GInterfaceInfo plugin_info = {
+      (GInterfaceInitFunc) gnc_window_embedded_window_init,
+      NULL,
+      NULL
+    };
+
     gnc_embedded_window_type = g_type_register_static (GTK_TYPE_VBOX,
 						       "GncEmbeddedWindow",
 						       &our_info, 0);
+    g_type_add_interface_static (gnc_embedded_window_type,
+				 GNC_TYPE_WINDOW,
+				 &plugin_info);
   }
 
   return gnc_embedded_window_type;
@@ -311,3 +323,21 @@ gnc_embedded_window_new (const gchar *action_group_name,
   return window;
 }
 
+static GtkWidget *
+gnc_embedded_window_get_statusbar (GncWindow *window_in)
+{
+  GncEmbeddedWindowPrivate *priv;
+  GncEmbeddedWindow *window;
+
+  g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW (window_in), NULL);
+
+  window = GNC_EMBEDDED_WINDOW(window_in);
+  priv = window->priv;
+  return priv->statusbar;
+}
+
+static void
+gnc_window_embedded_window_init (GncWindowIface *iface)
+{
+	iface->get_statusbar = gnc_embedded_window_get_statusbar;
+}
