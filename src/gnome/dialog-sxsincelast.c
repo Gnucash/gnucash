@@ -77,6 +77,7 @@
 #define SXSLD_DRUID_GLADE_NAME "sincelast_druid"
 
 #define SINCELAST_DRUID   "sincelast_druid"
+#define WHAT_TO_DO_PG "what_to_do"
 #define REMINDERS_PG "reminders_page"
 #define AUTO_CREATE_NOTIFY_PG "auto_create_notify_page"
 #define TO_CREATE_PG "to_create_page"
@@ -96,6 +97,8 @@
 #define VARIABLE_TABLE "variables_table"
 #define AUTO_CREATE_VBOX "ac_vbox"
 #define CREATED_VBOX "created_vbox"
+#define WHAT_TO_DO_VBOX "what_to_do_vbox"
+#define WHAT_TO_DO_PROGRESS "creation_progress"
 
 #define TO_CREATE_CLIST_WIDTH 3
 #define REMINDER_CLIST_WIDTH  3
@@ -132,6 +135,8 @@ typedef struct _sxSinceLastData {
         GtkWidget *sincelast_window;
         GnomeDruid *sincelast_druid;
         GladeXML *gxml;
+
+        GtkProgressBar *prog;
 
         /* Multi-stage processing-related stuff... */
         GList /* <autoCreateTuple*> */ *autoCreateList;
@@ -406,13 +411,20 @@ theres_no_turning_back_bang( GnomeDruidPage *druid_page,
 }
 
 static void
-reminders_page_prep( gpointer ud )
+whattodo_prep( GnomeDruidPage *druid_page,
+               gpointer arg1, gpointer ud )
 {
-        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+        DEBUG( "whattodo_prep" );
+}
+
+static void
+reminders_page_prep( sxSinceLastData *sxsld )
+{
         GtkWidget *w;
         if ( g_list_length( sxsld->reminderList ) == 0 ) {
                 w = glade_xml_get_widget( sxsld->gxml,
                                           AUTO_CREATE_NOTIFY_PG );
+                DEBUG( "Going to auto_create_notify page" );
                 gnome_druid_set_page( sxsld->sincelast_druid,
                                       GNOME_DRUID_PAGE(w) );
                 return;
@@ -429,7 +441,8 @@ static void
 reminders_prep( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
 {
-        reminders_page_prep( ud );
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+        reminders_page_prep( sxsld );
 }
 
 static gboolean 
@@ -468,6 +481,7 @@ auto_create_prep( GnomeDruidPage *druid_page,
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
         if ( ! sxsld->autoCreatedSomething ) {
+                DEBUG( "Going to to_create page" );
                 w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_PG );
                 gnome_druid_set_page( sxsld->sincelast_druid,
                                       GNOME_DRUID_PAGE(w) );
@@ -483,6 +497,7 @@ created_prep( GnomeDruidPage *druid_page,
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
         if ( !sxsld->createdSomething ) {
+                DEBUG( "Going to obsolete page" );
                 w = glade_xml_get_widget( sxsld->gxml, OBSOLETE_PG );
                 gnome_druid_set_page( sxsld->sincelast_druid,
                                       GNOME_DRUID_PAGE(w) );
@@ -497,6 +512,7 @@ obsolete_prep( GnomeDruidPage *druid_page,
         GtkWidget *w;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
         if ( g_list_length( sxsld->toRemoveList ) == 0 ) {
+                DEBUG( "Going to finish page" );
                 w = glade_xml_get_widget( sxsld->gxml, FINISH_PG );
                 gnome_druid_set_page( sxsld->sincelast_druid,
                                       GNOME_DRUID_PAGE(w) );
@@ -638,13 +654,16 @@ to_create_next( GnomeDruidPage *druid_page,
                 sxsld->createdTxnGUIDList =
                         g_list_concat( sxsld->createdTxnGUIDList, created );
         }
-        gnc_resume_gui_refresh();
+
+        DEBUG( "Done with creation; updating created ledger." );
 
         oldQuery = gnc_ledger_display_get_query( sxsld->created_ledger );
         newQuery = xaccQueryMerge( oldQuery, q, QUERY_AND );
         gnc_ledger_display_set_query( sxsld->created_ledger, newQuery );
         gnc_ledger_display_refresh( sxsld->created_ledger );
         xaccFreeQuery( q );
+
+        gnc_resume_gui_refresh();
 
         sxsld->createdSomething = TRUE;
 
@@ -796,6 +815,10 @@ sxsincelast_init( sxSinceLastData *sxsld )
         };
 
         static druidSignalHandlerTuple pages[] = {
+                { WHAT_TO_DO_PG,
+                  whattodo_prep, NULL, NULL,
+                  NULL, cancel_check },
+
                 { REMINDERS_PG,
                   reminders_prep, theres_no_turning_back_bang, reminders_next,
                   reminders_finish, cancel_check },
@@ -849,14 +872,18 @@ sxsincelast_init( sxSinceLastData *sxsld )
         w = glade_xml_get_widget( sxsld->gxml, SX_OBSOLETE_CLIST );
         clist_set_all_cols_autoresize(GTK_CLIST(w), SX_OBSOLETE_CLIST_WIDTH);
 
+        sxsld->prog = glade_xml_get_widget( sxsld->gxml, WHAT_TO_DO_PROGRESS );
+
         create_autoCreate_ledger( sxsld );
         create_created_ledger( sxsld );
 
+        //reminders_page_prep( sxsld );
+        gtk_widget_show_all( sxsld->sincelast_window );
+
         process_auto_create_list( sxsld->autoCreateList, sxsld );
 
-        reminders_page_prep( (gpointer)sxsld );
-
-        gtk_widget_show_all( sxsld->sincelast_window );
+        w = glade_xml_get_widget( sxsld->gxml, REMINDERS_PG );
+        gnome_druid_set_page( sxsld->sincelast_druid, GNOME_DRUID_PAGE(w) );
 }
 
 static void
@@ -969,9 +996,12 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         autoCreateTuple *act;
         gboolean autoCreateState, notifyState;
         Query *q, *dlQuery, *newQuery;
+        int count;
 
         q = xaccMallocQuery();
         gnc_suspend_gui_refresh();
+        count = 0;
+        gtk_progress_configure( sxsld->prog, 0, 0, g_list_length( autoCreateList ) );
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {
                 thisGUID = createdGUIDs = NULL;
                 act = (autoCreateTuple*)autoCreateList->data;
@@ -981,8 +1011,11 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                 create_transactions_on( act->sx,
                                         act->date,
                                         NULL, &createdGUIDs );
-                DEBUG( "created %d Transaction GUIDs",
-                       g_list_length( createdGUIDs ) );
+
+                count += g_list_length( createdGUIDs );
+                gtk_progress_set_value( sxsld->prog, count );
+                while (g_main_iteration(FALSE));
+
                 sxsld->autoCreatedSomething = TRUE;
                 if ( notifyState ) {
                         for ( thisGUID = createdGUIDs;
@@ -1000,6 +1033,9 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                         g_list_concat( sxsld->createdTxnGUIDList,
                                        createdGUIDs );
         }
+
+        DEBUG( "Finished creating transactions; updating ledger" );
+
         dlQuery = gnc_ledger_display_get_query( sxsld->ac_ledger );
         newQuery = xaccQueryMerge( dlQuery, q, QUERY_AND );
         gnc_ledger_display_set_query( sxsld->ac_ledger, newQuery );
@@ -1019,7 +1055,6 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
         if ( toCreateList == NULL )
                 return;
 
-        DEBUG( "foobar" );
         clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST ) );
         for ( ; toCreateList ; toCreateList = toCreateList->next ) {
                 tct = (toCreateTuple*)toCreateList->data;
@@ -1239,7 +1274,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 
                 xaccSchedXactionGetAutoCreate( sx, &autocreateState,
                                                &notifyState );
-                do {
+                for ( ; instanceList; instanceList = instanceList->next ) {
                         instDate = (GDate*)instanceList->data;
                         if ( autocreateState ) {
                                 act = g_new0( autoCreateTuple, 1 );
@@ -1255,8 +1290,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                                 sxsld->toCreateList =
                                         g_list_append( sxsld->toCreateList, tct );
                         }
-                } while ( (instanceList = instanceList->next) );
-
+                }
                 /* Report RE:showing the dialog iff there's stuff in it to
                  * show. */
                 showIt |= (g_list_length( sxsld->autoCreateList ) > 0);
@@ -1641,13 +1675,12 @@ create_transactions_on( SchedXaction *sx, GDate *gd,
         gboolean createdTCT;
 
 
-#if 0
         {
+                char tmpBuf[GNC_D_WIDTH];
                 g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, gd );
                 DEBUG( "Creating transactions on %s for %s",
                        tmpBuf, xaccSchedXactionGetName( sx ) );
         }
-#endif /* 0 */
 
         if ( tct != NULL
              && g_date_compare( gd, tct->date ) != 0 ) {

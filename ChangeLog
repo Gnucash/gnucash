@@ -1,3 +1,17 @@
+2002-04-20  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c (process_auto_create_list): Added
+	progress-bar support for transaction auto-creation.
+
+2002-04-17  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c
+	(editor_ok_button_clicked): Added checks for ScheduledTransactions
+	with no name, same name as existing SchedXaction.
+	(row_select_handler): Resolved "critical" GTK run-time warning
+	regarding navigating the Scheduled Transaction list with the arrow
+	keys.
+
 2002-04-16  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c

@@ -4615,6 +4615,57 @@ Anually
 
     <widget>
       <class>GnomeDruidPageStandard</class>
+      <name>what_to_do</name>
+      <title>What to do, what to do?</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>what_to_do_vbox</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkFrame</class>
+	  <name>frame82</name>
+	  <border_width>38</border_width>
+	  <label>Creating transactions...</label>
+	  <label_xalign>0.05</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkProgressBar</class>
+	    <name>creation_progress</name>
+	    <value>0</value>
+	    <lower>0</lower>
+	    <upper>100</upper>
+	    <bar_style>GTK_PROGRESS_CONTINUOUS</bar_style>
+	    <orientation>GTK_PROGRESS_LEFT_TO_RIGHT</orientation>
+	    <activity_mode>False</activity_mode>
+	    <show_text>True</show_text>
+	    <format>%v/%u (%p%%)</format>
+	    <text_xalign>0.5</text_xalign>
+	    <text_yalign>0.5</text_yalign>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
       <name>reminders_page</name>
       <title>Transaction Reminders</title>
       <title_color>255,255,255</title_color>

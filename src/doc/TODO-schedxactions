@@ -128,6 +128,12 @@ X create a template register
           dialogs are open.
       . creating a SX from trans with the SX list open does not update the SX
         list
+      . So since Advanced editing entails "Simple" editing, it should just
+        replace that window. Then, with some CM hookup between the List and
+        the Editor, all is well.
+    . 20020419 - Wilddev manages to create two SXes from one; the first is
+      okay, but the second is h0rk3d [deleting it causes segfault, though it
+      can be instantiated correctly].
   . tab-order
   . better frequency guess?
    [ related... ]
@@ -164,8 +170,10 @@ X create a template register
       . But this is true of manually-created transactions, too ... is this
         actually correct behavior?
     . inital "To-Create Transactions" varbinding table doesn't setup table correctly.
-    . creating/cancelling a bunch [FIXME:define "bunch"] of transactions
-      takes too long, with no progress indication.
+    . creating a bunch [FIXME:define "bunch"] of transactions takes too long
+      X with no progress indication.
+    . cancelling a bunch [FIXME:define "bunch"] of xactions takes too long
+      . no progress indication.
     X twunder reports [2002.01.29] register growing a little bit at a time if
       tab is hit to switch between register fields -- started with update on
       1/21.
