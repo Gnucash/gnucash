@@ -141,9 +141,10 @@ gnc_table_model_set_entry_handler (TableModel *model,
                                    int cell_type)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type < 0);
+  g_return_if_fail (cell_type >= 0);
 
-  gnc_table_model_handler_hash_insert (model->entry_handlers, cell_type,
+  gnc_table_model_handler_hash_insert (model->entry_handlers,
+                                       cell_type,
                                        entry_handler);
 }
 
