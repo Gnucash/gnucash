@@ -55,6 +55,7 @@ void xaccParseDate (struct tm *parsed, const char * datestr)
 {
    int iday, imonth, iyear;
    if (!parsed) return;
+   if (!datestr) return;
 
    scanDate(datestr, &iday, &imonth, &iyear);
    parsed->tm_mday = iday;
