@@ -113,16 +113,13 @@ gnc_ui_commodity_druid_create(const char * filename) {
   d->is_modal = FALSE;
 
   gtk_object_set_data(dobj, "commodity_druid_struct", (gpointer)d);
-  
+
   d->new_map = g_hash_table_new(g_str_hash, g_str_equal);
   d->old_map = g_hash_table_new(g_str_hash, g_str_equal);
   orphans = 
     gnc_commodity_table_get_commodities(gnc_engine_commodities(),
                                         GNC_COMMODITY_NS_LEGACY);
-  
-  gnc_commodity_table_delete_namespace(gnc_engine_commodities(),
-                                       GNC_COMMODITY_NS_LEGACY);
-  
+
   /* make a new list with the (saved) old mnemonic and the 
    * new currency. */
   for(l=orphans; l; l=l->next) {
@@ -422,8 +419,12 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
    * replace the account commodity pointers */
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
 
+  gnc_commodity_table_delete_namespace(gnc_engine_commodities(),
+                                       GNC_COMMODITY_NS_LEGACY);
+
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
+
   gnc_refresh_main_window();
 }
 
