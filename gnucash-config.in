@@ -105,6 +105,7 @@ done
 
 datadir=@datadir@
 libdir=@libdir@
+includedir=@includedir@
 pkgdatadir=${datadir}/@PACKAGE@
 pkglibdir=${libdir}/@PACKAGE@
 pkgincludedir=${includedir}/@PACKAGE@
