@@ -1,3 +1,7 @@
+2001-04-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-main.c: show current filename in app titles
+
 2001-04-13  Bill Gribble  <grib@billgribble.com>
 
 	* Bug fixes and a couple of new features for MDI stuff.  

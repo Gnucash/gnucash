@@ -142,6 +142,70 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   gnc_extensions_menu_setup(app);  
 }
 
+static void
+gnc_childwin_set_title (GNCMainChildInfo *childwin)
+{
+  GNCBook *book;
+  const char *filename;
+  char *title;
+
+  if (!childwin || !childwin->app)
+    return;
+
+  filename = gnc_book_get_url (gncGetCurrentBook ());
+
+  if (!filename)
+    filename = _("<no file>");
+  else if (strncmp ("file:", filename, 5) == 0)
+    filename += 5;
+
+  title = g_strdup_printf("%s - GnuCash (%s)", childwin->title, filename);
+  gtk_window_set_title(GTK_WINDOW(childwin->app), title);
+  g_free(title);
+}
+
+static void
+gnc_app_set_title (GnomeApp *app)
+{
+  GNCMainChildInfo *childwin;
+  GNCMainInfo *mainwin;
+  GnomeMDIChild *child;
+  GtkWidget *view;
+
+  if (!app)
+    return;
+
+  mainwin = gnc_ui_get_data ();
+  if (!mainwin || !mainwin->mdi)
+    return;
+
+  view = gnome_mdi_get_view_from_window (mainwin->mdi, app);
+  if (!view) return;
+
+  child = gnome_mdi_get_child_from_view (view);
+  if (!child) return;
+
+  childwin = gtk_object_get_user_data (GTK_OBJECT (child));
+  if (!childwin) return;
+
+  gnc_childwin_set_title (childwin);
+}
+
+static void
+gnc_refresh_main_window_titles (void)
+{
+  GList *containers = gtk_container_get_toplevels ();
+
+  while (containers)
+  {
+    GtkWidget *w = containers->data;
+
+    if (GNOME_IS_APP (w))
+      gnc_app_set_title (GNOME_APP (w));
+
+    containers = containers->next;
+  }
+}
 
 /********************************************************************
  * gnc_main_window_child_changed_cb()
@@ -159,14 +223,6 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
   GnomeMDIChild    * oldchild = mainwin->last_active;
   GnomeUIInfo      * hintinfo;
   GnomeApp         * new_app = gnome_mdi_get_app_from_view(childwin->contents);
-  char             * window_title;
-
-  /* set the window title */ 
-  if(childwin && new_app) {
-    window_title = g_strdup_printf("%s - GnuCash", childwin->title);
-    gtk_window_set_title(GTK_WINDOW(new_app), window_title);
-    g_free(window_title);
-  }
 
   /* hide the old toolbar, if needed */
   if(oldchild) {
@@ -209,6 +265,9 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
                             gnc_get_toolbar_style());
     }
   }
+
+  /* set the window title */ 
+  gnc_childwin_set_title (childwin);
 
   /* install menu hints if relevant */
   if(mdi->active_child) {
@@ -424,17 +483,14 @@ gnc_main_window_save(GNCMainInfo * wind) {
 void
 gnc_main_window_child_refresh(gpointer data) {
   GNCMainChildInfo *child = data;
-  char * window_title;
+
   gnome_mdi_child_set_name(child->child, child->child->name);
   gnome_mdi_update_child(gnc_ui_get_data()->mdi, child->child);
   
   /* pesky child_set_name tries to change the window title... set 
    * it back. */
-  if((gnc_ui_get_data()->mdi->active_child == child->child) &&
-     child->app) {
-    window_title = g_strdup_printf("%s - GnuCash", child->title);
-    gtk_window_set_title(GTK_WINDOW(child->app), window_title);
-    g_free(window_title);
+  if((gnc_ui_get_data()->mdi->active_child == child->child) && child->app) {
+    gnc_childwin_set_title (child);
   }
 }
 
@@ -469,6 +525,7 @@ gnc_main_window_options_cb(GtkWidget *widget, gpointer data) {
 static void
 gnc_main_window_file_new_file_cb(GtkWidget * widget) {
   gncFileNew();
+  gnc_refresh_main_window_titles();
 }
 
 static void
@@ -486,18 +543,19 @@ gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
 static void
 gnc_main_window_file_open_cb(GtkWidget * widget) {
   gncFileOpen();
+  gnc_refresh_main_window_titles();
 }
 
 static void
 gnc_main_window_file_save_cb(GtkWidget * widget) {
   gncFileSave();
-  /* gnc_refresh_main_window_title(); */ 
+  gnc_refresh_main_window_titles();
 }
 
 static void
 gnc_main_window_file_save_as_cb(GtkWidget * widget) {
   gncFileSaveAs();
-  /* gnc_refresh_main_window_title(); */
+  gnc_refresh_main_window_titles();
 }
 
 static void
