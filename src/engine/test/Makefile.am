@@ -35,7 +35,7 @@ TESTS_ENVIRONMENT = \
   LTDL_LIBRARY_PATH=../../gnc-module \
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:../.libs:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/guile:${top_srcdir}/src/guile/.libs
 
-bin_PROGRAMS = \
+noinst_PROGRAMS = \
   test-commodities \
   test-freq-spec \
   test-group-vs-book \

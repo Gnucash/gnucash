@@ -23,7 +23,7 @@ LDADD = \
    ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
   -lltdl
 
-bin_PROGRAMS = \
+noinst_PROGRAMS = \
   test-link-module \
   test-exp-parser \
   test-print-parse-amount
