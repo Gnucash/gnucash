@@ -8,6 +8,9 @@
 	  PrintAmountInternal by checking force_fit and round.  Excercises
 	  a bug (fixed in this patch) where cross-multiplies were NOT safe.
 
+	* src/gnome-search/dialog-search.c -- reset the search-type to
+	  "New Search" if we end up displaying no results.  Fixes bug #97095.
+	
 2003-01-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncTaxTable.[ch]: add functions to

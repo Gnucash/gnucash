@@ -365,6 +365,10 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 	GTK_VISIBILITY_FULL && have_list)
       gtk_clist_moveto (GTK_CLIST (sw->result_list), row, 0, 0.5, 0);
   }
+
+  /* If there is nothing to select, then turn on the new-search */
+  if (list == NULL)
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 }
 
 static void
