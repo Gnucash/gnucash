@@ -224,6 +224,13 @@ qof_collection_mark_clean (QofCollection *col)
    col->is_dirty = FALSE;
 }
 
+void 
+qof_collection_mark_dirty (QofCollection *col)
+{
+   if (!col) return;
+   col->is_dirty = TRUE;
+}
+
 /* =============================================================== */
 
 gpointer 
