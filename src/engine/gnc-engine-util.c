@@ -60,8 +60,8 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* BACKEND */
   GNC_LOG_WARNING,      /* QUERY */
   GNC_LOG_WARNING,      /* PRICE */
-  GNC_LOG_WARNING,      /* EVENT */
-  GNC_LOG_WARNING,      /* TXN */
+  GNC_LOG_WARNING,      /* SQL EVENT */
+  GNC_LOG_WARNING,      /* SQL TXN */
   GNC_LOG_WARNING,      /* KVP */
   GNC_LOG_DEBUG,        /* SX */
 };
@@ -201,7 +201,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if (now.tv_usec < gnc_clock[clockno].tv_usec)
   {
     now.tv_sec --;
-    now.tv_usec -= 1000000;
+    now.tv_usec += 1000000;
   }
   now.tv_sec -= gnc_clock[clockno].tv_sec;
   now.tv_usec -= gnc_clock[clockno].tv_usec;
