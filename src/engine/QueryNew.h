@@ -135,4 +135,7 @@ gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2);
  */
 void gncQueryPrint (QueryNew *query);
 
+/* Return the type of data we're querying for */
+GNCIdType gncQueryGetSearchFor (QueryNew *q);
+
 #endif /* GNC_QUERYNEW_H */

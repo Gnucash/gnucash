@@ -3,6 +3,24 @@
 	* src/gnome-utils/gnc-query-list.[ch]: an abstracted Query list
 	  widget to display the results of a Query.
 
+	* src/engine/Query{,P}.h: move the location of gncQuerySearchFor()
+	  to allow callers to look it up without requiring the private
+	  header.
+	* src/business/business-core/gncInvoice.[ch]: define
+	  INVOICE_IS_PAID and create gncInvoiceIsPaid() function (the
+	  prototype already existed, but it was never implemented).
+	* src/business/business-gnome/dialog-invoice.c: add IS_PAID column
+	  and the ability to search for paid/not-paid invoices.
+	* src/gnome-utils/Makefile.am: build gnc-query-list
+	* src/gnome-utils/gnc-query-list.[ch]: finish the GNCQueryList.
+	  - allow active-column sorting
+	  - watch all the entities in the query and update when an entry changes
+	  - use a checkbox to display booleans
+	* src/gnome-utils/search-param.[ch]: add extra APIs required to support
+	  the initial QueryList implementation
+	* src/gnome-search/dialog-search.c: Convert to use the new
+	  GNCQueryList to display the search results.
+	
 2003-05-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-commodities.c: 

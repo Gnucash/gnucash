@@ -2274,6 +2274,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 				       INVOICE_NOTES, NULL);
     params = gnc_search_param_prepend (params, _("Billing ID"), NULL, type,
 				       INVOICE_BILLINGID, NULL);
+    params = gnc_search_param_prepend (params, _("Is Paid?"), NULL, type,
+				       INVOICE_IS_PAID, NULL);
     params = gnc_search_param_prepend (params, _("Date Posted"), NULL, type,
 				       INVOICE_POSTED, NULL);
     params = gnc_search_param_prepend (params, _("Is Posted?"), NULL, type,
@@ -2291,13 +2293,15 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   if (columns == NULL) {
     columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
 					INVOICE_BILLINGID, NULL);
+    columns = gnc_search_param_prepend (columns, _("Type"), NULL, type,
+					INVOICE_TYPE, NULL);
+    columns = gnc_search_param_prepend (columns, _("Paid"), NULL, type,
+					INVOICE_IS_PAID, NULL);
+    columns = gnc_search_param_prepend (columns, _("Posted"), NULL, type,
+					INVOICE_POSTED, NULL);
     columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
 					INVOICE_OWNER, OWNER_PARENT,
 					OWNER_NAME, NULL);
-    columns = gnc_search_param_prepend (columns, _("Type"), NULL, type,
-					INVOICE_TYPE, NULL);
-    columns = gnc_search_param_prepend (columns, _("Posted"), NULL, type,
-					INVOICE_POSTED, NULL);
     columns = gnc_search_param_prepend (columns, _("Opened"), NULL, type,
 					INVOICE_OPENED, NULL);
     columns = gnc_search_param_prepend (columns, _("Num"), NULL, type,

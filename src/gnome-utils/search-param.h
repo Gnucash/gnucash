@@ -21,6 +21,8 @@ struct _GNCSearchParam {
 
   const char *		title;
   GtkJustification	justify;
+  gboolean		passive;
+  gboolean		non_resizeable;
 };
 
 struct _GNCSearchParamClass {
@@ -38,9 +40,13 @@ guint			gnc_search_param_get_type (void);
 GNCSearchParam *	gnc_search_param_new (void);
 GNCSearchParam *	gnc_search_param_clone (GNCSearchParam *param);
 
+/* use the param_path for this parameter.  This will automatically
+ * compute the parameter type and the converter functions.
+ */
 void		gnc_search_param_set_param_path (GNCSearchParam *param,
 						 GNCIdTypeConst search_type,
 						 GSList *param_path);
+
 /* List is property of the caller */
 GSList *		gnc_search_param_get_param_path (GNCSearchParam *param);
 GNCIdTypeConst		gnc_search_param_get_param_type (GNCSearchParam *param);
@@ -48,6 +54,10 @@ void			gnc_search_param_set_title (GNCSearchParam *param,
 						    const char *title);
 void			gnc_search_param_set_justify (GNCSearchParam *param,
 						      GtkJustification justify);
+void			gnc_search_param_set_passive (GNCSearchParam *param,
+						      gboolean value);
+void			gnc_search_param_set_non_resizable (GNCSearchParam *param,
+							    gboolean value);
 gboolean		gnc_search_param_type_match (GNCSearchParam *a,
 						     GNCSearchParam *b);
 
@@ -63,6 +73,7 @@ GSList *		gnc_search_param_get_converters (GNCSearchParam *param);
  */
 void	gnc_search_param_override_param_type (GNCSearchParam *param,
 					      GNCIdTypeConst param_type);
+
 
 /*************************************************************
  * Helper functions ..
@@ -81,5 +92,20 @@ GList *	gnc_search_param_prepend_with_justify (GList *list, char const *title,
 					       GNCIdTypeConst search_type,
 					       const char *param, ...);
 					  
+/* set a lookup function for this parameter (in lieu of setting the
+ * param path) if you want to specify a direct lookup function when
+ * using the compute_value interface.  Note that this wont work with
+ * sorting or other query interfaces, it's only useful for the
+ * query-list.
+ */
+typedef gpointer (*GNCSearchParamFcn)(gpointer object, gpointer arg);
+void		gnc_search_param_set_param_fcn (GNCSearchParam *param,
+						GNCIdTypeConst param_type,
+						GNCSearchParamFcn fcn,
+						gpointer arg);
+
+/* Compute the value of this parameter for this object */
+gpointer gnc_search_param_compute_value (GNCSearchParam *param, gpointer object);
+
 
 #endif /* _GNCSEARCH_PARAM_H */

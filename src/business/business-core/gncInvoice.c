@@ -507,7 +507,7 @@ const char * gncInvoiceGetType (GncInvoice *invoice)
   case GNC_OWNER_VENDOR:
     return _("Bill");
   case GNC_OWNER_EMPLOYEE:
-    return _("Expense Voucher");
+    return _("Expense");
   default:
     return NULL;
   }
@@ -1207,6 +1207,13 @@ gboolean gncInvoiceIsPosted (GncInvoice *invoice)
   return gncInvoiceDateExists (&(invoice->date_posted));
 }
 
+gboolean gncInvoiceIsPaid (GncInvoice *invoice)
+{
+  if (!invoice) return FALSE;
+  if (!invoice->posted_lot) return FALSE;
+  return gnc_lot_is_closed(invoice->posted_lot);
+}
+
 GUID gncInvoiceRetGUID (GncInvoice *invoice)
 {
   if (!invoice)
@@ -1370,6 +1377,7 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_DUE, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateDue },
     { INVOICE_POSTED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDatePosted },
     { INVOICE_IS_POSTED, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPosted },
+    { INVOICE_IS_PAID, QUERYCORE_BOOLEAN, (QueryAccess)gncInvoiceIsPaid },
     { INVOICE_BILLINGID, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetBillingID },
     { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },

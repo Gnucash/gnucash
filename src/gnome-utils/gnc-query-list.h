@@ -38,6 +38,7 @@ extern "C" {
 #define IS_GNC_QUERY_LIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_QUERY_LIST))
 
 typedef struct _GNCQueryList      GNCQueryList;
+typedef struct _GNCQueryListPriv  GNCQueryListPriv;
 typedef struct _GNCQueryListClass GNCQueryListClass;
 
 struct _GNCQueryList
@@ -63,6 +64,9 @@ struct _GNCQueryList
   /* Column resizing */
   gint prev_allocation;
   gint *title_widths;
+
+  /* Private data */
+  GNCQueryListPriv *priv;
 };
 
 struct _GNCQueryListClass

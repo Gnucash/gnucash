@@ -27,6 +27,7 @@
 #include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
+#include "gnc-component-manager.h"
 #include "messages.h"
 #include "gnc-query-list.h"
 #include "search-param.h"
@@ -39,6 +40,10 @@ enum
   LAST_SIGNAL
 };
 
+struct _GNCQueryListPriv {
+  QueryAccess	get_guid;
+  gint		component_id;
+};
 
 /* Impossible to get at runtime. Assume this is a reasonable number */
 #define ARROW_SIZE      14
@@ -116,7 +121,12 @@ gnc_query_list_new(GList *param_list, Query *query)
   /* more configuration */
   list->query = gncQueryCopy(query);
   list->column_params = param_list;
-  
+
+  /* cache the function to get the guid of this query type */
+  list->priv->get_guid =
+    gncQueryObjectGetParameterGetter (gncQueryGetSearchFor (query),
+				      QUERY_PARAM_GUID);
+
   /* Initialize the CList */
   gnc_query_list_init_clist(list);
 
@@ -179,6 +189,15 @@ gnc_query_list_column_title (GNCQueryList *list, gint column, const gchar *title
 }
 
 static void
+gnc_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  GNCQueryList *list = (GNCQueryList *)user_data;
+  g_return_if_fail (IS_GNC_QUERY_LIST(list));
+
+  gnc_query_list_refresh (list);
+}
+
+static void
 gnc_query_list_init (GNCQueryList *list)
 {
   list->query = NULL;
@@ -193,8 +212,13 @@ gnc_query_list_init (GNCQueryList *list)
 
   list->prev_allocation = -1;
   list->title_widths = NULL;
-}
 
+  list->priv = g_new0(GNCQueryListPriv, 1);
+  list->priv->component_id =
+    gnc_register_gui_component ("gnc-query-list-cm-class",
+				gnc_query_list_refresh_handler,
+				NULL, list);
+}
 
 static void
 gnc_query_list_init_clist (GNCQueryList *list)
@@ -400,6 +424,13 @@ gnc_query_list_destroy (GtkObject *object)
 {
   GNCQueryList *list = GNC_QUERY_LIST(object);
 
+  if (list->priv && list->priv->component_id >= 0)
+    gnc_unregister_gui_component (list->priv->component_id);
+  if (list->priv)
+  {
+    g_free (list->priv);
+    list->priv = NULL;
+  }
   if (list->query)
   {
     xaccFreeQuery(list->query);
@@ -709,7 +740,11 @@ gnc_query_list_fill(GNCQueryList *list)
 {
   gchar *strings[list->num_columns + 1];
   GList *entries, *item;
+  const GUID *guid;
   gint i;
+
+  /* Clear all watches */
+  gnc_gui_component_clear_watches (list->priv->component_id);
 
   /* Reverse the list now because 'append()' takes too long */
   entries = gncQueryRun(list->query);
@@ -764,6 +799,11 @@ gnc_query_list_fill(GNCQueryList *list)
 
     /* Now update any checkmarks */
     update_booleans (list, row);
+
+    /* and set a watcher on this item */
+    guid = (const GUID*)((list->priv->get_guid)(item->data));
+    gnc_gui_component_watch_entity (list->priv->component_id, guid,
+				    GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
     list->num_entries++;
   }
