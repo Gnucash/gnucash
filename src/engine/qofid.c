@@ -52,9 +52,15 @@ static void qof_collection_remove_entity (QofEntity *ent);
 void
 qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
 {
-
-  /* XXX redundant info .. maybe we should not pass redundant? */
-  g_return_if_fail (0 == safe_strcmp(tab->e_type, ent->e_type));
+  g_return_if_fail (NULL != tab);
+  
+  /* XXX We passed redundant info to this routine ... but I think that's
+	* OK, it might eliminate programming errors. */
+  if (safe_strcmp(tab->e_type, type))
+  {
+    PERR ("attempt to insert \"%s\" into \"%s\"", type, tab->e_type);
+	 return;
+  }
   ent->e_type = CACHE_INSERT (type);
 
   do
@@ -74,6 +80,7 @@ qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
 void
 qof_entity_release (QofEntity *ent)
 {
+  if (!ent->collection) return;
   qof_collection_remove_entity (ent);
   CACHE_REMOVE (ent->e_type);
   ent->e_type = NULL;
@@ -153,6 +160,8 @@ qof_collection_destroy (QofCollection *col)
 {
   CACHE_REMOVE (col->e_type);
   g_hash_table_destroy(col->hash_of_entities);
+  col->e_type = NULL;
+  col->hash_of_entities = NULL;
   g_free (col);
 }
 

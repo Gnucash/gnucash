@@ -26,22 +26,12 @@ run_test (void)
   QofBook *book;
   AccountGroup *grp;
 
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    failure("couldn't load gnucash/engine");
-    exit(get_rv());
-  }
-
   /* --------------------------------------------------------- */
   /* In the first test, we will merely try to see if we can run
    * without crashing.  We don't check to see if data is good. */
   sess = get_random_session ();
   book = qof_session_get_book (sess);
-  if (!book)
-  {
-    failure("book not created");
-    exit(get_rv());
-  }
+  do_test ((NULL != book), "book not created");
 
   add_random_transactions_to_book (book, 720);
 
@@ -60,6 +50,9 @@ run_test (void)
 static void
 main_helper (void *closure, int argc, char **argv)
 {
+  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+  do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "couldn't load engine");
+
   run_test ();
 
   print_test_results();

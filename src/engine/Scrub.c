@@ -91,6 +91,7 @@ TransScrubOrphansFast (Transaction *trans, AccountGroup *root)
   GList *node;
 
   if (!trans) return;
+  g_return_if_fail (root);
 
   for (node = trans->splits; node; node = node->next)
   {
@@ -328,6 +329,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   SplitList *node, *slist;
 
   if (!trans) return;
+  g_return_if_fail (root);
 
   xaccTransScrubSplits (trans);
 

@@ -168,9 +168,13 @@ xaccDupeSplit (Split *s)
 {
   Split *split = g_new0 (Split, 1);
 
-  /* copy(!) the guid and entity table. The cloned split is *not* unique,
-   * is a sick twisted clone that holds 'undo' information. */
-  split->entity.guid = s->entity.guid;
+  /* Trash the guid and entity table. We don't want to mistake 
+	* the cloned splits as something official.  If we ever use this
+	* split, we'll have to fix this up.
+   */
+  split->entity.e_type = NULL;
+  split->entity.guid = *guid_null();
+  split->entity.collection = NULL;
   split->book = s->book;
 
   split->parent = s->parent;
@@ -828,7 +832,6 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
   trans->orig = NULL;
 
   trans->idata = 0;
-
   qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
 }
 
@@ -941,9 +944,13 @@ xaccDupeTransaction (Transaction *t)
 
   trans->common_currency = t->common_currency;
 
-  /* copy(!) the guid.  The cloned transaction is **NOT** unique,
-   * it is a sick twisted clone that holds 'undo' information. */
-  trans->inst.entity = t->inst.entity;
+  /* Trash the guid and entity table. We don't want to mistake 
+	* the cloned transaction as something official.  If we ever 
+	* use this transaction, we'll have to fix this up.
+   */
+  trans->inst.entity.e_type = NULL;
+  trans->inst.entity.guid = *guid_null();
+  trans->inst.entity.collection = NULL;
   trans->inst.book = t->inst.book;
   trans->inst.editlevel = 0;
   trans->inst.do_free = FALSE;
@@ -1550,7 +1557,6 @@ xaccTransCommitEdit (Transaction *trans)
     * so other functions don't result in a recursive
     * call to xaccTransCommitEdit. */
    trans->inst.editlevel++;
-
    /* Before commiting the transaction, we're gonna enforce certain
     * constraints.  In particular, we want to enforce the cap-gains
     * and the balanced lot constraints.  These constraints might 
