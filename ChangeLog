@@ -1,3 +1,11 @@
+2001-05-31  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
+	* src/doc/design/engine.texinfo: document commodites & their API
+
+	* doc/sgml/C/xacc-price-editor.sgml: fix warnings
+
 2001-05-31  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-ticker.sgml: renamed xacc-price-sources.sgml

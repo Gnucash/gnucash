@@ -72,7 +72,7 @@
 	      <para><emphasis>Ask</emphasis> prices indicates what
 		the dealers are prepared to sell a stock for - naturally,
 		this is slightly higher than the bid price.
-	      <para>
+	      </para>
 	    </listitem>
 	    <listitem>
 	      <para><emphasis>Last</emphasis> prices indicate the
@@ -105,6 +105,8 @@
 	clicking on the appropriate "Sort by . . ." radio button
 	directly below the price list.
       </para>
+    </sect1>
+
     <sect1>
       <title>
 	Updating prices manually
@@ -152,6 +154,8 @@
 	GnuCash 1.4 had a helper script for getting price quotes,
 	but this is no longer needed.
       </para>
+    </sect1>
+
 </article>
 
 <!-- Local variables: -->

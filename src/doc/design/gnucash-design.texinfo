@@ -86,6 +86,7 @@ Engine
 * Numeric Library::             
 * Key-Value Pair Frames::       
 * Events::                      
+* Commodities::                 
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -123,6 +124,12 @@ Key-Value Pair Frames
 Events
 
 * Event API::                   
+
+Commodities
+
+* General Commodity API::       
+* Commodity Getters::           
+* Commodity Setters::           
 
 Splits
 

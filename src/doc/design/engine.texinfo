@@ -25,6 +25,7 @@ be created as a shared library for use by other programs.
 * Numeric Library::             
 * Key-Value Pair Frames::       
 * Events::                      
+* Commodities::                 
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -1118,7 +1119,7 @@ the caller and should not be accessed after the function returns.
 @end deftypefun
 
 
-@node Events, Splits, Key-Value Pair Frames, Engine
+@node Events, Commodities, Key-Value Pair Frames, Engine
 @section Events
 
 The Engine supports the concept of @dfn{Events} which notify
@@ -1192,7 +1193,133 @@ Resume engine event generation.
 @end deftypefun
 
 
-@node Splits, Transactions, Events, Engine
+@node Commodities, Splits, Events, Engine
+@section Commodities
+@tindex gnc_commodity
+
+A Commodity is the Engine abstraction of a tradable quantity,
+like a national currency or shares of a stock. A commodity
+object contains the following pieces of information:
+
+@table @asis
+
+@item A mnemonic name
+The `short' name for the commodity. For national currencies
+this is the 3-letter ISO4217 code (USD, AUD, etc.). For stocks
+this is generally the exchange symbol (RHAT, IBM, etc.).
+
+@item A namespace
+A string identifying the context in which the mnemonic is meaninful.
+
+@item A full name
+The `long' name for the commodity, such as "US Dollar" or "IBM Common
+Stock".
+
+@item A printable name
+The name used to print out a string describing the commodity to
+a user. This name is generally long -- in some contexts it may
+be better to use the mnemonic instead. The printable name is
+determined by the namespace and mnemonic.
+
+@item A unique name
+A canonical name for the commodity that cannot be identical to
+another commodity's unique name. The unique name is determined
+by the namespace and mnemonic.
+
+@item An exchange code
+A code used to identify the commodity in its namespace context.
+For example, stocks have a unique code assigned to them by the
+exchange they are listed on.
+
+@item A fraction
+An integer N which specifies that 1/N is generally the smallest
+fraction of the commodity which can be traded. For example, most
+currencies are tradable in 1/100ths, so the fraction would be 100.
+
+@end table
+
+@menu
+* General Commodity API::       
+* Commodity Getters::           
+* Commodity Setters::           
+@end menu
+
+
+@node General Commodity API, Commodity Getters, Commodities, Commodities
+@subsection General Commodity API
+
+@deftypefun {gnc_commodity *} gnc_commodity_new (const char * @var{fullname}, const char * @var{namespace}, const char * @var{mnemonic}, const char * @var{exchange_code}, int @var{fraction})
+Create and return a new commodity object with the given values, or
+@code{NULL} if any of the values are invalid.
+@end deftypefun
+
+@deftypefun void gnc_commodity_destroy (gnc_commodity * @var{cm})
+Destroy the given commodity and free all associated memory.
+@end deftypefun
+
+@deftypefun gboolean gnc_commodity_equiv (const gnc_commodity * @var{a}, const gnc_commodity * @var{b})
+Return true if the two given commodities are equivalent. Two commodities
+are equivalent when they have the same namespace and the same mnemonic.
+@end deftypefun
+
+
+@node Commodity Getters, Commodity Setters, General Commodity API, Commodities
+@subsection Commodity Getters
+
+@deftypefun {const char *} gnc_commodity_get_mnemonic (const gnc_commodity * @var{cm})
+Return the mnemonic of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_namespace (const gnc_commodity * @var{cm})
+Return the namespace of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_fullname (const gnc_commodity * @var{cm})
+Return the full name of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_printname (const gnc_commodity * @var{cm})
+Return the print name of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_exchange_code (const gnc_commodity * @var{cm})
+Return the exchange code of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_unique_name (const gnc_commodity * @var{cm})
+Return the unique name of @var{cm}.
+@end deftypefun
+
+@deftypefun int gnc_commodity_get_fraction (const gnc_commodity * @var{cm})
+Return the smallest tradable fraction of @var{cm}.
+@end deftypefun
+
+
+@node Commodity Setters,  , Commodity Getters, Commodities
+@subsection Commodity Setters
+
+@deftypefun void gnc_commodity_set_mnemonic (gnc_commodity * @var{cm}, const char * @var{mnemonic})
+Set the mnemonic of @var{cm} to @var{mnemonic}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_namespace (gnc_commodity * @var{cm}, const char * @var{namespace})
+Set the namespace of @var{cm} to @var{namespace}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_fullname (gnc_commodity * @var{cm}, const char * @var{fullname})
+Set the fullname of @var{cm} to @var{fullname}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_exchange_code (gnc_commodity * @var{cm}, const char * @var{exchange_code})
+Set the exchange code of @var{cm} to @var{exchange_code}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_fraction (gnc_commodity * @var{cm}, int @var{smallest_fraction})
+Set the fraction of @var{cm} to @var{fraction}.
+@end deftypefun
+
+
+@node Splits, Transactions, Commodities, Engine
 @section Splits
 @tindex Split
 
