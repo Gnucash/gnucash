@@ -601,7 +601,7 @@
               (N_ "Display the other account?\
  (if this is a split transaction, this parameter is guessed).") #f)
         (list (N_ "Shares") "h" (N_ "Display the number of shares?") #f)
-        (list (N_ "Price") "i" "Display the shares price?" #f)
+        (list (N_ "Price") "i" (N_ "Display the shares price?") #f)
         ;; note the "Amount" multichoice option in between here
         (list (N_ "Running Balance") "k" (N_ "Display a running balance") #f)
         (list (N_ "Totals") "l" (N_ "Display the totals?") #t)))
@@ -619,7 +619,7 @@
       (gnc:register-trep-option
        (gnc:make-multichoice-option
         gnc:pagename-display (N_ "Sign Reverses?")
-        "m" "Reverse amount display for certain account types"
+        "m" (N_ "Reverse amount display for certain account types")
         'credit-accounts
         (list 
          (vector 'none (N_ "None") (N_ "Don't change any displayed amounts"))
