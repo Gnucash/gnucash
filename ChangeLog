@@ -42,6 +42,9 @@
 
 	* src/engine/gnc-engine-util.c: turn off DEBUG on all the modules
 	  (for the release).
+
+	* accounts/C/acctchrt_business.gnucash-xea: fix some of the accounts
+	  in the tree to be more accurate to the real world.
 	
 2003-02-01  Derek Atkins  <derek@ihtfp.com>
 
