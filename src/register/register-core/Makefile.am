@@ -21,7 +21,8 @@ libgncmod_register_core_la_SOURCES = \
   table-layout.c \
   table-model.c
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   QuickFill.h \
   basiccell.h \
   cell-factory.h \
