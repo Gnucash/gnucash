@@ -38,17 +38,21 @@
  *  cap gains have. 
 
 ToDo List:
+ o Need to have some sort of modified event handling watcher,
+   so that the peered gains split gets notified when the source
+	split gets modified, etc. etc.
+	Also, need to use xaccTransSetReadOnly on the gains split.
+	XXX one readonly usage is not i18n'ed !!
 
  o If the amount in a split is changed, then the lot has to be recomputed.
    This has a potential trickle-through effect on all later lots. 
    Ideally, later lots are dissolved, and recomputed.  However, some 
    lots may have been user-hand-built. These should be left alone.
 
- o Rework gemini in kvp-utils because this is needed to associate 
-   split-up splits.
+ o XXX if the split has been split, and the lots need to be recomputed,
+   then the peers need to be reunified first!   And that implies that
+	gain transactions need to be 'reunified' too.
 
- o XXX if the split has been split, it needs to be reuinfied first?
-    this mains that gains need to be 'reunified' too.
  */
 
 #include "config.h"
@@ -68,6 +72,7 @@ ToDo List:
 #include "gnc-lot-p.h"
 #include "kvp-util-p.h"
 #include "messages.h"
+#include "qofid-p.h"
 
 static short module = MOD_LOT;
 
@@ -143,16 +148,6 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
       
    xaccAccountForEachLot (acc, earliest_helper, &es);
    return es.lot;
-}
-
-/* ============================================================== */
-
-static Timespec  
-gnc_lot_get_close_date (GNCLot *lot)
-{
-   Split *s = gnc_lot_get_latest_split (lot);
-   Transaction *trans = s->parent;
-   return trans->date_posted;
 }
 
 /* ============================================================== */
@@ -298,7 +293,9 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 
 /* ============================================================== */
 /* Accounting-policy callback.  Given an account and an amount, 
- * this routine should return a lot.
+ * this routine should return a lot.  By implementing this as 
+ * a callback, we can 'easily' add other accounting policies.
+ * Currently, we only implement the FIFO policy.
  */
 typedef GNCLot * (*AccountingPolicy) (Account *, 
                                       Split *, 
@@ -339,6 +336,7 @@ xaccSplitAssignToLot (Split *split,
         /* cmp == +1 if amt > baln */
         if (0 < cmp) 
         {
+           time_t now = time(0);
            Split * new_split;
            gnc_numeric amt_a, amt_b, amt_tot;
            gnc_numeric val_a, val_b, val_tot;
@@ -371,8 +369,6 @@ xaccSplitAssignToLot (Split *split,
 
            /* Put the remainder of the balance into a new split, which is
             * in other respects just a clone of this one */
-           /* XXX FIXME: we should add some kvp markup to indicate that these
-            * two splits used to be one before being 'split' */
            new_split = xaccMallocSplit (acc->book);
 
            /* Copy most of the split attributes */
@@ -382,10 +378,22 @@ xaccSplitAssignToLot (Split *split,
            ts = xaccSplitRetDateReconciledTS (split);
            xaccSplitSetDateReconciledTS (new_split, &ts);
 
-           /* Copying the KVP tree seems like the right thing to do, 
-            * this is potentially dangerous, depending on how other 
-            * users use it.*/
-           xaccSplitSetSlots_nc (new_split, kvp_frame_copy(xaccSplitGetSlots (split)));  
+           /* We do not copy the KVP tree, as it seems like a dangerous
+            * thing to do.  If the user wants to access stuff in the 'old'
+            * kvp tree from the 'new' split, they shoudl follow the 
+            * 'split-lot' pointers.  Yes, this is complicated, but what
+            * else can one do ??
+            */
+           /* Add kvp markup to indicate that these two splits used 
+            * to be one before being 'split' 
+            */
+           gnc_kvp_array (split->kvp_data, "/lot-split", now, 
+                           "peer_guid", xaccSplitGetGUID (new_split), 
+                           NULL);
+
+           gnc_kvp_array (new_split->kvp_data, "/lot-split", now, 
+                           "peer_guid", xaccSplitGetGUID (split), 
+                           NULL);
 
            xaccSplitSetAmount (new_split, amt_b);
            xaccSplitSetValue (new_split, val_b);
@@ -443,23 +451,27 @@ xaccSplitFIFOAssignToLot (Split *split)
 }
 
 /* ============================================================== */
-/** The xaccSplitComputeCapGains() routine computes the cap gains
- *  or losses for the indicated split.  The gains are placed into
- *  the 'gains_acct'.  If the gains_acct is NULL, then the appropriate
- *  default account is used (and created, if needed).
- *
- *  To compute the gains, the split must belong to a lot. If the
- *  split is the 'opening split', i.e. the earliest split in the 
- *  lot, then nothing is done, as there are no gains/losses (something
- *  must be bought *and* sold for there to be a gain/loss).
- *
- *  Note also: the 'amount' of the split must be of opposite sign,
- *  and must be equal to or smaller, than the 'amount' of the opening
- *  split; its an error otherwise.  If the 'amount' of the split is
- *  less than the opeing amount, the gains are pro-rated.
- *
- *  XXX above checks & pro-rating not yet implemented!!
- */
+
+Split *
+xaccSplitGetCapGainsSplit (Split *split)
+{
+   KvpValue *val;
+   GUID *gains_guid;
+   Split * gains_split;
+   
+   if (!split) return NULL;
+
+   val = kvp_frame_get_slot (split->kvp_data, "/gains-split");
+   if (!val) return NULL;
+   gains_guid = kvp_value_get_guid (val);
+   if (!val) return NULL;
+
+   gains_split = qof_entity_lookup (qof_book_get_entity_table(split->book),
+                   gains_guid, GNC_ID_SPLIT);
+   return gains_split;
+}
+
+/* ============================================================== */
 
 void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
@@ -480,10 +492,20 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    opening_split = gnc_lot_get_earliest_split(lot);
    if (split == opening_split)
    {
-      /* XXX we should check to make sure this split
-       * doesn't have a cap-gain xaction associated with it.
-       * If it does, itshould be trashed. 
+      /* Check to make sure this split doesn't have a cap-gain 
+       * transaction associated with it.  If it does, that's
+       * wrong, and we ruthlessly destroy it.
        */
+      if (xaccSplitGetCapGainsSplit (split))
+      {
+         Split *gains_split = xaccSplitGetCapGainsSplit(split);
+         Transaction *trans = gains_split->parent;
+         PERR ("Opening Split must not have cap gains!!\n");
+         
+         xaccTransBeginEdit (trans);
+         xaccTransDestroy (trans);
+         xaccTransCommitEdit (trans);
+      }
       return;
    }
    
@@ -499,17 +521,45 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       return;
    }
 
+   /* Opening amount should be larger (or equal) to current split,
+    * and it should be of the opposite sign.
+    */
+   if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_split->amount),
+                                gnc_numeric_abs(split->amount)))
+   {
+      PERR ("Malformed Lot! (too thin!)\n");
+      return;
+   }
+   if ( (gnc_numeric_negative_p(opening_split->amount) ||
+         gnc_numeric_positive_p(split->amount)) &&
+        (gnc_numeric_positive_p(opening_split->amount) ||
+         gnc_numeric_negative_p(split->amount)))
+   {
+      PERR ("Malformed Lot! (too fat!)\n");
+      return;
+   }
+
    /* The cap gains is the difference between the value of the
-    * opening split, and the current split. */
-   value = xaccSplitGetValue (opening_split);
-   value = gnc_numeric_add (value, xaccSplitGetValue (split),
+    * opening split, and the current split, pro-rated for an equal
+    * amount of shares. 
+    * i.e. purchase_price = opening_value / opening_amount 
+    * cost_basis = purchase_price * current_amount
+    * cap_gain = current_value - cost_basis 
+    */
+   value = gnc_numeric_mul (opening_split->value, split->amount,
+                   GNC_DENOM_AUTO, GNC_RND_NEVER);
+   value = gnc_numeric_div (value, opening_split->amount, 
+                   gnc_numeric_denom(opening_split->value), GNC_DENOM_EXACT);
+   
+   value = gnc_numeric_add (value, split->value,
                            GNC_DENOM_AUTO, GNC_DENOM_LCD);
-   PINFO ("Split value=%s Cap Gains=%s", 
-          gnc_numeric_to_string (xaccSplitGetValue(split)),
+   PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
+          gnc_numeric_to_string (opening_split->amount),
+          gnc_numeric_to_string (opening_split->value),
+          gnc_numeric_to_string (split->amount),
+          gnc_numeric_to_string (split->value),
           gnc_numeric_to_string (value));
 
-   /* XXX pro-rate based on amounts! */
-          
    /* Are the cap gains zero?  If not, add a balancing transaction.
     * As per design doc lots.txt: the transaction has two splits, 
     * with equal & opposite values.  The amt of one iz zero (so as
@@ -519,60 +569,94 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (FALSE == gnc_numeric_equal (value, zero))
    {
       Transaction *trans;
-      Account *lot_acc = lot->account;
-      QofBook *book = lot_acc->book;
       Split *lot_split, *gain_split;
       Timespec ts;
 
-      lot_split = xaccMallocSplit (book);
-      gain_split = xaccMallocSplit (book);
-
-      if (NULL == gain_acc)
-      {
-         gain_acc = GetOrMakeGainAcct (lot_acc, currency);
-      }
-      xaccAccountBeginEdit (gain_acc);
-      xaccAccountInsertSplit (gain_acc, gain_split);
-      xaccAccountCommitEdit (gain_acc);
-
-      xaccAccountBeginEdit (lot_acc);
-      xaccAccountInsertSplit (lot_acc, lot_split);
-      xaccAccountCommitEdit (lot_acc);
-
-      /* XXX See if there already is an associated
-       * gains transaction; if there is, adjust its value
-       * as appropriate. Else, create a new gains xaction.
-       *
-       * XXX for new xacton, install KVP markup indicating 
-       * that this is the gains trnasaction matching the 
-       * orig transaction.
+      /* See if there already is an associated gains transaction.
+       * If there is, adjust its value as appropriate. Else, create 
+       * a new gains transaction.
        */
-      trans = xaccMallocTransaction (book);
+      lot_split = xaccSplitGetCapGainsSplit (split);
 
-      xaccTransBeginEdit (trans);
-      xaccTransSetCurrency (trans, currency);
-      xaccTransSetDescription (trans, _("Realized Gain/Loss"));
-      ts = gnc_lot_get_close_date (lot);
+      /* Make sure the existing gains trans has the correct currency,
+       * just in case someone screwed with it! If not, blow it up. */
+      if (lot_split &&
+          (FALSE == gnc_commodity_equiv (currency,
+                              xaccTransGetCurrency(lot_split->parent))))
+      {
+         trans = lot_split->parent;
+           xaccTransBeginEdit (trans);
+           xaccTransDestroy (trans);
+           xaccTransCommitEdit (trans);
+         lot_split = NULL;
+      }
+      if (NULL == lot_split)
+      {
+         Account *lot_acc = lot->account;
+         QofBook *book = lot_acc->book;
+
+         lot_split = xaccMallocSplit (book);
+         gain_split = xaccMallocSplit (book);
+
+         /* Check to make sure the gains account currency matches. */
+         if ((NULL == gain_acc) ||
+             (FALSE == gnc_commodity_equiv (currency,
+                                   xaccAccountGetCommodity(gain_acc))))
+         {
+            gain_acc = GetOrMakeGainAcct (lot_acc, currency);
+         }
+
+         xaccAccountBeginEdit (gain_acc);
+         xaccAccountInsertSplit (gain_acc, gain_split);
+         xaccAccountCommitEdit (gain_acc);
+
+         xaccAccountBeginEdit (lot_acc);
+         xaccAccountInsertSplit (lot_acc, lot_split);
+         xaccAccountCommitEdit (lot_acc);
+
+         trans = xaccMallocTransaction (book);
+
+         xaccTransBeginEdit (trans);
+         xaccTransSetCurrency (trans, currency);
+         xaccTransSetDescription (trans, _("Realized Gain/Loss"));
+         
+         xaccTransAppendSplit (trans, lot_split);
+         xaccTransAppendSplit (trans, gain_split);
+
+         xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
+         xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
+
+         /* For the new transaction, install KVP markup indicating 
+          * that this is the gains transaction that corresponds
+          * to the gains source.
+          */
+         kvp_frame_set_guid (split->kvp_data, "/gains-split", 
+                     xaccSplitGetGUID (lot_split));
+         kvp_frame_set_guid (lot_split->kvp_data, "/gains-source", 
+                     xaccSplitGetGUID (split));
+      }
+      else
+      {
+         trans = lot_split->parent;
+         gain_split = xaccSplitGetOtherSplit (lot_split);
+         xaccTransBeginEdit (trans);
+      }
+
+      /* Common to both */
+      ts = xaccTransRetDatePostedTS (split->parent);
       xaccTransSetDatePostedTS (trans, &ts);
       xaccTransSetDateEnteredSecs (trans, time(0));
 
-      xaccTransAppendSplit (trans, lot_split);
-      xaccTransAppendSplit (trans, gain_split);
-
-      xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
       xaccSplitSetAmount (lot_split, zero);
       xaccSplitSetValue (lot_split, gnc_numeric_neg (value));
       gnc_lot_add_split (lot, lot_split);
 
-      xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
       xaccSplitSetAmount (gain_split, value);
       xaccSplitSetValue (gain_split, value);
-
       xaccTransCommitEdit (trans);
 
    }
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
-
 
 /* =========================== END OF FILE ======================= */

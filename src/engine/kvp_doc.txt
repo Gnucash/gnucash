@@ -139,11 +139,22 @@ Use:  Holders for a bunch of counters for various types.  Used specifically
 
 -----------------------
 
-Name: from-sched-xaction
+Name: /from-sched-xaction
 Type: GUID
 Entities: Transaction
 Use: Identifies that the Transaction was created from a ScheduledTransaction,
      and stores the GUID of that SX.
+
+Name: /gains-source
+Type: guid
+Entities: Split
+Use:  GUID of the split that is at the source of the cap gains recorded
+      in this split.
+
+Name: /gains-split
+Type: guid
+Entities: Split
+Use:  GUID of the split that records the capital gains for this split.
 
 -----------------------
 
@@ -255,6 +266,18 @@ Entities: Account
 Use: The next unused lot id number, used to autogenerate
      a lot title.
 
+
+Name: /lot-split/
+Type: kvp_frame
+Entities: Split
+Use:  A gemini-style kvp subdirectory holding identification of splits
+      that were split off of this split.  See /gemini/ for additional 
+      doco's.
+
+Name: /lot-split/0/peer_guid
+Type: GUID
+Entities: Split
+Use:  The GUID of the peer split which was split from this split.
 
 -----------------------
 

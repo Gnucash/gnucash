@@ -86,6 +86,13 @@ Account * xaccAccountGetDefaultGainAccount (Account *acc, gnc_commodity * curren
  */
 void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
 
+/** The xaccSplitGetCapGainsSplit() routine returns the split
+ *  that records the cap gains for this split.  It returns NULL
+ *  if not found.  This routine does nothing more than search for
+ *  the split recorded in the KVP key "/gains-split"
+ */
+                                                                                
+Split * xaccSplitGetCapGainsSplit (Split *);
 
 /** The`xaccSplitFIFOAssignToLot() routine will take the indicated
  *  split and assign it to the earliest open lot that it can find.
@@ -99,9 +106,13 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
  *  If the split needed to be broken up into several pieces, this
  *  routine will return TRUE, else it returns FALSE.
  *
+ *  If the split had to be broken up, kvp markup in the "/lot-split"
+ *  directory is used to identify the peers. 'gemini'-style kvp's
+ *  are used.
+ *
  *  Because this routine always uses the earliest open lot, it
  *  implments a "FIFO" First-In First-Out accounting policy.
- *  
+ *  (Adding new policies is 'easy', read the source luke).
  */
 
 gboolean xaccSplitFIFOAssignToLot (Split *split);
