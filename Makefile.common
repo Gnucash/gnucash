@@ -36,25 +36,24 @@ GTK_CFLAGS := $(shell gtk-config --cflags)
 # Makefile in src/foo/bar and src/foo/bax for now.
 
 define cleanupdeps
-	@echo -n "obj/" > $(basename $@).d
-	@cat $(basename $<).d >> $(basename $@).d
-	@rm $(basename $<).d
+	sed -e "1 s|$(basename $<)\.o|$@|1" $(basename $@).d.tmp > $(basename $@).d
+	rm $(basename $@).d.tmp
 endef
 
 # Default rule used for non-flavor dependent files (i.e. all of register)
 obj/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
-	$(CC) -MD -c $(CFLAGS) -o $@ $< 
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) -o $@ $< 
 	${cleanupdeps}
 
 obj/motif/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
-	$(CC) -MD -c $(CFLAGS) -DMOTIF -o $@ $< 
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) -DMOTIF -o $@ $< 
 	${cleanupdeps}
 
 obj/gnome/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
-	$(CC) -MD -c $(CFLAGS) ${GTK_CFLAGS} -DGNOME -o $@ $< 
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${GTK_CFLAGS} -DGNOME -o $@ $< 
 	${cleanupdeps}
 
 clean:
