@@ -1,3 +1,8 @@
+2004-04-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-scheduledxaction.c: Move variable declaration
+	  to the top of the block.
+
 2004-03-31  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: move m4/Makefile to its own line
