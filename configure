@@ -2272,6 +2272,10 @@ fi
 
 fi
 
+if test x"$no_x" = xyes; then
+      { echo "configure: error: Can not find X11 development headers or libraries." 1>&2; exit 1; }
+fi
+
 
 # This is how to use the variables set by AC_PATH_XTRA:
 #	cc @X_CFLAGS@ -c -o foo.o foo.c
@@ -2366,7 +2370,7 @@ fi
 # the XmHTML widget needs libz, libjpeg, libpng and libm
 # it also uses #ifdef's not #if's so DONT #def to zero.
 echo $ac_n "checking for deflateEnd in -lz""... $ac_c" 1>&6
-echo "configure:2370: checking for deflateEnd in -lz" >&5
+echo "configure:2374: checking for deflateEnd in -lz" >&5
 ac_lib_var=`echo z'_'deflateEnd | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2374,7 +2378,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lz  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2378 "configure"
+#line 2382 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2385,7 +2389,7 @@ int main() {
 deflateEnd()
 ; return 0; }
 EOF
-if { (eval echo configure:2389: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2393: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2409,7 +2413,7 @@ else
 fi
 
 echo $ac_n "checking for jpeg_read_scanlines in -ljpeg""... $ac_c" 1>&6
-echo "configure:2413: checking for jpeg_read_scanlines in -ljpeg" >&5
+echo "configure:2417: checking for jpeg_read_scanlines in -ljpeg" >&5
 ac_lib_var=`echo jpeg'_'jpeg_read_scanlines | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2417,7 +2421,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ljpeg  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2421 "configure"
+#line 2425 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2428,7 +2432,7 @@ int main() {
 jpeg_read_scanlines()
 ; return 0; }
 EOF
-if { (eval echo configure:2432: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2436: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2452,7 +2456,7 @@ else
 fi
 
 echo $ac_n "checking for png_read_image in -lpng""... $ac_c" 1>&6
-echo "configure:2456: checking for png_read_image in -lpng" >&5
+echo "configure:2460: checking for png_read_image in -lpng" >&5
 ac_lib_var=`echo png'_'png_read_image | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2460,7 +2464,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpng  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2464 "configure"
+#line 2468 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2471,7 +2475,7 @@ int main() {
 png_read_image()
 ; return 0; }
 EOF
-if { (eval echo configure:2475: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2479: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2501,7 +2505,7 @@ fi
 # LIBS="-lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS $LIBS"
 
 echo $ac_n "checking for XpmReadFileToXpmImage in -lXpm""... $ac_c" 1>&6
-echo "configure:2505: checking for XpmReadFileToXpmImage in -lXpm" >&5
+echo "configure:2509: checking for XpmReadFileToXpmImage in -lXpm" >&5
 ac_lib_var=`echo Xpm'_'XpmReadFileToXpmImage | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2509,7 +2513,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lXpm -L$x_libraries -lX11 $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2513 "configure"
+#line 2517 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2520,7 +2524,7 @@ int main() {
 XpmReadFileToXpmImage()
 ; return 0; }
 EOF
-if { (eval echo configure:2524: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2528: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2551,7 +2555,7 @@ fi
 # Don't build the xmhtml source if user already has it installed...
 # this is ugly, there must be a nicer way of setting this up ...
 echo $ac_n "checking for XmHTMLTextScrollToLine in -lXmHTML""... $ac_c" 1>&6
-echo "configure:2555: checking for XmHTMLTextScrollToLine in -lXmHTML" >&5
+echo "configure:2559: checking for XmHTMLTextScrollToLine in -lXmHTML" >&5
 ac_lib_var=`echo XmHTML'_'XmHTMLTextScrollToLine | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2559,7 +2563,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lXmHTML $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS $X_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2563 "configure"
+#line 2567 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2570,7 +2574,7 @@ int main() {
 XmHTMLTextScrollToLine()
 ; return 0; }
 EOF
-if { (eval echo configure:2574: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2578: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2601,21 +2605,19 @@ fi
 # is building GnuCash for people who might not have it).
 
 # See if the <nana.h> header file can be found.
-for ac_hdr in nana.h
-do
-ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:2609: checking for $ac_hdr" >&5
+ac_safe=`echo "nana.h" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for nana.h""... $ac_c" 1>&6
+echo "configure:2611: checking for nana.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2614 "configure"
+#line 2616 "configure"
 #include "confdefs.h"
-#include <$ac_hdr>
+#include <nana.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2619: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:2621: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -2631,18 +2633,14 @@ rm -f conftest*
 fi
 if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-    ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
-  cat >> confdefs.h <<EOF
-#define $ac_tr_hdr 1
-EOF
- 
+  :
 else
   echo "$ac_t""no" 1>&6
+{ echo "configure: error: Can not find nana.h -- do you have nana installed?" 1>&2; exit 1; }
 fi
-done
 
 echo $ac_n "checking for L_buffer_create in -lnana""... $ac_c" 1>&6
-echo "configure:2646: checking for L_buffer_create in -lnana" >&5
+echo "configure:2644: checking for L_buffer_create in -lnana" >&5
 ac_lib_var=`echo nana'_'L_buffer_create | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2650,7 +2648,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lnana  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2654 "configure"
+#line 2652 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2661,7 +2659,7 @@ int main() {
 L_buffer_create()
 ; return 0; }
 EOF
-if { (eval echo configure:2665: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2663: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2686,8 +2684,10 @@ EOF
 
 else
   echo "$ac_t""no" 1>&6
+{ echo "configure: error: Can not find a valid nana library -- do you have nana installed?" 1>&2; exit 1; }
 fi
  
+
 
 ### --------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.

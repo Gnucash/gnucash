@@ -140,8 +140,11 @@ LIBS="$LIBS -lm"
 # This allows us to be careful about libarary ordering, in case that's
 # important.
 
-AC_PATH_X
 AC_PATH_XTRA
+if test x"$no_x" = xyes; then
+      AC_ERROR([Can not find X11 development headers or libraries.])
+fi
+
 
 # This is how to use the variables set by AC_PATH_XTRA:
 #	cc @X_CFLAGS@ -c -o foo.o foo.c
@@ -241,8 +244,11 @@ AC_SUBST(XMHTML_INC)
 # is building GnuCash for people who might not have it).
 
 # See if the <nana.h> header file can be found.
-AC_CHECK_HEADERS(nana.h)
-AC_CHECK_LIB(nana, L_buffer_create) 
+AC_CHECK_HEADER(nana.h, ,
+                AC_MSG_ERROR([Can not find nana.h -- do you have nana installed?]))
+AC_CHECK_LIB(nana, L_buffer_create, ,
+             AC_MSG_ERROR([Can not find a valid nana library -- do you have nana installed?])) 
+
 
 ### --------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.
