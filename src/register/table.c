@@ -6,6 +6,11 @@
 #include "cell.h"
 #include "table.h"
 
+static void enterCB (Widget mw, XtPointer cd, XtPointer cb);
+static void leaveCB (Widget mw, XtPointer cd, XtPointer cb);
+static void modifyCB (Widget mw, XtPointer cd, XtPointer cb);
+static void traverseCB (Widget mw, XtPointer cd, XtPointer cb);
+
 Table * 
 xaccMallocTable (int tile_rows, int tile_cols)
 {
@@ -123,56 +128,31 @@ xaccRefreshHeader (Table *table)
 }
 
 /* ==================================================== */
+/* this routine calls the individual cell callbacks */
 
 static void
-enterCB (Widget mw, XtPointer cd, XtPointer cb)
+cellCB (Widget mw, XtPointer cd, XtPointer cb)
 {
    Table *table;
    XbaeMatrixDefaultActionCallbackStruct *cbs;
    int row, col;
-
-   table = (Table *) cd;
-   cbs = (XbaeMatrixDefaultActionCallbackStruct *)cb;
-
-   row = cbs->row;
-   col = cbs->column;
-
-   if (XbaeEnterCellReason != cbs->reason) return;
-
-   printf ("enter %d %d \n", row, col);
-}
-
-/* ==================================================== */
-/* this routine calls the individual cell callbacks */
-
-static void
-modifyCB (Widget mw, XtPointer cd, XtPointer cb)
-{
-   Table *table;
-   XbaeMatrixModifyVerifyCallbackStruct *cbs;
-   int row, col;
    int rel_row, rel_col;
    CellBlock *arr;
+   int invalid = 0;
 
    table = (Table *) cd;
-   cbs = (XbaeMatrixModifyVerifyCallbackStruct *) cb;
+   cbs = (XbaeMatrixDefaultActionCallbackStruct *) cb;
 
    row = cbs->row;
    col = cbs->column;
 
-   if (XbaeModifyVerifyReason != cbs->reason) return;
-
-   printf ("modify %d %d %s \n", row, col, cbs->verify->text->ptr);
-
-   /* reject edits by default, unless the cell handler allows them */
-   cbs->verify->doit = False;
-
    /* can't edit outside of the physical space */
-   if ((0 > row) || (0 > col)) return;
-   if ((row >= table->num_phys_rows) || (col >= table->num_phys_cols)) return;
+   invalid = (0 > row) || (0 > col) ;
+   invalid = invalid || (row >= table->num_phys_rows);
+   invalid = invalid || (col >= table->num_phys_cols);
 
    /* header rows cannot be modified */
-   if (row < table->num_header_rows) return;
+   invalid = invalid || (row < table->num_header_rows);
 
    /* compute the cell location */
    rel_row = row;
@@ -186,67 +166,254 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    if (arr) {
       rel_row %= (arr->numRows);
       rel_col %= (arr->numCols);
-      if (arr->cells[rel_row][rel_col]) {
-         const char * (*mv) (const char *, const char *, const char *);
-         mv = arr->cells[rel_row][rel_col]->modify_verify;
+      if (! (arr->cells[rel_row][rel_col])) invalid = TRUE;
+   } else {
+      invalid = TRUE;
+   }
 
-         /* OK, if there is a callback for this cell, call it */
-         if (mv) {
-            const char *old, *change;
-            char *new;
-            const char *retval;
-            int len;
-
-            old = cbs->prev_text;
-            change = cbs->verify->text->ptr;
-
-            /* but first, compute the new string */
-            len = 1;
-            if (old) len += strlen (old);
-            if (change) len += strlen (change);
-            new = (char *) malloc (len);
-
-            /* text may be inserted, or deleted, or replaced ... */
-            new[0] = 0;
-            strncat (new, old, cbs->verify->startPos);
-            if (change) strcat (new, change);
-            strcat (new, &old[(cbs->verify->endPos)]);
-
-            retval = (*mv) (old, change, new);
-
-            /* if the callback returned a non-null value, allow the edit */
-            if (retval) {
-
-               /* update data. bounds check done earlier */
-               free (table->entries[row][col]);
-               table->entries[row][col] = (char *) retval;
-
-               /* if the callback modified the display string,
-                * update the display cell as well */
-               if (retval != new) {
-                  XbaeMatrixSetCell (mw, row, col, (char *) retval);
-                  XbaeMatrixRefreshCell (mw, row, col);
-                  XbaeMatrixSetCursorPosition (mw, (cbs->verify->endPos) +1);
-
-                  /* the default update has already been overridden,
-                   * so don't allow Xbae to update */
-                  cbs->verify->doit = False;
-
-                  /* avoid wasting memory */
-                  free (new);
-               } else {
-
-                  /* the proposed edit was accepted! */
-                  cbs->verify->doit = True;
-               }
-            } else {
-               /* avoid wasting memory */
-               free(new);
-            }
+   /* oops the callback failed for some reason ... 
+    * reject the enter/edit/leave  and return */
+   if (invalid) {
+      switch (cbs->reason) {
+         case XbaeEnterCellReason: {
+            XbaeMatrixEnterCellCallbackStruct *ecbs;
+            ecbs = (XbaeMatrixEnterCellCallbackStruct *) cbs;
+            ecbs->doit = False;
+            ecbs->map = False;
+            break;
          }
+         case XbaeModifyVerifyReason: {
+            XbaeMatrixModifyVerifyCallbackStruct *mvcbs;
+            mvcbs = (XbaeMatrixModifyVerifyCallbackStruct *) cbs;
+            mvcbs->verify->doit = False;
+            break;
+         }
+         case XbaeTraverseCellReason: {
+            XbaeMatrixTraverseCellCallbackStruct *tcbs;
+            tcbs = (XbaeMatrixTraverseCellCallbackStruct *) cbs;
+            tcbs->next_row = 0;
+            tcbs->next_column = 0;
+            break;
+         }
+         case XbaeLeaveCellReason: {
+            XbaeMatrixLeaveCellCallbackStruct *lcbs;
+            lcbs = (XbaeMatrixLeaveCellCallbackStruct *) cbs;
+            lcbs->doit = False;
+            break;
+         }
+      }
+      return;
+   }
+
+   /* if we got to here, then there is a cell handler for 
+    * this cell. Dispatch for processing. */
+   switch (cbs->reason) {
+      case XbaeEnterCellReason: {
+         enterCB (mw, cd, cb);
+         break;
+      }
+      case XbaeModifyVerifyReason: {
+         modifyCB (mw, cd, cb);
+         break;
+      }
+      case XbaeLeaveCellReason: {
+         leaveCB (mw, cd, cb);
+         break;
+      }
+      case XbaeTraverseCellReason: {
+         traverseCB (mw, cd, cb);
+         break;
       }
    }
 }
+
+/* ==================================================== */
+/* this callback assumes that basic error checking has already
+ * been performed. */
+
+static void
+enterCB (Widget mw, XtPointer cd, XtPointer cb)
+{
+   Table *table;
+   CellBlock *arr;
+   XbaeMatrixEnterCellCallbackStruct *cbs;
+   int row, col;
+   int rel_row, rel_col;
+   const char * (*enter) (const char *);
+
+   table = (Table *) cd;
+   arr = table->cursor;
+   cbs = (XbaeMatrixEnterCellCallbackStruct *) cb;
+
+   /* compute the cell location */
+   row = cbs->row;
+   col = cbs->column;
+   rel_row = row - table->num_header_rows;
+   rel_col = col;
+   rel_row %= (arr->numRows);
+   rel_col %= (arr->numCols);
+
+   printf ("enter %d %d \n", row, col);
+
+   /* since we are here, there must be a cell handler.
+    * therefore, we accept entry into the cell by default, 
+    */
+   cbs->doit = True;
+   cbs->map = True;
+
+   /* OK, if there is a callback for this cell, call it */
+   enter = arr->cells[rel_row][rel_col]->enter_cell;
+   if (enter) {
+      const char *val, *retval;
+
+      val = table->entries[row][col];
+      retval = enter (val);
+      if (val != retval) {
+         if (table->entries[row][col]) free (table->entries[row][col]);
+         table->entries[row][col] = (char *) retval;
+         XbaeMatrixSetCell (mw, row, col, (char *) retval);
+         XbaeMatrixRefreshCell (mw, row, col);
+      }
+   }
+}
+
+/* ==================================================== */
+/* this routine calls the individual cell callbacks */
+
+static void
+modifyCB (Widget mw, XtPointer cd, XtPointer cb)
+{
+   Table *table;
+   CellBlock *arr;
+   XbaeMatrixModifyVerifyCallbackStruct *cbs;
+   int row, col;
+   int rel_row, rel_col;
+   const char * (*mv) (const char *, const char *, const char *);
+   const char *oldval, *change;
+   char *newval;
+   const char *retval;
+   int len;
+
+   table = (Table *) cd;
+   arr = table->cursor;
+   cbs = (XbaeMatrixModifyVerifyCallbackStruct *) cb;
+
+   /* compute the cell location */
+   row = cbs->row;
+   col = cbs->column;
+   rel_row = row;
+   rel_col = col;
+   rel_row -= table->num_header_rows;
+   rel_row %= (arr->numRows);
+   rel_col %= (arr->numCols);
+
+   /* accept edits by default, unless the cell handler rejects them */
+   cbs->verify->doit = True;
+
+   oldval = cbs->prev_text;
+   change = cbs->verify->text->ptr;
+
+   /* first, compute the newval string */
+   len = 1;
+   if (oldval) len += strlen (oldval);
+   if (change) len += strlen (change);
+   newval = (char *) malloc (len);
+
+   /* text may be inserted, or deleted, or replaced ... */
+   newval[0] = 0;
+   strncat (newval, oldval, cbs->verify->startPos);
+   if (change) strcat (newval, change);
+   strcat (newval, &oldval[(cbs->verify->endPos)]);
+
+   /* OK, if there is a callback for this cell, call it */
+   mv = arr->cells[rel_row][rel_col]->modify_verify;
+   if (mv) {
+      retval = (*mv) (oldval, change, newval);
+
+      /* if the callback returned a non-null value, allow the edit */
+      if (retval) {
+
+         /* update data. bounds check done earlier */
+         free (table->entries[row][col]);
+         table->entries[row][col] = (char *) retval;
+
+         /* if the callback modified the display string,
+          * update the display cell as well */
+         if (retval != newval) {
+            XbaeMatrixSetCell (mw, row, col, (char *) retval);
+            XbaeMatrixRefreshCell (mw, row, col);
+            XbaeMatrixSetCursorPosition (mw, (cbs->verify->endPos) +1);
+
+            /* the default update has already been overridden,
+             * so don't allow Xbae to update */
+            cbs->verify->doit = False;
+
+            /* avoid wasting memory */
+            free (newval);
+         }
+      } else {
+         /* NULL return value means the edit was rejected */
+         cbs->verify->doit = False;
+
+         /* avoid wasting memory */
+         free(newval);
+      }
+   } else {
+      /* update data. bounds check done earlier */
+      free (table->entries[row][col]);
+      table->entries[row][col] = strdup (newval);
+   }
+}
+ 
+
+
+/* ==================================================== */
+
+static void
+leaveCB (Widget mw, XtPointer cd, XtPointer cb)
+{
+   Table *table;
+   CellBlock *arr;
+   XbaeMatrixLeaveCellCallbackStruct *cbs;
+   int row, col;
+   int rel_row, rel_col;
+   const char * (*leave) (const char *);
+
+   table = (Table *) cd;
+   arr = table->cursor;
+   cbs = (XbaeMatrixLeaveCellCallbackStruct *) cb;
+
+   /* compute the cell location */
+   row = cbs->row;
+   col = cbs->column;
+   rel_row = row - table->num_header_rows;
+   rel_col = col;
+   rel_row %= (arr->numRows);
+   rel_col %= (arr->numCols);
+
+   printf ("leave %d %d \n", row, col);
+
+   /* by default, accept whateve the final roposed edit is */
+   cbs->doit = True;
+
+   /* OK, if there is a callback for this cell, call it */
+   leave = arr->cells[rel_row][rel_col]->leave_cell;
+   if (leave) {
+      const char *val, *retval;
+
+      val = cbs->value;
+      retval = leave (val);
+      if (val != retval) {
+         if (table->entries[row][col]) free (table->entries[row][col]);
+         table->entries[row][col] = (char *) retval;
+         cbs->value = strdup (retval);
+      }
+   } else {
+      if (table->entries[row][col]) free (table->entries[row][col]);
+      table->entries[row][col] = strdup (cbs->value);
+   }
+}
+
 
 /* ==================================================== */
 
@@ -254,18 +421,25 @@ static void
 traverseCB (Widget mw, XtPointer cd, XtPointer cb)
 {
    Table *table;
-   XbaeMatrixDefaultActionCallbackStruct *cbs;
+   CellBlock *arr;
+   XbaeMatrixTraverseCellCallbackStruct *cbs;
    int row, col;
+   int rel_row, rel_col;
 
    table = (Table *) cd;
-   cbs = (XbaeMatrixDefaultActionCallbackStruct *)cb;
+   arr = table->cursor;
+   cbs = (XbaeMatrixTraverseCellCallbackStruct *) cb;
 
+   /* compute the cell location */
    row = cbs->row;
    col = cbs->column;
-
-   if (XbaeTraverseCellReason != cbs->reason) return;
+   rel_row = row - table->num_header_rows;
+   rel_col = col;
+   rel_row %= (arr->numRows);
+   rel_col %= (arr->numCols);
 
    printf ("traverse %d %d \n", row, col);
+
 }
 
 
@@ -319,9 +493,10 @@ xaccCreateTable (Table *table, Widget parent, char * name)
     
    XtManageChild (reg);
 
-   XtAddCallback (reg, XmNenterCellCallback, enterCB, (XtPointer)table);
-   XtAddCallback (reg, XmNmodifyVerifyCallback, modifyCB, (XtPointer)table);
-   XtAddCallback (reg, XmNtraverseCellCallback, traverseCB, (XtPointer)table);
+   XtAddCallback (reg, XmNenterCellCallback, cellCB, (XtPointer)table);
+   XtAddCallback (reg, XmNleaveCellCallback, cellCB, (XtPointer)table);
+   XtAddCallback (reg, XmNmodifyVerifyCallback, cellCB, (XtPointer)table);
+   XtAddCallback (reg, XmNtraverseCellCallback, cellCB, (XtPointer)table);
 
    table->reg = reg;
    return (reg);

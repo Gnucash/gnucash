@@ -14,7 +14,24 @@ enum {
 };
 
 
-/* The modify-verify callback is called when a user
+/*
+ * The enter_cell() callback is called when the user first
+ * makes a move to enter a cell.  The current value of the 
+ * cell is passed as the argument.  If the callback wishes
+ * to change the value of the cell, it can return a non-null
+ * string.  Alternately, to leave the value of the cell 
+ * unchanged, it can return NULL.  If a string is returned, 
+ * the string must be as the result of a malloc.
+ *
+ * The leave_cell() callback is called when the user exits
+ * a cell.  The current value of the cell is passed as the 
+ * argument.  If the callback wishes to change the value of 
+ * the cell, it can return a non-null string.  Alternately, 
+ * to leave the value of the cell unchanged, it can return 
+ * NULL.  If a string is returned, the string must be as the 
+ * result of a malloc.
+ *
+ * The modify-verify callback is called when a user
  * makes a change to a cell.  
  * The three arguments passed in are :
  * "old", the string prior to user's attempted modification,
@@ -46,13 +63,13 @@ typedef struct _SingleCell {
   /* private data */
   char * value;   /* current value */
 
+  const char * (*enter_cell) (const char * current);
   const char * (*modify_verify) (const char *old, 
                                  const char *add, 
                                  const char *new); 
-
+  const char * (*leave_cell) (const char * current);
 
   struct _CellBlock *block;  /* back-pointer to parent container */
-  void * extdata;  /* generic extension mechanism */
 } SingleCell;
 
 

@@ -20,8 +20,9 @@ void xaccInitSingleCell (SingleCell *cell)
    cell->width = 0;
    cell->alignment = 0;
    cell->value = 0x0;
+   cell->enter_cell = NULL;
    cell->modify_verify = NULL;
-   cell->extdata = NULL;
+   cell->leave_cell = NULL;
    cell->block = NULL;
 }
 
