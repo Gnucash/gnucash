@@ -33,11 +33,14 @@
 #include "glade-gnc-dialogs.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity.h"
+#include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "messages.h"
 #include "query-user.h"
 
+
+#define DIALOG_FINCALC_CM_CLASS "dialog-fincalc"
 
 typedef enum
 {
@@ -231,6 +234,8 @@ fincalc_dialog_destroy(GtkObject *object, gpointer data)
   if (fcd == NULL)
     return;
 
+  gnc_unregister_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
+
   g_list_free(fcd->calc_buttons);
   fcd->calc_buttons = NULL;
 
@@ -278,7 +283,7 @@ fincalc_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
 static void
 close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
 {
-  gnc_ui_fincalc_dialog_destroy(fcd);
+  gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
 }
 
 static void
@@ -480,6 +485,14 @@ calc_future_value(GtkButton *button, FinCalcDialog *fcd)
   calc_value(fcd, FUTURE_VALUE);
 }
 
+static void
+close_handler (gpointer user_data)
+{
+  FinCalcDialog *fcd = user_data;
+
+  gnome_dialog_close (GNOME_DIALOG (fcd->dialog));
+}
+
 FinCalcDialog *
 gnc_ui_fincalc_dialog_create(void)
 {
@@ -499,6 +512,10 @@ gnc_ui_fincalc_dialog_create(void)
 
   fcd->dialog = create_Financial_Calculator_Dialog();
   fcdo = GTK_OBJECT(fcd->dialog);
+
+  gnc_register_gui_component (DIALOG_FINCALC_CM_CLASS,
+                              NULL, close_handler, fcd);
+
   gtk_signal_connect(fcdo, "destroy",
                      GTK_SIGNAL_FUNC(fincalc_dialog_destroy), fcd);
 
@@ -682,6 +699,5 @@ gnc_ui_fincalc_dialog_destroy(FinCalcDialog *fcd)
   if (fcd == NULL)
     return;
 
-  if (fcd->dialog != NULL)
-    gnome_dialog_close(GNOME_DIALOG(fcd->dialog));
+  gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
 }
