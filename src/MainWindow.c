@@ -895,6 +895,9 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       newfile = fileBox(toplevel,OPEN, "*.dat");
       if (newfile) {
         datafile = newfile;
+
+        /* destroy open windows first, before destroying the group itself */
+        xaccGroupWindowDestroy (grp);
         freeAccountGroup (grp);
       
         /* load the accounts from the users datafile */

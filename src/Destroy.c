@@ -54,4 +54,19 @@ xaccAccountWindowDestroy (Account *acc)
 
 }
 
+/* ------------------------------------------------------ */
+
+void
+xaccGroupWindowDestroy (AccountGroup *grp)
+{
+   int i;
+
+   if (!grp) return;
+
+   /* recursively destroy windows associated with children */
+   for (i=0; i<grp->numAcc; i++) {
+      xaccAccountWindowDestroy (grp->account[i]);
+   }
+}
+
 /************************** END OF FILE *************************/
