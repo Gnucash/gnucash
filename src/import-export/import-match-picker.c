@@ -276,8 +276,9 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
   matcher->user_settings = gnc_import_Settings_new ();
 
   /* load the interface */
-  g_assert
-    (xml = gnc_glade_xml_new ("generic-import.glade", "match_picker"));
+  xml = gnc_glade_xml_new ("generic-import.glade", "match_picker");
+  g_return_if_fail (xml != NULL);
+
   /* connect the signals in the interface */
   glade_xml_signal_connect_data(xml,
 				"match_transaction_select_cb", 

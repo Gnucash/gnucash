@@ -698,7 +698,7 @@ gnc_ui_qif_import_loaded_files_prepare_cb(GnomeDruidPage * page,
 
   update_file_page(wind);
   gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
-                                    FALSE, TRUE, TRUE); 
+                                    FALSE, TRUE, TRUE, TRUE); 
 }
 
 
@@ -717,7 +717,7 @@ gnc_ui_qif_import_load_another_cb(GtkButton * button,
   gnome_druid_set_page(GNOME_DRUID(wind->druid),
                        get_named_page(wind, "load_file_page"));
   gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
-                                    TRUE, TRUE, TRUE); 
+                                    TRUE, TRUE, TRUE, TRUE); 
 }
 
 
@@ -858,7 +858,7 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
   gnome_druid_set_page(GNOME_DRUID(wind->druid),
                        get_named_page(wind, "load_file_page"));
   gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
-                                    TRUE, TRUE, TRUE); 
+                                    TRUE, TRUE, TRUE, TRUE); 
   return TRUE;
 }
 
@@ -1535,7 +1535,7 @@ make_qif_druid_page(gnc_commodity * comm)
   GnomeDruidPageStandard * page;
 
   /* make the page widget */
-  retval->page = gnome_druid_page_standard_new_with_vals("", NULL);
+  retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
   retval->commodity = comm;
   gtk_object_set_data(GTK_OBJECT(retval->page),
                       "page_struct", (gpointer)retval);

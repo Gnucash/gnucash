@@ -32,6 +32,7 @@
 #include <gnome.h>
 #include <time.h>
 #include <g-wrap-wct.h>
+#include <gconf/gconf-client.h>
 
 #include "AccWindow.h"
 #include "Scrub.h"
@@ -1044,6 +1045,7 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
 {
   int adj = 0;
   GtkWidget *mbar, *menu, *regMenu, *regMenuItem, *tmpMi;
+  GConfClient *client;
 
   /* Get our menu bar from glade. */
   mbar = glade_xml_get_widget( xml, "gnc_register_menubar" );
@@ -1056,8 +1058,8 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
    * . remove the RegWindow menu from the menu bar, saving it's index.
    * . insert the GNCSplitReg menu at the same index.
    * . destroy now-unused widgets. */
-
-  if ( gnome_preferences_get_menus_have_tearoff() ) {
+  client = gconf_client_get_default ();
+  if ( gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL) ) {
     /* offset by one for the tearoff menu item. */
     adj = 1;
   }
@@ -1428,15 +1430,11 @@ static
 void
 gnc_register_set_read_only( RegWindow *regData )
 {
-  gchar *old_title, *new_title;
-  GtkArg objarg;
+  gchar old_title, *new_title;
 
-  objarg.name = "GtkWindow::title";
-  gtk_object_arg_get(GTK_OBJECT(regData->window), &objarg, NULL);
-  old_title = GTK_VALUE_STRING(objarg);
-  new_title = g_strdup_printf(_("%s [Read-Only]"), old_title);
+  g_object_get (G_OBJECT (regData->window), "title", &old_title, NULL);
+  new_title = g_strdup_printf(_("%s [Read-Only]"), &old_title);
   gtk_window_set_title( GTK_WINDOW(regData->window), new_title );
-  g_free(old_title);
   g_free(new_title);
 
   regData->read_only = TRUE;

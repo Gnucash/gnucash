@@ -275,8 +275,8 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 
   /* Deal with the terms handling of the due date */
   if (terms) {
-    gtk_signal_connect (GTK_OBJECT (ddc->post_date), "date_changed",
-			post_date_changed_cb, ddc);
+    g_signal_connect (G_OBJECT (ddc->post_date), "date_changed",
+		      G_CALLBACK (post_date_changed_cb), ddc);
     gtk_widget_set_sensitive (ddc->date, FALSE);
     post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
   } else

@@ -325,8 +325,11 @@ gnc_main_window_open_accounts(gboolean toplevel)
 {
   GNCMDIInfo * maininfo = gnc_mdi_get_current ();
   GnomeMDIChild * accountchild = gnc_acct_tree_window_create_child(NULL);
-  gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
-                      GNOME_MDI_CHILD(accountchild));  
+
+  g_assert (maininfo->mdi != NULL);
+  g_assert (accountchild != NULL);
+  g_assert (gnome_mdi_add_child(GNOME_MDI(maininfo->mdi), 
+                                GNOME_MDI_CHILD(accountchild)));
   
   if(toplevel) {
     gnome_mdi_add_toplevel_view(GNOME_MDI(maininfo->mdi), 

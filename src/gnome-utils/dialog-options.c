@@ -1334,6 +1334,7 @@ gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
 void
 gnc_options_register_stocks (void)
 {
+#if 0
 	static gboolean done = FALSE;
 	
 	GtkStockItem items[] = {
@@ -1350,7 +1351,7 @@ gnc_options_register_stocks (void)
 	done = TRUE;
 
 	gtk_stock_add (items, G_N_ELEMENTS (items));
-
+#endif
 }
 
 

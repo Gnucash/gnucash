@@ -7,6 +7,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <gconf/gconf-client.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -356,13 +357,15 @@ make_menu (GtkWidget *omenu, NewBillTerm *nbt)
 {
   GladeXML *xml;
   GtkWidget *popup;
+  GConfClient *client;
 
   /* Open and read the Popup XML */
   xml = gnc_glade_xml_new ("billterms.glade", "Term Type Popup");
   popup = glade_xml_get_widget (xml, "Term Type Popup");
 
   /* Glade insists on making this a tearoff menu. */
-  if (gnome_preferences_get_menus_have_tearoff ()) {
+  client = gconf_client_get_default ();
+  if (gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
     GtkMenuShell *ms = GTK_MENU_SHELL (popup);
     GtkWidget *tearoff;
 
@@ -373,9 +376,9 @@ make_menu (GtkWidget *omenu, NewBillTerm *nbt)
 
   /* attach the signal handlers */
   glade_xml_signal_connect_data (xml, "on_days1_activate",
-				 on_days1_activate, nbt);
+				 G_CALLBACK (on_days1_activate), nbt);
   glade_xml_signal_connect_data (xml, "on_proximo1_activate",
-				 on_proximo1_activate, nbt);
+				 G_CALLBACK (on_proximo1_activate), nbt);
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), popup);
   gtk_option_menu_set_history (GTK_OPTION_MENU (omenu),
@@ -431,18 +434,18 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term)
 
   /* Connect the dialog buttons */
   gnome_dialog_button_connect (GNOME_DIALOG (nbt->dialog), 0,
-			       new_billterm_ok_cb, nbt);
+			       G_CALLBACK (new_billterm_ok_cb), nbt);
 
   gnome_dialog_button_connect (GNOME_DIALOG (nbt->dialog), 1,
-			       new_billterm_cancel_cb, nbt);
+			       G_CALLBACK (new_billterm_cancel_cb), nbt);
 
   /* Set our modality */
   gnome_dialog_set_parent (GNOME_DIALOG (nbt->dialog),
 			   GTK_WINDOW (btw->dialog));
   gtk_window_set_modal (GTK_WINDOW (nbt->dialog), TRUE);
 
-  gtk_signal_connect (GTK_OBJECT (nbt->dialog), "destroy",
-		      new_billterm_dialog_destroy_cb, nbt);
+  g_signal_connect (G_OBJECT (nbt->dialog), "destroy",
+		    G_CALLBACK (new_billterm_dialog_destroy_cb), nbt);
 
 
   /* Show what we should */
@@ -724,29 +727,29 @@ gnc_ui_billterms_window_new (GNCBook *book)
   widget = glade_xml_get_widget (xml, "notebook_box");
   gtk_box_pack_start (GTK_BOX (widget), btw->notebook.notebook,
 		      TRUE, TRUE, 0);
-  g_object_unref (GTK_OBJECT (btw->notebook.notebook));
+  g_object_unref (G_OBJECT (btw->notebook.notebook));
 
   /* Connect all the buttons */
   button = glade_xml_get_widget (xml, "new_term_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      billterms_new_term_cb, btw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (billterms_new_term_cb), btw);
   button = glade_xml_get_widget (xml, "delete_term_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      billterms_delete_term_cb, btw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (billterms_delete_term_cb), btw);
   button = glade_xml_get_widget (xml, "edit_term_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      billterms_edit_term_cb, btw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (billterms_edit_term_cb), btw);
 
   /* Set the row-select callbacks */
-  gtk_signal_connect (GTK_OBJECT (btw->terms_clist), "select-row",
-		      billterms_row_selected, btw);
+  g_signal_connect (G_OBJECT (btw->terms_clist), "select-row",
+		    G_CALLBACK (billterms_row_selected), btw);
 
   /* Connect the dialog buttons */
   gnome_dialog_button_connect (GNOME_DIALOG (btw->dialog), 0,
-			       billterms_window_close, btw);
+			       G_CALLBACK (billterms_window_close), btw);
 
-  gtk_signal_connect (GTK_OBJECT (btw->dialog), "destroy",
-		      billterms_window_destroy_cb, btw);
+  g_signal_connect (G_OBJECT (btw->dialog), "destroy",
+		      G_CALLBACK (billterms_window_destroy_cb), btw);
 
   /* register with component manager */
   btw->component_id =

@@ -44,8 +44,9 @@ static void
 unselect_account_callback(GNCAccountTree *tree, Account *account, gpointer user_data)
 {
   GNCMainWinAccountTree *mw_tree = (GNCMainWinAccountTree *) user_data;
-  gtk_signal_emit(GTK_OBJECT(mw_tree),
+  g_signal_emit(G_OBJECT(mw_tree),
 		  mainwinaccounttree_signals[UNSELECT_ACCOUNT_SIGNAL],
+		  0,
 		  account);
   return;
 }
@@ -54,8 +55,9 @@ static void
 activate_account_callback(GNCAccountTree *tree, Account *account, gpointer user_data)
 {  
   GNCMainWinAccountTree *mw_tree = (GNCMainWinAccountTree *) user_data;
-  gtk_signal_emit(GTK_OBJECT(mw_tree),
+  g_signal_emit(G_OBJECT(mw_tree),
 		  mainwinaccounttree_signals[ACTIVATE_ACCOUNT_SIGNAL],
+		  0,
 		  account);
   return;
 }
@@ -78,8 +80,8 @@ select_account_callback(GNCAccountTree  *tree, Account *account, gpointer user_d
     }
   }
 
-  gtk_signal_emit(GTK_OBJECT(clicked_window),
-		  mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL],
+  g_signal_emit(G_OBJECT(clicked_window),
+		  mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL], 0,
 		  account);
 
   return;
@@ -88,41 +90,39 @@ select_account_callback(GNCAccountTree  *tree, Account *account, gpointer user_d
 static void
 gnc_mainwin_account_tree_class_init (GNCMainWinAccountTreeClass *klass)
 {
-  GtkObjectClass *object_class;
-  
-  object_class = (GtkObjectClass*) klass;
+	GObjectClass *object_class;
+
+	object_class = G_OBJECT_CLASS (klass);
       
-  
-  
-  mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL] = 
-    gtk_signal_new("select_account",
-		   GTK_RUN_FIRST,
-		   GTK_CLASS_TYPE(object_class),
-		   GTK_SIGNAL_OFFSET(GNCMainWinAccountTreeClass,
-				     select_account),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
+	mainwinaccounttree_signals[SELECT_ACCOUNT_SIGNAL] = 
+		g_signal_new("select_account",
+			     G_OBJECT_CLASS_TYPE (object_class),
+	  		     G_SIGNAL_RUN_FIRST,
+	  		     G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, select_account),
+			     NULL, NULL,
+			     g_cclosure_marshal_VOID__POINTER,
+			     G_TYPE_NONE, 1,
+			     G_TYPE_POINTER);
 
-  mainwinaccounttree_signals[UNSELECT_ACCOUNT_SIGNAL] =
-    gtk_signal_new("unselect_account",
-		   GTK_RUN_FIRST,
-		   GTK_CLASS_TYPE(object_class),
-		   GTK_SIGNAL_OFFSET(GNCMainWinAccountTreeClass,
-				     unselect_account),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
+	mainwinaccounttree_signals[UNSELECT_ACCOUNT_SIGNAL] =
+		g_signal_new("unselect_account",
+			     G_OBJECT_CLASS_TYPE (object_class),
+	  		     G_SIGNAL_RUN_FIRST,
+	  		     G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, unselect_account),
+			     NULL, NULL,
+			     g_cclosure_marshal_VOID__POINTER,
+			     G_TYPE_NONE, 1,
+			     G_TYPE_POINTER);
 
-  mainwinaccounttree_signals[ACTIVATE_ACCOUNT_SIGNAL] =
-    gtk_signal_new("activate_account",
-		   GTK_RUN_FIRST,
-		   GTK_CLASS_TYPE(object_class),
-		   GTK_SIGNAL_OFFSET(GNCMainWinAccountTreeClass,
-				     activate_account),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
+	mainwinaccounttree_signals[ACTIVATE_ACCOUNT_SIGNAL] =
+		g_signal_new("activate_account",
+			     G_OBJECT_CLASS_TYPE (object_class),
+	  		     G_SIGNAL_RUN_FIRST,
+	  		     G_STRUCT_OFFSET(GNCMainWinAccountTreeClass, activate_account),
+			     NULL, NULL,
+			     g_cclosure_marshal_VOID__POINTER,
+			     G_TYPE_NONE, 1,
+			     G_TYPE_POINTER);
 }
 
 static void
@@ -135,14 +135,14 @@ gnc_mainwin_account_tree_init(GNCMainWinAccountTree *mwac_tree)
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_signal_connect(GTK_OBJECT(mwac_tree->acc_tree), "activate_account",
-		     GTK_SIGNAL_FUNC (activate_account_callback), mwac_tree);
+  g_signal_connect (G_OBJECT (mwac_tree->acc_tree), "activate_account",
+		    G_CALLBACK (activate_account_callback), mwac_tree);
 
-  gtk_signal_connect(GTK_OBJECT(mwac_tree->acc_tree), "select_account",
-                     GTK_SIGNAL_FUNC(select_account_callback), mwac_tree);
+  g_signal_connect (G_OBJECT(mwac_tree->acc_tree), "select_account",
+                    G_CALLBACK (select_account_callback), mwac_tree);
 
-  gtk_signal_connect(GTK_OBJECT(mwac_tree->acc_tree), "unselect_account",
-                     GTK_SIGNAL_FUNC(unselect_account_callback), mwac_tree);
+  g_signal_connect (G_OBJECT(mwac_tree->acc_tree), "unselect_account",
+                    G_CALLBACK (unselect_account_callback), mwac_tree);
  
   gtk_container_add(GTK_CONTAINER(mwac_tree->scrolled_window), GTK_WIDGET(mwac_tree->acc_tree));
 
@@ -151,29 +151,29 @@ gnc_mainwin_account_tree_init(GNCMainWinAccountTree *mwac_tree)
   gtk_widget_show(GTK_WIDGET(mwac_tree->scrolled_window));
 }
 
-guint
+GType
 gnc_mainwin_account_tree_get_type ()
 {
-  static guint mwactree = 0;
-  
-  if (!mwactree)
-    {
-      static const GtkTypeInfo mwactree_info =
-      {
-	"GNCMainWinAccountTree",
-	sizeof (GNCMainWinAccountTree),
-	sizeof (GNCMainWinAccountTreeClass),
-	(GtkClassInitFunc) gnc_mainwin_account_tree_class_init,
-	(GtkObjectInitFunc) gnc_mainwin_account_tree_init,
-	NULL,
-	NULL,
-	(GtkClassInitFunc) NULL
-      };
-      
-      mwactree = gtk_type_unique (gtk_hbox_get_type (), &mwactree_info);
-    }
-  
-  return mwactree;
+	static GType mwactree = 0;
+
+	if (mwactree == 0) {
+		static const GTypeInfo mwactree_info = {
+			sizeof (GNCMainWinAccountTreeClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) gnc_mainwin_account_tree_class_init,
+			NULL,
+			NULL,
+			sizeof (GNCMainWinAccountTree),
+			0,
+			(GInstanceInitFunc) gnc_mainwin_account_tree_init
+		};
+		mwactree = g_type_register_static (GTK_TYPE_HBOX,
+						   "GNCMainWinAccountTree",
+						   &mwactree_info, 0);
+	}
+
+	return mwactree;
 }
 
 

@@ -72,7 +72,7 @@ gnc_ui_get_toplevel (void)
 
     app = GNOME_APP (w);
 
-    gnc_mdi = gtk_object_get_data (GTK_OBJECT (w), "gnc_mdi");
+    gnc_mdi = g_object_get_data (G_OBJECT (w), "gnc_mdi");
     if (!gnc_mdi)
       continue;
 
@@ -557,12 +557,12 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
   gnome_app_enable_layout_config (app, TRUE);
 
   /* flag the app as gnc mdi created */
-  gtk_object_set_data (GTK_OBJECT (app), "gnc_mdi", mainwin);
+  g_object_set_data (G_OBJECT (app), "gnc_mdi", mainwin);
 
   /* add a signal to preserve the toolbar on destroy */ 
-  gtk_signal_connect (GTK_OBJECT (app), "destroy", 
-                      GTK_SIGNAL_FUNC (gnc_mdi_app_destroyed_cb),
-                      mainwin);
+  g_signal_connect (G_OBJECT (app), "destroy", 
+                    G_CALLBACK (gnc_mdi_app_destroyed_cb),
+                    mainwin);
 }
 
 /**
@@ -902,17 +902,17 @@ gnc_mdi_new (const char *app_name,
   gnc_mdi->component_id = gnc_register_gui_component (GNC_MDI_CM_CLASS,
                                                       NULL, NULL, gnc_mdi);
 
-  gtk_signal_connect (GTK_OBJECT(gnc_mdi->mdi), "destroy",
-                      GTK_SIGNAL_FUNC(gnc_mdi_destroy_cb),
-                      gnc_mdi);
+  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "destroy",
+                    G_CALLBACK (gnc_mdi_destroy_cb),
+                    gnc_mdi);
 
-  gtk_signal_connect (GTK_OBJECT(gnc_mdi->mdi), "app_created",
-                      GTK_SIGNAL_FUNC(gnc_mdi_app_created_cb),
-                      gnc_mdi);
+  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "app_created",
+                    G_CALLBACK (gnc_mdi_app_created_cb),
+                    gnc_mdi);
 
-  gtk_signal_connect (GTK_OBJECT(gnc_mdi->mdi), "child_changed",
-                      GTK_SIGNAL_FUNC(gnc_mdi_child_changed_cb),
-                      gnc_mdi);
+  g_signal_connect (G_OBJECT (gnc_mdi->mdi), "child_changed",
+                    G_CALLBACK (gnc_mdi_child_changed_cb),
+                    gnc_mdi);
 
   gnc_mdi->toolbar_change_callback_id =
     gnc_register_option_change_callback (gnc_mdi_configure_toolbar_cb, 
@@ -1003,7 +1003,7 @@ gnc_mdi_has_apps (void)
       continue;
 #endif
 
-    gnc_mdi = gtk_object_get_data (GTK_OBJECT (toplevels->data), "gnc_mdi");
+    gnc_mdi = g_object_get_data (G_OBJECT (toplevels->data), "gnc_mdi");
     if (!gnc_mdi)
       continue;
 
@@ -1024,7 +1024,7 @@ gnc_app_set_title (GnomeApp *app)
 
   g_return_if_fail (app != NULL);
 
-  mainwin = gtk_object_get_data (GTK_OBJECT (app), "gnc_mdi");
+  mainwin = g_object_get_data (G_OBJECT (app), "gnc_mdi");
   if (!mainwin || !mainwin->mdi)
     return;
 

@@ -1179,6 +1179,10 @@ AC_OUTPUT( m4/Makefile
           dnl # we configure gnucash-config here because we *don't*
           dnl # want variables to be fully expanded
           gnucash-config
+
+          dnl # GNOME 2 Port (should be moved to Makefile.am)
+	  src/gnome/gnucash.desktop
+          src/gnome/gnucash.keys
           ,
           dnl # commands go here, but we don't have any right now
           )

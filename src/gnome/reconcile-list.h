@@ -28,73 +28,67 @@
 #include "Query.h"
 #include "gnc-numeric.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif				/* __cplusplus */
+G_BEGIN_DECLS
 
-#define GTK_TYPE_GNC_RECONCILE_LIST (gnc_reconcile_list_get_type ())
-#define GNC_RECONCILE_LIST(obj) (GTK_CHECK_CAST ((obj), GTK_TYPE_GNC_RECONCILE_LIST, GNCReconcileList))
-#define GNC_RECONCILE_LIST_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GNC_RECONCILE_LIST, GNCReconcileListClass))
-#define IS_GNC_RECONCILE_LIST(obj) (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_RECONCILE_LIST))
-#define IS_GNC_RECONCILE_LIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_RECONCILE_LIST))
+#define GNC_TYPE_RECONCILE_LIST		(gnc_reconcile_list_get_type ())
+#define GNC_RECONCILE_LIST(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_RECONCILE_LIST, GNCReconcileList))
+#define GNC_RECONCILE_LIST_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_RECONCILE_LIST, GNCReconcileListClass))
+#define GNC_IS_RECONCILE_LIST(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_RECONCILE_LIST))
+#define GNC_IS_RECONCILE_LIST_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_RECONCILE_LIST))
 
-typedef struct _GNCReconcileList      GNCReconcileList;
-typedef struct _GNCReconcileListClass GNCReconcileListClass;
+typedef struct GNCReconcileList GNCReconcileList;
 
-typedef enum
-{
-  RECLIST_DEBIT,
-  RECLIST_CREDIT
+typedef enum {
+	RECLIST_DEBIT,
+	RECLIST_CREDIT
 } GNCReconcileListType;
 
-struct _GNCReconcileList
-{
-  GtkCList clist;
+struct GNCReconcileList {
+	GtkCList clist;
 
-  GNCReconcileListType list_type;
+	GNCReconcileListType list_type;
 
-  gint num_splits;
-  gint num_columns;
+	gint num_splits;
+	gint num_columns;
 
-  gint current_row;
-  Split *current_split;
+	gint current_row;
+	Split *current_split;
 
-  gboolean no_toggle;
-  gboolean always_unselect;
-  gboolean first_fill;
+	gboolean no_toggle;
+	gboolean always_unselect;
+	gboolean first_fill;
 
-  GHashTable *reconciled;
+	GHashTable *reconciled;
 
-  Account *account;
-  Query *query;
+	Account *account;
+	Query *query;
 
-  GNCReconcileList *sibling;
+	GNCReconcileList *sibling;
 
-  /* Sorting info */
-  gint key;
-  gboolean increasing;
-  GtkWidget *title_arrow[5];
+	/* Sorting info */
+	gint key;
+	gboolean increasing;
+	GtkWidget *title_arrow[5];
 
-  /* Column resizing */
-  gint prev_allocation;
-  gint title_width[5];
+	/* Column resizing */
+	gint prev_allocation;
+	gint title_width[5];
 };
 
-struct _GNCReconcileListClass
-{
-  GtkCListClass parent_class;
+typedef struct {
+	GtkCListClass parent_class;
 
-  void (*toggle_reconciled) (GNCReconcileList *list,
-			     Split            *split);
-  void (*double_click_split) (GNCReconcileList *list,
-                              Split            *split);
-};
+	void (*toggle_reconciled)  (GNCReconcileList *list,
+				    Split            *split);
+	void (*double_click_split) (GNCReconcileList *list,
+				    Split            *split);
+} GNCReconcileListClass;
 
 /***********************************************************
  *                public functions                         *
  ***********************************************************/
 
-GtkType gnc_reconcile_list_get_type (void);
+GType gnc_reconcile_list_get_type (void);
 
 GtkWidget * gnc_reconcile_list_new (Account * account,
 				    GNCReconcileListType type);
@@ -118,8 +112,6 @@ void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
 gboolean gnc_reconcile_list_changed(GNCReconcileList *list);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* RECONCILE_LIST_H */

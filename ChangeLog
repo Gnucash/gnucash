@@ -1,3 +1,113 @@
+2003-05-16  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+	
+	* configure.in: Add gnucash.desktop, and gnucash.keys to the AC_OUTPUT targets.
+
+	In the following:
+	- Replace gtk_signal by g_signal
+	- Replace GNOME_DOCK by BONOBO_DOCK
+	- Fix wrong gtk_toolbar_new calls
+	- Replace some GTK_OBJECTs by G_OBJECTs
+	- Remove useless GOBJECT_DESTROYED calls
+	- Fix some GType declarations.
+	* src/business/business-gnome/business-gnome-utils.c:
+	(gnc_fill_account_select_combo), (add_menu_item),
+	(make_generic_optionmenu):
+	* src/business/business-gnome/dialog-billterms.c: (make_menu),
+	(new_billterm_dialog), (gnc_ui_billterms_window_new):
+	* src/business/business-gnome/dialog-date-close.c:
+	(gnc_dialog_dates_acct_parented):
+	* src/business/business-gnome/dialog-invoice.c:
+	(gnc_invoice_window_create_popup_menu),
+	(gnc_invoice_update_job_choice), (gnc_invoice_update_proj_job),
+	(gnc_invoice_update_window), (gnc_invoice_new_window),
+	(gnc_invoice_window_new_invoice):
+	* src/business/business-gnome/dialog-payment.c:
+	(new_payment_window):
+	* src/business/business-gnome/dialog-vendor.c:
+	(gnc_vendor_name_changed_cb):
+
+	In the following:
+	Convert the glade files to Glade 2.0 (with libglade-convert)
+	* src/business/business-gnome/glade/billterms.glade:
+	* src/business/business-gnome/glade/customer.glade:
+	* src/business/business-gnome/glade/date-close.glade:
+	* src/business/business-gnome/glade/employee.glade:
+	* src/business/business-gnome/glade/invoice.glade:
+	* src/business/business-gnome/glade/job.glade:
+	* src/business/business-gnome/glade/order.glade:
+	* src/business/business-gnome/glade/payment.glade:
+	* src/business/business-gnome/glade/vendor.glade:
+	* src/business/dialog-tax-table/tax-tables.glade:
+	* src/business/business-gnome/search-owner.c:
+	* src/gnome-utils/commodity.glade:
+	* src/gnome-utils/exchange-dialog.glade:
+	* src/gnome-utils/transfer.glade:
+	* src/gnome/glade/commodities.glade:
+	* src/gnome/glade/fincalc.glade:
+	* src/gnome/glade/help.glade:
+	* src/gnome/glade/newuser.glade:
+	* src/gnome/glade/price.glade:
+	* src/gnome/glade/print.glade:
+	* src/gnome/glade/progress.glade:
+	* src/gnome/glade/register.glade:
+	* src/gnome/glade/stocks.glade:
+	* src/gnome/glade/tax.glade:
+	* src/gnome/glade/userpass.glade:
+	* src/import-export/binary-import/binary-import.glade:
+	* src/import-export/generic-import.glade:
+	* src/import-export/hbci/glade/hbci.glade:
+	* src/import-export/hbci/glade/hbcipass.glade:
+	* src/import-export/ofx/ofx.glade:
+	* src/import-export/qif-import/qif.glade:
+	* src/report/report-gnome/report.glade:
+	
+	In the following:
+	- Replace gtk_signal by g_signal
+	- Replace GNOME_DOCK by BONOBO_DOCK
+	- Fix wrong gtk_toolbar_new calls
+	- Replace some GTK_OBJECTs by G_OBJECTs
+	- Remove useless GOBJECT_DESTROYED calls
+	- Fix some GType declarations.
+	(gnc_search_owner_get_type), (gnc_search_owner_class_init),
+	(gnc_search_owner_finalize), (set_owner_widget),
+	(type_option_changed), (add_type_menu_item), (make_type_menu),
+	(how_option_changed), (add_how_menu_item), (make_how_menu):
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	(add_menu_item), (make_menu), (new_tax_table_dialog),
+	(gnc_ui_tax_table_window_new):
+	* src/gnome-utils/dialog-options.c: (gnc_options_register_stocks):
+	* src/gnome-utils/dialog-utils.c:
+	(gnc_glade_autoconnect_full_func):
+	* src/gnome/dialog-new-user.c: (gnc_ui_new_user_dialog),
+	(gnc_ui_new_user_cancel_dialog):
+	* src/gnome/reconcile-list.c: (gnc_reconcile_list_get_type),
+	(gnc_reconcile_list_new), (gnc_reconcile_list_init),
+	(gnc_reconcile_list_class_init), (gnc_reconcile_list_toggle_row),
+	(gnc_reconcile_list_toggle), (gnc_reconcile_list_select_row),
+	(gnc_reconcile_list_unselect_row), (gnc_reconcile_list_finalize),
+	(gnc_reconcile_list_get_needed_height),
+	(gnc_reconcile_list_get_num_splits),
+	(gnc_reconcile_list_get_current_split),
+	(gnc_reconcile_list_refresh),
+	(gnc_reconcile_list_reconciled_balance),
+	(gnc_reconcile_list_commit), (gnc_reconcile_list_postpone),
+	(gnc_reconcile_list_unselect_all), (gnc_reconcile_list_changed),
+	(gnc_reconcile_list_set_sort_order):
+	* src/gnome/reconcile-list.h:
+	* src/gnome/window-reconcile.c: (gnc_recn_create_menu_bar),
+	(gnc_recn_create_tool_bar), (recnWindowWithBalance):
+	* src/gnome/window-register.c: (gnc_register_setup_menu_widgets),
+	(gnc_register_set_read_only):
+	* src/import-export/binary-import/druid-commodity.c:
+	(make_commodity_druid_page):
+	* src/import-export/import-main-matcher.c:
+	(gnc_gen_trans_list_new):
+	* src/import-export/import-match-picker.c: (init_match_picker_gui):
+	* src/import-export/qif-import/druid-qif-import.c:
+	(gnc_ui_qif_import_loaded_files_prepare_cb),
+	(gnc_ui_qif_import_load_another_cb),
+	(gnc_ui_qif_import_default_acct_back_cb), (make_qif_druid_page):
+
 2003-05-15  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	* TODO: Remove 15 th batch task

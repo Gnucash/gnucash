@@ -178,8 +178,8 @@ add_menu_item (GtkWidget *menu, NewTaxTable *ntt, char *label, gint type)
   GtkWidget *item;
 
   item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", GINT_TO_POINTER (type));
-  gtk_signal_connect (GTK_OBJECT (item), "activate", optionmenu_changed, ntt);
+  g_object_set_data (G_OBJECT (item), "option", GINT_TO_POINTER (type));
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (optionmenu_changed), ntt);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -198,7 +198,7 @@ make_menu (GtkWidget *omenu, NewTaxTable *ntt)
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT ((current == GNC_AMT_TYPE_VALUE-1 ?
+  g_signal_emit_by_name (G_OBJECT ((current == GNC_AMT_TYPE_VALUE-1 ?
 					value : percent)), "activate", ntt);
   gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
   return menu;
@@ -257,10 +257,10 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
   /* Connect the dialog buttons */
   gnome_dialog_button_connect (GNOME_DIALOG (ntt->dialog), 0,
-			       new_tax_table_ok_cb, ntt);
+			       G_CALLBACK (new_tax_table_ok_cb), ntt);
 
   gnome_dialog_button_connect (GNOME_DIALOG (ntt->dialog), 1,
-			       new_tax_table_cancel_cb, ntt);
+			       G_CALLBACK (new_tax_table_cancel_cb), ntt);
 
   /* Fill in the widgets appropriately */
   if (entry) {
@@ -275,8 +275,8 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 			   GTK_WINDOW (ttw->dialog));
   gtk_window_set_modal (GTK_WINDOW (ntt->dialog), TRUE);
 
-  gtk_signal_connect (GTK_OBJECT (ntt->dialog), "destroy",
-		      new_tax_table_dialog_destroy_cb, ntt);
+  g_signal_connect (G_OBJECT (ntt->dialog), "destroy",
+		    G_CALLBACK (new_tax_table_dialog_destroy_cb), ntt);
 
   /* Show what we should */
   gtk_widget_show_all (ntt->dialog);
@@ -652,33 +652,33 @@ gnc_ui_tax_table_window_new (GNCBook *book)
 
   /* Connect all the buttons */
   button = glade_xml_get_widget (xml, "new_table_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      tax_table_new_table_cb, ttw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (tax_table_new_table_cb), ttw);
   button = glade_xml_get_widget (xml, "delete_table_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      tax_table_delete_table_cb, ttw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (tax_table_delete_table_cb), ttw);
   button = glade_xml_get_widget (xml, "new_entry_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      tax_table_new_entry_cb, ttw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (tax_table_new_entry_cb), ttw);
   button = glade_xml_get_widget (xml, "edit_entry_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      tax_table_edit_entry_cb, ttw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (tax_table_edit_entry_cb), ttw);
   button = glade_xml_get_widget (xml, "delete_entry_button");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      tax_table_delete_entry_cb, ttw);
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (tax_table_delete_entry_cb), ttw);
 
   /* Set the row-select callbacks */
-  gtk_signal_connect (GTK_OBJECT (ttw->names_clist), "select-row",
-		      tax_table_row_selected, ttw);
-  gtk_signal_connect (GTK_OBJECT (ttw->entries_clist), "select-row",
-		      tax_table_entry_row_selected, ttw);
+  g_signal_connect (G_OBJECT (ttw->names_clist), "select-row",
+		    G_CALLBACK (tax_table_row_selected), ttw);
+  g_signal_connect (G_OBJECT (ttw->entries_clist), "select-row",
+		    G_CALLBACK (tax_table_entry_row_selected), ttw);
 
   /* Connect the dialog buttons */
   gnome_dialog_button_connect (GNOME_DIALOG (ttw->dialog), 0,
-			       tax_table_window_close, ttw);
+			       G_CALLBACK (tax_table_window_close), ttw);
 
-  gtk_signal_connect (GTK_OBJECT (ttw->dialog), "destroy",
-		      tax_table_window_destroy_cb, ttw);
+  g_signal_connect (G_OBJECT (ttw->dialog), "destroy",
+		    G_CALLBACK (tax_table_window_destroy_cb), ttw);
 
   /* register with component manager */
   ttw->component_id =
