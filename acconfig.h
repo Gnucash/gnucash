@@ -1,6 +1,6 @@
 /********************************************************************\
- * config.h -- configuration defines for xacc                       *
- * Copyright (C) 1997 Robin D. Clark                                *
+ * acconfig.h -- configuration defines for gnucash                  *
+ * Copyright (C) 1997 Robin D. Clark (rclark@cs.hmc.edu)            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -13,13 +13,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 
