@@ -65,29 +65,30 @@ typedef struct _PopBox
 
 static void block_picker_signals (DateCell *cell);
 static void unblock_picker_signals (DateCell *cell);
-static void realizeDate (BasicCell *bcell, gpointer w);
-static void setDateCellValue (BasicCell *bcell, const char *value);
-static void moveDate (BasicCell *bcell);
-static void date_cell_gui_destroy (BasicCell *bcell);
-static void date_cell_destroy (BasicCell *bcell);
-static void DateMV (BasicCell *_cell,
-                    const GdkWChar *change,
-                    int change_len,
-                    const GdkWChar *newval,
-                    int newval_len,
-                    int *cursor_position,
-                    int *start_selection,
-                    int *end_selection);
-static gboolean DateDirect (BasicCell *bcell,
-                            int *cursor_position,
-                            int *start_selection,
-                            int *end_selection,
-                            void *gui_data);
-static gboolean enterDate (BasicCell *bcell,
-                           int *cursor_position,
-                           int *start_selection,
-                           int *end_selection);
-static void leaveDate (BasicCell *bcell);
+static void gnc_date_cell_realize (BasicCell *bcell, gpointer w);
+static void gnc_date_cell_set_value_internal (BasicCell *bcell,
+                                              const char *value);
+static void gnc_date_cell_move (BasicCell *bcell);
+static void gnc_date_cell_gui_destroy (BasicCell *bcell);
+static void gnc_date_cell_destroy (BasicCell *bcell);
+static void gnc_date_cell_modify_verify (BasicCell *_cell,
+                                         const GdkWChar *change,
+                                         int change_len,
+                                         const GdkWChar *newval,
+                                         int newval_len,
+                                         int *cursor_position,
+                                         int *start_selection,
+                                         int *end_selection);
+static gboolean gnc_date_cell_direct_update (BasicCell *bcell,
+                                             int *cursor_position,
+                                             int *start_selection,
+                                             int *end_selection,
+                                             void *gui_data);
+static gboolean gnc_date_cell_enter (BasicCell *bcell,
+                                     int *cursor_position,
+                                     int *start_selection,
+                                     int *end_selection);
+static void gnc_date_cell_leave (BasicCell *bcell);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GTK_REG;
@@ -96,7 +97,7 @@ static short module = MOD_GTK_REG;
 /* ================================================ */
 
 static void
-xaccParseDate (struct tm *parsed, const char * datestr)
+gnc_parse_date (struct tm *parsed, const char * datestr)
 {
   int day, month, year;
 
@@ -128,10 +129,8 @@ xaccParseDate (struct tm *parsed, const char * datestr)
   mktime (parsed);
 }
 
-/* =============================================== */
-
 static void
-printDateCellDate (DateCell *cell, char *buff)
+gnc_date_cell_print_date (DateCell *cell, char *buff)
 {
   PopBox *box = cell->cell.gui_private;
 
@@ -140,8 +139,6 @@ printDateCellDate (DateCell *cell, char *buff)
              box->date.tm_mon + 1,
              box->date.tm_year+1900);
 }
-
-/* ================================================ */
 
 static char *
 DateCellHelpValue (BasicCell *bcell)
@@ -155,7 +152,7 @@ DateCellHelpValue (BasicCell *bcell)
     struct tm time;
 
     if (bcell->value != NULL)
-      xaccParseDate (&time, bcell->value);
+      gnc_parse_date (&time, bcell->value);
     else
     {
       time.tm_mday = box->date.tm_mday;
@@ -180,10 +177,8 @@ DateCellHelpValue (BasicCell *bcell)
   return NULL;
 }
 
-/* =============================================== */
-
 static void
-xaccInitDateCell (DateCell *cell)
+gnc_date_cell_init (DateCell *cell)
 {
   PopBox *box;
   time_t secs;
@@ -193,13 +188,13 @@ xaccInitDateCell (DateCell *cell)
 
   cell->cell.is_popup = TRUE;
 
-  cell->cell.destroy = date_cell_destroy;
+  cell->cell.destroy = gnc_date_cell_destroy;
 
-  cell->cell.gui_realize = realizeDate;
-  cell->cell.gui_destroy = date_cell_gui_destroy;
-  cell->cell.modify_verify = DateMV;
-  cell->cell.direct_update = DateDirect;
-  cell->cell.set_value = setDateCellValue;
+  cell->cell.gui_realize = gnc_date_cell_realize;
+  cell->cell.gui_destroy = gnc_date_cell_gui_destroy;
+  cell->cell.modify_verify = gnc_date_cell_modify_verify;
+  cell->cell.direct_update = gnc_date_cell_direct_update;
+  cell->cell.set_value = gnc_date_cell_set_value_internal;
   cell->cell.get_help_value = DateCellHelpValue;
 
   box = g_new0 (PopBox, 1);
@@ -217,19 +212,19 @@ xaccInitDateCell (DateCell *cell)
   /* default value is today's date */
   time (&secs);
   box->date = *localtime (&secs);
-  printDateCellDate (cell, buff);
+  gnc_date_cell_print_date (cell, buff);
 
   gnc_basic_cell_set_value_internal (&cell->cell, buff);
 }
 
 BasicCell *
-xaccMallocDateCell (void)
+gnc_date_cell_new (void)
 {
    DateCell *cell;
 
    cell = g_new0 (DateCell, 1);
 
-   xaccInitDateCell (cell);
+   gnc_date_cell_init (cell);
 
    return &cell->cell;
 }
@@ -352,7 +347,7 @@ unblock_picker_signals (DateCell *cell)
 }
 
 static void
-date_cell_gui_destroy (BasicCell *bcell)
+gnc_date_cell_gui_destroy (BasicCell *bcell)
 {
   PopBox *box = bcell->gui_private;
   DateCell *cell = (DateCell *) bcell;
@@ -367,7 +362,7 @@ date_cell_gui_destroy (BasicCell *bcell)
     }
 
     /* allow the widget to be shown again */
-    cell->cell.gui_realize = realizeDate;
+    cell->cell.gui_realize = gnc_date_cell_realize;
     cell->cell.gui_move = NULL;
     cell->cell.enter_cell = NULL;
     cell->cell.leave_cell = NULL;
@@ -378,12 +373,12 @@ date_cell_gui_destroy (BasicCell *bcell)
 }
 
 static void
-date_cell_destroy (BasicCell *bcell)
+gnc_date_cell_destroy (BasicCell *bcell)
 {
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = cell->cell.gui_private;
 
-  date_cell_gui_destroy (&(cell->cell));
+  gnc_date_cell_gui_destroy (&(cell->cell));
 
   g_free (box);
 
@@ -391,10 +386,8 @@ date_cell_destroy (BasicCell *bcell)
   cell->cell.gui_realize = NULL;
 }
 
-/* =============================================== */
-
 void 
-xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
+gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
 {
   PopBox *box = cell->cell.gui_private;
   struct tm dada;
@@ -427,7 +420,7 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
 }
 
 void 
-xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
+gnc_date_cell_set_value_secs (DateCell *cell, time_t secs)
 {
   PopBox *box = cell->cell.gui_private;
   char buff[DATE_BUF];
@@ -454,70 +447,8 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
   unblock_picker_signals (cell);
 }
 
-#define THIRTY_TWO_YEARS 0x3c30fc00LL
-
-void 
-xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
-{
-  PopBox *box = cell->cell.gui_private;
-  char buff[DATE_BUF];
-  struct tm * stm;
-
-  /* try to deal with dates earlier than December 1901 
-   * or later than Jan 2038.  Note that xaccValidateDate
-   * should be handling centential (non-) leap years.
-   * The suffix LL indicates that consts should be handled
-   * long long 64-bit consts.
-   */
-  if ((0x80000000LL > secs) || (0x7fffffffLL < secs)) 
-  {
-    int yrs;
-    time_t rem;
-    rem = secs % THIRTY_TWO_YEARS;
-    yrs = secs / THIRTY_TWO_YEARS;
-    stm = localtime (&rem);
-    box->date = *stm;
-    box->date.tm_year += 32 * yrs;
-    box->date.tm_sec = 0;
-    box->date.tm_min = 0;
-    box->date.tm_hour = 0;
-    box->date.tm_isdst = -1;
-    mktime (&(box->date));
-  }
-  else
-  {
-    /* OK, time value is an unsigned 32-bit int */
-    time_t sicko;
-    sicko = secs;
-    stm = localtime (&sicko);
-    box->date = *stm;
-    box->date.tm_sec = 0;
-    box->date.tm_min = 0;
-    box->date.tm_hour = 0;
-    box->date.tm_isdst = -1;
-    mktime (&(box->date));
-  }
-
-  printDate (buff,
-             box->date.tm_mday,
-             box->date.tm_mon + 1, 
-             box->date.tm_year + 1900);
-
-  gnc_basic_cell_set_value_internal (&cell->cell, buff);
-
-  if (!box->date_picker)
-    return;
-
-  block_picker_signals (cell);
-  gnc_date_picker_set_date (box->date_picker,
-                            box->date.tm_mday,
-                            box->date.tm_mon,
-                            box->date.tm_year + 1900);
-  unblock_picker_signals (cell);
-}
-
 void
-xaccCommitDateCell (DateCell *cell)
+gnc_date_cell_commit (DateCell *cell)
 {
   PopBox *box = cell->cell.gui_private;
   char buff[DATE_BUF];
@@ -525,7 +456,7 @@ xaccCommitDateCell (DateCell *cell)
   if (!cell)
     return;
 
-  xaccParseDate (&(box->date), cell->cell.value);
+  gnc_parse_date (&(box->date), cell->cell.value);
 
   printDate (buff,
              box->date.tm_mday, 
@@ -546,11 +477,11 @@ xaccCommitDateCell (DateCell *cell)
 }
 
 static gboolean
-DateDirect (BasicCell *bcell,
-            int *cursor_position,
-            int *start_selection,
-            int *end_selection,
-            void *gui_data)
+gnc_date_cell_direct_update (BasicCell *bcell,
+                             int *cursor_position,
+                             int *start_selection,
+                             int *end_selection,
+                             void *gui_data)
 {
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = cell->cell.gui_private;
@@ -694,14 +625,14 @@ DateDirect (BasicCell *bcell,
 }
 
 static void
-DateMV (BasicCell *_cell,
-        const GdkWChar *change,
-        int change_len,
-        const GdkWChar *newval,
-        int newval_len,
-        int *cursor_position,
-        int *start_selection,
-        int *end_selection)
+gnc_date_cell_modify_verify (BasicCell *_cell,
+                             const GdkWChar *change,
+                             int change_len,
+                             const GdkWChar *newval,
+                             int newval_len,
+                             int *cursor_position,
+                             int *start_selection,
+                             int *end_selection)
 {
   DateCell *cell = (DateCell *) _cell;
   PopBox *box = cell->cell.gui_private;
@@ -755,7 +686,7 @@ DateMV (BasicCell *_cell,
     char *newval_mb = gnc_wcstombs (newval);
 
     gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
-    xaccParseDate (&(box->date), newval_mb);
+    gnc_parse_date (&(box->date), newval_mb);
     g_free (newval_mb);
 
     if (!box->date_picker)
@@ -771,7 +702,7 @@ DateMV (BasicCell *_cell,
 }
 
 static void
-realizeDate (BasicCell *bcell, gpointer data)
+gnc_date_cell_realize (BasicCell *bcell, gpointer data)
 {
   GnucashSheet *sheet = data;
   GnomeCanvasItem *item = sheet->item_editor;
@@ -788,13 +719,13 @@ realizeDate (BasicCell *bcell, gpointer data)
 
   /* to mark cell as realized, remove the realize method */
   cell->cell.gui_realize = NULL;
-  cell->cell.gui_move = moveDate;
-  cell->cell.enter_cell = enterDate;
-  cell->cell.leave_cell = leaveDate;
+  cell->cell.gui_move = gnc_date_cell_move;
+  cell->cell.enter_cell = gnc_date_cell_enter;
+  cell->cell.leave_cell = gnc_date_cell_leave;
 }
 
 static void
-moveDate (BasicCell *bcell)
+gnc_date_cell_move (BasicCell *bcell)
 {
   PopBox *box = bcell->gui_private;
 
@@ -831,10 +762,10 @@ popup_set_focus (GnomeCanvasItem *item,
 }
 
 static gboolean
-enterDate (BasicCell *bcell,
-           int *cursor_position,
-           int *start_selection,
-           int *end_selection)
+gnc_date_cell_enter (BasicCell *bcell,
+                     int *cursor_position,
+                     int *start_selection,
+                     int *end_selection)
 {
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = bcell->gui_private;
@@ -859,7 +790,7 @@ enterDate (BasicCell *bcell,
 }
 
 static void
-leaveDate (BasicCell *bcell)
+gnc_date_cell_leave (BasicCell *bcell)
 {
   PopBox *box = bcell->gui_private;
 
@@ -872,27 +803,27 @@ leaveDate (BasicCell *bcell)
 }
 
 void
-xaccDateCellGetDate (DateCell *cell, Timespec *ts)
+gnc_date_cell_get_date (DateCell *cell, Timespec *ts)
 {
   PopBox *box = cell->cell.gui_private;
 
   if (!cell || !ts)
     return;
 
-  xaccParseDate (&(box->date), cell->cell.value);
+  gnc_parse_date (&(box->date), cell->cell.value);
 
   ts->tv_sec = mktime (&box->date);
   ts->tv_nsec = 0;
 }
 
 static void 
-setDateCellValue (BasicCell *_cell, const char *str)
+gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
 {
   DateCell *cell = (DateCell *) _cell;
   PopBox *box = cell->cell.gui_private;
   char buff[DATE_BUF];
 
-  xaccParseDate (&(box->date), str);
+  gnc_parse_date (&(box->date), str);
 
   printDate (buff,
              box->date.tm_mday, 

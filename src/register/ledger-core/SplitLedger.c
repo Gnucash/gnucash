@@ -1251,7 +1251,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     Timespec ts;
 
     cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-    xaccDateCellGetDate((DateCell *) cell, &ts);
+    gnc_date_cell_get_date ((DateCell *) cell, &ts);
 
     gnc_trans_scm_set_date(trans_scm, &ts);
   }
@@ -2033,11 +2033,11 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
     value = gnc_basic_cell_get_value (cell);
 
     /* commit any pending changes */
-    xaccCommitDateCell ((DateCell *) cell);
+    gnc_date_cell_commit ((DateCell *) cell);
 
     DEBUG ("DATE: %s", value ? value : "(null)");
 
-    xaccDateCellGetDate ((DateCell *) cell, &ts);
+    gnc_date_cell_get_date ((DateCell *) cell, &ts);
 
     xaccTransSetDatePostedTS (trans, &ts);
   }

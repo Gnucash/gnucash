@@ -91,8 +91,8 @@
  * Copyright (c) 2000 Dave Peticolas
  */
  
-#ifndef __DATE_CELL_C__
-#define __DATE_CELL_C__
+#ifndef DATE_CELL_H
+#define DATE_CELL_H
 
 #include <time.h>
 
@@ -106,17 +106,15 @@ typedef struct _DateCell
 } DateCell;
 
 /* installs a callback to handle date recording */
-BasicCell * xaccMallocDateCell (void);
+BasicCell * gnc_date_cell_new (void);
 
 /* days are 1-31, mon is 1-12, year 1900 == 1900 */
-void       xaccSetDateCellValue (DateCell *cell, int day, int mon, int year);  
-void       xaccSetDateCellValueSecs (DateCell *cell, time_t secs);
-void       xaccSetDateCellValueSecsL (DateCell *cell, long long secs);
+void        gnc_date_cell_set_value (DateCell *cell,
+                                     int day, int mon, int year);  
+void        gnc_date_cell_set_value_secs (DateCell *cell, time_t secs);
 
-void       xaccCommitDateCell (DateCell *cell);
+void        gnc_date_cell_commit (DateCell *cell);
 
-void       xaccDateCellGetDate (DateCell *cell, Timespec *ts);
+void        gnc_date_cell_get_date (DateCell *cell, Timespec *ts);
 
-#endif /* __DATE_CELL_C__ */
-
-/* --------------- end of file ---------------------- */
+#endif
