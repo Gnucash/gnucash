@@ -209,15 +209,17 @@ static int inputBoxCB(AB_BANKING *ab,
   int retval = 0;
   int newPin;
   int hideInput;
+
   g_assert(ab);
-  data = /* (GNCInteractor *) */ AB_Banking_GetUserData(ab);
+  data = AB_Banking_GetUserData(ab);
   g_assert(data);
   g_assert(maxLen > minsize);
 
-  newPin = (flags | AB_BANKING_INPUT_FLAGS_CONFIRM) ? TRUE : FALSE;
-  hideInput = (flags | AB_BANKING_INPUT_FLAGS_SHOW) ? FALSE : TRUE;
+  newPin = (flags | AB_BANKING_INPUT_FLAGS_CONFIRM) == 0;
+  /*   printf("inputBoxCB: Requesting newPind: %s\n", newPin ? "true" : "false"); */
+  hideInput = (flags | AB_BANKING_INPUT_FLAGS_SHOW) != 0;
   if (!hideInput)
-    printf("inputBoxCB: Oops, hideInput is false -- not implemented.\n");
+    printf("inputBoxCB: Oops, hideInput is false, i.e. the input is supposed to be readable -- not implemented.\n");
 
   while (TRUE) {
 
@@ -233,7 +235,7 @@ static int inputBoxCB(AB_BANKING *ab,
 	/* Cached user matches, so use cached PIN. */
 	/*printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));*/
 	strcpy(resultbuffer, data->pw);
-	return 1;
+	return 0;
       }
       else {
 	msgstr = g_strdup_printf("%s\n\n%s", title, text);
@@ -274,12 +276,12 @@ static int inputBoxCB(AB_BANKING *ab,
       }
       else 
 	g_free (memset (passwd, 0, strlen (passwd)));
-      return 1;
+      return 0;
     }
   }
   
   /* User wanted to abort. */
-  return 0;
+  return 1;
 }
 
 static int keepAlive(void *user_data)
