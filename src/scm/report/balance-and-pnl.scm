@@ -7,34 +7,43 @@
 (gnc:depend "report-utilities.scm")
 (gnc:depend "options.scm")
 
-(define (gnc:account-get-balance-until account to-tp)
+(define (gnc:account-get-balance-until account to-tp include-children?)
   (let ((query (gnc:malloc-query))
-	(balance-temp 0))
+	(balance (if include-children?
+                     (gnc:group-get-balance-until
+                      (gnc:account-get-children account) to-tp)
+                     0)))
     (gnc:query-add-account query account)
     (gnc:query-show-earliest query)
     (gnc:query-set-latest query to-tp)
-    (set! balance-temp
-          (gnc:split-list-balance (gnc:query-get-splits query)))
+    (set! balance
+          (+ balance (gnc:split-list-balance (gnc:query-get-splits query))))
     (gnc:free-query query)
-    balance-temp))
+    balance))
 
-(define (gnc:account-get-balance-interval account from-tp to-tp)
+(define (gnc:account-get-balance-interval account from-tp to-tp
+                                          include-children?)
   (let ((query (gnc:malloc-query))
-	(balance-temp 0))
+	(balance (if include-children?
+                     (gnc:group-get-balance-interval
+                      (gnc:account-get-children account) from-tp to-tp)
+                     0)))
     (gnc:query-add-account query account)
     (gnc:query-set-earliest query from-tp)
     (gnc:query-set-latest query to-tp)
-    (set! balance-temp 
-          (gnc:split-list-balance (gnc:query-get-splits query)))
+    (set! balance 
+          (+ balance (gnc:split-list-total (gnc:query-get-splits query))))
     (gnc:free-query query)
-    balance-temp))
+    balance))
 
 (define (gnc:group-get-balance-until group to-tp)
-  (apply + (map (lambda (x) (gnc:account-get-balance-until x to-tp)) group)))
+  (apply + (gnc:group-map-accounts
+            (lambda (x) (gnc:account-get-balance-until x to-tp #t)) group)))
 
 (define (gnc:group-get-balance-interval group from-tp to-tp)
-  (apply + (map (lambda (x)
-                  (gnc:account-get-balance-until x from-tp to-tp)) group)))
+  (apply + (gnc:group-map-accounts
+            (lambda (x) (gnc:account-get-balance-interval x from-tp to-tp #t))
+            group)))
 
 ;; Just a private scope.
 (let 
@@ -157,16 +166,16 @@
                    (account-balance (if balance-sheet?
                                         (gnc:account-get-balance-until
                                          account
-                                         to-value)
+                                         to-value #f)
                                         (gnc:account-get-balance-interval
                                          account
                                          from-value
-                                         to-value))))
+                                         to-value #f))))
 
                 (if (not balance-sheet?)
                     (set! account-balance (- account-balance)))
-                (l2-collector 'add account-balance)
                 (l1-collector 'add account-balance)
+                (l1-collector 'add (l2-collector 'total #f))
                 (l0-collector 'add (l1-collector 'total #f))
                 (let ((level-1-output
                        (render-level-1-account account
@@ -182,11 +191,11 @@
 	   (balance (make-stats-collector))
 	   (rawbal
 	    (if balance-sheet?
-		(gnc:account-get-balance-until account to-value)
+		(gnc:account-get-balance-until account to-value #f)
 		(gnc:account-get-balance-interval 
 		 account 
 		 from-value
-		 to-value))))
+		 to-value #f))))
 	(balance 'add 
 		 (if balance-sheet? 
 		     rawbal
@@ -207,12 +216,7 @@
 								from-value
 								to-value)))))
 	      (l2-collector 'add (balance 'total #f))
-	      (l1-collector 'add (l2-collector 'total #f))
-	      (let
-		  ((result (render-level-2-account
-			    account (l2-collector 'total #f))))
-		(l2-collector 'reset #f)
-		result)))))
+              (render-level-2-account account (balance 'total #f))))))
 
     (let
 	((current-group (gnc:get-current-group))

@@ -199,15 +199,18 @@
 		  (thunk (gnc:account-get-split account x)))
 		0 (gnc:account-get-split-count account) 1))
 
-(define (gnc:split-list-balance splits)
+(define (gnc:split-list-total splits)
   (let ((num-splits (gnc:count-splits splits)))
-    (if (eq? num-splits 0)
-        0
-        (let loop
-            ((balance (gnc:split-get-balance (gnc:ith-split splits 0)))
-             (index 1))
-          (if (>= index num-splits)
-              balance
-              (loop (+ (gnc:split-get-value (gnc:ith-split splits index))
-                       balance)
-                    (+ index 1)))))))
+    (let loop
+        ((total 0)
+         (index 0))
+      (if (>= index num-splits)
+          total
+          (loop (+ total (gnc:split-get-value (gnc:ith-split splits index)))
+                (+ index 1))))))
+
+(define (gnc:split-list-balance splits)
+  (if (= (gnc:count-splits splits) 0)
+      0
+      (+ (gnc:split-list-total splits)
+         (gnc:split-get-balance (gnc:ith-split splits 0)))))

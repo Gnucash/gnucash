@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.3.0\n"
+"Project-Id-Version: gnucash 1.3.3\n"
 "POT-Creation-Date: 2000-03-20 00:19-0800\n"
-"PO-Revision-Date: 2000-03-15 23:47+0200\n"
+"PO-Revision-Date: 2000-03-20 16:47+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Voulez-vous créer un nouveau compte?\n"
 "Sinon, sélectionnez alors un compte\n"
-"à ouvrir dans la fenetre principale.\n"
+"fuzzà ouvrir dans la fenetre principale.\n"
 
 #: messages-i18n.c:15
 msgid ""
@@ -92,9 +92,8 @@ msgid "You must select an account to scrub."
 msgstr "Vous devez sélectionner un compte à nettoyer."
 
 #: messages-i18n.c:21
-#, fuzzy
 msgid "You must select an account type."
-msgstr "Vous devez sélectionner un compte à nettoyer."
+msgstr "Vous devez sélectionner un type de compte."
 
 #: messages-i18n.c:22
 msgid ""
@@ -239,7 +238,6 @@ msgstr ""
 " est vide."
 
 #: messages-i18n.c:39
-#, fuzzy
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr ""
 "Des changements ont été fait depuis la derniere sauvegarde.\n"
@@ -360,6 +358,8 @@ msgid ""
 "to %s.\n"
 "Is that what you want to do?"
 msgstr ""
+"Les types de tous les comptes parents et leurs sous-comptes doit être changés vers %s.\n"
+"Est-ce celà que vous voulez faire?"
 
 #: messages-i18n.c:55
 #, c-format
@@ -367,6 +367,8 @@ msgid ""
 "The types of all the subaccounts must be changed to %s.\n"
 "Is that what you want to do?"
 msgstr ""
+"Les types de tous les sous-comptes doit être changés vers %s.\n"
+"Est-ce celà que vous voulez faire?"
 
 #: messages-i18n.c:56
 msgid ""
@@ -541,9 +543,8 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Ouvrir le compte sélectionné et tous ses sous-comptes."
 
 #: messages-i18n.c:93
-#, fuzzy
 msgid "Open a file"
-msgstr "Ouvrir fichier"
+msgstr "Ouvrir un fichier"
 
 #: messages-i18n.c:94
 msgid "Open the global preferences dialog"
@@ -670,7 +671,6 @@ msgid "_Account"
 msgstr "Compte"
 
 #: messages-i18n.c:125
-#, fuzzy
 msgid "_Accounts"
 msgstr "Comptes"
 
@@ -807,7 +807,6 @@ msgid "Account Name"
 msgstr "Nom du compte"
 
 #: messages-i18n.c:159
-#, fuzzy
 msgid "Account Type"
 msgstr "Type de compte"
 
@@ -844,7 +843,6 @@ msgid "Date Range"
 msgstr "Echelle de date"
 
 #: messages-i18n.c:168
-#, fuzzy
 msgid "Delete Account"
 msgstr "Supprimer le compte"
 
@@ -913,9 +911,8 @@ msgid "New Balance"
 msgstr "Nouveau solde"
 
 #: messages-i18n.c:185
-#, fuzzy
 msgid "New File"
-msgstr "Ouvrir fichier"
+msgstr "Nouveau fichier"
 
 #: messages-i18n.c:186
 msgid "New top level account"
@@ -982,7 +979,6 @@ msgid "Scrub Subaccounts"
 msgstr "Nettoyer les sous-comptes"
 
 #: messages-i18n.c:202
-#, fuzzy
 msgid "Select All"
 msgstr "Tout sélectionner"
 
@@ -1015,9 +1011,8 @@ msgid "Show Inc/Exp"
 msgstr "Montrer Revenus/Dépenses"
 
 #: messages-i18n.c:210
-#, fuzzy
 msgid "Show Categories"
-msgstr "Montrer catégories"
+msgstr "Montrer les catégories"
 
 #: messages-i18n.c:211
 msgid "Show Earliest"
@@ -1097,7 +1092,6 @@ msgstr "Compte"
 
 #: messages-i18n.c:230 src/gnome/glade-account-picker.c:60
 #: src/gnome/glade-qif-import.c:361
-#, fuzzy
 msgid "Accounts"
 msgstr "Comptes"
 
@@ -1106,7 +1100,6 @@ msgid "Account Information"
 msgstr "Informations du compte"
 
 #: messages-i18n.c:232
-#, fuzzy
 msgid "AutoDep"
 msgstr "Dépot Automatique"
 
@@ -1306,7 +1299,6 @@ msgid "Fee"
 msgstr "Taxes/Impots"
 
 #: messages-i18n.c:280
-#, fuzzy
 msgid "File"
 msgstr "Fichier"
 
@@ -1369,7 +1361,6 @@ msgid "Memo"
 msgstr "Mémo"
 
 #: messages-i18n.c:295
-#, fuzzy
 msgid "New"
 msgstr "Nouveau"
 
@@ -1544,7 +1535,6 @@ msgid "Type"
 msgstr "Type"
 
 #: messages-i18n.c:338
-#, fuzzy
 msgid "Transaction"
 msgstr "Transaction"
 
@@ -1651,7 +1641,7 @@ msgid ""
 "modes"
 msgstr ""
 "La couleur d'arrière-plan pour une répartition active dans le mode ligne "
-"multiet les modes auto"
+"multi et les modes auto"
 
 #: po/guile_strings.txt:26
 msgid "Double mode active background"
@@ -1789,7 +1779,7 @@ msgstr "Couleur d'arrière-plan"
 #: po/guile_strings.txt:62
 #, c-format
 msgid "The number option formatted as currency is %s."
-msgstr ""
+msgstr "L'option de numérotation formatté comme monnaie est %s."
 
 #: po/guile_strings.txt:63
 msgid "Income/Salary/Taxable"
@@ -1800,9 +1790,8 @@ msgid "There are no selected accounts in the account list option."
 msgstr "Il n'y a aucun comptes selectionnés dans la liste d'options du compte."
 
 #: po/guile_strings.txt:65
-#, fuzzy
 msgid "This page shows your net worth."
-msgstr "Cete page montre vos pertes et profits"
+msgstr "Cete page montre votre valeur financière nette"
 
 #: po/guile_strings.txt:66
 msgid "_Budget"
@@ -1878,9 +1867,8 @@ msgid "Save window sizes and positions."
 msgstr "Sauvegarder les tailles et positions de la fenêtre"
 
 #: po/guile_strings.txt:84
-#, fuzzy
 msgid "Number Option"
-msgstr "Options du rapport"
+msgstr "Options de numérotation"
 
 #: po/guile_strings.txt:85
 msgid "Reverse Income and Expense Accounts"
@@ -1892,7 +1880,7 @@ msgstr ""
 
 #: po/guile_strings.txt:87
 msgid "Add in sub-accounts of each selected"
-msgstr "Ajouter dans les sous-comptes sélecvtionnés de chacun"
+msgstr "Ajouter dans les sous-comptes sélectionnés de chacun"
 
 #: po/guile_strings.txt:88
 msgid "Day"
@@ -1920,7 +1908,7 @@ msgstr "Suivi du solde du compte"
 
 #: po/guile_strings.txt:94
 msgid "Start of reporting period"
-msgstr ""
+msgstr "Début de la période du rapport"
 
 #: po/guile_strings.txt:95
 msgid "Sort by EXACT entry time"
@@ -1988,7 +1976,7 @@ msgstr "Options du rapport"
 
 #: po/guile_strings.txt:116
 msgid "Calculate balance sheet up to this date"
-msgstr ""
+msgstr "Calculer la feuille du solde/bilan jsqu'à cette date"
 
 #: po/guile_strings.txt:117
 msgid "Alternate the even and odd colors with each transaction, not each row"
@@ -2112,7 +2100,7 @@ msgstr "L'option de date et d'heure est %s."
 
 #: po/guile_strings.txt:149
 msgid "End of reporting period"
-msgstr ""
+msgstr "Fin de la période du rapport"
 
 #: po/guile_strings.txt:150
 msgid "Don't reverse any accounts"
@@ -2131,7 +2119,7 @@ msgid "account_edit_win_width"
 msgstr ""
 
 #: po/guile_strings.txt:154
-#, fuzzy
+
 msgid "Ba_lance sheet"
 msgstr "Feuille du solde/bilan"
 
@@ -2148,9 +2136,9 @@ msgid "Show both icons and text"
 msgstr "Montrer ensemble les icônes et le texte"
 
 #: po/guile_strings.txt:160
-#, fuzzy, c-format
+#, c-format
 msgid "The number option is %s."
-msgstr "L'option de date est %s."
+msgstr "L'option de numérotation est %s."
 
 #: po/guile_strings.txt:161
 #, c-format
@@ -2222,7 +2210,6 @@ msgid "Export data as text."
 msgstr "Exporter les données comme texte."
 
 #: po/guile_strings.txt:179
-#, fuzzy
 msgid "Balance Sheet"
 msgstr "Feuille du solde/bilan"
 
@@ -2289,7 +2276,7 @@ msgid ""
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
 "C'est un exemple de rapport de Gnucash. Regardez le code source de Guile "
-"(scheme) dans %spour les détails sur l'écriture de vos propres rapports, ou "
+"(scheme) dans %s pour les détails sur l'écriture de vos propres rapports, ou "
 "étendez les rapports existants."
 
 #: po/guile_strings.txt:197
@@ -2371,7 +2358,7 @@ msgstr "Gain net"
 
 #: po/guile_strings.txt:214
 msgid "The fourth option rules!"
-msgstr "Les règles de la quatrième option"
+msgstr "Les règles de la quatrième option!"
 
 #: po/guile_strings.txt:215
 msgid "This is a date option with time"
@@ -2534,9 +2521,8 @@ msgid "Display the Account Transactions report."
 msgstr "Affiche le rapport des transactions du compte."
 
 #: po/guile_strings.txt:259
-#, fuzzy
 msgid "Net"
-msgstr "Nouveau"
+msgstr "Net"
 
 #: po/guile_strings.txt:260
 msgid "Have a nice day!"
@@ -2599,175 +2585,154 @@ msgstr ""
 "Inverser les comptes carte de crédit, dettes, capitaux propres, et revenus"
 
 #: po/guile_strings.txt:273
-#, fuzzy
 msgid "This is a number option."
-msgstr "C'est une option booléenne"
+msgstr "C'est une option de numérotation"
 
 #: po/guile_strings.txt:275
 msgid "Multi mode active split background"
 msgstr "Arrière-plan de la répartition active en mode multi"
 
 #: src/gnome/dialog-account-picker.c:95
-#, fuzzy
 msgid "All Accounts"
-msgstr "Comptes"
+msgstr "Tous les comptes"
 
 #: src/gnome/dialog-qif-import.c:228
-#, fuzzy
 msgid "Select QIF File"
-msgstr "Tout sélectionner"
+msgstr "Sélectionner un fichier QIF"
 
 #: src/gnome/dialog-qif-import.c:313
 msgid "You must specify a file to load."
-msgstr ""
+msgstr "Vous devez spécifier un fichier à charger."
 
 #: src/gnome/dialog-qif-import.c:317
-#, fuzzy
 msgid "You must specify a currency."
-msgstr "Vous devez sélectionner un type de compte."
+msgstr "Vous devez spécifier une monnaie."
 
 #: src/gnome/dialog-qif-import.c:331 src/gnome/dialog-qif-import.c:659
 #: src/gnome/dialog-qif-import.c:761 src/gnome/dialog-qif-import.c:859
 msgid "QIF File scheme code not loaded properly."
-msgstr ""
+msgstr "Le code scheme pour les fichiers QIF ne s'est pas chargé correctement."
 
 #: src/gnome/dialog-qif-import.c:354
 msgid "QIF File already loaded. Reload with current settings?"
-msgstr ""
+msgstr "Le fichier QIF est déjà chargé.Recharger avec les paramètres actuels?"
 
 #: src/gnome/dialog-qif-import.c:387
 msgid "Failed to load QIF file. Are you sure it's a QIF file?"
-msgstr ""
+msgstr "Erreur de chargement du fichier QIF. Etes-vous sûr que c'est un fichier QIF?"
 
 #: src/gnome/dialog-qif-import.c:789 src/gnome/dialog-qif-import.c:887
 msgid "Something is very wrong with QIF Importing."
-msgstr ""
+msgstr "Quelque chose est très mauvais avec l'importation de fichier QIF."
 
 #: src/gnome/glade-account-picker.c:103
-#, fuzzy
 msgid "Selected account:"
-msgstr "Supprimer le compte"
+msgstr "Compte sélectionné:"
 
 #: src/gnome/glade-account-picker.c:112
-#, fuzzy
 msgid "Description:"
-msgstr "Description"
+msgstr "Description:"
 
 #: src/gnome/glade-account-picker.c:121
-#, fuzzy
 msgid "Account type:"
-msgstr "Type de compte"
+msgstr "Type de compte:"
 
 #: src/gnome/glade-account-picker.c:177
-#, fuzzy
 msgid "Mutual"
-msgstr "Fonds communs(SICAV / FCP)"
+msgstr "Fonds communs"
 
 #: src/gnome/glade-qif-import.c:96
-#, fuzzy
 msgid "Loaded Files"
-msgstr "Nouveau fichier"
+msgstr "Fichiers chargés"
 
 #: src/gnome/glade-qif-import.c:127
-#, fuzzy
 msgid "File Info"
-msgstr "Fichier"
+msgstr "Informations fichier"
 
 #: src/gnome/glade-qif-import.c:155
 msgid "QIF Filename:"
-msgstr ""
+msgstr "Nom du fichier QIF:"
 
 #: src/gnome/glade-qif-import.c:164
-#, fuzzy
 msgid "QIF Account:"
-msgstr "Compte"
+msgstr "Compte QIF:"
 
 #: src/gnome/glade-qif-import.c:173
-#, fuzzy
 msgid "Currency:"
-msgstr "Monnaie"
+msgstr "Monnaie:"
 
 #: src/gnome/glade-qif-import.c:182
 msgid "Radix format:"
-msgstr ""
+msgstr "Format radix:"
 
 #: src/gnome/glade-qif-import.c:191
-#, fuzzy
 msgid "Date format:"
-msgstr "Format de date"
+msgstr "Format de date:"
 
 #: src/gnome/glade-qif-import.c:222
-#, fuzzy
 msgid "Auto"
-msgstr "Dépot Automatique"
+msgstr "Automatique"
 
 #: src/gnome/glade-qif-import.c:251
 msgid "Autodetect"
-msgstr ""
+msgstr "Détection automatique"
 
 #: src/gnome/glade-qif-import.c:254
 msgid "Decimal (1,000.00)"
-msgstr ""
+msgstr "Point (1,000.00)"
 
 #: src/gnome/glade-qif-import.c:257
 msgid "Comma (1.000,00)"
-msgstr ""
+msgstr "Virgule (1.000,00)"
 
 #: src/gnome/glade-qif-import.c:269
 msgid "Autodetect           "
-msgstr ""
+msgstr "Détection automatique"
 
 #: src/gnome/glade-qif-import.c:272
 msgid "MM/DD/YYYY"
-msgstr ""
+msgstr "MM/JJ/AAAA"
 
 #: src/gnome/glade-qif-import.c:275
 msgid "DD/MM/YYYY"
-msgstr ""
+msgstr "JJ/MM/AAAA"
 
 #: src/gnome/glade-qif-import.c:278
 msgid "YYYY/MM/DD"
-msgstr ""
+msgstr "AAAA/MM/JJ"
 
 #: src/gnome/glade-qif-import.c:281
 msgid "YYYY/DD/MM"
-msgstr ""
+msgstr "AAAA/JJ/MM"
 
 #: src/gnome/glade-qif-import.c:293
-#, fuzzy
 msgid "Select file"
-msgstr "Tout sélectionner"
+msgstr "Sélectionner un fichier"
 
 #: src/gnome/glade-qif-import.c:300
-#, fuzzy
 msgid "Load file"
-msgstr "Ouvrir un fichier"
+msgstr "Charger un fichier"
 
 #: src/gnome/glade-qif-import.c:307
-#, fuzzy
 msgid "Files"
-msgstr "Fichier"
+msgstr "Fichiers"
 
 #: src/gnome/glade-qif-import.c:333
-#, fuzzy
 msgid "QIF Account"
-msgstr "Compte"
+msgstr "Compte QIF"
 
 #: src/gnome/glade-qif-import.c:340 src/gnome/glade-qif-import.c:394
-#, fuzzy
 msgid "Transactions"
-msgstr "Transaction"
+msgstr "Transactions"
 
 #: src/gnome/glade-qif-import.c:347 src/gnome/glade-qif-import.c:401
-#, fuzzy
 msgid "GNUCash Account Name"
-msgstr "Nom du compte"
+msgstr "Nom du compte GNUCash"
 
 #: src/gnome/glade-qif-import.c:387
 msgid "QIF Category"
-msgstr ""
+msgstr "Catégorie QIF"
 
 #: src/gnome/glade-qif-import.c:415
-#, fuzzy
 msgid "Categories"
-msgstr "Montrer catégories"
+msgstr "Catégories"

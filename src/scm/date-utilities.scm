@@ -107,7 +107,17 @@
 
 ;; Time comparison, true if t2 is later than t1
 (define (gnc:timepair-later t1 t2)
-    (< (car t1) (car t2)))
+  (cond ((< (car t1) (car t2)) #t)
+        ((= (car t1) (car t2)) (< (cdr t2) (cdr t2)))
+        (else #f)))
+
+(define gnc:timepair-lt gnc:timepair-later)
+
+;; t1 <= t2
+(define (gnc:timepair-le t1 t2)
+  (cond ((< (car t1) (car t2)) #t)
+        ((= (car t1) (car t2)) (<= (cdr t2) (cdr t2)))
+        (else #f)))
 
 ;; Build a list of time intervals 
 (define (dateloop curd endd incr) 

@@ -22,7 +22,10 @@
                                                           gnc-name 
                                                           #\:))
         (check-full-name #f)
-        (make-new-acct #f))
+        (make-new-acct #f)
+        (default-currency 
+          (gnc:option-value 
+           (gnc:lookup-global-option "International" "Default Currency"))))
     
     (if (or (pointer-token-null? same-gnc-account) 
             (and (not (pointer-token-null? same-gnc-account))
@@ -84,6 +87,7 @@
                 (if make-new-acct
                     (begin 
                       (gnc:account-set-name new-acct acct-name)
+                      (gnc:account-set-currency new-acct default-currency)
                       (if gnc-type (gnc:account-set-type new-acct gnc-type))
                       (cond ((and (qif-acct? qif-info)
                                   (qif-acct:description qif-info))
@@ -107,6 +111,7 @@
                 (if make-new-acct
                     (begin 
                       (gnc:account-set-name new-acct gnc-name)
+                      (gnc:account-set-currency new-acct default-currency)
                       (cond ((and (qif-acct? qif-info)
                                   (qif-acct:description qif-info))
                              (gnc:account-set-description 
