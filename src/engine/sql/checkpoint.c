@@ -287,6 +287,7 @@ pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
    " WHERE gncEntry.transGuid = '");
    p = guid_to_string_buff (xaccTransGetGUID(trans), p);
    p = stpcpy (p, "' AND gncTransaction.transGuid = gncEntry.transGuid "
+                  "  AND gncCheckpoint.accountGuid = gncEntry.accountGuid "
                   "  AND date_start <= gncTransaction.date_posted "
                   "  AND date_end > gncTransaction.date_posted;\n"
                   "COMMIT WORK;\n");

@@ -157,6 +157,11 @@ in), you can log them off manually by issuing  the following:
 
 echo "UPDATE gncsession SET time_off='NOW' WHERE time_off = 'infinity';" | psql dbname
 
+Hopefully, you do not need to be warned that this dangerous
+if there really are other users logged in.  Accessing the
+database in single-user mode when there are other users logged
+in will result in thier work being clobbered.
+
 Other Options
 -------------
 The 'options=' and 'tty=' postgres keywords are supported. See the
@@ -240,8 +245,8 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- bug: if one user adds a transaction, the second user's starting 
-   balances will come out wrong.  Why??
+-- bug: if user modifies entry, account starting balances are
+   set incorrectly.
 
 -- modify checkpoint computation to always occur on fixed dates.
    Failure to do so causes the fill-out algorithm to pull in all 
