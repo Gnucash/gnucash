@@ -28,6 +28,14 @@
 #include "FileIOP.h"
 #include <guile/gh.h>
 
+
+/* Pulled from the libxml-1.8.8 header */
+#ifndef xmlChildrenNode
+#define xmlChildrenNode childs
+#define xmlRootNode root
+#endif
+
+
 static gboolean
 xml_add_str(xmlNodePtr p, const char *tag, const char *str,
             gboolean include_if_empty) {
