@@ -1,0 +1,5 @@
+Makefile
+gw-gnc-module.c
+gw-gnc-module.h
+gw-gnc-module.html
+.scm-links
