@@ -1,0 +1,29 @@
+
+X-Accountant for SGI Irix
+-------------------------
+
+xacc.inst.tar (540 K) contains a binary compiled for SGI Irix systems.
+
+Installing:
+-----------
+
+   1.download 
+   2.untar into a directory 
+   3.inst -f xacc 
+   4.go 
+   5.quit 
+
+Running:
+--------
+Type /usr/local/bin/xacc at the command line/
+
+Remember to set XACC_HELP to /usr/local/xacc/Docs if you want to be able
+to access the online help.
+
+There are sample xacc data files in /usr/local/xacc/data. 
+
+I also suggest setting the X resource:
+xacc*sgiMode: true 
+This makes xacc look much more sgi-ish.
+
+-- Tom Kludy tkludy@csd.sgi.com  December 1997
