@@ -1,7 +1,9 @@
+# Generated automatically from Makefile.in by configure.
+#
 ######################################################################
 #********************************************************************
-#* Makefile -- makefile for xacc (X-Accountant)                     *
-#* Copyright (C) 1997 Robin D. Clark                                *
+#* Makefile -- makefile for xacc                                    *
+#* Copyright (C) 1997 Robin Clark                                   *
 #*                                                                  *
 #* This program is free software; you can redistribute it and/or    *
 #* modify it under the terms of the GNU General Public License as   *
@@ -17,75 +19,54 @@
 #* along with this program; if not, write to the Free Software      *
 #* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 #*                                                                  *
-#*   Author: Rob Clark                                              *
-#* Internet: rclark@cs.hmc.edu                                      *
+#*   Author: Robin Clark                                            *
+#* Internet: rclark@rush.aero.org                                   *
 #*  Address: 609 8th Street                                         *
 #*           Huntington Beach, CA 92648-4632                        *
 #********************************************************************
 
+srcdir  = .
+
+PREFIX  = /usr/local
+INSTALL = /usr/bin/ginstall -c
+INSTALL_DATA = ${INSTALL} -m 644
+TARGET  = xacc
+CPU     = @target_cpu@
 
 ######################################################################
-# CONFIGURABLE STUFF:                                                #
-CC = cc
-AR = ar r
-RANLIB = ranlib
-
-# USE_NO_COLOR - don't use red/black colors to denote neg/positive
-#                balances, but instead display a signed number in
-#                the balance field
-# USEQUICKFILL - comment out if you get a compile error about
-#                XbaeMatrixSetCursorPosition
-# HYPER_HELP   - include hyper-text help system
-# DEBUGMEMORY  - does some accounting whenever malloc/free
-#                is called.
-# USEDEBUG     - causes debugging info to be displayed
-# CFLAGS = $(LFLAGS) -I../include -I../lib/libhtmlw -I../lib/Xbae-4.6.2-linas \
-#         -I ../lib/ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
-#	 -DUSEQUICKFILL 
-
-CFLAGS = $(LFLAGS) -I../include -I../lib/XmHTML-1.1.0/src  \
-	 -I../lib/Xbae-4.6.2-linas \
-         -I ../lib/ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
-	 -DUSEQUICKFILL 
+#
+# Description of targets:
+#
+#   default      -- make the application
+#   depend       -- generate the dependencies
+#   clean        -- remove *.a, *.o, *.bak, and *~
+#   distclean    -- get rid of config files too...
+#   install      -- installs everything
+#
 
 
-	 # -DDEBUGMEMORY -DUSEDEBUG
-	 # -DUSEQUICKFILL # -DUSE_NO_COLOR -DDEBUGMEMORY -DUSEDEBUG
-LFLAGS = -g -L/usr/lib -L/usr/local/lib -L/usr/X11/lib -L../lib
-LIBS   = -lXm -lXmu -lXt -lXpm -lXext -lSM -lICE -lX11 
-# LIBS   = -lXm -lXmu -lXt -lXpm -lXext -lSM -lICE -lX11 -lefence
+default:
+	@cd lib;    $(MAKE)
+	@cd src;    $(MAKE)
 
-######################################################################
+depend:
+	@cd lib;    $(MAKE) depend
+	@cd src;    $(MAKE) depend
 
-######################################################################
-# DO NOT EDIT THE STUFF BELOW THIS LINE!                             #
+clean:
+	rm -f *~ *.o *.bak
+	@cd lib;    $(MAKE) clean
+	@cd src;    $(MAKE) clean
 
-OPTIONS = "CC = $(CC)"           "LFLAGS = $(LFLAGS)" \
-          "CFLAGS = $(CFLAGS)"   "LIBS = $(LIBS)"     \
-          "RANLIB = $(RANLIB)"   "AR = $(AR)"
+distclean: clean
+	rm -f *~ *.o *.bak Makefile config.cache config.log config.status config.h
+	@cd lib;    $(MAKE) distclean
+	@cd src;    $(MAKE) distclean
 
-default :
-	@cd lib/ComboBox-1.33 ; $(MAKE) 
-	@cd lib/Xbae-4.6.2-linas ; $(MAKE) 
-	@cd lib/libhtmlw ; $(MAKE) $(OPTIONS)
-	@cd lib/XmHTML-1.1.0; $(MAKE) 
-	@cd src ; $(MAKE) $(OPTIONS)
-
-clean :
-	rm -f core junk tmp *~ *.bak
-	@cd include ; rm -f *~
-	@cd help    ; rm -f *~
-	@cd src ; $(MAKE) clean
-	@cd lib/libhtmlw ; $(MAKE) clean
-	@cd lib/ComboBox-1.33 ; $(MAKE) clean
-	@cd lib/Xbae-4.6.2-linas ; $(MAKE) clean
-
-really_clean : clean
-	@cd src ; $(MAKE) really_clean
-	@cd lib/libhtmlw ; $(MAKE) really_clean
-
-realclean: really_clean
-
-depend :
-	@cd src ; $(MAKE) depend $(OPTIONS)
+# ???
+#install: $(TARGET)
+#	@mkdir -p $(PREFIX)/bin
+#	@mkdir -p $(PREFIX)/share/xacc
+#	$(INSTALL) $(TARGET) $(PREFIX)/bin
+#       install html help files too!
 

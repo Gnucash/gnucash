@@ -794,6 +794,26 @@ else
 fi
 
 
+echo $ac_n "checking for POSIXized ISC""... $ac_c" 1>&6
+if test -d /etc/conf/kconfig.d &&
+  grep _POSIX_VERSION /usr/include/sys/unistd.h >/dev/null 2>&1
+then
+  echo "$ac_t""yes" 1>&6
+  ISC=yes # If later tests want to check for ISC.
+  cat >> confdefs.h <<\EOF
+#define _POSIX_SOURCE 1
+EOF
+
+  if test "$GCC" = yes; then
+    CC="$CC -posix"
+  else
+    CC="$CC -Xp"
+  fi
+else
+  echo "$ac_t""no" 1>&6
+  ISC=
+fi
+
 # If we cannot run a trivial program, we must be cross compiling.
 echo $ac_n "checking whether cross-compiling""... $ac_c" 1>&6
 if eval "test \"`echo '$''{'ac_cv_c_cross'+set}'`\" = set"; then
@@ -803,11 +823,11 @@ else
   ac_cv_c_cross=yes
 else
 cat > conftest.$ac_ext <<EOF
-#line 807 "configure"
+#line 827 "configure"
 #include "confdefs.h"
 main(){return(0);}
 EOF
-{ (eval echo configure:811: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }
+{ (eval echo configure:831: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ac_cv_c_cross=no
 else
@@ -827,7 +847,7 @@ else
   ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
 cat > conftest.$ac_ext <<EOF
-#line 831 "configure"
+#line 851 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -839,11 +859,11 @@ int t() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:843: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:863: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   # It does; now see whether it defined to BIG_ENDIAN or not.
 cat > conftest.$ac_ext <<EOF
-#line 847 "configure"
+#line 867 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
 #include <sys/param.h>
@@ -855,7 +875,7 @@ int t() {
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:859: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:879: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_c_bigendian=yes
 else
@@ -872,7 +892,7 @@ if test "$cross_compiling" = yes; then
     { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
 else
 cat > conftest.$ac_ext <<EOF
-#line 876 "configure"
+#line 896 "configure"
 #include "confdefs.h"
 main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
@@ -885,7 +905,7 @@ main () {
   exit (u.c[sizeof (long) - 1] == 1);
 }
 EOF
-{ (eval echo configure:889: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }
+{ (eval echo configure:909: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ac_cv_c_bigendian=no
 else
@@ -905,7 +925,8 @@ EOF
 fi
 
 
-
+# *******************************************
+# check for UI libs:
 echo $ac_n "checking how to run the C preprocessor""... $ac_c" 1>&6
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
@@ -921,13 +942,13 @@ else
   # On the NeXT, cc -E runs the code through the compiler's parser,
   # not just through cpp.
   cat > conftest.$ac_ext <<EOF
-#line 1052 "configure"
+#line 946 "configure"
 #include "confdefs.h"
 #include <assert.h>
 Syntax Error
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:1058: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:952: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   :
@@ -936,13 +957,13 @@ else
   rm -rf conftest*
   CPP="${CC-cc} -E -traditional-cpp"
   cat > conftest.$ac_ext <<EOF
-#line 1067 "configure"
+#line 961 "configure"
 #include "confdefs.h"
 #include <assert.h>
 Syntax Error
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:1073: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:967: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   :
@@ -1026,12 +1047,12 @@ if test "$ac_x_includes" = NO; then
 
   # First, try using that file with no special directory specified.
 cat > conftest.$ac_ext <<EOF
-#line 1157 "configure"
+#line 1051 "configure"
 #include "confdefs.h"
 #include <$x_direct_test_include>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:1162: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:1056: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -1098,7 +1119,7 @@ if test "$ac_x_libraries" = NO; then
   ac_save_LIBS="$LIBS"
   LIBS="-l$x_direct_test_library $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1229 "configure"
+#line 1123 "configure"
 #include "confdefs.h"
 
 int main() { return 0; }
@@ -1106,7 +1127,7 @@ int t() {
 ${x_direct_test_function}()
 ; return 0; }
 EOF
-if { (eval echo configure:1237: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+if { (eval echo configure:1131: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
   rm -rf conftest*
   LIBS="$ac_save_LIBS"
 # We can link X programs with no special library path.
@@ -1190,138 +1211,448 @@ else
   echo "$ac_t""libraries $x_libraries, headers $x_includes" 1>&6
 fi
 
+if test "$no_x" = yes; then
+  # Not all programs may use this symbol, but it does not hurt to define it.
+  X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
+else
+  if test -n "$x_includes"; then
+    X_CFLAGS="$X_CFLAGS -I$x_includes"
+  fi
 
-# *******************************************
-# hack alert -- this set of tests must be moved to
-# somewhere where the location of the X11 libs has been found.
-# On my system, this fails because libXt can't be found.
-# -------- linas ------
-# check for UI libs:
-#hack alert LIBS="-lXmu -lXext -lX11 -lSM -lICE"
-#hack alert #AC_CHECK_LIB(SM, ???)
-#hack alert #AC_CHECK_LIB(ICE, ???)
-#hack alert echo $ac_n "checking for -lXt""... $ac_c" 1>&6
-#hack alert ac_lib_var=`echo Xt'_'XtVaCreateWidget | tr './+\055' '__p_'`
-#hack alert if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-#hack alert   echo $ac_n "(cached) $ac_c" 1>&6
-#hack alert else
-#hack alert   ac_save_LIBS="$LIBS"
-#hack alert LIBS="-lXt  $LIBS"
-#hack alert cat > conftest.$ac_ext <<EOF
-#hack alert #line 922 "configure"
-#hack alert #include "confdefs.h"
-#hack alert /* Override any gcc2 internal prototype to avoid an error.  */
-#hack alert /* We use char because int might match the return type of a gcc2
-#hack alert     builtin and then its argument prototype would still apply.  */
-#hack alert char XtVaCreateWidget();
-#hack alert 
-#hack alert int main() { return 0; }
-#hack alert int t() {
-#hack alert XtVaCreateWidget()
-#hack alert ; return 0; }
-#hack alert EOF
-#hack alert if { (eval echo configure:934: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-#hack alert   rm -rf conftest*
-#hack alert   eval "ac_cv_lib_$ac_lib_var=yes"
-#hack alert else
-#hack alert   rm -rf conftest*
-#hack alert   eval "ac_cv_lib_$ac_lib_var=no"
-#hack alert fi
-#hack alert rm -f conftest*
-#hack alert LIBS="$ac_save_LIBS"
-#hack alert 
-#hack alert fi
-#hack alert if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-#hack alert   echo "$ac_t""yes" 1>&6
-#hack alert   LIBS="-lXt $LIBS"
-#hack alert else
-#hack alert   echo "$ac_t""no" 1>&6
-#hack alert { echo "configure: error: Must have libXt" 1>&2; exit 1; } 
-#hack alert fi
-#hack alert 
-#hack alert echo $ac_n "checking for -lXm""... $ac_c" 1>&6
-#hack alert ac_lib_var=`echo Xm'_'XmCreateMainWindow | tr './+\055' '__p_'`
-#hack alert if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-#hack alert   echo $ac_n "(cached) $ac_c" 1>&6
-#hack alert else
-#hack alert   ac_save_LIBS="$LIBS"
-#hack alert LIBS="-lXm  $LIBS"
-#hack alert cat > conftest.$ac_ext <<EOF
-#hack alert #line 961 "configure"
-#hack alert #include "confdefs.h"
-#hack alert /* Override any gcc2 internal prototype to avoid an error.  */
-#hack alert /* We use char because int might match the return type of a gcc2
-#hack alert     builtin and then its argument prototype would still apply.  */
-#hack alert char XmCreateMainWindow();
-#hack alert 
-#hack alert int main() { return 0; }
-#hack alert int t() {
-#hack alert XmCreateMainWindow()
-#hack alert ; return 0; }
-#hack alert EOF
-#hack alert if { (eval echo configure:973: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-#hack alert   rm -rf conftest*
-#hack alert   eval "ac_cv_lib_$ac_lib_var=yes"
-#hack alert else
-#hack alert   rm -rf conftest*
-#hack alert   eval "ac_cv_lib_$ac_lib_var=no"
-#hack alert fi
-#hack alert rm -f conftest*
-#hack alert LIBS="$ac_save_LIBS"
-#hack alert 
-#hack alert fi
-#hack alert if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-#hack alert   echo "$ac_t""yes" 1>&6
-#hack alert   LIBS="-lXm $LIBS"
-#hack alert else
-#hack alert   echo "$ac_t""no" 1>&6
-#hack alert { echo "configure: error: Must have libXm" 1>&2; exit 1; } 
-#hack alert fi
-#hack alert 
-#hack alert echo $ac_n "checking for -lXpm""... $ac_c" 1>&6
-#hack alert ac_lib_var=`echo Xpm'_'XpmReadFileToXpmImage | tr './+\055' '__p_'`
-#hack alert if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-#hack alert   echo $ac_n "(cached) $ac_c" 1>&6
-#hack alert else
-#hack alert   ac_save_LIBS="$LIBS"
-#hack alert LIBS="-lXpm  $LIBS"
-#hack alert cat > conftest.$ac_ext <<EOF
-#hack alert #line 1000 "configure"
-#hack alert #include "confdefs.h"
-#hack alert /* Override any gcc2 internal prototype to avoid an error.  */
-#hack alert /* We use char because int might match the return type of a gcc2
-#hack alert     builtin and then its argument prototype would still apply.  */
-#hack alert char XpmReadFileToXpmImage();
-#hack alert 
-#hack alert int main() { return 0; }
-#hack alert int t() {
-#hack alert XpmReadFileToXpmImage()
-#hack alert ; return 0; }
-#hack alert EOF
-#hack alert if { (eval echo configure:1012: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
-#hack alert   rm -rf conftest*
-#hack alert   eval "ac_cv_lib_$ac_lib_var=yes"
-#hack alert else
-#hack alert   rm -rf conftest*
-#hack alert   eval "ac_cv_lib_$ac_lib_var=no"
-#hack alert fi
-#hack alert rm -f conftest*
-#hack alert LIBS="$ac_save_LIBS"
-#hack alert 
-#hack alert fi
-#hack alert if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-#hack alert   echo "$ac_t""yes" 1>&6
-#hack alert   cat >> confdefs.h <<\EOF
-#hack alert define HAVE_XPM 1
-#hack alert EOF
-#hack alert  LIBS="-lXpm $LIBS"
-#hack alert else
-#hack alert   echo "$ac_t""no" 1>&6
-#hack alert cat >> confdefs.h <<\EOF
-#hack alert define HAVE_XPM 0
-#hack alert EOF
-#hack alert  
-#hack alert fi
+  # It would be nice to have a more robust check for the -R ld option than
+  # just checking for Solaris.
+  # It would also be nice to do this for all -L options, not just this one.
+  if test -n "$x_libraries"; then
+    X_LIBS="$X_LIBS -L$x_libraries"
+    if test "`(uname) 2>/dev/null`" = SunOS &&
+      uname -r | grep '^5' >/dev/null; then
+      X_LIBS="$X_LIBS -R $x_libraries"
+    fi
+  fi
+
+  # Check for libraries that X11R6 Xt/Xaw programs need.
+
+  ac_save_LDFLAGS="$LDFLAGS"
+  LDFLAGS="$LDFLAGS -L$x_libraries"
+  # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
+  # check for ICE first), but we must link in the order -lSM -lICE or
+  # we get undefined symbols.  So assume we have SM if we have ICE.
+  # These have to be linked with before -lX11, unlike the other
+  # libraries we check for below, so use a different variable.
+  #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
+  echo $ac_n "checking for -lICE""... $ac_c" 1>&6
+ac_lib_var=`echo ICE'_'IceConnectionNumber | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lICE  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1252 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char IceConnectionNumber();
+
+int main() { return 0; }
+int t() {
+IceConnectionNumber()
+; return 0; }
+EOF
+if { (eval echo configure:1264: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+  LDFLAGS="$ac_save_LDFLAGS"
+
+  # Check for system-dependent libraries X programs must link with.
+
+  if test "$ISC" = yes; then
+    X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
+  else
+    # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
+    # libraries were built with DECnet support.  And karl@cs.umb.edu says
+    # the Alpha needs dnet_stub (dnet does not exist).
+    echo $ac_n "checking for -ldnet""... $ac_c" 1>&6
+ac_lib_var=`echo dnet'_'dnet_ntoa | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-ldnet  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1300 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char dnet_ntoa();
+
+int main() { return 0; }
+int t() {
+dnet_ntoa()
+; return 0; }
+EOF
+if { (eval echo configure:1312: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+    if test $ac_cv_lib_dnet_dnet_ntoa = no; then
+      echo $ac_n "checking for -ldnet_stub""... $ac_c" 1>&6
+ac_lib_var=`echo dnet_stub'_'dnet_ntoa | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-ldnet_stub  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1339 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char dnet_ntoa();
+
+int main() { return 0; }
+int t() {
+dnet_ntoa()
+; return 0; }
+EOF
+if { (eval echo configure:1351: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+    fi
+
+    # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
+    # to get the SysV transport functions.
+    # Not sure which flavor of 386 UNIX this is, but it seems harmless to
+    # check for it.
+    echo $ac_n "checking for -lnsl""... $ac_c" 1>&6
+ac_lib_var=`echo nsl'_'t_accept | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lnsl  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1383 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char t_accept();
+
+int main() { return 0; }
+int t() {
+t_accept()
+; return 0; }
+EOF
+if { (eval echo configure:1395: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+    # lieder@skyler.mavd.honeywell.com says without -lsocket,
+    # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
+    # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
+    if test "`(uname) 2>/dev/null`" != IRIX; then
+      echo $ac_n "checking for -lsocket""... $ac_c" 1>&6
+ac_lib_var=`echo socket'_'socket | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lsocket  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1426 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char socket();
+
+int main() { return 0; }
+int t() {
+socket()
+; return 0; }
+EOF
+if { (eval echo configure:1438: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+    fi
+  fi
+fi
+
+
+
+
+
+# the XmHTML widget needs libz, libjpeg, libpng and libm
+LIBS="-lm"
+
+echo $ac_n "checking for -lz""... $ac_c" 1>&6
+ac_lib_var=`echo z'_'deflateEnd | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lz  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1475 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char deflateEnd();
+
+int main() { return 0; }
+int t() {
+deflateEnd()
+; return 0; }
+EOF
+if { (eval echo configure:1487: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_Z 1
+EOF
+ LIBS="-lz $LIBS"
+else
+  echo "$ac_t""no" 1>&6
+cat >> confdefs.h <<\EOF
+#define HAVE_Z 0
+EOF
+
+fi
+
+
+
+echo $ac_n "checking for -ljpeg""... $ac_c" 1>&6
+ac_lib_var=`echo jpeg'_'jpeg_read_scanlines | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-ljpeg  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1522 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char jpeg_read_scanlines();
+
+int main() { return 0; }
+int t() {
+jpeg_read_scanlines()
+; return 0; }
+EOF
+if { (eval echo configure:1534: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_JPEG 1
+EOF
+ LIBS="-ljpeg $LIBS"
+else
+  echo "$ac_t""no" 1>&6
+cat >> confdefs.h <<\EOF
+#define HAVE_JPEG 0
+EOF
+
+fi
+
+
+
+echo $ac_n "checking for -lpng""... $ac_c" 1>&6
+ac_lib_var=`echo png'_'png_read_image | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lpng  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1569 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char png_read_image();
+
+int main() { return 0; }
+int t() {
+png_read_image()
+; return 0; }
+EOF
+if { (eval echo configure:1581: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_PNG 1
+EOF
+ LIBS="-lpng $LIBS"
+else
+  echo "$ac_t""no" 1>&6
+cat >> confdefs.h <<\EOF
+#define HAVE_PNG 0
+EOF
+
+fi
+
+
+
+LIBS="-lXm -lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $LIBS"
+
+
+echo $ac_n "checking for -lXpm""... $ac_c" 1>&6
+ac_lib_var=`echo Xpm'_'XpmReadFileToXpmImage | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lXpm -L $x_libraries $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1619 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char XpmReadFileToXpmImage();
+
+int main() { return 0; }
+int t() {
+XpmReadFileToXpmImage()
+; return 0; }
+EOF
+if { (eval echo configure:1631: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_XPM 1
+EOF
+ LIBS="-lXpm $LIBS"
+else
+  echo "$ac_t""no" 1>&6
+cat >> confdefs.h <<\EOF
+#define HAVE_XPM 0
+EOF
+
+fi
+
+
 
 
 trap '' 1 2 15
@@ -1411,7 +1742,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "Makefile src/Makefile lib/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -1449,6 +1780,10 @@ s%@INSTALL@%$INSTALL%g
 s%@RANLIB@%$RANLIB%g
 s%@CC@%$CC%g
 s%@CPP@%$CPP%g
+s%@X_CFLAGS@%$X_CFLAGS%g
+s%@X_PRE_LIBS@%$X_PRE_LIBS%g
+s%@X_LIBS@%$X_LIBS%g
+s%@X_EXTRA_LIBS@%$X_EXTRA_LIBS%g
 s%@x_includes@%$x_includes%g
 s%@x_libraries@%$x_libraries%g
 
@@ -1456,7 +1791,7 @@ CEOF
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile lib/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile"}
+CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/libhtmlw/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
@@ -1621,4 +1956,5 @@ EOF
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
+
 
