@@ -1,3 +1,51 @@
+2001-11-21  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/bin/: new directory.  Added so that scripts will be in a
+	subdir and can be re-made/installed without a full build.
+
+	* src/bin/gnucash-env.in: new file -- you can use this to invoke
+	programs or scripts with the proper gnucash
+	environment. i.e. "gnucash-env guile -s foo bar" or
+	"gnucash-env some-command arg1 arg2 ..."
+
+	* src/gnome/window-main.c (gnc_shutdown): moved here for now, but
+	should eventually be moved to app-utils (or similar) and made
+	public again.
+
+	* src/bin/gnucash.in: moved here from ../gnucash.sh.in.  Now uses
+	gnucash-env to set up environment.
+
+	* src/gnome/gnucash.c.in: removed all code except
+	gnc_setup_gettext, which should be moved to app-utils, or
+	core-utils soon.
+
+	* src/scm/main.scm: remove append-path calls - handled in gnucash-env.
+	(append-path): unused -- deleted.
+	(gnc:main): handle setlocale here.
+
+	* src/.cvsignore: remove bits that moved to src/bin.
+
+	* src/Makefile.am: handle new src/bin directory, and remove all
+	the old gnucash binary bits.
+
+	* src/gnc-main.c: deleted.
+
+	* src/gnucash-make-guids.in: moved to src/bin.
+
+	* src/gnucash-run-script.in: moved to src/bin.
+
+	* src/gnucash.sh.in: moved to src/bin/gnucash.in.
+
+	* src/gnome/gnucash.h: removed many dead functions.
+
+	* src/bin/gnucash-run-script.in: moved here from ..
+
+	* src/bin/gnucash-make-guids.in: moved here from ..
+
+	* src/bin/Makefile.am: new file.
+
+	* src/bin/.cvsignore: new file.
+
 2001-11-20  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/gnome/gnucash.c.in
