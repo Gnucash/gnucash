@@ -32,7 +32,8 @@ LDADD = \
    ../libgncmod-app-utils.la \
    ../../engine/libgw-engine.la \
    ${top_builddir}/src/test-core/libgncmod-test.la \
-   ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la 
+   ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+   ${GUILE_LIBS}
 
 noinst_PROGRAMS = \
   test-link-module \
@@ -51,4 +52,5 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS}
