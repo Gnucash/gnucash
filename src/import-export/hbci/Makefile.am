@@ -8,6 +8,7 @@ libgncmod_hbci_la_SOURCES = \
   dialog-pass.c \
   dialog-hbcitrans.c \
   dialog-daterange.c \
+  gnc-hbci-account.c \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
   gnc-hbci-cb.c \
@@ -16,7 +17,6 @@ libgncmod_hbci_la_SOURCES = \
   gnc-hbci-getbalance.c \
   gnc-hbci-gettrans.c \
   hbci-interaction.c \
-  hbci-progressmon.c \
   druid-hbci-initial.c 
 
 # Must be included in tarball because they are listed in POTFILES.in
@@ -30,6 +30,7 @@ noinst_HEADERS = \
   druid-hbci-initial.h \
   druid-hbci-utils.h \
   gnc-hbci-actions.h \
+  gnc-hbci-account.h \
   gnc-hbci-cb.h \
   gnc-hbci-getbalance.h \
   gnc-hbci-gettrans.h \

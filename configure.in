@@ -589,7 +589,10 @@ AC_ARG_ENABLE( hbci,
   fi)
 if test x${HBCI_DIR} = xhbci ;
 then
-    AM_PATH_OPENHBCI(0.9.13)
+    AM_PATH_OPENHBCI2(1.9.0.1)
+    #all_libraries="$all_libraries $OPENHBCI_LIBS"
+    #all_includes="$all_includes $OPENHBCI_CXXFLAGS"
+    #AM_PATH_OPENHBCI(0.9.13)
     HBCI_LIBS="${OPENHBCI_LIBS}"
     HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
 

@@ -24,9 +24,9 @@
 #define DRUID_HBCI_UTILS_H
 
 #include <gnome.h>
-#include <openhbci/api.h>
+#include <openhbci2/api.h>
 #include "hbci-interaction.h"
-
+#include "gnc-hbci-utils.h"
 
 /** Save the reference strings to the HBCI accounts in the kvp's of
  * the gnucash accounts. Each value will only be set if it is
@@ -52,7 +52,12 @@ gboolean
 gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
 
 gboolean
-gnc_test_dir_exist_error (GtkWidget *parent, const char *filename);
+gnc_test_dir_exist_error (GtkWindow *parent, const char *filename);
 
+GList *
+gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox, 
+			  GList *accountlist);
+
+void *hbci_find_acc_cb(gnc_HBCI_Account *acc, void *user_data);
 
 #endif

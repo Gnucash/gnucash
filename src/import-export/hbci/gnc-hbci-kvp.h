@@ -75,6 +75,12 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
 GList *gnc_hbci_get_book_template_list (GNCBook *b);
 void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list);
 
+/** Returns a non-copied pointer to the GList of kvp_frames which
+ * eventually are the available HBCI accounts, stored in the given
+ * book. */
+GList *gnc_hbci_get_book_account_list (GNCBook *b);
+void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list);
+
 /* lowlevel */
 
 /* internal getter for kvp frame in book */

@@ -23,7 +23,7 @@
 #include "config.h"
 #include "gnc-hbci-gettrans.h"
 
-#include <openhbci/api.h>
+#include <openhbci2/api.h>
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
@@ -48,7 +48,8 @@ gboolean
 gettrans_dates(GtkWidget *parent, Account *gnc_acc, 
 	       HBCI_Date **from_date, HBCI_Date **to_date);
 
-static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data);
+static void *trans_list_cb (GWEN_DB_NODE *trans_node, void *user_data);
+static void *reports_cb(GWEN_DB_NODE *reportn, void *user_data);
 
 struct trans_list_data 
 {
@@ -61,20 +62,23 @@ void
 gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 {
   HBCI_API *api = NULL;
-  const HBCI_Account *h_acc = NULL;
+  HBCI_Outbox *outbox = NULL;
+  const gnc_HBCI_Account *h_acc = NULL;
   GNCInteractor *interactor = NULL;
   const HBCI_Customer *customer = NULL;
+  GList *hbci_accountlist = NULL;
   
   g_assert(parent);
   g_assert(gnc_acc);
 
   /* Get the api */
-  api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  api = gnc_hbci_api_new_currentbook (parent, &interactor, &hbci_accountlist);
   if (api == NULL) {
     printf("gnc_hbci_gettrans: Couldn't get HBCI API.\n");
     return;
   }
   g_assert (interactor);
+  outbox = HBCI_Outbox_new();
 
   /* Get the HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
@@ -83,7 +87,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     return;
   }
   /* printf("gnc_hbci_gettrans: HBCI account no. %s found.\n",
-     HBCI_Account_accountId (h_acc)); */
+     gnc_HBCI_Account_accountId (h_acc)); */
 
   /* Get the customer that should be doing this job. */
   customer = gnc_hbci_get_first_customer(h_acc);
@@ -96,7 +100,6 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 
   {
     /* Execute a GetTransactions job. */
-    HBCI_OutboxJobGetTransactions *trans_job;
     HBCI_OutboxJob *job;
     Timespec until_timespec;
     HBCI_Date *from_date, *to_date;
@@ -108,23 +111,30 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     timespecFromTime_t(&until_timespec, HBCI_Date_to_time_t(to_date));
     
     /* Create OutboxJob */
-    trans_job = 
-      HBCI_OutboxJobGetTransactions_new (customer, 
-					 (HBCI_Account *)h_acc,
-					 from_date,
-					 to_date);
+    job = HBCI_OutboxJob_new("JobGetTransactions", (HBCI_Customer *)customer, 
+			     gnc_HBCI_Account_accountId(h_acc));
+    
+    {
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      char *tmp;
+      
+      tmp = HBCI_Date_toString(from_date);
+      HBCI_Job_setProperty(jjob, "fromDate", tmp);
+      free(tmp);
+      tmp = HBCI_Date_toString(to_date);
+      HBCI_Job_setProperty(jjob, "toDate", tmp);
+      free(tmp);
+    }
     HBCI_Date_delete (from_date);
     HBCI_Date_delete (to_date);
-    job = HBCI_OutboxJobGetTransactions_OutboxJob (trans_job);
-    g_assert (job);
 
     /* Add job to HBCI_API queue. */
-    HBCI_API_addJob (api, job);
+    HBCI_Outbox_addJob (outbox, job);
 
     /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
+    if (!gnc_hbci_api_execute (parent, api, outbox, job, interactor)) {
       /* HBCI_API_executeOutbox failed. */
-      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+      HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
       return;
     }
 
@@ -132,10 +142,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     gnc_hbci_set_account_trans_retrieval (gnc_acc, until_timespec);
 
     /* Now finish the job duties. */
-    gnc_hbci_gettrans_final(parent, gnc_acc, trans_job, FALSE);
+    gnc_hbci_gettrans_final(parent, gnc_acc, job, FALSE);
 
     /* Clean up behind ourself. */
-    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_delete(outbox);
     gnc_hbci_api_save (api);
     GNCInteractor_hide (interactor);
   }
@@ -201,17 +212,33 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
 gboolean
 gnc_hbci_gettrans_final(GtkWidget *parent, 
 			Account *gnc_acc, 
-			const HBCI_OutboxJobGetTransactions *trans_job,
+			const HBCI_OutboxJob *trans_job,
 			gboolean run_until_done)
 {
   /* Now add the retrieved transactions to the gnucash account. */
-  const list_HBCI_Transaction *trans_list;
-      
-  trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
-  /*printf("gnc_hbci_gettrans: Got %d transactions.\n", 
-    list_HBCI_Transaction_size(trans_list));*/
+  GWEN_DB_NODE *trans_list, *response;
 
-  if (list_HBCI_Transaction_size(trans_list) > 0) {
+
+  response = HBCI_Job_responseData((HBCI_Job*)HBCI_OutboxJob_Job_const(trans_job));
+  if (!response) {
+    /*printf("Got no responseData\n");*/
+    return FALSE;
+  }
+
+  trans_list = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, 
+				"transactions");
+  if (!trans_list) {
+    gnome_ok_dialog_parented 
+      (_("The HBCI import returned no transactions for the selected time period."),
+       GTK_WINDOW (parent));
+    return TRUE;
+  }
+  
+  trans_list = GWEN_DB_GetGroup(trans_list,
+				GWEN_PATH_FLAGS_NAMEMUSTEXIST,
+				"booked");
+
+  if (trans_list && (GWEN_DB_Groups_Count(trans_list) > 0)) {
     struct trans_list_data data;
     GNCImportMainMatcher *importer_generic_gui = 
       gnc_gen_trans_list_new(NULL, NULL, TRUE);
@@ -219,7 +246,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
     data.importer_generic = importer_generic_gui;
     data.gnc_acc = gnc_acc;
 	
-    list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
+    GWEN_DB_Groups_Foreach (trans_list, reports_cb, &data);
 
     if (run_until_done)
       return gnc_gen_trans_list_run (importer_generic_gui);
@@ -235,102 +262,144 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 }
 
 
-
-/* list_HBCI_Transaction_foreach callback. The Conversion from HBCI to
-   GNC transaction is done here, once for each HBCI_Transaction.  */
-static void *trans_list_cb (const HBCI_Transaction *h_trans, 
-			    void *user_data)
+static void *reports_cb(GWEN_DB_NODE *reportn, void *user_data)
 {
-  Account *gnc_acc;
-  struct trans_list_data *data = user_data;
-  g_assert(data);
-  g_assert(h_trans);
-
-  gnc_acc = data->gnc_acc;
-  g_assert(gnc_acc);
-
-  gnc_hbci_trans_import(h_trans,data->importer_generic,gnc_acc);
-
+  if (!reportn) {
+    /*DBG_INFO(0, "Oops: reportn is NULL");*/
+    return NULL;
+  }
+  if (strcasecmp(GWEN_DB_GroupName(reportn), "report")==0) {
+    return GWEN_DB_Groups_Foreach(reportn, trans_list_cb, user_data);
+  } // if report
+  else {
+    /*DBG_WARN(0, "Unknown section \"%s\"", GWEN_DB_GroupName(reportn));*/
+  }
   return NULL;
 }
 
-void gnc_hbci_trans_import(const HBCI_Transaction *h_trans,
-		GNCImportMainMatcher *importer_generic,
-		Account *gnc_acc)
+
+/* list_HBCI_Transaction_foreach callback. The Conversion from HBCI to
+   GNC transaction is done here, once for each HBCI_Transaction.  */
+static void *trans_list_cb (GWEN_DB_NODE *trans_node, 
+			    void *user_data)
 {
+  HBCI_Transaction *h_trans;
   time_t current_time, tt1, tt2; 
   /*struct tm tm1, tm2;*/
+  Account *gnc_acc;
   GNCBook *book;
   Transaction *gnc_trans;
   Split *split;
+  struct trans_list_data *data = user_data;
+  g_assert(data);
 
+  if (!trans_node) return NULL;
+
+  gnc_acc = data->gnc_acc;
+  g_assert(gnc_acc);
   book = xaccAccountGetBook(gnc_acc);
-  gnc_trans = xaccMallocTransaction(book);
-  xaccTransBeginEdit(gnc_trans);
 
-  /*if(data.fi_id_valid==true){
-    gnc_import_set_trans_online_id(gnc_trans, data.fi_id);
-    }*/
+  if (strcasecmp(GWEN_DB_GroupName(trans_node), "transaction")==0) {
+    /* Create wrapper HBCI_Transaction */
+    h_trans = HBCI_Transaction_new(trans_node);
 
-  tt1 = HBCI_Date_to_time_t (HBCI_Transaction_date(h_trans));
-  tt2 = HBCI_Date_to_time_t (HBCI_Transaction_valutaDate(h_trans));
-  /*printf("Date? %s ValutaDate? %s", ctime(&tt1), ctime(&tt2));*/
-  /*tm1 = HBCI_Date_to_tm (HBCI_Transaction_date(h_trans));
-    tm2 = HBCI_Date_to_tm (HBCI_Transaction_valutaDate(h_trans));
-    printf("Date asc %s ValutaDate asc %s", asctime(&tm1), asctime(&tm2));*/
+    gnc_trans = xaccMallocTransaction(book);
+    xaccTransBeginEdit(gnc_trans);
+
+    /*if(data.fi_id_valid==true){
+      gnc_import_set_trans_online_id(gnc_trans, data.fi_id);
+      }*/
+
+    tt1 = HBCI_Date_to_time_t (HBCI_Transaction_date(h_trans));
+    tt2 = HBCI_Date_to_time_t (HBCI_Transaction_valutaDate(h_trans));
+    /*printf("Date? %s ValutaDate? %s", ctime(&tt1), ctime(&tt2));*/
+    /*tm1 = HBCI_Date_to_tm (HBCI_Transaction_date(h_trans));
+      tm2 = HBCI_Date_to_tm (HBCI_Transaction_valutaDate(h_trans));
+      printf("Date asc %s ValutaDate asc %s", asctime(&tm1), asctime(&tm2));*/
   
   
-  /* Date / Time */
-  xaccTransSetDateSecs
-    (gnc_trans, HBCI_Date_to_time_t (HBCI_Transaction_valutaDate (h_trans)));
-
-  current_time = time(NULL);
-  xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
-  
-  /* Currency; we take simply the default currency of the gnucash account */
-  xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
-
-  {
-    /* Number. We use the "customer reference", if there is one. */
-    const char *custref = HBCI_Transaction_customerReference (h_trans);
-    if (custref && (strlen (custref) > 0) && 
-	(g_strncasecmp (custref, "NONREF", 6) != 0))
-      xaccTransSetNum (gnc_trans, custref);
-  }
-  
-  /* Description */
-  {
-    char *g_descr = gnc_hbci_descr_tognc (h_trans);
-    xaccTransSetDescription (gnc_trans, g_descr);
-    g_free (g_descr);
-  }
-  
-  /* Notes. */
-  /*xaccTransSetNotes (gnc_trans, g_notes);*/
-  /* But Nobody ever uses the Notes field? */
-
-  /* Add one split */
-  split=xaccMallocSplit(book);
-  xaccTransAppendSplit(gnc_trans, split);
-  xaccAccountInsertSplit(gnc_acc, split);
-
-  {
-    /* Amount into the split */
-    gnc_numeric gnc_amount = double_to_gnc_numeric
-      (HBCI_Value_getValue (HBCI_Transaction_value (h_trans)),
-       xaccAccountGetCommoditySCU(gnc_acc),
-       GNC_RND_ROUND);
-    xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
-  }
-
-  /* Memo in the Split. */
-  {
-    char *g_memo = gnc_hbci_memo_tognc (h_trans);
-    xaccSplitSetMemo(split, g_memo);
-    g_free (g_memo);
-  }
+    /* Date / Time */
+    xaccTransSetDateSecs
+      (gnc_trans, HBCI_Date_to_time_t (HBCI_Transaction_valutaDate (h_trans)));
     
-  /* Instead of xaccTransCommitEdit(gnc_trans)  */
-  g_assert (importer_generic);
-  gnc_gen_trans_list_add_trans (importer_generic, gnc_trans);
+    current_time = time(NULL);
+    xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
+    
+    /* Currency; we take simply the default currency of the gnucash account */
+    xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
+    
+    {
+      /* Number. We use the "customer reference", if there is one. */
+      const char *custref = HBCI_Transaction_customerReference (h_trans);
+      if (custref && (strlen (custref) > 0) && 
+	  (g_strncasecmp (custref, "NONREF", 6) != 0))
+	xaccTransSetNum (gnc_trans, custref);
+    }
+    
+    /* Description */
+    {
+      char *g_descr = gnc_hbci_descr_tognc (h_trans);
+      xaccTransSetDescription (gnc_trans, g_descr);
+      g_free (g_descr);
+    }
+  
+    /* Notes. */
+    /*xaccTransSetNotes (gnc_trans, g_notes);*/
+    /* But Nobody ever uses the Notes field? */
+    
+    /* Add one split */
+    split=xaccMallocSplit(book);
+    xaccTransAppendSplit(gnc_trans, split);
+    xaccAccountInsertSplit(gnc_acc, split);
+    
+    {
+      /* Amount into the split */
+      gnc_numeric gnc_amount = double_to_gnc_numeric
+	(HBCI_Value_getValue (HBCI_Transaction_value (h_trans)),
+	 xaccAccountGetCommoditySCU(gnc_acc),
+	 GNC_RND_ROUND);
+    xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
+    }
+    
+    /* Memo in the Split. */
+    {
+      char *g_memo = gnc_hbci_memo_tognc (h_trans);
+      xaccSplitSetMemo(split, g_memo);
+      g_free (g_memo);
+    }
+    
+    /* Instead of xaccTransCommitEdit(gnc_trans)  */
+    g_assert (data->importer_generic);
+    gnc_gen_trans_list_add_trans (data->importer_generic, gnc_trans);
+
+    HBCI_Transaction_delete(h_trans);
+  }
+  else if (strcasecmp(GWEN_DB_GroupName(trans_node), "startsaldo")==0) {
+    /*DBG_INFO(0, "Found opening balance");*/
+  }
+  else if (strcasecmp(GWEN_DB_GroupName(trans_node), "endsaldo")==0) {
+    /* Found closing balance */
+    trans_node = GWEN_DB_GetGroup(trans_node,
+				  GWEN_PATH_FLAGS_NAMEMUSTEXIST,
+				  "value");
+    /*if (trans_node) {
+      HBCI_Value *bal;
+      char *val;
+      DBG_INFO(0, "Found closing balance");
+      
+      bal = HBCI_Value_new(GWEN_DB_GetCharValue(trans_node, "value", 0, "0"),
+			   GWEN_DB_GetCharValue(trans_node, "currency", 0, "EUR"));
+      
+      val = HBCI_Value_toReadableString(bal);
+      printf("Got closing balance %s\n", val);
+      
+      free(val);
+      HBCI_Value_delete(bal);
+      }*/
+  }
+  else {
+    /*DBG_WARN(0, "Unknown section \"%s\"", GWEN_DB_GroupName(trans_node));*/
+  }
+  return NULL;
+  
 }

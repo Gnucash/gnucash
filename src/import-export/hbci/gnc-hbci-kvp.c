@@ -27,6 +27,7 @@
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
 #define HBCI_TRANS_RETRIEVAL "trans-retrieval"
+#define HBCI_ACCOUNTS "hbci-accounts"
 
 /* Account */
 char *gnc_hbci_get_account_accountid (Account *a)
@@ -116,6 +117,20 @@ void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
   kvp_value *value = kvp_value_new_glist_nc (template_list);
   kvp_frame_set_slot_nc (frame, HBCI_TEMPLATES, value);
+  qof_book_kvp_changed (b);
+}
+
+GList *gnc_hbci_get_book_account_list (GNCBook *b)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNTS);
+  return kvp_value_get_glist (value);
+}
+void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_value_new_glist_nc (account_list);
+  kvp_frame_set_slot_nc (frame, HBCI_ACCOUNTS, value);
   qof_book_kvp_changed (b);
 }
 

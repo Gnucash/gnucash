@@ -23,7 +23,7 @@
 #ifndef HBCI_INTERACTION_H
 #define HBCI_INTERACTION_H
 
-#include <openhbci/api.h>
+#include <openhbci2/api.h>
 #include <gnome.h>
 
 typedef struct _inter_data GNCInteractor;
@@ -39,6 +39,7 @@ void GNCInteractor_delete(GNCInteractor *i);
 void GNCInteractor_erasePIN(GNCInteractor *i);
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent);
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value);
+GtkWidget *GNCInteractor_parent(GNCInteractor *i);
 
 
 #endif

@@ -25,9 +25,8 @@
 #endif
 
 #include <gnome.h>
-#include <openhbci/bank.h>
-#include <openhbci/outboxaccjobs.h>
-#include <openhbci.h>
+#include <openhbci2/bank.h>
+#include <openhbci2.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
@@ -142,7 +141,7 @@ void gnc_hbci_dialog_show(HBCITransDialog *td)
 /* -------------------------------------- */
 
 HBCI_Transaction *
-hbci_trans_fill_values(const HBCI_Account *h_acc, HBCITransDialog *td);
+hbci_trans_fill_values(const gnc_HBCI_Account *h_acc, HBCITransDialog *td);
 gboolean
 check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td, 
 		  const HBCI_Transaction *trans);
@@ -181,7 +180,7 @@ static void fill_template_menu_func(gpointer data, gpointer user_data)
 
 HBCITransDialog *
 gnc_hbci_dialog_new (GtkWidget *parent,
-		const HBCI_Account *h_acc,
+		const gnc_HBCI_Account *h_acc,
 		const HBCI_Customer *customer,
 		Account *gnc_acc,
 		GNC_HBCI_Transtype trans_type,
@@ -198,7 +197,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   td->trans_type = trans_type;
   g_assert (h_acc);
   g_assert (customer);
-  bank = HBCI_Account_bank (h_acc);
+  bank = gnc_HBCI_Account_bank (h_acc);
   g_assert (bank);
 #if HAVE_KTOBLZCHECK_H
   td->blzcheck = AccountNumberCheck_new();
@@ -319,11 +318,11 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     
     /* Fill in the values from the objects */
     gtk_label_set_text (GTK_LABEL (orig_name_label), 
-			(strlen(HBCI_Customer_custName (customer))>0 ? 
-			 HBCI_Customer_custName (customer) :
+			(strlen(HBCI_Customer_name (customer)) > 0 ?
+			 HBCI_Customer_name (customer) :
 			 HBCI_Customer_custId (customer)));
     gtk_label_set_text (GTK_LABEL (orig_account_label), 
-			HBCI_Account_accountId (h_acc));
+			gnc_HBCI_Account_accountId (h_acc));
     gtk_label_set_text (GTK_LABEL (orig_bankname_label), 
 			(strlen(HBCI_Bank_name (bank))>0 ?
 			 HBCI_Bank_name (bank) :
@@ -365,7 +364,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
  */
 
 int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td, 
-				 const HBCI_Account *h_acc)
+				 const gnc_HBCI_Account *h_acc)
 {
   int result;
   gboolean values_ok;
@@ -433,22 +432,19 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     fields into it and return it. The caller must
     HBCI_Transaction_delete() it when finished. */
 HBCI_Transaction *
-hbci_trans_fill_values(const HBCI_Account *h_acc, HBCITransDialog *td)
+hbci_trans_fill_values(const gnc_HBCI_Account *h_acc, HBCITransDialog *td)
 {
+  GWEN_DB_NODE *xnode = GWEN_DB_Group_new("transaction");
   /* Fill in the user-entered values */
-  HBCI_Transaction *trans = HBCI_Transaction_new();
+  HBCI_Transaction *trans = HBCI_Transaction_new(xnode);
 	
   /* OpenHBCI newer than 0.9.8: use account's bankCode values
    * instead of the bank's ones since this is what some banks
    * require. */
-  HBCI_Transaction_setOurCountryCode (trans, 
-				      HBCI_Account_countryCode (h_acc));
   HBCI_Transaction_setOurBankCode (trans, 
-				   HBCI_Account_instituteCode (h_acc));
-  HBCI_Transaction_setOurAccountId (trans, HBCI_Account_accountId (h_acc));
-  HBCI_Transaction_setOurSuffix (trans, HBCI_Account_accountSuffix (h_acc));
+				   gnc_HBCI_Account_bankCode (h_acc));
+  HBCI_Transaction_setOurAccountId (trans, gnc_HBCI_Account_accountId (h_acc));
 	
-  HBCI_Transaction_setOtherCountryCode (trans, 280);
   HBCI_Transaction_setOtherBankCode 
     (trans, gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)));
   /* printf("Got otherBankCode %s.\n",
@@ -530,50 +526,50 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
 
 HBCI_OutboxJob *
 gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, HBCI_API *api,
+			      HBCI_Outbox *outbox,
 			      const HBCI_Customer *customer, 
-			      HBCI_Account *h_acc, 
+			      gnc_HBCI_Account *h_acc, 
 			      GNC_HBCI_Transtype trans_type) 
 {
   HBCI_OutboxJob *job;
-      
+  const char *jobname;
+
   /* Create a Do-Transaction (Transfer) job. */
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
-    {
-      HBCI_OutboxJobDebitNote *debit_job =
-	HBCI_OutboxJobDebitNote_new (customer, h_acc, td->hbci_trans);
-      job = HBCI_OutboxJobDebitNote_OutboxJob (debit_job);
+    { 
+      jobname = "JobSingleDebitNote";
     }
     break;
   case SINGLE_TRANSFER:
     {
-      HBCI_OutboxJobTransfer *transfer_job = 
-	HBCI_OutboxJobTransfer_new (customer, h_acc, td->hbci_trans);
-      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      jobname = "JobSingleTransfer";
     }
     break;
   default:
     {
       /*printf("dialog-hbcitrans: Oops, unknown GNC_HBCI_Transtype %d.\n",
 	trans_type);*/
-      HBCI_OutboxJobTransfer *transfer_job = 
-	HBCI_OutboxJobTransfer_new (customer, h_acc, td->hbci_trans);
-      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      jobname = "JobSingleTransfer";
     }
   }
-  g_assert (job);
+  job = HBCI_OutboxJob_new(jobname, (HBCI_Customer *)customer, 
+			   gnc_HBCI_Account_accountId(h_acc));
+  HBCI_Job_addRequestData(HBCI_OutboxJob_Job(job), 
+			  "", HBCI_Transaction_node(td->hbci_trans));
 
   /* Make really sure there is no other job in the queue */
-  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+  HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
 
   /* Add job to queue */
-  HBCI_API_addJob (api, job);
+  HBCI_Outbox_addJob(outbox, job);
 
   return job;
 }
 
 gboolean 
 gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api, 
+			      HBCI_Outbox *outbox,
 			      HBCI_OutboxJob *job, GNCInteractor *interactor)
 {
   gboolean successful;
@@ -581,7 +577,7 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api,
   g_assert(api);
   g_assert(job);
 
-  successful = gnc_hbci_api_execute (td->parent, api, job, interactor);
+  successful = gnc_hbci_api_execute (td->parent, api, outbox, job, interactor);
 
   /*printf("dialog-hbcitrans: Ok, result of api_execute was %d.\n", 
     successful);*/
@@ -607,7 +603,7 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api,
   }
   /* Watch out! The job *has* to be removed from the queue
      here because otherwise it might be executed again. */
-  HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+  HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
   return successful;
 }
 

@@ -23,8 +23,8 @@
 #include "config.h"
 #include "gnc-hbci-transfer.h"
 
-#include <openhbci/api.h>
-#include <openhbci/outboxaccjobs.h>
+#include <openhbci2/api.h>
+#include <openhbci2/outboxjob.h>
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
@@ -47,20 +47,23 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 		    GNC_HBCI_Transtype trans_type)
 {
   HBCI_API *api = NULL;
-  const HBCI_Account *h_acc = NULL;
+  HBCI_Outbox *outbox = NULL;
+  const gnc_HBCI_Account *h_acc = NULL;
   GNCInteractor *interactor = NULL;
   const HBCI_Customer *customer = NULL;
+  GList *hbci_accountlist = NULL;
   
   g_assert(parent);
   g_assert(gnc_acc);
 
   /* Get API */
-  api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  api = gnc_hbci_api_new_currentbook (parent, &interactor, &hbci_accountlist);
   if (api == NULL) {
     printf("gnc_hbci_maketrans: Couldn't get HBCI API. Nothing will happen.\n");
     return;
   }
   g_assert (interactor);
+  outbox = HBCI_Outbox_new();
 
   /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
@@ -69,7 +72,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     return;
   }
   /*printf("gnc_hbci_maketrans: HBCI account no. %s found.\n",
-    HBCI_Account_accountId (h_acc));*/
+    gnc_HBCI_Account_accountId (h_acc));*/
   
   /* Get the customer that should be doing this job. */
   customer = gnc_hbci_get_first_customer(h_acc);
@@ -116,8 +119,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
       {
 	HBCI_OutboxJob *job = 
-	  gnc_hbci_trans_dialog_enqueue(td, api, customer, 
-					(HBCI_Account *)h_acc, trans_type);
+	  gnc_hbci_trans_dialog_enqueue(td, api, outbox, customer, 
+					(gnc_HBCI_Account *)h_acc, trans_type);
       
 	/* HBCI Transaction has been created and enqueued, so now open
 	 * the gnucash transaction dialog and fill in all values. */
@@ -131,7 +134,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 
 	  /* If the user pressed "execute now", then execute this job
 	     now. This function already delete()s the job. */
-	  successful = gnc_hbci_trans_dialog_execute(td, api, job, interactor);
+	  successful = gnc_hbci_trans_dialog_execute(td, api, outbox, 
+						     job, interactor);
 
 	  if (!successful) {
 	    /* HBCI job failed -- then remove gnc txn from the books. */
@@ -160,7 +164,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       }*/
 
     /* Just to be on the safe side, clear queue once again. */
-    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE);
+    HBCI_Outbox_delete(outbox);
     gnc_hbci_api_save (api);
     gnc_hbci_dialog_delete(td);
     gnc_trans_templ_delete_glist (template_list);
