@@ -36,6 +36,7 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+
 static GtkWidget *win = NULL;
 static GtkWidget *disable_cb = NULL;
 static GtkWidget *canvas = NULL;
