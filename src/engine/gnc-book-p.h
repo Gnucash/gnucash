@@ -44,15 +44,12 @@ struct gnc_book_struct
   /* The kvp_frame provides a place for top-level data associated 
    * with this book. */
   kvp_frame *kvp_data;
-  gboolean dirty;
   
   /* The entity table associates the GUIDs of all the objects
    * belonging to this book, with their pointers to the respective
    * objects.  This allows a lookup of objects based on thier guid.
    */
   GNCEntityTable *entity_table;
-
-  gboolean sx_notsaved; /* true if sched_xactions is changed */
 
   /* In order to store arbitrary data, for extensibility, add a table
    * that will be used to hold arbitrary pointers.
@@ -64,6 +61,11 @@ struct gnc_book_struct
    */
   char book_open;
 
+  /* dirty/clean flag. If dirty, then this book has been modified,
+   * but has not yet been written out to storage (file/database) 
+   */
+  gboolean dirty;
+  
   /* version number, used for tracking multiuser updates */
   gint32  version;
 
@@ -88,7 +90,6 @@ struct gnc_book_struct
  */
 void gnc_book_set_guid(GNCBook *book, GUID guid);
 void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
-void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 
 void gnc_book_set_backend (GNCBook *book, Backend *be);
 

@@ -46,41 +46,66 @@
 
 #include "Backend.h"
 #include "BackendP.h"
-#include "GroupP.h"
 #include "QueryObject.h"
-#include "SchedXaction.h"
 #include "TransLog.h"
-#include "engine-helpers.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
-#include "gnc-date.h"
-#include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
-#include "gnc-module.h"
-#include "gnc-pricedb-p.h"
 #include "gncObjectP.h"
+
+/* remove these when finished */
+#include "gnc-engine.h"
+#include "gnc-engine-util.h"
+#include "GroupP.h"
+#include "gnc-pricedb-p.h"
+#include "SchedXaction.h"
+#include "SchedXactionP.h"
 
 static short module = MOD_ENGINE;
 
 /* ====================================================================== */
 
+typedef struct xaccSchedXactionListDef {
+   GNCBook *book;
+	GList *sx_list;
+	gboolean sx_notsaved;
+} SchedXactionList;
+
 #define GNC_SCHEDXACTIONS "gnc_schedxactions"
-GList *
-gnc_book_get_schedxactions( GNCBook *book )
+static SchedXactionList *
+gnc_book_get_schedxaction_list( GNCBook *book )
 {
   if ( book == NULL ) return NULL;
   return gnc_book_get_data (book, GNC_SCHEDXACTIONS);
 }
 
+GList *
+gnc_book_get_schedxactions( GNCBook *book )
+{
+  SchedXactionList *list;
+  if ( book == NULL ) return NULL;
+  list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
+  return list->sx_list;
+}
+
 void
 gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 {
+  SchedXactionList *old_list, *new_list;
   if ( book == NULL ) return;
 
-  gnc_book_set_data (book, GNC_SCHEDXACTIONS, newList);
-  book->sx_notsaved = TRUE;
+  old_list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
+  if (old_list->sx_list == newList) return;
+  
+  new_list = g_new (SchedXactionList, 1);
+  new_list->sx_notsaved = TRUE;
+  new_list->book = book;
+  new_list->sx_list = newList;
+  
+  gnc_book_set_data (book, GNC_SCHEDXACTIONS, new_list);
+
+  g_free (old_list);
 }
 
 /* ====================================================================== */
@@ -97,7 +122,10 @@ mark_sx_clean(gpointer data, gpointer user_data)
 static void
 book_sxns_mark_saved(GNCBook *book)
 {
-  book->sx_notsaved = FALSE;
+  SchedXactionList *sxl;
+
+  sxl = gnc_book_get_schedxaction_list (book);
+  if (sxl) sxl->sx_notsaved = FALSE;
   g_list_foreach(gnc_book_get_schedxactions(book),
                  mark_sx_clean, 
                  NULL);
@@ -109,7 +137,10 @@ book_sxlist_notsaved(GNCBook *book)
 {
   GList *sxlist;
   SchedXaction *sx;
-  if(book->sx_notsaved
+  SchedXactionList *sxl;
+
+  sxl = gnc_book_get_schedxaction_list (book);
+  if((sxl && sxl->sx_notsaved)
      ||
      xaccGroupNotSaved(gnc_book_get_template_group(book))) return TRUE;
  
@@ -160,8 +191,7 @@ gnc_book_populate (GNCBook *book)
   
   gnc_pricedb_set_db (book, gnc_pricedb_create(book));
 
-  gnc_book_set_schedxactions (book,NULL);
-  book->sx_notsaved = FALSE;
+  gnc_book_set_schedxactions (book, NULL);
   gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
 
 }
@@ -178,7 +208,8 @@ gnc_book_depopulate (GNCBook *book)
   gnc_commodity_table_set_table (book, NULL);
 
   gnc_book_set_template_group (book, NULL);
-  /* FIXME: destroy SX data members here, too */
+
+  gnc_book_set_schedxactions (book, NULL);
 }
 
 /* ====================================================================== */
@@ -372,8 +403,7 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
 /* ====================================================================== */
 
 /* Store arbitrary pointers in the GNCBook for data storage extensibility */
-/* XXX if data is NULL, should we store a null pointer, or should
- * we remove the key from the hash table? 
+/* XXX if data is NULL, we ashould remove the key from the hash table!
  */
 void 
 gnc_book_set_data (GNCBook *book, const char *key, gpointer data)
