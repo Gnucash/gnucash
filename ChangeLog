@@ -1,3 +1,10 @@
+2003-05-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-reports/owner-report.scm:  Better fix for 108731
+	  limit the itemized invoices/payments to the start/end date range,
+	  but print out a "Balance" line if there is a non-zero balance as
+	  of the start date.
+
 2003-05-21  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:

@@ -171,9 +171,10 @@
 ;; Make sure the caller checks the type first and only calls us with
 ;; invoice and payment transactions.  we don't verify it here.
 ;;
-;; Return a pair of (date . value)
+;; Return a list of (printed? value odd-row?)
 ;;
-(define (add-txn-row table txn acc column-vector row-style inv-str reverse? start-date)
+(define (add-txn-row table txn acc column-vector odd-row? printed?
+		     inv-str reverse? start-date total)
   (let* ((type (gnc:transaction-get-txn-type txn))
 	 (date (gnc:transaction-get-date-posted txn))
 	 (due-date #f)
@@ -192,48 +193,71 @@
 		inv-str))
 	   ((equal? type gnc:transaction-type-payment) (_ "Payment, thank you"))
 	   (else (_ "Unknown"))))
-	 (row-contents '()))
+	 )
+
+    (define (make-row date due-date num type-str memo value)
+      (let ((row-contents '()))
+	(if (date-col column-vector)
+	    (addto! row-contents (gnc:print-date date)))
+	(if (date-due-col column-vector)
+	    (addto! row-contents 
+		    (if (and due-date
+			     (not (equal? due-date (cons 0 0))))
+			(gnc:print-date due-date)
+			"")))
+	(if (num-col column-vector)
+	    (addto! row-contents num))
+	(if (type-col column-vector)
+	    (addto! row-contents type-str))
+	(if (memo-col column-vector)
+	    (addto! row-contents memo))
+	(if (value-col column-vector)
+	    (addto! row-contents
+		    (gnc:make-html-table-cell/markup "number-cell"
+						     (gnc:make-gnc-monetary
+						      currency value))))
+	row-contents))
 
     (if reverse?
 	(set! value (gnc:numeric-neg value)))
 
     (if (gnc:timepair-later start-date date)
 	(begin
+
+	  ; Maybe print out the 'balance' row
+	  (if (not printed?)
+	      (begin
+		(set! printed? #t)
+		(if (not (gnc:numeric-zero-p total))
+		    (let ((row (make-row start-date #f "" (_ "Balance") "" total))
+			  (row-style (if odd-row? "normal-row" "alternate-row")))
+		      (gnc:html-table-append-row/markup! table row-style
+							 (reverse row))
+		      (set! odd-row? (not odd-row?))
+		      (set! row-style (if odd-row? "normal-row" "alternate-row")))
+		    )))
 	  
+	  ; Now print out the invoice row
 	  (if invoice
 	      (set! due-date (gnc:invoice-get-date-due invoice)))
 
-	  (if (date-col column-vector)
-	      (addto! row-contents (gnc:print-date date)))
-	  (if (date-due-col column-vector)
-	      (addto! row-contents 
-		      (if (and due-date
-			       (not (equal? due-date (cons 0 0))))
-			  (gnc:print-date due-date)
-			  "")))
-	  (if (num-col column-vector)
-	      (addto! row-contents (gnc:transaction-get-num txn)))
-	  (if (type-col column-vector)
-	      (addto! row-contents type-str))
-	  (if (memo-col column-vector)
-	      (addto! row-contents (gnc:split-get-memo split)))
-	  (if (value-col column-vector)
-	      (addto! row-contents
-		      (gnc:make-html-table-cell/markup "number-cell"
-						       (gnc:make-gnc-monetary
-							currency value))))
+	  (let ((row (make-row date due-date (gnc:transaction-get-num txn)
+			       type-str (gnc:split-get-memo split) value))
+		(row-style (if odd-row? "normal-row" "alternate-row")))
 
-	  (gnc:html-table-append-row/markup! table row-style
-					     (reverse row-contents))
+	    (gnc:html-table-append-row/markup! table row-style
+					       (reverse row)))
+
+	  (set! odd-row? (not odd-row?))
 	  ))
-    (cons date value)
+
+    (list printed? value odd-row?)
     ))
 
 
 (define (make-txn-table options query acc start-date end-date)
   (let ((txns (gnc:query-get-transactions query 'query-txn-match-any))
 	(used-columns (build-column-used options))
-	(odd-row? #t)
 	(total (gnc:numeric-zero))
 	(currency (gnc:default-currency)) ;XXX
 	(table (gnc:make-html-table))
@@ -249,20 +273,22 @@
     ; Order the transactions properly
     (set! txns (sort txns (lambda (a b) (> 0 (gnc:transaction-order a b)))))
 
-    (for-each
-     (lambda (txn)
-       (let ((type (gnc:transaction-get-txn-type txn))
-	     (row-style (if odd-row? "normal-row" "alternate-row")))
-	 (if
-	  (or (equal? type gnc:transaction-type-invoice)
-	      (equal? type gnc:transaction-type-payment))
-	  (let ((dv (add-txn-row table txn acc used-columns row-style
-				 inv-str reverse? start-date)))
+    (let ((printed? #f)
+	  (odd-row? #t))
+      (for-each
+       (lambda (txn)
+	 (let ((type (gnc:transaction-get-txn-type txn)))
+	   (if
+	    (or (equal? type gnc:transaction-type-invoice)
+		(equal? type gnc:transaction-type-payment))
+	    (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
+				       inv-str reverse? start-date total)))
 
-	    (set! odd-row? (not odd-row?))
-	    (set! total (gnc:numeric-add-fixed total (cdr dv)))
-	    ))))
-     txns)
+	      (set! printed? (car result))
+	      (set! total (gnc:numeric-add-fixed total (cadr result)))
+	      (set! odd-row? (caddr result))
+	      ))))
+       txns))
 
     (gnc:html-table-append-row/markup! 
      table
