@@ -20,6 +20,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include "config.h"
 #include "gnc-hbci-getbalance.h"
 
 #include <openhbci/api.h>
@@ -104,7 +105,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       /* HBCI_API_executeOutbox failed. */
       return;
     }
-    
+
     {
       const HBCI_AccountBalance *acc_bal;
       const HBCI_Balance *bal1, *bal2;
@@ -141,14 +142,22 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       choose1 = (timespec_cmp (&ts1, &ts2) == 1);
       
       val = HBCI_Balance_value (choose1 ? bal1 : bal2);
-		  
-      dialogres = gnc_verify_dialog_parented
+      
+      {
+	char *str = HBCI_Value_toReadableString (val);
+	dialogres = gnc_verify_dialog_parented
 	  (parent, 
 	   TRUE,
-	   "Result of HBCI job: \nAccount %s balance is %g\nReconcile account now?",
-	   (choose1 ? "noted" : "booked"),
-	   HBCI_Value_getValue (val));
+	   /* %s is either 'noted balance' or 'booked balance'. %s is the amount. */
+	   _("Result of HBCI job: \n"
+	     "Account %s is %s\n"
+	     "Reconcile account now?"),
+	   (choose1 ? _("noted balance") : _("booked balance")),
+	   str);
+	free (str);
+      }
 
+      GNCInteractor_hide (interactor);
       if (dialogres) 
 	recnWindowWithBalance (parent, 
 			       gnc_acc, 

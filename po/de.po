@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-10-27 23:28+0100\n"
-"PO-Revision-Date: 2002-10-27 23:38+0100\n"
+"POT-Creation-Date: 2002-10-27 23:56+0100\n"
+"PO-Revision-Date: 2002-10-28 00:01+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1818,7 +1818,7 @@ msgstr "_Buchen..."
 #: src/gnome/glade/stocks.glade.h:1 src/import-export/generic-import.glade.h:1
 #: src/import-export/hbci/glade/hbci.glade.h:6
 #: src/import-export/hbci/gnc-hbci-gettrans.c:303
-#: src/import-export/hbci/gnc-hbci-transfer.c:172
+#: src/import-export/hbci/gnc-hbci-transfer.c:173
 #: src/import-export/qif-import/qif.glade.h:1
 #: src/register/ledger-core/split-register-model.c:191
 msgid "Account"
@@ -4647,7 +4647,7 @@ msgstr "In Arbeit..."
 #: intl-scm/guile-strings.c:85 intl-scm/guile-strings.c:672
 #: src/engine/Account.c:2161 src/import-export/hbci/glade/hbci.glade.h:13
 #: src/import-export/hbci/gnc-hbci-gettrans.c:304
-#: src/import-export/hbci/gnc-hbci-transfer.c:173
+#: src/import-export/hbci/gnc-hbci-transfer.c:174
 msgid "Bank"
 msgstr "Bank"
 
@@ -5182,6 +5182,26 @@ msgid ""
 "\"\n"
 "Warning:  Ofx investment transactions require two accounts."
 msgstr ""
+
+#. %s is either 'noted balance' or 'booked balance'. %s is the amount.
+#: src/import-export/hbci/gnc-hbci-getbalance.c:152
+#, c-format
+msgid ""
+"Result of HBCI job: \n"
+"Account %s is %s\n"
+"Reconcile account now?"
+msgstr ""
+"Ergebnis des HBCI Auftrag:\n"
+"%s des Kontos ist %s\n"
+"Konto jetzt abgleichen?"
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:155
+msgid "noted balance"
+msgstr "Vorgemerkter Saldo"
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:155
+msgid "booked balance"
+msgstr "Gebuchter Saldo"
 
 #: src/import-export/hbci/glade/hbcipass.glade.h:1
 msgid "Confirm Password:"
@@ -5809,7 +5829,8 @@ msgid ""
 "user '%s' at bank '%s'."
 msgstr ""
 "Bitte die PIN für \n"
-"Benutzer '%s' der Bank '%s' eingeben."
+"Benutzer '%s' \n"
+"der Bank '%s' eingeben."
 
 #: src/import-export/hbci/hbci-interaction.c:186
 #, c-format
@@ -6029,11 +6050,11 @@ msgstr "Lokales System aktualisieren"
 msgid "Closing connection"
 msgstr "Verbindung schließen"
 
-#: src/import-export/hbci/gnc-hbci-transfer.c:111
+#: src/import-export/hbci/gnc-hbci-transfer.c:112
 msgid "Online HBCI Direct Debit Note"
 msgstr "Online-Auftrag Einzellastschrift"
 
-#: src/import-export/hbci/gnc-hbci-transfer.c:114
+#: src/import-export/hbci/gnc-hbci-transfer.c:115
 msgid "Online HBCI Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
@@ -6810,7 +6831,9 @@ msgstr "Die gewählte passende Buchung wird als abgeglichen markiert"
 msgid ""
 "The selected transaction and it's splits will be added to the appropriate "
 "account(s) and will be marked as reconciled."
-msgstr "Der gewählte Geschäftsvorgang und seine Buchungen werden zum Konto hinzugefügt und als abgeglichen markiert."
+msgstr ""
+"Der gewählte Geschäftsvorgang und seine Buchungen werden zum Konto "
+"hinzugefügt und als abgeglichen markiert."
 
 #: src/import-export/generic-import.glade.h:22
 msgid "The selected transaction will be ignored"
@@ -6819,7 +6842,9 @@ msgstr "Die gewählte Buchung wird ignoriert"
 #: src/import-export/generic-import.glade.h:23
 msgid ""
 "The selected transaction will replace the selected match AND ALL IT'S SPLITS"
-msgstr "Die gewählte Buchung wird den passenden Geschäftsvorgang ersetzen, INCLUSIVE aller Gegenbuchungen"
+msgstr ""
+"Die gewählte Buchung wird den passenden Geschäftsvorgang ersetzen, INCLUSIVE "
+"aller Gegenbuchungen"
 
 #: src/import-export/generic-import.glade.h:25
 msgid "be added as a new transaction"
@@ -6938,7 +6963,6 @@ msgid "Select Default"
 msgstr "Voreinstellung"
 
 #: src/gnome-utils/dialog-options.c:1367
-#, fuzzy
 msgid "Defaults"
 msgstr "Voreinstellung"
 
@@ -6955,18 +6979,20 @@ msgid "Select pixmap"
 msgstr "Bild auswählen"
 
 #: src/gnome-utils/dialog-commodity.c:130
-#, fuzzy
 msgid ""
 "\n"
 "Please select a commodity to match:"
-msgstr "Sie müssen eine Datei angeben, die geladen werden soll\n"
+msgstr ""
+"\n"
+"Geben Sie eine Währung/Aktie an, die passt:"
 
 #: src/gnome-utils/dialog-commodity.c:134
-#, fuzzy
 msgid ""
 "\n"
 "Commodity: "
-msgstr "Währung/Aktie:"
+msgstr ""
+"\n"
+"Währung/Aktie: "
 
 #: src/gnome-utils/dialog-commodity.c:139
 msgid ""

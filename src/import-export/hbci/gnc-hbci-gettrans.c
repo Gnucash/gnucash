@@ -104,7 +104,6 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     /* Execute a GetTransactions job. */
     HBCI_OutboxJobGetTransactions *trans_job;
     HBCI_OutboxJob *job;
-    HBCI_Error *err;
     Timespec last_timespec, until_timespec;
     time_t now = time(NULL), time_convert;
     struct tm tm;
@@ -162,7 +161,7 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
       /* HBCI_API_executeOutbox failed. */
       HBCI_Date_delete (from_date);
       HBCI_Date_delete (to_date);
-      return NULL;
+      return;
     }
 
     HBCI_Date_delete (from_date);
@@ -179,11 +178,12 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
       data.gnc_acc = gnc_acc;
       
       trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
-      printf("Got %d transactions.\n", 
+      printf("gnc_hbci_gettrans: Got %d transactions.\n", 
 	     list_HBCI_Transaction_size(trans_list));
       list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
     }
 
+    GNCInteractor_hide (interactor);
     /* Clean up behind ourself. */
     /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
   }
@@ -217,7 +217,7 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
 
   tt1 = HBCI_Date_to_time_t (HBCI_Transaction_date(h_trans));
   tt2 = HBCI_Date_to_time_t (HBCI_Transaction_valutaDate(h_trans));
-  printf("Date? %s ValutaDate? %s", ctime(&tt1), ctime(&tt2));
+  /*printf("Date? %s ValutaDate? %s", ctime(&tt1), ctime(&tt2));*/
   /*tm1 = HBCI_Date_to_tm (HBCI_Transaction_date(h_trans));
     tm2 = HBCI_Date_to_tm (HBCI_Transaction_valutaDate(h_trans));
     printf("Date asc %s ValutaDate asc %s", asctime(&tm1), asctime(&tm2));*/

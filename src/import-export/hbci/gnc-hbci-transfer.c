@@ -98,6 +98,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     if (!h_trans)
       return;
 
+    GNCInteractor_hide (interactor);
     {
       /* HBCI Transaction has finished, so now open the gnucash
 	 transaction dialog and fill in all values. */
