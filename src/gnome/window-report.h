@@ -27,10 +27,9 @@
 #include <guile/gh.h>
 
 #include "gnc-html.h"
-#include "dialog-options.h"
-#include "window-main.h"
+#include "gnc-mdi-utils.h"
   
-typedef struct _gnc_report_window gnc_report_window;
+typedef struct gnc_report_window_s gnc_report_window;
 
 /** PROTOTYPES ******************************************************/
 
@@ -61,4 +60,5 @@ void       gnc_report_window_add_edited_report(gnc_report_window * win,
 void       gnc_report_window_remove_edited_report(gnc_report_window * win, 
                                                   SCM report);
 void       gnc_report_raise_editor(SCM report);
+
 #endif

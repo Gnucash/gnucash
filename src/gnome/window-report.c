@@ -42,13 +42,12 @@
 #include "gnc-html.h"
 #include "gnc-ui.h"
 #include "option-util.h"
-#include "top-level.h"
-#include "window-main.h"
 #include "window-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
-struct _gnc_report_window {
+struct gnc_report_window_s
+{
   GNCMDIChildInfo * mc; 
   GtkWidget    * container;   
 
@@ -746,7 +745,9 @@ gnc_report_window_destroy(gnc_report_window * win) {
   SCM  set_editor = gh_eval_str("gnc:report-set-editor-widget!");
   SCM  disp_list; 
   SCM  edited, editor; 
-  
+
+  gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, win);
+
   /* close any open editors */
   for(edited = scm_list_copy(win->edited_reports); !gh_null_p(edited); 
       edited = gh_cdr(edited)) {

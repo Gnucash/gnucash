@@ -46,7 +46,6 @@
 #include "druid-qif-import.h"
 #include "gfec.h"
 #include "global-options.h"
-#include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-file-dialog.h"
 #include "gnc-file-history.h"
@@ -67,8 +66,6 @@
 #include "window-reconcile.h"
 #include "window-register.h"
 #include "window-report.h"
-
-#define WINDOW_MAIN_CM_CLASS "window-main"
 
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
@@ -237,10 +234,6 @@ gnc_main_window_new (void)
                         gnc_main_window_create_child);
 
   g_return_val_if_fail (retval != NULL, NULL);
-
-  retval->component_id = 
-    gnc_register_gui_component (WINDOW_MAIN_CM_CLASS, NULL, NULL, 
-                                retval);
 
   /* these menu and toolbar options are the ones that are always 
    * available */ 

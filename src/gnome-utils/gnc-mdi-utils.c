@@ -27,11 +27,13 @@
 
 #include "dialog-utils.h"
 #include "global-options.h"
+#include "gnc-component-manager.h"
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 
+#define GNC_MDI_CM_CLASS "gnc-mdi"
 
 static GNCMDIInfo *gnc_mdi_current = NULL;
 
@@ -156,6 +158,8 @@ gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
 
   if (gnc_mdi_current == gnc_mdi)
     gnc_mdi_current = NULL;
+
+  gnc_unregister_gui_component (gnc_mdi->component_id);
 
   g_free (gnc_mdi);
 }
@@ -383,6 +387,9 @@ gnc_mdi_new (const char *app_name,
   gnc_mdi->restore_cb = restore_cb;
 
   gnc_mdi->mdi = GNOME_MDI (gnome_mdi_new (app_name, title));
+
+  gnc_mdi->component_id = gnc_register_gui_component (GNC_MDI_CM_CLASS,
+                                                      NULL, NULL, gnc_mdi);
 
   gtk_signal_connect (GTK_OBJECT(gnc_mdi->mdi), "destroy",
                       GTK_SIGNAL_FUNC(gnc_mdi_destroy_cb),

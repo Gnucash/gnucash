@@ -31,29 +31,26 @@
 #include "AccWindow.h"
 #include "Scrub.h"
 #include "dialog-account.h"
+#include "dialog-options.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-account-tree.h"
 #include "gnc-book.h"
-#include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-html.h"
 #include "gnc-ui.h"
-#include "gnucash.h"
 #include "gtkselect.h"
 #include "io-gncxml-v2.h"
 #include "mainwindow-account-tree.h"
 #include "messages.h"
 #include "option-util.h"
-#include "top-level.h"
 #include "window-acct-tree.h"
-#include "window-help.h"
 #include "window-main.h"
 #include "window-reconcile.h"
 #include "window-register.h"
-#include "window-report.h"
 
 static short module = MOD_GUI;
 #define WINDOW_ACCT_TREE_CM_CLASS "window-acct-tree"
@@ -131,6 +128,7 @@ gnc_acct_tree_view_destroy(GtkObject * obj, gpointer user_data) {
   GNCAcctTreeWin * w = mc->user_data;
 
   gnc_mdi_remove_child(gnc_mdi_get_current (), mc);
+  gnc_unregister_gui_component (mc->component_id);
   gnc_acct_tree_window_destroy(w);
   g_free(mc->toolbar_info);
   g_free(mc->menu_info);
