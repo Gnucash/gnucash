@@ -1,3 +1,35 @@
+2002-10-27  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-mdi-utils.c (various routines): When
+	switching between MDI styles, the gnome MDI code creates and
+	destroys widgets at will.  Because of this, remember the list of
+	menu/toolbar *names* to be modified and then look up the widgets
+	each time a change needs to be made to the visibility/sensitivity
+	of the item. #96302
+ 	(gnc_mdi_child_changed_cb): If the MDI style is "toplevel", then
+	don't update the state of any menu/toolbar items when switching
+	out of a window.  Leave them as they were since that window is
+	still visible to the user.
+
+	* src/report/report-gnome/window-report.c
+	(gnc_report_window_load_cb): Don't try to unprotect the #f
+	object. Scheme doesn't normally care, but this will crash if
+	running under gdb.
+
+2002-10-26  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/option-util.c (gnc_commit_option): Use the new
+	function to send an error message to the gui code instead of
+	printing a message on stdout. #96166
+
+	* src/gnome-utils/gnc-currency-edit.c (currency_compare): Sort by
+	currency identifer since it appears first in the display. #96159
+	Change a couple other functions so that the full currency name is
+	always displayed in the widget.
+
+	* src/gnome/druid-hierarchy.c: Replace the commodity editor with a
+	currency selector. #95594
+
 2002-10-26  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c (sxsincelast_tc_row_sel): Place

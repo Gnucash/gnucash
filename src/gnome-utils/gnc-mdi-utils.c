@@ -124,6 +124,11 @@ gnc_mdi_file_percentage (const char *message, int percentage)
     gtk_main_iteration ();
 }
 
+typedef struct {
+  GNCMDIChildInfo *mc;
+  gboolean topmost;
+} gnc_mdi_update_args;
+
 /**
  * gnc_mdi_widget_show
  *
@@ -133,16 +138,45 @@ gnc_mdi_file_percentage (const char *message, int percentage)
  * This routine is merely a wrapper around gtk_widget_show/hide so
  * that those functions can be called on a list of widgets.
  */
-void
-gnc_mdi_widget_show(gpointer data, gpointer user_data)
+static void
+gnc_mdi_menu_widget_show(gpointer data, gpointer user_data)
 {
-  g_return_if_fail(data != NULL);
-  g_return_if_fail(GTK_IS_WIDGET(data));
+  gchar *path = (gchar *)data;
+  gnc_mdi_update_args *args = (gnc_mdi_update_args *)user_data;
+  GtkWidget *widget;
 
-  if ((gboolean)user_data) {
-    gtk_widget_show(GTK_WIDGET(data));
+  g_return_if_fail(data != NULL);
+  g_return_if_fail(user_data != NULL);
+
+  widget = gnc_mdi_child_find_menu_item(args->mc, path);
+  if (widget == NULL)
+    return;
+
+  if (args->topmost) {
+    gtk_widget_show(widget);
   } else {
-    gtk_widget_hide(GTK_WIDGET(data));
+    gtk_widget_hide(widget);
+  }
+}
+
+static void
+gnc_mdi_toolbar_widget_show(gpointer data, gpointer user_data)
+{
+  gchar *path = (gchar *)data;
+  gnc_mdi_update_args *args = (gnc_mdi_update_args *)user_data;
+  GtkWidget *widget;
+
+  g_return_if_fail(data != NULL);
+  g_return_if_fail(user_data != NULL);
+
+  widget = gnc_mdi_child_find_toolbar_item(args->mc, path);
+  if (widget == NULL)
+    return;
+
+  if (args->topmost) {
+    gtk_widget_show(widget);
+  } else {
+    gtk_widget_hide(widget);
   }
 }
 
@@ -156,12 +190,37 @@ gnc_mdi_widget_show(gpointer data, gpointer user_data)
  * so that functions can be called on a list of widgets.
  */
 static void
-gnc_mdi_widget_sensitive(gpointer data, gpointer user_data)
+gnc_mdi_menu_widget_sensitive(gpointer data, gpointer user_data)
 {
-  g_return_if_fail(data != NULL);
-  g_return_if_fail(GTK_IS_WIDGET(data));
+  gchar *path = (gchar *)data;
+  gnc_mdi_update_args *args = (gnc_mdi_update_args *)user_data;
+  GtkWidget *widget;
 
-  gtk_widget_set_sensitive(GTK_WIDGET(data), (gboolean)user_data);
+  g_return_if_fail(data != NULL);
+  g_return_if_fail(user_data != NULL);
+
+  widget = gnc_mdi_child_find_menu_item(args->mc, path);
+  if (widget == NULL)
+    return;
+
+  gtk_widget_set_sensitive(widget, args->topmost);
+}
+
+static void
+gnc_mdi_toolbar_widget_sensitive(gpointer data, gpointer user_data)
+{
+  gchar *path = (gchar *)data;
+  gnc_mdi_update_args *args = (gnc_mdi_update_args *)user_data;
+  GtkWidget *widget;
+
+  g_return_if_fail(data != NULL);
+  g_return_if_fail(user_data != NULL);
+
+  widget = gnc_mdi_child_find_toolbar_item(args->mc, path);
+  if (widget == NULL)
+    return;
+
+  gtk_widget_set_sensitive(widget, args->topmost);
 }
 
 /**
@@ -179,16 +238,22 @@ gnc_mdi_widget_sensitive(gpointer data, gpointer user_data)
 static void
 gnc_mdi_update_widgets(GNCMDIChildInfo *mc, gboolean topmost)
 {
+  gnc_mdi_update_args args;
+
   if (mc == NULL) return; /* expected once */
 
-  g_list_foreach(mc->widgets[GNC_AUTO_SHOW], gnc_mdi_widget_show,
-		 (gpointer)topmost);
-  g_list_foreach(mc->widgets[GNC_AUTO_HIDE], gnc_mdi_widget_show,
-		 (gpointer)!topmost);
-  g_list_foreach(mc->widgets[GNC_AUTO_ENABLE], gnc_mdi_widget_sensitive,
-		 (gpointer)topmost);
-  g_list_foreach(mc->widgets[GNC_AUTO_DISABLE], gnc_mdi_widget_sensitive,
-		 (gpointer)!topmost);
+  args.mc = mc;
+  args.topmost = topmost;
+  g_list_foreach(mc->menu_names[GNC_AUTO_SHOW], gnc_mdi_menu_widget_show, &args);
+  g_list_foreach(mc->toolbar_names[GNC_AUTO_SHOW], gnc_mdi_toolbar_widget_show, &args);
+  g_list_foreach(mc->menu_names[GNC_AUTO_ENABLE], gnc_mdi_menu_widget_sensitive, &args);
+  g_list_foreach(mc->toolbar_names[GNC_AUTO_ENABLE], gnc_mdi_toolbar_widget_sensitive, &args);
+
+  args.topmost = !topmost;
+  g_list_foreach(mc->menu_names[GNC_AUTO_HIDE], gnc_mdi_menu_widget_show, &args);
+  g_list_foreach(mc->toolbar_names[GNC_AUTO_HIDE], gnc_mdi_toolbar_widget_show, &args);
+  g_list_foreach(mc->menu_names[GNC_AUTO_DISABLE], gnc_mdi_menu_widget_sensitive, &args);
+  g_list_foreach(mc->toolbar_names[GNC_AUTO_DISABLE], gnc_mdi_toolbar_widget_sensitive, &args);
 }
 
 /**
@@ -305,37 +370,25 @@ gnc_mdi_child_auto_menu(GNCMDIChildInfo *mc,
 			GNCMDIAutoType type,
 			gchar *first_path, ...)
 {
-  GnomeDockItem *di;
-  GtkWidget *menubar;
-  GtkWidget *menu;
-  GtkWidget *menuitem;
+  GList *walker;
   va_list args;
   gchar *path;
-  int pos;
-
-  if (mc->app == NULL)
-    return;
-
-  di = gnome_app_get_dock_item_by_name (mc->app, GNOME_APP_MENUBAR_NAME);
-  if (di == NULL)
-    return;
-
-  menubar = gnome_dock_item_get_child (di);
-  if (menubar == NULL)
-    return;
 
   va_start(args, first_path);
   for (path = first_path; path != NULL; path = va_arg(args, gchar *)) {
-    menu = gnome_app_find_menu_pos (menubar, path, &pos);
-    if (menu == NULL)
+    for (walker = g_list_first(mc->menu_names[type]);
+	 walker;
+	 walker = g_list_next(walker)) {
+      if (strcmp(path, walker->data) == 0)
+	break;
+    }
+    if (walker) {
+      /* Found. Don't add again. */
       continue;
+    }
 
-    menuitem = (GtkWidget*)g_list_nth_data(GTK_MENU_SHELL(menu)->children, pos-1);
-    if (menuitem == NULL)
-      continue;
-
-    if (g_list_index(mc->widgets[type], menuitem) == -1)
-      mc->widgets[type] = g_list_append(mc->widgets[type], menuitem);
+    /* Not found, add it. */
+    mc->menu_names[type] = g_list_append(mc->menu_names[type], path);
   }
   va_end(args);
 }
@@ -369,45 +422,25 @@ gnc_mdi_child_auto_toolbar(GNCMDIChildInfo *mc,
 			   GNCMDIAutoType type,
 			   gchar *first_path, ...)
 {
-  GnomeDockItem *di;
-  GtkToolbar *toolbar;
-  GtkToolbarChild *child;
-  GtkWidget *widget = NULL;
-  gchar *label;
-  gchar *path, *transl;
+  GList *walker;
+  gchar *path;
   va_list args;
-  int pos;
-
-  if (mc->app == NULL)
-    return;
-
-  di = gnome_app_get_dock_item_by_name (mc->app, GNOME_APP_TOOLBAR_NAME);
-  if (di == NULL)
-    return;
-
-  toolbar = GTK_TOOLBAR(gnome_dock_item_get_child (di));
-  if (toolbar == NULL)
-    return;
 
   va_start(args, first_path);
   for (path = first_path; path != NULL; path = va_arg(args, gchar *)) {
-    transl = L_(path);
-    for (pos = 0; pos < toolbar->num_children; pos++) {
-      child = g_list_nth_data(toolbar->children, pos);
-      if ((child == NULL) || (child->label == NULL) || (child->widget == NULL))
-	continue;
-      gtk_label_get(GTK_LABEL(child->label), &label);
-      if (strcasecmp(label, transl) == 0) {
-	widget = child->widget;
+    for (walker = g_list_first(mc->toolbar_names[type]);
+	 walker;
+	 walker = g_list_next(walker)) {
+      if (strcmp(path, walker->data) == 0)
 	break;
-      }
+    }
+    if (walker) {
+      /* Found. Don't add again. */
+      continue;
     }
 
-    if (widget == NULL)
-      continue;
-
-    if (g_list_index(mc->widgets[type], widget) == -1)
-      mc->widgets[type] = g_list_append(mc->widgets[type], widget);
+    /* Not found, add it. */
+    mc->toolbar_names[type] = g_list_append(mc->toolbar_names[type], path);
   }
   va_end(args);
 }
@@ -634,7 +667,8 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   if (prev_child)
   {
     prevwin = gtk_object_get_user_data (GTK_OBJECT(prev_child));
-    gnc_mdi_update_widgets(prevwin, FALSE);
+    if (mdi->mode != GNOME_MDI_TOPLEVEL)
+      gnc_mdi_update_widgets(prevwin, FALSE);
   }
 
   if (mdi && mdi->active_child)
@@ -838,9 +872,9 @@ gnc_mdi_new (const char *app_name,
 {
   GNCMDIInfo * gnc_mdi;
 
-  if (gnc_mdi_current)
+  if (gnc_mdi_current) {
     return gnc_mdi_current;
-
+  }
   g_return_val_if_fail (app_name != NULL, NULL);
   g_return_val_if_fail (title != NULL, NULL);
   g_return_val_if_fail (can_restore_cb != NULL, NULL);

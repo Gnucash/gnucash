@@ -95,7 +95,8 @@ struct gnc_mdi_child_info
   char            * title;
  
   GNCMDIAutoSetup menu_tweaking;
-  GList	          * widgets[GNC_AUTO_LAST];
+  GList	          * menu_names[GNC_AUTO_LAST];
+  GList	          * toolbar_names[GNC_AUTO_LAST];
 
   GtkCallback     dispatch_callback[GNC_DISP_LAST];
   gpointer        dispatch_data[GNC_DISP_LAST];
@@ -136,7 +137,6 @@ void gnc_mdi_set_dispatch_cb (GNCMDIChildInfo * mc, GNCMDIDispatchType type,
 gboolean gnc_mdi_get_toolbar_visibility (void);
 void gnc_mdi_set_toolbar_visibility (gboolean visible);
 void gnc_mdi_show_toolbar (GNCMDIChildInfo *mc);
-void gnc_mdi_widget_show(gpointer data, gpointer user_data);
 
 
 #endif
