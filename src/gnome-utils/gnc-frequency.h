@@ -1,6 +1,7 @@
 /********************************************************************\
  * gnc-frequency.h -- GnuCash widget for frequency editing.         *
  * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -41,22 +42,25 @@ BEGIN_GNOME_DECLS
  * transaction or budgeting category, for instance], manipulating a FreqSpec
  * object in the process.
  **/
-typedef struct _GNCFrequency {
+typedef struct _GNCFrequency 
+{
 	GtkVBox	        widget;
 
-    	GtkVBox         *vb;
+  	GtkVBox         *vb;
 	GtkNotebook     *nb;
 	GtkOptionMenu   *freqOpt;
 	GNCDateEdit     *startDate;
 	GladeXML        *gxml;
 } GNCFrequency;
 
-typedef struct _GNCFrequencyClass {
+typedef struct _GNCFrequencyClass 
+{
   GtkVBoxClass parent_class;
   void (*changed) (GNCFrequency *gf);
 } GNCFrequencyClass;
 
-struct pageDataTuple {
+struct pageDataTuple 
+{
 	int		idx;
 	UIFreqType	uiFTVal;
 	char		*name;
@@ -69,6 +73,7 @@ guint gnc_frequency_get_type( void );
  **/
 GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *startDate );
 void gnc_frequency_init( GNCFrequency *gf );
+
 /**
  * Sets up the given GNCFrequency with the given FreqSpec and
  * UIFreqSpec.  If the FreqSpec is NULL, then the default value is
@@ -84,6 +89,17 @@ void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate );
  * Places the start date in outStartDate, if it's not null.
  **/
 void gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate );
+
+/**
+ * Set the label text for the frequency option menu.  In the current
+ * implementation, the default label text is "Frequency:"
+ */
+void gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt);
+/**
+ * Set the label text for the start-date entry widget. In the current
+ * impelmentation, the default label text is "Start Date:"
+ */
+void gnc_frequency_set_startdate_label_text (GNCFrequency *gf, const gchar *txt);
 
 END_GNOME_DECLS
 

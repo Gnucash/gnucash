@@ -1,6 +1,7 @@
 /********************************************************************\
  * gnc-frequency.c -- GnuCash widget for frequency editing.         *
  * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1124,3 +1125,26 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
         }
         gtk_signal_emit_by_name( GTK_OBJECT(gf), "changed", NULL );
 }
+
+/* ================================================================= */
+/* Relabel some of the labels */
+
+void 
+gnc_frequency_set_frequency_label_text (GNCFrequency *gf, const gchar *txt)
+{
+   GtkLabel *lbl;
+	if (!gf || !txt) return;
+   lbl = GTK_LABEL (glade_xml_get_widget (gf->gxml, "freq label"));
+   gtk_label_set_text (lbl, txt);
+}
+
+void 
+gnc_frequency_set_startdate_label_text (GNCFrequency *gf, const gchar *txt)
+{
+   GtkLabel *lbl;
+	if (!gf || !txt) return;
+   lbl = GTK_LABEL (glade_xml_get_widget (gf->gxml, "startdate label"));
+   gtk_label_set_text (lbl, txt);
+}
+
+/* ========================= END OF FILE =========================== */
