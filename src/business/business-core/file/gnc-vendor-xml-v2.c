@@ -85,7 +85,7 @@ vendor_dom_tree_create (GncVendor *vendor)
     xmlSetProp(ret, "version", vendor_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(vendor_guid_string,
-				      gncVendorGetGUID (vendor)));
+				      qof_instance_get_guid (QOF_INSTANCE(vendor))));
 
     xmlAddChild(ret, text_to_dom_tree(vendor_name_string,
                                       gncVendorGetName (vendor)));

@@ -58,22 +58,24 @@
 struct _gncCustomer 
 {
   QofInstance     inst;
+
+  /* The following fields are identical to 'vendor' */
   char *          id;
   char *          name;
   char *          notes;
   GncBillTerm *   terms;
   GncAddress *    addr;
-  GncAddress *    shipaddr;
   gnc_commodity * currency;
-  gnc_numeric     discount;
-  gnc_numeric     credit;
+  GncTaxTable*    taxtable;
+  gboolean        taxtable_override;
   GncTaxIncluded  taxincluded;
-
   gboolean        active;
   GList *         jobs;
 
-  GncTaxTable*    taxtable;
-  gboolean        taxtable_override;
+  /* The following fields aer unique to 'customer' */
+  gnc_numeric     credit;
+  gnc_numeric     discount;
+  GncAddress *    shipaddr;
 };
 
 static short module = MOD_BUSINESS;
@@ -117,16 +119,18 @@ GncCustomer *gncCustomerCreate (QofBook *book)
 
   cust = g_new0 (GncCustomer, 1);
   qof_instance_init (&cust->inst, book);
+
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
   cust->addr = gncAddressCreate (book, &cust->inst.guid, _GNC_MOD_NAME);
-  cust->shipaddr = gncAddressCreate (book, &cust->inst.guid, _GNC_MOD_NAME);
-  cust->discount = gnc_numeric_zero();
-  cust->credit = gnc_numeric_zero();
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
+
+  cust->discount = gnc_numeric_zero();
+  cust->credit = gnc_numeric_zero();
+  cust->shipaddr = gncAddressCreate (book, &cust->inst.guid, _GNC_MOD_NAME);
 
   addObj (cust);
   gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
@@ -416,20 +420,19 @@ void gncCustomerBeginEdit (GncCustomer *cust)
   GNC_BEGIN_EDIT (&cust->inst, _GNC_MOD_NAME);
 }
 
-static void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
+static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Customer QofBackend Failure: %d", errcode);
 }
 
-static void gncCustomerOnDone (QofInstance *inst)
+static inline void gncCustomerOnDone (QofInstance *inst)
 {
   GncCustomer *cust = (GncCustomer *) inst;
-  cust->inst.dirty = FALSE;
   gncAddressClearDirty (cust->addr);
   gncAddressClearDirty (cust->shipaddr);
 }
 
-static void cust_free (QofInstance *inst)
+static inline void cust_free (QofInstance *inst)
 {
   GncCustomer *cust = (GncCustomer *) inst;
   gncCustomerFree (cust);

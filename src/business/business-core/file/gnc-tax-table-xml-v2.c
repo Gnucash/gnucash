@@ -91,7 +91,7 @@ ttentry_dom_tree_create (GncTaxTableEntry *entry)
   account = gncTaxTableEntryGetAccount (entry);
   if (account)
     xmlAddChild(ret, guid_to_dom_tree (ttentry_account_string,
-				       xaccAccountGetGUID (account)));
+				       qof_instance_get_guid (QOF_INSTANCE(account))));
 
   amount = gncTaxTableEntryGetAmount (entry);
   xmlAddChild (ret, gnc_numeric_to_dom_tree (ttentry_amount_string, &amount));

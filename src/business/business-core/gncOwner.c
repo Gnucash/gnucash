@@ -232,7 +232,7 @@ const GUID * gncOwnerGetGUID (GncOwner *owner)
   case GNC_OWNER_JOB:
     return qof_instance_get_guid (QOF_INSTANCE(owner->owner.job));
   case GNC_OWNER_VENDOR:
-    return gncVendorGetGUID (owner->owner.vendor);
+    return qof_instance_get_guid (QOF_INSTANCE(owner->owner.vendor));
   case GNC_OWNER_EMPLOYEE:
     return gncEmployeeGetGUID (owner->owner.employee);
   }

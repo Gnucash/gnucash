@@ -49,7 +49,7 @@ test_vendor (void)
     do_test (gncVendorCreate (NULL) == NULL, "vendor create NULL");
     vendor = gncVendorCreate (book);
     do_test (vendor != NULL, "vendor create");
-    do_test (gncVendorGetBook (vendor) == book,
+    do_test (qof_instance_get_book (QOF_INSTANCE(vendor)) == book,
 	     "getbook");
 
     gncVendorBeginEdit (vendor);
@@ -75,7 +75,7 @@ test_vendor (void)
     guid_new (&guid);
     vendor = gncVendorCreate (book); count++;
     gncVendorSetGUID (vendor, &guid);
-    do_test (guid_equal (&guid, gncVendorGetGUID (vendor)), "guid compare");
+    do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(vendor))), "guid compare");
   }
 #if 0
   {

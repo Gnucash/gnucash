@@ -43,8 +43,6 @@ void gncVendorCommitEdit (GncVendor *vendor);
 
 /* Get Functions */
 
-QofBook * gncVendorGetBook (GncVendor *vendor);
-const GUID * gncVendorGetGUID (GncVendor *vendor);
 const char * gncVendorGetID (GncVendor *vendor);
 const char * gncVendorGetName (GncVendor *vendor);
 GncAddress * gncVendorGetAddr (GncVendor *vendor);
@@ -57,6 +55,9 @@ gboolean gncVendorGetActive (GncVendor *vendor);
 gboolean gncVendorGetTaxTableOverride (GncVendor *vendor);
 GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
 
+/** XXX should be renamed to RetJobList to be consistent with
+ * other usage, since caller must free the copied list 
+ */
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 
 GUID gncVendorRetGUID (GncVendor *vendor);
@@ -69,5 +70,9 @@ int gncVendorCompare (GncVendor *a, GncVendor *b);
 #define VENDOR_ID	"id"
 #define VENDOR_NAME	"name"
 #define VENDOR_ADDR	"addr"
+
+/** deprecated functions */
+#define gncVendorGetBook(X) qof_instance_get_book (QOF_INSTANCE(X))
+#define gncVendorGetGUID(X) qof_instance_get_guid (QOF_INSTANCE(X))
 
 #endif /* GNC_VENDOR_H_ */

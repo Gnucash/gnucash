@@ -89,7 +89,7 @@ customer_dom_tree_create (GncCustomer *cust)
     xmlSetProp(ret, "version", customer_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(cust_guid_string,
-				      gncCustomerGetGUID (cust)));
+				      qof_instance_get_guid(QOF_INSTANCE(cust))));
 
     xmlAddChild(ret, text_to_dom_tree(cust_name_string,
                                       gncCustomerGetName (cust)));
