@@ -74,43 +74,35 @@
 #define REG_TYPE_MASK       0xff
 
 /* 
- * REG_SHOW_TAMOUNT -- show debit, credit, price, value cells on the transaction line 
- * REG_SHOW_SAMOUNT -- show debit, credit, price, value cells on the split line 
- * REG_SHOW_TXFRM   -- show transfer-from cell on transaction line
- * REG_SHOW_RECS    -- show reconcile cell on split line
+ * enumerated display styles 
  * REG_DOUBLE_LINE  -- show two lines per transaction
  * REG_MULTI_LINE   -- show multiple lines per transaction
  * REG_DYNAMIC      -- dynamically expand edited transaction
  */
  
-#define REG_SHOW_TAMOUNT    0x0100
-#define REG_SHOW_SAMOUNT    0x0200
-#define REG_SHOW_TXFRM      0x0400
-#define REG_SHOW_RECS       0x0800
-#define REG_DOUBLE_LINE     0x1000
-#define REG_MULTI_LINE      0x2000
-#define REG_DYNAMIC         0x4000
+#define REG_SINGLE_LINE        1 << 8
+#define REG_DOUBLE_LINE        2 << 8
+#define REG_MULTI_LINE         3 << 8
+#define REG_SINGLE_DYNAMIC     4 << 8
+#define REG_DOUBLE_DYNAMIC     5 << 8 
+#define REG_STYLE_MASK      0xff << 8 
 
 /* modified flags -- indicate which cell values have been modified by user */
-#define MOD_NONE   0x0000
-#define MOD_DATE   0x0001
-#define MOD_NUM    0x0002
-#define MOD_TXFRM  0x0004
-#define MOD_DESC   0x0008
-#define MOD_RECN   0x0010
-#define MOD_TAMNT  0x0020
-#define MOD_TPRIC  0x0040
-#define MOD_TVALU  0x0080
+#define MOD_NONE   0x000
+#define MOD_DATE   0x001
+#define MOD_NUM    0x002
+#define MOD_DESC   0x004
+#define MOD_RECN   0x008
 
-#define MOD_ACTN   0x0100
-#define MOD_XFRM   0x0200
-#define MOD_XTO    0x0400
-#define MOD_MEMO   0x0800
-#define MOD_AMNT   0x1000
-#define MOD_PRIC   0x2000
-#define MOD_VALU   0x4000
-#define MOD_NEW    0x8000
-#define MOD_ALL    0xffff
+#define MOD_ACTN   0x010
+#define MOD_XFRM   0x020
+#define MOD_XTO    0x040
+#define MOD_MEMO   0x080
+#define MOD_AMNT   0x100
+#define MOD_PRIC   0x200
+#define MOD_VALU   0x400
+#define MOD_NEW    0x800
+#define MOD_ALL    0xfff
 
 /* The value of NUM_CELLS should be larger than the number of 
  * cells defined in the structure below!
@@ -124,37 +116,27 @@ struct _SplitRegister {
    Table         * table;
 
    /* the cursors that define the currently edited row */
-   CellBlock     * trans_cursor;
+   CellBlock     * lead_cursor;
+   CellBlock     * memo_cursor;
    CellBlock     * split_cursor;
    CellBlock     * header;
 
-   /* transaction cells */
-   /* these are handled only by the transaction cursor */
    DateCell      * dateCell;
    BasicCell     * numCell;
-   ComboCell     * xfrmTransCell;
    QuickFillCell * descCell;
    BasicCell     * recnCell;   /* main transaction line reconcile */
-   PriceCell     * creditTransCell;
-   PriceCell     * debitTransCell;
-   PriceCell     * priceTransCell;
-   PriceCell     * valueTransCell;
    PriceCell     * shrsCell;
    PriceCell     * balanceCell;
-   BasicCell     * nullTransCell;
+   BasicCell     * nullCell;
 
-   /* split cells */
-   /* these are handled only by the split cursor */
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
    ComboCell     * xtoCell;
    BasicCell     * memoCell;
-   BasicCell     * recsCell;   /* subsidiary split reconcile */
    PriceCell     * creditCell;
    PriceCell     * debitCell;
    PriceCell     * priceCell;
    PriceCell     * valueCell;
-   BasicCell     * nullSplitCell;
 
    /* the type of the register, must be one of the enumerated types
     * above *_REGISTER, *_LEDGER, above */
@@ -163,10 +145,7 @@ struct _SplitRegister {
    /* some private data; outsiders should not access this */
    short num_cols;
    short num_header_rows;
-   char *labels[NUM_CELLS];
-   short cols[NUM_CELLS];
-   short rows[NUM_CELLS];
-   short wids[NUM_CELLS];
+   BasicCell *header_label_cells[NUM_CELLS];
 
    /* user_hook allows users of this object to hang
     * private data onto it */
