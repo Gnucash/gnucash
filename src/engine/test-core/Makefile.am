@@ -14,7 +14,8 @@ libgncmod_test_engine_la_LIBADD = \
 
 noinst_HEADERS=test-engine-stuff.h
 
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
