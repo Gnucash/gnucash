@@ -425,7 +425,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   if(selected_accounts) {
     xaccQueryAddAccountMatch(q, selected_accounts,
                              gnc_option_menu_get_active
-                             (ftd->match_accounts_picker),
+                             (ftd->match_accounts_picker) + 1,
                              QUERY_AND);
   }                             
 
@@ -454,15 +454,15 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   amt_temp = 
     (double)gtk_spin_button_get_value_as_float
     (GTK_SPIN_BUTTON(ftd->amount_entry));
-  
-  amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker);
-  
-  if((amt_temp > 0.00001) || (amt_type != 0)) {
+
+  amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker) + 1;
+
+  if((amt_temp > 0.00001) || (amt_type != AMT_SGN_MATCH_EITHER)) {
     DxaccQueryAddAmountMatch(q, 
                             amt_temp,
                             amt_type,
                             gnc_option_menu_get_active
-                            (ftd->amount_comp_picker),
+                            (ftd->amount_comp_picker) + 1,
                             QUERY_AND);
   }
 
@@ -494,9 +494,9 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     (double)gtk_spin_button_get_value_as_float
     (GTK_SPIN_BUTTON(ftd->price_entry));
   amt_type = 
-    gnc_option_menu_get_active(ftd->price_comp_picker);
+    gnc_option_menu_get_active(ftd->price_comp_picker) + 1;
 
-  if((amt_temp > 0.00001) || (amt_type != 0)) {
+  if((amt_temp > 0.00001) || (amt_type != AMT_MATCH_ATLEAST)) {
     DxaccQueryAddSharePriceMatch(q, 
                                 amt_temp,
                                 amt_type,
@@ -507,9 +507,9 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     (double)gtk_spin_button_get_value_as_float
     (GTK_SPIN_BUTTON(ftd->shares_entry));
   amt_type = 
-    gnc_option_menu_get_active(ftd->shares_comp_picker);
+    gnc_option_menu_get_active(ftd->shares_comp_picker) + 1;
   
-  if((amt_temp > 0.00001) || (amt_type != 0)) {
+  if((amt_temp > 0.00001) || (amt_type != AMT_MATCH_ATLEAST)) {
     DxaccQueryAddSharesMatch(q, 
                             amt_temp,
                             amt_type,
