@@ -839,7 +839,7 @@ set_split_random_string(Split *spl,
 }
 
 /* Don't do voiding here, it should be done by xaccTransVoid */
-static char possible_chars[] = { 'c', 'y', 'f', 'n' };
+static char possible_chars[] = { NREC, CREC, YREC, FREC };
 
 Split*
 get_random_split(GNCSession *session, gnc_numeric num)
@@ -887,7 +887,7 @@ make_random_changes_to_split (Split *split)
   set_split_random_string (split, xaccSplitSetMemo);
   set_split_random_string (split, xaccSplitSetAction);
 
-  xaccSplitSetReconcile (split, possible_chars[get_random_int_in_range(0, 4)]);
+  xaccSplitSetReconcile (split, possible_chars[get_random_int_in_range(0, 3)]);
 
   xaccSplitSetDateReconciledTS (split, get_random_timespec());
 
