@@ -1761,8 +1761,7 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      xaccSPrintAmount(string, amount, print_flags,
-                       gnc_commodity_get_mnemonic(currency));
+      xaccSPrintAmount(string, amount, print_flags, currency);
       if(euro)
       {
 	strcat(string, " / ");
@@ -1782,8 +1781,7 @@ regRefresh(xaccLedgerDisplay *ledger)
       if (reverse)
         amount = -amount;
 
-      xaccSPrintAmount(string, amount, print_flags,
-                       gnc_commodity_get_mnemonic(currency));
+      xaccSPrintAmount(string, amount, print_flags, currency);
       if(euro)
       {
 	strcat(string, " / ");

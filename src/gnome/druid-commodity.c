@@ -31,6 +31,7 @@
 
 #include "FileDialog.h"
 #include "druid-commodity.h"
+#include "dialog-commodity.h"
 #include "query-user.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
@@ -45,11 +46,12 @@ struct _commoditydruid {
   GHashTable * new_map;
   GHashTable * old_map;
   GList      * pages;
+
 };
 
 struct _commoditydruidpage {
   GtkWidget * page;
-  GtkWidget * old_name_entry;
+  char      * old_name;
   GtkWidget * new_type_combo;
   GtkWidget * new_type_entry;
   GtkWidget * new_name_entry;
@@ -88,7 +90,7 @@ gnc_ui_commodity_druid_create(const char * filename) {
   d->druid           = gtk_object_get_data(dobj, "commodity_druid");
   d->intro_page      = gtk_object_get_data(dobj, "start_page");
   d->finish_page     = gtk_object_get_data(dobj, "finish_page");
-  back_page = d->intro_page;
+  back_page = GNOME_DRUID_PAGE(d->intro_page);
 
   gtk_object_set_data(dobj, "commodity_druid_struct", (gpointer)d);
   
@@ -156,53 +158,16 @@ gnc_ui_commodity_druid_create(const char * filename) {
  * how to make it work. 
  ********************************************************************/
 
-static int 
-g_strcmp(gconstpointer a, gconstpointer b) {
-  return strcmp(a, b);
-}
-
-
-static char * 
-update_namespace_picker(GtkWidget * combobox, const char * init_string) {
-  
-  GList * namespaces;
-  char  * active;
-
-  /* fetch a list of the namespaces */
-  namespaces = gnc_commodity_table_get_namespaces(gnc_engine_commodities());
-  namespaces = g_list_sort(namespaces, g_strcmp);
-
-  /* stick them in the combobox */
-  gtk_combo_set_popdown_strings(GTK_COMBO(combobox), namespaces);
-
-  /* set the entry text */
-  if(init_string) {
-    active = g_strdup(init_string);
-  }
-  else {
-    active = g_strdup(namespaces->data);
-  }    
-  gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combobox)->entry), active);
-  g_list_free(namespaces);
-
-  return active;
-}
-
 
 static CommodityDruidPage *
 make_commodity_druid_page(gnc_commodity * comm) {
 
   CommodityDruidPage * retval = g_new0(CommodityDruidPage, 1);
-  GtkWidget * top_hbox;
+  GtkWidget * top_vbox;
   GtkWidget * info_label;
   GtkWidget * next_label;
-  GtkWidget * temp_label;
-  GtkWidget * label_vbox;
-  GtkWidget * entry_vbox;
-  GtkWidget * twocol_hbox;
-  GtkWidget * old_frame;
-  GtkWidget * new_frame;
-
+  GtkWidget * temp;
+  char      * title = NULL;
   GnomeDruidPageStandard * page;
 
   /* make the page widget */
@@ -211,107 +176,121 @@ make_commodity_druid_page(gnc_commodity * comm) {
                       "page_struct", (gpointer)retval);
 
   page   = GNOME_DRUID_PAGE_STANDARD(retval->page);
+ 
+  /* save the old commodity name */
+  retval->old_name = g_strdup(gnc_commodity_get_mnemonic(comm));
+  title = g_strdup_printf("Enter information about \"%s\"",
+                          retval->old_name);
   
   gnome_druid_page_standard_set_bg_color(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_bg_color(page, & std_logo_bg_color);
   gnome_druid_page_standard_set_title_color(page, & std_title_color);
-  gnome_druid_page_standard_set_title(page, 
-                                      _("Enter information about a currency "
-                                        "or stock"));
-
-  top_hbox = gtk_hbox_new(FALSE, 2);
-  gtk_box_pack_start(GTK_BOX(page->vbox), top_hbox, FALSE, FALSE, 0);
+  gnome_druid_page_standard_set_title(page, title);
+  g_free(title);
+  
+  top_vbox = gtk_vbox_new(FALSE, 3);
+  gtk_box_pack_start(GTK_BOX(page->vbox), top_vbox, FALSE, FALSE, 0);
                      
   info_label = 
-    gtk_label_new(_("\"Old currency/stock info\" describes the information stored in \nyour accounts with the old version of Gnucash.  \n\"New currency/stock info\" is what will be saved with your\naccounts in the new version.\n\n -- \"Type\" means the type of the currency or security.  It \nshould be \"ISO-4217 Currencies\" for national currencies, or \n\"NASDAQ\", \"NYSE\", \"EUREX\", etc for stocks. \n -- \"Full name\" is a descriptive name  for the currency or stock, \n such as \"US Dollar\" or  \"Red Hat stock\".  \n -- \"Symbol/abbreviation\" is the ticker symbol or ISO \ncurrency symbol. \"USD\" for US dollars or \"RHAT\" for Red Hat \nshares.  \n\nThe symbol must be unique within the type (i.e. there \ncan only be one currency with the symbol \"USD\"). "));
-  gtk_box_pack_start(GTK_BOX(top_hbox), info_label, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
-  
-  entry_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_box_pack_start(GTK_BOX(top_hbox), entry_vbox, FALSE, FALSE, 0);
-  
-  old_frame = gtk_frame_new(_("Old currency/stock info"));  
-  gtk_box_pack_start(GTK_BOX(entry_vbox), old_frame, FALSE, FALSE, 0);
+    gtk_label_new(_("Pick the type of the currency or security. For "
+                    "national currencies, use \"ISO-4217 Currencies\".  "
+                    "Enter a new type in the box if the ones in the "
+                    "pick list are inappropriate."));
 
-  new_frame = gtk_frame_new(_("New currency/stock info"));
-  gtk_box_pack_start(GTK_BOX(entry_vbox), new_frame, FALSE, FALSE, 0);
-  
-  next_label = gtk_label_new(_("Click \"Next\" to accept the information\nand move to the next currency or stock.\n"));
-  gtk_box_pack_end(GTK_BOX(entry_vbox), next_label, FALSE, FALSE, 0);
-  
-  /* the old commodity entry area... not editable */
-  twocol_hbox = gtk_hbox_new(FALSE, 2);
-  gtk_container_add(GTK_CONTAINER(old_frame), twocol_hbox);
+  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
+  gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE);
+  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
-  label_vbox = gtk_vbox_new(TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(twocol_hbox), label_vbox, FALSE, FALSE, 0);
-  
-  entry_vbox = gtk_vbox_new(TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(twocol_hbox), entry_vbox, FALSE, FALSE, 0);
-  
-  temp_label = gtk_label_new(_("Currency/stock name:"));
-  gtk_box_pack_start (GTK_BOX (label_vbox), temp_label, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (temp_label), 1, 0.5);
+  temp = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
 
-  retval->old_name_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(entry_vbox),
-                     retval->old_name_entry, FALSE, FALSE, 0);
+  info_label = gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
-  gtk_entry_set_editable(GTK_ENTRY(retval->old_name_entry),
-                         FALSE);
-  gtk_entry_set_text(GTK_ENTRY(retval->old_name_entry),
-                     gnc_commodity_get_mnemonic(comm));
-  
-  /* the new commodity entry area... editable */
-  twocol_hbox = gtk_hbox_new(FALSE, 2);
-  gtk_container_add(GTK_CONTAINER(new_frame), twocol_hbox);
-
-  label_vbox = gtk_vbox_new(TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(twocol_hbox), label_vbox, FALSE, FALSE, 0);
-  
-  entry_vbox = gtk_vbox_new(TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(twocol_hbox), entry_vbox, FALSE, FALSE, 0);
-  
-  temp_label = gtk_label_new(_("Type:"));
-  gtk_box_pack_start (GTK_BOX (label_vbox), temp_label, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (temp_label), 1, 0.5);
-
-  temp_label = gtk_label_new(_("Full name:"));
-  gtk_box_pack_start (GTK_BOX (label_vbox), temp_label, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (temp_label), 1, 0.5);
-
-  temp_label = gtk_label_new(_("Symbol/abbreviation:"));
-  gtk_box_pack_start (GTK_BOX (label_vbox), temp_label, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (temp_label), 1, 0.5);
-  
   retval->new_type_combo = gtk_combo_new(); 
-  gtk_box_pack_start(GTK_BOX(entry_vbox),
-                     retval->new_type_combo, FALSE, FALSE, 0);
-  retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
-  update_namespace_picker(retval->new_type_combo, 
-                          gnc_commodity_get_namespace(comm));
+  gtk_box_pack_start(GTK_BOX(temp),
+                     retval->new_type_combo, TRUE, TRUE, 0);
+
+  info_label = gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
   
+  retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
+  gnc_ui_update_namespace_picker(retval->new_type_combo, 
+                                 gnc_commodity_get_namespace(comm));
+  
+  info_label = 
+    gtk_label_new(_("Enter a descriptive name for the currency or stock, "
+                    "such as \"US Dollar\" or \"Red Hat Stock\""));
+  
+  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
+  gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE); 
+  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
+ 
+  temp = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
+
+  info_label = gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+
   retval->new_name_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(entry_vbox), retval->new_name_entry,
-                     FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(temp), retval->new_name_entry,
+                     TRUE, TRUE, 0);
   gtk_entry_set_text(GTK_ENTRY(retval->new_name_entry),
                      gnc_commodity_get_fullname(comm));
   
+  info_label = gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+
+  info_label = 
+    gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\"), "
+                    "ISO currency symbol (such as \"USD\"), or "
+                    "other unique abbreviation for the name."));
+  
+  gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
+  gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE); 
+  gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
+ 
+  temp = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
+
+  info_label = gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+
   retval->new_mnemonic_entry = gtk_entry_new();
-  gtk_box_pack_start(GTK_BOX(entry_vbox), retval->new_mnemonic_entry,
-                     FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(temp), retval->new_mnemonic_entry,
+                     TRUE, TRUE, 0);
   gtk_entry_set_text(GTK_ENTRY(retval->new_mnemonic_entry),
                      gnc_commodity_get_mnemonic(comm));
+  
+  info_label = gtk_label_new("");
+  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
+  next_label = gtk_label_new(_("Click \"Next\" to accept the information "
+                               "and move to the next currency or stock."));
+  gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_FILL);
+  gtk_label_set_line_wrap (GTK_LABEL(next_label), TRUE);  
+  gtk_box_pack_start(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
+  
   return retval;
 }
-    
+
+
 /********************************************************************
  * gnc_ui_commodity_druid_destroy()
  ********************************************************************/
 
 void
 gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {  
+
+  GList * p;
+  CommodityDruidPage * cdp;
+  
+  for(p=cd->pages; p; p=p->next) {
+    cdp = (CommodityDruidPage *)p->data;
+    g_free(cdp->old_name);
+    g_free(cdp);
+  }
+  
   g_list_free(cd->pages);
   g_hash_table_destroy(cd->new_map);
   g_hash_table_destroy(cd->old_map);
@@ -350,13 +329,11 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   CommodityDruidPage * dpage = 
     (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
                                               "page_struct");
-  char * old_name;
   char * new_type;
   char * new_name;
   char * new_mnemonic;
   gnc_commodity * new_comm;
 
-  old_name     = gtk_entry_get_text(GTK_ENTRY(dpage->old_name_entry));
   new_type     = gtk_entry_get_text(GTK_ENTRY(dpage->new_type_entry));
   new_name     = gtk_entry_get_text(GTK_ENTRY(dpage->new_name_entry));
   new_mnemonic = gtk_entry_get_text(GTK_ENTRY(dpage->new_mnemonic_entry));
@@ -369,7 +346,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     return TRUE;
   }
   else {
-    new_comm = g_hash_table_lookup(cd->new_map, old_name);
+    new_comm = g_hash_table_lookup(cd->new_map, dpage->old_name);
     assert(new_comm);
     
     /* fill in the commodity structure info */

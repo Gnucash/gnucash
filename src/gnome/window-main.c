@@ -50,7 +50,6 @@
 #include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-account.h"
-#include "dialog-qif-import.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-totd.h"
@@ -280,7 +279,7 @@ gnc_ui_refresh_statusbar (void)
 					      "Default Currency",
 					      "USD");
   default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                "ISO-4217 Currencies",
+                                                GNC_COMMODITY_NS_ISO,
                                                 default_mnemonic);
 
   euro = gnc_lookup_boolean_option("International",
@@ -295,7 +294,7 @@ gnc_ui_refresh_statusbar (void)
   if (euro)
   {
     euro_commodity = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                "ISO-4217 Currencies",
+                                                GNC_COMMODITY_NS_ISO,
                                                 "EUR");    
     euro_accum = gnc_ui_get_currency_accumulator(&currency_list,
 						 euro_commodity);
@@ -1369,7 +1368,7 @@ mainWindow()
                                                          "Default Currency",
                                                          "USD");
     default_currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                                  "ISO-4217 Currencies",
+                                                  GNC_COMMODITY_NS_ISO,
                                                   default_currency_mnemonic);
     combo_box = gtk_select_new();
     main_info->totals_combo = combo_box;

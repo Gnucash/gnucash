@@ -457,7 +457,7 @@ gnc_locale_default_currency()
 
   lc       = gnc_localeconv();
   currency = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                        "ISO-4217 Currencies", 
+                                        GNC_COMMODITY_NS_ISO,
                                         lc->int_curr_symbol);
   got_it = GNC_T;
   

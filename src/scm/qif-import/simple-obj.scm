@@ -36,6 +36,26 @@
 (define (simple-obj-print obj)
   (write obj))
 
+(define (simple-obj-to-list obj)
+  (let ((retval '()))
+    (for-each 
+     (lambda (slot)
+       (let ((thunk (record-accessor (record-type-descriptor obj) slot)))
+         (set! retval (cons (thunk obj) retval))))
+     (record-type-fields (record-type-descriptor obj)))
+    (reverse retval)))
+
+(define (simple-obj-from-list list type)
+  (let ((retval (make-simple-obj type)))
+    (for-each 
+     (lambda (slot)
+       (let ((thunk (record-modifier type slot)))
+         (thunk retval (car list)))
+       (set! list (cdr list)))
+     (record-type-fields type))
+    retval))
+
+
 (define (make-simple-obj class)
   (let ((ctor (record-constructor class))
         (field-defaults 

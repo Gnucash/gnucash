@@ -1243,9 +1243,9 @@ gnc_ui_new_account_window (AccountGroup *this_is_not_used)
   
   aw->selected_currency = 
     gnc_commodity_table_lookup(gnc_engine_commodities(),
-                               "ISO-4217 Currencies",
+                               GNC_COMMODITY_NS_ISO,
                                default_currency);
-
+  
   gtk_entry_set_text(GTK_ENTRY(aw->currency_entry),
                      gnc_commodity_get_printname(aw->selected_currency));
   

@@ -341,6 +341,36 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 
 
 /********************************************************************
+ * gnc_commodity_table_find_full
+ * locate a commodity by namespace and printable name 
+ ********************************************************************/
+
+gnc_commodity *
+gnc_commodity_table_find_full(const gnc_commodity_table * table, 
+                              const char * namespace, 
+                              const char * fullname) {  
+  gnc_commodity * retval=NULL;
+  GList         * all;
+  GList         * iterator;
+
+  all = gnc_commodity_table_get_commodities(table, namespace);
+  if(fullname && fullname[0]) {
+    for(iterator = all; iterator; iterator=iterator->next) {
+      if(!strcmp(fullname, 
+                 gnc_commodity_get_printname(iterator->data))) {
+        retval = iterator->data;
+        break;
+      }
+    }
+    return retval;
+  }
+  else {
+    return NULL;
+  }
+}
+
+
+/********************************************************************
  * gnc_commodity_table_insert
  * add a commodity to the table. 
  ********************************************************************/
@@ -365,12 +395,29 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
 }
 
 /********************************************************************
+ * gnc_commodity_table_remove
+ * remove a commodity from the table (just unmaps it)
+ ********************************************************************/
+
+void
+gnc_commodity_table_remove(gnc_commodity_table * table, 
+                           const gnc_commodity * comm) {
+  gnc_commodity_namespace * nsp = NULL;
+
+  nsp = g_hash_table_lookup(table->table, (gpointer)(comm->namespace));
+  
+  if(nsp) {
+    g_hash_table_remove(nsp->table, (gpointer)comm->mnemonic);
+  }
+}
+
+/********************************************************************
  * gnc_commodity_table_has_namespace
  * see if any commodities in the namespace exist 
  ********************************************************************/
 
 int
-gnc_commodity_table_has_namespace(gnc_commodity_table * table,
+gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
                                   const char * namespace) {
   gnc_commodity_namespace * nsp = NULL;
   
@@ -417,7 +464,7 @@ g_hash_table_values(GHashTable * table) {
  ********************************************************************/
 
 GList * 
-gnc_commodity_table_get_namespaces(gnc_commodity_table * table) {
+gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) {
   return g_hash_table_keys(table->table);
 }
     
@@ -428,7 +475,7 @@ gnc_commodity_table_get_namespaces(gnc_commodity_table * table) {
  ********************************************************************/
 
 GList * 
-gnc_commodity_table_get_commodities(gnc_commodity_table * table,
+gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
                                     const char * namespace) {
   gnc_commodity_namespace * ns = NULL; 
   
@@ -485,40 +532,5 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   }
 }
     
-#if 0
-int
-main(int argc, char ** argv) {
-  gnc_commodity_table * t = 
-    gnc_commodity_table_new();
-  gnc_commodity * gba = gnc_commodity_new("UK Pounds Sterling",
-                                          "ISO-4217", "GBP",
-                                          100);
-  gnc_commodity * gbp = gnc_commodity_new("UK Pounds Sterling",
-                                          "ISO-4217", "GBP",
-                                          100);
-  gnc_commodity * gbc = gbp;
-
-  gnc_commodity_table_insert(t, gbp);
-
-  gbp = NULL;
-  gbp = gnc_commodity_table_lookup(t, "ISO-4217", "GBP");
-
-  printf("fullname    = '%s'\n", gnc_commodity_get_fullname(gbp));
-  printf("namespace   = '%s'\n", gnc_commodity_get_namespace(gbp));
-  printf("mnemonic    = '%s'\n", gnc_commodity_get_mnemonic(gbp));
-  printf("pence/pound = %d\n", gnc_commodity_get_fraction(gbp));
-
-  printf("pointer equivalence: %p == %p : %d\n",
-         gbp, gbc, gnc_commodity_equiv(gbp, gbc));
-  printf("element equivalence: %p == %p : %d\n",
-         gba, gbp, gnc_commodity_equiv(gba, gbp));
-  printf("bad pointer: %p == %p : %d\n",
-         NULL, gbp, gnc_commodity_equiv(NULL, gbp));
-  
-  gnc_commodity_delete(gbp);
-
-  return 0;
-}
-#endif
 
 

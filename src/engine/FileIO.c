@@ -280,12 +280,12 @@ gnc_commodity_import_legacy(const char * currency_name) {
 
   if(currency_name && (currency_name[0] != 0) ) {
     old = gnc_commodity_table_lookup(gnc_engine_commodities(),
-                                     "GNC_LEGACY_CURRENCIES",
+                                     GNC_COMMODITY_NS_LEGACY,
                                      currency_name);
     
     if(!old) {
       old = gnc_commodity_new(currency_name, currency_name, NULL, 
-                              "GNC_LEGACY_CURRENCIES", currency_name,
+                              GNC_COMMODITY_NS_LEGACY, currency_name,
                               0, 0, 0);
       gnc_commodity_table_insert(gnc_engine_commodities(), 
                                  old);

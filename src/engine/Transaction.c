@@ -677,7 +677,7 @@ xaccSplitSetBaseValue (Split *s, double value,
 
    if(s->acc &&
       s->acc->security &&
-      gnc_commodity_equiv(s->acc->security, s->acc->currency) && 
+      !gnc_commodity_equiv(s->acc->security, s->acc->currency) && 
       !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
      adjust_price = 1;
    }
@@ -708,9 +708,9 @@ xaccSplitSetBaseValue (Split *s, double value,
    else {
      PERR ("inappropriate base currency %s "
            "given split currency=%s and security=%s\n",
-           gnc_commodity_get_fullname(base_currency), 
-           gnc_commodity_get_fullname(s->acc->currency), 
-           gnc_commodity_get_fullname(s->acc->security));
+           gnc_commodity_get_printname(base_currency), 
+           gnc_commodity_get_printname(s->acc->currency), 
+           gnc_commodity_get_printname(s->acc->security));
      return;
    }
 }
@@ -751,9 +751,9 @@ xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
    {
       PERR ("inappropriate base currency %s "
             "given split currency=%s and security=%s\n",
-            gnc_commodity_get_fullname(base_currency), 
-            gnc_commodity_get_fullname(s->acc->currency), 
-            gnc_commodity_get_fullname(s->acc->security));
+            gnc_commodity_get_printname(base_currency), 
+            gnc_commodity_get_printname(s->acc->currency), 
+            gnc_commodity_get_printname(s->acc->security));
       return 0.0;
    }
    return value;
@@ -800,7 +800,11 @@ ComputeValue (Split **sarray, Split * skip_me,
               value += s->damount;
             } 
             else {
-              PERR ("inconsistent currencies\n");
+              PERR ("inconsistent currencies\n");      
+              printf("base = '%s', curr='%s', sec='%s'\n",
+                     gnc_commodity_get_printname(base_currency),
+                     gnc_commodity_get_printname(s->acc->currency),
+                     gnc_commodity_get_printname(s->acc->security));
               assert (0);
             }
          }
@@ -832,13 +836,13 @@ xaccIsCommonCurrency(const gnc_commodity * currency_1,
   if ((currency_1 == NULL) || (currency_2 == NULL))
     return GNC_F;
 
-  c1c2 = gnc_commodity_equiv(currency_1, currency_2);
-  c1s2 = gnc_commodity_equiv(currency_1, security_2);
+  c1c2 = !gnc_commodity_equiv(currency_1, currency_2);
+  c1s2 = !gnc_commodity_equiv(currency_1, security_2);
 
   if (security_1 != NULL)
   {
-    s1c2 = gnc_commodity_equiv(security_1, currency_2);
-    s1s2 = gnc_commodity_equiv(security_1, security_2);
+    s1c2 = !gnc_commodity_equiv(security_1, currency_2);
+    s1s2 = !gnc_commodity_equiv(security_1, security_2);
   }
   else /* no match */
   {
@@ -857,7 +861,7 @@ FindCommonCurrency (Split **slist, const gnc_commodity * ra,
   int i = 0;
 
   if (!slist) return NULL;
-
+  
   i=0; s = slist[0];
   while (s) {
     const gnc_commodity * sa, * sb;
@@ -878,10 +882,10 @@ FindCommonCurrency (Split **slist, const gnc_commodity * ra,
     sb = s->acc->security;
 
     if (ra && rb) {
-       int aa = gnc_commodity_equiv(ra,sa);
-       int ab = gnc_commodity_equiv(ra,sb);
-       int ba = gnc_commodity_equiv(rb,sa);
-       int bb = gnc_commodity_equiv(rb,sb);
+       int aa = !gnc_commodity_equiv(ra,sa);
+       int ab = !gnc_commodity_equiv(ra,sb);
+       int ba = !gnc_commodity_equiv(rb,sa);
+       int bb = !gnc_commodity_equiv(rb,sb);
 
        if ( (!aa) && bb) rb = NULL;
        else
@@ -897,8 +901,8 @@ FindCommonCurrency (Split **slist, const gnc_commodity * ra,
     } 
     else
     if (ra && !rb) {
-       int aa = gnc_commodity_equiv(ra,sa);
-       int ab = gnc_commodity_equiv(ra,sb);
+       int aa = !gnc_commodity_equiv(ra,sa);
+       int ab = !gnc_commodity_equiv(ra,sb);
        if ( aa && ab ) ra = NULL;
     }
 
@@ -985,8 +989,8 @@ xaccSplitRebalance (Split *split)
         if (s->acc) {
           PERR ("\taccount=%s currency=%s security=%s\n",
                 s->acc->accountName, 
-                gnc_commodity_get_fullname(s->acc->currency), 
-                gnc_commodity_get_fullname(s->acc->security));
+                gnc_commodity_get_printname(s->acc->currency), 
+                gnc_commodity_get_printname(s->acc->security));
         } else {
           PERR ("\t*** No parent account *** \n");
         }

@@ -1,0 +1,693 @@
+!Type:Cat
+NBonus
+DBonus Income
+T
+R7360
+I
+^
+NConsulting
+DConsulting Income
+T
+R4688
+I
+^
+NDiv Income
+DDividend Income
+T
+R4576
+I
+^
+NFinance Charge
+DFinance Charge Income
+T
+R4688
+I
+^
+NGift Received
+DGift Received
+I
+^
+NGr Sales
+DGross Sales
+T
+R4688
+I
+^
+NInterest Inc
+DInterest Income
+T
+R4592
+I
+^
+NInvest Inc
+DInvestment Income
+T
+I
+^
+NOther Inc
+DOther Income
+T
+R4112
+I
+^
+NOther Inc, Bus
+DOther Business Income
+T
+R4848
+I
+^
+NSalary
+DSalary Income
+T
+R7360
+I
+^
+NSalary Spouse
+DSpouse's Salary Income
+T
+R8096
+I
+^
+NServices
+DService Income
+T
+R4688
+I
+^
+NTax Refund
+DState/Local Tax Refund
+T
+R4160
+I
+^
+NUnemployment Inc
+DUnemployment Compensation
+T
+R7664
+I
+^
+N_DivInc
+DDividend
+T
+R4576
+I
+^
+N_DivIncTaxFree
+DTax-Free Dividend
+T
+R7792
+I
+^
+N_EmpStkOptInc
+DEmployee Stock Option Inc
+T
+R7360
+I
+^
+N_IntInc
+DInvestment Interest Inc
+T
+R4592
+I
+^
+N_IntIncTaxFree
+DTax-Free Inv Interest Inc
+T
+R7824
+I
+^
+N_LT CapGnDst
+DLong Term Cap Gain Dist
+T
+R7808
+I
+^
+N_MT CapGnDst
+DMid Term Cap Gain Dist
+T
+R7808
+I
+^
+N_RlzdGain
+DRealized Gain/Loss
+T
+I
+^
+N_ST CapGnDst
+DShort Term Cap Gain Dist
+T
+R4576
+I
+^
+N_UnrlzdGain
+DUnrealized Gain/Loss
+I
+^
+NAds
+DAdvertising
+T
+R4864
+E
+^
+NAuto
+DAutomobile Expenses
+E
+^
+NAuto:Fuel
+DAuto Fuel
+E
+^
+NAuto:Insurance
+DAuto Insurance
+E
+^
+NAuto:Registration
+DAuto Registration
+T
+R8560
+E
+^
+NAuto:Service
+DAuto Service
+E
+^
+NBad Debt
+DBad Debt Expense
+T
+R4880
+E
+^
+NBank Charge
+DBank Charge
+E
+^
+NCar
+DCar & Truck
+T
+R4896
+E
+^
+NCash
+DMisc Cash
+E
+^
+NCharity
+DCharitable Donations - Cash
+T
+R4480
+E
+^
+NChildcare
+DChildcare Expense
+T
+R6416
+E
+^
+NClothing
+DClothing
+E
+^
+NCommission
+DCommissions
+T
+R4912
+E
+^
+NDining
+DDining Out
+E
+^
+NDiscounts
+DDiscount Expense
+T
+R4736
+E
+^
+NDues and Subscriptions
+DDues and Subscription Expense
+T
+R4832
+E
+^
+NEducation
+DEducation
+E
+^
+NEntertainment
+DEntertainment
+E
+^
+NGifts Given
+DGift Expenses
+E
+^
+NGroceries
+DGroceries
+E
+^
+NHome Repair
+DHome Repair & Maint.
+E
+^
+NHousehold
+DHousehold Misc. Exp
+E
+^
+NHousing
+DHousing
+E
+^
+NInsurance
+DInsurance
+E
+^
+NInsurance, Bus
+DInsurance (not health)
+T
+R4960
+E
+^
+NInt Paid
+DInterest Paid
+T
+R4992
+E
+^
+NInterest Exp
+DInterest Expense
+E
+^
+NIRA Contrib
+DIRA Contribution
+T
+R4192
+E
+^
+NIRA Contrib Spouse
+DIRA Contribution Spouse
+T
+R7696
+E
+^
+NLate Fees
+DLate Payment Fees
+T
+R4832
+E
+^
+NLegal-Prof Fees
+DLegal & Prof. Fees
+T
+R4768
+E
+^
+NLicenses and Permits
+DLicense and Permits Expense
+T
+R5056
+E
+^
+NMeals & Entertn
+DMeals & Entertainment
+T
+R4704
+E
+^
+NMedical
+DMedical Expense
+T
+R4368
+E
+^
+NMedical:Doctor
+DDoctors, Dentists, & Hospitals
+T
+R7744
+E
+^
+NMedical:Medicine
+DPrescriptions
+T
+R4368
+E
+^
+NMisc
+DMiscellaneous
+E
+^
+NMiscellaneous, Bus
+DMisc. Business Expense
+T
+R4832
+E
+^
+NMortgage Int
+DMortgage Interest
+T
+E
+^
+NMortgage Int:Bank
+DMortgage Interest - Bank
+T
+R4528
+E
+^
+NMortgage Int:Individual
+DMortgage Interest - Individual
+T
+R8720
+E
+^
+NOffice
+DOffice Expenses
+T
+R5008
+E
+^
+NPostage and Delivery
+DPostage and Delivery Expense
+T
+R4832
+E
+^
+NPrinting and Reproduction
+DPrinting and Repro. Expense
+T
+R4832
+E
+^
+NRecreation
+DRecreation Expense
+E
+^
+NRent
+DHousing Rent
+E
+^
+NRent on Equip
+DRent-Vehicle,mach,equip
+T
+R4784
+E
+^
+NRent Paid
+DRent Paid
+T
+R4800
+E
+^
+NRepairs
+DRepairs
+T
+R5040
+E
+^
+NReturns
+DReturns & Allowances
+T
+R4736
+E
+^
+NSubscriptions
+DSubscriptions
+E
+^
+NSupplies, Bus
+DSupplies
+T
+R4816
+E
+^
+NTax
+DTaxes
+T
+E
+^
+NTax:Fed
+DFederal Tax
+T
+R7376
+E
+^
+NTax:Medicare
+DMedicare Tax
+T
+R7680
+E
+^
+NTax:Other
+DMisc. Taxes
+T
+E
+^
+NTax:Property
+DProperty Tax
+T
+R4416
+E
+^
+NTax:SDI
+DState Disability Insurance
+T
+R7408
+E
+^
+NTax:Soc Sec
+DSoc Sec Tax
+T
+R7392
+E
+^
+NTax:State
+DState Tax
+T
+R7424
+E
+^
+NTax Spouse
+DSpouse's Taxes
+T
+E
+^
+NTax Spouse:Fed
+DFederal Tax
+T
+R8112
+E
+^
+NTax Spouse:Medicare
+DMedicare Tax
+T
+R8160
+E
+^
+NTax Spouse:SDI
+DState Disability Insurance
+T
+R8144
+E
+^
+NTax Spouse:Soc Sec
+DSoc Sec Tax
+T
+R8128
+E
+^
+NTax Spouse:State
+DState Tax
+T
+R8176
+E
+^
+NTax, Business
+DTaxes & Licenses
+T
+R5056
+E
+^
+NTax, Business:Fed
+DFederal Tax
+T
+R5056
+E
+^
+NTax, Business:Local
+DLocal Tax
+T
+R5056
+E
+^
+NTax, Business:Property
+DProperty Tax
+T
+R5056
+E
+^
+NTax, Business:State
+DState Tax
+T
+R5056
+E
+^
+NTravel, Bus
+DBusiness Travel Expense
+T
+R5072
+E
+^
+NUtilities
+DWater, Gas, Electric
+E
+^
+NUtilities:Cable TV
+DCable TV
+E
+^
+NUtilities:Gas & Electric
+DGas and Electricity
+E
+^
+NUtilities:Telephone
+DTelephone Expense
+E
+^
+NUtilities:Water
+DWater
+E
+^
+NUtilities, Bus
+DWater, Gas, Electric
+T
+R5088
+E
+^
+NUtilities, Bus:Telephone, Bus
+DTelephone Expense
+T
+R5088
+E
+^
+NVacation
+DVacation expenses
+E
+^
+NVacation:Lodging
+DMotel/Hotel Costs
+E
+^
+NVacation:Travel
+DTransportation exp
+E
+^
+NWages
+DWages & Job Credits
+T
+R4752
+E
+^
+N_Accrued Int
+DAccrued Interest
+T
+E
+^
+N_IntExp
+DInvestment Interest Exp
+T
+R6816
+E
+^
+!Option:AutoSwitch
+!Account
+Ncanadian bank
+TBank
+^
+NDave's Checking
+TBank
+^
+NDave's 401K
+TPort
+^
+!Clear:AutoSwitch
+!Option:AutoSwitch
+!Account
+Ncanadian bank
+TBank
+^
+!Type:Bank 
+D8/31' 0
+U0.00
+T0.00
+CX
+POpening Balance
+L[canadian bank]
+^
+D8/31' 0
+U-1,000.00
+T-1,000.00
+NTXFR
+PTransfer Money
+L[Dave's Checking]
+^
+!Account
+NDave's Checking
+TBank
+^
+!Type:Bank 
+D6/ 1' 0
+U1,211.45
+T1,211.45
+CX
+POpening Balance
+L[Dave's Checking]
+^
+D7/ 1' 0
+U1,000.00
+T1,000.00
+PGnumatic, Inc.
+MGnumatic, Inc.
+LSalary
+SSalary
+ESalary Income
+$1,500.00
+STax:Fed
+EFederal Tax
+$-260.00
+STax:State
+EState Tax
+$-50.00
+STax:Soc Sec
+ESoc Sec Tax
+$-50.00
+STax:Medicare
+EMedicare Tax
+$-50.00
+STax:SDI
+EState Disability Insurance
+$-50.00
+S[Dave's 401K]
+ETransfer to Dave's 401K
+$-20.00
+S[Dave's 401K]
+ETransfer to Dave's 401K
+$-20.00
+^
+D8/31' 0
+U662.21
+T662.21
+PTransfer Money
+L[canadian bank]
+^
+!Account
+NDave's 401K
+TInvst
+^
+!Type:Invst
+D7/ 1' 0
+NXIn
+PGnumatic, Inc.
+U40.00
+T40.00
+MGnumatic, Inc.
+L[Dave's Checking]
+$40.00
+^

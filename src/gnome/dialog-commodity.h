@@ -34,7 +34,7 @@ typedef struct _selectcommoditywindow SelectCommodityWindow;
 typedef struct _newcommoditywindow NewCommodityWindow;
 
 typedef void (* gnc_commodity_callback)(const gnc_commodity *, void * data);
-
+ 
 SelectCommodityWindow * 
 gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
                                gnc_commodity_callback cb,
@@ -50,5 +50,10 @@ gnc_ui_select_commodity_modal(const gnc_commodity * orig_sel);
 
 const gnc_commodity * 
 gnc_ui_new_commodity_modal(const char * default_namespace);
+
+char * gnc_ui_update_namespace_picker(GtkWidget * combobox, const char * sel);
+void gnc_ui_update_commodity_picker(GtkWidget * combobox, 
+                                    const char * namespace,
+                                    const char * sel);
 
 #endif

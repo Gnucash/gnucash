@@ -53,8 +53,8 @@
    (gnc:account-get-code a)
    (gnc:account-get-description a)
    (gnc:account-get-notes a)
-   (gnc:account-get-currency a)
-   (gnc:account-get-security a)
+   (gnc:commodity-get-mnemonic (gnc:account-get-currency a)) ;; FIXME -- bg
+   (gnc:commodity-get-mnemonic (gnc:account-get-security a)) ;; FIXME -- bg
    (let* ((accinfo (gnc:account-get-acc-info a))
           (invacct (gnc:cast-to-inv-acct accinfo)))
      (if (not (pointer-token-null? invacct))

@@ -10,6 +10,7 @@ doc_DATA = \
   abc-all.qif \
   abc.qif \
   bogus.qif \
+  canada.qif \
   cbb-export.qif \
   currency.xac \
   every.qif \

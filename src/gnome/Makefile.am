@@ -13,11 +13,11 @@ libgncgnome_a_SOURCES = \
   dialog-find-transactions.c \
   dialog-options.c \
   dialog-print-check.c \
-  dialog-qif-import.c \
   dialog-totd.c \
   dialog-transfer.c \
   dialog-utils.c \
   druid-commodity.c \
+  druid-qif-import.c \
   extensions.c \
   file-history.c \
   glade-gnc-dialogs.c \
@@ -53,11 +53,11 @@ noinst_HEADERS = \
   dialog-find-transactions.h \
   dialog-options.h \
   dialog-print-check.h \
-  dialog-qif-import.h \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
   druid-commodity.h \
+  druid-qif-import.h \
   extensions.h \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \

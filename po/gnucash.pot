@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-08-25 01:06-0700\n"
+"POT-Creation-Date: 2000-09-20 16:35-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -918,7 +918,7 @@ msgstr ""
 msgid "Account Name"
 msgstr ""
 
-#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4491
+#: messages-i18n.c:203 src/gnome/glade-gnc-dialogs.c:4089
 msgid "Account Type"
 msgstr ""
 
@@ -986,7 +986,7 @@ msgstr ""
 msgid "Export To"
 msgstr ""
 
-#: messages-i18n.c:220 src/gnome/glade-gnc-dialogs.c:3257
+#: messages-i18n.c:220 src/gnome/glade-gnc-dialogs.c:2855
 msgid "Financial Calculator"
 msgstr ""
 
@@ -1034,7 +1034,7 @@ msgstr ""
 msgid "Mutual Fund"
 msgstr ""
 
-#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:4327
+#: messages-i18n.c:232 src/gnome/glade-gnc-dialogs.c:3925
 msgid "New Account"
 msgstr ""
 
@@ -1082,7 +1082,7 @@ msgstr ""
 msgid "Pick One"
 msgstr ""
 
-#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4524
+#: messages-i18n.c:244 src/gnome/glade-gnc-dialogs.c:4122
 msgid "Parent Account"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Purch Price"
 msgstr ""
 
-#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4541
+#: messages-i18n.c:247 src/gnome/glade-gnc-dialogs.c:4139
 msgid "Price Quote Source"
 msgstr ""
 
@@ -1239,16 +1239,15 @@ msgid "About"
 msgstr ""
 
 #: messages-i18n.c:288 po/guile_strings.txt:64
-#: src/gnome/glade-gnc-dialogs.c:1784
+#: src/gnome/glade-gnc-dialogs.c:1382
 msgid "Account"
 msgstr ""
 
-#: messages-i18n.c:289 src/gnome/glade-gnc-dialogs.c:302
-#: src/gnome/glade-gnc-dialogs.c:462
+#: messages-i18n.c:289 src/gnome/glade-gnc-dialogs.c:60
 msgid "Accounts"
 msgstr ""
 
-#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:4342
+#: messages-i18n.c:290 src/gnome/glade-gnc-dialogs.c:3940
 msgid "Account Information"
 msgstr ""
 
@@ -1256,7 +1255,7 @@ msgstr ""
 msgid "AutoDep"
 msgstr ""
 
-#: messages-i18n.c:292 src/gnome/glade-gnc-dialogs.c:2398
+#: messages-i18n.c:292 src/gnome/glade-gnc-dialogs.c:1996
 msgid "Action"
 msgstr ""
 
@@ -1269,7 +1268,7 @@ msgid "Ago"
 msgstr ""
 
 #: messages-i18n.c:295 po/guile_strings.txt:55
-#: src/gnome/glade-gnc-dialogs.c:2138
+#: src/gnome/glade-gnc-dialogs.c:1736
 msgid "Amount"
 msgstr ""
 
@@ -1282,7 +1281,7 @@ msgid "Phone"
 msgstr ""
 
 #: messages-i18n.c:298 po/guile_strings.txt:181
-#: src/gnome/glade-gnc-dialogs.c:567
+#: src/gnome/glade-gnc-dialogs.c:165
 msgid "Asset"
 msgstr ""
 
@@ -1303,7 +1302,7 @@ msgid "Balance"
 msgstr ""
 
 #: messages-i18n.c:304 po/guile_strings.txt:109
-#: src/gnome/glade-gnc-dialogs.c:561
+#: src/gnome/glade-gnc-dialogs.c:159
 msgid "Bank"
 msgstr ""
 
@@ -1324,7 +1323,7 @@ msgid "Cancel"
 msgstr ""
 
 #: messages-i18n.c:309 po/guile_strings.txt:140
-#: src/gnome/glade-gnc-dialogs.c:564
+#: src/gnome/glade-gnc-dialogs.c:162
 msgid "Cash"
 msgstr ""
 
@@ -1344,7 +1343,7 @@ msgstr ""
 msgid "Checking"
 msgstr ""
 
-#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2449
+#: messages-i18n.c:314 src/gnome/glade-gnc-dialogs.c:2047
 msgid "Cleared"
 msgstr ""
 
@@ -1361,7 +1360,7 @@ msgid "Create"
 msgstr ""
 
 #: messages-i18n.c:318 po/guile_strings.txt:266
-#: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
+#: src/gnome/glade-gnc-dialogs.c:168 src/gnome/glade-gnc-dialogs.c:1680
 msgid "Credit"
 msgstr ""
 
@@ -1370,12 +1369,12 @@ msgid "Credits"
 msgstr ""
 
 #: messages-i18n.c:320 po/guile_strings.txt:137
-#: src/gnome/glade-gnc-dialogs.c:582
+#: src/gnome/glade-gnc-dialogs.c:180
 msgid "Currency"
 msgstr ""
 
 #: messages-i18n.c:321 po/guile_strings.txt:6
-#: src/gnome/glade-gnc-dialogs.c:1920
+#: src/gnome/glade-gnc-dialogs.c:1518
 msgid "Date"
 msgstr ""
 
@@ -1384,7 +1383,7 @@ msgid "Days"
 msgstr ""
 
 #: messages-i18n.c:323 po/guile_strings.txt:38
-#: src/gnome/glade-gnc-dialogs.c:2085
+#: src/gnome/glade-gnc-dialogs.c:1683
 msgid "Debit"
 msgstr ""
 
@@ -1400,7 +1399,7 @@ msgstr ""
 msgid "Deficit"
 msgstr ""
 
-#: messages-i18n.c:327 src/gnome/glade-gnc-dialogs.c:2868
+#: messages-i18n.c:327 src/gnome/glade-gnc-dialogs.c:2466
 msgid "Delete"
 msgstr ""
 
@@ -1413,7 +1412,7 @@ msgid "Depreciation"
 msgstr ""
 
 #: messages-i18n.c:330 po/guile_strings.txt:157
-#: src/gnome/glade-gnc-dialogs.c:1978
+#: src/gnome/glade-gnc-dialogs.c:1576
 msgid "Description"
 msgstr ""
 
@@ -1442,7 +1441,7 @@ msgid "Edit"
 msgstr ""
 
 #: messages-i18n.c:337 po/guile_strings.txt:8
-#: src/gnome/glade-gnc-dialogs.c:591
+#: src/gnome/glade-gnc-dialogs.c:189
 msgid "Equity"
 msgstr ""
 
@@ -1455,7 +1454,7 @@ msgid "Exit"
 msgstr ""
 
 #: messages-i18n.c:340 po/guile_strings.txt:340
-#: src/gnome/glade-gnc-dialogs.c:588
+#: src/gnome/glade-gnc-dialogs.c:186
 msgid "Expense"
 msgstr ""
 
@@ -1479,7 +1478,7 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: messages-i18n.c:346 src/gnome/glade-gnc-dialogs.c:2523
+#: messages-i18n.c:346 src/gnome/glade-gnc-dialogs.c:2121
 msgid "Find"
 msgstr ""
 
@@ -1508,7 +1507,7 @@ msgid "Import"
 msgstr ""
 
 #: messages-i18n.c:353 po/guile_strings.txt:255
-#: src/gnome/glade-gnc-dialogs.c:585
+#: src/gnome/glade-gnc-dialogs.c:183
 msgid "Income"
 msgstr ""
 
@@ -1525,7 +1524,7 @@ msgid "Jump"
 msgstr ""
 
 #: messages-i18n.c:357 po/guile_strings.txt:201
-#: src/gnome/glade-gnc-dialogs.c:573
+#: src/gnome/glade-gnc-dialogs.c:171
 msgid "Liability"
 msgstr ""
 
@@ -1542,7 +1541,7 @@ msgid "LTCG"
 msgstr ""
 
 #: messages-i18n.c:361 po/guile_strings.txt:32
-#: src/gnome/glade-gnc-dialogs.c:2196
+#: src/gnome/glade-gnc-dialogs.c:1794
 msgid "Memo"
 msgstr ""
 
@@ -1564,7 +1563,7 @@ msgid "(none)"
 msgstr ""
 
 #: messages-i18n.c:366 po/guile_strings.txt:216
-#: src/gnome/glade-gnc-dialogs.c:4566
+#: src/gnome/glade-gnc-dialogs.c:4164
 msgid "Notes"
 msgstr ""
 
@@ -1608,11 +1607,11 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: messages-i18n.c:377 src/gnome/glade-gnc-dialogs.c:2340
+#: messages-i18n.c:377 src/gnome/glade-gnc-dialogs.c:1938
 msgid "Price"
 msgstr ""
 
-#: messages-i18n.c:378 src/gnome/glade-gnc-dialogs.c:937
+#: messages-i18n.c:378 src/gnome/glade-gnc-dialogs.c:535
 msgid "Print"
 msgstr ""
 
@@ -1701,7 +1700,7 @@ msgid "STCG"
 msgstr ""
 
 #: messages-i18n.c:400 po/guile_strings.txt:367
-#: src/gnome/glade-gnc-dialogs.c:576
+#: src/gnome/glade-gnc-dialogs.c:174
 msgid "Stock"
 msgstr ""
 
@@ -1721,7 +1720,7 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: messages-i18n.c:405 src/gnome/glade-gnc-dialogs.c:2615
+#: messages-i18n.c:405 src/gnome/glade-gnc-dialogs.c:2213
 msgid "Today"
 msgstr ""
 
@@ -1730,7 +1729,6 @@ msgid "Total"
 msgstr ""
 
 #: messages-i18n.c:408 po/guile_strings.txt:317
-#: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
 msgid "Type"
 msgstr ""
 
@@ -2514,7 +2512,7 @@ msgstr ""
 msgid "Help for first option"
 msgstr ""
 
-#: po/guile_strings.txt:210 src/gnome/glade-gnc-dialogs.c:2036
+#: po/guile_strings.txt:210 src/gnome/glade-gnc-dialogs.c:1634
 msgid "Number"
 msgstr ""
 
@@ -2792,8 +2790,8 @@ msgstr ""
 msgid "Plot Type"
 msgstr ""
 
-#: po/guile_strings.txt:287 src/gnome/glade-gnc-dialogs.c:2724
-#: src/gnome/glade-gnc-dialogs.c:2732
+#: po/guile_strings.txt:287 src/gnome/glade-gnc-dialogs.c:2322
+#: src/gnome/glade-gnc-dialogs.c:2330
 msgid "Budget"
 msgstr ""
 
@@ -2865,7 +2863,7 @@ msgstr ""
 msgid "Report end date"
 msgstr ""
 
-#: po/guile_strings.txt:305 src/gnome/glade-gnc-dialogs.c:1763
+#: po/guile_strings.txt:305 src/gnome/glade-gnc-dialogs.c:1361
 msgid "None"
 msgstr ""
 
@@ -2955,7 +2953,7 @@ msgstr ""
 msgid "Profit/Loss"
 msgstr ""
 
-#: po/guile_strings.txt:331 src/gnome/glade-gnc-dialogs.c:2268
+#: po/guile_strings.txt:331 src/gnome/glade-gnc-dialogs.c:1866
 msgid "Shares"
 msgstr ""
 
@@ -3059,7 +3057,7 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: po/guile_strings.txt:358 src/gnome/glade-gnc-dialogs.c:3114
+#: po/guile_strings.txt:358 src/gnome/glade-gnc-dialogs.c:2712
 msgid "Nominal"
 msgstr ""
 
@@ -3113,755 +3111,734 @@ msgstr ""
 msgid "All Accounts"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:190
+#: src/gnome/druid-qif-import.c:222
 msgid "Select QIF File"
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:251
-msgid "You must specify a file to load."
+#: src/gnome/druid-qif-import.c:284
+msgid ""
+"File not found or read permission denied.\n"
+"Please select another file."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:255
-msgid "You must specify a currency."
+#: src/gnome/druid-qif-import.c:296
+msgid ""
+"That QIF file is already loaded.\n"
+"Please select another file."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:270 src/gnome/dialog-qif-import.c:622
-#: src/gnome/dialog-qif-import.c:679 src/gnome/dialog-qif-import.c:777
-msgid "QIF File scheme code not loaded properly."
+#: src/gnome/druid-qif-import.c:549
+msgid "You must enter an account name."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:291
-msgid "QIF File already loaded. Reload with current settings?"
+#: src/gnome/druid-qif-import.c:900
+msgid "You must enter a Type for the commodity."
 msgstr ""
 
-#: src/gnome/dialog-qif-import.c:707 src/gnome/dialog-qif-import.c:804
-msgid "Something is very wrong with QIF Importing."
+#: src/gnome/druid-qif-import.c:904
+msgid "You must enter a name for the commodity."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:68
-msgid "Import QIF Files"
+#: src/gnome/druid-qif-import.c:908
+msgid "You must enter an abbreviation for the commodity."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:90
-msgid "Loaded Files"
+#. save the old commodity name
+#: src/gnome/druid-qif-import.c:992
+#, c-format
+msgid "Enter information about \"%s\""
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1005
+msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1030
+msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1052
+msgid ""
+"Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
+"the name."
+msgstr ""
+
+#: src/gnome/druid-qif-import.c:1073
+msgid "Click \"Next\" to accept the information and move on."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:45
+msgid "Select Account"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:103
+msgid "Selected account:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:112 src/gnome/glade-gnc-dialogs.c:2529
+#: src/gnome/glade-gnc-dialogs.c:2616 src/gnome/glade-gnc-dialogs.c:3972
+msgid "Description:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:121
-msgid "File Info"
+msgid "Account type:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:149
-msgid "QIF Filename:"
+#: src/gnome/glade-gnc-dialogs.c:177
+msgid "Mutual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:158
-msgid "Default QIF acct:"
+#: src/gnome/glade-gnc-dialogs.c:242 src/gnome/glade-gnc-dialogs.c:250
+msgid "Print Preview"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:167 src/gnome/glade-gnc-dialogs.c:4383
-msgid "Currency:"
+#: src/gnome/glade-gnc-dialogs.c:292
+msgid "Zoom in"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:198 src/gnome/glade-gnc-dialogs.c:1861
-#: src/gnome/glade-gnc-dialogs.c:1913 src/gnome/glade-gnc-dialogs.c:4447
+#: src/gnome/glade-gnc-dialogs.c:300
+msgid "Zoom out"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:350
+msgid "Print Setup"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:372
+msgid "Printer:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:380
+msgid "Paper size:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:388
+msgid "Pages to print:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:433 src/gnome/glade-gnc-dialogs.c:1355
+msgid "All"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:441
+msgid "Selected"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:463
+msgid "From:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:478
+msgid "To:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:500 src/gnome/glade-gnc-dialogs.c:507
+msgid "Select..."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:543
+msgid "Preview"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:600
+msgid "Select Paper Size"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:725
+msgid "Print Check"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:754
+msgid "Check format:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:762 src/gnome/glade-gnc-dialogs.c:932
+msgid "Check position:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:770 src/gnome/glade-gnc-dialogs.c:940
+msgid "Date format:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:792
+msgid "Quicken/QuickBooks (tm) US-Letter"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:795 src/gnome/glade-gnc-dialogs.c:816
+#: src/gnome/glade-gnc-dialogs.c:852
+msgid "Custom"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:807
+msgid "Top"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:810
+msgid "Middle"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:813
+msgid "Bottom"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:828
+msgid "December  31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:831
+msgid "31 December, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:834
+msgid "Dec 31, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:837
+msgid "31 Dec, 2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:840
+msgid "12/31/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:843
+msgid "12/31/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:846
+msgid "31/12/2000"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:849
+msgid "31/12/00"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:857
+msgid "Custom check parameters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:892
+msgid "Payee:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:900
+msgid "Date:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:908
+msgid "Amount (words):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:916
+msgid "Amount (numbers):"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:924
+msgid "Memo:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:948
+msgid "Units:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:963
+msgid "x"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1040
+msgid "Inches"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1043
+msgid "Centimeters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1046
+msgid "Millimeters"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1049
+msgid "Points"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1062
+msgid "y"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1121
+msgid "                                  "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1128
+msgid "                    "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1305
+msgid "Find Transactions"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1320
+msgid "Match Accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1341
+msgid "Find transactions affecting"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1358
+msgid "Any"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1367
+msgid "selected accounts:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1389
+msgid "Match Date"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1404
+msgid "Find transactions occurring between the dates:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1428 src/gnome/glade-gnc-dialogs.c:1444
+#: src/gnome/glade-gnc-dialogs.c:1481 src/gnome/glade-gnc-dialogs.c:1496
+msgid "/"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:1459 src/gnome/glade-gnc-dialogs.c:1511
+#: src/gnome/glade-gnc-dialogs.c:4045 src/gnome/glade-gnc-dialogs.c:4067
 #: src/gnome/glade-gnc-dialogs.c:4469
 msgid "Select ..."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:219
-msgid "Auto"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:241
-msgid "Load file"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:248
-msgid "Files"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:274
-msgid "QIF Account"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:281 src/gnome/glade-gnc-dialogs.c:335
-msgid "Transactions"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:288 src/gnome/glade-gnc-dialogs.c:342
-msgid "GNUCash Account Name"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:328
-msgid "QIF Category"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:356
-msgid "Categories"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:447
-msgid "Select Account"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:505
-msgid "Selected account:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:514 src/gnome/glade-gnc-dialogs.c:2931
-#: src/gnome/glade-gnc-dialogs.c:3018 src/gnome/glade-gnc-dialogs.c:4374
-msgid "Description:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:523
-msgid "Account type:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:579
-msgid "Mutual"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:644 src/gnome/glade-gnc-dialogs.c:652
-msgid "Print Preview"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:694
-msgid "Zoom in"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:702
-msgid "Zoom out"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:752
-msgid "Print Setup"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:774
-msgid "Printer:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:782
-msgid "Paper size:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:790
-msgid "Pages to print:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:835 src/gnome/glade-gnc-dialogs.c:1757
-msgid "All"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:843
-msgid "Selected"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:865
-msgid "From:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:880
-msgid "To:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:902 src/gnome/glade-gnc-dialogs.c:909
-msgid "Select..."
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:945
-msgid "Preview"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1002
-msgid "Select Paper Size"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1127
-msgid "Print Check"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1156
-msgid "Check format:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1164 src/gnome/glade-gnc-dialogs.c:1334
-msgid "Check position:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1172 src/gnome/glade-gnc-dialogs.c:1342
-msgid "Date format:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1194
-msgid "Quicken/QuickBooks (tm) US-Letter"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1197 src/gnome/glade-gnc-dialogs.c:1218
-#: src/gnome/glade-gnc-dialogs.c:1254
-msgid "Custom"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1209
-msgid "Top"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1212
-msgid "Middle"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1215
-msgid "Bottom"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1230
-msgid "December  31, 2000"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1233
-msgid "31 December, 2000"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1236
-msgid "Dec 31, 2000"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1239
-msgid "31 Dec, 2000"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1242
-msgid "12/31/2000"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1245
-msgid "12/31/00"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1248
-msgid "31/12/2000"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1251
-msgid "31/12/00"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1259
-msgid "Custom check parameters"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1294
-msgid "Payee:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1302
-msgid "Date:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1310
-msgid "Amount (words):"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1318
-msgid "Amount (numbers):"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1326
-msgid "Memo:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1350
-msgid "Units:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1365
-msgid "x"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1442
-msgid "Inches"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1445
-msgid "Centimeters"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1448
-msgid "Millimeters"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1451
-msgid "Points"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1464
-msgid "y"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1523
-msgid "                                  "
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1530
-msgid "                    "
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1707
-msgid "Find Transactions"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1722
-msgid "Match Accounts"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1743
-msgid "Find transactions affecting"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1760
-msgid "Any"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1769
-msgid "selected accounts:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1791
-msgid "Match Date"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1806
-msgid "Find transactions occurring between the dates:"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
-#: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
-msgid "/"
-msgstr ""
-
-#: src/gnome/glade-gnc-dialogs.c:1927 src/gnome/glade-gnc-dialogs.c:1985
+#: src/gnome/glade-gnc-dialogs.c:1525 src/gnome/glade-gnc-dialogs.c:1583
 msgid "Match Description"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:1942
+#: src/gnome/glade-gnc-dialogs.c:1540
 msgid "Find transactions whose Description matches:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:1964 src/gnome/glade-gnc-dialogs.c:2022
-#: src/gnome/glade-gnc-dialogs.c:2182 src/gnome/glade-gnc-dialogs.c:2384
+#: src/gnome/glade-gnc-dialogs.c:1562 src/gnome/glade-gnc-dialogs.c:1620
+#: src/gnome/glade-gnc-dialogs.c:1780 src/gnome/glade-gnc-dialogs.c:1982
 msgid "Case sensitive"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:1971 src/gnome/glade-gnc-dialogs.c:2029
-#: src/gnome/glade-gnc-dialogs.c:2189 src/gnome/glade-gnc-dialogs.c:2391
+#: src/gnome/glade-gnc-dialogs.c:1569 src/gnome/glade-gnc-dialogs.c:1627
+#: src/gnome/glade-gnc-dialogs.c:1787 src/gnome/glade-gnc-dialogs.c:1989
 msgid "Regular expression"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2000
+#: src/gnome/glade-gnc-dialogs.c:1598
 msgid "Find transactions whose Number matches:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2043
+#: src/gnome/glade-gnc-dialogs.c:1641
 msgid "Match Amount"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2065
+#: src/gnome/glade-gnc-dialogs.c:1663
 msgid "Find "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2079
+#: src/gnome/glade-gnc-dialogs.c:1677
 msgid "Credit or Debit"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2090
+#: src/gnome/glade-gnc-dialogs.c:1688
 msgid "splits having amounts of:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2111 src/gnome/glade-gnc-dialogs.c:2240
-#: src/gnome/glade-gnc-dialogs.c:2312
+#: src/gnome/glade-gnc-dialogs.c:1709 src/gnome/glade-gnc-dialogs.c:1838
+#: src/gnome/glade-gnc-dialogs.c:1910
 msgid "At least"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2114
+#: src/gnome/glade-gnc-dialogs.c:1712
 msgid "At most "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2117 src/gnome/glade-gnc-dialogs.c:2246
-#: src/gnome/glade-gnc-dialogs.c:2318
+#: src/gnome/glade-gnc-dialogs.c:1715 src/gnome/glade-gnc-dialogs.c:1844
+#: src/gnome/glade-gnc-dialogs.c:1916
 msgid "Exactly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2145
+#: src/gnome/glade-gnc-dialogs.c:1743
 msgid "Match Memo"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2160
+#: src/gnome/glade-gnc-dialogs.c:1758
 msgid "Find splits whose Memo matches:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2203
+#: src/gnome/glade-gnc-dialogs.c:1801
 msgid "Match number of shares"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2218
+#: src/gnome/glade-gnc-dialogs.c:1816
 msgid "Find securities transactions of:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2243 src/gnome/glade-gnc-dialogs.c:2315
+#: src/gnome/glade-gnc-dialogs.c:1841 src/gnome/glade-gnc-dialogs.c:1913
 msgid "At most"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2260
+#: src/gnome/glade-gnc-dialogs.c:1858
 msgid "shares"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2275
+#: src/gnome/glade-gnc-dialogs.c:1873
 msgid "Match share price"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2290
+#: src/gnome/glade-gnc-dialogs.c:1888
 msgid "Find securities transactions with share price of:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2347
+#: src/gnome/glade-gnc-dialogs.c:1945
 msgid "Match Action"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2362
+#: src/gnome/glade-gnc-dialogs.c:1960
 msgid "Find transactions whose Action matches:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2405
+#: src/gnome/glade-gnc-dialogs.c:2003
 msgid "Match Cleared state"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2420
+#: src/gnome/glade-gnc-dialogs.c:2018
 msgid "Find transactions whose Cleared status is:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2428
+#: src/gnome/glade-gnc-dialogs.c:2026
 msgid "Not cleared (n)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2435
+#: src/gnome/glade-gnc-dialogs.c:2033
 msgid "Cleared (c)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2442
+#: src/gnome/glade-gnc-dialogs.c:2040
 msgid "Reconciled (y)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2470
+#: src/gnome/glade-gnc-dialogs.c:2068
 msgid "Type of search"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2484
+#: src/gnome/glade-gnc-dialogs.c:2082
 msgid "New search"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2492
+#: src/gnome/glade-gnc-dialogs.c:2090
 msgid "Refine current search"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2500
+#: src/gnome/glade-gnc-dialogs.c:2098
 msgid "Add results to current search"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2508
+#: src/gnome/glade-gnc-dialogs.c:2106
 msgid "Delete results from current search"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2590
+#: src/gnome/glade-gnc-dialogs.c:2188
 msgid "Select Date"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2756
+#: src/gnome/glade-gnc-dialogs.c:2354
 msgid "Name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2778
+#: src/gnome/glade-gnc-dialogs.c:2376
 msgid "The name of this budget"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2787
+#: src/gnome/glade-gnc-dialogs.c:2385
 msgid "Budget Entries"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2835
+#: src/gnome/glade-gnc-dialogs.c:2433
 msgid "label773"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2859
+#: src/gnome/glade-gnc-dialogs.c:2457
 msgid "Add"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2866
+#: src/gnome/glade-gnc-dialogs.c:2464
 msgid "Add a new entry or subentry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2875
+#: src/gnome/glade-gnc-dialogs.c:2473
 msgid "Delete the selected entry or subentry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2890
+#: src/gnome/glade-gnc-dialogs.c:2488
 msgid "Move the selected item up"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2898
+#: src/gnome/glade-gnc-dialogs.c:2496
 msgid "Move the selected item down"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2907
+#: src/gnome/glade-gnc-dialogs.c:2505
 msgid "Entry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2940 src/gnome/glade-gnc-dialogs.c:3989
-#: src/gnome/glade-gnc-dialogs.c:4154
+#: src/gnome/glade-gnc-dialogs.c:2538 src/gnome/glade-gnc-dialogs.c:3587
+#: src/gnome/glade-gnc-dialogs.c:3752
 msgid "Type:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2979
+#: src/gnome/glade-gnc-dialogs.c:2577
 msgid "Normal"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2982
+#: src/gnome/glade-gnc-dialogs.c:2580
 msgid "No Total"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2987
+#: src/gnome/glade-gnc-dialogs.c:2585
 msgid "Matching Transactions..."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:2994
+#: src/gnome/glade-gnc-dialogs.c:2592
 msgid "Subentry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3027
+#: src/gnome/glade-gnc-dialogs.c:2625
 msgid "Amount:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3036
+#: src/gnome/glade-gnc-dialogs.c:2634
 msgid "Period:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3045
+#: src/gnome/glade-gnc-dialogs.c:2643
 msgid "Mechanism:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3054
+#: src/gnome/glade-gnc-dialogs.c:2652
 msgid "Bill Day:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3063
+#: src/gnome/glade-gnc-dialogs.c:2661
 msgid "Grace Period:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3117
+#: src/gnome/glade-gnc-dialogs.c:2715
 msgid "Bill"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3120
+#: src/gnome/glade-gnc-dialogs.c:2718
 msgid "Recurring"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3123
+#: src/gnome/glade-gnc-dialogs.c:2721
 msgid "Contingency"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3302
+#: src/gnome/glade-gnc-dialogs.c:2900
 msgid "Payment Periods"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3311 src/gnome/glade-gnc-dialogs.c:3356
-#: src/gnome/glade-gnc-dialogs.c:3401 src/gnome/glade-gnc-dialogs.c:3446
-#: src/gnome/glade-gnc-dialogs.c:3491
+#: src/gnome/glade-gnc-dialogs.c:2909 src/gnome/glade-gnc-dialogs.c:2954
+#: src/gnome/glade-gnc-dialogs.c:2999 src/gnome/glade-gnc-dialogs.c:3044
+#: src/gnome/glade-gnc-dialogs.c:3089
 msgid "Clear"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3317 src/gnome/glade-gnc-dialogs.c:3362
-#: src/gnome/glade-gnc-dialogs.c:3407 src/gnome/glade-gnc-dialogs.c:3452
-#: src/gnome/glade-gnc-dialogs.c:3497
+#: src/gnome/glade-gnc-dialogs.c:2915 src/gnome/glade-gnc-dialogs.c:2960
+#: src/gnome/glade-gnc-dialogs.c:3005 src/gnome/glade-gnc-dialogs.c:3050
+#: src/gnome/glade-gnc-dialogs.c:3095
 msgid "Clear the entry"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3319 src/gnome/glade-gnc-dialogs.c:3364
-#: src/gnome/glade-gnc-dialogs.c:3409 src/gnome/glade-gnc-dialogs.c:3454
-#: src/gnome/glade-gnc-dialogs.c:3499
+#: src/gnome/glade-gnc-dialogs.c:2917 src/gnome/glade-gnc-dialogs.c:2962
+#: src/gnome/glade-gnc-dialogs.c:3007 src/gnome/glade-gnc-dialogs.c:3052
+#: src/gnome/glade-gnc-dialogs.c:3097
 msgid "Calculate"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3347
+#: src/gnome/glade-gnc-dialogs.c:2945
 msgid "Interest Rate"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3392
+#: src/gnome/glade-gnc-dialogs.c:2990
 msgid "Present Value"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3437
+#: src/gnome/glade-gnc-dialogs.c:3035
 msgid "Periodic Payment"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3482
+#: src/gnome/glade-gnc-dialogs.c:3080
 msgid "Future Value"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3543 src/gnome/glade-gnc-dialogs.c:3791
+#: src/gnome/glade-gnc-dialogs.c:3141 src/gnome/glade-gnc-dialogs.c:3389
 msgid "Compounding:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3552 src/gnome/glade-gnc-dialogs.c:3800
+#: src/gnome/glade-gnc-dialogs.c:3150 src/gnome/glade-gnc-dialogs.c:3398
 msgid "Payments:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3575 src/gnome/glade-gnc-dialogs.c:3617
-#: src/gnome/glade-gnc-dialogs.c:3837 src/gnome/glade-gnc-dialogs.c:3879
+#: src/gnome/glade-gnc-dialogs.c:3173 src/gnome/glade-gnc-dialogs.c:3215
+#: src/gnome/glade-gnc-dialogs.c:3435 src/gnome/glade-gnc-dialogs.c:3477
 msgid "Annual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3578 src/gnome/glade-gnc-dialogs.c:3620
-#: src/gnome/glade-gnc-dialogs.c:3840 src/gnome/glade-gnc-dialogs.c:3882
+#: src/gnome/glade-gnc-dialogs.c:3176 src/gnome/glade-gnc-dialogs.c:3218
+#: src/gnome/glade-gnc-dialogs.c:3438 src/gnome/glade-gnc-dialogs.c:3480
 msgid "Semi-annual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3581 src/gnome/glade-gnc-dialogs.c:3623
-#: src/gnome/glade-gnc-dialogs.c:3843 src/gnome/glade-gnc-dialogs.c:3885
+#: src/gnome/glade-gnc-dialogs.c:3179 src/gnome/glade-gnc-dialogs.c:3221
+#: src/gnome/glade-gnc-dialogs.c:3441 src/gnome/glade-gnc-dialogs.c:3483
 msgid "Tri-annual"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3584 src/gnome/glade-gnc-dialogs.c:3626
-#: src/gnome/glade-gnc-dialogs.c:3846 src/gnome/glade-gnc-dialogs.c:3888
+#: src/gnome/glade-gnc-dialogs.c:3182 src/gnome/glade-gnc-dialogs.c:3224
+#: src/gnome/glade-gnc-dialogs.c:3444 src/gnome/glade-gnc-dialogs.c:3486
 msgid "Quarterly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3587 src/gnome/glade-gnc-dialogs.c:3629
-#: src/gnome/glade-gnc-dialogs.c:3849 src/gnome/glade-gnc-dialogs.c:3891
+#: src/gnome/glade-gnc-dialogs.c:3185 src/gnome/glade-gnc-dialogs.c:3227
+#: src/gnome/glade-gnc-dialogs.c:3447 src/gnome/glade-gnc-dialogs.c:3489
 msgid "Bi-monthly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3590 src/gnome/glade-gnc-dialogs.c:3632
-#: src/gnome/glade-gnc-dialogs.c:3852 src/gnome/glade-gnc-dialogs.c:3894
+#: src/gnome/glade-gnc-dialogs.c:3188 src/gnome/glade-gnc-dialogs.c:3230
+#: src/gnome/glade-gnc-dialogs.c:3450 src/gnome/glade-gnc-dialogs.c:3492
 msgid "Monthly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3593 src/gnome/glade-gnc-dialogs.c:3635
-#: src/gnome/glade-gnc-dialogs.c:3855 src/gnome/glade-gnc-dialogs.c:3897
+#: src/gnome/glade-gnc-dialogs.c:3191 src/gnome/glade-gnc-dialogs.c:3233
+#: src/gnome/glade-gnc-dialogs.c:3453 src/gnome/glade-gnc-dialogs.c:3495
 msgid "Semi-monthly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3596 src/gnome/glade-gnc-dialogs.c:3638
-#: src/gnome/glade-gnc-dialogs.c:3858 src/gnome/glade-gnc-dialogs.c:3900
+#: src/gnome/glade-gnc-dialogs.c:3194 src/gnome/glade-gnc-dialogs.c:3236
+#: src/gnome/glade-gnc-dialogs.c:3456 src/gnome/glade-gnc-dialogs.c:3498
 msgid "Bi-weekly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3599 src/gnome/glade-gnc-dialogs.c:3641
-#: src/gnome/glade-gnc-dialogs.c:3861 src/gnome/glade-gnc-dialogs.c:3903
+#: src/gnome/glade-gnc-dialogs.c:3197 src/gnome/glade-gnc-dialogs.c:3239
+#: src/gnome/glade-gnc-dialogs.c:3459 src/gnome/glade-gnc-dialogs.c:3501
 msgid "Weekly"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3602 src/gnome/glade-gnc-dialogs.c:3644
-#: src/gnome/glade-gnc-dialogs.c:3864 src/gnome/glade-gnc-dialogs.c:3906
+#: src/gnome/glade-gnc-dialogs.c:3200 src/gnome/glade-gnc-dialogs.c:3242
+#: src/gnome/glade-gnc-dialogs.c:3462 src/gnome/glade-gnc-dialogs.c:3504
 msgid "Daily (360)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3605 src/gnome/glade-gnc-dialogs.c:3647
-#: src/gnome/glade-gnc-dialogs.c:3867 src/gnome/glade-gnc-dialogs.c:3909
+#: src/gnome/glade-gnc-dialogs.c:3203 src/gnome/glade-gnc-dialogs.c:3245
+#: src/gnome/glade-gnc-dialogs.c:3465 src/gnome/glade-gnc-dialogs.c:3507
 msgid "Daily (365)"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3659
+#: src/gnome/glade-gnc-dialogs.c:3257
 msgid "End of Period Payments"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3668
+#: src/gnome/glade-gnc-dialogs.c:3266
 msgid "Beginning of Period Payments"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3683
+#: src/gnome/glade-gnc-dialogs.c:3281
 msgid "Discrete Compounding"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3692
+#: src/gnome/glade-gnc-dialogs.c:3290
 msgid "Continuous Compounding"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3706
+#: src/gnome/glade-gnc-dialogs.c:3304
 msgid "Schedule"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3773
+#: src/gnome/glade-gnc-dialogs.c:3371
 msgid "Effective Date:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3782
+#: src/gnome/glade-gnc-dialogs.c:3380
 msgid "Initial Payment:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3966
+#: src/gnome/glade-gnc-dialogs.c:3564
 msgid "Select currency/security "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:3997
+#: src/gnome/glade-gnc-dialogs.c:3595
 msgid "Currency/security:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4056
+#: src/gnome/glade-gnc-dialogs.c:3654
 msgid "New..."
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4116
+#: src/gnome/glade-gnc-dialogs.c:3714
 msgid "New Currency/Security"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4138
+#: src/gnome/glade-gnc-dialogs.c:3736
 msgid "Full name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4146
+#: src/gnome/glade-gnc-dialogs.c:3744
 msgid "Symbol/abbreviation:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4162
+#: src/gnome/glade-gnc-dialogs.c:3760
 msgid "Numeric identifier:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4170
+#: src/gnome/glade-gnc-dialogs.c:3768
 msgid "Fraction traded:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4227
+#: src/gnome/glade-gnc-dialogs.c:3825
 msgid "1 /"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4365
+#: src/gnome/glade-gnc-dialogs.c:3963
 msgid "Account Name:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4392
+#: src/gnome/glade-gnc-dialogs.c:3981
+msgid "Currency:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:3990
 msgid "Security:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4401
+#: src/gnome/glade-gnc-dialogs.c:3999
 msgid "Account Code:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4517
+#: src/gnome/glade-gnc-dialogs.c:4115
 msgid "label812"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4557
+#: src/gnome/glade-gnc-dialogs.c:4155
 msgid "The source for price quotes:"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4649
+#: src/gnome/glade-gnc-dialogs.c:4247
 msgid "Import currency and stock information"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4670
+#: src/gnome/glade-gnc-dialogs.c:4268
 msgid "Import currency and stock information "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4671
+#: src/gnome/glade-gnc-dialogs.c:4269
 msgid ""
 "The file you are loading is from an older version of Gnucash. \n"
 "Information about currencies, stocks, and mutual funds needs to\n"
@@ -3875,11 +3852,11 @@ msgid ""
 "Hit \"Cancel\" now to stop loading the file. "
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4683
+#: src/gnome/glade-gnc-dialogs.c:4281
 msgid "Update your accounts with the new information"
 msgstr ""
 
-#: src/gnome/glade-gnc-dialogs.c:4684
+#: src/gnome/glade-gnc-dialogs.c:4282
 msgid ""
 "Click \"Finish\" to update your accounts to use the new \n"
 "information you have entered.\n"
@@ -3887,6 +3864,243 @@ msgid ""
 "Click \"Cancel\" to cancel the file-loading process.  \n"
 "\n"
 "Click \"Back\" to review your currency selections."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4397
+msgid "QIF Import"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4418
+msgid "Import QIF files"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4419
+msgid ""
+"Gnucash can import financial data from QIF (Quicken \n"
+"Interchange Format) files written by Quicken/Quickbooks,\n"
+"MS Money, Moneydance, and many other programs. \n"
+"\n"
+"The import  process has several steps.  Nothing will be done \n"
+"to your  Gnucash accounts until you click \"Finish\" at the end\n"
+"of the process. \n"
+"\n"
+"Click \"Next\" to start loading your QIF data, or \"Cancel\" to \n"
+"abort the process. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4430
+msgid "Select a QIF file to load"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4438
+msgid ""
+"Please select a file to load.  When you click \"Next\", the file will\n"
+"be loaded into a temporary area for analysis and you may be asked\n"
+"to answer some questions about the account(s) that are in it.\n"
+"\n"
+"Files can contain single or multiple accounts; you will have the \n"
+"opportunity to load as many files as you wish, so don't worry if \n"
+"all your data isn't in just one file. \n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4453
+msgid "QIF Filename:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4485
+msgid "Set the default QIF account name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4493
+msgid ""
+"The QIF file that you just loaded appears to contain \n"
+"transactions for just one account, but the file does not have a \n"
+"name for that account.  \n"
+"\n"
+"Please enter a name for the account.  If the file was exported \n"
+"from another accounting program and you are importing multiple\n"
+"files, it is important to use the same name that was used in \n"
+"that program.\n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4508
+msgid "Account name:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4532
+msgid "QIF files you have loaded"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4540
+msgid "QIF Files"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4563
+msgid "label827"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4570
+msgid ""
+"Click \"Load another file\" if you have more data to import at this time.\n"
+"Do this if you have saved your accounts to separate QIF files.\n"
+"\n"
+"Click \"Next\" to finish loading files and move to the next step \n"
+"of the QIF import process. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4585
+msgid "Load another file"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4592
+msgid "Unload selected file"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4608
+msgid "Your accounts and stock holdings"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4616
+msgid ""
+"On the next page, the accounts in your QIF files and any stocks or mutual "
+"funds\n"
+"you own will be matched with Gnucash accounts.  If an account already "
+"exists\n"
+"with the same or a similar name and compatible type, it will be used; "
+"otherwise, \n"
+"the default behavior will be to create a new account with the same name and "
+"\n"
+"type as the QIF account.  If you do not like the suggested Gnucash account, "
+"\n"
+"click to change it.\n"
+"\n"
+"Note that Gnucash will be creating many accounts that did not exist on your\n"
+"other personal finance program, including a separate account for each stock\n"
+"you own, separate accounts for the brokerage commissions, special "
+"\"Equity\"\n"
+"accounts (subaccounts of Retained Earnings, by default) which are the "
+"source\n"
+"of your opening balances, etc.  All of these accounts will appear on the "
+"next \n"
+"page so that you can change the defaults if you want to, but it is safe to "
+"leave\n"
+"them alone.  Do not be alarmed.\n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4633
+msgid "Map QIF accounts to Gnucash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4660
+msgid "QIF account name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4667 src/gnome/glade-gnc-dialogs.c:4756
+msgid "Gnucash account name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4674 src/gnome/glade-gnc-dialogs.c:4763
+msgid "New?"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4681
+msgid "Click \"Next\" to check mappings for QIF categories. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4697
+msgid "Income and expense categories"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4705
+msgid ""
+"Gnucash uses separate Income and Expense accounts rather than  Categories to "
+"\n"
+"classify your transactions.  Each of the categories in your QIF file will be "
+"\n"
+"converted to a Gnucash account.  On the next page, you will have an "
+"opportunity\n"
+"to look at the suggested matching of QIF category to Gnucash account and \n"
+"change it if you do not like the suggested default. \n"
+"\n"
+"If you change your mind later, you can reorganize the account structure "
+"safely\n"
+"on your own. "
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4722
+msgid "Map QIF categories to Gnucash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4749
+msgid "QIF category name"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4770
+msgid ""
+"Click \"Next\" to enter information about the currency used in your QIF "
+"files."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4786
+msgid "Enter the currency used for new accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4794
+msgid ""
+"The QIF importer cannot currently handle multi-currency QIF \n"
+"files.  All the accounts in the QIF file(s) you are importing must\n"
+"be denominated in the same currency.  This limitation should be\n"
+"removed soon.\n"
+"\n"
+"Enter the currency to use for transactions imported from your\n"
+"QIF files:"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4816
+msgid ""
+"Click \"Next\" to enter information about stocks and\n"
+"mutual funds in the imported data."
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4832
+msgid "Tradable commodities"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4840
+msgid ""
+"In the next pages, you will be asked to provide information about stocks, \n"
+"mutual funds, and other tradable commodities that appear in the QIF file(s)\n"
+"you are importing.  Gnucash requires more information about tradable \n"
+"commodities than the QIF format can represent. \n"
+"\n"
+"Each stock, mutual fund, or other commodity must have a type, which is the \n"
+"exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \n"
+"etc), a full name, and an abbreviation.\n"
+"\n"
+"Check to see if there is an existing Type in the picker that is appropriate; "
+"if \n"
+"not, you can enter a new Type name by hand in the box.  Make sure that the\n"
+"abbreviation you enter matches the ticker  symbol used for the commodity \n"
+"on the exchange or listing for its type.  \n"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4859
+msgid "Update your Gnucash accounts"
+msgstr ""
+
+#: src/gnome/glade-gnc-dialogs.c:4860
+msgid ""
+"Click \"Finish\" to import data from the staging area and\n"
+"update your Gnucash accounts.  The account and category\n"
+"mapping information you have entered will be saved and will\n"
+"be the default the next time you use the QIF import \n"
+"facility. \n"
+"\n"
+"Click \"Back\" to review your account and category mappings,\n"
+"to change currency and security settings for new accounts, \n"
+"or to add more files to the staging area.\n"
+"\n"
+"Click \"Cancel\" to abort the QIF import process."
 msgstr ""
 
 #: src/gnome/print-session.c:233

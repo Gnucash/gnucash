@@ -78,18 +78,23 @@ void          gnc_commodity_table_destroy();
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
                                            const char * namespace, 
                                            const char * mnemonic);
+gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
+                                              const char * namespace,
+                                              const char * fullname);
 void          gnc_commodity_table_insert(gnc_commodity_table * table,
                                          const gnc_commodity * comm);
+void          gnc_commodity_table_remove(gnc_commodity_table * table,
+                                         const gnc_commodity * comm);
 
-int           gnc_commodity_table_has_namespace(gnc_commodity_table * t,
+int       gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
+                                            const char * namespace);
+GList     * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
+GList     * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
                                                 const char * namespace);
-GList         * gnc_commodity_table_get_namespaces(gnc_commodity_table * t);
-GList         * gnc_commodity_table_get_commodities(gnc_commodity_table * t,
-                                                    const char * namespace);
-void          gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-                                                const char * namespace);
-void          gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
-                                                   const char * namespace);
+void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
+                                            const char * namespace);
+void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
+                                               const char * namespace);
 #endif
 
 

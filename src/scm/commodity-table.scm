@@ -14,6 +14,11 @@
    string=?
    "iso-4217-currencies.scm"))
 
+(define GNC_COMMODITY_NS_ISO "ISO-4217 Currencies")
+(define GNC_COMMODITY_NS_NASDAQ "NASDAQ Securities")
+(define GNC_COMMODITY_NS_NYSE "NYSE Securities")
+(define GNC_COMMODITY_NS_EUREX "EUREX Securities")
+(define GNC_COMMODITY_NS_MUTUAL "US Mutual Funds")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  (gnc:setup-default-namespaces)
@@ -23,12 +28,12 @@
 
 (define (gnc:setup-default-namespaces)
   (let ((table (gnc:engine-commodities)))
-    (gnc:commodity-table-add-namespace table "NASDAQ Securities")
-    (gnc:commodity-table-add-namespace table "NYSE Securities")
-    (gnc:commodity-table-add-namespace table "EUREX Securities")
-    (gnc:commodity-table-add-namespace table "US Mutual Funds")))
+    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_NYSE)
+    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_NASDAQ)
+    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_EUREX)
+    (gnc:commodity-table-add-namespace table GNC_COMMODITY_NS_MUTUAL)))
 
-    
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  (gnc:load-iso-4217-currencies)
 ;;  load the default table of ISO-4217 currency information. 
@@ -70,4 +75,4 @@
 ;                            (display "inserting commodity ")
 ;                            (write form) (newline)
                             (gnc:commodity-table-insert table comm)))))
-                (loop (read)))))))))diff -u /dev/null '/home/grib/devel/gnucash-1.5/src/scm/engine-init.scm'
+                (loop (read)))))))))

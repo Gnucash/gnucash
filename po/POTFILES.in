@@ -4,6 +4,6 @@
 po/pseudo-source.c
 po/guile_strings.txt
 src/gnome/dialog-account-picker.c
-src/gnome/dialog-qif-import.c
+src/gnome/druid-qif-import.c
 src/gnome/glade-gnc-dialogs.c
 src/gnome/print-session.c

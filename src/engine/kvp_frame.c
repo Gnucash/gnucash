@@ -147,23 +147,20 @@ kvp_frame_set_slot(kvp_frame * frame, const char * slot,
                    const kvp_value * value) {
   gpointer orig_key;
   gpointer orig_value;
-  gpointer new_value;
-  int      key_exists;
-
-  new_value = kvp_value_copy(value);
+  int      key_exists; 
 
   g_hash_table_freeze(frame->hash);
-
   key_exists = g_hash_table_lookup_extended(frame->hash, slot,
                                             & orig_key, & orig_value);
-  if (key_exists) {
+  if(key_exists) {
     g_hash_table_remove(frame->hash, slot);
     g_free(orig_key);
-    kvp_value_delete(orig_value);
+    g_free(orig_value);
   }
 
-  g_hash_table_insert(frame->hash, g_strdup(slot), new_value);
-
+  g_hash_table_insert(frame->hash, 
+                      (gpointer)g_strdup(slot), 
+                      (gpointer)kvp_value_copy(value));
   g_hash_table_thaw(frame->hash);
 }
 

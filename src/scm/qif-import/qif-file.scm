@@ -61,13 +61,12 @@
                    (case qstate-type 
                      ((type:bank type:cash type:ccard type:invst
                                  #{type:oth\ a}#  #{type:oth\ l}#)
-                      (if ignore-accounts (set! current-account-name last-seen-account-name))
+                      (if ignore-accounts 
+                          (set! current-account-name last-seen-account-name))
                       (set! ignore-accounts #f)
                       (set! current-xtn (make-qif-xtn))
                       (set! default-split (make-qif-split))
                       (qif-split:set-category! default-split "")
-                      (qif-file:set-default-account-type! 
-                       self (qif-parse:state-to-account-type qstate-type))
                       (set! first-xtn #t))
                      ((type:class)
                       (set! current-xtn (make-qif-class)))
@@ -182,22 +181,23 @@
                            (qif-xtn:set-splits! current-xtn
                                                 (list default-split)))
                        (if first-xtn 
-                           (begin 
-                             (qif-file:process-opening-balance-xtn 
-                              self current-xtn qstate-type)
+                           (begin
+                             (if (not current-account-name)
+                                 (set! current-account-name 
+                                       (qif-file:process-opening-balance-xtn 
+                                        self current-xtn qstate-type)))
                              (set! first-xtn #f)))
                        
                        (if (and (eq? qstate-type 'type:invst)
                                 (not (qif-xtn:security-name current-xtn)))
                            (qif-xtn:set-security-name! current-xtn ""))
                        
-                       (if current-account-name 
-                           (qif-xtn:set-from-acct! current-xtn 
-                                                   current-account-name) 
-                           (qif-xtn:set-from-acct! 
-                            current-xtn (qif-file:default-account self)))
+                       (qif-xtn:set-from-acct! current-xtn 
+                                               current-account-name) 
+                       
                        (if (qif-xtn:date current-xtn)
                            (qif-file:add-xtn! self current-xtn))
+                       ;;(write current-xtn) (newline)
                        (set! current-xtn (make-qif-xtn))
                        (set! current-split #f)
                        (set! default-split (make-qif-split)))))
@@ -349,7 +349,8 @@
                    (car (qif-xtn:splits xtn))))
         (cat-is-acct? (qif-split:category-is-account? 
                        (car (qif-xtn:splits xtn))))
-        (security (qif-xtn:security-name xtn)))
+        (security (qif-xtn:security-name xtn))
+        (acct-name #f))
     (if (and payee (string? payee)              
              (not security)
              (string=? (string-remove-trailing-space payee)
@@ -363,22 +364,20 @@
            (car (qif-xtn:splits xtn))
            (default-equity-account))
           (qif-split:set-category-is-account?! 
-           (car (qif-xtn:splits xtn)) #t) 
-          (if (eq? (qif-file:default-account self) 'unknown)
-              (qif-file:set-default-account! self category)))
-        
-        ;; it's not an OB transaction.  Still set the default 
-        ;; account if there isn't one. 
-        (if (eq? (qif-file:default-account self) 'unknown)
-            (begin 
-              (qif-file:set-default-account!
-               self (qif-file:path-to-accountname self))
-              (case type
-                ((type:invst)
-                 (qif-file:set-default-account-type! self GNC-STOCK-TYPE))
-                (else
-                 (qif-file:set-default-account-type! self GNC-BANK-TYPE))))))))
+           (car (qif-xtn:splits xtn)) #t)
+          (set! acct-name category)))
+    acct-name))
 
+;; return #t if all xtns have a non-#f from-acct otherwise, we will
+;; need to ask for an explicit account.
+(define (qif-file:check-from-acct self)
+  (let ((retval #t))
+    (for-each 
+     (lambda (xtn)
+       (if (not (qif-xtn:from-acct xtn))
+           (set! retval #f)))
+     (qif-file:xtns self))
+    retval))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields self 

@@ -37,7 +37,6 @@
 #include "ui-callbacks.h"
 #include "file-history.h"
 
-
 /* This static indicates the debugging module that this .o belongs to.  */
 // static short module = MOD_GUI;
 
@@ -339,15 +338,6 @@ gncFileOpenFile (const char * newfile)
     return;
 
   gncPostFileOpen (newfile);
-}
-
-/* ======================================================== */
-
-void
-gncFileQIFImport (void)
-{
-  /* pop up the QIF File Import dialog box */
-  gnc_ui_qif_import_dialog_make(NULL);
 }
 
 /* ======================================================== */
