@@ -43,14 +43,13 @@
 #include "MultiLedger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"
-#include "main.h"
 #include "messages.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"
+#include "table-html.h"
 #include "Transaction.h"
 #include "util.h"
 #include "xtutil.h"
-#include "table-html.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -792,7 +791,7 @@ cancelCB( GtkWidget *w, gpointer data)
 /********************************************************************\
 \********************************************************************/
 
-#ifdef 0
+#if 0
 /* fileBox not implemented in GNOME version yet */
 
 static void

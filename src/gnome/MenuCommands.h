@@ -28,7 +28,7 @@
 /** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
-/* void gnucash_shutdown (GtkWidget *widget, gpointer *data); */
+void gnucash_shutdown (GtkWidget *widget, gpointer *data); 
 void file_cmd_open (GtkWidget *widget, gpointer data);
 void file_cmd_import (GtkWidget *widget, gpointer data);
 void file_cmd_quit (GtkWidget *widget, gpointer data);
@@ -37,7 +37,7 @@ void file_cmd_save (GtkWidget *widget, gpointer data);
 
 /** GLOBALS *********************************************************/
 //extern char  *helpPath;
-//extern GtkWidget   *app;
+extern GtkWidget   *app;
 
 #endif
 

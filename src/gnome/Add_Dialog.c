@@ -18,12 +18,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <string.h>
+
 #include <gnome.h>
+
+#include "AccInfo.h"
 #include "Add_Dialog.h"
 #include "MenuBar.h"
 #include "messages.h"
-#include "AccInfo.h"
-#include <string.h>
+#include "top-level.h"
 
 /** Globals *********************************************************/
 
