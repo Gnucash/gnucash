@@ -109,7 +109,6 @@ xaccSaveRegEntry (BasicRegister *reg)
     * cut down on uneccessary register redraws.  */
    changed = xaccGetChangeFlag (reg);
    
-printf ("saving %s \n", xaccTransGetDescription(trans));
    /* copy the contents from the cursor to the split */
 
    if (MOD_DATE & changed) 
@@ -127,7 +126,9 @@ printf ("saving %s \n", xaccTransGetDescription(trans));
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
 
    if (MOD_AMNT & changed) {
-      /* hack alert copy in new amount */
+      double new_amount;
+      new_amount = (reg->creditCell->amount) - (reg->debitCell->amount);
+      xaccSplitSetAmount (split, new_amount);
       xaccTransRecomputeAmount (trans);
    }
 
@@ -152,6 +153,7 @@ printf ("saving %s \n", xaccTransGetDescription(trans));
       /* hack alert -- implement this */
    }
 
+printf ("finished saving %s \n", xaccTransGetDescription(trans));
    /* refresh the register windows *only* if something changed */
    if (changed) {
       acc = xaccSplitGetAccount (split);
@@ -191,10 +193,10 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    xaccSetDebCredCellValue (reg->debitCell, 
                             reg->creditCell, xaccSplitGetAmount (split));
 
-   xaccSetAmountCellValue (reg->balanceCell, xaccGetBalance (split));
+   xaccSetAmountCellValue (reg->balanceCell, xaccSplitGetBalance (split));
 
    xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
-   xaccSetPriceCellValue  (reg->shrsCell,  xaccGetShareBalance (split));
+   xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));
    xaccSetAmountCellValue (reg->valueCell, xaccSplitGetValue (split));
 
    reg->table->current_cursor->user_data = (void *) split;
@@ -206,7 +208,8 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
 /* ======================================================== */
 
 void
-xaccLoadRegister (BasicRegister *reg, Split **slist)
+xaccLoadRegister (BasicRegister *reg, Split **slist, 
+                  Account *default_source_acc)
 {
    int i;
    Split *split;
@@ -269,16 +272,18 @@ printf ("load reg of %d entries --------------------------- \n",i);
       split = slist[i];
    }
 
-   /* add new, disconnected transaction at the end */
+   /* add the "blank split" at the end */
    trans = xaccMallocTransaction ();
    xaccTransSetDateToday (trans);
+   split = xaccTransGetSourceSplit (trans);
+   xaccAccountInsertSplit (default_source_acc, split);
 
    phys_row = reg->header->numRows;
    phys_row += i * (reg->cursor->numRows);
    xaccSetCursor (table, reg->cursor, phys_row, 0, i+1, 0);
    xaccMoveCursor (table, phys_row, 0);
 
-   xaccLoadRegEntry (reg, xaccTransGetSourceSplit (trans));
+   xaccLoadRegEntry (reg, split);
    
    /* restore the cursor to it original location */
    i++;
