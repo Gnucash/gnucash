@@ -3,6 +3,13 @@
 	* src/scm/printing/print-check.scm: some finer adjustments on
 	  the locations for Deluxe personal checks.
 
+	* acinclude.m4: modify the AC_GWRAP_CHECK_GUILE() macro to
+	  take an argument, the g-wrap module directory.  Then actually
+	  test that the g-wrap module loads.  This should detect systems
+	  without slib installed.
+	* configure.in: all the new gwrap check macro
+	  Fixes #113218
+	
 2003-05-19  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/QueryNew.[ch]: add gncQueryGetBooks() API to return
