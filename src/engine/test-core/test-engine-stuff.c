@@ -142,25 +142,24 @@ get_random_timespec(void)
   return ret;
 }
 
+#define RAND_IN_RANGE(X) ((X*((gint64) (rand()+1)))/RAND_MAX)
+
 gnc_numeric
 get_random_gnc_numeric(void)
 {
-    gint64 deno = rand();
-    gint64 numer = get_random_gint64();
+    gint64 numer = get_random_gint64()/10;
+    gint64 deno;
 
-#if 1
     if (RAND_MAX/2 < rand())
     {
-       gint64 norm = RAND_MAX / 2000;
-       /* Random number between 1 and 2000 */
-       deno /= norm;
-       deno += 1;
+       /* Random number between 1 and 6000 */
+       deno = RAND_IN_RANGE(6000ULL);
     }
     else
     {
-       gint64 norm = RAND_MAX / 8;
-       /* multiple of 10, between 1 and 100 million */
-       norm = deno / norm;
+       gint64 norm = RAND_IN_RANGE (10ULL);
+
+       /* multiple of 10, between 1 and 10 000 million */
        deno = 1;
        while (norm) 
        {
@@ -168,7 +167,6 @@ get_random_gnc_numeric(void)
           norm --;
        }
     }
-#endif
     return gnc_numeric_create(numer, deno);
 }
 
