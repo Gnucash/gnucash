@@ -1,45 +1,53 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.7 [fr] (Win98; I) [Netscape]">
-   <title>Compatibilit&eacute; an 2000 de GnuCash</title>
-<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
-</head>
-<body bgcolor="#EEEEEE">
-
-<h1>
-Compatibilit&eacute; an 2000 de GnuCash</h1>
-La version 1.1.25 de Gnucash et suivantes stocke toutes les dates en secondes
-et nanosecondes, o&ugrave; les secondes sont stock&eacute;s comme un entier
-sign&eacute; de 64-bit. Cel&agrave; devait suffire pour stocker les dates
-du pass&eacute; distant aussi bien que le futur distant, aussi longtemps
-qu'il y aura moins plusieurs douzaines d'heures dans l'&acirc;ge de l'univers.
-<p>Le format de fichier pour la version 1.1.25 et suivantes stocke les
-dates de la mani&egrave;re cit&eacute; ci-dessus.
-<p>Quelques routines internes utilisent le type <tt>time_t</tt> pour exprimer
-les secondes. Noter que sur la plupart des OS, c'est une longueur de 32-bit,
-et elle est limit&eacute; &agrave; l'&egrave;re Unix (D&eacute;c 1901 &agrave;
-Jan 2038).Il est r&eacute;sonnable d'esp&eacute;rer que <tt>time_t</tt>
-sera migr&eacute; vers l'utilisation de valeurs de 64 bit &agrave; ce moment
-l&agrave;.
-<p>Les fichiers de sauvegarde et log sont estampill&eacute; temporellement
-en utilisant la routine standard Unix <tt>ctime()</tt>, qui prend comme
-argument <tt>time_t</tt>. Ainsi, le m&eacute;canisme de sauvegarde et de
-log pourrait &eacute;prouver des troubles en 2038.Supposant que votre Unix
-actuel continue &agrave; &ecirc;tre en service &agrave; ce moment l&agrave;
-sans aucune correction.
-<p>Notez aussi que GnuCash reconnait correctement le 29 f&eacute;vrier
-2000 comme une "ann&eacute;e bissextile," une autre des "dates critiques
-de l'ann&eacute;e 2000."
-<p>Il est tr&egrave;s fortement sugg&eacute;r&eacute; que GnuCash devrait
-faire face raisonnablement bien &agrave; la transition vers le nouveau
-mill&eacute;naire, ou qu'il prend place en 2000 ou en 2001...
-<p>Les &eacute;l&eacute;ments de l'an 2000 sont d&eacute;crits en plus
-de d&eacute;tails &agrave; <a href="http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux
-et l'an 2000.</a>
-<br>
-<hr WIDTH="100%">
-<p>Retour &agrave; la <a href="xacc-main.html">Page principale de la documentation.</a>
-</body>
-</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<TITLE>Compatibilit&eacute; an 2000 de GnuCash</TITLE>
+	<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY BGCOLOR="#eeeeee">
+<H1>Compatibilit&eacute; an 2000 de GnuCash</H1>
+<P>Les versions 1.1.25 de Gnucash et suivantes stockent toutes les
+dates en secondes et nanosecondes, o&ugrave; les secondes sont
+stock&eacute;s comme un entier sign&eacute; de 64-bit. Cela devait
+suffire pour stocker les dates du pass&eacute; distant aussi bien que
+le futur distant, aussi longtemps qu'on ne d&eacute;couvre pas trop
+d'ordres de grandeur &agrave; l'&acirc;ge de l'univers, d'apr&egrave;s
+les estimations des astrophysiciens. 
+</P>
+<P>Le format de fichier pour les versions 1.1.25 et suivantes stocke
+les dates de la mani&egrave;re cit&eacute;e ci-dessus. 
+</P>
+<P>Quelques routines internes utilisent le type <TT>time_t</TT> pour
+exprimer les secondes. Notez que sur la plupart des OS, c'est une
+longueur de 32-bit, et elle est limit&eacute;e &agrave; l'&egrave;re
+Unix (D&eacute;c 1901 &agrave; Jan 2038). Il est raisonnable
+d'esp&eacute;rer que <TT>time_t</TT> sera migr&eacute; vers
+l'utilisation de valeurs de 64 bit &agrave; ce moment l&agrave;. 
+</P>
+<P>Les fichiers de sauvegarde et log sont estampill&eacute;
+temporellement en utilisant la routine standard Unix <TT>ctime()</TT>,
+qui prend comme argument <TT>time_t</TT>. Ainsi, le m&eacute;canisme
+de sauvegarde et de log pourrait &eacute;prouver des troubles en
+2038. Supposant que votre Unix actuel continue &agrave; &ecirc;tre en
+service &agrave; ce moment l&agrave; sans aucune correction. 
+</P>
+<P>Notez aussi que GnuCash reconna&icirc;t correctement le 29 f&eacute;vrier
+2000 comme une &quot;ann&eacute;e bissextile&quot;, une autre des
+&quot;dates critiques de l'ann&eacute;e 2000&quot;. 
+</P>
+<P>Il est tr&egrave;s fortement sugg&eacute;r&eacute; que GnuCash
+devrait faire face raisonnablement bien &agrave; la transition vers
+le nouveau mill&eacute;naire, qu'il commence en 2000 ou en 2001... 
+</P>
+<P STYLE="margin-bottom: 0cm">Les &eacute;l&eacute;ments de l'an 2000
+sont d&eacute;crits en plus de d&eacute;tails &agrave; <A HREF="http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux
+et l'an 2000</A>.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<HR>
+<P>Retour &agrave; la <A HREF="xacc-main.html">Page principale de la
+documentation.</A> 
+</P>
+</BODY>
+</HTML>
