@@ -1731,11 +1731,15 @@ xaccTransRollbackEdit (Transaction *trans)
       {
          Split *s = node->data;
 
+         trans->editlevel++;
+
          mark_split (s);
          xaccAccountRemoveSplit (xaccSplitGetAccount(s), s);
          xaccAccountRecomputeBalance (xaccSplitGetAccount(s));
          xaccRemoveEntity(s->entity_table, &s->guid);
          xaccFreeSplit (s);
+
+         trans->editlevel--;
       }
 
       g_list_free (trans->splits);
