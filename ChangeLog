@@ -1,5 +1,19 @@
 2001-06-04  Rob Browning  <rlb@cs.utexas.edu>
 
+	* lib/srfi/srfi-19.scm: updated to include guile-core bug fixes.
+	Removed syncase dependency.
+	(priv:open-input-string): removed -- check for open-input-string
+	and define that if not found.
+	(:optional): removed - just as easy to handle by-hand -- all funcs
+	that called :optional have been adjusted.
+	(priv:read-tai-utc-data): remove priv: from open-input-string.
+	(string->date): remove priv: from open-input-string.
+	(date): change constructor name to make-date.
+	(priv:decode-julian-day-number): add inexact->exact after
+	truncate.
+	(time-utc->date): add inexact->exact and int-secs.
+	(priv:locale-reader): use reverse! on result rather than reverse.
+
 	* src/scm/Makefile.am (gnc_regular_scm_files): remove process.scm.
 	(gncscmmoddir): new directory for gnucash guile modules --
 	i.e. for files available via (use-modules (gnucash foo)).
