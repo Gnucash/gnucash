@@ -1,3 +1,8 @@
+2003-02-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/glade/account.glade: Increase height of
+	  account-hierarchy druid.
+
 2003-02-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Quick fix to avoid
