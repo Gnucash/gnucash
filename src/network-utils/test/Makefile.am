@@ -2,11 +2,13 @@ TESTS =  \
   test-link-module \
   test-load-module
 
-TESTS_ENVIRONMENT= \
-   GNC_MODULE_PATH=.. \
-   GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:..:../../gnc-module:${top_srcdir}/lib \
-   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/network-utils
+GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/gnc-module \
+  --gnc-module-dir ${top_builddir}/src/network-utils \
+  --guile-load-dir ${G_WRAP_MODULE_DIR}
 
+TESTS_ENVIRONMENT := \
+  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
   test-link-module

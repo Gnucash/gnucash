@@ -3,11 +3,15 @@ TESTS = \
   test-escape \
   run-tests.sh
 
-TESTS_ENVIRONMENT=\
-  GNC_MODULE_PATH=${top_srcdir}/src/engine::${top_srcdir}/src/backend/file:${top_srcdir}/src/backend/postgres:${top_srcdir}/src/scm \
-  GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine \
-  LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine
+GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/gnc-module \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/backend/file \
+  --gnc-module-dir ${top_builddir}/src/backend/postgres \
+  --guile-load-dir ${G_WRAP_MODULE_DIR}
+
+TESTS_ENVIRONMENT := \
+  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
   test-db \

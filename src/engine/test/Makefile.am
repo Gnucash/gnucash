@@ -31,11 +31,13 @@ TESTS = \
   test-freq-spec \
   test-scm-query 
 
-TESTS_ENVIRONMENT = \
-  GNC_MODULE_PATH="${top_srcdir}/src/engine" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:../../gnc-module:${top_srcdir}/src/scm" \
-  LTDL_LIBRARY_PATH=../../gnc-module \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:${top_srcdir}/src/gnc-module
+GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/gnc-module \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${G_WRAP_MODULE_DIR}
+
+TESTS_ENVIRONMENT := \
+  $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
   test-commodities \
