@@ -20,6 +20,7 @@
 	  really "_Preferences"
 
 	* src/gnc-test-env: define LTDL_LIBRARY_PATH
+	* src/bin/overrides/gnucash-build-env: fix trailing whitespace bug
 	
 2002-09-29  Joshua Sled  <jsled@asynchronous.org>
 
