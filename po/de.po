@@ -109,6 +109,8 @@ msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
 msgstr ""
+"Wollen sie diese Buchung wirklich als nicht abgestimmt markieren?\n"
+"Das kann zukünftiges Ausgleichen erschweren!"
 
 #: messages-i18n.c:26
 msgid "Delete all the splits"
@@ -187,18 +189,20 @@ msgstr ""
 "Möchten sie fortfahren ?"
 
 #: messages-i18n.c:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error writing the file\n"
 "     %s\n"
 "\n"
 "%s"
 msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
-"     %s."
+"Es gab einen Fehler beim Schreiben der Datei\n"
+"     %s\n"
+"\n"
+"%s"
 
 #: messages-i18n.c:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error opening the file\n"
 "     %s\n"
@@ -206,18 +210,22 @@ msgid ""
 "%s"
 msgstr ""
 "Es gab einen Fehler beim Öffnen der Datei\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 
 #: messages-i18n.c:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error closing the file\n"
 "     %s\n"
 "\n"
 "%s"
 msgstr ""
-"Es gab einen Fehler beim Schliessen der Datei. \n"
-"     %s."
+"Es gab einen Fehler beim Schliessen der Datei\n"
+"     %s\n"
+"\n"
+"%s"
 
 #: messages-i18n.c:38
 #, c-format
@@ -287,7 +295,7 @@ msgstr ""
 
 #: messages-i18n.c:44
 msgid "You need to install the gnome-print library."
-msgstr ""
+msgstr "Sie müssen die gnome-print Bibliothek installieren."
 
 #: messages-i18n.c:45
 #, c-format
@@ -295,6 +303,8 @@ msgid ""
 "QIF file load failed:\n"
 "%s"
 msgstr ""
+"Laden der QIF Datei schlug fehl:\n"
+"%s"
 
 #: messages-i18n.c:46
 #, c-format
@@ -302,6 +312,8 @@ msgid ""
 "QIF file load warning:\n"
 "%s"
 msgstr ""
+"Problem beim Laden der QIF Datei:\n"
+"%s"
 
 #: messages-i18n.c:47
 #, c-format
@@ -309,6 +321,8 @@ msgid ""
 "QIF file parse failed:\n"
 "%s"
 msgstr ""
+"Interpretation der QIF Datei schlug fehl:\n"
+"%s"
 
 #: messages-i18n.c:48
 #, c-format
@@ -316,6 +330,8 @@ msgid ""
 "QIF file parse warning:\n"
 "%s"
 msgstr ""
+"Problem bei der Interpretation der QIF Datei:\n"
+"%s"
 
 #: messages-i18n.c:49
 msgid "The source for price quotes"
@@ -385,7 +401,7 @@ msgstr ""
 
 #: messages-i18n.c:59
 msgid "Are you sure you want to delete the current transaction?"
-msgstr "Sind sie sicher das sie das %s Konto löschen wollen?"
+msgstr "Sind sie sicher daß sie die aktuelle Buchung löschen wollen?"
 
 #: messages-i18n.c:60
 msgid "Recalculate Transaction"
@@ -396,6 +412,8 @@ msgid ""
 "The values entered for this transaction are inconsistent.\n"
 "Which value would you like to have recalculated?\n"
 msgstr ""
+"Die Werte dieser Buchung sind inkonsistent.\n"
+"Welchen Wert wollen sie anpassen?\n"
 
 #: messages-i18n.c:62
 #, c-format
@@ -404,6 +422,9 @@ msgid ""
 "to %s.\n"
 "Is that what you want to do?"
 msgstr ""
+"Die Typen aller übergeordneten Konten und deren Subkonten müssen auf %s\n"
+"geändert werden.\n"
+"Ist es das, was sie wollen?"
 
 #: messages-i18n.c:63
 #, c-format
@@ -411,10 +432,12 @@ msgid ""
 "The types of all the subaccounts must be changed to %s.\n"
 "Is that what you want to do?"
 msgstr ""
+"Die Typen aller Subkonten müssen auf %s geändert werden.\n"
+"Ist es das, was sie wollen?"
 
 #: messages-i18n.c:64
 msgid "The following changes must be made. Continue?"
-msgstr ""
+msgstr "Die folgenden Änderungen müssen gemacht werden. Weiter?"
 
 #: messages-i18n.c:65
 msgid ""
@@ -462,7 +485,7 @@ msgstr "Geben sie die neue Balance ein"
 
 #: messages-i18n.c:72
 msgid "Enter the date you want the balance adjusted"
-msgstr ""
+msgstr "Geben sie das Datum ein, an dem das Saldo berichtigt werden soll."
 
 #: messages-i18n.c:73
 msgid "Adjust the ending balance"
@@ -502,7 +525,7 @@ msgstr "Gewählte Buchung kopieren"
 
 #: messages-i18n.c:82
 msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
-msgstr ""
+msgstr "Geben sie einen 3-buchstabigen ISO-Währungscode (z.B. EUR für Euro) ein"
 
 #: messages-i18n.c:83
 msgid "Cut the selected transaction"
@@ -550,7 +573,7 @@ msgstr "HMTL-formatierten Bericht in Datei exportieren"
 
 #: messages-i18n.c:94
 msgid "Find transactions with a search."
-msgstr ""
+msgstr "Nach Buchungen suchen"
 
 #: messages-i18n.c:95
 msgid "Open the GnuCash help window"
@@ -726,7 +749,7 @@ msgstr "Beibehalten der normalen Kontoreihenfolge"
 
 #: messages-i18n.c:136
 msgid "Transfer funds from one account to another"
-msgstr "Transferieren von Währungen von einem Konto zu einem anderen"
+msgstr "Transferieren von Beträgen von einem Konto zu einem anderen"
 
 #: messages-i18n.c:137
 msgid "Enter the type of transaction, or choose one from the list"
@@ -1185,7 +1208,6 @@ msgid "Show All"
 msgstr "Alles anzeigen"
 
 #: messages-i18n.c:251
-#, fuzzy
 msgid "Show Income/Expense"
 msgstr "Einnahmen/Ausgaben anzeigen"
 
@@ -1766,7 +1788,7 @@ msgstr "Transfer"
 
 #: messages-i18n.c:398
 msgid "Untitled"
-msgstr ""
+msgstr "Ohne Titel"
 
 #: messages-i18n.c:399 po/guile_strings.txt:66
 msgid "Value"
@@ -1789,9 +1811,8 @@ msgid "Withdraw"
 msgstr "Abhebung"
 
 #: messages-i18n.c:404 po/guile_strings.txt:60
-#, fuzzy
 msgid "Withdrawal"
-msgstr "Abhebung"
+msgstr "Lastschrift"
 
 #: messages-i18n.c:405
 msgid "Years"
@@ -3495,28 +3516,24 @@ msgid "Find transactions whose Action matches:"
 msgstr "Suche Buchungen auf die folgende Aktion zutrifft:"
 
 #: src/gnome/glade-gnc-dialogs.c:2405
-#, fuzzy
 msgid "Match Cleared state"
-msgstr "zutreffendes Datum"
+msgstr "Passende Abgestimmtheit"
 
 #: src/gnome/glade-gnc-dialogs.c:2420
-#, fuzzy
 msgid "Find transactions whose Cleared status is:"
-msgstr "Suche Buchungen mit folgenden Nummern:"
+msgstr "Suche Buchungen deren Abgestimmtheit wie folgt ist:"
 
 #: src/gnome/glade-gnc-dialogs.c:2428
 msgid "Not cleared (n)"
-msgstr ""
+msgstr "Nicht abgestimmt (n)"
 
 #: src/gnome/glade-gnc-dialogs.c:2435
-#, fuzzy
 msgid "Cleared (c)"
-msgstr "Abgestimmt"
+msgstr "Abgestimmt (c)"
 
 #: src/gnome/glade-gnc-dialogs.c:2442
-#, fuzzy
 msgid "Reconciled (y)"
-msgstr "Abstimmen"
+msgstr "Ausgeglichen (y)"
 
 #: src/gnome/glade-gnc-dialogs.c:2470
 msgid "Type of search"
