@@ -1,0 +1,125 @@
+README.HBCI
+-----------
+
+Since the beta release 1.7.2, GnuCash features HBCI online banking
+support. This makes it the world's first *free* HBCI-enabled personal
+finance manager.
+
+HBCI (Home Banking Computer Interface) is a standard used by German
+banks for offering online banking service. Through this standard,
+business actions like statement retrieval, initiate bank transfer, or
+direct debits can be invoked by any HBCI-compliant client application,
+i.e. now also from GnuCash. Authentification and encryption is done
+through a bank-issued chip card or a self-generated file-based RSA key
+pair. (In the latter case, the user prints out his public key finger
+print on paper, signs it, and sends it to his bank.)
+
+Requirements
+------------
+
+OpenHBCI 0.9.3 or later 
+http://sourceforge.net/projects/openhbci
+
+which in turn requires:
+Libchipcard 0.6, http://sourceforge.net/projects/libchipcard
+and OpenSSL any 0.9.x, http://www.openssl.org
+
+Then you can build GnuCash 1.7.2 with:
+   ./configure --enable-hbci --with-openhbci-prefix=/your/openhbci/prefix
+
+And you need to apply at your Bank to get HBCI access. The bank will 
+provide you with some paper work which is needed during HBCI setup in 
+GnuCash.
+
+Quick Tour
+----------
+
+HBCI support is accessible through a few new menu items:
+
+* Setup: In the main window with the account hierarchy, the "Tools" menu 
+(German: "Werkzeuge") now contains the item "HBCI Setup" ("HBCI 
+Einrichtung"). This menu item opens the HBCI Setup druid which will 
+guide you through the setup.
+   - Chip card users will need to run this only once (even though I
+     haven't tested chip cards myself so far, so please don't hesitate to
+     send feedback)
+   - Users with self-generated file-based keys need to run this for the
+     first time to generate their keys and have their Ini-Letter printed,
+     which they need to send to their bank. After some days when the bank
+     has processed that letter, they need to run the HBCI Setup druid
+     a second time.
+   - Either way, eventually you are presented with a list of
+     HBCI-accessible accounts, and can choose which of your gnucash
+     account should be matched with each HBCI account.
+
+* Account functions: In the register window of your GnuCash accounts, 
+you now find the submenu item "Online Actions" ("Online Aktionen") in 
+the menu "Actions" ("Aktionen"). Each item in this submenu invokes a 
+particular HBCI action: "Get Balance", "Get Transactions", "New 
+Transfer", "New Direct Debit" ("Abfrage Saldo", "Abfrage Kontoumsätze", 
+"Neue Überweisung", "Neue Lastschrift"). Of course those menu items will 
+only do anything if that particular GnuCash account was matched to a 
+HBCI account in the setup druid; otherwise, simply nothing will happen. 
+How to perform each action will be explained in the respective 
+dialog windows.
+
+* Preference: By default, the user has to enter his password/PIN each 
+time a HBCI action is performed. If you prefer to have your password 
+cached in memory during your gnucash session, you can enable this by 
+activating the appropriate button in the Edit->Preference dialog 
+("Bearbeiten->Einstellungen") in the tab "Online Banking & Importing". 
+Of course the password/PIN is *never ever* stored on disk anywhere.
+
+Known Banks
+-----------
+
+OpenHBCI/Gnucash is successfully being used with:
+- Deutsche Bank
+- Kreissparkasse Hannover
+- Hamburger Sparkasse
+- Sparkasse Wilhelmshaven
+
+Call for Feedback
+-----------------
+
+If you encounter an error, don't hesitate to report it on 
+gnucash-devel@gnucash.org and on openhbci-general@lists.sf.net . Please 
+remember to include the version numbers of gnucash and openhbci as well 
+as any console output and/or HBCI connection log.
+
+Also, if you managed to successfully setup a bank that we don't have in 
+our list yet, please let us know as well. We appreciate any feedback on 
+this new functionality.
+
+Known Problems
+--------------
+
+* If you don't see the menu items mentioned above, then GnuCash was
+not built with --enable-hbci. Please check back on
+gnucash-devel@gnucash.org for debugging your build.
+
+* Currently each HBCI action can only be executed while you are online; 
+support for off-line preparation and queueing is not yet implemented.
+
+If you think you can do better on any of these issues -- why not give it 
+a try and start coding on yet more HBCI features? Gnucash only requires 
+some C and Gtk/Gnome knowledge, and other developers in the IRC channel 
+#gnucash, irc.gnome.org, will always assist you with problems arising 
+during coding. You don't need to know anything about HBCI since OpenHBCI 
+will do everything for you. Also, I (Christian Stimming) will withdraw 
+from HBCI/Gnucash development due to personal/time constraints in the 
+medium term. So if you want more features, why don't *you* start coding 
+today? We definitely welcome any new developer who contributes even the 
+smallest improvements.
+
+Credits
+-------
+
+The excellent OpenHBCI library is written by Fabian Kaiser 
+<fabian.kaiser@gmx.de>, Martin Preuss <openhbci@aquamaniac.de>, and 
+Christian Stimming <stimming@tuhh.de>. Libchipcard is written by Martin 
+Preuss <openhbci@aquamaniac.de>.
+
+By Christian Stimming <stimming@tuhh.de>
+Monday, 25 Nov 2002
+
