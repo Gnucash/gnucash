@@ -145,33 +145,71 @@ xaccSaveRegEntry (BasicRegister *reg)
    Split *split;
    Transaction *trans;
    Account * acc;
+   unsigned int changed;
 
    /* get the handle to the current split and transaction */
    split = xaccGetCurrentSplit (reg);
    if (!split) return;
    trans = (Transaction *) (split->parent);
+
+   /* use the changed flag to avoid heavy-weight updates
+    * of the split & transaction fields. This will help
+    * cut down on uneccessary register redraws.  */
+   changed = xaccGetChangeFlag (reg);
    
 printf ("saving %s \n", trans->description);
    /* copy the contents from the cursor to the split */
-   xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
-                            reg->dateCell->date.tm_mon+1,
-                            reg->dateCell->date.tm_year+1900);
 
-   xaccTransSetNum (trans, reg->numCell->value);
-   xaccTransSetDescription (trans, reg->descCell->cell.value);
-   xaccSplitSetMemo (split, reg->memoCell->value);
-   xaccSplitSetAction (split, reg->actionCell->cell.value);
-   xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+   if (MOD_DATE & changed) {
+      xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
+                               reg->dateCell->date.tm_mon+1,
+                               reg->dateCell->date.tm_year+1900);
 
-   ModifyXfer (split, reg->xfrmCell->cell.value);
+      /* hack alert -- should resort split array's */
+   }
 
-   /* lets assume that the amount changed, and 
-    * refresh all related accounts & account windows */
-   xaccTransRecomputeAmount (trans);
-   acc = (Account *) split->acc;
-   accRefresh (acc);
-   acc = (Account *) trans->credit_split.acc;
-   accRefresh (acc);
+   if (MOD_NUM & changed) 
+      xaccTransSetNum (trans, reg->numCell->value);
+   
+   if (MOD_DESC & changed) 
+      xaccTransSetDescription (trans, reg->descCell->cell.value);
+
+   if (MOD_RECN & changed) 
+      xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+
+   if (MOD_AMNT & changed) {
+      /* hack alert copy in new amount */
+      xaccTransRecomputeAmount (trans);
+   }
+
+   if (MOD_SHRS & changed) {
+      /* hack alert -- implement this */
+   }
+
+   if (MOD_PRIC & changed) {
+      /* hack alert -- implement this */
+   }
+
+   if (MOD_MEMO & changed) 
+      xaccSplitSetMemo (split, reg->memoCell->value);
+
+   if (MOD_ACTN & changed) 
+      xaccSplitSetAction (split, reg->actionCell->cell.value);
+
+   if (MOD_XFRM & changed) 
+      ModifyXfer (split, reg->xfrmCell->cell.value);
+
+   if (MOD_XTO & changed) {
+      /* hack alert -- implement this */
+   }
+
+   /* refresh the register windows *only* if something changed */
+   if (changed) {
+      acc = (Account *) split->acc;
+      accRefresh (acc);
+      acc = (Account *) trans->credit_split.acc;
+      accRefresh (acc);
+   }
 }
 
 /* ======================================================== */
@@ -245,7 +283,7 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
    /* set table size to number of items in list */
    i=0;
    while (slist[i]) i++;
-   xaccSetTableSize (table, i, 1);
+   xaccSetTableSize (table, i+1, 1);
 
 printf ("load reg of %d entries --------------------------- \n",i);
    /* populate the table */
@@ -261,6 +299,13 @@ printf ("load reg of %d entries --------------------------- \n",i);
       split = slist[i];
    }
 
+   /* add new, disconnected transaction at the end */
+   trans = xaccMallocTransaction ();
+   table->current_cursor_row = i;
+   table->current_cursor_col = 0;
+   xaccLoadRegEntry (reg, &(trans->credit_split));
+   i++;
+   
    /* restore the cursor to it original location */
    if (i <= save_cursor_row)  save_cursor_row = i - 1;
    if (0 > save_cursor_row)  save_cursor_row = 0;
