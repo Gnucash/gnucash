@@ -1,3 +1,16 @@
+2003-06-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncBillTerm.c: fix gncBillTermCopy()
+	  so it PROPERLY copies the bill term.  Oops!
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c:
+	  when rebuilding the refcount, make sure we fix the grandparent
+	  problems first so we refcount the correct object.
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	  when rebuilding the refcount, make sure we fix the grandparent
+	  problems first so we refcount the correct object.  Also cope
+	  with the broken gncBillTermCopy() and hope that the existing
+	  parent is correct.
+
 2003-06-16  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-register.c: Register with the component manager

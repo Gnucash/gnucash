@@ -536,9 +536,6 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
 
   table = gncEntryGetInvTaxTable(entry);
   if (table) {
-    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
-    count++;
-    g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
     if (taxtable_is_grandchild(table)) {
       PINFO("Fixing i-taxtable on entry %s\n",
 	     guid_to_string(gncEntryGetGUID(entry)));
@@ -546,14 +543,17 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
       gncEntryBeginEdit(entry);
       gncEntrySetInvTaxTable(entry, new_tt);
       gncEntryCommitEdit(entry);
+      table = new_tt;
+    }
+    if (table) {
+      count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+      count++;
+      g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
     }
   }
 
   table = gncEntryGetBillTaxTable(entry);
   if (table) {
-    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
-    count++;
-    g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
     if (taxtable_is_grandchild(table)) {
       PINFO("Fixing b-taxtable on entry %s\n",
 	     guid_to_string(gncEntryGetGUID(entry)));
@@ -561,6 +561,12 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
       gncEntryBeginEdit(entry);
       gncEntrySetBillTaxTable(entry, new_tt);
       gncEntryCommitEdit(entry);
+      table = new_tt;
+    }
+    if (table) {
+      count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+      count++;
+      g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
     }
   }
 }
