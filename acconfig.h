@@ -59,6 +59,9 @@
 /* The db1 database library */
 #undef PREFER_DB1
 
+/* Should we add guppi support? */
+#undef USE_GUPPI
+
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
 
