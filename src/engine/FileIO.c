@@ -1399,7 +1399,7 @@ writeDate( int fd, time_t secs )
   Local Variables:
   tab-width: 2
   indent-tabs-mode: nil
-  mode: c-mode
+  mode: c
   c-indentation-style: gnu
   eval: (c-set-offset 'block-open '-)
   End:
