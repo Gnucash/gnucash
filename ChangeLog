@@ -1,3 +1,10 @@
+2005-02-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-utils.c: When trying to load the symbol
+	  from a glade file, Fall back to dlsym() if g_module_symbol()
+	  fails.  This is necessary to find the symbols on on certain *BSD
+	  systems.
+
 2005-02-08  Christian Stimming  <stimming@tuhh.de>
 
 	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
