@@ -149,6 +149,19 @@ ultostr (unsigned long val, int base)
 }
 
 /********************************************************************\
+ * stpcpy for those platforms that don't have it.
+\********************************************************************/
+
+#ifndef HAVE_STPCPY
+char *
+stpcpy (char *dest, const char *src) 
+{
+   strcpy(dest, src);
+   return(dest + strlen(src));
+}
+#endif
+
+/********************************************************************\
  * currency & locale related stuff.
  * first attempt at internationalization i18n of currency amounts
  * In the long run, amounts should be printed with punctuation
