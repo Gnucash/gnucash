@@ -137,3 +137,9 @@ Linux 2.0.x -- Intel w/ Lesstif v0.82
 
 That's all folks!
 
+
+Credits:
+--------
+Robin Clark <rclark@hmc.edu> for original xacc
+Linas Vepstas <linas@lins.org> for extensive enhancements
+Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
