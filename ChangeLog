@@ -1,3 +1,7 @@
+2003-09-02  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* po/cs.po: Commit updated translation from translation project.
+	
 2003-08-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/import-backend.c: Aaarg. Fixed extremely
