@@ -268,14 +268,6 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
   gncCustomerCommitEdit (cust);
 }
 
-void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
-{
-  if (!cust || !guid) return;
-  if (guid_equal (guid, &cust->inst.entity.guid)) return;
-
-  qof_entity_set_guid (&cust->inst.entity, guid);
-}
-
 void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
 {
   if (!cust) return;

@@ -141,6 +141,58 @@ static void gncVendorFree (GncVendor *vendor)
   g_free (vendor);
 }
 
+#if 0
+/** Create a copy of a vendor, placing the copy into a new book. */
+GncVendor *
+gncCloneVendor (GncVendor *from, QofBook *book)
+{
+  GncVendor *vendor;
+
+  if (!book) return NULL;
+
+  vendor = g_new0 (GncVendor, 1);
+  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&vendor->inst, &from->inst);
+  
+  vendor->id = CACHE_INSERT (from->id);
+  vendor->name = CACHE_INSERT (from->name);
+  vendor->notes = CACHE_INSERT (from->notes);
+  vendor->addr = gncCloneAddress (from->addr, book);
+  vendor->taxincluded = from->taxincluded;
+  vendor->active = from->active;
+
+  vendor->jobs = NULL; xxx
+
+  GncBillTerm *   terms;
+  GncAddress *    addr;
+  gnc_commodity * currency;
+  GncTaxTable*    taxtable;
+  gboolean        taxtable_override;
+  GncTaxIncluded  taxincluded;
+  gboolean        active;
+  GList *         jobs;
+
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
+
+  return vendor;
+}
+
+GncVendor *
+gncVendorObtainTwin (GncVendor *from, QofBook *book)
+{
+  GncVendor *vendor;
+  if (!book) return NULL;
+
+  vendor = (GncVendor *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!vendor)
+  {
+    employee = gncCloneEmployee (from, book);
+  }
+
+  return vendor;
+}
+#endif
+
 /* ============================================================== */
 /* Set Functions */
 
