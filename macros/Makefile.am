@@ -6,6 +6,7 @@ MACROS=						\
   curses.m4					\
   gnome-bonobo-check.m4				\
   gnome-fileutils.m4				\
+  gnome-gdk-pixbuf.m4                           \
   gnome-ghttp-check.m4				\
   gnome-gnorba-check.m4				\
   gnome-guile-checks.m4				\
