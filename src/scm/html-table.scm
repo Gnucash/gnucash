@@ -29,6 +29,7 @@
                       row-headers
                       caption 
                       data
+		      num-rows
                       style
                       col-styles
                       row-styles
@@ -145,6 +146,7 @@
                          ;; ie (rowN rowN-1 . . . row0)
                          ;; So html-append-row is constant time but
                          ;; html-prepend-row is slow
+   0                     ;; num-rows
    (gnc:make-html-style-table) ;; style
    (make-hash-table 21)  ;; col-styles 
    (make-hash-table 21)  ;; row-styles 
@@ -280,8 +282,11 @@
 (define (gnc:html-table-col-style table col)
   (hash-ref (gnc:html-table-col-styles table) col))
 
-(define (gnc:html-table-num-rows table)
-  (length (gnc:html-table-data table)))
+(define gnc:html-table-num-rows
+ (record-accessor <html-table> 'num-rows))
+
+(define gnc:html-table-set-num-rows-internal!
+  (record-modifier <html-table> 'num-rows))
 
 (define (gnc:html-table-num-columns table)
   (let ((max 0))
@@ -294,14 +299,26 @@
     max))
 
 (define (gnc:html-table-append-row! table newrow)
-  (let ((dd (gnc:html-table-data table)))
+  (let* ((dd (gnc:html-table-data table))
+	 (current-num-rows (gnc:html-table-num-rows table))
+	 (new-num-rows (+ current-num-rows 1)))
     (set! dd (cons newrow dd))
-    (gnc:html-table-set-data! table dd)))
+    (gnc:html-table-set-num-rows-internal! 
+     table 
+     new-num-rows)
+    (gnc:html-table-set-data! table dd)
+    new-num-rows))
 
 (define (gnc:html-table-prepend-row! table newrow)
-  (let ((dd (gnc:html-table-data table)))
+  (let ((dd (gnc:html-table-data table))
+	(current-num-rows (gnc:html-table-num-rows table))
+	(new-num-rows (+ current-num-rows 1)))
     (set! dd (append dd (list newrow)))
-    (gnc:html-table-set-data! table dd)))
+    (gnc:html-table-set-num-rows-internal!
+     table
+     new-num-rows)
+    (gnc:html-table-set-data! table dd)
+    new-num-rows))
 
 (define (gnc:html-table-set-cell! table row col . objects)
   (let ((rowdata #f)
@@ -315,8 +332,8 @@
 	      ((< i row) #f)
 	    (gnc:html-document-append-row! table '()))
 	  (set! rowdata (make-list (+ col 1) #f))
-	  (gnc:html-document-append-row table rowdata)
-	  (set! l (length (gnc:html-table-data table)))
+	  (gnc:html-document-append-row! table rowdata)
+	  (set! l (gnc:html-table-num-rows))
 	  (set! row-loc (- (- l 1) row)))
 	(begin
 	  (set! row-loc (- (- l 1) row))

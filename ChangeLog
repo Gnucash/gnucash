@@ -1,3 +1,10 @@
+2001-03-07  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Added row colors to make things
+	look pretty.  Comments on effectiveness appreciated.
+
+	* src/scm/html-table.scm: keep track of how many rows are in the table.
+
 2001-03-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/iso-4217-currencies.scm: remove duplicate currency
