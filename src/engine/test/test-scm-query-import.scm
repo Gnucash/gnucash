@@ -7,6 +7,10 @@
   (gnc:module-system-init)
   (gnc:module-load "gnucash/engine" 0)
 
+  (display "\tTesting the Query Import interface... \n")
+  (display "\tYou may see \"Error: xaccQueryAddGUIDMatch: Invalid match type\".\n")
+  (display "\tThese messages are normal, and you can safely ignore them.\n\n")
+
   (let* ((session (gnc:session-new))
          (book (gnc:session-get-book session))
 	 (failures #f))
