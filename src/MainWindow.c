@@ -224,14 +224,56 @@ refreshMainWindow( void )
   {
 
   int   nrows;
+  int   row_from_top;
   AccountGroup *grp = topgroup;    /* hack -- should pass as argument ... */
   
+  /* During refresh, we remove and re-add all displayed accounts.
+   * We need to do this because the refresh may be due to an account 
+   * having been added, or due to an expansion of sub-accounts.
+   * However, doing this will cause the window to be scrolled
+   * to the top row, which is visually quite annoying.  Thus, we
+   * will save the current selected, visible row, and rescroll
+   * the redrawn window to put this row back to its original location.
+   * So -- first, figure out whats visible, and then restore.
+   */
+  if (selected_acc) {
+    int i, toprow;
+    XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
+
+    for (i=0; i<nrows; i++) {
+      Account * racc;
+      racc = (Account *) XbaeMatrixGetRowUserData (accountlist, i);
+      if (racc == selected_acc) break;
+    }
+    XtVaGetValues( accountlist, XmNtopRow, &toprow, NULL );
+    row_from_top = i - toprow;
+    if (0 > row_from_top) row_from_top = 0;  /* this should neve happen !? */
+  }
+
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
   xaccRecomputeGroupBalance (grp);  
   xaccMainWindowAddAcct (accountlist, grp, 0);
   xaccMainWindowRedisplayBalance ();
+
+  /* find the selected account in the new window, 
+   * and scroll to it. */
+  if (selected_acc) {
+    int i, toprow;
+    XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
+
+    for (i=0; i<nrows; i++) {
+      Account * racc;
+      racc = (Account *) XbaeMatrixGetRowUserData (accountlist, i);
+      if (racc == selected_acc) break;
+    }
+    toprow = i - row_from_top;
+    
+    /* set this row to be the top visible row */
+    XtVaSetValues( accountlist, XmNtopRow, toprow, NULL );
+    XbaeMatrixSelectRow( accountlist, i );
+  }
 }
 
 /********************************************************************\
@@ -332,27 +374,8 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
   }
 
   /* redraw the main window */
+  selected_acc = acc;
   refreshMainWindow ();
-
-  /* find the selected account in the new window, 
-   * and scroll to it. */
-  XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
-
-  for (i=0; i<nrows; i++) {
-    Account * racc;
-    racc = (Account *) XbaeMatrixGetRowUserData (accountlist, i);
-    if (racc == acc) {
-      Boolean isviz;
-      isviz = XbaeMatrixIsRowVisible (accountlist, i);
-      if (False == isviz) {
-        /* scroll to bottom first, so that during rewind, 
-         * sub-accounts become visible too */
-        XbaeMatrixMakeCellVisible (accountlist, nrows-1, 0);
-        XbaeMatrixMakeCellVisible (accountlist, i, 0);
-      }
-      break;
-    }
-  }
 }
 
 /********************************************************************\
