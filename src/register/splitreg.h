@@ -80,12 +80,12 @@
  * REG_DYNAMIC      -- dynamically expand edited transaction
  */
  
-#define REG_SINGLE_LINE        1 << 8
-#define REG_DOUBLE_LINE        2 << 8
-#define REG_MULTI_LINE         3 << 8
-#define REG_SINGLE_DYNAMIC     4 << 8
-#define REG_DOUBLE_DYNAMIC     5 << 8 
-#define REG_STYLE_MASK      0xff << 8 
+#define REG_SINGLE_LINE        (1 << 8)
+#define REG_DOUBLE_LINE        (2 << 8)
+#define REG_MULTI_LINE         (3 << 8)
+#define REG_SINGLE_DYNAMIC     (4 << 8)
+#define REG_DOUBLE_DYNAMIC     (5 << 8) 
+#define REG_STYLE_MASK      (0xff << 8) 
 
 /* modified flags -- indicate which cell values have been modified by user */
 #define MOD_NONE   0x000
