@@ -13,6 +13,7 @@ define(`account', `gncAccount, Account, Account, a,
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
        iguid,          , int32,  ptr->idata,
+       bookGUID,       , GUID *, gnc_book_get_guid(xaccAccountGetBook(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')

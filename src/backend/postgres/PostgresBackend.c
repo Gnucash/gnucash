@@ -42,6 +42,7 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -55,6 +56,7 @@
 #include "TransactionP.h"
 
 #include "account.h"
+#include "book.h"
 #include "builder.h"
 #include "checkpoint.h"
 #include "events.h"
@@ -709,6 +711,8 @@ pgendSync (Backend *bend, GNCBook *book)
    }
    be->freshly_created_db = FALSE;
 
+   pgendStoreBook (be, book);
+
    /* store the account group hierarchy, and then all transactions */
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
@@ -730,6 +734,12 @@ pgendSync (Backend *bend, GNCBook *book)
       /* in single user mode, read all the transactions */
       pgendGetMassTransactions (be, grp);
    }
+
+   /* hack alert -- In some deranged theory, we should be
+    * syncing prices here, as well as syncing any/all other
+    * engine structures that need to be stored.  But instead,
+    * price syn is handled as a separate routine ...
+    */
 
    /* re-enable events */
    pgendEnable(be);
@@ -764,23 +774,65 @@ trans_traverse_cb (Transaction *trans, void *cb_data)
 static void
 pgendSyncSingleFile (Backend *bend, GNCBook *book)
 {
+   char book_guid[40];
+   char buff[4000];
    char *p;
    PGBackend *be = (PGBackend *)bend;
    AccountGroup *grp = gnc_book_get_group (book);
 
    ENTER ("be=%p, grp=%p", be, grp);
 
+   /* hack alert -- we shouldn't be doing a global delete, 
+    * we should only be deleting the stuff that's in this particular 
+    * book .... */
    p = "BEGIN;\n"
+       "LOCK TABLE gncBook IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncAccount IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncCommodity IN EXCLUSIVE MODE;\n"
        "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
-       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n"
-       "DELETE FROM gncEntry;\n"
-       "DELETE FROM gncTransaction;\n"
-       "DELETE FROM gncAccount;\n"
-       "DELETE FROM gncCommodity;\n";
+       "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+
+   guid_to_string_buff (gnc_book_get_guid(book), book_guid);
+
+   /* First, we delete all of the accounts, splits and transactions
+    * associated with this book.  Its very tempting to just delete
+    * everything in the SQL db, but we note that there may be several 
+    * books stored here, and we want to delete only one book. 
+    */
+   /* do the one-book equivalent of "DELETE FROM gncTransaction;" */
+   p = buff;
+   p = stpcpy (p, "DELETE FROM gncTransaction WHERE "
+                  "  gncTransaction.transGuid = gncEntry.transGuid AND "
+                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  "  gncAccount.bookGuid = '");
+   p = stpcpy (p, book_guid);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   /* do the one-book equivalent of "DELETE FROM gncEntry;" */
+   p = buff;
+   p = stpcpy (p, "DELETE FROM gncEntry WHERE "
+                  "  gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  "  gncAccount.bookGuid = '");
+   p = stpcpy (p, book_guid);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+
+   /* do the one-book equivalent of "DELETE FROM gncAccount;" */
+   p = buff;
+   p = stpcpy (p, "DELETE FROM gncAccount WHERE bookGuid='");
+   p = stpcpy (p, book_guid);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   /* store the book struct */
+   pgendStoreBookNoLock (be, book, TRUE);
 
    /* Store accounts and commodities */
    xaccClearMarkDownGr (grp, 0);
@@ -792,6 +844,13 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
    xaccGroupBeginStagedTransactionTraversals(grp);
    xaccGroupStagedTransactionTraversal (grp, 1, trans_traverse_cb, be);
 
+   /* hack alert -- In some deranged theory, we should be
+    * syncing prices here, as well as syncing any/all other
+    * engine structures that need to be stored.  But instead,
+    * price sync is handled as a separate routine ...
+    */
+
+
    p = "COMMIT;";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -800,7 +859,7 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
 }
 
 /* ============================================================= */
-/* Please read the commend for pgendSync to truly understand
+/* Please read the comment for pgendSync to truly understand
  * how this routine works.  Its somewhat subtle.
  */
 
@@ -1240,6 +1299,8 @@ pgend_book_load_poll (Backend *bend)
 
    be->book = gnc_session_get_book (be->session);
 
+   pgendGetBook (be, be->book);
+
    grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1276,6 +1337,8 @@ pgend_book_load_single (Backend *bend)
    if (!be) return;
 
    be->book = gnc_session_get_book (be->session);
+
+   pgendGetBook (be, be->book);
 
    grp = pgendGetTopGroup (be);
 
@@ -2036,6 +2099,7 @@ pgendInit (PGBackend *be)
 
    be->my_pid = 0;
    be->do_account = 0;
+   be->do_book = 0;
    be->do_checkpoint = 0;
    be->do_price = 0;
    be->do_session = 0;

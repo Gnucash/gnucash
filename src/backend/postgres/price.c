@@ -214,6 +214,9 @@ pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
    gnc_commodity_table *comtab;
 
    comtab = gnc_book_get_commodity_table (be->book);
+printf ("duude comtab=%p book=%p session=%p sess-boo=%p\n",
+comtab, be->book, be->session,
+gnc_session_get_book(be->session));
 
    /* clear the marks on commodities -- we use this to mark 
     * the thing as 'already stored', avoiding redundant stores */

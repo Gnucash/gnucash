@@ -83,7 +83,6 @@ pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
      if (0 < pgendBookCompareVersion (be, book)) return;
    }
    book->version ++;  /* be sure to update the version !! */
-   book->version_check = be->version_check;
 
    if ((0 == book->idata) &&
        (FALSE == kvp_frame_is_empty (gnc_book_get_slots(book))))

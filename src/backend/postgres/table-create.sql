@@ -44,11 +44,12 @@ CREATE TABLE gncCommodity (
 	fraction	INT DEFAULT '100'
 );
 
--- CREATE TABLE gncBook (
--- 	bookGuid	CHAR(32) PRIMARY KEY,
--- 	version		INT4 NOT NULL,
--- 	iguid		INT4 UNIQUE DEFAULT nextval('gnc_iguid_seq')
--- );
+CREATE TABLE gncBook (
+	bookGuid	CHAR(32) PRIMARY KEY,
+	book_open	CHAR DEFAULT 'n',
+	version		INT4 NOT NULL,
+	iguid		INT4 UNIQUE DEFAULT nextval('gnc_iguid_seq')
+);
 
 -- Account structure -- parentGUID points to parent account
 -- guid. There is no supports for Groups in this schema.
@@ -57,7 +58,7 @@ CREATE TABLE gncCommodity (
 CREATE TABLE gncAccount (
 	accountGuid	CHAR(32) PRIMARY KEY,
 	parentGuid	CHAR(32) NOT NULL,
--- not yet	bookGuid	CHAR(32) NOT NULL,
+	bookGuid	CHAR(32) NOT NULL,
 	accountName 	TEXT NOT NULL CHECK (accountName <> ''),
 	accountCode 	TEXT,
 	description 	TEXT,

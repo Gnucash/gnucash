@@ -11,6 +11,7 @@ libgncmod_backend_postgres_la_LIBADD  =  -lpq  \
 libgncmod_backend_postgres_la_SOURCES = \
   PostgresBackend.c \
   account.c \
+  book.c \
   builder.c \
   checkpoint.c \
   escape.c \
@@ -27,6 +28,7 @@ noinst_HEADERS = \
   PostgresBackend.h \
   account.h \
   base-autogen.h \
+  book.h \
   builder.h \
   checkpoint.h \
   check-autogen.h \

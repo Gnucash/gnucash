@@ -37,7 +37,7 @@ static short module = MOD_BACKEND;
 /* ============================================================= */
 
 #define PGEND_CURRENT_MAJOR_VERSION  1
-#define PGEND_CURRENT_MINOR_VERSION  3
+#define PGEND_CURRENT_MINOR_VERSION  4
 #define PGEND_CURRENT_REV_VERSION    1
 
 /* ============================================================= */
@@ -347,9 +347,6 @@ add_multiple_book_support (PGBackend *be)
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
-   SEND_QUERY (be,p, );
-   FINISH_QUERY(be->connection);
- 
    p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,4,1,'End Add multiple book support');";
    SEND_QUERY (be,p, );
@@ -414,12 +411,10 @@ pgendUpgradeDB (PGBackend *be)
       {
         add_kvp_timespec_tables (be);
       }
-#ifdef NOT_YET
       if (4 > vers.minor)
       {
         add_multiple_book_support (be);
       }
-#endif
    }
 }
 
