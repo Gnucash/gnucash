@@ -1040,6 +1040,26 @@
    "Return the owner's currency")
 
   ;;
+  ;; gncTaxTable.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:taxtable-get-guid
+   '<gnc:guid-scm>
+   "gncTaxTableRetGUID"
+   '((<gnc:GncTaxTable*> taxtable))
+   "Return the GUID of the taxtable")
+
+  (gw:wrap-function
+   ws
+   'gnc:taxtable-lookup
+   '<gnc:GncTaxTable*>
+   "gncTaxTableLookupDirect"
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
+   "Lookup the tax table with GUID guid.")
+
+  ;;
   ;; gncVendor.h
   ;;
 

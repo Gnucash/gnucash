@@ -352,6 +352,81 @@ invoice_get_value (GNCOption *option, GtkWidget *widget)
 }
 
 
+/********************************************************************/
+/* "Tax Table" Option functions */
+
+
+static GtkWidget *
+create_taxtable_widget (GNCOption *option, GtkWidget *hbox)
+{
+  GtkWidget *widget;
+
+  widget = gtk_option_menu_new ();
+
+  gnc_ui_taxtables_optionmenu (widget, gnc_get_current_book (), TRUE, NULL);
+  
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gnc_option_set_widget (option, widget);
+
+  gnc_ui_optionmenu_set_changed_callback (widget,
+					  (void(*)(GtkWidget*,gpointer))option_changed_cb,
+					  option);
+
+  return widget;
+}
+
+/* Function to set the UI widget based upon the option */
+static GtkWidget *
+taxtable_set_widget (GNCOption *option, GtkBox *page_box,
+		     GtkTooltips *tooltips,
+		     char *name, char *documentation,
+		     /* Return values */
+		     GtkWidget **enclosing, gboolean *packed)
+{
+  GtkWidget *value;
+  GtkWidget *label;
+
+  *enclosing = gtk_hbox_new (FALSE, 5);
+  label = make_name_label (name);
+  gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
+
+  value = create_taxtable_widget (option, *enclosing);
+
+  gnc_option_set_ui_value (option, FALSE);
+
+  gtk_widget_show_all (*enclosing);
+  return value;
+}
+
+/* Function to set the UI Value for a particular option */
+static gboolean
+taxtable_set_value (GNCOption *option, gboolean use_default,
+		    GtkWidget *widget, SCM value)
+{
+  GncTaxTable *taxtable;
+
+  if (!gw_wcp_p (value))
+    scm_misc_error("business_options:taxtable_set_value",
+		   "Item is not a gw:wcp.", value);
+
+  taxtable = gw_wcp_get_ptr (value);
+
+  widget = gnc_option_get_widget (option);
+  gnc_ui_optionmenu_set_value (widget, taxtable);
+  return FALSE;
+}
+
+/* Function to get the UI Value for a particular option */
+static SCM
+taxtable_get_value (GNCOption *option, GtkWidget *widget)
+{
+  GncTaxTable *taxtable;
+
+  taxtable = gnc_ui_optionmenu_get_value (widget);
+  return gw_wcp_assimilate_ptr (taxtable, gh_eval_str("<gnc:GncTaxTable*>"));
+}
+
+
 
 
 void
@@ -364,6 +439,7 @@ gnc_business_options_initialize (void)
       customer_get_value },
     { "vendor", vendor_set_widget, vendor_set_value, vendor_get_value },
     { "invoice", invoice_set_widget, invoice_set_value, invoice_get_value },
+    { "taxtable", taxtable_set_widget, taxtable_set_value, taxtable_get_value },
     { NULL }
   };
 

@@ -603,6 +603,19 @@ void gncAccountValueDestroy (GList *list)
   g_list_free (list);
 }
 
+GUID gncTaxTableRetGUID (GncTaxTable *table)
+{
+  if (!table)
+    return *xaccGUIDNULL();
+
+  return table->guid;
+}
+
+GncTaxTable *gncTaxTableLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncTaxTableLookup (book, &guid);
+}
 
 /* Package-Private functions */
 

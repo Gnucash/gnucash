@@ -225,33 +225,49 @@ typedef struct {
   gint		component_id;
   GtkWidget *	omenu;
   GNCBook *	book;
-  gpointer *	result;
   gboolean	none_ok;
   const char *	(*get_name)(gpointer);
   GList *	(*get_list)(GNCBook*);
+
+  gboolean	building_menu;
+  gpointer	result;
+  gpointer *	result_p;
+  
+  void		(*changed_cb)(GtkWidget*, gpointer);
+  gpointer	cb_arg;
 } OpMenuData;
 
 #define DO_ADD_ITEM(s,o) { \
-	add_menu_item (menu, (s), omd->result, (o)); \
-	if (*(omd->result) == (o)) current = index; \
+	add_menu_item (menu, (s), omd, (o)); \
+	if (omd->result == (o)) current = index; \
 	index++; \
 }
 
 static void
-business_option_changed (GtkWidget *widget, gpointer *result)
+business_option_changed (GtkWidget *widget, gpointer data)
 {
-  *result = 
-    gtk_object_get_data (GTK_OBJECT (widget), "this_item");
+  OpMenuData *omd = data;
+
+  g_return_if_fail (omd);
+  omd->result = gtk_object_get_data (GTK_OBJECT (widget), "this_item");
+
+  if (!omd->building_menu) {
+    if (omd->result_p)
+      *(omd->result_p) = omd->result;
+
+    if (omd->changed_cb)
+      (omd->changed_cb)(omd->omenu, omd->cb_arg);
+  }
 }
 
 static void
-add_menu_item (GtkWidget *menu, const char *label, gpointer *result,
+add_menu_item (GtkWidget *menu, const char *label, OpMenuData *omd,
 	       gpointer this_item)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
   gtk_object_set_data (GTK_OBJECT (item), "this_item", this_item);
   gtk_signal_connect (GTK_OBJECT (item), "activate",
-		      business_option_changed, result);
+		      business_option_changed, omd);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
 }
@@ -272,11 +288,18 @@ build_generic_optionmenu (OpMenuData *omd)
   GtkWidget *menu;
   int current = 0, index = 0;
 
+  /* Make sure we can "get_list" */
+  if (omd->get_list == NULL)
+    return;
+
   /* Get the list of items */
   items = (omd->get_list)(omd->book);
 
+  /* Make a menu */
   menu = gtk_menu_new ();
   
+  omd->building_menu = TRUE;
+
   if (omd->none_ok || items == NULL)
     DO_ADD_ITEM (_("None"), NULL);
 
@@ -286,6 +309,8 @@ build_generic_optionmenu (OpMenuData *omd)
   gtk_option_menu_set_menu (GTK_OPTION_MENU (omd->omenu), menu);
   gtk_option_menu_set_history (GTK_OPTION_MENU (omd->omenu), current);
   gtk_widget_show (menu);
+
+  omd->building_menu = FALSE;
 }
 
 static void
@@ -295,7 +320,7 @@ generic_omenu_refresh_handler (GHashTable *changes, gpointer user_data)
   build_generic_optionmenu (omd);
 }
 
-static void
+static OpMenuData *
 make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
 			 gboolean none_ok, GNCIdType type_name,
 			 GList * (*get_list)(GNCBook*),
@@ -315,20 +340,25 @@ make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
     omd = g_new0 (OpMenuData, 1);
     omd->omenu = omenu;
     omd->book = book;
-    omd->result = result;
+    omd->result_p = result;
     omd->none_ok = none_ok;
     omd->get_name = get_name;
     omd->get_list = get_list;
     gtk_object_set_data (GTK_OBJECT (omenu), "menu-data", omd);
+
+    if (result)
+      omd->result = *result;
 
     omd->component_id =
       gnc_register_gui_component ("generic-omenu-refresh-hook",
 				  generic_omenu_refresh_handler,
 				  NULL, omd);
 
-    gnc_gui_component_watch_entity_type (omd->component_id,
-					 type_name,
-					 GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+    if (type_name)
+      gnc_gui_component_watch_entity_type (omd->component_id,
+					   type_name,
+					   GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
     
     gtk_signal_connect (GTK_OBJECT (omenu), "destroy",
 			generic_omenu_destroy_cb, omd);
@@ -336,6 +366,68 @@ make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
   }
 
   build_generic_optionmenu (omd);
+
+  return omd;
+}
+
+void
+gnc_ui_optionmenu_set_changed_callback (GtkWidget *omenu,
+					void (*changed_cb)(GtkWidget*,gpointer),
+					gpointer cb_arg)
+{
+  OpMenuData *omd;
+
+  if (!omenu) return;
+
+  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  g_return_if_fail (omd);
+
+  omd->changed_cb = changed_cb;
+  omd->cb_arg = cb_arg;
+}
+
+gpointer
+gnc_ui_optionmenu_get_value (GtkWidget *omenu)
+{
+  OpMenuData *omd;
+
+  if (!omenu) return NULL;
+
+  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  g_return_val_if_fail (omd, NULL);
+
+  return omd->result;
+}
+
+void
+gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data)
+{
+  OpMenuData *omd;
+  GtkWidget *menu;
+  GList *node;
+  gint counter;
+
+  if (!omenu) return;
+
+  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  g_return_if_fail (omd);
+
+  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (omenu));
+  g_return_if_fail (menu);
+
+  /* now walk all the children until we find our object */
+  for (counter = 0, node = ((GTK_MENU_SHELL (menu))->children);
+       node;
+       node = node->next, counter++)
+  {
+    GtkObject *menuitem = node->data;
+    gpointer this_object = gtk_object_get_data (menuitem, "this_item");
+
+    if (this_object == data) {
+      gtk_option_menu_set_history (GTK_OPTION_MENU (omd->omenu), counter);
+      return;
+    }
+  }
 }
 
 /* Create an optionmenu of available billing terms and attach it to
@@ -349,7 +441,7 @@ void
 gnc_ui_billterms_optionmenu (GtkWidget *omenu, GNCBook *book,
 			     gboolean none_ok, GncBillTerm **choice)
 {
-  if (!omenu || !book || !choice) return;
+  if (!omenu || !book) return;
 
   make_generic_optionmenu (omenu, book, none_ok, GNC_BILLTERM_MODULE_NAME,
 			   gncBillTermGetTerms,
@@ -361,7 +453,7 @@ void
 gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
 			     gboolean none_ok, GncTaxTable **choice)
 {
-  if (!omenu || !book || !choice) return;
+  if (!omenu || !book) return;
 
   make_generic_optionmenu (omenu, book, none_ok, GNC_TAXTABLE_MODULE_NAME,
 			   gncTaxTableGetTables,
@@ -373,23 +465,29 @@ void
 gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice)
 {
   GtkWidget *menu;
+  OpMenuData *omd;
   int current = 0, index = 0;
 
-  if (!omenu || !choice) return;
+  if (!omenu) return;
+
+  omd = make_generic_optionmenu (omenu, NULL, FALSE, NULL, NULL, NULL,
+				 (gpointer *)choice);
+
+  g_return_if_fail (omd);
 
   menu = gtk_menu_new ();
   
-  add_menu_item (menu, _("Yes"), (gpointer *)choice,
+  add_menu_item (menu, _("Yes"), omd,
 		 GINT_TO_POINTER (GNC_TAXINCLUDED_YES));
   if (*choice == GNC_TAXINCLUDED_YES) current = index;
   index++;
 
-  add_menu_item (menu, _("No"), (gpointer *)choice,
+  add_menu_item (menu, _("No"), omd,
 		 GINT_TO_POINTER (GNC_TAXINCLUDED_NO));
   if (*choice == GNC_TAXINCLUDED_NO) current = index;
   index++;
 
-  add_menu_item (menu, _("Use Global"), (gpointer *)choice,
+  add_menu_item (menu, _("Use Global"), omd,
 		 GINT_TO_POINTER (GNC_TAXINCLUDED_USEGLOBAL));
   if (*choice == GNC_TAXINCLUDED_USEGLOBAL) current = index;
   index++;

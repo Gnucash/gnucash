@@ -71,11 +71,13 @@
 	     (gnc:error "Illegal invoice value set"))))
      (lambda () (convert-to-invoice (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
        (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
-	     (set! value v))))
+	     (begin
+	       (set! option v)
+	       (set! option-set #t)))))
      validator
      #f #f #f #f)))
 
@@ -130,11 +132,13 @@
 	     (gnc:error "Illegal customer value set"))))
      (lambda () (convert-to-customer (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
        (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
-	     (set! value v))))
+	     (begin
+	       (set! option v)
+	       (set! option-set #t)))))
      validator
      #f #f #f #f)))
 
@@ -189,11 +193,13 @@
 	     (gnc:error "Illegal vendor value set"))))
      (lambda () (convert-to-vendor (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
      (lambda (f p)
        (let ((v (gnc:kvp-frame-get-slot-path f p)))
 	 (if (and v (string? v))
-	     (set! value v))))
+	     (begin
+	       (set! option v)
+	       (set! option-set #t)))))
      validator
      #f #f #f #f)))
 
@@ -283,19 +289,84 @@
        (lambda () (convert-to-owner (default-getter)))
        (gnc:restore-form-generator value->string)
        (lambda (f p)
-	 (gnc:kvp-frame-set-slot-path f (symbol->string (car value))
+	 (gnc:kvp-frame-set-slot-path f (symbol->string (car option))
 				      (append p '("type")))
-	 (gnc:kvp-frame-set-slot-path f (cdr value)
+	 (gnc:kvp-frame-set-slot-path f (cdr option)
 				      (append p '("value"))))
        (lambda (f p)
 	 (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
 	       (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
 	   (if (and t v (string? t) (string? v))
-	       (set! value (cons (string->symbol t) v)))))
+	       (begin
+		 (set! option (cons (string->symbol t) v))
+		 (set! option-set #t)))))
        validator
        owner-type #f #f #f))))
+
+
+;; Internally, values are always a guid. Externally, both guids and
+;; taxtable pointers may be used to set the value of the option. The
+;; option always returns a single taxtable pointer.
+
+(define (gnc:make-taxtable-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-getter
+	 value-validator)
+
+  (define (convert-to-guid item)
+    (if (string? item)
+        item
+        (gnc:taxtable-get-guid item)))
+
+  (define (convert-to-taxtable item)
+    (if (string? item)
+        (gnc:taxtable-lookup item (gnc:get-current-book))
+        item))
+
+  (let* ((option (convert-to-guid (default-getter)))
+         (option-set #f)
+         (getter (lambda () (convert-to-taxtable
+			     (if option-set
+				 option
+				 (default-getter)))))
+         (value->string (lambda ()
+                          (string-append
+                           "'" (gnc:value->string (if option-set option #f)))))
+         (validator
+          (if (not value-validator)
+              (lambda (taxtable) (list #t taxtable))
+              (lambda (taxtable)
+                (value-validator (convert-to-taxtable taxtable))))))
+    (gnc:make-option
+     section name sort-tag 'taxtable documentation-string getter
+     (lambda (taxtable)
+       (if (not taxtable) (set! taxtable (default-getter)))
+       (set! taxtable (convert-to-taxtable taxtable))
+       (let* ((result (validator taxtable))
+	      (valid (car result))
+	      (value (cadr result)))
+	 (if valid
+	     (begin
+	       (set! option (convert-to-guid value))
+	       (set! option-set #t))
+	     (gnc:error "Illegal taxtable value set"))))
+     (lambda () (convert-to-taxtable (default-getter)))
+     (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f option p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (begin
+	       (set! option v)
+	       (set! option-set #t)))))
+     validator
+     #f #f #f #f)))
 
 (export gnc:make-invoice-option)
 (export gnc:make-customer-option)
 (export gnc:make-vendor-option)
 (export gnc:make-owner-option)
+(export gnc:make-taxtable-option)

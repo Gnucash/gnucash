@@ -49,4 +49,18 @@ gnc_ui_taxtables_optionmenu (GtkWidget *omenu, GNCBook *book,
 /* Build an option menu for choosing a GncTaxIncluded */
 void gnc_ui_taxincluded_optionmenu (GtkWidget *omenu, GncTaxIncluded *choice);
 
+
+/* Here are some "generic option menu" utilities that can be used with
+ * ANY of the above option-menu types.  In particular the following
+ * functions are useful for hooking the above option menus into the
+ * GNC Option infrastructure.
+ */
+
+void gnc_ui_optionmenu_set_changed_callback (GtkWidget *omenu,
+					     void (*changed_cb)(GtkWidget*,gpointer),
+					     gpointer cb_arg);
+gpointer gnc_ui_optionmenu_get_value (GtkWidget *omenu);
+void gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data);
+
+
 #endif /* GNC_BUSINESS_UTILS_H_ */

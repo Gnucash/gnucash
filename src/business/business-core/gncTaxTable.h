@@ -84,6 +84,8 @@ gnc_numeric gncTaxTableEntryGetAmount (GncTaxTableEntry *entry);
 int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b);
 int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b);
 
+GUID gncTaxTableRetGUID (GncTaxTable *table);
+GncTaxTable *gncTaxTableLookupDirect (GUID guid, GNCBook *book);
 
 /************************************************/
 

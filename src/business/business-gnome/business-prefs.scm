@@ -66,6 +66,19 @@
   (reg-option
    (gnc:make-text-option
     gnc:*business-label* gnc:*company-addy*
-    "b" (N_ "The address of your business") "")))
+    "b" (N_ "The address of your business") ""))
+
+  (reg-option
+   (gnc:make-taxtable-option
+    gnc:*business-label* (N_ "Default Customer TaxTable")
+    "e" (N_ "The default tax table to apply to customers.")
+    (lambda () #f) #f))
+
+  (reg-option
+   (gnc:make-taxtable-option
+    gnc:*business-label* (N_ "Default Vendor TaxTable")
+    "f" (N_ "The default tax table to apply to vendors.")
+    (lambda () #f) #f))
+)
 
 (gnc:register-kvp-option-generator gnc:id-book book-options-generator)

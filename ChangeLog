@@ -1,3 +1,23 @@
+2003-01-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncTaxTable.[ch]: add functions to
+	  get the GUID and lookup by direct GUID (suitable for wrapping)
+	* src/business/business-core/gw-business-core-spec.scm: wrap
+	  the taxtable get-guid and lookup methods
+	* src/business/business-gnome/business-utils.[ch]: re-implement
+	  the "generic option menu" code to allow get_value(), set_value(),
+	  and changed_callback() functions.
+	* src/business/business-gnome/business-options.c: create a taxtable
+	  option type using the new generic optionmenu code
+	* src/business/business-gnome/business-options.scm: define a taxtable
+	  option.  Also fix all the other options when using a KVP storage
+	  to actually load and save the options properly
+	* src/business/business-gnome/business-prefs.scm: create a default
+	  customer and default vendor taxtable option for the "File Properties"
+	  option menu.
+
+	  Initial fix for #93462.  Next commit will actually use the values.
+
 2003-01-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/commodity-table.scm: move gnc:commodity-is-currency? here
