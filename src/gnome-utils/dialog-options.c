@@ -1242,16 +1242,10 @@ gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data)
 {
   GNCOptionWin * window = data;
 
-  /* Block the user from hitting other buttons until we're complete */
-  gtk_widget_set_sensitive(window->container, FALSE);
-
   if (window->apply_cb)
     window->apply_cb (window, window->apply_cb_data);
 
   gnc_options_dialog_clear_changed (window->container);
-
-  /* Now unblock the user */
-  gtk_widget_set_sensitive(window->container, TRUE);
 }
 
 static void

@@ -1,3 +1,15 @@
+2003-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-options.c: back out previous change.
+	* src/report/report-gnome/window-report.c: a better fix for
+	  #107953.  When we are asked to reload the report, queue the
+	  request, queue a draw event, and then return immediately.  When
+	  the draw event happens, load the report then.  This lets you
+	  hit Apply and then OK before the report finishes loading.
+
+	* src/import-export/ofx/test/Makefile.am: make sure we can find
+	  libofx/libofx.h
+	
 2003-05-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-options.c: don't let the user do anything
