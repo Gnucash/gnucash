@@ -921,6 +921,10 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
+/* QOF only */
+void qofSplitSetParentTrans(Split *s, QofEntity *ent);
+void qofSplitSetAccount(Split *s, QofEntity *ent);
+
 /** deprecated rouitines */
 #define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
 #define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))

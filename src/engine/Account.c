@@ -1470,6 +1470,22 @@ xaccAccountGetType (Account *acc)
    return (acc->type);
 }
 
+const char*
+qofAccountGetTypeString (Account *acc)
+{
+	if(!acc) { return NULL; }
+	return (xaccAccountTypeEnumAsString(acc->type));
+}
+
+void
+qofAccountSetType (Account *acc, const char *type_string)
+{
+	GNCAccountType type;
+
+	type = xaccAccountStringToEnum(type_string);
+	xaccAccountSetType(acc, type);
+}
+
 const char *
 xaccAccountGetName (Account *acc)
 {
@@ -2877,12 +2893,12 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_BALANCE_, 		QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance, 		NULL },
     { ACCOUNT_CLEARED_, 		QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance, 	NULL },
     { ACCOUNT_RECONCILED_,	 	QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance, NULL },
-	{ ACCOUNT_TYPE_, 			QOF_TYPE_INT32,   (QofAccessFunc)xaccAccountGetType, 			(QofSetterFunc)xaccAccountSetType },
-    { ACCOUNT_FUTURE_MINIMUM_, 	QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
+   { ACCOUNT_TYPE_,          QOF_TYPE_STRING,  (QofAccessFunc)qofAccountGetTypeString,   (QofSetterFunc)qofAccountSetType },
+   { ACCOUNT_FUTURE_MINIMUM_,QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
     { ACCOUNT_TAX_RELATED, 		QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, 		(QofSetterFunc) xaccAccountSetTaxRelated },
-	{ ACCOUNT_SCU, 				QOF_TYPE_INT32,   (QofAccessFunc)xaccAccountGetCommoditySCU, 	(QofSetterFunc)xaccAccountSetCommoditySCU },
+   { ACCOUNT_SCU,            QOF_TYPE_INT32,   (QofAccessFunc)xaccAccountGetCommoditySCU,(QofSetterFunc)xaccAccountSetCommoditySCU },
 	{ ACCOUNT_NSCU, 			QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetNonStdSCU, 		(QofSetterFunc)xaccAccountSetNonStdSCU },
-	{ ACCOUNT_PARENT,			GNC_ID_ACCOUNT,	  (QofAccessFunc)xaccAccountGetParentAccount,	(QofSetterFunc)qofAccountSetParent },
+   { ACCOUNT_PARENT,         GNC_ID_ACCOUNT,   (QofAccessFunc)xaccAccountGetParentAccount,(QofSetterFunc)qofAccountSetParent },
     { QOF_PARAM_BOOK, 			QOF_ID_BOOK, 	  (QofAccessFunc)qof_instance_get_book, 		NULL },
     { QOF_PARAM_GUID, 			QOF_TYPE_GUID,    (QofAccessFunc)qof_instance_get_guid, 		NULL },
     { ACCOUNT_KVP, 				QOF_TYPE_KVP, 	  (QofAccessFunc)qof_instance_get_slots, 		NULL },

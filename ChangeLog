@@ -1,3 +1,20 @@
+2005-03-25  Neil Williams <linux@codehelp.co.uk>
+	* src/backend/qsf/qsf-backend.c: Support for
+	multiple references in the same entity.
+	* src/business/business-gnome/gnc-plugin-business.c:
+	Typo in employee export collection.
+	* src/engine/Account.c:
+	* src/engine/Account.h: qofAccountGetTypeString
+	and qofAccountSetType to use string values for
+	enum types in QOF.
+	* src/engine/Transaction.c:
+	* src/engine/Transaction.h: qofSplitSetParentTrans
+	and qofSplitSetAccount QOF reference QofSetterFunc.
+	* src/engine/qofclass.c: Fixing reference identification.
+	* src/engine/qofsession.c: Removing debug calls. Minor fix.
+	* src/gnome/dialog-chart-export.c: Adding references to
+	generated Transaction and Splits in Chart of Accounts export.
+	
 2005-03-21  Neil Williams <linux@codehelp.co.uk>
 	* src/backend/qsf/qsf-backend.c: 
 	* src/backend/qsf/qsf-xml.c:

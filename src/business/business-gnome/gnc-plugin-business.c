@@ -737,7 +737,7 @@ gnc_plugin_business_cmd_export_employee (EggAction *action, GncMainWindowActionD
 	{
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
-		coll = qof_book_get_collection(book, GNC_ID_INVOICE);
+		coll = qof_book_get_collection(book, GNC_ID_EMPLOYEE);
 		success = qof_entity_copy_coll(chart_session, coll);
 		if(success) 
 		{ 

@@ -250,12 +250,18 @@ qof_class_param_foreach (QofIdTypeConst obj_name,
   g_hash_table_foreach (param_ht, param_foreach_cb, &iter);
 }
 
+struct param_ref_list
+{
+	GList *ref_list;
+};
+
 static void
 find_reference_param(QofParam *param, gpointer user_data)
 {
-	GList *ref_list;
+	struct param_ref_list *b;
 
-	ref_list = (GList*)user_data;
+	b = (struct param_ref_list*)user_data;
+	if((param->param_getfcn == NULL)||(param->param_setfcn == NULL)) { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_STRING))   { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_NUMERIC))  { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DATE))     { return; }
@@ -266,16 +272,22 @@ find_reference_param(QofParam *param, gpointer user_data)
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT64))    { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DOUBLE))   { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_KVP))      { return; }
-	ref_list = g_list_append(ref_list, param);
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_BOOLEAN))  { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_ID_BOOK))       { return; }
+	b->ref_list = g_list_append(b->ref_list, param);
 }
 
 GList*
 qof_class_get_referenceList(QofIdTypeConst type)
 {
 	GList *ref_list;
+	struct param_ref_list b;
 
 	ref_list = NULL;
-	qof_class_param_foreach(type, find_reference_param, ref_list);
+	b.ref_list = NULL;
+	qof_class_param_foreach(type, find_reference_param, &b);
+	ref_list = g_list_copy(b.ref_list);
+	g_list_free(b.ref_list);
 	return ref_list;
 }
 

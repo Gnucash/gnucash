@@ -132,10 +132,15 @@ static void
 qsf_session_end( QofBackend *be)
 {
 	QSFBackend *qsf_be;
+	GList *book_ref_list;
+	QofBook *book;
 	
 	qsf_be = (QSFBackend*)be;
 	g_return_if_fail(qsf_be != NULL);
-
+	book = qsf_be->params->book;
+	book_ref_list = (GList*)qof_book_get_data(book, ENTITYREFERENCE);
+	g_list_free(book_ref_list);
+	qof_book_set_data(book, PARTIAL_QOFBOOK, (gboolean*)FALSE);
 	qsf_free_params(qsf_be->params);
 	g_free(qsf_be->fullpath);
 	qsf_be->fullpath = NULL;
@@ -392,13 +397,14 @@ qof_reference_list_cb(gconstpointer a, gconstpointer b)
 	const QofEntityReference *aa;
 	const QofEntityReference *bb;
 
-	aa = (QofEntityReference*)a;
+	aa = (QofEntityReference*) a;
 	bb = (QofEntityReference*) b;
-	g_return_val_if_fail((aa != NULL), 1);
+	if(aa == NULL) { return 1; }
 	g_return_val_if_fail((bb != NULL), 1);
 	g_return_val_if_fail((aa->type != NULL), 1);
 	if((0 == guid_compare(bb->ent_guid, aa->ent_guid))
-		&&(0 == safe_strcmp(bb->type, aa->type)))
+		&&(0 == safe_strcmp(bb->type, aa->type))
+		&&(0 == safe_strcmp(bb->param->param_name, aa->param->param_name)))
 	{
 		return 0;
 	}
@@ -422,6 +428,46 @@ qof_reference_lookup(GList *referenceList, QofEntityReference *find)
 	return ent_ref;
 }
 
+static void
+reference_list_lookup(gpointer data, gpointer user_data)
+{
+	QofEntity *ent;
+	QofParam *ref_param;
+	QofEntityReference *reference, *starter;
+	qsf_param  *params;
+	xmlNodePtr node, object_node;
+	xmlNsPtr ns;
+	GList *copy_list;
+	gchar qsf_guid[GUID_ENCODING_LENGTH + 1], *ref_name;
+
+	params = (qsf_param*)user_data;
+	ref_param = (QofParam*)data;
+	object_node = params->output_node;
+	ent = params->qsf_ent;
+	ns = params->qsf_ns;
+	starter = g_new(QofEntityReference, 1);
+	starter->ent_guid = qof_entity_get_guid(ent);
+	starter->type = g_strdup(ent->e_type);
+	starter->param = ref_param;
+	starter->ref_guid = NULL;
+	copy_list = g_list_copy(params->referenceList);
+	reference = qof_reference_lookup(copy_list, starter);
+	g_free(starter);
+	if(reference != NULL) {
+		if((ref_param->param_getfcn == NULL)||(ref_param->param_setfcn == NULL))
+		{
+			return;
+		}
+		ref_name = g_strdup(reference->param->param_name);
+		node = xmlAddChild(object_node, xmlNewNode(ns, QOF_TYPE_GUID));
+		guid_to_string_buff(reference->ref_guid, qsf_guid);
+		xmlNodeAddContent(node, qsf_guid);
+		xmlNewProp(node, QSF_OBJECT_TYPE ,ref_name);
+		g_free(ref_name);
+	}
+}
+
+
 /*=====================================
 	Convert QofEntity to QSF XML node
 qof_param holds the parameter sequence.
@@ -429,12 +475,12 @@ qof_param holds the parameter sequence.
 static void
 qsf_entity_foreach(QofEntity *ent, gpointer data)
 {
-	QofEntityReference *reference, *starter;
 	qsf_param  *params;
 	GSList     *param_list, *supported;
+	GList      *ref;
 	xmlNodePtr node, object_node;
 	xmlNsPtr   ns;
-	gchar      *string_buffer, qsf_guid[GUID_ENCODING_LENGTH + 1], *ref_name;
+	gchar      *string_buffer;
 	GString    *buffer;
 	QofParam   *qof_param;
 	KvpFrame   *qsf_kvp;
@@ -469,35 +515,15 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 				xmlNewProp(node, QSF_OBJECT_TYPE , QOF_PARAM_GUID);
 				own_guid = TRUE;
 			}
-			PINFO (" own_guid=%d ent->e_type=%s qof_param->param_name=%s",
-				own_guid, ent->e_type, qof_param->param_name);
-/*			if((qof_param->param_setfcn != NULL) && (qof_param->param_getfcn != NULL))
-			{*/
-				starter = g_new(QofEntityReference, 1);
-				starter->ent_guid = qof_entity_get_guid(ent);
-				/* Reading ent->e_type can seg fault if the above check on get() and set() is removed. */
-				/* Some entities seem to be invalid artefacts. Why? */
-				starter->type = g_strdup(ent->e_type);
-				starter->param = qof_param;
-				starter->ref_guid = NULL;
-				reference = qof_reference_lookup(params->referenceList, starter);
-				g_free(starter);
-			if(reference != NULL) {
-					ref_name = g_strdup(reference->param->param_name);
-					node = xmlAddChild(object_node, xmlNewNode(ns, QOF_TYPE_GUID));
-					guid_to_string_buff(reference->ref_guid, qsf_guid);
-					PINFO ("reference found=%s %s %s", ref_name, qsf_guid, reference->type);
-					xmlNodeAddContent(node, qsf_guid);
-					xmlNewProp(node, QSF_OBJECT_TYPE ,ref_name);
-					g_free(ref_name);
+			params->qsf_ent = ent;
+			params->output_node = object_node;
+			ref = qof_class_get_referenceList(ent->e_type);
+			if(ref != NULL) {
+				g_list_foreach(ref, reference_list_lookup, params);
 			}
-				param_list = g_slist_next(param_list);
-				continue;
-/*			}*/
 		}
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_KVP))
 		{
-			/** Special KVP handling - the book_merge function doesn't render KVP */
 			qsf_kvp = kvp_frame_copy(qof_param->param_getfcn(ent,qof_param));
 			params->qof_param = qof_param;
 			params->output_node = object_node;
@@ -775,7 +801,6 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	qsf_ent = params->qsf_ent;
 	targetBook = params->book;
 	obj_type = xmlGetProp(node->parent, QSF_OBJECT_TYPE);
-	ENTER (" ");
 	if(0 == safe_strcasecmp(obj_type, parameter_name)) { return; }
 	cm_setter = qof_class_get_parameter_setter(obj_type, parameter_name);
 	cm_param = qof_class_get_parameter(obj_type, parameter_name);

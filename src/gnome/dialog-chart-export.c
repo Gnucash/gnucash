@@ -103,6 +103,8 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	QofCollection *coll;
 	const GUID *guid;
 	time_t trans_time;
+	GList *ref;
+	QofEntityReference *ent_ref;
 	
 	g_return_if_fail(user_data != NULL);
 	data = (chart_data*)user_data;
@@ -110,6 +112,7 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	data->param_ref_list = NULL;
 	guid = qof_entity_get_guid(ent);
 	acc_ent = (Account*)ent;
+	ref = NULL;
 	equity_account = data->equity_account;
 	g_return_if_fail(equity_account != NULL);
 	balance = xaccAccountGetBalanceAsOfDate(acc_ent, data->chart_time_t);
@@ -131,12 +134,21 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	xaccTransSetDateSecs (trans, trans_time);
 	xaccTransSetDateEnteredSecs (trans, trans_time);
 	xaccTransSetDescription (trans, OPENING_BALANCE_DESC);
+	/* User account split */
 	split = xaccMallocSplit (book);
 	xaccTransAppendSplit (trans, split);
 	xaccAccountInsertSplit (acc_ent, split);
 	xaccSplitSetAmount (split, balance);
 	xaccSplitSetValue (split, balance);
+	ref = qof_class_get_referenceList(GNC_ID_SPLIT);
+	while(ref != NULL) {
+		ent_ref = qof_entity_get_reference_from((QofEntity*)split, ref->data);
+		qof_session_update_reference_list(data->chart_session, ent_ref);
+		ref = g_list_next(ref);
+	}
+	g_list_free(ref);
 	balance = gnc_numeric_neg (balance);
+	/* Equity account split */
 	split = xaccMallocSplit (book);
 	xaccTransAppendSplit (trans, split);
 	xaccAccountInsertSplit (equity_account, split);
@@ -145,6 +157,20 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	xaccTransCommitEdit (trans);
 	xaccAccountCommitEdit (equity_account);
 	xaccAccountCommitEdit (acc_ent);
+	ref = qof_class_get_referenceList(GNC_ID_TRANS);
+	while(ref != NULL) {
+		ent_ref = qof_entity_get_reference_from((QofEntity*)trans, ref->data);
+		qof_session_update_reference_list(data->chart_session, ent_ref);
+		ref = g_list_next(ref);
+	}
+	g_list_free(ref);
+	ref = qof_class_get_referenceList(GNC_ID_SPLIT);
+	while(ref != NULL) {
+		ent_ref = qof_entity_get_reference_from((QofEntity*)split, ref->data);
+		qof_session_update_reference_list(data->chart_session, ent_ref);
+		ref = g_list_next(ref);
+	}
+	g_list_free(ref);
 }
 
 static GtkWidget *

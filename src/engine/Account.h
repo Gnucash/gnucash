@@ -227,6 +227,8 @@ other manner.
 */
 void qofAccountSetParent (Account *, QofEntity *);
 
+const char* qofAccountGetTypeString (Account *acc);
+void qofAccountSetType (Account *acc, const char *type_string);
 
 /** Get the account's name */
 const char *   xaccAccountGetName (Account *account);
