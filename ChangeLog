@@ -1,3 +1,7 @@
+2001-03-19  Dave Peticolas  <dave@krondo.com>
+
+	* rpm/gnucash.spec.in: add finance-quote-helper as executable
+
 2001-03-19  Derek Atkins  <warlord@MIT.EDU>
 
 	* src/engine/rpc/*: Gnucash RPC Subsystem (Backend and Server).
