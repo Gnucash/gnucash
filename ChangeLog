@@ -1,3 +1,8 @@
+2003-07-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofbook.c: be sure to delete the book's KVP when we
+	  destroy it.
+
 2003-07-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif/...
