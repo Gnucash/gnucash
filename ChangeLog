@@ -1,3 +1,16 @@
+2001-06-24  Kevin Finn  <kevinfinn@mediaone.net>
+
+	* src/gnome/dialog-transfer.[ch]: reformatted my previous changes
+	to 80 cols.  Added interface to specify whether description
+	quickfill will be based on From or To account splits.  Enhance
+	quickfill to also select the appropriate account in the account
+	tree for the matched transaction.
+
+	* src/gnome/window-reconcile.c: reformatted my previous changes to
+	80 cols.  Change the auto interest xfer dialog so that it
+	quickfills based on the reconcile account, rather than always on
+	the From account.
+
 2001-06-24  Dave Peticolas  <dave@krondo.com>
 
 	* AUTHORS: credits

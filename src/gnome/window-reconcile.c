@@ -121,32 +121,32 @@ struct _RecnWindow
  */
 typedef struct _startRecnWindowData
 {
-  Account       *account;          /* the account being reconciled             */
-  GNCAccountType account_type;     /* the type of the account                  */
-  gboolean       use_shares;       /* whether to use shares for the account    */
+  Account       *account;         /* the account being reconciled            */
+  GNCAccountType account_type;    /* the type of the account                 */
+  gboolean       use_shares;      /* whether to use shares for the account   */
 
-  GtkWidget     *startRecnWindow;  /* the startRecnWindow dialog               */
-  GtkWidget     *xfer_button;      /* the dialog's interest transfer button    */
-  GNCAmountEdit *end_value;        /* the dialog's ending balance amount edit  */
+  GtkWidget     *startRecnWindow; /* the startRecnWindow dialog              */
+  GtkWidget     *xfer_button;     /* the dialog's interest transfer button   */
+  GNCAmountEdit *end_value;       /* the dialog's ending balance amount edit */
 
-  XferDialog    *xferData;         /* the interest xfer dialog (if it exists)  */
+  XferDialog    *xferData;        /* the interest xfer dialog (if it exists) */
 
-  time_t         date;             /* the reconcile date for the interest xfer */
+  time_t         date;            /* the interest xfer reconcile date        */
 } startRecnWindowData;
 
 
-/* Note: make sure to update the help text for this in prefs.scm if these change!
- * These macros define the account types for which an auto interest xfer dialog
- * could pop up, if the user's preferences allow it.
+/* Note: make sure to update the help text for this in prefs.scm if these
+ * change!  These macros define the account types for which an auto interest
+ * xfer dialog could pop up, if the user's preferences allow it.
  */
-#define account_type_has_auto_interest_charge( type )  ( ( (type) == CREDIT ) || \
-                                                         ( (type) == LIABILITY ) )
+#define account_type_has_auto_interest_charge(type)  (((type) == CREDIT) || \
+                                                      ((type) == LIABILITY))
 
-#define account_type_has_auto_interest_payment( type )  ( ( (type) == BANK )   || \
-                                                          ( (type) == ASSET )  || \
-                                                          ( (type) == MUTUAL ) )
+#define account_type_has_auto_interest_payment(type) (((type) == BANK)  || \
+                                                      ((type) == ASSET) || \
+                                                      ((type) == MUTUAL))
 
-#define account_type_has_auto_interest_xfer( type ) \
+#define account_type_has_auto_interest_xfer(type) \
   (  account_type_has_auto_interest_charge(type) || \
     account_type_has_auto_interest_payment(type) )
 
@@ -341,9 +341,10 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), new_balance);
 }
 
-/* For a given account, determine if an auto interest xfer dialog should be shown,
- * based on both the per-account flag as well as the global reconcile option.
- * The global option is the default that is used if there is no per-account option.
+/* For a given account, determine if an auto interest xfer dialog should be
+ * shown, based on both the per-account flag as well as the global reconcile
+ * option.  The global option is the default that is used if there is no
+ * per-account option.
  */
 static gboolean
 gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( Account *account )
@@ -359,7 +360,7 @@ gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( Account *account )
  *   opens up a window to prompt the user to enter an interest      *
  *   charge or payment for an account prior to reconciling it.      *
  *   Only to be called for some types of accounts, as defined       *
- *   in the macros at the top of this file.
+ *   in the macros at the top of this file.                         *
  *                                                                  *
  * NOTE: This function does not return until the user presses "Ok"  *
  *       or "Cancel", which means that the transaction must be      *
@@ -393,7 +394,8 @@ static void
 gnc_recn_interest_xfer_no_auto_clicked_cb(GtkButton *button,
                                           startRecnWindowData *data)
 {
-  /* Indicate that the user doesn't want an auto interest xfer for this account.
+  /* Indicate that the user doesn't want
+   * an auto interest xfer for this account.
    */
   xaccAccountSetAutoInterestXfer( data->account, FALSE );
 
@@ -416,44 +418,59 @@ recnInterestXferWindow( startRecnWindowData *data)
   if( !account_type_has_auto_interest_xfer( data->account_type ) ) return;
 
   /* get a normal transfer dialog... */
-  data->xferData = gnc_xfer_dialog( GTK_WIDGET(data->startRecnWindow), data->account );
+  data->xferData = gnc_xfer_dialog( GTK_WIDGET(data->startRecnWindow),
+                                    data->account );
 
   /* ...and start changing things: */
 
   /* change title */
   if( account_type_has_auto_interest_payment( data->account_type ) )
-    title = gnc_recn_make_interest_window_name( data->account, "Interest Payment" );
+    title = gnc_recn_make_interest_window_name( data->account,
+                                                _("Interest Payment") );
   else
-    title = gnc_recn_make_interest_window_name( data->account, "Interest Charge" );
+    title = gnc_recn_make_interest_window_name( data->account,
+                                                _("Interest Charge") );
 
   gnc_xfer_dialog_set_title( data->xferData, title );
   g_free( title );
 
 
   /* change frame labels */
-  gnc_xfer_dialog_set_information_frame_label( data->xferData, _("Payment Information") );
+  gnc_xfer_dialog_set_information_frame_label( data->xferData,
+                                               _("Payment Information") );
 
-  /* interest accrued is a transaction from an income account to a bank account.
-   * interest charged is a transaction from a credit account to an expense account.
-   * The user isn't allowed to change the account (bank or credit) being reconciled.
+  /* Interest accrued is a transaction from an income account
+   * to a bank account.  Interest charged is a transaction from
+   * a credit account to an expense account.  The user isn't allowed
+   * to change the account (bank or credit) being reconciled.
    */
   if( account_type_has_auto_interest_payment( data->account_type ) )
   {
-    gnc_xfer_dialog_set_from_account_frame_label( data->xferData, _("Payment From") );
+    gnc_xfer_dialog_set_from_account_frame_label( data->xferData,
+                                                  _("Payment From") );
     gnc_xfer_dialog_set_from_show_button_active( data->xferData, TRUE );
 
-    gnc_xfer_dialog_set_to_account_frame_label( data->xferData, _("Reconcile Account") );
+    gnc_xfer_dialog_set_to_account_frame_label( data->xferData,
+                                                _("Reconcile Account") );
     gnc_xfer_dialog_select_to_account( data->xferData, data->account );
     gnc_xfer_dialog_lock_to_account_tree( data->xferData );
+
+    /* Quickfill based on the reconcile account, which is the "To" acct. */
+    gnc_xfer_dialog_quickfill_to_account( data->xferData, TRUE );
   }
   else  /* interest charged to account rather than paid to it */
   {
-    gnc_xfer_dialog_set_from_account_frame_label( data->xferData, _("Reconcile Account") );
+    gnc_xfer_dialog_set_from_account_frame_label( data->xferData, 
+                                                  _("Reconcile Account") );
     gnc_xfer_dialog_select_from_account( data->xferData, data->account );
     gnc_xfer_dialog_lock_from_account_tree( data->xferData );
 
-    gnc_xfer_dialog_set_to_account_frame_label( data->xferData, _("Payment To") );
+    gnc_xfer_dialog_set_to_account_frame_label( data->xferData,
+                                                _("Payment To") );
     gnc_xfer_dialog_set_to_show_button_active( data->xferData, TRUE );
+
+    /* Quickfill based on the reconcile account, which is the "From" acct. */
+    gnc_xfer_dialog_quickfill_to_account( data->xferData, FALSE );
   }
 
 
@@ -492,8 +509,10 @@ recnInterestXferWindow( startRecnWindowData *data)
 static void
 gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
 {
-  GtkWidget *entry = gnc_amount_edit_gtk_entry( GNC_AMOUNT_EDIT(data->end_value) );
-  gnc_numeric before = gnc_amount_edit_get_amount( GNC_AMOUNT_EDIT(data->end_value) );
+  GtkWidget *entry = gnc_amount_edit_gtk_entry(
+                           GNC_AMOUNT_EDIT(data->end_value) );
+  gnc_numeric before = gnc_amount_edit_get_amount(
+                           GNC_AMOUNT_EDIT(data->end_value) );
   gnc_numeric after = gnc_numeric_zero();
 
   recnInterestXferWindow( data );
@@ -519,7 +538,8 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
 static void
 gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
 {
-  /* indicate in account that user wants an auto interest xfer for this account */
+  /* indicate in account that user wants
+   * an auto interest xfer for this account */
   xaccAccountSetAutoInterestXfer( data->account, TRUE );
 
   /* make the button unclickable since we're popping up the window */
@@ -570,7 +590,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
   data.date = *statement_date;
 
   /* whether to have an automatic interest xfer dialog or not */
-  auto_interest_xfer_option = gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
+  auto_interest_xfer_option =
+     gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
   if( data.use_shares )
   {
@@ -697,7 +718,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
                           (GNC_AMOUNT_EDIT (end_value)));
   }
 
-  /* Allow the user to enter an interest payment or charge prior to reconciling */
+  /* Allow the user to enter an interest payment
+   * or charge prior to reconciling */
   if( account_type_has_auto_interest_xfer( data.account_type ) 
       && auto_interest_xfer_option )
   {
@@ -1612,9 +1634,11 @@ gnc_get_reconcile_info (Account *account,
      * the statement balance based on the statement date.
      */
     if (use_shares)
-      *new_ending = xaccAccountGetShareBalanceAsOfDate(account, *statement_date);
+      *new_ending =
+         xaccAccountGetShareBalanceAsOfDate(account, *statement_date);
     else
-      *new_ending = xaccAccountGetBalanceAsOfDate(account, *statement_date);
+      *new_ending =
+         xaccAccountGetBalanceAsOfDate(account, *statement_date);
   }
 
 }

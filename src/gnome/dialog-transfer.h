@@ -40,7 +40,8 @@ void gnc_xfer_dialog_close( XferDialog * );
 void gnc_xfer_dialog_set_title( XferDialog *, const gchar * );
 
 /* set the label of the topmost frame */
-void gnc_xfer_dialog_set_information_frame_label( XferDialog *, const gchar * );
+void gnc_xfer_dialog_set_information_frame_label( XferDialog *,
+                                                  const gchar * );
 
 /* Add a button with a user-specified label and "clicked" callback.
  * For now this doesn't offer a lot of flexibility, but it doesn't have to.
@@ -53,7 +54,8 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
 void gnc_xfer_dialog_toggle_currency_frame( XferDialog *xferData,
                                             gboolean show_frame );
 
-void gnc_xfer_dialog_set_from_account_frame_label( XferDialog *, const gchar * );
+void gnc_xfer_dialog_set_from_account_frame_label( XferDialog *,
+                                                   const gchar * );
 void gnc_xfer_dialog_set_to_account_frame_label( XferDialog *, const gchar * );
 
 /* set the buttons for "Show Income/Expense" */
@@ -73,5 +75,11 @@ void gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount);
 void gnc_xfer_dialog_set_description(XferDialog *xferData,
                                      const char *description);
 void gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time);
+
+/* Indicate whether the dialog should quickfill based on the "To" account,
+ * rather than the default which is the "From" account.
+ */
+void gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
+                                          gboolean qf_to_account );
 
 #endif
