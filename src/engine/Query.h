@@ -115,8 +115,7 @@ typedef enum {
 } amt_match_sgn_t;
 
 typedef enum {
-  BOOK_MATCH_ALL=1,
-  BOOK_MATCH_ANY,
+  BOOK_MATCH_ANY=1,
   BOOK_MATCH_NONE
 } book_match_t;
 
@@ -166,7 +165,8 @@ typedef enum {
 Query       * xaccMallocQuery(void);
 void          xaccFreeQuery(Query *);
 Query       * xaccQueryCopy(Query *q);
-void          xaccQuerySetGroup(Query * q, AccountGroup * group);
+void          xaccQuerySetBook(Query * q, GNCBook *);
+void          DxaccQuerySetGroup(Query * q, AccountGroup *);  /* depricated */
 
 Query       * xaccQueryInvert(Query * q1);
 Query       * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
@@ -248,6 +248,8 @@ void xaccQueryAddNumberMatch(Query * q, const char * matchstring,
                              int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddActionMatch(Query * q, const char * matchstring, 
                              int case_sens, int use_regexp, QueryOp op);
+
+/* ?????????? why are these depricated ??????????? */
 void DxaccQueryAddValueMatch(Query * q, double amount, 
                               amt_match_sgn_t amt_sgn,
                               amt_match_t how, QueryOp op);

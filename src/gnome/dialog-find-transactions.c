@@ -511,7 +511,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   g_assert(ftd->q);
 
   q = xaccMallocQuery();
-  xaccQuerySetGroup(q, gnc_get_current_group ());
+  xaccQuerySetBook(q, gnc_get_current_book ());
 
   /* account selections */
   selected_accounts = 

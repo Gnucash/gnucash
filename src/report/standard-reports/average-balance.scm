@@ -320,11 +320,11 @@
 
           ;; initialize the query to find splits in the right 
           ;; date range and accounts
-          (gnc:query-set-group query (gnc:get-current-group))
+          (gnc:query-set-book query (gnc:get-current-book))
 
 	  ;; for balance purposes, we don't need to do this, but it cleans up
 	  ;; the table display.
-          (gnc:query-set-match-non-voids-only! query (gnc:get-current-group))
+          (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
           (if dosubs? 

@@ -14,15 +14,12 @@
 static gboolean
 test_trans_query (Transaction *trans, gpointer data)
 {
-  AccountGroup *group;
   GNCBook *book = data;
   GList *list;
   Query *q;
 
-  group = gnc_book_get_group (book);
-
   q = make_trans_query (trans, ALL_QT);
-  xaccQuerySetGroup (q, group);
+  xaccQuerySetBook (q, book);
 
   list = xaccQueryGetTransactions (q, QUERY_MATCH_ANY);
   if (g_list_length (list) != 1)

@@ -859,8 +859,8 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
          * register, and create the entries in it. */
         if ( ! sxsld->autoCreateQuery ) {
                 sxsld->autoCreateQuery = xaccMallocQuery();
-                xaccQuerySetGroup( sxsld->autoCreateQuery,
-                                   gnc_book_get_group( gnc_get_current_book() ) );
+                xaccQuerySetBook( sxsld->autoCreateQuery,
+                                    gnc_get_current_book() );
 
         }
 

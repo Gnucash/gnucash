@@ -43,6 +43,7 @@
 
 #include "builder.h"
 #include "escape.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gncquery.h"
 #include "Transaction.h"
@@ -749,6 +750,12 @@ sqlQuery_kvp_build (sqlQuery *sq, KVPPredicateData *kpd)
  * as of Postgres 7.1. This code is needed: it delivers a big
  * performance boost.
  *
+ * (Tech Note: Postgres (and other databases ??) consider it
+ * to be a join with all rows matching when a table is listed
+ * in the FROM clause but not used in the WHERE clause: thus,
+ * the number of rows returned is sizeof(unrefed-table) times
+ * larger than otherwise.)
+ *
  * Specifically, I am refering to the 'need_account' and the
  * 'need_entry' booleans.  These serve no functional purpose:  
  * You'd get exactly the same results if you just set these to 
@@ -804,6 +811,16 @@ sqlQuery_build (sqlQuery *sq, Query *q)
             case PR_MEMO:
             case PR_PRICE: 
                need_entry = TRUE;
+               break;
+
+            case PR_BOOK: 
+               /* hack alert FIXME this sucks, since *all* queries will 
+                * have a PR_BOOK term in them, which is going to cause 
+                * this big old join, which is going to kill performance.
+                * Maybe we need to put the book in the transaction, for 
+                * performance ?? 
+                */
+               need_account = TRUE;
                break;
 
             case PR_VALUE:
@@ -930,7 +947,7 @@ sqlQuery_build (sqlQuery *sq, Query *q)
          {
             case PR_ACCOUNT: 
             {
-               GList *acct;
+               AccountList *acct;
 
                PINFO("term is PR_ACCOUNT");
 
@@ -1022,6 +1039,62 @@ sqlQuery_build (sqlQuery *sq, Query *q)
                {
                   sq->pq = stpcpy (sq->pq, ") ");
                }
+               break;
+            }
+
+            case PR_BOOK: 
+            {
+               BookList *book;
+
+               PINFO("term is PR_BOOK");
+
+               if (!pd->book.sense)
+               {
+                 sq->pq = stpcpy (sq->pq, "NOT ");
+               }
+
+               sq->pq = stpcpy(sq->pq, "(");
+
+               for (book = pd->book.book_guids; book; book=book->next)
+               {
+                 switch (pd->book.how)
+                 {
+                   case BOOK_MATCH_NONE:
+                     sq->pq = stpcpy (sq->pq, "NOT ");
+                     /* fall through */
+
+                   case BOOK_MATCH_ANY:
+                     sq->pq = stpcpy(sq->pq, "gncAccount.bookGuid='");
+                     sq->pq = guid_to_string_buff ((GUID*) book->data, sq->pq);
+                     sq->pq = stpcpy(sq->pq, "'");
+                     break;
+
+                   default:
+                     PERR ("unexpected book match type: %d",pd->book.how);
+                     break;
+                 }
+
+                 if (book->next)
+                 {
+                   switch (pd->book.how)
+                   {
+                     case BOOK_MATCH_ANY:
+                       sq->pq = stpcpy(sq->pq, " OR ");
+                       break;
+
+                     case BOOK_MATCH_NONE:
+                       sq->pq = stpcpy(sq->pq, " AND ");
+                       break;
+
+                     default:
+                       PERR ("unexpected book match type: %d",pd->book.how);
+                       break;
+                   }
+                 }
+               }
+
+               sq->pq = stpcpy(sq->pq, ")");
+
                break;
             }
 

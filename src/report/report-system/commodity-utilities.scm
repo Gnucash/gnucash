@@ -41,8 +41,8 @@
   (let ((query (gnc:malloc-query))
 	(splits #f))
     
-    (gnc:query-set-group query (gnc:get-current-group))
-    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group))
+    (gnc:query-set-book query (gnc:get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book))
     (gnc:query-add-account-match 
      query (gnc:list->glist currency-accounts)
      'acct-match-any 'query-and)

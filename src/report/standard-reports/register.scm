@@ -551,7 +551,7 @@
 
     (set! query (gnc:scm->query query-scm))
 
-    (gnc:query-set-group query (gnc:get-current-group))
+    (gnc:query-set-book query (gnc:get-current-book))
 
     (set! splits (gnc:glist->list
                   (if journal?

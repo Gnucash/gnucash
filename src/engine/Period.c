@@ -190,7 +190,7 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    /* Next, run the query */
    xaccAccountGroupBeginEdit (dest_book->topgroup);
    xaccAccountGroupBeginEdit (src_book->topgroup);
-   xaccQuerySetGroup (query, src_book->topgroup);
+   xaccQuerySetBook (query, src_book);
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
    /* And start moving transactions over */
@@ -430,7 +430,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
    query = xaccMallocQuery();
    xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
                                    TRUE, calve_date,
-                                   QUERY_OR);
+                                   QUERY_AND);
    closing_book = gnc_book_new();
    gnc_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';

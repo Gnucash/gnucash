@@ -112,7 +112,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 
   list->query = xaccMallocQuery();
 
-  xaccQuerySetGroup(list->query, gnc_get_current_group ());
+  xaccQuerySetBook(list->query, gnc_get_current_book ());
 
   /* match the account */
   xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);

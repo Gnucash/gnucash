@@ -460,7 +460,7 @@
 	  (query (gnc:malloc-query))
 	  (splits #f))
       
-      (gnc:query-set-group query (gnc:get-current-group))
+      (gnc:query-set-book query (gnc:get-current-book))
       (gnc:query-add-single-account-match query account 'query-and)
       (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
       (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
@@ -583,9 +583,9 @@
     this-collector))
 
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
-(define (gnc:query-set-match-non-voids-only! query group)
+(define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))
-     (gnc:query-set-group temp-query group)
+     (gnc:query-set-book temp-query book)
      
      (gnc:query-add-cleared-match
 	     temp-query
@@ -598,9 +598,9 @@
 
 ;; utility function - ensure that a query matches only voids.  Destructive
 
-(define (gnc:query-set-match-voids-only! query group)
+(define (gnc:query-set-match-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))
-     (gnc:query-set-group temp-query group)
+     (gnc:query-set-book temp-query book)
      
      (gnc:query-add-cleared-match
 	     temp-query

@@ -16,7 +16,7 @@
      query 
      (gnc:list->glist (gnc:group-get-subaccounts group))
      'acct-match-any 'query-or)
-    (gnc:query-set-group query group)
+    (d-gnc:query-set-group query group)
     (set! xtns (gnc:query-get-transactions query 'query-match-all))
     
     ;; lose the query 
@@ -45,7 +45,7 @@
     (for-each
      (lambda (xtn) 
        (let ((query (gnc:malloc-query)))         
-         (gnc:query-set-group query old-group)
+         (d-gnc:query-set-group query old-group)
          
          ;; the date should be close to the same.. +/- a week. 
          (let ((date (gnc:transaction-get-date-posted xtn)))               
@@ -56,11 +56,11 @@
          ;; for each split in the transaction, add a term to match the 
          ;; properties of one split 
          (let ((q-splits (gnc:malloc-query)))
-           (gnc:query-set-group q-splits old-group)
+           (d-gnc:query-set-group q-splits old-group)
            (for-each 
             (lambda (split)
               (let ((sq (gnc:malloc-query)))
-                (gnc:query-set-group sq old-group)
+                (d-gnc:query-set-group sq old-group)
                 
                 ;; we want to match the account in the old group that
                 ;; has the same name as an account in the new group.  If

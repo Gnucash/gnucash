@@ -1083,7 +1083,7 @@ Credit Card, and Income accounts")))))
 
         (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
-          (gnc:query-set-group query (gnc:get-current-group))
+          (gnc:query-set-book query (gnc:get-current-book))
 	      ;;(gnc:warn "query is:" query)
           (gnc:query-add-account-match query
                                            (gnc:list->glist c_account_1)
@@ -1101,9 +1101,9 @@ Credit Card, and Income accounts")))))
 
 	  (case void-status
 	   (('non-void-only) 
-	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-group)))
+	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book)))
 	   (('void-only)
-	    (gnc:query-set-match-voids-only! query (gnc:get-current-group)))
+	    (gnc:query-set-match-voids-only! query (gnc:get-current-book)))
 	   (else #f))
 
           (set! splits (gnc:glist->list (gnc:query-get-splits query)

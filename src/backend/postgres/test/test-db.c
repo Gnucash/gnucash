@@ -317,6 +317,8 @@ make_get_all_query (GNCSession * session)
 
   q = xaccMallocQuery ();
 
+  xaccQuerySetBook (q, gnc_session_get_book (session));
+
   xaccQueryAddClearedMatch (q,
                             CLEARED_NO |
                             CLEARED_CLEARED |
@@ -324,8 +326,6 @@ make_get_all_query (GNCSession * session)
                             CLEARED_FROZEN |
                             CLEARED_VOIDED,
                             QUERY_AND);
-
-  xaccQuerySetGroup (q, gnc_book_get_group (gnc_session_get_book (session)));
 
   return q;
 }
@@ -522,7 +522,6 @@ test_trans_query (Transaction *trans, gpointer data)
   QueryTestData *qtd = data;
   GNCBackendError io_err;
   GNCSession *session;
-  AccountGroup *group;
   char *filename;
   GNCBook *book;
   GList *list;
@@ -551,10 +550,9 @@ test_trans_query (Transaction *trans, gpointer data)
     return FALSE;
 
   book = gnc_session_get_book (session);
-  group = gnc_book_get_group (book);
 
   q = make_trans_query (trans, get_random_query_type () | GUID_QT);
-  xaccQuerySetGroup (q, group);
+  xaccQuerySetBook (q, book);
 
   if (!test_raw_query (session, q))
   {

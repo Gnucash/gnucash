@@ -1875,11 +1875,19 @@ of having a parent transaction with which one is working...")
 
   (gw:wrap-function
    mod
-   'gnc:query-set-group
+   'gnc:query-set-book
    '<gw:void>
-   "xaccQuerySetGroup"
+   "xaccQuerySetBook"
+   '((<gnc:Query*> q) (<gnc:Book*> book))
+   "Set the book that a query pertains to.")
+
+  (gw:wrap-function
+   mod
+   'd-gnc:query-set-group
+   '<gw:void>
+   "DxaccQuerySetGroup"
    '((<gnc:Query*> q) (<gnc:AccountGroup*> group))
-   "Set the account-group that a query pertains to.")
+   "(depricated; use query-set-book instead) Set the group that a query pertains to.")
 
   (gw:wrap-function
    mod
