@@ -136,11 +136,13 @@ int gnc_numeric_positive_p(gnc_numeric a);
  * same (same numerator and denominator)
  */ 
 int gnc_numeric_eq(gnc_numeric a, gnc_numeric b);     
+
 /** Equivalence predicate: Returns TRUE (1) if a and b represent
  *  exactly the same number (ratio of numerator to denominator is
  *  exactly equal)
  */ 
 int gnc_numeric_equal(gnc_numeric a, gnc_numeric b);  
+
 /** Equivalence predicate: Returns TRUE (1) if after both are
  * converted to DENOM using method HOW, a and b are
  * gnc_numeric_equal().
