@@ -153,6 +153,7 @@ Frederic Lespez <frederic.lespez@wanadoo.fr> French account templates fixes.
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Volodymyr M. Lisivka <lvm@mystery.lviv.net> Ukrainian translation
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
+Lionel Elie Mamane <lionel@mamane.lu> Patches for gcc2.95 macro compatibility
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code

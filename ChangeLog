@@ -1,3 +1,14 @@
+2003-12-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/gnc-trace.h: Fix for gcc2.95 for macros with variable
+	arguments by Lionel Elie Mamane <lionel@mamane.lu>.
+
+2003-12-18  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/gnome/dialog-price-editor.c: when the commodity is changed,
+	then set the currency to the currency of the last price entered
+	for this commodity
+
 2003-12-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/reconcile-list.c: make sure to verify that the items
