@@ -113,17 +113,21 @@ qfInsertTransactionRec( QuickFill *qf, Transaction *trans, int depth )
   {
   if( qf != NULL )
     {
-    if( trans->description[depth] != '\0' )
+    if( trans->description )
       {
-      int index = CHAR_TO_INDEX( trans->description[depth] );
-      
-      if( qf->qf[index] == NULL )
-        qf->qf[index] = mallocQuickFill();
-      
-      qf->qf[index]->trans = trans;
-      
-      qfInsertTransactionRec( qf->qf[index], trans, ++depth );
+      if( trans->description[depth] != '\0' )
+        {
+        int index = CHAR_TO_INDEX( trans->description[depth] );
+        
+        if( qf->qf[index] == NULL )
+          qf->qf[index] = mallocQuickFill();
+        
+        qf->qf[index]->trans = trans;
+        
+        qfInsertTransactionRec( qf->qf[index], trans, ++depth );
+        }
       }
     }
   }
-
+/********************** END OF FILE *********************************\
+\********************************************************************/

@@ -109,6 +109,30 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 }
 
 /********************************************************************\
+ * Fetch an account, given it's name                                *
+\********************************************************************/
+
+Account *
+xaccGetPeerAccountFromName ( Account *acc, char * name )
+{
+  Data * data;
+  Account *peer_acc;
+  int i;
+
+  if (NULL == acc) return NULL;
+  if (NULL == name) return NULL;
+
+  data = (Data *) acc->data;
+
+  for (i=0; i<data->numAcc; i++) {
+    peer_acc = data->account[i];
+    if (!strcmp(peer_acc->accountName, name)) return peer_acc;
+  }
+
+  return NULL;
+}
+
+/********************************************************************\
 \********************************************************************/
 Account *
 removeAccount( Data *data, int num )

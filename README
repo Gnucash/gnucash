@@ -39,11 +39,15 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9j:
+As of version 0.9k:
 Bugs:
+-- Cash distributions & cash dividends on stock not handled properly
 -- tabbing between fields for mutual funds does not work correctly. 
 -- should add "number of shares" to transfer popup when transferring
    from bank account to portfolio.
+-- Nasty core dump in motif when two register windows are opened,
+   and then closed.  Beats the heck out of me. 
+   
 
 ---------------
 Bare-bones Mutual Fund and Stock Portfolio handling

@@ -662,12 +662,12 @@ Do you want to continue anyway?\n");
   
   /* Add an opening balance transaction (as the first transaction) */
   trans = mallocTransaction();
+  initTransaction(trans);
   
   todaysDate( &(trans->date) );
-  trans->num         = XtNewString("");
-  trans->description = XtNewString("Opening Balance\0");
-  trans->memo        = XtNewString("");
-  
+  XtFree (trans->description);
+  trans->description = XtNewString("Opening Balance");
+
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
   

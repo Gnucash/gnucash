@@ -23,11 +23,11 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include "util.h"
-#include "main.h"
-#include "Data.h"
 #include "Account.h"
+#include "Data.h"
 #include "date.h"
+#include "main.h"
+#include "util.h"
 
 extern Data *data;
 int next_free_unique_account_id = 0;
@@ -94,13 +94,14 @@ freeAccount( Account *acc )
 
       /* free the transaction only if its not 
        * a part of a double entry */
-      if (trans->credit == _acc) trans->credit = NULL;
-      if (trans->debit  == _acc) trans->debit  = NULL;
+      if (_acc == trans->credit) trans->credit = NULL;
+      if (_acc == trans->debit) trans->debit  = NULL;
       if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
         freeTransaction( trans );
       }
     }
     
+    /* free the array of pointers */
     _free( acc->transaction );
     
     _free(acc);
@@ -142,7 +143,6 @@ removeTransaction( Account *acc, int num )
   if( acc != NULL )
     {
     int  i,j;
-    struct _account * _acc = (struct _account *) acc; 
     Transaction **oldTrans = acc->transaction;
 
     /* check for valid number */
@@ -173,8 +173,8 @@ removeTransaction( Account *acc, int num )
 
     /* if this is a double-entry transaction, be sure to
      * unmark it. */
-    if (trans->credit == _acc) trans->credit = NULL;
-    if (trans->debit  == _acc) trans->debit  = NULL;
+    if (((Account *)trans->credit) == acc) trans->credit = NULL;
+    if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
 
     }
   return trans;
@@ -182,94 +182,128 @@ removeTransaction( Account *acc, int num )
 
 /********************************************************************\
 \********************************************************************/
+
+void
+xaccRemoveTransaction( Account *acc, Transaction *trans)
+{
+  int i = getNumOfTransaction (acc, trans);
+  if (0 <= i) {
+    removeTransaction (acc, i);
+  }
+}
+
+/********************************************************************\
+\********************************************************************/
 int
 insertTransaction( Account *acc, Transaction *trans )
   {
   int position=-1;
+  int  i,j;
+  Date *dj,*dt;
+  int  inserted = False;
+  Transaction **oldTrans;
 
-  if( acc != NULL )
+  if (NULL == acc) {
+    printf ("Internal Error: insertTransaction(): \n");
+    printf (" no account specified ! \n");
+    return -1;
+  }
+    
+  /*  
+   * If the transaction hasn't already been marked as a debit
+   * or a credit to this account, then provide a default
+   * behavior for double-entry insertion.
+   *
+   * If this appears to be a new transaction, then default
+   * it to being a credit.  If this transaction is already
+   * in another account, assume this is the other half. 
+   */
+  
+  if ( (acc != (Account *) trans->credit) &&
+       (acc != (Account *) trans->debit) ) {
+
+    if (NULL == trans->credit) {
+      trans->credit = (struct _account *) acc;
+    } else 
+    if (NULL == trans->debit) {
+      trans->debit = (struct _account *) acc;
+    } else
     {
-    int  i,j;
-    Date *dj,*dt;
-    int  inserted = False;
-    struct _account * _acc = (struct _account *) acc; 
-    Transaction **oldTrans = acc->transaction;
-    
-    /* provide a default behavior for double-entry insertion */
-    /* If this appears to be a new transaction, then default
-     * it to being a credit.  If this transaction is already
-     * in another account, assume this is the other half. 
-     * This algorithm is not robust against internal programming
-     * errors ... various bizarre situations can sneak by without
-     * warning ... however, this will do for now. 
-     */
-    
-    if ( !((_acc == trans->debit) || (_acc == trans->credit)) ) {
-      if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
-        trans->credit = _acc;
-      } else {
-        if (NULL == trans->debit) {
-          trans->debit = _acc;
-        } else
-        if (NULL == trans->credit) {
-          trans->credit = _acc;
-        } else 
-        {
-          printf ("Internal Error: insertTransaction: inserting transaction \n");
-          printf ("that already exists! \n");
-          printf ("This error should not occur, please report it \n");
-        }
-      }
+      printf ("Internal Error: insertTransaction(): \n");
+      printf ("can't insert a transaction more than twice! \n");
+      printf ("This error should not occur, please report it \n");
     }
+  }
 
-    /* mark the data file as needing to be saved: */
-    if( data != NULL )
-      data->saved = False;
-    
-    acc->numTrans++;
-    acc->transaction = (Transaction **)_malloc((acc->numTrans)*
-                                               sizeof(Transaction *));
-    
-    /* dt is the date of the transaction we are inserting, and dj
-     * is the date of the "cursor" transaction... we want to insert
-     * the new transaction before the first transaction of the same
-     * or later date.  The !inserted bit is a bit of a kludge to 
-     * make sure we only insert the new transaction once! */
-    dt = &(trans->date);
-    for( i=0,j=0; i<acc->numTrans; i++,j++ )
+  /* mark the data file as needing to be saved: */
+  if( data != NULL )
+    data->saved = False;
+  
+  acc->numTrans++;
+  oldTrans = acc->transaction;
+  acc->transaction = (Transaction **)_malloc((acc->numTrans)*
+                                             sizeof(Transaction *));
+  
+  /* dt is the date of the transaction we are inserting, and dj
+   * is the date of the "cursor" transaction... we want to insert
+   * the new transaction before the first transaction of the same
+   * or later date.  The !inserted bit is a bit of a kludge to 
+   * make sure we only insert the new transaction once! */
+  dt = &(trans->date);
+  for( i=0,j=0; i<acc->numTrans; i++,j++ )
+    {
+    /* if we didn't do this, and we needed to insert into the
+     * last spot in the array, we would walk off the end of the
+     * old array, which is no good! */
+    if( j>=(acc->numTrans-1) )
       {
-      /* if we didn't do this, and we needed to insert into the
-       * last spot in the array, we would walk off the end of the
-       * old array, which is no good! */
-      if( j>=(acc->numTrans-1) )
+      position = i;
+      acc->transaction[i] = trans;
+      break;
+      }
+    else
+      {
+      dj = &(oldTrans[j]->date);
+      if( (datecmp(dj,dt) > 0) & !inserted )
         {
         position = i;
         acc->transaction[i] = trans;
-        break;
+        j--;
+        inserted = True;
         }
       else
-        {
-        dj = &(oldTrans[j]->date);
-        if( (datecmp(dj,dt) > 0) & !inserted )
-          {
-          position = i;
-          acc->transaction[i] = trans;
-          j--;
-          inserted = True;
-          }
-        else
-          acc->transaction[i] = oldTrans[j];
-        }
+        acc->transaction[i] = oldTrans[j];
       }
-    
-    _free(oldTrans);
     }
   
+  _free(oldTrans);
+
   if( position != -1 )
     qfInsertTransaction( acc->qfRoot, trans );
   
   return position;
+}
+
+/********************************************************************\
+\********************************************************************/
+Account *
+xaccGetOtherAccount( Account *acc, Transaction *trans )
+{
+  struct _account * _acc = (struct _account *) acc; 
+
+  if (NULL == acc) return NULL;
+
+  if (acc == ((Account *) trans->debit)) {
+     return ((Account *) trans->credit);
+  } else
+  if (acc == ((Account *) trans->credit)) {
+     return ((Account *) trans->debit);
+  } else {
+     printf ("Internal Error: xaccGetOtherAccount(): inconsistent entry \n");
   }
+
+  return NULL;
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -517,12 +551,10 @@ xaccCheckDateOrder (Account * acc, Transaction *trans )
   if (NULL == acc) return 0;
 
   position = getNumOfTransaction (acc, trans);
-
-  /* if transaction not present in the account, its because
-   * it hasn't been inserted yet. Insert it now. */
   if (-1 == position) {
-    insertTransaction( acc, trans );
-    return 1;
+    printf ("Internal Error: xaccCheckDateOrder(): \n");
+    printf ("transaction not present in the account !\n");
+    return 0;
   }
 
   prevTrans = getTransaction( acc, position-1 );
