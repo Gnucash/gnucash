@@ -1,7 +1,9 @@
 /********************************************************************
- * dialog-commodity.h -- "select" and "new" commodity windows       *
+ * dialog-sx-from-trans.h -- a simple dialog for creating a         *
+ *                           scheduled transaction for a "real      *
+ *                           one                                    *
  *                       (GnuCash)                                  *
- * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (C) 2000 Robert Merkel <rgmerk@mira.net>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,42 +23,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef GNC_DIALOG_COMMODITY_H_
-#define GNC_DIALOG_COMMODITY_H_
+#ifndef GNC_DIALOG_SX_FROM_TRANS_H
+#define GNC_DIALOG_SX_FROM_TRANS_H
 
-#include "gnc-commodity.h"
-#include "gnc-engine.h"
+#include "Transaction.h"
 
-typedef struct _selectcommoditywindow SelectCommodityWindow;
-typedef struct _commoditywindow CommodityWindow;
-
-typedef void (* gnc_commodity_callback)(const gnc_commodity *, void * data);
- 
-void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
-
-void gnc_ui_commodity_destroy(CommodityWindow * w);
-
-gnc_commodity * 
-gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
-                              GtkWidget * parent);
-
-gnc_commodity * 
-gnc_ui_new_commodity_modal(const char * default_namespace, 
-                           GtkWidget * parent);
-
-gboolean
-gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
-                            GtkWidget * parent);
-
-char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
-                                      const char * sel,
-                                      gboolean include_iso,
-                                      gboolean include_all);
-
-const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
-
-void gnc_ui_update_commodity_picker(GtkWidget * combobox, 
-                                    const char * namespace,
-                                    const char * sel);
+void gnc_sx_create_from_trans(Transaction *trans);
 
 #endif

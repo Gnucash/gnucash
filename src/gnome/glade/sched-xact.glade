@@ -375,155 +375,6 @@
 	      </widget>
 	    </widget>
 	  </widget>
-
-	  <widget>
-	    <class>GtkFrame</class>
-	    <name>frame47</name>
-	    <label>End</label>
-	    <label_xalign>0.05</label_xalign>
-	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-
-	    <widget>
-	      <class>GtkVBox</class>
-	      <name>vbox107</name>
-	      <border_width>2</border_width>
-	      <homogeneous>False</homogeneous>
-	      <spacing>0</spacing>
-
-	      <widget>
-		<class>GtkRadioButton</class>
-		<name>rb_noend</name>
-		<can_focus>True</can_focus>
-		<label>No End</label>
-		<active>True</active>
-		<draw_indicator>True</draw_indicator>
-		<group>sx_end_opt</group>
-		<child>
-		  <padding>2</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkRadioButton</class>
-		<name>rb_enddate</name>
-		<can_focus>True</can_focus>
-		<active>False</active>
-		<draw_indicator>True</draw_indicator>
-		<group>sx_end_opt</group>
-		<child>
-		  <padding>2</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-
-		<widget>
-		  <class>GtkHBox</class>
-		  <name>hbox152</name>
-		  <homogeneous>False</homogeneous>
-		  <spacing>0</spacing>
-
-		  <widget>
-		    <class>GtkLabel</class>
-		    <name>label847812</name>
-		    <label>End Date: </label>
-		    <justify>GTK_JUSTIFY_CENTER</justify>
-		    <wrap>False</wrap>
-		    <xalign>0.5</xalign>
-		    <yalign>0.5</yalign>
-		    <xpad>0</xpad>
-		    <ypad>0</ypad>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-		  </widget>
-
-		  <widget>
-		    <class>GnomeDateEdit</class>
-		    <name>sxe_end_date</name>
-		    <show_time>False</show_time>
-		    <use_24_format>True</use_24_format>
-		    <week_start_monday>False</week_start_monday>
-		    <lower_hour>7</lower_hour>
-		    <upper_hour>19</upper_hour>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-		  </widget>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkRadioButton</class>
-		<name>rb_num_occur</name>
-		<can_focus>True</can_focus>
-		<active>False</active>
-		<draw_indicator>True</draw_indicator>
-		<group>sx_end_opt</group>
-		<child>
-		  <padding>2</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-
-		<widget>
-		  <class>GtkVBox</class>
-		  <name>vbox134</name>
-		  <homogeneous>False</homogeneous>
-		  <spacing>0</spacing>
-
-		  <widget>
-		    <class>GtkLabel</class>
-		    <name>label847811</name>
-		    <label>Number of Occurances:</label>
-		    <justify>GTK_JUSTIFY_LEFT</justify>
-		    <wrap>False</wrap>
-		    <xalign>7.45058e-09</xalign>
-		    <yalign>0.5</yalign>
-		    <xpad>0</xpad>
-		    <ypad>0</ypad>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-		  </widget>
-
-		  <widget>
-		    <class>GnomeNumberEntry</class>
-		    <name>end_nentry</name>
-		    <max_saved>10</max_saved>
-		    <child>
-		      <padding>0</padding>
-		      <expand>False</expand>
-		      <fill>False</fill>
-		    </child>
-
-		    <widget>
-		      <class>GtkEntry</class>
-		      <child_name>GnomeEntry:entry</child_name>
-		      <name>combo-entry1</name>
-		      <can_focus>True</can_focus>
-		      <editable>True</editable>
-		      <text_visible>True</text_visible>
-		      <text_max_length>0</text_max_length>
-		      <text></text>
-		    </widget>
-		  </widget>
-		</widget>
-	      </widget>
-	    </widget>
-	  </widget>
 	</widget>
 
 	<widget>
@@ -540,6 +391,155 @@
 
 	  <widget>
 	    <class>Placeholder</class>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkFrame</class>
+	  <name>frame77</name>
+	  <label>End</label>
+	  <label_xalign>0.05</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox144</name>
+	    <border_width>2</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton1</name>
+	      <can_focus>True</can_focus>
+	      <label>No End</label>
+	      <active>True</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>sx_end_opt</group>
+	      <child>
+		<padding>2</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton2</name>
+	      <can_focus>True</can_focus>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>sx_end_opt</group>
+	      <child>
+		<padding>2</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkHBox</class>
+		<name>hbox160</name>
+		<homogeneous>False</homogeneous>
+		<spacing>0</spacing>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <name>label847840</name>
+		  <label>End Date: </label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+		</widget>
+
+		<widget>
+		  <class>GnomeDateEdit</class>
+		  <name>dateedit1</name>
+		  <show_time>False</show_time>
+		  <use_24_format>True</use_24_format>
+		  <week_start_monday>False</week_start_monday>
+		  <lower_hour>7</lower_hour>
+		  <upper_hour>19</upper_hour>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>radiobutton3</name>
+	      <can_focus>True</can_focus>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>sx_end_opt</group>
+	      <child>
+		<padding>2</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkVBox</class>
+		<name>vbox145</name>
+		<homogeneous>False</homogeneous>
+		<spacing>0</spacing>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <name>label847841</name>
+		  <label>Number of Occurrences:</label>
+		  <justify>GTK_JUSTIFY_LEFT</justify>
+		  <wrap>False</wrap>
+		  <xalign>7.45058e-09</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+		</widget>
+
+		<widget>
+		  <class>GnomeNumberEntry</class>
+		  <name>numberentry1</name>
+		  <max_saved>10</max_saved>
+		  <child>
+		    <padding>0</padding>
+		    <expand>False</expand>
+		    <fill>False</fill>
+		  </child>
+
+		  <widget>
+		    <class>GtkEntry</class>
+		    <child_name>GnomeEntry:entry</child_name>
+		    <name>entry3</name>
+		    <can_focus>True</can_focus>
+		    <editable>True</editable>
+		    <text_visible>True</text_visible>
+		    <text_max_length>0</text_max_length>
+		    <text></text>
+		  </widget>
+		</widget>
+	      </widget>
+	    </widget>
 	  </widget>
 	</widget>
       </widget>
@@ -4270,6 +4270,305 @@ Select those you wish to delete.</label>
 		<yalign>0.5</yalign>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
+  <name>sx_from_real_trans</name>
+  <title>Make Scheduled transaction</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>False</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>False</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>dialog-vbox23</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area23</name>
+      <layout_style>GTK_BUTTONBOX_DEFAULT_STYLE</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>0</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>ok_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>advanced_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<label>Advanced...</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>cancel_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkVBox</class>
+      <name>vbox146</name>
+      <homogeneous>False</homogeneous>
+      <spacing>0</spacing>
+      <child>
+	<padding>0</padding>
+	<expand>True</expand>
+	<fill>True</fill>
+      </child>
+
+      <widget>
+	<class>GtkHBox</class>
+	<name>hbox161</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label847842</name>
+	  <label>Name:</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkEntry</class>
+	  <name>name_entry</name>
+	  <can_focus>True</can_focus>
+	  <editable>True</editable>
+	  <text_visible>True</text_visible>
+	  <text_max_length>0</text_max_length>
+	  <text></text>
+	  <child>
+	    <padding>44</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkHBox</class>
+	<name>hbox162</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label847843</name>
+	  <label>Frequency:</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkOptionMenu</class>
+	  <name>freq_option_menu</name>
+	  <can_focus>True</can_focus>
+	  <items>Daily
+Weekly
+Monthly
+Quarterly
+Anually
+</items>
+	  <initial_choice>2</initial_choice>
+	  <child>
+	    <padding>22</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame78</name>
+	<label>End </label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox147</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkRadioButton</class>
+	    <name>never_end_button</name>
+	    <can_focus>True</can_focus>
+	    <label>Never End</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <group>end_group</group>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox163</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>end_on_date_button</name>
+	      <can_focus>True</can_focus>
+	      <label>End Date:</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>end_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GnomeDateEdit</class>
+	      <name>end_date_edit</name>
+	      <show_time>False</show_time>
+	      <use_24_format>True</use_24_format>
+	      <week_start_monday>False</week_start_monday>
+	      <lower_hour>0</lower_hour>
+	      <upper_hour>23</upper_hour>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox164</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkRadioButton</class>
+	      <name>n_occurrences_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Number Of Occurrences:</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <group>end_group</group>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GnomeEntry</class>
+	      <name>entry5</name>
+	      <width>152</width>
+	      <max_saved>10</max_saved>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkEntry</class>
+		<child_name>GnomeEntry:entry</child_name>
+		<name>n_occurrences_entry</name>
+		<can_focus>True</can_focus>
+		<editable>True</editable>
+		<text_visible>True</text_visible>
+		<text_max_length>0</text_max_length>
+		<text></text>
 	      </widget>
 	    </widget>
 	  </widget>

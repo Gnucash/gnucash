@@ -15,6 +15,7 @@ libgncmod_engine_la_SOURCES = \
   Group.c \
   Query.c \
   SchedXaction.c \
+  SX-ttinfo.c \
   Scrub.c \
   TransLog.c \
   Transaction.c \
@@ -47,6 +48,7 @@ noinst_HEADERS = \
   Group.h \
   GroupP.h \
   SchedXaction.h \
+  SX-ttinfo.h \
   Query.h \
   Scrub.h \
   TransLog.h \

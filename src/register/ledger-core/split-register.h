@@ -201,11 +201,14 @@ CellIOFlags  xaccSRTemplateGetIOFlagsHandler (VirtualLocation virt_loc,
 gboolean     xaccSRTemplateConfirmHandler (VirtualLocation virt_loc,
 					   gpointer user_data);
 
-// jsled-added 2001.05.19 for export to dialog-nextrun.c [which will
-// change its name at some point]
+/*
+ * jsled-added 2001.05.19 for export to dialog-nextrun.c [which will
+ * change its name at some point]
+ */
 void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 			       gboolean use_cut_semantics,
 			       gboolean do_commit);
+
 
 #endif
 

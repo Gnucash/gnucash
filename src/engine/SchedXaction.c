@@ -40,6 +40,7 @@
 #include "guid.h"
 #include "gnc-book.h"
 #include "FileDialog.h"
+#include "SX-ttinfo.h"
 
 static short module = MOD_SX;
 
@@ -93,15 +94,7 @@ xaccSchedXactionMalloc( GNCBook *book )
         return sx;
 }
 
-void
-sxprivtransactionListMapDelete( gpointer data, gpointer user_data )
-{
-        Transaction *t = (Transaction*)data;
-        xaccTransBeginEdit( t );
-        xaccTransDestroy( t );
-        xaccTransCommitEdit( t );
-	return;
-}
+
 
 static void
 sxprivTransMapDelete( gpointer data, gpointer user_data )
@@ -113,61 +106,70 @@ sxprivTransMapDelete( gpointer data, gpointer user_data )
   return;
 }
 
+
+static void
+delete_template_trans(SchedXaction *sx)
+{
+  GList *templ_acct_splits, *curr_split_listref;
+  Split *curr_split;
+  Transaction *split_trans;
+  GList *templ_acct_transactions = NULL;
+
+  templ_acct_splits 
+    = xaccAccountGetSplitList(sx->template_acct);
+  
+  for(curr_split_listref = templ_acct_splits;
+      curr_split_listref;
+      curr_split_listref = curr_split_listref->next)
+  {
+    curr_split = (Split *) curr_split_listref->data;
+    split_trans = xaccSplitGetParent(curr_split);
+    if(! (g_list_find(templ_acct_transactions, split_trans)))
+    {
+      templ_acct_transactions 
+	= g_list_prepend(templ_acct_transactions, split_trans);
+    }
+  }
+  
+  g_list_foreach(templ_acct_transactions,
+		 sxprivTransMapDelete, 
+		 NULL);
+  
+  return;
+}
 void
 xaccSchedXactionFree( SchedXaction *sx )
 {
-        AccountGroup *group;
-	GList *templ_acct_splits, *curr_split_listref;
-	GList *templ_acct_transactions=NULL;
-	Split *curr_split;
-	Transaction *split_trans;
-        if ( sx == NULL ) return;
-
-        xaccFreqSpecFree( sx->freq );
-        gnc_engine_generate_event( &sx->guid, GNC_EVENT_DESTROY );
-        xaccRemoveEntity( &sx->guid );
-
-        if ( sx->name )
-                g_free( sx->name );
-
       
-
-	/* 
-	 * we have to delete the transactions in the 
-	 * template account ourselves
-	 */
-	
-	templ_acct_splits 
-	  = xaccAccountGetSplitList(sx->template_acct);
-
-	for(curr_split_listref = templ_acct_splits;
-	    curr_split_listref;
-	    curr_split_listref = curr_split_listref->next)
-	{
-	  curr_split = (Split *) curr_split_listref->data;
-	  split_trans = xaccSplitGetParent(curr_split);
-	  if(! (g_list_find(templ_acct_transactions, split_trans)))
-	  {
-	    templ_acct_transactions 
-	      = g_list_prepend(templ_acct_transactions, split_trans);
-	  }
-	}
-	  
-	g_list_foreach(templ_acct_transactions,
-		       sxprivTransMapDelete, 
-		       NULL);
-		       
-	/*
-	 * xaccAccountDestroy removes the account from
-	 * its group for us AFAICT
-	 */
-
-	xaccAccountBeginEdit(sx->template_acct);
-	xaccAccountDestroy(sx->template_acct);
-	
-        g_free( sx );
-	
-	return;   
+  if ( sx == NULL ) return;
+  
+  xaccFreqSpecFree( sx->freq );
+  gnc_engine_generate_event( &sx->guid, GNC_EVENT_DESTROY );
+  xaccRemoveEntity( &sx->guid );
+  
+  if ( sx->name )
+    g_free( sx->name );
+  
+  
+  
+  /* 
+   * we have to delete the transactions in the 
+   * template account ourselves
+   */
+  
+  delete_template_trans( sx );
+  
+  /*
+   * xaccAccountDestroy removes the account from
+   * its group for us AFAICT
+   */
+  
+  xaccAccountBeginEdit(sx->template_acct);
+  xaccAccountDestroy(sx->template_acct);
+  
+  g_free( sx );
+  
+  return;   
 }
 
 
@@ -477,10 +479,6 @@ GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx, GDate *date )
         return next_occur;
 }
 
-/*
- * XXX: This does what you want, I think <rgmerk>
- */
-
 GList *
 xaccSchedXactionGetSplits( SchedXaction *sx )
 {
@@ -500,3 +498,103 @@ xaccSchedXactionIsDirty(SchedXaction *sx)
 {
   return sx->dirty;
 }
+
+
+static Split *
+pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
+{
+  Split *split;
+  kvp_frame *split_frame, *sx_frame;
+  kvp_value *tmp_value;
+  const GUID *acc_guid; 
+  
+  split = xaccMallocSplit();
+
+  xaccSplitSetMemo(split, 
+		   gnc_ttsplitinfo_get_memo(s_info));
+
+  xaccSplitSetAction(split,
+		     gnc_ttsplitinfo_get_action(s_info));
+  
+
+  xaccSplitSetAccount(split, 
+		      parent_acct);
+  split_frame = xaccSplitGetSlots(split);
+  
+  tmp_value 
+    = kvp_value_new_string(gnc_ttsplitinfo_get_credit_formula(s_info));
+
+  kvp_frame_set_slot_path(split_frame, 
+			  tmp_value,
+			  "sched-xaction",
+			  "credit-formula");
+  kvp_value_delete(tmp_value);
+		      
+  tmp_value
+    = kvp_value_new_string(gnc_ttsplitinfo_get_debit_formula(s_info));
+  
+  kvp_frame_set_slot_path(split_frame,
+			  tmp_value,
+			  "sched-xaction",
+			  "debit-formula");
+
+  kvp_value_delete(tmp_value);
+
+  acc_guid = xaccAccountGetGUID(gnc_ttsplitinfo_get_account(s_info));
+
+  tmp_value = kvp_value_new_guid(acc_guid);
+
+  kvp_frame_set_slot_path(split_frame,
+			tmp_value,
+			"sched-xaction",
+			"xfrm");
+
+  kvp_value_delete(tmp_value);
+
+  return split;
+}
+  
+
+void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list)
+{
+  
+  Transaction *new_trans;
+  TTInfo *tti;
+  TTSplitInfo *s_info;
+  Split *new_split;
+  /* delete any old transactions, if there are any */
+
+  GList *split_list;
+  delete_template_trans( sx );
+
+  for(;t_t_list != NULL; t_t_list = t_t_list->next)
+  {
+    tti = t_t_list->data;
+
+    new_trans = xaccMallocTransaction();
+
+    xaccTransBeginEdit(new_trans);
+
+    xaccTransSetDescription(new_trans, 
+			    gnc_ttinfo_get_description(tti));
+
+    xaccTransSetNum(new_trans,
+		    gnc_ttinfo_get_num(tti));
+
+    for(split_list = gnc_ttinfo_get_template_splits(tti);
+	split_list;
+	split_list = split_list->next)
+    {
+      s_info = split_list->data;
+      new_split = pack_split_info(s_info, sx->template_acct);
+      xaccTransAppendSplit(new_trans, new_split);
+    }
+    xaccTransCommitEdit(new_trans);
+
+  }
+
+  return;
+}
+
+  
+   

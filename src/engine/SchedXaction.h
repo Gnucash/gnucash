@@ -211,4 +211,12 @@ void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
 GDate xaccSchedXactionGetNextInstance( SchedXaction *sx );
 GDate xaccSchedXactionGetInstanceAfter( SchedXaction *sx, GDate *date );
 
+/*
+ * Set the schedxaction's template transaction.  t_t_list is a glist
+ * of TTInfo's as defined in SX-ttinfo.h
+ * the edit dialog doesn't use this mechanism.  Maybe it should
+ */
+
+void xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list);
+
 #endif /* XACC_SCHEDXACTION_H */

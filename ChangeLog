@@ -1,3 +1,28 @@
+2001-08-30  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-sx-from-trans.{ch}: New files, providing easy way
+	to turn existing transactions into SX's.
+
+	* src/engine/SX-ttinfo.{ch}: provide data structure for easy building
+	of template transactions for SX.
+
+	* src/engine/GNCId.h: changed include guards to fix in with policy.
+
+	* src/engine/SchedXaction.{ch}: added function to turn structures in 
+	SX-ttinfo.c into real template trans, fixed bugs.
+
+	* src/engine/kvp-doc.txt: updated docs.
+
+	* src/gnome/glade/sched-xact.glade: added dialog for SX-from-trans
+
+	* src/gnome/dialog-commodity.h: fixed include guards (previously, name
+	started with underscore).
+
+	* src/gnome/window-register.c: added code to let user activate 
+	SX-from-trans dialog
+
+	
+
 2001-08-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-html-guppi.c: activate the [xy]_axis_label

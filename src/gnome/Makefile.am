@@ -20,6 +20,7 @@ libgncgnome_a_SOURCES = \
   dialog-print-check.c \
   dialog-progress.c \
   dialog-style-sheet.c \
+  dialog-sx-from-trans.c \
   dialog-tax-info.c \
   dialog-totd.c \
   dialog-transfer.c \

@@ -156,11 +156,18 @@ Type: GUID
 Entities: Split associated with a SchedXaction
 Use: The GUID of this Split's xfrm account.
 
-Name: sched-xaction/amnt
+Name: sched-xaction/credit-formula
 Type: string
 Entities: Split associated with a SchedXaction
-Use: The amount field of a SchedXaction might be a formula, which we
-     store here.
+Use: Store the formula for the credit side of the split
+
+Name: sched-xaction/debit-formula
+Type: string
+Entities: Split associated with a SchedXaction
+Use: Formula for the debit.  Either the credit or the 
+debit formula must be empty.
+
+
 
 Name: from-sched-xaction
 Type: GUID

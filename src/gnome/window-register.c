@@ -40,6 +40,7 @@
 #include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "dialog-sx-from-trans.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
@@ -139,6 +140,7 @@ static void helpCB(GtkWidget *w, gpointer data);
 static void newAccountCB(GtkWidget * w, gpointer data);
 static void deleteCB(GtkWidget *w, gpointer data);
 static void duplicateCB(GtkWidget *w, gpointer data);
+static void recurCB(GtkWidget *w, gpointer data);
 static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
@@ -867,6 +869,14 @@ gnc_register_create_tool_bar (RegWindow *regData)
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Recur"),
+      N_("Make a scheduled transaction using this one as a template"),
+      recurCB, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_LINE_IN,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_TOGGLEITEM,
@@ -1498,6 +1508,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Recur"),
+      N_("Create a scheduled transaction using this one as a template"),
+      recurCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_TOGGLEITEM,
@@ -1686,6 +1704,14 @@ gnc_register_create_popup_menu (RegWindow *regData)
       N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Recur"), 
+      N_("Make a scheduled transaction using this one as a template"),
+      recurCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL, 
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
@@ -3114,6 +3140,24 @@ static void duplicateCB(GtkWidget *w, gpointer data)
 }
 
 
+/********************************************************************\
+ * recurCB                                                          *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data   - the data struct for this register               *
+ * Return: none                                                     *
+\********************************************************************/
+
+static void recurCB(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+  Transaction *pending_trans = xaccSRGetCurrentTrans(xaccLedgerDisplayGetSR (regData->ledger));
+
+  gnc_sx_create_from_trans(pending_trans);
+  return;
+}
+
+  
 /********************************************************************\
  * cancelCB                                                         *
  *                                                                  *
