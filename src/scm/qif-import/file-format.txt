@@ -15,20 +15,21 @@ Extensions
 ----------
 TEF -- Time and Expense Format (see below)
 
-QFX -- also known as 'WebConnect' --  very similar, and is the
+QFX -- also known as 'Web Connect' --  very similar, and is the
        'new' standard for on-line bank statement downloads.
+       (??? or is it just 'ofx in a file' ???)
 
 Type of account identifiers
 ----------------------------
 !Type:Bank     Bank account
-!Type:Bill
+!Type:Bill     ??? (bill presentment ???)
 !Type:Cash     Cash account
 !Type:CCard    Credit Card account
-!Type:Invoice  
+!Type:Invoice  ??? (invoice presentment ???)
 !Type:Invst    Investment account
 !Type:Oth A    Asset account
 !Type:Oth L    Liability account
-!Type:Tax
+!Type:Tax      ???
 
 !Account         Account list or which account applies to following 
                  transactions 
