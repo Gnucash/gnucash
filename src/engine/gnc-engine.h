@@ -61,7 +61,9 @@ gnc_commodity_table * gnc_engine_commodities(void);
  * Note that all the work is done when inserting or removing.  Once
  * cached the strings are just plain C strings.
  */
-extern GCache *gnc_string_cache;
+
+/* get the gnc_string_cache.  Create it if it doesn't exist already */
+GCache* gnc_engine_get_string_cache(void);
 
 #endif
 

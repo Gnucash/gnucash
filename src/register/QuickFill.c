@@ -86,7 +86,7 @@ gnc_quickfill_new (void)
 
   /* For now, use the engine cache. */
   if (qf_string_cache == NULL)
-    qf_string_cache = gnc_string_cache;
+    qf_string_cache = gnc_engine_get_string_cache ();
 
   qf = g_new (QuickFill, 1);
 

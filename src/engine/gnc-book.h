@@ -124,6 +124,14 @@ GNCBackendError gnc_book_pop_error (GNCBook *book);
 AccountGroup * gnc_book_get_group (GNCBook *book);
 void           gnc_book_set_group (GNCBook *book, AccountGroup *topgroup);
 
+
+/*
+ * gnc_book_get_commodity_table returns the commodity table associated with
+ * the BOOK.  At the moment this just returns the global commodity table,
+ * but if we get everything using this we can make it a non-global table :)
+ */
+gnc_commodity_table* gnc_book_get_commodity_table(GNCBook *book);
+
 /* The gnc_book_get_file_path() routine returns the fully-qualified file
  *    path for the book. That is, if a relative or partial filename
  *    was for the book, then it had to have been fully resolved to

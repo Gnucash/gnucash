@@ -460,7 +460,7 @@ xaccAccountGetSlots(Account * account) {
 }
 
 void
-xaccAccountSetSlots(Account *account, kvp_frame *frame)
+xaccAccountSetSlots_nc(Account *account, kvp_frame *frame)
 {
   if (!account) return;
   if (frame == account->kvp_data) return;

@@ -21,6 +21,7 @@ libgncengine_la_SOURCES = \
   date.c \
   GNCId.c \
   gnc-account-xml-v2.c \
+  gnc-commodity-xml-v2.c \
   guid.c \
   io-gncbin-r.c \
   io-gncxml-r.c \
@@ -83,6 +84,7 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-numeric.h \
   gnc-xml-helper.h \
+  gnc-xml.h \
   sixtp-dom-generators.h \
   sixtp-dom-parsers.h \
   sixtp-parsers.h \

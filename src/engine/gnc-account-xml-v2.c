@@ -9,16 +9,67 @@
 #include "sixtp-utils.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
+#include "sixtp-dom-parsers.h"
+#include "sixtp-dom-generators.h"
+
+#include "gnc-xml.h"
 
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
 #include "Group.h"
 
+const gchar *account_version_string = "2.0.0";
+
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act)
 {
-    return NULL;
+    xmlNodePtr ret;
+
+    ret = xmlNewNode(NULL, "gnc:account");
+    xmlSetProp(ret, "version", account_version_string);
+
+    xmlNewChild(ret, NULL, "act:name", xaccAccountGetName(act));
+    
+    xmlAddChild(ret, guid_to_dom_tree("act:id", xaccAccountGetGUID(act)));
+    
+    xmlNewChild(ret, NULL, "act:type",
+                xaccAccountTypeEnumAsString(xaccAccountGetType(act)));
+
+    xmlAddChild(ret, commodity_ref_to_dom_tree("act:currency",
+                                            xaccAccountGetCurrency(act)));
+
+    if(xaccAccountGetCode(act))
+    {
+        xmlNewChild(ret, NULL, "act:code", xaccAccountGetCode(act));
+    }
+
+    if(xaccAccountGetDescription(act))
+    {
+        xmlNewChild(ret, NULL, "act:description",
+                    xaccAccountGetDescription(act));
+    }
+       
+    if(xaccAccountGetSecurity(act))
+    {
+        xmlAddChild(ret, commodity_ref_to_dom_tree("act:security",
+                                                xaccAccountGetSecurity(act)));
+    }
+
+    if(xaccAccountGetSlots(act))
+    {
+        xmlAddChild(ret, kvp_frame_to_dom_tree("act:slots",
+                                            xaccAccountGetSlots(act)));
+    }
+
+    if(xaccAccountGetParentAccount(act))
+    {
+        xmlAddChild(ret, guid_to_dom_tree(
+                     "act:parent",
+                     xaccAccountGetGUID(xaccAccountGetParentAccount(act))));
+    }
+    
+    return ret;
 }
 
 /***********************************************************************/
@@ -80,6 +131,7 @@ static gboolean
 account_slots_handler (xmlNodePtr node, Account* act)
 {
     /* return dom_tree_handle_kvp(act->kvp_data, node); */
+    return TRUE;
 }
 
 static gboolean
@@ -178,16 +230,19 @@ gnc_account_end_handler(gpointer data_for_children,
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
 
     successful = TRUE;
+
+    if(parent_data)
+    {
+        return successful;
+    }
     
     acc = xaccMallocAccount();
     g_return_val_if_fail(acc, FALSE);
     xaccAccountBeginEdit(acc);
 
-    achild = tree->xmlChildrenNode;
-
     set_handlers(account_handlers_v2);
 
-    while(!achild)
+    for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {
         if(!gnc_xml_set_account_data(achild->name, achild, acc,
                                      account_handlers_v2))
@@ -195,7 +250,6 @@ gnc_account_end_handler(gpointer data_for_children,
             successful = FALSE;
             break;
         }
-        achild = achild->next;
     }
 
     xaccAccountCommitEdit(acc);
@@ -214,17 +268,17 @@ gnc_account_end_handler(gpointer data_for_children,
         if(!xaccAccountGetParent(acc))
         {
             /* FIXME: something like this */
-            /* xaccGroupInsertAccount(global_data->accountgroup, acc); */
+            /* xaccGroupInsertAccount(global_data, acc); */
         }
     }
     
-    xmlFreeNode(data_for_children);
+    xmlFreeNode(result);
 
     return successful;
 }
 
 sixtp*
-gnc_account_sixtp_parser_create()
+gnc_account_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_account_end_handler);
 }

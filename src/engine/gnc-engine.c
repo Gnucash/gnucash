@@ -47,10 +47,8 @@ gnc_engine_init(int argc, char ** argv) {
   engine_is_initialized = 1;
 
   /* initialize the string cache */
-  gnc_string_cache = g_cache_new( (GCacheNewFunc) g_strdup,
-    g_free, (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
-    g_str_hash, g_str_equal);
-
+  gnc_engine_get_string_cache();
+  
   xaccGUIDInit ();
 
   /* initialize the commodity table (it starts empty) */
@@ -63,6 +61,19 @@ gnc_engine_init(int argc, char ** argv) {
       (*hook)(argc, argv);
     }
   }
+}
+
+GCache*
+gnc_engine_get_string_cache(void)
+{
+    if(!gnc_string_cache) 
+    {
+        gnc_string_cache = g_cache_new(
+            (GCacheNewFunc) g_strdup, g_free,
+            (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
+            g_str_hash, g_str_equal);
+    }
+    return gnc_string_cache;
 }
 
 /********************************************************************

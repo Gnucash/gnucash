@@ -146,6 +146,12 @@ gnc_book_new (void)
 
 /* ============================================================== */
 
+gnc_commodity_table*
+gnc_book_get_commodity_table(GNCBook *book)
+{
+    return gnc_engine_commodities();
+}
+
 AccountGroup * 
 gnc_book_get_group (GNCBook *book)
 {

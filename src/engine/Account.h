@@ -134,7 +134,7 @@ void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);
 
 kvp_frame * xaccAccountGetSlots (Account *account);
-void xaccAccountSetSlots(Account *account, kvp_frame *frame);
+void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
 
 /*
  * The xaccAccountGetGUID() subroutine will return the
@@ -218,6 +218,7 @@ void xaccAccountSetCommodity (Account *account, const gnc_commodity *comm);
  * The future API will associate only one thing with an account:
  * the 'commodity'.  Use xaccAccountGetCommodity() to fetch it.
  */
+/* these two funcs take control of thier gnc_commodity args.  Don't free */
 void xaccAccountSetCurrency (Account *account, const gnc_commodity *currency);
 void xaccAccountSetSecurity (Account *account, const gnc_commodity *security);
 void xaccAccountSetCurrencySCU (Account *account, int frac);

@@ -7,20 +7,23 @@
 
 <!ENTITY % commodity-type "(cmdty:space, cmdty:id)">
 
-<!-- need to replace the etc here -->
-<!ENTITY % slot-types "(string | integer | double | etc)">
-
-<!ELEMENT slot (key, value)>
-
-<!ELEMENT slot:key (#PCDATA)>
-
-<!ELEMENT slot:value (#PCDATA)>
-
-<!ATTLIST slot:value type %slot-types; "string">
-
-<!ENTITY % slot-type "(slot+)">
+<!ENTITY % slot-types "(integer | double | numeric | string | guid | binary | glist | frame)">
 
 <!ELEMENT ts:date (#PCDATA)>
 <!ELEMENT ts:ns (#PCDATA)>
 
 <!ENTITY % date-type "(ts:date, ts:ns?)">
+
+<!-- this stuff isn't quite right -->
+<!ELEMENT slot (slot:key, slot:value)>
+
+<!ELEMENT slot:key (#PCDATA)>
+
+<!ENTITY % slot-val-type "(slot+?, slot:value+?, #PCDATA?)">
+
+<!ELEMENT slot:value %slot-val-type;>
+
+<!ATTLIST slot:value type %slot-types; "string">
+
+<!ENTITY % slot-type "(slot+)">
+

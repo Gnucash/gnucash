@@ -1,3 +1,76 @@
+2001-02-22  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-dom-parser1.c: Move generic funcs to test-stuff.c
+
+	* src/test/test-dom-converters1.c: Move generic funcs to
+	test-stuff.c 
+
+	* src/test/test-date-converting.c: move generic funcs to
+	test-stuff.c 
+
+	* src/engine/sixtp-to-dom-parser.c (dom_start_handler): cast arg
+	to xmlNewChild to xmlNodePtr
+	(dom_chars_handler): Remove is_whitespace func and use isspace_str
+	from other file.
+
+	* src/engine/sixtp-dom-parsers.c: Add all the dom_tree_to funcs.
+
+	* src/engine/sixtp-dom-generators.c (guid_to_dom_tree): Make GUID
+	arg const.
+	(commodity_ref_to_dom_tree): check nulls.
+	(add_kvp_value_node): Add all the kvp code.
+
+	* src/engine/kvp_frame.c: Use string cache func.
+	(charstar_va_list_to_gslist): new func.
+	(kvp_frame_get_frame): More refactoring.
+
+	* src/engine/gnc-engine.h: Add func def as below.
+
+	* src/engine/gnc-engine.c: Move string cache creation to function
+	to get so that you don't have to gnc_engine_init to use the global
+	string cache.
+	(gnc_engine_get_string_cache): Add func as above.
+
+	* src/engine/gnc-book.h: Add func as below.
+
+	* src/engine/gnc-book.c (gnc_book_get_commodity_table): Add
+	function.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_dom_tree_create):
+	Complete func.
+	(gnc_account_end_handler): Fix up.  Finish work.
+
+	* src/engine/Transaction.c (xaccInitSplit): Use func to get string
+	cache rather than accessing the var directly.
+
+	* src/engine/Account.h: same as Account.c.  Add comment on
+	xaccAccountSet{Currency,Security} that they take control of the
+	gnc_commodity args.
+
+	* src/engine/Account.c: Rename xaccAccountSetSlots to *_nc so we
+	use the kvp_frame provided rather than copy.
+
+	* src/doc/xml/types.dtd: Fix up kvp type list.  clean up timestamp
+	tuff.  Simplify a bit.
+
+	* src/doc/xml/account-v2.dtd: add code and description.
+
+2001-02-19  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/kvp_frame.c: Fix < to be > in binary datasize
+	argument (bug fix).  Add comment about appropriateness of
+	comparing data sizes first.
+	Fix double compare.  was using just gint64 compare.  Extracted out
+	double compare into double_compare function.
+	Fix return value of kvp_value_compare from gboolean -> gint.
+	Fix bug in kvp_glist_compare where it should have read (!lp2 &&
+	lp1) and it read (!lp2) so glists never compared equal.
+	(kvp_frame_get_hash): Add func.
+	(kvp_frame_to_string): Add func.
+	(kvp_value_to_string): Add func.
+	(kvp_value_glist_to_string): Add func.
+	(binary_to_string): Add func.
+
 2001-02-15  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/qif-import/qif-guess-map.scm: add stock hash

@@ -51,11 +51,317 @@ dom_tree_to_guid(xmlNodePtr node)
     }
 }
 
-kvp_frame*
-dom_tree_handle_kvp(xmlNodePtr node)
+kvp_value*
+dom_tree_to_integer_kvp_value(xmlNodePtr node)
 {
+    gchar *text;
+    gint64 daint;
+    kvp_value* ret = NULL;
+    
+    text = dom_tree_to_text(node->xmlChildrenNode);
 
-    return FALSE;
+    if(string_to_gint64(text, &daint))
+    {
+        ret = kvp_value_new_gint64(daint);
+    }
+    g_free(text);
+
+    return ret;
+}
+
+gboolean
+dom_tree_to_integer(xmlNodePtr node, gint64 *daint)
+{
+    gchar *text;
+    
+    text = dom_tree_to_text(node->xmlChildrenNode);
+
+    if(string_to_gint64(text, daint))
+    {
+        return TRUE;
+    }
+    else 
+    {
+        return FALSE;
+    }
+}
+
+kvp_value*
+dom_tree_to_double_kvp_value(xmlNodePtr node)
+{
+    gchar *text;
+    double dadoub;
+    kvp_value *ret = NULL;
+
+    text = dom_tree_to_text(node->xmlChildrenNode);
+
+    if(string_to_double(text, &dadoub))
+    {
+        ret = kvp_value_new_double(dadoub);
+    }
+
+    g_free(text);
+    
+    return ret;
+}
+
+kvp_value*
+dom_tree_to_numeric_kvp_value(xmlNodePtr node)
+{
+    gnc_numeric *danum;
+    kvp_value *ret = NULL;
+
+    danum = dom_tree_to_gnc_numeric(node);
+
+    if(danum)
+    {
+        ret = kvp_value_new_gnc_numeric(*danum);
+    }
+
+    g_free(danum);
+    
+    return ret;
+}
+
+kvp_value*
+dom_tree_to_string_kvp_value(xmlNodePtr node)
+{
+    gchar *datext;
+    kvp_value *ret = NULL;
+
+    datext = dom_tree_to_text(node->xmlChildrenNode);
+    if(datext)
+    {
+        ret = kvp_value_new_string(datext);
+    }
+
+    g_free(datext);
+    
+    return ret;
+}
+
+kvp_value*
+dom_tree_to_guid_kvp_value(xmlNodePtr node)
+{
+    GUID *daguid;
+    kvp_value *ret = NULL;
+
+    daguid = dom_tree_to_guid(node);
+    if(daguid)
+    {
+        ret = kvp_value_new_guid(daguid);
+    }
+
+    g_free(daguid);
+    
+    return ret;
+}
+
+gboolean
+string_to_binary(const gchar *str,  void **v, guint64 *data_len)
+{
+  guint64 str_len;
+  guchar *data;
+  int i, j;
+  
+  str_len = strlen(str);
+
+  /* Since no whitespace is allowed and hex encoding is 2 text chars
+     per binary char, the result must be half the input size and the
+     input size must be even. */
+  if((str_len % 2) != 0)
+      return(FALSE);
+  *data_len = str_len / 2;
+  data = g_new0(guchar, *data_len);
+  
+  g_return_val_if_fail(*v, FALSE);
+
+  for(j = 0, i = 0; i < str_len; i += 2, j++)
+  {
+      gchar tmpstr[3];
+      long int converted;
+      
+      tmpstr[0] = str[i];
+      tmpstr[1] = str[i + 1];
+      tmpstr[2] = '\0';
+
+      converted = strtol(tmpstr, NULL, 16);
+
+      data[j] = (unsigned char)converted;
+  }
+
+  *v = data;
+  
+  return(TRUE);
+}
+
+kvp_value*
+dom_tree_to_binary_kvp_value(xmlNodePtr node)
+{
+    gchar *text;
+    void *val;
+    guint64 len;
+    kvp_value *ret = NULL;
+
+    text = dom_tree_to_text(node->xmlChildrenNode);
+
+    if(string_to_binary(text, &val, &len))
+    {
+        ret = kvp_value_new_binary_nc(val, len);
+    }
+    else
+    {
+        g_warning("string_to_binary returned false");
+    }
+    
+    g_free(text);
+
+    return ret;
+}
+
+kvp_value*
+dom_tree_to_list_kvp_value(xmlNodePtr node)
+{
+    GList *list = NULL;
+    xmlNodePtr mark;
+    kvp_value *ret = NULL;
+
+    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
+    {
+        kvp_value *new_val;
+        new_val = dom_tree_to_kvp_value(mark);
+        if(new_val)
+        {
+            list = g_list_append(list, (gpointer)new_val);
+        }
+    }
+
+    if(list)
+    {
+        ret = kvp_value_new_glist_nc(list);
+    }
+    
+    return ret;
+}
+
+kvp_value*
+dom_tree_to_frame_kvp_value(xmlNodePtr node)
+{
+    kvp_frame *frame;
+    kvp_value *ret = NULL;
+
+    frame = dom_tree_to_kvp_frame(node);
+
+    if(frame)
+    {
+        ret = kvp_value_new_frame(frame);
+    }
+
+    kvp_frame_delete(frame);
+    
+    return ret;
+}
+
+
+struct kvp_val_converter
+{
+    gchar *tag;
+    kvp_value* (*converter)(xmlNodePtr node);
+};
+
+struct kvp_val_converter val_converters[] = {
+    { "integer", dom_tree_to_integer_kvp_value },
+    { "double", dom_tree_to_double_kvp_value },
+    { "numeric", dom_tree_to_numeric_kvp_value },
+    { "string", dom_tree_to_string_kvp_value },
+    { "guid", dom_tree_to_guid_kvp_value },
+    { "binary", dom_tree_to_binary_kvp_value },
+    { "list", dom_tree_to_list_kvp_value },
+    { "frame", dom_tree_to_frame_kvp_value },
+    { 0, 0 },
+};
+    
+kvp_value*
+dom_tree_to_kvp_value(xmlNodePtr node)
+{
+    gchar *type;
+    struct kvp_val_converter *mark;
+    kvp_value *ret = NULL;
+    
+    type = xmlGetProp(node, "type");
+    if(!type)
+    {
+        type = g_strdup_printf("string");
+    }
+
+    for(mark = val_converters; mark->tag; mark++)
+    {
+        if(safe_strcmp(type, mark->tag) == 0)
+        {
+            ret = (mark->converter)(node);
+        }
+    }
+
+    if(!mark->tag)
+    {
+        /* FIXME: deal with unknown type tag here */
+    }
+
+    g_free(type);
+    
+    return ret;
+}
+
+kvp_frame*
+dom_tree_to_kvp_frame(xmlNodePtr node)
+{
+    kvp_frame *ret;
+    xmlNodePtr mark;
+    
+    g_return_val_if_fail(node, NULL);
+
+    ret = kvp_frame_new();
+
+    for(mark = node->xmlChildrenNode; mark; mark = mark->next)
+    {
+        if(safe_strcmp(mark->name, "slot") == 0)
+        {
+            xmlNodePtr mark2;
+            gchar *key = NULL;
+            kvp_value *val = NULL;
+
+            for(mark2 = mark->xmlChildrenNode; mark2; mark2 = mark2->next)
+            {
+                if(safe_strcmp(mark2->name, "slot:key") == 0)
+                {
+                    key = dom_tree_to_text(mark2->xmlChildrenNode);
+                }
+                else if(safe_strcmp(mark2->name, "slot:value") == 0)
+                {
+                    val = dom_tree_to_kvp_value(mark2);
+                }
+                else
+                {
+                    /* FIXME: should put some error here */
+                }
+            }
+
+            if(key)
+            {
+                if(val)
+                {
+                    kvp_frame_set_slot_nc(ret, key, val);
+                }
+                else
+                {
+                    /* FIXME: should put some error here */
+                }
+                g_free(key);
+            }
+        }
+    }
+
+    return ret;
 }
 
 
@@ -302,5 +608,5 @@ associate_commodity_ref_with_engine_commodity(gnc_commodity *com)
 {
     return gnc_commodity_table_lookup(gnc_engine_commodities(),
                                       gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_exchange_code(com));
+                                      gnc_commodity_get_mnemonic(com));
 }

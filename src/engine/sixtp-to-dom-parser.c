@@ -6,8 +6,10 @@
 #include "sixtp-utils.h"
 #include "sixtp.h"
 
-static xmlNsPtr global_namespace;
+static xmlNsPtr global_namespace = NULL;
 
+/* Don't pass anything in the data_for_children value to this
+   function.  It'll cause a segfault */
 static gboolean dom_start_handler(
     GSList* sibling_data, gpointer parent_data, gpointer global_data,
     gpointer *data_for_children, gpointer *result, const gchar *tag,
@@ -22,7 +24,8 @@ static gboolean dom_start_handler(
     }
     else
     {
-        thing = xmlNewChild(parent_data, global_namespace, tag, NULL);
+        thing = xmlNewChild((xmlNodePtr)parent_data, global_namespace,
+                            tag, NULL);
     }
 
     if(attrs != NULL)
@@ -40,26 +43,12 @@ static gboolean dom_start_handler(
     return TRUE;
 }
 
-static gboolean is_whitespace(const char *text, int len)
-{
-    int i;
-    for(i = 0; i < len; i++)
-    {
-        if(!isspace(text[i]))
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
 static gboolean dom_chars_handler(
     GSList *sibling_data, gpointer parent_data, gpointer global_data,
     gpointer *result, const char *text, int length)
 {
-    if(length > 0 && !is_whitespace(text, length))
+    if(length > 0 && !isspace_str(text, length))
     {
-        /* gchar *stuff = g_strndup(text, length); */
         xmlNodeSetContentLen((xmlNodePtr)parent_data, text, length);
     }
     return TRUE;

@@ -2,6 +2,7 @@
 %types;
 
 <!ELEMENT gnc:account (act:name, act:id, act:type, act:currency,
+                       act:code?, act:description?,
                        act:security?, act:slots?, act:parent?)>
 <!ATTLIST gnc:account version CDATA #REQUIRED>
 

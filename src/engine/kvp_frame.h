@@ -62,11 +62,20 @@ kvp_frame   * kvp_frame_new(void);
 void          kvp_frame_delete(kvp_frame * frame);
 kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
 
+gchar* kvp_frame_to_string(const kvp_frame *frame);
+gchar* binary_to_string(const void *data, guint32 size);
+gchar* kvp_value_glist_to_string(const GList *list);
+
+GHashTable* kvp_frame_get_hash(const kvp_frame *frame);
+
 /* The kvp_frame_set_slot() routine copies the value into the frame,
  *    associating it with 'key'.
  * The kvp_frame_set_slot_nc() routine puts the value (without copying
  *    it) into the frame, associating it with 'key'.  This routine is
  *    handy for avoiding excess memory allocations & frees.
+ * Pointers passed as arguments into set_slot and get_slot are the
+ *    responsibility of the caller.  Pointers returned by get_slot are
+ *    owned by the kvp_frame.  Make copies as needed.
  */
 void          kvp_frame_set_slot(kvp_frame * frame, 
                                  const char * key, const kvp_value * value);
@@ -99,8 +108,7 @@ void          kvp_frame_set_slot_path_gslist (kvp_frame *frame,
  *
  * 
  */
-kvp_frame    * kvp_frame_get_frame (kvp_frame *frame,
-                                    const char *first_key, ...);
+kvp_frame    * kvp_frame_get_frame (kvp_frame *frame, ...);
 
 kvp_frame    * kvp_frame_get_frame_gslist (kvp_frame *frame,
                                            GSList *key_path);
@@ -118,6 +126,7 @@ kvp_value   * kvp_frame_get_slot_path_gslist (kvp_frame *frame,
                                               GSList *key_path);
 
 gint          kvp_frame_compare(const kvp_frame *fa, const kvp_frame *fb);
+gint          double_compare(double v1, double v2);
 
 void          kvp_value_delete(kvp_value * value);
 kvp_value   * kvp_value_copy(const kvp_value * value);
@@ -161,6 +170,8 @@ void        * kvp_value_get_binary(const kvp_value * value,
 GList       * kvp_value_get_glist(const kvp_value * value);
 kvp_frame   * kvp_value_get_frame(const kvp_value * value);
 
+gchar* kvp_value_to_string(const kvp_value *val);
+
 /* manipulators */
 
 gboolean kvp_value_binary_append(kvp_value *v, void *data, guint64 size);
@@ -177,5 +188,6 @@ void kvp_frame_for_each_slot(kvp_frame *f,
                                           kvp_value *value,
                                           gpointer data),
                              gpointer data);
+
 
 #endif

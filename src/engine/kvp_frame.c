@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
@@ -94,7 +95,7 @@ kvp_frame_new(void) {
 
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) {
-  g_cache_remove(gnc_string_cache, key);
+  g_cache_remove(gnc_engine_get_string_cache(), key);
   kvp_value_delete((kvp_value *)value);  
 }
 
@@ -120,7 +121,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
   kvp_frame * dest = (kvp_frame *)user_data;
   g_hash_table_freeze(dest->hash);
   g_hash_table_insert(dest->hash,
-                      (gpointer)g_cache_insert(gnc_string_cache, key), 
+                      (gpointer)g_cache_insert(gnc_engine_get_string_cache(), key), 
                       (gpointer)kvp_value_copy(value));
   g_hash_table_thaw(dest->hash);
 }
@@ -159,13 +160,14 @@ kvp_frame_set_slot_destructively(kvp_frame * frame, const char * slot,
                                             & orig_key, & orig_value);
   if(key_exists) {
     g_hash_table_remove(frame->hash, slot);
-    g_cache_remove(gnc_string_cache, orig_key);
+    g_cache_remove(gnc_engine_get_string_cache(), orig_key);
     kvp_value_delete(orig_value);
   }
 
   if(new_value) {
     g_hash_table_insert(frame->hash,
-                        g_cache_insert(gnc_string_cache, (gpointer) slot),
+                        g_cache_insert(gnc_engine_get_string_cache(),
+                                       (gpointer) slot),
       new_value);
   }
 
@@ -331,34 +333,45 @@ kvp_frame_get_frame_gslist (kvp_frame *frame, GSList *key_path)
   }
 }
 
+static GSList*
+charstar_va_list_to_gslist(va_list lst)
+{
+    const char *val;
+    GSList *ret = NULL;
+
+    while(TRUE)
+    {
+        val = va_arg(lst, const char*);
+
+        if(!val)
+        {
+            break;
+        }
+
+        ret = g_slist_append(ret, (gpointer)val);
+    }
+
+    return ret;
+}
+
 kvp_frame *
-kvp_frame_get_frame (kvp_frame *frame, const char *first_key, ...) 
+kvp_frame_get_frame (kvp_frame *frame,  ...) 
 {
   va_list ap;
-  const char *key;
   GSList *lst;
   kvp_frame *ret;
 
-  if (!frame || !first_key)
-    return frame;
+  if (!frame)
+    return NULL;
 
-  va_start (ap, first_key);
+  va_start (ap, frame);
 
-  key = first_key;
+  lst = charstar_va_list_to_gslist(ap);
+  
+  ret = kvp_frame_get_frame_gslist(frame, lst);
 
-  lst = NULL;
-
-  while (TRUE) {
-    lst = g_slist_append(lst, (gpointer) key);
-      
-    key = va_arg (ap, const char *);
-    if (!key) {
-      break;   /* the normal exit to this routine. */
-    }
-  }
   va_end (ap);
 
-  ret = kvp_frame_get_frame_gslist(frame, lst);
   g_slist_free(lst);
 
   return ret;
@@ -548,7 +561,7 @@ kvp_glist_compare(const GList * list1, const GList * list2) {
     lp2 = lp2->next;
   }
   if(!lp1 && lp2) return -1;
-  if(!lp2) return 1;
+  if(!lp2 && lp1) return 1;
   return 0;
 }
 
@@ -759,25 +772,6 @@ kvp_value_get_frame(const kvp_value * value) {
 
 /* manipulators */
 
-#if 0
-/* untested - didn't end up needing it... */
-
-gboolean
-kvp_value_binary_append(kvp_value *kv, void *data, guint64 size) {
-  void *new_data;
-  guint64 new_size;
-
-  if(kv->type != KVP_TYPE_BINARY) return(FALSE);
-  new_size = kv->value.binary.datasize + size;
-  new_data = g_realloc(kv->value.binary.data, new_size);
-  if(!new_data) return(FALSE);
-  memcpy(kv->value.binary.data + kv->value.binary.datasize, data, size);
-  kv->value.binary.datasize = new_size;
-  return(TRUE);
-}
-#endif
-
-
 kvp_value *
 kvp_value_copy(const kvp_value * value) {  
 
@@ -827,7 +821,18 @@ kvp_frame_for_each_slot(kvp_frame *f,
   g_hash_table_foreach(f->hash, (GHFunc) proc, data);
 }
 
-gboolean
+gint
+double_compare(double d1, double d2)
+{
+  if(isnan(d1) && isnan(d2)) return 0;
+  if((isinf(d1) == 1) && (isinf(d2) == 1)) return 0;
+  if((isinf(d1) == -1) && (isinf(d2) == -1)) return 0;
+  if(d1 < d2) return -1;
+  if(d1 > d2) return 1;
+  return 0;
+}
+
+gint
 kvp_value_compare(const kvp_value * kva, const kvp_value * kvb) {
   if(kva == kvb) return 0;
   /* nothing is always less than something */
@@ -839,10 +844,12 @@ kvp_value_compare(const kvp_value * kva, const kvp_value * kvb) {
 
   switch(kva->type) {
   case KVP_TYPE_GINT64:
-  case KVP_TYPE_DOUBLE:
     if(kva->value.int64 < kvb->value.int64) return -1;
     if(kva->value.int64 > kvb->value.int64) return 1;
     return 0;
+    break;
+  case KVP_TYPE_DOUBLE:
+    return double_compare(kva->value.dbl, kvb->value.dbl);
     break;
   case KVP_TYPE_NUMERIC:
     return gnc_numeric_compare (kva->value.numeric, kvb->value.numeric);
@@ -854,8 +861,10 @@ kvp_value_compare(const kvp_value * kva, const kvp_value * kvb) {
     return guid_compare(kva->value.guid, kvb->value.guid);
     break;
   case KVP_TYPE_BINARY:
+    /* I don't know that this is a good compare. Ab is bigger than Acef.
+       But I'm not sure that actually matters here. */
     if(kva->value.binary.datasize < kvb->value.binary.datasize) return -1;
-    if(kva->value.binary.datasize < kvb->value.binary.datasize) return 1;
+    if(kva->value.binary.datasize > kvb->value.binary.datasize) return 1;
     return memcmp(kva->value.binary.data,
                   kvb->value.binary.data,
                   kva->value.binary.datasize);
@@ -910,4 +919,156 @@ kvp_frame_compare(const kvp_frame *fa, const kvp_frame *fb) {
   kvp_frame_for_each_slot((kvp_frame *) fa, kvp_frame_compare_helper, &status);
 
   return(status.compare);
+}
+
+gchar*
+binary_to_string(const void *data, guint32 size)
+{
+    GString *output;
+    guint32 i;
+    guchar *data_str = (guchar*)data;
+    
+    output = g_string_sized_new(size * sizeof(char));
+    
+    for(i = 0; i < size; i++)
+    {
+        g_string_sprintfa(output, "%02x", (unsigned int) (data_str[i]));
+    }
+
+    return output->str;
+}
+
+gchar*
+kvp_value_glist_to_string(const GList *list)
+{
+    gchar *tmp1;
+    gchar *tmp2;
+    const GList *cursor;
+
+    tmp1 = g_strdup_printf("[ ");
+
+    for(cursor = list; cursor; cursor = cursor->next)
+    {
+        gchar *tmp3;
+
+        tmp3 = kvp_value_to_string((kvp_value*)cursor->data);
+        tmp2 = g_strdup_printf("%s %s,", tmp1, tmp3);
+        g_free(tmp1);
+        g_free(tmp3);
+        tmp1 = tmp2;
+    }
+
+    tmp2 = g_strdup_printf("%s ]", tmp1);
+    g_free(tmp1);
+    
+    return tmp2;
+}
+
+gchar*
+kvp_value_to_string(const kvp_value *val)
+{
+    gchar *tmp1;
+    gchar *tmp2;
+    
+    g_return_val_if_fail(val, NULL);
+    
+    switch(kvp_value_get_type(val))
+    {
+    case KVP_TYPE_GINT64:
+        return g_strdup_printf("KVP_VALUE_GINT64(%lld)",
+                               kvp_value_get_gint64(val));
+        break;
+
+    case KVP_TYPE_DOUBLE:
+        return g_strdup_printf("KVP_VALUE_DOUBLE(%g)",
+                               kvp_value_get_double(val));
+        break;
+
+    case KVP_TYPE_NUMERIC:
+        tmp1 = gnc_numeric_to_string(kvp_value_get_numeric(val));
+        tmp2 = g_strdup_printf("KVP_VALUE_NUMERIC(%s)", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_STRING:
+        return g_strdup_printf("KVP_VALUE_STRING(%s)",
+                               kvp_value_get_string(val));
+        break;
+
+    case KVP_TYPE_GUID:
+        tmp1 = guid_to_string(kvp_value_get_guid(val));
+        tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_BINARY:
+    {
+        guint64 len;
+        void *data;
+        data = kvp_value_get_binary(val, &len);
+        tmp1 = binary_to_string(data, len);
+        return g_strdup_printf("KVP_VALUE_BINARY(%s)", tmp1);
+    }
+        break;
+ 
+    case KVP_TYPE_GLIST:
+        tmp1 = kvp_value_glist_to_string(kvp_value_get_glist(val));
+        tmp2 = g_strdup_printf("KVP_VALUE_GLIST(%s)", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    case KVP_TYPE_FRAME:
+        tmp1 = kvp_frame_to_string(kvp_value_get_frame(val));
+        tmp2 = g_strdup_printf("KVP_VALUE_FRAME(%s)", tmp1);
+        g_free(tmp1);
+        return tmp2;
+        break;
+
+    default:
+        return g_strdup_printf(" ");
+        break;
+    }
+}
+
+static void
+kvp_frame_to_string_helper(gpointer key, gpointer value, gpointer data)
+{
+    gchar *tmp_val;
+    gchar **str = (gchar**)data;
+    gchar *old_data = *str;
+
+    tmp_val = kvp_value_to_string((kvp_value*)value);
+    
+    *str = g_strdup_printf("%s    %s => %s,\n", *str, (gchar*)key, tmp_val);
+
+    g_free(old_data);
+    g_free(tmp_val);
+}
+
+gchar*
+kvp_frame_to_string(const kvp_frame *frame)
+{
+    gchar *tmp1;
+
+    tmp1 = g_strdup_printf("{\n");
+
+    g_hash_table_foreach(frame->hash, kvp_frame_to_string_helper, &tmp1);
+    
+    {
+        gchar *tmp2;
+        tmp2 = g_strdup_printf("%s}\n", tmp1);
+        g_free(tmp1);
+        tmp1 = tmp2;
+    }
+    
+    return tmp1;
+}
+
+GHashTable*
+kvp_frame_get_hash(const kvp_frame *frame)
+{
+    return frame->hash;
 }
