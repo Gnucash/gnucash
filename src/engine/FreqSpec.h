@@ -20,7 +20,7 @@
 /** @addtogroup Engine_SchedXaction
     @{ */
 /** @file FreqSpec.h
-    @brief Frequency Specification
+    @brief Period / Date Frequency Specification
     @author Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>
     @author Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>  
 */
