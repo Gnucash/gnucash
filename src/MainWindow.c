@@ -354,55 +354,55 @@ mainWindow( Widget parent )
    * Set up the menubar                                             *
   \******************************************************************/
   MenuItem fileMenu[] = {
-    { "New File...",   &xmPushButtonWidgetClass, 'N', NULL, NULL, 
+    { "New File...",   &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_NEW,   (MenuItem *)NULL },
-    { "Open File...      ",&xmPushButtonWidgetClass, 'O', NULL, NULL, 
+    { "Open File...  ",&xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_OPEN,  (MenuItem *)NULL },
-    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, 
+    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },
-    { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, 
+    { "Save",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_SAVE,  (MenuItem *)NULL },
-    { "Save As...",    &xmPushButtonWidgetClass, 'A', NULL, NULL, 
+    { "Save As...",    &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_SAVEAS,(MenuItem *)NULL },
-    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, 
+    { "",              &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                  (MenuItem *)NULL },
-    { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, 
+    { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_QUIT,  (MenuItem *)NULL },
     NULL,
   };
 
   MenuItem accountMenu[] = {
-    { "New Account...",     &xmPushButtonWidgetClass, 'N', NULL, NULL, 
+    { "New Account...",     &xmPushButtonWidgetClass, 'N', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_NEW,  (MenuItem *)NULL },
-    { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, 
+    { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_OPEN, (MenuItem *)NULL },
-    { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, 
+    { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_EDIT, (MenuItem *)NULL },
-    { "Delete Account...",  &xmPushButtonWidgetClass, 'D', NULL, NULL,
+    { "Delete Account...",  &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_DEL,  (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "Transfer",           &xmPushButtonWidgetClass, 'C', NULL, NULL, 
+    { "Transfer",           &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, 
+    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_RPRT,  (MenuItem *)NULL },
 #if 0
-    { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, 
+    { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_CAT,  (MenuItem *)NULL },
 #endif
     NULL,
   };
   
   MenuItem helpMenu[] = {
-    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, 
+    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
-    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_MAIN,  (MenuItem *)NULL },
-    { "Accounts...",        &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+    { "Accounts...",        &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ACC,  (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, 
+    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
     NULL,
   };
@@ -519,7 +519,7 @@ mainWindow( Widget parent )
                    listCB, (XtPointer)NULL );
     
     /* If the user double-clicks on an account in the list, open
-     * up the detail view (ie the regWindow, or whatever) for
+     * up the detail view (ie the register window, or whatever) for
      * that type of account */
     XtAddCallback( accountlist, XmNdefaultActionCallback, 
                    accountMenubarCB, (XtPointer)AMB_OPEN );
@@ -942,7 +942,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         } else {
           if( NULL == acc->regData ) {  
             /* avoid having two registers updating one account */
-            acc->regData = regWindow( toplevel, acc );
+            acc->regData = regWindowSimple ( toplevel, acc );
           }
         }
       }

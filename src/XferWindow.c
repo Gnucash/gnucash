@@ -251,6 +251,7 @@ xferWindow( Widget parent )
     accountMenu[i].mnemonic      = 0;
     accountMenu[i].accelerator   = NULL;
     accountMenu[i].accel_text    = NULL;
+    accountMenu[i].sensitive     = True;
     accountMenu[i].callback      = menuCB;
     accountMenu[i].callback_data = xferData->menuData[2*i];
     accountMenu[i].subitems      = (MenuItem *)NULL;
@@ -284,6 +285,7 @@ xferWindow( Widget parent )
     accountMenu[i].mnemonic      = 0;
     accountMenu[i].accelerator   = NULL;
     accountMenu[i].accel_text    = NULL;
+    accountMenu[i].sensitive     = True;
     accountMenu[i].callback      = menuCB;
     accountMenu[i].callback_data = xferData->menuData[2*i+1];
     accountMenu[i].subitems      = (MenuItem *)NULL;
@@ -487,4 +489,4 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   XtDestroyWidget(xferData->dialog);
   }
 
-/* ********************** END OF FILE *************************/
+/*********************** END OF FILE *************************/

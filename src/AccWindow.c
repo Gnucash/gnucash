@@ -683,7 +683,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   refreshMainWindow();
 
   /* open up the account window for the user */
-  regWindow( toplevel, acc );
+  regWindowSimple ( toplevel, acc );
 
   /* if we got to here, tear down the dialog window */
   XtDestroyWidget (accData->dialog);

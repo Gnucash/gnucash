@@ -150,6 +150,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     menuList[i].label         = tmp;
     menuList[i].wclass        = &xmPushButtonWidgetClass;
     menuList[i].mnemonic      = 0;
+    menuList[i].sensitive     = True;
     menuList[i].accelerator   = NULL;
     menuList[i].accel_text    = NULL;
     menuList[i].callback      = xaccAccountMenuCB;
@@ -172,6 +173,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     menuList[i+pad].label         = tmp;
     menuList[i+pad].wclass        = &xmPushButtonWidgetClass;
     menuList[i+pad].mnemonic      = 0;
+    menuList[i+pad].sensitive     = True;
     menuList[i+pad].accelerator   = NULL;
     menuList[i+pad].accel_text    = NULL;
     menuList[i+pad].callback      = xaccAccountMenuCB;
@@ -194,6 +196,7 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
        menuList[i+pad].label         = tmp;
        menuList[i+pad].wclass        = &xmPushButtonWidgetClass;
        menuList[i+pad].mnemonic      = 0;
+       menuList[i+pad].sensitive     = True;
        menuList[i+pad].accelerator   = NULL;
        menuList[i+pad].accel_text    = NULL;
        menuList[i+pad].callback      = xaccAccountMenuCB;
