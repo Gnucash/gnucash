@@ -1,3 +1,23 @@
+2003-04-28  David Hampton  <hampton@employees.org>
+	* src/engine/iso-4217-currencies.scm: Remove two duplicate
+	commodities.  The newer name for these commodities was retained.
+
+	* src/app-utils/gnc-euro.c:
+	* src/app-utils/gnc-ui-util.c:
+	* src/backend/file/io-gncxml-v2.c:
+	* src/backend/postgres/test/test-db.c:
+	* src/backend/rpc/RpcUtils.c:
+	* src/engine/gnc-commodity.c:
+	* src/engine/gnc-commodity.h:
+	* src/engine/test-core/test-engine-stuff.c:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome-utils/dialog-commodity.c:
+	* src/gnome-utils/dialog-transfer.c:
+	* src/import-export/binary-import/druid-commodity.c:
+	* src/import-export/qif-import/druid-qif-import.c: Consolidate all
+	the tests for an ISO 4217 commodity into a pair of functions.  Use
+	these functions throughout the code.
+	
 2003-04-26  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-commodity-xml-v2.c: Consolidate duplicate

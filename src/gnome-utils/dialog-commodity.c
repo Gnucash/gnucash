@@ -454,8 +454,7 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
   /* stick them in the combobox */
   gtk_combo_set_popdown_strings (GTK_COMBO (combobox), namespaces);
 
-  if (!include_iso &&
-      safe_strcmp (init_string, GNC_COMMODITY_NS_ISO) == 0)
+  if (!include_iso && gnc_commodity_namespace_is_iso (init_string))
     init_string = NULL;
 
   /* set the entry text */
@@ -736,7 +735,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
 
   gnc_commodity * c;
 
-  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+  if (gnc_commodity_namespace_is_iso (namespace))
   {
     gnc_warning_dialog_parented(w->dialog,
                                 _("You may not create a new national "

@@ -75,6 +75,11 @@ gboolean gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b);
  */
 gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
 
+
+gboolean gnc_commodity_namespace_is_iso(const char *namespace);
+gboolean gnc_commodity_is_iso(const gnc_commodity * comm);
+
+
 /* gnc_commodity_table functions : operate on a database of commodity
  * info */
 

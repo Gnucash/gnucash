@@ -666,6 +666,18 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table)
   return g_hash_table_keys(table->table);
 }
 
+gboolean
+gnc_commodity_namespace_is_iso(const char *namespace)
+{
+  return (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0);
+}
+
+gboolean
+gnc_commodity_is_iso(const gnc_commodity * cm)
+{
+  if (!cm) return FALSE;
+  return (safe_strcmp(cm->namespace, GNC_COMMODITY_NS_ISO) == 0);
+}
 
 /********************************************************************
  * gnc_commodity_table_get_commodities

@@ -909,7 +909,7 @@ write_commodities(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
         }
 
         space = (gchar *) lp->data;
-        if(strcmp(GNC_COMMODITY_NS_ISO, space) != 0) {
+        if(!gnc_commodity_namespace_is_iso(space)) {
             GList *comms = gnc_commodity_table_get_commodities(tbl, space);
             GList *lp2;
 

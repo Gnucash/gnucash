@@ -1342,8 +1342,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       return;
     }
 
-    if (safe_strcmp (gnc_commodity_get_namespace (xferData->from_commodity),
-		     GNC_COMMODITY_NS_ISO))
+    if (!gnc_commodity_is_iso (xferData->from_commodity))
     {
       const char *message = _("You can't transfer from a non-currency account.  "
 			      "Try reversing the \"from\" and \"to\" accounts "

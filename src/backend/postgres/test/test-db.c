@@ -278,9 +278,7 @@ add_commodity_to_delete(gnc_commodity * com, gpointer data)
 {
     CommodityDeleteInfo *cdi = data;
 
-    if (!g_hash_table_lookup(cdi->hash, com) &&
-        safe_strcmp(gnc_commodity_get_namespace(com),
-                    GNC_COMMODITY_NS_ISO) != 0)
+    if (!g_hash_table_lookup(cdi->hash, com) && !gnc_commodity_is_iso(com))
         cdi->to_delete = g_list_prepend(cdi->to_delete, com);
 
     return TRUE;

@@ -417,7 +417,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     return TRUE;
   }
 
-  if (safe_strcmp (new_type, GNC_COMMODITY_NS_ISO) == 0 &&
+  if (gnc_commodity_namespace_is_iso (new_type) &&
       !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    new_type, new_mnemonic))
   {

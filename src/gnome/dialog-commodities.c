@@ -106,8 +106,7 @@ gnc_load_namespace (gpointer data, gpointer user_data)
   GList *commodities;
   GList *node;
 
-  if (!cd->show_currencies &&
-      safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+  if (!cd->show_currencies && gnc_commodity_namespace_is_iso (namespace))
     return;
 
   ct = gnc_get_current_commodities ();
@@ -143,9 +142,7 @@ gnc_commodities_set_sensitives (CommoditiesDialog *cd)
 {
   gboolean sensitive;
 
-  if (cd->commodity &&
-      safe_strcmp (gnc_commodity_get_namespace (cd->commodity),
-                   GNC_COMMODITY_NS_ISO) != 0)
+  if (cd->commodity && !gnc_commodity_is_iso (cd->commodity))
     sensitive = TRUE;
   else
     sensitive = FALSE;

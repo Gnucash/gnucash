@@ -1407,7 +1407,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
     return TRUE;
   }
 
-  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0 &&
+  if (gnc_commodity_namespace_is_iso (namespace) &&
       !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    namespace, mnemonic))
   {

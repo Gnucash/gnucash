@@ -1225,8 +1225,7 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
 
   info.commodity = commodity;
 
-  is_iso = (safe_strcmp (gnc_commodity_get_namespace (commodity),
-                         GNC_COMMODITY_NS_ISO) == 0);
+  is_iso = gnc_commodity_is_iso (commodity);
 
   if (is_decimal_fraction (gnc_commodity_get_fraction (commodity),
                            &info.max_decimal_places))
@@ -1263,8 +1262,7 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
 
   info.commodity = efffunc (account);
 
-  is_iso = (safe_strcmp (gnc_commodity_get_namespace (info.commodity),
-                         GNC_COMMODITY_NS_ISO) == 0);
+  is_iso = gnc_commodity_is_iso (info.commodity);
 
   scu = scufunc (account);
 
@@ -1620,9 +1618,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
      }
      else
      {
-       if (info.commodity &&
-           safe_strcmp (GNC_COMMODITY_NS_ISO,
-                        gnc_commodity_get_namespace (info.commodity)) != 0)
+       if (info.commodity && !gnc_commodity_is_iso (info.commodity))
          is_shares = TRUE;
 
        currency_symbol = gnc_commodity_get_mnemonic (info.commodity);

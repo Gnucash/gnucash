@@ -1182,7 +1182,7 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
     GList *commodities;
     GList *com_node;
 
-    if (strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
+    if (gnc_commodity_namespace_is_iso (ns))
       continue;
 
     commodities = gnc_commodity_table_get_commodities (table, ns);
