@@ -262,8 +262,8 @@ int           xaccTransCountSplits (Transaction *trans);
  * xaccTransFindCommonCurrency. This method is useful for determining
  * whether two accounts can have transactions in common.
  */
-gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
-				char *currency_2, char *security_2);
+gncBoolean xaccIsCommonCurrency(const char *currency_1, const char *security_1,
+				const char *currency_2, const char *security_2);
 
 /* The xaccTransFindCommonCurrency () method returns a string value 
  *    indicating a currency denomination that all of the splits in this
@@ -276,7 +276,7 @@ gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
  *    If all of the splits share both a common security and a common currency,
  *    then the string name for the currency is returned.
  */
-char * xaccTransFindCommonCurrency (Transaction *trans);
+const char * xaccTransFindCommonCurrency (Transaction *trans);
 
 /* The xaccTransIsCommonCurrency () method compares the input string
  *    to the currency/security denominations of all splits in the
@@ -294,7 +294,8 @@ char * xaccTransFindCommonCurrency (Transaction *trans);
  *    transaction have in common.  This routine is useful in dealing
  *    securities of differing types are moved across accounts.
  */
-char * xaccTransIsCommonCurrency (Transaction *trans, char * currency);
+const char * xaccTransIsCommonCurrency (Transaction *trans,
+                                        const char * currency);
 
 /* The xaccTransGetImbalance() method returns the total value of the
  *    transaction.  In a pure double-entry system, this imbalance
@@ -373,7 +374,8 @@ void         xaccSplitSetSharePriceAndAmount (Split *, double price,
 void         xaccSplitSetShareAmount (Split *, double);
 void         xaccSplitSetSharePrice (Split *, double);
 void         xaccSplitSetValue (Split *, double);
-void         xaccSplitSetBaseValue (Split *s, double value, char * base_currency);
+void         xaccSplitSetBaseValue (Split *s, double value,
+                                    const char * base_currency);
 
 
 /* The following four subroutines return the running balance up

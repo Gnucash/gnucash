@@ -673,8 +673,10 @@ static int revorder[NUM_ACCOUNT_TYPES] = {
 int
 xaccAccountOrder (Account **aa, Account **ab)
 {
-  char *da, *db; 
+  char *da, *db;
+  char *endptr = NULL;
   int ta, tb;
+  long la, lb;
 
   if ( (*aa) && !(*ab) ) return -1;
   if ( !(*aa) && (*ab) ) return +1;
@@ -683,6 +685,18 @@ xaccAccountOrder (Account **aa, Account **ab)
   /* sort on accountCode strings */
   da = (*aa)->accountCode;
   db = (*ab)->accountCode;
+
+  /* If accountCodes are both base 36 integers do an integer sort */
+  la = strtoul (da, &endptr, 36);
+  if((*da != '\0') && (*endptr == '\0')) {
+    lb = strtoul (db, &endptr, 36);
+    if((*db != '\0') && (*endptr == '\0')) {
+      if (la < lb) return -1;
+      if (la > lb) return +1;
+    }
+  }
+
+  /* Otherwise do a string sort */
   SAFE_STRCMP (da, db);
 
   /* if acccount-type-order array not initialized, initialize it */

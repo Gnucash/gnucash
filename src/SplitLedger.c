@@ -1386,8 +1386,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
       if ((new_acc != NULL) && (old_acc != new_acc))
       {
-        char *currency = NULL;
-        char *security = NULL;
+        const char *currency = NULL;
+        const char *security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
         currency = xaccTransIsCommonCurrency(trans, currency);
@@ -1461,8 +1461,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
          if ((new_acc != NULL) && (old_acc != new_acc))
          {
-           char *currency = NULL;
-           char *security = NULL;
+           const char *currency = NULL;
+           const char *security = NULL;
 
            currency = xaccAccountGetCurrency(new_acc);
            currency = xaccTransIsCommonCurrency(trans, currency);

@@ -520,7 +520,7 @@ xaccTransLookup (GUID *guid)
 \********************************************************************/
 
 void
-xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
+xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
 {
    if (!s) return;
 
@@ -606,7 +606,7 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
 \********************************************************************/
 
 static double
-ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
+ComputeValue (Split **sarray, Split * skip_me, const char * base_currency)
 {
    Split *s;
    int i=0;
@@ -656,15 +656,16 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
 double
 xaccTransGetImbalance (Transaction * trans)
 {
-  char * currency = xaccTransFindCommonCurrency (trans);
+  const char * currency = xaccTransFindCommonCurrency (trans);
   double imbal = ComputeValue (trans->splits, NULL, currency);
   return imbal;
 }
 
 /********************************************************************\
 \********************************************************************/
-gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
-				char *currency_2, char *security_2)
+gncBoolean
+xaccIsCommonCurrency(const char *currency_1, const char *security_1,
+                     const char *currency_2, const char *security_2)
 {
   int c1c2, c1s2, s1c2, s1s2;
 
@@ -694,8 +695,8 @@ gncBoolean xaccIsCommonCurrency(char *currency_1, char *security_1,
   return (c1c2 == 0) || (c1s2 == 0) || (s1c2 == 0) || (s1s2 == 0);
 }
 
-static char *
-FindCommonCurrency (Split **slist, char * ra, char * rb)
+static const char *
+FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 {
   Split *s;
   int i = 0;
@@ -756,7 +757,7 @@ FindCommonCurrency (Split **slist, char * ra, char * rb)
 }
 
 
-char *
+const char *
 xaccTransFindCommonCurrency (Transaction *trans)
 {
   char *ra, *rb;
@@ -771,8 +772,8 @@ xaccTransFindCommonCurrency (Transaction *trans)
   return FindCommonCurrency (trans->splits, ra, rb);
 }
 
-char *
-xaccTransIsCommonCurrency (Transaction *trans, char * ra)
+const char *
+xaccTransIsCommonCurrency (Transaction *trans, const char * ra)
 {
   return FindCommonCurrency (trans->splits, ra, NULL);
 }
@@ -799,7 +800,7 @@ xaccSplitRebalance (Split *split)
   Split *s;
   int i = 0;
   double value = 0.0;
-  char *base_currency=0x0;
+  const char *base_currency = NULL;
 
   trans = split->parent;
 
