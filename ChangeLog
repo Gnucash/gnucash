@@ -1,3 +1,12 @@
+2001-06-15  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-book.c (gnc_book_write_to_file): remove useless
+	line. 
+	(make_backup): new func for duplicate functionality
+	(copy_file): new func to copy file.
+	(gnc_book_backup_file): use make_backup
+	(gnc_book_write_to_file): use make_backup
+
 2001-06-15  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-account-picker.c: use libglade
