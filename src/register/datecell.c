@@ -1,14 +1,56 @@
 
 #include <string.h>
+#include <time.h>
 
 #include "datecell.h"
 #include "single.h"
 
 /* ================================================ */
 
+#define DATE_SEP '/'
+
 static const char * 
 DateMV (const char * old, const char *change, const char *new)
 {
+   int accel=0;
+   short day, month, year;
+   char * datestr;
+   char * sep;
+
+   /* if user hit backspace, accept the change */
+   if (!change) return new;
+
+   /* accept any numeric input */
+   if (isdigit (change[0])) return new;
+
+   /* accept the separator character */
+   if (DATE_SEP == change[0]) return new;
+
+   /* otherwise, maybe its an accelerator key.
+    * parse the date string */
+   day = 1;
+   month = 1;
+   year = 1970;
+
+   sscanf (new, "%d/%d/%d", day, month, year);
+
+printf ("parsed %d %d %d \n", day, month, year);
+
+   /* handle accelerator keys */
+   switch (change[0]) {
+      case '+':
+      case '=':
+         accel = 1;
+         break;
+
+      default:
+         /* accept any numeric input */
+         if (isdigit (change[0])) return new;
+   }
+
+   if (accel) {
+   }
+
    return new;
 }
 
@@ -28,8 +70,16 @@ xaccMallocDateCell (void)
 void
 xaccInitDateCell (SingleCell *cell)
 {
+  time_t secs;
+  struct tm *now;
+  char buff[30];
+
+  time (&secs);
+  now = localtime (&secs);
+  sprintf (buff, "%d/%d/%d", now->tm_mday, now->tm_mon+1, now->tm_year+1900);
+
   if (cell->value) free (cell->value);
-  cell ->value = strdup ("1/1/70");
+  cell ->value = strdup (buff);
 
   cell ->modify_verify = DateMV;
 }
