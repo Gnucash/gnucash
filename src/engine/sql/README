@@ -224,9 +224,6 @@ access).
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).  
 
--- change code for initial db access. We should query the pg_database
-   table to see if the database already exists.
-
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
    If user hits 'save' in the single-user or multi-user mode, it 
    should be a no-op (since the saves have already occured).  Only 
@@ -268,11 +265,6 @@ access).
    the backend in a disabled state if a communication error occurs;
    there will be other debilitating conditions if the backend disappears,
    leaving the engine in a possibly confused state.
-
-   For example, if postgres user is misconfigured, the LOCK TABLE
-   will fail on session validate, and FINISH_QUERY will close the
-   connection.  Subsequent sql will core dump gnucash, even though this 
-   is a sysadmin error.
 
 -- during open of register window, a query of splits is typically run
    twice (once during open -- LedgerDisplayInternal(), and again
