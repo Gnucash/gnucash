@@ -6,30 +6,30 @@
 
 <SECT1>
 <TITLE> Register Window</TITLE>
-<PARA>    <INLINEMEDIAOBJECT>
+<MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/regwin-single.png">
 </IMAGEOBJECT>
-</INLINEMEDIAOBJECT> 
+</MEDIAOBJECT> 
 
-    </PARA>
 <PARA>This is the "Register" or the "Ledger" window. Transactions
     are entered here.
 
     </PARA>
 <PARA>To enter a new transaction, just type into the last blank
-    transaction. As well as just typing them in, ou can use can use
+    transaction. As well as just typing them in, you can use
     the <LINK LINKEND="DATE">Date Accelerator keys</LINK> to
     quickly enter dates. Use the mouse or the <LINK LINKEND="XACC-REGWIN-KBD">Register Keyboard Shortcuts</LINK>to move
-    between fields, and hit the Enter key or click record to record
+    between fields, and press the <KEYCAP>Enter</KEYCAP> key or click
+    <GUIBUTTON>record</GUIBUTTON> on the toolbar to record
     the transaction:
-    <INLINEMEDIAOBJECT>
+
+    </PARA>
+    <MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/regwin-single2.png">
 </IMAGEOBJECT>
-</INLINEMEDIAOBJECT> 
-
-    </PARA>
+</MEDIAOBJECT> 
 <PARA>Notice how a the transaction has been recorded and a new,
     blank transaction has been created.
 
@@ -40,7 +40,7 @@
     </PARA>
 <PARA>After you have entered a few transactions, GnuCash will try
     to guess some or all of the remaining details of a transaction
-    when you type into the "Description" field. If GnuCash has
+    when you type into the <GUILABEL>Description</GUILABEL> field. If GnuCash has
     guessed wrong, simply type over or delete the incorrect
     information and replace it with the correct information.
 
@@ -48,99 +48,110 @@
 </SECT1>
 <SECT1 ID="XACC-MANTXN">
 <TITLE> Manipulating transactions</TITLE>
-<PARA>You can manipulate transactions with the toolbar or the
-    "Transaction" menu:
+<PARA>You can manipulate transactions with the toolbar buttons or the
+    <GUIMENU>Transaction</GUIMENU> menu:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>Delete:</EMPHASIS> you can delete a transaction or an
+    </PARA>
+<VARIABLELIST>
+<VARLISTENTRY><TERM><GUIBUTTON>Delete</GUIBUTTON></TERM>
+<LISTITEM><PARA> You can delete a transaction or an
       individual split.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Cancel:</EMPHASIS> this reverts any changes you have made to
-      the transaction you are currently entering/changing
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Cancel</GUIBUTTON></TERM>
+<LISTITEM><PARA> This undoes any changes you have made to
+      the transaction you are currently entering or changing.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>New:</EMPHASIS> this moves the cursor to the last line of the
-      register where new transactions are entered
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>New</GUIBUTTON></TERM>
+<LISTITEM><PARA> This moves the cursor to the last line of the
+      register where new transactions are entered.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Jump:</EMPHASIS> When placed over an existing transaction, it
-      takes you to the corresponding register entry in the other
-      register entry that this transaction appears in
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Jump</GUIBUTTON></TERM>
+<LISTITEM><PARA> When you have selected an existing transaction or split, this
+      takes you to the corresponding register entry in the other account
+      that is involved in the transaction or split.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Transfer:</EMPHASIS>This is an alternative way to enter a
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Transfer</GUIBUTTON></TERM>
+<LISTITEM><PARA>This is an alternative way to enter a
       transaction. You can do a transfer between any two accounts
       without opening up other registers.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Close:</EMPHASIS>Closes this register
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIBUTTON>Close</GUIBUTTON></TERM>
+<LISTITEM><PARA>Closes this register.
     </PARA>
 </LISTITEM>
-</ITEMIZEDLIST>
+</VARLISTENTRY>
+</VARIABLELIST>
 
-    </PARA>
 </SECT1>
 <SECT1 ID="XACC-VIEWTXN">
 <TITLE> Viewing Transactions</TITLE>
 <PARA>The register can show transactions in a variety of different
-    ways, controlled by entries on the "Register" menu.
+    ways, controlled by entries on the <GUIMENU>Register</GUIMENU> menu.
 
     </PARA>
 <PARA>The register can display transactions in several different
     styles:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>single-line mode:</EMPHASIS> transactions are displayed on a
-      single line.
+    </PARA>
+    <VARIABLELIST>
+<VARLISTENTRY><TERM><GUIMENUITEM>single-line</GUIMENUITEM> mode</TERM>
+<LISTITEM><PARA>Transactions are displayed on a single line.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>double-line mode:</EMPHASIS> transactions are displayed over
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIMENUITEM>double-line</GUIMENUITEM> mode</TERM>
+<LISTITEM><PARA>Transactions are displayed over
       two lines, with more information about each transaction
       shown.
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>multi-line mode:</EMPHASIS> transactions are displayed over
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIMENUITEM>multi-line</GUIMENUITEM> mode</TERM>
+<LISTITEM><PARA>Transactions are displayed over
       multiple lines, allowing the display of multiple entries.
       This allows you to enter multi-split transactions (for
       instance, when you pay multiple bills with one check).
 
       </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>auto-single and auto-double modes</EMPHASIS> are like single
+</VARLISTENTRY>
+<VARLISTENTRY><TERM><GUIMENUITEM>auto-single</GUIMENUITEM> and
+      <GUIMENUITEM>auto-double</GUIMENUITEM> modes</TERM>
+<LISTITEM><PARA>Like single
       and double-line modes, except that the currently-edited
       transaction is displayed in multi-line form. This is a very
       convenient way of entering multi-account transactions.
     </PARA>
 </LISTITEM>
-</ITEMIZEDLIST>
+</VARLISTENTRY>
+</VARIABLELIST>
 
-    </PARA>
-<PARA>To change the display style, to go the "Register" menu and
-    select "style".
+<PARA>To change the display style, to go the <GUIMENU>Register</GUIMENU>
+    menu and select a style from the <GUISUBMENU>Style</GUISUBMENU> submenu.
 
     </PARA>
 <PARA>Existing transactions are normally displayed in date order,
-    but this can also be changed with "Sort Order". You can also
+    but this can also be changed with the <GUIMENU>Register</GUIMENU>
+    menu's <GUISUBMENU>Sort Order</GUISUBMENU> submenu. You can also
     select a date rate from which transactions will be displayed
-    with "Date Range".
+    with <GUISUBMENU>Date Range</GUISUBMENU>.
 
     </PARA>
 </SECT1>
@@ -152,17 +163,20 @@
 
     </PARA>
 <PARA>The reconciliation status of a transaction is shown by the
-    reconciliation (R) field. 'c' indicates that a transaction has
-    been reconciled, 'n' indicates that it has not. You can change
-    the reconciliation status by clicking on a the 'r' field of the
-    transaction.
+    reconciliation (<GUILABEL>R</GUILABEL>) field. '<LITERAL>y</LITERAL>'
+    indicates that a transaction has been reconciled,
+    '<LITERAL>n</LITERAL>' indicates that it has not, and
+    '<LITERAL>c</LITERAL>' indicates that it has been cleared, but not
+    reconciled.  When a transaction has cleared, you can change its status
+    to '<LITERAL>c</LITERAL>' by clicking on its <GUILABEL>R</GUILABEL>
+    field.
 
     </PARA>
 <PARA>At the bottom of the account window, there are two running
-    balances, the "cleared and reconciled" balance, and the "total"
-    balance... the "cleared and reconciled" balance should
+    totals: '<GUILABEL>Balance</GUILABEL>', and
+    '<GUILABEL>Cleared</GUILABEL>'. '<GUILABEL>Cleared</GUILABEL>' should
     correspond to how much money the bank thinks you have in your
-    account, and the "total" balance includes outstanding
+    account, while '<GUILABEL>Balance</GUILABEL>' includes outstanding
     transactions.
 
     </PARA>
@@ -176,18 +190,17 @@
     window, or from a portfolio-view window, shown below.
 
     </PARA>
-<PARA><INLINEMEDIAOBJECT>
+<MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/foliowin.png">
 </IMAGEOBJECT>
-</INLINEMEDIAOBJECT>
-     <INLINEMEDIAOBJECT>
+</MEDIAOBJECT>
+     <MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/foliowin-single.png">
 </IMAGEOBJECT>
-</INLINEMEDIAOBJECT>
+</MEDIAOBJECT>
 
-    </PARA>
 <PARA>The portfolio ledger can seem a bit daunting at first
     sight.
 
@@ -243,7 +256,7 @@
 <LISTITEM>
 <PARA>If you are having trouble indicating a share
       purchase/sale in the portfolio ledger, then make sure that
-      <EMPHASIS>Transfer From</EMPHASIS> and <EMPHASIS>Transfer To</EMPHASIS> accounts are in
+      <GUILABEL>Transfer From</GUILABEL> and <GUILABEL>Transfer To</GUILABEL> accounts are in
       the right order. A transfer from a stock account is always
       interpreted as a sale, even if you entered the data as a
       purchase. The vice-versa is also true.
