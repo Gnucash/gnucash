@@ -677,8 +677,8 @@ xaccCreateTable (Table *table, GtkWidget * parent)
     }
   }
   
-  curs = table->current_cursor;
-  xaccCreateCursor (table, curs);
+  /* initialize any cell gui elements now, if any */
+  xaccCreateCursor (table, table->current_cursor);
 
   return (table->table_widget);
 }
