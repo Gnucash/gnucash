@@ -25,19 +25,19 @@
 #ifndef __XACC_ACCOUNT_GROUP_H__
 #define __XACC_ACCOUNT_GROUP_H__
 
-#include <glib.h>
-
 #include "config.h"
-#include "gnc-common.h"
+
+#include <glib.h>
 
 #include "Account.h"
 #include "GNCId.h"
+#include "gnc-common.h"
 
 
 /** PROTOTYPES ******************************************************/
-AccountGroup *xaccMallocAccountGroup( void );
-void          xaccFreeAccountGroup( AccountGroup *account_group );
-void 	      xaccAccountGroupCommitEdit( AccountGroup *grp );
+AccountGroup *xaccMallocAccountGroup (void);
+void          xaccFreeAccountGroup (AccountGroup *account_group);
+void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*
  * The xaccConcatGroups() subroutine will move all accounts
@@ -81,10 +81,10 @@ void    xaccGroupMarkNotSaved (AccountGroup *grp);
  *    Note, however, that it will mark the old parents as having 
  *    been modified.
  */
-void    xaccRemoveAccount (Account *);
-void    xaccRemoveGroup (AccountGroup *);
-void    xaccGroupInsertAccount( AccountGroup *grp, Account *acc );
-void    xaccInsertSubAccount( Account *parent, Account *child );
+void    xaccRemoveAccount (Account *account);
+void    xaccRemoveGroup (AccountGroup *group);
+void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
+void    xaccInsertSubAccount (Account *parent, Account *child);
 
 /*
  * The xaccGetNumAccounts() subroutine returns the number
@@ -100,7 +100,7 @@ void    xaccInsertSubAccount( Account *parent, Account *child );
 int     xaccGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
-Account * xaccGroupGetAccount (AccountGroup *, int);
+Account * xaccGroupGetAccount (AccountGroup *group, int index);
 
 /*
  * The xaccGetAccounts() subroutine returns an array containing 
@@ -135,11 +135,11 @@ int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
  *     names using the given separator.
  */
 
-Account *xaccGetAccountFromName     (AccountGroup *, const char *);
-Account *xaccGetAccountFromFullName (AccountGroup *,
+Account *xaccGetAccountFromName     (AccountGroup *group, const char *name);
+Account *xaccGetAccountFromFullName (AccountGroup *group,
                                      const char *name,
                                      const char separator);
-Account *xaccGetPeerAccountFromName (Account *, const char *);
+Account *xaccGetPeerAccountFromName (Account *account, const char *name);
 Account *xaccGetPeerAccountFromFullName (Account *acc,
                                          const char * name,
                                          const char separator);
@@ -149,7 +149,7 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
  *    up the balances of all accounts in a group.
  */
 
-void xaccRecomputeGroupBalance (AccountGroup *);
+void xaccRecomputeGroupBalance (AccountGroup *group);
 
 /*
  * The xaccGroupGetBalance() method returns the total of the balances 
@@ -157,20 +157,20 @@ void xaccRecomputeGroupBalance (AccountGroup *);
  */
 
 /* deprecated double API will go away */
-double      DxaccGroupGetBalance (AccountGroup *);
-gnc_numeric xaccGroupGetBalance (AccountGroup *);
+double      DxaccGroupGetBalance (AccountGroup *group);
+gnc_numeric xaccGroupGetBalance (AccountGroup *group);
 
 /*
  * The xaccGetAccountRoot () subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
 
-AccountGroup * xaccGetAccountRoot (Account *);
+AccountGroup * xaccGetAccountRoot (Account *group);
 
 /* The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.
  */
-Account * xaccGroupGetParentAccount (AccountGroup *);
+Account * xaccGroupGetParentAccount (AccountGroup *group);
 
 /*
  * The xaccGroupGetNextFreeCode() method will try to guess a reasonable 
