@@ -982,14 +982,12 @@ xaccAccountSetCurrencySCU (Account * acc, int scu) {
 int
 xaccAccountGetCurrencySCU (Account * acc) {
   if (!acc) return 0;
-  CHECK (acc);
   return acc->currency_scu;
 }
 
 int
 xaccAccountGetSecuritySCU (Account * acc) {
   if (!acc) return 0;
-  CHECK (acc);
   return acc->security_scu;
 }
 
