@@ -1,5 +1,10 @@
 Version history:
 ------- -------
+ 1.5.2  - 25 September 2000
+         o fixes for Solaris 8
+         o fixes for gnome-print 0.23
+         o misc bug fixes
+
  1.5.1  - 18 September 2000
          o new Spanish translation
          o new Russion translation
