@@ -1464,11 +1464,6 @@ get_random_book (void)
 
   book = gnc_book_new ();
 
-  /* XXX fixme -- gnc_book_set_group is a private engine function, 
-   * it should not be invoked in ordinary test cases.  Its should 
-   * be more like make_random_pricedb below... */
-  gnc_book_set_group (book, get_random_group (book));
-
   make_random_group (book, gnc_book_get_group (book));
   make_random_pricedb (book, gnc_book_get_pricedb (book));
 
