@@ -583,7 +583,7 @@ gnc_html_guppi_redraw_cb(GtkHTMLEmbedded * eb,
 
 static char * 
 unescape_newlines(const gchar * in) {
-  char * ip = in;
+  const char * ip = in;
   char * retval = g_strdup(in);
   char * op = retval;
 
