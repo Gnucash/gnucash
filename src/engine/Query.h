@@ -54,7 +54,7 @@ typedef enum {
 } sort_type_t;  
 
 typedef enum { PD_DATE, PD_AMOUNT, PD_ACCOUNT, 
-               PD_TRANS, PD_SPLIT, PD_STRING, PD_MISC } pd_type_t;
+               PD_STRING, PD_CLEARED,  PD_MISC } pd_type_t;
 
 typedef enum { ACCT_MATCH_ALL, ACCT_MATCH_ANY, ACCT_MATCH_NONE } acct_match_t;
 typedef enum { AMT_MATCH_ATLEAST, AMT_MATCH_ATMOST, 
@@ -62,33 +62,12 @@ typedef enum { AMT_MATCH_ATLEAST, AMT_MATCH_ATMOST,
 typedef enum { AMT_SGN_MATCH_EITHER, AMT_SGN_MATCH_CREDIT, 
                AMT_SGN_MATCH_DEBIT } amt_match_sgn_t;
 
+enum { CLEARED_NO=1, CLEARED_CLEARED=2, CLEARED_RECONCILED=4, 
+       CLEARED_FROZEN=8 };
+
 enum { STRING_MATCH_CASE=1, STRING_MATCH_REGEXP=2};
 
-/* the Query makes a subset of all splits based on 3 things: 
- *   - an AND-OR tree of predicates which combine to make a 
- *     split filter 
- *   - a sorting order for the matched splits
- *   - a chop limit which gives the maximum number of sorted
- *     splits to return. */
-
-typedef struct {
-  /* terms is a list of the OR-terms in a sum-of-products 
-   * logical expression. */
-  GList *  terms;  
-
-  /* sorting and chopping is independent of the search filter */
-  sort_type_t primary_sort;
-  sort_type_t secondary_sort;
-  sort_type_t tertiary_sort;
-  gncBoolean  sort_increasing;
-  int         max_splits;
-
-  /* cache the results so we don't have to run the whole search 
-   * again until it's really necessary */
-  int      changed;
-  AccountGroup * acct_group;
-  Split ** split_list;
-} Query;
+typedef struct _querystruct Query;
 
 typedef struct {
   pd_type_t    type;
@@ -124,27 +103,22 @@ typedef struct {
 } MiscPredicateData;
 
 typedef struct {
-  pd_type_t    type;
-  Transaction  * trans;
-} TransPredicateData;
+  pd_type_t  type;
+  int        how;
+} ClearedPredicateData;
 
-typedef struct {
-  pd_type_t    type;
-  Split        * split;
-} SplitPredicateData;
 
 typedef union { 
   pd_type_t            type;
   DatePredicateData    date;
   AmountPredicateData  amount;
   AccountPredicateData acct;
-  TransPredicateData   trans;
-  SplitPredicateData   split;
   StringPredicateData  str;
+  ClearedPredicateData cleared;
   MiscPredicateData    misc;
 } PredicateData;
 
-typedef int (* Predicate)(Split * foo, PredicateData * bar);
+typedef int (* Predicate)(Split * to_test, PredicateData * test_data);
 
 typedef struct {
   Predicate     p;
@@ -153,21 +127,22 @@ typedef struct {
 } QueryTerm;
 
 
+/*******************************************************************
+ *  basic Query API
+ *******************************************************************/
+
 Query   * xaccMallocQuery(void);
-void    xaccInitQuery(Query * q, QueryTerm * initial_term);
+void    xaccInitQuery(Query * q, QueryTerm * qt);
 void    xaccFreeQuery(Query *);
+void    xaccQuerySetGroup(Query * q, AccountGroup * group);
+Query   * xaccQueryInvert(Query * q1);
+Query   * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
+void    xaccQueryClear(Query * q);
+void    xaccQueryPurgeTerms(Query * q, pd_type_t type);
 
-Query  * xaccQueryInvert(Query * q1);
-Query  * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
-void   xaccQuerySetGroup(Query * q, AccountGroup * group);
-void   xaccQuerySwapTerms(Query * q1, Query * q2);
-void   xaccQuerySingleTerm(Query * q, QueryTerm * qt);
-void   xaccQueryClear(Query * q);
-void   xaccQueryPurgeTerms(Query * q, pd_type_t type);
+int     xaccQueryHasTerms(Query * q);
 
-int    xaccQueryHasTerms(Query * q);
-
-Split ** xaccQueryGetSplits(Query * q);
+Split   ** xaccQueryGetSplits(Query * q);
 
 /*******************************************************************
  *  match-adding API 
@@ -177,9 +152,6 @@ void xaccQueryAddAccountMatch(Query * q, Account ** acclist,
                               acct_match_t how, QueryOp op);
 void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
                                     QueryOp op);
-
-void xaccQueryAddTransMatch(Query * q, Transaction * t, int how, QueryOp op);
-void xaccQueryAddSplitMatch(Query * q, Split * t, int how, QueryOp op);
 
 void xaccQueryAddDescriptionMatch(Query * q, char * matchstring, 
                                   int case_sens, int use_regexp, QueryOp op);
@@ -208,23 +180,9 @@ void xaccQueryAddMemoMatch(Query * q, char * matchstring,
                            int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
+void xaccQueryAddClearedMatch(Query * q, int how, 
+                              QueryOp op);
 
-
-/*******************************************************************
- *  predicates for standard match types
- *******************************************************************/
-
-int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
-int  xaccTransMatchPredicate(Split * s, PredicateData * pd);
-int  xaccSplitMatchPredicate(Split * s, PredicateData * pd);
-int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
-int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
-int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
-int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
-int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
-int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
-int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
-int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
 
 /*******************************************************************
  *  sort-related functions 

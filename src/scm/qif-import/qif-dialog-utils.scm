@@ -9,19 +9,6 @@
 
 (gnc:support "qif-import/qif-dialog-utils.scm")
 
-(define (qif-dialog:munge-account-mapping old-map new-info)
-  (let ((new-name (car new-info))
-        (new-type (cadr new-info))
-        (new-descript (caddr new-info)))
-    (list-set! old-map 1 new-name)
-    (list-set! old-map 2 new-type)
-    (cond ((qif-cat? (list-ref old-map 5))
-           (qif-cat:set-description! (list-ref old-map 5) new-descript))
-          ((qif-acct? (list-ref old-map 5))
-           (qif-acct:set-description! (list-ref old-map 5) new-descript))
-          (#t 
-           (list-set! old-map 5 new-descript)))))
-    
 (define (default-dividend-acct security)
   (string-append "Dividends:" security))
 

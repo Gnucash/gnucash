@@ -40,9 +40,51 @@
 
 static short module = MOD_QUERY;
 
+/* the Query makes a subset of all splits based on 3 things: 
+ *   - an AND-OR tree of predicates which combine to make a 
+ *     split filter 
+ *   - a sorting order for the matched splits
+ *   - a chop limit which gives the maximum number of sorted
+ *     splits to return. */
+
+struct _querystruct {
+  /* terms is a list of the OR-terms in a sum-of-products 
+   * logical expression. */
+  GList *  terms;  
+
+  /* sorting and chopping is independent of the search filter */
+  sort_type_t primary_sort;
+  sort_type_t secondary_sort;
+  sort_type_t tertiary_sort;
+  gncBoolean  sort_increasing;
+  int         max_splits;
+
+  /* cache the results so we don't have to run the whole search 
+   * again until it's really necessary */
+  int      changed;
+  AccountGroup * acct_group;
+  Split ** split_list;
+};
+
+/*******************************************************************
+ *  predicates for standard match types
+ *******************************************************************/
+
+static int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
+
 /********************************************************************
  ********************************************************************/
 
+#if 0
 static void 
 print_query(Query * q) {
   GList * aterms;
@@ -65,6 +107,8 @@ print_query(Query * q) {
   }
   printf("\n");
 }
+#endif
+
 
 /********************************************************************
  * xaccMallocQuery 
@@ -94,6 +138,10 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
     or->data  = and;
   }
 
+  if(q->terms) {
+    xaccQueryClear(q);
+  }
+  
   q->terms      = or;
   q->split_list = NULL;
   q->changed    = 1;
@@ -114,7 +162,7 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
  * allow quick pass-off of results.
  ********************************************************************/
 
-void
+static void
 xaccQuerySwapTerms(Query * q1, Query * q2) {
   GList * g;
   g = q1->terms;
@@ -123,24 +171,6 @@ xaccQuerySwapTerms(Query * q1, Query * q2) {
 
   q1->changed = 1;
   q2->changed = 1;
-}
-
-
-/********************************************************************
- * xaccQuerySingleTerm
- * initialize the query with 1 term 
- ********************************************************************/
-
-void
-xaccQuerySingleTerm(Query * q, QueryTerm * qt) {
-  GList * or  = NULL;
-  GList * and = NULL;
-
-  or   = g_list_alloc();
-  and  = g_list_alloc();
-  and->data = qt;
-  or->data  = and;
-  q->terms = or;
 }
 
 
@@ -213,9 +243,6 @@ xaccQueryInvert(Query * q) {
 
   num_or_terms = g_list_length(q->terms);
   
-  DEBUG("inverting query: ");
-  DEBUGCMD (print_query(q));
-
   switch(num_or_terms) {
   case 0:
     retval = xaccMallocQuery();
@@ -289,8 +316,9 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
   Query * t1, * t2;
   GList * i, * j;
 
-  DEBUG("merging queries: op=%d\n", op);
-  DEBUGCMD(print_query(q1); print_query(q2);) 
+  if(!q1 || !q2 || !(q1->acct_group == q2->acct_group)) {
+    return NULL;
+  }
 
   switch(op) {
   case QUERY_OR:
@@ -827,69 +855,10 @@ xaccQueryAddAccountMatch(Query * q, Account ** acclist, acct_match_t how,
   qt->data.type           = PD_ACCOUNT;
   qt->data.acct.how       = how;
   qt->data.acct.accounts  = acclist;
-
-  xaccQuerySingleTerm(qs, qt);
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
-  xaccQuerySwapTerms(q, qr);
-
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
-}
-
-/********************************************************************
- * xaccQueryAddTransMatch
- * match splits in the given transaction
- ********************************************************************/
-
-void
-xaccQueryAddTransMatch(Query * q, Transaction * trans, int how,
-                       QueryOp op) {
-  Query     * qs  = xaccMallocQuery(); 
-  QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
-
-  qt->p      = & xaccTransMatchPredicate;
-  qt->sense  = how;
-  qt->data.type         = PD_TRANS;
-  qt->data.trans.trans  = trans;
-
-  xaccQuerySingleTerm(qs, qt);
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
-  xaccQuerySwapTerms(q, qr);
-
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
-}
-
-
-/********************************************************************
- * xaccQueryAddSplitMatch
- * match exactly the given split
- ********************************************************************/
-
-void
-xaccQueryAddSplitMatch(Query * q, Split * split, int how,
-                       QueryOp op) {
-  Query     * qs  = xaccMallocQuery(); 
-  QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
-
-  qt->p      = & xaccSplitMatchPredicate;
-  qt->sense  = how;
-  qt->data.type         = PD_SPLIT;
-  qt->data.split.split  = split;
-
-  xaccQuerySingleTerm(qs, qt);
+  
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -925,7 +894,9 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   qt->data.acct.how       = ACCT_MATCH_ANY;
   qt->data.acct.accounts  = acctlist;
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -979,7 +950,9 @@ xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
     qt->data.str.matchstring = teststr;
   }
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1033,7 +1006,9 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
     qt->data.str.matchstring = teststr;
   }
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1066,7 +1041,9 @@ xaccQueryAddDateMatch(Query * q,
   qt->data.date.start     = gnc_dmy2timespec(sday, smonth, syear);
   qt->data.date.end       = gnc_dmy2timespec(eday, emonth, eyear);
 
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1098,7 +1075,9 @@ xaccQueryAddDateMatchTS(Query * q,
   qt->data.date.start     = sts;  
   qt->data.date.end       = ets;
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1138,7 +1117,9 @@ xaccQueryAddDateMatchTT(Query * q,
   qt->data.date.start     = sts;
   qt->data.date.end       = ets;
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1190,7 +1171,9 @@ xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
     qt->data.str.matchstring = teststr;
   }
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1243,7 +1226,9 @@ xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
     qt->data.str.matchstring = teststr;
   }
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1277,7 +1262,9 @@ xaccQueryAddAmountMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = amt_sgn;
   qt->data.amount.amount    = amt;
 
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1310,7 +1297,9 @@ xaccQueryAddSharePriceMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = 0;
   qt->data.amount.amount    = amt;
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1342,7 +1331,9 @@ xaccQueryAddSharesMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = 0;
   qt->data.amount.amount    = amt;
   
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1374,7 +1365,9 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
   qt->data.misc.how       = how;
   qt->data.misc.data      = data;
 
-  xaccQuerySingleTerm(qs, qt);
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
@@ -1382,6 +1375,37 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
     qr = xaccQueryMerge(q, qs, QUERY_OR);
   }
   
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
+ * xaccQueryAddClearedMatch
+ * Add a 'cleared' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddClearedMatch(Query * q, int how, 
+                         QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  
+  qt->p      = & xaccClearedMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type      = PD_CLEARED;
+  qt->data.cleared.how  = how;
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+  
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1398,6 +1422,8 @@ xaccQueryPurgeTerms(Query * q, pd_type_t type) {
   QueryTerm * qt;
   GList * or;
   GList * and;
+
+  assert(q != NULL);
 
   for(or = q->terms; or; or = or->next) {
     for(and = or->data; and; and = and->next) {
@@ -1475,7 +1501,7 @@ string_match_predicate(const char * s, PredicateData * pd)
 /*******************************************************************
  *  value_match_predicate
  *******************************************************************/
-int 
+static int 
 value_match_predicate(double splitamt, PredicateData * pd) {
   switch(pd->amount.how) {
   case AMT_MATCH_ATLEAST:
@@ -1496,7 +1522,7 @@ value_match_predicate(double splitamt, PredicateData * pd) {
 /*******************************************************************
  *  xaccAccountMatchPredicate 
  *******************************************************************/
-int 
+static int 
 xaccAccountMatchPredicate(Split * s, PredicateData * pd) { 
   Transaction * parent;
   Split       * split;
@@ -1568,7 +1594,7 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd) {
 /*******************************************************************
  *  xaccDescriptionMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   const char  * descript;
@@ -1586,7 +1612,7 @@ xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
 /*******************************************************************
  *  xaccNumberMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
   Transaction * parent;
   const char  * number;
@@ -1603,37 +1629,9 @@ xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
 
 
 /*******************************************************************
- *  xaccTransMatchPredicate 
- *******************************************************************/
-int
-xaccTransMatchPredicate(Split * s, PredicateData * pd) {
-  Transaction * parent;
-  
-  assert(s && pd);  
-  assert(pd->type == PD_TRANS);
-
-  parent = xaccSplitGetParent(s);
-  assert(parent);
-
-  return (parent == pd->trans.trans);
-}
-
-
-/*******************************************************************
- *  xaccSplitMatchPredicate 
- *******************************************************************/
-int
-xaccSplitMatchPredicate(Split * s, PredicateData * pd) {
-  assert(s && pd);  
-  assert(pd->type == PD_SPLIT);
-  return (s == pd->split.split);
-}
-
-
-/*******************************************************************
  *  xaccActionMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccActionMatchPredicate(Split * s, PredicateData * pd) {
   const char  * action;
   
@@ -1648,7 +1646,7 @@ xaccActionMatchPredicate(Split * s, PredicateData * pd) {
 /*******************************************************************
  *  xaccMemoMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
   const char  * memo;
   
@@ -1663,15 +1661,18 @@ xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccMiscMatchPredicate
  *  *** Bill, please complete! ***
  *******************************************************************/
-int xaccMiscMatchPredicate(Split * s, PredicateData * pd) {
+#if 0
+static int 
+xaccMiscMatchPredicate(Split * s, PredicateData * pd) {
   return 0;
 }
+#endif
 
 
 /*******************************************************************
  *  xaccAmountMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
   double splitamt;
 
@@ -1697,7 +1698,7 @@ xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
 /*******************************************************************
  *  xaccSharePriceMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
   double   splitamt;
   Account  * acct;
@@ -1721,7 +1722,7 @@ xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
 /*******************************************************************
  *  xaccSharesMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
   double   splitamt;
   Account  * acct;
@@ -1746,7 +1747,7 @@ xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
 /*******************************************************************
  *  xaccDateMatchPredicate 
  *******************************************************************/
-int
+static int
 xaccDateMatchPredicate(Split * s, PredicateData * pd) {
   Timespec transtime;
 
@@ -1757,6 +1758,35 @@ xaccDateMatchPredicate(Split * s, PredicateData * pd) {
   
   return ((transtime.tv_sec >= pd->date.start.tv_sec) &&
           (transtime.tv_sec <= pd->date.end.tv_sec));
+}
+
+/*******************************************************************
+ *  xaccClearedMatchPredicate 
+ *******************************************************************/
+static int
+xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
+  int      cstate;
+
+  assert(s && pd);
+  assert(pd->type == PD_CLEARED);
+  
+  cstate = xaccSplitGetReconcile(s);
+  switch(cstate) {
+  case CREC:
+    return ((pd->cleared.how & CLEARED_CLEARED) ? 1 : 0);
+    break;
+  case YREC:
+    return ((pd->cleared.how & CLEARED_RECONCILED) ? 1 : 0);
+    break;
+  case FREC:
+    return ((pd->cleared.how & CLEARED_FROZEN) ? 1 : 0);
+    break;
+  case NREC:
+    return ((pd->cleared.how & CLEARED_NO) ? 1 : 0);
+    break;      
+  }
+
+  return 0;
 }
 
 

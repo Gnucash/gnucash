@@ -18,12 +18,26 @@ INCLUDES = \
   -I@PERLINCL@/CORE \
   -I${top_srcdir}/src/engine
 
-#  -I.. \
-#  -I../engine \
-#  -I../guile
-
-LDADD = \
-  ${top_srcdir}/src/engine/libgncengine.a
+libgncswig_la_LIBADD = \
+  @GLIB_LIBS@ \
+  ${top_srcdir}/src/engine/AccInfo.lo \
+  ${top_srcdir}/src/engine/Account.lo \
+  ${top_srcdir}/src/engine/DateUtils.lo \
+  ${top_srcdir}/src/engine/FileIO.lo \
+  ${top_srcdir}/src/engine/GNCId.lo \
+  ${top_srcdir}/src/engine/Group.lo \
+  ${top_srcdir}/src/engine/LedgerUtils.lo \
+  ${top_srcdir}/src/engine/Query.lo \
+  ${top_srcdir}/src/engine/Queue.lo \
+  ${top_srcdir}/src/engine/Scrub.lo \
+  ${top_srcdir}/src/engine/Session.lo \
+  ${top_srcdir}/src/engine/TransLog.lo \
+  ${top_srcdir}/src/engine/Transaction.lo \
+  ${top_srcdir}/src/engine/Backend.lo \
+  ${top_srcdir}/src/engine/date.lo \
+  ${top_srcdir}/src/engine/util.lo \
+  ${top_srcdir}/src/engine/guid.lo \
+  ${top_srcdir}/src/engine/md5.lo
 
 SWIG_INPUT_HDRS := \
   ${top_srcdir}/src/engine/AccInfo.h \

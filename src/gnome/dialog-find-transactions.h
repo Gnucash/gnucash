@@ -96,6 +96,10 @@ typedef struct {
   GtkWidget  * action_case_toggle;
   GtkWidget  * action_regexp_toggle;
 
+  GtkWidget  * cleared_not_cleared_toggle;
+  GtkWidget  * cleared_cleared_toggle;
+  GtkWidget  * cleared_reconciled_toggle;
+
 } FindTransactionsDialog;
 
 FindTransactionsDialog * 

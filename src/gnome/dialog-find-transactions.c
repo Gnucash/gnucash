@@ -41,6 +41,7 @@
 #include "splitreg.h"
 #include "dialog-find-transactions.h"
 #include "window-help.h"
+#include "Query.h"
 
 
 /********************************************************************\
@@ -140,6 +141,12 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->action_regexp_toggle =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "action_regexp_toggle");
 
+  ftd->cleared_cleared_toggle = 
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_cleared_toggle");
+  ftd->cleared_reconciled_toggle = 
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_reconciled_toggle");
+  ftd->cleared_not_cleared_toggle = 
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_not_cleared_toggle");
 
   /* add an account picker to the first tab */
   ftd->account_tree = gnc_account_tree_new();
@@ -206,8 +213,6 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   /* set data so we can find the struct in callbacks */
   gtk_object_set_data(GTK_OBJECT(ftd->dialog), "find_transactions_structure",
                       ftd);
-  
-
   
 
   /* if there's no original query, make the narrow, add, delete 
@@ -357,6 +362,8 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
 
   int start_year, start_month, start_day;
   int end_year, end_month, end_day;
+
+  int c_cleared, c_notcleared, c_reconciled;
 
   if(search_type == 0) {
     if(ftd->q) xaccFreeQuery(ftd->q);
@@ -561,6 +568,21 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                             QUERY_AND);
   }
   
+  c_cleared = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->cleared_cleared_toggle));
+  c_notcleared = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->cleared_not_cleared_toggle));
+  c_reconciled = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->cleared_reconciled_toggle));
+  
+  if(c_cleared || c_notcleared || c_reconciled) {
+    int how = 0;
+    if(c_cleared)    how = how | CLEARED_CLEARED;
+    if(c_notcleared) how = how | CLEARED_NO;
+    if(c_reconciled) how = how | CLEARED_RECONCILED;
+    xaccQueryAddClearedMatch(q, how, QUERY_AND);
+  }
+
   if(!ftd->ledger) {
     new_ledger = TRUE;
     ftd->ledger = xaccLedgerDisplayGeneral(NULL, NULL, SEARCH_LEDGER);

@@ -383,7 +383,8 @@
 	  <signal>
 	    <name>select_row</name>
 	    <handler>gnc_ui_qif_import_account_line_select_cb</handler>
-	    <last_modification_time>Tue, 14 Mar 2000 14:58:13 GMT</last_modification_time>
+	    <data>QIF_File_Import_Dialog</data>
+	    <last_modification_time>Sun, 04 Jun 2000 17:56:41 GMT</last_modification_time>
 	  </signal>
 	  <columns>4</columns>
 	  <column_widths>116,80,204,80</column_widths>
@@ -473,7 +474,8 @@
 	  <signal>
 	    <name>select_row</name>
 	    <handler>gnc_ui_qif_import_category_line_select_cb</handler>
-	    <last_modification_time>Tue, 14 Mar 2000 14:59:18 GMT</last_modification_time>
+	    <data>QIF_File_Import_Dialog</data>
+	    <last_modification_time>Sun, 04 Jun 2000 17:56:55 GMT</last_modification_time>
 	  </signal>
 	  <columns>4</columns>
 	  <column_widths>117,80,204,80</column_widths>
@@ -3628,6 +3630,94 @@ Exactly
 	<xpad>0</xpad>
 	<ypad>0</ypad>
       </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame25</name>
+	<label>Match Cleared state</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox61</name>
+	  <border_width>5</border_width>
+	  <homogeneous>False</homogeneous>
+	  <spacing>5</spacing>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label787</name>
+	    <label>Find transactions whose Cleared status is:</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>7.45058e-09</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>cleared_not_cleared_toggle</name>
+	    <can_focus>True</can_focus>
+	    <label>Not cleared (n)</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>cleared_cleared_toggle</name>
+	    <can_focus>True</can_focus>
+	    <label>Cleared (c)</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>cleared_reconciled_toggle</name>
+	    <can_focus>True</can_focus>
+	    <label>Reconciled (y)</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkLabel</class>
+	<child_name>Notebook:tab</child_name>
+	<name>label786</name>
+	<label>Cleared</label>
+	<justify>GTK_JUSTIFY_CENTER</justify>
+	<wrap>False</wrap>
+	<xalign>0.5</xalign>
+	<yalign>0.5</yalign>
+	<xpad>0</xpad>
+	<ypad>0</ypad>
+      </widget>
     </widget>
 
     <widget>
@@ -4687,6 +4777,22 @@ Contingency
 	<stock_button>GNOME_STOCK_BUTTON_HELP</stock_button>
       </widget>
     </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>window1</name>
+  <title>window1</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>Placeholder</class>
   </widget>
 </widget>
 

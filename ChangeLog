@@ -1,3 +1,9 @@
+2000-06-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/quickfillcell.c (quick_modify): before updating the
+	original copy, make sure it's still the same as the old value,
+	modulo case.
+
 2000-06-03  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/FileIO.c: John Goerzen's patch for 64-bit

@@ -401,10 +401,10 @@ create_QIF_File_Import_Dialog (void)
                       QIF_File_Import_Dialog);
   gtk_signal_connect (GTK_OBJECT (account_page_list), "select_row",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_account_line_select_cb),
-                      NULL);
+                      QIF_File_Import_Dialog);
   gtk_signal_connect (GTK_OBJECT (category_page_list), "select_row",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_category_line_select_cb),
-                      NULL);
+                      QIF_File_Import_Dialog);
   gtk_signal_connect (GTK_OBJECT (button2), "clicked",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_ok_cb),
                       QIF_File_Import_Dialog);
@@ -1683,6 +1683,13 @@ create_Find_Transactions (void)
   GtkWidget *action_case_toggle;
   GtkWidget *action_regexp_toggle;
   GtkWidget *label720;
+  GtkWidget *frame25;
+  GtkWidget *vbox61;
+  GtkWidget *label787;
+  GtkWidget *cleared_not_cleared_toggle;
+  GtkWidget *cleared_cleared_toggle;
+  GtkWidget *cleared_reconciled_toggle;
+  GtkWidget *label786;
   GtkWidget *hbox20;
   GtkWidget *hbox23;
   GtkWidget *frame12;
@@ -2394,6 +2401,57 @@ create_Find_Transactions (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label720);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label720);
+
+  frame25 = gtk_frame_new (_("Match Cleared state"));
+  gtk_widget_ref (frame25);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame25", frame25,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame25);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame25);
+
+  vbox61 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_ref (vbox61);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox61", vbox61,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox61);
+  gtk_container_add (GTK_CONTAINER (frame25), vbox61);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox61), 5);
+
+  label787 = gtk_label_new (_("Find transactions whose Cleared status is:"));
+  gtk_widget_ref (label787);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label787", label787,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label787);
+  gtk_box_pack_start (GTK_BOX (vbox61), label787, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label787), 7.45058e-09, 0.5);
+
+  cleared_not_cleared_toggle = gtk_check_button_new_with_label (_("Not cleared (n)"));
+  gtk_widget_ref (cleared_not_cleared_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "cleared_not_cleared_toggle", cleared_not_cleared_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (cleared_not_cleared_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox61), cleared_not_cleared_toggle, FALSE, FALSE, 0);
+
+  cleared_cleared_toggle = gtk_check_button_new_with_label (_("Cleared (c)"));
+  gtk_widget_ref (cleared_cleared_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "cleared_cleared_toggle", cleared_cleared_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (cleared_cleared_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox61), cleared_cleared_toggle, FALSE, FALSE, 0);
+
+  cleared_reconciled_toggle = gtk_check_button_new_with_label (_("Reconciled (y)"));
+  gtk_widget_ref (cleared_reconciled_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "cleared_reconciled_toggle", cleared_reconciled_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (cleared_reconciled_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox61), cleared_reconciled_toggle, FALSE, FALSE, 0);
+
+  label786 = gtk_label_new (_("Cleared"));
+  gtk_widget_ref (label786);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label786", label786,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label786);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 9), label786);
 
   hbox20 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox20);
@@ -3129,5 +3187,17 @@ create_Budget_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (Budget_Dialog), "tooltips", tooltips);
 
   return Budget_Dialog;
+}
+
+GtkWidget*
+create_window1 (void)
+{
+  GtkWidget *window1;
+
+  window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (window1), "window1", window1);
+  gtk_window_set_title (GTK_WINDOW (window1), _("window1"));
+
+  return window1;
 }
 

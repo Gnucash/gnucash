@@ -144,3 +144,19 @@ gnc_ui_select_date_dialog_ok_cb        (GtkButton       *button,
 void
 gnc_ui_select_date_dialog_cancel_cb    (GtkButton       *button,
                                         gpointer         user_data);
+
+void
+gnc_ui_qif_import_account_line_select_cb
+                                        (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_import_category_line_select_cb
+                                        (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);

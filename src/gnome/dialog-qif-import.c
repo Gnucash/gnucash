@@ -396,17 +396,15 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkList   * list,
                                         gpointer  user_data) {
   GtkWidget       * dialog = GTK_WIDGET(user_data);
   QIFImportWindow * wind = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");  
+  int file_index = 
+    GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(widget), "file_index"));
   
-  SCM scm_qiffile;
+  wind->selected_file = gh_list_ref(wind->imported_files, 
+                                    gh_int2scm(file_index));
   
-  scm_qiffile = GPOINTER_TO_INT
-    (gtk_object_get_data(GTK_OBJECT(widget), "scm-object"));
-
-  wind->selected_file = scm_qiffile;
   scm_protect_object(wind->selected_file);
-  update_file_info(wind, scm_qiffile);
-
+  update_file_info(wind, wind->selected_file);
 }
 
 
@@ -418,54 +416,24 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkList   * list,
 void
 gnc_ui_qif_import_ok_cb(GtkButton * button, gpointer user_data) {
 
-  SCM  save_map_prefs;
-  SCM  qif_to_gnc;
-  SCM  hash_set;
-  SCM  hash_data;
-  char * qif_acct_name;
-  char * qif_cat_name;
-  int row;
+  SCM  save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
+  SCM  qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
 
-  GtkWidget       * dialog = GTK_WIDGET(user_data);
   QIFImportWindow * wind = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
  
-  save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
-  qif_to_gnc     = gh_eval_str("qif-import:qif-to-gnc");
-  hash_set       = gh_eval_str("hash-set!");
-
   /* busy cursor */
   gnc_set_busy_cursor(NULL);
-
-  /* transfer the info from the account / category pickers to 
-   * the mapping info hash tables */
-  for(row=0; row < GTK_CLIST(wind->acct_list)->rows; row++) {
-    gtk_clist_get_text(GTK_CLIST(wind->acct_list), row, 0, &qif_acct_name);
-    
-    hash_data = (SCM)gtk_clist_get_row_data(GTK_CLIST(wind->acct_list), row);
-    gh_call3(hash_set, gh_cadr(wind->mapping_info), 
-             gh_str02scm(qif_acct_name), 
-             hash_data);
-  }
-
-  for(row=0; row < GTK_CLIST(wind->cat_list)->rows; row++) {
-    gtk_clist_get_text(GTK_CLIST(wind->cat_list), row, 0, &qif_cat_name);
-
-    hash_data = (SCM)gtk_clist_get_row_data(GTK_CLIST(wind->cat_list), row);
-    gh_call3(hash_set, gh_caddr(wind->mapping_info), 
-             gh_str02scm(qif_cat_name), 
-             hash_data);
-  }
   
   /* call a scheme function to do the work */
   gh_call2(qif_to_gnc, wind->imported_files, 
            wind->mapping_info);
-
+  
   /* write out mapping info before destroying the window */
   gh_call1(save_map_prefs, wind->mapping_info);
-
+  
   gnc_unset_busy_cursor(NULL);
-
+  
   gnc_ui_qif_import_dialog_destroy(wind);
   wind = NULL;
 }
@@ -492,24 +460,30 @@ void
 gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
                                          gint column, GdkEvent * event,
                                          gpointer user_data) {
-  char * initial_string;
-  int initial_type;
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
+  char  * gnc_acct_text = NULL;
+  char  * qif_acct_text = NULL;
+ 
+  int   initial_type;
+  SCM   scm_acct;
+  SCM   mapping_info;
+  SCM   scm_hash_ref = gh_eval_str("hash-ref");
 
-  SCM  scm_acct;
-  SCM  old_info;
-  SCM  munge_func = gh_eval_str("qif-dialog:munge-account-mapping");
+  gtk_clist_get_text(GTK_CLIST(clist), row, 0, &qif_acct_text);
+  gtk_clist_get_text(GTK_CLIST(clist), row, 2, &gnc_acct_text);
 
-  old_info = (SCM)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+  mapping_info = gh_call2(scm_hash_ref, gh_cadr(wind->mapping_info),
+                          gh_str02scm(qif_acct_text));
+  initial_type = gh_scm2int(gh_list_ref(mapping_info, gh_int2scm(2)));
 
-  gtk_clist_get_text(GTK_CLIST(clist), row, 2, &initial_string);
-
-  initial_type = gh_scm2int(gh_list_ref(old_info, gh_int2scm(2)));
-
-  scm_acct = accountPickerBox(initial_string, initial_type);
-
+  scm_acct = accountPickerBox(gnc_acct_text, initial_type);
+  
   if(gh_list_p(scm_acct)) {
-    gh_call2(munge_func, old_info, scm_acct);
-
+    scm_list_set_x(mapping_info, gh_int2scm(1), gh_car(scm_acct));
+    scm_list_set_x(mapping_info, gh_int2scm(2), gh_cadr(scm_acct));
+    scm_list_set_x(mapping_info, gh_int2scm(5), gh_caddr(scm_acct));
+    
     gtk_clist_set_text(GTK_CLIST(clist), row, 2, 
                        gh_scm2newstr(gh_car(scm_acct), NULL));
     gtk_clist_set_text(GTK_CLIST(clist), row, 3,
@@ -522,23 +496,30 @@ void
 gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
                                           gint column, GdkEvent * event,
                                           gpointer user_data) {
-  char * initial_string;
-  int initial_type;
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
+  char  * gnc_acct_text = NULL;
+  char  * qif_acct_text = NULL;
+  
+  int   initial_type;
+  SCM   scm_acct;
+  SCM   mapping_info;
+  SCM   scm_hash_ref = gh_eval_str("hash-ref");
+  
+  gtk_clist_get_text(GTK_CLIST(clist), row, 0, &qif_acct_text);
+  gtk_clist_get_text(GTK_CLIST(clist), row, 2, &gnc_acct_text);
 
-  SCM  scm_acct;
-  SCM  old_info;
-  SCM  munge_func = gh_eval_str("qif-dialog:munge-account-mapping");
-
-  old_info = (SCM)gtk_clist_get_row_data(GTK_CLIST(clist), row);
-
-  gtk_clist_get_text(GTK_CLIST(clist), row, 2, &initial_string);
-  initial_type = gh_scm2int(gh_list_ref(old_info, gh_int2scm(2)));
-
-  scm_acct = accountPickerBox(initial_string, initial_type);
-
+  mapping_info = gh_call2(scm_hash_ref, gh_caddr(wind->mapping_info),
+                          gh_str02scm(qif_acct_text));
+  initial_type = gh_scm2int(gh_list_ref(mapping_info, gh_int2scm(2)));
+  
+  scm_acct = accountPickerBox(gnc_acct_text, initial_type);
+  
   if(gh_list_p(scm_acct)) {
-    gh_call2(munge_func, old_info, scm_acct);
-
+    scm_list_set_x(mapping_info, gh_int2scm(1), gh_car(scm_acct));
+    scm_list_set_x(mapping_info, gh_int2scm(2), gh_cadr(scm_acct));
+    scm_list_set_x(mapping_info, gh_int2scm(5), gh_caddr(scm_acct));
+    
     gtk_clist_set_text(GTK_CLIST(clist), row, 2, 
                        gh_scm2newstr(gh_car(scm_acct), NULL));
     gtk_clist_set_text(GTK_CLIST(clist), row, 3,
@@ -546,7 +527,6 @@ gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
                        (gh_scm2int(gh_cadr(scm_acct))));
   }
 }
-
 
 
 /********************************************************************\
@@ -563,6 +543,7 @@ update_file_page(QIFImportWindow * wind) {
   SCM       scm_qiffile;
   SCM       qif_file_path;
   int       path_strlen;
+  int       scm_file_index = 0;
 
   /* clear the list */
   gtk_list_remove_items(GTK_LIST(wind->selected_file_list),
@@ -578,11 +559,11 @@ update_file_page(QIFImportWindow * wind) {
     new_list_item = 
       gtk_list_item_new_with_label(gh_scm2newstr(gh_call1(qif_file_path,
                                                           scm_qiffile),
-                                                 &path_strlen));
+                                                 &path_strlen));  
     gtk_object_set_data(GTK_OBJECT(new_list_item),
-                        "scm-object", GINT_TO_POINTER(scm_qiffile));
-    scm_protect_object(scm_qiffile);
-    
+                        "file_index", GINT_TO_POINTER(scm_file_index));
+    scm_file_index++;
+
     /* tack it on to the displayed list */
     new_loaded_file = g_list_alloc();
     new_loaded_file->next = NULL;
@@ -593,7 +574,7 @@ update_file_page(QIFImportWindow * wind) {
     /* now add the file to the loaded-files list */
     gtk_list_append_items(GTK_LIST(wind->selected_file_list), 
                           new_loaded_file);      
-
+    
     /* select_child will update the file info */
     if(scm_qiffile == wind->selected_file) {
       gtk_list_select_child(GTK_LIST(wind->selected_file_list), new_list_item);
@@ -639,12 +620,6 @@ update_file_info(QIFImportWindow * wind, SCM qif_file) {
     return;
   }
   else {
-    /* stick the currently-selected qiffile scm in the window data */
-    gtk_object_set_data(GTK_OBJECT(wind->dialog), 
-                        "current_qif_file", GINT_TO_POINTER(qif_file));
-    
-    scm_protect_object(qif_file);
-
     /* get the currency etc from the Scheme side */
     scm_currency      = gh_call1(qif_file_currency,
                                  qif_file);

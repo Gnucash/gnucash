@@ -18,7 +18,8 @@ LDADD = \
   engine/libgncengine.la \
   @GNOME_LIBS@ \
   @G_WRAP_LINK_ARGS@ \
-  @GUILE_LINK_ARGS@
+  @GUILE_LINK_ARGS@ \
+  @INTLLIBS@
 
 gnucash_SOURCES = \
   MultiLedger.c \
