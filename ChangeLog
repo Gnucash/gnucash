@@ -1,3 +1,8 @@
+2003-04-03  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/import-commodity-matcher.c: Fix debian bug #187061
+	Crash during import of investment accounts.
+
 2003-04-02  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* po/POTFILES.in,
