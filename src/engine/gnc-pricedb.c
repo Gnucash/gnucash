@@ -90,10 +90,10 @@ gnc_price_unref(GNCPrice *p)
 
   p->refcount--;
 
-  if(p->refcount == 0) {
-    gnc_price_begin_edit (p);
-    p->do_free = TRUE;
-    gnc_price_commit_edit (p);
+  if(p->refcount <= 0) {
+    if (NULL != p->db) {
+       PERR("last unref while price in database");
+    }
     gnc_price_destroy (p);
   }
 }
@@ -472,6 +472,21 @@ destroy_pricedb_commodity_hash_data(gpointer key,
   g_hash_table_destroy(currency_hash);
 }
 
+void
+gnc_pricedb_destroy(GNCPriceDB *db)
+{
+  if(!db) return;
+  g_hash_table_foreach (db->commodity_hash,
+                        destroy_pricedb_commodity_hash_data,
+                        NULL);
+  g_hash_table_destroy (db->commodity_hash);
+  db->commodity_hash = NULL;
+  db->backend = NULL;
+  g_free(db);
+}
+
+/* ==================================================================== */
+
 gboolean
 gnc_pricedb_dirty(GNCPriceDB *p)
 {
@@ -484,19 +499,6 @@ gnc_pricedb_mark_clean(GNCPriceDB *p)
 {
   if(!p) return;
   p->dirty = FALSE;
-}
-
-void
-gnc_pricedb_destroy(GNCPriceDB *db)
-{
-  if(!db) return;
-  g_hash_table_foreach (db->commodity_hash,
-                        destroy_pricedb_commodity_hash_data,
-                        NULL);
-  g_hash_table_destroy (db->commodity_hash);
-  db->commodity_hash = NULL;
-  db->backend = NULL;
-  g_free(db);
 }
 
 /* ==================================================================== */
@@ -534,12 +536,12 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   if(!gnc_price_list_insert(&price_list, p)) return FALSE;
   if(!price_list) return FALSE;
   g_hash_table_insert(currency_hash, currency, price_list);
-  db->dirty = TRUE;
   p->db = db;
 
   /* if we haven't been able to call the backend before, call it now */
   if (TRUE == p->not_saved) {
     gnc_price_begin_edit(p);
+    db->dirty = TRUE;
     gnc_price_commit_edit(p);
   }
   return TRUE;
@@ -585,10 +587,14 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
       g_hash_table_destroy (currency_hash);
     }
   }
-  db->dirty = TRUE;
 
-  /* don't set p->db to NULL, we need this pointer to successfully
-   * invoke the backend to delete the price. */
+  /* invoke the backend to delete this price */
+  gnc_price_begin_edit (p);
+  db->dirty = TRUE;
+  p->do_free = TRUE;
+  gnc_price_commit_edit (p);
+
+  p->db = NULL;
   gnc_price_unref(p);
   return TRUE;
 }

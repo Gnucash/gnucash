@@ -1659,6 +1659,18 @@ pgend_trans_commit_edit (Backend * bend,
    return 0;
 }
 
+/* ============================================================= */
+
+static int
+pgend_price_begin_edit (Backend * bend, GNCPrice *pr)
+{
+   if (pr && pr->db && pr->db->dirty) 
+   {
+      PERR ("price db is unexpectedly dirty");
+   }
+   return 0;
+}
+
 static int
 pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
 {
@@ -1694,6 +1706,8 @@ pgend_price_commit_edit (Backend * bend, GNCPrice *pr)
    bufp = "COMMIT;";
    SEND_QUERY (be,bufp,333);
    FINISH_QUERY(be->connection);
+
+   if (pr->db) pr->db->dirty = FALSE;
 
    LEAVE ("commited");
    return 0;
@@ -2651,7 +2665,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = pgend_trans_commit_edit;
             be->be.trans_rollback_edit = NULL;
-            be->be.price_begin_edit = NULL;
+            be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = NULL;
             be->be.sync = pgendSync;
@@ -2669,7 +2683,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = pgend_trans_commit_edit;
             be->be.trans_rollback_edit = NULL;
-            be->be.price_begin_edit = NULL;
+            be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;
             be->be.sync = pgendSync;
