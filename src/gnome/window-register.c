@@ -3084,17 +3084,12 @@ report_helper (RegWindow *regData, SCM func, Query *query)
   {
     query = xaccLedgerDisplayGetQuery (regData->ledger);
     g_return_if_fail (query != NULL);
-
-    query = xaccQueryCopy (query);
   }
 
   arg = gw_wcp_assimilate_ptr (query, qtype);
   args = gh_cons (arg, args);
   if (arg == SCM_UNDEFINED)
-  {
-    xaccFreeQuery (query);
     return;
-  }
 
   gh_apply (func, args);
 }

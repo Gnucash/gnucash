@@ -774,7 +774,7 @@ create_Find_Transactions (void)
   GtkWidget *balance_balanced_toggle;
   GtkWidget *balance_not_balanced_toggle;
   GtkWidget *label843;
-  GtkWidget *frame34;
+  GtkWidget *tags_frame;
   GtkWidget *vbox82;
   GtkWidget *label844;
   GtkWidget *tag_entry;
@@ -1531,19 +1531,19 @@ create_Find_Transactions (void)
   gtk_widget_show (label843);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 10), label843);
 
-  frame34 = gtk_frame_new (_("Match transaction tags (CURRENTLY INOPERABLE)"));
-  gtk_widget_ref (frame34);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame34", frame34,
+  tags_frame = gtk_frame_new (_("Match transaction tags (CURRENTLY INOPERABLE)"));
+  gtk_widget_ref (tags_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "tags_frame", tags_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame34);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame34);
+  gtk_widget_show (tags_frame);
+  gtk_container_add (GTK_CONTAINER (notebook2), tags_frame);
 
   vbox82 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox82);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox82", vbox82,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox82);
-  gtk_container_add (GTK_CONTAINER (frame34), vbox82);
+  gtk_container_add (GTK_CONTAINER (tags_frame), vbox82);
   gtk_container_set_border_width (GTK_CONTAINER (vbox82), 5);
 
   label844 = gtk_label_new (_("Find transactions with the tag:"));

@@ -234,10 +234,7 @@
       (gnc:register-option gnc:*report-options* new-option))
 
     (gnc:register-reg-option
-     (gnc:make-query-option "__reg" "query-new" #f))
-
-    (gnc:register-reg-option
-     (gnc:make-internal-option "__reg" "query" #f))
+     (gnc:make-query-option "__reg" "query" #f))
     (gnc:register-reg-option
      (gnc:make-internal-option "__reg" "journal" #f))
     (gnc:register-reg-option
@@ -576,7 +573,8 @@
     (let ((document (gnc:make-html-document))
 	  (splits '())
           (table '())
-	  (query    (opt-val "__reg" "query"))
+	  (query-scm (opt-val "__reg" "query"))
+          (query #f)
           (journal? (opt-val "__reg" "journal"))
           (debit-string (opt-val "__reg" "debit-string"))
           (credit-string (opt-val "__reg" "credit-string"))
@@ -585,6 +583,8 @@
 
       (if invoice?
           (set! title (_ "Invoice")))
+
+      (set! query (gnc:scm->query query-scm))
 
       (gnc:query-set-group query (gnc:get-current-group))
 
@@ -630,6 +630,8 @@
       (gnc:html-document-set-title! document title)
       (gnc:html-document-add-object! document table)
 
+      (gnc:free-query query)
+
       document))
 
   (gnc:define-report
@@ -652,7 +654,6 @@
   (let* ((options (gnc:make-report-options "Register"))
          (invoice-op (gnc:lookup-option options "Invoice" "Make an invoice"))
          (query-op (gnc:lookup-option options "__reg" "query"))
-         (query-new-op (gnc:lookup-option options "__reg" "query-new"))
          (journal-op (gnc:lookup-option options "__reg" "journal"))
          (double-op (gnc:lookup-option options "__reg" "double"))
          (title-op (gnc:lookup-option options "General" "Title"))
@@ -667,7 +668,6 @@
     
     (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)
-    (gnc:option-set-value query-new-op query)
     (gnc:option-set-value journal-op journal?)
     (gnc:option-set-value double-op double?)
     (gnc:option-set-value title-op title)
@@ -675,7 +675,6 @@
     (gnc:option-set-value credit-op credit-string)
     (func (gnc:make-report "Register" options))))
 
-  
 (define (gnc:show-register-report . rest)
   (apply gnc:apply-register-report
          (cons gnc:report-window (cons #f rest))))

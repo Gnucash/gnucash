@@ -41,7 +41,7 @@
   (define-syntax addto!
     (syntax-rules ()
 		  ((_ alist element) (set! alist (cons element alist)))))
-		     
+
   (define (split-account-full-name-same-p a b)
     (= (gnc:split-compare-account-full-names a b) 0))
 
@@ -479,11 +479,12 @@
 	"a" (N_ "Sort by this criterion first")
 	'account-name
 	key-choice-list #f
-	(lambda (x) 
-	  (gnc:set-option-selectable-by-name
+	(lambda (x)
+	  (gnc:option-db-set-option-selectable-by-name
+           gnc:*transaction-report-options*
 	   pagename-sorting optname-prime-subtotal
 	   (and (member x subtotal-enabled) #t)))))
-      
+
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	pagename-sorting (N_ "Primary Sort Order")
@@ -497,7 +498,8 @@
 	"c" 
 	(N_ "Subtotal according to the primary key?")
 	#t #f 
-	(lambda (x) (gnc:set-option-selectable-by-name 
+	(lambda (x) (gnc:option-db-set-option-selectable-by-name
+                     gnc:*transaction-report-options*
 		     pagename-sorting optname-prime-subtotal-by 
 		     (and x 
 			  (equal?
@@ -523,10 +525,11 @@
 	'date
 	key-choice-list #f
 	(lambda (x) 
-	  (gnc:set-option-selectable-by-name
+	  (gnc:option-db-set-option-selectable-by-name
+           gnc:*transaction-report-options*
 	   pagename-sorting optname-sec-subtotal
 	   (and (member x subtotal-enabled) #t)))))
-      
+
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	pagename-sorting (N_ "Secondary Sort Order")
@@ -539,9 +542,10 @@
 	pagename-sorting optname-sec-subtotal
 	"g" 
 	(N_ "Subtotal according to the secondary key?")
-	#t #f 
-	(lambda (x) (gnc:set-option-selectable-by-name 
-		       pagename-sorting optname-sec-subtotal-by x))))
+	#t #f
+	(lambda (x) (gnc:option-db-set-option-selectable-by-name
+                     gnc:*transaction-report-options*
+                     pagename-sorting optname-sec-subtotal-by x))))
 
       (gnc:register-trep-option
        (gnc:make-multichoice-option

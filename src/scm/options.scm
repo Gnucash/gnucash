@@ -714,8 +714,7 @@
     (gnc:make-option
      section name "" 'query #f
      (lambda () value)
-     (lambda (x) (set! value (if (list? x) x (gnc:query->scm x)))
-             (display value) (newline))
+     (lambda (x) (set! value (if (list? x) x (gnc:query->scm x))))
      (lambda () (if (list? default-value)
                     default-value
                     (gnc:query->scm default-value)))

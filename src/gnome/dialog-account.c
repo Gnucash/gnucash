@@ -1332,7 +1332,7 @@ gnc_type_list_unselect_cb(GtkCList * type_list, gint row, gint column,
   aw->type = BAD_TYPE;
 
   gtk_widget_set_sensitive(aw->security_edit, FALSE);
-  gtk_widget_set_sensitive(aw->source_menu, FALSE);
+  gtk_widget_set_sensitive(aw->quote_frame, FALSE);
 }
 
 

@@ -693,32 +693,24 @@ gnc_option_get_ui_value(GNCOption *option)
 
 
 /********************************************************************\
- * gnc_set_option_selectable_by_name                                *
+ * gnc_set_option_selectable                                        *
  *   Change the selectable state of the widget that represents a    *
  *   GUI option.                                                    *
  *                                                                  *
- * Args: section     - section of option                            *
- *       name        - name of option                               *
+ * Args: option      - option to change widget state for            *
  *       selectable  - if false, update the widget so that it       *
  *                     cannot be selected by the user.  If true,    *
  *                     update the widget so that it can be selected.*
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_set_option_selectable_by_name( const char *section,
-                                   const char *name,
-                                   gboolean selectable)
+gnc_set_option_selectable (GNCOption *option, gboolean selectable)
 {
-  GNCOption *option = gnc_get_option_by_name( section, name );
-
   if ((option == NULL) || (option->widget == NULL))
     return;
 
-  gtk_widget_set_sensitive( GTK_WIDGET(option->widget),
-                            selectable                  );
-
-  return;
-} /* gnc_set_option_selectable_by_name */
+  gtk_widget_set_sensitive (GTK_WIDGET(option->widget), selectable);
+}
 
 
 static void
