@@ -703,7 +703,8 @@ get_random_pricedb(QofBook *book)
 {
   GNCPriceDB *db;
 
-  db = gnc_pricedb_create (book);
+  // db = gnc_pricedb_create (book);
+  db = gnc_pricedb_get_db (book);
   make_random_pricedb (book, db);
 
   return db;
