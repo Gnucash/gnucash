@@ -35,9 +35,9 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
 
-#include "gnc-account-tree.h"
 #include "Group.h"
 #include "eggtreemodelfilter.h"
+#include "gnc-ui-util.h"
 
 G_BEGIN_DECLS
 
@@ -51,6 +51,16 @@ G_BEGIN_DECLS
 
 /* typedefs & structures */
 typedef struct GncTreeViewAccountPrivate GncTreeViewAccountPrivate;
+typedef struct AccountViewInfo_s     AccountViewInfo;
+
+
+struct AccountViewInfo_s
+{
+  gboolean include_type[NUM_ACCOUNT_TYPES];
+
+  gboolean show_field[NUM_ACCOUNT_FIELDS];
+};
+
 
 typedef struct {
 	GtkTreeView parent;
@@ -90,6 +100,8 @@ GtkTreeView  *gnc_tree_view_account_new                   (gboolean show_root);
 
 /** @name Account Tree View Configuration */
 /** @{ */
+
+const char *gnc_tree_view_account_get_field_name (AccountFieldCode field);
 
 /** Configure (by name) the set of visible columns in an account tree
  *  view.  By default, only the account name column is show.  The

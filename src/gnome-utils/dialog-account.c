@@ -33,7 +33,6 @@
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
 #include "global-options.h"
-#include "gnc-account-tree.h"
 #include "gnc-amount-edit.h"
 #include "gnc-general-select.h"
 #include "gnc-commodity.h"
@@ -566,7 +565,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   if(!full_name)
     full_name = g_strdup("");
 
-  account_field_name = g_strdup(gnc_ui_account_get_field_name(fs->field));
+  account_field_name = g_strdup(gnc_tree_view_account_get_field_name(fs->field));
   if (!account_field_name)
     account_field_name = g_strdup("");
 
@@ -1197,100 +1196,6 @@ gnc_account_type_list_create(AccountWindow *aw)
   gtk_clist_select_row(GTK_CLIST(aw->type_list), row, 0);
   gtk_clist_moveto(GTK_CLIST(aw->type_list), row, 0, 0.5, 0);
 }
-
-#if 0
-static void
-gnc_type_list_row_set_active(GtkCList *type_list, gint type, gboolean state)
-{
-  GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(type_list));
-  gint row = gtk_clist_find_row_from_data(type_list, (gpointer)type);
-
-  if (state)
-  {
-    gtk_clist_set_selectable(type_list, row, TRUE);
-    gtk_clist_set_background(type_list, row, &style->white);
-  }
-  else
-  {
-    gtk_clist_unselect_row(type_list, row, 0);
-    gtk_clist_set_selectable(type_list, row, FALSE);
-    gtk_clist_set_background(type_list, row, &style->dark[GTK_STATE_NORMAL]);
-  }
-}
-
-
-static void
-gnc_parent_tree_select(GNCAccountTree *tree,
-                       Account * account, 
-                       gpointer data)
-{
-  AccountWindow *aw = data;
-  GNCAccountType parent_type;
-  gboolean  compatible;
-  gint      type;
-
-  gnc_account_window_set_name (aw);
-
-  if (aw->dialog_type == EDIT_ACCOUNT)
-    return;
-
-  account = gnc_account_tree_get_current_account(tree);
-
-  /* Deleselect any or select top account */
-  if (account == NULL || account == aw->top_level_account)
-    if (aw->valid_types)
-    {
-      GList *node;
-      for (node = aw->valid_types; node; node = node->next)
-      {
-	type = ((GNCAccountType)(node->data));
-	gnc_type_list_row_set_active(GTK_CLIST(aw->type_list), type, TRUE);
-      }
-    }
-    else
-      for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-	gnc_type_list_row_set_active(GTK_CLIST(aw->type_list), type, TRUE);
-
-  else /* Some other account was selected */
-  {
-    parent_type = xaccAccountGetType(account);
-
-    /* set the allowable account types for this parent */
-    if (aw->valid_types)
-    {
-      GList *node;
-      for (node = aw->valid_types; node; node = node->next)
-      {
-	type = ((GNCAccountType)(node->data));
-	compatible = xaccAccountTypesCompatible (parent_type, type);
-	gnc_type_list_row_set_active (GTK_CLIST(aw->type_list), type,
-				      compatible);
-      }
-    }
-    else
-    {
-      for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
-      {
-	compatible = xaccAccountTypesCompatible(parent_type, type);
-	gnc_type_list_row_set_active(GTK_CLIST(aw->type_list), type,
-				     compatible);
-      }
-    }
-
-    /* now select a new account type if the account class has changed */
-    compatible = xaccAccountTypesCompatible(parent_type, aw->type);
-    if (!compatible)
-    {
-      gint row;
-      aw->type = parent_type;
-      row = gtk_clist_find_row_from_data(GTK_CLIST(aw->type_list),
-					 (gpointer)parent_type);
-      gtk_clist_select_row(GTK_CLIST(aw->type_list), row, 0);
-      gtk_clist_moveto(GTK_CLIST(aw->type_list), row, 0, 0.5, 0);
-    }
-  }
-}
-#endif
 
 static void
 gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)

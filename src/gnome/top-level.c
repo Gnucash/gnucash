@@ -61,6 +61,7 @@
 #include "gnc-report.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
@@ -70,8 +71,6 @@
 #include "messages.h"
 #include "split-register.h"
 #include "top-level.h"
-/*#include "window-main.h" */
-#include "window-acct-tree.h"
 #include "window-register.h"
 #include "window-report.h"
 

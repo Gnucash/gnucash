@@ -55,11 +55,9 @@ libgncgnome_la_SOURCES = \
   gnc-split-reg.c \
   gnc-window.c \
   lot-viewer.c \
-  mainwindow-account-tree.c \
   reconcile-list.c \
   tip-of-the-day.c \
   top-level.c \
-  window-acct-tree.c \
   window-main.c \
   window-main-summarybar.c \
   window-reconcile.c \
@@ -105,11 +103,9 @@ noinst_HEADERS = \
   gnc-window.h \
   gw-gnc.h \
   lot-viewer.h \
-  mainwindow-account-tree.h \
   reconcile-list.h \
   tip-of-the-day.h \
   top-level.h \
-  window-acct-tree.h \
   window-main.h \
   window-main-summarybar.h \
   window-reconcile.h \

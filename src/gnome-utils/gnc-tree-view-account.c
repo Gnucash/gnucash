@@ -139,6 +139,29 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 	object_class->destroy = gnc_tree_view_account_destroy;
 }
 
+/********************************************************************\
+ * gnc_init_account_view_info                                       *
+ *   initialize an account view info structure with default values  *
+ *                                                                  *
+ * Args: avi - structure to initialize                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
+static void
+gnc_init_account_view_info(AccountViewInfo *avi)
+{
+  int i;
+
+  for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+    avi->include_type[i] = TRUE;
+
+  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
+    avi->show_field[i] = FALSE;
+
+  avi->show_field[ACCOUNT_NAME] = TRUE;
+  avi->show_field[ACCOUNT_DESCRIPTION] = TRUE;
+  avi->show_field[ACCOUNT_TOTAL] = TRUE;
+}
+
 static void
 gnc_tree_view_account_init (GncTreeViewAccount *view)
 {
@@ -345,6 +368,15 @@ gnc_tree_view_account_pref_name_to_field (const char *pref_name)
       return i;
   return(GNC_TREE_MODEL_ACCOUNT_COL_NAME);
 }
+
+const char *
+gnc_tree_view_account_get_field_name (AccountFieldCode field)
+{
+  g_return_val_if_fail ((field >= 0) && (field < GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM), NULL);
+
+  return(gettext(gnc_tree_view_account_defaults[field].field_name));
+}
+
 
 /*
  * Set the list of columns that will be visible in an account tree view.

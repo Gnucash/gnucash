@@ -56,10 +56,8 @@
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "guile-util.h"
-#include "mainwindow-account-tree.h"
 #include "option-util.h"
 #include "top-level.h"
-#include "window-acct-tree.h"
 #include "window-main-summarybar.h"
 #include "window-main.h"
 #include "window-reconcile.h"
@@ -266,7 +264,6 @@ gnc_main_window_create_child(const gchar * configstring)
   ENTER(" ");
   if (!configstring)
   {
-    gnc_main_window_open_accounts (FALSE);
     LEAVE("no configstring");
     return NULL;
   }
@@ -277,9 +274,6 @@ gnc_main_window_create_child(const gchar * configstring)
 
   if (!safe_strcmp (type, URL_TYPE_REPORT)) {
     child = gnc_report_window_create_child(configstring);
-
-  } else if (!safe_strcmp (type, URL_TYPE_ACCTTREE)) {
-    child = gnc_acct_tree_window_create_child(configstring);
 
   } else {
     child = NULL;
@@ -488,7 +482,6 @@ gnc_main_window_file_new_window_cb(GtkWidget * widget, gpointer data)
   {
     if (!strcmp(mdi->active_child->name, _("Accounts")))
     {
-      gnc_main_window_open_accounts (TRUE);
     }
     else
     {
@@ -775,7 +768,6 @@ gnc_main_window_exit_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_main_window_file_new_account_tree_cb(GtkWidget * w, gpointer data)
 {
-  gnc_main_window_open_accounts(FALSE);
 }
 
 
