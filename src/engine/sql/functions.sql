@@ -22,7 +22,7 @@ CREATE FUNCTION gncSubtotalBalance (CHAR(32), DATETIME, DATETIME)
         gncTransaction.date_posted BETWEEN $2 AND $3'
     LANGUAGE 'sql';
 
-CREATE FUNCTION gncSubtotalClearedBalance (char(32), DATETIME, DATETIME)
+CREATE FUNCTION gncSubtotalClearedBalance (CHAR(32), DATETIME, DATETIME)
     RETURNS INT8
     AS 'SELECT INT8(sum(gncEntry.value))
         FROM gncEntry, gncTransaction
