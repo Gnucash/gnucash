@@ -1424,11 +1424,17 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   {
     gnc_numeric to_amt, from_amt;
 
+    /* If we've got the price-button set, then make sure we update the
+     * to-amount before we use it.
+     */
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(xferData->price_radio)))
+      gnc_xfer_update_to_amount(xferData);
+
     from_amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(xferData->amount_edit));
     to_amt = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
 
     *(xferData->exch_rate) =
-      gnc_numeric_abs (gnc_numeric_div (to_amount, amount, GNC_DENOM_AUTO,
+      gnc_numeric_abs (gnc_numeric_div (to_amt, from_amt, GNC_DENOM_AUTO,
 					GNC_DENOM_REDUCE));
   }
   else
