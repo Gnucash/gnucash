@@ -6,6 +6,10 @@
 	  - Change the message when the company name is left blank.
 	Fixes #109754
 
+	* src/gnome/dialog-print-check.c: a simple change -- use a globally-
+	  defined option-menu helper function instead of defining our own
+	  copy for no particular reason.
+
 2003-05-30  Christian Stimming  <stimming@tuhh.de>
 
 	* lib/guppi-legend.patch: Include patch for Guppi that fixes
