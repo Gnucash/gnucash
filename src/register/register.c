@@ -18,6 +18,9 @@
 #define XFRM_CELL_C  2
 #define XFRM_CELL_R  0
 
+#define XTO_CELL_C  -1
+#define XTO_CELL_R  -1
+
 #define XTO_CELL_C  2
 #define XTO_CELL_R  1
 

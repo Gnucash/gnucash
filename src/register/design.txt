@@ -1,6 +1,5 @@
-
-Design Overview
----------------
+The Register Object
+-------------------
 The register is an infrastructure for building 
 a modular spread-sheet/matrix/array of cells,
 where each cell may have a unique/special 
@@ -10,6 +9,33 @@ be easy to extend, modular & easy to maintain,
 and memory-efficient.  It is intended to be used
 for building financial apps and spread-sheets.
 
+Features
+--------
+-- Supported cell types:
+   Date:        display and/or edit of date, can 
+                use accelerator keys to set date
+   Price/Value: display and or edit of numeric quantity
+   Text:        arbitrary text string display and/or edit
+   Quickfill:   autocompletes user's typed in entry
+                to match previous entries
+   Combo:       pull-down menu of choices
+   Recncell:    checkbox, click to cycle through values
+
+-- Modular: cells/columns are thier own objects, 
+            new cells & column types can be invented.
+-- Easily configurable: layout of cells is programmatically 
+                        modifiable.
+-- Tabbing order between cells is customizable
+-- No assumptions made about source of data, no
+   predifined financial structure required or enforced.
+-- Motif & C based
+-- GUI code segregated, theorectially making port to 
+   Qt, GTK easy.
+
+
+
+Design Overview
+---------------
 The register is built of several components:
 the "cell", the "cellblock", the "cursor", the 
 "table", and the "register".
@@ -60,6 +86,15 @@ other GUI's (e.g. GTK, QT).
 
 All Motif-specific code appears in the "table".
 
+Apologies
+---------
+This is not the worlds most elegant design, its 
+ocasioanly a bit of a hack, occasionally over-complex,
+but it more or less works, and should be quite extensible.
+Its certainly light-years ahead of its predecessor.
+
+-- Linas Vepstas
+-- Feb 1998
 
 
 

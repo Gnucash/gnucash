@@ -41,9 +41,12 @@ typedef struct _BasicRegister {
    BasicCell     * recnCell;
    PriceCell     * creditCell;
    PriceCell     * debitCell;
+   PriceCell     * shrsCell;
+   PriceCell     * priceCell;
    BasicCell     * memoCell;
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
+   ComboCell     * xtoCell;
 
    PriceCell     * balanceCell;
 
