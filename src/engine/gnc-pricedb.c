@@ -653,8 +653,8 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
                                    Timespec t)
 {
   GList *price_list;
-  GNCPrice *before_price = NULL;
-  GNCPrice *after_price = NULL;
+  GNCPrice *current_price = NULL;
+  GNCPrice *next_price = NULL;
   GNCPrice *result = NULL;
   GList *item = NULL;
   GHashTable *currency_hash;
@@ -670,34 +670,37 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   item = price_list;
 
   /* default answer */
-  before_price = item->data;
+  current_price = item->data;
 
   /* find the first candidate past the one we want.  Remember that
      prices are in most-recent-first order. */
-  while(!after_price && item) {
+  while (!next_price && item) {
     GNCPrice *p = item->data;
     Timespec price_time = gnc_price_get_time(p);
-    if(timespec_cmp(&price_time, &t) > 0) {
-      before_price = after_price;
-      after_price = item->data;
+    if (timespec_cmp(&price_time, &t) <= 0) {
+      next_price = item->data;
+      break;
     }
+    current_price = item->data;
     item = item->next;
   }
 
-  if(before_price && !after_price) result = before_price;
-
-  {
-    Timespec before_t = gnc_price_get_time(before_price);
-    Timespec after_t = gnc_price_get_time(after_price);
-    Timespec diff_before = timespec_diff(&before_t, &t);
-    Timespec diff_after = timespec_diff(&after_t, &t);
-    Timespec abs_before = timespec_abs(&diff_before);
-    Timespec abs_after = timespec_abs(&diff_after);
-
-    if(timespec_cmp(&abs_before, &abs_after) < 0) {
-      result = before_price;
+  if (current_price) {
+    if (!next_price) {
+      result = current_price;
     } else {
-      result = after_price;
+      Timespec current_t = gnc_price_get_time(current_price);
+      Timespec next_t = gnc_price_get_time(next_price);
+      Timespec diff_current = timespec_diff(&current_t, &t);
+      Timespec diff_next = timespec_diff(&next_t, &t);
+      Timespec abs_current = timespec_abs(&diff_current);
+      Timespec abs_next = timespec_abs(&diff_next);
+      
+      if (timespec_cmp(&abs_current, &abs_next) <= 0) {
+	result = current_price;
+      } else {
+	result = next_price;
+      }
     }
   }
 

@@ -65,7 +65,7 @@
 				 (not (gnc:commodity-equiv? 
 				       trans-comm acc-comm))
 				 (or
-				  commodity
+				  (not commodity)
 				  (gnc:commodity-equiv?
 				   commodity trans-comm)
 				  (gnc:commodity-equiv?
