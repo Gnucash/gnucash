@@ -135,7 +135,12 @@ put_iguid_in_tables (PGBackend *be)
    char *p, buff[200];
    guint iguid;
 	
-   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+   p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncEntry IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncTransaction IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncKVPValue IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n"
+       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,0,'Start Put iGUID in Main Tables');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -146,6 +151,14 @@ put_iguid_in_tables (PGBackend *be)
        "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
        " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
+
+       "ALTER TABLE gncEntryTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "UPDATE gncEntryTrail SET iguid = 0;\n" 
+       
+       "UPDATE gncEntryTrail SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncEntryTrail.entryGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -156,6 +169,14 @@ put_iguid_in_tables (PGBackend *be)
        "UPDATE gncTransaction SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
        " WHERE gncGUIDCache.guid = gncTransaction.transGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
+
+       "ALTER TABLE gncTransactionTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "UPDATE gncTransactionTrail SET iguid = 0;\n" 
+       
+       "UPDATE gncTransactionTrail SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncTransactionTrail.transGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -166,6 +187,14 @@ put_iguid_in_tables (PGBackend *be)
        "UPDATE gncAccount SET iguid = gncGUIDCache.iguid "
        " FROM gncGUIDCache, gncKVPValue "
        " WHERE gncGUIDCache.guid = gncAccount.accountGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n"
+
+       "ALTER TABLE gncAccountTrail ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "UPDATE gncAccountTrail SET iguid = 0;\n" 
+       
+       "UPDATE gncAccountTrail SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncAccountTrail.accountGUID "
        " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);

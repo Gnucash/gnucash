@@ -1,5 +1,6 @@
 /********************************************************************\
- * PostgresBackend.c -- implements postgres backend                 *
+ * PostgresBackend.c -- implements postgres backend - main file     *
+ * Copyright (c) 2000, 2001 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,18 +20,6 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-
-/* 
- * FILE:
- * PostgresBackend.c
- *
- * FUNCTION:
- * Implements the callbacks for the Postgres backend.
- *
- * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas
- * 
- */
 
 #define _GNU_SOURCE
 
@@ -1712,8 +1701,26 @@ pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid,
          }
          if (0 < rc)
          {
+            gboolean someones_still_on;
             /* The server is older than we are; lets upgrade */
+            /* But first, make sure all users are logged off ... */
+            p = "BEGIN;\n";
+                "LOCK TABLE gncSession IN ACCESS EXCLUSIVE MODE;\n"
+                "SELECT time_off FROM gncSession WHERE time_off ='infinity';";
+            SEND_QUERY (be,p, );
+            someones_still_on = (gboolean) pgendGetResults (be, db_exists_cb, FALSE);
+            if (someones_still_on)
+            {
+               p = "COMMIT;\n";
+               SEND_QUERY (be,p, );
+               FINISH_QUERY(be->connection);
+               xaccBackendSetError (&be->be, ERR_SQL_DB_BUSY);
+               return;
+            }
             pgendUpgradeDB (be);
+            p = "COMMIT;\n";
+            SEND_QUERY (be,p, );
+            FINISH_QUERY(be->connection);
          }
          else
          {
