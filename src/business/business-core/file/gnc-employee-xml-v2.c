@@ -431,6 +431,7 @@ gnc_employee_xml_initialize (void)
     NULL,			/* add_item */
     employee_get_count,
     employee_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

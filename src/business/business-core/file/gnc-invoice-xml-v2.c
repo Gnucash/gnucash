@@ -551,6 +551,7 @@ gnc_invoice_xml_initialize (void)
     NULL,			/* add_item */
     invoice_get_count,
     invoice_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

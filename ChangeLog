@@ -1,3 +1,36 @@
+2003-06-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/io-gncxml-v2.[ch]: add API to the plugin
+	  modules to allow post-processing (scrubbing) of the book after
+	  it is loaded from XML.  This allows a plug-in to post-process
+	  the complete book.
+	* src/business/business-core/file/gnc-customer-xml-v2.c:
+	* src/business/business-core/file/gnc-employee-xml-v2.c:
+	* src/business/business-core/file/gnc-entry-xml-v2.c:
+	* src/business/business-core/file/gnc-invoice-xml-v2.c:
+	* src/business/business-core/file/gnc-job-xml-v2.c:
+	* src/business/business-core/file/gnc-order-xml-v2.c:
+	* src/business/business-core/file/gnc-vendor-xml-v2.c:
+	  add a NULL scrub member to the XML plugin API.
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c:
+	  create a scrub function to clear up bogus tax tables due
+	  to bug #114888 (and related bugs) which could cause
+	  tax tables to get created ad-nausium if you post and then
+	  unpost an invoice.  Scrubs all the entries for bogus
+	  tax tables, and then clears out the bogus tax tables.
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	  Hook in an empty scrub routine, because I think the same
+	  bug exists here, but I'll work on that later.
+	* src/business/business-core/gncEntry.c:
+	  make sure we properly dereference tax tables when we destroy
+	  an entry.
+	* src/business/business-core/gncTaxTable.c:
+	  - keep a list of children so we can unref ourselves from our
+	    children when we get destroyed
+	  - deal with parentless children
+	Fixes bug #114888 -- don't generate phantom (parent) tax tables
+	and clean up any existing bogus tax tables.
+
 2003-06-12  Christian Stimming  <stimming@tuhh.de>
 
 	* doc/TRANSLATION_HOWTO: Added, by Jon Lapham
