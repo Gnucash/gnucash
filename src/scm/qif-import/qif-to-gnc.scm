@@ -23,14 +23,14 @@
          (same-gnc-account 
           (gnc:get-account-from-full-name acct-group gnc-name separator))
          (make-new-acct #f))
-    
+
     (if (or (pointer-token-null? same-gnc-account) 
             (and (not (pointer-token-null? same-gnc-account))
                  (not (string=? 
                        (gnc:account-get-full-name same-gnc-account)
                        gnc-name))))
         (set! make-new-acct #t))
-    
+
     (if existing-account 
         existing-account 
         (let ((new-acct (gnc:malloc-account))
@@ -39,10 +39,9 @@
               (acct-name #f)
               (last-colon #f))
           (set! last-colon (string-rindex gnc-name separator))
-          
-          (gnc:init-account new-acct)
+
           (gnc:account-begin-edit new-acct)
-          
+
           ;; if this is a copy of an existing gnc account, 
           ;; copy the account properties 
           (if (not make-new-acct)

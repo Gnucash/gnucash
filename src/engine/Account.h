@@ -115,7 +115,6 @@ gboolean xaccAccountStringToType(const char* str, int *type);
 gboolean xaccAccountTypesCompatible (int parent_type, int child_type);
 
 Account     *xaccMallocAccount( void );
-void         xaccInitAccount( Account * );
 void         xaccFreeAccount( Account * );
 
 /* Compare two accounts for equality - this is a deep compare. */

@@ -771,7 +771,7 @@ gnc_recn_make_window_name(Account *account)
   fullname = xaccAccountGetFullName(account, gnc_get_account_separator());
   title = g_strconcat(fullname, " - ", _("Reconcile"), NULL);
 
-  free(fullname);
+  g_free(fullname);
 
   return title;
 }

@@ -62,7 +62,7 @@ static short module = MOD_ENGINE;
 /********************************************************************\
 \********************************************************************/
 
-void
+static void
 xaccInitAccount (Account * acc) {
 
   acc->parent   = NULL;
@@ -78,9 +78,9 @@ xaccInitAccount (Account * acc) {
 
   acc->type  = -1;
 
-  acc->accountName = strdup("");
-  acc->accountCode = strdup("");
-  acc->description = strdup("");
+  acc->accountName = g_strdup("");
+  acc->accountCode = g_strdup("");
+  acc->description = g_strdup("");
 
   acc->kvp_data    = kvp_frame_new();
 
@@ -105,7 +105,7 @@ xaccInitAccount (Account * acc) {
 Account *
 xaccMallocAccount( void )
 {
-  Account *acc = (Account *)_malloc(sizeof(Account));
+  Account *acc = g_new(Account, 1);
   xaccInitAccount (acc);
   return acc;
 }
@@ -152,9 +152,12 @@ xaccFreeAccount( Account *acc )
   g_list_free(acc->splits);
   acc->splits = NULL;
 
-  if (acc->accountName) free (acc->accountName);
-  if (acc->accountCode) free (acc->accountCode);
-  if (acc->description) free (acc->description);
+  g_free (acc->accountName);
+  acc->accountName = NULL;
+  g_free (acc->accountCode);
+  acc->accountCode = NULL;
+  g_free (acc->description);
+  acc->description = NULL;
 
   /* zero out values, just in case stray 
    * pointers are pointing here. */
@@ -184,7 +187,7 @@ xaccFreeAccount( Account *acc )
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
 
-  _free(acc);
+  g_free(acc);
 }
 
 /********************************************************************\
@@ -852,10 +855,10 @@ xaccAccountSetName (Account *acc, const char *str) {
    xaccAccountBeginEdit(acc);
    {
      CHECK (acc);
-     
+
      /* make strdup before freeing */
-     tmp = strdup (str);
-     if (acc->accountName) free (acc->accountName);
+     tmp = g_strdup (str);
+     g_free (acc->accountName);
      acc->accountName = tmp;
    }
    xaccAccountCommitEdit(acc);
@@ -871,8 +874,8 @@ xaccAccountSetCode (Account *acc, const char *str) {
      CHECK (acc);
      
      /* make strdup before freeing */
-     tmp = strdup (str);
-     if (acc->accountCode) free (acc->accountCode);
+     tmp = g_strdup (str);
+     g_free (acc->accountCode);
      acc->accountCode = tmp;
    }
    xaccAccountCommitEdit(acc);
@@ -888,8 +891,8 @@ xaccAccountSetDescription (Account *acc, const char *str) {
      CHECK (acc);
      
      /* make strdup before freeing */
-     tmp = strdup (str);
-     if (acc->description) free (acc->description);
+     tmp = g_strdup (str);
+     g_free (acc->description);
      acc->description = tmp;
    }
    xaccAccountCommitEdit(acc);
@@ -1047,11 +1050,7 @@ xaccAccountGetFullName(Account *account, const char separator)
   int length;
 
   if (account == NULL)
-  {
-    fullname = strdup("");
-    assert(fullname != NULL);
-    return fullname;
-  }
+    return g_strdup("");
 
   /* Figure out how much space is needed */
   length = 0;
@@ -1069,8 +1068,7 @@ xaccAccountGetFullName(Account *account, const char separator)
    * hold the null character at the end. */
 
   /* allocate the memory */
-  fullname = malloc(length * sizeof(char));
-  assert(fullname != 0);
+  fullname = g_new(char, length);
 
   /* go to end of string */
   p = fullname + length - 1;
@@ -1531,4 +1529,3 @@ xaccAccountForEachTransaction(Account *acc,
 
 /********************************************************************\
 \********************************************************************/
-

@@ -139,8 +139,8 @@ struct _SRInfo
   /* A split used to remember where to put the cursor */
   Split *cursor_hint_trans_split;
 
-  /* A column used to remember which column to put the cursor */
-  int cursor_hint_phys_col;
+  /* Used to remember where to put the cursor */
+  CursorClass cursor_hint_cursor_class;
 
   /* If the hints were set by the traverse callback */
   gboolean hint_set_by_traverse;
@@ -227,10 +227,10 @@ static Split * xaccSRGetCurrentTransSplit (SplitRegister *reg,
                                            VirtualCellLocation *vcell_loc);
 static GList * xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans,
                                        Split *split);
-static gboolean xaccSRFindTransSplit (SplitRegister *reg,
-                                      Transaction *trans,
-                                      Split *trans_split, Split *split,
-                                      VirtualCellLocation *vcell_loc);
+static gboolean xaccSRFindSplit (SplitRegister *reg,
+                                 Transaction *trans,
+                                 Split *trans_split, Split *split,
+                                 VirtualCellLocation *vcell_loc);
 static Split * sr_get_split (SplitRegister *reg,
                              VirtualCellLocation vcell_loc);
 static void xaccSRSetTransVisible (SplitRegister *reg,
@@ -645,6 +645,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   Split *old_trans_split;
   Split *new_trans_split;
   Split *new_split;
+  CursorClass new_class;
   gboolean saved;
 
   PINFO ("start callback %d %d \n",
@@ -665,12 +666,15 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
     /* The split at the transaction line we are moving to */
     new_trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc, NULL);
+
+    new_class = xaccSplitRegisterGetCursorClass (reg, new_virt_loc.vcell_loc);
   }
   else
   {
     new_trans = info->cursor_hint_trans;
     new_split = info->cursor_hint_split;
     new_trans_split = info->cursor_hint_trans_split;
+    new_class = info->cursor_hint_cursor_class;
   }
 
   /* commit the contents of the cursor into the database */
@@ -694,14 +698,14 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     info->cursor_hint_trans = new_trans;
     info->cursor_hint_split = new_split;
     info->cursor_hint_trans_split = new_trans_split;
-    info->cursor_hint_phys_col = -1;
+    info->cursor_hint_cursor_class = new_class;
 
     xaccSRRedrawRegEntry (reg);
 
     /* if the split we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
-    if (xaccSRFindTransSplit (reg, new_trans, new_trans_split,
-                              new_split, &vcell_loc))
+    if (xaccSRFindSplit (reg, new_trans, new_trans_split,
+                         new_split, &vcell_loc))
     {
       VirtualCell *vcell;
 
@@ -713,7 +717,8 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
       new_virt_loc.vcell_loc = reg->table->current_cursor_loc.vcell_loc;
   }
 
-  gnc_table_find_close_valid_cell (table, &new_virt_loc, info->exact_traversal);
+  gnc_table_find_close_valid_cell (table, &new_virt_loc,
+                                   info->exact_traversal);
 
   *p_new_virt_loc = new_virt_loc;
 
@@ -745,7 +750,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   info->cursor_hint_trans = new_trans;
   info->cursor_hint_split = new_split;
   info->cursor_hint_trans_split = new_trans_split;
-  info->cursor_hint_phys_col = -1;
+  info->cursor_hint_cursor_class = new_class;
 
   info->hint_set_by_traverse = FALSE;
 }
@@ -947,6 +952,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split),
                                          account_separator);
       xaccSetComboCellValue (reg->xfrmCell, fullname);
+      g_free(fullname);
+
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), TRUE);
 
       amount = DxaccSplitGetValue (auto_split);
@@ -1035,7 +1042,7 @@ LedgerTraverse (Table *table,
     info->cursor_hint_trans = trans;
     info->cursor_hint_split = split;
     info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
-    info->cursor_hint_phys_col = -1;
+    info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
     info->hint_set_by_traverse = TRUE;
 
     return;
@@ -1079,8 +1086,8 @@ LedgerTraverse (Table *table,
 
         xaccSRCancelCursorTransChanges(reg);
 
-        if (xaccSRFindTransSplit (reg, new_trans, trans_split,
-                                  new_split, &vcell_loc))
+        if (xaccSRFindSplit (reg, new_trans, trans_split,
+                             new_split, &vcell_loc))
           virt_loc.vcell_loc = vcell_loc;
         
         gnc_table_find_close_valid_cell (table, &virt_loc,
@@ -1197,6 +1204,11 @@ xaccSRGetTransSplit (SplitRegister *reg,
 
   while (TRUE)
   {
+    if ((0 > vcell_loc.virt_row) || (0 > vcell_loc.virt_col)) {
+      PERR ("bad row \n");
+      return NULL;
+    }
+
     cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
 
     if (cursor_class == CURSOR_CLASS_TRANS)
@@ -1208,36 +1220,6 @@ xaccSRGetTransSplit (SplitRegister *reg,
     }
 
     vcell_loc.virt_row--;
-
-    if ((0 > vcell_loc.virt_row) || (0 > vcell_loc.virt_col)) {
-      PERR ("bad row \n");
-      return NULL;
-    }
-  }
-}
-
-/* ======================================================== */
-
-static void
-xaccSRSetTransVisible (SplitRegister *reg,
-                       VirtualCellLocation vcell_loc,
-                       gboolean visible,
-                       gboolean only_blank_split)
-{
-  CursorClass cursor_class;
-
-  while (TRUE)
-  {
-    vcell_loc.virt_row++;
-
-    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
-    if (cursor_class != CURSOR_CLASS_SPLIT)
-      return;
-
-    if (only_blank_split && sr_get_split (reg, vcell_loc))
-      continue;
-
-    gnc_table_set_virt_cell_visible (reg->table, vcell_loc, visible);
   }
 }
 
@@ -1247,7 +1229,6 @@ static Split *
 xaccSRGetCurrentTransSplit (SplitRegister *reg,
                             VirtualCellLocation *trans_split_loc)
 {
-  CursorClass cursor_class;
   VirtualCellLocation vcell_loc;
 
   if (reg == NULL)
@@ -1255,24 +1236,7 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg,
 
   vcell_loc = reg->table->current_cursor_loc.vcell_loc;
 
-  while (TRUE)
-  {
-    if ((0 > vcell_loc.virt_row) || (0 > vcell_loc.virt_col)) {
-      PERR ("bad row \n");
-      return NULL;
-    }
-
-    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
-
-    if (cursor_class == CURSOR_CLASS_TRANS)
-    {
-      if (trans_split_loc)
-        *trans_split_loc = vcell_loc;
-      return sr_get_split (reg, vcell_loc);
-    }
-
-    vcell_loc.virt_row--;
-  }
+  return xaccSRGetTransSplit (reg, vcell_loc, trans_split_loc);
 }
 
 /* ======================================================== */
@@ -1386,7 +1350,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
     default:
       return FALSE;
   }
-  
+
   if (!xaccSplitRegisterGetCellLoc (reg, cell_type, v_loc.vcell_loc, &v_loc))
     return FALSE;
 
@@ -1401,9 +1365,9 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
 /* ======================================================== */
 
 static gboolean
-xaccSRFindTransSplit (SplitRegister *reg, Transaction *trans,
-                      Split *trans_split, Split *split,
-                      VirtualCellLocation *vcell_loc)
+xaccSRFindSplit (SplitRegister *reg, Transaction *trans,
+                 Split *trans_split, Split *split,
+                 VirtualCellLocation *vcell_loc)
 {
   Table *table = reg->table;
   gboolean found_trans = FALSE;
@@ -1448,6 +1412,31 @@ xaccSRFindTransSplit (SplitRegister *reg, Transaction *trans,
     }
 
   return found_something;
+}
+
+/* ======================================================== */
+
+static void
+xaccSRSetTransVisible (SplitRegister *reg,
+                       VirtualCellLocation vcell_loc,
+                       gboolean visible,
+                       gboolean only_blank_split)
+{
+  CursorClass cursor_class;
+
+  while (TRUE)
+  {
+    vcell_loc.virt_row++;
+
+    cursor_class = xaccSplitRegisterGetCursorClass (reg, vcell_loc);
+    if (cursor_class != CURSOR_CLASS_SPLIT)
+      return;
+
+    if (only_blank_split && sr_get_split (reg, vcell_loc))
+      continue;
+
+    gnc_table_set_virt_cell_visible (reg->table, vcell_loc, visible);
+  }
 }
 
 /* ======================================================== */
@@ -1533,6 +1522,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     return_split = new_split;
 
     info->cursor_hint_split = new_split;
+    info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
   }
   else
   {
@@ -1567,6 +1557,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     info->cursor_hint_trans = new_trans;
     info->cursor_hint_split = return_split;
     info->cursor_hint_trans_split = trans_split;
+    info->cursor_hint_cursor_class = CURSOR_CLASS_TRANS;
   }
 
   /* Refresh the GUI. */
@@ -1836,6 +1827,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
     info->cursor_hint_split = xaccTransGetSplit(trans, split_index);
     info->cursor_hint_trans_split = xaccTransGetSplit(trans,
                                                       trans_split_index);
+    info->cursor_hint_cursor_class = CURSOR_CLASS_TRANS;
   }
 
   accounts = gnc_trans_prepend_account_list(trans, accounts);
@@ -2373,7 +2365,10 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
      if ((info->cursor_hint_trans == trans) &&
          (info->cursor_hint_trans_split == trans_split) &&
          (info->cursor_hint_split == NULL))
+     {
        info->cursor_hint_split = split;
+       info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
+     }
    }
 
    DEBUG ("updating trans addr=%p\n", trans);
@@ -2876,15 +2871,11 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
     case XTO_CELL:
       {
         static char *name = NULL;
-        char *temp;
 
         g_free(name);
 
-        temp = xaccAccountGetFullName (xaccSplitGetAccount (split),
+        name = xaccAccountGetFullName (xaccSplitGetAccount (split),
                                        account_separator);
-        name = g_strdup (temp);
-        if (temp)
-          free(temp);
 
         return name;
       }
@@ -2943,15 +2934,8 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
          g_free (name);
 
          if (s)
-         {
-           char *temp;
-
-           temp = xaccAccountGetFullName (xaccSplitGetAccount (s),
+           name = xaccAccountGetFullName (xaccSplitGetAccount (s),
                                           account_separator);
-           name = g_strdup (temp);
-           if (temp)
-             free(temp);
-         }
          else
          {
            /* determine whether s is null because threre are three
@@ -3202,6 +3186,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   CellBlock *lead_cursor;
   Transaction *find_trans;
   Transaction *trans;
+  CursorClass find_class;
   Split *find_trans_split;
   Split *find_split;
   Split *split;
@@ -3260,6 +3245,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   find_trans = info->cursor_hint_trans;
   find_split = info->cursor_hint_split;
   find_trans_split = info->cursor_hint_trans_split;
+  find_class = info->cursor_hint_cursor_class;
 
   save_loc = table->current_cursor_loc;
 
@@ -3439,7 +3425,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   info->cursor_hint_trans = xaccSRGetCurrentTrans (reg);
   info->cursor_hint_split = xaccSRGetCurrentSplit (reg);
   info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
-  info->cursor_hint_phys_col = -1;
+  info->cursor_hint_cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
   info->hint_set_by_traverse = FALSE;
   info->exact_traversal = FALSE;
   info->first_pass = FALSE;
@@ -3506,7 +3492,7 @@ LoadXferCell (ComboCell * cell,
       if (name != NULL)
       {
         xaccAddComboCellMenuItem (cell, name);
-        free(name);
+        g_free(name);
       }
     }
     LoadXferCell (cell, xaccAccountGetChildren (acc), 

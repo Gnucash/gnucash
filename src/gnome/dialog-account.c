@@ -494,13 +494,6 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   full_name = xaccAccountGetFullName(account, gnc_get_account_separator());
   if(!full_name)
     full_name = g_strdup("");
-  else
-  {
-    /* Make sure this was allocated with glib funcs */
-    gchar *tmp = full_name;
-    full_name = g_strdup(tmp);
-    free(tmp);
-  }
 
   account_field_name = g_strdup(gnc_ui_get_account_field_name(fs->field));
   if (!account_field_name)
@@ -863,7 +856,7 @@ gnc_new_account_ok (AccountWindow *aw)
 
       account = xaccGetAccountFromFullName(group, fullname, separator);
 
-      free(fullname_parent);
+      g_free(fullname_parent);
       g_free(fullname);
     }
 
@@ -1261,10 +1254,9 @@ gnc_edit_window_set_name(AccountWindow *aw)
   fullname = xaccAccountGetFullName(aw->account, gnc_get_account_separator());
   title = g_strconcat(fullname, " - ", _("Edit Account"), NULL);
 
-  free(fullname);
-
   gtk_window_set_title(GTK_WINDOW(aw->dialog), title);
 
+  g_free(fullname);
   g_free(title);
 }
 

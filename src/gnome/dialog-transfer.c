@@ -878,7 +878,7 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
   if(xferData->curr_accts_list)
   {
     g_list_foreach(xferData->curr_accts_list,
-                  gnc_xfer_dialog_free_curr_accts_list, NULL);
+                   gnc_xfer_dialog_free_curr_accts_list, NULL);
     g_list_free(xferData->curr_accts_list);
     xferData->curr_accts_list = NULL;
   }

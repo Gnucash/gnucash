@@ -55,14 +55,14 @@ build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
     if(group == xaccAccountGetParent(accts[i])) {
       tree_item = 
         gtk_tree_item_new_with_label(xaccAccountGetName(accts[i]));
-      
+
       gtk_object_set_data(GTK_OBJECT(tree_item),
                           "acct_name",
                           xaccAccountGetFullName(accts[i], ':'));
 
       gtk_tree_append(GTK_TREE(tree), tree_item);
       children = xaccAccountGetChildren(accts[i]);
-      
+
       if(children && (xaccGetNumAccounts(children) > 0)) {
         sub_tree = gtk_tree_new();
         gtk_signal_connect(GTK_OBJECT(sub_tree), "select_child",
@@ -161,7 +161,7 @@ accountPickerBox(char * initial_selection, int initial_type) {
   gtk_widget_show(GTK_WIDGET(wind->treeview));
   gtk_widget_show(GTK_WIDGET(wind->dialog));
   gtk_main();
-  
+
   infolist = wind->scm_acct_info;
 
   /* destroy the window */

@@ -1606,7 +1606,7 @@ gnc_reg_set_window_name(RegWindow *regData)
 
     windowname = g_strconcat(account_name, " - ", reg_name, NULL);
 
-    free(account_name);
+    g_free(account_name);
   }
   else
     windowname = g_strdup(reg_name);

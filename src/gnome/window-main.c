@@ -571,9 +571,8 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
     if (gnc_verify_dialog(message, FALSE))
       gnc_ui_delete_account(account);
 
+    g_free(name);
     g_free(message);
-    if (name)
-      free (name);
   }
   else
   {
