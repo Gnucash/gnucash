@@ -54,6 +54,7 @@ gnucash-build-env: gnucash-build-env.in
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
+	    -e 's:@-G_WRAP_LIB_DIR-@:${G_WRAP_LIB_DIR}:g' \
             -e 's:@-GNC_BUILDDIR-@:${PWD}/${top_builddir}:g' \
             -e 's:@-GNC_SRCDIR-@:${PWD}/${top_srcdir}:g'
 	mv $@.tmp $@

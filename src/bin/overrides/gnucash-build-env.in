@@ -11,6 +11,7 @@
 top_srcdir="@-GNC_SRCDIR-@"
 top_builddir="@-GNC_BUILDDIR-@"
 G_WRAP_MODULE_DIR="@-G_WRAP_MODULE_DIR-@"
+G_WRAP_LIB_DIR="@-G_WRAP_LIB_DIR-@"
 
 if test "${GNC_CONFIG_PATH}"x = x
 then
@@ -33,6 +34,7 @@ fi
 eval `@-GNC_SRCDIR-@/src/gnc-test-env \
   --library-dir ${top_builddir}/src/core-utils \
   --library-dir ${top_builddir}/src/gnome \
+  --library-dir ${G_WRAP_LIB_DIR} \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/lib \
