@@ -29,7 +29,6 @@
 #include "FileDialog.h"
 #include "FileIO.h"
 #include "Group.h"
-#include "TransLog.h"
 #include "file-history.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -162,10 +161,8 @@ gncFileNew (void)
    * disable logging and events so we don't get all that junk. */
   gnc_engine_suspend_events ();
 
-  xaccLogDisable();
   gnc_book_destroy (book);
   current_book = NULL;
-  xaccLogEnable();
 
   /* start a new book */
   gncGetCurrentBook ();
@@ -276,7 +273,6 @@ gncPostFileOpen (const char * filename)
   gnc_engine_suspend_events ();
 
   gnc_set_busy_cursor (NULL);
-  xaccLogDisable ();
   new_group = NULL;
 
   /* hack alert -- there has got to be a simpler way of dealing with 
@@ -329,7 +325,6 @@ gncPostFileOpen (const char * filename)
       uh_oh = TRUE;
     }
   }
-  xaccLogEnable ();
   gnc_unset_busy_cursor (NULL);
 
   /* going down -- abandon ship */
@@ -355,13 +350,9 @@ gncPostFileOpen (const char * filename)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  xaccLogDisable();
-  xaccLogSetBaseName (newfile);
-
   gnc_book_destroy (current_book);
   current_book = new_book;
 
-  xaccLogEnable();
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
 
@@ -428,6 +419,7 @@ gncFileSave (void)
   GNCBook *book;
   int uh_oh = 0;
   int norr;
+  ENTER (" ");
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
@@ -484,6 +476,7 @@ gncFileSave (void)
   if (uh_oh) return;
 
   xaccGroupMarkSaved (gnc_book_get_group (book));
+  LEAVE (" ");
 }
 
 /* ======================================================== */
@@ -500,6 +493,7 @@ gncFileSaveAs (void)
   gboolean uh_oh = FALSE;
   int norr = 0;
 
+  ENTER(" ");
   filename = fileBox(_("Save"), "*.gnc", NULL);
   if (!filename) return;
 
@@ -514,7 +508,6 @@ gncFileSaveAs (void)
      g_free (buf);
      return;
   }
-
   book = gncGetCurrentBook ();
   oldfile = gnc_book_get_file_path (book);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
@@ -530,7 +523,6 @@ gncFileSaveAs (void)
   /* disable logging while we move over to the new set of accounts to
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal. */
-  xaccLogDisable ();
   new_book = gnc_book_new ();
   gnc_book_begin (new_book, newfile, FALSE);
 
@@ -545,7 +537,6 @@ gncFileSaveAs (void)
        gnc_book_begin (new_book, newfile, TRUE);
     }
   }
-  xaccLogEnable ();
 
   /* check for session errors (e.g. file locked by another user) */
   if (!norr) norr = gnc_book_get_error (new_book);
@@ -556,22 +547,16 @@ gncFileSaveAs (void)
   /* going down -- abandon ship */
   if (uh_oh)
   {
-    xaccLogDisable ();
     gnc_book_destroy (new_book);
-    xaccLogEnable ();
-
     g_free (newfile);
-
     return;
   }
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  xaccLogDisable ();
   gnc_book_set_group (book, NULL);
   gnc_book_destroy (book);
   current_book = new_book;
-  xaccLogEnable ();
 
   /* --------------- END CORE SESSION CODE -------------- */
 
@@ -600,11 +585,11 @@ gncFileSaveAs (void)
   }
 
   /* OK, save the data to the file ... */
-  xaccLogSetBaseName (newfile);
   gnc_book_set_group (new_book, group);
   gncFileSave ();
 
   g_free (newfile);
+  LEAVE (" ");
 }
 
 /* ======================================================== */
@@ -621,8 +606,6 @@ gncFileQuit (void)
    * a journal. */
   gnc_engine_suspend_events ();
 
-  xaccLogDisable();
-
   gnc_book_destroy (book);
   current_book = NULL;
 
@@ -635,11 +618,13 @@ gncFileQuit (void)
 AccountGroup *
 gncGetCurrentGroup (void)
 {
+  AccountGroup *grp;
   GNCBook *book;
 
   book = gncGetCurrentBook ();
 
-  return gnc_book_get_group (book);
+  grp = gnc_book_get_group (book);
+  return grp;
 }
 
 /* ======================================================== */
