@@ -416,7 +416,8 @@ developing over time"))
              (gnc:html-barchart-set-stacked?! chart stacked?)
              ;; If this is a stacked barchart, then reverse the legend.
 	     ;; Doesn't do what you'd expect. - DRH
-             ;;(gnc:html-barchart-set-legend-reversed?! chart stacked?)
+	     ;; It does work, but needs Guppi 0.40.4. - cstim
+             (gnc:html-barchart-set-legend-reversed?! chart stacked?)
              
              ;; If we have too many categories, we sum them into a new
              ;; 'other' category and add a link to a new report with just

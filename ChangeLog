@@ -1,3 +1,9 @@
+2003-05-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/standard-reports/category-barchart.scm: Re-enable
+	reversed legend in stacked barcharts. Needs Guppi 0.40.4
+	a.k.a. Guppi CVS, though, to actually work.
+
 2003-05-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c: Make sure the amount
