@@ -67,13 +67,13 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     { ENTRY_DISC_CELL, PRICE_CELL_TYPE_NAME, N_("sample:9,999.00") + 7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_ACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
-      CELL_ALIGN_LEFT, FALSE, FALSE },
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_TAXACC_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Tax:Account")+7,
-      CELL_ALIGN_LEFT, FALSE, FALSE },
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_TAXTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample:TT")+7,
-      CELL_ALIGN_LEFT, FALSE, FALSE },
-    { ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample:DT")+7,
-      CELL_ALIGN_LEFT, FALSE, FALSE }
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample(DT):+%")+11,
+      CELL_ALIGN_RIGHT, FALSE, FALSE }
   };
   int i;
 

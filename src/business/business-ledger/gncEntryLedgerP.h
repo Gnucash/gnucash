@@ -18,8 +18,10 @@ struct GncEntryLedger_s {
 
   Timespec	last_date_entered;
 
-  GNCBook *book;
-  Table *table;
+  gncUIWidget	parent;
+  GNCBook *	book;
+  Table *	table;
+  GncOrder *	order;
   GncEntryLedgerType type;
 };
 

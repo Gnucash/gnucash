@@ -162,3 +162,15 @@ Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger)
   return ledger->table;
 }
 
+void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
+					 GncOrder *order)
+{
+  if (!ledger) return;
+  ledger->order = order;
+}
+
+void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent)
+{
+  if (!ledger) return;
+  ledger->parent = parent;
+}

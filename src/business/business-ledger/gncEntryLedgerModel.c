@@ -172,10 +172,19 @@ static const char * get_distype_entry (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
+  char type;
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  return gnc_entry_ledger_type_string_getter ('0' +
-					      gncEntryGetDiscountType (entry));
+  type = gncEntryGetDiscountType (entry);
+
+  if (translate) {
+    return gnc_entry_ledger_type_string_getter (type + '0');
+  } else {
+    static char s[2];
+    s[0] = '0' + type;
+    s[1] = '\0';
+    return s;
+  }
 }
 
 static const char * get_pric_entry (VirtualLocation virt_loc,
@@ -239,10 +248,19 @@ static const char * get_taxtype_entry (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
+  char type;
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  return gnc_entry_ledger_type_string_getter ('0' + 
-					      gncEntryGetTaxType (entry));
+  type = gncEntryGetTaxType (entry);
+
+  if (translate) {
+    return gnc_entry_ledger_type_string_getter (type + '0');
+  } else {
+    static char s[2];
+    s[0] = '0' + type;
+    s[1] = '\0';
+    return s;
+  }
 }
 
 static const char * get_tax_entry (VirtualLocation virt_loc,
@@ -424,6 +442,12 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
 					  gpointer user_data)
 {
   return XACC_CELL_ALLOW_ALL;
+}
+
+static CellIOFlags get_typecell_io_flags (VirtualLocation virt_loc,
+					  gpointer user_data)
+{
+  return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
 }
 
 /* GET BG_COLORS */
@@ -612,11 +636,11 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model)
     { ENTRY_DATE_CELL, get_date_entry, get_date_label, get_date_help,  get_standard_io_flags },
     { ENTRY_DESC_CELL, get_desc_entry, get_desc_label, get_desc_help,  get_standard_io_flags },
     { ENTRY_DISC_CELL, get_disc_entry, get_disc_label, get_disc_help,  get_standard_io_flags },
-    { ENTRY_DISTYPE_CELL, get_distype_entry, get_distype_label, get_distype_help,  get_standard_io_flags },
+    { ENTRY_DISTYPE_CELL, get_distype_entry, get_distype_label, get_distype_help,  get_typecell_io_flags },
     { ENTRY_PRIC_CELL, get_pric_entry, get_pric_label, get_pric_help,  get_standard_io_flags },
     { ENTRY_QTY_CELL, get_qty_entry, get_qty_label, get_qty_help,  get_standard_io_flags },
     { ENTRY_TAXACC_CELL, get_taxacc_entry, get_taxacc_label, get_taxacc_help,  get_standard_io_flags },
-    { ENTRY_TAXTYPE_CELL, get_taxtype_entry, get_taxtype_label, get_taxtype_help,  get_standard_io_flags },
+    { ENTRY_TAXTYPE_CELL, get_taxtype_entry, get_taxtype_label, get_taxtype_help,  get_typecell_io_flags },
     { ENTRY_TAX_CELL, get_tax_entry, get_tax_label, get_tax_help,  get_standard_io_flags }
   };
   int i;

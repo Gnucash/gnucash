@@ -8,6 +8,7 @@
 #define GNC_ENTRY_LEDGER_H
 
 #include "gncEntry.h"
+#include "gncOrder.h"
 #include "gnc-book.h"
 #include "table-allgui.h"
 
@@ -47,6 +48,10 @@ typedef struct GncEntryLedger_s GncEntryLedger;
 /* Create and return a new GncEntry Ledger */
 GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type);
 
+/* Set the default order for this ledger */
+void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
+					 GncOrder *order);
+
 /* Destroy the GncEntry Ledger */
 void gnc_entry_ledger_destroy (GncEntryLedger *ledger);
 
@@ -60,5 +65,9 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list);
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
 
 void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new);
+
+gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit);
+
+void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
 
 #endif /* GNC_ENTRY_LEDGER_H */

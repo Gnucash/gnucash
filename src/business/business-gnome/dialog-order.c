@@ -242,6 +242,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   gnc_table_init_gui( regWidget, entry_ledger );
   ow->reg = GNUCASH_REGISTER(regWidget);
   GNUCASH_SHEET(ow->reg->sheet)->window = GTK_WIDGET(ow->dialog);
+  gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
   vbox = glade_xml_get_widget (xml, "ledger_vbox");
   // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
@@ -288,6 +289,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 				       GNC_ID_NONE,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
+  gnc_entry_ledger_set_default_order (entry_ledger, order);
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
   gtk_widget_show_all (ow->dialog);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);

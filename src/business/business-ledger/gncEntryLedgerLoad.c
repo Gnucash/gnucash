@@ -85,6 +85,10 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   if (!ledger) return;
 
+  /* Load up cells */
+  load_discount_type_cells (ledger);
+  load_tax_type_cells (ledger);
+
   blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
 
   if (blank_entry == NULL) {
@@ -189,7 +193,4 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   gnc_table_control_allow_move (table->control, TRUE);
 
   /* Set the confirmation callbacks and load the combo cells */
-
-  load_discount_type_cells (ledger);
-  load_tax_type_cells (ledger);
 }
