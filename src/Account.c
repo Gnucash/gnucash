@@ -33,6 +33,14 @@
 
 int next_free_unique_account_id = 0;
 
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -68,13 +76,6 @@ mallocAccount( void )
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
   acc->splits[0]   = NULL;
-  
-  /* private data */
-  acc->arrowb        = NULL;
-  acc->expand        = 0;
-  acc->regData       = NULL;
-  acc->regLedger     = NULL;
-  acc->ledgerList    = NULL;
   
   return acc;
   }
@@ -149,15 +150,6 @@ freeAccount( Account *acc )
   acc->description = NULL;
   acc->notes       = NULL;
   
-  /* hack alert -- shouldn't we destroy this widget ??? */
-  acc->arrowb   = NULL;  
-  acc->expand   = 0;
-  acc->regData  = NULL;
-  acc->regLedger = NULL;
-
-  if (acc->ledgerList) _free (acc->ledgerList);
-  acc->ledgerList = NULL;
-
   _free(acc);
 }
 
@@ -178,7 +170,7 @@ void
 xaccInsertSplit ( Account *acc, Split *split )
   {
   int  i,j;
-  int  inserted = False;
+  int  inserted = FALSE;
   Split **oldsplits;
   Transaction *trans;
 
@@ -186,7 +178,7 @@ xaccInsertSplit ( Account *acc, Split *split )
   if (!split) return;
 
   /* mark the data file as needing to be saved: */
-  if( acc->parent != NULL ) acc->parent->saved = False;
+  if( acc->parent != NULL ) acc->parent->saved = FALSE;
 
   split->acc = (struct _account *) acc;
     
@@ -214,7 +206,7 @@ xaccInsertSplit ( Account *acc, Split *split )
         if (xaccTransOrder (&ot,&trans) > 0) {
           acc->splits[i] = split;
           j--;
-          inserted = True;
+          inserted = TRUE;
         } else {
           acc->splits[i] = oldsplits[j];
         }
@@ -243,7 +235,7 @@ xaccRemoveSplit ( Account *acc, Split *split )
   if (!split) return;
 
   /* mark the data file as needing to be saved: */
-  if( acc->parent != NULL ) acc->parent->saved = False;
+  if( acc->parent != NULL ) acc->parent->saved = FALSE;
   
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
@@ -405,10 +397,10 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* figure out if the transactions are out of order */
   if (NULL != prevSplit) {
-    if( xaccTransOrder (&(prevSplit->parent), &(split->parent)) >0 ) outOfOrder = True;
+    if( xaccTransOrder (&(prevSplit->parent), &(split->parent)) >0 ) outOfOrder = TRUE;
   }
   if (NULL != nextSplit) {
-    if( xaccTransOrder (&(split->parent), &(nextSplit->parent)) >0 ) outOfOrder = True;
+    if( xaccTransOrder (&(split->parent), &(nextSplit->parent)) >0 ) outOfOrder = TRUE;
   }
 
   /* take care of re-ordering, if necessary */

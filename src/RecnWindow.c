@@ -456,10 +456,9 @@ recnWindow( Widget parent, Account *acc )
   if( !startRecnWindow(parent,acc,&ddiff) )
     return NULL;
     
+  FETCH_FROM_LIST (RecnWindow, recnList, acc, acc, recnData);
+
   setBusyCursor(parent);
-  
-  recnData = (RecnWindow *)_malloc(sizeof(RecnWindow));
-  recnData->acc = acc;
   recnData->ddiff = ddiff;
   
   sprintf( title, "%s: %s", acc->accountName, RECONCILE_STR);
@@ -840,7 +839,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
     }
   
   /* refresh the register window */
-  regRefresh(recnData->acc->regData);
+  regRefresh(recnData->acc);
   }
 
 /********************************************************************\

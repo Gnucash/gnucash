@@ -56,6 +56,17 @@
 #include "util.h"
 #include "XferWindow.h"
 
+typedef struct _MainArrow {
+
+  Account *account;
+  Widget   arrowb;   /* arrow button in the main window */
+  short    expand;   /* expand display of subaccounts in main window */
+  int      PreviousArrowReason; /* arrow workaround */
+
+} MainArrow;
+
+static MainArrow **arrowList = NULL;
+
 /** PROTOTYPES ******************************************************/
 static void xaccMainWindowRedisplayBalance (void);
 static void closeMainWindow ( Widget mw, XtPointer cd, XtPointer cb );
@@ -96,6 +107,73 @@ Boolean havePixels = False;
 #define XACC_MAIN_ACC_TYPE 2
 #define XACC_MAIN_ACC_BALN 3
 #define XACC_MAIN_NUM_COLS 4
+
+/********************************************************************\
+\********************************************************************/
+
+MainArrow *
+xaccMainArrow (Widget acctrix, Account *acc )
+{
+   MainArrow *arrowData;
+   int height;
+
+   FETCH_FROM_LIST (MainArrow, arrowList, acc, account, arrowData);
+
+   /* adjust arrow size for font size */
+   height = XbaeMatrixGetRowPixelHeight (acctrix);
+   arrowData->arrowb = XtVaCreateManagedWidget ("accarrow", 
+                                      xmArrowButtonWidgetClass, acctrix,
+                                      XmNwidth, height,
+                                      XmNheight, height,
+                                      XmNshadowThickness, 0,
+                                      XmNarrowDirection, XmARROW_DOWN, 
+                                      NULL);
+
+   XtAddCallback (arrowData->arrowb, XmNactivateCallback, 
+                         expandListCB, (XtPointer *) arrowData);
+
+#define __XACC_DO_ARROW_CALLBACK
+#ifdef  __XACC_DO_ARROW_CALLBACK
+   /* add a button press event handler just in case the 
+    * XmNactivate callback is broken. See notes for the
+    * ArrowEventCallback for details.  -- Linas */
+   arrowData->PreviousArrowReason = 0;
+   XtAddEventHandler(arrowData->arrowb, 
+                     ButtonPressMask | ButtonReleaseMask,
+                     False, (XtEventHandler) ArrowEventCallback,
+                     (XtPointer) arrowData);
+#endif /* __XACC_DO_ARROW_CALLBACK */
+
+   return arrowData;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccDestroyMainArrow (Account *acc )
+{
+   MainArrow *arrowData;
+
+   REMOVE_FROM_LIST (MainArrow, arrowList, acc, account, arrowData); 
+
+   if (!arrowData) return;
+
+   XtRemoveCallback (arrowData->arrowb, XmNactivateCallback,
+                     expandListCB, (XtPointer *) arrowData);
+
+#ifdef  __XACC_DO_ARROW_CALLBACK
+   arrowData->PreviousArrowReason = 0;
+   XtRemoveEventHandler (arrowData->arrowb, 
+                         ButtonPressMask | ButtonReleaseMask,
+                         False, (XtEventHandler) ArrowEventCallback,
+                         (XtPointer) arrowData);
+#endif /* __XACC_DO_ARROW_CALLBACK */
+   XtUnmanageChild (arrowData->arrowb);
+   XtDestroyWidget (arrowData->arrowb);
+   arrowData->arrowb = NULL;
+   free (arrowData);
+}
 
 /********************************************************************\
  * xaccMainWindowAddAcct                                            *
@@ -175,40 +253,14 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
      * will be a cell-wdiget, and will be stored with the account 
      * structure */
     if (acc->children) {
-       /* if the arrow button doesn't exist, add it */
-       if (NULL == acc->arrowb) {
-          int height;
-          /* adjust arrow size for font size */
-          height = XbaeMatrixGetRowPixelHeight (acctrix);
-          acc->arrowb = XtVaCreateManagedWidget ("accarrow", 
-                                      xmArrowButtonWidgetClass, acctrix,
-                                      XmNwidth, height,
-                                      XmNheight, height,
-                                      XmNshadowThickness, 0,
-                                      XmNarrowDirection, XmARROW_DOWN, 
-                                      NULL);
+       MainArrow *arrowData;
 
-          XtAddCallback (acc->arrowb, XmNactivateCallback, 
-                         expandListCB, (XtPointer *) acc);
-
-#define __XACC_DO_ARROW_CALLBACK
-#ifdef  __XACC_DO_ARROW_CALLBACK
-          /* add a button press event handler just in case the 
-           * XmNactivate callback is broken. See notes for the
-           * ArrowEventCallback for details.  -- Linas */
-          acc->PreviousArrowReason = 0;
-          XtAddEventHandler(acc->arrowb, 
-                            ButtonPressMask | ButtonReleaseMask,
-                            False, (XtEventHandler) ArrowEventCallback,
-                            (XtPointer) acc);
-#endif /* __XACC_DO_ARROW_CALLBACK */
-
-       }
-       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, acc->arrowb);
-       XtManageChild (acc->arrowb);
+       arrowData = xaccMainArrow (acctrix, acc);
+       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, arrowData->arrowb);
+       XtManageChild (arrowData->arrowb);
 
        /* recursively display children accounts */
-       if (acc->expand) {
+       if (arrowData->expand) {
           xaccMainWindowAddAcct (acctrix, acc->children, depth+1);
        }
     } else {
@@ -216,22 +268,8 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
         * arrow too.  This situation can occur if a sub-account
         * has been deleted. 
         */
-       if (acc->arrowb) {
-          XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, NULL);
-          XtRemoveCallback (acc->arrowb, XmNactivateCallback,
-                            expandListCB, (XtPointer *) acc);
-
-#ifdef  __XACC_DO_ARROW_CALLBACK
-          acc->PreviousArrowReason = 0;
-          XtRemoveEventHandler(acc->arrowb, 
-                            ButtonPressMask | ButtonReleaseMask,
-                            False, (XtEventHandler) ArrowEventCallback,
-                            (XtPointer) acc);
-#endif /* __XACC_DO_ARROW_CALLBACK */
-          XtUnmanageChild (acc->arrowb);
-          XtDestroyWidget (acc->arrowb);
-          acc->arrowb = NULL;
-       }
+       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, NULL);
+       xaccDestroyMainArrow (acc);
     }
   }
 }
@@ -365,39 +403,39 @@ static void
 expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
 {
   XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
-  Account *acc = (Account *)pClientData;
+  MainArrow *ad = (MainArrow *)pClientData;
 
   /* a "fix" to avoid double invocation */
   switch ( info->reason ) {
       case XmCR_ACTIVATE:
           /* avoid double invocation */
-          if (XmCR_ACTIVATE == acc->PreviousArrowReason) return;
-          acc -> PreviousArrowReason = XmCR_ACTIVATE;
+          if (XmCR_ACTIVATE == ad->PreviousArrowReason) return;
+          ad -> PreviousArrowReason = XmCR_ACTIVATE;
           break;
 
       default:
       case XmCR_ARM:
           /* avoid double invocation */
-          if (XmCR_ARM == acc->PreviousArrowReason) return;
-          acc -> PreviousArrowReason = XmCR_ARM;
+          if (XmCR_ARM == ad->PreviousArrowReason) return;
+          ad -> PreviousArrowReason = XmCR_ARM;
           return;
   }
 
   /* change arrow direction, mark account as needing expansion */
-  if (acc->expand) {
-     acc->expand = 0;
+  if (ad->expand) {
+     ad->expand = 0;
      XtVaSetValues (mw, 
                     XmNarrowDirection, XmARROW_DOWN, 
                     NULL);
   } else {
-     acc->expand = 1;
+     ad->expand = 1;
      XtVaSetValues (mw, 
                     XmNarrowDirection, XmARROW_UP, 
                     NULL);
   }
 
   /* redraw the main window */
-  selected_acc = acc;
+  selected_acc = ad->account;
   refreshMainWindow ();
 }
 

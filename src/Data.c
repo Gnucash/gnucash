@@ -29,6 +29,14 @@
 #include "Data.h"
 #include "util.h"
 
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
@@ -43,8 +51,8 @@ AccountGroup *topgroup = 0x0;
 void
 xaccInitializeAccountGroup (AccountGroup *grp)
   {
-  grp->saved       = True;
-  grp->new         = False;
+  grp->saved       = TRUE;
+  grp->new         = FALSE;
   
   grp->parent      = NULL;
   grp->numAcc      = 0;
@@ -96,7 +104,7 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return;
-   grp->saved = True;
+   grp->saved = TRUE;
 
    for (i=0; i<grp->numAcc; i++) {
       xaccAccountGroupMarkSaved (grp->account[i]->children); 
@@ -112,7 +120,7 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
    int i;
 
    if (!grp) return 0;
-   if (False == grp->saved) return 1;
+   if (FALSE == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
       not_saved = xaccAccountGroupNotSaved (grp->account[i]->children); 
@@ -296,7 +304,7 @@ removeAccount( AccountGroup *grp, int num )
     int i,j;
     Account **oldAcc = grp->account;
 
-    grp->saved = False;
+    grp->saved = FALSE;
     
     grp->numAcc--;
     grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
@@ -340,7 +348,7 @@ xaccRemoveGroup (AccountGroup *grp)
    grp = acc -> parent;
    if (!grp) return;
 
-   grp->saved = False;
+   grp->saved = FALSE;
 }
 
 /********************************************************************\
@@ -363,7 +371,7 @@ xaccRemoveAccount (Account *acc)
 
    oldAcc = grp->account;
 
-   grp->saved = False;
+   grp->saved = FALSE;
     
    grp->numAcc--;
 
@@ -429,7 +437,7 @@ insertAccount( AccountGroup *grp, Account *acc )
 
   oldAcc = grp->account;
     
-  grp->saved = False;
+  grp->saved = FALSE;
   
   grp->numAcc++;
   grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));

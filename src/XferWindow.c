@@ -483,7 +483,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   xaccInsertSplit (((Account *) (split->acc)), split);
   
   /* Refresh the "from" account register window */
-  regRefresh(acc->regData);
+  regRefresh(acc);
   /* Refresh the "from" account reconcile window */
   recnRefresh(acc);
   
@@ -491,7 +491,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   xaccInsertSplit (((Account *) (trans->credit_split.acc)), &(trans->credit_split));
 
   /* Refresh the "to" account register window */
-  regRefresh(acc->regData);
+  regRefresh(acc);
   /* Refresh the "to" account reconcile window */
   recnRefresh(acc);
 

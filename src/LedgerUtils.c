@@ -25,6 +25,8 @@
 #include "Transaction.h"
 #include "util.h"
 
+typedef struct _RegWindow xxxRegWindow;
+
 /* ------------------------------------------------------ */
 
 int accListCount (Account **list)
@@ -200,7 +202,7 @@ ledgerListAdd (Account * acc, struct _RegWindow *addreg)
    if (!acc) return;
    if (!addreg) return;
 
-   oldlist = acc->ledgerList;
+/*   oldlist = acc->ledgerList; */
    n = ledgerListCount (oldlist);
 
    newlist = (struct _RegWindow **) 
@@ -219,7 +221,7 @@ ledgerListAdd (Account * acc, struct _RegWindow *addreg)
    newlist[n] = addreg;
    newlist[n+1] = NULL;
 
-   acc->ledgerList = newlist;
+/*    acc->ledgerList = newlist; */
 }
 
 /* ------------------------------------------------------ */
@@ -235,7 +237,7 @@ ledgerListRemove (Account * acc, struct _RegWindow *delreg)
    if (!acc) return;
    if (!delreg) return;
 
-   oldlist = acc->ledgerList;
+   /* oldlist = acc->ledgerList; */
    n = ledgerListCount (oldlist);
 
    newlist = (struct _RegWindow **) 
@@ -256,7 +258,7 @@ ledgerListRemove (Account * acc, struct _RegWindow *delreg)
    }
    newlist[i] = NULL;
 
-   acc->ledgerList = newlist;
+   /* acc->ledgerList = newlist; */
 }
 
 /* ------------------------------------------------------ */
@@ -271,7 +273,7 @@ ledgerListIsMember (Account * acc, struct _RegWindow *memreg)
    if (!acc) return 0;
    if (!memreg) return 0;
 
-   list = acc->ledgerList;
+   /* list = acc->ledgerList; */
    if (!list) return 0;
 
    n = 0;

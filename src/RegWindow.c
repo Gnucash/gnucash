@@ -78,10 +78,15 @@ typedef struct _RegWindow {
 } RegWindow;
 
 
+/** GLOBALS *********************************************************/
+extern Widget  toplevel;
+
+static RegWindow **regList = NULL;     /* single-account registers */
+static RegWindow **ledgerList = NULL;  /* multiple-account registers */
 
 /** PROTOTYPES ******************************************************/
 RegWindow * regWindowLedger( Widget parent, Account **acclist, int type);
-void regRefresh (RegWindow * regData);
+void        regRefresh (Account *acc);
 
 static void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
 static void startRecnCB( Widget mw, XtPointer cd, XtPointer cb );
@@ -89,24 +94,6 @@ static void startAdjBCB( Widget mw, XtPointer cd, XtPointer cb );
 static void recordCB( Widget mw, XtPointer cd, XtPointer cb );
 static void deleteCB( Widget mw, XtPointer cd, XtPointer cb );
 static void cancelCB( Widget mw, XtPointer cd, XtPointer cb );
-
-
-/** GLOBALS *********************************************************/
-extern Widget  toplevel;
-
-/********************************************************************\
- * xaccDestroyRegWindow()
- * It is enought to call just XtDestroy Widget.  Any allocated
- * memory will be freed by the close callbacks.
-\********************************************************************/
-
-void
-xaccDestroyRegWindow (RegWindow *regData)
-{
-   if (!regData) return;
-   XtDestroyWidget(regData->dialog);
-}
-
 
 /********************************************************************\
  * regWindowSimple                                                  *
@@ -124,11 +111,6 @@ regWindowSimple( Widget parent, Account *acc )
 
   acclist[0] = acc;
   acclist[1] = NULL;
-
-  /* don't allow more than one regster window for this account */
-  /* hack alert -- we should raise this window to the top, if
-   * we are called, and the register already exists */
-  if (acc->regData) return acc->regData;
 
   retval = regWindowLedger (parent, acclist, acc->type);
   return retval;
@@ -151,11 +133,7 @@ regWindowAccGroup( Widget parent, Account *acc )
   Account *le;
   int n;
 
-  /* don't allow more than one ledger window for this account */
-  /* hack alert -- we should raise this window to the top, if
-   * we are called, and the ledger already exists */
-  if (acc->regLedger) return acc->regLedger;
-
+  /* hack alert -- should search in the ledger list */
   list = xaccGroupToList (acc);
 
   switch (acc->type) {
@@ -280,10 +258,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
    * create regData, compute register display type      *
   \******************************************************************/
 
-  setBusyCursor( parent );
+  /* hack this aint right quite */
+  FETCH_FROM_LIST (RegWindow, regList, acclist[0], blackacc[0], regData);
   
-  regData = (RegWindow *)_malloc(sizeof(RegWindow));
-
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
   regData->numAcc = accListCount (acclist);
@@ -296,11 +273,11 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     return NULL;
   }
 
+  setBusyCursor( parent );
+
   regData->type = ledger_type;
 
   if (1 == regData->numAcc) {
-    /* avoid having two open registers for one account */
-    regData->blackacc[0]->regData = regData;    
     windowname = regData->blackacc[0]->accountName;
   } else {
 
@@ -539,7 +516,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   /******************************************************************/
   XtManageChild(pane);
   
-  regRefresh( regData );
+  /* hack alert -- this is wrong */
+  regRefresh (regData->blackacc[0]);
   
   XtPopup( regData->dialog, XtGrabNone );
   
@@ -551,13 +529,35 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 /********************************************************************\
 \********************************************************************/
 
-void regRefresh (RegWindow * regData)
+void regRefresh (Account *acc)
 {
+   RegWindow *regData;
+
+   FIND_IN_LIST (RegWindow, regList, acc, blackacc[0], regData);
+
    /* complete GUI initialization */
    xaccLoadXferCell (regData->ledger->xfrmCell, regData->blackacc[0]->parent);
 
    xaccRecomputeBalance (regData->blackacc[0]);
    xaccLoadRegister (regData->ledger, regData->blackacc[0]->splits);
+}
+
+/********************************************************************\
+ * xaccDestroyRegWindow()
+ * It is enought to call just XtDestroy Widget.  Any allocated
+ * memory will be freed by the close callbacks.
+\********************************************************************/
+
+void
+xaccDestroyRegWindow (Account *acc)
+{
+   RegWindow *regData;
+
+   /* hack alert -- this is not correct yeah */
+   REMOVE_FROM_LIST (RegWindow, regList, acc, blackacc[0], regData);
+
+   XtDestroyWidget(regData->dialog);
+   free (regData);
 }
 
 /********************************************************************\
@@ -572,20 +572,19 @@ void regRefresh (RegWindow * regData)
 \********************************************************************/
 static void 
 closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
-  {
+{
   RegWindow *regData = (RegWindow *)cd;
   
   /* Save any unsaved changes */
   xaccSaveRegEntry (regData->ledger);
   
-  regData->blackacc[0]->regData = NULL;
   regData->blackacc[0]->regLedger = NULL;
 
   ledgerListRemoveList (regData->blackacc, regData);
-  _free(regData);
+  free(regData);
   
   DEBUG("closed RegWindow\n");
-  }
+}
 
 /********************************************************************\
  * startAdjBCB -- open up the adjust balance window... called       *
