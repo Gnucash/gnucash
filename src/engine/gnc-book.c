@@ -426,48 +426,73 @@ gnc_book_load_from_file(GNCBook *book)
   current year/month/day/hour/minute/second. */
 
 static gboolean
-gnc_book_write_to_file(GNCBook *book,
-                       gboolean make_backup)
+gnc_book_backup_file(GNCBook *book)
 {
-  const gchar *datafile = gnc_book_get_file_path(book);
+    char *timestamp;
+    char *backup;
+    const char *datafile = gnc_book_get_file_path(book);
 
-  if(!gnc_book_write_to_xml_file(book, datafile)) {
-    gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
-    return FALSE;
-  }
-
-  if(!make_backup) {
-    return TRUE;
-  } else {
-    char * timestamp;
-    int filenamelen;
-    char * backup;
+    if(gnc_book_determine_file_type(book) == GNC_BOOK_BIN_FILE)
+    {
+        /* make a more permament safer backup */
+        const char *back = "-binfmt.bkup";
+        char *bin_bkup = g_new(char, strlen(datafile) + strlen(back) + 1);
+        strcpy(bin_bkup, datafile);
+        strcat(bin_bkup, back);
+        link(datafile, bin_bkup);
+        g_free(bin_bkup);
+    }
     
-    /* also, write a time-stamped backup file */
-    /* tag each filename with a timestamp */
     timestamp = xaccDateUtilGetStampNow ();
-    
-    filenamelen = strlen (datafile) + strlen (timestamp) + 6;
-    
-    backup = (char *) malloc (filenamelen);
+    backup = g_new (char, strlen (datafile) + strlen (timestamp) + 6);
     strcpy (backup, datafile);
     strcat (backup, ".");
     strcat (backup, timestamp);
     strcat (backup, ".xac");
     free (timestamp);
-    
-    if(gnc_book_write_to_xml_file(book, backup)) {
-      free (backup);
-      return TRUE;
-    } else {
-      gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
-      free (backup);
+    link(datafile, backup);
+    g_free(backup);
+
+    return TRUE;
+}
+
+static gboolean
+gnc_book_write_to_file(GNCBook *book,
+                       gboolean make_backup)
+{
+  const gchar *datafile = gnc_book_get_file_path(book);
+  char *tmp_name;
+
+  tmp_name = g_new(char, strlen(datafile) + 12);
+  strcpy(tmp_name, datafile);
+  strcat(tmp_name, ".tmp-XXXXXX");
+  if(!mktemp(tmp_name))
+  {
+      gnc_book_push_error(book, ERR_BACKEND_MISC,
+                          g_strdup("unable to create temporary file name"));
       return FALSE;
-    }
   }
-  /* Should never get here */
-  gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
-  return FALSE;
+  
+  if(make_backup)
+  {
+      gnc_book_backup_file(book);
+  }
+  
+  if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
+  {
+      unlink(datafile);
+      link(tmp_name, datafile);
+      unlink(tmp_name);
+      g_free(tmp_name);
+      return TRUE;
+  }
+  else
+  {
+      unlink(tmp_name);
+      g_free(tmp_name);
+      gnc_book_push_error(book, ERR_BACKEND_MISC, NULL);
+      return FALSE;
+  }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -782,7 +807,7 @@ gnc_book_load (GNCBook *book)
 
     LEAVE("book_id=%s", book->book_id);
     return TRUE;
-  }
+  } 
   else
   {
     gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);

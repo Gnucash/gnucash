@@ -32,6 +32,33 @@
 	* src/scm/html-utilities.scm (gnc:html-build-acct-table): fix
 	horizontal line width if foreign currencies are shown.  
 
+2001-03-31  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-account.c (node_and_account_equal): fix parent
+	id test.  duh.
+
+	* src/test/test-real-data.sh (EXIT_VALUE): check for empty FILES
+	return.
+
+	* src/test/test-xml-commodity.c (main): fix argc test.
+
+	* src/test/test-xml-account.c (main): fix argc test.
+
+	* src/test/test-xml-commodity.c (main): fix argc test
+
+	* src/test/test-load-xml2.c (main): call xaccLogDisable
+
+	* src/test/test-xml-transaction.c (main): call xaccLogDisable
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2):
+	comment out load debug info.
+
+	* src/test/test-real-data.sh (EXIT_VALUE): don't run on a
+	directory. 
+
+	* src/test/gnc-test-stuff.c (test_files_in_dir): rename vars
+	file_count -> argc, files -> argv to be more accurate.
+
 2001-03-31  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/options.scm: add a text option type
@@ -43,6 +70,27 @@
 	* src/scm/report/register.scm: more work
 
 	* src/scm/html-document.scm: fix bug
+
+2001-03-30  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): add
+	stuff from file format 1 ledger data start and end handlers to
+	disable enable log, mark saved, and the rest.
+
+	* src/engine/gnc-book.c (gnc_book_write_to_file): clean up
+	writing.  Write only once.
+	(gnc_book_write_to_file): extract out backup functionality.
+	(gnc_book_backup_file): new func with extracted functionality.
+	(gnc_book_backup_file): add more permament backup for binary
+	data.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_end_handler): add
+	begin edit so that everyhing doesn't get recomputed till end.
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): add
+	commit of all accounts at end.
+
+	* src/engine/gnc-book.c (gnc_book_write_to_file): use v2 write.
 
 2001-03-30  Dave Peticolas  <dave@krondo.com>
 

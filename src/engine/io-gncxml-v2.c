@@ -4,6 +4,7 @@
 
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "TransLog.h"
 
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
@@ -11,7 +12,7 @@
 #include "sixtp-parsers.h"
 #include "gnc-xml.h"
 #include "gnc-book-p.h"
-#include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 
 #include "Group.h"
 
@@ -221,15 +222,19 @@ gnc_book_load_from_xml_file_v2(
     
     top_parser = sixtp_new();
     main_parser = sixtp_new();
-    
+
+    /* stop logging while we load */
+    xaccLogDisable ();
+
     if(!sixtp_add_some_sub_parsers(
         top_parser, TRUE,
         "gnc-v2", main_parser,
         NULL, NULL))
     {
+        xaccLogEnable ();
         return FALSE;
     }
-    
+
     if(!sixtp_add_some_sub_parsers(
            main_parser, TRUE,
            "gnc:count-data", gnc_counter_sixtp_parser_create(),
@@ -239,21 +244,42 @@ gnc_book_load_from_xml_file_v2(
            "gnc:transaction", gnc_transaction_sixtp_parser_create(),
            NULL, NULL))
     {
+        xaccLogEnable ();
         return FALSE;
     }
-    
+
     if(!sixtp_parse_file(top_parser, gnc_book_get_file_path(book),
                          NULL, &gd, &parse_result))
     {
         sixtp_destroy(top_parser);
+        xaccLogEnable ();
         return FALSE;
     }
-    else
-    {
-    }
-    
+
+    /* mark the newly read group as saved, since the act of putting 
+     * it together will have caused it to be marked up as not-saved. 
+     */
+    xaccGroupMarkSaved (gnc_book_get_group(book));
+
+    /* also mark the pricedb as saved for the same reasons */
+    gnc_pricedb_mark_clean (gnc_book_get_pricedb (book));
+
+    /* auto-number the accounts, if they are not already numbered */
+    xaccGroupDepthAutoCode (gnc_book_get_group(book));
+
+    /* commit all groups, this completes the BeginEdit started when the
+     * account_end_handler finished reading the account.
+     */
+    xaccAccountGroupCommitEdit (gnc_book_get_group(book));
+
+    /* set up various state that is not normally stored in the byte stream */
+    xaccRecomputeGroupBalance (gnc_book_get_group(book));
+
+    /* start logging again */
+    xaccLogEnable ();
+
     /* DEBUG */
-    print_counter_data(gd.counter);
+    /* print_counter_data(gd.counter); */
 
     return TRUE;
 }
@@ -468,7 +494,7 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
 
     fclose(out);
     
-    return FALSE;
+    return TRUE;
 }
 
 /***********************************************************************/

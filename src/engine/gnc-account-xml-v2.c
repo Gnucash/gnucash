@@ -259,6 +259,12 @@ gnc_account_end_handler(gpointer data_for_children,
     
     xmlFreeNode(tree);
 
+    /* Now return the account to the "edit" state.  At the end of reading
+     * all the transactions, we will Commit.  This replaces #splits
+     *  rebalances with #accounts rebalances at the end.  A BIG win!
+     */
+    xaccAccountBeginEdit(acc);
+    
     return successful;
 }
 
