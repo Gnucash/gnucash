@@ -233,6 +233,7 @@ Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
