@@ -36,6 +36,7 @@ EXTRA_DIST = \
   HACKING \
   README.patches \
   gnucash.lsm \
+  gnucash.m4 \
   gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
