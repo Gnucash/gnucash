@@ -34,7 +34,7 @@
 
 (gnc:define-report 
  'version 1
- 'name (N_ "URL Frame")
+ 'name (N_ "Frame URL")
  'menu-name (N_ "Custom Web Report")
  'menu-path (list gnc:menuname-utility)
  'options-generator options-generator

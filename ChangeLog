@@ -1,10 +1,12 @@
 2002-10-06  Derek Atkins  <derek@ihtfp.com>
 	* Rename a bunch of reports as per Chris Lyttle's suggestions
+	* Change the Report MENU names, not the REPORT names (except for
+	  the "Welcome to GnuCash" report)
 
 	* report-gnome/report-gnome.scm -- Create sorted menu items
 
 	* taxtxf.scm -- Change "Accounts -> Tax Information" to Edit->Tax Options
-	
+
 2002-10-06  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-utils.c (gnc_handle_date_accelerator): If

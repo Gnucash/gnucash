@@ -783,7 +783,8 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Tax Report & TXF Export")
+ 'name (N_ "Tax Report / TXF Export")
+ 'menu-name (N_ "Tax Report & TXF Export")
  ;;'menu-path (list gnc:menuname-taxes)
  'menu-tip (N_ "Taxable Income / Deductible Expenses / Export to .TXF file")
  'options-generator tax-options-generator

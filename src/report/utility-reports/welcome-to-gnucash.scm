@@ -34,7 +34,7 @@
          (sub-accounts (gnc:make-report "Account Summary"))
          (sub-expense-pie (gnc:make-report "Expense Accounts"))
          (sub-income-pie (gnc:make-report "Income Accounts"))
-         (sub-bar (gnc:make-report "Income & Expense Chart"))
+         (sub-bar (gnc:make-report "Income/Expense Chart"))
          (options #f))
 
     (define (set-option! section name value)
