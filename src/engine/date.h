@@ -122,9 +122,6 @@ Date*  todaysDate( Date *date );
 int    daysInMonth( int month , int year );
 int    datecmp( Date *date1, Date *date2 );
 
-int    sscandate( const char *in_string, Date *date, int flags);
-
-
 /** GLOBALS *********************************************************/
 
 extern DateFormat dateFormat;
