@@ -24,8 +24,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include <math.h>
 #include <malloc.h>
+#include <math.h>
 #include <string.h>
 
 #include "config.h"
@@ -156,7 +156,7 @@ ultostr (unsigned long val, int base)
 
 #if !HAVE_STPCPY
 char *
-stpcpy (char *dest, const char *src) 
+stpcpy (char *dest, const char *src)
 {
    strcpy(dest, src);
    return(dest + strlen(src));
