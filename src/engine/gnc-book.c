@@ -599,6 +599,8 @@ gnc_book_write_to_file(GNCBook *book,
 {
   const gchar *datafile = gnc_book_get_file_path(book);
   char *tmp_name;
+  struct stat statbuf;
+  int rc;
 
   tmp_name = g_new(char, strlen(datafile) + 12);
   strcpy(tmp_name, datafile);
@@ -621,6 +623,22 @@ gnc_book_write_to_file(GNCBook *book,
   
   if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
   {
+      /* Record the file's permissions before unlinking it */
+      rc = stat(datafile, &statbuf);
+      if(rc == 0)
+      {
+          /* Use the permissions from the original data file */
+          if(chmod(tmp_name, statbuf.st_mode) != 0)
+          {
+              gnc_book_push_error(
+                  book, ERR_BACKEND_MISC,
+                  g_strdup_printf("unable to chmod filename %s: %s",
+                                  datafile ? datafile : "(null)",
+                                  strerror(errno) ? strerror(errno) : ""));
+              g_free(tmp_name);
+              return FALSE;
+          }
+      }
       if(unlink(datafile) != 0 && errno != ENOENT)
       {
           gnc_book_push_error(
