@@ -27,6 +27,7 @@ INCLPATH = -I. \
            -I./engine/guid \
            -I./register \
            -Ireports \
+           -I@prefix@/lib/glib/include \
            -I@prefix@/include
 
 GNOME_CFLAGS += -I./gnome
