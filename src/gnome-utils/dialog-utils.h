@@ -159,17 +159,24 @@ void gnc_glade_autoconnect_full_func(const gchar *handler_name,
 
 /* Multibyte/wide char string helper functions. */
 
-/* Allocate new wide char string in dest_p. Return number of
- * wide chars or < 0 if error. */
+/** Allocate new wide char string in dest_p. Return number of
+ * wide chars or < 0 if error.  When the string is no longer
+ * needed, free it with g_free().
+ */
 gint         gnc_mbstowcs (GdkWChar **dest_p, const char *src);
 
-/* Return new multibyte string or NULL if failure. */
+/** Return new multibyte string or NULL if failure. 
+ * XXX how are we supposed to free this?? 
+ * with g_free or something else ??
+ */
 char *       gnc_wcstombs (const GdkWChar *src);
 
-/* Len of wide char string in chars */
+/** Len of wide char string in chars */
 gint         gnc_wcslen   (const GdkWChar *src);
 
-/* Duplicate wide char string */
+/** Duplicate wide char string. 
+ *  When the string is no longer needed, free it with g_free().
+ */
 GdkWChar *   gnc_wcsdup   (const GdkWChar *src);
 
 #endif
