@@ -41,10 +41,10 @@
 #include "Account.h"
 #include "AccWindow.h"
 #include "BuildMenu.h"
-#include "Data.h"
 #include "Destroy.h"
 #include "FileBox.h"
 #include "FileIO.h"
+#include "Group.h"
 #include "HelpWindow.h"
 #include "LedgerUtils.h"
 #include "main.h"
@@ -961,7 +961,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         datafile = newfile;
 
         /* load the accounts from the users datafile */
-        newgrp = xaccReadData (datafile);
+        newgrp = xaccReadAccountGroup (datafile);
 
         /* check for i/o error, put up appropriate error message */
         io_error = xaccGetFileIOError();
@@ -1019,7 +1019,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         datafile = XtNewString (buf);
       
         /* load the accounts from the users datafile */
-        grp = xaccReadQIFData (newfile);
+        grp = xaccReadQIFAccountGroup (newfile);
       
         if( NULL == topgroup ) {
           /* no topgroup exists */
@@ -1043,7 +1043,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         break;
       }
 
-      xaccWriteData( datafile, grp );
+      xaccWriteAccountGroup (datafile, grp);
       xaccAccountGroupMarkSaved (grp);
       break;
 

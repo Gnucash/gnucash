@@ -39,7 +39,7 @@
 #include "Account.h"
 #include "AdjBWindow.h"
 #include "BuildMenu.h"
-#include "Data.h"
+#include "Group.h"
 #include "Ledger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"

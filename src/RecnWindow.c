@@ -36,7 +36,7 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
+#include "Group.h"
 #include "RegWindow.h"
 #include "MainWindow.h"
 #include "messages.h"

@@ -21,11 +21,9 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
+#include "Group.h"
 #include "Transaction.h"
 #include "util.h"
-
-typedef struct _RegWindow xxxRegWindow;
 
 /* ------------------------------------------------------ */
 

@@ -40,7 +40,7 @@
 
 #include "Account.h"
 #include "AccountMenu.h"
-#include "Data.h"
+#include "Group.h"
 #include "messages.h"
 #include "MainWindow.h"
 #include "RegWindow.h"

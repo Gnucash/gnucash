@@ -23,7 +23,7 @@
 #include "Account.h"
 #include "AccWindow.h"
 #include "AdjBWindow.h"
-#include "Data.h"
+#include "Group.h"
 #include "LedgerUtils.h"
 #include "RegWindow.h"
 #include "RecnWindow.h"

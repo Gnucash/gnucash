@@ -27,9 +27,9 @@
 
 #include "config.h"
 
-#include "Data.h"
 #include "FileBox.h"
 #include "FileIO.h"
+#include "Group.h"
 #include "main.h"
 #include "MainWindow.h"
 #include "util.h"
@@ -155,7 +155,7 @@ main( int argc, char *argv[] )
     datafile = fileBox( toplevel, OPEN, "*.xac" );
   
   if( datafile != NULL )
-    topgroup = xaccReadData(datafile); /* load the accounts data from datafile*/
+    topgroup = xaccReadAccountGroup (datafile); /* load the accounts data from datafile*/
   
   if( NULL == topgroup )
     {

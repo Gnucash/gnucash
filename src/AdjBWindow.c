@@ -33,8 +33,8 @@
 #include "config.h"
 
 #include "Account.h"
-#include "Data.h"
 #include "date.h"
+#include "Group.h"
 #include "messages.h"
 #include "MainWindow.h"
 #include "RegWindow.h"

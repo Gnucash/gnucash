@@ -31,7 +31,7 @@
 
 #include "Account.h"
 #include "BuildMenu.h"
-#include "Data.h"
+#include "Group.h"
 #include "messages.h"
 #include "util.h"
 
