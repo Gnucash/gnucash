@@ -1,3 +1,9 @@
+2001-05-31  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/scm/tip-of-the-day.scm ((gnc:current-tip-number)): reset
+	number if greater.  tips read before config file so this number
+	gets reset by config file too high.
+
 2001-05-31  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/gnucash-design.texinfo: update docs
