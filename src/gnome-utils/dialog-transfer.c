@@ -2073,32 +2073,31 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
 {
   gboolean result_ok = FALSE;
 
-  if( xferData )
-  {
-    xferData->result_p = &result_ok;
-    while( TRUE )
-    {
-      gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
-
-        /* See if the dialog is still there.  For various reasons, the
-         * user could have hit OK but remained in the dialog.  We don't
-         * want to return processing back to anyone else until we clear
-         * off this dialog, so if the dialog is still there we'll just
-         * run it again.
-         */
+  if( NULL == xferData ) return FALSE;
   
-      DEBUG("find component");
-      if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
-                                           find_xfer, xferData ) )
-        {
-          /* no more dialog, and OK was clicked, so assume it's all good */
-          return( result_ok );
-        }
-        /* else run the dialog again */
-    }
+  xferData->result_p = &result_ok;
+  while( TRUE )
+  {
+    gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
+
+    /* See if the dialog is still there.  For various reasons, the
+     * user could have hit OK but remained in the dialog.  We don't
+     * want to return processing back to anyone else until we clear
+     * off this dialog, so if the dialog is still there we'll just
+     * run it again.
+     */
+
+    DEBUG("find component");
+    if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
+                                         find_xfer, xferData ) )
+      {
+        /* no more dialog, and OK was clicked, so assume it's all good */
+        xferData->result_p = NULL;
+        return( result_ok );
+      }
+      /* else run the dialog again */
   }
-    
-  return( FALSE );
+  return FALSE;
 }
 
 
