@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-09-15 23:33+0200\n"
-"PO-Revision-Date: 2003-10-14 10:33+0200\n"
+"PO-Revision-Date: 2003-10-14 12:15+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -14417,7 +14417,7 @@ msgstr "Datum Abgeglichen"
 #: intl-scm/guile-strings.c:2566 intl-scm/guile-strings.c:2720
 #: intl-scm/guile-strings.c:2824
 msgid "Other Account Name"
-msgstr "Name des Herkunftskontos"
+msgstr "Name des Gegenkontos"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2582 intl-scm/guile-strings.c:2844
@@ -14434,7 +14434,7 @@ msgstr "Volle Kontobezeichnung benutzen?"
 #: intl-scm/guile-strings.c:2598 intl-scm/guile-strings.c:2724
 #: intl-scm/guile-strings.c:2832
 msgid "Other Account Code"
-msgstr "Nummer des Herkunftskontos"
+msgstr "Nummer des Gegenkontos"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2602 intl-scm/guile-strings.c:2828
