@@ -672,20 +672,6 @@
         postscript. These should be easy to customize. Ideally,
         even novice users should be able to create custom reports. 
 
-        <p>Other output format possibilities include <a href=
-        "http://www.oasis-open.org/cover/">SGML</a> and <a href=
-        "http://www.oasis-open.org/cover/xml.html">Extensible
-        Markup Language - XML.</a> In the long run, these are
-        preferable to HTML, since <a href=
-        "http://www.jclark.com/dsssl/">DSSSL</a> tools such as <a
-        href="http://www.jclark.com/jade/">Jade (James DSSSL
-        Engine)</a> can be used to convert to RTF, Postscript, etc.
-        Add to this the consideration that XML is the basis for the
-        <a href="http://www.w3.org/DOM/">Document Object Model,</a>
-        which is being integrated into many web-based applications,
-        and we can see that XML is an increasingly significant
-        format as we look to the future.</p>
-
         <p>The Report Generator should be a separate but "dockable"
         subsystem of the whole. That is, it should be possible to
         run the report generator in a stand-alone, read-only
@@ -700,7 +686,7 @@
         using Guile.</p>
 
         <p>Generated reports should be exportable to other gnome
-        systems using bonbo. Reports should also be exportable to
+        systems using bonobo. Reports should also be exportable to
         the gnumeric spreadsheet (possibly by writing out gnumeric
         file format??)</p>
 
@@ -741,6 +727,23 @@
 
           <li>Heavy discussion by matt martin, Robert Merkel
           ...</li>
+          
+          <li>The following technologies were rejected/unused mostly
+        because they were too complex, didn't hang together technologies:
+        <a href= "http://www.oasis-open.org/cover/">SGML</a> and <a href=
+        "http://www.oasis-open.org/cover/xml.html">Extensible
+        Markup Language - XML.</a> In the long run, these are
+        preferable to HTML, since <a href=
+        "http://www.jclark.com/dsssl/">DSSSL</a> tools such as <a
+        href="http://www.jclark.com/jade/">Jade (James DSSSL
+        Engine)</a> can be used to convert to RTF, Postscript, etc.
+        Add to this the consideration that XML is the basis for the
+        <a href="http://www.w3.org/DOM/">Document Object Model</a>,
+        which is being integrated into many web-based applications,
+        and we can see that XML is an increasingly significant
+        format as we look to the future.
+        </li>
+
         </ul>
         <br>
         <br>
