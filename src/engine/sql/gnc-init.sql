@@ -2,6 +2,7 @@
 -- these tables roughly mirror the c structs in TransactionP.h and
 -- AccountP.h
 
+DROP TABLE gncAccount;
 CREATE TABLE gncAccount (
 	accountGuid	CHAR(16) PRIMARY KEY,
 	accountName 	VARCHAR(40) DEFAULT 'xoxo',
@@ -13,9 +14,15 @@ CREATE TABLE gncAccount (
 	security	VARCHAR(8)
 );
 
+INSERT INTO  gncaccount (accountguid,accountName,description) values
+                    ('asdfasdf','banky','some bogo bank');
+INSERT INTO  gncaccount (accountguid,accountName,description) values
+                    ('aqwerqwer','crebit dedit','bankruptcy follows');
+
 
 -- a gncEntry is what we call 'Split' elsewhere in the engine
 
+DROP TABLE gncEntry;
 CREATE TABLE gncEntry (
 	entryGuid		CHAR(16) PRIMARY KEY,
 	accountGuid		CHAR(16),
@@ -27,6 +34,7 @@ CREATE TABLE gncEntry (
 	share_price		FLOAT8 DEFAULT '0.0'
 );
 
+DROP TABLE gncTransaction;
 CREATE TABLE gncTransaction (
 	transGuid		CHAR(16) PRIMARY KEY,
 	date_entered	 	DATETIME,

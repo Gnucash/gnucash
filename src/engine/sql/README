@@ -9,12 +9,13 @@ developers who want to hack this code.
 3) as root, su - postgres then run 'createuser' to add your user id
 
 4) run the script gnc-init.sh
+   This script will automatically create the needed tables
 
 
 
 Development Notes
 -----------------
 Just about everything done in this demo is wrong.
--- primary keeys need to be built
 -- 
+
 
