@@ -468,7 +468,9 @@ AC_SUBST(RPC_DIR)
 ### OFX
 AC_ARG_ENABLE( ofx,
   [  --enable-ofx                 compile with ofx support (needs LibOFX)],
-       OFX_DIR=ofx)
+  if test "x$enableval" != "xno" ; then
+    OFX_DIR=ofx
+  fi)
 if test x${OFX_DIR} = xofx ;
 then
     AC_ARG_WITH( ofx-prefix, 
@@ -523,7 +525,9 @@ AC_SUBST(OFX_DIR)
 ### HBCI
 AC_ARG_ENABLE( hbci,
   [  --enable-hbci                compile with HBCI support (needs OpenHBCI)],
-       HBCI_DIR=hbci)
+  if test "x$enableval" != "xno" ; then
+    HBCI_DIR=hbci
+  fi)
 if test x${HBCI_DIR} = xhbci ;
 then
     AM_PATH_OPENHBCI(0.9.6)

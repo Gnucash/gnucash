@@ -1,3 +1,8 @@
+2003-05-03  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Fix hbci and ofx test for handling --disable
+	correctly.
+
 2003-05-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-parse.scm: Don't assume that a
