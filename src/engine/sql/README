@@ -150,8 +150,10 @@ Core bugs/features that still need work:
 
 -- single-update mode pops up a gui dialog to user asking them
    to save the data at the end of the sessino. But we've already done
-   this.  So something is marking teh data 'not saved'. 
-   fix this (again  ...)
+   this.  So something is marking the data 'not saved'. 
+   fix this (again  ...)  I think this is due to how the pricedb
+   sets the dirty flag.  single-update mode should reset the dirty
+   flag whenever a commit occurs.
 
 -- allow user to enter URL in GUI dialog.  User can currently type url
    into the file dialog window; it would be nice to have something 
@@ -162,11 +164,6 @@ Core bugs/features that still need work:
 
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).
-
--- add support for rlb's price db. Partial support is in place.
-   mass save & restore for mode=single-file is implemented.
-   price editing and deletion for mode=single-update is implemented.
-   To Be Done: price queries.
 
 -- error code should include strings passed back, to be shown in 
    GUI dialogs. This is because the backend needs to return things
@@ -188,11 +185,6 @@ Core bugs/features that still need work:
    will fail on session validate, and FINISH_QUERY will close the
    connection.  Subsequent sql will core dump gnucash, even though this 
    is a sysadmin error.
-
--- during sync, detect and report conflicting edits to accounts 
-   and transactions.  See the notes for pgendSync() for details
-   as to what this is about.  For the first pass, this is not a 
-   serious issue; its a 'nice to have' thing.
 
 -- during open of register window, a query of splits is typically run
    twice (once during open -- LedgerDisplayInternal(), and again
@@ -222,11 +214,18 @@ This list only affects the multi-user and advanced/optional features.
    Method B) keep an audit trail of deleted transactions, and check
      that.
 
+-- during sync, detect and report conflicting edits to accounts 
+   and transactions.  See the notes for pgendSync() for details
+   as to what this is about.  For the first pass, this is not a 
+   serious issue; its a 'nice to have' thing.
+
 -- store account balances in database.  This will be tricky ...
    -- split query gets hard ... 
    -- use postgres aggregates ?? 
 
 -- provide support for more query types in gncquery.c
+
+-- add support for price queries.
 
 -- add versioning support for price db.  We should add version numbers 
    to the prices, and check version numbers when updating prices.
