@@ -4,6 +4,7 @@
 #include "GNCIdP.h"
 
 #include "Account.h"
+#include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
@@ -32,7 +33,7 @@ main(int argc, char **argv)
     Split *spl;
     gnc_numeric num;
 
-    xaccGUIDInit();
+    gnc_engine_init (argc, argv);
 
     act1 = get_random_account();
     if(!act1)

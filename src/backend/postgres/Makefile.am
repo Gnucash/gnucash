@@ -102,7 +102,5 @@ table-version.c: table-version.sql
 	cat table-version.sql >> table-version.c
 	echo \" >> table-version.c
 
-clean:
-	-rm -f base-autogen.c check-autogen.c kvp-autogen.c 
-	-rm -f table-drop.c table-create.c table-version.c functions.c
-
+CLEANFILES = base-autogen.c check-autogen.c kvp-autogen.c \
+             table-drop.c table-create.c table-version.c functions.c

@@ -12,6 +12,7 @@
 #include "gnc-xml-helper.h"
 #include "gnc-xml.h"
 #include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "sixtp-parsers.h"
 
@@ -279,6 +280,7 @@ really_get_rid_of_transaction(Transaction *trn)
 struct tran_data_struct
 {
     Transaction *trn;
+    gnc_commodity *com;
     int value;
 };
 typedef struct tran_data_struct tran_data;
@@ -286,14 +288,20 @@ typedef struct tran_data_struct tran_data;
 static gboolean
 test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
 {
+    Transaction *trans = data;
     tran_data *gdata = (tran_data*)globaldata;
-    
-    do_test_args(
-        xaccTransEqual((Transaction*)data, gdata->trn, TRUE, TRUE),
-        "gnc_transaction_sixtp_parser_create",
-	__FILE__, __LINE__,
-	"%d", gdata->value);
-    really_get_rid_of_transaction((Transaction*)data);
+
+    xaccTransBeginEdit (trans);
+    xaccTransSetCurrency (trans, gdata->com);
+    xaccTransCommitEdit (trans);
+
+    do_test_args(xaccTransEqual(trans, gdata->trn, TRUE, TRUE),
+                 "gnc_transaction_sixtp_parser_create",
+                 __FILE__, __LINE__,
+                 "%d", gdata->value);
+
+    really_get_rid_of_transaction(trans);
+
     return TRUE;
 }
 
@@ -305,12 +313,15 @@ test_transaction(void)
     {
         Transaction *ran_trn;
         xmlNodePtr test_node;
+        gnc_commodity *com;
+        gchar *compare_msg;
         gchar *filename1;
         FILE *cmp_file;
         int fd;
-        gchar *compare_msg;
 
         ran_trn = get_random_transaction();
+
+        com = xaccTransGetCurrency (ran_trn);
 
         test_node = gnc_transaction_dom_tree_create(ran_trn);
         if(!test_node)
@@ -352,6 +363,7 @@ test_transaction(void)
             tran_data data;
 
             data.trn = ran_trn;
+            data.com = com;
             data.value = i;
             
             parser = gnc_transaction_sixtp_parser_create();
@@ -390,7 +402,7 @@ test_real_transaction(const char *tag, gpointer global_data, gpointer data)
 int
 main(int argc, char **argv)
 {
-    xaccGUIDInit();
+    gnc_engine_init (argc, argv);
     xaccLogDisable();
     
     if(argc > 1)

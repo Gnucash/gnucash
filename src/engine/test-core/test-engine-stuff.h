@@ -28,9 +28,10 @@ bin_data* get_random_binary_data(void);
 
 kvp_frame* get_random_kvp_frame(void);
 gnc_numeric get_random_gnc_numeric(void);
-gnc_commodity* get_random_gnc_commodity_ref(void);
 GUID* get_random_guid(void);
 GList* get_random_glist(void);
+
+void random_glist_strings_only (gboolean strings_only);
 
 GNCPrice * get_random_price(void);
 void make_random_pricedb (GNCPriceDB *pdb);

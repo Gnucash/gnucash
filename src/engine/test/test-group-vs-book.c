@@ -3,6 +3,7 @@
 
 #include "GNCIdP.h"
 #include "gnc-book.h"
+#include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 
@@ -137,7 +138,7 @@ main (int argc, char **argv)
 {
   int i;
 
-  xaccGUIDInit ();
+  gnc_engine_init (argc, argv);
 
   for (i = 0; i < 10; i++)
     run_test ();

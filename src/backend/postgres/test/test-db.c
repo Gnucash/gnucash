@@ -13,11 +13,14 @@
 #include "test-engine-stuff.h"
 
 static void
-test_book (GNCBook *book)
+run_test (void)
 {
+  GNCBook *book;
   GNCBackendError io_err;
   char cwd[1024];
   char *filename;
+
+  book = get_random_book ();
 
   getcwd (cwd, sizeof (cwd));
 
@@ -42,7 +45,6 @@ test_book (GNCBook *book)
 
   filename = g_strdup ("postgres://localhost:7777/gnc_test?mode=single-file");
   gnc_book_begin (book, filename, FALSE, TRUE);
-  g_free (filename);
 
   io_err = gnc_book_get_error (book);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning gnc_test"))
@@ -55,6 +57,41 @@ test_book (GNCBook *book)
   gnc_book_end (book);
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending gnc_test"))
     return;
+
+  gnc_book_destroy (book);
+
+  book = gnc_book_new ();
+
+  gnc_book_begin (book, filename, FALSE, FALSE);
+  g_free (filename);
+
+  io_err = gnc_book_get_error (book);
+  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning gnc_test load"))
+    return;
+
+  gnc_book_load (book);
+  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Loading gnc_test"))
+    return;
+
+  gnc_book_end (book);
+  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending gnc_test load"))
+    return;
+
+  filename = g_strconcat ("file:/", cwd, "/test-file-2", NULL);
+  gnc_book_begin (book, filename, FALSE, TRUE);
+  g_free (filename);
+
+  io_err = gnc_book_get_error (book);
+  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Beginning test-file-2"))
+    return;
+
+  gnc_book_save (book);
+  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Saving test-file-2"))
+    return;
+
+  gnc_book_end (book);
+  if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending test-file-2"))
+    return;
 }
 
 static void
@@ -65,13 +102,11 @@ guile_main (int argc, char **argv)
   gnc_module_system_init ();
   gnc_module_load ("gnucash/engine", 0);
 
+  random_glist_strings_only (TRUE);
+
   xaccLogDisable ();
 
-  book = get_random_book ();
-
-  test_book (book);
-
-  gnc_book_destroy (book);
+  run_test ();
 
   print_test_results ();
   exit (get_rv ());
@@ -80,7 +115,7 @@ guile_main (int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  getchar ();
+  /*  getchar (); */
 
   gh_enter (argc, argv, guile_main);
 

@@ -13,6 +13,7 @@
 #include "test-stuff.h"
 #include "FreqSpec.h"
 #include "GNCIdP.h"
+#include "gnc-engine.h"
 
 static void
 test_once (void)
@@ -524,7 +525,8 @@ main( int argc, char* argv[] )
 #if 0
 	set_success_print(TRUE);
 #endif
-        xaccGUIDInit();
+
+        gnc_engine_init (argc, argv);
 
 	test_once();
 

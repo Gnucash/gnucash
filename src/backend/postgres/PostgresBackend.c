@@ -1073,9 +1073,18 @@ pgendSessionEnd (PGBackend *be)
 
    if (!be->sessionGuid) return;
 
-   /* vacuuming w/ analyze can improve performance 20% */
+#if 0
+   /* vacuuming w/ analyze can improve performance 20%.
+    * Should this really be done on every session end?
+    * The postgres manual recommends once every night! */
    p = be->buff; *p=0;
    p = stpcpy (p, "VACUUM ANALYZE;\n");
+
+   SEND_QUERY (be,be->buff, );
+   FINISH_QUERY(be->connection);
+#endif
+
+   p = be->buff; *p=0;
    p = stpcpy (p, "UPDATE gncSession SET time_off='NOW' "
                   "WHERE sessionGuid='");
    p = stpcpy (p, be->session_guid_str);

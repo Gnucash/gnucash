@@ -17,6 +17,7 @@
 #include "test-stuff.h"
 
 static gboolean add_comms_to_engine = TRUE;
+static gboolean glist_strings_only = FALSE;
 
 /***********************************************************************/
 
@@ -24,6 +25,12 @@ void
 add_random_commodities_to_engine (gboolean add)
 {
   add_comms_to_engine = add;
+}
+
+void
+random_glist_strings_only (gboolean strings_only)
+{
+  glist_strings_only = strings_only;
 }
 
 Timespec*
@@ -61,28 +68,6 @@ get_random_commodity_namespace(void)
     return get_random_string_in_array(types);
 }
 
-gnc_commodity*
-get_random_gnc_commodity_ref(void)
-{
-    const gchar *name;
-    gchar *mnemonic;
-    gnc_commodity *ret;
-    
-    name = get_random_commodity_namespace();
-    mnemonic = get_random_string();
-
-    if(!name || !mnemonic)
-    {
-        return NULL;
-    }
-    
-    ret = gnc_commodity_new("", name, mnemonic, "", 0);
-
-    g_free(mnemonic);
-
-    return ret;
-}
-
 GNCPrice *
 get_random_price(void)
 {
@@ -93,11 +78,11 @@ get_random_price(void)
 
   p = gnc_price_create ();
 
-  c = get_random_gnc_commodity_ref ();
+  c = get_random_commodity ();
   c = gnc_commodity_table_insert (gnc_engine_commodities (), c);
   gnc_price_set_commodity (p, c);
 
-  c = get_random_gnc_commodity_ref ();
+  c = get_random_commodity ();
   c = gnc_commodity_table_insert (gnc_engine_commodities (), c);
   gnc_price_set_currency (p, c);
 
@@ -166,9 +151,13 @@ get_random_glist(void)
     int i;
     int count = get_random_int_in_range(1, 5);
     
-    for(i = 0; i < count; i++)
+    for (i = 0; i < count; i++)
     {
-        ret = g_list_prepend(ret, (gpointer)get_random_kvp_value(-2));
+        kvp_value_t kvpt;
+
+        kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
+
+        ret = g_list_prepend(ret, get_random_kvp_value (kvpt));
     }
     
     return ret;
@@ -397,7 +386,7 @@ get_random_account(void)
     set_account_random_string(ret, xaccAccountSetCode);
     set_account_random_string(ret, xaccAccountSetDescription);
 
-    xaccAccountSetCommodity(ret, get_random_gnc_commodity_ref());
+    xaccAccountSetCommodity(ret, get_random_commodity());
     
     xaccAccountSetSlots_nc(ret, get_random_kvp_frame());
     
@@ -492,7 +481,7 @@ get_random_transaction(void)
 
     xaccTransBeginEdit(ret);
 
-    xaccTransSetCurrency(ret, get_random_gnc_commodity_ref());
+    xaccTransSetCurrency(ret, get_random_commodity ());
 
     set_tran_random_string(ret, xaccTransSetNum);
 
@@ -511,7 +500,7 @@ get_random_transaction(void)
 }
 
 gnc_commodity*
-get_random_commodity(void)
+get_random_commodity (void)
 {
     gnc_commodity *ret;
     gchar *name;

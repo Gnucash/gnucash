@@ -31,3 +31,6 @@ INCLUDES = \
 
 EXTRA_DIST = \
   db-control.sh
+
+CLEANFILES = test-file-*
+
