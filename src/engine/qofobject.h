@@ -1,5 +1,6 @@
 /********************************************************************\
  * qofobject.h -- the Core Object Registration/Lookup Interface     *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -71,6 +72,7 @@ struct _QofObject
   void                (*foreach)(QofBook *, QofEntityForeachCB, gpointer);
 
   /* Given a particular object, return a printable string */
+  /* Argument should really be QofInstance not gpointer.. */
   const char *        (*printable)(gpointer obj);
 
 };

@@ -20,10 +20,10 @@
 \********************************************************************/
 /*
  * gnc-be-utils.h -- QOF Backend Utilities
- *	common code used by objects to define begin_edit() and
- *	commit_edit() functions.
+ *        common code used by objects to define begin_edit() and
+ *        commit_edit() functions.
  *
- * Written by:	Derek Atkins <derek@ihtfp.com>
+ * Written by:        Derek Atkins <derek@ihtfp.com>
  *
  */
 
@@ -37,12 +37,12 @@
 /* begin_edit helper
  *
  * assumes:
- *	obj->editlevel	(int)
- *	obj->book	(QofBook*)
+ *        obj->editlevel        (int)
+ *        obj->book        (QofBook*)
  *
  * @args:
- *	obj: the object to begin editing
- *	type: the object type
+ *        obj: the object to begin editing
+ *        type: the object type
  *
  * The caller should use this macro first and then perform any other operations.
  */
@@ -76,19 +76,20 @@
  * Then call PART2.  You cannot do anything after PART2.
  *
  * assumes:
- *	obj->editlevel	(int)
- *	obj->book	(QofBook*)
- *	obj->do_free	(gboolean)
+ *        obj->editlevel        (int)
+ *        obj->book        (QofBook*)
+ *        obj->do_free        (gboolean)
+ *        obj->dirty        (gboolean)
  */
 
 /*
  * part1 -- deal with the editlevel
  * 
  * assumes:
- *	obj->editlevel	(int)
+ *        obj->editlevel        (int)
  *
  * @args:
- *	obj: the object being committed
+ *        obj: the object being committed
  */
 
 #define GNC_COMMIT_EDIT_PART1(obj) { \
@@ -108,20 +109,20 @@
  * part2 -- deal with the backend
  * 
  * assumes:
- *	obj->book	(QofBook*)
- *	obj->do_free	(gboolean)
+ *        obj->book        (QofBook*)
+ *        obj->do_free        (gboolean)
  *
  * @args:
- *	obj: the object being committed
- *	type: the type of the object
- *	on_error: a function called if there is a backend error.
- *		void (*on_error)(obj, QofBackendError)
- *	on_done: a function called after the commit is complete but before
- *		the object is freed.  This is where you clear the "dirty"
- *		flag, and perform any other operations after the commit.
- *		void (*on_done)(obj)
- *	on_free: a function called if obj->do_free is TRUE. 
- *		void (*on_free)(obj)
+ *        obj: the object being committed
+ *        type: the type of the object
+ *        on_error: a function called if there is a backend error.
+ *                void (*on_error)(obj, QofBackendError)
+ *        on_done: a function called after the commit is complete but before
+ *                the object is freed.  This is where you clear the "dirty"
+ *                flag, and perform any other operations after the commit.
+ *                void (*on_done)(obj)
+ *        on_free: a function called if obj->do_free is TRUE. 
+ *                void (*on_free)(obj)
  */
 #define GNC_COMMIT_EDIT_PART2(obj,type,on_error,on_done,on_free) { \
   QofBackend * be; \
@@ -146,9 +147,10 @@
       qof_backend_set_error (be, errcode); \
     } \
   } \
-  (on_done)(obj);\
+  if (on_done) { (on_done)(obj); } \
+  obj->dirty = FALSE;              \
   \
-  if ((obj)->do_free) (on_free)(obj); \
+  if ((obj)->do_free) { (on_free)(obj); } \
 }
 
 
