@@ -1,3 +1,74 @@
+2001-11-20  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/gnome/gnucash.c.in
+	(gnucash_main_helper): switch to gnc_setenv.
+
+	* src/gnome/Makefile.am (AM_CFLAGS): add core-utils.
+
+	* src/gnc-module/gnc-module.c
+	(gnc_module_system_setup_load_path): use gnc_setenv.
+
+	* src/gnc-module/Makefile.am
+	(AM_CFLAGS): add core-utils.
+	(libgncmodule_la_LIBADD): add core-utils.
+
+	* src/engine/gnc-engine-util.h: add #include config.h.
+
+	* src/dialog-account/Makefile.am
+	(AM_CFLAGS): add GDK_PIXBUF_CFLAGS.
+
+	* src/core-utils/core-utils.h: new file.
+
+	* src/core-utils/core-utils.c: new file.
+	(gnc_setenv): new function.
+	(gnc_unsetenv): new function.
+
+	* src/core-utils/Makefile.am: new file.
+
+	* src/core-utils/.cvsignore: new file.
+
+	* src/business/business-gnome/Makefile.am
+	(AM_CFLAGS): add GDK_PIXBUF_CFLAGS.
+
+	* src/backend/file/test/test-save-in-lang.c
+	(test_file): switch from putenv to gnc_setenv.
+	(main): switch from putenv to gnc_setenv.
+
+	* src/backend/file/test/Makefile.am (AM_CFLAGS): add src/core-utils.
+
+	* configure.in (AC_OUTPUT): add src/core-utils.
+
+	* src/backend/file/sixtp-utils.c (gnc_timegm): switch from putenv
+	to gnc_setenv and gnc_unsetenv.
+
+	* src/README.modules: add core-utils.
+
+	* src/Makefile.am (SUBDIRS): add core-utils.
+
+2001-11-17  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/business/business-gnome/.cvsignore: add various-things.
+
+	* src/business/business-core/.cvsignore: add various things.
+
+	* src/business/business-core/test/Makefile.am: fixup
+	TESTS_ENVIRONMENT to use gnc-test-env.
+
+	* src/business/business-core/test/.cvsignore: add various things.
+
+	* src/business/.cvsignore: add Makefile.in.
+
+	* src/gnc-module/test/test-scm-multi: turned into guile script
+	invoked via /bin/sh.
+
+	* src/gnc-module/test/test-scm-multi.scm: deleted.
+
+	* src/gnc-module/test/Makefile.am: use gnc-test-env.
+	(EXTRA_DIST): remove test-scm-multi.scm.
+
+	* src/business/business-gnome/Makefile.am
+	(AM_CFLAGS): add GNOME_PRINT_CFLAGS.
+
 2001-11-16  Rob Browning  <rlb@defaultvalue.org>
 
 	* configure.in (AC_OUTPUT): add src/dialog-account.
