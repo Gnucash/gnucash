@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- the main data structure of the program                *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997 Linas Vepstas                                 *
+ * Copyright (C) 1997, 1998 Linas Vepstas                           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -375,38 +375,56 @@ xaccInsertSubAccount( Account *adult, Account *child )
 
 void
 xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
-  {
-  int i=-1;
-  Account **arr;
+{
+  int i,j,nacc;
+  Account **oldarr, **newarr;
+  int ralo = 1;
   
   if (NULL == grp) return;
   if (NULL == acc) return;
 
   /* If the account is currently in another group, remove it there first.
-   * Basically, we can't have accounts being in two places at once. */
+   * Basically, we can't have accounts being in two places at once. 
+   * If old and new parents are the same, reinsertion causes the sort order
+   * to be checked.
+   */
   if (acc->parent) {
+    if (grp == acc->parent) ralo = 0;
     xaccRemoveAccount (acc);
   }
+  grp->saved = FALSE;
 
   /* set back-pointer to the accounts parent */
   acc->parent = grp;
 
-  arr = grp->account;
-    
-  grp->saved = FALSE;
-  
-  grp->account = (Account **)_malloc(((grp->numAcc)+2)*sizeof(Account *));
-
-  for( i=0; i<(grp->numAcc); i++ ) {
-    grp->account[i] = arr[i];
+  nacc = grp->numAcc;
+  oldarr = grp->account;
+  newarr = oldarr;
+  if (ralo) {
+     newarr = (Account **) realloc (oldarr, (nacc+2)*sizeof(Account *));
+     if (newarr == oldarr) ralo = 0;
   }
-  _free(arr);
 
-  grp->account[(grp->numAcc)] = acc;
-  grp->numAcc++;
-  grp->account[(grp->numAcc)] = NULL;
-
+  /* insert account in proper sort order */
+  for( i=nacc-1, j=nacc; i>=0; i--, j-- ) {
+    if (i != j) {
+       if (0 < xaccAccountOrder (&(oldarr[i]), &acc)) {
+          newarr[j] = oldarr[i];
+       } else {
+          newarr[j] = acc;
+          j--;
+       }
+    } else {
+       newarr[j] = oldarr[i];
+    }
   }
+  if (ralo) free (oldarr);
+
+  nacc++;
+  newarr[nacc] = NULL;
+  grp->account = newarr;
+  grp->numAcc = nacc;
+}
 
 /********************************************************************\
 \********************************************************************/
