@@ -108,7 +108,7 @@ the account instead of opening a register.") #f))
    (simple-format
     #f "  (hash-set! gnc:*acct-tree-options* ~A options)\n" id)
    (simple-format
-    #f "  \"gnc-acct-tree:id=~S\")" id)))
+    #f "  \"gnc-acct-tree:id=~S\")\n\n" id)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -140,8 +140,10 @@ the account instead of opening a register.") #f))
               (hash-fold 
                (lambda (k v p)
                  (display (gnc:acct-tree-generate-restore-forms v k)) #t)
-               #t gnc:*acct-tree-options*)))))
-    (gnc:main-window-save (gnc:get-ui-data) book-url)
+               #t gnc:*acct-tree-options*)
+
+              (force-output)))
+          (gnc:main-window-save (gnc:get-ui-data) book-url)))
 
     (let ((dead-reports '()))
       ;; get a list of the reports we'll be needing to nuke     
