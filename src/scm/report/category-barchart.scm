@@ -414,16 +414,10 @@ developing over time"))
 					 gnc:account-get-full-name
 					 gnc:account-get-name) acct))))))))
 		all-data)))
-	  (gnc:html-barchart-set-button-1-bar-urls! chart (append urls urls)))
-
-	;; The legend urls always point to the registers.
-	(gnc:html-barchart-set-button-1-legend-urls! 
-	 chart (map 
-		(lambda (pair)
-		  (if (string? (car pair))
-		      other-anchor
-		      (gnc:account-anchor-text (car pair))))
-		all-data))
+	  (gnc:html-barchart-set-button-1-bar-urls! chart (append urls urls))
+	  ;; The legend urls do the same thing.
+	  (gnc:html-barchart-set-button-1-legend-urls! chart 
+						       (append urls urls)))
 
 	(gnc:html-document-add-object! document chart) 
 
@@ -439,10 +433,9 @@ lots of thin bars next to each other for each date, then you \
 should upgrade Guppi to version 0.35.4 or, \
 if that isn't out yet, use the Guppi CVS version.")
 	      (gnc:html-markup-p
-	       "Double-click on any legend box opens the register \
-to that account. Double-click on a bar opens either the \
-register or, if the account has subaccounts, opens \
-another barchart report with precisely those subaccounts.")
+	       "Double-click on any legend box or any bar opens \
+another barchart report with the subaccounts of that account or, \
+if that account doesn't have subaccounts, the register for the account.")
 	      (gnc:html-markup-p "Remove this text by disabling \
 the global Preference \"Display Tip of the Day\"."))))
 	

@@ -285,45 +285,41 @@ balance at a given time"))
 		(set! other-anchor (gnc:report-anchor-text id)))))
 
 	;; set the URLs; the slices are links to other reports
-	(gnc:html-piechart-set-button-1-slice-urls! 
-	 chart
-	 (map 
-	  (lambda (pair)
-	    (if (string? (cadr pair))
-		other-anchor
-		(let* ((acct (cadr pair))
-		       (subaccts 
-			(gnc:account-get-immediate-subaccounts acct)))       
-		  (if (null? subaccts)
-		      ;; if leaf-account, make this an anchor
-		      ;; to the register.
-		      (gnc:account-anchor-text (cadr pair))
-		      ;; if non-leaf account, make this a link
-		      ;; to another report which is run on the
-		      ;; immediate subaccounts of this account
-		      ;; (and including this account).
-		      (gnc:make-report-anchor
-		       reportname
-		       (gnc:report-options report-obj) 
-		       (list
-			(list gnc:pagename-accounts optname-accounts
-			      (cons acct subaccts))
-			(list gnc:pagename-accounts optname-levels
-			      (+ 1 tree-depth))
-			(list gnc:pagename-general 
-			      gnc:optname-reportname
-			      ((if show-fullname?
-				   gnc:account-get-full-name
-				   gnc:account-get-name) acct))))))))
-	  combined))
-	
-	(gnc:html-piechart-set-button-1-legend-urls! 
-	 chart (map 
-		(lambda (pair)
-		  (if (string? (cadr pair))
-		      other-anchor
-		      (gnc:account-anchor-text (cadr pair))))
-		combined))
+	(let 
+	    ((urls
+	      (map 
+	       (lambda (pair)
+		 (if (string? (cadr pair))
+		     other-anchor
+		     (let* ((acct (cadr pair))
+			    (subaccts 
+			     (gnc:account-get-immediate-subaccounts acct)))
+		       (if (null? subaccts)
+			   ;; if leaf-account, make this an anchor
+			   ;; to the register.
+			   (gnc:account-anchor-text (cadr pair))
+			   ;; if non-leaf account, make this a link
+			   ;; to another report which is run on the
+			   ;; immediate subaccounts of this account
+			   ;; (and including this account).
+			   (gnc:make-report-anchor
+			    reportname
+			    (gnc:report-options report-obj) 
+			    (list
+			     (list gnc:pagename-accounts optname-accounts
+				   (cons acct subaccts))
+			     (list gnc:pagename-accounts optname-levels
+				   (+ 1 tree-depth))
+			     (list gnc:pagename-general 
+				   gnc:optname-reportname
+				   ((if show-fullname?
+					gnc:account-get-full-name
+					gnc:account-get-name) acct))))))))
+	       combined)))
+	  (gnc:html-piechart-set-button-1-slice-urls! 
+	   chart urls)
+	  (gnc:html-piechart-set-button-1-legend-urls! 
+	   chart urls))
 	
 	(gnc:html-piechart-set-title!
 	 chart report-title)
@@ -350,7 +346,7 @@ balance at a given time"))
 		    
 		    "")))
 
-	(let ((urls
+	(let ((legend-labels
 	       (map 
 		(lambda (pair)
 		  (string-append
@@ -365,7 +361,7 @@ balance at a given time"))
 			(gnc:amount->string (car pair) print-info))
 		       "")))
 		combined)))
-	  (gnc:html-piechart-set-labels! chart urls))
+	  (gnc:html-piechart-set-labels! chart legend-labels))
 	
 	(gnc:html-document-add-object! document chart) 
 
@@ -376,8 +372,7 @@ balance at a given time"))
 	     document 
 	     (gnc:make-html-text 
 	      (gnc:html-markup-p 
-	       "Double-click on any legend box opens the register \
-to that account. Double-click on a pie slice opens either the \
+	       "Double-click on any legend box or pie slice opens either the \
 register or, if the account has subaccounts, opens \
 another piechart report with precisely those subaccounts.")
 	      (gnc:html-markup-p "Dragging with left button \
