@@ -27,6 +27,9 @@
 #include "Transaction.h"
 #include "util.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
+
 /* ------------------------------------------------------ */
 
 int accListCount (Account **list)
@@ -73,6 +76,7 @@ xaccGroupToList (Account *acc)
 
    if (!acc) return NULL;
 
+   ENTER ("xaccGroupToList(): acc=%p \n", acc);
    nacc = xaccGetNumAccounts (acc->children);
    nacc ++;  /* add one for this account */
 
@@ -88,18 +92,18 @@ xaccGroupToList (Account *acc)
          if (acc->children->account[i]->children) {
             Account **childlist;
             Account *childacc;
-            int ic = 0;
+            int ic = 1;
 
             /* get the children */
             childlist = xaccGroupToList (acc->children->account[i]);
 
             /* copy them over */
-            childacc = childlist[0];
+            childacc = childlist[1];
             while (childacc) {
-              n++;
+              n ++;
               list[n] = childacc;
-              childacc = childlist[ic];
               ic ++;
+              childacc = childlist[ic];
             }
             _free(childlist);
          }
@@ -107,6 +111,8 @@ xaccGroupToList (Account *acc)
       }
    }
    list[n] = NULL;
+   LEAVE ("xaccGroupToList(): n=%d nacc=%d \n", n, nacc);
+   assert (n==nacc);
 
    return list;
 }
