@@ -74,7 +74,6 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         int w = 0, h = 0;
         const char *text;
         GdkFont *font;
-        CellStyle *cs;
         GdkColor *bg_color;
         guint32 argb;
 
@@ -123,7 +122,6 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         virt_loc.phys_col_offset = j;
 
                         cd = gnucash_style_get_cell_dimensions (style, i, j);
-                        cs = gnucash_style_get_cell_style (style, i, j);
 
                         if (header->in_resize && (j == header->resize_col))
                                 w = header->resize_col_width;
@@ -143,16 +141,16 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
                         y_offset = h - MAX(CELL_VPADDING, font->descent + 4);
 
-                        switch (cs->alignment) {
+                        switch (gnc_table_get_align (table, virt_loc)) {
                         default:
-                        case GTK_JUSTIFY_LEFT:
+                        case CELL_ALIGN_LEFT:
                                 x_offset = CELL_HPADDING;
                                 break;
-                        case GTK_JUSTIFY_RIGHT:
+                        case CELL_ALIGN_RIGHT:
                                 x_offset = w - CELL_HPADDING;
                                 x_offset -= gdk_string_measure(font, text);
                                 break;
-                        case GTK_JUSTIFY_CENTER:
+                        case CELL_ALIGN_CENTER:
                                 if (w < gdk_string_measure (font, text))
                                         x_offset = CELL_HPADDING;
                                 else {

@@ -259,7 +259,6 @@ draw_cell (GnucashGrid *grid, int block,
         Table *table = grid->sheet->table;
         const char *text;
         GdkFont *font;
-        CellStyle *cs;
         SheetBlock *sheet_block;
         VirtualLocation virt_loc;
         GdkColor *bg_color;
@@ -267,6 +266,7 @@ draw_cell (GnucashGrid *grid, int block,
         gint x_offset, y_offset;
         GdkRectangle rect;
         guint32 argb;
+        gint borders;
 
         virt_loc.vcell_loc.virt_row = block;
         virt_loc.vcell_loc.virt_col = 0;
@@ -286,24 +286,23 @@ draw_cell (GnucashGrid *grid, int block,
 
         gdk_gc_set_foreground (grid->gc, &gn_black);
 
-        cs = gnucash_style_get_cell_style (style, i, j);
-
+        borders = gnucash_sheet_get_borders (grid->sheet, virt_loc);
         /* top */
-        if (cs->border & STYLE_BORDER_TOP)
+        if (borders & STYLE_BORDER_TOP)
                 gdk_draw_line (drawable, grid->gc, x, y, x+width, y);
 
         /* right */
-        if (cs->border & STYLE_BORDER_RIGHT)
+        if (borders & STYLE_BORDER_RIGHT)
                 gdk_draw_line (drawable, grid->gc, x+width, y,
                                x+width, y+height);
 
         /* bottom */
-        if (cs->border & STYLE_BORDER_BOTTOM)
+        if (borders & STYLE_BORDER_BOTTOM)
                 gdk_draw_line (drawable, grid->gc, x+width,
                                y+height, x, y+height);
 
         /* left */
-        if (cs->border & STYLE_BORDER_LEFT)
+        if (borders & STYLE_BORDER_LEFT)
                 gdk_draw_line (drawable, grid->gc, x, y+height, x, y);
 
         /* dividing line */
@@ -347,16 +346,16 @@ draw_cell (GnucashGrid *grid, int block,
 
         y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
 
-        switch (cs->alignment) {
+        switch (gnc_table_get_align (table, virt_loc)) {
                 default:
-                case GTK_JUSTIFY_LEFT:
+                case CELL_ALIGN_LEFT:
                         x_offset = CELL_HPADDING;
                         break;
-                case GTK_JUSTIFY_RIGHT:
+                case CELL_ALIGN_RIGHT:
                         x_offset = width - CELL_HPADDING
                                 - gdk_string_measure (font, text);
                         break;
-                case GTK_JUSTIFY_CENTER:
+                case CELL_ALIGN_CENTER:
                         if (width < gdk_string_measure (font, text))
                                 x_offset = CELL_HPADDING;
                         else {

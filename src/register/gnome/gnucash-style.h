@@ -59,12 +59,6 @@ typedef struct
         gint refcount;
 } BlockDimensions;
 
-typedef struct
-{
-        GtkJustification alignment;
-        int border;
-} CellStyle;
-
 struct _SheetBlockStyle
 {
         CellBlock * cursor;
@@ -72,12 +66,9 @@ struct _SheetBlockStyle
         gint nrows;
         gint ncols;
 
-        gint reg_type;
         gint cursor_type;
 
         BlockDimensions *dimensions;
-
-        GTable *cell_styles;
 
         GdkFont *header_font;          
 
@@ -99,9 +90,6 @@ gint gnucash_style_col_is_resizable (SheetBlockStyle *style, int col);
 
 CellDimensions * gnucash_style_get_cell_dimensions (SheetBlockStyle *style,
                                                     int row, int col);
-
-CellStyle * gnucash_style_get_cell_style (SheetBlockStyle *style,
-                                          int row, int col);
 
 void gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width);
 
@@ -133,11 +121,8 @@ void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 void gnucash_style_ref (SheetBlockStyle *style);
 void gnucash_style_unref (SheetBlockStyle *style);
 
-void gnucash_style_set_cell_borders (SheetBlockStyle *style,
-                                     int row, int col, int border);
 void gnucash_style_set_register_borders (int reg_borders_new);
-void gnucash_style_set_borders (SheetBlockStyle *style, int border);
-void gnucash_sheet_set_borders (GnucashSheet *sheet, int border);
+gint gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc);
 
 void gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths);
 void gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths);

@@ -118,10 +118,8 @@ item_edit_get_pixel_coords (ItemEdit *item_edit,
 static void
 item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 {
-        GtkJustification align;
         SheetBlockStyle *style;
         GtkEditable *editable;
-        CellStyle *cs;
         Table *table;
 
         int text_len, total_width;
@@ -137,10 +135,6 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         table = item_edit->sheet->table;
 
         info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
-
-        cs = gnucash_style_get_cell_style (style,
-                                           item_edit->virt_loc.phys_row_offset,
-                                           item_edit->virt_loc.phys_col_offset);
 
         argb = gnc_table_get_bg_color (table, item_edit->virt_loc);
 
@@ -184,8 +178,6 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->bg_rect.width = wd - (2 * CELL_HPADDING);
         info->bg_rect.height = hd - (2 * CELL_VPADDING - info->font->descent);
 
-        align = cs->alignment;
-
         toggle_space = (item_edit->is_combo) ?
                 item_edit->combo_toggle.toggle_offset : 0;
 
@@ -194,15 +186,13 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->text_rect.width = wd - toggle_space;
         info->text_rect.height = hd - (2*CELL_VPADDING - info->font->descent);
 
-        switch (align) {
-                case GTK_JUSTIFY_RIGHT:
+        switch (gnc_table_get_align (table, item_edit->virt_loc)) {
+                case CELL_ALIGN_RIGHT:
                         xoffset = info->text_rect.width -
                                   (2*CELL_HPADDING + total_width);
                         if (xoffset > 0)
                                 break;
                 default:
-                case GTK_JUSTIFY_LEFT:
-                case GTK_JUSTIFY_CENTER:
                         xoffset = MIN (CELL_HPADDING,
                                        info->text_rect.width -
                                        (2*CELL_HPADDING + pre_cursor_width));
@@ -489,17 +479,11 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         editable = GTK_EDITABLE (item_edit->editor);
 
         if (changed_cells) {
-                GtkJustification align;
-                CellStyle *cs;
+                CellAlignment align;
 
-                cs = gnucash_style_get_cell_style
-                        (item_edit->style,
-                         item_edit->virt_loc.phys_row_offset,
-                         item_edit->virt_loc.phys_col_offset);
+                align = gnc_table_get_align (table, item_edit->virt_loc);
 
-                align = cs->alignment;
-
-                if (align == GTK_JUSTIFY_RIGHT)
+                if (align == CELL_ALIGN_RIGHT)
                         gtk_editable_set_position(editable, -1);
                 else
                         gtk_editable_set_position(editable, 0);

@@ -114,6 +114,8 @@ typedef struct {
 
         gint alignment;
 
+        gint cell_borders;
+
         gint editing;
 
         gint button; /* mouse button being held down */
