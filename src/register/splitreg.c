@@ -448,13 +448,16 @@ SplitRegister * xaccMallocSplitRegister (int type)
 {								\
    BasicCell *hcell;						\
    hcell = xaccMallocTextCell();				\
-   hcell->width = NAME##_CELL_W;				\
-   if (1 == reg->num_header_rows) {				\
-      xaccAddCell (header, hcell, 0, NAME##_CELL_C);		\
-   } else {							\
-      xaccAddCell (header, hcell, NAME##_CELL_R, NAME##_CELL_C);	\
-   }								\
    xaccSetBasicCellValue (hcell, reg->labels[NAME##_CELL]);	\
+								\
+   if ((0<=NAME##_CELL_R) && (0<=NAME##_CELL_C)) {		\
+      header->widths[NAME##_CELL_C] = NAME##_CELL_W;		\
+      if (1 == reg->num_header_rows) {				\
+         header->cells[0][NAME##_CELL_C] = hcell;		\
+      } else {							\
+         header->cells[NAME##_CELL_R][NAME##_CELL_C] = hcell;	\
+      }								\
+   }								\
 }
    
 /* BASIC & FANCY macros initialize cells in the register */
@@ -465,15 +468,17 @@ SplitRegister * xaccMallocSplitRegister (int type)
 
 
 #define FANCY(CN,CT,CL) {					\
-   /* reg->CN##Cell = xaccMalloc##CT##Cell(); */		\
-   reg->CN##Cell->cell.width = CL##_CELL_W;			\
-   xaccAddCell (curs, &(reg->CN##Cell->cell), CL##_CELL_R, CL##_CELL_C); \
+   if ((0<=CL##_CELL_R) && (0<=CL##_CELL_C)) {			\
+      curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
+      curs->cells [CL##_CELL_R][CL##_CELL_C] = &(reg->CN##Cell->cell);\
+   }								\
 }
 
 #define BASIC(CN,CT,CL) {					\
-   /* reg->CN##Cell = xaccMalloc##CT##Cell(); */	 	\
-   reg->CN##Cell->width = CL##_CELL_W;				\
-   xaccAddCell (curs, reg->CN##Cell, CL##_CELL_R, CL##_CELL_C);	\
+   if ((0<=CL##_CELL_R) && (0<=CL##_CELL_C)) {			\
+      curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
+      curs->cells [CL##_CELL_R][CL##_CELL_C] = reg->CN##Cell;	\
+   }								\
 }
    
 /* ============================================== */
@@ -500,10 +505,9 @@ configCursors (SplitRegister *reg)
    */
 
    reg -> nullTransCell -> input_output = XACC_CELL_ALLOW_NONE;
-   reg -> nullTransCell -> width = 1;
    xaccSetBasicCellValue (reg->nullTransCell, "");
    for (i=0; i<reg->num_cols; i++) {
-      xaccAddCell (curs, reg->nullTransCell, 0, i);
+      curs->cells[0][i] = reg->nullTransCell;
    }
 
    FANCY (date,    Date,      DATE);
@@ -524,22 +528,6 @@ configCursors (SplitRegister *reg)
    curs->active_bg_color = 0xffdddd; /* pale red */
    curs->passive_bg_color = 0xccccff; /* pale blue */
 
-   /* Need to declare the cell backgrounds as well, otherwise, 
-    * the cell default will override ehte cursor
-    */
-   reg->dateCell ->  cell.bg_color = 0xccccff;
-   reg->numCell ->        bg_color = 0xccccff;
-   reg->xfrmTransCell ->  cell.bg_color = 0xccccff;
-   reg->descCell ->  cell.bg_color = 0xccccff;
-   reg->recnCell ->       bg_color = 0xccccff;
-   reg->creditTransCell->  cell.bg_color = 0xccccff;
-   reg->debitTransCell ->  cell.bg_color = 0xccccff;
-   reg->priceTransCell ->  cell.bg_color = 0xccccff;
-   reg->valueTransCell ->  cell.bg_color = 0xccccff;
-   reg->shrsCell ->  cell.bg_color = 0xccccff;
-   reg->balanceCell->cell.bg_color = 0xccccff;
-   reg->nullTransCell ->  bg_color = 0xccccff;
-
    /* --------------------------- */
    /* define the ledger cursor that handles splits */
    /* the cursor is 1 row tall */
@@ -551,10 +539,9 @@ configCursors (SplitRegister *reg)
    */
 
    reg -> nullSplitCell -> input_output = XACC_CELL_ALLOW_NONE;
-   reg -> nullSplitCell -> width = 1;
    xaccSetBasicCellValue (reg->nullSplitCell, "");
    for (i=0; i<reg->num_cols; i++) {
-      xaccAddCell (curs, reg->nullSplitCell, 0, i);
+      curs->cells[0][i] = reg->nullSplitCell;
    }
 
    FANCY (xfrm,    Combo,     XFRM);

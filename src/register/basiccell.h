@@ -170,18 +170,20 @@ typedef unsigned int uint32;
 
 struct _BasicCell {
 
-  short  width;           /* column width, in chars, not pixels */
-  short  alignment;       /* column text alignment */
-  char   input_output;    /* zero if output-only */
-
-  /* hack alert -- may want to redesign color to used named color strings. */
+  /* cell attributes */
+  /* hack alert -- may want to redesign color to use named color strings. */
   uint32 bg_color;        /* background color, ARGB format */
   uint32 fg_color;        /* forground (text) color ARGB format */
+  short use_fg_color;     /* if 0, above is ignored */
+  short use_bg_color;     /* if 0, above is ignored */
 
   /* hack alert -- add support for e.g. bold fonts !?!?! italic fonts ?? */
 
+  /* ==================================================== */
   char * value;          /* current value */
   unsigned int changed;  /* 2^32-1 if value modified */
+
+  char   input_output;    /* zero if output-only */
 
   /* "virtual", overloaded set-value method */
   void         (*set_value)     (BasicCell *,

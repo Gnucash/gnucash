@@ -160,23 +160,6 @@ xaccDestroyCellBlock (CellBlock *arr)
 /* =================================================== */
 
 void        
-xaccAddCell (CellBlock *arr, BasicCell *cell, int row, int col) 
-{
-   if (!arr) return;
-   if (!cell) return;
-
-   /* avoid embarrasement if cell incorrectly specified */
-   if ((0 > row) || (0 > col)) return;
-   if ((row >= arr->numRows) || (col >= arr->numCols)) return;
-
-   arr->cells[row][col] = cell;
-   arr->widths[col] = cell->width;
-   arr->alignments[col] = cell->alignment;
-}
-
-/* =================================================== */
-
-void        
 xaccNextRight (CellBlock *arr, int row,      int col, 
                                int next_row, int next_col)
 {

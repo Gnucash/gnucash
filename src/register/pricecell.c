@@ -112,6 +112,7 @@ xaccInitPriceCell (PriceCell *cell)
 
    SET ( &(cell->cell), "");
 
+   cell->cell.use_fg_color = 1;
    cell->cell.modify_verify = PriceMV;
    cell->cell.set_value = PriceSetValue;
 }

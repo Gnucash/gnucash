@@ -78,6 +78,10 @@ struct _CellBlock {
   uint32 active_bg_color;
   uint32 passive_bg_color;
 
+  /* other attributes */
+  short         *widths;        /* column widths */
+  unsigned char *alignments;    /* column text alignments */
+
   short     **right_traverse_r;
   short     **right_traverse_c;
   /* the above arrays have dimension of numRows*numCols.
@@ -104,10 +108,6 @@ struct _CellBlock {
    * wants it to be.  Handy for stuff.
    */
 
-  /* private, cached utility data */
-  short         *widths;        /* column widths */
-  unsigned char *alignments;    /* column text alignments */
-
 };
 
 typedef struct _CellBlock CellBlock;
@@ -115,9 +115,6 @@ typedef struct _CellBlock CellBlock;
 CellBlock * xaccMallocCellBlock (int numrows, int numcols);
 void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 void        xaccDestroyCellBlock (CellBlock *);
-
-/* add a cell to the array */
-void        xaccAddCell (CellBlock *, BasicCell *, int row, int col);
 
 /* define next cell to traverse to */
 void        xaccNextRight (CellBlock *, int row,      int col, 
