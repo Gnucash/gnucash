@@ -1,7 +1,7 @@
 2004-02-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-file.c:
-	* Index: src/app-utils/gnc-druid-provider-desc-multifile.c:
+	* src/app-utils/gnc-druid-provider-desc-multifile.c:
 	  don't need to cast to the superclass -- just use it directly
 	* src/gnome-utils/Makefile.am:
 	  add multifile sources and glade file
@@ -15,6 +15,9 @@
 	  Register the file and multifile providers
 	* src/import-export/qif-import/gnc-druid-test.c:
 	  Add the file and multifile providers to the druid test
+
+	* src/app-utils/gnc-druid-provider-desc-edge.c:
+	  don't need to cast to the cuperclass -- just use it directly.
 
 2004-02-07  Derek Atkins  <derek@ihtfp.com>
 

@@ -59,7 +59,7 @@ gnc_druid_provider_desc_edge_new_with_data(GNCDruidProviderDescEdgeWhich which,
   if (text)
     gnc_druid_provider_desc_edge_set_text(desc, text);
   if (title)
-    gnc_druid_provider_desc_set_title(GNC_DRUID_PROVIDER_DESC(desc), title);
+    gnc_druid_provider_desc_set_title(&(desc->parent), title);
 
   return desc;
 }
