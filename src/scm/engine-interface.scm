@@ -93,7 +93,7 @@
 ;; This function take a C split and returns a representation
 ;; of it as a split-structure. Assumes the transaction is open
 ;; for editing.
-(define (gnc:split->split-scm split)
+(define (gnc:split->split-scm split use-cut-semantics?)
   (gnc:make-split-scm
    (gnc:split-get-guid split)
    (gnc:account-get-guid (gnc:split-get-account split))
@@ -219,18 +219,22 @@
 
 ;; This function takes a C transaction and returns
 ;; a representation of it as a transaction-structure.
-(define (gnc:transaction->transaction-scm trans)
+(define (gnc:transaction->transaction-scm trans use-cut-semantics?)
   (define (trans-splits i)
     (let ((split (gnc:transaction-get-split trans i)))
       (if (pointer-token-null? split)
           '()
-          (cons (gnc:split->split-scm split)
+          (cons (gnc:split->split-scm split use-cut-semantics?)
                 (trans-splits (+ i 1))))))
   (gnc:make-transaction-scm
    (gnc:transaction-get-guid trans)
    (gnc:transaction-get-date-entered trans)
-   (gnc:transaction-get-date-posted trans)
-   (gnc:transaction-get-num trans)
+   (if use-cut-semantics?
+       (gnc:transaction-get-date-posted trans)
+       #f)
+   (if use-cut-semantics?
+       (gnc:transaction-get-num trans)
+       #f)
    (gnc:transaction-get-description trans)
    (trans-splits 0)))
 

@@ -209,7 +209,8 @@ static Split * xaccSRGetTransSplit (SplitRegister *reg,
                                     PhysicalLocation phys_loc);
 static void xaccSRLoadRegEntry (SplitRegister *reg, Split *split);
 static gboolean xaccSRSaveRegEntryToSCM (SplitRegister *reg,
-                                         SCM trans_scm, SCM split_scm);
+                                         SCM trans_scm, SCM split_scm,
+                                         gboolean use_cut_semantics);
 static Transaction * xaccSRGetTrans (SplitRegister *reg,
                                      PhysicalLocation phys_loc);
 static Split * xaccSRGetCurrentTransSplit (SplitRegister *reg);
@@ -375,14 +376,14 @@ gnc_trans_split_index(Transaction *trans, Split *split)
 
 /* Uses the scheme split copying routines */
 static void
-gnc_copy_split_onto_split(Split *from, Split *to)
+gnc_copy_split_onto_split(Split *from, Split *to, gboolean use_cut_semantics)
 {
   SCM split_scm;
 
   if ((from == NULL) || (to == NULL))
     return;
 
-  split_scm = gnc_copy_split(from);
+  split_scm = gnc_copy_split(from, use_cut_semantics);
   if (split_scm == SCM_UNDEFINED)
     return;
 
@@ -392,6 +393,7 @@ gnc_copy_split_onto_split(Split *from, Split *to)
 /* Uses the scheme transaction copying routines */
 static void
 gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
+                          gboolean use_cut_semantics,
                           gboolean do_commit)
 {
   SCM trans_scm;
@@ -399,7 +401,7 @@ gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
   if ((from == NULL) || (to == NULL))
     return;
 
-  trans_scm = gnc_copy_trans(from);
+  trans_scm = gnc_copy_trans(from, use_cut_semantics);
   if (trans_scm == SCM_UNDEFINED)
     return;
 
@@ -839,7 +841,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     case CURSOR_TRANS: {
       Transaction *auto_trans;
       GList *refresh_accounts;
-      Timespec post_date;
       char *desc;
 
       /* we must be on the blank split */
@@ -877,12 +878,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
         return;
 
       xaccTransBeginEdit(trans, FALSE);
-      gnc_copy_trans_onto_trans(auto_trans, trans, FALSE);
-
-      xaccDateCellGetDate (reg->dateCell, &post_date);
-      xaccTransSetDateTS (trans, &post_date);
-
-      xaccTransSetNum (trans, reg->numCell->cell.value);
+      gnc_copy_trans_onto_trans(auto_trans, trans, FALSE, FALSE);
 
       if (info->default_source_account != NULL)
       {
@@ -1637,7 +1633,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     xaccTransAppendSplit(trans, new_split);
     xaccTransCommitEdit(trans);
 
-    gnc_copy_split_onto_split(split, new_split);
+    gnc_copy_split_onto_split(split, new_split, FALSE);
 
     return_split = new_split;
 
@@ -1660,7 +1656,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     new_trans = xaccMallocTransaction();
 
-    gnc_copy_trans_onto_trans(trans, new_trans, TRUE);
+    gnc_copy_trans_onto_trans(trans, new_trans, FALSE, TRUE);
 
     xaccTransBeginEdit(new_trans, TRUE);
     xaccTransSetDateSecs(new_trans, info->last_date_entered);
@@ -1687,8 +1683,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
 /* ======================================================== */
 
-void
-xaccSRCopyCurrent (SplitRegister *reg)
+static void
+xaccSRCopyCurrentInternal (SplitRegister *reg, gboolean use_cut_semantics)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
@@ -1726,12 +1722,13 @@ xaccSRCopyCurrent (SplitRegister *reg)
   if (cursor_class == CURSOR_SPLIT)
   {
     /* We are on a split in an expanded transaction. Just copy the split. */
-    new_item = gnc_copy_split(split);
+    new_item = gnc_copy_split(split, use_cut_semantics);
 
     if (new_item != SCM_UNDEFINED)
     {
       if (changed)
-        xaccSRSaveRegEntryToSCM(reg, SCM_UNDEFINED, new_item);
+        xaccSRSaveRegEntryToSCM(reg, SCM_UNDEFINED, new_item,
+                                use_cut_semantics);
 
       copied_leader_guid = *xaccGUIDNULL();
     }
@@ -1739,7 +1736,7 @@ xaccSRCopyCurrent (SplitRegister *reg)
   else
   {
     /* We are on a transaction row. Copy the whole transaction. */
-    new_item = gnc_copy_trans(trans);
+    new_item = gnc_copy_trans(trans, use_cut_semantics);
 
     if (new_item != SCM_UNDEFINED)
     {
@@ -1754,7 +1751,7 @@ xaccSRCopyCurrent (SplitRegister *reg)
         else
           split_scm = SCM_UNDEFINED;
 
-        xaccSRSaveRegEntryToSCM(reg, new_item, split_scm);
+        xaccSRSaveRegEntryToSCM(reg, new_item, split_scm, use_cut_semantics);
       }
 
       copied_leader_guid = *xaccAccountGetGUID(info->default_source_account);
@@ -1772,6 +1769,14 @@ xaccSRCopyCurrent (SplitRegister *reg)
   scm_protect_object(copied_item);
 
   copied_class = cursor_class;
+}
+
+/* ======================================================== */
+
+void
+xaccSRCopyCurrent (SplitRegister *reg)
+{
+  xaccSRCopyCurrentInternal (reg, FALSE);
 }
 
 /* ======================================================== */
@@ -1809,7 +1814,7 @@ xaccSRCutCurrent (SplitRegister *reg)
   if (!changed && ((split == NULL) || (split == blank_split)))
     return;
 
-  xaccSRCopyCurrent(reg);
+  xaccSRCopyCurrentInternal(reg, TRUE);
 
   if (cursor_class == CURSOR_SPLIT)
     xaccSRDeleteCurrentSplit(reg);
@@ -2235,7 +2240,8 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
  * in sync with xaccSRSaveRegEntry and xaccSRSaveChangedCells. */
 
 static gboolean
-xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
+xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
+                         gboolean use_cut_semantics)
 {
   Transaction *trans;
   guint32 changed;
@@ -2304,7 +2310,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
         double amount;
 
         temp_split = xaccMallocSplit ();
-        other_split_scm = gnc_copy_split(temp_split);
+        other_split_scm = gnc_copy_split(temp_split, use_cut_semantics);
         xaccSplitDestroy(temp_split);
 
         temp_string = gnc_split_scm_get_memo(split_scm);
