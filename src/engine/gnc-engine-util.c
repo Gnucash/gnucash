@@ -27,10 +27,10 @@
 #include "config.h"
 
 #include <ctype.h>
+#include <glib.h>
 #include <string.h>
 
 #include "gnc-engine-util.h"
-#include "gnc-engine.h"
 
 
 /********************************************************************\
@@ -177,6 +177,32 @@ gnc_stpcpy (char *dest, const char *src)
 {
   strcpy (dest, src);
   return (dest + strlen (src));
+}
+
+/********************************************************************\
+ * The engine string cache
+\********************************************************************/
+
+static GCache * gnc_string_cache = NULL;
+
+GCache*
+gnc_engine_get_string_cache(void)
+{
+    if(!gnc_string_cache) 
+    {
+        gnc_string_cache = g_cache_new(
+            (GCacheNewFunc) g_strdup, g_free,
+            (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
+            g_str_hash, g_str_equal);
+    }
+    return gnc_string_cache;
+}
+
+void
+gnc_engine_string_cache_destroy (void)
+{
+  g_cache_destroy (gnc_string_cache);
+  gnc_string_cache = NULL;
 }
 
 /************************* END OF FILE ******************************\

@@ -29,6 +29,7 @@
 #include "QueryNewP.h" 
 #include "gncObjectP.h"
 #include "gnc-engine.h"
+#include "gnc-engine-util.h"
 
 #include "TransactionP.h"
 #include "AccountP.h"
@@ -37,8 +38,6 @@
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
-GCache * gnc_string_cache = NULL;
-
 
 /* GnuCash version functions */
 unsigned int
@@ -97,19 +96,6 @@ gnc_engine_init(int argc, char ** argv)
   }
 }
 
-GCache*
-gnc_engine_get_string_cache(void)
-{
-    if(!gnc_string_cache) 
-    {
-        gnc_string_cache = g_cache_new(
-            (GCacheNewFunc) g_strdup, g_free,
-            (GCacheDupFunc) g_strdup, g_free, g_str_hash, 
-            g_str_hash, g_str_equal);
-    }
-    return gnc_string_cache;
-}
-
 /********************************************************************
  * gnc_engine_shutdown
  * shutdown backend, destroy any global data, etc.
@@ -120,8 +106,7 @@ gnc_engine_shutdown (void)
 {
   gncQueryNewShutdown ();
 
-  g_cache_destroy (gnc_string_cache);
-  gnc_string_cache = NULL;
+  gnc_engine_string_cache_destroy ();
 
   gncObjectShutdown ();
   xaccGUIDShutdown ();
