@@ -75,7 +75,7 @@ LedgerMoveCursor  (Table *table, int new_phys_row, int new_phys_col, void * clie
     * LoadRegister code into expanding the appropriate split.
     * 
     */   
-   if ((reg->type) & REG_DYNAMIC) {
+   if ((reg->type) & (REG_SINGLE_DYNAMIC|REG_DOUBLE_DYNAMIC)) {
       Split * split;
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
       reg->table->current_cursor->user_data = (void *) split;
@@ -191,39 +191,17 @@ printf ("save split is %p \n", split);
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
    }
 
-   if (MOD_TAMNT & changed) {
-      double new_amount;
-      new_amount = (reg->creditTransCell->amount) - (reg->debitTransCell->amount);
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
-      { 
-         xaccSplitSetShareAmount (split, new_amount);
-      } else {
-         xaccSplitSetValue (split, new_amount);
-      }
-   }
-
-   if (MOD_TPRIC & changed) {
-      xaccSplitSetSharePrice (split, reg->priceTransCell->amount);
-   }
-
-   if (MOD_TVALU & changed) {
-      xaccSplitSetValue (split, -(reg->valueTransCell->amount));
-   }
-
-   /* -------------------------------------------------------------- */
-
    if (MOD_ACTN & changed) 
       xaccSplitSetAction (split, reg->actionCell->cell.value);
 
+   /* -------------------------------------------------------------- */
    /* OK, the handling of transfers gets complicated because it 
     * depends on what was displayed to the user.  For a multi-line
     * display, we just reparent the indicated split, its it,
     * and that's that.  For a two-line display, we want to reparent
     * the "other" split, but only if there is one ...
     */
-   if ((MOD_XFRM | MOD_TXFRM) & changed) {
+   if (MOD_XFRM & changed) {
       Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
@@ -239,11 +217,7 @@ printf ("save split is %p \n", split);
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
          old_acc = xaccSplitGetAccount (split_to_modify);
-         if (MOD_XFRM & changed) {
-           new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
-         } else  {
-            new_acc = xaccGetAccountByName (trans, reg->xfrmTransCell->cell.value);
-         }
+         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
          xaccAccountInsertSplit (new_acc, split_to_modify);
    
          /* make sure any open windows of the old account get redrawn */
@@ -277,9 +251,8 @@ printf ("save split is %p \n", split);
    }
 
    if (MOD_VALU & changed) {
-      xaccSplitSetValue (split, reg->valueCell->amount);
+      xaccSplitSetValue (split, -(reg->valueCell->amount));
    }
-
 
    xaccTransCommitEdit (trans);
 
@@ -316,30 +289,6 @@ xaccTransGetDescription(trans));
 
 /* ======================================================== */
 
-#define LOAD_XFRM(cellname) {							\
-   char * accname=NULL;								\
-										\
-   /* Show the transfer-from account name.                               */	\
-   /* What gets displayed depends on the display format.                 */	\
-   /* For a multi-line display, show the account for each member split.  */	\
-   /* For a one or two-line display, show the other account, but only    */	\
-   /* if there are exactly two splits.                                   */	\
-   if (reg->type & REG_MULTI_LINE) {						\
-      accname = xaccAccountGetName (xaccSplitGetAccount (split));		\
-      xaccSetComboCellValue (reg->cellname, accname);				\
-   } else {									\
-      Split *s = xaccGetOtherSplit (split);					\
-      if (s) {									\
-         accname = xaccAccountGetName (xaccSplitGetAccount (s));		\
-      } else {									\
-         accname = SPLIT_STR;							\
-      }										\
-      xaccSetComboCellValue (reg->cellname, accname);				\
-   } 										\
-}
-   
-/* ======================================================== */
-
 static void
 xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 {
@@ -354,42 +303,23 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
       xaccSetBasicCellValue (reg->numCell, "");
-      xaccSetComboCellValue (reg->xfrmTransCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
       xaccSetBasicCellValue (reg->recnCell, "");
-      xaccSetDebCredCellValue (reg->debitTransCell, 
-                               reg->creditTransCell, 0.0);
-      xaccSetPriceCellValue (reg->priceTransCell, 0.0);
-      xaccSetPriceCellValue (reg->valueTransCell, 0.0);
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
       xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
    } else {
-      double amt;
       Transaction *trans = xaccSplitGetParent (split);
    
       secs = xaccTransGetDate (trans);
       xaccSetDateCellValueSecs (reg->dateCell, secs);
    
       xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
-      LOAD_XFRM (xfrmTransCell);
       xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
    
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
-   
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
-      { 
-         amt = xaccSplitGetShareAmount (split);
-      } else {
-         amt = xaccSplitGetValue (split);
-      }
-      xaccSetDebCredCellValue (reg->debitTransCell, reg->creditTransCell, amt);
-      xaccSetPriceCellValue (reg->priceTransCell, xaccSplitGetSharePrice (split));
-      xaccSetPriceCellValue (reg->valueTransCell, xaccSplitGetValue (split));
    
       /* For income and expense acounts, we have to reverse
        * the meaning of balance, since, in a dual entry
@@ -436,14 +366,34 @@ xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
 
    } else {
       double amt;
+      char * accname=NULL;
    
       xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
-      LOAD_XFRM (xfrmCell);
+
+      /* Show the transfer-from account name.                            
+       * What gets displayed depends on the display format.                
+       * For a multi-line display, show the account for each member split.  
+       * For a one or two-line display, show the other account, but only    
+       * if there are exactly two splits.                                   
+       */
+      if (reg->type & REG_MULTI_LINE) {	
+         accname = xaccAccountGetName (xaccSplitGetAccount (split));
+         xaccSetComboCellValue (reg->xfrmCell, accname);
+      } else {
+         Split *s = xaccGetOtherSplit (split);
+         if (s) {
+            accname = xaccAccountGetName (xaccSplitGetAccount (s));
+         } else {
+            accname = SPLIT_STR;
+         }
+         xaccSetComboCellValue (reg->xfrmCell, accname);
+      }
+   
       xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
    
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
-      xaccSetBasicCellValue (reg->recsCell, buff);
+      xaccSetBasicCellValue (reg->recnCell, buff);
    
       if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
           (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
@@ -499,7 +449,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    table = reg->table;
    double_line = (reg->type) & REG_DOUBLE_LINE;
    multi_line  = (reg->type) & REG_MULTI_LINE;
-   dynamic = (reg->type) & REG_DYNAMIC;
+   dynamic = (reg->type) & (REG_SINGLE_DYNAMIC|REG_DOUBLE_DYNAMIC);
 
    /* save the current cursor location; we do this by saving
     * a pointer to the currently edited split; we restore the 
