@@ -867,6 +867,28 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
  *         datafile    - the name of the user's datafile            *
  *         toplevel    - the toplevel widget                        *
 \********************************************************************/
+/*
+ * freeAcount, freeAccountGroup -- hack alert
+ * There is a nasty bug/interaction between window destruction
+ * and the freeing of account groups that is not easy to fix.
+ * The current hack is to allow a memory leak, and not free
+ * the structures. 
+ *
+ * The problem occurs when the fileMenuBarCB is called
+ * and the result requires deletion of an account or group
+ * that has open GUI windows.  Due to the two-phase destroy
+ * structure of Motif, the following ahppens:
+ * -- this CB is called
+ * -- this CB calls XtDestroyWidget
+ * -- XtDetroyWidget marks widget for destruction
+ * -- this CB exits
+ * -- XtMainLoop calls widget close callbacks
+ * -- widget close callback accesses account structures
+ * Thus, we cannot actually delete the account structs
+ * in this callback.  In fact, its not clear when we can 
+ * delete them, given the current arcitecture.  Bummer.
+ * Maybe we'll fix this in 1.1
+ */
 void
 fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   {
@@ -895,7 +917,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       datafile = NULL;
       /* destroy open windows first, before destroying the group itself */
       xaccGroupWindowDestroy (grp);
-      freeAccountGroup (grp);
+      /* freeAccountGroup (grp); hack alert -- see note at top */
       grp = mallocAccountGroup();
       grp->new = True;             /* so we have to do a "SaveAs" when
                                     * the file is first saved */
@@ -916,7 +938,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
 
         /* destroy open windows first, before destroying the group itself */
         xaccGroupWindowDestroy (grp);
-        freeAccountGroup (grp);
+        /* freeAccountGroup (grp); hack alert -- see note at top */
       
         /* load the accounts from the users datafile */
         grp = readData (datafile);
@@ -1010,7 +1032,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       
       /* destroy open windows first, before destroying the group itself */
       xaccGroupWindowDestroy (grp);
-      freeAccountGroup (grp);
+      /* freeAccountGroup (grp); hack alert -- see note at top */
       topgroup = NULL;
       XtUnmapWidget(toplevel);     /* make it disappear quickly */
       XtDestroyWidget(toplevel);
@@ -1116,7 +1138,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
              * windows, if they are open */
             xaccAccountWindowDestroy (selected_acc);
             xaccRemoveAccount (selected_acc);
-            freeAccount (selected_acc);
+            /* freeAccount (selected_acc); hack alert -- see note at top */
             selected_acc = NULL;
             refreshMainWindow();
             }
