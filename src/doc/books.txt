@@ -241,8 +241,8 @@ Plan A has been implemented in the engine.
    fails to store the kvp's in a book structure ??
 
 
-The current implementation of books is broken by the lack of support of 
-'lots' in the engine.  The problem is that for stock accounts (and
+The current implementation of books is broken because it does not
+yet make use of 'lots'.  The problem is that for stock accounts (and
 other non-currency accounts), it is not enough to supply merely the 
 opening balance.  In order to handle depreciation or cap gains properly, 
 the dates and quantities of a purchase need to be easily available.  
@@ -260,10 +260,10 @@ Open Issues
 
 *) Trimming of price database ???
 
-*) handling of multi-book reports ???  Need to work out the recommended way
+*) Handling of multi-book reports ???  Need to work out the recommended way
    of making this happen....
 
-*) Lots ...
+*) Lots are now implemented in the engine, but not yet used in this code.
    
    
 
