@@ -37,5 +37,13 @@ void gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data);
 void gnc_main_window_totd_cb (GtkWidget *widget, gpointer data);
 void gnc_main_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_main_window_exit_cb (GtkWidget *widget, gpointer data);
+void gnc_main_window_file_save_cb(GtkWidget * widget, gpointer data);
+void gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data);
+void gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data);
+void gnc_main_window_gl_cb(GtkWidget *widget, gpointer data);
+void gnc_main_window_prices_cb(GtkWidget *widget, gpointer data);
+void gnc_main_window_find_transactions_cb (GtkWidget *widget, gpointer data);
+void gnc_main_window_sched_xaction_cb (GtkWidget *widget, gpointer data);
+void gnc_main_window_commodities_cb(GtkWidget *widget, gpointer data);
 
 #endif

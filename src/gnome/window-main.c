@@ -676,13 +676,13 @@ gnc_main_window_file_close_cb(GtkWidget * widget, gpointer data)
   }
 }
 
-static void
+void
 gnc_main_window_fincalc_cb(GtkWidget *widget, gpointer data)
 {
   gnc_ui_fincalc_dialog_create();
 }
 
-static void
+void
 gnc_main_window_gl_cb(GtkWidget *widget, gpointer data)
 {
   GNCLedgerDisplay *ld;
@@ -695,19 +695,22 @@ gnc_main_window_gl_cb(GtkWidget *widget, gpointer data)
   gnc_register_raise (regData);
 }
 
-static void
-gnc_main_window_prices_cb(GtkWidget *widget, gpointer data) {
+void
+gnc_main_window_prices_cb(GtkWidget *widget, gpointer data)
+{
   gnc_prices_dialog (NULL);
 }
 
 
-static void
-gnc_main_window_find_transactions_cb (GtkWidget *widget, gpointer data) {
+void
+gnc_main_window_find_transactions_cb (GtkWidget *widget, gpointer data)
+{
   gnc_ui_find_transactions_dialog_create(NULL);
 }
 
-static void
-gnc_main_window_sched_xaction_cb (GtkWidget *widget, gpointer data) {
+void
+gnc_main_window_sched_xaction_cb (GtkWidget *widget, gpointer data)
+{
   gnc_ui_scheduled_xaction_dialog_create();
 }
 
@@ -727,7 +730,7 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
   const gchar *message = _("The GnuCash personal finance manager.\n"
                            "The GNU way to manage your money!\n"
                            "http://www.gnucash.org/");
-  const gchar *copyright = "(C) 1998-2001 Linas Vepstas";
+  const gchar *copyright = "(C) 1998-2002 Linas Vepstas";
   const gchar *authors[] = {
     "Rob Browning <rlb@cs.utexas.edu>",
     "Bill Gribble <grib@billgribble.com>",
@@ -737,6 +740,7 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
     "Christian Stimming <stimming@tuhh.de>",
     "Linas Vepstas <linas@linas.org>",
     "Joshua Sled <jsled@asynchronous.org>",
+    "Derek Atkins <derek@ihtfp.com>",
     NULL
   };
 
@@ -748,8 +752,9 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
   gnome_dialog_run_and_close (GNOME_DIALOG(about));
 }
 
-static void
-gnc_main_window_commodities_cb(GtkWidget *widget, gpointer data) {
+void
+gnc_main_window_commodities_cb(GtkWidget *widget, gpointer data)
+{
   gnc_commodities_dialog (NULL);
 }
 
