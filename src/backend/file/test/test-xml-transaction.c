@@ -80,7 +80,7 @@ find_appropriate_node(xmlNodePtr node, Split *spl)
     return NULL;
 }
 
-static gboolean
+static char *
 equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 {
     xmlNodePtr mark;
@@ -93,9 +93,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(!guid_equal(id, xaccSplitGetGUID(spl)))
             {
-                printf("ids differ\n");
                 g_free(id);
-                return FALSE;
+                return "ids differ";
             }
             g_free(id);
         }
@@ -105,9 +104,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(safe_strcmp(memo, xaccSplitGetMemo(spl)) != 0)
             {
-                printf("memos differ\n");
                 g_free(memo);
-                return FALSE;
+                return "memos differ";
             }
             g_free(memo);
         }
@@ -117,9 +115,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(rs[0] != xaccSplitGetReconcile(spl))
             {
-                printf("states differ\n");
                 g_free(rs);
-                return FALSE;
+                return "states differ";
             }
             g_free(rs);
         }
@@ -129,9 +126,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(!gnc_numeric_eq(*num, xaccSplitGetValue(spl)))
             {
-                printf("values differ\n");
                 g_free(num);
-                return FALSE;
+                return "values differ";
             }
             g_free(num);
         }
@@ -141,9 +137,8 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(!gnc_numeric_eq(*num, xaccSplitGetAmount(spl)))
             {
-                printf("quantities differ\n");
                 g_free(num);
-                return FALSE;
+                return "quantities differ";
             }
             g_free(num);
         }
@@ -154,21 +149,21 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
 
             if(!guid_equal(id, xaccAccountGetGUID(account)))
             {
-                printf("accounts differ\n");
                 g_free(id);
-                return FALSE;
+                return "accounts differ";
             }
             g_free(id);
         }
     }
-    return TRUE;
+    return NULL;
 }
 
-static gboolean
+static char *
 equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
 {
     xmlNodePtr spl_node;
     Split *spl_mark;
+    char *msg;
     int i;
 
     g_return_val_if_fail(node, FALSE);
@@ -182,16 +177,17 @@ equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
 
         if(!spl_node)
         {
-            return FALSE;
+            return "no matching split found";
         }
 
-        if(!equals_node_val_vs_split_internal(spl_node, spl_mark))
+	msg = equals_node_val_vs_split_internal(spl_node, spl_mark);
+        if(msg != NULL)
         {
-            return FALSE;
+            return msg;
         }
     }
     
-    return TRUE;
+    return NULL;
 }
 
 static gchar*
@@ -269,9 +265,10 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
         }
         else if(safe_strcmp(mark->name, "trn:splits") == 0)
         {
-            if(!equals_node_val_vs_splits(mark, trn))
+	    char *msg = equals_node_val_vs_splits (mark, trn);
+            if(msg != NULL)
             {
-                return "splits differ";
+	        return msg;
             }
         }
         else
