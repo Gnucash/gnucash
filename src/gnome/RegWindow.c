@@ -711,6 +711,7 @@ recordCB( GtkWidget *w, gpointer data)
   RegWindow *regData = (RegWindow *) data;
   
   xaccSRSaveRegEntry (regData->ledger->ledger);
+  xaccSRRedrawRegEntry (regData->ledger->ledger);
 }
 
 /********************************************************************\
