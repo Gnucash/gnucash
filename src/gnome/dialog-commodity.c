@@ -31,6 +31,7 @@
 #include "window-help.h"
 #include "FileDialog.h"
 #include "query-user.h"
+#include "gnc-engine-util.h"
 #include "gnc-ui.h"
 
 
@@ -142,7 +143,8 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
   /* build the menus of namespaces and commodities */
   namespace = 
     gnc_ui_update_namespace_picker(retval->namespace_combo, 
-                                   gnc_commodity_get_namespace(orig_sel));
+                                   gnc_commodity_get_namespace(orig_sel),
+                                   TRUE, FALSE);
   gnc_ui_update_commodity_picker(retval->commodity_combo, namespace,
                                  gnc_commodity_get_printname(orig_sel));
   g_free(namespace);
@@ -253,20 +255,21 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
   GtkWidget             * dialog = GTK_WIDGET(user_data);
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
-  
+
   char * namespace = 
     gtk_entry_get_text(GTK_ENTRY(w->namespace_entry));
-  
+
   const gnc_commodity * new_commodity = 
     gnc_ui_new_commodity_modal(namespace, dialog);
-  
+
   if(new_commodity) {
     char *namespace;
-    
+
     namespace = 
       gnc_ui_update_namespace_picker(w->namespace_combo, 
                                      gnc_commodity_get_namespace
-                                     (new_commodity));
+                                     (new_commodity),
+                                     TRUE, FALSE);
     g_free(namespace);
     gnc_ui_update_commodity_picker(w->commodity_combo,
                                    gnc_commodity_get_namespace(new_commodity),
@@ -314,27 +317,65 @@ gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
  * gnc_ui_update_namespace_picker
  ********************************************************************/
 
-
 char * 
 gnc_ui_update_namespace_picker(GtkWidget * combobox, 
-                               const char * init_string) {
+                               const char * init_string,
+                               gboolean include_iso,
+                               gboolean include_all) {
   GList * namespaces;
   char  * active;
 
   /* fetch a list of the namespaces */
-  namespaces = gnc_commodity_table_get_namespaces(gnc_engine_commodities());
+  if (!include_all)
+    namespaces = gnc_commodity_table_get_namespaces(gnc_engine_commodities());
+  else
+  {
+    namespaces = NULL;
+    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_ISO);
+    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_NASDAQ);
+    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_NYSE);
+    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_EUREX);
+    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_MUTUAL);
+    namespaces = g_list_prepend (namespaces, GNC_COMMODITY_NS_AMEX);
+  }
+
   namespaces = g_list_sort(namespaces, g_strcmp);
+
+  {
+    GList *node;
+
+    node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
+    if (node && !include_iso)
+    {
+      namespaces = g_list_remove_link (namespaces, node);
+      g_list_free_1 (node);
+    }
+
+    node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_LEGACY, g_strcmp);
+    if (node)
+    {
+      namespaces = g_list_remove_link (namespaces, node);
+      g_list_free_1 (node);
+    }
+  }
 
   /* stick them in the combobox */
   gtk_combo_set_popdown_strings(GTK_COMBO(combobox), namespaces);
+
+  if (!include_iso &&
+      safe_strcmp (init_string, GNC_COMMODITY_NS_ISO) == 0)
+    init_string = NULL;
 
   /* set the entry text */
   if(init_string) {
     active = g_strdup(init_string);
   }
-  else {
+  else if (namespaces) {
     active = g_strdup(namespaces->data);
-  }    
+  }
+  else
+    active = g_strdup("");
+
   gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combobox)->entry), active);
   g_list_free(namespaces);
 
@@ -390,7 +431,8 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
                       GTK_SIGNAL_FUNC(new_commodity_close), retval);
 
   namespace = gnc_ui_update_namespace_picker(retval->namespace_combo,
-                                             selected_namespace);
+                                             selected_namespace,
+                                             FALSE, TRUE);
   g_free(namespace);
 
   return retval;
@@ -453,6 +495,14 @@ gnc_ui_new_commodity_ok_cb(GtkButton * button,
   char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
 
   gnc_commodity * c;
+
+  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+  {
+    gnc_warning_dialog_parented(dialog,
+                                _("You may not create a new ISO4217 "
+                                  "commodity."));
+    return;
+  }
 
   if(fullname && fullname[0] &&
      namespace && namespace[0] &&

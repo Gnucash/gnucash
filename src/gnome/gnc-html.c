@@ -357,7 +357,7 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
   GList    * current;
 
   handles = g_hash_table_lookup(html->request_info, uri);
-  
+
   /* handles will be NULL for an HTTP POST transaction, where we are
    * displaying the reply data. */
   if(!handles) {
@@ -407,6 +407,8 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
       g_hash_table_remove(html->request_info, uri);
     }
   }
+
+  gnc_unset_busy_cursor (html->html);
 }
 
 
@@ -434,6 +436,7 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
   if(need_request) {
     gnc_http_start_request(html->http, uri, gnc_html_http_request_cb, 
                            (gpointer)html);
+    gnc_set_busy_cursor (html->html);
   }
 }
 
@@ -668,7 +671,6 @@ gnc_html_set_base_cb(GtkHTML * gtkhtml, const gchar * base,
 
   html->base_type     = type;
   html->base_location = location;
-  
 }
 
 

@@ -27,10 +27,6 @@ The Definitive Guide (online)</ULINK>
 </PARA>
 </LISTITEM>
 
-<LISTITEM> <PARA> <ULINK URL=
-"http://www.oasis-open.com/davenport/dbdoc/">References for the
-DocBook DTD </ULINK> </PARA> </LISTITEM>
-
 <LISTITEM> <PARA><ULINK URL=
 "http://www.oasis-open.org/docbook/documentation/index.html"> DocBook
 - Documentation</ULINK></PARA> </LISTITEM>
@@ -41,19 +37,19 @@ DocBook</ULINK></PARA>
 </LISTITEM>
 
 <LISTITEM>
-<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/over/index.html"> DocBook
+<PARA> <ULINK URL="http://ella.slis.indiana.edu/~jfieber/docbook/doc/over/index.html"> DocBook
 Overview </ULINK> </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/user/index.html"> DocBook User
+<PARA> <ULINK URL="http://ella.slis.indiana.edu/~jfieber/docbook/doc/user/index.html"> DocBook User
 Guide </ULINK> </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/ref/index.html"> DocBook
+<PARA> <ULINK URL="http://ella.slis.indiana.edu/~jfieber/docbook/doc/ref/index.html"> DocBook
 Reference Guide </ULINK> </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA> <ULINK URL="http://fallout.campusview.indiana.edu/~jfieber/docbook/doc/maint/index.html">DocBook
+<PARA> <ULINK URL="http://ella.slis.indiana.edu/~jfieber/docbook/doc/maint/index.html">DocBook
 Customization Guide </ULINK> </PARA>
 </LISTITEM>
 <LISTITEM ID="MODULARDOCBOOK">
@@ -63,17 +59,13 @@ Modular DocBook Stylesheets </ULINK> </PARA>
 <LISTITEM>
 <PARA><ULINK URL="http://nwalsh.com/docbook/edbsyn/"> The
 nwalsh.com Home Page - Extended DocBook Synopses </ULINK>
-
 </PARA>
+
 <PARA> Adds tags for DocBook to support object oriented languages like
 Java, C++, and IDL, including such new entities as classes, fields,
-methods, exceptions, and so forth...
-
+methods, exceptions, and so forth.
 </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA> <ULINK URL="http://nwalsh.com/docbook/qr/quickref.htm"> DocBook V3.0 Quick
-Reference </ULINK> </PARA>
+
 </LISTITEM>
 <LISTITEM>
 <PARA> <ULINK URL="http://nis-www.lanl.gov/~rosalia/mydocs/docbook-intro.html"> Get
@@ -86,16 +78,7 @@ of graphics, and more information on ``interesting'' crossreferencing.</PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><ULINK URL="http://lwn.net/2000/features/DocBook/">Exploring SGML DocBook </ULINK>
-
 </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA> <ULINK URL="http://itrc.uwaterloo.ca/~papresco/SgmlTools/demo.html"> DocBook
-SGMLTOOLS demo </ULINK> </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA> <ULINK URL="http://nwalsh.com/docbook/nutshell.html">DocBook in a Nutshell </ULINK></PARA>
-
 </LISTITEM>
 
 <LISTITEM> <PARA><ULINK URL=
@@ -104,10 +87,6 @@ review of DocBook: The Definitive Guide </ULINK> as written for the
 DFW Unix User's Group
 
 </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><ULINK URL="http://www.freebsd.org/%7enik/primer/index.html"> FreeBSD Documentation
-Project Primer for New Contributors (SGMLTools)</ULINK> </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><ULINK URL="http://www.sslug.dk/%7epto/docbook.html">Getting started with SGMLTOOLS and DOCBOOK</ULINK></PARA>

@@ -1,4 +1,38 @@
+2001-03-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-totd.c (totd_close_cb): increment tip on
+	close so we open with the next one
+
+	* src/scm/tip-of-the-day.scm: make current tip number a preference
+	so it is saved and restored
+
+	* src/gnome/druid-commodity.c: same as below
+
+	* src/gnome/druid-qif-import.c: same as below
+
+	* src/gnome/dialog-commodity.c: prevent user from creating
+	a new iso commodity
+
+	* src/gnome/gnc-html.c: set busy cursor on html widget
+	while request is being processed
+
+	* src/gnome/window-main.c: hierarchy not heirarchy
+
+	* src/gnome/window-help.c: specify the help window as the
+	request dialog parent
+
+	* doc/sgml/C/xacc-dochack.sgml: remove and fix broken links
+
 2001-03-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/io-gncxml-r.c (gnc_is_xml_data_file): don't print
+	a warning just because we couldn't open the file
+
+	* src/FileDialog.c (gncPostFileOpen): clear the non-iso
+	commodities before loading the new file
+
+	* src/SplitLedger.c (xaccSRGetEntryHandler): convert imbalance
+	to transaction currency fraction
 
 	* src/FileDialog.c (gncFileNew): clear the non-iso commodities
 

@@ -46,7 +46,11 @@ gnc_commodity *
 gnc_ui_new_commodity_modal(const char * default_namespace, 
                            GtkWidget * parent);
 
-char * gnc_ui_update_namespace_picker(GtkWidget * combobox, const char * sel);
+char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
+                                      const char * sel,
+                                      gboolean include_iso,
+                                      gboolean include_all);
+
 void gnc_ui_update_commodity_picker(GtkWidget * combobox, 
                                     const char * namespace,
                                     const char * sel);

@@ -360,7 +360,8 @@ gnc_is_xml_data_file(const gchar *filename)
   g_return_val_if_fail(filename, result);
 
   f = fopen(filename, "r");
-  g_return_val_if_fail(f, result);
+  if (!f)
+    return result;
 
   num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
   if(num_read == 0) goto cleanup_and_exit;

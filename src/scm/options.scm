@@ -126,6 +126,10 @@
   (let ((getter (gnc:option-getter option)))
     (getter)))
 
+(define (gnc:option-set-value option value)
+  (let ((setter (gnc:option-setter option)))
+    (setter value)))
+
 (define (gnc:option-index-get-name option index)
   (let* ((option-data-fns (gnc:option-data-fns option))
 	 (name-fn (vector-ref option-data-fns 2)))

@@ -26,26 +26,26 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <guile/gh.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
 
-#include <guile/gh.h>
-#include "druid-qif-import.h"
+#include "Account.h"
+#include "FileBox.h"
+#include "FileDialog.h"
 #include "dialog-account-picker.h"
 #include "dialog-commodity.h"
-#include "global-options.h"
-#include "window-help.h"
-#include "messages.h"
-#include "gnc-ui.h"
-
-#include "Account.h"
-#include "FileDialog.h"
-#include "FileBox.h"
 #include "dialog-utils.h"
-#include "query-user.h"
+#include "druid-qif-import.h"
+#include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
+#include "gnc-ui.h"
+#include "messages.h"
+#include "query-user.h"
+#include "window-help.h"
 
 #include <g-wrap-runtime-guile.h>
 
@@ -887,7 +887,8 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
   SCM    scm_name;
 
   if(!acct_name || acct_name[0] == 0) {
-    gnc_warning_dialog(_("You must enter an account name."));
+    gnc_warning_dialog_parented(wind->window,
+                                _("You must enter an account name."));
     return TRUE;
   }
   else {
@@ -1435,18 +1436,32 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   int  show_matches;
 
   if(!namespace || (namespace[0] == 0)) {
-    gnc_warning_dialog(_("You must enter a Type for the commodity."));
+    gnc_warning_dialog_parented(wind->window,
+                                _("You must enter a Type for the commodity."));
     return TRUE;
   }
   else if(!name || (name[0] == 0)) {
-    gnc_warning_dialog(_("You must enter a name for the commodity."));
+    gnc_warning_dialog_parented(wind->window,
+                                _("You must enter a name for the commodity."));
     return TRUE;
   }
   else if(!mnemonic || (mnemonic[0] == 0)) {
-    gnc_warning_dialog(_("You must enter an abbreviation for the commodity."));
+    gnc_warning_dialog_parented
+      (wind->window, _("You must enter an abbreviation for the commodity."));
     return TRUE;
   }
-  
+
+  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0 &&
+      !gnc_commodity_table_lookup (gnc_engine_commodities (),
+                                   namespace, mnemonic))
+  {
+    gnc_warning_dialog_parented(wind->window,
+                                _("You must enter an existing ISO4217 "
+                                  "currency or enter a different type."));
+
+    return TRUE;
+  }
+
   if(page == (g_list_last(wind->commodity_pages))->data) {
     /* it's time to import the accounts. */
     show_matches = gnc_ui_qif_import_convert(wind);
@@ -1600,8 +1615,9 @@ make_qif_druid_page(gnc_commodity * comm) {
   retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
 
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
-                                 gnc_commodity_get_namespace(comm));
-  
+                                 gnc_commodity_get_namespace(comm),
+                                 TRUE, TRUE);
+
   info_label = 
     gtk_label_new(_("Enter the full name of the commodity, "
                     "such as \"Red Hat Stock\""));

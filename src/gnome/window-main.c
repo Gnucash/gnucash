@@ -787,7 +787,7 @@ gnc_ui_xml_v2_cb(GtkWidget *widget, gpointer menuItem)
 }
 
 static void
-gnc_ui_account_heirarchy_cb(GtkWidget *widget, gpointer menuItem)
+gnc_ui_account_hierarchy_cb(GtkWidget *widget, gpointer menuItem)
 {
 }
 
@@ -1392,9 +1392,9 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       },
       {
           GNOME_APP_UI_ITEM,
-          N_("Write _Account Heirarchy"),
-          N_("Write just the account heirarchy"),
-          gnc_ui_account_heirarchy_cb, NULL, NULL,
+          N_("Write _Account Hierarchy"),
+          N_("Write just the account hierarchy"),
+          gnc_ui_account_hierarchy_cb, NULL, NULL,
           GNOME_APP_PIXMAP_NONE, NULL,
           0, 0, NULL
       },

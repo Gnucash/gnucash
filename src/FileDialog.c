@@ -170,7 +170,7 @@ gncCreateFailHandler (const char *file)
 {
   const char *format = _("The database\n"
                          "   %s\n"
-                         "doesn't seem to exist.  Do you want to create it?\n");
+                         "doesn't seem to exist. Do you want to create it?\n");
   char *message;
   gboolean result;
 
@@ -299,6 +299,8 @@ gncPostFileOpen (const char * filename)
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
   gnc_book_destroy (current_book);
   current_book = NULL;
+
+  gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
 
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a book going. */

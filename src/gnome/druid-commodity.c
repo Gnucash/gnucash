@@ -245,7 +245,7 @@ make_commodity_druid_page(gnc_commodity * comm) {
                     "national currencies, \nuse \"ISO4217\".  "
                     "Enter a new type in the box if the ones in the\n"
                     "pick list are inappropriate."));
-  
+
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
@@ -257,7 +257,8 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
-                                 gnc_commodity_get_namespace(comm));
+                                 gnc_commodity_get_namespace(comm),
+                                 TRUE, TRUE);
 
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
@@ -383,21 +384,33 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   if((strlen(new_type) == 0) ||
      (strlen(new_name) == 0) ||
      (strlen(new_mnemonic) == 0)) {
-    gnc_warning_dialog(_("You must put values for the type, name,\n"
-                         "and abbreviation of the currency/stock."));
-    
+    gnc_warning_dialog_parented(cd->window,
+                                _("You must put values for the type, name,\n"
+                                  "and abbreviation of the currency/stock."));
+
     return TRUE;
   }
-  else {
-    new_comm = g_hash_table_lookup(cd->new_map, dpage->old_name);
-    assert(new_comm);
-    
-    /* fill in the commodity structure info */
-    gnc_commodity_set_fullname(new_comm, new_name);
-    gnc_commodity_set_namespace(new_comm, new_type);
-    gnc_commodity_set_mnemonic(new_comm, new_mnemonic);
-    return FALSE;
+
+  if (safe_strcmp (new_type, GNC_COMMODITY_NS_ISO) == 0 &&
+      !gnc_commodity_table_lookup (gnc_engine_commodities (),
+                                   new_type, new_mnemonic))
+  {
+    gnc_warning_dialog_parented(cd->window,
+                                _("You must enter an existing ISO4217 "
+                                  "currency or enter a different type."));
+
+    return TRUE;
   }
+
+  new_comm = g_hash_table_lookup(cd->new_map, dpage->old_name);
+  assert(new_comm);
+    
+  /* fill in the commodity structure info */
+  gnc_commodity_set_fullname(new_comm, new_name);
+  gnc_commodity_set_namespace(new_comm, new_type);
+  gnc_commodity_set_mnemonic(new_comm, new_mnemonic);
+
+  return FALSE;
 }
 
 static void 

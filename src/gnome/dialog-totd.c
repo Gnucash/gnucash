@@ -26,12 +26,12 @@
 
 #include <gnome.h>
 
-#include "global-options.h"
-#include "query-user.h"
-#include "messages.h"
-#include "tip-of-the-day.h"
 #include "dialog-totd.h"
+#include "global-options.h"
 #include "gnc-ui.h"
+#include "messages.h"
+#include "query-user.h"
+#include "tip-of-the-day.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -85,7 +85,8 @@ static GtkWidget *
 gnc_ui_totd_dialog_create(void)
 {
   char *new_hint;
-  win = gnome_dialog_new(_("Tip of the Day:"), 
+
+  win = gnome_dialog_new(_("Tip of the Day"), 
 			 GNOME_STOCK_BUTTON_PREV, 
 			 GNOME_STOCK_BUTTON_NEXT, 
 			 GNOME_STOCK_BUTTON_CLOSE, 
@@ -170,6 +171,8 @@ totd_close_cb(GtkWidget *widget, gpointer data)
 {
   gboolean new_enabled =
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
+
+  gnc_increment_tip();
 
   gtk_widget_destroy(GTK_WIDGET(win));
   win = NULL;

@@ -30,13 +30,9 @@
 (define (non-negative-integer? value)
   (and (integer? value) (>= value 0)))
 
-(define gnc:*current-tip-number* 
-  (gnc:make-config-var
-   "Which tip we're up to"
-;  (lambda (x) (if (and (integer? x) (>= x 0)) '(x) #f))
-   (lambda (var value) (if (non-negative-integer? value) (list value) #f))
-   =
-   0))
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__tips" "current_tip_number" 0))
 
 (define gnc:*number-of-tips* 
   (gnc:make-config-var
@@ -62,35 +58,40 @@
 	(set! gnc:*tip-list* (read in-port))
         (set! gnc:*tip-list*
               (map (lambda (pair) (cadr pair)) gnc:*tip-list*))
-	(if (not (= (length gnc:*tip-list*)
-                    (gnc:config-var-value-get gnc:*current-tip-number*)))
-	    (begin 
+	(if (not (= (length gnc:*tip-list*) (gnc:current-tip-number)))
+	    (begin
 	      (gnc:config-var-value-set! gnc:*number-of-tips* #t
                                          (length gnc:*tip-list*))
 	      (if (<= (gnc:config-var-value-get gnc:*number-of-tips*)
-		      (gnc:config-var-value-get gnc:*current-tip-number*))
-		  (gnc:config-var-value-set! #t gnc:*current-tip-number 0))))
+		      (gnc:current-tip-number))
+		  (gnc:reset-tip-number))))
 	(close-port in-port)
 	#f))
 
+(define (gnc:current-tip-number)
+  (gnc:option-value (gnc:lookup-global-option "__tips" "current_tip_number")))
+
 (define (gnc:get-current-tip)
-  (_ (list-ref gnc:*tip-list*
-               (gnc:config-var-value-get gnc:*current-tip-number*))))
+  (_ (list-ref gnc:*tip-list* (gnc:current-tip-number))))
+
+(define (gnc:reset-tip-number)
+  (let ((opt (gnc:lookup-global-option "__tips" "current_tip_number")))
+    (gnc:option-set-value opt 0)))
 
 (define (gnc:increment-tip-number)
-  (let ((new-value (+ (gnc:config-var-value-get gnc:*current-tip-number*) 1)))
+  (let ((new-value (+ (gnc:current-tip-number) 1))
+        (opt (gnc:lookup-global-option "__tips" "current_tip_number")))
     (if (< new-value (gnc:config-var-value-get gnc:*number-of-tips*))
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t new-value)
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t 0))))
+	(gnc:option-set-value opt new-value)
+	(gnc:option-set-value opt 0))))
 
 (define (gnc:decrement-tip-number)
-  (let ((new-value (- (gnc:config-var-value-get gnc:*current-tip-number*) 1)))
+  (let ((new-value (- (gnc:current-tip-number) 1))
+        (opt (gnc:lookup-global-option "__tips" "current_tip_number")))
     (if (< new-value 0)
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t 
-				   (- (gnc:config-var-value-get
-                                       gnc:*number-of-tips*) 1))
-	(gnc:config-var-value-set! gnc:*current-tip-number* #t new-value))))
-				  
+	(gnc:option-set-value opt (- (gnc:config-var-value-get
+                                      gnc:*number-of-tips*) 1))
+	(gnc:option-set-value opt new-value))))
 
 (gnc:read-tips)
 

@@ -3600,6 +3600,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
   if (split == NULL)
   {
     gnc_numeric imbalance;
+    gnc_commodity *currency;
 
     trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
     imbalance = xaccTransGetImbalance (trans);
@@ -3623,6 +3624,14 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
           *conditionally_changed = TRUE;
 
         imbalance = gnc_numeric_abs (imbalance);
+
+        currency = xaccTransGetCurrency (trans);
+        if (!currency)
+          currency = gnc_locale_default_currency ();
+
+        imbalance = gnc_numeric_convert (imbalance,
+                                         gnc_commodity_get_fraction (currency),
+                                         GNC_RND_ROUND);
 
         return xaccPrintAmount (imbalance,
                                 gnc_split_value_print_info (split, FALSE));

@@ -42,7 +42,7 @@
   (gnc:depend "report/report-list.scm")
   (gnc:depend "qif-import/qif-import.scm")
   (gnc:depend "printing/print-check.scm")
-  (gnc:depend "src/price-quotes.scm")
+  (gnc:depend "price-quotes.scm")
 
   ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))

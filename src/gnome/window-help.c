@@ -242,9 +242,9 @@ gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data) {
   char            * label = NULL;
 
   GtkWidget * dlg = gnome_request_dialog(FALSE, 
-                                         _("Enter URI:"), "", 250,
+                                         _("Enter URI to load:"), "", 250,
                                          &goto_string_cb, &url,
-                                         NULL);
+                                         GTK_WINDOW (help->toplevel));
   retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
   
   if((retval == 0) && url && (strlen(url) > 0)) {
