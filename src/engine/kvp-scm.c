@@ -38,6 +38,11 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         GUID tmpguid = gnc_scm2guid(val);
         return kvp_value_new_guid(&tmpguid);
     }
+    else if(gnc_timepair_p(val))
+    {
+        Timespec ts = gnc_timepair2timespec(val);
+	return kvp_value_new_timespec(ts);
+    }
     else if(gh_string_p(val))
     {
         char *newstr;
@@ -76,6 +81,9 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
         return gnc_guid2scm(*tempguid);
     }
         break;
+    case KVP_TYPE_TIMESPEC:
+        return gnc_timespec2timepair(kvp_value_get_timespec(val));
+	break;
 
     /* FIXME: handle types below */
     case KVP_TYPE_BINARY:

@@ -28,7 +28,7 @@
 
 #include "gnc-numeric.h"
 #include "guid.h"
-
+#include "date.h"
 
 /* a kvp_frame is a set of associations between character strings
  * (keys) and kvp_value structures.  A kvp_value is a union with
@@ -48,6 +48,7 @@ typedef enum {
   KVP_TYPE_NUMERIC,
   KVP_TYPE_STRING,
   KVP_TYPE_GUID,
+  KVP_TYPE_TIMESPEC,
   KVP_TYPE_BINARY, 
   KVP_TYPE_GLIST,
   KVP_TYPE_FRAME
@@ -152,6 +153,7 @@ kvp_value   * kvp_value_new_double(double value);
 kvp_value   * kvp_value_new_gnc_numeric(gnc_numeric value);
 kvp_value   * kvp_value_new_string(const char * value);
 kvp_value   * kvp_value_new_guid(const GUID * guid);
+kvp_value   * kvp_value_new_timespec(Timespec timespec);
 kvp_value   * kvp_value_new_binary(const void * data, guint64 datasize);
 kvp_value   * kvp_value_new_glist(const GList * value);
 kvp_value   * kvp_value_new_frame(const kvp_frame * value);
@@ -173,6 +175,7 @@ void        * kvp_value_get_binary(const kvp_value * value,
                                    guint64 * size_return); 
 GList       * kvp_value_get_glist(const kvp_value * value);
 kvp_frame   * kvp_value_get_frame(const kvp_value * value);
+Timespec    kvp_value_get_timespec(const kvp_value * value);
 
 gchar* kvp_value_to_string(const kvp_value *val);
 

@@ -252,6 +252,8 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
 
     if (kvp_type == KVP_TYPE_STRING)
       val_node = xmlNewTextChild(node, NULL, tag, kvp_value_get_string(val));
+    else if (kvp_type == KVP_TYPE_TIMESPEC)
+      val_node = NULL;
     else
       val_node = xmlNewTextChild(node, NULL, tag, NULL);
 
@@ -278,6 +280,15 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         add_text_to_node(val_node,"guid",
                          guid_to_string(kvp_value_get_guid(val)));
         break;
+    case KVP_TYPE_TIMESPEC:
+    {
+      Timespec ts = kvp_value_get_timespec (val);
+
+      val_node = timespec_to_dom_tree (tag, &ts);
+      xmlSetProp (val_node, "type", "timespec");
+      xmlAddChild (node, val_node);
+    }
+    break;
     case KVP_TYPE_BINARY:
     {
         guint64 size;

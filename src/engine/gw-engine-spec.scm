@@ -488,6 +488,7 @@
     (gw:enum-add-value! wt "KVP_TYPE_NUMERIC" 'kvp-type-numeric)
     (gw:enum-add-value! wt "KVP_TYPE_STRING" 'kvp-type-string)
     (gw:enum-add-value! wt "KVP_TYPE_GUID" 'kvp-type-guid)
+    (gw:enum-add-value! wt "KVP_TYPE_TIMESPEC" 'kvp-type-timespec)
     (gw:enum-add-value! wt "KVP_TYPE_BINARY" 'kvp-type-binary)
     (gw:enum-add-value! wt "KVP_TYPE_GLIST" 'kvp-type-glist)
     (gw:enum-add-value! wt "KVP_TYPE_FRAME" 'kvp-type-frame)

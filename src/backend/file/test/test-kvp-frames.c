@@ -42,16 +42,19 @@ test_kvp_copy_compare(int run,
 
     test_frame2 = kvp_frame_copy(test_frame1);
 
-    do_test_args(test_frame2 != NULL, "kvp_frame_copy", __FILE__, __LINE__, "run=%d", run);
+    do_test_args(test_frame2 != NULL, "kvp_frame_copy",
+                 __FILE__, __LINE__, "run=%d", run);
 
     if(kvp_frame_compare(test_frame1, test_frame2) == 0)
     {
-        success_args("kvp_frame_copy->kvp_frame_compare", __FILE__, __LINE__, "run=%d",run);
+        success_args("kvp_frame_copy->kvp_frame_compare",
+                     __FILE__, __LINE__, "run=%d",run);
     }
     else
     {
         gchar *tmp;
-        failure_args("kvp_frame_copy->kvp_frame_compare", __FILE__, __LINE__, "run=%d", run);
+        failure_args("kvp_frame_copy->kvp_frame_compare",
+                     __FILE__, __LINE__, "run=%d", run);
         tmp =  kvp_frame_to_string(test_frame1);
         printf("Frame1 is %s\n", tmp);
         g_free(tmp);
@@ -75,12 +78,14 @@ test_kvp_copy_get_slot(int run,
     test_val2 = kvp_frame_get_slot(test_frame2, test_key);
     if(kvp_value_compare(test_val1, test_val2) == 0)
     {
-        success_args("kvp_frame_copy->kvp_frame_get_slot", __FILE__, __LINE__, "run=%d", run);
+        success_args("kvp_frame_copy->kvp_frame_get_slot",
+                     __FILE__, __LINE__, "run=%d", run);
     }
     else
     {
         gchar *tmp;
-        failure_args("kvp_frame_copy->kvp_frame_get_slot", __FILE__, __LINE__, "run=%d", run);
+        failure_args("kvp_frame_copy->kvp_frame_get_slot",
+                     __FILE__, __LINE__, "run=%d", run);
         tmp =  kvp_frame_to_string(test_frame1);
         printf("Frame1 is %s\n", tmp);
         g_free(tmp);

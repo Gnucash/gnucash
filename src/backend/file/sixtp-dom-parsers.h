@@ -60,6 +60,7 @@ kvp_value* dom_tree_to_double_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_numeric_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_string_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_guid_kvp_value(xmlNodePtr node);
+kvp_value* dom_tree_to_timespec_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_binary_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_list_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);

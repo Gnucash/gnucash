@@ -186,6 +186,21 @@ dom_tree_to_guid_kvp_value(xmlNodePtr node)
     return ret;
 }
 
+kvp_value*
+dom_tree_to_timespec_kvp_value (xmlNodePtr node)
+{
+  Timespec * ts;
+  kvp_value * ret = NULL;
+
+  ts = dom_tree_to_timespec (node);
+  if (ts)
+    ret = kvp_value_new_timespec (*ts);
+
+  g_free (ts);
+    
+  return ret;
+}
+
 gboolean
 string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 {
@@ -306,6 +321,7 @@ struct kvp_val_converter val_converters[] = {
     { "numeric", dom_tree_to_numeric_kvp_value },
     { "string", dom_tree_to_string_kvp_value },
     { "guid", dom_tree_to_guid_kvp_value },
+    { "timespec", dom_tree_to_timespec_kvp_value },
     { "binary", dom_tree_to_binary_kvp_value },
     { "list", dom_tree_to_list_kvp_value },
     { "frame", dom_tree_to_frame_kvp_value },

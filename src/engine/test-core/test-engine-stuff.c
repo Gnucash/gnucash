@@ -447,6 +447,13 @@ get_random_kvp_value_depth (int type, gint depth)
     }
         break;
 
+    case KVP_TYPE_TIMESPEC:
+    {
+        Timespec *ts = get_random_timespec();
+        return kvp_value_new_timespec (*ts);
+    }
+	break;
+    
     case KVP_TYPE_BINARY:
     {
         bin_data *tmp_data;

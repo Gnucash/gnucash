@@ -57,6 +57,7 @@ struct _kvp_value {
     gnc_numeric numeric;
     gchar *str;
     GUID *guid;
+    Timespec timespec;
     kvp_value_binary_data binary;
     GList *list;
     kvp_frame *frame;    
@@ -623,6 +624,14 @@ kvp_value_new_guid(const GUID * value) {
 }  
 
 kvp_value *
+kvp_value_new_timespec(Timespec value) {
+  kvp_value * retval = g_new0(kvp_value, 1);
+  retval->type       = KVP_TYPE_TIMESPEC;
+  retval->value.timespec = value;
+  return retval;
+}  
+
+kvp_value *
 kvp_value_new_binary(const void * value, guint64 datasize) {
   kvp_value * retval = g_new0(kvp_value, 1);
   retval->type = KVP_TYPE_BINARY;
@@ -756,6 +765,16 @@ kvp_value_get_guid(const kvp_value * value) {
   }
 }
 
+Timespec
+kvp_value_get_timespec(const kvp_value * value) {
+  Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
+  if (!value) return ts;
+  if (value->type == KVP_TYPE_TIMESPEC)
+    return value->value.timespec;
+  else
+    return ts;
+}
+
 void *
 kvp_value_get_binary(const kvp_value * value, guint64 * size_return) {
   if (!value)
@@ -822,6 +841,9 @@ kvp_value_copy(const kvp_value * value) {
   case KVP_TYPE_GUID:
     return kvp_value_new_guid(value->value.guid);
     break;
+  case KVP_TYPE_TIMESPEC:
+    return kvp_value_new_timespec(value->value.timespec);
+    break;
   case KVP_TYPE_BINARY:
     return kvp_value_new_binary(value->value.binary.data,
                                 value->value.binary.datasize);
@@ -886,6 +908,9 @@ kvp_value_compare(const kvp_value * kva, const kvp_value * kvb) {
     break;
   case KVP_TYPE_GUID:
     return guid_compare(kva->value.guid, kvb->value.guid);
+    break;
+  case KVP_TYPE_TIMESPEC:
+    return timespec_cmp(&(kva->value.timespec), &(kvb->value.timespec));
     break;
   case KVP_TYPE_BINARY:
     /* I don't know that this is a good compare. Ab is bigger than Acef.
@@ -1036,6 +1061,14 @@ kvp_value_to_string(const kvp_value *val)
         g_free(tmp1);
         return tmp2;
         break;
+
+    case KVP_TYPE_TIMESPEC:
+        tmp1 = g_new0 (char, 40);
+	gnc_timespec_to_iso8601_buff (kvp_value_get_timespec (val), tmp1);
+	tmp2 = g_strdup_printf("KVP_VALUE_TIMESPEC(%s)", tmp1);
+	g_free(tmp1);
+	return tmp2;
+	break;
 
     case KVP_TYPE_BINARY:
     {

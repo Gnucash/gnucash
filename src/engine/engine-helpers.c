@@ -575,6 +575,10 @@ gnc_kvp_value2scm (kvp_value *value)
       scm = gnc_guid2scm (*kvp_value_get_guid (value));
       break;
 
+    case KVP_TYPE_TIMESPEC:
+      scm = gnc_timespec2timepair (kvp_value_get_timespec (value));
+      break;
+
     case KVP_TYPE_BINARY:
       scm = SCM_BOOL_F;
       break;
@@ -686,6 +690,12 @@ gnc_scm2kvp_value (SCM value_scm)
     case KVP_TYPE_GUID: {
       GUID guid = gnc_scm2guid (val_scm);
       value = kvp_value_new_guid (&guid);
+      break;
+    }
+
+    case KVP_TYPE_TIMESPEC: {
+      Timespec ts = gnc_timepair2timespec (val_scm);
+      value = kvp_value_new_timespec(ts);
       break;
     }
 
