@@ -166,6 +166,9 @@ if (@filename) {
   push(@args, '-manifest', "$gnc_home/tmp.MANIFEST");
 }
 elsif (defined($manifest)) {
+  if (not $manifest =~ m#/#) {
+    $manifest = "$cwd/$manifest";
+  }
   push(@args, '-manifest', "$manifest");
 }
 else {
