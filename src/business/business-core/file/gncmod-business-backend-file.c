@@ -11,6 +11,7 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "gnc-bill-term-xml-v2.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-employee-xml-v2.h"
 #include "gnc-entry-xml-v2.h"
@@ -57,6 +58,7 @@ libgncmod_business_backend_file_LTX_gnc_module_init(int refcount)
 
   if (refcount == 0) {
     /* Initialize our pointers into the backend subsystem */
+    gnc_billterm_xml_initialize ();
     gnc_customer_xml_initialize ();
     gnc_employee_xml_initialize ();
     gnc_entry_xml_initialize ();

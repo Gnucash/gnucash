@@ -1,3 +1,17 @@
+2002-06-21  Derek Atkins   <derek@ihtfp.com>
+
+	* .../business-core/gncBillTerm*.[ch]: Add Billing Term objects.
+	Currently there are "Days" and "Proximo" billing terms available.
+
+	* .../business-core/file/gnc-bill-term*: XML Backend storage for
+	Billing Terms.
+
+	* .../business-gnome/dialog-bill-terms.[ch]: Dialog to create,
+	view, and edit Billing Terms.
+
+	* .../business-gnome/business-prefs.scm: move the business
+	preferences (default option creation) to its own scheme file.
+	
 2002-06-20  David Hampton  <hampton@employees.org>
 
 	* src/engine/Transaction.[ch]: New function

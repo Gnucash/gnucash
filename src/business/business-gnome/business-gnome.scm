@@ -178,6 +178,13 @@
   ;;(gnc:add-extension new)
 
   (gnc:add-extension
+   (gnc:make-menu-item (N_ "Billing Terms")
+		       (N_ "View and Edit the available Billing Terms")
+		       (list top-level "")
+		       (lambda ()
+			 (gnc:billterms-new (gnc:get-current-book)))))
+
+  (gnc:add-extension
    (gnc:make-menu-item (N_ "Tax Tables")
 		       (N_ "View and Edit the available Tax Tables")
 		       (list top-level "")
@@ -327,20 +334,5 @@
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-business-items)
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-test)
 
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gui" "invoice_reg_width" 0))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "Business") (N_ "Number of Rows")
-  "a" (N_ "Default number of register rows to display in Invoices.")
-   10.0 ;; default
-    1.0 ;; lower bound
-  200.0 ;; upper bound
-    0.0 ;; number of decimals
-    1.0 ;; step size
-  ))
-
-
 (load-from-path "business-options.scm")
+(load-from-path "business-prefs.scm")

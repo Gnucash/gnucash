@@ -28,6 +28,7 @@ AM_CFLAGS = \
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
   business-utils.c \
+  dialog-billterms.c \
   dialog-customer.c \
   dialog-date-close.c \
   dialog-employee.c \
@@ -41,6 +42,7 @@ libgncmod_business_gnome_la_SOURCES = \
 
 noinst_HEADERS = \
   business-utils.h \
+  dialog-billterms.h \
   dialog-customer.h \
   dialog-date-close.h \
   dialog-employee.h \
@@ -74,7 +76,8 @@ gncscmmod_DATA =
 # For regular scheme definitions
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
-  business-options.scm
+  business-options.scm \
+  business-prefs.scm
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-gnome.scm

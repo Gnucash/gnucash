@@ -13,6 +13,7 @@ AM_CFLAGS = \
 libgncmod_business_core_la_SOURCES = \
   businessmod-core.c \
   gncAddress.c \
+  gncBillTerm.c \
   gncBusiness.c \
   gncCustomer.c \
   gncEmployee.c \
@@ -27,6 +28,8 @@ libgncmod_business_core_la_SOURCES = \
 noinst_HEADERS = \
   gncAddress.h \
   gncAddressP.h \
+  gncBillTerm.h \
+  gncBillTermP.h \
   gncBusiness.h \
   gncBusinessP.h \
   gncCustomer.h \

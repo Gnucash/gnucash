@@ -32,6 +32,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <dialog-billterms.h>\n"
       "#include <dialog-customer.h>\n"
       "#include <dialog-employee.h>\n"
       "#include <dialog-invoice.h>\n"
@@ -48,6 +49,18 @@
          '()
          (gw:inline-scheme '(use-modules (gnucash business-gnome))))))
   
+  ;;
+  ;; dialog-billterms.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:billterms-new
+   '<gw:void>
+   "gnc_ui_billterms_window_new"
+   '((<gnc:Book*> book))
+   "Dialog: view and edit the available Billing Terms.")
+
   ;;
   ;; dialog-customer.h
   ;;

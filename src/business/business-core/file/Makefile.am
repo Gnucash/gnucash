@@ -13,6 +13,7 @@ AM_CFLAGS = \
 libgncmod_business_backend_file_la_SOURCES = \
   gncmod-business-backend-file.c \
   gnc-address-xml-v2.c \
+  gnc-bill-term-xml-v2.c \
   gnc-customer-xml-v2.c \
   gnc-employee-xml-v2.c \
   gnc-entry-xml-v2.c \
@@ -25,6 +26,7 @@ libgncmod_business_backend_file_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-address-xml-v2.h \
+  gnc-bill-term-xml-v2.h \
   gnc-customer-xml-v2.h \
   gnc-employee-xml-v2.h \
   gnc-entry-xml-v2.h \
