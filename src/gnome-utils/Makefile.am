@@ -9,7 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   ${GUILE_INCS} \
-  ${GUPPI_CFLAGS} \
+  ${LIBGUPPI_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
@@ -89,7 +89,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
-  ${GUPPI_LIBS} \
+  ${LIBGUPPI_LIBS} \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
