@@ -32,17 +32,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "Account.h"
 #include "EuroUtils.h"
-#include "FileDialog.h"
-#include "Group.h"
 #include "global-options.h"
-#include "gnc-ui-util.h"
+#include "gnc-book.h"
 #include "gnc-common.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-module.h"
+#include "gnc-ui-util.h"
 #include "messages.h"
 
 
@@ -267,7 +265,9 @@ gnc_account_get_balance_in_currency (Account *account,
       gnc_commodity_equiv (currency, commodity))
     return balance;
 
-  book = gncGetCurrentBook ();
+  book = xaccGroupGetBook (xaccAccountGetRoot (account));
+  g_return_val_if_fail (book != NULL, gnc_numeric_zero ());
+
   pdb = gnc_book_get_pricedb (book);
 
   price = gnc_pricedb_lookup_latest (pdb, commodity, currency);
@@ -734,7 +734,7 @@ gnc_account_create_opening_balance (Account *account,
   g_return_val_if_fail (account != NULL, FALSE);
 
   equity_account =
-    gnc_find_or_create_equity_account (xaccGetAccountRoot (account),
+    gnc_find_or_create_equity_account (xaccAccountGetRoot (account),
                                        EQUITY_OPENING_BALANCE,
                                        xaccAccountGetCommodity (account));
   if (!equity_account)

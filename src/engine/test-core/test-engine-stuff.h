@@ -9,13 +9,10 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "gnc-commodity.h"
-#include "gnc-pricedb.h"
-#include "guid.h"
-#include "kvp_frame.h"
-#include "date.h"
-#include "Account.h"
+#include "Group.h"
 #include "Query.h"
+#include "date.h"
+#include "gnc-pricedb.h"
 
 Timespec* get_random_timespec(void);
 kvp_value* get_random_kvp_value(int type);
@@ -36,6 +33,7 @@ GUID* get_random_guid(void);
 GList* get_random_glist(void);
 
 GNCPrice * get_random_price(void);
+AccountGroup * get_random_group(void);
 Account* get_random_account(void);
 Split* get_random_split(gnc_numeric num);
 Transaction* get_random_transaction(void);

@@ -27,7 +27,7 @@ noinst_HEADERS = \
   gnc-gettext-util.h \
   gnc-helpers.h \
   gnc-ui-util.h \
-  guile-util.h 
+  guile-util.h
 
 libgncmod_app_utils_la_LDFLAGS = -module
 

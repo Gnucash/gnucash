@@ -32,7 +32,6 @@
 #include "date.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
-#include "messages.h"
 
 #include <libguile.h>
 #include <string.h>

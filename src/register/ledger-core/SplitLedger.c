@@ -3918,7 +3918,7 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
   AccountGroup *group;
   ComboCell *cell;
 
-  group = xaccGetAccountRoot(base_account);
+  group = xaccAccountGetRoot(base_account);
   if (group == NULL)
     group = gncGetCurrentGroup();
 

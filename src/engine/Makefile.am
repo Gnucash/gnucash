@@ -66,6 +66,7 @@ noinst_HEADERS = \
   kvp_frame.h \
   kvp-scm.h \
   md5.h \
+  messages.h \
   FreqSpec.h \
   SchedXaction.h
 

@@ -569,7 +569,7 @@ xaccClearMark (Account *acc, short val)
   AccountGroup *topgrp;
 
   if (!acc) return;
-  topgrp = xaccGetAccountRoot (acc);
+  topgrp = xaccAccountGetRoot (acc);
 
   if (topgrp)
   {

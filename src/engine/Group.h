@@ -158,7 +158,7 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
  * The xaccGetAccountRoot () subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
-AccountGroup * xaccGetAccountRoot (Account *account);
+AccountGroup * xaccAccountGetRoot (Account *account);
 
 /* The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.

@@ -1,5 +1,22 @@
 2001-08-20  Dave Peticolas  <dave@krondo.com>
 
+	* others: xaccGetAccountRoot->xaccAccountGetRoot
+
+	* src/engine/messages.h: move this file here
+
+	* src/engine/test/test-group-vs-book.c: new file. test group/book
+	references
+
+	* src/engine/test-core/test-engine-stuff.c (get_random_group): new
+	func
+
+	* src/engine/gnc-book.c: (gnc_book_set_group): update group's book
+
+	* src/engine/Group.c (xaccGroupGetBook): new func
+	(xaccGroupSetBook): new func
+
+	* src/engine/GroupP.h: add a reference to the group's book
+
 	* src/app-utils/global-options.[ch]: cleanup
 
 	* src/app-utils/option-util.[ch]: cleanup

@@ -22,7 +22,6 @@
 \********************************************************************/
 
 #include "config.h"
-#include "messages.h"
 
 #include <guile/gh.h>
 #include <string.h>

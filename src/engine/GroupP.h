@@ -33,14 +33,15 @@
  *
  */
 
-#ifndef XACC_ACCOUNT_GROUP_P_H
-#define XACC_ACCOUNT_GROUP_P_H
+#ifndef XACC_GROUP_P_H
+#define XACC_GROUP_P_H
 
 #include "config.h"
 
 #include "BackendP.h"
 #include "GNCId.h"
 #include "Transaction.h"
+#include "gnc-book.h"
 #include "gnc-numeric.h"
 
 
@@ -50,11 +51,16 @@ struct _account_group
   /* The flags: */
   unsigned int saved : 1;
 
-  Account *parent;                 /* back-pointer to parent */
+  Account *parent;         /* back-pointer to parent */
 
-  GList *accounts;                 /* list of account pointers */
+  GList *accounts;         /* list of account pointers */
 
-  Backend *backend;                /* persistant storage backend */
+  Backend *backend;        /* persistant storage backend */
+
+  GNCBook *book;           /* The book which this group belongs to */
 };
 
-#endif /* XACC_ACCOUNT_GROUP_P_H */
+
+void xaccGroupSetBook (AccountGroup *group, GNCBook *book);
+
+#endif

@@ -102,7 +102,7 @@ xaccAccountScrubOrphans (Account *acc)
     Split *split = node->data;
 
     xaccTransScrubOrphans (xaccSplitGetParent (split),
-                           xaccGetAccountRoot (acc));
+                           xaccAccountGetRoot (acc));
   }
 }
 
@@ -285,7 +285,7 @@ xaccAccountScrubImbalance (Account *acc)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    xaccTransScrubImbalance (trans, xaccGetAccountRoot (acc), NULL);
+    xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
   }
 }
 

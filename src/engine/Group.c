@@ -60,6 +60,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->accounts    = NULL;
 
   grp->backend     = NULL;
+  grp->book        = NULL;
 }
 
 /********************************************************************\
@@ -111,7 +112,7 @@ xaccGroupEqual(AccountGroup *ga,
   if (nb) return(FALSE);
 
   return(TRUE);
-} 
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -168,6 +169,33 @@ xaccGroupMarkDoFree (AccountGroup *grp)
     account->do_free = TRUE;
 
     xaccGroupMarkDoFree (account->children); 
+  }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+GNCBook *
+xaccGroupGetBook (AccountGroup *group)
+{
+  if (!group) return NULL;
+  return group->book;
+}
+
+void
+xaccGroupSetBook (AccountGroup *group, GNCBook *book)
+{
+  GList *node;
+
+  if (!group) return;
+
+  group->book = book;
+
+  for (node = group->accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    xaccGroupSetBook (account->children, book); 
   }
 }
 
@@ -338,7 +366,7 @@ xaccGroupGetAccountList (AccountGroup *grp)
 \********************************************************************/
 
 AccountGroup *
-xaccGetAccountRoot (Account * acc) 
+xaccAccountGetRoot (Account * acc) 
 {
   AccountGroup * grp;
   AccountGroup * root = NULL;
@@ -493,7 +521,7 @@ xaccGetPeerAccountFromName (Account *acc, const char * name)
   if (!name) return NULL;
 
   /* first, find the root of the account group structure */
-  root = xaccGetAccountRoot (acc);
+  root = xaccAccountGetRoot (acc);
 
   /* now search all accounts hanging off the root */
   peer_acc = xaccGetAccountFromName (root, name);
@@ -516,7 +544,7 @@ xaccGetPeerAccountFromFullName (Account *acc, const char * name,
   if (!name) return NULL;
 
   /* first, find the root of the account group structure */
-  root = xaccGetAccountRoot (acc);
+  root = xaccAccountGetRoot (acc);
 
   /* now search all acounts hanging off the root */
   peer_acc = xaccGetAccountFromFullName (root, name, separator);
@@ -581,6 +609,8 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
+  xaccGroupSetBook (acc->children, NULL);
+
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
@@ -590,11 +620,14 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 void
 xaccAccountInsertSubAccount (Account *adult, Account *child)
 {
-  if (!adult) return;
+  if (!adult || !child) return;
 
   /* if a container for the children doesn't yet exist, add it */
   if (adult->children == NULL)
+  {
     adult->children = xaccMallocAccountGroup ();
+    xaccGroupSetBook (adult->children, xaccGroupGetBook (adult->parent));
+  }
 
   /* set back-pointer to parent */
   adult->children->parent = adult;
@@ -647,6 +680,8 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   }
 
   grp->saved = 0;
+
+  xaccGroupSetBook (acc->children, xaccGroupGetBook (grp));
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }

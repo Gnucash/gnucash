@@ -905,7 +905,7 @@ pgend_trans_commit_edit (Backend * bend,
    {
       Split * s = xaccTransGetSplit (trans, 0);
       Account *acc = xaccSplitGetAccount (s);
-      AccountGroup *top = xaccGetAccountRoot (acc);
+      AccountGroup *top = xaccAccountGetRoot (acc);
       xaccGroupMarkSaved (top);
    }
 

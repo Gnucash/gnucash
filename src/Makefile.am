@@ -81,8 +81,7 @@ noinst_HEADERS = \
   RecnWindow.h \
   file-history.h \
   gnc-ui.h \
-  gnc-ui-common.h \
-  messages.h
+  gnc-ui-common.h
 
 EXTRA_DIST = \
   .cvsignore \

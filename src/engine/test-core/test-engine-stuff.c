@@ -280,6 +280,60 @@ set_account_random_string(Account* act,
     }
 }
 
+static void
+account_add_subaccounts (Account *account, int depth)
+{
+  int num_accounts;
+
+  if (depth == 0)
+    return;
+
+  num_accounts = get_random_int_in_range (1, 10);
+
+  while (num_accounts-- > 0)
+  {
+    Account *sub = get_random_account ();
+
+    xaccAccountInsertSubAccount (account, sub);
+
+    account_add_subaccounts (sub, depth - 1);
+  }
+}
+
+static AccountGroup *
+get_random_group_depth(int depth)
+{
+  AccountGroup *group;
+  int num_accounts;
+
+  if (depth == 0)
+    return NULL;
+
+  group = xaccMallocAccountGroup ();
+
+  num_accounts = get_random_int_in_range (1, 10);
+  while (num_accounts-- > 0)
+  {
+    Account *account = get_random_account ();
+
+    xaccGroupInsertAccount (group, account);
+
+    account_add_subaccounts (account, depth - 1);
+  }
+
+  return group;
+}
+
+AccountGroup *
+get_random_group(void)
+{
+  int depth;
+
+  depth = get_random_int_in_range (1, 4);
+
+  return get_random_group_depth (depth);
+}
+
 Account*
 get_random_account(void)
 {

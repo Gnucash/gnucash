@@ -125,6 +125,8 @@ AccountGroup *gnc_book_get_group (GNCBook *book);
 void gnc_book_set_group(GNCBook *book, AccountGroup *group);
 GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
 
+GNCBook * xaccGroupGetBook (AccountGroup *group);
+
 guint gnc_book_count_transactions(GNCBook *book);
 
 /*

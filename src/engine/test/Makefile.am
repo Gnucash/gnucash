@@ -22,6 +22,7 @@ TESTS = \
   test-create-account \
   test-commodities \
   test-freq-spec \
+  test-group-vs-book \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account
@@ -35,6 +36,7 @@ TESTS_ENVIRONMENT = \
 bin_PROGRAMS = \
   test-commodities \
   test-freq-spec \
+  test-group-vs-book \
   test-load-engine \
   test-resolve-file-path \
   test-scm-query \

@@ -67,7 +67,7 @@ main(int argc, char **argv)
     if(!guid_equal(xaccAccountGetGUID(act1), xaccSplitGetAccountGUID(spl)))
     {
 	 failure("xaccSplitGetAccountGUID "
-                "after xaccSplitSetAccount failed");
+                 "after xaccSplitSetAccount failed");
         return(get_rv());
     }
 

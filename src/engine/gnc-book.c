@@ -46,7 +46,7 @@
 
 #include "Backend.h"
 #include "BackendP.h"
-#include "Group.h"
+#include "GroupP.h"
 #include "SchedXaction.h"
 #include "TransLog.h"
 #include "gnc-engine-util.h"
@@ -162,10 +162,16 @@ gnc_book_get_group (GNCBook *book)
 void
 gnc_book_set_group (GNCBook *book, AccountGroup *grp)
 {
-  if(!book) return;
+  if (!book) return;
 
   /* Do not free the old topgroup here unless you also fix
    * all the other uses of gnc_book_set_group! */
+
+  if (book->topgroup == grp)
+    return;
+
+  xaccGroupSetBook (book->topgroup, NULL);
+  xaccGroupSetBook (grp, book);
 
   book->topgroup = grp;
 }
