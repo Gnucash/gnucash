@@ -3,13 +3,11 @@ imagedir = ${GNC_HELPDIR}/C/image
 image_DATA = \
   appr-asset1.png \
   appr-asset2.png \
-  appr-income.png \
   appr-main1.png \
   appr-main2.png \
   asset-barchart.png \
   asset-piechart.png \
   autosplitledger.png \
-  bal-graph.png \
   basicledger.png \
   basicledger-transfer.png \
   contract.png \
@@ -49,10 +47,6 @@ image_DATA = \
   pricedb.png \
   recnwin.png \
   recninfo.png \
-  regwin-double.png \
-  regwin-multi.png \
-  regwin-single.png \
-  regwin-single2.png \
   report-av-baln.png \
   report-baln.png \
   report-folio.png \

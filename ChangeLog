@@ -1,3 +1,16 @@
+2001-07-06  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/xacc-balancreport.sgml: minor updates
+
+	* doc/sgml/C/image/regwin*.png, appr-income.png, bal-graph.png,
+	  report-hierachical.png: no longer used, so removed.
+
+	* doc/sgml/C/image/*tax*.png: resaved as compressed png.
+
+	* doc/sgml/C/image/report-folio.png: reshot for 1.6.
+
+	* doc/sgml/C/image/Makefile.am: updated for removed files.
+
 2001-07-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Query.c (xaccQueryEqual): new func.
