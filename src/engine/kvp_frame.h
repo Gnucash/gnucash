@@ -75,8 +75,11 @@ gboolean      kvp_frame_is_empty(kvp_frame * frame);
 /*@}*/
 
 
+/** Internal helper */
 gchar* kvp_frame_to_string(const kvp_frame *frame);
+/** Internal helper */
 gchar* binary_to_string(const void *data, guint32 size);
+/** Internal helper */
 gchar* kvp_value_glist_to_string(const GList *list);
 
 GHashTable* kvp_frame_get_hash(const kvp_frame *frame);
@@ -179,13 +182,17 @@ gint          double_compare(double v1, double v2);
 /** list convenience funcs. */
 gint        kvp_glist_compare(const GList * list1, const GList * list2);
 
-/** kvp_glist_copy() performs a deep copy: same as mapping 
- *     kvp_value_copy() over the elements and then copying the spine. 
+/** kvp_glist_copy() performs a deep copy of a <b>GList of
+ *     kvp_frame's</b> (not to be confused with GLists of something
+ *     else): same as mapping kvp_value_copy() over the elements and
+ *     then copying the spine.
  */
 GList     * kvp_glist_copy(const GList * list);
 
-/** kvp_glist_delete() performs a deep delete: same as mapping 
- *    kvp_value_delete() over the elements and then deleting the GList. 
+/** kvp_glist_delete() performs a deep delete of a <b>GList of
+ *     kvp_frame's</b> (not to be confused with GLists of something
+ *     else): same as mapping * kvp_value_delete() over the elements
+ *     and then deleting the GList.
  */
 void        kvp_glist_delete(GList * list);
 
@@ -204,14 +211,20 @@ kvp_value   * kvp_value_new_string(const char * value);
 kvp_value   * kvp_value_new_guid(const GUID * guid);
 kvp_value   * kvp_value_new_timespec(Timespec timespec);
 kvp_value   * kvp_value_new_binary(const void * data, guint64 datasize);
+/** Creates a kvp_value from a <b>GList of kvp_value's</b>! (Not to be
+ * confused with GList's of something else!) */
 kvp_value   * kvp_value_new_glist(const GList * value);
 kvp_value   * kvp_value_new_frame(const kvp_frame * value);
 
 /** value constructors (non-copying - kvp_value takes pointer ownership)
    values *must* have been allocated via glib allocators! (gnew, etc.) */
 kvp_value   * kvp_value_new_binary_nc(void * data, guint64 datasize);
-/** value constructors (non-copying - kvp_value takes pointer ownership)
-   values *must* have been allocated via glib allocators! (gnew, etc.) */
+/** Creates a kvp_value from a <b>GList of kvp_value's</b>! (Not to be
+ * confused with GList's of something else!) 
+ *
+ * This value constructor is non-copying (kvp_value takes pointer
+ * ownership). The values *must* have been allocated via glib
+ * allocators! (gnew, etc.) */
 kvp_value   * kvp_value_new_glist_nc(GList *lst);
 /** value constructors (non-copying - kvp_value takes pointer ownership)
    values *must* have been allocated via glib allocators! (gnew, etc.) */
@@ -248,8 +261,9 @@ GUID        * kvp_value_get_guid(const kvp_value * value);
  * the value directly. */
 void        * kvp_value_get_binary(const kvp_value * value,
                                    guint64 * size_return); 
-/** Value accessor. This one is non-copying -- the caller can modify
- * the value directly. */
+/** Returns the GList of kvp_frame's (not to be confused with GList's
+ * of something else!) from the given kvp_frame.  This one is
+ * non-copying -- the caller can modify the value directly. */
 GList       * kvp_value_get_glist(const kvp_value * value);
 /** Value accessor. This one is non-copying -- the caller can modify
  * the value directly. */
