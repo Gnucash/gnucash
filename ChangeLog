@@ -1,5 +1,7 @@
 2001-05-14  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/druid-qif-import.c: fix bug
+
 	* src/engine/Account.c (xaccAccountGetChildren): fix bug
 
 	* src/engine/sixtp-dom-generators.c (add_kvp_value_node): use

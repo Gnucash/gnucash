@@ -202,8 +202,8 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->commodity_pages = NULL;
 
   retval->show_doc_pages = 
-    gnc_lookup_boolean_option(_("QIF Import"),
-                              _("Verbose documentation"),
+    gnc_lookup_boolean_option("QIF Import",
+                              "Verbose documentation",
                               TRUE);
   
   for(i=0; i < NUM_PRE_PAGES; i++) {
