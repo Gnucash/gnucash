@@ -475,8 +475,10 @@ totals to report currency")
 
 
   (let* ((companys (make-hash-table 23))
-	 (report-title (op-value  gnc:pagename-general 
-				 gnc:optname-reportname))
+	 (report-title (string-append
+			(op-value gnc:pagename-general gnc:optname-reportname)
+			": "
+			(gnc:account-get-name account)))
         ;; document will be the HTML document that we return.
 	(report-date (gnc:timepair-end-day-time 
 		      (gnc:date-option-absolute-time

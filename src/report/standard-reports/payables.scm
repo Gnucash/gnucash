@@ -32,8 +32,7 @@
 
 (use-modules (gnucash report aging))
 
-(define opt-pay-acc (N_ "Payables Account"))
-(define sect-acc (N_ "Accounts"))
+(define this-acc "this-account")
 
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
@@ -42,61 +41,27 @@
             (gnc:register-option options new-option))))
 
     (add-option
-     (gnc:make-account-list-option
-      sect-acc opt-pay-acc
-      "a" (N_ "Account where payables are stored.")
-      ;; FIXME: Have a global preference for the payables account??
-      ;; default-getter
-      (lambda ()
-	(define (find-first-payable current-group num-accounts this-account-ind)
-	  (if
-	   (>= this-account-ind num-accounts) 
-	   #f
-	   (let* 
-	       ((this-account 
-		 (gnc:group-get-account current-group this-account-ind))
-		(account-type (gw:enum-<gnc:AccountType>-val->sym
-			       (gnc:account-get-type this-account) #f)))
-	     (begin 
-	       (gnc:debug "this-account" this-account)
-	       (gnc:debug "account-type" account-type)
-	       (if (eq? account-type 'payable)
-		   (begin 
-		     (gnc:debug "this-account selected" this-account)
-		      this-account)
-		   (find-first-payable 
-		    current-group num-accounts (+ this-account-ind 1)))))))
-
-	(let* ((current-group (gnc:get-current-group))
-	      (num-accounts (gnc:group-get-num-accounts
-			     current-group)))
-	  (if (> num-accounts 0)
-	      (let ((first-payable (find-first-payable
-				      current-group
-				      num-accounts
-				      0)))
-		(gnc:debug "first-payable" first-payable)
-		(if first-payable
-		    (list first-payable)
-		    (list (gnc:group-get-account current-group 0))))
-	      '())))
-     ;; value-validator
-     (lambda (account-list)
-	(let ((first-account) (car account-list))
-	  (gnc:debug "account-list" account-list)
-	  (if first-account
-	    (let ((account-type (gw:enum-<gnc:AccountType>-val->sym 
-				 (gnc:account-get-type first-account))))
-	      (if (eq? 'payable account-type) 
-	  
-		  (cons #t  (list first-account))
-		  (cons #f  (_ "The payables account must be a payable account"))))
-	    ;; FIXME: until we can select a default account I need 
-	    ;; to catch this at the report-writing stage
-	    (#t '()))))
-      #f))
+     (gnc:make-internal-option "__reg" this-acc #f))
 
     (aging-options-generator options)))
+
+(define (find-first-payable-account)
+  (define (find-first-payable group num-accounts index)
+    (if (>= index num-accounts)
+	#f
+	(let* ((this-account (gnc:group-get-account (group index)))
+	       (account-type (gw:enum-<gnc:AccountType>-val->sym
+			      (gnc:account-get-type this-account) #f)))
+	  (if (eq? account-type 'payable)
+	      this-account
+	      (find-first-payable group num-accounts (+ index 1))))))
+
+  (let* ((current-group (gnc:get-current-group))
+	 (num-accounts (gnc:group-get-num-accounts
+			current-group)))
+    (if (> num-accounts 0)
+	(find-first-payable current-group num-accounts 0)
+	#f)))
 
 (define (payables-renderer report-obj)
 
@@ -106,30 +71,27 @@
   (define (op-value section name)
     (gnc:option-value (get-op section name)))
 
-  (let* ((payables-account (car (op-value sect-acc opt-pay-acc))))
+  (let* ((payables-account (op-value "__reg" this-acc)))
+    (gnc:debug "payables-account" payables-account)
+
+    (if (not payables-account)
+	(set! payables-account (find-first-payables-account)))
+
     (aging-renderer report-obj payables-account #f)))
 
 ;; Here we define the actual report with gnc:define-report
 (gnc:define-report
- 
- ;; The version of this report.
  'version 1
- 
- ;; The name of this report. This will be used, among other things,
- ;; for making its menu item in the main menu. You need to use the
- ;; untranslated value here!
  'name (N_ "Payable Aging")
-
- ;; A tip that is used to provide additional information about the
- ;; report to the user.
- 'menu-tip (N_ "Amount owed, grouped by creditors and age.")
-
- ;; A path describing where to put the report in the menu system.
- ;; In this case, it's going under the utility menu.
- 'menu-path (list gnc:menuname-asset-liability)
-
- ;; The options generator function defined above.
  'options-generator options-generator
- 
- ;; The rendering function defined above.
- 'renderer payables-renderer)
+ 'renderer payables-renderer
+ 'in-menu? #f)
+
+(define (gnc:payables-report-create-internal acct)
+  (let* ((options (gnc:make-report-options "Payable Aging"))
+	 (acct-op (gnc:lookup-option options "__reg" this-acc)))
+
+    (gnc:option-set-value acct-op acct)
+    (gnc:make-report "Payable Aging" options)))
+
+(export gnc:payables-report-create-internal)

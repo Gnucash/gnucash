@@ -3208,6 +3208,7 @@ static int
 report_helper (RegWindow *regData, Query *query)
 {
   SplitRegister *reg = gnc_ledger_display_get_split_register (regData->ledger);
+  Account *account;
   char *str;
   SCM qtype;
   SCM args;
@@ -3216,44 +3217,71 @@ report_helper (RegWindow *regData, Query *query)
 
   args = SCM_EOL;
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  arg = gh_str02scm ((char *) gnc_split_register_get_credit_string (reg));
-  args = gh_cons (arg, args);
+  switch (reg->type) {
+  case PAYABLE_REGISTER:
+  case RECEIVABLE_REGISTER:
+    g_return_val_if_fail (query == NULL, -1);
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  arg = gh_str02scm ((char *) gnc_split_register_get_debit_string (reg));
-  args = gh_cons (arg, args);
+    if (reg->type == PAYABLE_REGISTER)
+      func = gh_eval_str ("gnc:payables-report-create");
+    else
+      func = gh_eval_str ("gnc:receivables-report-create");
+    g_return_val_if_fail (gh_procedure_p (func), -1);
 
-  str = gnc_reg_get_name (regData, FALSE);
-  arg = gh_str02scm (str);
-  args = gh_cons (arg, args);
-  g_free (str);
+    qtype = gh_eval_str("<gnc:Account*>");
+    g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
 
-  arg = gh_bool2scm (reg->use_double_line);
-  args = gh_cons (arg, args);
+    account = gnc_ledger_display_leader (regData->ledger);
 
-  arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
-  args = gh_cons (arg, args);
+    arg = gw_wcp_assimilate_ptr (account, qtype);
+    args = gh_cons (arg, args);
+    g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
-  qtype = gh_eval_str("<gnc:Query*>");
-  g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+    break;
 
-  if (!query)
-  {
-    query = gnc_ledger_display_get_query (regData->ledger);
-    g_return_val_if_fail (query != NULL, -1);
+  default:
+    if (!query)
+    {
+      query = gnc_ledger_display_get_query (regData->ledger);
+      g_return_val_if_fail (query != NULL, -1);
+    }
+
+    func = gh_eval_str ("gnc:register-report-create");
+    g_return_val_if_fail (gh_procedure_p (func), -1);
+
+    /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+    arg = gh_str02scm ((char *) gnc_split_register_get_credit_string (reg));
+    args = gh_cons (arg, args);
+
+    /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
+    arg = gh_str02scm ((char *) gnc_split_register_get_debit_string (reg));
+    args = gh_cons (arg, args);
+
+    str = gnc_reg_get_name (regData, FALSE);
+    arg = gh_str02scm (str);
+    args = gh_cons (arg, args);
+    g_free (str);
+
+    arg = gh_bool2scm (reg->use_double_line);
+    args = gh_cons (arg, args);
+
+    arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
+    args = gh_cons (arg, args);
+
+    qtype = gh_eval_str("<gnc:Query*>");
+    g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+
+    arg = gw_wcp_assimilate_ptr (query, qtype);
+    args = gh_cons (arg, args);
+    g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
+
+    arg = gh_bool2scm (FALSE);
+    args = gh_cons (arg, args);
+
+    break;
   }
 
-  arg = gw_wcp_assimilate_ptr (query, qtype);
-  args = gh_cons (arg, args);
-  g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
-
-  arg = gh_bool2scm (FALSE);
-  args = gh_cons (arg, args);
-
-  func = gh_eval_str ("gnc:register-report-create");
-  g_return_val_if_fail (gh_procedure_p (func), -1);
-
+  /* Apply the function to the args */
   arg = gh_apply (func, args);
   g_return_val_if_fail (gh_exact_p (arg), -1);
 

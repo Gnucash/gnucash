@@ -9,6 +9,8 @@
 
 (export gnc:register-report-create)
 (export gnc:invoice-report-create)
+(export gnc:payables-report-create)
+(export gnc:receivables-report-create)
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash report account-piecharts))
@@ -28,3 +30,5 @@
 
 (define gnc:register-report-create gnc:register-report-create-internal)
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
+(define gnc:payables-report-create gnc:payables-report-create-internal)
+(define gnc:receivables-report-create gnc:receivables-report-create-internal)
