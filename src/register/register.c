@@ -3,6 +3,7 @@
  * register.c
  */
 
+#include "actioncell.h"
 #include "register.h"
 
 #define DATE_CELL_C  0
@@ -10,6 +11,9 @@
 
 #define NUM_CELL_C  1
 #define NUM_CELL_R  0
+
+#define ACTN_CELL_C  1
+#define ACTN_CELL_R  1
 
 #define XFRM_CELL_C  2
 #define XFRM_CELL_R  0
@@ -71,6 +75,11 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccSetBasicCellValue (cell, "Num");
 
    cell = xaccMallocTextCell();
+   cell->width = 11;
+   xaccAddCell (header, cell, XFRM_CELL_R, XFRM_CELL_C);
+   xaccSetBasicCellValue (cell, "Transfer From");
+   
+   cell = xaccMallocTextCell();
    cell->width = 29;
    xaccAddCell (header, cell, 0, DESC_CELL_C);
    xaccSetBasicCellValue (cell, "Description");
@@ -109,6 +118,11 @@ void xaccInitBasicRegister (BasicRegister *reg)
    cell->width = 7;
    xaccAddCell (curs, cell, NUM_CELL_R, NUM_CELL_C);
    reg->numCell = cell;
+   
+   cell = (BasicCell *) xaccMallocActionCell();
+   cell->width = 7;
+   xaccAddCell (curs, cell, ACTN_CELL_R, ACTN_CELL_C);
+   reg->actionCell = cell;
    
    cell = xaccMallocTextCell();
    cell->width = 11;
@@ -150,7 +164,8 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
    xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, CRED_CELL_R, CRED_CELL_C);
    xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
-   xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
+   xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
+   xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
    xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1, -1);
 
 

@@ -19,6 +19,7 @@ typedef struct _BasicRegister {
    CellBlock   * header;
    BasicCell  * dateCell;
    BasicCell  * numCell;
+   BasicCell  * actionCell;
    BasicCell  * xferCell;
    BasicCell  * descCell;
    BasicCell  * memoCell;
