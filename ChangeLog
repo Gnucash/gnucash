@@ -1,3 +1,7 @@
+2003-05-10  David Hampton  <hampton@employees.org>
+
+	* configure.in: Restore some lost changes.
+
 2003-05-09  Christian Stimming  <stimming@tuhh.de>
 
 	* macros/openhbci.m4: Fix openhbci macro again so that it uses a C
