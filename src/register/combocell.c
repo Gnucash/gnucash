@@ -134,6 +134,10 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
    SET (&(cell->cell), str);
    box = (PopBox *) (cell->cell.gui_private);
 
+   /* we just might get called before the gui is initialized.
+    * If so, then be sure to bail out now. */
+   if (!box) return;
+
    if (str) {
       if (0x0 != str[0]) {
          XmString choosen;
