@@ -31,6 +31,7 @@
 
 #include <time.h>
 
+#include "gnc-common.h"
 #include "Account.h"
 #include "Transaction.h"
 
@@ -72,9 +73,17 @@ void xaccQuerySetDateRange (Query *, time_t earliest, time_t latest);
 void xaccQuerySetDateRangeL (Query *, long long earliest, long long latest);
 #endif
 
+void xaccQuerySetEarliest (Query *, time_t earliest);
+void xaccQuerySetLatest   (Query *, time_t latest);
+
+/* The xaccQueryShowEarliestDateFound function and its partner tell
+ * the Query to use the earliest (resp. latest) splits found. */
+void xaccQueryShowEarliestDateFound (Query *);
+void xaccQueryShowLatestDateFound   (Query *);
+
 /* The xaccQuerySetSortOrder() method sets the sort order that
  *    should be used on the splits.  The three arguments should 
- *    be choosen from the enums above.  The first argument has the
+ *    be chosen from the enums above.  The first argument has the
  *    sort priority, the next the next, etc.
  */
 void xaccQuerySetSortOrder (Query *, int, int, int); 

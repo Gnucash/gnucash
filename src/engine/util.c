@@ -390,7 +390,7 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
    }
 
    /* Now see if we print parentheses */
-   if (print_sign && (sign_posn == 0))
+   if (print_sign && (sign_posn == 0) && (val < 0.0))
      bufp = stpcpy(bufp, "(");
 
    /* Now print the value */
@@ -398,7 +398,7 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
                     shrs & PRTSEP, ~(shrs & PRTSHR));
 
    /* Now see if we print parentheses */
-   if (print_sign && (sign_posn == 0))
+   if (print_sign && (sign_posn == 0) && (val < 0.0))
      bufp = stpcpy(bufp, ")");
 
    /* Now see if we print currency */

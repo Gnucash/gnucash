@@ -28,6 +28,8 @@
  *                                                                  * 
 \********************************************************************/
 
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -204,6 +206,20 @@ scanDate(const char *buff, int *day, int *month, int *year)
    /* get numeric values */
    switch(dateFormat)
    {
+#if 0 /* strptime broken in glibc <= 2.1.2 */
+     case DATE_FORMAT_LOCALE:
+       if (buff[0] != 0)
+       {
+         struct tm thetime;
+
+         strptime(buff, "%x", &thetime);
+
+         iday = thetime.tm_mday;
+         imonth = thetime.tm_mon + 1;
+         iyear = thetime.tm_year + 1900;
+       }
+       break;
+#endif
      case DATE_FORMAT_UK:
      case DATE_FORMAT_CE:
        if (first_field) iday = atoi (first_field);

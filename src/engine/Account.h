@@ -164,4 +164,8 @@ Account *      IthAccount (Account **list, int i);
 gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
 					  Account *account_2);
 
+/* Returns true if the account has 'ancestor' as an ancestor.
+ * Returns false if either is NULL. */
+gncBoolean     xaccAccountHasAncestor (Account *, Account * ancestor);
+
 #endif /* __XACC_ACCOUNT_H__ */

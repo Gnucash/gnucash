@@ -29,7 +29,9 @@
 
 #include <limits.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <strings.h>
+#include <ctype.h>
 
 #include "config.h"
 
@@ -225,6 +227,42 @@ xaccQuerySetDateRangeL (Query *q, long long early, long long late)
    q->latest.tv_sec = late;
 }
 
+void
+xaccQuerySetEarliest (Query *q, time_t earliest)
+{
+   if (!q) return;
+   q->changed = 1; 
+   q->earliest.tv_sec = earliest;
+}
+
+void
+xaccQuerySetLatest (Query *q, time_t latest)
+{
+   if (!q) return;
+   q->changed = 1; 
+   q->latest.tv_sec = latest;
+}
+
+/* ================================================== */
+
+void
+xaccQueryShowEarliestDateFound (Query *q)
+{
+   if (!q) return;
+   q->changed = 1; 
+   q->earliest.tv_sec = LONG_LONG_MIN;
+   q->earliest.tv_nsec = 0; 
+}
+
+void
+xaccQueryShowLatestDateFound (Query *q)
+{
+   if (!q) return;
+   q->changed = 1; 
+   q->latest.tv_sec = LONG_LONG_MAX;
+   q->latest.tv_nsec = 0; 
+}
+
 /* ================================================== */
 
 /* ================================================== */
@@ -283,21 +321,65 @@ xaccQuerySetDateRangeL (Query *q, long long early, long long late)
   }						\
 }
 
+static gncBoolean
+gnc_strisnum(char *s)
+{
+  if (s == NULL) return GNC_F;
+  if (*s == 0) return GNC_F;
+
+  while (*s && isspace(*s))
+    s++;
+
+  if (*s == 0) return GNC_F;
+  if (!isdigit(*s)) return GNC_F;
+
+  while (*s && isdigit(*s))
+    s++;
+
+  if (*s == 0) return GNC_T;
+
+  while (*s && isspace(*s))
+    s++;
+
+  if (*s == 0) return GNC_T;
+
+  return GNC_F;
+}
+
 #define CNUM {					\
   /* sort on transaction number */		\
+  unsigned long n1;                             \
+  unsigned long n2;                             \
   da = ta->num;					\
   db = tb->num;					\
-  if (da && db) {				\
-    retval = strcmp (da, db);			\
-    /* if strings differ, return */		\
-    if (retval) return retval;			\
-  } else					\
+  if (gnc_strisnum(da)) {                       \
+    if (!gnc_strisnum(db)) {                    \
+      return -1;                                \
+    }                                           \
+    sscanf(da, "%lu", &n1);                     \
+    sscanf(db, "%lu", &n2);                     \
+    if (n1 < n2) {                              \
+      return -1;                                \
+    }                                           \
+    if (n1 == n2) {                             \
+      return 0;                                 \
+    }                                           \
+    return +1;                                  \
+  }                                             \
+  if (gnc_strisnum(db)) {                       \
+    return +1;                                  \
+  }                                             \
   if (!da && db) {				\
     return -1;					\
-  } else					\
+  }     					\
   if (da && !db) {				\
     return +1;					\
   }						\
+  if (!da && !db) {                             \
+    return 0;                                   \
+  }                                             \
+  retval = strcmp (da, db);			\
+  return retval;                                \
 }
 
 #define CMEMO {					\

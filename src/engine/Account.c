@@ -1186,8 +1186,8 @@ IthAccount (Account **list, int i)
 /********************************************************************\
 \********************************************************************/
 
-gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
-					  Account *account_2)
+gncBoolean
+xaccAccountsHaveCommonCurrency(Account *account_1, Account *account_2)
 {
   if ((account_1 == NULL) || (account_2 == NULL))
     return GNC_F;
@@ -1195,5 +1195,28 @@ gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
   return xaccIsCommonCurrency(account_1->currency, account_1->security,
 			      account_2->currency, account_2->security);
 }
-   
+
+/********************************************************************\
+\********************************************************************/
+
+gncBoolean
+xaccAccountHasAncestor (Account *account, Account * ancestor)
+{
+  Account *parent;
+
+  if ((account == NULL) || (ancestor == NULL))
+    return GNC_F;
+
+  parent = xaccAccountGetParentAccount(account);
+  while (parent != NULL)
+  {
+    if (parent == ancestor)
+      return GNC_T;
+
+    parent = xaccAccountGetParentAccount(parent);
+  }
+
+  return GNC_F;
+}
+
 /*************************** END OF FILE **************************** */
