@@ -43,6 +43,7 @@ static void gnc_search_numeric_finalise	(GtkObject *obj);
 #define _PRIVATE(x) (((GNCSearchNumeric *)(x))->priv)
 
 struct _GNCSearchNumericPrivate {
+  gboolean	is_debcred;
 };
 
 static GNCSearchCoreTypeClass *parent_class;
@@ -103,6 +104,7 @@ gnc_search_numeric_init (GNCSearchNumeric *o)
   o->priv = g_malloc0 (sizeof (*o->priv));
   o->value = gnc_numeric_zero ();
   o->how = COMPARE_LT;
+  o->option = NUMERIC_MATCH_ANY;
 }
 
 static void
@@ -130,6 +132,21 @@ gnc_search_numeric_new (void)
   return o;
 }
 
+/**
+ * gnc_search_numeric_debcred_new:
+ *
+ * Create a new GNCSearchNumeric object, configured for DebCred.
+ * 
+ * Return value: A new #GNCSearchNumeric object.
+ **/
+GNCSearchNumeric *
+gnc_search_numeric_debcred_new (void)
+{
+  GNCSearchNumeric *o = (GNCSearchNumeric *)gtk_type_new(gnc_search_numeric_get_type ());
+  o->priv->is_debcred = TRUE;
+  return o;
+}
+
 void
 gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric value)
 {
@@ -147,6 +164,14 @@ gnc_search_numeric_set_how (GNCSearchNumeric *fi, query_compare_t how)
   fi->how = how;
 }
 
+void
+gnc_search_numeric_set_option (GNCSearchNumeric *fi, numeric_match_t option)
+{
+  g_return_if_fail (fi);
+  g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+  fi->option = option;
+}
+
 static gboolean
 validate (GNCSearchCoreType *fe)
 {
@@ -162,9 +187,16 @@ validate (GNCSearchCoreType *fe)
 }
 
 static void
-option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
+how_option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
 {
   fe->how = (query_compare_t)
+    gtk_object_get_data (GTK_OBJECT (widget), "option");
+}
+
+static void
+option_changed (GtkWidget *widget, GNCSearchNumeric *fe)
+{
+  fe->option = (query_compare_t)
     gtk_object_get_data (GTK_OBJECT (widget), "option");
 }
 
@@ -176,24 +208,24 @@ entry_changed (GNCAmountEdit *entry, GNCSearchNumeric *fe)
 
 static GtkWidget *
 add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
-	       query_compare_t option)
+	       query_compare_t option, GtkSignalFunc fcn)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
   gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", option_changed, user_data);
+  gtk_signal_connect (GTK_OBJECT (item), "activate", fcn, user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
 }
 
-#define ADD_MENU_ITEM(str,op) { \
-	item = add_menu_item (menu, fe, str, op); \
-	if (fi->how == op) { current = index; first = item; } \
+#define ADD_MENU_ITEM(cmp,str,op,fcn) { \
+	item = add_menu_item (menu, fe, str, op, fcn); \
+	if (cmp == op) { current = index; first = item; } \
 	index++; \
 } 
 
 static GtkWidget *
-make_menu (GNCSearchCoreType *fe)
+make_how_menu (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
   GtkWidget *menu, *item, *first, *opmenu;
@@ -201,13 +233,53 @@ make_menu (GNCSearchCoreType *fe)
 
   menu = gtk_menu_new ();
 
-  ADD_MENU_ITEM (_("is less than"), COMPARE_LT);
+  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+			   _("less than") : _("is less than")),
+		 COMPARE_LT, how_option_changed);
   first = item;			/* Force one */
-  ADD_MENU_ITEM (_("is less than or equal to"), COMPARE_LTE);
-  ADD_MENU_ITEM (_("equals"), COMPARE_EQUAL);
-  ADD_MENU_ITEM (_("does not equal"), COMPARE_NEQ);
-  ADD_MENU_ITEM (_("is greater than"), COMPARE_GT);
-  ADD_MENU_ITEM (_("is greater than or equal to"), COMPARE_GTE);
+  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+			   _("less than or equal to") :
+			   _("is less than or equal to")),
+		 COMPARE_LTE, how_option_changed);
+  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+			   _("equal to") : _("equals")),
+		 COMPARE_EQUAL, how_option_changed);
+  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+			   _("not equal to") : _("does not equal")),
+		 COMPARE_NEQ, how_option_changed);
+  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+			   _("greater than") : _("is greater than")),
+		 COMPARE_GT, how_option_changed);
+  ADD_MENU_ITEM (fi->how, (fi->priv->is_debcred ?
+			   _("greater than or equal to") :
+			   _("is greater than or equal to")),
+		 COMPARE_GTE, how_option_changed);
+
+  opmenu = gtk_option_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
+
+  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
+
+  return opmenu;
+}
+
+static GtkWidget *
+make_option_menu (GNCSearchCoreType *fe)
+{
+  GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
+  GtkWidget *menu, *item, *first, *opmenu;
+  int current = 0, index = 0;
+
+  menu = gtk_menu_new ();
+
+  ADD_MENU_ITEM (fi->option, _("has credits or debits"), NUMERIC_MATCH_ANY,
+		 option_changed);
+  first = item;			/* Force one */
+  ADD_MENU_ITEM (fi->option, _("has debits"), NUMERIC_MATCH_DEBIT,
+		 option_changed);
+  ADD_MENU_ITEM (fi->option, _("has credits"), NUMERIC_MATCH_CREDIT,
+		 option_changed);
 
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
@@ -229,8 +301,13 @@ get_widget (GNCSearchCoreType *fe)
 
   box = gtk_hbox_new (FALSE, 3);
 
-  /* Build and connect the option menu */
-  menu = make_menu (fe);
+  /* Build and connect the option menu(s) */
+  if (fi->priv->is_debcred) {
+    menu = make_option_menu (fe);
+    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+  }
+
+  menu = make_how_menu (fe);
   gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
 
   /* Build and connect the entry window */
@@ -250,7 +327,7 @@ static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
 
-  return gncQueryNumericPredicate (fi->how, NUMERIC_MATCH_ANY, fi->value);
+  return gncQueryNumericPredicate (fi->how, fi->option, fi->value);
 }
 
 static GNCSearchCoreType *clone(GNCSearchCoreType *fe)
@@ -263,6 +340,8 @@ static GNCSearchCoreType *clone(GNCSearchCoreType *fe)
   se = gnc_search_numeric_new ();
   gnc_search_numeric_set_value (se, fse->value);
   gnc_search_numeric_set_how (se, fse->how);
+  gnc_search_numeric_set_option (se, fse->option);
+  se->priv->is_debcred = fse->priv->is_debcred;
 
   return (GNCSearchCoreType *)se;
 }

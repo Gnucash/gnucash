@@ -30,7 +30,6 @@
 #include "search-core-type.h"
 #include "search-string.h"
 #include "search-date.h"
-#include "search-debcred.h"
 #include "search-double.h"
 #include "search-int64.h"
 #include "search-numeric.h"
@@ -196,7 +195,7 @@ gnc_search_core_type_new_type_name (const char *type)
   } else if (!strcmp (type, QUERYCORE_NUMERIC)) {
     return (GNCSearchCoreType *)gnc_search_numeric_new ();
   } else if (!strcmp (type, QUERYCORE_DEBCRED)) {
-    return (GNCSearchCoreType *)gnc_search_debcred_new ();
+    return (GNCSearchCoreType *)gnc_search_numeric_debcred_new ();
   } else if (!strcmp (type, QUERYCORE_BOOLEAN)) {
     return (GNCSearchCoreType *)gnc_search_boolean_new ();
   } else {

@@ -394,7 +394,6 @@ static GList *
 get_params_list (GNCIdTypeConst type)
 {
   GList *list = NULL;
-  GNCSearchParam *param;
 
   list = g_list_prepend (list, make_param (type, "Split->Txn->Void?",
 					   SPLIT_TRANS, TRANS_VOID_STATUS));

@@ -55,6 +55,6 @@ gboolean		gnc_search_param_type_match (GNCSearchParam *a,
  * don't match types properly.
  */
 void	gnc_search_param_override_param_type (GNCSearchParam *param,
-					      GNCIdTypeConst *param_type);
+					      GNCIdTypeConst param_type);
 
 #endif /* _GNCSEARCH_PARAM_H */

@@ -150,7 +150,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
 
 void
 gnc_search_param_override_param_type (GNCSearchParam *param,
-				      GNCIdTypeConst *param_type)
+				      GNCIdTypeConst param_type)
 {
   g_assert (IS_GNCSEARCH_PARAM (param));
   g_assert (param_type != NULL && *param_type != '\0');

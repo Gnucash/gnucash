@@ -38,6 +38,7 @@ struct _GNCSearchNumeric {
 
   query_compare_t	how;
   gnc_numeric		value;
+  numeric_match_t	option;
 };
 
 struct _GNCSearchNumericClass {
@@ -50,10 +51,12 @@ struct _GNCSearchNumericClass {
 
 guint		gnc_search_numeric_get_type	(void);
 GNCSearchNumeric	*gnc_search_numeric_new	(void);
+GNCSearchNumeric	*gnc_search_numeric_debcred_new (void);
 
 /* methods */
 void	gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric val);
 void	gnc_search_numeric_set_how (GNCSearchNumeric *fi, query_compare_t how);
+void	gnc_search_numeric_set_option (GNCSearchNumeric *fi, numeric_match_t option);
 
 #endif /* ! _GNCSEARCH_NUMERIC_H */
 
