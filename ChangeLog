@@ -1,3 +1,6 @@
+2002-11-29  Derek Atkins  <derek@ihtfp.com>
+	* src/gnome-utils/dialog-exchange.h -- header for the exchange-rate dialog
+
 2002-11-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/gnc-gen-transaction.c: Use add_threshold
