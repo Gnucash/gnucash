@@ -639,7 +639,7 @@ check_mult_div (void)
 	 */
 	check_binary_op (gnc_numeric_error (GNC_ERROR_OVERFLOW),
 			 gnc_numeric_div(a, b, GNC_DENOM_AUTO,
-					 GNC_HOW_DENOM_EXACT),
+					 GNC_HOW_RND_NEVER | GNC_HOW_DENOM_EXACT),
 			 a, b, "expected %s got %s = %s / %s for div exact");
 
 	check_binary_op (gnc_numeric_create(338441, 1000000),
@@ -671,6 +671,25 @@ check_mult_div (void)
 			 gnc_numeric_div(c, d, 82718,
 					 GNC_HOW_DENOM_EXACT|GNC_HOW_RND_NEVER),
 			 c, d, "expected %s got %s = %s / %s for div round");
+
+	/* A simple irreducible ratio, involving negative numbers */
+	gnc_numeric amt_a = gnc_numeric_create (-6005287905LL, 40595);
+	gnc_numeric amt_tot = gnc_numeric_create (-8744187958LL, 40595);
+	gnc_numeric frac = gnc_numeric_div (amt_a, amt_tot,
+                        GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+
+	check_binary_op (gnc_numeric_create(6005287905LL, 8744187958LL),
+	                 frac, amt_a, amt_tot, 
+	                 "expected %s got %s = %s / %s for div reduce");
+
+	/* Another overflow-prone condition */
+	gnc_numeric val_tot = gnc_numeric_create (-4280656418LL, 19873);
+	gnc_numeric val_a = gnc_numeric_mul (frac, val_tot,
+                        gnc_numeric_denom(val_tot),
+                        GNC_HOW_RND_ROUND| GNC_HOW_DENOM_EXACT);
+	check_binary_op (gnc_numeric_create(-2939846940LL, 19873),
+	                 val_a, val_tot, frac,
+	                 "expected %s got %s = %s * %s for mult round");
 }
   
 /* ======================================================= */
