@@ -16,7 +16,7 @@
 ( "Argentine Peso" "peso" "centavo"  "ISO4217" "ARS" "032" 100 100 )
 ( "Aruban Florin" "florin" "cent" "ISO4217" "AWG" "533" 100 100 )
 ( "Australian Dollar" "dollar" "cent" "ISO4217" "AUD" "036" 100 100 )
-( "Austrian Shilling" "shilling" "groschen"  "ISO4217" "ATS" "040" 100 100 )
+( "Austrian Shilling" "shilling" "groschen"  "ISO4217" "ATS" "040" 100 100 ) ;; through 1998
 ( "Azerbaijani Manat" "manat" "gopik" "ISO4217" "AZM" "031" 100 100 )
 ( "Bahamian Dollar" "dollar" "cent"  "ISO4217" "BSD" "044" 100 100 )
 ( "Bahraini Dinar" "dinar" "fil"  "ISO4217" "BHD" "048" 1000 1000 )
