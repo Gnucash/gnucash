@@ -1,3 +1,14 @@
+2003-10-17  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-sheet.c: Can now enter text
+	in the register.  Fix auto-completion.  Fix selection of a
+	transaction a/o cell when using the mouse.  Use gtk2 functions
+	instead of deprecated gtk1 functions.
+
+	* src/register/register-gnome/gnucash-grid.c: Any cell being
+	edited should use normal text.  Italic text is only for help
+	items.
+
 2003-10-12  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-scheduledxaction.c:

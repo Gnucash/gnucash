@@ -542,7 +542,7 @@ gsr_create_table( GNCSplitReg *gsr )
 
   gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
   GNUCASH_SHEET(gsr->reg->sheet)->window = gsr->window;
-  gtk_widget_show_all( GTK_WIDGET(gsr->reg) );
+  gtk_widget_show ( GTK_WIDGET(gsr->reg) );
   gtk_signal_connect (GTK_OBJECT(gsr->reg), "activate_cursor",
                       GTK_SIGNAL_FUNC(gnc_split_reg_record_cb), gsr);
   gtk_signal_connect (GTK_OBJECT(gsr->reg), "redraw_all",

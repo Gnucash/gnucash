@@ -256,8 +256,7 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
 
                 gtk_editable_set_position (editable, cursor_pos);
 
-                gtk_entry_select_region (GTK_ENTRY(sheet->entry),
-                                         start_sel, end_sel);
+                gtk_editable_select_region (editable, start_sel, end_sel);
         }
 
         gtk_widget_grab_focus (GTK_WIDGET(sheet));
@@ -758,11 +757,33 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
         }
 
         gtk_editable_set_position (editable, cursor_position);
-        gtk_entry_select_region(GTK_ENTRY(sheet->entry), start_sel, end_sel);
+        gtk_editable_select_region(editable, start_sel, end_sel);
 
 	return retval;
 }
 
+typedef struct {
+	GtkEditable *editable;
+        int start_sel;
+	int end_sel;
+
+} select_info;
+
+/*
+ * This function is needed because gtk_entry_insert_text() sets the
+ * cursor position after emitting the "insert+text" signal.  This
+ * means that the gtk_editable_select_region() call cannot be in the
+ * insert_cb function because it will just be cancelled out after
+ * the function finishes running.
+ */
+static gboolean
+gnucash_sheet_select_data_cb (select_info *info)
+{
+        gtk_editable_select_region (info->editable,
+				    info->start_sel, info->end_sel);
+	g_free(info);
+	return FALSE; /* This is a one shot function */
+}
 
 static void
 gnucash_sheet_insert_cb (GtkWidget *widget,
@@ -790,6 +811,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         int start_sel, end_sel;
         int old_position;
         int i;
+	select_info *info;
 
         if (sheet->input_cancelled)
         {
@@ -906,7 +928,19 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         if (*position < 0)
                 *position = gnc_mbstowcs(NULL, retval);
 
-        gtk_entry_select_region (GTK_ENTRY(sheet->entry), start_sel, end_sel);
+#if GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL
+        gtk_editable_select_region (editable, start_sel, end_sel);
+#else
+	if (start_sel != end_sel) {
+		info = g_malloc(sizeof(*info));
+		info->editable = editable;
+		info->start_sel = start_sel;
+		info->end_sel = end_sel;
+		g_timeout_add(/*ASAP*/ 1,
+			      (GSourceFunc)gnucash_sheet_select_data_cb,
+			      info);
+	}
+#endif
 
         g_free (change_text_w);
         g_free (old_text_w);
@@ -1009,7 +1043,8 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         }
 
         gtk_editable_set_position (editable, cursor_position);
-        gtk_entry_select_region(GTK_ENTRY(sheet->entry), start_sel, end_sel);
+        if (start_sel != end_sel)
+		gtk_editable_select_region(editable, start_sel, end_sel);
 
         g_free (old_text_w);
         g_free (new_text_w);
@@ -1112,7 +1147,6 @@ gnucash_motion_event (GtkWidget *widget, GdkEventMotion *event)
 {
         GnucashSheet *sheet;
         VirtualLocation virt_loc;
-        int xoffset, yoffset, x;
 
         g_return_val_if_fail(widget != NULL, TRUE);
         g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1135,15 +1169,10 @@ gnucash_motion_event (GtkWidget *widget, GdkEventMotion *event)
         if (!(event->state & GDK_BUTTON1_MASK))
                 return FALSE;
 
-        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet),
-					 &xoffset, &yoffset);
-
-        x = xoffset + event->x;
-
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
-                                  virt_loc, x, FALSE, TRUE);
+                                  virt_loc, event->x, FALSE, TRUE);
 
         return TRUE;
 }
@@ -1231,10 +1260,9 @@ static gboolean
 gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
         GnucashSheet *sheet;
+        GtkEditable *editable;
         VirtualCell *vcell;
-        int xoffset, yoffset;
         gboolean changed_cells;
-        int x, y;
 
         VirtualLocation cur_virt_loc;
         VirtualLocation new_virt_loc;
@@ -1286,16 +1314,10 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                         return FALSE;
         }
 
-        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet),
-					 &xoffset, &yoffset);
-
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
 
-        x = xoffset + event->x;
-        y = yoffset + event->y;
-
 	if (!gnucash_grid_find_loc_by_pixel(GNUCASH_GRID(sheet->grid),
-                                            x, y, &new_virt_loc))
+                                            event->x, event->y, &new_virt_loc))
 		return TRUE;
 
         vcell = gnc_table_get_virtual_cell (table, new_virt_loc.vcell_loc);
@@ -1306,10 +1328,11 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
             (event->type == GDK_2BUTTON_PRESS))
         {
                 gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
-                                          cur_virt_loc, x, FALSE, FALSE);
+                                          cur_virt_loc, event->x, FALSE, FALSE);
 
-                gtk_editable_set_position(GTK_EDITABLE(sheet->entry), -1);
-                gtk_editable_select_region(GTK_EDITABLE(sheet->entry), 0, -1);
+		editable = GTK_EDITABLE(sheet->entry);
+                gtk_editable_set_position(editable, -1);
+                gtk_editable_select_region(editable, 0, -1);
 
                 gnc_item_edit_claim_selection (GNC_ITEM_EDIT(sheet->item_editor),
                                            event->time);
@@ -1333,7 +1356,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                 gboolean extend_selection = event->state & GDK_SHIFT_MASK;
 
                 gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
-                                          cur_virt_loc, x, FALSE,
+                                          cur_virt_loc, event->x, FALSE,
                                           extend_selection);
 
                 if (do_popup)
@@ -1364,7 +1387,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &new_virt_loc);
 
         gnc_item_edit_set_cursor_pos (GNC_ITEM_EDIT(sheet->item_editor),
-                                  new_virt_loc, x, changed_cells, FALSE);
+                                  new_virt_loc, event->x, changed_cells, FALSE);
 
         if (do_popup)
                 gnome_popup_menu_do_popup_modal
@@ -1536,8 +1559,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
 
         if ((new_start != start_sel) || (new_end != end_sel))
         {
-                gtk_entry_select_region(GTK_ENTRY(sheet->entry),
-                                        new_start, new_end);
+                gtk_editable_select_region(editable, new_start, new_end);
                 changed = TRUE;
         }
 
@@ -1729,9 +1751,8 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                 end_sel = new_pos;
                 }
 
-                if (set_selection)
-                        gtk_entry_select_region(GTK_ENTRY(sheet->entry),
-                                                start_sel, end_sel);
+                if (set_selection && (start_sel != end_sel))
+                        gtk_editable_select_region(editable, start_sel, end_sel);
 
                 return result;
         }
@@ -2285,6 +2306,11 @@ gnucash_sheet_get_type (void)
         return gnucash_sheet_type;
 }
 
+static void
+gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
+{
+	gtk_widget_realize (entry);
+}
 
 GtkWidget *
 gnucash_sheet_new (Table *table)
@@ -2331,6 +2357,13 @@ gnucash_sheet_new (Table *table)
 
         gnome_canvas_item_hide (GNOME_CANVAS_ITEM(sheet->item_editor));
 
+	/* The GtkEntry must be realized in order to send events to
+	 * it.  We don't want to show it on the screen, but can't
+	 * realize it until after the window and all its parent
+	 * widgets have been realized. Thus this callback. */
+	g_signal_connect_after(sheet, "realize",
+			       G_CALLBACK(gnucash_sheet_realize_entry),
+			       sheet->entry);
         return GTK_WIDGET(sheet);
 }
 
@@ -2463,16 +2496,25 @@ gnucash_register_new (Table *table)
                           GTK_FILL | GTK_EXPAND | GTK_SHRINK,
                           GTK_FILL,
                           0, 0);
+        gtk_widget_show(header_canvas);
         
         gtk_table_attach (GTK_TABLE(widget), sheet,
                           0, 1, 1, 2,
                           GTK_FILL | GTK_EXPAND | GTK_SHRINK,
                           GTK_FILL | GTK_EXPAND | GTK_SHRINK,
                           0, 0);
+        gtk_widget_show(sheet);
+
+        gtk_table_attach (GTK_TABLE(widget), GNUCASH_SHEET(sheet)->entry,
+                          0, 1, 2, 3,
+                          GTK_FILL | GTK_EXPAND | GTK_SHRINK,
+                          GTK_FILL | GTK_EXPAND | GTK_SHRINK,
+                          0, 0);
+        gtk_widget_hide(GNUCASH_SHEET(sheet)->entry);
 
         scrollbar = gtk_vscrollbar_new(GNUCASH_SHEET(sheet)->vadj);
         gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
-                          1, 2, 0, 2,
+                          1, 2, 0, 3,
                           GTK_FILL,
                           GTK_EXPAND | GTK_SHRINK | GTK_FILL,
                           0, 0);
@@ -2481,7 +2523,7 @@ gnucash_register_new (Table *table)
         
         scrollbar = gtk_hscrollbar_new(GNUCASH_SHEET(sheet)->hadj);
         gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
-                          0, 1, 2, 3,
+                          0, 1, 3, 4,
                           GTK_EXPAND | GTK_SHRINK | GTK_FILL,
                           GTK_FILL,
                           0, 0);

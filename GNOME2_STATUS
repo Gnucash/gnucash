@@ -35,25 +35,13 @@ Account Tree: - FUNCTIONAL
 Register Core - MINIMALLY FUNCTIONAL
 
 	- All widgets visible
-	- Popup widgets work
 
-	- Cannot enter data
+	- Popup buttons fon't appear.
+	- Insertion point not shown. (fix gnucash-item-edit.c)
+	- Cannot hilight text with mouse (fix gnucash-item-edit.c)
+
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
-
-	- There's a problem with the vertical sizing of the register.
-	It doesn't respect the verital size of the enclosing widget,
-	and when you grow the window the register appears to grow
-	vertically at double the rate the window is growing.
-
-	"There's a nasty bug in the register code related to gnucash's
-	use of an off-screen gtkentry to do text manipulation.  g2
-	doesn't allow this, and I ran out of patience trying to fix
-	the problem and moved on to the account tree model/view.  At
-	some point, either I or someone else need sot go back and fix
-	this so the register isn't a read-only mechanism.  Hopefully
-	its a simple fix, and I didn't see it.  Other than this one
-	issue, the rest of the register works, as far as I can tell."
 
 Help - WORKING
 

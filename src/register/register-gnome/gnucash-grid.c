@@ -467,18 +467,17 @@ draw_cell (GnucashGrid *grid,
         if ((table->current_cursor_loc.vcell_loc.virt_row ==
              virt_loc.vcell_loc.virt_row) &&
 	    (!text || strlen(text) == 0)) {
-		pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
-                gdk_gc_set_foreground (grid->gc, &gn_light_gray);
                 text = gnc_table_get_label (table, virt_loc);
+		if ((text == NULL) || (*text == '\0'))
+			goto exit;
+                gdk_gc_set_foreground (grid->gc, &gn_light_gray);
 		pango_layout_set_text (layout, text, strlen (text));
-        } else {
-		pango_font_description_set_style (font, PANGO_STYLE_NORMAL);
+		pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
+		pango_context_set_font_description (context, font);
 	}
-	pango_context_set_font_description (context, font);
-	pango_font_description_free (font);
 
         if ((text == NULL) || (*text == '\0')) {
-                return;
+                goto exit;
 	}
 
         /*y_offset = ((height / 2) +
@@ -514,9 +513,13 @@ draw_cell (GnucashGrid *grid,
                          y + 1,
                          layout);
 
-	g_object_unref (layout);
-
         gdk_gc_set_clip_rectangle (grid->gc, NULL);
+
+ exit:
+	pango_font_description_set_style (font, PANGO_STYLE_NORMAL);
+	pango_context_set_font_description (context, font);
+	pango_font_description_free (font);
+	g_object_unref (layout);
 }
 
 static void
