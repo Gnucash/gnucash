@@ -255,11 +255,21 @@ restart_loop:
         }
         else
         {
+           gint64 id;
+           char buff[200];
+
            /* No lot was found.  Start a new lot */
            PINFO ("start new lot");
            lot = gnc_lot_new (acc->book);
            gnc_lot_add_split (lot, split);
            split = NULL;
+
+           /* Provide a reasonable title for the new lot */
+           id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
+           snprintf (buff, 200, _("Lot %lld"), id);
+           kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
+           id ++;
+           kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
         }
       }
 
