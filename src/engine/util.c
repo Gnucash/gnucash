@@ -643,15 +643,13 @@ xaccSPrintAmountGeneral (char * bufp, double val,
      cs_precedes = 0;  /* currency symbol follows amount */
      sep_by_space = 1; /* they are separated by a space  */
    }
-   else if (flags & PRTEUR)
-   {
-     currency_symbol = "EUR";
-     cs_precedes = 1;  /* currency symbol precedes amount */
-     sep_by_space = 0; /* they are not separated by a space  */
-   }
    else
    {
-     if (curr_sym == NULL)
+     if (flags & PRTEUR)
+     {
+       currency_symbol = "EUR ";
+     }
+     else if (curr_sym == NULL)
      {
        currency_symbol = lc->currency_symbol;
      }
