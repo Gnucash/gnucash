@@ -93,26 +93,24 @@ void          xaccTransDestroy (Transaction *trans);
  *    this is not done, errors will result.  If the defer flag is set, 
  *    then the automated re-balancing of all splits in this transaction
  *    is deferred until the xaccTransCommitEdit() call. This allows 
- *    multiple splits to be edited, and prices fiddled with, and the whole
- *    system sent temporarily out of balance, up until the Commit
+ *    multiple splits to be edited, and quantities modified, and the
+ *    whole system temporarily out of balance, up until the Commit
  *    call is made when double-entry is once again enforced.
  *
- * The xaccTransCommitEdit() method should be used to indicate that 
- *    all of the manipulations on the transaction are complete, and
- *    that these should be made permanent.  Note that this routine
- *    may result in the deletion of the transaction, if the transaction 
- *    is "empty" (has no splits, or * has a single split in it whose 
- *    value is non-zero.)
+ * The xaccTransCommitEdit() method indicates that the changes to the
+ *    transaction and its splits are complete and should be made
+ *    permanent. Note this routine may result in the deletion of the
+ *    transaction, if the transaction is "empty" (has no splits), or
+ *    of xaccTransDestroy() was called on the transaction.
  *
  * The xaccTransRollbackEdit() routine rejects all edits made, and 
  *    sets the transaction back to where it was before the editing 
  *    started.  This includes restoring any deleted splits, removing
  *    any added splits, and undoing the effects of xaccTransDestroy,
- *    as well as restoring prices, memo's descriptions, etc.
+ *    as well as restoring share quantities, memos, descriptions, etc.
  *
  * The xaccTransIsOpen() method returns TRUE if the transaction
- *    is open for editing. Otherwise, it returns false.
- */
+ *    is open for editing. Otherwise, it returns false.  */
 void          xaccTransBeginEdit (Transaction *trans, gboolean defer);
 void          xaccTransCommitEdit (Transaction *trans);
 void          xaccTransRollbackEdit (Transaction *trans);
@@ -197,13 +195,10 @@ void          xaccTransAppendSplit (Transaction *trans, Split *split);
  *    leaving the accounting structure out-of-balance or otherwise
  *    inconsistent.
  *
- *    If the deletion of the split leaves the transaction "empty",
- *    then the transaction will be marked for deletion.  (It will
- *    not be deleted until the xaccTransCommitEdit() routine is called.)
- *    The transaction is considered "empty" if it has no splits in it, 
- *    or it has only one split left, and that split is not a price split
- *    (i.e. has a non-zero value).  Transactions with only one split in 
- *    them are valid if and only if the value of that split is zero.
+ *    If the deletion of the split leaves the transaction with no
+ *    splits, then the transaction will be marked for deletion. (It
+ *    will not be deleted until the xaccTransCommitEdit() routine is
+ *    called.)
  */
 void          xaccSplitDestroy (Split *split);
 

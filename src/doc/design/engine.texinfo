@@ -671,6 +671,18 @@ user input.
 Allocate, initialize, and return a new Split.
 @end deftypefun
 
+@deftypefun void xaccSplitDestroy (Split * @var{split})
+Update @var{split}'s parent Account and Transaction in a consistent
+manner, completely unlinking of @var{split} and freeing its memory. The
+goal of this routine is to perform the removal and destruction of the
+Split in an atomic fashion, with no chance of accidentally leaving the
+accounting structure out-of-balance or otherwise inconsistent.
+
+If the deletion of the Split leaves the Transaction with no Splits, then
+the Transaction will be marked for deletion, but will not be deleted
+until the @code{xaccTransCommitEdit()} routine is called.
+@end deftypefun
+
 @deftypefun {const GUID *} xaccSplitGetGUID (Split * @var{split})
 Return the GUID of @var{split}.
 @end deftypefun 
@@ -924,6 +936,50 @@ for editing.
 Allocate, initialize, and return a new Transaction.
 @end deftypefun
 
+@deftypefun void xaccTransAppendSplit (Transaction * @var{trans}, Split * @var{split})
+Append @var{split} to the collection of Splits in @var{trans}. If the
+Split is already a part of another Transaction, it will be removed from
+that Transaction first.
+@end deftypefun
+
+@deftypefun void xaccTransDestroy (Transaction * {trans})
+Remove all of the Splits from each of their accounts and free the memory
+associated with them. This routine must be followed by either an
+@code{xaccTransCommitEdit()} in which case the transaction memory will
+be freed, or by @code{xaccTransRollbackEdit()}, in which case all the
+original Splits are put back into place.
+@end deftypefun
+
+@deftypefun void xaccTransBeginEdit (Transaction * @var{trans}, gboolean @var{defer})
+This method must be called before any changes are made to @var{trans} or
+any of its component Splits. If this is not done, errors will result. If
+@var{defer} is true, then the automated re-balancing of all Splits in
+this transaction is deferred until the @code{xaccTransCommitEdit()}
+call. This allows multiple splits to be edited, quantities modified,
+with the whole system temporarily out of balance, up until the
+Commit call is made when double-entry is once again enforced.
+@end deftypefun
+
+@deftypefun void xaccTransCommitEdit (Transaction * @var{trans})
+This method indicates that the changes to @var{trans} and its Splits are
+complete and should be made permanent. Note this routine may result in
+the deletion of the transaction, if the Transaction is "empty" (has no
+Splits) or if @code{xaccTransDestroy()} was called on the Transaction.
+@end deftypefun
+
+@deftypefun void xaccTransRollbackEdit (Transaction * @var{trans})
+Rejects all changes made to @var{trans} and its Splits, and sets
+@var{trans} back to where it was before the @code{xaccTransBeginEdit()}
+call. This includes restoring any deleted Splits, removing any added
+Splits, and undoing the effects of @code{xaccTransDestroy()}, as well
+as restoring share quantities, memos, descriptions, etc.
+@end deftypefun
+
+@deftypefun gboolean xaccTransIsOpen (Transaction * @var{trans})
+Return @code{TRUE} if @var{trans} is open for editing. Otherwise, it
+returns @code{FALSE}.
+@end deftypefun
+
 @deftypefun {const GUID *} xaccTransGetGUID (Transaction * @var{trans})
 Return the GUID of @var{trans}.
 @end deftypefun 
@@ -987,6 +1043,9 @@ Return the number of Splits in @var{trans}.
 
 @node Transaction Setters,  , Transaction Getters, Transactions
 @subsection Transaction Setters
+
+Remember, before you modify a Transaction, you must open it for editing
+with @code{xaccTransBeginEdit}.
 
 @deftypefun void xaccTransSetDate (Transaction * @var{trans}, int @var{day}, int @var{mon}, int @var{year})
 Set the post date of @var{trans} with @var{day}, @var{month}, and @var{year}.
