@@ -100,7 +100,7 @@ gnc_split_register_save_cells (gpointer save_data,
       Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
       if (trans != blank_trans)
-        sr_set_last_num (reg, gnc_basic_cell_get_value (cell));
+        gnc_split_register_set_last_num (reg, gnc_basic_cell_get_value (cell));
     }
   }
 

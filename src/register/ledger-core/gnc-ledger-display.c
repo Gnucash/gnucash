@@ -754,7 +754,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   ld->reg = gnc_split_register_new (reg_type, style, FALSE, is_template);
 
-  xaccSRSetData (ld->reg, ld, xaccLedgerDisplayParent);
+  gnc_split_register_set_data (ld->reg, ld, xaccLedgerDisplayParent);
 
   splits = xaccQueryGetSplits (ld->query);
 

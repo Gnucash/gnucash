@@ -35,7 +35,7 @@ static short module = MOD_LEDGER;
 
 
 static time_t
-get_today_midnight (void)
+gnc_get_today_midnight (void)
 {
   time_t present;
   struct tm tm;
@@ -72,7 +72,7 @@ gnc_split_register_init_info (SplitRegister *reg)
   info->default_account = *xaccGUIDNULL ();
   info->template_account = *xaccGUIDNULL ();
 
-  info->last_date_entered = get_today_midnight ();
+  info->last_date_entered = gnc_get_today_midnight ();
 
   info->first_pass = TRUE;
   info->full_refresh = TRUE;
@@ -142,7 +142,8 @@ gnc_split_register_set_template_account (SplitRegister *reg,
 }
 
 Transaction *
-xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
+gnc_split_register_get_trans (SplitRegister *reg,
+                              VirtualCellLocation vcell_loc)
 {
   Split *split;
 
@@ -168,9 +169,9 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
 }
 
 Split *
-xaccSRGetTransSplit (SplitRegister *reg,
-                     VirtualCellLocation vcell_loc,
-                     VirtualCellLocation *trans_split_loc)
+gnc_split_register_get_trans_split (SplitRegister *reg,
+                                    VirtualCellLocation vcell_loc,
+                                    VirtualCellLocation *trans_split_loc)
 {
   CursorClass cursor_class;
 
@@ -200,8 +201,9 @@ xaccSRGetTransSplit (SplitRegister *reg,
 }
 
 Split *
-xaccSRGetCurrentTransSplit (SplitRegister *reg,
-                            VirtualCellLocation *trans_split_loc)
+gnc_split_register_get_current_trans_split
+                                     (SplitRegister *reg,
+                                      VirtualCellLocation *trans_split_loc)
 {
   VirtualCellLocation vcell_loc;
 
@@ -210,14 +212,14 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg,
 
   vcell_loc = reg->table->current_cursor_loc.vcell_loc;
 
-  return xaccSRGetTransSplit (reg, vcell_loc, trans_split_loc);
+  return gnc_split_register_get_trans_split (reg, vcell_loc, trans_split_loc);
 }
 
 gboolean
-xaccSRFindSplit (SplitRegister *reg,
-                 Transaction *trans, Split *trans_split,
-                 Split *split, CursorClass find_class,
-                 VirtualCellLocation *vcell_loc)
+gnc_split_register_find_split (SplitRegister *reg,
+                               Transaction *trans, Split *trans_split,
+                               Split *split, CursorClass find_class,
+                               VirtualCellLocation *vcell_loc)
 {
   Table *table = reg->table;
   gboolean found_trans = FALSE;
@@ -266,8 +268,8 @@ xaccSRFindSplit (SplitRegister *reg,
 }
 
 void
-xaccSRShowTrans (SplitRegister *reg,
-                 VirtualCellLocation start_loc)
+gnc_split_register_show_trans (SplitRegister *reg,
+                               VirtualCellLocation start_loc)
 {
   VirtualCellLocation end_loc;
   int v_row;
@@ -297,10 +299,10 @@ xaccSRShowTrans (SplitRegister *reg,
 }
 
 void
-xaccSRSetTransVisible (SplitRegister *reg,
-                       VirtualCellLocation vcell_loc,
-                       gboolean visible,
-                       gboolean only_blank_split)
+gnc_split_register_set_trans_visible (SplitRegister *reg,
+                                      VirtualCellLocation vcell_loc,
+                                      gboolean visible,
+                                      gboolean only_blank_split)
 {
   CursorClass cursor_class;
 
@@ -320,7 +322,7 @@ xaccSRSetTransVisible (SplitRegister *reg,
 }
 
 void
-sr_set_cell_fractions (SplitRegister *reg, Split *split)
+gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split)
 {
   Account *account;
   Transaction *trans;
@@ -358,7 +360,7 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
 }
 
 CellBlock *
-sr_get_passive_cursor (SplitRegister *reg)
+gnc_split_register_get_passive_cursor (SplitRegister *reg)
 {
   const char *cursor_name = NULL;
 
@@ -386,7 +388,7 @@ sr_get_passive_cursor (SplitRegister *reg)
 }
 
 CellBlock *
-sr_get_active_cursor (SplitRegister *reg)
+gnc_split_register_get_active_cursor (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   const char *cursor_name = NULL;
@@ -419,7 +421,7 @@ sr_get_active_cursor (SplitRegister *reg)
 }
 
 void
-sr_set_last_num (SplitRegister *reg, const char *num)
+gnc_split_register_set_last_num (SplitRegister *reg, const char *num)
 {
   Account *account;
 

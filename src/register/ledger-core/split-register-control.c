@@ -204,8 +204,9 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
   /* The transaction we are coming from */
   old_split = xaccSRGetCurrentSplit (reg);
-  old_trans = xaccSRGetCurrentTrans (reg);
-  old_trans_split = xaccSRGetCurrentTransSplit (reg, &old_trans_split_loc);
+  old_trans = gnc_split_register_get_current_trans (reg);
+  old_trans_split =
+    gnc_split_register_get_current_trans_split (reg, &old_trans_split_loc);
   old_class = gnc_split_register_get_current_cursor_class (reg);
 
   exact_traversal = info->exact_traversal;
@@ -224,13 +225,14 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   else if (!info->hint_set_by_traverse)
   {
     /* The transaction where we are moving to */
-    new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
+    new_trans = gnc_split_register_get_trans (reg, new_virt_loc.vcell_loc);
 
     /* The split we are moving to */
     new_split = gnc_split_register_get_split (reg, new_virt_loc.vcell_loc);
 
     /* The split at the transaction line we are moving to */
-    new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
+    new_trans_split = gnc_split_register_get_trans_split
+      (reg, new_virt_loc.vcell_loc, NULL);
 
     new_class = gnc_split_register_get_cursor_class (reg,
                                                      new_virt_loc.vcell_loc);
@@ -307,8 +309,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
     /* if the split we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
-    if (xaccSRFindSplit (reg, new_trans, new_trans_split,
-                         new_split, new_class, &vcell_loc))
+    if (gnc_split_register_find_split (reg, new_trans, new_trans_split,
+                                       new_split, new_class, &vcell_loc))
     {
       VirtualCell *vcell;
 
@@ -319,9 +321,10 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     else
       new_virt_loc.vcell_loc = reg->table->current_cursor_loc.vcell_loc;
 
-    new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
+    new_trans = gnc_split_register_get_trans (reg, new_virt_loc.vcell_loc);
     new_split = gnc_split_register_get_split (reg, new_virt_loc.vcell_loc);
-    new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
+    new_trans_split = gnc_split_register_get_trans_split
+      (reg, new_virt_loc.vcell_loc, NULL);
     new_class = gnc_split_register_get_cursor_class (reg,
                                                      new_virt_loc.vcell_loc);
   }
@@ -345,7 +348,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
    * otherwise, we may need to change some visibility settings. */
   if (saved)
   {
-    sr_set_cell_fractions (reg, new_split);
+    gnc_split_register_set_cell_fractions (reg, new_split);
     return;
   }
 
@@ -359,19 +362,20 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     VirtualCellLocation vc_loc;
 
     vc_loc = old_trans_split_loc;
-    gnc_table_set_virt_cell_cursor (reg->table, vc_loc,
-                                    sr_get_passive_cursor (reg));
-    xaccSRSetTransVisible (reg, vc_loc, FALSE,
-                           reg->style == REG_STYLE_JOURNAL);
+    gnc_table_set_virt_cell_cursor
+      (reg->table, vc_loc, gnc_split_register_get_passive_cursor (reg));
+    gnc_split_register_set_trans_visible (reg, vc_loc, FALSE,
+                                          reg->style == REG_STYLE_JOURNAL);
 
     if ((REG_STYLE_AUTO_LEDGER == reg->style) ||
         (REG_STYLE_JOURNAL     == reg->style))
     {
-      xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, &vc_loc);
-      gnc_table_set_virt_cell_cursor (reg->table, vc_loc,
-                                      sr_get_active_cursor (reg));
-      xaccSRSetTransVisible (reg, vc_loc, TRUE,
-                             reg->style == REG_STYLE_JOURNAL);
+      gnc_split_register_get_trans_split (reg, new_virt_loc.vcell_loc,
+                                          &vc_loc);
+      gnc_table_set_virt_cell_cursor
+        (reg->table, vc_loc, gnc_split_register_get_active_cursor (reg));
+      gnc_split_register_set_trans_visible (reg, vc_loc, TRUE,
+                                            reg->style == REG_STYLE_JOURNAL);
     }
 
     info->trans_expanded = FALSE;
@@ -386,7 +390,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   info->cursor_hint_trans_split = new_trans_split;
   info->cursor_hint_cursor_class = new_class;
 
-  sr_set_cell_fractions (reg, new_split);
+  gnc_split_register_set_cell_fractions (reg, new_split);
 
   gnc_table_find_close_valid_cell (reg->table, p_new_virt_loc,
                                    exact_traversal);
@@ -398,8 +402,9 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     gnc_table_refresh_gui (reg->table, FALSE);
     gnc_table_leave_update (reg->table, reg->table->current_cursor_loc);
 
-    xaccSRGetTransSplit (reg, p_new_virt_loc->vcell_loc, &vc_loc);
-    xaccSRShowTrans (reg, vc_loc);
+    gnc_split_register_get_trans_split (reg, p_new_virt_loc->vcell_loc,
+                                        &vc_loc);
+    gnc_split_register_show_trans (reg, vc_loc);
   }
 }
 
@@ -556,7 +561,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
     return FALSE;
 
   split = xaccSRGetCurrentSplit (reg);
-  trans = xaccSRGetCurrentTrans (reg);
+  trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
     return FALSE;
 
@@ -845,7 +850,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
 
   split = xaccSRGetCurrentSplit (reg);
-  trans = xaccSRGetCurrentTrans (reg);
+  trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
     return FALSE;
 
@@ -1005,7 +1010,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
      * transaction. */
     info->cursor_hint_trans = trans;
     info->cursor_hint_split = split;
-    info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
+    info->cursor_hint_trans_split =
+      gnc_split_register_get_current_trans_split (reg, NULL);
     info->cursor_hint_cursor_class = CURSOR_CLASS_SPLIT;
     info->hint_set_by_traverse = TRUE;
 
@@ -1018,7 +1024,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                                    info->exact_traversal);
 
   /* Same transaction, no problem */
-  new_trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
+  new_trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
   if (trans == new_trans)
   {
     *p_new_virt_loc = virt_loc;
@@ -1052,14 +1058,16 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
         CursorClass new_class;
 
         new_split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-        trans_split = xaccSRGetTransSplit (reg, virt_loc.vcell_loc, NULL);
+        trans_split = gnc_split_register_get_trans_split (reg,
+                                                          virt_loc.vcell_loc,
+                                                          NULL);
         new_class = gnc_split_register_get_cursor_class (reg,
                                                          virt_loc.vcell_loc);
 
         xaccSRCancelCursorTransChanges (reg);
 
-        if (xaccSRFindSplit (reg, new_trans, trans_split,
-                             new_split, new_class, &vcell_loc))
+        if (gnc_split_register_find_split (reg, new_trans, trans_split,
+                                           new_split, new_class, &vcell_loc))
           virt_loc.vcell_loc = vcell_loc;
 
         gnc_table_find_close_valid_cell (reg->table, &virt_loc,

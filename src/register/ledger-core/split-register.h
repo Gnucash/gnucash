@@ -172,14 +172,12 @@ CursorClass gnc_split_register_get_cursor_class
                                               (SplitRegister *reg,
                                                VirtualCellLocation vcell_loc);
 
-/* The xaccSRSetData() method sets the user data and callback
- *    hooks for the register. */
-void xaccSRSetData(SplitRegister *reg, gpointer user_data,
-                   SRGetParentCallback get_parent);
+/* Sets the user data and callback hooks for the register. */
+void gnc_split_register_set_data (SplitRegister *reg, gpointer user_data,
+                                  SRGetParentCallback get_parent);
 
-/* The xaccSRGetCurrentTrans() method returns the transaction
- *    which is the parent of the current split (see below). */
-Transaction * xaccSRGetCurrentTrans (SplitRegister *reg);
+/* Returns the transaction which is the parent of the current split. */
+Transaction * gnc_split_register_get_current_trans (SplitRegister *reg);
 
 /* The xaccSRGetCurrentSplit() method returns the split at which 
  *    the cursor is currently located. */

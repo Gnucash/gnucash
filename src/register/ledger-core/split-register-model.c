@@ -541,7 +541,7 @@ gnc_split_register_get_debcred_bg_color (VirtualLocation virt_loc,
   {
     Transaction *trans;
 
-    trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
+    trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
 
     if (trans)
       *hatching = !gnc_numeric_zero_p (xaccTransGetImbalance (trans));
@@ -939,7 +939,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
     gnc_numeric imbalance;
     gnc_commodity *currency;
 
-    trans = xaccSRGetTrans (reg, virt_loc.vcell_loc);
+    trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
     imbalance = xaccTransGetImbalance (trans);
 
     if (gnc_numeric_zero_p (imbalance))

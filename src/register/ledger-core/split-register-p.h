@@ -121,34 +121,37 @@ Split * gnc_split_register_get_split (SplitRegister *reg,
 
 Account * gnc_split_register_get_default_account (SplitRegister *reg);
 
-Transaction * xaccSRGetTrans (SplitRegister *reg,
-                              VirtualCellLocation vcell_loc);
+Transaction * gnc_split_register_get_trans (SplitRegister *reg,
+                                            VirtualCellLocation vcell_loc);
 
-Split * xaccSRGetTransSplit (SplitRegister *reg,
-                             VirtualCellLocation vcell_loc,
-                             VirtualCellLocation *trans_split_loc);
+Split *
+gnc_split_register_get_trans_split (SplitRegister *reg,
+                                    VirtualCellLocation vcell_loc,
+                                    VirtualCellLocation *trans_split_loc);
 
-Split * xaccSRGetCurrentTransSplit (SplitRegister *reg,
-                                    VirtualCellLocation *vcell_loc);
+Split *
+gnc_split_register_get_current_trans_split (SplitRegister *reg,
+                                            VirtualCellLocation *vcell_loc);
 
-gboolean xaccSRFindSplit (SplitRegister *reg,
-                          Transaction *trans, Split *trans_split,
-                          Split *split, CursorClass cursor_class,
-                          VirtualCellLocation *vcell_loc);
+gboolean gnc_split_register_find_split (SplitRegister *reg,
+                                        Transaction *trans, Split *trans_split,
+                                        Split *split, CursorClass cursor_class,
+                                        VirtualCellLocation *vcell_loc);
 
-void xaccSRShowTrans (SplitRegister *reg, VirtualCellLocation start_loc);
+void gnc_split_register_show_trans (SplitRegister *reg,
+                                    VirtualCellLocation start_loc);
 
-void xaccSRSetTransVisible (SplitRegister *reg,
-                            VirtualCellLocation vcell_loc,
-                            gboolean visible,
-                            gboolean only_blank_split);
+void gnc_split_register_set_trans_visible (SplitRegister *reg,
+                                           VirtualCellLocation vcell_loc,
+                                           gboolean visible,
+                                           gboolean only_blank_split);
 
-void sr_set_cell_fractions (SplitRegister *reg, Split *split);
+void gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split);
 
-CellBlock * sr_get_passive_cursor (SplitRegister *reg);
-CellBlock * sr_get_active_cursor (SplitRegister *reg);
+CellBlock * gnc_split_register_get_passive_cursor (SplitRegister *reg);
+CellBlock * gnc_split_register_get_active_cursor (SplitRegister *reg);
 
-void sr_set_last_num (SplitRegister *reg, const char *num);
+void gnc_split_register_set_last_num (SplitRegister *reg, const char *num);
 
 Account * gnc_split_register_get_account (SplitRegister *reg,
                                           const char *cell_name);

@@ -1244,7 +1244,7 @@ gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
   AccountGroup *root;
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
-  trans = xaccSRGetCurrentTrans (reg);
+  trans = gnc_split_register_get_current_trans (reg);
 
   if (!trans)
     return;
@@ -1761,7 +1761,7 @@ gnc_register_record (RegWindow *regData)
 
   reg = xaccLedgerDisplayGetSR (regData->ledger);
 
-  trans = xaccSRGetCurrentTrans (reg);
+  trans = gnc_split_register_get_current_trans (reg);
 
   if (!xaccSRSaveRegEntry (reg, TRUE))
     return;
@@ -3151,10 +3151,10 @@ static void duplicateCB(GtkWidget *w, gpointer data)
 static void recurCB(GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
-  Transaction *pending_trans = xaccSRGetCurrentTrans(xaccLedgerDisplayGetSR (regData->ledger));
+  SplitRegister *reg = xaccLedgerDisplayGetSR (regData->ledger);
+  Transaction *pending_trans = gnc_split_register_get_current_trans (reg);
 
   gnc_sx_create_from_trans(pending_trans);
-  return;
 }
 
   

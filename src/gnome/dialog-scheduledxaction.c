@@ -1078,7 +1078,7 @@ sxed_reg_recordCB( GtkWidget *w, gpointer d )
         Transaction        *trans;
 
         reg = xaccLedgerDisplayGetSR( sxed->ledger );
-        trans = xaccSRGetCurrentTrans( reg );
+        trans = gnc_split_register_get_current_trans( reg );
         if ( !xaccSRSaveRegEntry( reg, TRUE ) )
                 return;
 

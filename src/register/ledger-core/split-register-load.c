@@ -201,7 +201,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   multi_line = (reg->style == REG_STYLE_JOURNAL);
   dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);
 
-  lead_cursor = sr_get_passive_cursor (reg);
+  lead_cursor = gnc_split_register_get_passive_cursor (reg);
   split_cursor = gnc_table_layout_get_cursor (table->layout, CURSOR_SPLIT);
 
   /* figure out where we are going to. */
@@ -425,14 +425,17 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
     trans_split_loc = save_loc;
 
-    trans_split = xaccSRGetTransSplit (reg, save_loc.vcell_loc,
-                                       &trans_split_loc.vcell_loc);
+    trans_split =
+      gnc_split_register_get_trans_split (reg, save_loc.vcell_loc,
+                                          &trans_split_loc.vcell_loc);
 
     if (dynamic || multi_line || info->trans_expanded)
     {
-      gnc_table_set_virt_cell_cursor (table, trans_split_loc.vcell_loc,
-                                      sr_get_active_cursor (reg));
-      xaccSRSetTransVisible (reg, trans_split_loc.vcell_loc, TRUE, multi_line);
+      gnc_table_set_virt_cell_cursor
+        (table, trans_split_loc.vcell_loc,
+         gnc_split_register_get_active_cursor (reg));
+      gnc_split_register_set_trans_visible (reg, trans_split_loc.vcell_loc,
+                                            TRUE, multi_line);
 
       info->trans_expanded = (reg->style == REG_STYLE_LEDGER);
     }
@@ -467,22 +470,23 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   }
 
   /* Set up the hint transaction, split, transaction split, and column. */
-  info->cursor_hint_trans = xaccSRGetCurrentTrans (reg);
+  info->cursor_hint_trans = gnc_split_register_get_current_trans (reg);
   info->cursor_hint_split = xaccSRGetCurrentSplit (reg);
-  info->cursor_hint_trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
+  info->cursor_hint_trans_split =
+    gnc_split_register_get_current_trans_split (reg, NULL);
   info->cursor_hint_cursor_class =
-    gnc_split_register_get_current_cursor_class(reg);
+    gnc_split_register_get_current_cursor_class (reg);
   info->hint_set_by_traverse = FALSE;
   info->traverse_to_new = FALSE;
   info->exact_traversal = FALSE;
   info->first_pass = FALSE;
   info->reg_loaded = TRUE;
 
-  sr_set_cell_fractions (reg, xaccSRGetCurrentSplit (reg));
+  gnc_split_register_set_cell_fractions (reg, xaccSRGetCurrentSplit (reg));
 
   gnc_table_refresh_gui (table, TRUE);
 
-  xaccSRShowTrans (reg, table->current_cursor_loc.vcell_loc);
+  gnc_split_register_show_trans (reg, table->current_cursor_loc.vcell_loc);
 
   /* set the completion character for the xfer cells */
   gnc_combo_cell_set_complete_char
@@ -507,8 +511,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   xaccSRLoadXferCells (reg, default_account);
 }
 
-static void 
-LoadXferCell (ComboCell * cell, AccountGroup * grp)
+static void
+gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
 {
   GList *list;
   GList *node;
@@ -555,10 +559,10 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
-  LoadXferCell (cell, group);
+  gnc_load_xfer_cell (cell, group);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
-  LoadXferCell (cell, group);
+  gnc_load_xfer_cell (cell, group);
 }
