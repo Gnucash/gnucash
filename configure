@@ -1462,7 +1462,7 @@ else
 fi
 
 
-GNC_EXPANDED_LOCALE_DIR=$(gnc_recursively_expand_var "${LOCALE_DIR}")
+GNC_EXPANDED_LOCALE_DIR=`gnc_recursively_expand_var "${LOCALE_DIR}"`
 
 
 
@@ -4451,9 +4451,9 @@ else
   GNC_SHAREDIR=${datadir}/gnucash
 fi
 
-GNC_EXPANDED_LIBDIR=$(gnc_recursively_expand_var "${GNC_LIBDIR}")
-GNC_EXPANDED_CONFIGDIR=$(gnc_recursively_expand_var "${GNC_CONFIGDIR}")
-GNC_EXPANDED_SHAREDIR=$(gnc_recursively_expand_var "${GNC_SHAREDIR}")
+GNC_EXPANDED_LIBDIR=`gnc_recursively_expand_var "${GNC_LIBDIR}"`
+GNC_EXPANDED_CONFIGDIR=`gnc_recursively_expand_var "${GNC_CONFIGDIR}"`
+GNC_EXPANDED_SHAREDIR=`gnc_recursively_expand_var "${GNC_SHAREDIR}"`
 
 GNC_MANDIR=${mandir}
 
@@ -4470,7 +4470,7 @@ GNC_MANDIR=${mandir}
 # HACK : inserts the path to gnucash.pm, which is used in the
 # reporting code and is defined in gnucash.h
 
-GNC_EXPANDED_PERLLIBPATH=$(gnc_recursively_expand_var "${GNC_LIBDIR}")
+GNC_EXPANDED_PERLLIBPATH=`gnc_recursively_expand_var "${GNC_LIBDIR}"`
 
 
 
