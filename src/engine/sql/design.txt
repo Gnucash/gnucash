@@ -137,7 +137,74 @@ an hour newer/older than the others, leading to bad updates).
 
 Balances
 --------
-UPDATE tx
-         SET (balance )= (SELECT expr from .... WHERE )
-WHERE txdate between today - 7 and today
+Account balances can be computed using advanced SQL statements.
+The basic idea looks like this:
+
+    UPDATE checkpoint
+        SET balance = (SELECT sum(expr) from .... WHERE 
+        txdate between today - 7 and today)
+
+The above is not a valid SQL statement; below is one that actually
+works.  Note that this statement updates *all* checkpoints for the 
+indicated accountguid.
+
+    UPDATE gnccheckpoint 
+        SET balance = (SELECT sum(gncentry.valuenum) 
+            FROM gncentry, gnctransaction
+            WHERE
+            gncentry.accountguid = gnccheckpoint.accountguid AND 
+            gncentry.transguid = gnctransaction.transguid AND 
+            gnctransaction.date_posted BETWEEN date_xpoint AND 
+            date_xpoint + 360 )
+        WHERE accountguid='111';
+
+Its a better to create a function that does the computation:
+
+    CREATE FUNCTION gncsubtotal (char(32), datetime, datetime)
+        RETURNS numeric
+        AS 'SELECT sum(gncentry.valuenum) 
+            FROM gncentry, gnctransaction
+            WHERE
+            gncentry.accountguid = $1 AND
+            gncentry.transguid = gnctransaction.transguid AND
+            gnctransaction.date_posted BETWEEN $2 AND $3'
+        LANGUAGE 'sql';
+
+and use it like this:
+
+    UPDATE gnccheckpoint
+        SET balance = (gncsubtotal ('4c9cad7be044559705988c63ea7affc5', 
+                       date_xpoint, date_xpoint + 360 ))
+        WHERE accountguid='111';
+
+
+----------------------------
+nothing but junk below/test demo
+
+CREATE FUNCTION gncsubtotal (char(32), datetime, datetime, int8)
+    RETURNS numeric
+    AS 'SELECT $4 * sum(gncentry.valuenum numeric/ gncentry.valuedenom
+numeric )
+        FROM gncentry, gnctransaction
+        WHERE
+        gncentry.accountguid = $1 AND
+        gncentry.transguid = gnctransaction.transguid AND
+        gnctransaction.date_posted BETWEEN $2 AND $3'
+    LANGUAGE 'sql';
+
+
+UPDATE gnccheckpoint
+      SET balance = (SELECT sum(gncentry.valuenum)
+FROM gncentry, gnctransaction
+WHERE
+gncentry.accountguid = '4c9cad7be044559705988c63ea7affc5' AND
+gncentry.transguid = gnctransaction.transguid AND
+gnctransaction.date_posted BETWEEN date_xpoint AND
+date_xpoint + 360 )
+WHERE accountguid='111';
+
+
+
+INSERT INTO gnccheckpoint (accountguid, date_xpoint, commodity, balance)
+VALUES (111, '1997-01-01 12:00:00-05', 'FLOOP::GLOP', 0);
 

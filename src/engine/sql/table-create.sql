@@ -80,10 +80,8 @@ CREATE TABLE gncEntry (
 	action			TEXT,
 	reconciled		CHAR DEFAULT 'n',
 	date_reconciled 	DATETIME,
-	amountNum		INT8 DEFAULT '0',
-	amountDenom		INT4 DEFAULT '100',
-	valueNum		INT8 DEFAULT '0',
-	valueDenom		INT4 DEFAULT '100'
+	amount			INT8 DEFAULT '0',
+	value			INT8 DEFAULT '0'
 );
 
 CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
@@ -98,13 +96,14 @@ CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 
 CREATE TABLE gncCheckpoint (
 	accountGuid		CHAR(32) NOT NULL,
-	date_xpoint	 	DATETIME NOT NULL,
+	date_start	 	DATETIME NOT NULL,
+-- 	date_end	 	DATETIME NOT NULL,
 	commodity		TEXT NOT NULL CHECK (commodity <>''),
 	balance			INT8 DEFAULT '0',
 	cleared_balance		INT8 DEFAULT '0',
 	reconciled_balance	INT8 DEFAULT '0',
 
-        PRIMARY KEY (accountGuid, date_xpoint, commodity)
+        PRIMARY KEY (accountGuid, date_start, commodity)
 );
 
 -- The price table stores the price of 'commodity' valued

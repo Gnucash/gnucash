@@ -826,7 +826,6 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
 static int
 pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
 {
-   gnc_commodity *modity=NULL;
    char *pbuff;
    Transaction *trans;
    PGresult *result;
@@ -836,6 +835,8 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    int i, j, nrows;
    int save_state = 1;
    GList *node, *db_splits=NULL, *engine_splits, *delete_splits=NULL;
+   gnc_commodity *currency = NULL;
+   gint64 trans_frac = 0;
    
    ENTER ("be=%p", be);
    if (!be || !trans_guid) return 0;
@@ -914,6 +915,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
          if (0 > engine_data_is_newer)
          {
             Timespec ts;
+
             xaccTransBeginEdit (trans);
             if (do_set_guid) xaccTransSetGUID (trans, trans_guid);
             xaccTransSetNum (trans, DB_GET_VAL("num",j));
@@ -929,7 +931,8 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
              * the reporting currency in an account. This hack will be 
              * obsolete when reporting currencies are removed from the
              * account. */
-            modity = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+            currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
+            trans_frac = gnc_commodity_get_fraction (currency);
 #if 0
             xaccTransSetCurrency
               (trans, gnc_string_to_commodity (DB_GET_VAL("currency",j)));
@@ -990,7 +993,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             Split *s;
             GUID guid;
             Timespec ts;
-            gint64 num, denom;
+            gint64 num;
             gnc_numeric value, amount;
 
             /* --------------------------------------------- */
@@ -1013,14 +1016,8 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
               (DB_GET_VAL("date_reconciled",j));
             xaccSplitSetDateReconciledTS (s, &ts);
 
-            num = atoll (DB_GET_VAL("amountNum", j));
-            denom = atoll (DB_GET_VAL("amountDenom", j));
-            amount = gnc_numeric_create (num, denom);
-            xaccSplitSetShareAmount (s, amount);
-
-            num = atoll (DB_GET_VAL("valueNum", j));
-            denom = atoll (DB_GET_VAL("valueDenom", j));
-            value = gnc_numeric_create (num, denom);
+            num = atoll (DB_GET_VAL("value", j));
+            value = gnc_numeric_create (num, trans_frac);
             xaccSplitSetValue (s, value);
 
             xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
@@ -1042,6 +1039,14 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             }
             else
             {
+               gnc_commodity *modity;
+               gint64 acct_frac;
+               num = atoll (DB_GET_VAL("amount", j));
+               modity = xaccAccountGetCommodity (acc);
+               acct_frac = gnc_commodity_get_fraction (modity);
+               amount = gnc_numeric_create (num, acct_frac);
+               xaccSplitSetShareAmount (s, amount);
+
                xaccTransAppendSplit (trans, s);
 
                if (acc != previous_acc)
@@ -1107,7 +1112,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    /* ------------------------------------------------- */
 
    /* see note above as to why we do this set here ... */
-   xaccTransSetCurrency (trans, modity);
+   xaccTransSetCurrency (trans, currency);
 
    xaccTransCommitEdit (trans);
 

@@ -87,7 +87,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
 
    /* and now, fetch *all* of the splits in this account */
    p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT gncEntry.amountNum AS amountNum, "
+   p = stpcpy (p, "SELECT gncEntry.amount AS amount, "
                   "       gncEntry.reconciled AS reconciled,"
                   "       gncTransaction.date_posted AS date_posted "
                   "FROM gncEntry, gncTransaction "
@@ -156,7 +156,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
             nsplits ++;
 
             /* accumulate balances */
-            amt = atoll (DB_GET_VAL("amountNum",j));
+            amt = atoll (DB_GET_VAL("amount",j));
             recn = (DB_GET_VAL("reconciled",j))[0];
             bp->balance += amt;
             if (NREC != recn)
@@ -238,9 +238,9 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    p = guid_to_string_buff (chk->account_guid, p);
    p = stpcpy (p, "' AND commodity='");
    p = stpcpy (p, chk->commodity);
-   p = stpcpy (p, "' AND date_xpoint <'");
+   p = stpcpy (p, "' AND date_start <'");
    p = gnc_timespec_to_iso8601_buff (chk->datetime, p);
-   p = stpcpy (p, "' ORDER BY date_xpoint DESC LIMIT 1;");
+   p = stpcpy (p, "' ORDER BY date_start DESC LIMIT 1;");
    SEND_QUERY (be,be->buff, );
 
    i=0; nrows=0;
