@@ -1,7 +1,7 @@
 # Engine Makefile.am file.
 
 # don't build sql subdir by default, unless you want hurt
-# SUBDIRS = sql
+SUBDIRS = ${SQL_DIR}
 
 # Build a libtool library, libhello.la for installation in libdir.
 lib_LTLIBRARIES = libgncengine.la

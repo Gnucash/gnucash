@@ -130,6 +130,15 @@ AC_ARG_ENABLE( profile,
 
 
 ### --------------------------------------------------------------------------
+### SQL
+AC_ARG_ENABLE( sql,
+  [  --enable-sql                 compile with sql support],
+       SQL_DIR=sql)
+
+AC_SUBST(SQL_DIR)
+
+
+### --------------------------------------------------------------------------
 ### i18n
 AC_ARG_WITH( locale-dir, 
   [  --with-locale-dir=PATH       specify where to look for locale-specific information],
