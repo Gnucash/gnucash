@@ -1,3 +1,38 @@
+gnucash (1.5.2.cvs20001210-0.1) unstable; urgency=low
+
+  * local compile
+
+ -- James LewisMoss <dres@debian.org>  Thu, 30 Nov 2000 13:29:17 -0500
+
+gnucash (1.5.2.cvs20001105-0.1) unstable; urgency=low
+
+  * Perl files gone.  Comment out stuff in rules that dealt with it.
+  * Local compile.
+
+ -- James LewisMoss <dres@debian.org>  Sun,  5 Nov 2000 20:39:28 -0500
+
+gnucash (1.5.2.cvs20001022-0.1) unstable; urgency=low
+
+  * local compile.
+  * Move perl files to correct place in perl heirarchy.
+
+ -- James LewisMoss <dres@debian.org>  Sun, 22 Oct 2000 18:49:38 -0400
+
+gnucash (1.5.2.cvs20000929-0.1) unstable; urgency=low
+
+  * More debian files fixes.  Specifically rules to put the files in the
+    correct place and adding a postinst to call ldconfig.
+  * local compile.
+
+ -- James LewisMoss <dres@debian.org>  Fri, 29 Sep 2000 15:25:07 -0400
+
+gnucash (1.5.2.cvs20000928-0.1) unstable; urgency=low
+
+  * local compile
+  * Change copyright file to refer to correct license directory.
+
+ -- James LewisMoss <dres@debian.org>  Thu, 28 Sep 2000 23:25:11 -0400
+
 gnucash (1.3.8-1) unstable; urgency=low
 
   * New Debian maintainer: John Goerzen <jgoerzen@complete.org>
@@ -154,5 +189,4 @@ gnucash (1.1.26-1) unstable; urgency=low
 
 Local variables:
 mode: debian-changelog
-add-log-mailing-address: "trd@cs.mu.oz.au"
 End:

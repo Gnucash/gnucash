@@ -26,3 +26,5 @@ stamp-h.in
 *.diff
 *.diffs
 *.xac.*.xac
+cscope.out
+cscope.files

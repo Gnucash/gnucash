@@ -34,6 +34,20 @@
 	* src/doc/design/Makefile.am (gnucash_design_TEXINFOS): Add info
 	files to clean list (why the hell aren't they already cleaned?)
 
+2000-11-15  James LewisMoss  <dres@debian.org>
+
+	* src/doc/design/register.texinfo (Split Register): Move a little
+	something around to make sure dvi/ps output doesn't spill off side
+	of page.
+
+	* src/doc/design/intro.texinfo (Introduction): Move a little
+	something around to make sure dvi/ps output doesn't spill off side
+	of page.
+
+	* src/doc/design/fdl.texinfo (GNU Free Documentation License):
+	Comment out @bye causing texi2dvi to quit not completing the
+	output. 
+
 2000-11-09  Bill Gribble  <grib@billgribble.com>
 
 	* src/engine/gnc_numeric.c: fix remainder-handling error

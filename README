@@ -132,7 +132,7 @@ The following packages are required to be installed to run gnucash:
 
   guile: provides main extension language infrastructure, used
     extensively in gnucash for initialization & startup. Requires
-    version 1.3 or later. (The guile-1.3-7 rpm works.)
+    version 1.3.4 or later.
 
   slib: scheme libraries for guile. Need version slib2c4 or later.
 

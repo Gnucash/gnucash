@@ -62,6 +62,16 @@ make-gnucash-patch: make-gnucash-patch.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-CLEANFILES += make-gnucash-patch
+CLEANFILES +=  cscope.files etags.files make-gnucash-patch
 
+cscope.files:
+	find . -name '*.[ch]' > cscope.files
 
+cscope.out: cscope.files
+	cscope -b
+
+TAGS: etags.files
+	etags - < etags.files
+
+etags.files:
+	find . -name '*.[ch]' -o -name '*.scm' > etags.files
