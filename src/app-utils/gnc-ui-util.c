@@ -34,14 +34,19 @@
 
 #include "Transaction.h"
 #include "global-options.h"
+
+#include "Account.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-module.h"
+#include "gnc-session.h"
 #include "gnc-ui-util.h"
+#include "Group.h"
 #include "messages.h"
+#include "Transaction.h"
 
 
 static short module = MOD_GUI;

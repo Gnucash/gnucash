@@ -28,6 +28,8 @@
 #include <glib.h>
 #include <locale.h>
 
+#include "Account.h"
+#include "gnc-engine.h"
 #include "Group.h"
 #include "gnc-session.h"
 
