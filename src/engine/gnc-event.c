@@ -153,7 +153,7 @@ gnc_engine_resume_events (void)
 }
 
 static void
-gnc_engine_generate_event_internal (const GUID *entity, QofIdType type,
+gnc_engine_generate_event_internal (QofEntity *entity, 
 				    GNCEngineEventType event_type)
 {
   GList *node;
@@ -181,23 +181,22 @@ gnc_engine_generate_event_internal (const GUID *entity, QofIdType type,
 
     PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
     if (hi->handler)
-      hi->handler ((GUID *)entity, type, event_type, hi->user_data);
+      hi->handler ((GUID *)&entity->guid, entity->e_type, event_type, hi->user_data);
   }
 }
 
 void
-gnc_engine_force_event (const GUID *entity, QofIdType type, 
+gnc_engine_force_event (QofEntity *entity, 
 			GNCEngineEventType event_type)
 {
   if (!entity)
     return;
 
-  gnc_engine_generate_event_internal (entity, type, event_type);
+  gnc_engine_generate_event_internal (entity, event_type);
 }
 
 void
-gnc_engine_generate_event (const GUID *entity, QofIdType type,
-			   GNCEngineEventType event_type)
+gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type)
 {
   if (!entity)
     return;
@@ -205,7 +204,7 @@ gnc_engine_generate_event (const GUID *entity, QofIdType type,
   if (suspend_counter)
     return;
 
-  gnc_engine_generate_event_internal (entity, type, event_type);
+  gnc_engine_generate_event_internal (entity, event_type);
 }
 
 /* =========================== END OF FILE ======================= */

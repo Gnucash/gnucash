@@ -122,58 +122,56 @@ const char * gnc_log_prettify (const char *name);
  */
 
 #define FATAL(format, args...) {                     \
-  if (gnc_should_log (module, GNC_LOG_FATAL)) {      \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
-      "Fatal Error: %s: " format, FUNK, ## args);    \
-  }                                                  \
+      "Fatal Error: %s(): " format, FUNK, ## args);  \
 }
 
 #define PERR(format, args...) {                    \
   if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
-      "Error: %s: " format, FUNK, ## args);        \
+      "Error: %s(): " format, FUNK, ## args);      \
   }                                                \
 }
 
 #define PWARN(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
-      "Warning: %s: " format, FUNK, ## args);      \
+      "Warning: %s(): " format, FUNK, ## args);    \
   }                                                \
 }
 
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
-      "Info: %s: " format, FUNK, ## args);         \
+      "Info: %s(): " format, FUNK, ## args);       \
   }                                                \
 }
 
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Debug: %s: " format, FUNK, ## args);        \
+      "Debug: %s(): " format, FUNK, ## args);      \
   }                                                \
 }
 
 #define ENTER(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Enter: %s: " format, FUNK, ## args);        \
+      "Enter: %s" format, FUNK, ## args);          \
   }                                                \
 }
 
 #define LEAVE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Leave: %s: " format, FUNK, ## args);        \
+      "Leave: %s" format, FUNK, ## args);          \
   }                                                \
 }
 
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Trace: %s: " format, FUNK, ## args);        \
+      "Trace: %s(): " format, FUNK, ## args);      \
   }                                                \
 }
 
