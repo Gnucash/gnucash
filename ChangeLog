@@ -1,3 +1,14 @@
+2003-05-27  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* configure.in: Requires gtk+-2.0 >= 2.2 and libgnomeui-2.0 >= 2.2
+
+	Replace gtk_signal_connect by g_signal_connect and GnomeDialog by
+	GtkDialog
+	* src/gnome/dialog-price-editor.c: (pedit_dialog_response),
+	(connect_type_menu_item), (gnc_price_pedit_dialog_create),
+	(close_handler):
+	* src/gnome/glade/price.glade:
+
 2003-05-26  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	Use different actions for different windows so that it is very easy
