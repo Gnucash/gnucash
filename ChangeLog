@@ -1,3 +1,17 @@
+2001-05-09  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/net-barchart.scm: check for empty data
+	and empty account lists.
+
+	* src/scm/report/category-barchart.scm: check for empty
+	data, print a nice error message.
+
+	* src/scm/html-piechart.scm: now produces a warning if an
+	empty piechart is sent to it.
+
+	* src/scm/html-barchart.scm: now checks for and warns
+	against empty barcharts
+
 2001-05-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/options-utilities.scm, src/scm/report/price-scatter.scm:
