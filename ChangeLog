@@ -1,3 +1,9 @@
+2003-12-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/reconcile-list.c: make sure to verify that the items
+	  in the reconcile hash are still around after a refresh.  Fixes
+	  bug #129121.
+
 2003-12-08  Benoit Grégoire  <bock@step.polymtl.ca>
 	*src/import-export/log-replay/gnc-log-replay.c:  Increase read buffer size.
 	Hopefully fixes 127421, but this time someone please do test the fix...
