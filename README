@@ -23,18 +23,39 @@ of the features of xacc are:
 To install:
 -----------
 
- First check the makefile to ensure that all the paths are OK.
- Also, make sure that the Xbae-Matrix widget and Motif or
- Lesstif are installed.  You can get Lesstif from 
- http://www.lesstif.org.  You can get The Xbae widget from
- ftp://ftp.x.org/contrib/widgets/motif/ or any mirror.  If
- you are using a version of Xbae 4.6.1, you will need to
- comment out "-DUSEQUICKFILL" in the Makefile.
+Normally, to build and install xacc, all you have to do is:
 
- # make depend
- # make
+  # ./configure
+  # make
+  # make install
+
+You can also build xacc in a seperate directory, which is
+useful if you are compiling for several platforms from a
+single copy of the source tree:
+
+  # mkdir BUILD
+  # mkdir BUILD/debug
+  # cd BUILD/debug
+  # ../../configure --enable-debug
+  # make
+  # make install
+
+Post-install instructions:
+
+   You have to set the environment variable XACC_HELP to point
+   to the xacc help files.  For example:
+
+      % setenv XACC_HELP /usr/local/share/xacc
+
+   for the tcsh shell, or:
+
+      % set XACC_HELP=/usr/local/share/xacc
+
+   for csh.
+
 
 sorry, no "make install" yet.
+
 
 
 Status:
