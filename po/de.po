@@ -784,7 +784,7 @@ msgstr ""
 
 #: messages-i18n.c:143
 msgid "Transfer funds from one account to another"
-msgstr "Transferieren von Währungen von einem Konto zu einem anderen"
+msgstr "Transferieren von Geld von einem Konto zu einem anderen"
 
 #: messages-i18n.c:144
 msgid "Enter the type of transaction, or choose one from the list"
@@ -2310,7 +2310,7 @@ msgstr "Es wurden keine Konten in der Kontenliste ausgewählt."
 
 #: po/guile_strings.txt:97
 msgid "Funds Out"
-msgstr "Ausgehende Fonds"
+msgstr "Belastung"
 
 #: po/guile_strings.txt:98
 msgid "This page shows your net worth."
@@ -2948,7 +2948,7 @@ msgstr "- (Minus)"
 
 #: po/guile_strings.txt:272
 msgid "Funds In"
-msgstr "Eingehende Fonds"
+msgstr "Gutschrift"
 
 #: po/guile_strings.txt:273
 #, fuzzy
