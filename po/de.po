@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.1\n"
-"POT-Creation-Date: 2000-03-15 02:46-0800\n"
+"POT-Creation-Date: 2000-03-15 03:12-0800\n"
 "PO-Revision-Date: 2000-03-12 15:20+0100\n"
 "Last-Translator: Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -915,175 +915,174 @@ msgid "Primary Key"
 msgstr "Primärschlüssel"
 
 #: ../po/guile_strings.txt:215
-msgid ""
-"For help on writing reports, or to contribute your brand new, totally cool "
-"report, consult the mailing list <a "
-"href=\"mailto:gnucash-devel@gnucash.org\"><tt>gnucash-devel@gnucash.org</tt><"
-"/a>. For details on subscribing to that list, see <a "
-"href=\"http://www.gnucash.org\"><tt>www.gnucash.org</tt></a>."
-msgstr ""
-
-#: ../po/guile_strings.txt:216
 msgid "Time and Date Option"
 msgstr "Zeit und Datums Option"
 
-#: ../po/guile_strings.txt:217
+#: ../po/guile_strings.txt:216
 msgid "Single mode default odd row background"
 msgstr "Single-Modus Standardhintergrundfarbe für Zeilen mit Fehlern"
 
-#: ../po/guile_strings.txt:218
+#: ../po/guile_strings.txt:217
 msgid "Double mode default odd row background"
 msgstr "Doppel-Modus Standardhintergrundfarbe für Zeilen mit Fehlern"
 
-#: ../po/guile_strings.txt:219
+#: ../po/guile_strings.txt:218
 msgid "The character used to separate fully-qualified account names"
 msgstr "Das Zeichen, das Kontennamen trennt"
 
-#: ../po/guile_strings.txt:220
+#: ../po/guile_strings.txt:219
 msgid "__gui"
 msgstr "__gui"
 
-#: ../po/guile_strings.txt:221
+#: ../po/guile_strings.txt:220
 #, fuzzy
 msgid "Report start date"
 msgstr "Alles anzeigen aus diesem Zeitraum"
 
-#: ../po/guile_strings.txt:222 messages-i18n.c:334
+#: ../po/guile_strings.txt:221 messages-i18n.c:334
 msgid "To"
 msgstr "Zu"
 
-#: ../po/guile_strings.txt:223
+#: ../po/guile_strings.txt:222
 msgid "smallest to largest, earliest to latest"
 msgstr "kleinster zu grösstem, ältester zu jüngstem"
 
-#: ../po/guile_strings.txt:224 messages-i18n.c:337
+#: ../po/guile_strings.txt:223 messages-i18n.c:337
 msgid "Type"
 msgstr "Typ"
 
-#: ../po/guile_strings.txt:225
+#: ../po/guile_strings.txt:224
 msgid "\\ (Backslash)"
 msgstr "\\ (Backslash)"
 
-#: ../po/guile_strings.txt:226
+#: ../po/guile_strings.txt:225
 msgid "Icons only"
 msgstr "Nur Icons"
 
-#: ../po/guile_strings.txt:227
+#: ../po/guile_strings.txt:226
 msgid "Help for third option"
 msgstr "Hilfe für die dritte Option"
 
-#: ../po/guile_strings.txt:228
+#: ../po/guile_strings.txt:227
 msgid "Default Register Mode"
 msgstr "Standard Register Modus"
 
-#: ../po/guile_strings.txt:229 messages-i18n.c:161
+#: ../po/guile_strings.txt:228 messages-i18n.c:161
 msgid "Auto Double"
 msgstr " Auto-Doppel"
 
-#: ../po/guile_strings.txt:230
+#: ../po/guile_strings.txt:229
 msgid "main_win_width"
 msgstr ""
 
-#: ../po/guile_strings.txt:231
+#: ../po/guile_strings.txt:230
 msgid "Sort by amount"
 msgstr "Sortieren nach Summe"
 
-#: ../po/guile_strings.txt:232
+#: ../po/guile_strings.txt:231
 msgid "This is an account list option"
 msgstr "Dies ist eine Kontoaufzählungsoption"
 
-#: ../po/guile_strings.txt:233
+#: ../po/guile_strings.txt:232
 msgid "Average Balance"
 msgstr "Durchschnitt"
 
-#: ../po/guile_strings.txt:234
+#: ../po/guile_strings.txt:233
 msgid "Show All Transactions"
 msgstr "Alle Buchungen anzeigen"
 
-#: ../po/guile_strings.txt:235
+#: ../po/guile_strings.txt:234
 msgid "Display the Profit and Loss report."
 msgstr "Gewinn- und Verlust-Bericht anzeigen"
 
-#: ../po/guile_strings.txt:236
+#: ../po/guile_strings.txt:235
 msgid "Display the Account Balance Tracker report."
 msgstr "Kontensaldo-Bericht anzeigen"
 
-#: ../po/guile_strings.txt:237
+#: ../po/guile_strings.txt:236
 msgid "2Week"
 msgstr "2 Wochen"
 
-#: ../po/guile_strings.txt:238
+#: ../po/guile_strings.txt:237
 msgid "Nothing"
 msgstr "Nichts"
 
-#: ../po/guile_strings.txt:239
+#: ../po/guile_strings.txt:238
 msgid "You have selected no values in the list option."
 msgstr ""
 
-#: ../po/guile_strings.txt:240
+#: ../po/guile_strings.txt:239
 #, fuzzy
 msgid "false"
 msgstr "Schliessen"
 
-#: ../po/guile_strings.txt:241 messages-i18n.c:276
+#: ../po/guile_strings.txt:240 messages-i18n.c:276
 msgid "Expense"
 msgstr "Ausgabe"
 
-#: ../po/guile_strings.txt:242
+#: ../po/guile_strings.txt:241
 msgid "An account list option"
 msgstr "Eine Kontenlisten-Option"
 
-#: ../po/guile_strings.txt:243
+#: ../po/guile_strings.txt:242
 msgid "Multi Choice Option"
 msgstr "Multi-Auswahl"
 
-#: ../po/guile_strings.txt:244
+#: ../po/guile_strings.txt:243
 msgid "This is a color option"
 msgstr "Farbauswahl"
 
-#: ../po/guile_strings.txt:245
+#: ../po/guile_strings.txt:244
 msgid "QIF File Import (Danger: Unfinished)"
 msgstr "Quicken-File-Import(QIF) (Vorsicht: Unstabil)"
 
-#: ../po/guile_strings.txt:246
+#: ../po/guile_strings.txt:245
 msgid "Make No Plot"
 msgstr ""
 
-#: ../po/guile_strings.txt:247
+#: ../po/guile_strings.txt:246
 msgid "Bad option"
 msgstr "Falsche Auswahl"
 
-#: ../po/guile_strings.txt:248
+#: ../po/guile_strings.txt:247
 msgid "Display the Balance sheet report."
 msgstr "Anzeigen der Bilanz"
 
-#: ../po/guile_strings.txt:249
+#: ../po/guile_strings.txt:248
 msgid "Display the Account Transactions report."
 msgstr "Anzeigen des Transkaktionsberichts"
 
-#: ../po/guile_strings.txt:250
+#: ../po/guile_strings.txt:249
 msgid "Have a nice day!"
 msgstr ""
 
-#: ../po/guile_strings.txt:251
+#: ../po/guile_strings.txt:250
 msgid "This is a list option"
 msgstr "Dies ist eine Aufzählungsoption"
 
-#: ../po/guile_strings.txt:252
+#: ../po/guile_strings.txt:251
 msgid "Order of Secondary sorting"
 msgstr "Reihenfolge der zweiten Sortierung"
 
-#: ../po/guile_strings.txt:253
+#: ../po/guile_strings.txt:252
 msgid "Help for second option"
 msgstr "Hilfe für die zweite Option"
 
-#: ../po/guile_strings.txt:254
+#: ../po/guile_strings.txt:253
 msgid "reg_stock_win_width"
 msgstr ""
 
-#: ../po/guile_strings.txt:255
+#: ../po/guile_strings.txt:254
 msgid "Report items up to and including this date"
 msgstr "Stelle bis inklusive dieses Datums dar"
+
+#: ../po/guile_strings.txt:255
+#, c-format
+msgid ""
+"For help on writing reports, or to contribute your brand new, totally cool "
+"report, consult the mailing list %s. For details on subscribing to that "
+"list, see %s."
+msgstr ""
 
 #: ../po/guile_strings.txt:256
 msgid ""

@@ -249,7 +249,13 @@
                     (string-append "<tt>" gnc:_share-dir-default_
                                    "/gnucash/scm/report" "</tt>"))
 
-         (make-para 'para-2)
+         (make-para 'para-2
+                    (string-append
+                     "<a href=\"mailto:gnucash-devel@gnucash.org\">"
+                     "<tt>gnucash-devel@gnucash.org</tt></a>")
+                    (string-append
+                     "<a href=\"http://www.gnucash.org\">"
+                     "<tt>www.gnucash.org</tt></a>"))
 
          (make-para 'time-string (bold time-string))
 
@@ -299,12 +305,8 @@
   (let ((string
          (string-append
           "For help on writing reports, or to contribute your brand "
-          "new, totally cool report, consult the mailing list "
-          "<a href=\"mailto:gnucash-devel@gnucash.org\">"
-          "<tt>gnucash-devel@gnucash.org</tt>" "</a>" ". "
-          "For details on subscribing to that list, see "
-          "<a href=\"http://www.gnucash.org\">"
-          "<tt>www.gnucash.org</tt>" "</a>" ".")))
+          "new, totally cool report, consult the mailing list %s. "
+          "For details on subscribing to that list, see %s.")))
     (string-db 'store 'para-2 string))
 
 
