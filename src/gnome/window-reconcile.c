@@ -1267,6 +1267,7 @@ recnWindow(GtkWidget *parent, Account *account)
   GtkWidget *dock;
   double new_ending;
   time_t statement_date;
+  static time_t last_statement_date = 0;
   GNCAccountType type;
 
   if (account == NULL)
@@ -1283,7 +1284,20 @@ recnWindow(GtkWidget *parent, Account *account)
   else
     new_ending = xaccAccountGetBalance(account);
 
-  statement_date = time(NULL);
+  /* The last time reconciliation was attempted during the current
+   * execution of gnucash, the date was stored.  Use that date if 
+   * possible.  This helps with balancing multiple accounts for
+   * which statements are issued at the same time, like multiple
+   * bank accounts on a single statement.
+   */
+  if( !last_statement_date )
+  {
+     statement_date = time(NULL);
+  }
+  else
+  {
+     statement_date = last_statement_date;
+  }
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
@@ -1293,6 +1307,8 @@ recnWindow(GtkWidget *parent, Account *account)
     free(recnData);
     return NULL;
   }
+
+  last_statement_date = statement_date;
 
   recnData->new_ending = new_ending;
   recnData->statement_date = statement_date;
