@@ -199,9 +199,10 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       }
 
       /* Now, total up the values */
-      value = gnc_numeric_add_fixed (value, xaccSplitGetValue (s));
-      PINFO ("Split value=%s Accum Lot value=%s", 
-          gnc_numeric_to_string (xaccSplitGetValue(s)),
+      value = gnc_numeric_add (value, xaccSplitGetValue (s), 
+                  GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+      PINFO ("Split=%p value=%s Accum Lot value=%s", s,
+          gnc_numeric_to_string (s->value),
           gnc_numeric_to_string (value));
           
    }

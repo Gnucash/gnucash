@@ -783,10 +783,12 @@ void
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("old amt=%lld/%lld new amt=%lld/%lld", 
+  ENTER ("split=%p old amt=%lld/%lld new amt=%lld/%lld", s,
         s->amount.num, s->amount.denom, amt.num, amt.denom);
-  check_open (s->parent);
 
+  if (gnc_numeric_eq (s->amount, amt)) return; /* Optimize common case */
+
+  check_open (s->parent);
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
 
   SET_GAINS_ADIRTY(s);
@@ -799,10 +801,11 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("old val=%lld/%lld new val=%lld/%lld", 
+  ENTER ("split=%p old val=%lld/%lld new val=%lld/%lld", s,
         s->value.num, s->value.denom, amt.num, amt.denom);
-  check_open (s->parent);
+  if (gnc_numeric_eq (s->value, amt)) return; /* Optimize common case */
 
+  check_open (s->parent);
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_RND_ROUND);
 
   SET_GAINS_VDIRTY(s);
