@@ -76,6 +76,7 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_taxtable_string "entry:taxtable"
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
+#define entry_bill_string "entry:bill"
 
 static void
 maybe_add_string (xmlNodePtr ptr, const char *tag, const char *str)
@@ -151,6 +152,11 @@ entry_dom_tree_create (GncEntry *entry)
     invoice = gncEntryGetInvoice (entry);
     if (invoice)
       xmlAddChild (ret, guid_to_dom_tree (entry_invoice_string,
+					  gncInvoiceGetGUID (invoice)));
+
+    invoice = gncEntryGetBill (entry);
+    if (invoice)
+      xmlAddChild (ret, guid_to_dom_tree (entry_bill_string,
 					  gncInvoiceGetGUID (invoice)));
 
     return ret;
@@ -430,6 +436,27 @@ entry_invoice_handler (xmlNodePtr node, gpointer entry_pdata)
     return TRUE;
 }
 
+static gboolean
+entry_bill_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    GUID *guid;
+    GncInvoice *invoice;
+
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
+    invoice = gncInvoiceLookup (pdata->book, guid);
+    if (!invoice) {
+      invoice = gncInvoiceCreate (pdata->book);
+      gncInvoiceSetGUID (invoice, guid);
+    }
+    gncBillAddEntry (invoice, pdata->entry);
+    gncInvoiceCommitEdit (invoice);
+
+    g_free(guid);
+    return TRUE;
+}
+
 static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_guid_string, entry_guid_handler, 1, 0 },
     { entry_date_string, entry_date_handler, 1, 0 },
@@ -448,6 +475,7 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_taxtable_string, entry_taxtable_handler, 0, 0 },
     { entry_order_string, entry_order_handler, 0, 0 },
     { entry_invoice_string, entry_invoice_handler, 0, 0 },
+    { entry_bill_string, entry_bill_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
@@ -542,7 +570,8 @@ xml_add_entry (gpointer entry_p, gpointer out_p)
   FILE *out = out_p;
 
   /* Don't save non-attached entries! */
-  if (!(gncEntryGetOrder (entry) || gncEntryGetInvoice (entry)))
+  if (!(gncEntryGetOrder (entry) || gncEntryGetInvoice (entry) ||
+	gncEntryGetBill (entry)))
     return;
 
   node = entry_dom_tree_create (entry);

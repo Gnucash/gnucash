@@ -435,6 +435,14 @@
 
   (gw:wrap-function
    ws
+   'gnc:entry-get-bill
+   '<gnc:GncInvoice*>
+   "gncEntryGetBill"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Bill")
+
+  (gw:wrap-function
+   ws
    'gnc:entry-get-order
    '<gnc:GncOrder*>
    "gncEntryGetOrder"

@@ -162,7 +162,8 @@ void gnc_invoice_window_sort_price_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_toolbar_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data);
 
-#define WIDTH_PREFIX "invoice_reg"
+#define INV_WIDTH_PREFIX "invoice_reg"
+#define BILL_WIDTH_PREFIX "bill_reg"
 static int last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
@@ -791,12 +792,27 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
   return popup;
 }
 
+static char *
+gnc_invoice_get_width_prefix (InvoiceWindow *iw)
+{
+  switch (gncOwnerGetType (&iw->owner)) {
+  case GNC_OWNER_CUSTOMER:
+    return INV_WIDTH_PREFIX;
+  case GNC_OWNER_VENDOR:
+    return  BILL_WIDTH_PREFIX;
+  default:
+    g_warning ("invalid owner");
+    return INV_WIDTH_PREFIX;
+  }
+}
+
 static void
 gnc_invoice_save_size (InvoiceWindow *iw)
 {
   gdk_window_get_geometry (iw->dialog->window, NULL, NULL, &last_width,
 			   NULL, NULL);
-  gnc_save_window_size (WIDTH_PREFIX, last_width, 0);
+
+  gnc_save_window_size (gnc_invoice_get_width_prefix (iw), last_width, 0);
 }
 
 static void
@@ -1122,7 +1138,8 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   case VIEW_INVOICE:
   case EDIT_INVOICE:
     if (last_width == 0)
-      gnc_get_window_size (WIDTH_PREFIX, &last_width, NULL);
+      gnc_get_window_size (gnc_invoice_get_width_prefix (iw), &last_width,
+			   NULL);
 
     gtk_window_set_default_size (GTK_WINDOW (iw->dialog), last_width, 0);
     break;
@@ -1304,6 +1321,8 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   GladeXML *xml;
   GtkWidget *hbox;
   GncEntryLedger *entry_ledger = NULL;
+  GncOwnerType owner_type;
+  GncEntryLedgerType ledger_type;
 
   g_assert (type != NEW_INVOICE && type != MOD_INVOICE);
 
@@ -1336,6 +1355,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   /* Save this for later */
   gncOwnerCopy (gncOwnerGetEndOwner (owner), &(iw->owner));
   gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
+  owner_type = gncOwnerGetType (&iw->owner);
 
   /* Find the dialog */
   iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "Invoice Entry Window");
@@ -1391,15 +1411,34 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   gtk_widget_set_sensitive (iw->posted_date, FALSE);
 
   /* Build the ledger */
+  ledger_type = GNCENTRY_INVOICE_VIEWER;
   switch (type) {
   case EDIT_INVOICE:
-    entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_ENTRY);
+    switch (owner_type) {
+    case GNC_OWNER_CUSTOMER:
+      ledger_type = GNCENTRY_INVOICE_ENTRY;
+      break;
+    case GNC_OWNER_VENDOR:
+      ledger_type = GNCENTRY_BILL_ENTRY;
+      break;
+    default:
+      g_warning ("Invalid owner type");
+    }
     break;
   case VIEW_INVOICE:
   default:
-    entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_VIEWER);
-    break;
+    switch (owner_type) {
+    case GNC_OWNER_CUSTOMER:
+      ledger_type = GNCENTRY_INVOICE_VIEWER;
+      break;
+    case GNC_OWNER_VENDOR:
+      ledger_type = GNCENTRY_BILL_VIEWER;
+      break;
+    default:
+      g_warning ("Invalid owner type");
+    }
   }
+  entry_ledger = gnc_entry_ledger_new (iw->book, ledger_type);
 
   /* Save the ledger... */
   iw->ledger = entry_ledger;

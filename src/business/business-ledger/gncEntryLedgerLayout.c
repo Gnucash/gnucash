@@ -104,6 +104,10 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
   case GNCENTRY_INVOICE_VIEWER:
     num_cols = 15;
     break;
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
+    num_cols = 9;
+    break;
   default:
     g_assert (FALSE);
     return;    
@@ -144,6 +148,22 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAXTABLE_CELL, 0, 12);
     gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 13);
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAXVAL_CELL, 0, 14);
+
+    break;
+
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
+
+    curs = gnc_table_layout_get_cursor (layout, "cursor");
+    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 0);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 1);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_ACCT_CELL, 0, 4);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, 5);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, 6);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 7);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXVAL_CELL, 0, 8);
 
     break;
 

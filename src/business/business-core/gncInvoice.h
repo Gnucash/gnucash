@@ -37,6 +37,10 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
 void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 
+/* Call this function when adding an entry to a bill instead of an invoice */
+void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
+void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
+
 /* Get Functions */
 
 GNCBook * gncInvoiceGetBook (GncInvoice *invoice);

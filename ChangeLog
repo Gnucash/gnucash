@@ -10,6 +10,24 @@
 	  "Bill" for vendor reports.  Fix the aging table.  Reverse the
 	  numerics for vendor reports.
 
+	* prefs.scm: change A/P's "Invoice" column header to "Bill"
+
+	* Separate Bills and Invoices into (somewhat) different things.
+	  An Entry now has pointers to an Invoice and a Bill, although
+	  both are represented by a GncInvoice.  Force a GncInvoice to a
+	  Bill if the owner is a Vendor.  (It's a regular Invoice if the
+	  owner is a Customer).  Eventually we can support Owner ==
+	  Employee to deal with Expense Reports.
+	* gncInvoice: add gncBill{Add,Remove}Entry
+	* gncEntry: add gncEntry{Get,Set}Bill
+	* gw-business-core: wrap gncEntryGetBill
+	* gnc-entry-xml-v2: add entry:bill pointer
+	* gncEntryLedger: deal with Bill Entry.  Don't need a lot of
+	  columns (compared to Invoices).  This is not complete, but is
+	  at a workable point now.
+	* dialog-invoice: call the BILL vs. INVOICE entry-ledger based
+	  on the invoice owner.
+	
 2002-07-08  Derek Atkins  <derek@ihtfp.com>
 
 	* kvp-option-registry.scm: create a registry of kvp-options

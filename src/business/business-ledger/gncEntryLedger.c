@@ -307,6 +307,7 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
 static void create_invoice_query (GncEntryLedger *ledger)
 {
   QueryNew *q, *q1;
+  char * type = NULL;
 
   if (!ledger->invoice)
     return;
@@ -321,6 +322,8 @@ static void create_invoice_query (GncEntryLedger *ledger)
    * 3.      ( Entry->Invoice == NULL AND
    *           Entry->Order->real-parent == Invoice->parent ) )
    *
+   * Param 2 uses Entry->Bill if the ledger->invoice->owner is a Vendor
+   *
    * Note that term 3 is only for Editable invoices where the 'owner'
    * is valid.
    */
@@ -328,13 +331,28 @@ static void create_invoice_query (GncEntryLedger *ledger)
   /* Term 1 */
   ledger->query = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
   gncQuerySetBook (ledger->query, gncInvoiceGetBook (ledger->invoice));
-
+  
   /* Term 2 */
+  switch (ledger->type) {
+  case GNCENTRY_INVOICE_ENTRY:
+  case GNCENTRY_INVOICE_VIEWER:
+    type = ENTRY_INVOICE;
+    break;
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
+    type = ENTRY_BILL;
+    break;
+  default:
+    g_warning ("Invalid Ledger type");
+    type = ENTRY_INVOICE;
+    break;
+  }
+
   q = gncQueryCreateFor (GNC_ENTRY_MODULE_NAME);
   gncQueryAddGUIDMatch (q,
 			g_slist_prepend (g_slist_prepend (NULL,
 							  QUERY_PARAM_GUID),
-					 ENTRY_INVOICE),
+					 type),
 			gncInvoiceGetGUID (ledger->invoice), QUERY_OR);
 
   /* Term 3 */
@@ -346,7 +364,7 @@ static void create_invoice_query (GncEntryLedger *ledger)
     gncQueryAddGUIDMatch (q2,
 			  g_slist_prepend (g_slist_prepend (NULL,
 							    QUERY_PARAM_GUID),
-					   ENTRY_INVOICE),
+					   type),
 			  NULL, QUERY_OR);
 
     /* entry_order->owner->end_guid == invoice->owner->guid */
@@ -432,6 +450,10 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger)
     break;
   case GNCENTRY_INVOICE_ENTRY:
     ledger->type = GNCENTRY_INVOICE_VIEWER;
+    create_invoice_query (ledger);
+    break;
+  case GNCENTRY_BILL_ENTRY:
+    ledger->type = GNCENTRY_BILL_VIEWER;
     create_invoice_query (ledger);
     break;
   default:
@@ -579,6 +601,10 @@ gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger)
     invoice = gncEntryGetInvoice (entry);
     if (invoice)
       gncInvoiceRemoveEntry (invoice, entry);
+
+    invoice = gncEntryGetBill (entry);
+    if (invoice)
+      gncBillRemoveEntry (invoice, entry);
 
     gncEntryDestroy (entry);
     /* XXX: Commit the deletion? */

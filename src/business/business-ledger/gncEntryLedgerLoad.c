@@ -189,6 +189,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
     switch (ledger->type) {
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_BILL_ENTRY:
       blank_entry = gncEntryCreate (ledger->book);
       gncEntrySetDate (blank_entry, ledger->last_date_entered);
       ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);

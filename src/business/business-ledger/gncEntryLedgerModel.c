@@ -624,6 +624,8 @@ static char * get_inv_help (VirtualLocation virt_loc, gpointer user_data)
   switch (ledger->type) {
   case GNCENTRY_ORDER_ENTRY:
   case GNCENTRY_ORDER_VIEWER:
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
     help = _("Is this entry Invoiced?");
     break;
   case GNCENTRY_INVOICE_ENTRY:
@@ -669,6 +671,7 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
   GncEntryLedger *ledger = user_data;
   switch (ledger->type) {
   case GNCENTRY_ORDER_ENTRY:
+  case GNCENTRY_BILL_ENTRY:
     {
       GncEntry *entry =
 	gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
@@ -702,6 +705,8 @@ static CellIOFlags get_inv_io_flags (VirtualLocation virt_loc,
   case GNCENTRY_ORDER_ENTRY:
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_INVOICE_VIEWER:
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
     return XACC_CELL_ALLOW_SHADOW;
   default:
     return XACC_CELL_ALLOW_ALL | XACC_CELL_ALLOW_EXACT_ONLY;
@@ -905,7 +910,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
     gncEntrySetTaxIncluded (entry, taxincluded);
   }
 
-  {
+  if (ledger->type == GNCENTRY_INVOICE_ENTRY) {
     char inv_value;
 
     inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
@@ -921,8 +926,9 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 	  gncInvoiceAddEntry (ledger->invoice, entry);
 
       } else {
-	/* Remove from the invoice iff we're attached to an order */
-	if (gncEntryGetOrder (entry) != NULL)
+	/* Remove from the invoice iff we're attached to an order or bill */
+	if ((gncEntryGetOrder (entry) != NULL) ||
+	    (gncEntryGetBill (entry) != NULL))
 	  gncInvoiceRemoveEntry (ledger->invoice, entry);
       }
     }
@@ -989,6 +995,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
   switch (type) {
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_INVOICE_VIEWER:
+  case GNCENTRY_BILL_VIEWER:
     /* make this table read-only */
     gnc_table_model_set_read_only (model, TRUE);
     break;

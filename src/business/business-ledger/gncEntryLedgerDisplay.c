@@ -44,7 +44,8 @@ gnc_entry_ledger_refresh_internal (GncEntryLedger *ledger, GList *entries)
 
   /* Viewers must always have at least one entry! */
   if ((ledger->type == GNCENTRY_ORDER_VIEWER ||
-       ledger->type == GNCENTRY_INVOICE_VIEWER) && !entries)
+       ledger->type == GNCENTRY_INVOICE_VIEWER ||
+       ledger->type == GNCENTRY_BILL_VIEWER) && !entries)
     return;
 
   ledger->loading = TRUE;
@@ -73,6 +74,8 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
 				    (gncInvoiceGetOwner (ledger->invoice)),
 				    GNC_EVENT_MODIFY);
   case GNCENTRY_INVOICE_VIEWER:
+  case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_BILL_VIEWER:
     type = GNC_INVOICE_MODULE_NAME;
     break;
 

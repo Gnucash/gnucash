@@ -71,6 +71,10 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
       /* Anything entered on an invoice entry must be part of the invoice! */
       gncInvoiceAddEntry (ledger->invoice, blank_entry);
       break;
+    case GNCENTRY_BILL_ENTRY:
+      /* Anything entered on an invoice entry must be part of the invoice! */
+      gncBillAddEntry (ledger->invoice, blank_entry);
+      break;
     default:
       /* Nothing to do for viewers */
       g_warning ("blank entry traversed in a viewer");
@@ -206,6 +210,7 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
   switch (ledger->type) {
   case GNCENTRY_ORDER_ENTRY:
   case GNCENTRY_INVOICE_ENTRY:
+  case GNCENTRY_BILL_ENTRY:
 
     /* There must be a blank entry */
     if (blank_entry == NULL)

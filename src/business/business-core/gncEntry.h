@@ -111,6 +111,7 @@ Account * gncEntryGetAccount (GncEntry *entry);
 
 GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
+GncInvoice * gncEntryGetBill (GncEntry *entry);
 
 GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid);
 
@@ -127,5 +128,6 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 
 #define ENTRY_ORDER	"order"
 #define ENTRY_INVOICE	"invoice"
+#define ENTRY_BILL	"bill"
 
 #endif /* GNC_ENTRY_H_ */

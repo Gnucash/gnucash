@@ -44,6 +44,7 @@ struct _gncEntry {
 
   GncOrder *	order;
   GncInvoice *	invoice;
+  GncInvoice *	bill;
 
   gnc_numeric	value;
   gnc_numeric	value_rounded;
@@ -274,6 +275,15 @@ void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
   mark_entry (entry);
 }
 
+/* called from gncInvoice when we're added to the Invoice/Bill */
+void gncEntrySetBill (GncEntry *entry, GncInvoice *bill)
+{
+  if (!entry) return;
+  if (entry->bill == bill) return;
+  entry->bill = bill;
+  mark_entry (entry);
+}
+
 void gncEntrySetTaxable (GncEntry *entry, gboolean taxable)
 {
   if (!entry) return;
@@ -357,6 +367,9 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   if (src->invoice)
     gncInvoiceAddEntry (src->invoice, dest);
 
+  if (src->bill)
+    gncBillAddEntry (src->bill, dest);
+
   dest->values_dirty = TRUE;
 }
 
@@ -434,6 +447,12 @@ GncInvoice * gncEntryGetInvoice (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->invoice;
+}
+
+GncInvoice * gncEntryGetBill (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return entry->bill;
 }
 
 GncOrder * gncEntryGetOrder (GncEntry *entry)
@@ -683,10 +702,16 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 static int
 get_commodity_denom (GncEntry *entry)
 {
+  gnc_commodity *c;
   if (!entry)
     return 0;
   if (entry->invoice) {
-    gnc_commodity *c = gncInvoiceGetCommonCommodity (entry->invoice);
+    c = gncInvoiceGetCommonCommodity (entry->invoice);
+    if (c)
+      return (gnc_commodity_get_fraction (c));
+  }
+  if (entry->bill) {
+    c = gncInvoiceGetCommonCommodity (entry->bill);
     if (c)
       return (gnc_commodity_get_fraction (c));
   }
@@ -851,7 +876,7 @@ static void _gncEntryForeach (GNCBook *book, foreachObjectCB cb,
 static GncObject_t gncEntryDesc = {
   GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
-  "Order/Invoice Entry",
+  "Order/Invoice/Bill Entry",
   _gncEntryCreate,
   _gncEntryDestroy,
   _gncEntryIsDirty,
@@ -871,6 +896,7 @@ gboolean gncEntryRegister (void)
     { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
     { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
     { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
+    { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetBill },
     { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QueryAccess)gncEntryGetOrder },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEntryGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncEntryGetGUID },

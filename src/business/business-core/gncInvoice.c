@@ -269,6 +269,31 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
   mark_invoice (invoice);
 }
 
+void gncBillAddEntry (GncInvoice *bill, GncEntry *entry)
+{
+  GncInvoice *old;
+
+  if (!bill || !entry) return;
+
+  old = gncEntryGetBill (entry);
+  if (old == bill) return;	/* I already own this one */
+  if (old) gncBillRemoveEntry (old, entry);
+
+  gncEntrySetBill (entry, bill);
+  bill->entries = g_list_insert_sorted (bill->entries, entry,
+					   (GCompareFunc)gncEntryCompare);
+  mark_invoice (bill);
+}
+
+void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
+{
+  if (!bill || !entry) return;
+
+  gncEntrySetBill (entry, NULL);
+  bill->entries = g_list_remove (bill->entries, entry);
+  mark_invoice (bill);
+}
+
 /* Get Functions */
 
 GNCBook * gncInvoiceGetBook (GncInvoice *invoice)
