@@ -1,4 +1,4 @@
-SUBDIRS = .  binary-import qif-import ${OFX_DIR} test
+SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 

@@ -1,3 +1,11 @@
+2002-07-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/main.scm: Add module-load for HBCI.
+
+	* src/import-export/hbci/*: Thanks to Benoit Gregoire, the initial
+	HBCI druid is at least visible now. Still no code that would
+	really do anything, though.
+
 2002-07-27  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Add --enable-hbci configure option.

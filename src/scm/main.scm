@@ -375,6 +375,7 @@ string and 'directories' must be a list of strings."
     (gnc:module-load "gnucash/import-export/binary-import" 0)
     (gnc:module-load "gnucash/import-export/qif-import" 0)
     (gnc:module-load-optional "gnucash/import-export/ofx" 0)
+    (gnc:module-load-optional "gnucash/import-export/hbci" 0)
     (gnc:module-load "gnucash/report/report-system" 0)
     (gnc:module-load "gnucash/report/stylesheets" 0)
     (gnc:module-load "gnucash/report/standard-reports" 0)

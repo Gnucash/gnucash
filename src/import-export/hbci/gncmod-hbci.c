@@ -61,10 +61,9 @@ gnc_module_init(int refcount) {
   }
 
   /* load the HBCI Scheme code */
-  if(gh_eval_str("(load-from-path \"hbci/hbci.scm\")") ==
-     SCM_BOOL_F) {
-    return FALSE;
-  }
+  gh_eval_str("(load-from-path \"hbci/hbci.scm\")");
+
+  printf("Load the HBCI initial druid\n");
   gh_new_procedure("gnc:hbci-initial-setup", 
 		   scm_hbci_initial_druid, 0, 0, 0);
   
