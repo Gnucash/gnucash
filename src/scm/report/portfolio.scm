@@ -30,6 +30,9 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 (define optname-price-source (N_ "Price Source"))
 
 (define (options-generator)

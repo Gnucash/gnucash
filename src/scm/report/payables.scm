@@ -34,6 +34,9 @@
 (require 'hash-table)
 (require 'record)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 (define opt-pay-acc (N_ "Payables Account"))
 (define sect-acc (N_ "Accounts"))
 (define optname-to-date (N_ "To"))

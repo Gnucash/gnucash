@@ -86,7 +86,8 @@ noinst_HEADERS = \
   messages.h
 
 EXTRA_DIST = \
-  .cvsignore
+  .cvsignore \
+  README.modules
 
 CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 

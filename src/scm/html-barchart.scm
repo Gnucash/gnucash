@@ -23,6 +23,8 @@
 
 (gnc:support "html-barchart.scm")
 
+(use-modules (ice-9 regex))
+
 (define <html-barchart>
   (make-record-type "<html-barchart>"
                     '(width 

@@ -9,8 +9,7 @@
 
 (define-module (gnucash report hello-world))
 
-(use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/engine" 0)
+(use-modules (gnucash engine))
 
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select

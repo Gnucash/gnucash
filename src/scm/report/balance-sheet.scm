@@ -33,6 +33,9 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 ;; first define all option's names so that they are properly defined
 ;; in *one* place.
 (define optname-to-date (N_ "To"))

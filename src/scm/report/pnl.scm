@@ -31,6 +31,9 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 ;; Profit and loss report. Actually, people in finances might want
 ;; something different under this name, but they are welcomed to
 ;; contribute their changes :-)

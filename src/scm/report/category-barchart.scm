@@ -31,6 +31,9 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"

@@ -16,6 +16,9 @@
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 (define optname-stepsize (N_ "Step Size"))

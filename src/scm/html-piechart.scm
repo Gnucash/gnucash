@@ -23,6 +23,8 @@
 
 (gnc:support "html-piechart.scm")
 
+(use-modules (ice-9 regex))
+
 (define <html-piechart>
   (make-record-type "<html-piechart>"
                     '(width height title subtitle data colors labels

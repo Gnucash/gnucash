@@ -33,6 +33,9 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 (define menuname-income (N_ "Income Piechart"))
 (define menuname-expense (N_ "Expense Piechart"))
 (define menuname-assets (N_ "Asset Piechart"))
@@ -338,8 +341,7 @@ balance at a given time"))
                chart urls)
               (gnc:html-piechart-set-button-1-legend-urls! 
                chart urls))
-            
-            
+
             (if 
              (not (null? combined))
              (begin
@@ -348,9 +350,9 @@ balance at a given time"))
                (gnc:html-piechart-set-width! chart width)
                (gnc:html-piechart-set-height! chart height)
                (gnc:html-piechart-set-data! chart (unzip1 combined))
-               (gnc:html-piechart-set-colors! chart
-                                              (gnc:assign-colors (length combined)))
-               
+               (gnc:html-piechart-set-colors!
+                chart (gnc:assign-colors (length combined)))
+
                (gnc:html-piechart-set-subtitle!
                 chart (string-append
                        (if do-intervals?
@@ -363,9 +365,14 @@ balance at a given time"))
                                     (gnc:timepair-to-datestring to-date-tp)))
                        (if show-total?
                            (let ((total (apply + (unzip1 combined))))
-                             (sprintf #f ": %s"
-                                      (gnc:amount->string total print-info)))
-                           
+                             (sprintf
+                              #f ": %s"
+                              (gnc:amount->string
+                               (gnc:double-to-gnc-numeric
+                                total
+                                (gnc:commodity-get-fraction report-currency)
+                                GNC-RND-ROUND)
+                               print-info)))
                            "")))
                
                (let ((legend-labels
@@ -380,13 +387,18 @@ balance at a given time"))
                           (if show-total?
                               (string-append 
                                " - "
-                               (gnc:amount->string (car pair) print-info))
+                               (gnc:amount->string
+                                (gnc:double-to-gnc-numeric
+                                 (car pair)
+                                 (gnc:commodity-get-fraction report-currency)
+                                 GNC-RND-ROUND)
+                                print-info))
                               "")))
                        combined)))
                  (gnc:html-piechart-set-labels! chart legend-labels))
-               
+
                (gnc:html-document-add-object! document chart))
-             
+
              (gnc:html-document-add-object!
               document
               (gnc:html-make-empty-data-warning report-title))))
@@ -394,7 +406,7 @@ balance at a given time"))
           (gnc:html-document-add-object!
            document
            (gnc:html-make-no-account-warning report-title)))
-      
+
       document)))
 
 (for-each 

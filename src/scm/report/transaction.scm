@@ -38,6 +38,9 @@
 (require 'printf)
 (require 'record)
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
 
