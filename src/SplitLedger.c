@@ -3089,37 +3089,112 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
        (CURRENCY_REGISTER == (reg->type)) ||
        (PORTFOLIO_LEDGER  == (reg->type))))
   {
+    gboolean recalc_shares = FALSE;
+    gboolean recalc_price = FALSE;
+    gboolean recalc_value = FALSE;
+    gboolean recalc_none = FALSE;
+    GNCAccountType account_type;
     gnc_numeric calc_value;
     gnc_numeric value;
     gnc_numeric price;
     gnc_numeric amount;
+    Account *account;
     int denom;
 
     if (MOD_SHRS & changed)
-      amount = xaccGetPriceCellValue(reg->sharesCell);
+      amount = xaccGetPriceCellValue (reg->sharesCell);
     else
-      amount = xaccSplitGetShareAmount(split);
+      amount = xaccSplitGetShareAmount (split);
 
     if (MOD_PRIC & changed)
-      price = xaccGetPriceCellValue(reg->priceCell);
+      price = xaccGetPriceCellValue (reg->priceCell);
     else
-      price = xaccSplitGetSharePrice(split);
+      price = xaccSplitGetSharePrice (split);
 
     if (MOD_AMNT & changed)
     {
-      gnc_numeric credit = xaccGetPriceCellValue(reg->creditCell);
-      gnc_numeric debit  = xaccGetPriceCellValue(reg->debitCell);
+      gnc_numeric credit = xaccGetPriceCellValue (reg->creditCell);
+      gnc_numeric debit  = xaccGetPriceCellValue (reg->debitCell);
       value = gnc_numeric_sub_fixed (debit, credit);
     }
     else
       value = xaccSplitGetValue(split);
+ 
+    /* First, we check if this is a split which has 2 of the 3 values
+     * changed. */
+  
+    if (((MOD_PRIC | MOD_AMNT) & changed) == (MOD_PRIC | MOD_AMNT))
+    {
+      if (!(MOD_SHRS & changed))
+        recalc_shares = TRUE;
+    }
+    else
+      if (((MOD_SHRS | MOD_AMNT) & changed) == (MOD_SHRS | MOD_AMNT))
+        recalc_price = TRUE;
+      else
+        if (((MOD_SHRS | MOD_PRIC) & changed) == (MOD_SHRS | MOD_PRIC))
+          recalc_value = TRUE;
+
+    /* Next, check if one value has been changed, and one other value is
+     * zero. */
+
+    if (MOD_SHRS & changed)
+    {
+      if (gnc_numeric_zero_p (price))
+      {
+        if (!gnc_numeric_zero_p (value))
+          recalc_price = TRUE;
+      }
+      else if (gnc_numeric_zero_p (value))
+        recalc_value = TRUE;
+    }
+    else if (MOD_PRIC & changed)
+    {
+      if (gnc_numeric_zero_p (amount))
+      {
+        if (!gnc_numeric_zero_p (value))
+          recalc_shares = TRUE;
+      }
+      else if (gnc_numeric_zero_p (value))
+        recalc_value = TRUE;
+    }
+    else if (MOD_AMNT & changed)
+    {
+      if (gnc_numeric_zero_p (amount))
+      {
+        if (!gnc_numeric_zero_p (price))
+          recalc_shares = TRUE;
+      }
+      else if (gnc_numeric_zero_p (price))
+        recalc_price = TRUE;
+    }
+
+    /*  Finally, check if this is an account other than STOCK or
+     *  MUTUAL type. If it is, this is a bank balancing split, so
+     *  don't recalc anything.*/
+
+    account = xaccSplitGetAccount (split);
+    account_type = xaccAccountGetType (account);
+
+    if (account_type != STOCK  &&
+        account_type != MUTUAL &&
+        account_type != CURRENCY)
+      recalc_none = TRUE;
 
     calc_value = gnc_numeric_mul (price, amount,
                                   GNC_DENOM_AUTO, GNC_DENOM_LCD);
 
     denom = gnc_split_get_value_denom (split);
 
-    if (!gnc_numeric_same (value, calc_value, denom, GNC_RND_ROUND))
+    /*  Now, if we have not flagged one of the recalcs, and value and
+     *  calc_value are not the same number, then we need to ask for
+     *  help from the user. */
+
+    if (!recalc_shares &&
+        !recalc_price &&
+        !recalc_value &&
+        !recalc_none && 
+        !gnc_numeric_same (value, calc_value, denom, GNC_RND_ROUND))
     {
       int i;
       int choice;
@@ -3131,19 +3206,19 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
                               "like to have recalculated?");
 
       if (MOD_SHRS & changed)
-        radio_list[0] = g_strdup_printf("%s (%s)", _("Shares"), _("Changed"));
+        radio_list[0] = g_strdup_printf ("%s (%s)", _("Shares"), _("Changed"));
       else
-        radio_list[0] = g_strdup(_("Shares"));
+        radio_list[0] = g_strdup (_("Shares"));
 
       if (MOD_PRIC & changed)
-        radio_list[1] = g_strdup_printf("%s (%s)", _("Price"), _("Changed"));
+        radio_list[1] = g_strdup_printf ("%s (%s)", _("Price"), _("Changed"));
       else
-        radio_list[1] = g_strdup(_("Price"));
+        radio_list[1] = g_strdup (_("Price"));
 
       if (MOD_AMNT & changed)
-        radio_list[2] = g_strdup_printf("%s (%s)", _("Value"), _("Changed"));
+        radio_list[2] = g_strdup_printf ("%s (%s)", _("Value"), _("Changed"));
       else
-        radio_list[2] = g_strdup(_("Value"));
+        radio_list[2] = g_strdup (_("Value"));
 
       if (!(MOD_PRIC & changed))
         default_value = 1;
@@ -3154,56 +3229,69 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       else
         default_value = 1;
 
-      choice = gnc_choose_radio_option_dialog_parented(xaccSRGetParent(reg),
-                                                       title,
-                                                       message,
-                                                       default_value,
-                                                       radio_list);
+      choice = gnc_choose_radio_option_dialog_parented (xaccSRGetParent(reg),
+                                                        title,
+                                                        message,
+                                                        default_value,
+                                                        radio_list);
 
       for (i = 0; i < 3; i++)
-        g_free(radio_list[i]);
+        g_free (radio_list[i]);
 
       switch(choice)
       {
         case 0: /* Modify number of shares */
-          if (gnc_numeric_zero_p (price))
-            break;
-
-          denom = gnc_split_get_quantity_denom (split);
-
-          amount = gnc_numeric_div (value, price, denom, GNC_RND_ROUND);
-
-          xaccSetPriceCellValue(reg->sharesCell, amount);
-          changed |= MOD_SHRS;
+          recalc_shares = TRUE;
           break;
         case 1: /* Modify the share price */
-          if (gnc_numeric_zero_p (amount))
-            break;
-
-          price = gnc_numeric_div (value, amount,
-                                   GNC_DENOM_AUTO,
-                                   GNC_DENOM_EXACT);
-
-          if (gnc_numeric_negative_p (price)) {
-            price = gnc_numeric_neg (price);
-            xaccSetDebCredCellValue (reg->debitCell, reg->creditCell,
-                                     gnc_numeric_neg (value));
-            changed |= MOD_AMNT;
-          }
-          xaccSetPriceCellValue(reg->priceCell, price);
-          changed |= MOD_PRIC;
+          recalc_price = TRUE;
           break;
         case 2: /* Modify total value */
-          denom = gnc_split_get_value_denom (split);
-
-          value = gnc_numeric_mul (price, amount, denom, GNC_RND_ROUND);
-
-          xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, value);
-          changed |= MOD_AMNT;
+          recalc_value = TRUE;
           break;
         default:
           break;
       }
+    }
+
+    if (recalc_shares)
+      if (!gnc_numeric_zero_p (price))
+      {
+        denom = gnc_split_get_quantity_denom (split);
+  
+        amount = gnc_numeric_div (value, price, denom, GNC_RND_ROUND);
+
+        xaccSetPriceCellValue (reg->sharesCell, amount);
+        changed |= MOD_SHRS;
+      }
+
+    if (recalc_price)
+      if (!gnc_numeric_zero_p (amount))
+      {
+        price = gnc_numeric_div (value, amount,
+                                 GNC_DENOM_AUTO,
+                                 GNC_DENOM_EXACT);
+
+        if (gnc_numeric_negative_p (price))
+        {
+          price = gnc_numeric_neg (price);
+          xaccSetDebCredCellValue (reg->debitCell, reg->creditCell,
+                                   gnc_numeric_neg (value));
+          changed |= MOD_AMNT;
+        }
+
+        xaccSetPriceCellValue (reg->priceCell, price);
+        changed |= MOD_PRIC;
+      }
+
+    if (recalc_value)
+    {
+      denom = gnc_split_get_value_denom (split);
+
+      value = gnc_numeric_mul (price, amount, denom, GNC_RND_ROUND);
+
+      xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, value);
+      changed |= MOD_AMNT;
     }
   }
 
