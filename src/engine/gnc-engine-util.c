@@ -51,7 +51,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* IO */
   GNC_LOG_WARNING,      /* REGISTER */
   GNC_LOG_WARNING,      /* LEDGER */
-  GNC_LOG_DEBUG,        /* HTML */
+  GNC_LOG_WARNING,      /* HTML */
   GNC_LOG_WARNING,      /* GUI */
   GNC_LOG_WARNING,      /* SCRUB */
   GNC_LOG_WARNING,      /* GTK_REG */
@@ -59,7 +59,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* BACKEND */
   GNC_LOG_WARNING,      /* QUERY */
   GNC_LOG_WARNING,      /* PRICE */
-  GNC_LOG_DEBUG,        /* EVENT */
+  GNC_LOG_WARNING,      /* EVENT */
 };
 
 
