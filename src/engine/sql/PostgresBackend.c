@@ -437,7 +437,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 
    SEND_QUERY (be, query_string, );
    xaction_hash = g_hash_table_new (g_direct_hash, (GCompareFunc) guid_equal);
-   xaction_hash = pgendGetResults (be, query_cb, xaction_hash);
+   pgendGetResults (be, query_cb, xaction_hash);
    REPORT_CLOCK (9, "fetched results at call %d", call_count);
 
    /* restore the transactions */
@@ -547,7 +547,24 @@ pgendRunQuery (Backend *bend, Query *q)
  *
  *    To add injury to insult, this routine fetches in a rather 
  *    inefficient manner, in particular, the account query.
+ *    (huh ???)
  */
+
+static gpointer
+get_all_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   GList *node, *xaction_list = (GList *) data;
+   GUID *trans_guid;
+
+   /* find the transaction this goes into */
+   trans_guid = xaccGUIDMalloc();
+   *trans_guid = nullguid;  /* just in case the read fails ... */
+   string_to_guid (DB_GET_VAL("transGUID",j), trans_guid);
+
+   xaction_list = g_list_prepend (xaction_list, trans_guid);
+   return xaction_list;
+}
+
 
 static void
 pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
@@ -558,15 +575,17 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    pgendDisable(be);
 
    SEND_QUERY (be, "SELECT transGuid FROM gncTransaction;", );
-   xaction_list = pgendGetResults (be, query_cb, xaction_list);
+   xaction_list = pgendGetResults (be, get_all_trans_cb, xaction_list);
 
    /* restore the transactions */
+   xaccAccountGroupBeginEdit (grp);
    for (node=xaction_list; node; node=node->next)
    {
       pgendCopyTransactionToEngine (be, (GUID *)node->data);
       xaccGUIDFree (node->data);
    }
    g_list_free(xaction_list);
+   xaccAccountGroupCommitEdit (grp);
 
    pgendEnable(be);
    gnc_engine_resume_events();
