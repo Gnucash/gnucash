@@ -198,10 +198,9 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   const AB_ACCOUNT_STATUS *response;
   const AB_BALANCE *noted_grp, *booked_grp;
   const AB_VALUE *booked_val, *noted_val;
-
   time_t booked_tt;
-
   gboolean dialogres;
+  double booked_value, noted_value;
 
   response = AB_JobGetBalance_GetAccountStatus((AB_JOB*)job);
   if (!response) {
@@ -212,18 +211,35 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   noted_grp = AB_AccountStatus_GetNotedBalance(response);
   booked_grp = AB_AccountStatus_GetBookedBalance(response);
 
-  if (!booked_grp || !noted_grp) {
-    printf("gnc_hbci_getbalance_finish: Oops, booked_grp or noted_grp == NULL.\n");
-    return TRUE;
+  if (booked_grp) {
+    booked_val = AB_Balance_GetValue(booked_grp);
+    booked_tt = GWEN_Time_toTime_t (AB_Balance_GetTime(booked_grp));
+    if (booked_val)
+      booked_value = AB_Value_GetValue (booked_val);
+    else {
+      printf("gnc_hbci_getbalance_finish: Warning: booked_val == NULL. Assuming 0.\n");
+      booked_value = 0.0;
+    }
+  } else {
+    printf("gnc_hbci_getbalance_finish: Warning: booked_grp == NULL. Assuming 0.\n");
+    booked_value = 0.0;
   }
-  booked_val = AB_Balance_GetValue(booked_grp);
-  
-  noted_val = AB_Balance_GetValue(noted_grp);
-  
-  booked_tt = GWEN_Time_toTime_t (AB_Balance_GetTime(booked_grp));
-    
-  if ((AB_Value_GetValue (noted_val) == 0) &&
-      (AB_Value_GetValue (booked_val) == 0))
+
+  if (noted_grp) {
+    noted_val = AB_Balance_GetValue(noted_grp);
+    /* noted_tt = GWEN_Time_toTime_t (AB_Balance_GetTime(noted_grp)); */
+    if (noted_val)
+      noted_value = AB_Value_GetValue (noted_val);
+    else {
+      printf("gnc_hbci_getbalance_finish: Warning: noted_val == NULL. Assuming 0.\n");
+      noted_value = 0.0;
+    }
+  } else {
+    printf("gnc_hbci_getbalance_finish: Warning: noted_grp == NULL. Assuming 0.\n");
+    noted_value = 0.0;
+  }
+
+  if ((noted_value == 0.0) && (booked_value == 0.0))
     {
       gnome_ok_dialog_parented 
 	/* Translators: Strings from this file are really only
@@ -248,7 +264,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 	   "Account booked balance is %s\n"),
 	 booked_str);
       char *message2 = 
-	((AB_Value_GetValue (noted_val) == 0) ?
+	((noted_value == 0.0) ?
 	 g_strdup_printf("%s", "") :
 	 bal_print_balance
 	 (_("For your information: This account also \n"
@@ -271,7 +287,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   if (dialogres) 
     {
       gnc_numeric value =
-	double_to_gnc_numeric (AB_Value_GetValue (booked_val),
+	double_to_gnc_numeric (booked_value,
 			       xaccAccountGetCommoditySCU(gnc_acc),
 			       GNC_RND_ROUND);
       recnWindowWithBalance (parent, 

@@ -1,3 +1,8 @@
+2004-09-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix HBCI balance
+	retrieval when some of the returned balance is NULL.
+
 2004-09-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofquerycore.c: Fix for x86_64.
