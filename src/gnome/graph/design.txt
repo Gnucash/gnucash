@@ -1,0 +1,49 @@
+* From: Rob Browning <rlb@cs.utexas.edu>
+
+
+For those of you interested, below is an extremely simple example of a
+tiny standalone program that can read an .xac file (specified as the
+first argument and then let you select accounts to plot from a Gtk
+window.  The plot is just a per-transaction running balance, but it's
+a start.  You need Gtk and plotutils 2.0 installed for this to work.
+I just put these files in a new directory src/graph.  There's a
+Makefile and plot-test.c.
+
+Issues:
+
+This program is trivial, and it only works via a Gtk GUI, but I think
+that in the end we should support both interactive and non-interactive
+operation of our graphing and reporting tools.  Whether this happens
+via special arguments to xacc, or by providing separate standalone
+programs that link to a common library (libxaccplot?) I don't know,
+but either way, I think we need both.
+
+This little program generates the graph by launching a child "graph"
+process (graph is part of the plotutils package).  I don't set any
+axis labels or anything.  This could obviously be improved, but there
+are limits to how flexible the graph program is.  It can't, for
+example, do pie or bar charts at the moment.
+
+However, the lower level library (libplot) that it's based on will
+allow us to do whatever we want.  In that case, though, we have to do
+the scaling, drawing, etc, ourselves, so I think we're better off to
+use "graph" for now, and go back and re-implement things in libplot,
+adding bells and whistles and other types of graphs later.  I did
+create libplot code for simple bars in a bargraph just to make sure I
+though it would be feasible.
+
+The other disadvantage to calling graph (as opposed to using libplot
+directly) is that it brings up it's own independent X window on each
+invocation.  This can also be overcome by switching to the more
+primitive libplot, where you can specify your own X drawable as the
+output device.
+
+I've actually contacted the plotutils author about providing the more
+sophisticated "graph" level plotting behaviors (autoscaling, etc.) as
+part of a library (libplotutils) rather than only as a standalone
+program.  My guess is that this will happen, but I haven't heard back
+yet.
+
+-- 
+Rob Browning <rlb@cs.utexas.edu>
+PGP fingerprint = E8 0E 0D 04 F5 21 A0 94  53 2B 97 F5 D6 4E 39 30
