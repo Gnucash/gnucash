@@ -153,6 +153,69 @@ The following is a list of the larger, more abstract, and more difficult
 architectural goals.  
 
 <dl>
+<dt><b>Graphs, Reports</b>
+<dd>Add the whole host of reports, including Net Worth statements,
+    Balance Sheets, and Profit & Loss statements.  These should be
+    printable: it might be best to create them as ordinary HTML pages,
+    and use the printing abilities of the browser.  In an ideal
+    situation, the user should be able to create custom reports.
+    <p>
+    Other output format possibilities include SGML and XML.  In the
+    long run, these are preferable to HTML, since DSSSL and 
+    <a href="http://www.jclark.com/jade/"> Jade (James DSSSL Engine</a>
+    can be used to convert to RTF, Postscript, etc.  XML is the wave 
+    of the future.
+    <p>
+    Graphs, charts, etc. too ...
+    <p>
+    One hard part of reporting is designing a configurable interface,
+    so that people can build custom reports.  
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>Simple HTML output is implemented. GnuCash will even act as a one-shot
+        web server.
+    </ul>
+    <p>
+
+<dt><b>Web Site Maintenance & Marketing</b>
+<dd>Put together an active, relevent web site.  Mailing list archives.
+    Screen shots.  Announces on c.o.l.a, freshmeat.  Bug tracker.
+    Gui glitz. Packaging.
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>Jeremy Collins put together the initial web site.  
+    <li>Volunteers needed to put together mailing list archives, etc.
+    </ul>
+    <p>
+
+<dt><b>OFX support</b>
+<dd>Provide the SGML DTD parsers to handle the OFX reports that many
+    banking institutions are providing, or will soon be providing, to
+    retail customers.  See below for OFX references.  OFX is an open spec
+    from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
+    The OFX DTD's are included in the 1.1 distributions. See 
+    <a href="http://www.ofx.org">OFX HomePage</a> for details.
+    <p>
+    <b>Status:</b>
+    <ul>
+    <li>Work on an OFX DTD parser has begun.  headers generated
+        correctly.  Constrcutors generated almost correctly.
+        Parser work done by Linas.
+    <li>Simple scripts have been run against real-live OFX servers.
+        Ueli Rutishauser <urutishauser@bigfoot.com>
+        has been able to do e*trade transactions to a real account.
+    </ul>
+    <p>
+
+<dt><b>Budgeting</b>
+<dd>Ability to handle budgeted future transactions.
+    <p>
+    <b>Status:</b>
+    A design doc has been started.
+    <p>
+
 <dt><b>Ledger Widget</b>
 <dd>Create a more powerful ledger widget.  Currently, the X-Accountant
     uses the powerful XbaeMatrix widget to display the ledger windows.
@@ -287,32 +350,6 @@ architectural goals.
     SQL does NOT require locks to be held for long periods of time!
     <p>
 
-<dt><b>OFX support</b>
-<dd>Provide the SGML DTD parsers to handle the OFX reports that many
-    banking institutions are providing, or will soon be providing, to
-    retail customers.  See below for OFX references.  OFX is an open spec
-    from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
-    The OFX DTD's are included in the 1.1 distributions. See 
-    <a href="http://www.ofx.org">OFX HomePage</a> for details.
-    <p>
-    <b>Status:</b>
-    <ul>
-    <li>Work on an OFX DTD parser has begun.  headers generated
-        correctly.  Constrcutors generated almost correctly.
-        Parser work done by Linas.
-    <li>Simple scripts have been run against real-live OFX servers.
-        Ueli Rutishauser <urutishauser@bigfoot.com>
-        has been able to do e*trade transactions to a real account.
-    </ul>
-    <p>
-
-<dt><b>Budgeting</b>
-<dd>Ability to handle budgeted future transactions.
-    <p>
-    <b>Status:</b>
-    A design doc has been started.
-    <p>
-
 </dl>
 
 <h2>Incremental Development Goals</h2>
@@ -321,7 +358,8 @@ immediately, independent of the major goals.
 
 <dl>
 <dt><b>User Interface Ports</b>
-<dd>Port the package as a whole to gtk/gnome, Qt, Emacs
+<dd>Port the package as a whole to gtk/gnome, Qt, Emacs.
+    <p>
     <b>Status:</b>
     <ul>
     <li>Jim Pick &lt;jimpick@jimpick.com&gt; may be working on an emacs version...
@@ -330,20 +368,6 @@ immediately, independent of the major goals.
     <li>Qt code submitted by ...
     </ul>
 
-    <p>
-
-<dt><b>Categories</b>
-<dd>Provide a default list of "Categories" (Income/Expense Accounts).
-    These are categories such as "Automobile Expense", "Bank Interest
-    Income", and "Employment Income".  The user should be able to 
-    select a default set of accounts, and have those be created.
-    To actually implement this, it might be best to simple create
-    a file with these in them, and load that file.  A mechanism should
-    be provided to allow the user to weed-out the unwanted accounts
-    without hampering their ability to use them at a later date, if
-    desired.  Current status: there exists the ability to merge 
-    accounts from multiple files, and the ability to hide/show
-    Income/Expense Account types.
     <p>
 
 <dt><b>Internationalization</b>
@@ -364,6 +388,38 @@ immediately, independent of the major goals.
     <li>Henning Spruth has translated the README into German.
     <li>
     </ul>
+    <p>
+
+<dt><b>Icons, Glitz, Icons, Glitz</b>
+<dd>A set of pretty icons and button pixmaps should be created for
+    minimized windows, and for the various buttons.  A user-configurable
+    button-bar would be nice too.  This should probably be coupled with
+    the creation of an X resource file, which does not currently exist.
+    <p>
+
+<dt><b>User Preferences</b>
+<dd>Create menu system & file format for manipulating user
+    preferences.  Preferences include things like showing/not
+    showing categories, forcing double-entry, etc.
+    <b>Current status:</b>
+    <ul>
+    <li>Rob Browning has put together a basic infrastructure
+        that unifies command-line flags with sceme-based config files.
+    </ul>
+    <p>
+
+<dt><b>Categories</b>
+<dd>Provide a default list of "Categories" (Income/Expense Accounts).
+    These are categories such as "Automobile Expense", "Bank Interest
+    Income", and "Employment Income".  The user should be able to 
+    select a default set of accounts, and have those be created.
+    To actually implement this, it might be best to simple create
+    a file with these in them, and load that file.  A mechanism should
+    be provided to allow the user to weed-out the unwanted accounts
+    without hampering their ability to use them at a later date, if
+    desired.  Current status: there exists the ability to merge 
+    accounts from multiple files, and the ability to hide/show
+    Income/Expense Account types.
     <p>
 
 <dt><b>Recurring Transactions</b>
@@ -387,13 +443,6 @@ immediately, independent of the major goals.
     field in the register window, to user arrow keys to navigate menus,
     and quick-fill to automatically complete fields.  However,
     it is not possible to tab over to the "Commit" button. It should be.
-    <p>
-
-<dt><b>Icons, Icons, Icons</b>
-<dd>A set of pretty icons and button pixmaps should be created for
-    minimized windows, and for the various buttons.  A user-configurable
-    button-bar would be nice too.  This should probably be coupled with
-    the creation of an X resource file, which does not currently exist.
     <p>
 
 <dt><b>Folder Tabs</b>
@@ -439,28 +488,9 @@ immediately, independent of the major goals.
     </ul>
     <p>
 
-<dt><b>Transaction Window Fixes</b>
-<dd>The transaction window should allow the user to specify a share
-    price (when purchasing/selling shares) as well as the load
-    and/or fees associated with the purchase.   Fees, of course,
-    are handled as separate transactions: however, it should
-    still be possible to specify the fees, the transfer, and other
-    details from a single window.
-    <p>
-    <b>Status</b>: Some basic reorganization of register was done to
-       support mixed multi-line split display.  However, the actual 
-       display of such things remaions unimplemented.
-    <p>
-
-<dt><b>User Preferences</b>
-<dd>Create menu system & file format for manipulating user
-    preferences.  Preferences include things like showing/not
-    showing categories, forcing double-entry, etc.
-    <b>Current status:</b>
-    <ul>
-    <li>Rob Browning has put together a basic infrastructure
-        that unifies command-line flags with sceme-based config files.
-    </ul>
+<dt><b>emacs, vi, motif, kde, gnome Key Bindings for Text Fields</b>
+<dd>Make sure that text fields can handle the vi & emacs key bindings,
+    so that e.g. emacs-style ctrl-a, ctrl-k does the right thing.
     <p>
 
 <dt><b>Bonds & Interest Bearing Instruments</b>
@@ -476,26 +506,6 @@ immediately, independent of the major goals.
     appreciation and depreciation should be treated.
     <p>
 
-<dt><b>Add Graphs</b>
-<dd>Add the whole rainbow of graphs, charts, etc.
-    <p>
-
-<dt><b>Add Reports</b>
-<dd>Add the whole host of reports, including Net Worth statements,
-    Balance Sheets, and Profit & Loss statements.  These should be
-    printable: it might be best to create them as ordinary HTML pages,
-    and use the printing abilities of the browser.  In an ideal
-    situation, the user should be able to create custom reports.
-    <p>
-    Other output format possibilities include SGML and XML.  In the
-    long run, these are preferable to HTML, since DSSSL and 
-    <a href="http://www.jclark.com/jade/"> Jade (James DSSSL Engine</a>
-    can be used to convert to RTF, Postscript, etc.  XML is the wave 
-    of the future.
-    <p>
-    The hard part of reporting is designing a configurable interface.
-    <p>
-
 <dt><b>Inventory, Job Costing</b>
 <dd>Add the business features needed to maintain a stock of items for
     sale, estimating jobs.
@@ -508,6 +518,14 @@ immediately, independent of the major goals.
 
 <dt><b>Check Printing</b>
 <dd>Create a check-printing ability.
+    <p>
+
+<dt><b>Locks</b>
+<dd>When splits are implemented, and the parent transaction has been
+    marked as cleared, the record should be locked, so that further
+    modifications to the amount can't be performed (or at least, a warning
+    is generated.  This prevents accidental garbaging up of old
+    transactions.)
     <p>
 
 <dt><b>Grayed-out Form Help</b>
@@ -532,6 +550,19 @@ immediately, independent of the major goals.
     never restructured for the vv 1.1 engine.)
     <p>
 
+<dt><b>Transaction Window Fixes</b>
+<dd>The transaction window should allow the user to specify a share
+    price (when purchasing/selling shares) as well as the load
+    and/or fees associated with the purchase.   Fees, of course,
+    are handled as separate transactions: however, it should
+    still be possible to specify the fees, the transfer, and other
+    details from a single window.
+    <p>
+    <b>Status</b>: Some basic reorganization of register was done to
+       support mixed multi-line split display.  However, the actual 
+       display of such things remaions unimplemented.
+    <p>
+
 <dt><b>Tab-delimited ASCII file format</b>
 <dd>People *like* to be able to read file contents in ASCII. There are
     many Unix tools for manipulating ASCII.  An ASCII equivalent of the
@@ -549,36 +580,6 @@ immediately, independent of the major goals.
     the SQL schemas in order to minimize I/O complexity and incompatibility.
     <p>
 
-<dt><b>Splits</b>
-<dd>When performing a transfer, it is well-useful to allow the transfer
-    to be "split" between several accounts.  To implement a split,
-    the best direction might be to have each transaction be a pointer
-    to a set of splits, with each split having it's own distinct
-    credited account, memo field and currency value.  Suggestion is to
-    leave the debited account pointer in the main transaction, and have one
-    credited account pointer in each of the splits.  Also, suggest
-    leaving a "cleared" flag in the main transaction, *and* putting a
-    separate cleared flag in each split as well.  This allows the
-    cleared flag to be independently set for both the debited & credited
-    accounts.
-    <p>
-    <b>Status:</b> Splits have been implemented in the engine
-    and are sort-of stable since version 1.1.7.  However, a special
-    GUI register for handling splits is not yet implemented.
-    <p>
-
-<dt><b>Locks</b>
-<dd>When splits are implemented, and the parent transaction has been
-    marked as cleared, the record should be locked, so that further
-    modifications to the amount can't be performed (or at least, a warning
-    is generated.  This prevents accidental garbaging up of old
-    transactions.)
-    <p>
-
-<dt><b>emacs & vi Key Bindings for Text Fields</b>
-<dd>Make sure that text fields can handle the vi & emacs key bindings,
-    so that e.g. ctrl-a, ctrl-k works.
-    <p>
 
 </dl>
 </p>
@@ -628,6 +629,23 @@ Well, just to show that we are getting things done.
     exciting text!! A mailing list, mailing list archives, and a live
     CVS tree are all bonuses. (December 1997)
     <p>
+
+<dt><b>Splits</b>
+<dd>When performing a transfer, it is well-useful to allow the transfer
+    to be "split" between several accounts.  To implement a split,
+    the best direction might be to have each transaction be a pointer
+    to a set of splits, with each split having it's own distinct
+    credited account, memo field and currency value.  Suggestion is to
+    leave the debited account pointer in the main transaction, and have one
+    credited account pointer in each of the splits.  Also, suggest
+    leaving a "cleared" flag in the main transaction, *and* putting a
+    separate cleared flag in each split as well.  This allows the
+    cleared flag to be independently set for both the debited & credited
+    accounts.
+    <p>
+    <b>Status:</b> Essentially more-or-less done (July/August 1998)
+    <p>
+
 </dl>
 
 
@@ -708,7 +726,7 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
 </ul>
 
 <hr>
-Draft version 0.23 -- September 1998<br>
+Draft version 0.24 -- September 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 </body>
 </html>
