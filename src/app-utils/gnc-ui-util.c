@@ -163,7 +163,7 @@ gnc_configure_reverse_balance (void)
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     reverse_type[i] = FALSE;
 
-  choice = gnc_lookup_multichoice_option ("General",
+  choice = gnc_lookup_multichoice_option ("Accounts",
                                           "Reversed-balance account types",
                                           "credit");
 
@@ -209,7 +209,7 @@ gnc_reverse_balance_init (void)
 
   reverse_balance_callback_id = 
     gnc_register_option_change_callback (gnc_configure_reverse_balance_cb,
-                                         NULL, "General",
+                                         NULL, "Accounts",
                                          "Reversed-balance account types");
 
   reverse_balance_inited = (reverse_balance_callback_id != SCM_UNDEFINED);
