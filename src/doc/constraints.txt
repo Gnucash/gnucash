@@ -88,7 +88,13 @@ they are, and how they work.
 -- Double Entry
 -- Double-Balance
 -- Date Posted of Gains Transaction
+   The posted date of the gains transaction is kept in sync with the
+   posted date on the transaction that is the source of the gains.
+   See the document 'lots.txt', section 'Cap Gains Actual Implementation' 
+   for details.
 -- Value of Gains Transaction
+   The value recorded by teh gains transaction is kept in sync with
+   the value
 
 
 

@@ -281,6 +281,11 @@ inventory first.  Thus, the profit/loss of the sale corresponds
 to the difference in price between when it was bought and sold.
 FIFO's are also used in depreciation schedules, and in other places.
 
+Currently the only policy that is implemented in the cap-gains 
+code is the FIFO policy.  I beleive that it's been abstracted 
+properly, so that it should be easy to add other policies, 
+e.g. LIFO.  See policy.c for what would need to be implemented.
+
 
 Implementation 
 ==============
@@ -384,24 +389,36 @@ back on the appropriate gains splits.  Currently, one can only change
 the date on the gains-source transaction; the date on teh
 gains-recording split cannot be changed.
 
+The value recorded by the gains transaction is updated whenever
+the value of the source changes.  The actual update is done by
+the xaccSplitComputeCapGains() routine, via xaccScrubLot(), which 
+is called at the time of xaccTransCommitEdit().  Note that two 
+different things can affect the gains: a change in the value of 
+the sale, and a change of the value of the purchase.  A set of 
+dirty flags are used to track these.
+
+If the amount of a plit changes, then the lot that its in becomes
+potentially unbalanced.  This requires the lot membership to be 
+recomputed; this in turn may require the split to be split into
+peices, or to be recombined into one from several pieces.
+
 TODO:
--- need to recompute lot membership when source split 'amount' changes.
-   Done, need to test.
--- need to recompute gain value when source split value changes.
-   Done, need to test.
 -- need to copy void status when source split date changes.
--- when gains split is destroyed... ? the user did this intentionally,
-   and needs to scrub ... need to document that this is the users 
-   responsibility ... 
+-- its possible for the the price, as recorded by one split
+   to vary wildly from that in another split in the same
+   transaction.  That's bad, prices should be normalized.
+   Theres a routine to do this, xaccScrubSubSplitPrice()
+   but its not currently used.
+-- write automated test cases to handle each situation.
 
 
 Conversion
 ==========
 As Lots are put into production, old GnuCash datasets
 will need to be converted.   Conversion will be done by running 
-all splits in an account through an accounting FIFO.  The goal
-of the FIFO is to match up purchases and sales so that these can
-be assigned to a Lot.
+all splits in an account through an accounting policy (currently, 
+there is only one policy, a FIFO).  The goal of the policy is to 
+match up purchases and sales so that these can be assigned to a Lot.
 
 The conversion algorithm will work as follows:
 
@@ -417,7 +434,8 @@ for each account {
    }
 }
 
-See the file Scrub2.h for details.
+See the file Scrub2.h for details of teh low-level API, and Scrub3.h 
+for the high-level API.
 
 There is a bit of a problem with this conversion proceedure: If the
 user had prviously recorded cap gains using a 'handmade' version of
@@ -487,6 +505,13 @@ Status
    These implement a FIFO accounting policy (April 2003)
  o Closed/Open lots are handled correctly during book closing.
    See src/engine/Period.c (August 2003)
+ o Work is finished on the automatic computation & tracking 
+   of gain/loss transactions.  Most of the engine API is in 
+   src/engine/cap-gains.h although the high-level 'scrub' API
+   is in src/engine/Scrub3.h.  See src/doc/constraints.txt for 
+   a 'big picture' view of how its done. (September 2003)
+ o A basic lot-viewing GUI is in src/gnome/lot-viewer.c
+   This GUI cannot 'edit' lots. (August 2003)
 
  o The Postgres backend does not yet support lots.
    XXX In particular, the programming API for Lots is currently
@@ -494,14 +519,10 @@ Status
    signalled that the lots have changed.  This is the case both for
    Scrub2.c and for src/gnome/lot-viewer.c (which changes KVP's).
 
- o prototype lot-viewing GUI in src/gnome/lot-viewer.c
-   This GUI cannot 'edit' lots.
+ o Need to write extensive test cases to verify the rather complex
+   constraints between the gains and lots and splits.
 
- o Work has begun on the automatic computation & tracking of gain/loss
-   transactions.   See src/engine/cap-gains.h  Routines now exist to 
-   compute these.  Need to add infrastructure to auto-recompute as 
-   needed, make use of this in register gui's, etc.  A lot of work left.
-   In particular, what about the cap-gains report?
+ o Need to write a cap-gains report!
 
 
 
