@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
 "POT-Creation-Date: 2001-06-06 16:53-0700\n"
-"PO-Revision-Date: 2001-06-06 17:06+02:00\n"
+"PO-Revision-Date: 2001-06-07 14:59+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -2659,9 +2659,8 @@ msgid "Stock Split"
 msgstr "Aktienteilung"
 
 #: src/gnome/glade-gnc-dialogs.c:6494
-#, fuzzy
 msgid "This druid will help you record a stock split or stock merger."
-msgstr "Dieser Assistent hilft Ihnen, eine Aktienteilung einzugeben."
+msgstr "Dieser Assistent hilft Ihnen, eine Aktienteilung oder einen Aktienzusammenschluß einzugeben."
 
 #: src/gnome/glade-gnc-dialogs.c:6505
 msgid "Stock Account"
@@ -3050,6 +3049,12 @@ msgid ""
 "Click 'Cancel'  if you do not wish to create any \n"
 "new accounts now."
 msgstr ""
+"Dieser Assistent hilft Ihnen, Konten in GnuCash zu erstellen.  Ein\n"
+"Konto kann entweder ein Anlagevermögen, eine Verbindlichkeit oder\n"
+"verschiedene Einnahmen und Ausgaben repräsentieren.\n"
+"\n"
+"Drücken Sie 'Abbrechen', wenn Sie keine neuen Konten erstellen\n"
+"möchten."
 
 #: src/gnome/new-user-interface.c:123
 msgid "Choose Currency"
@@ -3060,9 +3065,8 @@ msgid "Please choose the currency to use for new accounts."
 msgstr "Wählen Sie eine Währung für neue Konten."
 
 #: src/gnome/new-user-interface.c:159
-#, fuzzy
 msgid "Choose accounts to create"
-msgstr "Kontoart wählen"
+msgstr "Zu erstellende Konten wählen"
 
 #: src/gnome/new-user-interface.c:169
 msgid ""
@@ -3071,6 +3075,10 @@ msgid ""
 "Select the categories that are relevant to you.  You can always create \n"
 "additional accounts by hand later."
 msgstr ""
+"Wählen Sie die Kategorien, in denen Sie GnuCash benutzen möchten. \n"
+"Jede gewählte Kategorie wird einige Konten erzeugen. \n"
+"\n"
+"Sie können jederzeit auch später Konten anlegen. "
 
 #: src/gnome/new-user-interface.c:214
 msgid "Account Types"
@@ -3081,9 +3089,8 @@ msgid "Detailed Description"
 msgstr "Ausführliche Beschreibung"
 
 #: src/gnome/new-user-interface.c:341
-#, fuzzy
 msgid "Enter opening balances"
-msgstr "Eröffnungssalden"
+msgstr "Eröffnungssalden eingeben"
 
 #: src/gnome/new-user-interface.c:351
 msgid ""
@@ -3103,7 +3110,6 @@ msgid "Finish Account Setup"
 msgstr "Konteneinrichten fertigstellen"
 
 #: src/gnome/new-user-interface.c:451
-#, fuzzy
 msgid ""
 "Press `Finish' to create your new accounts.\n"
 "\n"
@@ -3111,12 +3117,11 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Drücken Sie 'Fertig', um Ihre neue Kontenhierarchie zu erstellen.\n"
+"Drücken Sie 'Fertig', um die neuen Konten zu erstellen.\n"
 "\n"
 "Drücken Sie 'Zurück', um Ihre Auswahl zu überprüfen.\n"
 "\n"
-"Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten "
-"zu erstellen."
+"Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten zu erstellen."
 
 #: src/gnome/new-user-interface.c:513
 msgid "Canceling"
@@ -7775,16 +7780,3 @@ msgstr ""
 #: src/scm/report/guile-strings.c:721
 msgid "Welcome to GnuCash 1.6"
 msgstr "Willkommen zu GnuCash 1.6"
-
-#~ msgid "This wizard will help you set up a new account hierarchy."
-#~ msgstr ""
-#~ "Dieser Assistent hilft Ihnen, eine neue Kontenhierarchie zu erstellen."
-
-#~ msgid ""
-#~ "Please choose the account types you would like to have automatically "
-#~ "setup in GnuCash."
-#~ msgstr ""
-#~ "Wählen Sie die Kontoarten, die Sie automatisch erstellt haben möchten."
-
-#~ msgid "Check and Enter Final Account Info"
-#~ msgstr "Konteninformationen überprüfen und bestätigen"
