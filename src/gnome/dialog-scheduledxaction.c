@@ -183,7 +183,7 @@ void
 editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
         GNCBook         *book;
-        GtkObject         *o, *o2, *o3;
+        GtkWidget       *o, *o2, *o3;
         GList                 *sxList;
         FreqSpec         *fs;
         gint                row;
@@ -675,12 +675,12 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         GnomeDateEdit        *gde;
         SplitRegister        *splitReg;
         GList                *splitList;
-        GtkObject        *o;
+        GtkWidget        *o;
         GString                *tmpgStr;
         struct tm        *tmpTm;
         GDate                *gd;
 
-        nameEntry = glade_xml_get_widget( sxed->gxml, "sxe_name" );
+        nameEntry = GTK_ENTRY(glade_xml_get_widget( sxed->gxml, "sxe_name" ));
         name = xaccSchedXactionGetName(sxed->sx);
         if ( name != NULL ) {
                 gtk_entry_set_text( nameEntry, name  );
@@ -701,7 +701,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 o = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(o), TRUE );
                 o = glade_xml_get_widget( sxed->gxml, "end_nentry" );
-                o = GTK_OBJECT(gnome_number_entry_gtk_entry( GNOME_NUMBER_ENTRY(o) ) );
+                o = gnome_number_entry_gtk_entry( GNOME_NUMBER_ENTRY(o) );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", xaccSchedXactionGetNumOccur( sxed->sx ) );
                 gtk_entry_set_text( GTK_ENTRY(o), tmpgStr->str );
@@ -734,7 +734,7 @@ static
 void
 set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType type )
 {
-        GtkObject *dateCtl, *occurCtl;
+        GtkWidget *dateCtl, *occurCtl;
 
         dateCtl = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
         gtk_widget_set_sensitive( GTK_WIDGET(dateCtl), (type == END_DATE) );
