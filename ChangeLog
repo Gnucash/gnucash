@@ -1,3 +1,11 @@
+2002-02-17  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-system/html-utilities.scm: Added support for
+	surpressing zero amounts.
+
+	* src/report/report-system/*-utilities.scm: Clean up
+	commodity-collector calling functions.
+
 2002-02-08  Derek Atkins <warlord@MIT.EDU>
 
 	* New Search GUI committed to the repository, with a search test

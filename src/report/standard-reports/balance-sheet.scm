@@ -240,7 +240,7 @@
                  asset-accounts
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn))
+                 show-fcur? report-currency exchange-fn #t))
                (liability-table 
                 (gnc:html-build-acct-table
                  #f to-date-tp
@@ -248,7 +248,7 @@
                  liability-accounts
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn))
+                 show-fcur? report-currency exchange-fn #t))
                (equity-table
                 (gnc:html-build-acct-table
                  #f to-date-tp
@@ -256,7 +256,7 @@
                  equity-accounts
                  #f #f #f #f #f 
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn)))
+                 show-fcur? report-currency exchange-fn #t)))
 
           (retained-profit-balance 'minusmerge
                                    neg-retained-profit-balance
