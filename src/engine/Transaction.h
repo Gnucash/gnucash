@@ -225,6 +225,17 @@ char * xaccTransFindCommonCurrency (Transaction *trans);
  */
 char * xaccTransIsCommonCurrency (Transaction *trans, char * currency);
 
+/* The xaccTransGetImbalance() method returns the total value of the
+ *    transaction.  In a pure double-entry system, this imbalance
+ *    should be exactly zero, and if it is not, something is broken.
+ *    However, when double-entry semantics are not enforced, unbalanced
+ *    transactions can sneak in, and this routine can be used to find
+ *    out how much things are off by.  The value returned is denominated
+ *    in the currency that is returned by the xaccTransFindCommonCurrency()
+ *    method.
+ */
+double xaccTransGetImbalance (Transaction * trans);
+
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */

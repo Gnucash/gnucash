@@ -17,13 +17,6 @@
 #include "Account.h"
 #include "Transaction.h"
 
-/*
- * The xaccTransGetUnbalance() method returns the sum of the values of the
- *    splits in this transaction.
- */
-
-double xaccTransGetUnbalance (Transaction * trans);
-
 /* The ScrubOrphans() methods search for transacations that contain
  *    splits that do not have a parent account. These "orphaned splits"
  *    are placed into an "orphan account" which the user will have to 
@@ -68,13 +61,11 @@ void xaccGroupScrubImbalance (AccountGroup *grp);
 static short module = MOD_SCRUB;
 static Account * GetOrMakeAccount (Account *, Transaction *, const char *);
 
-double
-xaccGetUnbalance (Transaction * trans) { return 0.0; }
-
 void 
 Scrub (Account *acc)
 {
-   xaccAccountScrubOrphans (acc);
+   xaccAccountTreeScrubOrphans (acc);
+   xaccAccountScrubImbalance (acc);
 }
 
 /* ================================================================ */
@@ -127,10 +118,76 @@ xaccAccountScrubOrphans (Account *acc)
             DEBUG ("xaccAccountScrubOrphans(): Found an orphan \n");
             /* OK, we found an orphan.  Put it in an orphan account. */
             orph = GetOrMakeAccount (acc, trans, ORPHAN_STR);
+            xaccAccountBeginEdit (orph, 1);
             xaccAccountInsertSplit (orph, s);
+            xaccAccountCommitEdit (orph);
          }
          j++; 
          s = xaccTransGetSplit (trans, j);
+      }
+      i++; split = slist[i];
+   }
+}
+
+/* ================================================================ */
+
+void
+xaccGroupScrubImbalance (AccountGroup *grp)
+{
+   int i=0;
+   if (!grp) return;
+
+   assert ((0 == grp->numAcc) || (grp->account));
+   for (i=0; i<grp->numAcc; i++) {
+      xaccAccountTreeScrubImbalance (grp->account[i]);
+   }
+}
+
+void
+xaccAccountTreeScrubImbalance (Account *acc)
+{
+   xaccGroupScrubImbalance (xaccAccountGetChildren(acc));
+   xaccAccountScrubImbalance (acc);
+}
+
+/* hack alert -- this string should probably be i18n'ed */
+#define IMBALANCE_STR "Imbalance-"
+
+void
+xaccAccountScrubImbalance (Account *acc)
+{
+   int i=0;
+   Split *split, **slist;
+   Transaction *trans;
+
+   PINFO ("xaccAccountScrubImbalance(): "
+          "Looking for imbalance in account %s \n", xaccAccountGetName(acc));
+
+   slist = xaccAccountGetSplitList (acc);
+   split = slist[0];
+   while (split) {
+      double imbalance;
+      trans = xaccSplitGetParent (split);
+
+      imbalance = xaccTransGetImbalance (trans);
+      if (!(DEQ (imbalance, 0.0))) {
+         Split *splat;
+         Account *orph;
+         DEBUG ("xaccAccountScrubImbalance(): "
+                "Found imbalance of %g\n", imbalance);
+         /* OK, we found an imbalanced trans.  Put it in the imbal account. */
+         orph = GetOrMakeAccount (acc, trans, IMBALANCE_STR);
+         
+         /* put split into account before setting split value */
+         splat = xaccMallocSplit();
+         xaccAccountBeginEdit (orph, 1);
+         xaccAccountInsertSplit (orph, splat);
+         xaccAccountCommitEdit (orph);
+
+         xaccTransBeginEdit (trans, 1);
+         xaccSplitSetValue (splat, -imbalance);
+         xaccTransAppendSplit (trans, splat);
+         xaccTransCommitEdit (trans);
       }
       i++; split = slist[i];
    }

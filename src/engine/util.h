@@ -95,7 +95,7 @@ size_t dcoresize();
 #define DMAX(x,y) ((x)>(y)) ? (x) : (y)
 #define isNum(x) (((x)-0x30) < 0) ? 0 : (((x)-0x30) > 9) ? 0 : 1
 
-#define EPS  (1.0e-4)
+#define EPS  (1.0e-6)
 #define DEQ(x,y) (((((x)+EPS)>(y)) ? 1 : 0) && ((((x)-EPS)<(y)) ? 1 : 0))
 
 

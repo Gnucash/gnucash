@@ -520,7 +520,6 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
 /********************************************************************\
 \********************************************************************/
 
-
 static double
 ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
 {
@@ -567,6 +566,14 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    }
 
    return value;
+}
+
+double
+xaccTransGetImbalance (Transaction * trans)
+{
+  char * currency = xaccTransFindCommonCurrency (trans);
+  double imbal = ComputeValue (trans->splits, NULL, currency);
+  return imbal;
 }
 
 /********************************************************************\
