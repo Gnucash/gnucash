@@ -203,7 +203,7 @@ xaccConfigGetForceDoubleEntry (void)
 
 #define MARK_SPLIT(split) {			\
    Account *acc = (Account *) ((split)->acc);	\
-   if (acc) acc->changed = 1;			\
+   if (acc) acc->changed |= ACC_INVALIDATE_ALL;	\
 }
 
 static void
@@ -308,6 +308,7 @@ double xaccSplitGetShareBalance (Split *s)
 double xaccSplitGetCostBasis (Split *s) 
 {
    if (!s) return 0.0;
+   xaccAccountRecomputeCostBasis (s->acc);
    return s->cost_basis;
 }
 

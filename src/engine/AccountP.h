@@ -18,7 +18,7 @@
 /********************************************************************\
  * Account.h -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -129,14 +129,20 @@ struct _account {
   int numSplits;                /* length of splits array below   */
   Split **splits;               /* ptr to array of ptrs to splits */
 
-  /* the "changed" flag helps the gui keep track of 
-   * changes to this account */
+  /* The "changed" flag is used to invalidate cached values in this structure.
+   * currently, the balances and the cost basis are cached.
+   */
   short changed;
 
   /* the "open" flag indicates if the account has been 
    * opened for editing. */
   short open;
 };
+
+/* bitfields for the changed flag */
+#define ACC_INVALID_BALN      0x1
+#define ACC_INVALID_COSTB     0x2
+#define ACC_INVALIDATE_ALL    0x3
 
 /* bitflields for the open flag */
 #define ACC_BEGIN_EDIT        0x1
@@ -159,6 +165,12 @@ void         xaccAccountRemoveSplit (Account *, Split *);
  * and the total balance, for this account */
 void         xaccAccountRecomputeBalance (Account *);
 void         xaccAccountRecomputeBalances (Account **);
+
+/*
+ * recomputes the cost basis 
+ */
+void         xaccAccountRecomputeCostBasis (Account *);
+
 
 /** GLOBALS *********************************************************/
 

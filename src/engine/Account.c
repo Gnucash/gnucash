@@ -34,6 +34,7 @@
 #include "GroupP.h"
 #include "date.h"
 #include "messages.h"
+#include "Queue.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
@@ -203,7 +204,7 @@ void
 xaccAccountCommitEdit (Account *acc)
 {
    if (!acc) return;
-   acc->changed = 1;
+   acc->changed |= ACC_INVALIDATE_ALL;
    acc->open = 0;
 }
 
@@ -263,7 +264,7 @@ disable for now till we figure out what the right thing is.
 */
 
   /* mark the account as having changed */
-  acc -> changed = TRUE;
+  acc -> changed |= ACC_INVALIDATE_ALL;
 
   /* if this split belongs to another acount, remove it from 
    * there first.  We don't want to ever leave the system
@@ -357,7 +358,7 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
   CHECK (acc);
 
   /* mark the account as having changed */
-  acc -> changed = TRUE;
+  acc -> changed |= ACC_INVALIDATE_ALL;
   
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
@@ -416,7 +417,8 @@ xaccAccountRecomputeBalance( Account * acc )
   Split *split, *last_split = NULL;
   
   if( NULL == acc ) return;
-  if (FALSE == acc->changed) return;
+  if (0x0 == (ACC_INVALID_BALN & acc->changed)) return;
+  acc->changed &= ~ACC_INVALID_BALN;
 
   split = acc->splits[0];
   while (split) {
@@ -453,7 +455,8 @@ xaccAccountRecomputeBalance( Account * acc )
       split -> cleared_balance = dcleared_balance;
       split -> reconciled_balance = dreconciled_balance;
     }
-    split -> cost_basis = dbalance;
+    /* invalidate the cost basis; this has to be computed with other routine */
+    split -> cost_basis = 0.0;
 
     last_split = split;
     i++;
@@ -477,6 +480,46 @@ xaccAccountRecomputeBalance( Account * acc )
   }
     
   return;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountRecomputeCostBasis( Account * acc )
+{
+  int  i = 0; 
+  double  amt = 0.0;
+  Split *split = NULL;
+  Queue *q;
+  
+  if( NULL == acc ) return;
+  if (0x0 == (ACC_INVALID_COSTB & acc->changed)) return;
+  acc->changed &= ~ACC_INVALID_COSTB;
+
+  /* create the FIFO queue */
+  q = xaccMallocQueue ();
+
+  /* loop over all splits in this account */
+  split = acc->splits[0];
+  while (split) {
+
+    /* positive amounts are a purchase, negative are a sale. 
+     * Use FIFO accounting: purchase to head, sale from tail. */
+    amt = split->damount;
+    if (0.0 < amt) {
+       xaccQueuePushHead (q, split);
+    } else 
+    if (0.0 > amt) {
+       xaccQueuePopTailShares (q, amt);
+    }
+    split->cost_basis = xaccQueueGetValue (q);
+
+    i++;
+    split = acc->splits[i];
+  }
+
+  xaccFreeQueue (q);
 }
 
 /********************************************************************\
