@@ -27,8 +27,9 @@ srcdir   = @srcdir@
 VPATH    = @srcdir@
 
 CC       = @CC@
-INCLPATH = -I.. -I./engine -I./register -I@srcdir@/../include
-CFLAGS   = @CFLAGS@ ${INCLPATH}
+INCLPATH = -I.. -I./engine -I./register -I@srcdir@/../include -I@prefix@/include
+CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
+
 
 ######################################################################
 # See Makefile.common for information about these variables.

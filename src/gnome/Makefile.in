@@ -24,16 +24,23 @@
 
 # These three lines are suggested defs for autoconf (see the info pages).
 @SET_MAKE@
+prefix   = @prefix@
 srcdir   = @srcdir@
 VPATH    = @srcdir@
+includedir=@includedir@
+
 
 CC       = @CC@
-INCLPATH = -I.. -I../.. -I../engine -I../register -I@srcdir@/../../include
+INCLPATH = -I.. -I../.. -I../engine -I../register -I@srcdir@/../../include \
+           -I$(includedir) -I$(prefix)/lib/gnome-libs/include
+ 
 
 CFLAGS   = @CFLAGS@ @X_CFLAGS@ ${INCLPATH}
 LDFLAGS  = @LDFLAGS@
-LIBS     = -lgif @LIBS@ @X_PRE_LIBS@ @X_LIBS@ $(shell gtk-config --libs) \
-           @X_EXTRA_LIBS@ -lgnomeui -lgnome -lgnomesupport -lgdk_imlib -ltiff -ldl
+LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
+           $(shell gtk-config --libs) @X_EXTRA_LIBS@ -lgnomeui -lgnome \
+           -lgnomesupport -lintl -lgdk_imlib -ltiff
+
 
 TARGET   = ../../xacc.gtk.bin
 STATIC   = ../../xacc-static.gtk.bin

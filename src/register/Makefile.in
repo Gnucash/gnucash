@@ -29,9 +29,11 @@ INCLPATH = -I@srcdir@/../.. \
            -I@srcdir@/../../include \
            -I@srcdir@/../engine \
            -I@srcdir@/../../lib/ComboBox-1.33 \
-           -I@srcdir@/../../lib/Xbae-4.6.2-linas 
+           -I@srcdir@/../../lib/Xbae-4.6.2-linas \
+           -I@prefix@/include
+ 
 
-CFLAGS := @CFLAGS@  -DCELL_WIDGETS=1 ${INCLPATH}
+CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} 
 
 ######################################################################
 # See Makefile.common for information about these variables.

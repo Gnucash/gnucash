@@ -112,7 +112,8 @@ GetOtherAccName (Split *split)
    trans = xaccSplitGetParent (split);
 
    numsplits = xaccTransCountSplits (trans);
-   if (2 < numsplits) return SPLIT_STR;
+   /* if (2 < numsplits) return SPLIT_STR; */
+   if (2 < numsplits) return "BOGUS";
 
    s = xaccTransGetSplit (trans, 0);
    if (s == split) {

@@ -36,7 +36,13 @@ int loglevel = 1;
  * DEBUGGING MEMORY ALLOCATION STUFF                                * 
 \********************************************************************/
 #if DEBUG_MEMORY
+
+#if defined (__NetBSD__)
+# define malloc_usable_size(ptr) 0
+#endif
+
 size_t core=0;
+
 void
 dfree( void *ptr )
   {

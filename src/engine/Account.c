@@ -700,7 +700,7 @@ void
 xaccAccountSetNotes (Account *acc, char *str)
 {
    char * tmp;
-   if (!acc) return;
+   if ((!acc) || (!str)) return;
    CHECK (acc);
 
    /* make strdup before freeing */

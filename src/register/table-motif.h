@@ -72,7 +72,7 @@
 /* hack alert -- I think destroy should unmalloc colors ?? */
 #define TABLE_PRIVATE_DATA_DESTROY(table) 
 
-#define TABLE_PRIVATE_DATA_RESIZE  xaccMotifResizeTable
+#define TABLE_PRIVATE_DATA_RESIZE(a,b,c,d,e)  xaccMotifResizeTable(a,b,c,d,e)
 
 typedef struct _Table Table;
 

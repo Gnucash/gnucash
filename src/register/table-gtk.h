@@ -96,7 +96,7 @@
 }
 
 /* nothing to resize */
-#define TABLE_PRIVATE_DATA_RESIZE(table)
+#define TABLE_PRIVATE_DATA_RESIZE(a,b,c,d,e)
 
 typedef struct _Table Table;
 
