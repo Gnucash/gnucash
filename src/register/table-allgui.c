@@ -288,8 +288,15 @@ xaccSetCursor (Table *table, CellBlock *curs,
 {
    int i,j;
 
-   /* hack alert -- should check to make sure that no null pointers
-    * or bad values were passed in ... */
+   /* reject various bad values that might get passed in */
+   if ((!table) || (!curs)) return;
+   if ((0 > phys_row_origin) || (0 > phys_col_origin)) return;
+   if (phys_row_origin >= table->num_phys_rows) return;
+   if (phys_col_origin >= table->num_phys_cols) return;
+
+   if ((0 > virt_row) || (0 > virt_col)) return;
+   if (virt_row >= table->num_virt_rows) return;
+   if (virt_col >= table->num_virt_cols) return;
 
    /* this cursor is the handler for this block */
    table->handlers[virt_row][virt_col] = curs;
