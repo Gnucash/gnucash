@@ -26,6 +26,8 @@ static gint max_group_depth = 4;
 static gint max_group_accounts = 10;
 
 static kvp_value* get_random_kvp_value_depth (int type, gint depth);
+static gpointer get_random_list_element (GList *list);
+static void add_random_splits(GNCSession *session, Transaction *trn);
 
 
 /***********************************************************************/
@@ -481,6 +483,174 @@ get_random_group (GNCSession *session)
   return get_random_group_depth (session, depth);
 }
 
+typedef struct
+{
+  GUID guid;
+} TransInfo;
+
+static void
+change_trans_helper (GNCSession *session, Transaction *trans, GList *accounts)
+{
+  GList *splits;
+  GList *node;
+  Split *split;
+
+  xaccTransBeginEdit (trans);
+
+  make_random_changes_to_transaction (session, trans);
+
+  switch (get_random_int_in_range (0, 6))
+  {
+    case 0: /* delete some splits, add some more */
+      do
+      {
+        split = xaccTransGetSplit (trans, 0);
+
+        xaccSplitDestroy (split);
+      } while (split);
+
+      add_random_splits (session, trans);
+
+      /* fall through */
+
+    case 1: /* move the splits around */
+      splits = xaccTransGetSplitList (trans);
+      for (node = splits; node; node = node->next)
+      {
+        Split *split = node->data;
+        Account *account;
+
+        account = get_random_list_element (accounts);
+
+        xaccAccountInsertSplit (account, split);
+      }
+      break;
+
+    case 2: /* destroy the transaction */
+      xaccTransDestroy (trans);
+      xaccTransCommitEdit (trans);
+      return;
+
+    default: /* do nothing */
+      break;
+  }
+
+  /* mess with the splits */
+  splits = xaccTransGetSplitList (trans);
+  for (node = splits; node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (get_random_boolean ())
+      make_random_changes_to_split (split);
+  }
+
+  xaccTransCommitEdit (trans);
+}
+
+static gboolean
+add_trans_helper (Transaction *trans, gpointer data)
+{
+  TransInfo *ti;
+  GList **list = data;
+
+  ti = g_new (TransInfo, 1);
+
+  ti->guid = *xaccTransGetGUID (trans);
+
+  *list = g_list_prepend (*list, ti);
+
+  return TRUE;
+}
+
+void
+make_random_changes_to_group (GNCSession *session, AccountGroup *group)
+{
+  Account *new_account;
+  Account *account;
+  GList *accounts;
+  GList *transes;
+  GList *splits;
+  GList *node;
+
+  g_return_if_fail (group && session);
+
+  accounts = xaccGroupGetSubAccounts (group);
+
+  /* Add a new account */
+  new_account = get_random_account (session);
+
+  if (get_random_boolean ())
+    xaccGroupInsertAccount (group, new_account);
+  else
+  {
+    account = get_random_list_element (accounts);
+
+    xaccAccountInsertSubAccount (account, new_account);
+  }
+
+  /* Mess with the accounts */
+  for (node = accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    if (get_random_boolean ())
+      make_random_changes_to_account (session, account);
+  }
+
+  /* Mess with the transactions & splits */
+  transes = NULL;
+  xaccGroupForEachTransaction (group, add_trans_helper, &transes);
+
+  for (node = transes; node; node = node->next)
+  {
+    TransInfo *ti = node->data;
+    Transaction *trans = xaccTransLookup (&ti->guid, session);
+
+    if (!trans)
+      continue;
+
+    g_warning ("got one");
+
+    change_trans_helper (session, trans, accounts);
+  }
+
+  for (node = transes; node; node = node->next)
+  {
+    TransInfo *ti = node->data;
+
+    g_free (ti);
+  }
+  g_list_free (transes);
+  transes = NULL;
+
+  /* delete an account */
+  account = get_random_list_element (accounts);
+
+  splits = xaccAccountGetSplitList (account);
+  splits = g_list_copy (splits);
+
+  for (node = splits; node; node = node->next)
+  {
+    Split *split = node->data;
+
+    do
+    {
+      new_account = get_random_list_element (accounts);
+    } while (new_account == account);
+
+    xaccAccountInsertSplit (new_account, split);
+  }
+
+  xaccAccountBeginEdit (account);
+  xaccAccountDestroy (account);
+
+  g_list_free (splits);
+  g_list_free (accounts);
+
+  /* TODO: move some accounts around */
+}
+
 Account*
 get_random_account(GNCSession *session)
 {
@@ -506,6 +676,30 @@ get_random_account(GNCSession *session)
     xaccAccountCommitEdit(ret);
 
     return ret;
+}
+
+void
+make_random_changes_to_account (GNCSession *session, Account *account)
+{
+    int tmp_int;
+
+    g_return_if_fail (account);
+
+    xaccAccountBeginEdit (account);
+
+    set_account_random_string (account, xaccAccountSetName);
+
+    tmp_int = get_random_int_in_range (BANK, CREDITLINE);
+    xaccAccountSetType (account, tmp_int);
+
+    set_account_random_string (account, xaccAccountSetCode);
+    set_account_random_string (account, xaccAccountSetDescription);
+
+    xaccAccountSetCommodity (account, get_random_commodity(session));
+
+    xaccAccountSetSlots_nc (account, get_random_kvp_frame());
+
+    xaccAccountCommitEdit (account);
 }
 
 static void
@@ -557,7 +751,28 @@ get_random_split(GNCSession *session, gnc_numeric num)
 void
 make_random_changes_to_split (Split *split)
 {
+  Transaction *trans;
+
   g_return_if_fail (split);
+
+  trans = xaccSplitGetParent (split);
+
+  xaccTransBeginEdit (trans);
+
+  set_split_random_string (split, xaccSplitSetMemo);
+  set_split_random_string (split, xaccSplitSetAction);
+
+  xaccSplitSetReconcile (split, possible_chars[get_random_int_in_range(0, 4)]);
+
+  xaccSplitSetDateReconciledTS (split, get_random_timespec());
+
+  xaccSplitSetSlots_nc (split, get_random_kvp_frame());
+
+  /* Don't change share values/prices here, since that would
+   * throw transactions out of balance. Do that in the corresponding
+   * change transaction function. */
+
+  xaccTransCommitEdit (trans);
 }
 
 static void
@@ -627,6 +842,32 @@ Transaction*
 get_random_transaction (GNCSession *session)
 {
   return get_random_transaction_with_currency (session, NULL);
+}
+
+void
+make_random_changes_to_transaction (GNCSession *session, Transaction *trans)
+{
+  GList *list;
+  GList *node;
+
+  g_return_if_fail (trans && session);
+
+  xaccTransBeginEdit (trans);
+
+  xaccTransSetCurrency (trans, get_random_commodity (session));
+
+  set_tran_random_string (trans, xaccTransSetNum);
+
+  trn_add_ran_timespec (trans, xaccTransSetDatePostedTS);
+  trn_add_ran_timespec (trans, xaccTransSetDateEnteredTS);
+
+  set_tran_random_string (trans, xaccTransSetDescription);
+
+  xaccTransSetSlots_nc (trans, get_random_kvp_frame());
+
+  /* Do split manipulations in higher-level functions */
+
+  xaccTransCommitEdit (trans);
 }
 
 static gpointer
@@ -985,4 +1226,20 @@ add_random_transactions_to_session (GNCSession *session, gint num_transactions)
   }
 
   g_list_free (accounts);
+}
+
+void
+make_random_changes_to_book (GNCSession *session, GNCBook *book)
+{
+  g_return_if_fail (session && book);
+
+  make_random_changes_to_group (session, gnc_book_get_group (book));
+}
+
+void
+make_random_changes_to_session (GNCSession *session)
+{
+  g_return_if_fail (session);
+
+  make_random_changes_to_book (session, gnc_session_get_book (session));
 }

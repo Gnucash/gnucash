@@ -1,3 +1,22 @@
+2001-10-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/test-core/test-engine-stuff.c: work on test
+	infrastructure for making changes to existing data
+
+	* src/engine/gnc-book.c: keep backends up to date
+
+	* src/engine/gnc-session.c: keep backends up to date
+
+	* src/backend/postgres/test/db-control.sh: bring down postmaster
+	on database create and destroy
+
+	* src/backend/postgres/test/test-db.c: work on single-update
+	test
+
+	* src/backend/postgres/txn.c: fix bug -- when deleting splits
+	from the database that aren't in the engine, can't use
+	xaccSplitLookup.
+
 2001-10-14  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (delete_button_clicked):
@@ -21,7 +40,6 @@
 
 	* src/app-utils/prefs.scm: Updates to wording, defaults for
 	Scheduled Transaction preferences.
-
 
 2001-10-14  Rob Browning  <rlb@defaultvalue.org>
 

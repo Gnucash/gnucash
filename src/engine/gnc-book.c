@@ -126,6 +126,8 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
   xaccGroupSetBook (grp, book);
 
   book->topgroup = grp;
+
+  xaccGroupSetBackend (grp, book->backend);
 }
 
 void
@@ -133,6 +135,7 @@ gnc_book_set_backend (GNCBook *book, Backend *be)
 {
   if (!book) return;
 
+  book->backend = be;
   xaccGroupSetBackend (book->topgroup, be);
   xaccPriceDBSetBackend (book->pricedb, be);
 }
@@ -168,7 +171,9 @@ void
 gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
 {
   if(!book) return;
+
   book->pricedb = db;
+  xaccPriceDBSetBackend (db, book->backend);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -184,6 +189,7 @@ void
 gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 {
   if ( book == NULL ) return;
+
   book->sched_xactions = newList;
   book->sx_notsaved = TRUE;
 }
@@ -207,6 +213,8 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
   xaccGroupSetBook (templateGroup, book);
 
   book->template_group = templateGroup;
+
+  xaccGroupSetBackend (templateGroup, book->backend);
 }
 
 Backend * 
@@ -241,7 +249,7 @@ gnc_book_mark_saved(GNCBook *book)
 
   xaccGroupMarkSaved(gnc_book_get_group(book));
   gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
-  
+
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
   book_sxns_mark_saved(book);
 }

@@ -156,6 +156,8 @@ gnc_session_set_book (GNCSession *session, GNCBook *book)
     return;
 
   session->book = book;
+
+  gnc_book_set_backend (book, session->backend);
 }
 
 GNCEntityTable *
@@ -215,24 +217,30 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 
   /* FIXME: this needs to be smarter with version numbers. */
   mod = gnc_module_load(mod_name, 0);
-  if(mod) 
+
+  if (mod) 
   {
     be_new_func = gnc_module_lookup(mod, "gnc_backend_new");
+
     if(be_new_func) 
     {
       session->backend = be_new_func();
+
+      gnc_book_set_backend (session->book, session->backend);
     }
-    else 
+    else
     {
       gnc_session_int_backend_load_error(session, " can't find backend_new ",
-				      "");
+                                         "");
     }      
   }
-  else 
+  else
   {
-    gnc_session_int_backend_load_error(session, " failed to load '%s' backend", 
-				    backend_name);
+    gnc_session_int_backend_load_error(session,
+                                       " failed to load '%s' backend", 
+                                       backend_name);
   }
+
   g_free(mod_name);
 }
 
@@ -615,6 +623,9 @@ gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 
   session_2->book = book_1;
   session_2->entity_table = entity_table_1;
+
+  gnc_book_set_backend (book_1, session_2->backend);
+  gnc_book_set_backend (book_2, session_1->backend);
 }
 
 gboolean

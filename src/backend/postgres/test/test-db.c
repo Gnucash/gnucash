@@ -202,6 +202,100 @@ test_access (const char *db_name, const char *mode, gboolean multi_user)
 }
 
 static gboolean
+test_updates (GNCSession *session, const char *db_name, const char *mode,
+              gboolean multi_user)
+{
+  GNCBackendError io_err;
+  GNCSession *session_2;
+  char *filename;
+  gboolean ok;
+
+  g_return_val_if_fail (session && db_name && mode, FALSE);
+
+  filename = db_file_url (db_name, mode);
+
+  gnc_session_begin (session, filename, FALSE, FALSE);
+  io_err = gnc_session_get_error (session);
+  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                     "Beginning db update session",
+                     __FILE__, __LINE__,
+                     "can't begin session for %s in mode %s",
+                     db_name, mode))
+    return FALSE;
+
+  /*  make_random_changes_to_session (session); */
+  {
+    Account *account;
+
+    account = xaccGroupGetAccount (gnc_book_get_group (gnc_session_get_book (session)), 0);
+
+    if (account)
+    {
+      xaccAccountBeginEdit (account);
+
+      switch (xaccAccountGetType (account))
+      {
+        case BANK:
+          xaccAccountSetType (account, CHECKING);
+          break;
+        default:
+          xaccAccountSetType (account, BANK);
+          break;
+      }
+
+      xaccAccountCommitEdit (account);
+    }
+    else
+      failure ("no account");
+  }
+
+  if (!multi_user)
+  {
+    gnc_session_end (session);
+    io_err = gnc_session_get_error (session);
+    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                       "Ending db session",
+                       __FILE__, __LINE__,
+                       "can't end session for %s in mode %s",
+                       db_name, mode))
+      return FALSE;
+  }
+
+  session_2 = gnc_session_new ();
+
+  if (!load_db_file (session_2, db_name, mode))
+    return FALSE;
+
+  ok = gnc_book_equal (gnc_session_get_book (session),
+                       gnc_session_get_book (session_2));
+
+  do_test_args (ok, "Books equal after update", __FILE__, __LINE__,
+                "Books not equal for session %s in mode %s",
+                db_name, mode);
+
+  if (!ok)
+  {
+    save_xml_files (session, session_2);
+    return FALSE;
+  }
+
+  if (multi_user)
+  {
+    gnc_session_end (session);
+    io_err = gnc_session_get_error (session);
+    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                       "Ending db session",
+                       __FILE__, __LINE__,
+                       "can't end session for %s in mode %s",
+                       db_name, mode))
+      return FALSE;
+  }
+
+  gnc_session_destroy (session_2);
+  g_free (filename);
+}
+
+static gboolean
 test_mode (const char *db_name, const char *mode,
            gboolean updates, gboolean multi_user)
 {
@@ -237,6 +331,9 @@ test_mode (const char *db_name, const char *mode,
 
   ok = test_access (db_name, mode, multi_user);
 
+  if (updates && !test_updates (session_db, db_name, mode, multi_user))
+    return FALSE;
+
   gnc_session_destroy (session);
   gnc_session_destroy (session_db);
 
@@ -249,7 +346,7 @@ run_test (void)
   if (!test_mode ("single_file", "single-file", FALSE, FALSE))
     return;
 
-  if (!test_mode ("single_update", "single-update", FALSE, FALSE))
+  if (!test_mode ("single_update", "single-update", TRUE, FALSE))
     return;
 }
 
@@ -259,7 +356,7 @@ guile_main (int argc, char **argv)
   gnc_module_system_init ();
   gnc_module_load ("gnucash/engine", 0);
 
-  g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING);
+  /*  g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING); */
 
   glist_exclude_type (KVP_TYPE_BINARY);
   glist_exclude_type (KVP_TYPE_GLIST);
@@ -287,8 +384,6 @@ guile_main (int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  /* getchar (); */
-
   gh_enter (argc, argv, guile_main);
 
   return 0;

@@ -60,5 +60,11 @@ void add_random_transactions_to_session (GNCSession *session,
                                          gint num_transactions);
 
 void make_random_changes_to_split (Split *split);
+void make_random_changes_to_transaction (GNCSession *session,
+                                         Transaction *trans);
+void make_random_changes_to_account (GNCSession *session, Account *account);
+void make_random_changes_to_group (GNCSession *session, AccountGroup *group);
+void make_random_changes_to_book (GNCSession *session, GNCBook *book);
+void make_random_changes_to_session (GNCSession *session);
 
 #endif

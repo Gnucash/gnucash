@@ -97,6 +97,13 @@ is_trans_empty (Transaction *trans)
  * it locks the tables appropriately.
  */
 
+typedef struct
+{
+  GUID guid;
+  char *guid_str;
+  guint32 iguid;
+} DeleteTransInfo;
+
 static gpointer
 delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
@@ -104,13 +111,22 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    GUID guid = nullguid;
 
    string_to_guid (DB_GET_VAL ("entryGuid", j), &guid);
+
    /* If the database has splits that the engine doesn't,
     * collect 'em up & we'll have to delete em */
    if (NULL == xaccSplitLookup (&guid, be->session))
    {
-      deletelist = g_list_prepend (deletelist, 
-                   g_strdup(DB_GET_VAL ("entryGuid", j)));
+      DeleteTransInfo *dti;
+
+      dti = g_new (DeleteTransInfo, 1);
+
+      dti->guid = guid;
+      dti->guid_str = g_strdup (DB_GET_VAL ("entryGuid", j));
+      dti->iguid = atoi (DB_GET_VAL ("iguid", j));
+
+      deletelist = g_list_prepend (deletelist, dti);
    }
+
    return deletelist;
 }
 
@@ -136,7 +152,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
     * since what is there may not match what we have cached in 
     * the engine. */
    p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT entryGuid FROM gncEntry WHERE transGuid='");
+   p = stpcpy (p, "SELECT entryGuid, iguid FROM gncEntry WHERE transGuid='");
    p = guid_to_string_buff(xaccTransGetGUID(trans), p);
    p = stpcpy (p, "';");
 
@@ -147,16 +163,28 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    p = be->buff; *p = 0;
    for (node=deletelist; node; node=node->next)
    {
-      Split *s;
-      GUID guid;
-      string_to_guid ((char *)(node->data), &guid);
-      s = xaccSplitLookup(&guid, be->session);
-      pgendStoreAuditSplit (be, s, SQL_DELETE);
+      DeleteTransInfo *dti = node->data;
+      GList *split_node;
+
+      /* find the old split in the saved original */
+      if (trans->orig && trans->orig->splits)
+        for (split_node = trans->orig->splits; split_node;
+             split_node = split_node->next)
+        {
+          Split *s = split_node->data;
+
+          if (s && guid_equal (&s->guid, &dti->guid))
+          {
+            pgendStoreAuditSplit (be, s, SQL_DELETE);
+            break;
+          }
+        }
 
       p = stpcpy (p, "DELETE FROM gncEntry WHERE entryGuid='");
-      p = stpcpy (p, node->data);
+      p = stpcpy (p, dti->guid_str);
       p = stpcpy (p, "';\n");
    }
+
    if (p != be->buff)
    {
       PINFO ("%s", be->buff ? be->buff : "(null)");
@@ -166,14 +194,21 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       /* destroy any associated kvp data as well */
       for (node=deletelist; node; node=node->next)
       {
-         Split *s;
-         GUID guid;
-         string_to_guid ((char *)(node->data), &guid);
-         s = xaccSplitLookup(&guid, be->session);
-         pgendKVPDelete (be, s->idata);
-         g_free (node->data);
+         DeleteTransInfo *dti = node->data;
+
+         pgendKVPDelete (be, dti->iguid);
       }
    }
+
+   for (node = deletelist; node; node = node->next)
+   {
+     DeleteTransInfo *dti = node->data;
+
+     g_free (dti->guid_str);
+     g_free (dti);
+   }
+   g_list_free (deletelist);
+   deletelist = NULL;
 
    /* Update the rest */
    start = xaccTransGetSplitList(trans);

@@ -8,10 +8,12 @@ PG_CTL="pg_ctl -D $DB -o -p7777"
 
 case $1 in
   create)
+    $PG_CTL status | grep "pid" && $PG_CTL stop
     rm -rf $DB
     initdb $DB || EXIT_VALUE=1
     ;;
   destroy)
+    $PG_CTL status | grep "pid" && $PG_CTL stop
     rm -rf $DB
     ;;
   start)
