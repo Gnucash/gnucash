@@ -62,6 +62,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
     xmlNodePtr ret;
     kvp_frame *kf;
 
+	 ENTER("(lot=%p)", lot);
     ret = xmlNewNode(NULL, gnc_lot_string);
     xmlSetProp(ret, "version", lot_version_string);
 
@@ -94,6 +95,7 @@ lot_id_handler (xmlNodePtr node, gpointer p)
     struct lot_pdata *pdata = p;
     GUID *guid;
 
+	 ENTER("(lot=%p)", pdata->lot);
     guid = dom_tree_to_guid(node);
     gnc_lot_set_guid(pdata->lot, *guid);
 
@@ -108,6 +110,7 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
     struct lot_pdata *pdata = p;
     gboolean success;
 
+	 ENTER("(lot=%p)", pdata->lot);
     success = dom_tree_to_kvp_frame_given
       (node, gnc_lot_get_slots (pdata->lot));
 
@@ -135,6 +138,7 @@ gnc_lot_end_handler(gpointer data_for_children,
     gxpf_data *gdata = (gxpf_data*)global_data;
     GNCBook *book = gdata->bookdata;
 
+	 ENTER("(lot=%p)", lot);
     successful = TRUE;
 
     if(parent_data)
@@ -169,6 +173,7 @@ dom_tree_to_lot (xmlNodePtr node, GNCBook *book)
     GNCLot *lot;
     gboolean successful;
 
+	 ENTER("(lot=%p)", lot);
     lot = gnc_lot_new(book);
 
     pdata.lot = lot;
@@ -191,3 +196,5 @@ gnc_lot_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_lot_end_handler, NULL, NULL);
 }
+
+/* ================== END OF FILE ========================== */

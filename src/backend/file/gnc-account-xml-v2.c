@@ -77,9 +77,9 @@ gnc_account_dom_tree_create(Account *act)
     const char *str;
     kvp_frame *kf;
     xmlNodePtr ret;
-    xmlNodePtr toaddto;
     GList *n;
 
+    ENTER ("(account=%p)", act);
 
     ret = xmlNewNode(NULL, gnc_account_string);
     xmlSetProp(ret, "version", account_version_string);
@@ -128,12 +128,17 @@ gnc_account_dom_tree_create(Account *act)
                      xaccAccountGetGUID(xaccAccountGetParentAccount(act))));
     }
 
-    toaddto = xmlNewChild(ret, NULL, act_lots_string, NULL);
-
-    for (n=xaccAccountGetLotList(act); n; n=n->next)
+    n = xaccAccountGetLotList (act);
+    PINFO ("lot list=%p", n);
+    if (n)
     {
-       GNCLot * lot =n->data;
-       xmlAddChild(toaddto, gnc_lot_dom_tree_create(lot));
+       xmlNodePtr toaddto = xmlNewChild(ret, NULL, act_lots_string, NULL);
+
+       for (; n; n=n->next)
+       {
+          GNCLot * lot = n->data;
+          xmlAddChild(toaddto, gnc_lot_dom_tree_create(lot));
+       }
     }
     
     return ret;
