@@ -184,6 +184,12 @@ static void jobStarted(JobProgressType type, int actions, void *user_data)
   case JOB_CHANGE_KEYS:
     msg = _("Job: Change Keys");
     break;
+#  if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>10) || (OPENHBCI_VERSION_BUILD>0)
+    /** Change keys */
+  case JOB_GET_STATUS:
+    msg = _("Job: Get Status Reports");
+    break;
+#  endif /* OPENHBCI_VERSION > 0.9.10.0 */
 #else /* OPENHBCI_VERSION > 0.9.8 */
   default:
     msg = _("Unknown");
