@@ -30,7 +30,7 @@
      (list
       "#include <dialog-customer.h>\n"
       "#include <dialog-employee.h>\n"
-      "#include <dialog-invoide.h>\n"
+      "#include <dialog-invoice.h>\n"
       "#include <dialog-job.h>\n"
       "#include <dialog-job-select.h>\n"
       "#include <dialog-order.h>\n"
