@@ -282,7 +282,6 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
   
   button = glade_xml_get_widget (xml, "newbutton");
   gtk_button_set_use_stock(GTK_BUTTON(button), TRUE);
-  printf("account picker is %p\n", wind->dialog);
 
   /* this is to get the checkmarks set up right.. it will get called 
    * again after the window is mapped. */
