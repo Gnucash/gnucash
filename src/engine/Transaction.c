@@ -1511,7 +1511,7 @@ xaccTransSetDateEnteredTS (Transaction *trans, Timespec *ts)
    trans->date_entered.tv_nsec = ts->tv_nsec;
 }
 
-#define THIRTY_TWO_YEARS 0x3c30fc00L
+#define THIRTY_TWO_YEARS 0x3c30fc00LL
 
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year)

@@ -61,10 +61,11 @@ void xaccQueryAddAccount (Query *, Account *acc);
 void  xaccQuerySetMaxSplits (Query *, int);
 
 /* The xaccQuerySetDateRange() method sets the date range
- *    for the query.  Thje query will return only those splits
- *    that are within this date range.
+ *    for the query.  The query will return only those splits
+ *    that are within this date range. The arguments "earliest"
+ *    and "latest" are seconds before or since 00:00:00 Jan 1 1970.
  */
-void xaccQuerySetDateRange (Query *, time_t earliest, time_t latest);
+void xaccQuerySetDateRange (Query *, long long earliest, long long latest);
 
 /* The xaccQuerySetSortOrder() method sets the sort order that
  *    should be used on the splits.  The three arguments should 

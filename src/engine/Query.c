@@ -80,6 +80,7 @@ xaccMallocQuery (void)
 static int Sort_DATE_NUM_AMOUNT (Split **, Split **);
 
 #define LONG_LONG_MAX 0x7fffffffffffffffLL
+#define LONG_LONG_MIN (- (0x7fffffffffffffffLL) -1)
 
 void 
 xaccInitQuery (Query *q)
@@ -91,7 +92,7 @@ xaccInitQuery (Query *q)
    q->changed = 0; 
    q->max_num_splits = INT_MAX ;
 
-   q->earliest.tv_sec = - (LONG_LONG_MAX) - 1; 
+   q->earliest.tv_sec = LONG_LONG_MIN;
    q->earliest.tv_nsec = 0; 
 
    /* Its a signed, 64-bit int */
@@ -101,7 +102,7 @@ xaccInitQuery (Query *q)
    q->earliest_found.tv_sec = LONG_LONG_MAX;
    q->earliest_found.tv_nsec = 0; 
 
-   q->latest_found.tv_sec = - (LONG_LONG_MAX) - 1;
+   q->latest_found.tv_sec = LONG_LONG_MIN;
    q->latest_found.tv_nsec = 0; 
 
    q->sort_func = (int (*)(const void*, const void *)) Sort_DATE_NUM_AMOUNT;
@@ -203,7 +204,7 @@ xaccQuerySetMaxSplits (Query *q, int max)
 /* ================================================== */
 
 void  
-xaccQuerySetDateRange (Query *q, time_t early, time_t late)
+xaccQuerySetDateRange (Query *q, long long early, long long late)
 {
    if (!q) return;
    q->changed = 1; 
