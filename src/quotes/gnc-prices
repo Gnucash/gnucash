@@ -1,12 +1,24 @@
 #!/usr/bin/perl -w
 #
-# gnucash perl thing
+# FILE:
+# update_prices
+#
+# FUNCTION:
+# go out to the net, fetch prices for any securities,
+# stocks/mutual funds in a GnuCash portfolio.
+#
+# HISTORY:
+# Created by Linas Vepstas January 1999
+# Copyright (c) 1999 Linas Vepstas
 
 use Quote;
 use lib '../swig/perl5/';
 use gnucash;
 
 # --------------------------------------------------
+# @account_list = &account_flatlist ($account_group);
+# This rouine accepts a pointer to a group, returns 
+# a flat list of all of the children in the group.
 
 sub account_flatlist 
 {
@@ -30,6 +42,9 @@ sub account_flatlist
 }
 
 # --------------------------------------------------
+# &setprice ($account, $date, $price);
+# This routine stores the indicated price in the indicated account.
+# Handy little utility avoids the usual hassle.
 
 sub setprice 
 {
@@ -48,40 +63,62 @@ sub setprice
 
    gnucash::xaccAccountBeginEdit ($acct, 1);
    gnucash::xaccAccountInsertSplit ($acct, $split);
-$tyme = gnucash::xaccTransGetDate ($trans);
-$dat = gnucash::xaccTransGetDateStr ($trans);
-print "yooo $dayte $tyme $dat\n";
    gnucash::xaccAccountCommitEdit ($acct);
 }
 
 # --------------------------------------------------
 
-
 die "Usage: $0 <gnucash-filename>" if $#ARGV < 0;
 
 # open the file, read all of the accounts
+print "Info: Opening file $ARGV[0]\n";
 $sess = gnucash::xaccMallocSession ();
 $grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
 
 die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 
-# get a flat list of accounts
+# get a flat list of accounts in the file
 @acctlist = &account_flatlist ($grp);
 
+# loop over the accounts, look for stock and mutual funds.
 foreach $acct (@acctlist) {
-      $name = gnucash::xaccAccountGetName ($acct);
-      print "Found account $name\n";
-      $type = gnucash::xaccAccountGetType ($acct);
-      if ($type == $gnucash::STOCK) {
-         $security = gnucash::xaccAccountGetSecurity ($acct);
-         %quotes = &Quote::yahoo ($security);
-         $price = $quotes {$security, "last"};
+   $name = gnucash::xaccAccountGetName ($acct);
+   print "Info: Found account $name\n";
+   $type = gnucash::xaccAccountGetType ($acct);
+
+   if (($type == $gnucash::STOCK) ||
+       ($type == $gnucash::MUTUAL)) 
+    {
+      $security = gnucash::xaccAccountGetSecurity ($acct);
+      $accinfo = gnucash::xaccAccountGetAccInfo ($acct);
+      $invacct = gnucash::xaccCastToInvAcct ($accinfo);
+      if ($invacct) {
+         $quotesrc = gnucash::xaccInvAcctGetPriceSrc ($invacct);
+         print "Info: will use $quotesrc for $name price quotes\n";
+         QUOTE: {
+            if ("YAHOO" eq $quotesrc) { 
+                %quotes = &Quote::yahoo ($security); 
+                $price = $quotes {$security, "last"};
+                last QUOTE;
+            }
+            if ("FIDELITY" eq $quotesrc) { 
+                %quotes = &Quote::fidelity ($security); 
+                $price = $quotes {$security, "nav"};
+                last QUOTE;
+            }
+            if ("TRPRICE" eq $quotesrc) { 
+                %quotes = &Quote::troweprice ($security); 
+                $price = $quotes {$security, "nav"};
+                last QUOTE;
+            }
+         }
          $dayte = $quotes {$security, "date"};
-         print "\t$security last=$price at $dayte\n";
          if ($price) {
+            print "Info: $security last price = $price at $dayte\n";
             &setprice ($acct, $dayte, $price);
          }
       }
+   }
 }
 
 gnucash::xaccSessionSave ($sess);
