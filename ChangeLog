@@ -1,3 +1,8 @@
+2003-01-09  Christian Stimming  <stimming@tuhh.de>
+
+	* po/el.po: Updated translation, reviewed by
+	ta_panta_rei@flashmail.com.
+
 2003-01-08  Derek Atkins  <derek@ihtfp.com>
 
 	* apply patch to use Euclid's algo for gnc_numeric_reduce
