@@ -548,7 +548,7 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
   if (table) {
     if (taxtable_is_grandchild(table)) {
       PINFO("Fixing i-taxtable on entry %s\n",
-	     guid_to_string(gncEntryGetGUID(entry)));
+	     guid_to_string(qof_instance_get_guid(QOF_INSTANCE(entry))));
       new_tt = taxtable_find_senior(table);
       gncEntryBeginEdit(entry);
       gncEntrySetInvTaxTable(entry, new_tt);
@@ -566,7 +566,7 @@ taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
   if (table) {
     if (taxtable_is_grandchild(table)) {
       PINFO("Fixing b-taxtable on entry %s\n",
-	     guid_to_string(gncEntryGetGUID(entry)));
+	     guid_to_string(qof_instance_get_guid(QOF_INSTANCE(entry))));
       new_tt = taxtable_find_senior(table);
       gncEntryBeginEdit(entry);
       gncEntrySetBillTaxTable(entry, new_tt);

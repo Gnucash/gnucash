@@ -31,6 +31,9 @@
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
+void qof_entity_set_guid (QofEntity *ent, const GUID *guid);
+		  
+
 /* Create and destroy entity tables */
 QofEntityTable * qof_entity_new (void);
 void qof_entity_destroy (QofEntityTable *table);
@@ -56,6 +59,7 @@ gpointer qof_entity_lookup (QofEntityTable *entity_table,
                            const GUID * guid, QofIdType entity_type);
 
 /* Store the given entity under the given id with the given type. */
+/* this routine obsolete, remove asap */
 void qof_entity_store (QofEntityTable *entity_table,
                       gpointer entity, const GUID * guid,
                       QofIdType entity_type);

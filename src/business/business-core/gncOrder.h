@@ -36,8 +36,6 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 /* Get Functions */
 
-QofBook * gncOrderGetBook (GncOrder *order);
-const GUID * gncOrderGetGUID (GncOrder *order);
 const char * gncOrderGetID (GncOrder *order);
 GncOwner * gncOrderGetOwner (GncOrder *order);
 Timespec gncOrderGetDateOpened (GncOrder *order);
@@ -64,5 +62,9 @@ gboolean gncOrderIsClosed (GncOrder *order);
 #define ORDER_CLOSED	"date_closed"
 #define ORDER_IS_CLOSED	"is_closed?"
 #define ORDER_NOTES	"notes"
+
+/** deprecated functions */
+#define gncOrderGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
+#define gncOrderGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 
 #endif /* GNC_ORDER_H_ */

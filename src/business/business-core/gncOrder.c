@@ -12,14 +12,18 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
-#include "gnc-book.h"
-#include "qofid.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
+
+#include "qofbook.h"
 #include "qofclass.h"
+#include "qofid.h"
+#include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofobject.h"
+#include "qofquery.h"
+#include "qofquerycore.h"
+
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
-#include "qofid-p.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -28,24 +32,20 @@
 #include "gncOrderP.h"
 #include "gncOwner.h"
 
-struct _gncOrder {
-  QofBook *book;
+struct _gncOrder 
+{
+  QofInstance inst;
 
-  GUID		guid;
   char *	id;
   char *	notes;
+  gboolean 	active;
+
   char *	reference;
   char *	printname;
   GncOwner	owner;
   GList *	entries;
   Timespec 	opened;
   Timespec 	closed;
-  gboolean 	active;
-
-  int		editlevel;
-  gboolean	do_free;
-
-  gboolean	dirty;
 };
 
 static short	module = MOD_BUSINESS;
@@ -65,17 +65,14 @@ static short	module = MOD_BUSINESS;
 	member = tmp; \
 	}
 
-static void addObj (GncOrder *order);
-static void remObj (GncOrder *order);
-
 G_INLINE_FUNC void mark_order (GncOrder *order);
 G_INLINE_FUNC void
 mark_order (GncOrder *order)
 {
-  order->dirty = TRUE;
-  gncBusinessSetDirtyFlag (order->book, _GNC_MOD_NAME, TRUE);
+  order->inst.dirty = TRUE;
+  gncBusinessSetDirtyFlag (order->inst.book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&order->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -87,7 +84,7 @@ GncOrder *gncOrderCreate (QofBook *book)
   if (!book) return NULL;
 
   order = g_new0 (GncOrder, 1);
-  order->book = book;
+  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
 
   order->id = CACHE_INSERT ("");
   order->notes = CACHE_INSERT ("");
@@ -95,10 +92,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->active = TRUE;
 
-  qof_entity_guid_new (qof_book_get_entity_table (book), &order->guid);
-  addObj (order);
-
-  gnc_engine_generate_event (&order->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
 
   return order;
 }
@@ -106,7 +100,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 void gncOrderDestroy (GncOrder *order)
 {
   if (!order) return;
-  order->do_free = TRUE;
+  order->inst.do_free = TRUE;
   gncOrderCommitEdit (order);
 }
 
@@ -114,16 +108,16 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  gnc_engine_generate_event (&order->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_DESTROY);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
   CACHE_REMOVE (order->notes);
   CACHE_REMOVE (order->reference);
-  remObj (order);
 
   if (order->printname) g_free (order->printname);
 
+  qof_instance_release (&order->inst);
   g_free (order);
 }
 
@@ -132,13 +126,8 @@ static void gncOrderFree (GncOrder *order)
 void gncOrderSetGUID (GncOrder *order, const GUID *guid)
 {
   if (!order || !guid) return;
-  if (guid_equal (guid, &order->guid)) return;
 
-  gncOrderBeginEdit (order);
-  remObj (order);
-  order->guid = *guid;
-  addObj (order);
-  gncOrderCommitEdit (order);
+  qof_entity_set_guid(&order->inst.entity, guid);
 }
 
 void gncOrderSetID (GncOrder *order, const char *id)
@@ -206,10 +195,11 @@ void gncOrderSetActive (GncOrder *order, gboolean active)
   gncOrderCommitEdit (order);
 }
 
+/* XXX the existance of this routie is wrong */
 void gncOrderSetDirty (GncOrder *order, gboolean dirty)
 {
   if (!order) return;
-  order->dirty = dirty;
+  order->inst.dirty = dirty;
 }
 
 /* Add an Entry to the Order */
@@ -241,18 +231,6 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
 }
 
 /* Get Functions */
-
-QofBook * gncOrderGetBook (GncOrder *order)
-{
-  if (!order) return NULL;
-  return order->book;
-}
-
-const GUID * gncOrderGetGUID (GncOrder *order)
-{
-  if (!order) return NULL;
-  return &(order->guid);
-}
 
 const char * gncOrderGetID (GncOrder *order)
 {
@@ -312,12 +290,6 @@ GncOrder * gncOrderLookup (QofBook *book, const GUID *guid)
 			   guid, _GNC_MOD_NAME);
 }
 
-gboolean gncOrderIsDirty (GncOrder *order)
-{
-  if (!order) return FALSE;
-  return order->dirty;
-}
-
 gboolean gncOrderIsClosed (GncOrder *order)
 {
   if (!order) return FALSE;
@@ -327,24 +299,29 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  GNC_BEGIN_EDIT (order, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&order->inst, _GNC_MOD_NAME);
 }
 
-static void gncOrderOnError (GncOrder *order, QofBackendError errcode)
+static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
 {
   PERR("Order QofBackend Failure: %d", errcode);
 }
 
-static void gncOrderOnDone (GncOrder *order)
+static inline void gncOrderOnDone (QofInstance *order)
 {
-  order->dirty = FALSE;
+}
+
+static inline void order_free (QofInstance *inst)
+{
+  GncOrder *order = (GncOrder *) inst;
+  gncOrderFree (order);
 }
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  GNC_COMMIT_EDIT_PART1 (order);
-  GNC_COMMIT_EDIT_PART2 (order, _GNC_MOD_NAME, gncOrderOnError,
-			 gncOrderOnDone, gncOrderFree);
+  GNC_COMMIT_EDIT_PART1 (&order->inst);
+  GNC_COMMIT_EDIT_PART2 (&order->inst, _GNC_MOD_NAME, gncOrderOnError,
+			 gncOrderOnDone, order_free);
 }
 
 int gncOrderCompare (GncOrder *a, GncOrder *b)
@@ -364,20 +341,10 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   compare = timespec_cmp (&(a->closed), &(b->closed));
   if (compare) return compare;
 
-  return guid_compare (&(a->guid), &(b->guid));
+  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
 /* Package-Private functions */
-
-static void addObj (GncOrder *order)
-{
-  gncBusinessAddObject (order->book, _GNC_MOD_NAME, order, &order->guid);
-}
-
-static void remObj (GncOrder *order)
-{
-  gncBusinessRemoveObject (order->book, _GNC_MOD_NAME, &order->guid);
-}
 
 static void _gncOrderCreate (QofBook *book)
 {
@@ -411,7 +378,7 @@ static const char * _gncOrderPrintable (gpointer obj)
 
   g_return_val_if_fail (order, NULL);
 
-  if (order->dirty || order->printname == NULL) {
+  if (order->inst.dirty || order->printname == NULL) {
     if (order->printname) g_free (order->printname);
 
     order->printname =
@@ -444,9 +411,9 @@ gboolean gncOrderRegister (void)
     { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
     { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, NULL },
     { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncOrderGetBook, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOrderGetGUID, NULL },
     { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

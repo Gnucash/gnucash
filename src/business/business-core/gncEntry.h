@@ -82,8 +82,6 @@ void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
 
 /* GET FUNCTIONS */
 /* Generic (shared) data */
-QofBook * gncEntryGetBook (GncEntry *entry);
-const GUID * gncEntryGetGUID (GncEntry *entry);
 Timespec gncEntryGetDate (GncEntry *entry);
 Timespec gncEntryGetDateEntered (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
@@ -170,5 +168,8 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_ORDER	"order"
 #define ENTRY_INVOICE	"invoice"
 #define ENTRY_BILL	"bill"
+
+/* deprecated functions, should be removed */
+#define gncEntryGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 
 #endif /* GNC_ENTRY_H_ */

@@ -62,8 +62,25 @@ typedef const char * QofIdTypeConst;
 #define QOF_ID_NULL           "null"
 #define QOF_ID_SESSION        "Session"
 
-
+typedef struct QofEntity_s QofEntity;
 typedef struct _QofEntityTable QofEntityTable;
+
+struct QofEntity_s
+{
+   QofIdType        e_type;
+	GUID             guid;
+	QofEntityTable * e_table;
+};
+
+
+/** Initialise the memory associated with an entity */
+void qof_entity_init (QofEntity *, QofIdType, QofEntityTable *);
+                                                                                
+/** release the data associated with this entity. Dont actually free
+ * the memory associated with the instance. */
+void qof_entity_release (QofEntity *);
+
+/** The stuff below is obsolete and should be removed ASAP. */
 
 /** Return the type of the indicated guid */
 QofIdType qof_entity_type (QofEntityTable *entity_table, const GUID * guid);

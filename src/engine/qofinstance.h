@@ -32,6 +32,7 @@
 #include "guid.h"
 #include "kvp_frame.h"
 #include "qofbook.h"
+#include "qofid.h"
 
 /* --- type macros --- */
 /* cheesy, but will do for now, eventually should be more gtk-like, handle
@@ -48,9 +49,8 @@ struct QofInstance_s
  * eventually, it may hold more fields, such as refrence counting...
  *
  */
-
-   /* Globally unique account id identifying this instance */
-   GUID guid;
+   /* Globally unique id identifying this instance */
+	QofEntity entity;
 
    /* The entity_table in which this instance is stored */
    QofBook * book;
@@ -72,10 +72,10 @@ struct QofInstance_s
 };
 
 /** Initialise the memory associated with an instance */
-void qof_instance_init (QofInstance *, QofBook *);
+void qof_instance_init (QofInstance *, QofIdType, QofBook *);
 
 /** release the data associated with this instance. Dont actually free 
- * the memory associated with teh instance. */
+ * the memory associated with the instance. */
 void qof_instance_release (QofInstance *inst);
 
 /** Return the book pointer */

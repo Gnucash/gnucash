@@ -83,7 +83,7 @@ order_dom_tree_create (GncOrder *order)
     xmlSetProp(ret, "version", order_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(order_guid_string,
-				      gncOrderGetGUID (order)));
+				      qof_instance_get_guid(QOF_INSTANCE (order))));
 
     xmlAddChild(ret, text_to_dom_tree(order_id_string,
                                       gncOrderGetID (order)));

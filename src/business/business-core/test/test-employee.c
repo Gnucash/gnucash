@@ -4,7 +4,8 @@
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
@@ -47,7 +48,7 @@ test_employee (void)
     do_test (gncEmployeeCreate (NULL) == NULL, "employee create NULL");
     employee = gncEmployeeCreate (book);
     do_test (employee != NULL, "employee create");
-    do_test (gncEmployeeGetBook (employee) == book,
+    do_test (qof_instance_get_book(QOF_INSTANCE(employee)) == book,
 	     "getbook");
 
     gncEmployeeBeginEdit (employee);
@@ -74,7 +75,7 @@ test_employee (void)
     guid_new (&guid);
     employee = gncEmployeeCreate (book); count++;
     gncEmployeeSetGUID (employee, &guid);
-    do_test (guid_equal (&guid, gncEmployeeGetGUID (employee)), "guid compare");
+    do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(employee))), "guid compare");
   }
 #if 0
   {
@@ -98,7 +99,7 @@ test_employee (void)
 
     addr = gncEmployeeGetAddr (employee);
     gncAddressSetName (addr, str);
-    res = gncObjectPrintable (GNC_EMPLOYEE_MODULE_NAME, employee);
+    res = qof_object_printable (GNC_EMPLOYEE_MODULE_NAME, employee);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    

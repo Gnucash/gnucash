@@ -586,7 +586,7 @@ G_INLINE_FUNC void gen_event (Split *split)
   if (account)
   {
     xaccGroupMarkNotSaved (account->parent);
-    gnc_engine_generate_event (&account->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+    gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
   }
 
   if (trans)
@@ -614,7 +614,7 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
     if (account)
     {
       xaccGroupMarkNotSaved (account->parent);
-      gnc_engine_generate_event (&account->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+      gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
     }
     if (lot)
     {

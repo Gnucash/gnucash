@@ -34,8 +34,50 @@
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str));
 
-/** #defines ********************************************************/
 #define QOFID_DEBUG 0
+static short module = MOD_ENGINE;
+
+/* =============================================================== */
+/* XXX under construction, the entity_store thing can be vastly simplified */
+
+void
+qof_entity_init (QofEntity *ent, QofIdType type, QofEntityTable * tab)
+{
+  ent->e_type = type;
+
+  do
+  {
+    guid_new(&ent->guid);
+
+    if (qof_entity_type (tab, &ent->guid) == QOF_ID_NONE)
+      break;
+
+    PWARN("duplicate id created, trying again");
+  } while(1);
+ 
+  ent->e_table = tab;
+
+  qof_entity_store (tab, ent, &ent->guid, type);
+}
+
+void
+qof_entity_release (QofEntity *ent)
+{
+  qof_entity_remove (ent->e_table, &ent->guid);
+  ent->e_table = NULL;
+}
+
+void
+qof_entity_set_guid (QofEntity *ent, const GUID *guid)
+{
+  if (guid_equal (guid, &ent->guid)) return;
+  qof_entity_remove (ent->e_table, &ent->guid);
+  ent->guid = *guid;
+  qof_entity_store (ent->e_table, ent, &ent->guid, ent->e_type);
+}
+
+/* =============================================================== */
+/* almost everything below is obsolete and should be removed */
 
 
 /** Type definitions ************************************************/
@@ -50,10 +92,6 @@ struct _QofEntityTable
   GHashTable * hash_by_guid;
   GHashTable * hash_of_types;
 };
-
-
-/** Static global variables *****************************************/
-static short module = MOD_ENGINE;
 
 
 /** Function implementations ****************************************/
@@ -89,12 +127,12 @@ qof_entity_destroy (QofEntityTable *entity_table)
     return;
 
   g_hash_table_foreach_remove (entity_table->hash_by_guid, entity_node_destroy,
-			       NULL);
+                               NULL);
   g_hash_table_destroy (entity_table->hash_by_guid);
   entity_table->hash_by_guid = NULL;
 
   g_hash_table_foreach_remove (entity_table->hash_of_types,
-			       entity_types_table_destroy, NULL);
+                               entity_types_table_destroy, NULL);
   g_hash_table_destroy (entity_table->hash_of_types);
   entity_table->hash_of_types = NULL;
 
@@ -249,7 +287,7 @@ entity_get_types_table (QofEntityTable *entity_table, QofIdType entity_type)
 
 static void
 entity_store_by_type (QofEntityTable *entity_table,
-		      GUID *new_guid, EntityNode *e_node)
+                      GUID *new_guid, EntityNode *e_node)
 {
   GHashTable *ht;
 
@@ -324,9 +362,9 @@ qof_entity_remove (QofEntityTable *entity_table, const GUID * guid)
 }
 
 struct _iterate {
-  QofEntityForeachCB	fcn;
-  gpointer		data;
-  QofIdType		type;
+  QofEntityForeachCB        fcn;
+  gpointer                data;
+  QofIdType                type;
 };
 
 static void foreach_cb (gpointer key, gpointer item, gpointer arg)
@@ -339,7 +377,7 @@ static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 
 void
 qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
-		   QofEntityForeachCB cb_func, gpointer user_data)
+                   QofEntityForeachCB cb_func, gpointer user_data)
 {
   GHashTable *ht;
   struct _iterate iter;

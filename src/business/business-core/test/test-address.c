@@ -18,7 +18,7 @@ static void
 test_address (void)
 {
   GncAddress *address;
-  GNCBook *book = gnc_book_new ();
+  QofBook *book = qof_book_new ();
 
   /* Test creation/destruction */
   {

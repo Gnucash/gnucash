@@ -88,16 +88,6 @@ static short module = MOD_BUSINESS;
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-static inline void addObj (GncCustomer *cust)
-{
-  gncBusinessAddObject (cust->inst.book, _GNC_MOD_NAME, cust, &cust->inst.guid);
-}
-
-static inline void remObj (GncCustomer *cust)
-{
-  gncBusinessRemoveObject (cust->inst.book, _GNC_MOD_NAME, &cust->inst.guid);
-}
-
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
 G_INLINE_FUNC void
 mark_customer (GncCustomer *customer)
@@ -105,7 +95,7 @@ mark_customer (GncCustomer *customer)
   customer->inst.dirty = TRUE;
   gncBusinessSetDirtyFlag (customer->inst.book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&customer->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&customer->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /* ============================================================== */
@@ -118,22 +108,21 @@ GncCustomer *gncCustomerCreate (QofBook *book)
   if (!book) return NULL;
 
   cust = g_new0 (GncCustomer, 1);
-  qof_instance_init (&cust->inst, book);
+  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
 
   cust->id = CACHE_INSERT ("");
   cust->name = CACHE_INSERT ("");
   cust->notes = CACHE_INSERT ("");
-  cust->addr = gncAddressCreate (book, &cust->inst.guid, _GNC_MOD_NAME);
+  cust->addr = gncAddressCreate (book, &cust->inst.entity.guid, _GNC_MOD_NAME);
   cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   cust->active = TRUE;
   cust->jobs = NULL;
 
   cust->discount = gnc_numeric_zero();
   cust->credit = gnc_numeric_zero();
-  cust->shipaddr = gncAddressCreate (book, &cust->inst.guid, _GNC_MOD_NAME);
+  cust->shipaddr = gncAddressCreate (book, &cust->inst.entity.guid, _GNC_MOD_NAME);
 
-  addObj (cust);
-  gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
 
   return cust;
 }
@@ -147,7 +136,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
 
   cust = g_new0 (GncCustomer, 1);
 
-  qof_instance_init (&cust->inst, book);
+  qof_instance_init (&cust->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&cust->inst, &from->inst);
 
   cust->id = CACHE_INSERT (from->id);
@@ -190,8 +179,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
     cust->jobs = g_list_prepend(cust->jobs, job);
   }
 
-  addObj (cust);
-  gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_CREATE);
 
   return cust;
 }
@@ -208,7 +196,7 @@ static void gncCustomerFree (GncCustomer *cust)
 {
   if (!cust) return;
 
-  gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (cust->id);
   CACHE_REMOVE (cust->name);
@@ -216,8 +204,6 @@ static void gncCustomerFree (GncCustomer *cust)
   gncAddressDestroy (cust->addr);
   gncAddressDestroy (cust->shipaddr);
   g_list_free (cust->jobs);
-
-  remObj (cust);
 
   if (cust->terms)
     gncBillTermDecRef (cust->terms);
@@ -285,14 +271,9 @@ void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
 void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
 {
   if (!cust || !guid) return;
-  if (guid_equal (guid, &cust->inst.guid)) return;
+  if (guid_equal (guid, &cust->inst.entity.guid)) return;
 
-  /* XXX this looks fishy, chinging guid's is deep, not transactional */
-  gncCustomerBeginEdit (cust);
-  remObj (cust);
-  cust->inst.guid = *guid;
-  addObj (cust);
-  gncCustomerCommitEdit (cust);
+  qof_entity_set_guid (&cust->inst.entity, guid);
 }
 
 void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
@@ -395,7 +376,7 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_insert_sorted (cust->jobs, job,
                                        (GCompareFunc)gncJobCompare);
 
-  gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -412,7 +393,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     cust->jobs = g_list_remove_link (cust->jobs, node);
     g_list_free_1 (node);
   }
-  gnc_engine_generate_event (&cust->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&cust->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncCustomerBeginEdit (GncCustomer *cust)
@@ -547,7 +528,7 @@ GUID gncCustomerRetGUID (GncCustomer *customer)
   if (!customer)
     return *guid_null();
 
-  return customer->inst.guid;
+  return customer->inst.entity.guid;
 }
 
 GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book)

@@ -45,8 +45,6 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
 /* Get Functions */
 
-QofBook * gncInvoiceGetBook (GncInvoice *invoice);
-const GUID * gncInvoiceGetGUID (GncInvoice *invoice);
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
@@ -144,5 +142,9 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 
 #define INVOICE_FROM_LOT	"invoice-from-lot"
 #define INVOICE_FROM_TXN	"invoice-from-txn"
+
+/** deprecated functions */
+#define gncInvoiceGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
+#define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 
 #endif /* GNC_INVOICE_H_ */

@@ -105,7 +105,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     xmlSetProp(ret, "version", invoice_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(invoice_guid_string,
-				      gncInvoiceGetGUID (invoice)));
+				      qof_instance_get_guid(QOF_INSTANCE(invoice))));
 
     xmlAddChild(ret, text_to_dom_tree(invoice_id_string,
                                       gncInvoiceGetID (invoice)));
@@ -144,7 +144,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     acc = gncInvoiceGetPostedAcc (invoice);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (invoice_postacc_string,
-					  xaccAccountGetGUID (acc)));
+					  qof_instance_get_guid(QOF_INSTANCE(acc))));
 
     xmlAddChild
       (ret,

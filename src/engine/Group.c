@@ -632,7 +632,7 @@ xaccAccountRemoveGroup (Account *acc)
 
   grp->saved = 0;
 
-  gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -667,7 +667,7 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
-  gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -690,7 +690,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 
   xaccGroupInsertAccount (adult->children, child);
 
-  gnc_engine_generate_event (&adult->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&adult->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -745,11 +745,11 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           */
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
-         gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_DESTROY);
-         qof_entity_remove (acc->inst.book->entity_table, &acc->inst.guid);
+         gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
+			qof_entity_release (&acc->inst.entity);
 
-         qof_entity_store (grp->book->entity_table, acc, &acc->inst.guid, GNC_ID_ACCOUNT);
-         gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_CREATE);
+         qof_entity_store (grp->book->entity_table, acc, &acc->inst.entity.guid, GNC_ID_ACCOUNT);
+         gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_CREATE);
       }
     }
 
@@ -765,7 +765,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
   grp->saved = 0;
 
-  gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -833,7 +833,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
          xaccGroupCopyGroup (to_acc->children, from_acc->children);
       }
       xaccAccountCommitEdit (to_acc);
-      gnc_engine_generate_event (&to_acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_CREATE);
+      gnc_engine_gen_event (&to_acc->inst.entity, GNC_EVENT_CREATE);
 
       /* make sure that we have a symmetric, uniform number of 
        * begin-edits, so that subsequent GroupCommitEdit's 
@@ -893,14 +893,14 @@ xaccGroupMergeAccounts (AccountGroup *grp)
             gb->parent = acc_a;
             acc_b->children = NULL;
 
-            gnc_engine_generate_event (&acc_a->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
-            gnc_engine_generate_event (&acc_b->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+            gnc_engine_gen_event (&acc_a->inst.entity, GNC_EVENT_MODIFY);
+            gnc_engine_gen_event (&acc_b->inst.entity, GNC_EVENT_MODIFY);
           }
           else
           {
             xaccGroupConcatGroup (ga, gb);
             acc_b->children = NULL;
-            gnc_engine_generate_event (&acc_b->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+            gnc_engine_gen_event (&acc_b->inst.entity, GNC_EVENT_MODIFY);
           }
         }
 
@@ -914,8 +914,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         {
           Split *split = lp->data;
 
-          gnc_engine_generate_event (&xaccSplitGetAccount(split)->inst.guid,
-				     GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+          gnc_engine_gen_event (&xaccSplitGetAccount(split)->inst.entity,
+				     GNC_EVENT_MODIFY);
           split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
         }

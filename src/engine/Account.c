@@ -73,7 +73,7 @@ G_INLINE_FUNC void account_event (Account *account);
 G_INLINE_FUNC void
 account_event (Account *account)
 {
-  gnc_engine_generate_event (&account->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
 }
 
 
@@ -93,7 +93,7 @@ mark_account (Account *account)
 static void
 xaccInitAccount (Account * acc, QofBook *book)
 {
-  qof_instance_init (&acc->inst, book);
+  qof_instance_init (&acc->inst, GNC_ID_ACCOUNT, book);
 
   acc->parent   = NULL;
   acc->children = NULL;
@@ -127,7 +127,6 @@ xaccInitAccount (Account * acc, QofBook *book)
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
 
-  qof_entity_store(book->entity_table, acc, &acc->inst.guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }
 
@@ -143,7 +142,7 @@ xaccMallocAccount (QofBook *book)
 
   acc = g_new (Account, 1);
   xaccInitAccount (acc, book);
-  gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_CREATE);
 
   return acc;
 }
@@ -240,7 +239,7 @@ xaccFreeAccount (Account *acc)
 
   if (!acc) return;
 
-  gnc_engine_generate_event (&acc->inst.guid, GNC_ID_ACCOUNT, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
 
   if (acc->children) 
   {
@@ -503,7 +502,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
   }
 
   if(check_guids) {
-    if(!guid_equal(&aa->inst.guid, &ab->inst.guid))
+    if(!guid_equal(&aa->inst.entity.guid, &ab->inst.entity.guid))
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -744,7 +743,7 @@ xaccAccountGetGUID (Account *account)
   if (!account)
     return guid_null();
 
-  return &account->inst.guid;
+  return &account->inst.entity.guid;
 }
 
 GUID
@@ -753,7 +752,7 @@ xaccAccountReturnGUID (Account *account)
   if (!account)
     return *guid_null();
 
-  return account->inst.guid;
+  return account->inst.entity.guid;
 }
 
 /********************************************************************\
@@ -767,12 +766,12 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
   /* XXX this looks fishy and weird to me ... */
   PINFO("acct=%p", account);
   xaccAccountBeginEdit (account);
-  qof_entity_remove (account->inst.book->entity_table, &account->inst.guid);
+  qof_entity_remove (account->inst.book->entity_table, &account->inst.entity.guid);
 
-  account->inst.guid = *guid;
+  account->inst.entity.guid = *guid;
 
   qof_entity_store (account->inst.book->entity_table, account,
-                   &account->inst.guid, GNC_ID_ACCOUNT);
+                   &account->inst.entity.guid, GNC_ID_ACCOUNT);
   account->inst.dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
@@ -1278,7 +1277,7 @@ xaccAccountOrder (Account **aa, Account **ab)
   SAFE_STRCMP (da, db);
 
   /* guarantee a stable sort */
-  return guid_compare (&((*aa)->inst.guid), &((*ab)->inst.guid));
+  return guid_compare (&((*aa)->inst.entity.guid), &((*ab)->inst.entity.guid));
 }
 
 /********************************************************************\

@@ -604,7 +604,7 @@ billterm_scrub_invoices (gpointer invoice_p, gpointer ht_p)
   if (term) {
     if (billterm_is_grandchild(term)) {
       PWARN("Fixing i-billterm on invoice %s\n",
-	     guid_to_string(gncInvoiceGetGUID(invoice)));
+	     guid_to_string(qof_instance_get_guid(QOF_INSTANCE(invoice))));
       new_bt = billterm_find_senior(term);
       gncInvoiceBeginEdit(invoice);
       gncInvoiceSetTerms(invoice, new_bt);

@@ -46,7 +46,8 @@
 #include "gnc-address-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_EMPLOYEE_MODULE_NAME
 
@@ -87,7 +88,7 @@ employee_dom_tree_create (GncEmployee *employee)
     xmlSetProp(ret, "version", employee_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(employee_guid_string,
-				      gncEmployeeGetGUID (employee)));
+				      qof_instance_get_guid(QOF_INSTANCE (employee))));
 
     xmlAddChild(ret, text_to_dom_tree(employee_username_string,
                                       gncEmployeeGetUsername (employee)));
@@ -119,7 +120,7 @@ employee_dom_tree_create (GncEmployee *employee)
     ccard_acc = gncEmployeeGetCCard (employee);
     if (ccard_acc)
       xmlAddChild(ret, guid_to_dom_tree(employee_ccard_string,
-					xaccAccountGetGUID (ccard_acc)));
+					qof_instance_get_guid(QOF_INSTANCE(ccard_acc))));
 
     return ret;
 }
@@ -403,7 +404,7 @@ static int
 employee_get_count (GNCBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -426,7 +427,7 @@ xml_add_employee (gpointer employee_p, gpointer out_p)
 static void
 employee_write (FILE *out, GNCBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
 }
 
 void
@@ -442,7 +443,7 @@ gnc_employee_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

@@ -41,6 +41,8 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
+#include "qofinstance.h"
+
 #include "gnc-owner-xml-v2.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
@@ -86,7 +88,7 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 
     xmlAddChild (ret, text_to_dom_tree (owner_type_string, type_str));
     xmlAddChild (ret, guid_to_dom_tree (owner_id_string,
-					gncOwnerGetGUID (owner)));
+					qof_instance_get_guid (QOF_INSTANCE(owner))));
 
     return ret;
 }

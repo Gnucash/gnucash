@@ -42,6 +42,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
 
@@ -77,23 +78,13 @@ static short        module = MOD_BUSINESS;
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-static inline void addObj (GncVendor *vendor)
-{
-  gncBusinessAddObject (vendor->inst.book, _GNC_MOD_NAME, vendor, &vendor->inst.guid);
-}
-
-static inline void remObj (GncVendor *vendor)
-{
-  gncBusinessRemoveObject (vendor->inst.book, _GNC_MOD_NAME, &vendor->inst.guid);
-}
-
 G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 G_INLINE_FUNC void
 mark_vendor (GncVendor *vendor)
 {
   vendor->inst.dirty = TRUE;
   gncBusinessSetDirtyFlag (vendor->inst.book, _GNC_MOD_NAME, TRUE);
-  gnc_engine_generate_event (&vendor->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /* ============================================================== */
@@ -106,18 +97,17 @@ GncVendor *gncVendorCreate (QofBook *book)
   if (!book) return NULL;
 
   vendor = g_new0 (GncVendor, 1);
-  qof_instance_init (&vendor->inst, book);
+  qof_instance_init (&vendor->inst, _GNC_MOD_NAME, book);
   
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (book, &vendor->inst.guid, _GNC_MOD_NAME);
+  vendor->addr = gncAddressCreate (book, &vendor->inst.entity.guid, _GNC_MOD_NAME);
   vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
   vendor->active = TRUE;
   vendor->jobs = NULL;
 
-  addObj (vendor);
-  gnc_engine_generate_event (&vendor->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
 
   return vendor;
 }
@@ -133,7 +123,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  gnc_engine_generate_event (&vendor->inst.guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -141,13 +131,12 @@ static void gncVendorFree (GncVendor *vendor)
   gncAddressDestroy (vendor->addr);
   g_list_free (vendor->jobs);
 
-  remObj (vendor);
-
   if (vendor->terms)
     gncBillTermDecRef (vendor->terms);
   if (vendor->taxtable)
     gncTaxTableDecRef (vendor->taxtable);
 
+  qof_instance_release (&vendor->inst);
   g_free (vendor);
 }
 
@@ -194,14 +183,8 @@ void gncVendorSetNotes (GncVendor *vendor, const char *notes)
 void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
 {
   if (!vendor || !guid) return;
-  if (guid_equal (guid, &vendor->inst.guid)) return;
 
-  /* XXX this looks fishy to me, this can't possibly be right */
-  gncVendorBeginEdit (vendor);
-  remObj (vendor);
-  vendor->inst.guid = *guid;
-  addObj (vendor);
-  gncVendorCommitEdit (vendor);
+  qof_entity_set_guid(&vendor->inst.entity, guid);
 }
 
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
@@ -348,7 +331,7 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
                                          (GCompareFunc)gncJobCompare);
 
-  gnc_engine_generate_event (&vendor->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -366,7 +349,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  gnc_engine_generate_event (&vendor->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)
@@ -432,7 +415,7 @@ GUID gncVendorRetGUID (GncVendor *vendor)
   if (!vendor)
     return *guid_null();
 
-  return vendor->inst.guid;
+  return vendor->inst.entity.guid;
 }
 
 GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book)

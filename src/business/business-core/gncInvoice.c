@@ -14,15 +14,19 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
-#include "gnc-book.h"
+
+#include "qofbook.h"
+#include "qofclass.h"
 #include "qofid.h"
+#include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofobject.h"
 #include "qofquerycore.h"
 #include "qofquery.h"
-#include "qofclass.h"
+
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-be-utils.h"
-#include "qofid-p.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -31,12 +35,14 @@
 #include "gncInvoiceP.h"
 #include "gncOwner.h"
 
-struct _gncInvoice {
-  QofBook *book;
+struct _gncInvoice 
+{
+  QofInstance inst;
   
-  GUID		guid;
   char *	id;
   char *	notes;
+  gboolean 	active;
+
   char *	billing_id;
   char *	printname;
   GncBillTerm *	terms;
@@ -54,13 +60,6 @@ struct _gncInvoice {
   Account * 	posted_acc;
   Transaction * posted_txn;
   GNCLot *	posted_lot;
-
-  gboolean 	active;
-
-  int		editlevel;
-  gboolean	do_free;
-
-  gboolean	dirty;
 };
 
 static short	module = MOD_BUSINESS;
@@ -83,17 +82,14 @@ static short	module = MOD_BUSINESS;
 	member = tmp; \
 	}
 
-static void addObj (GncInvoice *invoice);
-static void remObj (GncInvoice *invoice);
-
 static void mark_invoice (GncInvoice *invoice);
 static void
 mark_invoice (GncInvoice *invoice)
 {
-  invoice->dirty = TRUE;
-  gncBusinessSetDirtyFlag (invoice->book, _GNC_MOD_NAME, TRUE);
+  invoice->inst.dirty = TRUE;
+  gncBusinessSetDirtyFlag (invoice->inst.book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&invoice->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -105,7 +101,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
   if (!book) return NULL;
 
   invoice = g_new0 (GncInvoice, 1);
-  invoice->book = book;
+  qof_instance_init (&invoice->inst, _GNC_MOD_NAME, book);
 
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
@@ -116,10 +112,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
   invoice->to_charge_amount = gnc_numeric_zero();
 
-  qof_entity_guid_new (qof_book_get_entity_table (book), &invoice->guid);
-  addObj (invoice);
-
-  gnc_engine_generate_event (&invoice->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_CREATE);
 
   return invoice;
 }
@@ -127,7 +120,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 void gncInvoiceDestroy (GncInvoice *invoice)
 {
   if (!invoice) return;
-  invoice->do_free = TRUE;
+  invoice->inst.do_free = TRUE;
   gncInvoiceCommitEdit (invoice);
 }
 
@@ -135,19 +128,19 @@ static void gncInvoiceFree (GncInvoice *invoice)
 {
   if (!invoice) return;
 
-  gnc_engine_generate_event (&invoice->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
   CACHE_REMOVE (invoice->billing_id);
   g_list_free (invoice->entries);
-  remObj (invoice);
 
   if (invoice->printname) g_free (invoice->printname);
 
   if (invoice->terms)
     gncBillTermDecRef (invoice->terms);
 
+  qof_instance_release (&invoice->inst);
   g_free (invoice);
 }
 
@@ -156,13 +149,8 @@ static void gncInvoiceFree (GncInvoice *invoice)
 void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid)
 {
   if (!invoice || !guid) return;
-  if (guid_equal (guid, &invoice->guid)) return;
 
-  gncInvoiceBeginEdit (invoice);
-  remObj (invoice);
-  invoice->guid = *guid;
-  addObj (invoice);
-  gncInvoiceCommitEdit (invoice);
+  qof_entity_set_guid(&invoice->inst.entity, guid);
 }
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id)
@@ -276,10 +264,11 @@ void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount)
   gncInvoiceCommitEdit (invoice);
 }
 
+/* XXX the existance of this very routine is wrong !! */
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty)
 {
   if (!invoice) return;
-  invoice->dirty = dirty;
+  invoice->inst.dirty = dirty;
 }
 
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
@@ -366,18 +355,6 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
 }
 
 /* Get Functions */
-
-QofBook * gncInvoiceGetBook (GncInvoice *invoice)
-{
-  if (!invoice) return NULL;
-  return invoice->book;
-}
-
-const GUID * gncInvoiceGetGUID (GncInvoice *invoice)
-{
-  if (!invoice) return NULL;
-  return &(invoice->guid);
-}
 
 const char * gncInvoiceGetID (GncInvoice *invoice)
 {
@@ -567,12 +544,6 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice)
   return invoice->entries;
 }
 
-gboolean gncInvoiceIsDirty (GncInvoice *invoice)
-{
-  if (!invoice) return FALSE;
-  return invoice->dirty;
-}
-
 static void
 gncInvoiceDetachFromLot (GNCLot *lot)
 {
@@ -596,7 +567,7 @@ gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
   if (invoice->posted_lot) return;	/* Cannot reset invoice's lot */
 
   kvp = gnc_lot_get_slots (lot);
-  value = kvp_value_new_guid (gncInvoiceGetGUID (invoice));
+  value = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE(invoice)));
   kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
   kvp_value_delete (value);
   gncInvoiceSetPostedLot (invoice, lot);
@@ -635,7 +606,7 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 
   xaccTransBeginEdit (txn);
   kvp = xaccTransGetSlots (txn);
-  value = kvp_value_new_guid (gncInvoiceGetGUID (invoice));
+  value = kvp_value_new_guid (qof_instance_get_guid(QOF_INSTANCE(invoice)));
   kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
   kvp_value_delete (value);
   xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
@@ -741,10 +712,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Create a new lot for this invoice, if we need to do so */
   if (!lot)
-    lot = gnc_lot_new (invoice->book);
+    lot = gnc_lot_new (invoice->inst.book);
 
   /* Create a new transaction */
-  txn = xaccMallocTransaction (invoice->book);
+  txn = xaccMallocTransaction (invoice->inst.book);
   xaccTransBeginEdit (txn);
 
   name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
@@ -812,7 +783,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	if (ccard_acct && gncEntryGetBillPayment (entry) == GNC_PAYMENT_CARD) {
 	  Split *split;
 
-	  split = xaccMallocSplit (invoice->book);
+	  split = xaccMallocSplit (invoice->inst.book);
 	  /* set action? */
 	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
 	  xaccSplitSetAction (split, type);
@@ -846,7 +817,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split;
     GncAccountValue *acc_val = iter->data;
 
-    split = xaccMallocSplit (invoice->book);
+    split = xaccMallocSplit (invoice->inst.book);
     /* set action and memo? */
 
     xaccSplitSetMemo (split, memo);
@@ -865,7 +836,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
    * we should make that now..
    */
   if (ccard_acct && !gnc_numeric_zero_p (invoice->to_charge_amount)) {
-    Split *split = xaccMallocSplit (invoice->book);
+    Split *split = xaccMallocSplit (invoice->inst.book);
 
     /* Set memo.  action? */
     xaccSplitSetMemo (split, _("Extra to Charge Card"));
@@ -885,7 +856,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Now create the Posted split (which is negative -- it's a credit) */
   {
-    Split *split = xaccMallocSplit (invoice->book);
+    Split *split = xaccMallocSplit (invoice->inst.book);
 
     /* Set action/memo */
     xaccSplitSetMemo (split, memo);
@@ -928,8 +899,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     char *memo2 = _("Automatic Payment Forward");
     char *action2 = _("Auto Split");
 
-    t2 = xaccMallocTransaction (invoice->book);
-    lot2 = gnc_lot_new (invoice->book);
+    t2 = xaccMallocTransaction (invoice->inst.book);
+    lot2 = gnc_lot_new (invoice->inst.book);
     gncOwnerAttachToLot (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)),
 			 lot2);
     
@@ -946,7 +917,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
       xaccTransSetDatePostedTS (t2, post_date);
 
     /* Balance out this lot */
-    split = xaccMallocSplit (invoice->book);
+    split = xaccMallocSplit (invoice->inst.book);
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetAction (split, action2);
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
@@ -956,7 +927,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gnc_lot_add_split (lot, split);
 
     /* And apply the pre-payment to a new lot */
-    split = xaccMallocSplit (invoice->book);
+    split = xaccMallocSplit (invoice->inst.book);
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetAction (split, action2);
     xaccSplitSetBaseValue (split, total, invoice->currency);
@@ -1241,7 +1212,7 @@ GUID gncInvoiceRetGUID (GncInvoice *invoice)
   if (!invoice)
     return *guid_null();
 
-  return invoice->guid;
+  return invoice->inst.entity.guid;
 }
 
 GncInvoice * gncInvoiceLookupDirect (GUID guid, QofBook *book)
@@ -1259,24 +1230,29 @@ GncInvoice * gncInvoiceLookup (QofBook *book, const GUID *guid)
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
 {
-  GNC_BEGIN_EDIT (invoice, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&invoice->inst, _GNC_MOD_NAME);
 }
 
-static void gncInvoiceOnError (GncInvoice *invoice, QofBackendError errcode)
+static void inline gncInvoiceOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("Invoice QofBackend Failure: %d", errcode);
 }
 
-static void gncInvoiceOnDone (GncInvoice *invoice)
+static void gncInvoiceOnDone (QofInstance *invoice)
 {
-  invoice->dirty = FALSE;
+}
+
+static inline void invoice_free (QofInstance *inst)
+{
+  GncInvoice *invoice = (GncInvoice *) inst;
+  gncInvoiceFree (invoice);
 }
 
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
-  GNC_COMMIT_EDIT_PART1 (invoice);
-  GNC_COMMIT_EDIT_PART2 (invoice, _GNC_MOD_NAME, gncInvoiceOnError,
-			 gncInvoiceOnDone, gncInvoiceFree);
+  GNC_COMMIT_EDIT_PART1 (&invoice->inst);
+  GNC_COMMIT_EDIT_PART2 (&invoice->inst, _GNC_MOD_NAME, gncInvoiceOnError,
+			 gncInvoiceOnDone, invoice_free);
 }
 
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
@@ -1296,20 +1272,10 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
   compare = timespec_cmp (&(a->date_posted), &(b->date_posted));
   if (compare) return compare;
 
-  return guid_compare (&(a->guid), &(b->guid));
+  return guid_compare (&(a->inst.entity.guid), &(b->inst.entity.guid));
 }
 
 /* Package-Private functions */
-
-static void addObj (GncInvoice *invoice)
-{
-  gncBusinessAddObject (invoice->book, _GNC_MOD_NAME, invoice, &invoice->guid);
-}
-
-static void remObj (GncInvoice *invoice)
-{
-  gncBusinessRemoveObject (invoice->book, _GNC_MOD_NAME, &invoice->guid);
-}
 
 static void _gncInvoiceCreate (QofBook *book)
 {
@@ -1343,7 +1309,7 @@ static const char * _gncInvoicePrintable (gpointer obj)
 
   g_return_val_if_fail (invoice, NULL);
 
-  if (invoice->dirty || invoice->printname == NULL) {
+  if (invoice->inst.dirty || invoice->printname == NULL) {
     if (invoice->printname) g_free (invoice->printname);
 
     invoice->printname =
@@ -1408,9 +1374,9 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType, NULL },
     { INVOICE_TERMS, GNC_BILLTERM_MODULE_NAME, (QofAccessFunc)gncInvoiceGetTerms, NULL },
     { INVOICE_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncInvoiceGetBillTo, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncInvoiceGetBook, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncInvoiceGetGUID, NULL },
     { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

@@ -43,8 +43,9 @@
 #include "qofinstance.h"
 #include "qofid.h"
 #include "qofid-p.h"
-#include "qofquerycore.h"
+#include "qofobject.h"
 #include "qofquery.h"
+#include "qofquerycore.h"
 
 #include "gncBusiness.h"
 #include "gncJob.h"
@@ -76,17 +77,7 @@ mark_job (GncJob *job)
 {
   job->inst.dirty = TRUE;
   gncBusinessSetDirtyFlag (job->inst.book, _GNC_MOD_NAME, TRUE);
-  gnc_engine_generate_event (&job->inst.guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
-}
-
-static inline void addObj (GncJob *job)
-{
-  gncBusinessAddObject (job->inst.book, _GNC_MOD_NAME, job, &job->inst.guid);
-}
-
-static inline void remObj (GncJob *job)
-{
-  gncBusinessRemoveObject (job->inst.book, _GNC_MOD_NAME, &job->inst.guid);
+  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /* ================================================================== */
@@ -99,7 +90,7 @@ GncJob *gncJobCreate (QofBook *book)
   if (!book) return NULL;
 
   job = g_new0 (GncJob, 1);
-  qof_instance_init (&job->inst, book);
+  qof_instance_init (&job->inst, _GNC_MOD_NAME, book);
 
   job->id = CACHE_INSERT ("");
   job->name = CACHE_INSERT ("");
@@ -107,8 +98,7 @@ GncJob *gncJobCreate (QofBook *book)
   job->active = TRUE;
 
   /* GncOwner not initialized */
-  addObj (job);
-  gnc_engine_generate_event (&job->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_CREATE);
 
   return job;
 }
@@ -121,7 +111,7 @@ gncCloneJob (GncJob *from, QofBook *book)
   if (!book) return NULL;
                                                                                 
   job = g_new0 (GncJob, 1);
-  qof_instance_init (&job->inst, book);
+  qof_instance_init (&job->inst, _GNC_MOD_NAME, book);
   qof_instance_gemini (&job->inst, &from->inst);
                                                                                 
   job->id = CACHE_INSERT (from->id);
@@ -132,8 +122,7 @@ gncCloneJob (GncJob *from, QofBook *book)
   /* XXX need to clone too */
   job->owner = from->owner;
 
-  addObj (job);
-  gnc_engine_generate_event (&job->inst.guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_CREATE);
                                                                                 
   return job;
 }
@@ -149,7 +138,7 @@ static void gncJobFree (GncJob *job)
 {
   if (!job) return;
 
-  gnc_engine_generate_event (&job->inst.guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (job->id);
   CACHE_REMOVE (job->name);
@@ -166,9 +155,7 @@ static void gncJobFree (GncJob *job)
     break;
   }
 
-  remObj (job);
   qof_instance_release (&job->inst);
-
   g_free (job);
 }
 
@@ -229,13 +216,8 @@ void gncJobSetReference (GncJob *job, const char *desc)
 void gncJobSetGUID (GncJob *job, const GUID *guid)
 {
   if (!job || !guid) return;
-  if (guid_equal (guid, &job->inst.guid)) return;
 
-  gncJobBeginEdit (job);
-  remObj (job);
-  job->inst.guid = *guid;
-  addObj (job);
-  gncJobCommitEdit (job);
+  qof_entity_set_guid(&job->inst.entity, guid);
 }
 
 void gncJobSetOwner (GncJob *job, GncOwner *owner)

@@ -14,58 +14,54 @@
 #include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "qofid.h"
-#include "qofobject.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
-#include "qofclass.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+
+#include "qofclass.h"
+#include "qofid.h"
 #include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofobject.h"
+#include "qofquery.h"
+#include "qofquerycore.h"
 
 #include "gncBusiness.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 #include "gncAddress.h"
 
-struct _gncEmployee {
-  QofBook *	book;
-  GUID		guid;
-  char *	id;
-  char *	username;
-  char *	language;
-  char *	acl;
-  GncAddress *	addr;
+struct _gncEmployee 
+{
+  QofInstance inst;
+  char *          id;
+  char *          username;
+  GncAddress *    addr;
   gnc_commodity * currency;
-  gnc_numeric	workday;
-  gnc_numeric	rate;
-  gboolean	active;
-  gboolean	dirty;
+  gboolean        active;
+  
+  char *          language;
+  char *          acl;
+  gnc_numeric     workday;
+  gnc_numeric     rate;
 
-  Account *	ccard_acc;
-
-  int		editlevel;
-  gboolean	do_free;
+  Account *        ccard_acc;
 };
 
-static short	module = MOD_BUSINESS;
+static short        module = MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_EMPLOYEE_MODULE_NAME
+#define _GNC_MOD_NAME        GNC_EMPLOYEE_MODULE_NAME
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
-static void addObj (GncEmployee *employee);
-static void remObj (GncEmployee *employee);
 
 G_INLINE_FUNC void mark_employee (GncEmployee *employee);
 G_INLINE_FUNC void
 mark_employee (GncEmployee *employee)
 {
-  employee->dirty = TRUE;
-  gncBusinessSetDirtyFlag (employee->book, _GNC_MOD_NAME, TRUE);
+  employee->inst.dirty = TRUE;
+  gncBusinessSetDirtyFlag (employee->inst.book, _GNC_MOD_NAME, TRUE);
 
-  gnc_engine_generate_event (&employee->guid, _GNC_MOD_NAME, GNC_EVENT_MODIFY);
+  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /* Create/Destroy Functions */
@@ -77,22 +73,18 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   if (!book) return NULL;
 
   employee = g_new0 (GncEmployee, 1);
-  employee->book = book;
-  employee->dirty = FALSE;
-
+  qof_instance_init (&employee->inst, _GNC_MOD_NAME, book);
+  
   employee->id = CACHE_INSERT ("");
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (book, &employee->guid, _GNC_MOD_NAME);
+  employee->addr = gncAddressCreate (book, &employee->inst.entity.guid, _GNC_MOD_NAME);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
-  qof_entity_guid_new (qof_book_get_entity_table (book), &employee->guid);
-  addObj (employee);
-
-  gnc_engine_generate_event (&employee->guid, _GNC_MOD_NAME, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
 
   return employee;
 }
@@ -100,7 +92,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
 void gncEmployeeDestroy (GncEmployee *employee)
 {
   if (!employee) return;
-  employee->do_free = TRUE;
+  employee->inst.do_free = TRUE;
   gncEmployeeCommitEdit(employee);
 }
 
@@ -108,7 +100,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
-  gnc_engine_generate_event (&employee->guid, _GNC_MOD_NAME, GNC_EVENT_DESTROY);
+  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_DESTROY);
 
   CACHE_REMOVE (employee->id);
   CACHE_REMOVE (employee->username);
@@ -116,21 +108,21 @@ static void gncEmployeeFree (GncEmployee *employee)
   CACHE_REMOVE (employee->acl);
   gncAddressDestroy (employee->addr);
 
-  remObj (employee);
+  qof_instance_release (&employee->inst);
   g_free (employee);
 }
 
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-	char * tmp; \
-	\
-	if (!safe_strcmp (member, str)) return; \
-	gncEmployeeBeginEdit (obj); \
-	tmp = CACHE_INSERT (str); \
-	CACHE_REMOVE (member); \
-	member = tmp; \
-	}
+        char * tmp; \
+        \
+        if (!safe_strcmp (member, str)) return; \
+        gncEmployeeBeginEdit (obj); \
+        tmp = CACHE_INSERT (str); \
+        CACHE_REMOVE (member); \
+        member = tmp; \
+        }
 
 void gncEmployeeSetID (GncEmployee *employee, const char *id)
 {
@@ -162,12 +154,9 @@ void gncEmployeeSetLanguage (GncEmployee *employee, const char *language)
 void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid)
 {
   if (!employee || !guid) return;
-  if (guid_equal (guid, &employee->guid)) return;
-  gncEmployeeBeginEdit (employee);
-  remObj (employee);
-  employee->guid = *guid;
-  addObj (employee);
-  gncEmployeeCommitEdit (employee);
+  if (guid_equal (guid, &employee->inst.entity.guid)) return;
+  
+  qof_entity_set_guid (&employee->inst.entity, guid);
 }
 
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl)
@@ -232,19 +221,6 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
 }
 
 /* Get Functions */
-
-QofBook * gncEmployeeGetBook (GncEmployee *employee)
-{
-  if (!employee) return NULL;
-  return employee->book;
-}
-
-const GUID * gncEmployeeGetGUID (GncEmployee *employee)
-{
-  if (!employee) return NULL;
-  return &employee->guid;
-}
-
 const char * gncEmployeeGetID (GncEmployee *employee)
 {
   if (!employee) return NULL;
@@ -309,7 +285,7 @@ GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
   return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+                           guid, _GNC_MOD_NAME);
 }
 
 GUID gncEmployeeRetGUID (GncEmployee *employee)
@@ -317,7 +293,7 @@ GUID gncEmployeeRetGUID (GncEmployee *employee)
   if (!employee)
     return *guid_null();
 
-  return employee->guid;
+  return employee->inst.entity.guid;
 }
 
 GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book)
@@ -329,30 +305,37 @@ GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book)
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
 {
   if (!employee) return FALSE;
-  return (employee->dirty || gncAddressIsDirty (employee->addr));
+  return (employee->inst.dirty || gncAddressIsDirty (employee->addr));
 }
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  GNC_BEGIN_EDIT (employee, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&employee->inst, _GNC_MOD_NAME);
 }
 
-static void gncEmployeeOnError (GncEmployee *employee, QofBackendError errcode)
+static inline void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
 {
   PERR("Employee QofBackend Failure: %d", errcode);
 }
 
-static void gncEmployeeOnDone (GncEmployee *employee)
+static inline void gncEmployeeOnDone (QofInstance *inst)
 {
-  employee->dirty = FALSE;
+  GncEmployee *employee = (GncEmployee *) inst;
   gncAddressClearDirty (employee->addr);
 }
 
+static inline void emp_free (QofInstance *inst)
+{
+  GncEmployee *employee = (GncEmployee *) inst;
+  gncEmployeeFree (employee);
+}
+
+
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
-  GNC_COMMIT_EDIT_PART1 (employee);
-  GNC_COMMIT_EDIT_PART2 (employee, _GNC_MOD_NAME, gncEmployeeOnError,
-			 gncEmployeeOnDone, gncEmployeeFree);
+  GNC_COMMIT_EDIT_PART1 (&employee->inst);
+  GNC_COMMIT_EDIT_PART2 (&employee->inst, _GNC_MOD_NAME, gncEmployeeOnError,
+                         gncEmployeeOnDone, emp_free);
 }
 
 /* Other functions */
@@ -367,18 +350,6 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
 }
 
 /* Package-Private functions */
-
-static void addObj (GncEmployee *employee)
-{
-  gncBusinessAddObject (employee->book, _GNC_MOD_NAME, employee,
-			&employee->guid);
-}
-
-static void remObj (GncEmployee *employee)
-{
-  gncBusinessRemoveObject (employee->book, _GNC_MOD_NAME, &employee->guid);
-}
-
 static void _gncEmployeeCreate (QofBook *book)
 {
   gncBusinessCreate (book, _GNC_MOD_NAME);
@@ -400,7 +371,7 @@ static void _gncEmployeeMarkClean (QofBook *book)
 }
 
 static void _gncEmployeeForeach (QofBook *book, QofEntityForeachCB cb,
-				 gpointer user_data)
+                                 gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
@@ -433,9 +404,9 @@ gboolean gncEmployeeRegister (void)
     { EMPLOYEE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetID, NULL },
     { EMPLOYEE_USERNAME, QOF_TYPE_STRING, (QofAccessFunc)gncEmployeeGetUsername, NULL },
     { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncEmployeeGetAddr, NULL },
-    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncEmployeeGetBook, NULL },
-    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncEmployeeGetGUID, NULL },
     { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, NULL },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 

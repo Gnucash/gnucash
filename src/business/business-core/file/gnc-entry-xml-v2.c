@@ -124,7 +124,7 @@ entry_dom_tree_create (GncEntry *entry)
     xmlSetProp(ret, "version", entry_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(entry_guid_string,
-				      gncEntryGetGUID (entry)));
+				      qof_instance_get_guid(QOF_INSTANCE(entry))));
 
     ts = gncEntryGetDate (entry);
     xmlAddChild(ret, timespec_to_dom_tree (entry_date_string, &ts));
@@ -144,7 +144,7 @@ entry_dom_tree_create (GncEntry *entry)
     acc = gncEntryGetInvAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_invacct_string,
-					  xaccAccountGetGUID (acc)));
+					  qof_instance_get_guid(QOF_INSTANCE(acc))));
 
     maybe_add_numeric (ret, entry_iprice_string, gncEntryGetInvPrice (entry));
 
@@ -153,7 +153,7 @@ entry_dom_tree_create (GncEntry *entry)
     invoice = gncEntryGetInvoice (entry);
     if (invoice) {
       xmlAddChild (ret, guid_to_dom_tree (entry_invoice_string,
-					  gncInvoiceGetGUID (invoice)));
+					  qof_instance_get_guid(QOF_INSTANCE(invoice))));
 
       xmlAddChild(ret, text_to_dom_tree(entry_idisctype_string,
 					gncAmountTypeToString (
@@ -178,7 +178,7 @@ entry_dom_tree_create (GncEntry *entry)
     acc = gncEntryGetBillAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_billacct_string,
-					  xaccAccountGetGUID (acc)));
+					  qof_instance_get_guid (QOF_INSTANCE(acc))));
 
     maybe_add_numeric (ret, entry_bprice_string, gncEntryGetBillPrice (entry));
 
@@ -186,7 +186,7 @@ entry_dom_tree_create (GncEntry *entry)
     if (invoice) {
       GncOwner *owner;
       xmlAddChild (ret, guid_to_dom_tree (entry_bill_string,
-					  gncInvoiceGetGUID (invoice)));
+					  qof_instance_get_guid(QOF_INSTANCE(invoice))));
       xmlAddChild(ret, int_to_dom_tree(entry_billable_string,
 				       gncEntryGetBillable (entry)));
       owner = gncEntryGetBillTo (entry);
@@ -211,7 +211,7 @@ entry_dom_tree_create (GncEntry *entry)
     order = gncEntryGetOrder (entry);
     if (order)
       xmlAddChild (ret, guid_to_dom_tree (entry_order_string,
-					  gncOrderGetGUID (order)));
+					  qof_instance_get_guid(QOF_INSTANCE (order))));
 
     return ret;
 }
