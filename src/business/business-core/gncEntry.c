@@ -397,6 +397,22 @@ void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
 			       value, tax_value);
 }
 
+gnc_numeric gncEntryReturnValue (GncEntry *entry)
+{
+  gnc_numeric val = gnc_numeric_zero ();
+  if (!entry) return val;
+  gncEntryGetValue (entry, &val, NULL);
+  return val;
+}
+
+gnc_numeric gncEntryReturnTaxValue (GncEntry *entry)
+{
+  gnc_numeric val = gnc_numeric_zero ();
+  if (!entry) return val;
+  gncEntryGetValue (entry, NULL, &val);
+  return val;
+}
+
 void gncEntryCommitEdit (GncEntry *entry)
 {
   if (!entry) return;

@@ -17,11 +17,13 @@
 
 (use-modules (g-wrapped gw-engine-spec))
 (use-modules (g-wrap gw-wct-spec))
+(use-modules (g-wrap gw-glib-spec))
 
 (let ((ws (gw:new-wrapset "gw-business-core")))
   
   (gw:wrapset-depends-on ws "gw-standard")
   (gw:wrapset-depends-on ws "gw-wct")
+  (gw:wrapset-depends-on ws "gw-glib")
 
   (gw:wrapset-depends-on ws "gw-engine")
   
@@ -69,21 +71,406 @@
     (gw:enum-add-value! wt "GNC_OWNER_VENDOR" 'gnc-owner-vendor)
     #t)
 
+  ;;
   ;; gncAddress.h
+  ;;
 
+  (gw:wrap-function
+   ws
+   'gnc:address-get-name
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetName"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Name Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-addr1
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetAddr1"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Addr1 Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-addr2
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetAddr2"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Addr2 Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-addr3
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetAddr3"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Addr3 Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-addr4
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetAddr4"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Addr4 Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-phone
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetPhone"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Phone Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-fax
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetFax"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Fax Entry")
+
+  (gw:wrap-function
+   ws
+   'gnc:address-get-email
+   '(<gw:mchars> callee-owned const)
+   "gncAddressGetEmail"
+   '((<gnc:GncAddress*> address))
+   "Return the Address's Email Entry")
+
+  ;;
   ;; gncCustomer.h
+  ;;
 
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-id
+   '(<gw:mchars> callee-owned const)
+   "gncCustomerGetID"
+   '((<gnc:GncCustomer*> customer))
+   "Return the Customer's ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-name
+   '(<gw:mchars> callee-owned const)
+   "gncCustomerGetName"
+   '((<gnc:GncCustomer*> customer))
+   "Return the Customer's Name")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-addr
+   '<gnc:GncAddress*>
+   "gncCustomerGetAddr"
+   '((<gnc:GncCustomer*> customer))
+   "Return the Customer's Billing Address")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-shipaddr
+   '<gnc:GncAddress*>
+   "gncCustomerGetShipAddr"
+   '((<gnc:GncCustomer*> customer))
+   "Return the Customer's Shipping Address")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-get-notes
+   '(<gw:mchars> callee-owned const)
+   "gncCustomerGetNotes"
+   '((<gnc:GncCustomer*> customer))
+   "Return the Customer's Notes")
+
+  ;;
   ;; gncEmployee.h
+  ;;
 
+  ;;
   ;; gncEntry.h
+  ;;
 
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-date
+   '<gnc:time-pair>
+   "gncEntryGetDate"
+   '((<gnc:GncEntry*> entry))
+   "Return the entry's date")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-description
+   '(<gw:mchars> callee-owned const)
+   "gncEntryGetDescription"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Description")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-action
+   '(<gw:mchars> callee-owned const)
+   "gncEntryGetAction"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Action")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-quantity
+   '<gnc:numeric>
+   "gncEntryGetQuantity"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Quantity")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-price
+   '<gnc:numeric>
+   "gncEntryGetPrice"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Price")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-tax
+   '<gnc:numeric>
+   "gncEntryGetTax"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Tax")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-tax-type-string
+   '(<gw:mchars> callee-owned const)
+   "gncEntryGetTaxTypeStr"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Tax Type String")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-discount
+   '<gnc:numeric>
+   "gncEntryGetDiscount"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Discount")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-discount-type-string
+   '(<gw:mchars> callee-owned const)
+   "gncEntryGetDiscountTypeStr"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Discount Type String")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-value
+   '<gnc:numeric>
+   "gncEntryReturnValue"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Value")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-tax-value
+   '<gnc:numeric>
+   "gncEntryReturnTaxValue"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Tax Value")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-invoice
+   '<gnc:GncInvoice*>
+   "gncEntryGetInvoice"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Invoice")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-order
+   '<gnc:GncOrder*>
+   "gncEntryGetOrder"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Order")
+
+  ;;
   ;; gncInvoice.h
+  ;;
 
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-book
+   '<gnc:Book*>
+   "gncInvoiceGetBook"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's book")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-id
+   '(<gw:mchars> callee-owned const)
+   "gncInvoiceGetID"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-owner
+   '<gnc:GncOwner*>
+   "gncInvoiceGetOwner"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's Owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-date-opened
+   '<gnc:time-pair>
+   "gncInvoiceGetDateOpened"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the Date the invoice was opened")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-date-posted
+   '<gnc:time-pair>
+   "gncInvoiceGetDatePosted"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the Date the invoice was posted")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-date-due
+   '<gnc:time-pair>
+   "gncInvoiceGetDateDue"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the Date the invoice is due")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-date-paid
+   '<gnc:time-pair>
+   "gncInvoiceGetDatePaid"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the Date the invoice was paid")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-terms
+   '(<gw:mchars> callee-owned const)
+   "gncInvoiceGetTerms"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's Terms")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-notes
+   '(<gw:mchars> callee-owned const)
+   "gncInvoiceGetNotes"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's Notes")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-entries
+   '(gw:glist-of <gnc:GncEntry*> callee-owned)
+   "gncInvoiceGetEntries"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the invoice's list of Entries")
+
+  ;;
   ;; gncJob.h
+  ;;
 
+  (gw:wrap-function
+   ws
+   'gnc:job-get-id
+   '(<gw:mchars> callee-owned const)
+   "gncJobGetID"
+   '((<gnc:GncJob*> job))
+   "Return the Job's ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-get-name
+   '(<gw:mchars> callee-owned const)
+   "gncJobGetName"
+   '((<gnc:GncJob*> job))
+   "Return the Job's Name")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-get-reference
+   '(<gw:mchars> callee-owned const)
+   "gncJobGetReference"
+   '((<gnc:GncJob*> job))
+   "Return the Job's Reference")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-get-owner
+   '<gnc:GncOwner*>
+   "gncJobGetOwner"
+   '((<gnc:GncJob*> job))
+   "Return the Job's Owner")
+
+  ;;
   ;; gncOrder.h
+  ;;
 
+  (gw:wrap-function
+   ws
+   'gnc:order-get-id
+   '(<gw:mchars> callee-owned const)
+   "gncOrderGetID"
+   '((<gnc:GncOrder*> order))
+   "Return the Order's ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-get-owner
+   '<gnc:GncOwner*>
+   "gncOrderGetOwner"
+   '((<gnc:GncOrder*> order))
+   "Return the Order's Owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-get-date-opened
+   '<gnc:time-pair>
+   "gncOrderGetDateOpened"
+   '((<gnc:GncOrder*> order))
+   "Return the Date the order was opened")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-get-date-closed
+   '<gnc:time-pair>
+   "gncOrderGetDateClosed"
+   '((<gnc:GncOrder*> order))
+   "Return the Date the order was closed")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-get-notes
+   '(<gw:mchars> callee-owned const)
+   "gncOrderGetNotes"
+   '((<gnc:GncOrder*> order))
+   "Return the Order's Notes")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-get-entries
+   '(gw:glist-of <gnc:GncEntry*> callee-owned)
+   "gncOrderGetEntries"
+   '((<gnc:GncOrder*> order))
+   "Return the Order's list of Entries")
+
+  ;;
   ;; gncOwner.h
+  ;;
+
   (gw:wrap-function
    ws
    'gnc:owner-create
@@ -164,6 +551,40 @@
    '((<gnc:GncOwner*> owner1) (<gnc:GncOwner*> owner2))
    "Compare owner1 and owner2 and return if they are equal")
 
+  ;;
   ;; gncVendor.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:vendor-get-id
+   '(<gw:mchars> callee-owned const)
+   "gncVendorGetID"
+   '((<gnc:GncVendor*> vendor))
+   "Return the Vendor's ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:vendor-get-name
+   '(<gw:mchars> callee-owned const)
+   "gncVendorGetName"
+   '((<gnc:GncVendor*> vendor))
+   "Return the Vendor's Name")
+
+  (gw:wrap-function
+   ws
+   'gnc:vendor-get-addr
+   '<gnc:GncAddress*>
+   "gncVendorGetAddr"
+   '((<gnc:GncVendor*> vendor))
+   "Return the Vendor's Billing Address")
+
+  (gw:wrap-function
+   ws
+   'gnc:vendor-get-notes
+   '(<gw:mchars> callee-owned const)
+   "gncVendorGetNotes"
+   '((<gnc:GncVendor*> vendor))
+   "Return the Vendor's Notes")
 
 )
