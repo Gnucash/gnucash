@@ -1,5 +1,8 @@
 2003-12-22  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/hu_HU/*xea: Hungarian account templates by Sulyok Peter
+	<sp@elte.hu>
+
 	* src/engine/gnc-trace.h: Fix for gcc2.95 for macros with variable
 	arguments by Lionel Elie Mamane <lionel@mamane.lu>.
 

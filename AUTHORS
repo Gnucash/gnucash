@@ -176,6 +176,7 @@ Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
+Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
