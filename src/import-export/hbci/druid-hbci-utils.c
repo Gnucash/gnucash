@@ -243,8 +243,8 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename)
 
   return gnc_verify_dialog_parented
     (parent, TRUE,
-     _("The file %s does not exist. 
-Would you like to create it now?"), 
+     _("The file %s does not exist. \n"
+"Would you like to create it now?"), 
      filename ? filename : _("(null"));
 }
 
@@ -257,10 +257,10 @@ gnc_test_dir_exist_error (GtkWindow *parent, const char *filename)
   if (!dirtest) {
     gnc_error_dialog_parented
       (parent, 
-       _("The directory for file
-%s
-does not exist. 
-Please choose another place for this file."), 
+       _("The directory for file\n"
+"%s\n"
+"does not exist. \n"
+"Please choose another place for this file."), 
        filename ? filename : _("(null"));
     return FALSE;
   }

@@ -1129,23 +1129,23 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     keynumber = HBCI_MediumRDHBase_getInstKeyNumber(medr, use_cryptkey);
     keyversion = HBCI_MediumRDHBase_getInstKeyVersion(medr, use_cryptkey);
 
-    res = g_strdup_printf("<html><body><h1>Ini-Brief der Bank %s</h1>
-<h2>Bankdaten</h2><table>
-<tr><td>Bankleitzahl</td><td>%s</td></tr>
-<tr><td>IP-Adresse</td><td>%s</td></tr>
-<tr><td>Datum, Uhrzeit</td><td>%s</td></tr>
-<tr><td>Schl&uuml;sselnummer</td><td>%d</td></tr>
-<tr><td>Schl&uuml;sselversion</td><td>%d</td></tr>
-</table>
-<h2>Oeffentlicher Schl&uuml;ssel f&uuml;r die elektronische
-Signatur</h2>
-<h3>Exponent (768 Bit)</h3>
-<pre>%s</pre>
-<h3>Modulus (768 Bit)</h3>
-<pre>%s</pre>
-<h3>Hashwert</h3>
-<pre>%s</pre>
-</body></html>",
+    res = g_strdup_printf("<html><body><h1>Ini-Brief der Bank %s</h1>\n"
+"<h2>Bankdaten</h2><table>\n"
+"<tr><td>Bankleitzahl</td><td>%s</td></tr>\n"
+"<tr><td>IP-Adresse</td><td>%s</td></tr>\n"
+"<tr><td>Datum, Uhrzeit</td><td>%s</td></tr>\n"
+"<tr><td>Schl&uuml;sselnummer</td><td>%d</td></tr>\n"
+"<tr><td>Schl&uuml;sselversion</td><td>%d</td></tr>\n"
+"</table>\n"
+"<h2>Oeffentlicher Schl&uuml;ssel f&uuml;r die elektronische\n"
+"Signatur</h2>\n"
+"<h3>Exponent (768 Bit)</h3>\n"
+"<pre>%s</pre>\n"
+"<h3>Modulus (768 Bit)</h3>\n"
+"<pre>%s</pre>\n"
+"<h3>Hashwert</h3>\n"
+"<pre>%s</pre>\n"
+"</body></html>",
 			  bankname, 
 			  bankcode,
 			  bankip,
@@ -1267,26 +1267,26 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
     keynumber = HBCI_MediumRDHBase_getUserKeyNumber(medr);
     keyversion = HBCI_MediumRDHBase_getUserKeyVersion(medr);
 
-    res = g_strdup_printf("<html><body><h1>Ini-Brief</h1>
-<h2>Benutzerdaten</h2><table>
-<tr><td>Benutzername</td><td>%s</td></tr>
-<tr><td>Datum, Uhrzeit</td><td>%s</td></tr>
-<tr><td>Benutzerkennung</td><td>%s</td></tr>
-<tr><td>Schl&uuml;sselnummer</td><td>%d</td></tr>
-<tr><td>Schl&uuml;sselversion</td><td>%d</td></tr>
-<tr><td>Kundensystemkennung</td><td>%s</td></tr>
-</table>
-<h2>Oeffentlicher Schl&uuml;ssel f&uuml;r die elektronische
-Signatur</h2>
-<h3>Exponent</h3>
-<pre>%s</pre>
-<h3>Modulus</h3>
-<pre>%s</pre>
-<h3>Hash</h3>
-<pre>%s</pre>
-<p>&nbsp;</p>
-<hr>
-Ort, Datum, Unterschrift</body></html>",
+    res = g_strdup_printf("<html><body><h1>Ini-Brief</h1>\n"
+"<h2>Benutzerdaten</h2><table>\n"
+"<tr><td>Benutzername</td><td>%s</td></tr>\n"
+"<tr><td>Datum, Uhrzeit</td><td>%s</td></tr>\n"
+"<tr><td>Benutzerkennung</td><td>%s</td></tr>\n"
+"<tr><td>Schl&uuml;sselnummer</td><td>%d</td></tr>\n"
+"<tr><td>Schl&uuml;sselversion</td><td>%d</td></tr>\n"
+"<tr><td>Kundensystemkennung</td><td>%s</td></tr>\n"
+"</table>\n"
+"<h2>Oeffentlicher Schl&uuml;ssel f&uuml;r die elektronische\n"
+"Signatur</h2>\n"
+"<h3>Exponent</h3>\n"
+"<pre>%s</pre>\n"
+"<h3>Modulus</h3>\n"
+"<pre>%s</pre>\n"
+"<h3>Hash</h3>\n"
+"<pre>%s</pre>\n"
+"<p>&nbsp;</p>\n"
+"<hr>\n"
+"Ort, Datum, Unterschrift</body></html>",
 			  HBCI_User_userName (user),
 			  time_now,
 			  HBCI_User_userId (user),
@@ -1367,12 +1367,12 @@ on_button_clicked (GtkButton *button,
   } else if (strcmp (name, "serverno_button") == 0) {
     druid_disable_next_button (info);
     gnc_error_dialog_parented(GTK_WINDOW (info->window),
-			      _("Since the cryptographic keys of the bank cannot be verified, 
-you should stop contacting this Server Internet Address
-and contact your bank. To help your bank figure out the 
-problem, you should print out this erroneous Ini-Letter 
-and show it to your bank. Please abort the HBCI setup
-druid now."));
+			      _("Since the cryptographic keys of the bank cannot be verified,\n"
+				"you should stop contacting this Server Internet Address\n"
+				"and contact your bank. To help your bank figure out the\n"
+				"problem, you should print out this erroneous Ini-Letter\n"
+				"and show it to your bank. Please abort the HBCI setup\n"
+				"druid now."));
   } else if (strcmp (name, "serverprint_button") == 0) {
     gnc_html_print (info->server_html);
   } else if (strcmp (name, "userprint_button") == 0) {
