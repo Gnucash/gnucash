@@ -333,7 +333,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
 
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
-   PINFO ("xaccSRSaveRegEntry(): save split is %p \n", split);
+   ENTER ("xaccSRSaveRegEntry(): save split is %p \n", split);
    if (!split) {
       int vr, vc;
       Split *s;
@@ -391,11 +391,17 @@ xaccSRSaveRegEntry (SplitRegister *reg)
          reg->user_huck =  (void *) trans;
       }
    }
+   DEBUG ("xaccSRSaveRegEntry(): updating trans addr=%p\n", trans);
 
    /* copy the contents from the cursor to the split */
    if (MOD_DATE & changed) 
       /* commit any pending changes */
       xaccCommitDateCell (reg->dateCell);
+      DEBUG ("xaccSRSaveRegEntry(): MOD_DATE DMY= %2d/%2d/%4d \n",
+                               reg->dateCell->date.tm_mday,
+                               reg->dateCell->date.tm_mon+1,
+                               reg->dateCell->date.tm_year+1900);
+
       xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
                                reg->dateCell->date.tm_mon+1,
                                reg->dateCell->date.tm_year+1900);
