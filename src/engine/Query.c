@@ -1126,8 +1126,9 @@ xaccQueryCompileTerms (Query *q)
  * Run the search.
  ********************************************************************/
 
-GList *
-xaccQueryGetSplits(Query * q) {
+SplitList *
+xaccQueryGetSplits(Query * q) 
+{
   GList     * matching_splits=NULL;
   GList     * or_ptr, * and_ptr, * mptr;  
   GList     * all_accts, * node;
@@ -1267,7 +1268,7 @@ xaccQueryGetSplits(Query * q) {
  * Get splits but no more than one from a given transaction.
  ********************************************************************/
 
-GList *
+SplitList *
 xaccQueryGetSplitsUniqueTrans(Query *q)
 {
   GList       * splits = xaccQueryGetSplits(q);
@@ -1299,7 +1300,8 @@ xaccQueryGetSplitsUniqueTrans(Query *q)
  ********************************************************************/
 
 static void
-query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data) {
+query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data) 
+{
   Transaction * t = key;
   int         num_matches = GPOINTER_TO_INT(value);
   GList       ** matches = user_data;
@@ -1310,14 +1312,16 @@ query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data) {
 }
 
 static void
-query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data) {
+query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data) 
+{
   Transaction * t = key;
   GList       ** matches = user_data;
   *matches = g_list_prepend(*matches, t);
 }
 
-GList * 
-xaccQueryGetTransactions (Query * q, query_run_t runtype) {
+TransList * 
+xaccQueryGetTransactions (Query * q, query_run_t runtype) 
+{
   GList       * splits = xaccQueryGetSplits(q);
   GList       * current = NULL;
   GList       * retval = NULL;

@@ -282,9 +282,9 @@ int           xaccQueryNumTerms(Query * q);
 
 
 /* after the query has been set up, call this to run the query */
-GList       * xaccQueryGetSplits(Query * q);
-GList       * xaccQueryGetSplitsUniqueTrans(Query *q);
-GList       * xaccQueryGetTransactions(Query * q, query_run_t type);
+SplitList   * xaccQueryGetSplits(Query * q);
+SplitList   * xaccQueryGetSplitsUniqueTrans(Query *q);
+TransList   * xaccQueryGetTransactions(Query * q, query_run_t type);
 
 /* compare two queries for equality. this is a simplistic
  * implementation -- logical equivalences between different

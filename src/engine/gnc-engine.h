@@ -40,6 +40,7 @@ typedef struct gnc_session_struct GNCSession;
 
 typedef GList                  AccountList;
 typedef GList                  SplitList;
+typedef GList                  TransList;
 
 
 typedef void (* gnc_engine_init_hook_t)(int, char **);
