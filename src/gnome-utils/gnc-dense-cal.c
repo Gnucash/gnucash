@@ -87,7 +87,7 @@ static const gchar* MONTH_THIS_COLOR = "lavender";
 static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 
 static const gchar* MARK_COLOR = "Yellow";
-static const gchar* LABEL_FONT_NAME = "-Adobe-Helvetica-Bold-R-Normal--10-100-75-75-P-60-ISO8859-15";
+static const gchar* LABEL_FONT_NAME = "-adobe-helvetica-bold-r-normal--*-100-*-*-p-*-iso8859-1";
 
 static const gchar* MARKS_LOST_SIGNAL_NAME = "marks_lost";
 
