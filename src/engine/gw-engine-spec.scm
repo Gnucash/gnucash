@@ -1322,6 +1322,16 @@ when no longer needed.")
    (<gnc:time-pair> t))
  "Lookup a price at time t.")
 
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-lookup-day
+ '(gw:glist-of <gnc:Price*> caller-owned)
+ "gnc_pricedb_lookup_day"
+ '((<gnc:PriceDB*> db)
+   (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
+   (<gnc:time-pair> t))
+ "Lookup a price on the day specified by time t.")
+
 ;;===========
 ;; GNCSession
 
@@ -2415,3 +2425,19 @@ the timepair representing midday on that day")
  "gnc_lot_get_split_list"
  '((<gnc:Lot*> lot))
  "Return the list of splits attached to this lot.")
+
+(gw:wrap-function
+ ws
+ 'gnc:engine-suspend-events
+ '<gw:void>
+ "gnc_engine_suspend_events"
+ '()
+ "Suspend all engine events.") 
+
+(gw:wrap-function
+ ws
+ 'gnc:engine-resume-events
+ '<gw:void>
+ "gnc_engine_resume_events"
+ '()
+ "Resume engine event generation.") 
