@@ -38,7 +38,7 @@
  *     @{ */
 
 /** @file cap-gains.h
- *  @breif Utilities to Automatically Compute Capital Gains/Losses.
+ *  @brief Utilities to Automatically Compute Capital Gains/Losses.
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  */

@@ -34,6 +34,15 @@
 #include "qofid.h"
 #include "qofinstance.h"
 
+/** @addtogroup PriceDB
+    @{ */
+/** @file gnc-pricedb.h
+    @author Copyright (C) 2001 Rob Browning
+    @author Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>
+    @brief a simple price database for gnucash
+*/
+/** @} */
+
 
 /** @addtogroup Engine
     @{ */
@@ -116,12 +125,6 @@
       given.  It is assumed that commodities are a global resource and
       are pointer unique.
    */
-/** @file gnc-pricedb.h
-    @author Copyright (C) 2001 Rob Browning
-    @author Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>
-    @brief a simple price database for gnucash
-*/
-
 /* ================================================================ */
 
 /** @addtogroup Price

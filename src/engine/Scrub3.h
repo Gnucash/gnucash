@@ -25,7 +25,7 @@
     @{ */
 
 /** @file Scrub3.h
- *  @breif Hiogh-Level API for imposing Lot constraints
+ *  @brief Hiogh-Level API for imposing Lot constraints
  *  @author Created by Linas Vepstas Sept 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  */

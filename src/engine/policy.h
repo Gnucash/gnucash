@@ -18,16 +18,19 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
-/** @file policy.h
- *  @breif Implement Accounting Policy.
- *  @author Created by Linas Vepstas August 2003
- *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
- *
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Policy Accounting Policy
  *  This file implements Accounting Policy.  The Accounting Policy 
  *  determines how splits are assigned to lots.  The default policy
  *  is the FIFO policy: the first thing bought is also the first 
  *  thing sold. 
+    @{ */
+
+/** @file policy.h
+ *  @brief Implement Accounting Policy.
+ *  @author Created by Linas Vepstas August 2003
+ *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef XACC_POLICY_H 
@@ -35,7 +38,12 @@
 
 typedef struct gncpolicy_s GNCPolicy;
 
+/** First-in, First-out Policy */
 GNCPolicy *xaccGetFIFOPolicy (void); 
+
+/** Last-in, First-out Policy */
 GNCPolicy *xaccGetLIFOPolicy (void); 
 
 #endif /* XACC_POLICY_H */
+/** @} */
+/** @} */

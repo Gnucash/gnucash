@@ -25,7 +25,7 @@
     in greater detail in the file "src/doc/books.txt"
     @{ */
 /** @file Period.h
- *  @breif Implement accounting periods, as per design in src/doc/books.txt
+ *  @brief Implement accounting periods, as per design in src/doc/books.txt
  *  @author Copyright (c) 2001,2003 Linas Vepstas <linas@linas.org>
  */
 
