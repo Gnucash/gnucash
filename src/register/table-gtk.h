@@ -70,7 +70,9 @@
 #define TABLE_PRIVATE_DATA						\
   /* Gtk-only private table members  */					\
   GtkWidget *table_widget;          /* the Sheet */			\
-                                                                        \
+  gint insert_signal_tag;                                                 \
+  gint delete_signal_tag;                                               \
+  gint entry_needs_reconnect;                                       \
   /* see comments above */                                              \
   gboolean in_between_cells;                                            \
 									\
@@ -82,6 +84,8 @@
    table->in_between_cells = TRUE;					\
    									\
    table->next_tab_group = 0;						\
+    table->insert_signal_tag = -1;            \
+     table->delete_signal_tag = -1;             \
 }
 
 

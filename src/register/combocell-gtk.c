@@ -53,7 +53,7 @@
 
 #define SET(cell,str) { 		   \
   if ((cell)->value) free ((cell)->value); \
-  (cell)->value = strdup (str);            \
+  (cell)->value = strdup (str);    \
 }
 
 typedef struct _PopBox {
@@ -165,10 +165,18 @@ xaccSetComboCellValue (ComboCell *cell, const char * str) {
   SET (&(cell->cell), str);
 
   if(box->sheet) {
+#if 0
+		/*  This doesn't really do what we want, since
+				sheet->active_cell points to the cell on the
+				sheet that has most recently been clicked on,
+				which is not necessarily where the current
+				ComboCell *cell is located
+		*/
     gtk_sheet_set_cell_text(box->sheet,
                             box->sheet->active_cell.row,
                             box->sheet->active_cell.col,
                             (char *)str);
+#endif
   }
 }
 
@@ -215,11 +223,13 @@ enterCombo (BasicCell *bcell, const char *value) {
 
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
+  GtkWidget *entry = gtk_sheet_get_entry(box->sheet);
+  
 
   PINFO("ComboBox(%p): enter value (%s)\n", cell, value);
   
   gtk_sheet_change_entry(box->sheet, gtk_combo_get_type());
-  
+
   {
     GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
 
@@ -231,7 +241,6 @@ enterCombo (BasicCell *bcell, const char *value) {
                             box->sheet->active_cell.col,
                             (char *)value); 
   }
-  
   return NULL;
 }
 
@@ -242,11 +251,20 @@ leaveCombo (BasicCell *bcell, const char *value) {
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
   GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
+  GtkWidget *entry = gtk_sheet_get_entry(box->sheet);
+  
+	/* the next call will free() the text in the sheet->cell */
+	/* so be careful that value isn't a pointer to that text */
+  gtk_sheet_change_entry((box->sheet), gtk_shentry_get_type()); 
 
-  gtk_sheet_change_entry((box->sheet), gtk_shentry_get_type());  
-    
+  gtk_entry_set_text (GTK_ENTRY(gtk_sheet_get_entry(box->sheet)), value);
+
+  gtk_sheet_set_cell_text(box->sheet,
+                            box->sheet->active_cell.row,
+                            box->sheet->active_cell.col,
+                            (char *)value); 
+  
   SET (&(cell->cell), value);
-  cell->cell.changed = 0xffffffff;
   
   return NULL;
 }

@@ -98,7 +98,11 @@ void xaccSetBasicCellValue (BasicCell *cell, const char *val)
       cell->set_value = cb;
    } else {
       if (cell->value) free (cell->value);
-      cell->value = strdup (val);
+      if (val) {
+        cell->value = strdup (val);
+      } else {
+        cell->value = strdup("");
+      }
    }
 }
 
