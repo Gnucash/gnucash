@@ -174,12 +174,12 @@ first.
 > the level of description I'm thinking of for the stuff you use from
 > Xbae, since I don't know anything about it.
 
-Xbaematrix is "just" a table widget: it provides the following:
+XbaeMatrix is "just" a table widget: it provides the following:
 
 -- each cell is a "virtual" text widget.  (there is really only one text
-   widget in xbae, it gets dynamically mapped to the currently active
-   cell.  This is all 100% transparent bothto programmer and user.
-   I only mention this because it makes xbae very efficient space and
+   widget in Xbae, it gets dynamically mapped to the currently active
+   cell.  This is all 100% transparent both to programmer and user.
+   I only mention this because it makes Xbae very efficient space and
    speed wise for large tables.)
 -- cells can contain pixmaps
 -- cells can contain widgets (although this is kind of a hack --
@@ -192,7 +192,7 @@ Xbaematrix is "just" a table widget: it provides the following:
    reject the edits.  (e.g. I use this to accept only number &
    punctuation in money cells, and only valid dates in date cells.
    I also use this to implement accelerator keys for the date cells.)
--- allows cells to be marked read-only (not modifieable by user).
+-- allows cells to be marked read-only (not modifiable by user).
 -- allows a fixed number of rows & cols on left, right, bottom, top.
    (I only fix top rows).
 -- automatically puts up scroll bar on the scrolling region, when
@@ -200,7 +200,7 @@ Xbaematrix is "just" a table widget: it provides the following:
 -- user-defined data can be anchored to each cell, and/or row,
    and/or column.
 -- allows variety of highlighting features. (not used).
--- allows tab-traversal order to be set (which cells are visted
+-- allows tab-traversal order to be set (which cells are visited
    when tab key/arrows keys are hit).
 -- allows rows/columns to be labeled (not used).
 
@@ -210,17 +210,17 @@ xaccCreateTable() initializes the table widget
 cellCB () callback that is called when user enters/leaves a cell,
     (by clicking on it with mouse, or with tab/arrow keys), or
     when user attempts to edit the cell.  This callback in turn calls
-    the enterCB(), leaveCB() and modifyCB() routines, wich then call
+    the enterCB(), leaveCB() and modifyCB() routines, which then call
     GUI-independent callbacks for the register cell handlers.
-    Depending on the result of the cell calbacks, the string
+    Depending on the result of the cell callbacks, the string
     stored in the cell is modified or not.
 traverseCB() callback that is called when user tabs through sequence of
     cells.  This callback allows a sequence of cells to be defined
-    for tabbing trhough.
+    for tabbing through.
 
 Under the covers, XbaeMatrix uses the Motif Text Widget to create
 "cooked" strings out of raw key/button presses.  The Motif Text
-Widget automatically handles french/german/icelandic/cyrillic keyboards,
+Widget automatically handles French/German/Icelandic/Cyrillic keyboards,
 it handles the shift, alt & delete keys automatically, it handles
 the delete/backspace keys automatically, it handles middle-mouse
 paste automatically, etc.  The resulting "cooked" strings are passed
@@ -230,7 +230,7 @@ cell handlers.
 People porting this should give serious thought to finding and using
 "vi" or "emacs" editing text widgets under the covers. 
 
-That's pretty much it, except for some assorted gui-independent setup.
+That's pretty much it, except for some assorted GUI-independent setup.
 
 
 
