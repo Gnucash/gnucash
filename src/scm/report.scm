@@ -39,6 +39,7 @@
 (define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
+(define gnc:menuname-reports (N_ "_Reports"))
 (define gnc:menuname-asset-liability
   (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense 
@@ -51,24 +52,22 @@
 (define gnc:optname-reportname (N_ "Report name"))
 
 
-
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
   ;; comes after the "_File" menu. 
-  (define menu (gnc:make-menu (N_ "New _Report")
-                              (list "_File" "New _Account Tree")))
+  (define menu (gnc:make-menu gnc:menuname-reports (list "_File")))
   (define menu-namer (gnc:new-menu-namer))
   (define tax-menu (gnc:make-menu gnc:menuname-taxes
-                                  (list "_File" "New _Report" "")))
+                                  (list gnc:menuname-reports "")))
   (define income-expense-menu
     (gnc:make-menu gnc:menuname-income-expense
-                   (list "_File" "New _Report" "")))
+                   (list gnc:menuname-reports "")))
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability
-                   (list "_File" "New _Report" "")))
+                   (list gnc:menuname-reports "")))
   (define utility-menu
     (gnc:make-menu gnc:menuname-utility
-                   (list "_File" "New _Report" "")))
+                   (list gnc:menuname-reports "")))
   (define menu-hash (make-hash-table 23))
 
   (define (add-report-menu-item name report)
@@ -84,7 +83,7 @@
               (set! menu-path
                     (append menu-path '(""))))
 
-          (set! menu-path (append (list "_File" "New _Report") menu-path))
+          (set! menu-path (append (list gnc:menuname-reports) menu-path))
 
           (if menu-name (set! name menu-name))
 
@@ -127,7 +126,7 @@
    (gnc:make-menu-item 
     ((menu-namer 'add-name) (_ "Welcome Extravaganza")) 
     (_ "Welcome-to-GnuCash screen")
-    (list "_File" "New _Report" gnc:menuname-utility "")
+    (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
       (gnc:make-welcome-report)))))
 

@@ -1776,7 +1776,6 @@ Possible values are:
   @item ASSET
   Denotes a generic asset account.
 
-
   @item LIABILITY
   Denotes a generic liability account.
 
@@ -2024,6 +2023,15 @@ Return a @code{GList} of the Splits in @var{account}. This list must
 not be modified in any way.
 @end deftypefun
 
+@deftypefun {char *} xaccAccountGetFullName (Account * @var{account}, const char @var{separator})
+Returns the fully qualified name of @var{account} using the given
+separator character. The name must be g_freed after use. The fully
+qualified name of an account is the concatenation of the names of the
+account and all its ancestor accounts starting with the topmost account
+and ending with the given account. Each name is separated by the given
+character.
+@end deftypefun
+
 
 @node Account Tax API,  , Account Getters, Accounts
 @subsection Account Tax API
@@ -2066,6 +2074,26 @@ Set the payer name source associated with @var{account}.
 @node Account Groups, GNCBooks, Accounts, Engine
 @section Account Groups
 @tindex AccountGroup
+
+Account Groups are used by the Engine to connect Accounts
+together into an Account hierarchy. Account Groups do not
+correspond to any accounting concept -- they are specific
+to the GnuCash engine. Account Groups contain the following
+pieces of information:
+
+@table @asis
+
+@item A list of Accounts
+The list Accounts in the Group.
+
+@item A not-saved flag
+Indicates whether any information in the hierarchy
+rooted at the Group needs to be saved. That includes
+Accounts, Splits, and Transactions.
+
+@end table
+
+Account Groups do not have key-value frames or GUIDs.
 
 
 @node GNCBooks, Scrub, Account Groups, Engine

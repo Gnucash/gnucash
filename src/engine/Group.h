@@ -172,7 +172,7 @@ gnc_numeric xaccGroupGetBalance (AccountGroup *group);
  * The xaccGetAccountRoot () subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
-AccountGroup * xaccGetAccountRoot (Account *group);
+AccountGroup * xaccGetAccountRoot (Account *account);
 
 /* The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.

@@ -1,3 +1,14 @@
+2001-05-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/gnome/dialog-price-editor.c: add button to remove
+	prices before a user-entered date.
+
+	* src/gnome/file-history.c: fix for menu changes
+
+	* src/scm/report.scm: move reports menu to top-level
+
 2001-05-17  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/Makefile.am (libgncengine_la_SOURCES): remove

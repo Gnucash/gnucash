@@ -197,7 +197,7 @@ gnc_history_update_menu(GnomeApp * app)
   if (!gnome_app_find_menu_pos (menushell, GNOME_MENU_FILE_PATH, &pos))
     return;
 
-  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, "New _Report");
+  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, "New _Account Tree");
 
   if (!gnome_app_find_menu_pos (menushell, path, &pos))
     return;

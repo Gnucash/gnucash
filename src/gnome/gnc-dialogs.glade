@@ -11052,8 +11052,8 @@ quit without making any changes.</text>
 	  <class>GtkHButtonBox</class>
 	  <name>hbuttonbox5</name>
 	  <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
-	  <spacing>30</spacing>
-	  <child_min_width>85</child_min_width>
+	  <spacing>20</spacing>
+	  <child_min_width>50</child_min_width>
 	  <child_min_height>27</child_min_height>
 	  <child_ipad_x>7</child_ipad_x>
 	  <child_ipad_y>0</child_ipad_y>
@@ -11080,6 +11080,16 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>remove_old_button</name>
+	    <tooltip>Remove prices older than a user-entered date</tooltip>
+	    <can_default>True</can_default>
+	    <can_focus>True</can_focus>
+	    <label>Remove Old...</label>
 	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 

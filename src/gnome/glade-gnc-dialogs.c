@@ -7327,6 +7327,7 @@ create_Prices_Dialog (void)
   GtkWidget *hbuttonbox5;
   GtkWidget *add_button;
   GtkWidget *remove_button;
+  GtkWidget *remove_old_button;
   GtkWidget *edit_button;
   GtkWidget *get_quotes_button;
   GtkWidget *hbuttonbox4;
@@ -7455,6 +7456,8 @@ create_Prices_Dialog (void)
   gtk_widget_show (hbuttonbox5);
   gtk_box_pack_start (GTK_BOX (vbox122), hbuttonbox5, FALSE, FALSE, 0);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox5), GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (hbuttonbox5), 20);
+  gtk_button_box_set_child_size (GTK_BUTTON_BOX (hbuttonbox5), 50, 27);
 
   add_button = gtk_button_new_with_label (_("Add"));
   gtk_widget_ref (add_button);
@@ -7473,6 +7476,15 @@ create_Prices_Dialog (void)
   gtk_container_add (GTK_CONTAINER (hbuttonbox5), remove_button);
   GTK_WIDGET_SET_FLAGS (remove_button, GTK_CAN_DEFAULT);
   gtk_tooltips_set_tip (tooltips, remove_button, _("Remove the current price"), NULL);
+
+  remove_old_button = gtk_button_new_with_label (_("Remove Old..."));
+  gtk_widget_ref (remove_old_button);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "remove_old_button", remove_old_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (remove_old_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox5), remove_old_button);
+  GTK_WIDGET_SET_FLAGS (remove_old_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, remove_old_button, _("Remove prices older than a user-entered date"), NULL);
 
   edit_button = gtk_button_new_with_label (_("Edit"));
   gtk_widget_ref (edit_button);

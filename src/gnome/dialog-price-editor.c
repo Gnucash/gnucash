@@ -58,6 +58,7 @@ typedef struct
   GtkWidget * price_list;
   GtkWidget * edit_button;
   GtkWidget * remove_button;
+  GtkWidget * remove_old_button;
 
   GtkWidget * commodity_edit;
   GtkWidget * currency_edit;
@@ -242,6 +243,7 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
 
   gtk_widget_set_sensitive (pdb_dialog->edit_button, prices != NULL);
   gtk_widget_set_sensitive (pdb_dialog->remove_button, prices != NULL);
+  gtk_widget_set_sensitive (pdb_dialog->remove_old_button, prices != NULL);
 
   return g_list_length (prices);
 }
@@ -524,6 +526,69 @@ remove_clicked (GtkWidget *widget, gpointer data)
 }
 
 static void
+remove_old_clicked (GtkWidget *widget, gpointer data)
+{
+  PricesDialog *pdb_dialog = data;
+  GtkWidget *dialog;
+  GtkWidget *label;
+  GtkWidget *date;
+  GtkWidget *vbox;
+  gint result;
+
+  dialog = gnome_dialog_new (_("Remove old prices"),
+                             GNOME_STOCK_BUTTON_OK,
+                             GNOME_STOCK_BUTTON_CANCEL,
+                             NULL);
+
+  gnome_dialog_set_parent (GNOME_DIALOG (dialog),
+                           GTK_WINDOW (pdb_dialog->dialog));
+  gnome_dialog_close_hides (GNOME_DIALOG (dialog), FALSE);
+
+  vbox = GNOME_DIALOG (dialog)->vbox;
+
+  gtk_box_set_spacing (GTK_BOX (vbox), 3);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
+
+  label = gtk_label_new (_("All prices before the date below "
+                           "will be deleted."));
+
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+
+  date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
+  gtk_object_ref (GTK_OBJECT (date));
+  gtk_object_sink (GTK_OBJECT (date));
+
+  gtk_box_pack_start (GTK_BOX (vbox), date, FALSE, FALSE, 0);
+  gtk_widget_show (date);
+
+  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+  if (result == 0)
+  {
+    GNCBook *book = gncGetCurrentBook ();
+    GNCPriceDB *pdb = gnc_book_get_pricedb (book);
+    GList *node;
+    Timespec ts;
+
+    ts.tv_sec = gnc_date_edit_get_date (date);
+    ts.tv_nsec = 0;
+
+    for (node = pdb_dialog->prices; node; node = node->next)
+    {
+      GNCPrice *price = node->data;
+      Timespec pt = gnc_price_get_time (price);;
+
+      if (timespec_cmp (&pt, &ts) < 0)
+        gnc_pricedb_remove_price (pdb, price);
+    }
+
+    gnc_gui_refresh_all ();
+  }
+
+  gtk_object_unref (date);
+}
+
+static void
 add_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
@@ -588,6 +653,8 @@ gnc_prices_select_price_cb (GtkCList *clist, gint row, gint col,
                             pdb_dialog->price != NULL);
   gtk_widget_set_sensitive (pdb_dialog->remove_button,
                             pdb_dialog->price != NULL);
+  gtk_widget_set_sensitive (pdb_dialog->remove_old_button,
+                            pdb_dialog->price != NULL);
   gnc_prices_set_changed (pdb_dialog, FALSE);
 }
 
@@ -605,6 +672,7 @@ gnc_prices_unselect_price_cb (GtkCTree *ctre, gint row, gint col,
 
   gtk_widget_set_sensitive (pdb_dialog->edit_button, FALSE);
   gtk_widget_set_sensitive (pdb_dialog->remove_button, FALSE);
+  gtk_widget_set_sensitive (pdb_dialog->remove_old_button, FALSE);
   gnc_prices_set_changed (pdb_dialog, FALSE);
 }
 
@@ -840,6 +908,12 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (remove_clicked), pdb_dialog);
+
+    button = lookup_widget (dialog, "remove_old_button");
+    pdb_dialog->remove_old_button = button;
+
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        GTK_SIGNAL_FUNC (remove_old_clicked), pdb_dialog);
 
     button = lookup_widget (dialog, "add_button");
 
