@@ -957,13 +957,33 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
 /* ======================================================== */
 /* walk account tree recursively, pulling out all the names */
 
+#define SAFE_STRCMP(da,db) {            \
+  if ((da) && (db)) {                   \
+    int retval = strcmp ((da), (db));   \
+    /* if strings differ, return */     \
+    if (retval) return retval;          \
+  } else                                \
+  if ((!(da)) && (db)) {                \
+    return -1;                          \
+  } else                                \
+  if ((da) && (!(db))) {                \
+    return +1;                          \
+  }                                     \
+}
+
+static int
+safestrcmp (char * da, char * db) {
+   SAFE_STRCMP (da, db);
+   return 0;
+}
+
+
 static void 
 LoadXferCell (ComboCell *cell,  
               AccountGroup *grp,
-              char *base_currency)
+              char *base_currency, char *base_security)
 {
    Account * acc;
-   char * curr;
    int n;
 
    if (!grp) return;
@@ -976,14 +996,20 @@ LoadXferCell (ComboCell *cell,
    n = 0;
    acc = xaccGroupGetAccount (grp, n);
    while (acc) {
+      char *curr, *secu;
+
       curr = xaccAccountGetCurrency (acc);
-      if ((!curr) && (!base_currency)) {
+      secu = xaccAccountGetSecurity (acc);
+
+      if ( (!safestrcmp(curr,base_currency)) ||
+           (!safestrcmp(secu,base_currency)) ||
+           (!safestrcmp(curr,base_security)) ||
+           (!safestrcmp(secu,base_security)) )
+      {
          xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
       }
-      if (curr && base_currency && !strcmp (curr, base_currency)) {
-         xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
-      }
-      LoadXferCell (cell, xaccAccountGetChildren (acc), base_currency);
+      LoadXferCell (cell, xaccAccountGetChildren (acc), 
+                   base_currency, base_security);
       n++;
       acc = xaccGroupGetAccount (grp, n);
    }
@@ -993,10 +1019,15 @@ LoadXferCell (ComboCell *cell,
 
 void xaccLoadXferCell (ComboCell *cell,  
                        AccountGroup *grp, 
-                       char *base_currency)
+                       Account *base_account)
 {
+   char *curr, *secu;
+
+   curr = xaccAccountGetCurrency (base_account);
+   secu = xaccAccountGetSecurity (base_account);
+
    xaccAddComboCellMenuItem (cell, "");
-   LoadXferCell (cell, grp, base_currency);
+   LoadXferCell (cell, grp, curr, secu);
 }
 
 /* =======================  end of file =================== */
