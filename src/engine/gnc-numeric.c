@@ -563,10 +563,10 @@ static char *
 gnc_numeric_print(gnc_numeric in) {
   char * retval;
   if(gnc_numeric_check(in)) {
-    asprintf(&retval, "<ERROR> [%lld / %lld]", in.num, in.denom); 
+    retval = g_strdup_printf("<ERROR> [%lld / %lld]", in.num, in.denom); 
   }
   else {
-    asprintf(&retval, "[%lld / %lld]", in.num, in.denom); 
+    retval = g_strdup_printf("[%lld / %lld]", in.num, in.denom); 
   }
   return retval;
 }

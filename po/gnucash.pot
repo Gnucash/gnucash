@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-09-20 16:50-0700\n"
+"POT-Creation-Date: 2000-09-20 23:57-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3127,43 +3127,43 @@ msgid ""
 "Please select another file."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:549
+#: src/gnome/druid-qif-import.c:554
 msgid "You must enter an account name."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:900
+#: src/gnome/druid-qif-import.c:905
 msgid "You must enter a Type for the commodity."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:904
+#: src/gnome/druid-qif-import.c:909
 msgid "You must enter a name for the commodity."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:908
+#: src/gnome/druid-qif-import.c:913
 msgid "You must enter an abbreviation for the commodity."
 msgstr ""
 
 #. save the old commodity name
-#: src/gnome/druid-qif-import.c:992
+#: src/gnome/druid-qif-import.c:997
 #, c-format
 msgid "Enter information about \"%s\""
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1005
+#: src/gnome/druid-qif-import.c:1010
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1030
+#: src/gnome/druid-qif-import.c:1035
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1052
+#: src/gnome/druid-qif-import.c:1057
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
 msgstr ""
 
-#: src/gnome/druid-qif-import.c:1073
+#: src/gnome/druid-qif-import.c:1078
 msgid "Click \"Next\" to accept the information and move on."
 msgstr ""
 

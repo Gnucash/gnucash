@@ -316,20 +316,22 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
      * (#t error-message) for a warning */
     if(gh_list_p(load_return) &&
        (gh_car(load_return) == SCM_BOOL_T)) {
-      asprintf(&error_string,
-               QIF_LOAD_WARNING_FORMAT_MSG,
-               gh_scm2newstr(gh_cadr(load_return), NULL));
+      error_string = g_strdup_printf(QIF_LOAD_WARNING_FORMAT_MSG,
+                                     gh_scm2newstr(gh_cadr(load_return),
+                                                   NULL));
       gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
+      g_free(error_string);
     }      
     
     if((load_return != SCM_BOOL_T) &&
        (!gh_list_p(load_return) || 
         (gh_car(load_return) != SCM_BOOL_T))) {
-      asprintf(&error_string,
-               QIF_LOAD_FAILED_FORMAT_MSG,
-               gh_scm2newstr(gh_cadr(load_return), NULL));
+      error_string = g_strdup_printf(QIF_LOAD_FAILED_FORMAT_MSG,
+                                     gh_scm2newstr(gh_cadr(load_return),
+                                                   NULL));
       gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
-      
+      g_free(error_string);
+
       imported_files = 
         gh_call2(unload_qif_file, scm_qiffile, imported_files);
             
@@ -344,19 +346,22 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       
       if(gh_list_p(parse_return) && 
          (gh_car(parse_return) == SCM_BOOL_T)) {
-        asprintf(&error_string,
-                 QIF_PARSE_WARNING_FORMAT_MSG,
-                 gh_scm2newstr(gh_cadr(parse_return), NULL));
+        error_string = g_strdup_printf(QIF_PARSE_WARNING_FORMAT_MSG,
+                                       gh_scm2newstr(gh_cadr(parse_return),
+                                                     NULL));
         gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
+        g_free(error_string);
       }
 
       if((parse_return != SCM_BOOL_T) &&
          (!gh_list_p(parse_return) ||
           (gh_car(parse_return) != SCM_BOOL_T))) {
-        asprintf(&error_string,
-                 QIF_PARSE_FAILED_FORMAT_MSG,
-                 gh_scm2newstr(gh_cadr(parse_return), NULL));
+        error_string = g_strdup_printf(QIF_PARSE_FAILED_FORMAT_MSG,
+                                       gh_scm2newstr(gh_cadr(parse_return),
+                                                     NULL));
         gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
+        g_free(error_string);
+
         imported_files = 
           gh_call2(unload_qif_file, scm_qiffile, imported_files);
         
