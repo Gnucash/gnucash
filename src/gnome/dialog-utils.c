@@ -433,7 +433,6 @@ gnc_color_deficits (void)
   return gnc_lookup_boolean_option ("General",
                                     "Display negative amounts in red",
                                     TRUE);
-
 }
 
 

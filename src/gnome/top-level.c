@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include <guile/gh.h>
 #include <gnome.h>
-#include <gtk/gtk.h>
 #include <gtkhtml/gtkhtml.h>
 
 #include "g-wrap.h"
@@ -80,6 +79,8 @@ static void gnc_configure_reverse_balance(void);
 static void gnc_configure_sr_label_callbacks(void);
 static void gnc_configure_auto_raise_cb(void *);
 static void gnc_configure_auto_raise(void);
+static void gnc_configure_negative_color_cb(void *);
+static void gnc_configure_negative_color(void);
 static void gnc_configure_auto_decimal_cb(void *);
 static void gnc_configure_auto_decimal(void);
 static void gnc_configure_auto_decimal_places_cb(void *);
@@ -106,6 +107,7 @@ static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
+static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
 static SCM register_font_callback_id = SCM_UNDEFINED;
@@ -203,6 +205,12 @@ gnucash_ui_init(void)
                                           NULL, "Register",
                                           "Auto-Raise Lists");
 
+    gnc_configure_negative_color();
+    negative_color_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_negative_color_cb,
+                                          NULL, "General",
+                                          "Display negative amounts in red");
+
     gnc_configure_auto_decimal();
     auto_decimal_callback_id =
       gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
@@ -283,6 +291,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(register_borders_callback_id);
   gnc_unregister_option_change_callback_id(reverse_balance_callback_id);
   gnc_unregister_option_change_callback_id(auto_raise_callback_id);
+  gnc_unregister_option_change_callback_id(negative_color_callback_id);
   gnc_unregister_option_change_callback_id(register_font_callback_id);
   gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
 
@@ -684,6 +693,40 @@ gnc_configure_auto_raise(void)
   auto_pop = gnc_lookup_boolean_option("Register", "Auto-Raise Lists", TRUE);
 
   xaccComboCellSetAutoPop(auto_pop);
+}
+
+/* gnc_configure_negative_color_cb
+ *    Callback called when options change - sets
+ *    negative amount color flags
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_negative_color_cb(void *data)
+{
+  gnc_configure_negative_color();
+
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+  gnc_refresh_main_window();
+}
+
+/* gnc_configure_negative_color
+ *    sets negative amount color flags
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_negative_color(void)
+{
+  gboolean use_red;
+
+  use_red = gnc_lookup_boolean_option("General",
+                                      "Display negative amounts in red",
+                                      TRUE);
+
+  xaccSetSplitRegisterColorizeNegative (use_red);
 }
 
 /* gnc_configure_reverse_balance_cb

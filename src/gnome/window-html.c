@@ -30,7 +30,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <gtk/gtk.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gnome.h>
 #include <regex.h>

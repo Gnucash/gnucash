@@ -199,6 +199,8 @@ void     xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present);
 /* Set the colors used by SplitRegisters */
 void     xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 
+/* If use_red is TRUE, negative amounts will be printed in red. */
+void     xaccSetSplitRegisterColorizeNegative (gboolean use_red);
 
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,

@@ -24,7 +24,6 @@
 #ifndef __DRUID_COMMODITY_H__
 #define __DRUID_COMMODITY_H__
 
-#include <gtk/gtk.h>
 #include <gnome.h>
 
 #include "glade-gnc-dialogs.h"

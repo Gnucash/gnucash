@@ -212,6 +212,9 @@ static CursorClass copied_class = CURSOR_CLASS_NONE;
 static SCM copied_item = SCM_UNDEFINED;
 static GUID copied_leader_guid;
 
+/* Flag for determining colorization of negative amounts. */
+static gboolean use_red_for_negative = TRUE;
+
 
 /** static prototypes *****************************************************/
 
@@ -2967,6 +2970,9 @@ xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
   const guint32 red   = 0xff0000;
   Split *split;
 
+  if (!use_red_for_negative)
+    return black;
+
   split = xaccSplitLookup (guid);
   if (split == NULL)
     return black;
@@ -3207,6 +3213,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   int new_split_row = -1;
   time_t present;
   int i;
+
+  /* configure balance cell color usage */
+  reg->balanceCell->cell.use_fg_color = use_red_for_negative;
+  reg->shrbalnCell->cell.use_fg_color = use_red_for_negative;
 
   /* make sure we have a blank split */
   if (blank_split == NULL)
@@ -3610,6 +3620,14 @@ xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present)
     return;
 
   info->show_present_divider = show_present;
+}
+
+/* ======================================================== */
+
+void
+xaccSetSplitRegisterColorizeNegative (gboolean use_red)
+{
+  use_red_for_negative = use_red;
 }
 
 /* =======================  end of file =================== */

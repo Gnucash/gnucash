@@ -21,7 +21,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#include <gtk/gtk.h>
+#include "config.h"
+
+#include <gnome.h>
 #include <glib.h>
 #include <stdio.h>
 
