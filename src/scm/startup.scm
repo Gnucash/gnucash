@@ -11,4 +11,5 @@
 (gnc:load "prefs.scm")
 (gnc:load "command-line.scm")
 (gnc:load "convenience-wrappers.scm")
+(gnc:load "hooks.scm")
 (gnc:load "main.scm")

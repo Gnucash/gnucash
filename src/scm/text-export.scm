@@ -1,6 +1,5 @@
+;;; $Id$
 (require 'pretty-print)
-
-
 (define (gnc:group-map-accounts thunk group)
   (let loop ((num-accounts (gnc:group-get-num-accounts group))
              (i 0))
@@ -26,45 +25,13 @@
 ;           (loop num-splits (+ i 1))))))
 
 
-(define (gnc:transaction-map-splits thunk transaction)
-  (let loop ((num-splits (gnc:transaction-get-split-count transaction))
-             (i 0))
-    (if (< i num-splits)
-        (cons
-         (thunk (gnc:transaction-get-split transaction i))
-         (loop num-splits (+ i 1)))
-        '())))
 
 
-(define (gnc:split->output-form split)
-  (list
-   'split
-   (gnc:split-get-memo split)
-   (gnc:split-get-action split)
-   (gnc:split-get-reconcile-state split)
-   (gnc:split-get-reconciled-date split)
-   (gnc:split-get-docref split)
-   (gnc:split-get-share-amount split)
-   (gnc:split-get-share-price split)
-   (gnc:split-get-share-price split)
-   (let ((xfer-account (gnc:split-get-account split))
-         (xfer-account-id #f))
-     (if (not (pointer-token-null? xfer-account))
-         (set! xfer-account-id (gnc:account-get-id xfer-account)))
-     xfer-account-id)))
-
-
-(define (gnc:transaction->output-form transaction)
-  (list
-   'transaction
-   (gnc:transaction-get-num transaction)
-   (gnc:transaction-get-date-posted transaction)
-   (gnc:transaction-get-date-entered transaction)
-   (gnc:transaction-get-description transaction)
-   (gnc:transaction-get-docref transaction)
-   (gnc:transaction-map-splits gnc:split->output-form transaction)
-   
-   ))
+(define (gnc:main-win-export-data-as-text win) 
+  (let ((account-group (gnc:get-current-group)))
+    (if (not account-group)
+        (gnc:error-dialog "No account group available for text export.")
+        (gnc:account-group-export-as-text account-group))))
 
 
 (define (gnc:account->output-form a)
@@ -89,6 +56,25 @@
           gnc:account->output-form
           (gnc:account-get-children a)))))
 
+(define (gnc:account-group-export-as-text account-group)
+  (let ((file-name (gnc:file-selection-dialog
+		    "Select file for text export" "")))
+    (if file-name
+        (begin
+          (gnc:debug "Running text exporting to (not really) " file-name)
+          (pretty-print 'gnucash-data-file)
+          (pretty-print '(version "1.0"))
+          (display "\n\n;;; Account information\n")
+          ;; Print all the accounts
+          (pretty-print
+           (gnc:group-map-accounts
+            gnc:account->output-form
+            account-group))
+          (display "\n\n;;; Transactions\n\n")
+          ;; Now print all the transactions
+          (gnc:group-begin-staged-transaction-traversals account-group)
+          (gnc:group-map-accounts gnc:account-transactions-export-as-text
+				  account-group)))))
 
 (define (gnc:account-transactions-export-as-text account)
   (gnc:account-staged-transaction-traversal
@@ -96,40 +82,38 @@
    1
    (lambda (t) (pretty-print (gnc:transaction->output-form t)))))
 
+(define (gnc:transaction->output-form transaction)
+  (list
+   'transaction
+   (gnc:transaction-get-num transaction)
+   (gnc:transaction-get-date-posted transaction)
+   (gnc:transaction-get-date-entered transaction)
+   (gnc:transaction-get-description transaction)
+   (gnc:transaction-get-docref transaction)
+   (gnc:transaction-map-splits gnc:split->output-form transaction)))
 
-(define (gnc:main-win-export-data-as-text win) 
-  (let ((account-group #f)
-;        (session (gnc:main-window-get-session win)))
-        (session (gnc:main-window-get-session)))
-    
-    (if session (set! account-group (gnc:session-get-group session)))
-    
-    (if (not account-group)
-        (gnc:error-message-dialog "No account group available for text export.")
-        (gnc:account-group-export-as-text account-group))))
+(define (gnc:transaction-map-splits thunk transaction)
+  (let loop ((num-splits (gnc:transaction-get-split-count transaction))
+             (i 0))
+    (if (< i num-splits)
+        (cons
+         (thunk (gnc:transaction-get-split transaction i))
+         (loop num-splits (+ i 1)))
+        '())))
 
-
-(define (gnc:account-group-export-as-text account-group)
-  (let ((file-name (gnc:file-selection-dialog "Select file for text export" "")))
-    (if file-name
-        (begin
-          (gnc:debug "Running text exporting to (not really) " file-name)
-
-          (pretty-print 'gnucash-data-file)
-          (pretty-print '(version "1.0"))
-
-          (display "\n\n;;; Account information\n")
-
-          ;; Print all the accounts
-          (pretty-print
-           (gnc:group-map-accounts
-            gnc:account->output-form
-            account-group))
-
-          (display "\n\n;;; Transactions\n\n")
-          
-          ;; Now print all the transactions
-          (gnc:group-begin-staged-transaction-traversals account-group)
-          (gnc:group-map-accounts
-           gnc:account-transactions-export-as-text
-           account-group)))))
+(define (gnc:split->output-form split)
+  (list
+   'split
+   (gnc:split-get-memo split)
+   (gnc:split-get-action split)
+   (gnc:split-get-reconcile-state split)
+   (gnc:split-get-reconciled-date split)
+   (gnc:split-get-docref split)
+   (gnc:split-get-share-amount split)
+   (gnc:split-get-share-price split)
+   (gnc:split-get-share-price split)
+   (let ((xfer-account (gnc:split-get-account split))
+         (xfer-account-id #f))
+     (if (not (pointer-token-null? xfer-account))
+         (set! xfer-account-id (gnc:account-get-id xfer-account)))
+     xfer-account-id)))
