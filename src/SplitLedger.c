@@ -230,8 +230,8 @@ static Split * xaccSRGetCurrentTransSplit (SplitRegister *reg,
 static GList * xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans,
                                        Split *split);
 static gboolean xaccSRFindSplit (SplitRegister *reg,
-                                 Transaction *trans,
-                                 Split *trans_split, Split *split,
+                                 Transaction *trans, Split *trans_split,
+                                 Split *split, CursorClass cursor_class,
                                  VirtualCellLocation *vcell_loc);
 static Split * sr_get_split (SplitRegister *reg,
                              VirtualCellLocation vcell_loc);
@@ -439,8 +439,12 @@ gnc_find_split_in_trans_by_memo(Transaction *trans, const char *memo,
   {
     Split *split = xaccTransGetSplit(trans, i);
 
-    if (unit_price && (DxaccSplitGetSharePrice(split) != 1.0))
-      continue;
+    if (unit_price)
+    {
+      gnc_numeric price = xaccSplitGetSharePrice(split);
+      if (gnc_numeric_equal (price, gnc_numeric_create (1, 1)))
+        continue;
+    }
 
     if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
     {
@@ -614,6 +618,41 @@ sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc)
   return xaccSplitLookup (guid);
 }
 
+static int
+gnc_split_get_value_denom (Split *split)
+{
+  int denom;
+
+  denom = xaccAccountGetCurrencySCU (xaccSplitGetAccount (split));
+  if (denom == 0)
+  {
+    const gnc_commodity *commodity = gnc_locale_default_currency ();
+    denom = gnc_commodity_get_fraction (commodity);
+    if (denom == 0)
+      denom = 100;
+  }
+
+  return denom;
+}
+
+static int
+gnc_split_get_quantity_denom (Split *split)
+{
+  int denom;
+
+  denom = xaccAccountGetSecuritySCU (xaccSplitGetAccount (split));
+  if (denom == 0)
+  {
+    const gnc_commodity *commodity = gnc_locale_default_currency ();
+    denom = gnc_commodity_get_fraction (commodity);
+    if (denom == 0)
+      denom = 100;
+  }
+
+  return denom;
+}
+
+
 /* ======================================================== */
 /* This callback gets called when the user clicks on the gui
  * in such a way as to leave the current virtual cursor, and 
@@ -707,7 +746,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     /* if the split we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
     if (xaccSRFindSplit (reg, new_trans, new_trans_split,
-                         new_split, &vcell_loc))
+                         new_split, new_class, &vcell_loc))
     {
       VirtualCell *vcell;
 
@@ -771,8 +810,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   CursorClass cursor_class;
   CellType cell_type;
   Transaction *trans;
+  gnc_numeric amount;
   guint32 changed;
-  double amount;
   Split *split;
 
   /* auto-completion is only triggered by a tab out */
@@ -889,8 +928,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       g_list_free(refresh_accounts);
 
       /* now move to the non-empty amount column */
-      amount = DxaccSplitGetShareAmount (blank_split);
-      cell_type = (amount >= 0) ? DEBT_CELL : CRED_CELL;
+      amount = xaccSplitGetShareAmount (blank_split);
+      cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
       if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
         *p_new_virt_loc = new_virt_loc;
@@ -958,7 +997,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
 
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), TRUE);
 
-      amount = DxaccSplitGetValue (auto_split);
+      amount = xaccSplitGetValue (auto_split);
 
       xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amount);
       xaccBasicCellSetChanged (&(reg->debitCell->cell), TRUE);
@@ -968,8 +1007,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       gnc_table_refresh_gui (reg->table);
 
       /* now move to the non-empty amount column */
-      amount = DxaccSplitGetShareAmount (auto_split);
-      cell_type = (amount < 0) ? CRED_CELL : DEBT_CELL;
+      amount = xaccSplitGetShareAmount (auto_split);
+      cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
       if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
         *p_new_virt_loc = new_virt_loc;
@@ -1079,19 +1118,21 @@ LedgerTraverse (Table *table,
         VirtualCellLocation vcell_loc;
         Split *new_split;
         Split *trans_split;
+        CursorClass new_class;
 
         if ((result == GNC_VERIFY_YES) && xaccSRCheckReconciled (reg))
           break;
 
         new_split = sr_get_split(reg, virt_loc.vcell_loc);
         trans_split = xaccSRGetTransSplit(reg, virt_loc.vcell_loc, NULL);
+        new_class = xaccSplitRegisterGetCursorClass (reg, virt_loc.vcell_loc);
 
         xaccSRCancelCursorTransChanges(reg);
 
         if (xaccSRFindSplit (reg, new_trans, trans_split,
-                             new_split, &vcell_loc))
+                             new_split, new_class, &vcell_loc))
           virt_loc.vcell_loc = vcell_loc;
-        
+
         gnc_table_find_close_valid_cell (table, &virt_loc,
                                          info->exact_traversal);
 
@@ -1305,16 +1346,20 @@ xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
 
   table = reg->table;
 
-  for (v_row = 1; v_row < table->num_virt_rows; v_row++)
+  /* go backwards because typically you search for splits at the end
+   * and because we find split rows before transaction rows. */
+
+  for (v_row = table->num_virt_rows - 1; v_row > 0; v_row--)
     for (v_col = 0; v_col < table->num_virt_cols; v_col++)
     {
       VirtualCellLocation vc_loc = { v_row, v_col };
 
       s = sr_get_split (reg, vc_loc);
 
-      if ((s == split) && (vcell_loc != NULL))
+      if (s == split)
       {
-        *vcell_loc = vc_loc;
+        if (vcell_loc)
+          *vcell_loc = vc_loc;
 
         return TRUE;
       }
@@ -1332,22 +1377,20 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
   VirtualLocation v_loc;
   CursorClass cursor_class;
   CellType cell_type;
-  double value;
+  gnc_numeric value;
 
   if (!xaccSRGetSplitVirtLoc (reg, split, &v_loc.vcell_loc))
     return FALSE;
 
   cursor_class = xaccSplitRegisterGetCursorClass (reg, v_loc.vcell_loc);
 
-  value = DxaccSplitGetValue (split);
-  if (DEQ (value, 0.0))
-    value = 0.0;
+  value = xaccSplitGetValue (split);
 
   switch (cursor_class)
   {
     case CURSOR_CLASS_SPLIT:
     case CURSOR_CLASS_TRANS:
-      cell_type = (value >= 0.0) ? DEBT_CELL : CRED_CELL;
+      cell_type = (gnc_numeric_negative_p (value)) ? CRED_CELL : DEBT_CELL;
       break;
     default:
       return FALSE;
@@ -1367,8 +1410,9 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
 /* ======================================================== */
 
 static gboolean
-xaccSRFindSplit (SplitRegister *reg, Transaction *trans,
-                 Split *trans_split, Split *split,
+xaccSRFindSplit (SplitRegister *reg,
+                 Transaction *trans, Split *trans_split,
+                 Split *split, CursorClass find_class,
                  VirtualCellLocation *vcell_loc)
 {
   Table *table = reg->table;
@@ -1409,7 +1453,8 @@ xaccSRFindSplit (SplitRegister *reg, Transaction *trans,
         if (vcell_loc != NULL)
           *vcell_loc = vc_loc;
 
-        return TRUE;
+        if (cursor_class == find_class)
+          return TRUE;
       }
     }
 
@@ -2232,37 +2277,48 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   }
 
   if (MOD_AMNT & changed) {
-    double new_amount;
-    double price;
-    double credit;
-    double debit;
+    gnc_numeric new_amount;
+    gnc_numeric credit;
+    gnc_numeric debit;
+    gnc_numeric price;
 
     credit = xaccGetPriceCellValue(reg->creditCell);
     debit  = xaccGetPriceCellValue(reg->debitCell);
-    new_amount = debit - credit;
+    new_amount = gnc_numeric_sub_fixed (debit, credit);
 
-    price = gnc_split_scm_get_share_price(split_scm);
+    price = double_to_gnc_numeric (gnc_split_scm_get_share_price(split_scm),
+                                   100000, GNC_RND_ROUND);
 
-    new_amount = new_amount / price;
+    new_amount = gnc_numeric_div (new_amount, price, GNC_DENOM_AUTO,
+                                  GNC_RND_ROUND | GNC_DENOM_EXACT);
 
-    gnc_split_scm_set_share_price_and_amount(split_scm, price, new_amount);
+    gnc_split_scm_set_share_price_and_amount(split_scm,
+                                             gnc_numeric_to_double (price),
+                                             gnc_numeric_to_double (new_amount));
   }
 
   if (MOD_PRIC & changed) {
-    double price;
-    double amount;
+    gnc_numeric price;
+    gnc_numeric amount;
 
     price = xaccGetPriceCellValue(reg->priceCell);
-    amount = gnc_split_scm_get_share_amount(split_scm);
+    amount = double_to_gnc_numeric (gnc_split_scm_get_share_amount(split_scm),
+                                    100000, GNC_RND_ROUND);
 
-    gnc_split_scm_set_share_price_and_amount(split_scm, price, amount);
+    gnc_split_scm_set_share_price_and_amount(split_scm,
+                                             gnc_numeric_to_double (price),
+                                             gnc_numeric_to_double (amount));
   }
 
   if (MOD_SHRS & changed) {
-    double shares = xaccGetPriceCellValue(reg->sharesCell);
-    double price = gnc_split_scm_get_share_price(split_scm);
+    gnc_numeric shares = xaccGetPriceCellValue(reg->sharesCell);
+    gnc_numeric price =
+      double_to_gnc_numeric (gnc_split_scm_get_share_price(split_scm),
+                             100000, GNC_RND_ROUND);
 
-    gnc_split_scm_set_share_price_and_amount(split_scm, price, shares);
+    gnc_split_scm_set_share_price_and_amount(split_scm,
+                                             gnc_numeric_to_double (price),
+                                             gnc_numeric_to_double (shares));
   }
 
   return TRUE;
@@ -2564,12 +2620,14 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     if (!other_split) {
       other_split = xaccTransGetSplit (trans, 1);
       if (!other_split) {
-        double  amt = DxaccSplitGetShareAmount (split);
-        double  prc = DxaccSplitGetSharePrice (split);
+        gnc_numeric amount = xaccSplitGetShareAmount (split);
+        gnc_numeric price = xaccSplitGetSharePrice (split);
 
         other_split = xaccMallocSplit ();
 
-        DxaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
+        amount = gnc_numeric_neg (amount);
+
+        xaccSplitSetSharePriceAndAmount (other_split, price, amount);
 
         xaccTransAppendSplit (trans, other_split);
       }
@@ -2628,29 +2686,38 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
        (CURRENCY_REGISTER == (reg->type)) ||
        (PORTFOLIO_LEDGER  == (reg->type))))
   {
-    double value;
-    double price;
-    double amount;
+    gnc_numeric calc_value;
+    gnc_numeric value;
+    gnc_numeric price;
+    gnc_numeric amount;
+    int denom;
 
     if (MOD_SHRS & changed)
       amount = xaccGetPriceCellValue(reg->sharesCell);
     else
-      amount = DxaccSplitGetShareAmount(split);
+      amount = xaccSplitGetShareAmount(split);
 
     if (MOD_PRIC & changed)
       price = xaccGetPriceCellValue(reg->priceCell);
     else
-      price = DxaccSplitGetSharePrice(split);
+      price = xaccSplitGetSharePrice(split);
 
-    if (MOD_AMNT & changed) {
-      double credit = xaccGetPriceCellValue(reg->creditCell);
-      double debit  = xaccGetPriceCellValue(reg->debitCell);
-      value = debit - credit;
+    if (MOD_AMNT & changed)
+    {
+      gnc_numeric credit = xaccGetPriceCellValue(reg->creditCell);
+      gnc_numeric debit  = xaccGetPriceCellValue(reg->debitCell);
+      value = gnc_numeric_sub_fixed (debit, credit);
     }
     else
-      value = DxaccSplitGetValue(split);
+      value = xaccSplitGetValue(split);
 
-    if (!DEQEPS(value, price * amount, 1.0e-15)) {
+    calc_value = gnc_numeric_mul (price, amount,
+                                  GNC_DENOM_AUTO, GNC_DENOM_LCD);
+
+    denom = gnc_split_get_value_denom (split);
+
+    if (!gnc_numeric_same (value, calc_value, denom, GNC_RND_ROUND))
+    {
       int i;
       int choice;
       int default_value;
@@ -2696,30 +2763,37 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       switch(choice)
       {
         case 0: /* Modify number of shares */
-          if (price == 0)
+          if (gnc_numeric_zero_p (price))
             break;
 
-          amount = value / price;
+          denom = gnc_split_get_quantity_denom (split);
+
+          amount = gnc_numeric_div (value, price, denom, GNC_RND_ROUND);
 
           xaccSetPriceCellValue(reg->sharesCell, amount);
           changed |= MOD_SHRS;
           break;
         case 1: /* Modify the share price */
-          if (DEQEPS(0.0, amount, 1.0e-15))
+          if (gnc_numeric_zero_p (amount))
             break;
 
-          price = value / amount;
+          price = gnc_numeric_div (value, amount,
+                                   GNC_DENOM_AUTO,
+                                   GNC_DENOM_EXACT);
 
-          if (price < 0) {
-            price = -price;
-            xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, -value);
+          if (gnc_numeric_negative_p (price)) {
+            price = gnc_numeric_neg (price);
+            xaccSetDebCredCellValue (reg->debitCell, reg->creditCell,
+                                     gnc_numeric_neg (value));
             changed |= MOD_AMNT;
           }
           xaccSetPriceCellValue(reg->priceCell, price);
           changed |= MOD_PRIC;
           break;
         case 2: /* Modify total value */
-          value = price * amount;
+          denom = gnc_split_get_value_denom (split);
+
+          value = gnc_numeric_mul (price, amount, denom, GNC_RND_ROUND);
 
           xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, value);
           changed |= MOD_AMNT;
@@ -2731,21 +2805,21 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   if (MOD_SHRS & changed) {
-    double amount = xaccGetPriceCellValue(reg->sharesCell);
+    gnc_numeric amount = xaccGetPriceCellValue(reg->sharesCell);
 
-    DEBUG ("MOD_SHRS: %f\n", amount);
+    DEBUG ("MOD_SHRS");
 
-    DxaccSplitSetShareAmount (split, amount);
+    xaccSplitSetShareAmount (split, amount);
   }
 
   if (MOD_PRIC & changed) {
-    double price;
+    gnc_numeric price;
 
     price = xaccGetPriceCellValue(reg->priceCell);
 
-    DEBUG ("MOD_PRIC: %f\n", price);
+    DEBUG ("MOD_PRIC");
 
-    DxaccSplitSetSharePrice (split, price);
+    xaccSplitSetSharePrice (split, price);
   }
 
   /* The AMNT and NAMNT updates only differ by sign. Basically, 
@@ -2753,17 +2827,17 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
    * double and transaction cursors show, and so when updates
    * happen, the extra minus sign must also be handled. */
   if (MOD_AMNT & changed) {
-    double new_amount;
-    double credit;
-    double debit;
+    gnc_numeric new_amount;
+    gnc_numeric credit;
+    gnc_numeric debit;
 
     credit = xaccGetPriceCellValue(reg->creditCell);
     debit  = xaccGetPriceCellValue(reg->debitCell);
-    new_amount = debit - credit;
+    new_amount = gnc_numeric_sub_fixed (debit, credit);
 
-    DEBUG ("MOD_AMNT: %f\n", new_amount);
+    DEBUG ("MOD_AMNT");
 
-    DxaccSplitSetValue (split, new_amount);
+    xaccSplitSetValue (split, new_amount);
   }
   
   return refresh_accounts;
@@ -2823,15 +2897,15 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
       {
         SRInfo *info = xaccSRGetInfo(reg);
         Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-        double balance;
+        gnc_numeric balance;
 
         if (split == blank_split)
           return "";
 
-        balance = DxaccSplitGetShareBalance (split);
+        balance = xaccSplitGetShareBalance (split);
 
-        return DxaccPrintAmount (balance,
-                                 gnc_split_quantity_print_info (split, FALSE));
+        return xaccPrintAmount (balance,
+                                gnc_split_quantity_print_info (split, FALSE));
       }
       break;
 
@@ -2839,14 +2913,14 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
       {
         SRInfo *info = xaccSRGetInfo(reg);
         Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-        double balance;
+        gnc_numeric balance;
 
         if (split == blank_split)
           return "";
 
         /* If the reverse_balance callback is present use that.
          * Otherwise, reverse income and expense by default. */
-        balance = DxaccSplitGetBalance (split);
+        balance = xaccSplitGetBalance (split);
         if (reverse_balance != NULL)
         {
           Account *account;
@@ -2856,14 +2930,14 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
             account = info->default_source_account;
 
           if (reverse_balance(account))
-            balance = -balance;
+            balance = gnc_numeric_neg (balance);
         }
         else if ((INCOME_REGISTER == reg->type) ||
                  (EXPENSE_REGISTER == reg->type))
-          balance = -balance;
+          balance = gnc_numeric_neg (balance);
 
-        return DxaccPrintAmount (balance,
-                                 gnc_split_value_print_info (split, FALSE));
+        return xaccPrintAmount (balance,
+                                gnc_split_value_print_info (split, FALSE));
       }
       break;
 
@@ -2892,44 +2966,44 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
     case CRED_CELL:
     case DEBT_CELL:
       {
-        double amount;
+        gnc_numeric amount;
 
-        amount = DxaccSplitGetValue (split);
-        if (DEQ (amount, 0.0))
+        amount = xaccSplitGetValue (split);
+        if (gnc_numeric_zero_p (amount))
           return "";
 
-        if ((amount < 0.0) && (cell_type == DEBT_CELL))
+        if (gnc_numeric_negative_p (amount) && (cell_type == DEBT_CELL))
           return "";
 
-        if ((amount > 0.0) && (cell_type == CRED_CELL))
+        if (gnc_numeric_positive_p (amount) && (cell_type == CRED_CELL))
           return "";
 
-        amount = ABS (amount);
+        amount = gnc_numeric_abs (amount);
 
-        return DxaccPrintAmount (amount,
-                                 gnc_split_value_print_info (split, FALSE));
+        return xaccPrintAmount (amount,
+                                gnc_split_value_print_info (split, FALSE));
       }
 
     case PRIC_CELL:
       {
-        double price;
+        gnc_numeric price;
 
-        price = DxaccSplitGetSharePrice (split);
+        price = xaccSplitGetSharePrice (split);
 
-        return DxaccPrintAmount (price, gnc_default_price_print_info ());
+        return xaccPrintAmount (price, gnc_default_price_print_info ());
       }
 
     case SHRS_CELL:
       {
-        double shares;
+        gnc_numeric shares;
 
-        shares = DxaccSplitGetShareAmount (split);
+        shares = xaccSplitGetShareAmount (split);
 
-        if (DEQ (shares, 0.0))
+        if (gnc_numeric_zero_p (shares))
           return "";
 
-        return DxaccPrintAmount (shares,
-                                 gnc_split_quantity_print_info (split, FALSE));
+        return xaccPrintAmount (shares,
+                                gnc_split_quantity_print_info (split, FALSE));
       }
 
     case MXFRM_CELL:
@@ -2963,34 +3037,57 @@ xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
 }
 
 guint32
-xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
-                         gpointer user_data)
+xaccSRGetFGColorHandler (VirtualLocation virt_loc, gpointer user_data)
 {
-  GUID *guid = vcell_data;
-  CellType cell_type = _cell_type;
   SplitRegister *reg = user_data;
   const guint32 black = 0x000000;
   const guint32 red   = 0xff0000;
+  VirtualCell *vcell;
+  gboolean is_current;
+  CellType cell_type;
   Split *split;
 
   if (!use_red_for_negative)
     return black;
 
-  split = xaccSplitLookup (guid);
+  vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
+  if (!vcell || !vcell->cellblock)
+    return black;
+
+  split = xaccSplitLookup (vcell->vcell_data);
   if (split == NULL)
     return black;
 
+  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
+
+  is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
+                                    virt_loc.vcell_loc);
+
   switch (cell_type)
   {
+    case SHRS_CELL:
+      {
+        gnc_numeric shares;
+
+        if (is_current)
+          shares = xaccGetPriceCellValue (reg->sharesCell);
+        else
+          shares = xaccSplitGetShareAmount (split);
+
+        if (gnc_numeric_negative_p (shares))
+          return red;
+
+        return black;
+      }
+      break;
+
     case SHRBALN_CELL:
       {
-        double balance;
+        gnc_numeric balance;
 
-        balance = DxaccSplitGetShareBalance (split);
-        if (DEQ (balance, 0.0))
-          balance = 0.0;
+        balance = xaccSplitGetShareBalance (split);
 
-        if (balance < 0.0)
+        if (gnc_numeric_negative_p (balance))
           return red;
 
         return black;
@@ -2999,11 +3096,12 @@ xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
 
     case BALN_CELL:
       {
-        double balance;
+        gnc_numeric balance;
 
         /* If the reverse_balance callback is present use that.
          * Otherwise, reverse income and expense by default. */
-        balance = DxaccSplitGetBalance (split);
+        balance = xaccSplitGetBalance (split);
+
         if (reverse_balance != NULL)
         {
           Account *account;
@@ -3011,16 +3109,13 @@ xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
           account = xaccSplitGetAccount(split);
 
           if (reverse_balance(account))
-            balance = -balance;
+            balance = gnc_numeric_neg (balance);
         }
         else if ((INCOME_REGISTER == reg->type) ||
                  (EXPENSE_REGISTER == reg->type))
-          balance = -balance;
+          balance = gnc_numeric_neg (balance);
 
-        if (DEQ (balance, 0.0))
-          balance = 0.0;
-
-        if (balance < 0.0)
+        if (gnc_numeric_negative_p (balance))
           return red;
 
         return black;
@@ -3135,8 +3230,9 @@ sr_add_transaction (SplitRegister *reg,
                     gboolean visible_splits,
                     gboolean start_primary_color,
                     Split *find_split,
+                    CursorClass find_class,
                     int *new_split_row,
-                    VirtualCellLocation * vcell_loc);
+                    VirtualCellLocation *vcell_loc);
 
 G_INLINE_FUNC void
 sr_add_transaction (SplitRegister *reg,
@@ -3146,8 +3242,9 @@ sr_add_transaction (SplitRegister *reg,
                     gboolean visible_splits,
                     gboolean start_primary_color,
                     Split *find_split,
+                    CursorClass find_class,
                     int *new_split_row,
-                    VirtualCellLocation * vcell_loc)
+                    VirtualCellLocation *vcell_loc)
 {
   Split *secondary;
   int i = 0;
@@ -3167,7 +3264,7 @@ sr_add_transaction (SplitRegister *reg,
 
     if (secondary != split)
     {
-      if (secondary == find_split)
+      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
         *new_split_row = vcell_loc->virt_row;
 
       gnc_table_set_vcell (reg->table, reg->split_cursor,
@@ -3216,10 +3313,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   int new_split_row = -1;
   time_t present;
   int i;
-
-  /* configure balance cell color usage */
-  reg->balanceCell->cell.use_fg_color = use_red_for_negative;
-  reg->shrbalnCell->cell.use_fg_color = use_red_for_negative;
 
   /* make sure we have a blank split */
   if (blank_split == NULL)
@@ -3361,9 +3454,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     if (split == find_trans_split)
       new_trans_split_row = vcell_loc.virt_row;
 
-    sr_add_transaction (reg, trans, split, lead_cursor,
-                        multi_line, start_primary_color,
-                        find_split, &new_split_row, &vcell_loc);
+    sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
+                        start_primary_color, find_split, find_class,
+                        &new_split_row, &vcell_loc);
 
     if (!multi_line)
       start_primary_color = !start_primary_color;
@@ -3381,9 +3474,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   if (split == find_trans_split)
     new_trans_split_row = vcell_loc.virt_row;
 
-  sr_add_transaction (reg, trans, split, lead_cursor,
-                      multi_line, start_primary_color,
-                      find_split, &new_split_row, &vcell_loc);
+  sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
+                      start_primary_color, find_split, find_class,
+                      &new_split_row, &vcell_loc);
 
   /* resize the table to the sizes we just counted above */
   /* num_virt_cols is always one. */

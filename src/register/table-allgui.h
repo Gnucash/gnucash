@@ -136,8 +136,7 @@ typedef const char * (*TableGetEntryHandler) (gpointer vcell_data,
                                               short cell_type,
                                               gpointer user_data);
 
-typedef guint32 (*TableGetFGColorHandler) (gpointer vcell_data,
-                                           short cell_type,
+typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
                                            gpointer user_data);
 
 typedef guint32 (*TableGetBGColorHandler) (VirtualLocation virt_loc,

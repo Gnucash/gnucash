@@ -114,6 +114,7 @@ gnc_numeric gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
 gnc_numeric gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
                             gint64 denom, gint how);
 gnc_numeric gnc_numeric_neg(gnc_numeric a);
+gnc_numeric gnc_numeric_abs(gnc_numeric a);
 
 /* some shortcuts for common operations */
 gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b);

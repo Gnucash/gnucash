@@ -217,11 +217,6 @@ typedef char * (*CellGetHelpFunc) (BasicCell *cell);
 
 struct _BasicCell
 {
-  /* cell attributes */
-  guint32 fg_color;       /* forground (text) color ARGB format */
-
-  gboolean use_fg_color;  /* if 0, above is ignored */
-
   char * value;          /* current value */
   char * blank_help;     /* help when value is blank */
 

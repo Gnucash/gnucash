@@ -803,9 +803,9 @@ xaccInitSplitRegister (SplitRegister *reg,
   reg->recnCell->cell.input_output |= XACC_CELL_ALLOW_EXACT_ONLY;
 
   /* Initialize price cells */
-  xaccSetPriceCellValue (reg->debitCell, 0.0);
-  xaccSetPriceCellValue (reg->creditCell, 0.0);
-  xaccSetPriceCellValue (reg->sharesCell, 0.0);
+  xaccSetPriceCellValue (reg->debitCell, gnc_numeric_zero ());
+  xaccSetPriceCellValue (reg->creditCell, gnc_numeric_zero ());
+  xaccSetPriceCellValue (reg->sharesCell, gnc_numeric_zero ());
 
   /* Initialize shares and share balance cells */
   xaccSetPriceCellPrintInfo (reg->sharesCell, gnc_default_share_print_info ());

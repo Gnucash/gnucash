@@ -22,10 +22,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>    /* for finite in Solaris 8 */
-#endif
-
 #include <ctype.h>
 #include <errno.h>
 #include <glib.h>
@@ -725,9 +721,21 @@ DxaccPrintAmount (double val, GNCPrintAmountInfo info)
    return buf;
 }
 
+int
+xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
+{
+  return DxaccSPrintAmount (bufp, gnc_numeric_to_double (val), info);
+}
+
+const char *
+xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
+{
+  return DxaccPrintAmount (gnc_numeric_to_double (val), info);
+}
+
 
 /********************************************************************\
- * DxaccParseAmount                                                  *
+ * DxaccParseAmount                                                 *
  *   parses amount strings using locale data                        *
  *                                                                  *
  * Args: in_str   -- pointer to string rep of num                   *

@@ -84,8 +84,8 @@ Split * xaccSRGetCurrentSplit (SplitRegister *reg);
  *    NULL if there is none. */
 Split * xaccSRGetBlankSplit (SplitRegister *reg);
 
-/* The xaccSRGetSplitVirtLoc() method searches the split register for
- *    the given split. If found, it returns TRUE and vcell_loc
+/* The xaccSRGetSplitVirtLoc() method searches the split register
+ *    for the given split. If found, it returns TRUE and vcell_loc
  *    is set to the location of the split. Otherwise, the method
  *    returns FALSE. */
 gboolean xaccSRGetSplitVirtLoc (SplitRegister *reg, Split *split,
@@ -205,7 +205,7 @@ void     xaccSetSplitRegisterColorizeNegative (gboolean use_red);
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
                                     gpointer user_data);
-guint32      xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
+guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
 guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);

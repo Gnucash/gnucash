@@ -446,7 +446,19 @@ gnc_numeric_neg(gnc_numeric a) {
   return gnc_numeric_create(- a.num, a.denom);
 }
 
-  
+/********************************************************************
+ *  gnc_numeric_neg
+ *  return the absolute value of the argument 
+ ********************************************************************/
+
+gnc_numeric
+gnc_numeric_abs(gnc_numeric a) {
+  if(gnc_numeric_check(a)) {
+    return gnc_numeric_error(GNC_ERROR_ARG);
+  }
+  return gnc_numeric_create(ABS(a.num), a.denom);
+}
+
 /********************************************************************
  *  gnc_numeric_convert
  ********************************************************************/

@@ -58,13 +58,16 @@
 
 #include "basiccell.h"
 #include "gnc-common.h"
+#include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 
 typedef struct _PriceCell
 {
   BasicCell cell;
 
-  double amount;         /* the amount associated with this cell */
+  gnc_numeric amount;    /* the amount associated with this cell */
+
+  int fraction;          /* fraction used for rounding, if 0 no rounding */
 
   gboolean blank_zero;   /* controls printing of zero values */
 
@@ -78,10 +81,13 @@ PriceCell *  xaccMallocPriceCell (void);
 void         xaccDestroyPriceCell (PriceCell *cell);
 
 /* return the value of a price cell */
-double       xaccGetPriceCellValue (PriceCell *cell);
+gnc_numeric  xaccGetPriceCellValue (PriceCell *cell);
 
 /* updates amount, string format is three decimal places */
-void         xaccSetPriceCellValue (PriceCell *cell, double amount);
+void         xaccSetPriceCellValue (PriceCell *cell, gnc_numeric amount);
+
+/* Sets the fraction used for rounding. If 0, no rounding is performed. */
+void         xaccSetPriceCellFraction (PriceCell *cell, int fraction);
 
 /* Sets the cell as blank, regardless of the blank_zero value */
 void         xaccSetPriceCellBlank (PriceCell *cell);
@@ -96,8 +102,9 @@ void         xaccSetPriceCellPrintInfo (PriceCell *cell,
 
 /* updates two cells; the deb cell if amt is negative, the credit cell
  * if amount is positive, and makes the other cell blank. */
-void         xaccSetDebCredCellValue (PriceCell *deb,
-                                      PriceCell *cred, double amount);
+void         xaccSetDebCredCellValue (PriceCell *debit,
+                                      PriceCell *credit,
+                                      gnc_numeric amount);
 
 #endif /* __PRICE_CELL_C__ */
 

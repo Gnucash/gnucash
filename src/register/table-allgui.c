@@ -244,34 +244,10 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 guint32
 gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
-  VirtualCell *vcell;
-  CellBlockCell *cb_cell;
-  BasicCell *cell;
-  guint32 fg_color = 0x0; /* black */
+  if (!table->fg_color_handler)
+    return 0x0; /* black */
 
-  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-  if (vcell == NULL)
-    return fg_color;
-
-  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                    virt_loc.phys_row_offset,
-                                    virt_loc.phys_col_offset);
-  if (cb_cell == NULL)
-    return fg_color;
-
-  if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
-                           virt_loc.vcell_loc))
-  {
-    cell = cb_cell->cell;
-    if (cell == NULL)
-      return fg_color;
-
-    if (cell->use_fg_color && (XACC_CELL_ALLOW_SHADOW & cell->input_output))
-      return cell->fg_color;
-  }
-
-  return table->fg_color_handler (vcell->vcell_data, cb_cell->cell_type,
-                                  table->handler_user_data);
+  return table->fg_color_handler (virt_loc, table->handler_user_data);
 }
 
 /* ==================================================== */
