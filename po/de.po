@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
 "POT-Creation-Date: 2001-05-27 23:32-0700\n"
-"PO-Revision-Date: 2001-06-02 20:37+02:00\n"
+"PO-Revision-Date: 2001-06-03 01:38+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -2315,6 +2315,17 @@ msgid ""
 "If you select a different account, it will be remembered for future QIF \n"
 "files. "
 msgstr ""
+"QIF Dateien, die Sie von einer Bank oder einem Finanzinstitut\n"
+"heruntergeladen haben, bieten oftmals nicht genügend Informationen\n"
+"über Kontengliederungen und Kategorien, um sie automatisch den\n"
+"richtigen GnuCash-Konten zuzuordenen.\n"
+"\n"
+"Auf der folgenden Seite werden der Zahlungsempfänger und Buchungstext\n"
+"von Buchungen ohne Konten oder Kategorien aus der QIF Datei\n"
+"angezeigt. Als Voreinstellung werden solche Buchungen dem Konto \"Nicht\n"
+"spezifiziert\" zugeordnet. Wenn Sie nun die Buchungen einem anderen\n"
+"Konto zuweisen, wird diese Auswahl für zukünftige Importvorgänge\n"
+"gespeichert."
 
 #: src/gnome/glade-gnc-dialogs.c:4595
 msgid "Match payees/memos to GnuCash accounts"
@@ -2566,15 +2577,15 @@ msgstr "Suchergebnisse"
 
 #: src/gnome/glade-gnc-dialogs.c:5802
 msgid "New Style Sheet"
-msgstr "Neuer Stil"
+msgstr "Neue Stilvorlage"
 
 #: src/gnome/glade-gnc-dialogs.c:5810
 msgid "New style sheet info"
-msgstr "Info für neuen Stil"
+msgstr "Info für neue Stilvorlage"
 
 #: src/gnome/glade-gnc-dialogs.c:5841
 msgid "Style sheet template:"
-msgstr "Vorlage für Stil:"
+msgstr "Vorlage für Stilvorlage:"
 
 #: src/gnome/glade-gnc-dialogs.c:5940 src/gnome/glade-gnc-dialogs.c:6034
 #: src/gnome/window-acct-tree.c:889
@@ -2630,11 +2641,11 @@ msgstr "Buchungsinformation"
 
 #: src/gnome/glade-gnc-dialogs.c:6322
 msgid "HTML Style Sheets"
-msgstr "HTML-Stil"
+msgstr "HTML-Stilvorlage"
 
 #: src/gnome/glade-gnc-dialogs.c:6332
 msgid "Style sheets"
-msgstr "Stil"
+msgstr "Stilvorlage"
 
 #: src/gnome/glade-gnc-dialogs.c:6363
 msgid "label847668"
@@ -2642,7 +2653,7 @@ msgstr "label847668"
 
 #: src/gnome/glade-gnc-dialogs.c:6391
 msgid "Style sheet options"
-msgstr "Stil Optionen"
+msgstr "Stilvorlage Optionen"
 
 #: src/gnome/glade-gnc-dialogs.c:6474 src/gnome/glade-gnc-dialogs.c:6661
 msgid "Stock Split"
@@ -3234,7 +3245,7 @@ msgstr "_Konto öffnen"
 
 #: src/gnome/window-acct-tree.c:828
 msgid "Open S_ubaccounts"
-msgstr "Öffnen _Unterkonten"
+msgstr "_Unterkonten öffnen"
 
 #: src/gnome/window-acct-tree.c:829
 msgid "Open the selected account and all its subaccounts"
@@ -4207,7 +4218,7 @@ msgstr "Gutschrift"
 
 #: src/register/splitreg.c:165
 msgid "Withdraw"
-msgstr "Abhebung"
+msgstr "Belastung"
 
 #: src/register/splitreg.c:166
 msgid "Check"
@@ -5607,6 +5618,11 @@ msgid ""
 "where 'default expands to the default path, and 'current expands to\n"
 "the current value of the path."
 msgstr ""
+"Eine Liste von Zeichenketten, die den Suchpfad für die Funktion\n"
+"(gnc:load datei) setzt. Jedes Element muß entweder eine Zeichenkette\n"
+"oder ein Symbol sein, wobei die Zeichenkette ein gültiges Verzeichnis\n"
+"sein muß und als Symbol entweder 'default für den Voreinstellungs-Pfad\n"
+"oder 'current für den aktuelle Pfad gültig sind."
 
 #: src/scm/guile-strings.c:412
 msgid ""
@@ -5615,6 +5631,12 @@ msgid ""
 "'default expands to the default path, and 'current expands to the current "
 "value of the path."
 msgstr ""
+"Eine Liste von Zeichenketten, die den Suchpfad für HTML und\n"
+"GnuCash-HTML Dateien setzt. Jedes Element muß entweder eine\n"
+"Zeichenkette oder ein Symbol sein, wobei die Zeichenkette ein gültiges\n"
+"Verzeichnis sein muß und als Symbol entweder 'default für den\n"
+"Voreinstellungs-Pfad oder 'current für den aktuellen Pfad gültig\n"
+"sind."
 
 #: src/scm/guile-strings.c:413 src/scm/guile-strings.c:415
 msgid ""
@@ -5698,11 +5720,11 @@ msgstr "%s-Bericht anzeigen"
 
 #: src/scm/guile-strings.c:439
 msgid "Style Sheets..."
-msgstr "Stil..."
+msgstr "Stilvorlagen..."
 
 #: src/scm/guile-strings.c:440
 msgid "Edit report style sheets."
-msgstr "Bericht-Stil bearbeiten."
+msgstr "Stilvorlagen für Berichte bearbeiten."
 
 #: src/scm/guile-strings.c:441
 msgid "Welcome Extravaganza"
@@ -5808,6 +5830,11 @@ msgid ""
 "Format) files.  Click the Import button in the main window tool\n"
 "bar and follow the instructions provided."
 msgstr ""
+"Sie können jederzeit existierende Finanzdaten aus Quicken, MS Money\n"
+"oder anderen Programmen importieren, solange die Programme die Daten\n"
+"im Dateiformat QIF (Quicken Interchange Format) speichern\n"
+"können. Klicken Sie den \"Import\" Knopf in der Werkzeugleiste des\n"
+"Hauptfensters und folgen Sie den erscheinenden Anweisungen."
 
 #: src/scm/guile-strings.c:477
 msgid ""
@@ -5816,6 +5843,11 @@ msgid ""
 "income and expenses.  For more information on income and expense\n"
 "accounts, please see the GnuCash online manual."
 msgstr ""
+"Wenn Sie bereits mit anderen Finanzprogrammen wie z.B. Quicken\n"
+"vertraut sind, sollten Sie beachten, daß GnuCash durchgängig \"Konten\"\n"
+"anstelle von \"Kategorien\" benutzt, um Einnahmen und Ausgaben zu\n"
+"gliedern. Weitere Informationen zu Einnahme- und Ausgaben-Konten\n"
+"finden Sie im GnuCash Online-Handbuch."
 
 #: src/scm/guile-strings.c:481
 msgid ""
@@ -5825,6 +5857,12 @@ msgid ""
 "or setting up a chart of accounts, please see the GnuCash online\n"
 "manual."
 msgstr ""
+"Sie können neue Konten erstellen, indem Sie auf den \"Neu\" Knopf in der\n"
+"Werkzeugleiste des Hauptfensters klicken. Dies öffnet ein\n"
+"Dialogfenster, in dem Sie weitere Details zum neuen Konto eingeben\n"
+"können. Weitere Informationen zu den Kontoarten, die Sie zur Verfügung\n"
+"haben, und Hinweise zum Erstellen einer Kontenhierarchie finden Sie im\n"
+"GnuCash Online-Handbuch.  "
 
 #: src/scm/guile-strings.c:486
 msgid ""
@@ -5832,6 +5870,9 @@ msgid ""
 "account menu options. Within each register, clicking the right\n"
 "mouse button brings up the transaction menu options."
 msgstr ""
+"Ein Klick mit der rechten Maustaste im Hauptfenster öffnet die \"Konto\"\n"
+"Menüpunkte. Ein Klick mit der rechten Maustaste im Register öffnet die\n"
+"Menüpunkte zu \"Buchung\"."
 
 #: src/scm/guile-strings.c:489
 msgid ""
@@ -5840,6 +5881,12 @@ msgid ""
 "the first value, then select '+', '-','*', or '/'.  Type the\n"
 "second value and press Enter to record the calculated amount."
 msgstr ""
+"Wenn Sie Beträge im Register eingeben, können Sie das Eingabefeld wie\n"
+"einen einfachen Taschenrechner mit den Funtionen Addieren,\n"
+"Subtrahieren, Multiplizieren und Dividieren benutzen. Tippen Sie\n"
+"einfach einen Wert, gefolgt von \"+\", \"-\", \"*\" oder \"/\", gefolgt von\n"
+"einem zweiten Wert. Das anschließende Drücken von \"Eingabe\" wird den\n"
+"berechneten Betrag buchen."
 
 #: src/scm/guile-strings.c:493
 msgid ""
@@ -5848,6 +5895,10 @@ msgid ""
 "GnuCash will automatically complete the remainder of the\n"
 "transaction as it was last entered."
 msgstr ""
+"GnuCash spart Ihnen Tipparbeit durch die Quick-Fill Funktion. Wenn Sie\n"
+"die ersten Buchstaben des Verwendungszwecks einer früheren Buchung\n"
+"eingeben, kann GnuCash den Rest mit dem bekannten Text\n"
+"vervollständigen."
 
 #: src/scm/guile-strings.c:497
 msgid ""
@@ -5857,6 +5908,11 @@ msgid ""
 "of the parent account, followed by ':' and the first letter(s) of\n"
 "the subaccount (e.g. A:C for Assets:Cash.)"
 msgstr ""
+"Wenn Sie im Register die ersten Buchstaben eines Kontennamen eingeben,\n"
+"kann GnuCash den Namen anhand Ihrer Kontenliste vervollständigen. Für\n"
+"Unterkonten geben Sie die ersten Buchstaben des Hauptkontos ein,\n"
+"gefolgt von einem ':', gefolgt von den ersten Buchstaben des\n"
+"Unterkontos (z.B. A:B für Aktiva:Bargeld)."
 
 #: src/scm/guile-strings.c:502
 msgid ""
@@ -5865,6 +5921,10 @@ msgid ""
 "Alternatively, you can choose the register style Auto-Split Ledger or\n"
 "Transaction Journal from the Register|Style menu option."
 msgstr ""
+"Um mehrteilige Buchungen einzugeben (z.B. eine Gehaltszahlung mit\n"
+"mehreren Abzügen), klicken Sie den \"Teilbuchung\"-Knopf in der\n"
+"Werkzeugleiste. Alternativ können Sie auch den Anzeigestil\n"
+"\"Auto-Teilbuchungs Hauptbuch\" aus dem Menü Register|Stil wählen."
 
 #: src/scm/guile-strings.c:506
 msgid ""
@@ -5872,6 +5932,10 @@ msgid ""
 "From the main menu, highlight the parent account and select\n"
 "Accounts|Open Subaccounts from the menu."
 msgstr ""
+"Sie können die Buchungen aller Unterkonten in einem Register auf\n"
+"einmal ansehen. Markieren Sie dazu das Hauptkonto in der\n"
+"Konto-Hierarchie und wählen Sie dann den Menüpunkt Konten|Unterkonten\n"
+"öffnen."
 
 #: src/scm/guile-strings.c:509
 msgid ""
@@ -5880,6 +5944,10 @@ msgid ""
 "You can also press Tab and Shift-Tab to move between\n"
 "deposits and withdrawals."
 msgstr ""
+"Im Fenster \"Abgleichen\" können Sie mit der Leertaste Buchungen als\n"
+"\"Abgestimmt\" markieren. Um zwischen Gutschrift und Belastung zu\n"
+"wechseln, können Sie die Tab (die Tabulatortaste) und Umschalt-Tab\n"
+"drücken."
 
 #: src/scm/guile-strings.c:513
 msgid ""
@@ -5888,12 +5956,20 @@ msgid ""
 "number. You can use '+' and '-' to increment and decrement\n"
 "dates as well."
 msgstr ""
+"Bei der Datumseingabe können Sie mit '+' und '-' das Datum weiter-\n"
+"oder zurückzählen oder mit ']','}' und '{','[' das Datum monatsweise\n"
+"weiterschalten. Wenn Sie im Register Buchungsnummern eingeben, können\n"
+"Sie ebenfalls mit '+' und '-' die nächstfolgende oder vorige Nummer\n"
+"auswählen."
 
 #: src/scm/guile-strings.c:517
 msgid ""
 "You should back up your files regularly.  Just copy\n"
 "your GnuCash data file to a floppy or other backup device."
 msgstr ""
+"Machen Sie regelmäßig eine Sicherheitskopie Ihrer Daten. Kopieren Sie\n"
+"einfach Ihre GnuCash Datei auf eine Diskette oder ein anderes\n"
+"Backup-Medium."
 
 #: src/scm/guile-strings.c:519
 msgid ""
@@ -5913,12 +5989,17 @@ msgid ""
 "providing all the financial information you want at a glance.\n"
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
+"Sie können mehrere Berichte in einem einzigen Fenster anzeigen lassen,\n"
+"um alle Ihre Informationen im Blick zu haben. Benutzen Sie dafür den\n"
+"Bericht \"Mehrspaltige Anzeige\"."
 
 #: src/scm/guile-strings.c:526
 msgid ""
 "GnuCash can act as a simple web browser!  To display\n"
 "a web page as a report, use the \"Frame URL\" report."
 msgstr ""
+"GnuCash kann als einfacher Internet-Browser dienen. Um eine\n"
+"Internet-Seite anzuzeigen, benutzen Sie den Bericht \"URL-Fenster\"."
 
 #: src/scm/guile-strings.c:528
 msgid ""
@@ -5926,6 +6007,10 @@ msgid ""
 "a style sheet for your report as a report option, and use\n"
 "the Style Sheets menu to customize style sheets."
 msgstr ""
+"Mit einer Stilvorlage können Sie das Aussehen eines Berichts\n"
+"beeinflussen. Wählen Sie eine Stilvorlage für Ihren Bericht als\n"
+"Berichtsoption und benutzen Sie den Menüpunkt \"Stilvorlagen...\", um\n"
+"die Stilvorlagen anzupassen.  "
 
 #: src/scm/guile-strings.c:531
 msgid ""
@@ -5933,6 +6018,10 @@ msgid ""
 "as several mailing lists, you can chat to them live on IRC!\n"
 "Join them on #gnucash at irc.gnome.org"
 msgstr ""
+"Die Entwickler von GnuCash können auf einfache Weise erreicht\n"
+"werden. Es gibt einige Mailing-Listen, aber Sie können genausogut\n"
+"einen Live-Chat im IRC (Internet Relay Chat) ausprobieren. Die\n"
+"Entwicker sind im Channel #gnucash auf irc.gnome.org zu finden."
 
 #: src/scm/guile-strings.c:534
 msgid ""
@@ -5943,6 +6032,12 @@ msgid ""
 "There is another theory that this has already happened.\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
+"Online-Banking mit dem deutschen Standard HBCI wird von GnuCash zwar\n"
+"bisher noch nicht unterstützt, aber die Entwickler arbeiten mit\n"
+"Hochdruck daran. Warten Sie ab bis zur neuen Version 1.8 oder\n"
+"2.0. Wenn Sie weitere Wünsche für spätere Versionen haben, können Sie\n"
+"diese jederzeit an zur Mailingliste der Entwickler schicken. Wie sie\n"
+"die Mailingliste erreichen, steht im GnuCash Online-Handbuch."
 
 #: src/scm/qif-import/guile-strings.c:1
 msgid "Dividends"
@@ -7583,7 +7678,7 @@ msgstr "Anzahl Spalten, bevor eine neue Zeile begonnen wird"
 
 #: src/scm/report/guile-strings.c:718
 msgid "Multicolumn View"
-msgstr "Multispalten Anzeige"
+msgstr "Mehrspaltige Anzeige"
 
 #: src/scm/report/guile-strings.c:720
 msgid "GnuCash 1.6 has lots of nice features. Here are a few."
