@@ -97,7 +97,7 @@ xaccInitQuery (Query *q)
    q->acc_list = NULL;
    q->split_list = NULL;
    q->changed = 0; 
-   q->max_num_splits = INT_MAX ;
+   q->max_num_splits = INT_MAX;
 
    q->earliest.tv_sec = LONG_LONG_MIN;
    q->earliest.tv_nsec = 0; 

@@ -138,14 +138,6 @@
 					 report-description
 					 options
 					 balance-sheet?)
-    ;; currency symbol that is printed is a dollar sign, for now
-    ;; currency amounts get printed with two decimal places
-    ;; balance sheet doesn't print income or expense
-    ;; top-level accounts get printed in right-most column
-
-    ;; This code could definitely be more "schemy", but for now I mostly
-    ;; just translated it directly from the old ePerl with a few
-    ;; schemifications.
 
     (let* ((from-option (gnc:lookup-option options "Report Options" "From"))
            (from-value (if from-option (gnc:option-value from-option) #f))
