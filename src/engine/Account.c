@@ -93,6 +93,7 @@ xaccInitAccount (Account * acc)
   acc->description = g_strdup("");
 
   acc->kvp_data    = kvp_frame_new();
+  acc->idata = 0;
 
   acc->commodity     = NULL;
   acc->commodity_scu = 100000;

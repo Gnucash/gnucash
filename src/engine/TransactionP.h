@@ -121,6 +121,10 @@ struct _split
   gnc_numeric  balance;
   gnc_numeric  cleared_balance;
   gnc_numeric  reconciled_balance;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 
@@ -186,6 +190,10 @@ struct _transaction
    * any changes made if/when the edit is abandoned.
    */
   Transaction *orig;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 /* Set the transaction's GUID. This should only be done when reading

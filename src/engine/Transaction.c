@@ -109,6 +109,7 @@ xaccInitSplit(Split * split)
   split->reconciled_balance  = gnc_numeric_zero();
 
   split->kvp_data = kvp_frame_new();
+  split->idata = 0;
 
   xaccGUIDNew(&split->guid);
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
@@ -622,6 +623,7 @@ xaccInitTransaction (Transaction * trans)
   trans->orig = NULL;
 
   trans->kvp_data = kvp_frame_new();
+  trans->idata = 0;
 
   xaccGUIDNew(&trans->guid);
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);

@@ -142,6 +142,10 @@ struct _account {
    * in any way desired.  Handy for specialty traversals of the 
    * account tree. */
   short mark;
+
+  /* -------------------------------------------------------------- */
+  /* Backend private expansion data */
+  guint32  idata;     /* used by the sql backend for kvp management */
 };
 
 
