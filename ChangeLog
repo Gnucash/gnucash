@@ -1,3 +1,10 @@
+2001-02-03  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: add account table generating
+	function which builds a hierarchy and is generalized enough to be
+	used in balance- and profit-and-loss style reports. (moved from
+	report/account-summary.scm)
+
 2001-02-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report-utilities.scm: add function for determining the
