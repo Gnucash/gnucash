@@ -1661,7 +1661,7 @@ if test "${with_locale_dir+set}" = set; then
   withval="$with_locale_dir"
   LOCALE_DIR="$with_locale_dir"
 else
-  LOCALE_DIR="$datadir/locale"
+  LOCALE_DIR="\${localedatadir}/locale"
 fi
 
 

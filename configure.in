@@ -89,7 +89,7 @@ AC_ARG_ENABLE( warnings,
 AC_ARG_WITH( locale-dir, 
   [  --with-locale-dir=PATH       specify where to look for locale-specific information],
   LOCALE_DIR="$with_locale_dir",
-  LOCALE_DIR="$datadir/locale")
+  LOCALE_DIR="\${localedatadir}/locale")
 
 AC_SUBST(LOCALE_DIR)
 

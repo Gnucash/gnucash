@@ -28,7 +28,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 
 # datadir is usually /usr/share/
-datadir=$(prefix)/@DATADIRNAME@
+datadir=@datadir@
+
+localedatadir=$(prefix)/@DATADIRNAME@
 
 # localstatedir is usually /var/
 localstatedir=@localstatedir@
