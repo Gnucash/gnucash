@@ -389,6 +389,17 @@ ap_show_book (GnomeDruidPage *druidpage,
 
 /* =============================================================== */
 
+static void
+scrub_all(void)
+{
+  AccountGroup *group = gnc_get_current_group ();
+  xaccGroupScrubOrphans (group);
+  xaccGroupScrubImbalance (group);
+  xaccGroupScrubLotsBalance (group);
+}
+
+/* =============================================================== */
+
 static gboolean
 ap_close_period (GnomeDruidPage *druidpage,
                 GtkWidget *druid,
@@ -422,6 +433,7 @@ ap_close_period (GnomeDruidPage *druidpage,
     /* Close the books ! */
     gnc_suspend_gui_refresh ();
 
+    scrub_all();
     closed_book = gnc_book_close_period (current_book, closing_date, NULL, btitle);
 
     book_frame = qof_book_get_slots(closed_book);
