@@ -40,6 +40,7 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS}
 
 EXTRA_DIST = \
-  .cvsignore 
+  .cvsignore \
+  ${gncscm_DATA}
 
 CLEANFILES = ofx import-export gnucash g-wrapped .scm-links

@@ -1,3 +1,6 @@
+2002-10-31  Derek Atkins  <derek@ihtfp.com>
+	* import-export/ofx/Makefile.am: add gncscm_DATA to EXTRA_DIST
+
 2002-10-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/ofx/gnc-ofx-import.c: Fix security account creation bug caused by the presence of the character ':' in the account default name.  Fix compiler warnings.
 
