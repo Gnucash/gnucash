@@ -1705,6 +1705,8 @@ gnc_query2scm (Query *q)
 
   if (!q) return SCM_BOOL_F;
 
+  ++scm_block_gc;
+
   /* terms */
   pair = gh_cons (gnc_query_terms2scm (gncQueryGetTerms (q)), SCM_EOL);
   pair = gh_cons (gh_symbol2scm ("terms"), pair);
@@ -1740,6 +1742,7 @@ gnc_query2scm (Query *q)
 
   /* Reverse this list; tag it as 'query-v2' */
   pair = gh_reverse (query_scm);
+  --scm_block_gc;
   return gh_cons (gh_symbol2scm ("query-v2"), pair);
 }
 
@@ -1963,6 +1966,8 @@ gnc_scm2query_v2 (SCM query_scm)
   gboolean si1 = TRUE, si2 = TRUE, si3 = TRUE;
   int max_results = -1;
 
+  ++scm_block_gc;
+
   while (!gh_null_p (query_scm))
   {
     char *symbol;
@@ -2049,6 +2054,8 @@ gnc_scm2query_v2 (SCM query_scm)
 
     free (symbol);
   }
+
+  --scm_block_gc;
 
   if (ok && search_for) {
     gncQuerySearchFor (q, search_for);

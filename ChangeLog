@@ -6,6 +6,13 @@
 	  it.
 	Fixes bug #121677
 
+	* src/engine/engine-helpers.c:  turn off scheme garbage collection
+	  during query->scm and scm->query conversion.  It shaves about 50%
+	  off the test-scm-query-string tests.
+	* src/app-utils/test/test-scm-query-string.c: make the test
+	  deterministic by seeding the RNG with a known value.  There is a
+	  known "delay" at #245 with a seed of 1 on Linux systems.
+
 2003-09-08  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* po/glossary/sk.po: Commit updated file submitted through the
