@@ -43,6 +43,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
+#include "global-options.h"
 #include "gnc-associate-account.h"
 #include "gnc-ofx-import.h"
 #include "gnc-file-dialog.h"
@@ -81,6 +82,7 @@ void gnc_file_ofx_import (void)
   extern int ofx_STATUS_msg;
   char *filenames[3];
   const char *selected_filename;
+  char *default_dir;
 
   ofx_PARSER_msg = false;
   ofx_DEBUG_msg = false;
@@ -92,12 +94,20 @@ void gnc_file_ofx_import (void)
   gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
+  default_dir = gnc_lookup_string_option("__paths", "Import OFX", NULL);
+  if (default_dir == NULL)
+    gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
 				      NULL,
-				      NULL);
+				      default_dir);
 
   if(selected_filename!=NULL)
     {
+      /* Remember the directory as the default. */
+      gnc_extract_directory(&default_dir, selected_filename);
+      gnc_set_string_option("__paths", "Import OFX", default_dir);
+      g_free(default_dir);
+
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);
       filenames[0]=NULL;

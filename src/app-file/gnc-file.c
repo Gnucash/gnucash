@@ -556,9 +556,11 @@ gnc_file_export_file(const char * newfile)
   GNCSession *current_session, *new_session;
   gboolean ok;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
-  static char *default_dir = NULL;	/* default directory for exports */
+  char *default_dir;
 
-  gnc_init_default_directory(&default_dir);
+  default_dir = gnc_lookup_string_option("__paths", "Export Accounts", NULL);
+  if (default_dir == NULL)
+    gnc_init_default_directory(&default_dir);
 
   if (!newfile) {
     if (!file_dialog_func) {
@@ -573,7 +575,9 @@ gnc_file_export_file(const char * newfile)
 
   /* Remember the directory as the default. */
   gnc_extract_directory(&default_dir, newfile);
-      
+  gnc_set_string_option("__paths", "Export Accounts", default_dir);
+  g_free(default_dir);
+  
   gnc_engine_suspend_events();
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */

@@ -735,3 +735,15 @@ without one.")
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__gnc_network" "uid" ""))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__paths"  "Export Accounts" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__paths"  "Import QIF" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__paths"  "Import OFX" #f))

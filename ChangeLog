@@ -63,16 +63,31 @@
 	
 2003-01-12  David Hampton  <hampton@employees.org>
 
+	* macros/openhbci.m4: Scrub hbci include paths to prevent gcc 3.x
+	compile errors.
+
+	* src/app-utils/option-util.c: 
+	* src/app-utils/global-options.c: Add support for setting a string
+	option.
+
+	* src/app-utils/prefs.scm: Create hidden options for the saved
+	default import/export path names.
+
 	* src/app-utils/gnc-ui-util.c: Add routine for easily extracting a
 	directory path from a filename.
 
+	* src/import-export/ofx/gnc-ofx-import.c: Default the OFX import
+	directory to the directory of the last OFX file imported, or the
+	user's home dir for the first export. Remembered across
+	invocations of gnucash. #94428
+
 	* src/app-file/gnc-file.c: Default the save directory to the
 	directory of the last file used. Default the exports directory to
-	the direcory of the last file exported this session, or the user's
-	home dir for the first export. #94428
+	the directory of the last file exported, or the user's home dir for
+	the first export. Remembered across invocations of gnucash. #94428
 
 	* src/scm/price-quotes.scm: Correctly handle the case where no
-	stocks have been defined and the user askes gnucash to get price
+	stocks have been defined and the user asks gnucash to get price
 	quotes. #102560
 
 	* src/network-utils/gnc-http.c: Work around bug in ghttp library
