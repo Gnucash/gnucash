@@ -1,3 +1,20 @@
+2002-12-30  Matthew Vanecek <mevanecek@yahoo.com>
+	* src/backend/postgres/PostgresBackend.c: Added some ENTER
+	and LEAVE statements to more of the functions.
+
+	* src/backend/postgres/upgrade.c: Changed all the DATETIME
+	SQL data types to TIMESTAMP.  DATETIME will not be in Postgresql
+	as of 7.3.
+	
+	* src/backend/postgres/functions.sql: Changed all the DATETIME
+	types in the DDL to TIMESTAMP.
+
+	* src/backend/postgres/table-create.sql: Changed all the DATETIME
+	types in the DDL to TIMESTAMP.
+
+	* src/backend/postgres/table-audit.sql: Changed all the DATETIME
+	types in the DDL to TIMESTAMP.
+
 2002-12-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/app-utils/prefs.scm, src/app-utils/global-options.c: Rename

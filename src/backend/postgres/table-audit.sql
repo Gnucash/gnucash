@@ -29,7 +29,7 @@
 
 CREATE TABLE gncAuditTrail (
 	sessionGuid		CHAR(32)  NOT NULL,   -- who changed it
-	date_changed 		DATETIME,   -- when they changed it
+	date_changed 		TIMESTAMP,   -- when they changed it
         change			CHAR NOT NULL,
         objtype			CHAR NOT NULL
 );
@@ -78,7 +78,7 @@ CREATE TABLE gncEntryTrail (
 	memo			TEXT,
 	action			TEXT,
 	reconciled		CHAR DEFAULT 'n',
-	date_reconciled 	DATETIME,
+	date_reconciled 	TIMESTAMP,
 	amount			INT8 DEFAULT '0',
 	value			INT8 DEFAULT '0',
 	iguid			INT4 DEFAULT 0
@@ -90,7 +90,7 @@ CREATE TABLE gncPriceTrail (
 	priceGuid	CHAR(32) NOT NULL,  -- override, not a primary key anymore
 	commodity	TEXT NOT NULL CHECK (commodity <>''),
 	currency	TEXT NOT NULL CHECK (commodity <>''),
-	time		DATETIME,
+	time		TIMESTAMP,
 	source		TEXT,
 	type		TEXT,
 	valueNum	INT8 DEFAULT '0',
@@ -103,9 +103,9 @@ CREATE INDEX gncPriceTrail_price_idx ON gncPriceTrail (priceGuid);
 
 CREATE TABLE gncTransactionTrail (
 	transGuid	CHAR(32) NOT NULL,  -- override, not a primary key anymore
-	last_modified 	DATETIME DEFAULT 'NOW',
-	date_entered 	DATETIME,
-	date_posted 	DATETIME,
+	last_modified 	TIMESTAMP DEFAULT 'NOW',
+	date_entered 	TIMESTAMP,
+	date_posted 	TIMESTAMP,
 	num		TEXT,
 	description	TEXT,
         currency	TEXT NOT NULL CHECK (currency <> ''),
@@ -161,7 +161,7 @@ CREATE TABLE gncKVPvalue_timespecTrail (
 	iguid		INT4,
 	ipath		INT4,
 	type		char(4),
-	data		DATETIME
+	data		TIMESTAMP
 ) INHERITS (gncAuditTrail);
 
 CREATE TABLE gncKVPvalue_listTrail (

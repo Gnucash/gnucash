@@ -71,7 +71,7 @@ pgendVersionTable (PGBackend *be)
        "  minor    INT NOT NULL,\n"
        "  rev      INT DEFAULT '0',\n"
        "  name     TEXT UNIQUE NOT NULL CHECK (name <> ''),\n"
-       "  date     DATETIME DEFAULT 'NOW' \n"
+       "  date     TIMESTAMP DEFAULT 'NOW' \n"
        ");\n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,0,0,'Version Table');";
@@ -227,12 +227,12 @@ fix_reconciled_balance_func (PGBackend *be)
    FINISH_QUERY(be->connection);
 
    p = "DROP FUNCTION "
-       "gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME);";
+       "gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP);";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
    p = "CREATE FUNCTION "
-       "gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME)"
+       "gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)"
          "RETURNS INT8 "
          "AS 'SELECT INT8(sum(gncEntry.amount)) "
            "FROM gncEntry, gncTransaction "
@@ -266,7 +266,7 @@ add_kvp_timespec_tables (PGBackend *be)
   FINISH_QUERY(be->connection);
 
   p = "CREATE TABLE gncKVPvalue_timespec ( "
-      "  data		DATETIME "
+      "  data		TIMESTAMP "
       ") INHERITS (gncKVPvalue);";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
@@ -275,7 +275,7 @@ add_kvp_timespec_tables (PGBackend *be)
       "  iguid		INT4, "
       "  ipath		INT4, "
       "  type		char(4), "
-      "  data		DATETIME "
+      "  data		TIMESTAMP "
       ") INHERITS (gncAuditTrail);";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);

@@ -27,7 +27,7 @@ CREATE TABLE gncVersion (
 	minor	INT NOT NULL,
 	rev	INT DEFAULT '0',
 	name	TEXT UNIQUE NOT NULL CHECK (name <> ''),
-	date	DATETIME DEFAULT 'NOW'
+	date	TIMESTAMP DEFAULT 'NOW'
 );
 
 -- Commodity structure
@@ -72,9 +72,9 @@ CREATE TABLE gncAccount (
 
 CREATE TABLE gncTransaction (
 	transGuid	CHAR(32) PRIMARY KEY,
-	last_modified 	DATETIME DEFAULT 'NOW',
-	date_entered 	DATETIME,
-	date_posted 	DATETIME,
+	last_modified 	TIMESTAMP DEFAULT 'NOW',
+	date_entered 	TIMESTAMP,
+	date_posted 	TIMESTAMP,
 	num		TEXT,
 	description	TEXT,
         currency	TEXT NOT NULL CHECK (currency <> ''),
@@ -94,7 +94,7 @@ CREATE TABLE gncEntry (
 	memo			TEXT,
 	action			TEXT,
 	reconciled		CHAR DEFAULT 'n',
-	date_reconciled 	DATETIME,
+	date_reconciled 	TIMESTAMP,
 	amount			INT8 DEFAULT '0',
 	value			INT8 DEFAULT '0',
 	iguid			INT4 DEFAULT 0
@@ -114,8 +114,8 @@ CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 
 CREATE TABLE gncCheckpoint (
 	accountGuid		CHAR(32) NOT NULL,
-	date_start	 	DATETIME NOT NULL,
- 	date_end	 	DATETIME NOT NULL,
+	date_start	 	TIMESTAMP NOT NULL,
+ 	date_end	 	TIMESTAMP NOT NULL,
 	commodity		TEXT NOT NULL CHECK (commodity <>''),
 	type			TEXT DEFAULT 'simple',
 	balance			INT8 DEFAULT '0',
@@ -131,7 +131,7 @@ CREATE TABLE gncPrice (
 	priceGuid	CHAR(32) PRIMARY KEY,
 	commodity	TEXT NOT NULL CHECK (commodity <>''),
 	currency	TEXT NOT NULL CHECK (commodity <>''),
-	time		DATETIME,
+	time		TIMESTAMP,
 	source		TEXT,
 	type		TEXT,
 	valueNum	INT8 DEFAULT '0',
@@ -157,8 +157,8 @@ CREATE TABLE gncSession (
 	hostname		TEXT,
 	login_name		TEXT,
 	gecos			TEXT,
-	time_on			DATETIME NOT NULL,
-	time_off		DATETIME NOT NULL DEFAULT 'INFINITY'
+	time_on			TIMESTAMP NOT NULL,
+	time_off		TIMESTAMP NOT NULL DEFAULT 'INFINITY'
 );
 
 
@@ -230,7 +230,7 @@ CREATE TABLE gncKVPvalue_guid (
 -- CREATE INDEX gncKVPvalue_guid_iguid_idx ON gncKVPvalue_guid (iguid);
 
 CREATE TABLE gncKVPvalue_timespec (
-	data		DATETIME
+	data		TIMESTAMP
 --        PRIMARY KEY (iguid, ipath)
 ) INHERITS (gncKVPvalue);
 

@@ -12,7 +12,7 @@
 
 -- utility functions to compute checkpoint balance subtotals
 
-CREATE FUNCTION gncSubtotalBalance (CHAR(32), DATETIME, DATETIME)
+CREATE FUNCTION gncSubtotalBalance (CHAR(32), TIMESTAMP, TIMESTAMP)
     RETURNS INT8
     AS 'SELECT INT8(sum(gncEntry.amount))
         FROM gncEntry, gncTransaction
@@ -22,7 +22,7 @@ CREATE FUNCTION gncSubtotalBalance (CHAR(32), DATETIME, DATETIME)
         gncTransaction.date_posted BETWEEN $2 AND $3'
     LANGUAGE 'sql';
 
-CREATE FUNCTION gncSubtotalClearedBalance (CHAR(32), DATETIME, DATETIME)
+CREATE FUNCTION gncSubtotalClearedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)
     RETURNS INT8
     AS 'SELECT INT8(sum(gncEntry.amount))
         FROM gncEntry, gncTransaction
@@ -33,7 +33,7 @@ CREATE FUNCTION gncSubtotalClearedBalance (CHAR(32), DATETIME, DATETIME)
         gncEntry.reconciled <> \\'n\\''
     LANGUAGE 'sql';
 
-CREATE FUNCTION gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME)
+CREATE FUNCTION gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)
     RETURNS INT8
     AS 'SELECT INT8(sum(gncEntry.amount))
         FROM gncEntry, gncTransaction

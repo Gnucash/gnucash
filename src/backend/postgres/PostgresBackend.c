@@ -148,13 +148,15 @@ pgendAccountLookup (PGBackend *be, const GUID *acct_guid)
    GList *node;
    Account * acc = NULL;
 
+   ENTER("guid = %s", acct_guid);
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
       acc = xaccAccountLookup (acct_guid, book);
-      if (acc) return acc;
+      if (acc) { LEAVE("acc = %p", acc); return acc; }
    }
 
+   LEAVE("acc = (null)");
    return NULL;
 }
 
@@ -164,13 +166,15 @@ pgendTransLookup (PGBackend *be, const GUID *txn_guid)
    GList *node;
    Transaction * txn = NULL;
 
+   ENTER("guid = %s", txn_guid);
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
       txn = xaccTransLookup (txn_guid, book);
-      if (txn) return txn;
+      if (txn) { LEAVE("txt = %p", txn); return txn; }
    }
 
+   LEAVE("txn = (null");
    return NULL;
 }
 
@@ -180,13 +184,15 @@ pgendSplitLookup (PGBackend *be, const GUID *split_guid)
    GList *node;
    Split * split = NULL;
 
+   ENTER("guid = %s", split_guid);
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
       split = xaccSplitLookup (split_guid, book);
-      if (split) return split;
+      if (split) { LEAVE("split = %p", split); return split; }
    }
 
+   LEAVE("split = (null)");
    return NULL;
 }
 
@@ -196,11 +202,12 @@ pgendPriceLookup (PGBackend *be, const GUID *price_guid)
    GList *node;
    GNCPrice * price = NULL;
 
+   ENTER("guid = %s", price_guid);
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
       price = gnc_price_lookup (price_guid, book);
-      if (price) return price;
+      if (price) { LEAVE("price = %p", price); return price; }
    }
 
    return NULL;
@@ -212,13 +219,15 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
    GList *node;
    GNCIdType tip = GNC_ID_NONE;
 
+   ENTER("guid = %s", guid);
    for (node=be->blist; node; node=node->next)
    {
       GNCBook *book = node->data;
       tip = xaccGUIDType (guid, book);
-      if (GNC_ID_NONE != tip) return tip;
+      if (GNC_ID_NONE != tip) { LEAVE("tip = %s", tip); return tip; }
    }
 
+   LEAVE("tip = NULL");
    return GNC_ID_NONE;
 }
 
@@ -2420,6 +2429,8 @@ pgendInit (PGBackend *be)
    int i;
    Timespec ts;
 
+   ENTER(" ");
+   
    /* initialize global variable */
    nullguid = *(xaccGUIDNULL());
 
@@ -2482,6 +2493,7 @@ pgendInit (PGBackend *be)
    be->session = NULL;
    be->book = NULL;
    be->blist = NULL;
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -2491,9 +2503,11 @@ pgendNew (void)
 {
    PGBackend *be;
 
+   ENTER(" ");
    be = g_new0 (PGBackend, 1);
    pgendInit (be);
 
+   LEAVE(" ")
    return (Backend *) be;
 }
 
