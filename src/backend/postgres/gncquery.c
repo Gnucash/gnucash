@@ -49,7 +49,7 @@
 #include "qofquery.h"
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
-#include "qofqueryobject.h"
+#include "qofclass.h"
 
 #include "gncquery.h"
 #include "builder.h"
@@ -755,13 +755,13 @@ sqlQuery_build(sqlQuery * sq, Query * q)
             } else if (!safe_strcmp(path->data, SPLIT_VALUE)) {
                 need_entry = TRUE;
                 need_trans_commodity = TRUE;
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_GUID)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_GUID)) {
                 if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID))
                     need_entry = TRUE;
                 else if (!safe_strcmp(path->data, SPLIT_ACCOUNT)) {
                     need_account = TRUE;
                 }
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_KVP)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_KVP)) {
                 if (!safe_strcmp(path->data, SPLIT_KVP))
                     need_entry = TRUE;
                 else if (!safe_strcmp(path->data, SPLIT_ACCOUNT))
@@ -855,12 +855,12 @@ sqlQuery_build(sqlQuery * sq, Query * q)
             path = qof_query_term_get_param_path(qt);
             invert = qof_query_term_is_inverted(qt);
 
-            if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_GUID)) {
+            if (!safe_strcmp(pd->type_name, QOF_TYPE_GUID)) {
                 query_guid_t pdata = (query_guid_t) pd;
                 GList *node;
                 char *field = NULL;
 
-                PINFO("term is QOF_QUERYCORE_GUID");
+                PINFO("term is QOF_TYPE_GUID");
 
                 if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID)) {
                     field = "gncSplit.splitGuid";
@@ -959,7 +959,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     more_and = 0;
                 }
 
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_STRING)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_STRING)) {
                 query_string_t pdata = (query_string_t) pd;
 
                 if (!safe_strcmp(path->data, SPLIT_ACTION)) {
@@ -991,7 +991,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                           (char *)(path->data));
 
 
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_NUMERIC)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_NUMERIC)) {
                 query_numeric_t pdata = (query_numeric_t) pd;
 
 
@@ -1022,7 +1022,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     PINFO("Unknown NUMERIC: %s", (char *)(path->data));
                 }
 
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_DATE)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_DATE)) {
                 query_date_t pdata = (query_date_t) pd;
                 char *field = NULL;
                 const char *op = NULL;
@@ -1049,7 +1049,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 if (invert)
                     sq->pq = stpcpy(sq->pq, ") ");
 
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_CHAR)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_CHAR)) {
                 query_char_t pdata = (query_char_t) pd;
                 int got_one = 0;
 
@@ -1076,7 +1076,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                 } else
                     PINFO("Unknown CHAR type, %s", (char *)(path->data));
 
-            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_KVP)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_TYPE_KVP)) {
                 query_kvp_t pdata = (query_kvp_t) pd;
 
                 PINFO("term is a KVP");

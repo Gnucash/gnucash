@@ -1,3 +1,8 @@
+2003-10-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/postgres/gncquery.c:  Linas broke SQL when we renamed
+	  the QueryObjects to QofClass.
+
 2003-09-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-date.h: add a comment about minimum string length
