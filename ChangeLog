@@ -1,3 +1,10 @@
+2002-08-14  Joachim Breitner <mail@joachim-breitner.de>
+
+	It may not be appropriate for a newcomer in the gnucash community
+	like me, but could you please please include this simple patch in
+	the 1.6.7 release? The VWD source (already in Finance::Quote) is
+	the only source that has the German Deka-Fonts.
+
 2002-08-14  David Hampton  <hampton@employees.org>
 
 	* business-gnome/Makefile.am: cross-link the business-core

@@ -357,6 +357,7 @@
      ((string=? "ASX" src) 'asx)
      ((string=? "TIAACREF" src) 'tiaacref)
      ((string=? "TRUSTNET" src) 'trustnet)
+     ((string=? "VWD" src) 'vwd)
      ((string=? "CURRENCY" src) 'currency)
      (else #f)))
 
@@ -371,6 +372,7 @@
      ((asx) "asx")
      ((tiaacref) "tiaacref")
      ((trustnet) "trustnet")
+     ((vwd) "vwd")
      ((currency) "currency")
      (else #f)))
 

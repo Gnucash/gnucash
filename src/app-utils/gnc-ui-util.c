@@ -753,6 +753,8 @@ gnc_get_source_name (PriceSourceCode source)
       return "TIAA-CREF";
     case SOURCE_TRUSTNET :
       return "Trustnet";
+    case SOURCE_VWD :
+      return "VWD";
     default:
       break;
   }
@@ -785,6 +787,8 @@ gnc_get_source_code_name (PriceSourceCode source)
       return "TIAACREF";
     case SOURCE_TRUSTNET :
       return "TRUSTNET";
+    case SOURCE_VWD :
+      return "VWD";
     default:
       break;
   }
