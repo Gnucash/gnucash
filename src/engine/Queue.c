@@ -221,6 +221,9 @@ xaccQueuePushHead (Queue *q, Split *s)
     return;
   }
 
+  /* don't queue a split that has no value */
+  if (DEQ (s->damount, 0.0)) return;
+
   /* make room, if need be */
   ExtendHead (q);
 
@@ -236,7 +239,9 @@ xaccQueuePopTailShares (Queue *q, double shrs)
    int tp, hp;
    Split **list;
    double rshrs = 0.0;
+
    if (!q) return 0.0;
+   if (0.0 >= shrs) return 0.0;
 
    /* the tail holds enough to do it in one go. */
    if (q->tail_amount > shrs) {
@@ -276,7 +281,7 @@ xaccQueuePopTailShares (Queue *q, double shrs)
       tp++;
    }
 
-   /* oops, if we got to hear, we've used up all of the splits.
+   /* oops, if we got to here, we've used up all of the splits.
     * give em whatever we've got on the head, and then we're outta here.
     */
    q->tail_split = 0;
@@ -302,16 +307,107 @@ xaccQueuePopTailShares (Queue *q, double shrs)
 
 /* ================================================== */
 
+double 
+xaccQueuePopTailValue (Queue *q, double val)
+{
+   int tp, hp;
+   Split **list;
+   double rval = 0.0;
+
+   if (!q) return 0.0;
+   if (0.0 >= val) return 0.0;
+
+   /* the tail holds enough to do it in one go. */
+   if (q->tail_amount * q->tail_price > val) {
+      q->tail_amount -= val / q->tail_price;
+      return val;
+   }
+
+   /* use up the tail shares first ... */
+   val -= q->tail_amount * q->tail_price;
+   rval += q->tail_amount * q->tail_price;
+   q->tail_amount = 0.0;
+   q->tail_price = 0.0;
+   q->tail_date.tv_sec = 0;
+   q->tail_date.tv_nsec = 0;
+
+   /* start poping */
+   tp = q->tail_split;
+   hp = q->head_split;
+   list = q->split_list;
+   while (tp <= hp)
+   {
+      /* the tail holds enough to do it in one go. */
+      if ((list[tp]->damount)*(list[tp]->share_price) > val) {
+         q->tail_amount = list[tp]->damount - (val/(list[tp]->share_price));
+         q->tail_price = list[tp]->share_price;
+         assert (list[tp]->parent);
+         q->tail_date = list[tp]->parent->date_posted;
+         rval += val;
+         tp++;
+         q->tail_split = tp;
+         return rval;
+      }
+
+      /* well, well need use up this entire split ... */
+      val -= (list[tp]->damount) * (list[tp]->share_price);
+      rval += (list[tp]->damount) * (list[tp]->share_price);
+      tp++;
+   }
+
+   /* oops, if we got to here, we've used up all of the splits.
+    * give em whatever we've got on the head, and then we're outta here.
+    */
+   q->tail_split = 0;
+   q->head_split = -1;
+
+   /* the head holds enough to do it in one go. */
+   if (q->head_amount * q->head_price > val) {
+      q->head_amount -= val / (q->head_price);
+      rval += val;
+      return val;
+   }
+
+   /* use up whats left of the head shares */
+   val -= q->head_amount * q->head_price; 
+   rval += q->head_amount * q->head_price;
+   q->head_amount = 0.0;
+   q->head_price = 0.0;
+   q->head_date.tv_sec = 0;
+   q->head_date.tv_nsec = 0;
+
+   return rval;
+}
+
+/* ================================================== */
+/* these routines are same as above, but everything is reversed... */
+
+double 
+xaccQueuePopHeadValue (Queue *q, double val)
+{
+   PERR("xaccQueuePopHeadValue(): not implemented\n");
+   return 0.0;
+}
+
+double 
+xaccQueuePopHeadShares (Queue *q, double val)
+{
+   PERR("xaccQueuePopHeadsahres(): not implemented\n");
+   return 0.0;
+}
+
+/* ================================================== */
+
 double
 xaccQueueGetShares (Queue *q)
 {
    Split **list;
-   int shrs = 0.0;
+   int val = 0.0;
    int i, len;
    if (!q) return 0.0;
 
-   shrs += q->head_shares;
-   shrs += q->tail_shares;
+   shrs += q->head_amount;
+   shrs += q->tail_amount;
    
    len = q->head_split - q->tail_split + 1;
    list = q->split_list;
@@ -330,8 +426,8 @@ xaccQueueGetValue (Queue *q)
    int i, len;
    if (!q) return 0.0;
 
-   shrs += q->head_shares * q->head_price;
-   shrs += q->tail_shares * q->tail_price;
+   shrs += q->head_amount * q->head_price;
+   shrs += q->tail_amount * q->tail_price;
    
    len = q->head_split - q->tail_split + 1;
    list = q->split_list;
