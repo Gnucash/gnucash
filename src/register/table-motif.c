@@ -625,6 +625,8 @@ SetupColorTable (Table *table)
    XColor * colors;
    int i, ncolors;
 
+   if (!(table->table_widget)) return;
+
    /* if already initialized, do nothing */
    if (0 != table->ncolors) return;
 
@@ -769,6 +771,8 @@ RefreshColors (Table * table, int from_row, int to_row, int from_col, int to_col
 void        
 xaccRefreshTableGUI (Table * table)
 {
+  if (!table) return;
+  if (!(table->table_widget)) return;
 
 {int i;
 printf (" refresh numphysrows=%d numphyscols=%d =========================\n", 

@@ -721,6 +721,7 @@ xaccRefreshTableGUI (Table * table)
   
   printf("xaccRefreshTableGUI(%p)\n", table);
   if (!table) return;
+  if (!(table->table_widget)) return;
 
   /* The 0'th row of the handlers is defined as the header */
   curs = table->handlers[0][0];
