@@ -31,6 +31,7 @@
 #include "dialog-account-picker.h"
 #include "window-help.h"
 #include "messages.h"
+#include "messages_i18n.h"
 #include "gnome-top-level.h"
 #include "ui-callbacks.h"
 
@@ -227,7 +228,9 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
 
   new_file_name = fileBox(_("Select QIF File"), "*.qif");
 
-  if(new_file_name) {
+
+
+  if(new_file_name && (access(new_file_name, R_OK) == 0)) {
 
     /* set the filename entry for what was selected */
     if(wind->filename_entry) {
@@ -278,6 +281,7 @@ gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
   char * path_to_load;
   char * qif_account;
   char * currency;
+  char * error_string = NULL;
   int  radix_format;
   int  date_format;
 
@@ -288,6 +292,7 @@ gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
   SCM scm_filename, scm_currency, scm_radix, scm_date, scm_qif_account;
   SCM scm_qiffile;
   SCM imported_files = SCM_EOL;
+  SCM load_return;
 
   char * radix_symbols [] = { "unknown", "decimal", "comma" };  
   char * date_symbols [] = { "unknown", "m-d-y", "d-m-y", 
@@ -378,19 +383,27 @@ gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
        * guile-space */
       scm_protect_object(wind->selected_file);      
       
+      load_return = gh_call2(qif_file_load,  gh_car(imported_files),
+                             scm_filename);
+      
       /* import the file into it */
-      if(gh_call2(qif_file_load, 
-                  gh_car(imported_files),
-                  scm_filename) != SCM_BOOL_T) {
-        gnc_error_dialog_parented
-          (GTK_WINDOW(wind->dialog),
-           _("Failed to load QIF file. Are you sure it's a QIF file?"));
+      if(load_return  != SCM_BOOL_T) {
+        if(gh_list_p(load_return)) {
+          asprintf(&error_string,
+                   QIF_LOAD_FAILED_FORMAT_MSG,
+                   gh_scm2newstr(gh_cadr(load_return), NULL));
+        }
+        else {
+          error_string = QIF_LOAD_FAILED_DEFAULT_MSG;
+        }
+        gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), error_string);
+        
         imported_files = 
           gh_call2(unload_qif_file, scm_filename, imported_files);
       }
       wind->imported_files = imported_files;
       scm_protect_object(wind->imported_files);
-
+      
       /* now update the Accounts and Categories pages in the notebook */
       update_file_page(wind);
       update_accounts_page(wind); 

@@ -21,8 +21,8 @@
 #ifndef __DIALOG_ACCOUNT_PICKER_H_
 #define __DIALOG_ACCOUNT_PICKER_H_
 
-#include "glade-account-picker.h"
-#include "glade-cb-account-picker.h"
+#include "glade-gnc-dialogs.h"
+#include "glade-cb-gnc-dialogs.h"
 
 #include <guile/gh.h>
 

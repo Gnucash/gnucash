@@ -30,6 +30,7 @@
 #include "top-level.h"
 
 #include <gnome.h>
+#include <math.h>
 
 #include "gnome-top-level.h"
 #include "MultiLedger.h"
@@ -128,6 +129,7 @@ static void closeCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
 static void jump_cb(GtkWidget *widget, gpointer data);
+static void print_check_cb(GtkWidget * widget, gpointer data);
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
 
@@ -927,6 +929,52 @@ jump_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
+print_check_cb(GtkWidget * widget, gpointer data)
+{
+  RegWindow    * reg_data = (RegWindow *)data;
+#ifdef HAVE_LIBGNOMEPRINT
+  Split        * split    = xaccSRGetCurrentSplit(reg_data->ledger->ledger);
+  Transaction  * trans    = xaccSplitGetParent(split);
+
+  char         * payee;
+  char         * memo;
+  double       amount;
+  char         datestring[1024];
+  struct tm    * timestruct;
+  time_t       date;
+
+  SCM print_check = gh_eval_str("gnc:print-check");
+
+  if(split && trans &&
+     gh_procedure_p(print_check))
+  {
+    payee  = xaccTransGetDescription(trans);
+    amount = xaccSplitGetValue(split);
+    date   = xaccTransGetDate(trans);
+    memo   = xaccSplitGetMemo(split);
+
+    timestruct = localtime(&date);
+    if(!timestruct) {
+      g_warning("print_check_cb: error in date translation\n");
+      return;
+    }
+
+    strftime(datestring, sizeof(datestring), "%B %d, %Y", timestruct);
+
+    gh_apply(print_check,
+             SCM_LIST4(gh_str02scm(payee),
+                       gh_double2scm(fabs(amount)),
+                       gh_str02scm(datestring),
+                       gh_str02scm(memo)));
+  }
+#else
+  gnc_info_dialog_parented(reg_data->dialog,
+                           _"You need to install the gnome-print library.");
+#endif
+}
+
+
+static void
 gnc_register_scrub_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = (RegWindow *) data;
@@ -1123,6 +1171,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       GNOME_APP_UI_ITEM,
       JUMP_MENU_STR, TOOLTIP_JUMP_TRANS,
       jump_cb, regData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      PRINT_CHECK_MENU_STR, TOOLTIP_PRINT_CHECK,
+      print_check_cb, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

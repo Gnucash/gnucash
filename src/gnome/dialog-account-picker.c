@@ -23,8 +23,6 @@
 #include <gnome.h>
 #include <stdio.h>
 
-#include "glade-account-picker.h"
-#include "glade-cb-account-picker.h"
 #include "dialog-account-picker.h"
 
 #include <guile/gh.h>
@@ -99,7 +97,7 @@ accountPickerBox(char * initial_selection, int initial_type) {
 
   wind = g_new0(QIFAccountPickerDialog, 1);
 
-  wind->dialog     = create_GNUcash_Account_Picker();
+  wind->dialog     = create_QIF_Import_Account_Picker();
   wind->treeview   = 
     gtk_object_get_data(GTK_OBJECT(wind->dialog), "account_tree");
   wind->acct_entry = 

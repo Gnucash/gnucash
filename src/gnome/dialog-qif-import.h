@@ -23,8 +23,8 @@
 
 #include <guile/gh.h>
 
-#include "glade-qif-import.h"
-#include "glade-cb-qif-import.h"
+#include "glade-gnc-dialogs.h"
+#include "glade-cb-gnc-dialogs.h"
 #include "ui-callbacks.h"
 
 
