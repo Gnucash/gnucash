@@ -90,7 +90,8 @@ glade_DATA = \
 
 EXTRA_DIST = \
   .cvsignore \
-  gnc-dir.h.in
+  gnc-dir.h.in \
+  ${glade_DATA}
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
