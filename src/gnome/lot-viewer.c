@@ -79,7 +79,7 @@ struct _GNCLotViewer
    GtkPaned      * lot_hpaned;
    GtkPaned      * lot_vpaned;
    GtkCList      * lot_clist;
-   GtkText       * lot_notes;
+   GtkTextView   * lot_notes;
    GtkEntry      * title_entry;
    GtkCList      * mini_clist;
    GtkStatusbar  * status_bar;
@@ -226,8 +226,8 @@ lv_select_row_cb (GtkCList       *clist,
    /* Set the notes field */
    str = kvp_frame_get_string (kvp, "/notes");
    if (!str) str = "";
-   xxxgtk_text_set_text (lv->lot_notes, str);
-   gtk_text_set_editable (lv->lot_notes, TRUE);
+   xxxgtk_textview_set_text (lv->lot_notes, str);
+   gtk_text_view_set_editable (lv->lot_notes, TRUE);
 
    /* Don't set until end, to avoid recursion in gtkentry "changed" cb. */
    lv->selected_lot = lot;
@@ -250,8 +250,8 @@ lv_unset_lot (GNCLotViewer *lv)
    gtk_entry_set_editable (lv->title_entry, FALSE);
 
    /* Blank the notes area */
-   xxxgtk_text_set_text (lv->lot_notes, "");
-   gtk_text_set_editable (lv->lot_notes, FALSE);
+   xxxgtk_textview_set_text (lv->lot_notes, "");
+   gtk_text_view_set_editable (lv->lot_notes, FALSE);
 
    /* Erase the mini-view area */
    lv_clear_splits (lv);
@@ -281,7 +281,7 @@ lv_unselect_row_cb (GtkCList       *clist,
       kvp_frame_set_str (kvp, "/title", str);
 
       /* Get the notes, save the notes */
-      str = xxxgtk_text_get_text (lv->lot_notes);
+      str = xxxgtk_textview_get_text (lv->lot_notes);
       kvp_frame_set_str (kvp, "/notes", str);
    }
 
@@ -295,7 +295,7 @@ static void
 lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
-   char * title;
+   const char * title;
    title = gtk_entry_get_text (lv->title_entry);
    if (0 > lv->selected_row) return; 
    gtk_clist_set_text (lv->lot_clist, lv->selected_row, TITLE_COL, title);
@@ -511,7 +511,7 @@ lv_close_handler (gpointer user_data)
       kvp_frame_set_str (kvp, "/title", str);
 
       /* Get the notes, save the notes */
-      str = xxxgtk_text_get_text (lv->lot_notes);
+      str = xxxgtk_textview_get_text (lv->lot_notes);
       kvp_frame_set_str (kvp, "/notes", str);
    }
 
@@ -548,7 +548,7 @@ lv_create (GNCLotViewer *lv)
    lv->scrub_acc_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub account button"));
 
    lv->lot_clist = GTK_CLIST(glade_xml_get_widget (xml, "lot clist"));
-   lv->lot_notes = GTK_TEXT(glade_xml_get_widget (xml, "lot notes text"));
+   lv->lot_notes = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "lot notes text"));
    lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
 
    lv->lot_vpaned = GTK_PANED (glade_xml_get_widget (xml, "lot vpaned"));
