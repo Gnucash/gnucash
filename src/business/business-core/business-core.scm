@@ -130,7 +130,6 @@
 	  #f))))
 
 
-(export gnc:owner-get-name)
 (export gnc:owner-get-address)
 (export gnc:owner-get-address-dep)
 (export gnc:owner-get-owner-id)
