@@ -24,24 +24,32 @@
 
 #include "config.h"
 
+char *gnc_qualifier_prefix_gettext (const char *s);
+char *gnc_qualifier_prefix_noop (const char *s);
+
 #if defined(HAVE_GETTEXT)             /* HAVE_GETTEXT */
 
 #include <libintl.h>
 #include <locale.h>
 
 #undef _
+#undef Q_
 
 #ifdef DISABLE_GETTEXT_UNDERSCORE
 #define _(String) (String)
+#define Q_(String) gnc_qualifier_prefix_noop(String)
 #else                                 /* ENABLE_GETTEXT_UNDERSCORE */
 #define _(String) gettext(String)
+#define Q_(String) gnc_qualifier_prefix_gettext(String)
 #endif		                      /* End ENABLE_GETTEXT_UNDERSCORE */
 
 #else                                 /* Not HAVE_GETTEXT */
 
 #undef _
+#undef Q_
 
 #define _(String)       (String)
+#define Q_(String) gnc_qualifier_prefix_noop(String)
 #define gettext(String) (String)
 
 #endif                                /* End Not HAVE_GETTEXT */

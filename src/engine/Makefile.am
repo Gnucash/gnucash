@@ -31,7 +31,8 @@ libgncmod_engine_la_SOURCES = \
   gncmod-engine.c \
   guid.c \
   kvp_frame.c \
-  md5.c
+  md5.c \
+  messages.c
 
 # NetIO.c
 
