@@ -29,10 +29,7 @@
         (display "a symbolic link named 'slib' from the guile directory\n")
         (display "(usually /usr/share/guile) to the directory where slib\n")
         (display "is installed.\n\n")
-        (display "You may also need to run the following command as root:")
-        (newline)
-        (newline)
-        (display "  guile -c \"(use-modules (ice-9 slib)) (require 'new-catalog)\"")
+        (display "You may also need to run GnuCash once as root.")
         (newline)
         (newline))
 

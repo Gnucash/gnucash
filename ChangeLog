@@ -1,3 +1,8 @@
+2001-07-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/bootstrap.scm.in: instead of the scheme command,
+	just tell the user to run gnucash once as root.
+
 2001-07-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnc-ui-util.[ch]: implement towupper and iswlower
