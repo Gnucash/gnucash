@@ -11,6 +11,10 @@
 	  (i.e. a real container with no value in the container).
 	* fix part of bug #96032 -- use (gnc:owner-is-valid) to detect owner
 	  existence.
+
+	* fix bug #95954 -- cache backend query compiles.  Add a hash table
+	  to map book -> backend compile and fill it in when the terms are
+	  recompiled.
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 

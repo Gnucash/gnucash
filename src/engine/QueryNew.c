@@ -75,6 +75,9 @@ struct querynew_s {
   /* list of books that will be participating in the query */
   GList *	books;
 
+  /* a map of book to backend-compiled queries */
+  GHashTable*	be_compiled;
+
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
   int		changed;
@@ -93,6 +96,7 @@ static void query_init (QueryNew *q, QueryNewTerm *initial_term)
 {
   GList * or = NULL;
   GList *and = NULL;
+  GHashTable *ht;
 
   if (initial_term) {
     or = g_list_alloc ();
@@ -115,7 +119,9 @@ static void query_init (QueryNew *q, QueryNewTerm *initial_term)
   g_slist_free (q->secondary_sort.param_fcns);
   g_slist_free (q->tertiary_sort.param_fcns);
 
+  ht = q->be_compiled;
   memset (q, 0, sizeof (*q));
+  q->be_compiled = ht;
 
   q->terms = or;
   q->changed = 1;
@@ -429,7 +435,7 @@ static void compile_sort (QueryNewSort_t sort, GNCIdType obj)
 
 static void compile_terms (QueryNew *q)
 {
-  GList *or_ptr, *and_ptr;
+  GList *or_ptr, *and_ptr, *node;
 
   /* Find the specific functions for this Query.  Note that the
    * Query's search_for should now be set to the new type.
@@ -463,6 +469,18 @@ static void compile_terms (QueryNew *q)
   compile_sort (&(q->tertiary_sort), q->search_for);
 
   q->defaultSort = gncQueryObjectDefaultSort (q->search_for);
+
+  /* Now compile the backend instances */
+  for (node = q->books; node; node = node->next) {
+    GNCBook *book = node->data;
+    Backend *be = book->backend;
+
+    if (be && be->compile_query) {
+      gpointer result = (be->compile_query)(be, q);
+      if (result)
+	g_hash_table_insert (q->be_compiled, book, result);
+    }
+  }
 }
 
 static void check_item_cb (gpointer object, gpointer user_data)
@@ -511,6 +529,24 @@ static GList * merge_books (GList *l1, GList *l2)
   }
 
   return res;
+}
+
+static gboolean
+query_free_compiled (gpointer key, gpointer value, gpointer not_used)
+{
+  GNCBook* book = key;
+  Backend* be = book->backend;
+
+  if (be && be->free_query)
+    (be->free_query)(be, value);
+
+  return TRUE;
+}
+
+/* clear out any cached query_compilations */
+static void query_clear_compiles (QueryNew *q)
+{
+  g_hash_table_foreach_remove (q->be_compiled, query_free_compiled, NULL);
 }
 
 /********************************************************************/
@@ -583,8 +619,10 @@ GList * gncQueryRun (QueryNew *q)
   /* XXX: Prioritize the query terms? */
 
   /* prepare the Query for processing */
-  if (q->changed)
+  if (q->changed) {
+    query_clear_compiles (q);
     compile_terms (q);
+  }
 
   /* Now run the query over all the objects and save the results */
   {
@@ -598,21 +636,12 @@ GList * gncQueryRun (QueryNew *q)
       GNCBook *book = node->data;
       Backend *be = book->backend;
 
-      /* query the backend */
+      /* run the query in the backend */
       if (be) {
-	gpointer compiled_query = NULL;
+	gpointer compiled_query = g_hash_table_lookup (q->be_compiled, book);
 
-	/* XXX: The compiled query should be cached as part of
-	 * the compile_terms
-	 */
-
-	if (be->compile_query && be->run_query) {
-	  compiled_query = (be->compile_query) (be, q);
+	if (compiled_query && be->run_query)
 	  (be->run_query) (be, compiled_query);
-	}
-
-	if (compiled_query && be->free_query)
-	  (be->free_query) (be, compiled_query);
       }
 
       /* and then iterate over all the objects */
@@ -699,6 +728,7 @@ void gncQueryClear (QueryNew *query)
 QueryNew * gncQueryCreate (void)
 {
   QueryNew *qp = g_new0 (QueryNew, 1);
+  qp->be_compiled = g_hash_table_new (g_direct_hash, g_direct_equal);
   query_init (qp, NULL);
   return qp;
 }
@@ -763,18 +793,24 @@ void gncQueryDestroy (QueryNew *q)
 {
   if (!q) return;
   free_members (q);
+  query_clear_compiles (q);
+  g_hash_table_destroy (q->be_compiled);
   g_free (q);
 }
 
 QueryNew * gncQueryCopy (QueryNew *q)
 {
   QueryNew *copy;
+  GHashTable *ht;
+
   if (!q) return NULL;
   copy = gncQueryCreate ();
+  ht = copy->be_compiled;
   free_members (copy);
 
   memcpy (copy, q, sizeof (QueryNew));
 
+  copy->be_compiled = ht;
   copy->terms = copy_or_terms (q->terms);
   copy->books = g_list_copy (q->books);
   copy->results = g_list_copy (q->results);
@@ -782,6 +818,8 @@ QueryNew * gncQueryCopy (QueryNew *q)
   copy_sort (&(copy->primary_sort), &(q->primary_sort));
   copy_sort (&(copy->secondary_sort), &(q->secondary_sort));
   copy_sort (&(copy->tertiary_sort), &(q->tertiary_sort));
+
+  copy->changed = 1;
 
   return copy;
 }
@@ -1046,7 +1084,10 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
 {
   if (!q || !book) return;
 
-  q->books = g_list_prepend (q->books, book);
+  /* Make sure this book is only in the list once */
+  if (g_list_index (q->books, book) == -1)
+    q->books = g_list_prepend (q->books, book);
+
   gncQueryAddGUIDMatch (q, g_slist_prepend (g_slist_prepend (NULL,
 							     QUERY_PARAM_GUID),
 					    QUERY_PARAM_BOOK),
