@@ -119,6 +119,9 @@ INCLUDES = \
   ${GUILE_INCS}
 
 
+# We build this in an earlier directory.
+OMIT_DEPENDENCIES = gnc-dir.h
+
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
