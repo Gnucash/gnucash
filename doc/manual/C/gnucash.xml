@@ -1,10 +1,12 @@
-<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
-<!entity chapter1 system "chapter1.sgml">
-<!entity chapter2 system "chapter2.sgml">
-<!entity chapter3 system "chapter3.sgml">
-<!entity chapter4 system "chapter4.sgml">
-<!entity chapter5 system "chapter5.sgml">
-<!entity chapter6 system "chapter6.sgml">
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY chapter1 SYSTEM "chapter1.xml">
+<!ENTITY chapter2 SYSTEM "chapter2.xml">
+<!ENTITY chapter3 SYSTEM "chapter3.xml">
+<!ENTITY chapter4 SYSTEM "chapter4.xml">
+<!ENTITY chapter5 SYSTEM "chapter5.xml">
+<!ENTITY chapter6 SYSTEM "chapter6.xml">
 ]>
 <book id="index">
  <bookinfo>
@@ -68,5 +70,6 @@ A copy of this license was provided with this software in the file <filename>COP
 
 &chapter1;
 &chapter2;
+&chapter3;
 
 </book>

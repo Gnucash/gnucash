@@ -48,7 +48,7 @@ Unlike traditional accounting packages, GnuCash makes it very easy to enter your
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/basictxn.png" 
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>A Basic Transaction</phrase>
@@ -73,7 +73,7 @@ Here's what a paycheck deposit looks like in GnuCash.
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/basictxn2.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>A Paycheck Transaction</phrase>
@@ -99,7 +99,7 @@ For example, your gross pay might be $1000, but only $800 of that gets deposited
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/multitxn.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>A Split Paycheck Transaction</phrase>
@@ -156,7 +156,7 @@ The New User Setup wizard allows you to create several accounts at once.  When y
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/newuser.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The New User Druid</phrase>
@@ -184,7 +184,7 @@ GnuCash provides a Tip of the Day dialog to give helpful hints for using the pro
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/tipofday.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The Tip of the Day</phrase>
@@ -208,7 +208,7 @@ You should now see the main window, which looks like this:
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/mainwin.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The GnuCash Main Window</phrase>
@@ -242,7 +242,7 @@ Register windows are the account windows.   As the name suggests, they look simi
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/registerwin.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The Checking Account Register</phrase>
@@ -315,7 +315,7 @@ In the General tab, you will see the default settings shown here:
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/preference.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The Preferences dialog</phrase>
@@ -412,7 +412,7 @@ The Network tab contains options for network access, and it allows you to turn o
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/prefnetwk.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The Network Preferences</phrase>
@@ -503,7 +503,7 @@ Choose File|Save As... from the menu bar or select the Save toolbar button.  Gnu
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/filesave.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The file Save dialog</phrase>
@@ -570,7 +570,7 @@ To do this, click on the [Import] button from the toolbar or select File|Import 
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/import.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The QIF Import Druid</phrase>
@@ -640,7 +640,7 @@ Next, create a file to store test data.  This is the file that will be used in t
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/gcashdata.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The Main windows showing the test file</phrase>
@@ -662,7 +662,7 @@ From the menu, select Settings|Preferences and change the "Main Window" option t
 	  <mediaobject>
 	    <imageobject>
 	      <imagedata fileref="figures/gcashdata2.png"
-	      srccredit="Chris Lyttle <chris@wilddev.net>">
+	      srccredit="Chris Lyttle" format="PNG"/>
             </imageobject>
 	    <textobject>
 	        <phrase>The effect of changing the preferences</phrase>
