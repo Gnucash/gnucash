@@ -116,6 +116,9 @@ fill_account_list (StockSplitInfo *info, Account *account)
     if (gnc_numeric_zero_p (balance))
       continue;
 
+    if (xaccAccountGetPlaceholder (account))
+	continue;
+
     commodity = xaccAccountGetCommodity (account);
 
     print_info = gnc_account_print_info (account, FALSE);

@@ -1056,6 +1056,26 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
+  if (xaccAccountGetPlaceholder(from_account) ||
+      xaccAccountGetPlaceholder(to_account))
+  {
+    const char *placeholder_format =
+	_("The account %s\ndoes not allow transactions.\n");
+    char *message, *name;
+
+    if (xaccAccountGetPlaceholder(from_account))
+	name = xaccAccountGetFullName(from_account,
+				      gnc_get_account_separator ());
+    else
+	name = xaccAccountGetFullName(to_account,
+				      gnc_get_account_separator ());
+    message = g_strdup_printf(placeholder_format, name);
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+    g_free(message);
+    g_free(name);
+    return;
+  }
+
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
   {
     gnc_parse_error_dialog (xferData, _("You must enter a valid amount."));
