@@ -10,7 +10,8 @@ SUBDIRS = \
   scm \
   quotes \
   pixmaps \
-  optional
+  optional \
+  test
 
 # Engine Makefile.am file.
 bin_PROGRAMS = gnucash

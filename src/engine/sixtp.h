@@ -132,7 +132,10 @@ typedef enum {
 
     SIXTP_CHARS_FAIL_ID,
 } sixtp_handler_type;
-    
+
+/* completely invalid tag for xml */
+#define SIXTP_MAGIC_CATCHER "&MAGIX&"
+
 typedef enum {
   SIXTP_CHILD_RESULT_CHARS,
   SIXTP_CHILD_RESULT_NODE
@@ -167,8 +170,17 @@ void sixtp_sax_characters_handler(void *user_data, const xmlChar *text,
 void sixtp_sax_end_handler(void *user_data, const xmlChar *name);
 
 sixtp* sixtp_new(void);
-
 void sixtp_destroy(sixtp *sp);
+
+void sixtp_handle_catastrophe(sixtp_sax_data *sax_data);
+xmlEntityPtr sixtp_sax_get_entity_handler(void *user_data, const CHAR *name);
+
+gboolean sixtp_parse_file(sixtp *sixtp, const char *filename,
+                          gpointer data_for_top_level, gpointer global_data,
+                          gpointer *parse_result);
+gboolean sixtp_parse_buffer(sixtp *sixtp, char *bufp, int bufsz,
+                            gpointer data_for_top_level, gpointer global_data,
+                            gpointer *parse_result);
 
 void sixtp_set_start(sixtp *parser, sixtp_start_handler start_handler);
 void sixtp_set_before_child(sixtp *parser, sixtp_before_child_handler handler);

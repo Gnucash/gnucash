@@ -15,7 +15,7 @@
  *
  * HISTORY:
  * Initial code by Rob L. Browning 4Q 2000
- * Tuneups by James Lewis Moss Dec 2000
+ * Tuneups by James LewisMoss Dec 2000-Feb 2001
  * Generic I/O hack by Linas Vepstas January 2001
  *
  * Copyright (c) 2000,2001 Gnumatic Incorporated

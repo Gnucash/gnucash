@@ -2,8 +2,12 @@
 <!ENTITY % id-type "(guid, new)">
 <!ENTITY % default-id-type "guid">
 
-<!ENTITY % currency-type "(cur:space, cur:id)">
+<!ELEMENT cmd:space (#PCDATA)>
+<!ELEMENT cmd:id (#PCDATA)>
 
+<!ENTITY % commodity-type "(cmd:space, cmd:id)">
+
+<!-- need to replace the etc here -->
 <!ENTITY % slot-types "(string | integer | double | etc)">
 
 <!ELEMENT slot (key, value)>

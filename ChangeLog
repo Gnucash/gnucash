@@ -1,3 +1,46 @@
+2001-02-07  James LewisMoss  <dres@phoenixdsl.com>
+
+	* make-gnucash-patch.in: Add a file ending that is ignored.
+
+	* src/doc/xml/types.dtd: Change currency-type -> commodity-type.
+	Add defs for cmd:space and cmd:id.
+
+	* src/doc/xml/io-gncxml-version1.dtd: Change currency-type ->
+	commodity-type.
+
+	* src/doc/xml/account-v2.dtd: Change currency-type ->
+	commodity-type.
+
+2001-02-06  James LewisMoss  <dres@phoenixdsl.com>
+
+	* src/engine/sixtp.c: Use frame creator.
+	Move sixtp_handle_catastrophe to here. Add functions
+	sixtp_context_new, sixtp_context_destroy.  And change and move
+	sixtp_parse_file and sixtp_parse_buffer here from io-gncxml-r.c
+	Add concept of a parsing context to hold data.
+
+	* src/engine/sixtp-stack.h: Add creator.  Add headers.
+
+	* src/engine/sixtp-stack.c: Add creator.
+
+	* src/engine/sixtp-parsers.h: add needed headers.
+	Add func from sixtp-to-dom-parser.c
+
+	* src/engine/io-gncxml.h: Fix name.
+
+	* src/engine/io-gncxml-w.c: Fix name.
+
+	* src/engine/io-gncxml-r.c: Fix name.  Create stack frame creator
+	function and use here.
+
+2001-02-05  James LewisMoss  <dres@phoenixdsl.com>
+
+	* src/engine/sixtp-stack.h: Add glib.h include (needed for GSList)
+
+	* src/engine/sixtp.c: Add catchall tag for parsing handlers.  Use
+	name instead of next_parser_tag since that can now contain a magic
+	value.
+
 2001-02-05  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/qif-import/qif-merge-groups.scm: new file.  Utilities

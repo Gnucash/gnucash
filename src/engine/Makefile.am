@@ -37,6 +37,7 @@ libgncengine_la_SOURCES = \
   sixtp-stack.c \
   sixtp-utils.c \
   sixtp-xml-write-utils.c \
+  sixtp-to-dom-parser.c \
   sixtp.c \
   Account-xml-parser-v1.c \
   Commodity-xml-parser-v1.c \

@@ -193,35 +193,6 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
     return tochange;
 }
 
-sixtp*
-sixtp_new_full(sixtp_start_handler starter,
-               sixtp_before_child_handler cdbeforer,
-               sixtp_after_child_handler chafterer,
-               sixtp_end_handler ender,
-               sixtp_characters_handler charer,
-               sixtp_fail_handler failer,
-               sixtp_result_handler cleanresulter,
-               sixtp_result_handler cleancharer,
-               sixtp_result_handler resultfailer,
-               sixtp_result_handler charsfailer)
-{
-    sixtp *ret = sixtp_new();
-    g_return_val_if_fail(ret, NULL);
-    
-    sixtp_set_start(ret, starter);
-    sixtp_set_before_child(ret, cdbeforer);
-    sixtp_set_after_child(ret, chafterer);
-    sixtp_set_end(ret, ender);
-    sixtp_set_chars(ret, charer);
-    sixtp_set_fail(ret, failer);
-    sixtp_set_cleanup_result(ret, cleanresulter);
-    sixtp_set_cleanup_chars(ret, cleancharer);
-    sixtp_set_result_fail(ret, resultfailer);
-    sixtp_set_chars_fail(ret, charsfailer);
-
-    return ret;
-}
-    
 static void sixtp_destroy_child(gpointer key, gpointer value,
                                 gpointer user_data);
 
@@ -371,9 +342,16 @@ sixtp_sax_start_handler(void *user_data,
                                                 (gpointer) &next_parser);
   
   if(!lookup_success) {
-    PERR("Tag <%s> not allowed in current context.\n", name);
-    pdata->parsing_ok = FALSE;
-    return;
+       /* magic catch all value */ 
+      lookup_success = g_hash_table_lookup_extended(
+          current_parser->children, SIXTP_MAGIC_CATCHER,
+          (gpointer) &next_parser_tag, (gpointer) &next_parser);
+      if(!lookup_success) 
+      {
+          PERR("Tag <%s> not allowed in current context.\n", name);
+          pdata->parsing_ok = FALSE;
+          return;
+      }
   }
 
   if(current_frame->parser->before_child) {
@@ -396,24 +374,15 @@ sixtp_sax_start_handler(void *user_data,
                                           pdata->global_data,
                                           &(current_frame->frame_data),
                                           current_frame->tag,
-                                          next_parser_tag);
+                                          name);
   }
 
   g_return_if_fail(pdata->parsing_ok);
 
   /* now allocate the new stack frame and shift to it */
-  new_frame = g_new0(sixtp_stack_frame, 1);
-  new_frame->parser = next_parser;
-  new_frame->tag = next_parser_tag;
-  new_frame->data_for_children = NULL;
-  new_frame->data_from_children = NULL;
-  new_frame->frame_data = NULL;
+  new_frame = sixtp_stack_frame_new(next_parser, g_strdup(name));
   
-  /*printf("PUSHING FRAME for <%s> parser.\n", next_parser_tag);
-    sixtp_stack_frame_print(new_frame, 2, stderr); */
   pdata->stack = g_slist_prepend(pdata->stack, (gpointer) new_frame);
-  /*printf("RESULTANT STACK: ");
-    sixtp_print_frame_stack(pdata->stack, stderr); */
   
   if(next_parser->start_handler) {
     pdata->parsing_ok =
@@ -422,7 +391,7 @@ sixtp_sax_start_handler(void *user_data,
                                  pdata->global_data,
                                  &new_frame->data_for_children,
                                  &new_frame->frame_data,
-                                 next_parser_tag,
+                                 name,
                                  (gchar**)attrs);
   }
 }
@@ -553,3 +522,135 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
                                          child_result_data);
   }
 }
+
+xmlEntityPtr
+sixtp_sax_get_entity_handler(void *user_data, const CHAR *name) {
+  return xmlGetPredefinedEntity(name);
+}
+
+
+void
+sixtp_handle_catastrophe(sixtp_sax_data *sax_data) {
+  /* Something has gone wrong.  To handle it, we have to traverse the
+     stack, calling, at each level, the frame failure handler (the
+     handler for the current, unfinished block) and then the sibling
+     handlers.  The order is reverse chronological - oldest child
+     results cleaned up last.  This holds overall as well, stack
+     frames are cleaned up in their order on the stack which will be
+     youngest to oldest.  */
+
+  GSList *lp;
+  GSList **stack = &(sax_data->stack);
+
+  PERR("parse failed at \n");
+  sixtp_print_frame_stack(sax_data->stack, stderr);
+
+  while(*stack) {
+    sixtp_stack_frame *current_frame = (sixtp_stack_frame *) (*stack)->data;
+
+    /* cleanup the current frame */
+    if(current_frame->parser->fail_handler) {
+      GSList *sibling_data;
+      gpointer parent_data;
+
+      if((*stack)->next == NULL) {
+        /* This is the top of the stack... */
+        parent_data = NULL;
+        sibling_data = NULL; 
+      } else {
+        sixtp_stack_frame *parent_frame =
+          (sixtp_stack_frame *) (*stack)->next->data;
+        parent_data = parent_frame->data_for_children;
+        sibling_data = parent_frame->data_from_children;
+      }
+
+      current_frame->parser->fail_handler(current_frame->data_for_children,
+                                          current_frame->data_from_children,
+                                          sibling_data,
+                                          parent_data,
+                                          sax_data->global_data,
+                                          &current_frame->frame_data,
+                                          current_frame->tag);
+    }
+
+    /* now cleanup any children's results */
+    for(lp = current_frame->data_from_children; lp; lp = lp->next) {
+      sixtp_child_result *cresult = (sixtp_child_result *) lp->data;
+      if(cresult->fail_handler) {
+          cresult->fail_handler(cresult);
+      }
+    }
+
+    *stack = sixtp_pop_and_destroy_frame(*stack);
+  }
+}
+
+gboolean
+sixtp_parse_file(sixtp *sixtp,
+                 const char *filename,
+                 gpointer data_for_top_level,
+                 gpointer global_data,
+                 gpointer *parse_result) 
+{
+    sixtp_parser_context *ctxt;
+
+    if(!(ctxt = sixtp_context_new(sixtp, global_data, data_for_top_level)))
+    {
+        PERR("sixtp_context_new returned null");
+        return FALSE;
+    }
+
+    xmlSAXUserParseFile(&ctxt->handler, &ctxt->data, filename);
+
+    sixtp_context_run_end_handler(ctxt);
+    
+    if(ctxt->data.parsing_ok)
+    {
+        *parse_result = ctxt->top_frame->frame_data;
+        sixtp_context_destroy(ctxt);
+        return TRUE;
+    }
+    else
+    {
+        *parse_result = NULL;
+        sixtp_handle_catastrophe(&ctxt->data);
+        sixtp_context_destroy(ctxt);
+        return FALSE;
+    }
+}
+
+gboolean
+sixtp_parse_buffer(sixtp *sixtp,
+                   char *bufp,
+                   int bufsz,
+                   gpointer data_for_top_level,
+                   gpointer global_data,
+                   gpointer *parse_result) 
+{
+    sixtp_parser_context *ctxt;
+
+    if(!(ctxt = sixtp_context_new(sixtp, global_data, data_for_top_level)))
+    {
+        PERR("sixtp_context_new returned null");
+        return FALSE;
+    }
+
+    xmlSAXUserParseMemory(&ctxt->handler, &ctxt->data, bufp, bufsz);
+
+    sixtp_context_run_end_handler(ctxt);
+
+    if(ctxt->data.parsing_ok)
+    {
+        *parse_result = ctxt->top_frame->frame_data;
+        sixtp_context_destroy(ctxt);
+        return TRUE;
+    }
+    else
+    {
+        *parse_result = NULL;
+        sixtp_handle_catastrophe(&ctxt->data);
+        sixtp_context_destroy(ctxt);
+        return FALSE;
+    }
+}
+    

@@ -12,7 +12,27 @@ sixtp_stack_frame_destroy(sixtp_stack_frame *sf) {
   g_slist_free(sf->data_from_children);
   sf->data_from_children = NULL;
 
+/*   if(sf->tag) */
+/*   { */
+/*       g_free(sf->tag); */
+/*   } */
+  
   g_free(sf);
+}
+
+sixtp_stack_frame*
+sixtp_stack_frame_new(sixtp* next_parser, char *tag)
+{
+    sixtp_stack_frame* new_frame;
+    
+    new_frame = g_new0(sixtp_stack_frame, 1);
+    new_frame->parser = next_parser;
+    new_frame->tag = tag;
+    new_frame->data_for_children = NULL;
+    new_frame->data_from_children = NULL;
+    new_frame->frame_data = NULL;
+
+    return new_frame;
 }
 
 void
@@ -62,4 +82,73 @@ sixtp_print_frame_stack(GSList *stack, FILE *f) {
     indent += 2;
   }
 
+}
+
+
+/* Parser context */
+sixtp_parser_context*
+sixtp_context_new(sixtp *initial_parser, gpointer global_data,
+                  gpointer top_level_data)
+{
+    sixtp_parser_context* ret;
+
+    ret = g_new0(sixtp_parser_context, 1);
+
+    ret->handler.startElement = sixtp_sax_start_handler;
+    ret->handler.endElement = sixtp_sax_end_handler;
+    ret->handler.characters = sixtp_sax_characters_handler;
+    ret->handler.getEntity = sixtp_sax_get_entity_handler;
+
+    ret->data.parsing_ok = TRUE;
+    ret->data.stack = NULL;
+    ret->data.global_data = global_data;
+
+    ret->top_frame = sixtp_stack_frame_new(initial_parser, NULL);
+    
+    ret->top_frame_data = top_level_data;
+
+    ret->data.stack = g_slist_prepend(ret->data.stack,
+                                      (gpointer) ret->top_frame);
+
+    if(initial_parser->start_handler)
+    {
+        if(!initial_parser->start_handler(NULL,
+                                          &ret->top_frame_data,
+                                          &ret->data.global_data,
+                                          &ret->top_frame->data_for_children,
+                                          &ret->top_frame->frame_data,
+                                          NULL, NULL))
+        {
+            sixtp_handle_catastrophe(&ret->data);
+            sixtp_context_destroy(ret);
+            return NULL;
+        }
+    }
+    
+    return ret;
+}
+
+void
+sixtp_context_run_end_handler(sixtp_parser_context* ctxt)
+{
+    if(ctxt->top_frame->parser->end_handler)
+    {
+        ctxt->data.parsing_ok =
+        ctxt->top_frame->parser->end_handler(
+            ctxt->top_frame->data_for_children,
+            ctxt->top_frame->data_from_children,
+            NULL,
+            ctxt->top_frame_data,
+            ctxt->data.global_data,
+            &ctxt->top_frame->frame_data,
+            NULL);
+    }
+}
+
+void
+sixtp_context_destroy(sixtp_parser_context* context)
+{
+    sixtp_stack_frame_destroy(context->top_frame);
+    g_slist_free(context->data.stack);
+    g_free(context);
 }

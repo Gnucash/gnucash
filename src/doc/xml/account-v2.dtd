@@ -12,9 +12,9 @@
 
 <!ELEMENT act:type (#PCDATA)>
 
-<!ELEMENT act:currency %currency-type;>
+<!ELEMENT act:currency %commodity-type;>
 
-<!ELEMENT act:security %currency-type;>
+<!ELEMENT act:security %commodity-type;>
 
 <!ELEMENT act:slots %slot-type;>
 

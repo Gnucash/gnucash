@@ -109,7 +109,7 @@ if (not defined($old)) {
 
 chdir $gnc_home . "/" . $new or die "Can't cd!\n";
 # Start out with our basic makepatch arguments
-my @args = ('-verbose', '-diff', 'diff -u', '-exclude-vc');
+my @args = ('-verbose', '-diff', 'diff -up', '-exclude-vc');
 
 if (not $::ask_description) {
   push(@args, '-description', '');
@@ -221,6 +221,7 @@ __DATA__
 *.moc
 *.o
 *.orig
+*.ignmgp
 *.patch
 *.rej
 *.tar.gz

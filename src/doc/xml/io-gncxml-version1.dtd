@@ -25,7 +25,7 @@
             "( guid, num?, date-posted, date-entered, description?,
              slots?, split+)">
   <!ENTITY % combined-restores "%commodity-restore; | %account-restore; | %transaction-restore;">
-  <!ENTITY % currency-type "(space, id)">
+  <!ENTITY % commodity-type "(space, id)">
   <!ENTITY % commodity-new "ANY">
   <!ENTITY % account-new "ANY">
   <!ENTITY % transaction-new "ANY">
@@ -47,8 +47,8 @@
 
   <!ELEMENT guid (#PCDATA)>
   <!ELEMENT type (#PCDATA)>
-  <!ELEMENT security %currency-type;>
-  <!ELEMENT currency %currency-type;>
+  <!ELEMENT security %commodity-type;>
+  <!ELEMENT currency %commodity-type;>
   <!ELEMENT slots (s+)>
 
   <!-- used in two contexts as item in slots list and as a date in -->

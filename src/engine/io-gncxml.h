@@ -2,7 +2,7 @@
  * io-gncxml.h -- api for new XML-based file format
  *
  * Initial code by Rob l. Browning 4Q 2000
- * Tuneups by James Lewis Moss Dec 2000
+ * Tuneups by James LewisMoss Dec 2000
  *
  * Copyright (c) 2000,2001 Gnumatic Incorporated
  *

@@ -52,6 +52,22 @@ then
   AC_MSG_ERROR([Cannot find glib.])
 fi
 
+AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h)
+
+DL_LIB=
+AC_CHECK_FUNCS(dlopen,,[
+AC_CHECK_LIB(dl, dlopen, DL_LIB="-ldl",[
+AC_CHECK_LIB(dld, shl_load, DL_LIB="-ldld",[
+AC_CHECK_FUNCS(dlopen, DL_LIB="",
+AC_MSG_ERROR(Dynamic linking is not available on this platform.  Some apps,
+like panel, will not run properly.))
+])])])
+oLIBS="$LIBS"
+LIBS="$LIBS $DL_LIB"
+AC_CHECK_FUNCS(dlerror,,)
+LIBS="$oLIBS"
+AC_SUBST(DL_LIB)
+
 GNOME_INIT
 
 GNOME_COMPILE_WARNINGS
@@ -512,6 +528,7 @@ AC_OUTPUT(
           src/scm/qif-import/Makefile
           src/scm/report/Makefile
           src/scm/srfi/Makefile
+          src/test/Makefile
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
           ,
