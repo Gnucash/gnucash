@@ -72,6 +72,9 @@ struct query_s
   /* list of books that will be participating in the query */
   BookList *books;
 
+  /* Flag to indicate if we're searching over template-transactions, too. */
+  gboolean templates_too;
+
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
   int          changed;
@@ -102,7 +105,6 @@ static int  xaccValueMatchPredicate(Split * s, PredicateData * pd);
 
 /********************************************************************
  ********************************************************************/
-
 
 void 
 xaccQueryPrint(Query * q) 
@@ -288,6 +290,14 @@ xaccQueryPrint(Query * q)
   }
 }
 
+void
+xaccQuerySearchTemplateGroup( Query *q, gboolean newState )
+{
+  if (!q)
+    return;
+  q->templates_too = newState;
+}
+
 
 /********************************************************************
  * xaccInitQuery
@@ -328,6 +338,8 @@ xaccInitQuery(Query * q, QueryTerm * initial_term)
   q->primary_increasing = TRUE;
   q->secondary_increasing = TRUE;
   q->tertiary_increasing = TRUE;
+
+  q->templates_too = FALSE;
 }
 
 
@@ -646,6 +658,8 @@ xaccQueryCopy(Query *q)
   copy->changed = q->changed;
   copy->split_list = g_list_copy (q->split_list);
   copy->xtn_list = g_list_copy (q->xtn_list);
+  
+  copy->templates_too = q->templates_too;
 
   return copy;
 }
@@ -1328,6 +1342,12 @@ xaccQueryGetSplits(Query * q)
      GNCBook *book = node->data;
      all_accts = g_list_concat (all_accts, 
         xaccGroupGetSubAccounts (gnc_book_get_group(book)));
+     /* If we're searching template accounts, then add them. */
+     if ( q->templates_too ) {
+       all_accts =
+         g_list_concat( all_accts,
+                        xaccGroupGetSubAccounts( gnc_book_get_template_group(book) ) );
+     }
   }
 
   for (node = all_accts; node; node = node->next) 

@@ -50,7 +50,6 @@ typedef enum
   LD_SINGLE,
   LD_SUBACCOUNT,
   LD_GL,
-  LD_TEMPLATE,
 } GNCLedgerDisplayType;
 
 

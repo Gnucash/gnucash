@@ -4614,18 +4614,6 @@ Anually
     <name>sincelast_druid</name>
 
     <widget>
-      <class>GnomeDruidPageStart</class>
-      <name>druidpagestart1</name>
-      <title>Start page</title>
-      <text>I don't know exactly what we do here, but this is just a test, anyways...</text>
-      <title_color>255,255,255</title_color>
-      <text_color>0,0,0</text_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-    </widget>
-
-    <widget>
       <class>GnomeDruidPageStandard</class>
       <name>reminders_page</name>
       <title>Transaction Reminders</title>

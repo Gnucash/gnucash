@@ -417,10 +417,7 @@ gnc_ledger_display_gl (void)
 
 /**
  * id is some identifier that can be:
- * . used in a query to look for the transaction which belong to this
- *   template ledger
- * . set in a specific key value for new transactions which belong to
- *   this template ledger.
+ * FIXME: what's the correct description of 'id'?
  **/
 GNCLedgerDisplay *
 gnc_ledger_display_template_gl (char *id)
@@ -440,22 +437,23 @@ gnc_ledger_display_template_gl (char *id)
   acct = xaccGetAccountFromName (ag, id);
   if (!acct)
   {
-    /* FIXME */
-    printf( "can't get template account for id \"%s\"\n", id );
+    /* FIXME: this should be a more serious error, somehow */
+    PERR( "can't get template account for id \"%s\"\n", id );
   }
 
+  xaccQueryAddSingleBookMatch( q, book, QUERY_AND );
   xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
+  xaccQuerySearchTemplateGroup( q, TRUE );
 
-  PWARN ("cannot use queries in this way call <linas@linas.org> to fix");
-  DxaccQuerySetGroup (q, gnc_book_get_template_group(book));
+  //PWARN ("cannot use queries in this way call <linas@linas.org> to fix");
+  //DxaccQuerySetGroup (q, gnc_book_get_template_group(book));
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
                                     GENERAL_LEDGER,
                                     REG_STYLE_JOURNAL,
-                                    TRUE); /* template mode?  TRUE. */
+                                    TRUE); /* TRUE : template mode */
 
   sr = gnc_ledger_display_get_split_register (ld);
-
   gnc_split_register_set_template_account (sr, acct);
 
   return ld;
@@ -577,7 +575,6 @@ gnc_ledger_display_make_query (GNCLedgerDisplay *ld,
       break;
 
     case LD_GL:
-    case LD_TEMPLATE:
       return;
 
     default:
@@ -692,12 +689,6 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 
       break;
 
-  case LD_TEMPLATE:
-    class = REGISTER_TEMPLATE_CM_CLASS;
-    /* FIXME: sanity checks?
-       Check for kvp-frame data? */
-    break;
-    
     default:
       PERR ("bad ledger type: %d", ld_type);
       return NULL;

@@ -4,26 +4,14 @@ Main Scheduled Transaction todo list
 ------------------------------------
 
 ##################################################
-### Done
-##################################################
-
-X add the ...GetFreqStr() code for the complex composite FreqSpecs
-X fix the ...GetNextInstance() code
-X XMLv2 I/O
-X need policy for start-dates in GNCFrequency
-X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
-  X also needs to deal with >28-mday values WRT last-occur date + multipliers
-X Engine ...Init() functions should be private.
-X would like "don't even tell me you instantiated it, just fscking do
-  it!" option for non-manual-conf SXes
-
-##################################################
 ### To-Do
 ###
 ### '.' = to-do, 'X' = done, '?' = jsled verify
 ###
 ##################################################
 
+. Meta
+  . fulfill everything on http://linas.org/linux/gnucash/projects.html#alerts
 
 . FreqSpec.c
   . xaccFreqSpecGetFreqStr [display] needs to go away [?]
@@ -32,10 +20,11 @@ X create a template register
   X store account and amount data in kvp_frames.
   . find a way to list multiple registers for template transaction purposes.
     . this is a "normal" general ledger + a "stock" general ledger
+      . warlord's business stuff may extend this to more ledgers...
     . this is going to be: a tabbed notebook in which the tabs contain
       the number of transactions the GL they hold contain.
 
-. register macro-widget
+. register macro-widget [src/register/ledger-core/gnc-regWidget.{h,c}]
   . should support
     . toolbar
       . Close
@@ -64,13 +53,21 @@ X create a template register
         . Blank
         . Jump
       . extended to support previously-menu-accessible options in embedded case
-      
+
     . status bar
     . configurable UI elts [menu, toolbar, status]
+      . re-configurable UI elts
+        . menu: the register itself should provide a sub-menu for inclusion
+          into other menus [the window-register, for instance]
+        . toolbar: As seen above, certain toolbar elts are common, some are
+          appl.-specific.
+        . status: the status bar is sort-of a boolean option; applications
+          may wish to place the status bar in a more acceptable location.
     . default callbacks
       . override-able
+      . can "orverridable" mean "[gtk-style-]signal-based"?
     . bitmask of supported functionality
-      . !"Schedule..." for the embedded-in-SX-editor case, gray-out
+      . !"Schedule..." for the embedded-in-SX-editor case => gray-out
   . shouldn't [necessarily] support
     . date range [may be fixed/irrelevant by caller]
     . style changes [caller may enforce]
@@ -79,15 +76,52 @@ X create a template register
 
 ? Hook into 'book data changed' save-on-exit decision 
 
+. GNCFrequency
+  . bugs
+    . transitioning to a new tab doesn't correctly setup the agreement
+      between the startdate and the page elements.
+    X why does the accounts window go crazy when we change the FreqSpec parameters?
+      X probably component-manager related... yup; FreqSpec Malloc/Free
+        generates events, which cause GUI refreshes.
+    X Example calendar month change isn't handled correctly/doesn't refresh the
+      marks.
+      X fixed by removing any ability to change the example calendar.
+    X "Inappropriate FreqSpec type" on new-SX editing.
+    X "new; weekly: click on day, click off day: GLib-CRITICAL **: file gdate.c: line 1236 (g_date_to_struct_tm): assertion `g_date_valid (d)' failed."
+      . no longer reproducable
+
 . SX list
   . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
   . tab order
 
 . SX editor
-  X 'Cancel' button should auto-cancel ledger changes
   . tab order
+  . Can't click-out of the register
+  . 'ESC' while editing template register causes window to go away badly
+  . attempting to create a Weekly SX with no days selected causes a segfault.
+    . the user should be prevented from doing this.
+    X composite SX shouldn't segfault when asked to getFreqSpecStr for this
+  X should use regWidget
+  X Size/space issues [?]
+  X auto-shrink on window create [the register is too wide, leading to too
+    much whitespace on the two top panels -- sometimes].
+  X Un-selecting "End Date" leaves calendar widget sensitive
+  X 'Cancel' button should auto-cancel ledger changes
 
 . make-from-transaction
+  . bugs
+    . you can delete a freshly-from-trans'd SX from the list with the
+      from-trans dlg still open, then 'ok' the dlg to get a segfault.
+    . creating a SX from trans with the SX list open does not update it.
+    . general: there's going to be all sorts of interaction issues like these
+      between these things [SX-from-trans, SX list, SX editor] that should be
+      handled.
+  . tab-order
+  . better frequency guess?
+  [related...]
+  . match existing transactions for long-time users
+    . based off template-transaction data, some big existing-transaction
+      scanning code.
   X credit/debit pull-over issues
     X need to remove '-' from printed credit value.
   X pull accounts over.
@@ -95,15 +129,39 @@ X create a template register
   X need start-date on Make dialog
     X [initially starts as the next occurance after the created-from SX,
        which may not be the Right Thing]
-  . better frequency guess?
-    . non-trivial problem
-  [related...]
-  . match existing transactions for long-time users
-    . based off template-transaction data, some big existing-transaction
-      scanning code.
-  . tab-order
 
 . need "since-last-run" UI for instanatiation.
+  . need effective cancellation support
+  . need nifty visual style
+    . use color-setting code in src/gnome-utils/druid-utils.[ch]
+  . support sorting in clists
+  . tab-order
+    . variable-binding table:
+      . tab through variables -- if on last one: ( if something's unfilled,
+        tab back to there, else, tab back to clist:( if no more unfilled
+        entries, then tab down to back/next/cancel. ))
+  . Double-clicking on auto-create list should jump to transaction
+    . register of first split?
+  . Need some way to defer to-create SXes?
+  . need some configuration for constantly-running GnuCash users of when to
+    pop up the 'new scheduled transactions' dialog [option, time-of-day]
+  . fix first/last page issues.
+  . bugs 
+    . correct "Back" button behavior in Druid paradigm
+    . tab-order on variable-entry window isn't always correct.
+    . created SXes are put in GL forever... :(
+    . inital "To-Create Transactions" varbinding table doesn't setup table correctly.
+    X twunder reports [2002.01.29] register growing a little bit at a time if
+      tab is hit to switch between register fields -- started with update on
+      1/21.
+      X I _bet_ this is fixed with magic gnc-regWidget sizing fix -- 2002.04.15
+    X "0" and "0.0" don't work for variable values?
+    X correct "Cancel" behavior in Druid
+      X reset SX state to before creation
+      X delete any created SXes.
+      X restore any obsolete-n-deleted SXes.
+    X variable expressions don't get re-eval'd [as formula]?
+      X need to do this only on tab-out of the field.
   X Change from dialogs to druid
   X/O create transactions
     X numeric
@@ -111,6 +169,7 @@ X create a template register
       X need variable fill-in UI...
         X re-use gnome-sheet code for a variable-binding table? -- ended up
           using GtkTable [for now?]
+      X variables should default to '0', and '0' should be acceptable.
   X need way to expire/purge scheduled transactions which have no chance of
     being created [outside their end date; once-scheduled and past].
     X infrequent enough that a dialog should suffice.
@@ -118,33 +177,31 @@ X create a template register
     X Is it sufficient to look at the next instance of ea. transaction only?
       I think not... we probably want to look out until the transaction is
       outside the reminder range.
-  . support sorting in clists
-  . tab-order
-  . need some configuration for constantly-running GnuCash users of when to
-    pop up the 'new scheduled transactions' dialog [option, time-of-day]
   X Should deal with "nothing-to-do" better [not even show up in the worst
     [read: no auto-notify/to-create/reminders] case].
     X don't load/init/create the GUI if we're not about to use it.
     X this is different between the auto-invoked since-last-run dialog [show
       nothing] and the menu-invoked since-last-run [show a dialog to the user
       stating there's nothing to do].
-  . Double-clicking on auto-create list should jump to transaction
-    . register of first split?
   X double-clicking a reminder should [probably] move it up to the to-create
     list.
   X Easy UI way of moving through the SXes which need variable bindings.
     [This presently is: click "Ok" and the next clist row which needs
      bindings is selected.]
-  . Need some way to defer to-create SXes?
+  X any [horizontal] window size change height-grows the top/auto-create GL.
+  X always goes one date past the instantiation date.
+  X credit and debit seem reversed at instantiation time...
+    X this is fixed, but is the fix correct?
 
-. register mods
-  . to see upcoming xactions, modifying future balance
-  . to note which are "recurring"
-    . the mozilla "reload" glyph is kinda neat...
-  . Differently-colored "not-yet-created" entries for a configurable
-    time window.
-  . Context menus/sensitive toolbar button/menu item for creation of
-    not-yet-created transactions.
+. register mods?
+  . to see upcoming xactions, modifying future balance?
+    . to note which are "recurring"
+      . the mozilla "reload" glyph is kinda neat...
+      . prolly should use existing PIM "recurring" glyphs
+    . Differently-colored "not-yet-created" entries for a configurable
+      time window?
+    . Context menus/sensitive toolbar button/menu item for creation of
+      not-yet-created transactions?
   . The ability to turn a non-recurring transaction into a recurring one...
     X [see from-trans section]
   . inactive cells
@@ -161,21 +218,38 @@ X create a template register
     . only a couple left; which ones?
 
 . backend support
-  . PostgreSQL
+  . SQL
   . others? 
 
+##################################################
+### Done
+### ... don't put stuff here ... just move it to the bottom of the
+### appropriate list, above, and 'X' it -- jsled
+##################################################
+
+X add the ...GetFreqStr() code for the complex composite FreqSpecs
+X fix the ...GetNextInstance() code
+X XMLv2 I/O
+X need policy for start-dates in GNCFrequency
+X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
+  X also needs to deal with >28-mday values WRT last-occur date + multipliers
+X Engine ...Init() functions should be private.
+X would like "don't even tell me you instantiated it, just fscking do
+  it!" option for non-manual-conf SXes
+
 ---------------
+Random Notes
 
 . SX Creation...
   . Creation occurs due to a variety of circumstances:
-    X GnuCash starts and hasn't been run in some length of time; the
-      transactions which have "come due" since the last run are available for
-      creation.
     . A user opens a register with future transactions in it; they manually
       force the creation of the [perhaps not immediately next [though this
       seems a bit weird]] one.
     . A user is reminded of something which hasn't come due, but will w/in a
       configurable amount of time, and thus they pay/create it.
+    X GnuCash starts and hasn't been run in some length of time; the
+      transactions which have "come due" since the last run are available for
+      creation.
 
 . Configuration options...
   . Overall
@@ -220,49 +294,10 @@ X General
   X Date l10n.
 
 . GNCFreqency
-  X why does the accounts window go crazy when we change the FreqSpec parameters?
-    X probably component-manager related... yup; FreqSpec Malloc/Free
-      generates events, which cause GUI refreshes.
-  . transitioning to a new tab doesn't correctly setup the agreement between
-    the startdate and the page elements.
-  X Example calendar month change isn't handled correctly/doesn't refresh the
-    marks.
-    X fixed by removing any ability to change the example calendar.
-  X "Inappropriate FreqSpec type" on new-SX editing.
-  X "new; weekly: click on day, click off day: GLib-CRITICAL **: file gdate.c: line 1236 (g_date_to_struct_tm): assertion `g_date_valid (d)' failed."
-    . no longer reproducable
-
-. Scheduled Transaction Editor
-  . Can't click-out of the register
-  . 'ESC' while editing template register causes window to go away [badly].
-  . attempting to create a Weekly SX with no days selected causes a segfault.
-    . the user should be prevented from doing this.
-    X composite SX shouldn't segfault when asked to getFreqSpecStr for this
-  X Size/space issues [?]
-  X auto-shrink on window create [the register is too wide, leading to too
-    much whitespace on the two top panels -- sometimes].
-  X Un-selecting "End Date" leaves calendar widget sensitive
-
-. Scheduled Transaction List
 
 . Since-last-run
-  . correct "Back" button behavior in new Druid paradigm
-  . correct "Cancel" behavior in Druid
-    . reset SX state to before creation
-    . delete any created SXes.
-    . restore any obsolete-n-deleted SXes.
-  . tab-order on variable-entry window isn't always correct.
-  X any [horizontal] window size change height-grows the top/auto-create GL.
-  X always goes one date past the instantiation date.
-  X credit and debit seem reversed at instantiation time...
-    X this is fixed, but is the fix correct?
 
 . SX-from-trans
-  . you can delete a freshly-from-trans'd SX from the list with the
-    from-trans dlg still open, then 'ok' the dlg to get a segfault.
-  . creating a SX from trans with the SX list open does not update it.
-  . general: there's going to be all sorts of interaction issues like these
-    between these things [SX-from-trans, SX list, SX editor] that should be handled.
 
 ##################################################
 ### Enhancements
@@ -405,7 +440,7 @@ window-register notes:
 . RegWindow *regWindowSimple (Account *account)
 . RegWindow *regWindowAccGroup (Account *account)
   . functionality should remain, probably in reg mwidget
-
+    . I now disagree; this should be the caller [for templates, especially]
 
 . void gnc_register_raise (RegWindow *regData)
   . probably should remain here; if the reg mwidget has knowledge of it's
@@ -416,12 +451,13 @@ window-register notes:
   . should be part of mwidget
 
 . static void gnc_register_change_style (RegWindow *regData, SplitRegisterStyle style)
-. static void gnc_register_style_(ledger|auto_ledger|journal|double_line_cb (GtkWidget *w, gpointer data)
-  . mwidget
+. static void gnc_register_style_(ledger|auto_ledger|journal|double_line)_cb (GtkWidget *w, gpointer data)
+  . mwidget [no]
 
 . static void gnc_register_sort_(standard|date|date_entered|date_reconciled|num|amount|memo|desc)_cb(GtkWidget *w, gpointer data)
 . static void gnc_register_sort (RegWindow *regData, sort_type_t sort_code)
-  . mwidget
+  . mwidget? -- actually seems like container's responsibility.
+    . then, need some way to get the ledger->query for manip.
   . some of these may not make sense in embedded applications
 
 . static time_t gnc_register_(min|max)_day_time(time_t time_val)
@@ -437,15 +473,19 @@ window-register notes:
 . static void gnc_register_show_date_window(RegWindow *regData)
 . static RegDateWindow *gnc_register_date_window (RegWindow *regData, gboolean show_all)
   . need DateWindow policy/decision.
+  . decision: caller's responsibility.
 
 . static GtkWidget *gnc_register_create_tool_bar (RegWindow *regData)
   . mwidget
+  . should use passed-in toolbar, with clear contract about how the caller
+    should add/manip the [modified] toolbar provided.
 
 . static void gnc_ui_find_transactions_cb (GtkWidget *widget, gpointer data)
-  . necessary for embedded applications?
+  . necessary for embedded applications? [nope]
 
 . static GtkWidget *add_summary_label (GtkWidget *summarybar, const char *label_str)
   . mwidget [option]
+  . eh?
 
 . static GtkWidget *gnc_register_create_summary_bar (RegWindow *regData)
 . static GtkWidget *gnc_register_create_status_bar (RegWindow *regData)
@@ -480,7 +520,7 @@ window-register notes:
 
 . static gnc_numeric gnc_account_present_balance (Account *account)
 . static GNCPrice *account_latest_price (Account *account)
-  . mwidget?
+  . mwidget? [nope ... in fact, not even in window-register]
 
 . static void startRecnCB(GtkWidget * w, gpointer data)
   . recn: configurable behavior

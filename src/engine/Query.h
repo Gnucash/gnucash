@@ -229,6 +229,10 @@ gboolean xaccQueryEqual(Query *q1, Query *q2);
 /* handy for debugging */
 void    xaccQueryPrint(Query *q);
 
+/* (Un-)set the Query's search to look at the template account group used by
+ * scheduled transactions, as well. */
+void xaccQuerySearchTemplateGroup( Query *, gboolean );
+
 /*******************************************************************
  *  match-adding API 
  *******************************************************************/

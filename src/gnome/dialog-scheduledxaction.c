@@ -47,6 +47,8 @@
 #include "window-help.h"
 #include "window-register.h"
 
+#include "gnc-regwidget.h"
+
 /* FIXME: temp until variable-related-stuff settled. */
 #include "dialog-sxsincelast.h"
 
@@ -71,6 +73,8 @@ static short module = MOD_SX;
 #define END_NEVER_OPTION 0
 #define END_DATE_OPTION  1
 #define NUM_OCCUR_OPTION 2
+
+#define NUM_LEDGER_LINES_DEFAULT 6
 
 /** Datatypes ***********************************************************/
 
@@ -98,18 +102,18 @@ struct _SchedXactionDialog
 
 struct _SchedXactionEditorDialog
 {
-        GladeXML                *gxml;
-        GtkWidget                 *dialog;
-        SchedXactionDialog         *sxd;
-        SchedXaction                 *sx;
+        GladeXML *gxml;
+        GtkWidget *dialog;
+        SchedXactionDialog *sxd;
+        SchedXaction *sx;
         int new;
 
-        GNCLedgerDisplay         *ledger;
-        GnucashRegister         *reg;
+        GNCLedgerDisplay *ledger;
+        GnucashRegister *reg;
 
-        GNCFrequency                 *gncfreq;
+        GNCFrequency *gncfreq;
 
-        char                        *sxGUIDstr;
+        char *sxGUIDstr;
 
         GtkWidget *toolbar;
 };
@@ -178,8 +182,8 @@ sxed_close_handler ( gpointer user_data )
 
         gnc_sxed_reg_check_close( sxed );
 
-        gnc_ledger_display_close( sxed->ledger );
-        sxed->ledger = NULL;
+        /*gnc_ledger_display_close( sxed->ledger );*/
+        /*sxed->ledger = NULL;*/
 
         g_free (sxed->sxGUIDstr);
         sxed->sxGUIDstr = NULL;
@@ -485,7 +489,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
                                     NULL, /* no refresh handler */
-                                    sxd_close_handler, 
+                                    sxd_close_handler,
                                     sxd );
 
         gtk_signal_connect( sxdo, "destroy",
@@ -719,238 +723,6 @@ schedXact_editor_init( SchedXactionEditorDialog *sxed )
 }
 
 
-
-static
-GtkWidget *
-schedXaction_editor_create_reg_popup( SchedXactionEditorDialog *sxed )
-{
-  GtkWidget *popup;
-
-  static GnomeUIInfo transaction_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Enter"),
-      N_("Record the current transaction"),
-      sxed_reg_recordCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Cancel"),
-      N_("Cancel the current transaction"),
-      sxed_reg_cancelCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Delete"),
-      N_("Delete the current transaction"),
-      sxed_reg_deleteCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("D_uplicate"),
-      N_("Make a copy of the current transaction"),
-      sxed_reg_duplicateCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Schedule..."), 
-      N_("Create a scheduled transaction using the current one as a template"),
-      NULL, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL, 
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_TOGGLEITEM,
-      N_("_Split"),
-      N_("Show all splits in the current transaction"),
-      sxed_reg_expand_trans_checkCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Blank"),
-      N_("Move to the blank transaction at the "
-         "bottom of the register"),
-      sxed_reg_new_transCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Jump"),
-      N_("Jump to the corresponding transaction in "
-         "the other account"),
-      sxed_reg_jumpCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  gnc_fill_menu_with_data( transaction_menu, sxed );
-
-  popup = gnome_popup_menu_new (transaction_menu);
-
-  return popup;
-}
-
-static GtkWidget *
-schedXaction_editor_create_reg_tool_bar( SchedXactionEditorDialog *sxed )
-{
-        /* RegWindow *regData */
-  GtkWidget *toolbar;
-
-  static GnomeUIInfo toolbar_info[] =
-  {
-/*
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Close"),
-      N_("Close this register window"),
-      sxed_close_handler, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-*/
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Enter"),
-      N_("Record the current transaction"),
-      sxed_reg_recordCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Cancel"),
-      N_("Cancel the current transaction"),
-      sxed_reg_cancelCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Delete"),
-      N_("Delete the current transaction"),
-      sxed_reg_deleteCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Duplicate"),
-      N_("Make a copy of the current transaction"),
-      sxed_reg_duplicateCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
-      0, 0, NULL
-    },
-/*
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Schedule"),
-      N_("Create a scheduled transaction using the current one as a template"),
-      NULL, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_LINE_IN,
-      0, 0, NULL
-    },
-*/
-    GNOMEUIINFO_SEPARATOR,
-/*
-    {
-      GNOME_APP_UI_TOGGLEITEM,
-      N_("Split"),
-      N_("Show all splits in the current transaction"),
-      expand_trans_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_OPEN,
-      0, 0, NULL
-    },
-*/
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Blank"),
-      N_("Move to the blank transaction at the "
-         "bottom of the register"),
-      sxed_reg_new_transCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Jump"),
-      N_("Jump to the corresponding transaction in "
-         "the other account"),
-      sxed_reg_jumpCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Transfer"),
-      N_("Transfer funds from one account to another"),
-      sxed_reg_xferCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CONVERT,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Find"),
-      N_("Find transactions with a search"),
-      /* FIXME:gnc_ui_find_transactions_cb */ NULL,
-      NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_SEARCH,
-      0, 0, NULL
-    },
-/*
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Report"),
-      N_("Open a report window for this register"),
-      reportCB, 
-      NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_GREEN,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Print"),
-      N_("Print a report for this register"),
-      printReportCB,
-      NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PRINT,
-      0, 0, NULL
-    },
-*/
-    GNOMEUIINFO_END
-  };
-
-  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-
-  gnome_app_fill_toolbar_with_data (GTK_TOOLBAR(toolbar), toolbar_info,
-                                    NULL, sxed);
-
-  sxed->toolbar = toolbar;
-
-  /* regData->split_button = toolbar_info[9].widget; */
-
-  return toolbar;
-}
-
 static
 void
 schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
@@ -986,27 +758,61 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
         GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
-        GtkWidget *regWidget, *vbox, *popup, *toolbar;
-#define NUM_LEDGER_LINES_DEFAULT 6
+        GtkWidget *regWidget, *vbox, *toolbar;
         int numLedgerLines = NUM_LEDGER_LINES_DEFAULT;
 
         tempxaction_frame =
                 GTK_FRAME( glade_xml_get_widget( sxed->gxml,
                                                  "tempxaction_frame" ) );
+        vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
+
         sxed->sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID(sxed->sx) );
         sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
-
-        gnc_ledger_display_set_handlers( sxed->ledger,
-                                         sxe_ledger_destroy,
-                                         sxe_ledger_get_parent );
-        gnc_ledger_display_set_user_data( sxed->ledger, (gpointer)sxed );
-
         splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
 
         numLedgerLines =
                 (int)gnc_lookup_number_option( SX_OPT_STR,
                                                "Template Register Lines",
                                                NUM_LEDGER_LINES_DEFAULT );
+        gnucash_register_set_initial_rows(numLedgerLines);
+
+        regWidget = gnc_regWidget_new( sxed->ledger,
+                                       GTK_WINDOW(sxed->dialog) );
+        gtk_box_pack_start( GTK_BOX(vbox),
+                            gnc_regWidget_get_toolbar( GNC_REGWIDGET(regWidget) ),
+                            TRUE, TRUE, 2 );
+        {
+                GtkWidget *popup, *tmpMenu, *tmpMI;
+                /* Fixup the popup menu with the menus that would normally be in the
+                 * menu-bar of the window-register. */
+                popup = gnc_regWidget_get_popup( GNC_REGWIDGET(regWidget) );
+                gtk_menu_append( GTK_MENU(popup), gtk_menu_item_new() );
+
+                tmpMenu = gnc_regWidget_get_edit_menu( GNC_REGWIDGET(regWidget) );
+                tmpMI = gtk_menu_item_new_with_label( N_("Edit") );
+                gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
+                gtk_menu_append( GTK_MENU(popup), tmpMI );
+
+                tmpMenu = gnc_regWidget_get_style_menu( GNC_REGWIDGET(regWidget) );
+                tmpMI = gtk_menu_item_new_with_label( N_("Style") );
+                gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
+                gtk_menu_append( GTK_MENU(popup), tmpMI );
+
+                tmpMenu = gnc_regWidget_get_sort_menu( GNC_REGWIDGET(regWidget) );
+                tmpMI = gtk_menu_item_new_with_label( N_("Sort") );
+                gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
+                gtk_menu_append( GTK_MENU(popup), tmpMI );
+
+                gtk_widget_show_all( popup );
+        }
+        gtk_box_pack_start( GTK_BOX(vbox), regWidget, TRUE, TRUE, 2 );
+
+#if 0
+        gnc_ledger_display_set_handlers( sxed->ledger,
+                                         sxe_ledger_destroy,
+                                         sxe_ledger_get_parent );
+        gnc_ledger_display_set_user_data( sxed->ledger, (gpointer)sxed );
+
 
         /* Watch the order of operations, here... */
         gnucash_register_set_initial_rows( numLedgerLines );
@@ -1014,8 +820,6 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gnc_table_init_gui( regWidget, splitreg );
         sxed->reg = GNUCASH_REGISTER(regWidget);
         GNUCASH_SHEET(sxed->reg->sheet)->window = GTK_WIDGET(sxed->dialog);
-
-        vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
 
         popup = schedXaction_editor_create_reg_popup( sxed );
         gnucash_register_attach_popup( sxed->reg, popup, sxed );
@@ -1025,6 +829,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), regWidget, TRUE, TRUE, 2 );
+#endif /* 0 */
 
 #if 0
         gtk_signal_connect( GTK_OBJECT(sxed->dialog), "activate_cursor",
@@ -1567,115 +1372,6 @@ refactor_transaction_delete_query(GtkWindow *parent)
   gtk_widget_destroy(dialog);
 
   return return_value;
-}
-
-static
-void
-sxed_reg_deleteCB( GtkWidget *w, gpointer d )
-{
-  /* FIXME: this is C&P from window-register.c.  As it's the
-     identical code [modulo the SplitReg userdata-lookup], it
-     should be refactored. */
-  SchedXactionEditorDialog *sxed = d;
-  SplitRegisterStyle style;
-  CursorClass cursor_class;
-  SplitRegister *reg;
-  Transaction *trans;
-  char *buf = NULL;
-  Split *split;
-  gint result;
-
-  reg = gnc_ledger_display_get_split_register (sxed->ledger);
-
-  /* get the current split based on cursor position */
-  split = gnc_split_register_get_current_split (reg);
-  if (split == NULL)
-  {
-    gnc_split_register_cancel_cursor_split_changes (reg);
-    return;
-  }
-
-  trans = xaccSplitGetParent(split);
-  style = reg->style;
-  cursor_class = gnc_split_register_get_current_cursor_class(reg);
-
-  /* Deleting the blank split just cancels */
-  {
-    Split *blank_split = gnc_split_register_get_blank_split (reg);
-
-    if (split == blank_split)
-    {
-      gnc_split_register_cancel_cursor_trans_changes (reg);
-      return;
-    }
-  }
-
-  if (cursor_class == CURSOR_CLASS_NONE)
-    return;
-
-  /* On a split cursor, just delete the one split. */
-  if (cursor_class == CURSOR_CLASS_SPLIT)
-  {
-    const char *format = _("Are you sure you want to delete\n   %s\n"
-                           "from the transaction\n   %s ?");
-    /* ask for user confirmation before performing permanent damage */
-    buf = g_strdup_printf(format, xaccSplitGetMemo(split),
-                          xaccTransGetDescription(trans));
-
-    /* result = gnc_verify_dialog_parented(sxed->dialog, buf, FALSE); */
-    result = TRUE;
-
-    g_free(buf);
-
-    if (!result)
-      return;
-
-    gnc_split_register_delete_current_split (reg);
-    return;
-  }
-
-  g_return_if_fail (cursor_class == CURSOR_CLASS_TRANS);
-
-  /* On a transaction cursor with 2 or fewer splits in single or double
-   * mode, we just delete the whole transaction, kerblooie */
-  if ((xaccTransCountSplits(trans) <= 2) && (style == REG_STYLE_LEDGER))
-  {
-    const char *message = _("Are you sure you want to delete the current "
-                            "transaction?");
-
-    result = gnc_verify_dialog_parented(sxed->dialog, message, FALSE);
-
-    if (!result)
-      return;
-
-    gnc_split_register_delete_current_trans (reg);
-    return;
-  }
-
-  /* At this point we are on a transaction cursor with more than 2 splits
-   * or we are on a transaction cursor in multi-line mode or an auto mode.
-   * We give the user two choices: delete the whole transaction or delete
-   * all the splits except the transaction split. */
-  {
-    DeleteType del_type;
-
-    del_type = refactor_transaction_delete_query(GTK_WINDOW(sxed->dialog));
-
-    if (del_type == DELETE_CANCEL)
-      return;
-
-    if (del_type == DELETE_TRANS)
-    {
-      gnc_split_register_delete_current_trans (reg);
-      return;
-    }
-
-    if (del_type == DELETE_SPLITS)
-    {
-      gnc_split_register_emtpy_current_trans (reg);
-      return;
-    }
-  }
 }
 
 static

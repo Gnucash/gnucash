@@ -161,6 +161,7 @@ void xaccSchedXactionSetSlot( SchedXaction *sx,
 const GUID *xaccSchedXactionGetGUID( SchedXaction *sx );
 void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
 
+///@{
 /**
  * Next-Instance state data.
  *
@@ -179,7 +180,26 @@ void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
  **/
 void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
 void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
-void xaccSchedXactionDestroySequenceState( SchedXaction *sx, void *stateData );
+void xaccSchedXactionDestroySequenceState( void *stateData );
+///@}
+
+///@{
+/**
+ * Temporal state data.
+ *
+ * These functions allow us to opaquely save the entire temporal state of
+ * ScheduledTransactions.  This is used by the "since-last-run" dialog to
+ * store the initial state of SXes before modification ... if it later
+ * becomes necessary to revert an entire set of changes, we can 'revert' the
+ * SX without having to rollback all the individual state changes.
+ *
+ * NOTE that this is similar to the above SequenceState interface, and
+ * perhaps can be seen as entailing the above interface.
+ **/
+void *gnc_sx_create_temporal_state_snapshot( SchedXaction *sx );
+void gnc_sx_revert_to_temporal_state_snapshot( SchedXaction *sx, void *stateData );
+void gnc_sx_destroy_temporal_state_snapshot( void *stateData );
+///@}
 
 /**
  * Returns the next occurance of a scheduled transaction.  If the

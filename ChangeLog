@@ -1,3 +1,36 @@
+2002-04-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/ledger-core/gnc-ledger-display.c: Some template-GL
+	cleanup [debugging printf's removed].  Removed never-used
+	LD_TEMPLATE type.
+
+	* src/gnome/glade/sched-xact.glade: Removed unused start page.
+
+	* src/gnome/dialog-sxsincelast.c: Added support for using the
+	gnc-regWidget to display created transactions for review. Added
+	'Cancel' support. Didn't remove enough dead code, but started to.
+
+	* src/gnome/dialog-scheduledxaction.c: Added support for using the
+	gncRegWidget in the SX editor.  Formatting changes.
+
+	* src/register/ledger-core/gnc-regWidget.{h,c}: Added; a
+	macro-widget roughly duplicating the src/gnome/window-register.c
+	look-and-feel-and-behavior.
+
+	* src/engine/SchedXaction.c: Added support for saving a "temporal
+	snapshot" of a scheduled transaction. Rewrote "sequence state"
+	manipulations in terms of temporal snapshots.
+
+	* src/engine/Query.c: Add support for Querying the template
+	AccountGroup.
+
+	* src/doc/TODO-schedxactions: Updates.
+
+	* src/engine/Makefile.am: Prepend-to instead of unconditionally
+	setting GUILE_LOAD_PATH when creating iso-4217-currencies.c, for
+	those of us that need to set it for whatever reason we need to do
+	so.
+
 2002-03-04  Derek Atkins <warlord@MIT.EDU>
 
 	* Plug-in Extensions for backends, so pluggable objects can

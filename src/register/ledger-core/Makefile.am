@@ -12,7 +12,8 @@ libgncmod_ledger_core_la_SOURCES = \
   split-register-load.c \
   split-register-model.c \
   split-register-model-save.c \
-  split-register-util.c
+  split-register-util.c \
+  gnc-regwidget.c
 
 noinst_HEADERS = \
   gnc-ledger-display.h \
@@ -21,7 +22,8 @@ noinst_HEADERS = \
   split-register-layout.h \
   split-register-model.h \
   split-register-model-save.h \
-  split-register-p.h
+  split-register-p.h \
+  gnc-regwidget.h
 
 libgncmod_ledger_core_la_LDFLAGS = -module
 libgncmod_ledger_core_la_LIBADD = \
@@ -38,6 +40,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/register/register-core \
+  -I${top_srcdir}/src/register/register-gnome \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GNOME_INCLUDEDIR} \

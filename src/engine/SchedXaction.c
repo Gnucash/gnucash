@@ -43,10 +43,19 @@
 static short module = MOD_SX;
 
 /** Local data defs *****/
-void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
+
+/* Just the temporal bits from the SX structure. */
+typedef struct _temporalStateData {
+  GDate last_date;
+  GDate start_date;
+  GDate end_date;
+  gint num_occur_total;
+  gint num_occur_rem;
+} temporalStateData;
 
 /** Local Prototypes *****/
 
+void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 static void
 xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
@@ -635,8 +644,10 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 void*
 xaccSchedXactionCreateSequenceState( SchedXaction *sx )
 {
-        void *toRet = NULL;
+        //void *toRet = NULL;
 
+        return gnc_sx_create_temporal_state_snapshot( sx );
+        /*
         if ( xaccSchedXactionHasOccurDef( sx ) ) {
                 toRet = g_new0( gint, 1 );
                 *(gint*)toRet = xaccSchedXactionGetRemOccur( sx );
@@ -644,7 +655,8 @@ xaccSchedXactionCreateSequenceState( SchedXaction *sx )
         } else {
                 DEBUG( "Returning null state data" );
         }
-        return toRet;
+        */
+        //return toRet;
 }
 
 void
@@ -652,18 +664,56 @@ xaccSchedXactionIncrSequenceState( SchedXaction *sx,
                                    void *stateData )
 {
         if ( xaccSchedXactionHasOccurDef( sx ) ) {
+                temporalStateData *tsd = (temporalStateData*)stateData;
+                tsd->num_occur_rem -= 1;
+        }
+#if 0 /* change to temporal_state */
+        if ( xaccSchedXactionHasOccurDef( sx ) ) {
                 gint *remaining;
                 remaining = (gint*)stateData;
                 *remaining = *remaining - 1;
         }
+#endif /* 0 */
 }
 
 void
-xaccSchedXactionDestroySequenceState( SchedXaction *sx,
-                                      void *stateData )
+xaccSchedXactionDestroySequenceState( void *stateData )
 {
+        gnc_sx_destroy_temporal_state_snapshot( stateData );
+#if 0 /* change to temporal_state */
         if ( xaccSchedXactionHasOccurDef( sx ) ) {
                 g_free( (gint*)stateData );
         }
+#endif /* 0 */
 }
 
+void
+*gnc_sx_create_temporal_state_snapshot( SchedXaction *sx )
+{
+        temporalStateData *toRet = g_new0( temporalStateData, 1 );
+        toRet->last_date       = sx->last_date;
+        toRet->start_date      = sx->start_date;
+        toRet->end_date        = sx->end_date;
+        toRet->num_occur_total = sx->num_occurances_total;
+        toRet->num_occur_rem   = sx->num_occurances_remain;
+        return (void*)toRet;
+}
+
+void
+gnc_sx_revert_to_temporal_state_snapshot( SchedXaction *sx, void *stateData )
+{
+        temporalStateData *tsd = (temporalStateData*)stateData;
+        sx->last_date             = tsd->last_date;
+        sx->start_date            = tsd->start_date;
+        sx->end_date              = tsd->end_date;
+        sx->num_occurances_total  = tsd->num_occur_total;
+        sx->num_occurances_remain = tsd->num_occur_rem;
+
+        sx->dirty = TRUE;
+}
+
+void
+gnc_sx_destroy_temporal_state_snapshot( void *stateData )
+{
+        g_free( (temporalStateData*)stateData );
+}
