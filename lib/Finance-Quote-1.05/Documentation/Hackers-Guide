@@ -1,0 +1,283 @@
+Finance::Quote Hackers Guide
+Paul Fenwick <pjf@cpan.org>, May 2000
+
+$Version$
+
+0. Table of Contents
+====================
+
+	1. Introduction
+	2. How to write a Finance::Quote module.
+		2.1. The package name.
+		2.2. The methods() subroutine.
+		2.3. The functions specified by methods().
+		2.4. Currency.
+		2.5. Thngs to avoid.
+		2.6. Using your new module.
+	3. How to contribute your module to the world.
+	4. How to find out more?
+	5. How to join the mailing lists?
+
+1. Introduction
+===============
+
+This hacker's guide is primarily a tutorial on how to build your own
+Finance::Quote pluggable module.  After reading this guide, you should
+be able to write your own module to provide extra methods and functionality
+to the Finance::Quote library.
+
+This guide assumes that you are familiar with perl.
+
+2. How to write a Finance::Quote module
+=======================================
+
+Finding a source of information, and writing code to parse and interpret
+that information is a difficult task.  As such, we've aimed to make
+writing a Finance::Quote module as easy as possible.  There are only
+a few simple rules you need to follow:
+
+2.1. The package name.
+----------------------
+Finance::Quote expects that its loadable modules will be in the
+Finance::Quote namespace somewhere.  Hence, if you were writing
+a module called "DodgyBank" that returned information on DodgyBank's
+managed funds, a reasonable name for that module would be
+Finance::Quote::DodgyBank.
+
+2.2. The methods() subroutine.
+------------------------------
+Your module must have a subroutine named methods().  This function will
+be called by the Finance::Quote harness when it loads your module, and
+is used to determine which methods your module provides.  The methods()
+function must return a hash of method names and subroutine references.
+For example, if you had written a module which provides access to
+DodgyBank's managed funds, you might have the following
+
+	package Finance::Quote::DodgyBank;
+	sub methods { return ( dodgyfunds => \&funds 
+                               dodgyloans => \&loans ); }
+
+This would indicate that your package provides methods for
+"dodgyfunds" and "dodgyloans", and that the subroutines
+"funds" and "loans" should be called to access that information.
+
+The following method names should be used for the following information
+sources:
+
+	Method-Name			Source
+	---------------------------------------------------------
+	australia			Australian Stocks
+	canada				Canadian Stocks
+	europe				European Stocks
+	fidelity			Fidelity Investments
+	nasdaq				NASDAQ
+	nyse				New York Stock Exchange
+	tiaacref			TIAA-CREF
+	troweprice			T. Rowe. Price
+	usa				USA Stocks
+
+Method names should be lower-case, consist of alphanumeric characters
+(including underscore) only, and always begin with a letter.  This is
+not enforced, but future versions of the Finance::Quote framework may 
+rely upon it.
+
+It's strongly recommended that you also provide a unique name for your
+method, in case you (or others) wish to call that method exclusively
+in code.  Hence if you had written a module to fetch information from
+the NYSE from Yohoo!, you might implement the following methods
+function:
+
+	sub methods { return ( nyse => \&yohoo,
+			       yohoo => \&yohoo ); }
+
+This means that people who only want to use your function can use
+$quoter->fetch('yohoo',@stocks), but those who don't care where
+their NYSE stock information is fetched from can use
+$quoter->fetch('nyse',@stocks).  The first form allows you to know exactly
+where the information is coming from.  In the second, failover methods mean
+that many different functions could be used to fetch the stock information,
+not just the one you have defined.
+
+2.3 The functions specified by methods().
+-----------------------------------------
+The functions referred to by methods() will be passed a Finance::Quote
+object when called, and a list of zero or more symbol names.  The
+Finance::Quote object provides the following ready-to-use methods:
+
+	user_agent();	# Provides a ready-to-use LWP::UserAgent
+
+	parse_csv();	# Parses a list of comma-separated values
+			# and returns an array.
+
+The user_agent() method should be used if possible to fetch the information,
+as it should be already configured to use the timeout, proxy, and other
+settings requested by the calling program.
+
+Your function should return a two-dimensional hash as specified in the
+Finance::Quote man-page.  Eg:
+
+	$hash{$symbol,'last'} = $last_price;
+	$hash{$symbol,'name'} = $stock_name;
+	# etc etc.
+
+When returning your hash, you should check the context that your
+function was called in.  If it was called in a scalar context, then
+you should return a hashref instead.  This can be easily done
+with the following:
+
+	return wantarray() ? %hash : \%hash;
+
+It is ESSENTIAL that your hash contain a true value for {$symbol,'success'}
+for information that has been successfully obtained.  If the information
+was not obtained for any reason, then {$symbol,'success'} should
+be set to a false value (preferably 0), and a human-readable error
+message placed in {$symbol,'errormsg'}.  The following code snippet
+demonstrates this:
+
+	sub funds {
+
+		my $quoter = shift;	# The Finance::Quote object.
+		my @stocks = @_;
+		my %info;
+
+		my $DODGY_URL = "http://dodgybank.xxx/funds.csv?";
+
+		my $ua = $quoter->user_agent;	# This gives us a user-agent
+						# with timeouts, proxies,
+						# etc already configured.
+
+		my $response = $ua->request(GET $DODGY_URL);
+		unless ($response->is_success) {
+			foreach my $stock (@stocks) {
+				$info{$stock,"success"} = 0;
+				$info{$stock,"errormsg"} = "HTTP failure";
+			}
+			return wantarray ? %info : \%info;
+		}
+
+		# Do stuff with the information returned....
+
+	}
+
+It is valid to use "return" with no arguments if all stock lookups failed,
+however this does not provide any information as to WHY the lookups
+failed.  If at all possible, the errormsg labels should be set.
+
+It is also very very strongly recommended that you place your module's
+name in the {$stock,"source"} field.  This allows others to check where
+information was obtained, and to use it appropriately.
+
+2.4. Currency
+-------------
+Finance::Quote has support for multiple currencies and for currency
+conversion.  As long as you provide a little bit of information about
+the information you are returning, the Finance::Quote framework can
+do all the hard stuff for you.
+
+If you are returning information on a stock in a particular currency,
+then you can enter the ISO currency code into the "currency" field
+associated with the stock.  Eg:
+
+	$info{$stock,"currency"} = "AUD";  # Australian Dollars
+
+If the information you are returning does not have a currency
+(because it's an index like the Dow Jones Industrial or the
+All Oridinaries, or because you're returning percentages) then
+you should not set the currency field for that stock.  Finance::Quote
+knows not to attempt currency conversion for stocks without
+a currency field.
+
+If you do have a currency field, then by default Finance::Quote will
+arrange for the automatic conversion of a number of fields.  By
+default, these fields are last, high, low, net, bid, ask, close, open, 
+day_range, year_range, eps, div, cap, nav and price.  Of course,
+there may be some cases where this set is not appropriate, or where there
+are extra fields that should be converted.  This can be indicated
+by writing a function called "currency_fields()" in your module,
+that returns a list of fields that can undergo currency conversion.
+Eg:
+
+	sub currency_fields {
+		return qw/high low price bid/;
+	}
+
+currency_fields() will be passed a Finance::Quote object as its
+first argument, and a method called default_currency_fields()
+is available through this object.  This is useful if you want
+to use the defaults, but also add some of your own:
+
+	sub currency_fields {
+		my $quoter = shift;
+		return ($quoter->default_currency_fields, "commission");
+	}
+
+In the example above, the default fields would be available for currency
+conversion, but the "commission" field would also be converted.
+
+2.5. Things to avoid
+--------------------
+Some sources of information will provide more stock information than
+requested.  Some code may rely upon your code only returning information
+about the stocks that the caller requested.  As such, you should
+never return information about stocks that were not requested, even
+if you fetch and/or process that information.
+
+2.6. Using your new module
+--------------------------
+Using your new module is easy.  Normally when using Finance::Quote you'd
+do something like the following:
+
+	use Finance::Quote;
+	my $quoter = Finance::Quote->new();
+
+To use your new module, simply specify the module name (without
+the Finance::Quote prefix) in the new function.  Hence:
+
+	use Finance::Quote;
+	my $quoter = Finance::Quote->new("DodgyBank");
+
+The DodgyBank methods will now be available:
+
+	my %loaninfo = $quoter->fetch("dodgyloans","car","boat","house");
+	my %fundinfo = $quoter->fetch("dodgyfunds","lotto","shares");
+
+The resulting Finance::Quote object will also arrange for your functions
+to be callable without using fetch.  This syntax is strongly discouraged,
+as it results in pollution of the Finance::Quote namespace and provides
+little advantages over the fetch() method:
+
+	my %loaninfo = $quoter->dodgyloans("car","boat","loan");
+
+This mainly exists to maintain compatibility with previous versions of
+Finance::Quote.
+
+3. How to contribute your module to the world.
+==============================================
+If you'd like others to use your module, then send a post to
+
+	<finance-quote-devel@sourceforge.net> 
+
+to get in touch with the other finance-quote developers and maintainers.
+You can also submit your module using the patch manager at:
+
+	http://sourceforge.net/project/?group_id=4232
+
+4. How to find out more?
+========================
+The Finance::Quote webpage is located at:
+
+	http://finance-quote.sourceforge.net/
+
+You are welcome to make use of the tools at:
+
+	http://sourceforge.net/project/?group_id=4232
+
+5. How to join the mailing lists?
+=================================
+
+There are two mailing lists for Finance::Quote.  These can both be accessed
+from:
+
+	http://sourceforge.net/mail/?group_id=4232
+
+
