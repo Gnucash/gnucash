@@ -22,7 +22,7 @@
     @{ */
 /** @addtogroup Backend
  *  @{
- *  @file gnc-be-utils.h 
+ *  @file qof-be-utils.h 
  *  @brief QOF Backend Utilities
  *  @author Derek Atkins <derek@ihtfp.com>
  *    Common code used by objects to define begin_edit() and

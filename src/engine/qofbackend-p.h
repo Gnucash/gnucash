@@ -43,6 +43,7 @@
 
 #include "qofbackend.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 #include "qofquery.h"
 #include "qofsession.h"
 
