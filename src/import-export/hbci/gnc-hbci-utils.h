@@ -30,14 +30,17 @@
 #include "gnc-book.h"
 
 /* Create a new HBCI_API and let it load its environment from the
- * configuration file filename. If the file doesn't exist, this
- * function returns NULL. If the file exists, but OpenHBCI encountered
- * an error upon opening, then an error will be displayed, and NULL
- * will be returned.*/
-HBCI_API * gnc_hbci_api_new (const char *filename);
+ * configuration file filename. If the file doesn't exist and
+ * allowNewFile is set to FALSE, this function returns NULL. If the
+ * file exists, but OpenHBCI encountered an error upon opening, then
+ * an error will be displayed, and NULL will be returned.*/
+HBCI_API * gnc_hbci_api_new (const char *filename, 
+			     gboolean allowNewFile);
 
 /* Same as above, but takes the filename already from the current
-   book's kvp frame. */ 
+   book's kvp frame. Returns NULL if the file from the book's kvp
+   frame doesn't exist. Returns NULL also when there was an error upon
+   opening that file. */ 
 HBCI_API * gnc_hbci_api_new_currentbook (void);
 
 

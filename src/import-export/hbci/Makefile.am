@@ -7,6 +7,7 @@ libgncmod_hbci_la_SOURCES = \
   druid-hbci-utils.c \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
+  hbci-interaction.c \
   hbci-account-picker.c \
   druid-hbci-initial.c 
 

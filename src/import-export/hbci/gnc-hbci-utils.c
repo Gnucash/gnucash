@@ -29,21 +29,25 @@
 #include "gnc-hbci-kvp.h"
 #include "gnc-ui-util.h"
 
+#include "hbci-interaction.h"
+
 HBCI_API *
-gnc_hbci_api_new (const char *filename)
+gnc_hbci_api_new (const char *filename, gboolean allowNewFile)
 {
   HBCI_API *api = NULL;
   HBCI_Error *err = NULL;
   char *errstring;
   
-  if (!filename || 
-      !g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK))
+  if (!filename)
+      return NULL;
+  if (!allowNewFile && 
+      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK)))
     return NULL;
 
   api = HBCI_API_new (FALSE, TRUE);
   
   err = HBCI_API_loadEnvironment (api, filename);
-  if (!HBCI_Error_isOk (err)) {
+  if (!HBCI_Error_isOk (err) && !allowNewFile) {
     errstring = HBCI_Error_errorString (err);
     HBCI_Error_delete (err);
     gnc_error_dialog
@@ -53,6 +57,13 @@ gnc_hbci_api_new (const char *filename)
     return NULL;
   }
   HBCI_Error_delete (err);
+
+  // set HBCI_Interactor
+  HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
+			  gnc_hbci_new_interactor(), TRUE);
+  // Set HBCI_Progressmonitor
+  HBCI_API_setMonitor(api, gnc_hbci_new_pmonitor(), TRUE);
+  
   return api;
 };
 
@@ -60,7 +71,7 @@ gnc_hbci_api_new (const char *filename)
 HBCI_API * gnc_hbci_api_new_currentbook (void)
 {
   return gnc_hbci_api_new 
-    (gnc_hbci_get_book_configfile (gnc_get_current_book ()));
+    (gnc_hbci_get_book_configfile (gnc_get_current_book ()), FALSE);
 };
 
 

@@ -1,5 +1,10 @@
 2002-08-10  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/hbci-interaction.[hc]: Add code for
+	HBCI_API interaction. Will be migrated to gnucash-UI's code
+	soon. Recent changes to HBCI code require yet another update to
+	current OpenHBCI CVS.
+
 	* src/import-export/hbci/*: Add druid-hbci-utils.[hc], implement
 	more parts of HBCI setup. Requires update to current OpenHBCI CVS,
 	though.
