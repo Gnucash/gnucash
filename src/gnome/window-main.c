@@ -134,12 +134,16 @@ gnc_ui_build_currency_item(const char *currency)
 
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_widget_show(hbox);
-  gtk_box_pack_end(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
+  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
   label = gtk_label_new(currency);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_widget_show(hbox);
+  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
   label = gtk_label_new(ASSETS_C_STR);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -148,13 +152,13 @@ gnc_ui_build_currency_item(const char *currency)
 
   label = gtk_label_new("");
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
   gtk_widget_show(label);
   item->assets_label = label;
 
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_widget_show(hbox);
-  gtk_box_pack_end(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
+  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
   label = gtk_label_new(PROFITS_C_STR);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -164,7 +168,7 @@ gnc_ui_build_currency_item(const char *currency)
   label = gtk_label_new("");
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
-  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
   item->profits_label = label;
 
   gtk_widget_show(item->listitem);
@@ -239,13 +243,12 @@ gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
  *    using the equity account type correctly (which is not likely).
  *    Thus we show the sum of assets, rather than the sum of equities.
  *
- * hack alert XXX
- * The worst is gone, but the euro needs fixing.
+ * The EURO gets special treatment. There can be one line with
+ * EUR amounts and a EUR (total) line which summs up all EURO
+ * member currencies.
  *
- * Note the 'convert-to-euro' is a kind of a hack to work around this
- * bug: basically, any/all currencies are converted to the euro, and 
- * that is the sum that is reported.  It should probably be replaced by
- * a generic 'convert-to-common-currency' routine.
+ * There should be a 'grand total', too, which summs up all accounts
+ * converted to one common currency.
  */
 
 static void
@@ -282,8 +285,10 @@ gnc_ui_refresh_statusbar (void)
     return;
 
   currency_list = NULL;
-  if (euro) {
-    euro_accum = gnc_ui_get_currency_accumulator(&currency_list ,"EURO");
+  if (euro)
+  {
+    euro_accum = gnc_ui_get_currency_accumulator(&currency_list,
+						 EURO_TOTAL_STR);
   }
 
   group = gncGetCurrentGroup ();
@@ -312,7 +317,7 @@ gnc_ui_refresh_statusbar (void)
 	  amount += xaccGroupGetBalance(children);
 
         currency_accum->assets += amount;
-	if(euro && euro_accum != currency_accum)
+	if(euro)
 	{
 	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
 	}
@@ -324,9 +329,9 @@ gnc_ui_refresh_statusbar (void)
 	  amount += xaccGroupGetBalance(children);
 
         currency_accum->profits -= amount;
-	if(euro && euro_accum != currency_accum)
+	if(euro)
 	{
-	  euro_accum->profits += gnc_convert_to_euro(account_currency, amount);
+	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
 	}
 	break;
       case EQUITY:
@@ -340,12 +345,14 @@ gnc_ui_refresh_statusbar (void)
 
 
   for (current = g_list_first(main_info->totals_list); current;
-       current = g_list_next(current)) {
+       current = g_list_next(current))
+  {
     currency_item = current->data;
     currency_item->touched = 0;
   }
   for (current = g_list_first(currency_list); current;
-       current = g_list_next(current)) {
+       current = g_list_next(current))
+  {
     currency_accum = current->data;
     currency_item = gnc_ui_get_currency_item(&main_info->totals_list,
        					     currency_accum->currency,
@@ -367,12 +374,14 @@ gnc_ui_refresh_statusbar (void)
     g_list_free(currency_list);
   currency_list = NULL;
   current = g_list_first(main_info->totals_list);
-  while (current) {
+  while (current)
+  {
     GList *next = current->next;
 
     currency_item = current->data;
     if (currency_item->touched == 0
-        && strcmp(currency_item->currency, default_currency) != 0) {
+        && strcmp(currency_item->currency, default_currency) != 0)
+    {
       currency_list = g_list_append(currency_list, currency_item->listitem);
       main_info->totals_list = g_list_remove_link(main_info->totals_list,
 						  current);
@@ -381,7 +390,8 @@ gnc_ui_refresh_statusbar (void)
     }
     current = next;
   }
-  if (currency_list) {
+  if (currency_list)
+  {
     gtk_select_remove_items(GTK_SELECT(main_info->totals_combo), currency_list);
     g_list_free(currency_list);
   }

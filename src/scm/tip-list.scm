@@ -14,4 +14,7 @@
  ("When entering check numbers in the register, you can"
   "press '+' to enter the next number. You can use '+'"
   "and '-' to increment and decrement the number, respectively.")
+ ("To transfer funds between accounts with different currencies,"
+  "you need an intermediate currency trading account."
+  "Please see the GnuCash online manual for details")
 )

@@ -148,7 +148,10 @@
                             "section of the Preferences menu")
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \
-                            "currency.")
+                            "currency.\nTo transfer funds between " \
+                            "accounts with different currencies\n you" \
+                            "need an intermediate currency account.\n" \
+                            "Please see the GnuCash online manual")
 #define REPORT_ERR_MSG    _("Error executing scheme report.")
 #define REPORT_NOPARM_MSG _("This report has no parameters.")
 #define SHOW_INC_EXP_MSG  _("Show the income and expense accounts.")
@@ -171,7 +174,11 @@
 #define XFER_NSF_MSG      _("There must be at least two accounts\n"\
                             "created before you can transfer funds.")
 #define XFER_CURR_MSG     _("You cannot transfer between those accounts.\n" \
-                            "They do not have a common currency.")
+                            "They do not have a common currency.\n" \
+                            "To transfer funds between " \
+                            "accounts with different currencies you\n" \
+                            "need an intermediate currency account.\n" \
+                            "Please see the GnuCash online manual")
 #define XFER_DIFF_MSG     _("The \"From\" and \"To\" accounts\n must be " \
                             "different!")
 #define XFER_SAME_MSG     _("You can't transfer from and to the same " \
@@ -593,6 +600,7 @@
 #define EDIT_STR_N         N_("Edit")
 #define EDIT_STR            _(EDIT_STR_N)
 #define EQUITY_STR          _("Equity")
+#define EURO_TOTAL_STR      _("EUR (total)")
 #define EXIT_STR_N         N_("Exit")
 #define EXIT_STR            _(EXIT_STR_N)
 #define EXPENSE_STR         _("Expense")
