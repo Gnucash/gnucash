@@ -135,8 +135,18 @@ Prior to building GnuCash, you will have to obtain and install the following
 packages:
 
 SWIG    -- available at www.swig.org need 1.1p5 or later ...
-guile   -- need version 1.3 or later ( also build 1998.09.10 or later) ...
+guile   -- need version 1.3 or later ( or build 1998.09.10 or later) ...
+           ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
+
 Motif or Lesstif  --
+           Lesstif 0.81    works   
+           Lesstif 0.82    broken    
+           Lesstif 0.83    works    
+           Lesstif 0.86.0  is reported to work     
+           Lesstif 0.86.5  crashes.   
+           Commercial Motif seems to work, but beware old libXm's 
+           combined with new glibc's, 
+
 XmHTML  -- version 1.1.4 or later
            http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
            http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
