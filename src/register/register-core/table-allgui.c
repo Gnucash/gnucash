@@ -179,6 +179,19 @@ gnc_table_get_current_cell_type (Table *table)
 }
 
 gboolean
+gnc_table_get_current_cell_location (Table *table,
+                                     int cell_type,
+                                     VirtualLocation *virt_loc)
+{
+  if (table == NULL)
+    return FALSE;
+
+  return gnc_table_get_cell_location (table, cell_type,
+                                      table->current_cursor_loc.vcell_loc,
+                                      virt_loc);
+}
+
+gboolean
 gnc_table_virtual_cell_out_of_bounds (Table *table,
                                       VirtualCellLocation vcell_loc)
 {
@@ -436,6 +449,51 @@ gnc_table_get_cell_type (Table *table, VirtualLocation virt_loc)
   return gnc_table_layout_get_cell_type (table->layout, cell);
 }
 
+gboolean
+gnc_table_get_cell_location (Table *table,
+                             int cell_type,
+                             VirtualCellLocation vcell_loc,
+                             VirtualLocation *virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlock *cellblock;
+  int cell_row, cell_col;
+
+  if (table == NULL)
+    return FALSE;
+
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+  if (vcell == NULL)
+    return FALSE;
+
+  cellblock = vcell->cellblock;
+
+  for (cell_row = 0; cell_row < cellblock->num_rows; cell_row++)
+    for (cell_col = 0; cell_col < cellblock->num_cols; cell_col++)
+    {
+      CellBlockCell *cb_cell;
+      int ctype;
+
+      cb_cell = gnc_cellblock_get_cell (cellblock, cell_row, cell_col);
+      ctype = gnc_table_layout_get_cell_type (table->layout, cb_cell->cell);
+
+      if (ctype == cell_type)
+      {
+        if (virt_loc != NULL)
+        {
+          virt_loc->vcell_loc = vcell_loc;
+
+          virt_loc->phys_row_offset = cell_row;
+          virt_loc->phys_col_offset = cell_col;
+        }
+
+        return TRUE;
+      }
+    }
+
+  return FALSE;
+}
+
 void 
 gnc_table_set_size (Table * table, int virt_rows, int virt_cols)
 {
@@ -453,8 +511,6 @@ gnc_table_set_size (Table * table, int virt_rows, int virt_cols)
   gnc_table_resize (table, virt_rows, virt_cols);
 }
 
-/* ==================================================== */
-
 static void
 gnc_table_free_data (Table * table)
 {
@@ -463,8 +519,6 @@ gnc_table_free_data (Table * table)
 
   g_table_resize (table->virt_cells, 0, 0);
 }
-
-/* ==================================================== */
 
 static void
 gnc_virtual_location_init (VirtualLocation *vloc)

@@ -524,7 +524,8 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
       return FALSE;
   }
 
-  if (!xaccSplitRegisterGetCellLoc (reg, cell_type, v_loc.vcell_loc, &v_loc))
+  if (!gnc_table_get_cell_location (reg->table, cell_type,
+                                    v_loc.vcell_loc, &v_loc))
     return FALSE;
 
   if (virt_loc == NULL)
@@ -549,9 +550,9 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   gboolean changed;
   Split *split;
 
-  split = xaccSRGetCurrentSplit(reg);
-  trans = xaccSRGetCurrentTrans(reg);
-  trans_split = xaccSRGetCurrentTransSplit(reg, NULL);
+  split = xaccSRGetCurrentSplit (reg);
+  trans = xaccSRGetCurrentTrans (reg);
+  trans_split = xaccSRGetCurrentTransSplit (reg, NULL);
 
   /* This shouldn't happen, but be paranoid. */
   if (trans == NULL)

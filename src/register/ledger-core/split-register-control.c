@@ -678,7 +678,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         amount = xaccSplitGetAmount (blank_split);
         cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
-        if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
+        if (gnc_table_get_current_cell_location (reg->table, cell_type,
+                                                 &new_virt_loc))
           *p_new_virt_loc = new_virt_loc;
       }
 
@@ -725,7 +726,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         /* if there is no price field, only auto-complete from splits with
          * a unit share price. */
-        unit_price = !xaccSplitRegisterGetCurrentCellLoc(reg, PRIC_CELL, NULL);
+        unit_price = !gnc_table_get_current_cell_location (reg->table,
+                                                           PRIC_CELL, NULL);
 
         /* find a split to auto-complete on */
         if (sr_get_default_account (reg) != NULL)
@@ -791,7 +793,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         amount = xaccSplitGetAmount (auto_split);
         cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
-        if (xaccSplitRegisterGetCurrentCellLoc (reg, cell_type, &new_virt_loc))
+        if (gnc_table_get_current_cell_location (reg->table, cell_type,
+                                                 &new_virt_loc))
           *p_new_virt_loc = new_virt_loc;
       }
 
