@@ -59,10 +59,18 @@ static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
     gnc_commodity * (*getter) (Account *account),
-    void (*setter) (Account *account, gnc_commodity *comm))
+    void (*setter) (Account *account, gnc_commodity *comm),
+    int (*scu_getter) (Account *account),
+    void (*scu_setter) (Account *account, int scu))
 {
     gnc_commodity *gcom;
     gnc_commodity *com = getter(act);
+    int old_scu;
+
+    if (scu_getter)
+      old_scu = scu_getter(act);
+    else
+      old_scu = 0;
 
     if(!com)
     {
@@ -86,6 +94,8 @@ clear_up_account_commodity(
     {
         gnc_commodity_destroy(com);
         setter(act, gcom);
+        if (old_scu != 0 && scu_setter)
+          scu_setter(act, old_scu);
     }
 }
 
@@ -129,11 +139,21 @@ static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               DxaccAccountGetCurrency, DxaccAccountSetCurrency);
+                               DxaccAccountGetCurrency,
+                               DxaccAccountSetCurrency,
+                               DxaccAccountGetCurrencySCU,
+                               DxaccAccountSetCurrencySCU);
+
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               DxaccAccountGetSecurity, DxaccAccountSetSecurity);
+                               DxaccAccountGetSecurity,
+                               DxaccAccountSetSecurity,
+                               NULL, NULL);
+
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               xaccAccountGetCommodity, xaccAccountSetCommodity);
+                               xaccAccountGetCommodity,
+                               xaccAccountSetCommodity,
+                               xaccAccountGetCommoditySCU,
+                               xaccAccountSetCommoditySCU);
 
     xaccAccountScrubCommodity (act);
 

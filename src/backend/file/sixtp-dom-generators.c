@@ -298,10 +298,20 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     
     break;
     case KVP_TYPE_FRAME:
+    {
+        kvp_frame *frame;
+
         xmlSetProp(val_node, "type", "frame");
-        g_hash_table_foreach(kvp_frame_get_hash(kvp_value_get_frame(val)),
+
+        frame = kvp_value_get_frame (val);
+        if (!frame || !kvp_frame_get_hash (frame))
+          break;
+
+        g_hash_table_foreach(kvp_frame_get_hash(frame),
                              add_kvp_slot, val_node);
-        break;
+    }
+    break;
+
     default:
         break;
     }

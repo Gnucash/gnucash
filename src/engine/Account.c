@@ -96,7 +96,7 @@ xaccInitAccount (Account * acc)
   acc->idata = 0;
 
   acc->commodity     = NULL;
-  acc->commodity_scu = 100000;
+  acc->commodity_scu = 0;
 
   acc->splits = NULL;
 

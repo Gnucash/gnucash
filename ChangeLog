@@ -1,3 +1,13 @@
+2001-09-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/backend/file/sixtp-dom-generators.c (add_kvp_value_node):
+	fix warning in case of empty kvp sub-frame
+
+	* src/backend/file/io-gncxml-v2.c (clear_up_account_commodity):
+	fix scu values
+
+	* src/engine/Account.c (xaccInitAccount): initialize scu to 0
+
 2001-09-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/standard-reports/average-balance.scm: Ben Stanley
