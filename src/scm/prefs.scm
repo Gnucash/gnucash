@@ -348,6 +348,13 @@ the account instead of opening a register." #f))
    eq?
    #f))
 
+(define gnc:*arg-no-file*
+  (gnc:make-config-var
+   "Don't load any file, including autoloading the last file."
+   (lambda (var value) (if (boolean? value) (list value) #f))
+   eq?
+   #f))
+
 (define gnc:*config-dir*
   (gnc:make-config-var
    "Configuration directory."

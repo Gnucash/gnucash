@@ -75,10 +75,11 @@
   (if (not (= (gnc:lowlev-app-init) 0))
       (gnc:shutdown 0))
 
-  (let ((file (if (pair? gnc:*command-line-files*)
+  (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
+        (file (if (pair? gnc:*command-line-files*)
                   (car gnc:*command-line-files*)
                   (gnc:history-get-last))))
-    (if (string? file)
+    (if (and ok (string? file))
       (gnc:ui-open-file file)))
 
   ;; add a hook to save the user configs on shutdown

@@ -26,19 +26,24 @@
     (cons 'boolean
           (lambda (val)
             (gnc:config-var-value-set! gnc:*debugging?* #f val))))
-   
+
+   (cons
+    "nofile"
+    (cons 'boolean
+          (lambda (val)
+            (gnc:config-var-value-set! gnc:*arg-no-file* #f val))))
+
    (cons
     "config-dir"
     (cons 'string
           (lambda (val)
             (gnc:config-var-value-set! gnc:*config-dir* #f val))))
-   
+
    (cons
     "share-dir"
     (cons 'string
           (lambda (val)
             (gnc:config-var-value-set! gnc:*share-dir* #f val))))
-   
 
    (cons
     "load-path"

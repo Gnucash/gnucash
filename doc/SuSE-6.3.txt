@@ -16,6 +16,11 @@ Notes:
   NOTE: You can install new packages to older versions of SuSE from
         CD or ftp.suse.de or ftp.suse.com
 
+- This howto is primarily intended for compiling from source.
+  If you install the rpm, you don't need the various dev packages
+  and you don't need g-wrap. (However, you won't see this howto
+  until you installed the GnuCash rpm succesfully ;-).)
+
 Let's go:
 
 * Make sure you have a running system, including X. For my tests I
@@ -45,6 +50,11 @@ Let's go:
     cd /usr/share/guile
     su root -c "unzip -L /tmp/slib2c7"
 
+* Download g-wrap from
+    ftp://ftp.gnucash.org/pub/g-wrap/g-wrap-0.9.1..tar.gz
+  unpack and untar, then
+  ./configure, make, su, make install
+
 * Download GnuCash from
     http://www.gnucash.org/pub/gnucash/sources/unstable/1.3.x/1.3.0/gnucash-1.3.0.tar.gz
   and unpack it
@@ -64,4 +74,5 @@ Let's go:
     su root -c "make install"
 
 * You may need to run GnuCash once as root, because guile needs to set up
-  some things for slib.
+  some things for slib. Alternatively you can try as root:
+    guile -c '(use-modules (ice-9 slib)) (require 'new-catalog)'
