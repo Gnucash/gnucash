@@ -53,7 +53,7 @@ is, what a transaction is, and what to save in data files.  In short,
 QIF files just don't contain enough information to completely and
 accurately reconstruct your Quicken account hierarchy in the GnuCash
 double entry system without some guessing by the import code and some
-handholding by you.  QIF files omit small things that can be easily
+hand-holding by you.  QIF files omit small things that can be easily
 guessed (for instance, are numbers in decimal-radix [1,000.00 == 1000]
 form or European comma-radix form [1.000,00 == 1000]?  Are dates m/d/y
 or y/m/d?) and big things that can't be easily guessed, like, for
@@ -86,7 +86,7 @@ using GnuCash until you can get your old records in.
     
     <p>QIF files are plain text files formatted as "tag-value" pairs.
 At the beginning of each line there is a single character "tag"
-followed immedately by the "value", which extends to the end of the
+followed immediately by the "value", which extends to the end of the
 line.  Don't be afraid to pop up a QIF file in "less" or the text
 editor of your choice if you are having problems getting some Quicken
 data imported correctly; chances are a simple search-and-replace will
@@ -293,7 +293,7 @@ account name first.  The radix and date formats will stay on
 answer; in that case, you will have to make a manual selection.  You
 probably know what the correct radix format is; if you're in the US or
 the UK, it's definitely "decimal".  Almost every QIF file I have seen
-in the US is m/d/y for the date format, so try that if autodetect
+in the US is m/d/y for the date format, so try that if auto-detect
 doesn't work.
 
     <p>To go back to a file that you have previously loaded, select
@@ -455,7 +455,7 @@ point if someone tells me how it's supposed to work.
 
     <p>Brokerage accounts are really confusing to me.  Basically, my
 thinking is that the brokerage account itself should probably be a
-Bank account.  The only wierdness is in stuff like dividends paid from
+Bank account.  The only weirdness is in stuff like dividends paid from
 securities to the brokerage account.  If you're using a Dividend
 account, you can lose the information about where the dividend came
 from.  The importer tries to save this information by putting the
