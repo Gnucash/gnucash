@@ -25,6 +25,7 @@
 
 #include <gnome.h>
 #include <errno.h>
+#include <iconv.h>
 #include <gwenhywfar/directory.h>
 
 #include "gnc-ui.h"
@@ -475,16 +476,30 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   }
 }
 
+struct cb_struct {
+  gchar **result;
+  iconv_t gnc_iconv_handler;
+};
+
 /* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */
 static void *gnc_list_string_cb (const char *string, void *user_data)
 {
-  gchar **res = user_data;
-  gchar *tmp1, *tmp2;
+  struct cb_struct *u = user_data;
+  gchar **res = u->result;
+  gchar *tmp1, *tmp2, *outbuffer;
+  char *inbuffer = (char*)string;
+  size_t inbytes = strlen(string), outbytes = inbytes+2;
 
   if (!string) return NULL;
-  tmp1 = g_strdup (string);
-  g_strstrip (tmp1);
+  tmp1 = g_strndup (string, outbytes);
+  outbuffer = tmp1;
 
+  iconv(u->gnc_iconv_handler, &inbuffer, &inbytes,
+	&outbuffer, &outbytes);
+  if (outbytes > 0)
+    *outbuffer = '\0';
+
+  g_strstrip (tmp1);
   if (strlen (tmp1) > 0) {
     if (*res != NULL) {
       /* The " " is the separating string in between each two strings. */
@@ -511,19 +526,30 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   char *g_descr;
   const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
   const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
+  struct cb_struct cb_object;
+
+  /* FIXME: The internal target encoding is hard-coded so far. This
+     needs to be fixed for the gnome2 version; the target encoding is
+     then probably utf-8 as well. iconv is also used in
+     gnc_AB_BANKING_interactors() in hbci-interaction.c. */
+  cb_object.gnc_iconv_handler = iconv_open("ISO8859-15", "UTF-8");
+  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
 
   /* Don't use list_string_concat_delim here since we need to
      g_strstrip every single element of the string list, which is
      only done in our callback gnc_list_string_cb. The separator is
      also set there. */
+  cb_object.result = &h_descr;
   if (h_purpose)
     GWEN_StringList_ForEach (h_purpose,
 			     &gnc_list_string_cb,
-			     &h_descr);
+			     &cb_object);
+
+  cb_object.result = &othername;
   if (h_remotename)
     GWEN_StringList_ForEach (h_remotename,
 			     &gnc_list_string_cb,
-			     &othername);
+			     &cb_object);
   /*DEBUG("HBCI Description '%s'", h_descr);*/
 
   if (othername && (strlen (othername) > 0))
@@ -539,6 +565,7 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
        g_strdup (h_descr) : 
        g_strdup (_("Unspecified")));
 
+  iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   free (othername);
   return g_descr;
