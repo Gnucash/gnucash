@@ -53,13 +53,5 @@ typedef struct {
 
 PrintCheckDialog * gnc_ui_print_check_dialog_create(SCM callback);
 void gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd);
-void gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
-                                     gpointer  user_data);
-
-void gnc_ui_print_check_dialog_cancel_cb(GtkButton * button,
-                                         gpointer user_data);
-
-void gnc_ui_print_check_dialog_help_cb(GtkButton * button,
-                                       gpointer user_data);
 
 #endif

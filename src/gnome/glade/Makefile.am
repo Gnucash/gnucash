@@ -6,6 +6,7 @@ glade_DATA = \
 	find.glade \
 	help.glade \
 	price.glade \
+	print.glade \
 	progress.glade \
 	qif.glade \
 	register.glade \
@@ -22,6 +23,7 @@ STRING_FILES = \
 	find_strings.c \
 	help_strings.c \
 	price_strings.c \
+	print_strings.c \
 	progress_strings.c \
 	qif_strings.c \
 	register_strings.c \

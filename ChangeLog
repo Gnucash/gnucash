@@ -1,5 +1,7 @@
 2001-06-15  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-print-check.c: use libglade
+
 	* src/gnome/dialog-find-transactions.c: use libglade
 
 	* src/guile/gnc.gwp: remove budgeting api

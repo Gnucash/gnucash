@@ -29,7 +29,6 @@
 #include <guile/gh.h>
 
 #include "messages.h"
-#include "glade-gnc-dialogs.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
 #include "window-help.h"
@@ -42,6 +41,14 @@
 #define CHECK_PRINT_NUM_UNITS 4
 
 
+static void gnc_ui_print_check_dialog_ok_cb(GtkButton * button, 
+                                            gpointer user_data);
+static void gnc_ui_print_check_dialog_cancel_cb(GtkButton * button, 
+                                                gpointer user_data);
+static void gnc_ui_print_check_dialog_help_cb(GtkButton * button, 
+                                              gpointer user_data);
+
+
 /********************************************************************\
  * gnc_ui_print_check_dialog_create
  * make a new print check dialog and wait for it.
@@ -49,47 +56,44 @@
 
 PrintCheckDialog * 
 gnc_ui_print_check_dialog_create(SCM callback) {
-  PrintCheckDialog * pcd = g_new0(PrintCheckDialog, 1);  
+  PrintCheckDialog * pcd = g_new0(PrintCheckDialog, 1);
+  GladeXML *xml;
 
-  /* call the glade-defined creator */
-  pcd->dialog = create_Print_Check_Dialog();
+  xml = gnc_glade_xml_new ("print.glade", "Print Check Dialog");
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_print_check_dialog_ok_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_print_check_dialog_ok_cb), pcd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_print_check_dialog_cancel_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_print_check_dialog_cancel_cb), pcd);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_print_check_dialog_help_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_print_check_dialog_help_cb), pcd);
+
+  pcd->dialog = glade_xml_get_widget (xml, "Print Check Dialog");
   pcd->callback = callback;
 
   /* now pick out the relevant child widgets */
-  pcd->format_picker = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                           "check_format_picker");
-  pcd->position_picker = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                             "check_position_picker");
-  pcd->dformat_picker = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                            "date_format_picker");
+  pcd->format_picker = glade_xml_get_widget (xml, "check_format_picker");
+  pcd->position_picker = glade_xml_get_widget (xml, "check_position_picker");
+  pcd->dformat_picker = glade_xml_get_widget (xml, "date_format_picker");
 
-  pcd->payee_x = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "payee_x_entry");
-  pcd->payee_y = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "payee_y_entry");
-  pcd->date_x = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "date_x_entry");
-  pcd->date_y = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "date_y_entry");
-  pcd->words_x = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "amount_words_x_entry");
-  pcd->words_y = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "amount_words_y_entry");
-  pcd->number_x = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "amount_numbers_x_entry");
-  pcd->number_y = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "amount_numbers_y_entry");
-  pcd->memo_x = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "memo_x_entry");
-  pcd->memo_y = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                     "memo_y_entry");
-  pcd->check_position = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                            "check_position_entry");
-  pcd->format_entry = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                            "date_format_entry");
-
-  pcd->units_picker = gtk_object_get_data(GTK_OBJECT(pcd->dialog),
-                                          "units_picker");
+  pcd->payee_x = glade_xml_get_widget (xml, "payee_x_entry");
+  pcd->payee_y = glade_xml_get_widget (xml, "payee_y_entry");
+  pcd->date_x = glade_xml_get_widget (xml, "date_x_entry");
+  pcd->date_y = glade_xml_get_widget (xml, "date_y_entry");
+  pcd->words_x = glade_xml_get_widget (xml, "amount_words_x_entry");
+  pcd->words_y = glade_xml_get_widget (xml, "amount_words_y_entry");
+  pcd->number_x = glade_xml_get_widget (xml, "amount_numbers_x_entry");
+  pcd->number_y = glade_xml_get_widget (xml, "amount_numbers_y_entry");
+  pcd->memo_x = glade_xml_get_widget (xml, "memo_x_entry");
+  pcd->memo_y = glade_xml_get_widget (xml, "memo_y_entry");
+  pcd->check_position = glade_xml_get_widget (xml, "check_position_entry");
+  pcd->format_entry = glade_xml_get_widget (xml, "date_format_entry");
+  pcd->units_picker = glade_xml_get_widget (xml, "units_picker");
 
   /* fix the option menus so we can diagnose which option is 
      selected */
@@ -97,10 +101,6 @@ gnc_ui_print_check_dialog_create(SCM callback) {
   gnc_option_menu_init(pcd->position_picker);
   gnc_option_menu_init(pcd->dformat_picker);
   gnc_option_menu_init(pcd->units_picker);
-
-  /* set data so we can find the struct in callbacks */
-  gtk_object_set_data(GTK_OBJECT(pcd->dialog), "print_check_structure",
-                      pcd);
 
   scm_protect_object(pcd->callback);
 
@@ -139,12 +139,10 @@ entry_to_double(GtkWidget * entry) {
  * gnc_ui_print_check_dialog_ok_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_print_check_dialog_ok_cb(GtkButton * button, 
                                 gpointer user_data) {
-  GtkWidget        * dialog = user_data;
-  PrintCheckDialog * pcd = 
-    gtk_object_get_data(GTK_OBJECT(dialog), "print_check_structure");
+  PrintCheckDialog * pcd = user_data;
 
   SCM        make_check_format = gh_eval_str("make-print-check-format");
   SCM        callback;
@@ -234,11 +232,10 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
  * gnc_ui_print_check_dialog_cancel_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_print_check_dialog_cancel_cb(GtkButton * button, 
                                     gpointer user_data) {
-  PrintCheckDialog * pcd =
-    gtk_object_get_data(GTK_OBJECT(user_data), "print_check_structure");
+  PrintCheckDialog * pcd = user_data;
 
   gnc_ui_print_check_dialog_destroy(pcd);
 }
@@ -247,9 +244,8 @@ gnc_ui_print_check_dialog_cancel_cb(GtkButton * button,
  * gnc_ui_print_check_dialog_help_cb
 \********************************************************************/
 
-void
+static void
 gnc_ui_print_check_dialog_help_cb(GtkButton * button, 
                                   gpointer user_data) {
   helpWindow(NULL, NULL, HH_PRINTCHECK);
 }
-
