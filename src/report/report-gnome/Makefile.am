@@ -61,7 +61,6 @@ EXTRA_DIST = \
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
-	ln -sf . report
 	ln -sf . g-wrapped 
 	ln -sf . report 
 	touch .scm-links
