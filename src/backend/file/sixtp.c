@@ -139,9 +139,11 @@ sixtp_new(void)
 {
   sixtp *s = g_new0(sixtp, 1);
 
-  if(s) {
-    s->children = g_hash_table_new(g_str_hash, g_str_equal);
-    if(!s->children) {
+  if(s) 
+  {
+    s->child_parsers = g_hash_table_new(g_str_hash, g_str_equal);
+    if(!s->child_parsers) 
+    {
       g_free(s);
       s = NULL;
     }
@@ -240,8 +242,8 @@ sixtp_destroy_node(sixtp *sp, GHashTable *corpses)
 {
   g_return_if_fail(sp);
   g_return_if_fail(corpses);
-  g_hash_table_foreach(sp->children, sixtp_destroy_child, corpses);
-  g_hash_table_destroy(sp->children);
+  g_hash_table_foreach(sp->child_parsers, sixtp_destroy_child, corpses);
+  g_hash_table_destroy(sp->child_parsers);
   g_free(sp);
 }
 
@@ -299,7 +301,8 @@ sixtp_add_sub_parser(sixtp *parser, const gchar* tag, sixtp *sub_parser)
   g_return_val_if_fail(tag, FALSE);
   g_return_val_if_fail(sub_parser, FALSE);
 
-  g_hash_table_insert(parser->children, g_strdup(tag), (gpointer) sub_parser);
+  g_hash_table_insert(parser->child_parsers, 
+                      g_strdup(tag), (gpointer) sub_parser);
   return(TRUE);
 }
 
@@ -392,7 +395,7 @@ sixtp_sax_start_handler(void *user_data,
 
   /* Use an extended lookup so we can get *our* copy of the key.
      Since we've strduped it, we know its lifetime... */
-  lookup_success = g_hash_table_lookup_extended(current_parser->children,
+  lookup_success = g_hash_table_lookup_extended(current_parser->child_parsers,
                                                 name,
                                                 (gpointer) &next_parser_tag,
                                                 (gpointer) &next_parser);
@@ -401,7 +404,7 @@ sixtp_sax_start_handler(void *user_data,
   {
        /* magic catch all value */ 
       lookup_success = g_hash_table_lookup_extended(
-          current_parser->children, SIXTP_MAGIC_CATCHER,
+          current_parser->child_parsers, SIXTP_MAGIC_CATCHER,
           (gpointer) &next_parser_tag, (gpointer) &next_parser);
       if(!lookup_success) 
       {

@@ -85,7 +85,8 @@ typedef void (*sixtp_fail_handler)(gpointer data_for_children,
                                    gpointer *result,
                                    const gchar *tag);
 
-typedef struct sixtp {
+typedef struct sixtp 
+{
   /* If you change this, don't forget to modify all the copy/etc. functions */
   sixtp_start_handler start_handler;
   sixtp_before_child_handler before_child;
@@ -106,7 +107,7 @@ typedef struct sixtp {
   /* called to cleanup character results when cleaning up this node's
      children. */
 
-  GHashTable *children;
+  GHashTable *child_parsers;
 } sixtp;
 
 typedef enum {
