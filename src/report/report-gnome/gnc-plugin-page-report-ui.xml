@@ -1,0 +1,15 @@
+<ui>
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <separator name="ReportToolbarSep0" />
+      <toolitem name="ReportToolbarBack" action="ReportBackAction" />
+      <toolitem name="ReportToolbarForw" action="ReportForwAction" />
+      <toolitem name="ReportToolbarReload" action="ReportReloadAction" />
+      <toolitem name="ReportToolbarStop" action="ReportStopAction" />
+      <separator name="ReportToolbarSep1" />
+      <toolitem name="ReportToolbarExport" action="ReportExportAction" />
+      <toolitem name="ReportToolbarOptions" action="ReportOptionsAction" />
+      <toolitem name="ReportToolbarPrint" action="ReportPrintAction" />
+    </placeholder>
+  </toolbar>
+</ui>

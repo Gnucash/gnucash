@@ -64,6 +64,11 @@ noinst_DATA = .scm-links
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = report.glade
 
+uidir = $(GNC_UI_DIR)
+
+ui_DATA = \
+	gnc-plugin-page-report-ui.xml
+
 noinst_HEADERS = \
  gw-report-gnome.h
 
@@ -71,7 +76,8 @@ EXTRA_DIST = \
   .cvsignore \
   ${glade_DATA} \
   ${gwmod_DATA} \
-  ${gncmod_DATA}
+  ${gncmod_DATA} \
+  ${ui_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different

@@ -109,8 +109,8 @@ Reporting - Somewhat functional
           Goldberg of Gnumeric regarding Gnome Office Graphing [GOG] to be
           factored out of gnumeric into libgoffice.
 
-        - Menu / toolbar merging needs to be added; see
-          src/report/report-gnome/gnc-plugin-page-report.c:gnc_plugin_page_report_{,un}merge_actions(...)
+        - Report actions [forw/back/export/options/print] need relevant
+          backing.
 
         - Business reports menu
           a/ one-level deeper than it should be

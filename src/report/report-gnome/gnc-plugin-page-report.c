@@ -35,6 +35,7 @@
 #include "egg-menu-merge.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
 #include "gnc-plugin-page-report.h"
@@ -86,6 +87,14 @@ void gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * wi
 void gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win, SCM report);
 void gnc_plugin_page_report_raise_editor(SCM report);
 
+static void gnc_plugin_page_report_back_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_forw_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_reload_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_stop_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_export_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_options_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_print_cb(EggAction *action, GncPluginPageReport *rep);
+
 struct GncPluginPageReportPrivate
 {
         /// The report-id
@@ -114,6 +123,12 @@ struct GncPluginPageReportPrivate
 
         /// the container the above HTML widget is in.
         GtkContainer *container;
+
+        /// The EggActionGroup to use for [un]merging our UI.
+        EggActionGroup *action_group;
+
+        EggMenuMerge *ui_merge;
+        gint merge_id;
 };
 
 GType
@@ -616,25 +631,63 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
 static
 void
 gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
-                                      EggMenuMerge *merge )
+                                      EggMenuMerge *ui_merge )
 {
-        // FIXME: ui-merge
-        // toolbar, primarily
+        GncPluginPageReport *page;
+        GncPluginPageReportPrivate *priv;
+
+        page = GNC_PLUGIN_PAGE_REPORT(plugin_page);
+        priv = (GncPluginPageReportPrivate*)page->priv;
+
+        DEBUG( "merge actions" );
+        priv->ui_merge = ui_merge;
+        priv->merge_id
+                = gnc_menu_merge_add_actions( priv->ui_merge,
+                                              priv->action_group,
+                                              "gnc-plugin-page-report-ui.xml" );
+        DEBUG( "done merging" );
 }
 
 static
 void
 gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
-                                        EggMenuMerge *merge )
+                                        EggMenuMerge *ui_merge )
 {
-        // FIXME: ui-unmerge
+        GncPluginPageReport *rep = GNC_PLUGIN_PAGE_REPORT( plugin_page );
+        GncPluginPageReportPrivate *priv = (GncPluginPageReportPrivate*)rep->priv;
+
+        DEBUG( "unmerge actions" );
+	egg_menu_merge_remove_ui( ui_merge, priv->merge_id );
+	egg_menu_merge_remove_action_group( ui_merge, priv->action_group );
+
+	priv->ui_merge = NULL;
+        DEBUG( "done unmerging" );
 }
+
+static EggActionEntry report_actions[] =
+{
+        { "ReportBackAction", N_("Back"), GTK_STOCK_GO_BACK, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_back_cb) },
+        { "ReportForwAction", N_("Forward"), GTK_STOCK_GO_FORWARD, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_forw_cb) },
+        { "ReportReloadAction", N_("Reload"), GTK_STOCK_REFRESH, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_reload_cb) },
+        { "ReportStopAction", N_("Stop"), GTK_STOCK_STOP, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_stop_cb) },
+
+        { "ReportExportAction", N_("Export"), GTK_STOCK_SAVE, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_export_cb) },
+        { "ReportOptionsAction", N_("Options"), GTK_STOCK_PROPERTIES, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_options_cb) },
+        { "ReportPrintAction", N_("Print"), GTK_STOCK_PRINT, NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_print_cb) },
+};
+static guint num_report_actions = G_N_ELEMENTS( report_actions );
 
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 {
-        // JSLED: +FIXME
-	//EggActionGroup *action_group;
+	EggActionGroup *action_group;
 	GncPluginPageReportPrivate *priv;
 	GncPluginPage *parent;
         GString *tmpStr;
@@ -650,35 +703,35 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
-        // FIXME: + _(Report:) + priv->ext->name;
         tmpStr = g_string_sized_new( 32 );
         g_string_sprintf( tmpStr, "%s: %s", _("Report"),
                           gnc_report_name( priv->initial_report ) );
 	parent->title       = g_strdup(tmpStr->str);
-        // FIXME: + _(Report:) + priv->ext->name; 
-	//parent->tab_name    = g_strdup(_("Report"));
         parent->tab_name = g_strdup( tmpStr->str );
-        // FIXME: URI? gnc_report://classs/type ?
 	parent->uri         = g_strdup("default:");
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
-	/* Create menu and toolbar information */
-/*
-        JSLED: FIXME
-	action_group = egg_action_group_new ("GncPluginPageAccountTreeActions");
+	/* Create menu and toolbar information. */
+
+        /* Note that we're not actually doing the merge, here ... just setup
+         * the UI objects.  See gnc_plugin_page_report_[un]merge_actions(...) */
+
+        // Report actions [1.<historical> order]
+        // * fwd, back, reload, stop, 
+        // * export
+        // * options
+        // * print
+
+	action_group = egg_action_group_new ("GncPluginPageReportActions");
 	priv->action_group = action_group;
-	egg_action_group_add_actions (action_group,
-				      gnc_plugin_page_account_tree_actions,
-				      gnc_plugin_page_account_tree_n_actions,
-				      plugin_page);
-	gnc_gnome_utils_init_short_names (action_group, short_labels);
-*/
+	egg_action_group_add_actions( action_group,
+				      report_actions,
+				      num_report_actions,
+				      plugin_page );
 
 	active_pages = g_list_append (active_pages, plugin_page);
-
-        // JSLED: -FIXME
 }
 
 GncPluginPage*
@@ -726,4 +779,56 @@ close_handler (gpointer user_data)
         GncPluginPageReportPrivate *win = user_data;  
         DEBUG("in close handler\n");
         gnc_plugin_page_report_destroy (win);
+}
+
+// ------------------------------------------------------------
+// GTK ACTION CALLBACKS
+
+static
+void
+gnc_plugin_page_report_back_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "back" );
+}
+
+static
+void
+gnc_plugin_page_report_forw_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "forw" );
+}
+
+static
+void
+gnc_plugin_page_report_reload_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "reload" );
+}
+
+static
+void
+gnc_plugin_page_report_stop_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "stop" );
+}
+
+static
+void
+gnc_plugin_page_report_export_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "export" );
+}
+
+static
+void
+gnc_plugin_page_report_options_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "options" );
+}
+
+static
+void
+gnc_plugin_page_report_print_cb( EggAction *action, GncPluginPageReport *report )
+{
+        DEBUG( "print" );
 }

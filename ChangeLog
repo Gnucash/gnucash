@@ -1,5 +1,16 @@
 2004-05-31  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/report/report-gnome/gnc-plugin-page-report-ui.xml: Add
+	report UI decl.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_init),
+	(gnc_plugin_page_report_merge_actions),
+	(gnc_plugin_page_report_unmerge_actions): Create and [un]merge report
+	Actions + toolbar items on page-transitions.
+
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/top-level.c (gnc_html_register_url_cb): Modify to
 	handle hyperlinks better.
 
