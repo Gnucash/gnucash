@@ -49,10 +49,12 @@
 
 (define gnc:*config-dir*
   (gnc:make-config-var
-   (N_ "Configuration directory.")
+   (N_ "Configuration directory - can be overridden with GNC_CONFIG_DIR environment variable.")
    (lambda (var value) (if (string? value) (list value) #f))
    string=?
-   gnc:_config-dir-default_))
+   (if (getenv "GNC_CONFIG_DIR")
+       (getenv "GNC_CONFIG_DIR")
+       gnc:_config-dir-default_)))
 
 (define gnc:*share-dir*
   (gnc:make-config-var
