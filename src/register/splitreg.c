@@ -448,11 +448,11 @@ SplitRegister * xaccMallocSplitRegister (int type)
 {								\
    BasicCell *hcell;						\
    hcell = xaccMallocTextCell();				\
-   hcell->width = NAME##_CELL_W;				\
+   header->widths[NAME##_CELL_C] = NAME##_CELL_W;		\
    if (1 == reg->num_header_rows) {				\
-      xaccAddCell (header, hcell, 0, NAME##_CELL_C);		\
+      header->cells[0][NAME##_CELL_C] = hcell;			\
    } else {							\
-      xaccAddCell (header, hcell, NAME##_CELL_R, NAME##_CELL_C);	\
+      header->cells[NAME##_CELL_R][NAME##_CELL_C] = hcell;	\
    }								\
    xaccSetBasicCellValue (hcell, reg->labels[NAME##_CELL]);	\
 }
@@ -466,14 +466,14 @@ SplitRegister * xaccMallocSplitRegister (int type)
 
 #define FANCY(CN,CT,CL) {					\
    /* reg->CN##Cell = xaccMalloc##CT##Cell(); */		\
-   reg->CN##Cell->cell.width = CL##_CELL_W;			\
-   xaccAddCell (curs, &(reg->CN##Cell->cell), CL##_CELL_R, CL##_CELL_C); \
+   curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
+   curs->cells [CL##_CELL_R][CL##_CELL_C] = &(reg->CN##Cell->cell);\
 }
 
 #define BASIC(CN,CT,CL) {					\
    /* reg->CN##Cell = xaccMalloc##CT##Cell(); */	 	\
-   reg->CN##Cell->width = CL##_CELL_W;				\
-   xaccAddCell (curs, reg->CN##Cell, CL##_CELL_R, CL##_CELL_C);	\
+   curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
+   curs->cells [CL##_CELL_R][CL##_CELL_C] = reg->CN##Cell;	\
 }
    
 /* ============================================== */
@@ -500,10 +500,9 @@ configCursors (SplitRegister *reg)
    */
 
    reg -> nullTransCell -> input_output = XACC_CELL_ALLOW_NONE;
-   reg -> nullTransCell -> width = 1;
    xaccSetBasicCellValue (reg->nullTransCell, "");
    for (i=0; i<reg->num_cols; i++) {
-      xaccAddCell (curs, reg->nullTransCell, 0, i);
+      curs->cells[0][i] = reg->nullTransCell;
    }
 
    FANCY (date,    Date,      DATE);
@@ -551,10 +550,10 @@ configCursors (SplitRegister *reg)
    */
 
    reg -> nullSplitCell -> input_output = XACC_CELL_ALLOW_NONE;
-   reg -> nullSplitCell -> width = 1;
    xaccSetBasicCellValue (reg->nullSplitCell, "");
    for (i=0; i<reg->num_cols; i++) {
       xaccAddCell (curs, reg->nullSplitCell, 0, i);
+      curs->cells[0][i] = reg->nullSplitCell;
    }
 
    FANCY (xfrm,    Combo,     XFRM);
