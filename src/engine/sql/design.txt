@@ -7,40 +7,56 @@ See table-create.sql for more info.
 
 Session Table, Session Modes
 ----------------------------
-There are three basic modes for accessing the database:
-"Single User",  "Polled Multi-User" and "Event-Driven Multi-User"
+There are four basic modes for accessing the database:
+"Single User File Mode",  "Single User Update Mode", "Polled Multi-User" 
+and "Event-Driven Multi-User"
 The session table in the database indicates which mode the database is
 functioning.
 
 -- "Single User File Mode" -- 
+   mode=single-file
    Only one user can have access to the database at a time.  The
    database is used as a glorified file: engine data is 'saved' to
    the database only when the user selects 'save' from the GUI
-   dialog.  This mode exists because it is easy to implement, easy 
-   to debug, and has reasonable demands on the database for small
-   datasets.
+   dialog.  Just as it would be for a file, this mode erases the
+   contents of the database and over-writes it with the new data. 
 
-   This mode is guaranteed to clobber any sort of changes made by
-   other users (in the same way that multiple file writers clobber
-   each other).  Thus, this mode is mutually exclusive of any other,
-   and the engine prevents more than one concurrent user.  
+   This mode exists because it is easy to implement, easy 
+   to debug, and has reasonable demands on the database for small
+   datasets.  It is not efficeint for large datasets, and has 
+   a certain amount of risk in its use: because it erases the 
+   old data before writing the new data, it is prone to any
+   problems during the 'save'. For example, if the database
+   crashes during the write (very unlikely), data could be lost.
+   If gnucash has some certain kind of bug (possible), not all
+   of the data may be saved.  If gnucash crashes before a save,
+   then any changes since the last save would be lost.
+
+   This mode is mutually exclusive of any other access mode:
+   a lockout mechanism prevents other users from accessing the 
+   database while it is open in single-user mode.
 
 
 -- "Single User Update Mode" -- 
-   Similar to the "Single User File Mode", except that updates
-   are stored in the DB as they are made (thus eliminating the 
-   need for a big 'save' at the end of a session).  This mode is 
-   more robust in that there is minimal/no data loss in the event 
-   of a crash.
+   mode=single-update
+   Only one user can have access to the database at a time.  Updates 
+   to data are stored in the DB as they are made in the GUI; there
+   is no need to perform a mass-save at the end of a session.
+
+   This mode is more robust in that there is minimal/no data loss in 
+   the event of a crash.
 
 -- "Multi-User Polled" -- 
+   mode=multi-user-poll
    Multiple users are assumed, GnuCash polls the database to detect 
    changes in the data.  Partially Implemented. 
 
 
 -- "Multi-User Events" --
+   mode=multi-user
    GnuCash uses the SQL LISTEN/NOTIFY async message delivery routines.
    Not implemented.
+
 
 Safety Lockout
 --------------

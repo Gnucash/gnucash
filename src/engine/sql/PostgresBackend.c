@@ -1842,6 +1842,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    int rc;
    PGBackend *be;
    char *url, *start, *end;
+   char *password=NULL;
+   char *pg_options=NULL;
+   char *pg_tty=NULL;
    char *bufp;
 
    if (!sess) return;
@@ -1900,12 +1903,91 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       return; 
    }
 
-   /* chop of trailing url-encoded junk, if present */
+   /* dbname is the last thing before the url-encoded data */
    end = strchr (start, '?');
    if (end) *end = 0;
    be->dbName = g_strdup (start);
 
-   g_free(url);
+   /* loop and parse url-encoded data */
+   while (end)
+   {
+      start = end+1;
+      end = strchr (start, '&');
+      if (end) *end = 0;
+
+      /* mode keyword */
+      if (0 == strncasecmp (start, "mode=", 5))
+      {
+         start += 5;
+         if (0 == strcasecmp (start, "single-file")) {
+             be->session_mode = MODE_SINGLE_FILE;
+         } else
+         if (0 == strcasecmp (start, "single-update")) {
+             be->session_mode = MODE_SINGLE_UPDATE;
+         } else
+         if (0 == strcasecmp (start, "multi-user-poll")) {
+             be->session_mode = MODE_POLL;
+         } else
+         if (0 == strcasecmp (start, "multi-user")) {
+             be->session_mode = MODE_EVENT;
+         } else
+         {
+             PWARN ("the following message should be shown in a gui");
+             PWARN ("unknown mode %s, will use single-update mode",
+                   start);
+             be->session_mode = MODE_SINGLE_UPDATE;
+         } 
+         
+      } else
+
+      /* username and password */
+      if ((0 == strncasecmp (start, "username=", 9)) ||
+          (0 == strncasecmp (start, "user=", 5)) ||
+          (0 == strncasecmp (start, "login=", 6)))
+      {
+         start = strchr (start, '=') +1;
+         be->username = g_strdup (start);
+      } else
+
+      if ((0 == strncasecmp (start, "password=", 9)) ||
+          (0 == strncasecmp (start, "passwd=", 7)) ||
+          (0 == strncasecmp (start, "pass=", 5)) ||
+          (0 == strncasecmp (start, "pwd=", 4)))
+      {
+         start = strchr (start, '=') +1;
+         password = start;
+         if (0 == strcmp (password, "''")) password = "";
+      } else
+
+      /* postgres-specific options and debug tty  */
+      if (0 == strncasecmp (start, "options=", 8))
+      {
+         start = strchr (start, '=') +1;
+         pg_options = start;
+      } else
+
+      if (0 == strncasecmp (start, "tty=", 4))
+      {
+         start = strchr (start, '=') +1;
+         pg_tty = start;
+      } else
+
+      /* ignore other postgres-specific keywords */
+      if ((0 == strncasecmp (start, "host=", 5)) ||
+          (0 == strncasecmp (start, "port=", 5)) ||
+          (0 == strncasecmp (start, "dbname=", 7)) ||
+          (0 == strncasecmp (start, "authtype=", 9)))
+      {
+         PWARN ("the following message should be shown in a gui");
+         PWARN ("ignoring the postgres keyword %s", start);
+      } else
+      {
+         PWARN ("the following message should be shown in a gui");
+         PWARN ("unknown keyword %s, ignoring", start);
+      }
+   }
+
+
 
    /* handle localhost as a special case */
    if (!safe_strcmp("localhost", be->hostname))
@@ -1916,11 +1998,12 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
 
    be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
-                                  NULL, /* trace/debug options */
-                                  NULL, /* file or tty for debug output */
+                                  pg_options, /* trace/debug options */
+                                  pg_tty, /* file or tty for debug output */
                                   be->dbName, 
-                                  NULL,  /* login */
-                                  NULL);  /* pwd */
+                                  be->username,  /* login */
+                                  password);  /* pwd */
+
 
    /* check the connection status */
    if (CONNECTION_BAD == PQstatus(be->connection))
@@ -1960,11 +2043,11 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       char * p;
       be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
-                                  NULL, /* trace/debug options */
-                                  NULL, /* file or tty for debug output */
+                                  pg_options, /* trace/debug options */
+                                  pg_tty, /* file or tty for debug output */
                                   "gnucash", 
-                                  NULL,  /* login */
-                                  NULL);  /* pwd */
+                                  be->username,  /* login */
+                                  password);  /* pwd */
 
       /* check the connection status */
       if (CONNECTION_BAD == PQstatus(be->connection))
@@ -1990,11 +2073,11 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       /* now connect to the newly created database */
       be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
-                                  NULL, /* trace/debug options */
-                                  NULL, /* file or tty for debug output */
+                                  pg_options, /* trace/debug options */
+                                  pg_tty, /* file or tty for debug output */
                                   be->dbName, 
-                                  NULL,  /* login */
-                                  NULL);  /* pwd */
+                                  be->username,  /* login */
+                                  password);  /* pwd */
 
       /* check the connection status */
       if (CONNECTION_BAD == PQstatus(be->connection))
@@ -2014,6 +2097,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       FINISH_QUERY(be->connection);
    }
 
+   /* free url only after login completed */
+   g_free(url);
+
    // DEBUGCMD (PQtrace(be->connection, stderr));
 
    /* set the datestyle to something we can parse */
@@ -2022,16 +2108,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    FINISH_QUERY(be->connection);
 
    /* OK, lets see if we can get a valid session */
-   /* hack alert -- we hard-code the access mode here,
-    * but it should be user-adjustable.  */
-   be->session_mode = MODE_SINGLE_UPDATE;
-   // be->session_mode = MODE_POLL;
    rc = pgendSessionValidate (be, ignore_lock);
 
    /* set up pointers for appropriate behaviour */
-   /* In single mode, we load all transactions right away.
-    *    and we never have to query the database.
-    */
    if (rc)
    {
       switch (be->session_mode)
@@ -2158,7 +2237,7 @@ pgendInit (PGBackend *be)
    nullguid = *(xaccGUIDNULL());
 
    /* access mode */
-   be->session_mode = MODE_NONE;
+   be->session_mode = MODE_SINGLE_UPDATE;
    be->sessionGuid = NULL;
 
    /* generic backend handlers */
@@ -2183,6 +2262,7 @@ pgendInit (PGBackend *be)
    be->hostname = NULL;
    be->portno = NULL;
    be->dbName = NULL;
+   be->username = NULL;
    be->connection = NULL;
 
    be->builder = sqlBuilder_new();

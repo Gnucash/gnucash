@@ -45,6 +45,7 @@ struct _pgend {
    /* postgres-specific connection data */
    char * hostname;
    char * portno;
+   char * username;
    char * dbName;
    PGconn * connection;
 

@@ -17,6 +17,14 @@ Postgres Install Instructions
     have a GUI to ask for your password yet)
 5) as yourself (i.e. your unix login), run 'createdb gnucash'
    
+6) (optional) enable TCPIP connections to remote hosts. To do this:
+   edit the file /var/lib/pgsql/pg_hba.conf on the remote host to
+   configure and allow access from other hosts.  See 'man pg_hba.conf'
+   for details.  Also create users.  Be sure to set a password.
+   (there appears to be no way to pass an empty password to postgres)
+   Note also the user must have 'createuser' permissions in order to 
+   lock tables (this is a bug in postgres 6.5 and maybe later ???)
+
 
 GnuCash Build Instructions
 --------------------------
@@ -31,19 +39,53 @@ How To Use This Thing
 a) Open your favorite datafile in the usual fashion.
 b) Click on 'Save As'
 c) enter the following URL instead of a filename in the file picker:
-    postgres://localhost/some-name-you-pick
+    postgres://localhost/some_dbname_you_pick
 
 The above steps will copy your data into that database.  You can 
 then restart gnucash (or keep working) and type in the same URL
 in the file open dialogs.  Or try it on the commandline:
 
-/usr/local/bin/gnucash postgres://localhost/whatever
+/usr/local/bin/gnucash postgres://localhost/dbname_whatever
 
-Note that you *must* use 'localhost' for your hostname, and 
-not some other hostname.  This is because anything else requires
-an sql username & password, and we don't have the gui dialogs for 
-that yet.
 
+Remote Access
+-------------
+In principle, you can use URL's such as:
+postgres://some.where.com/dbname
+However, these URL's require that the host 'some.where.com' have
+TCPIP access enabled (by following instructions (6) above).
+This is true even if the hostname is your local machine.  Thus,
+unless you've setup postrgress TCPIP connections, you *MUST* use
+url's of the form postgres://localhost/dbname
+
+You can specify usernames and passwords in the URL as follows:
+
+postgres://localhost/dbname?user=whomever&password=asdf
+
+Note that the username and password are the pg_shadow username and
+password, *NOT* your unix login name and password.
+
+Access Modes
+------------
+There are four different ways or 'modes' in which to access the database.
+These are 
+mode=single-file
+mode=single-update
+mode=multi-user-poll
+mode=multi-user
+
+The last mode is prefered, but not yet implemented.
+See the file 'design.txt' for an explanation.
+Enable these by specifying the url
+
+postgres://localhost/dbname?mode=whatever
+
+The current default is single-update, but will soon be multi-user-poll
+
+Other Options
+-------------
+The 'options=' and 'tty=' postgres keywords are supported. See the
+postgres documentation for more info.
 
 
 To Be Done
@@ -55,6 +97,14 @@ Core bugs/features that still need work:
 -- Implement GUI to ask user for username/password to log onto the
    server. 
 
+-- bug: during exit, it asks 'do you want to save', when this 
+   isn't/shouldn't be needed
+
+-- error code should include strings passed back, to be shown in 
+   gui dialogs. This is because the backen needs to return things
+   like usernames, etc. in the dialogs, and the backend doesn't 
+   have the interfaces for passing this kind of info.
+
 -- fix the annoying postgres:,,localhost,asdf file syntax: needs
    mods to gnc-book to keep it happy about lock files & such.
    (coord with rlb on gnc-book redesign)
@@ -64,6 +114,11 @@ Core bugs/features that still need work:
    the backend in a disabled state if a communication error occurs;
    there will be other debiliting conditions if the backend disappears,
    leaving the engine in a possibly confused state.
+
+   for example, if postgres user is misconfigured, the LOCK TABLE
+   will fail on session validate, and FINISH_QUERY will close the
+   connection.  ubsequent sql will core dump gnucash, even though this 
+   is a sysadmin error.
 
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
