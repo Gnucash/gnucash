@@ -206,7 +206,6 @@ src/gnome/dialog-tax-info.c
 src/gnome/dialog-totd.c
 src/gnome/dialog-transfer.c
 src/gnome/dialog-userpass.c
-src/gnome/druid-commodity.c
 src/gnome/druid-hierarchy.c
 src/gnome/druid-stock-split.c
 src/gnome/file-history.c
@@ -234,6 +233,9 @@ src/import-export/qif-import/druid-qif-import.c
 src/import-export/qif-import/gncmod-qif-import.c
 src/import-export/qif-import/qif.glade
 src/import-export/qif-io-core/gncmod-qifiocore.c
+src/import-export/binary-import/druid-commodity.c
+src/import-export/binary-import/gncmod-binary-import.c
+src/import-export/binary-import/binary-import.glade
 src/optional/swig/gnucash-swig-defines.c
 src/optional/swig/helperfuncs.c
 src/test-core/test-stuff.c
