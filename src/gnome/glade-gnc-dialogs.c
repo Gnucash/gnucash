@@ -1276,6 +1276,12 @@ create_Find_Transactions (void)
   GtkWidget *cleared_cleared_toggle;
   GtkWidget *cleared_reconciled_toggle;
   GtkWidget *label786;
+  GtkWidget *frame36;
+  GtkWidget *vbox87;
+  GtkWidget *label846;
+  GtkWidget *balance_balanced_toggle;
+  GtkWidget *balance_not_balanced_toggle;
+  GtkWidget *label843;
   GtkWidget *frame34;
   GtkWidget *vbox82;
   GtkWidget *label844;
@@ -1283,7 +1289,7 @@ create_Find_Transactions (void)
   GtkWidget *vbox83;
   GtkWidget *tag_case_toggle;
   GtkWidget *tag_regexp_toggle;
-  GtkWidget *label843;
+  GtkWidget *label845;
   GtkWidget *hbox20;
   GtkWidget *hbox23;
   GtkWidget *frame12;
@@ -1312,6 +1318,7 @@ create_Find_Transactions (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (notebook2);
   gtk_box_pack_start (GTK_BOX (dialog_vbox7), notebook2, TRUE, TRUE, 0);
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook2), GTK_POS_LEFT);
 
   frame6 = gtk_frame_new (_("Match Accounts"));
   gtk_widget_ref (frame6);
@@ -1326,6 +1333,7 @@ create_Find_Transactions (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (match_accounts_vbox);
   gtk_container_add (GTK_CONTAINER (frame6), match_accounts_vbox);
+  gtk_container_set_border_width (GTK_CONTAINER (match_accounts_vbox), 5);
 
   hbox26 = gtk_hbox_new (FALSE, 5);
   gtk_widget_ref (hbox26);
@@ -1373,7 +1381,7 @@ create_Find_Transactions (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (account_match_scroller);
   gtk_box_pack_start (GTK_BOX (match_accounts_vbox), account_match_scroller, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_match_scroller), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_match_scroller), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   label716 = gtk_label_new (_("Account"));
   gtk_widget_ref (label716);
@@ -1993,6 +2001,50 @@ create_Find_Transactions (void)
   gtk_widget_show (label786);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 9), label786);
 
+  frame36 = gtk_frame_new (_("Match Balance state"));
+  gtk_widget_ref (frame36);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame36", frame36,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame36);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame36);
+
+  vbox87 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_ref (vbox87);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox87", vbox87,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox87);
+  gtk_container_add (GTK_CONTAINER (frame36), vbox87);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox87), 5);
+
+  label846 = gtk_label_new (_("Find transactions whose Balance status is:"));
+  gtk_widget_ref (label846);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label846", label846,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label846);
+  gtk_box_pack_start (GTK_BOX (vbox87), label846, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label846), 7.45058e-09, 0.5);
+
+  balance_balanced_toggle = gtk_check_button_new_with_label (_("Balanced"));
+  gtk_widget_ref (balance_balanced_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "balance_balanced_toggle", balance_balanced_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (balance_balanced_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox87), balance_balanced_toggle, FALSE, FALSE, 0);
+
+  balance_not_balanced_toggle = gtk_check_button_new_with_label (_("Not Balanced"));
+  gtk_widget_ref (balance_not_balanced_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "balance_not_balanced_toggle", balance_not_balanced_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (balance_not_balanced_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox87), balance_not_balanced_toggle, FALSE, FALSE, 0);
+
+  label843 = gtk_label_new (_("Balance"));
+  gtk_widget_ref (label843);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label843", label843,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label843);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 10), label843);
+
   frame34 = gtk_frame_new (_("Match transaction tags (CURRENTLY INOPERABLE)"));
   gtk_widget_ref (frame34);
   gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame34", frame34,
@@ -2047,12 +2099,12 @@ create_Find_Transactions (void)
   gtk_box_pack_start (GTK_BOX (vbox83), tag_regexp_toggle, FALSE, FALSE, 0);
   gtk_widget_set_sensitive (tag_regexp_toggle, FALSE);
 
-  label843 = gtk_label_new (_("Tags"));
-  gtk_widget_ref (label843);
-  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label843", label843,
+  label845 = gtk_label_new (_("Tags"));
+  gtk_widget_ref (label845);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label845", label845,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label843);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 10), label843);
+  gtk_widget_show (label845);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 11), label845);
 
   hbox20 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox20);
@@ -2081,6 +2133,7 @@ create_Find_Transactions (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox24);
   gtk_container_add (GTK_CONTAINER (frame12), vbox24);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox24), 3);
 
   new_search_radiobutton = gtk_radio_button_new_with_label (vbox24_group, _("New search"));
   vbox24_group = gtk_radio_button_group (GTK_RADIO_BUTTON (new_search_radiobutton));

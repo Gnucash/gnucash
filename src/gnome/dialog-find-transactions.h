@@ -100,6 +100,9 @@ typedef struct {
   GtkWidget  * cleared_cleared_toggle;
   GtkWidget  * cleared_reconciled_toggle;
 
+  GtkWidget  * balance_balanced_toggle;
+  GtkWidget  * balance_not_balanced_toggle;
+
   GtkWidget  * tag_entry;
   GtkWidget  * tag_case_toggle;
   GtkWidget  * tag_regexp_toggle;

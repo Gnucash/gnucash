@@ -1879,7 +1879,7 @@ Points
       <can_focus>True</can_focus>
       <show_tabs>True</show_tabs>
       <show_border>True</show_border>
-      <tab_pos>GTK_POS_TOP</tab_pos>
+      <tab_pos>GTK_POS_LEFT</tab_pos>
       <scrollable>False</scrollable>
       <tab_hborder>2</tab_hborder>
       <tab_vborder>2</tab_vborder>
@@ -1900,6 +1900,7 @@ Points
 	<widget>
 	  <class>GtkVBox</class>
 	  <name>match_accounts_vbox</name>
+	  <border_width>5</border_width>
 	  <homogeneous>False</homogeneous>
 	  <spacing>0</spacing>
 
@@ -1968,7 +1969,7 @@ None
 	  <widget>
 	    <class>GtkScrolledWindow</class>
 	    <name>account_match_scroller</name>
-	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	    <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	    <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
@@ -3033,6 +3034,80 @@ Exactly
 
       <widget>
 	<class>GtkFrame</class>
+	<name>frame36</name>
+	<label>Match Balance state</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox87</name>
+	  <border_width>5</border_width>
+	  <homogeneous>False</homogeneous>
+	  <spacing>5</spacing>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label846</name>
+	    <label>Find transactions whose Balance status is:</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>7.45058e-09</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>balance_balanced_toggle</name>
+	    <can_focus>True</can_focus>
+	    <label>Balanced</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>balance_not_balanced_toggle</name>
+	    <can_focus>True</can_focus>
+	    <label>Not Balanced</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkLabel</class>
+	<child_name>Notebook:tab</child_name>
+	<name>label843</name>
+	<label>Balance</label>
+	<justify>GTK_JUSTIFY_CENTER</justify>
+	<wrap>False</wrap>
+	<xalign>0.5</xalign>
+	<yalign>0.5</yalign>
+	<xpad>0</xpad>
+	<ypad>0</ypad>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
 	<name>frame34</name>
 	<label>Match transaction tags (CURRENTLY INOPERABLE)</label>
 	<label_xalign>0</label_xalign>
@@ -3125,7 +3200,7 @@ Exactly
       <widget>
 	<class>GtkLabel</class>
 	<child_name>Notebook:tab</child_name>
-	<name>label843</name>
+	<name>label845</name>
 	<label>Tags</label>
 	<justify>GTK_JUSTIFY_CENTER</justify>
 	<wrap>False</wrap>
@@ -3173,6 +3248,7 @@ Exactly
 	  <widget>
 	    <class>GtkVBox</class>
 	    <name>vbox24</name>
+	    <border_width>3</border_width>
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 

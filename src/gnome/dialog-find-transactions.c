@@ -155,6 +155,12 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
   ftd->cleared_not_cleared_toggle = 
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "cleared_not_cleared_toggle");
 
+  ftd->balance_balanced_toggle = 
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "balance_balanced_toggle");
+  ftd->balance_not_balanced_toggle = 
+    gtk_object_get_data(GTK_OBJECT(ftd->dialog),
+                        "balance_not_balanced_toggle");
+
   ftd->tag_entry =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "tag_entry");
   ftd->tag_case_toggle =
@@ -339,6 +345,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
   time_t start_date, end_date;
 
   int c_cleared, c_notcleared, c_reconciled;
+  int b_balanced, b_not_balanced;
 
   if(search_type == 0) {
     if(ftd->q) xaccFreeQuery(ftd->q);
@@ -495,6 +502,18 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
     if(c_notcleared) how = how | CLEARED_NO;
     if(c_reconciled) how = how | CLEARED_RECONCILED;
     xaccQueryAddClearedMatch(q, how, QUERY_AND);
+  }
+
+  b_balanced = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->balance_balanced_toggle));
+  b_not_balanced = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON(ftd->balance_not_balanced_toggle));
+
+  if(b_balanced || b_not_balanced) {
+    balance_match_t how = 0;
+    if(b_balanced)     how = how | BALANCE_BALANCED;
+    if(b_not_balanced) how = how | BALANCE_UNBALANCED;
+    xaccQueryAddBalanceMatch(q, how, QUERY_AND);
   }
 
   if(!ftd->ledger) {

@@ -4294,7 +4294,8 @@ LoadXferCell (ComboCell * cell,
    */
   n = 0;
   acc = xaccGroupGetAccount (grp, n);
-  while (acc) {
+  while (acc)
+  {
     const gnc_commodity * curr, * secu;
 
     curr = xaccAccountGetCurrency (acc);
@@ -4316,6 +4317,7 @@ LoadXferCell (ComboCell * cell,
         g_free(name);
       }
     }
+
     LoadXferCell (cell, xaccAccountGetChildren (acc), 
                   base_currency, base_security);
     n++;

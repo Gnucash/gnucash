@@ -53,19 +53,51 @@ typedef enum {
   BY_NONE
 } sort_type_t;  
 
-typedef enum { PD_DATE, PD_AMOUNT, PD_ACCOUNT, 
-               PD_STRING, PD_CLEARED,  PD_MISC } pd_type_t;
+typedef enum {
+  PD_DATE,
+  PD_AMOUNT,
+  PD_ACCOUNT, 
+  PD_STRING,
+  PD_CLEARED,
+  PD_BALANCE,
+  PD_MISC
+} pd_type_t;
 
-typedef enum { ACCT_MATCH_ALL, ACCT_MATCH_ANY, ACCT_MATCH_NONE } acct_match_t;
-typedef enum { AMT_MATCH_ATLEAST, AMT_MATCH_ATMOST, 
-               AMT_MATCH_EXACTLY } amt_match_t;
-typedef enum { AMT_SGN_MATCH_EITHER, AMT_SGN_MATCH_CREDIT, 
-               AMT_SGN_MATCH_DEBIT } amt_match_sgn_t;
+typedef enum {
+  ACCT_MATCH_ALL,
+  ACCT_MATCH_ANY,
+  ACCT_MATCH_NONE
+} acct_match_t;
 
-enum { CLEARED_NO=1, CLEARED_CLEARED=2, CLEARED_RECONCILED=4, 
-       CLEARED_FROZEN=8 };
+typedef enum
+{
+  AMT_MATCH_ATLEAST,
+  AMT_MATCH_ATMOST, 
+  AMT_MATCH_EXACTLY
+} amt_match_t;
 
-enum { STRING_MATCH_CASE=1, STRING_MATCH_REGEXP=2};
+typedef enum {
+  AMT_SGN_MATCH_EITHER,
+  AMT_SGN_MATCH_CREDIT, 
+  AMT_SGN_MATCH_DEBIT
+} amt_match_sgn_t;
+
+typedef enum {
+  CLEARED_NO         = 1 << 0,
+  CLEARED_CLEARED    = 1 << 1,
+  CLEARED_RECONCILED = 1 << 2, 
+  CLEARED_FROZEN     = 1 << 3
+} cleared_match_t;
+
+enum {
+  STRING_MATCH_CASE   = 1 << 0,
+  STRING_MATCH_REGEXP = 1 << 1
+};
+
+typedef enum {
+  BALANCE_BALANCED   = 1 << 0,
+  BALANCE_UNBALANCED = 1 << 1
+} balance_match_t;
 
 typedef struct _querystruct Query;
 
@@ -99,16 +131,20 @@ typedef struct {
 } StringPredicateData;
 
 typedef struct {
-  pd_type_t  type;
-  int        how;
-  int        data;
-} MiscPredicateData;
+  pd_type_t       type;
+  cleared_match_t how;
+} ClearedPredicateData;
+
+typedef struct {
+  pd_type_t       type;
+  balance_match_t how;
+} BalancePredicateData;
 
 typedef struct {
   pd_type_t  type;
   int        how;
-} ClearedPredicateData;
-
+  int        data;
+} MiscPredicateData;
 
 typedef union { 
   pd_type_t            type;
@@ -117,6 +153,7 @@ typedef union {
   AccountPredicateData acct;
   StringPredicateData  str;
   ClearedPredicateData cleared;
+  BalancePredicateData balance;
   MiscPredicateData    misc;
 } PredicateData;
 
@@ -181,10 +218,10 @@ void xaccQueryAddDateMatchTT(Query * q,
                              QueryOp op);
 void xaccQueryAddMemoMatch(Query * q, const char * matchstring, 
                            int case_sens, int use_regexp, QueryOp op);
+void xaccQueryAddClearedMatch(Query * q, cleared_match_t how, QueryOp op);
+void xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);
-void xaccQueryAddClearedMatch(Query * q, int how, 
-                              QueryOp op);
 
 
 /*******************************************************************

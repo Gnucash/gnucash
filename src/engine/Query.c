@@ -82,6 +82,7 @@ static int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
 
 /********************************************************************
  ********************************************************************/
@@ -1450,7 +1451,7 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
  ********************************************************************/
 
 void
-xaccQueryAddClearedMatch(Query * q, int how, 
+xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
                          QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
@@ -1458,7 +1459,7 @@ xaccQueryAddClearedMatch(Query * q, int how,
   
   qt->p      = & xaccClearedMatchPredicate;
   qt->sense  = 1;
-  qt->data.type      = PD_CLEARED;
+  qt->data.type = PD_CLEARED;
   qt->data.cleared.how  = how;
 
   xaccInitQuery(qs, qt);
@@ -1475,6 +1476,36 @@ xaccQueryAddClearedMatch(Query * q, int how,
   xaccFreeQuery(qr);
 }
 
+/********************************************************************
+ * xaccQueryAddBalanceMatch
+ * Add a 'balance' filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
+{
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccBalanceMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type = PD_BALANCE;
+  qt->data.balance.how = how;
+
+  xaccInitQuery(qs, qt);
+  xaccQuerySetGroup(qs, q->acct_group);
+
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
 
 /*******************************************************************
  *  xaccQueryPurgeTerms
@@ -1838,6 +1869,32 @@ xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
     return ((pd->cleared.how & CLEARED_NO) ? 1 : 0);
     break;      
   }
+
+  return 0;
+}
+
+/*******************************************************************
+ *  xaccBalanceMatchPredicate 
+ *******************************************************************/
+static int
+xaccBalanceMatchPredicate(Split * s, PredicateData * pd) {
+  gboolean balanced;
+
+  assert(s && pd);
+  assert(pd->type == PD_BALANCE);
+
+  if ((pd->balance.how & BALANCE_BALANCED) &&
+      (pd->balance.how & BALANCE_UNBALANCED))
+    return 1;
+
+  balanced =
+    gnc_numeric_zero_p (xaccTransGetImbalance (xaccSplitGetParent (s)));
+
+  if (balanced && (pd->balance.how & BALANCE_BALANCED))
+    return 1;
+
+  if (!balanced && (pd->balance.how & BALANCE_UNBALANCED))
+    return 1;
 
   return 0;
 }
