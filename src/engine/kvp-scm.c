@@ -55,7 +55,8 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     else if(gw_wcp_p(val) &&
 	    gw_wcp_is_of_type_p(gh_eval_str("<gnc:kvp-frame*>"), val))
     {
-        return gw_wcp_get_ptr(val);
+        kvp_frame *frame = gw_wcp_get_ptr(val);
+        return kvp_value_new_frame (frame);
     }
     /* FIXME: add binary handler here when it's figured out */
     /* FIXME: add list handler here */
