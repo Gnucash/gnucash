@@ -413,11 +413,11 @@ double xaccSplitGetCostBasis (Split *s)
  * Initialize a transaction structure
 \********************************************************************/
 
-void
+static void
 xaccInitTransaction( Transaction * trans )
 {
   Split *split;
-  
+
   /* Fill in some sane defaults */
   trans->num         = strdup("");
   trans->description = strdup("");
@@ -1111,7 +1111,7 @@ xaccSplitRebalance (Split *split)
 }
 
 void
-xaccTransBeginEdit (Transaction *trans, int defer)
+xaccTransBeginEdit (Transaction *trans, gboolean defer)
 {
    char open;
    Backend *be;

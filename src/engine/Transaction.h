@@ -42,17 +42,6 @@
 #define NREC 'n'              /* not reconciled or cleared         */
 
 /** STRUCTS *********************************************************/
-/* The debit & credit pointers are used to implement a double-entry 
- * accounting system.  Basically, the idea with double entry is that
- * there is always an account that is debited, and another that is
- * credited.  These two pointers identify the two accounts. 
- */
-
-/* A split transaction is one which shows up as a credit (or debit) in
- * one account, and pieces of it show up as debits (or credits) in other
- * accounts.  Thus, a single credit-card transaction might be split
- * between "dining", "tips" and "taxes" categories.
- */
 
 typedef struct _account       Account;
 typedef struct _account_group AccountGroup;
@@ -86,12 +75,8 @@ int    xaccConfigGetForceDoubleEntry (void);
  * The xaccMallocTransaction() will malloc memory and initialize it.
  *    Once created, it is usually unsafe to merely "free" this memory;
  *    the xaccTransDestroy() method should be called.
- *
- * The xaccInitTransaction() method will initialize the indicated memory 
- *    area.  Handy for on-stack transactions.
  */ 
 Transaction * xaccMallocTransaction (void); 
-void          xaccInitTransaction (Transaction *);
 
 /* The xaccTransDestroy() method will remove all 
  *    of the splits from each of their accounts, free the memory
@@ -101,7 +86,7 @@ void          xaccInitTransaction (Transaction *);
  *    case nothing at all is freed, and everything is put back into 
  *    original order.
  */
-void          xaccTransDestroy (Transaction *);
+void          xaccTransDestroy (Transaction *trans);
 
 /* The xaccTransBeginEdit() method must be called before any changes
  *    are made to a transaction or any of its component splits.  If 
@@ -128,9 +113,9 @@ void          xaccTransDestroy (Transaction *);
  * The xaccTransIsOpen() method returns TRUE if the transaction
  *    is open for editing. Otherwise, it returns false.
  */
-void          xaccTransBeginEdit (Transaction *, int defer);
-void          xaccTransCommitEdit (Transaction *);
-void          xaccTransRollbackEdit (Transaction *);
+void          xaccTransBeginEdit (Transaction *trans, gboolean defer);
+void          xaccTransCommitEdit (Transaction *trans);
+void          xaccTransRollbackEdit (Transaction *trans);
 
 gboolean      xaccTransIsOpen (Transaction *trans);
 
@@ -172,18 +157,20 @@ void          xaccTransSetSlot(Transaction * trans, const char * key,
  *    xaccTransSetDateSecs(), but sets the date to the current system
  *    date/time.
  */
-void          xaccTransSetDate (Transaction *, int day, int mon, int year);
-void          xaccTransSetDateSecs (Transaction *, time_t);
-void          xaccTransSetDateToday (Transaction *);
-void          xaccTransSetDateTS (Transaction *, const Timespec *);
+void          xaccTransSetDate (Transaction *trans,
+                                int day, int mon, int year);
+void          xaccTransSetDateSecs (Transaction *trans, time_t time);
+void          xaccTransSetDateToday (Transaction *trans);
+void          xaccTransSetDateTS (Transaction *trans, const Timespec *ts);
 
-void          xaccTransSetDateEnteredSecs (Transaction *, time_t);
-void          xaccTransSetDateEnteredTS (Transaction *, const Timespec *);
+void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
+void          xaccTransSetDateEnteredTS (Transaction *trans,
+                                         const Timespec *ts);
 
 
 /* set the Num and Description fields ... */
-void          xaccTransSetNum (Transaction *, const char *);
-void          xaccTransSetDescription (Transaction *, const char *);
+void          xaccTransSetNum (Transaction *trans, const char *num);
+void          xaccTransSetDescription (Transaction *trans, const char *desc);
 
 /* The xaccTransSetMemo() and xaccTransSetAction() methods are
  * convenience routines to keep the memo and action fields
@@ -192,8 +179,8 @@ void          xaccTransSetDescription (Transaction *, const char *);
  * and action of both splits.   Otherwise, they will set the
  * memo and action of the first split (source split) only.
  */
-void          xaccTransSetMemo (Transaction *, const char *);
-void          xaccTransSetAction (Transaction *, const char *);
+void          xaccTransSetMemo (Transaction *trans, const char *memo);
+void          xaccTransSetAction (Transaction *trans, const char *action);
 void          xaccTransSetDocref (Transaction *, const char *);
 
 /* The xaccTransAppendSplit() method will append the indicated 
@@ -201,7 +188,7 @@ void          xaccTransSetDocref (Transaction *, const char *);
  *    If the split is already a part of another transaction,
  *    it will be removed from that transaction first.
  */
-void          xaccTransAppendSplit (Transaction *, Split *);
+void          xaccTransAppendSplit (Transaction *trans, Split *split);
 
 /* The xaccSplitDestroy() method will update its parent account and 
  *    transaction in a consistent manner, resulting in the complete 
@@ -219,7 +206,7 @@ void          xaccTransAppendSplit (Transaction *, Split *);
  *    (i.e. has a non-zero value).  Transactions with only one split in 
  *    them are valid if and only if the value of that split is zero.
  */
-void          xaccSplitDestroy (Split *);
+void          xaccSplitDestroy (Split *split);
 
 /* ------------- gets --------------- */
 /* The xaccTransGetSplit() method returns a pointer to each of the 
@@ -233,15 +220,15 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 /* These routines return the Num (or ID field), the description, 
  * and the date field.
  */
-const char *  xaccTransGetNum (Transaction *);
-const char *  xaccTransGetDescription (Transaction *);
-const char *  xaccTransGetDocref (Transaction *);
-time_t        xaccTransGetDate (Transaction *);
+const char *  xaccTransGetNum (Transaction *trans);
+const char *  xaccTransGetDescription (Transaction *trans);
+const char *  xaccTransGetDocref (Transaction *trans);
+time_t        xaccTransGetDate (Transaction *trans);
 #ifndef SWIG  /* swig chokes on long long */
-long long     xaccTransGetDateL (Transaction *);
+long long     xaccTransGetDateL (Transaction *trans);
 #endif
-void          xaccTransGetDateTS (Transaction *, Timespec *);
-void          xaccTransGetDateEnteredTS (Transaction *, Timespec *);
+void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
+void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
 /* The xaccTransGetDateStr() method will return a malloc'ed string
  *    representing the posted date of the transaction, or NULL if
