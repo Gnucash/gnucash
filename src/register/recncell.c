@@ -51,6 +51,8 @@ ToggleRecn (BasicCell *_cell, const char *cur_val)
    /* throw up a popup if the user tries to undo a reconciled transcation */
    /* hack alert -- this sets a new precedent ... verifyBox is defined in
     * both the motif and the gtk subdirs; I don't think I like it that way.
+    * anyway, that's why we don't have a prototype for this ... let the compiler
+    * warn us, remind us to deal with this ...
     */
    if(cur_val[0] == YREC) {
      if(!verifyBox(NULL, "Really change state of reconciled transaction?")) {
