@@ -302,7 +302,7 @@ rebuild_url(URLType type, const gchar * location, const gchar * label) {
 static guint ghttp_callback_tag = 0;
 static int ghttp_callback_enabled = FALSE;
 
-static void
+static gint
 ghttp_check_callback(gpointer data) {
   gnc_html            * html = data;
   GList               * current; 
@@ -384,9 +384,12 @@ ghttp_check_callback(gpointer data) {
 
   /* if all requests are done, disable the timeout */
   if(html->requests == NULL) {
-    gtk_timeout_remove(ghttp_callback_tag);
     ghttp_callback_enabled = FALSE;
     ghttp_callback_tag = 0;
+    return FALSE;
+  }
+  else {
+    return TRUE;
   }
 }
 
