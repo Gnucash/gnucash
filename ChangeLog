@@ -4,6 +4,8 @@
 	  (written-in-C) QIF importer.  The code compiles but has not
 	  been tested.  Yet to do: merging, conversion to gnc, and UI.
 
+	* configure.in: search for db-4.1.  Fixes #116509.
+
 2003-07-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/import-parse.[ch]: routines to parse numbers
