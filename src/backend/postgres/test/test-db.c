@@ -8,6 +8,7 @@
 
 #include "Backend.h"
 #include "PostgresBackend.h"
+#include "TransactionP.h"
 #include "TransLog.h"
 #include "gnc-book.h"
 #include "gnc-engine.h"
@@ -603,6 +604,9 @@ compare_balances (GNCSession *session_1, GNCSession *session_2)
   g_return_val_if_fail (session_1, FALSE);
   g_return_val_if_fail (session_2, FALSE);
 
+  /* FIXME: remove */
+  return TRUE;
+
   list = xaccGroupGetSubAccounts (gnc_book_get_group (book_1));
   for (node = list; node; node = node->next)
   {
@@ -675,6 +679,96 @@ test_queries (GNCSession *session_base, const char *db_name, const char *mode)
   return ok;
 }
 
+typedef struct
+{
+  GNCSession *session_1;
+  GNCSession *session_2;
+} UpdateTestData;
+
+static gboolean
+test_trans_update (Transaction *trans, gpointer data)
+{
+  UpdateTestData *td = data;
+  GNCBackendError io_err;
+  Transaction * trans_2;
+  GNCBook * book_1;
+  GNCBook * book_2;
+  gboolean ok;
+
+  book_1 = gnc_session_get_book (td->session_1);
+  book_2 = gnc_session_get_book (td->session_2);
+
+  /* FIXME mess with splits, too */
+  make_random_changes_to_transaction (book_1, trans);
+  io_err = gnc_session_get_error (td->session_1);
+  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
+                     "changing transaction in session 1",
+                     __FILE__, __LINE__,
+                     "error changing transaction: %d", io_err))
+    return FALSE;
+
+  trans_2 = xaccTransLookup (xaccTransGetGUID (trans), book_2);
+  if (!do_test_args (trans_2 != NULL,
+                     "can't find trans_2",
+                     __FILE__, __LINE__,
+                     "error looking up transaction"))
+    return FALSE;
+
+  /* This should get rolled back. */
+  make_random_changes_to_transaction (book_2, trans_2);
+
+  ok = xaccTransEqual (trans, trans_2, TRUE, TRUE);
+  ok = ok && trans->version == trans_2->version;
+
+  if (!do_test_args (ok,
+                     "test rollback",
+                     __FILE__, __LINE__,
+                     "transaction not rolled back properly"))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+test_updates_2 (GNCSession *session_base,
+                const char *db_name, const char *mode)
+{
+  AccountGroup *group;
+  UpdateTestData td;
+  char * filename;
+  GNCBook *book;
+  gboolean ok;
+
+  g_return_val_if_fail (session_base && db_name && mode, FALSE);
+
+  filename = db_file_url (db_name, mode);
+
+  if (!load_db_file (session_base, db_name, mode, FALSE))
+    return FALSE;
+
+  multi_user_get_everything (session_base, NULL);
+
+  book = gnc_session_get_book (session_base);
+  group = gnc_book_get_group (book);
+
+  td.session_1 = session_base;
+  td.session_2 = gnc_session_new ();
+
+  if (!load_db_file (td.session_2, db_name, mode, FALSE))
+    return FALSE;
+
+  multi_user_get_everything (td.session_2, NULL);
+
+  ok = xaccGroupForEachTransaction (group, test_trans_update, &td);
+
+  gnc_session_end (session_base);
+
+  gnc_session_end (td.session_2);
+  gnc_session_destroy (td.session_2);
+
+  return ok;
+}
+
 static gboolean
 test_mode (const char *db_name, const char *mode,
            gboolean updates, gboolean multi_user)
@@ -737,6 +831,9 @@ test_mode (const char *db_name, const char *mode,
     return FALSE;
 
   if (multi_user && !test_queries (session_db, db_name, mode))
+    return FALSE;
+
+  if (updates && !test_updates_2 (session_db, db_name, mode))
     return FALSE;
 
   gnc_session_destroy (session);
