@@ -1,5 +1,7 @@
 2001-08-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/pricecell.c: fix bugs
+
 	* src/engine/sql/upgrade.h: fix warning
 
 	* src/engine/gnc-pricedb.[ch] (gnc_price_equal): new func

@@ -56,7 +56,6 @@ static void xaccInitPriceCell (PriceCell *cell);
 static void PriceSetValue (BasicCell *bcell, const char *value);
 static const char * xaccPriceCellPrintValue (PriceCell *cell);
 
-
 /* ================================================ */
 
 static gboolean
@@ -126,7 +125,7 @@ PriceMV (BasicCell *_cell,
 /* ================================================ */
 
 static void
-PriceParse (PriceCell *cell)
+PriceParse (PriceCell *cell, gboolean update_value)
 {
   const char *newval;
   char *oldval;
@@ -149,6 +148,9 @@ PriceParse (PriceCell *cell)
   else
     cell->amount = gnc_numeric_zero ();
 
+  if (!update_value)
+    return;
+
   newval = xaccPriceCellPrintValue (cell);
 
   /* If they are identical do nothing */
@@ -166,7 +168,7 @@ PriceLeave (BasicCell *_cell)
 {
   PriceCell *cell = (PriceCell *) _cell;
 
-  PriceParse (cell);
+  PriceParse (cell, TRUE);
 }
 
 /* ================================================ */
@@ -246,7 +248,7 @@ xaccGetPriceCellValue (PriceCell *cell)
   if (cell == NULL)
     return gnc_numeric_zero ();
 
-  PriceParse (cell);
+  PriceParse (cell, FALSE);
 
   return cell->amount;
 }
