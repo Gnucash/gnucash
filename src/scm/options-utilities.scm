@@ -147,5 +147,6 @@
       pagename name-report-currency
       (string-append sort-tag "b")
       (_ "All other currencies will get converted to this currency.")
-      (gnc:locale-default-currency)))))
-
+      (gnc:option-value
+       (gnc:lookup-global-option "International"
+				 "Default Currency"))))))
