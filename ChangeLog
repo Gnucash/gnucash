@@ -1,3 +1,8 @@
+2003-06-02  Christian Stimming  <stimming@tuhh.de>
+
+	* po/pt_BR.po: Updated Brazilian portugese translation by Jon
+	Lapham <lapham@extracta.com.br>.
+
 2003-06-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-date-format.*: Create a new "date format"
