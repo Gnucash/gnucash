@@ -3,6 +3,6 @@
 
 ;; Automatically generated defaults (don't use these directly --
 ;; they're used during actual initialization elsewhere)
-(define gnc:_install-config-dir_ "@-GNC_CONFIGDIR-@")
-(define gnc:_install-share-dir_ "@-GNC_SHAREDIR-@")
-(define gnc:_install-help-dir_ "@-GNC_HELPDIR-@")
+(define gnc:_install-config-path_ '("@-GNC_CONFIGDIR-@"))
+(define gnc:_install-share-path_ '("@-GNC_SHAREDIR-@"))
+(define gnc:_install-doc-path_ '("@-GNC_HELPDIR-@"))
