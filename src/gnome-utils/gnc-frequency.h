@@ -69,19 +69,21 @@ struct pageDataTuple
 guint gnc_frequency_get_type( void );
 
 /**
+ * Create a new freq spec widget.
+ * The menus and panaels will be initialized to correspond to the
+ * settings in the FreqSpec, and the date window will show the 
+ * indicated date.  Either or both may be NULL.
  * For the default freq spec widget, use 'NULL'.
  **/
-GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *startDate );
+GtkWidget * gnc_frequency_new( FreqSpec *fs, GDate *date );
 void gnc_frequency_init( GNCFrequency *gf );
 
 /**
- * Sets up the given GNCFrequency with the given FreqSpec and
- * UIFreqSpec.  If the FreqSpec is NULL, then the default value is
- * Daily; if the UIFreqSpec is not NONE, then that value is the
- * default.  If the FreqSpec is non-NULL, then it really should agree
- * with the UIFreqSpec; this is considered a 'critical' error.
+ * Change the given GNCFrequency with the given FreqSpec and GDate.  
+ * If the FreqSpec is NULL, then no change is made to the widget menus.
+ * If the date is NULL, then no change is made to the widget date field.
  **/
-void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *startDate );
+void gnc_frequency_setup( GNCFrequency *gf, FreqSpec *fs, GDate *date );
 
 /**
  * Saves the state of the GNCFrequenecy widget.
