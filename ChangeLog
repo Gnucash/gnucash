@@ -18,6 +18,19 @@
 
 	* Fixes #144268
 
+        * src/report/standard-reports/income-statement.scm:
+          src/report/standard-reports/pnl.scm:
+          src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Rewrote pnl.scm, renamed it to income-statement.scm.
+          Can now create a meaningful statement post-closing.
+
+        * src/report/report-system/html-acct-table.scm:
+          Updated to include ability to "see through" closing
+          and/or adjusting entries.
+
+	* Fixes #105330.
+
 2004-07-13  David Montenegro  <sunrise2000@comcast.net>
 
         * src/report/standard-reports/trial-balance.scm:

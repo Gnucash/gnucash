@@ -171,6 +171,27 @@
 ;;          account having a balance of zero. otherwise, a row will be
 ;;          generated for the account.
 ;; 
+;;     balance-mode: 'pre-adjusting 'pre-closing 'post-closing
+;;
+;;          indicates whether or not to ignore adjusting/closing
+;;          entries when computing account balances. 'pre-closing
+;;          ignores only closing entries. 'pre-adjusting also ignores
+;;          adjusting entries. 'post-closing counts all entries.
+;; 
+;;     adjusting-pattern: alist of 'str 'cased 'regexp
+;; 
+;;          a pattern alist, as accepted by
+;;          gnc:account-get-trans-type-balance-interval, matching
+;;          adjusting transactions to be ignored when balance-mode is
+;;          'pre-adjusting.
+;; 
+;;     closing-pattern: alist of 'str 'cased 'regexp
+;; 
+;;          a pattern alist, as accepted by
+;;          gnc:account-get-trans-type-balance-interval, matching
+;;          closing transactions to be ignored when balance-mode is
+;;          'pre-closing.
+;; 
 ;;     account-type: unimplemented
 ;;     account-class: unimplemented
 ;;     row-thunk: unimplemented (for gnc:html-acct-table-render)
@@ -507,6 +528,21 @@
 			  'show-leaf-acct)
 		      ))
 	 (label-mode (or (get-val env 'account-label-mode) 'anchor))
+	 (balance-mode (or (get-val env 'balance-mode) 'post-closing))
+	 (closing-pattern (or (get-val env 'closing-pattern)
+			      (list
+			       (list 'str (N_ "Closing Entries"))
+			       (list 'cased #f)
+			       (list 'regexp #f)
+			       )
+			      ))
+	 (adjusting-pattern (or (get-val env 'adjusting-pattern)
+				(list
+				 (list 'str (N_ "Adjusting Entries"))
+				 (list 'cased #f)
+				 (list 'regexp #f)
+				 )
+				))
 	 ;; local variables
 	 (toplvl-accts (gnc:group-get-account-list (gnc:get-current-group)))
 	 (acct-depth-reached 0)
@@ -522,14 +558,45 @@
 	     )
 	)
       
-      ;; the following two functions were lifted directly
-      ;; from html-utilities.scm
+      ;; the following function was adapted from html-utilities.scm
       (define (my-get-balance-nosub account start-date end-date)
-	(if start-date
-	    (gnc:account-get-comm-balance-interval
-	     account start-date end-date #f)
-	    (gnc:account-get-comm-balance-at-date
-	     account end-date #f)))
+	(let* ((post-closing-bal
+		(if start-date
+		    (gnc:account-get-comm-balance-interval
+		     account start-date end-date #f)
+		    (gnc:account-get-comm-balance-at-date
+		     account end-date #f)))
+	       (closing (lambda(a)
+			  (gnc:account-get-trans-type-balance-interval
+			   (list account) closing-pattern
+			   start-date end-date)
+			  )
+			)
+	       (adjusting (lambda(a)
+			    (gnc:account-get-trans-type-balance-interval
+			     (list account) adjusting-pattern
+			     start-date end-date)
+			    )
+			  )
+	       )
+	  (or (and (equal? balance-mode 'post-closing) post-closing-bal)
+	      (and (equal? balance-mode 'pre-closing)
+		   (let* ((closing-amt (closing account))
+			  )
+		     (post-closing-bal 'minusmerge closing-amt #f)
+		     post-closing-bal)
+		   )
+	      (and (equal? balance-mode 'pre-adjusting)
+		   (let* ((closing-amt (closing account))
+			  (adjusting-amt (adjusting account))
+			  )
+		     (post-closing-bal 'minusmerge closing-amt #f)
+		     (post-closing-bal 'minusmerge adjusting-amt #f)
+		     post-closing-bal)
+		   )
+	      )
+	  )
+	)
       
       ;; Additional function that includes the subaccounts as
       ;; well. Note: It is necessary to define this here (instead of

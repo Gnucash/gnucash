@@ -32,7 +32,7 @@ gncscmmod_DATA = \
    daily-reports.scm \
    equity-statement.scm \
    net-barchart.scm \
-   pnl.scm \
+   income-statement.scm \
    portfolio.scm \
    price-scatter.scm \
    register.scm \
