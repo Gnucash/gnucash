@@ -168,16 +168,16 @@ void          xaccSplitSetReconcile (Split *, char);
  * invoking any of them will cause other splits in the transaction
  * to be modified so that the net value of the transaction is zero. 
  *
- * The xaccSetShareAmount() method sets the number of shares
+ * The xaccSplitSetShareAmount() method sets the number of shares
  *     that the split should have.  
  *
- * The xaccSetSharePrice() method sets the price of the split.
+ * The xaccSplitSetSharePrice() method sets the price of the split.
  *
- * The xaccSetValue() method adjusts the number of shares in 
+ * The xaccSplitSetValue() method adjusts the number of shares in 
  *     the split so that the number of shares times the share price
  *     equals the value passed in.
  *
- * The xaccSetSharePriceAndAmount() method will simultaneously
+ * The xaccSplitSetSharePriceAndAmount() method will simultaneously
  *     update the share price and the number of shares. This 
  *     is a utility routine that is equivalent to a xaccSplitSetSharePrice()
  *     followed by and xaccSplitSetAmount(), except that it incurs the
@@ -189,6 +189,7 @@ void         xaccSplitSetSharePriceAndAmount (Split *, double price,
 void         xaccSplitSetShareAmount (Split *, double);
 void         xaccSplitSetSharePrice (Split *, double);
 void         xaccSplitSetValue (Split *, double);
+void         xaccSplitSetBaseValue (Split *s, double value, char * base_currency);
 
 
 /* The following four subroutines return the running balance up
@@ -213,6 +214,8 @@ double xaccSplitGetBalance (Split *);
 double xaccSplitGetClearedBalance (Split *);
 double xaccSplitGetReconciledBalance (Split *);
 double xaccSplitGetShareBalance (Split *);
+double xaccSplitGetBaseValue (Split *s, char *base_currency);
+
 
 /* return the parent transaction of the split */
 Transaction * xaccSplitGetParent (Split *);
