@@ -17,6 +17,8 @@ Options:
 Libraries:
 	engine
         app-utils
+        network-utils
+        gnome-utils
         gnucash
 EOF
 	exit $1
@@ -69,6 +71,14 @@ while test $# -gt 0; do
       lib_app_utils=yes
       any_lib=yes
       ;;
+    network-utils)
+      lib_network_utils=yes
+      any_lib=yes
+      ;;
+    gnome-utils)
+      lib_gnome_utils=yes
+      any_lib=yes
+      ;;
     gnucash)
       lib_gnucash=yes
       any_lib=yes
@@ -94,6 +104,12 @@ if test "$lib_gnucash" = "yes"; then
   lib_app_utils=no
 fi
 
+if test "$lib_gnome_utils" = "yes"; then
+  lib_engine=no
+  lib_app_utils=no
+  lib_network_utils=no
+fi
+
 if test "$echo_prefix" = "yes"; then
     echo $prefix
 fi
@@ -113,6 +129,14 @@ if test "$echo_cflags" = "yes"; then
         cflags="$cflags @-GNUCASH_APP_UTILS_CFLAGS-@"
     fi
 
+    if test "$lib_network_utils" = "yes"; then
+        cflags="$cflags @-GNUCASH_NETWORK_UTILS_CFLAGS-@"
+    fi
+
+    if test "$lib_gnome_utils" = "yes"; then
+        cflags="$cflags @-GNUCASH_GNOME_UTILS_CFLAGS-@"
+    fi
+
     echo $cflags
 fi
 
@@ -125,6 +149,14 @@ if test "$echo_libs" = "yes"; then
 
     if test "$lib_app_utils" = "yes"; then
         libs="$libs @-GNUCASH_APP_UTILS_LIBS-@"
+    fi
+
+    if test "$lib_network_utils" = "yes"; then
+        libs="$libs @-GNUCASH_NETWORK_UTILS_LIBS-@"
+    fi
+
+    if test "$lib_gnome_utils" = "yes"; then
+        libs="$libs @-GNUCASH_GNOME_UTILS_LIBS-@"
     fi
 
     echo $libs

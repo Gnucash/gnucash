@@ -15,7 +15,8 @@ libgncmod_network_utils_la_SOURCES = \
   gnc-http.c \
   gncmod-network-utils.c
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   gnc-gpg.h \
   gnc-http.h
 

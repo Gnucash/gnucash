@@ -27,8 +27,6 @@
 #include <glade/glade.h>
 #include <gnome.h>
 
-#include "basiccell.h"       /* FIXME: remove when multi-byte functions
-                                are in app-utils, (or just glib) */
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-commodity.h"

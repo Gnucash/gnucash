@@ -2,13 +2,11 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_PRINT_CFLAGS}
 
 #FIXME remove the following deps
 #  -I${top_srcdir}/src \
 #  -I${top_srcdir}/src/gnome \
-#  -I${top_srcdir}/src/register/ledger-core \
-#  -I${top_srcdir}/src/register/register-core \
 
 INCLUDES = \
   -I${top_srcdir}/src/gnc-module \
@@ -17,8 +15,6 @@ INCLUDES = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
-  -I${top_srcdir}/src/register/ledger-core \
-  -I${top_srcdir}/src/register/register-core \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS} \
   ${GUPPI_CFLAGS}
@@ -45,7 +41,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gtkselect.c \
   print-session.c
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   dialog-commodity.h \
   dialog-utils.h \
   druid-utils.h \
@@ -55,7 +52,6 @@ noinst_HEADERS = \
   gnc-currency-edit.h \
   gnc-date-delta.h \
   gnc-date-edit.h \
-  gnc-dir.h \
   gnc-frequency.h \
   gnc-gui-query.h \
   gnc-html-history.h \
@@ -64,6 +60,9 @@ noinst_HEADERS = \
   gnc-menu-extensions.h \
   gtkselect.h \
   print-session.h
+
+noinst_HEADERS = \
+  gnc-dir.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
