@@ -14,9 +14,7 @@ BasicCell * xaccMallocBasicCell (void)
 
 void xaccInitBasicCell (BasicCell *cell)
 {
-   cell->type = 0;
-   cell->row = 0;
-   cell->col = 0;
+   cell->input_output = 1;
    cell->width = 0;
    cell->alignment = 0;
    cell->value = 0x0;

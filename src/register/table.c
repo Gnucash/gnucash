@@ -208,7 +208,16 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    if (arr && !invalid) {
       rel_row %= (arr->numRows);
       rel_col %= (arr->numCols);
-      if (! (arr->cells[rel_row][rel_col])) invalid = TRUE;
+      if (! (arr->cells[rel_row][rel_col])) {
+         invalid = TRUE;
+      } else {
+         /* if cell is marked as output-only,
+          * then don't call callbacks */
+         if (0 == (arr->cells[rel_row][rel_col])->input_output) {
+            invalid = TRUE;
+         }
+      }
+
    } else {
       invalid = TRUE;
    }

@@ -64,9 +64,6 @@ xaccAddCell (CellBlock *arr, BasicCell *cell, int row, int col)
    if (!arr) return;
    if (!cell) return;
 
-   cell->row = row;
-   cell->col = col;
-
    /* avoid embarrasement if cell incorrectly specified */
    if ((0 > row) || (0 > col)) return;
    if ((row >= arr->numRows) || (col >= arr->numCols)) return;

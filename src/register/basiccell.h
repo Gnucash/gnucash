@@ -5,17 +5,12 @@
 #ifndef __XACC_BASIC_CELL_H__
 #define __XACC_BASIC_CELL_H__
 
-/* cell types */
-enum {
-  DATE,     
-  PRICE,     /* two-digit float point display */
-  AMOUNT,    /* three-digit float point display */
-  TEXT,      /* string text */
-  COMBO,     /* combobox */
-};
-
-
 /*
+ * The input_output member is zero if the cell is supposed 
+ * to only display values, but not accept user input.  If
+ * non-zero, then the callbacks below are used to when the
+ * cell is entered.
+ *
  * The enter_cell() callback is called when the user first
  * makes a move to enter a cell.  The current value of the 
  * cell is passed as the argument.  If the callback wishes
@@ -55,11 +50,9 @@ enum {
 
 typedef struct _BasicCell {
 
-  short type;     /* cell type */
-  short row;      /* relative row position */
-  short col;      /* relative column position */
-  short width;    /* column width, in chars, not pixels */
+  short width;     /* column width, in chars, not pixels */
   short alignment; /* column text alignment */
+  char  input_output;  /* zero if output-only */
 
   /* private data */
   char * value;   /* current value */

@@ -140,6 +140,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    
    reg->balanceCell = xaccMallocPriceCell();
    reg->balanceCell->cell.width = 9;
+   reg->balanceCell->cell.input_output = 0;
    xaccAddCell (curs, &(reg->balanceCell->cell), BALN_CELL_R, BALN_CELL_C);
    
    table =  xaccMallocTable (0, 0);
