@@ -74,6 +74,7 @@ noinst_HEADERS = \
   FreqSpecP.h \
   GNCIdP.h \
   GroupP.h \
+  QueryP.h \
   SchedXactionP.h \
   SX-ttinfo.h \
   TransactionP.h \

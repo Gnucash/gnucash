@@ -27,13 +27,14 @@
 #include <sys/types.h>
 #include <time.h>
 #include <glib.h>
-#include <regex.h>
 
 #include "date.h" 
 #include "gnc-engine.h" 
 #include "GNCId.h" 
 #include "guid.h" 
 #include "kvp_frame.h" 
+
+typedef struct query_s Query;
 
 typedef enum {
   QUERY_AND=1,
@@ -156,123 +157,6 @@ typedef enum {
   QUERY_MATCH_ALL=1,   /* match all accounts */
   QUERY_MATCH_ANY=2    /* match any account */
 } query_run_t;
-
-typedef struct _querystruct Query;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-} BasePredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  acct_match_t    how;
-  AccountList     *accounts;
-  AccountGUIDList *account_guids;
-} AccountPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  amt_match_t     how;
-  amt_match_sgn_t amt_sgn;
-  double          amount;
-} AmountPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  balance_match_t how;
-} BalancePredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  book_match_t    how;
-  BookList        *books;
-  BookGUIDList    *book_guids;
-} BookPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  cleared_match_t how;
-} ClearedPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  GUID            guid;
-  GNCIdType       id_type;
-} GUIDPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  int             use_start;
-  Timespec        start;
-  int             use_end;
-  Timespec        end;
-} DatePredicateData;
-
-typedef struct {
-  pd_type_t         type;
-  pr_type_t         term_type;
-  int               sense;
-  kvp_match_t       how;
-  kvp_match_where_t where;
-  GSList           *path;
-  kvp_value        *value;
-} KVPPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  int             how;
-  int             data;
-} MiscPredicateData;
-
-typedef struct {
-  pd_type_t       type;
-  pr_type_t       term_type;
-  int             sense;
-  int             case_sens;
-  int             use_regexp;
-  char           *matchstring;
-  regex_t         compiled;
-} StringPredicateData;
-
-typedef union { 
-  pd_type_t            type;
-  BasePredicateData    base;
-  AccountPredicateData acct;
-  AmountPredicateData  amount;
-  BalancePredicateData balance;
-  BookPredicateData    book;
-  ClearedPredicateData cleared;
-  DatePredicateData    date;
-  GUIDPredicateData    guid;
-  KVPPredicateData     kvp;
-  StringPredicateData  str;
-  MiscPredicateData    misc;
-} PredicateData;
-
-typedef int (* Predicate)(Split * to_test, PredicateData * test_data);
-
-typedef struct {
-  PredicateData data;
-  Predicate     p;
-} QueryTerm;
 
 
 /*******************************************************************
@@ -403,10 +287,6 @@ void xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
 void xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
                           kvp_match_t how, kvp_match_where_t where,
                           QueryOp op);
-void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
-                           QueryOp op);
-
-void xaccQueryAddPredicate (Query * q, PredicateData *pred, QueryOp op);
 
 
 /*******************************************************************
@@ -437,8 +317,5 @@ int  xaccQueryGetMaxSplits(Query * q);
 time_t xaccQueryGetEarliestDateFound(Query * q);
 time_t xaccQueryGetLatestDateFound(Query * q);
 
-
-/* This is useful for network systems */
-Predicate xaccQueryGetPredicate (pr_type_t term_type);
 
 #endif

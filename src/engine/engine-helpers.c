@@ -32,6 +32,7 @@
 #include "Backend.h"
 #include "Group.h"
 #include "Query.h"
+#include "QueryP.h"
 #include "date.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"

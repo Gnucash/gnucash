@@ -40,6 +40,7 @@
 #include "BackendP.h"
 #include "GNCId.h"
 #include "GroupP.h"
+#include "QueryP.h"
 #include "Query.h"
 #include "TransactionP.h"
 
@@ -52,7 +53,8 @@ static short module = MOD_QUERY;
  *   - a chop limit which gives the maximum number of sorted
  *     splits to return. */
 
-struct _querystruct {
+struct query_s
+{
   /* terms is a list of the OR-terms in a sum-of-products 
    * logical expression. */
   GList *  terms;  
@@ -66,14 +68,17 @@ struct _querystruct {
   gboolean    tertiary_increasing;
   int         max_splits;
 
+  /* list of books that will be participating in the query */
+  BookList *books;
+
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
   int          changed;
   query_run_t  last_run_type; 
   AccountGroup * acct_group;
 
-  GList        * split_list;
-  GList        * xtn_list;  
+  SplitList        * split_list;
+  TransList        * xtn_list;  
 };
 
 /*******************************************************************
@@ -131,10 +136,12 @@ xaccQueryPrint(Query * q)
   printf("\n");
 
   /* print the node contents */
-  for(i=q->terms; i; i=i->next) {
+  for(i=q->terms; i; i=i->next) 
+  {
     aterms = i->data;
     printf("aterm=%p\n", aterms);
-    for(j=aterms; j; j=j->next) {
+    for(j=aterms; j; j=j->next) 
+    {
       qt = (QueryTerm *)j->data;
       switch (qt->data.base.term_type) 
       {
@@ -158,14 +165,17 @@ xaccQueryPrint(Query * q)
                   qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
+
         case PR_BALANCE:
           printf ("balance sense=%d how=%d\n", qt->data.balance.sense,
                   qt->data.balance.how);
           break;
+
         case PR_CLEARED:
           printf ("cleared sense=%d how=%d\n", qt->data.cleared.sense,
                   qt->data.cleared.how);
           break;
+
         case PR_DATE: {
           char buff[40];
           printf ("date sense=%d use_start=%d use_end=%d\n", 
@@ -220,20 +230,24 @@ xaccQueryPrint(Query * q)
                   qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
+
         case PR_MISC:
           printf ("misc\n");
           break;
+
         case PR_NUM:
           printf ("num sense=%d case sensitive=%d\n", qt->data.str.sense,
                   qt->data.str.case_sens);
           printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
+
         case PR_PRICE:
           printf ("price sense=%d how=%d\n", qt->data.amount.sense,
                   qt->data.amount.how);
           printf ("\tsign=%d amount=%f\n", qt->data.amount.amt_sgn,
                   qt->data.amount.amount);
           break;
+
         case PR_SHRS:
           printf ("shrs sense=%d how=%d\n", qt->data.amount.sense,
                   qt->data.amount.how);
@@ -266,6 +280,7 @@ xaccQueryPrint(Query * q)
 
 /* initial_term has hand-over semantics! Thus, initial_term must point
  * to newly allocated memory or be NULL. */
+
 static void
 xaccInitQuery(Query * q, QueryTerm * initial_term) 
 {
@@ -280,8 +295,9 @@ xaccInitQuery(Query * q, QueryTerm * initial_term)
     or->data  = and;
   }
 
-  if(q->terms)
-    xaccQueryClear(q);
+  if(q->terms) xaccQueryClear(q);
+
+  q->books = NULL;
 
   q->terms      = or;
   q->split_list = NULL;
@@ -358,7 +374,8 @@ xaccQueryNumTerms(Query * q)
   if (!q)
     return 0;
 
-  for(o=q->terms; o; o=o->next) {
+  for(o=q->terms; o; o=o->next) 
+  {
      n += g_list_length(o->data);    
   }
   return n;
@@ -417,6 +434,17 @@ free_query_term(QueryTerm *qt)
       qt->data.acct.account_guids = NULL;
       break;
 
+    case PD_BOOK:
+      g_list_free (qt->data.book.books);
+      qt->data.book.books = NULL;
+
+      for (node = qt->data.book.book_guids; node; node = node->next)
+        xaccGUIDFree (node->data);
+
+      g_list_free (qt->data.book.book_guids);
+      qt->data.book.book_guids = NULL;
+      break;
+
     case PD_KVP:
       g_slist_free (qt->data.kvp.path);
       qt->data.kvp.path = NULL;
@@ -465,6 +493,20 @@ copy_query_term(QueryTerm * qt)
       }
       break;
 
+    case PD_BOOK:
+      nqt->data.book.books = g_list_copy (nqt->data.book.books);
+      nqt->data.book.book_guids =
+        g_list_copy (nqt->data.book.book_guids);
+      for (node = nqt->data.book.book_guids; node; node = node->next)
+      {
+        GUID *old = node->data;
+        GUID *new = xaccGUIDMalloc ();
+
+        *new = *old;
+        node->data = new;
+      }
+      break;
+
     case PD_KVP: {
       GSList *node;
 
@@ -495,7 +537,9 @@ copy_and_terms(GList *and_terms)
   GList *cur_and;
 
   for(cur_and = and_terms; cur_and; cur_and = cur_and->next)
+  {
     and = g_list_prepend(and, copy_query_term (cur_and->data));
+  }
 
   return g_list_reverse(and);
 }
@@ -507,7 +551,9 @@ copy_or_terms(GList * or_terms)
   GList * cur_or;
 
   for(cur_or = or_terms; cur_or; cur_or = cur_or->next)
+  {
     or = g_list_prepend(or, copy_and_terms(cur_or->data));
+  }
 
   return g_list_reverse(or);
 }
@@ -524,13 +570,14 @@ xaccFreeQueryMembers(Query *q)
 {
   GList * cur_or;
 
-  if (q == NULL)
-    return;
+  if (q == NULL) return;
 
-  for(cur_or = q->terms; cur_or; cur_or = cur_or->next) {
+  for(cur_or = q->terms; cur_or; cur_or = cur_or->next) 
+  {
     GList * cur_and;
 
-    for(cur_and = cur_or->data; cur_and; cur_and = cur_and->next) {
+    for(cur_and = cur_or->data; cur_and; cur_and = cur_and->next) 
+    {
       free_query_term(cur_and->data);
       cur_and->data = NULL;
     }
@@ -549,8 +596,7 @@ xaccFreeQueryMembers(Query *q)
 void    
 xaccFreeQuery(Query * q) 
 {
-  if (q == NULL)
-    return;
+  if (q == NULL) return;
 
   xaccFreeQueryMembers (q);
 
@@ -562,8 +608,7 @@ xaccQueryCopy(Query *q)
 {
   Query *copy;
 
-  if (q == NULL)
-    return NULL;
+  if (q == NULL) return NULL;
 
   copy = xaccMallocQuery ();
   xaccFreeQueryMembers (copy);
@@ -605,7 +650,8 @@ xaccQueryInvert(Query * q)
 
   num_or_terms = g_list_length(q->terms);
 
-  switch(num_or_terms) {
+  switch(num_or_terms) 
+  {
   case 0:
     retval = xaccMallocQuery();
     retval->max_splits     = q->max_splits;
@@ -869,7 +915,8 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
   if ( !(ta) && !(tb) ) return 0; 
 
 
-  switch(how) {
+  switch(how) 
+  {
   case BY_STANDARD:
     return xaccSplitDateOrder(sa, sb);
     break;
@@ -1147,8 +1194,30 @@ xaccQueryCompileTerms (Query *q)
 {
   GList * or_ptr, * and_ptr;
 
-  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
-    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
+  /* find all of the books involved */
+  if (q->books) g_list_free (q->books);
+  q->books = NULL;
+
+  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) 
+  {
+    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) 
+    {
+      QueryTerm *qt = and_ptr->data;
+      switch (qt->data.type)
+      {
+        case PD_BOOK:
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
+  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) 
+  {
+    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) 
+    {
       QueryTerm *qt = and_ptr->data;
       switch (qt->data.type)
       {
