@@ -49,12 +49,12 @@ typedef struct _PopBox {
 
 static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
-static void realizeCombo (struct _BasicCell *bcell, void *w, int width);
-static void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col);
-static void destroyCombo (struct _BasicCell *bcell);
-static void setComboValue (struct _BasicCell *bcell, const char *value);
-static const char * enterCombo (struct _BasicCell *bcell, const char *value);
-static const char * leaveCombo (struct _BasicCell *bcell, const char *value);
+static void realizeCombo (BasicCell *bcell, void *w, int width);
+static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
+static void destroyCombo (BasicCell *bcell);
+static void setComboValue (BasicCell *bcell, const char *value);
+static const char * enterCombo (BasicCell *bcell, const char *value);
+static const char * leaveCombo (BasicCell *bcell, const char *value);
 
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
@@ -76,8 +76,67 @@ void xaccInitComboCell (ComboCell *cell)
    xaccInitBasicCell ( &(cell->cell));
    cell->cell.realize = realizeCombo;
    cell->cell.set_value = setComboValue;
+   cell->cell.destroy = destroyCombo;
    cell->menuitems = (char **) malloc (sizeof (char *));
    cell->menuitems[0] = NULL;
+}
+
+/* =============================================== */
+
+static
+void destroyCombo (BasicCell *bcell)
+{
+   ComboCell *cell;
+
+   cell = (ComboCell *) bcell;
+
+   /* the realize callback will be null if the cell
+    * gui has been realized.  Therefore, if its null, 
+    * destroy the gui 
+    */
+   if (!(cell->cell.realize)) {
+      PopBox *box;
+
+      box = (PopBox *) (cell->cell.gui_private);
+   
+      moveCombo (bcell, -1, -1);
+   
+      XtDestroyWidget (box->combobox);
+      free (box);
+   
+      /* allow the widget to be created again */
+      cell->cell.gui_private = NULL;
+      cell->cell.realize = realizeCombo;
+      cell->cell.move = NULL;
+      cell->cell.enter_cell = NULL;
+      cell->cell.leave_cell = NULL;
+      cell->cell.destroy = NULL;
+   }
+
+}
+
+/* =============================================== */
+
+void xaccDestroyComboCell (ComboCell *cell)
+{
+   int n = 0;
+   char ** arr;
+
+   destroyCombo (&(cell->cell));
+
+   /* free malloced memory */
+   arr = cell->menuitems;
+   while (arr[n]) {
+      free (arr[n]);
+      n ++;
+   }
+   free (arr);
+   cell->menuitems = NULL;
+
+   cell->cell.realize = NULL;
+   cell->cell.set_value = NULL;
+
+   xaccDestroyBasicCell ( &(cell->cell));
 }
 
 /* =============================================== */
@@ -156,7 +215,7 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
 /* =============================================== */
 
 static void
-setComboValue (struct _BasicCell *_cell, const char *str)
+setComboValue (BasicCell *_cell, const char *str)
 {
    ComboCell * cell = (ComboCell *) _cell;
    xaccSetComboCellValue (cell, str);
@@ -165,7 +224,7 @@ setComboValue (struct _BasicCell *_cell, const char *str)
 /* =============================================== */
 
 static
-void realizeCombo (struct _BasicCell *bcell, void *w, int pixel_width)
+void realizeCombo (BasicCell *bcell, void *w, int pixel_width)
 {
    ComboCell *cell;
    PopBox *box;
@@ -246,7 +305,7 @@ void realizeCombo (struct _BasicCell *bcell, void *w, int pixel_width)
 /* =============================================== */
 
 static
-void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
+void moveCombo (BasicCell *bcell, int phys_row, int phys_col)
 {
    ComboCell *cell;
    PopBox *box;
@@ -270,7 +329,7 @@ void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
 /* =============================================== */
 
 static
-const char * enterCombo (struct _BasicCell *bcell, const char *value)
+const char * enterCombo (BasicCell *bcell, const char *value)
 {
    int phys_row, phys_col;
    String choice;
@@ -327,7 +386,7 @@ const char * enterCombo (struct _BasicCell *bcell, const char *value)
 /* =============================================== */
 
 static
-const char * leaveCombo (struct _BasicCell *bcell, const char *value)
+const char * leaveCombo (BasicCell *bcell, const char *value)
 {
    ComboCell *cell;
    PopBox *box;
@@ -346,31 +405,6 @@ const char * leaveCombo (struct _BasicCell *bcell, const char *value)
    XtUnmanageChild (box->combobox); 
 
    return NULL;
-}
-
-/* =============================================== */
-
-static
-void destroyCombo (struct _BasicCell *bcell)
-{
-   ComboCell *cell;
-   PopBox *box;
-
-   cell = (ComboCell *) bcell;
-   box = (PopBox *) (cell->cell.gui_private);
-
-   moveCombo (bcell, -1, -1);
-
-   XtDestroyWidget (box->combobox);
-   free (box);
-
-   /* allow the widget to be created again */
-   cell->cell.gui_private = NULL;
-   cell->cell.realize = realizeCombo;
-   cell->cell.move = NULL;
-   cell->cell.enter_cell = NULL;
-   cell->cell.leave_cell = NULL;
-   cell->cell.destroy = NULL;
 }
 
 /* =============================================== */
