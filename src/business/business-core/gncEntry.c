@@ -348,15 +348,18 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 {
   gnc_numeric	subtotal;
   gnc_numeric	this_value;
+  gnc_numeric	percent = gnc_numeric_create (100, 1);
 
   /* Compute the value */
 
   subtotal = gnc_numeric_mul (qty, price, 100, /* XXX */ GNC_RND_ROUND);
 
-  if (GNC_ENTRY_INTERP_IS_PERCENT (discount_type))
-    discount = gnc_numeric_mul (subtotal, discount, 100 /* XXX */, GNC_RND_ROUND);
+  if (GNC_ENTRY_INTERP_IS_PERCENT (discount_type)) {
+    discount = gnc_numeric_div (discount, percent, 10000 /* XXX */, GNC_RND_ROUND);
+    discount = gnc_numeric_mul (subtotal, discount, 10000 /* XXX */, GNC_RND_ROUND);
+  }
 
-  this_value = gnc_numeric_sub_fixed (subtotal, discount);
+  this_value = gnc_numeric_sub (subtotal, discount, 10000 /* XXX */, GNC_RND_ROUND);
   if (discount_type & GNC_ENTRY_PRETAX_FLAG)
     subtotal = this_value;
 
@@ -366,8 +369,10 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
   /* Now... Compute the tax value (if the caller wants it) */
 
   if (tax_value != NULL) {
-    if (GNC_ENTRY_INTERP_IS_PERCENT (tax_type))
-      tax = gnc_numeric_mul (subtotal, tax, 100 /* XXX */, GNC_RND_ROUND);
+    if (GNC_ENTRY_INTERP_IS_PERCENT (tax_type)) {
+      tax = gnc_numeric_div (tax, percent, 10000 /* XXX */, GNC_RND_ROUND);
+      tax = gnc_numeric_mul (subtotal, tax, 10000 /* XXX */, GNC_RND_ROUND);
+    }
 
     *tax_value = tax;
   }

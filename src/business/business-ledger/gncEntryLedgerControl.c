@@ -18,6 +18,7 @@
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "table-allgui.h"
+#include "pricecell.h"
 
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerControl.h"
@@ -217,6 +218,31 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
    * account or taxaccount if there is a value or tax.  E.g., if the
    * tax is zero, then we don't need a taxaccount.
    */
+
+  /* Compute/Display Value and TaxValue cells */
+  {
+    gnc_numeric qty, price, discount, tax, value, tax_value;
+    gint disc_type, tax_type;
+    PriceCell * cell;
+
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &qty);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &price);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_DISC_CELL, &discount);
+    gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &tax);
+
+    disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
+    tax_type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+
+    gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
+			  &value, &tax_value);
+
+    cell = (PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
+						    ENTRY_VALUE_CELL);
+    if (cell)
+      gnc_price_cell_set_value (cell, value);
+
+    /* XXX: set tax_value */
+  }
 
   /* See if we are tabbing off the end of the very last line */
   do

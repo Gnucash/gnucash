@@ -105,7 +105,6 @@ gnc_order_window_verify_ok (OrderWindow *ow)
 {
   const char *res;
   GncOrder *order;
-  GncOwner *owner;
 
   /* Check the ID */
   res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
@@ -116,13 +115,13 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   }
 
   /* Check the Owner */
-  //  owner = gnc_owner_get_owner (ow->owner_choice);
-  //  res = gncOrderGetName (owner);
-  //  if (res == NULL || safe_strcmp (res, "") == 0) {
-  //    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
-  //			       _("The Order must be givenan Owner."));
-  //    return FALSE;
-  //  }
+  gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
+  res = gncOwnerGetName (&(ow->owner));
+  if (res == NULL || safe_strcmp (res, "") == 0) {
+    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
+  			       _("The Order must be given an Owner."));
+    return FALSE;
+  }
 
   /* Check that there is at least one Entry */
   order = ow_get_order (ow);
@@ -257,6 +256,29 @@ gnc_order_window_destroy_cb (GtkWidget *widget, gpointer data)
   gnc_resume_gui_refresh ();
 
   g_free (ow);
+}
+
+static int
+gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
+{
+  OrderWindow *ow = data;
+
+  if (!ow)
+    return FALSE;
+
+  gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
+  switch (gncOwnerGetType (&(ow->owner))) {
+  case GNC_OWNER_JOB:
+  {
+    char const *msg = gncJobGetDesc (gncOwnerGetJob (&(ow->owner)));
+    gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
+    break;
+  }
+  default:
+    gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
+    break;    
+  }
+  return FALSE;
 }
 
 static int
@@ -469,6 +491,13 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 				  gnc_order_window_close_handler,
 				  ow);
   }
+
+  gtk_signal_connect (GTK_OBJECT (ow->owner_choice), "changed",
+		      GTK_SIGNAL_FUNC (gnc_order_owner_changed_cb),
+		      ow);
+
+  /* Set the Reference */
+  gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
   /* We know that "order" (and "owner") exist now */
   {

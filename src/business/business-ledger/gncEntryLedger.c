@@ -14,6 +14,7 @@
 #include "gnc-ui-util.h"
 #include "combocell.h"
 #include "pricecell.h"
+#include "recncell.h"
 #include "messages.h"
 
 #include "gncEntry.h"
@@ -31,13 +32,8 @@
 Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 					const char * cell_name)
 {
-  const char *name;
-
-  if (!gnc_table_layout_get_cell_changed (ledger->table->layout, cell_name,
-					  TRUE))
-    return NULL;
-
-  name = gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+  const char * name =
+    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
 
   return xaccGetAccountFromFullName (gnc_book_get_group (ledger->book),
 				     name,
@@ -46,13 +42,9 @@ Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 
 char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name)
 {
-  const char *value;
+  const char *value =
+    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
 
-  if (!gnc_table_layout_get_cell_changed (ledger->table->layout, cell_name,
-					  TRUE))
-    return '\0';
-
-  value = gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
   if (value)
     return *value;
   return '\0';
@@ -60,16 +52,30 @@ char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name)
 
 gint gnc_entry_ledger_get_type (GncEntryLedger *ledger, const char * cell_name)
 {
-  const char *typeval;
+  RecnCell *cell =
+    (RecnCell *) gnc_table_layout_get_cell (ledger->table->layout, cell_name);
 
-  if (!gnc_table_layout_get_cell_changed (ledger->table->layout, cell_name,
-					  TRUE))
+  if (!cell)
     return -1;
 
-  typeval = gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
-
-  return gncEntryGetTypeFromStr (typeval);
+  return (gnc_recn_cell_get_flag (cell) - '0');
 }
+
+/* Return TRUE if value is valid, return FALSE if invalid */
+gboolean gnc_entry_ledger_get_numeric (GncEntryLedger *ledger,
+				       const char *cell_name,
+				       gnc_numeric *value)
+{
+  PriceCell *cell =
+    (PriceCell *) gnc_table_layout_get_cell (ledger->table->layout, cell_name);
+
+  if (!value || !cell)
+    return FALSE;
+
+  *value = gnc_price_cell_get_value (cell);
+  return TRUE;
+}
+			      
 
 GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
 				       VirtualCellLocation vcell_loc)

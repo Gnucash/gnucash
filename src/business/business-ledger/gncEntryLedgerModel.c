@@ -15,8 +15,6 @@
 #include "gnc-ui-util.h"
 
 #include "datecell.h"
-#include "pricecell.h"
-#include "recncell.h"
 
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerModel.h"
@@ -173,7 +171,7 @@ static const char * get_disc_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (discount))
     return NULL;
 
-  return xaccPrintAmount (discount, gnc_default_price_print_info ());
+  return xaccPrintAmount (discount, gnc_default_print_info (FALSE));
 }
 
 static const char * get_distype_entry (VirtualLocation virt_loc,
@@ -213,7 +211,7 @@ static const char * get_pric_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (price))
     return NULL;
 
-  return xaccPrintAmount (price, gnc_default_price_print_info ());
+  return xaccPrintAmount (price, gnc_default_print_info (TRUE));
 }
 
 static const char * get_qty_entry (VirtualLocation virt_loc,
@@ -231,7 +229,7 @@ static const char * get_qty_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (qty))
     return NULL;
 
-  return xaccPrintAmount (qty, gnc_default_price_print_info ());
+  return xaccPrintAmount (qty, gnc_default_print_info (FALSE));
 }
 
 static const char * get_taxacc_entry (VirtualLocation virt_loc,
@@ -289,7 +287,7 @@ static const char * get_tax_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (tax))
     return NULL;
 
-  return xaccPrintAmount (tax, gnc_default_price_print_info ());
+  return xaccPrintAmount (tax, gnc_default_print_info (FALSE));
 }
 
 static const char * get_inv_entry (VirtualLocation virt_loc,
@@ -333,7 +331,7 @@ static const char * get_value_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (value))
     return NULL;
 
-  return xaccPrintAmount (value, gnc_default_price_print_info ());
+  return xaccPrintAmount (value, gnc_default_print_info (TRUE));
 }
 
 /* GET_HELP */
@@ -686,13 +684,10 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
 					 ENTRY_DISC_CELL, TRUE)) {
-    PriceCell *cell;
     gnc_numeric amount;
 
-    cell = (PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
-						    ENTRY_DISC_CELL);
-    amount = gnc_price_cell_get_value (cell);
-    gncEntrySetDiscount (entry, amount);
+    if (gnc_entry_ledger_get_numeric (ledger, ENTRY_DISC_CELL, &amount))
+	gncEntrySetDiscount (entry, amount);
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
@@ -707,24 +702,18 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
 					  ENTRY_PRIC_CELL, TRUE)) {
-    PriceCell *cell;
     gnc_numeric amount;
 
-    cell = (PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
-						    ENTRY_PRIC_CELL);
-    amount = gnc_price_cell_get_value (cell);
-    gncEntrySetPrice (entry, amount);
+    if (gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &amount))
+	gncEntrySetPrice (entry, amount);
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
 					 ENTRY_QTY_CELL, TRUE)) {
-    PriceCell *cell;
     gnc_numeric amount;
 
-    cell = (PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
-						    ENTRY_QTY_CELL);
-    amount = gnc_price_cell_get_value (cell);
-    gncEntrySetQuantity (entry, amount);
+    if (gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &amount))
+	gncEntrySetQuantity (entry, amount);
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
@@ -749,13 +738,10 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
 					 ENTRY_TAX_CELL, TRUE)) {
-    PriceCell *cell;
     gnc_numeric amount;
 
-    cell = (PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
-						    ENTRY_TAX_CELL);
-    amount = gnc_price_cell_get_value (cell);
-    gncEntrySetTax (entry, amount);
+    if (gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &amount))
+	gncEntrySetTax (entry, amount);
   }
 
   {
