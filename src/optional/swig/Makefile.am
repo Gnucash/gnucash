@@ -1,6 +1,5 @@
 SUBDIRS = examples
 
-
 SWIG = swig
 
 docdir = ${GNC_DOC_INSTALL_DIR}
@@ -25,7 +24,7 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   .cvsignore \
-  examples/scan-acct.pl \
+  README \
   perl5_typemaps.i \
   gnucash-swig-defines.c
 
