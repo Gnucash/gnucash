@@ -18,10 +18,10 @@ accounting application.  The project goals are to create a world-class
 GPL'ed Open Source personal financial application for GNU/Linux and other 
 Unix's.  The project is the result of a merger 
 of the GnoMoney project with Xacc development.  There are currently
-two versions: xacc-1.0.17, and xacc-1.1.x.  The version 1.0.17
+two versions: xacc-1.0.18, and xacc-1.1.x.  The version 1.0.18
 is written in Motif, and is considered to be stable/production quality.  
 You can read more about X-Accountant at its home page 
-<a href="http://www.cs.hmc.edu/~rclark/xacc/index.old.html">
+<a href="http://www.cs.hmc.edu/~rclark/xacc/index.html">
 http://www.cs.hmc.edu/~rclark/xacc/index.old.html</a>.
 <p>
 The <a href="http://gnucash.ml.org/">GnuCash</a> pages
@@ -31,8 +31,7 @@ aimed at developers, not users.
 <p>
 The version 1.1.x is *unstable* (may not even compile), and is in 
 active development.  This page attempts to describe the current 
-goals & status.  Current efforts center around a port to GTK, and 
-the addition of various features.
+goals & status.  
 <p>
 We believe that a GNU GPL project should provide goals and motivations
 at both the large and the small scales, in order to focus and motivate
@@ -41,7 +40,7 @@ and carry out; yet their lack serves only to dissuade the grand
 thinkers.  A list of detailed goals may be mind-numbing to the casual
 reader; yet, without them, the roll-up-your-sleeves-and-do-it
 coder cannot know where to begin.  Detailed goals lend a concreteness 
-to the discussion: they can be architect-ed, designed and coded at any time
+to the discussion: they can be architected, designed and coded at any time
 by coders of any ability.  Thus, we present a list of goals, large and
 small, with the hope that the small goals will fall quickly, and the
 large ones shall turn into a multitude of small ones.
@@ -49,6 +48,12 @@ large ones shall turn into a multitude of small ones.
 
 <h2>News</h2>
 <dl>
+<dt><b>September 1998</b>
+<dd>Version 1.1.18 is begining to get stable; most things work the way they're
+    supposed to. New features include variety of ways of viewing an account,
+    a simple query engine, and support for multiplecurrencies.
+    <p>
+
 <dt><b>April 1998</b>
 <dd>The domain "gnucash.org" has been registered; web site is up.
     <p>
@@ -77,30 +82,51 @@ large ones shall turn into a multitude of small ones.
 
 <h2>Meta-Architecture Goals</h2>
 
-Create a clean separation between the data structures and the
-GUI that manipulates them, along the lines of a "Model-View-Controller"
+<ul>
+<li>
+Create and maintain a clean separation between the data structures and the
+GUI that manipulates them, along the lines of a <b>Model-View-Controller</b>
 paradigm.   Lists of accounts and the transactions in
 them can be thought of as a representation of financial data,
-a "Model".   The GUI that adds, modifies and deletes these should 
-be thought of as a manipulator of the data, a "Controller".  
+a <b>Model</b>.   The GUI that adds, modifies and deletes these should 
+be thought of as a manipulator of the data, a <b>Controller</b>.  
 The current Motif GUI is just
 one possible manipulator of the data; other GUI's,
 some simple, some complex, some possibly based on other graphical
-toolkits (QT, Fresco) should be possible.  The "View" of the data
-is the modern way of saying a "report".  A report generator 
-can create balance sheets and profit&loss statements, it can create pie
-charts of asset allocations, or graphs asset value over time.
+toolkits (Qt, gtk, emacs) should be possible.  
+The <b>View</b> of the data is a modern way of saying "report". 
+One typically does not view, or want to view all of the data, 
+but only a subset: say, only the transactions for the month of May, 
+or only the account totals for certain accounts.  The concept of "View"
+in fact consists of two very separate ideas: the <b>Query Engine</b>
+and the <b>Report Generator</b>.  The Query Engine is used to extract 
+a list of transactions from the Model database, based on a set of dates,
+a set of types, or other criteria.  This list is then typically 
+edited by the controller, or possibly printed.  The Report Generator
+is used to create summary reports about average account balances, 
+or profit&loss statements, or cash-flow statements, or may be graphed
+as pie charts of asset allocations, or graphs asset value over time.
 <p>
 
+<li>
 Create a mechanism for obtaining data from multiple financial sources.
 Currently, GnuCash stores data in its own file format; it can also
 import Quicken(TM) QIF files.   However, other sources & sinks of data
-might be stock-quote web sites, on-line banking interfaces, or
-access to SQL databases.  It should be possible to have any of these at
-as data sources, and with the appropriate security mechanisms, it should
-also be possible to update these.
+might be stock-quote web sites, on-line banking interfaces such as OFX, 
+access to SQL databases, such as those of Linux-Kontor, or CORBA interfaces, 
+such as the GL Ledger submission to the OMG.  It should be possible to have
+any of these at as data sources, and with the appropriate security mechanisms,
+it should also be possible for a user of GnuCash to manipulate the data
+at the other end.
+<p>
+In particular, with respect to OFX & online banking, one should be able to think
+of GnuCash as a very special browser, capable of browsing financial web sites.
+Instead of talking HTML/HTTP, it would talk OFX or Gold with the remote
+server.  Besides just statically viewing ones bank account, it should also
+allow bill payment and other account manipulation.
 <p>
 
+<li>
 Create both a personal-financial accounting system, as well as a
 business accounting framework.  Although these two goals may seem at
 odds with each other, there is no reason why they could not share
@@ -119,6 +145,7 @@ a ledger window, and a report generation mechanism.   The tools
 created to allow one should be portable enough to be deployed in the
 other application as well.
 <p>
+</ul>
 
 
 <h2>Concrete Architectural and Development Goals</h2>
@@ -145,25 +172,59 @@ architectural goals.
     separation would make the design and implementation of new ledger
     windows much simpler and easier.
     <p>
-    <b>Current Status:</b> the latest alpha-development releases (version 
+    <b>Current Status:</b> the latest beta-development releases (version 
     1.1.x) contain such an object.  
     <ul>
     <li>Currently Motif-based
-    <li>GTK port is read-only
-    <li>No Qt port yet
+    <li>GTK port mostly work, but is hung up on the inadequacies of 
+        underlying table widget.
+    <li>No Qt port yet of the register.
     <li>the simple single-account ledgers (incl. stock ledgers) seem 
         to be working correctly, but no heavy testing yet.
-    <li>The multiple-account ledger is ery broken.
-    <li>The multi-split ledger is still unimplemented.  Since I know
-         how this should work, I hope to work on it soon.
-    <li>read-only GTK version published, thanks to Rob Browning.
+    <li>The multiple-account ledger is very broken.
+    <li>The multi-split ledger seems to work.  One can display
+        one line per transaction, two lines per transaction, one line 
+        per split, or a dynamic-expansion version of these.
+    <li>GTK version published, thanks to Rob Browning.
         (other comments above are for motif version).
-    <li>query for date range completely missing.
-    <li>No curses version yet.
+    <li>No curses or emacs version yet.
     <li>Taxes: For handling e.g. new zealand GST tax (12.5%) or british VAT,
         it would be enough to add a checkbox to say y/n, add tax ...
         (of course other schemes would be more sophisticated.)
+    <li>Linas Vepstas <linas@linas.org> is handling the "GUI-independent" 
+        parts of the register, as well as the Motif code.
+    <li>Ted Lemon &lt;mellon@hoffman.vix.com&gt;
+        is creating/fixing/extending
+        the underlying gtk widget to have the features that GnuCash needs.
     </ul>
+    <p>
+
+<dt><b>Engine, Financial Objects</b>
+<dd>The current system makes a distinction between the data (account,
+    transaction) and they GUI that displays it.  The data is embeded 
+    within and controlled by the "Engine", which is a set of routines
+    to access accounts, transactions, etc.  The flexibility and features 
+    of the engine can be improved, and in particular, the sophistication of 
+    the query generator, and the level of multiple-currency support.
+    But possibly the most important task is to review the paradigm
+    and adjust it to bring it in line with a transaction-processing 
+    model.
+    <p>
+    <b>Current Status:</b> 
+    <ul>
+    <li>The basic engine has been detangled from 
+        the GUI elements, as of version 1.1.4.  
+    <li>Binary file I/O mostly detangled into a separate module.
+    <li>Prototype for transaction logging in place
+    <li>Backup files automatically created & timestamped.
+    <li>BeginEdit()/CommitEdit() routines mostly in place,
+        These "Transaction processing constructs" 
+        should simplify creation of an SQL back end.
+    <li>Multiple currency support is shaky.
+    <li>Query engine is minimal/sparse in capabilities.
+    <li>Linas is handling the engine code.
+    </ul>
+
     <p>
 
 <dt><b>Extension Language Support</b>
@@ -186,11 +247,15 @@ architectural goals.
     At the final stages, it is hoped that new modules can be imported
     without requiring that the application itself be recompiled & relinked.
     <p>
-    <b>Status:</b>  Work has begun.  The transaction engine interfaces
-    are avaialable via 
-    <a href="http://starship.skyport.net/crew/beazley/swig.html">
-    SWIG</a>.
-    A scheme-based user-preferences/configuration file has been created.
+    <b>Status:</b>  
+    <ul>
+    <li>Work has begun.  
+    <li>The transaction engine interfaces are avaialable via 
+        <a href="http://starship.skyport.net/crew/beazley/swig.html">
+        SWIG</a>.
+    <li>The main loop is controlled by the Guile scheme interpreter.
+    <li>Rob Browning is the reigning expert.
+    </ul>
     <p>
 
 <dt><b>Multi-user Support</b>
@@ -222,30 +287,6 @@ architectural goals.
     SQL does NOT require locks to be held for long periods of time!
     <p>
 
-<dt><b>Engine, Financial Objects</b>
-<dd>The current system makes a distinction between the data (account,
-    transaction) and they GUI that displays it.  This distinction should
-    be further strengthened, and a set of financial objects, residing in
-    their own library, should be created.   Routines to help make the 
-    engine more transaction-processing oriented should be added.
-    <p>
-    <b>Current Status:</b> 
-    <ul>
-    <li>The basic engine has been detangled from 
-    the GUI elements, as of version 1.1.4.  
-    <li>Binary file i/o still remains tangled.  
-    <li>prototype for transaction logging in place
-    <li>backup files automatically created & timestamped.
-    <li>BeginEdit()/CommitEdit() routines mostly in place,
-        These "Transaction processing constructs" 
-        should simplify creation of an SQL back end.
-    <li>Engine seems to be working correctly, but no heavy testing yet.
-    <li>Support for alternate sort orders, or query for subset of
-        all transactions completely missing.
-    </ul>
-
-    <p>
-
 <dt><b>OFX support</b>
 <dd>Provide the SGML DTD parsers to handle the OFX reports that many
     banking institutions are providing, or will soon be providing, to
@@ -258,7 +299,10 @@ architectural goals.
     <ul>
     <li>Work on an OFX DTD parser has begun.  headers generated
         correctly.  Constrcutors generated almost correctly.
+        Parser work done by Linas.
     <li>Simple scripts have been run against real-live OFX servers.
+        Ueli Rutishauser <urutishauser@bigfoot.com>
+        has been able to do e*trade transactions to a real account.
     </ul>
     <p>
 
@@ -276,6 +320,18 @@ The following is a list of goals and "bug fixes" that should be solved
 immediately, independent of the major goals.
 
 <dl>
+<dt><b>User Interface Ports</b>
+<dd>Port the package as a whole to gtk/gnome, Qt, Emacs
+    <b>Status:</b>
+    <ul>
+    <li>Jim Pick &lt;jimpick@jimpick.com&gt; may be working on an emacs version...
+    <li>Daniel R Risacher &lt;magnus@alum.mit.edu&gt; is taking over the overall
+        gtk/gnome work from Jeremy Collins.
+    <li>Qt code submitted by ...
+    </ul>
+
+    <p>
+
 <dt><b>Categories</b>
 <dd>Provide a default list of "Categories" (Income/Expense Accounts).
     These are categories such as "Automobile Expense", "Bank Interest
@@ -292,19 +348,22 @@ immediately, independent of the major goals.
 
 <dt><b>Internationalization</b>
 <dd>All menus, markup and help-text should be internationalized,
-    so that X-Accountant could be usable in any country.  This
+    so that GnuCash could be usable in any country.  This
     would include the printing of currency values in the local 
     country conventions. 
     <p>
-    Current status: most English-language messages have been 
-    #defined and moved to a single header file. (messages.h)
-    (Will use gnu gettext for the message catalogues. ??)
-    Looking for routines that can parse and print
-    monetary values in different formats, as well as date/time
-    parsing/printing routines.  (xacc contains such parsing
-    routines, but they're not very powerful or i18n'ed.)
-    <p>
-    Henning Spruth has translated the README into German.
+    <b>Current status:</b>
+    <ul>
+    <li>Most English-language messages have been 
+        #defined and moved to a single header file. (messages.h)
+    <li>Plan to use gnu gettext() for the message catalogues. 
+    <li>Looking for routines that can parse and print
+        monetary values in different formats, as well as date/time
+        parsing/printing routines.  (gnucash contains such parsing
+        routines, but they're not very powerful or i18n'ed.)
+    <li>Henning Spruth has translated the README into German.
+    <li>
+    </ul>
     <p>
 
 <dt><b>Recurring Transactions</b>
@@ -314,6 +373,10 @@ immediately, independent of the major goals.
     whether the multi-user functions are available or not.
     Note also, maybe the engine needs to support two dates per
     transaction: expected, and actual ??
+    <b>Current status:</b>
+    <ul>
+    <li>Design Doc contributed by Bob Drzyzgula 
+    </ul>
     <p>
 
 <dt><b>Navigation</b>
@@ -330,7 +393,7 @@ immediately, independent of the major goals.
 <dd>A set of pretty icons and button pixmaps should be created for
     minimized windows, and for the various buttons.  A user-configurable
     button-bar would be nice too.  This should probably be coupled with
-    the creation of an X resource file, which does not currenyl exist.
+    the creation of an X resource file, which does not currently exist.
     <p>
 
 <dt><b>Folder Tabs</b>
@@ -368,6 +431,12 @@ immediately, independent of the major goals.
     transaction cannot be completed until two accounts have been specified.
     It should also be possible to sweep through the date, and find all
     dangling transactions.
+    <b>Current status:</b>
+    <ul>
+    <li>The engine has a couple of flags in it that control this;
+        however, they are compiled in, there is no way to change them
+        from the gui.
+    </ul>
     <p>
 
 <dt><b>Transaction Window Fixes</b>
@@ -387,6 +456,11 @@ immediately, independent of the major goals.
 <dd>Create menu system & file format for manipulating user
     preferences.  Preferences include things like showing/not
     showing categories, forcing double-entry, etc.
+    <b>Current status:</b>
+    <ul>
+    <li>Rob Browning has put together a basic infrastructure
+        that unifies command-line flags with sceme-based config files.
+    </ul>
     <p>
 
 <dt><b>Bonds & Interest Bearing Instruments</b>
@@ -501,11 +575,6 @@ immediately, independent of the major goals.
     transactions.)
     <p>
 
-<dt><b>Variety of Sorting Orders</b>
-<dd>Sort entries in register by date of key-in rather than date of
-    entry, or by date of clearing.  Or sort alphabetically.  Also,
-    filter, i.e. show only those entries of a particular type ...
-    <p>
 <dt><b>emacs & vi Key Bindings for Text Fields</b>
 <dd>Make sure that text fields can handle the vi & emacs key bindings,
     so that e.g. ctrl-a, ctrl-k works.
@@ -565,25 +634,18 @@ Well, just to show that we are getting things done.
 <h2>Volunteers</h2>
 Your name here as project contributor!
 <ul>
-<li>Linas Vepstas <linas@linas.org> is maintaining the current xacc
+<li>Linas Vepstas <linas@linas.org> is maintaining the current GnuCash
     and is attempting to coordinate the project work.
-<li>Jeremy Collins <linux@cyberramp.net>, originator of the GnoMoney
-    project, is working on a GTK port.
+<li>Jeremy Collins <linux@cyberramp.net>, originated the GnoMoney
+    project, created the intial GTK port, and set up the GnuCash web site.
 <li><a href="mailto:rlb@cs.utexas.edu">Rob Browning (rlb@cs.utexas.edu)</a>
-    ex-cbb'er, has begun work on a GTK-based graphing package.
-<li>Robin Clark <rclark@cs.hmc.edu>, the *original* X-Accountant author,
-    is creating a register widget in QT/KDE
-<li>Henning Spruth <henning@regent.e-technik.tu-muenchen.de> 
-    hopes to work in internationalization & locale issues,
-    including a translation to German.
-<li>Bradley M. Kuhn <bkuhn@ebb.org> hopes to coordinate assorted
-    activities.
-<li>Peter Norton <spacey@inch.com> is working on a GTK port of Xbae
+    ex-cbb'er, has ported the register to gtk, built a generic preferences
+    infrastructure, got the extension language pieces to work.
+    and has done some work on a GTK-based graphing package.
+<li>Robin Clark <rclark@cs.hmc.edu> wrote the *original* X-Accountant,
+    which was later renamed as GnuCash.
 <li>Daniel R Risacher <risacher@worldnet.att.net> is working on a
     GTK ledger/register/spread-sheet infrastructure.
-<li>Michael Newlyn Blake <Michael.Blake@Frogtown.Com> hopes to putter 
-    around with QIF export.
-<li>Brian Cooper <bcooper@dnaco.net> GTK port of interface.
 </ul>
 This list only mentions the currently active developers; many, many others
 have contributed fixes and patches.  I've tried to credit them in the README.
@@ -646,8 +708,7 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
 </ul>
 
 <hr>
-Draft version 0.22 -- April 1998<br>
+Draft version 0.23 -- September 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
-Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
 </html>
