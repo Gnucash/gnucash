@@ -53,10 +53,6 @@ typedef struct _PopBox
 	ItemEdit     *item_edit;
 	GNCItemList  *item_list;
 
-	gint     select_item_signal;
-        gint     change_item_signal;
-	gint     key_press_signal;
-
 	gboolean signals_connected; /* list signals connected? */
 
 	gboolean list_in_sync; /* list in sync with menustrings? */
@@ -165,6 +161,16 @@ change_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 }
 
 static void
+activate_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
+{
+	ComboCell *cell = data;
+	PopBox *box = cell->cell.gui_private;
+
+        item_edit_hide_list(box->item_edit);
+        box->list_popped = FALSE;
+}
+
+static void
 key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
 {
 	ComboCell *cell = data;
@@ -193,14 +199,7 @@ combo_disconnect_signals (ComboCell *cell)
         if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
                 return;
 
-	gtk_signal_disconnect(GTK_OBJECT(box->item_list),
-			      box->select_item_signal);
-
-	gtk_signal_disconnect(GTK_OBJECT(box->item_list),
-			      box->change_item_signal);
-
-	gtk_signal_disconnect(GTK_OBJECT(box->item_list),
-			      box->key_press_signal);
+	gtk_signal_disconnect_by_data (GTK_OBJECT(box->item_list), cell);
 
 	box->signals_connected = FALSE;
 }
@@ -216,21 +215,17 @@ combo_connect_signals (ComboCell *cell)
         if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
                 return;
 
-	box->select_item_signal =
-		gtk_signal_connect(GTK_OBJECT(box->item_list), "select_item",
-				   GTK_SIGNAL_FUNC(select_item_cb),
-				   (gpointer) cell);
+        gtk_signal_connect(GTK_OBJECT(box->item_list), "select_item",
+                           GTK_SIGNAL_FUNC(select_item_cb), cell);
 
-	box->change_item_signal =
-		gtk_signal_connect(GTK_OBJECT(box->item_list), "change_item",
-				   GTK_SIGNAL_FUNC(change_item_cb),
-				   (gpointer) cell);
+        gtk_signal_connect(GTK_OBJECT(box->item_list), "change_item",
+                           GTK_SIGNAL_FUNC(change_item_cb), cell);
 
-	box->key_press_signal =
-		gtk_signal_connect(GTK_OBJECT(box->item_list),
-				   "key_press_event",
-				   GTK_SIGNAL_FUNC(key_press_item_cb),
-				   (gpointer) cell);
+        gtk_signal_connect(GTK_OBJECT(box->item_list), "activate_item",
+                           GTK_SIGNAL_FUNC(activate_item_cb), cell);
+
+        gtk_signal_connect(GTK_OBJECT(box->item_list), "key_press_event",
+                           GTK_SIGNAL_FUNC(key_press_item_cb), cell);
 
 	box->signals_connected = TRUE;
 }
@@ -243,14 +238,7 @@ block_list_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        gtk_signal_handler_block(GTK_OBJECT(box->item_list),
-                                 box->select_item_signal);
-
-        gtk_signal_handler_block(GTK_OBJECT(box->item_list),
-                                 box->change_item_signal);
-
-        gtk_signal_handler_block(GTK_OBJECT(box->item_list),
-                                 box->key_press_signal);
+        gtk_signal_handler_block_by_data (GTK_OBJECT(box->item_list), cell);
 }
 
 static void
@@ -261,14 +249,7 @@ unblock_list_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        gtk_signal_handler_unblock(GTK_OBJECT(box->item_list),
-                                   box->select_item_signal);
-
-        gtk_signal_handler_unblock(GTK_OBJECT(box->item_list),
-                                   box->change_item_signal);
-
-        gtk_signal_handler_unblock(GTK_OBJECT(box->item_list),
-                                   box->key_press_signal);
+        gtk_signal_handler_unblock_by_data (GTK_OBJECT(box->item_list), cell);
 }
 
 /* =============================================== */

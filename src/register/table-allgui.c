@@ -1487,6 +1487,8 @@ gnc_table_traverse_update(Table *table,
   /* Call the table traverse callback for any modifications. */
   if (table->traverse)
     abort_move = table->traverse (table, dest_loc, dir);
+  else
+    abort_move = FALSE;
 
   LEAVE("dest_row = %d, dest_col = %d\n",
         dest_loc->vcell_loc.virt_row, dest_loc->vcell_loc.virt_col);
