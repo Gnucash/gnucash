@@ -34,10 +34,10 @@
 
 #define d(x)
 
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
-static gboolean validate (GNCSearchCoreType *fe);
-static GtkWidget *get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe);
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static gboolean gncs_validate (GNCSearchCoreType *fe);
+static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_owner_class_init	(GNCSearchOwnerClass *class);
 static void gnc_search_owner_init	(GNCSearchOwner *gspaper);
@@ -93,10 +93,10 @@ gnc_search_owner_class_init (GNCSearchOwnerClass *class)
   object_class->finalize = gnc_search_owner_finalise;
 
   /* override methods */
-  gnc_search_core_type->validate = validate;
-  gnc_search_core_type->get_widget = get_widget;
-  gnc_search_core_type->get_predicate = get_predicate;
-  gnc_search_core_type->clone = clone;
+  gnc_search_core_type->validate = gncs_validate;
+  gnc_search_core_type->get_widget = gncs_get_widget;
+  gnc_search_core_type->get_predicate = gncs_get_predicate;
+  gnc_search_core_type->clone = gncs_clone;
 
   /* signals */
 
@@ -135,7 +135,7 @@ gnc_search_owner_new (void)
 }
 
 static gboolean
-validate (GNCSearchCoreType *fe)
+gncs_validate (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
   gboolean valid = TRUE;
@@ -290,7 +290,7 @@ make_how_menu (GNCSearchCoreType *fe)
 }
 
 static GtkWidget *
-get_widget (GNCSearchCoreType *fe)
+gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *how_menu, *type_menu, *box;
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
@@ -321,7 +321,7 @@ get_widget (GNCSearchCoreType *fe)
   return box;
 }
 
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
   const GUID *guid;
@@ -336,7 +336,7 @@ static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
   return gncQueryGUIDPredicate (fi->how, l);
 }
 
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe)
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchOwner *se, *fse = (GNCSearchOwner *)fe;
 

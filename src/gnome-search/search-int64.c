@@ -33,10 +33,10 @@
 
 static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
 static void grab_focus (GNCSearchCoreType *fe);
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
-static gboolean validate (GNCSearchCoreType *fe);
-static GtkWidget *get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe);
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static gboolean gncs_validate (GNCSearchCoreType *fe);
+static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_int64_class_init	(GNCSearchInt64Class *class);
 static void gnc_search_int64_init	(GNCSearchInt64 *gspaper);
@@ -92,10 +92,10 @@ gnc_search_int64_class_init (GNCSearchInt64Class *class)
   /* override methods */
   gnc_search_core_type->editable_enters = editable_enters;
   gnc_search_core_type->grab_focus = grab_focus;
-  gnc_search_core_type->validate = validate;
-  gnc_search_core_type->get_widget = get_widget;
-  gnc_search_core_type->get_predicate = get_predicate;
-  gnc_search_core_type->clone = clone;
+  gnc_search_core_type->validate = gncs_validate;
+  gnc_search_core_type->get_widget = gncs_get_widget;
+  gnc_search_core_type->get_predicate = gncs_get_predicate;
+  gnc_search_core_type->clone = gncs_clone;
 
   /* signals */
 
@@ -152,7 +152,7 @@ gnc_search_int64_set_how (GNCSearchInt64 *fi, query_compare_t how)
 }
 
 static gboolean
-validate (GNCSearchCoreType *fe)
+gncs_validate (GNCSearchCoreType *fe)
 {
   GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
   gboolean valid = TRUE;
@@ -250,7 +250,7 @@ editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
 }
 
 static GtkWidget *
-get_widget (GNCSearchCoreType *fe)
+gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *entry, *menu, *box;
   GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
@@ -280,7 +280,7 @@ get_widget (GNCSearchCoreType *fe)
   return box;
 }
 
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
 
@@ -290,7 +290,7 @@ static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
   return gncQueryInt64Predicate (fi->how, fi->value);
 }
 
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe)
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchInt64 *se, *fse = (GNCSearchInt64 *)fe;
 

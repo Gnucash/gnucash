@@ -1,3 +1,9 @@
+2002-09-16  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/search-owner.c:
+	* src/gnome-search/search-xxx.c: Prefix various functions with
+	gncs_ to prevent naming conflicts with system routines.
+
 2002-09-15  Derek Atkins  <derek@ihtfp.com>
 	* fix bug #93331
 	* src/business/business-gnome/glade/payment.glade

@@ -34,10 +34,10 @@
 
 static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
 static void grab_focus (GNCSearchCoreType *fe);
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
-static gboolean validate (GNCSearchCoreType *fe);
-static GtkWidget *get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe);
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static gboolean gncs_validate (GNCSearchCoreType *fe);
+static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_date_class_init	(GNCSearchDateClass *class);
 static void gnc_search_date_init	(GNCSearchDate *gspaper);
@@ -93,10 +93,10 @@ gnc_search_date_class_init (GNCSearchDateClass *class)
   /* override methods */
   gnc_search_core_type->editable_enters = editable_enters;
   gnc_search_core_type->grab_focus = grab_focus;
-  gnc_search_core_type->validate = validate;
-  gnc_search_core_type->get_widget = get_widget;
-  gnc_search_core_type->get_predicate = get_predicate;
-  gnc_search_core_type->clone = clone;
+  gnc_search_core_type->validate = gncs_validate;
+  gnc_search_core_type->get_widget = gncs_get_widget;
+  gnc_search_core_type->get_predicate = gncs_get_predicate;
+  gnc_search_core_type->clone = gncs_clone;
 
   /* signals */
 
@@ -154,7 +154,7 @@ gnc_search_date_set_how (GNCSearchDate *fi, query_compare_t how)
 }
 
 static gboolean
-validate (GNCSearchCoreType *fe)
+gncs_validate (GNCSearchCoreType *fe)
 {
   GNCSearchDate *fi = (GNCSearchDate *)fe;
   gboolean valid = TRUE;
@@ -250,7 +250,7 @@ editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
 }
 
 static GtkWidget *
-get_widget (GNCSearchCoreType *fe)
+gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *entry, *menu, *box;
   GNCSearchDate *fi = (GNCSearchDate *)fe;
@@ -274,7 +274,7 @@ get_widget (GNCSearchCoreType *fe)
   return box;
 }
 
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchDate *fi = (GNCSearchDate *)fe;
 
@@ -284,7 +284,7 @@ static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
   return gncQueryDatePredicate (fi->how, DATE_MATCH_NORMAL, fi->ts);
 }
 
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe)
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchDate *se, *fse = (GNCSearchDate *)fe;
 

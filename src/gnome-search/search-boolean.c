@@ -30,10 +30,10 @@
 
 #define d(x)
 
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe);
-static gboolean validate (GNCSearchCoreType *fe);
-static GtkWidget *get_widget(GNCSearchCoreType *fe);
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe);
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static gboolean gncs_validate (GNCSearchCoreType *fe);
+static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_boolean_class_init	(GNCSearchBooleanClass *class);
 static void gnc_search_boolean_init	(GNCSearchBoolean *gspaper);
@@ -86,10 +86,10 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *class)
   object_class->finalize = gnc_search_boolean_finalise;
 
   /* override methods */
-  gnc_search_core_type->validate = validate;
-  gnc_search_core_type->get_widget = get_widget;
-  gnc_search_core_type->get_predicate = get_predicate;
-  gnc_search_core_type->clone = clone;
+  gnc_search_core_type->validate = gncs_validate;
+  gnc_search_core_type->get_widget = gncs_get_widget;
+  gnc_search_core_type->get_predicate = gncs_get_predicate;
+  gnc_search_core_type->clone = gncs_clone;
 
   /* signals */
 
@@ -147,7 +147,7 @@ gnc_search_boolean_set_how (GNCSearchBoolean *fi, query_compare_t how)
 }
 
 static gboolean
-validate (GNCSearchCoreType *fe)
+gncs_validate (GNCSearchCoreType *fe)
 {
   GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
   gboolean valid = TRUE;
@@ -214,7 +214,7 @@ make_menu (GNCSearchCoreType *fe)
 }
 
 static GtkWidget *
-get_widget (GNCSearchCoreType *fe)
+gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *toggle, *menu, *box;
   GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
@@ -238,7 +238,7 @@ get_widget (GNCSearchCoreType *fe)
   return box;
 }
 
-static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
+static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
 
@@ -248,7 +248,7 @@ static QueryPredData_t get_predicate (GNCSearchCoreType *fe)
   return gncQueryBooleanPredicate (fi->how, fi->value);
 }
 
-static GNCSearchCoreType *clone(GNCSearchCoreType *fe)
+static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchBoolean *se, *fse = (GNCSearchBoolean *)fe;
 
