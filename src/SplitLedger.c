@@ -2667,11 +2667,13 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
         const char *security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
-        currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
+        currency = xaccTransIsCommonExclSCurrency(trans, 
+						  currency, other_split);
 
         if (currency == NULL) {
           security = xaccAccountGetSecurity(new_acc);
-          security = xaccTransIsCommonExclSCurrency(trans, security, split);
+          security = xaccTransIsCommonExclSCurrency(trans, 
+						    security, other_split);
         }
 
         if ((currency != NULL) || (security != NULL)) {
