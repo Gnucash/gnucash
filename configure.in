@@ -1,13 +1,38 @@
-AC_INIT(src/motif/main.c)
+AC_INIT(src/guile/gnucash.h)
 
-# *******************************************
-# * figure out the configure options:
+### check for various programs, and stuff (do this first because later
+### commands depend on them):
+
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+AC_PROG_CC
+AC_ISC_POSIX
+AC_C_BIGENDIAN
+AC_PROG_MAKE_SET
+
+### Set up all the initial variable values...
+
 CFLAGS="${CFLAGS} -O2 -Wall"
-
 # some plything option lists
 #        CFLAGS="-g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects"
 #       CFLAGS="-g -Wall -ansi -pedantic -Wwrite-strings -Wtraditional  -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Winline" 
 #       CFLAGS="-g -Wall -ansi -pedantic"
+
+LIBS="$LIBS -lm"
+
+# We're going to set up our own X configure variables.  These are only
+# used in side configure.  At the end, we use them to set X_LIBS.
+# This allows us to be careful about libarary ordering, in case that's
+# important.
+
+AC_PATH_X
+AC_PATH_XTRA
+
+X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
+MOTIF_LIBS="-lXm"
+
+# *******************************************
+# * figure out the configure options:
 
 AC_ARG_ENABLE( debug,
        [  --enable-debug          compile with debugging flags set],
@@ -67,21 +92,14 @@ AC_ARG_WITH( gnome-libraries,
        [  --with-gnome-libraries=DIR   specify where to look for gnome libs],
        X_LIBS="${X_LIBS} -L$with_gnome_libraries" )
 
-# *******************************************
-# check for various programs, and stuff:
-AC_PROG_INSTALL
-AC_PROG_RANLIB
-AC_PROG_CC
-AC_ISC_POSIX
-AC_C_BIGENDIAN
-AC_PROG_MAKE_SET
+AC_ARG_WITH( opt-style-install,
+       [  --with-opt-style-install   install everything in subdirs of --prefix],
+       OPT_STYLE_INSTALL=1,
+       OPT_STYLE_INSTALL=0)
+AC_SUBST(OPT_STYLE_INSTALL)
 
 # *******************************************
-# check for UI libs:
-AC_PATH_X
-AC_PATH_XTRA
 
-LIBS="-lm"
 # the XmHTML widget needs libz, libjpeg, libpng and libm
 # it also uses #ifdef's not #if's so DONT #def to zero.
 AC_CHECK_LIB(z, deflateEnd,
@@ -108,10 +126,12 @@ AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
         XMHTML_TARGET=default 
         XMHTML_INC=/lib/XmHTML-1.1.0/src 
         LIBS="-L $srcdir/lib/XmHTML-1.1.0 $LIBS" , 
-        -lXm -L $x_libraries $X_LIBS -lXext -lXt -lX11) 
+        $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS $X_LIBS) 
 
 AC_SUBST(XMHTML_TARGET)
 AC_SUBST(XMHTML_INC)
+
+### Guile
 
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
@@ -127,9 +147,24 @@ AC_CHECK_LIB(guile, gh_enter,
 	)
 AC_SUBST(GUILELIBS)
 
+### Plotutils
+
+AC_CHECK_LIB(plot, openpl,
+  AC_DEFINE(HAVE_PLOTUTILS,1)
+  HAVE_PLOTUTILS=1
+  LIBS="-lplot $LIBS"
+  X_LIBS="-lXaw $X_LIBS",
+  ,
+  $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS) 
+
+# We need this in at least one of the Makefile.in's
+AC_SUBST(HAVE_PLOTUTILS)
+
+AC_SUBST(MOTIF_LIBS)
+
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile src/swig/Makefile src/swig/guile/Makefile lib/Makefile lib/XmHTML-1.1.0/Makefile lib/XmHTML-1.1.0/src/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash

@@ -61,4 +61,6 @@
 #undef USE_XMHTML  
 #endif
 
+#undef HAVE_PLOTUTILS
+
 #endif
