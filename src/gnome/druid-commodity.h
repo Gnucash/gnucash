@@ -26,8 +26,6 @@
 
 #include <gnome.h>
 
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 

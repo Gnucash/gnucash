@@ -36,6 +36,8 @@
 #include "druid-utils.h"
 #include "dialog-commodity.h"
 #include "query-user.h"
+#include "glade-gnc-dialogs.h"
+#include "glade-cb-gnc-dialogs.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"

@@ -24,8 +24,6 @@
 #ifndef __DIALOG_COMMODITY_H_
 #define __DIALOG_COMMODITY_H_
 
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 

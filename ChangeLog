@@ -1,3 +1,7 @@
+2001-06-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/druid-qif-import.c: use libglade
+
 2001-06-14  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/Transaction.c (get_corr_account_split): Fix

@@ -28,10 +28,11 @@
 #include <guile/gh.h>
 
 #include "dialog-account-picker.h"
-#include "druid-qif-import.h"
-
-#include "gnc-ui-util.h"
 #include "dialog-utils.h"
+#include "druid-qif-import.h"
+#include "glade-cb-gnc-dialogs.h"
+#include "glade-gnc-dialogs.h"
+#include "gnc-ui-util.h"
 #include "query-user.h"
 
 struct _accountpickerdialog {

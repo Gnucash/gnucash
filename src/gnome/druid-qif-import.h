@@ -26,8 +26,6 @@
 
 #include <guile/gh.h>
 
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
 #include "gnc-ui.h"
 
 QIFImportWindow * gnc_ui_qif_import_druid_make(void);

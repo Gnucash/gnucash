@@ -30,6 +30,7 @@ src/gnome/glade-gnc-dialogs.c
 src/gnome/glade-support.c
 src/gnome/glade/commodity_strings.c
 src/gnome/glade/price_strings.c
+src/gnome/glade/qif_strings.c
 src/gnome/glade/report_strings.c
 src/gnome/glade/stocks_strings.c
 src/gnome/glade/tax_strings.c
