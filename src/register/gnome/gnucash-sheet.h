@@ -78,7 +78,6 @@ typedef struct {
         GtkWidget *window;
 
         Table *table;
-        SplitRegister *split_register;
 
         GtkWidget *reg;
 

@@ -163,7 +163,7 @@ gnc_table_get_header_cell (Table *table)
 /* ==================================================== */
 
 static const char *
-gnc_table_get_entry_virtual_internal (Table *table, VirtualLocation virt_loc)
+gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
@@ -185,7 +185,7 @@ gnc_table_get_entry_virtual_internal (Table *table, VirtualLocation virt_loc)
 }
 
 const char *
-gnc_table_get_entry_virtual (Table *table, VirtualLocation virt_loc)
+gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
@@ -218,8 +218,29 @@ gnc_table_get_entry_virtual (Table *table, VirtualLocation virt_loc)
 
 /* ==================================================== */
 
+const char *
+gnc_table_get_label (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return "";
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL)
+    return NULL;
+
+  return cb_cell->label;
+}
+
+/* ==================================================== */
+
 guint32
-gnc_table_get_fg_color_virtual (Table *table, VirtualLocation virt_loc)
+gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
@@ -254,7 +275,7 @@ gnc_table_get_fg_color_virtual (Table *table, VirtualLocation virt_loc)
 /* ==================================================== */
 
 guint32
-gnc_table_get_bg_color_virtual (Table *table, VirtualLocation virt_loc)
+gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
@@ -553,7 +574,7 @@ gnc_table_move_cursor_internal (Table *table,
         {
           const char *entry;
 
-          entry = gnc_table_get_entry_virtual_internal (table, virt_loc);
+          entry = gnc_table_get_entry_internal (table, virt_loc);
 
           xaccSetBasicCellValue (cell, entry);
 

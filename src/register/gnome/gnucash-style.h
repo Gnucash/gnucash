@@ -61,7 +61,6 @@ typedef struct
 
 typedef struct
 {
-        gchar *label;
         GtkJustification alignment;
         int border;
 } CellStyle;

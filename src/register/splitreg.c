@@ -131,11 +131,11 @@ xaccInitSplitRegister (SplitRegister *reg,
 
 /* ============================================== */
 
-#define LABEL(NAME,label)			 \
-{						 \
-   BasicCell *hcell;				 \
-   hcell = reg->header_label_cells[NAME##_CELL]; \
-   xaccSetBasicCellValue (hcell, label);	 \
+#define LABEL(NAME,label)		   \
+{					   \
+   BasicCell *hcell;			   \
+   hcell = reg->header_cells[NAME##_CELL]; \
+   xaccSetBasicCellValue (hcell, label);   \
 }
 
 /* ============================================== */
@@ -298,7 +298,7 @@ configAction (SplitRegister *reg)
 #define SET(NAME,col,row,handler)			      \
 {							      \
    BasicCell *hcell;					      \
-   hcell = reg->header_label_cells[NAME##_CELL];	      \
+   hcell = reg->header_cells[NAME##_CELL];	              \
 							      \
    if ((0<=row) && (0<=col)) {				      \
       CellBlockCell *cb_cell;                                 \
@@ -307,6 +307,7 @@ configAction (SplitRegister *reg)
                                                               \
       cb_cell->cell = (handler);			      \
       cb_cell->cell_type = NAME##_CELL;                       \
+      cb_cell->label = g_strdup (hcell->value);               \
       cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE);   \
       cb_cell->alignment = NAME##_CELL_ALIGN;		      \
       cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);     \
@@ -316,6 +317,7 @@ configAction (SplitRegister *reg)
       if (cb_cell && (curs == reg->single_cursor)) {          \
         cb_cell->cell = hcell;			              \
         cb_cell->cell_type = NAME##_CELL;                     \
+        cb_cell->label = g_strdup (hcell->value);             \
         cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE); \
         cb_cell->alignment = NAME##_CELL_ALIGN;		      \
         cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);   \
@@ -598,7 +600,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
 {
   SplitRegister * reg;
 
-  reg = g_new(SplitRegister, 1);
+  reg = g_new0(SplitRegister, 1);
 
   xaccInitSplitRegister (reg, type, style,
                          entry_handler, fg_color_handler,
@@ -739,11 +741,11 @@ mallocCursors (SplitRegister *reg)
 
 /* ============================================== */
 
-#define HDR(NAME)				\
-{						\
-  BasicCell *hcell;				\
-  hcell = xaccMallocTextCell();			\
-  reg->header_label_cells[NAME##_CELL] = hcell;	\
+#define HDR(NAME)			  \
+{					  \
+  BasicCell *hcell;			  \
+  hcell = xaccMallocTextCell();		  \
+  reg->header_cells[NAME##_CELL] = hcell; \
 }
 
 #define NEW(CN,TYPE)				\
@@ -962,6 +964,8 @@ xaccConfigSplitRegister (SplitRegister *reg,
 void 
 xaccDestroySplitRegister (SplitRegister *reg)
 {
+  int i;
+
   /* give the user a chance to clean up */
   if (reg->destroy)
     (reg->destroy) (reg);
@@ -1017,6 +1021,16 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->debitCell   = NULL;
   reg->priceCell   = NULL;
   reg->sharesCell  = NULL;
+
+  for (i = 0; i < CELL_TYPE_COUNT; i++)
+  {
+    BasicCell *cell;
+
+    cell = reg->header_cells[i];
+    if (cell)
+      xaccDestroyTextCell (cell);
+    reg->header_cells[i] = NULL;
+  }
 
   /* free the memory itself */
   g_free (reg);

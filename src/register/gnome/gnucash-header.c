@@ -21,8 +21,9 @@
 /*
  * The Gnucash Header Canvas
  *
- * Author:
+ * Authors:
  *     Heath Martin <martinh@pegasus.cc.ucf.edu>
+ *     Dave Peticolas <dave@krondo.com>
  */
 
 #include "gnucash-sheet.h"
@@ -71,7 +72,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         int i, j;
         int xpaint, ypaint;
         int w = 0, h = 0;
-        gchar *text;
+        const char *text;
         GdkFont *font;
         CellStyle *cs;
         GdkColor *bg_color;
@@ -83,7 +84,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         virt_loc.vcell_loc.virt_col = 0;
         virt_loc.phys_row_offset = 0;
         virt_loc.phys_col_offset = 0;
-        argb = gnc_table_get_bg_color_virtual (table, virt_loc);
+        argb = gnc_table_get_bg_color (table, virt_loc);
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         /* Assume all cells have the same color */
@@ -109,6 +110,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         for (i = 0; i < style->nrows; i++) {
                 xpaint = -x;
+                virt_loc.phys_row_offset = i;
 
                 /* TODO: This routine is duplicated in several places.
                    Can we abstract at least the cell drawing routine?
@@ -117,6 +119,8 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 for (j = 0; j < style->ncols; j++) {
                         gint x_offset, y_offset;
                         GdkRectangle rect;
+
+                        virt_loc.phys_col_offset = j;
 
                         cd = gnucash_style_get_cell_dimensions (style, i, j);
                         cs = gnucash_style_get_cell_style (style, i, j);
@@ -131,7 +135,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         gdk_draw_rectangle (drawable, header->gc, FALSE,
                                             xpaint, ypaint, w, h);
 
-                        text = cs->label;
+                        virt_loc.vcell_loc =
+                                table->current_cursor_loc.vcell_loc;
+                        text = gnc_table_get_label (table, virt_loc);
                         if (!text)
                                 text = "";
 

@@ -39,8 +39,8 @@
 
 /* installs a callback to handle text recording */
 BasicCell * xaccMallocTextCell (void);
-void        xaccInitTextCell (BasicCell *);
-void        xaccDestroyTextCell (BasicCell *);
+void        xaccInitTextCell (BasicCell *cell);
+void        xaccDestroyTextCell (BasicCell *cell);
 
 #endif /* __TEXT_CELL_H__ */
 

@@ -119,7 +119,6 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);
-        sheet->split_register = sr;
         table = sheet->table;
 
         table->destroy = table_destroy_cb;

@@ -189,7 +189,7 @@ struct _SplitRegister
 
    int cursor_virt_row;
 
-   BasicCell *header_label_cells[CELL_TYPE_COUNT];
+   BasicCell *header_cells[CELL_TYPE_COUNT];
 
    /* user_data allows users of this object to hang
     * private data onto it */

@@ -479,15 +479,12 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width)
  * function assumes that the space for the style info has been
  * allocated already. */
 static void
-gnucash_sheet_style_recompile(SheetBlockStyle *style, SplitRegister *sr,
-                              gint cursor_type)
+gnucash_sheet_style_recompile(SheetBlockStyle *style, gint cursor_type)
 {
         CellBlock *cursor;
         gint i, j, type;
-        char *label;
 
         g_assert (style != NULL);
-        g_assert (sr != NULL);
         g_assert (style->cursor != NULL);
 
         cursor = style->cursor;
@@ -505,16 +502,6 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, SplitRegister *sr,
                         style->header_font = gnucash_register_font;
 
                         gnucash_style_set_borders (style, reg_borders);
-
-                        if (type > -1)
-                                label = sr->header_label_cells[type]->value;
-                        else if (cursor_type == GNUCASH_CURSOR_HEADER)
-                                label = cb_cell->cell->value;
-                        else
-                                label = "";
-
-                        g_free(cs->label);
-                        cs->label = g_strdup(label);
 
                         switch (cb_cell->alignment) {
                                 case CELL_ALIGN_RIGHT:
@@ -541,8 +528,7 @@ gnucash_sheet_styles_recompile(GnucashSheet *sheet)
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
         for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
-                gnucash_sheet_style_recompile (sheet->cursor_styles[i],
-                                               sheet->split_register, i);
+                gnucash_sheet_style_recompile (sheet->cursor_styles[i], i);
 }
 
 void
@@ -611,35 +597,15 @@ gnucash_style_get_cell_style (SheetBlockStyle *style, int row, int col)
         return g_table_index (style->cell_styles, row, col);
 }
 
-static void
-cell_style_construct (gpointer _cs, gpointer user_data)
-{
-        CellStyle *cs = _cs;
-
-        cs->label = NULL;
-}
-
-static void
-cell_style_destroy (gpointer _cs, gpointer user_data)
-{
-        CellStyle *cs = _cs;
-
-        g_free(cs->label);
-        cs->label = NULL;
-}
-
 static SheetBlockStyle *
 gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
                          GNCCursorType cursor_type)
 {
         SheetBlockStyle *style;
-        SplitRegister *sr;
 
         g_return_val_if_fail (sheet != NULL, NULL);
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
         g_return_val_if_fail (cursor != NULL, NULL);
-
-        sr = sheet->split_register;
 
         style = g_new0(SheetBlockStyle, 1);
 
@@ -649,12 +615,10 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
         style->nrows = cursor->num_rows;
         style->ncols = cursor->num_cols;
 
-        style->cell_styles = g_table_new (sizeof (CellStyle),
-                                          cell_style_construct,
-                                          cell_style_destroy, NULL);
+        style->cell_styles = g_table_new (sizeof(CellStyle), NULL, NULL, NULL);
         g_table_resize (style->cell_styles, style->nrows, style->ncols);
 
-        gnucash_sheet_style_recompile(style, sr, cursor_type);
+        gnucash_sheet_style_recompile(style, cursor_type);
 
         gnucash_style_dimensions_init (sheet, style);
 

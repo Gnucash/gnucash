@@ -717,7 +717,6 @@ gnucash_sheet_create (Table *table)
 
         sheet->table = table;
         sheet->entry = NULL;
-        sheet->split_register = NULL;
 
         if (sheet->smooth_scroll)
                 sheet->vadj = gtk_layout_get_vadjustment (GTK_LAYOUT(canvas));
@@ -1054,7 +1053,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        text = gnc_table_get_entry_virtual (sheet->table, virt_loc);
+        text = gnc_table_get_entry (sheet->table, virt_loc);
 
         item_edit_configure (ITEM_EDIT(sheet->item_editor));
         gnome_canvas_item_show (GNOME_CANVAS_ITEM (sheet->item_editor));
@@ -1829,7 +1828,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
         g_return_val_if_fail (virt_col < sheet->num_virt_cols, 0);
         g_return_val_if_fail (cell_col >= 0, 0);
 
-        for (virt_row = 1; virt_row < sheet->num_virt_rows ; virt_row++) {
+        for (virt_row = 0; virt_row < sheet->num_virt_rows ; virt_row++) {
                 VirtualCellLocation vcell_loc = { virt_row, virt_col };
 
                 block = gnucash_sheet_get_block (sheet, vcell_loc);
@@ -1848,18 +1847,16 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                                 virt_loc.phys_row_offset = cell_row;
                                 virt_loc.phys_col_offset = cell_col;
 
-                                text = gnc_table_get_entry_virtual
-                                        (sheet->table, virt_loc);
-
-                                font = GNUCASH_GRID(sheet->grid)->normal_font;
-
-                                if (!text || strlen(text) == 0) {
-                                        CellStyle *cs;
-
-                                        cs = gnucash_style_get_cell_style
-                                                (style, cell_row, cell_col);
-                                        text = cs->label;
+                                if (virt_row == 0) {
+                                        text = gnc_table_get_label
+                                                (sheet->table, virt_loc);
                                         font = style->header_font;
+                                }
+                                else {
+                                        text = gnc_table_get_entry
+                                                (sheet->table, virt_loc);
+
+                                        font = GNUCASH_GRID(sheet->grid)->normal_font;
                                 }
 
                                 width = (gdk_string_measure (font, text) +

@@ -142,7 +142,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                                            item_edit->virt_loc.phys_row_offset,
                                            item_edit->virt_loc.phys_col_offset);
 
-        argb = gnc_table_get_bg_color_virtual (table, item_edit->virt_loc);
+        argb = gnc_table_get_bg_color (table, item_edit->virt_loc);
 
         info->bg_color = gnucash_color_argb_to_gdk (argb);
         info->fg_color = &gn_black;

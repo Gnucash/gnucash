@@ -228,14 +228,13 @@ gnc_table_virtual_cell_out_of_bounds (Table *table,
 VirtualCell *  gnc_table_get_virtual_cell (Table *table,
                                            VirtualCellLocation vcell_loc);
 
-const char *   gnc_table_get_entry_virtual (Table *table,
-                                            VirtualLocation virt_loc);
+const char *   gnc_table_get_entry (Table *table, VirtualLocation virt_loc);
 
-guint32        gnc_table_get_fg_color_virtual (Table *table,
-                                               VirtualLocation virt_loc);
+const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
 
-guint32        gnc_table_get_bg_color_virtual (Table *table,
-                                               VirtualLocation virt_loc);
+guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
+
+guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc);
 
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);

@@ -264,6 +264,8 @@ draw_cell (GnucashGrid *grid, int block,
         VirtualLocation virt_loc;
         GdkColor *bg_color;
         GdkColor *fg_color;
+        gint x_offset, y_offset;
+        GdkRectangle rect;
         guint32 argb;
 
         virt_loc.vcell_loc.virt_row = block;
@@ -276,7 +278,7 @@ draw_cell (GnucashGrid *grid, int block,
         sheet_block = gnucash_sheet_get_block (grid->sheet,
                                                virt_loc.vcell_loc);
 
-        argb = gnc_table_get_bg_color_virtual (table, virt_loc);
+        argb = gnc_table_get_bg_color (table, virt_loc);
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         gdk_gc_set_foreground (grid->gc, bg_color);
@@ -324,11 +326,11 @@ draw_cell (GnucashGrid *grid, int block,
                 }
         }
 
-        text = gnc_table_get_entry_virtual (table, virt_loc);
+        text = gnc_table_get_entry (table, virt_loc);
 
         font = grid->normal_font;
 
-        argb = gnc_table_get_fg_color_virtual (table, virt_loc);
+        argb = gnc_table_get_fg_color (table, virt_loc);
         fg_color = gnucash_color_argb_to_gdk (argb);
 
         gdk_gc_set_foreground (grid->gc, fg_color);
@@ -337,16 +339,15 @@ draw_cell (GnucashGrid *grid, int block,
 	    (!text || strlen(text) == 0)) {
                 font = grid->italic_font;
                 gdk_gc_set_foreground (grid->gc, &gn_light_gray);
-                text = cs->label;
+                text = gnc_table_get_label (table, virt_loc);
         }
 
-        if (text) {
-                gint x_offset, y_offset;
-                GdkRectangle rect;
+        if ((text == NULL) || (*text == '\0'))
+                return;
 
-                y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
+        y_offset = height - MAX(CELL_VPADDING, font->descent + 4);
 
-                switch (cs->alignment) {
+        switch (cs->alignment) {
                 default:
                 case GTK_JUSTIFY_LEFT:
                         x_offset = CELL_HPADDING;
@@ -365,22 +366,21 @@ draw_cell (GnucashGrid *grid, int block,
                         break;
                 }
 
-                rect.x = x + CELL_HPADDING;
-                rect.y = y + CELL_VPADDING;
-                rect.width = width - 2*CELL_HPADDING;
-                rect.height = height;
+        rect.x = x + CELL_HPADDING;
+        rect.y = y + CELL_VPADDING;
+        rect.width = width - 2*CELL_HPADDING;
+        rect.height = height;
 
-                gdk_gc_set_clip_rectangle (grid->gc, &rect);
+        gdk_gc_set_clip_rectangle (grid->gc, &rect);
 
-                gdk_draw_string (drawable,
-                                 font,
-                                 grid->gc,
-                                 x + x_offset,
-                                 y + y_offset,
-                                 text);
+        gdk_draw_string (drawable,
+                         font,
+                         grid->gc,
+                         x + x_offset,
+                         y + y_offset,
+                         text);
 
-                gdk_gc_set_clip_rectangle (grid->gc, NULL);
-        }
+        gdk_gc_set_clip_rectangle (grid->gc, NULL);
 }
 
 
