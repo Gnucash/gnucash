@@ -428,7 +428,7 @@ calc_value(FinCalcDialog *fcd, FinCalcValue value)
     if (error_item == 0)
       entry = fcd->amounts[0];
     else
-      entry = GTK_ENTRY (fcd->amounts[error_item]);
+      entry = fcd->amounts[error_item];
     gtk_widget_grab_focus (entry);
     return;
   }
