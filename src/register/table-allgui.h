@@ -251,8 +251,9 @@ void        gnc_table_set_size (Table * table, int virt_rows, int virt_cols);
 void        gnc_table_create_cursor (Table *table, CellBlock *cursor);
 
 /* Indicate what handler should be used for a given virtual block */
-void        gnc_table_set_cursor (Table *table, CellBlock *curs,
-                                  VirtualCellLocation vcell_loc);
+void        gnc_table_set_vcell (Table *table, CellBlock *cursor,
+                                 gconstpointer vcell_data,
+                                 VirtualCellLocation vcell_loc);
 
 /* Set the virtual cell data for a particular location. */
 void        gnc_table_set_virt_cell_data (Table *table,

@@ -185,8 +185,6 @@ struct _SplitRegister
    SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
-   int num_virt_rows;
-
    int cursor_virt_row;
 
    BasicCell *header_cells[CELL_TYPE_COUNT];

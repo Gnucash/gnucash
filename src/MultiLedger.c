@@ -304,9 +304,11 @@ xaccGUIDCopy (gpointer _to, gconstpointer _from)
   const GUID *from = _from;
 
   g_return_if_fail(to != NULL);
-  g_return_if_fail(from != NULL);
 
-  *to = *from;
+  if (from == NULL)
+    *to = *xaccGUIDNULL();
+  else
+    *to = *from;
 }
 
 /********************************************************************\

@@ -437,20 +437,34 @@ gnc_table_resize (Table * table, int new_virt_rows, int new_virt_cols)
 /* ==================================================== */
 
 void
-gnc_table_set_cursor (Table *table, CellBlock *curs,
-                      VirtualCellLocation vcell_loc)
+gnc_table_set_vcell (Table *table,
+                     CellBlock *cursor,
+                     gconstpointer vcell_data,
+                     VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
 
-  if ((table == NULL) || (curs == NULL))
+  if ((table == NULL) || (cursor == NULL))
     return;
+
+  if ((vcell_loc.virt_row >= table->num_virt_rows) ||
+      (vcell_loc.virt_col >= table->num_virt_cols))
+    gnc_table_resize (table,
+                      MAX (table->num_virt_rows, vcell_loc.virt_row + 1),
+                      MAX (table->num_virt_cols, vcell_loc.virt_col + 1));
 
   vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
     return;
 
   /* this cursor is the handler for this block */
-  vcell->cellblock = curs;
+  vcell->cellblock = cursor;
+
+  /* copy the vcell user data */
+  if (table->vcell_data_copy)
+    table->vcell_data_copy (vcell->vcell_data, vcell_data);
+  else
+    vcell->vcell_data = (gpointer) vcell_data;
 }
 
 /* ==================================================== */

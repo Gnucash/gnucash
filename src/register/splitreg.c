@@ -904,32 +904,28 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  reg->cursor_virt_row = 1;
-  reg->num_virt_rows = 2;  /* one header, one single_cursor */
-
   table = gnc_table_new (entry_handler, fg_color_handler, reg,
                          allocator, deallocator, copy);
-
-  gnc_table_set_size (table, reg->num_virt_rows, 1);
 
   /* Set up header */
   {
     VirtualCellLocation vcell_loc = { 0, 0 };
 
-    gnc_table_set_cursor (table, header, vcell_loc);
+    gnc_table_set_vcell (table, header, NULL, vcell_loc);
   }
 
   /* Set up first and only initial row */
   {
     VirtualLocation vloc;
 
-    vloc.vcell_loc.virt_row = reg->cursor_virt_row;
+    vloc.vcell_loc.virt_row = 1;
     vloc.vcell_loc.virt_col = 0;
     vloc.phys_row_offset = 0;
     vloc.phys_col_offset = 0;
 
-    gnc_table_set_cursor (table, reg->single_cursor, vloc.vcell_loc);
+    gnc_table_set_vcell (table, reg->single_cursor, NULL, vloc.vcell_loc);
     gnc_table_move_cursor (table, vloc);
+    reg->cursor_virt_row = 1;
   }
 
   reg->table = table;

@@ -3302,7 +3302,6 @@ xaccSRCountRows (SplitRegister *reg,
      save_cursor_virt_row = 1;
 
    /* finally, record the values */
-   reg->num_virt_rows = num_virt_rows;
    reg->cursor_virt_row = save_cursor_virt_row;
 
    if (ext_found_trans != NULL)
@@ -3327,7 +3326,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    SplitRegisterBuffer *reg_buffer;
    CellBlock *lead_cursor;
    Transaction *find_trans;
-   Split *last_split = NULL;
    Split *find_trans_split;
    Split *find_split;
    Split *split;
@@ -3343,7 +3341,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    gboolean dynamic;
 
    VirtualCellLocation vcell_loc;
-   VirtualLocation virt_loc;
 
    SplitRegisterType type;
    SplitRegisterStyle style;
@@ -3355,7 +3352,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    xaccSplitRegisterConfigColors (reg);
 
    /* make sure we have a blank split */
-   if (blank_split == NULL) {
+   if (blank_split == NULL)
+   {
      Transaction *trans;
 
      trans = xaccMallocTransaction ();
@@ -3377,7 +3375,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    style = reg->style;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
-   if ((REG_SINGLE_LINE == style) ||
+   if ((REG_SINGLE_LINE    == style) ||
        (REG_SINGLE_DYNAMIC == style))
       lead_cursor = reg->single_cursor;
    else
@@ -3412,32 +3410,32 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* disable move callback -- we don't want the cascade of 
     * callbacks while we are fiddling with loading the register */
    table->move_cursor = NULL;
-   virt_loc.vcell_loc.virt_row = -1;
-   virt_loc.vcell_loc.virt_col = -1;
-   virt_loc.phys_row_offset = -1;
-   virt_loc.phys_col_offset = -1;
-   gnc_table_move_cursor_gui (table, virt_loc);
 
-   /* resize the table to the sizes we just counted above */
-   /* num_virt_cols is always one. */
-   gnc_table_set_size (table, reg->num_virt_rows, 1);
+   /* invalidate the cursor */
+   {
+     VirtualLocation virt_loc;
+
+     virt_loc.vcell_loc.virt_row = -1;
+     virt_loc.vcell_loc.virt_col = -1;
+     virt_loc.phys_row_offset = -1;
+     virt_loc.phys_col_offset = -1;
+     gnc_table_move_cursor_gui (table, virt_loc);
+   }
 
    /* make sure that the header is loaded */
    vcell_loc.virt_row = 0;
    vcell_loc.virt_col = 0;
-   gnc_table_set_cursor (table, reg->header, vcell_loc);
+   gnc_table_set_vcell (table, reg->header, NULL, vcell_loc);
+   vcell_loc.virt_row++;
 
    /* populate the table */
-   i = 0;
-   vcell_loc.virt_row = 1;  /* header is vrow zero */
-
    if (slist)
      split = slist[0]; 
    else
      split = NULL;
 
-   while (split) {
-
+   for (i = 0; split; i++, split = slist[i])
+   {
      if (pending_trans == xaccSplitGetParent (split))
        found_pending = TRUE;
 
@@ -3488,10 +3486,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             Split * secondary;
             int j = 0;
 
-            gnc_table_set_cursor (table, reg->trans_cursor, vcell_loc);
-            gnc_table_set_virt_cell_data (table, vcell_loc,
-                                          xaccSplitGetGUID (split));
-            vcell_loc.virt_row ++;
+            gnc_table_set_vcell (table, reg->trans_cursor,
+                                 xaccSplitGetGUID (split), vcell_loc);
+            vcell_loc.virt_row++;
 
             /* loop over all of the splits in the transaction. The
              * do..while will automatically put a blank (null) split
@@ -3501,28 +3498,22 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                secondary = xaccTransGetSplit (trans, j);
 
                if (secondary != split) {
-                  gnc_table_set_cursor (table, reg->split_cursor, vcell_loc);
-                  gnc_table_set_virt_cell_data (table, vcell_loc,
-                                                xaccSplitGetGUID (secondary));
-                  vcell_loc.virt_row ++;
+                  gnc_table_set_vcell (table, reg->split_cursor,
+                                       xaccSplitGetGUID (secondary),
+                                       vcell_loc);
+                  vcell_loc.virt_row++;
                }
 
                j++;
             } while (secondary);
-
          }
          else {
            /* the simple case ... */
-           gnc_table_set_cursor (table, lead_cursor, vcell_loc);
-           gnc_table_set_virt_cell_data (table, vcell_loc,
-                                          xaccSplitGetGUID (split));
-           vcell_loc.virt_row ++;
+           gnc_table_set_vcell (table, lead_cursor,
+                                xaccSplitGetGUID (split), vcell_loc);
+           vcell_loc.virt_row++;
          }
       }
-
-      last_split = split;
-      i++; 
-      split = slist[i];
    }
 
    /* add the blank split at the end. */
@@ -3532,8 +3523,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
    if (multi_line || (dynamic && info->blank_split_edited)) {
       /* do the transaction row of the blank split */
-      gnc_table_set_cursor (table, reg->trans_cursor, vcell_loc);
-      gnc_table_set_virt_cell_data (table, vcell_loc, xaccSplitGetGUID (split));
+      gnc_table_set_vcell (table, reg->trans_cursor,
+                           xaccSplitGetGUID (split), vcell_loc);
       vcell_loc.virt_row ++;
 
       if (multi_line || (dynamic && on_blank_split)) {
@@ -3547,9 +3538,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
           secondary = xaccTransGetSplit (trans, j);
 
           if (secondary != split) {
-            gnc_table_set_cursor (table, reg->split_cursor, vcell_loc);
-            gnc_table_set_virt_cell_data (table, vcell_loc,
-                                          xaccSplitGetGUID (secondary));
+            gnc_table_set_vcell (table, reg->split_cursor,
+                                 xaccSplitGetGUID (secondary), vcell_loc);
             vcell_loc.virt_row ++;
           }
 
@@ -3558,10 +3548,14 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       }
    }
    else {
-     gnc_table_set_cursor (table, lead_cursor, vcell_loc);
-     gnc_table_set_virt_cell_data (table, vcell_loc, xaccSplitGetGUID (split));
+     gnc_table_set_vcell (table, lead_cursor,
+                          xaccSplitGetGUID (split), vcell_loc);
      vcell_loc.virt_row ++;
    }
+
+   /* resize the table to the sizes we just counted above */
+   /* num_virt_cols is always one. */
+   gnc_table_set_size (table, vcell_loc.virt_row, 1);
 
    /* restore the cursor to its rightful position */
    {
