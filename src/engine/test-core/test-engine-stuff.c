@@ -4,17 +4,13 @@
  * Create transactions with random values, random accounts, random
  * account heirarchies, etc.
  *
- * XXX see notes below for the 'add_random_split()', which state:
- * "this routine creates a random, but otherwise self-consistent,
- * 'legal' transaction.  It should really be suplemented with another
- * routine that creates cruddy, inconsistent transactions, so that the
- * engine 'scrub' routines get tested. "
- *
- * XXX We should really modify that routine to create really, ugly, dirty
- * transactions -- 3 or more splits, some without parent accounts, 
- * other splits that have accounts but aren't in a transaction, 
- * splits that share a currency with the transaction, but whose
- * value doesn't equal amount, etc.
+ * XXX We should modify routines to create really, ugly, dirty
+ * transactions 
+ * -- 3 or more splits (TBD) 
+ * -- splits without parent accounts  (done)
+ * -- splits that have accounts but aren't in a transaction (TBD)
+ * -- splits that share a currency with the transaction, but whose
+ *    value doesn't equal amount (done)
  *
  * Created by Linux Developers Group, 2001
  * Updates Linas Vepstas July 2004
@@ -61,7 +57,7 @@ static gint total_num_accounts = 0;
  * This is used to test the data integrity scrubbers, which are 
  * supposed to clean up any crud they find.
  */
-// static gint borked = 1000;
+static gint borked = 80;
 
 gboolean gnc_engine_debug_random = FALSE;
 
@@ -140,6 +136,18 @@ void
 random_timespec_usec_resolution (gboolean usec_resolution_in)
 {
   usec_resolution = usec_resolution_in;
+}
+
+/* ========================================================== */
+
+static inline gboolean
+do_bork (void)
+{
+  if (1 == get_random_int_in_range (0, borked)) 
+  {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /* ========================================================== */
@@ -847,10 +855,10 @@ get_random_group (QofBook *book)
 /* ================================================================= */
 /* transaction stuff */
 
-/* XXX this routine creates a random, but otherwise self-consistent,
- * 'legal' transaction.  It should really be suplemented with another
- * routine that creates cruddy, inconsistent transactions, so that the
- * engine 'scrub' routines get tested.
+/** This routine creates a random, but otherwise self-consistent,
+ *  'legal' transaction.  It's been modified to occasionally build
+ *   cruddy, inconsistent transactions, so that the engine 'scrub' 
+ *   routines get tested.
  */
 static void
 add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
@@ -865,37 +873,56 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     gnc_commodity *com = xaccTransGetCurrency (trn);
     int scu = gnc_commodity_get_fraction(com);
     gnc_numeric num = get_random_gnc_numeric();
-    num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
+
+    if (!do_bork()) num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
 
     acc = get_random_list_element (account_list);
     s = get_random_split(book, acc);
     xaccTransAppendSplit(trn, s);
     xaccSplitSetValue(s, num);
 
+    /* If the currencies are the same, the split amount should equal
+     * the split value (unless we bork it on purpose) */
     if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
-                             xaccAccountGetCommodity(acc)))
+                             xaccAccountGetCommodity(acc)) &&
+        (!do_bork()))
     {
       xaccSplitSetAmount(s, num);
     }
 
-    /* Make sure that each side of the transaction is in 
-     * a different account; otherwise get weirdness in lot
-     * calculcations.  ... Hmm maybe should fix lots in 
-     * this case? */
-    do {
-       bcc = get_random_list_element (account_list);
-    } while (bcc == acc);
+    /* Occasionally leave a dangling split around */
+    if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
+
+    bcc = get_random_list_element (account_list);
+    if ((bcc == acc) && (!do_bork()))
+    { 
+      /* Make sure that each side of the transaction is in 
+       * a different account; otherwise get weirdness in lot
+       * calculcations.  ... Hmm maybe should fix lots in 
+       * this case? */
+      while (bcc == acc) {
+         bcc = get_random_list_element (account_list);
+      }
+    }
 
     s = get_random_split(book, bcc);
     xaccTransAppendSplit(trn, s);
+
+    /* Other split should have equal and opposite value */
+    if (do_bork()) 
+    {
+       num = get_random_gnc_numeric();
+    } 
     xaccSplitSetValue(s, gnc_numeric_neg(num));
 
     if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
-                             xaccAccountGetCommodity(bcc)))
+                             xaccAccountGetCommodity(bcc)) && 
+        (!do_bork()))
     {
       xaccSplitSetAmount(s, num);
     }
 
+    if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
 }
 
 typedef struct
