@@ -449,7 +449,7 @@ pgendPriceFind (Backend *bend, GNCPriceLookup *look)
    }
 
    SEND_QUERY (be, be->buff, );
-   pgendGetResults (be, get_price_cb, look->prdb);
+   pgendGetResults (be, get_price_cb, NULL);
 
    /* insertion into the price db will mark it dirty;
     * but it really isn't at this point. */
