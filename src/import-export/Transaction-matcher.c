@@ -740,12 +740,14 @@ void gnc_import_add_trans(Transaction *trans)
 	  this will be added as new by default */
 	static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
 	best_match=g_list_nth_data(transaction_info->match_list,0);
-	if(best_match->probability>=TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
+	if(best_match != NULL && 
+	   best_match->probability >= TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
 	  {
 	    transaction_info->action=RECONCILE;
 	    transaction_info->selected_match_info=best_match;
 	  }
-	else if(best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
+	else if(best_match == NULL ||
+		best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
 	  {
 	    transaction_info->action=ADD;
 	  }

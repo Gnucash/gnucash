@@ -1,4 +1,13 @@
+2002-09-29  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/Transaction-matcher.c: Fix	segfault when
+	importing into a gnucash account which has no splits.
+
+	* src/import-export/gnc-ofx-import.c: Code simplification for
+	commodity autoselection.
+
 2002-09-28  Derek Atkins  <derek@ihtfp.com>
+	
 	* fix g-wrap testing in configure to work with an existing config.cache
 
 2002-09-26  David Hampton  <hampton@employees.org>

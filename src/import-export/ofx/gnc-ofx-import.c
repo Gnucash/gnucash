@@ -288,7 +288,7 @@ int ofx_proc_account(struct OfxAccountData data)
   if(data.account_id_valid==true){
     //printf("ofx_proc_account() Now calling gnc_import_select_account()\n");
     printf("WRITEME:  ofx_proc_account() Fill in the account type, default name, currency, etc.  \n"); 
-    commodity_table = gnc_book_get_commodity_table(gnc_get_current_book());
+    commodity_table = gnc_get_current_commodities ();
     if( data.currency_valid == true)
       {
 	DEBUG("Currency from libofx: %s",data.currency);
