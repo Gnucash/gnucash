@@ -238,7 +238,7 @@ xaccSessionBeginFile (Session *sess, char * filefrag)
     */
    strcpy (pathbuf, sess->lockfile);
    path = strrchr (pathbuf, '/') + 1;
-   sprintf (path, "%lx.%d", gethostid(), getpid());
+   sprintf (path, "gnc%lx.%d", gethostid(), getpid());
    link (sess->lockfile, pathbuf);
    rc = stat (sess->lockfile, &statbuf);
    if (rc) {
