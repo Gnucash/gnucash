@@ -234,10 +234,13 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
     * mumbo-jumbo.  We do this by linking a unique file, and 
     * then examing the link count.  At least that's what the 
     * NFS programmers guide suggests. 
+    * Note: the "unique filename" must be unique for the
+    * triplet filename-host-process, otherwise accidental 
+    * aliases can occur.
     */
    strcpy (pathbuf, sess->lockfile);
-   path = strrchr (pathbuf, '/') + 1;
-   sprintf (path, "gnc%lx.%d", gethostid(), getpid());
+   path = strrchr (pathbuf, '.') + 1;
+   sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
    link (sess->lockfile, pathbuf);
    rc = stat (sess->lockfile, &statbuf);
    if (rc) {
@@ -436,10 +439,12 @@ xaccResolveFilePath (const char * filefrag)
       if (!path) break;
 
       /* lets see if we found the file here ... */
+      /* haral: if !S_ISREG: there is something with that name 
+       * but it's not a regular file */
       strcat (path, filefrag);
       rc = stat (path, &statbuf);
-      if (!rc) {
-         return (strdup (path));
+      if ((!rc) && (S_ISREG(statbuf.st_mode))) {
+          return (strdup (path));
       }
    }
 
