@@ -81,6 +81,10 @@ sql_Query_destroy (sqlQuery *sq)
 }
 
 /* =========================================================== */
+/* Note that postgres supports both case-sensitive and 
+ * case-insensitve string searches, and it also supports 
+ * regex!  yahooo! 
+ */
 
 #define STRING_TERM(fieldname)				\
 {							\
@@ -186,9 +190,12 @@ sqlQuery_build (sqlQuery*sq, Query *q)
                break;
 
             case PR_AMOUNT:
+            {
                PINFO("term is PR_AMOUNT");
                PERR ("not implemented");
                break;
+            }
+
             case PR_BALANCE:
                PINFO("term is PR_BALANCE");
                PERR ("not implemented");
