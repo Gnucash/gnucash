@@ -238,6 +238,7 @@ src/backend/file/gnc-book-xml-v2.c
 src/backend/postgres/test/test-period.c
 src/backend/postgres/test/test-escape.c
 src/backend/postgres/test/test-db.c
+src/backend/postgres/putil.c
 src/backend/postgres/gncquery.c
 src/backend/postgres/escape.c
 src/backend/postgres/PostgresBackend.c

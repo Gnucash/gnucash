@@ -359,10 +359,11 @@ gnc_ui_sx_loan_druid_create(void)
                         GtkAlignment *a;
                         GNCOptionInfo typeOptInfo[] = {
                                 { _("Fixed"), _("A Fixed-Rate loan"), ld_prm_type_changed, ldd },
-                                { _("3/1"),   _("A 3/1 ARM"),         ld_prm_type_changed, ldd },
-                                { _("5/1"),   _("A 5/1 ARM"),         ld_prm_type_changed, ldd },
-                                { _("7/1"),   _("A 7/1 ARM"),         ld_prm_type_changed, ldd },
-                                { _("10/1"),  _("A 10/1 ARM"),        ld_prm_type_changed, ldd },
+				/* Translators: ARM = Adjustable Rate Mortgage */
+                                { _("3/1 Year"),   _("A 3/1 Year ARM"),         ld_prm_type_changed, ldd },
+                                { _("5/1 Year"),   _("A 5/1 Year ARM"),         ld_prm_type_changed, ldd },
+                                { _("7/1 Year"),   _("A 7/1 Year ARM"),         ld_prm_type_changed, ldd },
+                                { _("10/1 Year"),  _("A 10/1 Year ARM"),        ld_prm_type_changed, ldd },
                         };
                         ldd->prmType =
                                 GTK_OPTION_MENU( gnc_build_option_menu( typeOptInfo, 5 ) );
@@ -436,6 +437,9 @@ gnc_ui_sx_loan_druid_create(void)
                                 vb = GTK_VBOX(gtk_vbox_new( FALSE, OPT_VBOX_SPACING ));
 
                                 /* Add payment checkbox. */
+
+				/* Translators: %s is "Taxes",
+				 * "Insurance", or similar. */
                                 g_string_sprintf( str, _("... pay \"%s\"?"),
                                                   rouid->optData->name );
                                 rouid->optCb =
@@ -1125,6 +1129,7 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         rod = ldd->ld.repayOpts[ldd->currentIdx];
         str = g_string_sized_new( 32 );
+	/* Translators: %s is "Taxes", or "Insurance", or similar */
         g_string_sprintf( str, _("Payment: \"%s\""), rod->name );
         gnome_druid_page_standard_set_title( GNOME_DRUID_PAGE_STANDARD(gdp),
                                              str->str );
