@@ -92,28 +92,88 @@
 static void
 configLayout (BasicRegister *reg, int type)
 {
+   /* perform a bsic layout that's valid for most
+    * of the ledgers; then customize with case 
+    * statements. */
+   reg->num_cols = 8;
+   reg->num_header_rows = 1;
+   SET (DATE_CELL,  0,  0, 11,  DATE_STR);
+   SET (NUM_CELL,   1,  0,  7,  NUM_STR);
+   SET (ACTN_CELL,  1,  1,  7,  NUM_STR);
+   SET (XFRM_CELL,  2,  0, 14,  XFRM_STR);
+   SET (XTO_CELL,   2,  1, 14,  XFTO_STR);
+   SET (DESC_CELL,  3,  0, 29,  DESC_STR);
+   SET (MEMO_CELL,  3,  1, 29,  DESC_STR);
+   SET (RECN_CELL,  4,  0,  1,  "R");
+   SET (CRED_CELL,  5,  0, 12,  CREDIT_STR);
+   SET (DEBT_CELL,  6,  0, 12,  DEBIT_STR);
+   SET (BALN_CELL,  7,  0, 12,  BALN_STR);
+   SET (SHRS_CELL, -1, -1, 12,  "");
+   SET (PRIC_CELL, -1, -1, 12,  "");
+
    switch (type) {
-      case BANK_REGISTER:
+      case BANK_LEDGER:
+      case CASH_LEDGER:
+      case ASSET_LEDGER:
+      case CREDIT_LEDGER:
+      case LIABILITY_LEDGER:
+      case INCOME_LEDGER:
+      case EXPENSE_LEDGER:
+      case EQUITY_LEDGER:
          reg->num_cols = 8;
          reg->num_header_rows = 1;
+         SET (XTO_CELL,  -1, -1, 14,  "");
+         SET (SHRS_CELL, -1, -1, 12,  "");
+         SET (PRIC_CELL, -1, -1, 12,  "");
+         break;
 
-         SET (DATE_CELL,  0,  0, 11,  DATE_STR);
-         SET (NUM_CELL,   1,  0,  7,  NUM_STR);
-         SET (ACTN_CELL,  1,  1,  7,  NUM_STR);
-         SET (XFRM_CELL,  2,  0, 11,  XFRM_STR);
-         SET (XTO_CELL,  -1, -1, 11,  "");
-         SET (DESC_CELL,  3,  0, 29,  DESC_STR);
-         SET (MEMO_CELL,  3,  1, 29,  DESC_STR);
-         SET (RECN_CELL,  4,  0,  1,  "R");
-         SET (CRED_CELL,  5,  0,  9,  CREDIT_STR);
-         SET (DEBT_CELL,  6,  0,  9,  DEBIT_STR);
-         SET (BALN_CELL,  7,  0,  9,  BALN_STR);
-         SET (SHRS_CELL, -1, -1,  9,  "");
-         SET (PRIC_CELL, -1, -1,  9,  "");
+      case STOCK_LEDGER:
+         reg->num_cols = 10;
+         SET (XTO_CELL,  -1, -1, 14,  "");
+         SET (SHRS_CELL,  7,  0, 12,  "");
+         SET (PRIC_CELL,  8,  0, 12,  "");
+         SET (BALN_CELL,  9,  0, 12,  BALN_STR);
 
       default:
-
    }
+
+   /* setup custom labels for the debit/credit columns */
+   switch (type) {
+      case BANK_LEDGER:
+         reg->labels [CRED_CELL] = PAYMENT_STR;
+         reg->labels [DEBT_CELL] = DEPOSIT_STR;
+         break;
+      case CASH_LEDGER:
+         reg->labels [CRED_CELL] = SPEND_STR;
+         reg->labels [DEBT_CELL] = RECEIVE_STR;
+         break;
+      case ASSET_LEDGER:
+         reg->labels [CRED_CELL] = DEPR_STR;
+         reg->labels [DEBT_CELL] = APPR_STR;
+         break;
+      case CREDIT_LEDGER:
+         reg->labels [CRED_CELL] = CHARGE_STR;
+         reg->labels [DEBT_CELL] = PAYMENT_STR;
+         break;
+      case LIABILITY_LEDGER:
+         reg->labels [CRED_CELL] = INCREASE_STR;
+         reg->labels [DEBT_CELL] = DECREASE_STR;
+         break;
+      case INCOME_LEDGER:
+         reg->labels [CRED_CELL] = INCOME_STR;
+         reg->labels [DEBT_CELL] = CHARGE_STR;
+         break;
+      case EXPENSE_LEDGER:
+         reg->labels [CRED_CELL] = REBATE_STR;
+         reg->labels [DEBT_CELL] = EXPENSE_STR;
+         break;
+      case EQUITY_LEDGER:
+         reg->labels [CRED_CELL] = SURPLUS_STR;
+         reg->labels [DEBT_CELL] = DEFICIT_STR;
+         break;
+      default:
+   }
+
 }
 
 /* ============================================== */
@@ -126,7 +186,14 @@ configTraverse (BasicRegister *reg, int type)
    CellBlock *curs = reg->cursor;
 
    switch (type) {
-      case BANK_REGISTER:
+      case BANK_LEDGER:
+      case CASH_LEDGER:
+      case ASSET_LEDGER:
+      case CREDIT_LEDGER:
+      case LIABILITY_LEDGER:
+      case INCOME_LEDGER:
+      case EXPENSE_LEDGER:
+      case EQUITY_LEDGER:
          xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
          xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
          xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);

@@ -16,7 +16,18 @@
 #include "textcell.h"
 
 /* defined register types */
-#define BANK_REGISTER  0
+#define BANK_LEDGER       0
+#define CASH_LEDGER       1
+#define ASSET_LEDGER      2
+#define CREDIT_LEDGER     3
+#define LIABILITY_LEDGER  4
+#define INCOME_LEDGER     5
+#define EXPENSE_LEDGER    6
+#define EQUITY_LEDGER     7
+#define STOCK_LEDGER      8
+#define GEN_LEDGER        9
+#define INC_LEDGER        10
+#define PORTFOLIO         11
 
 /* modified flags -- indicate how values have been modified */
 #define MOD_NONE  0x000
