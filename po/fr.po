@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.X\n"
 "POT-Creation-Date: 2000-04-09 11:49-0700\n"
-"PO-Revision-Date: 2000-04-07 22:05+0100\n"
+"PO-Revision-Date: 2000-04-13 22:05+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -839,10 +839,8 @@ msgid "_Adjust Balance"
 msgstr "Ajuster le solde"
 
 # messages-i18n.c:132
-#: messages-i18n.c:134
-#, fuzzy
 msgid "_Adjust Balance..."
-msgstr "Ajuster le solde"
+msgstr "Ajuster le solde..."
 
 # messages-i18n.c:133
 #: messages-i18n.c:135
@@ -891,9 +889,8 @@ msgstr "Solde final"
 
 # messages-i18n.c:141
 #: messages-i18n.c:144
-#, fuzzy
 msgid "_Ending Balance..."
-msgstr "Solde final"
+msgstr "Solde final..."
 
 # messages-i18n.c:142
 #: messages-i18n.c:145
@@ -922,9 +919,8 @@ msgstr "Nouveau compte"
 
 # messages-i18n.c:146
 #: messages-i18n.c:150
-#, fuzzy
 msgid "_New Account..."
-msgstr "Nouveau compte"
+msgstr "Nouveau compte..."
 
 # messages-i18n.c:147
 #: messages-i18n.c:151
@@ -943,21 +939,18 @@ msgstr "Préférences"
 
 # messages-i18n.c:149
 #: messages-i18n.c:154
-#, fuzzy
 msgid "_Preferences..."
-msgstr "Préférences"
+msgstr "Préférences..."
 
 # messages-i18n.c:150
 #: messages-i18n.c:155
-#, fuzzy
 msgid "_Print Check... (unfinished!)"
-msgstr "Imprimer chèques (non terminé!)"
+msgstr "Imprimer chèques...(non terminé!)"
 
 # messages-i18n.c:151
 #: messages-i18n.c:156
-#, fuzzy
 msgid "_Reconcile..."
-msgstr "Rapprocher"
+msgstr "Rapprocher..."
 
 # messages-i18n.c:151
 #: messages-i18n.c:157
@@ -996,9 +989,8 @@ msgstr "Nettoyer les sous-comptes"
 
 # messages-i18n.c:158
 #: messages-i18n.c:164
-#, fuzzy
 msgid "Set _Range..."
-msgstr "Mettre échelle"
+msgstr "Mettre échelle..."
 
 # messages-i18n.c:158
 #: messages-i18n.c:165
@@ -1032,9 +1024,8 @@ msgstr "Transférer"
 
 # messages-i18n.c:163
 #: messages-i18n.c:171
-#, fuzzy
 msgid "_Transfer..."
-msgstr "Transférer"
+msgstr "Transférer..."
 
 # messages-i18n.c:164
 #: messages-i18n.c:172
@@ -1143,9 +1134,8 @@ msgstr "Cacher Revenus/Dépenses"
 
 # messages-i18n.c:185
 #: messages-i18n.c:193
-#, fuzzy
 msgid "Import QIF..."
-msgstr "Importer QIF"
+msgstr "Importer QIF..."
 
 # messages-i18n.c:185
 #: messages-i18n.c:194
@@ -1380,7 +1370,7 @@ msgstr "Tot titres"
 # messages-i18n.c:231
 #: messages-i18n.c:240
 msgid "Transfer Information"
-msgstr "Transfert d'informations"
+msgstr "Informations du transfert"
 
 # messages-i18n.c:232
 #: messages-i18n.c:241
@@ -2784,7 +2774,7 @@ msgstr ""
 # po/guile_strings.txt:171
 #: po/guile_strings.txt:174
 msgid "Ba_lance sheet"
-msgstr "Feuille du solde/bilan"
+msgstr "Bilan"
 
 # po/guile_strings.txt:172
 #: po/guile_strings.txt:175
