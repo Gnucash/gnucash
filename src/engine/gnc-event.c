@@ -178,7 +178,7 @@ gnc_engine_generate_event_internal (const GUID *entity, QofIdType type,
   {
     HandlerInfo *hi = node->data;
 
-    PINFO ("id=%d node=%p hi=%p han=%p\n", hi->handler_id, node, hi, hi->handler);
+    PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
     if (hi->handler)
       hi->handler ((GUID *)entity, type, event_type, hi->user_data);
   }
