@@ -47,6 +47,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/locale/de/LC_MESSAGES/gnucash.*mo
 /usr/share/locale/en_GB/LC_MESSAGES/gnucash.*mo
 /usr/share/locale/fr/LC_MESSAGES/gnucash.*mo
+/usr/share/locale/ja/LC_MESSAGES/gnucash.*mo
 /usr/share/locale/sv/LC_MESSAGES/gnucash.*mo
 /usr/man/man1/gnucash.1
 /usr/man/man1/gnc-prices.1
