@@ -1,3 +1,11 @@
+2001-04-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-main.c: handle scm parsing errors
+
+	* src/scm/report.scm: fix bug
+
+	* src/guile/gfec.c: handle NULLs
+
 2001-04-26  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/net-barchart.scm: New file, it is the merger of

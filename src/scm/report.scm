@@ -291,7 +291,7 @@
         (if (gnc:report-parent report)
             (gnc:report-set-dirty?! 
              (gnc:find-report (gnc:report-parent report)) val))
-        
+
         ;; reload the window 
         (for-each 
          (lambda (win)
@@ -466,9 +466,10 @@
 
 (define (gnc:report-generate-restore-forms-complete report)
   (define (find-root r)
-    (let ((p (gnc:report-parent r)))
+    (let* ((pid (gnc:report-parent r))
+           (p (if pid (gnc:find-report pid) #f)))
       (if (not p) r (find-root p))))
-  
+
   (define (generate-forms/children r)
     (apply 
      string-append 
@@ -478,7 +479,7 @@
         (let ((child (gnc:find-report c)))
           (generate-forms/children child)))
       (gnc:report-children r))))
-  
+
   (let ((toplevel (find-root report)))
     (string-append 
      ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"

@@ -28,6 +28,7 @@
 #include <guile/gh.h>
 #include <string.h>
 
+#include "gfec.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
 #include "gnucash.h"
@@ -389,31 +390,53 @@ gnc_main_window_configure_mdi_cb (gpointer data)
  * MDI session restore time 
  ********************************************************************/
 
+static void
+gfec_create_child_error (const char *error_string)
+{
+  g_warning ("error creating mdi child\n\n%s",
+             error_string ? error_string : "(null)");
+}
+
 GnomeMDIChild * 
 gnc_main_window_create_child(const gchar * configstring) {
+  GnomeMDIChild *child;
   URLType type;
   char * location;
   char * label;
   char * url;
+  SCM scm;
 
-  url = gh_scm2newstr(gh_eval_str(configstring), NULL);
+  if (!configstring)
+    return NULL;
+
+  scm = gfec_eval_string(configstring, gfec_create_child_error);
+  if (!gh_string_p(scm))
+    return NULL;
+
+  url = gh_scm2newstr(scm, NULL);
+  if (!url)
+    return NULL;
 
   type = gnc_html_parse_url(NULL, url, &location, &label);
   g_free(location);
   g_free(label);
-  
+
   switch(type) {
   case URL_TYPE_REPORT:
-    return gnc_report_window_create_child(url);
+    child = gnc_report_window_create_child(url);
     break;
     
   case URL_TYPE_ACCTTREE:
-    return gnc_acct_tree_window_create_child(url);
+    child = gnc_acct_tree_window_create_child(url);
     break;
     
   default:
-    return NULL;
+    child = NULL;
   }
+
+  free (url);
+
+  return child;
 }
 
 
