@@ -1,6 +1,7 @@
 /********************************************************************\
  * QuickFill.h -- the quickfill tree data structure                 *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,15 +28,11 @@
 
 #include "config.h"
 
-#include "Account.h"
-#include "date.h"
 #include "QuickFill.h"
 #include "util.h"
 
 /** PROTOTYPES ******************************************************/
-void qfInsertTransactionRec( QuickFill *qf, Transaction *trans, int depth );
-
-/** GLOBALS *********************************************************/
+static void qfInsertTextRec( QuickFill *qf, const char * text, int depth );
 
 
 /********************************************************************\
@@ -66,7 +63,7 @@ mallocQuickFill( void )
   for( i=0; i<QFNUM; i++ )
     qf->qf[i] = NULL;
   
-  qf->trans = NULL;
+  qf->text = NULL;
   
   return qf;
   }
@@ -104,30 +101,30 @@ getQuickFill( QuickFill *qf, char c )
 /********************************************************************\
 \********************************************************************/
 void
-qfInsertTransaction( QuickFill *qf, Transaction *trans )
+qfInsertText( QuickFill *qf, const char * text )
   {
-  qfInsertTransactionRec( qf, trans, 0 );
+  qfInsertTransactionRec( qf, text, 0 );
   }
 
 /********************************************************************\
 \********************************************************************/
-void
-qfInsertTransactionRec( QuickFill *qf, Transaction *trans, int depth )
+static void
+qfInsertTextRec( QuickFill *qf, const char *text, int depth )
   {
   if( qf != NULL )
     {
-    if( trans->description )
+    if( text )
       {
-      if( trans->description[depth] != '\0' )
+      if( text[depth] != '\0' )
         {
-        int index = CHAR_TO_INDEX( trans->description[depth] );
+        int index = CHAR_TO_INDEX( text[depth] );
         
         if( qf->qf[index] == NULL )
           qf->qf[index] = mallocQuickFill();
         
-        qf->qf[index]->trans = trans;
+        qf->qf[index]->text = text;
         
-        qfInsertTransactionRec( qf->qf[index], trans, ++depth );
+        qfInsertTransactionRec( qf->qf[index], text, ++depth );
         }
       }
     }
