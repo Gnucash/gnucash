@@ -278,6 +278,28 @@ add128 (qofint128 a, qofint128 b)
   return sum;
 }
 
+/** Shift right by one bit (i.e. divide by two) */
+inline qofint128
+shift128 (qofint128 x)
+{
+  guint64 sbit = x.hi & 0x1;
+  x.hi >>= 1;
+  x.lo >>= 1;
+  if (sbit)
+  {
+    sbit = 1<<30;  /* in two step to avoid 1ULL<<63 */
+    sbit <<= 33;
+    x.lo |= sbit;
+    x.isbig = 1;
+    return x;
+  }
+  if (x.hi)
+  {
+    x.isbig = 1;
+  }
+  return x;
+}
+
 #ifdef TEST_128_BIT_MULT
 static void pr (gint64 a, gint64 b)
 {

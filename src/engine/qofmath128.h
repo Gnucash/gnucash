@@ -71,6 +71,9 @@ inline qofint128 lcm128 (guint64 a, guint64 b);
 /** Add a pair of 128-bit numbers, returning a 128-bit number */
 inline qofint128 add128 (qofint128 a, qofint128 b);
 
+/** Shift right by one bit (i.e. divide by two) */
+inline qofint128 shift128 (qofint128 x);
+
 #endif
 
 /** @} */
