@@ -298,11 +298,9 @@ xaccSplitGetAccountGUID(Split *split)
 void
 xaccSplitSetAccount(Split *s, Account *act)
 {
-    int i;
     if(!act)
     {
-        for(i = 0; i < 16; i++)
-            s->acc_guid.data[i] = '\0';
+        s->acc_guid = *xaccGUIDNULL();
     }
     else
     {
