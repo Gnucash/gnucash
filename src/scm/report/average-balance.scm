@@ -247,7 +247,7 @@
            (document  (gnc:make-html-document))
            (startbal  0.0))
       
-      (gnc:html-document-set-title! document (_ "Avergae Balance"))
+      (gnc:html-document-set-title! document (_ "Average Balance"))
 
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))
