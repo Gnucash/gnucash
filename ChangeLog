@@ -1,3 +1,9 @@
+2001-06-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/gnucash-design.texinfo: update docs
+
+	* src/doc/design/engine.texinfo: update docs
+
 2001-06-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report-html.scm: remove unneeded (require 'printf).

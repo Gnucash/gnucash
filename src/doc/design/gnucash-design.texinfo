@@ -89,6 +89,7 @@ Engine
 * Commodities::                 
 * Commodity Tables::            
 * Prices::                      
+* Price Databases::             
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -145,6 +146,10 @@ Prices
 * General Price API::           
 * Price Getters::               
 * Price Setters::               
+
+Price Databases
+
+* Price Lists::                 
 
 Splits
 

@@ -28,6 +28,7 @@ be created as a shared library for use by other programs.
 * Commodities::                 
 * Commodity Tables::            
 * Prices::                      
+* Price Databases::             
 * Splits::                      
 * Transactions::                
 * Accounts::                    
@@ -1425,7 +1426,7 @@ ISO4217 namespace.
 @end deftypefun
 
 
-@node Prices, Splits, Commodity Tables, Engine
+@node Prices, Price Databases, Commodity Tables, Engine
 @section Prices
 @tindex GNCPrice
 
@@ -1610,7 +1611,44 @@ Set the version of @var{p} to @var{versn}.
 @end deftypefun
 
 
-@node Splits, Transactions, Prices, Engine
+@node Price Databases, Splits, Prices, Engine
+@section Price Databases
+@tindex GNCPriceDB
+
+A Price Database stores GNCPrices and allows prices to be looked
+up based on currency, commodity, and time.
+
+
+@menu
+* Price Lists::                 
+@end menu
+
+
+@node Price Lists,  , Price Databases, Price Databases
+@subsection Price Lists
+
+Price Lists are used by Price Databases to organize prices for a given
+commodity and currency. A Price List is a list of prices with the same
+commodity and currency, sorted by decreasing time (earlier prices come
+later in the list).
+
+@deftypefun gboolean gnc_price_list_insert (GList ** @var{prices}, GNCPrice * @var{p})
+Insert price @var{p} into the list @var{prices}, calling
+@var{gnc_price_ref} on @var{p} during the process.
+@end deftypefun
+
+@deftypefun gboolean gnc_price_list_remove (GList ** @var{prices}, GNCPrice * @var{p})
+Remove price @var{p} from the list @var{prices}, calling
+@code{gnc_price_unref} on @var{p} during the process.
+@end deftypefun
+
+@deftypefun void gnc_price_list_destroy (GList * @var{prices})
+Destroy the price list @var{prices}, calling @code{gnc_price_unref}
+on all the prices in the list.
+@end deftypefun
+
+
+@node Splits, Transactions, Price Databases, Engine
 @section Splits
 @tindex Split
 
