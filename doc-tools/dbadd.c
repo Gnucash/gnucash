@@ -101,7 +101,7 @@ main (int argc, char *argv[])
     key.size = strlen (key.data);
 
     value.data = argv[i + 1];
-    value.size = strlen (value.data);
+    value.size = strlen (value.data) + 1;
 
     if (database->put (database, &key, &value, 0))
     {
