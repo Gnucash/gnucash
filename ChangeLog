@@ -1,5 +1,8 @@
 2002-12-07  Christian Stimming  <stimming@tuhh.de>
 
+	* po/el.po: Updated translation by Nikos Charonitakis
+	<charosn@her.forthnet.gr>
+
 	* src/engine/Transaction.h: Extensively added function
 	documentation (in order to avoid further amount/value confusion
 	down the road), watch doxygen output. Added a lot of 'const' all
