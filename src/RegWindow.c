@@ -61,9 +61,16 @@ enum {
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
  * register.  Any state info for the regWindow goes here. */
+
 typedef struct _RegWindow {
-  Account **blackacc;         /* The list of accounts associated with this regwin */
-  short   numAcc;             /* number of accounts in list */
+  Account *leader;            /* leading account                         */
+  Account **blackacc;         /* The list of accounts shown here         */
+  short   numAcc;             /* number of accounts in list              */
+
+  short type;                 /* register display type, usually equal to *
+                               * account type                            */
+
+  BasicRegister *ledger;      /* main ledger window                      */
 
   /* display widgets */
   Widget   dialog;
@@ -71,10 +78,6 @@ typedef struct _RegWindow {
   Widget   balance;           /* The balance text field                  */
   Widget   record;            /* the record transaction button           */
 
-  short type;                 /* register display type, usually equal to *
-                               * account type                            */
-
-  BasicRegister *ledger;
 } RegWindow;
 
 
@@ -83,9 +86,10 @@ extern Widget  toplevel;
 
 static RegWindow **regList = NULL;     /* single-account registers */
 static RegWindow **ledgerList = NULL;  /* multiple-account registers */
+static RegWindow **fullList = NULL;    /* all registers */
 
 /** PROTOTYPES ******************************************************/
-RegWindow * regWindowLedger( Widget parent, Account **acclist, int type);
+RegWindow * regWindowLedger( Widget parent, Account *lead, Account **acclist, int type);
 void        regRefresh (Account *acc);
 
 static void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
@@ -107,12 +111,8 @@ RegWindow *
 regWindowSimple( Widget parent, Account *acc )
   {
   RegWindow *retval;
-  Account *acclist[2];
 
-  acclist[0] = acc;
-  acclist[1] = NULL;
-
-  retval = regWindowLedger (parent, acclist, acc->type);
+  retval = regWindowLedger (parent, acc, NULL, acc->type);
   return retval;
   }
 
@@ -133,7 +133,7 @@ regWindowAccGroup( Widget parent, Account *acc )
   Account *le;
   int n;
 
-  /* hack alert -- should search in the ledger list */
+  /* build a flat list from the tree */
   list = xaccGroupToList (acc);
 
   switch (acc->type) {
@@ -177,8 +177,7 @@ regWindowAccGroup( Widget parent, Account *acc )
       _free (list);
       return NULL;
   }
-  retval = regWindowLedger (parent, list, ledger_type);
-  acc->regLedger = retval;
+  retval = regWindowLedger (parent, acc, list, ledger_type);
 
   if (list) _free (list);
 
@@ -189,14 +188,17 @@ regWindowAccGroup( Widget parent, Account *acc )
  * regWindowLedger                                                  *
  *   opens up a ledger window for the account list                  *
  *                                                                  *
- * Args:   parent  - the parent of this window                      *
- *         acc     - the account associated with this register      *
- * Return: regData - the register window instance                   *
+ * Args:   parent   - the parent of this window                     *
+ *         lead_acc - the account associated with this register     *
+ *                     (may be null)                                *
+ *         acc_list - the list of accounts to display in register   *
+ *                     (may be null)                                *
+ * Return: regData  - the register window instance                  *
 \********************************************************************/
 RegWindow *
-regWindowLedger( Widget parent, Account **acclist, int ledger_type )
+regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger_type )
   {
-  RegWindow   *regData;
+  RegWindow   *regData = NULL;
   Widget menubar, pane, buttonform, frame, reg, widget;
   int    position=0;
   char *windowname;
@@ -255,52 +257,72 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   
 
   /******************************************************************\
-   * create regData, compute register display type      *
   \******************************************************************/
 
-  /* hack this aint right quite */
-  FETCH_FROM_LIST (RegWindow, regList, acclist[0], blackacc[0], regData);
+  /* the two macros below will search for a register windows associated
+   * with the leading account.  If they exist, then they will be returned,
+   * and that will be that.  If they do not exist, they will be created.
+   *
+   * There are two lists for lead-accounts: simple, single-account 
+   * registers, which display one account only, and multiple-account
+   * registers.  A leading account can have at most one of each. 
+   * For a multiple-account register with a leader, all accounts
+   * shown in the register are sub-accounts of the leader.
+   *
+   * A third possibility exists: a multiple-account register, with
+   * no leader account.  In such a case, the list of accounts being
+   * displayed have no particular relationshp to each other.  There
+   * can be an arbitrary number of multiple-account leader-less
+   * registers.
+   */
+  regData = NULL;
+  if (lead_acc) {
+     if (!acclist) {
+       FETCH_FROM_LIST (RegWindow, regList, lead_acc, leader, regData);
+     } else {
+       FETCH_FROM_LIST (RegWindow, ledgerList, lead_acc, leader, regData);
+     }
+  }
   
+  /* if regData is null, then no leader account was specified */
+  if (!regData) {
+    regData = (RegWindow *) malloc (sizeof (RegWindow));
+    regData->leader = NULL;
+  }
+
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
   regData->numAcc = accListCount (acclist);
   regData->blackacc = accListCopy (acclist);
 
-  if (0 == regData->numAcc) {
-    /* this is pretty much an error condition. bail out. */
-    unsetBusyCursor( parent );
-    _free (regData);
-    return NULL;
-  }
+  ledgerListAddList (regData->blackacc, regData);
 
   setBusyCursor( parent );
 
   regData->type = ledger_type;
 
-  if (1 == regData->numAcc) {
-    windowname = regData->blackacc[0]->accountName;
-  } else {
-
-    switch (regData->type) {
-       case GEN_LEDGER:
-       case INC_LEDGER:
-         sprintf (buf, "%s General Ledger", regData->blackacc[0]->accountName);
-         break;
-       case PORTFOLIO:
-         sprintf (buf, "%s Portfolio", regData->blackacc[0]->accountName);
-         break;
-    }
-    windowname = buf;
-
-    /* associate register with account, so that we can do consistent
-     * updates */
-    regData->blackacc[0]->regLedger = regData;    
-  }
-  ledgerListAddList (regData->blackacc, regData);
-
   /******************************************************************\
    * Start creating the Motif Widgets ...                           *
   \******************************************************************/
+
+  /* pick a window name */
+  if (lead_acc) {
+    switch (regData->type) {
+       case GEN_LEDGER:
+       case INC_LEDGER:
+         sprintf (buf, "%s General Ledger", lead_acc->accountName);
+         break;
+       case PORTFOLIO:
+         sprintf (buf, "%s Portfolio", lead_acc->accountName);
+         break;
+       default:
+         sprintf (buf, "%s Register", lead_acc->accountName);
+         break;
+    }
+    windowname = buf;
+  } else {
+    windowname = "General Ledger";
+  }
 
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
@@ -308,7 +330,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
                           XmNdeleteResponse,   XmDESTROY,
                           XmNtitle,            windowname,
                           /*
-                           * Let the window find ti's own size, 
+                           * Let the window find it's own size, 
                            * based on the size of the fonts.
                            * XmNwidth,            395,
                            * XmNheight,           400,
@@ -524,7 +546,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   unsetBusyCursor( parent );
   
   return regData;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -578,8 +600,6 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   /* Save any unsaved changes */
   xaccSaveRegEntry (regData->ledger);
   
-  regData->blackacc[0]->regLedger = NULL;
-
   ledgerListRemoveList (regData->blackacc, regData);
   free(regData);
   
