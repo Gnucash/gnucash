@@ -2,6 +2,9 @@
 SUBDIRS = gnumeric printing qif-import report
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
+
+gncscmmod_DATA = process.scm
 
 gnc_autogen_scm_files = \
   bootstrap.scm
@@ -41,7 +44,6 @@ gnc_regular_scm_files = \
   path.scm \
   prefs.scm \
   price-quotes.scm \
-  process.scm \
   report.scm \
   report-html.scm \
   report-utilities.scm \
