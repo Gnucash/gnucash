@@ -324,87 +324,9 @@ string and 'directories' must be a list of strings."
     "\n\n"
     (_ "This is a development version. It may or may not work.\n")
     (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
-    (_ "The last stable version was ") "GnuCash 1.6.4" "\n"
+    (_ "The last stable version was ") "GnuCash 1.6.5" "\n"
     (_ "The next stable version will be ") "GnuCash 1.8.0"
     "\n\n")))
-
-(define (gnc:report-menu-setup)
-  ;; since this menu gets added to every child window, we say it 
-  ;; comes after the "_File" menu. 
-  (define menu (gnc:make-menu gnc:menuname-reports (list "_File")))
-  (define menu-namer (gnc:new-menu-namer))
-  (define tax-menu (gnc:make-menu gnc:menuname-taxes
-                                  (list gnc:menuname-reports "")))
-  (define income-expense-menu
-    (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:menuname-reports "")))
-  (define asset-liability-menu
-    (gnc:make-menu gnc:menuname-asset-liability
-                   (list gnc:menuname-reports "")))
-  (define utility-menu
-    (gnc:make-menu gnc:menuname-utility
-                   (list gnc:menuname-reports "")))
-  (define menu-hash (make-hash-table 23))
-
-  (define (add-template-menu-item name template)
-    (if (gnc:report-template-in-menu? template)
-        (let ((title (string-append (_ "Report") ": " (_ name)))
-              (menu-path (gnc:report-template-menu-path template))
-              (menu-name (gnc:report-template-menu-name template))
-              (menu-tip (gnc:report-template-menu-tip template))
-              (item #f))
-
-          (if (not menu-path)
-              (set! menu-path '(""))
-              (set! menu-path
-                    (append menu-path '(""))))
-
-          (set! menu-path (append (list gnc:menuname-reports) menu-path))
-
-          (if menu-name (set! name menu-name))
-
-          (if (not menu-tip)
-              (set! menu-tip
-                    (sprintf #f (_ "Display the %s report") (_ name))))
-
-          (set! item
-                (gnc:make-menu-item
-                 ((menu-namer 'add-name) name)
-                 menu-tip
-                 menu-path
-                 (lambda ()
-                   (let ((report (gnc:make-report
-                                  (gnc:report-template-name template))))
-                     (gnc:main-window-open-report report #f)))))
-          (gnc:add-extension item))))
-
-  (gnc:add-extension menu)
-
-  ;; add the menu option to edit style sheets 
-  (gnc:add-extension
-   (gnc:make-menu-item 
-    ((menu-namer 'add-name) (_ "Style Sheets..."))
-    (_ "Edit report style sheets.")
-    (list "_Settings" "")
-    (lambda ()
-      (gnc:style-sheet-dialog-open))))
-
-  ;; (gnc:add-extension tax-menu)
-  (gnc:add-extension income-expense-menu)
-  (gnc:add-extension asset-liability-menu)
-  (gnc:add-extension utility-menu)
-
-  ;; push reports (new items added on top of menu)
-  (gnc:report-templates-for-each add-template-menu-item)
-
-  ;; the Welcome to Gnucash-1.6 extravaganza 
-  (gnc:add-extension 
-   (gnc:make-menu-item 
-    ((menu-namer 'add-name) (_ "Welcome Extravaganza")) 
-    (_ "Welcome-to-GnuCash screen")
-    (list gnc:menuname-reports gnc:menuname-utility "")
-    (lambda ()
-      (gnc:main-window-open-report (gnc:make-welcome-report) #f)))))
 
 (define (gnc:startup)
   (gnc:debug "starting up.")
@@ -489,6 +411,24 @@ string and 'directories' must be a list of strings."
   (gnc:global-options-clear-changes)
 
   (gnc:report-menu-setup)
+
+  ;; add the menu option to edit style sheets 
+  (gnc:add-extension
+   (gnc:make-menu-item 
+    (_ "Style Sheets...")
+    (_ "Edit report style sheets.")
+    (list "_Settings" "")
+    (lambda ()
+      (gnc:style-sheet-dialog-open))))
+
+  ;; the Welcome to GnuCash-1.6 extravaganza 
+  (gnc:add-extension 
+   (gnc:make-menu-item 
+    (_ "Welcome Extravaganza")
+    (_ "Welcome-to-GnuCash screen")
+    (list gnc:menuname-reports gnc:menuname-utility "")
+    (lambda ()
+      (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
