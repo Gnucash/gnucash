@@ -118,8 +118,13 @@ AC_ARG_WITH( opt-style-install,
   OPT_STYLE_INSTALL=0)
 AC_SUBST(OPT_STYLE_INSTALL)
 
-# *******************************************
+PERLINCL="/usr/lib/perl5/i386-linux/5.00403/CORE"
+AC_ARG_WITH( perl-includes, 
+       [  --with-perl-includes=DIR    specify where to look for perl CORE includes],
+       PERLINCL="-I$with_perl_includes -I$with_perl_includes/CORE" )
+AC_SUBST(PERLINCL)
 
+# *******************************************
 # the XmHTML widget needs libz, libjpeg, libpng and libm
 # it also uses #ifdef's not #if's so DONT #def to zero.
 AC_CHECK_LIB(z, deflateEnd,
@@ -291,6 +296,7 @@ AC_OUTPUT(Makefile
           src/reports/Makefile
           src/swig/Makefile
           src/swig/guile/Makefile
+          src/swig/perl5/Makefile
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
