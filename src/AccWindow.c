@@ -244,10 +244,8 @@ accWindow( Widget parent )
   xaccAccountMenuAddCallback (accData->accMenu, selectAccountCB, (XtPointer) accData);
 
   /* account subroups are not implemented, so grey this out */
-/*
   XtSetSensitive (label, False);
   XtSetSensitive (group_menu, False);
-*/
    
   XtVaSetValues( group_menu,
                              XmNtopAttachment,  XmATTACH_WIDGET,
