@@ -27,6 +27,7 @@
 srcdir   = @srcdir@
 VPATH    = @srcdir@
 CC       = @CC@
+RANLIB   = @RANLIB@
 INCLPATH = -I/usr/include \
            -I/usr/local/include \
            -I@srcdir@/../../include \
