@@ -26,7 +26,7 @@
 
 #include <glib.h>
 
-#include "GNCId.h"
+#include "GNCIdP.h"
 #include "gnc-book.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
@@ -41,7 +41,7 @@ struct gnc_price_s
   GNCPriceDB *db;
   gnc_commodity *commodity;
   gnc_commodity *currency;
-  Timespec time;
+  Timespec tmspec;
   char *source;
   char *type;
   gnc_numeric value;

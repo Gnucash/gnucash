@@ -292,7 +292,7 @@ void
 gnc_price_set_time(GNCPrice *p, Timespec t)
 {
   if(!p) return;
-  if(!timespec_equal(&(p->time), &t)) 
+  if(!timespec_equal(&(p->tmspec), &t)) 
   {
     /* Changing the datestamp requires the hash table 
      * position to be modified. The easiest way of doing 
@@ -300,7 +300,7 @@ gnc_price_set_time(GNCPrice *p, Timespec t)
     gnc_price_ref (p);
     remove_price (p->db, p, FALSE);
     gnc_price_begin_edit (p);
-    p->time = t;
+    p->tmspec = t;
     if(p->db) p->db->dirty = TRUE;
     gnc_price_commit_edit (p);
     add_price (p->db, p);
@@ -403,7 +403,7 @@ gnc_price_get_time(GNCPrice *p)
     result.tv_nsec = 0;
     return result;
   }
-  return p->time;
+  return p->tmspec;
 }
 
 const char *

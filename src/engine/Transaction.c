@@ -94,7 +94,7 @@ check_open (Transaction *trans)
 \********************************************************************/
 
 static void
-xaccInitSplit(Split * split, GNCEntityTable *entity_table)
+xaccInitSplit(Split * split, GNCBook *book)
 {
   /* fill in some sane defaults */
   xaccSplitSetAccount(split, NULL);
@@ -116,33 +116,25 @@ xaccInitSplit(Split * split, GNCEntityTable *entity_table)
   split->kvp_data = kvp_frame_new();
   split->idata = 0;
 
-  split->entity_table = entity_table;
+  split->book = book;
 
-  xaccGUIDNewEntityTable (&split->guid, split->entity_table);
-  xaccStoreEntity(split->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  xaccGUIDNew (&split->guid, book);
+  xaccStoreEntity(book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
 \********************************************************************/
 
-static Split *
-xaccMallocSplitEntityTable (GNCEntityTable *entity_table)
-{
-  Split *split;
-
-  g_return_val_if_fail (entity_table, NULL);
-
-  split = g_new (Split, 1);
-  xaccInitSplit (split, entity_table);
-
-  return split;
-}
-
 Split *
 xaccMallocSplit(GNCBook *book)
 {
+  Split *split;
   g_return_val_if_fail (book, NULL);
-  return xaccMallocSplitEntityTable (gnc_book_get_entity_table (book));
+
+  split = g_new (Split, 1);
+  xaccInitSplit (split, book);
+
+  return split;
 }
 
 /********************************************************************\
@@ -161,7 +153,7 @@ xaccCloneSplit (Split *s)
   /* copy(!) the guid and entity table. The cloned split is *not* unique,
    * is a sick twisted clone that holds 'undo' information. */
   split->guid = s->guid;
-  split->entity_table = s->entity_table;
+  split->book = s->book;
 
   xaccSplitSetAccountGUID(split, s->acc_guid);
   split->parent = s->parent;
@@ -398,16 +390,6 @@ xaccSplitSetSlots_nc(Split *s, kvp_frame *frm)
  * Account funcs
  ********************************************************************/
 
-static void
-xaccSplitSetAccount_Internal(Split *s, Account *act)
-{
-    if(!act)
-    {
-        return;
-    }
-    s->acc = act;
-}
-
 Account*
 xaccSplitGetAccount(Split *s)
 {
@@ -415,10 +397,7 @@ xaccSplitGetAccount(Split *s)
     
     if (!s->acc)
     {
-        Account *account;
-
-        account = xaccAccountLookupEntityTable (&s->acc_guid, s->entity_table);
-        xaccSplitSetAccount_Internal (s, account);
+        s->acc = xaccAccountLookup (&s->acc_guid, s->book);
     }
 
     return s->acc;
@@ -483,21 +462,13 @@ xaccSplitSetGUID (Split *split, const GUID *guid)
 {
   if (!split || !guid) return;
   check_open (split->parent);
-  xaccRemoveEntity(split->entity_table, &split->guid);
+  xaccRemoveEntity(split->book->entity_table, &split->guid);
   split->guid = *guid;
-  xaccStoreEntity(split->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  xaccStoreEntity(split->book->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
 \********************************************************************/
-
-Split *
-xaccSplitLookupEntityTable (const GUID *guid, GNCEntityTable *entity_table)
-{
-  if (!guid) return NULL;
-  g_return_val_if_fail (entity_table, NULL);
-  return xaccLookupEntity(entity_table, guid, GNC_ID_SPLIT);
-}
 
 Split *
 xaccSplitLookup (const GUID *guid, GNCBook *book)
@@ -785,10 +756,10 @@ xaccInitTransaction (Transaction * trans, GNCBook *book)
   trans->kvp_data = kvp_frame_new();
   trans->idata = 0;
 
-  trans->entity_table = gnc_book_get_entity_table (book);
+  trans->book = book;
 
   xaccGUIDNew (&trans->guid, book);
-  xaccStoreEntity (trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  xaccStoreEntity (book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\
@@ -845,10 +816,10 @@ xaccCloneTransaction (Transaction *t)
   trans->common_currency = t->common_currency;
 
   /* copy(!) the guid and entity table.  The cloned transaction is
-   * *not* unique, is a sick twisted clone that holds 'undo'
+   * *not* unique, it is a sick twisted clone that holds 'undo'
    * information. */
   trans->guid = t->guid;
-  trans->entity_table = t->entity_table;
+  trans->book = t->book;
 
   return trans;
 }
@@ -1110,22 +1081,14 @@ void
 xaccTransSetGUID (Transaction *trans, const GUID *guid)
 {
   if (!trans || !guid) return;
-  xaccRemoveEntity(trans->entity_table, &trans->guid);
+  xaccRemoveEntity(trans->book->entity_table, &trans->guid);
   trans->guid = *guid;
-  xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+  xaccStoreEntity(trans->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
 
 /********************************************************************\
 \********************************************************************/
-
-Transaction *
-xaccTransLookupEntityTable (const GUID *guid,
-                            GNCEntityTable *entity_table)
-{
-  g_return_val_if_fail (entity_table, NULL);
-  return xaccLookupEntity (entity_table, guid, GNC_ID_TRANS);
-}
 
 Transaction *
 xaccTransLookup (const GUID *guid, GNCBook *book)
@@ -1585,7 +1548,7 @@ xaccTransCommitEdit (Transaction *trans)
       if ((1 == force_double_entry) &&
           (NULL == g_list_nth(trans->splits, 1)) &&
           (!gnc_numeric_zero_p(split->amount))) {
-        Split * s = xaccMallocSplitEntityTable(trans->entity_table);
+        Split * s = xaccMallocSplit(trans->book);
         xaccTransAppendSplit (trans, s);
         xaccAccountInsertSplit (xaccSplitGetAccount(s), s);
         xaccSplitSetMemo (s, split->memo);
@@ -1650,7 +1613,7 @@ xaccTransCommitEdit (Transaction *trans)
       PINFO ("delete trans at addr=%p", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
-      xaccRemoveEntity(trans->entity_table, &trans->guid);
+      xaccRemoveEntity(trans->book->entity_table, &trans->guid);
       xaccFreeTransaction (trans);
       return;
    }
@@ -1695,7 +1658,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* If the transaction had been deleted before the rollback,
     * the guid would have been unlisted. Restore that */
-   xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+   xaccStoreEntity(trans->book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 
    trans->common_currency = orig->common_currency;
 
@@ -1819,7 +1782,7 @@ xaccTransRollbackEdit (Transaction *trans)
          mark_split (s);
          xaccAccountRemoveSplit (xaccSplitGetAccount(s), s);
          xaccAccountRecomputeBalance (xaccSplitGetAccount(s));
-         xaccRemoveEntity(s->entity_table, &s->guid);
+         xaccRemoveEntity(s->book->entity_table, &s->guid);
          xaccFreeSplit (s);
 
          trans->editlevel--;
@@ -1837,7 +1800,7 @@ xaccTransRollbackEdit (Transaction *trans)
          Account *account = xaccSplitGetAccount(s);
 
          xaccSplitSetAccount(s, NULL);
-         xaccStoreEntity(s->entity_table, s, &s->guid, GNC_ID_SPLIT);
+         xaccStoreEntity(s->book->entity_table, s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (account, s);
          xaccAccountRecomputeBalance (account);
          mark_split (s);
@@ -1935,7 +1898,7 @@ xaccTransDestroy (Transaction *trans)
 
     xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
     xaccAccountRecomputeBalance (xaccSplitGetAccount(split));
-    xaccRemoveEntity(split->entity_table, &split->guid);
+    xaccRemoveEntity(split->book->entity_table, &split->guid);
     xaccFreeSplit (split);
 
     node->data = NULL;
@@ -1944,7 +1907,7 @@ xaccTransDestroy (Transaction *trans)
   g_list_free (trans->splits);
   trans->splits = NULL;
 
-  xaccRemoveEntity(trans->entity_table, &trans->guid);
+  xaccRemoveEntity(trans->book->entity_table, &trans->guid);
 
   /* the actual free is done with the commit call, else its rolled back */
   /* xaccFreeTransaction (trans);  don't do this here ... */
@@ -1978,7 +1941,7 @@ xaccSplitDestroy (Split *split)
    check_open (trans);
 
    mark_split (split);
-   xaccRemoveEntity (split->entity_table, &split->guid);
+   xaccRemoveEntity (split->book->entity_table, &split->guid);
 
    if (trans)
    {
@@ -2007,7 +1970,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    Transaction *oldtrans;
 
    if (!trans || !split) return;
-   g_return_if_fail (trans->entity_table == split->entity_table);
+   g_return_if_fail (trans->book == split->book);
    check_open (trans);
 
    /* first, make sure that the split isn't already inserted 
@@ -2058,21 +2021,21 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 #define DATE_CMP(aaa,bbb,field) {			\
   /* if dates differ, return */				\
   if ( (aaa->field.tv_sec) <				\
-       (bbb->field.tv_sec)) {			\
+       (bbb->field.tv_sec)) {				\
     return -1;						\
   } else						\
   if ( (aaa->field.tv_sec) >				\
-       (bbb->field.tv_sec)) {			\
+       (bbb->field.tv_sec)) {				\
     return +1;						\
   }							\
 							\
   /* else, seconds match. check nanoseconds */		\
-  if ( (aaa->field.tv_nsec) <			\
-       (bbb->field.tv_nsec)) {			\
+  if ( (aaa->field.tv_nsec) <				\
+       (bbb->field.tv_nsec)) {				\
     return -1;						\
   } else						\
-  if ( (aaa->field.tv_nsec) >			\
-       (bbb->field.tv_nsec)) {			\
+  if ( (aaa->field.tv_nsec) >				\
+       (bbb->field.tv_nsec)) {				\
     return +1;						\
   }							\
 }

@@ -660,11 +660,6 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 {
   if (!adult) return;
 
-  /* We want the parent to have an entity table.  It doesn't have to
-   * be the same entity table as the child, the xaccGroupInsertAccount
-   * routine will take care of that. */
-  g_return_if_fail (adult->entity_table);
-
   /* if a container for the children doesn't yet exist, add it */
   if (adult->children == NULL)
   {
@@ -718,9 +713,10 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
     {
       xaccGroupRemoveAccount (acc->parent, acc);
 
-      /* switch over entity tables if needed */
-      if (grp->book->entity_table != acc->entity_table)
+      /* switch over betwen books, if needed */
+      if (grp->book != acc->book)
       {
+// xxxxxxxxxxxxxxxxxxxxxxx
          /* hack alert -- this implementation is not exactly correct.
           * If the entity tables are not identical, then the 'from' book 
           * will have a different backend than the 'to' book.  This means
@@ -730,7 +726,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
          gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
-         xaccRemoveEntity (acc->entity_table, &acc->guid);
+         xaccRemoveEntity (acc->book->entity_table, &acc->guid);
 
          xaccStoreEntity (grp->book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
          gnc_engine_generate_event (&acc->guid, GNC_EVENT_CREATE);

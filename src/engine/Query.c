@@ -1082,12 +1082,10 @@ guid_list_to_account_list (Query * q, GList *guids)
     GUID *guid = node->data;
     Account *account;
 
-    if (!guid)
-      continue;
+    if (!guid) continue;
 
-    account = xaccAccountLookupEntityTable (guid, q->acct_group->book->entity_table);
-    if (!account)
-      continue;
+    account = xaccAccountLookup (guid, q->acct_group->book);
+    if (!account) continue;
 
     accounts = g_list_prepend (accounts, account);
   }
@@ -2488,12 +2486,12 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
     return 0;
   else if (!safe_strcmp (pd->guid.id_type, GNC_ID_ACCOUNT))
     return (xaccSplitGetAccount (s) ==
-	    xaccAccountLookupEntityTable (guid, s->entity_table));
+	    xaccAccountLookup (guid, s->book));
   else if (!safe_strcmp (pd->guid.id_type, GNC_ID_TRANS))
       return (xaccSplitGetParent (s) ==
-              xaccTransLookupEntityTable (guid, s->entity_table));
+              xaccTransLookup (guid, s->book));
   else if (!safe_strcmp (pd->guid.id_type, GNC_ID_SPLIT))
-    return s == xaccSplitLookupEntityTable (guid, s->entity_table);
+    return s == xaccSplitLookup (guid, s->book);
   else
     return 0;
 }

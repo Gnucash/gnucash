@@ -107,10 +107,9 @@ xaccInitAccount (Account * acc, GNCBook *book)
   acc->do_free = FALSE;
 
   acc->book = book;
-  acc->entity_table = gnc_book_get_entity_table (book);
 
   xaccGUIDNew(&acc->guid, book);
-  xaccStoreEntity(acc->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
+  xaccStoreEntity(book->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }
 
@@ -302,11 +301,11 @@ xaccFreeAccount (Account *acc)
   Transaction *t;
   GList *lp;
 
-  if (NULL == acc) return;
+  if (!acc || !acc->book) return;
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
 
-  xaccRemoveEntity (acc->entity_table, &acc->guid);
+  xaccRemoveEntity (acc->book->entity_table, &acc->guid);
 
   if (acc->children) 
   {
@@ -826,11 +825,11 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 
   PINFO("acct=%p", account);
   xaccAccountBeginEdit (account);
-  xaccRemoveEntity (account->entity_table, &account->guid);
+  xaccRemoveEntity (account->book->entity_table, &account->guid);
 
   account->guid = *guid;
 
-  xaccStoreEntity (account->entity_table, account,
+  xaccStoreEntity (account->book->entity_table, account,
                    &account->guid, GNC_ID_ACCOUNT);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
@@ -853,15 +852,6 @@ xaccAccountLookupDirect (GUID guid, GNCBook *book)
   if (!book) return NULL;
   return xaccLookupEntity (gnc_book_get_entity_table (book),
                            &guid, GNC_ID_ACCOUNT);
-}
-
-Account *
-xaccAccountLookupEntityTable (const GUID *guid,
-                              GNCEntityTable *entity_table)
-{
-  if (!guid) return NULL;
-  g_return_val_if_fail (entity_table, NULL);
-  return xaccLookupEntity (entity_table, guid, GNC_ID_ACCOUNT);
 }
 
 /********************************************************************\
@@ -962,7 +952,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   if (!split) return;
 
   /* check for book mix-up */
-  g_return_if_fail (acc->entity_table == split->entity_table);
+  g_return_if_fail (acc->book == split->book);
 
   trans = xaccSplitGetParent (split);
 

@@ -31,6 +31,8 @@
 #include "AccountP.h"
 #include "GNCIdP.h"
 #include "gnc-associate-account.h"
+#include "gnc-book-p.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
 static short module = MOD_ENGINE;
@@ -92,9 +94,7 @@ back_associate_expense_accounts(Account *stock_account,
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
-    g_return_if_fail(xaccGUIDTypeEntityTable (existing_acc_guid,
-                                              stock_account->entity_table) ==
-                     GNC_ID_NONE);
+    g_return_if_fail(GNC_ID_NONE == xaccGUIDType (existing_acc_guid, stock_account->book));
     
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
                           stock_acc_guid_kvpval);
@@ -129,8 +129,8 @@ back_associate_income_accounts(Account *stock_account,
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
-    g_return_if_fail(xaccGUIDTypeEntityTable(existing_acc_guid,
-                                             stock_account->entity_table) ==
+    g_return_if_fail(xaccGUIDType(existing_acc_guid,
+                                             stock_account->book) ==
                      GNC_ID_NONE);
     
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
@@ -172,7 +172,7 @@ make_kvpd_on_list(GList *account_list)
 }
 
 static GList *
-de_kvp_account_list(kvp_value *kvpd_list, GNCEntityTable *entity_table)
+de_kvp_account_list(kvp_value *kvpd_list, GNCBook *book)
 { 
   GList *guid_account_list = kvp_value_get_glist(kvpd_list);
   if (guid_account_list)
@@ -181,8 +181,7 @@ de_kvp_account_list(kvp_value *kvpd_list, GNCEntityTable *entity_table)
     for(; guid_account_list; guid_account_list=g_list_next(guid_account_list))
     {
       g_list_prepend(expense_acc_list,
-                     xaccAccountLookupEntityTable(guid_account_list->data,
-                                                  entity_table));
+                     xaccAccountLookup(guid_account_list->data, book));
     }
     
     expense_acc_list = g_list_reverse(expense_acc_list);
@@ -312,8 +311,7 @@ gnc_tracking_find_expense_accounts(Account *stock_account,
   kvpd_on_account_list = kvp_frame_get_slot(account_frame,
 					    expense_to_key[category]);
 
-  return de_kvp_account_list(kvpd_on_account_list,
-                             stock_account->entity_table);
+  return de_kvp_account_list(kvpd_on_account_list, stock_account->book);
 }
 
 /*********************************************************************\
@@ -347,8 +345,7 @@ gnc_tracking_find_income_accounts(Account *stock_account,
   kvpd_on_account_list = kvp_frame_get_slot(income_acc_frame,
 					    income_to_key[category]);
   
-  return de_kvp_account_list(kvpd_on_account_list,
-                             stock_account->entity_table);
+  return de_kvp_account_list(kvpd_on_account_list, stock_account->book);
 }
 
 /*********************************************************************\
@@ -452,8 +449,7 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
   
   stock_account_guid = kvp_value_get_guid(stock_account_kvpval);
   if(!safe_strcmp
-     (xaccGUIDTypeEntityTable(stock_account_guid,
-			      inc_or_expense_account->entity_table),
+     (xaccGUIDType(stock_account_guid, inc_or_expense_account->book),
       GNC_ID_NULL))
     return;
 
@@ -463,8 +459,8 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 
 
   inc_or_expense_account_guid = xaccAccountGetGUID(inc_or_expense_account);
-  stock_account = xaccAccountLookupEntityTable
-    (stock_account_guid, inc_or_expense_account->entity_table);
+  stock_account = xaccAccountLookup
+    (stock_account_guid, inc_or_expense_account->book);
 
   stock_account_kvpframe = xaccAccountGetSlots(stock_account);
 

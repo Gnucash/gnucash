@@ -90,46 +90,11 @@ xaccPriceDBGetBackend (GNCPriceDB *prdb)
   return prdb->book->backend;
 }
 
-/********************************************************************\
- * Fetch the backend                                                *
-\********************************************************************/
-
-/* XXX hack alert -- practically, it would be easier if we found the
- * book, and then asked the book about the backend.
- */
-
 Backend *
 xaccTransactionGetBackend (Transaction *trans)
 {
-  GList *snode, *node;
-  Split *s=NULL;
-
-  if (!trans) return NULL;
-
-  /* find an account */
-  snode = xaccTransGetSplitList(trans);
-  for (node = snode; node; node=node->next)
-  {
-    s = node->data;
-    if (xaccSplitGetAccount(s)) break;
-    s = NULL;
-  }
-
-  /* if transaction is being deleted, it won't have any splits
-   * so lets take a look at the 'original' transaction */
-  if (!s)
-  {
-    snode = xaccTransGetSplitList(trans->orig);
-    for (node = snode; node; node=node->next)
-    {
-      s = node->data;
-      if (xaccSplitGetAccount(s)) break;
-      s = NULL;
-    }
-  }
-  if (!s) return NULL;
-  
-  return xaccAccountGetBackend (xaccSplitGetAccount(s));
+  if (!trans || !trans->book) return NULL;
+  return trans->book->backend;
 }
 
 /***********************************************************************/

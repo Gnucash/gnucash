@@ -8,7 +8,7 @@
  * CAUTION: this is currently a non-functioning, experimental implementation
  * of the design described in src/doc/book.txt
 
-Open questions: hwo do we deal with the backends ???
+Open questions: how do we deal with the backends ???
  *
  * HISTORY:
  * created by Linas Vepstas November 2001
@@ -27,7 +27,11 @@ Open questions: hwo do we deal with the backends ???
  *    to partition an existing book into two parts.  It returns 
  *    a newly created book, containing a copy of all of the accounts,
  *    and it moves all of the transactions returned by the query to 
- *    the copied accounts.  I
+ *    the copied accounts.  
+
+The intent is that the 'typical' query will be a date that splits 
+the book into a 'before and after'; but in fact, any general query 
+will do.
 
 Note that this routine is 'special' in that it works hard to make sure
 that the partitioned accounts, transactions and splits are really
@@ -45,13 +49,31 @@ GNCBook * gnc_book_partition (GNCBook *, Query *);
 
 #include "gnc-book-p.h"
 #include "GroupP.h"
+#include "TransactionP.h"
+
+
+/* ================================================================ */
+
+static void
+reparent (Transaction *trans, GNCBook *book)
+{
+   GList *node;
+
+   for (node = trans->splits; node; node = node->next)
+   {
+      Account *twin;
+      Split *s = node->data;
+
+      twin = xaccAccountLookupTwin (s->acc, book);
+   }
+}
 
 /* ================================================================ */
 
 GNCBook * 
 gnc_book_partition (GNCBook *existing_book, Query *query)
 {
-   GList * split_list;
+   GList *split_list, *snode;
    GNCBook *partition_book;
    AccountGroup *part_topgrp;
 
@@ -64,6 +86,15 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
 
    /* next, run the query */
    split_list = xaccQueryGetSplitsUniqueTrans (query);
+
+   /* and start moving transactions over */
+   for (snode = split_list; snode; snode=snode->next)
+   {
+      GList *tnode;
+      Split *s = snode->data;
+      Transaction *trans = s->parent;
+
+   }
 
    return partition_book;
 }

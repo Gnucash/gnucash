@@ -58,15 +58,7 @@ struct account_s
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
-  /* XXX FIXME ... this pointer shadows a more 'technically correct
-   * pointer', the one in book.  The correct way to find the entity 
-   * table should be to find the accounts parent group, then find 
-   * the parent book, then find the entity table.  So this shadow 
-   * copy here is redundant... does it provide a performance boost
-   * by being here ???  Do we ahve another reason ??? */
-  GNCEntityTable *entity_table; /* Entity table this account is
-                                 * stored in. */
-  GNCBook *book;
+  GNCBook *book;   /* the entity_table in which this account is stored */
 
   /* The accountName is an arbitrary string assigned by the user. 
    * It is intended to a short, 5 to 30 character long string that
@@ -148,13 +140,6 @@ struct account_s
   /* Backend private expansion data */
   guint32  idata;     /* used by the sql backend for kvp management */
 };
-
-
-/* The xaccAccountLookupEntityTable() routine is like xaccAccountLookup
- *    but accepts and entity table instead of a book. 
- */
-Account * xaccAccountLookupEntityTable (const GUID *guid,
-                                        GNCEntityTable *entity_table);
 
 /* The xaccAccountRemoveSplit() routine will remove the indicated split
  *    from the indicated account.  Note that this will leave the split

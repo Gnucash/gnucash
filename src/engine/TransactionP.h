@@ -78,7 +78,7 @@ struct split_s
 {
   GUID guid;  /* globally unique id */
 
-  GNCEntityTable *entity_table; /* The table where this split is stored. */
+  GNCBook *book;             /* The enitity table where this split is stored. */
 
   GUID acc_guid;             /* the guid of the associated account */
   Account *acc;              /* back-pointer to debited/credited account  */
@@ -137,8 +137,7 @@ struct transaction_s
    */
   GUID guid;
 
-  /* entity_table is the table where the transaction is stored by guid */
-  GNCEntityTable *entity_table;
+  GNCBook *book;         /* The entity_table where the transaction is stored */
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
@@ -200,13 +199,6 @@ struct transaction_s
   /* Backend private expansion data */
   guint32  idata;     /* used by the sql backend for kvp management */
 };
-
-/* Lookup the transaction/split with the guid, using the given table. */
-Transaction * xaccTransLookupEntityTable (const GUID *guid,
-                                          GNCEntityTable *entity_table);
-
-Split * xaccSplitLookupEntityTable (const GUID *guid,
-                                    GNCEntityTable *entity_table);
 
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
