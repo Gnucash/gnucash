@@ -46,17 +46,19 @@
 #include "checkpoint.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
-#include "txn.h"
+#include "txnmass.h"
 
 #include "putil.h"
 
 static short module = MOD_TXN;
 
-
+/* ============================================================= */
 
 static gpointer
 get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
+   GList *node, *xaction_list = (GList *) data;
+
    Transaction *trans;
    gnc_commodity *currency = NULL;
    gint64 trans_frac = 0;
@@ -85,8 +87,12 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    /* set timestamp as 'recent' for this data */
    trans->version_check = be->version_check;
 
-   return NULL;
+   xaction_list = g_list_prepend (xaction_list, trans);
+
+   return xaction_list;
 }
+
+/* ============================================================= */
 
 static gpointer
 get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
@@ -169,9 +175,13 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    return NULL;
 }
 
+/* ============================================================= */
+
 void
 pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
 {
+   GList *node, *xaction_list = NULL;
+
    gnc_engine_suspend_events();
    pgendDisable(be);
 
@@ -184,9 +194,34 @@ pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
    SEND_QUERY (be, "SELECT * FROM gncEntry;", );
    pgendGetResults (be, get_mass_entry_cb, NULL);
 
+   for (node=xaction_list; node; node=node->next)
+   {
+      Transaction *trans = (Transaction *)node->data;
+      GList *splits;
+
+      /* ------------------------------------------------- */
+      /* Restore any kvp data associated with the transaction and splits.
+       * We won't do this en-mass, as there currently seems to be no
+       * performance advantage to doing so */
+   
+      trans->kvp_data = pgendKVPFetch (be, &(trans->guid), trans->kvp_data);
+   
+      splits = xaccTransGetSplitList(trans);
+      for (node = splits; node; node=node->next)
+      {
+         Split *s = node->data;
+         s->kvp_data = pgendKVPFetch (be, &(s->guid), s->kvp_data);
+      }
+
+      /* ------------------------------------------------- */
+      xaccTransCommitEdit (trans);
+   }
+   g_list_free(xaction_list);
+
    xaccAccountGroupCommitEdit (grp);
 
    pgendEnable(be);
    gnc_engine_resume_events();
 }
 
+/* ======================== END OF FILE ======================== */
