@@ -31,11 +31,11 @@ AC_PATH_XTRA
 X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
 MOTIF_LIBS="-lXm"
 
-# Let the user specify gtk paths:
-AC_ARG_WITH( gtk-config, 
-  [  --with-gtk-config=executable  which gtk-config to use to find gtk ],
-  GTK_CONFIG_BIN="$with_gtk/bin/")
-AC_SUBST(GTK_CONFIG_BIN)
+# Let the user specify gnome paths:
+AC_ARG_WITH( gnome-config, 
+  [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
+  GNOME_CONFIG_BIN="$with_gnome/bin/")
+AC_SUBST(GNOME_CONFIG_BIN)
 
 # Let the user specify imlib paths:
 AC_ARG_WITH( imlib, 
