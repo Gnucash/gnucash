@@ -4,11 +4,11 @@
 #include "price.h"
 #include "single.h"
 
-static char * 
-PriceMV (char * old, char *change, char *new)
+static const char * 
+PriceMV (const char * old, const char *change, const char *new)
 {
-   printf (" price mv called %s %s %s \n", old, change, new);
-   return strdup (new);
+   printf (" price mv called old:%s change:%s new:%s \n", old, change, new);
+   return new; 
 }
 
 /* ================================================ */

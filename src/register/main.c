@@ -28,6 +28,12 @@ CreateReg(Widget parent ) {
    cell->width = 9;
    xaccAddCell (header, cell);
    
+   cell = xaccMallocPriceCell();
+   cell->row = 0;
+   cell->col = 4;
+   cell->width = 9;
+   xaccAddCell (curs, cell);
+   
 
    table =  xaccMallocTable (0, 0);
    table -> cursor = curs;

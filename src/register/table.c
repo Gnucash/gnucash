@@ -57,6 +57,7 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
    }
    table->num_phys_rows = num_phys_rows;
    table->num_phys_cols = num_phys_cols;
+   table->num_header_rows = num_header_rows;
 
    table->num_tile_rows = tile_rows;
    table->num_tile_cols = tile_cols;
@@ -66,7 +67,9 @@ xaccInitTable (Table * table, int tile_rows, int tile_cols)
    for (i=0; i<num_phys_rows; i++) {
       table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
       for (j=0; j<num_phys_cols; j++) {
-         table->entries[i][j] = NULL;   /* hack alert ... */
+         /* the Xbae matrix hates null cell values, so lets
+          * accomodate it by letting empty cells have empty 
+          * strings */
          table->entries[i][j] = strdup ("");
       }
    }
@@ -131,6 +134,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    Table *table;
    XbaeMatrixModifyVerifyCallbackStruct *cbs;
    int row, col;
+   int rel_row, rel_col;
    CellBlock *arr;
 
    table = (Table *) cd;
@@ -146,39 +150,85 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    /* reject edits by default, unless the cell handler allows them */
    cbs->verify->doit = False;
 
-   /* compute the cell location */
-   /* remove offset for the header rows */
-   arr = table->header;
-   if (arr) {
-      /* header rows cannot be modified */
-      if (row < arr->numRows) return;
-      row -= arr->numRows;
-   }
+   /* can't edit outside of the physical space */
+   if ((0 > row) || (0 > col)) return;
+   if ((row >= table->num_phys_rows) || (col >= table->num_phys_cols)) return;
 
-   /* call the cell callback */
+   /* header rows cannot be modified */
+   if (row < table->num_header_rows) return;
+
+   /* compute the cell location */
+   rel_row = row;
+   rel_col = col;
+
+   /* remove offset for the header rows */
+   rel_row -= table->num_header_rows;
+
+   /* prepare to call the cell callback */
    arr = table->cursor;
    if (arr) {
-     row %= arr->numRows;
-     col %= arr->numCols;
-printf ("arr %p cells %p %d %d \n", arr, arr->cells, row, col);
-printf ("cell row %p \n", arr->cells[row]);
-printf ("cell col %p \n", arr->cells[row][col]);
-     if (arr->cells[row][col]) {
-        char * (*mv) (char *, char *, char *);
-        mv = arr->cells[row][col]->modify_verify;
-        if (mv) {
-           char * tmp;
-           tmp = (*mv) ("old", "haha", "new");
+      rel_row %= (arr->numRows);
+      rel_col %= (arr->numCols);
+      if (arr->cells[rel_row][rel_col]) {
+         const char * (*mv) (const char *, const char *, const char *);
+         mv = arr->cells[rel_row][rel_col]->modify_verify;
 
-           /* if the callback returned a non-null value, allow the edit */
-           if (tmp) {
-               cbs->verify->doit = True;
-           }
-        }
-     }
+         /* OK, if there is a callback for this cell, call it */
+         if (mv) {
+            const char *old, *change;
+            char *new;
+            const char *retval;
+            int len;
+
+            old = cbs->prev_text;
+            change = cbs->verify->text->ptr;
+
+            /* but first, compute the new string */
+            len = 1;
+            if (old) len += strlen (old);
+            if (change) len += strlen (change);
+            new = (char *) malloc (len);
+
+            /* text may be inserted, or deleted, or replaced ... */
+            new[0] = 0;
+            strncat (new, old, cbs->verify->startPos);
+            if (change) strcat (new, change);
+            strcat (new, &old[(cbs->verify->endPos)]);
+
+            retval = (*mv) (old, change, new);
+
+            /* if the callback returned a non-null value, allow the edit */
+            if (retval) {
+
+               /* update data. bounds check done earlier */
+               free (table->entries[row][col]);
+               table->entries[row][col] = (char *) retval;
+
+               /* if the callback modified the display string,
+                * update the display cell as well */
+               if (retval != new) {
+                  XbaeMatrixSetCell (mw, row, col, (char *) retval);
+                  XbaeMatrixRefreshCell (mw, row, col);
+                  XbaeMatrixSetCursorPosition (mw, (cbs->verify->endPos) +1);
+
+                  /* the default update has already been overridden,
+                   * so don't allow Xbae to update */
+                  cbs->verify->doit = False;
+
+                  /* avoid wasting memory */
+                  free (new);
+               } else {
+
+                  /* the proposed edit was accepted! */
+                  cbs->verify->doit = True;
+               }
+            } else {
+               /* avoid wasting memory */
+               free(new);
+            }
+         }
+      }
    }
-   
-   
 }
 
 /* ==================================================== */

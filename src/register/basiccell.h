@@ -23,7 +23,16 @@ enum {
  * "new", the string that would result is user's changes
  *        are accepted.
  * It must return a string, or void if it rejects the change.
- * The returned string will be the next cell value.
+ * The returned string will be used to update the cell value.
+ *
+ * Some memory management rules:
+ * (1) the callback must not modify the values of old, change, new
+ * (2) if the callback likes the new string, it may return the
+ *     pointer to "new".  It must *not* return the pointer to 
+ *     "change" or "old"
+ * (3) if the callback chooses to not return "new", it must 
+ *     malloc the memory for a new string.  It does not need
+ *     to worry about garbage collection.
  */
 
 typedef struct _SingleCell {
@@ -36,7 +45,9 @@ typedef struct _SingleCell {
 
   char * value;   /* current value */
 
-  char * (*modify_verify) (char *old, char *add, char *new);  /* modify verify callback */
+  const char * (*modify_verify) (const char *old, 
+                                 const char *add, 
+                                 const char *new); 
 
 
 } SingleCell;
