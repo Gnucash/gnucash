@@ -201,6 +201,7 @@ time_t xaccDMYToSec (int day, int month, int year);
 long int gnc_timezone (struct tm *tm);
 
 
+/* ------------------------------------------------------------------------ */
 /** @name DateFormat functions */
 /*@{*/
 /** DOCUMENT ME! */
@@ -212,6 +213,17 @@ const gchar *getDateFormatString(DateFormat df);
 /** DOCUMENT ME! */
 const gchar *getDateTextFormatString(DateFormat df);
 /*@}*/
+
+/** dateSeparator
+ *    Return the field separator for the current date format
+ *
+ * Args:   none
+ *
+ * Return: date character
+ *
+ * Globals: global dateFormat value
+ */
+char dateSeparator(void);
 
 /** @name Date Printing/Scanning functions 
  *
@@ -244,10 +256,17 @@ void printDateSecs (char * buff, time_t secs);
 /** Convenience; calls through to printDate(). **/
 void printGDate( char *buf, GDate *gd );
 
-/** DOCUMENT ME! */
+/** Convenience; calls through to printDate(). 
+ *  Return: string, which should be freed when no longer needed.
+ * **/
 char * xaccPrintDateSecs (time_t secs);
 
-/** DOCUMENT ME! */
+/** Convenience; calls through to printDate(). 
+ *  Return: static global string.
+ *  \warning This routine is not thread-safe, because it uses a single
+ *      global buffer to store the return value.  Use printDateSecs()
+ *      or xaccPrintDateSecs instead.
+ * **/
 const char * gnc_print_date(Timespec ts);
 
 /** The xaccDateUtilGetStamp() routine will take the given time in
@@ -256,17 +275,6 @@ const char * gnc_print_date(Timespec ts);
  *  @return A pointer to the generated string.
  *  @note The caller owns this buffer and must free it when done. */
 char *xaccDateUtilGetStamp (time_t thyme);
-
-/** dateSeparator
- *    Return the field separator for the current date format
- *
- * Args:   none
- *
- * Return: date character
- *
- * Globals: global dateFormat value
- */
-char dateSeparator(void);
 
 /** scanDate
  *    Convert a string into  day / month / year integers according to
@@ -282,12 +290,6 @@ char dateSeparator(void);
  * Globals: global dateFormat value
  */
 void scanDate (const char *buff, int *day, int *month, int *year);
-
-/** \warning hack alert XXX FIXME -- these date routines return incorrect
- * values for dates before 1970.  Most of them are good only up 
- * till 2038.  This needs fixing ... */
-time_t xaccScanDateS (const char *buff);
-/*@}*/
 
 
 /** @name Date Start/End Adjustment routines

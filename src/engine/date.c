@@ -932,15 +932,6 @@ xaccDMYToSec (int day, int month, int year)
   return secs;
 }
 
-time_t
-xaccScanDateS (const char *str)
-{
-  int month, day, year;
-
-  scanDate (str, &day, &month, &year);
-
-  return xaccDMYToSec (day,month,year);
-}
 
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
