@@ -84,6 +84,7 @@ void          xaccTransAppendSplit (Transaction *, Split *);
 void          xaccTransRemoveSplit (Transaction *, Split *);
 
 /* 
+ * HACK ALERT *** this algorithm is wrong. Needs fixing.
  * The xaccSplitRebalance() routine is an important routine for 
  * maintaining and ensuring that double-entries balance properly.
  * This routine forces the sum-total of the values of all the 

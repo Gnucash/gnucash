@@ -308,6 +308,7 @@ xaccTransRebalance (Transaction * trans)
   xaccSplitRebalance (&(trans->source_split));
 }
 
+/* hack alert -- the Rebalance algorithm is wrong. Needs fixing */
 void
 xaccSplitRebalance (Split *split)
 {
