@@ -141,7 +141,16 @@ static const char *
 gnc_split_register_get_recn_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
-  return _("Reconciled:R") + 11;
+  SplitRegister *reg = user_data;
+
+  switch (reg->type) {
+  case RECEIVABLE_REGISTER:
+  case PAYABLE_REGISTER:
+    return _("Paid");
+
+  default:
+    return _("Reconciled:R") + 11;
+  }
 }
 
 static const char *
