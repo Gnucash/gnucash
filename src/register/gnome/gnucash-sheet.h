@@ -127,7 +127,7 @@ typedef struct
 GtkType    gnucash_sheet_get_type (void);
 GtkWidget *gnucash_sheet_new (Table *table);
 
-void gnucash_sheet_table_load (GnucashSheet *sheet);
+void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll);
 
 void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
 

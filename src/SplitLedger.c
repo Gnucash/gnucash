@@ -771,7 +771,7 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
     }
   }
 
-  gnc_table_refresh_gui (reg->table);
+  gnc_table_refresh_gui (reg->table, TRUE);
 }
 
 gboolean
@@ -1063,7 +1063,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
   if (do_refresh)
   {
-    gnc_table_refresh_gui (table);
+    gnc_table_refresh_gui (table, FALSE);
     gnc_table_leave_update (table, table->current_cursor_loc);
   }
 }
@@ -1277,7 +1277,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       }
 
       /* and refresh the gui */
-      gnc_table_refresh_gui (reg->table);
+      gnc_table_refresh_gui (reg->table, TRUE);
 
       /* now move to the non-empty amount column */
       amount = xaccSplitGetShareAmount (auto_split);
@@ -2543,7 +2543,7 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
   if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
     gnc_table_move_cursor_gui (reg->table, virt_loc);
 
-  gnc_table_refresh_gui (reg->table);
+  gnc_table_refresh_gui (reg->table, TRUE);
 }
 
 /* ======================================================== */
@@ -4680,10 +4680,10 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
    * from the account. */
   if (!found_pending)
   {
-    if (xaccTransIsOpen(pending_trans))
-      xaccTransCommitEdit(pending_trans);
+    if (xaccTransIsOpen (pending_trans))
+      xaccTransCommitEdit (pending_trans);
 
-    info->pending_trans_guid = *xaccGUIDNULL();
+    info->pending_trans_guid = *xaccGUIDNULL ();
     pending_trans = NULL;
   }
 
@@ -4698,7 +4698,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   info->first_pass = FALSE;
   info->reg_loaded = TRUE;
 
-  gnc_table_refresh_gui (table);
+  gnc_table_refresh_gui (table, TRUE);
 
   /* set the completion character for the xfer cells */
   xaccComboCellSetCompleteChar (reg->mxfrmCell, account_separator);

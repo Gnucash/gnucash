@@ -182,13 +182,13 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         gnucash_sheet_compile_styles (sheet);
 
-        gnucash_sheet_table_load (sheet);
+        gnucash_sheet_table_load (sheet, TRUE);
         gnucash_sheet_cursor_set_from_table (sheet, TRUE);
         gnucash_sheet_redraw_all (sheet);
 }
 
 void        
-gnc_table_refresh_gui (Table * table)
+gnc_table_refresh_gui (Table * table, gboolean do_scroll)
 {
         GnucashSheet *sheet;
 
@@ -202,7 +202,7 @@ gnc_table_refresh_gui (Table * table)
         sheet = GNUCASH_SHEET(table->ui_data);
 
         gnucash_sheet_styles_recompile (sheet);
-        gnucash_sheet_table_load (sheet);
+        gnucash_sheet_table_load (sheet, do_scroll);
         gnucash_sheet_redraw_all (sheet);
 }
 
@@ -226,6 +226,7 @@ gnc_table_refresh_cursor_gui (Table * table,
         sheet = GNUCASH_SHEET (table->ui_data);
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
+
         if (gnucash_sheet_block_set_from_table (sheet, vcell_loc))
         {
                 gnucash_sheet_recompute_block_offsets (sheet);

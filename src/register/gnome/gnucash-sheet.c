@@ -85,7 +85,7 @@ gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor)
 }
 
 void
-gnucash_register_set_initial_rows(guint num_rows)
+gnucash_register_set_initial_rows (guint num_rows)
 {
         gnucash_register_initial_rows = num_rows;
 }
@@ -151,10 +151,10 @@ gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
         table = sheet->table;
         v_loc = table->current_cursor_loc;
 
-        gnucash_sheet_cursor_set(sheet, v_loc);
+        gnucash_sheet_cursor_set (sheet, v_loc);
 
         if (do_scroll)
-                gnucash_sheet_make_cell_visible(sheet, v_loc);
+                gnucash_sheet_make_cell_visible (sheet, v_loc);
 }
 
 
@@ -164,7 +164,7 @@ gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
         if (sheet->item_editor == NULL)
                 return;
 
-        gnome_canvas_item_hide(GNOME_CANVAS_ITEM (sheet->item_editor));
+        gnome_canvas_item_hide (GNOME_CANVAS_ITEM (sheet->item_editor));
         item_edit_hide_popup (ITEM_EDIT(sheet->item_editor));
 }
 
@@ -244,10 +244,10 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         {
 		gnucash_sheet_start_editing_at_cursor (sheet);
 
-                gtk_editable_set_position(editable, cursor_pos);
+                gtk_editable_set_position (editable, cursor_pos);
 
-                gtk_entry_select_region(GTK_ENTRY(sheet->entry),
-                                        start_sel, end_sel);
+                gtk_entry_select_region (GTK_ENTRY(sheet->entry),
+                                         start_sel, end_sel);
         }
 
         gtk_widget_grab_focus (GTK_WIDGET(sheet));
@@ -407,11 +407,11 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
                 y = 0;
 
         if (y != cy)
-                gtk_adjustment_set_value(sheet->vadj, y);
+                gtk_adjustment_set_value (sheet->vadj, y);
         if (x != cx)
-                gtk_adjustment_set_value(sheet->hadj, x);
+                gtk_adjustment_set_value (sheet->hadj, x);
 
-        gnucash_sheet_compute_visible_range(sheet);
+        gnucash_sheet_compute_visible_range (sheet);
         gnucash_sheet_update_adjustments (sheet);
 }
 
@@ -457,7 +457,7 @@ static void
 gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
 					 GnucashSheet *sheet)
 {
-        gnucash_sheet_compute_visible_range(sheet);
+        gnucash_sheet_compute_visible_range (sheet);
 }
 
 
@@ -1998,7 +1998,7 @@ gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_table_load (GnucashSheet *sheet)
+gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 {
         Table *table;
         gint num_virt_rows;
@@ -2030,10 +2030,11 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
 
         gnucash_sheet_set_scroll_region (sheet);
 
-        gnucash_sheet_show_row (sheet,
-                                table->current_cursor_loc.vcell_loc.virt_row);
+        if (do_scroll)
+                gnucash_sheet_show_row
+                        (sheet, table->current_cursor_loc.vcell_loc.virt_row);
 
-        gnucash_sheet_cursor_set_from_table (sheet, TRUE);
+        gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         gnucash_sheet_activate_cursor_cell (sheet, TRUE);
         gtk_layout_thaw (GTK_LAYOUT(sheet));        
 }

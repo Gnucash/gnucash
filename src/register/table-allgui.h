@@ -382,7 +382,7 @@ void        gnc_table_refresh_current_cursor_gui (Table * table,
                                                   gboolean do_scroll);
 
 /* Refresh the whole GUI from the table. */
-void        gnc_table_refresh_gui (Table *table);
+void        gnc_table_refresh_gui (Table *table, gboolean do_scroll);
 
 
 /* ==================================================== */
