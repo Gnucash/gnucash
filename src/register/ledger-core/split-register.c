@@ -1461,7 +1461,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    {
      SRSaveData *sd;
 
-     sd = gnc_split_register_save_data_new (trans, split);
+     sd = gnc_split_register_save_data_new (trans, split,
+					    info->trans_expanded);
      gnc_table_save_cells (reg->table, sd);
      gnc_split_register_save_data_destroy (sd);
    }

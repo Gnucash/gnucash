@@ -82,6 +82,20 @@
 	an alphabetic character has any modifiers applied to it, pass it
 	on to the window manager.  Fixes 88520.
 
+	* src/register/ledger-core/split-register-model-save.c
+	(gnc_split_register_save_data_new): Add a new arg to the register
+	save data to indicate whether the transaction the user is working
+	on is in expanded mode. (gnc_split_register_save_cells): Don't
+	balance other split of two, when the register is in expanded mode.
+
+	* src/register/ledger-core/split-register-control.c
+	(gnc_split_register_auto_completion): Add new arg to function
+	call.
+
+	* src/register/ledger-core/split-register.c
+	(gnc_split_register_save): Add new arg to function call.
+
+
 2002-10-05  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-engine-util.c (gnc_set_xxx_message): 

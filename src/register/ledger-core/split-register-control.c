@@ -689,7 +689,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         {
           SRSaveData *sd;
 
-          sd = gnc_split_register_save_data_new (trans, blank_split);
+          sd = gnc_split_register_save_data_new (trans, blank_split,
+					    info->trans_expanded);
           gnc_table_save_cells (reg->table, sd);
           gnc_split_register_save_data_destroy (sd);
         }

@@ -42,6 +42,7 @@ struct sr_save_data
 
   gboolean handled_dc; /* We have already handled the debit/credit cells. */
   gboolean do_scrub;   /* Scrub other split at the end. */
+  gboolean reg_expanded; /* Register is in expanded (split) mode */
 };
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -384,7 +385,7 @@ gnc_split_register_save_cells (gpointer save_data,
 
   xaccSplitScrub (sd->split);
 
-  if (other_split)
+  if (other_split && !sd->reg_expanded)
   {
     gnc_numeric value = xaccSplitGetValue (sd->split);
 
@@ -630,7 +631,8 @@ gnc_template_register_model_add_save_handlers (TableModel *model)
 }
 
 SRSaveData *
-gnc_split_register_save_data_new (Transaction *trans, Split *split)
+gnc_split_register_save_data_new (Transaction *trans, Split *split,
+				  gboolean expanded)
 {
   SRSaveData *sd;
 
@@ -643,6 +645,7 @@ gnc_split_register_save_data_new (Transaction *trans, Split *split)
   sd->split = split;
   sd->handled_dc = FALSE;
   sd->do_scrub = FALSE;
+  sd->reg_expanded = expanded;
 
   return sd;
 }
