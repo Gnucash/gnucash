@@ -48,7 +48,8 @@ LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
         ${top_srcdir}/src/engine/libgncmod-engine.la \
         ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
         ../libgncmod-backend-file.la \
-        ./libgnc-test-file-stuff.la
+        ./libgnc-test-file-stuff.la \
+        -lltdl
 
 CFLAGS = ${GLIB_CFLAGS}
 
