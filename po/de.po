@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
-"POT-Creation-Date: 2003-08-18 23:25+0200\n"
-"PO-Revision-Date: 2003-08-18 22:55+0200\n"
+"POT-Creation-Date: 2003-09-15 23:33+0200\n"
+"PO-Revision-Date: 2003-09-15 23:34+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -5155,7 +5155,7 @@ msgstr "Sie müssen eine Währung/Aktie auswählen."
 msgid "You must select a currency."
 msgstr "Sie müssen eine Währung auswählen."
 
-#: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1375
+#: src/gnome/dialog-price-editor.c:185 src/gnome-utils/dialog-transfer.c:1383
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -7078,7 +7078,7 @@ msgstr "Bis:"
 msgid "Show the income and expense accounts"
 msgstr "Anzeige der Ertrags- und Aufwand-Konten"
 
-#: src/gnome-utils/dialog-transfer.c:1329
+#: src/gnome-utils/dialog-transfer.c:1337
 msgid ""
 "You must specify an account to transfer from,\n"
 "or to, or both, for this transaction.\n"
@@ -7087,11 +7087,11 @@ msgstr ""
 "Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden\n"
 "soll. Andernfalls wird kein Geschäftsvorgang aufgezeichnet."
 
-#: src/gnome-utils/dialog-transfer.c:1338
+#: src/gnome-utils/dialog-transfer.c:1346
 msgid "You can't transfer from and to the same account!"
 msgstr "Herkunfts- und Zielkonto können nicht identisch sein."
 
-#: src/gnome-utils/dialog-transfer.c:1348
+#: src/gnome-utils/dialog-transfer.c:1356
 #, c-format
 msgid ""
 "The account %s\n"
@@ -7100,7 +7100,7 @@ msgstr ""
 "Das Konto %s\n"
 "kann keine Buchungen enthalten.\n"
 
-#: src/gnome-utils/dialog-transfer.c:1365
+#: src/gnome-utils/dialog-transfer.c:1373
 msgid ""
 "You can't transfer from a non-currency account.  Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
@@ -7109,15 +7109,15 @@ msgstr ""
 "mit normaler Währung. Übergangsweise sollten Sie die Von/Nach-Konten\n"
 "vertauschen und den Betrag negativ eingeben."
 
-#: src/gnome-utils/dialog-transfer.c:1388
+#: src/gnome-utils/dialog-transfer.c:1396
 msgid "You must enter an amount to transfer."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: src/gnome-utils/dialog-transfer.c:1402
+#: src/gnome-utils/dialog-transfer.c:1410
 msgid "You must enter a valid price."
 msgstr "Sie müssen einen gültigen Preis angeben."
 
-#: src/gnome-utils/dialog-transfer.c:1413
+#: src/gnome-utils/dialog-transfer.c:1421
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -8649,17 +8649,18 @@ msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
 #: src/import-export/hbci/gnc-hbci-getbalance.c:207
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
-"It seems as if your bank does not support Balance download \n"
-"in this HBCI version. You should choose a higher HBCI version \n"
-"number in the HBCI Setup. After that, try again to download \n"
-"the HBCI Balance.\n"
+"Either this is the correct balance, or your bank does not \n"
+"support Balance download in this HBCI version. You should \n"
+"choose a higher HBCI version number in the HBCI Setup. After \n"
+"that, try again to download the HBCI Balance.\n"
 msgstr ""
 "Der abgefragte Saldo war Null. \n"
 "\n"
-"Anscheinend bietet Ihre Bank keine Saldenabfrage in der gewählten\n"
-"HBCI-Version an. Abhilfe: Im HBCI-Einrichtungs-Assistent können Sie\n"
-"eine höhere HBCI-Version auswählen. Versuchen Sie anschließend erneut,\n"
-"den Saldo abzufragen.  \n"
+"Entweder war dies der korrekte Saldo, oder Ihre Bank bietet\n"
+"anscheinend keine Saldenabfrage in der gewählten HBCI-Version\n"
+"an. Abhilfe: Im HBCI-Einrichtungs-Assistent können Sie eine höhere\n"
+"HBCI-Version auswählen. Versuchen Sie anschließend erneut, den Saldo\n"
+"abzufragen.\n"
 
 #. Translators: %s is the amount.
 #: src/import-export/hbci/gnc-hbci-getbalance.c:223
@@ -9383,7 +9384,7 @@ msgstr "Aktualisieren Ihrer Gnucash Konten"
 msgid "(Full account ID: "
 msgstr "(Komplette Kontonummer: "
 
-#: src/import-export/import-backend.c:841
+#: src/import-export/import-backend.c:840
 msgid "Auto-Balance split"
 msgstr "Automatische Ausgleichsbuchung"
 
