@@ -1,3 +1,14 @@
+2003-11-12  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/tr_TR/*.xea: Added Turkish account templates by
+	A. Alper Atici <alper_atici@yahoo.com>
+
+	* configure.in, po/tr.po: Initial Turkish translation by A. Alper
+	Atici <alper_atici@yahoo.com>
+
+	* po/nl.po: Updated Dutch translation by Jeroen ten Berge
+	<twinbit@home.nl>
+
 2003-10-24  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/el_GR/*: Updated Greek account templates by Nikos
