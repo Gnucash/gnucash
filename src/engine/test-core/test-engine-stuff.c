@@ -30,6 +30,8 @@ static gint kvp_frame_max_elements = 10;
 
 static gint max_group_depth = 4;
 static gint max_group_accounts = 10;
+static gint max_total_accounts = 1000;
+static gint total_num_accounts = 0;
 
 static kvp_value* get_random_kvp_value_depth (int type, gint depth);
 static gpointer get_random_list_element (GList *list);
@@ -143,7 +145,31 @@ get_random_timespec(void)
 gnc_numeric
 get_random_gnc_numeric(void)
 {
-    return gnc_numeric_create(get_random_gint64(), rand());
+    gint64 deno = rand();
+    gint64 numer = get_random_gint64();
+
+#if 1
+    if (RAND_MAX/2 < rand())
+    {
+       gint64 norm = RAND_MAX / 2000;
+       /* Random number between 1 and 2000 */
+       deno /= norm;
+       deno += 1;
+    }
+    else
+    {
+       gint64 norm = RAND_MAX / 8;
+       /* multiple of 10, between 1 and 100 million */
+       norm = deno / norm;
+       deno = 1;
+       while (norm) 
+       {
+          deno *= 10;
+          norm --;
+       }
+    }
+#endif
+    return gnc_numeric_create(numer, deno);
 }
 
 const char *types[] =
@@ -541,12 +567,14 @@ account_add_subaccounts (QofBook *book, Account *account, int depth)
     return;
 
   num_accounts = get_random_int_in_range (1, 10);
-
   while (num_accounts-- > 0)
   {
     Account *sub = get_random_account (book);
 
     xaccAccountInsertSubAccount (account, sub);
+
+    total_num_accounts ++;
+    if (total_num_accounts > max_total_accounts) return;
 
     account_add_subaccounts (book, sub, depth - 1);
   }
@@ -583,6 +611,7 @@ make_random_group (QofBook *book, AccountGroup * group)
   g_return_if_fail (book);
   g_return_if_fail (group);
 
+  total_num_accounts = 0;
   depth = get_random_int_in_range (1, max_group_depth);
 
   make_random_group_depth (book, group, depth);
