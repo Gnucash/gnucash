@@ -68,7 +68,7 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
   Account *account;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return TRUE;
 
@@ -217,7 +217,7 @@ gnc_split_register_get_tcredit_label (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (info->tcredit_str)
     return info->tcredit_str;
@@ -242,7 +242,7 @@ gnc_split_register_get_tdebit_label (VirtualLocation virt_loc,
                                      gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (info->tdebit_str)
     return info->tdebit_str;
@@ -303,7 +303,7 @@ get_trans_total_amount (SplitRegister *reg, Transaction *trans)
   Account *account;
   gnc_numeric total = gnc_numeric_zero ();
 
-  account = sr_get_default_account (reg);
+  account = gnc_split_register_get_default_account (reg);
 
   if (!account)
     return total;
@@ -331,7 +331,7 @@ get_trans_last_split (SplitRegister *reg, Transaction *trans)
   Account *account;
   Split *last_split = NULL;
 
-  account = sr_get_default_account (reg);
+  account = gnc_split_register_get_default_account (reg);
 
   if (!account)
     return last_split;
@@ -381,7 +381,7 @@ gnc_split_register_get_shares_fg_color (VirtualLocation virt_loc,
   if (!use_red_for_negative)
     return black;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return black;
 
@@ -419,7 +419,7 @@ gnc_split_register_get_balance_fg_color (VirtualLocation virt_loc,
   if (!use_red_for_negative)
     return black;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return black;
 
@@ -611,7 +611,7 @@ gnc_split_register_get_date_entry (VirtualLocation virt_loc,
   Split *split;
   Timespec ts;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   trans = xaccSplitGetParent (split);
   if (!trans)
     return NULL;
@@ -631,7 +631,7 @@ gnc_split_register_get_num_entry (VirtualLocation virt_loc,
   Transaction *trans;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   trans = xaccSplitGetParent (split);
 
   return xaccTransGetNum (trans);
@@ -647,7 +647,7 @@ gnc_split_register_get_desc_entry (VirtualLocation virt_loc,
   Transaction *trans;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   trans = xaccSplitGetParent (split);
 
   return xaccTransGetDescription (trans);
@@ -663,7 +663,7 @@ gnc_split_register_get_notes_entry (VirtualLocation virt_loc,
   Transaction *trans;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   trans = xaccSplitGetParent (split);
 
   return xaccTransGetNotes (trans);
@@ -678,7 +678,7 @@ gnc_split_register_get_recn_entry (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return NULL;
 
@@ -704,7 +704,7 @@ gnc_split_register_get_action_entry (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   return xaccSplitGetAction (split);
 }
@@ -718,7 +718,7 @@ gnc_split_register_get_memo_entry (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   return xaccSplitGetMemo (split);
 }
@@ -730,12 +730,12 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
                                       gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   gnc_numeric balance;
   gboolean is_trans;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   if (split == xaccSplitLookup (&info->blank_split_guid))
     return NULL;
@@ -753,7 +753,7 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
 
     account = xaccSplitGetAccount (split);
     if (!account)
-      account = sr_get_default_account (reg);
+      account = gnc_split_register_get_default_account (reg);
 
     if (gnc_reverse_balance (account))
       balance = gnc_numeric_neg (balance);
@@ -775,7 +775,7 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
   if (!use_security_cells (reg, virt_loc))
     return NULL;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   price = xaccSplitGetSharePrice (split);
   if (gnc_numeric_zero_p (price))
@@ -797,7 +797,7 @@ gnc_split_register_get_shares_entry (VirtualLocation virt_loc,
   if (!use_security_cells (reg, virt_loc))
     return NULL;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   shares = xaccSplitGetAmount (split);
   if (gnc_numeric_zero_p (shares))
@@ -816,7 +816,7 @@ gnc_split_register_get_tshares_entry (VirtualLocation virt_loc,
   gnc_numeric total;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   total = get_trans_total_amount (reg, xaccSplitGetParent (split));
 
@@ -835,7 +835,7 @@ gnc_split_register_get_xfrm_entry (VirtualLocation virt_loc,
   Split *split;
   Split *s;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   g_free (name);
 
@@ -857,7 +857,7 @@ gnc_split_register_get_mxfrm_entry (VirtualLocation virt_loc,
   Split *split;
   Split *s;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return NULL;
 
@@ -895,7 +895,7 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
   gnc_numeric total;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return NULL;
 
@@ -931,7 +931,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   is_debit = gnc_cell_name_equal
     (gnc_table_get_cell_name (reg->table, virt_loc), DEBT_CELL);
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   if (!split)
   {
@@ -1010,7 +1010,7 @@ gnc_split_register_get_debcred_io_flags (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
   if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
     return XACC_CELL_ALLOW_NONE;
@@ -1034,7 +1034,7 @@ static gboolean
 gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   Split *split;
   char recn;
 
@@ -1043,7 +1043,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
   if (info->change_confirmed)
     return TRUE;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return TRUE;
 
@@ -1065,7 +1065,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     if (!confirm)
       return TRUE;
 
-    confirm = gnc_verify_dialog_parented (xaccSRGetParent (reg),
+    confirm = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
                                           message, FALSE);
 
     info->change_confirmed = confirm;
@@ -1100,7 +1100,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
   kvp_frame *kvpf;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return NULL;
 
@@ -1134,7 +1134,7 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
   kvp_frame *kvpf;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   kvpf = xaccSplitGetSlots (split);
 
   return kvp_value_get_string
@@ -1151,7 +1151,7 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
   kvp_frame *kvpf;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   kvpf = xaccSplitGetSlots (split);
 
   return kvp_value_get_string
@@ -1168,7 +1168,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
   kvp_frame *kvpf;
   Split *split;
 
-  split = sr_get_split (reg, virt_loc.vcell_loc);
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return gnc_split_register_get_debcred_entry (virt_loc,
                                                  translate,

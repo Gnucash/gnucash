@@ -112,12 +112,14 @@ struct sr_info
 };
 
 
-SRInfo * xaccSRGetInfo (SplitRegister *reg);
+SRInfo * gnc_split_register_get_info (SplitRegister *reg);
 
-gncUIWidget xaccSRGetParent (SplitRegister *reg);
+gncUIWidget gnc_split_register_get_parent (SplitRegister *reg);
 
-Split * sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc);
-Account * sr_get_default_account (SplitRegister *reg);
+Split * gnc_split_register_get_split (SplitRegister *reg,
+                                      VirtualCellLocation vcell_loc);
+
+Account * gnc_split_register_get_default_account (SplitRegister *reg);
 
 Transaction * xaccSRGetTrans (SplitRegister *reg,
                               VirtualCellLocation vcell_loc);

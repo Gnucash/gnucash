@@ -50,7 +50,7 @@ gnc_split_register_save_cells (gpointer save_data,
 {
   SRSaveData *sd = save_data;
   SplitRegister *reg = user_data;
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   Transaction *trans;
   Split *other_split = NULL;
   Split *split;
@@ -95,7 +95,7 @@ gnc_split_register_save_cells (gpointer save_data,
 
     if (gnc_num_cell_set_last_num ((NumCell *) cell, value))
     {
-      SRInfo *info = xaccSRGetInfo (reg);
+      SRInfo *info = gnc_split_register_get_info (reg);
       Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
       Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
@@ -303,7 +303,7 @@ gnc_split_register_save_template_cells (gpointer save_data,
 {
   SRSaveData    *sd = save_data;
   SplitRegister *reg = user_data;
-  SRInfo	*info = xaccSRGetInfo (reg);
+  SRInfo	*info = gnc_split_register_get_info (reg);
   Transaction   *trans;
   Split         *split;
   Split		*other_split = NULL;

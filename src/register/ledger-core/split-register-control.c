@@ -77,7 +77,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
       other_account = xaccSplitGetAccount (other_split);
     }
 
-    default_account = sr_get_default_account (reg);
+    default_account = gnc_split_register_get_default_account (reg);
     
     /* If the two pointers are the same, the account from other_split
      * is actually the default account. We must make other_account
@@ -112,11 +112,13 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     else
       default_value = 0;
 
-    choice = gnc_choose_radio_option_dialog_parented (xaccSRGetParent (reg),
-                                                      title,
-                                                      message,
-                                                      default_value,
-                                                      radio_list);
+    choice = gnc_choose_radio_option_dialog_parented
+      (gnc_split_register_get_parent (reg),
+       title,
+       message,
+       default_value,
+       radio_list);
+
     g_list_free (radio_list);
 
     switch (choice)
@@ -193,7 +195,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   if (!reg)
     return;
 
-  info = xaccSRGetInfo (reg);
+  info = gnc_split_register_get_info (reg);
   pending_trans = xaccTransLookup (&info->pending_trans_guid);
 
   PINFO ("start callback %d %d \n",
@@ -225,7 +227,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
 
     /* The split we are moving to */
-    new_split = sr_get_split (reg, new_virt_loc.vcell_loc);
+    new_split = gnc_split_register_get_split (reg, new_virt_loc.vcell_loc);
 
     /* The split at the transaction line we are moving to */
     new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
@@ -318,7 +320,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
       new_virt_loc.vcell_loc = reg->table->current_cursor_loc.vcell_loc;
 
     new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
-    new_split = sr_get_split (reg, new_virt_loc.vcell_loc);
+    new_split = gnc_split_register_get_split (reg, new_virt_loc.vcell_loc);
     new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
     new_class = gnc_split_register_get_cursor_class (reg,
                                                      new_virt_loc.vcell_loc);
@@ -474,7 +476,7 @@ gnc_find_split_in_reg_by_memo (SplitRegister *reg, const char *memo,
       Transaction *trans;
       VirtualCellLocation vcell_loc = { virt_row, virt_col };
 
-      split = sr_get_split (reg, vcell_loc);
+      split = gnc_split_register_get_split (reg, vcell_loc);
       trans = xaccSplitGetParent (split);
 
       if (trans == last_trans)
@@ -515,7 +517,7 @@ gnc_find_trans_in_reg_by_desc (SplitRegister *reg, const char *description)
       Transaction *trans;
       VirtualCellLocation vcell_loc = { virt_row, virt_col };
 
-      split = sr_get_split (reg, vcell_loc);
+      split = gnc_split_register_get_split (reg, vcell_loc);
       trans = xaccSplitGetParent(split);
 
       if (trans == last_trans)
@@ -537,7 +539,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                                     gncTableTraversalDir dir,
                                     VirtualLocation *p_new_virt_loc)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *blank_trans = xaccSplitGetParent (blank_split);
@@ -611,9 +613,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* find a transaction to auto-complete on */
-        if (sr_get_default_account (reg) != NULL)
+        if (gnc_split_register_get_default_account (reg) != NULL)
         {
-          Account *account = sr_get_default_account (reg);
+          Account *account = gnc_split_register_get_default_account (reg);
 
           auto_trans = xaccAccountFindTransByDesc(account, desc);
         }
@@ -630,11 +632,12 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         xaccTransBeginEdit (trans);
         gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
 
-        if (sr_get_default_account (reg) != NULL)
+        if (gnc_split_register_get_default_account (reg) != NULL)
         {
-          Account *default_account = sr_get_default_account (reg);
+          Account *default_account;
           GList *node;
 
+          default_account = gnc_split_register_get_default_account (reg);
           blank_split = NULL;
 
           for (node = xaccTransGetSplitList (trans); node; node = node->next)
@@ -736,9 +739,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                                                            PRIC_CELL, NULL);
 
         /* find a split to auto-complete on */
-        if (sr_get_default_account (reg) != NULL)
+        if (gnc_split_register_get_default_account (reg) != NULL)
         {
-          Account *account = sr_get_default_account (reg);
+          Account *account = gnc_split_register_get_default_account (reg);
 
           auto_split = gnc_find_split_in_account_by_memo (account, memo,
                                                           unit_price);
@@ -831,7 +834,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   if (!reg)
     return FALSE;
 
-  info = xaccSRGetInfo (reg);
+  info = gnc_split_register_get_info (reg);
 
   if (info->first_pass)
     return FALSE;
@@ -913,7 +916,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
       message = g_strdup_printf (format, name);
 
-      result = gnc_verify_dialog_parented (xaccSRGetParent (reg),
+      result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
                                            message, TRUE);
       if (!result)
         break;
@@ -1031,8 +1034,9 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     message = _("The current transaction has been changed.\n"
                 "Would you like to record it?");
 
-    result = gnc_verify_cancel_dialog_parented (xaccSRGetParent (reg),
-                                                message, GNC_VERIFY_YES);
+    result = gnc_verify_cancel_dialog_parented
+      (gnc_split_register_get_parent (reg),
+       message, GNC_VERIFY_YES);
   }
 
   switch (result)
@@ -1047,7 +1051,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
         Split *trans_split;
         CursorClass new_class;
 
-        new_split = sr_get_split (reg, virt_loc.vcell_loc);
+        new_split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
         trans_split = xaccSRGetTransSplit (reg, virt_loc.vcell_loc, NULL);
         new_class = gnc_split_register_get_cursor_class (reg,
                                                          virt_loc.vcell_loc);
@@ -1107,7 +1111,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
     if (!confirm)
       return TRUE;
 
-    return gnc_verify_dialog_parented (xaccSRGetParent (reg), message, TRUE);
+    return gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
+                                       message, TRUE);
   }
 
   return TRUE;

@@ -141,7 +141,6 @@ struct split_register
 
 /* Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
-typedef void (*SRSetHelpCallback) (gpointer user_data, const char *help_str);
 
 
 /** Prototypes ******************************************************/

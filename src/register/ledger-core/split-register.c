@@ -244,7 +244,7 @@ gnc_split_get_amount_denom (Split *split)
 void
 xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (!reg)
     return;
@@ -308,7 +308,7 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
 gboolean
 xaccSRCurrentTransExpanded (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (!reg)
     return FALSE;
@@ -337,9 +337,9 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
    * transaction. Go back one row to find a split in the transaction. */
   vcell_loc = reg->table->current_cursor_loc.vcell_loc;
 
-  vcell_loc.virt_row --;
+  vcell_loc.virt_row--;
 
-  split = sr_get_split (reg, vcell_loc);
+  split = gnc_split_register_get_split (reg, vcell_loc);
 
   return xaccSplitGetParent (split);
 }
@@ -350,13 +350,14 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
   if (reg == NULL)
     return NULL;
 
-  return sr_get_split (reg, reg->table->current_cursor_loc.vcell_loc);
+  return gnc_split_register_get_split
+    (reg, reg->table->current_cursor_loc.vcell_loc);
 }
 
 Split *
 xaccSRGetBlankSplit (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
 
   return blank_split;
@@ -447,7 +448,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
 Split *
 xaccSRDuplicateCurrent (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
@@ -491,8 +492,9 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
                             "Would you like to record it?");
     GNCVerifyResult result;
 
-    result = gnc_ok_cancel_dialog_parented (xaccSRGetParent(reg),
-                                            message, GNC_VERIFY_OK);
+    result = gnc_ok_cancel_dialog_parented
+      (gnc_split_register_get_parent (reg),
+       message, GNC_VERIFY_OK);
 
     if (result == GNC_VERIFY_CANCEL)
     {
@@ -546,7 +548,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     date = info->last_date_entered;
     if (gnc_strisnum (xaccTransGetNum (trans)))
     {
-      Account *account = sr_get_default_account (reg);
+      Account *account = gnc_split_register_get_default_account (reg);
 
       if (account)
         in_num = xaccAccountGetLastNum (account);
@@ -554,7 +556,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
         in_num = xaccTransGetNum (trans);
     }
 
-    if (!gnc_dup_trans_dialog (xaccSRGetParent (reg),
+    if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg),
                                &date, in_num, &out_num))
     {
       gnc_resume_gui_refresh ();
@@ -610,7 +612,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 static void
 xaccSRCopyCurrentInternal (SplitRegister *reg, gboolean use_cut_semantics)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
@@ -704,7 +706,7 @@ xaccSRCopyCurrent (SplitRegister *reg)
 void
 xaccSRCutCurrent (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
@@ -745,7 +747,7 @@ xaccSRCutCurrent (SplitRegister *reg)
 void
 xaccSRPasteCurrent (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   CursorClass cursor_class;
   Transaction *trans;
@@ -784,8 +786,8 @@ xaccSRPasteCurrent (SplitRegister *reg)
       return;
 
     if (split != NULL)
-      result = gnc_verify_dialog_parented(xaccSRGetParent(reg),
-                                          message, FALSE);
+      result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
+                                           message, FALSE);
     else
       result = TRUE;
 
@@ -820,7 +822,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
       return;
 
     if (split != blank_split)
-      result = gnc_verify_dialog_parented(xaccSRGetParent(reg),
+      result = gnc_verify_dialog_parented(gnc_split_register_get_parent(reg),
                                           message, FALSE);
     else
       result = TRUE;
@@ -840,7 +842,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
     split_index = gnc_trans_split_index(trans, split);
     trans_split_index = gnc_trans_split_index(trans, trans_split);
 
-    if ((sr_get_default_account (reg) != NULL) &&
+    if ((gnc_split_register_get_default_account (reg) != NULL) &&
         (xaccGUIDType(&copied_leader_guid) != GNC_ID_NULL))
     {
       new_guid = &info->default_account;
@@ -869,7 +871,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
 void
 xaccSRDeleteCurrentSplit (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   Transaction *trans;
@@ -918,7 +920,7 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
 void
 xaccSRDeleteCurrentTrans (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   Transaction *trans;
@@ -985,7 +987,7 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
 void
 xaccSREmptyCurrentTrans (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   Transaction *trans;
@@ -1077,7 +1079,7 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
 void
 xaccSRCancelCursorTransChanges (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = gnc_split_register_get_info(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
 
   /* Get the currently open transaction, rollback the edits on it, and
@@ -1298,7 +1300,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
 gboolean
 xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 {
-   SRInfo *info = xaccSRGetInfo(reg);
+   SRInfo *info = gnc_split_register_get_info(reg);
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
    Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
    Transaction *blank_trans = xaccSplitGetParent(blank_split);
@@ -1369,7 +1371,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)
    {
-     xaccAccountInsertSplit (sr_get_default_account (reg), blank_split);
+     xaccAccountInsertSplit (gnc_split_register_get_default_account (reg),
+                             blank_split);
      xaccTransSetDateEnteredSecs(trans, time(NULL));
    }
 
@@ -1494,7 +1497,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
     account = xaccSplitGetAccount (split);
 
   if (!account)
-    account = sr_get_default_account (reg);
+    account = gnc_split_register_get_default_account (reg);
 
   account_type = xaccAccountGetType (account);
 
@@ -1638,11 +1641,13 @@ sr_split_auto_calc (SplitRegister *reg, Split *split)
     else
       default_value = 1;
 
-    choice = gnc_choose_radio_option_dialog_parented (xaccSRGetParent(reg),
-                                                      title,
-                                                      message,
-                                                      default_value,
-                                                      radio_list);
+    choice = gnc_choose_radio_option_dialog_parented
+      (gnc_split_register_get_parent (reg),
+       title,
+       message,
+       default_value,
+       radio_list);
+
     for (node = radio_list; node; node = node->next)
       g_free (node->data);
 
@@ -1788,7 +1793,7 @@ sr_type_to_account_type(SplitRegisterType sr_type)
 const char *
 xaccSRGetDebitString (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (!reg)
     return NULL;
@@ -1809,7 +1814,7 @@ xaccSRGetDebitString (SplitRegister *reg)
 const char *
 xaccSRGetCreditString (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (!reg)
     return NULL;
@@ -1831,7 +1836,7 @@ xaccSRGetCreditString (SplitRegister *reg)
 gboolean
 xaccSRHasPendingChanges (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
 
   if (reg == NULL)
@@ -1846,7 +1851,7 @@ xaccSRHasPendingChanges (SplitRegister *reg)
 void
 xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (reg == NULL)
     return;
@@ -1857,7 +1862,7 @@ xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present)
 gboolean
 xaccSRFullRefreshOK (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (!info)
     return FALSE;
@@ -2218,7 +2223,7 @@ void
 xaccSRSetData (SplitRegister *reg, void *user_data,
                SRGetParentCallback get_parent)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   g_return_if_fail (reg != NULL);
 
@@ -2229,9 +2234,9 @@ xaccSRSetData (SplitRegister *reg, void *user_data,
 static void
 gnc_split_register_cleanup (SplitRegister *reg)
 {
-   SRInfo *info = xaccSRGetInfo(reg);
-   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+   SRInfo *info = gnc_split_register_get_info (reg);
+   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
+   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
    Transaction *trans;
 
    gnc_suspend_gui_refresh ();

@@ -135,7 +135,7 @@ void
 xaccSRLoadRegister (SplitRegister *reg, GList * slist,
                     Account *default_account)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   CursorBuffer *cursor_buffer;

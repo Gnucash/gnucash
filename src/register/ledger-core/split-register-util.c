@@ -58,7 +58,7 @@ get_today_midnight (void)
  * SplitRegister directly. If additional user data is needed, just add
  * it to the SRInfo structure above. */
 static void
-xaccSRInitRegisterData (SplitRegister *reg)
+gnc_split_register_init_info (SplitRegister *reg)
 {
   SRInfo *info;
 
@@ -81,21 +81,21 @@ xaccSRInitRegisterData (SplitRegister *reg)
 }
 
 SRInfo *
-xaccSRGetInfo (SplitRegister *reg)
+gnc_split_register_get_info (SplitRegister *reg)
 {
   if (!reg)
     return NULL;
 
   if (reg->sr_info == NULL)
-    xaccSRInitRegisterData (reg);
+    gnc_split_register_init_info (reg);
 
   return reg->sr_info;
 }
 
 gncUIWidget
-xaccSRGetParent (SplitRegister *reg)
+gnc_split_register_get_parent (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   if (reg == NULL)
     return NULL;
@@ -107,7 +107,8 @@ xaccSRGetParent (SplitRegister *reg)
 }
 
 Split *
-sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc)
+gnc_split_register_get_split (SplitRegister *reg,
+                              VirtualCellLocation vcell_loc)
 {
   GUID *guid;
 
@@ -122,9 +123,9 @@ sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc)
 }
 
 Account *
-sr_get_default_account (SplitRegister *reg)
+gnc_split_register_get_default_account (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   return xaccAccountLookup (&info->default_account);
 }
@@ -133,7 +134,7 @@ void
 gnc_split_register_set_template_account (SplitRegister *reg,
                                          Account *template_account)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
 
   g_return_if_fail (reg != NULL);
 
@@ -148,7 +149,7 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
   if (!reg || !reg->table)
     return NULL;
 
-  split = sr_get_split (reg, vcell_loc);
+  split = gnc_split_register_get_split (reg, vcell_loc);
 
   if (split != NULL)
     return xaccSplitGetParent(split);
@@ -157,7 +158,7 @@ xaccSRGetTrans (SplitRegister *reg, VirtualCellLocation vcell_loc)
    * transaction. Go back one row to find a split in the transaction. */
   vcell_loc.virt_row--;
 
-  split = sr_get_split (reg, vcell_loc);
+  split = gnc_split_register_get_split (reg, vcell_loc);
 
   /* This split could be NULL during register initialization. */
   if (split == NULL)
@@ -191,7 +192,7 @@ xaccSRGetTransSplit (SplitRegister *reg,
       if (trans_split_loc)
         *trans_split_loc = vcell_loc;
 
-      return sr_get_split (reg, vcell_loc);
+      return gnc_split_register_get_split (reg, vcell_loc);
     }
 
     vcell_loc.virt_row--;
@@ -232,7 +233,7 @@ xaccSRFindSplit (SplitRegister *reg,
     {
       VirtualCellLocation vc_loc = { v_row, v_col };
 
-      s = sr_get_split (reg, vc_loc);
+      s = gnc_split_register_get_split (reg, vc_loc);
       t = xaccSplitGetParent(s);
 
       cursor_class = gnc_split_register_get_cursor_class (reg, vc_loc);
@@ -311,7 +312,7 @@ xaccSRSetTransVisible (SplitRegister *reg,
     if (cursor_class != CURSOR_CLASS_SPLIT)
       return;
 
-    if (only_blank_split && sr_get_split (reg, vcell_loc))
+    if (only_blank_split && gnc_split_register_get_split (reg, vcell_loc))
       continue;
 
     gnc_table_set_virt_cell_visible (reg->table, vcell_loc, visible);
@@ -345,7 +346,7 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
   account = xaccSplitGetAccount (split);
 
   if (account == NULL)
-    account = sr_get_default_account (reg);
+    account = gnc_split_register_get_default_account (reg);
 
   cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                   SHRS_CELL);
@@ -387,7 +388,7 @@ sr_get_passive_cursor (SplitRegister *reg)
 CellBlock *
 sr_get_active_cursor (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
+  SRInfo *info = gnc_split_register_get_info (reg);
   const char *cursor_name = NULL;
 
   switch (reg->style)
@@ -422,7 +423,7 @@ sr_set_last_num (SplitRegister *reg, const char *num)
 {
   Account *account;
 
-  account = sr_get_default_account (reg);
+  account = gnc_split_register_get_default_account (reg);
   if (!account)
     return;
 
