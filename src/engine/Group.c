@@ -453,8 +453,10 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
    char * default_currency;
 
    if (!grp) return;
+   if (!(grp->account)) return;
 
    acc = grp->account[0];
+   if (!acc) return;
    default_currency = acc->currency;
 
    grp->balance = 0.0;
