@@ -42,15 +42,25 @@
 
 #include "main.h"
 #include "util.h"
+
+#define HAVE_XMHTML 1
+
+#if HAVE_HTMLW
 #include "HTML.h"
+#endif 
+
+#if HAVE_XMHTML
+#include "XmHTML.h"
+#endif 
+
 
 /********************************************************************\
  *     HTML History functions                                       * 
 \********************************************************************/
 typedef struct _HTMLHistory {
-  char   *htmlfile;
-  struct _HTMLHistory *last;
   struct _HTMLHistory *next;
+  struct _HTMLHistory *last;
+  char   *htmlfile;
 } HTMLHistory;
 
 /* insert an htmlfile into history.  Return TRUE if this
@@ -64,21 +74,23 @@ historyInsert( HTMLHistory **history, char *htmlfile )
     HTMLHistory *temp;
     
     /* delete all next pages: */
-    while( (*history)->next != NULL )
+    temp = (*history)->next;
+    while( temp ) 
       {
-      temp = (*history)->next;
-      
       (*history)->next = temp->next;
       _free(temp->htmlfile);
       _free(temp);
+
+      temp = (*history)->next;
       }
     
     /* Add new node to history: */
     temp = (HTMLHistory *)_malloc(sizeof(HTMLHistory));
     temp->htmlfile = (char *)_malloc((strlen(htmlfile)+1)*sizeof(char));
-    sprintf(temp->htmlfile,"%s",htmlfile);
+    strcpy (temp->htmlfile,htmlfile);
     temp->next = NULL;
     temp->last = (*history);
+    (*history)->next = temp;
     (*history) = temp;
     
     return FALSE;
@@ -88,7 +100,7 @@ historyInsert( HTMLHistory **history, char *htmlfile )
     /* This must be the first node in the history... */
     (*history) = (HTMLHistory *)_malloc(sizeof(HTMLHistory));
     (*history)->htmlfile = (char *)_malloc((strlen(htmlfile)+1)*sizeof(char));
-    sprintf((*history)->htmlfile,"%s",htmlfile);
+    strcpy ((*history)->htmlfile,htmlfile);
     (*history)->last = NULL;
     (*history)->next = NULL;
     
@@ -101,10 +113,10 @@ historyInsert( HTMLHistory **history, char *htmlfile )
 char *
 historyFwd( HTMLHistory **history )
   {
-  if( (*history) != NULL )
-    {
-    if( (*history)->next != NULL )
-      (*history) = (*history)->next;
+  if( (*history) != NULL ) {
+    if( (*history)->next != NULL ) { 
+      (*history) = (*history)->next; 
+       }
     return (*history)->htmlfile;
     }
   else
@@ -115,10 +127,10 @@ historyFwd( HTMLHistory **history )
 char *
 historyBack( HTMLHistory **history )
   {
-  if( (*history) != NULL )
-    {
-    if( (*history)->last != NULL )
+  if( (*history) != NULL ) {
+    if( (*history)->last != NULL ) {
       (*history) = (*history)->last;
+      }
     return (*history)->htmlfile;
     }
   else
@@ -175,6 +187,10 @@ static void   helpFwdCB( Widget mw, XtPointer cd, XtPointer cb );
 static void   helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb );
 
 char      *htmlRead( char *file );
+
+#if HAVE_XMHTML
+void xaccJumpToLabel (Widget mw, char *jumpfile);
+#endif 
 
 #if HAVE_XPM
 ImageInfo *htmlResolveImage( Widget wm, char *file, int nl );
@@ -241,11 +257,18 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     helpwidget =
       XtVaCreateManagedWidget( "help",
+#if HAVE_HTMLW
 			       htmlWidgetClass,         controlform,
 #if HAVE_XPM
 			       WbNresolveImageFunction, htmlResolveImage,
 #endif
 			       WbNdelayImageLoads,      False,
+#endif 
+
+#if HAVE_XMHTML
+                               xmHTMLWidgetClass,       controlform,
+                               XmNanchorButtons,        False, 
+#endif 
 			       XmNtopAttachment,        XmATTACH_FORM,
 			       XmNbottomAttachment,     XmATTACH_FORM,
 			       XmNleftAttachment,       XmATTACH_FORM,
@@ -254,7 +277,12 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 			       XmNheight,               400,
 			       NULL );
     
+#if HAVE_HTMLW
     XtAddCallback( helpwidget, WbNanchorCallback, helpAnchorCB, NULL );
+#endif 
+#if HAVE_XMHTML
+    XtAddCallback( helpwidget, XmNactivateCallback, helpAnchorCB, NULL );
+#endif
     
     
     /** ACTIONFORM ********************************************
@@ -313,7 +341,12 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     /* we have to load the page after the widget is realized, so
      * the pictures can be drawn  ?? but its not realized yet! */
+#if HAVE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
+#endif
+#ifdef HAVE_XMHTML
+    xaccJumpToLabel( helpwidget, htmlfile );
+#endif
 
     /* Fix action area of the pane to its current size, and not let it
      *  resize. */
@@ -330,8 +363,14 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     XtPopup( dialog, XtGrabNone );
     }
   /* if help window is already open, just load new page */
-  else
+  else {
+#if HAVE_HTMLW
     XtVaSetValues( helpwidget, WbNtext, htmlRead(htmlfile), NULL );
+#endif
+#ifdef HAVE_XMHTML
+    xaccJumpToLabel( helpwidget, htmlfile );
+#endif
+    }
   
   unsetBusyCursor( parent );
   }
@@ -339,7 +378,6 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 /********************************************************************\
  *     callback functions...                                        * 
 \********************************************************************/
-
 /********************************************************************\
  * helpBackCB - called when user clicks "Back" button... shows last * 
  *   help page in history                                           * 
@@ -355,9 +393,12 @@ helpBackCB( Widget mw, XtPointer cd, XtPointer cb )
   char *file = historyBack(&helpHistory);
   if( file != NULL )
     {
-    XtVaSetValues( helpwidget,
-		   WbNtext, htmlRead(file),
-		   NULL );
+#if HAVE_HTMLW
+    XtVaSetValues( helpwidget, WbNtext, htmlRead(file), NULL );
+#endif
+#ifdef HAVE_XMHTML
+    xaccJumpToLabel( helpwidget, file );
+#endif
     }
   }
 
@@ -376,9 +417,12 @@ helpFwdCB( Widget mw, XtPointer cd, XtPointer cb )
   char *file = historyFwd(&helpHistory);
   if( file != NULL )
     {
-    XtVaSetValues( helpwidget,
-		   WbNtext, htmlRead(file),
-		   NULL );
+#if HAVE_HTMLW
+    XtVaSetValues( helpwidget, WbNtext, htmlRead(file), NULL );
+#endif
+#ifdef HAVE_XMHTML
+    xaccJumpToLabel( helpwidget, file );
+#endif
     }
   }
 
@@ -408,15 +452,87 @@ closeHelpWin( Widget mw, XtPointer cd, XtPointer cb )
 static void
 helpAnchorCB( Widget mw, XtPointer cd, XtPointer cb )
   {
+#if HAVE_HTMLW
   WbAnchorCallbackData *acbs = (WbAnchorCallbackData *)cb;
-
   fprintf(stderr,"%d %s\n",acbs->element_id, acbs->text);
+
   
   if( historyInsert(&helpHistory,acbs->href) )
     {ERROR();}     /* CB shouldn't be called if there is not history!!! */
-  else
+  else {
     XtVaSetValues( mw, WbNtext, htmlRead(acbs->href), NULL );
+    }
+#endif
+
+#ifdef HAVE_XMHTML
+   XmHTMLAnchorCallbackStruct *acbs = (XmHTMLAnchorCallbackStruct *) cb;
+
+   if(acbs->reason != XmCR_ACTIVATE) return;
+
+   switch(acbs->url_type) {
+
+      /* a named anchor on a page that is already displayed */
+      case ANCHOR_JUMP: {
+         XmHTMLAnchorScrollToName(mw, acbs->href);
+      }
+      break;
+
+      /* a local file with a possible jump to label */
+      case ANCHOR_FILE_LOCAL: {
+         historyInsert(&helpHistory, acbs->href);
+         xaccJumpToLabel (mw, acbs->href);
+      }
+      break;
+
+      /*  other types are unsupported, but it would be fun if they were ... */
+      case ANCHOR_FTP:
+         fprintf(stderr, "Error: this help window doesn't support ftp: %s\n", acbs->href);
+         break;
+      case ANCHOR_HTTP:
+         fprintf(stderr, "Error: this help window doesn't support http: %s\n", acbs->href);
+         break;
+      case ANCHOR_MAILTO:
+         fprintf(stderr, "Error: this help window doesn't support email: %s\n", acbs->href);
+         break;
+      case ANCHOR_UNKNOWN:
+      default:
+         fprintf(stderr, "Error: don't know this type of url: %s\n", acbs->href);
+         break;
+   }
+
+#endif
   }
+
+/********************************************************************\
+ *     utility functions...                                         * 
+\********************************************************************/
+
+#if HAVE_XMHTML
+void
+xaccJumpToLabel (Widget mw, char *jumpfile)
+{
+   char *label, *file, *text;
+
+   file = strdup (jumpfile);
+
+   /*  see if this anchor contains a jump */
+   label = strchr (jumpfile, '#');
+   if (label) {
+      file [label - jumpfile] = 0x0;  /* truncate # from name */
+      label = strdup (label);
+   }
+
+   text = htmlRead (file);
+   XmHTMLTextSetString(mw, text);
+   if (label) {
+      XmHTMLAnchorScrollToName(mw, label);
+   } else {
+      XmHTMLTextScrollToLine(mw, 0);
+   }
+   free (file);
+   if (label) free (label);
+}
+#endif
 
 /********************************************************************\
  *     HTML functions...                                            * 
@@ -443,6 +559,7 @@ htmlRead( char *file )
   if( fd == -1 )
     {
     ERROR();
+    fprintf (stderr, "file was %s \n", file);
     return NULL;
     }
   

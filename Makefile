@@ -39,14 +39,19 @@ RANLIB = ranlib
 # DEBUGMEMORY  - does some accounting whenever malloc/free
 #                is called.
 # USEDEBUG     - causes debugging info to be displayed
-CFLAGS = $(LFLAGS) -I../include -I../lib/libhtmlw -I../lib/Xbae-4.6.2-linas \
+# CFLAGS = $(LFLAGS) -I../include -I../lib/libhtmlw -I../lib/Xbae-4.6.2-linas \
+#         -I ../lib/ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
+#	 -DUSEQUICKFILL 
+
+CFLAGS = $(LFLAGS) -I../include -I../lib/XmHTML-1.1.0/src  \
+	 -I../lib/Xbae-4.6.2-linas \
          -I ../lib/ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
 	 -DUSEQUICKFILL 
 
 
 	 # -DDEBUGMEMORY -DUSEDEBUG
 	 # -DUSEQUICKFILL # -DUSE_NO_COLOR -DDEBUGMEMORY -DUSEDEBUG
-LFLAGS = -g -L/usr/local/lib -L/usr/X11/lib -L../lib
+LFLAGS = -g -L/usr/lib -L/usr/local/lib -L/usr/X11/lib -L../lib
 LIBS   = -lXm -lXmu -lXt -lXpm -lXext -lSM -lICE -lX11 
 # LIBS   = -lXm -lXmu -lXt -lXpm -lXext -lSM -lICE -lX11 -lefence
 
@@ -63,14 +68,15 @@ default :
 	@cd lib/ComboBox-1.33 ; $(MAKE) 
 	@cd lib/Xbae-4.6.2-linas ; $(MAKE) 
 	@cd lib/libhtmlw ; $(MAKE) $(OPTIONS)
+	@cd lib/XmHTML-1.1.0; $(MAKE) 
 	@cd src ; $(MAKE) $(OPTIONS)
 
 clean :
 	rm -f core junk tmp *~ *.bak
 	@cd include ; rm -f *~
 	@cd help    ; rm -f *~
-	@cd lib/libhtmlw ; $(MAKE) clean
 	@cd src ; $(MAKE) clean
+	@cd lib/libhtmlw ; $(MAKE) clean
 	@cd lib/ComboBox-1.33 ; $(MAKE) clean
 	@cd lib/Xbae-4.6.2-linas ; $(MAKE) clean
 
