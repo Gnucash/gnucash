@@ -9,6 +9,14 @@
 #include "gnc-icons.h"
 #include "gnc-gnome-utils.h"
 
+static GtkStockItem items[] = {
+  { GNC_STOCK_ACCOUNT,        "Account",         0, 0, NULL },
+  { GNC_STOCK_DELETE_ACCOUNT, "_Delete Account", 0, 0, NULL },
+  { GNC_STOCK_EDIT_ACCOUNT,   "_Edit Account",   0, 0, NULL },
+  { GNC_STOCK_NEW_ACCOUNT,    "_New Account",    0, 0, NULL },
+  { GNC_STOCK_OPEN_ACCOUNT,   "_Open Account",   0, 0, NULL },
+};
+
 static void
 gnc_add_stock_icon_pair (GtkIconFactory *factory,
 			 const char *stock,
@@ -60,6 +68,10 @@ gnc_load_stock_icons (void)
 {
 	GtkIconFactory *factory;
 
+	/* Register our stock items */
+	gtk_stock_add (items, G_N_ELEMENTS (items));
+      
+	/* Add our custom icon factory to the list of defaults */
 	factory = gtk_icon_factory_new ();
 	gnc_add_stock_icon_pair (factory, GNC_STOCK_ACCOUNT,
 				 "account.png", "account-16.png");
