@@ -245,33 +245,46 @@ xaccAccountScrubDoubleBalance (Account *acc)
    if (!acc) return;
 
    for (node = acc->lots; node; node=node->next)
-	{
+   {
       gnc_commodity *currency = NULL;
       SplitList *snode;
-		GNCLot *lot = node->data;
+      gnc_numeric zero = gnc_numeric_zero();
+      gnc_numeric value = zero;
+      GNCLot *lot = node->data;
 
       /* We examine only closed lots */
       if (FALSE == gnc_lot_is_closed (lot)) continue;
 
-      /* Check to make sure all splits in the lot have a common currency */
       for (snode = lot->splits; snode; snode=snode->next)
-		{
+      {
          Split *s = snode->data;
          Transaction *trans = s->parent;
-			if (NULL == currency)
-			{
-				currency = trans->common_currency;
-			}
-			if (FALSE == gnc_commodity_equiv (currency, trans->common_currency))
-			{
+
+         /* Check to make sure all splits in the lot have a common currency */
+         if (NULL == currency)
+         {
+            currency = trans->common_currency;
+         }
+         if (FALSE == gnc_commodity_equiv (currency, trans->common_currency))
+         {
             /* Unhandled error condition.  We should do something 
              * graceful here. Don't know what.  FIXME XXX */
-				PERR ("currencies in lot are not equivalent");
-			}
-		}
+            PERR ("currencies in lot are not equivalent\n"
+                  "\ttrans=%s curr=%s\n", xaccTransGetDescription(trans), 
+                  gnc_commodity_get_fullname(trans->common_currency)); 
+         }
 
-      /* Now, total up the values */
-	}
+         /* Now, total up the values */
+         value = gnc_numeric_add (value, xaccSplitGetValue (s),
+                              GNC_DENOM_AUTO, 0);
+             
+      }
+
+      /* Is the value of the lot zero?  If not, add a balancing split */
+      if (FALSE == gnc_numeric_equal (value, zero))
+      {
+      }
+   }
 }
 
 /* =========================== END OF FILE ======================= */
