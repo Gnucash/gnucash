@@ -143,7 +143,7 @@ static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
 static time_t        readDMYDate( int fd, int token );
-static int           readTSDate( int fd, Timespec *, int token );
+static int           readTSDate( int fd, struct timespec *, int token );
 
 static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
@@ -1206,7 +1206,7 @@ xaccResetWriteFlags (AccountGroup *grp)
   for( i=0; i<numAcc; i++ ) {
     int n=0;
     Account *acc;
-    Split *s;
+    Split *s = NULL;
     acc = xaccGroupGetAccount (grp,i) ;
 
     /* recursively do sub-accounts */
@@ -1363,8 +1363,8 @@ writeGroup (int fd, AccountGroup *grp )
 static int
 writeAccount( int fd, Account *acc )
   {
-  Transaction *trans;
-  Split *s;
+  Transaction *trans = NULL;
+  Split *s = NULL;
   int err=0;
   int i, numUnwrittenTrans, ntrans;
   int acc_id;
@@ -1566,7 +1566,7 @@ writeSplit ( int fd, Split *split )
   int acc_id;
   struct timespec ts;
   double damount;
-  Account *xfer_acc;
+  Account *xfer_acc = NULL;
   char recn;
 
   ENTER ("writeSplit");
@@ -1605,7 +1605,7 @@ writeSplit ( int fd, Split *split )
     return -1;
 
   /* write the credited/debted account */
-  xfer_acc = (Account *) (split->acc);
+  xfer_acc = split->acc;
   acc_id = -1;
   if (xfer_acc) acc_id = xfer_acc -> id;
   INFO_2 ("writeSplit: credit %d \n", acc_id);
