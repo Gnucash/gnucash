@@ -7,6 +7,7 @@
 #ifndef GNC_BUSINESS_H_
 #define GNC_BUSINESS_H_
 
+#include "gnc-book.h"
 #include "gncObject.h"
 #include "GNCId.h"
 

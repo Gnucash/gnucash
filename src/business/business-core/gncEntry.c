@@ -9,7 +9,7 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-book-p.h"
+#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
