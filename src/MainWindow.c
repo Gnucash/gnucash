@@ -300,6 +300,7 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
 {
   XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
   Account *acc = (Account *)pClientData;
+  int i, nrows;
 
   /* a "fix" to avoid double invocation */
   switch ( info->reason ) {
@@ -330,8 +331,28 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
                     NULL);
   }
 
-  /* finally, redraw the main window */
+  /* redraw the main window */
   refreshMainWindow ();
+
+  /* find the selected account in the new window, 
+   * and scroll to it. */
+  XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
+
+  for (i=0; i<nrows; i++) {
+    Account * racc;
+    racc = (Account *) XbaeMatrixGetRowUserData (accountlist, i);
+    if (racc == acc) {
+      Boolean isviz;
+      isviz = XbaeMatrixIsRowVisible (accountlist, i);
+      if (False == isviz) {
+        /* scroll to bottom first, so that during rewind, 
+         * sub-accounts become visible too */
+        XbaeMatrixMakeCellVisible (accountlist, nrows-1, 0);
+        XbaeMatrixMakeCellVisible (accountlist, i, 0);
+      }
+      break;
+    }
+  }
 }
 
 /********************************************************************\
