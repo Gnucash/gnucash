@@ -242,6 +242,21 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
 }
 
 /* ======================================================== */
+/* Some notes about the "blank split":
+ * Q: What is the "blank split"?
+ * A: A new, empty split appended to the bottom of the ledger
+ *    window.  The blank split provides an area where the user
+ *    can type in new split/transaction info.  
+ *    The "blank split" is treated in a special way for a number
+ *    of reasons:
+ *    (1) it must always appear as the bottom-most split
+ *        in the Ledger window,
+ *    (2) it must be committed if the user edits it, and 
+ *        a new blank split must be created.
+ *    (3) it must be deleted when the ledger window is closed.
+ * To implement the above, the register "user_hook" is used
+ * to store the blank split with the register window structures.
+ */
 
 void
 xaccLoadRegister (BasicRegister *reg, Split **slist, 
