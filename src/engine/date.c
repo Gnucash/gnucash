@@ -495,9 +495,13 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   if (do_localtime)
   {
     struct tm *tm;
-    time_t tz_hour = 0;
+    int tz_hour;
+    time_t secs = mktime (&stm);
 
-    tm = localtime (&tz_hour);   /* bogus call, forces 'timezone' to be set */
+    /* The call to localtime is 'bogus', but it forces 'timezone' to be set.
+     * Note that we must use the accurate date, since the value of 'gnc_timezone'
+     * includes daylight savings corrections for that date. */
+    tm = localtime (&secs);   
     tz_hour = gnc_timezone(tm)/3600;
     stm.tm_hour -= tz_hour;
     stm.tm_min -= (gnc_timezone(tm) - 3600*tz_hour)/60;
@@ -540,6 +544,7 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   tz_hour = gnc_timezone (&parsed) / 3600;
   tz_min = (gnc_timezone (&parsed) - 3600*tz_hour) / 60;
   if (0>tz_min) { tz_min +=60; tz_hour --; }
+  if (60<=tz_min) { tz_min -=60; tz_hour ++; }
 
   /* we also have to print the sign by hand, to work around a bug
    * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
