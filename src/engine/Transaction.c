@@ -1968,25 +1968,25 @@ get_corr_account_split(Split *sa, Split **retval)
   Split *current_split;
   GList *split_list;
   Transaction * ta;
-  gnc_numeric sa_balance, current_balance;
-  gboolean sa_balance_positive, current_balance_positive, seen_different = FALSE;
+  gnc_numeric sa_value, current_value;
+  gboolean sa_value_positive, current_value_positive, seen_different = FALSE;
 
   *retval = NULL;
   g_return_val_if_fail(sa, TRUE);
   ta = xaccSplitGetParent(sa);
   
-  sa_balance = xaccSplitGetBalance(sa);
-  sa_balance_positive = gnc_numeric_positive_p(sa_balance);
+  sa_value = xaccSplitGetValue(sa);
+  sa_value_positive = gnc_numeric_positive_p(sa_value);
 
   for(split_list = xaccTransGetSplitList(ta);split_list; split_list = split_list->next)
   {
     current_split = split_list->data;
     if(current_split != sa)
     {
-      current_balance = xaccSplitGetBalance(current_split);
-      current_balance_positive = gnc_numeric_positive_p(current_balance);
-      if((sa_balance_positive && !current_balance_positive) || 
-	 (!sa_balance_positive && current_balance_positive))
+      current_value = xaccSplitGetValue(current_split);
+      current_value_positive = gnc_numeric_positive_p(current_value);
+      if((sa_value_positive && !current_value_positive) || 
+	 (!sa_value_positive && current_value_positive))
       {
 	if(seen_different)
 	{
