@@ -37,6 +37,12 @@
 #define ERR_FILEIO_FILE_TOO_OLD      5
 
 /** PROTOTYPES ******************************************************/
+/*
+ * NOTE:
+ * The Read and WriteAccountGroup routines should not be used directly.
+ * They are not "safe" against file-locking errors.  Use the Session
+ * object instead.
+ */
 AccountGroup *xaccReadAccountGroup  (char *datafile);
 int           xaccWriteAccountGroup (char *datafile, AccountGroup *grp);
 int           xaccGetFileIOError (void);
