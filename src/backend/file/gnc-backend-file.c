@@ -124,7 +124,7 @@ file_load_file(Backend *be)
 }
 
 static void
-file_book_load (Backend *be, GNCSession *session)
+file_book_load (Backend *be)
 {
     if (!file_load_file(be))
     {
@@ -186,20 +186,26 @@ gnc_backend_new(void)
     be->session_end = file_session_end;
     be->destroy_backend = file_destroy_backend;
 
-/*     be->account_begin_edit = file_account_begin_edit; */
-/*     be->account_commit_edit = file_account_commit_edit; */
-/*     be->trans_begin_edit = file_trans_begin_edit; */
-/*     be->trans_commit_edit = file_trans_commit_edit; */
-/*     be->trans_rollback_edit = file_trans_rollback_edit; */
-/*     be->price_begin_edit = file_price_begin_edit; */
-/*     be->price_commit_edit = file_price_commit_edit; */
+    /* The file backend will never have transactional
+     * behaviour.  So these vectors are null. */
 
-/*     be->run_query = file_run_query; */
-/*     be->price_lookup = file_price_lookup; */
+    be->account_begin_edit = NULL;
+    be->account_commit_edit = NULL;
+    be->trans_begin_edit = NULL;
+    be->trans_commit_edit = NULL;
+    be->trans_rollback_edit = NULL;
+    be->price_begin_edit = NULL;
+    be->price_commit_edit = NULL;
+
+    /* the file backend always loads all data ... */
+    be->run_query = NULL;
+    be->price_lookup = NULL;
+
+    /* the file backend will never be multi-user... */
+    be->events_pending = NULL;
+    be->process_events = NULL;
+
     be->sync_all = file_sync_all;
-
-/*     be->events_pending = file_events_pending; */
-/*     be->process_events = file_process_events; */
 
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
@@ -212,6 +218,7 @@ gnc_backend_new(void)
 }
 
 /* ---------------------------------------------------------------------- */
+
 static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
