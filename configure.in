@@ -155,15 +155,21 @@ AC_SUBST(XMHTML_INC)
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
 AC_CHECK_LIB(guile, gh_enter,
-	GUILELIBS="$GUILELIBS -lguile",
-	AC_CHECK_LIB(guile, gh_define,
-		GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap",
-		AC_CHECK_LIB(guile, gh_eval_file,
-			GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap -lqthreads",
-			AC_MSG_ERROR(cannot link with guile),
-			-ldl -lreadline -ltermcap -lqthreads),
-		-ldl -lreadline -ltermcap)
-	)
+   GUILELIBS="$GUILELIBS -lguile",
+   AC_CHECK_LIB(guile, gh_define,
+      GUILELIBS="$GUILELIBS -lguile -ldl -lreadline",
+      AC_CHECK_LIB(guile, gh_eval_file,
+         GUILELIBS="$GUILELIBS -lguile -ltermcap",
+         AC_CHECK_LIB(guile, gh_eval_file,
+            GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap",
+            AC_CHECK_LIB(guile, gh_eval_file,
+               GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap -lqthreads",
+               AC_MSG_ERROR(cannot link with guile),
+               -ldl -lreadline -ltermcap -lqthreads),
+            -ldl -lreadline -ltermcap)
+         -ltermcap)
+      -ldl -lreadline)
+   )
 AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
 

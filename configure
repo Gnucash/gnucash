@@ -2332,7 +2332,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lguile -ldl -lreadline -ltermcap $LIBS"
+LIBS="-lguile  $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2338 "configure"
 #include "confdefs.h"
@@ -2360,7 +2360,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap"
+  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline"
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for gh_eval_file in -lguile""... $ac_c" 1>&6
@@ -2370,7 +2370,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lguile -ldl -lreadline -ltermcap -lqthreads $LIBS"
+LIBS="-lguile  $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2376 "configure"
 #include "confdefs.h"
@@ -2398,6 +2398,82 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
+  GUILELIBS="$GUILELIBS -lguile -ltermcap"
+else
+  echo "$ac_t""no" 1>&6
+echo $ac_n "checking for gh_eval_file in -lguile""... $ac_c" 1>&6
+echo "configure:2406: checking for gh_eval_file in -lguile" >&5
+ac_lib_var=`echo guile'_'gh_eval_file | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lguile -ldl -lreadline -ltermcap $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 2414 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char gh_eval_file();
+
+int main() {
+gh_eval_file()
+; return 0; }
+EOF
+if { (eval echo configure:2425: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap"
+else
+  echo "$ac_t""no" 1>&6
+echo $ac_n "checking for gh_eval_file in -lguile""... $ac_c" 1>&6
+echo "configure:2444: checking for gh_eval_file in -lguile" >&5
+ac_lib_var=`echo guile'_'gh_eval_file | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lguile -ldl -lreadline -ltermcap -lqthreads $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 2452 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char gh_eval_file();
+
+int main() {
+gh_eval_file()
+; return 0; }
+EOF
+if { (eval echo configure:2463: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
   GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap -lqthreads"
 else
   echo "$ac_t""no" 1>&6
@@ -2406,7 +2482,13 @@ fi
 
 fi
 
-	
+         -ltermcap
+fi
+
+      -ldl -lreadline
+fi
+
+   
 fi
 
 
@@ -2415,7 +2497,7 @@ fi
 ### Plotutils
 
 echo $ac_n "checking for openpl in -lplot""... $ac_c" 1>&6
-echo "configure:2419: checking for openpl in -lplot" >&5
+echo "configure:2501: checking for openpl in -lplot" >&5
 ac_lib_var=`echo plot'_'openpl | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2423,7 +2505,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lplot $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2427 "configure"
+#line 2509 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2434,7 +2516,7 @@ int main() {
 openpl()
 ; return 0; }
 EOF
-if { (eval echo configure:2438: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2520: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
