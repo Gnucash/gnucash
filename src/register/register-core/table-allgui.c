@@ -164,24 +164,24 @@ gnc_table_restore_current_cursor (Table *table,
                                    table->current_cursor, buffer);
 }
 
-int
-gnc_table_get_current_cell_type (Table *table)
+const char *
+gnc_table_get_current_cell_name (Table *table)
 {
   if (table == NULL)
-    return -1;
+    return NULL;
 
-  return gnc_table_get_cell_type (table, table->current_cursor_loc);
+  return gnc_table_get_cell_name (table, table->current_cursor_loc);
 }
 
 gboolean
 gnc_table_get_current_cell_location (Table *table,
-                                     int cell_type,
+                                     const char *cell_name,
                                      VirtualLocation *virt_loc)
 {
   if (table == NULL)
     return FALSE;
 
-  return gnc_table_get_cell_location (table, cell_type,
+  return gnc_table_get_cell_location (table, cell_name,
                                       table->current_cursor_loc.vcell_loc,
                                       virt_loc);
 }
@@ -229,12 +229,12 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
                               gboolean *conditionally_changed)
 {
   TableGetEntryHandler entry_handler;
+  const char *cell_name;
   const char *entry;
-  int cell_type;
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
-  entry_handler = gnc_table_model_get_entry_handler (table->model, cell_type);
+  entry_handler = gnc_table_model_get_entry_handler (table->model, cell_name);
   if (!entry_handler) return "";
 
   entry = entry_handler (virt_loc, FALSE,
@@ -254,7 +254,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
   BasicCell *cell;
 
   cell = gnc_table_get_cell (table, virt_loc);
-  if (!cell || cell->cell_type < 0)
+  if (!cell || !cell->cell_name)
     return "";
 
   if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
@@ -269,7 +269,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
   }
 
   entry_handler = gnc_table_model_get_entry_handler (table->model,
-                                                     cell->cell_type);
+                                                     cell->cell_name);
   if (!entry_handler) return "";
 
   entry = entry_handler (virt_loc, TRUE, NULL,
@@ -284,15 +284,15 @@ CellIOFlags
 gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
   TableGetCellIOFlagsHandler io_flags_handler;
-  int cell_type;
+  const char *cell_name;
 
   if (!table || !table->model)
     return XACC_CELL_ALLOW_NONE;
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
   io_flags_handler = gnc_table_model_get_io_flags_handler (table->model,
-                                                           cell_type);
+                                                           cell_name);
   if (!io_flags_handler)
     return XACC_CELL_ALLOW_NONE;
 
@@ -303,15 +303,15 @@ const char *
 gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 {
   TableGetLabelHandler label_handler;
+  const char *cell_name;
   const char *label;
-  int cell_type;
 
   if (!table || !table->model)
     return "";
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
-  label_handler = gnc_table_model_get_label_handler (table->model, cell_type);
+  label_handler = gnc_table_model_get_label_handler (table->model, cell_name);
   if (!label_handler)
     return "";
 
@@ -326,15 +326,15 @@ guint32
 gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
   TableGetFGColorHandler fg_color_handler;
-  int cell_type;
+  const char *cell_name;
 
   if (!table || !table->model)
     return 0x0; /* black */
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
   fg_color_handler = gnc_table_model_get_fg_color_handler (table->model,
-                                                           cell_type);
+                                                           cell_name);
   if (!fg_color_handler)
     return 0x0;
 
@@ -346,7 +346,7 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                         gboolean *hatching)
 {
   TableGetBGColorHandler bg_color_handler;
-  int cell_type;
+  const char *cell_name;
 
   if (hatching)
     *hatching = FALSE;
@@ -354,10 +354,10 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
   if (!table || !table->model)
     return 0xffffff; /* white */
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
   bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
-                                                           cell_type);
+                                                           cell_name);
   if (!bg_color_handler)
     return 0x0;
 
@@ -370,15 +370,15 @@ gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                        PhysicalCellBorders *borders)
 {
   TableGetCellBorderHandler cell_border_handler;
-  int cell_type;
+  const char *cell_name;
 
   if (!table || !table->model)
     return;
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
   cell_border_handler = gnc_table_model_get_cell_border_handler (table->model,
-                                                                 cell_type);
+                                                                 cell_name);
   if (!cell_border_handler)
     return;
 
@@ -444,21 +444,21 @@ gnc_table_get_cell (Table *table, VirtualLocation virt_loc)
                                  virt_loc.phys_col_offset);
 }
 
-int
-gnc_table_get_cell_type (Table *table, VirtualLocation virt_loc)
+const char *
+gnc_table_get_cell_name (Table *table, VirtualLocation virt_loc)
 {
   BasicCell *cell;
 
   cell = gnc_table_get_cell (table, virt_loc);
   if (cell == NULL)
-    return -1;
+    return NULL;
 
-  return cell->cell_type;
+  return cell->cell_name;
 }
 
 gboolean
 gnc_table_get_cell_location (Table *table,
-                             int cell_type,
+                             const char *cell_name,
                              VirtualCellLocation vcell_loc,
                              VirtualLocation *virt_loc)
 {
@@ -479,15 +479,12 @@ gnc_table_get_cell_location (Table *table,
     for (cell_col = 0; cell_col < cellblock->num_cols; cell_col++)
     {
       BasicCell *cell;
-      int ctype;
 
       cell = gnc_cellblock_get_cell (cellblock, cell_row, cell_col);
       if (!cell)
         return FALSE;
 
-      ctype = cell->cell_type;
-
-      if (ctype == cell_type)
+      if (gnc_basic_cell_has_name (cell, cell_name))
       {
         if (virt_loc != NULL)
         {
@@ -1082,15 +1079,15 @@ gboolean
 gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
 {
   TableConfirmHandler confirm_handler;
-  int cell_type;
+  const char *cell_name;
 
   if (!table || !table->model)
     return TRUE;
 
-  cell_type = gnc_table_get_cell_type (table, virt_loc);
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
 
   confirm_handler = gnc_table_model_get_confirm_handler (table->model,
-                                                         cell_type);
+                                                         cell_name);
   if (!confirm_handler)
     return TRUE;
 

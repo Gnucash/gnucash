@@ -859,21 +859,91 @@ gnucash_style_set_register_hint_font_name (const char *name)
         gdk_font_ref (gnucash_register_hint_font);
 }
 
+typedef struct
+{
+        char *cell_name;
+        int width;
+} WidthNode;
+
+GNCHeaderWidths
+gnc_header_widths_new (void)
+{
+        return g_hash_table_new (g_str_hash, g_str_equal);
+}
+
+static void
+header_width_destroy_helper (gpointer key, gpointer value, gpointer user_data)
+{
+        WidthNode *wn = value;
+
+        g_free (wn->cell_name);
+        wn->cell_name = NULL;
+
+        g_free (wn);
+}
+
 void
-gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
+gnc_header_widths_destroy (GNCHeaderWidths widths)
+{
+        if (!widths) return;
+        g_hash_table_foreach (widths, header_width_destroy_helper, NULL);
+        g_hash_table_destroy (widths);
+}
+
+void
+gnc_header_widths_set_width (GNCHeaderWidths widths,
+                             const char *cell_name,
+                             int width)
+{
+        WidthNode *wn;
+
+        g_return_if_fail (widths != NULL);
+        g_return_if_fail (cell_name != NULL);
+
+        wn = g_hash_table_lookup (widths, cell_name);
+        if (!wn)
+        {
+                wn = g_new0 (WidthNode, 1);
+
+                wn->cell_name = g_strdup (cell_name);
+
+                g_hash_table_insert (widths, wn->cell_name, wn);
+        }
+
+        wn->width = width;
+}
+
+int
+gnc_header_widths_get_width (GNCHeaderWidths widths,
+                             const char *cell_name)
+{
+        WidthNode *wn;
+
+        g_return_val_if_fail (widths != NULL, 0);
+
+        wn = g_hash_table_lookup (widths, cell_name);
+        if (!wn)
+                return 0;
+
+        return wn->width;
+}
+
+void
+gnucash_sheet_get_header_widths (GnucashSheet *sheet,
+                                 GNCHeaderWidths widths)
 {
         SheetBlockStyle *style;
         CellBlock *header;
         int row, col;
 
-        g_return_if_fail(sheet != NULL);
-        g_return_if_fail(GNUCASH_IS_SHEET(sheet));
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
         style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
-        g_return_if_fail(style != NULL);
+        g_return_if_fail (style != NULL);
 
         header = style->cursor;
-        g_return_if_fail(header != NULL);
+        g_return_if_fail (header != NULL);
 
         for (row = 0; row < style->nrows; row++)
                 for (col = 0; col < style->ncols; col++)
@@ -887,31 +957,31 @@ gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
                                 continue;
 
                         cell = gnc_cellblock_get_cell (header, row, col);
-                        if (!cell)
+                        if (!cell || !cell->cell_name)
                                 continue;
 
-                        if (cell->cell_type < 0)
-                                continue;
-
-                        header_widths[cell->cell_type] = cd->pixel_width;
+                        gnc_header_widths_set_width (widths,
+                                                     cell->cell_name,
+                                                     cd->pixel_width);
                 }
 }
 
 void
-gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
+gnucash_sheet_set_header_widths (GnucashSheet *sheet,
+                                 GNCHeaderWidths widths)
 {
         SheetBlockStyle *style;
         CellBlock *header;
         int row, col;
 
-        g_return_if_fail(sheet != NULL);
-        g_return_if_fail(GNUCASH_IS_SHEET(sheet));
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
         style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
-        g_return_if_fail(style != NULL);
+        g_return_if_fail (style != NULL);
 
         header = style->cursor;
-        g_return_if_fail(header != NULL);
+        g_return_if_fail (header != NULL);
 
         for (row = 0; row < style->nrows; row++)
                 for (col = 0; col < style->ncols; col++)
@@ -923,16 +993,11 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
                                                                 row, col);
 
                         cell = gnc_cellblock_get_cell (header, row, col);
-                        if (!cell)
+                        if (!cell || !cell->cell_name)
                                 continue;
 
-                        if (cell->cell_type < 0)
-                                continue;
-
-                        if (header_widths[cell->cell_type] < 0)
-                                continue;
-
-                        cd->pixel_width = header_widths[cell->cell_type];
+                        cd->pixel_width = gnc_header_widths_get_width
+                                (widths, cell->cell_name);
                 }
 }
 

@@ -33,6 +33,8 @@
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -42,6 +44,13 @@
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_REGISTER;
+
+gboolean
+gnc_cell_name_equal (const char * cell_name_1,
+                     const char * cell_name_2)
+{
+  return (safe_strcmp (cell_name_1, cell_name_2) == 0);
+}
 
 BasicCell *
 gnc_basic_cell_new (void)
@@ -70,7 +79,8 @@ BasicCellHelpValue(BasicCell *cell)
 static void
 gnc_basic_cell_clear (BasicCell *cell)
 {
-  cell->cell_type = -1;
+  g_free (cell->cell_name);
+  cell->cell_name = NULL;
 
   cell->changed = FALSE;
   cell->conditionally_changed = FALSE;
@@ -138,10 +148,23 @@ gnc_basic_cell_destroy (BasicCell *cell)
 }
 
 void
-gnc_basic_cell_set_name (BasicCell *cell, int cell_type)
+gnc_basic_cell_set_name (BasicCell *cell, const char *name)
 {
   if (!cell) return;
-  cell->cell_type = cell_type;
+  if (cell->cell_name == name) return;
+
+  g_free (cell->cell_name);
+  cell->cell_name = g_strdup (name);
+}
+
+gboolean
+gnc_basic_cell_has_name (BasicCell *cell, const char *name)
+{
+  if (!cell) return FALSE;
+  if (!name) return FALSE;
+  if (!cell->cell_name) return FALSE;
+
+  return (strcmp (name, cell->cell_name) == 0);
 }
 
 void

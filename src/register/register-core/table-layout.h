@@ -44,11 +44,12 @@ void gnc_table_layout_destroy (TableLayout *layout);
 
 void gnc_table_layout_add_cell (TableLayout *layout, BasicCell *cell);
 
-BasicCell * gnc_table_layout_get_cell (TableLayout *layout, int cell_type);
+BasicCell * gnc_table_layout_get_cell (TableLayout *layout,
+                                       const char *cell_name);
 const char * gnc_table_layout_get_cell_value (TableLayout *layout,
-                                              int cell_type);
+                                              const char *cell_name);
 gboolean gnc_table_layout_get_cell_changed (TableLayout *layout,
-                                            int cell_type,
+                                            const char *cell_name,
                                             gboolean include_conditional);
 
 GList * gnc_table_layout_get_cells (TableLayout *layout);
@@ -60,6 +61,14 @@ CellBlock * gnc_table_layout_get_cursor (TableLayout *layout,
                                          const char *cursor_name);
 
 GList * gnc_table_layout_get_cursors (TableLayout *layout);
+
+void gnc_table_layout_set_primary_cursor (TableLayout *layout,
+                                          CellBlock *cursor);
+
+void gnc_table_layout_set_cell (TableLayout *layout,
+                                CellBlock *cursor,
+                                const char *cell_name,
+                                int row, int col);
 
 CursorBuffer * gnc_cursor_buffer_new (void);
 void gnc_cursor_buffer_destroy (CursorBuffer *buffer);

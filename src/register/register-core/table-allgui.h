@@ -159,10 +159,10 @@ void        gnc_table_save_current_cursor (Table *table, CursorBuffer *buffer);
 void        gnc_table_restore_current_cursor (Table *table,
                                               CursorBuffer *buffer);
 
-int         gnc_table_get_current_cell_type (Table *table);
+const char * gnc_table_get_current_cell_name (Table *table);
 
 gboolean    gnc_table_get_current_cell_location (Table *table,
-                                                 int cell_type,
+                                                 const char *cell_name,
                                                  VirtualLocation *virt_loc);
 
 
@@ -203,11 +203,11 @@ char *         gnc_table_get_help (Table *table);
 
 BasicCell *    gnc_table_get_cell (Table *table, VirtualLocation virt_loc);
 
-int            gnc_table_get_cell_type (Table *table,
+const char *   gnc_table_get_cell_name (Table *table,
                                         VirtualLocation virt_loc);
 
 gboolean       gnc_table_get_cell_location (Table *table,
-                                            int cell_type,
+                                            const char * cell_name,
                                             VirtualCellLocation vcell_loc,
                                             VirtualLocation *virt_loc);
 

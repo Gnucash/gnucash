@@ -119,13 +119,24 @@ void gnucash_style_config_register_borders (gboolean use_vertical_lines,
 void gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                                 PhysicalCellBorders *borders);
 
-void gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths);
-void gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths);
+typedef GHashTable *GNCHeaderWidths;
+
+GNCHeaderWidths gnc_header_widths_new (void);
+void gnc_header_widths_destroy (GNCHeaderWidths widths);
+void gnc_header_widths_set_width (GNCHeaderWidths widths,
+                                  const char *cell_name,
+                                  int width);
+int gnc_header_widths_get_width (GNCHeaderWidths widths,
+                                 const char *cell_name);
+
+void gnucash_sheet_get_header_widths (GnucashSheet *sheet,
+                                      GNCHeaderWidths widths);
+void gnucash_sheet_set_header_widths (GnucashSheet *sheet,
+                                      GNCHeaderWidths widths);
 
 
 extern GdkFont *gnucash_register_font;
 extern GdkFont *gnucash_register_hint_font;
-
 
 #endif
 

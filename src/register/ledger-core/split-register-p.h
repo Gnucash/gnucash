@@ -137,7 +137,8 @@ CellBlock * sr_get_active_cursor (SplitRegister *reg);
 
 void sr_set_last_num (SplitRegister *reg, const char *num);
 
-Account * gnc_split_register_get_account (SplitRegister *reg, int cell_type);
+Account * gnc_split_register_get_account (SplitRegister *reg,
+                                          const char *cell_name);
 
 gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
 

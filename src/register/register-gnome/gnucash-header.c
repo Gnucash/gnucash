@@ -145,7 +145,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                 w = cd->pixel_width;
 
                         cell = gnc_cellblock_get_cell (cb, i, j);
-                        if (!cell || cell->cell_type < 0)
+                        if (!cell || !cell->cell_name)
                         {
                                 xpaint += w;
                                 continue;

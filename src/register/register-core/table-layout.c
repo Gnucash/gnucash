@@ -36,12 +36,14 @@ struct table_layout_struct
 {
   GList *cells;   /* The cells in the table */
   GList *cursors; /* The cursors in the table */
+
+  CellBlock *primary_cursor;
 };
 
 typedef struct _CellBuffer CellBuffer;
 struct _CellBuffer
 {
-  int cell_type;
+  char * cell_name;
   char * value;
   guint32 changed;
   guint32 conditionally_changed;
@@ -105,7 +107,7 @@ gnc_table_layout_add_cell (TableLayout *layout,
   {
     BasicCell *list_cell = node->data;
 
-    if (list_cell->cell_type == cell->cell_type)
+    if (gnc_basic_cell_has_name (list_cell, cell->cell_name))
     {
       if (list_cell == cell)
         return;
@@ -122,7 +124,7 @@ gnc_table_layout_add_cell (TableLayout *layout,
 }
 
 BasicCell *
-gnc_table_layout_get_cell (TableLayout *layout, int cell_type)
+gnc_table_layout_get_cell (TableLayout *layout, const char *cell_name)
 {
   GList *node;
 
@@ -132,7 +134,7 @@ gnc_table_layout_get_cell (TableLayout *layout, int cell_type)
   {
     BasicCell *list_cell = node->data;
 
-    if (list_cell->cell_type == cell_type)
+    if (gnc_basic_cell_has_name (list_cell, cell_name))
       return list_cell;
   }
 
@@ -140,13 +142,13 @@ gnc_table_layout_get_cell (TableLayout *layout, int cell_type)
 }
 
 const char *
-gnc_table_layout_get_cell_value (TableLayout *layout, int cell_type)
+gnc_table_layout_get_cell_value (TableLayout *layout, const char * cell_name)
 {
   BasicCell *cell;
 
   g_return_val_if_fail (layout != NULL, NULL);
 
-  cell = gnc_table_layout_get_cell (layout, cell_type);
+  cell = gnc_table_layout_get_cell (layout, cell_name);
   if (!cell) return NULL;
 
   return gnc_basic_cell_get_value (cell);
@@ -154,14 +156,14 @@ gnc_table_layout_get_cell_value (TableLayout *layout, int cell_type)
 
 gboolean
 gnc_table_layout_get_cell_changed (TableLayout *layout,
-                                   int cell_type,
+                                   const char *cell_name,
                                    gboolean include_conditional)
 {
   BasicCell *cell;
 
   g_return_val_if_fail (layout != NULL, FALSE);
 
-  cell = gnc_table_layout_get_cell (layout, cell_type);
+  cell = gnc_table_layout_get_cell (layout, cell_name);
   if (!cell) return FALSE;
 
   if (!include_conditional)
@@ -236,6 +238,50 @@ gnc_table_layout_get_cursors (TableLayout *layout)
   return layout->cursors;
 }
 
+void
+gnc_table_layout_set_primary_cursor (TableLayout *layout,
+                                     CellBlock *cursor)
+{
+  g_return_if_fail (layout != NULL);
+  layout->primary_cursor = cursor;
+}
+
+void
+gnc_table_layout_set_cell (TableLayout *layout,
+                           CellBlock *cursor,
+                           const char *cell_name,
+                           int row, int col)
+{
+  CellBlock *header;
+  BasicCell *cell;
+
+  g_return_if_fail (layout != NULL);
+  g_return_if_fail (layout->primary_cursor != NULL);
+  g_return_if_fail (cursor != NULL);
+  g_return_if_fail (cell_name != NULL);
+  g_return_if_fail (row >= 0);
+  g_return_if_fail (col >= 0);
+  g_return_if_fail (row < cursor->num_rows);
+  g_return_if_fail (col < cursor->num_cols);
+
+  header = gnc_table_layout_get_cursor (layout, CURSOR_HEADER);
+  cell = gnc_table_layout_get_cell (layout, cell_name);
+
+  g_return_if_fail (header != NULL);
+  g_return_if_fail (cell != NULL);
+
+  cursor->start_col = MIN (cursor->start_col, col);
+  cursor->stop_col  = MAX (cursor->stop_col,  col);
+
+  header->start_col = MIN (header->start_col, col);
+  header->stop_col  = MAX (header->stop_col,  col);
+
+  gnc_cellblock_set_cell (cursor, row, col, cell);
+
+  if (cursor == layout->primary_cursor)
+    gnc_cellblock_set_cell (header, row, col, cell);
+}
+
 CursorBuffer *
 gnc_cursor_buffer_new (void)
 {
@@ -251,6 +297,9 @@ destroy_cell_buffer (CellBuffer *cb)
 {
   if (cb == NULL)
     return;
+
+  g_free (cb->cell_name);
+  cb->cell_name = NULL;
 
   g_free (cb->value);
   cb->value = NULL;
@@ -296,6 +345,7 @@ save_cell (BasicCell *bcell)
 
   cb = g_new0 (CellBuffer, 1);
 
+  cb->cell_name = g_strdup (bcell->cell_name);
   cb->value = g_strdup (bcell->value);
   cb->changed = bcell->changed;
   cb->conditionally_changed = bcell->conditionally_changed;
@@ -325,7 +375,6 @@ gnc_table_layout_save_cursor (TableLayout *layout,
       continue;
 
     cb = save_cell (list_cell);
-    cb->cell_type = list_cell->cell_type;
 
     buffer->cell_buffers = g_list_prepend (buffer->cell_buffers, cb);
   }
@@ -377,7 +426,7 @@ gnc_table_layout_restore_cursor (TableLayout *layout,
     CellBuffer *cb = node->data;
     BasicCell *cell;
 
-    cell = gnc_table_layout_get_cell (layout, cb->cell_type);
+    cell = gnc_table_layout_get_cell (layout, cb->cell_name);
 
     restore_cell (cell, cb, cursor);
   }

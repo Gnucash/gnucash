@@ -78,7 +78,7 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
                 BasicCell *cell;
 
                 cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
-                if (cell && cell->cell_type >= 0)
+                if (cell && cell->cell_name)
                         break;
         }
 
@@ -95,7 +95,7 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
                 BasicCell *cell;
 
                 cell = gnc_cellblock_get_cell (vcell->cellblock, 0, col);
-                if (cell && cell->cell_type >= 0)
+                if (cell && cell->cell_name)
                         break;
         }
 

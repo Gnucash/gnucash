@@ -41,8 +41,8 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
-#ifndef XACC_SPLITREG_H
-#define XACC_SPLITREG_H
+#ifndef SPLITREG_H
+#define SPLITREG_H
 
 #include "Account.h" /* FIXME No Engine headers!!! */
 
@@ -73,33 +73,29 @@ typedef enum
   NUM_REGISTER_TYPES
 } SplitRegisterType;
 
-/* These values are used to identify the cells in the register. */
-/* Keep these in sync with the cell_names array in splitreg.c.  */
-typedef enum
-{
-  NO_CELL    = -1,
-  DATE_CELL  =  0,
-  NUM_CELL,
-  DESC_CELL,
-  RECN_CELL,
-  BALN_CELL,
-  ACTN_CELL,
-  XFRM_CELL,
-  MEMO_CELL,
-  CRED_CELL,
-  DEBT_CELL,
-  PRIC_CELL,
-  SHRS_CELL,
-  MXFRM_CELL,     /* MXFRM is the "mirrored" transfer-from account */
-  TCRED_CELL,     /* T* cells are transaction summary cells */
-  TDEBT_CELL,
-  TSHRS_CELL,
-  TBALN_CELL,
-  NOTES_CELL,
-  FCRED_CELL, // formula credit, used by the template ledger
-  FDEBT_CELL, // formula debit, used by the template ledger
-  CELL_TYPE_COUNT,
-} CellType;
+/* Cell Names */
+#define DATE_CELL  "date"
+#define NUM_CELL   "num"
+#define DESC_CELL  "description"
+#define RECN_CELL  "reconcile"
+#define BALN_CELL  "balance"
+#define ACTN_CELL  "action"
+#define XFRM_CELL  "account"
+#define MEMO_CELL  "memo"
+#define DEBT_CELL  "debit"
+#define CRED_CELL  "credit"
+#define PRIC_CELL  "price"
+#define SHRS_CELL  "shares"
+#define MXFRM_CELL "transfer"
+
+/* T* cells are transaction summary cells */
+#define TDEBT_CELL "trans-debit"
+#define TCRED_CELL "trans-credit"
+#define TSHRS_CELL "trans-shares"
+#define TBALN_CELL "trans-balance"
+#define NOTES_CELL "notes"
+#define FDEBT_CELL "debit formula"
+#define FCRED_CELL "credit-formula"
 
 /*
  * enumerated display styles 
@@ -199,10 +195,4 @@ CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
 
 CursorClass     xaccCursorNameToClass (const char *cursor_name);
 
-const char * xaccSplitRegisterGetCellTypeName (CellType type);
-CellType     xaccSplitRegisterGetCellTypeFromName (const char *name);
-
-
-#endif /* XACC_SPLITREG_H */
-
-/* ============ END OF FILE ===================== */
+#endif

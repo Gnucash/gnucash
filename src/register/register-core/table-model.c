@@ -29,11 +29,11 @@
 #include "table-model.h"
 
 
-#define DEFAULT_HANDLER (-1)
+#define DEFAULT_HANDLER ""
 
 typedef struct
 {
-  int cell_type;
+  char *cell_name;
   gpointer handler;
 } HandlerNode;
 
@@ -41,13 +41,16 @@ typedef struct
 static GHashTable *
 gnc_table_model_handler_hash_new (void)
 {
-  return g_hash_table_new (g_int_hash, g_int_equal);
+  return g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 static void
 hash_destroy_helper (gpointer key, gpointer value, gpointer user_data)
 {
   HandlerNode *node = value;
+
+  g_free (node->cell_name);
+  node->cell_name = NULL;
 
   g_free (node);
 }
@@ -62,50 +65,57 @@ gnc_table_model_handler_hash_destroy (GHashTable *hash)
 }
 
 static void
-gnc_table_model_handler_hash_remove (GHashTable *hash, int cell_type)
+gnc_table_model_handler_hash_remove (GHashTable *hash, const char *cell_name)
 {
   HandlerNode *node;
 
   if (!hash) return;
 
-  node = g_hash_table_lookup (hash, &cell_type);
+  node = g_hash_table_lookup (hash, cell_name);
   if (!node) return;
+
+  g_free (node->cell_name);
+  node->cell_name = NULL;
 
   g_free (node);
 }
 
 static void
-gnc_table_model_handler_hash_insert (GHashTable *hash, int cell_type,
+gnc_table_model_handler_hash_insert (GHashTable *hash,
+                                     const char *cell_name,
                                      gpointer handler)
 {
   HandlerNode *node;
 
   g_return_if_fail (hash != NULL);
-  g_return_if_fail ((cell_type >= 0) || (cell_type == DEFAULT_HANDLER));
+  g_return_if_fail (cell_name != NULL);
 
-  gnc_table_model_handler_hash_remove (hash, cell_type);
+  gnc_table_model_handler_hash_remove (hash, cell_name);
   if (!handler) return;
 
   node = g_new0 (HandlerNode, 1);
 
-  node->cell_type = cell_type;
+  node->cell_name = g_strdup (cell_name);
   node->handler = handler;
 
-  g_hash_table_insert (hash, &node->cell_type, node);
+  g_hash_table_insert (hash, node->cell_name, node);
 }
 
 static gpointer
-gnc_table_model_handler_hash_lookup (GHashTable *hash, int cell_type)
+gnc_table_model_handler_hash_lookup (GHashTable *hash, const char *cell_name)
 {
   HandlerNode *node;
 
   if (!hash) return NULL;
 
-  node = g_hash_table_lookup (hash, &cell_type);
-  if (node) return node->handler;
+  if (cell_name)
+  {
+    node = g_hash_table_lookup (hash, cell_name);
+    if (node) return node->handler;
+  }
 
-  cell_type = DEFAULT_HANDLER;
-  node = g_hash_table_lookup (hash, &cell_type);
+  cell_name = DEFAULT_HANDLER;
+  node = g_hash_table_lookup (hash, cell_name);
   if (node) return node->handler;
 
   return NULL;
@@ -163,13 +173,13 @@ gnc_table_model_destroy (TableModel *model)
 void
 gnc_table_model_set_entry_handler (TableModel *model,
                                    TableGetEntryHandler entry_handler,
-                                   int cell_type)
+                                   const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->entry_handlers,
-                                       cell_type,
+                                       cell_name,
                                        entry_handler);
 }
 
@@ -185,24 +195,24 @@ gnc_table_model_set_default_entry_handler
 }
 
 TableGetEntryHandler
-gnc_table_model_get_entry_handler (TableModel *model, int cell_type)
+gnc_table_model_get_entry_handler (TableModel *model, const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->entry_handlers,
-                                              cell_type);
+                                              cell_name);
 }
 
 void
 gnc_table_model_set_label_handler (TableModel *model,
                                    TableGetLabelHandler label_handler,
-                                   int cell_type)
+                                   const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->label_handlers,
-                                       cell_type,
+                                       cell_name,
                                        label_handler);
 }
 
@@ -218,25 +228,25 @@ gnc_table_model_set_default_label_handler
 }
 
 TableGetLabelHandler
-gnc_table_model_get_label_handler (TableModel *model, int cell_type)
+gnc_table_model_get_label_handler (TableModel *model, const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->label_handlers,
-                                              cell_type);
+                                              cell_name);
 }
 
 void
 gnc_table_model_set_io_flags_handler
                                   (TableModel *model,
                                    TableGetCellIOFlagsHandler io_flags_handler,
-                                   int cell_type)
+                                   const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->io_flags_handlers,
-                                       cell_type,
+                                       cell_name,
                                        io_flags_handler);
 }
 
@@ -254,25 +264,25 @@ gnc_table_model_set_default_io_flags_handler
 
 TableGetCellIOFlagsHandler
 gnc_table_model_get_io_flags_handler (TableModel *model,
-                                      int cell_type)
+                                      const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->io_flags_handlers,
-                                              cell_type);
+                                              cell_name);
 }
 
 void
 gnc_table_model_set_fg_color_handler
                                   (TableModel *model,
                                    TableGetFGColorHandler fg_color_handler,
-                                   int cell_type)
+                                   const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->fg_color_handlers,
-                                       cell_type,
+                                       cell_name,
                                        fg_color_handler);
 }
 
@@ -290,25 +300,25 @@ gnc_table_model_set_default_fg_color_handler
 
 TableGetFGColorHandler
 gnc_table_model_get_fg_color_handler (TableModel *model,
-                                      int cell_type)
+                                      const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->fg_color_handlers,
-                                              cell_type);
+                                              cell_name);
 }
 
 void
 gnc_table_model_set_bg_color_handler
                                   (TableModel *model,
                                    TableGetBGColorHandler bg_color_handler,
-                                   int cell_type)
+                                   const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->bg_color_handlers,
-                                       cell_type,
+                                       cell_name,
                                        bg_color_handler);
 }
 
@@ -326,25 +336,25 @@ gnc_table_model_set_default_bg_color_handler
 
 TableGetBGColorHandler
 gnc_table_model_get_bg_color_handler (TableModel *model,
-                                      int cell_type)
+                                      const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->bg_color_handlers,
-                                              cell_type);
+                                              cell_name);
 }
 
 void
 gnc_table_model_set_cell_border_handler
                                 (TableModel *model,
                                  TableGetCellBorderHandler cell_border_handler,
-                                 int cell_type)
+                                 const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->cell_border_handlers,
-                                       cell_type,
+                                       cell_name,
                                        cell_border_handler);
 }
 
@@ -362,25 +372,25 @@ gnc_table_model_set_default_cell_border_handler
 
 TableGetCellBorderHandler
 gnc_table_model_get_cell_border_handler (TableModel *model,
-                                      int cell_type)
+                                      const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->cell_border_handlers,
-                                              cell_type);
+                                              cell_name);
 }
 
 void
 gnc_table_model_set_confirm_handler
                                 (TableModel *model,
                                  TableConfirmHandler confirm_handler,
-                                 int cell_type)
+                                 const char * cell_name)
 {
   g_return_if_fail (model != NULL);
-  g_return_if_fail (cell_type >= 0);
+  g_return_if_fail (cell_name != NULL);
 
   gnc_table_model_handler_hash_insert (model->confirm_handlers,
-                                       cell_type,
+                                       cell_name,
                                        confirm_handler);
 }
 
@@ -398,10 +408,10 @@ gnc_table_model_set_default_confirm_handler
 
 TableConfirmHandler
 gnc_table_model_get_confirm_handler (TableModel *model,
-                                      int cell_type)
+                                      const char * cell_name)
 {
   g_return_val_if_fail (model != NULL, NULL);
 
   return gnc_table_model_handler_hash_lookup (model->confirm_handlers,
-                                              cell_type);
+                                              cell_name);
 }

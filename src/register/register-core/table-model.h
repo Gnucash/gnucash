@@ -118,78 +118,78 @@ void         gnc_table_model_destroy (TableModel *model);
 void gnc_table_model_set_entry_handler
                                      (TableModel *model,
                                       TableGetEntryHandler entry_handler,
-                                      int cell_type);
+                                      const char * cell_name);
 void gnc_table_model_set_default_entry_handler
                                      (TableModel *model,
                                       TableGetEntryHandler entry_handler);
 TableGetEntryHandler gnc_table_model_get_entry_handler
                                      (TableModel *model,
-                                      int cell_type);
+                                      const char * cell_name);
 
 void gnc_table_model_set_label_handler
                                      (TableModel *model,
                                       TableGetLabelHandler label_handler,
-                                      int cell_type);
+                                      const char * cell_name);
 void gnc_table_model_set_default_label_handler
                                      (TableModel *model,
                                       TableGetLabelHandler label_handler);
 TableGetLabelHandler gnc_table_model_get_label_handler
                                      (TableModel *model,
-                                      int cell_type);
+                                      const char * cell_name);
 
 void gnc_table_model_set_io_flags_handler
                                  (TableModel *model,
                                   TableGetCellIOFlagsHandler io_flags_handler,
-                                  int cell_type);
+                                  const char * cell_name);
 void gnc_table_model_set_default_io_flags_handler
                                  (TableModel *model,
                                   TableGetCellIOFlagsHandler io_flags_handler);
 TableGetCellIOFlagsHandler gnc_table_model_get_io_flags_handler
                                  (TableModel *model,
-                                  int cell_type);
+                                  const char * cell_name);
 
 void gnc_table_model_set_fg_color_handler
                                  (TableModel *model,
                                   TableGetFGColorHandler io_flags_handler,
-                                  int cell_type);
+                                  const char * cell_name);
 void gnc_table_model_set_default_fg_color_handler
                                  (TableModel *model,
                                   TableGetFGColorHandler io_flags_handler);
 TableGetFGColorHandler gnc_table_model_get_fg_color_handler
                                  (TableModel *model,
-                                  int cell_type);
+                                  const char * cell_name);
 
 void gnc_table_model_set_bg_color_handler
                                  (TableModel *model,
                                   TableGetBGColorHandler io_flags_handler,
-                                  int cell_type);
+                                  const char * cell_name);
 void gnc_table_model_set_default_bg_color_handler
                                  (TableModel *model,
                                   TableGetBGColorHandler io_flags_handler);
 TableGetBGColorHandler gnc_table_model_get_bg_color_handler
                                  (TableModel *model,
-                                  int cell_type);
+                                  const char * cell_name);
 
 void gnc_table_model_set_cell_border_handler
                                  (TableModel *model,
                                   TableGetCellBorderHandler io_flags_handler,
-                                  int cell_type);
+                                  const char * cell_name);
 void gnc_table_model_set_default_cell_border_handler
                                  (TableModel *model,
                                   TableGetCellBorderHandler io_flags_handler);
 TableGetCellBorderHandler gnc_table_model_get_cell_border_handler
                                  (TableModel *model,
-                                  int cell_type);
+                                  const char * cell_name);
 
 void gnc_table_model_set_confirm_handler
                                  (TableModel *model,
                                   TableConfirmHandler io_flags_handler,
-                                  int cell_type);
+                                  const char * cell_name);
 void gnc_table_model_set_default_confirm_handler
                                  (TableModel *model,
                                   TableConfirmHandler io_flags_handler);
 TableConfirmHandler gnc_table_model_get_confirm_handler
                                  (TableModel *model,
-                                  int cell_type);
+                                  const char * cell_name);
 
 #endif

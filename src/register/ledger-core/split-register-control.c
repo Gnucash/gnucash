@@ -542,7 +542,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   Transaction *blank_trans = xaccSplitGetParent (blank_split);
   VirtualLocation new_virt_loc;
   CursorClass cursor_class;
-  CellType cell_type;
+  const char *cell_name;
   Transaction *trans;
   gnc_numeric amount;
   BasicCell *cell;
@@ -552,13 +552,13 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   if (dir != GNC_TABLE_TRAVERSE_RIGHT)
     return FALSE;
 
-  split = xaccSRGetCurrentSplit(reg);
-  trans = xaccSRGetCurrentTrans(reg);
+  split = xaccSRGetCurrentSplit (reg);
+  trans = xaccSRGetCurrentTrans (reg);
   if (trans == NULL)
     return FALSE;
 
   cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
-  cell_type = gnc_table_get_current_cell_type (reg->table);
+  cell_name = gnc_table_get_current_cell_name (reg->table);
 
   switch (cursor_class)
   {
@@ -576,7 +576,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* and leaving the description cell */
-        if (cell_type != DESC_CELL)
+        if (!gnc_cell_name_equal (cell_name, DESC_CELL))
           return FALSE;
 
         /* nothing but the date, num, and description should be changed */
@@ -681,9 +681,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         /* now move to the non-empty amount column */
         amount = xaccSplitGetAmount (blank_split);
-        cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
+        cell_name = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
-        if (gnc_table_get_current_cell_location (reg->table, cell_type,
+        if (gnc_table_get_current_cell_location (reg->table, cell_name,
                                                  &new_virt_loc))
           *p_new_virt_loc = new_virt_loc;
       }
@@ -702,7 +702,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* and leaving the memo cell */
-        if (cell_type != MEMO_CELL)
+        if (!gnc_cell_name_equal (cell_name, MEMO_CELL))
           return FALSE;
 
         /* nothing but the action, memo, and amounts should be changed */
@@ -797,9 +797,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         /* now move to the non-empty amount column */
         amount = xaccSplitGetAmount (auto_split);
-        cell_type = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
+        cell_name = (gnc_numeric_negative_p (amount)) ? CRED_CELL : DEBT_CELL;
 
-        if (gnc_table_get_current_cell_location (reg->table, cell_type,
+        if (gnc_table_get_current_cell_location (reg->table, cell_name,
                                                  &new_virt_loc))
           *p_new_virt_loc = new_virt_loc;
       }
@@ -860,37 +860,33 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   /* See if we are leaving an account field */
   do
   {
-    CellType cell_type;
+    const char *cell_name;
     ComboCell *cell;
     Account *account;
     char *name;
 
-    cell_type = gnc_table_get_current_cell_type (reg->table);
+    cell_name = gnc_table_get_current_cell_name (reg->table);
 
-    if (!(cell_type == XFRM_CELL ||
-          cell_type == MXFRM_CELL))
+    if (!gnc_cell_name_equal (cell_name, XFRM_CELL) &&
+        !gnc_cell_name_equal (cell_name, MXFRM_CELL))
       break;
 
     cell = NULL;
 
-    switch (cell_type)
+    if (gnc_cell_name_equal (cell_name, XFRM_CELL))
     {
-      case XFRM_CELL:
-        if (gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               XFRM_CELL, FALSE))
-          cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                          XFRM_CELL);
-        break;
+      if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                             XFRM_CELL, FALSE))
+        cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                        XFRM_CELL);
+    }
 
-      case MXFRM_CELL:
-        if (gnc_table_layout_get_cell_changed (reg->table->layout,
-                                               MXFRM_CELL, FALSE))
-          cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                          MXFRM_CELL);
-        break;
-
-      default:
-        break;
+    if (gnc_cell_name_equal (cell_name, MXFRM_CELL))
+    {
+      if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                             MXFRM_CELL, FALSE))
+        cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                        MXFRM_CELL);
     }
 
     if (!cell)

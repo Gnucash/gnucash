@@ -191,7 +191,7 @@ typedef enum
 
 struct _BasicCell
 {
-  int cell_type;
+  char * cell_name;
 
   char * value;                  /* current value */
   char * blank_help;             /* help when value is blank */
@@ -232,11 +232,15 @@ struct _BasicCell
 };
 
 
+gboolean     gnc_cell_name_equal (const char * cell_name_1,
+                                  const char * cell_name_2);
+
 BasicCell *  gnc_basic_cell_new (void);
 void         gnc_basic_cell_init (BasicCell *bcell);
 void         gnc_basic_cell_destroy (BasicCell *bcell);
 
-void         gnc_basic_cell_set_name (BasicCell *cell, int cell_type);
+void         gnc_basic_cell_set_name (BasicCell *cell, const char *name);
+gboolean     gnc_basic_cell_has_name (BasicCell *cell, const char *name);
 
 void         gnc_basic_cell_set_sample_text (BasicCell *cell,
                                              const char *sample_text);

@@ -371,9 +371,9 @@ gnc_split_register_get_shares_fg_color (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   const guint32 black = 0x000000;
   const guint32 red   = 0xff0000;
+  const char * cell_name;
   gboolean is_current;
   gnc_numeric shares;
-  CellType cell_type;
   Split *split;
 
   if (!use_red_for_negative)
@@ -383,12 +383,12 @@ gnc_split_register_get_shares_fg_color (VirtualLocation virt_loc,
   if (!split)
     return black;
 
-  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
+  cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
   is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
                                     virt_loc.vcell_loc);
 
-  if (cell_type == TSHRS_CELL)
+  if (gnc_cell_name_equal (cell_name, TSHRS_CELL))
     shares = get_trans_total_amount (reg, xaccSplitGetParent (split));
   else if (is_current)
     shares = gnc_price_cell_get_value
@@ -410,8 +410,8 @@ gnc_split_register_get_balance_fg_color (VirtualLocation virt_loc,
   SplitRegister *reg = user_data;
   const guint32 black = 0x000000;
   const guint32 red   = 0xff0000;
+  const char * cell_name;
   gnc_numeric balance;
-  CellType cell_type;
   Split *split;
 
   if (!use_red_for_negative)
@@ -421,9 +421,9 @@ gnc_split_register_get_balance_fg_color (VirtualLocation virt_loc,
   if (!split)
     return black;
 
-  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
+  cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
-  if (cell_type == BALN_CELL)
+  if (gnc_cell_name_equal (cell_name, BALN_CELL))
     balance = xaccSplitGetBalance (split);
   else
     balance = get_trans_total_balance (reg, xaccSplitGetParent (split));
@@ -737,7 +737,8 @@ gnc_split_register_get_balance_entry (VirtualLocation virt_loc,
   if (split == xaccSplitLookup (&info->blank_split_guid))
     return NULL;
 
-  is_trans = gnc_table_get_cell_type (reg->table, virt_loc) == TBALN_CELL;
+  is_trans = gnc_cell_name_equal
+    (gnc_table_get_cell_name (reg->table, virt_loc), TBALN_CELL);
 
   if (is_trans)
     balance = get_trans_total_balance (reg, xaccSplitGetParent (split));
@@ -887,24 +888,26 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
                                        gpointer user_data)
 {
   SplitRegister *reg = user_data;
+  const char * cell_name;
   gnc_numeric total;
-  int cell_type;
   Split *split;
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
   if (!split)
     return NULL;
 
-  cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
+  cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
   total = get_trans_total_amount (reg, xaccSplitGetParent (split));
   if (gnc_numeric_zero_p (total))
     return NULL;
 
-  if (gnc_numeric_negative_p (total) && (cell_type == TDEBT_CELL))
+  if (gnc_numeric_negative_p (total) &&
+      gnc_cell_name_equal (cell_name, TDEBT_CELL))
     return NULL;
 
-  if (gnc_numeric_positive_p (total) && (cell_type == TCRED_CELL))
+  if (gnc_numeric_positive_p (total) &&
+      gnc_cell_name_equal (cell_name, TCRED_CELL))
     return NULL;
 
   total = gnc_numeric_abs (total);
@@ -922,7 +925,8 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   gboolean is_debit;
   Split *split;
 
-  is_debit = gnc_table_get_cell_type (reg->table, virt_loc) == DEBT_CELL;
+  is_debit = gnc_cell_name_equal
+    (gnc_table_get_cell_name (reg->table, virt_loc), DEBT_CELL);
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
 
@@ -1173,7 +1177,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
   if (kvpf)
   {
     gnc_numeric amount;
-    int cell_type;
+    const char * cell_name;
     char *str;
 
     str = kvp_value_get_string (kvp_frame_get_slot (kvpf,
@@ -1184,12 +1188,14 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     if (gnc_numeric_zero_p (amount))
       return "";
 
-    cell_type = gnc_table_get_cell_type (reg->table, virt_loc);
+    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
-    if (gnc_numeric_negative_p (amount) && (cell_type == DEBT_CELL))
+    if (gnc_numeric_negative_p (amount) &&
+        gnc_cell_name_equal (cell_name, DEBT_CELL))
       return "";
 
-    if (gnc_numeric_positive_p (amount) && (cell_type == CRED_CELL))
+    if (gnc_numeric_positive_p (amount) &&
+        gnc_cell_name_equal (cell_name, CRED_CELL))
       return "";
 
     amount = gnc_numeric_abs (amount);

@@ -56,9 +56,8 @@ void
 gnc_table_save_state (Table *table)
 {
         GnucashSheet *sheet;
-        int header_widths[CELL_TYPE_COUNT];
+        GNCHeaderWidths widths;
         SCM alist;
-        int i;
 
         if (!table)
                 return;
@@ -68,34 +67,41 @@ gnc_table_save_state (Table *table)
 
         sheet = GNUCASH_SHEET (table->ui_data);
 
-        for (i = 0; i < CELL_TYPE_COUNT; i++)
-                header_widths[i] = -1;
+        widths = gnc_header_widths_new ();
 
         if (!GTK_OBJECT_DESTROYED(GTK_OBJECT(sheet)))
-                gnucash_sheet_get_header_widths (sheet, header_widths);
+                gnucash_sheet_get_header_widths (sheet, widths);
 
         alist = SCM_EOL;
         if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
-                for (i = 0; i < CELL_TYPE_COUNT; i++)
+        {
+                GList *node = gnc_table_layout_get_cells (table->layout);
+
+                for (; node; node = node->next)
                 {
-                        const char *name;
+                        BasicCell *cell = node->data;
+                        int width;
                         SCM assoc;
 
-                        if (header_widths[i] <= 0)
+                        width = gnc_header_widths_get_width (widths,
+                                                             cell->cell_name);
+                        if (width <= 0)
                                 continue;
 
-                        if (i == DESC_CELL)
+                        if (gnc_basic_cell_has_name (cell, DESC_CELL))
                                 continue;
 
-                        name = xaccSplitRegisterGetCellTypeName (i);
-                        assoc = gh_cons (gh_str02scm(name),
-                                         gh_int2scm(header_widths[i]));
+                        assoc = gh_cons (gh_str02scm(cell->cell_name),
+                                         gh_int2scm(width));
 
                         alist = gh_cons (assoc, alist);
                 }
+        }
 
         if (!gh_null_p (alist))
                 gnc_set_option ("__gui", "reg_column_widths", alist);
+
+        gnc_header_widths_destroy (widths);
 }
 
 static void
@@ -135,12 +141,11 @@ table_destroy_cb (Table *table)
 void
 gnc_table_init_gui (gncUIWidget widget, void *data)
 {
-        int header_widths[CELL_TYPE_COUNT];
+        GNCHeaderWidths widths;
         GnucashSheet *sheet;
         GnucashRegister *greg;
         Table *table;
         SCM alist;
-        int i;
 
         g_return_if_fail (widget != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
@@ -158,8 +163,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         /* config the cell-block styles */
 
-        for (i = 0; i < CELL_TYPE_COUNT; i++)
-                header_widths[i] = -1;
+        widths = gnc_header_widths_new ();
 
         if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
                 alist = gnc_lookup_option ("__gui", "reg_column_widths",
@@ -170,32 +174,32 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         while (gh_list_p (alist) && !gh_null_p (alist))
         {
                 char *name;
-                CellType ctype;
                 SCM assoc;
 
                 assoc = gh_car (alist);
                 alist = gh_cdr (alist);
 
                 name = gh_scm2newstr(gh_car (assoc), NULL);
-                ctype = xaccSplitRegisterGetCellTypeFromName (name);
-                if (name)
-                        free(name);
-
-                if (ctype == NO_CELL)
+                if (!name)
                         continue;
 
-                header_widths[ctype] = gh_scm2int(gh_cdr (assoc));
+                gnc_header_widths_set_width (widths, name,
+                                             gh_scm2int(gh_cdr (assoc)));
+
+                free (name);
         }
 
         gnucash_sheet_create_styles (sheet);
 
-        gnucash_sheet_set_header_widths (sheet, header_widths);
+        gnucash_sheet_set_header_widths (sheet, widths);
 
         gnucash_sheet_compile_styles (sheet);
 
         gnucash_sheet_table_load (sheet, TRUE);
         gnucash_sheet_cursor_set_from_table (sheet, TRUE);
         gnucash_sheet_redraw_all (sheet);
+
+        gnc_header_widths_destroy (widths);
 }
 
 void        

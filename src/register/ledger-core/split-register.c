@@ -480,7 +480,7 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
 {
   VirtualLocation v_loc;
   CursorClass cursor_class;
-  CellType cell_type;
+  const char *cell_name;
   gnc_numeric value;
 
   if (!xaccSRGetSplitVirtLoc (reg, split, &v_loc.vcell_loc))
@@ -494,13 +494,13 @@ xaccSRGetSplitAmountVirtLoc (SplitRegister *reg, Split *split,
   {
     case CURSOR_CLASS_SPLIT:
     case CURSOR_CLASS_TRANS:
-      cell_type = (gnc_numeric_negative_p (value)) ? CRED_CELL : DEBT_CELL;
+      cell_name = (gnc_numeric_negative_p (value)) ? CRED_CELL : DEBT_CELL;
       break;
     default:
       return FALSE;
   }
 
-  if (!gnc_table_get_cell_location (reg->table, cell_type,
+  if (!gnc_table_get_cell_location (reg->table, cell_name,
                                     v_loc.vcell_loc, &v_loc))
     return FALSE;
 
@@ -1520,14 +1520,14 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 }
 
 Account *
-gnc_split_register_get_account (SplitRegister *reg, int cell_type)
+gnc_split_register_get_account (SplitRegister *reg, const char * cell_name)
 {
   const char *name;
 
-  if (!gnc_table_layout_get_cell_changed (reg->table->layout, cell_type, TRUE))
+  if (!gnc_table_layout_get_cell_changed (reg->table->layout, cell_name, TRUE))
     return NULL;
 
-  name = gnc_table_layout_get_cell_value (reg->table->layout, cell_type);
+  name = gnc_table_layout_get_cell_value (reg->table->layout, cell_name);
 
   return xaccGetAccountFromFullName (gncGetCurrentGroup (),
                                      name, gnc_get_account_separator ());
