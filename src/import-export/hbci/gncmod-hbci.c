@@ -7,8 +7,8 @@
 
 #include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -65,10 +65,10 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   }
 
   /* load the HBCI Scheme code */
-  gh_eval_str("(load-from-path \"hbci/hbci.scm\")");
+  scm_c_eval_string("(load-from-path \"hbci/hbci.scm\")");
 
-  gh_new_procedure("gnc:hbci-initial-setup", 
-		   scm_hbci_initial_druid, 0, 0, 0);
+  scm_c_define_gsubr("gnc:hbci-initial-setup", 
+		     0, 0, 0, scm_hbci_initial_druid);
 
   /* Add menu items with C callbacks */
   gnc_hbci_addmenus();
