@@ -747,7 +747,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * cap_gain = current_value - cost_basis 
     */
    value = gnc_numeric_mul (opening_value, split->amount,
-                   GNC_DENOM_AUTO, GNC_RND_NEVER);
+                   GNC_DENOM_AUTO, GNC_RND_NEVER|GNC_DENOM_REDUCE);
    value = gnc_numeric_div (value, opening_amount, 
                    gnc_numeric_denom(opening_value), GNC_DENOM_EXACT);
    value = gnc_numeric_sub (value, split->value,
