@@ -438,14 +438,14 @@ static QofObject gncOrderDesc =
 gboolean gncOrderRegister (void)
 {
   static QofParam params[] = {
-    { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID, NULL },
-    { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference, NULL },
-    { ORDER_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncOrderGetOwner, NULL },
-    { ORDER_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateOpened, NULL },
+    { ORDER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetID, (QofSetterFunc)gncOrderSetID },
+    { ORDER_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetReference, (QofSetterFunc)gncOrderSetReference },
+    { ORDER_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncOrderGetOwner, (QofSetterFunc)gncOrderSetOwner },
+    { ORDER_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateOpened, (QofSetterFunc)gncOrderSetDateOpened },
     { ORDER_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed, NULL },
-    { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, NULL },
-    { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, NULL },
-    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, NULL },
+    { ORDER_CLOSED, QOF_TYPE_DATE, (QofAccessFunc)gncOrderGetDateClosed, (QofSetterFunc)gncOrderSetDateClosed },
+    { ORDER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncOrderGetNotes, (QofSetterFunc)gncOrderSetNotes },
+    { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncOrderGetActive, (QofSetterFunc)gncOrderSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
