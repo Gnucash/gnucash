@@ -89,6 +89,7 @@ struct _invoice_window {
   GtkWidget *	blank_button;
   GtkWidget *	print_button;
   GtkWidget *	post_button;
+  GtkWidget *	unpost_button;
 
   /* Summary Bar Widgets */
   GtkWidget *	summarybar_dock;
@@ -154,6 +155,7 @@ void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_printCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data);
 
 void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data);
@@ -575,6 +577,28 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   /* ... and redisplay here. */
   gnc_invoice_update_window (iw);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
+}
+
+void
+gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice;
+  char * msg;
+  gboolean result;
+
+  invoice = iw_get_invoice (iw);
+  if (!invoice)
+    return;
+
+  /* make sure the user REALLY wants to do this! */
+  msg = _("Unposting this Invoice will delete the posted transaction.  "
+	  "Are you sure you want to unpost it?");
+  result = gnc_verify_dialog_parented (iw->dialog, FALSE, msg);
+
+  if (!result) return;
+
+  
 }
 
 void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data)
@@ -1327,6 +1351,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   GtkWidget *acct_entry;
   GncInvoice *invoice;
   gboolean is_posted = FALSE;
+  gboolean can_unpost = FALSE;
 
   invoice = iw_get_invoice (iw);
 
@@ -1439,6 +1464,12 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 
     /* Ok, it's definitely posted. Setup the 'posted-invoice' fields now */
     is_posted = TRUE;
+
+    /* Can we unpost this invoice?
+     * XXX: right now we always can, but there
+     * may be times in the future when we cannot.
+     */
+    //can_unpost = TRUE;
     
     ts = gncInvoiceGetDatePosted (invoice);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
@@ -1490,6 +1521,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   gtk_widget_set_sensitive (iw->blank_button, !is_posted);
   gtk_widget_set_sensitive (iw->print_button, is_posted);
   gtk_widget_set_sensitive (iw->post_button, !is_posted);
+  gtk_widget_set_sensitive (iw->unpost_button, can_unpost);
 
   /* Set the menubar widgets sensitivity */
   gtk_widget_set_sensitive (iw->menu_print, is_posted);
@@ -1645,6 +1677,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->blank_button = glade_xml_get_widget (xml, "blank_button");
   iw->print_button = glade_xml_get_widget (xml, "print_button");
   iw->post_button = glade_xml_get_widget (xml, "post_button");
+  iw->unpost_button = glade_xml_get_widget (xml, "unpost_button");
 
   /* grab the menu widgets */
   iw->menu_print = glade_xml_get_widget (xml, "menu_print");

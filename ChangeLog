@@ -4,6 +4,15 @@
 	  Implement a generic Account Mapper for the import routines.
 	  Still needs a GUI.
 
+	* business/business-gnome/dialog-invoice.c
+	  Add an unpost button.  It does nothing at this point.
+	* business/business-gnome/glade/invoice.glade
+	  Add an unpost button.
+	* business/business-core/gncInvoice.c
+	  change the readonly message to point to unposting invoices
+	  NOTE: This just adds the icon and some new strings..  Functionality
+	  to be added soon.
+	
 2002-11-12  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-control.c
