@@ -52,7 +52,12 @@ typedef enum {
   ERR_BACKEND_DATA_CORRUPT, /* data in db is corrupt */
   ERR_BACKEND_SERVER_ERR,   /* error in response from server */
   ERR_BACKEND_ALLOC,        /* internal memory allocation failure */
-  ERR_BACKEND_PERM,         /* user login successful, but no permissions to access */
+  ERR_BACKEND_PERM,         /* user login successful, but no permissions 
+                             * to access the desired object */
+  ERR_BACKEND_MODIFIED,     /* commit of object update failed because 
+                             * another user has modified the object */
+  ERR_BACKEND_MOD_DESTROY,  /* commit of object update failed because 
+                             * another user has deleted the object */
   ERR_BACKEND_MISC,         /* undetermined error */
 
   /* fileio errors */
