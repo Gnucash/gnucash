@@ -710,7 +710,7 @@ gnc_table_create_cursor (Table * table, CellBlock *curs)
 
   if (!curs || !table) return;  
   if (!table->ui_data) return;
-  
+
   for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
     for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
     {
@@ -780,6 +780,9 @@ gnc_table_virtual_loc_valid(Table *table,
 
   vcell = gnc_table_get_virtual_cell(table, virt_loc.vcell_loc);
   if (vcell == NULL)
+    return FALSE;
+
+  if (!vcell->visible)
     return FALSE;
 
   /* verify that offsets are valid. This may occur if the app that is
@@ -1081,23 +1084,13 @@ gnc_table_direct_update(Table *table,
 
 /* ==================================================== */
 
-gboolean
-gnc_table_find_close_valid_cell (Table *table, VirtualLocation *virt_loc,
-                                 gboolean exact_pointer)
-{
-  if (!gnc_table_find_valid_cell_vert (table, virt_loc))
-    return FALSE;
-
-  return gnc_table_find_valid_cell_horiz (table, virt_loc, exact_pointer);
-}
-
-/* ==================================================== */
-
-gboolean
-gnc_table_find_valid_cell_vert (Table *table, VirtualLocation *virt_loc)
+static gboolean
+gnc_table_find_valid_row_vert (Table *table, VirtualLocation *virt_loc)
 {
   VirtualLocation vloc;
-  VirtualCell *vcell;
+  VirtualCell *vcell = NULL;
+  int top;
+  int bottom;
 
   if (table == NULL)
     return FALSE;
@@ -1112,10 +1105,26 @@ gnc_table_find_valid_cell_vert (Table *table, VirtualLocation *virt_loc)
   if (vloc.vcell_loc.virt_row >= table->num_virt_rows)
     vloc.vcell_loc.virt_row = table->num_virt_rows - 1;
 
-  vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-  if (vcell == NULL)
-    return FALSE;
-  if (vcell->cellblock == NULL)
+  top  = vloc.vcell_loc.virt_row;
+  bottom = vloc.vcell_loc.virt_row + 1;
+
+  while (top >= 1 || bottom < table->num_virt_rows)
+  {
+    vloc.vcell_loc.virt_row = top;
+    vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+    if (vcell && vcell->cellblock && vcell->visible)
+      break;
+
+    vloc.vcell_loc.virt_row = bottom;
+    vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+    if (vcell && vcell->cellblock && vcell->visible)
+      break;
+
+    top--;
+    bottom++;
+  }
+
+  if (!vcell || !vcell->cellblock || !vcell->visible)
     return FALSE;
 
   if (vloc.phys_row_offset < 0)
@@ -1130,7 +1139,7 @@ gnc_table_find_valid_cell_vert (Table *table, VirtualLocation *virt_loc)
 
 /* ==================================================== */
 
-gboolean
+static gboolean
 gnc_table_find_valid_cell_horiz(Table *table,
                                 VirtualLocation *virt_loc,
                                 gboolean exact_cell)
@@ -1194,6 +1203,18 @@ gnc_table_find_valid_cell_horiz(Table *table,
 /* ==================================================== */
 
 gboolean
+gnc_table_find_close_valid_cell (Table *table, VirtualLocation *virt_loc,
+                                 gboolean exact_pointer)
+{
+  if (!gnc_table_find_valid_row_vert (table, virt_loc))
+    return FALSE;
+
+  return gnc_table_find_valid_cell_horiz (table, virt_loc, exact_pointer);
+}
+
+/* ==================================================== */
+
+gboolean
 gnc_table_move_tab (Table *table,
                     VirtualLocation *virt_loc,
                     gboolean move_right)
@@ -1207,7 +1228,7 @@ gnc_table_move_tab (Table *table,
   vloc = *virt_loc;
 
   vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-  if ((vcell == NULL) || (vcell->cellblock == NULL))
+  if ((vcell == NULL) || (vcell->cellblock == NULL) || !vcell->visible)
     return FALSE;
 
   while (1)
@@ -1240,7 +1261,7 @@ gnc_table_move_tab (Table *table,
     }
 
     vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-    if ((vcell == NULL) || (vcell->cellblock == NULL))
+    if ((vcell == NULL) || (vcell->cellblock == NULL) || !vcell->visible)
       return FALSE;
 
     cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
@@ -1285,7 +1306,7 @@ gnc_table_move_vertical_position (Table *table,
   {
     VirtualCell *vcell;
 
-    /* going down */
+    /* going up */
     if (phys_row_offset < 0)
     {
       phys_row_offset++;
@@ -1301,22 +1322,33 @@ gnc_table_move_vertical_position (Table *table,
       if (vloc.vcell_loc.virt_row == 1)
         break;
 
-      vloc.vcell_loc.virt_row--;
+      do
+      {
+        vloc.vcell_loc.virt_row--;
 
-      vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-      if ((vcell == NULL) || (vcell->cellblock == NULL))
-        return FALSE;
+        vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+        if ((vcell == NULL) || (vcell->cellblock == NULL))
+          return FALSE;
+      } while (!vcell->visible);
 
       vloc.phys_row_offset = vcell->cellblock->num_rows - 1;
     }
-    /* going up */
+    /* going down */
     else
     {
-      phys_row_offset--;
+      do
+      {
+        vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+        if ((vcell == NULL) || (vcell->cellblock == NULL))
+          return FALSE;
 
-      vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-      if ((vcell == NULL) || (vcell->cellblock == NULL))
-        return FALSE;
+        if (vcell->visible)
+          break;
+
+        vloc.vcell_loc.virt_row++;
+      } while (TRUE);
+
+      phys_row_offset--;
 
       /* room left in the current cursor */
       if (vloc.phys_row_offset < (vcell->cellblock->num_rows - 1))

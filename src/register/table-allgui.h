@@ -287,20 +287,12 @@ gboolean    gnc_table_verify_cursor_position (Table *table,
 gpointer    gnc_table_get_vcell_data (Table *table,
                                       VirtualCellLocation vcell_loc);
 
+/* Find a close valid cell. If exact_cell is true, cells that must
+ *   be explicitly selected by the user (as opposed to just tabbing
+ *   into), are considered valid cells. */
 gboolean    gnc_table_find_close_valid_cell (Table *table,
                                              VirtualLocation *virt_loc,
                                              gboolean exact_cell);
-
-gboolean    gnc_table_find_valid_cell_vert (Table *table,
-                                            VirtualLocation *virt_loc);
-
-/* Find the closest valid horizontal cell. If exact_cell is true,
- *   cells that must be explicitly selected by the user (as opposed
- *   to just tabbing into), are considered valid cells. */
-gboolean    gnc_table_find_valid_cell_horiz (Table *table,
-                                             VirtualLocation *virt_loc,
-                                             gboolean exact_cell);
-
 
 /* ==================================================== */
 /* UI-specific functions */

@@ -1265,8 +1265,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         x = xoffset + event->x;
         y = yoffset + event->y;
 
-	if (!gnucash_grid_find_cell_by_pixel(GNUCASH_GRID(sheet->grid),
-                                             x, y, &new_virt_loc))
+	if (!gnucash_grid_find_loc_by_pixel(GNUCASH_GRID(sheet->grid),
+                                            x, y, &new_virt_loc))
 		return TRUE;
 
         vcell = gnc_table_get_virtual_cell (table, new_virt_loc.vcell_loc);

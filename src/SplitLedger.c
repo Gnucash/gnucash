@@ -2066,7 +2066,7 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
    * When cancelling edits, reload the cursor from the transaction. */
   xaccSplitRegisterClearChangeFlag(reg);
 
-  if (gnc_table_find_valid_cell_horiz(reg->table, &virt_loc, FALSE))
+  if (gnc_table_find_close_valid_cell(reg->table, &virt_loc, FALSE))
     gnc_table_move_cursor_gui(reg->table, virt_loc);
 
   gnc_table_refresh_gui(reg->table);

@@ -67,14 +67,8 @@ GtkType    gnucash_grid_get_type (void);
 GtkWidget *gnucash_grid_new 	 (GnucashSheet *sheet);
 
 gboolean
-gnucash_grid_find_block_origin_by_pixel (GnucashGrid *grid,
-                                         gint x, gint y,
-                                         VirtualCellLocation *vcell_loc,
-                                         gint *o_x, gint *o_y);
-
-gboolean
-gnucash_grid_find_cell_by_pixel (GnucashGrid *grid, gint x, gint y,
-                                 VirtualLocation *vcell_loc);
+gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
+                                VirtualLocation *vcell_loc);
 
 
 #endif /* GNUCASH_GRID_H */
