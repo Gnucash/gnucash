@@ -34,7 +34,7 @@
 
 /* hack alert -- temp defs should include Transaction.h */
 #define NREC 'n'
-#define CREC 'y'
+#define CREC 'c'
 
 /* ================================================ */
 
