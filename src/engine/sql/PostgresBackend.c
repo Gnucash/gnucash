@@ -1264,7 +1264,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
  * The problem that this routine is trying to solve is the need to
  * to run a query *and* maintain consistent balance checkpoints
  * within the engine data. As a by-product, it can pull in a vast 
- * amount of sql data into the engine.  The steps of teh algorithm
+ * amount of sql data into the engine.  The steps of the algorithm
  * are:
  *
  * 1) convert the engine style query to an SQL query string.
@@ -1954,11 +1954,18 @@ pgend_trans_commit_edit (Backend * bend,
    
       if (rollback) {
          bufp = "ROLLBACK;";
-         SEND_QUERY (be,bufp,444);
+         SEND_QUERY (be,bufp,444);  /* hack alert hard coded literal */
          FINISH_QUERY(be->connection);
    
          PINFO ("old tranasction didn't match DB, edit rolled back)\n");
-         return 666;   /* hack alert */
+
+         /* What happens here:  We return to the engine with an 
+          * error code.  This causes the engine to call 
+          * xaccTransRollback(), with then invokes our backend rollback 
+          * routine.  Our rollback routine updates from the latest in 
+          * the sql database, and voila! we are good to go. 
+          */
+         return 666;   /* hack alert- hard coded literal */
       } 
    }
 
@@ -2002,6 +2009,32 @@ pgend_trans_commit_edit (Backend * bend,
    }
 
    LEAVE ("commited");
+   return 0;
+}
+
+/* ============================================================= */
+/* transaction rollback routine.  This routine can be invoked
+ * in one of two ways: if the user canceled an edited transaction 
+ * by hand, from the gui, or automatically, due to a multi-user
+ * edit conflict.  In this latter case, the commit_edit routine
+ * above failed, and returned to the engine.  Then the engine
+ * xaccTransRollback routine got invoked, which called us.
+ * What we do here is to copy the transaction out of the dataabse
+ * and into the engine.  This will bring the local engine up
+ * to sync from the changes that other users had made.
+ */
+
+static int
+pgend_trans_rollback_edit (Backend * bend, 
+                         Transaction * trans)
+{
+   PGBackend *be = (PGBackend *)bend;
+   GUID * trans_guid;
+
+   if (!be || !trans) return 0;
+
+   trans_guid = xaccTransGetGUID (trans);
+   pgendCopyTransactionToEngine (be, trans_guid);
    return 0;
 }
 
@@ -2923,7 +2956,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
     * postgres. (Porblem: we don't really know why there was a fatal
     * error, there may be many reasons.  This is the fundamental 
     * problem with this approach.)  If the connect failed, then we
-    * create teh database, and try again.
+    * create the database, and try again.
     */
    be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
@@ -3082,7 +3115,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.account_commit_edit = pgend_account_commit_edit;
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit = NULL;
+            be->be.trans_rollback_edit = NULL;  /* no-op for single user */
             be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = NULL;
@@ -3102,7 +3135,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.account_commit_edit = pgend_account_commit_edit;
             be->be.trans_begin_edit = NULL;
             be->be.trans_commit_edit = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit = NULL;
+            be->be.trans_rollback_edit = pgend_trans_rollback_edit;
             be->be.price_begin_edit = pgend_price_begin_edit;
             be->be.price_commit_edit = pgend_price_commit_edit;
             be->be.run_query = pgendRunQuery;

@@ -226,6 +226,12 @@ access).
    In some cases, we have PERR without setting a backend error...
    grep for all PERR's that don't set backend error.
 
+-- note that transaction commit errors may in fact be i/o errors.
+   If an i/o error occured during commit, there would be some
+   abberant rollback behaviour. Ouch.
+
+-- the transaction rollback code needs to be a gui popup...
+
 -- fix the annoying postgres:,,localhost,asdf file syntax: needs
    mods to gnc-book to keep it happy about lock files & such.
    (coord with rlb on gnc-book redesign)
@@ -266,11 +272,11 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- before going beta: turn down debugging.  Set min-checkpoint-count 
-   to 30 not 3.
+-- before going beta: turn down debugging.  
 
--- possible bug ??: if always in multi-mode, then initial checkpoints 
-   not set up ?? should crete checkpoints during account creation...
+-- if always in multi-mode, then initial checkpoints not set up.
+   They're not needed until there are a lot of transactions in the 
+   system.  Need to recompute checkpoints on some periodic basis.
 
 -- bug: if another user deletes a transaction, or an account, we
    need to look at the audit trail to see if the thing has been deleted.
@@ -290,16 +296,6 @@ multi-user mode is fundamentally broken unless they are fixed.
 -- implement account rollback (i.e. if other user has modified the
    account, we need to do something to merge their work into ours...)
    ditto for prices ...
-
--- transaction rollback is 'incorrect'; sort of ?? since we should
-   roll back to what's in the db, and not the old stored transaction ...
-   (Currently, the register uses xaccTransRollback() to implement
-   a single level of undo; it performs the 'undo' from what it has
-   cached, rather than from the contents in the DB.  This is OK,
-   as long as some other user hasn't modified the DB in the meanwhile.)
-   This may not be a problem, as practically speaking, its highly
-   unlikely that one user is modifying data while the other is undoing
-   the same transaction.
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,
