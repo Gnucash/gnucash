@@ -74,7 +74,7 @@ dcoresize(void)
 \********************************************************************/
 
 int 
-safestrcmp (char * da, char * db) {
+safe_strcmp (char * da, char * db) {
    SAFE_STRCMP (da, db);
    return 0;
 }
