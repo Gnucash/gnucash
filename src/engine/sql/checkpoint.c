@@ -278,7 +278,8 @@ pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
    p = be->buff; *p = 0;
    p = stpcpy (p, "BEGIN WORK;\n"
                   "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
-                  "LOCK TABLE gncEntry, gncTransaction IN SHARE MODE;\n"
+                  "LOCK TABLE gncTransaction IN SHARE MODE;\n"
+                  "LOCK TABLE gncEntry IN SHARE MODE;\n"
                   "UPDATE gncCheckpoint SET "
    "  balance            = (gncsubtotalbalance        (gncEntry.accountGuid, date_start, date_end )),"
    "  cleared_balance    = (gncsubtotalclearedbalance (gncEntry.accountGuid, date_start, date_end )),"
