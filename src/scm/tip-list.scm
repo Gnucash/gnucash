@@ -14,6 +14,8 @@
  ("When entering check numbers in the register, you can"
   "press '+' to enter the next number. You can use '+'"
   "and '-' to increment and decrement the number, respectively.")
+ ("You should back up your files regularly.  Just copy" 
+  "the GnuCash .xac file to a floppy or other backup device.")
  ("To transfer funds between accounts with different currencies,"
   "you need an intermediate currency trading account."
   "Please see the GnuCash online manual for details")
