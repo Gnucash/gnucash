@@ -1891,46 +1891,6 @@ xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
    trans->date_entered.tv_nsec = ts->tv_nsec;
 }
 
-#define THIRTY_TWO_YEARS 0x3c30fc00LL
-
-Timespec
-gnc_dmy2timespec(int day, int month, int year) {
-  Timespec result;
-  struct tm date;
-  long long secs = 0;
-  long long era = 0;
-  
-  year -= 1900;
-  
-  /* make a crude attempt to deal with dates outside the 
-   * range of Dec 1901 to Jan 2038. Note the we screw up 
-   * centenial leap years here ... so hack alert --
-   */
-  if ((2 > year) || (136 < year)) 
-  {
-    era = year / 32;
-    year %= 32;
-    if (0 > year) { year += 32; era -= 1; } 
-  }
-  
-  date.tm_year = year;
-  date.tm_mon = month - 1;
-  date.tm_mday = day;
-  date.tm_hour = 11;
-  date.tm_min = 0;
-  date.tm_sec = 0;
-  
-  /* compute number of seconds */
-  secs = mktime (&date);
-  
-  secs += era * THIRTY_TWO_YEARS;
-  
-  result.tv_sec = secs;
-  result.tv_nsec = 0;
-  
-  return(result);
-}
-
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year) 
 {

@@ -155,9 +155,6 @@ kvp_value   * xaccTransGetSlot(Transaction * trans, const char * key);
 void          xaccTransSetSlot(Transaction * trans, const char * key, 
                                const kvp_value * value);
 
-/* Convert a day, month, and year to a Timespec */
-Timespec      gnc_dmy2timespec(int day, int month, int year);
-
 /* The xaccTransSetDateSecs() method will modify the posted date 
  *    of the transaction.  (Footnote: this shouldn't matter to a user,
  *    but anyone modifying the engine should understand that when
@@ -322,8 +319,8 @@ void          xaccInitSplit   (Split *);    /* clears a split struct */
  * split structure. */
 
 kvp_value * xaccSplitGetSlot(Split * split, const char * key);
-void      xaccSplitSetSlot(Split * split, const char * key, 
-                           const kvp_value * value);
+void        xaccSplitSetSlot(Split * split, const char * key, 
+                             const kvp_value * value);
 
 /*
  * The xaccSplitGetGUID() subroutine will return the

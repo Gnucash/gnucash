@@ -131,4 +131,7 @@ time_t xaccScanDateS (const char *buff);
 
 void xaccValidateDate (struct tm *date);
 
+/* Convert a day, month, and year to a Timespec */
+Timespec gnc_dmy2timespec(int day, int month, int year);
+
 #endif /* __XACC_DATE_H__ */
