@@ -67,10 +67,66 @@ Scheme:
 Dave Peticolas <dave@krondo.com>
 August 22, 2000
 
---------------------------------------------------
+=====================================================================
+TIPS AND HINTS
+=====================================================================
 
-Starting GnuCash in GDB -- Oct 2002
+Starting Gnucash from the build tree:
+-------------------------------------
 
-% gnucash-env gdb /path/to/guile
-[gdb output]
-% gdb> run -e main -s /path/to/devel-gnucash/libexec/overrides/gnucash --g-fatal-warnings
+To run gnucash from your build tree:
+-- edit ./src/bin/overrides/gnucash and replace gnucash-env with
+   gnucash-build-env
+-- then start gnucash by saying ./src/bin/overrides/gnucash
+-- Make sure you undo this change before installing gnucash
+
+
+Getting Trace Messages From GnuCash:
+------------------------------------
+Note that piping stdout from gnucash to a file causes gnucash to crash.
+Don't know why, this is a bug that needs to be fixed.  Here's another
+way to get trace messages into a file:
+
+-- edit src/engine/gnc-trace.c, adjust values in the array
+   gnc_log_modules[] to what you want to have for a given module.
+-- edit gnc_log_init() to fopen() the log file where you want 
+   messages to go to.
+
+
+Starting GnuCash in GDB
+-----------------------
+To run gdb on an installed version of gnucash (installed in /usr/local/bin:)
+
+    % gnucash-env gdb /usr/bin/guile
+    [gdb output]
+    % gdb> run -e main -s /usr/local/libexec/gnucash/overrides/gnucash --g-fatal-warnings
+    
+To run gdb on the version in your build tree:
+
+    % ./src/bin/overrides/gnucash-build-env gdb /usr/bin/guile
+    [gdb output]
+    % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
+
+
+Using Electric Fence with GnuCash
+---------------------------------
+    % configure --enable-efence
+(except this doesn't actually enable efence :-( need to hack
+configure.in and add $LIBS = -lefence and re-run ./autogen.sh)
+
+Don't know why, efence does not currently work with gnucash:
+I get a bunch of errors:
+   warning: Cannot initialize thread debugging library: unknown thread_db error '22'
+
+If you know how to fix this, please update tehse instructions.
+
+
+Using Valgrind with GnuCash
+---------------------------
+-- run ./src/bin/overrides/gnucash-valgrind
+
+However, I did not find valgrind to be useful.  It reported a bunch of
+guile bugs, some g_has_table bugs, and then the program exited prematurely 
+for no appearenet reason. :-( 
+
+If you know how to fix this, please update tehse instructions.

@@ -1737,6 +1737,216 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2003-09-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-kvp.c: Fix broken compile due to
+	Linas' change of the kvp_frame_get_frame() arguments. By
+	Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.[hc]: Code
+	refactorization so that the mt940 importer can re-use the existing
+	import functions from the hbci module. By Jan-Pascal van Best
+	<j.p.vanbest@tbm.tudelft.nl>
+
+	* src/import-export/mt940/gncmod-mt940-import.[hc]: Import module
+	for SWIFT MT940 files added. By Jan-Pascal van Best
+	<j.p.vanbest@tbm.tudelft.nl>
+
+2003-09-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/postgres/test/run-tests.sh: small fix from
+	  hawkfan to get tests to work when building outside srcdir.
+	* src/backend/postgres/putil.c: fix a bug introduced by Matthew --
+	  ANSI C does not allow you to declare a variable in the middle
+	  of an expression.  Move the declaration to the top of the function.
+	* src/backend/postgres/functions.sql:
+	* src/backend/postgres/table-audit.sql:
+	  We don't need the trailing semi-colon because the #include adds
+	  one.  The double semi-colon causes build failures in some cases.
+
+2003-09-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/ofx/gnc-ofx-import.c:  use <libofx/libofx.h>
+	  instead of "libofx/libofx.h" as it's not part of our system.
+	  Fixes a dependency problem in 1.8.6 release.
+
+2003-09-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/file/gnc-*.c:
+	  Add a "slots" parameter to allow for future expansion.  Right
+	  now this is completely ignored (which will allow future releases
+	  to add a kvp-frame slots to any business function and allow that
+	  file to be read by older versions).  Right now the slot is ignored,
+	  but that's better than barfing on the data file.
+
+2003-09-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-transfer.c:  during the dialog startup it
+	  tries to build the transfer rate.  This crashes on Solaris because
+	  during startup one commodity is still NULL when it tries to print
+	  it.
+	Fixes bug #121677
+
+	* src/engine/engine-helpers.c:  turn off scheme garbage collection
+	  during query->scm and scm->query conversion.  It shaves about 50%
+	  off the test-scm-query-string tests.
+	* src/engine/test-core/test-engine-stuff.c:  add some code to help
+	  track down what the get_random_query() is doing.  Turned off by
+	  default.
+	* src/app-utils/test/test-scm-query-string.c: make the test
+	  deterministic by seeding the RNG with a known value.  There is a
+	  known "delay" at #245 with a seed of 1 on Linux systems.
+
+2003-09-04  Derek Atkins  <derek@ihtfp.com>
+
+	Apply Nigel Titley's patch to fix #103174:
+	* src/register/register-core/basiccell.c:
+	  - add some debugging messages
+	  - don't kill ourself if we're asked to set the value to our own value.
+
+	Description of the problem from Nigel:
+	
+	The problem is that the SX formula_cell stuff calls (via an
+	intermediate step) 
+
+	gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
+
+	with value pointing at cell->value. The overall effect of this as far
+	as gnc_basic_cell_set_value_internal is concerned is to trash the value
+	stored in cell->value *before* re-writing back to the same place (the
+	g_free() writes memory management stuff in the first few bytes of the
+	value). This is what trashes the debit/credit value in the SX register
+	entry.
+	
+2003-08-29  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c: Fix bug in computing cleared balance.  The
+	bug was introdiced 4/1.
+
+	* lots of scm files: Remove the RCS "Id:" tag.  Its a PITA when
+	syncing between branches.
+
+2003-08-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Aaarg. Fixed extremely
+	stupid bug in the import value setting workaround.
+
+2003-08-19  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.5 release
+
+2003-08-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Workaround for
+	multi-currency importing bug as discussed on gnucash-devel.
+
+2003-08-13  Matt Vanecek   <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c pgend_session_begin():
+      Moved the pgendUpdgradeDB() call outside of the SQL transaction,
+      because the upgrades performed each have their own separate
+      transaction.
+
+    * src/backend/postgres/newtables.h: A little bit of cleanup. Also
+      changed all the INSERTs to specify column names, to prevent
+      problems with column orders between old/new tables.
+
+    * src/backend/postgres/table-audit.sql: Moved bookGuid in
+      gncPriceTrail to be the second column.
+      
+    * src/backend/postgres/table-create.sql: Moved bookGuid in
+      gncPrice to be the second column.
+
+    * src/backend/postgres/upgrade.c: (re)Added transaction control
+      to each upgrade function.  Also, the following fixes came out
+      of regression testing:
+    - add_multiple_book_support():  Removed the "NOT NULL" from the 
+      ADD COLUMN statements, and placed them in an ALTER TABLE...SET
+      NULL construct.  The original is not supported in Postgresql
+      and fails to execute.
+    - Changed the stpcpy() to use g_strdup_printf() instead, for dynamic
+      query assembly.
+    - Made a few cosmetic changes to comparisons for readability.
+    
+2003-08-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-splash.[ch]:
+	* src/gnome-utils/gnc-splash.[ch]: Move this code to the
+	gnome-utils directory.
+
+2003-08-10  Derek Atkins  <derek@ihtfp.com>
+
+	* rpm/Makefile.am: add gnucash.spec to the DIST; clean during
+	  distclean.  Rebuild it whenever the .in, Makefile, or config.status
+	  changes.  Fixes #119446.
+
+	* src/backend/file/sixtp.c: Add code to read XML files with real
+	  namespace declarations.  (see bug #88078)
+
+	* src/*/Makefile.am: Make sure we define PWD, as not all shells
+	  define it properly.  Fixes #119114.
+
+	* src/gnome/reconcile-list.c: our parent is a gnc-query-list, not
+	  a clist.  Fix a bug so we properly call the parent destroy function.
+
+2003-08-08  Matt Vanecek  <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c: Changed all the
+      gncEntry references to gncSplit, and entryGuid to splitGuid.
+    - pgend_session_begin(): Changed the 2nd qof_backend_set_message()
+      message argument to the internationalization format.
+    - Changed the pgendUpgradeDB() call to come after a commit--the
+      upgrade process uses its own transaction handling (now).
+      
+    * src/backend/postgres/checkpoint.c:
+    * src/backend/postgres/gncquery.c:
+    * src/backend/postgres/gncquery.h:
+    * src/backend/postgres/txn.c:
+    * src/backend/postgres/txnmass.c:
+    * src/backend/postgres/events.c: Changed all the gncEntry
+      references to gncSplit, and entryGuid to splitGuid.
+      
+    * src/backend/postgres/functions.sql: Changed the TIMESTAMP args
+      to TIMESTAMP WITH TIME ZONE args, and gncEntry args to gncSplit.
+    
+    * src/backend/postgres/putil.c: Added the execQuery() function
+    - sendQuery(): Added internationalization to the
+      qof_backend_set_message() call.
+
+    * src/backend/postgres/putil.h: Added the execQuery() prototype.
+    
+    * src/backend/postgres/table-create.sql:
+    * src/backend/postgres/table-audit.sql: Changed all the TIMESTAMP
+      types to TIMESTAMP WITH TIME ZONE.  Change all the gncEntry refs
+      to gncSplit, and entryGuid to splitGuid.
+    - Grouped all the index creates at the end for readability and
+      maintenance ease.
+
+    * src/backend/postgres/table-version.sql: Added a new insert row for
+      the gncVersion table to reflect these changes.
+
+    * src/backend/postgres/table.m4: Change all the gncEntry refs to
+      gncSplit, and entryGuid to splitGuid.
+
+    * src/backend/postgres/upgrade.c: Added message.h and qofbackend.h
+      for error messaging support.
+    - In each update function, added a call the DB for BEGIN and COMMIT.
+    - Changed all the gncEntry and entryGuid to gncSplit and splitGuid.
+    - Added the add_timezone_support() function to perform the latest
+      upgrades.
+    - pgendUpgradeDB(): Add a call to add_timezone_support() if the minor
+      version is less than 5.
+    - Changed PGEND_CURRENT_MINOR_VERSION from 4 to 5
+
+    * src/backend/postgres/newtables.h: new file for upgrading db tables
+      to v1.5.0.
+
+    * src/engine/qofbackend.c -- qof_backend_set_message(): Allow the
+      function to accept an NULL argument for the message, and to set
+      the backend error message to NULL in such a case.
+
+	FIXES #90768
+
 2003-08-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/druid-loan.c: Apply patch to fix a number of
