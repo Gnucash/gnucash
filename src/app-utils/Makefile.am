@@ -18,6 +18,7 @@ libgncmod_app_utils_la_SOURCES = \
   gfec.c \
   global-options.c \
   gnc-component-manager.c \
+  gnc-err-popup.c \
   gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
@@ -33,6 +34,7 @@ gncinclude_HEADERS = \
   gfec.h \
   global-options.h \
   gnc-component-manager.h \
+  gnc-err-popup.h \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \

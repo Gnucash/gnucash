@@ -32,6 +32,7 @@
 #include "glib-helpers.h"
 #include "guile-util.h"
 #include "gnc-engine-util.h"
+#include "gnc-err-popup.h"
 #include "guile-mappings.h"
 
 #include <g-wrap-wct.h>
