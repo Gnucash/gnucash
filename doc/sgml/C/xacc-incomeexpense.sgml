@@ -125,13 +125,15 @@ section deals with the more basic recording of incomes and expenses.
     equals the total sum of the credits, $1,600.00.
 
     </PARA>
-<PARA>If, as with <EMPHASIS>GnuCash,</EMPHASIS> everything is forced onto one
-    column, so that <EMPHASIS>debits</EMPHASIS> are represented by positive
-    values, and <EMPHASIS>credits</EMPHASIS> are represented by negative values,
-    the income/expense accounts do a slightly non-intuitive thing
-    and you see incomes as <EMPHASIS>negative</EMPHASIS> values. That <EMPHASIS>    appears</EMPHASIS> contrary to intuition, but is nonetheless
-    necessary in order for the 
-    <LINK LINKEND="IDENTITY">double-entry bookkeeping identity to hold true.</LINK>
+<PARA>If, as with <EMPHASIS>GnuCash,</EMPHASIS> everything is forced
+onto one column, so that <EMPHASIS>debits</EMPHASIS> are represented
+by positive values, and <EMPHASIS>credits</EMPHASIS> are represented
+by negative values, the income/expense accounts do a slightly
+non-intuitive thing and you see incomes as
+<EMPHASIS>negative</EMPHASIS> values. That <EMPHASIS>
+appears</EMPHASIS> contrary to intuition, but is nonetheless necessary
+in order for the <LINK LINKEND="XACC-DOUBLEENTRYRULE">double-entry accounting
+rule to hold true.</LINK>
 
     </PARA>
 <PARA>Income and expense accounts are also special, in

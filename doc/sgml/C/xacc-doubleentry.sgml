@@ -1,218 +1,261 @@
-
 <ARTICLE ID="XACC-DOUBLEENTRY">
 <ARTHEADER>
-<TITLE>Understanding Double Entry Accounting</TITLE>
+<TITLE>Understanding Double-Entry Accounting</TITLE>
 </ARTHEADER>
+
+<SECT1 ID="XACC-DOUBLEDEF">
+<TITLE> What is Double-Entry Accounting?</TITLE>
+
+<PARA>
+You've probably heard the saying, "Money doesn't
+     grow on trees."  It means that money must come from
+     somewhere---it doesn't just "appear."  Double-entry accounting is
+     a method of record-keeping that lets you track just
+     <emphasis>where</emphasis> your money comes from and <emphasis>
+     where</emphasis> it goes. </para>
+
+<para> Using double-entry means that money is never gained nor lost---it
+     is always transferred from somewhere (a source account) to
+     somewhere else (a destination account).   In GnuCash, this
+     transfer is known as a <EMPHASIS>transaction</emphasis>, and each
+     transaction requires at least two accounts. </para>
+
+<para>     An <emphasis>account</emphasis> in GnuCash is a record for
+     keeping track of what you own, owe, spend or receive.   For
+     example,  if you pay a phone bill with a check, money transfers
+     from checking to the phone company.  In GnuCash, this is a
+     transaction transferring money from a checking account to a phone expense
+     account.  You probably already think of your checking account as
+     a  bank "account," but your expenses (such as phone bill) are
+     also "accounts" in GnuCash.  </para>
+
+ <para>This double-entry concept has been around since the 13th century,
+      and its purpose has always been to reduce the likelihood of 
+      data-entry errors.  Fortunately, GnuCash makes it a lot easier
+      to enter transactions than it was in those early days of
+      accounting!  
+    </PARA>
+
+<sidebar><title>Insider knowledge:</title>
+<para>
+    Calling this 
+   <EMPHASIS>double</EMPHASIS>-entry bookkeeping is a bit misleading; 
+    it would be somewhat more accurate to call it <EMPHASIS>multiple-
+    </EMPHASIS>entry bookkeeping, since a transaction can affect more
+    than two accounts. Unfortunately, there's 700 years of
+    history of use of the term, which sufficiently discourages
+    changing it. 
+</para>
+</sidebar>
+
+</SECT1>
+
 <SECT1>
-<TITLE>Why Use Double Entry Accounting?</TITLE>
+<TITLE>Why Use Double-Entry Accounting?</TITLE>
 <PARA>
     Double-entry accounting helps you avoid mistakes.  This is why
-    professional accountants use it.  If you are new to accounting, 
-    it will help you organize your records and keep you from creating an
-    unauditable mess.  If you are an experienced accountant, then you
-    probably won't want to imagine what life was like before it.
+    professional accountants use it.  A double-entry
+    system provides a good check-and-balance benefit, by making
+    it easier for you to trace the source of any entry errors. </para>
 
+<para>It also provides more useful and complete information to you than
+    you would get with just a single-entry "checkbook" approach.  Because each
+    transaction contains both a source and destination, double-entry
+    provides valuable details that can be sorted and viewed in report
+    form later.  Reports allow you to see things like how much money
+    you made for the year and where it all went, what your net worth
+    is, and what your taxes might be for the year.</para> 
+
+<para>GnuCash offers an advantage over traditional accounting packages
+    because it does a lot of the double-entry work for you while still
+    giving you the accuracy benefits of double-entry accounting. 
     </PARA>
+
+ 
 </SECT1>
-<SECT1 ID="XACC-DOUBLEDEF">
-<TITLE> What is Double Entry Accounting?</TITLE>
-<PARA>Double entry bookkeeping is an accounting methodology
-    introduced in the 13th century to to make sure that each
-    transaction and account is properly balanced.
-    It greatly reduces the likelihood of data-entry errors.
 
-    </PARA>
-<PARA>A double-entry transaction is a transaction that contains
-    entries for two (or more) accounts that balance against one
-    another. One account is <EMPHASIS>debited</EMPHASIS> by an amount 
-    equal to what the other is <EMPHASIS>credited.</EMPHASIS> By ensuring that
-    each transaction balances, a balanced set of accounts is
-    guaranteed. This doesn't totally prevent errors, but it does
-    eliminate the class of <EMPHASIS>"I forgot to enter
-    that part of the transaction"</EMPHASIS> errors.
-    In the course  of maintaining large, complex sets of accounts with many
-    transactions, it is very easy to make errors that may go undetected for
-    a long time, and be appallingly difficult to track down, even when
-    double-entry bookkeeping is used.
-
-    </PARA>
-</SECT1>
 
 <SECT1 ID="XACC-DOUBLEENTRYRULE">
 <TITLE> The Rule of Double-Entry Accounting</TITLE>
 
-<PARA>The intuitive way of understanding double-entry 
-    is as a transfer from one bank account to another,
-    where the amount taken out of one bank account must equal that
-    deposited in the other. This is effectively the "rule" of double entry
-    accounting; if you add something in to one account, you 
-    have to subtract it from somewhere else.
-    When this is done regularly and consistently, this results in the
-    identity of accounting:
-    <ANCHOR ID="IDENTITY">
-    <ENVAR>Total of Debits = Total of Credits.</ENVAR>
-    </PARA>
+<PARA>In a double-entry transaction, an equal amount of money is
+    always transferred from one account (or group of accounts) to
+    another account (or group of accounts).  Accountants use the terms
+    <emphasis>debit</emphasis> and <emphasis> credit</emphasis> to
+    describe whether money is being transferred <emphasis>
+    to</emphasis> or <emphasis> from</emphasis> an
+    account. </para>
 
-<PARA>There is another important aspect to double-entry that
-    should also be understood: to get the complete picture,
-    you must also track income and expense.  When you deposit
-    your paycheck into your bank account, that money didn't 
-    come 'from thin air'.   Thus, when you record that bank deposit,
-    you shouldn't fool your accounting system about that thin air.
-    You should record your income in an income account:  
-    the money that goes into your bank comes from your income 
-    account.  Once again, adding in one place subtracts from another.
-    By keeping track of your income and expenses, you can ultimately
-    keep track of your equity:  Simply put, after years of earning and
-    spending, what you have left is what you got in, minus the 
-    amount you spent.  
-    </PARA>
-
-<PARA>
-(At this point, the documentation should discuss in greater
-detail what happens when you spend money to buy a sofa
-(except for money lost to taxes and shipping fees, 
-your net worth doesn't change much), and what happens as that sofa
-wears out (depreciation).  Again, these are transfers of money between
-accounts.  What's left over is the equity.  Be sure to point out that
-using doubble-entry against income+expense accounts is the correct way
-to track the change over time.)
-    </PARA>
-
-<PARA>
-    This is discussed in more detail in the 
-    <LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense</LINK> 
-    chapter.
-
-    </PARA>
-<PARA><EMPHASIS>Insider knowledge:</EMPHASIS> 
-    GnuCash treats "Debits" as positive values, and "Credits" as
-    negative values, and so the identity of accounting
-    simplifies to 
-    <LITERAL>value<SUBSCRIPT>1</SUBSCRIPT> + 
-    value<SUBSCRIPT>2</SUBSCRIPT> + 
-    value<SUBSCRIPT>3</SUBSCRIPT> + ...
-    = 0</LITERAL>
-    Calling this 
-   <EMPHASIS>double</EMPHASIS>-entry bookkeeping is a bit misleading; 
-    it would be
-    somewhat more accurate to call it <EMPHASIS>multiple-</EMPHASIS>entry
-    bookkeeping. Unfortunately, there's 700 years of history of use
-    of the term, which sufficiently discourages changing it. (And you
-    thought parts of Unix were crufty and old!)
+<para> Money is recorded in the debit column, which is the left
+    column, when it is being transferred <emphasis>to</emphasis> an
+    account.  Money is recorded in the credit column, which is the
+    right column, when it is being transferred
+    <emphasis>from</emphasis> an account. For every transaction, the
+    total of debits (left column entries)
+    must equal the total of credits (right column entries).
 
     </PARA>
 
-<PARA><EMPHASIS>Insider knowledge:</EMPHASIS> 
-    Bank statements are frequently written up from the 
-    <EMPHASIS>bank's</EMPHASIS> perspective, which is 
-    exactly <EMPHASIS>opposite</EMPHASIS> to
-    yours. For example, when you make a deposit at the bank,
-    you are giving them money which they promise to pay you back
-    someday.  To the bank, your money is a debt: it is money that they
-    owe you.  Thus, when you receive a statement from them, 
-    you may find the columns to be oddly mislabelled:  your
-    deposits are marked as 'debits', and withdrawls as 'credits'.
-    This practice is particularly common at older and more staid 
-    banks.
-    </PARA>
+<para> You don't have to use the terms "debit" and "credit" to use
+    GnuCash, however.  GnuCash registers default to "common" column
+    headings such as "deposit" and "withdrawal"---if you are more
+    comfortable with those headings, use them.  If you prefer the
+    credit and debit headings, you can change the column headings to
+    "use accounting labels" from the menu item
+    <guimenuitem>Settings|Preferences...General</guimenuitem>.</para>
 
-</SECT1>
+    <para>The main concept to remember, regardless of terminology, is
+    that all transactions involve a transfer of some amount of money
+    from a source to a destination. For example, if you write a check
+    for $50 to buy groceries, you record that as a transfer of $50
+    from the checking account to the groceries expense account.  In
+    accounting terms, this is a credit to checking and a debit to
+    groceries expense:</para>
+     
+  <literallayout>
+      Debit Groceries   50
+      Credit Checking        50</literallayout>
 
-<SECT1 ID="XACC-DOUBLEUSE">
-<TITLE>Using Double Entry</TITLE>
+
+<PARA>What about your paycheck?  You can see that money goes into a bank
+      account, but where does it come from?  In double-entry, the
+      money has to have a source, and the source of your paycheck is
+      an income account.  So to enter the deposit of a $500 paycheck
+      in your checking account, you record a transfer of $500 from an
+      income account to a checking account.  In accounting terms, this
+      is a credit to income and a debit to the bank account:</para>
+      
+   <literallayout>
+      Debit Checking  500
+      Credit Income          500</literallayout>
+
+     
+
+      <sidebar><title>Insider knowledge:</title>
+      <para>
+        Bank statements are often written up from the bank's
+        perspective, which is exactly <emphasis>opposite</emphasis> to
+        yours.  When you deposit that paycheck in the bank, you are
+        giving the bank money which they promise to pay you back
+        someday.  So to the bank, your deposit is a loan; it is money
+        they owe you.  Since that money is a
+        <emphasis>source</emphasis> of funds to the bank, they show a
+        <emphasis>credit</emphasis> to your checking account when you
+        deposit money in it.</para>
+      </sidebar>
+  
+      
+      
+    </SECT1>
+    
+    <SECT1 ID="XACC-DOUBLEUSE">
+      <TITLE>Using Double-Entry in GnuCash</TITLE>
+      <para>Let's try an example that applies double-entry accounting to
+        using GnuCash.  We will record the deposit of a $500 paycheck. </para> 
+      
+      
+      <SECT2>
+        <title>Creating Accounts</title>
+        <para>
+          To enter a paycheck deposit, you first need to create two
+          accounts.  The first account is a checking account.  Click
+          the <guibutton>New</guibutton> button in the main window
+          toolbar to create a new account, then enter the following
+          account details in the dialog box that appears:
+
+<literallayout>
+ Account Name:   "Checking"      
+ Account Type:    Highlight "Bank"   
+ Parent Account:  Highlight "New top level account"
+</literallayout>
+  </para>
+        
+      <para> Click "OK" to complete setup, then create a second income
+        account.  Click the <guibutton>New</guibutton> button again, and enter these
+        details in the dialog box:
+
+<literallayout>
+ Account Name:   "Salary"      
+ Account Type:    Highlight "Income"      
+ Parent Account:  Highlight "New top level account"</literallayout></para>     
+
+<sidebar><title>Insider knowledge:</title>
+
+   <para>
+    GnuCash provides several different types of accounts, discussed in
+    the <LINK LINKEND="XACC-ACCTYPES">Account Types </LINK>
+    section. Debits increase your asset and expense accounts, while
+    credits increase your income, liability and equity accounts.
+    Income and expense accounts are also discussed in more detail in
+    the <LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense</LINK>
+    section.</para></sidebar>
+    
+</sect2>
 <SECT2>
 <TITLE>Creating Transactions</TITLE>
-<PARA>To create a double-entry transaction:
+<PARA>To create a double-entry transaction for the paycheck deposit:
 
-    <ITEMIZEDLIST>
+<orderedLIST>
 <LISTITEM>
-<PARA>  Click on a box in the column marked <SCREEN>Transfer From</SCREEN>
-        on the left-hand side of the register. 
-        A menu will drop down, listing all of the accounts from
-        which a transfer may be made.
+<PARA> Open the Checking account register you just created by double-clicking
+                on the account name in the main window.
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA> Select one. 
-       When you record the transaction, the double-entry will
-        automatically be made, and the transaction automatically
-        appear in all windows showing the transferred-from and the
-        transferred-to accounts.
+<PARA>Tab to the Description field and enter "Paycheck Deposit." 
       
     </PARA>
 </LISTITEM>
-</ITEMIZEDLIST>
-
+<LISTITEM>
+<PARA>Tab to the Transfer field and select the Salary account from the
+                pull-down menu. 
+      
     </PARA>
+</LISTITEM><LISTITEM>
+<PARA> Tab to the Deposit column and enter "500," then hit "Enter" to
+                record the transaction. Now your Checking account
+                shows a debit entry of 500. 
+    </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Highlight the transaction again and click the "Jump" toolbar
+                button to see the transaction's effect on the Salary
+                account.  Notice that in the Salary account, you now
+                have a matching credit entry of 500 that GnuCash entered
+                automatically for you. 
+    </PARA>
+</LISTITEM>
+
+</orderedLIST>
+    </PARA>
+
 </SECT2>
+
 <SECT2>
 <TITLE>Changing Transactions</TITLE>
-<PARA>To <EMPHASIS>change</EMPHASIS> a double-entry transaction,
-    simply edit the transaction in any window in which it
-    appears.  Any changes made will be automatically reflected in both
-    accounts and all windows displaying the transaction.
-
+ <PARA>
+        What if you want to edit this transaction to increase the
+        paycheck deposit to $600?  To <EMPHASIS>change</EMPHASIS> a
+        double-entry transaction, simply select the transaction in any
+        register in which it appears, then make your changes and
+        record the transaction.  In this case, you can either edit the
+        transaction from the Checking account register or the Salary
+        account register.  Any changes made will be automatically
+        reflected in both accounts and all windows displaying the
+        transaction.
     </PARA>
-<PARA>Similarly, when a double-entry transaction is deleted, the
-    "splits" will be deleted from both accounts, and balances will
-    automatically be recalculated for <EMPHASIS>both</EMPHASIS> accounts.
-
-    </PARA>
-<PARA>To change the transfer account, simply select a new account
-    from the pull-down menu. When you record the transaction, it
-    will automatically be selected from the old account, and
-    inserted into the new account.
-
-    </PARA>
-</SECT2>
-</SECT1>
-<SECT1 ID="XACC-SCRUBBING">
-<TITLE> Scrubbing Clean</TITLE>
-<PARA>GnuCash may be configured to be strict about double entry,
-    or you may configure it to be "loose."
-    In "loose" mode, you can create <EMPHASIS>unbalanced
-    transactions,</EMPHASIS> that is, transactions where the "splits"
-    don't balance to zero. That discards the validation that comes
-    from using the more strict double entry scheme, which is
-    probably not a really wise move. In effect:
-
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>If you aren't sure of what you're doing, you likely do
-      not want to discard the validation of <EMPHASIS>double entry,</EMPHASIS> as
-      this helps you keep your accounts balanced even when you're
-      not perfectly clear on this.
+      <PARA>
+        To change the transfer account, simply select a new account
+        from the pull-down menu. When you record the transaction, this
+        account change will be reflected in all affected accounts.
+        Similarly, when a double-entry transaction is deleted, entries
+        will be deleted from all affected accounts, and balances will
+        automatically be recalculated for those accounts.
 
       </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>If you are an <EMPHASIS>accounting whiz,</EMPHASIS> you'll know that
-      it's <EMPHASIS>really important</EMPHASIS> to keep things in balance, and
-      again will prefer <EMPHASIS>double entry.</EMPHASIS>
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
 
-    </PARA>
-<PARA>But if you decide to "outsmart the system," and have a
-    number of unbalanced transactions, you'll probably want to
-    clean this up at some point. To clean up these unbalanced
-    transactions, you <EMPHASIS>Scrub</EMPHASIS> the account clean by choosing
-    <GUIMENU>Scrub</GUIMENU> from the window menu.
-    The process will examine each transaction; if the
-    transaction doesn't balance, a split entry will be created and
-    placed into an account named <EMPHASIS>Unbalanced.</EMPHASIS> You may then
-    review these splits and move them to their proper accounts.
-
-    </PARA>
-<PARA><EMPHASIS>Warning: Functionality Changing...</EMPHASIS>
-   At present, control over whether GnuCash is "strict" or
-    "loose" is established at compile time, and defaults to 
-   <EMPHASIS>strict.</EMPHASIS>
-   In the future, there will be no option of "looseness."
+</SECT2>
 
 
-</PARA>
-</SECT1>
+</sect1>
 </ARTICLE>
