@@ -22,6 +22,7 @@
 
 /*
  * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2003 <linas@linas.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -50,6 +51,8 @@
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncBusiness.h"
+#include "gncJobP.h"
+#include "gncTaxTableP.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
 
@@ -146,6 +149,7 @@ static void gncVendorFree (GncVendor *vendor)
 GncVendor *
 gncCloneVendor (GncVendor *from, QofBook *book)
 {
+  GList *node;
   GncVendor *vendor;
 
   if (!book) return NULL;
@@ -159,6 +163,7 @@ gncCloneVendor (GncVendor *from, QofBook *book)
   vendor->notes = CACHE_INSERT (from->notes);
   vendor->addr = gncCloneAddress (from->addr, &vendor->inst.entity, book);
   vendor->taxincluded = from->taxincluded;
+  vendor->taxtable_override = from->taxtable_override;
   vendor->active = from->active;
 
   vendor->terms = gncBillTermObtainTwin (from->terms, book);
@@ -166,14 +171,16 @@ gncCloneVendor (GncVendor *from, QofBook *book)
 
   vendor->currency = gnc_commodity_obtain_twin (from->currency, book);
 
-#if 0
-XXX unfinished
-  vendor->jobs = NULL; xxx
+  vendor->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
+  gncTaxTableIncRef (vendor->taxtable);
 
-  GncTaxTable*    taxtable;
-  gboolean        taxtable_override;
-  GList *         jobs;
-#endif
+  vendor->jobs = NULL;
+  for (node=g_list_last(from->jobs); node; node=node->prev)
+  {
+    GncJob *job = node->data;
+    job = gncJobObtainTwin (job, book);
+    vendor->jobs = g_list_prepend(vendor->jobs, job);
+  }
 
   gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
 

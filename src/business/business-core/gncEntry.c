@@ -193,6 +193,7 @@ mark_entry (GncEntry *entry)
   gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* ================================================================ */
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (QofBook *book)
@@ -257,6 +258,30 @@ static void gncEntryFree (GncEntry *entry)
   g_free (entry);
 }
 
+GncEntry *
+gncCloneEntry (GncEntry *from, QofBook *book)
+{
+  /* XXX unfinished */
+  return NULL;
+}
+
+GncEntry *
+gncEntryObtainTwin (GncEntry *from, QofBook *book)
+{
+  GncEntry *entry;
+  if (!book) return NULL;
+
+  entry = (GncEntry *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!entry)
+  {
+    entry = gncCloneEntry (from, book);
+  }
+
+  return entry;
+}
+
+
+/* ================================================================ */
 /* Set Functions */
 
 void gncEntrySetDate (GncEntry *entry, Timespec date)
@@ -587,6 +612,7 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   gncEntryCommitEdit (dest);
 }
 
+/* ================================================================ */
 /* Get Functions */
 
 Timespec gncEntryGetDate (GncEntry *entry)
@@ -745,6 +771,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
+/* ================================================================ */
 /*
  * This is the logic of computing the total for an Entry, so you know
  * what values to put into various Splits or to display in the ledger.
@@ -1083,6 +1110,8 @@ gboolean gncEntryIsOpen (GncEntry *entry)
   if (!entry) return FALSE;
   return (entry->inst.editlevel > 0);
 }
+
+/* ================================================================ */
 
 void gncEntryBeginEdit (GncEntry *entry)
 {

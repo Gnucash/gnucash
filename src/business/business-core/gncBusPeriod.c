@@ -1,29 +1,17 @@
 
 XXX TODO:
--- instance should somehow reference the qoftype, so that
-   things like gnc_engine_generate_event wouldn't 
-   need three args ... 
-   (in fact, so that many things wouldn't need to pass type explicitly)
-
-   entity node already stores type, so entity_node should be merged
-   with instance (or be parent of instance ?!)
-
--- bus obj has per-type hash tables that are identical to the entity
-   per-type hash tables, should be merged together.
-
--- bus object foreach should be made into a for-each by type
-   (requires modes to book for each to be a type-foreach).
-   (this would also add a per-type edit/commmit-edit, clone, dirty,
-   etc. functions!) Yahoo!
-
--- billterm and taxtables are incompletely cloned, not sure 
-   what to do with refcount, ask warlord, need to explore.
-
--- onwers incomplete cloned, neeed to handle remaining 'owners'
+-- contemplate a per-colection (per type) edit/commmit-edit, 
+   clone, dirty, etc. functions some more ...
 
 -- turn clone into a generic object callback, so that 
    the ObtainTwin could be qof_instance_obtain_twin,
    a generic function. (right now its copied everywhere)
+
+-- contemplate copy-on-write, and the true need for cloning,
+   and how to avoid excess cloning for the SQL backend.
+
+-- billterm and taxtables are incompletely cloned, not sure 
+   what to do with refcount, ask warlord, need to explore.
 
 -- The following busines objects have an id/name/desc/active
    this could be abstracted into an common object.
@@ -34,15 +22,23 @@ XXX TODO:
 -- gnVendor should be a base class to gncCustomer (they're
    identical, but customer adds more stuff).
 
-   Enployee could be base class for vendor, its got some of the 
+   Employee could be base class for vendor, its got some of the 
    things (name, addr, active, currency)
 
 -- TaxTable and BillTerm have common parent/child code.
    this could be abstracted into common code.
 
 =======
--- finish onwer cclone
--- vendor, invoice, entry, order
+-- finish clone of invoice, entry,
+
+
+-- jobs in the vendor job list that are no longer active should 
+   be kept back in old book, removed from new book??
+   ditto jobs in the customer list ??
+
+-- closed orders can be removed from new book ?
+
+
 
 
 #include "gncBusiness.h"

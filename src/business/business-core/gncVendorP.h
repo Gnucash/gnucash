@@ -37,9 +37,6 @@ gint64 gncVendorNextID (QofBook *book);
 /** The gncCloneVendor() routine makes a copy of the indicated
  *  vendor, placing it in the indicated book.  It copies
  *  the name, notes, address, etc.
- *  It also copies (as needed) both parents and children, so that
- *  the parent-child relationship is correctly mirrored in the 
- *  clone.
  *  It then adds a pair of 'gemini' kvp pointers so that each copy
  *  can be found from the other.
  */

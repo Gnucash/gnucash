@@ -53,6 +53,7 @@
 #include "gncOrder.h"
 #include "gncOrderP.h"
 #include "gncOwner.h"
+#include "gncOwnerP.h"
 
 struct _gncOrder 
 {
@@ -96,6 +97,7 @@ mark_order (GncOrder *order)
   gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
 }
 
+/* =============================================================== */
 /* Create/Destroy Functions */
 
 GncOrder *gncOrderCreate (QofBook *book)
@@ -142,6 +144,58 @@ static void gncOrderFree (GncOrder *order)
   g_free (order);
 }
 
+GncOrder *
+gncCloneOrder (GncOrder *from, QofBook *book)
+{
+  GList *node;
+  GncOrder *order;
+
+  if (!book) return NULL;
+
+  order = g_new0 (GncOrder, 1);
+  qof_instance_init (&order->inst, _GNC_MOD_NAME, book);
+  qof_instance_gemini (&order->inst, &from->inst);
+
+  order->id = CACHE_INSERT (from->id);
+  order->notes = CACHE_INSERT (from->notes);
+  order->reference = CACHE_INSERT (from->reference);
+
+  order->active = from->active;
+  order->printname = NULL; /* yes, null, that's right */
+  order->opened = from->opened;
+  order->closed = from->closed;
+
+  order->owner = gncCloneOwner (&from->owner, book);
+
+  order->entries = NULL;
+  for (node = g_list_last(from->entries); node; node=node->prev)
+  {
+    GncEntry *entry = node->data;
+    entry = gncEntryObtainTwin (entry, book);
+    order->entries = g_list_prepend (order->entries, entry);
+  }
+
+  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
+
+  return order;
+}
+
+GncOrder *
+gncOrderObtainTwin (GncOrder *from, QofBook *book)
+{
+  GncOrder *order;
+  if (!book) return NULL;
+
+  order = (GncOrder *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!order)
+  {
+    order = gncCloneOrder (from, book);
+  }
+
+  return order;
+}
+
+/* =============================================================== */
 /* Set Functions */
 
 void gncOrderSetID (GncOrder *order, const char *id)
@@ -209,6 +263,7 @@ void gncOrderSetActive (GncOrder *order, gboolean active)
   gncOrderCommitEdit (order);
 }
 
+/* =============================================================== */
 /* Add an Entry to the Order */
 void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 {
@@ -296,6 +351,8 @@ gboolean gncOrderIsClosed (GncOrder *order)
   if (order->closed.tv_sec || order->closed.tv_nsec) return TRUE;
   return FALSE;
 }
+
+/* =============================================================== */
 
 void gncOrderBeginEdit (GncOrder *order)
 {
