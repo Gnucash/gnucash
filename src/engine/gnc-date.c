@@ -962,8 +962,8 @@ xaccDateUtilGetStampNow (void)
 /* hack alert -- this routine returns incorrect values for 
  * dates before 1970 */
 
-static Timespec
-gnc_iso8601_to_timespec(const char *str, int do_localtime)
+Timespec
+gnc_iso8601_to_timespec_gmt(const char *str)
 {
   char buf[4];
   Timespec ts;
@@ -987,7 +987,7 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   str = strchr (str, ':'); if (str) { str++; } else { return ts; }
   stm.tm_sec = atoi (str);
 
-  /* the decimal point, optionally present ... */
+  /* The decimal point, optionally present ... */
   /* hack alert -- this algo breaks if more than 9 decimal places present */
   if (strchr (str, '.')) 
   { 
@@ -999,7 +999,7 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   }
   stm.tm_isdst = -1;
 
-  /* timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
+  /* Timezone format can be +hh or +hhmm or +hh.mm (or -) (or not present) */
   str += strcspn (str, "+-");
   if (str)
   {
@@ -1024,8 +1024,12 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
     }
   }
 
-  /* adjust for the local timezone */
-  if (do_localtime)
+  /* Note that mktime returns 'local seconds' which is the true time
+   * minus the timezone offset.  We don't want to work with local 
+   * seconds, since they swim around acording to daylight savings, etc. 
+   * We want to work with universal time.  Thus, add an offset
+   * to undo the damage that mktime causes.
+   */
   {
     struct tm tmp_tm;
     struct tm *tm;
@@ -1054,23 +1058,10 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
     stm.tm_isdst = tmp_tm.tm_isdst;
   }
 
-  /* compute number of seconds */
   ts.tv_sec = mktime (&stm);
   ts.tv_nsec = nsec;
 
   return ts;
-}
-
-Timespec
-gnc_iso8601_to_timespec_local(const char *str)
-{
-   return gnc_iso8601_to_timespec(str, 1);
-}
-
-Timespec
-gnc_iso8601_to_timespec_gmt(const char *str)
-{
-   return gnc_iso8601_to_timespec(str, 0);
 }
 
 /********************************************************************\
@@ -1093,8 +1084,8 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
   if (0>tz_min) { tz_min +=60; tz_hour --; }
   if (60<=tz_min) { tz_min -=60; tz_hour ++; }
 
-  /* we also have to print the sign by hand, to work around a bug
-   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
+  /* We also have to print the sign by hand, to work around a bug
+   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad).
    */
   cyn = '-';
   if (0>tz_hour) { cyn = '+'; tz_hour = -tz_hour; }
@@ -1111,7 +1102,7 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
                  tz_hour,
                  tz_min);
 
-  /* return pointer to end of string */
+  /* Return pointer to end of string. */
   buff += len;
   return buff;
 }
