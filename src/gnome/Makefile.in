@@ -40,7 +40,7 @@ LDFLAGS  = @LDFLAGS@
 
 GUILELIBS = @GUILELIBS@
 LIBS     = -L$(prefix)/lib @LIBS@ @X_PRE_LIBS@ @X_LIBS@ \
-           $(shell @GNOME_CONFIG_BIN@ --libs gtk) @X_EXTRA_LIBS@ -lgnomeui \   
+           $(shell @GNOME_CONFIG_BIN@ --libs gtk) @X_EXTRA_LIBS@ -lgnomeui \
 	   $(shell @GNOME_CONFIG_BIN@ --libs gnome gnomeui ) \
 	   $(GUILELIBS) # -lintl
 
