@@ -6,7 +6,9 @@ libgncmod_generic_import_la_SOURCES = \
 	import-account-matcher.c \
 	import-commodity-matcher.c \
 	import-backend.c \
+	import-format-dialog.c \
 	import-match-picker.c \
+	import-parse.c \
 	import-utilities.c \
 	import-settings.c \
 	import-match-map.c \
@@ -15,7 +17,8 @@ libgncmod_generic_import_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  import-match-map.h
+  import-match-map.h \
+  import-parse.h
 
 noinst_HEADERS = \
   import-account-matcher.h \
@@ -68,16 +71,24 @@ EXTRA_DIST = \
   .cvsignore \
   generic-import-design.txt
 
-#noinst_DATA = .scm-links
+if GNUCASH_SEPARATE_BUILDDIR
+#For compiling
+SCM_FILE_LINKS = 
+#For executing test cases
+SCM_FILE_LINKS += generic-import.scm
+endif
 
-#.scm-links:
-#	rm -f g-wrapped gnucash import-export qif-import
-#	ln -sf . qif-import # to fix (load "qif-import/foo.scm")
-#	ln -sf . import-export
-#	ln -sf . gnucash
-#	ln -sf . g-wrapped
-#	touch .scm-links
-DISTCLEANFILES = gnucash g-wrapped .scm-links import-export
+noinst_DATA = .scm-links
+
+.scm-links:
+	rm -f g-wrapped gnucash generic-import import-export
+	ln -sf . import-export
+	ln -sf . gnucash
+	ln -sf . generic-import
+	ln -sf . g-wrapped
+	touch .scm-links
+
+DISTCLEANFILES = gnucash generic-import g-wrapped .scm-links import-export
 
 # FIXME remove this when qif-io-core is finished
 DIST_SUBDIRS = binary-import qif-import qif-io-core ofx test hbci log-replay

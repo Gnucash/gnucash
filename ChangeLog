@@ -1,3 +1,13 @@
+2003-07-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/import-parse.[ch]: routines to parse numbers
+	  and dates in a mostly-locale-agnostic way.
+	* src/import-export/import-format-dialog.c: a dialog to ask the user
+	  to choose a format, when parsing just isn't enough.
+	* src/import-export/generic-import.glade: add the format_match dialog
+	* src/import-export/test/test-import-parse.c: test the import-parse
+	  routines.
+
 2003-07-09  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: change (and comment out) checks for pthreads
