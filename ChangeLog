@@ -1,3 +1,7 @@
+2001-06-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-scheduledxaction.c: use C comments. fix warning
+
 2001-06-18  Dave Peticolas  <dave@krondo.com>
 
 	* src/test/test-stuff.[ch]: fix warning

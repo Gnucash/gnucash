@@ -56,7 +56,7 @@ static short module = MOD_SX;
 
 /** Datatypes ***********************************************************/
 
-// FIXME: this is stolen from window-register.c
+/* FIXME: this is stolen from window-register.c */
 typedef enum
 {
         DELETE_TRANS,
@@ -75,7 +75,7 @@ struct _SchedXactionDialog
         GtkWidget        *dialog;
         GladeXML        *gxml;
 
-        // other pertinant scheduled-transaction-editor info
+       /* other pertinant scheduled-transaction-editor info */
 };
 
 struct _SchedXactionEditorDialog
@@ -113,12 +113,12 @@ static void cancel_button_clicked( GtkButton *b, gpointer d );
 static void endgroup_rb_toggled( GtkButton *b, gpointer d );
 static void set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType t );
 
-// ledger standard-handlers
+/* ledger standard-handlers */
 static void sxe_ledger_destroy( xaccLedgerDisplay *ld );
 static gncUIWidget sxe_ledger_get_parent( xaccLedgerDisplay *ld );
 static void sxe_ledger_set_help( xaccLedgerDisplay *ld, const char *help_str );
 
-// ledger callbacks
+/* ledger callbacks */
 static void sxe_register_record_cb( GnucashRegister *reg, gpointer d );
 static void sxe_register_redraw_all_cb( GnucashRegister *reg, gpointer d );
 
@@ -149,7 +149,7 @@ sxed_close_handler ( gpointer user_data )
         SchedXactionEditorDialog        *sxed = user_data;
 
         DEBUG( "In sxed_close_handler\n" );
-        // FIXME: destroy, too... the ledger, especially.
+        /* FIXME: destroy, too... the ledger, especially. */
         xaccLedgerDisplayClose( sxed->ledger );
         free(sxed->sxGUIDstr);
         gnome_dialog_close( GNOME_DIALOG( sxed->dialog ) );
@@ -166,7 +166,7 @@ static
 void
 cancel_button_clicked( GtkButton *b, gpointer d )
 {
-        // FIXME.
+        /* FIXME. */
         gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_CM_CLASS, d );
 }
 
@@ -174,7 +174,7 @@ static
 void
 editor_close_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 {
-        // FIXME: destroy ledger.
+        /* FIXME: destroy ledger. */
         gnc_close_gui_component_by_data( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed );
 }
 
@@ -193,7 +193,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
 
         gdate = g_date_new();
 
-        // read out data back into SchedXaction object.
+        /* read out data back into SchedXaction object. */
         o = glade_xml_get_widget( sxed->gxml, "sxe_name" );
         xaccSchedXactionSetName( sxed->sx, gtk_entry_get_text( GTK_ENTRY(o) ) );
 
@@ -201,18 +201,18 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         o2 = glade_xml_get_widget( sxed->gxml, "rb_noend" );
         o3 = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
         if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(o)) ) {
-                // get the end date data
+                /* get the end date data */
                 o = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
                 g_date_set_time( gdate, gnome_date_edit_get_date( GNOME_DATE_EDIT(o) ) );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
-                // set the num occurances data
+                /* set the num occurances data */
                 xaccSchedXactionSetNumOccur( sxed->sx, -1 );
         } else if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(o3) ) ) {
-                // get the occurances data
+                /* get the occurances data */
                 o = glade_xml_get_widget( sxed->gxml, "end_nentry" );
                 xaccSchedXactionSetNumOccur( sxed->sx,
                                              (gint)gnome_number_entry_get_number( GNOME_NUMBER_ENTRY(o) ) );
-                // set the end date data
+                /* set the end date data */
                 g_date_clear( gdate, 1 );
                 xaccSchedXactionSetEndDate( sxed->sx, gdate );
         } else if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o2) ) ) {
@@ -222,21 +222,21 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
         } else {
                 PERR( "No valid end specified\n" );
         }
-        // manual conf
+        /* manual conf */
         o = glade_xml_get_widget( sxed->gxml, "manual_conf" );
         xaccSchedXactionSetManual( sxed->sx,
                                    gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) );
 
-        // get the frequency spec data
+        /* get the frequency spec data */
         fs = xaccSchedXactionGetFreqSpec( sxed->sx );
         gnc_frequency_save_state( sxed->gncfreq, fs, gdate );
 
-        // now that we have it, set the start date
+        /* now that we have it, set the start date */
         xaccSchedXactionSetStartDate( sxed->sx, gdate );
 
         g_date_free( gdate );
 
-        // get the new Split list.
+        /* get the new Split list. */
 #if 0
         {
                 GList        *splitList;
@@ -255,9 +255,9 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 }
                 xaccSchedXactionSetSplits( sxed->sx, splitList );
         }
-#endif // 0
+#endif /* 0 */
 
-        // add to list
+        /* add to list */
         putSchedXactionInClist( sxed->sx, sxed->sxd );
         if ( sxed->new ) {
                 book = gncGetCurrentBook();
@@ -267,7 +267,7 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 sxed->sx = NULL;
         }
 
-        // cleanup
+        /* cleanup */
         gnc_unregister_gui_component_by_data( DIALOG_SCHEDXACTION_CM_CLASS, sxed );
         sxed_close_handler( (gpointer)sxed );
 }
@@ -299,17 +299,19 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
                 return;
 
         gnc_unregister_gui_component_by_data (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
-        // FIXME: free the GNCFrequency widget
+        /* FIXME: free the GNCFrequency widget */
 
-        // FIXME: free the ledger
-        //gtk_widget_destroy( xaccLedgerDisplayGetUserData( sxed->ledger )->window );
-        //xaccLedgerDisplaySetUserData( ledger, NULL );
-        // FIXME: free the necessary widgets
+        /* FIXME: free the ledger */
+        /*
+          gtk_widget_destroy( xaccLedgerDisplayGetUserData( sxed->ledger )->window );
+          xaccLedgerDisplaySetUserData( ledger, NULL );
+        */
+        /* FIXME: free the necessary widgets */
 
         gtk_widget_destroy( sxed->dialog );
         sxed->sx = NULL;
 
-        //xaccAccountDestroy( sxed->tmpAcct );
+        /* xaccAccountDestroy( sxed->tmpAcct ); */
 
         g_free(sxed);
 }
@@ -323,14 +325,14 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         sxd = g_new0( SchedXactionDialog, 1 );
 
-        //sxd->dialog = create_Scheduled_Transaction_List();
+        /* sxd->dialog = create_Scheduled_Transaction_List(); */
         sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", "Scheduled Transaction List" );
         sxd->dialog = glade_xml_get_widget( sxd->gxml, "Scheduled Transaction List" );
         
         sxdo = GTK_OBJECT(sxd->dialog);
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
-                                    NULL, // no refresh handler
+                                    NULL, /* no refresh handler */
                                     sxd_close_handler, 
                                     sxd );
 
@@ -353,7 +355,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         button = glade_xml_get_widget( sxd->gxml, "cancel_button" );
         gtk_signal_connect( GTK_OBJECT(button), "clicked",
                             GTK_SIGNAL_FUNC(cancel_button_clicked), sxd );
-        // turn off the cancel button, for now, as we have no way to cancel.
+        /* turn off the cancel button, for now, as we have no way to cancel. */
         gtk_widget_set_sensitive( GTK_WIDGET(button), FALSE );
 
         schedXact_populate( sxd );
@@ -401,7 +403,7 @@ row_select_handler( GtkCList *clist,
                 sxed->new = 0;
                 break;
         default:
-                // noop
+                /* noop */
                 break;
         }
 }
@@ -437,7 +439,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         sxed = g_new0( SchedXactionEditorDialog, 1 );
 
-        //sxed->dialog = create_Scheduled_Transaction_Editor();
+        /* sxed->dialog = create_Scheduled_Transaction_Editor(); */
         sxed->gxml = gnc_glade_xml_new( "sched-xact.glade", "Scheduled Transaction Editor" );
         sxed->dialog = glade_xml_get_widget( sxed->gxml, "Scheduled Transaction Editor" );
         if ( sxed->dialog == NULL ) {
@@ -447,14 +449,15 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         sxed->sx = sx;
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
-                                    NULL, // no refresh handler
-                                    sxed_close_handler, // file-static close handler
+                                    NULL, /* no refresh handler */
+                                    sxed_close_handler, /* file-static
+                                                           close handler */
                                     sxed );
 
         gtk_signal_connect(GTK_OBJECT(sxed->dialog), "destroy",
                            GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
                            sxed);
-        // FIXME: want delete-event, too.
+        /* FIXME: want delete-event, too. */
 
         button = glade_xml_get_widget( sxed->gxml, "ok_button" );
         gtk_signal_connect( GTK_OBJECT(button), "clicked",
@@ -481,13 +484,13 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_signal_connect( GTK_OBJECT(button), "clicked",
                             GTK_SIGNAL_FUNC(sxed_reg_recordCB), sxed );
 
-        // create the frequency-selection macrowidget
+        /* create the frequency-selection macrowidget */
         schedXact_editor_create_freq_sel( sxed );
-        // create the template-transaction ledger window
+        /* create the template-transaction ledger window */
         schedXact_editor_create_ledger( sxed );
-        // initialize
+        /* initialize */
         schedXact_editor_init( sxed );
-        // populate
+        /* populate */
         schedXact_editor_populate( sxed );
 
         gtk_widget_show_all(sxed->dialog);
@@ -627,7 +630,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         xaccLedgerDisplaySetUserData( sxed->ledger, (gpointer)sxed );
 
         splitreg = xaccLedgerDisplayGetSR( sxed->ledger );
-        // FIXME: make configurable
+        /* FIXME: make configurable */
         gnucash_register_set_initial_rows( 6 );
 
         regWidget = gnucash_register_new( splitreg->table );
@@ -646,20 +649,20 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gtk_signal_connect( GTK_OBJECT(sxed->dialog), "redraw_all",
                             GTK_SIGNAL_FUNC(sxe_register_redraw_all_cb), sxed );
 
-#endif // 0
+#endif /* 0 */
 
         popup = schedXaction_editor_create_reg_popup( sxed );
         gnucash_register_attach_popup( sxed->reg, popup, sxed );
 
-        // configure...
-        // don't use double-line
+        /* configure... */
+        /* don't use double-line */
         xaccConfigSplitRegister(splitreg,
                                 splitreg->type, splitreg->style,
                                 FALSE );
-        // don't show present/future divider [by definition, not necessary]
+        /* don't show present/future divider [by definition, not necessary] */
         xaccSRShowPresentDivider( splitreg, FALSE );
 
-        // force a refresh
+        /* force a refresh */
         xaccLedgerDisplayRefresh( sxed->ledger );
 }
 
@@ -689,7 +692,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         if ( g_date_valid( gd ) ) {
                 o = glade_xml_get_widget( sxed->gxml, "rb_enddate" );
                 gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(o), TRUE );
-                // fill in date data.
+                /* fill in date data. */
                 o = glade_xml_get_widget( sxed->gxml, "sxe_end_date" );
                 tmpTm = g_new0( struct tm, 1 );
                 g_date_to_struct_tm( gd, tmpTm );
@@ -717,16 +720,16 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(o),
                                       xaccSchedXactionGetManual( sxed->sx ) );
 
-        // populate the ledger
+        /* populate the ledger */
         { 
-                // create the split list
+                /* create the split list */
                 GList        *splitList;
 
                 splitList = xaccSchedXactionGetSplits( sxed->sx );
                 if ( splitList != NULL ) {
                         splitReg = xaccLedgerDisplayGetSR( sxed->ledger );
                         xaccSRLoadRegister(splitReg, splitList, NULL );
-                } // otherwise, use the existing stuff.
+                } /* otherwise, use the existing stuff. */
         }
 }
 
@@ -779,8 +782,8 @@ edit_button_clicked( GtkButton *b, gpointer d )
 
         do {
                 row = (int)sel->data;
-                // get the clist row for this listitem
-                // get the object UD
+                /* get the clist row for this listitem */
+                /* get the object UD */
                 sx = (SchedXaction*)gtk_clist_get_row_data( cl, row );
                 sxed = gnc_ui_scheduled_xaction_editor_dialog_create( sxd, sx );
                 sxed->new = 0;
@@ -841,8 +844,8 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 book = gncGetCurrentBook();
                 sxList = gnc_book_get_schedxactions( book );
                 gtk_clist_freeze( cl );
-                // delete back-to-front so clist index numbers aren't
-                // invalidated
+                /* delete back-to-front so clist index numbers aren't
+                   invalidated */
                 sel = g_list_last( sel );
                 do {
                         sx = (SchedXaction*)gtk_clist_get_row_data( cl, (int)sel->data );
@@ -866,15 +869,15 @@ static
 void
 endgroup_rb_toggled( GtkButton *b, gpointer d )
 {
-        // figure out which one
+        /* figure out which one */
         SchedXactionEditorDialog        *sxed;
         gint id;
 
         sxed = (SchedXactionEditorDialog*)d;
         id = (gint)gtk_object_get_data( GTK_OBJECT(b), "whichOneAmI" );
 
-        // FIXME: this can now be cleaned up with the help of
-        // set_endgroup_toggle_states(...)
+        /* FIXME: this can now be cleaned up with the help of
+           set_endgroup_toggle_states(...) */
         switch (id) {
         case END_OPTION:
                 set_endgroup_toggle_states( sxed, END_DATE );
@@ -933,7 +936,7 @@ putSchedXactionInClist( gpointer data, gpointer user_data )
         text[1] = freqStr->str;
         text[2] = nextDate->str;
 
-        // FIXME: leaky
+        /* FIXME: leaky */
         g_string_free( freqStr, FALSE );
         g_string_free( nextDate, FALSE );
 
@@ -955,9 +958,9 @@ static
 void
 sxe_ledger_destroy( xaccLedgerDisplay *ld )
 {
-        // FIXME?: see window-register.c:regDestroy
-        // get and save size?
-        // get and save table state?
+        /* FIXME?: see window-register.c:regDestroy
+           get and save size?
+           get and save table state? */
         DEBUG( "FIXME: sxe_ledger_destroy called\n" );
 }
 
@@ -968,8 +971,9 @@ sxe_ledger_get_parent( xaccLedgerDisplay *ld )
         SchedXactionEditorDialog *sxed;
 
         sxed = (SchedXactionEditorDialog*)xaccLedgerDisplayGetUserData( ld );
-        // FIXME: is this the direct parent?
-        //  doesn't look like it from window-register.c:gnc_register_get_parent
+        /* FIXME: is this the direct parent?
+           doesn't look like it from window-register.c:gnc_register_get_parent
+        */
         return sxed->dialog;
 }
 
@@ -977,12 +981,13 @@ static
 void
 sxe_ledger_set_help( xaccLedgerDisplay *ld, const char *help_str )
 {
-        // FIXME: display the given help text somewhere.
-        // FIXME: well, we have the place, but this is called far too often...
+        /* FIXME: display the given help text somewhere.
+           FIXME: well, we have the place, but this is called far too often
+        */
 #if 0
         DEBUG( "FIXME: sxe_ledger_set_help called with \"%s\"\n",
                 help_str );
-#endif // 0
+#endif /* 0 */
 }
 
 static
@@ -1015,7 +1020,7 @@ sxed_reg_recordCB( GtkWidget *w, gpointer d )
 #if 0
         if ( trans != NULL )
                 gnc_register_include_date( reg, xaccTransGetDate(trans) );
-#endif // 0
+#endif /* 0 */
 
         xaccSRRedrawReg( reg );
 }
@@ -1028,7 +1033,7 @@ sxed_reg_cancelCB( GtkWidget *w, gpointer d )
                 xaccLedgerDisplayGetSR( ((SchedXactionEditorDialog *)d)->ledger ) );
 }
 
-// FIXME
+/* FIXME */
 static void
 refactor_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
 {
@@ -1040,8 +1045,8 @@ refactor_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
   gtk_editable_insert_text(GTK_EDITABLE(text), s, strlen(s), &pos);
 }
 
-// FIXME
-DeleteType
+/* FIXME */
+static DeleteType
 refactor_transaction_delete_query(GtkWindow *parent)
 {
   GtkWidget *dialog;
@@ -1135,9 +1140,9 @@ static
 void
 sxed_reg_deleteCB( GtkWidget *w, gpointer d )
 {
-  // FIXME: this is C&P from window-register.c.  As it's the
-  // identical code [modulo the SplitReg userdata-lookup], it
-  // should be refactored.
+  /* FIXME: this is C&P from window-register.c.  As it's the
+     identical code [modulo the SplitReg userdata-lookup], it
+     should be refactored. */
   SchedXactionEditorDialog *sxed = d;
   SplitRegisterStyle style;
   CursorClass cursor_class;
@@ -1184,7 +1189,7 @@ sxed_reg_deleteCB( GtkWidget *w, gpointer d )
     buf = g_strdup_printf(format, xaccSplitGetMemo(split),
                           xaccTransGetDescription(trans));
 
-    //result = gnc_verify_dialog_parented(sxed->dialog, buf, FALSE);
+    /* result = gnc_verify_dialog_parented(sxed->dialog, buf, FALSE); */
     result = TRUE;
 
     g_free(buf);
@@ -1297,7 +1302,6 @@ static
 void
 sxed_reg_jumpCB( GtkWidget *w, gpointer d )
 {
-        // FIXME This one gets funky because of the accounts stored in
-        // the kvp-frames...
+      /* FIXME This one gets funky because of the accounts stored in
+         the kvp-frames */
 }
-
