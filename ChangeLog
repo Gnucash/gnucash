@@ -1,3 +1,7 @@
+2000-06-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gfec.c: fix bugs in usage of internal guile functions.
+
 2000-06-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/splitreg.c (xaccInitSplitRegister): use higher
