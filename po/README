@@ -1,0 +1,25 @@
+Notes on I18n for GnuCash
+-------------------------
+
+To update the .pot file for GnuCash it is best to simply build the
+sources using 'make'. Don't run xgettext by hand, because many of the
+translatable strings in GnuCash are taken from scheme files and will
+be missed.
+
+GnuCash .pot files contain some strings of the form:
+
+sample:<some text>
+Reconciled:R
+reconciled:y
+not cleared:n
+cleared:c
+frozen:f
+
+In each of the cases above, the translator should only translate the
+portion after the ':' and leave the rest as is. In the cases of single
+letters (such as reconciled:y), the letters are abbreviations of the
+word before the colon. The 'sample:' items are strings which are not
+displayed, but only used to estimate widths.
+
+Dave Peticolas
+April 02, 2001

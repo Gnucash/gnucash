@@ -1,5 +1,7 @@
 2001-04-02  Dave Peticolas  <dave@krondo.com>
 
+	* Makefile.am: add po/README
+
 	* src/gnome/window-main.c: hide developer menu
 
 	* src/gnome/window-register.c: add invoice menu item

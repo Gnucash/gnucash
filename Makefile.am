@@ -30,7 +30,8 @@ EXTRA_DIST = \
   HACKING \
   gnucash.lsm \
   make-gnucash-patch.in \
-  po/.cvsignore
+  po/.cvsignore \
+  po/README
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
