@@ -356,21 +356,27 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
    cell = (ComboCell *) cd;
    box = (PopBox *) (cell->cell.gui_private);
 
-   if ((0 > box->currow) || (0 > box->curcol)) {
-/*
-      printf ("Internal Error: ComboBox: incorrect cell location \n");
-      return;
-*/
-   }
+   /* check for a valid mapping of the widget.  
+    * Note that if the combo box value is set to 
+    * a string that is not in the combo box menu
+    * (for example, the empty string ""), then the 
+    * combobox will issue an XmCR_UNSELECT event.
+    * This typically happens while loading the array.
+    * We want to ignore these. */
+   if ((0 > box->currow) || (0 > box->curcol)) return;
+
    /* check the reason, because the unslect callback 
     * doesn't even have a value field! */
    if ( (XmCR_SINGLE_SELECT == selection->reason) ||
-        (XmCR_SINGLE_SELECT == selection->reason) ) {
+        (XmCR_BROWSE_SELECT == selection->reason) ) {
       choice = XmCvtXmStringToCT (selection->value);
+   } else 
+   if (XmCR_UNSELECT == selection->reason) {
+      choice = XtNewString ("");
+   } else {
+      return;
    }
-   if (!choice) choice = XtNewString ("");
 
-printf ("combo selectcb choice %s at %d %d  \n", choice, box->currow, box->curcol);
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    SET (&(cell->cell), choice);
    XtFree (choice);

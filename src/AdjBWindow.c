@@ -121,7 +121,7 @@ adjBWindow( Widget parent, Account *acc )
                                     NULL );
   
   todaysDate(&date);
-  sprintf(buf,"%2d/%2d/%4d", date.month, date.day, date.year);
+  sprtDate (buf, date.day, date.month, date.year);
   
   adjBData->date =
     XtVaCreateManagedWidget( "text",

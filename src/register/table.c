@@ -330,11 +330,6 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
    int iphys,jphys;
    BasicCell *cell;
 
-printf ("move cursor from %d %d to %d %d \n",
-table->current_cursor_row,
-table->current_cursor_col,
-virt_row, virt_col);
-
    /* call the callback, allowing the app to commit any changes */
    if (table->move_cursor) {
       (table->move_cursor) (table, table->client_data);
@@ -383,7 +378,21 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
    table->current_cursor_col = virt_col;
    table->cursor->user_data = NULL;
 
-   if ((0 > virt_row) || (0 > virt_col)) return;
+   if ((0 > virt_row) || (0 > virt_col)) {
+      /* if the location is invalid, then we should take this 
+       * as a command to unmap the cursor gui.  So do it .. */
+      for (i=0; i<table->tile_height; i++) {
+         for (j=0; j<table->tile_width; j++) {
+            cell = table->cursor->cells[i][j];
+            if (cell) {
+               if (cell->move) {
+                  (cell->move) (cell, -1, -1);
+               }
+            }
+         }
+      }
+      return;
+   }
    if (virt_row >= table->num_rows) return;
    if (virt_col >= table->num_cols) return;
 
@@ -1016,6 +1025,11 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 void        
 xaccRefreshTableGUI (Table * table)
 {
+{int i,j;
+printf (" refresh %d %d \n",  table->num_phys_rows,table->num_phys_cols);
+for (i=0; i<table->num_phys_rows; i++) {
+printf ("cell %d %s \n", i, table->entries[i][3]);
+}}
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
                                       XmNcells,   table->entries, 

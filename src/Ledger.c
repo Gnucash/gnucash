@@ -117,7 +117,7 @@ printf ("saving %s \n", trans->description);
        strcmp (SPLIT_STR, reg->xfrmCell->cell.value)) {
       Split *peer_split;
 
-printf ("xfr from %s to %x \n", xfr,  reg->xfrmCell->cell.value);
+printf ("xfr from %s to %s \n", xfr,  reg->xfrmCell->cell.value);
       peer_split = GetPeerSplit (split);
       if (peer_split) {
          acc = (Account *) (peer_split->acc);
@@ -151,6 +151,10 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    if (!split) return;
    trans = (Transaction *) (split->parent);
 
+printf ("load cell %s %2d/%2d/%4d \n", trans->description,
+trans->date.day, trans->date.month, trans->date.year);
+
+
    xaccSetDateCellValue (reg->dateCell, trans->date.day, 
                                         trans->date.month,
                                         trans->date.year);
@@ -173,6 +177,7 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
 
    xaccSetAmountCellValue (reg->balanceCell, split->balance);
 
+
    reg->table->cursor->user_data = (void *) split;
 
    /* copy cursor contents into the table */
@@ -189,31 +194,45 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
    Transaction *trans;
    char buff[BUFSIZE];
    Table *table;
+   int save_cursor_row;
 
    table = reg->table;
 
-   /* disable callback */
+   /* disable move callback -- we con't want the cascade of 
+    * callbacks while we are fiddling with loading the register */
    table->move_cursor = NULL;
+
+   /* save the current cursor location; we want to restore 
+    * it after the reload.  */
+   save_cursor_row = table->current_cursor_row;
+   xaccMoveCursorGUI (table, -1, -1);
 
    /* set table size to number of items in list */
    i=0;
    while (slist[i]) i++;
    xaccSetTableSize (table, i, 1);
 
+printf ("load reg of %d entries --------------------------- \n",i);
    /* populate the table */
    i=0;
    split = slist[0]; 
    while (split) {
 
-      xaccMoveCursor (table, i, 0);
+      table->current_cursor_row = i;
+      table->current_cursor_col = 0;
       xaccLoadRegEntry (reg, split);
 
       i++;
       split = slist[i];
    }
+
+   /* restore the cursor to it original location */
+   if (i <= save_cursor_row)  save_cursor_row = i - 1;
+   if (0 > save_cursor_row)  save_cursor_row = 0;
+   xaccMoveCursorGUI (table, save_cursor_row, 0);
    xaccRefreshTableGUI (table);
 
-   /* enable callback for cursor moves */
+   /* enable callback for cursor user-driven moves */
    table->move_cursor = LedgerMoveCursor;
    table->client_data = (void *) reg;
 }
@@ -245,6 +264,7 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
 
 void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
 {
+   xaccAddComboCellMenuItem (cell, "");
    xaccAddComboCellMenuItem (cell, SPLIT_STR);
    LoadXferCell (cell, grp);
 }

@@ -64,7 +64,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    header = xaccMallocCellBlock (1, MAX_COLS);
    reg->header = header;
 
-   cell = (BasicCell *) xaccMallocDateCell();
+   cell = xaccMallocTextCell();
    cell->width = 11;
    xaccAddCell (header, cell, 0, DATE_CELL_C);
    xaccSetBasicCellValue (cell, DATE_STR);
@@ -84,22 +84,22 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccAddCell (header, cell, 0, DESC_CELL_C);
    xaccSetBasicCellValue (cell, DESC_STR);
 
-   cell = xaccMallocRecnCell();
+   cell = xaccMallocTextCell();
    cell->width = 1;
    xaccAddCell (header, cell, 0, RECN_CELL_C);
    xaccSetBasicCellValue (cell, "R");
 
-   cell = (BasicCell *) xaccMallocPriceCell();
+   cell = xaccMallocTextCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, CRED_CELL_C);
    xaccSetBasicCellValue (cell, CREDIT_STR);
    
-   cell = (BasicCell *) xaccMallocPriceCell();
+   cell = xaccMallocTextCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, DEBT_CELL_C);
    xaccSetBasicCellValue (cell, DEBIT_STR);
 
-   cell = (BasicCell *) xaccMallocPriceCell();
+   cell = xaccMallocTextCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, BALN_CELL_C);
    xaccSetBasicCellValue (cell, BALN_STR);

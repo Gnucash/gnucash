@@ -46,6 +46,15 @@ char days[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 static int been_here = 0;
 
 /********************************************************************\
+\********************************************************************/
+
+void
+sprtDate (char * buff, int day, int month, int year)
+{
+   sprintf (buff, "%2d/%2d/%4d", month, day, year);
+}
+
+/********************************************************************\
  * adjustDay                                                        *
  *   adds adj to the current day of the month... the resulting day  *
  *   of the month is a valid day of the month                       *
