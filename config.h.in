@@ -38,6 +38,9 @@
 /* Turn on nana assertion checking */
 #undef  HAVE_LIBNANA
 
+/* check for stpcpy for Solaris */
+#undef HAVE_STPCPY
+
 /* Enable quickfill in register window */
 #define  USE_QUICKFILL       
 
