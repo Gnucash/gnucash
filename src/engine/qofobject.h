@@ -50,7 +50,7 @@
  * interface.  Only object modules compiled against this version
  * of the interface will load properly
  */
-#define QOF_OBJECT_VERSION 2
+#define QOF_OBJECT_VERSION 3
 
 
 typedef struct _QofObject QofObject;
@@ -99,11 +99,19 @@ struct _QofObject
    */
   void                (*foreach)(QofCollection *, QofEntityForeachCB, gpointer);
 
-  /** Given a particular item of this type, return a printable string.
-   *  XXX In the future, the argument should probably be changes to be 
-   *  QofEntity and not gpointer.. */
+  /** Given a particular item of this type, return a printable string. 
+   */
   const char *        (*printable)(gpointer instance);
 
+  /** Given a pair of items of this type, this routine returns value 
+   *  indicating which item is 'newer'.  This routine is used by storage
+   *  backends to determine if the local or the remote copy of a 
+   *  particular item is the latest, 'uptodate' version.  Tis routine
+   *  should return an integer less than, equal to, or greater than zero
+   *  if 'instance_left' is found to be, respecitvely, earlier than, equal
+   *  to or later than than 'instance_right'.
+   */
+  int                 (*version_cmp)(gpointer instance_left, gpointer instance_right);
 };
 
 /* -------------------------------------------------------------- */
