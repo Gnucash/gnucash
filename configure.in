@@ -264,7 +264,7 @@ AC_DEFINE(GNOME)
 G_WRAP_COMPILE_ARGS=""
 G_WRAP_LINK_ARGS=""
 
-AM_PATH_GWRAP(, , [AC_MSG_ERROR([
+AM_PATH_GWRAP(0.9.11, , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly.  If you need to
   install g-wrap, you can find it at ftp://ftp.gnucash.org/pub/g-wrap.
