@@ -120,8 +120,6 @@ Reporting - Somewhat functional
 
         - Save/restore in unknown state; believed to crash on re-start.
 
-        - Clicking on links in html pane causes crash.
-
 IMPORTING
 
   HBCI - Needs new http support. [gnet]
