@@ -1357,11 +1357,9 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 {
   gnc_commodity_namespace * ns = NULL; 
   
-  if(table) 
-  { 
-    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
-  }
+  if (!table) return;
   
+  ns = g_hash_table_lookup(table->table, (gpointer)namespace);
   if(!ns) 
   {
     GCache *str_cache = gnc_engine_get_string_cache ();
