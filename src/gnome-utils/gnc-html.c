@@ -104,10 +104,18 @@ static GHashTable * gnc_html_stream_handlers = NULL;
 /* hashes handlers for handling different URLType data */
 static GHashTable * gnc_html_url_handlers = NULL;
 
-static char error_404[] = 
-N_("<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>");
+static char error_404_format[] =
+"<html><body><h3>%s</h3><p>%s</body></html>";
+static char error_404_title[] = N_("Not found");
+static char error_404_body[] = 
+N_("The specified URL could not be loaded.");
 
-static char error_start[] = N_("<html><body><h3>Error</h3><p>There was an error loading the specified URL. <p>Error message: <p> ");
+static char error_format[] = 
+"<html><body><h3>%s</h3><p>%s</p>\n<p>%s:</p><p>";
+static char error_title[] = N_("Error");
+static char error_body1[] = 
+N_("There was an error loading the specified URL.");
+static char error_body2[] = N_("Error message");
 static char error_end[] = "</body></html>";
 
 
@@ -445,8 +453,10 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
     else {
       char *data;
 
-      data = _(error_start);
+      data = g_strdup_printf(error_format, 
+			     _(error_title), _(error_body1), _(error_body2));
       gtk_html_write(GTK_HTML(html->html), handle, data, strlen (data));
+      g_free (data);
       gtk_html_write(GTK_HTML(html->html), handle, body, body_len);
       gtk_html_write(GTK_HTML(html->html), handle,
                      error_end, strlen(error_end));
@@ -481,9 +491,11 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
       else {
         char *data;
 
-        data = _(error_start);
+	data = g_strdup_printf(error_format, 
+			       _(error_title), _(error_body1), _(error_body2));
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
                        data, strlen(data));
+	g_free (data);
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
                        body, body_len);
         gtk_html_write(GTK_HTML(html->html), (GtkHTMLStream *)(current->data), 
@@ -558,7 +570,9 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
         gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);      
       }
       else {
-        fdata = fdata ? fdata : g_strdup (_(error_404));
+        fdata = fdata ? fdata : 
+	  g_strdup_printf (error_404_format, 
+			   _(error_404_title), _(error_404_body));
         gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
         gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
       }
@@ -602,9 +616,11 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
 	    "\turl = '%s#%s'\n",
 	    location ? location : "(null)",
 	    label ? label : "(null)");
-      fdata = _(error_404);
+      fdata = g_strdup_printf (error_404_format, 
+			       _(error_404_title), _(error_404_body));
       gtk_html_write(GTK_HTML(html->html), handle, fdata, strlen (fdata));
       gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
+      g_free (fdata);
     }
 
   } while (FALSE);
@@ -971,6 +987,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
       if (result.error_message)
         gnc_error_dialog(result.error_message);
       else
+	/* %s is a URL (some location somewhere). */
         gnc_error_dialog(_("There was an error accessing %s."), location);
 
       if (html->load_cb)

@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-10-28 19:49+0100\n"
-"PO-Revision-Date: 2002-10-28 20:12+0100\n"
+"POT-Creation-Date: 2002-10-29 19:24+0100\n"
+"PO-Revision-Date: 2002-10-29 19:22+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -830,7 +830,7 @@ msgstr ""
 
 #: src/gnome/glade/print.glade.h:27 src/gnome/glade/sched-xact.glade.h:129
 #: src/gnome/window-acct-tree.c:830
-#: src/report/report-gnome/window-report.c:840
+#: src/report/report-gnome/window-report.c:842
 msgid "Options"
 msgstr "Optionen"
 
@@ -1166,7 +1166,6 @@ msgid "year(s)."
 msgstr "Jahre."
 
 #: src/gnome/glade/sched-xact.glade.h:210
-#, fuzzy
 msgid "years"
 msgstr "Jahre"
 
@@ -1367,7 +1366,7 @@ msgstr "Eingeben"
 
 #: src/gnome/glade/register.glade.h:34
 msgid "Erase all splits except the one for this account."
-msgstr ""
+msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2620 src/gnome-search/search.glade.h:5
@@ -1439,7 +1438,7 @@ msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
 #: src/business/business-gnome/glade/invoice.glade.h:49
 #: src/gnome-utils/window-help.c:641 src/gnome/glade/register.glade.h:49
 #: src/import-export/hbci/glade/hbci.glade.h:113
-#: src/report/report-gnome/window-report.c:849
+#: src/report/report-gnome/window-report.c:851
 msgid "Print"
 msgstr "Drucken"
 
@@ -2701,7 +2700,7 @@ msgstr "Neuen Kontenrahmen erstellen"
 msgid "Notes"
 msgstr "Bemerkung"
 
-#: src/app-utils/gnc-ui-util.c:945 src/gnome-utils/dialog-account.c:255
+#: src/app-utils/gnc-ui-util.c:952 src/gnome-utils/dialog-account.c:255
 #: src/gnome/glade/account.glade.h:28
 msgid "Opening Balance"
 msgstr "Anfangsbestand:"
@@ -2977,7 +2976,8 @@ msgstr "Sie müssen eine Währung auswählen."
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: src/gnome/dialog-transfer.c:395 src/gnome/druid-stock-split.c:228
+#: src/gnome-utils/gnc-html.c:115 src/gnome/dialog-transfer.c:395
+#: src/gnome/druid-stock-split.c:228
 msgid "Error"
 msgstr "Fehler"
 
@@ -3547,7 +3547,7 @@ msgstr "Die GnuCash-Hilfe öffnen"
 msgid "_Windows"
 msgstr "_Fenster"
 
-#: src/app-file/gnc-file.c:705 src/gnome/window-main.c:1010
+#: src/app-file/gnc-file.c:706 src/gnome/window-main.c:1010
 msgid "Save"
 msgstr "Speichern"
 
@@ -4054,31 +4054,38 @@ msgstr "Betrag"
 msgid "Tax Info"
 msgstr "Steuerrelevante Information"
 
-#: src/app-utils/gnc-ui-util.c:676
+#. Translators: For the following strings, the single letters
+#. after the colon are abbreviations of the word before the
+#. colon. Please only translate the letter *after* the colon.
+#: src/app-utils/gnc-ui-util.c:679
 msgid "not cleared:n"
 msgstr "not cleared:n"
 
-#: src/app-utils/gnc-ui-util.c:677
+#. Please only translate the letter *after* the colon.
+#: src/app-utils/gnc-ui-util.c:681
 msgid "cleared:c"
 msgstr "cleared:b"
 
-#: src/app-utils/gnc-ui-util.c:678
+#. Please only translate the letter *after* the colon.
+#: src/app-utils/gnc-ui-util.c:683
 msgid "reconciled:y"
 msgstr "reconciled:j"
 
-#: src/app-utils/gnc-ui-util.c:679
+#. Please only translate the letter *after* the colon.
+#: src/app-utils/gnc-ui-util.c:685
 msgid "frozen:f"
-msgstr "frozen:e"
+msgstr "frozen:f"
 
-#: src/app-utils/gnc-ui-util.c:680
+#. Please only translate the letter *after* the colon.
+#: src/app-utils/gnc-ui-util.c:687
 msgid "void:v"
 msgstr "void:s"
 
-#: src/app-utils/gnc-ui-util.c:722
+#: src/app-utils/gnc-ui-util.c:729
 msgid "(none)"
 msgstr "(kein(e))"
 
-#: src/app-utils/gnc-ui-util.c:809
+#: src/app-utils/gnc-ui-util.c:816
 msgid "Opening Balances"
 msgstr "Anfangsbestände"
 
@@ -4086,13 +4093,13 @@ msgstr "Anfangsbestände"
 #: intl-scm/guile-strings.c:2542 intl-scm/guile-strings.c:2544
 #: intl-scm/guile-strings.c:2564 intl-scm/guile-strings.c:2566
 #: intl-scm/guile-strings.c:2586 intl-scm/guile-strings.c:2588
-#: src/app-utils/gnc-ui-util.c:812
+#: src/app-utils/gnc-ui-util.c:819
 msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:135 intl-scm/guile-strings.c:1700
-#: src/app-utils/gnc-ui-util.c:885 src/engine/Account.c:2171
+#: src/app-utils/gnc-ui-util.c:892 src/engine/Account.c:2171
 #: src/register/ledger-core/split-register.c:2027
 msgid "Equity"
 msgstr "Eigenkapital"
@@ -4416,24 +4423,20 @@ msgstr "Gutschriften"
 
 #. Build and connect the toggles
 #: src/gnome-search/search-reconciled.c:253
-#, fuzzy
 msgid "Not Cleared"
-msgstr "Bestätigt"
+msgstr "Unbestätigt"
 
 #: src/gnome-search/search-reconciled.c:259
-#, fuzzy
 msgid "Reconciled"
-msgstr "Abgeglichen:"
+msgstr "Abgeglichen"
 
 #: src/gnome-search/search-reconciled.c:262
-#, fuzzy
 msgid "Frozen"
-msgstr "frozen:e"
+msgstr "Fixiert"
 
 #: src/gnome-search/search-reconciled.c:265
-#, fuzzy
 msgid "Voided"
-msgstr "Code"
+msgstr "Storniert"
 
 #: src/app-file/gnc-file.c:91 src/import-export/hbci/druid-hbci-utils.c:257
 #: src/import-export/hbci/druid-hbci-utils.c:273
@@ -4521,13 +4524,13 @@ msgstr ""
 "Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
 #: src/app-file/gnc-file.c:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file/URL \n"
 "    %s\n"
 "does not contain GnuCash data or the data is corrupt."
 msgstr ""
-"Die URL\n"
+"Die Datei/URL\n"
 "    %s\n"
 "verweist nicht auf GnuCash-Daten oder diese Daten sind fehlerhaft."
 
@@ -4667,16 +4670,15 @@ msgstr ""
 "Was möchten Sie tun?"
 
 #: src/app-file/gnc-file.c:443
-#, fuzzy
 msgid "Reading file..."
-msgstr "_Abgleichen..."
+msgstr "Datei lesen..."
 
-#: src/app-file/gnc-file.c:562 src/report/report-gnome/window-report.c:831
+#: src/app-file/gnc-file.c:562 src/report/report-gnome/window-report.c:833
 msgid "Export"
 msgstr "Exportieren"
 
-#: src/app-file/gnc-file.c:591 src/app-file/gnc-file.c:781
-#: src/report/report-gnome/window-report.c:437
+#: src/app-file/gnc-file.c:591 src/app-file/gnc-file.c:782
+#: src/report/report-gnome/window-report.c:439
 #, c-format
 msgid ""
 "The file \n"
@@ -4693,18 +4695,21 @@ msgstr ""
 msgid "Exporting file..."
 msgstr "Datei exportieren..."
 
-#: src/app-file/gnc-file.c:620
-#, fuzzy, c-format
+#. %s is the strerror(3) error string of the error that occurred.
+#: src/app-file/gnc-file.c:621
+#, c-format
 msgid ""
 "There was an error saving the file.\n"
 "\n"
 "%s"
-msgstr "Beim Speichern der Datei ist ein Fehler aufgetreten."
+msgstr ""
+"Beim Speichern der Datei ist ein Fehler aufgetreten:\n"
+"\n"
+"%s"
 
-#: src/app-file/gnc-file.c:651
-#, fuzzy
+#: src/app-file/gnc-file.c:652
 msgid "Writing file..."
-msgstr "In Arbeit..."
+msgstr "Datei schreiben..."
 
 #. src/scm/main-window.scm
 #: intl-scm/guile-strings.c:115 intl-scm/guile-strings.c:1152
@@ -5016,24 +5021,29 @@ msgstr "Wählen Sie das Export-Format"
 msgid "Choose the export format for this report:"
 msgstr "Wählen Sie das Export-Format für diesen Bericht:"
 
-#: src/report/report-gnome/window-report.c:405
-#, fuzzy, c-format
+#. %s is the type of what is about to be saved, e.g. "HTML".
+#: src/report/report-gnome/window-report.c:406
+#, c-format
 msgid "Save %s To File"
-msgstr "HTML in Datei speichern"
+msgstr "%s in Datei speichern"
 
-#: src/report/report-gnome/window-report.c:420
-#, fuzzy, c-format
+#. %s is the strerror(3) string of the error that occurred.
+#: src/report/report-gnome/window-report.c:422
+#, c-format
 msgid ""
 "You cannot save to that filename.\n"
 "\n"
 "%s"
-msgstr "Sie können die Datei nicht mit diesem Namen speichern."
+msgstr ""
+"Sie können nicht in diese Datei speichern:\n"
+"\n"
+"%s"
 
-#: src/report/report-gnome/window-report.c:429
+#: src/report/report-gnome/window-report.c:431
 msgid "You cannot save to that file."
 msgstr "Sie können nicht in diese Datei speichern."
 
-#: src/report/report-gnome/window-report.c:492
+#: src/report/report-gnome/window-report.c:494
 #, c-format
 msgid ""
 "Could not open the file\n"
@@ -5045,83 +5055,82 @@ msgstr ""
 " nicht öffnen.\n"
 "%s"
 
-#: src/report/report-gnome/window-report.c:511
-#, fuzzy
+#: src/report/report-gnome/window-report.c:513
 msgid "There are no options for this report."
-msgstr "Geben Sie einen beschreibenden Namen für diesen Bericht an"
+msgstr "Es gibt für diesen Bericht keine Optionen."
 
 #: src/gnome-utils/window-help.c:594
-#: src/report/report-gnome/window-report.c:794
+#: src/report/report-gnome/window-report.c:796
 msgid "Back"
 msgstr "Zurück"
 
 #: src/gnome-utils/window-help.c:595
-#: src/report/report-gnome/window-report.c:795
+#: src/report/report-gnome/window-report.c:797
 msgid "Move back one step in the history"
 msgstr "Einen Schritt zurück"
 
 #: src/gnome-utils/window-help.c:603
-#: src/report/report-gnome/window-report.c:803
+#: src/report/report-gnome/window-report.c:805
 msgid "Forward"
 msgstr "Vorwärts"
 
 #: src/gnome-utils/window-help.c:604
-#: src/report/report-gnome/window-report.c:804
+#: src/report/report-gnome/window-report.c:806
 msgid "Move forward one step in the history"
 msgstr "Einen Schritt vorwärts"
 
 #: src/gnome-utils/window-help.c:613
-#: src/report/report-gnome/window-report.c:812
+#: src/report/report-gnome/window-report.c:814
 msgid "Reload"
 msgstr "Erneut laden"
 
-#: src/report/report-gnome/window-report.c:813
+#: src/report/report-gnome/window-report.c:815
 msgid "Reload the current report"
 msgstr "Aktuellen Bericht neu laden"
 
 #: src/gnome-utils/window-help.c:631
-#: src/report/report-gnome/window-report.c:821
+#: src/report/report-gnome/window-report.c:823
 msgid "Stop"
 msgstr "Abbrechen"
 
 #: src/gnome-utils/window-help.c:632
-#: src/report/report-gnome/window-report.c:822
+#: src/report/report-gnome/window-report.c:824
 msgid "Cancel outstanding HTML requests"
 msgstr "Unbeantwortete HTML-Anfragen abbrechen "
 
-#: src/report/report-gnome/window-report.c:832
+#: src/report/report-gnome/window-report.c:834
 msgid "Export HTML-formatted report to file"
 msgstr "HTML-formatierten Bericht in Datei exportieren"
 
 #. src/report/report-system/html-utilities.scm
 #: intl-scm/guile-strings.c:1200 intl-scm/guile-strings.c:1206
-#: src/report/report-gnome/window-report.c:841
+#: src/report/report-gnome/window-report.c:843
 msgid "Edit report options"
 msgstr "Berichtsoptionen ändern"
 
-#: src/report/report-gnome/window-report.c:850
+#: src/report/report-gnome/window-report.c:852
 msgid "Print report window"
 msgstr "Bericht ausdrucken"
 
-#: src/report/report-gnome/window-report.c:992
+#: src/report/report-gnome/window-report.c:994
 msgid "Set the report options you want using this dialog."
 msgstr "Mit diesem Dialog können Sie die Berichtsoptionen bearbeiten."
 
-#: src/report/report-gnome/window-report.c:1098
-msgid ""
-"<html><body><h3>Report error</h3><p>An error occurred while running the "
-"report.</p></body></html>"
-msgstr ""
-"<html><body><h3>Berichtsfehler</h3><p>Während des Erstellens des Berichtes "
-"ist ein Fehler aufgetreten.</p></body></html>"
+#: src/report/report-gnome/window-report.c:1102
+msgid "Report error"
+msgstr "Fehler im Bericht"
 
-#: src/report/report-gnome/window-report.c:1125
-#: src/report/report-gnome/window-report.c:1147
+#: src/report/report-gnome/window-report.c:1103
+msgid "An error occurred while running the report."
+msgstr "Beim Erstellen des Berichts ist ein Fehler aufgetreten."
+
+#: src/report/report-gnome/window-report.c:1128
+#: src/report/report-gnome/window-report.c:1150
 #, c-format
 msgid "Badly formed options URL: %s"
 msgstr "Fehlerhafte Optionen-URL: %s"
 
-#: src/report/report-gnome/window-report.c:1135
+#: src/report/report-gnome/window-report.c:1138
 #, c-format
 msgid "Badly report id: %s"
 msgstr "Fehlerhafte Berichts ID: %s"
@@ -7071,13 +7080,17 @@ msgstr ""
 msgid ""
 "\n"
 "Exchange code (CUSIP or similar): "
-msgstr "\nTickersymbol (CUSIP oder ähnliches): "
+msgstr ""
+"\n"
+"Tickersymbol (CUSIP oder ähnliches): "
 
 #: src/gnome-utils/dialog-commodity.c:144
 msgid ""
 "\n"
 "Mnemonic(Ticker symbol or similar): "
-msgstr "\nAbkürzung/Tickersymbol: "
+msgstr ""
+"\n"
+"Abkürzung/Tickersymbol: "
 
 #: src/gnome-utils/dialog-commodity.c:335
 msgid ""
@@ -7160,31 +7173,30 @@ msgid "View..."
 msgstr "Neu..."
 
 #: src/gnome-utils/gnc-dense-cal.c:903
-#, fuzzy
 msgid "(unnamed)"
-msgstr "(kein(e))"
+msgstr "(unbenannt)"
 
 #: src/gnome-utils/dialog-utils.c:136
 msgid "Use local time"
 msgstr "Lokale Zeit benutzen"
 
-#: src/gnome-utils/gnc-html.c:108
-msgid ""
-"<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</"
-"body></html>"
-msgstr ""
-"<html><body><h3>Nicht gefunden</h3><p>Die angegebene URL konnte nicht\n"
-"geladen werden</body></html>"
+#: src/gnome-utils/gnc-html.c:109
+msgid "Not found"
+msgstr "Nicht gefunden"
 
-#: src/gnome-utils/gnc-html.c:110
-msgid ""
-"<html><body><h3>Error</h3><p>There was an error loading the specified URL. "
-"<p>Error message: <p> "
-msgstr ""
-"<html><body><h3>Fehler</h3><p>Beim Laden der URL trat ein Fehler\n"
-"auf.</p><p>Fehlermeldung:</p>"
+#: src/gnome-utils/gnc-html.c:111
+msgid "The specified URL could not be loaded."
+msgstr "Die angegebene URL konnte nicht geladen werden."
 
-#: src/gnome-utils/gnc-html.c:582 src/gnome-utils/gnc-html.c:1030
+#: src/gnome-utils/gnc-html.c:117
+msgid "There was an error loading the specified URL."
+msgstr "Beim Laden der URL ist ein Fehler aufgetreten."
+
+#: src/gnome-utils/gnc-html.c:118
+msgid "Error message"
+msgstr "Fehlermeldung"
+
+#: src/gnome-utils/gnc-html.c:596 src/gnome-utils/gnc-html.c:1047
 msgid ""
 "Secure HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -7194,7 +7206,7 @@ msgstr ""
 "Um ihn zu aktivieren, wählen Sie den Netzwerk Abschnitt der\n"
 "Einstellungen und aktivieren die entsprechende Option."
 
-#: src/gnome-utils/gnc-html.c:590 src/gnome-utils/gnc-html.c:1039
+#: src/gnome-utils/gnc-html.c:604 src/gnome-utils/gnc-html.c:1056
 msgid ""
 "Network HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -7203,7 +7215,7 @@ msgstr ""
 "Sie haben den \"HTTP Netzwerkzugang\" abgeschaltet.\n"
 "Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
 
-#: src/gnome-utils/gnc-html.c:865
+#: src/gnome-utils/gnc-html.c:881
 msgid ""
 "GnuCash Network is disabled and the link you have clicked requires it.\n"
 "You can enable it in the Network section\n"
@@ -7212,10 +7224,11 @@ msgstr ""
 "GnuCash Netzwerk is deaktiviert, aber der angeklickte Link benötigt es.\n"
 "Sie können das Netzwerk im 'Einstellungen'-Dialog aktivieren."
 
-#: src/gnome-utils/gnc-html.c:974
-#, fuzzy, c-format
+#. %s is a URL (some location somewhere).
+#: src/gnome-utils/gnc-html.c:991
+#, c-format
 msgid "There was an error accessing %s."
-msgstr "Beim Speichern der Datei ist ein Fehler aufgetreten."
+msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
 
 #: src/gnome-utils/commodity.glade.h:1
 msgid "1 /"
@@ -7325,23 +7338,23 @@ msgstr "Sie müssen ein steuerrelevantes Konto wählen."
 msgid "Value $"
 msgstr "Wert"
 
-#: src/business/dialog-tax-table/dialog-tax-table.c:194
-#, c-format
+#: src/business/dialog-tax-table/dialog-tax-table.c:195
+#, no-c-format
 msgid "Percent %"
 msgstr "Prozent %"
 
-#: src/business/dialog-tax-table/dialog-tax-table.c:507
+#: src/business/dialog-tax-table/dialog-tax-table.c:508
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
 msgstr "Steuertabelle \"%s\" ist in Benutzung. Sie können sie nicht löschen."
 
 #: src/business/business-gnome/dialog-billterms.c:614
-#: src/business/dialog-tax-table/dialog-tax-table.c:515
+#: src/business/dialog-tax-table/dialog-tax-table.c:516
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
 msgstr "Sind Sie sicher, dass Sie  \"%s\" löschen möchten?"
 
-#: src/business/dialog-tax-table/dialog-tax-table.c:552
+#: src/business/dialog-tax-table/dialog-tax-table.c:553
 msgid ""
 "You cannot remove the last entry from the tax table.\n"
 "Try deleting the tax table if you want to do that."
@@ -7350,7 +7363,7 @@ msgstr ""
 "löschen. Stattdessen müssten Sie die ganze Steuertabelle löschen,\n"
 "falls Sie das möchten."
 
-#: src/business/dialog-tax-table/dialog-tax-table.c:559
+#: src/business/dialog-tax-table/dialog-tax-table.c:560
 msgid "Are you sure you want to delete this entry?"
 msgstr "Sind Sie sicher, daß Sie diesen Eintrag löschen möchten?"
 
@@ -8855,66 +8868,70 @@ msgstr "="
 msgid ">"
 msgstr ">"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:54
+#. The 'sample:' items are strings which are not displayed, but
+#. only used to estimate widths. Translators, please only
+#. translate the portion after the ':' and leave the rest
+#. ("sample:") as is.
+#: src/business/business-ledger/gncEntryLedgerLayout.c:58
 msgid "sample:X"
 msgstr "sample:X"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:56
+#: src/business/business-ledger/gncEntryLedgerLayout.c:60
 #: src/register/ledger-core/split-register-layout.c:497
 #: src/register/ledger-core/split-register-layout.c:505
 msgid "sample:12/12/2000"
 msgstr "sample:12.12.2000"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:59
+#: src/business/business-ledger/gncEntryLedgerLayout.c:63
 msgid "sample:Description of an Entry"
 msgstr "sample:Beschreibungsbeispiel einer Buchung"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:61
+#: src/business/business-ledger/gncEntryLedgerLayout.c:65
 msgid "sample:Action"
 msgstr "sample:Aktion"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:63
 #: src/business/business-ledger/gncEntryLedgerLayout.c:67
+#: src/business/business-ledger/gncEntryLedgerLayout.c:71
 msgid "sample:9,999.00"
 msgstr "sample:9.999,00"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:65
-#: src/business/business-ledger/gncEntryLedgerLayout.c:83
+#: src/business/business-ledger/gncEntryLedgerLayout.c:69
+#: src/business/business-ledger/gncEntryLedgerLayout.c:89
 msgid "sample:999,999.00"
 msgstr "sample:999.999,00"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:69
-#, c-format
+#: src/business/business-ledger/gncEntryLedgerLayout.c:74
+#, no-c-format
 msgid "sample(DT):+%"
 msgstr "sample(DT):+%"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:71
-#, c-format
+#: src/business/business-ledger/gncEntryLedgerLayout.c:77
+#, no-c-format
 msgid "sample(DH):+%"
 msgstr "sample(DH):+%"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:73
-#: src/business/business-ledger/gncEntryLedgerLayout.c:75
+#: src/business/business-ledger/gncEntryLedgerLayout.c:79
+#: src/business/business-ledger/gncEntryLedgerLayout.c:81
 msgid "sample:Xfer:Account"
 msgstr "sample:Geschäftsvorgang:Konto"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:77
+#: src/business/business-ledger/gncEntryLedgerLayout.c:83
 msgid "sample:T?"
 msgstr "sample:T?"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:79
+#: src/business/business-ledger/gncEntryLedgerLayout.c:85
 msgid "sample:TI"
 msgstr "sample:TI"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:81
+#: src/business/business-ledger/gncEntryLedgerLayout.c:87
 msgid "sample:Tax Table 1"
 msgstr "sample:Steuertabelle Eins"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:85
+#: src/business/business-ledger/gncEntryLedgerLayout.c:91
 msgid "sample:999.00"
 msgstr "sample:999,00"
 
-#: src/business/business-ledger/gncEntryLedgerLayout.c:87
+#: src/business/business-ledger/gncEntryLedgerLayout.c:93
 msgid "sample:BI"
 msgstr "sample:BI"
 
@@ -12723,9 +12740,8 @@ msgstr "Nur nicht-stornierte"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1922
-#, fuzzy
 msgid "Show only non-voided transactions"
-msgstr "Alle Geschäftsvorgänge anzeigen"
+msgstr "Nur nicht-stornierte Geschäftsvorgänge anzeigen"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1924
@@ -12734,21 +12750,19 @@ msgstr "Nur stornierte"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1926
-#, fuzzy
 msgid "Show only voided transactions"
-msgstr "Alle Geschäftsvorgänge anzeigen"
+msgstr "Nur stornierte Geschäftsvorgänge anzeigen"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1928
-#, fuzzy
 msgid "Both"
-msgstr "Monat"
+msgstr "Beides"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1930
-#, fuzzy
 msgid "Show both (and include void transactions in totals)"
-msgstr "Zeige Geschäftsvorgänge ausführlich mit allen Buchungen"
+msgstr ""
+"Beides anzeigen (und stornierte Geschäftsvorgänge im Saldo miteinbeziehen)"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1934
@@ -12777,9 +12791,8 @@ msgstr "Nach Tageszeit sortieren"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1954
-#, fuzzy
 msgid "Sort by the Reconciled Date"
-msgstr "Sortiere nach Statement-Datum"
+msgstr "Sortiere nach Abgleich-Datum"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:1956
@@ -12899,9 +12912,8 @@ msgstr "Anzeigen des Datums?"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2030
-#, fuzzy
 msgid "Display the reconciled date?"
-msgstr "Anzeigen des Datums?"
+msgstr "Anzeigen des Abgleich-Datums?"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2034 intl-scm/guile-strings.c:2178
@@ -13742,9 +13754,8 @@ msgstr "Forderungs-Bericht Quelltext-Datei neu laden"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2726 intl-scm/guile-strings.c:2728
-#, fuzzy
 msgid "Initialize Test Data"
-msgstr "Zinssatz"
+msgstr "Testdaten zurücksetzen"
 
 #. src/business/business-reports/payables.scm
 #: intl-scm/guile-strings.c:2730
@@ -13808,17 +13819,13 @@ msgstr "Gesamt fällig"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2772
-#, fuzzy
 msgid "The company for this report"
-msgstr "Geben Sie einen beschreibenden Namen für diesen Bericht an"
+msgstr "Die Firma dieses Berichts"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2774
-#, fuzzy
 msgid "The account to search for transactions"
-msgstr ""
-"Das Konto %s existiert nicht.\n"
-"Möchten Sie es erstellen?"
+msgstr "Das Konto, in dem nach Buchungen gesucht werden soll"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2778 intl-scm/guile-strings.c:2784
@@ -13834,27 +13841,23 @@ msgstr "Spalten anzeigen"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2782 intl-scm/guile-strings.c:2788
-#, fuzzy
 msgid "Display the transaction date?"
-msgstr "Konto anzeigen?"
+msgstr "Anzeigen des Buchungsdatum?"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2794
-#, fuzzy
 msgid "Display the transaction reference?"
-msgstr "Anzahl von Anteilen anzeigen?"
+msgstr "Anzeigen der Buchungsreferenz?"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2800
-#, fuzzy
 msgid "Display the transaction type?"
-msgstr "Konto anzeigen?"
+msgstr "Anzeigen der Buchungsart?"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2806
-#, fuzzy
 msgid "Display the transaction description?"
-msgstr "Anzeigen der Beschreibung?"
+msgstr "Anzeigen der Buchungsbeschreibung?"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:2812 intl-scm/guile-strings.c:2828
@@ -14212,66 +14215,3 @@ msgstr "Entwicklung Forderungen"
 
 #~ msgid "Overview"
 #~ msgstr "Übersicht"
-
-#~ msgid "Stock Portfolio"
-#~ msgstr "Portfolio"
-
-#~ msgid "Balance Tracking"
-#~ msgstr "Saldo Entwicklung"
-
-#~ msgid "Tax Report"
-#~ msgstr "Steuer-Bericht"
-
-#~ msgid "TXF Export"
-#~ msgstr "TXF Export"
-
-#~ msgid "TXF Anomalies"
-#~ msgstr "TXF Ungewöhnlichkeiten"
-
-#~ msgid "Printing"
-#~ msgstr "Drucken"
-
-#~ msgid "Hacking Documentation"
-#~ msgstr "Entwickler-Dokumentationen"
-
-#~ msgid "GNU GPL"
-#~ msgstr "GNU GPL"
-
-#~ msgid "URL Tests"
-#~ msgstr "URL Tests"
-
-#~ msgid "gnucash.org"
-#~ msgstr "gnucash.org"
-
-#~ msgid "slashdot.org"
-#~ msgstr "slashdot.org"
-
-#~ msgid "Importing/Online"
-#~ msgstr "Import/Online"
-
-#~ msgid "Network"
-#~ msgstr "Netzwerk"
-
-#~ msgid "Allow http network access"
-#~ msgstr "HTTP Netzwerk-Zugang erlauben"
-
-#~ msgid "Enable GnuCash's HTTP client support."
-#~ msgstr "GnuCash HTTP-Client-Unterstützung aktivieren"
-
-#~ msgid "Allow https connections using OpenSSL"
-#~ msgstr "HTTPS Verbindungen mit OpenSSL erlauben"
-
-#~ msgid "Enable secure HTTP connections using OpenSSL"
-#~ msgstr "Verschlüsselte HTTP Verbindungen mit OpenSSL aktivieren"
-
-#~ msgid "Enable GnuCash Network"
-#~ msgstr "GnuCash Netzwerk aktivieren"
-
-#~ msgid "The GnuCash Network server provides support and other services"
-#~ msgstr "Der GnuCash Netzwerkdienst bietet Support und weitere Dienste an"
-
-#~ msgid "GnuCash Network server"
-#~ msgstr "GnuCash Netzwerk-Server"
-
-#~ msgid "Host to connect to for user registration and support services"
-#~ msgstr "Rechner für Benutzerregistrierung und Support"

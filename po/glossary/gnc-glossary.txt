@@ -151,6 +151,7 @@
 "transaction state: cleared"	"A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 "transaction state: frozen"	"-"
 "transaction state: reconciled"	"A transaction that was reconciled with the bank's statement."
+"transaction state: voided"	"A transaction that is void i.e. not valid (anymore)."
 "transfer (noun)"	"1. The action of transferring sth. 2. see: credit transfer"
 "transfer account"	"The account where an amount is transferred to"
 "transfer, to (register toolbar)"	"To move money from one account to another. Will create a transaction."

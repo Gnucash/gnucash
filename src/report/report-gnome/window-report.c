@@ -402,6 +402,7 @@ gnc_get_export_filename (SCM choice)
     if (s) free (s);
   }
 
+  /* %s is the type of what is about to be saved, e.g. "HTML". */
   title = g_strdup_printf (_("Save %s To File"), type);
 
   filepath = gnc_file_dialog (title, NULL, NULL);
@@ -417,6 +418,7 @@ gnc_get_export_filename (SCM choice)
   /* Check for an error that isn't a non-existant file. */
   if (rc != 0 && errno != ENOENT)
   {
+    /* %s is the strerror(3) string of the error that occurred. */
     const char *format = _("You cannot save to that filename.\n\n%s");
 
     gnc_error_dialog (format, strerror(errno));
@@ -1095,9 +1097,10 @@ gnc_html_report_stream_cb (const char *location, char ** data)
   ok = gnc_run_report_id_string (location, data);
 
   if (!ok)
-    *data = g_strdup (_("<html><body><h3>Report error</h3>"
-                        "<p>An error occurred while running the report.</p>"
-                        "</body></html>"));
+    *data = g_strdup_printf ("<html><body><h3>%s</h3>"
+			     "<p>%s</p></body></html>", 
+			     _("Report error"),
+			     _("An error occurred while running the report."));
 
   return ok;
 }

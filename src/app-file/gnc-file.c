@@ -617,6 +617,7 @@ gnc_file_export_file(const char * newfile)
 
   if (!ok)
   {
+    /* %s is the strerror(3) error string of the error that occurred. */
     const char *format = _("There was an error saving the file.\n\n%s");
 
     gnc_error_dialog_parented (NULL, format, strerror(errno));
