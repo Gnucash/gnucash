@@ -824,7 +824,7 @@ pgendSync (Backend *bend, GNCBook *book)
    else
    {
       /* in single user mode, read all the transactions */
-      pgendGetMassTransactions (be, grp);
+      pgendGetMassTransactions (be, book);
    }
 
    /* hack alert -- In some deranged theory, we should be
@@ -1437,7 +1437,6 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
 static void
 pgend_book_load_single (Backend *bend, GNCBook *book)
 {
-   AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
 
    if (!be) return;
@@ -1464,8 +1463,7 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
 
    pgendGetAllAccountsInBook (be, book);
 
-   grp = gnc_book_get_group (book);
-   pgendGetMassTransactions (be, grp);
+   pgendGetMassTransactions (be, book);
 
    /* re-enable events */
    pgendEnable(be);

@@ -27,7 +27,7 @@
  * Postgres backend utility macros
  *
  * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>
  * 
  */
 
@@ -68,11 +68,12 @@ gpointer pgendGetResults (PGBackend *be,
  */
 gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
 
-/* hack alert -- calling PQFinish() is quite harsh, since all 
- * subsequent sql queries will fail. On the other hand, killing
+/* hack alert -- calling PQfinish() on error is quite harsh, since 
+ * all subsequent sql queries will fail. On the other hand, killing
  * anything that follows *is* a way of minimizing data corruption 
  * due to subsequent mishaps ... so anyway, error handling in these 
- * routines needs to be rethought. 
+ * routines needs to be redone.   There are notes describing the
+ * 'correct' solution in src/doc/backend-error.txt.
  */
 
 /* ============================================================= */
@@ -335,6 +336,29 @@ gnc_commodity * gnc_string_to_commodity (const char *str, GNCBook *book);
       PINFO("mis-match: %s sql=%24.18g, eng=%24.18g", sqlname, 	\
          sqlval, engval); 					\
       ndiffs++; 						\
+   }								\
+}
+
+/* --------------------------------------------------------------- */
+
+#define FIND_BOOK(book) {					\
+   if (NULL == book)						\
+   {								\
+      GList *node;						\
+      GUID book_guid;						\
+								\
+      /* Find the book that holds this item */			\
+      book_guid = nullguid;  /* just in case the read fails */	\
+      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);	\
+								\
+      book = NULL;						\
+      for (node=be->blist; node; node=node->next)		\
+      {								\
+         book = node->data;					\
+         if (guid_equal (&book->guid, &book_guid)) break;	\
+         book = NULL;						\
+      }								\
+      if (!book) return NULL;					\
    }								\
 }
 

@@ -27,7 +27,7 @@
  * Implements the callbacks for the postgres backend.
  *
  * HISTORY:
- * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>
  */
 
 
@@ -112,6 +112,8 @@ struct _pgend {
    GNCSession *session;
    GNCBook *book;  /* the currently open book -- XXX -- depricate ???*/
    BookList *blist;  /* list of books in this db */
+
+   GList *tmp_return;
 };
 
 /*

@@ -1,6 +1,6 @@
 /********************************************************************\
  * txnmass.h -- transaction mass retreival for the postgres backend *
- * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
+ * Copyright (c) 2001, 2002 Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,11 +23,10 @@
 #ifndef POSTGRES_TXN_MASS_H
 #define POSTGRES_TXN_MASS_H
 
-#include "Group.h"
-#include "Transaction.h"
+#include "gnc-book.h"
 #include "PostgresBackend.h"
 
-void pgendGetMassTransactions (PGBackend *be, AccountGroup *grp);
+void pgendGetMassTransactions (PGBackend *be, GNCBook*);
 
 
 #endif /* POSTGRES_TXN_MASS_H */

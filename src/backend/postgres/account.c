@@ -1,6 +1,6 @@
 /********************************************************************\
  * account.c -- implements account handling for postgres backend    *
- * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>         *
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -256,24 +256,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
 
-   if (NULL == book)
-   {
-      GList *node;
-      GUID book_guid;
-
-      /* First, find the book that pertains to this account */
-      book_guid = nullguid;  /* just in case the read fails ... */
-      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);
-
-      book = NULL;
-      for (node=be->blist; node; node=node->next)
-      {
-         book = node->data;
-         if (guid_equal (&book->guid, &book_guid)) break;
-         book = NULL;
-      }
-      if (!book) return data;
-   }
+   FIND_BOOK (book);
 
    /* Next, lets see if we've already got this account */
    acct_guid = nullguid;  /* just in case the read fails ... */

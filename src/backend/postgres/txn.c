@@ -874,7 +874,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   engine_data_is_newer = pgendCopyTransactionToEngine (be, trans_guid);
+   engine_data_is_newer = xxxpgendCopyTransactionToEngine (be, trans_guid);
 
    /* if engine data was newer, we save to the db. */
    if (0 < engine_data_is_newer) 

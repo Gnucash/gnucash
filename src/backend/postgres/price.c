@@ -1,6 +1,6 @@
 /********************************************************************\
  * price.c -- implements price handling for the postgres backend    *
- * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
+ * Copyright (c) 2001, 2002 Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -269,30 +269,13 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    gnc_commodity * modity;
 
-   if (NULL == book)
-   {
-      GList *node;
-      GUID book_guid;
-
-      /* First, find the book that pertains to this price */
-      book_guid = nullguid;  /* just in case the read fails ... */
-      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);
-
-      book = NULL;
-      for (node=be->blist; node; node=node->next)
-      {
-         book = node->data;
-         if (guid_equal (&book->guid, &book_guid)) break;
-         book = NULL;
-      }
-      if (!book) return data;
-   }
+   FIND_BOOK (book);
 
    prdb = gnc_book_get_pricedb(book);
 
    /* First, lets see if we've already got this one */
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
-   pr = pgendPriceLookup (be, &guid);
+   pr = gnc_price_lookup (&guid, book);
 
    if (!pr) 
    { 

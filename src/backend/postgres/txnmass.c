@@ -1,6 +1,6 @@
 /********************************************************************\
  * txnmass.c -- implements mass transaction fetch                   *
- * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>         *
+ * Copyright (c) 2000, 2001, 2002 Linas Vepstas <linas@linas.org>   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -36,6 +36,8 @@
 #include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
@@ -57,15 +59,18 @@ static short module = MOD_TXN;
 static gpointer
 get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *xaction_list = (GList *) data;
+   GNCBook *book = data;
+   GList *xaction_list = be->tmp_return;
    Transaction *trans;
    gnc_commodity *currency = NULL;
    Timespec ts;
    GUID trans_guid;
 
+   FIND_BOOK (book);
+
    /* first, see if we already have such a transaction */
    string_to_guid (DB_GET_VAL("transGUID",j), &trans_guid);
-   trans = pgendTransLookup (be, &trans_guid);
+   trans = xaccTransLookup (&trans_guid, book);
    if (trans)
    {
       /* If transaction already exists, determine whose data is 
@@ -79,13 +84,14 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       if (db_version < cache_version) {
          xaccTransBeginEdit (trans);
          xaction_list = g_list_prepend (xaction_list, trans);
-         return xaction_list;
+         be->tmp_return = xaction_list;
+         return data;
        }
       xaccTransBeginEdit (trans);
    }
    else
    {
-      trans = xaccMallocTransaction(be->book);
+      trans = xaccMallocTransaction(book);
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }
@@ -99,7 +105,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi (DB_GET_VAL("iguid",j));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), book);
 
    xaccTransSetCurrency (trans, currency);
 
@@ -108,7 +114,8 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    xaction_list = g_list_prepend (xaction_list, trans);
 
-   return xaction_list;
+   be->tmp_return = xaction_list;
+   return data;
 }
 
 /* ============================================================= */
@@ -116,6 +123,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 static gpointer
 get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
+   GNCBook *book = data;
    Transaction *trans=NULL;
    Account *acc;
    Split *s;
@@ -127,15 +135,16 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_numeric value, amount;
    gint64 trans_frac = 0;
 
+   FIND_BOOK (book);
 
    /* --------------------------------------------- */
    PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-   s = pgendSplitLookup (be, &guid);
+   s = xaccSplitLookup (&guid, book);
    if (!s)
    {
-      s = xaccMallocSplit(be->book);
+      s = xaccMallocSplit(book);
       xaccSplitSetGUID(s, &guid);
    }
 
@@ -151,17 +160,19 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
-   trans = pgendTransLookup (be, &guid);
+   trans = xaccTransLookup (&guid, book);
    if (!trans)
    {
       PERR ("trans not found, will delete this split\n"
             "\t(split with  guid=%s\n"
-            "\twants a trans with guid=%s)\n",
+            "\twants a trans with guid=%s\n"
+            "\tin book with guid=%s)\n",
             DB_GET_VAL("entryGUID",j),
-            DB_GET_VAL("transGUID",j)
+            DB_GET_VAL("transGUID",j),
+            DB_GET_VAL("bookGUID",j)
             );
       xaccSplitDestroy (s);
-      return NULL;
+      return data;
    }
 
    xaccTransAppendSplit (trans, s);
@@ -170,17 +181,19 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    /* next, find the account that this split goes into */
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = pgendAccountLookup (be, &guid);
+   acc = xaccAccountLookup (&guid, book);
    if (!acc)
    {
       PERR ("account not found, will delete this split\n"
             "\t(split with  guid=%s\n"
-            "\twants an acct with guid=%s)\n",
+            "\twants an acct with guid=%s\n"
+            "\tin book with guid=%s)\n",
             DB_GET_VAL("entryGUID",j),
-            DB_GET_VAL("accountGUID",j)
+            DB_GET_VAL("accountGUID",j),
+            DB_GET_VAL("bookGUID",j)
             );
       xaccSplitDestroy (s);
-      return NULL;
+      return data;
    }
 
    /* We must set value after split has been inserted into account,
@@ -199,27 +212,50 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    value = gnc_numeric_create (num, trans_frac);
    xaccSplitSetValue (s, value);
 
-   return NULL;
+   return data;
 }
 
 /* ============================================================= */
 
 void
-pgendGetMassTransactions (PGBackend *be, AccountGroup *grp)
+pgendGetMassTransactions (PGBackend *be, GNCBook *book)
 {
+   char *p, buff[900];
    GList *node, *xaction_list = NULL;
+   AccountGroup *grp;
 
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   SEND_QUERY (be, "SELECT * FROM gncTransaction;", );
+   /* design note: someday, we might get a performance boost by adding
+    * a bookguid to the transaction table */
+   p = buff;
+   p = stpcpy (p, "SELECT DISTINCT gncTransaction.*, gncAccount.bookGuid as bookGuid "
+                  " FROM gncTransaction, gncEntry, gncAccount "
+                  " WHERE gncTransaction.transGuid = gncEntry.transGuid AND "
+                  " gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  " gncAccount.bookGuid = '");
+   p = guid_to_string_buff(gnc_book_get_guid (book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be, buff, );
 
    /* restore the transactions */
+   grp = gnc_book_get_group (book);
    xaccAccountGroupBeginEdit (grp);
-   xaction_list = pgendGetResults (be, get_mass_trans_cb, NULL);
 
-   SEND_QUERY (be, "SELECT * FROM gncEntry;", );
-   pgendGetResults (be, get_mass_entry_cb, NULL);
+   be->tmp_return = NULL;
+   pgendGetResults (be, get_mass_trans_cb, book);
+   xaction_list = be->tmp_return;
+
+   p = buff;
+   p = stpcpy (p, "SELECT gncEntry.*, gncAccount.bookGuid as bookGuid "
+                  " FROM gncEntry, gncAccount "
+                  " WHERE gncEntry.accountGuid = gncAccount.accountGuid AND "
+                  " gncAccount.bookGuid = '");
+   p = guid_to_string_buff(gnc_book_get_guid (book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be, buff, );
+   pgendGetResults (be, get_mass_entry_cb, book);
 
    for (node=xaction_list; node; node=node->next)
    {
