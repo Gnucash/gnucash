@@ -122,6 +122,8 @@
 #include "table-allgui.h"
 
 
+#define SPLIT_TRANS_STR _("-- Split Transaction --")
+
 typedef struct _SRInfo SRInfo;
 struct _SRInfo
 {
@@ -1310,7 +1312,7 @@ LedgerTraverse (Table *table,
       break;
 
     name = cell->cell.value;
-    if (!name || *name == '\0')
+    if (!name || *name == '\0' || safe_strcmp (name, SPLIT_TRANS_STR) == 0)
       break;
 
     account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
@@ -3282,18 +3284,63 @@ get_trans_total_balance (SplitRegister *reg, Transaction *trans)
 
 /* ======================================================== */
 
+static gboolean
+use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
+{
+  GNCAccountType account_type;
+  CursorClass cursor_class;
+  Account *account;
+  guint32 changed;
+  Split *split;
+
+  split = sr_get_split (reg, virt_loc.vcell_loc);
+  if (!split)
+    return TRUE;
+
+  cursor_class = xaccSplitRegisterGetCursorClass (reg,
+                                                  virt_loc.vcell_loc);
+  if (cursor_class != CURSOR_CLASS_SPLIT)
+    return TRUE;
+
+  changed = xaccSplitRegisterGetChangeFlag (reg);
+  if (MOD_XFRM & changed)
+  {
+    account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                          reg->xfrmCell->cell.value,
+                                          account_separator);
+    if (!account)
+      account = xaccSplitGetAccount (split);
+  }
+  else
+    account = xaccSplitGetAccount (split);
+
+  if (!account)
+    return XACC_CELL_ALLOW_ALL;
+
+  account_type = xaccAccountGetType (account);
+
+  if (account_type == STOCK  ||
+      account_type == MUTUAL ||
+      account_type == CURRENCY)
+    return TRUE;
+
+  return FALSE;
+}
+
 const char *
-xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
+xaccSRGetEntryHandler (VirtualLocation virt_loc,
                        gboolean *conditionally_changed, gpointer user_data)
 {
-  CellType cell_type = _cell_type;
   SplitRegister *reg = user_data;
   const char *value = "";
+  CellType cell_type;
   Transaction *trans;
   Split *split;
 
   if (conditionally_changed)
     *conditionally_changed = FALSE;
+
+  cell_type = xaccSplitRegisterGetCellType (reg, virt_loc);
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
   if (split == NULL)
@@ -3468,6 +3515,9 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
       {
         gnc_numeric price;
 
+        if (!use_security_cells (reg, virt_loc))
+          return "";
+
         price = xaccSplitGetSharePrice (split);
 
         return xaccPrintAmount (price, gnc_default_price_print_info ());
@@ -3476,6 +3526,9 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
     case SHRS_CELL:
       {
         gnc_numeric shares;
+
+        if (!use_security_cells (reg, virt_loc))
+          return "";
 
         shares = xaccSplitGetShareAmount (split);
 
@@ -3502,7 +3555,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
             * or more splits, or whether there is only one */
            s = xaccTransGetSplit (xaccSplitGetParent(split), 1);
            if (s)
-             name = g_strdup (_("-- Split Transaction --"));
+             name = g_strdup (SPLIT_TRANS_STR);
            else
              name = g_strdup ("");
          }
@@ -3574,45 +3627,10 @@ xaccSRGetIOFlagsHandler (VirtualLocation virt_loc, gpointer user_data)
 
     case PRIC_CELL:
     case SHRS_CELL:
-      {
-        Split *split = sr_get_split (reg, virt_loc.vcell_loc);
-        GNCAccountType account_type;
-        CursorClass cursor_class;
-        Account *account;
-        guint32 changed;
+      if (use_security_cells (reg, virt_loc))
+        return XACC_CELL_ALLOW_ALL;
 
-        if (!split)
-          return XACC_CELL_ALLOW_ALL;
-
-        cursor_class = xaccSplitRegisterGetCursorClass (reg,
-                                                        virt_loc.vcell_loc);
-        if (cursor_class != CURSOR_CLASS_SPLIT)
-          return XACC_CELL_ALLOW_ALL;
-
-        changed = xaccSplitRegisterGetChangeFlag (reg);
-        if (MOD_XFRM & changed)
-        {
-          account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
-                                                reg->xfrmCell->cell.value,
-                                                account_separator);
-          if (!account)
-            account = xaccSplitGetAccount (split);
-        }
-        else
-          account = xaccSplitGetAccount (split);
-
-        if (!account)
-          return XACC_CELL_ALLOW_ALL;
-
-        account_type = xaccAccountGetType (account);
-
-        if (account_type == STOCK  ||
-            account_type == MUTUAL ||
-            account_type == CURRENCY)
-          return XACC_CELL_ALLOW_ALL;
-
-        return XACC_CELL_ALLOW_SHADOW;
-      }
+      return XACC_CELL_ALLOW_NONE;
 
     default:
       return XACC_CELL_ALLOW_NONE;

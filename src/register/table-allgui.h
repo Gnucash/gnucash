@@ -99,10 +99,9 @@
 typedef enum
 {
   XACC_CELL_ALLOW_NONE       = 0,
-  XACC_CELL_ALLOW_SHADOW     = 1 << 0,
-  XACC_CELL_ALLOW_INPUT      = 1 << 1,
-  XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_SHADOW | XACC_CELL_ALLOW_INPUT,
-  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2
+  XACC_CELL_ALLOW_INPUT      = 1 << 0,
+  XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_INPUT,
+  XACC_CELL_ALLOW_EXACT_ONLY = 1 << 1
 } CellIOFlags;
 
 
@@ -162,7 +161,6 @@ typedef void (*TableSetHelpFunc) (Table *table,
 typedef void (*TableDestroyFunc) (Table *table);
 
 typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
-                                              short cell_type,
                                               gboolean *conditionally_changed,
                                               gpointer user_data);
 

@@ -206,7 +206,6 @@ gboolean xaccSRCurrentTransExpanded (SplitRegister *reg);
 
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
-                                    short _cell_type,
                                     gboolean *changed,
                                     gpointer user_data);
 CellIOFlags  xaccSRGetIOFlagsHandler (VirtualLocation virt_loc,

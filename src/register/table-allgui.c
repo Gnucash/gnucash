@@ -172,23 +172,9 @@ static const char *
 gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
                               gboolean *conditionally_changed)
 {
-  VirtualCell *vcell;
-  CellBlockCell *cb_cell;
   const char *entry;
 
-  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-  if (vcell == NULL)
-    return "";
-
-  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                    virt_loc.phys_row_offset,
-                                    virt_loc.phys_col_offset);
-  if (cb_cell == NULL)
-    return "";
-  if (cb_cell->cell_type < 0)
-    return "";
-
-  entry = table->entry_handler (virt_loc, cb_cell->cell_type,
+  entry = table->entry_handler (virt_loc,
                                 conditionally_changed,
                                 table->handler_user_data);
   if (!entry)
@@ -223,12 +209,11 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 
     io_flags = gnc_table_get_io_flags (table, virt_loc);
 
-    if (io_flags & XACC_CELL_ALLOW_SHADOW)
+    if (io_flags & XACC_CELL_ALLOW_INPUT)
       return cb_cell->cell->value;
   }
 
-  entry = table->entry_handler (virt_loc, cb_cell->cell_type, NULL,
-                                table->handler_user_data);
+  entry = table->entry_handler (virt_loc, NULL, table->handler_user_data);
   if (!entry)
     entry = "";
 
@@ -631,7 +616,7 @@ gnc_table_move_cursor_internal (Table *table,
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
         io_flags = gnc_table_get_io_flags (table, virt_loc);
-        if (io_flags & XACC_CELL_ALLOW_SHADOW)
+        if (io_flags & XACC_CELL_ALLOW_INPUT)
         {
           const char *entry;
           gboolean conditionally_changed = FALSE;

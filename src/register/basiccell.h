@@ -61,8 +61,6 @@
  *
  *     XACC_CELL_ALLOW_INPUT  accept keyboard & mouse
  *       input from the user. 
- *     XACC_CELL_ALLOW_SHADOW copy ("shadow") the contents
- *       of register cells.
  *     XACC_CELL_ALLOW_EXACT_ONLY the cell may only be
  *       entered by 'exact' selection, i.e., not by
  *       indirect selection by, for example, tabbing.
@@ -73,14 +71,6 @@
  *   to only display values, but not accept user input. If
  *   set, then the callbacks below are used to when the
  *   cell is entered.
- *
- *   If ALLOW_SHADOW is not set, then register contents
- *   will never be copied into this cell.  This may result
- *   in undesirable behaviour when the cell is moved around,
- *   as the cell contents will be imprinted onto every location 
- *   where it is moved.  On the other hand, this can be useful
- *   for, e.g. blanking out cells.
- *
  *
  * USER CALLBACKS:
  * The enter_cell() callback is called when the user first
