@@ -2367,7 +2367,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   GUILELIBS="-lguile -ldl -lreadline -lqthreads"
 else
   echo "$ac_t""no" 1>&6
-echo "configure: warning: cannot link with guile" 1>&2
+{ echo "configure: error: cannot link with guile" 1>&2; exit 1; }
 fi
 
 fi
