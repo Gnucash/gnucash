@@ -159,8 +159,7 @@ employeeCB (const char *location, const char *label,
     else
     {
       result->error_message =
-	g_strdup_printf (/* XXX:FIXME: _() */
-			 ("Entity type does not match Employee: %s"),
+	g_strdup_printf (_("Entity type does not match Employee: %s"),
 			 location);
       return FALSE;
     }

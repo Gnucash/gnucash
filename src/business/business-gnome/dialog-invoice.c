@@ -1634,14 +1634,14 @@ gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
       switch (iw->dialog_type) 
 	{
 	case NEW_INVOICE:
-	  wintitle = /* XXX:FIXME: _() */ ("New Expense Voucher");
+	  wintitle = _("New Expense Voucher");
 	  break;
 	case MOD_INVOICE:
 	case EDIT_INVOICE:
-	  wintitle = /* XXX:FIXME: _() */ ("Edit Expense Voucher");
+	  wintitle = _("Edit Expense Voucher");
 	  break;
 	case VIEW_INVOICE:
-	  wintitle = /* XXX:FIXME: _() */ ("View Expense Voucher");
+	  wintitle = _("View Expense Voucher");
 	  break;
 	}
       break;
