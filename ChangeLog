@@ -1,3 +1,8 @@
+2003-02-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/glade/hbci.glade: Clarify some
+	HBCI strings.
+
 2003-02-14  David Hampton  <hampton@employees.org>
 
 	* src/quotes/dump-finance-quote: Do a runtime check for
