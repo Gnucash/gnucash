@@ -388,11 +388,13 @@ sixtp_sax_characters_handler(void *user_data, const xmlChar *text, int len) {
 
   if(!pdata->parsing_ok) return;
 
+#if 0  
   {
     gchar *tmp = g_strndup(text, len);
     /*fprintf(stderr, "Hit chars (%s)\n", tmp);*/
     g_free(tmp);
   }
+#endif
 
   frame = (sixtp_stack_frame *) pdata->stack->data;
   if(frame->parser->characters_handler) {
@@ -802,13 +804,14 @@ typedef struct {
 } GNCParseStatus;
 
 static gboolean
-isspace_str(const gchar *str) {
+isspace_str(const gchar *str, int nomorethan) {
   const gchar *cursor = str;
-  while(*cursor) {
+  while(*cursor && (nomorethan != 0)) {
     if(!isspace(*cursor)) {
       return(FALSE);
     }
     cursor++;
+    nomorethan--;
   }
   return(TRUE);
 }
@@ -820,11 +823,7 @@ allow_and_ignore_only_whitespace(GSList *sibling_data,
                                  gpointer *result,
                                  const char *text,
                                  int length) {
-  gchar *copytxt = g_strndup(text, length);
-  gboolean is_space = isspace_str(copytxt);
-
-  g_free(copytxt);
-  return(is_space);
+  return(isspace_str(text, length));
 }
 
 static gboolean
@@ -935,7 +934,7 @@ string_to_gint64(const gchar *str, gint64 *v) {
     return(FALSE);
   }
 
-  if(!isspace_str(str + num_read)) return(FALSE);
+  if(!isspace_str(str + num_read, -1)) return(FALSE);
   return(TRUE);
 }
 
@@ -1851,7 +1850,7 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
     }
 
     if((sign != '+') && (sign != '-')) return(FALSE);
-    if(!isspace_str(strpos + num_read)) return(FALSE);
+    if(!isspace_str(strpos + num_read, -1)) return(FALSE);
 
     parsed_time.tm_gmtoff = (h1 * 10 + h2) * 60 * 60;
     parsed_time.tm_gmtoff += (m1 * 10 + m2) * 60;
