@@ -1,3 +1,27 @@
+2001-12-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/main.scm: remove some report menu setup functionality
+
+	* src/report/report-gnome/report-gnome.scm: move some report
+	menu setup functionality here
+
+	* src/gnome/top-level.c: take out component manager initialization
+	and shutdown
+
+	* src/engine/Transaction.c: fix spelling
+
+	* src/backend/postgres/test/test-db.c: work on tests
+
+	* src/backend/postgres/test/.cvsignore: ignore database dirs
+
+	* src/backend/postgres/txn.c: fix spelling
+
+	* src/app-utils/gncmod-app-utils.c: perform component manager
+	initialization and shutdown here
+
+	* src/app-file/gnc-file.c: suspend engine events when
+	creating new session
+
 2001-12-19  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/gw-engine-spec.scm: g-wrap event types enum
