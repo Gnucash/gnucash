@@ -116,7 +116,6 @@
       are pointer unique.
 
  */
-typedef struct gnc_price_s GNCPrice;
 /** */
 typedef struct gnc_price_lookup_s GNCPriceLookup;
 
