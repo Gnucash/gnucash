@@ -3381,7 +3381,7 @@ xaccTransVoid(Transaction *transaction,
     xaccSplitSetReconcile(split, VREC);
   }
 
-  xaccTransSetReadOnly(transaction, "Transaction Voided");
+  xaccTransSetReadOnly(transaction, _("Transaction Voided"));
   xaccTransCommitEdit(transaction);
 }
 
