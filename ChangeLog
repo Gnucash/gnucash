@@ -1,3 +1,10 @@
+2001-08-05  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-register.c: move close button to left
+	to be more consistent with main window
+
+	* src/SplitLedger.c (sr_split_auto_calc): fix bug
+
 2001-08-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/main-window.scm: handle errors in creating

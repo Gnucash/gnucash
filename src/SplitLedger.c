@@ -3110,7 +3110,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
 
     if (!(MOD_PRIC & changed))
       default_value = 1;
-    if (!(MOD_SHRS & changed))
+    else if (!(MOD_SHRS & changed))
       default_value = 0;
     else if (!(MOD_AMNT & changed))
       default_value = 2;
