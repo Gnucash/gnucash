@@ -237,6 +237,8 @@ configLayout (SplitRegister *reg)
          reg->num_cols = 11;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
          if (show_samount) {
+            SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
+            SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
             SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
             SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
          }
@@ -308,11 +310,24 @@ configLayout (SplitRegister *reg)
 /* hack alert -- if show_tamount or show_samount is set then don't traverse there */
 /* hack alert -- fix show_txfrm also ... */
 
+#define FIRST_RIGHT(r,c) {				\
+   prev_r = r; prev_c = c;				\
+}
+
+#define NEXT_RIGHT(r,c) {				\
+   xaccNextRight (curs, prev_r, prev_c, (r), (c));	\
+   prev_r = r; prev_c = c;				\
+}
+
 static void
 configTraverse (SplitRegister *reg)
 {
+   int prev_r, prev_c;
    CellBlock *curs = NULL;
    int type = (reg->type) & REG_TYPE_MASK;
+   int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
+   int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
+   int show_txfrm = (reg->type) & REG_SHOW_TXFRM;
 
    switch (type) {
       case BANK_REGISTER:
@@ -326,36 +341,62 @@ configTraverse (SplitRegister *reg)
       case INCOME_LEDGER:    /* hack alert do xto cell too */
       case GENERAL_LEDGER:    /* hack alert do xto cell too */
          curs = reg->trans_cursor;
-         xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
-         xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, DESC_CELL_R, DESC_CELL_C);
-         xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
+         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
+         NEXT_RIGHT  (NUM_CELL_R,  NUM_CELL_C);
+         if (show_txfrm) {
+            NEXT_RIGHT (TXFRM_CELL_R, TXFRM_CELL_C);
+         }
+         NEXT_RIGHT  (DESC_CELL_R, DESC_CELL_C);
+         if (show_tamount) {
+            NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
+            NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
+         }
+         NEXT_RIGHT  (-1-DATE_CELL_R, -1-DATE_CELL_C);
 
          curs = reg->split_cursor;
-         xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
-         xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
-         xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
-         xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, CRED_CELL_R, CRED_CELL_C);
-         xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, -1-ACTN_CELL_R, -1-ACTN_CELL_C);
+         FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
+         NEXT_RIGHT (XFRM_CELL_R, XFRM_CELL_C);
+         NEXT_RIGHT (MEMO_CELL_R, MEMO_CELL_C);
+         if (show_samount) {
+            NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
+            NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
+         }
+         NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
          break;
 
       case STOCK_REGISTER:
       case PORTFOLIO:
          curs = reg->trans_cursor;
-         xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
-         xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, DESC_CELL_R, DESC_CELL_C);
-         xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
+         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
+         NEXT_RIGHT (NUM_CELL_R,  NUM_CELL_C);
+         if (show_txfrm) {
+            NEXT_RIGHT (TXFRM_CELL_R, TXFRM_CELL_C);
+         }
+         NEXT_RIGHT (DESC_CELL_R, DESC_CELL_C);
+         if (show_tamount) {
+            NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
+            NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
+            NEXT_RIGHT (TPRIC_CELL_R, TPRIC_CELL_C);
+            NEXT_RIGHT (TVALU_CELL_R, TVALU_CELL_C);
+         }
+         NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
 
          curs = reg->split_cursor;
-         xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
-         xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
-         xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
-         xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, CRED_CELL_R, CRED_CELL_C);
-         xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, PRIC_CELL_R, PRIC_CELL_C);
-         xaccNextRight (curs, PRIC_CELL_R, PRIC_CELL_C, -1-ACTN_CELL_R, -1-ACTN_CELL_C);
+         FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
+         NEXT_RIGHT (XFRM_CELL_R, XFRM_CELL_C);
+         NEXT_RIGHT (MEMO_CELL_R, MEMO_CELL_C);
+         if (show_samount) {
+            NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
+            NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
+            NEXT_RIGHT (PRIC_CELL_R, PRIC_CELL_C);
+            NEXT_RIGHT (VALU_CELL_R, VALU_CELL_C);
+         }
+         NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
          break;
 
       default:
-         xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
+         FIRST_RIGHT (DATE_CELL_R, DATE_CELL_C);
+         NEXT_RIGHT  (-1-DATE_CELL_R, -1-DATE_CELL_C);
 
    }
 }
