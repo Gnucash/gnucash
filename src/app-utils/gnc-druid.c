@@ -131,6 +131,92 @@ gnc_druid_prev_provider(GNCDruid* druid)
   return druid->provider;
 }
 
+void
+gnc_druid_next_page(GNCDruid* druid)
+{
+  GNCDruidProvider *prov;
+  GNCDruidPage* page = NULL;
+
+  g_return_if_fail(druid);
+  g_return_if_fail(IS_GNC_DRUID(druid));
+
+  for (prov = druid->provider; !page; ) {
+
+    /* How we behave depends on whether we have a provider... 
+     * if we do not have a provider, then get the next one and
+     * try to get the first page.  If we DO have a provider, then
+     * ask for the next page.  If neither gave us a page then we
+     * should go to the next provider.  Once we get a page or if
+     * we hit the next of the provider list, we're done.
+     */
+
+    if (!prov) {
+
+      /* Nope, no provider */
+      prov = gnc_druid_next_provider(druid);
+      if (!prov)
+	break;
+
+      /* New provider -- get the first page */
+      page = gnc_druid_provider_first_page(prov);
+
+    } else {
+
+      /* Yep, try to get the next page */
+      page = gnc_druid_provider_next_page(prov);
+    }
+
+    /* If we didn't get a page, then we should go to the next provider */
+    if (!page)
+      prov = NULL;
+  }
+
+  if (page)
+    gnc_druid_set_page(druid, page);
+
+  g_return_if_fail(page);
+}
+
+void
+gnc_druid_prev_page(GNCDruid* druid)
+{
+  GNCDruidProvider *prov;
+  GNCDruidPage* page = NULL;
+
+  g_return_if_fail(druid);
+  g_return_if_fail(IS_GNC_DRUID(druid));
+
+  for (prov = druid->provider; !page; ) {
+
+    /* See gnc_druid_next_page for documentation */
+
+    if (!prov) {
+
+      /* Nope, no provider */
+      prov = gnc_druid_prev_provider(druid);
+      if (!prov)
+	break;
+
+      /* New provider -- get the first page */
+      page = gnc_druid_provider_last_page(prov);
+
+    } else {
+
+      /* Yep, try to get the next page */
+      page = gnc_druid_provider_prev_page(prov);
+    }
+
+    /* If we didn't get a page, then we should go to the next provider */
+    if (!page)
+      prov = NULL;
+  }
+
+  if (page)
+    gnc_druid_set_page(druid, page);
+
+  g_return_if_fail(page);
+}
+
 /* Other functions */
 
 /**

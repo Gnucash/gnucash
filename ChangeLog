@@ -14,6 +14,13 @@
 	  a gnome-druid edge-page (first/last page in the druid).  Probably
 	  still need to hook into the next/prev buttons.
 
+	* gnc-druid.[ch]: add gnc_druid_{next,prev}_page() APIs to choose the
+	  default next/previous page in the druid.  This will automatically
+	  walk through the providers to find the next real page.
+	* gnc-druid-gnome.c: hook in handlers for "next" and "back" signals
+	  for default page moves.  This should allow us to constantly keep
+	  track of the current provider.
+
 2004-01-13  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: pull in gobject with glib

@@ -101,6 +101,32 @@ gnc_druid_gnome_cancel_cb(GnomeDruid* druid, gpointer user_data)
   g_object_unref(G_OBJECT(dg));
 }
 
+static gboolean
+gnc_druid_gnome_next_cb(GnomeDruidPage* page, GtkWidget *arg1, gpointer user_data)
+{
+  GNCDruid *druid;
+
+  g_return_val_if_fail(IS_GNC_DRUID_GNOME(user_data), FALSE);
+  druid = GNC_DRUID(user_data);
+
+  gnc_druid_next_page(druid);
+
+  return TRUE;
+}
+
+static gboolean
+gnc_druid_gnome_prev_cb(GnomeDruidPage* page, GtkWidget *arg1, gpointer user_data)
+{
+  GNCDruid *druid;
+
+  g_return_val_if_fail(IS_GNC_DRUID_GNOME(user_data), FALSE);
+  druid = GNC_DRUID(user_data);
+
+  gnc_druid_prev_page(druid);
+
+  return TRUE;
+}
+
 static GNCDruid*
 gnc_druid_gnome_build(const char* title)
 {
@@ -118,6 +144,10 @@ gnc_druid_gnome_build(const char* title)
 
   g_signal_connect(G_OBJECT(widget), "cancel",
 		   (GCallback)gnc_druid_gnome_cancel_cb, druid);
+  g_signal_connect(G_OBJECT(widget), "next",
+		   (GCallback)gnc_druid_gnome_next_cb, druid);
+  g_signal_connect(G_OBJECT(widget), "back",
+		   (GCallback)gnc_druid_gnome_prev_cb, druid);
   gtk_widget_show_all(widget);
 
   return GNC_DRUID(druid);

@@ -62,6 +62,9 @@ void gnc_druid_set_page(GNCDruid*, GNCDruidPage*);
 GNCDruidProvider* gnc_druid_next_provider(GNCDruid*);
 GNCDruidProvider* gnc_druid_prev_provider(GNCDruid*);
 
+void gnc_druid_next_page(GNCDruid*);
+void gnc_druid_prev_page(GNCDruid*);
+
 /* Other functions */
 
 /**
