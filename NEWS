@@ -1,5 +1,8 @@
 Version history:
 ------- -------
+ 1.6.4  - 30 September 2001
+         o fix bug importing GnuCash 1.4 files
+
  1.6.3  - 23 September 2001
          o new Polish translation
          o Danish and Spanish translation of new account files
