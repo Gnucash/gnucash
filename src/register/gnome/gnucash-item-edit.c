@@ -1258,9 +1258,6 @@ item_edit_hide_popup (ItemEdit *item_edit)
         g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
 
-	if (item_edit->item_list == NULL)
-		return;
-
 	if (item_edit->item_list)
                 gnome_canvas_item_set
                         (GNOME_CANVAS_ITEM(item_edit->item_list),
