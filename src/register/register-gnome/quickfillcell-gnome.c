@@ -72,7 +72,7 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
                  (*start_selection >= *cursor_position))
                 *cursor_position = *end_selection;
 
-        match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value_w,
+        match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value,
                                                     *cursor_position);
 
         if (match == NULL)

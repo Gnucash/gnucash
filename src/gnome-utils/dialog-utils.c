@@ -531,23 +531,19 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     case GDK_minus:
       if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
       {
-        GdkWChar *wcs;
-        int count;
-        int len;
-        int i;
-
-        len = gnc_mbstowcs (&wcs, date_str);
-        if (len < 0)
-          return FALSE;
+        const char *c;
+        gunichar uc;
+        int count = 0;
 
         /* rough check for existing date */
-        for (i = count = 0; i < len; i++)
+        c = date_str;
+        while (*c)
         {
-          if (wcs[i] == '-')
+          uc = g_utf8_get_char (c);
+          if (uc == '-')
             count++;
+          c = g_utf8_next_char (c);          
         }
-
-        g_free (wcs);
 
         if (count < 2)
           return FALSE;
@@ -984,87 +980,4 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
     else
       g_signal_connect(signal_object, signal_name, func, user_data);
   }
-}
-
-
-gint
-gnc_mbstowcs (GdkWChar **dest_p, const char *src)
-{
-  GdkWChar *dest;
-  gint src_len;
-  gint retval;
-
-  if (!src)
-    return -1;
-
-  src_len = strlen (src);
-
-  dest = g_new0 (GdkWChar, src_len + 1);
-
-  retval = gdk_mbstowcs (dest, src, src_len);
-
-  if (retval < 0)
-  {
-    PERR ("bad multi-byte conversion");
-  }
-
-  if (dest_p)
-    *dest_p = dest;
-  else
-    g_free (dest);
-
-  return retval;
-}
-
-char *
-gnc_wcstombs (const GdkWChar *src)
-{
-  char *retval;
-
-  if (!src)
-    return NULL;
-
-  retval = gdk_wcstombs (src);
-  if (!retval)
-  {
-    PERR ("bad multi-byte conversion");
-  }
-
-  return retval;
-}
-
-gint
-gnc_wcslen (const GdkWChar *src)
-{
-  int len = 0;
-
-  if (!src)
-    return 0;
-
-  while (src[len])
-    len++;
-
-  return len;
-}
-
-GdkWChar *
-gnc_wcsdup (const GdkWChar *src)
-{
-  GdkWChar *dest;
-  int len;
-  int i;
-
-  if (!src)
-    return NULL;
-
-  len = gnc_wcslen (src);
-
-  dest = g_new (GdkWChar, len + 1);
-
-  for (i = 0; i < len; i++)
-    dest[i] = src[i];
-
-  dest[len] = 0;
-
-  return dest;
 }

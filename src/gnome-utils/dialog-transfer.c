@@ -606,12 +606,13 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
                                gint *start_pos,
                                XferDialog *xferData)
 {
-  GdkWChar *change_text_w, *old_text_w, *new_text_w;
-  int change_text_len, old_text_len, new_text_len, old_pos;
-  char *new_text;
+  GString *change_text_gs, *new_text_gs;
+  glong old_text_chars, new_text_chars;
   const char *old_text, *match_str = NULL;
   QuickFill *match;
   int i;
+  const char *c;
+  gunichar uc;
 
   xferData->desc_didquickfill = FALSE;
 
@@ -622,58 +623,41 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
   if (!old_text)
     old_text = "";
 
-  old_text_len = gnc_mbstowcs (&old_text_w, old_text);
-  if (old_text_len < 0)
+  /* If we are inserting in the middle, do nothing */
+  old_text_chars = g_utf8_strlen (old_text, -1);
+  if( *start_pos < old_text_chars )
     return;
 
-   /* If we are inserting in the middle, do nothing */
-  if( *start_pos < old_text_len )
-    return;
-
-  /* insert_text is not NULL-terminated, how annoying */
-  {
-    char *temp;
-
-    temp = g_new (char, insert_text_len + 1);
-    strncpy (temp, insert_text, insert_text_len);
-    temp[insert_text_len] = '\0';
-
-    change_text_w = g_new0 (GdkWChar, insert_text_len + 1);
-    change_text_len = gdk_mbstowcs (change_text_w, temp,
-                                    insert_text_len);
-
-    g_free (temp);
-  }
-
-  if (change_text_len < 0)
-  {
-    PERR ("bad change text conversion");
-    g_free (change_text_w);
-      return;
-  }
-
-  old_pos = *start_pos;
+  change_text_gs = g_string_new_len (insert_text, insert_text_len);
 
   /* Construct what the new value of the text entry will be */
-  new_text_len = old_text_len + change_text_len;
-  new_text_w = g_new0 (GdkWChar, new_text_len + 1);
+  new_text_gs = g_string_new ("");
+  
+  i = 0;
+  c = old_text;
+  //Copy old text up to insert position
+  while ( *c && ( i < *start_pos ) )
+  {
+    uc = g_utf8_get_char ( c );
+    g_string_append_unichar ( new_text_gs, uc );
+    c = g_utf8_next_char ( c );
+    i++;      
+  }
 
-  for (i = 0; i < *start_pos; i++)
-          new_text_w[i] = old_text_w[i];
+  //Copy inserted text
+  g_string_append ( new_text_gs, change_text_gs->str );
 
-  for (i = *start_pos; i < *start_pos + change_text_len; i++)
-          new_text_w[i] = change_text_w[i - *start_pos];
+  //Copy old text after insert position
+  while ( *c )
+  {
+    uc = g_utf8_get_char ( c );
+    g_string_append_unichar ( new_text_gs, uc );
+    c = g_utf8_next_char ( c );
+  }
 
-  for (i = *start_pos + change_text_len; i < new_text_len; i++)
-          new_text_w[i] = old_text_w[i - change_text_len];
-
-  new_text_w[new_text_len] = 0;
-
-  new_text = gnc_wcstombs (new_text_w);
-
-  if( ( match = gnc_quickfill_get_string_match( xferData->qf, new_text_w ) )
+  if( ( match = gnc_quickfill_get_string_match( xferData->qf, new_text_gs->str ) )
    && ( match_str = gnc_quickfill_string( match ) ) 
-   && safe_strcmp( new_text, old_text ) )
+   && safe_strcmp( new_text_gs->str, old_text ) )
   {
     g_signal_handlers_block_matched (G_OBJECT (entry),
 				     G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, xferData);
@@ -694,15 +678,16 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
 
     /* Store off data for the key_press_cb or
      * the button_release_cb to make use of. */
-    xferData->desc_cursor_position = new_text_len;
-    xferData->desc_start_selection = new_text_len;
+    new_text_chars = g_utf8_strlen (new_text_gs->str, -1);
+    xferData->desc_cursor_position = new_text_chars;
+    xferData->desc_start_selection = new_text_chars;
     xferData->desc_end_selection = -1;
     xferData->desc_didquickfill = TRUE;
   }
 
-  g_free( new_text );
-  g_free( new_text_w );
-
+  g_string_free (change_text_gs, TRUE);
+  g_string_free (new_text_gs, TRUE);
+  
 }
 
 /* This common post-key press and post-button release handler fixes
@@ -2070,4 +2055,3 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
   xferData->transaction_cb = handler;
   xferData->transaction_user_data = user_data;
 }
-

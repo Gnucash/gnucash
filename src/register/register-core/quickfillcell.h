@@ -58,7 +58,7 @@ typedef struct
   QuickFillSort sort;  /* determines order of strings matched.
                         * default is QUICKFILL_LIFO. */
 
-  GdkWChar *original;  /* original string entered in original case */
+  char *original;  /* original string entered in original case */
 } QuickFillCell;
 
 BasicCell *      gnc_quickfill_cell_new (void);

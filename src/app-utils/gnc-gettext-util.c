@@ -42,6 +42,7 @@ gnc_setup_gettext(void)
 #ifdef HAVE_GETTEXT
   bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
   textdomain (TEXT_DOMAIN);
+  bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
 #endif
 }
 

@@ -424,9 +424,9 @@ gnc_combo_cell_set_value (ComboCell *cell, const char *str)
 
 static void
 gnc_combo_cell_modify_verify (BasicCell *_cell,
-                              const GdkWChar *change,
+                              const char *change,
                               int change_len,
-                              const GdkWChar *newval,
+                              const char *newval,
                               int newval_len,
                               int *cursor_position,
                               int *start_selection,
@@ -437,10 +437,15 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         const char *match_str;
         QuickFill *match;
         gboolean pop_list;
+        glong newval_chars;
+        glong change_chars;
+    
+        newval_chars = g_utf8_strlen (newval, newval_len);
+        change_chars = g_utf8_strlen (change, change_len);
 
         if (box->in_list_select)
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
 
                 *cursor_position = -1;
                 *start_selection = 0;
@@ -452,14 +457,14 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         /* If deleting, just accept */
         if (change == NULL)
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
                 return;
         }
 
         /* If we are inserting in the middle, just accept */
-        if (*cursor_position < _cell->value_len)
+        if (*cursor_position < _cell->value_chars)
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
                 return;
         }
 
@@ -469,7 +474,7 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
 
         if ((match == NULL) || (match_str == NULL))
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
 
                 block_list_signals (cell);
                 gnc_item_list_select (box->item_list, NULL);
@@ -478,9 +483,9 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
                 return;
         }
 
-        *start_selection = newval_len;
+        *start_selection = newval_chars;
         *end_selection = -1;
-        *cursor_position += change_len;
+        *cursor_position += change_chars;
 
         if (!box->list_popped)
                 pop_list = auto_pop_combos;
@@ -539,7 +544,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
                                 return FALSE;
 
                         match = gnc_quickfill_get_string_len_match
-                                (box->qf, bcell->value_w, *cursor_position);
+                                (box->qf, bcell->value, *cursor_position);
                         if (match == NULL)
                                 return TRUE;
 
@@ -580,28 +585,34 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
                 return FALSE;
 
-        if ((*cursor_position < bcell->value_len) &&
-            ((*end_selection < bcell->value_len) ||
+        if ((*cursor_position < bcell->value_chars) &&
+            ((*end_selection < bcell->value_chars) ||
              (*cursor_position < *start_selection)))
                 return FALSE;
 
-        if ((*cursor_position == bcell->value_len) &&
+        if ((*cursor_position == bcell->value_chars) &&
             (*start_selection != *end_selection) &&
-            (*end_selection < bcell->value_len))
+            (*end_selection < bcell->value_chars))
                 return FALSE;
 
         find_pos = -1;
-        if (*cursor_position < bcell->value_len)
+        if (*cursor_position < bcell->value_chars)
         {
                 int i = *cursor_position;
-
-                while (bcell->value_w[i])
+                const char *c;
+                gunichar uc;
+              
+                c = g_utf8_offset_to_pointer (bcell->value, i);
+                while (*c)
                 {
-                        if (bcell->value_w[i++] == box->complete_char)
-                        {
-                                find_pos = i;
-                                break;
-                        }
+                    uc = g_utf8_get_char (c);
+                    if (uc == box->complete_char)
+                    {
+                        find_pos = (i + 1);
+                        break;
+                    }
+                    c = g_utf8_next_char (c);
+                    i++;
                 }
         }
 
@@ -614,12 +625,12 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         }
         else
         {
-                new_pos = bcell->value_len;
+                new_pos = bcell->value_chars;
                 extra_colon = TRUE;
         }
 
         match = gnc_quickfill_get_string_len_match (box->qf,
-                                                    bcell->value_w, new_pos);
+                                                    bcell->value, new_pos);
         if (match == NULL)
                 return FALSE;
 

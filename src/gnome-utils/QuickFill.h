@@ -48,20 +48,17 @@ void         gnc_quickfill_destroy (QuickFill *qf);
 
 const char * gnc_quickfill_string (QuickFill *qf);
 
-QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, GdkWChar wc);
+QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, gunichar c);
 
 QuickFill *  gnc_quickfill_get_string_match (QuickFill *qf,
-                                             const GdkWChar *str);
+                                             const char *str);
 
 QuickFill *  gnc_quickfill_get_string_len_match (QuickFill *qf,
-                                                 const GdkWChar *str, int len);
+                                                 const char *str, int len);
 
 QuickFill *  gnc_quickfill_get_unique_len_match (QuickFill *qf, int *len);
 
 void         gnc_quickfill_insert (QuickFill *qf, const char *text,
                                    QuickFillSort sort_code);
-
-void         gnc_quickfill_insert_wc (QuickFill *qf, const GdkWChar *text,
-                                      QuickFillSort sort_code);
 
 #endif /* QUICKFILL_H */

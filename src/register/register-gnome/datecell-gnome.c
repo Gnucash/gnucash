@@ -32,7 +32,6 @@
 
 #include "config.h"
 
-#include <ctype.h>
 #include <gnome.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,9 +71,9 @@ static void gnc_date_cell_move (BasicCell *bcell);
 static void gnc_date_cell_gui_destroy (BasicCell *bcell);
 static void gnc_date_cell_destroy (BasicCell *bcell);
 static void gnc_date_cell_modify_verify (BasicCell *_cell,
-                                         const GdkWChar *change,
+                                         const char *change,
                                          int change_len,
-                                         const GdkWChar *newval,
+                                         const char *newval,
                                          int newval_len,
                                          int *cursor_position,
                                          int *start_selection,
@@ -449,9 +448,9 @@ gnc_date_cell_direct_update (BasicCell *bcell,
 
 static void
 gnc_date_cell_modify_verify (BasicCell *_cell,
-                             const GdkWChar *change,
+                             const char *change,
                              int change_len,
-                             const GdkWChar *newval,
+                             const char *newval,
                              int newval_len,
                              int *cursor_position,
                              int *start_selection,
@@ -463,9 +462,7 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
 
   if (box->in_date_select)
   {
-    char *newval_mb = gnc_wcstombs (newval);
-    gnc_basic_cell_set_value (_cell, newval_mb);
-    g_free (newval_mb);
+    gnc_basic_cell_set_value (_cell, newval);
     return;
   }
 
@@ -476,26 +473,40 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     accept = TRUE;
   else
   {
-    int i, count = 0;
+    int count = 0;
     unsigned char separator = dateSeparator ();
     gboolean ok = TRUE;
-
-    for (i = 0; i < change_len; i++)
+    const gchar *c;
+    gunichar uc;
+    
+    /* accept only numbers or a date separator. Note that the
+     * separator of '-' (for DATE_FORMAT_ISO) takes precedence
+     * over the accelerator below! */      
+    c = change;
+    while (*c)
     {
-      /* accept only numbers or a date separator. Note that the
-       * separator of '-' (for DATE_FORMAT_ISO) takes precedence
-       * over the accelerator below! */
-      if (!isdigit (change[i]) && (separator != change[i]))
+      uc = g_utf8_get_char (c);
+        
+      if (!g_unichar_isdigit (uc) && (separator != uc))
         ok = FALSE;
 
-      if (separator == change[i])
+      if (separator == uc)
         count++;
+      
+      c = g_utf8_next_char (c);
+    }      
+    
+    c = _cell->value;
+    while (*c)
+    {
+      uc = g_utf8_get_char (c);
+        
+      if (separator == uc)
+        count++;
+
+      c = g_utf8_next_char (c);
     }
-
-    for (i = 0; i < _cell->value_len; i++)
-      if (separator == _cell->value_w[i])
-        count++;
-
+     
     if (2 < count)
       ok = FALSE;
 
@@ -506,11 +517,9 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
   /* keep a copy of the new value */
   if (accept)
   {
-    char *newval_mb = gnc_wcstombs (newval);
 
-    gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
-    gnc_parse_date (&(box->date), newval_mb);
-    g_free (newval_mb);
+    gnc_basic_cell_set_value_internal (&cell->cell, newval);
+    gnc_parse_date (&(box->date), newval);
 
     if (!box->date_picker)
       return;

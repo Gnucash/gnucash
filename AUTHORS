@@ -178,6 +178,7 @@ Bill Nottingham <notting@redhat.com> guile configure patch
 Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
+Scott Oonk <s.oonk@comcast.net> utf-8 changes.
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext

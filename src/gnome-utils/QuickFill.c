@@ -25,12 +25,7 @@
 
 #include "config.h"
 
-#include <ctype.h>
 #include <string.h>
-
-#ifdef HAVE_WCTYPE_H
-#include <wctype.h>
-#endif
 
 #include "QuickFill.h"
 #include "dialog-utils.h"
@@ -48,9 +43,8 @@ struct _QuickFill
 
 
 /** PROTOTYPES ******************************************************/
-static void quickfill_insert_recursive (QuickFill *qf, const GdkWChar *text,
-                                        int depth, const char *mb_text,
-                                        QuickFillSort sort);
+static void quickfill_insert_recursive (QuickFill *qf, const char *text,
+                                        int depth, QuickFillSort sort);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
@@ -83,7 +77,7 @@ gnc_quickfill_new (void)
 {
   QuickFill *qf;
 
-  if (sizeof (guint) < sizeof (GdkWChar))
+  if (sizeof (guint) < sizeof (gunichar))
   {
     PWARN ("Can't use quickfill");
     return NULL;
@@ -143,9 +137,9 @@ gnc_quickfill_string (QuickFill *qf)
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-gnc_quickfill_get_char_match (QuickFill *qf, GdkWChar wc)
+gnc_quickfill_get_char_match (QuickFill *qf, gunichar uc)
 {
-  guint key = iswlower (wc) ? towupper (wc) : wc;
+  guint key = g_unichar_toupper (uc);
 
   if (qf == NULL)
     return NULL;
@@ -159,19 +153,24 @@ gnc_quickfill_get_char_match (QuickFill *qf, GdkWChar wc)
 \********************************************************************/
 QuickFill *
 gnc_quickfill_get_string_len_match (QuickFill *qf,
-                                    const GdkWChar *str, int len)
+                                    const char *str, int len)
 {
+  const char *c;
+  gunichar uc;
+
   if (str == NULL)
     return NULL;
 
-  while ((*str != 0) && (len > 0))
+  c = str;
+  while (*c && (len > 0))
   {
     if (qf == NULL)
       return NULL;
 
-    qf = gnc_quickfill_get_char_match (qf, *str);
+    uc = g_utf8_get_char (c);
+    qf = gnc_quickfill_get_char_match (qf, uc);
 
-    str++;
+    c = g_utf8_next_char (c);
     len--;
   }
 
@@ -181,12 +180,12 @@ gnc_quickfill_get_string_len_match (QuickFill *qf,
 /********************************************************************\
 \********************************************************************/
 QuickFill *
-gnc_quickfill_get_string_match (QuickFill *qf, const GdkWChar *str)
+gnc_quickfill_get_string_match (QuickFill *qf, const char *str)
 {
   if (str == NULL)
     return NULL;
 
-  return gnc_quickfill_get_string_len_match (qf, str, gnc_wcslen (str));
+  return gnc_quickfill_get_string_len_match (qf, str, g_utf8_strlen (str, -1));
 }
 
 /********************************************************************\
@@ -229,65 +228,39 @@ gnc_quickfill_get_unique_len_match (QuickFill *qf, int *length)
 void
 gnc_quickfill_insert (QuickFill *qf, const char *text, QuickFillSort sort)
 {
-  GdkWChar *wc_text;
+  gchar *normalized_str;
 
-  if (text)
-  {
-    if (gnc_mbstowcs (&wc_text, text) < 0)
-    {
-      PERR ("bad text conversion");
-      return;
-    }
-  }
-  else
-    wc_text = NULL;
+  if ((qf == NULL) || (text == NULL))
+    return;
 
-  quickfill_insert_recursive (qf, wc_text, 0, text, sort);
-
-  g_free (wc_text);
-}
-
-void
-gnc_quickfill_insert_wc (QuickFill *qf, const GdkWChar *text,
-                         QuickFillSort sort)
-{
-  char *mb_text;
-
-  if (text)
-  {
-    mb_text = gnc_wcstombs (text);
-    if (mb_text == NULL)
-    {
-      PERR ("bad text conversion");
-      return;
-    }
-  }
-  else
-    mb_text = NULL;
-
-  quickfill_insert_recursive (qf, text, 0, mb_text, sort);
-
-  g_free (mb_text);
+  normalized_str = g_utf8_normalize (text, -1, G_NORMALIZE_DEFAULT);
+  quickfill_insert_recursive (qf, normalized_str, 0, sort);
+  g_free (normalized_str);
 }
 
 /********************************************************************\
 \********************************************************************/
 static void
-quickfill_insert_recursive (QuickFill *qf, const GdkWChar *text, int depth,
-                            const char *mb_text, QuickFillSort sort)
+quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
+                            QuickFillSort sort)
 {
   guint key;
   char *old_text;
   QuickFill *match_qf;
   int len;
+  char *key_char;
+  gunichar key_char_uc;
 
   if (qf == NULL)
     return;
-
-  if ((text == NULL) || (text[depth] == 0))
+  
+  if ((text == NULL) || (g_utf8_strlen (text, -1) <= depth))
     return;
 
-  key = iswlower (text[depth]) ? towupper (text[depth]) : text[depth];
+  key_char = g_utf8_offset_to_pointer (text, depth);
+
+  key_char_uc = g_utf8_get_char (key_char);
+  key = g_unichar_toupper (key_char_uc);
 
   match_qf = g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
   if (match_qf == NULL)
@@ -301,33 +274,33 @@ quickfill_insert_recursive (QuickFill *qf, const GdkWChar *text, int depth,
   switch (sort)
   {
     case QUICKFILL_ALPHA:
-      if (old_text && (strcoll (mb_text, old_text) >= 0))
+      if (old_text && (g_utf8_collate (text, old_text) >= 0))
         break;
 
     case QUICKFILL_LIFO:
     default:
-      len = gnc_wcslen (text);
+      len = g_utf8_strlen (text, -1);
 
       /* If there's no string there already, just put the new one in. */
       if (old_text == NULL)
       {
-        match_qf->text = g_cache_insert (qf_string_cache, (gpointer) mb_text);
+        match_qf->text = g_cache_insert (qf_string_cache, (gpointer) text);
         match_qf->len = len;
         break;
       }
 
       /* Leave prefixes in place */
       if ((len > match_qf->len) &&
-          (strncmp(mb_text, old_text, strlen(old_text)) == 0))
+          (strncmp(text, old_text, strlen(old_text)) == 0))
         break;
 
       g_cache_remove (qf_string_cache, old_text);
-      match_qf->text = g_cache_insert (qf_string_cache, (gpointer) mb_text);
+      match_qf->text = g_cache_insert (qf_string_cache, (gpointer) text);
       match_qf->len = len;
       break;
   }
 
-  quickfill_insert_recursive (match_qf, text, ++depth, mb_text, sort);
+  quickfill_insert_recursive (match_qf, text, ++depth, sort);
 }
 
 /********************** END OF FILE *********************************\

@@ -138,19 +138,5 @@ void gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				     gboolean after,
 				     gpointer user_data);
 
-/* Multibyte/wide char string helper functions. */
-
-/* Allocate new wide char string in dest_p. Return number of
- * wide chars or < 0 if error. */
-gint         gnc_mbstowcs (GdkWChar **dest_p, const char *src);
-
-/* Return new multibyte string or NULL if failure. */
-char *       gnc_wcstombs (const GdkWChar *src);
-
-/* Len of wide char string in chars */
-gint         gnc_wcslen   (const GdkWChar *src);
-
-/* Duplicate wide char string */
-GdkWChar *   gnc_wcsdup   (const GdkWChar *src);
 
 #endif

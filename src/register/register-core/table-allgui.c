@@ -1184,9 +1184,9 @@ gnc_table_confirm_change (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_modify_update (Table *table,
                          VirtualLocation virt_loc,
-                         const GdkWChar *change,
+                         const char *change,
                          int change_len,
-                         const GdkWChar *newval,
+                         const char *newval,
                          int newval_len,
                          int *cursor_position,
                          int *start_selection,
@@ -1242,9 +1242,7 @@ gnc_table_modify_update (Table *table,
         cursor_position, start_selection, end_selection);
   else
   {
-    char *newval_mb = gnc_wcstombs (newval);
-    gnc_basic_cell_set_value (cell, newval_mb);
-    g_free (newval_mb);
+    gnc_basic_cell_set_value (cell, newval);
   }
 
   if (safe_strcmp (old_value, cell->value) != 0)

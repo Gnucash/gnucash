@@ -344,9 +344,9 @@ gboolean     gnc_table_confirm_change(Table *table, VirtualLocation virt_loc);
 
 const char * gnc_table_modify_update(Table *table,
                                      VirtualLocation virt_loc,
-                                     const GdkWChar *change,
+                                     const char *change,
                                      int change_len,
-                                     const GdkWChar *newval,
+                                     const char *newval,
                                      int newval_len,
                                      int *cursor_position,
                                      int *start_selection,

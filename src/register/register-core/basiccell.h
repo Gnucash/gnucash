@@ -158,9 +158,9 @@ typedef gboolean (*CellEnterFunc) (BasicCell *cell,
                                    int *end_selection);
 
 typedef void (*CellModifyVerifyFunc) (BasicCell *cell,
-                                      const GdkWChar *add_str,
+                                      const char *add_str,
                                       int add_str_len,
-                                      const GdkWChar *new_value,
+                                      const char *new_value,
                                       int new_value_len,
                                       int *cursor_position,
                                       int *start_selection,
@@ -192,10 +192,7 @@ struct basic_cell
   char * cell_name;
 
   char * value;                  /* current value */
-
-  GdkWChar * value_w;            /* value as wide chars */
-
-  gint value_len;                /* length of wide chars value */
+  guint value_chars;           /* number of characters in value */
 
   gboolean changed;               /* true if value modified */
   gboolean conditionally_changed; /* true if value modified conditionally */
@@ -259,8 +256,5 @@ void         gnc_basic_cell_set_conditionally_changed (BasicCell *cell,
 /* for sub-class use only */
 void         gnc_basic_cell_set_value_internal (BasicCell *bcell,
                                                 const char *value);
-
-void         gnc_basic_cell_set_wcvalue_internal (BasicCell *bcell,
-                                                  const GdkWChar *value);
 
 #endif /* BASIC_CELL_H */
