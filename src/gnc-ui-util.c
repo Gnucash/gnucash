@@ -765,15 +765,6 @@ gnc_pop_locale (void)
   g_free (saved_locale);
 }
 
-
-static char *
-gnc_stpcpy (char *dest, const char *src)
-{
-   strcpy(dest, src);
-   return(dest + strlen(src));
-}
-
-
 GNCPrintAmountInfo
 gnc_default_print_info (gboolean use_symbol)
 {
