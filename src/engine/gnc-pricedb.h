@@ -154,6 +154,7 @@ void gnc_price_set_time(GNCPrice *p, Timespec t);
 void gnc_price_set_source(GNCPrice *p, const char *source);
 void gnc_price_set_type(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
+void gnc_price_set_version(GNCPrice *p, gint32 versn);
 
 /***********/
 /* getters */
@@ -168,6 +169,7 @@ Timespec        gnc_price_get_time(GNCPrice *p);
 const char *    gnc_price_get_source(GNCPrice *p);
 const char *    gnc_price_get_type(GNCPrice *p);
 gnc_numeric     gnc_price_get_value(GNCPrice *p);
+gint32          gnc_price_get_version(GNCPrice *p);
 
 /**********************************************************************
   GNCPrice lists:

@@ -53,6 +53,7 @@ gnc_price_create()
   p->editlevel = 0;
   p->not_saved = FALSE;
   p->do_free = FALSE;
+  p->version = 0;
   xaccGUIDNew (&p->guid);
   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
@@ -109,6 +110,8 @@ gnc_price_clone(GNCPrice* p)
   if(!p) return NULL;
   new_p = gnc_price_create();
   if(!new_p) return NULL;
+
+  new_p->version = p->version;
 
   gnc_price_begin_edit(new_p);
   /* never ever clone guid's */
@@ -286,6 +289,13 @@ gnc_price_set_value(GNCPrice *p, gnc_numeric value)
   gnc_price_commit_edit (p);
 }
 
+void
+gnc_price_set_version(GNCPrice *p, gint32 vers)
+{
+  if(!p) return;
+  p->version = vers;
+}
+
 
 /* ==================================================================== */
 /* getters */
@@ -352,6 +362,13 @@ gnc_price_get_currency(GNCPrice *p)
 {
   if(!p) return NULL;
   return p->currency;
+}
+
+gint32
+gnc_price_get_version(GNCPrice *p)
+{
+  if(!p) return 0;
+  return (p->version);
 }
 
 /* ==================================================================== */

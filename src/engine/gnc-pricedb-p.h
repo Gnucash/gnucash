@@ -39,6 +39,7 @@ struct _GNCPrice {
   char *source;
   char *type;
   gnc_numeric value;
+  gint32   version;              /* version number, for syncing with backend */
 
   /* 'private' object management fields */
   guint32  refcount;             /* garbage collection reference count */
