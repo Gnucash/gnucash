@@ -11,6 +11,7 @@ src/gnc-ui-util.c
 src/gnome/dialog-account-picker.c
 src/gnome/dialog-account.c
 src/gnome/dialog-budget.c
+src/gnome/dialog-column-view.c
 src/gnome/dialog-commodity.c
 src/gnome/dialog-filebox.c
 src/gnome/dialog-fincalc.c

@@ -1622,7 +1622,7 @@ mainWindow (void)
 
   gtk_notebook_append_page(GTK_NOTEBOOK(main_info->notebook),
                            main_info->account_tree,
-                           gtk_label_new("Accounts"));
+                           gtk_label_new(_("Accounts")));
   
   /* gnome_app_set_contents(GNOME_APP(app), main_info->account_tree); */
   gnome_app_set_contents(GNOME_APP(app), main_info->notebook); 

@@ -132,7 +132,7 @@
          (gnc:make-string-option 
           (N_ "General") (N_ "Report name") "0a"
           (N_ "Enter a descriptive name for this report")
-          (gnc:report-template-name report-template)))
+          (_ (gnc:report-template-name report-template))))
         (stylesheet 
          (gnc:make-multichoice-option 
           (N_ "General") (N_ "Stylesheet") "0b"

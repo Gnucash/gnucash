@@ -25,11 +25,12 @@
 #include <gnome.h>
 #include <guile/gh.h>
 
-#include "option-util.h"
+#include "dialog-column-view.h"
+#include "dialog-options.h"
 #include "glade-cb-gnc-dialogs.h"
 #include "glade-gnc-dialogs.h"
-#include "dialog-options.h"
-#include "dialog-column-view.h"
+#include "messages.h"
+#include "option-util.h"
 
 
 struct gncp_column_view_edit {
