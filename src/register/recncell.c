@@ -32,13 +32,13 @@
 #include "basiccell.h"
 #include "recncell.h"
 
-/* hack alert -- temp defs: we should  should probably include 
- * Transaction.h and also implement a more sophisticated togglig
- * between the various reconcile states. 
+/* hack alert -- I am uncomfortable with including engine
+ * stuff here; all code in this directory should really be 
+ * independent of the engine.  Its just that we need the
+ * defs for YREC, CREC, etc. This is some cleanup we should 
+ * do some day.
  */
-
-#define NREC 'n'
-#define CREC 'c'
+#include "Transaction.h"
 
 /* ================================================ */
 
@@ -47,6 +47,16 @@ ToggleRecn (BasicCell *_cell, const char *cur_val)
 {
    BasicCell *cell = (BasicCell *) _cell;
    char buff[2];
+
+   /* throw up a popup if the user tries to undo a reconciled transcation */
+   /* hack alert -- this sets a new precedent ... verifyBox is defined in
+    * both the motif and the gtk subdirs; I don't think I like it that way.
+    */
+   if(cur_val[0] == YREC) {
+     if(!verifyBox(NULL, "Really change state of reconciled transaction?")) {
+       return strdup(cur_val);
+     }
+   }
 
    if (NREC == cur_val[0]) {
      buff[0] = CREC;
