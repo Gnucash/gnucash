@@ -4245,4 +4245,5 @@ int main ()
     AC_DEFINE(HAVE_SCANF_LLD, 1,
       [Define if scanf supports %lld conversions.])
   fi
+  AC_MSG_RESULT($am_cv_scanf_lld)
 ])

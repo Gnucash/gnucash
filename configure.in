@@ -727,7 +727,7 @@ else
 fi
 AC_SUBST(LC_MESSAGES_ENUM)
 
-if test $am_cv_scanf_lld=no; then
+if test $am_cv_scanf_lld = "no"; then
   AC_MSG_CHECKING(if scanf supports %qd conversion)
   AC_TRY_RUN([
 #include <stdio.h>
@@ -747,7 +747,7 @@ int main ()
         AC_MSG_RESULT(yes)
         ],[
         AC_MSG_RESULT(no)
-        AC_MSG_ERROR(cannot continue, no long long conversion support in scanf)
+        AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
         ])
 fi
 
