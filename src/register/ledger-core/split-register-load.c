@@ -175,13 +175,28 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   if (blank_split == NULL)
   {
     Transaction *trans;
+    gnc_commodity * currency = NULL;
+
+    /* Determine the proper currency to use for this transaction.
+     * if default_account != NULL and default_account->commodity is
+     * a currency, then use that.  Otherwise use the default currency.
+     */
+    if (default_account != NULL) {
+      gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
+      if (commodity) {
+	const char * namespace = gnc_commodity_get_namespace (commodity);
+	if (!safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) ||
+	    !safe_strcmp (namespace, GNC_COMMODITY_NS_LEGACY))
+	  currency = commodity;
+      }
+    }
 
     gnc_suspend_gui_refresh ();
 
     trans = xaccMallocTransaction (gnc_get_current_book ());
 
     xaccTransBeginEdit (trans);
-    xaccTransSetCurrency (trans, gnc_default_currency ()); /* is this lame? */
+    xaccTransSetCurrency (trans, currency ? currency : gnc_default_currency ());
     xaccTransSetDateSecs (trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
     xaccTransAppendSplit (trans, blank_split);
