@@ -94,6 +94,7 @@
 #include "messages.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "TransLog.h"
 #include "util.h"
 
 #define PERMS   0666
@@ -242,6 +243,8 @@ xaccReadAccountGroup( char *datafile )
     return NULL;
   }
   
+  /* disable logging during load; otherwise its just a mess */
+  xaccLogDisable();
   holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
 
@@ -267,6 +270,7 @@ xaccReadAccountGroup( char *datafile )
 
   maingrp = NULL;
 
+  xaccLogEnable();
   close(fd);
   return grp;
 }
