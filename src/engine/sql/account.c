@@ -486,6 +486,7 @@ pgend_account_commit_edit (Backend * bend,
       PWARN(" account data in engine is newer\n"
             " account must be rolled back.  This function\n"
             " is not completely implemented !! \n");
+      xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
       LEAVE ("rolled back");
       return 445;
    }

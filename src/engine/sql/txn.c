@@ -833,6 +833,7 @@ pgend_trans_commit_edit (Backend * bend,
           * routine.  Our rollback routine updates from the latest in 
           * the sql database, and voila! we are good to go. 
           */
+         xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
          return 666;   /* hack alert- hard coded literal */
       } 
    }
@@ -908,6 +909,7 @@ pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
    if (-1 < pgendTransactionGetDeletedVersion (be, trans))
    {
       LEAVE ("destroyed");
+      xaccBackendSetError (&be->be, ERR_BACKEND_MOD_DESTROY);
       return BACKEND_ROLLBACK_DESTROY;
    }
 
