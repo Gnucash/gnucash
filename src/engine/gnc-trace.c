@@ -38,7 +38,7 @@
 gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 {
   GNC_LOG_FATAL,        /* DUMMY */
-  GNC_LOG_TRACE,      /* ENGINE */
+  GNC_LOG_WARNING,      /* ENGINE */
   GNC_LOG_WARNING,      /* IO */
   GNC_LOG_WARNING,      /* REGISTER */
   GNC_LOG_WARNING,      /* LEDGER */
@@ -47,20 +47,20 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* SCRUB */
   GNC_LOG_WARNING,      /* GTK_REG */
   GNC_LOG_WARNING,      /* GUILE */
-  GNC_LOG_TRACE,      /* BACKEND */
-  GNC_LOG_TRACE,      /* QUERY */
+  GNC_LOG_WARNING,      /* BACKEND */
+  GNC_LOG_WARNING,      /* QUERY */
   GNC_LOG_WARNING,      /* PRICE */
   GNC_LOG_WARNING,      /* SQL EVENT */
   GNC_LOG_WARNING,      /* SQL TXN */
   GNC_LOG_WARNING,      /* KVP */
   GNC_LOG_WARNING,      /* SX */
-  GNC_LOG_TRACE,      /* BOOK */
+  GNC_LOG_WARNING,      /* BOOK */
   GNC_LOG_TRACE,        /* TEST */
-  GNC_LOG_TRACE,      /* LOT */
+  GNC_LOG_WARNING,      /* LOT */
   GNC_LOG_WARNING,      /* ACCOUNT */
   GNC_LOG_WARNING,      /* IMPORT */
   GNC_LOG_WARNING,      /* BUSINESS */
-  GNC_LOG_TRACE,        /* DRUID */
+  GNC_LOG_WARNING,      /* DRUID */
   GNC_LOG_WARNING,      /* COMMODITY */
 };
 
