@@ -72,12 +72,15 @@ struct _TextDrawInfo
 
         GdkRectangle bg_rect;
         GdkRectangle text_rect;
+        GdkRectangle hatch_rect;
 
         GdkColor *fg_color;
         GdkColor *bg_color;
 
         GdkColor *fg_color2;
         GdkColor *bg_color2;
+
+        gboolean hatching;
 
         int text_x1;
         int text_x2;
@@ -140,6 +143,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         int start_pos, end_pos;
         int toggle_space, cursor_pos;
         int xoffset;
+        gboolean hatching;
         guint32 argb;
 
         style = item_edit->style;
@@ -150,9 +154,10 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         block = gnucash_sheet_get_block (item_edit->sheet,
                                          item_edit->virt_loc.vcell_loc);
 
-        argb = gnc_table_get_bg_color (table, item_edit->virt_loc, NULL);
+        argb = gnc_table_get_bg_color (table, item_edit->virt_loc, &hatching);
 
         info->bg_color = gnucash_color_argb_to_gdk (argb);
+        info->hatching = hatching;
         info->fg_color = &gn_black;
 
         info->bg_color2 = &gn_dark_gray;
@@ -221,6 +226,14 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->cursor_x = info->text_x1 + pre_cursor_width;
         info->cursor_y1 = info->text_y - info->font->ascent;
         info->cursor_y2 = info->text_y + info->font->descent;
+
+        if (info->hatching)
+        {
+                info->hatch_rect.x = dx;
+                info->hatch_rect.y = dy;
+                info->hatch_rect.width = wd;
+                info->hatch_rect.height = hd;
+        }
 }
 
 static void
@@ -243,6 +256,13 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         gdk_draw_rectangle (drawable, item_edit->gc, TRUE,
                             info.bg_rect.x, info.bg_rect.y,
                             info.bg_rect.width, info.bg_rect.height);
+
+        if (info.hatching)
+                gnucash_draw_hatching (drawable, item_edit->gc,
+                                       info.hatch_rect.x,
+                                       info.hatch_rect.y,
+                                       info.hatch_rect.width,
+                                       info.hatch_rect.height);
 
         /* Draw the foreground text and cursor */
         gdk_gc_set_clip_rectangle (item_edit->gc, &info.text_rect);
