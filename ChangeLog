@@ -8,6 +8,9 @@
 	  add more text to make it more clear what's going on.  Hopefully
 	  fixes #104878.
 
+	* src/report/standard-reports/register.scm: add Debit and Credit
+	  totals.  Fixes bug #115611.
+
 2003-07-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif: an incomplete implementation of a new

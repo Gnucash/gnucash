@@ -326,8 +326,10 @@
     (opt-val "__reg" "double"))
   (define (reg-report-invoice?)
     #f)
+  (define (reg-report-show-totals?)
+    (opt-val "Display" "Totals"))
 
-  (define (add-subtotal-row leader table used-columns
+  (define (add-subtotal-row label leader table used-columns
                             subtotal-collector subtotal-style)
     (let ((currency-totals (subtotal-collector
                             'format gnc:make-gnc-monetary #f)))
@@ -361,7 +363,7 @@
                    table
                    subtotal-style
                    (append (cons (gnc:make-html-table-cell/markup
-                                  "total-label-cell" (_ "Net Change"))
+                                  "total-label-cell" label)
                                  '())
                            (list (gnc:make-html-table-cell/size/markup
                                   1 (colspan currency)
@@ -389,10 +391,20 @@
                                   multi-rows?
                                   double?
                                   odd-row?
-                                  total-collector)
+                                  total-collector
+				  debit-collector
+				  credit-collector)
     (if (null? splits)
-        (add-subtotal-row leader table used-columns
-                          total-collector "grand-total")
+	(begin
+	  ;; add debit/credit totals
+	  (if (reg-report-show-totals?)
+	      (begin
+		(add-subtotal-row (_ "Total Debits") leader table used-columns
+				  debit-collector "grand-total")
+		(add-subtotal-row (_ "Total Credits") leader table used-columns
+				  credit-collector "grand-total")))
+	  (add-subtotal-row (_ "Net Change") leader table used-columns
+			    total-collector "grand-total"))
 
         (let* ((current (car splits))
                (current-row-style (if multi-rows? "normal-row"
@@ -417,6 +429,16 @@
                            (gnc:gnc-monetary-commodity split-value)
                            (gnc:gnc-monetary-amount split-value))
 
+	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
+	      (debit-collector 'add
+			       (gnc:gnc-monetary-commodity split-value)
+			       (gnc:gnc-monetary-amount split-value)))
+
+	  (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
+	      (credit-collector 'add
+			       (gnc:gnc-monetary-commodity split-value)
+			       (gnc:gnc-monetary-amount split-value)))
+
           (do-rows-with-subtotals leader
                                   rest
                                   table
@@ -425,7 +447,9 @@
                                   multi-rows?
                                   double?
                                   (not odd-row?)                       
-                                  total-collector))))
+                                  total-collector
+				  debit-collector
+				  credit-collector))))
 
   (define (splits-leader splits)
     (let ((accounts (map gnc:split-get-account splits)))
@@ -456,6 +480,8 @@
                             multi-rows?
                             double?
                             #t
+                            (gnc:make-commodity-collector)
+                            (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector))
     table))
 
