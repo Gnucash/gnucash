@@ -1,5 +1,7 @@
 2001-12-08  Christian Stimming  <stimming@tuhh.de>
 
+	* po/POTFILES.in: Forgot this one.
+
 	* po/de.po: Updated German translation.
 
 	* src/EuroUtils.c: Fixed rounding error.
