@@ -1,3 +1,9 @@
+2003-03-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-ledger/gncEntryLedgerLayout.c: reuse
+	  the "sample" account string from the split-register to make
+	  the account column a bit wider.
+
 2003-03-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-ledger/gncEntryLedger.c: allow the user
