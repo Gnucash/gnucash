@@ -267,6 +267,7 @@ gnc_cm_event_handler (GUID *entity,
   add_event (&changes, entity, event_type, TRUE);
 
   id_type = xaccGUIDType (entity, gnc_get_current_book ());
+  g_return_if_fail (id_type);
 
   if (safe_strcmp (id_type, GNC_ID_SPLIT) == 0)
   {
