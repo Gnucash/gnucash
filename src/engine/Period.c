@@ -152,10 +152,13 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Account *twin;
       Split *s = node->data;
 
-      /* Move the split into the new book ... */
-      qof_entity_remove (s->book->entity_table, &s->guid);
-      s->book = book;
-      qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      /* Move the splits over (only if they haven't already been moved). */
+      if (s->book != book)
+      {
+         qof_entity_remove (s->book->entity_table, &s->guid);
+         s->book = book;
+         qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      }
 
       /* Find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -165,9 +168,13 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       }
       else
       {
-        xaccAccountInsertSplit (twin, s);
-        twin->balance_dirty = TRUE;
-        twin->sort_dirty = TRUE;
+        /* Move the split too, if it hasn't been moved already */
+        if (s->acc != twin)
+        {
+           xaccAccountInsertSplit (twin, s);
+           twin->balance_dirty = TRUE;
+           twin->sort_dirty = TRUE;
+        }
       }
    }
 
@@ -195,6 +202,7 @@ gnc_book_insert_lot_clobber (QofBook *book, GNCLot *lot)
 void
 gnc_book_insert_lot (QofBook *book, GNCLot *lot)
 {
+   SplitList *snode;
    Account *twin;
    if (!lot || !book) return;
    
@@ -210,6 +218,18 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    qof_entity_remove (lot->book->entity_table, &lot->guid);
    lot->book = book;
    qof_entity_store(book->entity_table, lot, &lot->guid, GNC_ID_LOT);
+
+   /* Move the splits over (only if they haven't already been moved). */
+   for (snode = lot->splits; snode; snode=snode->next)
+   {
+      Split *s = snode->data;
+      if (s->book != book)
+      {
+         qof_entity_remove (s->book->entity_table, &s->guid);
+         s->book = book;
+         qof_entity_store(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+      }
+   }
 
    twin = xaccAccountLookupTwin (lot->account, book);
    if (!twin)
@@ -461,15 +481,15 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    lot_list = create_lot_list_from_trans_list (trans_list);
    lot_list = lot_list_preen_open_lots (lot_list);
 
-   /* Move closed lots over to destination. Do this before 
-    * moving transactions, which should avoid damage to lots. */
+   /* Move closed lots over to destination. Do this before moving 
+    * the txn's, so that the lots don't get trashed.  */
    for (lnode = lot_list; lnode; lnode = lnode->next)
    {
       GNCLot *lot = lnode->data;
       gnc_book_insert_lot (dest_book, lot);
    }
 
-   /* Move the transactions over */
+   /* Move the transactions over to the destination book. */
    for (tnode = trans_list; tnode; tnode=tnode->next)
    {
       Transaction *trans = tnode->data;
