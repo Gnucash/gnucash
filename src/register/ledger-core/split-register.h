@@ -307,6 +307,7 @@ void gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg);
 void gnc_split_register_load (SplitRegister *reg, GList * split_list,
                               Account *default_source_acc);
 
+
 /** Copy the contents of the current cursor to a split. The split and
  *    transaction that are updated are the ones associated with the
  *    current cursor (register entry) position. If the do_commit flag
@@ -341,9 +342,22 @@ void gnc_split_register_expand_current_trans (SplitRegister *reg,
 /** Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
 gboolean gnc_split_register_current_trans_expanded (SplitRegister *reg);
 
-/** Return the debit and credit strings used in the register. */
+/** Return the debit string used in the register. */
 const char * gnc_split_register_get_debit_string (SplitRegister *reg);
+
+/** Return the credit string used in the register. */
 const char * gnc_split_register_get_credit_string (SplitRegister *reg);
+
+
+/** Pop up the exchange-rate dialog, maybe, for the current split.
+ * If force_dialog is TRUE, the forces the dialog to to be called.
+ * If the dialog does not complete successfully, then return TRUE.
+ * Return FALSE in all other cases (meaning "move on")
+ */
+gboolean
+gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
+
+/* -------------------------------------------------------------- */
 
 /** Private function -- outsiders must not use this */
 gboolean gnc_split_register_full_refresh_ok (SplitRegister *reg);
@@ -356,14 +370,6 @@ void     gnc_split_register_load_xfer_cells (SplitRegister *reg,
 void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,
                                 gboolean use_cut_semantics,
                                 gboolean do_commit);
-
-/** Pop up the exchange-rate dialog, maybe, for the current split.
- * If force_dialog is TRUE, the forces the dialog to to be called.
- * If the dialog does not complete successfully, then return TRUE.
- * Return FALSE in all other cases (meaning "move on")
- */
-gboolean
-gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 
 #endif
 
