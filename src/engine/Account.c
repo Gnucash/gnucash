@@ -198,6 +198,8 @@ Account *
 xaccCloneAccount (const Account *from, QofBook *book, 
                   const char * gemini_path)
 {
+    const char * ucom;
+    const gnc_commodity_table * comtbl;
     Account *ret;
 
     if (!from || !book) return NULL;
