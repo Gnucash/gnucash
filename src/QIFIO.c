@@ -44,9 +44,6 @@
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
 
-/** GLOBALS *********************************************************/
-extern Widget toplevel;
-
 /********************************************************************\
  * xaccReadQIFLine                                                  * 
  *   reads in one line of ASCII, until cr-nl                        *
@@ -154,6 +151,9 @@ char * xaccReadQIFAccount (int fd, Account * acc)
      } else 
      if ('T' == qifline [0]) {
 
+        if (!strcmp (&qifline[1], "Bank\r\n")) {
+           acc -> type = BANK;
+        } else
         if (!strcmp (&qifline[1], "Invst\r\n")) {
            acc -> type = PORTFOLIO;
         } else {
@@ -297,10 +297,14 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
      if ('M' == qifline [0]) {   /* M == memo field */
         XACC_PREP_STRING (trans->memo);
      } else 
-     if ('Y' == qifline [0]) {   /* Y == ?? */
+     if ('P' == qifline [0]) {   /* P == Payee, for Bank accounts */
         XACC_PREP_STRING (trans->description);
      } else
-     if ('N' == qifline [0]) {   /* N == check number aka type of transfer */
+     if ('Y' == qifline [0]) {   /* Y == Name of Security */
+        XACC_PREP_STRING (trans->description);
+     } else
+     /* N == check numbers for Banks, but Action for portfolios */
+     if ('N' == qifline [0]) {   
         XACC_PREP_STRING (trans->num);
         if (!strncmp (qifline, "NSell", 5)) isneg = 1;
      } else
