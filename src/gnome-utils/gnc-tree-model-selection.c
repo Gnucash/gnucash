@@ -478,8 +478,8 @@ gnc_tree_model_selection_iter_children (GtkTreeModel *tree_model,
 		if (!gtk_tree_model_iter_children (model->priv->child_model, &child_iter, NULL))
 			return FALSE;
 	} else {
-		g_return_val_if_fail (iter != NULL, FALSE);
-		g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
+		g_return_val_if_fail (parent != NULL, FALSE);
+		g_return_val_if_fail (parent->stamp == model->stamp, FALSE);
 
 		gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_parent, parent);
 
