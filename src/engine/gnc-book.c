@@ -81,6 +81,7 @@ gnc_book_init (GNCBook *book)
   book->kvp_data = kvp_frame_new ();
   book->topgroup = xaccMallocAccountGroup(book);
   book->pricedb = gnc_pricedb_create(book);
+  book->shared_quickfill = NULL;
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
@@ -218,6 +219,20 @@ xaccGNCBookGetBackend (GNCBook *book)
 {
    if (!book) return NULL;
    return book->backend;
+}
+
+gpointer
+gnc_book_get_shared_quickfill_hack (GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->shared_quickfill;
+}
+
+void
+gnc_book_set_shared_quickfill_hack (GNCBook *book, gpointer qf)
+{
+  if (!book) return;
+  book->shared_quickfill = qf;
 }
 
 /* ====================================================================== */

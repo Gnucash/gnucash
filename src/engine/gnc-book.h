@@ -108,4 +108,7 @@ gint64 gnc_book_get_counter (GNCBook *book, const char *counter_name);
 
 #define BOOK_KVP		"kvp"
 
+gpointer gnc_book_get_shared_quickfill_hack (GNCBook *);
+void gnc_book_set_shared_quickfill_hack (GNCBook *, gpointer);
+
 #endif /* GNC_BOOK_H */

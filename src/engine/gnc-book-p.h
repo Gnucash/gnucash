@@ -55,6 +55,7 @@ struct gnc_book_struct
   /* Pointers to top-level data structures. */
   AccountGroup *topgroup;
   GNCPriceDB *pricedb;
+  gpointer shared_quickfill;
 
   GList *sched_xactions;
   AccountGroup *template_group;
