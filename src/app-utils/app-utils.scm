@@ -264,7 +264,7 @@
                           ;; Must come after the scheme options are loaded.
                           (gnc:c-options-init)
 
-                          ;; Initialize the expresion parser.
+                          ;; Initialize the expression parser.
                           ;; Must come after the C side options initialization.
                           (gnc:exp-parser-init))))
 
