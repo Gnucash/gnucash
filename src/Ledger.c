@@ -67,73 +67,6 @@ GetOtherAccName (Split *split)
 
 /* ======================================================== */
 
-static void
-ModifyXfer (Split * split, const char * new_acc_name)
-{
-   char * xfr;
-   Split *partner_split;
-   Transaction *trans = (Transaction *) (split->parent);
-   Account * acc;
-
-   if (0 == strcmp (SPLIT_STR, new_acc_name)) return;
-
-   /* check to see whether old an new destination are 
-    * the same. If they are, then its a no-op */
-   xfr = GetOtherAccName (split);
-   if (0 == strcmp (xfr, new_acc_name)) return;
-
-   /* if the new desitnation does not match the current dest,
-    * then move the far end of the split to the new location.
-    */
-printf ("xfr from %s to %s \n", xfr,  new_acc_name);
-
-   if (split != &(trans->credit_split)) {
-      partner_split = &(trans->credit_split);
-
-      /* remove the partner split from the old account */
-      acc = (Account *) (partner_split->acc);
-      xaccRemoveSplit (acc, partner_split);
-
-      /* insert the partner split into the new account */
-      acc = (Account *) split->acc;
-      acc = xaccGetPeerAccountFromName (acc, new_acc_name);
-      xaccInsertSplit (acc, partner_split);
-
-      /* loop over all of the debit splits, and refresh,
-       * since they were all affected. */
-      if (trans->debit_splits) {
-         int i = 0;
-         partner_split = trans->debit_splits[i];
-         while (partner_split) {
-            acc = (Account *) (partner_split->acc);
-            i++;
-            partner_split = trans->debit_splits[i];
-         }
-      }
-   } else {
-      /* perform that transfer *only* if there is
-       * one split */
-      if (trans->debit_splits) {
-         if (0x0 != trans->debit_splits[0]) {
-            if (0x0 == trans->debit_splits[1]) {
-               partner_split = trans->debit_splits[0];
-
-               /* remove the partner split from the old account */
-               acc = (Account *) (partner_split->acc);
-               xaccRemoveSplit (acc, partner_split);
-
-               /* insert the partner split into the new account */
-               acc = (Account *) split->acc;
-               acc = xaccGetPeerAccountFromName (acc, new_acc_name);
-               xaccInsertSplit (acc, partner_split);
-            }
-         }
-      }
-   }
-}
-
-/* ======================================================== */
-
 void 
 xaccSaveRegEntry (BasicRegister *reg)
 {
@@ -189,7 +122,7 @@ printf ("saving %s \n", trans->description);
       xaccSplitSetAction (split, reg->actionCell->cell.value);
 
    if (MOD_XFRM & changed) 
-      ModifyXfer (split, reg->xfrmCell->cell.value);
+      xaccMoveFarEndByName (split, reg->xfrmCell->cell.value);
 
    if (MOD_XTO & changed) {
       /* hack alert -- implement this */

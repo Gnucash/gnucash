@@ -28,6 +28,7 @@
 #include "Account.h"
 #include "Data.h"
 #include "date.h"
+#include "messages.h"
 #include "Transaction.h"
 #include "util.h"
 
@@ -520,6 +521,62 @@ xaccZeroRunningBalances( Account **list )
       nacc++;
       acc = list[nacc];
    }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccMoveFarEnd (Split *split, Account *new_acc)
+{
+   Split *partner_split = 0x0;
+   Transaction *trans;
+   Account * acc;
+
+   if (!split) return;
+   
+   /* if the new desitnation does not match the current dest,
+    * then move the far end of the split to the new location.
+    */
+   trans = (Transaction *) (split->parent);
+   if (split != &(trans->credit_split)) {
+      partner_split = &(trans->credit_split);
+   } else {
+      /* perform that transfer *only* if there is one split */
+      if (trans->debit_splits) {
+         if (0x0 != trans->debit_splits[0]) {
+            if (0x0 == trans->debit_splits[1]) {
+               partner_split = trans->debit_splits[0];
+            }
+         }
+      }
+   }
+
+   if (partner_split) {
+      /* remove the partner split from the old account */
+      acc = (Account *) (partner_split->acc);
+      if (acc != new_acc) {
+         xaccRemoveSplit (acc, partner_split);
+         xaccInsertSplit (new_acc, partner_split);
+      }
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccMoveFarEndByName (Split *split, const char *new_acc_name)
+{
+   Account *acc;
+
+   if (!split) return;
+   if (0 == strcmp (SPLIT_STR, new_acc_name)) return;
+
+   acc = (Account *) split->acc;
+   acc = xaccGetPeerAccountFromName (acc, new_acc_name);
+
+   xaccMoveFarEnd (split, acc);
 }
 
 /********************************************************************\
