@@ -140,6 +140,7 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         SheetBlock *block;
         SheetBlockStyle *style;
         GtkEditable *editable;
+        CellAlignment align;
         Table *table;
 
         gboolean hatching;
@@ -219,7 +220,9 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->text_rect.width  = wd - toggle_space;
         info->text_rect.height = hd - 2;
 
-        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        align = gnc_table_get_align (table, item_edit->virt_loc);
+
+        switch (align)
         {
                 case CELL_ALIGN_RIGHT:
                         xoffset = info->text_rect.width -
@@ -245,6 +248,34 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 
                 if (xoffset + pre_cursor_width < CELL_HPADDING)
                         xoffset = CELL_HPADDING - pre_cursor_width;
+        }
+
+        switch (align)
+        {
+                case CELL_ALIGN_RIGHT:
+                        if (xoffset > CELL_HPADDING &&
+                            xoffset + total_width >
+                            info->text_rect.width - CELL_HPADDING)
+                                xoffset = MAX (CELL_HPADDING,
+                                               (info->text_rect.width -
+                                                CELL_HPADDING) - total_width);
+
+                        if (xoffset + total_width <
+                            info->text_rect.width - CELL_HPADDING)
+                                xoffset = (info->text_rect.width -
+                                           CELL_HPADDING) - total_width;
+
+                        break;
+
+                default:
+                        xoffset = MIN (xoffset, CELL_HPADDING);
+
+                        if (xoffset < CELL_HPADDING &&
+                            xoffset + total_width <
+                            info->text_rect.width - CELL_HPADDING)
+                                xoffset = MIN (CELL_HPADDING,
+                                               (info->text_rect.width -
+                                                CELL_HPADDING) - total_width);
         }
 
         info->text_x1 = dx + xoffset;

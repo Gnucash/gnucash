@@ -1,5 +1,8 @@
 2001-04-19  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/gnome/gnucash-item-edit.c (item_edit_draw_info): fix
+	some left-right scrolling glitches
+
 	* src/gnome/dialog-tax-info.c: implement tax info api
 
 	* src/gnome/account-tree.c: same as below
