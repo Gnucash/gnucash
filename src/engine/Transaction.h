@@ -362,18 +362,15 @@ int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
 void          xaccTransSetDate (Transaction *trans,
                                 int day, int mon, int year);
 
-/** The xaccTransSetDateSecs() method will modify the <i>posted</i>
+/** The xaccTransSetDatePostedSecs() method will modify the <i>posted</i>
     date of the transaction, specified by a time_t (see ctime(3)). The
     posted date is the date when this transaction was posted at the
     bank. */
-void          xaccTransSetDateSecs (Transaction *trans, time_t time);
-
-/**     xaccTransSetDatePostedSecs() is just an alias for
-	xaccTransSetDateSecs() -- both functions access the same date. */
+#define xaccTransSetDateSecs xaccTransSetDatePostedSecs
 void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 
 /**  The xaccTransSetDatePostedTS() method does the same thing as
-     xaccTransSetDate[Posted]Secs(), but takes a struct timespec64. */
+     xaccTransSetDatePostedSecs(), but takes a struct timespec64. */
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
