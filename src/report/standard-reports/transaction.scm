@@ -1086,7 +1086,7 @@ Credit Card, and Income accounts")))))
           (gnc:query-set-book query (gnc:get-current-book))
 	      ;;(gnc:warn "query is:" query)
           (gnc:query-add-account-match query
-                                           (gnc:list->glist c_account_1)
+                                       c_account_1
                                        'acct-match-any 'query-and)
           (gnc:query-add-date-match-timepair
            query #t begindate #t enddate 'query-and)
@@ -1106,8 +1106,8 @@ Credit Card, and Income accounts")))))
 	    (gnc:query-set-match-voids-only! query (gnc:get-current-book)))
 	   (else #f))
 
-          (set! splits (gnc:glist->list (gnc:query-get-splits query)
-                                        <gnc:Split*>))
+          (set! splits (gnc:query-get-splits query))
+
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
 	  ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
