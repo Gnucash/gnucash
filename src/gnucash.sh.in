@@ -1,0 +1,48 @@
+#!/bin/sh
+exec guile -s "$0" "$@"
+!#
+
+;; Don't put any envt settings, etc above -- otherwise, we can't
+;; invoke this directly from within an interactive guile and have it
+;; wor (for debugging).
+
+(setenv "LD_LIBRARY_PATH"
+        (apply string-append
+               (or (getenv "LD_LIBRARY_PATH") "")
+               (list ":"
+                     "@-GNC_LIBDIR-@"
+                     ":"
+                     "@-GNC_MODULE_DIR-@")))
+
+(set! %load-path
+      (append
+       (list
+        "@-G_WRAP_MODULE_DIR-@"
+        ;; GNC_BOOTSTRAP_MODDIR
+        "@-GNC_SHAREDIR-@/guile-modules"
+        ;; GNC_BOOTSTRAP_SCMDIR
+        "@-GNC_SHAREDIR-@/scm")
+       %load-path))
+
+(let ((lib (if (or (string=? (version) "1.3")
+                   (string=? (version) "1.3.4"))
+               (dynamic-link "libgncguile.so")
+               (dynamic-link "libgncguile"))))
+  (if lib
+      (dynamic-call "gnc_sh_setup" lib)
+      (begin
+        (display "Can't load libgncguile.  Aborting.\n")
+        (exit 1))))
+
+(use-modules (gnucash bootstrap))
+
+;; UGLY HACK -- FIXME -- code should be rewritten to not need this.
+;; In particular, we should be using gnc_scm_lookup where we're using
+;; gh_lookup or gh_eval_str now.
+(set-current-module (resolve-module '(gnucash bootstrap)))
+
+(gnc:main)
+
+;; Local Variables:
+;; mode: scheme
+;; End:
