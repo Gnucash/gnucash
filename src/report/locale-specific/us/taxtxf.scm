@@ -29,7 +29,7 @@
 ;; depends must be outside module scope -- and should eventually go away.
 
 (define-module (gnucash report taxtxf))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'printf)
@@ -37,7 +37,6 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/app-file" 0)
 
 (define (make-level-collector num-levels)
   (let ((level-collector (make-vector num-levels)))
@@ -404,24 +403,11 @@
                     #t)))
           accounts))
 
-;; returns 'html if html is chosen, 'txf if txf is chosen,
-;; and #f otherwise
-(define (choose-export-format)
-  (let ((choice (gnc:choose-radio-option-dialog-parented
-                 #f
-                 (_ "Choose export format")
-                 (_ "Choose the export format for this report:")
-                 0
-                 (list (_ "HTML") (_ "TXF")))))
-    (case choice
-      ((0) 'html)
-      ((1) 'txf)
-      (else #f))))
-
 (define (generate-tax-or-txf report-name
                              report-description
                              report-obj
-                             tax-mode?)
+                             tax-mode?
+                             file-name)
 
   (define (get-option pagename optname)
     (gnc:option-value
@@ -706,8 +692,7 @@
           (today-date (strftime "D%m/%d/%Y" 
                                 (localtime 
                                  (car (gnc:timepair-canonical-day-time
-                                       (cons (current-time) 0))))))
-          (file-name #f))
+                                       (cons (current-time) 0)))))))
 
       ;; Now, the main body
       ;; Reset all the balance collectors
@@ -720,28 +705,6 @@
 
       (if (not tax-mode?)		; Do Txf mode
           (begin
-            (set! file-name		; get file name from user
-                  (do ((fname (gnc:file-selection-dialog
-                               (_ "Select file for .TXF export") ""
-                               "~/export.txf")
-                              (gnc:file-selection-dialog
-                               (_ "Select file for .TXF export") ""
-                               "~/export.txf")))  
-                      ((if (not fname)
-                           #t		; no "Cancel" button, exit
-                           (if (access? fname F_OK)
-                               (if (gnc:verify-dialog
-                                    (sprintf
-                                     #f 
-                                     (_ "File: \"%s\" exists.\nOverwrite?")
-                                     fname)
-                                    #f)
-                                   (begin (delete-file fname)
-                                          #t)
-                                   #f)
-                               #t))
-                       fname)))
-
             (if file-name		; cancel TXF if no file selected
                 (let* ((port (open-output-file file-name))    
                        (output
@@ -757,9 +720,9 @@
                   (gnc:display-report-list-item output-txf port
                                                 "taxtxf.scm - ")
                   (close-output-port port)
-                  #f)
-                #t))
-          
+                  #t)
+                #f))
+
           (begin			; else do tax report
             (gnc:html-document-set-style! 
              doc "blue"
@@ -816,7 +779,7 @@
                   (gnc:html-markup-p
                    (_ "No Tax Related accounts were found.  Go to the\
  Accounts->Tax Information dialog to set up tax-related accounts.")))))
-            
+
             doc)))))
 
 (gnc:define-report
@@ -831,16 +794,14 @@
               (_ "This report shows your Taxable Income and \
 Deductible Expenses.")
               report-obj
-              #t))
- 'export-thunk (lambda (report-obj)
-                 (let ((choice (choose-export-format)))
-                   (case choice
-                     ((txf)
-                      (generate-tax-or-txf
-                       (_ "Taxable Income / Deductible Expenses")
-                       (_ "This page shows your Taxable Income and \
+              #t
+              #f))
+ 'export-types (list (cons (_ "TXF") 'txf))
+ 'export-thunk (lambda (report-obj choice file-name)
+                 (generate-tax-or-txf
+                  (_ "Taxable Income / Deductible Expenses")
+                  (_ "This page shows your Taxable Income and \
 Deductible Expenses.")
-                       report-obj
-                       #f)
-                      #f)
-                     (else choice)))))
+                  report-obj
+                  #f
+                  file-name)))
