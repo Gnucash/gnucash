@@ -263,9 +263,9 @@ gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name)
  * This routine searches through the application menu data structures
  * to find the specified menu item widgets, and then adds them to a
  * list.  This list is used for automatic manipulation of the widget
- * whenever the gnc child (@param1) becomes the front-most
- * window. When the child is no longer the front-most window the
- * manipulation is undone.
+ * whenever the gnc child (@mc) becomes the front-most window. When
+ * the child is no longer the front-most window the manipulation is
+ * undone.
  *
  * *** Do not i18n strings passed to this function.  The routines
  * *** called by this function correctly handle taking menu paths
