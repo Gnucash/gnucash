@@ -534,6 +534,20 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
   return TRUE;
 }
 
+static int
+gnc_report_window_save_cb(GtkWidget * w, gpointer data)
+{
+  gnc_report_window * report = data;
+  SCM save_func = gh_eval_str("gnc:report-save-to-savefile");
+
+  if(report->cur_report != SCM_BOOL_F)
+  {
+    gh_call1(save_func, report->cur_report);
+  }
+
+  return TRUE;
+}
+
 /* We got a draw event.  See if we need to reload the report */
 static void
 gnc_report_window_draw_cb(GtkWidget *unused, GdkRectangle *unused1, gpointer data)
@@ -901,6 +915,15 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
       GNOME_STOCK_PIXMAP_PRINT,
       0, 0, NULL
     },
+    { GNOME_APP_UI_ITEM,
+      _("Save report"),
+      _("Save the current report for later use in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu. Will go into effect at the next startup of gnucash."),
+      gnc_report_window_save_cb, win,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_SAVE,
+      0, 0, NULL
+    },    
     GNOMEUIINFO_END
   };
   

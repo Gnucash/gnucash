@@ -41,6 +41,7 @@
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
 (define gnc:menuname-utility (N_ "_Sample & Custom"))
+(define gnc:menuname-custom (N_ "_Custom"))
 (define gnc:pagename-general (N_ "General"))
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))
@@ -380,9 +381,16 @@
    (gnc:generate-restore-forms (gnc:report-options report) "options")
    "  options))\n"
    (simple-format 
-    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'options-generator options-gen\n  'renderer (gnc:report-template-renderer/name ~S)))\n\n"
+    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/name ~S)))\n\n"
     (gnc:report-name report)
     (gnc:report-type report))))
+
+(define (gnc:report-save-to-savefile report)
+  (let ((conf-file-name gnc:current-saved-reports))
+    ;;(display conf-file-name)
+    (display (gnc:report-generate-saved-forms report)
+	     (open-file conf-file-name "a"))
+    (force-output)))
 
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
