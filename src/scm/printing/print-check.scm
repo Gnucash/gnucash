@@ -6,8 +6,9 @@
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash printing number-to-words))
+
 (gnc:support "printing/print-check.scm")
-(gnc:depend  "printing/number-to-words.scm")
 (gnc:depend  "qif-import/simple-obj.scm")
 
 
