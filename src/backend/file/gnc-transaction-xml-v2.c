@@ -437,7 +437,7 @@ trn_currency_handler(xmlNodePtr node, gpointer trans_pdata)
     Transaction *trn = pdata->trans;
     gnc_commodity *ref;
 
-    ref = dom_tree_to_commodity_ref_no_engine(node);
+    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     xaccTransSetCurrency(trn, ref);
 
     return TRUE;

@@ -659,7 +659,7 @@ failure:
 
 
 gnc_commodity *
-dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
+dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *book)
 {
   /* Turn something like this
      
@@ -714,7 +714,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
   } else {
     g_strstrip(space_str);
     g_strstrip(id_str);
-    c = gnc_commodity_new(NULL, space_str, id_str, NULL, 0);
+    c = gnc_commodity_new(NULL, space_str, id_str, NULL, 0, book);
   }
 
   g_free(space_str);
@@ -730,7 +730,7 @@ dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book)
     gnc_commodity *ret;
     gnc_commodity_table *table;
 
-    daref = dom_tree_to_commodity_ref_no_engine(node);
+    daref = dom_tree_to_commodity_ref_no_engine(node, book);
 
     table = gnc_book_get_commodity_table (book);
 

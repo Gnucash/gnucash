@@ -25,9 +25,7 @@
 #define GNC_COMMODITY_H
 
 #include <glib.h>
-
-typedef struct _gnc_commodity           gnc_commodity;
-typedef struct _gnc_commodity_table     gnc_commodity_table;
+#include "gnc-engine.h"
 
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
@@ -43,7 +41,8 @@ gnc_commodity * gnc_commodity_new(const char * fullname,
                                   const char * namespace,
                                   const char * mnemonic,
                                   const char * exchange_code,
-                                  int fraction);
+                                  int fraction,
+                                  GNCBook *);
 
 void  gnc_commodity_destroy(gnc_commodity * cm);
 
@@ -55,6 +54,7 @@ const char * gnc_commodity_get_exchange_code(const gnc_commodity * cm);
 const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
 int     gnc_commodity_get_fraction(const gnc_commodity * cm);
 gint16  gnc_commodity_get_mark(const gnc_commodity * cm);
+GNCBook * gnc_commodity_get_book(const gnc_commodity * cm);
 
 void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
 void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
@@ -117,6 +117,6 @@ gboolean gnc_commodity_table_foreach_commodity(gnc_commodity_table * table,
                                                      gpointer user_data),
                                        gpointer user_data);
 
-gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table);
+gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, GNCBook*);
 
 #endif

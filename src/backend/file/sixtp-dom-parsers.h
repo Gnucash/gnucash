@@ -42,7 +42,7 @@
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
 gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book);
-gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node);
+gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *);
 
 FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, GNCBook *book);
 

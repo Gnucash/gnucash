@@ -190,7 +190,7 @@ account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
-    ref = dom_tree_to_commodity_ref_no_engine(node);
+    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     xaccAccountSetCommodity(pdata->account, ref);
 
     return TRUE;
@@ -214,7 +214,7 @@ account_currency_handler (xmlNodePtr node, gpointer act_pdata)
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
-    ref = dom_tree_to_commodity_ref_no_engine(node);
+    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     DxaccAccountSetCurrency(pdata->account, ref, pdata->book);
 
     return TRUE;
@@ -238,7 +238,7 @@ account_security_handler (xmlNodePtr node, gpointer act_pdata)
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
-    ref = dom_tree_to_commodity_ref_no_engine(node);
+    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     DxaccAccountSetSecurity(pdata->account, ref, pdata->book);
 
     return TRUE;

@@ -35,10 +35,10 @@ test_dom_tree_to_commodity_ref(void)
         test_str1 = get_random_string();
         test_str2 = get_random_string();
         
-        test_com1 = gnc_commodity_new(NULL, test_str1, test_str2, NULL, 0);
+        test_com1 = gnc_commodity_new(NULL, test_str1, test_str2, NULL, 0, NULL);
         test_node = commodity_ref_to_dom_tree("test-com", test_com1);
 
-        test_com2 = dom_tree_to_commodity_ref_no_engine(test_node);
+        test_com2 = dom_tree_to_commodity_ref_no_engine(test_node, NULL);
 
         do_test(gnc_commodity_equiv(test_com1, test_com2),
                             "dom_tree_to_commodity_ref_no_engine");

@@ -181,14 +181,14 @@ equals_node_val_vs_guid(xmlNodePtr node, const GUID *id)
 }
 
 gboolean
-equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com)
+equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, GNCBook *book)
 {
     gnc_commodity *cmpcom;
 
     g_return_val_if_fail(node, FALSE);
     g_return_val_if_fail(com, FALSE);
 
-    cmpcom = dom_tree_to_commodity_ref_no_engine(node);
+    cmpcom = dom_tree_to_commodity_ref_no_engine(node, book);
 
     g_return_val_if_fail(cmpcom, FALSE);
 

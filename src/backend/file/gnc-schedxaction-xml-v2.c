@@ -580,7 +580,8 @@ tt_act_handler( xmlNodePtr node, gpointer data )
                            applies for
                            SchedXaction.c:xaccSchedXactionInit... */
                         com = gnc_commodity_new( "template", "template",
-                                                 "template", "template", 1 );
+                                                 "template", "template",
+                                                 1, txd->book );
                         xaccAccountSetCommodity( acc, com );
                 }
 

@@ -37,7 +37,7 @@ exec guile -s $0 "$@"
                                          ~S,
                                          ~S,
                                          ~S,
-                                         ~S);\n
+                                         ~S, book);\n
     if(!c) {
       PWARN(\"failed to create commodity for currency %s\", fullname);
     } else {

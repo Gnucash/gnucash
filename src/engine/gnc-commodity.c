@@ -42,26 +42,27 @@ static short module = MOD_ENGINE;
  * of the smallest-transactional-units of the currency are there
  * in a 'unitname' unit. */ 
 
-struct _gnc_commodity { 
-  char   * fullname;  
-  char   * namespace;
-  char   * mnemonic;
-  char   * printname;
-  char   * exchange_code;  /* CUSIP or other identifying code */
-  int    fraction;
-  char   * unique_name;  
-  gint16 mark;             /* user-defined mark, handy for traversals */
+struct gnc_commodity_s { 
+  GNCBook * book;
+  char    * fullname;  
+  char    * namespace;
+  char    * mnemonic;
+  char    * printname;
+  char    * exchange_code;  /* CUSIP or other identifying code */
+  int       fraction;
+  char    * unique_name;  
+  gint16    mark;           /* user-defined mark, handy for traversals */
 };
 
-struct _gnc_commodity_namespace {
+struct gnc_commodity_namespace_s {
   GHashTable * table;
 };
 
-struct _gnc_commodity_table {
+struct gnc_commodity_table_s {
   GHashTable * table;
 };
 
-typedef struct _gnc_commodity_namespace gnc_commodity_namespace;
+typedef struct gnc_commodity_namespace_s gnc_commodity_namespace;
 
 /********************************************************************
  * gnc_commodity_new
@@ -89,10 +90,11 @@ gnc_commodity *
 gnc_commodity_new(const char * fullname, 
                   const char * namespace, const char * mnemonic, 
                   const char * exchange_code, 
-                  int fraction)
+                  int fraction, GNCBook *book)
 {
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
 
+  retval->book = book;
   retval->fullname  = g_strdup(fullname);
   retval->namespace = g_strdup(namespace);
   retval->mnemonic  = g_strdup(mnemonic);
@@ -145,7 +147,8 @@ gnc_commodity_destroy(gnc_commodity * cm)
  ********************************************************************/
 
 const char *
-gnc_commodity_get_mnemonic(const gnc_commodity * cm) {
+gnc_commodity_get_mnemonic(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->mnemonic;
 }
@@ -155,7 +158,8 @@ gnc_commodity_get_mnemonic(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_printname(const gnc_commodity * cm) {
+gnc_commodity_get_printname(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->printname;
 }
@@ -166,7 +170,8 @@ gnc_commodity_get_printname(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_namespace(const gnc_commodity * cm) {
+gnc_commodity_get_namespace(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->namespace;
 }
@@ -177,7 +182,8 @@ gnc_commodity_get_namespace(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_fullname(const gnc_commodity * cm) {
+gnc_commodity_get_fullname(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->fullname;
 }
@@ -188,7 +194,8 @@ gnc_commodity_get_fullname(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char *
-gnc_commodity_get_unique_name(const gnc_commodity * cm) {
+gnc_commodity_get_unique_name(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->unique_name;
 }
@@ -199,7 +206,8 @@ gnc_commodity_get_unique_name(const gnc_commodity * cm) {
  ********************************************************************/
 
 const char * 
-gnc_commodity_get_exchange_code(const gnc_commodity * cm) {
+gnc_commodity_get_exchange_code(const gnc_commodity * cm) 
+{
   if(!cm) return NULL;
   return cm->exchange_code;
 }
@@ -209,7 +217,8 @@ gnc_commodity_get_exchange_code(const gnc_commodity * cm) {
  ********************************************************************/
 
 int
-gnc_commodity_get_fraction(const gnc_commodity * cm) {
+gnc_commodity_get_fraction(const gnc_commodity * cm) 
+{
   if(!cm) return 0;
   return cm->fraction;
 }
@@ -219,9 +228,17 @@ gnc_commodity_get_fraction(const gnc_commodity * cm) {
  ********************************************************************/
 
 gint16
-gnc_commodity_get_mark(const gnc_commodity * cm) {
+gnc_commodity_get_mark(const gnc_commodity * cm) 
+{
   if(!cm) return 0;
   return cm->mark;
+}
+
+GNCBook *
+gnc_commodity_get_book(const gnc_commodity * cm) 
+{
+  if(!cm) return NULL;
+  return cm->book;
 }
 
 /********************************************************************
@@ -859,7 +876,8 @@ gnc_commodity_table_equal(gnc_commodity_table *t_1,
  ********************************************************************/
 
 gboolean
-gnc_commodity_table_add_default_data(gnc_commodity_table *table)
+gnc_commodity_table_add_default_data(gnc_commodity_table *table, 
+                                     GNCBook *book)
 {
 
   #include "./iso-4217-currencies.c"

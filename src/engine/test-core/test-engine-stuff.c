@@ -1128,7 +1128,7 @@ get_random_commodity (GNCBook *book)
     xcode = get_random_string();
     ran_int = get_random_int_in_range(1, 100000);
 
-    ret = gnc_commodity_new (name, space, mn, xcode, ran_int);
+    ret = gnc_commodity_new (name, space, mn, xcode, ran_int, book);
 
     g_free(mn);
     g_free(name);

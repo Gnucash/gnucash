@@ -194,6 +194,14 @@ equals_node_val_vs_splits(xmlNodePtr node, const Transaction *trn)
     return TRUE;
 }
 
+static GNCBook *
+xaccTransGetBook (Transaction *trn)
+{
+   Split *s = xaccTransGetSplit (trn, 0);
+   Account *acc = xaccSplitGetAccount(s);
+   return xaccAccountGetBook (acc);
+}
+
 static gchar*
 node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
 {
@@ -227,7 +235,7 @@ node_and_transaction_equal(xmlNodePtr node, Transaction *trn)
         else if(safe_strcmp(mark->name, "trn:currency") == 0)
         {
             if(!equals_node_val_vs_commodity(
-                   mark, xaccTransGetCurrency(trn)))
+                   mark, xaccTransGetCurrency(trn), xaccTransGetBook(trn)))
             {
                 return g_strdup("currencies differ");
             }
