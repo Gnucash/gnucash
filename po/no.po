@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: achtung 0.1\n"
-"POT-Creation-Date: 2001-06-09 16:49-0700\n"
+"POT-Creation-Date: 2001-06-10 23:32-0700\n"
 "PO-Revision-Date: 2001-05-25 12:42+02:00\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -157,7 +157,7 @@ msgstr ""
 msgid "Open"
 msgstr "Åpne"
 
-#: src/FileDialog.c:565 src/gnome/window-main.c:1084
+#: src/FileDialog.c:565 src/gnome/window-main.c:1090
 msgid "Save"
 msgstr "Lagre"
 
@@ -170,8 +170,8 @@ msgid ""
 "Are you sure you want to overwrite it?"
 msgstr ""
 
-#: src/SplitLedger.c:125 src/engine/Transaction.c:2017
-#: src/engine/Transaction.c:2038 src/register/splitreg.c:739
+#: src/SplitLedger.c:125 src/engine/Transaction.c:2016
+#: src/engine/Transaction.c:2037 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:344
 #, fuzzy
 msgid "-- Split Transaction --"
@@ -469,7 +469,7 @@ msgstr ""
 msgid "Imbalance"
 msgstr ""
 
-#: src/engine/Transaction.c:2059 src/gnome/druid-stock-split.c:395
+#: src/engine/Transaction.c:2058 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:869 src/register/splitreg.c:241
 msgid "Split"
 msgstr "Splitt"
@@ -642,21 +642,21 @@ msgstr ""
 msgid "New top level account"
 msgstr ""
 
-#: src/gnome/dialog-account.c:1709
+#: src/gnome/dialog-account.c:1717
 #, fuzzy
 msgid "<No name>"
 msgstr "Navn"
 
-#: src/gnome/dialog-account.c:1749
+#: src/gnome/dialog-account.c:1757
 msgid "Edit Account"
 msgstr ""
 
-#: src/gnome/dialog-account.c:1752
+#: src/gnome/dialog-account.c:1760
 #, fuzzy, c-format
 msgid "(%d) New Accounts"
 msgstr "Ny konto"
 
-#: src/gnome/dialog-account.c:1763 src/gnome/glade-gnc-dialogs.c:3446
+#: src/gnome/dialog-account.c:1771 src/gnome/glade-gnc-dialogs.c:3446
 msgid "New Account"
 msgstr "Ny konto"
 
@@ -664,7 +664,7 @@ msgstr "Ny konto"
 msgid "No description"
 msgstr "Ingen beskrivelse"
 
-#: src/gnome/dialog-column-view.c:243
+#: src/gnome/dialog-column-view.c:242
 #, fuzzy
 msgid "Contents"
 msgstr "Centimeter"
@@ -3148,7 +3148,7 @@ msgstr "Skriv ut"
 msgid "Print Help window"
 msgstr "Forhåndsvisning av utskrift"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1094
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1100
 #: src/gnome/window-register.c:933 src/gnome/window-register.c:1374
 msgid "Close"
 msgstr "Lukk"
@@ -3193,147 +3193,147 @@ msgstr ""
 "GnuCash personlig finansverktøy.\n"
 "GNU-måten å kontrollere dine penger!"
 
-#: src/gnome/window-main.c:922
+#: src/gnome/window-main.c:928
 #, fuzzy
 msgid "New _File"
 msgstr "Ny fil"
 
-#: src/gnome/window-main.c:923
+#: src/gnome/window-main.c:929
 msgid "Create a new file"
 msgstr "Opprett en ny fil"
 
-#: src/gnome/window-main.c:930
+#: src/gnome/window-main.c:936
 #, fuzzy
 msgid "Export Accounts..."
 msgstr "Kontoer"
 
-#: src/gnome/window-main.c:931
+#: src/gnome/window-main.c:937
 msgid "Export the account hierarchy to a new file"
 msgstr ""
 
-#: src/gnome/window-main.c:939
+#: src/gnome/window-main.c:945
 msgid "Import QIF..."
 msgstr ""
 
-#: src/gnome/window-main.c:940
+#: src/gnome/window-main.c:946
 msgid "Import a Quicken QIF file"
 msgstr ""
 
-#: src/gnome/window-main.c:948
+#: src/gnome/window-main.c:954
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "Ny konto"
 
-#: src/gnome/window-main.c:949
+#: src/gnome/window-main.c:955
 msgid "Open a new account tree view"
 msgstr ""
 
-#: src/gnome/window-main.c:956
+#: src/gnome/window-main.c:962
 msgid "Move to New Window"
 msgstr ""
 
-#: src/gnome/window-main.c:957
+#: src/gnome/window-main.c:963
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr ""
 
-#: src/gnome/window-main.c:963
+#: src/gnome/window-main.c:969
 msgid "Close _Window"
 msgstr ""
 
-#: src/gnome/window-main.c:964 src/gnome/window-main.c:1095
+#: src/gnome/window-main.c:970 src/gnome/window-main.c:1101
 msgid "Close the current notebook page"
 msgstr ""
 
-#: src/gnome/window-main.c:976
+#: src/gnome/window-main.c:982
 msgid "_Preferences..."
 msgstr "_Brukervalg..."
 
-#: src/gnome/window-main.c:977
+#: src/gnome/window-main.c:983
 msgid "Open the global preferences dialog"
 msgstr ""
 
-#: src/gnome/window-main.c:989
+#: src/gnome/window-main.c:995
 #, fuzzy
 msgid "_General Ledger"
 msgstr "Generelt"
 
-#: src/gnome/window-main.c:990
+#: src/gnome/window-main.c:996
 msgid "Open a general ledger window"
 msgstr ""
 
-#: src/gnome/window-main.c:997
+#: src/gnome/window-main.c:1003
 msgid "Commodity _Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:998
+#: src/gnome/window-main.c:1004
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:1005
+#: src/gnome/window-main.c:1011
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:1006
+#: src/gnome/window-main.c:1012
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:1013
+#: src/gnome/window-main.c:1019
 msgid "Financial _Calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:1014
+#: src/gnome/window-main.c:1020
 msgid "Use the financial calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:1020
+#: src/gnome/window-main.c:1026
 #, fuzzy
 msgid "_Find Transactions"
 msgstr "Finn transaksjoner"
 
-#: src/gnome/window-main.c:1021 src/gnome/window-register.c:906
+#: src/gnome/window-main.c:1027 src/gnome/window-register.c:906
 #, fuzzy
 msgid "Find transactions with a search"
 msgstr "Finn transaksjoner"
 
-#: src/gnome/window-main.c:1033
+#: src/gnome/window-main.c:1039
 msgid "_Manual"
 msgstr "_Manual"
 
-#: src/gnome/window-main.c:1034
+#: src/gnome/window-main.c:1040
 msgid "Open the GnuCash Manual"
 msgstr ""
 
-#: src/gnome/window-main.c:1041
+#: src/gnome/window-main.c:1047
 msgid "_Tips Of The Day"
 msgstr ""
 
-#: src/gnome/window-main.c:1042
+#: src/gnome/window-main.c:1048
 msgid "View the Tips of the Day"
 msgstr ""
 
-#: src/gnome/window-main.c:1061
+#: src/gnome/window-main.c:1067
 msgid "_Tools"
 msgstr ""
 
-#: src/gnome/window-main.c:1062
+#: src/gnome/window-main.c:1068
 #, fuzzy
 msgid "_Settings"
 msgstr "Innstillinger"
 
-#: src/gnome/window-main.c:1063
+#: src/gnome/window-main.c:1069
 #, fuzzy
 msgid "_Windows"
 msgstr "vindu1"
 
-#: src/gnome/window-main.c:1085
+#: src/gnome/window-main.c:1091
 msgid "Save the file to disk"
 msgstr ""
 
-#: src/gnome/window-main.c:1110
+#: src/gnome/window-main.c:1116
 msgid "Exit"
 msgstr "Avslutt"
 
-#: src/gnome/window-main.c:1111
+#: src/gnome/window-main.c:1117
 msgid "Exit GnuCash"
 msgstr ""
 
@@ -3955,16 +3955,16 @@ msgstr ""
 msgid "Print report window"
 msgstr "Forhåndsvisning av utskrift"
 
-#: src/guile/gnucash.c:143
+#: src/guile/gnucash.c:144
 msgid "This is a development version. It may or may not work."
 msgstr ""
 
-#: src/guile/gnucash.c:147
+#: src/guile/gnucash.c:148
 #, c-format
 msgid "The last stable version was %s."
 msgstr ""
 
-#: src/guile/gnucash.c:149
+#: src/guile/gnucash.c:150
 #, c-format
 msgid "The next stable version will be %s."
 msgstr ""
@@ -5626,21 +5626,13 @@ msgstr ""
 
 #: src/scm/guile-strings.c:470
 msgid ""
-"Warning!! This is a DEVELOPMENT version of GnuCash.\n"
-"It probably has lots of bugs and unstable features!\n"
-"If you are looking for a stable personal finance application,\n"
-"you should use the latest release of GnuCash 1.4."
-msgstr ""
-
-#: src/scm/guile-strings.c:474
-msgid ""
 "The GnuCash online manual has lots of helpful information.  \n"
 "If you are upgrading from GnuCash 1.4, the section \"What's new in\n"
 "GnuCash 1.6\" is particularly interesting. You can access the manual\n"
 "under the Help menu."
 msgstr ""
 
-#: src/scm/guile-strings.c:478
+#: src/scm/guile-strings.c:474
 msgid ""
 "You can easily import your existing financial data from Quicken,\n"
 "MS Money or other programs that export QIF (Quicken Interchange\n"
@@ -5648,7 +5640,7 @@ msgid ""
 "bar and follow the instructions provided."
 msgstr ""
 
-#: src/scm/guile-strings.c:482
+#: src/scm/guile-strings.c:478
 msgid ""
 "If you are familiar with other financial programs such as Quicken,\n"
 "note that GnuCash uses accounts instead of categories to track\n"
@@ -5656,7 +5648,7 @@ msgid ""
 "accounts, please see the GnuCash online manual."
 msgstr ""
 
-#: src/scm/guile-strings.c:486
+#: src/scm/guile-strings.c:482
 msgid ""
 "Create new accounts by clicking the New button in the main window\n"
 "tool bar.  This will bring up a dialog box where you can enter\n"
@@ -5665,14 +5657,14 @@ msgid ""
 "manual."
 msgstr ""
 
-#: src/scm/guile-strings.c:491
+#: src/scm/guile-strings.c:487
 msgid ""
 "Click the right mouse button in the main window to bring up the\n"
 "account menu options. Within each register, clicking the right\n"
 "mouse button brings up the transaction menu options."
 msgstr ""
 
-#: src/scm/guile-strings.c:494
+#: src/scm/guile-strings.c:490
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash\n"
 "calculator to add, subtract, multiply and divide .  Simply type\n"
@@ -5680,7 +5672,7 @@ msgid ""
 "second value and press Enter to record the calculated amount."
 msgstr ""
 
-#: src/scm/guile-strings.c:498
+#: src/scm/guile-strings.c:494
 msgid ""
 "Quick-fill makes it easy to enter common transactions.  When you\n"
 "type the first letter(s) of a common transaction description,\n"
@@ -5688,7 +5680,7 @@ msgid ""
 "transaction as it was last entered."
 msgstr ""
 
-#: src/scm/guile-strings.c:502
+#: src/scm/guile-strings.c:498
 msgid ""
 "Type the first letter(s) of an existing account name in the\n"
 "Transfer register column, and GnuCash will complete the name from\n"
@@ -5697,7 +5689,7 @@ msgid ""
 "the subaccount (e.g. A:C for Assets:Cash.)"
 msgstr ""
 
-#: src/scm/guile-strings.c:507
+#: src/scm/guile-strings.c:503
 msgid ""
 "To enter multiple-split transactions such as a paycheck with\n"
 "multiple deductions, click the Split button in the tool bar.\n"
@@ -5705,14 +5697,14 @@ msgid ""
 "Transaction Journal from the Register|Style menu option."
 msgstr ""
 
-#: src/scm/guile-strings.c:511
+#: src/scm/guile-strings.c:507
 msgid ""
 "Want to see all your subaccount transactions in one register?\n"
 "From the main menu, highlight the parent account and select\n"
 "Accounts|Open Subaccounts from the menu."
 msgstr ""
 
-#: src/scm/guile-strings.c:514
+#: src/scm/guile-strings.c:510
 msgid ""
 "In the reconcile window, you can press the spacebar\n"
 "to mark transactions as reconciled.\n"
@@ -5720,7 +5712,7 @@ msgid ""
 "deposits and withdrawals."
 msgstr ""
 
-#: src/scm/guile-strings.c:518
+#: src/scm/guile-strings.c:514
 msgid ""
 "When entering check numbers in the register, you can\n"
 "type '+' to enter the next number or '-' to enter the previous\n"
@@ -5728,13 +5720,13 @@ msgid ""
 "dates as well."
 msgstr ""
 
-#: src/scm/guile-strings.c:522
+#: src/scm/guile-strings.c:518
 msgid ""
 "You should back up your files regularly.  Just copy\n"
 "your GnuCash data file to a floppy or other backup device."
 msgstr ""
 
-#: src/scm/guile-strings.c:524
+#: src/scm/guile-strings.c:520
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "you need an intermediate currency trading account. Click the Transfer\n"
@@ -5742,34 +5734,34 @@ msgid ""
 "transaction. See the GnuCash online manual for details."
 msgstr ""
 
-#: src/scm/guile-strings.c:528
+#: src/scm/guile-strings.c:524
 msgid ""
 "You can pack multiple reports into a single window, \n"
 "providing all the financial information you want at a glance.\n"
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:531
+#: src/scm/guile-strings.c:527
 msgid ""
 "GnuCash can act as a simple web browser!  To display\n"
 "a web page as a report, use the \"Frame URL\" report."
 msgstr ""
 
-#: src/scm/guile-strings.c:533
+#: src/scm/guile-strings.c:529
 msgid ""
 "Style Sheets affect how reports are displayed.  Choose\n"
 "a style sheet for your report as a report option, and use\n"
 "the Style Sheets menu to customize style sheets."
 msgstr ""
 
-#: src/scm/guile-strings.c:536
+#: src/scm/guile-strings.c:532
 msgid ""
 "The GnuCash developers are easy to contact.  As well\n"
 "as several mailing lists, you can chat to them live on IRC!\n"
 "Join them on #gnucash at irc.gnome.org"
 msgstr ""
 
-#: src/scm/guile-strings.c:539
+#: src/scm/guile-strings.c:535
 msgid ""
 "There is a theory that if ever anyone discovers what\n"
 "the Universe is for and why it is here, it will instantly\n"
