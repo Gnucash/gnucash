@@ -35,6 +35,12 @@ xml-i18n-merge
 xml-i18n-merge.in
 xml-i18n-update
 xml-i18n-update.in
+intltool-extract
+intltool-extract.in
+intltool-merge
+intltool-merge.in
+intltool-update
+intltool-update.in
 *.tar.gz
 *.log
 *.patch
