@@ -1,0 +1,4 @@
+Makefile
+.deps
+.libs
+test-link

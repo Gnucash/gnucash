@@ -8,3 +8,8 @@ gnucash.keys
 *.la
 *.lo
 .libs
+gw-gnc.scm
+gw-gnc.h
+gw-gnc.c
+gw-gnc.html
+.scm-links
