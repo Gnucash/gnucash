@@ -1,4 +1,4 @@
-pkglib_LTLIBRARIES = libgnc-app-file-gnome.la
+lib_LTLIBRARIES = libgnc-app-file-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
