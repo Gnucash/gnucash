@@ -1,6 +1,7 @@
-How to install gnucash-1.2.5 on SuSE-6.3
+How to install gnucash-1.3.0 on SuSE-6.3
 ========================================
 (written 2000-01-07 by Peter Pointner <peter@wuzel.m.isar.de>)
+(changed for gnucash-1.3.0 2000-03-01 by Herbert Thoma (tma@iis.fhg.de))
 
 Notes:
 
@@ -30,6 +31,8 @@ Let's go:
        xdevel
   + from series xdev
        lesstiff  lesstifd
+  + from series gnm
+       gnlibs gnlibsd
 
 * Download slib from
     ftp://ftp.gnu.org/pub/gnu/jacal/slib2c7.zip
@@ -39,57 +42,19 @@ Let's go:
     su root -c "unzip -L /tmp/slib2c7"
 
 * Download GnuCash from
-    http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-1.2.5.tar.gz
+    http://www.gnucash.org/pub/gnucash/sources/unstable/1.3.x/1.3.0/gnucash-1.3.0.tar.gz
   and unpack it
-    tar xzf gnucash-1.2.5.tar.gz
+    tar xzf gnucash-1.3.0.tar.gz
+* Alternatively get GnuCash from cvs
+    cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login (password guest)
+    cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout gnucash
 
-* Now apply the patch at the end of this file. The first hunk will
-  make the file selection box work with lesstiff-0.89.1, the version
-  which comes with SuSE 6.3. It should not hurt with other versions.
-      The second hunk changes a hardcoded path to match the default
-  installation prefix. This change stops gnucash from crashing when
-  showing a report. You can apply this patch by something like
-    cd gnucash-1.2.5
-    patch -p1 < ../README-SuSE-6.3
- 
 * Configure, build and install gnucash. Installation must probably be
   done as root, the files go to various places in /usr/local.
 
-    cd gnucash-1.2.5
+    cd gnucash-1.3.0
     ./configure
-    make
+    make motif    for motif version  or
+    make gnome    for gnome version (recommended)  or
+    make qt       for qt/KDE version (pre alpha, may even not compile)
     su root -c "make install"
-
-
-=================== patch follows ========================
-
-diff -ru gnucash-1.2.5/src/motif/FileBox.c gnucash-1.2.5.patched/src/motif/File
-Box.c
---- gnucash-1.2.5/src/motif/FileBox.c	Mon Oct 18 06:18:29 1999
-+++ gnucash-1.2.5.patched/src/motif/FileBox.c	Fri Jan  7 22:25:17 2000
-@@ -208,8 +208,10 @@
-   {
-   char **fileName = (char **)cd;
-   ENTER("closeBoxCB");
--  *fileName = NULL;
--  done = True;
-+  if (! done) {
-+    *fileName = NULL;
-+    done = True;
-+  }
-   LEAVE("closeBoxCB");
-   }
- 
-diff -ru gnucash-1.2.5/src/reports/Sheet.c gnucash-1.2.5.patched/src/reports/Sh
-eet.c
---- gnucash-1.2.5/src/reports/Sheet.c	Tue Jul  6 08:44:52 1999
-+++ gnucash-1.2.5.patched/src/reports/Sheet.c	Fri Jan  7 22:40:35 2000
-@@ -235,7 +235,7 @@
-    }
- 
-    /* hack afreakin lert -- this path should not be hard-coded ... */
--   fullpath = strdup ("/usr/lib/gnucash/");
-+   fullpath = strdup ("/usr/local/lib/gnucash/");
-    
-    fprintf (to_perl,
-        "<: \n"
