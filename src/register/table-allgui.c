@@ -332,8 +332,9 @@ makePassive (Table *table)
 {
    int i,j;
    CellBlock *curs;
-   int r_origin = table->current_cursor_phys_row;
-   int c_origin = table->current_cursor_phys_col;
+   int phys_row = table->current_cursor_phys_row;
+   int phys_col = table->current_cursor_phys_col;
+   int r_origin, c_origin;
 
 
    /* Change the cell background colors to thier "passive" values.
@@ -341,7 +342,12 @@ makePassive (Table *table)
     * less the same thing as "the current location is no longer being edited.")
     * (But only do this if the cursor has a valid current location) 
     */
-   if ((0 > r_origin) || (0 > c_origin)) return;
+   if ((0 > phys_row) || (0 > phys_col)) return;
+
+   r_origin = phys_row;
+   c_origin = phys_col;
+   r_origin -= table->locators[phys_row][phys_col]->phys_row_offset;
+   c_origin -= table->locators[phys_row][phys_col]->phys_col_offset;
 
    curs = table->current_cursor;
 
@@ -384,7 +390,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
     * associated with the current location of the cursor.  
     * Note that this callback may recursively call this routine. */
    if (table->move_cursor) {
-      (table->move_cursor) (table, new_phys_row, new_phys_col, 
+      (table->move_cursor) (table, &new_phys_row, &new_phys_col, 
                             table->client_data);
 
       /* The above callback can cause this routine to be called recursively.
@@ -447,9 +453,11 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    curs = table->handlers[new_virt_row][new_virt_col];
    table->current_cursor = curs;
 
-   /* record the new virtual position ... */
+   /* record the new position ... */
    table->current_cursor_virt_row = new_virt_row;
    table->current_cursor_virt_col = new_virt_col;
+   table->current_cursor_phys_row = new_phys_row;
+   table->current_cursor_phys_col = new_phys_col;
 
    /* compute some useful offsets ... */
    phys_row_origin = new_phys_row;
@@ -457,9 +465,6 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
-
-   table->current_cursor_phys_row = phys_row_origin;
-   table->current_cursor_phys_col = phys_col_origin;
 
    /* setting the previous traversal value to the last of a traversal chain will
     * gaurentee that first entry into a register will occur at the first cell */
@@ -528,6 +533,8 @@ void xaccCommitCursor (Table *table)
    int i,j;
    int virt_row, virt_col;
    CellBlock *curs;
+   int phys_row, phys_col;
+   int phys_row_origin, phys_col_origin;
 
    curs = table->current_cursor;
    if (!curs) return;
@@ -540,14 +547,22 @@ void xaccCommitCursor (Table *table)
    if (virt_row >= table->num_virt_rows) return;
    if (virt_col >= table->num_virt_cols) return;
 
+   /* compute the true origin of the cell block */
+   phys_row = table->current_cursor_phys_row;
+   phys_col = table->current_cursor_phys_col;
+   phys_row_origin = table->current_cursor_phys_row;
+   phys_col_origin = table->current_cursor_phys_col;
+   phys_row_origin -= table->locators[phys_row][phys_col]->phys_row_offset;
+   phys_col_origin -= table->locators[phys_row][phys_col]->phys_col_offset;
+
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {
          BasicCell *cell;
          
          cell = curs->cells[i][j];
          if (cell) {
-            int iphys = i + table->current_cursor_phys_row;
-            int jphys = j + table->current_cursor_phys_col;
+            int iphys = i + phys_row_origin;
+            int jphys = j + phys_col_origin;
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
             }
@@ -566,7 +581,6 @@ void xaccCommitCursor (Table *table)
 }
 
 /* ==================================================== */
-/* hack alert -- will core dump if numrows has changed, etc. */
 /* hack alert -- assumes that first block is header. */
 /* hack alert -- this routine is *just like* that above,
  * except that its's committing the very first cursor.
@@ -644,6 +658,17 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
        * in the cursor */
       xaccCommitCursor (table);
       xaccMoveCursorGUI (table, phys_row, phys_col);
+   } else {
+
+      /* The request might be to move to a cell that is one column over.
+       * If so, then do_commit will be zero, as there will have been no 
+       * reason to actually move a cursor.  However, we want to keep 
+       * positions accurate, so record the new location.  (The move may 
+       * may also be one row up or down, which, for a two-row cursor,
+       * also might not require a cursor movement).
+       */
+      table->current_cursor_phys_row = phys_row;
+      table->current_cursor_phys_col = phys_col;
    }
 }
 
