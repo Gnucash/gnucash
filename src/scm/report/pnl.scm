@@ -182,7 +182,7 @@
                        #t gnc:accounts-get-comm-total-profit 
                        (_ "Profit") do-grouping? 
                        show-parent-balance? show-parent-total?
-                       show-fcur? report-currency exchange-fn)))
+                       show-fcur? report-currency exchange-fn #t)))
 
           ;; add the table 
           (gnc:html-document-add-object! doc table)

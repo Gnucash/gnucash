@@ -1,3 +1,11 @@
+2002-02-17  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: Added support for surpressing zero
+	amounts.
+
+	* src/scm/*-utilities.scm: Clean up commodity-collector calling
+	functions.
+
 2002-02-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-html-guppi.c: Added workaround for Guppi barchart
