@@ -1,3 +1,8 @@
+2001-08-29  Christian Stimming <stimming@tuhh.de> 
+
+	* po/pl.po: Added (preliminary) Polish translation by Zbigniew
+	Chyla <cyba@gnome.pl>
+
 2001-08-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-html-guppi.c: activate the [xy]_axis_label
