@@ -1,13 +1,13 @@
-# Translation of `gnucash' messages to Russian.
-# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Translation of gnucash messages to Russian.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 # Valek Filippov <frob@df.ru>, 2000.
-# Vitaly Lipatov <lav@altlinux.ru>, 2002,2003.
+# Vitaly Lipatov <lav@altlinux.ru>, 2002, 2003, 2004.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8.7\n"
-"POT-Creation-Date: 2003-09-14 18:59-0700\n"
-"PO-Revision-Date: 2003-09-25 11:24MSK\n"
+"Project-Id-Version: gnucash 1.8.8\n"
+"POT-Creation-Date: 2003-11-17 22:01-0800\n"
+"PO-Revision-Date: 2004-01-14 23:04MSK\n"
 "Last-Translator: Vitaly Lipatov <lav@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1062,7 +1062,7 @@ msgstr "Дата"
 
 #: src/business/business-gnome/glade/invoice.glade:178
 msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Идентификатор счёта-фактуры. Если будет не заполнен, подходящее число будет проставлено автоматически"
 
 #: src/business/business-gnome/glade/invoice.glade:261
 #: src/business/business-gnome/glade/invoice.glade:437
@@ -1298,7 +1298,7 @@ msgstr "_Главная Книга"
 #: src/business/business-gnome/glade/invoice.glade:1060
 #: src/gnome/glade/register.glade:578 src/gnome/window-main.c:879
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "Просмотреть и изменить цены для ценных бумаг и сберегательных фондов"
+msgstr "Просмотреть и изменить цены для ценных бумаг и взаимных фондов"
 
 #: src/business/business-gnome/glade/invoice.glade:1066
 #: src/gnome/glade/register.glade:584 src/gnome/window-main.c:878
@@ -1308,7 +1308,7 @@ msgstr "_Редактор цен"
 #: src/business/business-gnome/glade/invoice.glade:1073
 #: src/gnome/glade/register.glade:591 src/gnome/window-main.c:887
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "Просмотреть и изменить товары для ценных бумаг и сберегательных фондов"
+msgstr "Просмотреть и изменить товары для ценных бумаг и взаимных фондов"
 
 #: src/business/business-gnome/glade/invoice.glade:1079
 #: src/gnome/glade/register.glade:597
@@ -1448,9 +1448,8 @@ msgid "Job: "
 msgstr "Задача: "
 
 #: src/business/business-gnome/glade/invoice.glade:2010
-#, fuzzy
 msgid "Extra Payments"
-msgstr "Платежи:"
+msgstr "Дополнительные платежи"
 
 #: src/business/business-gnome/glade/invoice.glade:2028
 msgid "Additional to Card:"
@@ -1481,7 +1480,7 @@ msgstr "Название задачи"
 
 #: src/business/business-gnome/glade/job.glade:181
 msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Идентификатор задачи. Если оставлено незаполненным, подходящее число будет прописано за вас"
 
 #: src/business/business-gnome/glade/job.glade:216
 msgid "Owner Information"
@@ -1543,7 +1542,7 @@ msgstr "Создать заказ"
 
 #: src/business/business-gnome/glade/order.glade:695
 msgid "The order ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Идентификатор заказа. Если оставлено незаполненным, подходящее  число будет прописано за вас"
 
 #: src/business/business-gnome/glade/order.glade:876
 msgid "Order"
@@ -1682,13 +1681,13 @@ msgstr ""
 "Ваш выбор \"%s\" уже используется."
 
 #: src/business/business-gnome/dialog-billterms.c:484
-#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:892
-#: src/import-export/hbci/druid-hbci-initial.c:1290
-#: src/import-export/hbci/hbci-interaction.c:178
-#: src/import-export/hbci/hbci-interaction.c:179
-#: src/import-export/hbci/hbci-interaction.c:303
-#: src/import-export/hbci/hbci-interaction.c:369
-#: src/import-export/hbci/hbci-interaction.c:491
+#: src/engine/FreqSpec.c:970 src/import-export/hbci/druid-hbci-initial.c:820
+#: src/import-export/hbci/druid-hbci-initial.c:1218
+#: src/import-export/hbci/hbci-interaction.c:170
+#: src/import-export/hbci/hbci-interaction.c:171
+#: src/import-export/hbci/hbci-interaction.c:295
+#: src/import-export/hbci/hbci-interaction.c:371
+#: src/import-export/hbci/hbci-interaction.c:493
 #: src/import-export/hbci/hbci-progressmon.c:192 intl-scm/guile-strings.c:1081
 msgid "Unknown"
 msgstr "Неизвестно"
@@ -2254,13 +2253,15 @@ msgstr ""
 "Создать её?"
 
 #: src/business/business-ledger/gncEntryLedgerControl.c:473
-#, fuzzy
 msgid ""
 "The current entry has been changed.\n"
 "However, this entry is part of an existing order.\n"
 "Would you like to record the change and\n"
 "effectively change your order?"
-msgstr "является до ?"
+msgstr ""
+"Текущая запись была изменена.\n"
+"Впрочем, эта запись была частью существующего заказа.\n"
+"Записать изменение и зменить заказ?"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:58
 msgid "sample:X"
@@ -2328,9 +2329,8 @@ msgid "sample:BI"
 msgstr "пример: BI"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:97
-#, fuzzy
 msgid "sample:Payment"
-msgstr "Платёж"
+msgstr "пример: Платёж"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:32
 msgid "$"
@@ -2376,9 +2376,8 @@ msgid "Income Account"
 msgstr "Счёт Прихода"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:45
-#, fuzzy
 msgid "Expense Account"
-msgstr "Счёт Расхода"
+msgstr "Счёт Расходов"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:50
 #: src/register/ledger-core/split-register-model.c:184
@@ -2437,9 +2436,8 @@ msgstr "Всего"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:115
 #: intl-scm/guile-strings.c:861 intl-scm/guile-strings.c:1025
-#, fuzzy
 msgid "Tax"
-msgstr "_Налоги"
+msgstr "Налоги"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:120
 #, fuzzy
@@ -2637,8 +2635,8 @@ msgstr ""
 "%d: %s"
 
 #: src/engine/Account.c:2478 src/import-export/hbci/glade/hbci.glade:444
-#: src/import-export/hbci/gnc-hbci-utils.c:522
-#: src/import-export/hbci/gnc-hbci-utils.c:526 intl-scm/guile-strings.c:1565
+#: src/import-export/hbci/gnc-hbci-utils.c:527
+#: src/import-export/hbci/gnc-hbci-utils.c:531 intl-scm/guile-strings.c:1565
 #: intl-scm/guile-strings.c:3909
 msgid "Bank"
 msgstr "Банк"
@@ -2661,7 +2659,7 @@ msgstr "Ценные бумаги"
 
 #: src/engine/Account.c:2484 intl-scm/guile-strings.c:3921
 msgid "Mutual Fund"
-msgstr "Сберегательный фонд"
+msgstr "Взаимный фонд"
 
 #: src/engine/Account.c:2485 src/gnome/glade/price.glade:162
 #: src/gnome/dialog-price-edit-db.c:500 intl-scm/guile-strings.c:3923
@@ -2793,7 +2791,7 @@ msgstr "Брошенный"
 msgid "Imbalance"
 msgstr "Несоответствие"
 
-#: src/engine/Transaction.c:1718
+#: src/engine/Transaction.c:1717
 msgid ""
 "Another user has modified this transaction\n"
 "\tjust a moment ago. Please look at their changes,\n"
@@ -2803,14 +2801,14 @@ msgstr ""
 "Посмотрите на его изменения, и попробуйте ещё раз,\n"
 "если необходимо.\n"
 
-#: src/engine/Transaction.c:2358 src/engine/Transaction.c:2379
-#: src/register/ledger-core/split-register-control.c:977
+#: src/engine/Transaction.c:2357 src/engine/Transaction.c:2378
+#: src/register/ledger-core/split-register-control.c:982
 #: src/register/ledger-core/split-register.c:2089
 #: intl-scm/guile-strings.c:2325 intl-scm/guile-strings.c:2809
 msgid "-- Split Transaction --"
 msgstr "-- Транзакция из частей --"
 
-#: src/engine/Transaction.c:2400 src/gnome/glade/register.glade:1608
+#: src/engine/Transaction.c:2399 src/gnome/glade/register.glade:1608
 #: src/gnome/druid-stock-split.c:410
 #: src/register/ledger-core/split-register.c:2073
 #: intl-scm/guile-strings.c:2435
@@ -3516,8 +3514,8 @@ msgstr "Выберите или добавьте счёт GnuCash"
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
 #: src/import-export/generic-import.glade:899
-#: src/import-export/hbci/gnc-hbci-utils.c:521
-#: src/import-export/hbci/gnc-hbci-utils.c:525
+#: src/import-export/hbci/gnc-hbci-utils.c:526
+#: src/import-export/hbci/gnc-hbci-utils.c:530
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:1055 intl-scm/guile-strings.c:1765
@@ -5604,7 +5602,7 @@ msgid "<No information>"
 msgstr "<Нет информации>"
 
 #: src/gnome/gnc-split-reg.c:902
-#: src/register/ledger-core/split-register-control.c:1462
+#: src/register/ledger-core/split-register-control.c:1467
 #: src/register/ledger-core/split-register.c:496
 msgid ""
 "The current transaction has been changed.\n"
@@ -6530,7 +6528,7 @@ msgid ""
 "Hit \"Cancel\" now to stop loading the file. "
 msgstr ""
 "Файл, который вы загрузили, создан в старой версии GnuCash. \n"
-"Информация о валютах, ценных бумагах и сберегательных фондах\n"
+"Информация о валютах, ценных бумагах и взаимных фондах\n"
 "требует обновления до новой версии.\n"
 "\n"
 "Этот диалог запросит у вас некоторую дополнительную информацию о\n"
@@ -6758,6 +6756,13 @@ msgid ""
 "A new OpenHBCI configuration file with that name will be created when this HBCI \n"
 "Setup finishes."
 msgstr ""
+"Если у вас уже есть конфигурационный файл OpenHBCI (например, от `aqmoney`), \n"
+"пожалуйста, выберите его здесь. GnuCash продолжит использование вашей существующей конфигурации.\n"
+"\n"
+"Если у вас ещё не конфигурационного файла OpenHBCI, пожалуйста, \n"
+"укажите здесь название файла. \n"
+"Новый конфигурационный файл OpenHBCI с указанным названием будет создан, \n"
+"когда настройка HBCI будет завершена."
 
 #: src/import-export/hbci/glade/hbci.glade:199
 msgid "Enter Bank Information"
@@ -7250,7 +7255,7 @@ msgstr ""
 msgid "%s at %s (code %s)"
 msgstr "%s - %s к %s"
 
-#: src/import-export/hbci/druid-hbci-initial.c:562
+#: src/import-export/hbci/druid-hbci-initial.c:490
 #, fuzzy
 msgid ""
 "You have changed the HBCI version. GnuCash will now need to \n"
@@ -7258,7 +7263,7 @@ msgid ""
 "Press 'Ok' now to proceed to updating the system and the account list."
 msgstr "до  список Да до  до  список."
 
-#: src/import-export/hbci/druid-hbci-initial.c:605
+#: src/import-export/hbci/druid-hbci-initial.c:533
 #, c-format
 msgid ""
 "Enter account id for new account \n"
@@ -7267,15 +7272,15 @@ msgstr ""
 "Введите идентификатор счёта для нового счёта\n"
 "в банке %s (код банка %s):"
 
-#: src/import-export/hbci/druid-hbci-initial.c:620
+#: src/import-export/hbci/druid-hbci-initial.c:548
 msgid "An account with this account id at this bank already exists."
 msgstr ""
 
-#: src/import-export/hbci/druid-hbci-initial.c:1057
+#: src/import-export/hbci/druid-hbci-initial.c:985
 msgid "Default Customer"
 msgstr "Клиент по умолчанию"
 
-#: src/import-export/hbci/druid-hbci-initial.c:1549
+#: src/import-export/hbci/druid-hbci-initial.c:1477
 #, fuzzy
 msgid ""
 "Since the cryptographic keys of the bank cannot be verified,\n"
@@ -7390,12 +7395,53 @@ msgstr ""
 msgid ""
 "Your security medium is not supported. No appropriate plugin \n"
 "has been found for that medium. Aborting."
-msgstr ""
+msgstr "Ваш защищённый носитель не поддерживается. Для него не найдено подходящего дополнения. Завершаем."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:494 intl-scm/guile-strings.c:1277
+#: src/import-export/hbci/gnc-hbci-utils.c:499 intl-scm/guile-strings.c:1277
 #: intl-scm/guile-strings.c:1317
 msgid "Unspecified"
 msgstr "Не указано"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:607
+msgid "Choose HBCI bank"
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-utils.c:608
+msgid ""
+"More than one HBCI bank is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-utils.c:677
+#: src/import-export/hbci/gnc-hbci-utils.c:753
+#, fuzzy, c-format
+msgid "%s (%s) at bank %s (%s)"
+msgstr "%s - %s к %s"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:687
+#, fuzzy
+msgid "Choose HBCI customer"
+msgstr "Ввести нового клиента"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:688
+msgid ""
+"More than one HBCI customer is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-utils.c:763
+#, fuzzy
+msgid "Choose HBCI user"
+msgstr "Выберите Валюту"
+
+#: src/import-export/hbci/gnc-hbci-utils.c:764
+msgid ""
+"More than one HBCI user is available for \n"
+"the requested operation. Please choose \n"
+"the one that should be used."
+msgstr ""
 
 #: src/import-export/hbci/gncmod-hbci.c:89
 #, fuzzy
@@ -7440,7 +7486,7 @@ msgstr "Заметка"
 msgid "Online Actions"
 msgstr "Действия через Интернет"
 
-#: src/import-export/hbci/hbci-interaction.c:43 intl-scm/guile-strings.c:433
+#: src/import-export/hbci/hbci-interaction.c:44 intl-scm/guile-strings.c:433
 #: intl-scm/guile-strings.c:1209 intl-scm/guile-strings.c:1215
 #: intl-scm/guile-strings.c:1221 intl-scm/guile-strings.c:1227
 #: intl-scm/guile-strings.c:1237 intl-scm/guile-strings.c:3851
@@ -7448,7 +7494,7 @@ msgstr "Действия через Интернет"
 msgid "Online Banking & Importing"
 msgstr "Онлайн"
 
-#: src/import-export/hbci/hbci-interaction.c:192
+#: src/import-export/hbci/hbci-interaction.c:184
 #, fuzzy, c-format
 msgid ""
 "Please enter and confirm new PIN for \n"
@@ -7456,92 +7502,98 @@ msgid ""
 "with at least %d characters."
 msgstr "с с d."
 
-#: src/import-export/hbci/hbci-interaction.c:201
+#: src/import-export/hbci/hbci-interaction.c:193
 #, fuzzy, c-format
 msgid ""
 "Please enter and confirm a new PIN for \n"
-"user '%s' at unknown bank,\n"
+"user '%s',\n"
 "with at least %d characters."
-msgstr "с неизвестно d."
+msgstr "с с d."
 
-#: src/import-export/hbci/hbci-interaction.c:208
+#: src/import-export/hbci/hbci-interaction.c:200
 #, fuzzy, c-format
 msgid ""
 "Please enter and confirm a new PIN\n"
 "with at least %d characters."
 msgstr "d."
 
-#: src/import-export/hbci/hbci-interaction.c:229
+#: src/import-export/hbci/hbci-interaction.c:221
 #, fuzzy, c-format
 msgid ""
 "Please enter PIN for \n"
 "user '%s' at bank '%s'."
 msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:236
+#: src/import-export/hbci/hbci-interaction.c:228
 #, fuzzy, c-format
 msgid ""
 "Please enter PIN for \n"
 "user '%s' at unknown bank."
 msgstr "с неизвестно."
 
-#: src/import-export/hbci/hbci-interaction.c:242
+#: src/import-export/hbci/hbci-interaction.c:234
 #, fuzzy
 msgid ""
-"Please enter PIN for \n"
-"unknown user at unknown bank."
-msgstr "владелец неизвестно."
+"Please enter the PIN for \n"
+"the newly created user."
+msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:259
+#: src/import-export/hbci/hbci-interaction.c:251
 #, fuzzy, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
 msgstr "до  d до ?"
 
-#: src/import-export/hbci/hbci-interaction.c:310
-#, fuzzy, c-format
+#: src/import-export/hbci/hbci-interaction.c:303
+#, c-format
 msgid ""
-"Please make sure the key file for \n"
-"user '%s' at bank '%s' can be accessed."
-msgstr "с с."
+"Please make sure the key file for user '%s' at bank '%s' can be \n"
+"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+"the key file is on a floppy disk or other removable media, please make \n"
+"sure the floppy disk or medium is correctly mounted."
+msgstr ""
 
-#: src/import-export/hbci/hbci-interaction.c:315
-#, fuzzy, c-format
+#: src/import-export/hbci/hbci-interaction.c:311
+#, c-format
 msgid ""
-"Please make sure the key file for \n"
-"user '%s' at unknown bank can be accessed."
-msgstr "с неизвестно."
+"Please make sure the key file for user '%s' can be \n"
+"accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
+"the key file is on a floppy disk or other removable media, please make \n"
+"sure the floppy disk or medium is correctly mounted."
+msgstr ""
 
-#: src/import-export/hbci/hbci-interaction.c:323
+#: src/import-export/hbci/hbci-interaction.c:321
 #, fuzzy, c-format
 msgid ""
 "Please insert chip card for \n"
 "user '%s' at bank '%s'."
 msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:328
+#: src/import-export/hbci/hbci-interaction.c:326
 #, fuzzy, c-format
 msgid ""
 "Please insert chip card for \n"
-"user '%s' at unknown bank."
-msgstr "с неизвестно."
+"user '%s'."
+msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:337
-#, fuzzy
+#: src/import-export/hbci/hbci-interaction.c:336
 msgid ""
-"Please make sure the key file for \n"
-"unknown user at unknown bank can be accessed."
-msgstr "владелец неизвестно."
+"Please make sure the key file for the newly created user can be \n"
+"accessed. If you want to create the key file on your harddisk, simply \n"
+"press 'Ok'. If you want to create the key on a floppy disk or other \n"
+"removable media, please make sure the floppy disk or medium is \n"
+"correctly mounted."
+msgstr ""
 
-#: src/import-export/hbci/hbci-interaction.c:342
+#: src/import-export/hbci/hbci-interaction.c:344
 #, fuzzy
 msgid ""
 "Please insert chip card for \n"
-"unknown user at unknown bank."
-msgstr "владелец неизвестно."
+"the newly created user."
+msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:376
+#: src/import-export/hbci/hbci-interaction.c:378
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
@@ -7549,43 +7601,43 @@ msgid ""
 "sure the correct key file can be accessed."
 msgstr ""
 
-#: src/import-export/hbci/hbci-interaction.c:382
+#: src/import-export/hbci/hbci-interaction.c:384
 #, c-format
 msgid ""
 "The key file does not seem to be the correct \n"
-"file for user '%s' at unknown bank. Please make \n"
-"sure the correct key file can be accessed."
+"file for user '%s'. Please make sure the \n"
+"correct key file can be accessed."
 msgstr ""
 
-#: src/import-export/hbci/hbci-interaction.c:391
+#: src/import-export/hbci/hbci-interaction.c:393
 #, fuzzy, c-format
 msgid ""
 "Please insert the correct chip card for \n"
 "user '%s' at bank '%s'."
 msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:396
+#: src/import-export/hbci/hbci-interaction.c:398
 #, fuzzy, c-format
 msgid ""
 "Please insert the correct chip card for \n"
-"user '%s' at unknown bank."
-msgstr "с неизвестно."
+"user '%s'."
+msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:405
+#: src/import-export/hbci/hbci-interaction.c:407
 msgid ""
 "The key file does not seem to be the correct \n"
-"file for unknown user at unknown bank. Please make \n"
+"file for the newly created user. Please make \n"
 "sure the correct key file can be accessed."
 msgstr ""
 
-#: src/import-export/hbci/hbci-interaction.c:411
+#: src/import-export/hbci/hbci-interaction.c:413
 #, fuzzy
 msgid ""
 "Please insert the correct chip card for \n"
-"unknown user at unknown bank."
-msgstr "владелец неизвестно."
+"the newly created user."
+msgstr "с с."
 
-#: src/import-export/hbci/hbci-interaction.c:495
+#: src/import-export/hbci/hbci-interaction.c:497
 #, fuzzy, c-format
 msgid ""
 "Please enter PIN for \n"
@@ -7593,21 +7645,21 @@ msgid ""
 "at the keypad of your chip card reader."
 msgstr "с с d."
 
-#: src/import-export/hbci/hbci-interaction.c:503
+#: src/import-export/hbci/hbci-interaction.c:505
 #, fuzzy, c-format
 msgid ""
 "Please enter PIN for \n"
-"user '%s' at unknown bank\n"
+"user '%s'\n"
 "at the keypad of your chip card reader."
-msgstr "с неизвестно."
+msgstr "с с d."
 
-#: src/import-export/hbci/hbci-interaction.c:510
+#: src/import-export/hbci/hbci-interaction.c:512
 #, fuzzy
 msgid ""
 "Please enter PIN for \n"
-"unknown user at unknown bank\n"
+"the newly created user \n"
 "at the keypad of your chip card reader."
-msgstr "владелец неизвестно."
+msgstr "с с d."
 
 #: src/import-export/hbci/hbci-progressmon.c:98
 #: src/import-export/hbci/hbci-progressmon.c:99
@@ -7731,48 +7783,48 @@ msgstr "Обновление локальной системы"
 msgid "Closing connection"
 msgstr "Закрываем соединение"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:291
+#: src/import-export/hbci/dialog-hbcitrans.c:295
 #, fuzzy
 msgid "Enter an Online Direct Debit Note"
 msgstr "Направлять"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:294
+#: src/import-export/hbci/dialog-hbcitrans.c:298
 #, fuzzy
 msgid "Debited Account Owner"
 msgstr "Удалить счёт"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:296
+#: src/import-export/hbci/dialog-hbcitrans.c:300
 #, fuzzy
 msgid "Debited Account Number"
 msgstr "Друге название счёта"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:298
+#: src/import-export/hbci/dialog-hbcitrans.c:302
 #, fuzzy
 msgid "Debited Account Bank Code"
 msgstr "Банк"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:301
+#: src/import-export/hbci/dialog-hbcitrans.c:305
 #, fuzzy
 msgid "Credited Account Owner"
 msgstr "Кредитные счета"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:303
+#: src/import-export/hbci/dialog-hbcitrans.c:307
 #, fuzzy
 msgid "Credited Account Number"
 msgstr "Кредитные счета"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:305
+#: src/import-export/hbci/dialog-hbcitrans.c:309
 #, fuzzy
 msgid "Credited Account Bank Code"
 msgstr "Банк"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:326
-#: src/import-export/hbci/dialog-hbcitrans.c:647
-#: src/import-export/hbci/dialog-hbcitrans.c:656
+#: src/import-export/hbci/dialog-hbcitrans.c:330
+#: src/import-export/hbci/dialog-hbcitrans.c:661
+#: src/import-export/hbci/dialog-hbcitrans.c:670
 msgid "(unknown)"
 msgstr "(неизвестно)"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:401
+#: src/import-export/hbci/dialog-hbcitrans.c:405
 msgid ""
 "The amount is zero or the amount field could not be \n"
 "interpreted correctly. You might have mixed up decimal \n"
@@ -7782,7 +7834,7 @@ msgid ""
 "Do you want to enter the job again?"
 msgstr ""
 
-#: src/import-export/hbci/dialog-hbcitrans.c:489
+#: src/import-export/hbci/dialog-hbcitrans.c:503
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -7791,7 +7843,7 @@ msgid ""
 "transfer job be sent with this account number anyway?"
 msgstr ""
 
-#: src/import-export/hbci/dialog-hbcitrans.c:583
+#: src/import-export/hbci/dialog-hbcitrans.c:597
 msgid ""
 "The job was successfully sent to the bank, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7802,28 +7854,39 @@ msgid ""
 "Do you want to enter the job again?"
 msgstr ""
 
-#: src/import-export/hbci/dialog-hbcitrans.c:686
+#: src/import-export/hbci/dialog-hbcitrans.c:700
 #, fuzzy
 msgid "Enter name for new template:"
 msgstr "Введите название счёта"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:207
+#: src/import-export/hbci/gnc-hbci-getbalance.c:221
 #, fuzzy
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
-"It seems as if your bank does not support Balance download \n"
-"in this HBCI version. You should choose a higher HBCI version \n"
-"number in the HBCI Setup. After that, try again to download \n"
-"the HBCI Balance.\n"
+"Either this is the correct balance, or your bank does not \n"
+"support Balance download in this HBCI version. In the latter \n"
+"case you should choose a higher HBCI version number in the HBCI \n"
+"Setup. After that, try again to download the HBCI Balance.\n"
 msgstr "дюйм Настройки до "
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:223
+#: src/import-export/hbci/gnc-hbci-getbalance.c:237
 #, fuzzy, c-format
 msgid ""
 "Result of HBCI job: \n"
 "Account booked balance is %s%s\n"
-"Reconcile account now?"
 msgstr "является с?"
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:248
+#, c-format
+msgid ""
+"For your information: This account also \n"
+"has a noted balance of %s%s\n"
+msgstr ""
+
+#: src/import-export/hbci/gnc-hbci-getbalance.c:252
+#, fuzzy
+msgid "Reconcile account now?"
+msgstr "Счёт согласования"
 
 #: src/import-export/hbci/gnc-hbci-gettrans.c:230
 #, fuzzy
@@ -8451,7 +8514,7 @@ msgstr " автоматически "
 
 #: src/import-export/import-main-matcher.c:675
 msgid "Match missing!"
-msgstr ""
+msgstr "Ничего не найдено!"
 
 #: src/import-export/import-main-matcher.c:683
 msgid "Do not import (no action selected)"
@@ -8481,12 +8544,12 @@ msgstr "Выровнять сумму частей текущего счёта"
 msgid "Adjust other account split total"
 msgstr "Выровнять сумму частей другого счёта"
 
-#: src/register/ledger-core/split-register-control.c:1060
+#: src/register/ledger-core/split-register-control.c:1065
 #, fuzzy
 msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr "до  транзакция дюйм до ."
 
-#: src/register/ledger-core/split-register-control.c:1533
+#: src/register/ledger-core/split-register-control.c:1538
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
@@ -9571,9 +9634,8 @@ msgid "Use file compression"
 msgstr "Использовать сжатие файла"
 
 #: intl-scm/guile-strings.c:425
-#, fuzzy
 msgid "Compress the data file."
-msgstr "Сжимать."
+msgstr "Сжимать файл данных."
 
 #: intl-scm/guile-strings.c:429
 #, fuzzy
@@ -10698,7 +10760,6 @@ msgid "2Week"
 msgstr "2 недели"
 
 #: intl-scm/guile-strings.c:1459
-#, fuzzy
 msgid "Two Weeks"
 msgstr "Две недели"
 
@@ -10809,39 +10870,36 @@ msgid "Choose the marker for each data point."
 msgstr "Выберите маркер для каждой точки данных."
 
 #: intl-scm/guile-strings.c:1527 intl-scm/guile-strings.c:1529
-#, fuzzy
 msgid "Circle"
-msgstr "Wire"
+msgstr "Круг"
 
 #: intl-scm/guile-strings.c:1531 intl-scm/guile-strings.c:1533
-#, fuzzy
 msgid "Cross"
-msgstr "Убытки"
+msgstr "Крест"
 
 #: intl-scm/guile-strings.c:1535 intl-scm/guile-strings.c:1537
-#, fuzzy
 msgid "Square"
-msgstr "Акции"
+msgstr "Квадрат"
 
 #: intl-scm/guile-strings.c:1539 intl-scm/guile-strings.c:1541
 msgid "Asterisk"
-msgstr ""
+msgstr "Звёздочка"
 
 #: intl-scm/guile-strings.c:1543
 msgid "Filled circle"
-msgstr ""
+msgstr "Заполненный круг"
 
 #: intl-scm/guile-strings.c:1545
 msgid "Circle filled with color"
-msgstr ""
+msgstr "Круг, заполненный цветом"
 
 #: intl-scm/guile-strings.c:1547
 msgid "Filled square"
-msgstr ""
+msgstr "Заполненный квадрат"
 
 #: intl-scm/guile-strings.c:1549
 msgid "Square filled with color"
-msgstr ""
+msgstr "Квадрат, заполненный цветом"
 
 #: intl-scm/guile-strings.c:1551
 msgid "Choose the method for sorting accounts."
@@ -10861,7 +10919,7 @@ msgstr "Упорядочено в алфавитном порядке названий счетов"
 
 #: intl-scm/guile-strings.c:1563
 msgid "By amount, largest to smallest"
-msgstr ""
+msgstr "По количеству, от наибольшего к наименьшему"
 
 #: intl-scm/guile-strings.c:1571 intl-scm/guile-strings.c:1655
 #: intl-scm/guile-strings.c:1895 intl-scm/guile-strings.c:1897
@@ -10881,7 +10939,7 @@ msgstr "Ценные бумаги"
 
 #: intl-scm/guile-strings.c:1577
 msgid "Mutual Funds"
-msgstr "Сберегательный фонд"
+msgstr "Взаимный фонд"
 
 #: intl-scm/guile-strings.c:1579
 msgid "Currencies"
@@ -11402,11 +11460,11 @@ msgstr "Баланс %s к %s"
 
 #: intl-scm/guile-strings.c:2027 intl-scm/guile-strings.c:2035
 msgid "Income vs. Day of Week"
-msgstr ""
+msgstr "Поступления в день недели"
 
 #: intl-scm/guile-strings.c:2029 intl-scm/guile-strings.c:2037
 msgid "Expenses vs. Day of Week"
-msgstr ""
+msgstr "Траты в день недели"
 
 #: intl-scm/guile-strings.c:2031
 #, fuzzy
@@ -12725,15 +12783,15 @@ msgstr "является"
 
 #: intl-scm/guile-strings.c:3321
 msgid "What's New in v1.8"
-msgstr ""
+msgstr "Что нового в версии 1.8"
 
 #: intl-scm/guile-strings.c:3323
 msgid "About this Book"
-msgstr ""
+msgstr "Об этой книге"
 
 #: intl-scm/guile-strings.c:3325
 msgid "Top Ten Reasons to Use GnuCash"
-msgstr ""
+msgstr "Десять причин использовать GnuCash"
 
 #: intl-scm/guile-strings.c:3327
 #, fuzzy
@@ -12766,7 +12824,7 @@ msgstr "Двойное"
 
 #: intl-scm/guile-strings.c:3339
 msgid "Data Entry Concepts"
-msgstr ""
+msgstr "Концепция записей"
 
 #: intl-scm/guile-strings.c:3341
 #, fuzzy
@@ -12798,7 +12856,7 @@ msgstr "Меню"
 
 #: intl-scm/guile-strings.c:3359
 msgid "Menu Shortcuts"
-msgstr ""
+msgstr "Горячие клавиши для меню"
 
 #: intl-scm/guile-strings.c:3361
 #, fuzzy
@@ -12938,9 +12996,8 @@ msgid "Features of the Account Register"
 msgstr "Отбирать указанные счета"
 
 #: intl-scm/guile-strings.c:3441
-#, fuzzy
 msgid "Choosing a Register Style"
-msgstr "Стиль оформления Журнала по умолчанию"
+msgstr "Выбоп стиля оформления журнала"
 
 #: intl-scm/guile-strings.c:3443
 msgid "Using Entry Shortcuts"
@@ -13154,7 +13211,7 @@ msgstr ""
 
 #: intl-scm/guile-strings.c:3561
 msgid "Recording Purchases in a Foreign Currency (How-To)"
-msgstr ""
+msgstr "Записываем покупки в иностранной валюте (Как сделать)"
 
 #: intl-scm/guile-strings.c:3563
 msgid "Tracking Currency Investments (How-To)"
@@ -13171,7 +13228,7 @@ msgstr "Изменить курс обмена"
 
 #: intl-scm/guile-strings.c:3569
 msgid "Putting It All Together (Examples)"
-msgstr ""
+msgstr "Помещаем это всё вместе (Примеры)"
 
 #: intl-scm/guile-strings.c:3571
 #, fuzzy
@@ -13184,7 +13241,7 @@ msgstr ""
 
 #: intl-scm/guile-strings.c:3585
 msgid "Overview of Business Features"
-msgstr ""
+msgstr "Обзор возможностей, нужных для делового применения"
 
 #: intl-scm/guile-strings.c:3589 intl-scm/guile-strings.c:3627
 #, fuzzy
@@ -13256,24 +13313,23 @@ msgstr ""
 
 #: intl-scm/guile-strings.c:3673
 msgid "Build Protocol"
-msgstr ""
+msgstr "Протокол сборки"
 
 #: intl-scm/guile-strings.c:3675
-#, fuzzy
 msgid "Pay an Employee"
-msgstr "Найти работника"
+msgstr "Оплата работнику"
 
 #: intl-scm/guile-strings.c:3677
 msgid "Pay the Government"
-msgstr ""
+msgstr "Оплата правительству"
 
 #: intl-scm/guile-strings.c:3679
 msgid "Appendix A: Migration Guide"
-msgstr ""
+msgstr "Приложение А. Руководство по переходу"
 
 #: intl-scm/guile-strings.c:3681
 msgid "Appendix B: Frequently Asked Questions"
-msgstr ""
+msgstr "Приложение Б. Часто задаваемые вопросы"
 
 #: intl-scm/guile-strings.c:3683
 msgid "Appendix C: Contributed Account Trees"
@@ -13564,19 +13620,16 @@ msgid "Account fields to display"
 msgstr "Отображаемые поля счёта"
 
 #: intl-scm/guile-strings.c:3951
-#, fuzzy
 msgid "Balance in Report Currency"
-msgstr "Валюта отчёта"
+msgstr "Баланс в валюте отчётов"
 
 #: intl-scm/guile-strings.c:3953
-#, fuzzy
 msgid "Present Balance"
-msgstr "Настоящее значение"
+msgstr "Текущий баланс"
 
 #: intl-scm/guile-strings.c:3955
-#, fuzzy
 msgid "Present Balance in Report Currency"
-msgstr "Валюта отчёта"
+msgstr "Текущий баланс в валюте отчёта"
 
 #: intl-scm/guile-strings.c:3957
 #, fuzzy
@@ -13683,7 +13736,7 @@ msgstr "Загружаются данные..."
 
 #: intl-scm/guile-strings.c:4009 intl-scm/guile-strings.c:4011
 msgid "No accounts marked for quote retrieval."
-msgstr ""
+msgstr "Нет счетов, отмеченных для получения ставок."
 
 #: intl-scm/guile-strings.c:4013 intl-scm/guile-strings.c:4015
 #: intl-scm/guile-strings.c:4031 intl-scm/guile-strings.c:4033
