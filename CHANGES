@@ -1,5 +1,9 @@
 Version history:
 ------- -------
+ 1.0.12 - 4 Jan 98
+         o large variety of bug fixes, patches, enhancements.
+         o Debian package version
+
  1.0b1 - 29 Nov 97
          o  Many, many changes by Linas Vepstas to give double entry
             bookkeeping, sub-accounts, income/expense account types, and
@@ -87,23 +91,4 @@ Version history:
        Don't do anything.  The register window is still pretty
        buggy.
 
-
-
-
-
-Things to do/fix:    (in no particular order)
------- -- ------
-
-  o  Reg window segfaults on close... (I think this might be a
-     lesstif problem, so try a newer version)
- 
-  o  memorized transactions/quickfill (They work, but you need
-     a newer than v4.6.1 Xbae Widget)
-
-  o  Bug Fixes!  There are still a few bugs floating around.
-     (Let me know if you find any)
-
-  o  a README and/or man page!
-
-  o  use configure or Imake?  or at least a proper "make install"
 

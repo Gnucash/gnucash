@@ -1,11 +1,13 @@
 Open, known bugs, desired enhancements:
 
-> 3)  Selecting "File", "New File" does nothing..
+3)  Selecting "File", "New File" does nothing..
 
 Its supposed to work that way, erasing old work.  Clarify
 the docs or change the menu entry name.
 
 10) cleared balances are incorrectly shown for stock accounts
+
+Hmm. verify that this is still broken!?!
 
 12) all messages should be moved out so that translation to foreign
     languages would be possible.
@@ -19,7 +21,8 @@ the docs or change the menu entry name.
 18) add (none) to transfer list, or explain that a second selection 
     will clear it.
 
-20) fix quickfill for ledgers.
+20) fix quickfill for general ledgers. (it works for
+    simple register windows).
 
 21) add "number of shares" to XferWindow
 
@@ -159,6 +162,8 @@ fixed. changed XmNnavigation
 
 19) verify that tabbing works for mutual funds and for ledgers
 fixed.
+
+
 
 46) fix traversal for ledger windows
 fixed.
