@@ -143,16 +143,16 @@
   (N_ "International") (N_ "Date Format")
   "a" (N_ "Date Format Display") 'locale
   (list (list->vector (list 'us
-                            (N_ "US")
+                            (N_ "US (12/31/2001)")
                             (N_ "US-style: mm/dd/yyyy")))
         (list->vector (list 'uk
-                            (N_ "UK")
+                            (N_ "UK (31/12/2001)")
                             (N_ "UK-style dd/mm/yyyy")))
         (list->vector (list 'ce
-                            (N_ "Europe")
+                            (N_ "Europe (31.12.2001)")
                             (N_ "Continental Europe: dd.mm.yyyy")))
         (list->vector (list 'iso
-                            (N_ "ISO")
+                            (N_ "ISO (2001-12-31)")
                             (N_ "ISO Standard: yyyy-mm-dd")))
         (list->vector (list 'locale
                             (N_ "Locale")

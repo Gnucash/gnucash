@@ -344,14 +344,14 @@ Custom
 	  <class>GtkOptionMenu</class>
 	  <name>date_format_picker</name>
 	  <can_focus>True</can_focus>
-	  <items>US
-UK
-Europe
-ISO
+	  <items>US (12/31/2001)
+UK (31/12/2001)
+Europe (31.12.2001)
+ISO (2001-12-31)
 Locale
 Custom
 </items>
-	  <initial_choice>5</initial_choice>
+	  <initial_choice>0</initial_choice>
 	  <child>
 	    <left_attach>1</left_attach>
 	    <right_attach>4</right_attach>
