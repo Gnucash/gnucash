@@ -193,7 +193,7 @@ pgendStoreOneTransactionOnly (PGBackend *be, Transaction *trans)
  */
 
 static void
-pgendStoreOneSplitOnly (PGBackend *be, Split *split)
+pgendStoreOneSplitOnly (PGBackend *be, Split *split, int update)
 {
    Timespec ts;
    const char *split_guid, *acct_guid, *trans_guid;
@@ -208,22 +208,40 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split)
    /* hack alert date is not stored ... */
    xaccSplitGetDateReconciledTS (split, &ts);
 
-   /* hack alert -- values should be escaped so that no '' apear in them */
-   snprintf (be->buff, be->bufflen, 
-            "INSERT INTO gncEntry "
-            "(entryGuid, accountGuid, transGuid, memo, action,"
-            "reconciled, amount, share_price)"
-            " values "
-            "('%s', '%s', '%s', '%s', '%s', '%c', %g, %g);",
-            split_guid,
-            acct_guid,
-            trans_guid,
-            xaccSplitGetMemo(split),
-            xaccSplitGetAction(split),
-            xaccSplitGetReconcile(split),
-            xaccSplitGetShareAmount(split),
-            xaccSplitGetSharePrice(split)
-            );
+   if (update) {
+      /* hack alert -- values should be escaped so that no '' apear in them */
+      snprintf (be->buff, be->bufflen, 
+               "UPDATE gncEntry SET"
+               "accountGuid='%s', transGuid='%s', memo='%s', action='%s', "
+               "reconciled='%c', amount=%g, share_price=%g "
+               "WHERE entryGuid='%s';",
+               acct_guid,
+               trans_guid,
+               xaccSplitGetMemo(split),
+               xaccSplitGetAction(split),
+               xaccSplitGetReconcile(split),
+               xaccSplitGetShareAmount(split),
+               xaccSplitGetSharePrice(split),
+               split_guid
+               );
+   } else {
+      /* hack alert -- values should be escaped so that no '' apear in them */
+      snprintf (be->buff, be->bufflen, 
+               "INSERT INTO gncEntry "
+               "(entryGuid, accountGuid, transGuid, memo, action,"
+               "reconciled, amount, share_price)"
+               " values "
+               "('%s', '%s', '%s', '%s', '%s', '%c', %g, %g);",
+               split_guid,
+               acct_guid,
+               trans_guid,
+               xaccSplitGetMemo(split),
+               xaccSplitGetAction(split),
+               xaccSplitGetReconcile(split),
+               xaccSplitGetShareAmount(split),
+               xaccSplitGetSharePrice(split)
+               );
+   }
    free ((char *) split_guid);
    free ((char *) acct_guid);
    free ((char *) trans_guid);
@@ -356,8 +374,10 @@ traverse_cb (Transaction *trans, void *cb_data)
    for (i=0; i<nsplits; i++) {
       Split * s = xaccTransGetSplit (trans, i);
       int ndiffs = pgendCompareOneSplitOnly (be, s);
-      PINFO ("ndiffs = %d\n", ndiffs);
-      pgendStoreOneSplitOnly (be, s);
+      /* update split if there are differences ... */
+      if (0<ndiffs) pgendStoreOneSplitOnly (be, s, 1);
+      /* insert split if it doesn't exist */
+      if (0>ndiffs) pgendStoreOneSplitOnly (be, s, 0);
    }
 
    return 0;
@@ -494,8 +514,10 @@ pgend_trans_commit_edit (Backend * bend, Transaction * trans)
    for (i=0; i<nsplits; i++) {
       Split *s =  xaccTransGetSplit (trans, i);
       int ndiffs = pgendCompareOneSplitOnly (be, s);
-      PINFO ("ndiffs = %d\n", ndiffs);
-      pgendStoreOneSplitOnly (be, s);
+      /* update split if there are differences ... */
+      if (0<ndiffs) pgendStoreOneSplitOnly (be, s, 1);
+      /* insert split if it doesn't exist */
+      if (0>ndiffs) pgendStoreOneSplitOnly (be, s, 0);
    }
 
 #if 0
