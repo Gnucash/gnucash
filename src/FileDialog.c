@@ -66,20 +66,21 @@ show_file_error (GNCFileIOError io_error, const char *newfile)
     case ERR_FILEIO_NONE:
       break;
     case ERR_FILEIO_MISC:
-      buf = _("Something went wrong during file IO,\n"
-              "but I'm not sure what.");
-      if (!gnc_verify_dialog (buf, TRUE))
-        uh_oh = TRUE;
+      buf = _("There was an error during file IO.");
+      gnc_error_dialog (buf);
+      uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_NOT_FOUND:
       buf = g_strdup_printf (file_not_found_msg(), newfile);
       gnc_error_dialog (buf);
+      g_free (buf);
       uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_EMPTY:
       buf = _("The file \n    %s\n is empty.");
       buf = g_strdup_printf (buf, newfile);
       gnc_error_dialog (buf);
+      g_free (buf);
       uh_oh = TRUE;
       break;
     case ERR_FILEIO_FILE_TOO_NEW:
@@ -103,10 +104,9 @@ show_file_error (GNCFileIOError io_error, const char *newfile)
       break;
     default:
       PERR("FIXME: Unhandled FileIO error in show_file_error.");
+      uh_oh = TRUE;
       break;
   }
-
-  g_free (buf);
 
   return uh_oh;
 }

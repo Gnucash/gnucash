@@ -1163,7 +1163,7 @@ xaccGroupVisitUnvisitedTransactions (AccountGroup *g,
   if (!visited_txns) return(FALSE);
 
   list = xaccGroupGetSubAccounts (g);
-  if (!list) return(FALSE);
+  if (!list) return(TRUE);
 
   for (node = list; node && keep_going; node = node->next)
   {
