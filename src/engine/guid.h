@@ -25,9 +25,10 @@
 #define __GUID_H__ 
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"
 #endif
 
+#include <ctype.h>
 #include <glib.h>
 
 /* This file defines an API for using globally unique identifiers. */
@@ -96,6 +97,6 @@ gint     guid_compare(const GUID *g1, const GUID *g2);
 /* Given a GUID *, hash it to a guint */
 guint guid_hash_to_guint(gconstpointer ptr);
 
-GHashTable *guid_hash_table_new();
+GHashTable *guid_hash_table_new(void);
 
 #endif

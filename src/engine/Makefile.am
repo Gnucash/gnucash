@@ -26,9 +26,10 @@ libgncengine_la_SOURCES = \
   kvp_frame.c \
   gnc-book.c \
   gnc-commodity.c \
-  gnc-numeric.c \
   gnc-engine.c \
-  gnc-engine-util.c
+  gnc-engine-util.c \
+  gnc-event.c \
+  gnc-numeric.c
 
 libgncengine_la_LDFLAGS = -version-info 2:1:1
 
@@ -57,9 +58,11 @@ noinst_HEADERS = \
   kvp_frame.h \
   gnc-book.h \
   gnc-commodity.h \
-  gnc-numeric.h \
   gnc-engine.h \
-  gnc-engine-util.h
+  gnc-engine-util.h \
+  gnc-event.h \
+  gnc-event-p.h \
+  gnc-numeric.h
 
 EXTRA_DIST = \
   .cvsignore \
