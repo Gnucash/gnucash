@@ -67,4 +67,8 @@ void gncQueryObjectRegister (GNCIdTypeConst obj_name,
 QueryCoreType gncQueryObjectParameterType (GNCIdTypeConst obj_name,
 					   const char *param_name);
 
+/* Return the registered Object Definition for the requested parameter */
+const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
+						   const char *parameter);
+
 #endif /* GNC_QUERYOBJECT_H */
