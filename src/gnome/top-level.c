@@ -168,6 +168,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
   {
     GUID guid;
     GNCIdType id_type;
+    QofEntity *qofEnt;
 
     if (!string_to_guid (location + 5, &guid))
     {
@@ -175,7 +176,10 @@ gnc_html_register_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+    //id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+    //id_type = 
+    qofEnt = qof_book_get_entity_by_guid( gnc_get_current_book(), &guid );
+    id_type = qofEnt->e_type;
     if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
     {
         result->error_message = g_strdup_printf (_("No such entity: %s"),

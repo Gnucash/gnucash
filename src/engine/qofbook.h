@@ -134,7 +134,13 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 #define QOF_BOOK_KVP     "qof-kvp"
 
 /**@}*/
- 
+
+/**
+ * @return The releveant QofEntity for the given GUID across all collections
+ * in the book, or NULL if one cannot be found.
+ **/
+QofEntity* qof_book_get_entity_by_guid( QofBook *book, GUID *entity );
+
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
 

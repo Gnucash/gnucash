@@ -1,3 +1,12 @@
+2004-05-31  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/top-level.c (gnc_html_register_url_cb): Modify to
+	handle hyperlinks better.
+
+	* src/engine/qofbook.c (qof_book_get_entity_by_guid): Add generic
+	GUID lookup [without entity-type being known] to handle historical
+	code.
+
 2004-05-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_show_progress): Proxy

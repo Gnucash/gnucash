@@ -50,6 +50,8 @@
 #include "qofid-p.h"
 #include "qofobject-p.h"
 
+#include "guid.h"
+
 static short module = MOD_ENGINE;
 
 /* ====================================================================== */
@@ -331,6 +333,43 @@ gboolean qof_book_register (void)
   qof_class_register (QOF_ID_BOOK, NULL, params);
 
   return TRUE;
+}
+
+typedef struct _BookLookup {
+  GUID *guid;
+  QofEntity *toRet;
+} BookLookup;
+
+/// QofCollection 'foreach' function to find the QofEntity with the given GUID.
+static
+void
+_entity_by_guid( QofCollection *col, gpointer userData )
+{
+  BookLookup *lookup;
+
+  lookup = (BookLookup*)userData;
+
+  // save some instructions if we've already seen the value.
+  if ( lookup->toRet != NULL )
+    return;
+
+  lookup->toRet = qof_collection_lookup_entity( col, lookup->guid );
+}
+
+QofEntity*
+qof_book_get_entity_by_guid( QofBook *book, GUID *guid )
+{
+  BookLookup lookup;
+
+  if ( ! (guid && book) )
+    return NULL;
+
+  lookup.guid = guid;
+  lookup.toRet = NULL;
+  
+  qof_book_foreach_collection( book, _entity_by_guid, &lookup );
+
+  return lookup.toRet;
 }
 
 /* ========================== END OF FILE =============================== */
