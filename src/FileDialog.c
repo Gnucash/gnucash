@@ -19,12 +19,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-/*
- * hack alert -- the contents of this file are 99.997% motif independent.
- * this file should be moved to a neutral directory, and recycled for use
- * with the gtk/gnome code.
- */
-
 #include <errno.h>
 
 #include "config.h"
