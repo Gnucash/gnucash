@@ -144,7 +144,7 @@ xaccOpenLog (void)
    fprintf (trans_log, "mod	trans_guid	split_guid	time_now	" \
                        "date_entered	date_posted	" \
                        "acc_guid	acc_name	num	description	" \
-                       "memo	action	reconciled	" \
+                       "notes	memo	action	reconciled	" \
                        "amount	value	date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 }
@@ -169,6 +169,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
 {
    GList *node;
    char *trans_guid_str, *split_guid_str;
+   const char *trans_notes; 
    char dnow[100], dent[100], dpost[100], drecn[100]; 
    Timespec ts;
 
@@ -185,7 +186,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
    gnc_timespec_to_iso8601_buff (ts, dpost);
 
    trans_guid_str = guid_to_string (xaccTransGetGUID(trans));
-
+   trans_notes = xaccTransGetNotes(trans);
    fprintf (trans_log, "===== START\n");
 
    for (node = trans->splits; node; node = node->next) {
@@ -205,7 +206,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
       /* use tab-separated fields */
       fprintf (trans_log,
                "%c\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t"
-               "%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
+               "%s\t%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
                flag,
                trans_guid_str, split_guid_str,  /* trans+split make up unique id */
                dnow ? dnow : "",
@@ -215,6 +216,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
                accname ? accname : "",
                trans->num ? trans->num : "", 
                trans->description ? trans->description : "",
+               trans_notes ? trans_notes : "",
                split->memo ? split->memo : "",
                split->action ? split->action : "",
                split->reconciled,

@@ -1,3 +1,9 @@
+2003-05-29  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/engine/TransLog.c: Now log the transaction notes field (kvp actually).
+	* src/engine/kvp_frame.h: Docs 
+	* src/import-export/log-replay/gnc-log-replay.c: Actually make it work:) Thanks Derek for pointing me to the private headers.  Support the new note field.
+
 2003-05-29  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: OpenHBCI version 0.9.11 is required now. Earlier

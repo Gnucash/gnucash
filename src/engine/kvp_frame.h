@@ -1,7 +1,4 @@
 /********************************************************************\
- * kvp_frame.h -- a key-value frame system for gnucash.             *
- * Copyright (C) 2000 Bill Gribble                                  *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,8 +17,12 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/** @file kvp_frame.h @brief A key-value frame system for gnucash.*/
+/** @addtogroup Engine
+    @{ */
+/** @file kvp_frame.h
+    @brief A key-value frame system for gnucash
+    @author Copyright (C) 2000 Bill Gribble
+*/
 
 #ifndef KVP_FRAME_H
 #define KVP_FRAME_H
@@ -298,3 +299,4 @@ void kvp_frame_for_each_slot(kvp_frame *f,
 /*@}*/
 
 #endif
+/** @} */

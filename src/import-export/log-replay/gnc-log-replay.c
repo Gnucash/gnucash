@@ -35,21 +35,15 @@
 #include <libguile.h>
 #include <gmodule.h>
 
-#include "import-account-matcher.h"
-#include "import-commodity-matcher.h"
-#include "import-utilities.h"
-#include "import-main-matcher.h"
-
 #include "Account.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "global-options.h"
-#include "gnc-associate-account.h"
 #include "gnc-log-replay.h"
 #include "gnc-file-dialog.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
-
 
 #include "dialog-utils.h"
 
@@ -88,6 +82,8 @@ typedef struct _split_record
   int trans_num_present;
   char trans_descr[STRING_FIELD_SIZE];
   int trans_descr_present;
+  char trans_notes[STRING_FIELD_SIZE];
+  int trans_notes_present;
   char split_memo[STRING_FIELD_SIZE];
   int split_memo_present;
   char split_action[STRING_FIELD_SIZE];
@@ -219,6 +215,11 @@ static split_record interpret_split_record( char *record_line)
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
+      strncpy(record.trans_notes,tok_ptr,STRING_FIELD_SIZE-1);
+      record.trans_notes_present=TRUE;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
       strncpy(record.split_memo,tok_ptr,STRING_FIELD_SIZE-1);
       record.split_memo_present=TRUE;
     }
@@ -276,46 +277,39 @@ static void dump_split_record(split_record record)
 	  break;
 	}
     }
-
   if(record.trans_guid_present)
     {
       string_ptr = guid_to_string (&(record.trans_guid));
       DEBUG("Transaction GUID: %s", string_ptr);
       g_free(string_ptr);
     }
-
   if(record.split_guid_present)
     {
       string_ptr = guid_to_string (&(record.split_guid));
       DEBUG("Split GUID: %s", string_ptr);
       g_free(string_ptr);
     }
-
   if(record.log_date_present)
     {
       gnc_timespec_to_iso8601_buff (record.log_date, string_buf);
       DEBUG("Log entry date: %s", string_buf);
     }
-
   if(record.date_entered_present)
     {
       gnc_timespec_to_iso8601_buff (record.date_entered, string_buf);
       DEBUG("Date entered: %s", string_buf);
     }
-
   if(record.date_posted_present)
     {
       gnc_timespec_to_iso8601_buff (record.date_posted, string_buf);
       DEBUG("Date posted: %s", string_buf);
     }
-
   if(record.acc_guid_present)
     {
       string_ptr = guid_to_string (&(record.acc_guid));
       DEBUG("Account GUID: %s", string_ptr);
       g_free(string_ptr);
     }
-
   if(record.acc_name_present)
     {
       DEBUG("Account name: %s", record.acc_name);
@@ -327,6 +321,10 @@ static void dump_split_record(split_record record)
   if(record.trans_descr_present)
     {
       DEBUG("Transaction description: %s", record.trans_descr);
+    }
+  if(record.trans_notes_present)
+    {
+      DEBUG("Transaction notes: %s", record.trans_notes);
     }
   if(record.split_memo_present)
     {
@@ -340,21 +338,18 @@ static void dump_split_record(split_record record)
     {
       DEBUG("Split reconcile: %c", record.split_reconcile);
     }
-
   if(record.amount_present)
     {
       string_ptr = gnc_numeric_to_string(record.amount);
       DEBUG("Record amount: %s", string_ptr);
       g_free(string_ptr);
     }
-  
   if(record.value_present)
     {
       string_ptr = gnc_numeric_to_string(record.value);
       DEBUG("Record value: %s", string_ptr);
       g_free(string_ptr);
     }
-
   if(record.date_reconciled_present)
     {
       gnc_timespec_to_iso8601_buff (record.date_reconciled, string_buf);
@@ -425,6 +420,7 @@ static void  process_trans_record(  FILE *log_file)
 		      DEBUG("process_trans_record(): Creating the new transaction");
 		      trans = xaccMallocTransaction (book);
 		      xaccTransBeginEdit(trans);
+		      xaccTransSetGUID (trans, &(record.trans_guid));
 		      /*Fill the transaction info*/
 		      if(record.date_entered_present)
 			{
@@ -442,10 +438,15 @@ static void  process_trans_record(  FILE *log_file)
 			{
 			  xaccTransSetDescription(trans,record.trans_descr);
 			}
+		      if(record.trans_notes_present)
+			{
+			  xaccTransSetNotes(trans,record.trans_notes);
+			}
 		    }
 		  if(record.split_guid_present == TRUE) /*Fill the split info*/
 		    {
 		      split=xaccMallocSplit(book);
+		      xaccSplitSetGUID (split, &(record.split_guid));
 		      if(record.acc_guid_present)
 			{
 			  acct = xaccAccountLookupDirect(record.acc_guid,book);
@@ -507,7 +508,7 @@ void gnc_file_log_replay (void)
   char read_buf[256];
   char *read_retval;
   FILE *log_file;
-  char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	memo	action	reconciled	amount	value	date_reconciled";
+  char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled";
   char * record_start_str = "===== START";
 
   gnc_should_log(MOD_IMPORT, GNC_LOG_DEBUG);
