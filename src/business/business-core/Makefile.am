@@ -1,7 +1,7 @@
 SUBDIRS = . test file
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgw-business-core.la libgncmod-business-core.la
+pkglib_LTLIBRARIES = libgncmod-business-core.la libgw-business-core.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -66,6 +66,7 @@ libgncmod_business_core_la_LIBADD = \
 
 libgw_business_core_la_SOURCES = gw-business-core.c 
 libgw_business_core_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+libgw_business_core_la_LIBADD  = libgncmod-business-core.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm
