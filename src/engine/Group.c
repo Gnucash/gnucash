@@ -23,6 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <assert.h>
+
 #include "config.h"
 
 #include "Account.h"
@@ -311,7 +313,7 @@ xaccRemoveGroup (AccountGroup *grp)
 void
 xaccRemoveAccount (Account *acc)
 {
-   int i,j;
+   int i,j, nacc;
    AccountGroup *grp;
    Account **arr;
 
@@ -323,29 +325,25 @@ xaccRemoveAccount (Account *acc)
     * are not yet parented. */
    if (NULL == grp) return;
 
+   nacc = grp->numAcc;
+   assert (nacc);
+
    arr = grp->account;
 
+   for( i=0,j=0; j<nacc; i++,j++ ) {
+      arr[i] = arr[j];
+      if( acc == arr[j] ) { i--; }
+   }
+   nacc --;
+   arr[nacc] = NULL;
+   grp->numAcc = nacc;
    grp->saved = FALSE;
-    
-   grp->numAcc--;
 
-   if (0 < grp->numAcc) {
-       
-      for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
-         arr[i] = arr[j];
-         if( acc == arr[j] ) { i--; }
-      }
-      arr[grp->numAcc] = NULL;
-   } else {
-      arr[grp->numAcc] = NULL;
-      grp->account = NULL;
-
-      /* if this was the last account in a group, delete
-       * the group as well (unless its a root group) */
-      if (grp->parent) {
-         xaccRemoveGroup (grp);
-         xaccFreeAccountGroup (grp);
-      }
+   /* if this was the last account in a group, delete
+    * the group as well (unless its a root group) */
+   if ((0 == nacc) && (grp->parent)) {
+      xaccRemoveGroup (grp);
+      xaccFreeAccountGroup (grp);
    }
 }
 
@@ -377,8 +375,8 @@ xaccInsertSubAccount( Account *adult, Account *child )
 void
 xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
 {
-  int i,j,nacc;
-  Account **oldarr, **newarr;
+  int i,nacc;
+  Account **arr;
   int ralo = 1;
   
   if (NULL == grp) return;
@@ -399,31 +397,24 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
   acc->parent = grp;
 
   nacc = grp->numAcc;
-  oldarr = grp->account;
-  newarr = oldarr;
+  arr = grp->account;
   if (ralo) {
-     newarr = (Account **) realloc (oldarr, (nacc+2)*sizeof(Account *));
-     if (newarr == oldarr) ralo = 0;
+     arr = (Account **) realloc (arr, (nacc+2)*sizeof(Account *));
   }
 
   /* insert account in proper sort order */
-  for( i=nacc-1, j=nacc; i>=0; i--, j-- ) {
-    if (i != j) {
-       if (0 < xaccAccountOrder (&(oldarr[i]), &acc)) {
-          newarr[j] = oldarr[i];
-       } else {
-          newarr[j] = acc;
-          j--;
-       }
+  for (i=nacc; i>=0; i--) {
+    if ((0<i) && (0 < xaccAccountOrder (&(arr[i]), &acc))) {
+       arr[i] = arr[i-1];
     } else {
-       newarr[j] = oldarr[i];
+       arr[i] = acc;
+       break;
     }
   }
-  if (ralo) free (oldarr);
 
   nacc++;
-  newarr[nacc] = NULL;
-  grp->account = newarr;
+  arr[nacc] = NULL;
+  grp->account = arr;
   grp->numAcc = nacc;
 }
 
@@ -472,6 +463,7 @@ void
 xaccGroupDepthAutoCode (AccountGroup *grp)
 {
    int depth;
+   if (!grp) return;
 
    /* get the depth */
    depth = xaccGroupGetDepth (grp);
@@ -484,6 +476,7 @@ void
 xaccGroupAutoCode (AccountGroup *grp, int depth)
 {
    int i;
+   if (!grp || (0>depth)) return;
 
    for (i=0; i<grp->numAcc; i++) {
       Account *acc = grp->account[i];

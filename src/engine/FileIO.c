@@ -305,6 +305,9 @@ xaccReadAccountGroup( char *datafile )
    */
   xaccAccountGroupMarkSaved (grp);
 
+  /* auto-number the accounts, if they are not already numbered */
+  xaccGroupDepthAutoCode (grp);
+
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
    * error, try to continue anyway. */
