@@ -70,6 +70,10 @@ version 0.82.  These core dumps do not occur with lesstif v 0.81,
 nor with RedHat Motif.  If it's crashing, please try using the
 statically-linked Motif version, as described below.
 
+lesstiff v 0.83 is reported tobe broken
+lessstif v 0.86.0 is reported to work
+lessstif v 0.86.5 is reported to be broken
+
 
 Running:
 --------
