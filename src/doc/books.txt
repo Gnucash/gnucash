@@ -313,5 +313,8 @@ Open Issues / ToDo
    lots, and those close lots have transactions; none of this can be moved
    to closed book; must walk the entire tree.
 
+*) book closing GUI needs to save/restore period end date to KVP on 
+   open book.
+
 =========================== end of file ========================
 
