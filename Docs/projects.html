@@ -6,8 +6,8 @@
     Goals include ease-of use, double entry, OFX support, charts,
     and reports, and multi-user support.">
 
-<meta name="keywords" content="linux, ofx, accounting, finance,
-    financial, ledger, double entry, GPL, gnu, corba, gnome, Qt, Motif">
+<meta name="keywords" content="linux, OFX, accounting, finance,
+    financial, ledger, double entry, GPL, gnu, CORBA, gnome, Qt, Motif">
 </head>
 
 <body bgcolor="#eeeeee"> 
@@ -33,7 +33,7 @@ unless you are looking for excitement and adventure.
 <p>
 This document is divided into several sections.  
 <ol>
-<li><a href="#arch">Archititectural Goals</a>
+<li><a href="#arch">Architectural Goals</a>
 <li><a href="#reqs">Feature Requirements</a>
 <li><a href="#feats">Features</a>
 </ol>
@@ -86,7 +86,7 @@ the Engine is a set of programming API's that the GUI (or a script,
 or even a clever command-line-addict) can use to manipulate the data.
 Currently, the Engine is fairly poor, and matches the data types and 
 formats that the GUI can manipulate.  These include transactions, 
-transaction entires (splits), accounts and account heirarchies.
+transaction entries (splits), accounts and account hierarchies.
 The Engine has a very simple apply/commit model, and a simple 
 query mechanism for generating reports and views.
 The Engine currently handles only a small set of data sources: 
@@ -96,9 +96,9 @@ However, since the Engine is meant to be the interface between
 the GUI and the financial data, it is meant to be able to do much more.
 <p>
 In particular, it should be possible to back the Engine onto an 
-SQL dataabase, and thereby enable multiple users and/or intrface 
-to more complex accounting ssytems.  The engine should also be 
-expandable to handle other sources of data, such os OFX, 
+SQL database, and thereby enable multiple users and/or interface 
+to more complex accounting systems.  The engine should also be 
+expandable to handle other sources of data, such as OFX, 
 Integrion GOLD, the Open Trading Protocol, the OMG CORBA
 General Ledger submission, the IBM San Francisco business objects, 
 or closer to home, Linux Kontor.  In particular, it should
@@ -109,15 +109,15 @@ but also to manipulate it and send it back.
 The above structure then leads one to view GnuCash not so much as
 a tightly integrated application, but a loose federation of parts
 objects, libraries and interfaces.  In order to facilitate the 
-glueing together of these parts, as well as simplify the questions 
-of customizablity, change and rapid development, GnuCash makes use 
+gluing together of these parts, as well as simplify the questions 
+of customizability, change and rapid development, GnuCash makes use 
 of an extension language to glue the pieces together. The extension
 language that is most central to Gnucash is Scheme, although some
 of the interfaces are also available through Perl.
 <p>
 <h3>Markets and Users</h3>
 Implicit in this desire for extensibility is the need to build
-two different types of finacial applications: one for the home
+two different types of financial applications: one for the home
 user, and one for the small business.  These two types of systems 
 use much of the same financial lingo, and can share a lot of code, 
 but in fact are quite different.
@@ -125,7 +125,7 @@ but in fact are quite different.
 A personal finance system needs to be easy to use, have a simple 
 'intuitive', yet powerful, menu system, and provide graphs, charts, 
 net-worth reports, mortgage calculators, budget planners, and
-and interfaces to on-line banking, shoping and stock systems.  
+and interfaces to on-line banking, shopping and stock systems.  
 <p>
 A business system needs to run over the network, allowing multiple
 simultaneous users.  It needs support for payroll, inventory control,
@@ -228,7 +228,7 @@ Features that small/medium businesses expect.
     <li>Most English-language messages have been 
         <tt>#defined</tt> and moved to a single header file
         <tt>include/messages_en.h</tt>
-    <li>Plan to use gnu <tt>gettext()</tt> for the message catalogues. 
+    <li>Plan to use gnu <tt>gettext()</tt> for the message catalogs. 
     <li>Looking for routines that can parse and print
         monetary values in different formats, as well as date/time
         parsing/printing routines.  (gnucash contains such parsing
@@ -245,7 +245,7 @@ Features that small/medium businesses expect.
     Balance Sheets, and Profit & Loss statements.  These should be
     printable: it might be best to create them as ordinary HTML pages,
     and use the printing abilities of the browser.  These should be 
-    easy to customoize. Ideally, even novice users should be able to 
+    easy to customize. Ideally, even novice users should be able to 
     create custom reports.
     <p>
     Other output format possibilities include SGML and XML.  In the
@@ -339,7 +339,7 @@ Features that small/medium businesses expect.
         Create grayed out entries in the ledger, titled "Memo",
         "Description", etc, helping users understand what should be typed into
         each field.
-    <li><b>emacs, vi, motif, kde, gnome Key Bindings for Text Fields</b>
+    <li><b>emacs, vi, motif, KDE, gnome Key Bindings for Text Fields</b>
         Make sure that text fields can handle the vi & emacs key bindings,
         so that e.g. emacs-style ctrl-a, ctrl-k does the right thing.
     </ul>
@@ -369,7 +369,7 @@ Features that small/medium businesses expect.
     <b>Current status:</b>
     <ul>
     <li>Rob Browning has put together a basic infrastructure
-        that unifies command-line flags with sceme-based config files.
+        that unifies command-line flags with scheme-based config files.
     <li>Rob also is auto-generating the GUI ...
     </ul>
     <p>
@@ -393,7 +393,7 @@ Features that small/medium businesses expect.
     <p>
     Such "wiring together" will consist of a dispatch infrastructure
     that will allow arbitrary menu entries to be hooked to arbitrary
-    modules.  The configuration for menu entries, and thier associated
+    modules.  The configuration for menu entries, and their associated
     callbacks, will be specified in an ext-lang configuration file.
     At the final stages, it is hoped that new modules can be imported
     without requiring that the application itself be recompiled & relinked.
@@ -425,14 +425,14 @@ Features that small/medium businesses expect.
 <a name="note">
 <dt><b>Annotate with News Stories</b>
 <dd>Download, save, annotate investment news & research.
-    Provide a way of storing news stories with accounts, and pssibly 
+    Provide a way of storing news stories with accounts, and possibly 
     annotating individual transactions in the same way.
     <p>
 
 <a name="loan">
 <dt><b>Loan and Mortgage Calculators</b>
 <dd>Provide a variety of simple GUI utilities to allow user to calculate
-    the future value of loans, mortgage payments, interst payments, etc.
+    the future value of loans, mortgage payments, interest payments, etc.
     <p>
     <b>Status:</b>
     <ul>
@@ -451,7 +451,7 @@ Features that small/medium businesses expect.
     Design/implementation for this is tricky.  It should probably leverage
     <tt>crontab</tt>, but this can lead to difficulties &amp; bugs.  
     May need interfaces to email for emailed alerts.  Interfaces into 
-    calendering systems? 
+    calendaring systems? 
     <b>Current status:</b>
     <ul>
     <li>April 1998 -- Design Doc contributed by Bob Drzyzgula.  See 
@@ -462,7 +462,7 @@ Features that small/medium businesses expect.
 <a name="budget">
 <dt><b>Budgeting</b>
 <dd>Ability to create a budget (i.e. estimates of future expenditures).
-    Reconcile actual expoenditures against future expenditures.
+    Reconcile actual expenditures against future expenditures.
     Create simple, step-by-step 'financial plan' budgeting GUI's:
     <ul>
     <li>Home purchase planner
@@ -517,7 +517,7 @@ Features that small/medium businesses expect.
     retail customers.  See below for OFX references.  OFX is an open spec
     from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
     The OFX DTD's are included in the 1.1 distributions. See 
-    <a href="http://www.ofx.net">OFX HomePage</a> for details.
+    <a href="http://www.ofx.net">OFX Home Page</a> for details.
     <p>
     There are two ways to build an OFX parser. One way is to build 
     a compile-time DTD parser that treats the DTD as if it were an IDL, 
@@ -540,7 +540,7 @@ Features that small/medium businesses expect.
 <a name="currency">
 <dt><b>Multiple Currencies</b>
 <dd>Need to support multiple currencies.  Work is needed in the
-    and the GUI.  The engine currently supports multple currencies 
+    and the GUI.  The engine currently supports multiple currencies 
     by treating them as securities, and thus allowing currency trading.
     The currency-trading register needs a complete overhaul.
     <p>
@@ -561,10 +561,10 @@ Features that small/medium businesses expect.
     <b>Current status:</b>
     <ul>
     <li>April 1998 -- The engine has a couple of flags in it that control 
-        double-entry behaviour: it can be made lax, or strict: 
+        double-entry behavior: it can be made lax, or strict: 
         however, they are compiled in, there is no way to change them
-        from the gui.
-    <li>Dec 1998 -- Scruber functions implemented to crawl through data,
+        from the GUI.
+    <li>Dec 1998 -- Scrubber functions implemented to crawl through data,
         and find all unbalanced or orphaned transactions.
     </ul>
     <p>
@@ -590,7 +590,7 @@ Features that small/medium businesses expect.
 <a name="tax">
 <dt><b>Tax Preparation</b>
 <dd>Gotta prepare those taxes. TurboTax -- categorize items according 
-    to differnt tazx schedules -- VAT -- estimate income taxes -- 
+    to different tax schedules -- VAT -- estimate income taxes -- 
     estimate itemized deductions -- find potential deductions, categorize
     them -- 
     <p>
@@ -609,14 +609,14 @@ Features that small/medium businesses expect.
 <a name="engine">
 <dt><b>Enriched Engine, Financial Objects</b>
 <dd>The current system makes a distinction between the data (account,
-    transaction) and they GUI that displays it.  The data is embeded 
+    transaction) and they GUI that displays it.  The data is embedded 
     within and controlled by the "Engine", which is a set of routines
     to access accounts, transactions, etc.  The engine serves as a 
     kind of a dynamic cache between the permanent data repository 
     (file, sql db) and the GUI.
     <p>
     The current engine is rather simple: it provides support for
-    accounts, account heirarchies and transactions consisting of 
+    accounts, account hierarchies and transactions consisting of 
     multiple entries.  Many of the features described elsewhere 
     need the engine to have a far richer, more sophisticated data 
     model: parties (names, addresses), transaction id's & part numbers, 
@@ -643,8 +643,8 @@ Features that small/medium businesses expect.
     <li>Binary file I/O mostly detangled into a separate module.
     <li>Crude transaction logging in place; should be suitable
         for error/crash recovery but has not been tried by fire.
-    <li>Backup files automatically created & timestamped.
-    <li>BeginEdit()/RoolbackEdit()/CommitEdit() routines mostly in place,
+    <li>Backup files automatically created & time-stamped.
+    <li>BeginEdit()/RollbackEdit()/CommitEdit() routines mostly in place,
         These "Transaction processing constructs" 
         should simplify creation of an SQL back end.
     <li>Multiple currency support is present but raw.
@@ -689,8 +689,8 @@ Features that small/medium businesses expect.
     <p>
     <ul>
     <li>Stephan Lichtenauer &lt;s_lichtenauer@muenchen.org&gt;
-        is working on corba interfaces.
-    <li>"Alexander L. Belikoff" &lt;abel@bfr.co.il&gt; may start work on corba
+        is working on CORBA interfaces.
+    <li>"Alexander L. Belikoff" &lt;abel@bfr.co.il&gt; may start work on CORBA
     </ul>
   
     <p>
