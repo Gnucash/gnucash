@@ -43,9 +43,8 @@ gncinclude_HEADERS = \
 EXTRA_DIST = \
   .cvsignore 
 
-CFLAGS = @CFLAGS@
-
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
