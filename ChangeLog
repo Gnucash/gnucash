@@ -1,3 +1,8 @@
+2003-01-19  John Pierce <john@killterm.org>
+
+	* macros/autogen.sh
+	  Use variables for programs so they can be overridden easily.
+
 2003-01-19  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-numeric.c -- be more intelligent when operating
