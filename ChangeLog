@@ -1,3 +1,43 @@
+2005-02-20  Neil Williams  <linux@codehelp.co.uk>
+
+	* src/app-file/gnc-file.c: Adding messages to handlers for 
+	new QSF backend errors.
+	* src/backend/qsf/pilot-qsf-GnuCashInvoice.xml: Correcting
+	the schema namespace URL.
+	* src/backend/qsf/qsf-backend.c: 
+	* src/backend/qsf/qsf-xml-map.c: 
+	* src/backend/qsf/qsf-xml.c: Re-organising and adding
+	references and almost complete KVP support to QSF backend.
+	* src/backend/qsf/qsf-map.xsd.xml: 
+	* src/backend/qsf/qsf-object.xsd.xml: Correcting attribute
+	declarations and schema namespace URL. Adding KVP, double
+	and char support to object schema.
+	* src/backend/qsf/qsf-xml.h: Adding references support,
+	documenting use of a partial QofBook. Changing the namespace URL.
+	* src/engine/gnc-date.c: Fix the last-day-of-month computation for
+	leap years.  Need to use modulo, not divide - needed by other parts
+	of this update, already in HEAD.
+        * src/engine/qof_book_merge.c: Fix double free of the targetList
+        entities that cause xaccGroupGetNumSubAccounts to generate a
+        segmentation fault.
+        * src/engine/kvp_frame.c:
+        * src/engine/kvp_frame.h: Add kvp_value_to_bare_string to 
+	generate strings without debug information.
+	* src/engine/qofbackend-p.h: Support for a partial QofBook.
+	The backend needs to handle external references to entities 
+	outside this book and save a QofBook that contains any mix of 
+	QOF objects, whether or not any specific object exists in the book.
+	* src/engine/qofbackend.h: Adding a further QSF error code for
+	when a GUID string has been mangled and fails to convert to a GUID.
+	* src/engine/qofsession.c: Adding qof_entity_copy routines to
+	copy single, lists or collections of entities between session books.
+	Note: Each function creates a partial QofBook! Only certain backends
+	{QSF} can handle partial books! Use for data export.
+	* src/engine/qofsession.h: Documenting copying entities between
+	sessions and using a partial QofBook. Also, allow a session book to 
+	be printed to stdout.
+	
+
 2005-02-17  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: properly notice that we've got a gtkhtml version.

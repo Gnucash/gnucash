@@ -243,6 +243,14 @@ struct QofBackendProvider_s
    */
   const char * access_method;
 
+  /** \brief Partial QofBook handler
+	
+	TRUE if the backend handles external references
+	to entities outside this book and can save a QofBook that
+	does not contain any specific QOF objects.
+	*/
+  gboolean partial_book_supported;
+	
   /** Return a new, initialized backend backend. */
   QofBackend * (*backend_new) (void);
 
@@ -278,6 +286,8 @@ struct QofBackend_s
   gboolean (*process_events) (QofBackend *);
 
   QofBePercentageFunc percentage;
+
+  QofBackendProvider *provider;
 
   /** Document Me !!! what is this supposed to do ?? */
   gboolean (*save_may_clobber_data) (QofBackend *);

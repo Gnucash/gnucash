@@ -260,12 +260,12 @@ int gnc_date_my_last_mday (int month, int year)
      /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
 
   /* Is this a leap year? */
-  if (year / 2000 == 0)
+  if (year % 2000 == 0)
     is_leap = TRUE;
-  else if (year / 400 == 0)
+  else if (year % 400 == 0)
       is_leap = FALSE;
   else
-    is_leap = (year / 4 == 0);
+    is_leap = (year % 4 == 0);
 
   return days_in_month[is_leap][month-1];
 }

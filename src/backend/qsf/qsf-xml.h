@@ -70,7 +70,16 @@ on the application).
 
 QSF is designed to cope with partial QofBooks at the QofObject level. There is no 
 requirement for specific objects to always be defined, as long as each QOF object 
-specified is fully defined, no orphan or missing parameters are allowed.
+specified is fully defined, no orphan or missing parameters are allowed. Part of the
+handling for partial books requires a storage mechanism for references to entities
+that are not within reach of the current book. This requires a little extra coding
+in the QSF QofBackend to contain the reference data so that when the book is
+written out, the reference can be included. When the file is imported back in, a
+little extra code then rebuilds those references during the merge.
+
+Copying entites from an existing QofBook using the qof_entity_copy routines will 
+automatically create the reference table. If your QOF objects use references to other
+entities, books that are created manually also need to create a reference table.
 
 Work is continuing on supporting QSF in GnuCash and QOF. QSF is a very open format - 
 the majority of the work will be in standardising object types and creating maps that 
@@ -88,6 +97,10 @@ GNU GPL licence and QSF is free software.
 		variables and the conditional logic may not be up to the task of the
 		datebook repetition calculations.
 	- Rationalise the API - remove functions that shouldn't be public.
+
+\todo QOF contains numerous g_string_sprintf and g_string_sprintfa calls.
+	These are deprecated and should be renamed to g_string_printf and g_string_append_printf
+	respectively.
 
 QSF is in three sections:
 	- QSF Backend : a QofBackend for file:/ QSF objects and maps.
@@ -117,8 +130,51 @@ QSF is in three sections:
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofobject.h"
+#include "kvp_frame.h"
 #include "qofbackend-p.h"
-#include "qofsession.h"
+#include "qofsession-p.h"
+#include "qofbook-p.h"
+
+/* KVP XML
+ *
+ * <kvp type="ACCOUNT_KVP", path="/book/accounting-period" value="string">week</kvp>
+ * (ACCOUNT_KVP only for clarity here, actual is "kvp"
+ *
+ * <kvp type="kvp" path="/from-sched-xaction" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
+ *
+ * The relevance of kvp type won't be evident in GnuCash, they all use "kvp".
+ *
+ * need switch statement on kvp_value_get_type(val) val = kvp_value* val,
+ * itself used by g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
+ * xmlNodePtr ret;
+ *
+ * Then retrieve the kvp_frame as the parameter from the entity. Use that frame to
+ * copy the key and value - become slots for this entity.
+ *
+ * kvp:key == path
+ * kvp:value == content converted according to the type of value.
+ * kvp:type == QofParam->name
+ * 
+ * Elsewhere:
+ * string:type == QofParam->name
+ * i.e. <string type="to_do_note"/> == a to_do_note type string
+ * 
+ *
+ * Consider wholesale change from type="" to name="" for object parameters?
+ * (but name has special meaning in the KVP documentation).
+ * 
+ *  
+ * <kvp type="kvp" path="/from-sched-xaction" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
+ * A kvp type KVP parameter located at $path containing a $value.
+ *
+ * A non-GnuCash example helps:
+ * <kvp type="pilot_addr_kvp" path="/user/name" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
+ * A pilot_addr_kvp type KVP parameter located at /user/name containing a guid value.
+ *
+ * 
+ *
+ * */
+
 
 typedef enum  {
 	QSF_UNDEF = 0, /**< Initial undefined value. */
@@ -148,7 +204,7 @@ typedef struct qsf_object_set
 Make sure the same version of QOF is in use in both applications.
 */
 #define QSF_ROOT_TAG	"qof-qsf" /**< The top level root tag */
-#define QSF_DEFAULT_NS	"urn:qof-qsf-container" /**< Default namespace for QSF root tag
+#define QSF_DEFAULT_NS	"http://qof.sourceforge.net/" /**< Default namespace for QSF root tag
 
 The map namespace is not included as maps are not currently written out by QOF.
 */
@@ -158,6 +214,8 @@ The map namespace is not included as maps are not currently written out by QOF.
 #define QSF_BOOK_COUNT	"count" /**< Sequential counter of each book in this file */
 #define QSF_OBJECT_TAG	"object" /**< Second level child: object tag */
 #define QSF_OBJECT_TYPE	"type" /**< QSF parameter name for object type specifiers */
+#define QSF_OBJECT_KVP  "path" /**< The path to this KVP value in the entity frame. */
+#define QSF_OBJECT_VALUE "value" /**< The KVP Value. */
 #define QSF_OBJECT_COUNT	"count" /**< Sequential counter for each QSF object in this file */
 #define QSF_XML_VERSION	"1.0"  /**< The current XML version. */
 #define MAP_ROOT_TAG	"qsf-map" /**< Top level root tag for QSF Maps */
@@ -175,7 +233,8 @@ No text content allowed.
 Attributes: e_type Copied directly from the QofObject definition.
 Content: The full QofObject description for the defined QOF object.
 */
-#define MAP_DEFAULT_TAG	"default"  /**< User editable defaults for data not available within the available QSF objects.
+#define MAP_DEFAULT_TAG	"default"  /**< User editable defaults for data not available within the
+available QSF objects.
 
 Some defaults will relate to how to format descriptive dates, whether discount should be considered,
 which account to use for certain QSF data from applications that don't use accounts.
@@ -186,7 +245,10 @@ Some defaults are pre-defined and cannot be over-written:
 
 Attributes (All are mandatory): 
 
-\a name The text name for this default. Certain pre-defined defaults exist but user- or map-defined defaults can have any unique text name. Spaces are \b NOT allowed, use undersccores instead. The value of name must not duplicate any existing default, define, object or parameter unless the special type, enum, is used.
+\a name The text name for this default. Certain pre-defined defaults exist but user- or
+map-defined defaults can have any unique text name. Spaces are \b NOT allowed, use undersccores
+instead. The value of name must not duplicate any existing default, define, object or parameter
+unless the special type, enum, is used.
 
 \a type QOF_TYPE - must be one of the recognised QOF data types for the
 qof_version in use or the special type, enum.
@@ -195,6 +257,7 @@ qof_version in use or the special type, enum.
 [0-9]?/[0-9]?
 
 \attention Using boolean defaults
+
 A boolean default is not output in the QSF directly, instead the value is
 used in the calculations to modify certain values. If the boolean default
 is set to true, the if statement containing the boolean name will be evaluated. If the boolean
@@ -202,13 +265,29 @@ default is set to false, the corresponding else will be evaluted. Make sure your
 calculations contain an appropriate else statement so that the boolean value
 can be adjusted without invalidating the map!
 
+QSF deals with partial QofBooks - each object is fully described but the
+book does not have to contain any specific object types or have any
+particular structure. To merge partial books into usual QofBook data
+sources, the map must deal with entities that need to be referenced in
+the target QofBook but which simply don't exist in the QofBook used to generate
+the QSF. e.g. pilot-link knows nothing of Accounts yet when QSF creates
+a gncInvoice from qof-datebook, gncInvoice needs to know the GUID of 
+certain accounts in the target QofBook. This is handled in the map 
+by specifying the name of the account as a default for that map. When imported,
+the QSF QofBackend looks up the object required using the name of
+the parameter to obtain the parameter type. This is the only situation
+where QSF converts between QOF data types. A string description of the
+required object is converted to the GUID for that specific entity. The
+map cannot contain the GUID as it is generic and used by multiple users.
+
 \attention Using enumerators
 - enum types are the only defaults that are allowed to use the same name value more than once. 
 - enum types are used to increase the readability of a QSF map.
 - The enum name acts to group the enum values together - in a similar fashion to radio buttons in HTML forms. 
 - enum types are used only where the QOF object itself uses an enum type. 
 
-e.g. the tax_included enum type allows maps to use the full name of the enum value GNC_TAXINCLUDED_YES, instead of the cryptic digit value, 1.
+e.g. the tax_included enum type allows maps to use the full name of the enum value GNC_TAXINCLUDED_YES,
+instead of the cryptic digit value, 1.
 
 */
 #define MAP_OBJECT_TAG	"object" /**< Contains all the calculations to make one object from others.
@@ -223,7 +302,7 @@ QSF follows the same rule as qof_book_merge. Only if a getter and a setter funct
 a parameter is it available to QSF. If a ::QofAccessFunc and ::QofSetterFunc are both defined
 for any QofObject parameter, that parameter \b MUST be calculated in any map that defines that object.
 */
-#define MAP_QOF_VERSION	"qof_version" /**< This is the QOF_OBJECT_VERSION >From QOF.
+#define MAP_QOF_VERSION	"qof_version" /**< This is the QOF_OBJECT_VERSION from QOF.
 
 QSF maps may need to be updated if QOF itself is upgraded. This setting is coded into QOF and 
 maps for one version cannot necessarily be used by other versions. At the first release of QSF,
@@ -255,6 +334,8 @@ The value of the e_type must be the value of the e_type for that object in the
 originating QOF application. The define tag must contain the value of the description
 of the same object in the same originating QOF application.
 */
+/** \todo enum is an attempt to make enumerator values descriptive in the maps
+and QSF (possibly). Not working yet. */
 #define MAP_ENUM_TYPE "enum"
 #define QSF_XSD_TIME	"%Y-%m-%dT%H:%M:%SZ" /**< xsd:dateTime format in coordinated universal time, UTC.
 
@@ -356,17 +437,20 @@ typedef struct qsf_metadata
 	int count; /**< sequential counter for each object in the book */
 	GList *qsf_object_list; /**< list of qsf_objects */
 	GSList *qsf_sequence; /**< Parameter list sorted into QSF order */
+	GHashTable *referenceTable;  /**< Table of references, ::QofEntityReference. */
 	GHashTable *qsf_parameter_hash; /**< Hashtable of parameters for each object */
 	GHashTable *qsf_calculate_hash, *qsf_default_hash, *qsf_define_hash;
 	GSList *supported_types; /**< The partial list of QOF types currently supported, in QSF order. */
 	xmlDocPtr input_doc, output_doc; /**< Pointers to the input and output xml document(s). */
 	/** \todo Review the list of xml nodes in qsf_param and rationalise. */
 	xmlNodePtr child_node, cur_node, param_node, output_node, output_root, book_node, lister;
-	xmlNsPtr qsf_ns, map_ns;/**< Separate namespaces for QSF objects and QSF maps. */
+	xmlNsPtr qsf_ns, map_ns;     /**< Separate namespaces for QSF objects and QSF maps. */
 	const char *qof_type; /**< Holds details of the QOF_TYPE */
 	QofIdType qof_obj_type;	/**< current QofObject type (e_type) for the parameters. */
 	QofEntity *qsf_ent; /**< Current entity in the book. */
 	QofBackend *be; /**< the current QofBackend for this operation. */
+	gboolean knowntype;          /**< detect references by comparing with known QOF types. */
+	QofParam *qof_param;         /**< used by kvp to handle the frame hash table */
 	QofBook *book;	/**< the current QofBook.
 
 		Theoretically, QSF can handle multiple QofBooks - currently limited to 1.
@@ -375,8 +459,12 @@ typedef struct qsf_metadata
 	char *filepath; /**< Path to the QSF file. */
 }qsf_param;
 
-void qsf_free_params(qsf_param *params);
+/** \brief Free the QSF context.
 
+Frees the two GHashTables, the GSList, the output xmlDoc
+and the two xmlNs namespaces.
+*/
+void qsf_free_params(qsf_param *params);
 
 /** \brief Validation metadata
 
@@ -438,6 +526,18 @@ objects that are also registered with QOF in the host application.
 void
 qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid);
 
+/** @name Map Checks
+@{
+Check that the map is sufficient for this object. 
+
+Map is usable if all input objects are defined in the object file.
+Count define tags, subtract those calculated in the map (defined as objects)
+Check each remaining object e_type and description against the objects
+declared in the object file. Fail if some map objects remain undefined.
+
+not finished - expect noticeable changes.
+
+*/
 void
 qsf_map_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid);
 
@@ -446,9 +546,7 @@ qsf_map_top_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params);
 
 void
 qsf_map_object_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params);
-
-xmlNodePtr
-qsf_add_object_tag(qsf_param *params, int count);
+/** @} */
 
 /** \brief Compares an xmlDoc in memory against the schema file.
 
@@ -523,26 +621,18 @@ each object described in the file is checked to find out if the supplied QSF
 map is suitable. Map files are accepted if all objects described in the QSF object
 file are defined in the QSF map.
 
+\todo Need to code for how to find these files.
+
+
 @return TRUE if the file validates and the supplied QSF map is usable,
 otherwise FALSE.
 */
 gboolean is_qsf_object_with_map_be(char *map_path, qsf_param *params);
 
-/** \brief Main processing routine
-
-Currently, only a test routine but this will process the QSF map, when required,
-process the QSF object(s) and output a suitable QofBook ready for ::BookMerge
-
-@return TRUE on success, FALSE otherwise.
-
-*/
-gboolean qsf_test_main(void);
-
-
 /**	\brief QOF processing routine.
 
-To replace the qsf_test_main routine with genuine calls to QofSession and 
-qof_book_merge. Accepts QSF_OBJECT.
+Called by ::qof_session_load if a map is required.
+Accepts QSF_OBJECT.
 
 Checks available QSF maps for match. Only succeeds if a suitable map exists.
 
@@ -552,27 +642,81 @@ load_qsf_object(QofBook *book, const char *fullpath, qsf_param *params);
 
 /**	\brief QOF processing routine.
 
-To replace the qsf_test_main routine with genuine calls to QofSession and 
-qof_book_merge. Accepts QSF_GNC_OBJECT.
-
+Called using ::qof_session_load when all objects defined in the
+XML are registered in the current instance of QOF.
 */
 gboolean
 load_our_qsf_object(QofBook *book, const char *fullpath, qsf_param *params);
 
-/** \brief Export a QofBook as QSF
+/** \brief Book and book-guid node handler.
 
-@param	book	QofBook*
-
-@return NULL on error, otherwise a pointer to the xml document in memory, xmlDocPtr,
-	use xmlDocDump() to write the XML to a file.
+Reads the book count="" attribute (currently only 1 QofBook is supported per QSF object file)
+Sets the book-guid as the GUID of the current QofBackend QofBook in qsf_param.
+Calls the next handler, qsf_object_node_handler, with the child of the book tag.
 */
-xmlDocPtr
-qofbook_to_qsf(QofBook *book);
-
 void qsf_book_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params);
 
+/** \brief Commit the QSF object data to a new QofBook.
+
+The parentage of qof_book_merge should be obvious in this function.
+
+Large chunks were just lifted directly from the commit loop and adjusted
+to obtain the data to commit from the xmlNodePtr instead of qof_book_mergeRule. If
+anything, it's easier here because all entities are new, there are no targets.
+
+\todo references
+
+Unlike qof_book_merge, this routine runs once per parameter within a loop
+that iterates over objects - it does not have a loop of it's own.
+
+All entities are new.
+
+Using the parent of the current node to 
+retrieve the type parameter of the parent provides the type parameter of
+the object tag - the e_type of the current QofObject which allows 
+qof_class_get_parameter_setter(obj_type, key);
+
+@param	key		name of the parameter: QofIdType
+@param	value	xmlNodePtr value->name == QOF_TYPE, content(value) = data to commit.
+@param	data	qsf_param* - inevitably.
+
+*/
 void qsf_object_commitCB(gpointer key, gpointer value, gpointer data);
 
+/** \brief Convert a string value into KvpValue
+
+Partner to ::kvp_value_to_string. Given the type of KvpValue
+required, attempts to convert the string into that type of
+value.
+
+@param content A string representation of the value, ideally as
+		output by kvp_value_to_string.
+@param type KvpValueType of the intended KvpValue
+
+@return KvpValue* or NULL on failure.
+*/
+KvpValue*
+string_to_kvp_value(const char *content, KvpValueType type);
+
+/** \brief Backend init routine.
+
+Sets the sequence of parameters to match the schema and provide a reliable
+parse. Sets the default strings for qsf_enquiry_date, qsf_time_now and
+qsf_time_string.
+
+Filters the parameter list to set each type in this order:
+- QOF_TYPE_STRING
+- QOF_TYPE_GUID
+- QOF_TYPE_BOOLEAN
+- QOF_TYPE_NUMERIC
+- QOF_TYPE_DATE
+- QOF_TYPE_INT32
+- QOF_TYPE_INT64
+- QOF_TYPE_DOUBLE
+- QOF_TYPE_CHAR
+- QOF_TYPE_KVP (pending.)
+
+*/
 void qsf_param_init(qsf_param *params);
 
 
@@ -652,38 +796,24 @@ corresponding function in other code.
 
 The file is validated aginst the QSF map schema, qsf-map.xsd.xsml. This
 function is called by ::is_qsf_object. If called directly, the map file
-is validated and closed with a QofBackend error. QSF maps do not contain
-user data and are used to import QSF object files.
+is validated and closed, no data is retrieved. QSF maps do not contain
+user data but are used to import QSF object files from other applications.
 
 @return TRUE if the map validates, otherwise FALSE.
 */
 gboolean is_qsf_map(const char *path);
 
-/** \brief Write a QofBook to QSF
-
-This function can be used to write any QofBook to QSF. Remember that
-only fully \b QOF-compliant objects are supported by QSF.
-
-Your QOF objects must have:
-	- a create: function in the QofObject definition
-	- a foreach: function in the QofObject definition
-	- QofParam params[] registered with QOF using
-		qof_class_register and containing all necessary parameters
-		to reconstruct this object without any further information.
-	- Logical distinction between those parameters that should be
-		set (have a QofAccessFunc and QofSetterFunc) and those that 
-		should only be calculated (only a QofAccessFunc).
-
-The file is validated against the QSF object schema before being written.
-Check the QofBackendError - don't assume the file is OK.
-
-*/
-void
-write_qsf_from_book(FILE *out, QofBook *book);
-
 /** \brief Determine the type of QSF and load it into the QofBook
 
-@param	qsf_doc Pointer to the QSF object in memory, xmlDocPtr.
+- is_our_qsf_object, OUR_QSF_OBJ, QSF object file using only QOF objects known to the calling process.
+	No map is required.
+- is_qsf_object, IS_QSF_OBJ, QSF object file that may or may not have a QSF map
+	to convert external objects. This temporary type will be set to HAVE_QSF_MAP if a suitable
+	map exists, or an error value returned: ERR_QSF_NO_MAP, ERR_QSF_BAD_MAP or ERR_QSF_WRONG_MAP
+	This allows the calling process to inform the user that the QSF itself is valid but a
+	suitable map cannot be found.
+- is_qsf_map, IS_QSF_MAP, QSF map file. In the backend, this generates ERR_QSF_MAP_NOT_OBJ but
+	it can be used internally when processing maps to match a QSF object.
 
 @return NULL on error, otherwise a pointer to the QofBook. Use
 	the qof_book_merge API to merge the new data into the current
@@ -692,6 +822,12 @@ write_qsf_from_book(FILE *out, QofBook *book);
 void
 qsf_file_type (QofBackend *be, QofBook *book);
 
+/** \brief Describe this backend to the application. 
+
+Sets QSF Backend Version 0.1, access method = file:
+
+This is the QOF backend interface, not the GnuCash module.
+*/
 void qsf_provider_init(void);
 
 void
@@ -708,7 +844,8 @@ Loads a QSF object file containing only GnuCash objects
 into a second QofSession.
 
 @param first_session A QofSession pointer to the original session. This
-	will become the target of the subsequent qof_book_merge.
+will become the target of the subsequent qof_book_merge.
+
 @param path	Absolute or relative path to the file to be loaded
 
 @return ERR_BACKEND_NO_ERR == 0 on success, otherwise the QofBackendError
@@ -717,22 +854,49 @@ into a second QofSession.
 \todo Build the qof_book_merge code onto this function if session loads
 	properly.
 */
-QofBackendError qof_session_load_our_qsf_object(QofSession *first_session, const char *path);
+QofBackendError 
+qof_session_load_our_qsf_object(QofSession *first_session, const char *path);
 
 /** \brief Placeholder so far.
 
-
 \todo Determine the map to use and convert the QOF objects
 
-Much of the map code is written but there is still work to do.
+ Much of the map code is written but there is still work to do.
 */
-QofBackendError qof_session_load_qsf_object(QofSession *first_session, const char *path);
+QofBackendError 
+qof_session_load_qsf_object(QofSession *first_session, const char *path);
 	
 void qsf_destroy_backend (QofBackend *be);
 
-/** \brief Backend routine to open a file to write
+/** \brief Backend routine to write a file or stdout.
 
-Calls write_qsf_from_book to convert the QofBook to QSF XML.
+This function is used by ::qof_session_save to write any QofBook to QSF,
+any process that can create a new QofSession and populate the QofBook 
+with QOF objects can write the data as QSF XML - the book does not need
+an AccountGroup. Remember that only fully \b QOF-compliant objects
+are supported by QSF.
+
+Your QOF objects must have:
+	- a create: function in the QofObject definition
+	- a foreach: function in the QofObject definition
+	- QofParam params[] registered with QOF using
+		qof_class_register and containing all necessary parameters
+		to reconstruct this object without any further information.
+	- Logical distinction between those parameters that should be
+		set (have a QofAccessFunc and QofSetterFunc) and those that 
+		should only be calculated (only a QofAccessFunc).
+
+If you begin your QSF session with ::QOF_STDOUT as the book_id,
+QSF will write to STDOUT - usually a terminal. This is used by QOF
+applications to provide data streaming. If you don't want terminal
+output, take care to check the path given to 
+::qof_session_begin - don't try to change it later!
+
+The XML is validated against the QSF object schema before being
+written (to file or stdout).
+
+Check the QofBackendError - don't assume the file is OK.
+
 */
 void qsf_write_file(QofBackend *be, QofBook *book);
 

@@ -100,6 +100,11 @@ show_session_error (QofBackendError io_error, const char *newfile)
       uh_oh = FALSE;
       break;
 
+	case ERR_BACKEND_NO_HANDLER: {
+		fmt = _("No suitable backend was found for\n%s.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break;
+	}
     case ERR_BACKEND_NO_BACKEND:
       fmt = _("The URL \n    %s\n"
               "is not supported by this version of GnuCash.");
@@ -206,6 +211,13 @@ show_session_error (QofBackendError io_error, const char *newfile)
 		gnc_error_dialog(parent, fmt, newfile);
 		break; 
 	}
+	case ERR_QSF_BAD_OBJ_GUID: {
+		fmt = _("The selected QSF object file\n%s\n contains one or more invalid GUIDs."
+				"The file cannot be processed - please check the source of the file"
+				" and try again.");
+		gnc_error_dialog(parent, fmt, newfile);
+		break;
+	}
 	case ERR_QSF_NO_MAP: {
 		fmt = _("The selected QSF Object file\n%s\nrequires a map but it was not provided.");
 		gnc_error_dialog(parent, fmt, newfile);
@@ -225,6 +237,12 @@ show_session_error (QofBackendError io_error, const char *newfile)
 			"opened as a QSF object.");
 	  gnc_error_dialog(parent, fmt, newfile);
 	  break; 
+	}
+	case ERR_QSF_OVERFLOW : {
+		fmt = _("When converting XML strings into numbers, an overflow "
+			"has been detected. The QSF object file\n%s\n contains invalid "
+			"data in a field that is meant to hold a number.");
+		gnc_error_dialog(parent, fmt, newfile);
 	}
     case ERR_FILEIO_FILE_BAD_READ:
       fmt = _("There was an error reading the file.\n"

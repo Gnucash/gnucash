@@ -104,10 +104,6 @@ qof_book_merge_abort (qof_book_mergeData *mergeData)
 	}
 		mergeData->mergeList = g_list_next(mergeData->mergeList);
 	}
-	while(mergeData->targetList != NULL) {
-		g_free(mergeData->targetList->data);
-		mergeData->targetList = g_slist_next(mergeData->targetList);
-	}
 	g_list_free(mergeData->mergeList);
 	g_slist_free(mergeData->mergeObjectParams);
 	g_slist_free(mergeData->targetList);
@@ -285,10 +281,6 @@ qof_book_mergeCommit( qof_book_mergeData *mergeData )
 		g_slist_free(currentRule->mergeParam);
 		g_slist_free(currentRule->linkedEntList);
 		mergeData->mergeList = g_list_next(mergeData->mergeList);
-	}
-	while(mergeData->targetList != NULL) {
-		g_free(mergeData->targetList->data);
-		mergeData->targetList = g_slist_next(mergeData->targetList);
 	}
 	g_list_free(mergeData->mergeList);
 	g_slist_free(mergeData->mergeObjectParams);

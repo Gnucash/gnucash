@@ -1,5 +1,6 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-targetNamespace="urn:qof-qsf-map" xmlns="urn:qof-qsf-map">
+targetNamespace="http://qof.sourceforge.net/" 
+xmlns:qsf-map="http://qof.sourceforge.net/">
 <xsd:annotation>
     <xsd:documentation xml:lang="en">
 	Query Object Framework Serialization Format (QSF)
@@ -18,18 +19,18 @@ targetNamespace="urn:qof-qsf-map" xmlns="urn:qof-qsf-map">
 	Temple	Place, Suite 330, Boston, MA 02111-1307 USA
     </xsd:documentation>
   </xsd:annotation>
-<xsd:element name="qsf-map" type="map-type"/>
+<xsd:element name="qsf-map" qsf-map:type="map-type"/>
 <xsd:complexType name="map-type">
  <xsd:sequence>
-   <xsd:element name="definition" type="qsfdefinition"/>
-   <xsd:element name="object" type="mapobject" minOccurs="1" maxOccurs="unbounded"/>
+   <xsd:element name="definition" qsf-map:type="qsfdefinition"/>
+   <xsd:element name="object" qsf-map:type="mapobject" minOccurs="1" maxOccurs="unbounded"/>
  </xsd:sequence>
 </xsd:complexType>
 <xsd:complexType name="qsfdefinition">
  <xsd:sequence>
-   <xsd:element name="define" type="qsfdefine" minOccurs="2" maxOccurs="unbounded"/>
-   <xsd:element name="default" type="qsfdefault" minOccurs="0" maxOccurs="unbounded"/>
-   <xsd:element name="variable" type="qsfvariable" minOccurs="0" maxOccurs="unbounded"/>
+   <xsd:element name="define" qsf-map:type="qsfdefine" minOccurs="2" maxOccurs="unbounded"/>
+   <xsd:element name="default" qsf-map:type="qsfdefault" minOccurs="0" maxOccurs="unbounded"/>
+   <xsd:element name="variable" qsf-map:type="qsfvariable" minOccurs="0" maxOccurs="unbounded"/>
  </xsd:sequence>
  <xsd:attribute name="qof_version" type="xsd:positiveInteger"/>
 </xsd:complexType>
@@ -60,17 +61,17 @@ targetNamespace="urn:qof-qsf-map" xmlns="urn:qof-qsf-map">
 </xsd:complexType>
 <xsd:complexType name="mapobject">
  <xsd:sequence>
-   <xsd:element name="calculate" type="qsfcalculate" minOccurs="1" maxOccurs="unbounded"/>
+   <xsd:element name="calculate" qsf-map:type="qsfcalculate" minOccurs="1" maxOccurs="unbounded"/>
  </xsd:sequence>
  <xsd:attribute name="type" type="xsd:string"/>
  <xsd:attribute name="value" type="xsd:string"/>
 </xsd:complexType>
 <xsd:complexType name="qsfcalculate">
  <xsd:sequence>
-   <xsd:element name="set" type="qsf_set" minOccurs="0" maxOccurs="1"/>
-   <xsd:element name="if" type="qsf_if" minOccurs="0" maxOccurs="unbounded"/>
-   <xsd:element name="equals" type="qsf_equal" minOccurs="0" maxOccurs="unbounded"/>
-   <xsd:element name="else" type="qsf_else" minOccurs="0" maxOccurs="unbounded"/>
+   <xsd:element name="set" qsf-map:type="qsf_set" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="if" qsf-map:type="qsf_if" minOccurs="0" maxOccurs="unbounded"/>
+   <xsd:element name="equals" qsf-map:type="qsf_equal" minOccurs="0" maxOccurs="unbounded"/>
+   <xsd:element name="else" qsf-map:type="qsf_else" minOccurs="0" maxOccurs="unbounded"/>
  </xsd:sequence>
  <xsd:attribute name="type" type="xsd:string"/>
  <xsd:attribute name="value" type="xsd:string"/>
@@ -86,8 +87,8 @@ targetNamespace="urn:qof-qsf-map" xmlns="urn:qof-qsf-map">
 </xsd:complexType>
 <xsd:complexType name="qsf_if">
  <xsd:sequence>
-   <xsd:element name="set" type="qsf_set" minOccurs="0" maxOccurs="1"/>
-   <xsd:element name="equals" type="qsf_equal" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="set" qsf-map:type="qsf_set" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="equals" qsf-map:type="qsf_equal" minOccurs="0" maxOccurs="1"/>
  </xsd:sequence>
  <xsd:attribute name="boolean" type="xsd:string" use="optional"/>
  <xsd:attribute name="type" type="xsd:string" use="optional"/>
@@ -96,19 +97,20 @@ targetNamespace="urn:qof-qsf-map" xmlns="urn:qof-qsf-map">
 </xsd:complexType>
 <xsd:complexType name="qsf_else">
  <xsd:sequence>
-   <xsd:element name="set" type="qsf_set" minOccurs="0" maxOccurs="1"/>
-   <xsd:element name="equals" type="qsf_equal" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="set" qsf-map:type="qsf_set" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="equals" qsf-map:type="qsf_equal" minOccurs="0" maxOccurs="1"/>
  </xsd:sequence>
  <xsd:attribute name="type" type="xsd:string"/>
  <xsd:attribute name="value" type="xsd:string"/>
 </xsd:complexType>
 <xsd:complexType name="qsf_equal">
  <xsd:sequence>
-   <xsd:element name="set" type="qsf_set" minOccurs="0" maxOccurs="1"/>
-   <xsd:element name="equals" type="qsf_equal" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="set" qsf-map:type="qsf_set" minOccurs="0" maxOccurs="1"/>
+   <xsd:element name="equals" qsf-map:type="qsf_equal" minOccurs="0" maxOccurs="1"/>
  </xsd:sequence>
  <xsd:attribute name="type" type="xsd:string"/>
  <xsd:attribute name="value" type="xsd:string"/>
 </xsd:complexType>
 
 </xsd:schema>
+

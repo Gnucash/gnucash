@@ -209,15 +209,14 @@ KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const char * slot,
 
 /** @name KvpFrame URL handling */
 /*@{*/
-/** The kvp_frame_add_url_encoding() routine will parse the value
- *    string, assuming it to be URL-encoded in the standard way, *
- *    turning it into a set of key-value pairs, and adding those to
- *    the * indicated frame.  URL-encoded strings are the things that
- *    are * returned by web browsers when a form is filled out.  For
- *    example, * 'start-date=June&end-date=November' consists of two
- *    keys, * 'start-date' and 'end-date', which have the values
- *    'June' and * 'November', respectively.  This routine also
- *    handles % encoding.
+/** The kvp_frame_add_url_encoding() routine will parse the
+ *  value string, assuming it to be URL-encoded in the standard way,
+ *  turning it into a set of key-value pairs, and adding those to the
+ *  indicated frame.  URL-encoded strings are the things that are
+ *  returned by web browsers when a form is filled out.  For example,
+ *  'start-date=June&end-date=November' consists of two keys, 
+ *  'start-date' and 'end-date', which have the values 'June' and 
+ *  'November', respectively.  This routine also handles % encoding.
  *
  *  This routine treats all values as strings; it does *not* attempt
  *    to perform any type-conversion.
@@ -228,15 +227,16 @@ void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /** @name KvpFrame Glist Bag Storing */
 /*@{*/
 
-/** The kvp_frame_add_gint64() routine will add (as in append, not as
- *  in sum) the value of the gint64 to the glist bag of values at the
- *  indicated path.  If not all frame components of the path exist,
- *  they are created.  If the value previously stored at this path was
- *  not a glist bag, then a bag will be formed there, the old value
- *  placed in the bag, and the new value added to the bag.
+/** The kvp_frame_add_gint64() routine will add the value of the 
+ *     gint64 to the glist bag of values at the indicated path. 
+ *     If not all frame components of the path exist, they are 
+ *     created.  If the value previously stored at this path was 
+ *     not a glist bag, then a bag will be formed there, the old 
+ *     value placed in the bag, and the new value added to the bag.
  *
- *  Similarly, the add_double, add_numeric, and add_timespec routines
- *  perform the same function, for each of the respective types.
+ *     Similarly, the add_double, add_numeric, and add_timespec 
+ *     routines perform the same function, for each of the respective 
+ *     types.
  */
 void kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival);
 void kvp_frame_add_double(KvpFrame * frame, const char * path, double dval);
@@ -594,26 +594,12 @@ GUID        * kvp_value_get_guid(const KvpValue * value);
 void        * kvp_value_get_binary(const KvpValue * value,
                                    guint64 * size_return); 
 
-/** Returns the GList of kvp_frames (not to be confused with GList's
+/** Returns the GList of kvp_frame's (not to be confused with GList's
  * of something else!) from the given kvp_frame.  This one is
  * non-copying -- the caller can modify the value directly.  
- *
- * CAS: Maybe I'm confused (because this case really is too
- * confusing), but I think this comment is wrong.  I think the
- * returned GList is a list of whatever values were added by
- * kvp_frame_add_*().  So, if you called kvp_frame_add_frame, then,
- * yes, it's a list frames, but if you called
- * kvp_frame_add_{something_else}(), then it's a list of
- * something_elses.
- *
- * IMO, this glist case SHOULD NOT BE USED.  Why would you make a
- * KvpValue a glist of frames when a frame is already inherently a
- * list of subframes?  And why would you make a KvpValue a glist of
- * any other type when, apparently, the interface that requires you to
- * specify value types doesn't enforce type consistency in the list,
- * and provides no record of the type anyway?  Talk about asking for
- * headaches.  (I'm too chicken to search for callers. :)
-*/
+ * The returned GList is a list of  KvpValues of any type, including mixed. 
+ * Cast each list gpointer to a KvpValue and use the KvpValue->type to
+ * determine the type of value at each position in the list. */
 GList       * kvp_value_get_glist(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify
@@ -628,7 +614,17 @@ gint          kvp_value_compare(const KvpValue *va, const KvpValue *vb);
 
 /*@}*/
 
+/** \brief General purpose function to convert any KvpValue to a string.
 
+Only the bare string is returned, there is no debugging information.
+*/
+gchar* kvp_value_to_bare_string(const KvpValue *val);
+
+/** \brief Debug version of kvp_value_to_string
+
+This version is used only by ::qof_query_printValueForParam,
+itself a debugging and development utility function.
+*/
 gchar* kvp_value_to_string(const KvpValue *val);
 
 /** Manipulator: 

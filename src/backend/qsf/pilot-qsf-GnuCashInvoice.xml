@@ -3,7 +3,7 @@
 <!-- maps use the same sequence of parameter types as other QSF -->
 <!-- Trans:desc can be set by expenses or datebook -->
 <qsf-map
-xmlns="urn:qof-qsf-map">
+xmlns="http://qof.sourceforge.net/">
 <definition qof_version="3">
   <define e_type="qof-expenses">Pilot-link QOF expenses</define>
   <define e_type="qof-datebook">Pilot-link QOF datebook</define>

@@ -82,6 +82,7 @@
  * @brief Encapsulates a connection to a backend (persistent store)
  * @author Copyright (c) 1998, 1999, 2001, 2002 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
+ * @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  */
 
 #ifndef QOF_SESSION_H
@@ -236,7 +237,168 @@ void     qof_session_save (QofSession *session,
  */
 void     qof_session_end  (QofSession *session);
 
+/** @name Copying entities between sessions.
+
+Only certain backends can cope with selective copying of
+entities and only fully defined QOF entities can be copied
+between sessions - see the \ref QSF (QSF) documentation 
+(::qsf_write_file) for more information.
+
+The recommended backend for the new session is QSF or a future
+SQL backend. Using any of these entity copy functions sets a 
+flag in the backend that this is now a partial QofBook - see 
+below. When you save a session containing a partial QofBook,
+the session will check that the backend is able to handle the
+partial book. If not, the backend will be replaced by one that
+can handle partial books, preferably one using the same
+::access_method. Currently, this means that a book 
+using the GnuCash XML v2 file backend will be switched to QSF.
+
+Copied entities are identical to the source entity, all parameters
+defined with ::QofAccessFunc and ::QofSetterFunc in QOF are copied
+and the ::GUID of the original ::QofEntity is set in the new entity.
+Sessions containing copied entities are intended for use
+as mechanisms for data export.
+
+It is acceptable to add entities to new_session in batches. Note that
+any of these calls will fail if an entity already exists in new_session
+with the same GUID as any entity to be copied. 
+
+To merge a whole QofBook or where there is any possibility
+of collisions or requirement for user intervention,
+see \ref BookMerge
+
+@{
+
+*/
+
+/** Used as the key value for the QofBook data hash.
+
+Retrieved later by QSF (or any other suitable backend) to
+rebuild the references from the QofEntityReference struct
+that contains the QofIdType and GUID of the referenced entity
+of the original QofBook.
+*/
+#define ENTITYREFERENCE "QofEntityReference"
+
+/** \brief Copy a single QofEntity to another session
+ 
+Checks first that no entity in the session book contains
+the GUID of the source entity. 
+
+ @param new_session - the target session
+ @param original - the QofEntity* to copy
+
+@return FALSE without copying if the session contains an entity
+with the same GUID already, otherwise TRUE.
+*/
+
+gboolean qof_entity_copy_to_session(QofSession* new_session, QofEntity* original);
+
+/** @brief Copy a GList of entities to another session
+
+The QofBook in the new_session must \b not contain any entities
+with the same GUID as any of the source entities - there is
+no support for handling collisions, instead use \ref BookMerge
+
+Note that the GList (e.g. from ::qof_sql_query_run) can contain
+QofEntity pointers of any ::QofIdType, in any sequence. As long
+as all members of the list are ::QofEntity*, and all GUID's are
+unique, the list can be copied.
+
+ @param new_session - the target session
+ @param entity_list - a GList of QofEntity pointers of any type(s).
+
+@return FALSE, without copying, if new_session contains any entities
+with the same GUID. Otherwise TRUE.
+
+*/
+gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list);
+
+/** @brief Copy a QofCollection of entities.
+
+The QofBook in the new_session must \b not contain any entities
+with the same GUID as any entities in the collection - there is
+no support for handling collisions - instead, use \ref BookMerge
+
+@param new_session - the target session
+@param entity_coll - a QofCollection of any QofIdType.
+
+@return FALSE, without copying, if new_session contains any entities
+with the same GUID. Otherwise TRUE.
+*/
+
+gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll);
+
+/** @} 
+*/
+
+/** @name Using a partial QofBook.
+
+Part of the handling for partial books requires a storage mechanism for
+references to entities that are not within reach of the partial book.
+This requires a hash table in the book data to contain the reference 
+QofIdType and GUID so that when the book is written out, the
+reference can be included. See ::qof_book_get_data. 
+When the file is imported back in, the hash table needs to be rebuilt.
+The QSF backend rebuilds the references by linking to real entities. Other
+backends can process the hash table in similar ways.
+
+The hashtable key is the GUID of the known entity and the value is a 
+QofEntityReference to the referenced entity - a struct that contains the
+GUID and the QofIdType of the referenced entity.
+
+Partial books need to be differentiated in the backend, the 
+flag in the book data is used by qof_session_save to prevent a partial
+book being saved using a backend that requires a full book.
+
+ @{ */
+
+
+/** \brief External references in a partial QofBook.
+
+This data is built into a hash table for use by any session that
+deals with partial QofBooks. It is used by the entity copy
+functions and by the QSF backend. The hashtable key is
+the GUID of the known entity and the value is a 
+QofEntityReference to the referenced entity. 
+*/
+typedef struct qof_entity_reference {
+	QofIdType type;
+	GUID      *guid;
+}QofEntityReference;
+
+/** \brief Flag indicating a partial QofBook.
+
+When set in the book data with a gboolean value of TRUE,
+the flag denotes that only a backend that supports partial
+books can be used to save this session.
+*/
+
+#define PARTIAL_QOFBOOK "PartialQofBook"
+
+/** @}
+*/
+
+/** \brief Allow session data to be printed to stdout
+
+book_id can't be NULL and we do need to have an access_method,
+so use one to solve the other.
+
+To print a session to stdout, use ::qof_session_begin. Example:
+
+\a qof_session_begin(session,QOF_STDOUT,TRUE,FALSE);
+
+When you call qof_session_save(session, NULL), the output will appear
+on stdout and can be piped or redirected to other processes.
+
+Currently, only the QSF backend supports writing to stdout, other
+backends may return a ::QofBackendError.
+*/
+#define QOF_STDOUT "file:"
+
 /** @name Event Handling
+
  @{ */
 /** The qof_session_events_pending() method will return TRUE if the backend
  *    has pending events which must be processed to bring the engine
@@ -264,7 +426,7 @@ gboolean qof_session_export (QofSession *tmp_session,
 			     QofSession *real_session,
 			     QofPercentageFunc percentage_func);
 
-#endif /* GNUCASH_MJOR_VERSION */
+#endif /* GNUCASH_MAJOR_VERSION */
 
 /** Register a function to be called just before a session is closed.
  *

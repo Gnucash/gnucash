@@ -21,19 +21,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- /** @addtogroup Backend
-    @{ */
-/** @addtogroup QSF QOF Serialisation Format
-
-	The qsf-map.c source file is included in this documentation during development
-	to help explain certain methods. The doxygen tags can be
-	removed / set as ordinary comments once each method is finalised.
-
-    @{ */
-/** @file qsf-xml-map.c
-    @brief  QSF Map validation and processing.
-    @author Copyright (C) 2005 Neil Williams <linux@codehelp.co.uk>
-*/
 
 #define _GNU_SOURCE
 
@@ -44,8 +31,6 @@
 #include <libxml/xmlschemas.h>
 #include "qsf-xml.h"
 #include "qsf-dir.h"
-
-//static short int module = MOD_BACKEND;
 
 static void
 qsf_date_default_handler(const char *default_name, GHashTable *qsf_default_hash,
@@ -114,24 +99,6 @@ qsf_map_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid)
 	}
 }
 
-
-/** \brief Validates a QSF object against a specific QSF map.
-
-@param	path	path to the QSF object file
-@param	map_path	path to the QSF map file.
-
-Need to code for how to find these files.
-
-	Map is usable if all input objects are defined in the object file.
-		Count define tags, subtract those calculated in the map (defined as objects)
-		Check each remaining object e_type and description against the objects
-		declared in the object file. Fail if some map objects remain undefined.
-
-@return FALSE (0) or < 0 on error, 1 on success
-
-Check QofBackendError for a description of the error.
-
-*/
 gboolean is_qsf_object_with_map_be(char *map_file, qsf_param *params)
 {
 	xmlDocPtr doc, map_doc;
@@ -193,7 +160,6 @@ gboolean is_qsf_object_with_map_be(char *map_file, qsf_param *params)
 	valid_count += valid.valid_object_count;
 	g_hash_table_destroy(valid.validation_table);
 	if(valid_count == 0) {
-		/* clear any previous error */
 		qof_backend_get_error(params->be);
 		return TRUE;
 	}
@@ -270,24 +236,6 @@ gboolean is_qsf_map(const char *path)
 }
 
 
-/** \brief Handling defaults.
-
-QSF deals with partial QofBooks - each object is fully described but the
-book does not have to contain any specific object types or have any
-particular structure. To merge partial books into usual QofBook data
-sources, the map must deal with entities that need to be referenced in
-the target QofBook but which simply don't exist in the QofBook used to generate
-the QSF. e.g. pilot-link knows nothing of Accounts yet when QSF creates
-a gncInvoice from qof-datebook, gncInvoice needs to know the GUID of 
-certain accounts in the target QofBook. This is handled in the map 
-by specifying the name of the account as a default for that map. When imported,
-the QSF QofBackend looks up the object required using the name of
-the parameter to obtain the parameter type. This is the only situation
-where QSF converts between QOF data types. A string description of the
-required object is converted to the GUID for that specific entity. The
-map cannot contain the GUID as it is generic and used by multiple users.
-
-*/
 static void
 qsf_map_default_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params )
 {
@@ -386,8 +334,7 @@ qsf_else_set_value(xmlNodePtr parent, GHashTable *default_hash,
 	return NULL;
 }
 
-/** \brief Handles the set tag in the map.
-
+/* Handles the set tag in the map.
 This function will be overhauled once inside QOF 
 QOF hook required for "Lookup in the receiving application"
 */
@@ -564,6 +511,25 @@ qsf_calculate_conditional(xmlNodePtr param_node, xmlNodePtr child, qsf_param *pa
 			}
 		}
 	}
+}
+
+static xmlNodePtr
+qsf_add_object_tag(qsf_param *params, int count)
+{
+	xmlNodePtr extra_node;
+	GString *str;
+	xmlChar *property;
+
+	str = g_string_new (" ");
+	g_string_printf(str, "%i", count);
+	extra_node = NULL;
+	extra_node = xmlAddChild(params->output_node,
+		xmlNewNode(params->qsf_ns, QSF_OBJECT_TAG));
+	xmlNewProp(extra_node, QSF_OBJECT_TYPE,
+		xmlGetProp(params->cur_node, QSF_OBJECT_TYPE));
+	property = xmlCharStrdup(str->str);
+	xmlNewProp(extra_node, QSF_OBJECT_COUNT, property);
+	return extra_node;
 }
 
 void
