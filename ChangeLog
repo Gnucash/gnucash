@@ -53,6 +53,14 @@
 	locale doesn't work for account hierarchy druid, then check all
 	abbreviated versions of that locale.
 
+2002-07-02  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-ui-util.c (PrintAmountInternal): If the "auto
+	decimal places" option has been set, force all numbers to be
+	printed with that many decimal places.  That will prevent multiple
+	conversion of a cell (e.g. 1234.00 => 1234 => 12.34) as a user
+	tabs in and out of a cell.
+
 2002-07-02  Derek Atkins  <derek@ihtfp.com>
 
 	* register/register-gnome/gnucash-sheet.c: allow a caller to
