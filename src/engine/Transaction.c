@@ -677,6 +677,37 @@ xaccTransCommitEdit (Transaction *trans)
    if (!trans) return;
    CHECK_OPEN (trans);
 
+   /* At this point, we check to see if we have a valid transaction.
+    * As a result of editing, we could end up with a transaction that
+    * has no splits in it, in which case we delete the transaction and
+    * return.  Alternately the transaction may have only one split in 
+    * it, in which case ... that's OK if and only if the split has no 
+    * value (i.e. is only recording a price).  Otherwise, a single
+    * split with a value can't possibly balance, thus violating the 
+    * rules of double-entry, and that's way bogus. So delete 
+    * the split, delete the transaction.  I suppose we could 
+    * generate an error or something like that at this point,
+    * to let the user know that we blew away a split.
+    */
+
+   split = trans->splits[0];
+   if (!split ||
+       ((NULL == trans->splits[1]) && (!(DEQ(0.0, split->damount)))))
+   {
+      /* Make a log in the journal before destruction.  */
+      xaccTransWriteLog (trans, 'D');
+      if (split) {
+         acc = split->acc;
+         MARK_SPLIT (split);
+         xaccAccountRemoveSplit (acc, split);
+         xaccAccountRecomputeBalance (acc);
+         xaccFreeSplit (split);
+         trans->splits[0] = NULL;
+      }
+      xaccFreeTransaction (trans);
+      return;
+   }
+
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
@@ -749,8 +780,7 @@ xaccSplitDestroy (Split *split)
    trans = split->parent;
    assert (trans);
    assert (trans->splits);
-   // temp hack alert -- get rid of annoying error messages
-   // CHECK_OPEN (trans);
+   CHECK_OPEN (trans);
 
    numsplits = 0;
    s = trans->splits[0];
@@ -765,42 +795,20 @@ xaccSplitDestroy (Split *split)
    /* If the account has three or more splits, 
     * merely unlink & free the split. 
     *
-    * Or if the account has only two splits, and the 
-    * split to be destroyed is a price split (i.e.
-    * has a damount value of zero), then
-    * merely unlink & free the split. 
+    * Or if the account has only two splits, 
+    * then this destroy will leave only one split.
+    * Don't rebalance, as this will goof up the
+    * value of teh remaining split.
     */
-   if ((2 < numsplits) ||
-       ((2 == numsplits) && (DEQ(0.0, split->damount))))
-   {
-      MARK_SPLIT (split);
-      xaccTransRemoveSplit (trans, split);
-      acc = split->acc;
-      xaccAccountRemoveSplit (acc, split);
-      xaccAccountRecomputeBalance (acc);
-      xaccFreeSplit (split);
-      xaccSplitRebalance (trans->splits[0]);
-   } else {
-      /* if the transaction has only two splits,
-       * remove both of them, and them destroy the 
-       * transaction. Make a log in the journal before 
-       * destruction.
-       */
-      xaccTransWriteLog (trans, 'D');
-      s = trans->splits[0];
-      acc = s->acc;
-      MARK_SPLIT (s);
-      xaccAccountRemoveSplit (acc, s);
-      xaccAccountRecomputeBalance (acc);
+   MARK_SPLIT (split);
+   xaccTransRemoveSplit (trans, split);
+   acc = split->acc;
+   xaccAccountRemoveSplit (acc, split);
+   xaccAccountRecomputeBalance (acc);
+   xaccFreeSplit (split);
 
-      s = trans->splits[1];
-      if (s) {
-         acc = s->acc;
-         MARK_SPLIT (s);
-         xaccAccountRemoveSplit (acc, s);
-         xaccAccountRecomputeBalance (acc);
-         xaccFreeTransaction (trans);
-      }
+   if (2 < numsplits) {
+      xaccSplitRebalance (trans->splits[0]);
    }
 }
 

@@ -110,6 +110,7 @@ xaccFreeAccount( Account *acc )
 {
   int i=0;
   Split *s;
+  Transaction *t;
 
   if (NULL == acc) return;
     
@@ -129,12 +130,17 @@ xaccFreeAccount( Account *acc )
     s->acc = NULL;
   }
 
-  /* search for orphaned transactions, and delete them */
+  /* destroy all of the splits. The xaccCommitEdit() call
+   * will automatically clean up orphaned transactions.
+   */
   acc->open |= ACC_BEING_DESTROYED;
   acc->open |= ACC_DEFER_REBALANCE;
   for (i=0; i<acc->numSplits; i++) {
     s = acc->splits[i];
+    t = s->parent;
+    xaccTransBeginEdit (t, 1);
     xaccSplitDestroy (s);
+    xaccTransCommitEdit (t);
   }
 
   /* free up array of split pointers */

@@ -72,9 +72,13 @@ void          xaccInitTransaction (Transaction *);/* clears a trans struct */
  */
 void          xaccTransDestroy (Transaction *);
 
-/* The xaccTransBegineEdit() ... 
+/* The xaccTransBeginEdit() ... 
  *    If the defer flag is set, then automated balancing
  *    is defered until the commit ...
+ *
+ * The xaccTransCommitEdit() routine may result in the deletion of the
+ * transaction, if the transaction is "empty" (has no splits, or
+ * has a single split in it whose value is non-zero.)
  */
 void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
@@ -115,10 +119,13 @@ void          xaccTransAppendSplit (Transaction *, Split *);
  *    leaving the accounting structure out-of-balance or otherwise
  *    inconsistent.
  *
- *    If the parent transaction of the split has three or more splits
- *    in it, then only this one split is unlinked. If the parent
- *    transaction has only two splits in it (and thus, this is one of
- *    them), then both splits and the transaction are destroyed.
+ *    If the deletion of the split leaves the transaction "empty",
+ *    then the transaction will be marked for deletion.  (It will
+ *    not be deleted until the xaccTransCommitEdit() routine is called.)
+ *    The transaction is considered "empty" if it has no splits in it, 
+ *    or it has only one split left, and that split is not a price split
+ *    (i.e. has a non-zero value).  Transactions with only one split in 
+ *    them are valid if and only if the value of that split is zero.
  */
 void          xaccSplitDestroy (Split *);
 
