@@ -6,7 +6,27 @@
 <title>Asset and Liability Piecharts</title>
 <para><emphasis>PICTURES NEEDED!!!!</emphasis> 
 </para>
-<para>This is not yet documented.</para>
+<para>These piecharts are useful for getting an
+view of how your assets and liabilities are categorized.
+By selecting options appropriately, you can examine, say,
+the allocation of your stock portfolio, or get an overall
+view of your investment mix.  
+Note that piecharts can be rotated by clicking on them and
+dragging the mouse, and individual segments can be "exploded".</para>
+
+
+<para>Options available for these reports include:</para>
+<itemizedlist>
+	  <listitem><para><emphasis><link linkend="xacc-options-accounts">
+		Accounts</link></emphasis></para>
+	  </listitem>
+	  <listitem><para><emphasis><link linkend="xacc-options-report-title">
+		  Report Title</link></emphasis></para></listitem>
+	  <listitem><para><emphasis><link linkend="xacc-options-date">
+		  Date</link></emphasis></para>
+	  </listitem>
+	  <listitem><para><emphasis>Add more!!!</emphasis></para></listitem>
+</itemizedlist>
 </sect1>
 </article>
 

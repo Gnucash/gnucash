@@ -17,6 +17,7 @@
 <!entity xacceuro system "xacc-euro.sgml">
 <!entity xaccdateinput system "xacc-dateinput.sgml">
 <!entity xaccgnomemdi system "xacc-gnome-mdi.sgml">
+<!entity xaccgnucashwebbrowser system "xacc-gnucash-web-browser.sgml">
 <!entity xaccincomeexpense system "xacc-incomeexpense.sgml">
 <!entity xaccincomeexpensebarcharts system "xacc-income-expense-barcharts.sgml">
 <!entity xaccincomeexpensepiecharts system "xacc-income-expense-piecharts.sgml">
@@ -72,6 +73,7 @@
 &xacceuro;
 &xaccdateinput;
 &xaccgnomemdi;
+&xaccgnucashwebbrowser;
 &xaccincomeexpense;
 &xaccincomeexpensebarcharts;
 &xaccincomeexpensepiecharts;

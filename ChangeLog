@@ -1,3 +1,15 @@
+2001-05-17  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* doc/sgml/C/xacc-gnucash-web-browser.sgml: New file.
+
+	* doc/sgml/C/Makefile.am: add new file.
+
+	* doc/sgml/C/gnucash.sgml, xacc-gnome-mdi.sgml, 
+	xacc-asset-liability-piecharts.sgml: more updated/new content.
+
+	* ChangeLog: fix wrong path in (my) previous changelog
+	entry.
+
 2001-05-16  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/gnucash-design.texinfo: update docs
@@ -17,7 +29,7 @@
 	* src/scm/html-utilities.scm ((gnc:html-make-empty-data-warning)): 
 	update message.
 
-	* src/scm/{gnucash.sgml, xacc-account-summary.sgml, 
+	* doc/sgml/C/{gnucash.sgml, xacc-account-summary.sgml, 
 	xacc-asset-liability-barcharts.sgml, xacc-reports.sgml}: more new
 	material.
 

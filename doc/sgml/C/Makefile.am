@@ -24,6 +24,7 @@ GNUCASH_SGML_FILES = \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-gnome-mdi.sgml \
+	xacc-gnucash-web-browser.sgml \
 	xacc-gpl.sgml \
 	xacc-incomeexpense.sgml \
 	xacc-income-expense-barcharts.sgml \
