@@ -46,6 +46,28 @@
  * lines in the transaction display, not just to one line (one split) at a
  * time.
  * 
+ * =====================================================================
+ * Some notes on Reloads & Redraws:
+ * 
+ * Reloads and redraws tend to be heavyweight. We try to use change flags
+ * as much as possible in this code, but imagine the following senario:
+ *
+ * Create two bank accounts.  Transfer money from one to the other.
+ * Open two registers, showing each account. Change the amount in one window.
+ * Note that the other window also redraws, to show the new correct amount.
+ * 
+ * Since you changed an amount value, potentially *all* displayed balances change
+ * in *both* register windows (as well as the leger balance in the main window).
+ * Three or more windows may be involved if you have e.g. windows open for bank,
+ * employer, taxes and your entering a paycheck...  (or correcting a typo in an
+ * old paycheck)... changing a date might even cause all entries in all three
+ * windows to be re-ordered.
+ * 
+ * The only thing I can think of is a bit stored with every table entry, stating
+ * 'this entry has changed since lst time, redraw it'.  But that still doesn't
+ * avoid the overhead of reloading the table from the engine.
+ * 
+ * 
  *
  * HISTORY:
  * Copyright (c) 1998,1999 Linas Vepstas
