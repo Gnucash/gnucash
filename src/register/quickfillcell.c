@@ -43,6 +43,7 @@
 #include <wctype.h>
 
 #include "basiccell.h"
+#include "gnc-ui-util.h"
 #include "quickfillcell.h"
 
 

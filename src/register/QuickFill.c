@@ -33,6 +33,7 @@
 #include "basiccell.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 
 struct _QuickFill

@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-ui-util.h -- utility functions for the GnuCash UI            *
+ * gnc-ui-util.c -- utility functions for the GnuCash UI            *
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -1830,3 +1830,23 @@ gnc_set_auto_decimal_places( int places )
   auto_decimal_places = places;
 }
 
+/* These implementations are rather lame. */
+#ifndef HAVE_TOWUPPER
+gint32
+towupper (gint32 wc)
+{
+  if (wc > 127)
+    return wc;
+
+  return toupper ((int) wc);
+}
+
+int
+iswlower (gint32 wc)
+{
+  if (wc > 127)
+    return 1;
+
+  return islower ((int) wc);
+}
+#endif
