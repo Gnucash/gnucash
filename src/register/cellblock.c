@@ -38,242 +38,246 @@
 CellBlock * xaccMallocCellBlock (int numrows, int numcols)
 {
 
-   CellBlock *arr;
-   arr = (CellBlock *) malloc (sizeof (CellBlock));
+   CellBlock *cellblock;
 
-   arr->numRows = 0;
-   arr->numCols = 0;
+   cellblock = g_new(CellBlock, 1);
 
-   arr->active_bg_color   = 0xffffff; /* white */
-   arr->passive_bg_color  = 0xffffff; /* white */
-   arr->passive_bg_color2 = 0xffffff; /* white */
+   cellblock->numRows = 0;
+   cellblock->numCols = 0;
 
-   arr->user_data = NULL;
-   arr->cells = NULL;
-   arr->cell_types = NULL;
-   arr->right_traverse_r = NULL;
-   arr->right_traverse_c = NULL;
-   arr->left_traverse_r = NULL;
-   arr->left_traverse_c = NULL;
-   arr->widths = NULL;
-   arr->alignments = NULL;
-   xaccInitCellBlock (arr, numrows, numcols);
+   cellblock->active_bg_color   = 0xffffff; /* white */
+   cellblock->passive_bg_color  = 0xffffff; /* white */
+   cellblock->passive_bg_color2 = 0xffffff; /* white */
 
-   return arr;
+   cellblock->user_data = NULL;
+   cellblock->cells = NULL;
+   cellblock->cell_types = NULL;
+   cellblock->right_traverse_r = NULL;
+   cellblock->right_traverse_c = NULL;
+   cellblock->left_traverse_r = NULL;
+   cellblock->left_traverse_c = NULL;
+   cellblock->widths = NULL;
+   cellblock->alignments = NULL;
+
+   xaccInitCellBlock (cellblock, numrows, numcols);
+
+   return cellblock;
 }
 
 /* =================================================== */
 
 static void        
-FreeCellBlockMem (CellBlock *arr)
+FreeCellBlockMem (CellBlock *cellblock)
 {
    int i;
    int oldrows, oldcols;
 
-   oldrows = arr->numRows;
-   oldcols = arr->numCols;
+   oldrows = cellblock->numRows;
+   oldcols = cellblock->numCols;
 
    /* free cell array, if any */
-   if (arr->cells) {
+   if (cellblock->cells) {
       for (i=0; i<oldrows; i++) {
-         if (arr->cells[i]) free (arr->cells[i]);
+         if (cellblock->cells[i])
+           free (cellblock->cells[i]);
       }
-      free (arr->cells);
+      free (cellblock->cells);
    }
 
    /* free label array, if any */
-   if (arr->cell_types) {
+   if (cellblock->cell_types) {
       for (i=0; i<oldrows; i++) {
-         if (arr->cell_types[i]) free (arr->cell_types[i]);
+         if (cellblock->cell_types[i])
+           free (cellblock->cell_types[i]);
       }
    }
    
    /* free right traversal chain */
-   if (arr->right_traverse_r) {
+   if (cellblock->right_traverse_r) {
       for (i=0; i<oldrows; i++) {
-         if (arr->right_traverse_r[i]) free (arr->right_traverse_r[i]);
+         if (cellblock->right_traverse_r[i])
+           free (cellblock->right_traverse_r[i]);
       }
    }
-   if (arr->right_traverse_c) {
+   if (cellblock->right_traverse_c) {
       for (i=0; i<oldrows; i++) {
-         if (arr->right_traverse_c[i]) free (arr->right_traverse_c[i]);
+         if (cellblock->right_traverse_c[i])
+           free (cellblock->right_traverse_c[i]);
       }
    }
 
    /* free left traversal chain */
-   if (arr->left_traverse_r) {
+   if (cellblock->left_traverse_r) {
       for (i=0; i<oldrows; i++) {
-         if (arr->left_traverse_r[i]) free (arr->left_traverse_r[i]);
+         if (cellblock->left_traverse_r[i])
+           free (cellblock->left_traverse_r[i]);
       }
    }
-   if (arr->left_traverse_c) {
+   if (cellblock->left_traverse_c) {
       for (i=0; i<oldrows; i++) {
-         if (arr->left_traverse_c[i]) free (arr->left_traverse_c[i]);
+         if (cellblock->left_traverse_c[i])
+           free (cellblock->left_traverse_c[i]);
       }
    }
 
    /* free widths, alignments */
-   if (arr->widths) free (arr->widths);
-   if (arr->alignments) free (arr->alignments);
+   if (cellblock->widths) free (cellblock->widths);
+   if (cellblock->alignments) free (cellblock->alignments);
 }
 
 /* =================================================== */
 
 void        
-xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
+xaccInitCellBlock (CellBlock *cellblock, int numrows, int numcols)
 {
    int i, j;
-   if (!arr) return;
+   if (!cellblock) return;
 
-   FreeCellBlockMem (arr);
+   FreeCellBlockMem (cellblock);
 
    /* record new size */
-   arr->numRows = numrows;
-   arr->numCols = numcols;
+   cellblock->numRows = numrows;
+   cellblock->numCols = numcols;
 
    /* malloc new cell array */
-   arr->cells = (BasicCell ***) malloc (numrows * sizeof (BasicCell **));
-   arr->cell_types = (short **) malloc (numrows * sizeof (short *));
+   cellblock->cells = malloc (numrows * sizeof (BasicCell **));
+   cellblock->cell_types = malloc (numrows * sizeof (short *));
    for (i=0; i<numrows; i++) {
-      (arr->cells)[i] = (BasicCell **) malloc (numcols * sizeof (BasicCell *));
-      (arr->cell_types)[i] = (short *) malloc (numcols * sizeof (short));
+      (cellblock->cells)[i] = malloc (numcols * sizeof (BasicCell *));
+      (cellblock->cell_types)[i] = malloc (numcols * sizeof (short));
       for (j=0; j<numcols; j++) {
-         (arr->cells)[i][j] = NULL;
-         (arr->cell_types)[i][j] = -1;         
+         (cellblock->cells)[i][j] = NULL;
+         (cellblock->cell_types)[i][j] = -1;         
       }
    }
 
    /* malloc new right traversal arrays */
-   arr->right_traverse_r = (short **) malloc (numrows * sizeof (short *));
-   arr->right_traverse_c = (short **) malloc (numrows * sizeof (short *));
+   cellblock->right_traverse_r = malloc (numrows * sizeof (short *));
+   cellblock->right_traverse_c = malloc (numrows * sizeof (short *));
    for (i=0; i<numrows; i++) {
-      (arr->right_traverse_r)[i] = (short *) malloc (numcols * sizeof (short));
-      (arr->right_traverse_c)[i] = (short *) malloc (numcols * sizeof (short));
+      (cellblock->right_traverse_r)[i] = malloc (numcols * sizeof (short));
+      (cellblock->right_traverse_c)[i] = malloc (numcols * sizeof (short));
       for (j=0; j<numcols-1; j++) {
          /* default traversal is same row, next column */
-         (arr->right_traverse_r)[i][j] = i;
-         (arr->right_traverse_c)[i][j] = j+1;
+         (cellblock->right_traverse_r)[i][j] = i;
+         (cellblock->right_traverse_c)[i][j] = j+1;
       }
       /* at end of row, wrap to next row */
-      (arr->right_traverse_r)[i][numcols-1] = i+1;
-      (arr->right_traverse_c)[i][numcols-1] = 0;
+      (cellblock->right_traverse_r)[i][numcols-1] = i+1;
+      (cellblock->right_traverse_c)[i][numcols-1] = 0;
    }
    /* at end of block, wrap back to begining */
-   (arr->right_traverse_r)[numrows-1][numcols-1] = 0;
-   (arr->right_traverse_c)[numrows-1][numcols-1] = 0;
+   (cellblock->right_traverse_r)[numrows-1][numcols-1] = 0;
+   (cellblock->right_traverse_c)[numrows-1][numcols-1] = 0;
 
    /* last is last ... */
-   arr->last_reenter_traverse_row = numrows-1;
-   arr->last_reenter_traverse_col = numcols-1;
+   cellblock->last_reenter_traverse_row = numrows-1;
+   cellblock->last_reenter_traverse_col = numcols-1;
 
    /* malloc new left traversal arrays */
-   arr->left_traverse_r = (short **) malloc (numrows * sizeof (short *));
-   arr->left_traverse_c = (short **) malloc (numrows * sizeof (short *));
+   cellblock->left_traverse_r = malloc (numrows * sizeof (short *));
+   cellblock->left_traverse_c = malloc (numrows * sizeof (short *));
    for (i=0; i<numrows; i++) {
-      (arr->left_traverse_r)[i] = (short *) malloc (numcols * sizeof (short));
-      (arr->left_traverse_c)[i] = (short *) malloc (numcols * sizeof (short));
+      (cellblock->left_traverse_r)[i] = malloc (numcols * sizeof (short));
+      (cellblock->left_traverse_c)[i] = malloc (numcols * sizeof (short));
       for (j=0; j<numcols-1; j++) {
          /* default traversal is same row, previous column */
-         (arr->left_traverse_r)[i][j] = i;
-         (arr->left_traverse_c)[i][j] = j-1;
+         (cellblock->left_traverse_r)[i][j] = i;
+         (cellblock->left_traverse_c)[i][j] = j-1;
       }
       /* at start of row, wrap to previous row */
-      (arr->left_traverse_r)[i][numcols-1] = i-1;
-      (arr->left_traverse_c)[i][numcols-1] = numcols-1;
+      (cellblock->left_traverse_r)[i][numcols-1] = i-1;
+      (cellblock->left_traverse_c)[i][numcols-1] = numcols-1;
    }
    /* at start of block, wrap back to end */
-   (arr->right_traverse_r)[0][0] = numrows-1;
-   (arr->right_traverse_c)[0][0] = numcols-1;
+   (cellblock->right_traverse_r)[0][0] = numrows-1;
+   (cellblock->right_traverse_c)[0][0] = numcols-1;
 
    /* first is last ... */
-   arr->last_left_reenter_traverse_row = 0;
-   arr->last_left_reenter_traverse_col = 0;
+   cellblock->last_left_reenter_traverse_row = 0;
+   cellblock->last_left_reenter_traverse_col = 0;
    
-   arr->widths = (short *) malloc (numcols * sizeof(short));
-   arr->alignments = (Alignments *) malloc (numcols * sizeof(Alignments));
+   cellblock->widths = malloc (numcols * sizeof(short));
+   cellblock->alignments = malloc (numcols * sizeof(Alignments));
    
    for (j=0; j<numcols; j++) {
-      arr->widths[j] = 0;
-      arr->alignments[j] = ALIGN_RIGHT;
+      cellblock->widths[j] = 0;
+      cellblock->alignments[j] = ALIGN_RIGHT;
    }
 }
 
 /* =================================================== */
 
 void        
-xaccDestroyCellBlock (CellBlock *arr)
+xaccDestroyCellBlock (CellBlock *cellblock)
 {
-   if (!arr) return;
+   if (!cellblock) return;
 
-   FreeCellBlockMem (arr);
+   FreeCellBlockMem (cellblock);
 
    /* finally, free this object itself */
-   free (arr);
+   g_free (cellblock);
 }
 
 /* =================================================== */
 
 void        
-xaccNextRight (CellBlock *arr, int row,      int col, 
+xaccNextRight (CellBlock *cellblock, int row,      int col, 
                                int next_row, int next_col)
 {
-   if (!arr) return;
+   if (!cellblock) return;
 
    /* avoid embarrasement if cell incorrectly specified */
    if ((0 > row) || (0 > col)) return;
-   if ((row >= arr->numRows) || (col >= arr->numCols)) return;
+   if ((row >= cellblock->numRows) || (col >= cellblock->numCols)) return;
 
    /* -1 is a valid value for next ... it signifies that traversal
     * should go to next tab group, so do not check for neg values.
-    * if ((0 > next_row) || (0 > next_col)) return; 
     */
 
    /* if the "next" location to hop to is larger than the cursor, that
     * just means that we should hop to the next cursor.  Thus, large
     * values for next *are* valid.
-    * if ((next_row >= arr->numRows) || (next_col >= arr->numCols)) return; 
     */
 
-   (arr->right_traverse_r)[row][col] = next_row;
-   (arr->right_traverse_c)[row][col] = next_col;
+   (cellblock->right_traverse_r)[row][col] = next_row;
+   (cellblock->right_traverse_c)[row][col] = next_col;
 
    /* if traversing out (neg values) record this as the last ... */
    if ((0 > next_row) || (0 > next_col)) {
-      arr->last_reenter_traverse_row = row;
-      arr->last_reenter_traverse_col = col;
+      cellblock->last_reenter_traverse_row = row;
+      cellblock->last_reenter_traverse_col = col;
    }
 
 }
 
 
 void        
-xaccNextLeft (CellBlock *arr, int row,      int col, 
+xaccNextLeft (CellBlock *cellblock, int row,      int col, 
                               int next_row, int next_col)
 {
-   if (!arr) return;
+   if (!cellblock) return;
 
    /* avoid embarrasement if cell incorrectly specified */
    if ((0 > row) || (0 > col)) return;
-   if ((row >= arr->numRows) || (col >= arr->numCols)) return;
+   if ((row >= cellblock->numRows) || (col >= cellblock->numCols)) return;
 
    /* -1 is a valid value for next ... it signifies that traversal
     * should go to next tab group, so do not check for neg values.
-    * if ((0 > next_row) || (0 > next_col)) return; 
     */
 
    /* if the "next" location to hop to is larger than the cursor, that
     * just means that we should hop to the next cursor.  Thus, large
     * values for next *are* valid.
-    * if ((next_row >= arr->numRows) || (next_col >= arr->numCols)) return; 
     */
 
-   (arr->left_traverse_r)[row][col] = next_row;
-   (arr->left_traverse_c)[row][col] = next_col;
+   (cellblock->left_traverse_r)[row][col] = next_row;
+   (cellblock->left_traverse_c)[row][col] = next_col;
 
    /* if traversing out (neg values) record this as the last ... */
    if ((0 > next_row) || (0 > next_col)) {
-      arr->last_left_reenter_traverse_row = row;
-      arr->last_left_reenter_traverse_col = col;
+      cellblock->last_left_reenter_traverse_row = row;
+      cellblock->last_left_reenter_traverse_col = col;
    }
 
 }

@@ -23,7 +23,6 @@
 
 #include <gnome.h>
 
-#include "table-gnome.h"
 #include "table-allgui.h"
 
 

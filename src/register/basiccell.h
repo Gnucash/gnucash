@@ -164,11 +164,8 @@
  * initialization & changes.
  *
  * The realize() callback will be called when GUI-specific 
- *    initialization needs to be done.  For Xt/Motif, the second
- *    argument will be cast to the parent widget.  The third
- *    argument passes in the desired pixel-width for the GUI 
- *    element.  (Yes, the pixel-size thing is a hack that we
- *    allow for the moment. See below for more info.)
+ *    initialization needs to be done. For Gnome, the second
+ *    argument will be cast to the parent widget.
  *
  * The destroy() callback will be called when the GUI associated
  *    with the cell needs to be destroyed.
@@ -180,12 +177,6 @@
  *
  * The gui_private member may be used by the derived class to 
  *    store any additional GUI-specific data.
- *
- * GUI HACK ALERT NOTES:
- * The realize method takes a width argument only as a hack
- * to work around the fact that the combo-box requires a width
- * in pixels, rather than in characters.  It would be nice if 
- * ComboBox supported the XmNunits resource, but it doesn't.  
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
@@ -199,6 +190,7 @@
 #include "gnc-common.h"
 #include "gnc-ui-common.h"
 
+
 /* define a bitmask */
 #define XACC_CELL_ALLOW_NONE       0x0
 #define XACC_CELL_ALLOW_SHADOW     0x1
@@ -206,62 +198,79 @@
 #define XACC_CELL_ALLOW_ALL        0x3
 #define XACC_CELL_ALLOW_EXACT_ONLY 0x4
 
+#define GNC_CELL_CHANGED 0xffffffff
+
 typedef struct _BasicCell BasicCell;
 
-struct _BasicCell {
+typedef void (*CellSetValueFunc) (BasicCell *,
+                                  const char * new_value);
 
+typedef const char * (*CellEnterFunc) (BasicCell *,
+                                       const char * current,
+                                       int *cursor_position,
+                                       int *start_selection,
+                                       int *end_selection);
+
+typedef const char * (*CellModifyVerifyFunc) (BasicCell *,
+                                              const char *old_value, 
+                                              const char *add_str, 
+                                              const char *new_value,
+                                              int *cursor_position,
+                                              int *start_selection,
+                                              int *end_selection);
+
+typedef gboolean (*CellDirectUpdateFunc) (BasicCell *,
+                                          const char *oldval,
+                                          char **newval_ptr,
+                                          int *cursor_position,
+                                          int *start_selection,
+                                          int *end_selection,
+                                          void *gui_data);
+
+typedef const char * (*CellLeaveFunc) (BasicCell *,
+                                       const char * current);
+
+typedef void (*CellRealizeFunc) (BasicCell *, 
+                                 void *gui_handle);
+
+typedef void (*CellMoveFunc) (BasicCell *,
+                              int phys_row, int phys_col);
+
+typedef void (*CellDestroyFunc) (BasicCell *);
+
+typedef char * (*CellGetHelpFunc) (BasicCell *);
+
+struct _BasicCell
+{
   /* cell attributes */
   /* hack alert -- may want to redesign color to use named color strings. */
   guint32 bg_color;       /* background color, ARGB format */
   guint32 fg_color;       /* forground (text) color ARGB format */
+
   gboolean use_fg_color;  /* if 0, above is ignored */
   gboolean use_bg_color;  /* if 0, above is ignored */
 
-  /* hack alert -- add support for e.g. bold fonts !?!?! italic fonts ?? */
-
-  /* ==================================================== */
   char * value;          /* current value */
-  char *blank_help;      /* help when value is blank */
-  guint32 changed;       /* 2^32-1 if value modified */
+  char * blank_help;     /* help when value is blank */
 
-  char input_output;     /* zero if output-only */
+  guint32 changed;       /* 2^32-1 if value modified */
+  guint8  input_output;  /* zero if output-only */
 
   /* "virtual", overloaded set-value method */
-  void         (*set_value)     (BasicCell *,
-                                 const char * new_value);
+  CellSetValueFunc set_value;
 
   /* cell-editing callbacks */
-  const char * (*enter_cell)    (BasicCell *,
-                                 const char * current,
-                                 int *cursor_position,
-                                 int *start_selection,
-                                 int *end_selection);
-  const char * (*modify_verify) (BasicCell *,
-                                 const char *old_value, 
-                                 const char *add_str, 
-                                 const char *new_value,
-                                 int *cursor_position,
-                                 int *start_selection,
-                                 int *end_selection);
-  gncBoolean   (*direct_update) (BasicCell *,
-                                 const char *oldval,
-                                 char **newval_ptr,
-                                 int *cursor_position,
-                                 int *start_selection,
-                                 int *end_selection,
-                                 void *gui_data);
-  const char * (*leave_cell)    (BasicCell *,
-                                 const char * current);
+  CellEnterFunc        enter_cell;
+  CellModifyVerifyFunc modify_verify;
+  CellDirectUpdateFunc direct_update;
+  CellLeaveFunc        leave_cell;
 
   /* private, GUI-specific callbacks */
-  void         (* realize) (BasicCell *, 
-                            void *gui_handle,
-                            int pixel_width);
-  void         (* move)    (BasicCell *, 
-                            int phys_row, int phys_col);
-  void         (* destroy) (BasicCell *);
+  CellRealizeFunc realize;
+  CellMoveFunc    move;
+  CellDestroyFunc destroy;
 
-  char * (*get_help_value) (BasicCell *);
+  CellGetHelpFunc get_help_value;
 
   /* general hook for gui-private data */
   void * gui_private;

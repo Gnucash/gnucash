@@ -24,21 +24,16 @@
  *
  * FUNCTION:
  * Implements the infrastructure for the displayed table.
- * This is the Gtk implementation;
+ * This is the Gnome implementation.
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  * Copyright (c) 1998 Rob Browning <rlb@cs.utexas.edu>
  * Copyright (c) 1999 Heath Martin <martinh@pegasus.cc.ucf.edu>
  * Copyright (c) 2000 Heath Martin <martinh@pegasus.cc.ucf.edu>
+ * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
-/*
-  TODO: fix up alignments in a UI independent manner.
-
-  deal with the fact (if necessary) that the gtk UI can't directly
-  "cancel" a traverse.
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,17 +43,31 @@
 
 #include "cellblock.h"
 #include "table-allgui.h"
-#include "table-gnome.h"
-#include "util.h"
 #include "splitreg.h"
+#include "util.h"
 
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
 
 
+static void
+table_destroy_cb(Table *table)
+{
+        if (table == NULL)
+                return;
+
+        if (table->ui_data == NULL)
+                return;
+
+        if (table->ui_data)
+                gtk_widget_unref(GTK_WIDGET(table->ui_data));
+
+        table->ui_data = NULL;
+}
+
 void
-xaccCreateTable (GtkWidget *widget, void *data)
+gnc_table_init_gui (gncUIWidget widget, void *data)
 {
         SplitRegister *sr;
         GnucashSheet *sheet;
@@ -69,15 +78,17 @@ xaccCreateTable (GtkWidget *widget, void *data)
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
 
-        sr = (SplitRegister *)data;
+        sr = (SplitRegister *) data;
 
         greg = GNUCASH_REGISTER(widget);
         sheet = GNUCASH_SHEET(greg->sheet);
         sheet->split_register = data;
         table = sheet->table;
 
-        table->table_widget = GTK_WIDGET(sheet);
-        gtk_widget_ref (table->table_widget);
+        table->destroy = table_destroy_cb;
+        table->ui_data = sheet;
+
+        gtk_widget_ref (GTK_WIDGET(sheet));
 
         /* config the cell-block styles */
 
@@ -106,7 +117,7 @@ xaccCreateTable (GtkWidget *widget, void *data)
 					     sr->split_cursor,
 					     GNUCASH_CURSOR_SPLIT);
 
-        xaccRefreshHeader (table);
+        gnc_table_refresh_header (table);
 
         gnucash_sheet_table_load (sheet);
         gnucash_sheet_cursor_set_from_table (sheet, TRUE);
@@ -115,7 +126,7 @@ xaccCreateTable (GtkWidget *widget, void *data)
 
 
 void        
-xaccRefreshTableGUI (Table * table)
+gnc_table_refresh_gui (Table * table)
 {
         GnucashSheet *sheet;
         SheetBlockStyle *style;
@@ -123,13 +134,13 @@ xaccRefreshTableGUI (Table * table)
 
         if (!table)
                 return;
-        if (!table->table_widget)
+        if (!table->ui_data)
                 return;
 
-        g_return_if_fail (GNUCASH_IS_SHEET (table->table_widget));
+        g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
-        sheet = GNUCASH_SHEET(table->table_widget);
-        sr = (SplitRegister *)sheet->split_register;
+        sheet = GNUCASH_SHEET(table->ui_data);
+        sr = sheet->split_register;
 
         style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
         gnucash_sheet_style_recompile (style, sr->header, sr,
@@ -158,47 +169,41 @@ xaccRefreshTableGUI (Table * table)
 
 
 void        
-doRefreshCursorGUI (Table * table, CellBlock *curs,
-                    int from_row, int from_col, gncBoolean do_scroll)
+gnc_table_refresh_cursor_gui (Table * table,
+                              CellBlock *curs,
+                              int phys_row, int phys_col,
+                              gboolean do_scroll)
 {
         GnucashSheet *sheet;
+        PhysicalCell *pcell;
         gint virt_row, virt_col;
 
         if (!table)
                 return;
-        if (!table->table_widget)
+        if (!table->ui_data)
                 return;
 
-        g_return_if_fail (GNUCASH_IS_SHEET (table->table_widget));
+        g_return_if_fail (GNUCASH_IS_SHEET (table->ui_data));
 
         /* if the current cursor is undefined, there is nothing to do. */
         if (!curs) return;
-        if ((0 > from_row) || (0 > from_col)) return;
-        if ((from_row >= table->num_phys_rows) ||
-            (from_col >= table->num_phys_cols))
+        if ((0 > phys_row) || (0 > phys_col)) return;
+        if ((phys_row >= table->num_phys_rows) ||
+            (phys_col >= table->num_phys_cols))
                 return;
 
-        sheet = GNUCASH_SHEET(table->table_widget);
+        sheet = GNUCASH_SHEET(table->ui_data);
 
         /* compute the physical bounds of the current cursor */
-        virt_row = table->locators[from_row][from_col]->virt_row;
-        virt_col = table->locators[from_row][from_col]->virt_col;
+        pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+
+        virt_row = pcell->virt_loc.virt_row;
+        virt_col = pcell->virt_loc.virt_col;
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         gnucash_sheet_block_set_from_table (sheet, virt_row, virt_col);
         gnucash_sheet_redraw_block (sheet, virt_row, virt_col);
 }
-
-/* FIXME:  this won't really do what is expected, since
- * our sheet doesn't necessarily have constant width columns.
- * 
- */
-int
-gnc_table_column_width(Table *table, const int col)
-{
-        return 0;
-}
-
 
 /* ================== end of file ======================= */
 

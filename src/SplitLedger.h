@@ -122,10 +122,11 @@
 #include "splitreg.h"
 #include "Transaction.h"
 
+
 /* Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (void *user_data);
 typedef void (*SRSetHelpCallback) (void *user_data, const char *help_str);
-typedef gncBoolean (*SRReverseBalanceCallback) (Account *account);
+typedef gboolean (*SRReverseBalanceCallback) (Account *account);
 
 void xaccSRSetData(SplitRegister *reg, void *user_data,
                    SRGetParentCallback get_parent,
@@ -139,11 +140,11 @@ Transaction * xaccSRGetCurrentTrans (SplitRegister *reg);
 Split * xaccSRGetCurrentSplit (SplitRegister *reg);
 Split * xaccSRGetBlankSplit (SplitRegister *reg);
 
-gncBoolean xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
-                                 int *virt_row, int *virt_col);
-gncBoolean xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
-                                      Split *trans_split, Split *split,
-                                      int *virt_row, int *virt_col);
+gboolean xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
+                               int *virt_row, int *virt_col);
+gboolean xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
+                                    Split *trans_split, Split *split,
+                                    int *virt_row, int *virt_col);
 
 Split * xaccSRDuplicateCurrent (SplitRegister *reg);
 
@@ -161,11 +162,11 @@ void    xaccSRCancelCursorTransChanges (SplitRegister *reg);
 void    xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                             Account *default_source_acc);
 
-gncBoolean xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit);
-void       xaccSRRedrawRegEntry (SplitRegister *reg);
+gboolean xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit);
+void     xaccSRRedrawRegEntry (SplitRegister *reg);
 
 void    xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
 
-gncBoolean xaccSRHasPendingChanges (SplitRegister *reg);
+gboolean xaccSRHasPendingChanges (SplitRegister *reg);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

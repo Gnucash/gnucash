@@ -1470,20 +1470,26 @@ gnucash_sheet_get_style_from_table (GnucashSheet *sheet, gint vrow, gint vcol)
 {
         Table *table;
         SplitRegister *sr;
+        VirtualCell *vcell;
+        CellBlock *cursor;
 
         g_return_val_if_fail (sheet != NULL, NULL);
         g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), NULL);
 
         table = sheet->table;
-        sr = (SplitRegister *)sheet->split_register;
+        sr = sheet->split_register;
 
-        if (table->handlers[vrow][vcol] == sr->single_cursor)
+        vcell = gnc_table_get_virtual_cell (table, vrow, vcol);
+
+        cursor = vcell->cellblock;
+
+        if (cursor == sr->single_cursor)
                 return sheet->cursor_style[GNUCASH_CURSOR_SINGLE];
-        else if (table->handlers[vrow][vcol] == sr->double_cursor)
+        else if (cursor == sr->double_cursor)
                 return sheet->cursor_style[GNUCASH_CURSOR_DOUBLE];
-        else if (table->handlers[vrow][vcol] == sr->trans_cursor)
+        else if (cursor == sr->trans_cursor)
                 return sheet->cursor_style[GNUCASH_CURSOR_TRANS];
-        else if (table->handlers[vrow][vcol] == sr->split_cursor)
+        else if (cursor == sr->split_cursor)
                 return sheet->cursor_style[GNUCASH_CURSOR_SPLIT];
         else
                 return sheet->cursor_style[GNUCASH_CURSOR_HEADER];

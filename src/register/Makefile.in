@@ -120,7 +120,7 @@ noinst_LIBRARIES = libgncregister.a
 libgncregister_a_SOURCES =    QuickFill.c   basiccell.c   cellblock.c   datecell.c   numcell.c   pricecell.c   quickfillcell.c   recncell.c   splitreg.c   table-allgui.c   table-gnome.c   textcell.c
 
 
-noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   datecell.h   numcell.h   pricecell.h   quickfillcell.h   recncell.h   splitreg.h   table-allgui.h   table-gnome.h   textcell.h
+noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   datecell.h   numcell.h   pricecell.h   quickfillcell.h   recncell.h   splitreg.h   table-allgui.h   textcell.h
 
 
 EXTRA_DIST =    .cvsignore   design.txt   table-html.c   table-html.h

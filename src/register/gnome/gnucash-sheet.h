@@ -24,7 +24,6 @@
 #include <gnome.h>
 
 #include "splitreg.h"
-#include "table-gnome.h"
 #include "table-allgui.h"
 
 #define CELL_VPADDING 5

@@ -36,7 +36,6 @@
 
 #include "splitreg.h"
 #include "table-allgui.h"
-#include "table-gnome.h"
 #include "combocell.h"
 #include "gnucash-sheet.h"
 #include "gnucash-item-edit.h"
@@ -77,7 +76,7 @@ typedef struct _PopBox
 
 static void block_list_signals (ComboCell *cell);
 static void unblock_list_signals (ComboCell *cell);
-static void realizeCombo (BasicCell *bcell, void *w, int width);
+static void realizeCombo (BasicCell *bcell, void *w);
 static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (BasicCell *bcell);
 static const char * enterCombo (BasicCell *bcell,
@@ -697,7 +696,7 @@ ComboHelpValue(BasicCell *bcell)
 /* =============================================== */
 
 static void
-realizeCombo (BasicCell *bcell, void *data, int pixel_width)
+realizeCombo (BasicCell *bcell, void *data)
 {
 	GnucashSheet *sheet = (GnucashSheet *) data;
 	GnomeCanvasItem *item = sheet->item_editor;

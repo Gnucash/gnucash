@@ -27,7 +27,6 @@ noinst_HEADERS = \
   recncell.h \
   splitreg.h \
   table-allgui.h \
-  table-gnome.h \
   textcell.h
 
 EXTRA_DIST = \

@@ -67,11 +67,7 @@ enum _Alignments {
   ALIGN_FILL,
 };
 
-#ifdef MOTIF
-typedef unsigned char Alignments;
-#else
 typedef enum _Alignments Alignments;
-#endif
 
 struct _CellBlock {
 
@@ -86,7 +82,7 @@ struct _CellBlock {
   BasicCell ***cells;  /* row-col array */
 
   short **cell_types;  /* row-col array of the cell types in splitreg.h */
-  
+
   /* The active_bg_color is the default color (in argb) for the cell
    * backgrounds when this cell block needs to be "highlighted" in 
    * some way (typically, when this cellblock represents the
@@ -103,7 +99,7 @@ struct _CellBlock {
   guint32 passive_bg_color2;
 
   /* other attributes */
-  short         *widths;        /* column widths */
+  short      *widths;        /* column widths */
   Alignments *alignments;    /* column text alignments */
 
   short     **right_traverse_r;
@@ -137,9 +133,7 @@ struct _CellBlock {
 
   void * user_data;
   /* above is a pointer to anything the programmer-user of this struct
-   * wants it to be.  Handy for stuff.
-   */
-
+   * wants it to be.  Handy for stuff. */
 };
 
 typedef struct _CellBlock CellBlock;
@@ -149,10 +143,12 @@ void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 void        xaccDestroyCellBlock (CellBlock *);
 
 /* define next cell to traverse to */
-void        xaccNextRight (CellBlock *, int row,      int col,
-                                        int next_row, int next_col);
+void        xaccNextRight (CellBlock *cellblock,
+                           int row,      int col,
+                           int next_row, int next_col);
 
-void        xaccNextLeft (CellBlock *arr, int row,      int col,
-                                          int next_row, int next_col);
+void        xaccNextLeft (CellBlock *cellblock,
+                          int row,      int col,
+                          int next_row, int next_col);
 
 #endif /* __XACC_CELL_BLOCK_H__ */

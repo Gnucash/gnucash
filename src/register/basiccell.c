@@ -170,7 +170,7 @@ xaccBasicCellSetChanged (BasicCell *cell, gncBoolean changed)
   if (cell == NULL)
     return;
 
-  cell->changed = changed ? 0xffffffff : 0;
+  cell->changed = changed ? GNC_CELL_CHANGED : 0;
 }
 
 /* ================== end of file ====================== */

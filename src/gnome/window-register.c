@@ -46,7 +46,7 @@
 #include "dialog-utils.h"
 #include "query-user.h"
 #include "enriched-messages.h"
-#include "table-gnome.h"
+#include "table-allgui.h"
 #include "gnucash-sheet.h"
 #include "global-options.h"
 #include "dialog-find-transactions.h"
@@ -1641,7 +1641,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
     gnucash_register_set_initial_rows(num_rows);
 
     register_widget = gnucash_register_new(ledger->ledger->table);
-    xaccCreateTable(register_widget, ledger->ledger);
+    gnc_table_init_gui(register_widget, ledger->ledger);
 
     gtk_container_add(GTK_CONTAINER(table_frame), register_widget);
 

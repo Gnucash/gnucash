@@ -96,6 +96,7 @@ void
 gnucash_cursor_get_phys (GnucashCursor *cursor, int *phys_row, int *phys_col)
 {
         Table *table;
+        VirtualCell *vcell;
         int virt_row, virt_col;
         int cell_row, cell_col;
 
@@ -114,10 +115,10 @@ gnucash_cursor_get_phys (GnucashCursor *cursor, int *phys_row, int *phys_col)
         cell_col =
 		GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->col;
 
-        *phys_row =
-		table->rev_locators[virt_row][virt_col]->phys_row + cell_row;
-        *phys_col =
-		table->rev_locators[virt_row][virt_col]->phys_col + cell_col;
+        vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
+
+        *phys_row = vcell->phys_loc.phys_row + cell_row;
+        *phys_col = vcell->phys_loc.phys_col + cell_col;
 }
 
 

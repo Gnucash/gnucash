@@ -140,11 +140,11 @@ struct _SRInfo
   int cursor_hint_phys_col;
 
   /* If the hints were set by the traverse callback */
-  gncBoolean hint_set_by_traverse;
+  gboolean hint_set_by_traverse;
 
   /* A flag indicating if the last traversal was 'exact'.
    * See table-allgui.[ch] for details. */
-  gncBoolean exact_traversal;
+  gboolean exact_traversal;
 
   /* The default account where new splits are added */
   Account *default_source_account;
@@ -153,7 +153,7 @@ struct _SRInfo
   time_t last_date_entered;
 
   /* true if the current blank split has been edited and commited */
-  gncBoolean blank_split_edited;
+  gboolean blank_split_edited;
 
   /* User data for users of SplitRegisters */
   void *user_data;
@@ -391,7 +391,7 @@ gnc_copy_split_onto_split(Split *from, Split *to)
 /* Uses the scheme transaction copying routines */
 static void
 gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
-                          gncBoolean do_commit)
+                          gboolean do_commit)
 {
   SCM trans_scm;
 
@@ -544,8 +544,11 @@ gnc_find_split_in_reg_by_memo(SplitRegister *reg, const char *memo,
   for (virt_row = num_rows - 1; virt_row >= 0; virt_row--)
     for (virt_col = num_cols - 1; virt_col >= 0; virt_col--)
     {
-      Split *split = table->user_data[virt_row][virt_col];
-      Transaction *trans = xaccSplitGetParent(split);
+      Split *split;
+      Transaction *trans;
+
+      split = gnc_table_get_user_data_virtual (table, virt_row, virt_col);
+      trans = xaccSplitGetParent(split);
 
       if (trans == last_trans)
         continue;
@@ -584,8 +587,11 @@ gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
   for (virt_row = num_rows - 1; virt_row >= 0; virt_row--)
     for (virt_col = num_cols - 1; virt_col >= 0; virt_col--)
     {
-      Split *split = table->user_data[virt_row][virt_col];
-      Transaction *trans = xaccSplitGetParent(split);
+      Split *split;
+      Transaction *trans;
+
+      split = gnc_table_get_user_data_virtual (table, virt_row, virt_col);
+      trans = xaccSplitGetParent(split);
 
       if (trans == last_trans)
         continue;
@@ -622,26 +628,25 @@ gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
  */
 
 static void
-LedgerMoveCursor (Table *table, 
-                  int *p_new_phys_row, 
-                  int *p_new_phys_col, 
-                  void * client_data)
+LedgerMoveCursor (Table *table,
+                  int *p_new_phys_row,
+                  int *p_new_phys_col)
 {
   int new_phys_row = *p_new_phys_row;
   int new_phys_col = *p_new_phys_col;
-  SplitRegister *reg = client_data;
+  SplitRegister *reg = table->user_data;
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   Transaction *new_trans;
   Transaction *trans;
+  PhysicalCell *pcell;
   Split *trans_split;
   Split *new_split;
-  gncBoolean saved;
-  Locator *locator;
   int new_cell_row;
   int new_cell_col;
   int phys_row_offset;
   int phys_col_offset;
+  gboolean saved;
 
   PINFO ("start callback %d %d \n", new_phys_row, new_phys_col);
 
@@ -658,7 +663,8 @@ LedgerMoveCursor (Table *table,
     new_trans = xaccSRGetTrans(reg, new_phys_row, new_phys_col);
 
     /* The split we are moving to */
-    new_split = xaccGetUserData(reg->table, new_phys_row, new_phys_col);
+    new_split = gnc_table_get_user_data_physical(reg->table,
+                                                 new_phys_row, new_phys_col);
 
     /* The split at the transaction line we are moving to */
     trans_split = xaccSRGetTransSplit(reg, new_phys_row, new_phys_col);
@@ -680,9 +686,10 @@ LedgerMoveCursor (Table *table,
   }
   else
   {
-    locator = table->locators[new_phys_row][new_phys_col];
-    new_cell_row = locator->phys_row_offset;
-    new_cell_col = locator->phys_col_offset;
+    pcell = gnc_table_get_physical_cell (table, new_phys_row, new_phys_col);
+
+    new_cell_row = pcell->virt_loc.phys_row_offset;
+    new_cell_col = pcell->virt_loc.phys_col_offset;
   }
 
   /* commit the contents of the cursor into the database */
@@ -708,12 +715,12 @@ LedgerMoveCursor (Table *table,
      * then it may have moved. Find out where it is now. */
     if (xaccSRGetTransSplitRowCol (reg, new_trans, trans_split, new_split,
                                    &virt_row, &virt_col)) {
-      RevLocator *rev_locator;
+      VirtualCell *vcell;
 
-      rev_locator = table->rev_locators[virt_row][virt_col];
+      vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
 
-      new_phys_row = rev_locator->phys_row;
-      new_phys_col = rev_locator->phys_col;
+      new_phys_row = vcell->phys_loc.phys_row;
+      new_phys_col = vcell->phys_loc.phys_col;
 
       new_phys_row += new_cell_row;
       new_phys_col += new_cell_col;
@@ -751,8 +758,8 @@ LedgerMoveCursor (Table *table,
 
   reg->cursor_phys_row = new_phys_row;
 
-  locator = table->locators[new_phys_row][new_phys_col];
-  reg->cursor_virt_row = locator->virt_row;
+  pcell = gnc_table_get_physical_cell (table, new_phys_row, new_phys_col);
+  reg->cursor_virt_row = pcell->virt_loc.virt_row;
 
   /* if auto-expansion is enabled, we need to redraw the register
    * to expand out the splits at the new location. We use the
@@ -767,7 +774,8 @@ LedgerMoveCursor (Table *table,
     trans_split = xaccSRGetTransSplit(reg, new_phys_row, new_phys_col);
     info->cursor_hint_trans_split = trans_split;
 
-    new_split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
+    new_split = gnc_table_get_user_data_physical (reg->table,
+                                                  new_phys_row, new_phys_col);
     info->cursor_hint_split = new_split;
 
     info->cursor_hint_phys_col = new_phys_col;
@@ -1002,10 +1010,10 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccBasicCellSetChanged (&(reg->ncreditCell->cell), GNC_T);
 
       /* copy cursor contents into the table */
-      xaccCommitCursor (reg->table);
+      gnc_table_commit_cursor (reg->table);
 
       /* and refresh the gui */
-      xaccRefreshTableGUI (reg->table);
+      gnc_table_refresh_gui (reg->table);
 
       /* now move to the non-empty amount column */
       amount = xaccSplitGetShareAmount (auto_split);
@@ -1036,10 +1044,9 @@ static void
 LedgerTraverse (Table *table,
                 int *p_new_phys_row,
                 int *p_new_phys_col,
-                gncTableTraversalDir dir,
-                void * client_data)
+                gncTableTraversalDir dir)
 {
-  SplitRegister *reg = client_data;
+  SplitRegister *reg = table->user_data;
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   Transaction *trans, *new_trans;
@@ -1061,7 +1068,7 @@ LedgerTraverse (Table *table,
   changed = xaccSplitRegisterGetChangeFlag(reg);
   if (!changed && (pending_trans != trans))
   {
-    if (gnc_register_cell_valid(table, phys_row, phys_col, GNC_F))
+    if (gnc_table_physical_cell_valid(table, phys_row, phys_col, FALSE))
       return;
 
     if (phys_row < reg->num_header_rows)
@@ -1083,8 +1090,12 @@ LedgerTraverse (Table *table,
   if ((phys_row >= 0) && (phys_col >= 0) &&
       (phys_row < table->num_phys_rows) && (phys_col < table->num_phys_cols))
   {
-    virt_row = table->locators[phys_row][phys_col]->virt_row;
-    virt_col = table->locators[phys_row][phys_col]->virt_col;
+    PhysicalCell *pcell;
+
+    pcell = gnc_table_get_physical_cell (table, phys_row, phys_col);
+
+    virt_row = pcell->virt_loc.virt_row;
+    virt_col = pcell->virt_loc.virt_col;
 
     if ((virt_row == table->current_cursor_virt_row) &&
         (virt_col == table->current_cursor_virt_col))
@@ -1148,7 +1159,8 @@ LedgerTraverse (Table *table,
       Split *new_split;
       Split *trans_split;
 
-      new_split = xaccGetUserData(reg->table, phys_row, phys_col);
+      new_split = gnc_table_get_user_data_physical(reg->table,
+                                                   phys_row, phys_col);
       trans_split = xaccSRGetTransSplit(reg, phys_row, phys_col);
 
       xaccSRCancelCursorTransChanges(reg);
@@ -1156,11 +1168,11 @@ LedgerTraverse (Table *table,
       if (xaccSRGetTransSplitRowCol (reg, new_trans, trans_split, new_split,
                                      &virt_row, &virt_col))
       {
-        RevLocator *rev_locator;
+        VirtualCell *vcell;
 
-        rev_locator = table->rev_locators[virt_row][virt_col];
+        vcell = gnc_table_get_virtual_cell (table, virt_row, virt_col);
 
-        phys_row = rev_locator->phys_row;
+        phys_row = vcell->phys_loc.phys_row;
       }
 
       if (phys_row >= table->num_phys_rows)
@@ -1185,9 +1197,9 @@ LedgerTraverse (Table *table,
 /* ======================================================== */
 
 static void
-LedgerSetHelp (Table *table, const char *help_str, void *client_data)
+LedgerSetHelp (Table *table, const char *help_str)
 {
-  SplitRegister *reg = client_data;
+  SplitRegister *reg = table->user_data;
   SRInfo *info = xaccSRGetInfo(reg);
 
   if (info->set_help == NULL)
@@ -1219,7 +1231,7 @@ LedgerDestroy (SplitRegister *reg)
         pending_trans = NULL;
       }
 
-      xaccTransBeginEdit (trans, 1);
+      xaccTransBeginEdit (trans, TRUE);
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
 
@@ -1245,24 +1257,24 @@ static Transaction *
 xaccSRGetTrans (SplitRegister *reg, int phys_row, int phys_col)
 {
   Split *split;
+  PhysicalCell *pcell;
   int virt_row, virt_col;
 
   if (reg == NULL)
     return NULL;
 
-  if ((phys_row < 0) || (phys_col < 0) ||
-      (phys_row >= reg->table->num_phys_rows) ||
-      (phys_col >= reg->table->num_phys_cols))
+  pcell = gnc_table_get_physical_cell (reg->table, phys_row, phys_col);
+  if (pcell == NULL)
     return NULL;
 
-  split = xaccGetUserData(reg->table, phys_row, phys_col);
+  split = gnc_table_get_user_data_physical (reg->table, phys_row, phys_col);
   if (split != NULL)
     return xaccSplitGetParent(split);
 
   /* Split is blank. Assume it is the blank split of a multi-line
    * transaction. Go back one row to find a split in the transaction. */
-  virt_row = reg->table->locators[phys_row][phys_col]->virt_row;
-  virt_col = reg->table->locators[phys_row][phys_col]->virt_col;
+  virt_row = pcell->virt_loc.virt_row;
+  virt_col = pcell->virt_loc.virt_col;
 
   virt_row --;
   if ((0 > virt_row) || (0 > virt_col)) {
@@ -1270,7 +1282,7 @@ xaccSRGetTrans (SplitRegister *reg, int phys_row, int phys_col)
     return NULL;
   }
 
-  split = (Split *) reg->table->user_data[virt_row][virt_col];
+  split = gnc_table_get_user_data_virtual (reg->table, virt_row, virt_col);
   if (split == NULL) {
     PERR ("no parent \n");
     return NULL;
@@ -1286,24 +1298,24 @@ xaccSRGetTransSplit (SplitRegister *reg, int phys_row, int phys_col)
 {
   CursorType cursor_type;
   int virt_row, virt_col;
+  PhysicalCell *pcell;
 
   if (reg == NULL)
     return NULL;
 
-  if ((phys_row < 0) || (phys_col < 0) ||
-      (phys_row >= reg->table->num_phys_rows) ||
-      (phys_col >= reg->table->num_phys_cols))
+  pcell = gnc_table_get_physical_cell (reg->table, phys_row, phys_col);
+  if (pcell == NULL)
     return NULL;
 
-  virt_row = reg->table->locators[phys_row][phys_col]->virt_row;
-  virt_col = reg->table->locators[phys_row][phys_col]->virt_col;
+  virt_row = pcell->virt_loc.virt_row;
+  virt_col = pcell->virt_loc.virt_col;
 
   while (1)
   {
     cursor_type = xaccSplitRegisterGetCursorTypeRowCol (reg,
                                                         virt_row, virt_col);
     if (cursor_type == CURSOR_TRANS)
-      return reg->table->user_data[virt_row][virt_col];
+      return gnc_table_get_user_data_virtual (reg->table, virt_row, virt_col);
 
     virt_row --;
 
@@ -1320,6 +1332,7 @@ static Split *
 xaccSRGetCurrentTransSplit (SplitRegister *reg)
 {
   Split *split;
+  PhysicalCell *pcell;
   CursorType cursor_type;
   int phys_row, phys_col;
   int virt_row, virt_col;
@@ -1338,13 +1351,12 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg)
   phys_row = reg->table->current_cursor_phys_row;
   phys_col = reg->table->current_cursor_phys_col;
 
-  if ((phys_row < 0) || (phys_col < 0) ||
-      (phys_row >= reg->table->num_phys_rows) ||
-      (phys_col >= reg->table->num_phys_cols))
+  pcell = gnc_table_get_physical_cell (reg->table, phys_row, phys_col);
+  if (pcell == NULL)
     return NULL;
 
-  virt_row = reg->table->locators[phys_row][phys_col]->virt_row;
-  virt_col = reg->table->locators[phys_row][phys_col]->virt_col;
+  virt_row = pcell->virt_loc.virt_row;
+  virt_col = pcell->virt_loc.virt_col;
 
   while (1)
   {
@@ -1358,7 +1370,7 @@ xaccSRGetCurrentTransSplit (SplitRegister *reg)
     cursor_type = xaccSplitRegisterGetCursorTypeRowCol (reg,
                                                         virt_row, virt_col);
     if (cursor_type == CURSOR_TRANS)
-      return reg->table->user_data[virt_row][virt_col];
+      return gnc_table_get_user_data_virtual (reg->table, virt_row, virt_col);
   }
 }
 
@@ -1368,6 +1380,7 @@ Transaction *
 xaccSRGetCurrentTrans (SplitRegister *reg)
 {
   Split *split;
+  PhysicalCell *pcell;
   int phys_row, phys_col;
   int virt_row, virt_col;
 
@@ -1383,13 +1396,12 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
   phys_row = reg->table->current_cursor_phys_row;
   phys_col = reg->table->current_cursor_phys_col;
 
-  if ((phys_row < 0) || (phys_col < 0) ||
-      (phys_row >= reg->table->num_phys_rows) ||
-      (phys_col >= reg->table->num_phys_cols))
+  pcell = gnc_table_get_physical_cell (reg->table, phys_row, phys_col);
+  if (pcell == NULL)
     return NULL;
 
-  virt_row = reg->table->locators[phys_row][phys_col]->virt_row;
-  virt_col = reg->table->locators[phys_row][phys_col]->virt_col;
+  virt_row = pcell->virt_loc.virt_row;
+  virt_col = pcell->virt_loc.virt_col;
 
   virt_row --;
   if ((0 > virt_row) || (0 > virt_col)) {
@@ -1397,7 +1409,7 @@ xaccSRGetCurrentTrans (SplitRegister *reg)
     return NULL;
   }
 
-  split = (Split *) reg->table->user_data[virt_row][virt_col];
+  split = gnc_table_get_user_data_virtual (reg->table, virt_row, virt_col);
 
   return xaccSplitGetParent(split);
 }
@@ -1431,7 +1443,7 @@ xaccSRGetBlankSplit (SplitRegister *reg)
 
 /* ======================================================== */
 
-gncBoolean
+gboolean
 xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
                       int *virt_row, int *virt_col)
 {
@@ -1442,7 +1454,7 @@ xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
   for (v_row = 1; v_row < table->num_virt_rows; v_row++)
     for (v_col = 0; v_col < table->num_virt_cols; v_col++)
     {
-      s = (Split *) table->user_data[v_row][v_col];
+      s = gnc_table_get_user_data_virtual (table, v_row, v_col);
 
       if (s == split)
       {
@@ -1460,15 +1472,15 @@ xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
 
 /* ======================================================== */
 
-gncBoolean
+gboolean
 xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
                            Split *trans_split, Split *split,
                            int *virt_row, int *virt_col)
 {
   Table *table = reg->table;
-  gncBoolean found_trans = GNC_F;
-  gncBoolean found_trans_split = GNC_F;
-  gncBoolean found_something = GNC_F;
+  gboolean found_trans = GNC_F;
+  gboolean found_trans_split = GNC_F;
+  gboolean found_something = GNC_F;
   CursorType cursor_type;
   int v_row, v_col;
   Transaction *t;
@@ -1477,7 +1489,7 @@ xaccSRGetTransSplitRowCol (SplitRegister *reg, Transaction *trans,
   for (v_row = 1; v_row < table->num_virt_rows; v_row++)
     for (v_col = 0; v_col < table->num_virt_cols; v_col++)
     {
-      s = table->user_data[v_row][v_col];
+      s = gnc_table_get_user_data_virtual (table, v_row, v_col);
       t = xaccSplitGetParent(s);
 
       cursor_type = xaccSplitRegisterGetCursorTypeRowCol(reg, v_row, v_col);
@@ -1908,8 +1920,8 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
 
   account = xaccSplitGetAccount(split);
 
-  xaccTransBeginEdit(trans, 1);
-  xaccAccountBeginEdit(account, 1);
+  xaccTransBeginEdit(trans, TRUE);
+  xaccAccountBeginEdit(account, TRUE);
   xaccSplitDestroy(split);
   xaccAccountCommitEdit(account);
   xaccTransCommitEdit(trans);
@@ -1960,7 +1972,7 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
       pending_trans = NULL;
     }
 
-    xaccTransBeginEdit (trans, 1);
+    xaccTransBeginEdit (trans, TRUE);
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
 
@@ -1978,7 +1990,7 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
 
   accounts = gnc_trans_prepend_account_list(trans, NULL);
 
-  xaccTransBeginEdit(trans, 1);
+  xaccTransBeginEdit(trans, TRUE);
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 
@@ -2030,7 +2042,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
       pending_trans = NULL;
     }
 
-    xaccTransBeginEdit (trans, 1);
+    xaccTransBeginEdit (trans, TRUE);
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
 
@@ -2049,7 +2061,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
   accounts = gnc_trans_prepend_account_list(trans, NULL);
   splits = gnc_trans_prepend_split_list(trans, NULL);
 
-  xaccTransBeginEdit(trans, 1);
+  xaccTransBeginEdit(trans, TRUE);
   for (node = splits; node; node = node->next)
     if (node->data != split)
       xaccSplitDestroy(node->data);
@@ -2090,9 +2102,9 @@ xaccSRCancelCursorSplitChanges (SplitRegister *reg)
   xaccSplitRegisterClearChangeFlag(reg);
 
   if (gnc_table_find_valid_cell_horiz(reg->table, &row, &col, GNC_F))
-    xaccMoveCursorGUI(reg->table, row, col);
+    gnc_table_move_cursor_gui(reg->table, row, col);
 
-  xaccRefreshTableGUI(reg->table);
+  gnc_table_refresh_gui(reg->table);
 }
 
 /* ======================================================== */
@@ -2155,7 +2167,7 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
 /* Copy from the register object to scheme. This needs to be
  * in sync with xaccSRSaveRegEntry and xaccSRSaveChangedCells. */
 
-static gncBoolean
+static gboolean
 xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 {
   Transaction *trans;
@@ -2313,8 +2325,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 /* ======================================================== */
 /* Copy from the register object to the engine */
 
-gncBoolean
-xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
+gboolean
+xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 {
    GList *refresh_accounts;
    SRInfo *info = xaccSRGetInfo(reg);
@@ -2914,7 +2926,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 
       {
          Split *s = xaccGetOtherSplit (split);
-         gncBoolean need_to_free = GNC_F;
+         gboolean need_to_free = GNC_F;
 
          if (s) {
             accname = xaccAccountGetFullName (xaccSplitGetAccount (s),
@@ -2955,7 +2967,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
    reg->table->current_cursor->user_data = split;
 
    /* copy cursor contents into the table */
-   xaccCommitCursor (reg->table);
+   gnc_table_commit_cursor (reg->table);
 
    LEAVE("SRLoadTransEntry()\n");
 }
@@ -2976,24 +2988,24 @@ xaccSRCountRows (SplitRegister *reg,
    SRInfo *info = xaccSRGetInfo(reg);
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
    CellBlock *lead_cursor;
+   PhysicalCell *pcell;
    Transaction *trans;
    Split *split;
-   Locator *locator;
    Table *table;
 
-   gncBoolean found_split = GNC_F;
-   gncBoolean found_trans = GNC_F;
-   gncBoolean found_trans_split = GNC_F;
-   gncBoolean on_blank_split = GNC_F;
-   gncBoolean did_expand = GNC_F;
-   gncBoolean on_trans_split;
-   gncBoolean multi_line;
-   gncBoolean dynamic;
+   gboolean found_split = GNC_F;
+   gboolean found_trans = GNC_F;
+   gboolean found_trans_split = GNC_F;
+   gboolean on_blank_split = GNC_F;
+   gboolean did_expand = GNC_F;
+   gboolean on_trans_split;
+   gboolean multi_line;
+   gboolean dynamic;
 
    SplitRegisterStyle style;
    int save_cursor_phys_row;
    int save_cursor_virt_row;
-   int save_cell_row;
+   int save_cell_row = -1;
    int num_phys_rows;
    int num_virt_rows;
    int i;
@@ -3002,12 +3014,10 @@ xaccSRCountRows (SplitRegister *reg,
    style = reg->style;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
-   if ((REG_SINGLE_LINE == style) ||
-       (REG_SINGLE_DYNAMIC == style)) {
+   if ((REG_SINGLE_LINE == style) || (REG_SINGLE_DYNAMIC == style))
       lead_cursor = reg->single_cursor;
-   } else {
+   else
       lead_cursor = reg->double_cursor;
-   }
 
    /* save the current cursor location; if we can't find the
     * requested transaction/split pair, we restore the 
@@ -3016,9 +3026,11 @@ xaccSRCountRows (SplitRegister *reg,
    save_cursor_virt_row = reg->cursor_virt_row;
 
    /* save the current cell row offset */
-   locator = table->locators[reg->table->current_cursor_phys_row]
-                            [reg->table->current_cursor_phys_col];
-   save_cell_row = locator->phys_row_offset;
+   pcell = gnc_table_get_physical_cell (table,
+                                        table->current_cursor_phys_row,
+                                        table->current_cursor_phys_col);
+   if (pcell)
+     save_cell_row = pcell->virt_loc.phys_row_offset;
    if (save_cell_row < 0)
      save_cell_row = 0;
 
@@ -3066,7 +3078,7 @@ xaccSRCountRows (SplitRegister *reg,
    while (split) {
       /* do not count the blank split */
       if (split != blank_split) {
-         gncBoolean do_expand;
+         gboolean do_expand;
 
          trans = xaccSplitGetParent(split);
 
@@ -3288,14 +3300,14 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    Split *split;
    Table *table;
 
-   gncBoolean found_pending = GNC_F;
-   gncBoolean found_split = GNC_F;
-   gncBoolean found_trans = GNC_F;
-   gncBoolean found_trans_split = GNC_F;
-   gncBoolean did_expand = GNC_F;
-   gncBoolean on_blank_split;
-   gncBoolean multi_line;
-   gncBoolean dynamic;
+   gboolean found_pending = GNC_F;
+   gboolean found_split = GNC_F;
+   gboolean found_trans = GNC_F;
+   gboolean found_trans_split = GNC_F;
+   gboolean did_expand = GNC_F;
+   gboolean on_blank_split;
+   gboolean multi_line;
+   gboolean dynamic;
 
    SplitRegisterType type;
    SplitRegisterStyle style;
@@ -3313,7 +3325,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
      trans = xaccMallocTransaction ();
 
-     xaccTransBeginEdit (trans, 1);
+     xaccTransBeginEdit (trans, TRUE);
      xaccTransSetDateSecs(trans, info->last_date_entered);
      xaccTransCommitEdit (trans);
 
@@ -3374,15 +3386,15 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* disable move callback -- we don't want the cascade of 
     * callbacks while we are fiddling with loading the register */
    table->move_cursor = NULL;
-   xaccMoveCursorGUI (table, -1, -1);
+   gnc_table_move_cursor_gui (table, -1, -1);
 
    /* resize the table to the sizes we just counted above */
    /* num_virt_cols is always one. */
-   xaccSetTableSize (table, reg->num_phys_rows, reg->num_cols, 
-                            reg->num_virt_rows, 1);
+   gnc_table_set_size (table, reg->num_phys_rows, reg->num_cols, 
+                       reg->num_virt_rows, 1);
 
    /* make sure that the header is loaded */
-   xaccSetCursor (table, reg->header, 0, 0, 0, 0);
+   gnc_table_set_cursor (table, reg->header, 0, 0, 0, 0);
 
    PINFO ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
 
@@ -3404,7 +3416,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       /* do not load the blank split */
       if (split != blank_split) {
          Transaction *trans;
-         gncBoolean do_expand;
+         gboolean do_expand;
 
          PINFO ("load trans %d at phys row %d \n", i, phys_row);
 
@@ -3434,8 +3446,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
             Split * secondary;
             int j = 0;
 
-            xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-            xaccMoveCursor (table, phys_row, 0);
+            gnc_table_set_cursor (table, reg->trans_cursor,
+                                  phys_row, 0, vrow, 0);
+            gnc_table_move_cursor (table, phys_row, 0);
             xaccSRLoadRegEntry (reg, split);
             vrow ++;
             phys_row += reg->trans_cursor->numRows; 
@@ -3448,9 +3461,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                secondary = xaccTransGetSplit (trans, j);
 
                if (secondary != split) {
-                  xaccSetCursor (table, reg->split_cursor,
-                                 phys_row, 0, vrow, 0);
-                  xaccMoveCursor (table, phys_row, 0);
+                  gnc_table_set_cursor (table, reg->split_cursor,
+                                        phys_row, 0, vrow, 0);
+                  gnc_table_move_cursor (table, phys_row, 0);
                   xaccSRLoadRegEntry (reg, secondary);
                   PINFO ("load split %d at phys row %d addr=%p \n", 
                           j, phys_row, secondary);
@@ -3463,8 +3476,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
          } else {
             /* the simple case ... */
-            xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
-            xaccMoveCursor (table, phys_row, 0);
+            gnc_table_set_cursor (table, lead_cursor, phys_row, 0, vrow, 0);
+            gnc_table_move_cursor (table, phys_row, 0);
             xaccSRLoadRegEntry (reg, split);
             vrow ++;
             phys_row += lead_cursor->numRows; 
@@ -3486,8 +3499,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
    if (multi_line || (dynamic && info->blank_split_edited)) {
       /* do the transaction row of the blank split */
-      xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-      xaccMoveCursor (table, phys_row, 0);
+      gnc_table_set_cursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
+      gnc_table_move_cursor (table, phys_row, 0);
       xaccSRLoadRegEntry (reg, split);
       vrow ++;
       phys_row += reg->trans_cursor->numRows; 
@@ -3503,9 +3516,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
           secondary = xaccTransGetSplit (trans, j);
 
           if (secondary != split) {
-            xaccSetCursor (table, reg->split_cursor,
-                           phys_row, 0, vrow, 0);
-            xaccMoveCursor (table, phys_row, 0);
+            gnc_table_set_cursor (table, reg->split_cursor,
+                                  phys_row, 0, vrow, 0);
+            gnc_table_move_cursor (table, phys_row, 0);
             xaccSRLoadRegEntry (reg, secondary);
             PINFO ("load split %d at phys row %d addr=%p \n", 
                    j, phys_row, secondary);
@@ -3517,8 +3530,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
         } while (secondary);
       }
    } else {
-      xaccSetCursor (table, lead_cursor, phys_row, 0, vrow, 0);
-      xaccMoveCursor (table, phys_row, 0);
+      gnc_table_set_cursor (table, lead_cursor, phys_row, 0, vrow, 0);
+      gnc_table_move_cursor (table, phys_row, 0);
       xaccSRLoadRegEntry (reg, split);
       vrow ++;
       phys_row += lead_cursor->numRows; 
@@ -3531,13 +3544,13 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
      if (gnc_table_find_valid_cell_horiz(table, &row, &col, GNC_F))
      {
-       xaccMoveCursorGUI(table, row, col);
+       gnc_table_move_cursor_gui(table, row, col);
        reg->cursor_phys_row = row;
 
        if (reg_buffer != NULL)
        {
          xaccSplitRegisterRestoreCursorChanged(reg, reg_buffer);
-         xaccCommitCursor (table);
+         gnc_table_commit_cursor (table);
        }
      }
 
@@ -3567,7 +3580,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    info->hint_set_by_traverse = GNC_F;
    info->exact_traversal = GNC_F;
 
-   xaccRefreshTableGUI (table);
+   gnc_table_refresh_gui (table);
 
    /* set the completion character for the xfer cells */
    xaccComboCellSetCompleteChar (reg->mxfrmCell, account_separator);
@@ -3578,7 +3591,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    table->move_cursor = LedgerMoveCursor;
    table->traverse = LedgerTraverse;
    table->set_help = LedgerSetHelp;
-   table->client_data = reg;
+   table->user_data = reg;
 
    reg->destroy = LedgerDestroy;
 }
@@ -3592,7 +3605,7 @@ LoadXferCell (ComboCell *cell,
               const char *base_currency,
               const char *base_security)
 {
-  gncBoolean load_everything;
+  gboolean load_everything;
   Account * acc;
   char *name;
   int n;
@@ -3683,7 +3696,7 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
 
 /* ======================================================== */
 
-gncBoolean
+gboolean
 xaccSRHasPendingChanges (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo(reg);
