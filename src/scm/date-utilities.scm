@@ -216,6 +216,7 @@
     (set-tm:year zd 0)
     (set-tm:yday zd 0)
     (set-tm:wday zd 0)
+    (set-tm:isdst zd 0)
     zd))
 
 (define SecDelta 
@@ -288,6 +289,7 @@
     (set-tm:hour bdt 23)
     (let ((newtime (car (mktime bdt))))
       (cons newtime 0))))
+
 (define (gnc:reldate-get-symbol x) (vector-ref x 0))
 (define (gnc:reldate-get-string x) (vector-ref x 1))
 (define (gnc:reldate-get-desc x) (vector-ref x 2))
@@ -311,7 +313,6 @@
     (if rel-date-data
        ((gnc:reldate-get-fn rel-date-data))
        (gnc:error "Tried to look up an undefined date symbol"))))
-    
 
 (define (gnc:get-relative-date-strings date-symbol)
   (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))
@@ -334,6 +335,7 @@
     (set-tm:hour now 0)
     (set-tm:mday now 1)
     (set-tm:mon now 0)
+    (set-tm:isdst now 0)
     (gnc:secs->timepair (car (mktime now)))))
 
 (define (gnc:get-start-prev-year)
@@ -344,7 +346,8 @@
     (set-tm:mday now 1)
     (set-tm:mon now 0)
     (set-tm:year now (- (tm:year now) 1))
-    (gnc:secs->timepair (car (mktime now))))) 
+    (set-tm:isdst now 0)
+    (gnc:secs->timepair (car (mktime now)))))
 
 (define (gnc:get-end-prev-year)
   (let ((now (localtime (current-time))))
@@ -354,8 +357,8 @@
     (set-tm:mday now 31)
     (set-tm:mon now 11)
     (set-tm:year now (- (tm:year now) 1))
-    (gnc:secs->timepair (car (mktime now))))) 
-
+    (set-tm:isdst now 0)
+    (gnc:secs->timepair (car (mktime now)))))
 
 ;; FIXME:: Replace with option when it becomes available
 (define (gnc:get-start-cur-fin-year)
@@ -388,7 +391,6 @@
 	  (set-tm:mon now 6)
 	  (set-tm:year now (- (tm:year now) 2))
 	  (cons (car (mktime now)) 0))
-		      
 	(begin
 	  (set-tm:sec now 0)
 	  (set-tm:min now 0)
@@ -408,7 +410,6 @@
 	  (set-tm:mday now 30)
 	  (set-tm:mon now 5)
 	  (cons (car (mktime now)) 0))
-		      
 	(begin
 	  (set-tm:sec now 59)
 	  (set-tm:min now 59)
@@ -452,7 +453,6 @@
     (set-tm:mday (gnc:days-in-month (+ (tm:month now) 1)) (+ (tm:year) 1900))
     (cons (car (mktime now)) 0)))
     
-
 (define (gnc:get-start-current-quarter)
   (let ((now (localtime (current-time))))
     (set-tm:sec now 0)

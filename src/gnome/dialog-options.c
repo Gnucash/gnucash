@@ -81,7 +81,7 @@ gnc_date_option_set_select_method(GNCOption *option, gboolean use_absolute,
 {
   GList* widget_list;
   GtkWidget *ab_button, *rel_button, *rel_widget, *ab_widget;
- 
+
   widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
   ab_button = g_list_nth_data(widget_list, GNC_RD_WID_AB_BUTTON_POS);
   ab_widget = g_list_nth_data(widget_list, GNC_RD_WID_AB_WIDGET_POS);
@@ -206,9 +206,9 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
     int index;
     char *date_option_type;
     char *symbol_str;
-    
+
     date_option_type = gnc_option_date_option_get_subtype(option);
-    
+
     if (gh_vector_p(value))
     {
       symbol = gh_vector_ref(value, gh_int2scm(0));
@@ -253,7 +253,7 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 	  if (gnc_timepair_p(tp))
 	  {
 	    ts = gnc_timepair2timespec(tp);
-	    
+
 	    if (safe_strcmp(date_option_type, "absolute") == 0)
 	    {
 	      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
@@ -284,7 +284,6 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 	}
 	free(symbol_str);
       }
-    
     }
     else
     {
@@ -456,7 +455,8 @@ gnc_option_get_ui_value(GNCOption *option)
   {
     int index;
     SCM type, val;
-    char *subtype =  gnc_option_date_option_get_subtype(option);
+    char *subtype = gnc_option_date_option_get_subtype(option);
+
     if(safe_strcmp(subtype, "relative") == 0)
     {
       index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(option->widget),
@@ -468,10 +468,10 @@ gnc_option_get_ui_value(GNCOption *option)
     else if (safe_strcmp(subtype, "absolute") == 0)
     { 		      
       Timespec ts;
-      
+
       ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(option->widget));
       ts.tv_nsec = 0;
-      
+
       result = gh_cons(gh_symbol2scm("absolute"), gnc_timespec2timepair(ts));
     }
     else if (safe_strcmp(subtype, "both") == 0)
@@ -503,8 +503,7 @@ gnc_option_get_ui_value(GNCOption *option)
     }
     g_free(subtype);
   }
-  
-else if (safe_strcmp(type, "account-list") == 0)
+  else if (safe_strcmp(type, "account-list") == 0)
   {
     GNCAccountTree *tree;
     GList *list;

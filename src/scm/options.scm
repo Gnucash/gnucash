@@ -314,9 +314,9 @@
 	 (or 
 	  (and (eq? 'relative (car date)) (symbol? (cdr date)))
           (and (eq? 'absolute (car date)) 
-		    (pair? (cdr date)) 
-		    (exact? (cadr date)) 
-		    (exact? (cddr date))))))
+               (pair? (cdr date)) 
+               (exact? (cadr date)) 
+               (exact? (cddr date))))))
   (define (list-lookup list item)
     (cond
      ((null? list) #f)
@@ -327,30 +327,29 @@
                           (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name sort-tag 'date documentation-string
-    (lambda () 
+     (lambda () 
        (if (eq? (car value) 'relative)
-   
 	   (vector 'relative (gnc:get-absolute-from-relative-date
                               (cdr value)) (cdr value))
 	   (vector 'absolute (cdr value))))
      (lambda (date)
        (if (date-legal date)
            (set! value date)
-          (gnc:error "Illegal date value set")))
+           (gnc:error "Illegal date value set")))
      default-getter
      (gnc:restore-form-generator value->string)
      (lambda (date)
        (if (date-legal date)
            (list #t date)
-          (list #f "date-option: illegal date")))
+           (list #f "date-option: illegal date")))
      (vector subtype show-time relative-date-list) 
      (vector (lambda () (length relative-date-list))
-       (lambda (x) (list-ref relative-date-list x))
-       (lambda (x) (gnc:get-relative-date-string
-                    (list-ref relative-date-list x)))
-       (lambda (x) (gnc:get-relative-date-desc
-                    (list-ref relative-date-list x)))
-       (lambda (x) (list-lookup relative-date-list x)))
+             (lambda (x) (list-ref relative-date-list x))
+             (lambda (x) (gnc:get-relative-date-string
+                          (list-ref relative-date-list x)))
+             (lambda (x) (gnc:get-relative-date-desc
+                          (list-ref relative-date-list x)))
+             (lambda (x) (list-lookup relative-date-list x)))
      #f
      #f)))
 

@@ -75,7 +75,7 @@
       (display ")")
       (newline)
       (newline port))))
-  
+
     (define (report-output->string tree)
       (call-with-output-string
        (lambda (port)
