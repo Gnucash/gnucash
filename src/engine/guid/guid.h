@@ -31,9 +31,12 @@
 /* This file defines an API for using globally unique identifiers. */
 
 /* The type used to store guids */
-typedef struct _GUID
+typedef union _GUID
 {
   unsigned char data[16];
+
+  int __align_me; /* this just ensures that GUIDs are 32-bit
+                   * aligned on systems that need them to be. */
 } GUID;
 
 
