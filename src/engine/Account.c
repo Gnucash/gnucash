@@ -39,13 +39,6 @@
 #include "TransactionP.h"
 #include "util.h"
 
-/* The unsafe_ops flag allows certain unsafe manipulations to be 
- * performed on the data structures. Normally, this is disabled,
- * as it can lead to scrambled data.
- * hack alert -- this should be a configurable parameter.
- */
-int unsafe_ops = 1;
-
 int next_free_unique_account_id = 0;
 
 static short module = MOD_ENGINE; 
@@ -1077,18 +1070,6 @@ xaccAccountSetCurrency (Account *acc, const char *str)
    if ((!acc) || (!str)) return;
    CHECK (acc);
 
-   if (acc->currency && (0x0 != acc->currency[0])) {
-      if (unsafe_ops) {
-         PWARN ( "it is dangerous to change the currency denomination of an account! \n"
-                "\tAccount=%s old currency=%s new currency=%s \n",
-                acc->accountName, acc->currency, str);
-      } else {
-         PERR ("the currency denomination of an account cannot be changed!\n"
-                "\tAccount=%s \n", acc->accountName);
-         return;
-      }
-   }
-   /* free the zero-length string */
    if (acc->currency) free (acc->currency);
    acc->currency = strdup (str);
 }
@@ -1099,18 +1080,6 @@ xaccAccountSetSecurity (Account *acc, const char *str)
    if ((!acc) || (!str)) return;
    CHECK (acc);
 
-   if (acc->security && (0x0 != acc->security[0])) {
-      if (unsafe_ops) {
-         PWARN ("it is dangerous to change the security denomination of an account! \n"
-                "\tAccount=%s old security=%s new security=%s \n",
-                acc->accountName, acc->security, str);
-      } else {
-         PERR ("the security denomination of an account cannot be changed!\n"
-               "\tAccount=%s \n", acc->accountName);
-         return;
-      }
-   }
-   /* free the zero-length string */
    if (acc->security) free (acc->security);
    acc->security = strdup (str);
 }
