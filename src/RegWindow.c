@@ -106,7 +106,7 @@ typedef struct _RegWindow {
 
 
 /** PROTOTYPES ******************************************************/
-RegWindow * regWindowLedger( Widget parent, Account **acclist );
+RegWindow * regWindowLedger( Widget parent, Account **acclist, int type);
 
 static double regRecalculateBalance( RegWindow *regData );
 static void regSaveTransaction( RegWindow *regData, int position );
@@ -443,12 +443,17 @@ regRefresh( RegWindow *regData )
         }  
           break;
 
+        case PORTFOLIO: 
         case INC_LEDGER: 
         case GEN_LEDGER: {
            Account * acc;
            int show;
            themount = trans->damount;
-           sprintf( buf, "%.2f ", themount );
+           if (PORTFOLIO == regData->type) {
+              sprintf( buf, "%.3f ", themount );
+           } else {
+              sprintf( buf, "%.2f ", themount );
+           }
 
            acc = (Account *) (trans->debit);
            show = xaccIsAccountInList (acc, regData->blackacc);
@@ -467,6 +472,7 @@ regRefresh( RegWindow *regData )
            }
         }  
           break;
+
         default:
           fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", 
                   regData->type);
@@ -1063,6 +1069,7 @@ regSaveTransaction( RegWindow *regData, int position )
         }
         break;
 
+      case PORTFOLIO:
       case INC_LEDGER: 
       case GEN_LEDGER: {
         Account *acc;
@@ -1087,7 +1094,11 @@ regSaveTransaction( RegWindow *regData, int position )
         }
         trans->damount = themount;
 
-        sprintf( buf, "%.2f ", themount );
+        if (PORTFOLIO == regData->type) {
+          sprintf( buf, "%.3f ", themount );
+        } else {
+          sprintf( buf, "%.2f ", themount );
+        }
         if (show_debit) {
           XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, buf );
         } else {
@@ -1278,25 +1289,94 @@ regWindowSimple( Widget parent, Account *acc )
   acclist[0] = acc;
   acclist[1] = NULL;
 
-  retval = regWindowLedger (parent, acclist);
+  retval = regWindowLedger (parent, acclist, acc->type);
   return retval;
   }
+
 /********************************************************************\
- * regWindow                                                        *
- *   opens up a register window for Account account                 *
+ * regWindowAccGroup                                                *
+ *   opens up a register window for a group of Accounts             *
  *                                                                  *
  * Args:   parent  - the parent of this window                      *
  *         acc     - the account associated with this register      *
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindowLedger( Widget parent, Account **acclist )
+regWindowAccGroup( Widget parent, Account *acc )
+  {
+  RegWindow *retval;
+  Account **list;
+  int ledger_type;
+  Account *le;
+  int n;
+
+  list = xaccGroupToList (acc);
+
+  switch (acc->type) {
+    case BANK:
+    case CASH:
+    case ASSET:
+    case CREDIT:
+    case LIABILITY:
+       /* if any of the sub-accounts have STOCK or MUTUAL types,
+        * then we must use the PORTFOLIO type ledger.  Otherise,
+        * a plain old GEN_LEDGER will do. */
+       ledger_type = GEN_LEDGER;
+
+       le = list[0];
+       n = 0;
+       while (le) {
+          if ((STOCK == le->type) || (MUTUAL == le->type)) {
+             ledger_type = PORTFOLIO;
+          }
+          n++;
+          le = list[n];
+       }
+       break;
+
+    case STOCK:
+    case MUTUAL:
+       ledger_type = PORTFOLIO;
+       break;
+    
+    case INCOME:
+    case EXPENSE:
+       ledger_type = INC_LEDGER;
+       break;
+
+    case EQUITY:
+       ledger_type = GEN_LEDGER;
+       break;
+
+    default:
+      PERR (" regWindowAccGroup(): unknown account type \n");
+      _free (list);
+      return;
+  }
+  retval = regWindowLedger (parent, list, ledger_type);
+
+  if (list) _free (list);
+
+  return retval;
+  }
+
+/********************************************************************\
+ * regWindowLedger                                                  *
+ *   opens up a ledger window for the account list                  *
+ *                                                                  *
+ * Args:   parent  - the parent of this window                      *
+ *         acc     - the account associated with this register      *
+ * Return: regData - the register window instance                   *
+\********************************************************************/
+RegWindow *
+regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   {
   Transaction *trans;
   RegWindow   *regData;
   Widget menubar, pane, buttonform, frame, reg, widget;
   int    position=0;
   char *windowname;
+  char buf [BUFSIZE];
 
   setBusyCursor( parent );
   
@@ -1331,19 +1411,20 @@ regWindowLedger( Widget parent, Account **acclist )
     return NULL;
   }
 
-  /* if there is only once account that we are supposed 
-   * to display, use that account type as the display type. */
+  regData->type = ledger_type;
+
   if (1 == regData->numAcc) {
-    regData->type = regData->blackacc[0]->type;
     regData->qf   = regData->blackacc[0]->qfRoot;
 
     /* avoid having two open registers for one account */
     regData->blackacc[0]->regData = regData;    
     windowname = regData->blackacc[0]->accountName;
   } else {
-    regData->type = GEN_LEDGER;
-    windowname = "ledger";  /* hack alert -- append account name */
-    regData->qf   = regData->blackacc[0]->qfRoot;  /* hack alert -- this probably broken */
+    sprintf (buf, "%s General Ledger", regData->blackacc[0]->accountName);
+    windowname = buf;
+
+    /* hack alert -- quickfill for ledgers is almost certainly broken */
+    regData->qf   = regData->blackacc[0]->qfRoot;  
     /* hack alert -- xxxx -- do the ledgerlist thing */
   }
 
@@ -1568,6 +1649,7 @@ regWindowLedger( Widget parent, Account **acclist )
         regData->cellRowLocation [XTO_CELL_ID]  = -1;
         break;
 
+      case PORTFOLIO:
       case INC_LEDGER:
       case GEN_LEDGER:
         regData->cellRowLocation [XTO_CELL_ID]  = 1;
@@ -1605,6 +1687,7 @@ regWindowLedger( Widget parent, Account **acclist )
         break;
       case STOCK:
       case MUTUAL:
+      case PORTFOLIO:
         regData -> columnWidths[PRIC_CELL_C] = 8;   /* price */
         regData -> columnWidths[SHRS_CELL_C] = 8;   /* share balance */
         break;
@@ -1639,6 +1722,7 @@ regWindowLedger( Widget parent, Account **acclist )
 
       case STOCK:
       case MUTUAL:
+      case PORTFOLIO:
         regData -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
         break;
@@ -1679,6 +1763,7 @@ regWindowLedger( Widget parent, Account **acclist )
         break;
       case STOCK:
       case MUTUAL:
+      case PORTFOLIO:
         regData -> columnLabels[0][PRIC_CELL_C] = "Price";
         regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
         break;
@@ -1720,6 +1805,7 @@ regWindowLedger( Widget parent, Account **acclist )
         break;
       case STOCK:
       case MUTUAL:
+      case PORTFOLIO:
         regData -> columnLabels[0][PAY_CELL_C] = "Sold";
         regData -> columnLabels[0][DEP_CELL_C] = "Bought";
         break;

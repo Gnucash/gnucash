@@ -138,7 +138,24 @@ xaccGroupToList (Account *acc)
    n = 1;
    if (acc->children) {
       for (i=0; i<acc->children->numAcc; i++) {
-         list[i+1] = acc->children->account[i];
+         list[n] = acc->children->account[i];
+
+         /* recursively add children too */
+         if (acc->children->account[i]->children) {
+            Account **childlist;
+            Account *childacc;
+            int ic = 0;
+
+            childlist = xaccGroupToList (acc->children->account[i]);
+            childacc = childlist[0];
+            while (childacc) {
+              n++;
+              list[n] = childacc;
+              childacc = childlist[ic];
+              ic ++;
+            }
+            _free(childlist);
+         }
          n++;
       }
    }

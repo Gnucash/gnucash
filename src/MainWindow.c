@@ -377,7 +377,7 @@ mainWindow( Widget parent )
       accountMenubarCB, (XtPointer)AMB_NEW,  (MenuItem *)NULL },
     { "Open Account",       &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_OPEN, (MenuItem *)NULL },
-    { "Open in Ledger",     &xmPushButtonWidgetClass, 'O', NULL, NULL, False,
+    { "Open Subaccounts",   &xmPushButtonWidgetClass, 'O', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_LEDGER, (MenuItem *)NULL },
     { "Edit Account...",    &xmPushButtonWidgetClass, 'E', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_EDIT, (MenuItem *)NULL },
@@ -956,12 +956,8 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case AMB_LEDGER:
       DEBUG("AMB_LEDGER\n");
       {
-        Account **list;
-        list = xaccGroupToList (selected_acc);
-
-        /* hack alert xxxxxxxxxxx -- don't double open */
-        regWindowLedger ( toplevel, list );
-        if (list) _free (list);
+        /* hack alert xxxxxxxxxxx -- don't double open  this group! */
+        regWindowAccGroup ( toplevel, selected_acc );
       }
       break;
 
