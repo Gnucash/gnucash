@@ -476,8 +476,8 @@
   ;; containing the function code executed and the txf-string or error message
   (define (txf-function acc txf-inc txf-exp txf-payer)
     (if acc
-	(let ((txf-type (gnc:account-type->symbol
-			 (gnc:account-get-type acc))))
+	(let ((txf-type (gw:enum-GNCAccountType-val->sym
+			 (gnc:account-get-type acc) #f)))
 	  (if (is-type-income-or-expense? txf-type)
 	      (let* ((str (if (is-type-income? txf-type)
 			      (txf-string txf-inc 
@@ -585,8 +585,8 @@
       (if (and txf?
 	       ;; (not (equal? account-value 0.0)) ; fails, round off, I guess
 	       (not (equal? value (gnc:amount->string 0 print-info))))
-	  (let* ((type (gnc:account-type->symbol (gnc:account-get-type
-						  account)))
+	  (let* ((type (gw:enum-GNCAccountType-val->sym (gnc:account-get-type
+                                                         account) #f))
 		 (code (gnc:account-get-txf-code account))
 		 (date-str (if date
 			       (strftime "%m/%d/%Y" (localtime (car date)))
@@ -668,15 +668,15 @@
 	   (append (list account-name) nbsp-x-value) 
 	   align-x)
 	  '())))
-  
+
   (define (is-type-income-or-expense? type)
-    (member type '(INCOME EXPENSE)))
-  
+    (member type '(income expense)))
+
   (define (is-type-income? type)
-    (member type '(INCOME)))
-  
+    (member type '(income)))
+
   ;; Recursivly validate children if parent is not a tax account.
-  ;; Don't check children if parent is vaild.
+  ;; Don't check children if parent is valid.
   ;; Returns the Parent if a child or grandchild is valid.
   (define (validate accounts hierarchical?)
     (if hierarchical?
@@ -905,7 +905,8 @@
 	    '()))
       
       (define (handle-level-x-account level account)
-	(let ((type (gnc:account-type->symbol (gnc:account-get-type account)))
+	(let ((type (gw:enum-GNCAccountType-val->sym
+                     (gnc:account-get-type account) #f))
 	      (name (gnc:account-get-name account)))
 	  (if (or hierarchical? (is-type-income-or-expense? type))
 	      (let* ((children (gnc:account-get-children account))
