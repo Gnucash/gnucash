@@ -4,8 +4,6 @@
 lib_LTLIBRARIES = libgnc_postgres.la
 libgnc_postgres_la_LDFLAGS = -version-info 7:0:7
 
-libgnc_postgres_la_LIBADD = ../libgncengine.la
-
 libgnc_postgres_la_SOURCES = \
   PostgresBackend.c \
   account.c \
