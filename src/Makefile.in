@@ -29,6 +29,7 @@ VPATH    = @srcdir@
 CC       = @CC@
 INCLPATH = -I/usr/include \
            -I.. \
+           -I/usr/local/include \
            -I@x_includes@/. \
            -I@srcdir@/../include \
            -I@srcdir@/../lib/ComboBox-1.33 \
@@ -42,7 +43,7 @@ INCLPATH = -I/usr/include \
 CFLAGS   = @cflags@ -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
-LIBPATH  = -L/lib -L/usr/lib -L@x_libraries@/.
+LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib -L@x_libraries@/.
 TARGET   = ../xacc.bin
 STATIC   = ../xacc-static.bin
 
