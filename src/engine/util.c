@@ -228,7 +228,7 @@ rstrstr (const char *haystack, const char * needle)
     const char * hp = haystack + haylen - 1;
     const char * np = needle + neelen - 1;
 
-    if ((0 == neelen) || (0 == haylen)) return 0x0;
+    if ((0 == neelen) || (0 == haylen)) return NULL;
 
     while (hp >= haystack+neelen) {
         if (*hp == *np) {
@@ -240,7 +240,7 @@ rstrstr (const char *haystack, const char * needle)
         --hp;
     }
 
-    return 0x0;
+    return NULL;
 }
 
 
@@ -519,10 +519,10 @@ PrintAmt(char *buf, double val, int prec,
          gboolean monetary,
          int min_trailing_zeros)
 {
-  int i, stringLength, numWholeDigits, sepCount;
+  int i, string_length, num_whole_digits;
   struct lconv *lc = gnc_localeconv();
-  char tempBuf[50];
-  char *bufPtr = buf;
+  char decimal_point;
+  char temp_buf[50];
 
   /* check if we're printing infinity */
   if (!finite(val)) {
@@ -530,10 +530,38 @@ PrintAmt(char *buf, double val, int prec,
     return 3;
   }
 
+  /* print the absolute value */
   if (val < 0.0)
     val = DABS(val);
 
-  util_fptostr(tempBuf, val, prec);
+  /* print the value without separators */
+  util_fptostr(temp_buf, val, prec);
+
+  if (monetary)
+    decimal_point = lc->mon_decimal_point[0];
+  else
+    decimal_point = lc->decimal_point[0];
+
+  /* fix up the decimal place, if there is one */
+  string_length = strlen(temp_buf);
+  num_whole_digits = -1;
+
+  for (i = string_length - 1; i >= 0; i--)
+    if ((temp_buf[i] == '.') ||
+        (temp_buf[i] == lc->mon_decimal_point[0]) ||
+        (temp_buf[i] == lc->decimal_point[0]))
+    {
+      temp_buf[i] = decimal_point;
+      num_whole_digits = i;
+      break;
+    }
+
+  if (num_whole_digits < 0)
+    num_whole_digits = string_length;  /* Can't find decimal place, it's
+                                        * a whole number */
+
+  /* just a quick check */
+  assert (num_whole_digits > 0);
 
   /* Here we strip off trailing decimal zeros per the argument. */
   if (prec > 0)
@@ -543,73 +571,82 @@ PrintAmt(char *buf, double val, int prec,
 
     max_delete = prec - min_trailing_zeros;
 
-    p = tempBuf + strlen(tempBuf) - 1;
+    p = temp_buf + strlen(temp_buf) - 1;
 
     while ((*p == '0') && (max_delete > 0))
     {
-      *p-- = 0;
+      *p-- = '\0';
       max_delete--;
     }
 
-    if (*p == '.')
-      *p = 0;
+    if (*p == decimal_point)
+      *p = '\0';
   }
 
   if (!use_separators)
   {
-    /* fix up the decimal place, if there is one */
-    stringLength = strlen(tempBuf);
-    numWholeDigits = -1;
-    for (i = stringLength - 1; i >= 0; i--) {
-      if (tempBuf[i] == '.') {
-        if (monetary)
-          tempBuf[i] = lc->mon_decimal_point[0];
-        else
-          tempBuf[i] = lc->decimal_point[0];
-        break;
-      }
-    }
-
-    strcpy(buf, tempBuf);
+    strcpy(buf, temp_buf);
   }
   else
   {
-    /* Determine where the decimal place is, if there is one */
-    stringLength = strlen(tempBuf);
-    numWholeDigits = -1;
-    for (i = stringLength - 1; i >= 0; i--) {
-      if ((tempBuf[i] == '.') || (tempBuf[i] == lc->decimal_point[0])) {
-        numWholeDigits = i;
-        if (monetary)
-          tempBuf[i] = lc->mon_decimal_point[0];
-        else
-          tempBuf[i] = lc->decimal_point[0];
-        break;
-      }
+    int group_count;
+    char separator;
+    char *temp_ptr;
+    char *buf_ptr;
+    char *group;
+
+    if (monetary)
+    {
+      separator = lc->mon_thousands_sep[0];
+      group = lc->mon_grouping;
+    }
+    else
+    {
+      separator = lc->thousands_sep[0];
+      group = lc->grouping;
     }
 
-    if (numWholeDigits < 0)
-      numWholeDigits = stringLength;  /* Can't find decimal place, it's
-                                       * a whole number */
+    buf_ptr = buf;
+    temp_ptr = &temp_buf[num_whole_digits - 1];
+    group_count = 0;
 
-    /* We now know the number of whole digits, now insert separators while
-     * copying them from the temp buffer to the destination */
-    bufPtr = buf;
-    for (i = 0; i < numWholeDigits; i++, bufPtr++) {
-      *bufPtr = tempBuf[i];
-      sepCount = (numWholeDigits - i) - 1;
-      if ((sepCount % 3 == 0) &&
-          (sepCount != 0))
+    while (temp_ptr != temp_buf)
+    {
+      *buf_ptr++ = *temp_ptr--;
+
+      if (*group != CHAR_MAX)
       {
-        bufPtr++;
-        if (monetary)
-          *bufPtr = lc->mon_thousands_sep[0];
-        else
-          *bufPtr = lc->thousands_sep[0];
+        group_count++;
+
+        if (group_count == *group)
+        {
+          *buf_ptr++ = separator;
+          group_count = 0;
+
+          /* Peek ahead at the next group code */
+          switch (group[1])
+          {
+            /* A null char means repeat the last group indefinitely */
+            case '\0':
+              break;
+            /* CHAR_MAX means no more grouping allowed */
+            case CHAR_MAX:
+              /* fall through */
+            /* Anything else means another group size */
+            default:
+              group++;
+              break;
+          }
+        }
       }
     }
 
-    strcpy(bufPtr, &tempBuf[numWholeDigits]);
+    /* We built the string backwards, now reverse */
+    *buf_ptr++ = *temp_ptr;
+    *buf_ptr = '\0';
+    g_strreverse(buf);
+
+    strcpy(buf_ptr, &temp_buf[num_whole_digits]);
   } /* endif */
 
   return strlen(buf);
@@ -957,6 +994,10 @@ xaccParseAmount (const char * in_str, gboolean monetary, double *result,
           *out++ = *in; /* we record the digits themselves in out_str
                          * for later conversion by libc routines */
           next_state = PRE_GROUP_ST;
+        }
+        else if (*in == decimal_point)
+        {
+          next_state = FRAC_ST;
         }
         else if (isspace(*in))
         {
