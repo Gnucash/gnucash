@@ -2131,7 +2131,7 @@ xaccGetAccountByFullName (Transaction *trans, const char * name,
       s = trans->splits[i];
    }
    
-   if (!acc) return 0x0;
+   if (!acc) return NULL;
 
    acc = xaccGetPeerAccountFromFullName (acc, name, separator);
    return acc;

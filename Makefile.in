@@ -199,13 +199,13 @@ install:
   # Share directory
   # Try to do this in a platform independent way...
   # Directories
-	for dir in `find share/scm/ -type d`; do \
+	for dir in `find share/scm/ -type d -follow`; do \
     dest=`echo $$dir | cut -c 11-` ;\
 		mkdir -p ${GNC_SHAREDIR}/scm/$$dest; \
   done
 
   # Files
-	for file in `find share/scm/ -name "*.scm"`; do \
+	for file in `find share/scm/ -name "*.scm" -follow`; do \
     dest=`echo $$file | cut -c 11-` ;\
 		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
   done

@@ -376,6 +376,19 @@ xaccCommitDateCell (DateCell *cell)
 
 /* ================================================ */
 
+void
+xaccDateCellGetDate (DateCell *cell, Timespec *ts)
+{
+  if (!cell || !ts) return;
+
+  xaccParseDate (&(cell->date), cell->cell.value);
+
+  ts->tv_sec = mktime(&cell->date);
+  ts->tv_nsec = 0;
+}
+
+/* ================================================ */
+
 DateCell *
 xaccMallocDateCell (void)
 {

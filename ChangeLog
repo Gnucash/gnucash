@@ -1,3 +1,14 @@
+2000-05-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* Makefile.in: add -follow arguments to find commands
+
+	* Makefile.common (CFLAGS): removed hard-coded profiling option
+
+	* configure.in: add a profiling argument.
+
+	* src/guile/gnucash.c: use putenv, not setenv. putenv is POSIX,
+	seems to be more common.
+
 2000-05-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* many: removed use of SCM registry in favor of scm_protect_object

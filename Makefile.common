@@ -42,7 +42,7 @@ MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
 QT_OBJS    := $(addprefix obj/qt/,${COMMON_SRCS:.c=.o})
 QT_OBJS    += $(addprefix obj/qt/,${QT_SRCS:.cpp=.o})
 
-CFLAGS += -pg ${DEFS}
+CFLAGS += ${DEFS}
 
 ifdef GNOME_CONFIG_BIN
   GNOME_CFLAGS += $(shell ${GNOME_CONFIG_BIN} --cflags gnomeui)

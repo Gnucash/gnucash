@@ -1,14 +1,3 @@
-/*
- * FILE:
- * recncell.c
- * 
- * FUNCTION:
- * Implements a mouse-click cell that allows a series
- * of values to be clicked through.
- *
- * HISTORY:
- * Copyright (c) 1998 Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,9 +10,25 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
+
+/*
+ * FILE:
+ * recncell.c
+ * 
+ * FUNCTION:
+ * Implements a mouse-click cell that allows a series
+ * of values to be clicked through.
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +37,7 @@
 #include "basiccell.h"
 #include "recncell.h"
 #include "ui-callbacks.h"
+#include "messages.h"
 
 /* hack alert -- I am uncomfortable with including engine
  * stuff here; all code in this directory should really be 
@@ -40,6 +46,7 @@
  * do some day.
  */
 #include "Transaction.h"
+
 
 /* ================================================ */
 
@@ -59,10 +66,7 @@ ToggleRecn (BasicCell *_cell, const char *cur_val,
       but that's still perhaps not optimal...  */
 
    if(cur_val[0] == YREC) {
-     if(!gnc_verify_dialog("Do you really want to mark this transaction"
-                           "not reconciled?\nDoing so might make future"
-                           "reconciliation difficult!",
-			   GNC_T)) {
+     if(!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T)) {
        return strdup(cur_val);
      }
    }

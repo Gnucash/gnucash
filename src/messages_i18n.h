@@ -82,6 +82,9 @@
                             "choose an account to reconcile.\n")
 #define AMOUNT_NUM_MSG    _("The amount must be a number.")
 #define BALANCE_NUM_MSG   _("The balance must be a number.")
+#define CHANGE_RECN_MSG   _("Do you really want to mark this transaction"\
+                            "not reconciled?\nDoing so might make future"\
+                            "reconciliation difficult!")
 #define DEL_SPLITS_MSG    _("Delete all the splits")
 #define DEL_TRANS_MSG     _("Delete the whole transaction")
 #define DEL_USUAL_MSG     _("This selection will delete the whole "\

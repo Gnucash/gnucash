@@ -88,7 +88,10 @@
 #define __XACC_DATE_CELL_C__
 
 #include <time.h>
+
 #include "basiccell.h"
+#include "Transaction.h"
+
 
 typedef struct _DateCell {
    BasicCell cell;
@@ -105,6 +108,8 @@ void       xaccSetDateCellValueSecs (DateCell *, time_t secs);
 void       xaccSetDateCellValueSecsL (DateCell *, long long secs);
 
 void       xaccCommitDateCell (DateCell *);
+
+void       xaccDateCellGetDate (DateCell *cell, Timespec *ts);
 
 #endif /* __XACC_DATE_CELL_C__ */
 

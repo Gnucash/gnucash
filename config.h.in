@@ -42,6 +42,9 @@
 /* Standard C headers present */
 #undef STDC_HEADERS
 
+/* limits.h header present */
+#undef HAVE_LIMITS_H
+
 /* memcpy present */
 #undef HAVE_MEMCPY
 

@@ -184,7 +184,6 @@ static SRReverseBalanceCallback reverse_balance = NULL;
 
 /* The copied split or transaction, if any */
 static SCM copied_item = SCM_UNDEFINED;
-static SCM copied_item_id = SCM_UNDEFINED;
 
 /* static prototypes */
 static void xaccSRLoadRegEntry (SplitRegister *reg, Split *split);
@@ -278,9 +277,7 @@ xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
 }
 
 
-/* copies basic split values from 'from' split to 'to' split.
- * doesn't copy reconciled flag, or open the parent transactions
- * for editing. Does *not* insert the 'to' split into an account!! */
+/* Uses the scheme split copying routines */
 static void
 gnc_copy_split_onto_split(Split *from, Split *to)
 {
@@ -296,48 +293,20 @@ gnc_copy_split_onto_split(Split *from, Split *to)
   gnc_copy_split_scm_onto_split(split_scm, to);
 }
 
-/* copies the basic transaction values and the splits from the
- * 'from' trans to the 'to' trans. Any existing splits in the
- * 'to' trans are deleted. Does *not* open the 'to' trans for
- * editing!!! Splits are copied using gnc_copy_split_onto_split
- * above. The new splits will be in exactly the same order as in
- * the 'from' transaction. */
+/* Uses the scheme transaction copying routines */
 static void
-gnc_copy_trans(Transaction *from, Transaction *to)
+gnc_copy_trans_onto_trans(Transaction *from, Transaction *to)
 {
-  Split *from_split, *to_split;
-  Timespec timespec;
-  int num_splits;
-  int i;
+  SCM trans_scm;
 
   if ((from == NULL) || (to == NULL))
     return;
 
-  /* remove the old splits */
-  to_split = xaccTransGetSplit(to, 0);
-  while (to_split != NULL)
-  {
-    xaccSplitDestroy(to_split);
-    to_split = xaccTransGetSplit(to, 0);
-  }
+  trans_scm = gnc_copy_trans(from);
+  if (trans_scm == SCM_UNDEFINED)
+    return;
 
-  /* add in the new splits */
-  num_splits = xaccTransCountSplits(from);
-  for (i = 0; i < num_splits; i++)
-  {
-    from_split = xaccTransGetSplit(from, i);
-
-    to_split = xaccMallocSplit();
-    gnc_copy_split_onto_split(from_split, to_split);
-
-    xaccTransAppendSplit(to, to_split);
-  }
-
-  /* now do the transaction-specific values */
-  xaccTransGetDateTS(from, &timespec);
-  xaccTransSetDateTS(to, &timespec);
-  xaccTransSetDescription(to, xaccTransGetDescription(from));
-  xaccTransSetDocref(to, xaccTransGetDocref(from));
+  gnc_copy_trans_scm_onto_trans(trans_scm, to);
 }
 
 /* ======================================================== */
@@ -467,7 +436,8 @@ LedgerMoveCursor (Table *table,
     else if (new_phys_col >= table->num_phys_cols)
       new_phys_col = table->num_phys_cols - 1;
 
-    gnc_table_find_valid_cell_horiz(table, &new_phys_row, &new_phys_col, GNC_F);
+    gnc_table_find_valid_cell_horiz(table, &new_phys_row,
+                                    &new_phys_col, GNC_F);
 
     *p_new_phys_row = new_phys_row;
     *p_new_phys_col = new_phys_col;
@@ -887,46 +857,35 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   else
   {
     Transaction *new_trans;
+    int split_index;
     int num_splits;
     int i;
 
     /* We are on a transaction row. Copy the whole transaction. */
 
+    split_index = -1;
+    num_splits = xaccTransCountSplits(trans);
+    for (i = 0; i < num_splits; i++)
+      if (xaccTransGetSplit(trans, i) == split)
+      {
+        split_index = i;
+        break;
+      }
+
+    /* we should *always* find the split, but be paranoid */
+    if (split_index < 0)
+      return NULL;
+
     new_trans = xaccMallocTransaction();
 
-    xaccTransBeginEdit(new_trans, GNC_T);
-
-    gnc_copy_trans(trans, new_trans);
-
-    num_splits = xaccTransCountSplits(trans);
-    return_split = NULL;
-
-    /* Link the new splits into the accounts. */
-    for (i = 0; i < num_splits; i++)
-    {
-      Account *account;
-      Split *old_split;
-      Split *new_split;
-
-      old_split = xaccTransGetSplit(trans, i);
-      account = xaccSplitGetAccount(old_split);
-
-      new_split = xaccTransGetSplit(new_trans, i);
-
-      xaccAccountBeginEdit(account, GNC_T);
-      xaccAccountInsertSplit(account, new_split);
-      xaccAccountCommitEdit(account);
-
-      /* Returned split is the transaction split */
-      if (old_split == split)
-        return_split = new_split;
-    }
-
-    xaccTransCommitEdit(new_trans);
+    gnc_copy_trans_onto_trans(trans, new_trans);
 
     /* This shouldn't happen, but be paranoid. */
-    if (return_split == NULL)
-      return_split = xaccTransGetSplit(new_trans, 0);
+    num_splits = xaccTransCountSplits(new_trans);
+    if (split_index >= num_splits)
+      split_index = 0;
+
+    return_split = xaccTransGetSplit(new_trans, split_index);
   }
 
   /* Refresh the GUI. */
@@ -1247,6 +1206,168 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
 }
 
 /* ======================================================== */
+/* Copy from the register object to scheme.
+ * This needs to be in sync with xaccSRSaveRegEntry. */
+
+static gncBoolean
+xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
+{
+  Transaction *trans;
+  unsigned int changed;
+  int style;
+
+  /* use the changed flag to avoid heavy-weight updates
+   * of the split & transaction fields. This will help
+   * cut down on uneccessary register redraws. */
+  changed = xaccSplitRegisterGetChangeFlag (reg);
+  if (!changed)
+    return GNC_F;
+
+  style = (reg->type) & REG_STYLE_MASK;   
+
+  /* get the handle to the current split and transaction */
+  trans = xaccSRGetCurrentTrans (reg);
+  if (trans == NULL)
+    return GNC_F;
+
+  /* copy the contents from the cursor to the split */
+  if (MOD_DATE & changed) {
+    Timespec ts;
+
+    xaccDateCellGetDate(reg->dateCell, &ts);
+    gnc_trans_scm_set_date(trans_scm, &ts);
+  }
+
+  if (MOD_NUM & changed)
+    gnc_trans_scm_set_num(trans_scm, reg->numCell->cell.value);
+
+  if (MOD_DESC & changed)
+    gnc_trans_scm_set_description(trans_scm, reg->descCell->cell.value);
+
+  if (MOD_RECN & changed)
+    gnc_split_scm_set_reconcile_state(split_scm, reg->recnCell->value[0]);
+
+  if (MOD_ACTN & changed)
+    gnc_split_scm_set_action(split_scm, reg->actionCell->cell.value);
+
+  if (MOD_MEMO & changed)
+    gnc_split_scm_set_memo(split_scm, reg->memoCell->cell.value);
+
+  if ((MOD_XFRM | MOD_XTO) & changed) {
+    Account *new_account;
+    char *new_name;
+
+    if (MOD_XFRM & changed)
+      new_name = reg->xfrmCell->cell.value;
+    else
+      new_name = reg->xtoCell->cell.value;
+
+    new_account = xaccGetAccountByFullName(trans, new_name, account_separator);
+
+    if (new_account != NULL)
+      gnc_split_scm_set_account(split_scm, new_account);
+  }
+
+  if (MOD_MXFRM & changed) {
+    SCM other_split_scm;
+
+    other_split_scm = gnc_trans_scm_get_other_split_scm(trans_scm, split_scm);
+
+    if (other_split_scm == SCM_UNDEFINED) {
+      if (gnc_trans_scm_get_num_splits(trans_scm) == 1) {
+        Split *temp_split;
+        char *temp_string;
+        double price;
+        double amount;
+
+        temp_split = xaccMallocSplit ();
+        other_split_scm = gnc_copy_split(temp_split);
+        xaccSplitDestroy(temp_split);
+
+        temp_string = gnc_split_scm_get_memo(split_scm);
+        if (temp_string != NULL) {
+          gnc_split_scm_set_memo(other_split_scm, temp_string);
+          free(temp_string);
+        }
+
+        temp_string = gnc_split_scm_get_action(split_scm);
+        if (temp_string != NULL) {
+          gnc_split_scm_set_action(other_split_scm, temp_string);
+          free(temp_string);
+        }
+
+        price = gnc_split_scm_get_share_price(other_split_scm);
+        amount = gnc_split_scm_get_share_amount(other_split_scm);
+        gnc_split_scm_set_share_price_and_amount(other_split_scm,
+                                                 price, amount);
+
+        gnc_trans_scm_append_split_scm(trans_scm, other_split_scm);
+      }
+    }
+
+    if (other_split_scm != SCM_UNDEFINED) {
+      Account *new_account;
+
+      new_account = xaccGetAccountByFullName(trans, reg->mxfrmCell->cell.value,
+                                             account_separator);
+
+      if (new_account != NULL)
+        gnc_split_scm_set_account(other_split_scm, new_account);
+    }
+  }
+
+  if ((MOD_AMNT | MOD_NAMNT) & changed) {
+    double new_amount;
+    double price;
+    double credit;
+    double debit;
+
+    if (MOD_AMNT & changed) {
+      credit = xaccGetPriceCellValue(reg->creditCell);
+      debit  = xaccGetPriceCellValue(reg->debitCell);
+      new_amount = debit - credit;
+    } else {
+      credit = xaccGetPriceCellValue(reg->ncreditCell);
+      debit  = xaccGetPriceCellValue(reg->ndebitCell);
+      new_amount = -(debit - credit);
+    }
+
+    price = gnc_split_scm_get_share_price(split_scm);
+
+    if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
+        (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+        (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+        (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))
+      ;
+    else
+      new_amount = new_amount / price;
+
+    gnc_split_scm_set_share_price_and_amount(split_scm, price, new_amount);
+  }
+
+  if (MOD_PRIC & changed) {
+    double price;
+    double amount;
+
+    price = xaccGetPriceCellValue(reg->priceCell);
+    amount = gnc_split_scm_get_share_amount(split_scm);
+
+    gnc_split_scm_set_share_price_and_amount(split_scm, price, amount);
+  }
+
+  if (MOD_VALU & changed) {
+    double value = xaccGetPriceCellValue(reg->valueCell);
+    double price = gnc_split_scm_get_share_price(split_scm);
+
+    value = value / price;
+
+    gnc_split_scm_set_share_price_and_amount(split_scm, price, value);
+  }
+
+  return GNC_T;
+}
+
+/* ======================================================== */
 /* Copy from the register object to the engine */
 
 gncBoolean
@@ -1262,7 +1383,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
-    * cut down on uneccessary register redraws.  */
+    * cut down on uneccessary register redraws. */
    changed = xaccSplitRegisterGetChangeFlag (reg);
    if (!changed)
      return GNC_F;

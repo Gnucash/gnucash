@@ -145,7 +145,7 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
       value = gh_cdr(value);
 
       row = gnc_option_permissible_value_index(option, item);
-      if (index < 0)
+      if (row < 0)
       {
         bad_value = TRUE;
         break;

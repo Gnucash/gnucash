@@ -40,7 +40,9 @@ AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 AC_HEADER_STDC
 
+AC_CHECK_HEADERS(limits.h)
 AC_CHECK_FUNCS(stpcpy memcpy)   
+
 
 ### --------------------------------------------------------------------------
 ### Variables
@@ -69,6 +71,11 @@ AC_ARG_ENABLE( debug,
        LDFLAGS="${LDFLAGS} -g -Wall"
        AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1),
        AC_DEFINE(DEBUG_MEMORY,0) AC_DEFINE(USE_DEBUG,0) )
+
+AC_ARG_ENABLE( profile,
+       [  --enable-profile          compile with profiling set],
+       CFLAGS="${CFLAGS} -pg"
+       LDFLAGS="${LDFLAGS} -pg")
 
 AC_ARG_ENABLE( warnings,
        [  --enable-warnings         compile with lots of warnings generated],
