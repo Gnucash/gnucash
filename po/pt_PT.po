@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 1.6.3\n"
-"POT-Creation-Date: 2001-09-22 01:23+0100\n"
+"POT-Creation-Date: 2001-09-22 18:50-0700\n"
 "PO-Revision-Date: 2001-09-22 22:45-0700\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: NONE \n"
@@ -3932,8 +3932,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
-"Identificar e corrigir transacções não balanceadas e parcelas orfãs "
-"nesta conta" 
+"Identificar e corrigir transacções não balanceadas e parcelas orfãs nesta "
+"conta"
 
 # src/gnome/window-main.c:1175
 #: src/gnome/window-acct-tree.c:798
@@ -3946,8 +3946,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Identificar e corrigir transacções não balanceadas e parcelas orfãs "
-"nesta conta e suas sub-contas"
+"Identificar e corrigir transacções não balanceadas e parcelas orfãs nesta "
+"conta e suas sub-contas"
 
 #: src/gnome/window-acct-tree.c:807
 msgid "Check & Repair A_ll"
@@ -3958,8 +3958,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
 msgstr ""
-"Identificar e corrigir transacções não balanceadas e parcelas orfãs "
-"em todas as contas"
+"Identificar e corrigir transacções não balanceadas e parcelas orfãs em todas "
+"as contas"
 
 # src/gnome/window-main.c:1197 src/gnome/window-reconcile.c:1058
 #: src/gnome/window-acct-tree.c:822 src/gnome/window-reconcile.c:1158
@@ -4912,8 +4912,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "transactions of this account"
 msgstr ""
-"Identificar e corrigir transacções não balanceadas e parcelas orfãs em "
-"todas as transacções desta conta"
+"Identificar e corrigir transacções não balanceadas e parcelas orfãs em todas "
+"as transacções desta conta"
 
 #: src/gnome/window-register.c:1539
 msgid "Check & _Repair Current"

@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-08-24 21:33+0200\n"
+"POT-Creation-Date: 2001-09-22 18:50-0700\n"
 "PO-Revision-Date: 2001-08-24 23:24+02:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
@@ -192,8 +192,9 @@ msgstr ""
 "Möchten Sie die Datei zur aktuellen Version aktualisieren lassen?"
 
 #: src/FileDialog.c:186
+#, fuzzy
 msgid ""
-"The SQL database is in use by other users,and the upgrade cannot be "
+"The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff.\n"
 "If there are currently no other users, consult the \n"
 "documentation to learn how to clear out dangling login\n"
@@ -333,7 +334,7 @@ msgid "Changed"
 msgstr "Geändert"
 
 #: src/SplitLedger.c:3102 src/SplitLedger.c:3104 src/SplitLedger.c:4063
-#: src/gnome/dialog-price-editor.c:735 src/gnome/glade-gnc-dialogs.c:1374
+#: src/gnome/dialog-price-editor.c:743 src/gnome/glade-gnc-dialogs.c:1374
 #: src/gnome/glade-gnc-dialogs.c:7430 src/register/splitreg.c:229
 #: src/scm/report/guile-strings.c:418 src/scm/report/guile-strings.c:425
 #: src/scm/report/guile-strings.c:462 src/scm/report/guile-strings.c:470
@@ -378,7 +379,7 @@ msgstr "Belastung"
 msgid "Credit"
 msgstr "Gutschrift"
 
-#: src/SplitLedger.c:4027 src/gnome/dialog-price-editor.c:732
+#: src/SplitLedger.c:4027 src/gnome/dialog-price-editor.c:740
 #: src/gnome/glade-gnc-dialogs.c:960 src/gnome/glade-gnc-dialogs.c:4803
 #: src/gnome/glade-gnc-dialogs.c:4851 src/gnome/glade-gnc-dialogs.c:7409
 #: src/gnome/reconcile-list.c:163 src/scm/report/guile-strings.c:159
@@ -521,7 +522,7 @@ msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
 #: src/engine/Account.c:1875 src/gnc-ui-util.c:130
-#: src/gnome/dialog-price-editor.c:731 src/gnome/glade-gnc-dialogs.c:7402
+#: src/gnome/dialog-price-editor.c:739 src/gnome/glade-gnc-dialogs.c:7402
 #: src/scm/guile-strings.c:96 src/scm/guile-strings.c:149
 #: src/scm/guile-strings.c:159
 msgid "Currency"
@@ -549,7 +550,7 @@ msgstr "Eigenkapital"
 msgid "Orphan"
 msgstr "Ausbuchungskonto"
 
-#: src/engine/Scrub.c:307
+#: src/engine/Scrub.c:309
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
@@ -591,7 +592,7 @@ msgid "Numeric error"
 msgstr "Numerischer Fehler"
 
 #: src/gnc-ui-util.c:115 src/gnome/dialog-commodities.c:339
-#: src/gnome/dialog-price-editor.c:734 src/gnome/glade-gnc-dialogs.c:7423
+#: src/gnome/dialog-price-editor.c:742 src/gnome/glade-gnc-dialogs.c:7423
 #: src/gnome/glade-gnc-dialogs.c:7825 src/gnome/new-user-interface.c:398
 #: src/scm/guile-strings.c:155
 msgid "Type"
@@ -896,12 +897,12 @@ msgstr "Alte Preise entfernen"
 msgid "All prices before the date below will be deleted."
 msgstr "Alle Preise vor dem untenstehenden Datum werden gelöscht."
 
-#: src/gnome/dialog-price-editor.c:730 src/gnome/glade-gnc-dialogs.c:7395
+#: src/gnome/dialog-price-editor.c:738 src/gnome/glade-gnc-dialogs.c:7395
 #: src/scm/guile-strings.c:82
 msgid "Commodity"
 msgstr "Währung/Aktie"
 
-#: src/gnome/dialog-price-editor.c:733 src/gnome/glade-gnc-dialogs.c:7416
+#: src/gnome/dialog-price-editor.c:741 src/gnome/glade-gnc-dialogs.c:7416
 msgid "Source"
 msgstr "Quelle"
 
