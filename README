@@ -155,6 +155,14 @@ built for motif-1.2 compatibility.
 These core dumps do not occur with RedHat Motif (or other commercial
 versions of Motif).
 
+Other Tools
+-----------
+A tool to generate (ascii) reports from gnucash/xacc files can be found 
+at http://www.zeta.org.au/~grahamc/xacc_rpts.html.
+
+A tool to cleanup & import Quicken files can be found at (insert the url
+here).
+
 Building & Installing:
 ----------------------
 These steps does not apply to binary distributions; only to
@@ -412,6 +420,7 @@ Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
+Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
