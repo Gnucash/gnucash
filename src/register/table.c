@@ -27,6 +27,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include <Xm/Xm.h>
@@ -63,11 +64,6 @@ xaccMallocTable (void)
 void 
 xaccInitTable (Table * table)
 {
-   int num_header_rows;
-   int num_phys_rows;
-   int num_phys_cols;
-   int i,j;
-
    table->table_widget = 0;
    table->next_tab_group = 0;
 
@@ -632,6 +628,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
             lcbs->doit = True;
             break;
          }
+         default:
+            break;
       }
       return;
    }
@@ -652,6 +650,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
          leaveCB (mw, cd, cb);
          break;
       }
+      default:
+         break;
    }
 }
 
@@ -1060,7 +1060,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 void        
 xaccRefreshTableGUI (Table * table)
 {
-{int i,j;
+{int i;
 printf (" refresh %d %d \n",  table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
 printf ("cell %d %s \n", i, table->entries[i][3]);

@@ -107,5 +107,5 @@ void        xaccMoveCursorGUI (Table *, int virt_row, int virt_col);
 /* copy text in the cursor cells to the table */
 void        xaccCommitCursor (Table *);
 
-#endif __XACC_TABLE_H__
+#endif /* __XACC_TABLE_H__ */
 /* ================== end of file ======================= */

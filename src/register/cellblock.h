@@ -66,4 +66,4 @@ void        xaccAddCell (CellBlock *, BasicCell *, int row, int col);
 void        xaccNextRight (CellBlock *, int row,      int col, 
                                         int next_row, int next_col);
 
-#endif __XACC_CELL_BLOCK_H__
+#endif /* __XACC_CELL_BLOCK_H__ */

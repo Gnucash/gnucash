@@ -118,6 +118,6 @@ void            xaccInitBasicRegister (BasicRegister *, int type);
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccGetChangeFlag (BasicRegister *);
 
-#endif __XACC_REGISTER_H__
+#endif /* __XACC_REGISTER_H__ */
 
 /* ============ END OF FILE ===================== */

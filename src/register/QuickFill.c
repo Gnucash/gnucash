@@ -42,7 +42,7 @@ static void qfInsertTextRec( QuickFill *qf, const char * text, int depth );
  * of the internals of QuickFill into one file.                     *
 \********************************************************************/
 
-int 
+static int 
 CHAR_TO_INDEX( char c )
   {
   c = toupper(c)-0x40;

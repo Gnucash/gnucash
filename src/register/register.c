@@ -25,6 +25,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <stdlib.h>
+
 #include "messages.h"
 #include "register.h"
 
@@ -161,8 +163,10 @@ configLayout (BasicRegister *reg, int type)
          SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
          SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
          SET (BALN_CELL, 10,  0, 12,  BALN_STR);
+         break;
 
       default:
+         break;
    }
 
    /* setup custom labels for the debit/credit columns */
@@ -202,7 +206,9 @@ configLayout (BasicRegister *reg, int type)
       case STOCK_LEDGER:
          reg->labels [DEBT_CELL] = SOLD_STR;
          reg->labels [CRED_CELL] = BOUGHT_STR;
+         break;
       default:
+         break;
    }
 
 }
@@ -268,15 +274,15 @@ BasicRegister * xaccMallocBasicRegister (int type)
 /* HDR is a utility to set up the header row */
 #define HDR(NAME)						\
 {								\
-   BasicCell *cell;						\
-   cell = xaccMallocTextCell();					\
-   cell->width = NAME##_CELL_W;					\
+   BasicCell *hcell;						\
+   hcell = xaccMallocTextCell();				\
+   hcell->width = NAME##_CELL_W;				\
    if (1 == reg->num_header_rows) {				\
-      xaccAddCell (header, cell, 0, NAME##_CELL_C);		\
+      xaccAddCell (header, hcell, 0, NAME##_CELL_C);		\
    } else {							\
-      xaccAddCell (header, cell, NAME##_CELL_R, NAME##_CELL_C);	\
+      xaccAddCell (header, hcell, NAME##_CELL_R, NAME##_CELL_C);	\
    }								\
-   xaccSetBasicCellValue (cell, reg->labels[NAME##_CELL]);	\
+   xaccSetBasicCellValue (hcell, reg->labels[NAME##_CELL]);	\
 }
    
 /* BASIC & FANCY macros initialize cells in the register */
@@ -298,7 +304,6 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 {
    Table * table;
    CellBlock *curs, *header;
-   BasicCell *cell;
 
    /* --------------------------- */
    configLayout (reg, type);

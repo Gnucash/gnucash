@@ -25,6 +25,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <ctype.h>
 #include <string.h>
 
 #include "util.h"
@@ -33,7 +34,6 @@
 #include "pricecell.h"
 
 static void PriceSetValue (struct _BasicCell *, const char *);
-static void Set (BasicCell *, const char *);
 
 #define DECIMAL_PT  '.'
 
