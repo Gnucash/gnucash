@@ -453,7 +453,23 @@
    (qif-file:xtns self)
    qif-parse:print-date
    'error-on-ambiguity
-   (lambda (e) e)))
+   (lambda (t e) e)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-file:parse-fields-results results type
+;;  take the results from qif-file:parse fields and find
+;;  the results for a particular type of parse
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (qif-file:parse-fields-results results type)
+  (define (test-results results)
+    (if (null? results) #f
+	(let* ((this-res (car results))
+	       (this-type (car this-res)))
+	  (if (eq? this-type type)
+	      (cdr this-res)
+	      (test-results (cdr results))))))
+
+  (if results (test-results results) #f))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields self 
@@ -466,10 +482,10 @@
    (let* ((error #f)
           (all-ok #f)
           (set-error 
-           (lambda (e) 
+           (lambda (t e) 
              (if (not error)
-                 (set! error (list e))
-                 (set! error (cons e error)))))
+                 (set! error (list (cons t e)))
+                 (set! error (cons (cons t e) error)))))
           (errlist-to-string 
            (lambda (lst)
              (with-output-to-string 
@@ -486,7 +502,7 @@
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'tax-class)
       
       (check-and-parse-field 
        qif-cat:budget-amt qif-cat:set-budget-amt! gnc:numeric-equal
@@ -494,7 +510,7 @@
        qif-parse:parse-number/format (qif-file:cats self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'budget-amt)
       
       ;; fields of accounts 
       (check-and-parse-field 
@@ -503,7 +519,7 @@
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'limit)
       
       (check-and-parse-field 
        qif-acct:budget qif-acct:set-budget! gnc:numeric-equal
@@ -511,7 +527,7 @@
        qif-parse:parse-number/format (qif-file:accounts self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'budget)
       
       (parse-field 
        qif-acct:type qif-acct:set-type!
@@ -526,7 +542,7 @@
        (qif-file:xtns self)
        qif-parse:print-date
        'error-on-ambiguity
-       set-error)
+       set-error 'date)
       
       (parse-field 
        qif-xtn:cleared qif-xtn:set-cleared!
@@ -542,7 +558,7 @@
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'share-price)
       
       (check-and-parse-field 
        qif-xtn:num-shares qif-xtn:set-num-shares! gnc:numeric-equal
@@ -550,7 +566,7 @@
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'num-shares)
       
       (check-and-parse-field 
        qif-xtn:commission qif-xtn:set-commission! gnc:numeric-equal
@@ -558,7 +574,7 @@
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity
-       set-error)
+       set-error 'commission)
       
       ;; this one's a little tricky... it checks and sets all the 
       ;; split amounts for the transaction together.     
@@ -568,7 +584,7 @@
        qif-parse:parse-numbers/format (qif-file:xtns self)
        qif-parse:print-numbers
        'guess-on-ambiguity
-       set-error)
+       set-error 'split-amounts)
       
       (begin 
         (set! all-ok #t)
@@ -607,7 +623,7 @@
 
 (define (check-and-parse-field getter setter equiv-thunk checker 
                                formats parser objects printer 
-                               on-error errormsg)
+                               on-error errormsg errortype)
   ;; first find the right format for the field
   (let ((do-parsing #f)
         (retval #t)
@@ -639,7 +655,7 @@
 
     (cond 
      ((null? formats) 
-      (errormsg "Data for number or date does not match a known format.")
+      (errormsg errortype "Data for number or date does not match a known format.")
       (set! retval #f)
       (set! do-parsing #f))
      ((and (not (null? (cdr formats))) do-parsing)
@@ -649,11 +665,11 @@
       ;; error.  ATM since there's no way to correct the error let's 
       ;; just leave it be.
       (if (or (all-formats-equivalent? getter parser equiv-thunk formats 
-                                       objects printer errormsg)      
+                                       objects printer errormsg errortype)      
               (eq? on-error 'guess-on-ambiguity))
           (set! format (car formats))
           (begin 
-            (errormsg formats)
+            (errormsg errortype formats)
             (set! do-parsing #f)
             (set! retval #t))))
      (#t 
@@ -675,7 +691,7 @@
                        (setter current parsed)
                        (begin 
                          (set! retval #f)
-                         (errormsg 
+                         (errormsg errortype
                           "Data format inconsistent in QIF file.")))))))
          objects))
     retval))
@@ -687,7 +703,7 @@
 ;; radix, but who cares?  The values will be the same).
 
 (define (all-formats-equivalent? getter parser equiv-thunk formats objects 
-                                 printer errormsg)
+                                 printer errormsg errortype)
   (let ((all-ok #t))
     (let obj-loop ((objlist objects))
       (let* ((unparsed (getter (car objlist)))
@@ -701,7 +717,7 @@
                    (if (not (equiv-thunk parsed this-parsed))
                        (begin 
                          (set! all-ok #f) 
-                         (errormsg 
+                         (errormsg errortype
                           (with-output-to-string 
                             (lambda ()
                               (for-each 

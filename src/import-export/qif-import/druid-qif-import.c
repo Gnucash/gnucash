@@ -430,6 +430,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
   SCM check_from_acct = gh_eval_str("qif-file:check-from-acct");
   SCM default_acct    = gh_eval_str("qif-file:path-to-accountname");
+  SCM qif_file_parse_results  = gh_eval_str("qif-file:parse-fields-results");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
@@ -524,31 +525,46 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       /* call the field parser */
       parse_return = gh_call1(qif_file_parse, gh_car(imported_files));
       
-      /* warning means the date format is ambiguous. Set up the format
-       * selector page.  FIXME: this can return warnings for things
-       * other than date format ambiguities. */
+      /* parser returns:
+       *   success:	#t
+       *   failure:	(#f . ((type . errror) ...))
+       *   warning:	(#t . ((type . error) ...))
+       *
+       * warning means that (potentially) the date format is
+       * ambiguous.  So search the results for the "date" type and if
+       * it's found, set up the format selector page.
+       */
       if(gh_list_p(parse_return) && 
          (gh_car(parse_return) == SCM_BOOL_T)) {
-        date_formats   = gh_cadr(parse_return);
-        format_strings = NULL;
-        while(gh_list_p(date_formats) && !gh_null_p(date_formats)) {
-          format_strings = 
-            g_list_append(format_strings, 
-                          gh_symbol2newstr(gh_car(date_formats), NULL));
-          date_formats = gh_cdr(date_formats);
-        }
-        gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
-                                      format_strings);
 
-        for(listit = format_strings; listit; listit=listit->next) {
-          free(listit->data);
-          listit->data = NULL;
-        }
-        g_list_free(format_strings);
+	if ((date_formats = gh_call2(qif_file_parse_results,
+				     gh_cdr(parse_return),
+				     gh_symbol2scm("date"))) != SCM_BOOL_F) {
+	  format_strings = NULL;
+	  while(gh_list_p(date_formats) && !gh_null_p(date_formats)) {
+	    format_strings = 
+	      g_list_append(format_strings, 
+			    gh_symbol2newstr(gh_car(date_formats), NULL));
+	    date_formats = gh_cdr(date_formats);
+	  }
+	  gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
+					format_strings);
+
+	  for(listit = format_strings; listit; listit=listit->next) {
+	    free(listit->data);
+	    listit->data = NULL;
+	  }
+	  g_list_free(format_strings);
         
-        ask_date_format = TRUE;
+	  ask_date_format = TRUE;
+
+	} else {
+	  /* FIXME: we've got a "warning" but it's not the date! */
+	  ;
+	}
       }
 
+      /* Can this ever happen??? */
       if(parse_return == SCM_BOOL_F) {
         gnc_error_dialog_parented(GTK_WINDOW(wind->window),
                                   _("An error occurred while parsing the "
@@ -560,7 +576,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       else if((parse_return != SCM_BOOL_T) &&
          (!gh_list_p(parse_return) ||
           (gh_car(parse_return) != SCM_BOOL_T))) {
-        char *warn_str = gh_scm2newstr(gh_cadr(parse_return), NULL);
+        char *warn_str = gh_scm2newstr(gh_cdadr(parse_return), NULL);
         gnc_error_dialog_parented(GTK_WINDOW(wind->window),
 				  _("QIF file parse failed:\n%s"),
 				  warn_str ? warn_str : "(null)");

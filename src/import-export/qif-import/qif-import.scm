@@ -50,6 +50,7 @@
 
 (export qif-file:read-file)
 (export qif-file:parse-fields)
+(export qif-file:parse-fields-results)
 (export qif-file:check-from-acct)
 (export qif-file:reparse-dates)
 (export qif-file:check-from-acct)

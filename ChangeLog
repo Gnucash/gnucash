@@ -1,3 +1,19 @@
+2003-01-31  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-file.scm: change the way that
+	  parse-fields reports an error or warning.  In particular, return
+	  a list such that the error is tied to the actual type.  This will
+	  allow us to differentiate a date-parse ambiguity from any other
+	  type of ambiguity.  Also add a new procedure that, when given the
+	  (cdr parse-results) and a 'type' will return the actual error for
+	  that particular type.
+  	* src/import-export/qif-import/qif-import.scm: export the new symbol
+	* src/import-export/qif-import/druid-qif-import.c: change the logic
+	  to use the new parse results and only try to fill the date dialog if
+	  there is actually a date parsing ambiguity.
+
+	  Fixes Morrison J. Chang's QIF import problem.
+
 2003-01-30  Derek Atkins  <derek@ihtfp.com>
 
 	* po/np.po -- add the proper "Plural" header so it builds again.
