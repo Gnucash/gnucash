@@ -47,7 +47,7 @@
 #include "gnc-lot-p.h"
 #include "messages.h"
 
-static short module = MOD_SCRUB;
+static short module = MOD_LOT;
 
 /* ============================================================== */
 
@@ -115,8 +115,8 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
    es.ts.tv_sec = 10000000LL * ((long long) LONG_MAX);
    es.ts.tv_nsec = 0;
 
-   if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_positive_p;
-   else es.numeric_pred = gnc_numeric_negative_p;
+   if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_negative_p;
+   else es.numeric_pred = gnc_numeric_positive_p;
       
    xaccAccountForEachLot (acc, earliest_helper, &es);
    return es.lot;
@@ -131,6 +131,7 @@ xaccAccountScrubLots (Account *acc)
 
    if (!acc) return;
 
+   ENTER ("acc=%s", acc->accountName);
    xaccAccountBeginEdit (acc);
 
    /* Loop over all splits, and make sure that every split
@@ -156,6 +157,7 @@ restart_loop:
        */
      while (split)
      {
+        PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
         lot = xaccAccountFindEarliestOpenLot (acc, split->amount);
         if (lot)
         {
@@ -163,6 +165,7 @@ restart_loop:
            gnc_numeric baln = gnc_lot_get_balance (lot);
            int cmp = gnc_numeric_compare (split->amount, baln);
 
+           PINFO ("found open lot with baln=%s", gnc_numeric_to_string (baln));
            /* cmp == +1 if amt > baln */
            if (0 < cmp) 
            {
@@ -179,6 +182,7 @@ restart_loop:
               amt_a = gnc_numeric_neg (baln);
               amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
 
+              PINFO ("XXXXXXXXXXXXXXXX splitting split ");
               /* Compute the value so that it holds in the same proportion:
                * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
                */
@@ -195,7 +199,7 @@ restart_loop:
                * because the new balance should be precisely zero. */
               gnc_lot_add_split (lot, split);
 
-              /* put the remainder of teh balance into a new split, which is
+              /* put the remainder of the balance into a new split, which is
                * in other respects just a clone of this one */
               /* XXX FIXME: we should add some kvp markup to indicate that these
                * two splits used to be one before being 'split' */
@@ -227,11 +231,14 @@ restart_loop:
            {
               gnc_lot_add_split (lot, split);
               split = NULL;
+              PINFO ("added split to lot, new lot baln=%s", 
+                   gnc_numeric_to_string (gnc_lot_get_balance(lot)));
            }
         }
         else
         {
            /* No lot was found.  Start a new lot */
+           PINFO ("start new lot");
            lot = gnc_lot_new (acc->book);
            gnc_lot_add_split (lot, split);
            split = NULL;
@@ -241,6 +248,7 @@ restart_loop:
       if (splits_added) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
+   LEAVE ("acc=%s", acc->accountName);
 }
 
 /* ============================================================== */
@@ -262,6 +270,7 @@ xaccAccountScrubDoubleBalance (Account *acc)
 
    if (!acc) return;
 
+   ENTER ("acc=%s", acc->accountName);
    for (node = acc->lots; node; node=node->next)
    {
       gnc_commodity *currency = NULL;
@@ -294,9 +303,14 @@ xaccAccountScrubDoubleBalance (Account *acc)
 
          /* Now, total up the values */
          value = gnc_numeric_add (value, xaccSplitGetValue (s),
-                              GNC_DENOM_AUTO, 0);
+                              GNC_DENOM_AUTO, GNC_DENOM_LCD);
+         PINFO ("Split value=%s Accum Lot value=%s", 
+             gnc_numeric_to_string (xaccSplitGetValue(s)),
+             gnc_numeric_to_string (value));
              
       }
+
+      PINFO ("Lot value=%s", gnc_numeric_to_string (value));
 
       /* Is the value of the lot zero?  If not, add a balancing transaction.
        * As per design doc lots.txt: the transaction has two splits, 
@@ -350,6 +364,7 @@ xaccAccountScrubDoubleBalance (Account *acc)
 
       }
    }
+   LEAVE ("acc=%s", acc->accountName);
 }
 
 /* ============================================================== */
