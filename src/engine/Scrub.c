@@ -397,7 +397,7 @@ xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
 
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
-
+  
   currency = xaccTransFindOldCommonCurrency (trans, book);
   if (currency)
   {
@@ -408,6 +408,52 @@ xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
   else
   {
     PWARN ("no common transaction currency found");
+  }
+  {
+    Split *sp;
+    int i;
+    for (i=0; (sp = xaccTransGetSplit (trans, i)); i++) {
+      if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
+			     xaccSplitGetValue (sp))) {
+	Account *acc = xaccSplitGetAccount (sp);
+	gnc_commodity *acc_currency = xaccAccountGetCommodity (acc);
+	if (acc_currency == currency) {
+	  /* This Split needs fixing: The transaction-currency equals
+	     the account-currency/commodity, but the amount/values are
+	     inequal i.e. they still correspond to the security
+	     (amount) and the currency (value). In the new model, the
+	     value is the amount in the account-commodity -- so it
+	     needs to be set to equal the amount (since the
+	     account-currency doesn't exist anymore). 
+
+	  Note: Nevertheless we lose some information here. Namely,
+	  the information that the 'amount' in 'account-old-security'
+	  was worth 'value' in 'account-old-currency'. Maybe it would
+	  be better to store that information in the price database? 
+	  But then, for old currency transactions there is still the
+	  'other' transaction, which is going to keep that
+	  information. So I don't bother with that here. -- cstim,
+	  2002/11/20. */
+	  
+	  /*PWARN ("## Error likely: Split '%s' Amount %s %s, value %s",
+	    xaccSplitGetMemo (sp),
+	    gnc_numeric_to_string (amount),
+	    gnc_commodity_get_mnemonic (currency),
+	    gnc_numeric_to_string (value));*/
+	  xaccTransBeginEdit (trans);
+	  xaccSplitSetValue (sp, xaccSplitGetAmount (sp));
+	  xaccTransCommitEdit (trans);
+	}
+	/*else {
+	  PWARN ("Ok: Split '%s' Amount %s %s, value %s %s",
+	  xaccSplitGetMemo (sp),
+	  gnc_numeric_to_string (amount),
+	  gnc_commodity_get_mnemonic (currency),
+	  gnc_numeric_to_string (value),
+	  gnc_commodity_get_mnemonic (acc_currency));
+	  }*/
+      }
+    }
   }
 }
 

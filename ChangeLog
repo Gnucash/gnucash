@@ -1,3 +1,9 @@
+2002-11-19  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/Scrub.c (xaccTransScrubCurrency): Add code to deal
+	correctly with currency exchange transactions from 1.6. Fixes
+	reported problems with importing 1.6 data files, #91505.
+
 2002-11-18  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Change default "RECONCILE"
 	action from 'y' (reconciled) to'c' (cleared)
