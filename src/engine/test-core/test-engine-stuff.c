@@ -1005,8 +1005,11 @@ set_tran_random_string(Transaction* trn,
 static void
 add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
-    Account *account;
+    Account *acc, *bcc;
     Split *s;
+
+    /* Gotta have at least two different accounts */
+    if (1 >= g_list_length (account_list)) return;
 
     /* Set up two splits whose values really are opposites. */
     gnc_commodity *com = xaccTransGetCurrency (trn);
@@ -1014,15 +1017,35 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     gnc_numeric num = get_random_gnc_numeric();
     num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
 
-    account = get_random_list_element (account_list);
-    s = get_random_split(book, account);
+    acc = get_random_list_element (account_list);
+    s = get_random_split(book, acc);
     xaccTransAppendSplit(trn, s);
     xaccSplitSetValue(s, num);
 
-    account = get_random_list_element (account_list);
-    s = get_random_split(book, account);
+    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
+                             xaccAccountGetCommodity(acc)))
+    {
+      xaccSplitSetAmount(s, num);
+    }
+
+    /* Make sure that each side of the transaction is in 
+     * a different account; otherwise get weirdness in lot
+     * calculcations.  ... Hmm maybe should fix lots in 
+     * this case? */
+    do {
+       bcc = get_random_list_element (account_list);
+    } while (bcc == acc);
+
+    s = get_random_split(book, bcc);
     xaccTransAppendSplit(trn, s);
     xaccSplitSetValue(s, gnc_numeric_neg(num));
+
+    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
+                             xaccAccountGetCommodity(bcc)))
+    {
+      xaccSplitSetAmount(s, num);
+    }
+
 }
 
 static void
