@@ -1,7 +1,7 @@
 .deps
 Makefile
 Makefile.in
-gnc_test
+gnc_test*
 test-db
 test-escape
 test_file_*

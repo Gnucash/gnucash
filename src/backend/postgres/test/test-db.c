@@ -600,12 +600,12 @@ compare_balances (GNCSession *session_1, GNCSession *session_2)
   GNCBook * book_2 = gnc_session_get_book (session_2);
   GList * list;
   GList * node;
+  gboolean ok;
 
   g_return_val_if_fail (session_1, FALSE);
   g_return_val_if_fail (session_2, FALSE);
 
-  /* FIXME: remove */
-  return TRUE;
+  ok = TRUE;
 
   list = xaccGroupGetSubAccounts (gnc_book_get_group (book_1));
   for (node = list; node; node = node->next)
@@ -616,38 +616,42 @@ compare_balances (GNCSession *session_1, GNCSession *session_2)
     account_2 = xaccAccountLookup (xaccAccountGetGUID (account_1), book_2);
     if (!account_2)
     {
-      g_warning ("session_1 has account %s but not session_2",
-                 guid_to_string (xaccAccountGetGUID (account_1)));
+      failure_args ("", __FILE__, __LINE__,
+                    "session_1 has account %s but not session_2",
+                    guid_to_string (xaccAccountGetGUID (account_1)));
       return FALSE;
     }
 
-    if (!gnc_numeric_eq (xaccAccountGetBalance (account_1),
-                         xaccAccountGetBalance (account_2)))
+    if (!gnc_numeric_equal (xaccAccountGetBalance (account_1),
+                            xaccAccountGetBalance (account_2)))
     {
-      g_warning ("balances not equal for account %s",
-                 guid_to_string (xaccAccountGetGUID (account_1)));
-      return FALSE;
+      failure_args ("", __FILE__, __LINE__,
+                    "balances not equal for account %s",
+                    guid_to_string (xaccAccountGetGUID (account_1)));
+      ok = FALSE;
     }
 
-    if (!gnc_numeric_eq (xaccAccountGetClearedBalance (account_1),
-                         xaccAccountGetClearedBalance (account_2)))
+    if (!gnc_numeric_equal (xaccAccountGetClearedBalance (account_1),
+                            xaccAccountGetClearedBalance (account_2)))
     {
-      g_warning ("cleared balances not equal for account %s",
-                 guid_to_string (xaccAccountGetGUID (account_1)));
-      return FALSE;
+      failure_args ("", __FILE__, __LINE__,
+                    "cleared balances not equal for account %s",
+                    guid_to_string (xaccAccountGetGUID (account_1)));
+      ok = FALSE;
     }
 
-    if (!gnc_numeric_eq (xaccAccountGetReconciledBalance (account_1),
-                         xaccAccountGetReconciledBalance (account_2)))
+    if (!gnc_numeric_equal (xaccAccountGetReconciledBalance (account_1),
+                            xaccAccountGetReconciledBalance (account_2)))
     {
-      g_warning ("reconciled balances not equal for account %s",
-                 guid_to_string (xaccAccountGetGUID (account_1)));
-      return FALSE;
+      failure_args ("", __FILE__, __LINE__,
+                    "reconciled balances not equal for account %s",
+                    guid_to_string (xaccAccountGetGUID (account_1)));
+      ok = FALSE;
     }
   }
   g_list_free (list);
 
-  return TRUE;
+  return ok;
 }
 
 static gboolean
