@@ -1,4 +1,8 @@
 2002-12-02  Chris Lyttle  <chris@wilddev.net>
+	
+	* src/doc/Makefile.am: fix for failure when building rpm
+
+2002-12-02  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: update to new version 1.7.4
 	* configure.in: update to new version 1.7.4

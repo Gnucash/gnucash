@@ -40,8 +40,10 @@ maintainer-clean-local: clean-local
 	rm -rf html refman.pdf
 
 install-data-hook:
-	mkdir -p $(srcdir)/html #Workaround to allow libofx-cvs user to install without doc.
-	cp -rp $(srcdir)/html ${docdir}
+	$(mkinstalldirs) $(DESTDIR)$(docdir)/html
+#	mkdir -p $(srcdir)/html #Workaround to allow libofx-cvs user to install without doc.
+#	cp -rp $(srcdir)/html ${docdir}
+	cp -rp $(srcdir)/html $(DESTDIR)$(docdir)/html
 
 uninstall-hook:
 	rm -rf ${docdir}/html
