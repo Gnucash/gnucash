@@ -32,6 +32,6 @@ gboolean gnc_is_xml_data_file_v2(const gchar *filename);
 void gnc_free_example_account_list(GSList *list);
 GSList* gnc_load_example_account_list(const char *dirname);
 
+gboolean gnc_is_example_account_xml(const gchar *name);
 
 #endif /* __IO_EXAMPLE_ACCOUNT_H__ */
-
