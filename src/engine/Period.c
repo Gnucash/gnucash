@@ -416,16 +416,33 @@ create_lot_list_from_trans_list (TransList *trans_list)
 void 
 gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
-   GNCPriceDB *pdb;
-   GList *price_list;
+   GNCPriceDB *src_pdb, *dest_pdb;
+   GList *price_list, *pnode;
 
    if (!src_book || !dest_book || !query) return;
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
 
-   pdb = gnc_pricedb_get_db (src_book);
+   src_pdb = gnc_pricedb_get_db (src_book);
+   dest_pdb = gnc_pricedb_get_db (dest_book);
+
+   gnc_pricedb_begin_edit (src_pdb);
+   gnc_pricedb_begin_edit (dest_pdb);
 
    qof_query_set_book (query, src_book);
    price_list = qof_query_run (query);
+
+   for (pnode = price_list; pnode; pnode=pnode->next)
+   {
+      GNCPrice *pr = pnode->data;
+printf ("duude got price =%p\n", pr);
+      gnc_price_ref (pr);
+      gnc_pricedb_remove_price (src_pdb, pr);
+      gnc_pricedb_add_price (dest_pdb, pr);
+      gnc_price_unref (pr);
+   }
+
+   gnc_pricedb_commit_edit (dest_pdb);
+   gnc_pricedb_commit_edit (src_pdb);
 
    LEAVE (" src_book=%p dest_book=%p", src_book, dest_book);
 }
@@ -436,7 +453,6 @@ void
 gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 {
    AccountGroup *src_grp, *dst_grp;
-   QofBackend *be;
    time_t now;
    TransList *trans_list, *tnode;
    LotList *lot_list, *lnode;
@@ -444,12 +460,6 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    if (!src_book || !dest_book || !query) return;
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
 
-   be = src_book->backend;
-   if (be && be->begin)
-   {
-      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
-   }
-   
    /* First, copy the book's KVP tree */
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write a kvp merge routine,
@@ -504,10 +514,6 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    gnc_kvp_gemini (src_book->kvp_data, now, "book_guid", &dest_book->guid, NULL);
    gnc_kvp_gemini (dest_book->kvp_data, now, "book_guid", &src_book->guid, NULL);
 
-   if (be && be->commit)
-   {
-      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
-   }
    LEAVE (" ");
 }
 
@@ -697,6 +703,30 @@ add_closing_balances (AccountGroup *closed_grp,
 }
 
 /* ================================================================ */
+
+static void 
+period_begin_edit (QofBook *src_book, QofBook *dest_book)
+{
+   QofBackend *be;
+   be = src_book->backend;
+   if (be && be->begin)
+   {
+      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
+   }
+}
+   
+static void 
+period_commit_edit (QofBook *src_book, QofBook *dest_book)
+{
+   QofBackend *be;
+   be = src_book->backend;
+   if (be && be->commit)
+   {
+      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
+   }
+}
+
+/* ================================================================ */
 /* Split a book into two by date */
 
 QofBook * 
@@ -719,6 +749,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
    qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';
 
+   period_begin_edit (existing_book, closing_book);
+
    /* Get all transactions that are *earlier* than the calve date,
     * and put them in the new book.  */
    txn_query = qof_query_create_for (GNC_ID_TRANS);
@@ -737,7 +769,9 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                                          QOF_DATE_MATCH_NORMAL,
                                          calve_date);
    param_list = qof_query_build_param_list (PRICE_DATE, NULL);
+printf ("duude start by adding term to query\n");
    qof_query_add_term (prc_query, param_list, pred_data, QOF_QUERY_FIRST_TERM);
+printf ("duude finished by adding term to query\n");
 
    gnc_book_partition_pricedb (closing_book, existing_book, prc_query);
    qof_query_destroy (prc_query);
@@ -766,6 +800,9 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                         existing_book, closing_book,
                         equity_account,
                         &calve_date, &ts, memo);
+
+   period_commit_edit (existing_book, closing_book);
+
    LEAVE (" ");
    return closing_book;
 }
