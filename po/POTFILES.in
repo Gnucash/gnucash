@@ -34,6 +34,7 @@ src/backend/file/sixtp-to-dom-parser.c
 src/backend/file/sixtp-utils.c
 src/backend/file/sixtp.c
 src/backend/file/gnc-pricedb-xml-v2.c
+src/backend/file/gnc-book-xml-v2.c
 src/backend/file/gncmod-backend-file.c
 src/backend/rpc/RpcBackend.c
 src/backend/rpc/RpcServer.c
@@ -49,6 +50,7 @@ src/backend/rpc/svc_thrd.c
 src/backend/rpc/xprt_thrd.c
 src/backend/postgres/test/test-db.c
 src/backend/postgres/test/test-escape.c
+src/backend/postgres/test/test-period.c
 src/backend/postgres/account.c
 src/backend/postgres/builder.c
 src/backend/postgres/checkpoint.c
@@ -63,6 +65,7 @@ src/backend/postgres/txn.c
 src/backend/postgres/txnmass.c
 src/backend/postgres/upgrade.c
 src/backend/postgres/PostgresBackend.c
+src/backend/postgres/book.c
 src/backend/net/NetIO.c
 src/app-utils/test/test-link-module.c
 src/app-utils/test/test-exp-parser.c
@@ -113,13 +116,18 @@ src/business/business-gnome/gnc-business-utils.c
 src/business/business-gnome/job.glade
 src/business/business-gnome/vendor.glade
 src/business/business-gnome/dialog-order.c
+src/business/business-gnome/dialog-invoice.c
 src/business/business-gnome/order.glade
 src/business/business-gnome/business-utils.c
-src/business/business-ledger/gncEntryLedger.c
+src/business/business-gnome/date-close.glade
+src/business/business-gnome/dialog-date-close.c
+src/business/business-gnome/invoice.glade
 src/business/business-ledger/gncEntryLedgerControl.c
 src/business/business-ledger/gncEntryLedgerLayout.c
 src/business/business-ledger/gncEntryLedgerModel.c
 src/business/business-ledger/gncEntryLedgerLoad.c
+src/business/business-ledger/gncEntryLedger.c
+src/business/business-ledger/gncEntryLedgerDisplay.c
 src/gnome-utils/dialog-utils.c
 src/gnome-utils/druid-utils.c
 src/gnome-utils/dialog-commodity.c
@@ -129,6 +137,7 @@ src/gnome-utils/gnc-account-tree.c
 src/gnome-utils/gnc-commodity-edit.c
 src/gnome-utils/cursors.c
 src/gnome-utils/gnc-html.c
+src/gnome-utils/commodity.glade
 src/gnome-utils/gnc-menu-extensions.c
 src/gnome-utils/gnc-currency-edit.c
 src/gnome-utils/gnc-gui-query.c
@@ -138,13 +147,14 @@ src/gnome-utils/gnc-html-guppi.c
 src/gnome-utils/gnc-frequency.c
 src/gnome-utils/gncmod-gnome-utils.c
 src/gnome-utils/gnc-date-delta.c
+src/gnome-utils/gnc-gnome-utils.c
 src/gnome-utils/dialog-options.c
 src/gnome-utils/window-help.c
 src/gnome-utils/gnc-general-select.c
 src/gnome-utils/gtkselect.c
 src/gnome-utils/print-session.c
-src/gnome-utils/commodity.glade
 src/gnome-utils/gnc-mdi-utils.c
+src/gnome-utils/argv-list-converters.c
 src/network-utils/gnc-gpg.c
 src/network-utils/gnc-http.c
 src/network-utils/test/test-link-module.c
@@ -272,7 +282,6 @@ src/gnome/window-register.c
 src/gnome/tip-of-the-day.c
 src/gnome/dialog-sx-from-trans.c
 src/gnome/gnucash.desktop.in
-src/gnome/argv-list-converters.c
 src/import-export/qif-import/dialog-account-picker.c
 src/import-export/qif-import/druid-qif-import.c
 src/import-export/qif-import/gncmod-qif-import.c
