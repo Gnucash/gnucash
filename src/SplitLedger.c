@@ -3,7 +3,24 @@
  * SplitLedger.c 
  *
  * FUNCTION:
- * copy transaction data from engine into ledger object
+ * copy transaction data from engine into split-register object.
+ *
+ *
+ * DESIGN NOTES:
+ * Some notes about the "blank split":
+ * Q: What is the "blank split"?
+ * A: A new, empty split appended to the bottom of the ledger
+ *    window.  The blank split provides an area where the user
+ *    can type in new split/transaction info.  
+ *    The "blank split" is treated in a special way for a number
+ *    of reasons:
+ *    (1) it must always appear as the bottom-most split
+ *        in the Ledger window,
+ *    (2) it must be committed if the user edits it, and 
+ *        a new blank split must be created.
+ *    (3) it must be deleted when the ledger window is closed.
+ * To implement the above, the register "user_hook" is used
+ * to store the blank split with the register window structures.
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
@@ -123,7 +140,7 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws.  */
-   changed = xaccGetChangeFlag (reg);
+   changed = xaccSplitRegisterGetChangeFlag (reg);
    if (!changed) return;
    
    /* get the handle to the current split and transaction */
@@ -250,21 +267,6 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 }
 
 /* ======================================================== */
-/* Some notes about the "blank split":
- * Q: What is the "blank split"?
- * A: A new, empty split appended to the bottom of the ledger
- *    window.  The blank split provides an area where the user
- *    can type in new split/transaction info.  
- *    The "blank split" is treated in a special way for a number
- *    of reasons:
- *    (1) it must always appear as the bottom-most split
- *        in the Ledger window,
- *    (2) it must be committed if the user edits it, and 
- *        a new blank split must be created.
- *    (3) it must be deleted when the ledger window is closed.
- * To implement the above, the register "user_hook" is used
- * to store the blank split with the register window structures.
- */
 
 void
 xaccSRLoadRegister (SplitRegister *reg, Split **slist, 
@@ -297,13 +299,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    while (slist[i]) i++;
 
    /* compute the corresponding number of physical & virtual rows. */
-   /* number of virtual rows is number of splits plus transactions,
-    * plus one for the header  */
-   num_virt_rows = 1;
-
-   /* plus one for the blank new entry split. */
-   if (!(reg->user_hook)) num_virt_rows ++; 
-
    /* num_phys_cols is easy ... just the total number of columns 
     * in the header */
    num_phys_cols = reg->header->numCols;
@@ -311,11 +306,21 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* num_phys_rows is the number of rows in all the cursors */
    num_phys_rows = reg->header->numRows;
 
+   /* number of virtual rows is number of splits plus transactions,
+    * plus one for the header  */
+   num_virt_rows = 1;
+
    i=0;
    trans = NULL;
    split = slist[0]; 
    while (split) {
       if (trans != xaccSplitGetParent (split)) {
+         if (NULL != trans) {
+            /* add a line for the blank split at tail
+             * of previous transaction.  */
+            num_virt_rows ++;
+            num_phys_rows += reg->split_cursor->numRows; 
+         }
          trans = xaccSplitGetParent (split);
          /* add a row for each transaction */
          num_virt_rows ++;
@@ -326,6 +331,14 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       num_phys_rows += reg->split_cursor->numRows; 
       i++;
       split = slist[i];
+   }
+
+   /* plus three: for the blank new entry split. 
+    * (one for last split, one for blank transaction & split) */
+   if (!(reg->user_hook)) {
+      num_virt_rows += 3; 
+      num_phys_rows += reg->trans_cursor->numRows;
+      num_phys_rows += 2 * (reg->split_cursor->numRows);
    }
 
    /* num_virt_cols is always one. */
@@ -349,25 +362,43 @@ printf ("load reg of %d entries --------------------------- \n",i);
 
          /* first, load the transaction header line */
          if (trans != xaccSplitGetParent (split)) {
+            if (NULL != trans) {
+               /* add a line for the blank split at tail
+                * of previous transaction.  */
+               xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+               xaccMoveCursor (table, phys_row, 0);
+printf ("load blank split %d \n", phys_row);
+               vrow ++;
+               phys_row += reg->split_cursor->numRows; 
+            }
             trans = xaccSplitGetParent (split);
-            vrow ++;
-            phys_row += reg->trans_cursor->numRows; 
+printf ("load trans %d \n", phys_row);
             xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
             xaccMoveCursor (table, phys_row, 0);
             xaccSRLoadRegEntry (reg, split);
+            vrow ++;
+            phys_row += reg->trans_cursor->numRows; 
          }
 
+printf ("load split %d \n", phys_row);
          /* now load each split that belongs to that transaction */
-         phys_row += (reg->split_cursor->numRows);
-         vrow ++;
          xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
          xaccMoveCursor (table, phys_row, 0);
          xaccSRLoadRegEntry (reg, split);
+         vrow ++;
+         phys_row += (reg->split_cursor->numRows);
       }
 
       i++; 
       split = slist[i];
    }
+
+   /* add a line for the blank split at tail
+    * of previous transaction.  */
+   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+   xaccMoveCursor (table, phys_row, 0);
+   vrow ++;
+   phys_row += reg->split_cursor->numRows; 
 
    /* add the "blank split" at the end */
    if (reg->user_hook) {
@@ -383,12 +414,14 @@ printf ("load reg of %d entries --------------------------- \n",i);
       reg->destroy = LedgerDestroy;
    }
 
-   phys_row += (reg->split_cursor->numRows);
+   xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
+   xaccMoveCursor (table, phys_row, 0);
+   xaccSRLoadRegEntry (reg, split);
    vrow ++;
+   phys_row += reg->trans_cursor->numRows; 
+   
    xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
-   
-   xaccSRLoadRegEntry (reg, split);
    
    /* restore the cursor to its original location */
    if (phys_row <= save_cursor_phys_row) {
