@@ -1,5 +1,49 @@
 2001-12-20  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/main.scm: update for api changes
+
+	* src/report/report-gnome/window-report.h: add new init api
+
+	* src/report/report-gnome/window-report.c: move some report
+	initialization here from top-level.c
+
+	* src/report/report-gnome/gncmod-report-gnome.c: call new report
+	initialization function
+
+	* src/report/report-gnome/Makefile.am: add app-utils dependency
+
+	* src/gnome/top-level.h: update for api changes
+
+	* src/gnome/top-level.c: remove some gnome initialization &
+	shutdown. change ui init api.
+
+	* src/gnome/gw-gnc-spec.scm: update for api changes
+
+	* src/gnome/argv-list-converters.h: remove
+
+	* src/gnome/argv-list-converters.c: remove
+
+	* src/gnome/Makefile.am: remove argv-list-converters.[ch]
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: g-wrap new funcs
+
+	* src/gnome-utils/gncmod-gnome-utils.c: remove #include cruft
+
+	* src/gnome-utils/gnc-html.c: remove #include cruft
+
+	* src/gnome-utils/gnc-gnome-utils.h: new file
+
+	* src/gnome-utils/gnc-gnome-utils.c: new file -- init and shutdown
+	functions
+
+	* src/gnome-utils/argv-list-converters.h: add
+
+	* src/gnome-utils/argv-list-converters.c: add
+
+	* src/gnome-utils/Makefile.am: add new files
+
+	* src/gnc-ui.h: remove cruft
+
 	* src/scm/main.scm: remove some report menu setup functionality
 
 	* src/report/report-gnome/report-gnome.scm: move some report
