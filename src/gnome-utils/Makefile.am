@@ -22,6 +22,7 @@ INCLUDES = \
 libgncmod_gnome_utils_la_SOURCES = \
   cursors.c \
   dialog-commodity.c \
+  dialog-options.c \
   dialog-utils.c \
   druid-utils.c \
   gnc-account-tree.c \
@@ -44,6 +45,7 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   dialog-commodity.h \
+  dialog-options.h \
   dialog-utils.h \
   druid-utils.h \
   gnc-account-tree.h \

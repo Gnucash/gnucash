@@ -39,12 +39,12 @@
 #include "guile-util.h"
 #include "messages.h"
 #include "option-util.h"
-#include "window-help.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-struct _gnc_option_win {
+struct gnc_option_win
+{
   GtkWidget  * container;
   GtkWidget  * notebook;
 
@@ -67,6 +67,10 @@ typedef enum {
   GNC_RD_WID_AB_WIDGET_POS,
   GNC_RD_WID_REL_BUTTON_POS,
   GNC_RD_WID_REL_WIDGET_POS} GNCRdPositions;
+
+
+static GNCOptionWinCallback global_help_cb = NULL;
+gpointer global_help_cb_data = NULL;
 
 
 static GtkWidget *
@@ -2074,6 +2078,13 @@ gnc_options_dialog_set_close_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
   win->close_cb_data = data;
 }
 
+void
+gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
+                                      gpointer cb_data)
+{
+  global_help_cb = thunk;
+  global_help_cb_data = cb_data;
+}
 
 void
 gnc_options_dialog_destroy(GNCOptionWin * win) {
@@ -2119,7 +2130,8 @@ gnc_options_dialog_apply_cb(GNCOptionWin *propertybox,
 static void
 gnc_options_dialog_help_cb(GNCOptionWin *propertybox,
 			   gpointer user_data) {
-  helpWindow(NULL, NULL, HH_GLOBPREFS);
+  if (global_help_cb)
+    global_help_cb (propertybox, global_help_cb_data);
 }
 
 static void

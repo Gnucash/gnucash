@@ -28,7 +28,7 @@
 
 #include "option-util.h"
 
-typedef struct _gnc_option_win GNCOptionWin;
+typedef struct gnc_option_win GNCOptionWin;
 
 typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
@@ -50,6 +50,8 @@ void gnc_options_dialog_set_close_cb(GNCOptionWin * win,
                                      GNCOptionWinCallback thunk,
                                      gpointer cb_data);
                                      
+void gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
+                                           gpointer cb_data);
 
 void gnc_show_options_dialog(void);
 void gnc_build_options_dialog_contents(GNCOptionWin *win,

@@ -161,6 +161,12 @@ gnc_set_remaining_argv(int len, const char **rest)
 }
 
 
+static void
+gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
+{
+  helpWindow (NULL, NULL, HH_GLOBPREFS);
+}
+
 static gboolean
 gnc_html_file_stream_cb (const char *location, char ** data)
 {
@@ -543,6 +549,8 @@ gnucash_ui_init(void)
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
     gnc_file_set_can_cancel_callback (gnc_ui_can_cancel_save);
+
+    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();

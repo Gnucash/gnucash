@@ -11,7 +11,6 @@ libgncgnome_a_SOURCES = \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-new-user.c \
-  dialog-options.c \
   dialog-price-editor.c \
   dialog-print-check.c \
   dialog-progress.c \
@@ -58,7 +57,6 @@ noinst_HEADERS = \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
-  dialog-options.h \
   dialog-print-check.h \
   dialog-progress.h \
   dialog-style-sheet.h \
