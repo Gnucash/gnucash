@@ -74,6 +74,7 @@
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"
 #include "gnc-split-reg.h"
+#include "window-register.h"
 
 #include "dialog-sxsincelast.h"
 #include "dialog-scheduledxaction.h"
@@ -1311,7 +1312,8 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
 
         gnc_sxsld_commit_ledgers( sxsld );
 
-        /* If we're finishing from the to-create page, then process the page contents. */
+        /* If we're finishing from the to-create page, then process the page
+         * contents. */
         if ( druid_page ==
              GNOME_DRUID_PAGE( glade_xml_get_widget( sxsld->gxml,
                                                      TO_CREATE_PG ) ) ) {
@@ -1843,7 +1845,6 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
         reminderInstanceTuple *rit;
         FreqSpec *fs;
         GString *freqSpecStr;
-        /* Major FIXME [????] */
 
         ctree = GTK_CTREE( glade_xml_get_widget( sxsld->gxml,
                                                  REMINDER_LIST ) );
@@ -1931,14 +1932,8 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                 rowtext[0] = xaccSchedXactionGetName( tdt->sx );
 
                 fs = xaccSchedXactionGetFreqSpec( tdt->sx );
-
                 xaccFreqSpecGetFreqStr( fs, tmp_str );
                 rowtext[1] = tmp_str->str;
-
-                /* FIXME: This date is the first invalid one, as opposed to the
-                 * last valid one. :(   Or, even better, the reason for
-                 * obsolesence. */
-                /*g_date_strftime( rowtext[2], GNC_D_WIDTH, GNC_D_FMT, tdt->endDate ); */
 
                 strcpy( rowtext[2], _( OBSOLETE_TEXT ) );
 
@@ -2752,21 +2747,22 @@ tct_table_entry_key_handle( GtkWidget *widget, GdkEventKey *event, gpointer ud )
         gtk_entry_set_text( ent, str->str );
         g_string_free( str, TRUE );
 
-        /* FIXME: Next, deal with tab-ordering in this page...  */
-
-        // if ( entry isn't last in table )
-        //    return (normal)FALSE
-        // if ( unfilled entry in this table exists )
-        //    change focus to unfilled entry
-        // if ( no more unfilled clist-rows )
-        //    return (normal)FALSE
-        // clist-select next unfilled row
-
-        // This doesn't deal with shift-tab very well ... 
-        // And there's a question of if the user will allow us to futz with
-        // their tab-ordering... though it's already pretty screwed up for the
-        // dynamically-changing-table anyways, so they probably won't mind
-        // too much... -- jsled
+        /* FIXME: Next, deal with tab-ordering in this page...
+         *
+         * if ( entry isn't last in table )
+         *    return (normal)FALSE
+         * if ( unfilled entry in this table exists )
+         *    change focus to unfilled entry
+         * if ( no more unfilled clist-rows )
+         *    return (normal)FALSE
+         * clist-select next unfilled row
+         *
+         * This doesn't deal with shift-tab very well ... 
+         * And there's a question of if the user will allow us to futz with
+         * their tab-ordering... though it's already pretty screwed up for the
+         * dynamically-changing-table anyways, so they probably won't mind
+         * too much... -- jsled
+         */
 
         return FALSE;
 }
@@ -3471,7 +3467,8 @@ inform_or_add( reminderTuple *rt, gboolean okFlag,
 
                 userMsg = g_string_sized_new( 128 );
                 g_string_sprintf( userMsg,
-                                  "You cannot skip instances of Scheduled Transactions.\n"
+                                  "You cannot skip instances of "
+                                  "Scheduled Transactions.\n"
                                   "The following instances of \"%s\"\n"
                                   "must be selected as well:\n\n",
                                   xaccSchedXactionGetName( rt->sx ) );
@@ -3532,21 +3529,11 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
 
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->ac_gsr), TRUE, TRUE, 2 );
-
-        /* FIXME: we should do all the happy-fun register stuff... button bar
-         * controls ... popups ... */
-
-        /* configure... */
-        /* don't use double-line */
-        /* FIXME */
+        gnc_split_reg_use_extended_popup( sxsld->ac_gsr );
         gnc_split_register_config(splitreg,
                                   splitreg->type, splitreg->style,
                                   FALSE);
-
-        /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
-
-        /* force a refresh */
         gnc_ledger_display_refresh( sxsld->ac_ledger );
 }
 
@@ -3579,21 +3566,82 @@ create_created_ledger( sxSinceLastData *sxsld )
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->created_gsr), TRUE, TRUE, 2 );
 
-        /* FIXME: we should do all the happy-fun register stuff... button bar
-         * controls ... popups ... */
-
-        /* configure... */
-        /* don't use double-line */
-        /* FIXME */
+        gnc_split_reg_use_extended_popup( sxsld->created_gsr );
         gnc_split_register_config(splitreg,
                                   splitreg->type, splitreg->style,
                                   FALSE);
-
-        /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
-
-        /* force a refresh */
         gnc_ledger_display_refresh( sxsld->created_ledger );
+}
+
+static
+void
+sxsld_jump_to_real_txn( GNCSplitReg *gsr, gpointer ud )
+{
+        SplitRegister *reg;
+        Account *account;
+        Account *leader;
+        Split *split;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+        DEBUG( "FIXME: Should jump to the actual, not the fake, txn." );
+        reg = gnc_ledger_display_get_split_register( sxsld
+                                                     ->to_create_ledger );
+
+        split = gnc_split_register_get_current_split (reg);
+        if (split == NULL)
+                return;
+
+        {
+                GUID *acct_guid;
+                kvp_frame *split_kvpf;
+                kvp_value *kvp_val;
+                
+                split_kvpf = xaccSplitGetSlots( split );
+                kvp_val = kvp_frame_get_slot_path( split_kvpf,
+                                                   GNC_SX_ID,
+                                                   GNC_SX_ACCOUNT,
+                                                   NULL );
+                if ( kvp_val == NULL ) {
+                        PERR( "Null kvp_val for account" );
+                }
+                acct_guid = kvp_value_get_guid( kvp_val );
+                account = xaccAccountLookup( acct_guid,
+                                             gnc_get_current_book ());
+        }
+        
+        if (account == NULL)
+                return;
+
+        leader = gnc_ledger_display_leader( gsr->ledger );
+
+        if (account == leader)
+        {
+                split = xaccSplitGetOtherSplit(split);
+                if (split == NULL)
+                        return;
+
+                account = xaccSplitGetAccount(split);
+                if (account == NULL)
+                        return;
+                if (account == leader)
+                        return;
+        }
+
+        {
+                GNCLedgerDisplay *ld;
+                GNCSplitReg *gsr;
+
+                ld = gnc_ledger_display_simple( account );
+                gsr = gnc_ledger_display_get_user_data( ld );
+                if ( !gsr ) {
+                        /* create new */
+                        gsr = regWindowSimple( account );
+                }
+                gnc_split_reg_raise( gsr );
+                gnc_split_reg_jump_to_split( gsr, split );
+        }
+        
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(gsr), "jump" );
 }
 
 static void
@@ -3617,20 +3665,17 @@ create_to_create_ledger( sxSinceLastData *sxsld )
                                            ( CREATE_TOOLBAR | CREATE_POPUP ),
                                            ( CAP_READ_ONLY | CAP_SCHEDULE) ) );
 
+        gtk_signal_connect( GTK_OBJECT(sxsld->to_create_gsr), "jump",
+                            GTK_SIGNAL_FUNC( sxsld_jump_to_real_txn ),
+                            sxsld );
+
         DEBUG( "(to_create gsr)%.8x", sxsld->to_create_gsr );
         txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
         gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
                            GTK_WIDGET( sxsld->to_create_gsr ) );
-
-        /* configure... */
-        /* don't use double-line */
         gnc_split_register_config( splitreg, splitreg->type, splitreg->style,
                                    FALSE );
-
-        /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
-
-        /* force a refresh */
         gnc_ledger_display_refresh( sxsld->to_create_ledger );
 }
 
@@ -3767,7 +3812,6 @@ gnc_sxsld_free_toCreateTuple_list( GList *l )
                 tct->instanceList = NULL;
                 g_free( tct );
         }
-
 }
 
 static

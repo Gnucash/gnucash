@@ -1,3 +1,27 @@
+2002-11-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-split-reg.c (gsr_setup_status_widgets): Only setup
+	the status check if we've created it to prevent some
+	warning/critical noise.
+	(gnc_split_reg_class_init): Setup default signal handlers to
+	GTK_RUN_LAST so that they can be stopped by callers.
+	(gnc_split_reg_use_extended_popup): Added; replaces
+	dialog-schedxaction.c version of same in a cleaner way.
+	(gsr_default_schedule_handler): If the transaction which is
+	requested to be "Schedule..."d was created from an SX, then the
+	editor for the SX which created the txn is opened rather than from
+	SX-From-Trans dialog.
+	(gnc_split_reg_jump_to_blank, gnc_split_reg_jump_to_split_amount)
+	(gnc_split_reg_jump_to_split): Add ledger refreshes to get correct
+	behavior.
+
+	* src/gnome/dialog-sxsincelast.c (sxsld_jump_to_real_txn): Added;
+	jump to the correct [read: real] txn on a jump signal from the
+	ledger.
+
+	* src/gnome/gnc-split-reg.c (gsr_default_jump_handler): Use new
+	regWindowSimple signature for creating new windows on a jump.
+
 2002-11-16  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register.c (gnc_split_register_save):

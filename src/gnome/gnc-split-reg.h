@@ -257,14 +257,15 @@ void gnc_split_reg_set_split_state( GNCSplitReg *gsr, gboolean split );
 void gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine );
 
 /**
- * Convenience function for users.  Returns the popup menu containing what
- * would normally be the menu-bar-placed menu items.  Callers may not have a
- * menu bar, but wish to provide full functionality.
+ * Convenience function for callers.  Sets up the popup menu to contain the
+ * GNCSplitReg-provided menuswhat would normally be the menu-bar.  Callers
+ * may not have a menu bar themselves, but wish to provide full
+ * functionality via the popup menu.
  *
  * The menu-bar items will be at the bottom of the popup menu, seperated.
- * The menu-bar items will be created if they were not originally created.
+ * The menu-bar items will not be created if they were not originally created.
  **/
-GtkWidget *gnc_split_reg_get_popup_extended( GNCSplitReg *gsr );
+void gnc_split_reg_use_extended_popup( GNCSplitReg *gsr );
 
 gboolean gnc_split_reg_check_close( GNCSplitReg *gsr );
 

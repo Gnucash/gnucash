@@ -51,9 +51,3 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 void gnc_ui_scheduled_xaction_editor_dialog_destroy( SchedXactionEditorDialog *sxd );
 
 #endif
-
-/**
- * TODO:
- * . date-entries should back-stop each other?
- * . modify gtkentry to prohibit fracation num-occurance values.
- **/

@@ -38,6 +38,7 @@
 #include "Account.h"
 #include "AccWindow.h"
 #include "Scrub.h"
+#include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -60,17 +61,17 @@
 static short module = MOD_SX;
 
 /**
- * TODO/FIXME list:
- * . alpha-necessary
+ * TODO list:
+ *
+ * X alpha-necessary
  *   X fill out gnc-split-reg.h interface
- *   . calendar/date-picker
- *   . FIXMES
+ *   X calendar/date-picker
  * . beta-necessary
  *   . date-inclusion on jumping
- *   . title-renaming in read-only case.
- *   . size-allocation
- *   . default schedule/recur handling for from-SX items.
  *   . pass in, use number-of-lines
+ *   . title-renaming in read-only case.
+ *   X size-allocation
+ *   X default schedule/recur handling for from-SX items.
  *   X handle destruction/cleanup more cleanly
  *   X conditional creation
  *   X handle widget-visibility callbacks
@@ -277,7 +278,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
   for ( i=0; signals[i].signal_name != NULL; i++ ) {
     gnc_split_reg_signals[ signals[i].s ] =
       gtk_signal_new( signals[i].signal_name,
-                      GTK_RUN_FIRST,
+                      GTK_RUN_LAST,
                       object_class->type, signals[i].defaultOffset,
                       gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
   }
@@ -539,6 +540,10 @@ gsr_setup_status_widgets( GNCSplitReg *gsr )
 
   /* be sure to initialize the gui elements associated with the cursor */
   gnc_split_register_config( sr, sr->type, sr->style, use_double_line );
+
+  if ( ! (gsr->createFlags & CREATE_MENUS) ) {
+    return;
+  }
 
   check = GTK_CHECK_MENU_ITEM( gsr->double_line_check );
 
@@ -1157,8 +1162,8 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
   SplitRegister *reg = gnc_ledger_display_get_split_register( gsr->ledger );
   Transaction *pending_trans = gnc_split_register_get_current_trans (reg);
 
-  /* FIXME: If the transaction has a sched-xact KVP frame, then go to the
-   * editor for the existing SX; otherwise, do the sx-from-trans dialog. */
+  /* If the transaction has a sched-xact KVP frame, then go to the editor
+   * for the existing SX; otherwise, do the sx-from-trans dialog. */
   {
     kvp_frame *txn_frame;
     kvp_value *kvp_val;
@@ -1166,11 +1171,27 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
      * pointing-to the SX this was created from. */
     txn_frame = xaccTransGetSlots( pending_trans );
     if ( txn_frame != NULL ) {
-      DEBUG( "Got frame, looking up key" );
       kvp_val = kvp_frame_get_slot( txn_frame, "from-sched-xaction" );
       if ( kvp_val ) {
-        DEBUG( "Find SX with GUID \"%s\"",
-               guid_to_string( kvp_value_get_guid( kvp_val ) ) );
+        GUID *fromSXId = kvp_value_get_guid( kvp_val );
+        SchedXaction *theSX = NULL;
+        GList *sxElts;
+        
+        /* Get the correct SX */
+        for ( sxElts = gnc_book_get_schedxactions( gnc_get_current_book() );
+              (!theSX) && sxElts;
+              sxElts = sxElts->next ) {
+          SchedXaction *sx = (SchedXaction*)sxElts->data;
+          theSX =
+            ( ( guid_equal( xaccSchedXactionGetGUID( sx ), fromSXId ) )
+              ? sx : NULL );
+        }
+
+        if ( theSX ) {
+          SchedXactionDialog *sxd = gnc_ui_scheduled_xaction_dialog_create();
+          gnc_ui_scheduled_xaction_editor_dialog_create( sxd, theSX, FALSE );
+          return;
+        }
       }
     }
   }
@@ -1194,13 +1215,6 @@ gnc_split_reg_record_trans_cb (GtkWidget *w, gpointer data)
   GNCSplitReg *gsr = data;
   gsr_emit_signal( gsr, "enter_ent" );
 }
-
-/* typedef enum */
-/* { */
-/*   DELETE_CANCEL, */
-/*   DELETE_SPLITS, */
-/*   DELETE_TRANS, */
-/* } DeleteType; */
 
 void
 gsr_default_cancel_handler( GNCSplitReg *gsr, gpointer data )
@@ -1287,6 +1301,8 @@ gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split)
 
   if (gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
     gnucash_register_goto_virt_cell( gsr->reg, vcell_loc );
+
+  gnc_ledger_display_refresh( gsr->ledger );
 }
 
 
@@ -1315,6 +1331,8 @@ gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split)
 
   if (gnc_split_register_get_split_amount_virt_loc (reg, split, &virt_loc))
     gnucash_register_goto_virt_loc (gsr->reg, virt_loc);
+  
+  gnc_ledger_display_refresh (gsr->ledger);
 }
 
 void
@@ -1330,6 +1348,8 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
 
   if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
     gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
+
+  gnc_ledger_display_refresh (gsr->ledger);
 }
 
 void
@@ -1393,14 +1413,10 @@ gsr_default_jump_handler( GNCSplitReg *gsr, gpointer data )
     gsr = gnc_ledger_display_get_user_data( ld );
     if ( !gsr ) {
       /* create new */
-      RegWindow *rw = regWindowSimple( account );
-      gnc_register_raise( rw );
-      gnc_register_jump_to_split( rw, split );
-    } else {
-      /* Use existing. */
-      gtk_window_present( GTK_WINDOW(gsr->window) );
-      gnc_split_reg_jump_to_split( gsr, split );
+      gsr = regWindowSimple( account );
     }
+    gnc_split_reg_raise( gsr );
+    gnc_split_reg_jump_to_split( gsr, split );
   }
 }
 
@@ -1705,7 +1721,6 @@ gnc_split_reg_size_allocate (GtkWidget *widget,
 {
   GNCSplitReg *gsr = user_data;
   gsr->width = allocation->width;
-  /* FIXME: this can't be correct... */
   gtk_window_set_default_size( GTK_WINDOW(gsr->window), gsr->width, 0 );
 }
 
@@ -2213,10 +2228,26 @@ gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine )
   PERR( "unimplemented" );
 }
 
-GtkWidget*
-gnc_split_reg_get_popup_extended( GNCSplitReg *gsr )
+void
+gnc_split_reg_use_extended_popup( GNCSplitReg *gsr )
 {
+  GtkWidget *popup, *tmpMenu, *tmpMI;
+
   g_assert( gsr );
-  PERR( "unimplemented" );
-  return NULL;
+
+  popup = gsr->popup_menu;
+
+  gtk_menu_append( GTK_MENU(popup), gtk_menu_item_new() );
+
+  tmpMenu = gnc_split_reg_get_edit_menu( gsr );
+  tmpMI = gtk_menu_item_new_with_label( N_("Edit") );
+  gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
+  gtk_menu_append( GTK_MENU(popup), tmpMI );
+
+  tmpMenu = gnc_split_reg_get_view_menu( gsr );
+  tmpMI = gtk_menu_item_new_with_label( N_("View") );
+  gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
+  gtk_menu_append( GTK_MENU(popup), tmpMI );
+
+  gtk_widget_show_all( popup );
 }
