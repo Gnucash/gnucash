@@ -1,3 +1,7 @@
+2001-06-16  Robert Graham Merkel <rgmerk@mira.net
+
+	* po/POTFILES.in : remove references to deleted files.
+
 2001-06-15  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/gnc-book.c (gnc_book_write_to_file): remove useless
