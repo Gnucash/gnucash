@@ -377,7 +377,7 @@ printf ("save split is %p \n", split);
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
          old_acc = xaccSplitGetAccount (split_to_modify);
-         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+         new_acc = xaccGetAccountByName (trans, reg->mxfrmCell->cell.value);
          xaccAccountInsertSplit (new_acc, split_to_modify);
    
          /* make sure any open windows of the old account get redrawn */
