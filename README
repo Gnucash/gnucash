@@ -297,6 +297,9 @@ following packages:
   g-wrap: RPM's, debs, and source available at 
           ftp://ftp.gnucash.org/pub/g-wrap.
 
+  texinfo: If you are building from CVS, you need the GNU texinfo
+           package, version 4.0 or later.
+
 What you'll need to get and install in order to make sure you have all
 of these pieces properly installed for your particular operating
 system flavor will vary, but here's at least a partial list of what
