@@ -97,15 +97,6 @@ gnc_plugin_account_tree_new (void)
 	return GNC_PLUGIN (plugin);
 }
 
-void
-gnc_new_account_tree (GncMainWindow *window)
-{
-	GncPluginPage *page;
-
-	page = gnc_plugin_page_account_tree_new ();
-	gnc_main_window_open_page (window, page);
-}
-
 static void
 gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 {
@@ -179,4 +170,17 @@ gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action,
 {
 	g_return_if_fail (data != NULL);
 	gnc_new_account_tree (data->window);
+}
+
+/************************************************************
+ *                     Other Functions                      *
+ ************************************************************/
+
+void
+gnc_new_account_tree (GncMainWindow *window)
+{
+	GncPluginPage *page;
+
+	page = gnc_plugin_page_account_tree_new ();
+	gnc_main_window_open_page (window, page);
 }
