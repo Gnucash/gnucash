@@ -1,0 +1,34 @@
+/* XPM */
+static char * radar_icon [] = {
+/* width height num_colors chars_per_pixel */
+"    18   18        9            1",
+/* colors */
+". c #000000",
+"# c #ff0000",
+"a c #00ffff",
+"b c #008400",
+"c c #008484",
+"d c #848484",
+"e c #c6c6c6",
+"f c #ffff00",
+"g c None",
+/* pixels */
+"gggggggggggggggggg",
+"gggggggggggggggggg",
+"gggggggg.ggggggggg",
+"ggggggg##ggggggggg",
+"gggggg#####ggggggg",
+"ggggg#gg.gg##ggggg",
+"g.gg#ggbbbggg#gg.g",
+"gg##ggbgbbbbgg##gg",
+"gg##.bbg.ggbb.##gg",
+"gg#ggbbg.g.bbg#ggg",
+"gg#ggbg...ggbg#ggg",
+"gg#ggbg.g.gbgg#ggg",
+"ggg#gbbgggbbg#gggg",
+"ggg#gbbbbbb.g#gggg",
+"ggg##ggggggg##gggg",
+"ggg###########gggg",
+"gg.ggggggggggg.ggg",
+"gggggggggggggggggg"
+};

@@ -53,6 +53,7 @@
 #include "gnc-html.h"
 #include "gnc-http.h"
 #include "gnc-html-history.h"
+#include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -380,8 +381,14 @@ gnc_html_initialize (void)
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
 
+  PINFO( "initializing gnc_html..." );
+  printf( "initializing gnc_html...\n" );
+
   for (i = 0; types[i].type; i++)
     gnc_html_register_urltype (types[i].type, types[i].protocol);
+
+  // initialize graphing support
+  gnc_html_graph_gog_init();
 }
 
 
