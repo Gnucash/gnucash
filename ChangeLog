@@ -1,5 +1,8 @@
 2001-05-31  Dave Peticolas  <dave@krondo.com>
 
+	* src/test/test-dom-converters1.c (test_dom_tree_to_gnc_numeric):
+	fix bug
+
 	* src/engine/sixtp-utils.c (string_to_gint32): use intermediate
 	variable in case int != gint32.
 
