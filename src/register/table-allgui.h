@@ -180,6 +180,11 @@ void        xaccDestroyTable (Table *);
 void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                              int virt_rows, int virt_cols);
 
+/* The xaccCreateCursor() method can be called whenever a reconfig
+ *    of the cursor may require new gui elements to be initialized.
+ */
+void        xaccCreateCursor (Table *, CellBlock *);
+
 /* indicate what handler should be used for a given virtual block */
 void 
 xaccSetCursor (Table *table, CellBlock *curs,

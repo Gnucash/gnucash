@@ -581,9 +581,12 @@ void
 xaccCreateCursor (Table *table, CellBlock *curs) 
 {
    int i,j;
-   Widget reg = table->table_widget;
+   Widget reg;
+   if (!curs || !table) return;
 
-   if (!curs) return;
+   /* if Xbae itself is not yet created, then we can't go here either */
+   reg = table->table_widget;
+   if (!reg) return;
 
    for (i=0; i<curs->numRows; i++) {
       for (j=0; j<curs->numCols; j++) {

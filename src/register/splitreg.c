@@ -745,6 +745,13 @@ xaccConfigSplitRegister (SplitRegister *reg, int newtype)
    configLayout (reg);
    configTraverse (reg);
    configCursors (reg);
+
+   /* Make sure that any GU elemnts associated with this reconfig 
+    * are properly initialized.  */
+   xaccCreateCursor (reg->table, reg->single_cursor);
+   xaccCreateCursor (reg->table, reg->double_cursor);
+   xaccCreateCursor (reg->table, reg->trans_cursor);
+   xaccCreateCursor (reg->table, reg->split_cursor);
 }
 
 /* ============================================== */
