@@ -9,7 +9,7 @@ libgncmod_locale_reports_us_la_LDFLAGS = -module
 libgncmod_locale_reports_us_la_LIBADD = \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} 
 
 
 AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}

@@ -1,1 +1,1 @@
-SUBDIRS=ledger-core register-core register-gnome
+SUBDIRS=register-core register-gnome ledger-core 

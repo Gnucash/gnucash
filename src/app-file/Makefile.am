@@ -29,8 +29,6 @@ libgncmod_app_file_la_LDFLAGS = -module
 libgncmod_app_file_la_LIBADD = \
   ../gnc-module/libgncmodule.la \
   ../engine/libgncmod-engine.la \
-  ../app-utils/libgncmod-app-utils.la \
-  ../calculation/libgncmod-calculation.la \
   ../gnome-utils/libgncmod-gnome-utils.la \
   ./gnome/libgnc-app-file-gnome.la \
   ${GUILE_LIBS} \

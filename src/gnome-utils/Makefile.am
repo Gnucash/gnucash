@@ -78,6 +78,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
+  ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GUPPI_LIBS} \

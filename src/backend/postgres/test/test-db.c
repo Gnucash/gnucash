@@ -407,6 +407,7 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
 
   gnc_session_destroy (session_2);
   g_free (filename);
+  return TRUE;
 }
 
 static gboolean

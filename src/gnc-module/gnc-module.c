@@ -243,6 +243,7 @@ gnc_module_get_info(const char * fullpath)
 {
   lt_dlhandle  handle;
 
+  //printf("(init) dlopening %s\n", fullpath);
   handle = lt_dlopen(fullpath);
   if(handle) 
   {
@@ -252,7 +253,8 @@ gnc_module_get_info(const char * fullpath)
      * types are */ 
     if (!modsysver) 
     {
-      lt_dlclose(handle);
+      //printf("(init) closing %s\n", fullpath);
+      //lt_dlclose(handle);
       return NULL;
     }
 
@@ -278,13 +280,14 @@ gnc_module_get_info(const char * fullpath)
         info->module_interface   = *(int *)interface;
         info->module_age         = *(int *)age;
         info->module_revision    = *(int *)revision;
-        lt_dlclose(handle);
+	//printf("(init) closing %s\n", fullpath);
+        //lt_dlclose(handle);
         return info;
       }
       else 
       {
         g_warning ("module '%s' does not match module signature\n", fullpath);
-        lt_dlclose(handle);
+        //lt_dlclose(handle);
         return NULL;
       }
     }
@@ -293,7 +296,7 @@ gnc_module_get_info(const char * fullpath)
       /* unsupported module system interface version */
       /* printf("\n** WARNING ** : module '%s' requires newer module system\n",
 	 fullpath); */
-      lt_dlclose(handle);
+      //lt_dlclose(handle);
       return NULL;
     }
   }
@@ -421,6 +424,9 @@ gnc_module_load(char * module_name, gint interface)
     /* module already loaded ... call the init thunk */
     if(info->init_func) 
     {
+      printf("calling init func for '%s' .. refcount = %d\n", 
+	     module_name, info->load_count);
+	     
       if(info->init_func(info->load_count)) 
       {
 	info->load_count++;
@@ -442,6 +448,9 @@ gnc_module_load(char * module_name, gint interface)
     GNCModuleInfo * modinfo = gnc_module_locate(module_name, interface);
     lt_dlhandle   handle = NULL;
     
+    //if(modinfo) 
+    //printf("(load) dlopening %s\n", modinfo->module_filepath);
+
     if(modinfo && ((handle = lt_dlopen(modinfo->module_filepath)) != NULL)) 
     {
       lt_ptr initfunc = lt_dlsym(handle, "gnc_module_init");
@@ -458,6 +467,9 @@ gnc_module_load(char * module_name, gint interface)
         
         /* now call its init function.  this should load any dependent
          * modules, too.  If it doesn't return TRUE unload the module. */
+	printf("calling init func for '%s' .. refcount = 0\n", 
+	       module_name);
+	
         if(!info->init_func(0)) 
 	{
           /* init failed. unload the module. */
@@ -465,7 +477,7 @@ gnc_module_load(char * module_name, gint interface)
           g_hash_table_remove(loaded_modules, info);
           g_free(info->filename);
           g_free(info);
-          lt_dlclose(handle);
+          //lt_dlclose(handle);
           return NULL;
         }
 
@@ -475,7 +487,7 @@ gnc_module_load(char * module_name, gint interface)
       {
         g_warning ("Module %s (%s) is not a gnc-module.\n", module_name,
                    modinfo->module_filepath);
-        lt_dlclose(handle);
+        //lt_dlclose(handle);
       }
       return info;
     }
@@ -522,7 +534,8 @@ gnc_module_unload(GNCModule module)
     if(info->load_count == 0) 
     {
       /* now close the module and free the struct */ 
-      lt_dlclose(info->handle);
+      //printf("(unload) closing %s\n", info->filename);
+      //lt_dlclose(info->handle);
       g_hash_table_remove(loaded_modules, module);
       g_free(info);
     }

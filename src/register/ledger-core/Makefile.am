@@ -24,6 +24,7 @@ noinst_HEADERS = \
 
 libgncmod_ledger_core_la_LDFLAGS = -module
 libgncmod_ledger_core_la_LIBADD = \
+  ${top_srcdir}/src/register/register-core/libgncmod-register-core.la \
   ${top_srcdir}/src/gnome/libgncgnome.la 
 
 AM_CFLAGS = \
