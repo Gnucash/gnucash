@@ -56,6 +56,8 @@ void          gnc_html_show_url(gnc_html * html,
                                 const char * label, int newwin_hint);
 void          gnc_html_reload(gnc_html * html);
 void          gnc_html_print(gnc_html * html);
+void          gnc_html_cancel(gnc_html * html);
+
 URLType
 gnc_html_parse_url(gnc_html * html, const gchar * url, 
                    char ** url_location, char ** url_label);

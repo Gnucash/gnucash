@@ -338,6 +338,24 @@
       #f #f #f (lambda (x) (option-widget-changed-cb x)))))
 
 
+(define (gnc:make-pixmap-option 
+         section name sort-tag doc-string
+         default-value)
+  (let* ((value default-value))
+    (gnc:make-option
+     section name sort-tag 'pixmap doc-string
+     (lambda ()  value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator  (lambda () (gnc:value->string value)))
+     (lambda (x)
+       (if (string? x)
+           (begin 
+             (list #t x))
+           (begin 
+             (list #f "pixmap-option: not a string"))))
+     #f #f #f #f)))
+
 ;; subtype should be on of 'relative 'absolute or 'both
 ;; relative-date-list should be the list of relative dates permitted
 ;; gnc:all-relative-dates contains a list of all relative dates.
@@ -471,10 +489,10 @@
      multiple-selection #f #f #f)))
 
 (define (gnc:multichoice-list-lookup list item )
-    (cond
-     ((null? list) #f)
-     ((eq? item (vector-ref (car list) 0)) 0)
-     (else (+ 1 (gnc:multichoice-list-lookup (cdr list) item)))))
+  (cond
+   ((null? list) #f)
+   ((eq? item (vector-ref (car list) 0)) 0)
+   (else (+ 1 (gnc:multichoice-list-lookup (cdr list) item)))))
 
 ;; multichoice options use the option-data as a list of vectors.
 ;; Each vector contains a permissible value (scheme symbol), a

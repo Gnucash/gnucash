@@ -215,7 +215,7 @@
      (lambda (account)
        (newline port)
        (write-data account port))
-     (gnc:group-map-all-accounts account->output-form account-group))
+     (gnc:group-map-accounts account->output-form account-group))
     
     (display "\n\n;;; Transactions\n\n" port)
     ;; Now print all the transactions
@@ -227,7 +227,7 @@
     ;;   (account-txns-write account port))
     ;; account-group)
     
-    (gnc:group-map-all-accounts
+    (gnc:group-map-accounts
      (lambda (account)
        (newline port)
        (account-txns-write account port))

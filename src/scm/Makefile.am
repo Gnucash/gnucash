@@ -20,16 +20,24 @@ gnc_regular_scm_files = \
   engine-utilities.scm \
   extensions.scm \
   graph.scm \
+  gnc-numeric.scm \
   help-topics-index.scm \
   hooks.scm \
-  html-generator.scm \
+  html-barchart.scm \
+  html-document.scm \
+  html-piechart.scm \
+  html-style-info.scm \
+  html-style-sheet.scm \
+  html-text.scm \
+  html-table.scm \
   iso-4217-currencies.scm \
   main.scm \
   options.scm \
   path.scm \
   prefs.scm \
-  report-utilities.scm \
   report.scm \
+  report-html.scm \
+  report-utilities.scm \
   slib-backup.scm \
   startup.scm \
   structure.scm \

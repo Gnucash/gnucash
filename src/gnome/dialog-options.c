@@ -406,10 +406,29 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
       {
         GnomeFontPicker *picker = GNOME_FONT_PICKER(option->widget);
         gnome_font_picker_set_font_name(picker, string);
+      }
+      if(string) {
         free(string);
       }
     }
     else
+      bad_value = TRUE;
+  }
+  else if(safe_strcmp(type, "pixmap") == 0) {
+    /* PIXMAP */
+    if(gh_string_p(value)) {
+      char * string = gh_scm2newstr(value, NULL);
+      if (string && *string) {
+        GnomeFileEntry *fentry = 
+          GNOME_FILE_ENTRY(gnome_pixmap_entry_gnome_file_entry
+          (GNOME_PIXMAP_ENTRY(option->widget)));
+        gnome_file_entry_set_default_path(fentry, string);
+      }
+      if(string) {
+        free(string);
+      }
+    }
+    else 
       bad_value = TRUE;
   }
   else
@@ -608,8 +627,16 @@ gnc_option_get_ui_value(GNCOption *option)
     string = gnome_font_picker_get_font_name(picker);
     result = gh_str02scm(string);
   }
-  else
+  else if (safe_strcmp(type, "pixmap") == 0) 
   {
+    /* PIXMAP */
+    GnomePixmapEntry * p = GNOME_PIXMAP_ENTRY(option->widget);
+    char             * string = gnome_pixmap_entry_get_filename(p);
+
+    result = gh_str02scm(string);
+  }  
+  else
+    {
     PERR("Unknown type for refresh. Ignoring.\n");
   }
 
@@ -1261,6 +1288,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "string") == 0)
   {
@@ -1286,6 +1314,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "currency") == 0)
   {
@@ -1315,6 +1344,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "commodity") == 0)
   {
@@ -1344,6 +1374,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "multichoice") == 0)
   {
@@ -1365,6 +1396,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "date") == 0)
   {
@@ -1391,6 +1423,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_start(page_box, enclosing, FALSE, FALSE, 5);
     packed = TRUE;  
     gnc_option_set_ui_value(option, FALSE);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "account-list") == 0)
   {
@@ -1413,6 +1446,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     gtk_clist_set_row_height(GTK_CLIST(value), 0);
     gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "list") == 0)
   {
@@ -1440,6 +1474,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     gtk_clist_set_row_height(GTK_CLIST(value), 0);
     gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * num_lines);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "number-range") == 0)
   {
@@ -1517,6 +1552,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "color") == 0)
   {
@@ -1548,6 +1584,7 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
   }
   else if (safe_strcmp(type, "font") == 0)
   {
@@ -1576,6 +1613,41 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
+  }
+  else if (safe_strcmp(type, "pixmap") == 0)
+  {
+    GtkWidget *label;
+    GtkWidget *default_button;
+    gchar *colon_name;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+    value = gnome_pixmap_entry_new(NULL, _("Select pixmap"),
+                                   FALSE);
+    gnome_pixmap_entry_set_preview(GNOME_PIXMAP_ENTRY(value), FALSE);
+
+    gtk_signal_connect(GTK_OBJECT
+                       (gnome_pixmap_entry_gtk_entry
+                        (GNOME_PIXMAP_ENTRY(value))),
+                       "changed",
+		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
+    
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    default_button = gnc_option_create_default_button(option, tooltips);
+    gtk_box_pack_end(GTK_BOX(enclosing), default_button, FALSE, FALSE, 0);
+
+    gtk_widget_show(value);
+    gtk_widget_show(label);
+    gtk_widget_show(default_button);
+    gtk_widget_show(enclosing);
   }
   else
   {
@@ -1587,9 +1659,6 @@ gnc_option_set_ui_widget(GNCOption *option,
 
   if (value != NULL)
     gtk_tooltips_set_tip(tooltips, value, documentation, NULL);
-
-  if (enclosing != NULL)
-    gtk_widget_show_all(enclosing);
 
   if (raw_name != NULL)
     free(raw_name);

@@ -1,225 +1,201 @@
-;; -*-scheme-*-
-;; account-summary.scm
-;; account(s) summary report
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; account-summary.scm : brief account listing 
+;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
+;; 
+;; Original version by  Terry D. Boldt (tboldt@attglobal.net>
+;;   Author makes no implicit or explicit guarantee of accuracy of
+;;   these calculations and accepts no responsibility for direct
+;;   or indirect losses incurred as a result of using this software.
+;;  
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
 ;;
-;; Author makes no implicit or explicit guarantee of accuracy of
-;;  these calculations and accepts no responsibility for direct
-;;  or indirect losses incurred as a result of using this software.
-;;
-;; Terry D. Boldt (tboldt@attglobal.net>
-;; created by modifying other report files extensively - the authors of
-;; the modified report files are graciously thanked for their efforts.
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "report/account-balance.scm")
-(gnc:depend "report-utilities")
-(gnc:depend "html-generator.scm")
-(gnc:depend "date-utilities.scm")
+(gnc:support "report/account-summary.scm")
+(gnc:depend  "report-html.scm")
 
-(let ()
+;; account summary report 
+;; prints a simple table of account information with clickable 
+;; links to open the corresponding register window.
 
-  ;; Options
+(let () 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; options generator
+  ;; select accounts to report on, whether to show subaccounts,
+  ;; whether to include subtotaled subaccount balances in the report,
+  ;; and what date to show the summary for.
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
   (define (accsum-options-generator)
-    (let*
-        ((gnc:*accsum-track-options* (gnc:new-options))
-         ;; register a configuration option for the report
-         (gnc:register-accsum-option
-          (lambda (new-option)
-            (gnc:register-option gnc:*accsum-track-options*
-                                 new-option))))
-
-      ;; to-date
-      (gnc:register-accsum-option
+    (let* ((options (gnc:new-options))
+           (opt-register 
+            (lambda (opt)
+              (gnc:register-option options opt))))
+      
+      ;; date at which to report balance
+      (opt-register 
        (gnc:make-date-option
-        (N_ "Report Options") (N_ "To")
-        "a" (N_ "Report up to and including this date")
-        (lambda ()
-          (let ((bdtime (localtime (current-time))))
-            (set-tm:sec bdtime 59)
-            (set-tm:min bdtime 59)
-            (set-tm:hour bdtime 23)
-            (cons 'absolute (cons (car (mktime bdtime)) 0))))
+        (_ "General") (_ "Date")
+        "a" (_ "Select a date to report on")
+        (lambda () (cons 'absolute (cons (current-time) 0)))
         #f 'absolute #f))
-
-      ;; account(s) to do report on
-      (gnc:register-accsum-option
+      
+      ;; set of accounts to do report on 
+      (opt-register 
        (gnc:make-account-list-option
-        (N_ "Report Options") (N_ "Account")
-        "b" (N_ "Report on these account(s)")
+        (_ "General") (_ "Account")
+        "b" (_ "Report on these account(s)")
         (lambda ()
           (let ((current-accounts (gnc:get-current-accounts)))
             (cond ((not (null? current-accounts)) current-accounts)
                   (else
                    (gnc:group-get-account-list (gnc:get-current-group))))))
         #f #t))
-
-      (gnc:register-accsum-option
+      
+      (opt-register 
        (gnc:make-simple-boolean-option
-        (N_ "Report Options") (N_ "Sub-Accounts")
-        "c" (N_ "Include Sub-Accounts of each selected Account") #f))
+        (_ "General") (_ "Sub-Accounts")
+        "c" (_ "Include sub-accounts of each selected account?") #f))      
+      
+      (opt-register 
+       (gnc:make-simple-boolean-option
+        (_ "General") (_ "Include Sub-Account balances")
+        "d" (_ "Include sub-account balances in printed balance?") #f))      
+      
+      options))
 
-      gnc:*accsum-track-options*))
 
-;; I copied the following html generation code from the html-generation file
-;; because I like the numbers in the balance column aligned at the top of the
-;; cell - this aligns the number with the account name - rather than placing
-;; the balance number in the default position of the vertical center of cell
-;; which makes it difficult to match the balance with the account name.
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; build-acct-table
+  ;; does the dirty work of building a table for a set of accounts. 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Create a column entry
-  (define (accsum_html-table-col val)
-    (string-append "<TD valign=top align=right>" (tostring val) "</TD>"))
-
-  (define (accsum_html-table-col-align val align)
-    (string-append "<TD align=" align ">" (tostring val) "</TD>"))
-
-;; Create an html table row from a list of entries
-  (define (accsum_html-table-row lst)
-    (cond ((string? lst) lst)
-	  (else
-	   (string-append
-	    "<TR>"
-    	(apply string-append (map accsum_html-table-col lst))
-	    "</TR>"))))
-
-; Create an html table row from a list of entries
-  (define (accsum_html-table-row-align lst align-list)
-    (cond ((string? lst) lst)
-	  (else
-	   (string-append
-    	"<TR>"
-	    (apply string-append
-                   (map accsum_html-table-col-align lst align-list))
-	    "</TR>"))))
-
-;; Create an html table from a list of rows, each containing
-;;   a list of column entries
-  (define (accsum_html-table hdrlst llst)
-    (string-append
-     (accsum_html-table-header hdrlst)
-     (apply string-append (map accsum_html-table-row llst))
-     (accsum_html-table-footer)))
-
-  (define (accsum_html-table-headcol val)
-    (string-append "<TH justify=center>" (tostring val) "</TH>"))
-
-  (define (accsum_html-table-header vec)
-     (apply string-append "<TABLE cellspacing=10 rules=\"rows\">\n"
-            (map accsum_html-table-headcol vec)))
-
-  (define (accsum_html-table-footer)
-    "</TABLE>")
-
-  (define (column-list)
-    (list (_ "Account Name") (_ "Balance")))
-
-  (define (non-zero-at-date-accounts accts date)
-    (if (null? accts)
-        '()
-        (let ((acct (car accts))
-              (rest (non-zero-at-date-accounts (cdr accts) date)))
-          (if (< (d-gnc:account-get-balance-at-date acct date #t) 0.01)
-              rest
-              (cons acct rest)))))
-
-  ;; build the table rows for a single account
-  ;; date specifies the ending date for the account
-  ;; do-children specifies whether to expand the children
-  ;; in the table
-  ;; each row consists of two columns: account-name account-balance
-  ;; the children are a separate table enclosed in the account-name cell
-  ;; do not include accounts which have a zero balance
-  (define (acc-sum-table-row account date do-children?)
-    (let
-      ((acc-bal (d-gnc:account-get-balance-at-date account date #t))
-       (children (gnc:account-get-children account)))
-      (list
-       (if (and do-children? (> (gnc:group-get-num-accounts children) 0))
-           (string-append (gnc:account-get-name account)
-                          (acc-sum-table
-                           (non-zero-at-date-accounts
-                            (gnc:group-get-account-list children) date)
-                           date #t))
-           (gnc:account-get-name account))
-       (gnc:amount->string acc-bal
-                           (gnc:account-value-print-info account #t)))))
-
-  ;; build the table for the list of 'accounts' passed
-  (define (acc-sum-table accnts date do-children?)
-    (let ((columns (column-list)))
-      (if (null? accnts)
-          ""
-          (accsum_html-table columns
-                      (map (lambda (acct)
-                             (acc-sum-table-row acct date do-children?))
-                           (non-zero-at-date-accounts accnts date))))))
-
-;; get the total of a list of accounts at the specified date.
-;; all children are included in the calculation
-  (define (account-total-at-date accnts date)
-    (apply +
-         (map (lambda (account)
-                (d-gnc:account-get-balance-at-date account date #t)) accnts)))
+  (define (build-acct-table accounts end-date do-subs? sub-balances?)
+    (let ((table (gnc:make-html-table)))
+      ;; column 1: account names 
+      (gnc:html-table-append-column!
+       table 
+       (map (lambda (acct)
+              (gnc:make-html-text (gnc:html-markup-anchor
+                                   (string-append 
+                                    "gnc-register:account=" 
+                                    (gnc:account-get-full-name acct))
+                                   (gnc:account-get-name acct))))
+            accounts))
+      
+      ;; column 2 (optional): subaccount info
+      (if do-subs? 
+          (let* ((has-subs? #f)
+                 (data 
+                  (map (lambda (acct)
+                         (let* ((children 
+                                 (gnc:account-get-immediate-subaccounts acct)))
+                           (if (not (null? children))
+                               (begin 
+                                 (set! has-subs? #t)
+                                 (build-acct-table children end-date 
+                                                   #t sub-balances?))
+                               #f)))
+                       accounts)))
+            (if has-subs? 
+                (begin 
+                  (gnc:html-table-append-column! table data)))))
+      
+      ;; column 3: balances 
+      (gnc:html-table-append-column! 
+       table
+       (map (lambda (acct)
+              (gnc:account-get-balance-at-date acct end-date sub-balances?))
+            accounts))
+      
+      ;; set column and table styles 
+      (let ((bal-col (- (gnc:html-table-num-columns table) 1)))
+        (gnc:html-table-set-col-style! 
+         table 0 "td" 
+         'attribute '("align" "left"))
+        (gnc:html-table-set-col-style! 
+         table 0 "th" 
+         'attribute '("align" "left"))        
+        
+        (gnc:html-table-set-col-style! 
+         table bal-col "td" 
+         'attribute '("align" "right"))
+        (gnc:html-table-set-col-style! 
+         table bal-col "th" 
+         'attribute '("align" "right"))
+        
+        (gnc:html-table-set-style! 
+         table "td" 
+         'attribute '("valign" "top")))
+      
+      table))
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; accsum-renderer
+  ;; set up the document and add the table
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (define (accsum-renderer options)
-      (let ((acctcurrency "USD")
-            (acctname "")
-            (enddate (gnc:date-option-absolute-time (gnc:option-value
-                      (gnc:lookup-option options "Report Options" "To"))))
-            (accounts (gnc:option-value
-                       (gnc:lookup-option options "Report Options" "Account")))
-            (dosubs (gnc:option-value
-                     (gnc:lookup-option options
-                                        "Report Options" "Sub-Accounts")))
-            (prefix (list "<HTML>" "<head>" "<title>"
-                          "Account Summary" "</title>" "</head>" "<BODY>"))
-            (suffix  (list "</BODY>" "</HTML>"))
-            (rept-data '())
-            (rept-text "")
-            (rept-total ())
-            (slist '()))
-
-        (if (null? accounts)
-            (set! rept-text
-                  (list "<TR><TD>"
-                        (_ "You have not selected an account.")
-                        "</TD></TR>"))
-            (begin
-
-              (set! rept-total
-                    (gnc:amount->string
-                     (account-total-at-date accounts enddate)
-                     (gnc:account-value-print-info (car accounts) #t)))
-
-              ; Grab account names
-              (set! acctname
-                    (string-join (map gnc:account-get-name accounts) " , "))
-
-              ;; Create HTML
-              (set! rept-data (acc-sum-table accounts enddate dosubs))))
-
-        (list
-         prefix
-         (if (null? accounts)
-             rept-text
-             (list
-              (sprintf #f
-                       (if dosubs
-                           (_ "Date: %s<br>Report for %s and all Sub-Accounts.<br>Accounts Total: %s")
-                           (_ "Date: %s<br>Report for %s.<br>Accounts Total: %s"))
-                       (gnc:print-date enddate)
-                       acctname
-                       rept-total)
-              "<p>\n"))
-         rept-data
-         ;; rept-total
-         suffix)))
-
-  (gnc:define-report
-   ;; version
+    (define (get-option optname)
+      (gnc:option-value
+       (gnc:lookup-option options (_ "General") optname)))
+    
+    (let ((accounts (get-option (_ "Account")))
+          (date-tp (vector-ref (get-option (_ "Date")) 1))
+          (do-subs? (get-option (_ "Sub-Accounts")))
+          (do-subtotals? (get-option (_ "Include Sub-Account balances")))
+          (doc (gnc:make-html-document)))
+      
+      (gnc:html-document-set-title! doc "Account Summary")
+      (if (not (null? accounts))
+          (let ((table (build-acct-table accounts date-tp 
+                                         do-subs? do-subtotals?)))
+            ;; set the column headers 
+            (if (= (gnc:html-table-num-columns table) 3)
+                (begin 
+                  (gnc:html-table-set-col-style! 
+                   table 1 "table" 
+                   'attribute '("width" "100%"))
+                  (gnc:html-table-set-col-headers!
+                   table 
+                   (list (_ "Account name") (_ "Sub-Accounts") (_ "Balance"))))
+                (begin 
+                  (gnc:html-table-set-col-headers!
+                   table (list (_ "Account name") (_ "Balance")))))
+            ;; add the table 
+            (gnc:html-document-add-object! doc table))
+          
+          ;; error condition: no accounts specified
+          (let ((p (gnc:make-html-text)))
+            (gnc:html-text-append! 
+             p 
+             (gnc:html-markup-h2 (_ "No accounts selected"))
+             (gnc:html-markup-p
+              (_ "This report requires accounts to be selected.")))
+            (gnc:html-document-add-object! doc p)))      
+      doc))
+  
+  (gnc:define-report 
    'version 1
-   ;; Name
-   'name (N_ "Account Summary")
-   ;; Options
+   'name (_ "Account Summary")
    'options-generator accsum-options-generator
-   ;; renderer
    'renderer accsum-renderer))
+
+
+          
+      
+          

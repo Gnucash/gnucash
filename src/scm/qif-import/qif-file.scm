@@ -18,341 +18,343 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-file:read-file self path)
-  (qif-file:set-path! self path)
-  (let* ((qstate-type #f)
-         (current-xtn #f)
-         (current-split #f)
-         (current-account-name #f)
-         (last-seen-account-name #f)
-         (default-split #f)
-         (first-xtn #f)
-         (ignore-accounts #f)
-         (return-val #t)
-         (line #f)
-         (tag #f)
-         (value #f)
-         (heinous-error #f)
-         (start-time #f)
-         (end-time #f)
-         (delimiters (string #\cr #\nl))
-         (valid-acct-types 
-          '(type:bank type:cash
-                      type:ccard type:invst
-                      #{type:oth\ a}#  #{type:oth\ l}#))
-         (progress-dialog #f)
-         (file-stats (stat path))
-         (file-size (stat:size file-stats))
-         (bytes-read 0))
-    (set! start-time (gettimeofday))
+  (false-if-exception
+   (let* ((qstate-type #f)
+          (current-xtn #f)
+          (current-split #f)
+          (current-account-name #f)
+          (last-seen-account-name #f)
+          (default-split #f)
+          (first-xtn #f)
+          (ignore-accounts #f)
+          (return-val #t)
+          (line #f)
+          (tag #f)
+          (value #f)
+          (heinous-error #f)
+          (start-time #f)
+          (end-time #f)
+          (delimiters (string #\cr #\nl))
+          (valid-acct-types 
+           '(type:bank type:cash
+                       type:ccard type:invst
+                       #{type:oth\ a}#  #{type:oth\ l}#))
+          (progress-dialog #f)
+          (file-stats (stat path))
+          (file-size (stat:size file-stats))
+          (bytes-read 0))
 
-    (if (> file-size 10000)
-        (begin
-          (set! progress-dialog (gnc:progress-dialog-new #f #f))
-          (gnc:progress-dialog-set-title progress-dialog "Progress")
-          (gnc:progress-dialog-set-heading progress-dialog
-                                           "Loading QIF file...")
-          (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+     (qif-file:set-path! self path)
+     (set! start-time (gettimeofday))
 
-    (with-input-from-file path
-      (lambda ()
-        ;; loop over lines
-        (let line-loop ()
-          (set! line (read-delimited delimiters))
-          (if (and 
-               (not (eof-object? line))
-               (not (string=? line "")))
-              (begin 
-                ;; add to the bytes-read tally 
-                (set! bytes-read 
-                      (+ bytes-read 1 (string-length line)))
+     (if (> file-size 10000)
+         (begin
+           (set! progress-dialog (gnc:progress-dialog-new #f #f))
+           (gnc:progress-dialog-set-title progress-dialog "Progress")
+           (gnc:progress-dialog-set-heading progress-dialog
+                                            "Loading QIF file...")
+           (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
 
-                ;; pick the 1-char tag off from the remainder of the line 
-                (set! tag (string-ref line 0))
-                (set! value (make-shared-substring line 1))
-                
-                ;; now do something with the line 
-                (if
-                 (eq? tag #\!)
-                 (begin 
-                   (set! qstate-type (qif-parse:parse-bang-field value))
-                   (case qstate-type 
-                     ((type:bank type:cash type:ccard type:invst
-                                 #{type:oth\ a}#  #{type:oth\ l}#)
-                      (if ignore-accounts 
-                          (set! current-account-name last-seen-account-name))
-                      (set! ignore-accounts #f)
-                      (set! current-xtn (make-qif-xtn))
-                      (set! default-split (make-qif-split))
-                      (qif-split:set-category! default-split "")
-                      (set! first-xtn #t))
-                     ((type:class)
-                      (set! current-xtn (make-qif-class)))
-                     ((type:cat)
-                      (set! current-xtn (make-qif-cat)))
-                     ((account)
-                      (set! current-xtn (make-qif-acct)))
-                     ((option:autoswitch)
-                      (set! ignore-accounts #t))
-                     ((clear:autoswitch)
-                      (set! ignore-accounts #f))))
+     (with-input-from-file path
+       (lambda ()
+         ;; loop over lines
+         (let line-loop ()
+           (set! line (read-delimited delimiters))
+           (if (and 
+                (not (eof-object? line))
+                (not (string=? line "")))
+               (begin 
+                 ;; add to the bytes-read tally 
+                 (set! bytes-read 
+                       (+ bytes-read 1 (string-length line)))
+
+                 ;; pick the 1-char tag off from the remainder of the line 
+                 (set! tag (string-ref line 0))
+                 (set! value (make-shared-substring line 1))
                  
+                 ;; now do something with the line 
+                 (if
+                  (eq? tag #\!)
+                  (begin 
+                    (set! qstate-type (qif-parse:parse-bang-field value))
+                    (case qstate-type 
+                      ((type:bank type:cash type:ccard type:invst
+                                  #{type:oth\ a}#  #{type:oth\ l}#)
+                       (if ignore-accounts 
+                           (set! current-account-name last-seen-account-name))
+                       (set! ignore-accounts #f)
+                       (set! current-xtn (make-qif-xtn))
+                       (set! default-split (make-qif-split))
+                       (qif-split:set-category! default-split "")
+                       (set! first-xtn #t))
+                      ((type:class)
+                       (set! current-xtn (make-qif-class)))
+                      ((type:cat)
+                       (set! current-xtn (make-qif-cat)))
+                      ((account)
+                       (set! current-xtn (make-qif-acct)))
+                      ((option:autoswitch)
+                       (set! ignore-accounts #t))
+                      ((clear:autoswitch)
+                       (set! ignore-accounts #f))))
+                  
 ;;;                        (#t 
 ;;;                         (display "qif-file:read-file can't handle ")
 ;;;                         (write qstate-type)
 ;;;                         (display " transactions yet.")
 ;;;                         (newline))))
-                 
+                  
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                 ;; bank-account type transactions 
+                  ;; bank-account type transactions 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                  
+                  (case qstate-type 
+                    ((type:bank type:cash type:ccard type:invst
+                                #{type:oth\ a}#  #{type:oth\ l}#)
+                     (case tag
+                       ;; D : transaction date 
+                       ((#\D)
+                        (qif-xtn:set-date! current-xtn value))
+                       
+                       ;; T : total amount 
+                       ((#\T)
+                        (if default-split 
+                            (qif-split:set-amount! default-split value)))
+                       
+                       ;; P : payee
+                       ((#\P)
+                        (qif-xtn:set-payee! current-xtn value))
+                       
+                       ;; A : address 
+                       ;; multiple "A" lines are appended together with 
+                       ;; newlines; some Quicken files have a lot of 
+                       ;; A lines. 
+                       ((#\A)
+                        (qif-xtn:set-address! 
+                         current-xtn
+                         (let ((current (qif-xtn:address current-xtn)))
+                           (if (not (string? current))
+                               (set! current ""))
+                           (string-append current "\n" value))))
+                       
+                       ;; N : check number / transaction number /xtn direction
+                       ;; there's both an action and a number in gnucash,
+                       ;; one for securities, one for banks. 
+                       ((#\N)
+                        (if (eq? qstate-type 'type:invst)
+                            (qif-xtn:set-action! current-xtn value)
+                            (qif-xtn:set-number! current-xtn value)))
+
+                       ;; C : cleared flag 
+                       ((#\C)
+                        (qif-xtn:set-cleared! current-xtn value))
+                       
+                       ;; M : memo 
+                       ((#\M)
+                        (if default-split 
+                            (qif-split:set-memo! default-split value)))
+                       
+                       ;; I : share price (stock transactions)
+                       ((#\I)
+                        (qif-xtn:set-share-price! current-xtn value))
+                       
+                       ;; Q : number of shares (stock transactions)
+                       ((#\Q)
+                        (qif-xtn:set-num-shares! current-xtn value))
+                       
+                       ;; Y : name of security (stock transactions)
+                       ((#\Y)
+                        (qif-xtn:set-security-name! current-xtn value))
+                       
+                       ;; O : commission (stock transactions)
+                       ((#\O)
+                        (qif-xtn:set-commission! current-xtn value))
+                       
+                       ;; L : category 
+                       ((#\L)
+                        (if default-split 
+                            (qif-split:set-category! default-split value)))
+                       
+                       ;; S : split category 
+                       ((#\S)
+                        (set! current-split (make-qif-split))
+                        (set! default-split #f)
+                        (qif-split:set-category! current-split value)
+                        (qif-xtn:set-splits! 
+                         current-xtn
+                         (cons current-split (qif-xtn:splits current-xtn))))
+                       
+                       ;; E : split memo 
+                       ((#\E)
+                        (if current-split 
+                            (qif-split:set-memo! current-split value)))
+                       
+                       ;; $ : split amount (if there are splits)
+                       ((#\$)
+                        (if current-split
+                            (qif-split:set-amount! current-split value)))
+                       
+                       ;; ^ : end-of-record 
+                       ((#\^)
+                        (if (null? (qif-xtn:splits current-xtn)) 
+                            (qif-xtn:set-splits! current-xtn
+                                                 (list default-split)))
+                        (if first-xtn 
+                            (let ((opening-balance-payee 
+                                   (qif-file:process-opening-balance-xtn 
+                                    self current-xtn qstate-type)))
+                              (if (not current-account-name)
+                                  (set! current-account-name 
+                                        opening-balance-payee))
+                              (set! first-xtn #f)))
+                        
+                        (if (and (eq? qstate-type 'type:invst)
+                                 (not (qif-xtn:security-name current-xtn)))
+                            (qif-xtn:set-security-name! current-xtn ""))
+                        
+                        (qif-xtn:set-from-acct! current-xtn 
+                                                current-account-name) 
+                        
+                        (if (qif-xtn:date current-xtn)
+                            (qif-file:add-xtn! self current-xtn))
+                        ;;(write current-xtn) (newline)
+                        (set! current-xtn (make-qif-xtn))
+                        (set! current-split #f)
+                        (set! default-split (make-qif-split))
+                        
+                        (if progress-dialog 
+                            (begin 
+                              (gnc:progress-dialog-set-value 
+                               progress-dialog
+                               (* 100 (/ bytes-read file-size)))
+                              (gnc:progress-dialog-update progress-dialog)))))) 
+                    
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ;; Class transactions 
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ((type:class)
+                     (case tag
+                       ;; N : name 
+                       ((#\N)
+                        (qif-class:set-name! current-xtn value))
+                       
+                       ;; D : description 
+                       ((#\D)
+                        (qif-class:set-description! current-xtn value))
+                       
+                       ;; R : tax copy designator (ignored for now)
+                       ((#\R)
+                        #t)
+
+                       ;; end-of-record
+                       ((#\^)
+                        (qif-file:add-class! self current-xtn)
+                        (set! current-xtn (make-qif-class)))
+                       
+                       (else
+                        (display "qif-file:read-file : unknown Class slot ")
+                        (display tag) 
+                        (display " .. continuing anyway.")
+                        (newline))))
+                    
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ;; Account definitions
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    
+                    ((account)
+                     (case tag
+                       ((#\N)
+                        (qif-acct:set-name! current-xtn value)
+                        (set! last-seen-account-name value))
+                       ((#\D)
+                        (qif-acct:set-description! current-xtn value))
+                       ((#\T)
+                        (qif-acct:set-type! current-xtn value))
+                       ((#\L)
+                        (qif-acct:set-limit! current-xtn value))
+                       ((#\B)
+                        (qif-acct:set-budget! current-xtn value))
+                       ((#\^)
+                        (if (not ignore-accounts)
+                            (set! current-account-name 
+                                  (qif-acct:name current-xtn)))
+                        (qif-file:add-account! self current-xtn)
+                        (set! current-xtn (make-qif-acct)))))
+                    
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ;; Category (Cat) transactions 
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    
+                    ((type:cat)
+                     (case tag
+                       ;; N : category name 
+                       ((#\N)
+                        (qif-cat:set-name! current-xtn value))
+                       
+                       ;; D : category description 
+                       ((#\D)
+                        (qif-cat:set-description! current-xtn value))
+                       
+                       ;; T : is this a taxable category?
+                       ((#\T)
+                        (qif-cat:set-taxable! current-xtn #t))
+                       
+                       ;; E : is this an expense category?
+                       ((#\E)
+                        (qif-cat:set-expense-cat! current-xtn #t))
+                       
+                       ;; I : is this an income category? 
+                       ((#\I)
+                        (qif-cat:set-income-cat! current-xtn #t))
+                       
+                       ;; R : tax form/line designator 
+                       ((#\R)
+                        (qif-cat:set-tax-class! current-xtn value))
+                       
+                       ;; B : budget amount.  not really supported. 
+                       ((#\B)
+                        (qif-cat:set-budget-amt! current-xtn value))
+                       
+                       ;; end-of-record
+                       ((#\^)
+                        (qif-file:add-cat! self current-xtn)
+                        (set! current-xtn (make-qif-cat)))
+                       
+                       (else
+                        (display "qif-file:read-file : unknown Cat slot ")
+                        (display tag) 
+                        (display " .. continuing anyway") (newline))))
+                    
+                    ;; trying to sneak one by, eh? 
+                    (else 
+                     (if (not qstate-type)
+                         (begin
+                           (display "line = ") (display line) (newline)
+                           (display "qif-file:read-file : ")
+                           (display "file does not appear to be a QIF file.")
+                           (newline)
+                           (set! 
+                            return-val 
+                            (list #f "File does not appear to be a QIF file."))
+                           (set! heinous-error #t))))))
                  
-                 (case qstate-type 
-                   ((type:bank type:cash type:ccard type:invst
-                               #{type:oth\ a}#  #{type:oth\ l}#)
-                    (case tag
-                      ;; D : transaction date 
-                      ((#\D)
-                       (qif-xtn:set-date! current-xtn value))
-                      
-                      ;; T : total amount 
-                      ((#\T)
-                       (if default-split 
-                           (qif-split:set-amount! default-split value)))
-                      
-                      ;; P : payee
-                      ((#\P)
-                       (qif-xtn:set-payee! current-xtn value))
-                      
-                      ;; A : address 
-                      ;; multiple "A" lines are appended together with 
-                      ;; newlines; some Quicken files have a lot of 
-                      ;; A lines. 
-                      ((#\A)
-                       (qif-xtn:set-address! 
-                        current-xtn
-                        (let ((current (qif-xtn:address current-xtn)))
-                          (if (not (string? current))
-                              (set! current ""))
-                          (string-append current "\n" value))))
-                      
-                      ;; N : check number / transaction number /xtn direction
-                      ;; there's both an action and a number in gnucash,
-                      ;; one for securities, one for banks. 
-                      ((#\N)
-                       (if (eq? qstate-type 'type:invst)
-                           (qif-xtn:set-action! current-xtn value)
-                           (qif-xtn:set-number! current-xtn value)))
+                 ;; this is if we read a normal (non-null, non-eof) line...
+                 (if (not heinous-error)
+                     (line-loop)))
+               
+               ;; and this is if we read a null or eof line 
+               (if (and (not heinous-error)
+                        (not (eof-object? line)))
+                   (line-loop))))))    
+     
+     ;; now reverse the transaction list so xtns are in the same order that 
+     ;; they were in the file.  This is important in a few cases. 
+     (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
 
-                      ;; C : cleared flag 
-                      ((#\C)
-                       (qif-xtn:set-cleared! current-xtn value))
-                      
-                      ;; M : memo 
-                      ((#\M)
-                       (if default-split 
-                           (qif-split:set-memo! default-split value)))
-                      
-                      ;; I : share price (stock transactions)
-                      ((#\I)
-                       (qif-xtn:set-share-price! current-xtn value))
-                      
-                      ;; Q : number of shares (stock transactions)
-                      ((#\Q)
-                       (qif-xtn:set-num-shares! current-xtn value))
-                      
-                      ;; Y : name of security (stock transactions)
-                      ((#\Y)
-                       (qif-xtn:set-security-name! current-xtn value))
-                      
-                      ;; O : commission (stock transactions)
-                      ((#\O)
-                       (qif-xtn:set-commission! current-xtn value))
-                      
-                      ;; L : category 
-                      ((#\L)
-                       (if default-split 
-                           (qif-split:set-category! default-split value)))
-                      
-                      ;; S : split category 
-                      ((#\S)
-                       (set! current-split (make-qif-split))
-                       (set! default-split #f)
-                       (qif-split:set-category! current-split value)
-                       (qif-xtn:set-splits! 
-                        current-xtn
-                        (cons current-split (qif-xtn:splits current-xtn))))
-                      
-                      ;; E : split memo 
-                      ((#\E)
-                       (if current-split 
-                           (qif-split:set-memo! current-split value)))
-                      
-                      ;; $ : split amount (if there are splits)
-                      ((#\$)
-                       (if current-split
-                           (qif-split:set-amount! current-split value)))
-                      
-                      ;; ^ : end-of-record 
-                      ((#\^)
-                       (if (null? (qif-xtn:splits current-xtn)) 
-                           (qif-xtn:set-splits! current-xtn
-                                                (list default-split)))
-                       (if first-xtn 
-                           (let ((opening-balance-payee 
-                                  (qif-file:process-opening-balance-xtn 
-                                   self current-xtn qstate-type)))
-                             (if (not current-account-name)
-                                 (set! current-account-name 
-                                       opening-balance-payee))
-                             (set! first-xtn #f)))
-                       
-                       (if (and (eq? qstate-type 'type:invst)
-                                (not (qif-xtn:security-name current-xtn)))
-                           (qif-xtn:set-security-name! current-xtn ""))
-                       
-                       (qif-xtn:set-from-acct! current-xtn 
-                                               current-account-name) 
-                       
-                       (if (qif-xtn:date current-xtn)
-                           (qif-file:add-xtn! self current-xtn))
-                       ;;(write current-xtn) (newline)
-                       (set! current-xtn (make-qif-xtn))
-                       (set! current-split #f)
-                       (set! default-split (make-qif-split))
-                       
-                       (if progress-dialog 
-                           (begin 
-                             (gnc:progress-dialog-set-value 
-                              progress-dialog
-                              (* 100 (/ bytes-read file-size)))
-                             (gnc:progress-dialog-update progress-dialog)))))) 
-                   
-                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                   ;; Class transactions 
-                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                   ((type:class)
-                    (case tag
-                      ;; N : name 
-                      ((#\N)
-                       (qif-class:set-name! current-xtn value))
-                      
-                      ;; D : description 
-                      ((#\D)
-                       (qif-class:set-description! current-xtn value))
-                      
-                      ;; R : tax copy designator (ignored for now)
-                      ((#\R)
-                       #t)
+     (if progress-dialog
+         (gnc:progress-dialog-destroy progress-dialog))
 
-                      ;; end-of-record
-                      ((#\^)
-                       (qif-file:add-class! self current-xtn)
-                       (set! current-xtn (make-qif-class)))
-                      
-                      (else
-                       (display "qif-file:read-file : unknown Class slot ")
-                       (display tag) 
-                       (display " .. continuing anyway.")
-                       (newline))))
-                   
-                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                   ;; Account definitions
-                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                   
-                   ((account)
-                    (case tag
-                      ((#\N)
-                       (qif-acct:set-name! current-xtn value)
-                       (set! last-seen-account-name value))
-                      ((#\D)
-                       (qif-acct:set-description! current-xtn value))
-                      ((#\T)
-                       (qif-acct:set-type! current-xtn value))
-                      ((#\L)
-                       (qif-acct:set-limit! current-xtn value))
-                      ((#\B)
-                       (qif-acct:set-budget! current-xtn value))
-                      ((#\^)
-                       (if (not ignore-accounts)
-                           (set! current-account-name 
-                                 (qif-acct:name current-xtn)))
-                       (qif-file:add-account! self current-xtn)
-                       (set! current-xtn (make-qif-acct)))))
-                   
-                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                   ;; Category (Cat) transactions 
-                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                   
-                   ((type:cat)
-                    (case tag
-                      ;; N : category name 
-                      ((#\N)
-                       (qif-cat:set-name! current-xtn value))
-                      
-                      ;; D : category description 
-                      ((#\D)
-                       (qif-cat:set-description! current-xtn value))
-                      
-                      ;; T : is this a taxable category?
-                      ((#\T)
-                       (qif-cat:set-taxable! current-xtn #t))
-                      
-                      ;; E : is this an expense category?
-                      ((#\E)
-                       (qif-cat:set-expense-cat! current-xtn #t))
-                      
-                      ;; I : is this an income category? 
-                      ((#\I)
-                       (qif-cat:set-income-cat! current-xtn #t))
-                      
-                      ;; R : tax form/line designator 
-                      ((#\R)
-                       (qif-cat:set-tax-class! current-xtn value))
-                      
-                      ;; B : budget amount.  not really supported. 
-                      ((#\B)
-                       (qif-cat:set-budget-amt! current-xtn value))
-                      
-                      ;; end-of-record
-                      ((#\^)
-                       (qif-file:add-cat! self current-xtn)
-                       (set! current-xtn (make-qif-cat)))
-                      
-                      (else
-                       (display "qif-file:read-file : unknown Cat slot ")
-                       (display tag) 
-                       (display " .. continuing anyway") (newline))))
-                   
-                   ;; trying to sneak one by, eh? 
-                   (else 
-                    (if (not qstate-type)
-                        (begin
-                          (display "line = ") (display line) (newline)
-                          (display "qif-file:read-file : ")
-                          (display "file does not appear to be a QIF file.")
-                          (newline)
-                          (set! 
-                           return-val 
-                           (list #f "File does not appear to be a QIF file."))
-                          (set! heinous-error #t))))))
-                
-                ;; this is if we read a normal (non-null, non-eof) line...
-                (if (not heinous-error)
-                    (line-loop)))
-              
-              ;; and this is if we read a null or eof line 
-              (if (and (not heinous-error)
-                       (not (eof-object? line)))
-                  (line-loop))))))    
-    
-    ;; now reverse the transaction list so xtns are in the same order that 
-    ;; they were in the file.  This is important in a few cases. 
-    (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
-
-    (if progress-dialog
-        (gnc:progress-dialog-destroy progress-dialog))
-
-    return-val))
+     return-val)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:process-opening-balance-xtn self xtn
@@ -426,124 +428,125 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-file:parse-fields self)
-  (let* ((error #f)
-         (all-ok #f)
-         (start-time #f)
-         (end-time #f)
-         (set-error 
-          (lambda (e) 
-            (if (not error)
-                (set! error (list e))
-                (set! error (cons e error)))))
-         (errlist-to-string 
-          (lambda (lst)
-            (with-output-to-string 
-              (lambda ()
-                (for-each 
-                 (lambda (elt)
-                   (display elt))
-                 lst))))))
-    (set! start-time (gettimeofday))
-    (and 
-     ;; fields of categories. 
-     (check-and-parse-field 
-      qif-cat:tax-class qif-cat:set-tax-class! 
-      qif-parse:check-number-format '(decimal comma)
-      qif-parse:parse-number/format (qif-file:cats self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-     
-     (check-and-parse-field 
-      qif-cat:budget-amt qif-cat:set-budget-amt! 
-      qif-parse:check-number-format '(decimal comma) 
-      qif-parse:parse-number/format (qif-file:cats self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-     
-     ;; fields of accounts 
-     (check-and-parse-field 
-      qif-acct:limit qif-acct:set-limit! 
-      qif-parse:check-number-format '(decimal comma) 
-      qif-parse:parse-number/format (qif-file:accounts self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-     
-     (check-and-parse-field 
-      qif-acct:budget qif-acct:set-budget! 
-      qif-parse:check-number-format '(decimal comma) 
-      qif-parse:parse-number/format (qif-file:accounts self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-    
-     (parse-field 
-      qif-acct:type qif-acct:set-type!
-      qif-parse:parse-acct-type (qif-file:accounts self)
-      set-error)
+  (false-if-exception 
+   (let* ((error #f)
+          (all-ok #f)
+          (start-time #f)
+          (end-time #f)
+          (set-error 
+           (lambda (e) 
+             (if (not error)
+                 (set! error (list e))
+                 (set! error (cons e error)))))
+          (errlist-to-string 
+           (lambda (lst)
+             (with-output-to-string 
+               (lambda ()
+                 (for-each 
+                  (lambda (elt)
+                    (display elt))
+                  lst))))))
+     (set! start-time (gettimeofday))
+     (and 
+      ;; fields of categories. 
+      (check-and-parse-field 
+       qif-cat:tax-class qif-cat:set-tax-class! 
+       qif-parse:check-number-format '(decimal comma)
+       qif-parse:parse-number/format (qif-file:cats self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      (check-and-parse-field 
+       qif-cat:budget-amt qif-cat:set-budget-amt! 
+       qif-parse:check-number-format '(decimal comma) 
+       qif-parse:parse-number/format (qif-file:cats self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      ;; fields of accounts 
+      (check-and-parse-field 
+       qif-acct:limit qif-acct:set-limit! 
+       qif-parse:check-number-format '(decimal comma) 
+       qif-parse:parse-number/format (qif-file:accounts self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      (check-and-parse-field 
+       qif-acct:budget qif-acct:set-budget! 
+       qif-parse:check-number-format '(decimal comma) 
+       qif-parse:parse-number/format (qif-file:accounts self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      (parse-field 
+       qif-acct:type qif-acct:set-type!
+       qif-parse:parse-acct-type (qif-file:accounts self)
+       set-error)
 
-     ;; fields of transactions 
-     (check-and-parse-field 
-      qif-xtn:date qif-xtn:set-date! 
-      qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m) 
-      qif-parse:parse-date/format 
-      (qif-file:xtns self)
-      qif-parse:print-date
-      'error-on-ambiguity
-      set-error)
-     
-     (parse-field 
-      qif-xtn:cleared qif-xtn:set-cleared!
-      qif-parse:parse-cleared-field (qif-file:xtns self) set-error)
+      ;; fields of transactions 
+      (check-and-parse-field 
+       qif-xtn:date qif-xtn:set-date! 
+       qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m) 
+       qif-parse:parse-date/format 
+       (qif-file:xtns self)
+       qif-parse:print-date
+       'error-on-ambiguity
+       set-error)
+      
+      (parse-field 
+       qif-xtn:cleared qif-xtn:set-cleared!
+       qif-parse:parse-cleared-field (qif-file:xtns self) set-error)
 
-     (parse-field 
-      qif-xtn:action qif-xtn:set-action!
-      qif-parse:parse-action-field (qif-file:xtns self) set-error)
+      (parse-field 
+       qif-xtn:action qif-xtn:set-action!
+       qif-parse:parse-action-field (qif-file:xtns self) set-error)
+      
+      (check-and-parse-field 
+       qif-xtn:share-price qif-xtn:set-share-price!
+       qif-parse:check-number-format '(decimal comma) 
+       qif-parse:parse-number/format (qif-file:xtns self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      (check-and-parse-field 
+       qif-xtn:num-shares qif-xtn:set-num-shares!
+       qif-parse:check-number-format '(decimal comma) 
+       qif-parse:parse-number/format (qif-file:xtns self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      (check-and-parse-field 
+       qif-xtn:commission qif-xtn:set-commission!
+       qif-parse:check-number-format '(decimal comma) 
+       qif-parse:parse-number/format (qif-file:xtns self)
+       qif-parse:print-number
+       'guess-on-ambiguity
+       set-error)
+      
+      ;; this one's a little tricky... it checks and sets all the 
+      ;; split amounts for the transaction together.     
+      (check-and-parse-field 
+       qif-xtn:split-amounts qif-xtn:set-split-amounts!
+       qif-parse:check-number-formats '(decimal comma) 
+       qif-parse:parse-numbers/format (qif-file:xtns self)
+       qif-parse:print-numbers
+       'guess-on-ambiguity
+       set-error)
+      
+      (begin 
+        (set! all-ok #t)
+        #t))
      
-     (check-and-parse-field 
-      qif-xtn:share-price qif-xtn:set-share-price!
-      qif-parse:check-number-format '(decimal comma) 
-      qif-parse:parse-number/format (qif-file:xtns self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-     
-     (check-and-parse-field 
-      qif-xtn:num-shares qif-xtn:set-num-shares!
-      qif-parse:check-number-format '(decimal comma) 
-      qif-parse:parse-number/format (qif-file:xtns self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-     
-     (check-and-parse-field 
-      qif-xtn:commission qif-xtn:set-commission!
-      qif-parse:check-number-format '(decimal comma) 
-      qif-parse:parse-number/format (qif-file:xtns self)
-      qif-parse:print-number
-      'guess-on-ambiguity
-      set-error)
-     
-     ;; this one's a little tricky... it checks and sets all the 
-     ;; split amounts for the transaction together.     
-     (check-and-parse-field 
-      qif-xtn:split-amounts qif-xtn:set-split-amounts!
-      qif-parse:check-number-formats '(decimal comma) 
-      qif-parse:parse-numbers/format (qif-file:xtns self)
-      qif-parse:print-numbers
-      'guess-on-ambiguity
-      set-error)
-     
-     (begin 
-       (set! all-ok #t)
-       #t))
-    
-    (set! end-time (gettimeofday))
-    (cond (error
-           (cons all-ok error))
-          (#t #t))))
+     (set! end-time (gettimeofday))
+     (cond (error
+            (cons all-ok error))
+           (#t #t)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  parse-field 

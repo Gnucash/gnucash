@@ -2956,6 +2956,7 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Add</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 
 	      <widget>
@@ -2965,6 +2966,7 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Delete</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 	    </widget>
 
@@ -2985,6 +2987,7 @@ Exactly
 		<tooltip>Move the selected item up</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -2998,6 +3001,7 @@ Exactly
 		<tooltip>Move the selected item down</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3151,6 +3155,7 @@ No Total
 		<name>match_button</name>
 		<can_focus>True</can_focus>
 		<label>Matching Transactions...</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -3572,6 +3577,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3585,6 +3591,7 @@ Contingency
 		<name>payment_periods_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3656,6 +3663,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3669,6 +3677,7 @@ Contingency
 		<name>interest_rate_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3740,6 +3749,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3753,6 +3763,7 @@ Contingency
 		<name>present_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3824,6 +3835,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3837,6 +3849,7 @@ Contingency
 		<name>periodic_payment_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3908,6 +3921,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3921,6 +3935,7 @@ Contingency
 		<name>future_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -5714,6 +5729,7 @@ worry if your data is in multiple files.
 	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
 	    </signal>
 	    <label>Select...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>3</padding>
 	      <expand>False</expand>
@@ -6027,6 +6043,7 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:32:12 GMT</last_modification_time>
 	    </signal>
 	    <label>Load another file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -6045,6 +6062,7 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:34:33 GMT</last_modification_time>
 	    </signal>
 	    <label>Unload selected file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -7311,6 +7329,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
 
       <widget>
@@ -7320,6 +7339,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
     </widget>
   </widget>
@@ -7532,6 +7552,7 @@ words.
 		  <last_modification_time>Fri, 15 Dec 2000 18:13:53 GMT</last_modification_time>
 		</signal>
 		<label>Search</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -7550,6 +7571,7 @@ words.
 		  <last_modification_time>Fri, 15 Dec 2000 18:14:21 GMT</last_modification_time>
 		</signal>
 		<label>Help</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -7729,6 +7751,189 @@ words.
 
 <widget>
   <class>GnomeDialog</class>
+  <name>New Style Sheet Dialog</name>
+  <title>New Style Sheet</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>True</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+  <auto_close>False</auto_close>
+  <hide_on_close>False</hide_on_close>
+
+  <widget>
+    <class>GtkVBox</class>
+    <child_name>GnomeDialog:vbox</child_name>
+    <name>dialog-vbox15</name>
+    <homogeneous>False</homogeneous>
+    <spacing>8</spacing>
+    <child>
+      <padding>4</padding>
+      <expand>True</expand>
+      <fill>True</fill>
+    </child>
+
+    <widget>
+      <class>GtkHButtonBox</class>
+      <child_name>GnomeDialog:action_area</child_name>
+      <name>dialog-action_area15</name>
+      <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
+      <spacing>8</spacing>
+      <child_min_width>85</child_min_width>
+      <child_min_height>27</child_min_height>
+      <child_ipad_x>7</child_ipad_x>
+      <child_ipad_y>0</child_ipad_y>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button73</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>button75</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkFrame</class>
+      <name>frame40</name>
+      <border_width>2</border_width>
+      <label>New style sheet info</label>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>False</fill>
+      </child>
+
+      <widget>
+	<class>GtkHBox</class>
+	<name>hbox82</name>
+	<border_width>4</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>4</spacing>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox93</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>2</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label847669</name>
+	    <label>Name:</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>1</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <name>label847670</name>
+	    <label>Style sheet template:</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>1</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox94</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>2</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkEntry</class>
+	    <name>name_entry</name>
+	    <can_focus>True</can_focus>
+	    <editable>True</editable>
+	    <text_visible>True</text_visible>
+	    <text_max_length>0</text_max_length>
+	    <text></text>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkCombo</class>
+	    <name>template-combo</name>
+	    <value_in_list>False</value_in_list>
+	    <ok_if_empty>True</ok_if_empty>
+	    <case_sensitive>False</case_sensitive>
+	    <use_arrows>True</use_arrows>
+	    <use_arrows_always>False</use_arrows_always>
+	    <items></items>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <child_name>GtkCombo:entry</child_name>
+	      <name>template-entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>0</text_max_length>
+	      <text></text>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GnomeDialog</class>
   <name>Tax Information Dialog</name>
   <title>Tax Information</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
@@ -7848,6 +8053,7 @@ words.
 	    <border_width>3</border_width>
 	    <can_focus>True</can_focus>
 	    <label>Toggle Subaccounts</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>
@@ -8201,6 +8407,137 @@ words.
 	    </child>
 	  </widget>
 	</widget>
+      </widget>
+    </widget>
+  </widget>
+</widget>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>HTML Style Sheet Dialog</name>
+  <title>HTML Style Sheets</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_NONE</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>GtkHPaned</class>
+    <name>hpaned1</name>
+    <handle_size>10</handle_size>
+    <gutter_size>15</gutter_size>
+    <position>175</position>
+
+    <widget>
+      <class>GtkFrame</class>
+      <name>frame39</name>
+      <label>Style sheets</label>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+      <child>
+	<shrink>False</shrink>
+	<resize>True</resize>
+      </child>
+
+      <widget>
+	<class>GtkVBox</class>
+	<name>vbox92</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+
+	<widget>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow17</name>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkCList</class>
+	    <name>style_sheet_list</name>
+	    <can_focus>True</can_focus>
+	    <columns>1</columns>
+	    <column_widths>80</column_widths>
+	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	    <show_titles>False</show_titles>
+	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847668</name>
+	      <label>label847668</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox81</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>new_button</name>
+	    <can_focus>True</can_focus>
+	    <label>New...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkButton</class>
+	    <name>delete_button</name>
+	    <can_focus>True</can_focus>
+	    <label>Delete</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GtkFrame</class>
+      <name>style_sheet_options</name>
+      <label>Style sheet options</label>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+      <child>
+	<shrink>False</shrink>
+	<resize>True</resize>
+      </child>
+
+      <widget>
+	<class>Placeholder</class>
       </widget>
     </widget>
   </widget>

@@ -202,6 +202,20 @@ gnc_help_window_back_cb(GtkWidget * w, gpointer data) {
   return TRUE;
 }
 
+static int
+gnc_help_window_stop_button_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window       * help = data;
+  gnc_html_cancel(help->html);
+  return TRUE;
+}
+
+static int
+gnc_help_window_reload_button_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window       * help = data;
+  gnc_html_reload(help->html);
+  return TRUE;
+}
+
 
 /********************************************************************
  * topics-browser callbacks 
@@ -271,7 +285,7 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
                                  GTK_CTREE_NODE(parent), NULL,
                                  ctopics, 1,
                                  NULL, NULL, NULL, NULL,
-                                 leafnode, TRUE);
+                                 leafnode, FALSE);
     
     gtk_ctree_node_set_row_data_full(GTK_CTREE(tree), 
                                      GTK_CTREE_NODE(node), curl,
@@ -309,13 +323,16 @@ gnc_help_window_print_cb(GtkWidget * w, gpointer data) {
   gnc_html_print(help->html);
 }
 
+
 static void 
 item_destroy_cb(GtkListItem * li, gpointer user_data) {
   g_free(gtk_object_get_user_data(GTK_OBJECT(li)));
 }
 
+
 static void
-show_search_results(gnc_help_window * help, const char * matches) {
+show_search_results(gnc_help_window * help, const char * matches, 
+                    int match_len) {
   const char * current;
   const char * end;
   char       * this_link=NULL;
@@ -345,7 +362,7 @@ show_search_results(gnc_help_window * help, const char * matches) {
     results = g_list_append(results, listitem);
     current = end+1;
   }
- 
+  
   /* get rid of the old items */ 
   if(GTK_LIST(help->search_results)->children) {
     gtk_list_remove_items(GTK_LIST(help->search_results),
@@ -383,7 +400,7 @@ gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
 
   if(err == 0) {
     /* the data in the DB is a newline-separated list of filenames */
-    show_search_results(help, value.data);    
+    show_search_results(help, value.data, value.size);    
   }
 }
 
@@ -442,6 +459,24 @@ gnc_help_window_new (void) {
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_FORWARD,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Reload"),
+      N_("Reload the current document"),
+      gnc_help_window_reload_button_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_REFRESH,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Stop"),
+      N_("Cancel outstanding HTML requests"),
+      gnc_help_window_stop_button_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_STOP,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,

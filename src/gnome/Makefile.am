@@ -15,6 +15,7 @@ libgncgnome_a_SOURCES = \
   dialog-options.c \
   dialog-print-check.c \
   dialog-progress.c \
+  dialog-style-sheet.c \
   dialog-tax-info.c \
   dialog-totd.c \
   dialog-transfer.c \
@@ -68,6 +69,7 @@ noinst_HEADERS = \
   dialog-options.h \
   dialog-print-check.h \
   dialog-progress.h \
+  dialog-style-sheet.h \
   dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \

@@ -323,7 +323,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
                            scm_filename);
     
     /* a list returned is (#f error-message) for an error, 
-     * (#t error-message) for a warning */
+     * (#t error-message) for a warning, or just #f for an 
+     * exception. */
     if(gh_list_p(load_return) &&
        (gh_car(load_return) == SCM_BOOL_T)) {
       char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
@@ -335,9 +336,15 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     }
 
     /* check success of the file load */
-    if((load_return != SCM_BOOL_T) &&
-       (!gh_list_p(load_return) || 
-        (gh_car(load_return) != SCM_BOOL_T))) {
+    if(load_return == SCM_BOOL_F) {
+      gnc_error_dialog_parented(GTK_WINDOW(wind->window), 
+                                _( "An error occurred while "
+                                   "loading the QIF file."));
+      return TRUE;
+    }
+    else if ((load_return != SCM_BOOL_T) &&
+             (!gh_list_p(load_return) || 
+              (gh_car(load_return) != SCM_BOOL_T))) {
       char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
       error_string = g_strdup_printf(_("QIF file load failed:\n%s"),
                                      warn_str);
@@ -383,7 +390,15 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
         ask_date_format = TRUE;
       }
 
-      if((parse_return != SCM_BOOL_T) &&
+      if(parse_return == SCM_BOOL_F) {
+        gnc_error_dialog_parented(GTK_WINDOW(wind->window),
+                                  _("An error occurred while parsing the "
+                                    "QIF file."));
+        imported_files = 
+          gh_call2(unload_qif_file, scm_qiffile, imported_files);
+        return TRUE;
+      }
+      else if((parse_return != SCM_BOOL_T) &&
          (!gh_list_p(parse_return) ||
           (gh_car(parse_return) != SCM_BOOL_T))) {
         char *warn_str = gh_scm2newstr(gh_cadr(parse_return), NULL);
@@ -1190,6 +1205,7 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   
   SCM   save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
   SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
+  SCM   retval;
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
   QIFDruidPage * page;
@@ -1222,19 +1238,26 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   }
   
   /* call a scheme function to do the work */
-  gh_apply(qif_to_gnc, 
-           SCM_LIST5(wind->imported_files,
-                     wind->acct_map_info, 
-                     wind->cat_map_info,
-                     wind->stock_hash,
-                     gh_str02scm(currname)));
-  
-  /* write out mapping info before destroying the window */
-  gh_call2(save_map_prefs, wind->acct_map_info, wind->cat_map_info); 
-  
+  retval = gh_apply(qif_to_gnc, 
+                    SCM_LIST5(wind->imported_files,
+                              wind->acct_map_info, 
+                              wind->cat_map_info,
+                              wind->stock_hash,
+                              gh_str02scm(currname)));
+  if(retval == SCM_BOOL_F) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->window),
+                              _("An error occurred while importing "
+                                "QIF transactions into Gnucash.  Your data "
+                                "may be in an inconsistent state."));
+  }
+  else {
+    /* write out mapping info before destroying the window */
+    gh_call2(save_map_prefs, wind->acct_map_info, wind->cat_map_info); 
+  }
+
   gnc_unset_busy_cursor(NULL);
   gnc_resume_gui_refresh ();
-
+  
   gnc_ui_qif_import_druid_destroy(wind);  
 }
 

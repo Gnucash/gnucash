@@ -76,26 +76,21 @@
 
 
 (define (gnc:transaction-map-splits thunk transaction)
-  (let loop ((num-splits (gnc:transaction-get-split-count transaction))
-             (i 0))
-    (if (< i num-splits)
-        (cons
-         (thunk (gnc:transaction-get-split transaction i))
-         (loop num-splits (+ i 1)))
-        '())))
+  (let ((retval '()))
+    (let loop ((splits (or (gnc:transaction-get-splits transaction) '())))
+      (if (not (null? splits))
+          (begin 
+            (set! retval (cons (thunk (car splits)) retval))
+            (loop (cdr splits)))))
+    (reverse retval)))
 
 (define (gnc:group-map-accounts thunk group)
-  "Call thunk for each account in group, returning the results as a
-list.  Return '() for a null group."
-  (let loop ((i 0)
-             (num-accounts (gnc:group-get-num-accounts group)))
-    (if (< i num-accounts)
-        (cons (thunk (gnc:group-get-account group i))
-              (loop (+ i 1) num-accounts))
-        '())))
+  (let ((retval '()))
+    (let loop ((accounts (or (gnc:group-get-subaccounts group) '())))
+      (if (not (null? accounts))
+          (begin 
+            (set! retval (cons (thunk (car accounts)) retval))
+            (loop (cdr accounts)))))
+    (reverse retval)))
 
-;; map over all accounts (including subaccounts) in a group
-(define (gnc:group-map-all-accounts thunk group)
-  (map thunk
-       (or (gnc:group-get-subaccounts group)
-           '())))
+

@@ -27,6 +27,7 @@
 #include <libguppitank/guppi-tank.h>
 
 #include "gnc-html-embedded.h"
+#include "mainwindow-account-tree.h"
 
 static double * 
 read_doubles(const char * string, int nvalues) {
@@ -49,11 +50,35 @@ read_strings(const char * string, int nvalues) {
   int    choffset=0;
   int    accum = 0;
   char   ** retval = g_new0(char *, nvalues);
-  
-  for(n=0; n<nvalues; n++) {
-    retval[n] = g_new0(char, strlen(string+choffset)+1);
-    sscanf(string+accum, "%s%n", retval[n], &choffset);
+  char   thischar;
+  const char * inptr = string;
+  int    escaped = FALSE;
+
+  for(n=0; n < nvalues; n++) {
+    retval[n] = g_new0(char, strlen(string+accum)+1);
+    retval[n][0] = 0;
+    choffset = 0;
+    while((thischar = *inptr) != 0) {
+      if(thischar == '\\') {
+        escaped = TRUE;
+        inptr++;
+      }
+      else if((thischar != ' ') || escaped) {
+        retval[n][choffset] = thischar;
+        retval[n][choffset+1] = 0;    
+        choffset++;
+        escaped = FALSE;
+        inptr++;
+      }
+      else {
+        /* an unescaped space */
+        escaped = FALSE;
+        inptr++;
+        break;
+      }
+    }
     accum += choffset;
+    /* printf("retval[%d] = '%s'\n", n, retval[n]); */
   }
   
   return retval;  
@@ -62,6 +87,8 @@ read_strings(const char * string, int nvalues) {
 static void
 free_strings(char ** strings, int nstrings) {
   int  count;
+
+  if(!strings) return;
 
   for(count=0; count < nstrings; count++) {
     g_free(strings[count]);
@@ -88,6 +115,7 @@ gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
   double      * data=NULL;
   char        ** labels=NULL;
   char        ** colors=NULL;
+  char        * gtitle;
   
   if((param = g_hash_table_lookup(params, "datasize")) != NULL) {
     sscanf(param, "%d", &datasize);
@@ -122,14 +150,20 @@ gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
                                argind, arglist);
 
   if(piechart) {
-    title = guppi_object_new("title", w, h,
-                             "title", g_hash_table_lookup(params, "title"),
-                             "subtitle", g_hash_table_lookup(params, 
-                                                             "subtitle"),
-                             "subobject", piechart,
-                             "on_top", TRUE, NULL);
-    rv = guppi_object_build_widget(title);  
-    gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+    if((gtitle = g_hash_table_lookup(params, "title")) != NULL) {
+      title = guppi_object_new("title", w, h,
+                               "title", gtitle,
+                               "subtitle", g_hash_table_lookup(params, 
+                                                               "subtitle"),
+                               "subobject", piechart,
+                               "on_top", TRUE, NULL);
+      rv = guppi_object_build_widget(title);  
+      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+    }
+    else {
+      rv = guppi_object_build_widget(piechart);  
+      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)piechart);
+    }      
   }
   else {
     rv = NULL;
@@ -138,7 +172,7 @@ gnc_html_embedded_piechart(int w, int h, GHashTable * params) {
   g_free(data);
   free_strings(labels, datasize);
   free_strings(colors, datasize);
-
+  
   return rv;
 }
 
@@ -153,17 +187,19 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
 
   GuppiObject * barchart = NULL;
   GuppiObject * title = NULL;
-  GtkArg      arglist[6];
+  GtkArg      arglist[9];
   int         argind=0;
   GtkWidget   * rv;
   char        * param;
   int         datarows=0;
   int         datacols=0;
+  int         rotate=0;
   double      * data=NULL;
   char        ** col_labels=NULL;
   char        ** row_labels=NULL;
   char        ** col_colors=NULL;
-  
+  char        * gtitle = NULL;
+
   if((param = g_hash_table_lookup(params, "data_rows")) != NULL) {
     sscanf(param, "%d", &datarows);
     arglist[argind].name   = "data_rows";
@@ -185,6 +221,20 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
     GTK_VALUE_POINTER(arglist[argind]) = data;
     argind++;    
   }
+#if 0
+  if((param = g_hash_table_lookup(params, "x_axis_label")) != NULL) {
+    arglist[argind].name   = "x_axis_label";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = param;
+    argind++;    
+  }
+  if((param = g_hash_table_lookup(params, "y_axis_label")) != NULL) {
+    arglist[argind].name   = "y_axis_label";
+    arglist[argind].type   = GTK_TYPE_POINTER;
+    GTK_VALUE_POINTER(arglist[argind]) = param;
+    argind++;    
+  }
+#endif
   if((param = g_hash_table_lookup(params, "col_labels")) != NULL) {
     col_labels = read_strings(param, datacols);
     arglist[argind].name   = "column_labels";
@@ -206,21 +256,33 @@ gnc_html_embedded_barchart(int w, int h, GHashTable * params) {
     GTK_VALUE_POINTER(arglist[argind]) = col_colors;
     argind++;    
   }
+  if((param = g_hash_table_lookup(params, "rotate_row_labels")) != NULL) {
+    sscanf(param, "%d", &rotate);
+    arglist[argind].name   = "rotate_x_axis_labels";
+    arglist[argind].type   = GTK_TYPE_BOOL;
+    GTK_VALUE_BOOL(arglist[argind]) = rotate;
+    argind++;    
+  }
 
   barchart = guppi_object_newv("barchart", w, h,
                                argind, arglist);
   
   if(barchart) {
-
-    title = guppi_object_new("title", w, h,
-                             "title", g_hash_table_lookup(params, "title"),
-                             "subtitle", g_hash_table_lookup(params, 
-                                                             "subtitle"),
-                             "subobject", barchart,
-                             "on_top", TRUE, NULL);
-    
-    rv = guppi_object_build_widget(title);  
-    gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+    if((gtitle = g_hash_table_lookup(params, "title")) != NULL) {      
+      title = guppi_object_new("title", w, h,
+                               "title", gtitle,
+                               "subtitle", g_hash_table_lookup(params, 
+                                                               "subtitle"),
+                               "subobject", barchart,
+                               "on_top", TRUE, NULL);
+      
+      rv = guppi_object_build_widget(title);  
+      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+    }
+    else {
+      rv = guppi_object_build_widget(barchart);  
+      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)barchart);
+    }
   }
   else {
     rv = NULL;
@@ -253,7 +315,8 @@ gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
   int         color;
   double      * x_data=NULL;
   double      * y_data=NULL;
-  
+  char        * gtitle = NULL;
+
   if((param = g_hash_table_lookup(params, "datasize")) != NULL) {
     sscanf(param, "%d", &datasize);
     arglist[argind].name   = "data_size";
@@ -306,16 +369,20 @@ gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
                              argind, arglist);
 
   if(scatter) {
-
-    title = guppi_object_new("title", w, h,
-                             "title", g_hash_table_lookup(params, "title"),
-                             "subtitle", g_hash_table_lookup(params, 
-                                                             "subtitle"),
-                             "subobject", scatter,
-                             "on_top", TRUE, NULL);
-    
-    rv = guppi_object_build_widget(title);  
-    gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+    if((gtitle = g_hash_table_lookup(params, "title")) != NULL) {
+      title = guppi_object_new("title", w, h,
+                               "title", gtitle,
+                               "subtitle", g_hash_table_lookup(params, 
+                                                               "subtitle"),
+                               "subobject", scatter,
+                               "on_top", TRUE, NULL);
+      rv = guppi_object_build_widget(title);  
+      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)title);
+    }
+    else {
+      rv = guppi_object_build_widget(scatter);  
+      gtk_object_set_user_data(GTK_OBJECT(rv), (gpointer)scatter);
+    }
   }
   else {
     rv = NULL;
@@ -326,3 +393,48 @@ gnc_html_embedded_scatter(int w, int h, GHashTable * params) {
   return rv;
 }
 
+/********************************************************************
+ * gnc_html_embedded_account_tree
+ * create a gnucash account tree display from an <object> form
+ ********************************************************************/
+
+static void 
+set_bools(char * indices, gboolean * array, int num) {
+  int index, n, args;
+  int accum = 0;
+  int choffset = 0;
+  
+  for(n=0; n<num; n++) {
+    args = sscanf(indices+accum, "%d%n", &index, &choffset);
+    accum += choffset;
+    if(args == 0) {
+      break;
+    }
+    if(index < num) {
+      array[index] = TRUE;
+    }
+  }
+}
+
+GtkWidget * 
+gnc_html_embedded_account_tree(int w, int h, GHashTable * params) {
+  AccountViewInfo info;
+  GtkWidget       * tree = gnc_mainwin_account_tree_new();
+  char            * param;
+  int             * fields;
+
+  memset(&info, 0, sizeof(AccountViewInfo));
+
+  if((param = g_hash_table_lookup(params, "fields"))) {
+    set_bools(param, &(info.show_field[0]), NUM_ACCOUNT_FIELDS);
+  }
+  if((param = g_hash_table_lookup(params, "types"))) {
+    set_bools(param, &(info.include_type[0]), NUM_ACCOUNT_TYPES);
+  }
+  gnc_mainwin_account_tree_set_view_info(GNC_MAINWIN_ACCOUNT_TREE(tree),
+                                         info);
+  
+  gnc_account_tree_refresh(GNC_ACCOUNT_TREE
+                           (GNC_MAINWIN_ACCOUNT_TREE(tree)->acc_tree));
+  return tree;
+}

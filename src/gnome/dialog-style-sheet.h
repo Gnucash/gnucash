@@ -1,5 +1,6 @@
 /********************************************************************
- * gnc-html-embedded.h -- embed objects in the html stream          *
+ * dialog-style-sheet.h -- window for configuring HTML style       *
+ *                       sheets in GnuCash                          *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -18,16 +19,13 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef __GNC_HTML_EMBEDDED_H__
-#define __GNC_HTML_EMBEDDED_H__
+#ifndef __GNC_DIALOG_STYLE_SHEET_H__
+#define __GNC_DIALOG_STYLE_SHEET_H__
 
-#include <gnome.h>
+typedef struct _stylesheetdialog StyleSheetDialog;
 
-GtkWidget * gnc_html_embedded_piechart(gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_barchart(gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_scatter(gint w, gint h, GHashTable * params);
-GtkWidget * gnc_html_embedded_account_tree(gint w, gint h, GHashTable * prms);
+void gnc_style_sheet_dialog_open(void);
 
 #endif

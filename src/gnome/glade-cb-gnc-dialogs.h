@@ -15,42 +15,6 @@ gnc_ui_account_picker_cancel_cb        (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_print_preview_OK_cb             (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_print_dialog_select_printer_cb  (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_print_dialog_select_paper_cb    (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_print_dialog_ok_cb              (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_print_dialog_preview_cb         (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_print_dialog_cancel_cb          (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_print_dialog_help_cb            (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_paper_dialog_ok_cb              (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_paper_dialog_cancel_cb          (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
 gnc_ui_print_check_dialog_ok_cb        (GtkButton       *button,
                                         gpointer         user_data);
 

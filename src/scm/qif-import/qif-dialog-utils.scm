@@ -9,6 +9,8 @@
 
 (gnc:support "qif-import/qif-dialog-utils.scm")
 
+(use-modules (ice-9 regex))
+
 (define (default-stock-acct brokerage security)
   (string-append brokerage (gnc:account-separator-char) security))
 
@@ -454,13 +456,16 @@
          (qif-xtn:set-from-acct! xtn new-acct-name)))
    (qif-file:xtns qif-file)))
 
-(define qif-import:account-name-regexp
-  (let* ((rstr ":([^:]+)$|^([^:]+)$")
-         (newstr (regexp-substitute/global 
-                  #f ":" rstr 'pre (gnc:account-separator-char) 'post)))
-    (make-regexp newstr)))
+(define qif-import:account-name-regexp #f)
 
 (define (qif-import:get-account-name fullname)
+  (if (not qif-import:account-name-regexp)
+      (let* ((rstr ":([^:]+)$|^([^:]+)$")
+             (newstr (regexp-substitute/global 
+                      #f ":" rstr 'pre (gnc:account-separator-char) 'post)))
+        
+        (set! qif-import:account-name-regexp (make-regexp newstr))))
+  
   (let ((match (regexp-exec qif-import:account-name-regexp fullname)))
     (if match
         (begin 

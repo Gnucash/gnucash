@@ -50,6 +50,7 @@ gnucash_html_dir = $(top_srcdir)/doc/html/C
 GNUCASH_HTML_FILES = \
 	$(gnucash_html_dir)/xacc-tax-report-example.html \
 	$(gnucash_html_dir)/xacc-txf-categories.html \
+	$(gnucash_html_dir)/account-tree-demo.html \
         $(gnucash_html_dir)/guppi-pie-demo.html \
         $(gnucash_html_dir)/guppi-bar-demo.html \
         $(gnucash_html_dir)/guppi-points-demo.html

@@ -58,6 +58,31 @@
 	       separator
 	       (gnc:account-get-name account)))))))
 
+;; get children that are the direct descendant of this acct
+(define (gnc:account-get-immediate-subaccounts acct)
+  (define (acctptr-eq? a1 a2)
+    (let ((a1-str 
+           (with-output-to-string (lambda () (write a1))))
+          (a2-str 
+           (with-output-to-string (lambda () (write a2)))))
+      (string=? a1-str a2-str)))
+  
+  (let* ((group (gnc:account-get-children acct))
+         (children (gnc:group-get-subaccounts group))
+         (retval '()))
+    (for-each 
+     (lambda (child)
+       (if (acctptr-eq? acct (gnc:account-get-parent-account child))
+           (begin 
+             (set! retval (cons child retval)))))
+     children)
+    (reverse retval)))
+
+;; get all children of this account 
+(define (gnc:account-get-all-subaccounts acct)
+  (let ((group (gnc:account-get-children acct)))
+    (gnc:group-get-subaccounts group)))
+                            
 ;; returns a list contains elements of the-list for which predicate is true
 (define (gnc:filter-list the-list predicate)
   (let loop ((rest the-list)
@@ -170,7 +195,7 @@
 	  ('reset (reset-all))
           (else (gnc:warn "bad stats-collector action: " action)))))))
 
-(define (makedrcr-collector)
+(define (make-drcr-collector)
   (let ;;; values
       ((debits 0)
        (credits 0)
@@ -307,22 +332,33 @@
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
-(define (d-gnc:account-get-balance-at-date account date include-children?)
+(define (gnc:account-get-balance-at-date account date include-children?)
   (let ((children-balance
          (if include-children?
-             (d-gnc:group-get-balance-at-date
+             (gnc:group-get-balance-at-date
               (gnc:account-get-children account) date)
-             0)))
-    (let loop ((index 0)
-               (balance 0)
-               (split (gnc:account-get-split account 0)))
-      (if (not split)
-          (+ children-balance balance)
-          (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))
-              (+ children-balance balance)
-              (loop (+ index 1)
-                    (d-gnc:split-get-balance split)
-                    (gnc:account-get-split account (+ index 1))))))))
+             0))
+        (balance #f)
+        (query (gnc:malloc-query))
+        (splits #f))
+    
+    (gnc:query-set-group query (gnc:get-current-group))
+    (gnc:query-add-single-account-match query account 'query-and)
+    (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
+    (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
+    (gnc:query-set-sort-increasing query #t)
+    (gnc:query-set-max-splits query 1)
+    
+    (set! splits (gnc:glist->list 
+                  (gnc:query-get-splits query) 
+                  <gw:wt-Split*>))
+    (if (and splits (not (null? splits)))
+        (set! balance (gnc:numeric-to-double 
+                       (gnc:split-get-balance (car splits))))
+        (set! balance 0.0))
+    (if include-children? 
+        (+ balance children-balance)
+        balance)))    
 
 ;; This works similar as above but returns a currency-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -349,11 +385,12 @@
 
 ;; get the balance of a group of accounts at the specified date.
 ;; all children are included in the calculation
-(define (d-gnc:group-get-balance-at-date group date)
+(define (gnc:group-get-balance-at-date group date)
   (apply +
          (gnc:group-map-accounts
           (lambda (account)
-            (d-gnc:account-get-balance-at-date account date #t)) group)))
+            (gnc:account-get-balance-at-date account date #t)) 
+          group)))
 
 ;; returns a currency-collector
 (define (gnc:group-get-curr-balance-at-date group date)

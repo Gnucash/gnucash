@@ -107,6 +107,21 @@ gnc_report_window_back_cb(GtkWidget * w, gpointer data) {
 }
 
 
+static int
+gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window       * report = data;
+  gnc_html_cancel(report->html);
+  return TRUE;
+}
+
+static int
+gnc_report_window_reload_button_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window       * report = data;
+  gnc_html_reload(report->html);
+  return TRUE;
+}
+
+
 static void
 gnc_report_window_set_back_button(gnc_report_window * win, int enabled) {
   gtk_widget_set_sensitive(win->back_widg, enabled);
@@ -153,8 +168,8 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
                           gpointer data) {
   gnc_report_window * win = data;
   int  report_id;
-  SCM  find_report = gh_eval_str("gnc:find-inst-report");
-  SCM  get_options = gh_eval_str("gnc:inst-report-options");
+  SCM  find_report = gh_eval_str("gnc:find-report");
+  SCM  get_options = gh_eval_str("gnc:report-options");
   SCM  inst_report;
   SCM  inst_options;
   
@@ -311,6 +326,24 @@ gnc_report_window_new(GtkWidget * container) {
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
       GNOME_STOCK_PIXMAP_FORWARD,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Reload"),
+      N_("Reload the current report"),
+      gnc_report_window_reload_button_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_REFRESH,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      N_("Stop"),
+      N_("Cancel outstanding HTML requests"),
+      gnc_report_window_stop_button_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_STOP,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,

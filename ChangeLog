@@ -1,3 +1,75 @@
+2001-01-12  Bill Gribble  <grib@billgribble.com>
+
+	* doc/html/C/account-tree-demo.html: add a simple demo of
+	embedding a gnucash main window widget in HTML
+
+	* src/gnome/dialog-options.c: add a 'pixmap' option type to
+	the GNC options 
+
+	* src/gnome-dialog-style-sheet.{c,h}: new dialog for creating 
+	and editing HTML style sheets 
+
+	* src/gnome/druid-qif-import.c: add support for false-if-exception
+	error handling within QIF import process
+
+	* src/gnome/gnc-html-embedded.c: add backslash escaping for
+	converting string arrays to and from single HTML strings
+
+	* src/gnome/gnc-html-embedded.c: error handling in creating guppi
+	plots, and add new embedded object type for embedding a gnucash
+	mainwindow-account-tree in HTML (preliminary).  Add x axis 
+	label rotation as an option to the barchart.
+
+	* src/gnome/gnc-html.c: fixes for renaming of report objects and
+	handling false-if-exception returns from report runs.  Use async
+	mode for ghttp requests and add a gtk_timeout callback to check on
+	their status.  Add a gnc_html_cancel() which gets rid of pending
+	ghttp requests (called by the stop buttons in help, report
+	windows)
+
+	* src/gnome/window-help.c: bug fixes for search results printing.
+	Don't expand help topics nodes on creation.  Add stop and reload
+	buttons to the toolbar.
+	
+	* src/gnome/window-report.c: Add stop and reload buttons to the
+	toolbar.
+
+	* src/guile/gnc-helpers.c: fix helpers for recordization of
+	<gnc-numeric> on Scheme side
+
+	* src/scm/engine-utilities.scm: rewrite transaction map functions
+	to eliminate ith-transaction calls 
+
+	* src/scm/gnc-numeric.scm: make gnc-numeric into a first class 
+	type on the scheme side (<gnc-numeric>)
+
+	* src/scm/html-*.scm (7 files): new architecture for generating
+	HTML within reports.  See src/scm/report-html.txt for an overview.
+
+	* src/scm/options.scm: support for pixmap options 
+
+	* src/scm/qif-import/: add false-if-exception error catching in
+	QIF import entry points.
+
+	* src/scm/report-utilities.scm: add functions to get immediate 
+	subaccounts; rewrite get-balance-at-date.
+
+	* src/scm/report.scm: rename report objects; now the thing that
+	gets created by define-report is a <report-template> and the thing
+	that has a window and a set of parameters is a <report>.  Add a
+	"style sheet" option automatcally to EVERY report, and a "General"
+	section to put it in; report with only 1 page of options should
+	use "General".  Add false-if-exception error catching to report
+	run.
+
+	* src/scm/report/account-summary.scm, src/scm/report/hello-world.scm,
+	src/scm/report/average-balance.scm: rewrite some reports using the
+	new HTML generation infrastructure.  Old reports won't work until
+	they are rewritten.
+
+	* src/scm/report/stylesheet-*.scm (2 files): create some sample
+	stylesheet templates. 
+
 2001-01-03  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/engine/Transaction.h :start documenting reserved split slots.

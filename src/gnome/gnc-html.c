@@ -46,6 +46,7 @@
 #include "gnc-html.h"
 #include "gnc-html-history.h"
 #include "gnc-html-embedded.h"
+#include "query-user.h"
 #include "window-help.h"
 #include "window-report.h"
 
@@ -63,8 +64,9 @@ struct _gnc_html {
   GncHTMLLoadCB     load_cb;
   GncHTMLFlyoverCB  flyover_cb;
   GncHTMLButtonCB   button_cb;
-
   ghttp_request     * request; 
+
+  GList             * requests;
   gpointer          flyover_cb_data;
   gpointer          load_cb_data;
   gpointer          button_cb_data;
@@ -72,8 +74,16 @@ struct _gnc_html {
   struct _gnc_html_history * history; 
 };
 
+struct request_info {
+  ghttp_request * request;
+  GtkHTMLStream * handle;
+};
+
 static char error_404[] = 
 "<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>";
+
+static char error_report[] = 
+"<html><body><h3>Report error</h3><p>An error occurred while running the report.</body></html>";
 
 /********************************************************************
  * gnc_html_parse_url
@@ -288,7 +298,123 @@ rebuild_url(URLType type, const gchar * location, const gchar * label) {
                            (location ? location : ""));
   }
 }
+
+static guint ghttp_callback_tag = 0;
+static int ghttp_callback_enabled = FALSE;
+
+static void
+ghttp_check_callback(gpointer data) {
+  gnc_html            * html = data;
+  GList               * current; 
+  ghttp_status        status;
+  struct request_info * req;
+
+  /* walk the request list to deal with any complete requests */
+  for(current = html->requests; current; current = current->next) {
+    req = current->data;
     
+    status = ghttp_process(req->request);
+    switch(status) {
+    case ghttp_done:
+      if (ghttp_get_body_len(req->request) > 0) {      
+#if 0
+        {
+          /* hack alert  FIXME:
+           * This code tries to see if the returned body is
+           * in fact gnc xml code. If it seems to be, then we 
+           * load it as data, rather than loading it into the 
+           * gtkhtml widget.  My gut impression is that we should 
+           * probably be doing this somewhere else, not here ....
+           * But I can't think of another place for now. -- linas
+           */
+          const char * bufp = ghttp_get_body(req->request);
+          bufp += strspn (bufp, " /t/v/f/n/r");
+          if (!strncmp (bufp, "<?xml version", 13)) {
+            gncFileOpenFile ((char *) fullurl);
+            return;
+          } 
+        }
+#endif
+        
+        gtk_html_write(GTK_HTML(html->html), 
+                       req->handle, 
+                       ghttp_get_body(req->request), 
+                       ghttp_get_body_len(req->request));
+        gtk_html_end(GTK_HTML(html->html), req->handle, GTK_HTML_STREAM_OK);
+      }
+      else {
+        gtk_html_write(GTK_HTML(html->html), req->handle, error_404, 
+                       strlen(error_404));
+        gtk_html_end(GTK_HTML(html->html), req->handle, GTK_HTML_STREAM_ERROR);
+      }
+      ghttp_request_destroy(req->request);
+      req->request   = NULL;
+      req->handle    = NULL;
+      current->data  = NULL;
+      g_free(req);
+      break;
+
+    case ghttp_error:
+      gtk_html_write(GTK_HTML(html->html), req->handle, error_404, 
+                     strlen(error_404));
+      gtk_html_end(GTK_HTML(html->html), req->handle, GTK_HTML_STREAM_ERROR);
+      ghttp_request_destroy(req->request);
+      req->request   = NULL;
+      req->handle    = NULL;
+      current->data  = NULL;
+      g_free(req);
+      break;
+
+    case ghttp_not_done:
+      break;
+    }
+  }
+  
+  /* walk the list again to remove dead requests */
+  current = html->requests;
+  while(current) {
+    if(current->data == NULL) {
+      html->requests = g_list_remove_link(html->requests, current);
+      current = html->requests;
+    }
+    else {
+      current = current->next;
+    }
+  }
+
+  /* if all requests are done, disable the timeout */
+  if(html->requests == NULL) {
+    gtk_timeout_remove(ghttp_callback_tag);
+    ghttp_callback_enabled = FALSE;
+    ghttp_callback_tag = 0;
+  }
+}
+
+static void 
+gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
+  
+  struct request_info * info = g_new0(struct request_info, 1);
+
+  info->request = ghttp_request_new();
+  info->handle  = handle;
+  ghttp_set_uri(info->request, uri);
+  ghttp_set_header(info->request, http_hdr_User_Agent, 
+                   "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
+  ghttp_set_sync(info->request, ghttp_async);
+  ghttp_prepare(info->request);
+  ghttp_process(info->request);
+
+  html->requests = g_list_append(html->requests, info);
+  
+  /* start the gtk timeout if not started */
+  if(!ghttp_callback_enabled) {
+    ghttp_callback_tag = 
+      gtk_timeout_add(100, ghttp_check_callback, (gpointer)html);
+    ghttp_callback_enabled = TRUE;
+  }
+}
+
+
 /********************************************************************
  * gnc_html_load_to_stream : actually do the work of loading the HTML
  * or binary data referenced by a URL and feeding it into the GtkHTML
@@ -331,49 +457,11 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   case URL_TYPE_FTP:
   case URL_TYPE_SECURE:
     fullurl = rebuild_url(type, location, label);
-    
-    ghttp_set_uri(html->request, fullurl);
-    // ghttp_set_header(html->request, http_hdr_Connection, "close");
-    ghttp_set_header(html->request, http_hdr_User_Agent, 
-           "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
-    // ghttp_clean(html->request);
-    ghttp_prepare(html->request);
-    ghttp_process(html->request);
-
-    if(ghttp_get_body_len(html->request) > 0) {
-
-      {
-         /* hack alert  FIXME:
-          * This code tries to see if the returned body is
-          * in fact gnc xml code. If it seems to be, then we 
-          * load it as data, rather than loading it into the 
-          * gtkhtml widget.  My gut impression is that we should 
-          * probably be doing this somewhere else, not here ....
-          * But I can't think of another place for now. -- linas
-          */
-         const char * bufp = ghttp_get_body(html->request);
-         bufp += strspn (bufp, " /t/v/f/n/r");
-         if (!strncmp (bufp, "<?xml version", 13)) {
-            gncFileOpenFile ((char *) fullurl);
-            return;
-         } 
-      }
-
-      gtk_html_write(GTK_HTML(html->html), handle, 
-                     ghttp_get_body(html->request), 
-                     ghttp_get_body_len(html->request));
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
-    }
-    else {
-      gtk_html_write(GTK_HTML(html->html), handle, error_404, 
-                     strlen(error_404));
-      gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
-    }
-
+    gnc_html_start_request(html, fullurl, handle);    
     break;
     
   case URL_TYPE_REPORT:
-    run_report = gh_eval_str("gnc:inst-report-run");
+    run_report = gh_eval_str("gnc:report-run");
 
     if(!strncmp("id=", location, 3)) {
       /* get the report ID */
@@ -381,20 +469,26 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       
       /* get the HTML text */ 
       scmtext = gh_call1(run_report, gh_int2scm(id));
-      fdata = gh_scm2newstr(scmtext, &fsize);
-      
-      if(fdata) {
-        gtk_html_write(GTK_HTML(html->html), handle, fdata, fsize);
-        free(fdata);
-        fdata = NULL;
-        fsize = 0;
+      if(scmtext == SCM_BOOL_F) {
+        gtk_html_write(GTK_HTML(html->html), handle, 
+                       error_report, strlen(error_report));        
       }
       else {
-        gtk_html_write(GTK_HTML(html->html), handle, error_404, 
-                       strlen(error_404));
-        printf(" ** gnc_html WARNING : report HTML generator failed.\n");
+        fdata = gh_scm2newstr(scmtext, &fsize);
+        if(fdata) {
+          gtk_html_write(GTK_HTML(html->html), handle, fdata, fsize);
+          free(fdata);
+          fdata = NULL;
+          fsize = 0;
+        }
+        else {
+          gtk_html_write(GTK_HTML(html->html), handle, error_404, 
+                         strlen(error_404));
+          printf(" ** gnc_html WARNING : report HTML generator failed.\n");
+        }
       }
     }
+
     gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);
     break;
     
@@ -504,6 +598,16 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
   else if(!strcmp(eb->classid, "gnc-guppi-scatter")) {
     widg = gnc_html_embedded_scatter(eb->width, eb->height, 
                                      eb->params); 
+    if(widg) {
+      gtk_widget_show_all(widg);
+      gtk_container_add(GTK_CONTAINER(eb), widg);
+      gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+    }
+    retval = TRUE;
+  }
+  else if(!strcmp(eb->classid, "gnc-account-tree")) {
+    widg = gnc_html_embedded_account_tree(eb->width, eb->height, 
+                                          eb->params); 
     if(widg) {
       gtk_widget_show_all(widg);
       gtk_container_add(GTK_CONTAINER(eb), widg);
@@ -662,6 +766,9 @@ gnc_html_open_register(gnc_html * html, const gchar * location) {
                                       gnc_get_account_separator());
     reg = regWindowSimple(acct);
     gnc_register_raise(reg);
+  }
+  else {
+    gnc_warning_dialog(_("Badly formed gnc-register: URL."));
   }
 }
 
@@ -868,6 +975,35 @@ gnc_html_new() {
   gtk_html_load_empty(GTK_HTML(retval->html));
   
   return retval;
+}
+
+/********************************************************************\
+ * gnc_html_cancel
+ * cancel any outstanding HTML fetch requests. 
+\********************************************************************/
+void
+gnc_html_cancel(gnc_html * html) {
+  GList * current;
+  
+  if(ghttp_callback_enabled == TRUE) {
+    gtk_timeout_remove(ghttp_callback_tag);
+    ghttp_callback_enabled = FALSE;
+    ghttp_callback_tag = 0;
+
+    /* go through and destroy all the requests */
+    for(current = html->requests; current; current = current->next) {
+      if(current->data) {
+        struct request_info * r = current->data;
+        ghttp_request_destroy(r->request);
+        g_free(r);
+        current->data = NULL;
+      }
+    }
+
+    /* free the list backbone */
+    g_list_free(html->requests);
+    html->requests = NULL;
+  }  
 }
 
 
