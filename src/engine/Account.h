@@ -111,6 +111,7 @@ typedef enum
  *    to the local language.
  */
 const char * xaccAccountGetTypeStr (GNCAccountType type); 
+GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
 
 /* 
  * Conversion routines for the account types to/from strings

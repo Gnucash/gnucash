@@ -34,12 +34,13 @@ static Account *
 ask_make_acct (DialogDateClose *ddc, const char *name, gboolean new_acc)
 {
   char *message;
+  GList *types = NULL;
+  Account *acc;
 
   if (new_acc) {
     gboolean result;
-    message = g_strdup_printf (_("The %s account \"%s\" does not exist.\n"
-				 "Would you like to create it?"), 
-			       xaccAccountGetTypeStr (ddc->acct_type), name);
+    message = g_strdup_printf (_("The account \"%s\" does not exist.\n"
+				 "Would you like to create it?"), name);
     
     result =
       gnc_verify_dialog_parented (ddc->dialog, message, TRUE);
@@ -48,7 +49,10 @@ ask_make_acct (DialogDateClose *ddc, const char *name, gboolean new_acc)
       return NULL;
   }
 
-  return gnc_ui_new_accounts_from_name_window (name);
+  types = g_list_append (types, (gpointer)(ddc->acct_type));
+  acc = gnc_ui_new_accounts_from_name_window_with_types (name, types);
+  g_list_free (types);
+  return acc;
 }
 
 static void

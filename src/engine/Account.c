@@ -1974,6 +1974,24 @@ xaccAccountGetTypeStr(GNCAccountType type) {
   return _(account_type_name [type]);
 }
 
+GNCAccountType
+xaccAccountGetTypeFromStr (const gchar *str)
+{
+  gint type;
+
+  for (type = 0; type < NUM_ACCOUNT_TYPES; type++)
+  {
+    if (!safe_strcmp (str, _(account_type_name [type])))
+      return type;
+  }
+
+  PERR("asked to translate unknown account type string %s.\n",
+       str ? str : "(null)");
+
+  return BAD_TYPE;
+}
+
+
 /********************************************************************\
 \********************************************************************/
 

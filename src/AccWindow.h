@@ -41,6 +41,8 @@ AccountWindow * gnc_ui_new_account_window_with_default(AccountGroup *group,
 AccountWindow * gnc_ui_edit_account_window (Account *account);
 
 Account * gnc_ui_new_accounts_from_name_window (const char *name);
+Account * gnc_ui_new_accounts_from_name_window_with_types (const char *name,
+							   GList *valid_types);
 
 void gnc_ui_set_default_new_account_currency (const char *currency);
 
