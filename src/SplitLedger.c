@@ -189,7 +189,7 @@ printf ("save split is %p \n", split);
    }
 
    if (MOD_TPRIC & changed) {
-      xaccSplitSetSharePrice (split, -(reg->priceTransCell->amount));
+      xaccSplitSetSharePrice (split, reg->priceTransCell->amount);
    }
 
    if (MOD_TVALU & changed) {
