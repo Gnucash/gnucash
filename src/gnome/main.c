@@ -42,6 +42,8 @@
 char        *helpPath = NULL;
 GtkWidget   *toplevel;
 GtkWidget   *filebox;
+gint	     filebox_quit;
+GtkWidget   *import_filebox;
 char        *datafile = NULL;
 GtkWidget   *app;
 
@@ -55,33 +57,78 @@ gchar *accRes[] ={
   "asset",
   "credit",
   "liability",
-  "portfolio",
+  "stock",
   "mutual",
   "income",
   "expense",
-  "equity"
+  "equity",
+  "checking",
+  "savings",
+  "creditline",
 };
 
 void
 file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
 {
-  datafile = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
+  char *newfile = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
 
   /* Check to see if this is a valid datafile */
-  if ( datafile != NULL )
-  {
-    topgroup = xaccReadAccountGroup (datafile);   
-    gtk_widget_destroy ( filebox );
-  }
+  if ( newfile == NULL )
+    return;
+
+  if (filebox_quit)
+    {
+      gtk_signal_disconnect (GTK_OBJECT (filebox), filebox_quit);
+      filebox_quit = 0;
+    }
+
+  datafile = newfile;
+  topgroup = xaccReadAccountGroup (datafile);   
+  gtk_widget_hide (filebox);
  
   if( NULL == topgroup )
-  {
-    /* load the accounts data from datafile*/
-    topgroup = xaccMallocAccountGroup(); 
-  } 
+    {
+      /* Load the accounts data from datafile*/
+      topgroup = xaccMallocAccountGroup(); 
+    } 
+  
+  xaccAccountGroupMarkSaved (topgroup);
+  main_window_init (topgroup);
+}
 
-  xaccAccountGroupMarkSaved(topgroup);
-  main_window_init(topgroup);
+void
+import_ok_sel (GtkWidget *w, GtkFileSelection *fs)
+{
+  char *newfile = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
+  int io_error;
+  AccountGroup *newgrp;
+
+  if (newfile) {
+    gtk_widget_hide (import_filebox);
+
+    /* Load the accounts from the users datafile */
+    newgrp = xaccReadQIFAccountGroup (newfile);
+    
+    /* Check for i/o error, put up appropriate error message */
+    io_error = xaccGetQIFIOError();
+    if (io_error)
+      {
+	printf ("I/O Error: %d", io_error);
+	return;
+      }
+    
+    if( NULL == topgroup )
+      {
+	/* no topgroup exists */
+	topgroup = xaccMallocAccountGroup();
+      }
+
+    /* Since Quicken will not export all accounts into one file, we
+       must merge them in one by one */
+    xaccConcatGroups (topgroup, newgrp);
+    xaccMergeAccounts (topgroup);
+    xaccConsolidateGrpTransactions (topgroup);
+  }
 }
 
 void
@@ -115,7 +162,13 @@ gnucash_shutdown (GtkWidget *widget, gpointer *data)
 void
 file_cmd_open (GtkWidget *widget, gpointer data)
 {
-  g_print ( "Menu Command: file open\n" );
+    gtk_widget_show ( filebox );
+}
+
+void
+file_cmd_import (GtkWidget *widget, gpointer data)
+{
+    gtk_widget_show (import_filebox);
 }
 
 void
@@ -136,6 +189,7 @@ void file_cmd_quit (GtkWidget *widget, gpointer data)
   gtk_main_quit();
 }
 
+#if 0
 static void
 foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
   const int num_accts = xaccGroupGetNumAccounts(g);
@@ -164,6 +218,7 @@ foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
   _free(splits);
   _free(acc_list);
 }
+#endif
 
 
 /********************************************************************\
@@ -181,7 +236,7 @@ foreach_split_in_group(AccountGroup *g, void (*f)(Split *)) {
 int 
 main( int argc, char *argv[] )
 {   
- // gtk_init ( &argc, &argv );
+  // gtk_init ( &argc, &argv );
 
   if(argc > 1) {
     /* Gnome is a pain about this if we don't handle it first
@@ -217,10 +272,18 @@ main( int argc, char *argv[] )
   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filebox)->ok_button),
                       "clicked", (GtkSignalFunc) file_ok_sel, filebox );
   
-  /* Connect the cancel_button to also kill the app */
-  gtk_signal_connect_object ( GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
-                              "clicked", (GtkSignalFunc) gtk_exit, NULL );
+  /* Filebox widget for importing QIF files. */
+  import_filebox = gtk_file_selection_new ( "Import..." );
 
+  gtk_signal_connect (GTK_OBJECT (import_filebox), "delete_event",
+                      (GtkSignalFunc) gtk_widget_destroy, 
+                      GTK_OBJECT(import_filebox));
+  
+  /* Connect the ok_button to file_ok_sel function */
+  gtk_signal_connect
+    (GTK_OBJECT (GTK_FILE_SELECTION (import_filebox)->ok_button),
+     "clicked", (GtkSignalFunc) import_ok_sel, import_filebox );
+  
   /* read in the filename (should be the first arg after all
    * the X11 stuff */
   if( datafile != NULL ) {
@@ -254,6 +317,12 @@ main( int argc, char *argv[] )
     main_window_init(topgroup);
   } else {
     /* Filebox code here */
+    /* Connect the cancel_button to also kill the app */
+    filebox_quit =
+      gtk_signal_connect_object
+	(GTK_OBJECT (GTK_FILE_SELECTION (filebox)->cancel_button),
+	 "clicked", (GtkSignalFunc)gtk_exit, NULL );
+
     gtk_widget_show ( filebox );
   }
   

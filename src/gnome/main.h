@@ -52,6 +52,7 @@
 /** PROTOTYPES ******************************************************/
 void gnucash_shutdown (GtkWidget *widget, gpointer *data);
 void file_cmd_open (GtkWidget *widget, gpointer data);
+void file_cmd_import (GtkWidget *widget, gpointer data);
 void file_cmd_quit (GtkWidget *widget, gpointer data);
 void file_cmd_save (GtkWidget *widget, gpointer data);
 void prepare_app ( void );
