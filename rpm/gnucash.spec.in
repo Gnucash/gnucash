@@ -1,20 +1,42 @@
+# Check whether GnuCash should be build with or without the Postgres backend.
+# When building GnuCash, pass "--with postgres" or "--without postgres"
+# options, as in
+#    rpmbuild --with postgres -bb gnucash.spec
+%if "%{_with_postgres}" == "--with-postgres"
+  %define _with_postgres 1
+  %define sql_config --enable-sql
+%else
+  %define _with_postgres 0
+  %define sql_config --disable-sql
+%endif
+
 Name:      	gnucash
 Summary:   	GnuCash is an application to keep track of your finances.
 Version:   	@-VERSION-@
 Release:  	1
 Copyright: 	Free Software Foundation
 Group:     	Applications/Finance
+URL:            http://www.gnucash.org
 Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
 BuildRoot: 	/var/tmp/gnucash-%version
 Requires:  	gnome-libs >= 1.2.0
+Buildrequires: 	gnome-libs-devel >= 1.2.0
 Requires:	gdk-pixbuf >= 0.2.5
+Buildrequires:	gdk-pixbuf-devel >= 0.2.5
 Requires:	gnome-print >= 0.21
+Buildrequires:	gnome-print-devel >= 0.21
 Requires:	guile >= 1.3.4
+Buildrequires:	guile-devel >= 1.3.4
 Requires:	gtkhtml >= 0.8
+Buildrequires:	gtkhtml-devel >= 0.8
 Requires:	Guppi >= 0.35.3
+Buildrequires:	Guppi-devel >= 0.35.3
 Requires:	g-wrap >= 1.3.1
+Buildrequires:	g-wrap-devel >= 1.3.1
 Requires:	umb-scheme >= 3.2
 Requires:	gal >= 0.8
+Buildrequires:	gal-devel >= 0.8
+Buildrequires:	libglade-devel >= 0.16
 
 %description
 GnuCash is a personal finance manager. A check-book like
@@ -22,6 +44,23 @@ register GUI allows you to enter and track bank accounts,
 stocks, income and even currency trades. The interface is
 designed to be simple and easy to use, but is backed with
 double-entry accounting principles to ensure balanced books.
+
+
+%if %{_with_postgres}
+%package backend-postgres
+Summary: Backend for storing GnuCash data in a PostgreSQL database.
+Group: Applications/Finance
+Requires: gnucash = %{PACKAGE_VERSION}
+Requires: postgres >= 7.1.3
+
+%description backend-postgres
+
+This package contains a backend for storing your GnuCash accounts and
+transactions in a PostgreSQL database.  Install this package if you
+want to keep your financial data in a database instead of a flat file
+(recommended for large volumes of data and commercial sites).
+%endif
+
 
 %package devel
 Summary: Header files for GnuCash development.
@@ -37,16 +76,13 @@ in C programs.
 %setup -q
 
 %build
-%configure
+%configure %{sql_config}
 make
+cp -p src/backend/postgres/README README.postgres
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-LIBRARY_PATH="${LIBRARY_PATH}:${RPM_BUILD_ROOT}%{_libdir}"
-LIBRARY_PATH="${LIBRARY_PATH}:${RPM_BUILD_ROOT}%{_libdir}/gnucash"
-export LIBRARY_PATH
 %{makeinstall}
-
 %find_lang %name
 
 %clean
@@ -55,12 +91,16 @@ export LIBRARY_PATH
 %files -f %{name}.lang
 %defattr(444,root,root,755)
 %attr(555,root,root) %{_bindir}/*
-%dir %{_libexecdir}/gnucash
 %attr(555,root,root) %{_libexecdir}/gnucash
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
 %{_mandir}/man1/*
 %{_infodir}/*.gz
-%{_libdir}/*
+%{_libdir}/gnucash/libgnc-*
+%{_libdir}/gnucash/libgncmod-[a,c-z]*
+%{_libdir}/gnucash/libgncmod-b[b-z]*
+%{_libdir}/gnucash/libgncmod-backend-file*
+%{_libdir}/gnucash/libgw*
+%{_libdir}/lib*
 %dir %{_datadir}/gnucash
 %{_datadir}/gnucash/accounts
 %{_datadir}/gnucash/doc
@@ -76,7 +116,13 @@ export LIBRARY_PATH
 %doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README README.patches
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt
 
+
+%if %{_with_postgres}
+%files backend-postgres
+%{_libdir}/gnucash/libgncmod-backend-postgres*
+%doc README.postgres
+%endif
+
 %files devel
-%dir %{_includedir}/gnucash
 %{_includedir}/gnucash
 %{_datadir}/aclocal/gnucash.m4
