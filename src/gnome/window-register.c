@@ -512,28 +512,28 @@ gnc_register_set_date_range(RegWindow *regData)
 
   if (!gtk_toggle_button_get_active(toggle)) {
     time_t start;
-    
+
     start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
     start = gnc_register_min_day_time(start);
-    
+
     xaccQueryAddDateMatchTT(regData->ledger->query, 
                             start, LONG_MAX,
                             QUERY_AND);
   }
-  
+
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_latest);
   if (!gtk_toggle_button_get_active(toggle)) {
     time_t end;
-    
+
     end = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
     end = gnc_register_max_day_time(end);
-    
+
     xaccQueryAddDateMatchTT(regData->ledger->query, 
                             LONG_MIN,
                             end,                            
                             QUERY_AND);
   }
-  
+
   gnc_date_range_set_sensitivities(regData);
 }
 
@@ -665,6 +665,16 @@ gnc_register_date_window(RegWindow *regData)
     show_all = gnc_lookup_boolean_option("Register",
                                          "Show All Transactions",
                                          TRUE);
+
+    /* This is a bit of a hack. The number of splits should be
+     * configurable, or maybe we should go back a time range instead
+     * of picking a number, or maybe we should be able to exclude
+     * based on reconciled status. Anyway, this works for now. */
+    if (!show_all)
+    {
+      xaccQuerySetMaxSplits(regData->ledger->query, 30);
+      xaccQueryGetSplits(regData->ledger->query);
+    }
 
     vbox = gtk_vbox_new(FALSE, 2);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);

@@ -1,5 +1,9 @@
 2000-06-05  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-register.c (gnc_register_date_window): if 'show
+	all transactions' is not set in the preferences, limit it to
+	30. Temporary fix for 1.4, this should be configurable.
+
 	* configure.in: changed '! test' to 'test !'.
 
 	* src/engine: removed *Consolidate* functions. These were cruft
