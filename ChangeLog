@@ -1,3 +1,6 @@
+2004-11-15  Benoit Grégoire <bock@step.polymtl.ca>
+ 	* po/fr.po: Updated french translation by Benoit Grégoire
+
 2004-11-13  Christian Stimming  <stimming@tuhh.de>
 
 	* po/POTFILES.in, src/report/report-gnome/window-report.c,
@@ -15,6 +18,9 @@
 	* po/cs.po: Updated Czech translation by Miloslav Trmac
 	<mitr@volny.cz>
 
+2004-11-02  Benoit Grégoire <bock@step.polymtl.ca>
+	* accounts/fr_FR/acctchrt_business.gnucash-xea: Gerald Delafond new translation of the GnuCash business chart of account.
+	
 2004-11-02  Benoit Grégoire <bock@step.polymtl.ca>
 	* po/fr.po: Updated french translation by Gerald Delafond and Benoit Grégoire
 
