@@ -1,3 +1,10 @@
+2003-01-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-reports/aging.scm:  When computing the aging
+	  report, ignore splits that belong to closed lots.  This way we wont
+	  get the wrong values when the invoice falls outside the 360-day
+	  window but its payment falls inside the window.
+
 2004-01-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: return a "valid" GUID even if passed a NULL
