@@ -483,13 +483,8 @@ xaccResolveFilePath (const char * filefrag)
    /* OK, now we try to find or build an absolute file path */
 
    /* check for an absolute file path */
-   if ('/' == *filefrag) {
+   if ('/' == *filefrag)
       return strdup (filefrag);
-      rc = stat (filefrag, &statbuf);
-      if ((!rc) && (S_ISREG(statbuf.st_mode)))
-          return (strdup (filefrag));
-      return NULL;
-   } 
 
    /* get conservative on the length so that sprintf(getpid()) works ... */
    /* strlen ("/.LCK") + sprintf (%x%d) */
