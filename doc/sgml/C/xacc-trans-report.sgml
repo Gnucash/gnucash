@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Transaction Report</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>Transaction reports list details for transactions in a
     specified account over a specified period, in a convenient
     format for viewing and exporting.
@@ -135,7 +136,7 @@ in the report. The choices include:
 
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
