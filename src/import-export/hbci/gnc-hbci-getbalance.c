@@ -51,6 +51,7 @@ bal_print_debug(const char *name,
   free (str);
 }
 
+
 void
 gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 {
@@ -108,7 +109,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       return;
     }
 
-    gnc_hbci_getbalance_debugprint(balance_job, h_acc);
+    /* gnc_hbci_getbalance_debugprint(balance_job, h_acc); */
     
     /* Finish this job. */
     gnc_hbci_getbalance_finish (parent, 
@@ -165,6 +166,19 @@ void gnc_hbci_getbalance_debugprint(HBCI_OutboxJobGetBalance *balance_job,
 		  balance_tt);
 }
 
+static gchar*
+bal_print_balance(const char *format,
+		  const HBCI_Value *val,
+		  gboolean negative)
+{
+  char *str = HBCI_Value_toReadableString (val);
+  char *res = g_strdup_printf(format, 
+			      (negative ? "-" : ""), 
+			      str);
+  free (str);
+  return res;
+}
+
 
 
 gboolean
@@ -206,26 +220,45 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 	 */
 	(_("The downloaded HBCI Balance was zero.\n"
 	   "Either this is the correct balance, or your bank does not \n"
-	   "support Balance download in this HBCI version. You should \n"
-	   "choose a higher HBCI version number in the HBCI Setup. After \n"
-	   "that, try again to download the HBCI Balance.\n"),
+	   "support Balance download in this HBCI version. In the latter \n"
+	   "case you should choose a higher HBCI version number in the HBCI \n"
+	   "Setup. After that, try again to download the HBCI Balance.\n"),
 	 GTK_WINDOW (parent));
       dialogres = FALSE;
     }
   else
     {
       char *booked_str = HBCI_Value_toReadableString (booked_val);
+      char *message1 = g_strdup_printf
+	(
+	 /* Translators: The first %s is "-" if this amount is
+	  * negative or "" if it is positive. The second %s is the
+	  * amount. */
+	 _("Result of HBCI job: \n"
+	   "Account booked balance is %s%s\n"),
+	 (booked_debit ? "-" : ""),
+	 booked_str);
+      char *message2 = 
+	((HBCI_Value_getValue (HBCI_Balance_value (noted_bal)) == 0) ?
+	 g_strdup_printf("%s", "") :
+	 bal_print_balance
+	 /* Translators: The first %s is "-" if this amount is
+	  * negative or "" if it is positive. The second %s is the
+	  * amount. */
+	 (_("For your information: This account also \n"
+	    "has a noted balance of %s%s\n"),
+	  HBCI_Balance_value (noted_bal),
+	  HBCI_Balance_isDebit (noted_bal)));
+      const char *message3 = _("Reconcile account now?");
 
       dialogres = gnc_verify_dialog
 	(parent, 
 	 TRUE,
-	 /* Translators: %s is the amount. */
-	 _("Result of HBCI job: \n"
-	   "Account booked balance is %s%s\n"
-	   "Reconcile account now?"),
-	 (booked_debit ? "-" : ""),
-	 booked_str);
+	 "%s%s\n%s",
+	 message1, message2, message3);
 
+      g_free (message1);
+      g_free (message2);
       free (booked_str);
     }
 

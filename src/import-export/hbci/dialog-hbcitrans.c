@@ -520,8 +520,8 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
     break;
   }
 	
-  printf("gnc_hbci_trans: KtoBlzCheck said check is %d = %s\n",
-	 blzresult, blztext);
+  /*printf("gnc_hbci_trans: KtoBlzCheck said check is %d = %s\n",
+    blzresult, blztext);*/
   return values_ok;
 #else
   return TRUE;
