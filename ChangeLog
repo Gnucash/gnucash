@@ -1,3 +1,8 @@
+2004-08-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/gnucash.desktop.in: make the desktop HIG compliant.
+	  Fixes #145545
+
 2004-07-20  Derek Atkins <derek@ihtfp.com>
 
 	* src/engine/Scrub.c
