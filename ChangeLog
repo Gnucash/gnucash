@@ -1,3 +1,8 @@
+2003-05-08  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/pt_BR.po: New Brazilian Portugese glossary by Jon
+	Lapham <lapham@extracta.com.br>
+
 2003-05-08  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/openhbci.m4: revert cstim's and hampton's changes to make
