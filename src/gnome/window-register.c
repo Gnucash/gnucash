@@ -2318,7 +2318,7 @@ gnc_register_include_date(RegWindow *regData, time_t date)
  * Return: none                                                     *
 \********************************************************************/
 static void
-recordCB(GtkWidget *w, gpointer data)
+recordCB (GtkWidget *w, gpointer data)
 {
   RegWindow *regData = data;
   SplitRegister *reg;
@@ -2340,7 +2340,7 @@ recordCB(GtkWidget *w, gpointer data)
   }
 
   if (trans != NULL)
-    gnc_register_include_date(regData, xaccTransGetDate(trans));
+    gnc_register_include_date (regData, xaccTransGetDate(trans));
 
   xaccSRRedrawReg (reg);
 }

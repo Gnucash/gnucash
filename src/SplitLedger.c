@@ -164,7 +164,7 @@ struct _SRInfo
   gboolean reg_loaded;
 
   /* The default account where new splits are added */
-  Account *default_source_account;
+  GUID default_account;
 
   /* The last date recorded in the blank split */
   time_t last_date_entered;
@@ -180,7 +180,7 @@ struct _SRInfo
   gboolean first_pass;
 
   /* User data for users of SplitRegisters */
-  void *user_data;
+  gpointer user_data;
 
   /* hook to get parent widget */
   SRGetParentCallback get_parent;
@@ -190,27 +190,7 @@ struct _SRInfo
 };
 
 
-/* ======================================================== */
-/* The force_double_entry_awareness flag controls how the 
- * register behaves if the user failed to specify a transfer-to
- * account when creating a new split. What it does is simple,
- * although it can lead to some confusion to the user.
- * If this flag is set, then any new split will be put into
- * the leader account. What happens visually is that it appears
- * as if there are two transactions, one debiting and one crediting
- * this account by exactly the same amount. Thus, the user is forced
- * to deal with this somewhat nutty situation.
- *
- * If this flag is *not* set, then the split just sort of 
- * hangs out, without belonging to any account. This will 
- * of course lead to a ledger that fails to balance.
- * Bummer, duude !
- *
- * hack alert -- this flag should really be made a configurable 
- * item in some config script.
- */
-
-static int force_double_entry_awareness = 0;
+/** static variables ******************************************************/
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_LEDGER;
@@ -255,6 +235,7 @@ static void xaccSRSetTransVisible (SplitRegister *reg,
                                    gboolean visible,
                                    gboolean only_blank_split);
 static void xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
+static gboolean trans_has_reconciled_splits (Transaction *trans);
 
 
 /** implementations *******************************************************/
@@ -294,6 +275,7 @@ xaccSRInitRegisterData(SplitRegister *reg)
 
   info->blank_split_guid = *xaccGUIDNULL ();
   info->pending_trans_guid = *xaccGUIDNULL ();
+  info->default_account = *xaccGUIDNULL ();
   info->last_date_entered = get_today_midnight ();
   info->first_pass = TRUE;
 
@@ -633,6 +615,14 @@ gnc_find_trans_in_reg_by_desc(SplitRegister *reg, const char *description)
   return NULL;
 }
 
+static Account *
+sr_get_default_account (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+
+  return xaccAccountLookup (&info->default_account);
+}
+
 static Split *
 sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc)
 {
@@ -685,13 +675,12 @@ gnc_split_get_quantity_denom (Split *split)
 static void
 sr_set_cell_fractions (SplitRegister *reg, Split *split)
 {
-  SRInfo *info = xaccSRGetInfo (reg);
   Account *account;
 
   account = xaccSplitGetAccount (split);
 
   if (account == NULL)
-    account = info->default_source_account;
+    account = sr_get_default_account (reg);
 
   if (account)
   {
@@ -851,6 +840,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   Split *old_trans_split;
   Split *new_trans_split;
   Split *new_split;
+  Split *old_split;
   CursorClass new_class;
   CursorClass old_class;
   gboolean exact_traversal;
@@ -862,6 +852,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
          new_virt_loc.vcell_loc.virt_col);
 
   /* The transaction we are coming from */
+  old_split = xaccSRGetCurrentSplit (reg);
   old_trans = xaccSRGetCurrentTrans (reg);
   old_trans_split = xaccSRGetCurrentTransSplit (reg, &old_trans_split_loc);
   old_class = xaccSplitRegisterGetCurrentCursorClass (reg);
@@ -917,6 +908,38 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     info->pending_trans_guid = *xaccGUIDNULL();
     pending_trans = NULL;
     saved = TRUE;
+  }
+  else if (old_trans &&
+           (old_trans != new_trans) &&
+           !trans_has_reconciled_splits (old_trans))
+  {
+    gnc_numeric imbalance;
+
+    imbalance = xaccTransGetImbalance (old_trans);
+    if (!gnc_numeric_zero_p (imbalance))
+    {
+      const char *message = _("The current transaction is not balanced.\n"
+                              "You must either balance it yourself, or\n"
+                              "GnuCash will automatically balance it for\n"
+                              "you. Do you want to balance it yourself?");
+      gboolean result;
+
+      result = gnc_verify_dialog_parented (xaccSRGetParent (reg),
+                                           message, TRUE);
+      if (result)
+      {
+        new_trans = old_trans;
+        new_split = old_split;
+        new_trans_split = old_trans_split;
+        new_class = old_class;
+        new_virt_loc = table->current_cursor_loc;
+      }
+      else
+      {
+        xaccTransScrubImbalance (old_trans);
+        saved = TRUE;
+      }
+    }
   }
 
   if (saved)
@@ -1088,9 +1111,9 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
         return FALSE;
 
       /* find a transaction to auto-complete on */
-      if (info->default_source_account != NULL)
+      if (sr_get_default_account (reg) != NULL)
       {
-        Account *account = info->default_source_account;
+        Account *account = sr_get_default_account (reg);
 
         auto_trans = gnc_find_trans_in_account_by_desc(account, desc);
       }
@@ -1107,8 +1130,9 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccTransBeginEdit (trans);
       gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
 
-      if (info->default_source_account != NULL)
+      if (sr_get_default_account (reg) != NULL)
       {
+        Account *default_account = sr_get_default_account (reg);
         int num_splits;
         int i;
 
@@ -1119,7 +1143,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
         {
           Split *s = xaccTransGetSplit(trans, i);
 
-          if (info->default_source_account == xaccSplitGetAccount(s))
+          if (default_account == xaccSplitGetAccount(s))
           {
             blank_split = s;
             info->blank_split_guid = *xaccSplitGetGUID(blank_split);
@@ -1202,9 +1226,9 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       unit_price = !xaccSplitRegisterGetCurrentCellLoc(reg, PRIC_CELL, NULL);
 
       /* find a split to auto-complete on */
-      if (info->default_source_account != NULL)
+      if (sr_get_default_account (reg) != NULL)
       {
-        Account *account = info->default_source_account;
+        Account *account = sr_get_default_account (reg);
 
         auto_split = gnc_find_split_in_account_by_memo(account, memo, trans,
                                                        unit_price);
@@ -2072,7 +2096,7 @@ xaccSRCopyCurrentInternal (SplitRegister *reg, gboolean use_cut_semantics)
         xaccSRSaveRegEntryToSCM(reg, new_item, split_scm, use_cut_semantics);
       }
 
-      copied_leader_guid = *xaccAccountGetGUID(info->default_source_account);
+      copied_leader_guid = info->default_account;
     }
   }
 
@@ -2244,10 +2268,10 @@ xaccSRPasteCurrent (SplitRegister *reg)
     split_index = gnc_trans_split_index(trans, split);
     trans_split_index = gnc_trans_split_index(trans, trans_split);
 
-    if ((info->default_source_account != NULL) &&
+    if ((sr_get_default_account (reg) != NULL) &&
         (xaccGUIDType(&copied_leader_guid) != GNC_ID_NULL))
     {
-      new_guid = xaccAccountGetGUID(info->default_source_account);
+      new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,
                                                   &copied_leader_guid,
                                                   new_guid, TRUE);
@@ -2780,7 +2804,7 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)
    {
-     xaccAccountInsertSplit (info->default_source_account, blank_split);
+     xaccAccountInsertSplit (sr_get_default_account (reg), blank_split);
      xaccTransSetDateEnteredSecs(trans, time(NULL));
    }
 
@@ -2796,9 +2820,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
      split = xaccMallocSplit ();
      xaccTransAppendSplit (trans, split);
-
-     if (force_double_entry_awareness)
-       xaccAccountInsertSplit (info->default_source_account, split);
 
      gnc_table_set_virt_cell_data (reg->table,
                                    reg->table->current_cursor_loc.vcell_loc,
@@ -3251,8 +3272,7 @@ get_trans_total_value (SplitRegister *reg, Transaction *trans)
   Account *account;
   gnc_numeric total = gnc_numeric_zero ();
 
-  SRInfo *info = xaccSRGetInfo(reg);
-  account = info->default_source_account;
+  account = sr_get_default_account (reg);
 
   if (!account)
     return total;
@@ -3280,8 +3300,7 @@ get_trans_total_shares (SplitRegister *reg, Transaction *trans)
   Account *account;
   gnc_numeric total = gnc_numeric_zero ();
 
-  SRInfo *info = xaccSRGetInfo(reg);
-  account = info->default_source_account;
+  account = sr_get_default_account (reg);
 
   if (!account)
     return total;
@@ -3308,9 +3327,8 @@ get_trans_last_split (SplitRegister *reg, Transaction *trans)
   GList *node;
   Account *account;
   Split *last_split = NULL;
-  SRInfo *info = xaccSRGetInfo (reg);
 
-  account = info->default_source_account;
+  account = sr_get_default_account (reg);
 
   if (!account)
     return last_split;
@@ -3533,7 +3551,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
 
           account = xaccSplitGetAccount(split);
           if (account == NULL)
-            account = info->default_source_account;
+            account = sr_get_default_account (reg);
 
           if (reverse_balance(account))
             balance = gnc_numeric_neg (balance);
@@ -3552,7 +3570,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
       {
         static char *name = NULL;
 
-        g_free(name);
+        g_free (name);
 
         name = xaccAccountGetFullName (xaccSplitGetAccount (split),
                                        account_separator);
@@ -4272,7 +4290,7 @@ sr_add_transaction (SplitRegister *reg,
 
 void
 xaccSRLoadRegister (SplitRegister *reg, GList * slist,
-                    Account *default_source_acc)
+                    Account *default_account)
 {
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
@@ -4325,7 +4343,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     gnc_resume_gui_refresh ();
   }
 
-  info->default_source_account = default_source_acc;
+  info->default_account = *xaccAccountGetGUID (default_account);
 
   table = reg->table;
 
@@ -4575,7 +4593,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
   reg->destroy = LedgerDestroy;
 
-  xaccSRLoadXferCells (reg, default_source_acc);
+  xaccSRLoadXferCells (reg, default_account);
 }
 
 /* ======================================================== */
@@ -4650,7 +4668,6 @@ xaccLoadXferCell (ComboCell *cell,
   secu = xaccAccountGetSecurity (base_account);
 
   xaccClearComboCellMenu (cell);
-  xaccAddComboCellMenuItem (cell, "");
   LoadXferCell (cell, grp, curr, secu);
 }
 
@@ -4693,14 +4710,37 @@ xaccSRHasPendingChanges (SplitRegister *reg)
 
 /* ======================================================== */
 
+static gboolean
+trans_has_reconciled_splits (Transaction *trans)
+{
+  GList *node;
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    switch (xaccSplitGetReconcile (split))
+    {
+      case YREC:
+      case FREC:
+        return TRUE;
+
+      default:
+        break;
+    }
+  }
+
+  return FALSE;
+}
+
 gboolean
 xaccSRCheckReconciled (SplitRegister *reg)
 {
   Split *split;
   guint32 changed;
   gboolean confirm;
-  char *message = _("You are about to change a reconciled transaction.\n"
-                    "Are you sure you want to do that?");
+  char *message = _("You are about to change a transaction with reconciled\n"
+                    "splits. Are you sure you want to do that?");
 
   if (reg == NULL)
     return TRUE;
@@ -4713,14 +4753,8 @@ xaccSRCheckReconciled (SplitRegister *reg)
   if (split == NULL)
     return TRUE;
 
-  switch (xaccSplitGetReconcile (split))
-  {
-    case YREC:
-    case FREC:
-      break;
-    default:
-      return TRUE;
-  }
+  if (!trans_has_reconciled_splits (xaccSplitGetParent (split)))
+    return TRUE;
 
   confirm = gnc_lookup_boolean_option("Register",
                                       "Confirm before changing reconciled",

@@ -723,6 +723,8 @@ MarkDirtyAllRegsClass (Account *account, const char *component_class)
   for (node = list; node; node = node->next)
   {
   }
+
+  g_list_free (list);
 }
 
 static void
@@ -751,6 +753,8 @@ RefreshAllRegsClass (Account *account, const char *component_class)
 
     xaccLedgerDisplayRefresh (ld);
   }
+
+  g_list_free (list);
 }
 
 static void 
@@ -834,6 +838,8 @@ xaccDestroyLedgerDisplayClass (Account *account, const char *component_class)
 
     gnc_close_gui_component (ld->component_id);
   }
+
+  g_list_free (list);
 }
 
 void

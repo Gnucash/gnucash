@@ -24,10 +24,12 @@
 #ifndef __XACC_SPLIT_LEDGER_H__
 #define __XACC_SPLIT_LEDGER_H__
 
-#include "gnc-common.h"
+#include <glib.h>
+
 #include "Group.h"
-#include "splitreg.h"
 #include "Transaction.h"
+#include "gnc-common.h"
+#include "splitreg.h"
 
 
 /* Datatypes */
@@ -51,17 +53,16 @@ struct _SplitRegisterColors
 
 
 /* Callback function type */
-typedef gncUIWidget (*SRGetParentCallback) (void *user_data);
-typedef void (*SRSetHelpCallback) (void *user_data, const char *help_str);
+typedef gncUIWidget (*SRGetParentCallback) (gpointer user_data);
+typedef void (*SRSetHelpCallback) (gpointer user_data, const char *help_str);
 typedef gboolean (*SRReverseBalanceCallback) (Account *account);
 
 
 /* The xaccSRSetData() method sets the user data and callback
  *    hooks for the register. */
-void xaccSRSetData(SplitRegister *reg, void *user_data,
+void xaccSRSetData(SplitRegister *reg, gpointer user_data,
                    SRGetParentCallback get_parent,
                    SRSetHelpCallback set_help);
-
 
 /* The xaccSRSetAccountSeparator() method sets the character
  *    used to separate accounts in fully-qualified names. */
