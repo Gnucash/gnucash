@@ -1206,6 +1206,56 @@ double_kvp_value_parser_new() {
   return(simple_kvp_value_parser_new(double_kvp_value_end_handler));
 }
 
+/* <numeric> - gnc_numeric kvp_value parser.
+
+   input: NA
+   returns: numeric kvp_value
+
+   start: NA
+   chars: generic_accumulate_chars.
+   end: convert chars to numeric kvp_value* if possible and return.
+
+   cleanup-result: kvp_value_delete.
+   cleanup-chars: g_free (for chars)
+   fail: NA
+   result-fail: kvp_value_delete
+   chars-fail: g_free (for chars)
+
+ */
+
+static gboolean
+numeric_kvp_value_end_handler(gpointer data_for_children,
+                              GSList* data_from_children,
+                              GSList* sibling_data,
+                              gpointer parent_data,
+                              gpointer global_data,
+                              gpointer *result,
+                              const gchar *tag) {
+  gchar *txt = NULL;
+  gnc_numeric val;
+  kvp_value *kvpv;
+  gboolean ok;
+
+  txt = concatenate_child_result_chars(data_from_children);
+  if(!txt) return(FALSE);
+
+  ok = string_to_gnc_numeric(txt, &val) != NULL;
+  g_free(txt);
+
+  if(!ok) return(FALSE);
+
+  kvpv = kvp_value_new_numeric(val);
+  if(!kvpv) return(FALSE);
+
+  *result = kvpv;
+  return(TRUE);
+}
+
+static sixtp*
+numeric_kvp_value_parser_new() {
+  return(simple_kvp_value_parser_new(numeric_kvp_value_end_handler));
+}
+
 /* <string> - string kvp_value parser.
 
    input: NA
@@ -1519,6 +1569,10 @@ add_all_kvp_value_parsers_as_sub_nodes(sixtp *p,
   child_pr = double_kvp_value_parser_new();
   if(!child_pr) return(FALSE);
   sixtp_add_sub_parser(p, "double", child_pr);
+
+  child_pr = numeric_kvp_value_parser_new();
+  if(!child_pr) return(FALSE);
+  sixtp_add_sub_parser(p, "numeric", child_pr);
 
   child_pr = string_kvp_value_parser_new();
   if(!child_pr) return(FALSE);

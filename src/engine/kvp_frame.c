@@ -21,13 +21,17 @@
  *                                                                  *
  ********************************************************************/
 
-#include "kvp_frame.h"
-#include "guid.h"
-#include "gnc-engine.h"
+#include "config.h"
 
-#include <string.h>
-#include <stdio.h>
 #include <glib.h>
+#include <stdio.h>
+#include <string.h>
+
+#include "gnc-engine.h"
+#include "gnc-numeric.h"
+#include "guid.h"
+#include "kvp_frame.h"
+
 
  /* Note that we keep the keys for this hash table in a GCache
   * (gnc_string_cache), as it is likely we will see the same keys
@@ -47,6 +51,7 @@ struct _kvp_value {
   union {
     gint64 int64;
     double dbl;
+    gnc_numeric numeric;
     gchar *str;
     GUID *guid;
     kvp_value_binary_data binary;
@@ -266,7 +271,15 @@ kvp_value_new_double(double value) {
   retval->type        = KVP_TYPE_DOUBLE;
   retval->value.dbl   = value;
   return retval;
-}  
+}
+
+kvp_value *
+kvp_value_new_numeric(gnc_numeric value) {
+  kvp_value * retval    = g_new0(kvp_value, 1);
+  retval->type          = KVP_TYPE_NUMERIC;
+  retval->value.numeric = value;
+  return retval;
+}
 
 kvp_value *
 kvp_value_new_string(const char * value) {
@@ -351,6 +364,7 @@ kvp_value_delete(kvp_value * value) {
     
   case KVP_TYPE_GINT64:    
   case KVP_TYPE_DOUBLE:
+  case KVP_TYPE_NUMERIC:
   default:
     break;
   }
@@ -379,6 +393,16 @@ kvp_value_get_double(const kvp_value * value) {
   }
   else {
     return 0.0;
+  }
+}
+
+gnc_numeric 
+kvp_value_get_numeric(const kvp_value * value) {
+  if(value->type == KVP_TYPE_NUMERIC) {
+    return value->value.numeric;
+  }
+  else {
+    return gnc_numeric_zero ();
   }
 }
 
@@ -467,6 +491,9 @@ kvp_value_copy(const kvp_value * value) {
   case KVP_TYPE_DOUBLE:
     return kvp_value_new_double(value->value.dbl);
     break;
+  case KVP_TYPE_NUMERIC:
+    return kvp_value_new_numeric(value->value.numeric);
+    break;
   case KVP_TYPE_STRING:
     return kvp_value_new_string(value->value.str);
     break;
@@ -515,8 +542,11 @@ kvp_value_compare(const kvp_value * kva, const kvp_value * kvb) {
   case KVP_TYPE_GINT64:
   case KVP_TYPE_DOUBLE:
     if(kva->value.int64 < kvb->value.int64) return -1;
-    if(kva->value.int64 > kvb->value.int64) return -1;
+    if(kva->value.int64 > kvb->value.int64) return 1;
     return 0;
+    break;
+  case KVP_TYPE_NUMERIC:
+    return gnc_numeric_compare (kva->value.numeric, kvb->value.numeric);
     break;
   case KVP_TYPE_STRING:
     return strcmp(kva->value.str, kvb->value.str);

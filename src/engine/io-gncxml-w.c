@@ -447,6 +447,9 @@ xml_add_kvp_value(xmlNodePtr p, kvp_value *val) {
   case KVP_TYPE_DOUBLE:
     return(xml_add_double(p, "double", kvp_value_get_double(val)));
     break;
+  case KVP_TYPE_NUMERIC:
+    return(xml_add_gnc_numeric(p, "numeric", kvp_value_get_numeric(val)));
+    break;
   case KVP_TYPE_STRING:
     return(xml_add_str(p, "string", kvp_value_get_string(val), TRUE));
     break;

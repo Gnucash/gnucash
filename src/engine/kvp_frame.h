@@ -24,9 +24,11 @@
 #ifndef __KVP_FRAME_H__
 #define __KVP_FRAME_H__
 
-#include <sys/types.h>
-#include <guid.h>
 #include <glib.h>
+
+#include "gnc-numeric.h"
+#include "guid.h"
+
 
 /* a kvp_frame is a set of associations between character strings
  * (keys) and kvp_value structures.  A kvp_value is a union with
@@ -42,6 +44,7 @@
 typedef enum {
   KVP_TYPE_GINT64,
   KVP_TYPE_DOUBLE,
+  KVP_TYPE_NUMERIC,
   KVP_TYPE_STRING,
   KVP_TYPE_GUID,
   KVP_TYPE_BINARY, 
@@ -85,6 +88,7 @@ void        kvp_glist_delete(GList * list);
 /* value constructors (copying for pointer args) */
 kvp_value   * kvp_value_new_gint64(gint64 value);
 kvp_value   * kvp_value_new_double(double value);
+kvp_value   * kvp_value_new_numeric(gnc_numeric value);
 kvp_value   * kvp_value_new_string(const char * value);
 kvp_value   * kvp_value_new_guid(const GUID * guid);
 kvp_value   * kvp_value_new_binary(const void * data, guint64 datasize);
@@ -101,6 +105,7 @@ kvp_value_t kvp_value_get_type(const kvp_value * value);
 
 gint64      kvp_value_get_gint64(const kvp_value * value);
 double      kvp_value_get_double(const kvp_value * value);
+gnc_numeric kvp_value_get_numeric(const kvp_value * value);
 char        * kvp_value_get_string(const kvp_value * value);
 GUID        * kvp_value_get_guid(const kvp_value * value);
 void        * kvp_value_get_binary(const kvp_value * value,
