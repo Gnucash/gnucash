@@ -41,6 +41,7 @@ RANLIB = ranlib
 # USEDEBUG     - causes debugging info to be displayed
 CFLAGS = $(LFLAGS) -I../include -I../lib/libhtmlw -I../lib/Xbae-4.6.2-linas \
          -I ../lib/ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
+	 -DUSEQUICKFILL 
 
 
 	 # -DDEBUGMEMORY -DUSEDEBUG
