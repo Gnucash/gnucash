@@ -283,6 +283,15 @@ provide an accurate Profit & Loss statement.
 <PARA>for misc fixes</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>warlord@MIT.EDU</email> Derek
+      Atkins</GLOSSTERM>
+<GLOSSDEF>
+<PARA>build system patch</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>fred@moremagic.com</email> Fred Baube</GLOSSTERM>
 <GLOSSDEF>

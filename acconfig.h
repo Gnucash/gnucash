@@ -53,6 +53,9 @@
 /* is guile available */
 #undef HAVE_GUILE
 
+/* New or old Guile Smob for G-wrap */
+#undef GWRAP_OLD_GUILE_SMOB
+
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
 

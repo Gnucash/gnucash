@@ -264,29 +264,22 @@ AC_DEFINE(GNOME)
 G_WRAP_COMPILE_ARGS=""
 G_WRAP_LINK_ARGS=""
 
-# Find the configure script
-AC_PATH_PROG(G_WRAP_CONFIG,g-wrap-config)
+AM_PATH_GWRAP(, , [AC_MSG_ERROR([
 
-if test -x "${G_WRAP_CONFIG}";
-then
-  # Find out what the g-wrap compile and link flags are.
-  G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
-  G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-static-link-args guile`
-fi
+  g-wrap does not appear to be installed correctly.  If you need to
+  install g-wrap, you can find it at ftp://ftp.gnucash.org/pub/g-wrap.
+])])
 
-# Find the tool
-AC_PATH_PROG(G_WRAP, g-wrap)
+# Find out what the g-wrap compile and link flags are.
+AC_MSG_CHECKING(for g-wrap compile args)
+G_WRAP_COMPILE_ARGS=`${G_WRAP_CONFIG} --c-compile-args guile`
+AC_MSG_RESULT($G_WRAP_COMPILE_ARGS)
 
-if test x"${G_WRAP_COMPILE_ARGS}" = x || \
-   test x"${G_WRAP_LINK_ARGS}" = x || \
-   test ! -x "${G_WRAP}";
-then
-  AC_MSG_ERROR([
+AC_MSG_CHECKING(for g-wrap link args)
+G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-static-link-args guile`
+AC_MSG_RESULT($G_WRAP_LINK_ARGS)
 
-  g-wrap does not appear to be installed.  It must be installed and
-  its binary directory must be in your PATH.  If you need to install
-  g-wrap, you can find it at ftp://ftp.gnucash.org/pub/g-wrap.])
-fi
+AC_GWRAP_CHECK_GUILE
 
 AC_SUBST(G_WRAP)
 AC_SUBST(G_WRAP_CONFIG)
