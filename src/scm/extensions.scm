@@ -57,15 +57,15 @@
   (gnc:make-extension 'separator #f #f path #f))
 
 
-(define (gnc:extensions-menu-setup win)
+(define (gnc:extensions-menu-setup)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
-
-  (define export-item
-    (gnc:make-menu-item (N_ "Export data as text (Danger: Unfinished)")
-                        (N_ "Export data as text.")
-                        (list "Extensions" "")
-                        (lambda () (gnc:main-win-account-group-write win))))
-
+  
+;  (define export-item
+;    (gnc:make-menu-item (N_ "Export data as text (Danger: Unfinished)")
+;                        (N_ "Export data as text.")
+;                        (list "Extensions" "")
+;                        (lambda () (gnc:main-win-account-group-write win))))
+  
   (define progress-item
     (gnc:make-menu-item (N_ "Test progress dialog")
                         (N_ "Test progress dialog")
@@ -91,11 +91,11 @@
                             (gnc:progress-dialog-destroy dialog)))))
 
   (gnc:add-extension menu)
-  (gnc:add-extension export-item)
+;  (gnc:add-extension export-item)
   (gnc:add-extension progress-item))
 
 (if (gnc:debugging?)
-    (gnc:hook-add-dangler gnc:*main-window-opened-hook*
+    (gnc:hook-add-dangler gnc:*ui-startup-hook*
                           gnc:extensions-menu-setup))
 
 

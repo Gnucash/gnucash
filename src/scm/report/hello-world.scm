@@ -162,7 +162,9 @@
        (gnc:make-account-list-option
         (N_ "Hello Again") (N_ "An account list option")
         "g" (N_ "This is an account list option")
-        (lambda () (gnc:get-current-accounts))
+        ;; FIXME : this used to be gnc:get-current-accounts, but 
+        ;; that doesn't exist any more.
+        (lambda () '())
         #f #t))
       
       ;; This is a list option. The user can select one or (possibly)

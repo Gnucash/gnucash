@@ -28,7 +28,6 @@
 
 #include "AccWindow.h"
 #include "FileDialog.h"
-#include "MainWindow.h"
 #include "MultiLedger.h"
 #include "account-tree.h"
 #include "dialog-account.h"
@@ -1820,7 +1819,14 @@ gnc_ui_new_account_window_internal (Account *base_account,
 AccountWindow *
 gnc_ui_new_account_window (AccountGroup *this_is_not_used) 
 {
-  return gnc_ui_new_account_window_internal (gnc_get_current_account (), NULL);
+  /* FIXME get_current_account went away. */
+  return gnc_ui_new_account_window_internal (NULL, NULL);
+}
+
+AccountWindow *
+gnc_ui_new_account_window_with_default(AccountGroup *this_is_not_used,
+                                       Account * parent)  {
+  return gnc_ui_new_account_window_internal (parent, NULL);
 }
 
 

@@ -36,6 +36,8 @@
 typedef struct _AccountWindow  AccountWindow;
 
 AccountWindow * gnc_ui_new_account_window (AccountGroup *group);
+AccountWindow * gnc_ui_new_account_window_with_default(AccountGroup *group,
+                                                       Account * parent);
 AccountWindow * gnc_ui_edit_account_window (Account *account);
 
 Account * gnc_ui_new_accounts_from_name_window (const char *name);

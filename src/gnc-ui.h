@@ -46,10 +46,6 @@
 #define HH_COMMODITY         "xacc-commodity.html"
 
 
-/* Return the main GnuCash window ***********************************/
-gncUIWidget gnc_get_ui_data(void);
-
-
 /* Dialog windows ***************************************************/
 
 typedef enum
@@ -61,18 +57,20 @@ typedef enum
 } GNCVerifyResult;
 
 GNCVerifyResult
-         gnc_verify_cancel_dialog_parented(gncUIWidget parent,
-                                           const char *message,
-                                           GNCVerifyResult default_result);
+gnc_verify_cancel_dialog_parented(gncUIWidget parent,
+                                  const char *message,
+                                  GNCVerifyResult default_result);
+
+GNCVerifyResult gnc_verify_cancel_dialog(const char *message, 
+                                         GNCVerifyResult default_result);
 
 gboolean gnc_verify_dialog_parented(gncUIWidget parent,
                                     const char *message,
                                     gboolean yes_is_default);
 
-GNCVerifyResult
-         gnc_ok_cancel_dialog_parented(gncUIWidget parent,
-                                       const char *message,
-                                       GNCVerifyResult default_result);
+GNCVerifyResult gnc_ok_cancel_dialog_parented(gncUIWidget parent,
+                                              const char *message,
+                                              GNCVerifyResult default_result);
 
 void     gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
@@ -108,20 +106,14 @@ gboolean gnc_get_username_password (gncUIWidget parent,
 
 /* Managing the GUI Windows *****************************************/
 
-void gnc_ui_destroy_all_subwindows (void);
-
+void        gnc_ui_shutdown (void);
+void        gnc_ui_destroy_all_subwindows (void);
+gncUIWidget gnc_ui_get_toplevel(void);
 
 /* Changing the GUI Cursor ******************************************/
 
 void gnc_set_busy_cursor(gncUIWidget w, gboolean update_now);
 void gnc_unset_busy_cursor(gncUIWidget w);
-
-
-/* Getting main window information **********************************/
-
-Account * gnc_get_current_account(void);
-GList   * gnc_get_current_accounts(void);
-
 
 /* QIF Import Windows ***********************************************/
 

@@ -69,7 +69,7 @@
                    (build-path (getenv "HOME") ".gnucash" "config.user"))
                   (auto-file
                    (build-path (getenv "HOME") ".gnucash" "config.auto")))
-
+              
               (if (access? user-file F_OK)
                   (if (false-if-exception (primitive-load user-file))
                       (set! user-config-loaded? #t)

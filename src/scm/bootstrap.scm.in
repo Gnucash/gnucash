@@ -60,6 +60,11 @@
   (if (not result)
       (set! gnc:*load-slib-backup* #t)))
 
+;; Test for simple-format
+(if (not (defined? 'simple-format))
+    (begin
+      (require 'format)
+      (define simple-format format)))
 
 (define (build-path firstelement . restofpath)
   (define separator "/")

@@ -74,15 +74,16 @@
        optname-display-depth optname-show-subaccounts
        optname-accounts "a" 1
        (lambda ()
-	 (let ((current-accounts (gnc:get-current-accounts)))
+         ;; FIXME : gnc:get-current-accounts disappeared
+	 (let ((current-accounts '()))
 	   (cond ((not (null? current-accounts)) current-accounts)
 		 (else
 		  (gnc:group-get-account-list (gnc:get-current-group)))))))
-
+      
       ;; with or without grouping
       (gnc:options-add-group-accounts!      
        options pagename-accounts optname-group-accounts "b" #t)
-
+      
       ;; new options here
       (gnc:register-option 
        options

@@ -35,7 +35,6 @@
 #include "AccWindow.h"
 #include "FileBox.h"
 #include "FileDialog.h"
-#include "MainWindow.h"
 #include "SplitLedger.h"
 #include "TransLog.h"
 #include "argv-list-converters.h"
@@ -66,6 +65,7 @@
 #include "splitreg.h"
 #include "window-help.h"
 #include "window-main.h"
+#include "window-acct-tree.h"
 #include "window-report.h"
 #include "new-user-interface.h"
 #include "new-user-funs.h"
@@ -101,7 +101,7 @@ static void gnc_configure_register_hint_font(void);
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GtkWidget *app = NULL;
+static GNCMainInfo * app = NULL;
 
 static int gnome_is_running = FALSE;
 static int gnome_is_initialized = FALSE;
@@ -138,11 +138,18 @@ gnucash_ui_is_terminating(void)
 
 /* ============================================================== */
 
-gncUIWidget
-gnc_get_ui_data(void)
+GNCMainInfo *
+gnc_ui_get_data(void)
 {
   return app;
 }
+
+gncUIWidget
+gnc_ui_get_toplevel(void) {
+  /* FIXME */
+  return gnc_main_window_get_toplevel(app);
+}
+  
 
 static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
 
@@ -236,12 +243,10 @@ gnucash_ui_init(void)
 
     /* put up splash screen */
     gnc_show_splash_screen ();
-
+    
     /* make sure splash is up */
     while (gtk_events_pending ())
       gtk_main_iteration ();
-
-    app = gnome_app_new("GnuCash", "GnuCash");
 
     gnc_configure_date_format();
     date_callback_id =
@@ -308,9 +313,17 @@ gnucash_ui_init(void)
     xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
 
     /* gnc_default_ui_start */
-
     gnucash_style_init();
     gnucash_color_init();
+
+    /* initialize gnome MDI and set up application window defaults  */
+    app = gnc_main_window_new();
+    /* Run the ui startup hooks. */
+    {
+      SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
+      SCM hook = gh_eval_str("gnc:*ui-startup-hook*");
+      gh_call1(run_danglers, hook); 
+    }    
   }
 
   LEAVE ("\n");
@@ -320,13 +333,14 @@ gnucash_ui_init(void)
 
 static gboolean hasstarted = FALSE;
 void
-gnc_default_ui_start(void)
-{
-    if(!hasstarted)
-    {
-        mainWindow();
-        hasstarted = TRUE;
+gnc_default_ui_start(void) {
+  if(!hasstarted) {
+    if(!gnome_mdi_restore_state(app->mdi, "/GnuCash/MDI Session",
+                                gnc_main_window_create_child)) {
+      gnc_main_window_open_accounts(FALSE);
     }
+    hasstarted = TRUE;
+  }
 }
 
 /* ============================================================== */
@@ -337,9 +351,9 @@ gnc_ui_shutdown (void)
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
-    gnc_ui_destroy_all_subwindows();
-    gnc_ui_mainWindow_save_size();
-    gtk_widget_hide(app);
+    gnc_main_window_save(app);
+    gnc_main_window_destroy(app);
+    app = NULL;
     gtk_main_quit();
 #ifdef USE_GUPPI    
     gnc_html_guppi_shutdown();
@@ -367,7 +381,7 @@ gnc_ui_destroy (void)
 
   if (app != NULL)
   {
-    gtk_widget_destroy(app);
+    gnc_main_window_destroy(app);
     app = NULL;
   }
 
@@ -385,19 +399,9 @@ gnc_ui_show_main_window(void)
   gnucash_ui_init();
   gnc_default_ui_start();
   
-  gtk_widget_show(app);
-
   /* Get the main window on screen. */
   while (gtk_events_pending())
     gtk_main_iteration();
-
-  /* Run the main window hooks. */
-  {
-    SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
-    SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
-    SCM window = gw_wcp_assimilate_ptr(app, gh_eval_str("<gnc:UIWidget>"));
-    gh_call2(run_danglers, hook, window); 
-  }
 
   return 0;
 }

@@ -60,6 +60,7 @@
 #include "gnc-network.h"
 #include "query-user.h"
 #include "window-help.h"
+#include "window-main.h"
 #include "window-report.h"
 #include "messages.h"
 
@@ -196,6 +197,9 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     }
     else if(!strcmp(protocol, "gnc-register")) {
       retval = URL_TYPE_REGISTER;
+    } 
+    else if(!strcmp(protocol, "gnc-acct-tree")) {
+      retval = URL_TYPE_ACCTTREE;
     }
     else if(!strcmp(protocol, "gnc-report")) {
       retval = URL_TYPE_REPORT;
@@ -218,14 +222,19 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
     retval = URL_TYPE_JUMP;
   }
   else {
-    retval = html->base_type;
+    if(html) {
+      retval = html->base_type;
+    }
+    else {
+      retval = URL_TYPE_FILE;
+    }
   }
   
   g_free(protocol);
  
   switch(retval) {
   case URL_TYPE_FILE:    
-    if(!found_protocol && path && html->base_location) {
+    if(!found_protocol && path && html && html->base_location) {
       if(path[0] == '/') {
         *url_location = g_strdup(path);
       }
@@ -247,7 +256,7 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
 
   case URL_TYPE_OTHER:
   default:
-    if(!found_protocol && path && html->base_location) {
+    if(!found_protocol && path && html && html->base_location) {
       if(path[0] == '/') {
         *url_location = 
           g_strconcat(extract_machine_name(html->base_location),
@@ -347,7 +356,7 @@ extract_base_name(URLType type, const gchar * path) {
 
 static char * url_type_names[] = {
   "file:", "", "http:", "ftp:", "https:", 
-  "gnc-register:", "gnc-report:", "gnc-options:", "gnc-scm:",
+  "gnc-register:", "gnc-acct-tree:", "gnc-report:", "gnc-options:", "gnc-scm:",
   "gnc-help:", "gnc-xml:", "gnc-action:", ""
 };
 
@@ -590,6 +599,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     break;
     
   case URL_TYPE_REGISTER:
+  case URL_TYPE_ACCTTREE:
   case URL_TYPE_OPTIONS:
   case URL_TYPE_SCHEME:
   case URL_TYPE_FTP:
@@ -1088,23 +1098,26 @@ gnc_html_open_report(gnc_html * html, const gchar * location,
                      const gchar * label, int newwin) {
   gnc_report_window * rwin;
   GtkHTMLStream * handle;
+  char * rebuilt_url;
 
   /* make a new window if necessary */ 
   if(newwin) {
-    rwin = gnc_report_window_new(NULL);
-    html = gnc_report_window_get_html(rwin);
+    rebuilt_url = rebuild_url(URL_TYPE_REPORT, location, label);
+    gnc_main_window_open_report_url(rebuilt_url, FALSE);
+    g_free(rebuilt_url);
   }
-
-  gnc_html_history_append(html->history,
-                          gnc_html_history_node_new(URL_TYPE_REPORT, 
-                                                    location, label));
-  
-  g_free(html->base_location);
-  html->base_type     = URL_TYPE_FILE;
-  html->base_location = NULL;
-
-  handle = gtk_html_begin(GTK_HTML(html->html));
-  gnc_html_load_to_stream(html, handle, URL_TYPE_REPORT, location, label);
+  else {
+    gnc_html_history_append(html->history,
+                            gnc_html_history_node_new(URL_TYPE_REPORT, 
+                                                      location, label));
+    
+    g_free(html->base_location);
+    html->base_type     = URL_TYPE_FILE;
+    html->base_location = NULL;
+    
+    handle = gtk_html_begin(GTK_HTML(html->html));
+    gnc_html_load_to_stream(html, handle, URL_TYPE_REPORT, location, label);
+  }
 }
 
 
@@ -1250,6 +1263,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
                        (gpointer)html);
     break;
     
+  URL_TYPE_ACCTTREE:
   default:
     break;
   }

@@ -1,8 +1,7 @@
 /********************************************************************
- * window-main.h -- public GNOME main window functions              *
+ * window-acct-tree.h -- public account-tree-window functions       *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
  * Copyright (C) 2001 Bill Gribble <grib@gnumatic.com>              *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -21,44 +20,22 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#ifndef __WINDOW_MAIN_H__
-#define __WINDOW_MAIN_H__
+#ifndef __WINDOW_ACCT_TREE_H__
+#define __WINDOW_ACCT_TREE_H__
 
-#include <gnome.h>
-#include <guile/gh.h>
+#include "mainwindow-account-tree.h"
+#include "window-main.h"
 
-typedef struct  {
-  GnomeMDI * mdi;
-  int      component_id;
-  SCM      toolbar_change_callback_id;
-  GList    * children;
-} GNCMainInfo;
+typedef struct GNCAcctTreeWin_p GNCAcctTreeWin;
 
-typedef struct {
-  GnomeMDIChild   * child;
-  GtkWidget       * contents;
-  GnomeApp        * app;
-
-  GtkWidget       * toolbar;  
-  GnomeUIInfo     * toolbar_info;
-  int             toolbar_size;
-  GnomeUIInfo     * menu_info;
-
-  int             component_id;
-  void            * user_data;
-} GNCMainChildInfo;
-
-
-GNCMainInfo   * gnc_main_window_new(void);
-void            gnc_main_window_destroy(GNCMainInfo * wind); 
-void            gnc_main_window_save(GNCMainInfo * wind);
-GtkWidget     * gnc_main_window_get_toplevel(GNCMainInfo * wind);
-void            gnc_main_window_create_child_toolbar(GNCMainInfo * mi, 
+GNCAcctTreeWin * gnc_acct_tree_window_new(const gchar * url);
+void             gnc_acct_tree_window_destroy(GNCAcctTreeWin * win);
+GtkWidget      * gnc_acct_tree_window_get_widget(GNCAcctTreeWin * win);
+void             gnc_acct_tree_window_create_menu(GNCAcctTreeWin * win,
+                                                  GNCMainChildInfo * child);
+void             gnc_acct_tree_window_create_toolbar(GNCAcctTreeWin * win,
                                                      GNCMainChildInfo * child);
-void            gnc_main_window_add_child(GNCMainInfo * main,
-                                          GNCMainChildInfo * child);
-void            gnc_main_window_remove_child(GNCMainInfo * main,
-                                             GNCMainChildInfo * child);
-void            gnc_main_window_child_refresh(GNCMainChildInfo * mc);
-GnomeMDIChild * gnc_main_window_create_child(const gchar * configstring);
+Account        * gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * w);
+GnomeMDIChild  * gnc_acct_tree_window_create_child(const gchar * url);
+void            gnc_main_window_open_accounts(gint toplevel); 
 #endif

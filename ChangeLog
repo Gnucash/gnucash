@@ -1,3 +1,34 @@
+2001-04-12  Bill Gribble  <grib@billgribble.com>
+
+	* Lots and lots of changes to support Gnome MDI.  And I thought it
+	would be an easy way to get that toolbar problem fixed.  Short
+	story is lots of function prototypes changed to reflect the notion
+	that there is no longer a single top-level gnucash window or
+	account tree.  41 files changed, which is too many for me to
+	itemize :)
+
+	* src/gnome/window-acct-tree.{c,h}: new file; the "account tree
+	window" is the contents of the former main window.  Now you can
+	have as many of them open as you want.  account trees and reports
+	are the 2 kinds of "main window children" which MDI manages.
+
+	* src/gnome/window-main-summarybar.{c,h}: new file.  I moved the
+	summary bar stuff out of the account tree because there's one
+	summary bar per top-level window but possible many account trees
+	per top-level window.
+
+	* src/gnome/window-main.c: this is not what it used to be at all.
+	the main gnucash ui element is now a 'GnomeMDI'.  The only menus
+	and toolbar items here are ones that are always visible in any
+	top-level window.
+
+	* src/scm/prefs/scm: acct tree prefs are treated differently (one
+	options obj per acct tree) and are auto-saved and restored.
+
+	* src/scm/report.scm: report options are auto saved and restored. 
+
+	* src/scm/html-style-sheet.scm: so are style sheets. 
+
 2001-04-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-list.c: same as below

@@ -35,7 +35,6 @@
 #include <time.h>
 
 #include "AccWindow.h"
-#include "MainWindow.h"
 #include "MultiLedger.h"
 #include "RegWindow.h"
 #include "Scrub.h"

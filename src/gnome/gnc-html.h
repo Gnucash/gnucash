@@ -32,6 +32,7 @@ typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP,
                URL_TYPE_HTTP, URL_TYPE_FTP, 
                URL_TYPE_SECURE, 
                URL_TYPE_REGISTER,   /* for gnucash register popups */
+               URL_TYPE_ACCTTREE,   /* for account tree windows */
                URL_TYPE_REPORT,     /* for gnucash report popups */
                URL_TYPE_OPTIONS,    /* for editing report options */ 
                URL_TYPE_SCHEME,     /* for scheme code evaluation */

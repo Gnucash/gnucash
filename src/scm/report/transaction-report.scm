@@ -332,7 +332,8 @@
       (N_ "General") (N_ "Account")
       "c" (N_ "Do transaction report on these accounts")
       (lambda ()
-        (let ((current-accounts (gnc:get-current-accounts))
+        ;; FIXME : gnc:get-current-accounts disappeared.
+        (let ((current-accounts '())
               (num-accounts (gnc:group-get-num-accounts
                              (gnc:get-current-group)))
               (first-account (gnc:group-get-account

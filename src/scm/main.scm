@@ -85,7 +85,6 @@
   (cond ((gnc:ui-is-running?)
 	 (if (not (gnc:ui-is-terminating?))
 	     (begin
-               (gnc:ui-destroy-all-subwindows)
                (if (gnc:file-query-save)
                    (begin
                      (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
@@ -135,8 +134,12 @@
   ;; add a hook to shut down the expression parser
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:exp-parser-shutdown)
 
-  ;; add a hook to save the user configs on shutdown
-  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)
+  ;; add a hook to save the user configs on shutdown.  this saves
+  ;; global options plus (for the moment) saved report and account
+  ;; tree window parameters.  reports and parameters should probably
+  ;; be in a separate file, with the main data file, or something
+  ;; else.
+  (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-all-options)
 
   ;; add a hook to shut down the C side options code
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:c-options-shutdown)

@@ -53,8 +53,10 @@ libgncgnome_a_SOURCES = \
   query-user.c \
   reconcile-list.c \
   top-level.c \
+  window-acct-tree.c \
   window-help.c \
   window-main.c \
+  window-main-summarybar.c \
   window-reconcile.c \
   window-register.c \
   window-report.c
@@ -112,8 +114,11 @@ noinst_HEADERS = \
   print-session.h \
   query-user.h \
   reconcile-list.h \
+  top-level.h \
+  window-acct-tree.h \
   window-help.h \
   window-main.h \
+  window-main-summarybar.h \
   window-reconcile.h \
   window-register.h \
   window-report.h

@@ -38,14 +38,19 @@
 (define *gnc:_reports_* (make-hash-table 23))
 (define *gnc:_report-next-serial_* 0)
 
-(define (gnc:report-menu-setup win)
-  (define menu (gnc:make-menu "_Reports" (list "_Accounts")))
-  (define tax-menu (gnc:make-menu (N_ "_Taxes") (list "_Reports" "")))
-  (define income-expense-menu
-    (gnc:make-menu (N_ "_Income & Expense") (list "_Reports" "")))
-  (define asset-liability-menu
-    (gnc:make-menu (N_ "_Assets & Liabilities") (list "_Reports" "")))
+(define (gnc:report-menu-setup)
+  ;; since this menu gets added to every child window, we say it 
+  ;; comes after the "_File" menu. 
+  (define menu (gnc:make-menu "New _Report" 
+                              (list "_File" "New _Account Tree")))
   (define menu-namer (gnc:new-menu-namer))
+  (define tax-menu (gnc:make-menu (N_ "_Taxes") 
+                                  (list "_File" "New _Report" "")))
+  (define income-expense-menu
+    (gnc:make-menu (N_ "_Income & Expense") (list "_File" "New _Report" "")))
+  (define asset-liability-menu
+    (gnc:make-menu (N_ "_Assets & Liabilities") 
+                   (list "_File" "New _Report" "")))
   (define menu-hash (make-hash-table 23))
 
   (define (add-report-menu-item name report)
@@ -55,56 +60,59 @@
               (menu-name (gnc:report-menu-name report))
               (menu-tip (gnc:report-menu-tip report))
               (item #f))
-
+          
           (if (not menu-path)
               (set! menu-path '(""))
               (set! menu-path
                     (append menu-path '(""))))
-
-          (set! menu-path (cons "_Reports" menu-path))
-
+          
+          (set! menu-path (append (list "_File" "New _Report") menu-path))
+          
           (if menu-name (set! name menu-name))
-
+          
           (if (not menu-tip)
               (set! menu-tip
                     (sprintf #f (_ "Display the %s report") name)))
-
+          
           (set! item
                 (gnc:make-menu-item
                  ((menu-namer 'add-name) name)
                  menu-tip
                  menu-path
                  (lambda ()
-                   (gnc:backtrace-if-exception 
-                    (lambda ()
-                      (let ((rept (gnc:make-report
-                                   (gnc:report-template-name report))))
-                        (if (gnc:option-value
-                             (gnc:lookup-global-option
-                              "Main Window" "Reports appear in Main Window"))
-                            (gnc:report-in-main-window rept)
-                            (gnc:report-window rept))))))))
+                   (let ((rept (gnc:make-report
+                                (gnc:report-template-name report))))
+                     (gnc:main-window-open-report rept #f)))))
           (gnc:add-extension item))))
+  
+  (gnc:add-extension menu)
 
   ;; add the menu option to edit style sheets 
-  (gnc:add-extension menu)
   (gnc:add-extension
    (gnc:make-menu-item 
     ((menu-namer 'add-name) (_ "Style Sheets..."))
     (_ "Edit report style sheets.")
-    (list "_Reports" "")
+    (list "_Settings" "")
     (lambda ()
       (gnc:style-sheet-dialog-open))))
-
-  (gnc:add-extension 
-   (gnc:make-separator (list "_Reports" "")))
 
   (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
-
+  
   ;; push reports (new items added on top of menu)
   (hash-for-each add-report-menu-item *gnc:_report-templates_*))
+
+(define (gnc:save-report-options)
+  (let ((port (open (build-path (getenv "HOME") ".gnucash" "config.auto")
+                    (logior O_WRONLY O_CREAT O_APPEND))))
+    (hash-fold
+     (lambda (id report-obj p)
+       (if (not (null? (gnc:report-display-list report-obj)))
+           (let ((code (gnc:report-generate-restore-forms report-obj)))
+             (display code port)))
+       #f) #f *gnc:_reports_*)
+    (close port)))
 
 (define <report-template>
   (make-record-type "<report-template>"
@@ -163,6 +171,12 @@
   (record-accessor <report-template> 'menu-name))
 (define gnc:report-menu-tip
   (record-accessor <report-template> 'menu-tip))
+
+(define (gnc:report-template-new-options/name template-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
+    (if templ
+        (gnc:report-template-new-options templ)
+        #f)))
 
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
@@ -231,21 +245,16 @@
   (record-modifier <report> 'children))
 
 (define (gnc:report-add-child! report child)
-  (gnc:report-add-parent! child report)
+  (gnc:report-set-children! 
+   report (cons (gnc:report-id child) (gnc:report-children report))))
+
+(define (gnc:report-add-child-by-id! report child)
   (gnc:report-set-children! 
    report (cons child (gnc:report-children report))))
 
-(define (gnc:report-add-child-by-id! report child)
-  (let ((childrep (gnc:find-report child)))
-    (if childrep
-        (begin 
-          (gnc:report-add-parent! childrep report)
-          (gnc:report-set-children! 
-           report (cons childrep (gnc:report-children report)))))))
-
 (define (gnc:report-add-parent! report parent)
   (gnc:report-set-parents! 
-   report (cons parent (gnc:report-parents report))))
+   report (cons (gnc:report-id parent) (gnc:report-parents report))))
 
 (define gnc:report-dirty? 
   (record-accessor <report> 'dirty?))
@@ -260,7 +269,7 @@
         ;; mark the parents as dirty 
         (for-each 
          (lambda (parent)
-           (gnc:report-set-dirty?! parent val))
+           (gnc:report-set-dirty?! (gnc:find-report parent) val))
          (gnc:report-parents report))
 
         ;; reload the window 
@@ -283,18 +292,27 @@
 
 (define (gnc:report-register-display report window)
   (if (and window report)
-      (if (not (member window (gnc:report-display-list report)))
-          (gnc:report-set-display-list! 
-           report 
-           (cons window (gnc:report-display-list report))))))
+      (begin 
+        (if (not (member window (gnc:report-display-list report)))
+            (gnc:report-set-display-list! 
+             report 
+             (cons window (gnc:report-display-list report))))
+        (for-each 
+         (lambda (rep)
+           (gnc:report-register-display (gnc:find-report rep) window))
+         (gnc:report-children report)))))
   
 (define (gnc:report-unregister-display report window)
   (if (and window report)
-      (if (member window (gnc:report-display-list report))
-          (gnc:report-set-display-list! 
-           report 
-           (delete window (gnc:report-display-list report))))))
-  
+      (begin 
+        (if (member window (gnc:report-display-list report))
+            (gnc:report-set-display-list! 
+             report 
+             (delete window (gnc:report-display-list report))))
+        (for-each 
+         (lambda (rep)
+           (gnc:report-unregister-display (gnc:find-report rep) window))
+         (gnc:report-children report)))))
 
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
@@ -311,6 +329,14 @@
 
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
+
+(define (gnc:restore-report id template-name parents children options)
+  (let ((r ((record-constructor <report>)
+            template-name id options parents children #t '() #f)))
+    (if (>= id *gnc:_report-next-serial_*)
+        (set! *gnc:_report-next-serial_* (+ id 1)))
+    (hash-set! *gnc:_reports_* id r)))
+
 
 (define (gnc:make-report-options template-name)
   (let ((template (hash-ref *gnc:_report-templates_* template-name)))
@@ -382,12 +408,24 @@
   (let ((r (hash-ref *gnc:_reports_* id)))
     (for-each 
      (lambda (child)
-       (gnc:report-remove-by-id (gnc:report-id child)))
+       (gnc:report-remove-by-id child))
      (gnc:report-children r))
     (hash-remove! *gnc:_reports_* id)))
 
 (define (gnc:find-report id) 
   (hash-ref *gnc:_reports_* id))
+
+(define (gnc:report-generate-restore-forms report)
+  (string-append 
+   (simple-format
+    #f "(let ((options (gnc:report-template-new-options/name ~S)))\n"
+    (gnc:report-type report))
+   (gnc:generate-restore-forms (gnc:report-options report)
+                               "options")
+   (simple-format #f "  (gnc:restore-report ~S ~S '~S '~S options))\n"
+                  (gnc:report-id report) (gnc:report-type report)
+                  (gnc:report-parents report)
+                  (gnc:report-children report))))
 
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
@@ -453,7 +491,6 @@
               html)
             #f))))
 
-
 (define (gnc:report-run id)
   (gnc:backtrace-if-exception 
    (lambda ()
@@ -469,4 +506,4 @@
              html)
            #f)))))
               
-(gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)
+(gnc:hook-add-dangler gnc:*ui-startup-hook* gnc:report-menu-setup)

@@ -37,7 +37,8 @@
         pagename-general (N_ "Accounts")
         "d" (N_ "Do transaction report on this account")
         (lambda ()
-          (let ((current-accounts (gnc:get-current-accounts)))
+          ;; FIXME : gnc:get-current-accounts disappeared
+          (let ((current-accounts '()))
 	    ;; If some accounts were selected, use those
             (cond ((not (null? current-accounts)) 
 		   current-accounts)

@@ -36,7 +36,6 @@
 #include "AccWindow.h"
 #include "EuroUtils.h"
 #include "FileDialog.h"
-#include "MainWindow.h"
 #include "MultiLedger.h"
 #include "RegWindow.h"
 #include "Scrub.h"

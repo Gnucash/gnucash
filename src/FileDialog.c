@@ -244,8 +244,7 @@ gncFileNew (void)
 gboolean
 gncFileQuerySave (void)
 {
-  GNCBook *book = gncGetCurrentBook();
-  gncUIWidget app = gnc_get_ui_data();
+  GNCBook * book = gncGetCurrentBook();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -258,8 +257,8 @@ gncFileQuerySave (void)
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
 
-    result = gnc_verify_cancel_dialog_parented (app, message, GNC_VERIFY_YES);
-
+    result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
+    
     if (result == GNC_VERIFY_CANCEL)
       return FALSE;
 

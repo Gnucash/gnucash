@@ -1315,5 +1315,5 @@
 ;        gnc:budget-entries
 ;        (lambda () (display "Applied the budget.\n"))))));
   
-  (gnc:hook-add-dangler gnc:*main-window-opened-hook*
-                        (lambda (win) (gnc:add-extension budget-item))))
+  (gnc:hook-add-dangler gnc:*ui-startup-hook*
+                        (lambda () (gnc:add-extension budget-item))))

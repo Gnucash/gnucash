@@ -23,10 +23,11 @@
 #ifndef __HISTORY_H__
 #define __HISTORY_H__
 
+#include <gnome.h>
 #define MAX_HISTORY 4
 
 void gnc_history_add_file (const char *filename);
-void gnc_history_update_menu (void);
+void gnc_history_update_menu (GnomeApp * app);
 const char * gnc_history_get_last (void);
 
 #endif

@@ -61,7 +61,7 @@ static void totd_close_cb(GtkWidget *widget, gpointer data);
 /** Implementations ***************************************************/
 
 /************************************************************************\
- * gnc_ui_totd_dialog_crfeate_and_run                                   *
+ * gnc_ui_totd_dialog_create_and_run                                    *
  *   display and run the "Tip of the Day" dialog                        *
  *                                                                      *
  * Returns: nothing                                                     *
@@ -91,8 +91,6 @@ gnc_ui_totd_dialog_create(void)
 			 GNOME_STOCK_BUTTON_NEXT, 
 			 GNOME_STOCK_BUTTON_CLOSE, 
 			 NULL);	
-
-  gnome_dialog_set_parent(GNOME_DIALOG(win), GTK_WINDOW(gnc_get_ui_data()));
 
   gnome_dialog_set_default(GNOME_DIALOG(win), 2);
   gnome_dialog_close_hides(GNOME_DIALOG(win), FALSE);

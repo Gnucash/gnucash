@@ -71,6 +71,35 @@
 (define (gnc:global-options-clear-changes)
   (gnc:options-clear-changes gnc:*options-entries*))
 
+;; save-all-options: this is the actual hook that gets called at
+;; shutdown.  right now, we put all the options in the same file so
+;; it's important to make sure it happens in this order.  later the
+;; hook should probably revert back to just save-global-options.
+(define (gnc:save-all-options)
+  (gnc:save-global-options)
+  (gnc:save-report-options)
+  (gnc:save-acct-tree-options)
+  (gnc:save-style-sheet-options))
+
+(define (gnc:save-acct-tree-options)
+  (let ((port (open (build-path (getenv "HOME") ".gnucash" "config.auto")
+                    (logior O_WRONLY O_CREAT O_APPEND)))
+        (maxid 0))
+    (hash-fold
+     (lambda (id optobj p)
+       (let ((code 
+              (string-append
+               "(let ((options (gnc:make-acct-tree-window-options)))\n"
+               (gnc:generate-restore-forms optobj "options")
+               (simple-format
+                #f "  (hash-set! gnc:*acct-tree-options* ~A options))\n"
+                id))))
+         (display code port)
+         (if (> id maxid) (set! maxid id)))
+       #f) #f gnc:*acct-tree-options*)
+    (format port " (set! gnc:*acct-tree-id* ~A)\n\n" (+ 1 maxid))
+    (close port)))
+
 (define (gnc:save-global-options)
   (gnc:make-home-dir)
   (gnc:save-options gnc:*options-entries*
@@ -80,7 +109,8 @@
                      "(gnc:config-file-format-version 1)\n\n"
                      ";"
                      (_ "GnuCash Configuration Options")
-                     "\n")))
+                     "\n")
+                    #t))
 
 (define (gnc:config-file-format-version version) #t)
 
@@ -121,55 +151,7 @@
 (define (gnc:get-credit-string type)
   (_ (assoc-ref gnc:*credit-strings* type)))
 
-
-;; Main Window options
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Main Window") (N_ "Double click expands parent accounts")
-  "a" (N_ "Double clicking on an account with children expands \
-the account instead of opening a register.") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Main Window") (N_ "Reports appear in Main Window")
-  "a" (N_ "By default, reports go into the main window instead of a separate window.") #t))
-
-(gnc:register-configuration-option
- (gnc:make-list-option
-  (N_ "Main Window") (N_ "Account types to display")
-  "b" ""
-  (list 'bank 'cash 'credit 'asset 'liability 'stock
-        'mutual 'currency 'income 'expense 'equity)
-  (list (list->vector (list 'bank      (N_ "Bank") ""))
-        (list->vector (list 'cash      (N_ "Cash") ""))
-        (list->vector (list 'credit    (N_ "Credit") ""))
-        (list->vector (list 'asset     (N_ "Asset") ""))
-        (list->vector (list 'liability (N_ "Liability") ""))
-        (list->vector (list 'stock     (N_ "Stock") ""))
-        (list->vector (list 'mutual    (N_ "Mutual Fund") ""))
-        (list->vector (list 'currency  (N_ "Currency") ""))
-        (list->vector (list 'income    (N_ "Income") ""))
-        (list->vector (list 'expense   (N_ "Expense") ""))
-        (list->vector (list 'equity    (N_ "Equity") "")))))
-
-(gnc:register-configuration-option
- (gnc:make-list-option
-  (N_ "Main Window") (N_ "Account fields to display")
-  "c" ""
-  (list 'description 'total)
-  (list (list->vector (list 'type        (N_ "Type") ""))
-        (list->vector (list 'code        (N_ "Code") ""))
-        (list->vector (list 'description (N_ "Description") ""))
-        (list->vector (list 'notes       (N_ "Notes") ""))
-        (list->vector (list 'currency    (N_ "Currency") ""))
-        (list->vector (list 'security    (N_ "Security") ""))
-        (list->vector (list 'balance     (N_ "Balance") ""))
-        (list->vector (list 'total       (N_ "Total") "")))))
-
-
 ;; International options
-
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
   (N_ "International") (N_ "Date Format")
@@ -518,6 +500,81 @@ transaction.") #t))
   (N_ "Network") (N_ "GnuCash Network server") 
   "d" (N_ "Host to connect to for user registration and support services")
   "www.gnumatic.com"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; account tree options 
+;; these are here because they used to be global preferences; 
+;; they should probably move elsewhere.  
+;;
+;; like reports, we have an integer tree id that is the index into a
+;; global hash table, and URLs of the form gnc-acct-tree:id=%d will
+;; open to the right window.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define gnc:*acct-tree-options* (make-hash-table 11))
+(define gnc:*acct-tree-id* 0)
+
+(define (gnc:find-acct-tree-window-options id)
+  (hash-ref gnc:*acct-tree-options* id))
+
+(define (gnc:make-acct-tree-window-options) 
+  (let* ((options (gnc:new-options))
+         (add-option 
+          (lambda (opt)
+            (gnc:register-option options opt))))
+    (add-option
+     (gnc:make-string-option
+      (N_ "Account Tree") (N_ "Name of account view")
+      "a" (N_ "If you keep multiple account views open, it may be helpful 
+               to give each one a descriptive name") (N_ "Accounts")))
+    (add-option
+     (gnc:make-simple-boolean-option
+      (N_ "Account Tree") (N_ "Double click expands parent accounts")
+      "a" (N_ "Double clicking on an account with children expands \
+               the account instead of opening a register.") #f))
+    (add-option
+     (gnc:make-list-option
+      (N_ "Account Tree") (N_ "Account types to display")
+      "b" ""
+      (list 'bank 'cash 'credit 'asset 'liability 'stock
+            'mutual 'currency 'income 'expense 'equity)
+      (list (list->vector (list 'bank      (N_ "Bank") ""))
+            (list->vector (list 'cash      (N_ "Cash") ""))
+            (list->vector (list 'credit    (N_ "Credit") ""))
+            (list->vector (list 'asset     (N_ "Asset") ""))
+            (list->vector (list 'liability (N_ "Liability") ""))
+            (list->vector (list 'stock     (N_ "Stock") ""))
+            (list->vector (list 'mutual    (N_ "Mutual Fund") ""))
+            (list->vector (list 'currency  (N_ "Currency") ""))
+            (list->vector (list 'income    (N_ "Income") ""))
+            (list->vector (list 'expense   (N_ "Expense") ""))
+            (list->vector (list 'equity    (N_ "Equity") "")))))
+    
+    (add-option
+     (gnc:make-list-option
+      (N_ "Account Tree") (N_ "Account fields to display")
+      "c" ""
+      (list 'description 'total)
+      (list (list->vector (list 'type        (N_ "Type") ""))
+            (list->vector (list 'code        (N_ "Code") ""))
+            (list->vector (list 'description (N_ "Description") ""))
+            (list->vector (list 'notes       (N_ "Notes") ""))
+            (list->vector (list 'currency    (N_ "Currency") ""))
+            (list->vector (list 'security    (N_ "Security") ""))
+            (list->vector (list 'balance     (N_ "Balance") ""))
+            (list->vector (list 'total       (N_ "Total") "")))))
+
+    options))
+
+(define (gnc:make-new-acct-tree-window)  
+  (let ((options (gnc:make-acct-tree-window-options))
+        (id gnc:*acct-tree-id*))
+    (hash-set! gnc:*acct-tree-options* id options)
+    (set! gnc:*acct-tree-id* (+ 1 id))
+    (cons options id)))
+    
+(define (gnc:free-acct-tree-window id) 
+  (hash-remove! gnc:*acct-tree-options* id))
 
 ;;; Configuation variables
 

@@ -29,7 +29,6 @@
 #include "gnc-ui.h"
 #include "messages.h"
 
-
 static GSList *history_list = NULL;
 static gint num_menu_entries = -1;
 
@@ -155,10 +154,9 @@ gnc_history_get_last(void)
 }
 
 void
-gnc_history_update_menu(void)
+gnc_history_update_menu(GnomeApp * app)
 {
   GtkWidget *app_w;
-  GnomeApp *app;
   GnomeUIInfo *menu;
   GnomeDockItem *di;
   GtkWidget *menushell;
@@ -169,12 +167,6 @@ gnc_history_update_menu(void)
   int count;
   int i, n;
   int pos;
-
-  app_w = gnc_get_ui_data ();
-  if (!app_w)
-    return;
-
-  app = GNOME_APP (app_w);
 
   di = gnome_app_get_dock_item_by_name(app, GNOME_APP_MENUBAR_NAME);
   if (di == NULL)

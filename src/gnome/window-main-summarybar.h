@@ -1,6 +1,7 @@
-/********************************************************************\
- * extensions.h -- functions to build the dynamic extensions        *
- * Copyright (C) 1999 Rob Browning         	                    *
+/********************************************************************
+ * window-main-summarybar.h -- summary of finances in main window   *
+ * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 2001 Bill Gribble <grib@gnumatic.com>              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,16 +19,13 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ ********************************************************************/
 
-#ifndef __EXTENSIONS_H__
-#define __EXTENSIONS_H__
+#ifndef WINDOW_MAIN_SUMMARYBAR_H
+#define WINDOW_MAIN_SUMMARYBAR_H
 
-#include <guile/gh.h>
 #include <gnome.h>
 
-void gnc_add_extension(SCM extension);
-void gnc_extensions_menu_setup(GnomeApp * app);
-void gnc_extensions_shutdown(void);
+GtkWidget * gnc_main_window_summary_new(void);
 
 #endif

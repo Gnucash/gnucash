@@ -85,15 +85,15 @@
    'shutdown-hook
    "Functions to run at guile shutdown.  Hook args: ()"))
 
+(define gnc:*ui-startup-hook*
+  (gnc:hook-define
+   'ui-startup-hook
+   "Functions to run when the ui comes up.  Hook args: ()"))
+
 (define gnc:*ui-shutdown-hook*
   (gnc:hook-define 
    'ui-shutdown-hook
    "Functions to run at ui shutdown.  Hook args: ()"))
-
-(define gnc:*main-window-opened-hook*
-  (gnc:hook-define
-   'main-window-opened-hook
-   "Functions to run whenever the main window is opened.  Hook args: (window)"))
 
 (define gnc:*file-opened-hook*
   (gnc:hook-define 

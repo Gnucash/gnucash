@@ -57,7 +57,6 @@ noinst_HEADERS = \
   EuroUtils.h \
   FileBox.h \
   FileDialog.h \
-  MainWindow.h \
   MultiLedger.h \
   RecnWindow.h \
   RegWindow.h \

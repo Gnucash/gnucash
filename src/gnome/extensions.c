@@ -29,7 +29,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
 
-
 typedef struct _ExtensionInfo ExtensionInfo;
 struct _ExtensionInfo
 {
@@ -269,8 +268,9 @@ gnc_create_extension_info(SCM extension)
   ext_info->info[1].type = GNOME_APP_UI_ENDOFINFO;
 
   scm_protect_object(extension);
-
-  extension_list = g_slist_prepend(extension_list, ext_info);
+  
+  /* need to append so we can run them in order */
+  extension_list = g_slist_append(extension_list, ext_info);
 
   return ext_info;
 }
@@ -295,24 +295,28 @@ gnc_add_extension(SCM extension)
 {
   GnomeApp *app;
   ExtensionInfo *ext_info;
-  char *path;
-
   ext_info = gnc_create_extension_info(extension);
   if (ext_info == NULL)
   {
     PERR("bad extension");
     return;
   }
-
-  path = gnc_extension_path(ext_info);
-
-  app = GNOME_APP(gnc_get_ui_data());
-  gnome_app_insert_menus(app, path, ext_info->info);
-  gnome_app_install_menu_hints(app, ext_info->info);
-
-  g_free(path);
 }
 
+void
+gnc_extensions_menu_setup(GnomeApp * app) {
+  GSList        * l = NULL;
+  ExtensionInfo * info;
+  char          * path;
+  
+  for(l=extension_list; l; l=l->next) {
+    info = l->data;
+    path = gnc_extension_path(info);
+    gnome_app_insert_menus(app, path, info->info);
+    gnome_app_install_menu_hints(app, info->info); 
+    g_free(path);
+  }
+}
 
 void
 gnc_extensions_shutdown(void)

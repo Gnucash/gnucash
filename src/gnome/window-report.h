@@ -28,20 +28,32 @@
 
 #include "gnc-html.h"
 #include "dialog-options.h"
+#include "window-main.h"
   
 typedef struct _gnc_report_window gnc_report_window;
 
 /** PROTOTYPES ******************************************************/
 
-gnc_report_window * gnc_report_window_new(GtkWidget * container);
+gnc_report_window * gnc_report_window_new(GNCMainChildInfo * mc);
 void       gnc_report_window_destroy(gnc_report_window * rep);
 void       gnc_report_window_show_report(gnc_report_window * rw, int id);
 void       gnc_report_window_reload(gnc_report_window * rw);
 gnc_html   * gnc_report_window_get_html(gnc_report_window * rw);
+GtkWidget  * gnc_report_window_get_container(gnc_report_window * rw);
+SCM        gnc_report_window_get_report(gnc_report_window * rw);
+
+void       gnc_report_window_create_menu(gnc_report_window * report, 
+                                         GNCMainChildInfo * child);
+void       gnc_report_window_create_toolbar(gnc_report_window * report, 
+                                            GNCMainChildInfo * child);
 
 void       gnc_report_window_default_params_editor(SCM options, SCM report);
 
-void reportWindow(int id);
-void gnc_print_report (int report_id);
+void       gnc_main_window_open_report (int report_id, gint toplevel);
+void       gnc_main_window_open_report_url (const char * url, gint toplevel);
+
+GnomeMDIChild * gnc_report_window_create_child(const gchar * url);
+void       reportWindow(int id);
+void       gnc_print_report (int report_id);
 
 #endif

@@ -32,7 +32,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
 
-
 typedef struct _FileBoxInfo FileBoxInfo;
 struct _FileBoxInfo
 {
@@ -94,7 +93,7 @@ fileBox (const char * title, const char * filter, const char *default_name)
 
   gtk_window_set_modal(GTK_WINDOW(fb_info.file_box), TRUE);
   gtk_window_set_transient_for(GTK_WINDOW(fb_info.file_box),
-			       GTK_WINDOW(gnc_get_ui_data()));
+			       GTK_WINDOW(gnc_ui_get_toplevel()));
 
   gtk_signal_connect(GTK_OBJECT(fb_info.file_box->ok_button),
 		     "clicked", GTK_SIGNAL_FUNC(store_filename),

@@ -36,8 +36,10 @@
 #include "FileDialog.h"
 #include "Group.h"
 #include "global-options.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-common.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "messages.h"
@@ -1729,3 +1731,4 @@ gnc_set_auto_decimal_places( int places )
 {
   auto_decimal_places = places;
 }
+

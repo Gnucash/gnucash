@@ -61,6 +61,7 @@
 (define (gnc:html-style-sheet-template-find tname)
   (hash-ref *gnc:_style-sheet-templates_* tname))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  define-html-style-sheet 
 ;;  actually defines an <html-style-sheet-template>.
@@ -91,7 +92,7 @@
 
 (define <html-style-sheet> 
   (make-record-type "<html-style-sheet>" 
-                    '(name options renderer style)))
+                    '(name type options renderer style)))
 
 (define gnc:html-style-sheet? 
   (record-predicate <html-style-sheet>))
@@ -101,6 +102,12 @@
 
 (define gnc:html-style-sheet-set-name!
   (record-modifier <html-style-sheet> 'name))
+
+(define gnc:html-style-sheet-type
+  (record-accessor <html-style-sheet> 'type))
+
+(define gnc:html-style-sheet-set-type!
+  (record-modifier <html-style-sheet> 'type))
 
 (define gnc:html-style-sheet-options
   (record-accessor <html-style-sheet> 'options))
@@ -120,6 +127,26 @@
 (define gnc:html-style-sheet-style
   (record-accessor <html-style-sheet> 'style))
 
+(define (gnc:save-style-sheet-options) 
+  (let ((port (open (build-path (getenv "HOME") ".gnucash" "config.auto")
+                    (logior O_WRONLY O_CREAT O_APPEND))))
+    (hash-fold
+     (lambda (id ss-obj p)
+       (let ((code 
+              (string-append 
+               (format #f "(let ((template (gnc:html-style-sheet-template-find ~S)))\n" 
+                       (gnc:html-style-sheet-type ss-obj))
+               "  (if template \n"
+               "    (let ((options ((gnc:html-style-sheet-template-options-generator template)))) \n"
+               (gnc:generate-restore-forms 
+                (gnc:html-style-sheet-options ss-obj) "options")
+               (format #f " (gnc:restore-html-style-sheet ~S ~S options))))\n"
+                       (gnc:html-style-sheet-name ss-obj)
+                       (gnc:html-style-sheet-type ss-obj)))))
+         (display code port))
+       #f) #f *gnc:_style-sheets_*)
+    (close port)))
+
 (define (gnc:html-style-sheet-set-style! sheet tag . rest)
   (let ((newstyle #f))
     (if (and (= (length rest) 2)
@@ -135,7 +162,7 @@
   (let* ((template (gnc:html-style-sheet-template-find template-name)))
     (if template
         (let ((rv (gnc:make-html-style-sheet-internal 
-                   style-sheet-name
+                   style-sheet-name template-name 
                    ((gnc:html-style-sheet-template-options-generator template))
                    (gnc:html-style-sheet-template-renderer template)
                    (gnc:make-html-style-table))))
@@ -156,6 +183,36 @@
            rv "<gnc-monetary>" 
            gnc:default-html-gnc-monetary-renderer #f)
 
+          ;; store it in the style sheet hash 
+          (hash-set! *gnc:_style-sheets_* style-sheet-name rv)
+          rv)
+        #f)))
+
+(define (gnc:restore-html-style-sheet style-sheet-name template-name options)
+  (let* ((template (gnc:html-style-sheet-template-find template-name)))
+    (if template
+        (let ((rv (gnc:make-html-style-sheet-internal 
+                   style-sheet-name template-name 
+                   options
+                   (gnc:html-style-sheet-template-renderer template)
+                   (gnc:make-html-style-table))))
+          ;; set up the fallback data styles for every rendered document 
+          (gnc:html-style-sheet-set-style! 
+           rv "<string>" 
+           gnc:default-html-string-renderer #f)
+          
+          (gnc:html-style-sheet-set-style! 
+           rv "<gnc-numeric>" 
+           gnc:default-html-gnc-numeric-renderer #f)
+          
+          (gnc:html-style-sheet-set-style!
+           rv "<number>" 
+           gnc:default-html-number-renderer #f)
+          
+          (gnc:html-style-sheet-set-style!
+           rv "<gnc-monetary>" 
+           gnc:default-html-gnc-monetary-renderer #f)
+          
           ;; store it in the style sheet hash 
           (hash-set! *gnc:_style-sheets_* style-sheet-name rv)
           rv)
