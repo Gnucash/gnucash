@@ -29,7 +29,6 @@ EXTRA_DIST = \
   .cvsignore \
   HACKING \
   gnucash.lsm \
-  intl/.cvsignore \
   make-gnucash-patch.in \
   po/.cvsignore
 

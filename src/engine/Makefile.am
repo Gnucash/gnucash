@@ -72,10 +72,8 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   README.query-api \
-  README.gnc-numeric \
   design.txt \
   extensions.txt \
-  io-gncxml-version1.dtd \
   kvp_doc.txt
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_XML_CFLAGS} ${GHTTP_CFLAGS}
