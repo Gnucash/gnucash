@@ -428,16 +428,6 @@ gnc_acct_tree_window_menu_stock_split_cb (GtkWidget * widget,
 }
 
 static void
-gnc_acct_tree_window_menu_euro_conv_cb (GtkWidget * widget, 
-					GnomeMDIChild * child) {
-  GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);
-
-  gnc_euro_conv_dialog ();
-}
-
-static void
 gnc_acct_tree_window_menu_add_account_cb (GtkWidget * widget, 
                                           GnomeMDIChild * child) {
   GNCMainChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
@@ -873,14 +863,6 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
       N_("Stock S_plit..."),
       N_("Record a stock split or a stock merger"),
       gnc_acct_tree_window_menu_stock_split_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Euro Conversion..."),
-      N_("Do the Euro conversion of the account hierarchy"),
-      gnc_acct_tree_window_menu_euro_conv_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

@@ -1,5 +1,10 @@
 2001-12-10  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome/druid-euro-conv.c: Added support for Stock accounts.
+
+	* src/gnome/window-main.c, src/gnome/window-acct-tree.c: moved
+	Euro conversion to Tools menu.
+
 	* po/sv.po: Fixed Swedish translation, by Christian Rose
 	<menthos@menthos.com>, who thanks Peter Karlsson
 	<peter@softwolves.pp.se> for his comments.

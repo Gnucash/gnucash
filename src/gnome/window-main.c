@@ -904,6 +904,12 @@ gnc_main_window_find_transactions_cb (GtkWidget *widget, gpointer data) {
 }
 
 static void
+gnc_acct_tree_window_menu_euro_conv_cb (GtkWidget * widget, 
+					GnomeMDIChild * child) {
+  gnc_euro_conv_dialog ();
+}
+
+static void
 gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
 {
   GtkWidget *about;
@@ -1065,6 +1071,14 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
       N_("_Find Transactions"),
       N_("Find transactions with a search"),
       gnc_main_window_find_transactions_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Euro Conversion..."),
+      N_("Do the Euro conversion of the account hierarchy"),
+      gnc_acct_tree_window_menu_euro_conv_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

@@ -237,7 +237,8 @@ exchange_amounts(Account *old_a, Account *exchange, Account *new_a)
 {
   Transaction *trans;
   Split *split;
-  gnc_numeric amount, eur_amount;
+  gnc_numeric amount, eur_amount, share_amount, eur_share_amount;
+  GNCAccountType account_type;
 
   g_return_if_fail (old_a != NULL);
   g_return_if_fail (exchange != NULL);
@@ -250,17 +251,31 @@ exchange_amounts(Account *old_a, Account *exchange, Account *new_a)
   amount = xaccAccountGetBalance(old_a);
   if (!gnc_numeric_zero_p(amount))
     {
+      eur_amount = gnc_convert_to_euro (xaccAccountGetCurrency(old_a),
+					amount);
+      account_type = xaccAccountGetType (old_a);
+      if ((account_type == STOCK) ||
+	  (account_type == MUTUAL))
+	{
+	  share_amount = xaccAccountGetShareBalance(old_a);
+	  eur_share_amount = share_amount;
+	}
+      else
+	{
+	  share_amount = amount;
+	  eur_share_amount = eur_amount;
+	};
+	  
       xaccAccountBeginEdit (old_a);
       xaccAccountBeginEdit (exchange);
       xaccAccountBeginEdit (new_a);
       
-      eur_amount = gnc_convert_to_euro (xaccAccountGetCurrency(old_a),
-					amount);
+      /* Transaction from old account to exchange account */
       trans = xaccMallocTransaction ();
       xaccTransBeginEdit (trans);
       
       split = xaccMallocSplit ();
-      xaccSplitSetAmount (split, gnc_numeric_neg(amount));
+      xaccSplitSetAmount (split, gnc_numeric_neg(share_amount));
       xaccSplitSetValue (split, gnc_numeric_neg(amount));
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (old_a, split);
@@ -275,11 +290,12 @@ exchange_amounts(Account *old_a, Account *exchange, Account *new_a)
       xaccTransSetDateToday (trans);
       xaccTransCommitEdit (trans);
 
+      /* Transaction from exchange account to new account */
       trans = xaccMallocTransaction ();
       xaccTransBeginEdit (trans);
       
       split = xaccMallocSplit ();
-      xaccSplitSetAmount (split, eur_amount);
+      xaccSplitSetAmount (split, eur_share_amount);
       xaccSplitSetValue (split, eur_amount);
       xaccTransAppendSplit (trans, split);
       xaccAccountInsertSplit (new_a, split);
