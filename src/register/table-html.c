@@ -210,7 +210,7 @@ xaccTableWebServeHTML (Table * table, unsigned short port)
    listen_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    CHKERR (listen_fd, "cant listen");
 
-   bzero ((void*) &myaddr, sizeof (struct sockaddr_in));
+   memset ((void*) &myaddr, 0, sizeof (struct sockaddr_in));
    myaddr.sin_family = AF_INET;
    myaddr.sin_addr.s_addr = htonl (INADDR_ANY);
    myaddr.sin_port = htons (port);   /* WWW server is port 80 but that is usperuser only */

@@ -368,9 +368,8 @@ qrestore_datepred_start_handler(GSList* sibling_data, gpointer parent_data,
                                 gpointer *result, const gchar *tag,
                                 gchar **attrs)
 {
-  DatePredicateData *dp = g_new (DatePredicateData, 1);
+  DatePredicateData *dp = g_new0 (DatePredicateData, 1);
   g_return_val_if_fail(dp, FALSE);
-  bzero (dp, sizeof (DatePredicateData));
   dp->type = PD_DATE;
   dp->term_type = PR_DATE;
   *data_for_children = dp;

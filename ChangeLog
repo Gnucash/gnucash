@@ -1,3 +1,9 @@
+2001-04-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Query-xml-parser-v1.c
+	(qrestore_datepred_start_handler): use g_new0 instead of bzero --
+	more portable
+
 2001-04-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/md5.h: include stddef.h for size_t
