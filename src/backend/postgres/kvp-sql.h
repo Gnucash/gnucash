@@ -65,7 +65,7 @@ void pgendKVPInit (PGBackend *);
  */
 
 void pgendKVPStore (PGBackend *, guint32 iguid, kvp_frame *);
-void pgendKVPDelete (PGBackend *, guint32 iguid, char objtype);
+void pgendKVPDelete (PGBackend *, guint32 iguid);
 
 kvp_frame * pgendKVPFetch (PGBackend *, guint32 iguid, kvp_frame *);
 

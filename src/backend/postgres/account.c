@@ -132,7 +132,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
 
    if (acct->idata)
    {
-      pgendKVPDelete (be, acct->idata, 'a');
+      pgendKVPDelete (be, acct->idata);
       pgendKVPStore (be, acct->idata, acct->kvp_data);
    }
    LEAVE(" ");
@@ -471,7 +471,7 @@ pgend_account_commit_edit (Backend * bend,
    {
       const GUID *guid = xaccAccountGetGUID(acct);
       pgendStoreAuditAccount (be, acct, SQL_DELETE);
-      pgendKVPDelete (be, acct->idata, 'a');
+      pgendKVPDelete (be, acct->idata);
 
       p = be->buff; *p = 0;
       p = stpcpy (p, "DELETE FROM gncAccount WHERE accountGuid='");

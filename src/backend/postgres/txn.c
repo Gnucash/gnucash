@@ -196,7 +196,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       {
          DeleteTransInfo *dti = node->data;
 
-         pgendKVPDelete (be, dti->iguid, 'e');
+         pgendKVPDelete (be, dti->iguid);
       }
    }
 
@@ -228,7 +228,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
          pgendPutOneSplitOnly (be, s);
          if (s->idata)
          {
-           pgendKVPDelete (be, s->idata, 'e');
+           pgendKVPDelete (be, s->idata);
            pgendKVPStore (be, s->idata, s->kvp_data);
          }
       }
@@ -248,7 +248,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
 
       if (trans->idata)
       {
-        pgendKVPDelete (be, trans->idata, 't');
+        pgendKVPDelete (be, trans->idata);
         pgendKVPStore (be, trans->idata, trans->kvp_data);
       }
    }
@@ -282,9 +282,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
-         if (0 != s->idata) pgendKVPDelete (be, s->idata, 'e');
+         if (0 != s->idata) pgendKVPDelete (be, s->idata);
       }
-      if (0 != trans->idata) pgendKVPDelete (be, trans->idata, 't');
+      if (0 != trans->idata) pgendKVPDelete (be, trans->idata);
    }
 
    LEAVE(" ");

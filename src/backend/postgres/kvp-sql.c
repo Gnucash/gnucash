@@ -519,24 +519,19 @@ pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
    p = stpcpy (p, "INSERT INTO gncKVPValue" TYPE "Trail SELECT '");	\
    p = stpcpy (p, sess_str);						\
    p = stpcpy (p, "' as sessionGuid, datetime('NOW') as date_changed, "	\
-                  "'d' as change, '");                                  \
-   p = stpcpy (p, objtype);                                             \
-   p = stpcpy (p, "' as objtype, ");                                    \
+                  "'d' as change, 'k' as objtype, ");                   \
    p = stpcpy (p, "* from gncKVPValue" TYPE " WHERE iguid=");           \
    p = stpcpy (p, iguid_str);						\
 }
 
 void 
-pgendKVPDelete (PGBackend *be, guint32 iguid, char objtype_char)
+pgendKVPDelete (PGBackend *be, guint32 iguid)
 {
-   char iguid_str[80], sess_str[80], objtype[2];
+   char iguid_str[80], sess_str[80];
    char * p;
 
    if (!be || 0 == iguid)
      return;
-
-   objtype[0] = objtype_char;
-   objtype[1] = '\0';
 
    sprintf (iguid_str, "%d;\n", iguid);
    guid_to_string_buff (be->sessionGuid, sess_str);
