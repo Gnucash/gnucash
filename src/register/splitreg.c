@@ -415,37 +415,6 @@ static void
 configLayout (SplitRegister *reg)
 {
   CellBlock *curs;
-  int i;
-
-  /* fill things up with null cells */
-  for (i = 0; i < reg->cursor_header->num_cols; i++)
-  {
-    CellBlockCell *cb_cell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_header, 0, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_ledger_single, 0, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_ledger_double, 0, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_ledger_double, 1, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_journal_single, 0, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_journal_double, 0, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_journal_double, 1, i);
-    cb_cell->cell = reg->nullCell;
-
-    cb_cell = gnc_cellblock_get_cell (reg->cursor_split, 0, i);
-    cb_cell->cell = reg->nullCell;
-  }
 
   switch (reg->type)
   {
@@ -779,8 +748,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* --------------------------- */
   /* malloc the workhorse cells */
 
-  reg->nullCell = gnc_register_make_cell (BASIC_CELL_TYPE_NAME);
-
   gnc_register_add_cell (reg, DATE_CELL,  DATE_CELL_TYPE_NAME);
   gnc_register_add_cell (reg, NUM_CELL,   NUM_CELL_TYPE_NAME);
   gnc_register_add_cell (reg, DESC_CELL,  QUICKFILL_CELL_TYPE_NAME);
@@ -806,13 +773,6 @@ xaccInitSplitRegister (SplitRegister *reg,
 
   /* config the layout of the cells in the cursors */
   configLayout (reg);
-
-  /* The Null Cell is used to make sure that "empty" cells stay empty.
-   * This solves the problem of having the table be reformatted, the
-   * result of which is that an empty cell has landed on a cell that
-   * was previously non-empty.  We want to make sure that we erase
-   * those cell contents. The null cells handles this for us. */
-  xaccSetBasicCellValue (reg->nullCell, "");
 
   /* The num cell is the transaction number */
   xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, NUM_CELL),
@@ -996,9 +956,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->cursor_journal_single = NULL;
   reg->cursor_journal_double = NULL;
   reg->cursor_split = NULL;
-
-  gnc_basic_cell_destroy (reg->nullCell);
-  reg->nullCell = NULL;
 
   for (node = reg->cells; node; node = node->next)
   {

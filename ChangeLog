@@ -1,3 +1,11 @@
+2001-07-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/gnc-test-stuff.[ch] (get_random_price): new func.
+
+	* src/register/splitreg.[ch]: remove null cell
+
+	* src/engine/Transaction.h: update docs
+
 2001-07-21  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/cell-factory.[ch]: a new object for creation of

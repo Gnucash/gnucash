@@ -224,31 +224,9 @@ Timespec      xaccTransRetDatePostedTS (Transaction *trans);
 int           xaccTransCountSplits (Transaction *trans);
 
 /* --------------------------------------------------------------- */
-/* Commmodities.  Most of the commodity routines below are/will
- * be obsolescent.  They will all be replaced by two routines:
- * xaccTransSet/GetCurrency().  
- *
- * Semantics: Each transaction's 'currency' is by definition the
- * balancing common currency for the splits in that transaction.
- *
- * The xaccTransGetCurrency() routine will give the same result
- * as xaccTransFindCommonCurrency(), except that 'finding' won't
- * be necessary: the common currency will be stored with the 
- * transaction.  This will guarentee that a common currency is 
- * always avaiable, thus eliminating the need for many of the other
- * checks and comparisons.
- *
- * Note side effect: the Account structure will no longer store a
- * 'currency' and a 'security'. Instead it will store only one
- * commodity (i.e. currency), that is the one formerly known as
- * 'security'.  Meanwhile, we'll be in a transition period, where we
- * store the currency both in the account and the transaction. Warning
- * messages will print to the screen if things don't go well.  If
- * there are no warnings after a few months, then we'll make the
- * transition permanent.  Meanwhile, the xaccTransSetCurrency() will
- * attempt to do 'the right thing'.
+/* Commmodity routines. Each transaction's 'currency' is by definition
+ * the balancing common currency for the splits in that transaction.
  * */
-
 gnc_commodity * xaccTransGetCurrency (Transaction *trans);
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 

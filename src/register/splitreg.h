@@ -157,8 +157,6 @@ struct _SplitRegister
   CellBlock     * cursor_journal_double;
   CellBlock     * cursor_split;
 
-  BasicCell     * nullCell;
-
   SplitRegisterType type;
   SplitRegisterStyle style;
   gboolean use_double_line;
