@@ -23,6 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <string.h>
+
 #include "config.h"
 #include "messages.h"
 #include "util.h"
@@ -122,89 +124,87 @@ char * xaccPrintAmount (double val, short shrs)
  * doing.  Don't break it!
 \********************************************************************/
 
-double xaccParseUSAmount (char * str) 
+#define MINUS_SIGN '-'
+#define K_SEP      ','      /* thousands separator */
+#define DEC_SEP    '.'      /* decimal point */
+
+double xaccParseUSAmount (const char * instr) 
 {
-   char * tok;
+   char *mstr, *str, *tok;
    double dollars = 0.0;
    int len;
    int isneg = 0;
 
-   if (!str) return 0.0;
+   if (!instr) return 0.0;
+   mstr = strdup (instr);
+   str = mstr;
 
-   if ('-' == str[0]) {
-      isneg = 1;
-      str += sizeof(char);
-   }
+   /* strip off garbage at end of the line */
+   tok = strchr (str, '\r');
+   if (tok) *tok = 0x0;
+   tok = strchr (str, '\n');
+   if (tok) *tok = 0x0;
 
-   tok = strchr (str, ',');
+   /* search for a minus sign */
+   tok = strchr (str, MINUS_SIGN);
    if (tok) {
-      *tok = 0x0;
-      dollars = ((double) (1000 * atoi (str)));
+      isneg = 1;
       str = tok+sizeof(char);
    }
 
-   tok = strchr (str, ',');
-   if (tok) {
+   /* remove comma's */
+   tok = strchr (str, K_SEP);
+   while (tok) {
       *tok = 0x0;
       dollars *= 1000.0;
       dollars += ((double) (1000 * atoi (str)));
       str = tok+sizeof(char);
    }
 
-   tok = strchr (str, '.');
+   /* search for a decimal point */
+   tok = strchr (str, DEC_SEP);
    if (tok) {
       *tok = 0x0;
       dollars += ((double) (atoi (str)));
       str = tok+sizeof(char);
 
-      tok = strchr (str, '\r');
-      if (!tok) {
-         tok = strchr (str, '\n');
-         if (!tok) return dollars;
+      /* if there is anything trailing the decimal 
+       * point, convert it  */
+      if (str[0]) {
+
+         /* strip off garbage at end of the line */
+         tok = strchr (str, ' ');
+         if (tok) *tok = 0x0;
+   
+         /* adjust for number of decimal places */
+         len = strlen(str);
+         if (6 == len) {
+            dollars += 0.000001 * ((double) atoi (str));
+         } else
+         if (5 == len) {
+            dollars += 0.00001 * ((double) atoi (str));
+         } else
+         if (4 == len) {
+            dollars += 0.0001 * ((double) atoi (str));
+         } else
+         if (3 == len) {
+            dollars += 0.001 * ((double) atoi (str));
+         } else
+         if (2 == len) {
+            dollars += 0.01 * ((double) atoi (str));
+         } else 
+         if (1 == len) {
+            dollars += 0.1 * ((double) atoi (str));
+         } 
       }
-      *tok = 0x0;
-
-      /* strip off garbage at end of the line */
-      tok = strchr (str, '\n');
-      if (tok) *tok = 0x0;
-
-      tok = strchr (str, ' ');
-      if (tok) *tok = 0x0;
-
-      /* adjust for number of decimal places */
-      len = strlen(str);
-      if (6 == len) {
-         dollars += 0.000001 * ((double) atoi (str));
-      } else
-      if (5 == len) {
-         dollars += 0.00001 * ((double) atoi (str));
-      } else
-      if (4 == len) {
-         dollars += 0.0001 * ((double) atoi (str));
-      } else
-      if (3 == len) {
-         dollars += 0.001 * ((double) atoi (str));
-      } else
-      if (2 == len) {
-         dollars += 0.01 * ((double) atoi (str));
-      } else 
-      if (1 == len) {
-         dollars += 0.1 * ((double) atoi (str));
-      } 
 
    } else {
-      tok = strchr (str, '\r');
-      if (tok) *tok = 0x0;
-      tok = strchr (str, '\n');
-      if (tok) *tok = 0x0;
-      tok = strchr (str, ' ');
-      if (tok) *tok = 0x0;
-
       dollars += ((double) (atoi (str)));
    }
 
    if (isneg) dollars = -dollars;
 
+   free (mstr);
    return dollars;
 }
 
