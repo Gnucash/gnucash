@@ -451,6 +451,7 @@ GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new)
 
   if (!table) return NULL;
   if (table->child) return table->child;
+  if (table->parent) return table;
   if (make_new) {
     child = gncTaxTableCopy (table);
     gncTaxTableSetChild (table, child);

@@ -1,3 +1,9 @@
+2003-05-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncTaxTable.c: when asking for
+	  the child, return ourself if we're already a child instead
+	  of making a (useless) grandchild.
+	
 2003-05-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c, dialog-hbcitrans.c,
