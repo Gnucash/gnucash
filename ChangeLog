@@ -1,5 +1,7 @@
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/tip-list.scm: update tip
+
 	* src/register/register-common.h: move function defs to
 	register-common.c
 
