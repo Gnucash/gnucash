@@ -1,3 +1,8 @@
+2004-11-22  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, README: Add configure check for libofx version
+	0.7.0 and respective error message. Update docs. Fixes #159050
+
 2004-11-15  Benoit Grégoire <bock@step.polymtl.ca>
  	* po/fr.po: Yet again updated french translation, by  
 Gérard Delafond this time.  Merging with the previous one was not amusing, let's hope we don't have to do that again.  With all the contributions to the french translation since 1.8.9, this is really a major overhaull.
