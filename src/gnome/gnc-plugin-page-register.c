@@ -538,11 +538,20 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 { 
 	GncPluginPageRegisterPrivate *priv ;
 	Account *account;
+	SplitRegister *sr;
+	EggAction *action;
 
 	priv = page->priv;
 	account = gnc_plugin_page_register_get_account (page);
 	gnc_gnome_utils_update_actions(priv->action_group, actions_requiring_account,
 				 "sensitive", account != NULL);
+
+	sr = gnc_ledger_display_get_split_register(priv->ledger);
+	action = egg_action_group_get_action (priv->action_group,
+					      "StyleDoubleLineAction");
+	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
+	egg_toggle_action_set_active (EGG_TOGGLE_ACTION(action), sr->use_double_line);
+	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 }
 
 
