@@ -1,5 +1,5 @@
 /********************************************************************\
- * Group.c -- chart of accounts (heirarchical tree of accounts)     *
+ * Group.c -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
@@ -36,6 +36,7 @@
 #include "TransactionP.h"
 #include "gnc-common.h"
 #include "gnc-engine-util.h"
+#include "gnc-event-p.h"
 #include "gnc-numeric.h"
 
 static short module = MOD_ENGINE;
@@ -67,7 +68,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
 \********************************************************************/
 
 AccountGroup *
-xaccMallocAccountGroup( void )
+xaccMallocAccountGroup (void)
 {
   AccountGroup *grp = g_new (AccountGroup, 1);
 
@@ -515,6 +516,8 @@ xaccRemoveGroup (AccountGroup *grp)
   if (!grp) return;
 
   grp->saved = 0;
+
+  gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -545,6 +548,8 @@ xaccRemoveAccount (Account *acc)
     xaccRemoveGroup (grp);
     xaccFreeAccountGroup (grp);
   }
+
+  gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -566,6 +571,8 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
   if (!child) return;
 
   xaccGroupInsertAccount (adult->children, child);
+
+  gnc_engine_generate_event (&adult->guid, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -601,6 +608,8 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
   grp->accounts = g_list_insert_sorted (grp->accounts, acc,
                                         group_insert_helper);
+
+  gnc_engine_generate_event (&acc->guid, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -882,11 +891,15 @@ xaccGroupMergeAccounts (AccountGroup *grp)
             acc_a->children = gb;
             gb->parent = acc_a;
             acc_b->children = NULL;
+
+            gnc_engine_generate_event (&acc_a->guid, GNC_EVENT_MODIFY);
+            gnc_engine_generate_event (&acc_b->guid, GNC_EVENT_MODIFY);
           }
           else
           {
             xaccGroupConcatGroup (ga, gb);
             acc_b->children = NULL;
+            gnc_engine_generate_event (&acc_b->guid, GNC_EVENT_MODIFY);
           }
         }
 
@@ -899,6 +912,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         for (lp = acc_b->splits; lp; lp = lp->next)
         {
           Split *split = lp->data;
+
+          gnc_engine_generate_event (&split->acc->guid, GNC_EVENT_MODIFY);
 
           split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
