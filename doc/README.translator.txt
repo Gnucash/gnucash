@@ -1,4 +1,8 @@
-This document explains how to create a GnuCash translation file for
+This document describes the different things needed to translate
+GnuCash for a particular locale.
+
+----------------------------------------------------------------------
+This section explains how to create a GnuCash translation file for
 use with GNU gettext.
 
    by Yannick  LE  NY <y-le-ny@ifrance.com>, the French translator
@@ -151,3 +155,33 @@ For example:
 #: messages-i18n.c:251
 msgid "Show Income/Expense"
 msgstr "Einnahmen/Ausgaben anzeigen"
+
+----------------------------------------------------------------------
+This section describes the actions needed to translate the manual.
+
+1) Create a new directory doc/sgml/<locale> (where <locale> is
+   something like es, en_GB, or pt_PT).
+2) Copy the files from doc/sgml/C into this directory.
+3) Recreate the image files in doc/sgml/C/gnucash so that they are
+   appropriate to the locale.
+4) Edit all the sgml files and translate for the locale.
+
+----------------------------------------------------------------------
+This section describes the actions needed to translate the files
+containing the new account hierarchies.
+
+1) Create a new directory accounts/<locale>.
+2) Copy the files from accounts/C to accounts/<locale>
+3) Do not change any xml tags.
+For each file:
+4) Change the gnc-act:title, gnc-act:short-description, and
+   gnc-act:long-description to contain appropriately translated text.
+   Do not add any newlines in the long description except at the end
+   and begining of the string.
+5) For each gnc:account in the file translate the act:name, and
+   act:description fields.  Please do not translate any other fields.
+
+----------------------------------------------------------------------
+
+Thanks so very much to all the translators for their hard effort and
+excellent work.
