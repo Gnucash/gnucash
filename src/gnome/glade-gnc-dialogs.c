@@ -7309,7 +7309,7 @@ create_Prices_Dialog (void)
 
   tooltips = gtk_tooltips_new ();
 
-  Prices_Dialog = gnome_dialog_new (_("Prices Editor"), NULL);
+  Prices_Dialog = gnome_dialog_new (_("Price Editor"), NULL);
   gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "Prices_Dialog", Prices_Dialog);
   gtk_window_set_policy (GTK_WINDOW (Prices_Dialog), TRUE, TRUE, FALSE);
 

@@ -10813,7 +10813,7 @@ quit without making any changes.</text>
 <widget>
   <class>GnomeDialog</class>
   <name>Prices Dialog</name>
-  <title>Prices Editor</title>
+  <title>Price Editor</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
