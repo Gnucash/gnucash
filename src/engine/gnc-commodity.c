@@ -366,6 +366,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
 
   if (c) {
+    if (c == comm)
+      return c;
+
     gnc_commodity_set_fullname (c, gnc_commodity_get_fullname (comm));
     gnc_commodity_set_fraction (c, gnc_commodity_get_fraction (comm));
     gnc_commodity_set_exchange_code (c,
