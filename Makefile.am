@@ -71,7 +71,7 @@ cscope.out: cscope.files
 	cscope -b
 
 TAGS: etags.files
-	etags - < etags.files
+	etags -L - < etags.files
 
 etags.files:
 	find . -name '*.[ch]' -o -name '*.scm' > etags.files
