@@ -6,6 +6,7 @@ gncscm_DATA = \
   qif-file.scm \
   qif-guess-map.scm \
   qif-import.scm \
+  qif-merge-groups.scm \
   qif-objects.scm \
   qif-parse.scm \
   qif-to-gnc.scm \

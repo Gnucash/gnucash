@@ -1,3 +1,34 @@
+2001-02-05  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/qif-import/qif-merge-groups.scm: new file.  Utilities
+	for detecting duplicate transactions in two account groups.
+
+	* src/scm/qif-import/qif-quick-import.scm: new file (unfinished).
+	A start at a "quick import" facility that will import a single
+	QIF file with very little interaction. 
+
+	* src/engine/Group.c: be sure to free account split list and
+	set to NULL on merge
+
+	* src/engine/Query.c: add a new API to get Transactions from a
+	query instead of splits.  you have to specify whether you want
+	transactions with one split matching the query or all splits
+	matching the query.  More options later.
+
+	* src/gnome/druid-qif-import.c : add a few slots to the 
+	QIF window struct and add the extra pages to the dialog to 
+	allow review and selection of duplicate transactions 
+
+	* src/guile/gnc.gwp: wrap new Query functions and enums; wrap 
+	gnc:group-concat-group 
+
+	* src/scm/gnc-numeric.scm: add gnc-numeric enumerated types.  
+	They need to be bitwise combined so don't use g-wrap enum 
+	features.
+
+	* src/scm/qif-import/qif-to-gnc.scm: change semantics slightly to
+	put new xtns in a new Group and return it before committing.
+
 2001-02-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-utilities.scm: Added sorting of accounts according

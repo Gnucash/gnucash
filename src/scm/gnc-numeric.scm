@@ -22,6 +22,28 @@
 
 (gnc:support "gnc-numeric.scm")
 
+;; use 'logor' in guile to bit-combine RND and DENOM flags.
+
+(define GNC-RND-FLOOR           1)
+(define GNC-RND-CEIL            2)
+(define GNC-RND-TRUNC           3)
+(define GNC-RND-PROMOTE         4)
+(define GNC-RND-ROUND-HALF-DOWN 5)
+(define GNC-RND-ROUND-HALF-UP   6)
+(define GNC-RND-ROUND           7)
+(define GNC-RND-NEVER           8)
+
+(define GNC-DENOM-AUTO          0)
+(define GNC-DENOM-REDUCE       32)
+(define GNC-DENOM-FIXED        64)
+(define GNC-DENOM-LCD          48)
+
+(define GNC-ERROR-OK            0)
+(define GNC-ERROR-ARG          -1)
+(define GNC-ERROR-OVERFLOW     -2)
+(define GNC-ERROR-DENOM-DIFF   -3)
+(define GNC-ERROR-REMAINDER    -4)
+
 (define <gnc-numeric>
   (make-record-type "<gnc-numeric>" 
                     '(num denom)))
@@ -37,6 +59,9 @@
 
 (define gnc:gnc-numeric-denom
   (record-accessor <gnc-numeric> 'denom))
+
+(define (gnc:numeric-denom-reciprocal arg)
+  (- arg))
 
 
   

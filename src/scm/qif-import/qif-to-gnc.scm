@@ -3,16 +3,13 @@
 ;;;  this is where QIF transactions are transformed into a 
 ;;;  Gnucash account tree.
 ;;;
-;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000 
+;;;  Copyright 2000-2001 Bill Gribble <grib@billgribble.com> 
 ;;;  $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (gnc:support "qif-import/qif-to-gnc.scm")
 
 (define gnc:*default-denom* 100000)
-(define GNC-RND-ROUND 7)
-(define GNC-DENOM-REDUCE 32)
-(define GNC-DENOM-LCD 48)
 
 (define (gnc:qif-fuzzy= num-1 num-2)
   (< (abs (- num-1 num-2)) .00000001))
@@ -24,24 +21,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:find-or-make-acct acct-info currency security 
-                                      gnc-acct-hash acct-group)
+                                      gnc-acct-hash old-group new-group)
   (let* ((separator (string-ref (gnc:account-separator-char) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
-          (gnc:get-account-from-full-name acct-group gnc-name separator))
+          (gnc:get-account-from-full-name old-group gnc-name separator))
          (allowed-types 
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
          (incompatible-acct #f))
 
     (define (make-unique-name-variant long-name short-name)
-      (if (gnc:get-account-from-full-name acct-group long-name separator)
+      (if (gnc:get-account-from-full-name old-group long-name separator)
           (let loop ((count 2))
             (let ((test-name 
                    (string-append long-name (sprintf #f " %a" count))))
               (if (gnc:get-account-from-full-name 
-                   acct-group test-name separator)
+                   old-group test-name separator)
                   (loop (+ 1 count))
                   test-name)))
           short-name))
@@ -122,7 +119,7 @@
                 
                 (set! parent-acct (qif-import:find-or-make-acct 
                                    pinfo currency security 
-                                   gnc-acct-hash acct-group)))
+                                   gnc-acct-hash old-group new-group)))
               (begin 
                 (set! acct-name gnc-name)))
           
@@ -157,7 +154,7 @@
           (gnc:account-commit-edit new-acct)
           (if parent-acct
               (gnc:account-insert-subaccount parent-acct new-acct)
-              (gnc:group-insert-account acct-group new-acct))
+              (gnc:group-insert-account new-group new-acct))
           
           (hash-set! gnc-acct-hash gnc-name new-acct)
           new-acct))))
@@ -174,7 +171,8 @@
                                qif-acct-map qif-cat-map stock-map 
                                default-currency-name)
   (false-if-exception 
-   (let* ((account-group (gnc:get-current-group))
+   (let* ((old-group (gnc:get-current-group))
+          (new-group (gnc:malloc-account-group))
           (gnc-acct-hash (make-hash-table 20))
           (separator (string-ref (gnc:account-separator-char) 0))
           (default-currency 
@@ -249,17 +247,16 @@
           (cond ((and equity? security)  ;; a "retained holdings" acct
                  (qif-import:find-or-make-acct acctinfo 
                                                security security
-                                               gnc-acct-hash account-group))
+                                               gnc-acct-hash 
+                                               old-group new-group))
                 (security 
                  (qif-import:find-or-make-acct 
-                  acctinfo 
-                  default-currency security
-                  gnc-acct-hash account-group))
+                  acctinfo default-currency security
+                  gnc-acct-hash old-group new-group))
                 (#t 
                  (qif-import:find-or-make-acct 
-                  acctinfo 
-                  default-currency default-currency
-                  gnc-acct-hash account-group)))))
+                  acctinfo default-currency default-currency
+                  gnc-acct-hash old-group new-group)))))
       sorted-accounts-list)
      
      ;; before trying to mark transactions, prune down the list of 
@@ -321,12 +318,12 @@
                  ;; create and fill in the GNC transaction
                  (let ((gnc-xtn (gnc:transaction-create)))
                    (gnc:transaction-begin-edit gnc-xtn)
-
+                   
                    ;; build the transaction
                    (qif-import:qif-xtn-to-gnc-xtn 
                     xtn qif-file gnc-xtn gnc-acct-hash 
                     qif-acct-map qif-cat-map)
-
+                   
                    ;; rebalance and commit everything
                    (gnc:transaction-commit-edit gnc-xtn)))))
          (qif-file:xtns qif-file)))
@@ -336,11 +333,8 @@
      (if progress-dialog
          (gnc:progress-dialog-destroy progress-dialog))
      
-     ;; now take the new account tree and merge it in with the 
-     ;; existing gnucash account tree. 
-     (gnc:group-merge-accounts account-group))))
-
-
+     new-group)))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-xtn-to-gnc-xtn
 ;; translate a single transaction to a set of gnucash splits and 
@@ -1027,3 +1021,4 @@
                 (d-gnc:split-set-share-price 
                  split (d-gnc:split-get-share-price last-split)))
             (if (< i numsplits) (loop (+ 1 i) ith-split)))))))
+

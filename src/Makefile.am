@@ -37,7 +37,7 @@ LDADD = \
   ${GHTTP_LIBS} \
   ${GUPPI_LIBS} \
   ${DB_LIBS} \
-  ${INTLLIBS}
+  ${INTLLIBS} 
 
 gnucash_SOURCES = \
   MultiLedger.c \

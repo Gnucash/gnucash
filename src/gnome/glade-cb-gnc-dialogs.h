@@ -198,3 +198,24 @@ gnc_help_window_search_button_cb       (GtkButton       *button,
 void
 gnc_help_window_search_help_button_cb  (GtkButton       *button,
                                         gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_convert_cb           (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_import_duplicate_new_select_cb
+                                        (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_import_duplicate_old_select_cb
+                                        (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);

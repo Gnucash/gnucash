@@ -917,7 +917,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
 
         /* consolidate transactions */
         lp = acc_b->splits;
-
+        
         for (lp = acc_b->splits; lp; lp = lp->next)
         {
           Split *split = lp->data;
@@ -927,6 +927,9 @@ xaccGroupMergeAccounts (AccountGroup *grp)
           split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
         }
+
+        g_list_free(acc_b->splits);
+        acc_b->splits = NULL;
 
         /* move back one before removal */
         node_b = node_b->prev;

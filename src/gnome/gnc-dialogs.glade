@@ -2991,6 +2991,7 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Add</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 
 	      <widget>
@@ -3000,6 +3001,7 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Delete</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 	    </widget>
 
@@ -3020,6 +3022,7 @@ Exactly
 		<tooltip>Move the selected item up</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3033,6 +3036,7 @@ Exactly
 		<tooltip>Move the selected item down</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3186,6 +3190,7 @@ No Total
 		<name>match_button</name>
 		<can_focus>True</can_focus>
 		<label>Matching Transactions...</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -3607,6 +3612,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3620,6 +3626,7 @@ Contingency
 		<name>payment_periods_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3691,6 +3698,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3704,6 +3712,7 @@ Contingency
 		<name>interest_rate_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3775,6 +3784,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3788,6 +3798,7 @@ Contingency
 		<name>present_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3859,6 +3870,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3872,6 +3884,7 @@ Contingency
 		<name>periodic_payment_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3943,6 +3956,7 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3956,6 +3970,7 @@ Contingency
 		<name>future_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -5625,7 +5640,7 @@ Click &quot;Back&quot; to review your currency selections.</text>
 
     <widget>
       <class>GnomeDruidPageStart</class>
-      <name>druidpagestart1</name>
+      <name>start_page</name>
       <title>Import QIF files</title>
       <text>Gnucash can import financial data from QIF (Quicken 
 Interchange Format) files written by Quicken/Quickbooks,
@@ -5749,6 +5764,7 @@ worry if your data is in multiple files.
 	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
 	    </signal>
 	    <label>Select...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>3</padding>
 	      <expand>False</expand>
@@ -5782,7 +5798,7 @@ worry if your data is in multiple files.
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
-	  <fill>True</fill>
+	  <fill>False</fill>
 	</child>
 
 	<widget>
@@ -6062,6 +6078,7 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:32:12 GMT</last_modification_time>
 	    </signal>
 	    <label>Load another file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -6080,6 +6097,7 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:34:33 GMT</last_modification_time>
 	    </signal>
 	    <label>Unload selected file</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -6092,7 +6110,7 @@ of the QIF import process. </label>
 
     <widget>
       <class>GnomeDruidPageStandard</class>
-      <name>druidpagestandard9</name>
+      <name>account_doc_page</name>
       <title>Your accounts and stock holdings</title>
       <title_color>255,255,255</title_color>
       <background_color>153,191,153</background_color>
@@ -6144,7 +6162,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 
     <widget>
       <class>GnomeDruidPageStandard</class>
-      <name>druidpagestandard3</name>
+      <name>account_match_page</name>
       <signal>
 	<name>prepare</name>
 	<handler>gnc_ui_qif_import_accounts_prepare_cb</handler>
@@ -6259,7 +6277,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 
     <widget>
       <class>GnomeDruidPageStandard</class>
-      <name>druidpagestandard10</name>
+      <name>category_doc_page</name>
       <title>Income and expense categories</title>
       <title_color>255,255,255</title_color>
       <background_color>153,191,154</background_color>
@@ -6307,7 +6325,7 @@ within GnuCash.</label>
 
     <widget>
       <class>GnomeDruidPageStandard</class>
-      <name>druidpagestandard4</name>
+      <name>category_match_page</name>
       <signal>
 	<name>prepare</name>
 	<handler>gnc_ui_qif_import_categories_prepare_cb</handler>
@@ -6524,7 +6542,7 @@ mutual funds in the imported data.</label>
 
     <widget>
       <class>GnomeDruidPageStandard</class>
-      <name>commodity_page</name>
+      <name>commodity_doc_page</name>
       <signal>
 	<name>prepare</name>
 	<handler>gnc_ui_qif_import_commodity_prepare_cb</handler>
@@ -6576,6 +6594,269 @@ or listing for its type.
 	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>match_doc_page</name>
+      <signal>
+	<name>next</name>
+	<handler>gnc_ui_qif_import_convert_cb</handler>
+	<data>QIF_Import_Druid</data>
+	<last_modification_time>Sat, 03 Feb 2001 19:33:19 GMT</last_modification_time>
+      </signal>
+      <title>Match duplicate transactions</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,154</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox34</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label847694</name>
+	  <label>If you are importing a QIF file downloaded from a bank or other financial
+institution, some of the information in the QIF file may duplicate information
+already in your GnuCash accounts.  GnuCash will try to detect duplicates 
+of existing transactions.  
+
+On the next page, you will be asked to confirm that an existing transaction
+matches an imported transaction.  Imported transactions are shown on the
+left side of the page, and possible  matches for the selected left-hand
+transaction are shown  to the right.  There may be several old transactions 
+that could match an imported transaction; you will be able to select the 
+correct one by clicking in the &quot;Dup?&quot; column of the correct transaction.
+
+You can control the rules used by GnuCash to find duplicate transcations 
+in the &quot;QIF Import&quot; section of the GnuCash Preferences dialog.
+
+Click &quot;Next&quot; to find duplicate transactions. </label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>match_duplicates_page</name>
+      <title>Select possible duplicates</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,154</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox35</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox94</name>
+	  <homogeneous>True</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkFrame</class>
+	    <name>frame45</name>
+	    <label>Imported transactions with duplicates</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow22</name>
+	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_NEVER</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	      <widget>
+		<class>GtkCList</class>
+		<name>new_transaction_list</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>select_row</name>
+		  <handler>gnc_ui_qif_import_duplicate_new_select_cb</handler>
+		  <data>QIF_Import_Druid</data>
+		  <last_modification_time>Mon, 05 Feb 2001 18:28:49 GMT</last_modification_time>
+		</signal>
+		<columns>3</columns>
+		<column_widths>53,172,56</column_widths>
+		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+		<show_titles>True</show_titles>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847700</name>
+		  <label>Date</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847701</name>
+		  <label>Description</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847702</name>
+		  <label>Amount</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkFrame</class>
+	    <name>frame46</name>
+	    <label>Possible duplicates for selected new transaction</label>
+	    <label_xalign>0</label_xalign>
+	    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkScrolledWindow</class>
+	      <name>scrolledwindow23</name>
+	      <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	      <vscrollbar_policy>GTK_POLICY_NEVER</vscrollbar_policy>
+	      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+
+	      <widget>
+		<class>GtkCList</class>
+		<name>old_transaction_list</name>
+		<can_focus>True</can_focus>
+		<signal>
+		  <name>select_row</name>
+		  <handler>gnc_ui_qif_import_duplicate_old_select_cb</handler>
+		  <data>QIF_Import_Druid</data>
+		  <last_modification_time>Mon, 05 Feb 2001 18:29:59 GMT</last_modification_time>
+		</signal>
+		<columns>4</columns>
+		<column_widths>50,133,55,32</column_widths>
+		<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+		<show_titles>True</show_titles>
+		<shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847703</name>
+		  <label>Date</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847704</name>
+		  <label>Description</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847705</name>
+		  <label>Amount</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+
+		<widget>
+		  <class>GtkLabel</class>
+		  <child_name>CList:title</child_name>
+		  <name>label847706</name>
+		  <label>Dup?</label>
+		  <justify>GTK_JUSTIFY_CENTER</justify>
+		  <wrap>False</wrap>
+		  <xalign>0.5</xalign>
+		  <yalign>0.5</yalign>
+		  <xpad>0</xpad>
+		  <ypad>0</ypad>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
 	</widget>
       </widget>
     </widget>
@@ -7346,6 +7627,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
+	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
 
       <widget>
@@ -7355,6 +7637,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
     </widget>
   </widget>
@@ -7567,6 +7850,7 @@ words.
 		  <last_modification_time>Fri, 15 Dec 2000 18:13:53 GMT</last_modification_time>
 		</signal>
 		<label>Search</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -7585,6 +7869,7 @@ words.
 		  <last_modification_time>Fri, 15 Dec 2000 18:14:21 GMT</last_modification_time>
 		</signal>
 		<label>Help</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -8066,6 +8351,7 @@ words.
 	    <border_width>3</border_width>
 	    <can_focus>True</can_focus>
 	    <label>Select Subaccounts</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>
@@ -8079,6 +8365,7 @@ words.
 	    <border_width>3</border_width>
 	    <can_focus>True</can_focus>
 	    <label>Unselect Subaccounts</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>
@@ -8536,6 +8823,7 @@ words.
 	    <name>new_button</name>
 	    <can_focus>True</can_focus>
 	    <label>New...</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -8548,6 +8836,7 @@ words.
 	    <name>delete_button</name>
 	    <can_focus>True</can_focus>
 	    <label>Delete</label>
+	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>

@@ -114,6 +114,15 @@ typedef enum {
   BALANCE_UNBALANCED = 1 << 1
 } balance_match_t;
 
+/* query_run_t describes whether to require all splits or 
+ * any to match for a transaction to be returned by 
+ * xaccQueryGetTransactions */
+
+typedef enum {
+  QUERY_MATCH_ALL=1,
+  QUERY_MATCH_ANY=2
+} query_run_t;
+
 typedef struct _querystruct Query;
 
 typedef struct {
@@ -146,8 +155,8 @@ typedef struct {
   pr_type_t       term_type;
   int             sense;
   acct_match_t    how;
-  GList          *accounts;
-  GList          *account_guids;
+  GList           *accounts;
+  GList           *account_guids;
 } AccountPredicateData;
 
 typedef struct {
@@ -223,6 +232,7 @@ GList       * xaccQueryGetTerms(Query * q);
 
 /* after the query has been set up, call this to run the query */
 GList       * xaccQueryGetSplits(Query * q);
+GList       * xaccQueryGetTransactions(Query * q, query_run_t type);
 
 /* handy for debugging */
 void    xaccQueryPrint(Query *q);

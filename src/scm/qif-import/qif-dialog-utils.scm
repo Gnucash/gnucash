@@ -538,3 +538,19 @@
         bin))
      (vector->list hash-table))
     (list newhash (sort names string<?))))
+
+
+(define (qif-import:refresh-match-selection matches item)
+  (if (> item -1)
+      (let ((i 0))
+        (for-each-in-order 
+         (lambda (match)
+           (if (= i item)
+               (if (cdr match) 
+                   (set-cdr! match #f)
+                   (set-cdr! match #t))
+               (set-cdr! match #f))
+           (set! i (+ 1 i)))
+         matches))))
+
+

@@ -60,12 +60,22 @@ struct _qifimportwindow {
   GtkWidget * cat_list;
   GtkWidget * currency_picker;
   GtkWidget * currency_entry;
-
+  GtkWidget * new_transaction_list;
+  GtkWidget * old_transaction_list;
+  
+  GtkWidget * start_page;
   GtkWidget * loaded_files_page;
   GtkWidget * load_file_page;
   GtkWidget * date_format_page;
   GtkWidget * account_name_page;
-  GtkWidget * commodity_page;
+  GtkWidget * account_doc_page;
+  GtkWidget * account_match_page;
+  GtkWidget * category_doc_page;
+  GtkWidget * category_match_page;
+  GtkWidget * currency_page;
+  GtkWidget * commodity_doc_page;
+  GtkWidget * match_doc_page;
+  GtkWidget * match_duplicates_page;
   GtkWidget * end_page;
 
   GList     * pages;
@@ -81,6 +91,10 @@ struct _qifimportwindow {
 
   SCM       gnc_acct_info;
   SCM       stock_hash;
+
+  SCM       imported_account_group;
+  SCM       match_transactions;
+  int       selected_transaction;
 };
 
 struct _qifdruidpage {
@@ -132,7 +146,10 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->acct_display_info =  SCM_BOOL_F;
   retval->acct_map_info     =  SCM_BOOL_F;
   retval->stock_hash        =  SCM_BOOL_F;
-
+  retval->imported_account_group   = SCM_BOOL_F;
+  retval->match_transactions = SCM_BOOL_F;
+  retval->selected_transaction = 0;
+  
   retval->druid          = gtk_object_get_data(wobj, "qif_import_druid");
   retval->filename_entry = gtk_object_get_data(wobj, "qif_filename_entry");
   retval->acct_entry     = gtk_object_get_data(wobj, "qif_account_entry");
@@ -143,12 +160,29 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->currency_entry = gtk_object_get_data(wobj, "currency_entry");
   retval->acct_list      = gtk_object_get_data(wobj, "account_page_list");
   retval->cat_list       = gtk_object_get_data(wobj, "category_page_list");
-
+  retval->new_transaction_list = 
+    gtk_object_get_data(wobj, "new_transaction_list");
+  retval->old_transaction_list = 
+    gtk_object_get_data(wobj, "old_transaction_list");
+  
+  retval->start_page = gtk_object_get_data(wobj, "start_page");
   retval->load_file_page = gtk_object_get_data(wobj, "load_file_page");
   retval->loaded_files_page = gtk_object_get_data(wobj, "loaded_files_page");
-  retval->commodity_page  = gtk_object_get_data(wobj, "commodity_page");  
-  retval->account_name_page  = gtk_object_get_data(wobj, "account_name_page"); 
   retval->date_format_page  = gtk_object_get_data(wobj, "date_format_page"); 
+  retval->account_name_page  = gtk_object_get_data(wobj, "account_name_page"); 
+  retval->account_doc_page  = gtk_object_get_data(wobj, "account_doc_page"); 
+  retval->account_match_page = 
+    gtk_object_get_data(wobj, "account_match_page"); 
+  retval->category_doc_page  = gtk_object_get_data(wobj, "category_doc_page"); 
+  retval->category_match_page = 
+    gtk_object_get_data(wobj, "category_match_page"); 
+  retval->currency_page  = gtk_object_get_data(wobj, "currency_page");  
+  retval->commodity_doc_page  = 
+    gtk_object_get_data(wobj, "commodity_doc_page");  
+  retval->match_doc_page  = 
+    gtk_object_get_data(wobj, "match_doc_page");  
+  retval->match_duplicates_page  = 
+    gtk_object_get_data(wobj, "match_duplicates_page");  
   retval->end_page  = gtk_object_get_data(wobj, "end_page");
   
   retval->pages = NULL;
@@ -174,6 +208,8 @@ gnc_ui_qif_import_druid_make(void)  {
   scm_protect_object(retval->acct_display_info);
   scm_protect_object(retval->acct_map_info);
   scm_protect_object(retval->stock_hash);
+  scm_protect_object(retval->imported_account_group);
+  scm_protect_object(retval->match_transactions);
   
   /* set a default currency for new accounts */
   gnc_ui_update_commodity_picker(retval->currency_picker,
@@ -207,7 +243,9 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
   scm_unprotect_object(window->acct_display_info);
   scm_unprotect_object(window->acct_map_info);
   scm_unprotect_object(window->stock_hash);
-  
+  scm_unprotect_object(window->imported_account_group);
+  scm_unprotect_object(window->match_transactions);
+
   g_free(window);
 }
 
@@ -964,12 +1002,12 @@ gnc_ui_qif_import_categories_next_cb(GnomeDruidPage * page,
      * to the end page */
     if(gh_call1(any_stock, wind->acct_map_info) == SCM_BOOL_T) {
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->commodity_page));
+                           GNOME_DRUID_PAGE(wind->commodity_doc_page));
       return TRUE;
     }
     else {
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->end_page));
+                           GNOME_DRUID_PAGE(wind->match_doc_page));
       return TRUE;
     }
   }
@@ -993,7 +1031,7 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
   }
   else {
     gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                         GNOME_DRUID_PAGE(wind->end_page));
+                         GNOME_DRUID_PAGE(wind->match_doc_page));
     return TRUE;
   }
 }
@@ -1045,7 +1083,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   SCM   comm_ptr_token;
 
   gnc_commodity  * commodity;
-  GnomeDruidPage * back_page = GNOME_DRUID_PAGE(wind->commodity_page);  
+  GnomeDruidPage * back_page = GNOME_DRUID_PAGE(wind->commodity_doc_page);  
   QIFDruidPage   * new_page;
   
   /* only set up once */
@@ -1194,32 +1232,37 @@ make_qif_druid_page(gnc_commodity * comm) {
 
 
 /****************************************************************
- * qif_import_finish_cb
+ * qif_import_convert_cb
  * do the work of actually translating QIF xtns to GNC xtns.
  ****************************************************************/
 
-void
-gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage, 
-                            gpointer arg1, 
-                            gpointer user_data) {
-  
-  SCM   save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
+gboolean
+gnc_ui_qif_import_convert_cb(GnomeDruidPage * gpage, 
+                             gpointer arg1, 
+                             gpointer user_data) {
   SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
-  SCM   retval;
+  SCM   find_duplicates = gh_eval_str("gnc:group-find-duplicates");
+  SCM   retval, matches;
+  SCM   current_xtn;
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
   QIFDruidPage * page;
   GList        * pageptr;
+  Transaction  * gnc_xtn;
+  Split        * gnc_split;
+
   char * mnemonic = NULL; 
   char * namespace = NULL;
   char * fullname = NULL;
+  gchar * row_text[4] = { NULL, NULL, NULL, NULL };
+  int  rownum;
 
   /* get the default currency */
   char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
 
-  gnc_suspend_gui_refresh ();
 
   /* busy cursor */
+  gnc_suspend_gui_refresh ();
   gnc_set_busy_cursor(NULL);
 
   /* get any changes to the imported stocks */
@@ -1237,30 +1280,190 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
     gnc_commodity_table_insert(gnc_engine_commodities(), page->commodity);
   }
   
-  /* call a scheme function to do the work */
+  /* call a scheme function to do the work.  The return value is an
+   * account group containing all the new accounts and transactions */
   retval = gh_apply(qif_to_gnc, 
                     SCM_LIST5(wind->imported_files,
                               wind->acct_map_info, 
                               wind->cat_map_info,
                               wind->stock_hash,
                               gh_str02scm(currname)));
+
+  gnc_unset_busy_cursor(NULL);
+
   if(retval == SCM_BOOL_F) {
     gnc_error_dialog_parented(GTK_WINDOW(wind->window),
                               _("An error occurred while importing "
-                                "QIF transactions into Gnucash.  Your data "
-                                "may be in an inconsistent state."));
+                                "QIF transactions into Gnucash.  Your "
+                                "accounts are unchanged."));    
+    scm_unprotect_object(wind->imported_account_group);
+    wind->imported_account_group = SCM_BOOL_F;
+    scm_protect_object(wind->imported_account_group);
   }
   else {
-    /* write out mapping info before destroying the window */
-    gh_call2(save_map_prefs, wind->acct_map_info, wind->cat_map_info); 
-  }
+    scm_unprotect_object(wind->imported_account_group);
+    wind->imported_account_group = retval;
+    scm_protect_object(wind->imported_account_group);
 
-  gnc_unset_busy_cursor(NULL);
-  gnc_resume_gui_refresh ();
+    /* now detect duplicate transactions */ 
+    gnc_set_busy_cursor(NULL);
+    retval = gh_call2(find_duplicates, 
+                      gh_eval_str("(gnc:get-current-group)"),
+                      wind->imported_account_group);
+    gnc_unset_busy_cursor(NULL);
+    
+    scm_unprotect_object(wind->match_transactions);
+    wind->match_transactions = retval;
+    scm_protect_object(wind->match_transactions);
+    
+    /* skip to the last page if we couldn't find duplicates 
+     * in the new group */
+    if((retval == SCM_BOOL_F) ||
+       (gh_null_p(retval))) {
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           GNOME_DRUID_PAGE(wind->end_page));
+      gnc_resume_gui_refresh();
+      return TRUE;
+    }
+
+    /* otherwise, make up the display for the duplicates page */
+    gtk_clist_clear(GTK_CLIST(wind->new_transaction_list));
+    gtk_clist_freeze(GTK_CLIST(wind->new_transaction_list));
+
+    while(!gh_null_p(retval)) {
+      current_xtn = gh_caar(retval);
+      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
+      gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
+
+      row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
+      row_text[1] = xaccTransGetDescription(gnc_xtn);
+
+      if(xaccTransCountSplits(gnc_xtn) > 2) {
+        row_text[2] = g_strdup(_("(split)")); 
+      }
+      else {
+        row_text[2] = 
+          xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
+                          gnc_account_value_print_info
+                          (xaccSplitGetAccount(gnc_split), TRUE));
+      }
+
+      rownum = gtk_clist_append(GTK_CLIST(wind->new_transaction_list),
+                                row_text);      
+      
+      retval      = gh_cdr(retval); 
+    }
+    
+    gtk_clist_thaw(GTK_CLIST(wind->new_transaction_list));        
+    gtk_clist_select_row(GTK_CLIST(wind->new_transaction_list), 0, 0);
+  }  
+  gnc_resume_gui_refresh();
+  return FALSE;
+}
+
+static void
+refresh_old_transactions(QIFImportWindow * wind, int selection) {
+  SCM          possible_matches;
+  SCM          current_xtn;
+  SCM          selected;
+  Transaction  * gnc_xtn;
+  Split        * gnc_split;
+  gchar        * row_text[4] = { NULL, NULL, NULL, NULL };
+  int          rownum;
+  
+  gtk_clist_clear(GTK_CLIST(wind->old_transaction_list));
+  gtk_clist_freeze(GTK_CLIST(wind->old_transaction_list));
+
+  if(wind->match_transactions != SCM_BOOL_F) {
+    possible_matches = gh_cdr(gh_list_ref
+                              (wind->match_transactions,
+                               gh_int2scm(wind->selected_transaction)));
+    gh_call2(gh_eval_str("qif-import:refresh-match-selection"),
+             possible_matches, gh_int2scm(selection));
+    
+    while(!gh_null_p(possible_matches)) {
+      current_xtn = gh_car(possible_matches);
+      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(gh_car(current_xtn));
+      selected    = gh_cdr(current_xtn);
+      gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
+      
+      row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
+      row_text[1] = xaccTransGetDescription(gnc_xtn);
+      
+      if(xaccTransCountSplits(gnc_xtn) > 2) {
+        row_text[2] = g_strdup(_("(split)")); 
+      }
+      else {
+        row_text[2] = 
+          xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
+                          gnc_account_value_print_info
+                          (xaccSplitGetAccount(gnc_split), TRUE));
+      }
+      
+      if(selected != SCM_BOOL_F) {
+        row_text[3] = "*";
+      }
+      else {
+        row_text[3] = NULL;
+      }
+      
+      rownum = gtk_clist_append(GTK_CLIST(wind->old_transaction_list),
+                                row_text);
+      possible_matches = gh_cdr(possible_matches);
+    }
+  }
+  gtk_clist_thaw(GTK_CLIST(wind->old_transaction_list));
+}
+
+void
+gnc_ui_qif_import_duplicate_new_select_cb(GtkCList * clist, int row, int col, 
+                                          GdkEvent * ev, gpointer user_data) {
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
+
+  wind->selected_transaction = row;
+  refresh_old_transactions(wind, -1);
+}
+
+
+void
+gnc_ui_qif_import_duplicate_old_select_cb(GtkCList * clist, int row, int col, 
+                                          GdkEvent * ev, gpointer user_data) {
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
+
+  refresh_old_transactions(wind, row);
+}
+
+void
+gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage, 
+                            gpointer arg1, 
+                            gpointer user_data) {
+  
+  SCM   save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
+  SCM   cat_and_merge = gh_eval_str("gnc:group-catenate-and-merge");
+  SCM   prune_xtns = gh_eval_str("gnc:prune-matching-transactions");
+  
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
+
+  gnc_suspend_gui_refresh();
+
+  /* prune the old transactions marked as dupes */
+  gh_call1(prune_xtns, wind->match_transactions);
+
+  /* actually add in the new transactions. */
+  gh_call2(cat_and_merge, 
+           gh_eval_str("(gnc:get-current-group)"),
+           wind->imported_account_group);
+  
+  gnc_resume_gui_refresh();
+  
+  /* write out mapping info before destroying the window */
+  gh_call2(save_map_prefs, wind->acct_map_info, wind->cat_map_info); 
   
   gnc_ui_qif_import_druid_destroy(wind);  
 }
-
 
 void
 gnc_ui_qif_import_cancel_cb (GnomeDruid * druid, 
@@ -1281,3 +1484,4 @@ gncFileQIFImport (void)
   /* pop up the QIF File Import dialog box */
   gnc_ui_qif_import_druid_make();
 }
+

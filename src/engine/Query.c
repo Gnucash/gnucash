@@ -64,9 +64,12 @@ struct _querystruct {
 
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
-  int      changed;
+  int          changed;
+  query_run_t  last_run_type; 
   AccountGroup * acct_group;
+
   GList        * split_list;
+  GList        * xtn_list;  
 };
 
 /*******************************************************************
@@ -1082,6 +1085,74 @@ xaccQueryGetSplits(Query * q) {
   q->split_list = matching_splits;
   
   return matching_splits;
+}
+
+/********************************************************************
+ * xaccQueryGetTransactions 
+ * Get transactions matching the query terms, specifying whether 
+ * we require some or all splits to match 
+ ********************************************************************/
+
+static void
+query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data) {
+  Transaction * t = key;
+  int         num_matches = GPOINTER_TO_INT(value);
+  GList       ** matches = user_data;
+
+  if(num_matches == xaccTransCountSplits(t)) {
+    *matches = g_list_prepend(*matches, t);
+  }
+}
+
+static void
+query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data) {
+  Transaction * t = key;
+  GList       ** matches = user_data;
+  *matches = g_list_prepend(*matches, t);
+}
+
+GList * 
+xaccQueryGetTransactions (Query * q, query_run_t runtype) {
+  GList       * splits = xaccQueryGetSplits(q);
+  GList       * current = NULL;
+  GList       * retval = NULL;
+  GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
+  Transaction * trans = NULL;
+  gpointer    val = NULL;
+  int         count = 0;
+  
+  /* iterate over matching splits, incrementing a match-count in
+   * the hash table */
+  for(current = splits; current; current=current->next) {
+    trans = xaccSplitGetParent((Split *)(current->data));
+    
+    /* don't waste time looking up unless we need the count 
+     * information */
+    if(runtype == QUERY_MATCH_ALL) {
+      val   = g_hash_table_lookup(trans_hash, trans);
+      count = GPOINTER_TO_INT(val);
+    }
+    g_hash_table_insert(trans_hash, trans, GINT_TO_POINTER(count + 1));
+  }
+  
+  /* now pick out the transactions that match */
+  if(runtype == QUERY_MATCH_ALL) {
+    g_hash_table_foreach(trans_hash, query_match_all_filter_func, 
+                         &retval);
+  }
+  else {
+    g_hash_table_foreach(trans_hash, query_match_any_filter_func, 
+                         &retval);
+  }
+
+  /* ATM we rerun the xtn filter every time.  Need to add checks and 
+   * updates for using cached results. */
+  q->last_run_type = runtype;
+  q->xtn_list = retval;
+  
+  g_hash_table_destroy(trans_hash);
+
+  return retval;
 }
 
 
