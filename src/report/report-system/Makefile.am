@@ -6,7 +6,6 @@ libgncmod_report_system_la_SOURCES=gncmod-report-system.c
 libgncmod_report_system_la_LDFLAGS=-module
 libgncmod_report_system_la_LIBADD = \
   -L../../gnc-module -L../../gnc-module/.libs -lgncmodule \
-  -L../../app-utils -L../../app-utils/.libs -lgncmod-app-utils \
   ${GLIB_LIBS} ${GUILE_LIBS} 
 
 
