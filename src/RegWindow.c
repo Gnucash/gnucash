@@ -48,6 +48,9 @@
 #include "Transaction.h"
 #include "util.h"
 
+
+#define XACC_NUM_COLS  12
+
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
  * register.  Any state info for the regWindow goes here. */
@@ -65,6 +68,13 @@ typedef struct _RegWindow {
                                * a new transaction                       */
   PopBox         *actbox;     /* ComboBox for actions                    */
   PopBox         *xferbox;    /* ComboBox for transfers                  */
+
+  short          numCols;     /* number of dolumns in the register       */
+  short columnLocation [XACC_NUM_COLS];  /* column ordering              */
+  short columnWidths   [XACC_NUM_COLS];  /* widths (in chars not pixels) */
+  String columnLabels  [3][XACC_NUM_COLS]; /* column labels              */
+  unsigned char alignments[XACC_NUM_COLS]; /* alignment of display chars */
+
 } RegWindow;
 
 
@@ -125,23 +135,23 @@ extern Pixel negPixel;
 
 /* the actual column location is pulled out of the column location array */
 #define DATE_CELL_R  0
-#define DATE_CELL_C  (acc->columnLocation[DATE_COL_ID])
+#define DATE_CELL_C  (regData->columnLocation[DATE_COL_ID])
 #define NUM_CELL_R   0
-#define NUM_CELL_C   (acc->columnLocation[NUM_COL_ID])
+#define NUM_CELL_C   (regData->columnLocation[NUM_COL_ID])
 #define DESC_CELL_R  0
-#define DESC_CELL_C  (acc->columnLocation[DESC_COL_ID])
+#define DESC_CELL_C  (regData->columnLocation[DESC_COL_ID])
 #define RECN_CELL_R  0
-#define RECN_CELL_C  (acc->columnLocation[RECN_COL_ID])
+#define RECN_CELL_C  (regData->columnLocation[RECN_COL_ID])
 #define PAY_CELL_R   0
-#define PAY_CELL_C   (acc->columnLocation[PAY_COL_ID])
+#define PAY_CELL_C   (regData->columnLocation[PAY_COL_ID])
 #define DEP_CELL_R   0
-#define DEP_CELL_C   (acc->columnLocation[DEP_COL_ID])
+#define DEP_CELL_C   (regData->columnLocation[DEP_COL_ID])
 #define BALN_CELL_R  0
-#define BALN_CELL_C  (acc->columnLocation[BALN_COL_ID]) 
+#define BALN_CELL_C  (regData->columnLocation[BALN_COL_ID]) 
 
-#define PRIC_CELL_C   (acc->columnLocation[PRIC_COL_ID])
-#define SHRS_CELL_C   (acc->columnLocation[SHRS_COL_ID])
-#define ACTN_CELL_C   (acc->columnLocation[ACTN_COL_ID])
+#define PRIC_CELL_C   (regData->columnLocation[PRIC_COL_ID])
+#define SHRS_CELL_C   (regData->columnLocation[SHRS_COL_ID])
+#define ACTN_CELL_C   (regData->columnLocation[ACTN_COL_ID])
 
 #define YEAR_CELL_R  1
 #define YEAR_CELL_C  DATE_CELL_C  /* same column as the date */
@@ -206,7 +216,7 @@ regRefresh( RegWindow *regData )
     /* The number of rows we need to add/subtract (ie, delta-rows :) */
     nnrows = (regData->acc->numTrans)*2 + 3; 
     drows  = (nnrows-1) - (nrows-1);
-    ncols  = regData->acc->numCols; 
+    ncols  = regData->numCols; 
     acc = regData->acc;
 
     /* allocate a new matrix: */
@@ -399,6 +409,7 @@ regRefresh( RegWindow *regData )
  * Args:   regData -- this RegWindow                                *
  * Return: the final balance                                        *
 \********************************************************************/
+
 double
 regRecalculateBalance( RegWindow *regData )
   {
@@ -486,8 +497,11 @@ regRecalculateBalance( RegWindow *regData )
     XmTextSetString( regData->balance, buf );
     }
   
-  refreshMainWindow();        /* make sure the balance field in
-                               * the main window is up to date */
+  
+  /* make sure the balance field in the main 
+   * window is up to date.  */ 
+  refreshMainWindow();       
+
   return dbalance;
   }
 
@@ -858,7 +872,6 @@ regWindow( Widget parent, Account *acc )
   regData->qf = acc->qfRoot;
   regData->insert    = 0;          /* the insert (cursor) position in
                                     * quickfill cells */
-  
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
                           xmDialogShellWidgetClass, parent,
@@ -984,29 +997,29 @@ regWindow( Widget parent, Account *acc )
       case INCOME:
       case EXPENSE:
       case EQUITY:
-        acc->columnLocation [DATE_COL_ID] = 0;
-        acc->columnLocation [NUM_COL_ID]  = 1;
-        acc->columnLocation [DESC_COL_ID] = 2;
-        acc->columnLocation [RECN_COL_ID] = 3;
-        acc->columnLocation [PAY_COL_ID]  = 4;
-        acc->columnLocation [DEP_COL_ID]  = 5;
-        acc->columnLocation [BALN_COL_ID] = 6;
-        acc -> numCols = 7;
+        regData->columnLocation [DATE_COL_ID] = 0;
+        regData->columnLocation [NUM_COL_ID]  = 1;
+        regData->columnLocation [DESC_COL_ID] = 2;
+        regData->columnLocation [RECN_COL_ID] = 3;
+        regData->columnLocation [PAY_COL_ID]  = 4;
+        regData->columnLocation [DEP_COL_ID]  = 5;
+        regData->columnLocation [BALN_COL_ID] = 6;
+        regData -> numCols = 7;
 
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc->columnLocation [DATE_COL_ID] = 0;
-        acc->columnLocation [NUM_COL_ID]  = 1;
-        acc->columnLocation [ACTN_COL_ID] = 2;
-        acc->columnLocation [DESC_COL_ID] = 3;
-        acc->columnLocation [RECN_COL_ID] = 4;
-        acc->columnLocation [PAY_COL_ID]  = 5;
-        acc->columnLocation [DEP_COL_ID]  = 6;
-        acc->columnLocation [PRIC_COL_ID] = 7;
-        acc->columnLocation [SHRS_COL_ID] = 8;
-        acc->columnLocation [BALN_COL_ID] = 9;
-        acc -> numCols = 10;
+        regData->columnLocation [DATE_COL_ID] = 0;
+        regData->columnLocation [NUM_COL_ID]  = 1;
+        regData->columnLocation [ACTN_COL_ID] = 2;
+        regData->columnLocation [DESC_COL_ID] = 3;
+        regData->columnLocation [RECN_COL_ID] = 4;
+        regData->columnLocation [PAY_COL_ID]  = 5;
+        regData->columnLocation [DEP_COL_ID]  = 6;
+        regData->columnLocation [PRIC_COL_ID] = 7;
+        regData->columnLocation [SHRS_COL_ID] = 8;
+        regData->columnLocation [BALN_COL_ID] = 9;
+        regData -> numCols = 10;
         break;
       default:
         fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
@@ -1015,13 +1028,13 @@ regWindow( Widget parent, Account *acc )
     /* ----------------------------------- */
     /* set up column widths */
 
-    acc -> colWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
-    acc -> colWidths[NUM_CELL_C]  = 8;   /* also XFER_CELL_C */
-    acc -> colWidths[DESC_CELL_C] = 35;  /* also MEMO_CELL_C */
-    acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
-    acc -> colWidths[PAY_CELL_C]  = 12;  /* the widths of columns */
-    acc -> colWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
-    acc -> colWidths[BALN_CELL_C] = 12;  /* dollar balance */
+    regData -> columnWidths[DATE_CELL_C] = 5;   /* also YEAR_CELL_C */
+    regData -> columnWidths[NUM_CELL_C]  = 8;   /* also XFER_CELL_C */
+    regData -> columnWidths[DESC_CELL_C] = 35;  /* also MEMO_CELL_C */
+    regData -> columnWidths[RECN_CELL_C] = 1;   /* the widths of columns */
+    regData -> columnWidths[PAY_CELL_C]  = 12;  /* the widths of columns */
+    regData -> columnWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
+    regData -> columnWidths[BALN_CELL_C] = 12;  /* dollar balance */
 
     switch(acc->type)
       {
@@ -1036,22 +1049,22 @@ regWindow( Widget parent, Account *acc )
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
-        acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
-        acc -> colWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
+        regData -> columnWidths[PRIC_CELL_C] = 8;   /* price */
+        regData -> columnWidths[SHRS_CELL_C] = 8;   /* share balance */
+        regData -> columnWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
         break;
       }
     
     /* ----------------------------------- */
     /* set up column alignments */
 
-    acc -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
-    acc -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  /* need XFER to be visible */
-    acc -> alignments[DESC_CELL_C] = XmALIGNMENT_BEGINNING;
-    acc -> alignments[RECN_CELL_C] = XmALIGNMENT_CENTER;
-    acc -> alignments[PAY_CELL_C]  = XmALIGNMENT_END;
-    acc -> alignments[DEP_CELL_C]  = XmALIGNMENT_END;
-    acc -> alignments[BALN_CELL_C] = XmALIGNMENT_END;
+    regData -> alignments[DATE_CELL_C] = XmALIGNMENT_END;
+    regData -> alignments[NUM_CELL_C]  = XmALIGNMENT_BEGINNING;  /* need XFER to be visible */
+    regData -> alignments[DESC_CELL_C] = XmALIGNMENT_BEGINNING;
+    regData -> alignments[RECN_CELL_C] = XmALIGNMENT_CENTER;
+    regData -> alignments[PAY_CELL_C]  = XmALIGNMENT_END;
+    regData -> alignments[DEP_CELL_C]  = XmALIGNMENT_END;
+    regData -> alignments[BALN_CELL_C] = XmALIGNMENT_END;
 
     switch(acc->type)
       {
@@ -1067,9 +1080,9 @@ regWindow( Widget parent, Account *acc )
 
       case PORTFOLIO:
       case MUTUAL:
-        acc -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
-        acc -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
-        acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
+        regData -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
+        regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
+        regData -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
         break;
       }
     
@@ -1077,14 +1090,14 @@ regWindow( Widget parent, Account *acc )
     /* Put the appropriate heading names in the column titles */
     for (i=0; i<3; i++) {
        for (j=0; j<XACC_NUM_COLS; j++) {
-          acc->rows[i][j] = "";
+          regData->columnLabels[i][j] = "";
        }
     }
 
-    acc -> rows[0][DATE_CELL_C] = "Date";
-    acc -> rows[0][NUM_CELL_C]  = "Num";
-    acc -> rows[0][DESC_CELL_C] = "Description";
-    acc -> rows[0][BALN_CELL_C] = "Balance";
+    regData -> columnLabels[0][DATE_CELL_C] = "Date";
+    regData -> columnLabels[0][NUM_CELL_C]  = "Num";
+    regData -> columnLabels[0][DESC_CELL_C] = "Description";
+    regData -> columnLabels[0][BALN_CELL_C] = "Balance";
     switch(acc->type)
       {
       case BANK:
@@ -1098,57 +1111,57 @@ regWindow( Widget parent, Account *acc )
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> rows[0][PRIC_CELL_C] = "Price";
-        acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
-        acc -> rows[0][ACTN_CELL_C] = "Action";   /* action */
+        regData -> columnLabels[0][PRIC_CELL_C] = "Price";
+        regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
+        regData -> columnLabels[0][ACTN_CELL_C] = "Action";   /* action */
         break;
       }
     
     switch(acc->type)
       {
       case BANK:
-        acc -> rows[0][PAY_CELL_C] = "Payment";
-        acc -> rows[0][DEP_CELL_C] = "Deposit";
+        regData -> columnLabels[0][PAY_CELL_C] = "Payment";
+        regData -> columnLabels[0][DEP_CELL_C] = "Deposit";
         break;
       case CASH:
-        acc -> rows[0][PAY_CELL_C] = "Spend";
-        acc -> rows[0][DEP_CELL_C] = "Receive";
+        regData -> columnLabels[0][PAY_CELL_C] = "Spend";
+        regData -> columnLabels[0][DEP_CELL_C] = "Receive";
         break;
       case ASSET:
-        acc -> rows[0][PAY_CELL_C] = "Decrease";
-        acc -> rows[0][DEP_CELL_C] = "Increase";
+        regData -> columnLabels[0][PAY_CELL_C] = "Decrease";
+        regData -> columnLabels[0][DEP_CELL_C] = "Increase";
         break;
       case CREDIT:
-        acc -> rows[0][PAY_CELL_C] = "Charge";
-        acc -> rows[0][DEP_CELL_C] = "Payment";
+        regData -> columnLabels[0][PAY_CELL_C] = "Charge";
+        regData -> columnLabels[0][DEP_CELL_C] = "Payment";
         break;
       case LIABILITY:
-        acc -> rows[0][PAY_CELL_C] = "Increase";
-        acc -> rows[0][DEP_CELL_C] = "Decrease";
+        regData -> columnLabels[0][PAY_CELL_C] = "Increase";
+        regData -> columnLabels[0][DEP_CELL_C] = "Decrease";
         break;
       case INCOME:
-        acc -> rows[0][PAY_CELL_C] = "Income";
-        acc -> rows[0][DEP_CELL_C] = "Charge";
+        regData -> columnLabels[0][PAY_CELL_C] = "Income";
+        regData -> columnLabels[0][DEP_CELL_C] = "Charge";
         break;
       case EXPENSE:
-        acc -> rows[0][PAY_CELL_C] = "Rebate";
-        acc -> rows[0][DEP_CELL_C] = "Expense";
+        regData -> columnLabels[0][PAY_CELL_C] = "Rebate";
+        regData -> columnLabels[0][DEP_CELL_C] = "Expense";
         break;
       case EQUITY:
-        acc -> rows[0][PAY_CELL_C] = "Surplus";
-        acc -> rows[0][DEP_CELL_C] = "Deficit";
+        regData -> columnLabels[0][PAY_CELL_C] = "Surplus";
+        regData -> columnLabels[0][DEP_CELL_C] = "Deficit";
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> rows[0][PAY_CELL_C] = "Sold";
-        acc -> rows[0][DEP_CELL_C] = "Bought";
+        regData -> columnLabels[0][PAY_CELL_C] = "Sold";
+        regData -> columnLabels[0][DEP_CELL_C] = "Bought";
         break;
       }
     
     data = (String **)XtMalloc(3*sizeof(String *));
-    data[0] = &(acc -> rows[0][0]);
-    data[1] = &(acc -> rows[1][0]);
-    data[2] = &(acc -> rows[2][0]);
+    data[0] = &(regData -> columnLabels[0][0]);
+    data[1] = &(regData -> columnLabels[1][0]);
+    data[2] = &(regData -> columnLabels[2][0]);
     sprintf( buf, "reg" );
     reg = XtVaCreateWidget( strcat(buf,accRes[acc->type]),
                             xbaeMatrixWidgetClass,  frame,
@@ -1158,9 +1171,9 @@ regWindow( Widget parent, Account *acc )
                             XmNrows,                2,
                             XmNvisibleRows,         15,
                             XmNfill,                True,
-                            XmNcolumns,             acc -> numCols,
-                            XmNcolumnWidths,        acc -> colWidths,
-                            XmNcolumnAlignments,    acc -> alignments,
+                            XmNcolumns,             regData -> numCols,
+                            XmNcolumnWidths,        regData -> columnWidths,
+                            XmNcolumnAlignments,    regData -> alignments,
                             XmNtraverseFixedCells,  False,
                             XmNgridType,            XmGRID_SHADOW_IN,
                             XmNshadowType,          XmSHADOW_ETCHED_IN,
