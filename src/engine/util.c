@@ -358,7 +358,19 @@ PrintAmt(char *buf, double val, int prec,
 
   if (!use_separators)
   {
-    /* If we're not using separators, then the whole string is copied */
+    /* fix up the decimal place, if there is one */
+    stringLength = strlen(tempBuf);
+    numWholeDigits = -1;
+    for (i = stringLength - 1; i >= 0; i--) {
+      if (tempBuf[i] == '.') {
+        if (monetary)
+          tempBuf[i] = lc->mon_decimal_point[0];
+        else
+          tempBuf[i] = lc->decimal_point[0];
+        break;
+      }
+    }
+
     strcpy(buf, tempBuf);
   }
   else
@@ -367,7 +379,7 @@ PrintAmt(char *buf, double val, int prec,
     stringLength = strlen(tempBuf);
     numWholeDigits = -1;
     for (i = stringLength - 1; i >= 0; i--) {
-      if (tempBuf[i] == '.') {
+      if ((tempBuf[i] == '.') || (tempBuf[i] == lc->decimal_point[0])) {
         numWholeDigits = i;
         if (monetary)
           tempBuf[i] = lc->mon_decimal_point[0];

@@ -1951,11 +1951,11 @@ msgstr ""
 
 #: po/guile_strings.txt:98
 msgid "The items selected in the list option are:"
-msgstr "Die gewählten Optionen in der Lsite sind :"
+msgstr "Die gewählten Optionen in der Liste sind :"
 
 #: po/guile_strings.txt:99
 msgid "Average"
-msgstr "Durchscnitt"
+msgstr "Durchschnitt"
 
 #: po/guile_strings.txt:100
 msgid "A_ccount Balance Tracker"
@@ -1963,7 +1963,7 @@ msgstr "Konten-Saldo-Beobachter"
 
 #: po/guile_strings.txt:102
 msgid "Start of reporting period"
-msgstr ""
+msgstr "Anfangsdatums des Berichtes"
 
 #: po/guile_strings.txt:103
 msgid "Sort by EXACT entry time"
@@ -2746,7 +2746,7 @@ msgstr "Komma (1.000,00)"
 
 #: src/gnome/glade-gnc-dialogs.c:269
 msgid "Autodetect           "
-msgstr "automatisch herausfinden"
+msgstr "Automatisch herausfinden"
 
 #: src/gnome/glade-gnc-dialogs.c:272
 msgid "MM/DD/YYYY"
@@ -2803,7 +2803,7 @@ msgstr "Ausgewähltes Konto:"
 #: src/gnome/glade-gnc-dialogs.c:573
 #, fuzzy
 msgid "Description:"
-msgstr "Beschreibung"
+msgstr "Beschreibung:"
 
 #: src/gnome/glade-gnc-dialogs.c:582
 msgid "Account type:"
@@ -2815,49 +2815,43 @@ msgstr "Investmentfonds"
 
 #: src/gnome/glade-gnc-dialogs.c:786
 msgid "Print Dialog"
-msgstr ""
+msgstr "Dialog ausdrucken"
 
 #: src/gnome/glade-gnc-dialogs.c:794
-#, fuzzy
 msgid "Print Setup"
-msgstr "Scheck drucken"
+msgstr "Einstellungen drucken"
 
 #: src/gnome/glade-gnc-dialogs.c:815
-#, fuzzy
 msgid "Printer:"
-msgstr "Drucken"
+msgstr "Drucker:"
 
 #: src/gnome/glade-gnc-dialogs.c:823
 msgid "Paper size:"
-msgstr ""
+msgstr "Papierformat:"
 
 #: src/gnome/glade-gnc-dialogs.c:831
 msgid "Pages to print:"
-msgstr ""
+msgstr "Seiten die gedruckt werden sollen:"
 
 #: src/gnome/glade-gnc-dialogs.c:876
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: src/gnome/glade-gnc-dialogs.c:884
-#, fuzzy
 msgid "Selected"
-msgstr "Datei auswählen"
+msgstr "Ausgewählt"
 
 #: src/gnome/glade-gnc-dialogs.c:906
-#, fuzzy
 msgid "From:"
-msgstr "Von"
+msgstr "Von:"
 
 #: src/gnome/glade-gnc-dialogs.c:921
-#, fuzzy
 msgid "To:"
-msgstr "Zu"
+msgstr "Zu:"
 
 #: src/gnome/glade-gnc-dialogs.c:943 src/gnome/glade-gnc-dialogs.c:950
-#, fuzzy
 msgid "Select..."
-msgstr "Alle auswählen"
+msgstr "Auswählen..."
 
 #: src/gnome/glade-gnc-dialogs.c:986
 msgid "Preview"
