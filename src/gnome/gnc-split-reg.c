@@ -191,10 +191,6 @@ static void gnc_split_reg_class_init( GNCSplitRegClass *class );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
 
-void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
-void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
-void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
-
 void gnc_split_register_size_allocate (GtkWidget *widget,
                                        GtkAllocation *allocation,
                                        gpointer user_data);

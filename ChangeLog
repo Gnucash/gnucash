@@ -1,3 +1,10 @@
+2002-11-06  Derek Atkins  <derek@ihtfp.com>
+	* gnome/gnc-split-reg: export jump_to_* functions
+	* gnome/window-reconcile.c: re-enable the 'jump to blank'
+	* gnome/window-register.c: re-enable the 'jump to blank' by calling into
+	  the split-reg's implementation.
+	  fixes bug #97680 
+
 2002-11-06  Christian Stimming  <stimming@tuhh.de>
 
 	* po/de.po: Completed German translation. Some typo fixed

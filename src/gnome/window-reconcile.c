@@ -1043,7 +1043,7 @@ gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
     return;
 
   gnc_register_raise (regData);
-/*   gnc_register_jump_to_blank (regData); */
+  gnc_register_jump_to_blank (regData);
 }
 
 static void

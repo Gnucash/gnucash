@@ -274,4 +274,11 @@ GtkWidget *gnc_split_reg_get_popup_extended( GNCSplitReg *gsr );
 
 gboolean gnc_split_reg_check_close( GNCSplitReg *gsr );
 
+/*
+ * Function to jump to various places in the register
+ */
+void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
+void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
+void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
+
 #endif /* GNC_SPLIT_REG_H */

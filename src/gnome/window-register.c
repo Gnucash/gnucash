@@ -1551,6 +1551,13 @@ gnc_register_help_cb (GtkWidget *widget, gpointer data)
   helpWindow (NULL, NULL, HH_REGWIN);
 }
 
+void gnc_register_jump_to_blank(RegWindow *regData)
+{
+  if (!regData) return;
+  if (!regData->gsr) return;
+  gnc_split_reg_jump_to_blank (regData->gsr);
+}
+
 /********************************************************************\
  * gnc_register_jump_to_split                                       *
  *   move the cursor to the split, if present in register           *
