@@ -90,13 +90,13 @@ http://linas.org/linux/xacc/
 
 Important Note:
 ---------------
-Numerous core dumps have been reported when using various
+Core dumps have been reported when using various
 versions of lesstif.  Some versions work, others don't.
 Lesstif 0.81: works
 Lesstif 0.82: broken
-Lesstif 0.81: works
 Lesstif 0.86.0: works
 Lesstif 0.86.5: broken
+Lesstif 0.87.0: broken (missing symbols for XmeDrawShadows, etc.)
 
 These core dumps do not occur with RedHat Motif (or other commercial
 versions of Motif).
