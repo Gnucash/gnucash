@@ -398,8 +398,8 @@ void gnc_gen_trans_add_trans(GNCGenTransaction *gui, Transaction *trans)
       transaction_info = gnc_import_TransInfo_new(trans, NULL);
       
       gnc_import_TransInfo_init_matches (transaction_info, 
-					 gui->clear_threshold, 
-					 gui->clear_threshold,
+					 gui->add_threshold, 
+					 gui->add_threshold,
 					 gui->display_threshold,
 					 gnc_gen_trans_get_fuzzy_amount (gui));
 
