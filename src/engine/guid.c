@@ -221,11 +221,16 @@ guid_init(void)
 
   md5_init_ctx(&guid_context);
 
+  /* entropy pool */
+  {
+    init_from_file ("/dev/random", 256);
+    init_from_file ("/dev/urandom", 256);
+  }
+
   /* files */
   {
     const char * files[] =
-    { "/dev/urandom",
-      "/etc/passwd",
+    { "/etc/passwd",
       "/proc/loadavg",
       "/proc/meminfo",
       "/proc/net/dev",
@@ -234,7 +239,6 @@ guid_init(void)
       "/proc/self/stat",
       "/proc/stat",
       "/proc/uptime",
-      "/dev/urandom", /* once more for good measure :) */
       NULL
     };
     int i;
