@@ -2,7 +2,7 @@
  * date.c -- utility functions to handle the date (adjusting, get   * 
  *           current date, etc.) for xacc (X-Accountant)            *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998 Linas Vepstas                                 *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -147,13 +147,25 @@ printDateSecs (char * buff, time_t t)
                    theTime->tm_year + 1900);
 }
 
-
 char * 
 xaccPrintDateSecs (time_t t)
 {
    char buff[100];
    printDateSecs (buff, t);
    return strdup (buff);
+}
+
+char *
+gnc_print_date(Timespec ts)
+{
+  static char buff[256];
+  time_t t;
+
+  t = ts.tv_sec + (ts.tv_nsec / 1000000000.0);
+
+  printDateSecs(buff, t);
+
+  return buff;
 }
 
 /**

@@ -69,5 +69,3 @@
 ;	(display "Overlay 'f3 with 42, add to 'f1 value")
 ;	(mi 'put 'f3 42)
 ;	(display (number->string (+ (mi 'get 'f1) (mi 'get 'f3)))) (newline))))
-
-

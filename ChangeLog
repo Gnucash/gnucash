@@ -1,7 +1,20 @@
+2000-03-23  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/report/average-balance.scm: fixed many things and i18n'd
+	the report.
+
+	* src/engine/util.c (PrintAmt): always use '.' as the decimal point
+	coming from sprintf.
+
 2000-03-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/prefs.scm: set the default currency code using the
+	wrapped C function in util.c below.
 
 	* src/engine/util.c (xaccSPrintAmount): add a PRTNMN flag for
  	printing non-monetary values.
+	(gnc_locale_default_currency): return the currency code for the
+ 	current locale.
 
 	* src/register/splitreg.c (xaccInitSplitRegister): update for
  	changes to the price cell api.

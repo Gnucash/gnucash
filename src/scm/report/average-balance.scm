@@ -14,92 +14,9 @@
 (require 'hash-table)
 
 (gnc:depend "structure.scm")
+(gnc:depend "report-utilities")
 (gnc:depend "html-generator.scm")
 (gnc:depend "date-utilities.scm")
-
-;; Options
-(define (runavg-options-generator)
-  (let*
-      ((gnc:*runavg-track-options* (gnc:new-options))
-       ;; register a configuration option for the report
-       (gnc:register-runavg-option 
-	(lambda (new-option)
-	  (gnc:register-option gnc:*runavg-track-options* 
-			       new-option))))
-
-    ;; from date  
-    (gnc:register-runavg-option
-     (gnc:make-date-option
-      "Report Options" "From"
-      "a" "Report Items from this date" 
-      (lambda ()
-	(let ((bdtime (localtime (current-time))))
-	  (set-tm:sec bdtime 0)
-	  (set-tm:min bdtime 0)
-	  (set-tm:hour bdtime 0)
-	  (set-tm:mday bdtime 1)
-	  (set-tm:mon bdtime 0)
-          (cons (car (mktime bdtime)) 0)))
-      #f))
-
-    ;; to-date
-    (gnc:register-runavg-option
-     (gnc:make-date-option
-      "Report Options" "To"
-      "c" "Report items up to and including this date"
-      (lambda () (cons (current-time) 0))
-      #f))
-
-    ;; account(s) to do report on
-
-    (gnc:register-runavg-option
-     (gnc:make-account-list-option
-      "Report Options" "Account"
-      "d" "Do transaction report on this account"
-      (lambda ()
-	(let ((current-accounts (gnc:get-current-accounts))
-	      (num-accounts 
-	       (gnc:group-get-num-accounts (gnc:get-current-group))))
-
-	  (cond ((not (null? current-accounts)) current-accounts)
-		(else 
-		 (let ((acctlist '()))
-		   (gnc:for-loop 
-		    (lambda(x)
-		      (set! acctlist 
-			    (append! 
-			     acctlist
-			     (list (gnc:group-get-account 
-				    (gnc:get-current-group) x)))))
-		    0 num-accounts 1)
-		   acctlist)))))	
-      #f #t))
-
-    (gnc:register-runavg-option
-     (gnc:make-multichoice-option
-      "Report Options" "Step Size"
-      "b" "Get number at each one of these" 'WeekDelta
-      (list #(DayDelta "Day" "Day")
-	    #(WeekDelta "Week" "Week")
-	    #(TwoWeekDelta "2Week" "Two Week")
-	    #(MonthDelta "Month" "Month")
-	    #(YearDelta "Year" "Year")
-	    )))
-
-    (gnc:register-runavg-option
-     (gnc:make-simple-boolean-option
-      "Report Options" "Sub-Accounts"
-      "e" "Add in sub-accounts of each selected" #f))
-
-    (gnc:register-runavg-option
-     (gnc:make-multichoice-option
-      "Report Options" "Plot Type"
-      "f" "Get number at each one of these" 'NoPlot
-      (list #(NoPlot "Nothing" "Make No Plot")
-	    #(AvgBalPlot "Average" "Average Balance")
-	    #(GainPlot "Net Gain" "Net Gain")
-	    #(GLPlot "Gain/Loss" "Gain And Loss"))))
-    gnc:*runavg-track-options*))
 
 ;; Plot strings
 (define AvgBalPlot "using 2:3:4:5 t 'Average Balance' with errorbars, '' using 2:3 smooth sbezier t '' with lines")
@@ -107,327 +24,436 @@
 (define GLPlot "using 2:8 t 'Losses' with lp, '' using 2:7 t 'Gains' with lp")
 (define NoPlot "")
 
-;; applies thunk to each split in account account
-(define (gnc:for-each-split-in-account account thunk)
-  (gnc:for-loop (lambda (x) (thunk (gnc:account-get-split account x)))
-		0 (gnc:account-get-split-count account) 1))
+(let ()
 
-;; get transactions date from split - needs to be done indirectly
-;; as it's stored in the parent transaction
+  ;; Options
+  (define (runavg-options-generator)
+    (let*
+        ((gnc:*runavg-track-options* (gnc:new-options))
+         ;; register a configuration option for the report
+         (gnc:register-runavg-option 
+          (lambda (new-option)
+            (gnc:register-option gnc:*runavg-track-options* 
+                                 new-option))))
 
-(define (gnc:split-get-transaction-date split)
-  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+      ;; from date  
+      (gnc:register-runavg-option
+       (gnc:make-date-option
+        "Report Options" "From"
+        "a" "Report Items from this date" 
+        (lambda ()
+          (let ((bdtime (localtime (current-time))))
+            (set-tm:sec bdtime 0)
+            (set-tm:min bdtime 0)
+            (set-tm:hour bdtime 0)
+            (set-tm:mday bdtime 1)
+            (set-tm:mon bdtime 0)
+            (cons (car (mktime bdtime)) 0)))
+        #f))
 
-;; ditto descriptions
-(define (gnc:split-get-description-from-parent split)
-  (gnc:transaction-get-description (gnc:split-get-parent split)))
+      ;; to-date
+      (gnc:register-runavg-option
+       (gnc:make-date-option
+        "Report Options" "To"
+        "c" "Report items up to and including this date"
+        (lambda ()
+          (let ((bdtime (localtime (current-time))))
+            (set-tm:sec bdtime 59)
+            (set-tm:min bdtime 59)
+            (set-tm:hour bdtime 23)
+            (cons (car (mktime bdtime)) 0)))
+        #f))
 
-;; get the account name of a split
-(define (gnc:split-get-account-name split)  
-  (gnc:account-get-name (gnc:split-get-account split)))
+      ;; account(s) to do report on
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Text table 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      (gnc:register-runavg-option
+       (gnc:make-account-list-option
+        "Report Options" "Account"
+        "d" "Do transaction report on this account"
+        (lambda ()
+          (let ((current-accounts (gnc:get-current-accounts))
+                (num-accounts 
+                 (gnc:group-get-num-accounts (gnc:get-current-group))))
 
-; Create an text table row from a list of entries
-(define (text-table-row lst)
-  (string-append 
-   (tostring (car lst))
+            (cond ((not (null? current-accounts)) current-accounts)
+                  (else
+                   (let ((acctlist '()))
+                     (gnc:for-loop 
+                      (lambda(x)
+                        (set! acctlist 
+                              (append! 
+                               acctlist
+                               (list (gnc:group-get-account 
+                                      (gnc:get-current-group) x)))))
+                      0 num-accounts 1)
+                     acctlist)))))	
+        #f #t))
 
-   (apply string-append (map (lambda (val)
-			       (string-append "\t" (tostring val)))
-			     (cdr lst)))
-   "\n"))
+      (gnc:register-runavg-option
+       (gnc:make-multichoice-option
+        "Report Options" "Step Size"
+        "b" "Get number at each one of these" 'WeekDelta
+        (list #(DayDelta "Day" "Day")
+              #(WeekDelta "Week" "Week")
+              #(TwoWeekDelta "2Week" "Two Week")
+              #(MonthDelta "Month" "Month")
+              #(YearDelta "Year" "Year")
+              )))
 
-(define (text-table-header lst)
-  (string-append
-   "# " 
-   (text-table-row lst)))
+      (gnc:register-runavg-option
+       (gnc:make-simple-boolean-option
+        "Report Options" "Sub-Accounts"
+        "e" "Add in sub-accounts of each selected" #f))
 
-(define (text-table hdrlst llst)
-  (string-append
-   (text-table-header hdrlst)
-   (apply string-append (map text-table-row llst))))
+      (gnc:register-runavg-option
+       (gnc:make-multichoice-option
+        "Report Options" "Plot Type"
+        "f" "Get number at each one of these" 'NoPlot
+        (list #(NoPlot "Nothing" "Make No Plot")
+              #(AvgBalPlot "Average" "Average Balance")
+              #(GainPlot "Net Gain" "Net Gain")
+              #(GLPlot "Gain/Loss" "Gain And Loss"))))
+      gnc:*runavg-track-options*))
 
-; Quick and dirty until there is REAL plot support
-(define (data-to-gpfile hdrlst llst fn plotcmd)
-  (let ((oport (open-output-file fn)))
-       (display  
-	   (text-table hdrlst llst)
-	 oport)
-	(close-output-port oport)))
+  ;; get transactions date from split - needs to be done indirectly
+  ;; as it's stored in the parent transaction
 
-;; Returns sum of all vector elements after the first
-(define (vector-sum v)
-  (let ((sum 0)) 
-    (gnc:for-loop 
-     (lambda(i) (set! sum (+ sum (car (vector-ref v i))))) 
-		  1 (vector-length v) 1)
-       sum))
+  (define (gnc:split-get-transaction-date split)
+    (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
 
-; Datelist entry operators
-(define (dl:begin dl) (car dl))
-(define (dl:end dl) (car (cdr dl)))
+  ;; ditto descriptions
+  (define (gnc:split-get-description-from-parent split)
+    (gnc:transaction-get-description (gnc:split-get-parent split)))
 
-(define (reduce-split-list dl tl pt av)
-  (let ((stat-accumulator (make-stats-collector))
-	;;; (avgaccum 0) ;;   'add, 'total, 'average, 'getmax, 'getmin, reset
-        ;;; (balmin 10E9) 
-	;;; (balmax -10E9)
-	(gl-accumulator (makedrcr-collector))
-	(bals av) 
-	(prevdate 0))
+  ;; get the account name of a split
+  (define (gnc:split-get-account-name split)  
+    (gnc:account-get-name (gnc:split-get-account split)))
 
-    ;; accbal runs the accumulator
-    (define (accbal beg end)
-      (let ((curbal (vector-sum (car (cdr (av 'x 0))))))
-	(stat-accumulator 'add (gnc:timepair-delta beg end))))
 
-    (define (calc-in-interval d tl)
-      (cond ((not (null? tl))
-	     (let* ((bd (dl:begin d))	; begin date
-		    (ed (dl:end d))	; end date
-		    (cs (car tl))	; current split
-		    (cd (gnc:split-get-transaction-date cs)) ;current date
-		    (an (gnc:split-get-account-name cs)) ; account name
-		    (prevbal (vector-sum (car (cdr (av 'x 0))))))
+  ;; Text table 
 
-               (cond ((gnc:timepair-later cd bd) ;split before interval
-		      (bals 'put an (gnc:split-get-balance cs))
-		      (calc-in-interval d (cdr tl)))
+  ; Create an text table row from a list of entries
+  (define (text-table-row lst)
+    (string-append 
+     (tostring (car lst))
 
-		     ((gnc:timepair-later cd ed) ;split is in the interval
-		      (accbal prevdate cd)
-		      (bals 'put an (gnc:split-get-balance cs))
+     (apply string-append (map (lambda (val)
+                                 (string-append "\t" (tostring val)))
+                               (cdr lst)))
+     "\n"))
 
-		      (let ((val (gnc:split-get-value cs)))
-			(gl-accumulator 'add val))
-		      (set! prevdate cd)
-		      (calc-in-interval d (cdr tl)))
+  (define (text-table-header lst)
+    (string-append
+     "# " 
+     (text-table-row lst)))
 
-		     (else		; Past interval, nothing to do?
-		      (accbal prevdate ed)
-		      tl))))
-	    (else			; Out of data !
-	     (accbal prevdate (dl:end d))
-	     tl)))
+  (define (text-table hdrlst llst)
+    (string-append
+     (text-table-header hdrlst)
+     (apply string-append (map text-table-row llst))))
 
-    ;; Actual routine
-    (cond ((null? dl) '());; End of recursion
-	  (else 
-	   (let ((bd (dl:begin (car dl))) 
-                 (ed (dl:end (car dl))))
+  ; Quick and dirty until there is REAL plot support
+  (define (data-to-gpfile hdrlst llst fn plotcmd)
+    (let ((oport (open-output-file fn)))
+      (display  
+       (text-table hdrlst llst)
+       oport)
+      (close-output-port oport)))
 
-	     ;; Reset valaccumulator values
-	     (set! prevdate bd)
-	     (stat-accumulator 'reset #f)
-	     (gl-accumulator 'reset #f)
+  ;; Returns sum of all vector elements after the first
+  (define (vector-sum v)
+    (let ((sum 0)) 
+      (gnc:for-loop 
+       (lambda(i) (set! sum (+ sum (car (vector-ref v i))))) 
+       1 (vector-length v) 1)
+      sum))
 
-	     (let ((rest (calc-in-interval (car dl) tl)))
-	       ;; list of values for report
-               (cons
-                (list
-                 (gnc:timepair-to-ldatestring bd)
-                 (gnc:timepair-to-ldatestring ed)
-                 (/ (stat-accumulator 'total #f)
-                    (gnc:timepair-delta bd ed))
-                 (stat-accumulator 'getmin #f)
-                 (stat-accumulator 'getmax #f)
-                 (- (gl-accumulator 'debits #f) 
-                    (gl-accumulator 'credits #f))
-                 (gl-accumulator 'debits #f) 
-                 (gl-accumulator 'credits #f))
-		(reduce-split-list (cdr dl) rest pt av))))))))
+  (define (reduce-split-list deltas splits balance)
+    (let ((stat-accumulator (make-stats-collector))
+          (min-max-accumulator (make-stats-collector))
+          (gl-accumulator (makedrcr-collector))
+          (prevdate 0))
 
-;; Pull a scheme list of splits from a C array
-(define (gnc:convert-split-list slist)
-  (let 
-      ((numsplit 0)
-       (schsl '()))
-    (while  
-     (let ((asplit (gnc:ith-split slist numsplit)))
-       (cond 
-	((pointer-token-null? asplit ) #f)
-	(else 
-	 (set! schsl (append! schsl (list asplit)))
-	 (set! numsplit (+ numsplit 1))
-	 #t))) ())
-    schsl))
+      ;; accbal runs the accumulator
+      (define (accbal start end)
+        (stat-accumulator 'add
+                          (* (gnc:timepair-delta start end) balance))
+        (min-max-accumulator 'add balance))
 
-;; Pull a scheme list of accounts (including subaccounts) from group grp
-(define (gnc:group-get-account-list grp)
-  (cond ((pointer-token-null? grp) '())
-	(else
-	 (let ((numacct 0)
-	       (acctar (gnc:get-accounts grp))
-	       (schal '()))
-	   (while  
-	    (let ((anact (gnc:account-nth-account acctar numacct)))
-	      (cond 
-	       ((pointer-token-null? anact ) #f)
-	       (else 
-		(set! schal (append! schal (list anact)))
-		(set! numacct (+ numacct 1))
-		#t))) ())
-	   schal))))
+      (define (calc-in-interval delta splits)
+        (let ((start (car delta))
+              (end   (cadr delta)))
+          (if (null? splits)
+              (begin
+                (accbal start end)
+                '())
+              (let* ((split (car splits))
+                     (now   (gnc:split-get-transaction-date split)))
 
-(define (accumvects x y)
-  (cond 
-   ((null? x) '())
-   ((number? (car x)) 
-    (cons  (+ (car x) (car y)) (accumvects (cdr x) (cdr y))))
-   (else (cons "x" (accumvects (cdr x) (cdr y))))))
+                (cond ((gnc:timepair-lt now start) ;split before interval
+                       (set! balance (+ balance (gnc:split-get-value split)))
+                       (calc-in-interval delta (cdr splits)))
 
-;; Add x to list lst if it is not already in there
-(define (addunique lst x)
-  (cond 
-   ((null? lst)  (list x))           ; all checked add it
-   (else (cond 
-	  ((equal? x (car lst)) lst) ; found, quit search and don't add again
-	  (else (cons (car lst) (addunique (cdr lst) x))) ; keep searching
-	  ))))
+                      ((gnc:timepair-lt now end) ;split is in the interval
+                       (accbal prevdate now)
+                       (set! prevdate now)
+                       (gl-accumulator 'add (gnc:split-get-value split))
+                       (set! balance (+ balance (gnc:split-get-value split)))
+                       (calc-in-interval delta (cdr splits)))
 
-;; Calculate averages of each column
-(define (get-averages indata)
-  (let ((avglst '()))
-    (map (lambda (x) (set! avglst (append avglst (list 0.0)))) (car indata))
-    (map (lambda (x) 
-	   (set! avglst (accumvects x avglst)))
-	 indata)
-    (map (lambda (x) 
-	   (cond ((number? x) (/ x (length indata)))
-		 (else "")))
-	 avglst)))
+                      (else             ; split is past interval
+                       (accbal prevdate end)
+                       splits))))))
 
-;; Turn a C array of accounts into a scheme list of account names
-(define (gnc:acctnames-from-list acctlist)
-  (let ((anlist '()))
-    (map (lambda(an) 
-	   (set! anlist (append! anlist 
-				 (list (gnc:account-get-name an))))) 
-	 acctlist)
-    anlist))
+      ;; Actual routine
+      (if (null? deltas)
+          '()                           ; end of recursion
+          (let* ((delta (car deltas))
+                 (start (car delta))
+                 (end   (cadr delta)))
 
-(define acctcurrency "USD")
-(define acctname "")
+            ;; Reset accumulator values
+            (set! prevdate start)
+            (stat-accumulator 'reset #f)
+            (min-max-accumulator 'reset #f)
+            (gl-accumulator 'reset #f)
 
-(define (allsubaccounts accounts)
-  (cond ((null? accounts) '())
-	(else 
-;	 (display (gnc:account-get-name (car accounts)))(newline)
-	 (append 
-	       (gnc:group-get-account-list 
-		 (gnc:account-get-children (car accounts)))
-	       (allsubaccounts (cdr accounts))))))
+            (let ((rest (calc-in-interval delta splits)))
+              ;; list of values for report
+              (cons
+               (list start
+                     end
+                     (/ (stat-accumulator 'total #f)
+                        (gnc:timepair-delta start end))
+                     (min-max-accumulator 'getmin #f)
+                     (min-max-accumulator 'getmax #f)
+                     (- (gl-accumulator 'debits #f) 
+                        (gl-accumulator 'credits #f))
+                     (gl-accumulator 'debits #f) 
+                     (gl-accumulator 'credits #f))
+               (reduce-split-list (cdr deltas) rest balance)))))))
 
-(define (average-balance-renderer options)
-  (let ((gov-fun (lambda (value)
-		   (gnc:option-value (gnc:lookup-option 
-				      options "Report Options"
-				      value)))))
-    (let ((begindate (gov-fun "From"))
-	  (enddate (gov-fun "To"))
-	  (stepsize (eval (gov-fun "Step Size")))
-	  (plotstr (eval (gov-fun "Plot Type")))
-	  (accounts (gov-fun "Account"))
-	  (dosubs (gov-fun "Sub-Accounts"))
-	  (prefix  (list "<HTML>" "<BODY>"))
-	  (suffix  (list "</BODY>" "</HTML>"))
-	  (collist
-	   (list "Beginning" "Ending" "Average" "Max" "Min" 
-		 "Net Gain" "Gain" "Loss"))
-	  (report-lines '())
-	  (rept-data '())
-	  (sum-data '())
-	  (tempstruct '())
-	  (rept-text "")
-	  (gncq (gnc:malloc-query))
-	  (slist '()))
-      (gnc:init-query gncq)
+  (define (format-numbers-in-list list)
+    (if (null? list)
+        '()
+        (cond ((number? (car list))
+               (cons (gnc:amount->string (car list) #f #t #f)
+                     (format-numbers-in-list (cdr list))))
+              (else
+               (cons (car list)
+                     (format-numbers-in-list (cdr list)))))))
 
-      (if (null? accounts)
-	  (set! rept-text
-		(list "<TR><TD>You have not selected an account.</TD></TR>"))
-	  (begin
-					; Grab account names
-	    (set! acctname (string-join 
-			    (map gnc:account-get-name accounts) 
-			    " , "))
-	    (cond ((equal? dosubs #t)
-		   (map (lambda (a)
-			  (set! accounts (addunique accounts a)))
-			(allsubaccounts accounts))
+  (define (format-reduced-list list)
+    (define (reduce-line line)
+      (let ((start (car  line))
+            (end   (cadr line))
+            (rest  (cddr line)))
+        (cons (gnc:print-date start)
+              (cons (gnc:print-date end)
+                    (format-numbers-in-list rest)))))
+    (if (null? list)
+        '()
+        (cons (reduce-line (car list))
+              (format-reduced-list (cdr list)))))
 
-		   (set! acctname (string-append acctname " and sub-accounts"))))
+  (define (gnc:timepair-to-gnuplot-string tp)
+    (let ((bdtime (localtime (car tp))))
+      (strftime "%m/%d/%Y" bdtime)))
 
-	    (map (lambda(acct) (gnc:query-add-account gncq acct)) accounts)
+  (define (gnuplot-reduced-list list)
+    (define (reduce-line line)
+      (let ((start (car  line))
+            (end   (cadr line))
+            (rest  (cddr line)))
+        (cons (gnc:timepair-to-gnuplot-string start)
+              (cons (gnc:timepair-to-gnuplot-string end) rest))))
+    (if (null? list)
+        '()
+        (cons (reduce-line (car list))
+              (gnuplot-reduced-list (cdr list)))))
 
-	    (set! tempstruct 
-		  (build-mystruct-instance 
-		   (define-mystruct 
-		     (gnc:acctnames-from-list accounts))))
+  ;; Pull a scheme list of splits from a C array
+  (define (gnc:convert-split-list slist)
+    (let loop ((index 0)
+               (split (gnc:ith-split slist 0)))
+      (if (pointer-token-null? split)
+          '()
+          (cons split (loop (+ index 1)
+                            (gnc:ith-split slist (+ index 1)))))))
 
-	    (set! acctcurrency (gnc:account-get-currency (car accounts)))
+  ;; Pull a scheme list of accounts (including subaccounts) from group grp
+  (define (gnc:group-get-account-list grp)
+    (if (pointer-token-null? grp)
+        '()
+        (let ((account-array (gnc:get-accounts grp)))
+          (let loop
+              ((index 0)
+               (account (gnc:account-nth-account account-array 0)))
+            (if (pointer-token-null? account)
+                '()
+                (cons account
+                      (loop (+ index 1)
+                            (gnc:account-nth-account account-array
+                                                     (+ index 1)))))))))
 
-	    (set! report-lines 
-		  (gnc:convert-split-list (gnc:query-get-splits gncq)))
+  (define (accumvects x y)
+    (cond 
+     ((null? x) '())
+     ((number? (car x)) 
+      (cons  (+ (car x) (car y)) (accumvects (cdr x) (cdr y))))
+     (else (cons "x" (accumvects (cdr x) (cdr y))))))
 
-	    (gnc:free-query gncq)
+  ;; Add x to list lst if it is not already in there
+  (define (addunique lst x)
+    (cond 
+     ((null? lst)  (list x))           ; all checked add it
+     (else (cond 
+            ((equal? x (car lst)) lst) ; found, quit search and don't add again
+            (else (cons (car lst) (addunique (cdr lst) x))) ; keep searching
+            ))))
 
-	    (display (length report-lines))
-	    (display " Splits\n")
+  ;; Calculate averages of each column
+  (define (get-averages indata)
+    (let ((avglst '()))
+      (set! avglst (map (lambda (x) 0.0) (car indata)))
+      (for-each (lambda (x) 
+                  (set! avglst (accumvects x avglst)))
+                indata)
+      (map (lambda (x) 
+             (cond ((number? x) (/ x (length indata)))
+                   (else "")))
+           avglst)))
 
-            ; Set initial balances to zero
-	    (map (lambda(an) (tempstruct 'put an 0)) 
-		 (gnc:acctnames-from-list accounts))
+  (define (allsubaccounts accounts)
+    (cond ((null? accounts) '())
+          (else 
+           (append 
+            (gnc:group-get-account-list 
+             (gnc:account-get-children (car accounts)))
+            (allsubaccounts (cdr accounts))))))
 
-	    (dateloop begindate enddate stepsize)
+  (define string-db (gnc:make-string-database))
 
-	    (set! rept-data 
-		  (reduce-split-list
-		   (dateloop begindate enddate stepsize)
-		   report-lines (make-zdate) tempstruct))
+  (define (column-list)
+    (map (lambda (key) (string-db 'lookup key))
+         (list 'beginning 'ending 'average 'max 'min 'net-gain 'gain 'loss)))
 
-	    (set! sum-data (get-averages rept-data))
+  (define (average-balance-renderer options)
+    (let ((gov-fun (lambda (value)
+                     (gnc:option-value (gnc:lookup-option 
+                                        options "Report Options"
+                                        value)))))
+      (let ((acctcurrency "USD")
+            (acctname "")
+            (begindate (gov-fun "From"))
+            (enddate (gov-fun "To"))
+            (stepsize (eval (gov-fun "Step Size")))
+            (plotstr (eval (gov-fun "Plot Type")))
+            (accounts (gov-fun "Account"))
+            (dosubs (gov-fun "Sub-Accounts"))
+            (prefix  (list "<HTML>" "<BODY>"))
+            (suffix  (list "</BODY>" "</HTML>"))
+            (columns (column-list))
+            (report-lines '())
+            (rept-data '())
+            (sum-data '())
+            (rept-text "")
+            (gncq (gnc:malloc-query))
+            (slist '()))
+        (gnc:init-query gncq)
 
-	    ;; Create HTML
-	    (set! rept-text 
-		  (html-table 
-		   collist
-		   (append rept-data 
-			   (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>" sum-data))))
+        (if (null? accounts)
+            (set! rept-text
+                  (list "<TR><TD>"
+                        (string-db 'lookup 'no-account)
+                        "</TD></TR>"))
+            (begin
 
-	    ;; Do a plot
-	    (if (not (string=? NoPlot plotstr))
-		(let 
-		    ((fn "/tmp/gncplot.dat")
-		     (preplot (string-append
-                               "set xdata time\n"
-                               "set timefmt '%m/%d/%Y'\n"
-                               "set pointsize 2\n"
-                               "set title '" acctname "'\n"
-                               "set ylabel '" acctcurrency "'\n"
-                               "set xlabel 'Period Ending'\n")))
+              ; Grab account names
+              (set! acctname
+                    (string-join (map gnc:account-get-name accounts) " , "))
 
-		  (data-to-gpfile collist rept-data fn plotstr)
-		  (system 
-		   (string-append "echo \"" preplot "plot '"
-				  fn "'" plotstr
-				  "\"|gnuplot -persist " ))))))
+              (if dosubs
+                  (map (lambda (a)
+                         (set! accounts (addunique accounts a)))
+                       (allsubaccounts accounts)))
 
-      (append prefix
-	      (if (null? accounts)
-		  ()
-		  (list "Report for " acctname "<p>\n"))
-	      (list rept-text) suffix))))
+              (map (lambda (acct) (gnc:query-add-account gncq acct)) accounts)
 
-(gnc:define-report
- ;; version
- 1
- ;; Name
- "Account Balance Tracker"
- ;; Options
- runavg-options-generator
- ;; renderer
- average-balance-renderer)
+              (set! acctcurrency (gnc:account-get-currency (car accounts)))
+
+              (set! report-lines 
+                    (gnc:convert-split-list (gnc:query-get-splits gncq)))
+
+              (gnc:free-query gncq)
+
+              (set! rept-data 
+                    (reduce-split-list (dateloop begindate enddate stepsize)
+                                       report-lines 0))
+
+              (set! sum-data (get-averages rept-data))
+
+              ;; Create HTML
+              (set! rept-text 
+                    (html-table 
+                     columns
+                     (append (format-reduced-list rept-data)
+                             (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>"
+                                   (format-numbers-in-list sum-data)))))
+
+              ;; Do a plot
+              (if (not (string=? NoPlot plotstr))
+                  (let ((fn "/tmp/gncplot.dat")
+                        (preplot (string-append
+                                  "set xdata time\n"
+                                  "set timefmt '%m/%d/%Y'\n"
+                                  "set pointsize 2\n"
+                                  "set title '" acctname "'\n"
+                                  "set ylabel '" acctcurrency "'\n"
+                                  "set xlabel '"
+                                  (string-db 'lookup 'period-ending)
+                                  "'\n")))
+
+                    (data-to-gpfile columns (gnuplot-reduced-list rept-data)
+                                    fn plotstr)
+                    (system 
+                     (string-append "echo \"" preplot "plot '"
+                                    fn "'" plotstr
+                                    "\"|gnuplot -persist " ))))))
+
+        (append prefix
+                (if (null? accounts)
+                    '()
+                    (list (sprintf #f
+                                   (string-db 'lookup
+                                              (if dosubs
+                                                  'report-for-and
+                                                  'report-for))
+                                   acctname)
+                          "<p>\n"))
+                (list rept-text)
+                suffix))))
+
+  ;; Define the strings
+  (string-db 'store 'beginning "Beginning")
+  (string-db 'store 'ending "Ending")
+  (string-db 'store 'average "Average")
+  (string-db 'store 'max "Max")
+  (string-db 'store 'min "Min")
+  (string-db 'store 'net-gain "Net Gain")
+  (string-db 'store 'gain "Gain")
+  (string-db 'store 'loss "Loss")
+  (string-db 'store 'no-account "You have not selected an account.")
+  (string-db 'store 'period-ending "Period Ending")
+  (string-db 'store 'report-for "Report for %s.")
+  (string-db 'store 'report-for-and "Report for %s and all subaccounts.")
+
+  (gnc:define-report
+   ;; version
+   1
+   ;; Name
+   "Account Balance Tracker"
+   ;; Options
+   runavg-options-generator
+   ;; renderer
+   average-balance-renderer))

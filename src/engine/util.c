@@ -240,6 +240,7 @@ gnc_localeconv()
 
   gnc_lconv_set(&lc.decimal_point, ".");
   gnc_lconv_set(&lc.thousands_sep, ",");
+  gnc_lconv_set(&lc.int_curr_symbol, "USD ");
   gnc_lconv_set(&lc.currency_symbol, CURRENCY_SYMBOL);
   gnc_lconv_set(&lc.mon_decimal_point, ".");
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
@@ -257,6 +258,29 @@ gnc_localeconv()
   lc_set = GNC_T;
 
   return &lc;
+}
+
+char *
+gnc_locale_default_currency()
+{
+  static char currency[4];
+  gncBoolean got_it = GNC_F;
+  struct lconv *lc;
+  int i;
+
+  if (got_it)
+    return currency;
+
+  for (i = 0; i < 4; i++)
+    currency[i] = 0;
+
+  lc = gnc_localeconv();
+
+  strncpy(currency, lc->int_curr_symbol, 3);
+
+  got_it = GNC_T;
+
+  return currency;
 }
 
 /* Utility function for printing non-negative amounts */
@@ -298,7 +322,7 @@ PrintAmt(char *buf, double val, int prec,
       max_delete--;
     }
 
-    if (*p == lc->decimal_point[0])
+    if (*p == '.')
       *p = 0;
   }
 
@@ -313,10 +337,12 @@ PrintAmt(char *buf, double val, int prec,
     stringLength = strlen(tempBuf);
     numWholeDigits = -1;
     for (i = stringLength - 1; i >= 0; i--) {
-      if (tempBuf[i] == lc->decimal_point[0]) {
+      if (tempBuf[i] == '.') {
         numWholeDigits = i;
         if (monetary)
           tempBuf[i] = lc->mon_decimal_point[0];
+        else
+          tempBuf[i] = lc->decimal_point[0];
         break;
       }
     }

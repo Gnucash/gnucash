@@ -276,6 +276,13 @@
 
          (make-para 'num-string-1 (bold (number->string num-val)))
 
+         ;; Here we print the value of the number option formatted as
+         ;; currency. When printing currency values, you should use
+         ;; the functions (gnc:amount->string) and
+         ;; (gnc:amount->formatted-string) which are defined in
+         ;; report-utilities. These functions will format the number
+         ;; appropriately in the current locale. Don't try to format
+         ;; it yourself -- it will be wrong in other locales.
          (make-para 'num-string-2
                     (bold (gnc:amount->formatted-string num-val #f)))
 
@@ -348,6 +355,7 @@
 
   ;; Here we define the actual report with gnc:define-report
   (gnc:define-report
+
    ;; The version of this report.
    1
 

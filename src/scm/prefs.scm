@@ -119,13 +119,11 @@ the account instead of opening a register." #f))
 	#(iso "ISO" "ISO Standard: yyyy-mm-dd"))))
 ;	#(locale "Locale" "Take from system locale"))))
 
-;; hack alert - we should probably get the default new account currency
-;; from the locale
-;; I haven't figured out if I can do this in scheme or need a C hook yet
 (gnc:register-configuration-option
  (gnc:make-string-option
   "International" "Default Currency"
-  "b" "Default Currency For New Accounts" "USD"))
+  "b" "Default Currency For New Accounts"
+  (gnc:locale-default-currency)))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option

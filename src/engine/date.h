@@ -2,7 +2,7 @@
  * date.h -- utility functions to handle the date (adjusting, get   * 
  *           current date, etc.) for xacc (X-Accountant)            *
  * Copyright (C) 1997 Robin D. Clark (rclark@cs.hmc.edu)            *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -96,6 +96,7 @@ void printDate (char * buff, int day, int month, int year);
 void printDateSecs (char * buff, time_t secs);
 
 char * xaccPrintDateSecs (time_t secs);
+char * gnc_print_date(Timespec ts);
 
 void scanDate (const char *buff, int *day, int *monty, int *year);
 char dateSeparator(void);

@@ -137,6 +137,9 @@ char * ultostr (unsigned long val, int base);
  */
 struct lconv * gnc_localeconv();
 
+/* Returns the 3 character currency code of the current locale. */
+char * gnc_locale_default_currency();
+
 
 /** PROTOTYPES ******************************************************/
 

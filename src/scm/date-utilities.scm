@@ -172,13 +172,14 @@
     (set-tm:mon ddt 1)
     ddt))
 
-(define (gnc:timepair-to-ldatestring tp)
-  (let ((bdtime (localtime (car tp))))
-    (strftime "%m/%d/%Y" bdtime)))
+(define (gnc:timepair->secs tp)
+  (inexact->exact
+   (+ (car tp)
+      (/ (cdr tp) 1000000000))))
 
-;; Find difference in seconds (?) between time 1 and time2
+;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
-    (- (car t2) (car t1)))
+    (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))
 
 ;; timepair manipulation functions
 ;; hack alert  - these should probably be put somewhere else
