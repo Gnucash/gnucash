@@ -1,4 +1,4 @@
-# translation of fr.po to 
+# translation of fr.po to
 # translation of fr.po to
 # translation of fr.po to
 # translation of fr.po to
@@ -409,7 +409,7 @@ msgstr "(aucun)"
 
 #: src/app-utils/gnc-ui-util.c:73
 msgid "-- Single Sources --"
-msgstr "-- Sourcea unique --"
+msgstr "-- Source unique --"
 
 #: src/app-utils/gnc-ui-util.c:92
 msgid "-- Multiple Sources --"
@@ -573,7 +573,7 @@ msgstr "Pré-paiement"
 
 #: src/business/business-core/gncInvoice.c:1329
 msgid " (posted)"
-msgstr ""
+msgstr " (publié)"
 
 #: src/business/business-core/gncOrder.c:416
 msgid " (closed)"
@@ -586,7 +586,7 @@ msgstr " (fermé)"
 #: src/business/business-gnome/glade/job.glade.h:1
 #: src/business/business-gnome/glade/order.glade.h:1
 msgid "(owner)"
-msgstr ""
+msgstr " (propriétaire)"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #. src/report/report-system/options-utilities.scm
@@ -649,11 +649,11 @@ msgstr "Num"
 #: src/business/business-gnome/glade/vendor.glade.h:16
 #: src/gnome/window-reconcile.c:445
 msgid "Payment Information"
-msgstr "Information sur les paiements"
+msgstr "Information de Paiement"
 
 #: src/business/business-gnome/glade/payment.glade.h:7
 msgid "Post To"
-msgstr ""
+msgstr "Publier sur"
 
 # messages-i18n.c:234
 #: src/business/business-gnome/glade/payment.glade.h:8
@@ -665,7 +665,7 @@ msgstr "Transférer vers"
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 #: src/business/business-gnome/glade/billterms.glade.h:1
 msgid "(type)"
-msgstr ""
+msgstr "(sorte)"
 
 #: src/business/business-gnome/glade/billterms.glade.h:2
 msgid "Absolute Day-of-the-month"
@@ -673,29 +673,29 @@ msgstr "Jour du mois"
 
 #: src/business/business-gnome/glade/billterms.glade.h:3
 msgid "Cancel your changes"
-msgstr ""
+msgstr "Annuler vos modifications"
 
 #: src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Choose the type of Billing Term"
-msgstr ""
+msgstr "Choisir la sorte de terme de Facturation"
 
 # messages-i18n.c:74
 #: src/business/business-gnome/glade/billterms.glade.h:5
 msgid "Close this window"
-msgstr ""
+msgstr "Fermer cette fenêtre"
 
 #: src/business/business-gnome/glade/billterms.glade.h:6
 msgid "Commit this Billing Term"
-msgstr ""
+msgstr "Soumettre ces termes de Facturation"
 
 # messages-i18n.c:93
 #: src/business/business-gnome/glade/billterms.glade.h:7
 msgid "Create a new Billing Term"
-msgstr ""
+msgstr "Créer de nouveaux termes de Facturation"
 
 #: src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
-msgstr ""
+msgstr "Jour pivot: "
 
 # po/guile_strings.txt:101
 #. src/report/standard-reports/price-scatter.scm
@@ -719,38 +719,38 @@ msgstr "Supprimer"
 # messages-i18n.c:77
 #: src/business/business-gnome/glade/billterms.glade.h:11
 msgid "Delete the current Billing Term"
-msgstr ""
+msgstr "Supprimer le terme de Facturation actuel"
 
 # src/gnome/glade-gnc-dialogs.c:573
 #: src/business/business-gnome/glade/billterms.glade.h:12
 msgid "Description: "
-msgstr ""
+msgstr "Description: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:14
 #, no-c-format
 msgid "Discount %: "
-msgstr ""
+msgstr "Rabais %: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:15
 msgid "Discount Day: "
-msgstr ""
+msgstr "Jour de rabais: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:16
 msgid "Discount Days: "
-msgstr ""
+msgstr "Jours de rabais: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:17
 msgid "Due Day: "
-msgstr ""
+msgstr "Date d'écheance: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:18
 msgid "Due Days: "
-msgstr ""
+msgstr "Dates d'écheance: "
 
 # messages-i18n.c:105
 #: src/business/business-gnome/glade/billterms.glade.h:19
 msgid "Edit the current Billing Term"
-msgstr ""
+msgstr "Modifier les termes de Facturation actuels"
 
 # messages-i18n.c:281
 #: src/business/business-gnome/glade/billterms.glade.h:20
@@ -771,7 +771,7 @@ msgstr "Nom :"
 
 #: src/business/business-gnome/glade/billterms.glade.h:22
 msgid "New Billing Terms"
-msgstr ""
+msgstr "Nouveaux termes de Facturation"
 
 # messages-i18n.c:303
 #. create the button.
@@ -796,11 +796,11 @@ msgstr ""
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/billterms.glade.h:26
 msgid "Table"
-msgstr ""
+msgstr "Table"
 
 #: src/business/business-gnome/glade/billterms.glade.h:27
 msgid "Term Definition"
-msgstr ""
+msgstr "Définition de Terme"
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
@@ -809,7 +809,7 @@ msgstr ""
 #: src/business/business-gnome/glade/invoice.glade.h:60
 #: intl-scm/guile-strings.c:3798 intl-scm/guile-strings.c:4122
 msgid "Terms"
-msgstr ""
+msgstr "Termes"
 
 #: src/business/business-gnome/glade/billterms.glade.h:29
 msgid ""
@@ -817,40 +817,45 @@ msgid ""
 "bills are applied to the following month.  Negative values count backwards "
 "from the end of the month."
 msgstr ""
+"Le jour de pivot pour que les factures soient appliquées au mois prochain. "
+"Apres ce jour, les factures seront appliquées au mois suivant.  Les valeurs "
+"négatives sont soustraites a partir de la fin du mois."
 
 #: src/business/business-gnome/glade/billterms.glade.h:30
 msgid "The day of the month bills are due"
-msgstr ""
+msgstr "Jour du mois ou les factures sont a échéance"
 
 #: src/business/business-gnome/glade/billterms.glade.h:31
 msgid "The description of the Billing Term, printed on invoices"
-msgstr ""
+msgstr "La description des termes de Facturation, imprimée sur les factures"
 
 #: src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The discount percentage applied if paid early."
-msgstr ""
+msgstr "Le rabais (%) appliqué en cas de paiement précoce."
 
 #: src/business/business-gnome/glade/billterms.glade.h:33
 msgid "The internal name of the Billing Term."
-msgstr ""
+msgstr "Le nom interne de ces termes de Facturation."
 
 #: src/business/business-gnome/glade/billterms.glade.h:34
 msgid "The last day of the month for the early payment discount."
-msgstr ""
+msgstr "Le dernier jour du mois éligible au rabais de paiement précoce."
 
 #: src/business/business-gnome/glade/billterms.glade.h:35
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
 msgstr ""
+"Le nombre de jour après date durant lesquels un rabais pour paiement précoce"
+"sera appliqué."
 
 #: src/business/business-gnome/glade/billterms.glade.h:36
 msgid "The number of days to pay the bill after the post date."
-msgstr ""
+msgstr "Nombre de jours pour effectuer le paiement après date."
 
 #: src/business/business-gnome/glade/billterms.glade.h:37
 msgid "The percentage discount applied for early payment."
-msgstr ""
+msgstr "Le pourcentage de rabais appliqué pour paiement précoce."
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
@@ -879,7 +884,7 @@ msgstr ""
 #: src/business/business-gnome/glade/invoice.glade.h:2
 #: src/business/business-gnome/glade/vendor.glade.h:3
 msgid "(terms)"
-msgstr ""
+msgstr "(termes)"
 
 # messages-i18n.c:240
 #: src/business/business-gnome/glade/customer.glade.h:4
@@ -899,24 +904,24 @@ msgstr "Adresse:"
 
 #: src/business/business-gnome/glade/customer.glade.h:6
 msgid "Billing Address"
-msgstr ""
+msgstr "Adresse de Facturation"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/customer.glade.h:7
 #: src/business/business-gnome/glade/invoice.glade.h:6
 #: src/business/business-gnome/glade/order.glade.h:3
 msgid "Billing Information"
-msgstr ""
+msgstr "Information de Facturation"
 
 #: src/business/business-gnome/glade/customer.glade.h:8
 #: src/business/business-gnome/glade/vendor.glade.h:6
 msgid "Company Name: "
-msgstr ""
+msgstr "Nom de la Compagnie: "
 
 # messages-i18n.c:173
 #: src/business/business-gnome/glade/customer.glade.h:9
 msgid "Credit Limit: "
-msgstr ""
+msgstr "Limite de Crédit: "
 
 # src/gnome/glade-gnc-dialogs.c:173
 #: src/business/business-gnome/glade/customer.glade.h:10
@@ -938,30 +943,30 @@ msgstr "Consommateur"
 
 #: src/business/business-gnome/glade/customer.glade.h:12
 msgid "Customer Number: "
-msgstr ""
+msgstr "Numéro de Consommateur: "
 
 #: src/business/business-gnome/glade/customer.glade.h:13
 msgid "Discount: "
-msgstr ""
+msgstr "Rabais: "
 
 #: src/business/business-gnome/glade/customer.glade.h:14
 #: src/business/business-gnome/glade/employee.glade.h:10
 #: src/business/business-gnome/glade/vendor.glade.h:8
 msgid "Email: "
-msgstr ""
+msgstr "Courriel: "
 
 #: src/business/business-gnome/glade/customer.glade.h:15
 #: src/business/business-gnome/glade/employee.glade.h:13
 #: src/business/business-gnome/glade/vendor.glade.h:9
 msgid "Fax: "
-msgstr ""
+msgstr "Télécopieur: "
 
 # src/gnome/glade-gnc-dialogs.c:127
 #: src/business/business-gnome/glade/customer.glade.h:16
 #: src/business/business-gnome/glade/employee.glade.h:14
 #: src/business/business-gnome/glade/vendor.glade.h:10
 msgid "Identification"
-msgstr ""
+msgstr "Identification"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
@@ -987,7 +992,7 @@ msgstr "Notes"
 #: src/business/business-gnome/glade/customer.glade.h:20
 #: src/business/business-gnome/glade/vendor.glade.h:14
 msgid "Override the global Tax Table?"
-msgstr ""
+msgstr "Surpasser la table d'impôsition globale?"
 
 # messages-i18n.c:244
 #: src/business/business-gnome/glade/customer.glade.h:21
@@ -998,20 +1003,20 @@ msgstr "Téléphone: "
 
 #: src/business/business-gnome/glade/customer.glade.h:22
 msgid "Shipping Address"
-msgstr ""
+msgstr "Adresse de livraison"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/customer.glade.h:23
 msgid "Shipping Information"
-msgstr ""
+msgstr "Information de livraison"
 
 #: src/business/business-gnome/glade/customer.glade.h:24
 msgid "Tax Included: "
-msgstr ""
+msgstr "Taxes Incluses: "
 
 #: src/business/business-gnome/glade/customer.glade.h:25
 msgid "Tax Table: "
-msgstr ""
+msgstr "Table d'imposition: "
 
 #: src/business/business-gnome/glade/customer.glade.h:26
 #: src/business/business-gnome/glade/vendor.glade.h:20
@@ -1097,27 +1102,27 @@ msgstr ""
 #: src/business/business-gnome/search-owner.c:236
 #: intl-scm/guile-strings.c:3892
 msgid "Employee"
-msgstr ""
+msgstr "Employé"
 
 #: src/business/business-gnome/glade/employee.glade.h:12
 msgid "Employee Number: "
-msgstr ""
+msgstr "Numéro d'Employé"
 
 # messages-i18n.c:227
 #: src/business/business-gnome/glade/employee.glade.h:15
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 #: src/business/business-gnome/glade/employee.glade.h:16
 msgid "Language: "
-msgstr ""
+msgstr "Langage: "
 
 #. src/business/business-gnome/business-gnome.scm
 #: src/business/business-gnome/glade/employee.glade.h:18
 #: src/business/business-gnome/dialog-employee.c:284
 #: intl-scm/guile-strings.c:3550 intl-scm/guile-strings.c:3552
 msgid "New Employee"
-msgstr ""
+msgstr "Nouvel Employé"
 
 #: src/business/business-gnome/glade/employee.glade.h:19
 #: src/business/business-gnome/glade/vendor.glade.h:15
@@ -1244,7 +1249,7 @@ msgstr ""
 # messages-i18n.c:280
 #: src/business/business-gnome/glade/invoice.glade.h:25
 msgid "Dup_licate"
-msgstr ""
+msgstr "Dup_liquer"
 
 # messages-i18n.c:280
 #: src/business/business-gnome/glade/invoice.glade.h:26
@@ -1265,7 +1270,7 @@ msgstr "Éditer"
 # messages-i18n.c:105
 #: src/business/business-gnome/glade/invoice.glade.h:28
 msgid "Edit this Invoice"
-msgstr ""
+msgstr "Modifier cette Facture"
 
 #: src/business/business-gnome/glade/invoice.glade.h:29
 #: src/gnome/glade/register.glade.h:29
@@ -1280,7 +1285,7 @@ msgstr "un nom pour le compte"
 # messages-i18n.c:312
 #: src/business/business-gnome/glade/invoice.glade.h:31
 msgid "Extra Payments"
-msgstr ""
+msgstr "Paiements additionnels"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -1298,7 +1303,7 @@ msgstr "ID facture"
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/invoice.glade.h:35
 msgid "Invoice Information"
-msgstr ""
+msgstr "Information de Facturation"
 
 #: src/business/business-gnome/glade/invoice.glade.h:36
 #: src/business/business-gnome/search-owner.c:237
@@ -1417,12 +1422,12 @@ msgstr "Trier par description"
 # po/guile_strings.txt:238
 #: src/business/business-gnome/glade/invoice.glade.h:57
 msgid "Sort by price"
-msgstr ""
+msgstr "Trier par prix"
 
 # po/guile_strings.txt:261
 #: src/business/business-gnome/glade/invoice.glade.h:58
 msgid "Sort by quantity"
-msgstr ""
+msgstr "Trier par quantitée"
 
 # po/guile_strings.txt:108
 #: src/business/business-gnome/glade/invoice.glade.h:59
@@ -1435,6 +1440,7 @@ msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
+"Le numéro ID de la facture. Si omis, un numéro raisonnable vous sera assigné"
 
 # messages-i18n.c:273
 #: src/business/business-gnome/glade/invoice.glade.h:62
@@ -1557,7 +1563,7 @@ msgstr ""
 # messages-i18n.c:316
 #: src/business/business-gnome/glade/invoice.glade.h:84
 msgid "_Price"
-msgstr ""
+msgstr "_Prix"
 
 #: src/business/business-gnome/glade/invoice.glade.h:85
 #: src/gnome/glade/register.glade.h:122 src/gnome/window-main.c:878
@@ -1566,7 +1572,7 @@ msgstr "Éditeur de _cotation"
 
 #: src/business/business-gnome/glade/invoice.glade.h:86
 msgid "_Quantity"
-msgstr ""
+msgstr "_Quantitée"
 
 # messages-i18n.c:326
 #. src/report/report-system/report.scm
@@ -1807,7 +1813,7 @@ msgstr ""
 #: src/business/business-gnome/business-urls.c:327
 #, c-format
 msgid "Bad URL %s"
-msgstr ""
+msgstr "Mauvais URL %s"
 
 #: src/business/business-gnome/business-urls.c:339
 #, c-format
@@ -1832,7 +1838,7 @@ msgstr "Le pourcentage doit être entre 0 et 100."
 
 #: src/business/business-gnome/dialog-billterms.c:259
 msgid "You must provide a name for this Billing Term."
-msgstr ""
+msgstr "Vous devez fournir un nom pour ce terme de Facturation."
 
 #: src/business/business-gnome/dialog-billterms.c:265
 #, c-format
@@ -1840,6 +1846,8 @@ msgid ""
 "You must provide a unique name for this Billing Term.\n"
 "Your choice \"%s\" is already in use."
 msgstr ""
+"Vous devez fournir un nom unique pour ce terme de Facturation.\n"
+"Votre choix \"%s\" est déja employé."
 
 #. src/business/business-reports/owner-report.scm
 #: src/business/business-gnome/dialog-billterms.c:484
@@ -1858,7 +1866,7 @@ msgstr "Inconnu"
 #: src/business/business-gnome/dialog-billterms.c:608
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "Le Terme \"%s\" est utilisé. Vous ne pouvez le supprimer."
 
 # messages-i18n.c:17
 #: src/business/business-gnome/dialog-billterms.c:614
@@ -1873,11 +1881,14 @@ msgid ""
 "If this customer is an individual (and not a company) you should set the "
 "\"company name\" and \"contact name\" the same."
 msgstr ""
+"Vous devez entrer un nom de companie.\n"
+"Si ce consommateur est un individu (et non pas une compagnie) vous devriez régler "
+"\"Nom de la Compagnie\" et \"Nom du Contact\" a la meme valeur."
 
 # messages-i18n.c:13
 #: src/business/business-gnome/dialog-customer.c:245
 msgid "You must enter a billing address."
-msgstr ""
+msgstr "Vous devez entrer une adresse de Facturation."
 
 #: src/business/business-gnome/dialog-customer.c:255
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -1972,7 +1983,7 @@ msgstr ""
 #: src/business/business-gnome/dialog-job.c:547
 #: src/business/business-gnome/dialog-vendor.c:680
 msgid "ID #"
-msgstr ""
+msgstr "ID #"
 
 #: src/business/business-gnome/dialog-date-close.c:49
 msgid "No Account selected.  Please try again."
@@ -2009,19 +2020,19 @@ msgstr ""
 
 #: src/business/business-gnome/dialog-employee.c:706
 msgid "Employee ID"
-msgstr ""
+msgstr "ID de l'Employé"
 
 #: src/business/business-gnome/dialog-employee.c:708
 msgid "Employee Username"
-msgstr ""
+msgstr "Nom d'usager de l'Employé"
 
 #: src/business/business-gnome/dialog-employee.c:710
 msgid "Employee Name"
-msgstr ""
+msgstr "Nom de l'Employé"
 
 #: src/business/business-gnome/dialog-employee.c:716
 msgid "Username"
-msgstr ""
+msgstr "Nom d'usager"
 
 # po/guile_strings.txt:188
 #. src/business/business-reports/aging.scm
@@ -5890,11 +5901,11 @@ msgstr "Emprun à taux fixe"
 #. Translators: ARM = Adjustable Rate Mortgage
 #: src/gnome/druid-loan.c:514
 msgid "3/1 Year"
-msgstr ""
+msgstr "3/1 Année"
 
 #: src/gnome/druid-loan.c:514
 msgid "A 3/1 Year ARM"
-msgstr ""
+msgstr "3/1 "
 
 # po/guile_strings.txt:182
 #: src/gnome/druid-loan.c:515
@@ -11280,7 +11291,7 @@ msgstr "Charger la configuration système"
 #. src/scm/command-line.scm
 #: intl-scm/guile-strings.c:257
 msgid "Run the RPC Server if GnuCash was configured with --enable-rpc"
-msgstr ""
+msgstr "Lance le serveur RPC si GnuCash a été configuré avec --enable-rpc"
 
 #. src/scm/price-quotes.scm
 #: intl-scm/guile-strings.c:259 intl-scm/guile-strings.c:261
@@ -11443,7 +11454,7 @@ msgstr "Les 5 comptes de base"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:337
 msgid "The Principal Accounting Equation"
-msgstr ""
+msgstr "L'Équation Comptable Principale"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:339 intl-scm/guile-strings.c:345
@@ -11465,7 +11476,7 @@ msgstr "Fichiers, Comptes et Transactions"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:347
 msgid "The GnuCash Interface"
-msgstr ""
+msgstr "L'Interface GnuCash"
 
 # messages-i18n.c:166
 #. src/scm/help-topics-index.scm
@@ -11489,12 +11500,12 @@ msgstr "Boutons de la barre d'outils"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:359
 msgid "Menu Items"
-msgstr ""
+msgstr "Éléments de Menu"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:361
 msgid "Menu Shortcuts"
-msgstr ""
+msgstr "Raccourcis Menu"
 
 # messages-i18n.c:291
 #. src/scm/help-topics-index.scm
@@ -11541,7 +11552,7 @@ msgstr "International"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:373
 msgid "Online Banking"
-msgstr ""
+msgstr "Transactions banquaire en ligne"
 
 # po/guile_strings.txt:83
 #. src/scm/help-topics-index.scm
@@ -11557,13 +11568,13 @@ msgstr "Couleurs du registre"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:383
 msgid "Getting Help"
-msgstr ""
+msgstr "Obtenir de l'aide"
 
 # src/gnome/glade-gnc-dialogs.c:638
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:385
 msgid "Help Manual"
-msgstr ""
+msgstr "Manuel d'aide"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:387
@@ -11573,7 +11584,7 @@ msgstr ""
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:389
 msgid "Topic Search"
-msgstr ""
+msgstr "Recherche de Sujet"
 
 # messages-i18n.c:93
 #. src/scm/help-topics-index.scm
