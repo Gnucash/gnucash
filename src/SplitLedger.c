@@ -2070,10 +2070,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    gncBoolean dynamic;
 
    unsigned int changed;
+   int save_phys_col;
+   int type, style;
    int phys_row;
    int vrow;
-   int type, style;
-   int save_phys_col;
    int i;
 
    xaccSplitRegisterConfigColors (reg);
@@ -2107,6 +2107,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* paranoia */
    if (save_phys_col < 0)
      save_phys_col = 0;
+   if (save_phys_col >= table->num_phys_cols)
+     save_phys_col = table->num_phys_cols - 1;
 
    /* count the number of rows, looking for the place we want to go. */
    found_split = xaccSRCountRows (reg, slist, find_trans, find_split);

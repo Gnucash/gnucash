@@ -1,0 +1,40 @@
+
+Currently, backups and log files are automatically stored by the engine
+with date/time stamps every time the user hits 'save' in the gui.
+
+(The actual file writing is done by xaccWriteAccountGroupFile() in
+in src/engine/FileIOP.h)
+
+Proposed design changes:
+------------------------
+a) Allow user to configure which directory backups should be put into.
+   (currently, this is same as current directory).  Requires changes to
+   engine FileIOP.h as well as GUI.
+
+   One possible default is ~/.gnucash/data/  (Which is supposed to 
+   be the place where files are saved if no directory is specified.!?)
+
+b) Prompt the user to make a backup every third save.  Make this number
+   configurable. If no default backup path set, prompt to set it,
+   with suggested path being ~/.gnucash/backups/
+
+c) If save format was XML text, then could use RCS ...
+   Alternately,
+For those that don't know, xdelta is like RCS, but it's designed to
+handle any kind of data, including binary, is supposed to work really
+well, and transparently handles gzipped data with some form of MD5sum
+verification.  It's also available in library form.  Like RCS it would
+give us the ability to do cool things like snapshot the data every so
+often for nearly no cost.  Want to see what things looked like 6
+months ago?  Just enter the right date into the "time-warp" dialog :>
+
+For those on Debian systems, just install the xdelta and
+libxdelta2-dev packages.  Others can get the source from
+ftp://www.xcf.berkeley.edu/pub/xdelta/, or just go to
+ftp.debian.org:/pub/debian/dists/unstable/main/source/utils/xdelta*.tar.gz
+
+
+d) Could monitor how many changes (records altered) the user has made,
+   and could prompt for more frequent saves if lots of editing has
+   ocurred...
+

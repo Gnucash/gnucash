@@ -230,7 +230,6 @@ msgstr ""
 " ist leer."
 
 #: messages-i18n.c:39
-#, fuzzy
 msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr ""
 "Es wurden Veränderungen seit der letzten Speicherung vorgenommen.  "
@@ -358,9 +357,8 @@ msgid "Are you sure you want to delete the current transaction?"
 msgstr "Sind sie sicher das sie das %s Konto löschen wollen?"
 
 #: messages-i18n.c:57
-#, fuzzy
 msgid "Recalculate Transaction"
-msgstr "Buchung löschen"
+msgstr "Buchung neu kalkulieren"
 
 #: messages-i18n.c:58
 msgid ""
@@ -504,12 +502,10 @@ msgid "Enter the total value of the shares"
 msgstr "Geben sie den Gesamtwert der Anteile ein"
 
 #: messages-i18n.c:86
-#, fuzzy
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Geben sie ein Transferkonto ein oder wählen sie aus der Liste"
 
 #: messages-i18n.c:87
-#, fuzzy
 msgid "Enter the account to transfer to, or choose one from the list"
 msgstr "Geben sie ein Transferkonto ein oder wählen sie aus der Liste"
 
@@ -870,9 +866,8 @@ msgid "Cash"
 msgstr "Bargeld"
 
 #: messages-i18n.c:176
-#, fuzzy
 msgid "Changed"
-msgstr "Belastung"
+msgstr "Geändert"
 
 #: messages-i18n.c:177
 msgid "Charge"
@@ -1232,9 +1227,8 @@ msgid "Second Option"
 msgstr "Zweite Option"
 
 #: po/guile_strings.txt:3
-#, fuzzy
 msgid "Cost"
-msgstr "Schliessen"
+msgstr "Kosten"
 
 #: po/guile_strings.txt:5
 msgid "Status"
@@ -1263,7 +1257,6 @@ msgid "Stock Portfolio Valuation"
 msgstr ""
 
 #: po/guile_strings.txt:15
-#, fuzzy
 msgid "Stock Portfolio"
 msgstr "Portfolio"
 
@@ -1383,7 +1376,6 @@ msgid "Income-Salary-Taxable"
 msgstr "zu versteuerndes Einkommen"
 
 #: po/guile_strings.txt:45
-#, fuzzy
 msgid "_Stock Portfolio"
 msgstr "Portfolio"
 
@@ -1396,9 +1388,8 @@ msgid "US-style: mm/dd/yyyy"
 msgstr "US-Stil : Monat/Tag/Jahr"
 
 #: po/guile_strings.txt:48
-#, fuzzy
 msgid "You have not selected an account."
-msgstr "Wählen sie ein Konto zum Ausbuchen"
+msgstr "Sie haben kein Konto ausgewählt"
 
 #: po/guile_strings.txt:49
 msgid "By default, show every transaction in an account."
@@ -1449,7 +1440,6 @@ msgid "Display the Hello, World report."
 msgstr "Den 'Hallo Welt'-Report anzeigen"
 
 #: po/guile_strings.txt:64
-#, fuzzy
 msgid "Gain"
 msgstr "Gewinn/Verlust"
 
@@ -1511,7 +1501,6 @@ msgid "Import QIF File - Scripted in Guile."
 msgstr "Importieren einer Quicken-Datei (QIF) - Skriptsprache Guile"
 
 #: po/guile_strings.txt:79
-#, fuzzy
 msgid "Category"
 msgstr "QIF Kategorie"
 
@@ -1555,9 +1544,8 @@ msgid "The background color for the active transaction in single mode"
 msgstr "Hintergrundfarbe für die aktive Transaktion im 'Single-Mode'"
 
 #: po/guile_strings.txt:88
-#, fuzzy
 msgid "Loss"
-msgstr "Gewinn/Verlust"
+msgstr "Verlust"
 
 #: po/guile_strings.txt:89
 msgid "Credit Accounts"
@@ -1580,19 +1568,17 @@ msgid "Save window sizes and positions."
 msgstr "Speichere Fenstergrössen und -positionen"
 
 #: po/guile_strings.txt:95
-#, fuzzy
 msgid "Number Option"
-msgstr "Berichtsoptionen"
+msgstr "Zahlenoptionen"
 
 #: po/guile_strings.txt:96
-#, fuzzy
 msgid "There are no accounts to report on."
-msgstr "Es wurden keine Konten in der Kontenliste ausgewählt."
+msgstr "Es gibt keine Konten für den Bericht."
 
 #: po/guile_strings.txt:97
-#, fuzzy, c-format
+#, c-format
 msgid "Report for %s."
-msgstr "Berichte"
+msgstr "Bericht für %s."
 
 #: po/guile_strings.txt:98
 msgid "Reverse Income and Expense Accounts"
@@ -1690,9 +1676,8 @@ msgid "Date Format Display"
 msgstr "Datumsformat-Anzeige"
 
 #: po/guile_strings.txt:124
-#, fuzzy
 msgid "Ending"
-msgstr "Zunehmend"
+msgstr "Endend"
 
 #: po/guile_strings.txt:125
 msgid "Reversed-balance account types"
@@ -1723,9 +1708,8 @@ msgid "Calculate balance sheet up to this date"
 msgstr ""
 
 #: po/guile_strings.txt:133
-#, fuzzy
 msgid "Transaction Report"
-msgstr "Transaktion"
+msgstr "Transaktionsbericht"
 
 #: po/guile_strings.txt:134
 msgid "Alternate the even and odd colors with each transaction, not each row"
@@ -1816,14 +1800,12 @@ msgid "Do transaction report on this account"
 msgstr "Sie können nicht von und zu dem selben Konto transferieren !"
 
 #: po/guile_strings.txt:157
-#, fuzzy
 msgid "Recent Price"
-msgstr "Verkaufspreis"
+msgstr "letzter Preis"
 
 #: po/guile_strings.txt:158
-#, fuzzy
 msgid "Net Inflow"
-msgstr "Datei Info"
+msgstr "Preis aus dem Netz"
 
 #: po/guile_strings.txt:159
 msgid "Single mode default even row background"
@@ -1896,9 +1878,9 @@ msgid "Show both icons and text"
 msgstr "Sowohl Icons, als auch Text anzeigen"
 
 #: po/guile_strings.txt:180
-#, fuzzy, c-format
+#, c-format
 msgid "The number option is %s."
-msgstr "Die Datums-Option ist %s."
+msgstr "Die Zahlen-Option ist %s."
 
 #: po/guile_strings.txt:181
 #, c-format
@@ -1938,9 +1920,8 @@ msgid "Primary Sort Order"
 msgstr "Hauptsortier-Reihenfolge"
 
 #: po/guile_strings.txt:191
-#, fuzzy
 msgid "Name"
-msgstr "Nummer"
+msgstr "Name"
 
 #: po/guile_strings.txt:192
 msgid "Descending"
@@ -2073,9 +2054,8 @@ msgid "First Option"
 msgstr "Erste Option"
 
 #: po/guile_strings.txt:225
-#, fuzzy
 msgid "Display the Stock Portfolio report."
-msgstr "Den 'Hallo Welt'-Report anzeigen"
+msgstr "Den Portfolio-Bericht anzeigen"
 
 #: po/guile_strings.txt:226
 msgid ""
@@ -2165,9 +2145,8 @@ msgid "Primary Key"
 msgstr "Primärschlüssel"
 
 #: po/guile_strings.txt:247
-#, fuzzy
 msgid "Ticker"
-msgstr "Zeit"
+msgstr "Ticker"
 
 #: po/guile_strings.txt:248
 msgid "Time and Date Option"
@@ -2230,19 +2209,16 @@ msgid "Average Balance"
 msgstr "Durchschnitt"
 
 #: po/guile_strings.txt:265
-#, fuzzy
 msgid "Totals"
 msgstr "Gesamt"
 
 #: po/guile_strings.txt:266
-#, fuzzy
 msgid "Profit/Loss"
 msgstr "Saldo Einnahmen/Ausgaben"
 
 #: po/guile_strings.txt:267
-#, fuzzy
 msgid "Shares"
-msgstr "Belastung"
+msgstr "Anteile"
 
 #: po/guile_strings.txt:268
 msgid "Show All Transactions"
@@ -2377,9 +2353,8 @@ msgstr ""
 "Zeige Kreditkarten-, Schulden-, Ausgleichs- und Einkommenskonten umgedreht"
 
 #: po/guile_strings.txt:300
-#, fuzzy
 msgid "This is a number option."
-msgstr "Dies ist eine boolsche Option"
+msgstr "Dies ist eine Zahlen Option"
 
 #: po/guile_strings.txt:302
 msgid "Multi mode active split background"
@@ -2416,7 +2391,6 @@ msgid "Something is very wrong with QIF Importing."
 msgstr "Es ist etwas nicht in Ordnung mit dem QIF-Import."
 
 #: src/gnome/glade-gnc-dialogs.c:74
-#, fuzzy
 msgid "Import QIF Files"
 msgstr "QIF-File importieren"
 
@@ -2518,16 +2492,14 @@ msgid "Categories"
 msgstr "Kategorien"
 
 #: src/gnome/glade-gnc-dialogs.c:506
-#, fuzzy
 msgid "Select Account"
-msgstr "Konto löschen"
+msgstr "Konto auswählen"
 
 #: src/gnome/glade-gnc-dialogs.c:564
 msgid "Selected account:"
 msgstr "Ausgewähltes Konto:"
 
 #: src/gnome/glade-gnc-dialogs.c:573
-#, fuzzy
 msgid "Description:"
 msgstr "Beschreibung:"
 
@@ -2540,7 +2512,6 @@ msgid "Mutual"
 msgstr "Investmentfonds"
 
 #: src/gnome/glade-gnc-dialogs.c:700
-#, fuzzy
 msgid "Print Preview"
 msgstr "Vorschau"
 
@@ -2585,403 +2556,390 @@ msgid "Preview"
 msgstr "Vorschau"
 
 #: src/gnome/glade-gnc-dialogs.c:1036
-#, fuzzy
 msgid "Select Paper Size"
-msgstr "Drucker auswählen"
+msgstr "Papiergrösse auswählen"
 
 #: src/gnome/glade-gnc-dialogs.c:1149
-#, fuzzy
 msgid "Print Check"
-msgstr "Einstellungen drucken"
+msgstr "Scheck drucken"
 
 #: src/gnome/glade-gnc-dialogs.c:1178
-#, fuzzy
 msgid "Check format:"
-msgstr "Datumsformat:"
+msgstr "Scheckformat:"
 
 #: src/gnome/glade-gnc-dialogs.c:1186 src/gnome/glade-gnc-dialogs.c:1356
-#, fuzzy
 msgid "Check position:"
-msgstr "Girokonto"
+msgstr "Scheckposition:"
 
 #: src/gnome/glade-gnc-dialogs.c:1216
 msgid "Quicken/QuickBooks (tm)"
-msgstr ""
+msgstr "Quicken/Quickbooks (tm)"
 
 #: src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 #: src/gnome/glade-gnc-dialogs.c:1276
-#, fuzzy
 msgid "Custom"
-msgstr "AutoDepot"
+msgstr "Üblich"
 
 #: src/gnome/glade-gnc-dialogs.c:1231
-#, fuzzy
 msgid "Top"
-msgstr "Zu"
+msgstr "Anfang/Oben"
 
 #: src/gnome/glade-gnc-dialogs.c:1234
-#, fuzzy
 msgid "Middle"
-msgstr "Datei"
+msgstr "Mittig"
 
 #: src/gnome/glade-gnc-dialogs.c:1237
 msgid "Bottom"
-msgstr ""
+msgstr "Unten/Ende"
 
 #: src/gnome/glade-gnc-dialogs.c:1252
 msgid "December  31, 2000"
-msgstr ""
+msgstr "Dezember 31., 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1255
 msgid "31 December, 2000"
-msgstr ""
+msgstr "31. Dezember, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1258
-#, fuzzy
 msgid "Dec 31, 2000"
-msgstr "Dezimal (1,000.00)"
+msgstr "Dez 31, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1261
 msgid "31 Dec, 2000"
-msgstr ""
+msgstr "31. Dez, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1264
 msgid "12/31/2000"
-msgstr ""
+msgstr "12/31/2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1267
 msgid "12/31/00"
-msgstr ""
+msgstr "12/31/00"
 
 #: src/gnome/glade-gnc-dialogs.c:1270
 msgid "31/12/2000"
-msgstr ""
+msgstr "31/12/2000"
 
 #: src/gnome/glade-gnc-dialogs.c:1273
 msgid "31/12/00"
-msgstr ""
+msgstr "31/12/00"
 
 #: src/gnome/glade-gnc-dialogs.c:1281
 msgid "Custom check parameters"
-msgstr ""
+msgstr "Allgemeine Scheck-Parameter"
 
 #: src/gnome/glade-gnc-dialogs.c:1316
-#, fuzzy
 msgid "Payee:"
-msgstr "Belastung"
+msgstr "Zahlungsempfänger"
 
 #: src/gnome/glade-gnc-dialogs.c:1324
-#, fuzzy
 msgid "Date:"
-msgstr "Datum"
+msgstr "Datum:"
 
 #: src/gnome/glade-gnc-dialogs.c:1332
 msgid "Amount (words):"
-msgstr ""
+msgstr "Betrag (in Worten):"
 
 #: src/gnome/glade-gnc-dialogs.c:1340
 msgid "Amount (numbers):"
-msgstr ""
+msgstr "Betrag (in Zahlen):"
 
 #: src/gnome/glade-gnc-dialogs.c:1348
-#, fuzzy
 msgid "Memo:"
-msgstr "Memo"
+msgstr "Memo:"
 
 #: src/gnome/glade-gnc-dialogs.c:1372
 msgid "Units:"
-msgstr ""
+msgstr "Einheiten:"
 
 #: src/gnome/glade-gnc-dialogs.c:1387
 msgid "x"
-msgstr ""
+msgstr "x"
 
 #: src/gnome/glade-gnc-dialogs.c:1457
-#, fuzzy
 msgid "Inches"
-msgstr "Zunahme"
+msgstr "Inches"
 
 #: src/gnome/glade-gnc-dialogs.c:1460
 msgid "Centimeters"
-msgstr ""
+msgstr "Zentimeter"
 
 #: src/gnome/glade-gnc-dialogs.c:1463
 msgid "Millimeters"
-msgstr ""
+msgstr "Millimeter"
 
 #: src/gnome/glade-gnc-dialogs.c:1466
-#, fuzzy
 msgid "Points"
-msgstr "Saldo Einnahmen/Ausgaben"
+msgstr "Punkte"
 
 #: src/gnome/glade-gnc-dialogs.c:1478
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: src/gnome/print-session.c:230
 msgid "You must select a printer first."
 msgstr "Sie müssen erst einen Drucker auswählen"
 
-#~ msgid "Double line mode with multi-line cursor"
-#~ msgstr "Doppel-Zeilen Modus mit Multi-Zeilen-Cursor"
+msgid "Double line mode with multi-line cursor"
+msgstr "Doppel-Zeilen Modus mit Multi-Zeilen-Cursor"
 
-#~ msgid "Single line mode with multi-line cursor"
-#~ msgstr "Einzel-Zeilen Modus mit Multi-Zeilen-Cursor"
+msgid "Single line mode with multi-line cursor"
+msgstr "Einzel-Zeilen Modus mit Multi-Zeilen-Cursor"
 
-#~ msgid "Adjust the balance of the selected account"
-#~ msgstr "Saldo anpassen"
+msgid "Adjust the balance of the selected account"
+msgstr "Saldo anpassen"
 
-#~ msgid "Adjust the balance of the main account for this register"
-#~ msgstr "Anpassen des Saldo"
+msgid "Adjust the balance of the main account for this register"
+msgstr "Anpassen des Saldo"
 
-#~ msgid "Move to the blank transaction at the bottom of the register"
-#~ msgstr "Springe zur ersten freien Zeile"
+msgid "Move to the blank transaction at the bottom of the register"
+msgstr "Springe zur ersten freien Zeile"
 
-#~ msgid "Cancel the current transaction"
-#~ msgstr "Buchung nicht ausführen"
+msgid "Cancel the current transaction"
+msgstr "Buchung nicht ausführen"
 
-#~ msgid "Close this register window"
-#~ msgstr "Fenster schliessen"
+msgid "Close this register window"
+msgstr "Fenster schliessen"
 
-#~ msgid "Set the date range of this register"
-#~ msgstr "Den Datumsbereich dieses Registers setzen"
+msgid "Set the date range of this register"
+msgstr "Den Datumsbereich dieses Registers setzen"
 
-#~ msgid "Delete selected account"
-#~ msgstr "Gewähltes Konto löschen."
+msgid "Delete selected account"
+msgstr "Gewähltes Konto löschen."
 
-#~ msgid "Delete the current transaction"
-#~ msgstr "Buchung löschen"
+msgid "Delete the current transaction"
+msgstr "Buchung löschen"
 
-#~ msgid "Make a copy of the current transaction"
-#~ msgstr "Aktuelle Buchung kopieren"
+msgid "Make a copy of the current transaction"
+msgstr "Aktuelle Buchung kopieren"
 
-#~ msgid "Edit the selected account"
-#~ msgstr "Gewähltes Konto bearbeiten."
+msgid "Edit the selected account"
+msgstr "Gewähltes Konto bearbeiten."
 
-#~ msgid "Edit the main account for this register"
-#~ msgstr "Bearbeiten des Hauptkonto"
+msgid "Edit the main account for this register"
+msgstr "Bearbeiten des Hauptkonto"
 
-#~ msgid "Exit GnuCash"
-#~ msgstr "GnuCash verlassen."
+msgid "Exit GnuCash"
+msgstr "GnuCash verlassen."
 
-#~ msgid "Open the GnuCash help window"
-#~ msgstr "Das GnuCash-Hilfe-Fenster öffnen"
+msgid "Open the GnuCash help window"
+msgstr "Das GnuCash-Hilfe-Fenster öffnen"
 
-#~ msgid "Import a Quicken QIF file"
-#~ msgstr "Importieren einer Quicken QIF-Datei"
+msgid "Import a Quicken QIF file"
+msgstr "Importieren einer Quicken QIF-Datei"
 
-#~ msgid "Jump to the corresponding transaction in the other account"
-#~ msgstr "Zur passenden Gegentransaktion im Gegenkonto springen"
+msgid "Jump to the corresponding transaction in the other account"
+msgstr "Zur passenden Gegentransaktion im Gegenkonto springen"
 
-#~ msgid "Create a new account"
-#~ msgstr "Ein neues Konto eröffnen."
+msgid "Create a new account"
+msgstr "Ein neues Konto eröffnen."
 
-#~ msgid "Create a new file"
-#~ msgstr "Eine neue Datei anlegen"
+msgid "Create a new file"
+msgstr "Eine neue Datei anlegen"
 
-#~ msgid "Open the selected account"
-#~ msgstr "Gewähltes Konto löschen."
+msgid "Open the selected account"
+msgstr "Gewähltes Konto löschen."
 
-#~ msgid "Open the selected account and all its subaccounts"
-#~ msgstr "Öffne das gewählte Konto und alle Sub-Konten"
+msgid "Open the selected account and all its subaccounts"
+msgstr "Öffne das gewählte Konto und alle Sub-Konten"
 
-#~ msgid "Open a file"
-#~ msgstr "Datei öffnen"
+msgid "Open a file"
+msgstr "Datei öffnen"
 
-#~ msgid "Open the global preferences dialog"
-#~ msgstr "Allgemeine Optionen"
+msgid "Open the global preferences dialog"
+msgstr "Allgemeine Optionen"
 
-#~ msgid "Reconcile the selected account"
-#~ msgstr "Gewähltes Konto ausgleichen"
+msgid "Reconcile the selected account"
+msgstr "Gewähltes Konto ausgleichen"
 
-#~ msgid "Reconcile the main account for this register"
-#~ msgstr "Ausgleichen des Hauptkontos"
+msgid "Reconcile the main account for this register"
+msgstr "Ausgleichen des Hauptkontos"
 
-#~ msgid "Record the current transaction"
-#~ msgstr "Buchung durchführen"
+msgid "Record the current transaction"
+msgstr "Buchung durchführen"
 
-#~ msgid "Save the file to disk"
-#~ msgstr "Speichern dieser Datei"
+msgid "Save the file to disk"
+msgstr "Speichern dieser Datei"
 
-#~ msgid "Identify and fix problems in the account"
-#~ msgstr "Identifizieren und Beseitigen von Problemen in diesem Konto"
+msgid "Identify and fix problems in the account"
+msgstr "Identifizieren und Beseitigen von Problemen in diesem Konto"
 
-#~ msgid "Identify and fix problems in all the accounts"
-#~ msgstr "Identifizieren und Beseitigen von Problemen in allen Konten"
+msgid "Identify and fix problems in all the accounts"
+msgstr "Identifizieren und Beseitigen von Problemen in allen Konten"
 
-#~ msgid "Identify and fix problems in the account and its subaccounts"
-#~ msgstr ""
-#~ "Identifizieren und Beseitigen von Problemen in diesem Konto und in den "
-#~ "Unterkonten"
+msgid "Identify and fix problems in the account and its subaccounts"
+msgstr ""
+"Identifizieren und Beseitigen von Problemen in diesem Konto und in den "
+"Unterkonten"
 
-#~ msgid "Identify and fix problems in the accounts of this register"
-#~ msgstr "Identifizieren und Beseitigen von Problemen in diesem Konto"
+msgid "Identify and fix problems in the accounts of this register"
+msgstr "Identifizieren und Beseitigen von Problemen in diesem Konto"
 
-#~ msgid "Show all of the transactions in the account"
-#~ msgstr "Alle Buchungen anzeigen"
+msgid "Show all of the transactions in the account"
+msgstr "Alle Buchungen anzeigen"
 
-#~ msgid "Sort by Amount, then Date, then Num"
-#~ msgstr "Sortieren nach Betrag, Datum und danach nach Nummer"
+msgid "Sort by Amount, then Date, then Num"
+msgstr "Sortieren nach Betrag, Datum und danach nach Nummer"
 
-#~ msgid "Sort by Date, then Num, then Amount"
-#~ msgstr "Sortieren nach Datum, Nummer und danach nach Summe"
+msgid "Sort by Date, then Num, then Amount"
+msgstr "Sortieren nach Datum, Nummer und danach nach Summe"
 
-#~ msgid "Sort by Description, then Date, then Num"
-#~ msgstr "Sortieren nach Beschreibung, Datum und danach nach Nummer"
+msgid "Sort by Description, then Date, then Num"
+msgstr "Sortieren nach Beschreibung, Datum und danach nach Nummer"
 
-#~ msgid "Sort by Memo, then Date, then Num"
-#~ msgstr "Sortieren nach Memo, Datum und danach nach Nummer"
+msgid "Sort by Memo, then Date, then Num"
+msgstr "Sortieren nach Memo, Datum und danach nach Nummer"
 
-#~ msgid "Sort by Num, then Date, then Amount"
-#~ msgstr "Sortieren nach Nummer, Datum und danach nach Betrag"
+msgid "Sort by Num, then Date, then Amount"
+msgstr "Sortieren nach Nummer, Datum und danach nach Betrag"
 
-#~ msgid "Keep normal account order"
-#~ msgstr "Beibehalten der normalen Kontoreihenfolge"
+msgid "Keep normal account order"
+msgstr "Beibehalten der normalen Kontoreihenfolge"
 
-#~ msgid "Transfer funds from one account to another"
-#~ msgstr "Transferieren von Währungen von einem Konto zu einem anderen"
+msgid "Transfer funds from one account to another"
+msgstr "Transferieren von Währungen von einem Konto zu einem anderen"
 
-#~ msgid "_Account"
-#~ msgstr "Konto"
+msgid "_Account"
+msgstr "Konto"
 
-#~ msgid "_Accounts"
-#~ msgstr "_Konten"
+msgid "_Accounts"
+msgstr "_Konten"
 
-#~ msgid "_Blank"
-#~ msgstr "Leer"
+msgid "_Blank"
+msgstr "Leer"
 
-#~ msgid "_Cancel"
-#~ msgstr "Abbrechen"
+msgid "_Cancel"
+msgstr "Abbrechen"
 
-#~ msgid "_Date Range"
-#~ msgstr "Datumsbereich"
+msgid "_Date Range"
+msgstr "Datumsbereich"
 
-#~ msgid "_Delete Account"
-#~ msgstr "Konto löschen"
+msgid "_Delete Account"
+msgstr "Konto löschen"
 
-#~ msgid "_Delete"
-#~ msgstr "Löschen"
+msgid "_Delete"
+msgstr "Löschen"
 
-#~ msgid "D_uplicate"
-#~ msgstr "Wiederholen"
+msgid "D_uplicate"
+msgstr "Wiederholen"
 
-#~ msgid "_Edit Account"
-#~ msgstr "_Konto bearbeiten"
+msgid "_Edit Account"
+msgstr "_Konto bearbeiten"
 
-#~ msgid "_Help"
-#~ msgstr "_Hilfe"
+msgid "_Help"
+msgstr "_Hilfe"
 
-#~ msgid "_Jump"
-#~ msgstr "Springe"
+msgid "_Jump"
+msgstr "Springe"
 
-#~ msgid "_Open Account"
-#~ msgstr "_Konto öffnen"
+msgid "_Open Account"
+msgstr "_Konto öffnen"
 
-#~ msgid "Open S_ubaccounts"
-#~ msgstr "Öffnen Unterkonten"
+msgid "Open S_ubaccounts"
+msgstr "Öffnen Unterkonten"
 
-#~ msgid "_Record"
-#~ msgstr "Eintragen"
+msgid "_Record"
+msgstr "Eintragen"
 
-#~ msgid "_Register"
-#~ msgstr "Register"
+msgid "_Register"
+msgstr "Register"
 
-#~ msgid "_Scrub"
-#~ msgstr "Ausbuchen"
+msgid "_Scrub"
+msgstr "Ausbuchen"
 
-#~ msgid "Scrub A_ccount"
-#~ msgstr "Konto ausbuchen"
+msgid "Scrub A_ccount"
+msgstr "Konto ausbuchen"
 
-#~ msgid "Scrub A_ll"
-#~ msgstr "Ausbuchen"
+msgid "Scrub A_ll"
+msgstr "Ausbuchen"
 
-#~ msgid "Scrub Su_baccounts"
-#~ msgstr "Ausbuchen Unterkonten"
+msgid "Scrub Su_baccounts"
+msgstr "Ausbuchen Unterkonten"
 
-#~ msgid "Show _All"
-#~ msgstr "Alle anzeigen"
+msgid "Show _All"
+msgstr "Alle anzeigen"
 
-#~ msgid "Sort _Order"
-#~ msgstr "Sortierreihenfolge"
+msgid "Sort _Order"
+msgstr "Sortierreihenfolge"
 
-#~ msgid "_Style"
-#~ msgstr "Stil"
+msgid "_Style"
+msgstr "Stil"
 
-#~ msgid "_Transaction"
-#~ msgstr "Transaktion"
+msgid "_Transaction"
+msgstr "_Transaktion"
 
-#~ msgid "New File"
-#~ msgstr "Datei öffnen"
+msgid "New File"
+msgstr "Neue Datei"
 
-#~ msgid "Sort by Amount"
-#~ msgstr "Sortiere nach Betrag"
+msgid "Sort by Amount"
+msgstr "Sortiere nach Betrag"
 
-#~ msgid "Sort by Date"
-#~ msgstr "Sortiere nach Datum"
+msgid "Sort by Date"
+msgstr "Sortiere nach Datum"
 
-#~ msgid "Sort by Description"
-#~ msgstr "Sortiere nach Beschreibung"
+msgid "Sort by Description"
+msgstr "Sortiere nach Beschreibung"
 
-#~ msgid "Sort by Memo"
-#~ msgstr "Sortiere nach Memo"
+msgid "Sort by Memo"
+msgstr "Sortiere nach Memo"
 
-#~ msgid "Sort by Num"
-#~ msgstr "Sortiere nach Nummer"
+msgid "Sort by Num"
+msgstr "Sortiere nach Nummer"
 
-#~ msgid "Standard order"
-#~ msgstr "Standard Order"
+msgid "Standard order"
+msgstr "Standard Order"
 
-#~ msgid "Blank"
-#~ msgstr "Leer"
+msgid "Blank"
+msgstr "Leer"
 
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
+msgid "Cancel"
+msgstr "Abbrechen"
 
-#~ msgid "Close"
-#~ msgstr "Schliessen"
+msgid "Close"
+msgstr "Schliessen"
 
-#~ msgid "Delete"
-#~ msgstr "Löschen"
+msgid "Delete"
+msgstr "Löschen"
 
-#~ msgid "Duplicate"
-#~ msgstr "Wiederholen"
+msgid "Duplicate"
+msgstr "Wiederholen"
 
-#~ msgid "Edit"
-#~ msgstr "Bearbeiten"
+msgid "Edit"
+msgstr "Bearbeiten"
 
-#~ msgid "Exit"
-#~ msgstr "Beenden"
+msgid "Exit"
+msgstr "Beenden"
 
-#~ msgid "Import"
-#~ msgstr "QIF-File importieren"
+msgid "Import"
+msgstr "QIF-File importieren"
 
-#~ msgid "Jump"
-#~ msgstr "Sprung"
+msgid "Jump"
+msgstr "Sprung"
 
-#~ msgid "New"
-#~ msgstr "Neu"
+msgid "New"
+msgstr "Neu"
 
-#~ msgid "Open"
-#~ msgstr "Öffnen"
+msgid "Open"
+msgstr "Öffnen"
 
-#~ msgid "Record"
-#~ msgstr "Eintragen"
+msgid "Record"
+msgstr "Eintragen"
 
-#~ msgid "Save"
-#~ msgstr "Sichern"
+msgid "Save"
+msgstr "Sichern"
 
-#~ msgid "Transfer"
-#~ msgstr "Transfer"
+msgid "Transfer"
+msgstr "Transfer"
 
-#~ msgid "Show transactions on multiple lines with one line for each split"
-#~ msgstr "Transaktionen im Multi-Mode mit einer Zeile pro Split anzeigen"
+msgid "Show transactions on multiple lines with one line for each split"
+msgstr "Transaktionen im Multi-Mode mit einer Zeile pro Split anzeigen"
 
-#~ msgid "__gui"
-#~ msgstr "__gui"
+msgid "__gui"
+msgstr "__gui"
 
-#~ msgid "Print Dialog"
-#~ msgstr "Dialog ausdrucken"
+msgid "Print Dialog"
+msgstr "Dialog ausdrucken"
 
-#~ msgid "Failed to load QIF file. Are you sure it's a QIF file?"
-#~ msgstr ""
-#~ "QIF-Import fehlgeschlagen.Sind sie sicher, dass es eine QIF-Datei ist?"
+msgid "Failed to load QIF file. Are you sure it's a QIF file?"
+msgstr ""
+"QIF-Import fehlgeschlagen.Sind sie sicher, dass es eine QIF-Datei ist?"

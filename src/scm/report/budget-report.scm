@@ -3,26 +3,32 @@
 ;; Report on budget
 ;; Bryan Larsen (blarsen@ada-works.com)
 
-;; situations I want to handle
-;; lunch M-F -- funny period
-;; xmas gifts & birthday gifts in same budget line
-;; car repairs -- contingency
-;; car fuel-ups -- known amount, variable period
-;; paychecks & rent payments -- specific dates
+;; TODO
+;; properly handle income as well
+;; proper totals
+;; "upcoming/overdue bills" report
+;; druids to enter budget
+;; save/load budget
+;; internationalization
+;; speedup:  replace linear search with hash, 
+;;           create structure functions on load, 
+;;           move subexpressions outside loops
+;; clean up report
+;; graph budget progress
 
 (require 'sort)
 (require 'record)
 (gnc:depend "report-utilities.scm")
 (gnc:depend "html-generator.scm")
 (gnc:depend "date-utilities.scm")
+(gnc:depend "acc-create.scm")
 
 ;; budget types
-					;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
-					; that happen once per period
-					;(define gnc:budget-contingency 2) ; a budget item where you estimate a
-					; value over a long period for
-					; unexpected expenses.
-
+;;(define gnc:budget-recurring 1) ; regular, recurring budget expenses
+;; that happen once per period
+;;(define gnc:budget-contingency 2) ; a budget item where you estimate a
+;; value over a long period for
+;; unexpected expenses.
 ;; convert a date to a defined fraction
 (define (gnc:date-to-N-fraction caltime type)
   (case type
@@ -126,92 +132,151 @@
 (define budget-entry-structure
   (make-record-type 
    "budget-entry-structure" 
-   '(description amount accounts period period-type budget-type
-		 window-start window-end)))
+   '(description accounts subentries)))
 
-(define (make-budget-entry desc amt acct per ptype budget-type start end)
+(define budget-subentry-structure 
+  (make-record-type
+   "budget-subentry-structure"
+   '(description amount period period-type mechanism)))
+
+(define budget-recurring-mechanism-structure
+  (make-record-type 
+   "budget-recurring-mechanism-structure"
+   '()))
+
+(define budget-bill-mechanism-structure
+  (make-record-type 
+   "budget-bill-mechanism-structure"
+   '(window-start-day window-end-day)))
+
+(define budget-contingency-mechanism-structure
+  (make-record-type 
+   "budget-contingency-mechanism-structure"
+   '()))
+
+(define (make-budget-entry desc acct subentries)
   ((record-constructor budget-entry-structure) 
-   desc amt acct per ptype budget-type start end))
+   desc acct subentries))
+
+(define (make-budget-subentry desc amt per ptype mech)
+  ((record-constructor budget-subentry-structure)
+   desc amt per ptype mech))
+
+(define (make-recurring-mechanism)
+  ((record-constructor budget-recurring-mechanism-structure)))
+
+(define (make-bill-mechanism window-start-day window-end-day)
+  ((record-constructor budget-bill-mechanism-structure)
+   window-start-day window-end-day))
+
+(define (make-contingency-mechanism)
+  ((record-constructor budget-contingency-mechanism-structure)))
 
 (define gnc:budget-entries
   (list
-   (make-budget-entry "lunch" 8 '("Food:Lunch") 1 
-		      'gnc:budget-day 'gnc:budget-recurring 1 0)
-   (make-budget-entry "junk food" 0.50 '("Food:Junk") 1 
-		      'gnc:budget-day 'gnc:budget-recurring 1 0)
-   (make-budget-entry "car repairs" 2500 '("Car:Repairs") 5
-		      'gnc:budget-year 'gnc:budget-contingency 1 0)
-   (make-budget-entry "rent" 312.50 '("Household:Rent") 1
-		      'gnc:budget-month 'gnc:budget-trigger -1 2)
-   (make-budget-entry "car payments" 374.80 '("Car:Loan Payments") 1
-		      'gnc:budget-month 'gnc:budget-trigger 13 17)
-   (make-budget-entry "car 2" 374.80 '("Car:Loan Payments") 1
-		      'gnc:budget-month 'gnc:budget-trigger 20 20)))
+   ;; first line is always the "other" collector.
+   (make-budget-entry "other" '()
+    (list
+     (make-budget-subentry "" 3 1 'gnc:budget-day
+			   (make-recurring-mechanism))))
+   (make-budget-entry  "lunch" '("Expense:Food:Lunch" "Expense:Food:Junk") 
+    (list 
+     (make-budget-subentry "" 8 1 'gnc:budget-day 
+			   (make-recurring-mechanism))))
+   (make-budget-entry "car repairs" '("Expense:Car:Repairs") 
+    (list
+     (make-budget-subentry "contingency" 2500 5 'gnc:budget-year
+			   (make-contingency-mechanism))
+     (make-budget-subentry "maintenance" 50 6 'gnc:budget-month 
+			   (make-recurring-mechanism))))
+   (make-budget-entry "rent" '("Expense:Household:Rent") 
+    (list
+     (make-budget-subentry "" 312.50 1 'gnc:budget-month 
+			   (make-bill-mechanism 0 2))))
+   (make-budget-entry "car payments" '("Expense:Car:Loan Payments") 
+    (list
+     (make-budget-subentry "" 374.80 1 'gnc:budget-month 
+			   (make-bill-mechanism 13 17))))))
 
 (define (budget-entry-get-description budget-entry)
   ((record-accessor budget-entry-structure 'description) budget-entry))
 
-(define (budget-entry-get-amount budget-entry)
-  ((record-accessor budget-entry-structure 'amount) budget-entry))
+(define (budget-subentry-get-description subentry)
+  ((record-accessor budget-subentry-structure 'description) subentry))
 
 (define (budget-entry-get-accounts budget-entry)
   ((record-accessor budget-entry-structure 'accounts) budget-entry))
 
-(define (budget-entry-get-period budget-entry)
-  ((record-accessor budget-entry-structure 'period) budget-entry))
+(define (budget-entry-get-subentries budget-entry)
+  ((record-accessor budget-entry-structure 'subentries) budget-entry))
 
-(define (budget-entry-get-period-type budget-entry)
-  ((record-accessor budget-entry-structure 'period-type) budget-entry))
+(define (budget-subentry-get-amount subentry)
+  ((record-accessor budget-subentry-structure 'amount) subentry))
 
-(define (budget-entry-get-window-start budget-entry)
-  ((record-accessor budget-entry-structure 'window-start) budget-entry))
+(define (budget-subentry-get-period subentry)
+  ((record-accessor budget-subentry-structure 'period) subentry))
 
-(define (budget-entry-get-window-end budget-entry)
-  ((record-accessor budget-entry-structure 'window-end) budget-entry))
+(define (budget-subentry-get-period-type subentry)
+  ((record-accessor budget-subentry-structure 'period-type) subentry))
+
+(define (budget-bill-get-window-start-day bill)
+  ((record-accessor budget-bill-mechanism-structure 'window-start-day) bill))
+
+(define (budget-bill-get-window-end-day bill)
+  ((record-accessor budget-bill-mechanism-structure 'window-end-day) bill))
+
+(define (budget-subentry-get-mechanism subentry)
+  ((record-accessor budget-subentry-structure 'mechanism) subentry))
 
 (define (budget-description-html-proc)
-  (lambda (budget-line)
-    (html-generic-cell #f #f #f 
-		       (budget-entry-get-description 
-			(budget-line-get-entry budget-line)))))
+  (lambda (entry subentry report subreport)
+    (html-generic-cell #f #f #f (budget-entry-get-description entry))))
 
-(define (budget-amount-html-proc)
-  (lambda (budget-line)
-    (html-currency-cell #f #f (budget-entry-get-amount 
-			       (budget-line-get-entry budget-line)))))
+(define (budget-sub-description-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-generic-cell #f #f #f (budget-subentry-get-description subentry))))
 
-;; fixme -- only returns the first account in the list
 (define (budget-accounts-html-proc)
-  (lambda (budget-line)
+  (lambda (entry subentry report subreport)
     (html-generic-cell 
      #f #f #f 
-     (car (budget-entry-get-accounts (budget-line-get-entry budget-line))))))
+     (list->string (budget-entry-get-accounts entry)))))
+
+(define (budget-amount-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-subentry-get-amount subentry))))
 
 (define (budget-period-html-proc)
-  (lambda (budget-line)
+  (lambda (entry subentry report subreport)
     (html-number-cell
-     #f #f "%i" (budget-entry-get-period (budget-line-get-entry budget-line)))))
+     #f #f "%i" (budget-subentry-get-period subentry))))
 
 (define (budget-period-type-html-proc)
-  (lambda (budget-line)
+  (lambda (entry subentry report subreport)
     (html-generic-cell
      #f #f #f
      (gnc:date-describe-type 
-      (budget-entry-get-period-type (budget-line-get-entry budget-line))))))
+      (budget-subentry-get-period-type subentry)))))
 
-(define (budget-window-start-html-proc)
-  (lambda (budget-line)
-    (html-number-cell
-     #f #f "%i" (budget-entry-get-window-start (budget-line-get-entry budget-line)))))
+(define (budget-window-start-day-html-proc)
+  (lambda (entry subentry report subreport)
+    (let ((mechanism (budget-subentry-get-mechanism subentry)))
+      (if ((record-predicate budget-bill-mechanism-structure) mechanism)
+	  (html-number-cell
+	   #f #f "%i" (budget-bill-get-window-start-day mechanism))
+	  (html-generic-cell #f #f #f "")))))
 
-(define (budget-window-end-html-proc)
-  (lambda (budget-line)
-    (html-number-cell
-     #f #f "%i" (budget-entry-get-window-end (budget-line-get-entry budget-line)))))
+(define (budget-window-end-day-html-proc)
+  (lambda (entry subentry report subreport)
+    (let ((mechanism (budget-subentry-get-mechanism subentry)))
+      (if ((record-predicate budget-bill-mechanism-structure) mechanism)
+	  (html-number-cell
+	   #f #f "%i" (budget-bill-get-window-end-day mechanism))
+	  (html-generic-cell #f #f #f "")))))
 
 ;; budget report:  a vector with indexes corresponding to the budget
 ;; 0 - actual:  the amount spend / recieved
-;; 1 - budgeted: the budgeted amount.  Simply the periods * amount
+;; 1 - nominal: the nominal budgeted amount.  Simply the periods * amount
 ;; 2 - num-periods: the number of periods for the line in the report
 ;; 3 - mimimum-expected: minimum you expected to spend during the
 ;;          report period
@@ -222,83 +287,88 @@
 (define budget-report-structure
   (make-record-type 
    "budget-report-structure" 
-   '(actual budgeted num-periods minimum-expected maximum-expected 
-	    time-remaining num-triggers-upper num-triggers-lower)))
+   '(actual nominal minimum-expected maximum-expected subreports)))
 
-(define (make-empty-budget-report)
+(define budget-subreport-structure
+  (make-record-type
+   "budget-subreport-structure"
+   '(nominal minimum-expected maximum-expected)))
+
+(define (make-empty-budget-report entry)
   ((record-constructor budget-report-structure) 
-   0 0 0 0 0 0 0 0))
+   0 0 0 0 
+   (map
+    (lambda (subentry)
+      (make-empty-subreport))
+    (budget-entry-get-subentries entry))))
+
+(define (make-empty-subreport)
+  ((record-constructor budget-subreport-structure)
+   0 0 0))
+
+(define (budget-report-get-subreports brep)
+  ((record-accessor budget-report-structure 'subreports) brep))
 
 (define (budget-report-get-actual brep)
   ((record-accessor budget-report-structure 'actual) brep))
 
-(define (budget-report-get-budgeted brep)
-  ((record-accessor budget-report-structure 'budgeted) brep))
+(define (budget-report-get-nominal brep)
+  ((record-accessor budget-report-structure 'nominal) brep))
 
-(define (budget-report-get-num-periods brep)
-  ((record-accessor budget-report-structure 'num-periods) brep))
+(define (budget-subreport-get-nominal brep)
+  ((record-accessor budget-subreport-structure 'nominal) brep))
 
 (define (budget-report-get-minimum-expected brep)
   ((record-accessor budget-report-structure 'minimum-expected) brep))
 
+(define (budget-subreport-get-minimum-expected brep)
+  ((record-accessor budget-subreport-structure 'minimum-expected) brep))
+
 (define (budget-report-get-maximum-expected brep)
   ((record-accessor budget-report-structure 'maximum-expected) brep))
 
-(define (budget-report-get-time-remaining brep)
-  ((record-accessor budget-report-structure 'time-remaining) brep))
-
-(define (budget-report-get-num-triggers-upper brep)
-  ((record-accessor budget-report-structure 'num-triggers-upper) brep))
-
-(define (budget-report-get-num-triggers-lower brep)
-  ((record-accessor budget-report-structure 'num-triggers-lower) brep))
+(define (budget-subreport-get-maximum-expected brep)
+  ((record-accessor budget-subreport-structure 'maximum-expected) brep))
 
 (define (budget-actual-html-proc)
-  (lambda (budget-line)
-    (html-currency-cell #f #f (budget-report-get-actual 
-			       (budget-line-get-report budget-line)))))
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-report-get-actual report))))
 
-(define (budget-budgeted-html-proc)
-  (lambda (budget-line)
-    (html-currency-cell #f #f (budget-report-get-budgeted 
-			       (budget-line-get-report budget-line)))))
-
-(define (budget-num-periods-html-proc)
-  (lambda (budget-line)
-    (html-number-cell #f #f "%.6f" (budget-report-get-num-periods
-				    (budget-line-get-report budget-line)))))
+(define (budget-nominal-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-report-get-nominal report))))
 
 (define (budget-minimum-expected-html-proc)
-  (lambda (budget-line)
-    (html-currency-cell #f #f (budget-report-get-minimum-expected
-			       (budget-line-get-report budget-line)))))
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-report-get-minimum-expected report))))
 
 (define (budget-maximum-expected-html-proc)
-  (lambda (budget-line)
-    (html-currency-cell #f #f (budget-report-get-maximum-expected
-			       (budget-line-get-report budget-line)))))
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-report-get-maximum-expected report))))
 
-(define (budget-time-remaining-html-proc)
-  (lambda (budget-line)
-    (html-number-cell #f #f "%.1f" (budget-report-get-time-remaining
-				    (budget-line-get-report budget-line)))))
+(define (budget-sub-nominal-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-subreport-get-nominal subreport))))
 
-(define (budget-num-triggers-upper-html-proc)
-  (lambda (budget-line)
-    (html-number-cell #f #f "%.0f" (budget-report-get-num-triggers-upper
-				    (budget-line-get-report budget-line)))))
+(define (budget-sub-minimum-expected-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-subreport-get-minimum-expected subreport))))
 
-(define (budget-num-triggers-lower-html-proc)
-  (lambda (budget-line)
-    (html-number-cell #f #f "%.0f" (budget-report-get-num-triggers-lower
-				    (budget-line-get-report budget-line)))))
+(define (budget-sub-maximum-expected-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-currency-cell #f #f (budget-subreport-get-maximum-expected subreport))))
+
+(define (budget-null-html-proc)
+  (lambda (entry subentry report subreport)
+    (html-generic-cell 
+     #f #f #f "")))
 
 (define budget-line-structure
   (make-record-type "budget-line-structure"
 		    '(entry report)))
 
 (define (make-budget-line entry report)
-  ((record-constructor budget-line-structure)  entry report))
+  ((record-constructor budget-line-structure) entry report))
 
 (define (budget-line-get-entry line)
   ((record-accessor budget-line-structure 'entry) line))
@@ -306,6 +376,53 @@
 (define (budget-line-get-report line)
   ((record-accessor budget-line-structure 'report) line))
 
+(define report-spec-structure
+  (make-record-type
+   "report-spec-structure"
+   '(header format-proc type)))
+
+(define (make-report-spec header format-proc type)
+  ((record-constructor report-spec-structure)
+   header format-proc type))
+
+(define (report-spec-get-header spec)
+  ((record-accessor report-spec-structure 'header) spec))
+
+(define (report-spec-get-format-proc spec)
+  ((record-accessor report-spec-structure 'format-proc) spec))
+
+(define (report-spec-get-type spec)
+  ((record-accessor report-spec-structure 'type) spec))
+
+(define (budget-line-html line report-specs)
+  (let ((entry (budget-line-get-entry line))
+	(report (budget-line-get-report line)))
+    ;;(map-in-order
+    (map
+     (lambda (subentry subreport)
+       (html-table-row-manual
+	(map
+	 (lambda (specs)
+	   (case (report-spec-get-type specs)
+	     ((gnc:report-all)
+	      ((report-spec-get-format-proc specs) 
+	       entry subentry report subreport))
+	     ((gnc:report-first)
+	      (if (eqv? subreport (car (budget-report-get-subreports report)))
+		  ((report-spec-get-format-proc specs)
+		   entry subentry report subreport)
+		  ((budget-null-html-proc) 
+		   entry subentry report subreport)))
+	     ((gnc:report-last)
+	      (if (= (cdr subentry) '())
+		  ((report-spec-get-format-proc specs)
+		   entry subentry report subreport)
+		  ((budget-null-html-proc) 
+		   entry subentry report subreport)))
+	     (else (gnc:debug "budget-line-html: invalid type"))))
+	 report-specs)))
+     (budget-entry-get-subentries entry)
+     (budget-report-get-subreports report))))
 
 ;; add a value to the budget accumulator
 (define (budget-report-accumulate-actual! value budget-line)
@@ -313,56 +430,90 @@
    (budget-line-get-report budget-line)
    (+ value (budget-report-get-actual (budget-line-get-report budget-line)))))
 
-;; calculate the # of periods on a budget line.
-;; dates are in # seconds after 1970
-(define (budget-calculate-periods! budget-line begin-date end-date)
-  (let ((entry (budget-line-get-entry budget-line)))
-    ((record-modifier budget-report-structure 'num-periods)
-     (budget-line-get-report budget-line)
-     (/ (gnc:date-N-delta begin-date end-date 
-			  (budget-entry-get-period-type entry))
-	(budget-entry-get-period entry)))))
+(define (budget-subreport-set-min-expected! subreport min-expected)
+  ((record-modifier budget-subreport-structure 'minimum-expected)
+   subreport min-expected))
 
-;; calculate the budgeted value.
-;; dependency: budget-calculate-periods!
-(define (budget-calculate-budgeted! budget-line)
-  ((record-modifier budget-report-structure 'budgeted)
+(define (budget-subreport-set-max-expected! subreport max-expected)
+  ((record-modifier budget-subreport-structure 'maximum-expected)
+   subreport max-expected))
+
+(define (budget-report-accumulate-min-expected! report min-expected)
+  ((record-modifier budget-report-structure 'minimum-expected) report
+   (+ min-expected (budget-report-get-minimum-expected report))))
+
+(define (budget-report-accumulate-max-expected! report max-expected)
+  ((record-modifier budget-report-structure 'maximum-expected) report
+   (+ max-expected (budget-report-get-maximum-expected report))))
+
+;; return the # of budget periods over the report period
+(define (budget-num-periods subentry begin-date end-date)
+  (/ (gnc:date-N-delta begin-date end-date
+		       (budget-subentry-get-period-type subentry))
+     (budget-subentry-get-period subentry)))
+
+
+(define (budget-calculate-expected! budget-line begin-date end-date)
+  (let ((entry (budget-line-get-entry budget-line))
+	(report (budget-line-get-report budget-line)))
+    (for-each 
+     (lambda (subentry subreport)
+       (let ((mechanism (budget-subentry-get-mechanism subentry)))
+	 (cond (((record-predicate 
+		  budget-bill-mechanism-structure) mechanism)
+		(budget-calculate-bill! 
+		 subentry subreport mechanism begin-date end-date))
+	       (((record-predicate
+		  budget-recurring-mechanism-structure) mechanism)
+		(budget-calculate-recurring! 
+		 subentry subreport mechanism begin-date end-date))
+	       (((record-predicate
+		  budget-contingency-mechanism-structure) mechanism)
+		(budget-calculate-contingency! 
+		 subentry subreport mechanism begin-date end-date))
+	       (else (gnc:debug "invalid mechanism!")))
+	 (budget-report-accumulate-min-expected! 
+	  report (budget-subreport-get-minimum-expected subreport))
+	 (budget-report-accumulate-max-expected! 
+	  report (budget-subreport-get-maximum-expected subreport))))
+     (budget-entry-get-subentries entry)
+     (budget-report-get-subreports report))))
+	       
+;; calculate the nominal value.
+(define (budget-calculate-nominal! budget-line begin-date end-date)
+  ((record-modifier budget-report-structure 'nominal)
    (budget-line-get-report budget-line)
-   (* (budget-entry-get-amount (budget-line-get-entry budget-line))
-      (budget-report-get-num-periods (budget-line-get-report budget-line)))))
+   (apply +
+	  (map
+	   (lambda (subentry subreport)
+	     (let ((t (* (budget-subentry-get-amount subentry)
+			 (budget-num-periods subentry begin-date end-date))))
+	       ((record-modifier budget-subreport-structure 'nominal)
+		subreport t)
+	       t))
+	   (budget-entry-get-subentries (budget-line-get-entry budget-line))
+	   (budget-report-get-subreports (budget-line-get-report budget-line))))))
 
-;; calculate the values for minimum-expected and maxmimum-expected
-;; dependency: budget-calculate-periods!
-(define (budget-calculate-expected! budget-line)
-  (let ((brep (budget-line-get-report budget-line))
-	(entry (budget-line-get-entry budget-line)))
-					; fixme: contingency type budget entries may have a lower minimum
-    ((record-modifier budget-report-structure 'minimum-expected) brep
-     (* (budget-entry-get-amount entry)		    
-	(floor (budget-report-get-num-periods brep))))
-    ((record-modifier budget-report-structure 'maximum-expected) brep
-     (* (budget-entry-get-amount entry)
-	(ceiling (budget-report-get-num-periods brep))))))
+(define (budget-calculate-recurring! subentry subreport mechanism begin end)
+  (let ((np (budget-num-periods subentry begin end))
+	(amount (budget-subentry-get-amount subentry)))
+    (budget-subreport-set-min-expected! subreport (* amount (floor np)))
+    (budget-subreport-set-max-expected! subreport (* amount (ceiling np)))))
 
-;; calculate the amount of time remaining in the budget period
-;; dependency: budget-calculate-periods!
-(define (budget-calculate-time-remaining! budget-line)
-  (let* ((entry (budget-line-get-entry budget-line))
-	 (brep (budget-line-get-report budget-line))
-	 (periods (budget-report-get-num-periods brep)))
-    ((record-modifier budget-report-structure 'time-remaining) brep
-     (* (- (ceiling periods) periods) 
-	(budget-entry-get-period entry)))))
+(define (budget-calculate-contingency! subentry subreport mechanism begin end)
+  (let ((np (budget-num-periods subentry begin end))
+	(amount (budget-subentry-get-amount subentry)))
+    (let ((min
+	   (max 0 (* (- np 1.0) amount))))
+      (budget-subreport-set-min-expected! subreport min)
+      (budget-subreport-set-max-expected! subreport (+ min amount)))))
 
-;; calculate the number of times the trigger window occurs in the budget
-;; period
-(define (budget-calculate-num-triggers! budget-line begin-date end-date)
-  (let ((entry (budget-line-get-entry budget-line)))
-    (let ((brep (budget-line-get-report budget-line))
-	  (N-type (budget-entry-get-period-type entry))
-	  (window-start (budget-entry-get-window-start entry))
-	  (window-end (budget-entry-get-window-end entry))
-	  (psize (budget-entry-get-period entry)))
+(define (budget-calculate-bill! subentry subreport mechanism begin-date end-date)
+  (let ((N-type (budget-subentry-get-period-type subentry))
+	(window-start (budget-bill-get-window-start-day mechanism))
+	(window-end (budget-bill-get-window-end-day mechanism))
+	(psize (budget-subentry-get-period subentry))
+	(amount (budget-subentry-get-amount subentry)))
       ; convert negative numbers to positive numbers
       (let ((trig-start-A (if (> window-start 0)
 			      window-start
@@ -431,26 +582,33 @@
 				 (floor (/ (gnc:date-to-N-fraction 
 					    begin-date N-type) psize))))))))
 	; now save 'em into the record
-	((record-modifier budget-report-structure 'num-triggers-lower) brep
-	 sure)
-	((record-modifier budget-report-structure 'num-triggers-upper) brep
-	 (+ sure possible))))))
+	(budget-subreport-set-min-expected! subreport 
+					    (* amount sure))
+	(budget-subreport-set-max-expected! subreport 
+					    (* amount (+ sure possible))))))
 
 ;; given an account name, return the budget line
 ;; return #f if there is no budget line for that account
-(define (budget-get-line account-name budget)
-  (cond ((null? budget) #f)
-	(else
-	 (let loop2
-	     ((accounts (budget-entry-get-accounts 
-			 (budget-line-get-entry (car budget)))))
-	   (cond ((null? accounts) #f)
-		 (else 
-		  (cond ((or (string=? account-name (car accounts))
-			     (loop2 (cdr accounts)))
-			 (car budget))
-			(else
-			 (budget-get-line account-name (cdr budget))))))))))
+(define (budget-get-line account-name budg)
+  (let loop1 ((budget budg))
+    (cond ((null? budget) #f)
+	  (else
+	   (cond ((budget-get-line-2 account-name (car budget))
+		  (car budget))
+		 (else (loop1 (cdr budget))))))))
+
+;; I should be able to put this inside budget-get-line, but for some
+;; reason, it screws up.
+(define (budget-get-line-2 account-name budget-line)
+  (let loop2
+      ((accounts (budget-entry-get-accounts 
+		  (budget-line-get-entry budget-line))))
+    (cond ((null? accounts) #f)
+	  (else 
+	   (cond ((or (string=? account-name (car accounts))
+		      (loop2 (cdr accounts)))
+		  budget-line)
+		 (else #f))))))
 
 
 ;; register a configuration option for the budget report
@@ -503,6 +661,73 @@
 	    "How are you doing on your budget?"))))
   gnc:*budget-report-options*)
 
+(define gnc:budget-full-report-specs
+  (list
+   (make-report-spec 
+    "Description" (budget-description-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Accounts" (budget-accounts-html-proc) 'gnc:report-first)
+   (make-report-spec 
+    "Description (subs)" (budget-sub-description-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Amount" (budget-amount-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Period" (budget-period-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "" (budget-period-type-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Window Start Day" (budget-window-start-day-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Window End Day" (budget-window-end-day-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Actual" (budget-actual-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Nominal (total)" (budget-nominal-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Nominal" (budget-sub-nominal-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Upper Limit (total)" (budget-maximum-expected-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Upper Limit" (budget-sub-maximum-expected-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Lower Limit (total)" (budget-minimum-expected-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Lower Limit" (budget-sub-minimum-expected-html-proc) 'gnc:report-all)))
+
+(define gnc:budget-balance-report-specs
+  (list
+   (make-report-spec 
+    "Description" (budget-description-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Accounts" (budget-accounts-html-proc) 'gnc:report-first)
+   (make-report-spec 
+    "Description (subs)" (budget-sub-description-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Amount" (budget-amount-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Period" (budget-period-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "" (budget-period-type-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Window Start Day" (budget-window-start-day-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Window End Day" (budget-window-end-day-html-proc) 'gnc:report-all)
+   (make-report-spec
+    "Nominal (total)" (budget-nominal-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Nominal" (budget-sub-nominal-html-proc) 'gnc:report-all)))
+
+(define gnc:budget-status-report-specs
+  (list
+   (make-report-spec 
+    "Description" (budget-description-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Upper Limit" (budget-maximum-expected-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Lower Limit" (budget-minimum-expected-html-proc) 'gnc:report-first)
+   (make-report-spec
+    "Actual" (budget-actual-html-proc) 'gnc:report-first)))
+
 (gnc:define-report
  ;; version
  1
@@ -520,124 +745,59 @@
 			       (gnc:option-value enddate))))
 	  (budget-list (map 
 			(lambda (entry)
-			  (make-budget-line entry (make-empty-budget-report)))
+			  (make-budget-line entry (make-empty-budget-report entry)))
 			gnc:budget-entries)))
 
      (let loop ((group (gnc:get-current-group)))
        (if (not (pointer-token-null? group))
 	   (gnc:group-map-accounts
 	    (lambda (account)
-	      (let ((line 
-		     (budget-get-line
-		      (gnc:account-get-full-name account)
-		      budget-list)))
-		(if line 
+	      (if (eqv? (gnc:account-type->symbol (gnc:account-get-type account))
+			'EXPENSE)
+		  (let* ((line
+			  (budget-get-line
+			   (gnc:account-get-full-name account)
+			   budget-list))
+			 (line2 (if line line (car budget-list))))
 		    (gnc:for-each-split-in-account 
 		     account
 		     (lambda (split)
-		       (budget-report-accumulate-actual! 
-			(gnc:split-get-value split) line))))
-		(loop (gnc:account-get-children account))))
+		       (budget-report-accumulate-actual!
+			(gnc:split-get-value split) line2)))))
+	      (loop (gnc:account-get-children account)))
 	    group)))
 
      (for-each 
       (lambda (line)
 	(begin
-	  (budget-calculate-periods! line begin-date-secs end-date-secs)
-	  (budget-calculate-budgeted! line)
-	  (budget-calculate-expected! line)
-	  (budget-calculate-time-remaining! line)
-	  (budget-calculate-num-triggers! line begin-date-secs end-date-secs)))
+	  (budget-calculate-nominal! line begin-date-secs end-date-secs)
+	  (budget-calculate-expected! line begin-date-secs end-date-secs)))
       budget-list)
      
-     (let ((report-headers '())
-	   (report-procs '()))
-       (case (gnc:option-value 
-	      (gnc:lookup-option options "Report Options" "View"))
-	 ((full)
-	  (set! report-headers (list
-				"Description"
-				"Amount"
-				"Accounts"
-				"Period"
-				""
-				"Actual"
-				"Window Start"
-				"Window End"
-				"Budgeted"
-				"Number of Periods"
-				"Lower Limit"
-				"Upper Limit"
-				"Time Remaining"
-				""
-				"Num Triggers Upper"
-				"Num Triggers Lower"))
-	  (set! report-procs (list
-			      budget-description-html-proc
-			      budget-amount-html-proc
-			      budget-accounts-html-proc
-			      budget-period-html-proc	
-			      budget-period-type-html-proc
-			      budget-actual-html-proc
-			      budget-window-start-html-proc
-			      budget-window-end-html-proc
-			      budget-budgeted-html-proc
-			      budget-num-periods-html-proc
-			      budget-minimum-expected-html-proc
-			      budget-maximum-expected-html-proc
-			      budget-time-remaining-html-proc
-			      budget-period-type-html-proc
-			      budget-num-triggers-upper-html-proc
-			      budget-num-triggers-lower-html-proc)))
-	 ((balancing)
-	  (set! report-headers (list
-				"Description"
-				"Accounts"
-				"Period"
-				""
-				"Amount"
-				"Number of Periods"
-				"Budgeted"))
-	  (set! report-procs (list
-			      budget-description-html-proc
-			      budget-accounts-html-proc
-			      budget-period-html-proc
-			      budget-period-type-html-proc
-			      budget-amount-html-proc
-			      budget-num-periods-html-proc
-			      budget-budgeted-html-proc)))
-	 ((status)
-	  (set! report-headers (list
-				"Description"
-				"Time Remaining"
-				""
-				"Lower Limit"
-				"Upper Limit"
-				"Actual"))
-	  (set! report-procs (list
-			      budget-description-html-proc
-			      budget-time-remaining-html-proc
-			      budget-period-type-html-proc
-			      budget-minimum-expected-html-proc
-			      budget-maximum-expected-html-proc
-			      budget-actual-html-proc)))
-	 (else
-	  (gnc:debug "Invalid view option")))
+     (let ((report-specs 
+	    (case (gnc:option-value
+		   (gnc:lookup-option options "Report Options" "View"))
+	      ((full) gnc:budget-full-report-specs)
+	      ((balancing) gnc:budget-balance-report-specs)
+	      ((status) gnc:budget-status-report-specs)
+	      (else (gnc:debug (list "Invalid view option" 
+				     (gnc:option-value
+				      (gnc:lookup-option options "Report Options" "View"))))))))
        (list
 	(html-start-document)
 	"<p>This is a budget report.  It is very preliminary, but you may find it useful.  To actually change the budget, currently you have to edit budget-report.scm.</p>"
 	(html-start-table)
 	(html-table-row-manual
-	 (map-in-order
-	  (lambda (item) (html-cell-header item))
-	  report-headers))
-	(map-in-order
+	 ;;(map-in-order
+	 (map
+	  (lambda (spec) 
+	    (html-cell-header 
+	     (report-spec-get-header spec)))
+	  report-specs))
+	;;(map-in-order
+	(map
 	 (lambda (line)	 
-	   (html-table-row-manual
-	    (map-in-order
-	     (lambda (proc)
-	       ((proc) line))
-	     report-procs)))
+	   (budget-line-html line report-specs))
 	 budget-list)
 	(html-end-table)
 	(html-end-document))))))

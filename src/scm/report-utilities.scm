@@ -57,6 +57,7 @@
 
 ;; like map, but restricted to one dimension, and
 ;; guaranteed to have inorder semantics.
+;; note: map-in-order is in a SRFI.
 (define (gnc:inorder-map the-list fn)
   (let loop ((rest the-list)
              (collected '()))
