@@ -144,32 +144,40 @@
 
   (gnc:module-system-init)
   
-  ;; right now we have to statically load all these at startup time.
-  ;; Hopefully we can gradually make them autoloading.
-  (gnc:module-load "gnucash/engine" 0)
-  (gnc:module-load "gnucash/app-utils" 0)
-  (gnc:module-load "gnucash/app-file" 0)
-  (gnc:module-load "gnucash/register/ledger-core" 0)
-  (gnc:module-load "gnucash/register/register-core" 0)
-  (gnc:module-load "gnucash/register/register-gnome" 0)
-  (gnc:module-load "gnucash/import-export/binary-import" 0)
-  (gnc:module-load "gnucash/import-export/qif-import" 0)
-  (gnc:module-load "gnucash/report/report-system" 0)
-  (gnc:module-load "gnucash/report/stylesheets" 0)
-  (gnc:module-load "gnucash/report/standard-reports" 0)
-  (gnc:module-load "gnucash/report/utility-reports" 0)
-  (gnc:module-load "gnucash/report/locale-specific/us" 0)
+  ;; SUPER UGLY HACK -- this should go away when I come back for the
+  ;; second cleanup pass...
+  (let ((original-module (current-module))
+        (bootstrap (resolve-module '(gnucash bootstrap))))
+    
+    (set-current-module bootstrap)
+    
+    ;; right now we have to statically load all these at startup time.
+    ;; Hopefully we can gradually make them autoloading.
+    (gnc:module-load "gnucash/engine" 0)
+    (gnc:module-load "gnucash/app-utils" 0)
+    (gnc:module-load "gnucash/app-file" 0)
+    (gnc:module-load "gnucash/register/ledger-core" 0)
+    (gnc:module-load "gnucash/register/register-core" 0)
+    (gnc:module-load "gnucash/register/register-gnome" 0)
+    (gnc:module-load "gnucash/import-export/binary-import" 0)
+    (gnc:module-load "gnucash/import-export/qif-import" 0)
+    (gnc:module-load "gnucash/report/report-system" 0)
+    (gnc:module-load "gnucash/report/stylesheets" 0)
+    (gnc:module-load "gnucash/report/standard-reports" 0)
+    (gnc:module-load "gnucash/report/utility-reports" 0)
+    (gnc:module-load "gnucash/report/locale-specific/us" 0)
 
-  ;; Now we can load a bunch of files.
-  (load-from-path "path.scm")
-  (load-from-path "command-line.scm")
-  (load-from-path "doc.scm")
-  (load-from-path "extensions.scm")
-  (load-from-path "main-window.scm")
-  (load-from-path "tip-of-the-day.scm")
-  (load-from-path "printing/print-check.scm")
+    ;; Now we can load a bunch of files.
+    (load-from-path "path.scm")
+    (load-from-path "command-line.scm")
+    (load-from-path "doc.scm")
+    (load-from-path "extensions.scm")
+    (load-from-path "main-window.scm")
+    (load-from-path "tip-of-the-day.scm")
+    (load-from-path "printing/print-check.scm")
 
-  (gnc:use-guile-module-here! '(gnucash price-quotes))
+    (gnc:use-guile-module-here! '(gnucash price-quotes))
+    (set-current-module original-module))
 
   (gnc:hook-add-dangler gnc:*book-opened-hook*
                         (lambda (file)
