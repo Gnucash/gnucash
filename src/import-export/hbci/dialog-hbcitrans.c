@@ -24,20 +24,24 @@
 
 #include <gnome.h>
 #include <openhbci/bank.h>
+#include <openhbci/outboxaccjobs.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
+
+#include "gnc-hbci-utils.h"
 #include "dialog-hbcitrans.h"
 
 HBCI_Transaction *
 gnc_hbci_trans (GtkWidget *parent,
 		HBCI_API *api,
+		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
 		const HBCI_Customer *customer)
 {
   GtkWidget *dialog;
   GladeXML *xml;
-  HBCI_Transaction *res_trans = NULL;
+  HBCI_Transaction *trans = NULL;
   gint result;
   const HBCI_Bank *bank;
   
@@ -65,7 +69,6 @@ gnc_hbci_trans (GtkWidget *parent,
     GtkWidget *orig_account_label;
     GtkWidget *orig_bankname_label;
     GtkWidget *orig_bankcode_label;
-    HBCI_Transaction *trans;
     
     g_assert 
       (recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
@@ -111,9 +114,10 @@ gnc_hbci_trans (GtkWidget *parent,
     gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
   
     result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+    /* printf("hbci_trans: result button was %d.\n", result); */
     
-    /* Was cancel pressed? */
-    if (result != 0) {
+    /* Was cancel pressed or dialog closed? */
+    if ((result != 0) && (result != 1)) {
       gtk_widget_destroy (GTK_WIDGET (dialog));
       return NULL;
     }
@@ -151,9 +155,48 @@ gnc_hbci_trans (GtkWidget *parent,
       HBCI_Transaction_setValue (trans, val);
     }
 
-    res_trans = trans;
+    {
+      /* Create a Do-Transaction (Transfer) job. */
+      HBCI_OutboxJobTransfer *transfer_job;
+      HBCI_OutboxJob *job;
+    
+      transfer_job = 
+	HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
+      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
+      g_assert (job);
+      HBCI_API_addJob (api, job);
+
+      /* If the user pressed "execute now", then execute this job now. */
+      if (result == 0) {
+	HBCI_Error *err;
+	  
+	if (interactor)
+	  GNCInteractor_show (interactor);
+
+	/*HBCI_Hbci_setDebugLevel(1);*/
+	err = HBCI_API_executeQueue (api, TRUE);
+	g_assert (err);
+	if (!HBCI_Error_isOk(err)) {
+	  char *errstr = g_strdup_printf("gnc_hbci_maketrans: Error at executeQueue: %s",
+					 HBCI_Error_message (err));
+	  printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+		 HBCI_OutboxJob_result(job));
+	  HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
+					    (HBCI_API_Hbci (api)), errstr);
+	  g_free (errstr);
+	  HBCI_Error_delete (err);
+	  gnc_hbci_debug_outboxjob (job);
+	  gtk_widget_destroy (GTK_WIDGET (dialog));
+	  return trans;
+	}
+	/*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
+	HBCI_Error_delete (err);
+      }
+      
+    }
+
   }
   
   gtk_widget_destroy (GTK_WIDGET (dialog));
-  return res_trans;
+  return trans;
 }

@@ -30,9 +30,12 @@
 #include <openhbci/customer.h>
 #include <openhbci/transaction.h>
 
+#include "hbci-interaction.h"
+
 HBCI_Transaction *
 gnc_hbci_trans (GtkWidget *parent,
 		HBCI_API *api,
+		GNCInteractor *interactor,
 		const HBCI_Account *h_acc,
 		const HBCI_Customer *customer);
 

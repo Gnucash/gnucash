@@ -998,6 +998,24 @@ gnc_xfer_dialog_set_description(XferDialog *xferData, const char *description)
 }
 
 /********************************************************************\
+ * gnc_xfer_dialog_set_memo                                         *
+ *   set the memo in the given xfer dialog                          *
+ *                                                                  *
+ * Args:   xferData    - xfer dialog structure                      *
+ *         memo        - the memo to set                            *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo)
+{
+  if (xferData == NULL)
+    return;
+
+  gtk_entry_set_text(GTK_ENTRY(xferData->memo_entry), memo);
+  /* gnc_quickfill_insert( xferData->qf, memo, QUICKFILL_LIFO ); */
+}
+
+/********************************************************************\
  * gnc_xfer_dialog_set_date                                         *
  *   set the date in the given xfer dialog                          *
  *                                                                  *

@@ -22,9 +22,12 @@
 
 #include "gnc-hbci-actions.h"
 
-#include "gnc-ui.h"
 #include <openhbci/api.h>
 #include <openhbci/outboxaccjobs.h>
+
+#include "gnc-ui.h"
+#include "gnc-numeric.h"
+#include "dialog-transfer.h"
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
@@ -185,43 +188,28 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc)
 
   {
     /* Now open the HBCI_trans_dialog. */
-    HBCI_Transaction *trans = gnc_hbci_trans (parent, api, h_acc, customer);
+    HBCI_Transaction *trans = gnc_hbci_trans (parent, api, interactor,
+					      h_acc, customer);
     if (!trans)
       return;
 
     {
-      /* Execute a Do-Transaction (Transfer) job. */
-      HBCI_OutboxJobTransfer *transfer_job;
-      HBCI_OutboxJob *job;
-      HBCI_Error *err;
-    
-      transfer_job = 
-	HBCI_OutboxJobTransfer_new (customer, (HBCI_Account *)h_acc, trans);
-      job = HBCI_OutboxJobTransfer_OutboxJob (transfer_job);
-      g_assert (job);
-      HBCI_API_addJob (api, job);
-
-      if (interactor)
-	GNCInteractor_show (interactor);
-
-      HBCI_Hbci_setDebugLevel(1);
-      err = HBCI_API_executeQueue (api, TRUE);
-      g_assert (err);
-      if (!HBCI_Error_isOk(err)) {
-	char *errstr = g_strdup_printf("gnc_hbci_maketrans: Error at executeQueue: %s",
-				       HBCI_Error_message (err));
-	printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
-	       HBCI_OutboxJob_result(job));
-	HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
-					  (HBCI_API_Hbci (api)), errstr);
-	g_free (errstr);
-	HBCI_Error_delete (err);
-	gnc_hbci_debug_outboxjob (job);
-	return;
-      }
-      /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
-      HBCI_Error_delete (err);
-    
+      gnc_numeric amount;
+      char *description;
+      XferDialog *transdialog;
+      
+      amount = double_to_gnc_numeric 
+	(HBCI_Value_getValue (HBCI_Transaction_value (trans)),
+	 100, GNC_RND_FLOOR);
+      description = g_strdup_printf("HBCI to %s", 
+				    HBCI_Transaction_otherAccountId (trans));
+      
+      transdialog = gnc_xfer_dialog (parent, gnc_acc);
+      gnc_xfer_dialog_set_title (transdialog, "HBCI initiated transaction");
+      /* gnc_xfer_dialog_toggle_currency_frame (transdialog, FALSE); */
+      gnc_xfer_dialog_set_amount (transdialog, amount);
+      gnc_xfer_dialog_set_description (transdialog, description);
+      g_free (description);
     }
     
     HBCI_Transaction_delete (trans);

@@ -73,6 +73,7 @@ void gnc_xfer_dialog_lock_to_account_tree(XferDialog *xferData );
 void gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount);
 void gnc_xfer_dialog_set_description(XferDialog *xferData,
                                      const char *description);
+void gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo);
 void gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time);
 
 /* Indicate whether the dialog should quickfill based on the "To" account,

@@ -1,3 +1,11 @@
+2002-09-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-actions.c,
+	src/import-export/hbci/dialog-hbcitrans.[hc] : Connect the HBCI
+	transaction-invocation and gnucash xfer dialog.
+
+	* src/gnome/dialog-transfer.[hc]: Add set_memo access function.
+
 2002-09-19  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-actions.[hc], gnc-hbci-cb.[hc],
