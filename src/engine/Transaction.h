@@ -20,6 +20,62 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Transaction Financial Transactions
+    A good overview of transactions, splits and accounts can be 
+    found in the texinfo documentation, together with an overview of
+    how to use this API.
+
+Splits, or "Ledger Entries" are the fundamental
+accounting units. Each Split consists of an amount (number of dollar
+bills, number of shares, etc.), the value of that amount expressed in
+a (possibly) different currency than the amount, a Memo, a pointer to
+the parent Transaction, a pointer to the debited Account, a reconciled
+flag and timestamp, an "Action" field, and a key-value frame which can
+store arbitrary data.
+                                                                              
+Transactions embody the notion of "double entry" accounting. 
+A Transaction consists of a date, a description, an ID number, 
+a list of one or more Splits, and a key-value frame.  The transaction
+also specifies the currency with which all of the splits will be valued.
+When double-entry rules are enforced, the sum total value of the splits 
+are zero.  If there are only two splits, then the value of one must be 
+positive, the other negative: this denotes that one account is debited, 
+and another is credited by an equal amount.  By forcing the value of the
+splits to always 'add up' to zero, we can gaurentee that the balances
+of the accounts are always correctly balanced.
+
+The engine does not enforce double-entry accounting, but provides an API
+to enable user-code to find unbalanced transactions and 'repair' them so
+that they are in balance. 
+
+Note the sum of the values of Splits in a Transaction is always computed
+with respect to a currency; thus splits can be balanced even when they
+are in different currencies, as long as they share a common currency.
+This feature allows currency-trading accounts to be established.
+                                                                              
+Every Split must point to its parent Transaction, and that Transaction
+must in turn include that Split in the Transaction's list of Splits. A
+Split can belong to at most one Transaction. These relationships are
+enforced by the engine. The engine user cannnot accidentally destroy
+this relationship as long as they stick to using the API and never
+access internal structures directly.
+
+Splits are grouped into Accounts which are also known
+as "Ledgers" in accounting practice. Each Account consists of a list of
+Splits that debit that Account. To ensure consistency, if a Split points
+to an Account, then the Account must point to the Split, and vice-versa.
+A Split can belong to at most one Account. Besides merely containing a
+list of Splits, the Account structure also gives the Account a name, a
+code number, description and notes fields, a key-value frame, a pointer
+to the commodity that is used for all splits in this account. The
+commodity can be the name of anything traded and tradable: a stock 
+(e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or anything
+added to the commodity table.  
+
+Accounts can be arranged in a hierarchical tree. The nodes of the tree
+are called "Account Groups". By accounting
+convention, the value of an Account is equal to the value of all of its
+Splits plus the value of all of its sub-Accounts.
+
     @{ */
 /** @file Transaction.h 
     @brief API for Transactions and Splits (journal entries)
