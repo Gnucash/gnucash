@@ -79,6 +79,8 @@ gnc_engine_init(int argc, char ** argv)
   if (1 == engine_is_initialized) return;
   engine_is_initialized = 1;
 
+  gnc_log_init();
+
   /* initialize the string cache */
   gnc_engine_get_string_cache();
   
