@@ -99,36 +99,6 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
 }
 
 /* ======================================================== */
-/* a split always has a partner */
-
-static char * 
-GetOtherAccName (Split *split)
-{
-   Account *acc = NULL;
-   Transaction *trans;
-   Split *s, *other_split;
-   int numsplits;
-
-   trans = xaccSplitGetParent (split);
-
-   numsplits = xaccTransCountSplits (trans);
-   /* if (2 < numsplits) return SPLIT_STR; */
-   if (2 < numsplits) return "BOGUS";
-
-   s = xaccTransGetSplit (trans, 0);
-   if (s == split) {
-      other_split = xaccTransGetSplit (trans, 1);
-   } else {
-      other_split = s;
-   }
-
-   acc = xaccSplitGetAccount (other_split);
-   if (acc) return xaccAccountGetName (acc);
-
-   return "";
-}
-
-/* ======================================================== */
 /* Copy from the register object to the engine */
 
 void 
@@ -287,7 +257,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetBasicCellValue (reg->recnCell, buff);
    
       /* the transfer account */
-      accname = GetOtherAccName (split);
+      accname = xaccAccountGetName (xaccSplitGetAccount (split));
       xaccSetComboCellValue (reg->xfrmCell, accname);
    
       xaccSetDebCredCellValue (reg->debitCell, 
@@ -324,7 +294,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 {
    int i;
    Split *split;
-   Transaction *trans;
    Table *table;
    int save_cursor_phys_row;
    int num_phys_rows;
@@ -353,39 +322,49 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* num_phys_rows is the number of rows in all the cursors */
    num_phys_rows = reg->header->numRows;
 
-   /* number of virtual rows is number of splits plus transactions,
-    * plus one for the header  */
+   /* Count the number of rows needed.  
+    * the count will be equal to 
+    * +1   for the header
+    * +n   that is, one (transaction) row for each split passed in,
+    * +n   one blank edit row for each transaction
+    * +p   where p is the sum total of all the splits in the transaction
+    * +2   an editable transaction and split at the end.
+    */
    num_virt_rows = 1;
 
    i=0;
-   trans = NULL;
    split = slist[0]; 
    while (split) {
-      if (trans != xaccSplitGetParent (split)) {
-         if (NULL != trans) {
-            /* add a line for the blank split at tail
-             * of previous transaction.  */
-            num_virt_rows ++;
-            num_phys_rows += reg->split_cursor->numRows; 
-         }
-         trans = xaccSplitGetParent (split);
-         /* add a row for each transaction */
-         num_virt_rows ++;
-         num_phys_rows += reg->trans_cursor->numRows; 
-      }
-      /* add a row for each split */
+      Transaction *trans;
+      int j;
+
+      trans = xaccSplitGetParent (split);
+      if (!trans) {
+         /* hack assert */
+         printf ("Internal Error: xaccSRLoadRegister(): "
+                 "Split without a parent \n");
+         break;
+      } 
+
+      /* add one row for a transaction */
       num_virt_rows ++;
-      num_phys_rows += reg->split_cursor->numRows; 
+      num_phys_rows += reg->trans_cursor->numRows; 
+      
+      /* add a row for each split, minus one, plus one */
+      j = xaccTransCountSplits (trans);
+      num_virt_rows += j;
+      num_phys_rows += j * reg->split_cursor->numRows; 
+
       i++;
       split = slist[i];
    }
 
-   /* plus three: for the blank new entry split. 
-    * (one for last split, one for blank transaction & split) */
+   /* plus two: one blank transaction, one blank split. */ 
    if (!(reg->user_hook)) {
-      num_virt_rows += 3; 
+      i++;
+      num_virt_rows += 2; 
       num_phys_rows += reg->trans_cursor->numRows;
-      num_phys_rows += 2 * (reg->split_cursor->numRows);
+      num_phys_rows += reg->split_cursor->numRows;
    }
 
    /* num_virt_cols is always one. */
@@ -394,66 +373,58 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* make sure that the header is loaded */
    xaccSetCursor (table, reg->header, 0, 0, 0, 0);
 
-printf ("load reg of %d entries --------------------------- \n",i);
+printf ("load register of %d virtual entries %d phys rows ----------- \n", i, num_phys_rows);
    /* populate the table */
    i=0;
    vrow = 1;   /* header is vrow zero */
    phys_row = reg->header->numRows;
-   trans = NULL;
    split = slist[0]; 
    while (split) {
 
-      /* don't load the "blank split" inline; instead, we put
-       * it at the end. */
-      if (split != ((Split *) (reg->user_hook))) {
+      /* do not load the blank split */
+      if (split != ((Split *) reg->user_hook)) {
+         Transaction *trans;
+         Split * secondary;
+         int j = 0;
 
-         /* first, load the transaction header line */
-         if (trans != xaccSplitGetParent (split)) {
-            if (NULL != trans) {
-               /* add a line for the blank split at tail
-                * of previous transaction.  */
-               xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
-               xaccMoveCursor (table, phys_row, 0);
-               xaccSRLoadRegEntry (reg, NULL);
-printf ("load blank split %d \n", phys_row);
-               vrow ++;
-               phys_row += reg->split_cursor->numRows; 
-            }
-            trans = xaccSplitGetParent (split);
-printf ("load trans %d \n", phys_row);
-            xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
-            xaccMoveCursor (table, phys_row, 0);
-            xaccSRLoadRegEntry (reg, split);
-            vrow ++;
-            phys_row += reg->trans_cursor->numRows; 
-         }
-
-printf ("load split %d \n", phys_row);
-         /* now load each split that belongs to that transaction */
-         xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+/* hack alert it would be more efficient to have two different
+loads, one to handle teh transaction side, one to handle the 
+split side.  But, for now a single load works just fine.
+*/
+printf ("load trans %d at phys row %d \n", i, phys_row);
+         xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
          xaccMoveCursor (table, phys_row, 0);
          xaccSRLoadRegEntry (reg, split);
          vrow ++;
-         phys_row += (reg->split_cursor->numRows);
+         phys_row += reg->trans_cursor->numRows; 
+   
+         /* loop over all of the splits in the transaction */
+         /* the do..while will automaticaly put a blank (null) split at the end */
+         trans = xaccSplitGetParent (split);
+         j = 0;
+         do {
+            secondary = xaccTransGetSplit (trans, j);
+            if (secondary != split) {
+printf ("load split %d at phys row %d \n", j, phys_row);
+               xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
+               xaccMoveCursor (table, phys_row, 0);
+               xaccSRLoadRegEntry (reg, secondary);
+               vrow ++;
+               phys_row += reg->split_cursor->numRows; 
+            }
+            j++;
+         } while (secondary);
       }
 
       i++; 
       split = slist[i];
    }
 
-   /* add a line for the blank split at tail
-    * of previous transaction.  */
-printf ("load blank split %d \n", phys_row);
-   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
-   xaccMoveCursor (table, phys_row, 0);
-   xaccSRLoadRegEntry (reg, NULL);
-   vrow ++;
-   phys_row += reg->split_cursor->numRows; 
-
    /* add the "blank split" at the end */
    if (reg->user_hook) {
       split = (Split *) reg->user_hook;
    } else {
+      Transaction *trans;
       trans = xaccMallocTransaction ();
       xaccTransBeginEdit (trans);
       xaccTransSetDateToday (trans);
@@ -472,6 +443,8 @@ printf ("load blank split %d \n", phys_row);
    
    xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
+// hack alert something busted, this staement cause a core dump. why ??
+   // xaccSRLoadRegEntry (reg, split);
    
    /* restore the cursor to its original location */
    if (phys_row <= save_cursor_phys_row) {
@@ -516,7 +489,6 @@ LoadXferCell (ComboCell *cell,  AccountGroup *grp)
 void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
 {
    xaccAddComboCellMenuItem (cell, "");
-   xaccAddComboCellMenuItem (cell, SPLIT_STR);
    LoadXferCell (cell, grp);
 }
 
