@@ -1329,4 +1329,14 @@ writeDate( int fd, Date *date )
   return err;
   }
 
+/********************************************************************/
+/*
+  Local Variables:
+  tab-width: 2
+  indent-tabs-mode: nil
+  mode: c-mode
+  c-indentation-style: gnu
+  eval: (c-set-offset 'block-open '-)
+  End:
+*/
 /*********************** END OF FILE *********************************/
