@@ -21,7 +21,7 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @addtogroup AccountGroup
+/** @addtogroup Group Account Heirarchy Tree
     Accounts are organized into a heirarchical tree.  The account
     group is the parent node that holds accounts.
     @{ */

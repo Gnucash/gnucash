@@ -20,7 +20,7 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @addtogroup Policy Accounting Policy
+/** @addtogroup Policy Accounting Policy (FIFO/LIFO)
  *  This file implements Accounting Policy.  The Accounting Policy 
  *  determines how Splits are assigned to Lots.  The contents
  *  of a Lot determines the Gains on that Lot.  The default policy

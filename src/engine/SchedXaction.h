@@ -21,7 +21,10 @@
  * @addtogroup Engine
  * @{ */
 /**
- * @addtogroup SchedXaction
+ * @addtogroup SchedXaction Scheduled/Periodic/Recurring Transactions
+   Scheduled Transactions provides a framework for remembering
+   information about a transactions that are set to occur in the 
+   future, either once or periodically.
  * @{ */
 /**
  * @file SchedXaction.h

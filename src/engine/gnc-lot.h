@@ -20,7 +20,7 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @addtogroup Lot Lot: Core Function for AR/AP, Inventory, Stock Lots, Cap Gains
+/** @addtogroup Lot Lots: Core Function for AR/AP, Inventory, Stock Lots, Cap Gains
  * One often needs to know that the item 'bought' in one transaction
  * is the same one as the item 'sold' in a different transaction.
  * Lots are used to make this association.  One Lot holds all of the

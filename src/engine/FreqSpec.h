@@ -19,7 +19,7 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @addtogroup FreqSpec  Frequency Specification
+/** @addtogroup FreqSpec Specifying Recurring Dates (Periods)
     @{ */
 /** @file FreqSpec.h
     @brief Period / Date Frequency Specification
