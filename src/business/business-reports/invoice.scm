@@ -11,6 +11,7 @@
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
+(require 'hash-table)
 (require 'record)
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -78,8 +79,8 @@
     (set-col (opt-val "Display Columns" "Quantity") 3)
     (set-col (opt-val "Display Columns" "Price") 4)
     (set-col (opt-val "Display Columns" "Discount") 5)
-    (set-col (opt-val "Display Columns" "Tax") 6)
-    (set-col (opt-val "Display Columns" "Tax Value") 7)
+    (set-col (opt-val "Display Columns" "Taxable") 6)
+    (set-col (opt-val "Display Columns" "Tax Amount") 7)
     (set-col (opt-val "Display Columns" "Total") 8)
     col-vector))
 
@@ -99,12 +100,25 @@
     (if (discount-col column-vector)
 	(addto! heading-list (_ "Discount")))
     (if (tax-col column-vector)
-	(addto! heading-list (_ "Tax")))
+	(addto! heading-list (_ "Taxable")))
     (if (taxvalue-col column-vector)
 	(addto! heading-list (_ "Tax Amount")))
     (if (value-col column-vector)
 	(addto! heading-list (_ "Total")))
     (reverse heading-list)))
+
+(define (make-account-hash) (make-hash-table 23))
+
+(define (update-account-hash hash values)
+  (for-each
+   (lambda (item)
+     (let* ((acct (car item))
+	    (val (cdr item))
+	    (ref (hash-ref hash acct)))
+
+       (hash-set! hash acct (if ref (gnc:numeric-add-fixed ref val) val))))
+   values))
+
 
 (define (monetary-or-percent numeric currency entry-type)
   (if (gnc:entry-type-percent-p entry-type)
@@ -171,17 +185,10 @@
 
     (if (tax-col column-vector)
 	(addto! row-contents
-		(gnc:make-html-table-cell/markup
-		 "number-cell"
-		 (if #t ""
-		 (if invoice?
-		     (monetary-or-percent (gnc:entry-get-inv-tax entry)
-					  currency
-					  (gnc:entry-get-inv-tax-type entry))
-		     (monetary-or-percent (gnc:entry-get-bill-tax entry)
-					  currency
-					  (gnc:entry-get-bill-tax-type entry))))))
-	)
+		(if (if invoice?
+			(gnc:entry-get-inv-taxable entry)
+			(gnc:entry-get-bill-taxable entry))
+		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)
 	(addto! row-contents
@@ -243,18 +250,23 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Tax")
-    "l" (N_ "Display the entry's tax") #f))
+    (N_ "Display Columns") (N_ "Taxable")
+    "l" (N_ "Display the entry's taxable status") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Tax Value")
-    "m" (N_ "Display the entry's monetary tax") #f))
+    (N_ "Display Columns") (N_ "Tax Amount")
+    "m" (N_ "Display each entry's total total tax") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Total")
     "n" (N_ "Display the entry's value") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Individual Taxes")
+    "o" (N_ "Display all the individual taxes?") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -303,13 +315,15 @@
   gnc:*report-options*)
 
 (define (make-entry-table invoice options add-order invoice?)
-  (let ((show-payments (gnc:option-value
-			(gnc:lookup-option options (N_ "Display")
-					   (N_ "Payments"))))
+  (define (opt-val section name)
+    (gnc:option-value 
+     (gnc:lookup-option options section name)))
+
+  (let ((show-payments (opt-val "Display" "Payments"))
+	(display-all-taxes (opt-val "Display" "Individual Taxes"))
 	(lot (gnc:invoice-get-posted-lot invoice))
 	(txn (gnc:invoice-get-posted-txn invoice)))
 
-                          
     (define (colspan monetary used-columns)
       (cond
        ((value-col used-columns) (value-col used-columns))
@@ -379,13 +393,27 @@
 				    odd-row?
 				    value-collector
 				    tax-collector
-				    total-collector)
+				    total-collector
+				    acct-hash)
       (if (null? entries)
 	  (begin
 	    (add-subtotal-row table used-columns value-collector
 			      "grand-total" (_ "Subtotal"))
-	    (add-subtotal-row table used-columns tax-collector
-			      "grand-total" (_ "Tax"))
+
+	    (if display-all-taxes
+		(hash-for-each
+		 (lambda (acct value)
+		   (let ((collector (gnc:make-commodity-collector))
+			 (commodity (gnc:account-get-commodity acct))
+			 (name (gnc:account-get-name acct)))
+		     (collector 'add commodity value)
+		     (add-subtotal-row table used-columns collector
+				       "grand-total" name)))
+		 acct-hash)
+
+		; nope, just show the total tax.
+		(add-subtotal-row table used-columns tax-collector
+				  "grand-total" (_ "Tax")))
 
 	    (if (and show-payments lot)
 		(let ((splits (sort-list!
@@ -403,7 +431,10 @@
 
 	    (add-subtotal-row table used-columns total-collector
 			      "grand-total" (_ "Amount Due")))
-	  
+
+	  ;;
+	  ;; End of BEGIN -- now here's the code to handle all the entries!
+	  ;;
 	  (let* ((current (car entries))
 		 (current-row-style (if odd-row? "normal-row" "alternate-row"))
 		 (rest (cdr entries))
@@ -415,13 +446,16 @@
 					      current-row-style
 					      invoice?)))
 
+	    (if display-all-taxes
+		(let ((tax-list (gnc:entry-get-tax-values current invoice?)))
+		  (update-account-hash acct-hash tax-list))
+		(tax-collector 'add
+			       (gnc:gnc-monetary-commodity (cdr entry-values))
+			       (gnc:gnc-monetary-amount (cdr entry-values))))
+
 	    (value-collector 'add
 			     (gnc:gnc-monetary-commodity (car entry-values))
 			     (gnc:gnc-monetary-amount (car entry-values)))
-
-	    (tax-collector 'add
-                           (gnc:gnc-monetary-commodity (cdr entry-values))
-                           (gnc:gnc-monetary-amount (cdr entry-values)))
 
 	    (total-collector 'add
 			     (gnc:gnc-monetary-commodity (car entry-values))
@@ -440,7 +474,8 @@
 				    (not odd-row?)
 				    value-collector
 				    tax-collector
-				    total-collector))))
+				    total-collector
+				    acct-hash))))
 
     (let* ((table (gnc:make-html-table))
 	   (used-columns (build-column-used options))
@@ -459,7 +494,8 @@
 			      #t
 			      (gnc:make-commodity-collector)
 			      (gnc:make-commodity-collector)
-			      totals)
+			      totals
+			      (make-account-hash))
       table)))
 
 (define (string-expand string character replace-string)

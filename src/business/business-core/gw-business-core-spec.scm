@@ -11,6 +11,7 @@
   :use-module (g-wrap))
 
 (use-modules (g-wrap))
+(use-modules (g-wrap simple-type))
 
 (use-modules (g-wrap gw-standard-spec))
 (use-modules (g-wrap gw-wct-spec))
@@ -43,7 +44,8 @@
       "#include <gncOrder.h>\n"
       "#include <gncOwner.h>\n"
       "#include <gncTaxTable.h>\n"
-      "#include <gncVendor.h>\n")))
+      "#include <gncVendor.h>\n"
+      "#include <gncBusGuile.h>\n")))
 
   (gw:wrapset-add-cs-initializers!
    ws
@@ -89,6 +91,14 @@
     (gw:enum-add-value! wt "GNC_TERM_TYPE_DAYS" 'gnc-term-type-days)
     (gw:enum-add-value! wt "GNC_TERM_TYPE_PROXIMO" 'gnc-term-type-proximo)
     #t)
+
+  ;; Wrap the GncAccountValue type (gncTaxTable.h)
+  (gw:wrap-simple-type
+   ws
+   '<gnc:GncAccountValue*> "GncAccountValue*"
+   '("gnc_account_value_pointer_p(" scm-var ")")
+   '(c-var " = gnc_scm_to_account_value_ptr(" scm-var ");\n")
+   '(scm-var " = gnc_account_value_ptr_to_scm(" c-var ");\n"))
 
   ;;
   ;; Define business Query parameters
@@ -411,6 +421,22 @@
 
   (gw:wrap-function
    ws
+   'gnc:entry-get-inv-taxable
+   '<gw:bool>
+   "gncEntryGetInvTaxable"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Taxable value")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-bill-taxable
+   '<gw:bool>
+   "gncEntryGetBillTaxable"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Taxable value")
+
+  (gw:wrap-function
+   ws
    'gnc:entry-get-value
    '<gnc:numeric>
    "gncEntryReturnValue"
@@ -432,6 +458,14 @@
    "gncEntryReturnDiscountValue"
    '((<gnc:GncEntry*> entry) (<gw:bool> invoice?))
    "Return the Entry's computed Discount Value")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-tax-values
+   '(gw:glist-of <gnc:GncAccountValue*> callee-owned)
+   "gncEntryReturnTaxValues"
+   '((<gnc:GncEntry*> entry) (<gw:bool> invoice?))
+   "Return the Entry's list of computed Tax Values for each Tax account")
 
   (gw:wrap-function
    ws

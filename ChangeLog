@@ -1,3 +1,16 @@
+2003-01-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncBusGuile.[ch]: functions to interface
+	  between business objects and scheme.  Add hooks to convert between
+	  GncAccountValue* and scheme.
+	* src/business/business-core/gw-business-core-spec.scm:
+	  wrap the GncAccountValue*
+	  wrap gncEntryReturnTaxValues()
+	  wrap gncEntryGetInvTaxable() and gncEntryGetBillTaxable()
+	* src/business/business-reports/invoice.scm: change a couple of
+	  columns.  Enable viewing the "taxable" entry.  Enable viewing
+	  all the tax accounts individually (fixes bug #102892)
+
 2003-01-11  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.c: The "reverse balance" preference
