@@ -59,7 +59,7 @@ make-gnucash-potfiles: make-gnucash-potfiles.in
 
 
 DISTCLEANFILES += \
-  TAGS.stamp cscope.files cscope.out etags.files make-gnucash-patch
+  cscope.files cscope.out etags.files make-gnucash-patch
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -69,11 +69,7 @@ cscope.out: cscope.files
 
 if GNC_TAGS_FILE
 
-TAGS.stamp: etags.files $(shell cat etags.files)
-	etags `cat etags.files`
-	touch TAGS.stamp
-
-TAGS:
+etags.files: $(shell find . -type d)
 	find . -path './debian' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
 	@if cmp --quiet etags.files etags.files.tmp; \
         then \
@@ -83,7 +79,9 @@ TAGS:
           echo "TAGS file list has changed."; \
           mv etags.files.tmp etags.files; \
         fi
-	${MAKE} TAGS.stamp
+
+TAGS: etags.files $(shell cat etags.files)
+	etags `cat etags.files`
 
 else
 
