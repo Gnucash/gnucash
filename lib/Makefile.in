@@ -53,8 +53,8 @@ all:
 include @top_srcdir@/Makefile.common
 
 g-wrap-install:
-	(cd g-wrap && make)
-	(cd g-wrap && make install)
+	(cd g-wrap && ${MAKE})
+	(cd g-wrap && ${MAKE} install)
 TRASH += g-wrap-install
 
 # this make dist is a quick hack to avoid build problems that
