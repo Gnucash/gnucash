@@ -13,16 +13,16 @@ define(`account', `gncAccount, Account, Account, a,
        commodity,      , char *, gnc_commodity_get_unique_name(xaccAccountGetCommodity(ptr)),
        version,        , int32,  xaccAccountGetVersion(ptr),
        iguid,          , int32,  ptr->idata,
-       bookGUID,       , GUID *, gnc_book_get_guid(xaccAccountGetBook(ptr)),
+       bookGUID,       , GUID *, qof_book_get_guid(xaccAccountGetBook(ptr)),
        parentGUID,     , GUID *, xaccAccountGetGUID(xaccAccountGetParentAccount(ptr)),
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
 
-define(`book', `gncBook, Book, GNCBook, b,
+define(`book', `gncBook, Book, QofBook, b,
        book_open,      , char,   ptr->book_open,
        version,        , int32,  ptr->version,
        iguid,          , int32,  ptr->idata,
-       bookGUID,    KEY, GUID *, gnc_book_get_guid(ptr),
+       bookGUID,    KEY, GUID *, qof_book_get_guid(ptr),
        ')
 
 define(`split', `gncEntry, Split, Split, e,
@@ -77,7 +77,7 @@ define(`price', `gncPrice, Price, GNCPrice, p,
        valueNum,     , int64,    gnc_numeric_num(gnc_price_get_value(ptr)),
        valueDenom,   , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
        version,      , int32,    gnc_price_get_version(ptr),
-       bookGUID,     , GUID *,   gnc_book_get_guid(gnc_price_get_book(ptr)),
+       bookGUID,     , GUID *,   qof_book_get_guid(gnc_price_get_book(ptr)),
        priceGUID, KEY, GUID *,   gnc_price_get_guid(ptr),
        ')
        

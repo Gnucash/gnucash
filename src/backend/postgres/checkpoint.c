@@ -44,8 +44,8 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofackend-p.h"
 #include "Group.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"

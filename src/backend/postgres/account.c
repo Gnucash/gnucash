@@ -430,7 +430,7 @@ pgendGetAccounts (PGBackend *be, QofBook *book)
 void
 pgendGetAllAccounts (PGBackend *be)
 {
-   BookList *node;
+   QofBookList *node;
    char * bufp;
 
    ENTER ("be=%p", be);
@@ -478,7 +478,7 @@ pgendGetAllAccountsInBook (PGBackend *be, QofBook *book)
 
    p = buff;
    p = stpcpy (p, "SELECT * FROM gncAccount WHERE bookGuid='");
-   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = guid_to_string_buff (qof_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
    pgendGetAccounts (be, book);

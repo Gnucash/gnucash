@@ -235,7 +235,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
                   " WHERE gncTransaction.transGuid = gncEntry.transGuid AND "
                   " gncEntry.accountGuid = gncAccount.accountGuid AND "
                   " gncAccount.bookGuid = '");
-   p = guid_to_string_buff(gnc_book_get_guid (book), p);
+   p = guid_to_string_buff(qof_book_get_guid (book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
 
@@ -252,7 +252,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
                   " FROM gncEntry, gncAccount "
                   " WHERE gncEntry.accountGuid = gncAccount.accountGuid AND "
                   " gncAccount.bookGuid = '");
-   p = guid_to_string_buff(gnc_book_get_guid (book), p);
+   p = guid_to_string_buff(qof_book_get_guid (book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
    pgendGetResults (be, get_mass_entry_cb, book);

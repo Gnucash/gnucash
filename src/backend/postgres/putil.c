@@ -34,8 +34,8 @@
 #include <glib.h> 
 #include <libpq-fe.h>  
 #include <stdlib.h>  
-#include "Backend.h"
-#include "BackendP.h"
+#include "qofbackend.h"
+#include "qofbackend-p.h"
 #include "gnc-engine-util.h" 
 #include "PostgresBackend.h"
 

@@ -207,7 +207,7 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
    for (node=be->blist; node; node=node->next)
    {
       QofBook *book = node->data;
-      tip = xaccGUIDType (guid, book);
+      tip = qof_entity_type (qof_book_get_entity_table(book), guid);
       if (GNC_ID_NONE != tip) { LEAVE("tip = %s", tip); return tip; }
    }
 
@@ -956,7 +956,7 @@ pgendSyncSingleFile (QofBackend *bend, QofBook *book)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   guid_to_string_buff (gnc_book_get_guid(book), book_guid);
+   guid_to_string_buff (qof_book_get_guid(book), book_guid);
 
    /* First, we delete all of the accounts, splits and transactions
     * associated with this book.  Its very tempting to just delete
@@ -1091,7 +1091,7 @@ pgendSyncPriceDBSingleFile (QofBackend *bend, QofBook *book)
    p = stpcpy (p, "BEGIN;\n"
                   "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
                   "DELETE FROM gncPrice WHERE bookGuid='\n");
-   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = guid_to_string_buff (qof_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
@@ -1489,7 +1489,7 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
    qof_session_set_book(be->session, book);
                         
    PINFO("Book GUID = %s\n",
-           guid_to_string(gnc_book_get_guid(book)));
+           guid_to_string(qof_book_get_guid(book)));
 
    pgendGetAllAccountsInBook (be, book);
 
@@ -2497,7 +2497,7 @@ pgendInit (PGBackend *be)
 
 /* ============================================================= */
 
-Backend * 
+QofBackend * 
 pgendNew (void)
 {
    PGBackend *be;

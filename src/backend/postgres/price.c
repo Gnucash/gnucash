@@ -30,8 +30,8 @@
 #include <string.h>
 #include <libpq-fe.h>  
 
-#include "gnc-book.h"
-#include "gnc-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -342,7 +342,7 @@ pgendGetAllPricesInBook (PGBackend *be, QofBook *book)
    /* Get them ALL */
    p = buff;
    p = stpcpy (p, "SELECT * FROM gncPrice WHERE bookGuid='");
-   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = guid_to_string_buff (qof_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
    pgendGetResults (be, get_price_cb, book);
