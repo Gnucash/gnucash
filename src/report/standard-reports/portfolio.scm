@@ -35,6 +35,7 @@
 (define reportname (N_ "Investment Portfolio"))
 
 (define optname-price-source (N_ "Price Source"))
+(define optname-shares-digits (N_ "Share decimal places"))
 (define optname-zero-shares (N_ "Include accounts with no shares"))
 
 (define (options-generator)
@@ -57,6 +58,12 @@
     (gnc:options-add-price-source! 
      options gnc:pagename-general
      optname-price-source "d" 'pricedb-latest)
+
+    (add-option
+     (gnc:make-number-range-option
+      gnc:pagename-general optname-shares-digits
+      "e" (N_ "The number of decimal places to use for share numbers") 2
+      0 6 0 1))
 
     ;; Account tab
     (add-option
@@ -102,6 +109,10 @@
   (define (table-add-stock-rows table accounts to-date
                                 currency price-fn include-empty collector)
 
+   (let ((share-print-info
+	  (gnc:share-print-info-places (get-option gnc:pagename-general
+						   optname-shares-digits))))
+
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) collector
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
@@ -135,7 +146,8 @@
 			      ticker-symbol
 			      listing
 			      (gnc:make-html-table-header-cell/markup
-			       "number-cell" (gnc:numeric-to-double units))
+			       "number-cell" 
+			       (gnc:amount->string units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
 			       (gnc:html-price-anchor
@@ -144,11 +156,13 @@
 						       (cdr price-info))))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)))
+		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc:numeric-to-double units)))
+		       ;;(display units) (newline)
 		       (table-add-stock-rows-internal rest (not odd-row?)))
 		(table-add-stock-rows-internal rest odd-row?)))))
 
     (set! work-to-do (length accounts))
-    (table-add-stock-rows-internal accounts #t))
+    (table-add-stock-rows-internal accounts #t)))
 
   ;; Tell the user that we're starting.
   (gnc:report-starting reportname)

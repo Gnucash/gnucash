@@ -1,3 +1,41 @@
+2002-12-15  David Hampton  <hampton@employees.org>
+
+	* src/report/standard-reports/advanced-portfolio.scm: 
+	* src/report/standard-reports/portfolio.scm: Add an option for
+	changing the number of decimal places used in the shares
+	column. #87164
+
+	* src/app-utils/gnc-helpers.c:
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gw-app-utils-spec.scm: New functions for creating
+	a print-info data structure with an explicit number of decimal
+	places.  Added flags to GNCPrintAmountInfo to control
+	truncation/rounding of numbers.
+
+	* src/report/report-system/report-utilities.scm: New helper
+	routine for user feedback during rendering.
+
+	* src/report/report-system/html-document.scm:
+	* src/report/report-system/report-system.scm: Give user feedback
+	during the rendering of a report. Clunky at this point since most
+	reports are large tables (which is considered one html item).
+
+	* src/engine/Query.c:
+	* src/engine/QueryNew.c:
+	* src/business/business-ledger/gncEntryLedger.c: Promote private
+	build_param_list() function to a public function named
+	xaccQueryBuildParamList().
+
+	* src/engine/Query.h: Change cleared_match_t enum.
+
+	* src/gnome/window-register.c:
+	* src/gnome/glade/register.glade: Add menu items and code so a
+	user can limit transactions in a register to any combination of
+	the Reconciled/Cleared/Voided/Unreconciled states. #87990
+
+	* src/gnome-utils/dialog-options.c: Fix the order of the dialog
+	buttons to match the Gnome 1.x pattern. #98291
+
 2002-12-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Clarified some text, removed

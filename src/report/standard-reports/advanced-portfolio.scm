@@ -39,6 +39,7 @@
 (define reportname (N_ "Advanced Portfolio"))
 
 (define optname-price-source (N_ "Price Source"))
+(define optname-shares-digits (N_ "Share decimal places"))
 (define optname-zero-shares (N_ "Include accounts with no shares"))
 
 (define (options-generator)
@@ -61,6 +62,12 @@
     (gnc:options-add-price-source! 
      options gnc:pagename-general
      optname-price-source "d" 'pricedb-latest)
+
+    (add-option
+     (gnc:make-number-range-option
+      gnc:pagename-general optname-shares-digits
+      "e" (N_ "The number of decimal places to use for share numbers") 2
+      0 6 0 1))
 
     ;; Account tab
     (add-option
@@ -114,6 +121,10 @@
                                 currency price-fn include-empty
                                 total-value total-moneyin total-moneyout
                                 total-gain)
+
+   (let ((share-print-info
+	  (gnc:share-print-info-places (get-option gnc:pagename-general
+						   optname-shares-digits))))
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) total-value
@@ -215,7 +226,7 @@
 			      ticker-symbol
 			      listing
 			      (gnc:make-html-table-header-cell/markup
-			       "number-cell" (gnc:numeric-to-double units))
+			       "number-cell" (gnc:amount->string units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
 			       (gnc:html-price-anchor
@@ -240,7 +251,7 @@
 		(table-add-stock-rows-internal rest odd-row?)))))
 
     (set! work-to-do (gnc:accounts-count-splits accounts))
-    (table-add-stock-rows-internal accounts #t))
+    (table-add-stock-rows-internal accounts #t)))
 
   ;; Tell the user that we're starting.
   (gnc:report-starting reportname)
