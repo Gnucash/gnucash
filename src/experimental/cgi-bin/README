@@ -1,1 +1,32 @@
 this is some cgi-bin testing
+
+---------------
+The fast-cgi applcation requires fast-cgi to be installed.
+www.fastcgi.com
+
+This takes some doing:
+-- there are two parts to fast_cgi -- the apache module,
+   and the development kit.  You need only the development
+   kit to build these demos; but you need the server module 
+   to run them.
+
+   (Note: instead of using the apache module, you can 
+   also use the 'cgi-fcgi' server that comes with the 
+   fcgi development kit.  With this program, you don't
+   need to recompile the apache server or install any 
+   modules.)
+
+-- To install the server module:
+   -- apache must be compiled by hand (there were no 
+      fastcgi RPM's that I could find).
+   -- the mod_fastcgi apache module must be installed 
+      & configured as per directions on www.fastcgi.com
+
+-- the fast-cgi development toolkit must be downloaded 
+   and installed.
+
+===================
+The gnc-server is a pre-pre-pre-alpha server for gnucash.
+A huge anmount of work is needed to make it run right.
+
+--linas

@@ -1,13 +1,13 @@
 # cgi-bin Makefile.am file.
 
 
-bin_PROGRAMS = hello hello2
+bin_PROGRAMS = hello hello2 fastcgi-hello gnc-server
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} 
 
 LDADD = 			\
   ../../engine/libgncengine.la 	\
-  -lxml -lghttp -lglib
+  -lxml -lghttp -lglib -lfcgi
 
 INCLUDES =
 
@@ -16,6 +16,12 @@ hello_SOURCES = \
 
 hello2_SOURCES = \
   hello2.c
+
+fastcgi_hello_SOURCES = \
+  fastcgi-hello.c
+
+gnc_server_SOURCES = \
+  gnc-server.c
 
 noinst_HEADERS = 
 

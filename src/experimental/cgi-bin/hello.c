@@ -60,9 +60,9 @@ main (int argc, char *argv[])
 
    /* print the HTTP header */
    printf ("HTTP/1.1 200 OK\n");
-   printf ("Content-Type: text/xml\n");
-   printf ("Content-Length: %d\n", sz);
-   printf ("\n");
+   printf ("Content-Type: text/gnc-xml\r\n");
+   printf ("Content-Length: %d\r\n", sz);
+   printf ("\r\n");
 
    printf ("%s", bufp);
    free (bufp);
