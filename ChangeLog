@@ -6,6 +6,13 @@
 	* po/en_GB.po: updated translation by Nigel Titley
 	<nigel@titley.com>.
 	
+2003-03-14  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c (gnc_start_recn_date_changed):
+	Don't reverse the account balance here. The routine called to
+	retrieve the account balance has already taken care of reversing
+	the sign where necessary.
+
 2003-03-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Makefile.am: make sure to add INTLLIBS in case
