@@ -26,6 +26,10 @@
 #include <gnome.h>
 #include <guile/gh.h>
 #include <time.h>
+#include <locale.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "FileDialog.h"
 #include "dialog-utils.h"
@@ -191,18 +195,44 @@ add_each_gea_to_clist(gpointer data, gpointer user_data)
     row++;
 }
 
+static gchar*
+gnc_get_ea_locale_dir(const char *top_dir)
+{
+    static gchar *default_locale = "C";
+    gchar *ret;
+    gchar *locale;
+    struct stat buf;
+    
+    locale = g_strdup(setlocale(LC_MESSAGES, NULL));
+
+    ret = g_strdup_printf("%s/%s", top_dir, locale);
+    g_free(locale);
+
+    printf("Pondering dir: %s\n", ret);
+    
+    if(stat(ret, &buf) != 0)
+    {
+        ret = g_strdup_printf("%s/%s", top_dir, default_locale);
+    }
+
+    printf("Opening from dir: %s\n", ret);
+    
+    return ret;
+}
+    
 void
 on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data)
 {
-    GSList *list;
-    GtkCList *clist;
-
     if(!(int)gtk_object_get_data(GTK_OBJECT(gnc_get_new_user_dialog()),
                                  "account_list_added"))
     {
-        list = gnc_load_example_account_list(GNC_ACCOUNTS_DIR "/C");
+        GSList *list;
+        GtkCList *clist;
+        gchar *locale_dir = gnc_get_ea_locale_dir(GNC_ACCOUNTS_DIR);
+        
+        list = gnc_load_example_account_list(locale_dir);
     
         clist = gnc_new_user_get_clist();
         
@@ -216,7 +246,8 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
         gtk_clist_thaw(clist);
         
         g_slist_free (list);
-
+        g_free(locale_dir);
+        
         gtk_object_set_data(GTK_OBJECT(gnc_get_new_user_dialog()),
                             "account_list_added", (void*)1);
     }
