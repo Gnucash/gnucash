@@ -203,6 +203,7 @@ Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
+Andy Wingo <wingo@pobox.com> income per day-of-week report
 David Woodhouse <dwmw2@infradead.org> messages  British translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation

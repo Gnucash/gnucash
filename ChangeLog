@@ -1,5 +1,8 @@
 2003-03-29  Christian Stimming  <stimming@tuhh.de>
 
+	* src/report/standard-reports/daily-reports.scm: New report
+	"income vs. day of week" by Andy Wingo <wingo@pobox.com>.
+
 	* src/engine/gnc-session.c: OpenBSD fix by Todd T. Fries
 	<todd@flare.fries.net>
 
