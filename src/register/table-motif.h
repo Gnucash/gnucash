@@ -78,7 +78,6 @@ typedef struct _Table Table;
 
 /* create the widget */
 Widget      xaccCreateTable (Table *, Widget parent, char * name);
-void        xaccCreateCursor (Table *, CellBlock *);
 void        xaccNextTabGroup (Table *, Widget);
 
 void        xaccMotifResizeTable (Table * table,

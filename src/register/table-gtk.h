@@ -55,25 +55,31 @@
 
  */
 
+/* TABLE_PRIVATE_DATA:in_between_cells is used to detect real user
+   cell changes.  Otherwise we get a bunch of spurious changed,
+   insert_text, and delete_text events whenever the user clicks on a
+   new cell as the engine updates all the cell contents (in the
+   current cursor?)
+
+   This may not be strictly necessary, as the redundant "changes"
+   might not hurt anything, but for now I'm going to do this until I
+   figure out what's going on.  At the very least, this will be more
+   efficient.  I don't know yet if it's at all dangerous, but so far I
+   don't suspect it to be.  */
+
 #define TABLE_PRIVATE_DATA						\
   /* Gtk-only private table members  */					\
   GtkWidget *table_widget;          /* the Sheet */			\
                                                                         \
-  /* Current editing cell */						\
-  int current_col;							\
-  int current_row;							\
-									\
-  /* snapshot of entry text -- used to detect changes in callback */	\
-  char *prev_entry_text;						\
+  /* see comments above */                                              \
+  gboolean in_between_cells;                                            \
 									\
   GtkWidget *next_tab_group;        /* where to traverse in the end */	\
 
 #define TABLE_PRIVATE_DATA_INIT(table) {				\
    table->table_widget = NULL;						\
 									\
-   table->current_col = -1;  /* coords ignoring header lines */		\
-   table->current_row = -1;						\
-   table->prev_entry_text = NULL;					\
+   table->in_between_cells = TRUE;					\
    									\
    table->next_tab_group = 0;						\
 }
@@ -86,8 +92,6 @@
    if(table->table_widget) gtk_widget_unref(table->table_widget);	\
    table->table_widget = NULL;						\
 									\
-   g_free(table->prev_entry_text);                                      \
-   table->prev_entry_text = NULL;                                       \
 }
 
 /* nothing to resize */

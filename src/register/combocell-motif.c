@@ -35,6 +35,7 @@
 #include <Xbae/Matrix.h>
 
 #include "combocell.h"
+#include "util.h"
 
 /* Some GUI-private date that is inappropriate for 
  * the public interface.  In this impelmentation, 
@@ -54,10 +55,6 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
 static void realizeCombo (BasicCell *bcell, void *w, int width);
 static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (BasicCell *bcell);
-
-#if 0
-static void setComboValue (BasicCell *bcell, const char *value);
-#endif
 
 static const char * enterCombo (BasicCell *bcell, const char *value);
 static const char * leaveCombo (BasicCell *bcell, const char *value);
@@ -97,18 +94,14 @@ void xaccInitComboCell (ComboCell *cell)
 static
 void destroyCombo (BasicCell *bcell)
 {
-   ComboCell *cell;
-
-   cell = (ComboCell *) bcell;
+   ComboCell *cell = (ComboCell *) bcell;
 
    /* the realize callback will be null if the cell
     * gui has been realized.  Therefore, if its null, 
     * destroy the gui 
     */
    if (!(cell->cell.realize)) {
-      PopBox *box;
-
-      box = (PopBox *) (cell->cell.gui_private);
+      PopBox *box = (PopBox *) (cell->cell.gui_private);
    
       if (box) { 
          if (XtIsRealized(box->combobox)) {

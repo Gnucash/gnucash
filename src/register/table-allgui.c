@@ -28,9 +28,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
+#include "util.h"
 #include "cellblock.h"
 #include "table-allgui.h"
+
 #include "util.h"
 
 #ifdef KDE
@@ -584,8 +587,8 @@ void xaccCommitCursor (Table *table)
          if (cell) {
             int iphys = i + phys_row_origin;
             int jphys = j + phys_col_origin;
-            PINFO ("xaccCommitCursor(): rowcol (%d,%d) oldval=%s newval=%s\n",
-               iphys, jphys, table->entries[iphys][jphys], cell->value);
+            /*PINFO ("xaccCommitCursor(): rowcol (%d,%d) oldval=%s newval=%s\n",
+              iphys, jphys, table->entries[iphys][jphys], cell->value);*/
             if (table->entries[iphys][jphys]) {
                free (table->entries[iphys][jphys]);
             }
@@ -716,16 +719,51 @@ xaccGetUserData (Table *table, int phys_row, int phys_col)
 }
 
 /* ==================================================== */
+/* if any of the cells have GUI specific components that need 
+ * initialization, initialize them now. The realize() callback
+ * on the cursor cell is how we inform the cell handler that 
+ * now is the time to initialize its GUI.  */
+
+void        
+xaccCreateCursor (Table * table, CellBlock *curs) { 
+  int i,j;
+  if (!curs || !table) return;  
+  if (!table->table_widget) return;
+  
+  for (i=0; i<curs->numRows; i++) {
+    for (j=0; j<curs->numCols; j++) {
+      BasicCell *cell;
+      cell = curs->cells[i][j];
+      if (cell) {
+        void (*realize) (BasicCell *, void *gui, int pixel_width);
+        realize = cell->realize;
+        if (realize) {
+          realize (cell,
+                   ((void *) table->table_widget),
+                   gnc_table_column_width(table, j));
+        }
+      }
+    }
+  }
+}
+
+/* ==================================================== */
 
 void 
 wrapVerifyCursorPosition (Table *table, int row, int col)
 {
    CellBlock *save_curs = table->current_cursor;
-   int save_phys_row = table->current_cursor_phys_row;
-   int save_phys_col = table->current_cursor_phys_col;
+   const int save_phys_row = table->current_cursor_phys_row;
+   const int save_phys_col = table->current_cursor_phys_col;
 
+   PINFO("table1: leave rr (%d %d) table val %s\n", 
+         2, 2,
+         table->entries[2][2]);
    /* VerifyCursor will do all sorts of gui-independent machinations */
    xaccVerifyCursorPosition (table, row, col);
+   PINFO("table2: leave rr (%d %d) table val %s\n", 
+         2, 2,
+         table->entries[2][2]);
 
    if ((save_phys_row != table->current_cursor_phys_row) ||
        (save_phys_col != table->current_cursor_phys_col))
@@ -749,7 +787,7 @@ xaccRefreshCursorGUI (Table * table)
 /* ==================================================== */
 
 int
-gnc_register_cell_valid(Table *table, const int row, const int col) {
+gnc_register_cell_valid(Table *table, int row, int col) {
   int invalid = 0;
   int rel_row, rel_col;
   CellBlock *arr, *header;
@@ -762,7 +800,9 @@ gnc_register_cell_valid(Table *table, const int row, const int col) {
   /* gtksheet may call cell_changed after table has been destroyed.
      Are we papering over a real bug here?
      This is probably a good check anyway. */
-  if(!table->handlers) return TRUE;
+  invalid = invalid || (table->handlers == NULL);
+
+  if(invalid) return(invalid);
 
   /* header rows cannot be modified */
   /* hack alert -- assumes that header is first cell */
@@ -770,9 +810,9 @@ gnc_register_cell_valid(Table *table, const int row, const int col) {
   header = table->handlers[0][0];
   invalid = invalid || (row < header->numRows);
 
-  /* If row or col is invalid, then the next bits could segfault... */
-  if(invalid) return TRUE;
-  
+  /* GNOME needs this.  Trying to find out why... */
+  /* if(invalid) return(invalid); */
+    
   /* compute the cell location */
   rel_row = table->locators[row][col]->phys_row_offset;
   rel_col = table->locators[row][col]->phys_col_offset;
@@ -803,6 +843,272 @@ gnc_register_cell_valid(Table *table, const int row, const int col) {
     invalid = TRUE;
   }
   return(!invalid);
+}
+
+/* ========================================================================
+   Handle the non gui-specific parts of a cell enter callback
+*/
+
+void
+gnc_table_enter_update(Table *table,
+                       int row, int col,
+                       char **new_text) {
+  /* If text should be changed, then new_text will be set to non-null
+     on return */
+
+  CellBlock *arr = table->current_cursor;
+  const int rel_row = table->locators[row][col]->phys_row_offset;
+  const int rel_col = table->locators[row][col]->phys_col_offset;
+  
+  const char * (*enter) (BasicCell *, const char *);
+  
+  PINFO("table: enter rr (0 2) cell->val %s table val %s\n", 
+        arr->cells[0][2]->value,
+        table->entries[2][2]);
+
+  PINFO("table: enter %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+        row, col, rel_row, rel_col, 
+        arr->cells[rel_row][rel_col], table->entries[row][col]);
+  
+  *new_text = NULL;
+  
+  /* OK, if there is a callback for this cell, call it */
+  enter = arr->cells[rel_row][rel_col]->enter_cell;
+
+  printf("ENTER: %d %d == (", rel_row, rel_col);
+
+  if (enter) {
+    const char *val;
+    char *retval;
+
+    printf("has enter handler");
+    
+    val = table->entries[row][col];
+    retval = (char *) enter(arr->cells[rel_row][rel_col], val);
+    if (NULL == retval) retval = (char *) val;
+    if (val != retval) {
+      if (table->entries[row][col]) free (table->entries[row][col]);
+      table->entries[row][col] = retval;
+      (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+      *new_text = retval;
+    }
+  }
+  printf(")\n");
+  
+  /* record this position as the cell that will be
+   * traversed out of if a traverse even happens */
+  table->prev_phys_traverse_row = row;
+  table->prev_phys_traverse_col = col;
+}
+
+void
+gnc_table_leave_update(Table *table, int row, int col,
+                       const char* old_text,
+                       char **new_text) {
+  CellBlock *arr = table->current_cursor;
+  const int rel_row = table->locators[row][col]->phys_row_offset;
+  const int rel_col = table->locators[row][col]->phys_col_offset;
+  const char * (*leave) (BasicCell *, const char *);
+  char *newval;
+  
+  PINFO("table: leave -- proposed (%d %d) rel(%d %d) \"%s\"\n",
+        row, col, rel_row, rel_col, old_text);
+
+  *new_text = NULL;
+  
+  /* OK, if there is a callback for this cell, call it */
+  leave = arr->cells[rel_row][rel_col]->leave_cell;
+  if (leave) {
+    const char *val, *retval;
+    
+    val = old_text;
+    retval = leave(arr->cells[rel_row][rel_col], val);
+    
+    newval = (char *) retval;
+    if (NULL == retval) newval = strdup (val);
+    if (val == retval) newval = strdup (val);
+    
+    /* if the leave() routine declared a new string, lets use it */
+    if ( retval && (retval != val)) {
+      *new_text = strdup (retval);
+    }
+    
+  } else {
+    newval = strdup (old_text);
+  }
+  
+  /* save whatever was returned; but lets check for  
+   * changes to avoid roiling the cells too much */
+  if (table->entries[row][col]) {
+    if (strcmp (table->entries[row][col], newval)) {
+      free (table->entries[row][col]);
+      table->entries[row][col] = newval;
+      (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+    } else {
+      /* leave() allocated memory, which we will not be using ... */
+      free (newval);
+    }
+  } else {
+    table->entries[row][col] = newval;
+    (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+  }
+  
+  /* Do the verify last, which in general asumes that cell handlers
+     are up to date (i.e. the leave has been processed.) */
+
+  wrapVerifyCursorPosition (table,
+                            table->reverify_phys_row,
+                            table->reverify_phys_col);
+}
+
+
+const char *
+gnc_table_modify_update(Table *table, int row, int col,
+                        const char *oldval,
+                        const char *change,
+                        char *newval) {
+  /* returned result should not be touched by the caller */
+  /* NULL return value means the edit was rejected */
+
+  CellBlock *arr = table->current_cursor;
+  
+  /* compute the cell location */
+  const int rel_row = table->locators[row][col]->phys_row_offset;
+  const int rel_col = table->locators[row][col]->phys_col_offset;
+
+  const char * (*mv) (BasicCell *, const char *, const char *, const char *);
+  const char *retval = NULL;
+  
+  /* OK, if there is a callback for this cell, call it */
+  mv = arr->cells[rel_row][rel_col]->modify_verify;
+  if (mv) {
+    retval = (*mv) (arr->cells[rel_row][rel_col], oldval, change, newval);
+    
+    /* if the callback returned a non-null value, allow the edit */
+    if (retval) {
+      
+      /* update data. bounds check done earlier */
+      free (table->entries[row][col]);
+      table->entries[row][col] = (char *) retval;
+      (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+    }
+  } else {
+    /* update data. bounds check done earlier */
+    free (table->entries[row][col]);
+    table->entries[row][col] = newval;
+    (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+  }
+  PINFO("table: modify -- change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
+        row, col, rel_row, rel_col, 
+        arr->cells[rel_row][rel_col], table->entries[row][col]);
+  
+  return(retval);
+}
+
+gncBoolean
+gnc_table_traverse_update(Table *table, int row, int col,
+                          gncTableTraversalDir dir,
+                          int *dest_row,
+                          int *dest_col) {
+  gncBoolean exit_register = FALSE;
+  CellBlock *arr = table->current_cursor;
+  
+  PINFO("table: traverse -- proposed (%d %d %s) -> (%d %d %s)\n",
+        row, col, table->entries[row][col],
+        *dest_row, *dest_col, table->entries[*dest_row][*dest_col]);
+
+  /* process forward-moving traversals */
+  switch(dir) {
+    case GNC_TABLE_TRAVERSE_RIGHT:
+      /* Don't do a thing unless we verify that the row and column
+       * are in bounds. Ordinarily, they are always in bounds, except 
+       * in an unusual, arguably buggy situation: If the table has 
+       * been recently resized smaller, then the Xbae code might report
+       * a traverse out of a cell that was in the larger array, but not
+       * in the smaller array.  This is probably an Xbae bug. It 
+       * will core dump array access.
+       */
+      if ((row >= table->num_phys_rows) || 
+          (col >= table->num_phys_cols)) {
+        
+        assert (0);
+        table->prev_phys_traverse_row = *dest_row;
+        table->prev_phys_traverse_col = *dest_col;
+        return FALSE;
+      }
+      
+      {
+        /* cannot compute the cell location until we have checked that
+         * row and colu have valid values.  compute the cell location
+         * */
+        const int rel_row = table->locators[row][col]->phys_row_offset;
+        const int rel_col = table->locators[row][col]->phys_col_offset;
+        
+        int next_row = arr->right_traverse_r[rel_row][rel_col];
+        int next_col = arr->right_traverse_c[rel_row][rel_col];
+        
+        /* if we are at the end of the traversal chain, hop out of this
+         * tab group, and into the next.  */
+        if ((0 > next_row) || (0 > next_col)) {
+          /* reverse the sign of next_row, col to be positive. */
+          *dest_row = row - rel_row - next_row - 1; 
+          *dest_col = col - rel_col - next_col - 1;
+          exit_register = TRUE;
+        } else {
+          *dest_row = row - rel_row + next_row; 
+          *dest_col = col - rel_col + next_col;
+        }
+      }
+      break;
+  
+    default:
+      /* FIXME: Right now we don't handle anything but forward
+         traversals, but in the future, here's how it should go:
+
+         by default, we *accept* the proposed traversal.
+         
+         if its a left moving tab, you should move left.
+         if its an upwards moving tab you should move up, etc.
+         if its a mouse pointer, we should allow user to go to that cell.
+         all we are doing here is *not* overriding the proposed values.
+         
+         for right moving tab, we over-rode the proposed values to
+         make tabbing prettier. but some day we may want to make
+         moving up and down prettier too,.  */
+
+      break;
+  }
+  
+  /* OK, now we do a fancy trick to get the auto-expanding registers
+     to work right.  The trick is that as one transaction is expanded
+     or collapsed, the rows all get renumbered.  Now, we can't tell
+     the code to directly hope to the new renumbered position, because
+     we haven't completed all of our work yet.  In particular, we
+     haven't left the current cell, and this means we haven't yet
+     saved those cell contents.  Only after saving, can we reconfigure
+     the table.  And only after we reconfigure the table can we move
+     the since only then will we know where & how to move it to.  Sooo
+     ...  here's what we do. We compute where we should have hopped to
+     in the reconfigured table, and save that off in the "reverify"
+     fields.  Then we hop to the boring old place we would have hopped
+     to if there had been no reconfiguring going on.  Later on, after
+     we've reconfigured, we will move the cursor to the "reverify"
+     position, and viola, we'll be in the right place.  */
+  
+  if (table->traverse) {
+    int nr = *dest_row;
+    int nc = *dest_col;
+    table->reverify_phys_row = nr;
+    table->reverify_phys_col = nc;
+    (table->traverse) (table, &nr, &nc, table->client_data);
+    *dest_row = nr;
+    *dest_col = nc;
+  }
+  
+  table->prev_phys_traverse_row = *dest_row;
+  table->prev_phys_traverse_col = *dest_col;
+
+  return(exit_register);
 }
 
 /* ================== end of file ======================= */

@@ -43,7 +43,7 @@
 
 typedef struct _ComboCell {
    BasicCell cell;
-   char **   menuitems;
+   char **   menuitems;         /* not used in the gnome version */
 } ComboCell;
 
 ComboCell *  xaccMallocComboCell (void);

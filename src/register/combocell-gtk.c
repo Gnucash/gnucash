@@ -8,7 +8,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas <linas@linas.org>
- * Copyright (c) 1998 Rob Browning <rlb@cs.utexas.edu>
+ * Copyright (c) 1998-1999 Rob Browning <rlb@cs.utexas.edu>
  */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
@@ -26,37 +26,40 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+/*
+   TODO: We have no use for the generic ComboCell->menuitems.  These
+   should probably be killed.  Each GUI should probably handle it's
+   own strings.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <gtk/gtk.h>
+
+#include "gtksheet.h"
+#include "gtksheetentry.h"
+
 #include "table-allgui.h"
 #include "table-gtk.h"
-
-
+#include "util.h"
 #include "combocell.h"
+
 
 /* Some GUI-private date that is inappropriate for 
  * the public interface.  In this impelmentation, 
- * it holds gtk data that we need.
- */
+ * it holds gtk data that we need.  */
 
-#define SET(cell,str) { 			\
-   if ((cell)->value) free ((cell)->value);	\
-   (cell)->value = strdup (str);		\
-   (cell)->changed = 0xffffffff;                \
+#define SET(cell,str) { 		   \
+  if ((cell)->value) free ((cell)->value); \
+  (cell)->value = strdup (str);            \
 }
 
 typedef struct _PopBox {
-  GtkCombo *combobox;
   GList *menustrings;
-  Table *table;
-  int currow;
-  int curcol;
+  GtkSheet *sheet;
 } PopBox;
-
-//static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 
 static void realizeCombo (BasicCell *bcell, void *w, int width);
 static void moveCombo (BasicCell *bcell, int phys_row, int phys_col);
@@ -65,58 +68,38 @@ static void setComboValue (BasicCell *bcell, const char *value);
 static const char * enterCombo (BasicCell *bcell, const char *value);
 static const char * leaveCombo (BasicCell *bcell, const char *value);
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GTK_REG;
+
 /* =============================================== */
 
-ComboCell *xaccMallocComboCell (void)
-{
+ComboCell *xaccMallocComboCell (void) {
   ComboCell * cell;
   cell = (ComboCell *) malloc (sizeof (ComboCell));
   xaccInitComboCell (cell);
   return cell;
 }
 
-void xaccInitComboCell (ComboCell *cell)
-{
-  xaccInitBasicCell ( &(cell->cell));
+void xaccInitComboCell (ComboCell *cell) {
+  xaccInitBasicCell(&(cell->cell));
   cell->cell.realize = realizeCombo;
   cell->cell.set_value = setComboValue;
   cell->cell.destroy = destroyCombo;
   {
     PopBox *box = (PopBox *) malloc (sizeof (PopBox));
-    box->table   = NULL;
+    box->sheet   = NULL;
     box->menustrings = NULL;
-    box->combobox = GTK_COMBO(gtk_combo_new());
-    gtk_widget_ref(GTK_WIDGET(box->combobox));
-    gtk_combo_set_value_in_list(box->combobox, 1, 0);
-    gtk_widget_show(GTK_WIDGET(box->combobox));
     cell->cell.gui_private = box;
   }
 }
 
 /* =============================================== */
 
-static
-void destroyCombo (BasicCell *bcell)
-{
-#if OLD_CLIST_REG
+static void
+destroyCombo (BasicCell *bcell) {
   ComboCell *cell = (ComboCell *) bcell;
-  PopBox *box = (PopBox *) (cell->cell.gui_private);
   
-  /* HACK: I had to put the three extra tests in the guard so that
-     we don't get a segfault on register window closes.  I haven't checked
-     to be sure this is exactly the right thing to do, but it works.
-
-     Actually, almost all of the combobox (and table-gtk for that
-     matter) code is an ugly hack that should go away when we have a
-     real table widget... */
-
-
-  if (!(cell->cell.realize) && box && box->table && box->table->entry_frame) {
-    gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
-                         GTK_WIDGET(box->combobox));
-    gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
-                      GTK_WIDGET(box->table->entry_widget));
-
+  if (!(cell->cell.realize)) {
     /* allow the widget to be shown again */
     cell->cell.realize = realizeCombo;
     cell->cell.move = NULL;
@@ -124,20 +107,15 @@ void destroyCombo (BasicCell *bcell)
     cell->cell.leave_cell = NULL;
     cell->cell.destroy = NULL;
   }  
-#endif
 }
 
 /* =============================================== */
 
-void xaccDestroyComboCell (ComboCell *cell)
-{
+void xaccDestroyComboCell (ComboCell *cell) {
   PopBox *box = (PopBox *) (cell->cell.gui_private);
   
   destroyCombo (&(cell->cell));
   
-  gtk_widget_destroy(GTK_WIDGET(box->combobox));
-  gtk_widget_unref(GTK_WIDGET(box->combobox));
-
   g_list_foreach(box->menustrings, (GFunc) g_free, NULL);
   g_list_free(box->menustrings);
 
@@ -148,27 +126,30 @@ void xaccDestroyComboCell (ComboCell *cell)
   cell->cell.realize = NULL;
   cell->cell.set_value = NULL;
   
-  xaccDestroyBasicCell ( &(cell->cell));
+  xaccDestroyBasicCell (&(cell->cell));
 }
 
 /* =============================================== */
 
 void 
-xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
-{
-  PopBox *box = (PopBox *) cell->cell.gui_private;
-
-  /*
-  GtkList *comboitems = GTK_LIST(box->combobox->list); 
-  */
-  
+xaccAddComboCellMenuItem (ComboCell *cell, char * menustr) { 
   if (!cell) return;
   if (!menustr) return;
 
-  box->menustrings = g_list_append(box->menustrings, g_strdup(menustr));
-  fprintf(stderr, "Adding item: %s\n", menustr);
-  
-  gtk_combo_set_popdown_strings(box->combobox, box->menustrings);
+  {
+    PopBox *box = (PopBox *) cell->cell.gui_private;
+    box->menustrings = g_list_append(box->menustrings, g_strdup(menustr));
+    
+    /* if we are adding the menu item to a cell that is already
+       realized, then alose add it to the widget directly.  */
+
+    if(box->sheet) {
+      if(GTK_IS_COMBO(gtk_sheet_get_entry(box->sheet))) {
+        GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
+        gtk_combo_set_popdown_strings(combobox, box->menustrings);
+      }
+    }
+  }
 }
 
 /* =============================================== */
@@ -177,41 +158,39 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
  */
 
 void 
-xaccSetComboCellValue (ComboCell *cell, const char * str)
-{
-  PopBox * box;
-  
+xaccSetComboCellValue (ComboCell *cell, const char * str) {
+  PopBox *box = (PopBox *) (cell->cell.gui_private);  
+
   if(!str) str = "";
-  
   SET (&(cell->cell), str);
-  box = (PopBox *) (cell->cell.gui_private);
-  
-  gtk_entry_set_text(GTK_ENTRY(box->combobox->entry), str);
+
+  if(box->sheet) {
+    gtk_sheet_set_cell_text(box->sheet,
+                            box->sheet->active_cell.row,
+                            box->sheet->active_cell.col,
+                            str);
+  }
 }
-  
+
 /* =============================================== */
 
 static void
-setComboValue (BasicCell *_cell, const char *str)
-{
-   ComboCell * cell = (ComboCell *) _cell;
-   xaccSetComboCellValue (cell, str);
+setComboValue (BasicCell *_cell, const char *str) {
+  ComboCell * cell = (ComboCell *) _cell;
+  xaccSetComboCellValue(cell, str);
 }
 
 
 /* =============================================== */
 
-static
-void realizeCombo (BasicCell *bcell, void *data, int pixel_width)
-{
-  Table *table = (Table *) data;
+static void
+realizeCombo (BasicCell *bcell, void *data, int pixel_width) {
+  GtkSheet *sheet = (GtkSheet *) data;
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = cell->cell.gui_private;
   
   /* initialize gui-specific, private data */
-  box->table   = table;
-  box->currow   = -1;
-  box->curcol   = -1;
+  box->sheet   = sheet;
   
   /* to mark cell as realized, remove the realize method */
   cell->cell.realize = NULL;
@@ -223,57 +202,34 @@ void realizeCombo (BasicCell *bcell, void *data, int pixel_width)
 
 /* =============================================== */
 
-static
-void moveCombo (BasicCell *bcell, int phys_row, int phys_col)
-{
-  ComboCell *cell = (ComboCell *) bcell;
-  PopBox *box = cell->cell.gui_private;
-  box->currow = phys_row;
-  box->curcol = phys_col;
+static void
+moveCombo (BasicCell *bcell, int phys_row, int phys_col) {
+  /* no op with gtksheet */
+  return;
 }
 
 /* =============================================== */
 
-static
-const char * enterCombo (BasicCell *bcell, const char *value)
-{
+static const char *
+enterCombo (BasicCell *bcell, const char *value) {
+
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
-  int phys_row = box->currow;
-  int phys_col = box->curcol;
-  char *choice;
 
-  /* if the new position is valid, go to it, 
-   * otherwise, unmanage the widget */
+  PINFO("ComboBox(%p): enter value (%s)\n", cell, value);
+  
+  gtk_sheet_change_entry(box->sheet, gtk_combo_get_type());
+  
+  {
+    GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
 
-  if ((0 <= phys_row) && (0 <= phys_col)) {
-    
-    /* Get the current cell contents, and set the
-     * combobox menu selection to match the contents. 
-     * We could use the value passed in, but things should
-     * be consitent, so we don't need it. */
-    choice = cell->cell.value;
-    
-    if(!choice) choice = "";
-    
-#if OLD_CLIST_REG
-    if(GTK_WIDGET(box->table->entry_widget)->parent == 
-       box->table->entry_frame) {
-      gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
-                           GTK_WIDGET(box->table->entry_widget));
-    }
-    gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
-                      GTK_WIDGET(box->combobox));
-    
-    gtk_entry_set_text(GTK_ENTRY(box->combobox->entry), choice);
-#endif
-  }  else {
-#if OLD_CLIST_REG
-    gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
-                         GTK_WIDGET(box->combobox));
-    gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
-                      GTK_WIDGET(box->table->entry_widget));
-#endif
+    /* Add all the strings... */
+    gtk_combo_set_popdown_strings(combobox, box->menustrings);
+
+    gtk_sheet_set_cell_text(box->sheet,
+                            box->sheet->active_cell.row,
+                            box->sheet->active_cell.col,
+                            value); 
   }
   
   return NULL;
@@ -281,43 +237,17 @@ const char * enterCombo (BasicCell *bcell, const char *value)
 
 /* =============================================== */
 
-static
-const char * leaveCombo (BasicCell *bcell, const char *value)
-{
+static const char *
+leaveCombo (BasicCell *bcell, const char *value) {
   ComboCell *cell = (ComboCell *) bcell;
   PopBox *box = (PopBox *) (cell->cell.gui_private);
+  GtkCombo *combobox = GTK_COMBO(box->sheet->sheet_entry);
 
-#if OLD_CLIST_REG
-  gchar *text;
-#endif
-  
-  /* check for a valid mapping of the widget.  
-     Note that if the combo box value is set to 
-     a string that is not in the combo box menu
-     (for example, the empty string ""), then the 
-     combobox will issue an XmCR_UNSELECT event.
-     This typically happens while loading the array.
-     We want to ignore these. */
-  if ((0 > box->currow) || (0 > box->curcol)) return NULL;
-  
-#if OLD_CLIST_REG
-  text = gtk_entry_get_text(GTK_ENTRY(box->combobox->entry));
-  
-  /* be sure to set the string into the matrix widget as well,
-     so that we don't end up blanking out the cell when we 
-     unmap the combobox widget */
-  gtk_clist_set_text(GTK_CLIST(box->table->table_widget),
-                     box->currow - 1,
-                     box->curcol,
-                     text); 
-  
-  SET (&(cell->cell), text);
+  gtk_sheet_change_entry((box->sheet), gtk_shentry_get_type());  
+    
+  SET (&(cell->cell), value);
   cell->cell.changed = 0xffffffff;
-  gtk_container_remove(GTK_CONTAINER(box->table->entry_frame),
-                       GTK_WIDGET(box->combobox));
-  gtk_container_add(GTK_CONTAINER(box->table->entry_frame),
-                    GTK_WIDGET(box->table->entry_widget));
-#endif  
+  
   return NULL;
 }
 

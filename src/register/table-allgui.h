@@ -66,9 +66,18 @@
 #include "table-qt.h"
 #endif 
 
+#include "gnc-common.h"
 
 #include "basiccell.h"
 #include "cellblock.h"
+
+typedef enum {
+  GNC_TABLE_TRAVERSE_POINTER,
+  GNC_TABLE_TRAVERSE_LEFT,
+  GNC_TABLE_TRAVERSE_RIGHT,
+  GNC_TABLE_TRAVERSE_UP,
+  GNC_TABLE_TRAVERSE_DOWN
+} gncTableTraversalDir;
 
 /* the Locator structure is used provide a mapping from
  * the physical array of cells to the logical array of 
@@ -259,12 +268,27 @@ void * xaccGetUserData (Table *table, int phys_row, int phys_col);
 /* ==================================================== */
 /* these are used internally by table-{motif,gtk}.c
    perhaps these should go in a table-allguiP.h  
+
+   They were also ripped more or less straight out of table-motif.c
+   and just made UI independent.  In the long run, they should
+   probably be rewritten to have even clearer interfaces/semantics.
+   For now, though, this will do.
+
+   Function bodies may also be a little contorted, but that's because
+   I had to be careful to only make changes that preserved all the
+   previous invariants.  Sometimes the most careful change may not
+   have been the clearest.
+   
 */
+
+int
+gnc_table_column_width(Table *table, int col);
+
 void 
 wrapVerifyCursorPosition (Table *table, int row, int col);
  
 int
-gnc_register_cell_valid(Table *table, const int row, const int col);
+gnc_register_cell_valid(Table *table, int row, int col);
 
 void        
 doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
@@ -272,6 +296,24 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
 void        
 xaccRefreshCursorGUI (Table * table);
 
+void
+gnc_table_enter_update(Table *table, int row, int col, char **new_text);
+
+void
+gnc_table_leave_update(Table *table, int row, int col,
+                       const char* old_text,
+                       char **new_text);
+
+const char *
+gnc_table_modify_update(Table *table, int row, int col,
+                        const char *oldval,
+                        const char *change,
+                        char *newval);
+gncBoolean
+gnc_table_traverse_update(Table *table, int row, int col,
+                          gncTableTraversalDir dir,
+                          int *dest_row,
+                          int *dest_col);
 
 /* ==================================================== */
 /* 
