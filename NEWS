@@ -1,5 +1,12 @@
 Version history:
 ------- -------
+ 1.7.1  - 13 October 2002
+ 	 o first alpha release
+	 o lots of new features, please test as much as you can
+	 o esp Scheduled Transactions, Small Business and OFX/HBCI.
+	 o please check Changelog for exact details
+	 o NOTE: Report bugs to bugzilla.gnome.org
+
  1.5.98 - 04 June 2001
          o second beta release
          o updated documentation (English & Portuguese)

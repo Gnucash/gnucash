@@ -55,6 +55,7 @@ James LewisMoss <dres@debian.org> design doc patches, XML refactoring,
 Christian Stimming <stimming@tuhh.de> is a report-generating 
    monster. He's been one of the largest contributors to the current report
    infrastructure, creating many of the important reports. 
+   He has also contributed HBCI support.
 
 Joshua Sled <jsled@asynchronous.org> works on scheduled transactions
    and budgeting.
@@ -72,9 +73,13 @@ David Hampton <hampton@employees.org> is an all-around
    previous tendency to hacks obsessively on GnuCash. (Something in
    the name?)
 
-Chris Lyttle <chris@wilddev.net> writes documentation and administers
-   the GnuCash bug list.
+Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
+   Is currently writing new help and integrating and finishing a
+   concepts and tutorial written by Carol Champagne. Looks after
+   releasing new GnuCash versions and updating the website.
 
+Benoit Grégoire <bock@step.polymtl.ca> coded a long awaited OFX module
+   for GnuCash and wrote the external libOFX library that it uses.
 
 Other Contributors:
 ----------------
@@ -116,7 +121,6 @@ Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
 Hans de Graaff <hans@degraaff.org> XML patches
-Benoit Grégoire <bock@step.polymtl.ca> OFX import
 Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version

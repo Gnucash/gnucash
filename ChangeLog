@@ -3,6 +3,8 @@
 	* accounts/fr_FR/Makefile.am: fix make dist breakage
 	* rpm/gnucash.spec.in: update for release
 	* configure.in: change to version 1.7.1
+	* AUTHORS: moved Benoit to main developers
+	* NEWS: added section for 1.7.1 release.
 	
 2002-10-13  David Hampton  <hampton@employees.org>
 
