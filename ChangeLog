@@ -23,6 +23,19 @@
 	* src/import-export/import-match-map.c:
 	  use GPOINTER_TO_INT and GINT_TO_POINTER macros to be 64-bit safe.
 
+	James Strandboge's "Easy Invoice" patch:
+	* src/business/business-reports/Makefile.am:
+	* src/business/business-reports/business-reports.scm:
+	* src/business/business-reports/easy-invoice.scm:
+	  add "easy invoice" code.
+	* src/business/business-utils/business-prefs.scm:
+	* src/business/business-utils/business-utils.scm:
+	  add preferences for the business ID, used in the easy invoice.
+	* src/report/stylesheets/Makefile.am:
+	* src/report/stylesheets/stylesheets.scm:
+	* src/report/stylesheets/stylesheet-easy.scm:
+	  add "easy stylesheet" code.
+
 2004-10-30  Christian Stimming  <stimming@tuhh.de>
 
 	* doc/README.HBCI: Updated HBCI readme.

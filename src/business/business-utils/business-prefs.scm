@@ -101,7 +101,13 @@
   (reg-option
    (gnc:make-text-option
     gnc:*business-label* gnc:*company-addy*
-    "b" (N_ "The address of your business") ""))
+    "b1" (N_ "The address of your business") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-id*
+    "b2" (N_ "The ID for your company (eg 'Tax-ID: 00-000000")
+    ""))
 
   (reg-option
    (gnc:make-taxtable-option
