@@ -39,18 +39,48 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9c, Mutual fund and Stock Portfolio handling
-is implemented, but is very much in alpha state: many features
-are missing, and others are broken.  In particular, mutual funds 
-cannot be saved to disk.  Also, transfers to bank accounts are
-not properly supported.  Also, tabbing between fields for
-mutual funds does not work correctly.
+As of version 0.9f:
+---------------
+Mutual fund and Stock Portfolio handling
+is implemented, but is in alpha state: many features are
+missing, and others are broken.   Transfers between funds and
+bank accounts are not properly supported.  Also, tabbing between 
+fields for mutual funds does not work correctly.  One planned
+addition is an indication of the type of transaction (Buy, 
+Cap Gain, Dividend Reinvest, etc.) But it is not clear when 
+this will be added.
 
-An alpha version of import from quicken files is also present,
+--------
+An alpha version of import from Quicken files is also present,
 but it is very broken, and many/most quicken formats are not
-supported.
+supported.  It is not currently enabled in the code ... adventrous
+coders are encouraged to hack on this ...
 
-An alpha-level double-entry system has been created. Its use 
-is not currently forced.  It is used only during transfers 
-between accounts.  It is not saved to file, or read from file.
+------------
+An beta-level double-entry system has been created.
+"Double-entry" is a form of accounting where all transactions
+show up in two accounts (for example, a transfer from
+a credit card(Diners Club) to a cash account(Entertainment Expense)
+will show up in both accounts.  Modifying/deleting a transaction 
+in one account window automatically modifies/deletes it in the 
+other too.  
+
+The system does not force the use of double-entry: in fact,
+double entries are made ONLY when the "transfer" menu item is 
+used.
+
+A future extension to force the use of double-entry for an account
+is planned, as well as the ability to make transfers directly
+from the register(ledger) window.  However, this function will
+be tricky, since it requires hacks on the Xbae widget used to
+display the register.
+
+Double-entries should be correctly saved-to-file & restored 
+from file.
+
+-------------
+The "reports" menu item is unimplemented and will result in a core dump.
+-------------
+
+That's all folks!
 

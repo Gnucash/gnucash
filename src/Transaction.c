@@ -52,9 +52,16 @@ initTransaction( Transaction * trans )
   trans->damount     = 0.0;
   trans->share_price = 1.0;
 
+  trans->credit_balance = 0.0;
+  trans->credit_cleared_balance = 0.0;
+  trans->debit_balance = 0.0;
+  trans->debit_cleared_balance = 0.0;
+
   trans->date.year   = 1900;        
   trans->date.month  = 1;        
   trans->date.day    = 1;        
+
+  trans->write_flag  = 0;
   }
 
 /********************************************************************\

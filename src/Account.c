@@ -30,6 +30,7 @@
 #include "date.h"
 
 extern Data *data;
+int next_free_unique_account_id = 0;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -45,6 +46,13 @@ mallocAccount( void )
   {
   Account *acc = (Account *)_malloc(sizeof(Account));
   
+  acc->id = next_free_unique_account_id;
+  next_free_unique_account_id ++;
+
+  acc->data = NULL;
+  acc->balance = 0.0;
+  acc->cleared_balance = 0.0;
+
   acc->flags = 0;
   acc->type  = 0;
   
@@ -104,13 +112,10 @@ freeAccount( Account *acc )
 Transaction *
 getTransaction( Account *acc, int num )
   {
-  if( acc != NULL )
-    {
-    if( (0 <= num) && (num < acc->numTrans) )
-      return acc->transaction[num];
-    else
-      return NULL;
-    }
+  if( NULL == acc ) return NULL;
+
+  if( (num >= 0) && (num < acc->numTrans) )
+    return acc->transaction[num];
   else
     return NULL;
   }
@@ -194,7 +199,7 @@ insertTransaction( Account *acc, Transaction *trans )
     /* If this appears to be a new transaction, then default
      * it to being a credit.  If this transaction is already
      * in another account, assume this is the other half. 
-     * This algoriothm is not robust against internal programming
+     * This algorithm is not robust against internal programming
      * errors ... various bizarre situations can sneak by without
      * warning ... however, this will do for now. 
      */
@@ -272,6 +277,8 @@ insertTransaction( Account *acc, Transaction *trans )
 double xaccGetAmount (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
+   if (NULL == trans) return 0.0;
+   if (NULL == acc) return 0.0;
       
    /* for a double-entry, determine if this is a credit or a debit */
    if ( trans->credit == ((struct _account *) acc) ) {
@@ -305,4 +312,193 @@ void xaccSetAmount (Account *acc, Transaction *trans, double themount)
    }
 }
 
-/* -------------------- end of file --------------- */
+/********************************************************************\
+\********************************************************************/
+
+double xaccGetBalance (Account *acc, Transaction *trans)
+{
+   double themount; /* amount */
+      
+   /* for a double-entry, determine if this is a credit or a debit */
+   if ( trans->credit == ((struct _account *) acc) ) {
+      themount = trans->credit_balance;
+   } else 
+   if ( trans->debit == ((struct _account *) acc) ) {
+      themount = trans->debit_balance;
+   } else {
+      printf ("Internal Error: xaccGetBalance: missing double entry \n");
+      printf ("this error should not occur. Please report the problem. \n");
+      themount = 0.0;  /* punt */
+   }
+   return themount;
+}
+    
+/********************************************************************\
+\********************************************************************/
+
+double xaccGetClearedBalance (Account *acc, Transaction *trans)
+{
+   double themount; /* amount */
+      
+   /* for a double-entry, determine if this is a credit or a debit */
+   if ( trans->credit == ((struct _account *) acc) ) {
+      themount = trans->credit_cleared_balance;
+   } else 
+   if ( trans->debit == ((struct _account *) acc) ) {
+      themount = trans->debit_cleared_balance;
+   } else {
+      printf ("Internal Error: xaccGetClearedBalance: missing double entry \n");
+      printf ("this error should not occur. Please report the problem. \n");
+      themount = 0.0;  /* punt */
+   }
+   return themount;
+}
+    
+/********************************************************************\
+\********************************************************************/
+
+double xaccGetShareBalance (Account *acc, Transaction *trans)
+{
+   double themount; /* amount */
+      
+   /* for a double-entry, determine if this is a credit or a debit */
+   if ( trans->credit == ((struct _account *) acc) ) {
+      themount = trans->credit_share_balance;
+   } else 
+   if ( trans->debit == ((struct _account *) acc) ) {
+      themount = trans->debit_share_balance;
+   } else {
+      printf ("Internal Error: xaccGetShareBalance: missing double entry \n");
+      printf ("this error should not occur. Please report the problem. \n");
+      themount = 0.0;  /* punt */
+   }
+   return themount;
+}
+    
+/********************************************************************\
+ * xaccRecomputeBalance                                             *
+ *   recomputes the partial balances and the current balance for    *
+ *   this account.                                                  *
+
+The current balance is always the current share balance times the
+current share price.  The share price for bank accounts is always 1.0,
+so, for bank acccounts, the current balance is always equal to the current
+share balance.
+ *                                                                  *
+ * Args:   account -- the account for which to recompute balances   *
+ * Return: void                                                     *
+\********************************************************************/
+void
+xaccRecomputeBalance( Account * acc )
+{
+  int  i; 
+  double  dbalance    = 0.0;
+  double  dcleared_balance = 0.0;
+  Transaction *trans;
+  
+  if( NULL == acc ) return;
+
+  for( i=0; (trans=getTransaction(acc,i)) != NULL; i++ ) {
+    dbalance += xaccGetAmount (acc, trans);
+    
+    if( trans->reconciled != NREC ) {
+      dcleared_balance += xaccGetAmount (acc, trans);
+    }
+
+    if (acc == (Account *) trans->credit) {
+      trans -> credit_share_balance = dbalance;
+      trans -> credit_share_cleared_balance = dcleared_balance;
+      trans -> credit_balance = trans->share_price * dbalance;
+      trans -> credit_cleared_balance = trans->share_price * dcleared_balance;
+    }
+    if (acc == (Account *) trans->debit) {
+      trans -> debit_share_balance = dbalance;
+      trans -> debit_share_cleared_balance = dcleared_balance;
+      trans -> debit_balance = trans->share_price * dbalance;
+      trans -> debit_cleared_balance = trans->share_price * dcleared_balance;
+    }
+  }
+
+  acc -> balance = dbalance;
+  acc -> cleared_balance = dcleared_balance;
+    
+  return;
+}
+
+/********************************************************************\
+ * xaccCheckDateOrder                                               *
+ *   check this transaction to see if the date is in correct order  *
+ *   If it is not, reorder the transactions ...                     *
+ *                                                                  *
+ * Args:   acc   -- the account to check                            *
+ *         trans -- the transaction to check                        *
+ *
+ * Return: int -- non-zero if out of order                          *
+\********************************************************************/
+int
+xaccCheckDateOrder (Account * acc, Transaction *trans )
+{
+  int outOfOrder = 0;
+  Transaction *prevTrans;
+  Transaction *nextTrans;
+  int position;
+
+  if (NULL == acc) return 0;
+
+  position = getNumOfTransaction (acc, trans);
+
+  /* if transaction not present in the account, its because
+   * it hasn't been inserted yet. Insert it now. */
+  if (-1 == position) {
+    insertTransaction( acc, trans );
+    return 1;
+  }
+
+  prevTrans = getTransaction( acc, position-1 );
+  nextTrans = getTransaction( acc, position+1 );
+
+  /* figure out if the transactions are out of order */
+  if (NULL != prevTrans) {
+    if( datecmp(&(prevTrans->date),&(trans->date))>0 ) outOfOrder = True;
+  }
+  if (NULL != nextTrans) {
+    if( datecmp(&(trans->date),&(nextTrans->date))>0 ) outOfOrder = True;
+  }
+
+  /* take care of re-ordering, if necessary */
+  if( outOfOrder ) {
+    removeTransaction( acc, position );
+    insertTransaction( acc, trans );
+    return 1;
+  }
+  return 0;
+}
+
+/********************************************************************\
+ * xaccCheckDateOrderDE                                             *
+ *   check this transaction to see if the date is in correct order  *
+ *   If it is not, reorder the transactions ...                     *
+ *   This routine perfroms the check for both of the double-entry   *
+ *   transaction entries ...                                        *
+ *                                                                  *
+ * Args:   trans -- the transaction to check                        *
+ * Return: int -- non-zero if out of order                          *
+\********************************************************************/
+int
+xaccCheckDateOrderDE (Transaction *trans )
+{
+  Account * acc;
+  int outOfOrder = 0;
+
+  if (NULL == trans) return 0;
+
+  acc = (Account *) (trans->credit);
+  outOfOrder += xaccCheckDateOrder (acc, trans);
+  acc = (Account *) (trans->debit);
+  outOfOrder += xaccCheckDateOrder (acc, trans);
+
+  if (outOfOrder) return 1;
+  return 0;
+}
+
+/*************************** end of file **************************** */

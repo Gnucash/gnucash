@@ -44,6 +44,7 @@
 typedef struct _accwindow {
   String notes;          /* The text from the "Notes" window        */
                          /* The account type buttons:               */
+  Widget dialog;
   Widget bank;
   Widget cash;
   Widget asset;
@@ -116,6 +117,7 @@ accWindow( Widget parent )
   
   XtAddCallback( dialog, XmNdestroyCallback, 
 		 closeAccWindow, (XtPointer)accData );
+  accData->dialog = dialog;
   
   /* The form to put everything in the dialog in */
   form = XtVaCreateWidget( "form", xmFormWidgetClass, dialog, 
@@ -320,8 +322,10 @@ accWindow( Widget parent )
   XtAddCallback( widget, XmNactivateCallback, 
 		 createCB, (XtPointer)accData );
   /* We need to do something to clean up memory too! */
+/* this is done at endo fo dialog.
   XtAddCallback( widget, XmNactivateCallback, 
 		 destroyShellCB, (XtPointer)dialog );  
+*/
     
   XtManageChild(buttonform);
   
@@ -585,13 +589,38 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   Transaction *trans;
   Account     *acc;
   AccWindow   *accData = (AccWindow *)cd;
-  
+  Boolean set = False;
+
   String name = XmTextGetString(accData->name);
   String desc = XmTextGetString(accData->desc);
   
+  {
+    /* since portfolio & mutual not fully implemented, provide warning */
+    int warn = 0;
+    XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
+    if(set) warn = 1;
+    
+    XtVaGetValues( accData->mutual, XmNset, &set, NULL );
+    if(set) warn = 1;
+
+    if (warn) {
+     int do_it_anyway;
+     do_it_anyway = verifyBox (toplevel, 
+"Warning: Portfolio and Mutual Fund \n\
+Account types are not fully implemented. \n\
+You can play with the interface here, \n\
+but doing so may damage your data. \n\
+You have been warned! \n\
+Do you want to continue anyway?\n");
+    if (!do_it_anyway) return;
+    }
+  }
+
   /* The account has to have a name! */
-  if( strcmp( name, "" ) == 0 )
+  if( strcmp( name, "" ) == 0 ) {
+    errorBox (toplevel, "The account must be given a name! \n");
     return;
+  }
   
   acc = mallocAccount();
   acc->flags     = 0;
@@ -600,37 +629,34 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   acc->notes       = accData->notes;
   
   /* figure out account type */
-    {
-    Boolean set = False;
     
-    XtVaGetValues( accData->bank, XmNset, &set, NULL );
-    if(set)
-      acc->type = BANK;
-    
-    XtVaGetValues( accData->cash, XmNset, &set, NULL );
-    if(set)
-      acc->type = CASH;
-    
-    XtVaGetValues( accData->asset, XmNset, &set, NULL );
-    if(set)
-      acc->type = ASSET;
-    
-    XtVaGetValues( accData->credit, XmNset, &set, NULL );
-    if(set)
-      acc->type = CREDIT;
-    
-    XtVaGetValues( accData->liability, XmNset, &set, NULL );
-    if(set)
-      acc->type = LIABILITY;
-    
-    XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
-    if(set)
-      acc->type = PORTFOLIO;
-    
-    XtVaGetValues( accData->mutual, XmNset, &set, NULL );
-    if(set)
-      acc->type = MUTUAL;
-    }
+  XtVaGetValues( accData->bank, XmNset, &set, NULL );
+  if(set)
+    acc->type = BANK;
+  
+  XtVaGetValues( accData->cash, XmNset, &set, NULL );
+  if(set)
+    acc->type = CASH;
+  
+  XtVaGetValues( accData->asset, XmNset, &set, NULL );
+  if(set)
+    acc->type = ASSET;
+  
+  XtVaGetValues( accData->credit, XmNset, &set, NULL );
+  if(set)
+    acc->type = CREDIT;
+  
+  XtVaGetValues( accData->liability, XmNset, &set, NULL );
+  if(set)
+    acc->type = LIABILITY;
+  
+  XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
+  if(set)
+    acc->type = PORTFOLIO;
+  
+  XtVaGetValues( accData->mutual, XmNset, &set, NULL );
+  if(set)
+    acc->type = MUTUAL;
   
   /* Add an opening balance transaction (as the first transaction) */
   trans = mallocTransaction();
@@ -650,6 +676,9 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   refreshMainWindow();
   /* open up the account window for the user */
   regWindow( toplevel, acc );
+
+  /* if we got to here, tear down the dialog window */
+  XtDestroyWidget (accData->dialog);
   }
 
 /********************************************************************\

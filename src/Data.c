@@ -1,6 +1,7 @@
 /********************************************************************\
  * Data.c -- the main data structure of the program                 *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -84,6 +85,30 @@ getAccount( Data *data, int num )
   }
 
 /********************************************************************\
+ * Fetch an account, given only it's ID number                      *
+\********************************************************************/
+
+Account *
+xaccGetPeerAccountFromID ( Account *acc, int acc_id )
+{
+  Data * data;
+  Account *peer_acc;
+  int i;
+
+  if (NULL == acc) return NULL;
+  if (-1 >= acc_id) return NULL;
+
+  data = (Data *) acc->data;
+
+  for (i=0; i<data->numAcc; i++) {
+    peer_acc = data->account[i];
+    if (acc_id == peer_acc->id) return peer_acc;
+  }
+
+  return NULL;
+}
+
+/********************************************************************\
 \********************************************************************/
 Account *
 removeAccount( Data *data, int num )
@@ -124,26 +149,30 @@ int
 insertAccount( Data *data, Account *acc )
   {
   int i=-1;
+  Account **oldAcc;
   
-  if( data != NULL )
-    {
-    Account **oldAcc = data->account;
+  if (NULL == data) return -1;
+  if (NULL == acc) return -1;
+
+  /* set back-pointer to the accounts parent */
+  acc->data = (struct _data *) data;
+
+  oldAcc = data->account;
     
-    data->saved = False;
-    
-    data->numAcc++;
-    data->account = (Account **)_malloc((data->numAcc)*sizeof(Account *));
-    
-    for( i=0; i<(data->numAcc-1); i++ )
-      data->account[i] = oldAcc[i];
-    
-    data->account[i] = acc;
-    
-    _free(oldAcc);
-    }
+  data->saved = False;
+  
+  data->numAcc++;
+  data->account = (Account **)_malloc((data->numAcc)*sizeof(Account *));
+  
+  for( i=0; i<(data->numAcc-1); i++ )
+    data->account[i] = oldAcc[i];
+  
+  data->account[i] = acc;
+  
+  _free(oldAcc);
+
   return i;
   }
 
 
-
-
+/****************** END OF FILE *************************************/

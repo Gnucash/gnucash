@@ -435,7 +435,8 @@ Boolean
 verifyBox( Widget parent, char *text )
   {
   Widget    dialog,msgbox;
-  XmString  message     = XmStringCreateSimple(text);
+  /* XmString  message     = XmStringCreateSimple(text); */
+  XmString  message     = XmStringCreateLtoR( text, charset );
   XmString  yes,no;
   VerifyBox verifyData;
   

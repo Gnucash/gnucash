@@ -38,6 +38,7 @@
 #include "main.h"
 #include "util.h"
 
+extern Widget  toplevel;
 
 typedef struct _menuData
 {
@@ -47,6 +48,7 @@ typedef struct _menuData
 
 typedef struct _xferwindow
 {
+  Widget dialog;
   Widget date;
   Widget desc;
   Widget amount;
@@ -107,12 +109,13 @@ xferWindow( Widget parent )
   
   XtAddCallback( dialog, XmNdestroyCallback, 
                  closeXferWindow, (XtPointer)xferData );
+  xferData->dialog = dialog;
   
   /* The form to put everything in the dialog in */
   form = XtVaCreateWidget( "form", xmFormWidgetClass, dialog, NULL );
   /******************************************************************\
-	 * Text fields....                                                *
-	\******************************************************************/  
+   * Text fields....                                                *
+  \******************************************************************/  
   label = 
   XtVaCreateManagedWidget( "Date",
                            xmLabelGadgetClass, form,
@@ -346,8 +349,10 @@ xferWindow( Widget parent )
 
   XtAddCallback( widget, XmNactivateCallback, 
                  xferCB, (XtPointer)xferData );
+/*
   XtAddCallback( widget, XmNactivateCallback, 
                  destroyShellCB, (XtPointer)dialog );  
+*/
     
   XtManageChild(buttonform);
   
@@ -422,6 +427,12 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   String  str;
   float   val=0.0;
 
+  /* silently reject transfers into-out-of the same account */
+  if (xferData->from == xferData->to) {
+    errorBox (toplevel, "The \"From\" and \"To\" accounts\n must be different!\n");
+    return;
+  }
+
   data->saved = False;
   
   /* a double-entry transfer -- just one record, two accounts */
@@ -465,6 +476,9 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   recnRefresh(acc->recnData);
 
   refreshMainWindow();
+
+  /* now close xfer window */
+  XtDestroyWidget(xferData->dialog);
   }
 
 /* ********************** END OF FILE *************************/

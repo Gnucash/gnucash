@@ -206,8 +206,14 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 				   XmNdialogStyle,  XmDIALOG_APPLICATION_MODAL,
 				   XmNtitle,        title,
 				   XmNdeleteResponse, XmDESTROY,
+				   XmNwidth,        500,
+				   XmNheight,       400,
+                                   XmNtransient,    FALSE,  /* allow window to be repositioned */
+
+/*
 				   XmNminWidth,     500,
 				   XmNminHeight,    400,
+*/
 				   NULL );
     
     XtAddCallback( dialog, XmNdestroyCallback, closeHelpWin, NULL );

@@ -74,7 +74,7 @@ void recordCB( Widget mw, XtPointer cd, XtPointer cb );
 void deleteCB( Widget mw, XtPointer cd, XtPointer cb );
 void cancelCB( Widget mw, XtPointer cd, XtPointer cb );
 void regCB( Widget mw, XtPointer cd, XtPointer cb );
-void dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs );
+void dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_year );
 
 
 /** GLOBALS *********************************************************/
@@ -277,6 +277,10 @@ regRefresh( RegWindow *regData )
           newData[row+1][PRIC_CELL_C] = XtNewString("");
           newData[row][SHRS_CELL_C]   = XtNewString("");
           newData[row+1][SHRS_CELL_C] = XtNewString("");
+/*
+          newData[row][ACTN_CELL_C]   = XtNewString("");
+          newData[row+1][ACTN_CELL_C] = XtNewString("");
+*/
           break;
         default:
           fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", regData->acc->type);
@@ -315,7 +319,7 @@ regRefresh( RegWindow *regData )
     
     /* set the cell data: */
     XtVaSetValues( regData->reg, XmNcells, newData, NULL );
-    regRecalculateBalance(regData);
+    regRecalculateBalance (regData);
     
     /* and free memory!!! */
     /* ??? */
@@ -337,31 +341,25 @@ regRecalculateBalance( RegWindow *regData )
   int  i; 
   int  position   = 1;
   double  dbalance    = 0.0;
-  double  share_balance    = 0.0;
   double  dclearedBalance = 0.0;
-  double  share_clearedBalance = 0.0;
+  double share_balance = 0.0;
   char buf[BUFSIZE];
   Transaction *trans;
   Account *acc;
   Widget reg;
   
-  if( regData != NULL ) {
-    reg = regData->reg;
-    acc = regData->acc;
-  } else {
-    reg = NULL;
-    acc = NULL;
-  }
+  if( NULL == regData ) return 0.0;
+
+  reg = regData->reg;
+  acc = regData->acc;
+
+  xaccRecomputeBalance (acc);
   
-  for( i=0; (trans=getTransaction(regData->acc,i)) != NULL; i++ )
+  for( i=0; (trans=getTransaction(acc,i)) != NULL; i++ )
     {
-    share_balance += xaccGetAmount (acc, trans);
-    dbalance = trans -> share_price * share_balance;
-    
-    if( trans->reconciled != NREC ) {
-      share_clearedBalance += xaccGetAmount (acc, trans);
-      dclearedBalance = trans->share_price * share_clearedBalance;
-    }
+    dbalance = xaccGetBalance (acc, trans);
+    dclearedBalance = xaccGetClearedBalance (acc, trans);
+    share_balance = xaccGetShareBalance (acc, trans);
     
     if( reg != NULL )
       {
@@ -406,15 +404,12 @@ regRecalculateBalance( RegWindow *regData )
       }
     }
   
-  if( regData != NULL )
+  if( NULL != regData->balance )
     {
-    if( regData->balance != NULL )
-      {
-      sprintf( buf, "$ %.2f \n$ %.2f \0", 
-               dbalance, dclearedBalance );
-      
-      XmTextSetString( regData->balance, buf );
-      }
+    sprintf( buf, "$ %.2f \n$ %.2f \0", 
+             dbalance, dclearedBalance );
+    
+    XmTextSetString( regData->balance, buf );
     }
   
   refreshMainWindow();        /* make sure the balance field in
@@ -431,6 +426,19 @@ regRecalculateBalance( RegWindow *regData )
  * Return: none                                                     *
  * Global: data - the data for open datafile                        *
 \********************************************************************/
+
+#define RECALC_BALANCE(sacc) {				\
+  Account * xfer_acc;					\
+  RegWindow * xfer_reg;					\
+  xfer_acc = (Account *) (sacc);			\
+  if (xfer_acc) {					\
+    xfer_reg = (RegWindow *) (xfer_acc->regData);	\
+    if (xfer_reg) {					\
+      regRecalculateBalance (xfer_reg);			\
+    }							\
+  }							\
+}
+
 void
 regSaveTransaction( RegWindow *regData, int position )
   {
@@ -438,7 +446,6 @@ regSaveTransaction( RegWindow *regData, int position )
    * regData->changed is a bitfield that keeps track of things
    * that might have changed, so we only have to save the stuff
    * that has changed */
-  Boolean outOfOrder = False;
   char buf[BUFSIZE];
   int  newPosition;
   int  row = (position * 2) + 1;
@@ -524,7 +531,8 @@ regSaveTransaction( RegWindow *regData, int position )
     trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,RECN_CELL_C))[0];
     
     /* Remember, we need to recalculate the reconciled balance now! */
-    regRecalculateBalance(regData);
+    RECALC_BALANCE ((trans->credit));
+    RECALC_BALANCE ((trans->debit));
     }
   
   if( regData->changed & MOD_AMNT )
@@ -561,7 +569,8 @@ regSaveTransaction( RegWindow *regData, int position )
       XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, buf );
       }
     
-    regRecalculateBalance(regData);
+    RECALC_BALANCE ((trans->credit));
+    RECALC_BALANCE ((trans->debit));
     }
 
   /* ignore MOD_PRIC if for non-stock accounts */
@@ -583,7 +592,8 @@ regSaveTransaction( RegWindow *regData, int position )
     XbaeMatrixSetCell( regData->reg, row, PRIC_CELL_C, buf );
     
     /* Remember, we need to recalculate the reconciled balance now! */
-    regRecalculateBalance(regData);
+    RECALC_BALANCE ((trans->credit));
+    RECALC_BALANCE ((trans->debit));
     }
   
   /* Before we check the date, and possibly insert the new
@@ -602,18 +612,13 @@ regSaveTransaction( RegWindow *regData, int position )
       _free(trans);
       return;
       }
-    else
-      {
-      /* If this is a valid new transaction, add a new
-       * empty transaction to take its place */
-      outOfOrder = TRUE;
-      }
     }
   
   if( regData->changed & MOD_DATE )
     {
     Transaction *prevTrans;
     Transaction *nextTrans;
+    Boolean outOfOrder = False;
     prevTrans = getTransaction( acc, position-1 );
     nextTrans = getTransaction( acc, position+1 );
 
@@ -623,32 +628,38 @@ regSaveTransaction( RegWindow *regData, int position )
             &(trans->date.month),
             &(trans->date.day) );
     
-    trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,row+1,0));
+    trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,row+1,DATE_CELL_C));
     
     /* figure out if the transactions are out of order */
-    if( prevTrans != NULL )
-      if( datecmp(&(prevTrans->date),&(trans->date))>0 )
-        outOfOrder = True;
-    if( nextTrans != NULL )
-      if( datecmp(&(trans->date),&(nextTrans->date))>0 )
-        outOfOrder = True;
+    outOfOrder = xaccCheckDateOrderDE (trans);
     
-    /* take care of re-ordering, if necessary */
+    /* take care of re-ordering implications on the register, if necessary */
     if( outOfOrder )
       {
-      /* We need to change lastTrans, because we remove and re-insert
-       * the transaction... reset lastTrans to zero to prevent it from
-       * indicating a row that doesn't exist.  (That shouldn't happen
-       * anyways!) */
-      regData->lastTrans = 0;
-      
-      /* We don't need to remove if it isn't in the transaction list */
-      if( !(regData->changed & MOD_NEW) )
-        removeTransaction( acc, position );
-      
-      insertTransaction( acc, trans );
-      
-      regRefresh(regData);
+
+  /* REFRESH_REGISTER needs to null out lastTrans, because 
+   * during date reordering we removed and re-inserted
+   * the transaction... reset lastTrans to zero to prevent it from
+   * indicating a row that doesn't exist.  (That shouldn't happen
+   * anyways!) */
+#define REFRESH_REGISTER(sacc) {			\
+  Account * xfer_acc;					\
+  RegWindow * xfer_reg;					\
+  xfer_acc = (Account *) (sacc);			\
+  if (xfer_acc) {					\
+    xfer_reg = (RegWindow *) (xfer_acc->regData);	\
+    if (xfer_reg) {					\
+      xfer_reg->lastTrans = 0;				\
+      regRefresh (xfer_reg);				\
+    }							\
+  }							\
+}
+
+      /* if the date changed on a double-entry (transfer) transaction,
+       * then make sure that both register windows are updated .. */
+
+      REFRESH_REGISTER ((trans->credit));
+      REFRESH_REGISTER ((trans->debit));
       }
     
     /* Scroll to the last row, if it is a new transaction */
@@ -658,17 +669,27 @@ regSaveTransaction( RegWindow *regData, int position )
       XbaeMatrixMakeCellVisible( regData->reg, lastRow, DESC_CELL_C );
       }
     
-    /* recalculate the balances, but only after re-ordering
-     * cells */
-    regRecalculateBalance(regData);
+    /* recalculate the balances, but only after re-ordering cells */
+    RECALC_BALANCE ((trans->credit));
+    RECALC_BALANCE ((trans->debit));
     }
   
   /* reset the "changed" bitfield */
   regData->changed   = 0;
 
-  /* If the reconcile window is open, update it!!! */
-  if( acc->recnData != NULL )
-    recnRefresh( acc->recnData );
+#define REFRESH_RECONCILE_WIN(sacc) {			\
+  /* If the reconcile window is open, update it!!! */	\
+  Account * xfer_acc;					\
+  xfer_acc = (Account *) (sacc);			\
+  if (xfer_acc) {					\
+    if (NULL != xfer_acc->recnData) {			\
+      recnRefresh( xfer_acc->recnData );		\
+    }							\
+  }							\
+}
+
+  REFRESH_RECONCILE_WIN ((trans->credit));
+  REFRESH_RECONCILE_WIN ((trans->debit));
   
   return;
   }
@@ -717,9 +738,9 @@ regWindow( Widget parent, Account *acc )
                           xmDialogShellWidgetClass, parent,
                           XmNdeleteResponse,   XmDESTROY,
                           XmNtitle,            acc->accountName,
-                          XmNwidth,            495,
-                          XmNheight,           500,
 /*
+                          XmNwidth,            395,
+                          XmNheight,           400,
                           XmNminWidth,         495,
                           XmNmaxWidth,         495,
                           XmNminHeight,        500,
@@ -839,15 +860,15 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc->columnLocation [DATE_COL_ID] = 0;
         acc->columnLocation [NUM_COL_ID]  = 1;
-        acc->columnLocation [ACTN_COL_ID] = 2;
-        acc->columnLocation [DESC_COL_ID] = 3;
-        acc->columnLocation [RECN_COL_ID] = 4;
-        acc->columnLocation [PAY_COL_ID]  = 5;
-        acc->columnLocation [DEP_COL_ID]  = 6;
-        acc->columnLocation [PRIC_COL_ID] = 7;
-        acc->columnLocation [SHRS_COL_ID] = 8;
-        acc->columnLocation [BALN_COL_ID] = 9;
-        acc -> numCols = 10;
+        /* acc->columnLocation [ACTN_COL_ID] = 2; */
+        acc->columnLocation [DESC_COL_ID] = 2;
+        acc->columnLocation [RECN_COL_ID] = 3;
+        acc->columnLocation [PAY_COL_ID]  = 4;
+        acc->columnLocation [DEP_COL_ID]  = 5;
+        acc->columnLocation [PRIC_COL_ID] = 6;
+        acc->columnLocation [SHRS_COL_ID] = 7;
+        acc->columnLocation [BALN_COL_ID] = 8;
+        acc -> numCols = 9;
         break;
       default:
         fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -856,7 +877,7 @@ regWindow( Widget parent, Account *acc )
     /* ----------------------------------- */
     /* set up column widths */
 
-    acc -> colWidths[DATE_CELL_C] = 4;   /* the widths of columns */
+    acc -> colWidths[DATE_CELL_C] = 5;   /* the widths of columns */
     acc -> colWidths[NUM_CELL_C]  = 4;   /* the widths of columns */
     acc -> colWidths[DESC_CELL_C] = 35;  /* the widths of columns */
     acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
@@ -876,7 +897,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
         acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
-        acc -> colWidths[ACTN_CELL_C] = 6;   /* action (category) */
+        /* acc -> colWidths[ACTN_CELL_C] = 6;   /* action (category) */
         break;
       }
     
@@ -904,7 +925,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         acc -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
-        acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
+        /* acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
         break;
       }
     
@@ -932,7 +953,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> rows[0][PRIC_CELL_C] = "Price";
         acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
-        acc -> rows[0][ACTN_CELL_C] = "Cat";
+        /* acc -> rows[0][ACTN_CELL_C] = "Cat";   /* action */
         break;
       }
     
@@ -976,7 +997,7 @@ regWindow( Widget parent, Account *acc )
                             XmNfixedRows,           1,
                             XmNfixedColumns,        0,
                             XmNrows,                2,
-                            XmNvisibleRows,         20,
+                            XmNvisibleRows,         15,
                             XmNfill,                True,
                             XmNcolumns,             acc -> numCols,
                             XmNcolumnWidths,        acc -> colWidths,
@@ -1206,12 +1227,30 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
+
+#define REMOVE_TRANS(sacc,trans) {				\
+  Account   *otherAcc = (Account *) (sacc); 			\
+  if (otherAcc) {						\
+    RegWindow *otherRegData = otherAcc -> regData;		\
+    int n = getNumOfTransaction (otherAcc, trans);		\
+								\
+    /* remove the transaction */				\
+    trans = removeTransaction( otherAcc, n );			\
+								\
+    /* remove the rows from the matrix */			\
+    if (otherRegData) {						\
+      int otherrow = 2*n + 1;					\
+      XbaeMatrixDeleteRows( otherRegData->reg, otherrow, 2 );	\
+      XbaeMatrixRefresh( otherRegData->reg);			\
+    }								\
+  }								\
+}
+
 void
 deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
   Account   *acc     = regData->acc;
-  Account   *otherAcc = 0x0;
   
   if( getTransaction(acc,regData->lastTrans) != NULL )
     {
@@ -1220,37 +1259,17 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
     if( verifyBox( toplevel, msg ) )
       {
       Transaction *trans;
-      int row = (2*regData->lastTrans) + 1;
-      /* remove the transaction */
-      trans = removeTransaction( acc, regData->lastTrans );
+      trans = getTransaction (acc, regData->lastTrans );
       
-      /* remove the rows from the matrix */
-      XbaeMatrixDeleteRows( regData->reg, row, 2 );
-      XbaeMatrixRefresh(regData->reg);
-      
-      /* if this is a double entry transaction, 
-       * remove it from the other account too ...... */
-      if (trans->credit) otherAcc = (Account *) trans->credit; 
-      if (trans->debit) otherAcc = (Account *) trans->debit; 
-      if (otherAcc) {
-        RegWindow *otherRegData = otherAcc -> regData;
-        int otherrow;
-        int n = getNumOfTransaction (otherAcc, trans);
-        trans = removeTransaction( otherAcc, n );
+      /* remove the transaction from both accounts */
+      REMOVE_TRANS ((trans->credit), trans);
+      REMOVE_TRANS ((trans->debit), trans);
 
-        /* remove the rows from the matrix */
-        if (otherRegData) {
-          otherrow = 2*n + 1;
-          XbaeMatrixDeleteRows( otherRegData->reg, otherrow, 2 );
-          XbaeMatrixRefresh( otherRegData->reg);
-          regRecalculateBalance (otherRegData);
-        }
-      }
+      RECALC_BALANCE ((trans->debit));
+      RECALC_BALANCE ((trans->credit));
 
       /* Delete the transaction */
       freeTransaction (trans);
-      
-      regRecalculateBalance(regData);
       }
     }
   }
@@ -1327,7 +1346,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
           !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
           !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
-          !IN_MEMO_CELL(row,col) )
+          !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->map  = FALSE;
@@ -1450,7 +1469,11 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         }
 #endif	
       if( IN_DATE_CELL(row,col) )
-        dateCellFormat( mw, mvcbs );       /* format according to date
+        dateCellFormat( mw, mvcbs, 0);     /* format according to date
+                                            * cell rules */
+
+      if( IN_YEAR_CELL(row,col) )
+        dateCellFormat( mw, mvcbs, 1);     /* format according to date
                                             * cell rules */
 
       /* look to see if numeric format is OK.  Note that
@@ -1491,7 +1514,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       /* if the cell is modified, mark it as modified, so we know  to 
        * save it... (Don't mark reconciled here, because you can't
        * actually enter the reconciled cell... mark it in XbaerCellReason */
-      if( IN_DATE_CELL(row,col) )
+      if( IN_DATE_CELL(row,col) || IN_YEAR_CELL(row,col) )
         regData->changed |= MOD_DATE;
       
       if( IN_NUM_CELL(row,col) )
@@ -1613,7 +1636,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
 \********************************************************************/
 void
-dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
+dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_year )
   {
   /* Date format -- valid characters are numerals, '/', and
    * accelerator keys (accelerator keys have doit = False,
@@ -1635,15 +1658,24 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
 
   input = (mvcbs->verify->text->ptr)[0];
   
-  row  = mvcbs->row;
+  if (do_year) {
+    row  = mvcbs->row - 1;
+  } else {
+    row  = mvcbs->row;
+  }
   col  = mvcbs->column;
   
   date.day   = 0;
   date.month = 0;
   date.year  = 0;
   
-  sscanf( mvcbs->prev_text,
-          "%d/%d",&(date.month), &(date.day) );
+  if (do_year) {
+    sscanf( XbaeMatrixGetCell(mw,row,col),
+            "%d/%d",&(date.month), &(date.day) );
+  }else {
+    sscanf( mvcbs->prev_text, 
+            "%d/%d",&(date.month), &(date.day) );
+  }
   sscanf( XbaeMatrixGetCell(mw,row+1,col),
           "%d", &(date.year) );
   
@@ -1725,19 +1757,20 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
        * on the first on, we accept, on the second one
        * we skip to the year cell
        */
-    {
-    int i,count=0;
-    DEBUGCMD(printf(" = %s\n",mvcbs->prev_text));
-    for( i=0; (mvcbs->prev_text)[i] != '\0'; i++ )
-      if( (mvcbs->prev_text)[i] == '/' )
-        count++;
-    if( count >= 1 )
+      if (0 == do_year) 
       {
-      XbaeMatrixEditCell( mw, row+1, col );
-      XbaeMatrixSelectCell( mw, row+1, col );
+      int i,count=0;
+      DEBUGCMD(printf(" = %s\n",mvcbs->prev_text));
+      for( i=0; (mvcbs->prev_text)[i] != '\0'; i++ )
+        if( (mvcbs->prev_text)[i] == '/' )
+          count++;
+      if( count >= 1 )
+        {
+        XbaeMatrixEditCell( mw, row+1, col );
+        XbaeMatrixSelectCell( mw, row+1, col );
+        }
       }
-    }
-    break;
+      break;
     default:
       /* only accept the input if it is a number */
       mvcbs->verify->doit = isNum(input);
@@ -1755,3 +1788,4 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
     }
   }
  
+/************************** END OF FILE *************************/
