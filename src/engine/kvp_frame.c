@@ -222,7 +222,7 @@ kvp_list_copy(const kvp_list * list) {
   return retval;
 }
 
-int
+gboolean
 kvp_list_null_p(const kvp_list * list) {
   return (!list || (list->list == NULL));
 }
