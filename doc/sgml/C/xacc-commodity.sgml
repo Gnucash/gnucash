@@ -16,7 +16,7 @@ name such as "US Dollars" or "IBM Common Stock". </para>
 ticker symbol (for stocks), ISO currency symbol (for national
 currencies), or other unique abbreviation for the commodity.  If the
 commodity is traded on any public exchange, it is important to use the
-same identifier used on that exchange.
+same identifier used on that exchange. </para>
 
 <para>The <emphasis>type</emphasis> of a commodity is the grouping or
 namespace in which it exists.  For example, national currencies are of

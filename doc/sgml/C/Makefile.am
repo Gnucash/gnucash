@@ -13,6 +13,7 @@ GNUCASH_SGML_FILES = \
 	xacc-balancereport.sgml \
 	xacc-balancesheet.sgml \
 	xacc-chartofaccts.sgml \
+	xacc-commodity.sgml \
 	xacc-currencyhandling.sgml \
 	xacc-dateinput.sgml \
 	xacc-depreciation.sgml \
