@@ -157,12 +157,12 @@ AC_SUBST(XMHTML_INC)
 AC_CHECK_LIB(guile, gh_enter,
 	GUILELIBS="$GUILELIBS -lguile",
 	AC_CHECK_LIB(guile, gh_define,
-		GUILELIBS="$GUILELIBS -lguile -ldl -lreadline",
+		GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap",
 		AC_CHECK_LIB(guile, gh_eval_file,
-			GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -lqthreads",
+			GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap -lqthreads",
 			AC_MSG_ERROR(cannot link with guile),
-			-ldl -lreadline -lqthreads),
-		-ldl -lreadline)
+			-ldl -lreadline -ltermcap -lqthreads),
+		-ldl -lreadline -ltermcap)
 	)
 AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
