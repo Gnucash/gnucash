@@ -32,6 +32,11 @@
 #include "Transaction.h"
 #include "util.h"
 
+/* the MAX_QUERY_SPLITS define determines how many transactions should be shown
+ * in the register.  Its set to a default of 30.  But this should be converted
+ * into a user-configurable value.  So hack-alert on the configuration aspect.
+ */
+#define MAX_QUERY_SPLITS 30
 
 /** GLOBALS *********************************************************/
 /* These are globals because they describe the state of the entire session.
@@ -334,6 +339,9 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->query = xaccMallocQuery();
   xaccQuerySetAccounts (regData->query, regData->displayed_accounts);
   xaccQueryAddAccount (regData->query, regData->leader);
+
+  /* by default, display only thirty transactions */
+  xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS);
 
   /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
