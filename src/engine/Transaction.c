@@ -591,7 +591,8 @@ G_INLINE_FUNC void gen_event (Split *split);
 G_INLINE_FUNC void gen_event (Split *split)
 {
   Account *account = split->acc;
-  Transaction *trans;
+  Transaction *trans = split->parent;
+  GNCLot *lot = split->lot;
 
   if (account)
   {
@@ -599,10 +600,15 @@ G_INLINE_FUNC void gen_event (Split *split)
      gnc_engine_generate_event (&account->guid, GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
   }
 
-  trans = split->parent;
   if (trans)
   {
     gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+  }
+
+  if (lot)
+  {
+    /* A change of value/amnt affects gains displat, etc. */
+    gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
   }
 }
 
@@ -613,9 +619,18 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
 
   for (node = trans->splits; node; node = node->next)
   {
-    Account *account = ((Split *) (node->data)) -> acc;
+    Split *s = node->data;
+    Account *account = s->acc;
+    GNCLot *lot = s->lot;
     if (account)
+    {
       xaccGroupMarkNotSaved (account->parent);
+    }
+    if (lot)
+    {
+      /* A change of transaction date might affect opening date of lot */
+      gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
+    }
   }
 
   gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);

@@ -80,6 +80,7 @@ gnc_lot_new (QofBook *book)
 
    lot = g_new (GNCLot, 1);
    gnc_lot_init (lot, book);
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_CREATE);
    return lot;
 }
 
@@ -252,6 +253,8 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
 
     /* for recomputation of is-closed */
    lot->is_closed = -1;
+
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
 }
 
 void
@@ -269,6 +272,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
+   gnc_engine_generate_event (&lot->guid, GNC_ID_LOT, GNC_EVENT_MODIFY);
 }
 
 /* ============================================================== */
