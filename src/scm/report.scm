@@ -57,7 +57,6 @@
         (let* ((renderer (gnc:report-renderer report))
                (lines    (renderer options))
                (output   (report-output->string lines)))
-          (display output) (newline)
           output)
         #f)))
 
