@@ -1,6 +1,7 @@
 
 SUBDIRS = \
   doc \
+  core-utils \
   gnc-module \
   test-core \
   network-utils \
