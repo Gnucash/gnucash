@@ -5,6 +5,10 @@
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
  *********************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>

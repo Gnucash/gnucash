@@ -1,3 +1,16 @@
+2002-01-07 Herbert Thoma <herbie@hthoma.de>
+
+	* src/gnome-search/gncmod-gnome-search.c:
+	* src/business/business-gnome/businessmod-gnome.c:
+	* gnucash/src/gnome-utils/dialog-options.h:
+	* src/import-export/binary-import/druid-commodity.h:
+	* src/register/register-gnome/gnucash-color.c:
+	* src/report/report-gnome/gncmod-report-gnome.c:
+	  add #ifdef HAVE_CONFIG_H
+	    #include <config.h>
+	    #endif
+	  this fixes compile errors on SuSE 8.0 + 8.1
+
 2003-01-07  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/file/* -- don't save half-built data.
