@@ -53,24 +53,13 @@ gnc_account_ui_refresh(Account *account)
    }
 
    xaccAccountDisplayRefresh(account);
-   recnRefresh(account);
-   gnc_ui_refresh_edit_account_window(account);
 }
 
 /* ------------------------------------------------------ */
 void
 gnc_account_glist_ui_refresh(GList *accounts)
 {
-  GList *node;
-
   xaccAccGListDisplayRefresh(accounts);
-
-  node = accounts;
-  while (node != NULL)
-  {
-    recnRefresh(node->data);
-    node = node->next;
-  }
 }
 
 /* ------------------------------------------------------ */
@@ -99,24 +88,10 @@ gnc_group_ui_refresh(AccountGroup *group)
 void 
 gnc_transaction_ui_refresh(Transaction *trans)
 {
-  Account *account;
-  Split *split;
-  int i, num_splits;  
-
   if (trans == NULL)
     return;
 
   xaccTransDisplayRefresh(trans);
-
-  num_splits = xaccTransCountSplits(trans);
-
-  for (i = 0; i < num_splits; i++)
-  {
-    split = xaccTransGetSplit(trans, i);
-    account = xaccSplitGetAccount(split);
-
-    recnRefresh(account);
-  }
 }
 
 /************************** END OF FILE *************************/

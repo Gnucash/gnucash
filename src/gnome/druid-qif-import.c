@@ -43,6 +43,7 @@
 #include "FileBox.h"
 #include "dialog-utils.h"
 #include "query-user.h"
+#include "gnc-component-manager.h"
 #include "gnc-ui-util.h"
 
 #include <g-wrap-runtime-guile.h>
@@ -1199,7 +1200,9 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
   /* get the default currency */
   char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
-  
+
+  gnc_suspend_gui_refresh ();
+
   /* busy cursor */
   gnc_set_busy_cursor(NULL);
 
@@ -1230,7 +1233,8 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   gh_call2(save_map_prefs, wind->acct_map_info, wind->cat_map_info); 
   
   gnc_unset_busy_cursor(NULL);
-  
+  gnc_resume_gui_refresh ();
+
   gnc_ui_qif_import_druid_destroy(wind);  
 }
 

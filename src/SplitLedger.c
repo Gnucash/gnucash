@@ -113,6 +113,7 @@
 #include "Scrub.h"
 #include "SplitLedger.h"
 #include "global-options.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
@@ -158,6 +159,9 @@ struct _SRInfo
   /* Indicates that the current transaction is expanded
    * in ledger mode. Meaningless in other modes. */
   gboolean trans_expanded;
+
+  /* set to TRUE after register is loaded */
+  gboolean reg_loaded;
 
   /* The default account where new splits are added */
   Account *default_source_account;
@@ -897,6 +901,9 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   }
 
   info->hint_set_by_traverse = FALSE;
+  info->reg_loaded = FALSE;
+
+  gnc_suspend_gui_refresh ();
 
   /* commit the contents of the cursor into the database */
   saved = xaccSRSaveRegEntry (reg, old_trans != new_trans);
@@ -912,17 +919,23 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     saved = TRUE;
   }
 
+  if (saved)
+  {
+    info->cursor_hint_trans = new_trans;
+    info->cursor_hint_split = new_split;
+    info->cursor_hint_trans_split = new_trans_split;
+    info->cursor_hint_cursor_class = new_class;
+  }
+
+  gnc_resume_gui_refresh ();
+
   /* redrawing the register can muck everything up */
   if (saved)
   {
     VirtualCellLocation vcell_loc;
 
-    info->cursor_hint_trans = new_trans;
-    info->cursor_hint_split = new_split;
-    info->cursor_hint_trans_split = new_trans_split;
-    info->cursor_hint_cursor_class = new_class;
-
-    xaccSRRedrawRegEntry (reg);
+    if (!info->reg_loaded)
+      xaccSRRedrawReg (reg);
 
     /* if the split we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
@@ -1087,6 +1100,10 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       if (auto_trans == NULL)
         return FALSE;
 
+      /* now perform the completion */
+
+      gnc_suspend_gui_refresh ();
+
       xaccTransBeginEdit (trans);
       gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
 
@@ -1141,6 +1158,8 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       gnc_account_glist_ui_refresh(refresh_accounts);
 
       g_list_free(refresh_accounts);
+
+      gnc_resume_gui_refresh ();
 
       /* now move to the non-empty amount column */
       amount = xaccSplitGetShareAmount (blank_split);
@@ -1517,6 +1536,8 @@ LedgerDestroy (SplitRegister *reg)
    Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
    Transaction *trans;
 
+   gnc_suspend_gui_refresh ();
+
    /* be sure to destroy the "blank split" */
    if (blank_split != NULL) {
       /* split destroy will automatically remove it
@@ -1548,6 +1569,8 @@ LedgerDestroy (SplitRegister *reg)
    }
 
    xaccSRDestroyRegisterData(reg);
+
+   gnc_resume_gui_refresh ();
 }
 
 /* ======================================================== */
@@ -1878,6 +1901,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   if (!changed && ((split == NULL) || (split == blank_split)))
     return NULL;
 
+  gnc_suspend_gui_refresh ();
+
   /* If the cursor has been edited, we are going to have to commit
    * it before we can duplicate. Make sure the user wants to do that. */
   if (changed)
@@ -1890,7 +1915,10 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
                                            message, GNC_VERIFY_OK);
 
     if (result == GNC_VERIFY_CANCEL)
+    {
+      gnc_resume_gui_refresh ();
       return NULL;
+    }
 
     xaccSRSaveRegEntry(reg, TRUE);
 
@@ -1937,7 +1965,10 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
 
     /* we should *always* find the split, but be paranoid */
     if (split_index < 0)
+    {
+      gnc_resume_gui_refresh ();
       return NULL;
+    }
 
     new_trans = xaccMallocTransaction();
 
@@ -1963,6 +1994,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   /* Refresh the GUI. */
   gnc_refresh_main_window();
   gnc_transaction_ui_refresh(trans);
+  gnc_resume_gui_refresh ();
 
   return return_split;
 }
@@ -2160,6 +2192,8 @@ xaccSRPasteCurrent (SplitRegister *reg)
     if (!result)
       return;
 
+    gnc_suspend_gui_refresh ();
+
     accounts = gnc_trans_prepend_account_list(trans, NULL);
 
     if (split == NULL)
@@ -2195,6 +2229,8 @@ xaccSRPasteCurrent (SplitRegister *reg)
 
     if (!result)
       return;
+
+    gnc_suspend_gui_refresh ();
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);
 
@@ -2235,6 +2271,7 @@ xaccSRPasteCurrent (SplitRegister *reg)
   /* Refresh the GUI. */
   gnc_refresh_main_window();
   gnc_account_glist_ui_refresh(accounts);
+  gnc_resume_gui_refresh ();
 
   g_list_free(accounts);
 }
@@ -2266,6 +2303,8 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
     return;
   }
 
+  gnc_suspend_gui_refresh ();
+
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
    * their register windows after the deletion. */
@@ -2290,6 +2329,7 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
 
   gnc_refresh_main_window ();
   gnc_account_glist_ui_refresh(accounts);
+  gnc_resume_gui_refresh ();
 
   g_list_free(accounts);
 }
@@ -2327,6 +2367,8 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
       pending_trans = NULL;
     }
 
+    gnc_suspend_gui_refresh ();
+
     xaccTransBeginEdit (trans);
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
@@ -2335,8 +2377,11 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
     blank_split = NULL;
 
     xaccAccountDisplayRefresh(account);
+    gnc_resume_gui_refresh ();
     return;
   }
+
+  gnc_suspend_gui_refresh ();
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
@@ -2358,6 +2403,7 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
 
   gnc_refresh_main_window ();
   gnc_account_glist_ui_refresh(accounts);
+  gnc_resume_gui_refresh ();
 
   g_list_free(accounts);
 }
@@ -2397,6 +2443,8 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
       pending_trans = NULL;
     }
 
+    gnc_suspend_gui_refresh ();
+
     xaccTransBeginEdit (trans);
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
@@ -2405,8 +2453,11 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
     blank_split = NULL;
 
     xaccAccountDisplayRefresh(account);
+    gnc_resume_gui_refresh ();
     return;
   }
+
+  gnc_suspend_gui_refresh ();
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
@@ -2431,6 +2482,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
 
   gnc_refresh_main_window ();
   gnc_account_glist_ui_refresh(accounts);
+  gnc_resume_gui_refresh ();
 
   g_list_free(accounts);
   g_list_free(splits);
@@ -2484,6 +2536,8 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
   if (!pending_trans)
     return;
 
+  gnc_suspend_gui_refresh ();
+
   accounts = gnc_trans_prepend_account_list (pending_trans, NULL);
 
   xaccTransRollbackEdit (pending_trans);
@@ -2497,12 +2551,14 @@ xaccSRCancelCursorTransChanges (SplitRegister *reg)
   info->pending_trans_guid = *xaccGUIDNULL ();
 
   gnc_refresh_main_window ();
+
+  gnc_resume_gui_refresh ();
 }
 
 /* ======================================================== */
 
 void
-xaccSRRedrawRegEntry (SplitRegister *reg) 
+xaccSRRedrawReg (SplitRegister *reg) 
 {
    Transaction *trans;
 
@@ -2710,6 +2766,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
    ENTER ("xaccSRSaveRegEntry(): save split is %p \n", split);
 
+   gnc_suspend_gui_refresh ();
+
    /* determine whether we should commit the pending transaction */
    if (pending_trans != trans) {
      if (xaccTransIsOpen (pending_trans))
@@ -2798,6 +2856,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
      gnc_account_glist_ui_refresh(refresh_accounts);
      g_list_free(refresh_accounts);
    }
+
+   gnc_resume_gui_refresh ();
 
    return TRUE;
 }
@@ -3248,8 +3308,8 @@ get_trans_last_split (SplitRegister *reg, Transaction *trans)
   GList *node;
   Account *account;
   Split *last_split = NULL;
+  SRInfo *info = xaccSRGetInfo (reg);
 
-  SRInfo *info = xaccSRGetInfo(reg);
   account = info->default_source_account;
 
   if (!account)
@@ -4249,6 +4309,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   {
     Transaction *trans;
 
+    gnc_suspend_gui_refresh ();
+
     trans = xaccMallocTransaction ();
 
     xaccTransBeginEdit (trans);
@@ -4258,8 +4320,9 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     xaccTransCommitEdit (trans);
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
-
     info->blank_split_edited = FALSE;
+
+    gnc_resume_gui_refresh ();
   }
 
   info->default_source_account = default_source_acc;
@@ -4496,6 +4559,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   info->traverse_to_new = FALSE;
   info->exact_traversal = FALSE;
   info->first_pass = FALSE;
+  info->reg_loaded = TRUE;
 
   gnc_table_refresh_gui (table);
 

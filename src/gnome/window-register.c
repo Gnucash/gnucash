@@ -1015,8 +1015,8 @@ new_trans_cb(GtkWidget *widget, gpointer data)
 
   if (xaccSRCheckReconciled (regData->ledger->reg))
   {
-    if (xaccSRSaveRegEntry(regData->ledger->reg, TRUE))
-      xaccSRRedrawRegEntry(regData->ledger->reg);
+    if (xaccSRSaveRegEntry (regData->ledger->reg, TRUE))
+      xaccSRRedrawReg (regData->ledger->reg);
   }
   else
     xaccSRCancelCursorTransChanges (regData->ledger->reg);
@@ -2277,7 +2277,7 @@ recordCB(GtkWidget *w, gpointer data)
   if (trans != NULL)
     gnc_register_include_date(regData, xaccTransGetDate(trans));
 
-  xaccSRRedrawRegEntry(regData->ledger->reg);
+  xaccSRRedrawReg (regData->ledger->reg);
 }
 
 

@@ -72,6 +72,8 @@ static short module = MOD_GUI;
 
 /** Prototypes ******************************************************/
 static void gnc_gui_refresh_internal (gboolean force);
+static GList * find_component_ids_by_class (const char *component_class);
+static gboolean got_events = FALSE;
 
 
 /** Implementations *************************************************/
@@ -223,10 +225,15 @@ gnc_cm_event_handler (GUID *entity,
                       GNCEngineEventType event_type,
                       gpointer user_data)
 {
-#ifdef CM_DEBUG
   add_event (&changes, entity, event_type, TRUE);
+  got_events = TRUE;
+
+#if CM_DEBUG
   fprintf (stderr, "event: %d\n", event_type);
 #endif
+
+  if (suspend_counter == 0)
+    gnc_gui_refresh_internal (FALSE);
 }
 
 static gint handler_id;
@@ -391,6 +398,15 @@ gnc_gui_component_watch_entity_type (gint component_id,
   add_event_type (&ci->watch_info, entity_type, event_mask, FALSE);
 }
 
+const EventInfo *
+gnc_gui_get_entity_events (GHashTable *changes, GUID *entity)
+{
+  if (!changes || !entity)
+    return GNC_EVENT_NONE;
+
+  return g_hash_table_lookup (changes, entity);
+}
+
 void
 gnc_gui_component_clear_watches (gint component_id)
 {
@@ -542,13 +558,66 @@ changes_match (ComponentEventInfo *cei)
 }
 
 static void
+compile_helper (gpointer key, gpointer value, gpointer user_data)
+{
+  GUID *guid = key;
+  EventInfo *info = value;
+  ComponentEventInfo *cei = user_data;
+  GNCIdType id_type;
+
+  id_type = xaccGUIDType (guid);
+  switch (id_type)
+  {
+    case GNC_ID_TRANS:
+      cei->trans_event_mask |= info->event_mask;
+      break;
+
+    case GNC_ID_ACCOUNT:
+      cei->account_event_mask |= info->event_mask;
+      break;
+
+    case GNC_ID_NONE:
+      break;
+
+    default:
+      PERR ("unexpected id type: %d", id_type);
+      break;
+  }
+}
+
+static void
+compile_changes (ComponentEventInfo *cei)
+{
+  if (!cei)
+    return;
+
+  g_hash_table_foreach (cei->entity_events, compile_helper, cei);
+}
+
+static void
 gnc_gui_refresh_internal (gboolean force)
 {
+  GList *list;
   GList *node;
 
-  for (node = components; node; node = node->next)
+#if CM_DEBUG
+  fprintf (stderr, "refresh!\n");
+#endif
+
+  if (!got_events)
+    return;
+
+  if (!force)
+    compile_changes (&changes);
+
+  list = find_component_ids_by_class (NULL);
+
+  for (node = list; node; node = node->next)
   {
-    ComponentInfo *ci = node->data;
+    ComponentInfo *ci = find_component (GPOINTER_TO_INT (node->data));
+
+    if (!ci)
+      continue;
 
     if (!ci->refresh_handler)
       continue;
@@ -560,6 +629,9 @@ gnc_gui_refresh_internal (gboolean force)
   }
 
   clear_event_info (&changes);
+  got_events = FALSE;
+
+  g_list_free (list);
 }
 
 void

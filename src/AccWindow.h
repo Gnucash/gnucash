@@ -40,14 +40,6 @@ AccountWindow * gnc_ui_edit_account_window (Account *account);
 
 Account * gnc_ui_new_accounts_from_name_window (const char *name);
 
-
-/* The xaccDestroyEditAccWindow() subroutine can be called from
- *   anywhere to shut down the Register window. Used primarily when
- *   destroying the underlying account.  */
-void gnc_ui_destroy_edit_account_window (Account *account);
-
-void gnc_ui_refresh_edit_account_window (Account *account);
-
 void gnc_ui_set_default_new_account_currency (const char *currency);
 
 

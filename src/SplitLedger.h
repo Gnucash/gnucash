@@ -166,14 +166,14 @@ void    xaccSRLoadRegister (SplitRegister *reg, GList * slist,
  *    The method returns TRUE if something was changed. */
 gboolean xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit);
 
-/* The xaccSRRedrawRegEntry() method should be called soon 
+/* The xaccSRRedrawReg() method should be called soon 
  *    after the xaccSRSaveRegEntry() method.  It checks the 
  *    change flag for the current entry/split, and if it
  *    has been modified, it causes a redraw of any register
  *    window that could be affected.  That is, it causes 
  *    a redraw of any window showing this split, or any
  *    other split that belongs to this same tansaction. */
-void     xaccSRRedrawRegEntry (SplitRegister *reg);
+void     xaccSRRedrawReg (SplitRegister *reg);
 
 /* The xaccSRHasPendingChanges() method returns TRUE if the register
  *    has changed cells that have not been committed. */

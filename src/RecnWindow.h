@@ -37,12 +37,6 @@ typedef struct _RecnWindow RecnWindow;
 
 
 /** PROTOTYPES ******************************************************/
-void        recnRefresh (Account * account);
 RecnWindow *recnWindow (gncUIWidget parent, Account *account);
-
-/* The xaccDestroyRecnWindow() subroutine can be called from anywhere
- * to shut down the Register window.  Used primarily when destroying
- * the underlying account. */
-void        xaccDestroyRecnWindow (Account *account);
 
 #endif

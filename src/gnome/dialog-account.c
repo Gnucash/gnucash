@@ -64,7 +64,7 @@ struct _AccountWindow
 
   AccountDialogType dialog_type;
 
-  Account *account;
+  GUID    account;
   Account *top_level_account;
   Account *created_account;
 
@@ -104,44 +104,61 @@ static void gnc_account_window_set_name (AccountWindow *aw);
 static AccountWindow *
 gnc_ui_new_account_window_internal (Account *base_account,
                                     GList *subaccount_names);
+static void make_account_changes(GHashTable *change_currency,
+                                 GHashTable *change_security,
+                                 GHashTable *change_type);
+static void gnc_ui_refresh_edit_account_window (AccountWindow *aw);
 
 
 /** Implementation *******************************************************/
+
+static Account *
+aw_get_account (AccountWindow *aw)
+{
+  if (!aw)
+    return NULL;
+
+  return xaccAccountLookup (&aw->account);
+}
 
 /* Copy the account values to the GUI widgets */
 static void
 gnc_account_to_ui(AccountWindow *aw)
 {
+  Account *account = aw_get_account (aw);
   const gnc_commodity * commodity;
   const char *string;
   gboolean tax_related;
   gint pos = 0;
 
-  string = xaccAccountGetName (aw->account);
+  if (!account)
+    return;
+
+  string = xaccAccountGetName (account);
   gtk_entry_set_text(GTK_ENTRY(aw->name_entry), string);
 
-  string = xaccAccountGetDescription (aw->account);
+  string = xaccAccountGetDescription (account);
   gtk_entry_set_text(GTK_ENTRY(aw->description_entry), string);
 
-  commodity = xaccAccountGetCurrency (aw->account);
+  commodity = xaccAccountGetCurrency (account);
   gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->currency_edit),
                                     commodity);
 
-  commodity = xaccAccountGetSecurity (aw->account);
+  commodity = xaccAccountGetSecurity (account);
   gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->security_edit),
                                     commodity);
 
-  string = xaccAccountGetCode (aw->account);
+  string = xaccAccountGetCode (account);
   gtk_entry_set_text(GTK_ENTRY(aw->code_entry), string);
 
-  string = xaccAccountGetNotes (aw->account);
+  string = xaccAccountGetNotes (account);
   if (string == NULL) string = "";
 
   gtk_editable_delete_text (GTK_EDITABLE (aw->notes_text), 0, -1);
   gtk_editable_insert_text (GTK_EDITABLE (aw->notes_text), string,
                             strlen(string), &pos);
 
-  tax_related = xaccAccountGetTaxRelated (aw->account);
+  tax_related = xaccAccountGetTaxRelated (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->tax_related_button),
                                 tax_related);
 
@@ -150,11 +167,10 @@ gnc_account_to_ui(AccountWindow *aw)
 
   {
     /* we'll let GetPriceSrc handle the account type checking... */
-    const char* price_src = xaccAccountGetPriceSrc(aw->account);
-    if (price_src) {
-      gtk_option_menu_set_history(GTK_OPTION_MENU(aw->source_menu),
-                                  gnc_get_source_code(price_src));
-    }
+    const char* price_src = xaccAccountGetPriceSrc (account);
+    if (price_src)
+      gtk_option_menu_set_history (GTK_OPTION_MENU (aw->source_menu),
+                                   gnc_get_source_code (price_src));
   }
 }
 
@@ -163,45 +179,49 @@ gnc_account_to_ui(AccountWindow *aw)
 static void
 gnc_ui_to_account(AccountWindow *aw)
 {
+  Account *account = aw_get_account (aw);
   const gnc_commodity *commodity;
   Account *parent_account;
   const char *old_string;
   const char *string;
   gboolean tax_related;
 
-  xaccAccountBeginEdit (aw->account);
+  if (!account)
+    return;
 
-  if (aw->type != xaccAccountGetType (aw->account))
-    xaccAccountSetType (aw->account, aw->type);
+  xaccAccountBeginEdit (account);
+
+  if (aw->type != xaccAccountGetType (account))
+    xaccAccountSetType (account, aw->type);
 
   string = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
-  old_string = xaccAccountGetName (aw->account);
+  old_string = xaccAccountGetName (account);
   if (safe_strcmp (string, old_string) != 0)
-    xaccAccountSetName (aw->account, string);
+    xaccAccountSetName (account, string);
 
   string = gtk_entry_get_text (GTK_ENTRY(aw->description_entry));
-  old_string = xaccAccountGetDescription (aw->account);
+  old_string = xaccAccountGetDescription (account);
   if (safe_strcmp (string, old_string) != 0)
-    xaccAccountSetDescription (aw->account, string);
+    xaccAccountSetDescription (account, string);
 
   commodity =
     gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->currency_edit));
   if (commodity &&
-      !gnc_commodity_equiv(commodity, xaccAccountGetCurrency(aw->account)))
-    xaccAccountSetCurrency (aw->account, commodity);
+      !gnc_commodity_equiv(commodity, xaccAccountGetCurrency(account)))
+    xaccAccountSetCurrency (account, commodity);
 
   string = gtk_entry_get_text (GTK_ENTRY(aw->code_entry));
-  old_string = xaccAccountGetCode (aw->account);
+  old_string = xaccAccountGetCode (account);
   if (safe_strcmp (string, old_string) != 0)
-    xaccAccountSetCode (aw->account, string);
+    xaccAccountSetCode (account, string);
 
   if ((STOCK == aw->type) || (MUTUAL == aw->type) || (CURRENCY == aw->type))
   {
     commodity = gnc_commodity_edit_get_commodity
       (GNC_COMMODITY_EDIT (aw->security_edit));
     if (commodity &&
-        !gnc_commodity_equiv(commodity, xaccAccountGetSecurity(aw->account)))
-      xaccAccountSetSecurity (aw->account, commodity);
+        !gnc_commodity_equiv (commodity, xaccAccountGetSecurity(account)))
+      xaccAccountSetSecurity (account, commodity);
 
     if ((STOCK == aw->type) || (MUTUAL == aw->type))
     {
@@ -209,20 +229,20 @@ gnc_ui_to_account(AccountWindow *aw)
 
       code = gnc_option_menu_get_active (aw->source_menu);
       string = gnc_get_source_code_name (code);
-      old_string = xaccAccountGetPriceSrc (aw->account);
+      old_string = xaccAccountGetPriceSrc (account);
       if (safe_strcmp (string, old_string) != 0)
-        xaccAccountSetPriceSrc(aw->account, string);
+        xaccAccountSetPriceSrc (account, string);
     }
   }
 
   string = gtk_editable_get_chars (GTK_EDITABLE(aw->notes_text), 0, -1);
-  old_string = xaccAccountGetNotes (aw->account);
+  old_string = xaccAccountGetNotes (account);
   if (safe_strcmp (string, old_string) != 0)
-    xaccAccountSetNotes (aw->account, string);
+    xaccAccountSetNotes (account, string);
 
   tax_related =
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
-  xaccAccountSetTaxRelated (aw->account, tax_related);
+  xaccAccountSetTaxRelated (account, tax_related);
 
   parent_account =
     gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE(aw->parent_tree));
@@ -233,21 +253,27 @@ gnc_ui_to_account(AccountWindow *aw)
 
   if (parent_account != NULL)
   {
-    if (parent_account != xaccAccountGetParentAccount (aw->account))
-      xaccAccountInsertSubAccount (parent_account, aw->account);
+    if (parent_account != xaccAccountGetParentAccount (account))
+      xaccAccountInsertSubAccount (parent_account, account);
   }
   else
-    xaccGroupInsertAccount (gncGetCurrentGroup(), aw->account);
+    xaccGroupInsertAccount (gncGetCurrentGroup(), account);
 
   xaccAccountCommitEdit (parent_account);
-  xaccAccountCommitEdit (aw->account);
+  xaccAccountCommitEdit (account);
 }
 
 
 static void 
-gnc_finish_ok (AccountWindow *aw)
+gnc_finish_ok (AccountWindow *aw,
+               GHashTable *change_currency,
+               GHashTable *change_security,
+               GHashTable *change_type)
 {
+  gnc_suspend_gui_refresh ();
+
   /* make the account changes */
+  make_account_changes(change_currency, change_security, change_type);
   gnc_ui_to_account (aw);
 
   /* Refresh all registers so they have this account in their lists */
@@ -256,18 +282,24 @@ gnc_finish_ok (AccountWindow *aw)
   /* Refresh the main window. This will also refresh all account lists. */
   gnc_refresh_main_window ();
 
+  gnc_resume_gui_refresh ();
+
   /* do it all again, if needed */
   if (aw->dialog_type == NEW_ACCOUNT && aw->subaccount_names)
   {
     const gnc_commodity *commodity;
     Account *parent;
+    Account *account;
     GList *node;
 
-    parent = aw->account;
-    aw->account = xaccMallocAccount ();
+    gnc_suspend_gui_refresh ();
+
+    parent = aw_get_account (aw);
+    account = xaccMallocAccount ();
+    aw->account = *xaccAccountGetGUID (account);
     aw->type = xaccAccountGetType (parent);
 
-    xaccAccountSetName (aw->account, aw->subaccount_names->data);
+    xaccAccountSetName (account, aw->subaccount_names->data);
 
     node = aw->subaccount_names;
     aw->subaccount_names = g_list_remove_link (aw->subaccount_names, node);
@@ -289,14 +321,16 @@ gnc_finish_ok (AccountWindow *aw)
     gnc_account_tree_select_account (GNC_ACCOUNT_TREE(aw->parent_tree),
                                      parent, TRUE);
 
+    gnc_resume_gui_refresh ();
+
     return;
   }
 
   /* save for posterity */
-  aw->created_account = aw->account;
+  aw->created_account = aw_get_account (aw);
 
   /* so it doesn't get freed on close */
-  aw->account = NULL;
+  aw->account = *xaccGUIDNULL ();
 
   gnc_close_gui_component (aw->component_id);
 }
@@ -635,7 +669,9 @@ extra_change_verify(AccountWindow *aw,
   if (aw == NULL)
     return FALSE;
 
-  account = aw->account;
+  account = aw_get_account (aw);
+  if (!account)
+    return FALSE;
 
   titles[0] = _("Account");
   titles[1] = _("Field");
@@ -712,17 +748,21 @@ static gboolean
 gnc_filter_parent_accounts (Account *account, gpointer data)
 {
   AccountWindow *aw = data;
+  Account *aw_account = aw_get_account (aw);
 
   if (account == NULL)
+    return FALSE;
+
+  if (aw_account == NULL)
     return FALSE;
 
   if (account == aw->top_level_account)
     return TRUE;
 
-  if (account == aw->account)
+  if (account == aw_account)
     return FALSE;
 
-  if (xaccAccountHasAncestor(account, aw->account))
+  if (xaccAccountHasAncestor(account, aw_account))
     return FALSE;
 
   return TRUE;
@@ -802,7 +842,9 @@ gnc_edit_account_ok(AccountWindow *aw)
   }
 
 
-  account = aw->account;
+  account = aw_get_account (aw);
+  if (!account)
+    return;
 
   change_currency = g_hash_table_new(NULL, NULL);
   change_security = g_hash_table_new(NULL, NULL);
@@ -874,11 +916,9 @@ gnc_edit_account_ok(AccountWindow *aw)
 
   if (current_type != aw->type)
     /* Just refreshing won't work. */
-    xaccDestroyLedgerDisplay(account);
+    xaccDestroyLedgerDisplay (account);
 
-  make_account_changes(change_currency, change_security, change_type);
-
-  gnc_finish_ok (aw);
+  gnc_finish_ok (aw, change_currency, change_security, change_type);
 
   g_hash_table_destroy (change_currency);
   g_hash_table_destroy (change_security);
@@ -976,7 +1016,7 @@ gnc_new_account_ok (AccountWindow *aw)
     return;
   }
 
-  gnc_finish_ok (aw);
+  gnc_finish_ok (aw, NULL, NULL, NULL);
 }
 
 
@@ -1034,14 +1074,19 @@ static int
 gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 {
   AccountWindow *aw = data;
+  Account *account;
+
+  account = aw_get_account (aw);
+
+  gnc_suspend_gui_refresh ();
 
   switch (aw->dialog_type)
   {
     case NEW_ACCOUNT:
-      if (aw->account != NULL)
+      if (account != NULL)
       {
-        xaccFreeAccount (aw->account);
-        aw->account = NULL;
+        xaccFreeAccount (account);
+        aw->account = *xaccGUIDNULL ();
       }
 
       DEBUG ("account add window destroyed\n");
@@ -1052,6 +1097,7 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
     default:
       PERR ("unexpected dialog type\n");
+      gnc_resume_gui_refresh ();
       return FALSE;
   }
 
@@ -1059,6 +1105,8 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
   xaccFreeAccount (aw->top_level_account);
   aw->top_level_account = NULL;
+
+  gnc_resume_gui_refresh ();
 
   if (aw->subaccount_names)
   {
@@ -1156,7 +1204,7 @@ gnc_account_type_list_create(AccountWindow *aw)
       aw->type = last_used_account_type;
       break;
     case EDIT_ACCOUNT:
-      aw->type = xaccAccountGetType(aw->account);
+      aw->type = xaccAccountGetType (aw_get_account (aw));
       break;
   }
 
@@ -1291,7 +1339,7 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_box_pack_start(GTK_BOX(box), aw->security_edit, TRUE, TRUE, 0);
 
   box = gtk_object_get_data(awo, "source_box");
-  aw->source_menu = gnc_ui_source_menu_create(aw->account);
+  aw->source_menu = gnc_ui_source_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->source_menu, TRUE, TRUE, 0);
 
   aw->type_list = gtk_object_get_data(awo, "type_list");
@@ -1370,6 +1418,9 @@ gnc_account_window_set_name (AccountWindow *aw)
   char *fullname;
   char *title;
 
+  if (!aw || !aw->parent_tree)
+    return;
+
   fullname = get_ui_fullname (aw);
 
   if (aw->dialog_type == EDIT_ACCOUNT)
@@ -1404,20 +1455,49 @@ close_handler (gpointer user_data)
   gnome_dialog_close (GNOME_DIALOG (aw->dialog));
 }
 
+
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  AccountWindow *aw = user_data;
+  const EventInfo *info;
+  Account *account;
+
+  account = aw_get_account (aw);
+  if (!account)
+  {
+    gnc_close_gui_component (aw->component_id);
+    return;
+  }
+
+  if (changes)
+  {
+    info = gnc_gui_get_entity_events (changes, &aw->account);
+    if (info && (info->event_mask & GNC_EVENT_DESTROY))
+    {
+      gnc_close_gui_component (aw->component_id);
+      return;
+    }
+  }
+
+  gnc_ui_refresh_edit_account_window (aw);
+}
+
+
 static AccountWindow *
 gnc_ui_new_account_window_internal (Account *base_account,
                                     GList *subaccount_names)
 {
   const gnc_commodity *commodity;
   AccountWindow *aw;
+  Account *account;
 
   aw = g_new0 (AccountWindow, 1);
 
   aw->dialog_type = NEW_ACCOUNT;
-  aw->account = xaccMallocAccount ();
 
-  aw->component_id = gnc_register_gui_component (DIALOG_NEW_ACCOUNT_CM_CLASS,
-                                                 NULL, close_handler, aw);
+  account = xaccMallocAccount ();
+  aw->account = *xaccAccountGetGUID (account);
 
   if (base_account)
     aw->type = xaccAccountGetType (base_account);
@@ -1428,18 +1508,19 @@ gnc_ui_new_account_window_internal (Account *base_account,
   {
     GList *node;
 
-    xaccAccountSetName (aw->account, subaccount_names->data);
+    xaccAccountSetName (account, subaccount_names->data);
 
     aw->subaccount_names = g_list_copy (subaccount_names->next);
     for (node = aw->subaccount_names; node; node = node->next)
       node->data = g_strdup (node->data);
   }
 
-  gnc_account_window_create (aw);
+  gnc_suspend_gui_refresh ();
 
+  gnc_account_window_create (aw);
   gnc_account_to_ui (aw);
 
-  gnc_account_window_set_name (aw);
+  gnc_resume_gui_refresh ();
 
   commodity = gnc_lookup_currency_option ("International",
                                           "Default Currency",
@@ -1455,6 +1536,15 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gnc_window_adjust_for_screen (GTK_WINDOW(aw->dialog));
 
+  gnc_account_window_set_name (aw);
+
+  aw->component_id = gnc_register_gui_component (DIALOG_NEW_ACCOUNT_CM_CLASS,
+                                                 refresh_handler,
+                                                 close_handler, aw);
+
+  gnc_gui_component_watch_entity_type (aw->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
   return aw;
 }
 
@@ -1587,7 +1677,7 @@ find_by_account (gpointer find_data, gpointer user_data)
   if (!aw)
     return FALSE;
 
-  return (aw->account == account);
+  return guid_equal (&aw->account, xaccAccountGetGUID (account));
 }
 
 /********************************************************************\
@@ -1614,17 +1704,15 @@ gnc_ui_edit_account_window(Account *account)
   aw = g_new0 (AccountWindow, 1);
 
   aw->dialog_type = EDIT_ACCOUNT;
-  aw->account = account;
+  aw->account = *xaccAccountGetGUID (account);
   aw->subaccount_names = NULL;
 
-  aw->component_id = gnc_register_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
-                                                 NULL, close_handler, aw);
+  gnc_suspend_gui_refresh ();
 
   gnc_account_window_create (aw);
-
   gnc_account_to_ui (aw);
 
-  gnc_account_window_set_name (aw);
+  gnc_resume_gui_refresh ();
 
   gtk_widget_show_all (aw->dialog);
 
@@ -1634,7 +1722,17 @@ gnc_ui_edit_account_window(Account *account)
   gnc_account_tree_select_account(GNC_ACCOUNT_TREE(aw->parent_tree),
                                   parent, TRUE);
 
+  gnc_account_window_set_name (aw);
+
   gnc_window_adjust_for_screen(GTK_WINDOW(aw->dialog));
+
+  aw->component_id = gnc_register_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
+                                                 refresh_handler,
+                                                 close_handler, aw);
+
+  gnc_gui_component_watch_entity_type (aw->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   return aw;
 }
@@ -1667,34 +1765,18 @@ gnc_ui_destroy_account_add_windows (void)
  * gnc_ui_refresh_edit_account_window                               *
  *   refreshes the edit window                                      *
  *                                                                  *
- * Args:   account - the account of the window to refresh           *
+ * Args:   aw - the account window to refresh                       *
  * Return: none                                                     *
 \********************************************************************/
-void
-gnc_ui_refresh_edit_account_window (Account *account)
+static void
+gnc_ui_refresh_edit_account_window (AccountWindow *aw)
 {
-  AccountWindow *aw; 
-
-  aw = gnc_find_first_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
-                                     find_by_account, account);
   if (aw == NULL)
     return;
+
+  gnc_account_tree_refresh (GNC_ACCOUNT_TREE(aw->parent_tree));
 
   gnc_account_window_set_name (aw);
-}
-
-
-void
-gnc_ui_destroy_edit_account_window (Account * account)
-{
-  AccountWindow *aw;
-
-  aw = gnc_find_first_gui_component (DIALOG_EDIT_ACCOUNT_CM_CLASS,
-                                     find_by_account, account);
-  if (aw == NULL)
-    return;
-
-  gnc_close_gui_component (aw->component_id);
 }
 
 
