@@ -1,3 +1,7 @@
+2003-06-14  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/help-topics-index.scm: add Jon Lapham's patch
+
 2003-06-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/io-gncxml-v2.[ch]: add API to the plugin
