@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8.0\n"
 "POT-Creation-Date: 2003-02-02 23:37-0800\n"
-"PO-Revision-Date: 2003-02-11 21:26+0100\n"
+"PO-Revision-Date: 2003-02-22 13:45+0100\n"
 "Last-Translator: Lorenzo Cappelletti <L.Cappelletti@mail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -466,7 +466,7 @@ msgstr "Totale"
 # messages-i18n.c:231
 #: src/app-utils/gnc-ui-util.c:331 intl-scm/guile-strings.c:3209
 msgid "Tax Info"
-msgstr "Informazioni tasse"
+msgstr "Informazioni imposte"
 
 #: src/app-utils/gnc-ui-util.c:749
 msgid "not cleared:n"
@@ -1023,20 +1023,20 @@ msgstr "Limiti di credito: "
 
 #: src/business/business-gnome/glade/customer.glade:711
 msgid "Tax Included: "
-msgstr "Tasse incluse: "
+msgstr "Imposte incluse: "
 
 #: src/business/business-gnome/glade/customer.glade:728
 msgid "Tax Table: "
-msgstr "Tabella tasse: "
+msgstr "Tabella imposte: "
 
 #: src/business/business-gnome/glade/customer.glade:845
 #: src/business/business-gnome/glade/vendor.glade:780
 msgid "Override the global Tax Table?"
-msgstr "Sovrascrivere la tabella tasse globale?"
+msgstr "Sovrascrivere la tabella imposte globale?"
 
 #: src/business/business-gnome/glade/customer.glade:860
 msgid "What Tax Table should be applied to this customer?"
-msgstr "Quale tabella tasse deve essere applicata a questo cliente?"
+msgstr "Quale tabella imposte deve essere applicata a questo cliente?"
 
 # messages-i18n.c:231
 #: src/business/business-gnome/glade/customer.glade:904
@@ -1471,11 +1471,11 @@ msgstr "Calcolatrice _finanziaria"
 
 #: src/business/business-gnome/glade/invoice.glade:1099
 msgid "View and edit the list of Tax Tables"
-msgstr "Visualizza e modifica la lista delle tabelle delle tasse"
+msgstr "Visualizza e modifica la lista delle tabelle imposte"
 
 #: src/business/business-gnome/glade/invoice.glade:1105
 msgid "_Tax Table Editor"
-msgstr "Editor _tabelle tasse"
+msgstr "Editor _tabelle imposte"
 
 #: src/business/business-gnome/glade/invoice.glade:1112
 #, fuzzy
@@ -1736,16 +1736,16 @@ msgstr "Venditore"
 
 #: src/business/business-gnome/glade/vendor.glade:678
 msgid "Tax Included:"
-msgstr "Tasse incluse:"
+msgstr "Imposte incluse:"
 
 # po/guile_strings.txt:264
 #: src/business/business-gnome/glade/vendor.glade:695
 msgid "Tax Table:"
-msgstr "Tabella tasse:"
+msgstr "Tabella imposte:"
 
 #: src/business/business-gnome/glade/vendor.glade:795
 msgid "What Tax Table should be applied to this vendor?"
-msgstr "Quale tabella tasse deve essere applicata a questo venditore?<"
+msgstr "Quale tabella imposte deve essere applicata a questo venditore?<"
 
 #: src/business/business-gnome/business-urls.c:41
 #: src/business/business-gnome/business-urls.c:91
@@ -2396,7 +2396,7 @@ msgid ""
 "The tax table %s does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"La tabella tasse %s non esiste.\n"
+"La tabella imposte %s non esiste.\n"
 "Si desidera crearla?"
 
 # messages-i18n.c:54
@@ -2478,7 +2478,7 @@ msgstr "sample:TI"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:87
 msgid "sample:Tax Table 1"
-msgstr "sample:Tabella tasse 1"
+msgstr "sample:Tabella imposte 1"
 
 #: src/business/business-ledger/gncEntryLedgerLayout.c:91
 msgid "sample:999.00"
@@ -2491,7 +2491,7 @@ msgstr "sample:BI"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:32
 msgid "$"
-msgstr ""
+msgstr "$"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:33
 #: src/gnome/glade/sched-xact.glade:4650 intl-scm/guile-strings.c:739
@@ -2559,18 +2559,17 @@ msgstr "Quantità"
 # po/guile_strings.txt:264
 #: src/business/business-ledger/gncEntryLedgerModel.c:89
 #: src/business/dialog-tax-table/tax-tables.glade:380
-#, fuzzy
 msgid "Tax Table"
-msgstr "Tabella tasse"
+msgstr "Tabella imposte"
 
 # po/guile_strings.txt:264
 #: src/business/business-ledger/gncEntryLedgerModel.c:94
 msgid "Taxable?"
-msgstr "Tassabile?"
+msgstr "Imponibile?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:99
 msgid "Tax Included?"
-msgstr "Tasse incluse?"
+msgstr "Imposte incluse?"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -2588,7 +2587,7 @@ msgstr "Subtotale"
 #: src/business/business-ledger/gncEntryLedgerModel.c:114
 #: intl-scm/guile-strings.c:853
 msgid "Tax"
-msgstr "Tasse"
+msgstr "Imposte"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:119
 #, fuzzy
@@ -2597,114 +2596,103 @@ msgstr "Conto"
 
 # messages-i18n.c:129
 #: src/business/business-ledger/gncEntryLedgerModel.c:482
-#, fuzzy
 msgid "Enter the income/expense account for the Entry, or choose one from the list"
-msgstr "Immettere il conto da cui trasferire o sceglierne uno dalla lista"
+msgstr "Immettere il conto entrate/uscite per l'immissione o sceglierne uno dalla lista"
 
 # po/guile_strings.txt:108
 #: src/business/business-ledger/gncEntryLedgerModel.c:495
-#, fuzzy
 msgid "Enter the type of Entry"
-msgstr "Ordina per data d'immisione"
+msgstr "Immettere il tipo di immissione"
 
 # messages-i18n.c:223
 #: src/business/business-ledger/gncEntryLedgerModel.c:531
-#, fuzzy
 msgid "Enter the Entry Description"
-msgstr "Ordina per descrizione"
+msgstr "Immettere la descrizione per l'immissione"
 
 # messages-i18n.c:105
 #: src/business/business-ledger/gncEntryLedgerModel.c:546
-#, fuzzy
 msgid "Enter the Discount Amount"
-msgstr "La fine del mese in corso"
+msgstr "Immettere l'ammontare dello sconto"
 
 # messages-i18n.c:126
 #: src/business/business-ledger/gncEntryLedgerModel.c:549
-#, fuzzy
 msgid "Enter the Discount Percent"
-msgstr "Immettere il prezzo delle quote"
+msgstr "Immettere la percentuale di sconto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:552
 msgid "Enter the Discount ... unknown type"
-msgstr ""
+msgstr "Immettere lo sconto... tipo sconosciuto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:569
 msgid "Discount Type: Monetary Value"
-msgstr ""
+msgstr "Tipo sconto: valore monetario"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:572
 msgid "Discount Type: Percent"
-msgstr ""
+msgstr "Tipo di sconto: percentuale"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: src/business/business-ledger/gncEntryLedgerModel.c:575
-#, fuzzy
 msgid "Select the Discount Type"
-msgstr "Seleziona conto"
+msgstr "Selezionare il tipo di sconto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:591
 msgid "Tax computed after discount is applied"
-msgstr ""
+msgstr "Imposta calcolata dopo l'applicazione dello sconto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:594
 msgid "Discount and tax both applied on pretax value"
-msgstr ""
+msgstr "Sconto e imposta applicati sul valore imponibile"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:597
 msgid "Discount computed after tax is applied"
-msgstr ""
+msgstr "Sconto calcolato dopo l'applicazione del'imposta"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:600
 msgid "Select how to compute the Discount and Taxes"
-msgstr ""
+msgstr "Selezionare come calcolare lo sconto e le imposte"
 
 # messages-i18n.c:123
 #: src/business/business-ledger/gncEntryLedgerModel.c:613
-#, fuzzy
 msgid "Enter the unit-Price for this Entry"
-msgstr "Immettere un nome per il conto"
+msgstr "Immettere il prezzo unitario per questa immissione"
 
 # messages-i18n.c:81
 #: src/business/business-ledger/gncEntryLedgerModel.c:625
-#, fuzzy
 msgid "Enter the Quantity of units for this Entry"
-msgstr "Modifica il conto principale per questo registro"
+msgstr "Immettere la quantità di unità per questa immissione"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:637
 msgid "Enter the Tax Table to apply to this entry"
-msgstr ""
+msgstr "Immettere la tabella imposte da applicare per questa immissione"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:646
 msgid "Is this entry taxable?"
-msgstr ""
+msgstr "Questa immissione è imponibile?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:655
 msgid "Is the tax already included in the price of this entry?"
-msgstr ""
+msgstr "L'imposta è già compresa nel prezzo di questa immissione?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:670
 msgid "Is this entry Invoiced?"
-msgstr ""
+msgstr "L'immissione è fatturabile?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:674
 msgid "Include this entry on this invoice?"
-msgstr ""
+msgstr "Includere questa immissione in questa fattura?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:677
-#, fuzzy
 msgid "Unknown EntryLedger Type"
-msgstr "Tipo di file sconosciuto"
+msgstr "Tipo di immissione per il libro mastro sconosciuta"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:690
-#, fuzzy
 msgid "The subtotal value of this entry "
-msgstr "Il nome di questo budget"
+msgstr "Subtotale per questa immissione "
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:702
-#, fuzzy
 msgid "The total tax of this entry "
-msgstr "Il nome di questo budget"
+msgstr "Imposta totale per questa immissione "
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:711
 msgid "Is this entry billable to a customer or job?"
@@ -2714,46 +2702,39 @@ msgstr ""
 #: src/business/dialog-tax-table/tax-tables.glade:23
 #: src/business/dialog-tax-table/tax-tables.glade:86
 #: intl-scm/guile-strings.c:623
-#, fuzzy
 msgid "Tax Tables"
-msgstr "Tabelle"
+msgstr "Tabelle imposte"
 
 #: src/business/dialog-tax-table/tax-tables.glade:184
 msgid "Tax Table Entries"
-msgstr ""
+msgstr "Immissioni tabella imposte"
 
 #: src/business/dialog-tax-table/tax-tables.glade:227
-#, fuzzy
 msgid "label8"
-msgstr "label812"
+msgstr "label8"
 
 #: src/business/dialog-tax-table/tax-tables.glade:240
-#, fuzzy
 msgid "label9"
-msgstr "label773"
+msgstr "label9"
 
 #: src/business/dialog-tax-table/tax-tables.glade:434
-#, fuzzy
 msgid "Tax Table Entry"
-msgstr "Dopia entrata"
+msgstr "Immissione tabella imposte"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/business/dialog-tax-table/tax-tables.glade:492
-#, fuzzy
 msgid "Value: "
-msgstr "Valore"
+msgstr "Valore: "
 
 # messages-i18n.c:236 po/guile_strings.txt:56
 #: src/business/dialog-tax-table/tax-tables.glade:567
-#, fuzzy
 msgid "Tax Account"
-msgstr "Conto"
+msgstr "Conto imposte"
 
 # messages-i18n.c:13
 #: src/business/dialog-tax-table/dialog-tax-table.c:71
-#, fuzzy
 msgid "You must provide a name for this Tax Table."
-msgstr "È necessario immettere un nome per il titolo."
+msgstr "È necessario immettere un nome per questa tabella imposte."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:77
 #, c-format
@@ -2761,53 +2742,54 @@ msgid ""
 "You must provide a unique name for this Tax Table.\n"
 "Your choice \"%s\" is already in use."
 msgstr ""
+"È necessario un nome univoco per questa tabella imposte.\n"
+"La scelta \"%s\" è già in uso."
 
 # messages-i18n.c:13
 #: src/business/dialog-tax-table/dialog-tax-table.c:104
-#, fuzzy
 msgid "You must choose a Tax Account."
-msgstr "È necessario scegliere un conto padre valido."
+msgstr "È necessario scegliere un conto imposte."
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: src/business/dialog-tax-table/dialog-tax-table.c:195
-#, fuzzy
 msgid "Value $"
-msgstr "Valore"
+msgstr "Valore $"
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:197
 #, no-c-format
 msgid "Percent %"
-msgstr ""
+msgstr "Percentuale %"
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:510
 #, c-format
 msgid "Tax table \"%s\" is in use.  You cannot delete it."
-msgstr ""
+msgstr "La tabella imposte \"%s\" è in uso. Non è possibile cancellarla."
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:555
 msgid ""
 "You cannot remove the last entry from the tax table.\n"
 "Try deleting the tax table if you want to do that."
 msgstr ""
+"Non è possibile rimuovere l'ultima immissione dalla tabella imposte.\n"
+"Provare a cancellare la tabella imposte per rimuovere l'immissione."
 
 # messages-i18n.c:17
 #: src/business/dialog-tax-table/dialog-tax-table.c:562
-#, fuzzy
 msgid "Are you sure you want to delete this entry?"
-msgstr "Si è sicuri di voler cancellare il conto %s?"
+msgstr "Si è sicuri di voler cancellare questa immissione?"
 
 #: src/engine/Account.c:488
 msgid "Error message not available"
 msgstr "Messaggio d'errore non disponibile"
 
 #: src/engine/Account.c:491
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred while saving Account:\n"
 "%d: %s"
 msgstr ""
-"È avvenuto un errore mentre veniva elaborato\n"
-"    %s\n"
+"È avvenuto un errore durante il salvataggio del conto:\n"
+"%d: %s"
 
 # messages-i18n.c:250 po/guile_strings.txt:94
 # src/gnome/glade-gnc-dialogs.c:620
@@ -3654,7 +3636,7 @@ msgstr "Attenzione: Finance::Quote non installato correttamente."
 # messages-i18n.c:211
 #: src/gnome/glade/account.glade:615 src/gnome/glade/tax.glade:264
 msgid "Tax Related"
-msgstr "Relativo alle tasse"
+msgstr "Relativo alle imposte"
 
 #: src/gnome/glade/account.glade:633
 #, fuzzy
@@ -5107,7 +5089,7 @@ msgstr ""
 # messages-i18n.c:231
 #: src/gnome/glade/tax.glade:22 src/gnome/glade/tax.glade:244
 msgid "Tax Information"
-msgstr "Informazioni tasse"
+msgstr "Informazioni imposte"
 
 # src/gnome/glade-gnc-dialogs.c:582
 #: src/gnome/glade/tax.glade:192
@@ -5964,7 +5946,7 @@ msgstr "Opzioni ta_sse"
 # messages-i18n.c:53
 #: src/gnome/window-main.c:850
 msgid "Setup tax information for all income and expense accounts"
-msgstr "Imposta le informazioni delle tasse per tutti conti di entrata e spese"
+msgstr "Imposta le informazioni delle imposte per tutti conti di entrata e spese"
 
 # messages-i18n.c:326
 #: src/gnome/window-main.c:861
@@ -10542,7 +10524,7 @@ msgstr ": (due punti)"
 # po/guile_strings.txt:21
 #: intl-scm/guile-strings.c:349
 msgid "Income:Salary:Taxable"
-msgstr "Entrate:Salario:Tassabile"
+msgstr "Entrate:Salario:Imponibile"
 
 # po/guile_strings.txt:145
 #: intl-scm/guile-strings.c:351
@@ -10552,7 +10534,7 @@ msgstr "/ (barra)"
 # po/guile_strings.txt:72
 #: intl-scm/guile-strings.c:353
 msgid "Income/Salary/Taxable"
-msgstr "Entrata/Salario/Tassabile"
+msgstr "Entrata/Salario/Imponibile"
 
 # po/guile_strings.txt:255
 #: intl-scm/guile-strings.c:355
@@ -10562,7 +10544,7 @@ msgstr "\\ (barra rovesciata)"
 # po/guile_strings.txt:193
 #: intl-scm/guile-strings.c:357
 msgid "Income\\Salary\\Taxable"
-msgstr "Entrate\\Salario\\Tassabile"
+msgstr "Entrate\\Salario\\Imponibile"
 
 # po/guile_strings.txt:198
 #: intl-scm/guile-strings.c:359
@@ -10572,7 +10554,7 @@ msgstr "- (trattino)"
 # po/guile_strings.txt:44
 #: intl-scm/guile-strings.c:361
 msgid "Income-Salary-Taxable"
-msgstr "Entrate-Salario-Tassabile"
+msgstr "Entrate-Salario-Imponibile"
 
 # po/guile_strings.txt:186
 #: intl-scm/guile-strings.c:363
@@ -10582,7 +10564,7 @@ msgstr ". (punto)"
 # po/guile_strings.txt:204
 #: intl-scm/guile-strings.c:365
 msgid "Income.Salary.Taxable"
-msgstr "Entrate.Salario.Tassabile"
+msgstr "Entrate.Salario.Imponibile"
 
 # po/guile_strings.txt:123
 #: intl-scm/guile-strings.c:369
@@ -11660,7 +11642,7 @@ msgstr ""
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: intl-scm/guile-strings.c:1125
 msgid "Tax Report / TXF Export"
-msgstr "Rapporto tasse / Esporta TXF"
+msgstr "Rapporto imposte / Esporta TXF"
 
 # po/guile_strings.txt:186
 #: intl-scm/guile-strings.c:1131
@@ -11681,7 +11663,7 @@ msgstr "Usa periodo Da - A"
 
 #: intl-scm/guile-strings.c:1139
 msgid "1st Est Tax Quarter"
-msgstr "stima tasse 1° trimestre"
+msgstr "stima imposte 1° trimestre"
 
 #: intl-scm/guile-strings.c:1141
 msgid "Jan 1 - Mar 31"
@@ -11689,7 +11671,7 @@ msgstr "1 gen - 31 mar"
 
 #: intl-scm/guile-strings.c:1143
 msgid "2nd Est Tax Quarter"
-msgstr "stima tasse 2° trimestre"
+msgstr "stima imposte 2° trimestre"
 
 #: intl-scm/guile-strings.c:1145
 msgid "Apr 1 - May 31"
@@ -11697,7 +11679,7 @@ msgstr "1 apr - 31 mag"
 
 #: intl-scm/guile-strings.c:1147
 msgid "3rd Est Tax Quarter"
-msgstr "stima tasse 3° trimestre"
+msgstr "stima imposte 3° trimestre"
 
 #: intl-scm/guile-strings.c:1149
 msgid "Jun 1 - Aug 31"
@@ -11705,7 +11687,7 @@ msgstr "1 giu - 31 ago"
 
 #: intl-scm/guile-strings.c:1151
 msgid "4th Est Tax Quarter"
-msgstr "stima tasse 4° trimestre"
+msgstr "stima imposte 4° trimestre"
 
 #: intl-scm/guile-strings.c:1153
 msgid "Sep 1 - Dec 31"
@@ -11718,7 +11700,7 @@ msgstr "Anno scorso"
 
 #: intl-scm/guile-strings.c:1159
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr "stima tasse 1° trimestre anno scorso"
+msgstr "stima imposte 1° trimestre anno scorso"
 
 #: intl-scm/guile-strings.c:1161
 msgid "Jan 1 - Mar 31, Last year"
@@ -11726,7 +11708,7 @@ msgstr "1 gen - 31 mar, anno scorso"
 
 #: intl-scm/guile-strings.c:1163
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr "stima tasse 2° trimestre anno scorso"
+msgstr "stima imposte 2° trimestre anno scorso"
 
 #: intl-scm/guile-strings.c:1165
 msgid "Apr 1 - May 31, Last year"
@@ -11734,7 +11716,7 @@ msgstr "1 apr - 31 mag, anno scorso"
 
 #: intl-scm/guile-strings.c:1167
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr "stima tasse 3° trimestre anno scorso"
+msgstr "stima imposte 3° trimestre anno scorso"
 
 #: intl-scm/guile-strings.c:1169
 msgid "Jun 1 - Aug 31, Last year"
@@ -11742,7 +11724,7 @@ msgstr "1 giu - 31 ago, anno scorso"
 
 #: intl-scm/guile-strings.c:1171
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr "stima tasse 4° trimestre anno scorso"
+msgstr "stima imposte 4° trimestre anno scorso"
 
 #: intl-scm/guile-strings.c:1173
 msgid "Sep 1 - Dec 31, Last year"
@@ -11797,13 +11779,13 @@ msgstr "Gli oggetti blu sono esportabili verso un file .TXF."
 #: intl-scm/guile-strings.c:1199
 #, fuzzy
 msgid "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
-msgstr "Non è stato trovato alcun conto relativo alle tasse. Andare al dialogo Conti->Informazioni tasse per impostare dei conti relativi alle tasse."
+msgstr "Non è stato trovato alcun conto relativo alle imposte. Andare al dialogo Conti->Informazioni imposte per impostare dei conti relativi alle imposte."
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: intl-scm/guile-strings.c:1201
 #, fuzzy
 msgid "Tax Report & TXF Export"
-msgstr "Rapporto tasse / Esporta TXF"
+msgstr "Rapporto imposte / Esporta TXF"
 
 # po/guile_strings.txt:66
 #: intl-scm/guile-strings.c:1203
@@ -12139,7 +12121,7 @@ msgstr "_Entrate e Uscite"
 # po/guile_strings.txt:264
 #: intl-scm/guile-strings.c:1379
 msgid "_Taxes"
-msgstr "_Tasse"
+msgstr "_Imposte"
 
 #: intl-scm/guile-strings.c:1381
 msgid "_Sample & Custom"
