@@ -1,7 +1,7 @@
 Begin3
 Title:		xacc -- simple single-user accounting program
-Version:	1.0.17
-Entered-date:	14FEB98
+Version:	1.0.18
+Entered-date:	20FEB98
 Description:    xacc is a program to keep track of your finances.  It 
                 offers a simple check-book register style interface.
                 Currently, the features are quite simple:
@@ -31,7 +31,7 @@ Description:    xacc is a program to keep track of your finances.  It
                    o General Ledger for displaying multiple
                      accounts at once.
                 - Quicken Import. Support for import from 
-                  Quicken Version 3 QIF files.
+                  Quicken QIF files.
                  
 Keywords:	X11 Accounting double entry
 Author:		rclark@cs.hmc.edu (Robin Clark)
