@@ -45,7 +45,7 @@ static void
 LedgerMoveCursor  (Table *table, void * client_data)
 {
    BasicRegister *reg = (BasicRegister *) client_data;
-   xaccSaveRegEntry (reg);
+   xaccBRSaveRegEntry (reg);
 }
 
 /* ======================================================== */
@@ -69,7 +69,7 @@ LedgerDestroy (BasicRegister *reg)
 /* ======================================================== */
 
 Split * 
-xaccGetCurrentSplit (BasicRegister *reg)
+xaccBRGetCurrentSplit (BasicRegister *reg)
 {
    CellBlock *cursor;
    Split *split;
@@ -113,7 +113,7 @@ GetOtherAccName (Split *split)
 /* ======================================================== */
 
 void 
-xaccSaveRegEntry (BasicRegister *reg)
+xaccBRSaveRegEntry (BasicRegister *reg)
 {
    Split *split;
    Transaction *trans;
@@ -123,11 +123,11 @@ xaccSaveRegEntry (BasicRegister *reg)
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
     * cut down on uneccessary register redraws.  */
-   changed = xaccGetChangeFlag (reg);
+   changed = xaccBasicRegisterGetChangeFlag (reg);
    if (!changed) return;
    
    /* get the handle to the current split and transaction */
-   split = xaccGetCurrentSplit (reg);
+   split = xaccBRGetCurrentSplit (reg);
    if (!split) return;
    trans = xaccSplitGetParent (split);
 
@@ -197,7 +197,7 @@ printf ("finished saving %s \n", xaccTransGetDescription(trans));
 /* ======================================================== */
 
 void
-xaccLoadRegEntry (BasicRegister *reg, Split *split)
+xaccBRLoadRegEntry (BasicRegister *reg, Split *split)
 {
    Transaction *trans;
    char *accname;
@@ -267,7 +267,7 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
  */
 
 void
-xaccLoadRegister (BasicRegister *reg, Split **slist, 
+xacBRcLoadRegister (BasicRegister *reg, Split **slist, 
                   Account *default_source_acc)
 {
    int i;
@@ -334,7 +334,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
          vrow ++;
          xaccSetCursor (table, reg->cursor, phys_row, 0, vrow, 0);
          xaccMoveCursor (table, phys_row, 0);
-         xaccLoadRegEntry (reg, split);
+         xaccBRLoadRegEntry (reg, split);
       }
 
       i++; 
@@ -361,7 +361,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
    xaccSetCursor (table, reg->cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
    
-   xaccLoadRegEntry (reg, split);
+   xaccBRLoadRegEntry (reg, split);
    
    /* restore the cursor to its original location */
    phys_row = reg->header->numRows;
@@ -380,6 +380,8 @@ printf ("load reg of %d entries --------------------------- \n",i);
    table->move_cursor = LedgerMoveCursor;
    table->client_data = (void *) reg;
 }
+
+#ifdef THIS_HAS_BEEN_MOVED_TO_SPLITREG_C 
 
 /* ======================================================== */
 /* walk account tree recursively, pulling out all the names */
@@ -413,4 +415,5 @@ void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
    LoadXferCell (cell, grp);
 }
 
+#endif /* THIS_HAS_BEEN_MOVED_TO_SPLITREG_C  */
 /* =======================  end of file =================== */
