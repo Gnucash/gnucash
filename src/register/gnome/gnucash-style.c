@@ -516,14 +516,6 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, SplitRegister *sr,
                         g_free(cs->label);
                         cs->label = g_strdup(label);
 
-                        cs->active_bg_color =
-                                gnucash_color_argb_to_gdk
-                                (cursor->active_bg_color);
-
-                        cs->inactive_bg_color =
-                                gnucash_color_argb_to_gdk
-                                (cursor->passive_bg_color);
-
                         switch (cb_cell->alignment) {
                                 case CELL_ALIGN_RIGHT:
                                         cs->alignment = GTK_JUSTIFY_RIGHT;
@@ -625,8 +617,6 @@ cell_style_construct (gpointer _cs, gpointer user_data)
         CellStyle *cs = _cs;
 
         cs->label = NULL;
-        cs->active_bg_color = NULL;
-        cs->inactive_bg_color = NULL;
 }
 
 static void

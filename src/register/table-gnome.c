@@ -218,8 +218,13 @@ gnc_table_refresh_cursor_gui (Table * table,
         sheet = GNUCASH_SHEET(table->ui_data);
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
-        gnucash_sheet_block_set_from_table (sheet, vcell_loc);
-        gnucash_sheet_redraw_block (sheet, vcell_loc);
+        if (gnucash_sheet_block_set_from_table (sheet, vcell_loc))
+        {
+                gnucash_sheet_recompute_block_offsets (sheet);
+                gnucash_sheet_redraw_all (sheet);
+        }
+        else
+                gnucash_sheet_redraw_block (sheet, vcell_loc);
 }
 
 /* ================== end of file ======================= */

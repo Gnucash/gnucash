@@ -1771,9 +1771,9 @@ gnucash_sheet_get_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 }
 
 
-/* This fills up a block from the table; it sets the style, sizes the
-   entries matrix, and sets the entries. */
-void
+/* This fills up a block from the table; it sets the style and returns
+ * true if the style changed. */
+gboolean
 gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
                                     VirtualCellLocation vcell_loc)
 {
@@ -1785,7 +1785,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
         style = gnucash_sheet_get_style_from_table (sheet, vcell_loc);
 
         if (block == NULL)
-                return;
+                return FALSE;
 
         table = sheet->table;
 
@@ -1806,7 +1806,11 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
                         sheet->height += block->style->dimensions->height;
 
                 gnucash_style_ref(block->style);
+
+                return TRUE;
         }
+
+        return FALSE;
 }
 
 
@@ -1954,7 +1958,7 @@ gnucash_sheet_resize (GnucashSheet *sheet)
 }
 
 void
-gnucash_sheet_table_load (GnucashSheet *sheet)
+gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet)
 {
         Table *table;
         SheetBlock *block;
@@ -1962,6 +1966,41 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
         gint i, j;
         gint height;
         gint width;
+
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
+        g_return_if_fail (sheet->table != NULL);
+
+        table = sheet->table;
+        num_virt_rows = table->num_virt_rows;
+
+        height = 0;
+        block = NULL;
+        for (i = 0; i < table->num_virt_rows; i++) {
+                width = 0;
+
+                for (j = 0; j < table->num_virt_cols; j++) {
+                        VirtualCellLocation vcell_loc = { i, j };
+
+                        block = gnucash_sheet_get_block (sheet, vcell_loc);
+
+                        block->origin_x = width;
+                        block->origin_y = height;
+
+                        width += block->style->dimensions->width;
+                }
+
+                if (i > 0)
+                        height += block->style->dimensions->height;
+        }
+}
+
+void
+gnucash_sheet_table_load (GnucashSheet *sheet)
+{
+        Table *table;
+        gint num_virt_rows;
+        gint i, j;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -1978,27 +2017,14 @@ gnucash_sheet_table_load (GnucashSheet *sheet)
         gnucash_sheet_resize (sheet);
 
         /* fill it up */
-        height = 0;
-        block = NULL;
-        for (i = 0; i < table->num_virt_rows; i++) {
-                width = 0;
-
+        for (i = 0; i < table->num_virt_rows; i++)
                 for (j = 0; j < table->num_virt_cols; j++) {
                         VirtualCellLocation vcell_loc = { i, j };
 
                         gnucash_sheet_block_set_from_table (sheet, vcell_loc);
-
-                        block = gnucash_sheet_get_block (sheet, vcell_loc);
-
-                        block->origin_x = width;
-                        block->origin_y = height;
-
-                        width += block->style->dimensions->width;
                 }
 
-                if (i > 0)
-                        height += block->style->dimensions->height;
-        }
+        gnucash_sheet_recompute_block_offsets (sheet);
 
         gnucash_sheet_set_scroll_region (sheet);
 

@@ -63,8 +63,6 @@ typedef struct
 {
         gchar *label;
         GtkJustification alignment;
-        GdkColor *active_bg_color;
-        GdkColor *inactive_bg_color;
         int border;
 } CellStyle;
 

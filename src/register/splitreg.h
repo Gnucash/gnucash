@@ -151,7 +151,8 @@ typedef struct _SplitRegister SplitRegister;
 
 typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
 
-struct _SplitRegister {
+struct _SplitRegister
+{
    /* the table itself that implements the underlying GUI. */
    Table         * table;
 

@@ -273,7 +273,8 @@ draw_cell (GnucashGrid *grid, int block,
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
-        sheet_block = gnucash_sheet_get_block (grid->sheet, virt_loc.vcell_loc);
+        sheet_block = gnucash_sheet_get_block (grid->sheet,
+                                               virt_loc.vcell_loc);
 
         argb = gnc_table_get_bg_color_virtual (table, virt_loc);
         bg_color = gnucash_color_argb_to_gdk (argb);

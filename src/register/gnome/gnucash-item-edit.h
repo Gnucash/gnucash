@@ -77,7 +77,7 @@ typedef struct
         GdkGC *gc;
 
         /* Where are we */
-        int cell_col, cell_row, virt_col, virt_row;
+        VirtualLocation virt_loc;
 
         SheetBlockStyle  *style;
 } ItemEdit;

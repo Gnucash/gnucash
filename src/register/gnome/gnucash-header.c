@@ -66,19 +66,28 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         SheetBlockStyle *style = header->style;
         SheetBlockStyle *header_style;
         CellDimensions *cd;
+        VirtualLocation virt_loc;
+        Table *table = header->sheet->table;
         int i, j;
         int xpaint, ypaint;
         int w = 0, h = 0;
         gchar *text;
         GdkFont *font;
         CellStyle *cs;
+        GdkColor *bg_color;
+        guint32 argb;
 
         header_style = header->sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
 
-        cs = gnucash_style_get_cell_style (header_style, 0, 0);
+        virt_loc.vcell_loc.virt_row = 0;
+        virt_loc.vcell_loc.virt_col = 0;
+        virt_loc.phys_row_offset = 0;
+        virt_loc.phys_col_offset = 0;
+        argb = gnc_table_get_bg_color_virtual (table, virt_loc);
+        bg_color = gnucash_color_argb_to_gdk (argb);
 
         /* Assume all cells have the same color */
-        gdk_gc_set_foreground(header->gc, cs->inactive_bg_color);
+        gdk_gc_set_foreground(header->gc, bg_color);
         gdk_draw_rectangle(drawable, header->gc, TRUE, 0, 0, width, height);
 
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);

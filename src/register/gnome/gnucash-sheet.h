@@ -145,6 +145,8 @@ GtkWidget *gnucash_sheet_new (Table *table);
 
 void gnucash_sheet_table_load (GnucashSheet *sheet);
 
+void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
+
 GtkType gnucash_register_get_type (void);
 
 /* this already has scrollbars attached */
@@ -176,8 +178,8 @@ void gnucash_sheet_cursor_set (GnucashSheet *gsheet, VirtualLocation virt_loc);
 const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
 					       const gchar *new_text);
 
-void gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
-                                         VirtualCellLocation vcell_loc);
+gboolean gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
+                                             VirtualCellLocation vcell_loc);
 
 void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 

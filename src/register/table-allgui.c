@@ -272,7 +272,9 @@ gnc_table_get_bg_color_virtual (Table *table, VirtualLocation virt_loc)
     bg_color = vcell->cellblock->active_bg_color;
   else
   {
-    if (table->alternate_bg_colors)
+    if (virt_loc.vcell_loc.virt_row == 0)
+      bg_color = vcell->cellblock->passive_bg_color;
+    else if (table->alternate_bg_colors)
     {
       if ((virt_loc.vcell_loc.virt_row % 2) == 1)
         bg_color = vcell->cellblock->passive_bg_color;
