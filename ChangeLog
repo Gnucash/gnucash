@@ -52,6 +52,11 @@
 
 2002-11-23  David Hampton  <hampton@employees.org>
 
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_commit): Don't
+	override the previous state on all the transactions in the
+	reconciliation window. Only set those the user identified as
+	reconciled. #95639
+
 	* src/register/ledger-core/gnc-ledger-display.c (refresh_handler): 
 	If there is a current split, then ensure that the transaction
 	containing that split stays in the register.  This will make the

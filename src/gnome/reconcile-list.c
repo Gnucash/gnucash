@@ -722,7 +722,9 @@ gnc_reconcile_list_reconciled_balance (GNCReconcileList *list)
 
 /********************************************************************\
  * gnc_reconcile_list_commit                                        *
- *   commit the reconcile information in the list                   *
+ *   Commit the reconcile information in the list. only change the  *
+ *   state of those items marked as reconciled.  All others should  *
+ *   retain their previous state (none, cleared, voided, etc.).     *
  *                                                                  *
  * Args: list - list to commit                                      *
  *       date - date to set as the reconcile date                   *
@@ -744,18 +746,15 @@ gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
   for (i = 0; i < list->num_splits; i++)
   {
     Transaction *trans;
-    char recn;
 
     split = gtk_clist_get_row_data (clist, i);
+    if (!g_hash_table_lookup (list->reconciled, split))
+      continue;
+
     trans = xaccSplitGetParent(split);
-
-    recn = g_hash_table_lookup (list->reconciled, split) ? YREC : NREC;
-
     xaccTransBeginEdit(trans);
-    xaccSplitSetReconcile (split, recn);
-    if (recn == YREC) {
-      xaccSplitSetDateReconciledSecs (split, date);
-    }
+    xaccSplitSetReconcile (split, YREC);
+    xaccSplitSetDateReconciledSecs (split, date);
     xaccTransCommitEdit(trans);
   }
 }
