@@ -1,3 +1,11 @@
+2002-12-11  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: require g-wrap >= 1.3.3
+	* src/engine/gw-engine-spec.scm: use gslist-of where needed
+	* src/engine/gw-kvp-spec.scm: use gslist-of where needed
+
+	NOTE: As of now you ABSOLUTELY REQUIRE G-WRAP >= 1.3.3
+	
 2002-12-11  David Hampton  <hampton@employees.org>
 
 	* src/gnc-ui.h: New help URLs for Wilddev.

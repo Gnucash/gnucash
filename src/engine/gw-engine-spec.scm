@@ -1735,7 +1735,7 @@ of having a parent transaction with which one is working...")
  'gnc:query-purge-terms
  '<gw:void>
  "gncQueryPurgeTerms"
- '((<gnc:Query*> q) ((gw:glist-of <gnc:id-type> caller-owned) param-path))
+ '((<gnc:Query*> q) ((gw:gslist-of <gnc:id-type> caller-owned) param-path))
  "Remove query terms of a particular parameter-path.")
 
 (gw:wrap-function

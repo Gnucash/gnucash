@@ -46,7 +46,7 @@
    '<gw:void>
    "gnc_kvp_frame_delete_at_path"
    '((<gnc:kvp-frame*> f)
-     ((gw:glist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
+     ((gw:gslist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
    "Deletes the kvp_frame at the key-path in frame f")
    
   (gw:wrap-function
@@ -73,7 +73,7 @@
    '<gw:void>
    "kvp_frame_set_slot_path_gslist"
    '((<gnc:kvp-frame*> k) (<gnc:kvp-value*> v)
-     ((gw:glist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
+     ((gw:gslist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
    "Sets the path key-path in frame k to the value v")
 
   (gw:wrap-function
@@ -82,7 +82,7 @@
    '<gnc:kvp-value*>
    "kvp_frame_get_slot_path_gslist"
    '((<gnc:kvp-frame*> k)
-     ((gw:glist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
+     ((gw:gslist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
    "Gets the value at slots key-path in frame k")
 
   ;;
