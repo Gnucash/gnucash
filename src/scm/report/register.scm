@@ -8,6 +8,11 @@
 
 (define-module (gnucash report register))
 
+(export gnc:show-register-report)
+(export gnc:print-register-report)
+(export gnc:show-invoice-report)
+
+(use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'record)
 

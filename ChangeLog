@@ -1,5 +1,7 @@
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/register.scm: add exported functions and needed modules
+
 	* AUTHORS: credits
 
 	* doc/sgml/C/xacc-about.sgml: credits
