@@ -141,7 +141,6 @@ AccountGroup * xaccGetAccountRoot (Account *);
 
 void xaccConsolidateGrpTransactions (AccountGroup *);
 
-/* #define getAccount xaccGroupGetAccount */
 Account * xaccGroupGetAccount (AccountGroup *, int);
 double    xaccGroupGetBalance (AccountGroup *);
 
