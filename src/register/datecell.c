@@ -39,7 +39,7 @@
 #include "basiccell.h"
 #include "datecell.h"
 
-static void setDateCellValue (struct _BasicCell *, const char *);
+static void setDateCellValue (BasicCell *, const char *);
 
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
@@ -181,7 +181,7 @@ xaccValidateDate (struct tm *date, int recur)
 /* ================================================ */
 
 static const char * 
-DateEnter (struct _BasicCell *_cell, const char * curr)
+DateEnter (BasicCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
 
@@ -195,7 +195,7 @@ DateEnter (struct _BasicCell *_cell, const char * curr)
 /* ================================================ */
 
 static const char * 
-DateMV (struct _BasicCell *_cell, 
+DateMV (BasicCell *_cell, 
         const char *oldval, 
         const char *change, 
         const char *newval)
@@ -308,7 +308,7 @@ DateMV (struct _BasicCell *_cell,
 /* ================================================ */
 
 static const char * 
-DateLeave (struct _BasicCell *_cell, const char * curr)
+DateLeave (BasicCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
    char buff[30];
@@ -402,7 +402,7 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
 /* ================================================ */
 
 static void 
-setDateCellValue (struct _BasicCell *_cell, const char *str)
+setDateCellValue (BasicCell *_cell, const char *str)
 {
    DateCell *cell = (DateCell *) _cell;
    char buff[30];
