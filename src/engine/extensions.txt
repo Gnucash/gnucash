@@ -1,0 +1,40 @@
+
+Proposed Extensions
+-------------------
+The following are extension proposals to the various underlying data
+structures and interfaces:
+
+Accounting Periods
+------------------
+Acconting periods are implemented by creating a structure that
+describes the accounting period, and then assigning ever traansaction to
+at least one period.
+
+typedef struct _accountingPeriod {
+        GUID guid;           // id
+	char *name;          // user-selectable name
+	int kind;            // enum {none, week, month, quarter, year }
+	start_date;          //
+	end_date;
+} AccountingPeriod;
+
+The Transaction struct has to be extended with a period guid.
+Every transaction can belong to at most one accounting period.
+
+
+Changes to Transaction Structure
+--------------------------------
+Add an accounting period guid (see above).
+
+Changes to Journal Entry (Split) Structure
+------------------------------------------
+Voucher Reference
+-----------------
+Add a char * voucher;  This is a generic id string that somehow
+identifies the piece of paper/electronic document(s) that indicate
+where/how to find the paper trial for this entry.   This list of id's
+should probably be a list of key-value pairs, where the keys & values
+can be completely configured by the user, and hold the needed data
+that the user wants to store.  For the SQL backend, this is a key
+to a user-definable table.
+
