@@ -312,6 +312,16 @@ gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 SplitList*      xaccAccountGetSplitList (Account *account);
 LotList*        xaccAccountGetLotList (Account *account);
 
+/* Find a list of open lots that match the match_func.  Sort according
+ * to sort_func.  If match_func is NULL, then all open lots are returned.
+ * If sort_func is NULL, then the returned list has no particular order.
+ * The caller must free to returned list.
+ */
+LotList * xaccAccountFindOpenLots (Account *acc,
+				   gboolean (*match_func)(GNCLot *lot,
+							  gpointer user_data),
+				   gpointer user_data, GCompareFunc sort_func);
+
 gboolean        xaccAccountGetTaxRelated (Account *account);
 void            xaccAccountSetTaxRelated (Account *account,
                                           gboolean tax_related);

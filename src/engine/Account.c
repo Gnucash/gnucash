@@ -1835,6 +1835,39 @@ xaccAccountGetLotList (Account *acc)
   return (acc->lots);
 }
 
+LotList *
+xaccAccountFindOpenLots (Account *acc,
+			gboolean (*match_func)(GNCLot *lot,
+					       gpointer user_data),
+			gpointer user_data, GCompareFunc sort_func)
+{
+  GList *lot_list;
+  GList *retval = NULL;
+
+  if (!acc)
+    return NULL;
+
+  lot_list = xaccAccountGetLotList (acc);
+  for ( ; lot_list ; lot_list = lot_list->next ) {
+    GNCLot *lot = lot_list->data;
+
+    /* If this lot is closed, then ignore it */
+    if (gnc_lot_is_closed (lot))
+      continue;
+
+    if (match_func && !(match_func)(lot, user_data))
+      continue;
+
+    /* Ok, this is a valid lot.  Add it to our list of lots */
+    if (sort_func)
+      retval = g_list_insert_sorted (retval, lot, sort_func);
+    else
+      retval = g_list_prepend (retval, lot);
+  }
+
+  return retval;
+}
+
 /********************************************************************\
 \********************************************************************/
 
