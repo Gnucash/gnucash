@@ -446,7 +446,7 @@ finish_helper(gpointer key, gpointer value, gpointer data)
   gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, key);
   GList          * accts;
   GList          * node;
-  GNCBook        * book = gnc_get_current_book ();
+  QofBook        * book = gnc_get_current_book ();
 
   if(!book) 
   {
