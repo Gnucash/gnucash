@@ -3099,6 +3099,11 @@ finder_help_function(Account *account,
 {
   GList *slp;
 
+  /* First, make sure we set the data to NULL BEFORE we start */
+  if (split) *split = NULL;
+  if (trans) *trans = NULL;
+
+  /* Then see if we have any work to do */
   if (account == NULL) return;
 
   /* Why is this loop iterated backwards ?? Presumably because the split
@@ -3118,9 +3123,6 @@ finder_help_function(Account *account,
       return;
     }
   }
-
-  if( split ) *split = NULL;
-  if( trans ) *trans = NULL;
 }
 
 Split *

@@ -69,6 +69,10 @@
 	  certain reports doesn't work right when the "reverse account
 	  balances" is set in certain ways.  Fixes #107472.
 
+	* src/engine/Account.c: initialize the returned values in
+	  finder_help_function().  This fixes bug #108883 (and possibly
+	  others not reported).
+
 2003-06-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/io-gncxml-v2.c: make the book-string an extern
