@@ -125,6 +125,7 @@ Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
+Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
 Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches

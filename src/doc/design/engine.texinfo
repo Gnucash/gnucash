@@ -2191,6 +2191,17 @@ Return the @var{index}th Account in @var{group}, starting at zero.
 If @var{index} is out of range, @code{NULL} is returned.
 @end deftypefun
 
+@deftypefun {GList *} xaccGroupGetSubAccounts (AccountGroup * @var{grp})
+Return a list of the Accounts, including sub-Accounts, in @var{grp}. The
+returned list should be freed with @code{g_list_free} when no longer
+needed.
+@end deftypefun
+
+@deftypefun {GList *} xaccGroupGetAccountList (AccountGroup * @var{grp})
+Return a list of the immediate children of @var{grp}. The returned list
+should not be freed or modified in any way.
+@end deftypefun
+
 
 @node GNCBooks, Scrub, Account Groups, Engine
 @section GNCBooks

@@ -1,3 +1,13 @@
+2001-05-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* configure.in: add Norwegian to list of translations
+
+	* AUTHORS: add credits
+
+	* doc/sgml/C/xacc-about.sgml: add credits
+
 2001-05-25  Christian Stimming  <stimming@tuhh.de>
 
 	* po/no.po: Kjartan Maraas' Norwegian updated translation.

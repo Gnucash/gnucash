@@ -616,6 +616,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossdef>
+<para>Norwegian translations</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>martinh@pegasus.cc.ucf.edu</email> Heath
       Martin</glossterm>
 <glossdef>
