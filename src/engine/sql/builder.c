@@ -67,7 +67,7 @@ sqlBuilder_escape (sqlBuilder *b, const char *str)
    if (len == slen) return str;
 
    /* count to see how much space we'll need */
-   p = str + slen +1;
+   p = str + slen + 1;
    while (*p)
    {
       len ++;
@@ -84,7 +84,7 @@ sqlBuilder_escape (sqlBuilder *b, const char *str)
    /* copy and escape */
    src_head = (char *) str;
    dst_tail = b->escape;
-   p = src_head + strcspn (p, "\\\'");
+   p = src_head + strcspn (src_head, "\\\'");
    while (*p)
    {
       size_t cp_len = p - src_head;
@@ -99,7 +99,16 @@ sqlBuilder_escape (sqlBuilder *b, const char *str)
       src_head = p+1;
       p = src_head + strcspn (src_head, "\\\'");
    }
+   if (p != src_head)
+   {
+      size_t cp_len = p - src_head;
+
+      strncpy (dst_tail, src_head, cp_len);
+      dst_tail += cp_len;
+   }
    *dst_tail = 0;
+
+   g_warning (b->escape);
 
    return b->escape;
 }
