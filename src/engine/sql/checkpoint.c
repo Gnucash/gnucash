@@ -310,9 +310,9 @@ static gpointer
 get_checkpoint_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    Checkpoint *chk = (Checkpoint *) data;
-   chk->balance = strtoll(DB_GET_VAL("baln", j), NULL, 10);
-   chk->cleared_balance = strtoll(DB_GET_VAL("cleared_baln", j), NULL, 10);
-   chk->reconciled_balance = strtoll(DB_GET_VAL("reconed_baln", j), NULL, 10);
+   chk->balance = strtoll(DB_GET_VAL("baln", j), NULL, 0);
+   chk->cleared_balance = strtoll(DB_GET_VAL("cleared_baln", j), NULL, 0);
+   chk->reconciled_balance = strtoll(DB_GET_VAL("reconed_baln", j), NULL, 0);
    return data;
 }
 
