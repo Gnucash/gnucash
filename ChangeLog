@@ -19,6 +19,39 @@
 	* src/register/table-allgui.c: remove the gnc_table_column_width
 	call.
 
+2000-08-07  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/tip-of-the-day.scm: don't initialize at startup.
+
+	* src/scm/main.scm (gnc:*batch-mode-forms-to-evaluate*): new
+	global to hold forms added by --evaluate for execution after
+	startup.
+	(gnc:main): support --evalutate properly.
+
+	* src/scm/engine-utilities.scm (gnc:transaction-map-splits): moved here.
+	(gnc:group-map-accounts): moved here.
+
+	* src/scm/command-line.scm (gnc:*arg-defs*): add --evaluate
+	option.  This should be considered beta, and it's not documented
+	yet, but it's useful for me right now, we need something like it,
+	and I'd like others to see what they think.  Also, this will only
+	work right when I finish fixing up tip-of-the-day to not
+	initialize when the file loads.
+
+	* src/pixmaps/Makefile.am: minor typo.
+
+	* src/guile/option-util.c: include string.h
+
+	* src/guile/guile-util.c: include string.h
+
+	* src/guile/gfec.c: include string.h
+
+	* doc/gnucash.1: change filename extension in example to .gnc
+
+	* configure.in: always report missing templates as an error.
+
+	* README: updates (also change = to # for section seps (helps CVS))
+
 2000-07-22  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/window-reconcile.c: After reconciliation, if the
