@@ -531,6 +531,7 @@ gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct)
   if (!book) return;
 
   old_ct = gnc_commodity_table_get_table (book);
+  if (old_ct == ct) return;
   gnc_book_set_data (book, GNC_COMMODITY_TABLE, ct);
   gnc_commodity_table_destroy (old_ct);
 }
