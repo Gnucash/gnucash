@@ -38,6 +38,8 @@
 #include "gnc-numeric.h"
 #include "gnc-trace.h"
 #include "kvp_frame.h"
+#include "kvp-util-p.h"
+#include "Account.h"
 #include "Scrub3.h"
 #include "Transaction.h"
 #include "TransactionP.h"
@@ -125,82 +127,25 @@ xaccScrubSubSplitPrice (Split *split)
 
 /* ================================================================= */
 
+#define LATER 1
 #if LATER
-
-/** The gnc_kvp_bag_find_by_guid() routine examines the bag pointed
- *    located at root.  It looks for a frame in that bag that has the
- *    guid value of "desired_guid" filed under the key name "guid_name".
- *    If it finds that matching guid, then it returns a pointer to 
- *    the KVP frame that contains it.  If it is not found, or if there
- *    is any other error, NULL is returned.
- */
-
-KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
-                         const char *guid_name, GUID *desired_guid);
-
-#define MATCH_GUID(elt) {                                       \
-  KvpFrame *fr = kvp_value_get_frame (elt);                     \
-  if (fr) {                                                     \
-     GUID *guid = kvp_frame_get_guid (fr, guid_name);           \
-     if (guid && guid_equal (desired_guid, guid)) return fr;    \
-  }                                                             \
-} 
-
-KvpFrame *
-gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
-                         const char *guid_name, GUID *desired_guid)
-{
-  KvpValue *arr;
-  KvpValueType valtype;
-  GList *node;
-
-  arr = kvp_frame_get_value (root, path);
-  valtype = kvp_value_get_type (arr);
-  if (KVP_TYPE_FRAME == valtype)
-  {
-    MATCH_GUID (arr);
-    return NULL;
-  }
-
-  /* Its gotta be a single isolated frame, or a list of them. */
-  if (KVP_TYPE_GLIST != valtype) return NULL;
-
-  for (node = kvp_value_get_glist(arr); node; node=node->next)
-  {
-    KvpValue *va = arr->data;
-    MATCH_GUID (va);
-  }
-  return NULL;
-}
-
-
-/** Remove the given frame from the bag.  The frame is removed,
- *  however, it is not deleted. 
- */
-
-void
-gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
-{
-}
 
 /* Remove the guid of b from a */
 static void
 remove_guids (Split *sa, Split *sb)
 {
-   KvpValue *kval;
    KvpFrame *ksub;
 
-   /* If there are no sub-splits, thats real bad, since the whole 
-    * point fo the merge was to have them be gemini'd. */
-   kval = kvp_frame_get_slot (sa->kvp_data, "lot-split");
-   ksub = kvp_value_get_frame (kval);
+   /* Find and remove the matching guid's */
+   ksub = gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
+                    "peer_guid", &sb->guid);
    if (!ksub) 
    {
       PERR ("merging splits that didn't have correct gemini values!");
       return;
    }
-   
-
+   gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
+   kvp_frame_delete (ksub);
 }
 
 /* The 'merge_splits() routine causes the amount & value of sb 
@@ -242,6 +187,9 @@ merge_splits (Split *sa, Split *sb)
    xaccTransCommitEdit (txn);
    xaccAccountCommitEdit (act);
 }
+
+/* XXX need describtiion */
+void xaccScrubMergeSubSplits (Split *split);
 
 void 
 xaccScrubMergeSubSplits (Split *split)

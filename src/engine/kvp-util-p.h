@@ -86,4 +86,15 @@ void gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs,
 KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
                          const char *guid_name, GUID *desired_guid);
 
+
+/** Remove the given frame from the bag.  The frame is removed,
+ *  however, it is not deleted.  Note that the frame pointer must
+ *  be a pointer to the actual frame (for example, as returned by
+ *  gnc_kvp_bag_find_by_guid() for by gnc_kvp_bag_add()), and not
+ *  some copy of the frame.
+ */
+
+void gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path,
+                               KvpFrame *fr);
+
 #endif /* XACC_KVP_UTIL_P_H */

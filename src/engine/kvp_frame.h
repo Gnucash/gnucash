@@ -151,6 +151,50 @@ void kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid);
 void kvp_frame_set_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
 void kvp_frame_set_frame_nc(KvpFrame *frame, const char *path, KvpFrame *chld);
 
+/** The kvp_frame_set_value() routine copies the value into the frame,
+ *    at the location 'path'.   If the path contains slashes '/', these 
+ *    are assumed to represent a sequence of keys.  The returned value 
+ *    is a pointer to the actual frame into which the value was inserted;
+ *    it is NULL if the frame couldn't be found (and thus the value wasn't 
+ *    inserted).  The old value at this location, if any, is destroyed.
+ *
+ *    Pointers passed as arguments into this routine are the responsibility 
+ *    of the caller; the pointers are *not* taken over or managed.
+ */
+KvpFrame *   kvp_frame_set_value(KvpFrame * frame, 
+                                 const char * path, const KvpValue * value);
+/**
+ * The kvp_frame_set_value_nc() routine puts the value (without copying
+ *    it) into the frame, putting it at the location 'path'.  If the path 
+ *    contains slashes '/', these are assumed to represent a sequence of keys.
+ *    The returned value is a pointer to the actual frame into which the value 
+ *    was inserted; it is NULL if the frame couldn't be found (and thus the 
+ *    value wasn't inserted).  The old value at this location, if any,
+ *    is destroyed.
+ *
+ *    This routine is handy for avoiding excess memory allocations & frees.
+ *    Note that because the KvpValue was grabbed, you can't just delete 
+ *    unless you remove the key as well (or unless you replace the value).
+ */
+KvpFrame *    kvp_frame_set_value_nc(KvpFrame * frame, 
+                                 const char * path, KvpValue * value);
+
+/** The kvp_frame_replace_value_nc() routine places the new value 
+ *    at the indicated path.   It returns the old value, if any.  
+ *    It returns NULL if there was an error, or if there was no 
+ *    old value. If the path doesn't exist, it is created, unless
+ *    new_value is NULL.  Passing in a NULL new_value has the 
+ *    effect of deleting the trailing slot (i.e. the trailing path
+ *    element).  
+ */
+KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const char * slot,
+                                       KvpValue * new_value);
+
+
+/*@}*/
+
+/** @name KvpFrame URL handling */
+/*@{*/
 /** The kvp_frame_add_url_encoding() routine will parse the
  *  value string, assuming it to be URL-encoded in the standard way,
  *  turning it into a set of key-value pairs, and adding those to the
@@ -297,37 +341,31 @@ KvpFrame    * kvp_frame_get_frame_slash (KvpFrame *frame,
 
 /** You probably shouldn't be using these low-level routines */
 
-/** The kvp_frame_set_slot_slash() routine copies the value into the frame,
- *    at the location 'path'.   If the path contains slashes '/', these 
- *    are assumed to represent a sequence of keys.  The returned value 
- *    is a pointer to the actual frame into which the value was inserted;
- *    it is NULL if the frame couldn't be found (and thus the value wasn't 
- *    inserted).
+/** All of the kvp_frame_set_slot_*() routines set the slot values
+ *    "destructively", in that if there was an old value there, that
+ *    old value is destroyed (and the memory freed).  Thus, one 
+ *    should not hang on to value pointers, as these will get 
+ *    trashed if set_slot is called on the corresponding key.
  *
- *    Pointers passed as arguments into this routine are the responsibility 
- *    of the caller; the pointers are *not* taken over or managed.
+ *    If you want the old value, use kvp_frame_replace_slot().
  */
-KvpFrame *   kvp_frame_set_slot_slash(KvpFrame * frame, 
-                                 const char * path, const KvpValue * value);
-/**
- * The kvp_frame_set_slot_slash_nc() routine puts the value (without copying
- *    it) into the frame, putting it at the location 'path'.  If the path 
- *    contains slashes '/', these are assumed to represent a sequence of keys.
- *    The returned value is a pointer to the actual frame into which the value 
- *    was inserted; it is NULL if the frame couldn't be found (and thus the 
- *    value wasn't inserted).
- *
- *    This routine is handy for avoiding excess memory allocations & frees.
- *    Note that because the KvpValue was grabbed, you can't just delete 
- *    unless you remove the key as well (or unless you replace the value).
+
+/** The kvp_frame_replace_slot_nc() routine places the new value into
+ *    the indicated frame, for the given key.  It returns the old
+ *    value, if any.  It returns NULL if the slot doesn't exist,
+ *    if there was some other an error, or if there was no old value.
+ *    Passing in a NULL new_value has the effect of deleting that
+ *    slot.
  */
-KvpFrame *    kvp_frame_set_slot_slash_nc(KvpFrame * frame, 
-                                 const char * path, KvpValue * value);
+KvpValue * kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
+                                 KvpValue * new_value);
+
 
 /** The kvp_frame_set_slot() routine copies the value into the frame,
  *    associating it with a copy of 'key'.  Pointers passed as arguments 
  *    into kvp_frame_set_slot are the responsibility of the caller;
- *    the pointers are *not* taken over or managed.
+ *    the pointers are *not* taken over or managed.  The old value at
+ *    this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot(KvpFrame * frame, 
                                  const char * key, const KvpValue * value);
@@ -337,21 +375,24 @@ void          kvp_frame_set_slot(KvpFrame * frame,
  *    routine is handy for avoiding excess memory allocations & frees.
  *    Note that because the KvpValue was grabbed, you can't just delete 
  *    unless you remove the key as well (or unless you replace the value).
+ *    The old value at this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_nc(KvpFrame * frame, 
                                     const char * key, KvpValue * value);
 
 /** The kvp_frame_set_slot_path() routine walks the hierarchy,
- * using the key values to pick each branch.  When the terminal node
- * is reached, the value is copied into it.
+ *     using the key values to pick each branch.  When the terminal 
+ *     node is reached, the value is copied into it.  The old value 
+ *     at this location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path (KvpFrame *frame,
                                        const KvpValue *value,
                                        const char *first_key, ...);
 
 /** The kvp_frame_set_slot_path_gslist() routine walks the hierarchy,
- *  using the key values to pick each branch.  When the terminal node
- *  is reached, the value is copied into it.
+ *     using the key values to pick each branch.  When the terminal node
+ *     is reached, the value is copied into it.  The old value at this
+ *     location, if any, is destroyed.
  */
 void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
                                               const KvpValue *value,
@@ -465,6 +506,10 @@ void          kvp_value_delete(KvpValue * value);
 
 /** This is a deep value copy. */
 KvpValue   * kvp_value_copy(const KvpValue * value);
+
+/** replace old frame value with new, return old frame */
+KvpFrame * kvp_value_replace_frame_nc(KvpValue *value, KvpFrame * newframe);
+
 /*@}*/
 
 

@@ -95,8 +95,7 @@ init_frame_body_if_needed(KvpFrame *f)
 {
   if(!f->hash) 
   {
-    f->hash = g_hash_table_new(&kvp_hash_func, 
-                               &kvp_comp_func);
+    f->hash = g_hash_table_new(&kvp_hash_func, &kvp_comp_func);
   }
   return(f->hash != NULL);
 }
@@ -105,7 +104,8 @@ KvpFrame *
 kvp_frame_new(void) 
 {
   KvpFrame * retval = g_new0(KvpFrame, 1);
-  /* save space until we have data */
+
+  /* Save space until the frame is actually used */
   retval->hash = NULL;
   return retval;
 }
@@ -175,16 +175,16 @@ kvp_frame_copy(const KvpFrame * frame)
  * Passing in a null value into this routine has the effect of 
  * removing the key from the KVP tree.
  */
-static KvpValue *
-kvp_frame_replace_slot (KvpFrame * frame, const char * slot, 
+KvpValue *
+kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot, 
                                  KvpValue * new_value) 
 {
   gpointer orig_key;
   gpointer orig_value = NULL;
   int      key_exists;
 
-  if(!frame->hash) return NULL; /*  Error ...  */
-  if(!init_frame_body_if_needed(frame)) return NULL; /* Error ... */
+  if (!frame || !slot) return NULL; 
+  if (!init_frame_body_if_needed(frame)) return NULL; /* Error ... */
 
   g_hash_table_freeze(frame->hash);
 
@@ -216,12 +216,12 @@ kvp_frame_replace_slot (KvpFrame * frame, const char * slot,
 /* Passing in a null value into this routine has the effect
  * of deleting the old value stored at this slot.
  */
-static void
+static inline void
 kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot, 
                                  KvpValue * new_value) 
 {
   KvpValue * old_value;
-  old_value = kvp_frame_replace_slot (frame, slot, new_value);
+  old_value = kvp_frame_replace_slot_nc (frame, slot, new_value);
   kvp_value_delete (old_value);
 }
 
@@ -401,7 +401,7 @@ kvp_frame_set_gint64(KvpFrame * frame, const char * path, gint64 ival)
 {
   KvpValue *value;
   value = kvp_value_new_gint64 (ival);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -410,7 +410,7 @@ kvp_frame_set_double(KvpFrame * frame, const char * path, double dval)
 {
   KvpValue *value;
   value = kvp_value_new_double (dval);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -419,7 +419,7 @@ kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
 {
   KvpValue *value;
   value = kvp_value_new_gnc_numeric (nval);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -428,7 +428,7 @@ kvp_frame_set_str(KvpFrame * frame, const char * path, const char* str)
 {
   KvpValue *value;
   value = kvp_value_new_string (str);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -437,7 +437,7 @@ kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid)
 {
   KvpValue *value;
   value = kvp_value_new_guid (guid);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -446,7 +446,7 @@ kvp_frame_set_timespec(KvpFrame * frame, const char * path, Timespec ts)
 {
   KvpValue *value;
   value = kvp_value_new_timespec (ts);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -455,7 +455,7 @@ kvp_frame_set_frame(KvpFrame * frame, const char * path, KvpFrame *fr)
 {
   KvpValue *value;
   value = kvp_value_new_frame (fr);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
 }
 
@@ -464,8 +464,58 @@ kvp_frame_set_frame_nc(KvpFrame * frame, const char * path, KvpFrame *fr)
 {
   KvpValue *value;
   value = kvp_value_new_frame_nc (fr);
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   if (!frame) kvp_value_delete (value);
+}
+
+/* ============================================================ */
+
+KvpFrame *
+kvp_frame_set_value_nc (KvpFrame * frame, const char * key_path, 
+                        KvpValue * value) 
+{
+  char *last_key;
+
+  frame = get_trailer_make (frame, key_path, &last_key);
+  if (!frame) return NULL;
+  kvp_frame_set_slot_destructively(frame, last_key, value);
+  return frame;
+}
+
+KvpFrame *
+kvp_frame_set_value (KvpFrame * frame, const char * key_path, 
+                     const KvpValue * value) 
+{
+  KvpValue *new_value = NULL;
+  char *last_key;
+
+  frame = get_trailer_make (frame, key_path, &last_key);
+  if (!frame) return NULL;
+
+  if (value) new_value = kvp_value_copy(value);
+  kvp_frame_set_slot_destructively(frame, last_key, new_value);
+  return frame;
+}
+
+KvpValue *
+kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path, 
+                            KvpValue * new_value) 
+{
+  KvpValue * old_value;
+  char *last_key;
+
+  if (new_value)
+  {
+     frame = get_trailer_make (frame, key_path, &last_key);
+  }
+  else
+  {
+     frame = (KvpFrame *) get_trailer_or_null (frame, key_path, &last_key);
+  }
+  if (!frame) return NULL;
+
+  old_value = kvp_frame_replace_slot_nc (frame, last_key, new_value);
+  return old_value;
 }
 
 /* ============================================================ */
@@ -498,14 +548,14 @@ kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value)
        vlist = g_list_append (vlist, value);
        klist = kvp_value_new_glist_nc (vlist);
 
-       kvp_frame_replace_slot (frame, key, klist);
+       kvp_frame_replace_slot_nc (frame, key, klist);
     }
     return frame;
   }
 
   /* Hmm, if we are here, the path doesn't exist. We need to 
    * create the path, add the value to it. */
-  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  frame = kvp_frame_set_value_nc (frame, path, value);
   return frame;
 }
 
@@ -718,35 +768,6 @@ kvp_frame_set_slot_path_gslist (KvpFrame *frame,
     if (!frame)
       return;
   }
-}
-
-/* ============================================================ */
-
-KvpFrame *
-kvp_frame_set_slot_slash_nc (KvpFrame * frame, const char * key_path, 
-                   KvpValue * value) 
-{
-  char *last_key;
-
-  frame = get_trailer_make (frame, key_path, &last_key);
-  if (!frame) return NULL;
-  kvp_frame_set_slot_destructively(frame, last_key, value);
-  return frame;
-}
-
-KvpFrame *
-kvp_frame_set_slot_slash (KvpFrame * frame, const char * key_path, 
-                   const KvpValue * value) 
-{
-  KvpValue *new_value = NULL;
-  char *last_key;
-
-  frame = get_trailer_make (frame, key_path, &last_key);
-  if (!frame) return NULL;
-
-  if (value) new_value = kvp_value_copy(value);
-  kvp_frame_set_slot_destructively(frame, last_key, new_value);
-  return frame;
 }
 
 /* ============================================================ */
@@ -1381,6 +1402,17 @@ kvp_value_get_frame(const KvpValue * value)
   else {
     return NULL;
   }
+}
+
+KvpFrame *
+kvp_value_replace_frame_nc(KvpValue *value, KvpFrame * newframe) 
+{
+  KvpFrame *oldframe;
+  if (KVP_TYPE_FRAME != value->type) return NULL;
+
+  oldframe = value->value.frame;
+  value->value.frame = newframe;
+  return oldframe;  
 }
 
 /* manipulators */

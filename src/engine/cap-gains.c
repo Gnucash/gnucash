@@ -407,11 +407,11 @@ xaccSplitAssignToLot (Split *split,
            /* Add kvp markup to indicate that these two splits used 
             * to be one before being 'split' 
             */
-           gnc_kvp_bag_add (split->kvp_data, "/lot-split", now, 
+           gnc_kvp_bag_add (split->kvp_data, "lot-split", now, 
                             "peer_guid", xaccSplitGetGUID (new_split), 
                             NULL);
 
-           gnc_kvp_bag_add (new_split->kvp_data, "/lot-split", now, 
+           gnc_kvp_bag_add (new_split->kvp_data, "lot-split", now, 
                             "peer_guid", xaccSplitGetGUID (split), 
                             NULL);
 

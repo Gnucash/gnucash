@@ -132,6 +132,41 @@ gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
 }
 
 /* ================================================================ */
+
+#define KILL_MATCH(elt)                                                 \
+  if (fr == kvp_value_get_frame (elt)) {                                \
+     KvpValue *old_val = kvp_frame_replace_value_nc (root, path, NULL); \
+     kvp_value_replace_frame_nc (old_val, NULL);                        \
+     kvp_value_delete (old_val);                                        \
+     return;                                                            \
+  }
+
+void
+gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
+{
+  KvpValue *arr;
+  KvpValueType valtype;
+  GList *node;
+
+  arr = kvp_frame_get_value (root, path);
+  valtype = kvp_value_get_type (arr);
+  if (KVP_TYPE_FRAME == valtype)
+  {
+    KILL_MATCH (arr);
+    return;
+  }
+
+  /* Its gotta be a single isolated frame, or a list of them. */
+  if (KVP_TYPE_GLIST != valtype) return;
+
+  for (node = kvp_value_get_glist(arr); node; node=node->next)
+  {
+    KvpValue *va = node->data;
+    KILL_MATCH (va);
+  }
+}
+
+/* ================================================================ */
 /*
  * See header for docs.
  */
