@@ -1,3 +1,8 @@
+2003-08-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Aaarg. Fixed extremely
+	stupid bug in the import value setting workaround.
+
 2003-08-19  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/main.scm: Update for 1.8.5 release
