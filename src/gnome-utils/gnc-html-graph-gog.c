@@ -29,9 +29,7 @@ static short module = MOD_GUI;
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
-/*
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
-*/
 
 void
 gnc_html_graph_gog_init(void) {
@@ -42,7 +40,7 @@ gnc_html_graph_gog_init(void) {
 
   gnc_html_register_object_handler( "gnc-guppi-pie", handle_piechart );
   gnc_html_register_object_handler( "gnc-guppi-bar", handle_barchart );
-  //gnc_html_register_object_handler("gnc-guppi-scatter", handle_scatter);
+  gnc_html_register_object_handler( "gnc-guppi-scatter", handle_scatter );
 }
 
 static double * 
@@ -117,6 +115,46 @@ free_strings(char ** strings, int nstrings) {
   g_free(strings);
 }
 
+static void
+addPixbufGraphWidget( GtkHTMLEmbedded *eb, GogObject *graph )
+{
+  GtkWidget *widget;
+  GogRenderer *pixbufRend;
+  GdkPixbuf *buf;
+  gboolean updateStatus;
+
+  // Note that this shouldn't be necessary as per discussion with Jody...
+  // ... but it is because we don't embed in a control which passes the
+  // update requests back to the graph widget, a-la the foo-canvas that
+  // gnumeric uses.  We probably _should_ do something like that, though.
+  gog_object_update( GOG_OBJECT(graph) );
+
+#if 0
+  // example SVG use.  Also, nice for debugging.
+  {
+    GsfOutput *mem;
+    gboolean output;
+
+    mem = gsf_output_memory_new();
+    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
+    printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
+  }
+#endif // 0
+
+  pixbufRend = g_object_new( GOG_RENDERER_PIXBUF_TYPE,
+                             "model", graph,
+                             NULL );
+  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), eb->width, eb->height, 1. );
+  buf = gog_renderer_pixbuf_get(GOG_RENDERER_PIXBUF(pixbufRend));
+  widget = gtk_image_new_from_pixbuf( buf );
+  gtk_widget_set_size_request( widget, eb->width, eb->height );
+  gtk_widget_show_all( widget );
+  gtk_container_add( GTK_CONTAINER(eb), widget );
+  // blindly copied from gnc-html-guppi.c
+  gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+}
+
+
 /*
  * Handle the following parameters:
  * title: text
@@ -131,14 +169,10 @@ free_strings(char ** strings, int nstrings) {
 static int
 handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 {
-  GtkWidget *widget;
   GogObject *graph, *chart, *tmp, *legend;
   GogPlot *plot;
   GogSeries *series;
   GOData *labelData, *sliceData;
-  GogRenderer *pixbufRend;
-  GdkPixbuf *buf;
-  gboolean updateStatus;
   int datasize;
   double *data = NULL;
   char **labels = NULL, **colors = NULL;
@@ -174,7 +208,6 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     return FALSE;
   }
   g_object_set (G_OBJECT (plot),
-		"vary_style_by_element",	TRUE,
 		NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
   series = gog_plot_new_series( plot );
@@ -187,7 +220,6 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   go_data_emit_changed (GO_DATA (sliceData));
 
   // fixme: colors
-
   {
     char *titleParam;
     GOData *title;
@@ -198,45 +230,13 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     gog_object_set_pos (tmp, GOG_POSITION_N | GOG_POSITION_ALIGN_START);
     title = go_data_scalar_str_new (titleParam, FALSE);
     gog_dataset_set_dim (GOG_DATASET (tmp), 0, title, NULL);
-    gog_style_set_font (GOG_STYLED_OBJECT (tmp)->style,
-                        pango_font_description_from_string ("Sans Bold 10"));
   }
 
   legend = gog_object_add_by_name( chart, "Legend", NULL );
-  gog_style_set_font( GOG_STYLED_OBJECT(legend)->style,
-                      pango_font_description_from_string( "Sans Regular 8" ) );
 
-  // Note that this shouldn't be necessary as per discussion with Jody...
-  // ... but it is because we don't embed in a control which passes the
-  // update requests back to the graph widget, a-la the foo-canvas that
-  // gnumeric uses.  We probably _should_ do something like that, though.
-  gog_object_update( GOG_OBJECT(graph) );
+  addPixbufGraphWidget( eb, graph );
 
-#if 0
-  // example SVG use.  Also, nice for debugging.
-  {
-    GsfOutput *mem;
-    gboolean output;
-
-    mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
-    printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
-  }
-#endif // 0
-
-  pixbufRend = g_object_new( GOG_RENDERER_PIXBUF_TYPE,
-                             "model", graph,
-                             NULL );
-  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), eb->width, eb->height, 1. );
-  buf = gog_renderer_pixbuf_get(GOG_RENDERER_PIXBUF(pixbufRend));
-  widget = gtk_image_new_from_pixbuf( buf );
-  gtk_widget_set_size_request( widget, eb->width, eb->height );
-  gtk_widget_show_all( widget );
-  gtk_container_add( GTK_CONTAINER(eb), widget );
-  // blindly copied from gnc-html-guppi.c
-  gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
-
-  PINFO( "piechart rendering." );
+  PINFO( "piechart rendered" );
   return TRUE;
 }
 
@@ -255,23 +255,22 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 static int
 handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 {
-  GtkWidget *widget;
   GogObject *graph, *chart, *tmp, *legend;
   GogPlot *plot;
   GogSeries *series;
   GOData *labelData, *sliceData;
-  GogRenderer *pixbufRend;
-  GdkPixbuf *buf;
-  gboolean updateStatus;
   int datarows, datacols;
   double *data = NULL;
   char **col_labels = NULL, **row_labels = NULL, **col_colors = NULL;
   //char *x_axis_label, *y_axis_label;
-  //gboolean rotate_row_labels, stacked;
+  //gboolean rotate_row_labels;
+  gboolean stacked = FALSE;
+  char *barType;
 
   // First, parse data from the text-ized params.
   {
-    char *datarowsStr, *datacolsStr, *dataStr, *colLabelsStr, *rowLabelsStr, *colColorsStr;
+    char *datarowsStr, *datacolsStr, *dataStr, *colLabelsStr, *rowLabelsStr, *colColorsStr, *stackedStr;
+    gint stackedInt;
 
     datarowsStr  = g_hash_table_lookup(eb->params, "data_rows");
     datacolsStr  = g_hash_table_lookup(eb->params, "data_cols");
@@ -279,6 +278,11 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     colLabelsStr = g_hash_table_lookup(eb->params, "col_labels");
     rowLabelsStr = g_hash_table_lookup(eb->params, "row_labels");
     colColorsStr = g_hash_table_lookup(eb->params, "col_colors");
+    stackedStr = NULL;
+    stackedStr   = g_hash_table_lookup(eb->params, "stacked");
+    sscanf( stackedStr, "%d", &stackedInt );
+    stacked = (gboolean)stackedInt;
+
 #if 0 // too strong at the moment.
     g_return_val_if_fail( datarowsStr != NULL
                           && datacolsStr != NULL
@@ -288,9 +292,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
                           && colColorsStr != NULL, FALSE );
 #endif // 0
     sscanf( datarowsStr, "%d", &datarows );
-    PINFO( "datarows=%d", datarows );
     sscanf( datacolsStr, "%d", &datacols );
-    PINFO( "datacols=%d", datacols );
     data = read_doubles( dataStr, datarows*datacols );
     row_labels = read_strings( rowLabelsStr, datarows );
     col_labels = read_strings( colLabelsStr, datacols );
@@ -308,9 +310,16 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     printf( "plugin not loaded" );
     return FALSE;
   }
+  barType = "normal";
+  if ( stacked )
+  {
+    // this is still behaving very strangely, but we'll deal with that later.
+    barType = "stacked";
+  }
+  PINFO( "barType=[%s]", barType );
   g_object_set (G_OBJECT (plot),
-		"vary_style_by_element",	TRUE,
-                "type",                         "normal",
+                "vary_style_by_element",	TRUE,
+                "type",                         barType,
 		NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
 
@@ -345,41 +354,83 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     gog_object_set_pos (tmp, GOG_POSITION_N | GOG_POSITION_ALIGN_START);
     title = go_data_scalar_str_new (titleParam, FALSE);
     gog_dataset_set_dim (GOG_DATASET (tmp), 0, title, NULL);
-    /*
-    gog_style_set_font (GOG_STYLED_OBJECT (tmp)->style,
-                        pango_font_description_from_string ("Sans Bold 10"));
-    */
   }
 
   legend = gog_object_add_by_name( chart, "Legend", NULL );
 
+  // we need to do this twice for the barchart... :p
   gog_object_update( GOG_OBJECT(graph) );
 
-#if 0
-  // example SVG use.  Also, nice for debugging.
-  {
-    GsfOutput *mem;
-    gboolean output;
-
-    mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
-    printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
-  }
-#endif // 0
-
-  pixbufRend = g_object_new( GOG_RENDERER_PIXBUF_TYPE,
-                             "model", graph,
-                             NULL );
-  gog_object_update( GOG_OBJECT(graph) );
-  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), eb->width, eb->height, 1. );
-  buf = gog_renderer_pixbuf_get(GOG_RENDERER_PIXBUF(pixbufRend));
-  widget = gtk_image_new_from_pixbuf( buf );
-  gtk_widget_set_size_request( widget, eb->width, eb->height );
-  gtk_widget_show_all( widget );
-  gtk_container_add( GTK_CONTAINER(eb), widget );
-  // blindly copied from gnc-html-guppi.c
-  gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+  addPixbufGraphWidget( eb, graph );
 
   PINFO( "barchart rendered." );
+  return TRUE;
+}
+
+static int
+handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
+{
+  GogObject *graph, *chart, *legend;
+  GogPlot *plot;
+  GogSeries *series;
+  GOData *sliceData;
+  char *title, *subtitle, *xAxisLabel, *yAxisLabel;
+  int datasize;
+  double *xData, *yData;
+
+  {
+    char *datasizeStr, *xDataStr, *yDataStr;
+
+    title = g_hash_table_lookup( eb->params, "title" );
+    subtitle = g_hash_table_lookup( eb->params, "subtitle" );
+
+    datasizeStr = g_hash_table_lookup( eb->params, "datasize" );
+    sscanf( datasizeStr, "%d", &datasize );
+
+    xDataStr = g_hash_table_lookup( eb->params, "x_data" );
+    xData = read_doubles( xDataStr, datasize );
+
+    yDataStr = g_hash_table_lookup( eb->params, "y_data" );
+    yData = read_doubles( yDataStr, datasize );
+
+    xAxisLabel = g_hash_table_lookup( eb->params, "x_axis_label" );
+    yAxisLabel = g_hash_table_lookup( eb->params, "y_axis_label" );
+  }
+
+  graph = g_object_new( GOG_GRAPH_TYPE, NULL );
+  chart = gog_object_add_by_name( graph, "Chart", NULL );
+  plot = gog_plot_new_by_name( "GogXYPlot" );
+  if ( !plot )
+  {
+    // FIXME - log betterer
+    printf( "plugin not loaded" );
+    return FALSE;
+  }
+  //g_object_set (G_OBJECT (plot), NULL);
+  gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
+
+  series = gog_plot_new_series( plot );
+
+  sliceData = go_data_vector_val_new( xData, datasize );
+  gog_series_set_dim( series, 0, sliceData, NULL );
+  go_data_emit_changed (GO_DATA (sliceData));
+
+  sliceData = go_data_vector_val_new( yData, datasize );
+  gog_series_set_dim( series, 1, sliceData, NULL );
+  go_data_emit_changed (GO_DATA (sliceData));
+
+  // fixme: colors
+  // fixme: title, subtitle
+  // fixme: axis labels
+
+  //legend = gog_object_add_by_name( chart, "Legend", NULL );
+
+  // And twice for the scatter, too... :p
+  gog_object_update( GOG_OBJECT(graph) );
+
+  addPixbufGraphWidget( eb, graph );
+
+  PINFO( "scatter rendered." );
+
   return TRUE;
 }
