@@ -976,14 +976,12 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
  ********************************************************************/
 
 void
-xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
+xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
                              int case_sens, int use_regexp,
                              QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
   qt->p      = & xaccDescriptionMatchPredicate;
@@ -1001,25 +999,23 @@ xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1032,14 +1028,12 @@ xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
  ********************************************************************/
 
 void
-xaccQueryAddMemoMatch(Query * q, char * matchstring,
+xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                       int case_sens, int use_regexp,
                       QueryOp op) {
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
   qt->p      = & xaccMemoMatchPredicate;
@@ -1057,16 +1051,13 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
 
@@ -1075,7 +1066,8 @@ xaccQueryAddMemoMatch(Query * q, char * matchstring,
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1207,14 +1199,12 @@ xaccQueryAddDateMatchTT(Query * q,
  * Add a number-field filter 
  ********************************************************************/
 void
-xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
+xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) {
   
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
   qt->p      = & xaccNumberMatchPredicate;
@@ -1232,25 +1222,23 @@ xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1262,14 +1250,12 @@ xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
  * Add a action-field filter 
  ********************************************************************/
 void
-xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
+xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) {
   
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
-  char      * teststr;
-  char      * src, * dest;
   int       flags = REG_EXTENDED;
 
   qt->p      = & xaccActionMatchPredicate;
@@ -1287,25 +1273,23 @@ xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
     regcomp(&qt->data.str.compiled, matchstring, flags);
   }
   else if(!case_sens) {
-    teststr = g_new0(char, strlen(matchstring)+1);
-    dest    = teststr;
-    for(src=matchstring; *src; src++) {
-      *dest = tolower(*src);
-      dest++;      
+    char *s;
+
+    for(s = qt->data.str.matchstring; *s; s++) {
+      *s = tolower(*s);
     }
-    *dest = 0;    
-    qt->data.str.matchstring = teststr;
   }
-  
+
   xaccInitQuery(qs, qt);
   xaccQuerySetGroup(qs, q->acct_group);
-  
+
   if(xaccQueryHasTerms(q)) {
     qr = xaccQueryMerge(q, qs, op);
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
+
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);

@@ -304,7 +304,7 @@ gnc_print_session_moveto(PrintSession * ps, double x, double y) {
 
 
 void 
-gnc_print_session_text(PrintSession * ps, char * text) {
+gnc_print_session_text(PrintSession * ps, const char * text) {
   gnome_print_show(GNOME_PRINT_CONTEXT(ps->meta), text);  
 }
 

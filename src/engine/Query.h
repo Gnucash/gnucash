@@ -154,11 +154,11 @@ void xaccQueryAddAccountMatch(Query * q, GList * accounts,
 void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
                                     QueryOp op);
 
-void xaccQueryAddDescriptionMatch(Query * q, char * matchstring, 
+void xaccQueryAddDescriptionMatch(Query * q, const char * matchstring, 
                                   int case_sens, int use_regexp, QueryOp op);
-void xaccQueryAddNumberMatch(Query * q, char * matchstring, 
+void xaccQueryAddNumberMatch(Query * q, const char * matchstring, 
                              int case_sens, int use_regexp, QueryOp op);
-void xaccQueryAddActionMatch(Query * q, char * matchstring, 
+void xaccQueryAddActionMatch(Query * q, const char * matchstring, 
                              int case_sens, int use_regexp, QueryOp op);
 void DxaccQueryAddAmountMatch(Query * q, double amount, 
                               amt_match_sgn_t amt_sgn,
@@ -179,7 +179,7 @@ void xaccQueryAddDateMatchTT(Query * q,
                              int use_start, time_t stt, 
                              int use_end, time_t ett,
                              QueryOp op);
-void xaccQueryAddMemoMatch(Query * q, char * matchstring, 
+void xaccQueryAddMemoMatch(Query * q, const char * matchstring, 
                            int case_sens, int use_regexp, QueryOp op);
 void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                            QueryOp op);

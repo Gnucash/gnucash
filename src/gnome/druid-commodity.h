@@ -40,7 +40,7 @@ CommodityDruid  * gnc_ui_commodity_druid_create(const char * filename);
 void            gnc_ui_commodity_druid_destroy(CommodityDruid * d);
 
 /* invoke import druid modally */
-void            gnc_import_legacy_commodities(char * filename);
+void            gnc_import_legacy_commodities(const char * filename);
 
 #endif
 

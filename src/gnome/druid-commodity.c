@@ -73,7 +73,7 @@ static int gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page,
 
 
 void
-gnc_import_legacy_commodities(char * filename) {
+gnc_import_legacy_commodities(const char * filename) {
   CommodityDruid * d = gnc_ui_commodity_druid_create(filename);
 
   d->is_modal = TRUE;
