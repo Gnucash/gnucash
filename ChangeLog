@@ -13,6 +13,10 @@
 	  Enable changing the "ID" for different business objects.
 	  Fixes #108563.
 	
+	* src/import-export/qif-import/qif-file.scm: Don't try to
+	  parse values that begin "..." because it is clearly not
+	  valid (regardless of the locale).  Fixes #109868.
+
 2003-04-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c,

@@ -17,6 +17,12 @@
       (string=? "1.4" (substring (version) 0 3))) #f)
  (else (use-modules (ice-9 rdelim))))
 
+(define qif-bad-numeric-rexp 
+  (make-regexp "^\.\.\."))
+
+(define (not-bad-numeric-string? input)
+  (if (regexp-exec qif-bad-numeric-rexp input) #f #t))
+
 (define (qif-file:read-file self path ticker-map)
   (false-if-exception
    (let* ((qstate-type #f)
@@ -115,7 +121,7 @@
                        
                        ;; T : total amount 
                        ((#\T)
-                        (if default-split 
+                        (if (and default-split (not-bad-numeric-string? value))
                             (qif-split:set-amount! default-split value)))
                        
                        ;; P : payee
@@ -195,7 +201,7 @@
                        
                        ;; $ : split amount (if there are splits)
                        ((#\$)
-                        (if current-split
+                        (if (and current-split (not-bad-numeric-string? value))
 			    (qif-split:set-amount! current-split value)))
                        
                        ;; ^ : end-of-record 
