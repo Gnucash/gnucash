@@ -32,6 +32,8 @@ AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
+AC_CHECK_FUNCS(stpcpy)   
+
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
@@ -240,8 +242,7 @@ AC_SUBST(XMHTML_INC)
 
 # See if the <nana.h> header file can be found.
 AC_CHECK_HEADERS(nana.h)
-AC_CHECK_LIB(nana,L_buffer_create,
-       LIBS="${LIBS} -lnana") 
+AC_CHECK_LIB(nana, L_buffer_create) 
 
 ### --------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.
