@@ -380,6 +380,8 @@ SGI IRIX              -- MIPS
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
+HPUX 11.0             -- http://cloud.prohosting.com/patos/docs/gnucash_on_hpux11.htm
+
 
 See http://www.gnucash.org/pub/gnucash 
 or  http://www.linas.org/linux/gnucash 
