@@ -28,7 +28,9 @@
 
 #include "gnucash.h"
 #include "messages.h"
+#include "Query.h"
 #include "reconcile-listP.h"
+#include "FileDialog.h"
 #include "date.h"
 #include "util.h"
 
@@ -85,6 +87,20 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   list->account = account;
   list->list_type = type;
 
+  list->query = xaccMallocQuery();
+
+  xaccQuerySetGroup(list->query, gncGetCurrentGroup());
+
+  /* match the account */
+  xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);
+
+  if (type == RECLIST_CREDIT)
+    xaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
+                            AMT_MATCH_ATLEAST, QUERY_AND);
+  else
+    xaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
+                            AMT_MATCH_ATLEAST, QUERY_AND);
+
   return GTK_WIDGET(list);
 }
 
@@ -109,6 +125,7 @@ gnc_reconcile_list_init(GNCReconcileList *list)
   list->current_split = NULL;
   list->no_toggle = FALSE;
   list->always_unselect = FALSE;
+  list->query = NULL;
 
   while (titles[list->num_columns] != NULL)
     list->num_columns++;
@@ -300,6 +317,12 @@ gnc_reconcile_list_destroy(GtkObject *object)
     list->reconciled = NULL;
   }
 
+  if (list->query != NULL)
+  {
+    xaccFreeQuery(list->query);
+    list->query = NULL;
+  }
+
   if (GTK_OBJECT_CLASS(parent_class)->destroy)
     (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
@@ -435,7 +458,8 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
     if (g_hash_table_lookup(list->reconciled, split) == NULL)
       continue;
 
-    if((account_type == STOCK) || (account_type == MUTUAL))
+    if ((account_type == STOCK) || (account_type == MUTUAL) ||
+        (account_type == CURRENCY))
       total += xaccSplitGetShareAmount(split);
     else
       total += xaccSplitGetValue(split);
@@ -521,25 +545,45 @@ gnc_reconcile_list_changed(GNCReconcileList *list)
 }
 
 
+/********************************************************************\
+ * gnc_reconcile_list_set_sort_order                                *
+ *   sets the sorting order of splits in the list                   *
+ *                                                                  *
+ * Args: list - list to change the sort order for                   *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_reconcile_list_set_sort_order(GNCReconcileList *list, sort_type_t key)
+{
+  g_return_if_fail(list != NULL);
+  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
+  g_return_if_fail(list->query != NULL);
+
+  xaccQuerySetSortOrder(list->query, key,
+                        (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
+                        BY_NONE);
+}
+
 static void
 gnc_reconcile_list_fill(GNCReconcileList *list)
 {
   gchar *strings[list->num_columns + 1];
   GNCPrintAmountFlags flags = PRTSEP;
-  Transaction *trans;
-  Split *split;
+  GNCAccountType account_type;
   gboolean reconciled;
+
+  Transaction *trans;
+  Split **splits;
+  Split *split;
+
   char *currency;
-  int num_splits;
-  int account_type;
-  double amount;
   char recn_str[2];
   char recn;
+
+  double amount;
   int row;
-  int i;
 
   account_type = xaccAccountGetType(list->account);
-  num_splits = xaccAccountGetNumSplits(list->account);
   currency = xaccAccountGetCurrency(list->account);
   strings[4] = recn_str;
   strings[5] = NULL;
@@ -548,9 +592,11 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
       (account_type == CURRENCY))
     flags |= PRTSHR;
 
-  for (i = 0; i < num_splits; i++)
+  splits = xaccQueryGetSplits(list->query);
+
+  for ( ; *splits != NULL; splits++)
   {
-    split = xaccAccountGetSplit(list->account, i);
+    split = *splits;
 
     recn = xaccSplitGetReconcile(split);
     if ((recn != NREC) && (recn != CREC))

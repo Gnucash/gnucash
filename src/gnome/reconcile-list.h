@@ -64,6 +64,7 @@ struct _GNCReconcileList
   GtkStyle *reconciled_style;
 
   Account *account;
+  Query *query;
 };
 
 struct _GNCReconcileListClass
@@ -100,9 +101,8 @@ void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
 gboolean gnc_reconcile_list_changed(GNCReconcileList *list);
 
-void gnc_reconcile_list_set_selection_mode(GNCReconcileList *list,
-                                           GtkSelectionMode mode);
-
+void gnc_reconcile_list_set_sort_order(GNCReconcileList *list,
+                                       sort_type_t key);
 
 #ifdef __cplusplus
 }
