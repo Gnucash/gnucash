@@ -63,6 +63,8 @@ typedef struct _PopBox
         gboolean autosize;
 
         QuickFill *qf;
+        gboolean use_quickfill_cache;  /* If TRUE, we don't own the qf */
+
         gboolean in_list_select;
 
         gboolean strict;
@@ -127,6 +129,8 @@ gnc_combo_cell_init (ComboCell *cell)
 	cell->cell.gui_private = box;
 
         box->qf = gnc_quickfill_new ();
+        box->use_quickfill_cache = FALSE;
+
         box->in_list_select = FALSE;
 
         box->strict = TRUE;
@@ -301,8 +305,12 @@ gnc_combo_cell_destroy (BasicCell *bcell)
 		g_list_free(box->menustrings);
                 box->menustrings = NULL;
 
-                gnc_quickfill_destroy (box->qf);
-                box->qf = NULL;
+                /* Don't destroy the qf if its not ours to destroy */
+                if (FALSE == box->use_quickfill_cache)
+                {
+                        gnc_quickfill_destroy (box->qf);
+                        box->qf = NULL;
+                }
 
                 for (node = box->ignore_strings; node; node = node->next)
                 {
@@ -339,8 +347,12 @@ gnc_combo_cell_clear_menu (ComboCell * cell)
         g_list_free (box->menustrings);
         box->menustrings = NULL;
 
-        gnc_quickfill_destroy (box->qf);
-        box->qf = gnc_quickfill_new ();
+        /* Don't destroy the qf if its not ours to destroy */
+        if (FALSE == box->use_quickfill_cache)
+        {
+                gnc_quickfill_destroy (box->qf);
+                box->qf = gnc_quickfill_new ();
+        }
 
         if (box->item_list != NULL)
         {
@@ -353,6 +365,21 @@ gnc_combo_cell_clear_menu (ComboCell * cell)
 
         box->list_in_sync = TRUE;
         box->list_sorted = TRUE;
+}
+
+void
+gnc_combo_cell_use_quickfill_cache (ComboCell * cell, QuickFill *shared_qf)
+{
+	PopBox *box;
+
+	if (cell == NULL) return;
+
+	box = cell->cell.gui_private;
+	if (NULL == box) return;
+
+	box->use_quickfill_cache = TRUE;
+	gnc_quickfill_destroy (box->qf);
+	box->qf = shared_qf;
 }
 
 static void
@@ -404,7 +431,7 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
         {
                 block_list_signals (cell);
 
-		gnc_item_list_append (box->item_list, menustr);
+                gnc_item_list_append (box->item_list, menustr);
                 if (cell->cell.value &&
                     (strcmp (menustr, cell->cell.value) == 0))
                         gnc_item_list_select (box->item_list, menustr);
@@ -414,7 +441,12 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
 	else
 		box->list_in_sync = FALSE;
 
-        gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
+        /* If we're going to be using a pre-fab quickfill, 
+         * then don't fill it in here */
+        if (FALSE == box->use_quickfill_cache)
+        {
+                gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
+        }
 
         box->list_sorted = FALSE;
 }
