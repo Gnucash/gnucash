@@ -859,10 +859,10 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 
 /** deprecated rouitines */
 #define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccSplitReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
 #define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccTransReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
 #define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */

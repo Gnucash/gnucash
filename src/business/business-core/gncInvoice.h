@@ -177,7 +177,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 /** deprecated functions */
 #define gncInvoiceGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncInvoiceGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
-#define gncInvoiceRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncInvoiceRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncInvoiceLookupDirect(G,B) gncInvoiceLookup((B),&(G))
 
 #endif /* GNC_INVOICE_H_ */

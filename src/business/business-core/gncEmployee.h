@@ -94,7 +94,7 @@ int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 
 /** deprecated routines */
 #define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_ENTITY(E))
-#define gncEmployeeRetGUID(E) (*(qof_entity_get_guid(QOF_ENTITY(E))))
+#define gncEmployeeRetGUID(E) (E ? *(qof_entity_get_guid(QOF_ENTITY(E))) : *(guid_null()))
 #define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
 
 #endif /* GNC_EMPLOYEE_H_ */

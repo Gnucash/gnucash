@@ -166,7 +166,7 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 /** deprecated */
 #define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
 #define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
-#define xaccAccountReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define xaccAccountReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
 
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL

@@ -86,7 +86,7 @@ int gncJobCompare (const GncJob *a, const GncJob *b);
 /** deprecated functions */
 #define gncJobGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncJobGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
-#define gncJobRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncJobRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncJobLookupDirect(G,B) gncJobLookup((B),&(G))
 
 #endif /* GNC_JOB_H_ */

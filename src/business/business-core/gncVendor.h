@@ -103,7 +103,7 @@ int gncVendorCompare (GncVendor *a, GncVendor *b);
 /** deprecated functions */
 #define gncVendorGetBook(X) qof_instance_get_book (QOF_INSTANCE(X))
 #define gncVendorGetGUID(X) qof_instance_get_guid (QOF_INSTANCE(X))
-#define gncVendorRetGUID(X) (*(qof_instance_get_guid (QOF_INSTANCE(X))))
+#define gncVendorRetGUID(X) (X ? *(qof_instance_get_guid (QOF_INSTANCE(X))) : *(guid_null()))
 #define gncVendorLookupDirect(G,B) gncVendorLookup((B),&(G))
 
 #endif /* GNC_VENDOR_H_ */
