@@ -518,24 +518,39 @@
 	    <widget>
 	      <class>GtkMenuItem</class>
 	      <name>menuitem50</name>
+	      <tooltip>Open the GnuCash Tutorial</tooltip>
 	      <signal>
 		<name>activate</name>
-		<handler>gnc_main_window_help_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
+		<handler>gnc_main_window_tutorial_cb</handler>
+		<last_modification_time>Sat, 23 Nov 2002 19:16:04 GMT</last_modification_time>
 	      </signal>
-	      <label>_Gnucash Users Manual</label>
+	      <label>Tutorial and Concepts _Guide</label>
 	      <right_justify>False</right_justify>
 	    </widget>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
 	      <name>menuitem51</name>
+	      <tooltip>View the Tips of the Day</tooltip>
 	      <signal>
 		<name>activate</name>
 		<handler>gnc_main_window_totd_cb</handler>
 		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
 	      </signal>
 	      <label>_Tip Of The Day</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>help1</name>
+	      <tooltip>Open the GnuCash Help</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_help_cb</handler>
+		<last_modification_time>Sat, 23 Nov 2002 19:16:04 GMT</last_modification_time>
+	      </signal>
+	      <label>_Help</label>
 	      <right_justify>False</right_justify>
 	    </widget>
 

@@ -22,6 +22,11 @@
 
 2002-11-23  David Hampton  <hampton@employees.org>
 
+	* src/gnome/glade/register.glade: Update help menu items. 99169
+
+	* src/gnome/window-register.c (gnc_register_toolbar_cb): Remove
+	unused routine.	
+
 	* src/import-export/qif-import/qif-merge-groups.scm: Add a new
 	progress box for a function that takes forever and a day to
 	complete.

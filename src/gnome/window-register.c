@@ -139,7 +139,6 @@ void gnc_register_start_recn_cb(GtkWidget *w, gpointer data);
 void gnc_register_xfer_cb(GtkWidget *w, gpointer data);
 void gnc_register_stock_split_cb (GtkWidget * w, gpointer data);
 void gnc_register_edit_cb(GtkWidget *w, gpointer data);
-void gnc_register_help_cb(GtkWidget *w, gpointer data);
 void gnc_register_new_account_cb(GtkWidget * w, gpointer data);
 
 void gnc_register_close_cb(GtkWidget *w, gpointer data);
@@ -1529,19 +1528,6 @@ void
 gnc_register_fincalc_cb(GtkWidget *widget, gpointer data)
 {
   gnc_ui_fincalc_dialog_create();
-}
-
-/********************************************************************\
- * gnc_register_help_cb                                             *
- *                                                                  *
- * Args:   widget - the widget that called us                       *
- *         data   - not used                                        *
- * Return: none                                                     *
-\********************************************************************/
-void
-gnc_register_help_cb (GtkWidget *widget, gpointer data)
-{
-  helpWindow (NULL, NULL, HH_REGWIN);
 }
 
 void
