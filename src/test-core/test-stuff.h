@@ -127,5 +127,7 @@ gchar* get_random_string_without(const char *exclude_chars);
 gint64 get_random_gint64(void);
 double get_random_double(void);
 const char* get_random_string_in_array(const char* str_list[]);
+#define get_random_numeric() (double_to_gnc_numeric (get_random_double (), \
+						GNC_DENOM_AUTO, GNC_RND_ROUND))
 
 #endif /* TEST_STUFF_H */
