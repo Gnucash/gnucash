@@ -34,6 +34,19 @@
 #include "kvp_frame.h"
 #include "gnc-book.h"
 
+/* 
+ * #defines for kvp_frame strings
+ * FIXME: Is this the right spot for them <rgmerk>?
+ */
+
+#define GNC_SX_ID                    "sched-xaction"
+#define GNC_SX_ACCOUNT               "account"
+#define GNC_SX_CREDIT_FORMULA        "credit-formula"
+#define GNC_SX_DEBIT_FORMULA         "debit-formula"
+#define GNC_SX_SHARES                "shares"
+#define GNC_SX_AMOUNT                "amnt"
+#define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"
+
 /**
  * A single scheduled transaction.
  *

@@ -415,7 +415,7 @@
 
 	    <widget>
 	      <class>GtkRadioButton</class>
-	      <name>radiobutton1</name>
+	      <name>rb_noend</name>
 	      <can_focus>True</can_focus>
 	      <label>No End</label>
 	      <active>True</active>
@@ -430,7 +430,7 @@
 
 	    <widget>
 	      <class>GtkRadioButton</class>
-	      <name>radiobutton2</name>
+	      <name>rb_enddate</name>
 	      <can_focus>True</can_focus>
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
@@ -466,7 +466,7 @@
 
 		<widget>
 		  <class>GnomeDateEdit</class>
-		  <name>dateedit1</name>
+		  <name>sxe_end_date</name>
 		  <show_time>False</show_time>
 		  <use_24_format>True</use_24_format>
 		  <week_start_monday>False</week_start_monday>
@@ -483,7 +483,7 @@
 
 	    <widget>
 	      <class>GtkRadioButton</class>
-	      <name>radiobutton3</name>
+	      <name>rb_num_occur</name>
 	      <can_focus>True</can_focus>
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
@@ -530,7 +530,7 @@
 		  <widget>
 		    <class>GtkEntry</class>
 		    <child_name>GnomeEntry:entry</child_name>
-		    <name>entry3</name>
+		    <name>end_nentry</name>
 		    <can_focus>True</can_focus>
 		    <editable>True</editable>
 		    <text_visible>True</text_visible>

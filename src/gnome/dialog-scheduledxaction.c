@@ -44,7 +44,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
 #include "gnc-ledger-display.h"
-
 #include "messages.h"
 #include "query-user.h"
 
@@ -711,8 +710,8 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         /* configure... */
         /* don't use double-line */
         gnc_split_register_config(splitreg,
-                                  splitreg->type, splitreg->style,
-                                  FALSE );
+                                splitreg->type, splitreg->style,
+                                FALSE );
         /* don't show present/future divider [by definition, not necessary] */
         xaccSRShowPresentDivider( splitreg, FALSE );
 

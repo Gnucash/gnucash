@@ -216,6 +216,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
   return 0;
 }
+
 static guint
 sxftd_compute_sx(SXFromTransInfo *sxfti)
 {
@@ -245,7 +246,8 @@ GtkWidget *w;
 
   trans_t = xaccTransGetDate(sxfti->trans);
 
-  g_date_set_julian(&date, trans_t);
+  
+  g_date_set_time(&date, trans_t);
  
   fs = xaccFreqSpecMalloc();
 
@@ -265,35 +267,44 @@ GtkWidget *w;
 
     g_date_add_days(&date, 1); 
     xaccFreqSpecSetDaily(fs, &date, 1);
+    xaccFreqSpecSetUIType(fs, UIFREQ_DAILY);
     break;
 
   case FREQ_WEEKLY:
     g_date_add_days(&date, 7);
     xaccFreqSpecSetWeekly(fs, &date, 1);
+    xaccFreqSpecSetUIType(fs, UIFREQ_WEEKLY);
     break;
 
   case FREQ_MONTHLY:
     g_date_add_months(&date, 1);
     xaccFreqSpecSetMonthly(fs, &date, 1);
+    xaccFreqSpecSetUIType(fs, UIFREQ_MONTHLY);
     break;
 
   case FREQ_QUARTERLY:
     g_date_add_months(&date, 3);
     xaccFreqSpecSetMonthly(fs, &date, 3);
+    xaccFreqSpecSetUIType(fs, UIFREQ_QUARTERLY);
     break;
 
   case FREQ_ANNUALLY:
     g_date_add_years(&date, 1);
     xaccFreqSpecSetMonthly(fs, &date, 12);
+    xaccFreqSpecSetUIType(fs, UIFREQ_YEARLY);
     break;
 
   default:
 
-    PWARN("Nonexistent frequency selected.  This is a bug.");
+    PERR("Nonexistent frequency selected.  This is a bug.");
     
-    /* report fsckup */
-    sxftd_errno = 1;
     break;
+  }
+
+  if (sxftd_errno == 0)
+  {
+    xaccSchedXactionSetFreqSpec( sx, fs);
+    xaccSchedXactionSetStartDate(sx, &date);
   }
 
   end_info = sxftd_get_end_info(sxfti);

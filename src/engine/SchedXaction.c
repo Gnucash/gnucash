@@ -187,6 +187,7 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 {
         g_return_if_fail( fs );
 
+	DEBUG("Called xaccSchedXactionSetFreqSpec");
         xaccFreqSpecFree( sx->freq );
         sx->freq = fs;
 	sx->dirty = TRUE;
@@ -420,6 +421,8 @@ xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
   sx->advanceRemindDays = reminderDays;
 }
 
+
+/* FIXME: there is a bug in this, I think */
 GDate
 xaccSchedXactionGetNextInstance( SchedXaction *sx )
 {
@@ -526,8 +529,8 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
 
   kvp_frame_set_slot_path(split_frame, 
 			  tmp_value,
-			  "sched-xaction",
-			  "credit-formula");
+			  GNC_SX_ID,
+			  GNC_SX_CREDIT_FORMULA);
   kvp_value_delete(tmp_value);
 		      
   tmp_value
@@ -535,8 +538,8 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
   
   kvp_frame_set_slot_path(split_frame,
 			  tmp_value,
-			  "sched-xaction",
-			  "debit-formula");
+			  GNC_SX_ID,
+			  GNC_SX_DEBIT_FORMULA);
 
   kvp_value_delete(tmp_value);
 
@@ -546,8 +549,8 @@ pack_split_info(TTSplitInfo *s_info, Account *parent_acct)
 
   kvp_frame_set_slot_path(split_frame,
 			tmp_value,
-			"sched-xaction",
-			"xfrm");
+			GNC_SX_ID,
+			GNC_SX_ACCOUNT);
 
   kvp_value_delete(tmp_value);
 

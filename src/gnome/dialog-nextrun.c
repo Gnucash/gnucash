@@ -319,9 +319,9 @@ create_each_transaction( Transaction *t, void *d )
                         GUID                *acct_guid;
                         Account                *acct;
                         /* contains the guid of the split's actual account. */
-                        kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/xfrm" );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_ACCOUNT );
                         if ( kvp_val == NULL ) {
-                                PERR( "Null kvp_val for xfrm\n" );
+                                PERR( "Null kvp_val for account\n" );
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
                         acct = xaccAccountLookup( acct_guid );
@@ -338,7 +338,7 @@ create_each_transaction( Transaction *t, void *d )
                         gnc_numeric        final;
                         int                gncn_error;
 
-                        kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/credit_formula" );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_CREDIT_FORMULA );
                         str = kvp_value_get_string( kvp_val );
                         credit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL ) {
@@ -354,7 +354,7 @@ create_each_transaction( Transaction *t, void *d )
                                         str, gnc_numeric_to_string( credit_num ) );
                         }
                         
-                        kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/debit_formula" );
+                        kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_DEBIT_FORMULA );
                         str = kvp_value_get_string( kvp_val );
 
                         debit_num = gnc_numeric_create( 0, 1 );
@@ -384,8 +384,8 @@ create_each_transaction( Transaction *t, void *d )
                         xaccSplitSetValue( split, final );
                 }
 #if 0
-                kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/shares" );
-                kvp_val = kvp_frame_get_slot( split_kvpf, "sched-xaction/amnt" );
+                kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_SHARES );
+                kvp_val = kvp_frame_get_slot_path( split_kvpf, GNC_SX_ID, GNC_SX_AMNT );
 #endif /* 0 */
         } while ( (sList = sList->next) && (osList = osList->next) );
 

@@ -349,8 +349,11 @@ gnc_split_register_save_template_cells (gpointer save_data,
     }
 
     acctGUID = xaccAccountGetGUID (acct);
-    kvp_frame_set_slot (kvpf, "sched-xaction/xfrm",
-                        kvp_value_new_guid (acctGUID));
+
+    /* FIXME: replace these with #defines - is it ok to #include "SchedXaction.h" ?? */
+
+    kvp_frame_set_slot_path (kvpf, kvp_value_new_guid(acctGUID), "sched-xaction", "account");
+
     kvpf = xaccSplitGetSlots (split);
 
     cell = gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
@@ -385,12 +388,16 @@ gnc_split_register_save_template_cells (gpointer save_data,
     /* amountStr = gnc_numeric_to_string( new_amount ); */
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-    kvp_frame_set_slot (kvpf, "sched-xaction/credit_formula",
-                        kvp_value_new_string (value));
+    kvp_frame_set_slot_path( kvpf,kvp_value_new_string( value ), 
+			     "sched-xaction", "credit-formula");
 
     value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
-    kvp_frame_set_slot (kvpf, "sched-xaction/debit_formula",
-                        kvp_value_new_string (value));
+
+    kvp_frame_set_slot_path( kvpf,  
+			kvp_value_new_string( value ),
+			"sched-xaction", 
+			"debit_formula");
+
 
     DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
 
@@ -407,9 +414,12 @@ gnc_split_register_save_template_cells (gpointer save_data,
     DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
 
     /* sharesStr = gnc_numeric_to_string( sharesStr ); */
-    kvp_frame_set_slot (kvpf, "sched-xaction/shares",
-                        kvp_value_new_string (sharesStr));
-    DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
+    kvp_frame_set_slot_path( kvpf,
+			     kvp_value_new_string( sharesStr ),
+			     "sched-xaction",
+			     "shares");
+    DEBUG( "kvp_frame  after: %s\n", kvp_frame_to_string( kvpf ) );
+
     /* set the shares to an innocuous value */
     xaccSplitSetSharePriceAndAmount (split,
                                      gnc_numeric_create(0, 1),

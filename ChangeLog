@@ -1,3 +1,15 @@
+2001-09-04  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* several SX-related .c files: replaced use of kvp_frame_{set,get}_slot, 
+	with {set,get}_slot_path, replaced literals with #defines.
+
+	* src/engine/SchedXaction.h: #define names for kvp_frame keys.
+
+	* src/engine/dialog-sx-from-trans.h: fix freqspec and date/time setting bugs.
+
+	* src/gnome/glade/sched-xact.glade: rename several items in editor dialog
+	to match UI code.
+
 2001-09-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/backend/file/sixtp-dom-generators.c (add_kvp_value_node):

@@ -151,7 +151,7 @@ Entities: Split in a SchedXaction
 Use: Storage for the various fields of a scheduled transaction's
      template Splits.
 
-Name: sched-xaction/xfrm
+Name: sched-xaction/account
 Type: GUID
 Entities: Split associated with a SchedXaction
 Use: The GUID of this Split's xfrm account.

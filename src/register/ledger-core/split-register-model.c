@@ -1112,8 +1112,8 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
   {
     GUID *guid;
 
-    guid = kvp_value_get_guid (kvp_frame_get_slot (kvpf,
-                                                   "sched-xaction/xfrm"));
+    guid = kvp_value_get_guid (kvp_frame_get_slot_path (kvpf,
+                                                   "sched-xaction","account"));
 
     name = xaccAccountGetFullName (xaccAccountLookup (guid),
                                    gnc_get_account_separator ());
@@ -1138,7 +1138,7 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
   kvpf = xaccSplitGetSlots (split);
 
   return kvp_value_get_string
-    (kvp_frame_get_slot (kvpf, "sched-xaction/debit_formula"));
+    (kvp_frame_get_slot_path (kvpf, "sched-xaction","debit_formula"));
 }
 
 static const char *
@@ -1155,7 +1155,7 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
   kvpf = xaccSplitGetSlots (split);
 
   return kvp_value_get_string
-    (kvp_frame_get_slot (kvpf, "sched-xaction/credit_formula"));
+    (kvp_frame_get_slot_path (kvpf, "sched-xaction","credit_formula"));
 }
 
 static const char *
@@ -1183,8 +1183,9 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     const char * cell_name;
     char *str;
 
-    str = kvp_value_get_string (kvp_frame_get_slot (kvpf,
-                                                    "sched-xaction/amnt"));
+    PWARN("This code is wrong.  Fix it immediately!!!!");
+    str = kvp_value_get_string (kvp_frame_get_slot_path (kvpf,
+                                                    "sched-xaction", "amnt"));
     amount = gnc_numeric_zero ();
     string_to_gnc_numeric (str, &amount);
 
