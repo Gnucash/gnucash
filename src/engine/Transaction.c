@@ -1663,18 +1663,18 @@ xaccTransCommitEdit (Transaction *trans)
 
      /* first debits */
      for (node = trans->splits; node; node = node->next) {
-	 split = node->data;
-	 if (gnc_numeric_negative_p (xaccSplitGetValue (split)))
-	   continue;
-	 new_list = g_list_append(new_list, split);
+       split = node->data;
+       if (gnc_numeric_negative_p (xaccSplitGetValue (split)))
+          continue;
+       new_list = g_list_append(new_list, split);
      }
 
-    /* then credits */
+     /* then credits */
      for (node = trans->splits; node; node = node->next) {
-	 split = node->data;
-	 if (!gnc_numeric_negative_p (xaccSplitGetValue (split)))
-	   continue;
-	 new_list = g_list_append(new_list, split);
+       split = node->data;
+       if (!gnc_numeric_negative_p (xaccSplitGetValue (split)))
+          continue;
+       new_list = g_list_append(new_list, split);
      }
 
      /* install newly sorted list */
