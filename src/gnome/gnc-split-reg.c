@@ -924,20 +924,19 @@ gnc_split_reg_check_close( GNCSplitReg *gsr )
   if ( !pending_changes )
     return TRUE;
 
-  result = gnc_verify_cancel_dialog_parented(gsr->window, GNC_VERIFY_YES,
-					     message);
+  result = gnc_verify_cancel_dialog(gsr->window, GTK_RESPONSE_YES, message);
   switch (result)
   {
-    case GNC_VERIFY_YES:
-    case GNC_VERIFY_OK:
+    case GTK_RESPONSE_YES:
+    case GTK_RESPONSE_OK:
       gnc_split_reg_record_trans_cb( gsr->window, gsr );
       return TRUE;
 
-    case GNC_VERIFY_NO:
+    case GTK_RESPONSE_NO:
       gnc_split_register_cancel_cursor_trans_changes( reg );
       return TRUE;
 
-    case GNC_VERIFY_CANCEL:
+    case GTK_RESPONSE_CANCEL:
       return FALSE;
   }
   return TRUE;
@@ -1107,7 +1106,8 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
     kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
     if ( kvp_val ) {
       // GUID *fromSXId = kvp_value_get_guid( kvp_val );
-      gnc_error_dialog(_("This transaction has already been reversed."));
+      gnc_error_dialog(gsr->window,
+		       _("This transaction has already been reversed."));
       return;
     }
   }
@@ -1170,11 +1170,11 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   if (xaccTransHasReconciledSplits (trans)) {
     buf = g_strconcat (message, "\n\n", recn_warn, NULL);
     result =
-      gnc_generic_warning_dialog_parented(gsr->window, two_choices, buf);
+      gnc_generic_warning_dialog(gsr->window, two_choices, buf);
   } else {
       buf = g_strdup (message);
       result =
-        gnc_generic_question_dialog_parented(gsr->window, two_choices,buf);
+        gnc_generic_question_dialog(gsr->window, two_choices,buf);
   }
   g_free(buf);
   if (!result)
@@ -1263,7 +1263,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     char recn;
 
     if (split == gnc_split_register_get_current_trans_split (reg, NULL)) {
-      gnc_error_dialog(anchor_split);
+      gnc_error_dialog(gsr->window, anchor_split);
       return;
     }
 
@@ -1285,10 +1285,10 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
       g_free (buf);
       buf = new_buf;
       result =
-        gnc_generic_warning_dialog_parented(gsr->window, two_choices, "%s", buf);
+        gnc_generic_warning_dialog(gsr->window, two_choices, "%s", buf);
     } else {
       result =
-        gnc_generic_question_dialog_parented(gsr->window, two_choices, "%s", buf);
+        gnc_generic_question_dialog(gsr->window, two_choices, "%s", buf);
     }
     g_free(buf);
 
@@ -1315,11 +1315,11 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     if (xaccTransHasReconciledSplits (trans)) {
       buf = g_strconcat (message, "\n\n", recn_warn, NULL);
       result =
-        gnc_generic_warning_dialog_parented(gsr->window, two_choices, buf);
+        gnc_generic_warning_dialog(gsr->window, two_choices, buf);
     } else {
       buf = g_strdup (message);
       result =
-        gnc_generic_question_dialog_parented(gsr->window, two_choices, buf);
+        gnc_generic_question_dialog(gsr->window, two_choices, buf);
     }
 
     g_free (buf);
@@ -2220,7 +2220,7 @@ gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
 
-  gnc_warning_dialog_parented(args->gsr->window, "%s", args->string);
+  gnc_warning_dialog(args->gsr->window, "%s", args->string);
   g_free(args);
   return FALSE;
 }

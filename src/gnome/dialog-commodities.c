@@ -261,7 +261,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
                             "at least one of your accounts. You may\n"
                             "not delete it.");
 
-    gnc_warning_dialog_parented (cd->dialog, message);
+    gnc_warning_dialog (cd->dialog, message);
     g_list_free (accounts);
     return;
   }
@@ -275,14 +275,14 @@ remove_clicked (GtkWidget *widget, gpointer data)
 			    "you sure you want to delete the selected\n"
                             "commodity and its price quotes?");
 
-    do_delete = gnc_verify_dialog_parented (cd->dialog, TRUE, message);
+    do_delete = gnc_verify_dialog (cd->dialog, TRUE, message);
   }
   else
   {
     const char *message = _("Are you sure you want to delete the\n"
                             "selected commodity?");
 
-    do_delete = gnc_verify_dialog_parented (cd->dialog, TRUE, message);
+    do_delete = gnc_verify_dialog (cd->dialog, TRUE, message);
   }
 
   if (do_delete)

@@ -175,7 +175,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc, 
 			      GList *template_list, gboolean dont_ask)
 {
-  if (dont_ask || gnc_verify_dialog_parented
+  if (dont_ask || gnc_verify_dialog
       (parent, 
        FALSE,
        "%s",

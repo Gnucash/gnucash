@@ -69,14 +69,14 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
     name = gtk_entry_get_text (GTK_ENTRY (ntt->name_entry));
     if (name == NULL || *name == '\0') {
       message = _("You must provide a name for this Tax Table.");
-      gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), message);
+      gnc_error_dialog (ntt->dialog, message);
       return;
     }
     if (gncTaxTableLookupByName (ttw->book, name)) {
       message = g_strdup_printf(_(
 			 "You must provide a unique name for this Tax Table.\n"
 			 "Your choice \"%s\" is already in use."), name);
-      gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), "%s", message);
+      gnc_error_dialog (ntt->dialog, "%s", message);
       g_free (message);
       return;
     }
@@ -86,14 +86,14 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
   amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (ntt->amount_entry));
   if (gnc_numeric_negative_p (amount)) {
     message = _("Negative amounts are not allowed.");
-    gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), message);
+    gnc_error_dialog (ntt->dialog, message);
     return;
   }
   if (ntt->type == GNC_AMT_TYPE_PERCENT &&
       gnc_numeric_compare (amount,
 			   gnc_numeric_create (100, 1)) > 0) {
     message = _("Percentage amount must be between 0 and 100.");
-    gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), message);
+    gnc_error_dialog (ntt->dialog, message);
     return;
   }							   
 
@@ -102,7 +102,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
     gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE (ntt->acct_tree));
   if (acc == NULL) {
     message = _("You must choose a Tax Account.");
-    gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), message);
+    gnc_error_dialog (ntt->dialog, message);
     return;
   }
 
@@ -509,14 +509,14 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     char *message =
       g_strdup_printf (_("Tax table \"%s\" is in use.  You cannot delete it."),
 		       gncTaxTableGetName (ttw->current_table));
-    gnc_error_dialog_parented (GTK_WINDOW (ttw->dialog), "%s", message);
+    gnc_error_dialog (ttw->dialog, "%s", message);
     g_free (message);
     return;
   }
 
-  if (gnc_verify_dialog_parented (ttw->dialog, FALSE,
-				  _("Are you sure you want to delete \"%s\"?"),
-				  gncTaxTableGetName (ttw->current_table))) {
+  if (gnc_verify_dialog (ttw->dialog, FALSE,
+			 _("Are you sure you want to delete \"%s\"?"),
+			 gncTaxTableGetName (ttw->current_table))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
     gncTaxTableBeginEdit (ttw->current_table);
@@ -554,12 +554,12 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
   if (g_list_length (gncTaxTableGetEntries (ttw->current_table)) <= 1) {
     char *message = _("You cannot remove the last entry from the tax table.\n"
 		      "Try deleting the tax table if you want to do that.");
-    gnc_error_dialog_parented (GTK_WINDOW (ttw->dialog), message);
+    gnc_error_dialog (ttw->dialog, message);
     return;
   }
 
-  if (gnc_verify_dialog_parented (ttw->dialog, FALSE,
-			  _("Are you sure you want to delete this entry?"))) {
+  if (gnc_verify_dialog (ttw->dialog, FALSE,
+			 _("Are you sure you want to delete this entry?"))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
     gncTaxTableBeginEdit (ttw->current_table);

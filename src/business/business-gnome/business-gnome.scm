@@ -126,7 +126,7 @@
 			    "\n"))))
 		 bills)
 
-		(gnc:info-dialog message)))))))
+		(gnc:info-dialog #f message)))))))
 
 
 (define (add-customer-items)

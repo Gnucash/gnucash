@@ -1727,8 +1727,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     if (!confirm)
       return TRUE;
 
-    confirm = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                          FALSE, message);
+    confirm = gnc_verify_dialog (gnc_split_register_get_parent (reg),
+				 FALSE, message);
 
     info->change_confirmed = confirm;
 

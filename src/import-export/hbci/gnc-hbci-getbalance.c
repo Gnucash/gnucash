@@ -216,7 +216,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
     {
       char *booked_str = HBCI_Value_toReadableString (booked_val);
 
-      dialogres = gnc_verify_dialog_parented
+      dialogres = gnc_verify_dialog
 	(parent, 
 	 TRUE,
 	 /* Translators: %s is the amount. */

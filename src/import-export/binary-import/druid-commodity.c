@@ -411,9 +411,9 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   if((strlen(new_type) == 0) ||
      (strlen(new_name) == 0) ||
      (strlen(new_mnemonic) == 0)) {
-    gnc_warning_dialog_parented(cd->window,
-                                _("You must put values for the type, name,\n"
-                                  "and abbreviation of the currency/stock."));
+    gnc_warning_dialog(cd->window,
+		       _("You must put values for the type, name,\n"
+			 "and abbreviation of the currency/stock."));
 
     return TRUE;
   }
@@ -422,9 +422,9 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
       !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    new_type, new_mnemonic))
   {
-    gnc_warning_dialog_parented(cd->window,
-                                _("You must enter an existing national "
-                                  "currency or enter a different type."));
+    gnc_warning_dialog(cd->window,
+		       _("You must enter an existing national "
+			 "currency or enter a different type."));
 
     return TRUE;
   }

@@ -84,6 +84,7 @@ gnc_file_init (void)
 static gboolean
 show_session_error (QofBackendError io_error, const char *newfile)
 {
+  GtkWidget *parent = gnc_ui_get_toplevel();
   gboolean uh_oh = TRUE;
   const char *fmt;
 
@@ -98,38 +99,38 @@ show_session_error (QofBackendError io_error, const char *newfile)
     case ERR_BACKEND_NO_BACKEND:
       fmt = _("The URL \n    %s\n"
               "is not supported by this version of GnuCash.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_BAD_URL:
       fmt = _("Can't parse the URL\n   %s\n");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_CANT_CONNECT:
       fmt = _("Can't connect to\n   %s\n"
               "The host, username or password were incorrect.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_CONN_LOST:
       fmt = _("Can't connect to\n   %s\n"
               "Connection was lost, unable to send data.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_TOO_NEW:
       fmt = _("This file/URL appears to be from a newer version\n"
               "of GnuCash. You must upgrade your version of GnuCash\n"
               "to work with this data.");
-      gnc_error_dialog (fmt);
+      gnc_error_dialog (parent, fmt);
       break;
 
     case ERR_BACKEND_NO_SUCH_DB:
       fmt = _("The database\n"
               "   %s\n"
               "doesn't seem to exist. Do you want to create it?\n");
-      if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, fmt, newfile)) { uh_oh = FALSE; }
       break;
 
     case ERR_BACKEND_LOCKED:
@@ -138,7 +139,7 @@ show_session_error (QofBackendError io_error, const char *newfile)
               "That database may be in use by another user,\n"
               "in which case you should not open the database.\n"
               "\nDo you want to proceed with opening the database?");
-      if (gnc_verify_dialog (TRUE, fmt, newfile)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, fmt, newfile)) { uh_oh = FALSE; }
       break;
 
     case ERR_BACKEND_READONLY:
@@ -146,68 +147,68 @@ show_session_error (QofBackendError io_error, const char *newfile)
               "   %s.\n"
               "That database may be on a read-only file system,\n"
 	      "or you may not have write permission for the directory.\n");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_DATA_CORRUPT:
       fmt = _("The file/URL \n    %s\n"
               "does not contain GnuCash data or the data is corrupt.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_SERVER_ERR:
       fmt = _("The server at URL \n    %s\n"
               "experienced an error or encountered bad or corrupt data.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_PERM:
       fmt = _("You do not have permission to access\n    %s\n");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_MISC:
       fmt = _("An error occurred while processing\n    %s\n");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_BAD_READ:
       fmt = _("There was an error reading the file.\n"
               "Do you want to continue?");
-      if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_PARSE_ERROR:
       fmt = _("There was an error parsing the file \n    %s\n");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_EMPTY:
       fmt = _("The file \n    %s\n is empty.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
       fmt = _("The file \n    %s\n could not be found.");
-      gnc_error_dialog (fmt, newfile);
+      gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_TOO_OLD:
       fmt = _("This file is from an older version of GnuCash.\n"
               "Do you want to continue?");
-      if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_UNKNOWN_FILE_TYPE:
       fmt = _("Unknown file type");
-      gnc_error_dialog(fmt, newfile);
+      gnc_error_dialog(parent, fmt, newfile);
       break;
       
     case ERR_SQL_DB_TOO_OLD:
       fmt = _("This database is from an older version of GnuCash.\n"
               "Do you want to want to upgrade the database "
               "to the current version?");
-      if (gnc_verify_dialog (TRUE, fmt)) { uh_oh = FALSE; }
+      if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_SQL_DB_BUSY:
@@ -216,13 +217,13 @@ show_session_error (QofBackendError io_error, const char *newfile)
               "If there are currently no other users, consult the \n"
               "documentation to learn how to clear out dangling login\n"
               "sessions.");
-      gnc_error_dialog (fmt);
+      gnc_error_dialog (parent, fmt);
       break;
 
     default:
       PERR("FIXME: Unhandled error %d", io_error);
       fmt = _("An unknown I/O error occurred.");
-      gnc_error_dialog (fmt);
+      gnc_error_dialog (parent, fmt);
       break;
   }
 
@@ -303,6 +304,8 @@ gnc_file_new (void)
 gboolean
 gnc_file_query_save (void)
 {
+  GtkWidget *parent = gnc_ui_get_toplevel();
+
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
    * Pose the question as a "while" loop, so that if user screws
@@ -316,18 +319,18 @@ gnc_file_query_save (void)
                             "Save. Save the data to file?");
 
     if (can_cancel_cb && can_cancel_cb ())
-      result = gnc_verify_cancel_dialog (GNC_VERIFY_YES, message);
+      result = gnc_verify_cancel_dialog (parent, GTK_RESPONSE_YES, message);
     else
     {
-      gboolean do_save = gnc_verify_dialog (TRUE, message);
+      gboolean do_save = gnc_verify_dialog (parent, TRUE, message);
 
-      result = do_save ? GNC_VERIFY_YES : GNC_VERIFY_NO;
+      result = do_save ? GTK_RESPONSE_YES : GTK_RESPONSE_NO;
     }
 
-    if (result == GNC_VERIFY_CANCEL)
+    if (result == GTK_RESPONSE_CANCEL)
       return FALSE;
 
-    if (result == GNC_VERIFY_NO)
+    if (result == GTK_RESPONSE_NO)
       return TRUE;
 
     gnc_file_save ();
@@ -402,9 +405,9 @@ gnc_post_file_open (const char * filename)
     int rc;
 
     if (shutdown_cb) {
-      rc = gnc_generic_question_dialog (buttons, fmt, newfile);
+      rc = gnc_generic_question_dialog (NULL, buttons, fmt, newfile);
     } else {
-      rc = gnc_generic_question_dialog (buttons+1, fmt, newfile)+1;
+      rc = gnc_generic_question_dialog (NULL, buttons+1, fmt, newfile)+1;
     }
 
     if (rc == 0)
@@ -622,7 +625,7 @@ gnc_file_export_file(const char * newfile)
                            "Are you sure you want to overwrite it?");
 
     /* if user says cancel, we should break out */
-    if (!gnc_verify_dialog (FALSE, format, newfile))
+    if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
     {
       return;
     }
@@ -650,7 +653,7 @@ gnc_file_export_file(const char * newfile)
     /* %s is the strerror(3) error string of the error that occurred. */
     const char *format = _("There was an error saving the file.\n\n%s");
 
-    gnc_error_dialog_parented (NULL, format, strerror(errno));
+    gnc_error_dialog (NULL, format, strerror(errno));
     return;
   }
 }
@@ -820,7 +823,7 @@ gnc_file_save_as (void)
                            "Are you sure you want to overwrite it?");
 
     /* if user says cancel, we should break out */
-    if (!gnc_verify_dialog (FALSE, format, newfile))
+    if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
     {
       g_free (newfile);
       return;

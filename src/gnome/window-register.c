@@ -1486,11 +1486,11 @@ gnc_register_void_trans_cb(GtkWidget *w, gpointer data)
   if (trans == NULL)
     return;
   if (xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(_("This transaction has already been voided."));
+    gnc_error_dialog(NULL, _("This transaction has already been voided."));
     return;
   }
   if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
-    gnc_error_dialog(_("You cannot void a transaction with reconciled or cleared splits."));
+    gnc_error_dialog(NULL, _("You cannot void a transaction with reconciled or cleared splits."));
     return;
   }
 
@@ -1535,7 +1535,7 @@ gnc_register_unvoid_trans_cb(GtkWidget *w, gpointer data)
   reg = gnc_ledger_display_get_split_register (regData->ledger);
   trans = gnc_split_register_get_current_trans (reg);
   if (!xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(_("This transaction is not voided."));
+    gnc_error_dialog(NULL, _("This transaction is not voided."));
     return;
   }
   gnc_split_register_unvoid_current_trans

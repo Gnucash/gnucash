@@ -449,15 +449,14 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   /* check a few error conditions before we get started */
   if(strlen(path_to_load) == 0) {
     /* stay here if no file specified */
-    gnc_error_dialog_parented(GTK_WINDOW(wind->window), 
-                              _("Please select a file to load.\n"));
+    gnc_error_dialog(wind->window, _("Please select a file to load.\n"));
     return TRUE;
   }
   else if ((strlen(path_to_load) > 0) && access(path_to_load, R_OK) < 0) {
     /* stay here if bad file */
-    gnc_error_dialog_parented(GTK_WINDOW(wind->window), 
-                              _("File not found or read permission denied.\n"
-                                "Please select another file."));
+    gnc_error_dialog(wind->window, 
+		     _("File not found or read permission denied.\n"
+		       "Please select another file."));
     return TRUE;
   }
   else {
@@ -467,7 +466,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     
     if(scm_call_2(qif_file_loaded, scm_filename, wind->imported_files)
        == SCM_BOOL_T) {
-      gnc_error_dialog_parented(GTK_WINDOW(wind->window),
+      gnc_error_dialog(wind->window,
                                 _("That QIF file is already loaded.\n"
                                   "Please select another file."));
       return TRUE;
@@ -494,26 +493,25 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     if(SCM_LISTP(load_return) &&
        (SCM_CAR(load_return) == SCM_BOOL_T)) {
       char *warn_str = gh_scm2newstr(SCM_CADR(load_return), NULL);
-      gnc_warning_dialog_parented(GTK_WIDGET(wind->window),
-				  _("QIF file load warning:\n%s"),
-				  warn_str ? warn_str : "(null)");
+      gnc_warning_dialog(GTK_WIDGET(wind->window),
+			 _("QIF file load warning:\n%s"),
+			 warn_str ? warn_str : "(null)");
       free (warn_str);
     }
 
     /* check success of the file load */
     if(load_return == SCM_BOOL_F) {
-      gnc_error_dialog_parented(GTK_WINDOW(wind->window), 
-                                _( "An error occurred while "
-                                   "loading the QIF file."));
+      gnc_error_dialog(wind->window, 
+		       _( "An error occurred while loading the QIF file."));
       return TRUE;
     }
     else if ((load_return != SCM_BOOL_T) &&
              (!SCM_LISTP(load_return) || 
               (SCM_CAR(load_return) != SCM_BOOL_T))) {
       char *warn_str = gh_scm2newstr(SCM_CADR(load_return), NULL);
-      gnc_error_dialog_parented(GTK_WINDOW(wind->window),
-				_("QIF file load failed:\n%s"),
-				warn_str ? warn_str : "(null)");
+      gnc_error_dialog(wind->window,
+		       _("QIF file load failed:\n%s"),
+		       warn_str ? warn_str : "(null)");
       free (warn_str);
 
       imported_files = 
@@ -570,9 +568,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
       /* Can this ever happen??? */
       if(parse_return == SCM_BOOL_F) {
-        gnc_error_dialog_parented(GTK_WINDOW(wind->window),
-                                  _("An error occurred while parsing the "
-                                    "QIF file."));
+        gnc_error_dialog(wind->window,
+			 _("An error occurred while parsing the QIF file."));
         imported_files = 
           scm_call_2(unload_qif_file, scm_qiffile, imported_files);
         return TRUE;
@@ -581,9 +578,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
          (!SCM_LISTP(parse_return) ||
           (SCM_CAR(parse_return) != SCM_BOOL_T))) {
         char *warn_str = gh_scm2newstr(SCM_CDADR(parse_return), NULL);
-        gnc_error_dialog_parented(GTK_WINDOW(wind->window),
-				  _("QIF file parse failed:\n%s"),
-				  warn_str ? warn_str : "(null)");
+        gnc_error_dialog(wind->window,
+			 _("QIF file parse failed:\n%s"),
+			 warn_str ? warn_str : "(null)");
         free(warn_str);
 
         imported_files = 
@@ -822,8 +819,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
   SCM    scm_name;
 
   if(!acct_name || acct_name[0] == 0) {
-    gnc_warning_dialog_parented(wind->window,
-                                _("You must enter an account name."));
+    gnc_warning_dialog(wind->window, _("You must enter an account name."));
     return TRUE;
   }
   else {
@@ -1183,10 +1179,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   gnc_unset_busy_cursor(NULL);
 
   if(retval == SCM_BOOL_F) {
-    gnc_error_dialog_parented(GTK_WINDOW(wind->window),
-                              _("An error occurred while importing "
-                                "QIF transactions into GnuCash. Your "
-                                "accounts are unchanged."));    
+    gnc_error_dialog(wind->window,
+		     _("An error occurred while importing "
+		       "QIF transactions into GnuCash. Your "
+		       "accounts are unchanged."));    
     scm_unprotect_object(wind->imported_account_group);
     wind->imported_account_group = SCM_BOOL_F;
     scm_protect_object(wind->imported_account_group);
@@ -1395,17 +1391,17 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   int  show_matches;
 
   if(!namespace || (namespace[0] == 0)) {
-    gnc_warning_dialog_parented(wind->window,
-                                _("You must enter a Type for the commodity."));
+    gnc_warning_dialog(wind->window,
+		       _("You must enter a Type for the commodity."));
     return TRUE;
   }
   else if(!name || (name[0] == 0)) {
-    gnc_warning_dialog_parented(wind->window,
-                                _("You must enter a name for the commodity."));
+    gnc_warning_dialog(wind->window,
+		       _("You must enter a name for the commodity."));
     return TRUE;
   }
   else if(!mnemonic || (mnemonic[0] == 0)) {
-    gnc_warning_dialog_parented
+    gnc_warning_dialog
       (wind->window, _("You must enter an abbreviation for the commodity."));
     return TRUE;
   }
@@ -1414,9 +1410,9 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
       !gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                    namespace, mnemonic))
   {
-    gnc_warning_dialog_parented(wind->window,
-                                _("You must enter an existing national "
-                                  "currency or enter a different type."));
+    gnc_warning_dialog(wind->window,
+		       _("You must enter an existing national "
+			 "currency or enter a different type."));
 
     return TRUE;
   }

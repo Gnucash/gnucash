@@ -271,7 +271,7 @@
 ;          ((vest) 
 ;           'vest)
           (else
-           (gnc:warning-dialog 
+           (gnc:warning-dialog #f
             (string-append
              (sprintf #f (_ "The file contains an unknown Action '%s'.")
                       read-value)

@@ -608,17 +608,17 @@
      ((eq? fq-call-data #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog  (_ "No commodities marked for quote retrieval."))
+          (gnc:error-dialog #f (_ "No commodities marked for quote retrieval."))
 	  (gnc:warn (_ "No commodities marked for quote retrieval."))))
      ((eq? fq-results #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog  (_ "Unable to get quotes or diagnose the problem."))
+          (gnc:error-dialog #f (_ "Unable to get quotes or diagnose the problem."))
 	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog
+          (gnc:error-dialog #f
            (_ "You are missing some needed Perl libraries.
 Run 'update-finance-quote' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
@@ -626,17 +626,17 @@ Run 'update-finance-quote' as root to install them.") "\n")))
      ((member 'system-error fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog
+          (gnc:error-dialog #f
            (_ "There was a system error while retrieving the price quotes."))
           (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog
+          (gnc:error-dialog #f
            (_ "There was an unknown error while retrieving the price quotes."))
           (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
      ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
-      (gnc:error-dialog
+      (gnc:error-dialog #f
        (_ "Unable to get quotes or diagnose the problem."))
        (set! keep-going? #f))
      ((not commod-tz-quote-triples)
@@ -647,7 +647,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
           (if (and ok-syms (not (null? ok-syms)))
               (set!
                keep-going?
-               (gnc:verify-dialog #t
+               (gnc:verify-dialog #f #t
                 (call-with-output-string
                  (lambda (p)
                    (display (_ "Unable to retrieve quotes for these items:") p)
@@ -657,7 +657,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
                    (newline p)
                    (display (_ "Continue using only the good quotes?") p)))))
               (begin
-                (gnc:error-dialog
+                (gnc:error-dialog #f
                  (call-with-output-string
                   (lambda (p)
                     (display
@@ -686,7 +686,7 @@ Run 'update-finance-quote' as root to install them.") "\n")))
            (if (gnc:ui-is-running?)
                (set!
                 keep-going?
-                (gnc:verify-dialog #t
+                (gnc:verify-dialog #f #t
                  (call-with-output-string
                   (lambda (p)
                     (display (_ "Unable to create prices for these items:") p)

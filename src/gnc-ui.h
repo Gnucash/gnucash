@@ -51,61 +51,50 @@
 
 typedef enum
 {
-  GNC_VERIFY_NO,
-  GNC_VERIFY_YES,
-  GNC_VERIFY_CANCEL,
-  GNC_VERIFY_OK
+  GTK_RESPONSE_NO,
+  GTK_RESPONSE_YES,
+  GTK_RESPONSE_CANCEL,
+  GTK_RESPONSE_OK
 } GNCVerifyResult;
 
 extern GNCVerifyResult
-gnc_verify_cancel_dialog(GNCVerifyResult default_result,
-			 const char *format, ...) G_GNUC_PRINTF (2, 3);
-extern GNCVerifyResult
-gnc_verify_cancel_dialog_parented(gncUIWidget parent,
-				  GNCVerifyResult default_result,
-				  const char *format, ...) G_GNUC_PRINTF (3,4);
+gnc_verify_cancel_dialog(gncUIWidget parent,
+			 GNCVerifyResult default_result,
+			 const char *format, ...) G_GNUC_PRINTF (3,4);
 
 
 
 extern gboolean
-gnc_verify_dialog(gboolean yes_is_default,
-		  const char *format, ...) G_GNUC_PRINTF (2, 3);
-extern gboolean
-gnc_verify_dialog_parented(gncUIWidget parent,
-			   gboolean yes_is_default,
-			   const char *format, ...) G_GNUC_PRINTF (3, 4);
+gnc_verify_dialog(gncUIWidget parent,
+		  gboolean yes_is_default,
+		  const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 
 
 extern GNCVerifyResult
-gnc_ok_cancel_dialog(GNCVerifyResult default_result,
-		     const char *format, ...) G_GNUC_PRINTF (2, 3);
-extern GNCVerifyResult
-gnc_ok_cancel_dialog_parented(gncUIWidget parent,
-			      GNCVerifyResult default_result,
-			      const char *format, ...) G_GNUC_PRINTF (3,4);
+gnc_ok_cancel_dialog(gncUIWidget parent,
+		     GNCVerifyResult default_result,
+		     const char *format, ...) G_GNUC_PRINTF (3,4);
 
 
 
 extern void
-gnc_warning_dialog_parented(gncUIWidget parent,
-			    const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+gnc_warning_dialog(gncUIWidget parent,
+		   const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
 
 
 extern void
-gnc_error_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
-extern void
-gnc_error_dialog_parented(GtkWindow *parent,
-			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+gnc_error_dialog(GtkWidget *parent,
+		 const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
 
 
-int      gnc_choose_radio_option_dialog_parented (gncUIWidget parent,
-                                                  const char *title,
-                                                  const char *msg,
-                                                  int default_value,
-                                                  GList *radio_list);
+int      gnc_choose_radio_option_dialog (gncUIWidget parent,
+					 const char *title,
+					 const char *msg,
+					 int default_value,
+					 GList *radio_list);
 
 gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);

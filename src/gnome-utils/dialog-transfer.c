@@ -485,10 +485,10 @@ gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
   if (error_string == NULL)
     error_string = "";
 
-  gnc_error_dialog_parented (GTK_WINDOW(xferData->dialog),
-			     "%s\n\n%s: %s.",
-			     error_string, _("Error"),
-			     parse_error_string);
+  gnc_error_dialog (xferData->dialog,
+		    "%s\n\n%s: %s.",
+		    error_string, _("Error"),
+		    parse_error_string);
 }
 
 /*** Callbacks for description quickfill. ***/
@@ -1331,7 +1331,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       const char *message = _("You must specify an account to transfer from,\n"
 			      "or to, or both, for this transaction.\n"
 			      "Otherwise, it will not be recorded.");
-      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      gnc_error_dialog(xferData->dialog, message);
       LEAVE("bad account");
       return;
     }
@@ -1340,7 +1340,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     {
       const char *message = _("You can't transfer from and to the same "
 			      "account!");
-      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      gnc_error_dialog(xferData->dialog, message);
       LEAVE("same account");
       return;
     }
@@ -1358,7 +1358,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       else
 	name = xaccAccountGetFullName(to_account,
 				      gnc_get_account_separator ());
-      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), placeholder_format, name);
+      gnc_error_dialog(xferData->dialog, placeholder_format, name);
       g_free(name);
       LEAVE("placeholder");
       return;
@@ -1369,7 +1369,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       const char *message = _("You can't transfer from a non-currency account.  "
 			      "Try reversing the \"from\" and \"to\" accounts "
 			      "and making the \"amount\" negative.");
-      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+      gnc_error_dialog(xferData->dialog, message);
       LEAVE("non-currency");
       return;
     }
@@ -1391,7 +1391,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   if (gnc_numeric_zero_p (amount))
   {
     const char *message = _("You must enter an amount to transfer.");
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
+    gnc_error_dialog(xferData->dialog, message);
     LEAVE("invalid from amount");
     return;
   }

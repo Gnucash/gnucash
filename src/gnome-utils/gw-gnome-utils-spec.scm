@@ -248,7 +248,8 @@
    'gnc:error-dialog
    '<gw:void>
    "gnc_error_dialog"
-   '(((<gw:mchars> caller-owned const) message))
+   '((<gtk:Widget*> window)
+     ((<gw:mchars> caller-owned const) message))
    "Show ok dialog box with given error message.")
 
   (gw:wrap-function
@@ -256,7 +257,8 @@
    'gnc:verify-dialog
    '<gw:bool>
    "gnc_verify_dialog"
-   '((<gw:bool> yes_is_default)
+   '((<gtk:Widget*> window)
+     (<gw:bool> yes_is_default)
      ((<gw:mchars> caller-owned const) message))
    "Show yes/no dialog box with given message.")
 
@@ -265,7 +267,8 @@
    'gnc:info-dialog
    '<gw:void>
    "gnc_info_dialog"
-   '(((<gw:mchars> caller-owned const) message))
+   '((<gtk:Widget*> window)
+     ((<gw:mchars> caller-owned const) message))
    "Show ok dialog box with given message.")
 
   (gw:wrap-function
@@ -273,7 +276,8 @@
    'gnc:warning-dialog
    '<gw:void>
    "gnc_warning_dialog"
-   '(((<gw:mchars> caller-owned const) message))
+   '((<gtk:Widget*> window)
+     ((<gw:mchars> caller-owned const) message))
    "Show warning dialog box with given message.")
 
   (gw:wrap-function
@@ -286,9 +290,9 @@
 
   (gw:wrap-function
    ws
-   'gnc:choose-radio-option-dialog-parented
+   'gnc:choose-radio-option-dialog
    '<gw:int>
-   "gnc_choose_radio_option_dialog_parented"
+   "gnc_choose_radio_option_dialog"
    '((<gnc:UIWidget> parent)
      ((<gw:mchars> caller-owned const) title)
      ((<gw:mchars> caller-owned const) msg)

@@ -611,7 +611,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
 
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
-	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+	  gnc_error_dialog(NULL, _("Secure HTTP access is disabled.\n"
 			     "You can enable it in the Network section of\n"
 			     "the Preferences dialog."));
 	  break;
@@ -619,7 +619,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       }
 
       if(!http_allowed()) {
-	gnc_error_dialog(_("Network HTTP access is disabled.\n"
+	gnc_error_dialog(NULL, _("Network HTTP access is disabled.\n"
 			   "You can enable it in the Network section of\n"
 			   "the Preferences dialog."));
       } else {
@@ -925,7 +925,7 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
       }
     }
     else {
-      gnc_error_dialog(_("GnuCash Network is disabled and the link "
+      gnc_error_dialog(NULL, _("GnuCash Network is disabled and the link "
                          "you have clicked requires it.\n"
                          "You can enable it in the Network section\n"
                          "of the Preferences dialog."));
@@ -1038,10 +1038,11 @@ gnc_html_show_url(gnc_html * html, URLType type,
     if (!ok)
     {
       if (result.error_message)
-        gnc_error_dialog(result.error_message);
+        gnc_error_dialog(NULL, result.error_message);
       else
 	/* %s is a URL (some location somewhere). */
-        gnc_error_dialog(_("There was an error accessing %s."), location);
+        gnc_error_dialog(NULL,
+			 _("There was an error accessing %s."), location);
 
       if (html->load_cb)
         html->load_cb (html, result.url_type,
@@ -1099,7 +1100,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
     do {
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
-	  gnc_error_dialog(_("Secure HTTP access is disabled.\n"
+	  gnc_error_dialog(NULL, _("Secure HTTP access is disabled.\n"
 			     "You can enable it in the Network section of\n"
 			     "the Preferences dialog."));
 	  break;
@@ -1108,7 +1109,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
 
       if (safe_strcmp (type, URL_TYPE_FILE)) {
 	if(!http_allowed()) {
-	  gnc_error_dialog(_("Network HTTP access is disabled.\n"
+	  gnc_error_dialog(NULL, _("Network HTTP access is disabled.\n"
 			     "You can enable it in the Network section of\n"
 			     "the Preferences dialog."));
 	  break;

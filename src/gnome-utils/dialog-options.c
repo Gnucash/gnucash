@@ -1580,7 +1580,7 @@ gnc_show_options_dialog(void)
 
   if (gnc_option_db_num_sections(global_options) == 0)
   {
-    gnc_warning_dialog(_("No options!"));
+    gnc_warning_dialog(NULL, _("No options!"));
     return;
   }
 

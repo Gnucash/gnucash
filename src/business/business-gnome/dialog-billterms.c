@@ -228,12 +228,12 @@ verify_term_ok (NewBillTerm *nbt)
   num = gnc_numeric_zero ();
   if (gnc_numeric_negative_p (num)) {
     message = _("Negative amounts are not allowed.");
-    gnc_error_dialog_parented (GTK_WINDOW (nbt->dialog), message);
+    gnc_error_dialog (nbt->dialog, message);
     return FALSE;
   }
   if (gnc_numeric_compare (num, gnc_numeric_create (100, 1)) > 0) {
     message = _("Percentage amount must be between 0 and 100.");
-    gnc_error_dialog_parented (GTK_WINDOW (nbt->dialog), message);
+    gnc_error_dialog (nbt->dialog, message);
     return FALSE;
   }
   return TRUE;
@@ -257,14 +257,14 @@ new_billterm_ok_cb (GtkWidget *widget, gpointer data)
     name = gtk_entry_get_text (GTK_ENTRY (nbt->name_entry));
     if (name == NULL || *name == '\0') {
       message = _("You must provide a name for this Billing Term.");
-      gnc_error_dialog_parented (GTK_WINDOW (nbt->dialog), message);
+      gnc_error_dialog (nbt->dialog, message);
       return;
     }
     if (gncBillTermLookupByName (btw->book, name)) {
       message = g_strdup_printf(_(
 			 "You must provide a unique name for this Billing Term.\n"
 			 "Your choice \"%s\" is already in use."), name);
-      gnc_error_dialog_parented (GTK_WINDOW (nbt->dialog), "%s", message);
+      gnc_error_dialog (nbt->dialog, "%s", message);
       g_free (message);
       return;
     }
@@ -604,15 +604,15 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
     return;
 
   if (gncBillTermGetRefcount (btw->current_term) > 0) {
-    gnc_error_dialog_parented (GTK_WINDOW (btw->dialog),
-			       _("Term \"%s\" is in use.  You cannot delete it."),
-			       gncBillTermGetName (btw->current_term));
+    gnc_error_dialog (btw->dialog,
+		      _("Term \"%s\" is in use.  You cannot delete it."),
+		      gncBillTermGetName (btw->current_term));
     return;
   }
 
-  if (gnc_verify_dialog_parented (btw->dialog, FALSE,
-				  _("Are you sure you want to delete \"%s\"?"),
-				  gncBillTermGetName (btw->current_term))) {
+  if (gnc_verify_dialog (btw->dialog, FALSE,
+			 _("Are you sure you want to delete \"%s\"?"),
+			 gncBillTermGetName (btw->current_term))) {
     /* Ok, let's remove it */
     gnc_suspend_gui_refresh ();
     gncBillTermBeginEdit (btw->current_term);

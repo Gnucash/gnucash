@@ -123,7 +123,7 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
     /* Translators: %s is the string "an Account" i.e. its translation. */
     const char *format = _("Invalid Entry:  You need to supply %s.");
 
-    gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), format, cell_msg);
+    gnc_error_dialog (ledger->parent, format, cell_msg);
     return FALSE;
   }
   return TRUE;
@@ -357,7 +357,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     {
       const char *format = _("The tax table %s does not exist.\n"
                              "Would you like to create it?");
-      if (!gnc_verify_dialog_parented (ledger->parent, TRUE, format, name))
+      if (!gnc_verify_dialog (ledger->parent, TRUE, format, name))
         break;
     }
 
@@ -479,22 +479,21 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
       /* FALLTHROUGH */
     default:
-      result = GNC_VERIFY_YES;
+      result = GTK_RESPONSE_YES;
       goto dontask;
     }
 
-    result = gnc_verify_cancel_dialog_parented (ledger->parent,
-						GNC_VERIFY_YES, message);
+    result = gnc_verify_cancel_dialog(ledger->parent, GTK_RESPONSE_YES, message);
   }
 
 dontask:
 
   switch (result)
   {
-    case GNC_VERIFY_YES:
+    case GTK_RESPONSE_YES:
       break;
 
-    case GNC_VERIFY_NO:
+    case GTK_RESPONSE_NO:
       {
         VirtualCellLocation vcell_loc;
 	GncEntry *new_entry;
@@ -514,7 +513,7 @@ dontask:
 
       break;
 
-    case GNC_VERIFY_CANCEL:
+    case GTK_RESPONSE_CANCEL:
       return TRUE;
 
     default:
@@ -575,7 +574,7 @@ gnc_entry_ledger_check_close_internal (GtkWidget *parent,
   if (!gnc_entry_ledger_verify_can_save (ledger))
     return FALSE;
 
-  if (dontask || gnc_verify_dialog_parented (parent, TRUE, message))
+  if (dontask || gnc_verify_dialog (parent, TRUE, message))
     gnc_entry_ledger_save (ledger, TRUE);
   else
     gnc_entry_ledger_cancel_cursor_changes (ledger);

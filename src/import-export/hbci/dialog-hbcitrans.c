@@ -394,7 +394,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));*/
     if (HBCI_Value_getValue (HBCI_Transaction_value (td->hbci_trans)) == 0.0) {
       gtk_widget_show_all (td->dialog); 
-      values_ok = !gnc_verify_dialog_parented
+      values_ok = !gnc_verify_dialog
 	(GTK_WIDGET (td->dialog),
 	 TRUE,
 	 "%s",
@@ -483,7 +483,7 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
   switch (blzresult) {
   case 2:
     gtk_widget_show_all (parent); 
-    values_ok = gnc_verify_dialog_parented
+    values_ok = gnc_verify_dialog
       (parent,
        TRUE,
        _("The internal check of the destination account number '%s' \n"
@@ -576,7 +576,7 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, HBCI_API *api,
     /* HBCI_API_executeOutbox failed. */
     if ((HBCI_OutboxJob_status (job) == HBCI_JOB_STATUS_DONE) &&
 	(HBCI_OutboxJob_result (job) == HBCI_JOB_RESULT_FAILED)) 
-      successful = !gnc_verify_dialog_parented
+      successful = !gnc_verify_dialog
 	(td->parent, 
 	 FALSE,
 	 "%s",

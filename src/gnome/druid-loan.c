@@ -1015,7 +1015,7 @@ ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd )
 {
         const char *cancelMsg = _( "Are you sure you want to cancel "
                                    "the Mortgage/Loan Setup Druid?" );
-        if ( gnc_verify_dialog_parented( ldd->dialog, FALSE, cancelMsg ) ) {
+        if ( gnc_verify_dialog( ldd->dialog, FALSE, cancelMsg ) ) {
                 gnc_close_gui_component_by_data( DIALOG_LOAN_DRUID_CM_CLASS,
                                                  ldd );
         }
@@ -1129,9 +1129,8 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
         ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
         if ( ldd->ld.primaryAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "loan account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid loan account.") );
                 return TRUE;
         } 
         if ( ! ldd->ld.repPriAcct ) {
@@ -1217,9 +1216,9 @@ ld_opts_save_state( LoanDruidData *ldd )
                 ldd->ld.escrowAcct =
                         gnc_account_sel_get_account( ldd->optEscrowGAS );
                 if ( ldd->ld.escrowAcct == NULL ) {
-                        gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                                  _("Please select a valid "
-                                                    "Escrow Account.") );
+                        gnc_info_dialog( ldd->dialog,
+					 _("Please select a valid "
+					   "Escrow Account.") );
                         return TRUE;
                 }
                 
@@ -1283,25 +1282,23 @@ ld_rep_save( LoanDruidData *ldd )
         ldd->ld.repFromAcct =
                 gnc_account_sel_get_account( ldd->repAssetsFromGAS );
         if ( ldd->ld.repFromAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"from\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid \"from\" account."));
                 return TRUE;
         }
         ldd->ld.repPriAcct =
                 gnc_account_sel_get_account( ldd->repPrincToGAS );
         if ( ldd->ld.repPriAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"to\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid \"to\" account.") );
                 return TRUE;
         }
         ldd->ld.repIntAcct =
                 gnc_account_sel_get_account( ldd->repIntToGAS );
         if ( ldd->ld.repIntAcct == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"interest\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid "
+				   "\"interest\" account.") );
                 return TRUE;
         }
         gnc_frequency_save_state( ldd->repGncFreq,
@@ -1504,18 +1501,18 @@ ld_pay_save_current( LoanDruidData *ldd )
         if ( rod->specSrcAcctP ) {
                 rod->from = gnc_account_sel_get_account( ldd->payAcctFromGAS );
                 if ( rod->from == NULL ) {
-                        gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                                  _("Please select a valid "
-                                                    "\"from\" account.") );
+                        gnc_info_dialog( ldd->dialog,
+					 _("Please select a valid "
+					   "\"from\" account.") );
                         return TRUE;
                 }
         }
 
         rod->to   = gnc_account_sel_get_account( ldd->payAcctToGAS );
         if ( rod->to == NULL ) {
-                gnc_info_dialog_parented( GTK_WINDOW(ldd->dialog),
-                                          _("Please select a valid "
-                                            "\"to\" account.") );
+                gnc_info_dialog( ldd->dialog,
+				 _("Please select a valid "
+				   "\"to\" account.") );
                 return TRUE;
         }
         

@@ -993,9 +993,8 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
       gnc_commodity_set_quote_tz(c, string);
       return;
     }
-    gnc_warning_dialog_parented(w->dialog,
-                                _("You may not create a new national "
-                                  "currency."));
+    gnc_warning_dialog(w->dialog,
+		       _("You may not create a new national currency."));
     return;
   }
 
@@ -1007,8 +1006,7 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
 
     if ((!w->edit_commodity && c) ||
         (w->edit_commodity && c && (c != w->edit_commodity))) {
-      gnc_warning_dialog_parented (w->dialog,
-                                   _("That commodity already exists."));
+      gnc_warning_dialog (w->dialog, _("That commodity already exists."));
       return;
     }
 
@@ -1047,10 +1045,10 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     c = gnc_commodity_table_insert(gnc_get_current_commodities(), c);
   }
   else {
-    gnc_warning_dialog_parented(w->dialog,
-                                _("You must enter a non-empty \"Full name\", "
-                                  "\"Symbol/abbreviation\",\n"
-                                  "and \"Type\" for the commodity."));
+    gnc_warning_dialog(w->dialog,
+		       _("You must enter a non-empty \"Full name\", "
+			 "\"Symbol/abbreviation\",\n"
+			 "and \"Type\" for the commodity."));
   }
   LEAVE(" ");
 }

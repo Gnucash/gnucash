@@ -113,7 +113,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     else
       default_value = 0;
 
-    choice = gnc_choose_radio_option_dialog_parented
+    choice = gnc_choose_radio_option_dialog
       (gnc_split_register_get_parent (reg),
        title,
        message,
@@ -1060,7 +1060,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   /* If this is an un-expanded, multi-split transaction, then warn the user */
   if (force_dialog && !expanded && ! xfer_acc) {
-    gnc_error_dialog (message);
+    gnc_error_dialog (gnc_split_register_get_parent (reg), message);
     return TRUE;
   }
 
@@ -1109,7 +1109,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (!expanded && osplit &&
       gnc_split_register_split_needs_amount (reg, split) &&
       gnc_split_register_split_needs_amount (reg, osplit)) {
-    gnc_error_dialog (message);
+    gnc_error_dialog (gnc_split_register_get_parent (reg), message);
     return TRUE;
   }
 
@@ -1452,17 +1452,17 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     message = _("The current transaction has been changed.\n"
                 "Would you like to record it?");
 
-    result = gnc_verify_cancel_dialog_parented
+    result = gnc_verify_cancel_dialog
       (gnc_split_register_get_parent (reg),
-       GNC_VERIFY_YES, message);
+       GTK_RESPONSE_YES, message);
   }
 
   switch (result)
   {
-    case GNC_VERIFY_YES:
+    case GTK_RESPONSE_YES:
       break;
 
-    case GNC_VERIFY_NO:
+    case GTK_RESPONSE_NO:
       {
         VirtualCellLocation vcell_loc;
         Split *new_split;
@@ -1490,7 +1490,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
       break;
 
-    case GNC_VERIFY_CANCEL:
+    case GTK_RESPONSE_CANCEL:
       return TRUE;
 
     default:
@@ -1531,8 +1531,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
     if (!confirm)
       return TRUE;
 
-    return gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
-                                       TRUE, message);
+    return gnc_verify_dialog (gnc_split_register_get_parent (reg),
+			      TRUE, message);
   }
 
   return TRUE;

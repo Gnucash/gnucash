@@ -615,8 +615,8 @@ static void gnc_hbci_addaccount(HBCIInitialInfo *info,
     if ( HBCI_Bank_findAccount (bank, accnr) )
       {
 	/* Yes, then don't create it again */
-	gnc_error_dialog_parented
-	  (GTK_WINDOW (info->window),
+	gnc_error_dialog
+	  (info->window,
 	   _("An account with this account id at this bank already exists."));
       }
     else
@@ -712,7 +712,7 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
   /* file doesn't need to be created here since OpenHBCI will create
      it automatically.*/
 
-  if (!gnc_test_dir_exist_error (GTK_WINDOW (info->window), filename)) {
+  if (!gnc_test_dir_exist_error (info->window, filename)) {
     g_free (filename);
     return TRUE;
   }
@@ -989,8 +989,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 	g_free (mediumname);
 	return TRUE;
       }
-      if (!gnc_test_dir_exist_error (GTK_WINDOW (info->window), 
-				     mediumname)) {
+      if (!gnc_test_dir_exist_error (info->window, mediumname)) {
 	g_free (mediumname);
 	return TRUE;
       }
@@ -1545,13 +1544,13 @@ on_button_clicked (GtkButton *button,
     druid_enable_next_button (info);
   } else if (strcmp (name, "serverno_button") == 0) {
     druid_disable_next_button (info);
-    gnc_error_dialog_parented(GTK_WINDOW (info->window),
-			      _("Since the cryptographic keys of the bank cannot be verified,\n"
-				"you should stop contacting this Server Internet Address\n"
-				"and contact your bank. To help your bank figure out the\n"
-				"problem, you should print out this erroneous Ini-Letter\n"
-				"and show it to your bank. Please abort the HBCI setup\n"
-				"druid now."));
+    gnc_error_dialog(info->window,
+		     _("Since the cryptographic keys of the bank cannot be verified,\n"
+		       "you should stop contacting this Server Internet Address\n"
+		       "and contact your bank. To help your bank figure out the\n"
+		       "problem, you should print out this erroneous Ini-Letter\n"
+		       "and show it to your bank. Please abort the HBCI setup\n"
+		       "druid now."));
   } else if (strcmp (name, "serverprint_button") == 0) {
     gnc_html_print (info->server_html);
   } else if (strcmp (name, "userprint_button") == 0) {
