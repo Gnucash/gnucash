@@ -23,16 +23,12 @@
 
 #include "config.h"
 
-/* GNOME 2 Port (Replace GtkText) */
-
 #include <gnome.h>
-#include "eggtreemodelfilter.h"
 #include <libguile.h>
 
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
-#include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -69,6 +65,7 @@ typedef struct
   GtkWidget * dialog;
 
   GtkWidget * account_treeview;
+  GtkWidget * select_button;
 
   GtkWidget * tax_related_button;
   GtkWidget * txf_category_clist;
@@ -265,16 +262,12 @@ clear_gui (TaxInfoDialog *ti_dialog)
 }
 
 static gboolean
-gnc_tax_info_dialog_account_filter_func (GtkTreeModel *model,
-					 GtkTreeIter  *iter,
+gnc_tax_info_dialog_account_filter_func (Account *account,
 					 gpointer data)
 {
-	TaxInfoDialog *dialog = data;
-	Account *account;
+  TaxInfoDialog *dialog = data;
 
-	account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT (model), iter);
-
-	return xaccAccountGetType (account) == dialog->account_type;
+  return xaccAccountGetType (account) == dialog->account_type;
 }
 
 static TXFInfo *
@@ -404,23 +397,39 @@ window_destroy_cb (GtkObject *object, gpointer data)
 }
 
 static void
+cursor_changed_cb (GtkWidget *widget, gpointer data)
+{
+  TaxInfoDialog *ti_dialog = data;
+  GncTreeViewAccount *account_tree;
+  Account *account;
+  gint num_children;
+
+  account_tree = GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview);
+  account = gnc_tree_view_account_get_cursor_account (account_tree);
+  if (!account) {
+    gtk_widget_set_sensitive(ti_dialog->select_button, FALSE);
+    return;
+  }
+
+  num_children = gnc_tree_view_account_count_children(account_tree, account);
+  gtk_widget_set_sensitive(ti_dialog->select_button, num_children > 0);
+}
+
+static void
 select_subaccounts_clicked (GtkWidget *widget, gpointer data)
 {
-#if 0
   TaxInfoDialog *ti_dialog = data;
-  GNCAccountTree *tree; FIXME
+  GncTreeViewAccount *account_tree;
   Account *account;
 
-  tree = GNC_ACCOUNT_TREE (ti_dialog->account_tree);
-
-  account = gnc_account_tree_get_focus_account (tree);
+  account_tree = GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview);
+  account = gnc_tree_view_account_get_cursor_account (account_tree);
   if (!account)
     return;
 
-  gnc_account_tree_select_subaccounts (tree, account, FALSE);
+  gnc_tree_view_account_select_subaccounts (account_tree, account);
 
-  gtk_widget_grab_focus (ti_dialog->account_tree);
-#endif
+  gtk_widget_grab_focus (ti_dialog->account_treeview);
 }
 
 static void
@@ -455,6 +464,7 @@ tax_info_show_income_accounts (TaxInfoDialog *ti_dialog, gboolean show_income)
   gnc_tree_view_account_set_view_info (tree, &info);
 
   load_category_list (ti_dialog);
+  cursor_changed_cb(GTK_WIDGET(tree), ti_dialog);
 }
 
 static int
@@ -493,10 +503,8 @@ gnc_tax_info_income_cb (GtkWidget *w, gpointer data)
 
   tax_info_show_income_accounts (ti_dialog, show_income);
 
-#if 0
-  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (ti_dialog->account_tree));
-  gnc_account_tree_expand_all (GNC_ACCOUNT_TREE (ti_dialog->account_tree));
-#endif
+  ti_dialog->account_type = show_income ? INCOME : EXPENSE;
+  gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview));
 
   gnc_tax_info_update_accounts (ti_dialog);
 
@@ -550,18 +558,15 @@ txf_code_select_row_cb (GtkCList *clist,
   GtkAdjustment *adj;
   GtkWidget *scroll;
   GtkWidget *frame;
-  GtkEditable *ge;
+  GtkTextBuffer *tb;
   const char *text;
-  gint pos = 0;
 
   txf_info = g_list_nth_data (tax_infos (ti_dialog), row);
 
-  ge = GTK_EDITABLE (ti_dialog->txf_help_text);
+  tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ti_dialog->txf_help_text));
 
   text = (txf_info && txf_info->help) ? txf_info->help : "";
-
-  gtk_editable_delete_text (ge, 0, -1);
-  gtk_editable_insert_text (ge, text, strlen (text), &pos);
+  gtk_text_buffer_set_text (tb, text, -1);
 
   scroll = gnc_glade_lookup_widget (GTK_WIDGET (clist), "help_scroll");
 
@@ -635,6 +640,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   ti_dialog->dialog = dialog;
   tido = GTK_OBJECT (dialog);
 
+  ti_dialog->account_type = EXPENSE;
   ti_dialog->income_txf_infos = load_txf_info (TRUE);
   ti_dialog->expense_txf_infos = load_txf_info (FALSE);
 
@@ -699,16 +705,15 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
   /* account tree */
   {
-    GtkWidget *income_radio, *box;
+    GtkWidget *income_radio, *expense_radio, *box;
     GtkTreeView *tree_view;
     GtkTreeSelection *selection;
 
-    box = glade_xml_get_widget (xml, "account_treeview");
+    box = glade_xml_get_widget (xml, "account_hbox");
     tree_view = gnc_tree_view_account_new (FALSE);
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view), 
 				      gnc_tax_info_dialog_account_filter_func,
 				      ti_dialog, NULL);
-    gtk_tree_view_expand_all (tree_view);
     ti_dialog->account_treeview = GTK_WIDGET(tree_view);
 
     selection = gtk_tree_view_get_selection (tree_view);
@@ -717,27 +722,34 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
                       G_CALLBACK (gnc_tax_info_account_changed_cb),
                       ti_dialog);
 
-    tax_info_show_income_accounts (ti_dialog, FALSE);
-
     gtk_widget_show (ti_dialog->account_treeview);
     gtk_container_add (GTK_CONTAINER (box), ti_dialog->account_treeview);
 
     income_radio = glade_xml_get_widget (xml, "income_radio");
+    expense_radio = glade_xml_get_widget (xml, "expense_radio");
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(expense_radio), TRUE);
     g_signal_connect (G_OBJECT (income_radio), "toggled",
                       G_CALLBACK  (gnc_tax_info_income_cb),
                         ti_dialog);
-  }
+    //   gtk_button_clicked (GtkButton *button);
+ }
 
   /* select subaccounts button */
   {
     GtkWidget *button;
 
     button = glade_xml_get_widget (xml, "select_subaccounts_button");
+    ti_dialog->select_button = button;
+
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK  (select_subaccounts_clicked),
-                        ti_dialog);
+		      ti_dialog);
+    g_signal_connect (G_OBJECT (ti_dialog->account_treeview), "cursor_changed",
+                      G_CALLBACK  (cursor_changed_cb),
+		      ti_dialog);
   }
 
+  tax_info_show_income_accounts (ti_dialog, FALSE);
   gnc_tax_info_update_accounts (ti_dialog);
   clear_gui (ti_dialog);
   gnc_tax_info_set_changed (ti_dialog, FALSE);
