@@ -119,6 +119,7 @@ Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
+Péter Hosszú <hosszu@web.de> Hungarian translation
 Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
@@ -165,6 +166,7 @@ Tomas Pospisek <tpo@spin.ch> Debian patches
 Paul Poulain <famille.p.poulain@free.fr> French translations
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
+Christian Rose <menthos@menthos.com> Swedish translation
 Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
 Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
