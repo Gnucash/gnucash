@@ -116,10 +116,11 @@ static void gncVendorFree (GncVendor *vendor)
 
 /* Set Functions */
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncVendorBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -129,24 +130,27 @@ void gncVendorSetID (GncVendor *vendor, const char *id)
 {
   if (!vendor) return;
   if (!id) return;
-  SET_STR(vendor->id, id);
+  SET_STR(vendor, vendor->id, id);
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetName (GncVendor *vendor, const char *name)
 {
   if (!vendor) return;
   if (!name) return;
-  SET_STR(vendor->name, name);
+  SET_STR(vendor, vendor->name, name);
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetNotes (GncVendor *vendor, const char *notes)
 {
   if (!vendor) return;
   if (!notes) return;
-  SET_STR(vendor->notes, notes);
+  SET_STR(vendor,vendor->notes, notes);
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
@@ -154,29 +158,36 @@ void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
   if (!vendor || !guid) return;
   if (guid_equal (guid, &vendor->guid)) return;
 
+  gncVendorBeginEdit (vendor);
   remObj (vendor);
   vendor->guid = *guid;
   addObj (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
 {
   if (!vendor) return;
   if (vendor->terms == terms) return;
+
+  gncVendorBeginEdit (vendor);
   if (vendor->terms)
     gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
   if (vendor->terms)
     gncBillTermDecRef (vendor->terms);
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetTaxIncluded (GncVendor *vendor, GncTaxIncluded taxincl)
 {
   if (!vendor) return;
   if (taxincl == vendor->taxincluded) return;
+  gncVendorBeginEdit (vendor);
   vendor->taxincluded = taxincl;
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com)
@@ -185,36 +196,44 @@ void gncVendorSetCommodity (GncVendor *vendor, gnc_commodity *com)
   if (vendor->commodity &&
       gnc_commodity_equal (vendor->commodity, com))
     return;
+  gncVendorBeginEdit (vendor);
   vendor->commodity = com;
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetActive (GncVendor *vendor, gboolean active)
 {
   if (!vendor) return;
   if (active == vendor->active) return;
+  gncVendorBeginEdit (vendor);
   vendor->active = active;
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetTaxTableOverride (GncVendor *vendor, gboolean override)
 {
   if (!vendor) return;
   if (vendor->taxtable_override == override) return;
+  gncVendorBeginEdit (vendor);
   vendor->taxtable_override = override;
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 void gncVendorSetTaxTable (GncVendor *vendor, GncTaxTable *table)
 {
   if (!vendor) return;
   if (vendor->taxtable == table) return;
+  gncVendorBeginEdit (vendor);
   if (vendor->taxtable)
     gncTaxTableDecRef (vendor->taxtable);
   if (table)
     gncTaxTableIncRef (table);
   vendor->taxtable = table;
   mark_vendor (vendor);
+  gncVendorCommitEdit (vendor);
 }
 
 /* Get Functions */

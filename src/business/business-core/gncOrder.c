@@ -52,10 +52,11 @@ static short	module = MOD_BUSINESS;
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncOrderBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -130,16 +131,19 @@ void gncOrderSetGUID (GncOrder *order, const GUID *guid)
   if (!order || !guid) return;
   if (guid_equal (guid, &order->guid)) return;
 
+  gncOrderBeginEdit (order);
   remObj (order);
   order->guid = *guid;
   addObj (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetID (GncOrder *order, const char *id)
 {
   if (!order || !id) return;
-  SET_STR (order->id, id);
+  SET_STR (order, order->id, id);
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
@@ -147,46 +151,56 @@ void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
   if (!order || !owner) return;
   if (gncOwnerEqual (&order->owner, owner)) return;
 
+  gncOrderBeginEdit (order);
   gncOwnerCopy (owner, &order->owner);
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetDateOpened (GncOrder *order, Timespec date)
 {
   if (!order) return;
   if (timespec_equal (&order->opened, &date)) return;
+  gncOrderBeginEdit (order);
   order->opened = date;
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetDateClosed (GncOrder *order, Timespec date)
 {
   if (!order) return;
   if (timespec_equal (&order->closed, &date)) return;
+  gncOrderBeginEdit (order);
   order->closed = date;
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetNotes (GncOrder *order, const char *notes)
 {
   if (!order || !notes) return;
-  SET_STR (order->notes, notes);
+  SET_STR (order, order->notes, notes);
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetReference (GncOrder *order, const char *reference)
 {
   if (!order || !reference) return;
-  SET_STR (order->reference, reference);
+  SET_STR (order, order->reference, reference);
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetActive (GncOrder *order, gboolean active)
 {
   if (!order) return;
   if (order->active == active) return;
+  gncOrderBeginEdit (order);
   order->active = active;
   mark_order (order);
+  gncOrderCommitEdit (order);
 }
 
 void gncOrderSetDirty (GncOrder *order, gboolean dirty)

@@ -116,9 +116,11 @@ static void gncJobFree (GncJob *job)
 
 /* Set Functions */
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
+	if (!safe_strcmp (member, str)) return; \
+	gncJobBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -128,24 +130,27 @@ void gncJobSetID (GncJob *job, const char *id)
 {
   if (!job) return;
   if (!id) return;
-  SET_STR(job->id, id);
+  SET_STR(job, job->id, id);
   mark_job (job);
+  gncJobCommitEdit (job);
 }
 
 void gncJobSetName (GncJob *job, const char *name)
 {
   if (!job) return;
   if (!name) return;
-  SET_STR(job->name, name);
+  SET_STR(job, job->name, name);
   mark_job (job);
+  gncJobCommitEdit (job);
 }
 
 void gncJobSetReference (GncJob *job, const char *desc)
 {
   if (!job) return;
   if (!desc) return;
-  SET_STR(job->desc, desc);
+  SET_STR(job, job->desc, desc);
   mark_job (job);
+  gncJobCommitEdit (job);
 }
 
 void gncJobSetGUID (GncJob *job, const GUID *guid)
@@ -153,9 +158,11 @@ void gncJobSetGUID (GncJob *job, const GUID *guid)
   if (!job || !guid) return;
   if (guid_equal (guid, &job->guid)) return;
 
+  gncJobBeginEdit (job);
   remObj (job);
   job->guid = *guid;
   addObj (job);
+  gncJobCommitEdit (job);
 }
 
 void gncJobSetOwner (GncJob *job, GncOwner *owner)
@@ -164,6 +171,8 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
   if (!owner) return;
   if (gncOwnerEqual (owner, &(job->owner))) return;
   /* XXX: Fail if we have ANY orders or invoices */
+
+  gncJobBeginEdit (job);
 
   switch (gncOwnerGetType (&(job->owner))) {
   case GNC_OWNER_CUSTOMER:
@@ -188,14 +197,17 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
   }
 
   mark_job (job);
+  gncJobCommitEdit (job);
 }
 
 void gncJobSetActive (GncJob *job, gboolean active)
 {
   if (!job) return;
   if (active == job->active) return;
+  gncJobBeginEdit (job);
   job->active = active;
   mark_job (job);
+  gncJobCommitEdit (job);
 }
 
 void gncJobBeginEdit (GncJob *job)

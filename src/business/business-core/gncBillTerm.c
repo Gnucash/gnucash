@@ -55,10 +55,11 @@ static short	module = MOD_BUSINESS;
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncBillTermBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -121,94 +122,116 @@ void gncBillTermSetGUID (GncBillTerm *term, const GUID *guid)
   if (!term || !guid) return;
   if (guid_equal (guid, &term->guid)) return;
 
+  gncBillTermBeginEdit (term);
   remObj (term);
   term->guid = *guid;
   addObj (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetName (GncBillTerm *term, const char *name)
 {
   if (!term || !name) return;
-  SET_STR (term->name, name);
+  SET_STR (term, term->name, name);
   mark_term (term);
   maybe_resort_list (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetDescription (GncBillTerm *term, const char *desc)
 {
   if (!term || !desc) return;
-  SET_STR (term->desc, desc);
+  SET_STR (term, term->desc, desc);
   mark_term (term);
   maybe_resort_list (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type)
 {
   if (!term) return;
   if (term->type == type) return;
+  gncBillTermBeginEdit (term);
   term->type = type;
   mark_term (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetDueDays (GncBillTerm *term, gint days)
 {
   if (!term) return;
   if (term->due_days == days) return;
+  gncBillTermBeginEdit (term);
   term->due_days = days;
   mark_term (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetDiscountDays (GncBillTerm *term, gint days)
 {
   if (!term) return;
   if (term->disc_days == days) return;
+  gncBillTermBeginEdit (term);
   term->disc_days = days;
   mark_term (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetDiscount (GncBillTerm *term, gnc_numeric discount)
 {
   if (!term) return;
   if (gnc_numeric_eq (term->discount, discount)) return;
+  gncBillTermBeginEdit (term);
   term->discount = discount;
   mark_term (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff)
 {
   if (!term) return;
   if (term->cutoff == cutoff) return;
+  gncBillTermBeginEdit (term);
   term->cutoff = cutoff;
   mark_term (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetParent (GncBillTerm *term, GncBillTerm *parent)
 {
   if (!term) return;
+  gncBillTermBeginEdit (term);
   term->parent = parent;
   term->refcount = 0;
   gncBillTermMakeInvisible (term);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetChild (GncBillTerm *term, GncBillTerm *child)
 {
   if (!term) return;
+  gncBillTermBeginEdit (term);
   term->child = child;
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermIncRef (GncBillTerm *term)
 {
   if (!term) return;
   if (term->parent) return;	/* children dont need refcounts */
+  gncBillTermBeginEdit (term);
   term->refcount++;
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermDecRef (GncBillTerm *term)
 {
   if (!term) return;
   if (term->parent) return;	/* children dont need refcounts */
+  gncBillTermBeginEdit (term);
   term->refcount--;
   g_return_if_fail (term->refcount >= 0);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermSetRefcount (GncBillTerm *term, gint64 refcount)
@@ -220,8 +243,10 @@ void gncBillTermSetRefcount (GncBillTerm *term, gint64 refcount)
 void gncBillTermMakeInvisible (GncBillTerm *term)
 {
   if (!term) return;
+  gncBillTermBeginEdit (term);
   term->invisible = TRUE;
   add_or_rem_object (term, FALSE);
+  gncBillTermCommitEdit (term);
 }
 
 void gncBillTermChanged (GncBillTerm *term)

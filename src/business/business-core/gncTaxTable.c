@@ -116,10 +116,11 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncTaxTableBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -206,46 +207,57 @@ void gncTaxTableSetGUID (GncTaxTable *table, const GUID *guid)
   if (!table || !guid) return;
   if (guid_equal (guid, &table->guid)) return;
 
+  gncTaxTableBeginEdit (table);
   remObj (table);
   table->guid = *guid;
   addObj (table);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableSetName (GncTaxTable *table, const char *name)
 {
   if (!table || !name) return;
-  SET_STR (table->name, name);
+  SET_STR (table, table->name, name);
   mark_table (table);
   maybe_resort_list (table);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent)
 {
   if (!table) return;
+  gncTaxTableBeginEdit (table);
   table->parent = parent;
   table->refcount = 0;
   gncTaxTableMakeInvisible (table);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableSetChild (GncTaxTable *table, GncTaxTable *child)
 {
   if (!table) return;
+  gncTaxTableBeginEdit (table);
   table->child = child;
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableIncRef (GncTaxTable *table)
 {
   if (!table) return;
   if (table->parent) return;	/* children dont need refcounts */
+  gncTaxTableBeginEdit (table);
   table->refcount++;
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableDecRef (GncTaxTable *table)
 {
   if (!table) return;
   if (table->parent) return;	/* children dont need refcounts */
+  gncTaxTableBeginEdit (table);
   table->refcount--;
   g_return_if_fail (table->refcount >= 0);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableSetRefcount (GncTaxTable *table, gint64 refcount)
@@ -257,8 +269,10 @@ void gncTaxTableSetRefcount (GncTaxTable *table, gint64 refcount)
 void gncTaxTableMakeInvisible (GncTaxTable *table)
 {
   if (!table) return;
+  gncTaxTableBeginEdit (table);
   table->invisible = TRUE;
   add_or_rem_object (table, FALSE);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableEntrySetAccount (GncTaxTableEntry *entry, Account *account)
@@ -298,6 +312,8 @@ void gncTaxTableAddEntry (GncTaxTable *table, GncTaxTableEntry *entry)
 {
   if (!table || !entry) return;
   if (entry->table == table) return; /* already mine */
+
+  gncTaxTableBeginEdit (table);
   if (entry->table)
     gncTaxTableRemoveEntry (entry->table, entry);
 
@@ -306,21 +322,26 @@ void gncTaxTableAddEntry (GncTaxTable *table, GncTaxTableEntry *entry)
 					 (GCompareFunc)gncTaxTableEntryCompare);
   mark_table (table);
   mod_table (table);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry)
 {
   if (!table || !entry) return;
+  gncTaxTableBeginEdit (table);
   entry->table = NULL;
   table->entries = g_list_remove (table->entries, entry);
   mark_table (table);
   mod_table (table);
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableChanged (GncTaxTable *table)
 {
   if (!table) return;
+  gncTaxTableBeginEdit (table);
   table->child = NULL;
+  gncTaxTableCommitEdit (table);
 }
 
 void gncTaxTableBeginEdit (GncTaxTable *table)

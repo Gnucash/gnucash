@@ -5,6 +5,9 @@
 	* Use the begin/commit calls in the GUI and file-backend.
 	* mostly fixes bug #96855.
 
+	* business/business-core/*.c: add begin/commit edit calls in every 'set'
+	  function.  Fixes 96855.
+	
 2002-11-03  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/dialog-sxsincelast.c, src/gnome/window-main.c,

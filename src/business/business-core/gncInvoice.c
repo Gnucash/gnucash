@@ -68,10 +68,11 @@ static short	module = MOD_BUSINESS;
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncInvoiceBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -147,74 +148,89 @@ void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid)
   if (!invoice || !guid) return;
   if (guid_equal (guid, &invoice->guid)) return;
 
+  gncInvoiceBeginEdit (invoice);
   remObj (invoice);
   invoice->guid = *guid;
   addObj (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id)
 {
   if (!invoice || !id) return;
-  SET_STR (invoice->id, id);
+  SET_STR (invoice, invoice->id, id);
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 {
   if (!invoice || !owner) return;
   if (gncOwnerEqual (&invoice->owner, owner)) return;
+  gncInvoiceBeginEdit (invoice);
   gncOwnerCopy (owner, &invoice->owner);
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
   if (timespec_equal (&invoice->date_opened, &date)) return;
+  gncInvoiceBeginEdit (invoice);
   invoice->date_opened = date;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
 {
   if (!invoice) return;
   if (timespec_equal (&invoice->date_posted, &date)) return;
+  gncInvoiceBeginEdit (invoice);
   invoice->date_posted = date;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetTerms (GncInvoice *invoice, GncBillTerm *terms)
 {
   if (!invoice) return;
   if (invoice->terms == terms) return;
+  gncInvoiceBeginEdit (invoice);
   if (invoice->terms)
     gncBillTermDecRef (invoice->terms);
   invoice->terms = terms;
   if (invoice->terms)
     gncBillTermIncRef (invoice->terms);
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id)
 {
   if (!invoice) return;
-  SET_STR (invoice->billing_id, billing_id);
+  SET_STR (invoice, invoice->billing_id, billing_id);
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes)
 {
   if (!invoice || !notes) return;
-  SET_STR (invoice->notes, notes);
+  SET_STR (invoice, invoice->notes, notes);
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 {
   if (!invoice) return;
   if (invoice->active == active) return;
+  gncInvoiceBeginEdit (invoice);
   invoice->active = active;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com)
@@ -223,8 +239,10 @@ void gncInvoiceSetCommonCommodity (GncInvoice *invoice, gnc_commodity *com)
   if (invoice->common_commodity &&
       gnc_commodity_equal (invoice->common_commodity, com))
     return;
+  gncInvoiceBeginEdit (invoice);
   invoice->common_commodity = com;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto)
@@ -232,8 +250,10 @@ void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto)
   if (!invoice || !billto) return;
   if (gncOwnerEqual (&invoice->billto, billto)) return;
 
+  gncInvoiceBeginEdit (invoice);
   gncOwnerCopy (billto, &invoice->billto);
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty)
@@ -247,8 +267,10 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
   if (!invoice) return;
   g_return_if_fail (invoice->posted_txn == NULL);
 
+  gncInvoiceBeginEdit (invoice);
   invoice->posted_txn = txn;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot)
@@ -256,8 +278,10 @@ void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot)
   if (!invoice) return;
   g_return_if_fail (invoice->posted_lot == NULL);
 
+  gncInvoiceBeginEdit (invoice);
   invoice->posted_lot = lot;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc)
@@ -265,8 +289,10 @@ void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc)
   if (!invoice) return;
   g_return_if_fail (invoice->posted_acc == NULL);
 
+  gncInvoiceBeginEdit (invoice);
   invoice->posted_acc = acc;
   mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry)
@@ -609,6 +635,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   if (!invoice || !acc) return NULL;
 
+  gncInvoiceBeginEdit (invoice);
+
   /* Stabilize the Billing Terms of this invoice */
   if (invoice->terms)
     gncInvoiceSetTerms (invoice,
@@ -807,6 +835,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccTransCommitEdit (t2);
     xaccAccountCommitEdit (acc);
   }
+
+  gncInvoiceCommitEdit (invoice);
 
   return txn;
 }

@@ -125,10 +125,11 @@ static void gncCustomerFree (GncCustomer *cust)
 
 /* Set Functions */
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
 	if (!safe_strcmp (member, str)) return; \
+	gncCustomerBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -138,24 +139,27 @@ void gncCustomerSetID (GncCustomer *cust, const char *id)
 {
   if (!cust) return;
   if (!id) return;
-  SET_STR(cust->id, id);
+  SET_STR(cust, cust->id, id);
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetName (GncCustomer *cust, const char *name)
 {
   if (!cust) return;
   if (!name) return;
-  SET_STR(cust->name, name);
+  SET_STR(cust, cust->name, name);
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetNotes (GncCustomer *cust, const char *notes)
 {
   if (!cust) return;
   if (!notes) return;
-  SET_STR(cust->notes, notes);
+  SET_STR(cust, cust->notes, notes);
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
@@ -163,81 +167,101 @@ void gncCustomerSetGUID (GncCustomer *cust, const GUID *guid)
   if (!cust || !guid) return;
   if (guid_equal (guid, &cust->guid)) return;
 
+  gncCustomerBeginEdit (cust);
   remObj (cust);
   cust->guid = *guid;
   addObj (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
 {
   if (!cust) return;
   if (cust->terms == terms) return;
+
+  gncCustomerBeginEdit (cust);
   if (cust->terms)
     gncBillTermDecRef (cust->terms);
   cust->terms = terms;
   if (cust->terms)
     gncBillTermIncRef (cust->terms);
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetTaxIncluded (GncCustomer *cust, GncTaxIncluded taxincl)
 {
   if (!cust) return;
   if (taxincl == cust->taxincluded) return;
+  gncCustomerBeginEdit (cust);
   cust->taxincluded = taxincl;
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetActive (GncCustomer *cust, gboolean active)
 {
   if (!cust) return;
   if (active == cust->active) return;
+  gncCustomerBeginEdit (cust);
   cust->active = active;
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetDiscount (GncCustomer *cust, gnc_numeric discount)
 {
   if (!cust) return;
   if (gnc_numeric_equal (discount, cust->discount)) return;
+  gncCustomerBeginEdit (cust);
   cust->discount = discount;
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetCredit (GncCustomer *cust, gnc_numeric credit)
 {
   if (!cust) return;
   if (gnc_numeric_equal (credit, cust->credit)) return;
+  gncCustomerBeginEdit (cust);
   cust->credit = credit;
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetCommodity (GncCustomer *cust, gnc_commodity *com)
 {
   if (!cust || !com) return;
   if (cust->commodity && gnc_commodity_equal (cust->commodity, com)) return;
+  gncCustomerBeginEdit (cust);
   cust->commodity = com;
   mark_customer (cust);
+  gncCustomerCommitEdit (cust);
 }
 
 void gncCustomerSetTaxTableOverride (GncCustomer *customer, gboolean override)
 {
   if (!customer) return;
   if (customer->taxtable_override == override) return;
+  gncCustomerBeginEdit (customer);
   customer->taxtable_override = override;
   mark_customer (customer);
+  gncCustomerCommitEdit (customer);
 }
 
 void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table)
 {
   if (!customer) return;
   if (customer->taxtable == table) return;
+
+  gncCustomerBeginEdit (customer);
   if (customer->taxtable)
     gncTaxTableDecRef (customer->taxtable);
   if (table)
     gncTaxTableIncRef (table);
   customer->taxtable = table;
   mark_customer (customer);
+  gncCustomerCommitEdit (customer);
 }
 
 /* Note that JobList changes do not affect the "dirtiness" of the customer */

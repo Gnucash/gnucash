@@ -116,10 +116,11 @@ static void gncEmployeeFree (GncEmployee *employee)
 
 /* Set Functions */
 
-#define SET_STR(member, str) { \
+#define SET_STR(obj, member, str) { \
 	char * tmp; \
 	\
-	if (!strcmp (member, str)) return; \
+	if (!safe_strcmp (member, str)) return; \
+	gncEmployeeBeginEdit (obj); \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -129,57 +130,67 @@ void gncEmployeeSetID (GncEmployee *employee, const char *id)
 {
   if (!employee) return;
   if (!id) return;
-  SET_STR(employee->id, id);
+  SET_STR(employee, employee->id, id);
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username)
 {
   if (!employee) return;
   if (!username) return;
-  SET_STR(employee->username, username);
+  SET_STR(employee, employee->username, username);
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language)
 {
   if (!employee) return;
   if (!language) return;
-  SET_STR(employee->language, language);
+  SET_STR(employee, employee->language, language);
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid)
 {
   if (!employee || !guid) return;
   if (guid_equal (guid, &employee->guid)) return;
+  gncEmployeeBeginEdit (employee);
   remObj (employee);
   employee->guid = *guid;
   addObj (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl)
 {
   if (!employee) return;
   if (!acl) return;
-  SET_STR(employee->acl, acl);
+  SET_STR(employee, employee->acl, acl);
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetWorkday (GncEmployee *employee, gnc_numeric workday)
 {
   if (!employee) return;
   if (gnc_numeric_equal (workday, employee->workday)) return;
+  gncEmployeeBeginEdit (employee);
   employee->workday = workday;
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate)
 {
   if (!employee) return;
   if (gnc_numeric_equal (rate, employee->rate)) return;
+  gncEmployeeBeginEdit (employee);
   employee->rate = rate;
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetCommodity (GncEmployee *employee, gnc_commodity *com)
@@ -188,16 +199,20 @@ void gncEmployeeSetCommodity (GncEmployee *employee, gnc_commodity *com)
   if (employee->commodity && 
       gnc_commodity_equal (employee->commodity, com))
     return;
+  gncEmployeeBeginEdit (employee);
   employee->commodity = com;
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active)
 {
   if (!employee) return;
   if (active == employee->active) return;
+  gncEmployeeBeginEdit (employee);
   employee->active = active;
   mark_employee (employee);
+  gncEmployeeCommitEdit (employee);
 }
 
 /* Get Functions */
