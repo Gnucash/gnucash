@@ -426,7 +426,7 @@ static const char * get_value_entry (VirtualLocation virt_loc,
 
     value = gncEntryReturnValue (entry, ledger->is_invoice);
   }
-  return xaccPrintAmount (value, gnc_default_print_info (TRUE));
+  return xaccPrintAmount (value, gnc_default_print_info (FALSE));
 }
 
 static const char * get_taxval_entry (VirtualLocation virt_loc,
@@ -450,7 +450,7 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
     value = gncEntryReturnTaxValue (entry, ledger->is_invoice);
   }
 
-  return xaccPrintAmount (value, gnc_default_print_info (TRUE));
+  return xaccPrintAmount (value, gnc_default_print_info (FALSE));
 }
 
 static const char * get_billable_entry (VirtualLocation virt_loc,

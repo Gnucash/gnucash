@@ -1,3 +1,9 @@
+2002-10-18  Derek Atkins  <derek@ihtfp.com>
+	* dialog-date-close.c: remove unused function and non-necessary header
+
+	* gncEntryLedgerModel.c: don't use the currency symbol when printing
+	  value and tax cells.
+	
 2002-10-18  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* Implement a working commodity matcher for the generic import
