@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-25 12:23+0200\n"
-"PO-Revision-Date: 2004-09-25 12:27+0200\n"
+"POT-Creation-Date: 2004-10-02 18:44+0200\n"
+"PO-Revision-Date: 2004-10-02 18:45+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -7478,13 +7478,22 @@ msgstr "Online Aktionen"
 msgid "Online Banking & Importing"
 msgstr "Online Banking & Import"
 
-#: src/import-export/hbci/hbci-interaction.c:349
+#: src/import-export/hbci/hbci-interaction.c:341
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
 "long. Do you want to try again?"
 msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
+"sein.  Erneut versuchen?"
+
+#: src/import-export/hbci/hbci-interaction.c:407
+#, c-format
+msgid ""
+"This TAN needs to be at least %d characters \n"
+"long. Do you want to try again?"
+msgstr ""
+"Diese TAN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:334
@@ -7583,7 +7592,7 @@ msgstr "Wollen Sie die Liste der Vorlagen wirklich sortieren?"
 msgid "Do you really want to delete the template '%s'?"
 msgstr "Wollen Sie die Vorlage »%s« wirklich löschen?"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:234
+#: src/import-export/hbci/gnc-hbci-getbalance.c:253
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "Either this is the correct balance, or your bank does not \n"
@@ -7599,7 +7608,7 @@ msgstr ""
 "HBCI-Version auswählen. Versuchen Sie anschließend erneut, den Saldo\n"
 "abzufragen.  \n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:247
+#: src/import-export/hbci/gnc-hbci-getbalance.c:266
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
@@ -7608,7 +7617,7 @@ msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
 "Gebuchter Saldo des Kontos ist %s\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:254
+#: src/import-export/hbci/gnc-hbci-getbalance.c:273
 #, c-format
 msgid ""
 "For your information: This account also \n"
@@ -7617,12 +7626,12 @@ msgstr ""
 "Zu Ihrer Information: Dieses Konto hat außerdem folgenden \n"
 "Saldo an zur Ausführung vorgemerkten Aufträgen: %s\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:257
+#: src/import-export/hbci/gnc-hbci-getbalance.c:276
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
-#: src/import-export/hbci/gnc-hbci-gettrans.c:201
-#: src/import-export/hbci/gnc-hbci-gettrans.c:222
+#: src/import-export/hbci/gnc-hbci-gettrans.c:203
+#: src/import-export/hbci/gnc-hbci-gettrans.c:224
 msgid "The HBCI import returned no transactions for the selected time period."
 msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
@@ -12590,7 +12599,9 @@ msgstr "Gewinne und Verluste mit einberechnen"
 
 #: intl-scm/guile-strings.c:2556
 msgid "Include splits with no shares for calculating money-in and money-out"
-msgstr "Buchungsteile ohne Aktien-Anteile trotzdem für Wertzuwachs und -abnahme mit einbeziehen"
+msgstr ""
+"Buchungsteile ohne Aktien-Anteile trotzdem für Wertzuwachs und -abnahme mit "
+"einbeziehen"
 
 #: intl-scm/guile-strings.c:2580 intl-scm/guile-strings.c:3154
 msgid "Gain"
