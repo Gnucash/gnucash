@@ -94,6 +94,7 @@
 #include "messages.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "TransLog.h"
 #include "util.h"
 
 #define PERMS   0666
@@ -242,6 +243,8 @@ xaccReadAccountGroup( char *datafile )
     return NULL;
   }
   
+  /* disable logging during load; otherwise its just a mess */
+  xaccLogDisable();
   holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
 
@@ -267,6 +270,7 @@ xaccReadAccountGroup( char *datafile )
 
   maingrp = NULL;
 
+  xaccLogEnable();
   close(fd);
   return grp;
 }
@@ -396,6 +400,20 @@ readAccount( int fd, AccountGroup *grp, int token )
       printf (" expected %d got %d transactions \n",numTrans,i);
       break;
       }
+#ifdef DELINT_BLANK_SPLITS_HACK
+      /* This is a dangerous hack, as it can destroy real data. */
+      {
+        int j=0;   
+        Split *s = trans->splits[0];
+        while (s) {
+          if (DEQ(0.0,s->damount) && DEQ (1.0,s->share_price)) {
+             xaccTransRemoveSplit (trans, s);
+             break;
+          }
+          j++; s=trans->splits[j];
+        }
+      }
+#endif /* DELINT_BLANK_SPLITS_HACK */
     }
   
   springAccount (acc->id);
@@ -558,6 +576,13 @@ readTransaction( int fd, Account *acc, int token )
   if (4 >= token) 
     { 
     Split * s;
+
+    /* The code below really wants to assume that there are a pair
+     * of splits in every transaction, so make it so. 
+     */
+    s = xaccMallocSplit ();
+    xaccTransAppendSplit (trans, s);
+
     tmp = readString( fd, token );
     if( NULL == tmp )
       {
@@ -569,7 +594,8 @@ readTransaction( int fd, Account *acc, int token )
     free (tmp);
     
     /* action first introduced in version 3 of the file format */
-    if (3 <= token) {
+    if (3 <= token) 
+       {
        tmp = readString( fd, token );
        if( NULL == tmp )
          {
@@ -741,8 +767,8 @@ readTransaction( int fd, Account *acc, int token )
     XACC_FLIP_INT (numSplits);
     for (i=0; i<numSplits; i++) {
         split = readSplit (fd, token);
-        if (2 > i+offset) {
-           /* the first two splits have been malloced. just replace them */
+        if (0 == i+offset) {
+           /* the first split has been malloced. just replace it */
            xaccFreeSplit (trans->splits[i+offset]);
            trans->splits[i+offset] = split;
            split->parent = trans;

@@ -131,7 +131,7 @@ void  xaccFreeSplit   (Split *);    /* frees memory */
 
 /* The xaccTransRemoveSplit() routine will remove the indicated
  *    split from the transaction.  It will *NOT* otherwise 
- *    readjust balances, modify accounts, etc.
+ *    re-adjust balances, modify accounts, etc.
  */
 void  xaccTransRemoveSplit (Transaction*, Split *);
 

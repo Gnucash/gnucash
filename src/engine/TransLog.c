@@ -35,14 +35,60 @@
 #include "util.h"
 
 /*
- * The logfiles are useful for tracing, journalling.
+ * The logfiles are useful for tracing, journalling, error recovery.
  * Note that the current support for journalling is at best 
- * embryonic, at worst, sets the wrong expectations.
+ * embryonic, at worst, is dangerous by setting the wrong expectations.
  */
-int gen_logs = 1;
-FILE * trans_log = 0x0;
-FILE * split_log = 0x0;
 
+/* 
+ * Some design philosphy that I think would be good to keep in mind:
+ * (0) Simplicity and foolproofness are the over-riding design points.
+ *     This is supposed to be a fail-safe safety net.   We don't want
+ *     our safety net to fail because of some whiz-bang shenanigans.
+ *
+ * (1) Try to keep the code simple.  Want to make it simple and obvious
+ *     that we are recording everything that we need to record.
+ *
+ * (2) Keep the printed format human readable, for the same reasons.
+ * (2.a) Keep the format, simple, flat, more or less unstructured,
+ *       record oriented.  This will help parsing by perl scripts.
+ *       No, using a perl script to analyze a file that's supposed to be human
+ *       readable is not a contradication in terms -- that's exactly the point.
+ * (2.b) Use tabs as a human freindly field separator; its also a character
+ *       that does not (should not) appear naturally anywhere in the data, 
+ *       as it serves no formatting purpose in the current GUI design.
+ *       (hack alert -- this is not currently tested for or enforced,
+ *       so this is a very unsafe assumption. Maybe urlencoding should 
+ *       be used.)
+ * (2.c) Don't print redundant information in a single record. This would 
+ *       just confuse any potential user of this file.
+ * (2.d) Saving space, being compact is not a priority, I don't think.
+ *       
+ * (3) There are no compatibility requirements from release to release.
+ *     Sounds OK to me to change the format of the output when needed.
+ *
+ * (-) print transaction start and end delimiters
+ * (-) print a unique transaction id as a handy label for anyone 
+ *     who actually examines these logs.  
+ *     The C address pointer to the transaction struct should be fine, 
+ *     as it is simple and unique until the transaction is deleted ...
+ *     and we log deletions, so that's OK.  Just note that the id
+ *     for a deleted transaction might be recycled.
+ * (-) print the current timestamp, so that if it is known that a bug 
+ *     occurred at a certain time, it can be located.
+ * (-) hack alert -- something better than just the account name 
+ *     is needed for identifying the account.
+ */
+
+
+static int gen_logs = 1;
+static FILE * trans_log = 0x0;
+
+/********************************************************************\
+\********************************************************************/
+
+void xaccLogDisable (void) { gen_logs = 0; }
+void xaccLogEnable  (void) { gen_logs = 1; }
 
 /********************************************************************\
 \********************************************************************/
@@ -50,41 +96,29 @@ FILE * split_log = 0x0;
 void
 xaccOpenLog (void)
 {
+   char filename[1000];
    char * timestamp;
 
    if (!gen_logs) return;
-   if (trans_log && split_log) return;
+   if (trans_log) return;
 
    /* tag each filename with a timestamp */
    timestamp = xaccDateUtilGetStampNow ();
 
-   if (!trans_log) {
-      char filename[1000];
+   strcpy (filename, "translog.");
+   strcat (filename, timestamp);
+   strcat (filename, ".log");
 
-      strcpy (filename, "translog.");
-      strcat (filename, timestamp);
-      strcat (filename, ".log");
+   trans_log = fopen (filename, "a");
 
-      trans_log = fopen (filename, "a");
+   /* use tab-separated fields */
+   fprintf (trans_log, "mod	id	time_now	" \
+                       "date_entered	date_posted	" \
+                       "num description	" \
+                       "account	memo	action	reconciled	" \
+                       "amount	price date_reconciled\n");
+   fprintf (trans_log, "-----------------\n");
 
-      /* use tab-separated fields, to be /rdb compatible */
-      fprintf (trans_log, "num	description\n");
-      fprintf (trans_log, "-----------------\n");
-   }
-
-   if (!split_log) {
-      char filename[1000];
-
-      strcpy (filename, "splitlog.");
-      strcat (filename, timestamp);
-      strcat (filename, ".log");
-
-      split_log = fopen (filename, "a");
-
-      /* use tab-separated fields, to be /rdb compatible */
-      fprintf (split_log, "num	memo	action	reconciled	amount	price\n");
-      fprintf (split_log, "-----------------\n");
-   }
    free (timestamp);
 }
 
@@ -92,34 +126,56 @@ xaccOpenLog (void)
 \********************************************************************/
 
 void
-xaccTransWriteLog (Transaction *trans)
+xaccTransWriteLog (Transaction *trans, char flag)
 {
    Split *split;
    int i = 0;
+   char *dnow, *dent, *dpost, *drecn; 
 
    if (!gen_logs) return;
-   if (!trans_log || !split_log) return;
+   if (!trans_log) return;
 
-   /* use tab-separated fields, to be /rdb compatible */
-   fprintf (trans_log, "%s	%s\n", trans->num, trans->description);
+   dnow = xaccDateUtilGetStampNow ();
+   dent = xaccDateUtilGetStamp (trans->date_entered.tv_sec);
+   dpost = xaccDateUtilGetStamp (trans->date_posted.tv_sec);
+
+   fprintf (trans_log, "===== START\n");
 
    split = trans->splits[0];
    while (split) {
-      fprintf (split_log, "%s	%s	%s	%c	%10.6f	%10.6f\n",
-               trans->num,
+      char * accname = "";
+      if (split->acc) accname = split->acc->description;
+      drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
+
+      /* use tab-separated fields */
+      fprintf (trans_log, "%c	%p	%s	%s	%s	%s	%s	" \
+               "%s	%s	%s	%c	%10.6f	%10.6f	%s\n",
+               flag,
+               trans,
+               dnow,
+               dent, 
+               dpost, 
+               trans->num, 
+               trans->description,
+               accname,
                split->memo,
                split->action,
                split->reconciled,
                split->damount,
-               split->share_price
+               split->share_price,
+               drecn
                );
+      free (drecn);
       i++;
       split = trans->splits[i];
    }
+   fprintf (trans_log, "===== END\n");
+   free (dnow);
+   free (dent);
+   free (dpost);
 
    /* get data out to the disk */
    fflush (trans_log);
-   fflush (split_log);
 }
 
 /********************************************************************\
@@ -127,6 +183,8 @@ xaccTransWriteLog (Transaction *trans)
 
 #if 0
 /* open_memstream seems to give various distros fits
+ * this has resulted in warfare on the mailing list.
+ * I think the truce called required changing this to asprintf
  * this code is not currently used ...  so its ifdef out
  */
 
