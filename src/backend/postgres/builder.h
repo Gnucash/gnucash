@@ -25,11 +25,14 @@
  * builder.h
  *
  * FUNCTION:
- * Generic SQL backend query builder
- * Compiles typed tag-value pairs into sql queries
+ * Generic SQL query builder.  This class can be sued to construct
+ * a basic sql query statement (of the type 'select', 'update' or 
+ * 'insert') by simply making C calls indicating the table and the 
+ * fields to query.
  *
- * The code here is/should be general enought to work with 
- * any SQL implementation.
+ * Its fairly limited in the range of sql syntax that it supports,
+ * but on the other hand, the code here is/should be general enough 
+ * to work with  any SQL implementation.
  *
  * HISTORY:
  * Linas Vepstas January 2001
@@ -85,9 +88,14 @@ void sqlBuild_Where_GUID (sqlBuilder *b, const char *tag, const GUID *val);
 void sqlBuild_Where_Int32 (sqlBuilder *b, const char *tag, gint32 val);
 
 
-/* Get the completed query string back.  This query string is
- * probably general enough to work with almost any SQL db, 
- * I beleive. */
+/* The sqlBuild_Query() routine returns a valid SQL query 
+ *    statement that reflects the set of build calls just made.   
+ *    This string is freed when sqlBuilder_destroy() is called, 
+ *    so make a copy if you need it.
+ *
+ *    This resulting query string is probably general enough to 
+ *    work with almost any SQL db, I beleive.     
+ */   
 const char *sqlBuild_Query (sqlBuilder *b);
 
 
