@@ -5,6 +5,26 @@
 	  but I couldn't reproduce the problem so I couldn't actually test
 	  the fix.
 
+	* src/business/business-gnome/dialog-billterms.c:
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-payment.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/gnc-split-reg.c:
+	* src/import-export/hbci/hbci-interaction.c:
+	  Change dialog statements to allow for embedded percent signs in
+	  the messages.  In other words, don't allow user input into the
+	  format string of a printf.  There may be other forms of this bug
+	  elsewhere -- the code should be manually scrubbed file by file
+	  for all printf()'s to make sure no user-servicable strings are
+	  used as a printf format argument.  Fixes #115245.
+
+	* src/business/business-gnome/dialog-invoice.c: change how the
+	  billterms option menu is used so it will change properly if
+	  you change the invoice's owner.  Fixes #115290.
+
 2003-06-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/io-gncxml-v2.c: make the book-string an extern
