@@ -49,16 +49,27 @@ g-wrap-install:
 TRASH += g-wrap-install
 
 
-# the make dist is a quick hack to avoid onerous rebuild for naive users ...
+# this make dist is a quick hack to avoid build problems that
+# naive builders are suffering from.  Doing a 'make dist' makes
+# build problems go away.
 dist:
-	touch gwrap/Makefile.in
+	touch g-wrap/aclocal.m4  
+	touch g-wrap/configure.in 
+	touch g-wrap/Makefile.in  
+	touch g-wrap/doc/Makefile.in 
+	touch g-wrap/configure 
+	touch g-wrap/conf-h.in  
+	touch g-wrap/stamp-h.in
+	chmod +x g-wrap/missing
+
+
 
 motif:	g-wrap-install
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
 
-.PHONY: motif g-wrap-install
+.PHONY: motif g-wrap-install dist
 
 # Local Variables:
 # tab-width: 2
