@@ -518,24 +518,41 @@ string and 'directories' must be a list of strings."
   (gnc:debug "UI Shutdown hook.")
   (gnc:file-quit))
 
-(define (gnc:normalize-path file)
-  (let* ((parts-in (string-split file #\/))
+(define (gnc:strip-path path)
+  (let* ((parts-in (string-split path #\/))
 	 (parts-out '()))
 
-    ;; Convert to a path based at the root
-    (if (not (string-null? (car parts-in)))
-	(set! parts-in (append (string-split (getenv "PWD") #\/) parts-in)))
-
     ;; Strip out "." and ".." components
+    ;; Strip out // components
     (for-each
      (lambda (part)
        (cond ((string=? part ".") #f)
 	     ((string=? part "..") (set! parts-out (cdr parts-out)))
+	     ((and (string-null? part) (not (= (length parts-out) 0))) #f)
 	     (else (set! parts-out (cons part parts-out)))))
      parts-in)
 
     ;; Put it back together
-    (string-join (reverse parts-out) "/")
+    (string-join (reverse parts-out) "/")))
+
+(define (gnc:normalize-path file)
+  (let* ((parts-in (string-split file #\/))
+	 (parts-out '()))
+
+    ;; Convert to a path based at the root.  If the filename starts
+    ;; with a '/' then the first component of the list is a null
+    ;; string.  If the path starts with foo:// then the first
+    ;; component will contain a ':' and the second will be null.
+    (cond ((string-null? (car parts-in))
+	   (gnc:strip-path file))
+	  ((and (string=? (car parts-in) "file:")
+		(string-null? (cadr parts-in)))
+	   (gnc:strip-path file))
+	  ((and (string-index (car parts-in) #\:)
+		(string-null? (cadr parts-in)))
+	   file)
+	  (else
+	   (gnc:strip-path (append (string-split (getenv "PWD") #\/) parts-in))))
   )
 )
 
