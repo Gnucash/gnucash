@@ -1,3 +1,9 @@
+2001-06-01  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/commodity-utilities.scm: exchange functions 
+	now return unchanged quantity if the two currencies are
+	identical.
+
 2001-06-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/engine.texinfo: document commodity table API

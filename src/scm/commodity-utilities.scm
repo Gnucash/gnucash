@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; commodity-utilities.scm: Functions for handling different commodities.
-;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
+;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>          
 ;; 
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -590,6 +590,16 @@
 	 (gnc:convert-to-euro (gnc:gnc-monetary-commodity foreign)
 			      (gnc:gnc-monetary-amount foreign))))))
 
+
+;; A trivial exchange function - if the "foreign" monetary amount
+;; and the domestic currency are the same, return the foreign 
+;; amount unchanged, otherwise return 0
+
+(define (gnc:exchange-if-same foreign domestic)
+  (if (gnc:commodity-equiv? (gnc:gnc-monetary-commodity foreign) domestic)
+      foreign
+      #f))
+
 ;; This one returns the ready-to-use function for calculation of the
 ;; exchange rates. The returned function takes a <gnc-monetary> and
 ;; the <gnc:commodity*> domestic-commodity, exchanges the amount into
@@ -597,19 +607,23 @@
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
     (lambda (foreign domestic)
-      (if foreign
-	  (or (gnc:exchange-by-euro foreign domestic #f)
-	      (gnc:make-gnc-monetary 
-	       domestic
-	       (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
-				  exchangelist)))
-		 (if (not pair)
-		     (gnc:numeric-zero)
-		     (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
-				      (cadr pair)
-				      (gnc:commodity-get-fraction domestic)
-				      GNC-RND-ROUND)))))
-	  #f))))
+      (begin
+	(gnc:debug "foreign: " foreign)
+	(gnc:debug "domestic: " domestic)
+	(if foreign
+	    (or (gnc:exchange-by-euro foreign domestic #f)
+		(gnc:exchange-if-same foreign domestic)
+		(gnc:make-gnc-monetary 
+		 domestic
+		 (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
+				    exchangelist)))
+		   (if (not pair)
+		       (gnc:numeric-zero)
+		       (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
+					(cadr pair)
+					(gnc:commodity-get-fraction domestic)
+					GNC-RND-ROUND)))))
+	  #f)))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
@@ -668,6 +682,7 @@
 	 foreign domestic)
   (if (and (record? foreign) (gnc:gnc-monetary? foreign))
       (or (gnc:exchange-by-euro foreign domestic #f)
+	  (gnc:exchange-if-same foreign domestic)
 	   (gnc:exchange-by-pricedb-helper
 	    foreign domestic
 	    (gnc:pricedb-lookup-latest
@@ -689,6 +704,7 @@
   (if (and (record? foreign) (gnc:gnc-monetary? foreign)
 	   date)
       (or (gnc:exchange-by-euro foreign domestic date)
+	  (gnc:exchange-if-same foreign domestic)
 	   (gnc:exchange-by-pricedb-helper
 	    foreign domestic
 	    (gnc:pricedb-lookup-nearest-in-time
@@ -705,14 +721,22 @@
 ;; function returns a <gnc-monetary>.
 (define (gnc:exchange-by-pricealist-nearest
 	 pricealist foreign domestic date)
-  (if (and (record? foreign) (gnc:gnc-monetary? foreign)
-	   date (not (null? pricealist)))
+  (begin 
+    (gnc:debug "foreign " foreign)
+    (gnc:debug "domestic " domestic)
+    (gnc:debug "pricealist " pricealist)
+    
+    (if (and (record? foreign) (gnc:gnc-monetary? foreign)
+	   date)
       (or (gnc:exchange-by-euro foreign domestic date)
-	  (gnc:exchange-by-pricevalue-helper
-	   foreign domestic
-	   (gnc:pricealist-lookup-nearest-in-time
-	    pricealist (gnc:gnc-monetary-commodity foreign) date)))
-      #f))
+	  (gnc:exchange-if-same foreign domestic)
+	  (if (not (null? pricealist))
+	      (gnc:exchange-by-pricevalue-helper
+	       foreign domestic
+	       (gnc:pricealist-lookup-nearest-in-time
+		pricealist (gnc:gnc-monetary-commodity foreign) date))
+	      #f))
+      #f)))
 
        
 
