@@ -1,6 +1,11 @@
 Makefile
+Makefile.in
 .deps
 .libs
-Makefile.in
+.scm-links
 *.lo
 *.la
+gw-register-core.c
+gw-register-core.h
+gw-register-core.html
+gw-register-core.scm

@@ -1,6 +1,6 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-register-core.la
+pkglib_LTLIBRARIES = libgncmod-register-core.la libgw-register-core.la
 
 libgncmod_register_core_la_LDFLAGS = -module
 libgncmod_register_core_la_LIBADD = \
@@ -47,8 +47,15 @@ gncinclude_HEADERS = \
   table-layout.h \
   table-model.h
 
+libgw_register_core_la_SOURCES = gw-register-core.c
+libgw_register_core_la_LDFLAGS = -module
+
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-register-core.scm gw-register-core-spec.scm
+
 EXTRA_DIST = \
-  .cvsignore 
+  .cvsignore \
+  ${gwmod_DATA}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -60,3 +67,22 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
+
+gw-register-core.scm gw-register-core.c gw-register-core.h: .scm-links gw-register-core-spec.scm
+	FLAVOR=gnome guile -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	  (set! %load-path (cons \"${PWD}\" %load-path)) \
+	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
+	  (primitive-load \"./gw-register-core-spec.scm\") \
+	  (gw:generate-module \"gw-register-core\")"
+
+BUILT_SOURCES += gw-register-core.scm gw-register-core.c gw-register-core.h
+CLEANFILES = gw-register-core.scm gw-register-core.c gw-register-core.h \
+             gw-register-core.html gnucash g-wrapped register .scm-links
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	ln -sf . register
+	touch .scm-links

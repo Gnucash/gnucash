@@ -6,6 +6,7 @@
  *********************************************************************/
 
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -28,8 +29,17 @@ gnc_module_description(void) {
   return g_strdup("Toolkit-independent GUI for ledger-like table displays");
 }
 
+static void
+lmod(char * mn) 
+{
+  char * form = g_strdup_printf("(use-modules %s)\n", mn);
+  gh_eval_str(form);
+  g_free(form);
+}
+
 int
-gnc_module_init(int refcount) {
+gnc_module_init(int refcount)
+{
   if(!gnc_module_load("gnucash/engine", 0)) 
   {
     return FALSE;
@@ -42,7 +52,7 @@ gnc_module_init(int refcount) {
     return FALSE;
   }
 
+  lmod("(g-wrapped gw-register-core)");
+
   return TRUE;
 }
-
-
