@@ -407,8 +407,8 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
    struct tm * stm;
 
    /* try to deal with dates earlier than December 1901 
-    * or later than Jan 2038. Note that this blows off 
-    * centenial leap years. */
+    * or later than Jan 2038.  Note that xaccValidateDate
+    * should be handling centential (non-) leap years. */
    if ((0x80000000L > secs) || (0x7fffffffL < secs)) 
    {
       int yrs;
@@ -418,6 +418,7 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
       stm = localtime (&rem);
       cell->date = *stm;
       cell->date.tm_year += 32 * yrs;
+      xaccValidateDate (&(cell->date), 0);
    } else {
       /* OK, time value is an unsigned 32-bit int */
       time_t sicko;
