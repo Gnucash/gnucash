@@ -21,7 +21,8 @@ libgncmod_dialog_tax_table_la_SOURCES = \
   dialog-tax-table.c
 
 noinst_HEADERS = \
-  dialog-tax-table.h
+  dialog-tax-table.h \
+  gw-dialog-tax-table.h
 
 libgncmod_dialog_tax_table_la_LDFLAGS = -module
 
@@ -84,5 +85,5 @@ gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
 
 BUILT_SOURCES = gw-dialog-tax-table.scm gw-dialog-tax-table.c \
 	gw-dialog-tax-table.h
-CLEANFILES = ${BUILT_SOURCES} gw-dialog-tax-table.html \
-             ${SCM_FILE_LINKS} g-wrapped gnucash .scm-links
+DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
+                 gw-dialog-tax-table.html

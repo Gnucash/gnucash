@@ -10,7 +10,9 @@ checklib_LTLIBRARIES = libbar.la libgncmodbar.la
 libbar_la_LDFLAGS = -module
 libbar_la_SOURCES = bar.c
 
-noinst_HEADERS = bar.h
+noinst_HEADERS = \
+  bar.h \
+  bar-gwrap.h
 
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
 libgncmodbar_la_LDFLAGS=-module
@@ -27,7 +29,8 @@ bar-gwrap.c bar-gwrap.h: bar-gwrap.scm ${top_builddir}/config.status
 	  (gw:generate-wrapset \"bar-gwrap\")"
 
 BUILT_SOURCES = bar-gwrap.c bar-gwrap.h
-CLEANFILES = *.so* *.a bar-gwrap.c bar-gwrap.h bar-gwrap.html
+
+DISTCLEANFILES = bar-gwrap.html
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

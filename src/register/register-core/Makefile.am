@@ -55,6 +55,9 @@ libgw_register_core_la_LDFLAGS = -module
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-register-core.scm gw-register-core-spec.scm
 
+noinst_HEADERS = \
+  gw-register-core.h
+
 EXTRA_DIST = \
   .cvsignore \
   ${gwmod_DATA}
@@ -99,5 +102,5 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: \
 	  (gw:generate-wrapset \"gw-register-core\")"
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
-CLEANFILES = ${BUILT_SOURCES} gw-register-core.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped register .scm-links
+DISTCLEANFILES = gnucash g-wrapped register .scm-links ${SCM_FILE_LINKS} \
+                 gw-register-core.html

@@ -38,16 +38,11 @@ gncinclude_HEADERS = \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
-  option-util.h
-
-#
-# i18n.h wants to be installed, but we do NOT want it included
-# in the DISTFILE.  So, call it data and don't add it to
-# extra_dist..
-#
-gnci18nincludedir = ${GNC_INCLUDE_DIR}
-gnci18ninclude_DATA = \
+  option-util.h \
   i18n.h
+
+noinst_HEADERS = \
+  gw-app-utils.h
 
 libgncmod_app_utils_la_LDFLAGS = -module
 
@@ -130,5 +125,5 @@ gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
 	  (gw:generate-wrapset \"gw-app-utils\")"
 
 BUILT_SOURCES += gw-app-utils.scm gw-app-utils.c gw-app-utils.h
-CLEANFILES = ${BUILT_SOURCES} gw-app-utils.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links \
+                 gw-app-utils.html

@@ -34,4 +34,5 @@ noinst_HEADERS =
 
 EXTRA_DIST += \
   .cvsignore \
-  README 
+  README \
+  login.html

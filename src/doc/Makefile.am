@@ -12,7 +12,21 @@ EXTRA_DIST = \
   plugin.txt \
   tax.txt \
   doxygen_main_page.c \
-  doxygen.cfg.in
+  doxygen.cfg.in \
+  TODO-schedxactions \
+  TODO-sixtp \
+  backend-api.txt \
+  backend-errors.txt \
+  books.txt \
+  currencies.txt \
+  gnc-commodity.txt \
+  loans.txt \
+  lots.txt \
+  multicurrency-discussion.txt \
+  netlogin.txt \
+  query-api.txt \
+  user-prefs-howto.txt
+
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -29,7 +43,7 @@ dist-hook: doc
 	echo "dist-hook: " && pwd
 	cp -rp html ${distdir}
 
-clean-local:
+maintainer-clean-local:
 	echo "clean-local: " && pwd
 	rm -rf html latex
 	rm -f doxygen.cfg doxygen.log refman.pdf

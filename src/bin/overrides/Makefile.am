@@ -25,16 +25,15 @@ PWD := $(shell pwd)
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
 
-guile: guile.in
+guile: guile.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GUILE-@:${GUILE}:'
 	mv $@.tmp $@
 	chmod u+x $@
-BUILT_SOURCES = guile
 CLEANFILES = guile
 
-gnucash-env: gnucash-env.in
+gnucash-env: gnucash-env.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
@@ -47,10 +46,9 @@ gnucash-env: gnucash-env.in
             -e 's:@-GNC_SCRIPT_OVERRIDE_DIR-@:${gncoverridedir}:g'
 	mv $@.tmp $@
 	chmod u+x $@
-BUILT_SOURCES += gnucash-env
 CLEANFILES += gnucash-env
 
-gnucash-build-env: gnucash-build-env.in
+gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
@@ -59,5 +57,4 @@ gnucash-build-env: gnucash-build-env.in
             -e 's:@-GNC_SRCDIR-@:${PWD}/${top_srcdir}:g'
 	mv $@.tmp $@
 	chmod u+x $@
-BUILT_SOURCES += gnucash-build-env
 CLEANFILES += gnucash-build-env

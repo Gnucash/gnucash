@@ -23,7 +23,9 @@ gncinclude_HEADERS = \
   gnc-file-dialog.h \
   gnc-file-history.h
 
-noinst_HEADERS = gnc-file-p.h
+noinst_HEADERS = \
+  gnc-file-p.h \
+  gw-app-file.h
 
 libgncmod_app_file_la_LDFLAGS = -module
 
@@ -31,7 +33,7 @@ libgncmod_app_file_la_LIBADD = \
   ../gnc-module/libgncmodule.la \
   ../engine/libgncmod-engine.la \
   ../gnome-utils/libgncmod-gnome-utils.la \
-  ./gnome/libgnc-app-file-gnome.la \
+  gnome/libgnc-app-file-gnome.la \
   ../app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
@@ -73,5 +75,5 @@ gw-app-file.scm gw-app-file.c gw-app-file.h: \
 	  (gw:generate-wrapset \"gw-app-file\")"
 
 BUILT_SOURCES = gw-app-file.scm gw-app-file.c gw-app-file.h
-CLEANFILES = ${BUILT_SOURCES} gw-app-file.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+	gw-app-file.html

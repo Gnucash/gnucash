@@ -55,7 +55,8 @@ noinst_HEADERS = \
   dialog-order.h \
   dialog-payment.h \
   dialog-vendor.h \
-  search-owner.h
+  search-owner.h \
+  gw-business-gnome.h
 
 libgncmod_business_gnome_la_LDFLAGS = -module
 
@@ -121,7 +122,6 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: \
 	 (gw:generate-wrapset \"gw-business-gnome\")"
 
 BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
-CLEANFILES = ${BUILT_SOURCES} gw-business-gnome.html \
-             ${SCM_FILE_LINKS} g-wrapped gnucash .scm-links
-
+DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
+                 gw-business-gnome.html
 

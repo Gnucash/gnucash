@@ -1,5 +1,50 @@
 2003-01-19  John Pierce <john@killterm.org>
 
+	* doc/Makefile.am
+	* src/doc/Makefile.am
+	* src/doc/design/Makefile.am
+	* src/experimental/cgi-bin/Makefile.am
+	  Added docs that were missing from dist.
+	  Moved doxygen clean rules to maintainer-clean.
+	  Moved texinfos to maintainer-clean.
+
+	* lib/libc/Makefile.am
+	  Added sources needed for OS X to dist.
+
+	* src/app-utils/Makefile.am
+	* src/backend/postgres/Makefile.am
+	* src/business/business-core/Makefile.am
+	* src/business/business-gnome/Makefile.am
+	* src/business/dialog-tax-table/Makefile.am
+	* src/core-utils/Makefile.am
+	* src/engine/Makefile.am
+	* src/gnc-module/Makefile.am
+	* src/gnc-module/test/mod-bar/Makefile.am
+	* src/gnc-module/test/mod-baz/Makefile.am
+	* src/gnc-module/test/mod-foo/Makefile.am
+	* src/gnome/Makefile.am
+	* src/gnome-search/Makefile.am
+	* src/import-export/Makefile.am
+	* src/import-export/binary-import/Makefile.am
+	* src/import-export/qif-io-core/Makefile.am
+	* src/register/register-core/Makefile.am
+	* src/report/report-gnome/Makefile.am
+	* src/scm/Makefile.am
+	* src/app-file/Makefile.am
+	* src/gnome-utils/Makefile.am
+	  Put generated headers into dist.
+	  Moved symlinks to distclean.
+	  Moved generated files to maintainer-clean.
+	  Put generated gw-.*.scm files in dist for parity.
+	  Put generated sources into dist.
+	  Moved generated source to maintainer-clean.
+
+	* src/bin/overrides/Makefile
+	  Made built scripts depend on config.status to ensure
+	  they're rebuilt when paths change.
+
+2003-01-19  John Pierce <john@killterm.org>
+
 	* macros/autogen.sh
 	  Use variables for programs so they can be overridden easily.
 

@@ -26,7 +26,8 @@ libgncmod_binary_import_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  druid-commodity.h
+  druid-commodity.h \
+  gw-binary-import.h
 
 libgncmod_binary_import_la_LDFLAGS = -module
 
@@ -89,6 +90,6 @@ gw-binary-import.scm gw-binary-import.c gw-binary-import.h: \
 	  (gw:generate-wrapset \"gw-binary-import\")"
 
 BUILT_SOURCES = gw-binary-import.scm gw-binary-import.c gw-binary-import.h
-CLEANFILES = ${BUILT_SOURCES} gw-binary-import.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped import-export .scm-links
+DISTCLEANFILES = gnucash g-wrapped import-export .scm-links ${SCM_FILE_LINKS} \
+                 gw-binary-import.html
 

@@ -44,6 +44,8 @@ libgncmod_engine_la_SOURCES = \
   md5.c \
   messages.c
 
+EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
+
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
@@ -103,7 +105,9 @@ noinst_HEADERS = \
   gnc-session-p.h \
   gncObjectP.h \
   kvp-util-p.h \
-  md5.h
+  md5.h \
+  gw-engine.h \
+  gw-kvp.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 
@@ -193,6 +197,6 @@ BUILT_SOURCES = \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h 
 
-CLEANFILES = ${BUILT_SOURCES} gw-engine.html gw-kvp.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+                 gw-engine.html gw-kvp.html
 

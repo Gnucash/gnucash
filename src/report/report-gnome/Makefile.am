@@ -58,6 +58,9 @@ noinst_DATA = .scm-links
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = report.glade
 
+noinst_HEADERS = \
+ gw-report-gnome.h
+
 EXTRA_DIST = \
   .cvsignore \
   ${glade_DATA} \
@@ -93,5 +96,5 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: \
 	  (gw:generate-wrapset \"gw-report-gnome\")"
 
 BUILT_SOURCES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h
-CLEANFILES = ${BUILT_SOURCES} gw-report-gnome.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped report .scm-links
+DISTCLEANFILES = gnucash g-wrapped report .scm-links ${SCM_FILE_LINKS} \
+                 gw-report-gnome.html

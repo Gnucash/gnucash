@@ -83,7 +83,8 @@ gncinclude_HEADERS = \
 
 noinst_HEADERS = \
   argv-list-converters.h \
-  gnc-dir.h
+  gnc-dir.h \
+  gw-gnome-utils.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
@@ -173,5 +174,5 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = ${BUILT_SOURCES} gw-gnome-utils.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+                 gw-gnome-utils.html

@@ -46,7 +46,8 @@ noinst_HEADERS = \
   search-numeric.h \
   search-param.h \
   search-reconciled.h \
-  search-string.h
+  search-string.h \
+  gw-gnome-search.h
 
 libgncmod_gnome_search_la_LDFLAGS = -module
 
@@ -108,5 +109,5 @@ gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h: \
 	 (gw:generate-wrapset \"gw-gnome-search\")"
 
 BUILT_SOURCES = gw-gnome-search.scm gw-gnome-search.c gw-gnome-search.h
-CLEANFILES = ${BUILT_SOURCES} gw-gnome-search.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+                 gw-gnome-search.html

@@ -10,7 +10,9 @@ checklib_LTLIBRARIES=libfoo.la libgncmodfoo.la
 libfoo_la_LDFLAGS = -module
 libfoo_la_SOURCES = foo.c
 
-noinst_HEADERS = foo.h
+noinst_HEADERS = \
+  foo.h \
+  foo-gwrap.h
 
 libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
 libgncmodfoo_la_LDFLAGS = -module 
@@ -27,7 +29,8 @@ foo-gwrap.c foo-gwrap.h: foo-gwrap.scm ${top_builddir}/config.status
            (gw:generate-wrapset \"foo-gwrap\")"
 
 BUILT_SOURCES = foo-gwrap.c foo-gwrap.h
-CLEANFILES = *.so* *.a foo-gwrap.c foo-gwrap.h foo-gwrap.html
+
+DISTCLEANFILES = foo-gwrap.html
 
 # Keep automake from generating install targets for test libs
 install-checklibLTLIBRARIES:

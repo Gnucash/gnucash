@@ -33,6 +33,9 @@ gncinclude_HEADERS = \
 
 noinst_DATA = .scm-links
 
+noinst_HEADERS = \
+ gw-gnc-module.h
+
 EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gwmod_DATA}
@@ -63,6 +66,7 @@ gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: \
 	  (gw:generate-wrapset \"gw-gnc-module\")"
 
 BUILT_SOURCES = gw-gnc-module.scm gw-gnc-module.h gw-gnc-module.c
-CLEANFILES = ${BUILT_SOURCES} gw-gnc-module.html \
-             ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links
+DISTCLEANFILES = .scm-links g-wrapped gnucash ${SCM_FILE_LINKS} \
+                 gw-gnc-module.html
+
 

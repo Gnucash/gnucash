@@ -67,9 +67,8 @@ AM_CFLAGS = \
 EXTRA_DIST = \
   $(glade_DATA) \
   ${gncscm_DATA} \
-  .cvsignore
-
-CLEANFILES =
+  .cvsignore \
+  generic-import-design.txt
 
 #noinst_DATA = .scm-links
 
@@ -80,7 +79,7 @@ CLEANFILES =
 #	ln -sf . gnucash
 #	ln -sf . g-wrapped
 #	touch .scm-links
-CLEANFILES += generic-import import-export gnucash g-wrapped .scm-links
+DISTCLEANFILES = gnucash g-wrapped .scm-links import-export
 
 # FIXME remove this when qif-io-core is finished
 DIST_SUBDIRS = binary-import qif-import qif-io-core ofx test hbci

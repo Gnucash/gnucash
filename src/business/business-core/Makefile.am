@@ -51,7 +51,8 @@ noinst_HEADERS = \
   gncTaxTable.h \
   gncTaxTableP.h \
   gncVendor.h \
-  gncVendorP.h
+  gncVendorP.h \
+  gw-business-core.h
 
 libgncmod_business_core_la_LDFLAGS = -module
 
@@ -106,5 +107,5 @@ gw-business-core.scm gw-business-core.c gw-business-core.h: \
 	 (gw:generate-wrapset \"gw-business-core\")"
 
 BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
-CLEANFILES = ${BUILT_SOURCES} gw-business-core.html \
-             ${SCM_FILE_LINKS} g-wrapped gnucash .scm-links
+DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
+                 gw-business-core.html

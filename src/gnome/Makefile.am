@@ -78,6 +78,7 @@ noinst_HEADERS = \
   gnc-network.h \
   gnc-splash.h \
   gnc-split-reg.h \
+  gnc-version.h \
   gw-gnc.h \
   mainwindow-account-tree.h \
   reconcile-list.h \
@@ -87,7 +88,8 @@ noinst_HEADERS = \
   window-main.h \
   window-main-summarybar.h \
   window-reconcile.h \
-  window-register.h
+  window-register.h \
+  gw-gnc.h
 
 EXTRA_DIST = \
   .cvsignore \
@@ -95,7 +97,7 @@ EXTRA_DIST = \
   gnucash.keys.in \
   gnucash.mime \
   gnc-network.c \
-  gw-gnc-spec.scm
+  ${gwmod_DATA}
 
 
 AM_CFLAGS = \
@@ -135,7 +137,7 @@ AM_CFLAGS = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnucash.keys: gnucash.keys.in
+gnucash.keys: gnucash.keys.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-icondir-@:${appicondir}:g'
@@ -174,8 +176,6 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
-DISTCLEANFILES = .scm-links gnucash g-wrapped ${SCM_FILE_LINKS}
-
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
   gw-gnc-spec.scm .scm-links ${top_builddir}/config.status
 	FLAVOR=gnome guile -c \
@@ -187,4 +187,6 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c gnc-version.h
-CLEANFILES = ${BUILT_SOURCES} gw-gnc.html gnucash.keys gnucash.desktop
+CLEANFILES = gnucash.keys gnucash.desktop
+DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+                 gw-gnc.html

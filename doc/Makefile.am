@@ -25,6 +25,7 @@ EXTRA_DIST = \
   build-aix.txt \
   build-solaris.txt \
   build-suse.txt \
+  generic_objects.txt \
   gnome-hackers.txt \
   gnc-prices.1.in \
   gnucash.1.in

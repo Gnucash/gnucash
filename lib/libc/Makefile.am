@@ -7,6 +7,8 @@ noinst_HEADERS = \
 # No sources should be listed.
 libc_missing_la_SOURCES = libc-missing-noop.c
 
+EXTRA_libc_missing_la_SOURCES = localtime_r.c strptime.c
+
 # This will automatically be filled in with the necessary object file
 # names.  Configure does this based upon the AC_REPLACE_FUNCS macros.
 LIBOBJS = @LIBOBJS@

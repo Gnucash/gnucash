@@ -31,8 +31,6 @@ config_DATA = config
 	ln -sf ${srcdir} gnucash
 	touch .scm-links
 
-CLEANFILES = .scm-links gnucash 
-
 SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 
 EXTRA_DIST = \
@@ -54,4 +52,6 @@ build-config.scm: build-config.scm.in Makefile
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
-CLEANFILES += build-config.scm
+
+DISTCLEANFILES = gnucash .scm-links
+MAINTAINERCLEANFILES = build-config.scm
