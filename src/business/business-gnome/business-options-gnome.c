@@ -20,6 +20,7 @@
 #include "business-options-gnome.h"
 #include "business-gnome-utils.h"
 #include "dialog-invoice.h"
+#include "guile-mappings.h"
 
 static int
 option_changed_cb (GtkWidget *widget, gpointer data)
@@ -87,10 +88,10 @@ get_owner_type_from_option (GNCOption *option)
   SCM odata = gnc_option_get_option_data (option);
   SCM conv_func;
 
-  conv_func = gh_eval_str ("gw:enum-<gnc:GncOwnerType>-val->int");
-  odata = gh_call1 (conv_func, odata);
+  conv_func = scm_c_eval_string ("gw:enum-<gnc:GncOwnerType>-val->int");
+  odata = scm_call_1 (conv_func, odata);
 
-  return gh_scm2long (odata);
+  return scm_num2long (odata, SCM_ARG1, __FUNCTION__);
 }
 
 
@@ -155,7 +156,7 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
   owner.type = type;
   gnc_owner_get_owner (widget, &owner);
 
-  return gw_wcp_assimilate_ptr (&owner, gh_eval_str("<gnc:GncOwner*>"));
+  return gw_wcp_assimilate_ptr (&owner, scm_c_eval_string("<gnc:GncOwner*>"));
 }
 
 
@@ -215,7 +216,7 @@ customer_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return gw_wcp_assimilate_ptr (owner.owner.undefined,
-				gh_eval_str("<gnc:GncCustomer*>"));
+				scm_c_eval_string("<gnc:GncCustomer*>"));
 }
 
 
@@ -275,7 +276,7 @@ vendor_get_value (GNCOption *option, GtkWidget *widget)
   gnc_owner_get_owner (widget, &owner);
 
   return gw_wcp_assimilate_ptr (owner.owner.undefined,
-				gh_eval_str("<gnc:GncVendor*>"));
+				scm_c_eval_string("<gnc:GncVendor*>"));
 }
 
 /********************************************************************/
@@ -348,7 +349,7 @@ invoice_get_value (GNCOption *option, GtkWidget *widget)
   GncInvoice *invoice;
 
   invoice = gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
-  return gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
+  return gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
 }
 
 
@@ -423,7 +424,7 @@ taxtable_get_value (GNCOption *option, GtkWidget *widget)
   GncTaxTable *taxtable;
 
   taxtable = gnc_ui_optionmenu_get_value (widget);
-  return gw_wcp_assimilate_ptr (taxtable, gh_eval_str("<gnc:GncTaxTable*>"));
+  return gw_wcp_assimilate_ptr (taxtable, scm_c_eval_string("<gnc:GncTaxTable*>"));
 }
 
 

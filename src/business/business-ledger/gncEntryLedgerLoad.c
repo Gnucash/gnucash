@@ -9,7 +9,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "Account.h"
 #include "gnc-ui-util.h"
@@ -276,7 +276,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	}
 
 	if (id_book == SCM_UNDEFINED)
-	  id_book = gh_eval_str ("gnc:id-book");
+	  id_book = scm_c_eval_string ("gnc:id-book");
 
 	/* Compute the proper taxtable */
 	odb = gnc_option_db_new_for_type (id_book);

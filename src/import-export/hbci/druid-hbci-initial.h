@@ -23,7 +23,7 @@
 #ifndef DRUID_HBCI_INITIAL_H
 #define DRUID_HBCI_INITIAL_H
 
-#include <guile/gh.h>
+#include <libguile.h>
 
 void gnc_hbci_initial_druid (void);
 SCM  scm_hbci_initial_druid (void);

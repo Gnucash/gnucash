@@ -23,7 +23,8 @@
 
 #include "config.h"
 
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 #include <string.h>
 
 #include "gnc-engine-util.h"
@@ -40,19 +41,19 @@ gnc_printinfo2scm(GNCPrintAmountInfo info)
 {
   SCM info_scm = SCM_EOL;
 
-  info_scm = gh_cons (gh_bool2scm (info.round), info_scm);
-  info_scm = gh_cons (gh_bool2scm (info.force_fit), info_scm);
-  info_scm = gh_cons (gh_bool2scm (info.monetary), info_scm);
-  info_scm = gh_cons (gh_bool2scm (info.use_locale), info_scm);
-  info_scm = gh_cons (gh_bool2scm (info.use_symbol), info_scm);
-  info_scm = gh_cons (gh_bool2scm (info.use_separators), info_scm);
+  info_scm = scm_cons (SCM_BOOL (info.round), info_scm);
+  info_scm = scm_cons (SCM_BOOL (info.force_fit), info_scm);
+  info_scm = scm_cons (SCM_BOOL (info.monetary), info_scm);
+  info_scm = scm_cons (SCM_BOOL (info.use_locale), info_scm);
+  info_scm = scm_cons (SCM_BOOL (info.use_symbol), info_scm);
+  info_scm = scm_cons (SCM_BOOL (info.use_separators), info_scm);
 
-  info_scm = gh_cons (gh_int2scm (info.min_decimal_places), info_scm);
-  info_scm = gh_cons (gh_int2scm (info.max_decimal_places), info_scm);
+  info_scm = scm_cons (scm_int2num (info.min_decimal_places), info_scm);
+  info_scm = scm_cons (scm_int2num (info.max_decimal_places), info_scm);
 
-  info_scm = gh_cons (gnc_commodity_to_scm (info.commodity), info_scm);
+  info_scm = scm_cons (gnc_commodity_to_scm (info.commodity), info_scm);
 
-  info_scm = gh_cons (gh_symbol2scm ("print-info"), info_scm);
+  info_scm = scm_cons (scm_str2symbol ("print-info"), info_scm);
 
   return info_scm;
 }
@@ -63,32 +64,32 @@ gnc_scm2printinfo(SCM info_scm)
   GNCPrintAmountInfo info;
 
   /* skip type */
-  info_scm = gh_cdr (info_scm);
-  info.commodity = gnc_scm_to_commodity (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.commodity = gnc_scm_to_commodity (SCM_CAR (info_scm));
 
-  info_scm = gh_cdr (info_scm);
-  info.max_decimal_places = gh_scm2int (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.max_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1, __FUNCTION__);
 
-  info_scm = gh_cdr (info_scm);
-  info.min_decimal_places = gh_scm2int (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.min_decimal_places = scm_num2int (SCM_CAR (info_scm), SCM_ARG1, __FUNCTION__);
 
-  info_scm = gh_cdr (info_scm);
-  info.use_separators = gh_scm2bool (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.use_separators = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = gh_cdr (info_scm);
-  info.use_symbol = gh_scm2bool (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.use_symbol = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = gh_cdr (info_scm);
-  info.use_locale = gh_scm2bool (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.use_locale = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = gh_cdr (info_scm);
-  info.monetary = gh_scm2bool (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.monetary = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = gh_cdr (info_scm);
-  info.force_fit = gh_scm2bool (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.force_fit = SCM_NFALSEP (SCM_CAR (info_scm));
 
-  info_scm = gh_cdr (info_scm);
-  info.round = gh_scm2bool (gh_car (info_scm));
+  info_scm = SCM_CDR (info_scm);
+  info.round = SCM_NFALSEP (SCM_CAR (info_scm));
 
   return info;
 }
@@ -99,11 +100,11 @@ gnc_printinfo_p(SCM info_scm)
   char *symbol;
   int retval;
 
-  if (!gh_list_p(info_scm) || gh_null_p(info_scm))
+  if (!SCM_LISTP(info_scm) || SCM_NULLP(info_scm))
     return 0;
 
-  info_scm = gh_car (info_scm);
-  if (!gh_symbol_p (info_scm))
+  info_scm = SCM_CAR (info_scm);
+  if (!SCM_SYMBOLP (info_scm))
     return 0;
 
   symbol = gh_symbol2newstr (info_scm, NULL);

@@ -9,7 +9,7 @@ how I did it, but there are a few bits you have to be careful about.
 
 One of the main sources of useful information is "info guile-ref".
 This contains the documentation for all the guile C-side functions
-like gh_car(), gh_append(), etc. that manipulate opaque SCM objects
+like SCM_CAR(), scm_append(), etc. that manipulate opaque SCM objects
 from the guile side.
 
 Given that and a reasonable understanding of GTK/GNOME, you should be

@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <string.h>
 
 #include "GNCIdP.h"
@@ -127,7 +127,7 @@ run_test (void)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/engine", 0);
 
@@ -144,6 +144,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

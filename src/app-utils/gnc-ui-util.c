@@ -48,6 +48,7 @@
 #include "Group.h"
 #include "messages.h"
 #include "Transaction.h"
+#include "guile-mappings.h"
 
 
 static short module = MOD_GUI;
@@ -516,12 +517,12 @@ gnc_ui_account_get_tax_info_string (Account *account)
 
     g_return_val_if_fail (module, NULL);
 
-    get_form = gh_eval_str ("(false-if-exception gnc:txf-get-form)");
-    get_desc = gh_eval_str ("(false-if-exception gnc:txf-get-description)");
+    get_form = scm_c_eval_string ("(false-if-exception gnc:txf-get-form)");
+    get_desc = scm_c_eval_string ("(false-if-exception gnc:txf-get-description)");
   }
 
-  g_return_val_if_fail (gh_procedure_p (get_form), NULL);
-  g_return_val_if_fail (gh_procedure_p (get_desc), NULL);
+  g_return_val_if_fail (SCM_PROCEDUREP (get_form), NULL);
+  g_return_val_if_fail (SCM_PROCEDUREP (get_desc), NULL);
 
   if (!account)
     return NULL;
@@ -537,23 +538,22 @@ gnc_ui_account_get_tax_info_string (Account *account)
   if (!code)
     return NULL;
 
-  category = gh_eval_str (atype == INCOME ?
-                          "txf-income-categories" :
-                          "txf-expense-categories");
+  category = scm_c_eval_string (atype == INCOME ?
+				"txf-income-categories" :
+				"txf-expense-categories");
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
-  code_scm = gh_symbol2scm ((char *) code);
+  code_scm = scm_str2symbol (code);
 
-  scm = gh_call2 (get_form, category, code_scm);
-  if (!gh_string_p (scm))
+  scm = scm_call_2 (get_form, category, code_scm);
+  if (!SCM_STRINGP (scm))
     return NULL;
 
   form = gh_scm2newstr (scm, NULL);
   if (!form)
     return NULL;
 
-  scm = gh_call2 (get_desc, category, code_scm);
-  if (!gh_string_p (scm))
+  scm = scm_call_2 (get_desc, category, code_scm);
+  if (!SCM_STRINGP (scm))
   {
     free (form);
     return NULL;

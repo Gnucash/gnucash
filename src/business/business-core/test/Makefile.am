@@ -1,5 +1,6 @@
 
 AM_CFLAGS = \
+  -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
@@ -32,6 +33,7 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/business/business-core \
   --gnc-module-dir ${top_srcdir}/src/gnc-module \
   --gnc-module-dir ${top_srcdir}/src/engine \
+  --library-dir    ${G_WRAP_LIB_DIR} \
   --guile-load-dir ${G_WRAP_MODULE_DIR}
 
 TESTS_ENVIRONMENT := \

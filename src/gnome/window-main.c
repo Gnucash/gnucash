@@ -26,7 +26,7 @@
 
 #include <errno.h>
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -68,6 +68,7 @@
 #include "window-register.h"
 #include "window-report.h"
 #include "messages.h"
+#include "guile-mappings.h"
 
 static gboolean gnc_show_status_bar = TRUE;
 static gboolean gnc_show_summary_bar = TRUE;
@@ -112,12 +113,12 @@ void
 gnc_shutdown (int exit_status)
 {
   /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
-  SCM scm_shutdown = gh_eval_str("gnc:shutdown");
+  SCM scm_shutdown = scm_c_eval_string("gnc:shutdown");
 
   if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
   {
-    SCM scm_exit_code = gh_long2scm(exit_status);    
-    gh_call1(scm_shutdown, scm_exit_code);
+    SCM scm_exit_code = scm_long2num(exit_status);    
+    scm_call_1(scm_shutdown, scm_exit_code);
   }
   else
   {

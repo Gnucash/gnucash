@@ -25,7 +25,8 @@
 
 #include <gnome.h>
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "dialog-account-picker.h"
 #include "dialog-utils.h"
@@ -59,18 +60,18 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
   sep[0] = gnc_get_account_separator();
   acctinfo[1] = "";
 
-  while(!gh_null_p(accts)) {
-    current = gh_car(accts);
+  while(!SCM_NULLP(accts)) {
+    current = SCM_CAR(accts);
 
-    if(gh_null_p(current)) {
+    if(SCM_NULLP(current)) {
       printf(" ** BUG in acct tree .. grib fix me! (everybody else ignore)\n");
-      accts = gh_cdr(accts);
+      accts = SCM_CDR(accts);
       continue;
     }
 
-    acctinfo[0] = gh_scm2newstr(gh_car(current), NULL);
+    acctinfo[0] = gh_scm2newstr(SCM_CAR(current), NULL);
 
-    if(!gh_null_p(gh_caddr(current))) {
+    if(!SCM_NULLP(SCM_CADDR(current))) {
       leafnode = FALSE;
     }
     else {
@@ -83,7 +84,7 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
                                  leafnode, TRUE);
 
     gnc_clist_set_check (GTK_CLIST (tree), (*row)++, 1,
-                         gh_cadr (current) == SCM_BOOL_T);
+                         SCM_CADR (current) == SCM_BOOL_T);
 
     /* set some row data */ 
     if(base_name && (strlen(base_name) > 0)) {
@@ -96,10 +97,10 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
                                      acctname,
                                      row_data_destroy_cb);
     if(!leafnode) {
-      acct_tree_add_accts(gh_caddr(current), tree, node, acctname, row);
+      acct_tree_add_accts(SCM_CADDR(current), tree, node, acctname, row);
     }
     
-    accts = gh_cdr(accts);      
+    accts = SCM_CDR(accts);      
   }
 }
 
@@ -110,9 +111,9 @@ test_str_cmp(gconstpointer a, gconstpointer b) {
 
 static void
 build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
-  SCM  get_accts = gh_eval_str("qif-import:get-all-accts");
-  SCM  acct_tree = gh_call1(get_accts, 
-                            gnc_ui_qif_import_druid_get_mappings(import));
+  SCM  get_accts = scm_c_eval_string("qif-import:get-all-accts");
+  SCM  acct_tree = scm_call_1(get_accts, 
+			      gnc_ui_qif_import_druid_get_mappings(import));
   GtkCTreeNode * new_sel;
   int row = 0;
 
@@ -152,7 +153,7 @@ new_child_string_cb(char * string, gpointer data) {
 static void
 gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) {
   QIFAccountPickerDialog * wind = user_data;
-  SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!");
+  SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
   char name[251] = "";
   char sep[2] = " ";
   int  retval    = -1;
@@ -175,7 +176,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) {
       fullname = g_strdup(name);
     }
     wind->selected_name = g_strdup(fullname);
-    gh_call2(name_setter, wind->map_entry, gh_str02scm(fullname));
+    scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(fullname));
     g_free(fullname);
   }
 
@@ -189,13 +190,13 @@ gnc_ui_qif_account_picker_select_cb(GtkCTree   * tree,
                                     gint column,
                                     gpointer  user_data) {
   QIFAccountPickerDialog * wind = user_data;
-  SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!");
+  SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
 
   g_free(wind->selected_name);
   wind->selected_name = 
     g_strdup(gtk_ctree_node_get_row_data(tree, node));
 
-  gh_call2(name_setter, wind->map_entry, gh_str02scm(wind->selected_name));
+  scm_call_2(name_setter, wind->map_entry, scm_makfrom0str(wind->selected_name));
 }
 
 
@@ -233,9 +234,9 @@ gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
 SCM
 qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {  
   QIFAccountPickerDialog * wind;
-  SCM save_entry   = gh_eval_str("qif-map-entry:clone");
-  SCM init_pick    = gh_eval_str("qif-map-entry:gnc-name");
-  SCM saved_entry  = gh_call1(save_entry, map_entry);
+  SCM save_entry   = scm_c_eval_string("qif-map-entry:clone");
+  SCM init_pick    = scm_c_eval_string("qif-map-entry:gnc-name");
+  SCM saved_entry  = scm_call_1(save_entry, map_entry);
   int retval = -1;
   char * scmname;
   GladeXML *xml;
@@ -254,7 +255,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {
 
   wind->map_entry  = map_entry;
   
-  scmname = gh_scm2newstr(gh_call1(init_pick, map_entry), NULL);
+  scmname = gh_scm2newstr(scm_call_1(init_pick, map_entry), NULL);
   wind->selected_name = g_strdup(scmname);
   free(scmname);
 

@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,7 +42,7 @@ test_load_file(GNCBook *book, const char *filename)
 }
 
 static void
-guile_main(int argc, char **argv)
+guile_main (void *closure, int argc, char **argv)
 {
     const char *location = getenv("GNC_ACCOUNT_PATH");
     GSList *list = NULL;
@@ -105,8 +105,8 @@ guile_main(int argc, char **argv)
 }
 
 int
-main(int argc, char ** argv)
+main (int argc, char ** argv)
 {
-  gh_enter (argc, argv, guile_main);
+  scm_boot_guile (argc, argv, guile_main, NULL);
   return 0;
 }

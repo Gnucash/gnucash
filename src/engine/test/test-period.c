@@ -8,7 +8,7 @@
 
 #include <ctype.h>
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <time.h>
 
 #include "Account.h"

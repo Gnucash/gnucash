@@ -23,7 +23,7 @@
 #ifndef DRUID_HBCI_FINAL_H
 #define DRUID_HBCI_FINAL_H
 
-#include <guile/gh.h>
+#include <libguile.h>
 
 /* Empty file at the moment. */
 

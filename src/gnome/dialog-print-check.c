@@ -26,7 +26,8 @@
 
 #include <stdio.h>
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "date.h"
 #include "messages.h"
@@ -318,8 +319,8 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
 {
   PrintCheckDialog * pcd = user_data;
 
-  SCM        make_check_format = gh_eval_str("make-print-check-format");
-  SCM        print_check = gh_eval_str("gnc:print-check");
+  SCM        make_check_format = scm_c_eval_string("make-print-check-format");
+  SCM        print_check = scm_c_eval_string("gnc:print-check");
   SCM        format_data;
   SCM        fmt, posn, cust_format, date_format;
   int        sel_option;
@@ -329,10 +330,10 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   char       * positions[] = { "top", "middle", "bottom", "custom" };
 
   sel_option = gnc_ui_print_get_option_menu_item(pcd->format_picker);
-  fmt        = gh_symbol2scm(formats[sel_option]);
+  fmt        = scm_str2symbol(formats[sel_option]);
 
   sel_option = gnc_ui_print_get_option_menu_item(pcd->position_picker);
-  posn       = gh_symbol2scm(positions[sel_option]);
+  posn       = scm_str2symbol(positions[sel_option]);
 
   sel_option = gnc_ui_print_get_option_menu_item(pcd->units_picker);
   switch(sel_option) {
@@ -342,46 +343,46 @@ gnc_ui_print_check_dialog_ok_cb(GtkButton * button,
   case 3:  multip = 1.0; break;    /* points */
   }
     
-  date_format = gh_str02scm(pcd->format_string);
+  date_format = scm_makfrom0str(pcd->format_string);
   
   cust_format = 
     SCM_LIST7
-    (gh_cons(gh_symbol2scm("payee"),
-             SCM_LIST2(gh_double2scm(multip*entry_to_double(pcd->payee_x)),
-                       gh_double2scm(multip*entry_to_double(pcd->payee_y)))),
-     gh_cons(gh_symbol2scm("date"),
-             SCM_LIST2(gh_double2scm(multip*entry_to_double(pcd->date_x)),
-                       gh_double2scm(multip*entry_to_double(pcd->date_y)))),
-     gh_cons(gh_symbol2scm("amount-words"),
-             SCM_LIST2(gh_double2scm(multip*entry_to_double(pcd->words_x)),
-                       gh_double2scm(multip*entry_to_double(pcd->words_y)))),
-     gh_cons(gh_symbol2scm("amount-number"),
-             SCM_LIST2(gh_double2scm(multip*entry_to_double(pcd->number_x)),
-                       gh_double2scm(multip*entry_to_double(pcd->number_y)))),
-     gh_cons(gh_symbol2scm("memo"),
-             SCM_LIST2(gh_double2scm(multip*entry_to_double(pcd->memo_x)),
-                       gh_double2scm(multip*entry_to_double(pcd->memo_y)))),
-     gh_cons(gh_symbol2scm("position"),
-             gh_double2scm(multip*entry_to_double(pcd->check_position))),
-     gh_cons(gh_symbol2scm("date-format"),
-             gh_str02scm(gtk_entry_get_text(GTK_ENTRY(pcd->format_entry)))));
+    (scm_cons(scm_str2symbol("payee"),
+	      SCM_LIST2(scm_make_real(multip*entry_to_double(pcd->payee_x)),
+			scm_make_real(multip*entry_to_double(pcd->payee_y)))),
+     scm_cons(scm_str2symbol("date"),
+	      SCM_LIST2(scm_make_real(multip*entry_to_double(pcd->date_x)),
+			scm_make_real(multip*entry_to_double(pcd->date_y)))),
+     scm_cons(scm_str2symbol("amount-words"),
+	      SCM_LIST2(scm_make_real(multip*entry_to_double(pcd->words_x)),
+			scm_make_real(multip*entry_to_double(pcd->words_y)))),
+     scm_cons(scm_str2symbol("amount-number"),
+	      SCM_LIST2(scm_make_real(multip*entry_to_double(pcd->number_x)),
+			scm_make_real(multip*entry_to_double(pcd->number_y)))),
+     scm_cons(scm_str2symbol("memo"),
+	      SCM_LIST2(scm_make_real(multip*entry_to_double(pcd->memo_x)),
+			scm_make_real(multip*entry_to_double(pcd->memo_y)))),
+     scm_cons(scm_str2symbol("position"),
+	      scm_make_real(multip*entry_to_double(pcd->check_position))),
+     scm_cons(scm_str2symbol("date-format"),
+	      scm_makfrom0str(gtk_entry_get_text(GTK_ENTRY(pcd->format_entry)))));
 
   /* hide the window */
   gnc_ui_print_check_dialog_hide(pcd);
 
   /* now call the callback passed in from the scheme side with 
      the format as an arg */
-  format_data = gh_apply(make_check_format,
-			 SCM_LIST4(fmt, posn, date_format, cust_format));
+  format_data = scm_apply(make_check_format,
+			  SCM_LIST4(fmt, posn, date_format, cust_format),
+			  SCM_EOL);
 
-  gh_apply(print_check,
-	   /* FIXME: when we drop support older guiles, drop the
-	      (char *) coercions below. */
-	   SCM_LIST5(format_data,
-		     gh_str02scm((char *) pcd->payee),
-		     gh_double2scm(gnc_numeric_to_double (pcd->amount)),
-		     gh_ulong2scm(pcd->date),
-		     gh_str02scm((char *) pcd->memo)));
+  scm_apply(print_check,
+	    SCM_LIST5(format_data,
+		      scm_makfrom0str(pcd->payee),
+		      scm_make_real(gnc_numeric_to_double (pcd->amount)),
+		      scm_ulong2num(pcd->date),
+		      scm_makfrom0str(pcd->memo)),
+	    SCM_EOL);
   
 }
 

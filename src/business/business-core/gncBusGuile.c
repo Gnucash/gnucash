@@ -16,7 +16,7 @@ get_acct_type ()
   static SCM account_type = SCM_UNDEFINED;
 
   if(account_type == SCM_UNDEFINED) {
-    account_type = gh_eval_str("<gnc:Account*>");
+    account_type = scm_c_eval_string("<gnc:Account*>");
     /* don't really need this - types are bound globally anyway. */
     if(account_type != SCM_UNDEFINED) scm_protect_object(account_type);
   }
@@ -28,9 +28,9 @@ int gnc_account_value_pointer_p (SCM arg)
 {
   SCM account_type = get_acct_type();
 
-  return (gh_pair_p (arg) &&
-	  gw_wcp_is_of_type_p(account_type, gh_car (arg)) &&
-	  gnc_numeric_p (gh_cdr (arg)));
+  return (SCM_CONSP (arg) &&
+	  gw_wcp_is_of_type_p(account_type, SCM_CAR (arg)) &&
+	  gnc_numeric_p (SCM_CDR (arg)));
 }
 
 GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
@@ -42,14 +42,14 @@ GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
   SCM val;
 
   /* Get the account */
-  val = gh_car (valuearg);
+  val = SCM_CAR (valuearg);
   if (!gw_wcp_is_of_type_p (account_type, val))
     return NULL;
 
   acc = gw_wcp_get_ptr (val);
 
   /* Get the value */
-  val = gh_cdr (valuearg);
+  val = SCM_CDR (valuearg);
   value = gnc_scm_to_numeric (val);
 
   /* Build and return the object */
@@ -71,6 +71,6 @@ SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
   val = gnc_numeric_convert (av->value, gnc_commodity_get_fraction (com),
 			     GNC_RND_ROUND);
 
-  return gh_cons (gw_wcp_assimilate_ptr (av->account, account_type),
-		  gnc_numeric_to_scm (val));
+  return scm_cons (gw_wcp_assimilate_ptr (av->account, account_type),
+		   gnc_numeric_to_scm (val));
 }

@@ -23,7 +23,7 @@
 #ifndef GNC_HBCI_KVP_H
 #define GNC_HBCI_KVP_H
 
-//#include <guile/gh.h>
+//#include <libguile.h>
 #include <glib.h>
 #include "kvp_frame.h"
 #include "Account.h"

@@ -25,7 +25,7 @@
 #define GNC_MDI_UTILS_H
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 typedef struct gnc_mdi_child_info GNCMDIChildInfo;
 

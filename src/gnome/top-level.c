@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <popt.h>
 #include <stdlib.h>
 #include <g-wrap-wct.h>
@@ -419,9 +419,9 @@ gnc_gui_init (SCM command_line)
 
     /* Run the ui startup hooks. */
     {
-      SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
-      SCM hook = gh_eval_str("gnc:*ui-startup-hook*");
-      gh_call1(run_danglers, hook); 
+      SCM run_danglers = scm_c_eval_string("gnc:hook-run-danglers");
+      SCM hook = scm_c_eval_string("gnc:*ui-startup-hook*");
+      scm_call_1(run_danglers, hook); 
     }    
   }
 

@@ -25,7 +25,7 @@
 #define GUILE_UTIL_H
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "date.h"
 #include "gnc-book.h"

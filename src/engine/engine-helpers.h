@@ -31,8 +31,9 @@
 #include <Account.h>
 #include <GNCId.h>
 #include <Query.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 Timespec gnc_transaction_get_date_posted(Transaction *t);
 Timespec gnc_transaction_get_date_entered(Transaction *t);

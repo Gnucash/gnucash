@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include <glib.h>
-#include <guile/gh.h>
 #include <time.h>
 
 #include "TransLog.h"

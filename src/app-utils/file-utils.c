@@ -34,7 +34,8 @@
 #include <unistd.h>
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "file-utils.h"
 #include "messages.h"
@@ -58,12 +59,11 @@ gncFindFile (const char * filename)
   if (!filename || *filename == '\0')
     return NULL;
 
-  /* This should be gh_lookup, but that appears to be broken */
-  find_doc_file = gh_eval_str("gnc:find-doc-file");
-  scm_filename = gh_str02scm ((char *) filename);
-  scm_result = gh_call1(find_doc_file, scm_filename);
+  find_doc_file = scm_c_eval_string("gnc:find-doc-file");
+  scm_filename = scm_makfrom0str ((char *) filename);
+  scm_result = scm_call_1(find_doc_file, scm_filename);
 
-  if (gh_string_p(scm_result))
+  if (SCM_STRINGP(scm_result))
     full_filename = gh_scm2newstr(scm_result, NULL);
 
   g_filename = g_strdup (full_filename);

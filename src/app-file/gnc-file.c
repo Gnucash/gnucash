@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <string.h>
 #include <g-wrap-wct.h>
 
@@ -249,11 +249,11 @@ static void
 gnc_book_opened (void)
 {
   GNCSession *session = gnc_get_current_session();
-  gh_call2 (gh_eval_str("gnc:hook-run-danglers"),
-            gh_eval_str("gnc:*book-opened-hook*"),
-	    (session ? 
-	     gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
-	     SCM_BOOL_F));
+  scm_call_2 (scm_c_eval_string("gnc:hook-run-danglers"),
+	      scm_c_eval_string("gnc:*book-opened-hook*"),
+	      (session ? 
+	       gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+	       SCM_BOOL_F));
 }
 
 void
@@ -272,11 +272,11 @@ gnc_file_new (void)
    * disable events so we don't get spammed by redraws. */
   gnc_engine_suspend_events ();
   
-  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-           gh_eval_str("gnc:*book-closed-hook*"),
-	   (session ?
-	    gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
-	    SCM_BOOL_F));
+  scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
+	     scm_c_eval_string("gnc:*book-closed-hook*"),
+	     (session ?
+	      gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+	      SCM_BOOL_F));
 
   gnc_close_gui_component_by_session (session);
   gnc_session_destroy (session);
@@ -284,8 +284,8 @@ gnc_file_new (void)
   /* start a new book */
   gnc_get_current_session ();
 
-  gh_call1(gh_eval_str("gnc:hook-run-danglers"),
-           gh_eval_str("gnc:*new-book-hook*"));
+  scm_call_1(scm_c_eval_string("gnc:hook-run-danglers"),
+	     scm_c_eval_string("gnc:*new-book-hook*"));
 
   gnc_book_opened ();
 
@@ -359,12 +359,12 @@ gnc_post_file_open (const char * filename)
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
   current_session  = gnc_get_current_session();
-  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-           gh_eval_str("gnc:*book-closed-hook*"),
-	   (current_session ?
-	    gw_wcp_assimilate_ptr (current_session,
-				   gh_eval_str("<gnc:Session*>")) :
-	    SCM_BOOL_F));
+  scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
+	     scm_c_eval_string("gnc:*book-closed-hook*"),
+	     (current_session ?
+	      gw_wcp_assimilate_ptr (current_session,
+				     scm_c_eval_string("<gnc:Session*>")) :
+	      SCM_BOOL_F));
   gnc_session_destroy (current_session);
 
   /* load the accounts from the users datafile */
@@ -691,10 +691,10 @@ gnc_file_save (void)
   gnc_book_mark_saved (gnc_session_get_book (session));
 
   /* save the main window state */
-  gh_call1 (gh_eval_str("gnc:main-window-save-state"),
-	    (session ?
-	     gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
-	     SCM_BOOL_F));
+  scm_call_1 (scm_c_eval_string("gnc:main-window-save-state"),
+	      (session ?
+	       gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+	       SCM_BOOL_F));
 
   LEAVE (" ");
 }
@@ -832,11 +832,11 @@ gnc_file_quit (void)
    * transactions during shutdown would cause massive redraws */
   gnc_engine_suspend_events ();
 
-  gh_call2(gh_eval_str("gnc:hook-run-danglers"),
-           gh_eval_str("gnc:*book-closed-hook*"),
-	   (session ?
-	    gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
-	    SCM_BOOL_F));
+  scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
+	     scm_c_eval_string("gnc:*book-closed-hook*"),
+	     (session ?
+	      gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+	      SCM_BOOL_F));
   
   gnc_session_destroy (session);
 

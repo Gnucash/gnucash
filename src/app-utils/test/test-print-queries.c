@@ -1,6 +1,7 @@
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "engine-helpers.h"
 #include "gnc-module.h"
@@ -18,10 +19,10 @@ test_query (Query *q, SCM val2str)
   SCM args = SCM_EOL;
 
   scm_q = gnc_query2scm (q);
-  args = gh_cons (scm_q, SCM_EOL);
-  str_q = gh_apply (val2str, args);
+  args = scm_cons (scm_q, SCM_EOL);
+  str_q = scm_apply (val2str, args, SCM_EOL);
 
-  args = gh_cons (gh_str02scm ("'"), gh_cons (str_q, SCM_EOL));
+  args = scm_cons (scm_makfrom0str ("'"), scm_cons (str_q, SCM_EOL));
   str_q = scm_string_append (args);
 
   gh_display (str_q); gh_newline (); gh_newline ();
@@ -34,8 +35,8 @@ run_tests (int count)
   SCM val2str;
   int i;
 
-  val2str = gh_eval_str ("gnc:value->string");
-  g_return_if_fail (gh_procedure_p (val2str));
+  val2str = scm_c_eval_string ("gnc:value->string");
+  g_return_if_fail (SCM_PROCEDUREP (val2str));
 
   for (i = 0; i < count; i++) {
     q = get_random_query ();
@@ -46,7 +47,7 @@ run_tests (int count)
 }
 
 static void
-main_helper (int argc, char **argv)
+main_helper (void *closure, int argc, char **argv)
 {
   int count = 50;
 
@@ -74,6 +75,6 @@ main_helper (int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  scm_boot_guile (argc, argv, main_helper, NULL);
   return 0;
 }

@@ -24,8 +24,9 @@
 #ifndef OPTION_UTIL_H
 #define OPTION_UTIL_H
 
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-commodity.h"
 #include "kvp_frame.h"

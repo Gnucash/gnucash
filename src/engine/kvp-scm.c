@@ -6,6 +6,7 @@
 #include <engine-helpers.h>
 
 #include "kvp-scm.h"
+#include "guile-mappings.h"
 
 int
 gnc_kvp_value_ptr_p(SCM arg)
@@ -21,13 +22,13 @@ gnc_kvp_value_ptr_p(SCM arg)
 kvp_value*
 gnc_scm_to_kvp_value_ptr(SCM val)
 {
-    if(gh_exact_p (val) && gnc_gh_gint64_p(val))
+    if(SCM_EXACTP (val) && gnc_gh_gint64_p(val))
     {
         return kvp_value_new_gint64(gnc_scm_to_gint64(val));
     }
-    else if(gh_number_p(val))
+    else if(SCM_NUMBERP(val))
     {
-        return kvp_value_new_double(gh_scm2double(val));
+        return kvp_value_new_double(scm_num2dbl(val, __FUNCTION__));
     }
     else if(gnc_numeric_p(val))
     {
@@ -43,7 +44,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         Timespec ts = gnc_timepair2timespec(val);
 	return kvp_value_new_timespec(ts);
     }
-    else if(gh_string_p(val))
+    else if(SCM_STRINGP(val))
     {
         char *newstr;
         kvp_value *ret;
@@ -53,7 +54,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         return ret;
     }
     else if(gw_wcp_p(val) &&
-	    gw_wcp_is_of_type_p(gh_eval_str("<gnc:kvp-frame*>"), val))
+	    gw_wcp_is_of_type_p(scm_c_eval_string("<gnc:kvp-frame*>"), val))
     {
         kvp_frame *frame = gw_wcp_get_ptr(val);
         return kvp_value_new_frame (frame);
@@ -72,13 +73,13 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
         return gnc_gint64_to_scm(kvp_value_get_gint64(val));
         break;
     case KVP_TYPE_DOUBLE:
-        return gh_double2scm(kvp_value_get_double(val));
+        return scm_make_real(kvp_value_get_double(val));
         break;
     case KVP_TYPE_NUMERIC:
         return gnc_numeric_to_scm(kvp_value_get_numeric(val));
         break;
     case KVP_TYPE_STRING:
-        return gh_str02scm(kvp_value_get_string(val));
+        return scm_makfrom0str(kvp_value_get_string(val));
         break;
     case KVP_TYPE_GUID:
     {
@@ -95,7 +96,7 @@ gnc_kvp_value_ptr_to_scm(kvp_value* val)
         kvp_frame *frame = kvp_value_get_frame(val);
 	if (frame)
 	  return gw_wcp_assimilate_ptr (frame,
-					gh_eval_str("<gnc:kvp-frame*>"));
+					scm_c_eval_string("<gnc:kvp-frame*>"));
     }
         break;
 

@@ -40,7 +40,7 @@
 #include <gnome.h>
 #include <regex.h>
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "Account.h"
 #include "Group.h"

@@ -24,7 +24,7 @@
 #define TOP_LEVEL_H
 
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "window-main.h"
 

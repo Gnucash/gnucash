@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
 #include <string.h>
 
 #include "Account.h"

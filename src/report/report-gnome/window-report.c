@@ -28,7 +28,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <sys/stat.h>
 
 #include <g-wrap-wct.h>
@@ -47,6 +47,7 @@
 #include "option-util.h"
 #include "window-help.h"
 #include "window-report.h"
+#include "guile-mappings.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -93,14 +94,14 @@ gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
 {
   GNCMDIChildInfo  * rwin = gtk_object_get_user_data(GTK_OBJECT(child));
   gnc_report_window * report;
-  SCM    get_name = gh_eval_str("gnc:report-name");
+  SCM    get_name = scm_c_eval_string("gnc:report-name");
   char   * name = NULL; 
   
   if(rwin) {
     report = rwin->user_data;
     if(report->initial_report != SCM_BOOL_F) {
-      name = gh_scm2newstr(gh_call1(get_name, 
-                                    report->initial_report),
+      name = gh_scm2newstr(scm_call_1(get_name, 
+				      report->initial_report),
                            NULL);
     }
     else {
@@ -333,24 +334,24 @@ gnc_get_export_type_choice (SCM export_types)
   int choice;
   SCM tail;
 
-  if (!gh_list_p (export_types))
+  if (!SCM_LISTP (export_types))
     return SCM_BOOL_F;
 
-  for (tail = export_types; !gh_null_p (tail); tail = gh_cdr (tail))
+  for (tail = export_types; !SCM_NULLP (tail); tail = SCM_CDR (tail))
   {
-    SCM pair = gh_car (tail);
+    SCM pair = SCM_CAR (tail);
     char * name;
     SCM scm;
 
-    if (!gh_pair_p (pair))
+    if (!SCM_CONSP (pair))
     {
       g_warning ("unexpected list element");
       bad = TRUE;
       break;
     }
 
-    scm = gh_car (pair);
-    if (!gh_string_p (scm))
+    scm = SCM_CAR (pair);
+    if (!SCM_STRINGP (scm))
     {
       g_warning ("unexpected pair element");
       bad = TRUE;
@@ -386,10 +387,10 @@ gnc_get_export_type_choice (SCM export_types)
     return SCM_BOOL_T;
 
   choice--;
-  if (choice >= gh_length (export_types))
+  if (choice >= scm_ilength (export_types))
     return SCM_BOOL_F;
 
-  return gh_list_ref (export_types, gh_int2scm (choice));
+  return scm_list_ref (export_types, scm_int2num (choice));
 }
 
 static const char *
@@ -405,7 +406,7 @@ gnc_get_export_filename (SCM choice)
     type = g_strdup (_("HTML"));
   else
   {
-    char * s = gh_scm2newstr (gh_car (choice), NULL);
+    char * s = gh_scm2newstr (SCM_CAR (choice), NULL);
     type = g_strdup (s);
     if (s) free (s);
   }
@@ -464,13 +465,13 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
   gboolean result;
   SCM choice;
 
-  export_types = gh_call1 (gh_eval_str ("gnc:report-export-types"),
-                           report->cur_report);
+  export_types = scm_call_1 (scm_c_eval_string ("gnc:report-export-types"),
+			     report->cur_report);
 
-  export_thunk = gh_call1 (gh_eval_str ("gnc:report-export-thunk"),
-                           report->cur_report);
+  export_thunk = scm_call_1 (scm_c_eval_string ("gnc:report-export-thunk"),
+			     report->cur_report);
 
-  if (gh_list_p (export_types) && gh_procedure_p (export_thunk))
+  if (SCM_LISTP (export_types) && SCM_PROCEDUREP (export_thunk))
     choice = gnc_get_export_type_choice (export_types);
   else
     choice = SCM_BOOL_T;
@@ -482,15 +483,15 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
   if (!filepath)
     return TRUE;
 
-  if (gh_pair_p (choice))
+  if (SCM_CONSP (choice))
   {
     SCM file_scm;
     SCM res;
 
-    choice = gh_cdr (choice);
-    file_scm = gh_str02scm ((char *) filepath);
+    choice = SCM_CDR (choice);
+    file_scm = scm_makfrom0str (filepath);
 
-    res = gh_call3 (export_thunk, report->cur_report, choice, file_scm);
+    res = scm_call_3 (export_thunk, report->cur_report, choice, file_scm);
 
     result = (res != SCM_BOOL_F);
   }
@@ -513,11 +514,11 @@ static int
 gnc_report_window_params_cb(GtkWidget * w, gpointer data)
 {
   gnc_report_window * report = data;
-  SCM start_editor = gh_eval_str("gnc:report-edit-options");
+  SCM start_editor = scm_c_eval_string("gnc:report-edit-options");
 
   if(report->cur_report != SCM_BOOL_F)
   {
-    if(gh_call1(start_editor, report->cur_report) == SCM_BOOL_F) {
+    if(scm_call_1(start_editor, report->cur_report) == SCM_BOOL_F) {
       gnc_warning_dialog(_("There are no options for this report."));
     }
     else {
@@ -532,10 +533,10 @@ static void
 gnc_report_window_reload_cb(GtkWidget * unused, gpointer data)
 {
   gnc_report_window * report = data;
-  SCM               dirty_report = gh_eval_str("gnc:report-set-dirty?!");
+  SCM               dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
 
   if(report->cur_report != SCM_BOOL_F) {
-    gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
+    scm_call_2(dirty_report, report->cur_report, SCM_BOOL_T);
     gnc_html_reload(report->html);
   }
 }
@@ -580,11 +581,11 @@ static void
 gnc_report_window_option_change_cb(gpointer data)
 {
   gnc_report_window * report = data;
-  SCM               dirty_report = gh_eval_str("gnc:report-set-dirty?!");
+  SCM               dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
 
   if(report->cur_report != SCM_BOOL_F) {
     /* it's probably already dirty, but make sure */
-    gh_call2(dirty_report, report->cur_report, SCM_BOOL_T);
+    scm_call_2(dirty_report, report->cur_report, SCM_BOOL_T);
     gnc_html_reload(report->html);
   }
 }
@@ -607,9 +608,9 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
 {
   gnc_report_window * win = data;
   int  report_id;
-  SCM  find_report = gh_eval_str("gnc:find-report");
-  SCM  get_options = gh_eval_str("gnc:report-options");
-  SCM  set_needs_save = gh_eval_str("gnc:report-set-needs-save?!");
+  SCM  find_report    = scm_c_eval_string("gnc:find-report");
+  SCM  get_options    = scm_c_eval_string("gnc:report-options");
+  SCM  set_needs_save = scm_c_eval_string("gnc:report-set-needs-save?!");
   SCM  inst_report;
   
   /* we get this callback if a new report is requested to be loaded OR
@@ -624,7 +625,7 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
 	  && location && (strlen(location) > 10) &&
           !strncmp("report-id=", location, 10)) {
     sscanf(location+10, "%d", &report_id);
-    inst_report = gh_call1(find_report, gh_int2scm(report_id));
+    inst_report = scm_call_1(find_report, scm_int2num(report_id));
     if(inst_report != SCM_BOOL_F) {
       gnc_report_window_add_edited_report(win, inst_report);      
     }
@@ -636,7 +637,7 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   
   /* get the inst-report from the Scheme-side hash, and get its
    * options and editor thunk */
-  if((inst_report = gh_call1(find_report, gh_int2scm(report_id))) ==
+  if((inst_report = scm_call_1(find_report, scm_int2num(report_id))) ==
      SCM_BOOL_F) {
     return;
   }
@@ -646,9 +647,9 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
     win->initial_report = inst_report;
     scm_protect_object(win->initial_report);
     
-    gh_call2(set_needs_save, inst_report, SCM_BOOL_T);
+    scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
 
-    win->initial_odb = gnc_option_db_new(gh_call1(get_options, inst_report));  
+    win->initial_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
     win->name_change_cb_id = 
       gnc_option_db_register_change_callback(win->initial_odb,
                                              gnc_report_window_refresh,
@@ -668,7 +669,7 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   win->cur_report = inst_report;
   scm_protect_object(win->cur_report);
 
-  win->cur_odb = gnc_option_db_new(gh_call1(get_options, inst_report));  
+  win->cur_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
   win->option_change_cb_id = 
     gnc_option_db_register_change_callback(win->cur_odb,
                                            gnc_report_window_option_change_cb,
@@ -725,7 +726,7 @@ gnc_report_window_history_destroy_cb(gnc_html_history_node * node,
   int                report_id;
   
   if(remover == SCM_BOOL_F) {
-    remover = gh_eval_str("gnc:report-remove-by-id");
+    remover = scm_c_eval_string("gnc:report-remove-by-id");
   }
   
   if(node && 
@@ -733,7 +734,7 @@ gnc_report_window_history_destroy_cb(gnc_html_history_node * node,
      !strncmp("id=", node->location, 3)) {
     sscanf(node->location+3, "%d", &report_id);
     /*    printf("unreffing report %d and children\n", report_id);
-          gh_call1(remover, gh_int2scm(report_id)); */
+          scm_call_1(remover, scm_int2num(report_id)); */
   }
   else {
     return;
@@ -901,17 +902,17 @@ void
 gnc_report_window_destroy(gnc_report_window * win)
 {
 
-  SCM  get_editor = gh_eval_str("gnc:report-editor-widget");
-  SCM  set_editor = gh_eval_str("gnc:report-set-editor-widget!");
+  SCM  get_editor = scm_c_eval_string("gnc:report-editor-widget");
+  SCM  set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
   SCM  edited, editor; 
 
   gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, win);
 
   /* close any open editors */
-  for(edited = scm_list_copy(win->edited_reports); !gh_null_p(edited); 
-      edited = gh_cdr(edited)) {
-    editor = gh_call1(get_editor, gh_car(edited));
-    gh_call2(set_editor, gh_car(edited), SCM_BOOL_F);
+  for(edited = scm_list_copy(win->edited_reports); !SCM_NULLP(edited); 
+      edited = SCM_CDR(edited)) {
+    editor = scm_call_1(get_editor, SCM_CAR(edited));
+    scm_call_2(set_editor, SCM_CAR(edited), SCM_BOOL_F);
     if(editor != SCM_BOOL_F) {
       gtk_widget_destroy(GTK_WIDGET(gw_wcp_get_ptr(editor)));
     }
@@ -1006,12 +1007,12 @@ static void
 gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
                             gpointer user_data)
 {
-  SCM  dirty_report = gh_eval_str("gnc:report-set-dirty?!");
+  SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
   struct report_default_params_data * win = user_data;
   
   if(!win) return;
   gnc_option_db_commit(win->db);
-  gh_call2(dirty_report, win->cur_report, SCM_BOOL_T);
+  scm_call_2(dirty_report, win->cur_report, SCM_BOOL_T);
 }
 
 static void
@@ -1026,9 +1027,9 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
                             gpointer user_data)
 {
   struct report_default_params_data * win = user_data;
-  SCM    set_editor = gh_eval_str("gnc:report-set-editor-widget!");
+  SCM    set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
   
-  gh_call2(set_editor, win->cur_report, SCM_BOOL_F);
+  scm_call_2(set_editor, win->cur_report, SCM_BOOL_F);
   gnc_option_db_destroy(win->db);
   scm_unprotect_object(win->scm_options);
   gnc_options_dialog_destroy(win->win);
@@ -1039,13 +1040,13 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 GtkWidget * 
 gnc_report_window_default_params_editor(SCM options, SCM report)
 {
-  SCM get_editor = gh_eval_str("gnc:report-editor-widget");
-  SCM get_title = gh_eval_str("gnc:report-type");
+  SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
+  SCM get_title  = scm_c_eval_string("gnc:report-type");
   SCM ptr;
   
   char *title = NULL;
 
-  ptr = gh_call1(get_editor, report);
+  ptr = scm_call_1(get_editor, report);
   if(ptr != SCM_BOOL_F) {
     GtkWindow * w = gw_wcp_get_ptr(ptr);
     gtk_window_present(w);
@@ -1059,7 +1060,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     prm->cur_report  = report;
     prm->db          = gnc_option_db_new(prm->scm_options);
 
-    ptr = gh_call1(get_title, report);
+    ptr = scm_call_1(get_title, report);
     if (ptr != SCM_BOOL_F) {
       title = gh_scm2newstr(ptr, NULL);
     }
@@ -1100,7 +1101,7 @@ gnc_report_window_remove_edited_report(gnc_report_window * win, SCM report)
 void
 gnc_report_window_add_edited_report(gnc_report_window * win, SCM report)
 {
-  SCM new_edited = gh_cons(report, win->edited_reports);
+  SCM new_edited = scm_cons(report, win->edited_reports);
   scm_unprotect_object(win->edited_reports);
   win->edited_reports = new_edited;
   scm_protect_object(win->edited_reports);
@@ -1109,8 +1110,8 @@ gnc_report_window_add_edited_report(gnc_report_window * win, SCM report)
 void
 gnc_report_raise_editor(SCM report)
 {
-  SCM get_editor = gh_eval_str("gnc:report-editor-widget");
-  SCM editor = gh_call1(get_editor, report);
+  SCM get_editor = scm_c_eval_string("gnc:report-editor-widget");
+  SCM editor = scm_call_1(get_editor, report);
   gtk_window_present(gw_wcp_get_ptr(editor));
 }
 
@@ -1142,8 +1143,8 @@ static gboolean
 gnc_html_options_url_cb (const char *location, const char *label,
                          gboolean new_window, GNCURLResult *result)
 {
-  SCM find_report  = gh_eval_str ("gnc:find-report");
-  SCM start_editor = gh_eval_str ("gnc:report-edit-options");
+  SCM find_report  = scm_c_eval_string ("gnc:find-report");
+  SCM start_editor = scm_c_eval_string ("gnc:report-edit-options");
   SCM report;
   int report_id;
 
@@ -1163,7 +1164,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    report = gh_call1 (find_report, gh_int2scm (report_id));
+    report = scm_call_1 (find_report, scm_int2num (report_id));
     if (report == SCM_UNDEFINED ||
         report == SCM_BOOL_F)
     {
@@ -1173,7 +1174,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    gh_call1 (start_editor, report);
+    scm_call_1 (start_editor, report);
 
     return TRUE;
   }

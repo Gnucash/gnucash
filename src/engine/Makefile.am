@@ -4,6 +4,7 @@ pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
+	-I${top_srcdir}/src \
 	-I${top_srcdir}/src/gnc-module \
 	${GNUCASH_ENGINE_CFLAGS}
 

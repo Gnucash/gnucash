@@ -25,8 +25,9 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <string.h>
+#include "guile-mappings.h"
 
 #include "AccWindow.h"
 #include "Scrub.h"
@@ -1088,18 +1089,18 @@ gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * win) {
 
 static void
 gnc_acct_tree_window_options_new(GNCAcctTreeWin * win) {
-  SCM func = gh_eval_str("gnc:make-new-acct-tree-window");
-  SCM opts_and_id = gh_call0(func);
+  SCM func = scm_c_eval_string("gnc:make-new-acct-tree-window");
+  SCM opts_and_id = scm_call_0(func);
   
   scm_unprotect_object(win->options);
-  win->options = gh_car(opts_and_id);
+  win->options = SCM_CAR(opts_and_id);
   scm_protect_object(win->options);
-  win->options_id = gh_scm2int(gh_cdr(opts_and_id));
+  win->options_id = scm_num2int(SCM_CDR(opts_and_id), SCM_ARG1, __FUNCTION__);
 }
 
 void
 gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
-  SCM  free_tree = gh_eval_str("gnc:free-acct-tree-window");
+  SCM  free_tree = scm_c_eval_string("gnc:free-acct-tree-window");
   gnc_unregister_option_change_callback_id
     (win->euro_change_callback_id);
   
@@ -1113,7 +1114,7 @@ gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
   
   gnc_option_db_destroy(win->odb);
 
-  gh_call1(free_tree, gh_int2scm(win->options_id));
+  scm_call_1(free_tree, scm_int2num(win->options_id));
 
   scm_unprotect_object(win->options);
   g_free (win);
@@ -1123,7 +1124,7 @@ gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
 GNCAcctTreeWin *
 gnc_acct_tree_window_new(const gchar * url)  {
   GNCAcctTreeWin * treewin = g_new0(GNCAcctTreeWin, 1);
-  SCM find_options = gh_eval_str("gnc:find-acct-tree-window-options");
+  SCM find_options = scm_c_eval_string("gnc:find-acct-tree-window-options");
   SCM temp;
   int options_id;
   URLType type;
@@ -1153,7 +1154,7 @@ gnc_acct_tree_window_new(const gchar * url)  {
 	location && (strlen(location) > 3) && 
 	!strncmp("id=", location, 3)) {
       sscanf(location+3, "%d", &options_id);
-      temp = gh_call1(find_options, gh_int2scm(options_id));
+      temp = scm_call_1(find_options, scm_int2num(options_id));
 
       if(temp != SCM_BOOL_F) {
         scm_unprotect_object(treewin->options);

@@ -9,7 +9,8 @@
 #ifndef GFEC_H
 #define GFEC_H
 
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 typedef void (*gfec_error_handler)(const char *error_message);
 

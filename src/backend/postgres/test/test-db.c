@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <libpq-fe.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -1075,7 +1075,7 @@ test_performance(DbInfo *dbinfo)
 #endif
 
 static void
-guile_main(int argc, char **argv)
+guile_main (void *closure, int argc, char **argv)
 {
     DbInfo *dbinfo;
     
@@ -1130,8 +1130,8 @@ guile_main(int argc, char **argv)
 }
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
-    gh_enter(argc, argv, guile_main);
+    gh_enter(argc, argv, guile_main, NULL);
     return 0;
 }

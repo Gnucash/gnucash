@@ -5,8 +5,9 @@
  * Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <glib.h>
 
 #include "gnc-module.h"
@@ -55,8 +56,8 @@ libgncmod_dialog_tax_table_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
-  gh_eval_str("(use-modules (g-wrapped gw-dialog-tax-table))");
-  //  gh_eval_str("(use-modules (gnucash dialog-tax-table))");
+  scm_c_eval_string("(use-modules (g-wrapped gw-dialog-tax-table))");
+  //  scm_c_eval_string("(use-modules (gnucash dialog-tax-table))");
 
   return TRUE;
 }

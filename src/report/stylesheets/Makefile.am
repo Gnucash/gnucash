@@ -7,7 +7,10 @@ libgncmod_stylesheets_la_SOURCES = \
 
 libgncmod_stylesheets_la_LDFLAGS=-module
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
+AM_CFLAGS = \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/gnc-module \
+  ${GUILE_INCS} ${GLIB_CFLAGS}
 
 .scm-links:
 	rm -f gnucash report

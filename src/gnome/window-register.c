@@ -61,6 +61,7 @@
 #include "window-report.h"
 #include "top-level.h"
 #include "dialog-print-check.h"
+#include "guile-mappings.h"
 
 typedef struct _RegDateWindow RegDateWindow;
 struct _RegDateWindow
@@ -1470,27 +1471,25 @@ report_helper (RegWindow *regData, Split *split, Query *query)
 
   args = SCM_EOL;
 
-  func = gh_eval_str ("gnc:register-report-create");
-  g_return_val_if_fail (gh_procedure_p (func), -1);
+  func = scm_c_eval_string ("gnc:register-report-create");
+  g_return_val_if_fail (SCM_PROCEDUREP (func), -1);
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  arg = gh_str02scm ((char *) gnc_split_register_get_credit_string (reg));
-  args = gh_cons (arg, args);
+  arg = scm_makfrom0str (gnc_split_register_get_credit_string (reg));
+  args = scm_cons (arg, args);
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  arg = gh_str02scm ((char *) gnc_split_register_get_debit_string (reg));
-  args = gh_cons (arg, args);
+  arg = scm_makfrom0str (gnc_split_register_get_debit_string (reg));
+  args = scm_cons (arg, args);
 
   str = gnc_reg_get_name (regData, FALSE);
-  arg = gh_str02scm (str);
-  args = gh_cons (arg, args);
+  arg = scm_makfrom0str (str);
+  args = scm_cons (arg, args);
   g_free (str);
 
-  arg = gh_bool2scm (reg->use_double_line);
-  args = gh_cons (arg, args);
+  arg = SCM_BOOL (reg->use_double_line);
+  args = scm_cons (arg, args);
 
-  arg = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
-  args = gh_cons (arg, args);
+  arg = SCM_BOOL (reg->style == REG_STYLE_JOURNAL);
+  args = scm_cons (arg, args);
 
   if (!query)
   {
@@ -1498,17 +1497,17 @@ report_helper (RegWindow *regData, Split *split, Query *query)
     g_return_val_if_fail (query != NULL, -1);
   }
 
-  qtype = gh_eval_str("<gnc:Query*>");
+  qtype = scm_c_eval_string("<gnc:Query*>");
   g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
 
   arg = gw_wcp_assimilate_ptr (query, qtype);
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
   if (split)
   {
-    qtype = gh_eval_str("<gnc:Split*>");
+    qtype = scm_c_eval_string("<gnc:Split*>");
     g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
     arg = gw_wcp_assimilate_ptr (split, qtype);
   }
@@ -1516,24 +1515,24 @@ report_helper (RegWindow *regData, Split *split, Query *query)
   {
     arg = SCM_BOOL_F;
   }
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
-  qtype = gh_eval_str("<gnc:Account*>");
+  qtype = scm_c_eval_string("<gnc:Account*>");
   g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
 
   account = gnc_ledger_display_leader (regData->ledger);
   arg = gw_wcp_assimilate_ptr (account, qtype);
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
   g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
   /* Apply the function to the args */
-  arg = gh_apply (func, args);
-  g_return_val_if_fail (gh_exact_p (arg), -1);
+  arg = scm_apply (func, args, SCM_EOL);
+  g_return_val_if_fail (SCM_EXACTP (arg), -1);
 
-  return gh_scm2int (arg);
+  return scm_num2int (arg, SCM_ARG1, __FUNCTION__);
 }
 
 /********************************************************************\

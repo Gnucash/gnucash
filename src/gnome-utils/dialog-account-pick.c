@@ -26,7 +26,7 @@
 
 #include <gnome.h>
 #include <stdio.h>
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "dialog-account-pick.h"
 #include "dialog-utils.h"

@@ -40,7 +40,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,6 +50,7 @@
 #include "gnucash-style.h"
 #include "table-allgui.h"
 #include "table-gnome.h"
+#include "guile-mappings.h"
 
 
 void
@@ -91,14 +92,14 @@ gnc_table_save_state (Table *table)
                         if (cell->expandable)
                                 continue;
 
-                        assoc = gh_cons (gh_str02scm(cell->cell_name),
-                                         gh_int2scm(width));
+                        assoc = scm_cons (scm_makfrom0str(cell->cell_name),
+					  scm_int2num(width));
 
-                        alist = gh_cons (assoc, alist);
+                        alist = scm_cons (assoc, alist);
                 }
         }
 
-        if (!gh_null_p (alist))
+        if (!SCM_NULLP (alist))
                 gnc_set_option ("__gui", "reg_column_widths", alist);
 
         gnc_header_widths_destroy (widths);
@@ -171,20 +172,22 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         else
                 alist = SCM_EOL;
 
-        while (gh_list_p (alist) && !gh_null_p (alist))
+        while (SCM_LISTP (alist) && !SCM_NULLP (alist))
         {
                 char *name;
                 SCM assoc;
 
-                assoc = gh_car (alist);
-                alist = gh_cdr (alist);
+                assoc = SCM_CAR (alist);
+                alist = SCM_CDR (alist);
 
-                name = gh_scm2newstr(gh_car (assoc), NULL);
+                name = gh_scm2newstr(SCM_CAR (assoc), NULL);
                 if (!name)
                         continue;
 
                 gnc_header_widths_set_width (widths, name,
-                                             gh_scm2int(gh_cdr (assoc)));
+                                             scm_num2int(SCM_CDR (assoc),
+							 SCM_ARG1,
+							 __FUNCTION__));
 
                 free (name);
         }

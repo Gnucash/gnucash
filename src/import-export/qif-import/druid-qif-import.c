@@ -26,7 +26,7 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -49,6 +49,7 @@
 #include "gnc-ui.h"
 #include "messages.h"
 #include "window-help.h"
+#include "guile-mappings.h"
 
 #include <g-wrap-wct.h>
 
@@ -391,8 +392,8 @@ gnc_ui_qif_import_load_file_back_cb(GnomeDruidPage * page, gpointer arg1,
 {
   QIFImportWindow * wind = user_data;
 
-  if (gh_list_p(wind->imported_files) &&
-      (gh_length(wind->imported_files) > 0)) {
+  if (SCM_LISTP(wind->imported_files) &&
+      (scm_ilength(wind->imported_files) > 0)) {
     gnome_druid_set_page(GNOME_DRUID(wind->druid), 
 			 get_named_page(wind, "loaded_files_page"));
     return TRUE;
@@ -423,14 +424,14 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   GList * format_strings;
   GList * listit;
 
-  SCM make_qif_file   = gh_eval_str("make-qif-file");
-  SCM qif_file_load   = gh_eval_str("qif-file:read-file");
-  SCM qif_file_parse  = gh_eval_str("qif-file:parse-fields");
-  SCM qif_file_loaded = gh_eval_str("qif-dialog:qif-file-loaded?");
-  SCM unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
-  SCM check_from_acct = gh_eval_str("qif-file:check-from-acct");
-  SCM default_acct    = gh_eval_str("qif-file:path-to-accountname");
-  SCM qif_file_parse_results  = gh_eval_str("qif-file:parse-fields-results");
+  SCM make_qif_file   = scm_c_eval_string("make-qif-file");
+  SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
+  SCM qif_file_parse  = scm_c_eval_string("qif-file:parse-fields");
+  SCM qif_file_loaded = scm_c_eval_string("qif-dialog:qif-file-loaded?");
+  SCM unload_qif_file = scm_c_eval_string("qif-dialog:unload-qif-file");
+  SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
+  SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
+  SCM qif_file_parse_results  = scm_c_eval_string("qif-file:parse-fields-results");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
@@ -458,10 +459,10 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   }
   else {
     /* convert filename to scm */
-    scm_filename   = gh_str02scm(path_to_load);
+    scm_filename   = scm_makfrom0str(path_to_load);
     imported_files = wind->imported_files;
     
-    if(gh_call2(qif_file_loaded, scm_filename, wind->imported_files)
+    if(scm_call_2(qif_file_loaded, scm_filename, wind->imported_files)
        == SCM_BOOL_T) {
       gnc_error_dialog_parented(GTK_WINDOW(wind->window),
                                 _("That QIF file is already loaded.\n"
@@ -473,23 +474,23 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     gnc_set_busy_cursor(NULL, TRUE);
     
     /* create the <qif-file> object */
-    scm_qiffile          = gh_call0(make_qif_file);    
-    imported_files       = gh_cons(scm_qiffile, imported_files);    
+    scm_qiffile          = scm_call_0(make_qif_file);    
+    imported_files       = scm_cons(scm_qiffile, imported_files);    
 
     scm_unprotect_object(wind->selected_file);      
     wind->selected_file  = scm_qiffile;    
     scm_protect_object(wind->selected_file);      
     
     /* load the file */
-    load_return = gh_call3(qif_file_load, gh_car(imported_files),
-                           scm_filename, wind->ticker_map);
+    load_return = scm_call_3(qif_file_load, SCM_CAR(imported_files),
+			     scm_filename, wind->ticker_map);
     
     /* a list returned is (#f error-message) for an error, 
      * (#t error-message) for a warning, or just #f for an 
      * exception. */
-    if(gh_list_p(load_return) &&
-       (gh_car(load_return) == SCM_BOOL_T)) {
-      char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
+    if(SCM_LISTP(load_return) &&
+       (SCM_CAR(load_return) == SCM_BOOL_T)) {
+      char *warn_str = gh_scm2newstr(SCM_CADR(load_return), NULL);
       gnc_warning_dialog_parented(GTK_WIDGET(wind->window),
 				  _("QIF file load warning:\n%s"),
 				  warn_str ? warn_str : "(null)");
@@ -504,16 +505,16 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       return TRUE;
     }
     else if ((load_return != SCM_BOOL_T) &&
-             (!gh_list_p(load_return) || 
-              (gh_car(load_return) != SCM_BOOL_T))) {
-      char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
+             (!SCM_LISTP(load_return) || 
+              (SCM_CAR(load_return) != SCM_BOOL_T))) {
+      char *warn_str = gh_scm2newstr(SCM_CADR(load_return), NULL);
       gnc_error_dialog_parented(GTK_WINDOW(wind->window),
 				_("QIF file load failed:\n%s"),
 				warn_str ? warn_str : "(null)");
       free (warn_str);
 
       imported_files = 
-        gh_call2(unload_qif_file, scm_qiffile, imported_files);
+        scm_call_2(unload_qif_file, scm_qiffile, imported_files);
             
       scm_unprotect_object(wind->imported_files);
       wind->imported_files = imported_files;
@@ -523,7 +524,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     }
     else {
       /* call the field parser */
-      parse_return = gh_call1(qif_file_parse, gh_car(imported_files));
+      parse_return = scm_call_1(qif_file_parse, SCM_CAR(imported_files));
       
       /* parser returns:
        *   success:	#t
@@ -534,18 +535,18 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
        * ambiguous.  So search the results for the "date" type and if
        * it's found, set up the format selector page.
        */
-      if(gh_list_p(parse_return) && 
-         (gh_car(parse_return) == SCM_BOOL_T)) {
+      if(SCM_LISTP(parse_return) && 
+         (SCM_CAR(parse_return) == SCM_BOOL_T)) {
 
-	if ((date_formats = gh_call2(qif_file_parse_results,
-				     gh_cdr(parse_return),
-				     gh_symbol2scm("date"))) != SCM_BOOL_F) {
+	if ((date_formats = scm_call_2(qif_file_parse_results,
+				       SCM_CDR(parse_return),
+				       gh_symbol2scm("date"))) != SCM_BOOL_F) {
 	  format_strings = NULL;
-	  while(gh_list_p(date_formats) && !gh_null_p(date_formats)) {
+	  while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats)) {
 	    format_strings = 
 	      g_list_append(format_strings, 
 			    gh_symbol2newstr(gh_car(date_formats), NULL));
-	    date_formats = gh_cdr(date_formats);
+	    date_formats = SCM_CDR(date_formats);
 	  }
 	  gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
 					format_strings);
@@ -570,20 +571,20 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
                                   _("An error occurred while parsing the "
                                     "QIF file."));
         imported_files = 
-          gh_call2(unload_qif_file, scm_qiffile, imported_files);
+          scm_call_2(unload_qif_file, scm_qiffile, imported_files);
         return TRUE;
       }
       else if((parse_return != SCM_BOOL_T) &&
-         (!gh_list_p(parse_return) ||
-          (gh_car(parse_return) != SCM_BOOL_T))) {
-        char *warn_str = gh_scm2newstr(gh_cdadr(parse_return), NULL);
+         (!SCM_LISTP(parse_return) ||
+          (SCM_CAR(parse_return) != SCM_BOOL_T))) {
+        char *warn_str = gh_scm2newstr(SCM_CDADR(parse_return), NULL);
         gnc_error_dialog_parented(GTK_WINDOW(wind->window),
 				  _("QIF file parse failed:\n%s"),
 				  warn_str ? warn_str : "(null)");
         free(warn_str);
 
         imported_files = 
-          gh_call2(unload_qif_file, scm_qiffile, imported_files);
+          scm_call_2(unload_qif_file, scm_qiffile, imported_files);
         
         return TRUE;
       } 
@@ -600,10 +601,10 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       /* we need to get a date format, so go to the next page */
       return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
     }
-    else if(gh_call1(check_from_acct, gh_car(imported_files)) != SCM_BOOL_T) {
+    else if(scm_call_1(check_from_acct, SCM_CAR(imported_files)) != SCM_BOOL_T) {
       /* skip to the "ask account name" page */
-      default_acctname = gh_scm2newstr(gh_call1(default_acct, 
-                                                gh_car(imported_files)),
+      default_acctname = gh_scm2newstr(scm_call_1(default_acct, 
+                                                SCM_CAR(imported_files)),
                                        NULL);
       gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
       
@@ -631,19 +632,19 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
 
-  SCM  reparse_dates   = gh_eval_str("qif-file:reparse-dates");
-  SCM  check_from_acct = gh_eval_str("qif-file:check-from-acct");
+  SCM  reparse_dates   = scm_c_eval_string("qif-file:reparse-dates");
+  SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
   SCM  format_sym = 
-    gh_symbol2scm(gtk_entry_get_text(GTK_ENTRY(wind->date_format_entry)));
+    scm_str2symbol(gtk_entry_get_text(GTK_ENTRY(wind->date_format_entry)));
   
-  gh_call2(reparse_dates, wind->selected_file, format_sym);
+  scm_call_2(reparse_dates, wind->selected_file, format_sym);
   
-  if(gh_call1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
-    SCM default_acct    = gh_eval_str("qif-file:path-to-accountname");
+  if(scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
+    SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
     char * default_acctname;
 
-    default_acctname = gh_scm2newstr(gh_call1(default_acct,
-					      wind->selected_file),
+    default_acctname = gh_scm2newstr(scm_call_1(default_acct,
+						wind->selected_file),
 				     NULL);
     gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
 
@@ -674,11 +675,11 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
 {
   QIFImportWindow * wind = user_data;
 
-  if(gh_list_p(wind->imported_files) && 
-     (gh_length(wind->imported_files) > row)) {
+  if(SCM_LISTP(wind->imported_files) && 
+     (scm_ilength(wind->imported_files) > row)) {
     scm_unprotect_object(wind->selected_file);
-    wind->selected_file = gh_list_ref(wind->imported_files,
-                                      gh_int2scm(row));   
+    wind->selected_file = scm_list_ref(wind->imported_files,
+				       scm_int2num(row));   
     scm_protect_object(wind->selected_file);
   } 
 }
@@ -733,12 +734,12 @@ gnc_ui_qif_import_unload_file_cb(GtkButton * button,
 {
   QIFImportWindow * wind = user_data;
 
-  SCM unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
+  SCM unload_qif_file = scm_c_eval_string("qif-dialog:unload-qif-file");
   SCM imported_files;
   
   if(wind->selected_file != SCM_BOOL_F) {
     imported_files = 
-      gh_call2(unload_qif_file, wind->selected_file, wind->imported_files);
+      scm_call_2(unload_qif_file, wind->selected_file, wind->imported_files);
   
     scm_unprotect_object(wind->imported_files);
     wind->imported_files = imported_files;
@@ -771,14 +772,14 @@ update_file_page(QIFImportWindow * wind)
 
   /* clear the list */
   gtk_clist_clear(GTK_CLIST(wind->selected_file_list));
-  qif_file_path = gh_eval_str("qif-file:path");
+  qif_file_path = scm_c_eval_string("qif-file:path");
   
   /* iterate over all the imported files */
   gtk_clist_freeze(GTK_CLIST(wind->selected_file_list));
   
-  while(!gh_null_p(loaded_file_list)) {  
-    scm_qiffile = gh_car(loaded_file_list);
-    row_text    = gh_scm2newstr(gh_call1(qif_file_path, scm_qiffile), NULL);
+  while(!SCM_NULLP(loaded_file_list)) {  
+    scm_qiffile = SCM_CAR(loaded_file_list);
+    row_text    = gh_scm2newstr(scm_call_1(qif_file_path, scm_qiffile), NULL);
 
     row = gtk_clist_append(GTK_CLIST(wind->selected_file_list),
                            &row_text);
@@ -788,7 +789,7 @@ update_file_page(QIFImportWindow * wind)
       sel_item = row;
     }
 
-    loaded_file_list = gh_cdr(loaded_file_list);
+    loaded_file_list = SCM_CDR(loaded_file_list);
   }
   gtk_clist_thaw(GTK_CLIST(wind->selected_file_list));
 
@@ -814,7 +815,7 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
   char   * acct_name = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
-  SCM    fix_default = gh_eval_str("qif-import:fix-from-acct");
+  SCM    fix_default = scm_c_eval_string("qif-import:fix-from-acct");
   SCM    scm_name;
 
   if(!acct_name || acct_name[0] == 0) {
@@ -823,8 +824,8 @@ gnc_ui_qif_import_default_acct_next_cb(GnomeDruidPage * page,
     return TRUE;
   }
   else {
-    scm_name = gh_str02scm(acct_name);
-    gh_call2(fix_default, wind->selected_file, scm_name);
+    scm_name = scm_makfrom0str(acct_name);
+    scm_call_2(fix_default, wind->selected_file, scm_name);
     return FALSE;
   }
 }
@@ -842,10 +843,10 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
                                        gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  SCM unload = gh_eval_str("qif-dialog:unload-qif-file");
+  SCM unload = scm_c_eval_string("qif-dialog:unload-qif-file");
   SCM files_list;
 
-  files_list = gh_call2(unload, wind->selected_file, wind->imported_files);
+  files_list = scm_call_2(unload, wind->selected_file, wind->imported_files);
 
   scm_unprotect_object(wind->imported_files);
   wind->imported_files = files_list;
@@ -877,9 +878,9 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 			   GtkWidget *list, SCM map_info, SCM * display_info)
 {
 
-  SCM  get_qif_name         = gh_eval_str("qif-map-entry:qif-name");
-  SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
-  SCM  get_new              = gh_eval_str("qif-map-entry:new-acct?");
+  SCM  get_qif_name = scm_c_eval_string("qif-map-entry:qif-name");
+  SCM  get_gnc_name = scm_c_eval_string("qif-map-entry:gnc-name");
+  SCM  get_new      = scm_c_eval_string("qif-map-entry:new-acct?");
   SCM  accts_left;
   int  sel_row=0;
   char * row_text[3];
@@ -889,10 +890,10 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
   sel_row = (GTK_CLIST(list))->focus_row;
 
   /* now get the list of strings to display in the clist widget */
-  accts_left = gh_call3(make_display,
-                        wind->imported_files,
-                        map_info, 
-                        wind->gnc_acct_info);
+  accts_left = scm_call_3(make_display,
+			  wind->imported_files,
+			  map_info, 
+			  wind->gnc_acct_info);
 
   scm_unprotect_object(*display_info);
   *display_info = accts_left;  
@@ -912,18 +913,18 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 
   row_text[2] = "";
 
-  while(!gh_null_p(accts_left)) {
-    row_text[0] = gh_scm2newstr(gh_call1(get_qif_name, gh_car(accts_left)),
+  while(!SCM_NULLP(accts_left)) {
+    row_text[0] = gh_scm2newstr(scm_call_1(get_qif_name, SCM_CAR(accts_left)),
                                 NULL);
-    row_text[1] = gh_scm2newstr(gh_call1(get_gnc_name, gh_car(accts_left)),
+    row_text[1] = gh_scm2newstr(scm_call_1(get_gnc_name, SCM_CAR(accts_left)),
                                 NULL);
     
     row = gtk_clist_append(GTK_CLIST(list), row_text);
 
     gnc_clist_set_check (GTK_CLIST(list), row, 2,
-                         gh_call1(get_new, gh_car(accts_left)) == SCM_BOOL_T);
+                         scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
-    accts_left = gh_cdr(accts_left);
+    accts_left = SCM_CDR(accts_left);
 
     free(row_text[0]);
     free(row_text[1]);
@@ -946,7 +947,7 @@ static void
 update_accounts_page(QIFImportWindow * wind)
 {
 
-  SCM  make_account_display = gh_eval_str("qif-dialog:make-account-display");
+  SCM  make_account_display = scm_c_eval_string("qif-dialog:make-account-display");
 
   update_account_picker_page (wind, make_account_display, wind->acct_list,
 			      wind->acct_map_info, &(wind->acct_display_info));
@@ -960,7 +961,7 @@ update_accounts_page(QIFImportWindow * wind)
 static void
 update_categories_page(QIFImportWindow * wind)
 {
-  SCM  make_category_display = gh_eval_str("qif-dialog:make-category-display");
+  SCM  make_category_display = scm_c_eval_string("qif-dialog:make-category-display");
 
   update_account_picker_page (wind, make_category_display, wind->cat_list,
 			      wind->cat_map_info, &(wind->cat_display_info));
@@ -974,7 +975,7 @@ update_categories_page(QIFImportWindow * wind)
 static void
 update_memo_page(QIFImportWindow * wind)
 {
-  SCM  make_memo_display = gh_eval_str("qif-dialog:make-memo-display");
+  SCM  make_memo_display = scm_c_eval_string("qif-dialog:make-memo-display");
 
   update_account_picker_page (wind, make_memo_display, wind->memo_list,
 			      wind->memo_map_info, &(wind->memo_display_info));
@@ -992,16 +993,16 @@ static void
 select_line (QIFImportWindow *wind, gint row, SCM display_info, SCM map_info,
 	     void (*update_page)(QIFImportWindow *))
 {
-  SCM   get_name = gh_eval_str("qif-map-entry:qif-name");
+  SCM   get_name = scm_c_eval_string("qif-map-entry:qif-name");
   SCM   selected_acct;
   
   /* find the <qif-map-entry> corresponding to the selected row */
-  selected_acct = gh_list_ref(display_info, gh_int2scm(row));
+  selected_acct = scm_list_ref(display_info, scm_int2num(row));
   
   /* call the account picker to update it */
   selected_acct = qif_account_picker_dialog(wind, selected_acct);
 
-  scm_hash_set_x(map_info, gh_call1(get_name, selected_acct), selected_acct);
+  scm_hash_set_x(map_info, scm_call_1(get_name, selected_acct), selected_acct);
 
   /* update display */
   update_page(wind);
@@ -1119,8 +1120,8 @@ static gboolean
 gnc_ui_qif_import_convert(QIFImportWindow * wind)
 {
 
-  SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
-  SCM   find_duplicates = gh_eval_str("gnc:group-find-duplicates");
+  SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
+  SCM   find_duplicates = scm_c_eval_string("gnc:group-find-duplicates");
   SCM   retval;
   SCM   current_xtn;
 
@@ -1161,19 +1162,20 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
     if (old_commodity != page->commodity) {
-	scm_hash_remove_x(wind->stock_hash, gh_str02scm(fullname));
+	scm_hash_remove_x(wind->stock_hash, scm_makfrom0str(fullname));
     }
   }
 
   /* call a scheme function to do the work.  The return value is an
    * account group containing all the new accounts and transactions */
-  retval = gh_apply(qif_to_gnc, 
-                    SCM_LIST6(wind->imported_files,
-                              wind->acct_map_info, 
-                              wind->cat_map_info,
-                              wind->memo_map_info,
-                              wind->stock_hash,
-                              gh_str02scm(currname)));
+  retval = scm_apply(qif_to_gnc, 
+		     SCM_LIST6(wind->imported_files,
+			       wind->acct_map_info, 
+			       wind->cat_map_info,
+			       wind->memo_map_info,
+			       wind->stock_hash,
+			       scm_makfrom0str(currname)),
+		     SCM_EOL);
 
   gnc_unset_busy_cursor(NULL);
 
@@ -1193,9 +1195,9 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
-    retval = gh_call2(find_duplicates, 
-                      gh_eval_str("(gnc:get-current-group)"),
-                      wind->imported_account_group);
+    retval = scm_call_2(find_duplicates, 
+			scm_c_eval_string("(gnc:get-current-group)"),
+			wind->imported_account_group);
     gnc_unset_busy_cursor(NULL);
     
     scm_unprotect_object(wind->match_transactions);
@@ -1205,7 +1207,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     /* skip to the last page if we couldn't find duplicates 
      * in the new group */
     if((retval == SCM_BOOL_F) ||
-       (gh_null_p(retval))) {
+       (SCM_NULLP(retval))) {
 
       gnc_resume_gui_refresh();
       return FALSE;
@@ -1217,8 +1219,8 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     gtk_clist_clear(GTK_CLIST(wind->new_transaction_list));
     gtk_clist_freeze(GTK_CLIST(wind->new_transaction_list));
 
-    while(!gh_null_p(retval)) {
-      current_xtn = gh_caar(retval);
+    while(!SCM_NULLP(retval)) {
+      current_xtn = SCM_CAAR(retval);
       gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
       gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
 
@@ -1238,7 +1240,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
       rownum = gtk_clist_append(GTK_CLIST(wind->new_transaction_list),
                                 (gchar **) row_text);      
       
-      retval      = gh_cdr(retval); 
+      retval      = SCM_CDR(retval); 
     }
 
     gtk_clist_columns_autosize(GTK_CLIST(wind->new_transaction_list));
@@ -1262,15 +1264,15 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
                                gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  SCM any_new      = gh_eval_str("qif-import:any-new-accts?");
-  SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
+  SCM any_new      = scm_c_eval_string("qif-import:any-new-accts?");
+  SCM update_stock = scm_c_eval_string("qif-import:update-stock-hash");
 
   int show_matches;
   
   /* if any accounts are new, ask about the currency; else,
    * just skip that page */
-  if((gh_call1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
-     (gh_call1(any_new, wind->cat_map_info) == SCM_BOOL_T)) {
+  if((scm_call_1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
+     (scm_call_1(any_new, wind->cat_map_info) == SCM_BOOL_T)) {
     /* go to currency page */ 
     return gnc_ui_qif_import_generic_next_cb(page, arg1, wind);
   }
@@ -1278,8 +1280,8 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
     /* if we need to look at stocks, do that, otherwise import
      * xtns and go to the duplicates page */
     scm_unprotect_object(wind->new_stocks);
-    wind->new_stocks = gh_call3(update_stock, wind->stock_hash,
-				wind->ticker_map, wind->acct_map_info);
+    wind->new_stocks = scm_call_3(update_stock, wind->stock_hash,
+				  wind->ticker_map, wind->acct_map_info);
     scm_protect_object(wind->new_stocks);
     
     if(wind->new_stocks != SCM_BOOL_F) {
@@ -1329,13 +1331,13 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
                                    gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
+  SCM update_stock = scm_c_eval_string("qif-import:update-stock-hash");
   int show_matches;
 
   gnc_set_busy_cursor(NULL, TRUE);
   scm_unprotect_object(wind->new_stocks);
-  wind->new_stocks =  gh_call3(update_stock, wind->stock_hash, 
-			       wind->ticker_map, wind->acct_map_info);
+  wind->new_stocks =  scm_call_3(update_stock, wind->stock_hash, 
+				 wind->ticker_map, wind->acct_map_info);
   scm_protect_object(wind->new_stocks);
   
   if(wind->new_stocks != SCM_BOOL_F) {
@@ -1455,7 +1457,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
 {
   QIFImportWindow * wind = user_data;
 
-  SCM   hash_ref          = gh_eval_str("hash-ref");
+  SCM   hash_ref  = scm_c_eval_string("hash-ref");
   SCM   stocks;
   SCM   comm_ptr_token;
   SCM   show_matches;
@@ -1468,7 +1470,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   if(wind->commodity_pages) return;
   
   /* this shouldn't happen, but DTRT if it does */
-  if(gh_null_p(wind->new_stocks)) {
+  if(SCM_NULLP(wind->new_stocks)) {
     printf("somehow got to commodity doc page with nothing to do... BUG!\n");
     if (gnc_ui_qif_import_convert(wind))
       show_matches = SCM_BOOL_T;
@@ -1495,8 +1497,8 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   /* insert new pages, one for each stock */
   gnc_set_busy_cursor(NULL, TRUE);
   stocks = wind->new_stocks;
-  while(!gh_null_p(stocks) && (stocks != SCM_BOOL_F)) {
-    comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stocks));
+  while(!SCM_NULLP(stocks) && (stocks != SCM_BOOL_F)) {
+    comm_ptr_token = scm_call_2(hash_ref, wind->stock_hash, SCM_CAR(stocks));
     commodity      = gw_wcp_get_ptr(comm_ptr_token);
     
     new_page = make_qif_druid_page(commodity);
@@ -1513,7 +1515,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
                             GNOME_DRUID_PAGE(new_page->page));
     back_page = GNOME_DRUID_PAGE(new_page->page);
     
-    stocks = gh_cdr(stocks);
+    stocks = SCM_CDR(stocks);
     gtk_widget_show_all(new_page->page);
   }
   gnc_unset_busy_cursor(NULL);
@@ -1655,18 +1657,17 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
                                      GTK_JUSTIFY_CENTER);
 
   if(wind->match_transactions != SCM_BOOL_F) {
-    possible_matches = gh_cdr(gh_list_ref
-                              (wind->match_transactions,
-                               gh_int2scm(wind->selected_transaction)));
-    gh_call2(gh_eval_str("qif-import:refresh-match-selection"),
-             possible_matches, gh_int2scm(selection));
+    possible_matches = SCM_CDR(scm_list_ref(wind->match_transactions,
+                                  scm_int2num(wind->selected_transaction)));
+    scm_call_2(scm_c_eval_string("qif-import:refresh-match-selection"),
+	       possible_matches, scm_int2num(selection));
 
     row_text[3] = "";
 
-    while(!gh_null_p(possible_matches)) {
-      current_xtn = gh_car(possible_matches);
-      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(gh_car(current_xtn));
-      selected    = gh_cdr(current_xtn);
+    while(!SCM_NULLP(possible_matches)) {
+      current_xtn = SCM_CAR(possible_matches);
+      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(SCM_CAR(current_xtn));
+      selected    = SCM_CDR(current_xtn);
       gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
       
       row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
@@ -1688,7 +1689,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
       gnc_clist_set_check (GTK_CLIST(wind->old_transaction_list),
                            rownum, 3, selected != SCM_BOOL_F);
 
-      possible_matches = gh_cdr(possible_matches);
+      possible_matches = SCM_CDR(possible_matches);
     }
   }
 
@@ -1723,9 +1724,9 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
                             gpointer user_data)
 {
   
-  SCM   save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
-  SCM   cat_and_merge = gh_eval_str("gnc:group-catenate-and-merge");
-  SCM   prune_xtns = gh_eval_str("gnc:prune-matching-transactions");
+  SCM   save_map_prefs = scm_c_eval_string("qif-import:save-map-prefs");
+  SCM   cat_and_merge = scm_c_eval_string("gnc:group-catenate-and-merge");
+  SCM   prune_xtns = scm_c_eval_string("gnc:prune-matching-transactions");
   
   QIFImportWindow * wind = user_data;
 
@@ -1733,20 +1734,21 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
 
   /* prune the old transactions marked as dupes */
   if(wind->match_transactions != SCM_BOOL_F) {
-    gh_call1(prune_xtns, wind->match_transactions);
+    scm_call_1(prune_xtns, wind->match_transactions);
   }
 
   /* actually add in the new transactions. */
-  gh_call2(cat_and_merge, 
-           gh_eval_str("(gnc:get-current-group)"),
-           wind->imported_account_group);
+  scm_call_2(cat_and_merge, 
+	     scm_c_eval_string("(gnc:get-current-group)"),
+	     wind->imported_account_group);
   
   gnc_resume_gui_refresh();
   
   /* write out mapping info before destroying the window */
-  gh_apply(save_map_prefs, 
-           SCM_LIST4(wind->acct_map_info, wind->cat_map_info,
-                     wind->memo_map_info, wind->stock_hash));
+  scm_apply(save_map_prefs, 
+	    SCM_LIST4(wind->acct_map_info, wind->cat_map_info,
+		      wind->memo_map_info, wind->stock_hash),
+	    SCM_EOL);
   
   gnc_ui_qif_import_druid_destroy(wind);  
 }
@@ -1991,17 +1993,17 @@ gnc_ui_qif_import_druid_make(void)  {
   
   /* load the saved-state of the mappings from Quicken accounts and
    * categories to gnucash accounts */
-  load_map_prefs = gh_eval_str("qif-import:load-map-prefs");
+  load_map_prefs = scm_c_eval_string("qif-import:load-map-prefs");
 
-  mapping_info = gh_call0(load_map_prefs);
-  retval->gnc_acct_info    = gh_list_ref(mapping_info, gh_int2scm(0));
-  retval->acct_map_info    = gh_list_ref(mapping_info, gh_int2scm(1));
-  retval->cat_map_info     = gh_list_ref(mapping_info, gh_int2scm(2));
-  retval->memo_map_info    = gh_list_ref(mapping_info, gh_int2scm(3));
-  retval->stock_hash       = gh_list_ref(mapping_info, gh_int2scm(4));
+  mapping_info = scm_call_0(load_map_prefs);
+  retval->gnc_acct_info    = scm_list_ref(mapping_info, scm_int2num(0));
+  retval->acct_map_info    = scm_list_ref(mapping_info, scm_int2num(1));
+  retval->cat_map_info     = scm_list_ref(mapping_info, scm_int2num(2));
+  retval->memo_map_info    = scm_list_ref(mapping_info, scm_int2num(3));
+  retval->stock_hash       = scm_list_ref(mapping_info, scm_int2num(4));
 
-  create_ticker_map = gh_eval_str("make-ticker-map");
-  retval->ticker_map = gh_call0(create_ticker_map);
+  create_ticker_map = scm_c_eval_string("make-ticker-map");
+  retval->ticker_map = scm_call_0(create_ticker_map);
   
   scm_protect_object(retval->imported_files);
   scm_protect_object(retval->selected_file);

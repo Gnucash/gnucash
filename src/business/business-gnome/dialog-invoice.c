@@ -40,6 +40,7 @@
 #include "dialog-tax-table.h"
 #include "dialog-billterms.h"
 #include "AccWindow.h"
+#include "guile-mappings.h"
 
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
@@ -495,17 +496,17 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
 
   g_return_if_fail (invoice);
 
-  func = gh_eval_str ("gnc:invoice-report-create");
-  g_return_if_fail (gh_procedure_p (func));
+  func = scm_c_eval_string ("gnc:invoice-report-create");
+  g_return_if_fail (SCM_PROCEDUREP (func));
 
-  arg = gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
-  args = gh_cons (arg, args);
+  arg = gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
+  args = scm_cons (arg, args);
 
   /* scm_protect_object(func); */
 
-  arg = gh_apply (func, args);
-  g_return_if_fail (gh_exact_p (arg));
-  report_id = gh_scm2int (arg);
+  arg = scm_apply (func, args, SCM_EOL);
+  g_return_if_fail (SCM_EXACTP (arg));
+  report_id = scm_num2int (arg, SCM_ARG1, __FUNCTION__);
 
   /* scm_unprotect_object(func); */
   if (report_id >= 0)
@@ -662,31 +663,31 @@ void gnc_business_call_owner_report (GncOwner *owner, Account *acc)
 
   args = SCM_EOL;
 
-  func = gh_eval_str ("gnc:owner-report-create");
-  g_return_if_fail (gh_procedure_p (func));
+  func = scm_c_eval_string ("gnc:owner-report-create");
+  g_return_if_fail (SCM_PROCEDUREP (func));
 
   if (acc) {
-    qtype = gh_eval_str("<gnc:Account*>");
+    qtype = scm_c_eval_string("<gnc:Account*>");
     g_return_if_fail (qtype != SCM_UNDEFINED);
 
     arg = gw_wcp_assimilate_ptr (acc, qtype);
     g_return_if_fail (arg != SCM_UNDEFINED);
-    args = gh_cons (arg, args);
+    args = scm_cons (arg, args);
   } else {
-    args = gh_cons (SCM_BOOL_F, args);
+    args = scm_cons (SCM_BOOL_F, args);
   }
 
-  qtype = gh_eval_str("<gnc:GncOwner*>");
+  qtype = scm_c_eval_string("<gnc:GncOwner*>");
   g_return_if_fail (qtype != SCM_UNDEFINED);
 
   arg = gw_wcp_assimilate_ptr (owner, qtype);
   g_return_if_fail (arg != SCM_UNDEFINED);
-  args = gh_cons (arg, args);
+  args = scm_cons (arg, args);
 
   /* Apply the function to the args */
-  arg = gh_apply (func, args);
-  g_return_if_fail (gh_exact_p (arg));
-  id = gh_scm2int (arg);
+  arg = scm_apply (func, args, SCM_EOL);
+  g_return_if_fail (SCM_EXACTP (arg));
+  id = scm_num2int (arg, SCM_ARG1, __FUNCTION__);
 
   if (id >= 0)
     reportWindow (id);

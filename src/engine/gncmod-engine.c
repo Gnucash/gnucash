@@ -5,9 +5,11 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 
 #include "gnc-engine.h"
 #include "gnc-module-api.h"
@@ -49,12 +51,12 @@ libgncmod_engine_LTX_gnc_module_init(int refcount)
     gnc_engine_init(0, NULL);
   }
   
-  gh_eval_str("(use-modules (gnucash engine))");
+  scm_c_eval_string("(use-modules (gnucash engine))");
 
-  gh_eval_str("(use-modules (g-wrap gw-glib))");
+  scm_c_eval_string("(use-modules (g-wrap gw-glib))");
 
-  gh_eval_str("(use-modules (g-wrapped gw-kvp))");
-  gh_eval_str("(use-modules (g-wrapped gw-engine))");
+  scm_c_eval_string("(use-modules (g-wrapped gw-kvp))");
+  scm_c_eval_string("(use-modules (g-wrapped gw-engine))");
 
   return TRUE;
 }

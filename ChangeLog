@@ -1,3 +1,8 @@
+2003-02-22  David Hampton  <hampton@employees.org>
+
+	* various: Initial port from the deprecated (in 1.6) guile gh_xxx
+	interface to the supported scm_xxx interface.
+
 2003-02-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Quick fix to avoid

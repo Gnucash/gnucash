@@ -744,7 +744,7 @@ gnc_gui_refresh_internal (gboolean force)
       continue;
 
     if (!ci->refresh_handler &&
-        !gh_procedure_p (ci->refresh_handler_scm))
+        !SCM_PROCEDUREP (ci->refresh_handler_scm))
       continue;
 
     if (force)
@@ -752,14 +752,14 @@ gnc_gui_refresh_internal (gboolean force)
       if (ci->refresh_handler)
         ci->refresh_handler (NULL, ci->user_data);
       else
-        gh_call0 (ci->refresh_handler_scm);
+        scm_call_0 (ci->refresh_handler_scm);
     }
     else if (changes_match (&ci->watch_info, &changes_backup))
     {
       if (ci->refresh_handler)
         ci->refresh_handler (changes_backup.entity_events, ci->user_data);
       else
-        gh_call0 (ci->refresh_handler_scm);
+        scm_call_0 (ci->refresh_handler_scm);
     }
   }
 
@@ -802,13 +802,13 @@ gnc_close_gui_component (gint component_id)
   }
 
   if (!ci->close_handler &&
-      !gh_procedure_p (ci->close_handler_scm))
+      !SCM_PROCEDUREP (ci->close_handler_scm))
     return;
 
   if (ci->close_handler)
     ci->close_handler (ci->user_data);
   else
-    gh_call0 (ci->close_handler_scm);
+    scm_call_0 (ci->close_handler_scm);
 }
 
 void

@@ -40,6 +40,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
+#include "guile-mappings.h"
 
 static short module = MOD_ENGINE;
 
@@ -92,8 +93,8 @@ gnc_timespec2timepair(Timespec t)
   SCM nsecs;
 
   secs = gnc_gint64_to_scm(t.tv_sec);
-  nsecs = gh_long2scm(t.tv_nsec);
-  return(gh_cons(secs, nsecs));
+  nsecs = scm_long2num(t.tv_nsec);
+  return(scm_cons(secs, nsecs));
 }
 
 Timespec
@@ -102,8 +103,8 @@ gnc_timepair2timespec(SCM x)
   Timespec result = {0,0};
   if (gnc_timepair_p (x))
   {
-    result.tv_sec = gnc_scm_to_gint64(gh_car(x));
-    result.tv_nsec = gh_scm2long(gh_cdr(x));
+    result.tv_sec = gnc_scm_to_gint64(SCM_CAR(x));
+    result.tv_nsec = scm_num2long(SCM_CDR(x), SCM_ARG1, __FUNCTION__);
   }
   return(result);
 }
@@ -111,9 +112,9 @@ gnc_timepair2timespec(SCM x)
 int
 gnc_timepair_p(SCM x)
 {
-  return(gh_pair_p(x) &&
-         gnc_gh_gint64_p(gh_car(x)) &&
-         gnc_gh_gint64_p(gh_cdr(x)));
+  return(SCM_CONSP(x) &&
+         gnc_gh_gint64_p(SCM_CAR(x)) &&
+         gnc_gh_gint64_p(SCM_CDR(x)));
 }
 
 SCM
@@ -124,7 +125,7 @@ gnc_guid2scm(GUID guid)
   if (!guid_to_string_buff(&guid, string))
     return SCM_UNDEFINED;
 
-  return gh_str02scm(string);
+  return scm_makfrom0str(string);
 }
 
 GUID
@@ -145,7 +146,7 @@ gnc_guid_p(SCM guid_scm) {
   char string[GUID_ENCODING_LENGTH + 1];
   GUID guid;
 
-  if (!gh_string_p(guid_scm))
+  if (!SCM_STRINGP(guid_scm))
     return FALSE;
 
   gh_get_substr(guid_scm, string, 0, GUID_ENCODING_LENGTH);
@@ -198,9 +199,9 @@ gnc_gw_enum_val2scm (const char *typestr, int value)
 
   func_name = g_strdup_printf ("gw:enum-%s-val->sym", typestr);
 
-  func = gh_eval_str (func_name);
-  if (gh_procedure_p (func))
-    scm = gh_call2 (func, gh_int2scm (value), gh_bool2scm (FALSE));
+  func = scm_c_eval_string (func_name);
+  if (SCM_PROCEDUREP (func))
+    scm = scm_call_2 (func, scm_int2num (value), SCM_BOOL_F);
   else
     scm = SCM_BOOL_F;
 
@@ -218,15 +219,15 @@ gnc_gw_enum_scm2val (const char *typestr, SCM enum_scm)
 
   func_name = g_strdup_printf ("gw:enum-%s-val->int", typestr);
 
-  func = gh_eval_str (func_name);
-  if (gh_procedure_p (func))
-    scm = gh_call1 (func, enum_scm);
+  func = scm_c_eval_string (func_name);
+  if (SCM_PROCEDUREP (func))
+    scm = scm_call_1 (func, enum_scm);
   else
-    scm = gh_int2scm (0);
+    scm = scm_int2num (0);
 
   g_free (func_name);
 
-  return gh_scm2int (scm);
+  return scm_num2int (scm, SCM_ARG1, __FUNCTION__);
 }
 
 /* query_compare_t */
@@ -380,16 +381,16 @@ gnc_scm2bitfield (const char *typestr, SCM field_scm)
 {
   int field = 0;
 
-  if (!gh_list_p (field_scm))
+  if (!SCM_LISTP (field_scm))
     return 0;
 
-  while (!gh_null_p (field_scm))
+  while (!SCM_NULLP (field_scm))
   {
     SCM scm;
     int bit;
 
-    scm = gh_car (field_scm);
-    field_scm = gh_cdr (field_scm);
+    scm = SCM_CAR (field_scm);
+    field_scm = SCM_CDR (field_scm);
 
     bit = gnc_gw_enum_scm2val (typestr, scm);
     field |= bit;
@@ -409,17 +410,17 @@ gnc_scm2balance_match_how (SCM how_scm, gboolean *resp)
 {
   char *how;
 
-  if (!gh_list_p (how_scm))
+  if (!SCM_LISTP (how_scm))
     return FALSE;
 
-  if (gh_null_p (how_scm))
+  if (SCM_NULLP (how_scm))
     return FALSE;
 
   /* Only allow a single-entry list */
-  if (!gh_null_p (gh_cdr (how_scm)))
+  if (!SCM_NULLP (SCM_CDR (how_scm)))
     return FALSE;
 
-  how = gh_symbol2newstr (gh_car (how_scm), NULL);
+  how = gh_symbol2newstr (SCM_CAR (how_scm), NULL);
 
   if (!safe_strcmp (how, "balance-match-balanced"))
     *resp = TRUE;
@@ -437,10 +438,10 @@ gnc_scm2kvp_match_where (SCM where_scm)
   GNCIdType res;
   char *where;
 
-  if (!gh_list_p (where_scm))
+  if (!SCM_LISTP (where_scm))
     return NULL;
 
-  where = gh_symbol2newstr (gh_car (where_scm), NULL);
+  where = gh_symbol2newstr (SCM_CAR (where_scm), NULL);
 
   if (!safe_strcmp (where, "kvp-match-split"))
     res = GNC_ID_SPLIT;
@@ -468,10 +469,10 @@ gnc_guid_glist2scm (GList *account_guids)
     GUID *guid = node->data;
 
     if (guid)
-      guids = gh_cons (gnc_guid2scm (*guid), guids);
+      guids = scm_cons (gnc_guid2scm (*guid), guids);
   }
 
-  return gh_reverse (guids);
+  return scm_reverse (guids);
 }
 
 static GList *
@@ -479,12 +480,12 @@ gnc_scm2guid_glist (SCM guids_scm)
 {
   GList *guids = NULL;
 
-  if (!gh_list_p (guids_scm))
+  if (!SCM_LISTP (guids_scm))
     return NULL;
 
-  while (!gh_null_p (guids_scm))
+  while (!SCM_NULLP (guids_scm))
   {
-    SCM guid_scm = gh_car (guids_scm);
+    SCM guid_scm = SCM_CAR (guids_scm);
     GUID *guid;
 
     guid = xaccGUIDMalloc ();
@@ -492,7 +493,7 @@ gnc_scm2guid_glist (SCM guids_scm)
 
     guids = g_list_prepend (guids, guid);
 
-    guids_scm = gh_cdr (guids_scm);
+    guids_scm = SCM_CDR (guids_scm);
   }
 
   return g_list_reverse (guids);
@@ -512,14 +513,14 @@ gnc_guid_glist_free (GList *guids)
 static SCM
 gnc_query_numeric2scm (gnc_numeric val)
 {
-  return gh_cons (gnc_gint64_to_scm (val.num),
+  return scm_cons (gnc_gint64_to_scm (val.num),
 		  gnc_gint64_to_scm (val.denom));
 }
 
 static gboolean
 gnc_query_numeric_p (SCM pair)
 {
-  return (gh_pair_p (pair));
+  return (SCM_CONSP (pair));
 }
 
 static gnc_numeric
@@ -528,8 +529,8 @@ gnc_query_scm2numeric (SCM pair)
   SCM denom;
   SCM num;
 
-  num = gh_car (pair);
-  denom = gh_cdr (pair);
+  num = SCM_CAR (pair);
+  denom = SCM_CDR (pair);
 
   return gnc_numeric_create (gnc_scm_to_gint64 (num),
 			     gnc_scm_to_gint64 (denom));
@@ -545,11 +546,11 @@ gnc_query_path2scm (GSList *path)
   {
     const char *key = node->data;
 
-    if (key) /* FIXME: remove cast */
-      path_scm = gh_cons (gh_str02scm ((char *) key), path_scm);
+    if (key)
+      path_scm = scm_cons (scm_makfrom0str (key), path_scm);
   }
 
-  return gh_reverse (path_scm);
+  return scm_reverse (path_scm);
 }
 
 static GSList *
@@ -557,15 +558,15 @@ gnc_query_scm2path (SCM path_scm)
 {
   GSList *path = NULL;
 
-  if (!gh_list_p (path_scm))
+  if (!SCM_LISTP (path_scm))
     return NULL;
 
-  while (!gh_null_p (path_scm))
+  while (!SCM_NULLP (path_scm))
   {
-    SCM key_scm = gh_car (path_scm);
+    SCM key_scm = SCM_CAR (path_scm);
     char *key, *tmp;
 
-    if (!gh_string_p (key_scm))
+    if (!SCM_STRINGP (key_scm))
       break;
 
     tmp = gh_scm2newstr (key_scm, NULL);
@@ -574,7 +575,7 @@ gnc_query_scm2path (SCM path_scm)
 
     path = g_slist_prepend (path, key);
 
-    path_scm = gh_cdr (path_scm);
+    path_scm = SCM_CDR (path_scm);
   }
 
   return g_slist_reverse (path);
@@ -616,7 +617,7 @@ gnc_kvp_value2scm (kvp_value *value)
 
   value_t = kvp_value_get_type (value);
 
-  value_scm = gh_cons (gnc_kvp_value_type2scm (value_t), value_scm);
+  value_scm = scm_cons (gnc_kvp_value_type2scm (value_t), value_scm);
 
   switch (value_t)
   {
@@ -625,11 +626,11 @@ gnc_kvp_value2scm (kvp_value *value)
       break;
 
     case KVP_TYPE_DOUBLE:
-      scm = gh_double2scm (kvp_value_get_double (value));
+      scm = scm_make_real (kvp_value_get_double (value));
       break;
 
     case KVP_TYPE_STRING:
-      scm = gh_str02scm (kvp_value_get_string (value));
+      scm = scm_makfrom0str (kvp_value_get_string (value));
       break;
 
     case KVP_TYPE_GUID:
@@ -655,8 +656,8 @@ gnc_kvp_value2scm (kvp_value *value)
 
       scm = SCM_EOL;
       for (node = kvp_value_get_glist (value); node; node = node->next)
-        scm = gh_cons (gnc_kvp_value2scm (node->data), scm);
-      scm = gh_reverse (scm);
+        scm = scm_cons (gnc_kvp_value2scm (node->data), scm);
+      scm = scm_reverse (scm);
       break;
     }
 
@@ -669,9 +670,9 @@ gnc_kvp_value2scm (kvp_value *value)
       break;
   }
 
-  value_scm = gh_cons (scm, value_scm);
+  value_scm = scm_cons (scm, value_scm);
 
-  return gh_reverse (value_scm);
+  return scm_reverse (value_scm);
 }
 
 typedef struct
@@ -687,12 +688,11 @@ kvp_frame_slot2scm (const char *key, kvp_value *value, gpointer data)
   SCM key_scm;
   SCM pair;
 
-  /* FIXME: remove cast */
-  key_scm = gh_str02scm ((char *) key);
+  key_scm = scm_makfrom0str (key);
   value_scm = gnc_kvp_value2scm (value);
-  pair = gh_cons (key_scm, value_scm);
+  pair = scm_cons (key_scm, value_scm);
 
-  ksd->scm = gh_cons (pair, ksd->scm);
+  ksd->scm = scm_cons (pair, ksd->scm);
 }
 
 static SCM
@@ -719,17 +719,17 @@ gnc_scm2kvp_value (SCM value_scm)
   SCM type_scm;
   SCM val_scm;
 
-  if (!gh_list_p (value_scm) || gh_null_p (value_scm))
+  if (!SCM_LISTP (value_scm) || SCM_NULLP (value_scm))
     return NULL;
 
-  type_scm = gh_car (value_scm);
+  type_scm = SCM_CAR (value_scm);
   value_t = gnc_scm2kvp_value_type (type_scm);
 
-  value_scm = gh_cdr (value_scm);
-  if (!gh_list_p (value_scm) || gh_null_p (value_scm))
+  value_scm = SCM_CDR (value_scm);
+  if (!SCM_LISTP (value_scm) || SCM_NULLP (value_scm))
     return NULL;
 
-  val_scm = gh_car (value_scm);
+  val_scm = SCM_CAR (value_scm);
 
   switch (value_t)
   {
@@ -738,7 +738,7 @@ gnc_scm2kvp_value (SCM value_scm)
       break;
 
     case KVP_TYPE_DOUBLE:
-      value = kvp_value_new_double (gh_scm2double (val_scm));
+      value = kvp_value_new_double (scm_num2dbl (val_scm, __FUNCTION__));
       break;
 
     case KVP_TYPE_STRING: {
@@ -780,10 +780,10 @@ gnc_scm2kvp_value (SCM value_scm)
       GList *list = NULL;
       GList *node;
 
-      for (; gh_list_p (val_scm) && !gh_null_p (val_scm);
-           val_scm = gh_cdr (val_scm))
+      for (; SCM_LISTP (val_scm) && !SCM_NULLP (val_scm);
+           val_scm = SCM_CDR (val_scm))
       {
-        SCM scm = gh_car (val_scm);
+        SCM scm = SCM_CAR (val_scm);
 
         list = g_list_prepend (list, gnc_scm2kvp_value (scm));
       }
@@ -820,26 +820,26 @@ gnc_scm2kvp_frame (SCM frame_scm)
 {
   kvp_frame * frame;
 
-  if (!gh_list_p (frame_scm)) return NULL;
+  if (!SCM_LISTP (frame_scm)) return NULL;
 
   frame = kvp_frame_new ();
 
-  for (; gh_list_p (frame_scm) && !gh_null_p (frame_scm);
-       frame_scm = gh_cdr (frame_scm))
+  for (; SCM_LISTP (frame_scm) && !SCM_NULLP (frame_scm);
+       frame_scm = SCM_CDR (frame_scm))
   {
-    SCM pair = gh_car (frame_scm);
+    SCM pair = SCM_CAR (frame_scm);
     kvp_value *value;
     SCM key_scm;
     SCM val_scm;
     char *key;
 
-    if (!gh_pair_p (pair))
+    if (!SCM_CONSP (pair))
       continue;
 
-    key_scm = gh_car (pair);
-    val_scm = gh_cdr (pair);
+    key_scm = SCM_CAR (pair);
+    val_scm = SCM_CDR (pair);
 
-    if (!gh_string_p (key_scm))
+    if (!SCM_STRINGP (key_scm))
       continue;
 
     key = gh_scm2newstr (key_scm, NULL);
@@ -867,72 +867,72 @@ gnc_queryterm2scm (QueryNewTerm_t qt)
   SCM qt_scm = SCM_EOL;
   QueryPredData_t pd = NULL;
 
-  qt_scm = gh_cons (gnc_query_path2scm (gncQueryTermGetParamPath (qt)),
+  qt_scm = scm_cons (gnc_query_path2scm (gncQueryTermGetParamPath (qt)),
 		    qt_scm);
-  qt_scm = gh_cons (gh_bool2scm (gncQueryTermIsInverted (qt)), qt_scm);
+  qt_scm = scm_cons (SCM_BOOL (gncQueryTermIsInverted (qt)), qt_scm);
 
   pd = gncQueryTermGetPredData (qt);
-  qt_scm = gh_cons (gh_symbol2scm ((char*)(pd->type_name)), qt_scm);
-  qt_scm = gh_cons (gnc_query_compare2scm (pd->how), qt_scm);
+  qt_scm = scm_cons (scm_str2symbol (pd->type_name), qt_scm);
+  qt_scm = scm_cons (gnc_query_compare2scm (pd->how), qt_scm);
 
   if (!safe_strcmp (pd->type_name, QUERYCORE_STRING)) {
     query_string_t pdata = (query_string_t) pd;
 
-    qt_scm = gh_cons (gnc_query_string2scm (pdata->options), qt_scm);
-    qt_scm = gh_cons (gh_bool2scm (pdata->is_regex), qt_scm);
-    qt_scm = gh_cons (gh_str02scm (pdata->matchstring), qt_scm);
+    qt_scm = scm_cons (gnc_query_string2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (SCM_BOOL (pdata->is_regex), qt_scm);
+    qt_scm = scm_cons (scm_makfrom0str (pdata->matchstring), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_DATE)) {
     query_date_t pdata = (query_date_t) pd;
 
-    qt_scm = gh_cons (gnc_query_date2scm (pdata->options), qt_scm);
-    qt_scm = gh_cons (gnc_timespec2timepair (pdata->date), qt_scm);
+    qt_scm = scm_cons (gnc_query_date2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (gnc_timespec2timepair (pdata->date), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_NUMERIC)) {
     query_numeric_t pdata = (query_numeric_t) pd;
 
-    qt_scm = gh_cons (gnc_query_numericop2scm (pdata->options), qt_scm);
-    qt_scm = gh_cons (gnc_query_numeric2scm (pdata->amount), qt_scm);
+    qt_scm = scm_cons (gnc_query_numericop2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (gnc_query_numeric2scm (pdata->amount), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_GUID)) {
     query_guid_t pdata = (query_guid_t) pd;
 
-    qt_scm = gh_cons (gnc_query_guid2scm (pdata->options), qt_scm);
-    qt_scm = gh_cons (gnc_guid_glist2scm (pdata->guids), qt_scm);
+    qt_scm = scm_cons (gnc_query_guid2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (gnc_guid_glist2scm (pdata->guids), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_INT64)) {
     query_int64_t pdata = (query_int64_t) pd;
 
-    qt_scm = gh_cons (gnc_gint64_to_scm (pdata->val), qt_scm);
+    qt_scm = scm_cons (gnc_gint64_to_scm (pdata->val), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_DOUBLE)) {
     query_double_t pdata = (query_double_t) pd;
 
-    qt_scm = gh_cons (gh_double2scm (pdata->val), qt_scm);
+    qt_scm = scm_cons (scm_make_real (pdata->val), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_BOOLEAN)) {
     query_boolean_t pdata = (query_boolean_t) pd;
 
-    qt_scm = gh_cons (gh_bool2scm (pdata->val), qt_scm);
+    qt_scm = scm_cons (SCM_BOOL (pdata->val), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_CHAR)) {
     query_char_t pdata = (query_char_t) pd;
 
-    qt_scm = gh_cons (gnc_query_char2scm (pdata->options), qt_scm);
-    qt_scm = gh_cons (gh_str02scm (pdata->char_list), qt_scm);
+    qt_scm = scm_cons (gnc_query_char2scm (pdata->options), qt_scm);
+    qt_scm = scm_cons (scm_makfrom0str (pdata->char_list), qt_scm);
 
   } else if (!safe_strcmp (pd->type_name, QUERYCORE_KVP)) {
     query_kvp_t pdata = (query_kvp_t) pd;
 
-    qt_scm = gh_cons (gnc_query_path2scm (pdata->path), qt_scm);
-    qt_scm = gh_cons (gnc_kvp_value2scm (pdata->value), qt_scm);
+    qt_scm = scm_cons (gnc_query_path2scm (pdata->path), qt_scm);
+    qt_scm = scm_cons (gnc_kvp_value2scm (pdata->value), qt_scm);
 
   } else {
     PWARN ("query core type %s not supported", pd->type_name);
     return SCM_BOOL_F;
   }
 
-  return gh_reverse (qt_scm);
+  return scm_reverse (qt_scm);
 }
 
 static Query *
@@ -946,35 +946,35 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
   gboolean inverted = FALSE;
   query_compare_t compare_how;
 
-  if (!gh_list_p (qt_scm) || gh_null_p (qt_scm))
+  if (!SCM_LISTP (qt_scm) || SCM_NULLP (qt_scm))
     return NULL;
 
   do {
     /* param path */
-    scm = gh_car (qt_scm);
-    qt_scm = gh_cdr (qt_scm);
-    if (!gh_list_p (scm))
+    scm = SCM_CAR (qt_scm);
+    qt_scm = SCM_CDR (qt_scm);
+    if (!SCM_LISTP (scm))
       break;
     path = gnc_query_scm2path (scm);
 
     /* inverted */
-    scm = gh_car (qt_scm);
-    qt_scm = gh_cdr (qt_scm);
-    if (!gh_boolean_p (scm))
+    scm = SCM_CAR (qt_scm);
+    qt_scm = SCM_CDR (qt_scm);
+    if (!SCM_BOOLP (scm))
       break;
-    inverted = gh_scm2bool (scm);
+    inverted = SCM_NFALSEP (scm);
 
     /* type */
-    scm = gh_car (qt_scm);
-    qt_scm = gh_cdr (qt_scm);
-    if (!gh_symbol_p (scm))
+    scm = SCM_CAR (qt_scm);
+    qt_scm = SCM_CDR (qt_scm);
+    if (!SCM_SYMBOLP (scm))
       break;
     type = gh_symbol2newstr (scm, NULL);
 
     /* query_compare_t */
-    scm = gh_car (qt_scm);
-    qt_scm = gh_cdr (qt_scm);
-    if (gh_null_p (scm))
+    scm = SCM_CAR (qt_scm);
+    qt_scm = SCM_CDR (qt_scm);
+    if (SCM_NULLP (scm))
       break;
     compare_how = gnc_query_scm2compare (scm);
 
@@ -985,21 +985,21 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       gboolean is_regex;
       char *matchstring;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       options = gnc_query_scm2string (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_boolean_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_BOOLP (scm))
 	break;
-      is_regex = gh_scm2bool (scm);
+      is_regex = SCM_NFALSEP (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_string_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_STRINGP (scm))
 	break;
       matchstring = gh_scm2newstr (scm, NULL);
 
@@ -1011,15 +1011,15 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       date_match_t options;
       Timespec date;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       options = gnc_query_scm2date (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       date = gnc_timepair2timespec (scm);
 
@@ -1029,14 +1029,14 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       numeric_match_t options;
       gnc_numeric val;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       options = gnc_query_scm2numericop (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
       if (!gnc_query_numeric_p (scm))
 	break;
       val = gnc_query_scm2numeric (scm);
@@ -1047,15 +1047,15 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       guid_match_t options;
       GList *guids;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       options = gnc_query_scm2guid (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_list_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_LISTP (scm))
 	break;
       guids = gnc_scm2guid_glist (scm);
 
@@ -1066,9 +1066,9 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
     } else if (!safe_strcmp (type, QUERYCORE_INT64)) {
       gint64 val;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       val = gnc_scm_to_gint64 (scm);
 
@@ -1077,22 +1077,22 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
     } else if (!safe_strcmp (type, QUERYCORE_DOUBLE)) {
       double val;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_number_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_NUMBERP (scm))
 	break;
-      val = gh_scm2double (scm);
+      val = scm_num2dbl (scm, __FUNCTION__);
 
       pd = gncQueryDoublePredicate (compare_how, val);
 
     } else if (!safe_strcmp (type, QUERYCORE_BOOLEAN)) {
       gboolean val;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_boolean_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_BOOLP (scm))
 	break;
-      val = gh_scm2bool (scm);
+      val = SCM_NFALSEP (scm);
 
       pd = gncQueryBooleanPredicate (compare_how, val);
 
@@ -1100,15 +1100,15 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       char_match_t options;
       char *char_list;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm))
 	break;
       options = gnc_query_scm2char (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_string_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_STRINGP (scm))
 	break;
       char_list = gh_scm2newstr (scm, NULL);
 
@@ -1119,15 +1119,15 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
       GSList *kvp_path;
       kvp_value *value;
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (!gh_list_p (scm))
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (!SCM_LISTP (scm))
 	break;
       kvp_path = gnc_query_scm2path (scm);
 
-      scm = gh_car (qt_scm);
-      qt_scm = gh_cdr (qt_scm);
-      if (gh_null_p (scm)) {
+      scm = SCM_CAR (qt_scm);
+      qt_scm = SCM_CDR (qt_scm);
+      if (SCM_NULLP (scm)) {
 	gnc_query_path_free (kvp_path);
 	break;
       }
@@ -1172,35 +1172,35 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
   Query *q = NULL;
   SCM scm;
 
-  if (!gh_list_p (query_term_scm) ||
-      gh_null_p (query_term_scm)) {
+  if (!SCM_LISTP (query_term_scm) ||
+      SCM_NULLP (query_term_scm)) {
     PINFO ("null term");
     return NULL;
   }
 
   do {
     /* pd_type */
-    scm = gh_car (query_term_scm);
-    query_term_scm = gh_cdr (query_term_scm);
+    scm = SCM_CAR (query_term_scm);
+    query_term_scm = SCM_CDR (query_term_scm);
     pd_type = gh_symbol2newstr (scm, NULL);
 
     /* pr_type */
-    if (gh_null_p (query_term_scm)) {
+    if (SCM_NULLP (query_term_scm)) {
       PINFO ("null pr_type");
       break;
     }
-    scm = gh_car (query_term_scm);
-    query_term_scm = gh_cdr (query_term_scm);
+    scm = SCM_CAR (query_term_scm);
+    query_term_scm = SCM_CDR (query_term_scm);
     pr_type = gh_symbol2newstr (scm, NULL);
 
     /* sense */
-    if (gh_null_p (query_term_scm)) {
+    if (SCM_NULLP (query_term_scm)) {
       PINFO ("null sense");
       break;
     }
-    scm = gh_car (query_term_scm);
-    query_term_scm = gh_cdr (query_term_scm);
-    sense = gh_scm2bool (scm);
+    scm = SCM_CAR (query_term_scm);
+    query_term_scm = SCM_CDR (query_term_scm);
+    sense = SCM_NFALSEP (scm);
 
     q = xaccMallocQuery ();
 
@@ -1211,37 +1211,37 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       Timespec end;
 
       /* use_start */
-      if (gh_null_p (query_term_scm)) {
+      if (SCM_NULLP (query_term_scm)) {
 	PINFO ("null use_start");
 	break;
       }
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
-      use_start = gh_scm2bool (scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
+      use_start = SCM_NFALSEP (scm);
 
       /* start */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       start = gnc_timepair2timespec (scm);
 
       /* use_end */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
-      use_end = gh_scm2bool (scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
+      use_end = SCM_NFALSEP (scm);
 
       /* end */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       end = gnc_timepair2timespec (scm);
 
       xaccQueryAddDateMatchTS (q, use_start, start, use_end, end, QUERY_OR);
@@ -1255,25 +1255,25 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       gnc_numeric val;
 
       /* how */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       how = gnc_scm2amt_match_how (scm);
 
       /* amt_sgn */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       amt_sgn = gnc_query_scm2numericop (scm);
 
       /* amount */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
-      amount = gh_scm2double (scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
+      amount = scm_num2dbl (scm, __FUNCTION__);
 
       val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO, GNC_RND_ROUND);
 
@@ -1298,23 +1298,23 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       GList *account_guids;
 
       /* how */
-      if (gh_null_p (query_term_scm)) {
+      if (SCM_NULLP (query_term_scm)) {
 	PINFO ("pd-account: null how");
 	break;
       }
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       how = gnc_scm2acct_match_how (scm);
 
       /* account guids */
-      if (gh_null_p (query_term_scm)) {
+      if (SCM_NULLP (query_term_scm)) {
 	PINFO ("pd-account: null guids");
 	break;
       }
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
 
       account_guids = gnc_scm2guid_glist (scm);
 
@@ -1330,27 +1330,27 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       char *matchstring;
 
       /* case_sens */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
-      case_sens = gh_scm2bool (scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
+      case_sens = SCM_NFALSEP (scm);
 
       /* use_regexp */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
-      use_regexp = gh_scm2bool (scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
+      use_regexp = SCM_NFALSEP (scm);
 
       /* matchstring */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       matchstring = gh_scm2newstr (scm, NULL);
 
       if (!safe_strcmp (pr_type, "pr-action")) {
@@ -1381,11 +1381,11 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       cleared_match_t how;
 
       /* how */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       how = gnc_scm2cleared_match_how (scm);
 
       xaccQueryAddClearedMatch (q, how, QUERY_OR);
@@ -1395,11 +1395,11 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       gboolean how;
 
       /* how */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       if (gnc_scm2balance_match_how (scm, &how) == FALSE)
 	break;
 
@@ -1412,16 +1412,16 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       char *tmp;
 
       /* guid */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
 	break;
 
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       guid = gnc_scm2guid (scm);
 
       /* id type */
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       tmp = gh_scm2newstr (scm, NULL);
       id_type = g_strdup (tmp);
       if (tmp) free (tmp);
@@ -1436,31 +1436,31 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       GNCIdType where;
 
       /* how */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
         break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       how = gnc_scm2kvp_match_how (scm);
 
       /* where */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
         break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       where = gnc_scm2kvp_match_where (scm);
 
       /* path */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
         break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       path = gnc_query_scm2path (scm);
 
       /* value */
-      if (gh_null_p (query_term_scm))
+      if (SCM_NULLP (query_term_scm))
         break;
-      scm = gh_car (query_term_scm);
-      query_term_scm = gh_cdr (query_term_scm);
+      scm = SCM_CAR (query_term_scm);
+      query_term_scm = SCM_CDR (query_term_scm);
       value = gnc_scm2kvp_value (scm);
 
       xaccQueryAddKVPMatch (q, path, value, how, where, QUERY_OR);
@@ -1530,15 +1530,15 @@ gnc_query_terms2scm (GList *terms)
 
       qt_scm = gnc_queryterm2scm (qt);
 
-      and_terms = gh_cons (qt_scm, and_terms);
+      and_terms = scm_cons (qt_scm, and_terms);
     }
 
-    and_terms = gh_reverse (and_terms);
+    and_terms = scm_reverse (and_terms);
 
-    or_terms = gh_cons (and_terms, or_terms);
+    or_terms = scm_cons (and_terms, or_terms);
   }
 
-  return gh_reverse (or_terms);
+  return scm_reverse (or_terms);
 }
 
 static Query *
@@ -1546,15 +1546,15 @@ gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
 {
   Query *q = NULL;
 
-  if (!gh_list_p (and_terms))
+  if (!SCM_LISTP (and_terms))
     return NULL;
 
-  while (!gh_null_p (and_terms))
+  while (!SCM_NULLP (and_terms))
   {
     SCM term;
 
-    term = gh_car (and_terms);
-    and_terms = gh_cdr (and_terms);
+    term = SCM_CAR (and_terms);
+    and_terms = SCM_CDR (and_terms);
 
     if (!q)
       q = gnc_scm2query_term_query (term, vers);
@@ -1586,17 +1586,17 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 {
   Query *q = NULL;
 
-  if (!gh_list_p (or_terms))
+  if (!SCM_LISTP (or_terms))
     return NULL;
 
   q = xaccMallocQuery ();
 
-  while (!gh_null_p (or_terms))
+  while (!SCM_NULLP (or_terms))
   {
     SCM and_terms;
 
-    and_terms = gh_car (or_terms);
-    or_terms = gh_cdr (or_terms);
+    and_terms = SCM_CAR (or_terms);
+    or_terms = SCM_CDR (or_terms);
 
     if (!q)
       q = gnc_scm2query_and_terms (and_terms, vers);
@@ -1633,11 +1633,11 @@ gnc_query_sort2scm (QueryNewSort_t qs)
   if (path == NULL)
     return SCM_BOOL_F;
 
-  sort_scm = gh_cons (gnc_query_path2scm (path), sort_scm);
-  sort_scm = gh_cons (gh_int2scm (gncQuerySortGetSortOptions (qs)), sort_scm);
-  sort_scm = gh_cons (gh_bool2scm (gncQuerySortGetIncreasing (qs)), sort_scm);
+  sort_scm = scm_cons (gnc_query_path2scm (path), sort_scm);
+  sort_scm = scm_cons (scm_int2num (gncQuerySortGetSortOptions (qs)), sort_scm);
+  sort_scm = scm_cons (SCM_BOOL (gncQuerySortGetIncreasing (qs)), sort_scm);
 
-  return gh_reverse (sort_scm);
+  return scm_reverse (sort_scm);
 }
 
 static gboolean
@@ -1652,40 +1652,40 @@ gnc_query_scm2sort (SCM sort_scm, GSList **path, gint *options, gboolean *inc)
   g_return_val_if_fail (*path == NULL, FALSE);
 
   /* This is ok -- it means we have an empty sort.  Don't do anything */
-  if (gh_boolean_p (sort_scm))
+  if (SCM_BOOLP (sort_scm))
     return TRUE;
 
   /* Ok, this had better be a list */
-  if (!gh_list_p (sort_scm))
+  if (!SCM_LISTP (sort_scm))
     return FALSE;
   
   /* Parse the path, options, and increasing */
-  val = gh_car (sort_scm);
-  sort_scm = gh_cdr (sort_scm);
-  if (!gh_list_p (val))
+  val = SCM_CAR (sort_scm);
+  sort_scm = SCM_CDR (sort_scm);
+  if (!SCM_LISTP (val))
     return FALSE;
   p = gnc_query_scm2path (val);
 
   /* options */
-  val = gh_car (sort_scm);
-  sort_scm = gh_cdr (sort_scm);
-  if (!gh_number_p (val)) {
+  val = SCM_CAR (sort_scm);
+  sort_scm = SCM_CDR (sort_scm);
+  if (!SCM_NUMBERP (val)) {
     gnc_query_path_free (p);
     return FALSE;
   }
-  o = gh_scm2int (val);
+  o = scm_num2int (val, SCM_ARG1, __FUNCTION__);
 
   /* increasing */
-  val = gh_car (sort_scm);
-  sort_scm = gh_cdr (sort_scm);
-  if (!gh_boolean_p (val)) {
+  val = SCM_CAR (sort_scm);
+  sort_scm = SCM_CDR (sort_scm);
+  if (!SCM_BOOLP (val)) {
     gnc_query_path_free (p);
     return FALSE;
   }
-  i = gh_scm2bool (val);
+  i = SCM_NFALSEP (val);
 
   /* EOL */
-  if (!gh_null_p (sort_scm)) {
+  if (!SCM_NULLP (sort_scm)) {
     gnc_query_path_free (p);
     return FALSE;
   }
@@ -1706,41 +1706,41 @@ gnc_query2scm (Query *q)
   if (!q) return SCM_BOOL_F;
 
   /* terms */
-  pair = gh_cons (gnc_query_terms2scm (gncQueryGetTerms (q)), SCM_EOL);
-  pair = gh_cons (gh_symbol2scm ("terms"), pair);
-  query_scm = gh_cons (pair, query_scm);
+  pair = scm_cons (gnc_query_terms2scm (gncQueryGetTerms (q)), SCM_EOL);
+  pair = scm_cons (scm_str2symbol ("terms"), pair);
+  query_scm = scm_cons (pair, query_scm);
 
   /* search-for */
-  pair = gh_cons (gh_symbol2scm ((char*) gncQueryGetSearchFor (q)), SCM_EOL);
-  pair = gh_cons (gh_symbol2scm ("search-for"), pair);
-  query_scm = gh_cons (pair, query_scm);
+  pair = scm_cons (scm_str2symbol (gncQueryGetSearchFor (q)), SCM_EOL);
+  pair = scm_cons (scm_str2symbol ("search-for"), pair);
+  query_scm = scm_cons (pair, query_scm);
 
   /* sorts... */
   gncQueryGetSorts (q, &s1, &s2, &s3);
 
   /* primary-sort */
-  pair = gh_cons (gnc_query_sort2scm (s1), SCM_EOL);
-  pair = gh_cons (gh_symbol2scm ("primary-sort"), pair);
-  query_scm = gh_cons (pair, query_scm);
+  pair = scm_cons (gnc_query_sort2scm (s1), SCM_EOL);
+  pair = scm_cons (scm_str2symbol ("primary-sort"), pair);
+  query_scm = scm_cons (pair, query_scm);
 
   /* secondary-sort */
-  pair = gh_cons (gnc_query_sort2scm (s2), SCM_EOL);
-  pair = gh_cons (gh_symbol2scm ("secondary-sort"), pair);
-  query_scm = gh_cons (pair, query_scm);
+  pair = scm_cons (gnc_query_sort2scm (s2), SCM_EOL);
+  pair = scm_cons (scm_str2symbol ("secondary-sort"), pair);
+  query_scm = scm_cons (pair, query_scm);
 
   /* tertiary-sort */
-  pair = gh_cons (gnc_query_sort2scm (s3), SCM_EOL);
-  pair = gh_cons (gh_symbol2scm ("tertiary-sort"), pair);
-  query_scm = gh_cons (pair, query_scm);
+  pair = scm_cons (gnc_query_sort2scm (s3), SCM_EOL);
+  pair = scm_cons (scm_str2symbol ("tertiary-sort"), pair);
+  query_scm = scm_cons (pair, query_scm);
 
   /* max results */
-  pair = gh_cons (gh_int2scm (gncQueryGetMaxResults (q)), SCM_EOL);
-  pair = gh_cons (gh_symbol2scm ("max-results"), pair);
-  query_scm = gh_cons (pair, query_scm);
+  pair = scm_cons (scm_int2num (gncQueryGetMaxResults (q)), SCM_EOL);
+  pair = scm_cons (scm_str2symbol ("max-results"), pair);
+  query_scm = scm_cons (pair, query_scm);
 
   /* Reverse this list; tag it as 'query-v2' */
-  pair = gh_reverse (query_scm);
-  return gh_cons (gh_symbol2scm ("query-v2"), pair);
+  pair = scm_reverse (query_scm);
+  return scm_cons (scm_str2symbol ("query-v2"), pair);
 }
 
 static GSList *
@@ -1822,26 +1822,26 @@ gnc_scm2query_v1 (SCM query_scm)
   gboolean tertiary_increasing = TRUE;
   int max_splits = -1;
 
-  while (!gh_null_p (query_scm))
+  while (!SCM_NULLP (query_scm))
   {
     char *symbol;
     SCM sym_scm;
     SCM value;
     SCM pair;
 
-    pair = gh_car (query_scm);
-    query_scm = gh_cdr (query_scm);
+    pair = SCM_CAR (query_scm);
+    query_scm = SCM_CDR (query_scm);
 
-    if (!gh_pair_p (pair)) {
+    if (!SCM_CONSP (pair)) {
       PERR ("Not a Pair");
       ok = FALSE;
       break;
     }
 
-    sym_scm = gh_car (pair);
-    value = gh_cadr (pair);
+    sym_scm = SCM_CAR (pair);
+    value = SCM_CADR (pair);
 
-    if (!gh_symbol_p (sym_scm)) {
+    if (!SCM_SYMBOLP (sym_scm)) {
       PERR ("Not a symbol");
       ok = FALSE;
       break;
@@ -1867,7 +1867,7 @@ gnc_scm2query_v1 (SCM query_scm)
       }
 
     } else if (safe_strcmp ("primary-sort", symbol) == 0) {
-      if (!gh_symbol_p (value)) {
+      if (!SCM_SYMBOLP (value)) {
 	PINFO ("Invalid primary sort");
         ok = FALSE;
         free (symbol);
@@ -1877,7 +1877,7 @@ gnc_scm2query_v1 (SCM query_scm)
       primary_sort = gh_symbol2newstr (value, NULL);
 
     } else if (safe_strcmp ("secondary-sort", symbol) == 0) {
-      if (!gh_symbol_p (value)) {
+      if (!SCM_SYMBOLP (value)) {
 	PINFO ("Invalid secondary sort");
         ok = FALSE;
         free (symbol);
@@ -1887,7 +1887,7 @@ gnc_scm2query_v1 (SCM query_scm)
       secondary_sort = gh_symbol2newstr (value, NULL);
 
     } else if (safe_strcmp ("tertiary-sort", symbol) == 0) {
-      if (!gh_symbol_p (value)) {
+      if (!SCM_SYMBOLP (value)) {
 	PINFO ("Invalid tertiary sort");
         ok = FALSE;
         free (symbol);
@@ -1897,23 +1897,23 @@ gnc_scm2query_v1 (SCM query_scm)
       tertiary_sort = gh_symbol2newstr (value, NULL);
 
     } else if (safe_strcmp ("primary-increasing", symbol) == 0) {
-      primary_increasing = gh_scm2bool (value);
+      primary_increasing = SCM_NFALSEP (value);
 
     } else if (safe_strcmp ("secondary-increasing", symbol) == 0) {
-      secondary_increasing = gh_scm2bool (value);
+      secondary_increasing = SCM_NFALSEP (value);
 
     } else if (safe_strcmp ("tertiary-increasing", symbol) == 0) {
-      tertiary_increasing = gh_scm2bool (value);
+      tertiary_increasing = SCM_NFALSEP (value);
 
     } else if (safe_strcmp ("max-splits", symbol) == 0) {
-      if (!gh_number_p (value)) {
+      if (!SCM_NUMBERP (value)) {
 	PERR ("invalid max-splits");
         ok = FALSE;
         free (symbol);
         break;
       }
 
-      max_splits = gh_scm2int (value);
+      max_splits = scm_num2int (value, SCM_ARG1, __FUNCTION__);
 
     } else {
       PERR ("Unknown symbol: %s", symbol);
@@ -1963,25 +1963,25 @@ gnc_scm2query_v2 (SCM query_scm)
   gboolean si1 = TRUE, si2 = TRUE, si3 = TRUE;
   int max_results = -1;
 
-  while (!gh_null_p (query_scm))
+  while (!SCM_NULLP (query_scm))
   {
     char *symbol;
     SCM sym_scm;
     SCM value;
     SCM pair;
 
-    pair = gh_car (query_scm);
-    query_scm = gh_cdr (query_scm);
+    pair = SCM_CAR (query_scm);
+    query_scm = SCM_CDR (query_scm);
 
-    if (!gh_pair_p (pair)) {
+    if (!SCM_CONSP (pair)) {
       ok = FALSE;
       break;
     }
 
-    sym_scm = gh_car (pair);
-    value = gh_cadr (pair);
+    sym_scm = SCM_CAR (pair);
+    value = SCM_CADR (pair);
 
-    if (!gh_symbol_p (sym_scm)) {
+    if (!SCM_SYMBOLP (sym_scm)) {
       ok = FALSE;
       break;
     }
@@ -2004,7 +2004,7 @@ gnc_scm2query_v2 (SCM query_scm)
       }
 
     } else if (!safe_strcmp ("search-for", symbol)) {
-      if (!gh_symbol_p (value)) {
+      if (!SCM_SYMBOLP (value)) {
 	ok = FALSE;
 	free (symbol);
 	break;
@@ -2033,13 +2033,13 @@ gnc_scm2query_v2 (SCM query_scm)
       }
 
     } else if (!safe_strcmp ("max-results", symbol)) {
-      if (!gh_number_p (value)) {
+      if (!SCM_NUMBERP (value)) {
         ok = FALSE;
         free (symbol);
         break;
       }
 
-      max_results = gh_scm2int (value);
+      max_results = scm_num2int (value, SCM_ARG1, __FUNCTION__);
 
     } else {
       ok = FALSE;
@@ -2072,14 +2072,14 @@ gnc_scm2query (SCM query_scm)
   Query *q = NULL;
 
   /* Not a list or NULL?  No need to go further */
-  if (!gh_list_p (query_scm) || gh_null_p (query_scm))
+  if (!SCM_LISTP (query_scm) || SCM_NULLP (query_scm))
     return NULL;
 
   /* Grab the 'type' (for v2 and above) */
-  q_type = gh_car (query_scm);
+  q_type = SCM_CAR (query_scm);
 
-  if (!gh_symbol_p (q_type)) {
-    if (gh_pair_p (q_type)) {
+  if (!SCM_SYMBOLP (q_type)) {
+    if (SCM_CONSP (q_type)) {
       /* Version-1 queries are just a list */
       return gnc_scm2query_v1 (query_scm);
     } else {
@@ -2093,7 +2093,7 @@ gnc_scm2query (SCM query_scm)
     return NULL;
 
   if (!safe_strcmp (type, "query-v2"))
-    q = gnc_scm2query_v2 (gh_cdr (query_scm));
+    q = gnc_scm2query_v2 (SCM_CDR (query_scm));
 
   free (type);
   return q;
@@ -2108,13 +2108,13 @@ gnc_scm_traversal_adapter(Transaction *t, void *data)
   SCM thunk = *((SCM *) data);
 
   if(trans_type == SCM_BOOL_F) {
-    trans_type = gh_eval_str("<gnc:Transaction*>");
+    trans_type = scm_c_eval_string("<gnc:Transaction*>");
     /* don't really need this - types are bound globally anyway. */
     if(trans_type != SCM_BOOL_F) scm_protect_object(trans_type);
   }
   
   scm_trans = gw_wcp_assimilate_ptr(t, trans_type);
-  result = gh_call1(thunk, scm_trans);
+  result = scm_call_1(thunk, scm_trans);
 
   return (result != SCM_BOOL_F);
 }
@@ -2151,8 +2151,8 @@ gnc_gint64_to_scm(const gint64 x)
   const guint32 upper_half = (guint32) (magnitude >> 32);
   SCM result;
 
-  result = scm_sum(scm_ash(gh_ulong2scm(upper_half), SCM_MAKINUM(32)),
-                   gh_ulong2scm(lower_half));
+  result = scm_sum(scm_ash(scm_ulong2num(upper_half), SCM_MAKINUM(32)),
+                   scm_ulong2num(lower_half));
   
   if(negative_p) {
     return scm_difference(SCM_INUM0, result);
@@ -2186,7 +2186,7 @@ gnc_scm_to_gint64(SCM num)
   */
   
   if (bits00to15_mask == SCM_BOOL_F) {
-    bits00to15_mask = gh_ulong2scm(0xFFFF);
+    bits00to15_mask = scm_ulong2num(0xFFFF);
     scm_protect_object (bits00to15_mask);
   }
 
@@ -2201,7 +2201,7 @@ gnc_scm_to_gint64(SCM num)
    */
   for (i = 48; i >=0; i-= 16) {
     bits = scm_ash(magnitude, SCM_MAKINUM(-i));
-    c_bits = gh_scm2ulong(scm_logand(bits, bits00to15_mask));
+    c_bits = scm_num2ulong(scm_logand(bits, bits00to15_mask), SCM_ARG1, __FUNCTION__);
     c_result += ((long long)c_bits << i);
     magnitude = scm_difference(magnitude, scm_ash(bits, SCM_MAKINUM(i)));
   }
@@ -2244,7 +2244,7 @@ gnc_gh_gint64_p(SCM num)
     initialized = 1;
   }
 
-  return (gh_exact_p(num) &&
+  return (SCM_EXACTP(num) &&
           (scm_geq_p(num, minval) != SCM_BOOL_F) &&
           (scm_leq_p(num, maxval) != SCM_BOOL_F));
 }
@@ -2256,14 +2256,14 @@ gnc_scm_to_numeric(SCM gncnum)
   static SCM get_denom = SCM_BOOL_F;
   
   if(get_num == SCM_BOOL_F) {
-    get_num = gh_eval_str("gnc:gnc-numeric-num");
+    get_num = scm_c_eval_string("gnc:gnc-numeric-num");
   }
   if(get_denom == SCM_BOOL_F) {
-    get_denom = gh_eval_str("gnc:gnc-numeric-denom");
+    get_denom = scm_c_eval_string("gnc:gnc-numeric-denom");
   }
   
-  return gnc_numeric_create(gnc_scm_to_gint64(gh_call1(get_num, gncnum)),
-                            gnc_scm_to_gint64(gh_call1(get_denom, gncnum)));
+  return gnc_numeric_create(gnc_scm_to_gint64(scm_call_1(get_num, gncnum)),
+                            gnc_scm_to_gint64(scm_call_1(get_denom, gncnum)));
 }
 
 SCM
@@ -2272,11 +2272,11 @@ gnc_numeric_to_scm(gnc_numeric arg)
   static SCM maker = SCM_BOOL_F;
 
   if(maker == SCM_BOOL_F) {
-    maker = gh_eval_str("gnc:make-gnc-numeric");
+    maker = scm_c_eval_string("gnc:make-gnc-numeric");
   }
   
-  return gh_call2(maker, gnc_gint64_to_scm(gnc_numeric_num(arg)),
-                  gnc_gint64_to_scm(gnc_numeric_denom(arg)));
+  return scm_call_2(maker, gnc_gint64_to_scm(gnc_numeric_num(arg)),
+		    gnc_gint64_to_scm(gnc_numeric_denom(arg)));
 }
 
 int
@@ -2286,9 +2286,9 @@ gnc_numeric_p(SCM arg)
   SCM        ret    = SCM_BOOL_F;
 
   if(type_p == SCM_BOOL_F) {
-    type_p = gh_eval_str("gnc:gnc-numeric?");
+    type_p = scm_c_eval_string("gnc:gnc-numeric?");
   }
-  ret = gh_call1(type_p, arg);
+  ret = scm_call_1(type_p, arg);
 
   if(ret == SCM_BOOL_F) {
     return FALSE;
@@ -2307,7 +2307,7 @@ gnc_scm_to_commodity(SCM scm)
   static SCM commodity_type = SCM_UNDEFINED;
 
   if(commodity_type == SCM_UNDEFINED) {
-    commodity_type = gh_eval_str("<gnc:commodity*>");
+    commodity_type = scm_c_eval_string("<gnc:commodity*>");
     /* don't really need this - types are bound globally anyway. */
     if(commodity_type != SCM_UNDEFINED) scm_protect_object(commodity_type);
   }
@@ -2331,7 +2331,7 @@ gnc_commodity_to_scm (const gnc_commodity *commodity)
   if(commodity == NULL) return SCM_BOOL_F;
 
   if(commodity_type == SCM_UNDEFINED) {
-    commodity_type = gh_eval_str("<gnc:commodity*>");
+    commodity_type = scm_c_eval_string("<gnc:commodity*>");
     /* don't really need this - types are bound globally anyway. */
     if(commodity_type != SCM_UNDEFINED) scm_protect_object(commodity_type);
   }
@@ -2352,7 +2352,7 @@ gnc_book_to_scm (GNCBook *book)
 
   if (book_type == SCM_UNDEFINED)
   {
-    book_type = gh_eval_str ("<gnc:Book*>");
+    book_type = scm_c_eval_string ("<gnc:Book*>");
 
     /* don't really need this - types are bound globally anyway. */
     if (book_type != SCM_UNDEFINED)
@@ -2375,7 +2375,7 @@ gnc_session_to_scm (GNCSession *session)
 
   if (session_type == SCM_UNDEFINED)
   {
-    session_type = gh_eval_str ("<gnc:Session*>");
+    session_type = scm_c_eval_string ("<gnc:Session*>");
 
     /* don't really need this - types are bound globally anyway. */
     if (session_type != SCM_UNDEFINED)

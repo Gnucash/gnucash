@@ -24,7 +24,7 @@
 #ifndef GNC_HELPERS
 #define GNC_HELPERS
 
-#include <guile/gh.h>
+#include <libguile.h>
 
 #include "gnc-ui-util.h"
 

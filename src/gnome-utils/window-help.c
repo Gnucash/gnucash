@@ -30,7 +30,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <gnome.h>
-#include <guile/gh.h>
+#include <libguile.h>
+#include "guile-mappings.h"
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -388,28 +389,28 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
   char         * curl = NULL;
   gboolean     leafnode;
 
-  if(!gh_list_p(topics)) return;
+  if(!SCM_LISTP(topics)) return;
 
-  for(; !gh_null_p(topics); topics = gh_cdr(topics)) {
-    this_topic = gh_car(topics);
+  for(; !SCM_NULLP(topics); topics = SCM_CDR(topics)) {
+    this_topic = SCM_CAR(topics);
 
-    if(!gh_list_p(this_topic)) continue;
+    if(!SCM_LISTP(this_topic)) continue;
 
-    if(!gh_null_p(gh_cdr(this_topic)) && !gh_null_p(gh_cddr(this_topic))) {
-      subtopics  = gh_caddr(this_topic);
+    if(!SCM_NULLP(SCM_CDR(this_topic)) && !SCM_NULLP(SCM_CDDR(this_topic))) {
+      subtopics  = SCM_CADDR(this_topic);
     }
     else {
       subtopics = SCM_BOOL_F;
     }
 
-    topic_str  = gh_scm2newstr(gh_car(this_topic), NULL);
+    topic_str  = gh_scm2newstr(SCM_CAR(this_topic), NULL);
     ctopics[0] = _(topic_str);
 
-    if(!gh_null_p(gh_cdr(this_topic))) {
-      curl = gh_scm2newstr(gh_cadr(this_topic), NULL);
+    if(!SCM_NULLP(SCM_CDR(this_topic))) {
+      curl = gh_scm2newstr(SCM_CADR(this_topic), NULL);
     }
    
-    if(gh_list_p(subtopics)) {
+    if(SCM_LISTP(subtopics)) {
       leafnode = FALSE;
     }
     else {
@@ -426,7 +427,7 @@ topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent,
                                      GTK_CTREE_NODE(node), curl,
                                      free_url_cb);
     free(topic_str);
-    if(gh_list_p(subtopics)) {
+    if(SCM_LISTP(subtopics)) {
       topics_add_children(subtopics, tree, node, help);
     }
   }
@@ -436,10 +437,9 @@ static void
 gnc_help_window_load_topics(gnc_help_window * help, const gchar * file)
 {  
   SCM topics;
-  SCM load_topics =  gh_eval_str("gnc:load-help-topics");
+  SCM load_topics =  scm_c_eval_string("gnc:load-help-topics");
 
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  topics = gh_call1(load_topics, gh_str02scm((char *) file));
+  topics = scm_call_1(load_topics, scm_makfrom0str(file));
   topics_add_children(topics, GTK_CTREE(help->topics_tree), NULL, help);
   gtk_ctree_expand_to_depth (GTK_CTREE(help->topics_tree), NULL, 1);
   gtk_widget_show_all(help->topics_tree);
