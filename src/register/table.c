@@ -273,6 +273,10 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
          table->entries[row][col] = (char *) retval;
          XbaeMatrixSetCell (mw, row, col, (char *) retval);
          XbaeMatrixRefreshCell (mw, row, col);
+
+         /* don't map a text widget */
+         cbs->map = False;
+         cbs->doit = False;
       }
    }
 }
