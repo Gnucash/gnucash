@@ -111,7 +111,7 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
    int not_saved;
    int i;
 
-   if (!grp) return;
+   if (!grp) return 0;
    if (False == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
@@ -144,7 +144,6 @@ getAccount( AccountGroup *grp, int num )
 int
 xaccGetNumAccounts ( AccountGroup *root )
 {
-  Account *acc;
   int num_acc = 0;
   int i;
 
@@ -197,7 +196,7 @@ xaccGetAccountRoot (Account * acc)
 {
   Account *parent_acc;
   AccountGroup * grp;
-  AccountGroup * root;
+  AccountGroup * root = NULL;
 
   /* find the root of the account group structure */
   grp = (AccountGroup *) acc->parent;
@@ -221,7 +220,6 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 {
   AccountGroup * root;
   Account *peer_acc;
-  int i;
 
   if (NULL == acc) return NULL;
   if (-1 >= acc_id) return NULL;
@@ -273,7 +271,6 @@ xaccGetPeerAccountFromName ( Account *acc, char * name )
 {
   AccountGroup * root;
   Account *peer_acc;
-  int i;
 
   if (NULL == acc) return NULL;
   if (NULL == name) return NULL;

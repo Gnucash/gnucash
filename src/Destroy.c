@@ -34,8 +34,7 @@
 void
 xaccAccountWindowDestroy (Account *acc)
 {
-   int nacc;
-   int i, n;
+   int i;
 
    if (!acc) return;
 

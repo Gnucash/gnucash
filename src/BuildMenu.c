@@ -80,10 +80,10 @@ Widget BuildMenu( Widget parent, int menu_type, char *menu_title,
 		  MenuItem *items)
   {
   Widget    menu,
-            cascade, 
+            cascade=0, 
             widget,
-            first_menuitem,
-            initial_choice;
+            first_menuitem=0,
+            initial_choice=0;
   int       i;
   XmString  str;
 

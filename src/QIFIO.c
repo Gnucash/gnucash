@@ -35,6 +35,7 @@
 
 #include <fcntl.h>
 #include <string.h>
+#include <unistd.h>
 #include <Xm/Xm.h>
 
 #include "config.h"
@@ -314,7 +315,6 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
          *tok = ':';
 
          if (parent) {
-            Account *preexisting;
 
             /* trim off the parent account name ... */
             /* tok += sizeof(char);  leave behind the colon ... */

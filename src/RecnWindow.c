@@ -119,13 +119,13 @@ recnRefresh( RecnWindow *recnData )
         sprintf( buf, "%c", trans->reconciled );
         rows[0] = XtNewString(buf);
         rows[1] = trans->num;
-        sprintf( buf, "%2d/%2d/%02d\0", 
+        sprintf( buf, "%2d/%2d/%02d", 
                  trans->date.month,
                  trans->date.day,
                  (trans->date.year%100) );
         rows[2] = XtNewString(buf);
         rows[3] = trans->description;
-        sprintf( buf, "%.2f\0", DABS(themount) );
+        sprintf( buf, "%.2f", DABS(themount) );
         rows[4] = XtNewString(buf);
         
         if( 0.0 > themount)
@@ -191,17 +191,17 @@ recnRecalculateBalance( RecnWindow *recnData )
     }
   
   /* Update the difference field, and the total fields */
-  sprintf( buf, " $ %.2f\0", DABS(ddebit) );
+  sprintf( buf, " $ %.2f", DABS(ddebit) );
   XmTextSetString( recnData->totDebit, buf );
   
-  sprintf( buf, " $ %.2f\0", dcredit );
+  sprintf( buf, " $ %.2f", dcredit );
   XmTextSetString( recnData->totCredit, buf );
 
   ddiff = recnData->ddiff + dcredit + ddebit;
   if( 0.0 > ddiff )
-    sprintf( buf, "-$ %.2f\0", DABS(ddiff) );
+    sprintf( buf, "-$ %.2f", DABS(ddiff) );
   else
-    sprintf( buf, " $ %.2f\0", ddiff );    
+    sprintf( buf, " $ %.2f", ddiff );    
   XmTextSetString( recnData->difference, buf );
   }
 
@@ -823,7 +823,6 @@ recnCB( Widget mw, XtPointer cd, XtPointer cb )
   
   XbaeMatrixEnterCellCallbackStruct *cbs =
     (XbaeMatrixEnterCellCallbackStruct *)cb;
-  int rows = XbaeMatrixNumRows(mw);
   
   cbs->doit = False;
   cbs->map  = False;

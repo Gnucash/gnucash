@@ -51,6 +51,7 @@
 #include "MainWindow.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"
+#include "Reports.h"
 #include "util.h"
 #include "XferWindow.h"
 
@@ -109,7 +110,6 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
   for( i=0; i<grp->numAcc; i++ )
     {
     String cols[XACC_MAIN_NUM_COLS];
-    Transaction *trans=NULL;
     Account *acc = getAccount( grp, i );
     double dbalance;
     
@@ -141,9 +141,9 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
       dbalance = -dbalance;
     }
     if( 0.0 > dbalance )
-      sprintf( buf,"-$%.2f\0", DABS(dbalance) );
+      sprintf( buf,"-$%.2f", DABS(dbalance) );
     else
-      sprintf( buf,"$%.2f\0", DABS(dbalance) );
+      sprintf( buf,"$%.2f", DABS(dbalance) );
     cols[XACC_MAIN_ACC_BALN] = XtNewString(buf);
     
     XtVaGetValues (acctrix, XmNrows, &currow, NULL);
@@ -226,7 +226,7 @@ refreshMainWindow( void )
   {
 
   int   nrows;
-  int   row_from_top;
+  int   row_from_top = 0;
   AccountGroup *grp = topgroup;    /* hack -- should pass as argument ... */
   
   /* During refresh, we remove and re-add all displayed accounts.
@@ -311,7 +311,6 @@ ArrowEventCallback(Widget w, XtPointer pClientData,
                    XEvent *event, Boolean *ContDispatch)
 
 {
-    Account *acc = (Account *) pClientData;
     XButtonEvent *bev = (XButtonEvent *) event;
     XmArrowButtonCallbackStruct many;
 
@@ -344,7 +343,6 @@ expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
 {
   XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
   Account *acc = (Account *)pClientData;
-  int i, nrows;
 
   /* a "fix" to avoid double invocation */
   switch ( info->reason ) {
@@ -418,7 +416,7 @@ mainWindow( Widget parent )
       NULL,         NULL,                  (MenuItem *)NULL },
     { "Quit",          &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       fileMenubarCB, (XtPointer)FMB_QUIT,  (MenuItem *)NULL },
-    NULL,
+    { NULL, },
   };
 
   MenuItem accountMenu[] = {
@@ -442,7 +440,7 @@ mainWindow( Widget parent )
     { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_CAT,  (MenuItem *)NULL },
 #endif
-    NULL,
+    { NULL, },
   };
   
   MenuItem helpMenu[] = {
@@ -456,7 +454,7 @@ mainWindow( Widget parent )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
-    NULL,
+    { NULL, },
   };
   
   mainwindow = XtVaCreateManagedWidget( "mainwindow", 
@@ -808,7 +806,6 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   XbaeMatrixEnterCellCallbackStruct *cbs =
     (XbaeMatrixEnterCellCallbackStruct *)cb;
-  int rows = XbaeMatrixNumRows(accountlist);
   
   cbs->doit = False;
   cbs->map  = False;
@@ -996,9 +993,6 @@ void
 accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   int button = (int)cd;
-  int *posList;
-  int numPos;
-  AccountGroup *grp = topgroup;
   
   /*
    * which of the file menubar options was chosen
@@ -1115,8 +1109,6 @@ void
 helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   int button = (int)cd;
-  int *posList;
-  int numPos;
   
   /*
    * which of the file menubar options was chosen

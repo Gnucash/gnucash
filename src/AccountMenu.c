@@ -255,7 +255,6 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
   Widget     bar_widget;
   MenuItem   *menuList;
   AccountMenu *accData;
-  XmString   labelStr;
   int        i;
   int        offset = 0;
   int        nacc;

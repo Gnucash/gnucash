@@ -77,6 +77,7 @@
 \********************************************************************/
 
 #include <fcntl.h>
+#include <unistd.h>
 #include <Xm/Xm.h>
 
 #include "config.h"
@@ -182,10 +183,8 @@ AccountGroup *
 readData( char *datafile )
   {
   int  fd;
-  int  numAcc;
   int  err=0;
   int  token=0;
-  int  i;
   int  num_unclaimed;
   AccountGroup *grp = 0x0;
 

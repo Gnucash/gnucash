@@ -38,6 +38,9 @@
 #include "BuildMenu.h"
 #include "Data.h"
 #include "main.h"
+#include "MainWindow.h"
+#include "RecnWindow.h"
+#include "RegWindow.h"
 #include "util.h"
 
 
@@ -81,7 +84,7 @@ xferWindow( Widget parent )
   {
   Date       date;
   char       buf[BUFSIZE];
-  Widget     dialog, form, widget, label, buttonform, menu;
+  Widget     dialog, form, widget, label, buttonform;
   MenuItem   *accountMenu;
   XferWindow *xferData;
   int        position,i;
@@ -133,7 +136,7 @@ xferWindow( Widget parent )
                            NULL );
   
   todaysDate(&date);
-  sprintf(buf,"%2d/%2d/%4d\0", date.month, date.day, date.year);
+  sprintf(buf,"%2d/%2d/%4d", date.month, date.day, date.year);
   
   xferData->date = 
   XtVaCreateManagedWidget( "text",

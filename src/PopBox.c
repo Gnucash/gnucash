@@ -50,7 +50,6 @@ PopBox *
 popBox (Widget parent, int width, int drop_width)
 {
    Widget combobox;
-   XmString str;
    PopBox *popData;
 
    /* malloc the pop GUI structure */

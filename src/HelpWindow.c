@@ -191,6 +191,15 @@ void xaccJumpToLabel (Widget mw, char *jumpfile);
 #endif 
 
 #if HAVE_XPM
+struct _image_info {
+  int width;
+  int height;
+  int num_colors;
+  Pixmap pixmap;
+};
+
+typedef struct _image_info ImageInfo;
+  
 ImageInfo *htmlResolveImage( Widget wm, char *file, int nl );
 #endif
 
@@ -599,7 +608,7 @@ htmlResolveImage( Widget mw, char *file, int nl )
   ImageInfo *img = (ImageInfo *)malloc(sizeof(ImageInfo));
   XpmImage  xpm;
   XpmAttributes attr;
-  int err,i;
+  int err;
   char filename[BUFSIZE];
   
   sprintf( (char *)&filename, "%s/%s", helpPath, file );
@@ -613,10 +622,10 @@ htmlResolveImage( Widget mw, char *file, int nl )
   img->width  = xpm.width;
   img->height = xpm.height;
   img->num_colors = xpm.ncolors;
-  img->image_data = None;
+  img->pixmap = None;
   
   err = XpmCreatePixmapFromXpmImage( XtDisplay(mw), XtWindow(mw), &xpm,
-				     &(img->image), NULL, NULL );
+				     &(img->pixmap), NULL, NULL );
   if( err != 0 )
     ERROR();
   

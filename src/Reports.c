@@ -46,8 +46,7 @@
 void 
 simpleReportWindow( Widget parent )
   {
-  Widget    dialog, form, frame, rc, widget, 
-            label, buttonform;
+  Widget    dialog, form, frame, widget, buttonform;
   setBusyCursor( parent );
   
   /* force the size of the dialog so it is not resizable */

@@ -200,7 +200,7 @@ removeTransaction( Account *acc, int num )
   Transaction **oldTrans;
   int  i,j;
 
-  if (NULL == acc) return;
+  if (NULL == acc) return NULL;
 
   oldTrans = acc->transaction;
 
@@ -357,8 +357,6 @@ insertTransaction( Account *acc, Transaction *trans )
 Account *
 xaccGetOtherAccount( Account *acc, Transaction *trans )
 {
-  struct _account * _acc = (struct _account *) acc; 
-
   if (NULL == acc) return NULL;
 
   if (acc == ((Account *) trans->debit)) {
@@ -403,7 +401,7 @@ double xaccGetShareAmount (Account *acc, Transaction *trans)
    } else {
       printf ("Internal Error: xaccGetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
-      printf ("acc=0x%x deb=0x%x cred=0x%x\n", acc, trans->debit, trans->credit);
+      printf ("acc=%p deb=%p cred=%p\n", acc, trans->debit, trans->credit);
       themount = 0.0;  /* punt */
    }
    return themount;
@@ -538,7 +536,7 @@ xaccRecomputeBalance( Account * acc )
   double  share_balance    = 0.0;
   double  share_cleared_balance = 0.0;
   double  amt = 0.0;
-  Transaction *trans, *last_trans;
+  Transaction *trans, *last_trans=NULL;
   Account *tracc;
   
   if( NULL == acc ) return;

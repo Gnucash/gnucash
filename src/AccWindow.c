@@ -43,6 +43,8 @@
 #include "AccountMenu.h"
 #include "Data.h"
 #include "main.h"
+#include "MainWindow.h"
+#include "RegWindow.h"
 #include "TextBox.h"
 #include "util.h"
 
@@ -129,7 +131,7 @@ accWindow( Widget parent )
 				 XmNmaxHeight, 340,
                                  XmNresizable, FALSE,
                                  XmNallowShellResize, FALSE,
-                                 /* XmNtransient, FALSE,  /* allow window to be repositioned */
+                                 /* XmNtransient, FALSE, */ /* allow window to be repositioned */
 				 NULL );
   
   XtAddCallback( dialog, XmNdestroyCallback, 
@@ -633,7 +635,7 @@ editNotesCB( Widget mw, XtPointer cd, XtPointer cb )
 static void
 createCB( Widget mw, XtPointer cd, XtPointer cb )
   {
-  int i, num, acc_id;
+  int i;
   Transaction *trans;
   Account     *acc, *parent_acc;
   AccWindow   *accData = (AccWindow *)cd;
@@ -737,7 +739,7 @@ finishEditCB( Widget mw, XtPointer cd, XtPointer cb )
 static void
 selectAccountCB( Widget mw, XtPointer cd, XtPointer cb )
 {
-  int i, but;
+  int i, but=0;
   Boolean set;
   AccWindow *menu = (AccWindow *) cd;
   Account *acc = (Account *) cb;

@@ -58,7 +58,6 @@ PopBox *
 xferBox (Widget parent, AccountGroup *grp, int width, int drop_down_width)
 {
    PopBox *popGUI;
-   Account * acc;
 
    popGUI = popBox (parent, width, drop_down_width);
 

@@ -371,11 +371,7 @@ verifyBoxCB( Widget mw, XtPointer cd, XtPointer cb )
 void 
 errorBox( Widget parent, char *message )
   {
-  Widget   dialog,
-           pane,
-           controlform,
-           actionform,
-           widget;
+  Widget   dialog;
 
   if( message != NULL )
     {

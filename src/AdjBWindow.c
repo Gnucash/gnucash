@@ -37,6 +37,8 @@
 #include "date.h"
 #include "main.h"
 #include "MainWindow.h"
+#include "RegWindow.h"
+#include "RecnWindow.h"
 #include "util.h"
 
 /** GLOBALS *********************************************************/
@@ -129,7 +131,7 @@ adjBWindow( Widget parent, Account *acc )
                                     NULL );
   
   todaysDate(&date);
-  sprintf(buf,"%2d/%2d/%4d\0", date.month, date.day, date.year);
+  sprintf(buf,"%2d/%2d/%4d", date.month, date.day, date.year);
   
   adjBData->date =
     XtVaCreateManagedWidget( "text",

@@ -66,7 +66,6 @@ Account ** accListCopy (Account **list)
 Transaction ** accListGetSortedTrans (Account **list)
 {
    Account *acc;
-   Transaction *trans;
    Transaction **tarray;
    int nacc = 0;
    int ntrans = 0;
@@ -115,7 +114,8 @@ Transaction ** accListGetSortedTrans (Account **list)
    }
 
    /* run the sort routine on the array */
-   qsort (tarray, ntrans, sizeof (Transaction *), xaccTransOrder);
+   qsort (tarray, ntrans, sizeof (Transaction *), 
+            (int(*)(const void*, const void *)) xaccTransOrder);
 
    return tarray;
 }   
@@ -128,7 +128,7 @@ xaccGroupToList (Account *acc)
    int nacc;
    int i, n;
 
-   if (!acc) return;
+   if (!acc) return NULL;
 
    nacc = xaccGetNumAccounts (acc->children);
    nacc ++;  /* add one for this account */

@@ -77,7 +77,7 @@ typedef struct _RegWindow {
                                * transaction currEntry                   */
   unsigned short currEntry;   /* to keep track of last edited transaction*/
 
-  char type;                  /* register display type, usually equal to *
+  short type;                 /* register display type, usually equal to *
                                * account type                            */
 
   char header_rows;           /* number of header rows                   */
@@ -1264,7 +1264,6 @@ regSaveTransaction( RegWindow *regData, int position )
   if( regData->changed & MOD_MEMO )
     {
     String tmp;
-    String  memo = NULL;
     DEBUG("MOD_MEMO\n");
     /* ... the memo ... */
     XtFree( trans->memo );
@@ -1685,7 +1684,7 @@ regWindowAccGroup( Widget parent, Account *acc )
     default:
       PERR (" regWindowAccGroup(): unknown account type \n");
       _free (list);
-      return;
+      return NULL;
   }
   retval = regWindowLedger (parent, list, ledger_type);
   acc->regLedger = retval;
@@ -1706,7 +1705,6 @@ regWindowAccGroup( Widget parent, Account *acc )
 RegWindow *
 regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   {
-  Transaction *trans;
   RegWindow   *regData;
   Widget menubar, pane, buttonform, frame, reg, widget;
   int    position=0;
@@ -1723,7 +1721,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   MenuItem reportMenu[] = {
     { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       NULL, (XtPointer)0,  (MenuItem *)NULL },
-    NULL,
+    { NULL, },
   };
   
   MenuItem activityMenu[] = {
@@ -1745,7 +1743,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       destroyShellCB, NULL, (MenuItem *)NULL },
-    NULL,
+    { NULL, },
   };
 
   
@@ -1758,7 +1756,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
-    NULL,
+    { NULL, },
   };
   
 
@@ -2749,8 +2747,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           regData->insert = mvcbs->verify->currInsert;
           DEBUG("resyncing quickfill!\n");
           DEBUGCMD(printf(" insert = %d\n currInsert = %d\n",
-                          regData->insert,
-                          mvcbs->verify->currInsert ));
+                          (int) regData->insert,
+                          (int) (mvcbs->verify->currInsert) ));
           /* we are out of sync, which means that the user
            * must have hit delete or something... to be on
            * the safe side, rescan the description field,

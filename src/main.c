@@ -32,7 +32,7 @@
 #include "FileBox.h"
 #include "FileIO.h"
 #include "main.h"
-#include "RegWindow.h"
+#include "MainWindow.h"
 #include "util.h"
 
 /** PROTOTYPES ******************************************************/
@@ -173,5 +173,7 @@ main( int argc, char *argv[] )
   
   /* Enter event loop */
   XtAppMainLoop(app);
+
+  return 0;
   }
 

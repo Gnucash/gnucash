@@ -56,9 +56,9 @@ void fileBoxCB( Widget mw, XtPointer cd, XtPointer cb );
 char *
 fileBox( Widget parent, int type, char * filter)
   {
-  Widget   dialog;
+  Widget   dialog=0;
   char*    fileName = NULL;
-  XmString filterpattern, dialogname;
+  XmString filterpattern, dialogname=NULL;
 
   if( !done )
     return NULL;                   /* Don't open if there already is

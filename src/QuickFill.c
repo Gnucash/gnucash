@@ -22,6 +22,7 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <ctype.h>
 #include <string.h>
 
 #include "config.h"
