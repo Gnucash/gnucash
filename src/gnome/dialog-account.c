@@ -1849,9 +1849,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gnc_resume_gui_refresh ();
 
-  commodity = gnc_lookup_currency_option ("International",
-                                          "Default Currency",
-                                          gnc_locale_default_currency ());
+  commodity = gnc_default_currency ();
 
   gnc_commodity_edit_set_commodity (GNC_COMMODITY_EDIT (aw->currency_edit),
                                     commodity);

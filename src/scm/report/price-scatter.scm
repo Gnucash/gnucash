@@ -63,14 +63,14 @@
 
       (gnc:options-add-currency! 
        options pagename-price optname-report-currency "d")
-      
+
       (add-option
        (gnc:make-commodity-option 
 	pagename-price optname-price-commodity
 	"e"
 	(N_ "Calculate the price of this commodity.")
-	(gnc:locale-default-currency)))
-      
+	(gnc:default-currency)))
+
       (add-option
        (gnc:make-multichoice-option
 	pagename-price optname-price-source

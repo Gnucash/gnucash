@@ -31,6 +31,7 @@
 #include "dialog-utils.h"
 #include "glade-gnc-dialogs.h"
 #include "glade-support.h"
+#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
@@ -301,7 +302,7 @@ price_to_gui (PricesDialog *pdb_dialog)
   else
   {
     commodity = NULL;
-    currency = gnc_locale_default_currency ();
+    currency = gnc_default_currency ();
     date.tv_sec = time (NULL);
     date.tv_nsec = 0;
     source = "";

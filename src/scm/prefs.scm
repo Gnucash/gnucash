@@ -168,8 +168,7 @@
  (gnc:make-simple-boolean-option
   (N_ "International") (N_ "Enable EURO support")
   "d" (N_ "Enables support for the European Union EURO currency") 
-  (gnc:is-euro-currency
-   (gnc:locale-default-currency))))
+  (gnc:is-euro-currency (gnc:default-currency))))
 
 
 ;;; Register options

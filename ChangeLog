@@ -1,3 +1,37 @@
+2001-06-02  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/price-scatter.scm: same as below
+
+	* src/scm/prefs.scm: same as below
+
+	* src/gnc-ui-util.c: same as below
+
+	* src/gnome/druid-qif-import.c: same as below
+
+	* src/gnome/dialog-price-editor.c: same as below
+
+	* src/gnome/dialog-fincalc.c: same as below
+
+	* src/SplitLedger.c: use gnc_default_currency instead
+	of gnc_locale_default_currency.
+
+	* src/scm/options-utilities.scm: use new func
+
+	* src/scm/report/transaction-report.scm: handle splits with no
+	account
+
+	* src/gnome/dialog-account.c: use new func
+
+	* src/gnome/window-main-summarybar.c: use new func
+
+	* src/guile/gnc.gwp: wrap new func below
+
+	* src/guile/global-options.c (gnc_default_currency): new func
+	to return user-set default currency
+
+	* src/engine/gnc-book.c (gnc_book_backup_file): use g_free
+	instead of free.
+
 2001-06-02  Christian Stimming  <stimming@tuhh.de>
 
 	* po/gnc-glossary.txt: Updated glossary, 15 new terms, and lots of

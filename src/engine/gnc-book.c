@@ -463,14 +463,15 @@ gnc_book_backup_file(GNCBook *book)
         }
         g_free(bin_bkup);
     }
-    
+
     timestamp = xaccDateUtilGetStampNow ();
     backup = g_new (char, strlen (datafile) + strlen (timestamp) + 6);
     strcpy (backup, datafile);
     strcat (backup, ".");
     strcat (backup, timestamp);
     strcat (backup, ".xac");
-    free (timestamp);
+    g_free (timestamp);
+
     if(link(datafile, backup) != 0)
     {
         gnc_book_push_error(

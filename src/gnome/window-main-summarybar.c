@@ -260,10 +260,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   GList *list;
   GList *node;
 
-  default_currency =
-    gnc_lookup_currency_option("International",
-                               "Default Currency",
-                               gnc_locale_default_currency ());
+  default_currency = gnc_default_currency ();
 
   if (euro)
   {
@@ -366,10 +363,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   GList *current;
   gboolean euro;
 
-  default_currency =
-    gnc_lookup_currency_option("International",
-                               "Default Currency",
-                               gnc_locale_default_currency ());
+  default_currency = gnc_default_currency ();
 
   euro = gnc_lookup_boolean_option("International",
                                    "Enable EURO support",
@@ -460,10 +454,7 @@ gnc_main_window_summary_new (void) {
   GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
   GtkWidget       * summarybar;
   GNCCurrencyItem * def_item;
-  gnc_commodity   * default_currency =
-    gnc_lookup_currency_option ("International",
-                                "Default Currency",
-                                gnc_locale_default_currency ());
+  gnc_commodity   * default_currency = gnc_default_currency ();
   
   retval->hbox         = gtk_hbox_new (FALSE, 5);  
   retval->totals_combo = gtk_select_new ();

@@ -520,7 +520,7 @@ gnc_find_or_create_equity_account (GNCEquityType equity_type,
   }
 
   if (!base_name_exists &&
-      gnc_commodity_equiv (currency, gnc_locale_default_currency ()))
+      gnc_commodity_equiv (currency, gnc_default_currency ()))
   {
     g_free (name);
     name = g_strdup (base_name);
@@ -777,7 +777,7 @@ gnc_default_print_info (gboolean use_symbol)
 
   lc = gnc_localeconv ();
 
-  info.commodity = gnc_locale_default_currency ();
+  info.commodity = gnc_default_currency ();
 
   info.max_decimal_places = lc->frac_digits;
   info.min_decimal_places = lc->frac_digits;

@@ -256,7 +256,7 @@ gnc_ui_qif_import_druid_make(void)  {
   gnc_ui_update_commodity_picker(retval->currency_picker,
                                  GNC_COMMODITY_NS_ISO, 
                                  gnc_commodity_get_printname
-                                 (gnc_locale_default_currency()));
+                                 (gnc_default_currency()));
   
   if(!retval->show_doc_pages) {
     gnome_druid_set_page(GNOME_DRUID(retval->druid),

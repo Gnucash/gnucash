@@ -590,7 +590,7 @@ gnc_split_get_value_denom (Split *split)
   denom = xaccAccountGetCurrencySCU (xaccSplitGetAccount (split));
   if (denom == 0)
   {
-    gnc_commodity *commodity = gnc_locale_default_currency ();
+    gnc_commodity *commodity = gnc_default_currency ();
     denom = gnc_commodity_get_fraction (commodity);
     if (denom == 0)
       denom = 100;
@@ -607,7 +607,7 @@ gnc_split_get_quantity_denom (Split *split)
   denom = xaccAccountGetCommoditySCU (xaccSplitGetAccount (split));
   if (denom == 0)
   {
-    gnc_commodity *commodity = gnc_locale_default_currency ();
+    gnc_commodity *commodity = gnc_default_currency ();
     denom = gnc_commodity_get_fraction (commodity);
     if (denom == 0)
       denom = 100;
@@ -644,7 +644,7 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
 
     xaccSetPriceCellFraction (reg->sharesCell, 10000);
 
-    commodity = gnc_locale_default_currency ();
+    commodity = gnc_default_currency ();
     fraction = gnc_commodity_get_fraction (commodity);
 
     xaccSetPriceCellFraction (reg->debitCell, fraction);
@@ -3681,7 +3681,7 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
 
         currency = xaccTransGetCurrency (trans);
         if (!currency)
-          currency = gnc_locale_default_currency ();
+          currency = gnc_default_currency ();
 
         imbalance = gnc_numeric_convert (imbalance,
                                          gnc_commodity_get_fraction (currency),

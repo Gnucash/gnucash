@@ -32,6 +32,7 @@
 #include "finvar.h"
 #include "glade-gnc-dialogs.h"
 #include "glade-support.h"
+#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
@@ -148,7 +149,7 @@ fi_to_gui(FinCalcDialog *fcd)
 
   pmt = double_to_gnc_numeric (fcd->financial_info.pmt, 100000, GNC_RND_ROUND);
 
-  commodity = gnc_locale_default_currency ();
+  commodity = gnc_default_currency ();
 
   total = gnc_numeric_mul (npp, pmt, gnc_commodity_get_fraction (commodity),
                            GNC_RND_ROUND);
@@ -501,7 +502,7 @@ gnc_ui_fincalc_dialog_create(void)
   GtkWidget *hbox;
   GtkWidget *edit;
 
-  commodity = gnc_locale_default_currency ();
+  commodity = gnc_default_currency ();
 
   fcd = g_new0(FinCalcDialog, 1);
 
