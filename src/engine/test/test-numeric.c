@@ -239,56 +239,56 @@ check_rounding (void)
 	val = gnc_numeric_create(7, 16);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (43,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_FLOOR),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_FLOOR),
                    val, "expected %s = %s = (%s as 100th's floor)");
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (44,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_CEIL),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_CEIL),
                    val, "expected %s = %s = (%s as 100th's ceiling)");
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (43,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_TRUNC),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_TRUNC),
                    val, "expected %s = %s = (%s as 100th's trunc)");
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (44,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 
 	val = gnc_numeric_create(1511, 1000);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (151,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 
 	val = gnc_numeric_create(1516, 1000);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (152,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 
 	/* Half-values always get rounded to nearest even number */
 	val = gnc_numeric_create(1515, 1000);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (152,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 
 	val = gnc_numeric_create(1525, 1000);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (152,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 
 	val = gnc_numeric_create(1535, 1000);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (154,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 
 	val = gnc_numeric_create(1545, 1000);
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (154,100),
-	                gnc_numeric_convert (val, 100, GNC_RND_ROUND),
+	                gnc_numeric_convert (val, 100, GNC_HOW_RND_ROUND),
                    val, "expected %s = %s = (%s as 100th's round)");
 }
 
@@ -303,31 +303,31 @@ check_double (void)
 	                gnc_numeric_create (112346,100000),
                    double_to_gnc_numeric(1.1234567890123, 
                                          GNC_DENOM_AUTO, 
-                                         GNC_DENOM_SIGFIGS(6) |
-                                         GNC_RND_ROUND),
+                                         GNC_HOW_DENOM_SIGFIGS(6) |
+                                         GNC_HOW_RND_ROUND),
                    val, "expected %s = %s double 6 figs");
 
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (112346,10000000),
                    double_to_gnc_numeric(0.011234567890123, 
                                          GNC_DENOM_AUTO, 
-                                         GNC_DENOM_SIGFIGS(6) |
-                                         GNC_RND_ROUND),
+                                         GNC_HOW_DENOM_SIGFIGS(6) |
+                                         GNC_HOW_RND_ROUND),
                    val, "expected %s = %s double 6 figs");
 
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (112346,100),
                    double_to_gnc_numeric(1123.4567890123, 
                                          GNC_DENOM_AUTO, 
-                                         GNC_DENOM_SIGFIGS(6) |
-                                         GNC_RND_ROUND),
+                                         GNC_HOW_DENOM_SIGFIGS(6) |
+                                         GNC_HOW_RND_ROUND),
                    val, "expected %s = %s double 6 figs");
 	check_unary_op (gnc_numeric_eq,
 	                gnc_numeric_create (112346,10000000000LL),
                    double_to_gnc_numeric(1.1234567890123e-5, 
                                          GNC_DENOM_AUTO, 
-                                         GNC_DENOM_SIGFIGS(6) |
-                                         GNC_RND_ROUND),
+                                         GNC_HOW_DENOM_SIGFIGS(6) |
+                                         GNC_HOW_RND_ROUND),
                    val, "expected %s = %s double 6 figs");
 
 	double flo = gnc_numeric_to_double(gnc_numeric_create(7, 16));
@@ -344,51 +344,51 @@ check_add_subtract (void)
 
   /* Well, actually 14/24 would be acceptable/better in this case */
   check_binary_op (gnc_numeric_create(7,12), 
-                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s + %s for add exact");
   
   check_binary_op (gnc_numeric_create(58,100), 
-                   gnc_numeric_add(a, b, 100, GNC_RND_ROUND),
+                   gnc_numeric_add(a, b, 100, GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s + %s for add 100ths (banker's)");
   
   check_binary_op (gnc_numeric_create(5833,10000), 
                    gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
-                                         GNC_DENOM_SIGFIGS(4) |
-                                         GNC_RND_ROUND),
+                                         GNC_HOW_DENOM_SIGFIGS(4) |
+                                         GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s + %s for add 4 sig figs");
   
   check_binary_op (gnc_numeric_create(583333,1000000), 
                    gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
-                                         GNC_DENOM_SIGFIGS(6) |
-                                         GNC_RND_ROUND),
+                                         GNC_HOW_DENOM_SIGFIGS(6) |
+                                         GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s + %s for add 6 sig figs");
   
   check_binary_op (gnc_numeric_create(1,12), 
-                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s - %s for sub exact");
   
   /* We should try something trickier for reduce & lcd */
   check_binary_op (gnc_numeric_create(1,12), 
-                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s - %s for sub reduce");
   
   check_binary_op (gnc_numeric_create(1,12), 
-                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD),
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
 						 a, b, "expected %s got %s = %s - %s for sub reduce");
   
   check_binary_op (gnc_numeric_create(8,100), 
-                   gnc_numeric_sub(a, b, 100, GNC_RND_ROUND),
+                   gnc_numeric_sub(a, b, 100, GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s - %s for sub 100ths (banker's)");
   
 #if CHECK_ERRORS_TOO
   gnc_numeric c;
-  c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  c = gnc_numeric_add_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
          gnc_numeric_print(err));
   
-  c = gnc_numeric_sub_with_error(a, b, 100, GNC_RND_FLOOR, &err);
+  c = gnc_numeric_sub_with_error(a, b, 100, GNC_HOW_RND_FLOOR, &err);
   printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
@@ -417,14 +417,14 @@ check_add_subtract (void)
 		ne = na+nb;
 		e = gnc_numeric_create(ne, deno);
 		check_binary_op (e,
-                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s + %s for exact addition");
 
 		/* Subtract */
 		ne = na-nb;
 		e = gnc_numeric_create(ne, deno);
 		check_binary_op (e,
-                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s - %s for exact subtraction");
 	}
 }
@@ -434,42 +434,43 @@ check_add_subtract (void)
 static void
 check_mult_div (void)
 {
+  gnc_numeric c, d;
   gnc_numeric a = gnc_numeric_create(2, 6);
   gnc_numeric b = gnc_numeric_create(1, 4);
 
   check_binary_op (gnc_numeric_create(2,24), 
-                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s * %s for mult exact");
 
   check_binary_op (gnc_numeric_create(1,12), 
-                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s * %s for mult reduce");
 
   check_binary_op (gnc_numeric_create(8,100), 
-                   gnc_numeric_mul(a, b, 100, GNC_RND_ROUND),
+                   gnc_numeric_mul(a, b, 100, GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s * %s for mult 100th's");
 
   check_binary_op (gnc_numeric_create(8,6), 
-                   gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+                   gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s / %s for div exact");
 
   check_binary_op (gnc_numeric_create(4,3), 
-                   gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+                   gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s / %s for div reduce");
 
   check_binary_op (gnc_numeric_create(133,100), 
-                   gnc_numeric_div(a, b, 100, GNC_RND_ROUND),
+                   gnc_numeric_div(a, b, 100, GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s * %s for div 100th's");
 
 #if CHECK_ERRORS_TOO
   gnc_numeric c;
-  c = gnc_numeric_mul_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  c = gnc_numeric_mul_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
          gnc_numeric_print(err));
 
-  c = gnc_numeric_div_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  c = gnc_numeric_div_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
   printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(c),
@@ -485,7 +486,7 @@ check_mult_div (void)
   b = gnc_numeric_create(10000000*v, v);
 
   check_binary_op (b,
-	                gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD),
+	                gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
 						 a, b, "expected %s got %s = %s * %s for multiply");
 
 	/* Multiply some random numbers.  This test presumes that
@@ -508,7 +509,7 @@ check_mult_div (void)
 		b = gnc_numeric_create(nb, deno);
 
 		check_binary_op (gnc_numeric_create(ne,1), 
-			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s * %s for mult exact");
 
 		/* Force 128-bit math to come into play */
@@ -518,7 +519,7 @@ check_mult_div (void)
 			a = gnc_numeric_create(na << j, 1<<j);
 			b = gnc_numeric_create(nb << j, 1<<j);
 			check_binary_op (gnc_numeric_create(ne, 1), 
-			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+			          gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s * %s for mult reduce");
 		}
 
@@ -526,7 +527,7 @@ check_mult_div (void)
 		b = gnc_numeric_create(deno, nb);
 
 		check_binary_op (gnc_numeric_create(ne,1), 
-			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s / %s for div exact");
 
 		/* avoid overflow; */
@@ -538,14 +539,16 @@ check_mult_div (void)
 			a = gnc_numeric_create(na << j, 1<<j);
 			b = gnc_numeric_create(1<<j, nb << j);
 			check_binary_op (gnc_numeric_create(ne, 1), 
-			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+			          gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s / %s for div reduce");
 		}
 
 	}
 	a = gnc_numeric_create(782592055622866ULL,89025);
 	b = gnc_numeric_create(2222554708930978ULL,85568);
-	/* Dividing the above pair overflows.  This can be seen from
+	/* Dividing the above pair overflows, in that after
+	 * the division the denominator won't fit into a 
+	 * 64-bit quantity.  This can be seen from
 	 * the factorization int primes:
 	 * 782592055622866 = 2 * 2283317 * 171371749
 	 * (yes, thats a seven and a nine digit prime)
@@ -553,11 +556,45 @@ check_mult_div (void)
 	 * (yes, that's a sixteen-digit prime number)
 	 * 89025 = 3*5*5*1187 
 	 * 85568= 64*7*191   
-	 * You can do this by hand and see that it overflows.
+	 * If the rounding method is exact/no-round, then 
+	 * an overflow error should be signalled; else the 
+	 * divide routine should shift down the results till
+	 * the overflow is eliminated.
+	 * 
 	 */
-	check_binary_op (gnc_numeric_create(GNC_ERROR_OVERFLOW, 0),
+	check_binary_op (gnc_numeric_error (GNC_ERROR_OVERFLOW),
 			 gnc_numeric_div(a, b, GNC_DENOM_AUTO,
-					 GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND),
+					 GNC_HOW_DENOM_EXACT),
+			 a, b, "expected %s got %s = %s / %s for div exact");
+
+	check_binary_op (gnc_numeric_create(338441, 1000000),
+			 gnc_numeric_div(a, b, GNC_DENOM_AUTO,
+					 GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND),
+			 a, b, "expected %s got %s = %s / %s for div round");
+
+	/* The below is a 'typical' value calculation: 
+	 * value_frac = value_tot * amt_frace / amt_tot
+	 * and has some typical potential-overflow values. 
+	 * 82718 = 2 * 59 * 701
+	 * 47497125586 = 2 * 1489 * 15949337
+	 * 69100955 = 5 * 7 * 11 * 179483
+	 * 32005637020 = 4 * 5 * 7 * 43 * 71 * 103 * 727
+	 */
+	a = gnc_numeric_create (-47497125586LL, 82718);
+	b = gnc_numeric_create (-69100955LL, 55739);
+	c = gnc_numeric_mul (a,b, GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+	d = gnc_numeric_create (-32005637020LL, 55739);
+
+	check_binary_op (gnc_numeric_create(-102547458LL, 82718),
+			 gnc_numeric_div(c, d, 82718,
+					 GNC_HOW_DENOM_EXACT),
+			 a, b, "expected %s got %s = %s / %s for div round");
+
+// XXX this set of tests is not yet working right ... 
+// it should be overflowing not rounding 
+	check_binary_op (gnc_numeric_error (GNC_ERROR_OVERFLOW),
+			 gnc_numeric_div(c, d, 82718,
+					 GNC_HOW_DENOM_EXACT|GNC_HOW_RND_NEVER),
 			 a, b, "expected %s got %s = %s / %s for div round");
 }
   
