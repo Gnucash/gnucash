@@ -83,9 +83,6 @@
                             "choose an account to reconcile.\n")
 #define AMOUNT_NUM_MSG    _("The amount must be a number.")
 #define BALANCE_NUM_MSG   _("The balance must be a number.")
-#define CALC_INTEREST_MSG _("The interest rate cannot be zero.")
-#define CALC_MISSING_MSG  _("You must enter values for the other quantities.")
-#define CALC_PAYMENTS_MSG _("The number of payments cannot be zero.")
 #define CHANGE_RECN_MSG   _("Do you really want to mark this transaction "\
                             "not reconciled?\nDoing so might make future "\
                             "reconciliation difficult!")

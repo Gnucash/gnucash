@@ -31,6 +31,7 @@
 #include "finvar.h"
 #include "finproto.h"
 #include "glade-gnc-dialogs.h"
+#include "gnc-amount-edit.h"
 #include "gnc-dateedit.h"
 #include "query-user.h"
 #include "messages.h"
@@ -53,13 +54,15 @@ struct _FinCalcDialog
 {
   GtkWidget *dialog;
 
-  GtkWidget *entries[NUM_FIN_CALC_VALUES];
+  GtkWidget *amounts[NUM_FIN_CALC_VALUES];
 
   GtkWidget *compounding_menu;
   GtkWidget *payment_menu;
 
   GtkWidget *end_of_period_radio;
   GtkWidget *discrete_compounding_radio;
+
+  GtkWidget *payment_total_label;
 
   financial_info financial_info;
 
@@ -116,6 +119,7 @@ fi_to_gui(FinCalcDialog *fcd)
 {
   char string[1024];
   struct lconv *lc;
+  double total;
   int i;
 
   if (fcd == NULL)
@@ -124,19 +128,23 @@ fi_to_gui(FinCalcDialog *fcd)
   lc = gnc_localeconv();
 
   snprintf(string, sizeof(string), "%u", fcd->financial_info.npp);
-  gtk_entry_set_text(GTK_ENTRY(fcd->entries[PAYMENT_PERIODS]), string);
+  gtk_entry_set_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]), string);
 
-  xaccSPrintAmount(string, fcd->financial_info.ir, PRTNMN, NULL);
-  gtk_entry_set_text(GTK_ENTRY(fcd->entries[INTEREST_RATE]), string);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]),
+                              fcd->financial_info.ir);
 
-  xaccSPrintAmount(string, fcd->financial_info.pv, 0, NULL);
-  gtk_entry_set_text(GTK_ENTRY(fcd->entries[PRESENT_VALUE]), string);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]),
+                              fcd->financial_info.pv);
 
-  xaccSPrintAmount(string, fcd->financial_info.pmt, 0, NULL);
-  gtk_entry_set_text(GTK_ENTRY(fcd->entries[PERIODIC_PAYMENT]), string);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]),
+                              fcd->financial_info.pmt);
 
-  xaccSPrintAmount(string, -fcd->financial_info.fv, 0, NULL);
-  gtk_entry_set_text(GTK_ENTRY(fcd->entries[FUTURE_VALUE]), string);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]),
+                              -fcd->financial_info.fv);
+
+  total = fcd->financial_info.npp * fcd->financial_info.pmt;
+  xaccSPrintAmount (string, total, PRTSEP, NULL);
+  gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
   i = normalize_period(&fcd->financial_info.CF);
   gtk_option_menu_set_history(GTK_OPTION_MENU(fcd->compounding_menu), i);
@@ -166,21 +174,21 @@ gui_to_fi(FinCalcDialog *fcd)
 
   lc = gnc_localeconv();
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[PAYMENT_PERIODS]));
+  string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
   fcd->financial_info.npp = strtol(string, NULL, 10);
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[INTEREST_RATE]));
-  xaccParseAmount(string, FALSE, &fcd->financial_info.ir, NULL);
+  fcd->financial_info.ir =
+    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[INTEREST_RATE]));
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[PRESENT_VALUE]));
-  xaccParseAmount(string, TRUE, &fcd->financial_info.pv, NULL);
+  fcd->financial_info.pv =
+    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PRESENT_VALUE]));
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[PERIODIC_PAYMENT]));
-  xaccParseAmount(string, TRUE, &fcd->financial_info.pmt, NULL);
+  fcd->financial_info.pmt =
+    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[PERIODIC_PAYMENT]));
 
-  string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[FUTURE_VALUE]));
-  if (xaccParseAmount(string, TRUE, &fcd->financial_info.fv, NULL))
-    fcd->financial_info.fv = -fcd->financial_info.fv;
+  fcd->financial_info.fv =
+    gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
+  fcd->financial_info.fv = -fcd->financial_info.fv;
 
   i = gnc_option_menu_get_active(fcd->compounding_menu);
   fcd->financial_info.CF = periods[i];
@@ -270,9 +278,15 @@ close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
 }
 
 static void
-fincalc_clear_clicked(GtkButton *button, GtkEntry *entry)
+fincalc_entry_clear_clicked(GtkButton *button, GtkEntry *entry)
 {
   gtk_entry_set_text(GTK_ENTRY(entry), "");
+}
+
+static void
+fincalc_amount_clear_clicked(GtkButton *button, GNCAmountEdit *edit)
+{
+  gtk_entry_set_text(GTK_ENTRY (edit->amount_entry), "");
 }
 
 static void
@@ -299,10 +313,13 @@ init_fi(FinCalcDialog *fcd)
 }
 
 /* Determine whether the value can be calculated. If it can, return
- * NULL. Otherwise, return a string describing the reason. */
+ * NULL. Otherwise, return a string describing the reason and the offending
+ * entry in error_item. */
 static const char *
-can_calc_value(FinCalcDialog *fcd, FinCalcValue value)
+can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
 {
+  const char *missing = _("You must enter values for the other quantities.");
+  const char *bad_exp = _("You must enter a valid expression.");
   unsigned int uvalue;
   const char *string;
   double dvalue;
@@ -311,13 +328,32 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value)
   if (fcd == NULL)
     return NULL;
 
+  string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
+  if ((string == NULL) || (*string == '\0'))
+  {
+    *error_item = PAYMENT_PERIODS;
+    return missing;
+  }
+
   /* Check for missing values */
-  for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
+  for (i = 1; i < NUM_FIN_CALC_VALUES; i++)
     if (i != value)
     {
-      string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[i]));
+      GtkWidget *entry;
+
+      entry = GNC_AMOUNT_EDIT (fcd->amounts[i])->amount_entry;
+      string = gtk_entry_get_text(GTK_ENTRY(entry));
       if ((string == NULL) || (*string == '\0'))
-        return CALC_MISSING_MSG;
+      {
+        *error_item = i;
+        return missing;
+      }
+
+      if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (fcd->amounts[i])))
+      {
+        *error_item = i;
+        return bad_exp;
+      }
     }
 
   /* Check for zero interest */
@@ -327,11 +363,13 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value)
     case PRESENT_VALUE:
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
-      string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[INTEREST_RATE]));
-      dvalue = 0.0;
-      xaccParseAmount(string, FALSE, &dvalue, NULL);
+      dvalue = gnc_amount_edit_get_amount
+        (GNC_AMOUNT_EDIT (fcd->amounts[INTEREST_RATE]));
       if (DEQ(dvalue, 0.0))
-        return CALC_INTEREST_MSG;
+      {
+        *error_item = INTEREST_RATE;
+        return _("The interest rate cannot be zero.");
+      }
       break;
     default:
       break;
@@ -344,10 +382,13 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value)
     case PRESENT_VALUE:
     case PERIODIC_PAYMENT:
     case FUTURE_VALUE:
-      string = gtk_entry_get_text(GTK_ENTRY(fcd->entries[PAYMENT_PERIODS]));
+      string = gtk_entry_get_text(GTK_ENTRY(fcd->amounts[PAYMENT_PERIODS]));
       uvalue = strtol(string, NULL, 10);
       if (uvalue == 0)
-        return CALC_PAYMENTS_MSG;
+      {
+        *error_item = PAYMENT_PERIODS;
+        return _("The number of payments cannot be zero.");
+      }
       break;
     default:
       break;
@@ -360,14 +401,22 @@ static void
 calc_value(FinCalcDialog *fcd, FinCalcValue value)
 {
   const char *string;
+  int error_item = 0;
 
   if (fcd == NULL)
     return;
 
-  string = can_calc_value(fcd, value);
+  string = can_calc_value(fcd, value, &error_item);
   if (string != NULL)
   {
+    GtkWidget *entry;
+
     gnc_error_dialog_parented(GTK_WINDOW(fcd->dialog), string);
+    if (error_item == 0)
+      entry = fcd->amounts[0];
+    else
+      entry = GNC_AMOUNT_EDIT (fcd->amounts[error_item])->amount_entry;
+    gtk_widget_grab_focus (entry);
     return;
   }
 
@@ -436,7 +485,10 @@ gnc_ui_fincalc_dialog_create(void)
   FinCalcDialog *fcd;
   GtkObject *fcdo;
   GtkWidget *button;
+  GtkWidget *entry;
   GtkWidget *menu;
+  GtkWidget *hbox;
+  GtkWidget *edit;
 
   fcd = g_new0(FinCalcDialog, 1);
 
@@ -445,30 +497,67 @@ gnc_ui_fincalc_dialog_create(void)
   gtk_signal_connect(fcdo, "destroy",
                      GTK_SIGNAL_FUNC(fincalc_dialog_destroy), fcd);
 
-  fcd->entries[PAYMENT_PERIODS] = gtk_object_get_data(fcdo,
-                                                      "payment_periods_entry");
-  gtk_signal_connect(GTK_OBJECT(fcd->entries[PAYMENT_PERIODS]), "changed",
+
+  entry = gtk_object_get_data(fcdo, "payment_periods_entry");
+  fcd->amounts[PAYMENT_PERIODS] = entry;
+  gtk_signal_connect(GTK_OBJECT(entry), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
-  fcd->entries[INTEREST_RATE] = gtk_object_get_data(fcdo,
-                                                    "interest_rate_entry");
-  gtk_signal_connect(GTK_OBJECT(fcd->entries[INTEREST_RATE]), "changed",
+
+  edit = gnc_amount_edit_new();
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  fcd->amounts[INTEREST_RATE] = edit;
+  gtk_widget_show (edit);
+
+  hbox = gtk_object_get_data(fcdo, "interest_rate_hbox");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
+  gtk_signal_connect(GTK_OBJECT(entry), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
-  fcd->entries[PRESENT_VALUE] = gtk_object_get_data(fcdo,
-                                                    "present_value_entry");
-  gtk_signal_connect(GTK_OBJECT(fcd->entries[PRESENT_VALUE]), "changed",
+
+  edit = gnc_amount_edit_new();
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
+  fcd->amounts[PRESENT_VALUE] = edit;
+  gtk_widget_show (edit);
+
+  hbox = gtk_object_get_data(fcdo, "present_value_hbox");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
+  gtk_signal_connect(GTK_OBJECT(entry), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
-  fcd->entries[PERIODIC_PAYMENT] =
-    gtk_object_get_data(fcdo, "periodic_payment_entry");
-  gtk_signal_connect(GTK_OBJECT(fcd->entries[PERIODIC_PAYMENT]), "changed",
+
+  edit = gnc_amount_edit_new();
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
+  fcd->amounts[PERIODIC_PAYMENT] = edit;
+  gtk_widget_show (edit);
+
+  hbox = gtk_object_get_data(fcdo, "periodic_payment_hbox");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
+  gtk_signal_connect(GTK_OBJECT(entry), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
 
-  fcd->entries[FUTURE_VALUE] = gtk_object_get_data(fcdo,
-                                                   "future_value_entry");
-  gtk_signal_connect(GTK_OBJECT(fcd->entries[FUTURE_VALUE]), "changed",
+
+  edit = gnc_amount_edit_new();
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+  gnc_amount_edit_set_print_flags (GNC_AMOUNT_EDIT(edit), PRTSEP);
+  fcd->amounts[FUTURE_VALUE] = edit;
+  gtk_widget_show (edit);
+
+  hbox = gtk_object_get_data(fcdo, "future_value_hbox");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+  entry = GNC_AMOUNT_EDIT (edit)->amount_entry;
+  gtk_signal_connect(GTK_OBJECT(entry), "changed",
                      GTK_SIGNAL_FUNC(fincalc_entry_changed), fcd);
+
 
   button = gtk_object_get_data(fcdo, "payment_periods_calc_button");
   fcd->calc_buttons = g_list_prepend(fcd->calc_buttons, button);
@@ -497,28 +586,28 @@ gnc_ui_fincalc_dialog_create(void)
 
   button = gtk_object_get_data(fcdo, "payment_periods_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_clear_clicked),
-                     fcd->entries[PAYMENT_PERIODS]);
+                     GTK_SIGNAL_FUNC(fincalc_entry_clear_clicked),
+                     fcd->amounts[PAYMENT_PERIODS]);
 
   button = gtk_object_get_data(fcdo, "interest_rate_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_clear_clicked),
-                     fcd->entries[INTEREST_RATE]);
+                     GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
+                     fcd->amounts[INTEREST_RATE]);
 
   button = gtk_object_get_data(fcdo, "present_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_clear_clicked),
-                     fcd->entries[PRESENT_VALUE]);
+                     GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
+                     fcd->amounts[PRESENT_VALUE]);
 
   button = gtk_object_get_data(fcdo, "periodic_payment_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_clear_clicked),
-                     fcd->entries[PERIODIC_PAYMENT]);
+                     GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
+                     fcd->amounts[PERIODIC_PAYMENT]);
 
   button = gtk_object_get_data(fcdo, "future_value_clear_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                     GTK_SIGNAL_FUNC(fincalc_clear_clicked),
-                     fcd->entries[FUTURE_VALUE]);
+                     GTK_SIGNAL_FUNC(fincalc_amount_clear_clicked),
+                     fcd->amounts[FUTURE_VALUE]);
 
   menu = gtk_object_get_data(fcdo, "compounding_menu");
   fcd->compounding_menu = menu;
@@ -546,13 +635,15 @@ gnc_ui_fincalc_dialog_create(void)
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(close_button_clicked), fcd);
 
+  fcd->payment_total_label = gtk_object_get_data (fcdo, "payment_total_label");
+
   init_fi(fcd);
 
   fi_to_gui(fcd);
 
   fincalc_allow_calc(fcd, FALSE);
 
-  gtk_widget_grab_focus(fcd->entries[PAYMENT_PERIODS]);
+  gtk_widget_grab_focus(fcd->amounts[PAYMENT_PERIODS]);
 
   gtk_widget_show(fcd->dialog);
 
