@@ -56,16 +56,13 @@ LedgerDestroy (BasicRegister *reg)
    /* be sure to destroy the "blank split" */
    if (reg->user_hook) {
       Split *split;
-      Transaction * trans;
       Account * acc;
 
       split = (Split *) (reg->user_hook);
 
       acc = xaccSplitGetAccount (split);
       xaccAccountRemoveSplit (acc, split);
-
-      trans = xaccSplitGetParent (split);
-      xaccFreeTransaction (trans);
+      xaccSplitDestroy (split);
       reg->user_hook = NULL;
    }
 }
@@ -93,25 +90,24 @@ GetOtherAccName (Split *split)
 {
    Account *acc = NULL;
    Transaction *trans;
+   Split *s, *other_split;
+   int numsplits;
+
    trans = xaccSplitGetParent (split);
 
-   if (0 == xaccTransIsSource (trans, split)) {
-      Split *split = xaccTransGetSourceSplit (trans);
-      acc = xaccSplitGetAccount (split);
-   } else {
-      Split *split = xaccTransGetDestSplit (trans, 0);
-      if (NULL != split) {
-          Split *nother_split = xaccTransGetDestSplit (trans, 1);
+   numsplits = xaccTransCountSplits (trans);
+   if (2 < numsplits) return SPLIT_STR;
 
-         /* if only one split, then use that */
-         if (NULL == nother_split) {
-            acc = xaccSplitGetAccount (split);
-         } else {
-            return SPLIT_STR;
-         }
-      } 
+   s = xaccTransGetSplit (trans, 0);
+   if (s == split) {
+      other_split = xaccTransGetSplit (trans, 1);
+   } else {
+      other_split = s;
    }
+
+   acc = xaccSplitGetAccount (other_split);
    if (acc) return xaccAccountGetName (acc);
+
    return "";
 }
 
@@ -341,7 +337,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
    } else {
       trans = xaccMallocTransaction ();
       xaccTransSetDateToday (trans);
-      split = xaccTransGetSourceSplit (trans);
+      split = xaccTransGetSplit (trans, 0);
       xaccAccountInsertSplit (default_source_acc, split);
       reg->user_hook =  (void *) split;
       reg->destroy = LedgerDestroy;
