@@ -36,7 +36,7 @@
 /* The debuging macros enable the setting of trace messages */
 #include <stdio.h>
 
-#ifdef HAVE_NANA_H
+#if HAVE_NANA_H
 #include <nana.h>
 
 /* override standard system assert with nana I assertion */
@@ -139,19 +139,19 @@ char * ultostr (unsigned long val, int base);
 
 /** PROTOTYPES ******************************************************/
 
-#define PRTSYM 0x1
-#define PRTSHR 0x2
-#define PRTSEP 0x4
 /*
- * The xaccPrintAmount() subroutine converts a double amount
- * to a printable string, depending on the argument shrs:
- * 0 -- print two decimal places
- * 1 -- print currency symbol & two decimal places
- * 2 -- print three decimal places
- * 3 -- prints three decimal places followed by string "shrs"
- * 4-7 as above, but comma separated
+ * The xaccPrintAmount() and xaccSPrintAmount() routines provide
+ *    i18n'ed convenience routines for printing share and currency
+ *    amounts.  Both routines take a double argument, and print
+ *    into a string.  The argument 'shrs' is a bitflag that controls
+ *    the format.  If it is zero, two decimal places and no currency
+ *    symbol will be printed.  If non-zero, it must be a bitwise-or
+ *    of the following:
  *
- * shrs must be bitwise-OR of PRTSYM, PRTSHR and PRTSEP
+ *    PRTSYM -- also print currency symbol.
+ *    PRTSHR -- print three decimal places
+ *    PRTSYM | PRTSHR --  prints three decimal places followed by string "shrs" 
+ *    PRTSEP -- print comma-separated K's
  *
  * The xaccPrintAmount() routine returns a pointer to a statically
  *    allocated buffer, and is therefore not thread-safe.
@@ -159,6 +159,11 @@ char * ultostr (unsigned long val, int base);
  * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
  *    printed to.  It returns the length of the printed string.
  */
+
+#define PRTSYM 0x1
+#define PRTSHR 0x2
+#define PRTSEP 0x4
+
 char * xaccPrintAmount (double val, short shrs);
 int xaccSPrintAmount (char *buf, double val, short shrs);
 
