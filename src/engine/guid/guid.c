@@ -434,11 +434,12 @@ decode_md5_string(const char *string, unsigned char *data)
 const char *
 guid_to_string(const GUID * guid)
 {
-  static char string[33];
+  char *string = malloc(GUID_ENCODING_LENGTH+1);
+  if (!string) return NULL;
 
   encode_md5_data(guid->data, string);
 
-  string[32] = '\0';
+  string[GUID_ENCODING_LENGTH] = '\0';
 
   return string;
 }
