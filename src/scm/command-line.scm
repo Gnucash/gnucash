@@ -281,10 +281,12 @@ the current value of the path.")
                   (lambda ()
                     (gnc:use-guile-module-here! '(gnucash price-quotes))
                     (gnc:suspend-gui-refresh)
+                    (gnc:engine-suspend-events)
                     (if (not (gnc:add-quotes-to-book-at-url val))
                         (begin
                           (gnc:error "Failed to add quotes to " val)
                           (gnc:shutdown 1)))
+                    (gnc:engine-suspend-events)
                     (gnc:resume-gui-refresh))
                   gnc:*batch-mode-things-to-do*)))
          "FILE"

@@ -32,6 +32,8 @@
                       (gnc:session-begin session url
                                          ignore-lock?
                                          create-if-needed?)
+		      (eq? 'no-err (gw:enum-<gnc:BackendError>-val->sym
+				    (gnc:session-get-error session) #f))
                       (gnc:session-load session)
                       session)))
     (or result

@@ -640,6 +640,11 @@
          (keep-going? #t))
 
     (cond
+     ((eq? fq-results #f)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog  (_ "Unable to get quotes or diagnose the problem."))
+	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
@@ -738,19 +743,22 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 
 (define (gnc:add-quotes-to-book-at-url url)
   (let* ((session (gnc:url->loaded-session url #f #f))
-         (quote-ok? (and session
-                         (gnc:book-add-quotes
-                          (gnc:session-get-book session)))))
+         (quote-ok? #f))
+    (if session
+	(begin
+	  (set! quote-ok? (and (gnc:book-add-quotes
+				(gnc:session-get-book session))))
 
-    (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
-    (and session (gnc:session-save session))
-    (if (not (eq? 'no-err
-                  (gw:enum-<gnc:BackendError>-val->sym
-                   (gnc:session-get-error session) #f)))
-        (set! quote-ok? #f))
-    (if (not quote-ok?)
-        (gnc:msg "session-save failed " (gnc:session-get-error session)))
-    (and session (gnc:session-destroy session))
+	  (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
+	  (gnc:session-save session)
+	  (if (not (eq? 'no-err
+			(gw:enum-<gnc:BackendError>-val->sym
+			 (gnc:session-get-error session) #f)))
+	      (set! quote-ok? #f))
+	  (if (not quote-ok?)
+	      (gnc:msg "session-save failed " (gnc:session-get-error session)))
+	  (gnc:session-destroy session))
+	(gnc:error "book-add-quotes unable to open file"))
     quote-ok?))
 
 ; (define (get-1-quote exchange . items)
