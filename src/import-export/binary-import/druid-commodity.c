@@ -464,19 +464,19 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
   for(node = accts; node; node = node->next)
   {
     Account *account = node->data;
-    GNCSession *session;
+    GNCBook *book;
 
-    session = gnc_get_current_session ();
+    book = gnc_get_current_book ();
 
     xaccAccountBeginEdit(account);
 
-    if (gnc_commodity_equiv (DxaccAccountGetCurrency(account, session),
+    if (gnc_commodity_equiv (DxaccAccountGetCurrency(account, book),
                              old_comm))
-      DxaccAccountSetCurrency (account, comm, session);
+      DxaccAccountSetCurrency (account, comm, book);
 
-    if (gnc_commodity_equiv (DxaccAccountGetSecurity(account, session),
+    if (gnc_commodity_equiv (DxaccAccountGetSecurity(account, book),
                              old_comm))
-      DxaccAccountSetSecurity(account, comm, session);
+      DxaccAccountSetSecurity(account, comm, book);
 
     if (gnc_commodity_equiv (xaccAccountGetCommodity(account), old_comm))
       xaccAccountSetCommodity(account, comm);
@@ -499,7 +499,7 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
 
   /* Fix account and transaction commodities */
   xaccGroupScrubCommodities (gnc_get_current_group (),
-                             gnc_get_current_session ());
+                             gnc_get_current_book ());
 
   /* Fix split amount/value */
   xaccGroupScrubSplits (gnc_get_current_group ());

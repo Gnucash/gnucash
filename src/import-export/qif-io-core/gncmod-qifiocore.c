@@ -31,7 +31,7 @@ gnc_module_description(void) {
 }
 
 int
-gnc_module_init(void) {
+gnc_module_init(int refcount) {
   /* load the engine (we depend on it) */
   if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
@@ -51,14 +51,7 @@ gnc_module_init(void) {
   return TRUE;
 }
 
-void
-gnc_module_on_load(void) {
-  /* load the engine (we depend on it) */
-  gnc_module_load("gnucash/engine", 0);
-  gh_eval_str("(use-modules (gnucash qif-io core))");
-}
-
 int
-gnc_module_end(void) {
+gnc_module_end(int refcount) {
   return TRUE;
 }
