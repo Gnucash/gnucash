@@ -1,10 +1,13 @@
 This directory contains
 
+-- cbb      -- misc perl scripts for loading cbb files
 -- engine   -- a directory containing gui-independent accounting engine
 -- gnome    -- the gtk/gnome implementation of gnucash
 -- motif    -- the motif implementation of gnucash
+-- ofx      -- Open Financial Exchange 
 -- qt       -- the Qt/KDE implementation of gnucash
 -- register -- a directory containg the register object
+-- swig     -- perl, etc. wrappers for engine code
 
 This directory contains a smatttering of gui-independent mis files.
 
