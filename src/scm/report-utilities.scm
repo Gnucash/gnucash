@@ -104,9 +104,6 @@
 		 (thunk (gnc:account-get-split account x)))
 	       0 (gnc:account-get-split-count account) 1))
 
-(define (gnc:group-get-accounts group)
-  (gnc:group-map-accounts (lambda (a) a) group))
-
 ;; Pull a scheme list of splits from a C array
 (define (gnc:convert-split-list split-array)
   (let loop ((index 0)
@@ -117,18 +114,6 @@
         (loop (+ index 1)
               (gnc:ith-split split-array (+ index 1))
               (cons split slist)))))
-
-;; pull a scheme list of splits from an account
-(define (gnc:account-get-split-list account)
-  (let ((num-splits (gnc:account-get-split-count account)))
-    (let loop ((index 0)
-               (split (gnc:account-get-split account 0))
-               (slist '()))
-      (if (= index num-splits)
-	  (reverse slist)
-          (loop (+ index 1)
-                (gnc:account-get-split account (+ index 1))
-                (cons split slist))))))
 
 ; (define (gnc:account-transactions-for-each thunk account)
 ;   ;; You must call gnc:group-reset-write-flags on the account group

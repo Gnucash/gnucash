@@ -46,22 +46,10 @@
         "Report Options" "Account"
         "b" "Report on these account(s)"
         (lambda ()
-          (let ((current-accounts (gnc:get-current-accounts))
-                (num-accounts
-                 (gnc:group-get-num-accounts (gnc:get-current-group))))
-
+          (let ((current-accounts (gnc:get-current-accounts)))
             (cond ((not (null? current-accounts)) current-accounts)
                   (else
-                   (let ((acctlist '()))
-                     (gnc:for-loop
-                      (lambda(x)
-                        (set! acctlist
-                              (append!
-                               acctlist
-                               (list (gnc:group-get-account
-                                      (gnc:get-current-group) x)))))
-                      0 num-accounts 1)
-                     acctlist)))))	
+                   (gnc:group-get-account-list (gnc:get-current-group))))))
         #f #t))
 
       (gnc:register-accsum-option
@@ -99,7 +87,8 @@
 	  (else
 	   (string-append
     	"<TR>"
-	    (apply string-append (map accsum_html-table-col-align lst align-list))
+	    (apply string-append
+                   (map accsum_html-table-col-align lst align-list))
 	    "</TR>"))))
 
 ;; Create an html table from a list of rows, each containing
@@ -119,12 +108,6 @@
 
   (define (accsum_html-table-footer)
     "</TABLE>")
-
-  ;; the following should be defined in the report-utilities file (Dave put it there I believe).
-  ;; Just in case I am including it here if your copy of report-utilities doesn't have it
-  ;; un-comment to use
-;;  (define (gnc:group-get-accounts group)
-;;    (gnc:group-map-accounts (lambda (a) a) group))
 
   (define string-db (gnc:make-string-database))
 
@@ -157,7 +140,8 @@
            (string-append (gnc:account-get-name account)
                           (acc-sum-table
                            (non-zero-at-date-accounts
-                            (gnc:group-get-accounts children) date) date #t))
+                            (gnc:group-get-account-list children) date)
+                           date #t))
            (gnc:account-get-name account))
        (gnc:amount->string acc-bal
                            (gnc:account-value-print-info account #t)))))
@@ -176,9 +160,8 @@
 ;; all children are included in the calculation
   (define (account-total-at-date accnts date)
     (apply +
-         (map (lambda (account) (d-gnc:account-get-balance-at-date account date #t)) accnts))
-  )
-
+         (map (lambda (account)
+                (d-gnc:account-get-balance-at-date account date #t)) accnts)))
 
   (define (accsum-renderer options)
       (let ((acctcurrency "USD")

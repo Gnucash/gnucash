@@ -82,10 +82,7 @@
         "Report Options" "Account"
         "d" "Do transaction report on this account"
         (lambda ()
-          (let ((current-accounts (gnc:get-current-accounts))
-                (num-accounts 
-                 (gnc:group-get-num-accounts (gnc:get-current-group))))
-
+          (let ((current-accounts (gnc:get-current-accounts)))
             (cond ((not (null? current-accounts)) current-accounts)
                   (else
                    (gnc:group-get-account-list (gnc:get-current-group))))))
