@@ -103,7 +103,7 @@ xaccScrubLot (GNCLot *lot)
 
   /* If the lot balance is zero, we don't need to rebalance */
   lot_baln = gnc_lot_get_balance (lot);
-  PINFO ("lot baln=%s for %s", gnc_numeric_to_string (lot_baln), 
+  PINFO ("lot baln=%s for %s", gnc_num_dbg_to_string (lot_baln), 
                                gnc_lot_get_title(lot));
   if (! gnc_numeric_zero_p (lot_baln))
   {
@@ -112,7 +112,7 @@ xaccScrubLot (GNCLot *lot)
 
     /* Get the opening balance for this lot */
     pcy->PolicyGetLotOpening (pcy, lot, &opening_baln, NULL, NULL);
-    PINFO ("lot opner baln=%s", gnc_numeric_to_string (opening_baln));
+    PINFO ("lot opener baln=%s", gnc_num_dbg_to_string (opening_baln));
 
     /* If the lot is fat, give the boot to all the non-opening 
      * splits, and refill it */
@@ -165,7 +165,7 @@ xaccAccountScrubLots (Account *acc)
   if (!acc) return;
   if (FALSE == xaccAccountHasTrades (acc)) return;
                                                                                 
-  ENTER ("acc=%s", acc->accountName);
+  ENTER ("(acc=%s)", acc->accountName);
   xaccAccountBeginEdit(acc);
   xaccAccountAssignLots (acc);
 
@@ -175,7 +175,7 @@ xaccAccountScrubLots (Account *acc)
     xaccScrubLot (lot);
   }
   xaccAccountCommitEdit(acc);
-  LEAVE ("acc=%s", acc->accountName);
+  LEAVE ("(acc=%s)", acc->accountName);
 }
 
 /* ============================================================== */

@@ -1168,6 +1168,22 @@ gnc_numeric_to_string(gnc_numeric n)
   return result;
 }
 
+gchar *
+gnc_num_dbg_to_string(gnc_numeric n) 
+{
+  static char buff[1000];
+  static char *p = buff;
+  long long int tmpnum = n.num;
+  long long int tmpdenom = n.denom;
+
+  p+= 100;
+  if (p-buff >= 1000) p = buff;
+   
+  sprintf(p, "%lld/%lld", tmpnum, tmpdenom);
+
+  return p;
+}
+
 const gchar *
 string_to_gnc_numeric(const gchar* str, gnc_numeric *n) 
 {

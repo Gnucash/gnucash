@@ -272,9 +272,9 @@ xaccSplitScrub (Split *split)
   PINFO ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
          " old amount %s %s, new amount %s",
             trans->description, split->memo,
-            gnc_numeric_to_string (xaccSplitGetAmount(split)),
+            gnc_num_dbg_to_string (xaccSplitGetAmount(split)),
             gnc_commodity_get_mnemonic (currency),
-            gnc_numeric_to_string (xaccSplitGetValue(split)));
+            gnc_num_dbg_to_string (xaccSplitGetValue(split)));
 
   xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
@@ -638,9 +638,9 @@ xaccTransScrubCurrency (Transaction *trans)
         PWARN ("Adjusted split with mismatched values, desc=\"%s\" memo=\"%s\"" 
                " old amount %s %s, new amount %s",
                trans->description, sp->memo,
-               gnc_numeric_to_string (xaccSplitGetAmount(sp)),
+               gnc_num_dbg_to_string (xaccSplitGetAmount(sp)),
                gnc_commodity_get_mnemonic (currency),
-               gnc_numeric_to_string (xaccSplitGetValue(sp)));
+               gnc_num_dbg_to_string (xaccSplitGetValue(sp)));
         xaccTransBeginEdit (trans);
         xaccSplitSetAmount (sp, xaccSplitGetValue(sp));
         xaccTransCommitEdit (trans);
@@ -649,9 +649,9 @@ xaccTransScrubCurrency (Transaction *trans)
       {
         PINFO ("Ok: Split '%s' Amount %s %s, value %s %s",
         xaccSplitGetMemo (sp),
-        gnc_numeric_to_string (amount),
+        gnc_num_dbg_to_string (amount),
         gnc_commodity_get_mnemonic (currency),
-        gnc_numeric_to_string (value),
+        gnc_num_dbg_to_string (value),
         gnc_commodity_get_mnemonic (acc_currency));
       }*/
     }

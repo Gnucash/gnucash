@@ -327,6 +327,10 @@ double      gnc_numeric_to_double(gnc_numeric in);
 /** Convert to string. The returned buffer is to be g_free'd by the
  *  caller (it was allocated through g_strdup) */
 gchar *gnc_numeric_to_string(gnc_numeric n);
+
+/** Convert to string. Uses a static, non-thread-safe buffer.
+ *  For internal use only. */
+gchar * gnc_num_dbg_to_string(gnc_numeric n);
 /** @}*/
 
 /** @name Comparisons and Predicates */

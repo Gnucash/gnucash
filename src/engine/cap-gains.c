@@ -376,14 +376,14 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
      if (xaccTransGetVoidStatus(split->parent)) return NULL;
 
      PWARN ("split with zero amount; value=%s gflag=%x gsplit=%p",
-            gnc_numeric_to_string (split->amount), 
+            gnc_num_dbg_to_string (split->amount), 
             split->gains,
             split->gains_split);
      if (split->gains_split)
      {
        PWARN ("gains amt=%s value=%s", 
-              gnc_numeric_to_string (split->gains_split->amount),
-              gnc_numeric_to_string (split->gains_split->value));
+              gnc_num_dbg_to_string (split->gains_split->amount),
+              gnc_num_dbg_to_string (split->gains_split->value));
      }
      return NULL;
    }
@@ -400,7 +400,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       xaccAccountBeginEdit (acc);
       gnc_lot_add_split (lot, split);
       PINFO ("added split to empty lot, new lot baln=%s (%s)", 
-           gnc_numeric_to_string (gnc_lot_get_balance(lot)),
+           gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
            gnc_lot_get_title (lot));
       xaccAccountCommitEdit (acc);
       return NULL;
@@ -421,8 +421,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
    {
       PWARN ("accounting policy gave us split that enlarges the lot!\n"
              "old lot baln=%s split amt=%s lot=%s",
-             gnc_numeric_to_string (gnc_lot_get_balance(lot)),
-             gnc_numeric_to_string (split->amount),
+             gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
+             gnc_num_dbg_to_string (split->amount),
              gnc_lot_get_title (lot));
 
       acc = split->acc;
@@ -439,7 +439,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
    cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount),
                                         gnc_numeric_abs(baln));
 
-   PINFO ("found open lot with baln=%s (%s)", gnc_numeric_to_string (baln),
+   PINFO ("found open lot with baln=%s (%s)", gnc_num_dbg_to_string (baln),
                                               gnc_lot_get_title (lot));
 
    /* cmp == -1 if amt < baln, ==0 if amt==baln */
@@ -449,7 +449,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       xaccAccountBeginEdit (acc);
       gnc_lot_add_split (lot, split);
       PINFO ("simple added split to lot, new lot baln=%s", 
-           gnc_numeric_to_string (gnc_lot_get_balance(lot)));
+           gnc_num_dbg_to_string (gnc_lot_get_balance(lot)));
       xaccAccountCommitEdit (acc);
       return NULL;
    }
@@ -476,8 +476,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
 
       PINFO ("++++++++++++++ splitting split=%p into amt = %s + %s",
               split,
-              gnc_numeric_to_string(amt_a),
-              gnc_numeric_to_string(amt_b) );
+              gnc_num_dbg_to_string(amt_a),
+              gnc_num_dbg_to_string(amt_b) );
 
       /* Compute the value so that it holds in the same proportion:
        * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
@@ -497,9 +497,9 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
               "\tval_tot=%s amt_a=%s amt_tot=%s\n",
               xaccAccountGetName(acc),
               xaccTransGetDescription(trans),
-              gnc_numeric_to_string(val_tot),
-              gnc_numeric_to_string(amt_a),
-              gnc_numeric_to_string(amt_tot));
+              gnc_num_dbg_to_string(val_tot),
+              gnc_num_dbg_to_string(amt_a),
+              gnc_num_dbg_to_string(amt_tot));
       }
 
       if (gnc_numeric_zero_p(val_a) || gnc_numeric_zero_p(val_b))
@@ -508,9 +508,9 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       }
 
       PINFO ("split value is = %s = %s + %s",
-              gnc_numeric_to_string(val_tot),
-              gnc_numeric_to_string(val_a),
-              gnc_numeric_to_string(val_b) );
+              gnc_num_dbg_to_string(val_tot),
+              gnc_num_dbg_to_string(val_a),
+              gnc_num_dbg_to_string(val_b) );
 
       xaccSplitSetAmount (split, amt_a);
       xaccSplitSetValue (split, val_a);
@@ -608,7 +608,7 @@ xaccSplitAssign (Split *split)
     */
    while (split)
    {
-     PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
+     PINFO ("have split amount=%s", gnc_num_dbg_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
      lot = pcy->PolicyGetLot (pcy, split);
      if (!lot)
@@ -787,14 +787,14 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       for (n=lot->splits; n; n=n->next) 
       {
          Split *s = n->data;
-         PINFO ("split amt=%s", gnc_numeric_to_string(s->amount));
+         PINFO ("split amt=%s", gnc_num_dbg_to_string(s->amount));
       }
       PERR ("Malformed Lot \"%s\"! (too thin!) " 
             "opening amt=%s split amt=%s baln=%s",
              gnc_lot_get_title (lot),
-             gnc_numeric_to_string (opening_amount),
-             gnc_numeric_to_string (split->amount),
-             gnc_numeric_to_string (gnc_lot_get_balance(lot)));
+             gnc_num_dbg_to_string (opening_amount),
+             gnc_num_dbg_to_string (split->amount),
+             gnc_num_dbg_to_string (gnc_lot_get_balance(lot)));
       return;
    }
    if ( (gnc_numeric_negative_p(opening_amount) ||
@@ -806,14 +806,14 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       for (n=lot->splits; n; n=n->next) 
       {
          Split *s = n->data;
-         PINFO ("split amt=%s", gnc_numeric_to_string(s->amount));
+         PINFO ("split amt=%s", gnc_num_dbg_to_string(s->amount));
       }
       PERR ("Malformed Lot \"%s\"! (too fat!) "
             "opening amt=%s split amt=%s baln=%s",
              gnc_lot_get_title (lot),
-             gnc_numeric_to_string (opening_amount),
-             gnc_numeric_to_string (split->amount),
-             gnc_numeric_to_string (gnc_lot_get_balance(lot)));
+             gnc_num_dbg_to_string (opening_amount),
+             gnc_num_dbg_to_string (split->amount),
+             gnc_num_dbg_to_string (gnc_lot_get_balance(lot)));
       return;
    }
 
@@ -833,11 +833,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    value = gnc_numeric_sub (value, split->value,
                             GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
-          gnc_numeric_to_string (opening_amount),
-          gnc_numeric_to_string (opening_value),
-          gnc_numeric_to_string (split->amount),
-          gnc_numeric_to_string (split->value),
-          gnc_numeric_to_string (value));
+          gnc_num_dbg_to_string (opening_amount),
+          gnc_num_dbg_to_string (opening_value),
+          gnc_num_dbg_to_string (split->amount),
+          gnc_num_dbg_to_string (split->value),
+          gnc_num_dbg_to_string (value));
    if (gnc_numeric_check (value))
    {
       PERR ("Numeric overflow during gains calculation\n"
@@ -845,11 +845,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             "\tOpen amt=%s val=%s\n\tsplit amt=%s val=%s\n\tgains=%s\n",
              xaccAccountGetName(split->acc),
              xaccTransGetDescription(split->parent),
-             gnc_numeric_to_string (opening_amount),
-             gnc_numeric_to_string (opening_value),
-             gnc_numeric_to_string (split->amount),
-             gnc_numeric_to_string (split->value),
-             gnc_numeric_to_string (value));
+             gnc_num_dbg_to_string (opening_amount),
+             gnc_num_dbg_to_string (opening_value),
+             gnc_num_dbg_to_string (split->amount),
+             gnc_num_dbg_to_string (split->value),
+             gnc_num_dbg_to_string (value));
       return;
    }
 

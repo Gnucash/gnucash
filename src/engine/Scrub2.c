@@ -134,9 +134,9 @@ xaccLotFill (GNCLot *lot)
          PERR ("Accounting Policy gave us a split that "
                "doesn't fit into this lot\n"
                "lot baln=%s, isclosed=%d, aplit amt=%s",
-               gnc_numeric_to_string (gnc_lot_get_balance(lot)),
+               gnc_num_dbg_to_string (gnc_lot_get_balance(lot)),
                gnc_lot_is_closed (lot),
-               gnc_numeric_to_string (split->amount));
+               gnc_num_dbg_to_string (split->amount));
          break;
       }
 
@@ -196,8 +196,8 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       value = gnc_numeric_add (value, xaccSplitGetValue (s), 
                   GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
       PINFO ("Split=%p value=%s Accum Lot value=%s", s,
-          gnc_numeric_to_string (s->value),
-          gnc_numeric_to_string (value));
+          gnc_num_dbg_to_string (s->value),
+          gnc_num_dbg_to_string (value));
           
    }
 
@@ -210,14 +210,14 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
        * error, and fix that.
        */
       PERR ("Closed lot fails to double-balance !! lot value=%s",
-            gnc_numeric_to_string (value));
+            gnc_num_dbg_to_string (value));
       GList *node;
       for (node=lot->splits; node; node=node->next)
       {
         Split *s = node->data;
         PERR ("s=%p amt=%s val=%s", s, 
-              gnc_numeric_to_string(s->amount),
-              gnc_numeric_to_string(s->value));
+              gnc_num_dbg_to_string(s->amount),
+              gnc_num_dbg_to_string(s->value));
       }
    }
 
@@ -286,9 +286,9 @@ xaccScrubSubSplitPrice (Split *split, int maxmult, int maxamtscu)
                "\tdst_amt=%s src_val=%s src_amt=%s\n",
                xaccAccountGetName (s->acc),
                xaccTransGetDescription(txn),
-               gnc_numeric_to_string(dst_amt),
-               gnc_numeric_to_string(src_val),
-               gnc_numeric_to_string(src_amt));
+               gnc_num_dbg_to_string(dst_amt),
+               gnc_num_dbg_to_string(src_val),
+               gnc_num_dbg_to_string(src_amt));
          continue;
       }
 
@@ -410,7 +410,7 @@ xaccScrubMergeSubSplits (Split *split)
    txn = split->parent;
    lot = xaccSplitGetLot (split);
 
-   ENTER (" ");
+   ENTER ("(Lot=%s)", gnc_lot_get_title(lot));
 restart:
    for (node=txn->splits; node; node=node->next)
    {
