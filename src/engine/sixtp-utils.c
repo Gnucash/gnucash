@@ -39,6 +39,8 @@
 #include "date.h"
 #include "guid.h"
 #include "gnc-numeric.h"
+#include "gnc-engine-util.h"
+
 
 gboolean
 isspace_str(const gchar *str, int nomorethan) {
@@ -197,7 +199,7 @@ string_to_gint64(const gchar *str, gint64 *v) {
   int num_read;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %lld %n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " " GNC_SCANF_LLD " %n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
 

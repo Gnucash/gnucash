@@ -1062,7 +1062,8 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
   if(!str) return NULL;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %lld/%lld%n", &tmpnum, &tmpdenom, &num_read) < 2) {
+  if(sscanf(str, " " GNC_SCANF_LLD "/" GNC_SCANF_LLD "%n",
+            &tmpnum, &tmpdenom, &num_read) < 2) {
     return(NULL);
   }
   n->num = tmpnum;

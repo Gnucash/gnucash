@@ -279,10 +279,13 @@ AC_DEFUN([LANGINFO_D_FMT_CHECK],
 
 AC_DEFUN([STRUCT_TM_GMTOFF_CHECK],
 [
-  AC_CACHE_CHECK([for the tm_gmtoff member of struct tm], am_cv_struct_tm_gmtoff,
-    [AC_TRY_LINK([#include <time.h>
-                  #define _GNU_SOURCE
-                  #define __EXTENSIONS__],
+  AC_CACHE_CHECK([for the tm_gmtoff member of struct tm],
+                 am_cv_struct_tm_gmtoff,
+    [AC_TRY_LINK([
+        #include <time.h>
+        #define _GNU_SOURCE
+        #define __EXTENSIONS__
+],
       [struct tm tm;
        tm.tm_gmtoff = 0;],
       am_cv_struct_tm_gmtoff=yes,
@@ -291,5 +294,32 @@ AC_DEFUN([STRUCT_TM_GMTOFF_CHECK],
   if test $am_cv_struct_tm_gmtoff = yes; then
     AC_DEFINE(HAVE_STRUCT_TM_GMTOFF, 1,
       [Define if you have the tm_gmtoff member of struct tm.])
+  fi
+])
+
+AC_DEFUN([SCANF_LLD_CHECK],
+[
+  AC_CACHE_CHECK([if scanf supports %lld conversions],
+                 am_cv_scanf_lld,
+      AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+
+  d = 0;
+  if ((sscanf ("10000000000", "%lld", &d) != 1) || (d != 10000000000))
+    exit (1);
+
+  exit (0);
+}
+],
+        am_cv_scanf_lld=yes,
+        am_cv_scanf_lld=no))
+  if test $am_cv_scanf_lld = yes; then
+    AC_DEFINE(HAVE_SCANF_LLD, 1,
+      [Define if scanf supports %lld conversions.])
   fi
 ])

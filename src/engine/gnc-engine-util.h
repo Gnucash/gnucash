@@ -169,6 +169,13 @@ void gnc_set_log_level_global(gncLogLevel level);
   }					\
 }
 
+/* Define the long long int conversion for scanf */
+#if HAVE_SCANF_LLD
+# define GNC_SCANF_LLD "%lld"
+#else
+# define GNC_SCANF_LLD "%qd"
+#endif
+
 
 /** Prototypes *************************************************/
 

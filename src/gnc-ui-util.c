@@ -1679,7 +1679,7 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
     {
       *out = '\0';
 
-      if (*out_str != '\0' && sscanf(out_str, "%lld", &numer) < 1)
+      if (*out_str != '\0' && sscanf(out_str, GNC_SCANF_LLD, &numer) < 1)
       {
         next_state = NO_NUM_ST;
       }
@@ -1775,7 +1775,7 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
       len = 8;
     }
 
-    if (sscanf (out_str, "%lld", &fraction) < 1)
+    if (sscanf (out_str, GNC_SCANF_LLD, &fraction) < 1)
     {
       g_free(out_str);
       return FALSE;

@@ -1,5 +1,22 @@
 2001-06-01  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/sixtp-dom-parsers.c (string_to_integer): use new
+	scanf macro below
+
+	* src/engine/sixtp-utils.c: use new scanf macro below
+
+	* src/engine/gnc-numeric.c: use new scanf macro below
+
+	* src/engine/gnc-engine-util.h: define GNC_SCANF_LLD macro to use
+	for scanf long long int conversion. This is needed since there is
+	not a common solution between Linux, Solaris, and FreeBSD. Thanks
+	to Matthew Condell for finding the problem and to Matt and Alan
+	Orndorff for testing it.
+
+	* configure.in: invoke conversion test below
+
+	* acinclude.m4: add test for %lld scanf conversion
+
 	* README: update info
 
 2001-06-01  Robert Graham Merkel  <rgmerk@mira.net>

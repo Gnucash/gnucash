@@ -742,7 +742,7 @@ string_to_integer(const char *content, gint64 *to)
 {
     long long int to_in;
 
-    if(sscanf(content, "%lld", &to_in) == 1)
+    if(sscanf(content, GNC_SCANF_LLD, &to_in) == 1)
     {
         if (to)
           *to = to_in;
