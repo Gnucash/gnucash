@@ -39,9 +39,12 @@ typedef struct gnc_commodity_s       gnc_commodity;
 typedef struct gnc_commodity_table_s gnc_commodity_table;
 
 typedef GList                  AccountList;
+typedef GList                  BookList;
 typedef GList                  SplitList;
 typedef GList                  TransList;
 
+typedef GList                  AccountGUIDList;
+typedef GList                  BookGUIDList;
 
 typedef void (* gnc_engine_init_hook_t)(int, char **);
 
