@@ -1,3 +1,8 @@
+2001-07-11  James LewisMoss  <jimdres@mindspring.com>
+
+	* configure.in (GNOME_XML_CFLAGS): add Richard Braakman's xml
+	version check.
+
 2001-07-09  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: check for ghttp_ssl.h
