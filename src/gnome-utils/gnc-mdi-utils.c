@@ -28,7 +28,6 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-file.h"
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-ui-util.h"
@@ -97,7 +96,7 @@ gnc_mdi_set_toolbar_visibility (gboolean visible)
   gnc_toolbar_visible = visible;
 }
 
-static void
+void
 gnc_mdi_file_percentage (const char *message, int percentage)
 {
   GtkWidget *app;
@@ -518,8 +517,6 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
 
   /* enable save and restore of menubar positions */
   gnome_app_enable_layout_config (app, TRUE);
-
-  gnc_file_set_pct_handler (gnc_mdi_file_percentage);
 
   /* flag the app as gnc mdi created */
   gtk_object_set_data (GTK_OBJECT (app), "gnc_mdi", mainwin);

@@ -14,6 +14,7 @@
 #include "gnc-file-p.h"
 #include "gnc-file-history.h"
 #include "gnc-file-dialog.h"
+#include "gnc-mdi-utils.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
@@ -72,6 +73,9 @@ libgncmod_app_file_LTX_gnc_module_init(int refcount)
     gnc_file_set_handlers (gnc_history_add_file,
                            gnc_history_get_last,
                            gnc_file_dialog);    
+
+    gnc_file_set_pct_handler (gnc_mdi_file_percentage);
+
     gnc_file_init ();
   }
 
@@ -84,6 +88,7 @@ libgncmod_app_file_LTX_gnc_module_end(int refcount)
   if(refcount == 0) 
   {
     gnc_file_set_handlers (NULL, NULL, NULL);
+    gnc_file_set_pct_handler (NULL);
   }
   return TRUE;
 }

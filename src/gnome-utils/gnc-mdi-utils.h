@@ -118,6 +118,8 @@ void gnc_mdi_child_refresh (GNCMDIChildInfo *child);
 GNCMDIInfo * gnc_mdi_get_current (void);
 gboolean gnc_mdi_has_apps (void);
 
+void gnc_mdi_file_percentage (const char *message, int percentage);
+
 void gnc_app_set_title (GnomeApp *app);
 
 void gnc_mdi_save (GNCMDIInfo * gnc_mdi, char * filename);

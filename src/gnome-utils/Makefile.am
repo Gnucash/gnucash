@@ -6,7 +6,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
-  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   ${GUILE_INCS} \
@@ -86,7 +85,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GUPPI_LIBS} \
