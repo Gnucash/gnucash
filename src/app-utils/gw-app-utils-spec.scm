@@ -128,6 +128,14 @@
 
   (gw:wrap-function
    mod
+   'gnc:setup-gettext
+   '<gw:void>
+   "gnc_setup_gettext"
+   '()
+   "Runs bindtextdomain and textdomain.")
+
+  (gw:wrap-function
+   mod
    'gnc:gettext-helper
    '(<gw:m-chars-caller-owned> gw:const)
    "gnc_gettext_helper"
