@@ -3331,15 +3331,15 @@ trans_is_balanced_p (const Transaction *txn)
 gboolean xaccTransRegister (void)
 {
   static QofParam params[] = {
-    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum,NULL },
-    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription,NULL },
-    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS,NULL },
-    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS,NULL },
-    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS,NULL },
+    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
+    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
+    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)xaccTransSetDateEnteredTS },
+    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)xaccTransSetDatePostedTS },
+    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS, (QofSetterFunc)xaccTransSetDateDueTS },
     { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance,NULL },
-    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes,NULL },
+    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes, (QofSetterFunc)xaccTransSetNotes },
     { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p,NULL },
-    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType,NULL },
+    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType, (QofSetterFunc)xaccTransSetTxnType },
     { TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccTransGetVoidStatus,NULL },
     { TRANS_VOID_REASON, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetVoidReason,NULL },
     { TRANS_VOID_TIME, QOF_TYPE_DATE, (QofAccessFunc)xaccTransGetVoidTime,NULL },

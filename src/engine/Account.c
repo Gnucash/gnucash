@@ -2849,16 +2849,16 @@ static QofObject account_object_def = {
 gboolean xaccAccountRegister (void)
 {
   static QofParam params[] = {
-    { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName, NULL },
-    { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode, NULL },
-    { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription, NULL },
-    { ACCOUNT_NOTES_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetNotes, NULL },
+    { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName, (QofSetterFunc) xaccAccountSetName },
+    { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode, (QofSetterFunc) xaccAccountSetCode },
+    { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription, (QofSetterFunc) xaccAccountSetDescription },
+    { ACCOUNT_NOTES_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetNotes, (QofSetterFunc) xaccAccountSetNotes },
     { ACCOUNT_PRESENT_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance, NULL },
     { ACCOUNT_BALANCE_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance, NULL },
     { ACCOUNT_CLEARED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance, NULL },
     { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance, NULL },
     { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
-    { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, NULL },
+    { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, (QofSetterFunc) xaccAccountSetTaxRelated },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
