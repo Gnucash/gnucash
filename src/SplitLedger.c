@@ -470,7 +470,12 @@ xaccSRSaveRegEntry (SplitRegister *reg)
       if (!other_split) {
          other_split = xaccTransGetSplit (trans, 1);
          if (!other_split) {
+            double  amt = xaccSplitGetShareAmount (split);
+            double  prc = xaccSplitGetSharePrice (split);
             other_split = xaccMallocSplit ();
+            xaccSplitSetMemo (other_split, xaccSplitGetMemo (split));
+            xaccSplitSetAction (other_split, xaccSplitGetAction (split));
+            xaccSplitSetSharePriceAndAmount (other_split, prc, -amt);
             xaccTransAppendSplit (trans, other_split);
          }
       }
