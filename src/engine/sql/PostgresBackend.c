@@ -649,10 +649,12 @@ pgendSync (Backend *bend, AccountGroup *grp)
 
    be->version_check = (guint32) time(0);
 
-   /* for the multi-user modes, we allow a save only once,
-    * when the database is created for the first time */
+   /* For the multi-user modes, we allow a save only once,
+    * when the database is created for the first time.
+    * Ditto for the single-user update mode: it should never
+    * wander out of sync.
+    */
    if ((MODE_SINGLE_FILE != be->session_mode) &&
-       (MODE_SINGLE_UPDATE != be->session_mode) &&
        (FALSE == be->freshly_created_db))
    {
       LEAVE("no sync");
