@@ -173,9 +173,16 @@ QofBackendError qof_session_get_error (QofSession *session);
 const char * qof_session_get_error_message(QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
 
+/** The qof_session_add_book() allows additional books to be added to
+ *    a session. 
+ * XXX Under construction, clarify the following when done:
+ * XXX There must already be an open book in the session already!?
+ * XXX Only one open bok at a time per session is alowed!?
+ * XXX each book gets its own unique backend ???
+ */
+void qof_session_add_book (QofSession *session, QofBook *book);
 
 QofBook * qof_session_get_book (QofSession *session);
-void qof_session_set_book (QofSession *session, QofBook *book);
 
 /** The qof_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename

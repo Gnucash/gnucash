@@ -212,7 +212,7 @@ qof_session_get_book (QofSession *session)
 }
 
 void
-qof_session_set_book (QofSession *session, QofBook *addbook)
+qof_session_add_book (QofSession *session, QofBook *addbook)
 {
   GList *node;
   if (!session) return;
@@ -231,11 +231,13 @@ qof_session_set_book (QofSession *session, QofBook *addbook)
     /* hack alert -- someone should free all the books in the list,
      * but it should probably not be us ... since the books backends
      * should be shutdown first, etc */
+/* XXX this should probably be an error XXX */
     g_list_free (session->books);
     session->books = g_list_append (NULL, addbook);
   }
   else 
   {
+/* XXX Need to tell the backend to add a book as well */
     session->books = g_list_append (session->books, addbook);
   }
 
