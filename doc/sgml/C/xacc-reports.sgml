@@ -17,6 +17,8 @@ Barchart</link>shows your net worth in a graphical environment.
 If you examine just assets or liabilities, <link linkend="xacc-asset-liability-barcharts">
 barcharts</link> showing data over time are available, as are
 <link linkend="xacc-asset-liability-piecharts">piecharts</link>.
+</para>
+</listitem>
 
 <listitem><para><link linkend="xacc-pnl"> Profit And Loss State:
 </link> shows Income and/or Expenses over a selectable period.  </para>
@@ -43,6 +45,8 @@ to TaxCut or TurboTax.  </para>
 <listitem> <para><link linkend="xacc-balancereport">Balance
 Tracker</link> tracks the balance of one or more accounts over time,
 with the option of displaying both tables and a bar chart.</para>
+</listitem>
+
 </itemizedlist>
 
 </para>
@@ -92,10 +96,10 @@ allows you to export the contents of the report as a HTML file for
 later viewing or printing.  </para> </listitem>
 
 <listitem> <para><emphasis>Close</emphasis> closes the report window.
-</para> </listitem>
+</para></listitem>
 
 </itemizedlist>
-
+</para>
 </sect1>
 
 <sect1 id="xacc-multiple-reports">

@@ -13,6 +13,7 @@ interface).  When you open a new
 <link linkend="xacc-mainwin">account tree</link>
 or <link linkend="xacc-reports">report</link> using the file menu, the
 new view can be displayed in several ways.
+</para>
 
 </sect1>
 <sect1 id="xacc-notebook-view">
@@ -31,6 +32,7 @@ for the new view.  You can move and resize this window any way you
 want, independently of the original gnucash main window.  If you have
 a window manager that supports multiple desktops, you can happily
 move it onto a to a different one.
+</para>
 </sect1>
 
 <sect1 id="xacc-single-window-view">

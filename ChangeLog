@@ -1,5 +1,17 @@
 2001-05-17  Dave Peticolas  <dave@krondo.com>
 
+	* doc/sgml/C/xacc-reports.sgml: fix warnings
+
+	* doc/sgml/C/xacc-net-worth-barchart.sgml: fix warnings
+
+	* doc/sgml/C/xacc-gnucash-web-browser.sgml: fix warnings
+
+	* doc/sgml/C/xacc-gnome-mdi.sgml: fix warnings
+
+	* doc/sgml/C/xacc-common-report-options.sgml: fix warnings
+
+	* doc/sgml/C/Makefile.am: add new file to Makefile.am
+
 	* src/doc/design/gnucash-design.texinfo: update docs
 
 	* src/doc/design/engine.texinfo: update docs

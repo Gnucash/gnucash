@@ -1,10 +1,10 @@
-<ARTICLE ID="XACC-COMMON-REPORT-OPTIONS"
-<ARTHEADER>
-<TITLE>Common Report Options</TITLE>
-</ARTHEADER>
-<SECT1>
-<TITLE> Common Report Options</TITLE>
-<PARA>Many reports share similar sorts of options.  Some common ones
+<article ID="XACC-COMMON-REPORT-OPTIONS"
+<artheader>
+<title>Common Report Options</title>
+</artheader>
+<sect1>
+<title> Common Report Options</title>
+<para>Many reports share similar sorts of options.  Some common ones
 include:
 
 <itemizedlist>
@@ -87,5 +87,6 @@ You can choose a weighted average of prices over all transactions,
 prices at current values, or prices at the time of the report date.</para>
 </listitem>
 </itemizedlist>
+</para>
 </sect1>
 </article>
