@@ -37,7 +37,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to. */
-/* static short module = MOD_GUI; */
+static short module = MOD_GUI;
 
 
 /********************************************************************\
@@ -433,4 +433,177 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
   gdk_window_resize(GTK_WIDGET(window)->window, width, height);
   gtk_widget_queue_resize(GTK_WIDGET(window));
+}
+
+
+typedef struct
+{
+  GdkPixmap *on_pixmap;
+  GdkPixmap *off_pixmap;
+  GdkBitmap *mask;
+
+  GNCUpdateCheck update_cb;
+  gpointer user_data;
+} GNCCListCheckInfo;
+
+static void
+check_realize (GtkWidget *widget, gpointer user_data)
+{
+  GNCCListCheckInfo *check_info = user_data;
+  GdkGCValues gc_values;
+  GtkCList *clist;
+  gint font_height;
+  gint check_size;
+  GdkColormap *cm;
+  GtkStyle *style;
+  GdkGC *gc;
+  gint i;
+
+  if (check_info->mask)
+    return;
+
+  style = gtk_widget_get_style (widget);
+
+  font_height = style->font->ascent + style->font->descent;
+  check_size = (font_height > 0) ? font_height - 3 : 9;
+
+  check_info->mask = gdk_pixmap_new (NULL, check_size, check_size, 1);
+
+  check_info->on_pixmap = gdk_pixmap_new (widget->window,
+                                          check_size, check_size, -1);
+
+  check_info->off_pixmap = gdk_pixmap_new (widget->window,
+                                           check_size, check_size, -1);
+
+  gc_values.foreground = style->white;
+  gc = gtk_gc_get (1, gtk_widget_get_colormap (widget),
+                   &gc_values, GDK_GC_FOREGROUND);
+
+  gdk_draw_rectangle (check_info->mask, gc, TRUE,
+                      0, 0, check_size, check_size);
+
+  gtk_gc_release (gc);
+
+  gc = style->base_gc[GTK_STATE_NORMAL];
+
+  gdk_draw_rectangle (check_info->on_pixmap, gc, TRUE,
+                      0, 0, check_size, check_size);
+  gdk_draw_rectangle (check_info->off_pixmap, gc, TRUE,
+                      0, 0, check_size, check_size);
+
+  cm = gtk_widget_get_colormap (widget);
+
+  gc_values.foreground.red = 0;
+  gc_values.foreground.green = 65535 / 2;
+  gc_values.foreground.blue = 0;
+
+  gdk_colormap_alloc_color (cm, &gc_values.foreground, FALSE, TRUE);
+
+  gc = gdk_gc_new_with_values (widget->window, &gc_values, GDK_GC_FOREGROUND);
+
+  gdk_draw_line (check_info->on_pixmap, gc,
+                 1, check_size / 2,
+                 check_size / 3, check_size - 5);
+  gdk_draw_line (check_info->on_pixmap, gc,
+                 1, check_size / 2 + 1,
+                 check_size / 3, check_size - 4);
+        
+  gdk_draw_line (check_info->on_pixmap, gc,
+                 check_size / 3, check_size - 5,
+                 check_size - 3, 2);
+  gdk_draw_line (check_info->on_pixmap, gc,
+                 check_size / 3, check_size - 4,
+                 check_size - 3, 1);
+
+  gdk_gc_unref (gc);
+
+  clist = GTK_CLIST (widget);
+
+  for (i = 0; i < clist->rows; i++)
+    check_info->update_cb (clist, i);
+}
+
+static void
+check_unrealize (GtkWidget *widget, gpointer user_data)
+{
+  GNCCListCheckInfo *check_info = user_data;
+
+  if (check_info->mask)
+    gdk_bitmap_unref (check_info->mask);
+
+  if (check_info->on_pixmap)
+    gdk_pixmap_unref (check_info->on_pixmap);
+
+  if (check_info->off_pixmap)
+    gdk_pixmap_unref (check_info->off_pixmap);
+
+  check_info->mask = NULL;
+  check_info->on_pixmap = NULL;
+  check_info->off_pixmap = NULL;
+}
+
+static void
+check_destroy (GtkWidget *widget, gpointer user_data)
+{
+  GNCCListCheckInfo *check_info = user_data;
+
+  g_free (check_info);
+}
+
+void
+gnc_clist_add_check (GtkCList *list, GNCUpdateCheck update_cb,
+                     gpointer user_data)
+{
+  GNCCListCheckInfo *check_info;
+  GtkObject *object;
+
+  g_return_if_fail (GTK_IS_CLIST (list));
+  g_return_if_fail (update_cb != NULL);
+
+  object = GTK_OBJECT (list);
+
+  check_info = gtk_object_get_data (object, "gnc-check-info");
+  if (check_info)
+  {
+    PWARN ("clist already has check");
+    return;
+  }
+
+  check_info = g_new0 (GNCCListCheckInfo, 1);
+
+  check_info->update_cb = update_cb;
+  check_info->user_data = user_data;
+
+  gtk_object_set_data (object, "gnc-check_info", check_info);
+
+  gtk_signal_connect (object, "realize",
+                      GTK_SIGNAL_FUNC (check_realize), check_info);
+  gtk_signal_connect (object, "unrealize",
+                      GTK_SIGNAL_FUNC (check_unrealize), check_info);
+  gtk_signal_connect (object, "destroy",
+                      GTK_SIGNAL_FUNC (check_destroy), check_info);
+}
+
+
+void
+gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
+{
+  GNCCListCheckInfo *check_info;
+  GdkPixmap *pixmap;
+
+  g_return_if_fail (GTK_IS_CLIST (list));
+
+  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
+    return;
+
+  check_info = gtk_object_get_data (GTK_OBJECT (list), "gnc-check_info");
+  if (!check_info)
+  {
+    PWARN ("you need to call gnc_clist_add_check first");
+    return;
+  }
+
+  pixmap = checked ? check_info->on_pixmap : check_info->off_pixmap;
+
+  gtk_clist_set_pixmap (list, row, 4, pixmap, check_info->mask);
 }

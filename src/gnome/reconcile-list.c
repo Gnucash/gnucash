@@ -125,11 +125,23 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 }
 
 static void
+update_toggle (GtkCList *list, gint row)
+{
+  GNCReconcileList *rlist = GNC_RECONCILE_LIST (list);
+  gboolean reconciled;
+  Split *split;
+
+  split = gtk_clist_get_row_data (list, row);
+  reconciled = g_hash_table_lookup (rlist->reconciled, split) != NULL;
+
+  gnc_clist_set_check (list, row, 4, reconciled);
+}
+
+static void
 gnc_reconcile_list_init (GNCReconcileList *list)
 {
   GtkCList *clist = GTK_CLIST (list);
   GtkStyle *style;
-  gint font_height;
   gchar * titles[] =
     {
       _("Date"),
@@ -172,133 +184,16 @@ gnc_reconcile_list_init (GNCReconcileList *list)
       for (i = 0; i < list->num_columns; i++)
       {
 	width = gdk_string_width (font, titles[i]);
-	gtk_clist_set_column_min_width (GTK_CLIST(list), i, width + 5);
+	gtk_clist_set_column_min_width (clist, i, width + 5);
 	if (i == 4)
-	  gtk_clist_set_column_max_width (GTK_CLIST(list), i, width + 5);
+	  gtk_clist_set_column_max_width (clist, i, width + 5);
       }
-
-      font_height = font->ascent + font->descent;
     }
-    else
-      font_height = 0;
   }
 
-  list->check_size = (font_height > 0) ? font_height - 3 : 9;
-
-  list->mask = NULL;
-  list->off_pixmap = NULL;
-  list->on_pixmap = NULL;
+  gnc_clist_add_check (clist, update_toggle, NULL);
 }
 
-static void
-set_toggle (GNCReconcileList *list, gint row)
-{
-  gboolean reconciled;
-  GdkPixmap *pixmap;
-  Split *split;
-
-  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
-    return;
-
-  split = gtk_clist_get_row_data (GTK_CLIST (list), row);
-  reconciled = g_hash_table_lookup (list->reconciled, split) != NULL;
-
-  pixmap = reconciled ? list->on_pixmap : list->off_pixmap;
-
-  gtk_clist_set_pixmap (GTK_CLIST (list), row, 4, pixmap, list->mask);
-}
-
-static void
-widget_realize (GtkWidget *widget)
-{
-  GNCReconcileList *list = GNC_RECONCILE_LIST (widget);
-  GdkGCValues gc_values;
-  GdkColormap *cm;
-  GtkStyle *style;
-  GdkGC *gc;
-  gint i;
-
-  if (GTK_WIDGET_CLASS (parent_class)->realize)
-    (GTK_WIDGET_CLASS (parent_class)->realize) (widget);
-
-  if (list->mask)
-    return;
-
-  style = gtk_widget_get_style (widget);
-
-  list->mask = gdk_pixmap_new (NULL, list->check_size, list->check_size, 1);
-  list->on_pixmap = gdk_pixmap_new (widget->window,
-                                    list->check_size, list->check_size, -1);
-  list->off_pixmap = gdk_pixmap_new (widget->window,
-                                     list->check_size, list->check_size, -1);
-
-  gc_values.foreground = style->white;
-  gc = gtk_gc_get (1, gtk_widget_get_colormap (widget),
-                   &gc_values, GDK_GC_FOREGROUND);
-
-  gdk_draw_rectangle (list->mask, gc, TRUE, 0, 0,
-                      list->check_size, list->check_size);
-
-  gtk_gc_release (gc);
-
-  gc = style->base_gc[GTK_STATE_NORMAL];
-
-  gdk_draw_rectangle (list->on_pixmap, gc, TRUE, 0, 0,
-                      list->check_size, list->check_size);
-  gdk_draw_rectangle (list->off_pixmap, gc, TRUE, 0, 0,
-                      list->check_size, list->check_size);
-
-  cm = gtk_widget_get_colormap (widget);
-
-  gc_values.foreground.red = 0;
-  gc_values.foreground.green = 65535 / 2;
-  gc_values.foreground.blue = 0;
-
-  gdk_colormap_alloc_color (cm, &gc_values.foreground, FALSE, TRUE);
-
-  gc = gdk_gc_new_with_values (widget->window, &gc_values, GDK_GC_FOREGROUND);
-
-  gdk_draw_line (list->on_pixmap, gc,
-                 1, list->check_size / 2,
-                 list->check_size / 3, list->check_size - 5);
-  gdk_draw_line (list->on_pixmap, gc,
-                 1, list->check_size / 2 + 1,
-                 list->check_size / 3, list->check_size - 4);
-        
-  gdk_draw_line (list->on_pixmap, gc,
-                 list->check_size / 3, list->check_size - 5,
-                 list->check_size - 3, 2);
-  gdk_draw_line (list->on_pixmap, gc,
-                 list->check_size / 3, list->check_size - 4,
-                 list->check_size - 3, 1);
-
-  gdk_gc_unref (gc);
-
-  for (i = 0; i < GTK_CLIST (list)->rows; i++)
-    set_toggle (list, i);
-}
-
-static void
-widget_unrealize (GtkWidget *widget)
-{
-  GNCReconcileList *list = GNC_RECONCILE_LIST (widget);
-
-  if (list->mask)
-    gdk_bitmap_unref (list->mask);
-
-  if (list->on_pixmap)
-    gdk_pixmap_unref (list->on_pixmap);
-
-  if (list->off_pixmap)
-    gdk_pixmap_unref (list->off_pixmap);
-
-  list->mask = NULL;
-  list->on_pixmap = NULL;
-  list->off_pixmap = NULL;
-
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
-}
 
 static void
 gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
@@ -341,9 +236,6 @@ gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
 
   object_class->destroy = gnc_reconcile_list_destroy;
 
-  widget_class->realize = widget_realize;
-  widget_class->unrealize = widget_unrealize;
-
   clist_class->select_row = gnc_reconcile_list_select_row;
   clist_class->unselect_row = gnc_reconcile_list_unselect_row;
 
@@ -374,7 +266,7 @@ gnc_reconcile_list_toggle (GNCReconcileList *list)
   else
     g_hash_table_remove (list->reconciled, split);
 
-  set_toggle (list, row);
+  update_toggle (GTK_CLIST (list), row);
 
   gtk_signal_emit (GTK_OBJECT (list),
                    reconcile_list_signals[TOGGLE_RECONCILED], split);
@@ -794,7 +686,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);
     gtk_clist_set_row_data (GTK_CLIST(list), row, split);
 
-    set_toggle (list, row);
+    update_toggle (GTK_CLIST (list), row);
 
     list->num_splits++;
   }

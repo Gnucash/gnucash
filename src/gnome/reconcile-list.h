@@ -67,12 +67,6 @@ struct _GNCReconcileList
 
   Account *account;
   Query *query;
-
-  gint check_size;
-
-  GdkPixmap *on_pixmap;
-  GdkPixmap *off_pixmap;
-  GdkBitmap *mask;
 };
 
 struct _GNCReconcileListClass

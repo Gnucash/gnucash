@@ -66,4 +66,12 @@ int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
+
+/*** Using checks with clists ************************************/
+typedef void (*GNCUpdateCheck) (GtkCList *list, int row);
+
+void gnc_clist_add_check (GtkCList *list, GNCUpdateCheck update_cb,
+                          gpointer user_data);
+void gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked);
+
 #endif
