@@ -1561,6 +1561,9 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    QofBackend *be;
+
+   if (!trans) return;
+
    QOF_COMMIT_EDIT_PART1 (&trans->inst);
 
    /* We increment this for the duration of the call
@@ -2844,8 +2847,9 @@ xaccSplitGetSharePrice (const Split * split)
    * handle some overflow and other error conditions by returning
    * zero.  But still print an error to let us know it happened.
    */
-  if (gnc_numeric_check(price)) {
-    PERR("Computing Shares Price Failed (%d): [ %lld / %lld ] / [ %lld / %lld ]",
+  if (gnc_numeric_check(price)) 
+  {
+    PERR("Computing share price failed (%d): [ %lld / %lld ] / [ %lld / %lld ]",
 	 gnc_numeric_check(price), val.num, val.denom, amt.num, amt.denom);
     return gnc_numeric_create(0,1);
   }
