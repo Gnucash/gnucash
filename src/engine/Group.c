@@ -415,7 +415,7 @@ xaccGetPeerAccountFromName ( Account *acc, const char * name )
   /* first, find the root of the account group structure */
   root = xaccGetAccountRoot (acc);
 
-  /* now search all acounts hanging off the root */
+  /* now search all accounts hanging off the root */
   peer_acc = xaccGetAccountFromName (root, name);
 
   return peer_acc;
