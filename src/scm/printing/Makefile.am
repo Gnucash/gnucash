@@ -1,10 +1,12 @@
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/printing
 
-gncscm_DATA = \
-  number-to-words.scm \
-  print-check.scm
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/printing
+gncscmmod_DATA = number-to-words.scm
+
+gncscm_DATA = print-check.scm
 
 EXTRA_DIST = \
   .cvsignore \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  ${gncscmmod_DATA}
