@@ -32,6 +32,7 @@
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 
