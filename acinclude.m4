@@ -12,21 +12,6 @@ AC_DEFUN(AC_GWRAP_CHECK_GUILE,
  if test "${GUILE}" = "no" ; then
 	AC_MSG_ERROR(g-wrap couldn't find guile.)
  fi
- 
- dnl If guile uses the old-style smob, then define it.
- dnl To make this work, you must have the line 
- dnl #undef GWRAP_OLD_GUILE_SMOB 
- dnl in your acconfig.h or config.h.in, and
- dnl include that config.h.  If not, your code will not
- dnl work with guile 1.3
- AC_MSG_CHECKING(for whether guile uses old SMOB format)
- if ${GUILE} -c '(if (string=? (version) "1.3") (exit 0) (exit 1))' ;
- then
-	AC_MSG_RESULT(yes)
-        AC_DEFINE(GWRAP_OLD_GUILE_SMOB)
- else
-	AC_MSG_RESULT(no)
- fi
 ])
 
 dnl AM_PATH_GWRAP ([MINIMUM-VERSION, [ACTION-IF-FOUND.
@@ -50,7 +35,7 @@ fi
 
 dnl if prefix set, then set them explicitly
 if test x${gwrap_prefix} != x ; then
-   G_WRAP_CONFIG = ${gwrap_prefix}/bin/g-wrap-config
+   G_WRAP_CONFIG=${gwrap_prefix}/bin/g-wrap-config
 else
 
   AC_PATH_PROG(G_WRAP_CONFIG, g-wrap-config, no)
