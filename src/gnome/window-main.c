@@ -669,7 +669,7 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       N_("Find transactions with a search"),
       gnc_main_window_find_transactions_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
+      'f', GDK_CONTROL_MASK, NULL
     },
     GNOMEUIINFO_SUBTREE( N_("Scheduled Transactions"),
                          gnc_sched_xaction_tools_submenu_template ),
