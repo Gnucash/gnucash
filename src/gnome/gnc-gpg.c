@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <gnome.h>
@@ -360,7 +361,7 @@ gnc_gpg_make_keypair(const gchar * username,
                      const gchar * idstring,
                      const gchar * email,
                      const gchar * passphrase) {
-  char * stdin = 
+  char * gpg_input = 
     g_strdup_printf("Key-Type: DSA\n"
                     "Key-Length: 1024\n"
                     "Subkey-Type: ELG-E\n"
@@ -383,8 +384,8 @@ gnc_gpg_make_keypair(const gchar * username,
     NULL
   };
 
-  char * retval = gnc_gpg_transform(stdin, strlen(stdin), NULL, argv);
-  g_free(stdin);
+  char * retval = gnc_gpg_transform(gpg_input, strlen(gpg_input), NULL, argv);
+  g_free(gpg_input);
   return retval;
 }
 
@@ -394,7 +395,7 @@ gnc_gpg_make_keypair_async(const gchar * username,
                            const gchar * email,
                            const gchar * passphrase,
                            GncGPGCb cb, gpointer data) {
-  char * stdin = 
+  char * gpg_input = 
     g_strdup_printf("Key-Type: DSA\n"
                     "Key-Length: 1024\n"
                     "Subkey-Type: ELG-E\n"
@@ -417,6 +418,6 @@ gnc_gpg_make_keypair_async(const gchar * username,
     NULL
   };
 
-  gnc_gpg_transform_async(stdin, strlen(stdin), NULL, argv, cb, data);
-  g_free(stdin);
+  gnc_gpg_transform_async(gpg_input, strlen(gpg_input), NULL, argv, cb, data);
+  g_free(gpg_input);
 }
