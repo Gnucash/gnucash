@@ -188,6 +188,13 @@ void xaccQueryAddDateMatchTT(Query * q,
                              int use_start, time_t stt, 
                              int use_end, time_t ett,
                              QofQueryOp op);
+void xaccQueryGetDateMatchTS (Query * q, 
+			      Timespec * sts,
+			      Timespec * ets);
+void xaccQueryGetDateMatchTT (Query * q, 
+			      time_t * stt,
+			      time_t * ett);
+
 typedef enum {
   CLEARED_NONE       = 0x0000,
   CLEARED_NO         = 0x0001,

@@ -144,6 +144,9 @@ QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);
 /** Destroy a predicate. */
 void qof_query_core_predicate_free (QofQueryPredData *pdata);
 
+/** Retrieve a predicate. */
+gboolean qof_query_date_predicate_get_date (QofQueryPredData *data, Timespec *date);
+
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */

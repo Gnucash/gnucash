@@ -395,6 +395,32 @@ xaccQueryAddDateMatchTS (Query * q,
   qof_query_destroy (tmp_q);
 }
 
+void
+xaccQueryGetDateMatchTS (Query * q, 
+			 Timespec * sts,
+			 Timespec * ets)
+{
+  QofQueryPredData *term_data;
+  GSList *param_list;
+  GSList *terms, *tmp;
+
+  sts->tv_sec = sts->tv_nsec = 0;
+  ets->tv_sec = ets->tv_nsec = 0;
+
+  param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+  terms = qof_query_get_term_type (q, param_list);
+  g_slist_free(param_list);
+
+  for (tmp = terms; tmp; tmp = g_slist_next(tmp)) {
+    term_data = tmp->data;
+    if (term_data->how == QOF_COMPARE_GTE)
+      qof_query_date_predicate_get_date(term_data, sts);
+    if (term_data->how == QOF_COMPARE_LTE)
+      qof_query_date_predicate_get_date(term_data, ets);
+  }
+  g_slist_free(terms);
+}
+
 /********************************************************************
  * xaccQueryAddDateMatch
  * Add a date filter to an existing query. 
@@ -440,6 +466,20 @@ xaccQueryAddDateMatchTT(Query * q,
   xaccQueryAddDateMatchTS (q, use_start, sts,
                            use_end, ets, op);
   
+}
+
+void
+xaccQueryGetDateMatchTT (Query * q, 
+                        time_t * stt,
+                        time_t * ett)
+{
+  Timespec   sts;
+  Timespec   ets;
+
+  xaccQueryGetDateMatchTS (q, &sts, &ets);
+
+  *stt = sts.tv_sec;
+  *ett = ets.tv_sec;
 }
 
 void

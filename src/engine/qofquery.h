@@ -152,6 +152,7 @@ int qof_query_has_terms (QofQuery *q);
 int qof_query_num_terms (QofQuery *q);
 
 gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param);
+GSList * qof_query_get_term_type (QofQuery *q, GSList *term_param);
 
 QofQuery * qof_query_copy (QofQuery *q);
 QofQuery * qof_query_invert(QofQuery *q);

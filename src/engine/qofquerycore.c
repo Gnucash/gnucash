@@ -372,6 +372,17 @@ qof_query_date_predicate (QofQueryCompare how,
   return ((QofQueryPredData*)pdata);
 }
 
+gboolean
+qof_query_date_predicate_get_date (QofQueryPredData *pd, Timespec *date)
+{
+  query_date_t pdata = (query_date_t)pd;
+
+  if (pdata->pd.type_name != query_date_type)
+    return FALSE;
+  *date = pdata->date;
+  return TRUE;
+}
+
 static char * date_to_string (gpointer object, QofAccessFunc get)
 {
   Timespec ts = ((query_date_getter)get)(object);
