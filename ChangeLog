@@ -1,3 +1,72 @@
+2001-05-15  Rob Browning  <rlb@cs.utexas.edu>
+
+	* doc/sgml/C/Makefile.am (GNUCASH_SGML_FILES): remove entries
+	listing missing files -- build was broken.
+
+	* src/scm/report/transaction-report.scm (addto!): make a
+	let-syntax since you apparently can't define-syntax before other
+	defines in a nested let.
+
+	* src/scm/report/register.scm (addto!): make a let-syntax since
+	you apparently can't define-syntax before other defines in a
+	nested let.
+
+	* src/scm/gnumeric/gnumeric-utilities.scm: use srfis as modules.
+
+	* src/scm/srfi/: moved to lib/srfi.
+
+	* src/scm/srfi/.cvsignore: moved to lib/srfi.
+
+	* src/scm/srfi/Makefile.am: moved to lib/srfi.
+
+	* src/scm/srfi/README: moved to lib/srfi.
+
+	* src/scm/srfi/srfi-1.r5rs.scm: merged to lib/srfi/srfi-1.scm.
+
+	* src/scm/srfi/srfi-1.unclear.scm: merged to lib/srfi/srfi-1.scm.
+	
+	* src/scm/srfi/srfi-19.scm: moved to lib/srfi.
+	
+	* src/scm/srfi/srfi-8.guile.scm: merged to lib/srfi/srfi-8.scm.
+	
+	* src/scm/srfi/srfi-8.scm: merged to lib/srfi/srfi-8.scm.
+	
+	* src/scm/utilities.scm (flatten): improved via grib's version.
+
+	* src/scm/text-export.scm: use srfis as modules.
+
+	* src/scm/main.scm: use srfis as modules.
+
+	* src/scm/date-utilities.scm: use srfi-19 as a module.
+
+	* src/scm/Makefile.am (SUBDIRS): remove srfi.
+
+	* src/gnome/window-main.c
+	(gnc_main_window_restore): fix prototype (const-wise).
+
+	* src/gnome/window-main.h
+	(gnc_main_window_restore): fix prototype (const-wise).
+
+	* Makefile.am (TAGS): add a msg to suggest --enable-tags.
+
+	* lib/Makefile.am (SUBDIRS): add srfi.
+
+	* configure.in: add lib/srfi/Makefile to AC_OUTPUT.
+
+	* lib/srfi/srfi-2.scm: new file.
+
+	* lib/srfi/srfi-9.scm: new file.
+
+	* lib/srfi/srfi-11.scm: new file.
+
+	* lib/srfi/srfi-8.scm: moved from src/scm/srfi/.
+
+	* lib/srfi/srfi-19.scm: moved from src/scm/srfi.
+
+	* lib/srfi/README: moved from src/scm/srfi/.
+
+	* lib/srfi/srfi-1.scm: moved from src/scm/srfi/.
+
 2001-05-15  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-xml-account.c (node_and_account_equal): add equals
