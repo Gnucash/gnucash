@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# Usage: gnucash-build-env
+
+# Usage: gnucash-build-env any-cmd [ args ... ]
+# runs any-cmd in gnucash's build environment.
+
+# As with all the other gnucash overrides scripts, expects PATH to be
+# set appropriately.
+
+top_srcdir="@-GNC_SRCDIR-@"
+top_builddir="@-GNC_BUILDDIR-@"
+G_WRAP_MODULE_DIR="@-G_WRAP_MODULE_DIR-@"
+
+if test "${GNC_CONFIG}"x = x
+then
+  GNC_CONFIG_DIR="${top_srcdir}/src/scm"
+  export GNC_CONFIG_DIR
+fi
+
+eval `@-GNC_SRCDIR-@/src/gnc-test-env \
+  --library-dir ${top_builddir}/src/core-utils \
+  --library-dir ${top_builddir}/src/gnome \
+  --guile-load-dir ${G_WRAP_MODULE_DIR} \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --guile-load-dir ${top_builddir}/lib \
+  --guile-load-dir ${top_builddir}/lib/guile-www \
+  --guile-load-dir ${top_builddir}/src/gnome \
+  --gnc-module-dir ${top_builddir}/src/gnc-module \
+  --gnc-module-dir ${top_builddir}/src/tax/us \
+  --gnc-module-dir ${top_builddir}/src/calculation \
+  --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/network-utils \
+  --gnc-module-dir ${top_builddir}/src/app-file \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/engine/test-core \
+  --gnc-module-dir ${top_builddir}/src/report/stylesheets \
+  --gnc-module-dir ${top_builddir}/src/report/report-system \
+  --gnc-module-dir ${top_builddir}/src/report/utility-reports \
+  --gnc-module-dir ${top_builddir}/src/report/standard-reports \
+  --gnc-module-dir ${top_builddir}/src/report/locale-specific/us \
+  --gnc-module-dir ${top_builddir}/src/backend/rpc \
+  --gnc-module-dir ${top_builddir}/src/backend/file \
+  --gnc-module-dir ${top_builddir}/src/backend/postgres \
+  --gnc-module-dir ${top_builddir}/src/business/business-core \
+  --gnc-module-dir ${top_builddir}/src/business/business-gnome \
+  --gnc-module-dir ${top_builddir}/src/import-export/qif-io-core \
+  --gnc-module-dir ${top_builddir}/src/import-export/qif-import \
+  --gnc-module-dir ${top_builddir}/src/import-export/binary-import \
+  --gnc-module-dir ${top_builddir}/src/gnome-utils \
+  --gnc-module-dir ${top_builddir}/src/test-core \
+  --gnc-module-dir ${top_builddir}/src/register/ledger-core \
+  --gnc-module-dir ${top_builddir}/src/register/register-gnome \
+  --gnc-module-dir ${top_builddir}/src/register/register-core \
+  `
+exec "$@"
