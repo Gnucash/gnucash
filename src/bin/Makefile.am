@@ -29,7 +29,6 @@ EXTRA_DIST = .cvsignore gnucash-build-env.in generate-gnc-script
 ${gnc_common_scripts}: generate-gnc-script
 	./generate-gnc-script $@ "${gncoverridesdir}"
 
-BUILT_SOURCES = ${gnc_common_scripts}
 CLEANFILES = ${gnc_common_scripts}
 
 
