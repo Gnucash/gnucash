@@ -168,8 +168,8 @@ gnc_price_begin_edit (GNCPrice *p)
   if (p->db) {
     Backend *be;
     be = xaccPriceDBGetBackend (p->db);
-    if (be && be->price_begin_edit) {
-       (be->price_begin_edit) (be, p);
+    if (be && be->begin) {
+       (be->begin) (be, GNC_ID_PRICE, p);
     }
     p->not_saved = FALSE;
   } else {
@@ -199,7 +199,7 @@ gnc_price_commit_edit (GNCPrice *p)
   if (p->db) {
     Backend *be;
     be = xaccPriceDBGetBackend (p->db);
-    if (be && be->price_commit_edit) {
+    if (be && be->commit) {
       GNCBackendError errcode;
 
       /* clear errors */
@@ -209,12 +209,12 @@ gnc_price_commit_edit (GNCPrice *p)
 
       /* if we haven't been able to call begin edit before, call it now */
       if (TRUE == p->not_saved) {
-        if (be->price_begin_edit) {
-          (be->price_begin_edit) (be, p);
+        if (be->begin) {
+          (be->begin) (be, GNC_ID_PRICE, p);
         }
       }
 
-      (be->price_commit_edit) (be, p);
+      (be->commit) (be, GNC_ID_PRICE, p);
       errcode = xaccBackendGetError (be);
       if (ERR_BACKEND_NO_ERR != errcode) 
       {

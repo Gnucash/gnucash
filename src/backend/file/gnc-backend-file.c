@@ -188,23 +188,21 @@ gnc_backend_new(void)
     xaccInitBackend(be);
     
     be->session_begin = file_session_begin;
-    be->book_load = gnc_file_be_load_from_file;
-    be->price_load = NULL;
     be->session_end = file_session_end;
     be->destroy_backend = file_destroy_backend;
+
+    be->load = gnc_file_be_load_from_file;
 
     /* The file backend will never have transactional
      * behaviour.  So these vectors are null. */
 
-    be->account_begin_edit = NULL;
-    be->account_commit_edit = NULL;
-    be->trans_begin_edit = NULL;
-    be->trans_commit_edit = NULL;
-    be->trans_rollback_edit = NULL;
-    be->price_begin_edit = NULL;
-    be->price_commit_edit = NULL;
+    be->begin = NULL;
+    be->commit = NULL;
+    be->rollback = NULL;
 
     /* the file backend always loads all data ... */
+    be->compile_query = NULL;
+    be->free_query = NULL;
     be->run_query = NULL;
     be->price_lookup = NULL;
 
@@ -214,7 +212,7 @@ gnc_backend_new(void)
     be->events_pending = NULL;
     be->process_events = NULL;
 
-    be->sync_all = file_sync_all;
+    be->sync = file_sync_all;
     be->export = gnc_file_be_write_accounts_to_file;
 
     fbe->dirname = NULL;

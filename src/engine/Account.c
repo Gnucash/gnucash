@@ -384,8 +384,8 @@ xaccAccountBeginEdit (Account *acc)
 
   /* See if there's a backend.  If there is, invoke it. */
   be = xaccAccountGetBackend (acc);
-  if (be && be->account_begin_edit) {
-     (be->account_begin_edit) (be, acc);
+  if (be && be->begin) {
+     (be->begin) (be, GNC_ID_ACCOUNT, acc);
   }
 }
 
@@ -452,7 +452,7 @@ xaccAccountCommitEdit (Account *acc)
 
   /* See if there's a backend.  If there is, invoke it. */
   be = xaccAccountGetBackend (acc);
-  if (be && be->account_commit_edit) 
+  if (be && be->commit) 
   {
     GNCBackendError errcode;
 
@@ -461,7 +461,7 @@ xaccAccountCommitEdit (Account *acc)
       errcode = xaccBackendGetError (be);
     } while (ERR_BACKEND_NO_ERR != errcode);
 
-    (be->account_commit_edit) (be, acc);
+    (be->commit) (be, GNC_ID_ACCOUNT, acc);
     errcode = xaccBackendGetError (be);
 
     if (ERR_BACKEND_NO_ERR != errcode)
@@ -2836,7 +2836,7 @@ static GncObject_t account_object_def = {
   NULL,				/* is_dirty */
   NULL,				/* mark_clean */
   account_foreach,		/* foreach */
-  xaccAccountGetName		/* printable */
+  (const char* (*)(gpointer)) xaccAccountGetName /* printable */
 };
 
 gboolean xaccAccountRegister (void)

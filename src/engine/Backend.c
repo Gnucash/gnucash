@@ -103,34 +103,30 @@ void
 xaccInitBackend(Backend *be)
 {
     be->session_begin = NULL;
-    be->book_load = NULL;
-    be->price_load = NULL;
     be->session_end = NULL;
     be->destroy_backend = NULL;
 
-    be->account_begin_edit = NULL;
-    be->account_commit_edit = NULL;
-    be->trans_begin_edit = NULL;
-    be->trans_commit_edit = NULL;
-    be->trans_rollback_edit = NULL;
-    be->price_begin_edit = NULL;
-    be->price_commit_edit = NULL;
+    be->load = NULL;
 
+    be->begin = NULL;
+    be->commit = NULL;
+    be->rollback = NULL;
+
+    be->compile_query = NULL;
+    be->free_query = NULL;
     be->run_query = NULL;
     be->price_lookup = NULL;
-    be->sync_all = NULL;
-    be->sync_group = NULL;
-    be->sync_price = NULL;
-    be->export = NULL;
-    be->percentage = NULL;
+
+    be->sync = NULL;
 
     be->events_pending = NULL;
     be->process_events = NULL;
 
-    be->book_transfer_begin = NULL;
-    be->book_transfer_commit = NULL;
-
     be->last_err = ERR_BACKEND_NO_ERR;
+
+    be->percentage = NULL;
+
+    be->export = NULL;
 }
 
 /************************* END OF FILE ********************************/

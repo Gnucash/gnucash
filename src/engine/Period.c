@@ -165,9 +165,9 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
 
    be = src_book->backend;
-   if (be && be->book_transfer_begin)
+   if (be && be->begin)
    {
-      (*be->book_transfer_begin)(be, dest_book);
+      (*be->begin)(be, GNC_ID_PERIOD, dest_book);
    }
    
    /* First, copy the book's KVP tree */
@@ -209,9 +209,9 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    gnc_kvp_gemini (src_book->kvp_data, NULL, &dest_book->guid, now);
    gnc_kvp_gemini (dest_book->kvp_data, NULL, &src_book->guid, now);
 
-   if (be && be->book_transfer_commit)
+   if (be && be->commit)
    {
-      (*be->book_transfer_commit)(be, dest_book);
+      (*be->commit)(be, GNC_ID_PERIOD, dest_book);
    }
    LEAVE (" ");
 }

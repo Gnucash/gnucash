@@ -60,6 +60,7 @@ typedef const char * GNCIdTypeConst;
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
 #define GNC_ID_SESSION        "Session"
 #define GNC_ID_TRANS          "Trans"
+#define GNC_ID_PERIOD	      "Period"
 
 /* Return the type of an identifier. */
 GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book);

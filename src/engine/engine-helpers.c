@@ -872,7 +872,7 @@ gnc_queryterm2scm (QueryNewTerm_t qt)
   qt_scm = gh_cons (gh_bool2scm (gncQueryTermIsInverted (qt)), qt_scm);
 
   pd = gncQueryTermGetPredData (qt);
-  qt_scm = gh_cons (gh_symbol2scm (pd->type_name), qt_scm);
+  qt_scm = gh_cons (gh_symbol2scm ((char*)(pd->type_name)), qt_scm);
   qt_scm = gh_cons (gnc_query_compare2scm (pd->how), qt_scm);
 
   if (!safe_strcmp (pd->type_name, QUERYCORE_STRING)) {
@@ -1711,7 +1711,7 @@ gnc_query2scm (Query *q)
   query_scm = gh_cons (pair, query_scm);
 
   /* search-for */
-  pair = gh_cons (gh_symbol2scm (gncQueryGetSearchFor (q)), SCM_EOL);
+  pair = gh_cons (gh_symbol2scm ((char*) gncQueryGetSearchFor (q)), SCM_EOL);
   pair = gh_cons (gh_symbol2scm ("search-for"), pair);
   query_scm = gh_cons (pair, query_scm);
 

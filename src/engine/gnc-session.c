@@ -52,6 +52,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "gnc-session-p.h"
+#include "gnc-event.h"
 
 static GNCSession * current_session = NULL;
 static short module = MOD_IO;
@@ -480,18 +481,10 @@ gnc_session_load (GNCSession *session,
       xaccLogDisable();
       be->percentage = percentage_func;
 
-      if (be->book_load) 
+      if (be->load) 
       {
-          be->book_load (be, newbook);
-
+          be->load (be, newbook);
           gnc_session_push_error (session, xaccBackendGetError(be), NULL);
-      }
-
-      if (be->price_load) 
-      {
-          be->price_load (be, newbook);
-
-          gnc_session_push_error(session, xaccBackendGetError(be), NULL);
       }
 
       /* we just got done loading, it can't possibly be dirty !! */
@@ -620,22 +613,10 @@ gnc_session_save (GNCSession *session,
       gnc_book_set_backend (abook, be);
       be->percentage = percentage_func;
   
-      if (be->sync_all)
+      if (be->sync)
       {
-        (be->sync_all)(be, abook);
+        (be->sync)(be, abook);
         if (save_error_handler(be, session)) return;
-      }
-  
-      if (be->sync_group)
-      {
-        (be->sync_group)(be, abook);
-        if (save_error_handler(be, session)) return;
-      }
-  
-      if (be->sync_price)
-      {
-        (be->sync_price)(be, abook);
-        if(save_error_handler(be, session)) return;
       }
     }
     

@@ -1555,8 +1555,8 @@ xaccTransBeginEdit (Transaction *trans)
 
    /* See if there's a backend.  If there is, invoke it. */
    be = xaccTransactionGetBackend (trans);
-   if (be && be->trans_begin_edit)
-      (be->trans_begin_edit) (be, trans);
+   if (be && be->begin)
+      (be->begin) (be, GNC_ID_TRANS, trans);
 
    xaccOpenLog ();
    xaccTransWriteLog (trans, 'B');
@@ -1646,7 +1646,7 @@ xaccTransCommitEdit (Transaction *trans)
    PINFO ("descr is %s", str);
 
    be = xaccTransactionGetBackend (trans);
-   if (be && be->trans_commit_edit) 
+   if (be && be->commit) 
    {
       GNCBackendError errcode;
 
@@ -1655,7 +1655,7 @@ xaccTransCommitEdit (Transaction *trans)
         errcode = xaccBackendGetError (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->trans_commit_edit) (be, trans, trans->orig);
+      (be->commit) (be, GNC_ID_TRANS, trans);
 
       errcode = xaccBackendGetError (be);
       if (ERR_BACKEND_NO_ERR != errcode)
@@ -1893,7 +1893,7 @@ xaccTransRollbackEdit (Transaction *trans)
    /* Now that the engine copy is back to its original version,
     * get the backend to fix it in the database */
    be = xaccTransactionGetBackend (trans);
-   if (be && be->trans_rollback_edit) 
+   if (be && be->rollback) 
    {
       GNCBackendError errcode;
 
@@ -1902,7 +1902,7 @@ xaccTransRollbackEdit (Transaction *trans)
         errcode = xaccBackendGetError (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->trans_rollback_edit) (be, trans);
+      (be->rollback) (be, GNC_ID_TRANS, trans);
 
       errcode = xaccBackendGetError (be);
       if (ERR_BACKEND_MOD_DESTROY == errcode)
@@ -3161,7 +3161,7 @@ static GncObject_t split_object_def = {
   NULL,				/* is_dirty */
   NULL,				/* mark_clean */
   split_foreach,		/* foreach */
-  xaccSplitGetMemo		/* printable */
+  (const char* (*)(gpointer)) xaccSplitGetMemo		/* printable */
 };
 
 static gpointer split_account_guid_getter (gpointer obj)
@@ -3247,7 +3247,7 @@ static GncObject_t trans_object_def = {
   NULL,				/* is_dirty */
   NULL,				/* mark_clean */
   trans_foreach,		/* foreach */
-  xaccTransGetDescription	/* printable */
+  (const char* (*)(gpointer)) xaccTransGetDescription	/* printable */
 };
 
 static gboolean

@@ -681,10 +681,22 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    LEAVE (" ");
 }
 
+static gpointer
+pgendCompileQuery (Backend *bend, Query *q)
+{
+  return q;
+}
+
+static void
+pgendFreeQuery (Backend *bend, gpointer q)
+{
+}
+
 static void 
-pgendRunQuery (Backend *bend, Query *q)
+pgendRunQuery (Backend *bend, gpointer q_p)
 {
    PGBackend *be = (PGBackend *)bend;
+   Query *q = (Query*) q_p;
    const char * sql_query_string;
    AccountGroup *topgroup;
    sqlQuery *sq;
@@ -1311,7 +1323,7 @@ pgendSessionValidate (PGBackend *be, int break_lock)
        * file-lock error from the GUI perspective:
        * (The GUI allows users to break the lock, if desired).
        */
-      be->be.book_load = pgend_book_load_single_lockerr;
+      be->be.load = pgend_book_load_single_lockerr;
       xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
       retval = FALSE;
    } else {
@@ -1555,6 +1567,114 @@ pgend_price_load_single (Backend *bend, GNCBook *book)
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
+}
+
+/* ============================================================= */
+/*
+ * These are the Backend Entry Points, which call into the various
+ * functions herein..  These are generic, and (eventually) pluggable.
+ *
+ */
+
+static void
+pgend_do_load_single (Backend *bend, GNCBook *book)
+{
+  pgend_book_load_single (bend, book);
+  pgend_price_load_single (bend, book);
+
+  /* XXX: Other things to load here.... (dynamic data) */
+}
+
+static void
+pgendDoSyncSingleFile (Backend *bend, GNCBook *book)
+{
+   pgendSyncSingleFile (bend, book);
+   pgendSyncPriceDBSingleFile (bend, book);
+
+   /* XXX: Other data types */
+}
+
+static void
+pgendDoSync (Backend *bend, GNCBook *book)
+{
+   pgendSync (bend, book);
+   pgendSyncPriceDB (bend, book);
+
+   /* XXX: Other data types */
+}
+
+static void
+pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
+{
+  PGBackend *be = (PGBackend*)bend;
+
+  if (!safe_strcmp (type, GNC_ID_PERIOD))
+    return pgend_book_transfer_begin (bend, object);
+
+  switch (be->session_mode) {
+  case MODE_EVENT:
+  case MODE_POLL:
+  case MODE_SINGLE_UPDATE:
+
+    if (!safe_strcmp (type, GNC_ID_PRICE))
+      return pgend_price_begin_edit (bend, object);
+
+  case MODE_SINGLE_FILE:
+    break;
+  }
+
+  /* XXX: Add dynamic plug-in here */
+}
+
+static void
+pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
+{
+  PGBackend *be = (PGBackend*)bend;
+
+  if (!safe_strcmp (type, GNC_ID_PERIOD))
+    return pgend_book_transfer_commit (bend, object);
+
+  switch (be->session_mode) {
+  case MODE_EVENT:
+  case MODE_POLL:
+  case MODE_SINGLE_UPDATE:
+
+    if (!safe_strcmp (type, GNC_ID_TRANS))
+      return pgend_trans_commit_edit (bend, object);
+
+    if (!safe_strcmp (type, GNC_ID_PRICE))
+      return pgend_price_commit_edit (bend, object);
+
+    if (!safe_strcmp (type, GNC_ID_ACCOUNT))
+      return pgend_account_commit_edit (bend, object);
+
+  case MODE_SINGLE_FILE:
+    break;
+  }
+
+  /* XXX: Add dynamic plug-in here */
+}
+
+static void
+pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
+{
+  PGBackend *be = (PGBackend*)bend;
+
+  switch (be->session_mode) {
+  case MODE_EVENT:
+  case MODE_POLL:
+
+    if (!safe_strcmp (type, GNC_ID_TRANS)) {
+      Transaction *txn = (Transaction*) object;
+      return pgend_trans_rollback_edit (bend, txn, txn->orig);
+    }
+
+  case MODE_SINGLE_UPDATE:
+  case MODE_SINGLE_FILE:
+    break;
+  }
+
+  /* XXX: Add dynamic plug-in here */
 }
 
 /* ============================================================= */
@@ -2092,22 +2212,17 @@ pgend_session_begin (Backend *backend,
       {
          case MODE_SINGLE_FILE:
             pgendEnable(be);
-            be->be.book_load            = pgend_book_load_single;
-            be->be.price_load           = pgend_price_load_single;
-            be->be.book_transfer_begin  = pgend_book_transfer_begin;
-            be->be.book_transfer_commit = pgend_book_transfer_commit;
-            be->be.account_begin_edit   = NULL;
-            be->be.account_commit_edit  = NULL;
-            be->be.trans_begin_edit     = NULL;
-            be->be.trans_commit_edit    = NULL;
-            be->be.trans_rollback_edit  = NULL;
-            be->be.price_begin_edit     = NULL;
-            be->be.price_commit_edit    = NULL;
+            be->be.load                 = pgend_do_load_single;
+            be->be.begin		= pgend_do_begin;
+            be->be.commit		= pgend_do_commit;
+            be->be.rollback		= pgend_do_rollback;
+
+	    be->be.compile_query	= NULL;
+	    be->be.free_query		= NULL;
             be->be.run_query            = NULL;
             be->be.price_lookup         = NULL;
-            be->be.sync_all             = pgendSyncSingleFile;
-            be->be.sync_group           = NULL;
-            be->be.sync_price           = pgendSyncPriceDBSingleFile;
+
+            be->be.sync                 = pgendDoSyncSingleFile;
             be->be.export               = NULL;
             be->be.percentage           = NULL;
             be->be.events_pending       = NULL;
@@ -2119,22 +2234,17 @@ pgend_session_begin (Backend *backend,
 
          case MODE_SINGLE_UPDATE:
             pgendEnable(be);
-            be->be.book_load            = pgend_book_load_single;
-            be->be.price_load           = pgend_price_load_single;
-            be->be.book_transfer_begin  = pgend_book_transfer_begin;
-            be->be.book_transfer_commit = pgend_book_transfer_commit;
-            be->be.account_begin_edit   = NULL;
-            be->be.account_commit_edit  = pgend_account_commit_edit;
-            be->be.trans_begin_edit     = NULL;
-            be->be.trans_commit_edit    = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit  = NULL;  /* no-op for single user */
-            be->be.price_begin_edit     = pgend_price_begin_edit;
-            be->be.price_commit_edit    = pgend_price_commit_edit;
+            be->be.load                 = pgend_do_load_single;
+            be->be.begin		= pgend_do_begin;
+            be->be.commit		= pgend_do_commit;
+            be->be.rollback		= pgend_do_rollback;
+
+	    be->be.compile_query	= NULL;
+	    be->be.free_query		= NULL;
             be->be.run_query            = NULL;
             be->be.price_lookup         = NULL;
-            be->be.sync_all             = pgendSync;
-            be->be.sync_group           = NULL;
-            be->be.sync_price           = pgendSyncPriceDB;
+
+            be->be.sync                 = pgendDoSync;
             be->be.export               = NULL;
             be->be.percentage           = NULL;
             be->be.events_pending       = NULL;
@@ -2146,22 +2256,17 @@ pgend_session_begin (Backend *backend,
 
          case MODE_POLL:
             pgendEnable(be);
-            be->be.book_load            = pgend_book_load_poll;
-            be->be.price_load           = NULL;
-            be->be.book_transfer_begin  = pgend_book_transfer_begin;
-            be->be.book_transfer_commit = pgend_book_transfer_commit;
-            be->be.account_begin_edit   = NULL;
-            be->be.account_commit_edit  = pgend_account_commit_edit;
-            be->be.trans_begin_edit     = NULL;
-            be->be.trans_commit_edit    = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit  = pgend_trans_rollback_edit;
-            be->be.price_begin_edit     = pgend_price_begin_edit;
-            be->be.price_commit_edit    = pgend_price_commit_edit;
+            be->be.load                 = pgend_book_load_poll;
+            be->be.begin		= pgend_do_begin;
+            be->be.commit		= pgend_do_commit;
+            be->be.rollback		= pgend_do_rollback;
+
+	    be->be.compile_query	= pgendCompileQuery;
+	    be->be.free_query		= pgendFreeQuery;
             be->be.run_query            = pgendRunQuery;
             be->be.price_lookup         = pgendPriceFind;
-            be->be.sync_all             = pgendSync;
-            be->be.sync_group           = NULL;
-            be->be.sync_price           = pgendSyncPriceDB;
+
+            be->be.sync                 = pgendDoSync;
             be->be.export               = NULL;
             be->be.percentage           = NULL;
             be->be.events_pending       = NULL;
@@ -2178,22 +2283,17 @@ pgend_session_begin (Backend *backend,
             pgendSessionGetPid (be);
             pgendSessionSetupNotifies (be);
 
-            be->be.book_load            = pgend_book_load_poll;
-            be->be.price_load           = NULL;
-            be->be.book_transfer_begin  = pgend_book_transfer_begin;
-            be->be.book_transfer_commit = pgend_book_transfer_commit;
-            be->be.account_begin_edit   = NULL;
-            be->be.account_commit_edit  = pgend_account_commit_edit;
-            be->be.trans_begin_edit     = NULL;
-            be->be.trans_commit_edit    = pgend_trans_commit_edit;
-            be->be.trans_rollback_edit  = pgend_trans_rollback_edit;
-            be->be.price_begin_edit     = pgend_price_begin_edit;
-            be->be.price_commit_edit    = pgend_price_commit_edit;
+            be->be.load                 = pgend_book_load_poll;
+            be->be.begin		= pgend_do_begin;
+            be->be.commit		= pgend_do_commit;
+            be->be.rollback		= pgend_do_rollback;
+
+	    be->be.compile_query	= pgendCompileQuery;
+	    be->be.free_query		= pgendFreeQuery;
             be->be.run_query            = pgendRunQuery;
             be->be.price_lookup         = pgendPriceFind;
-            be->be.sync_all             = pgendSync;
-            be->be.sync_group           = NULL;
-            be->be.sync_price           = pgendSyncPriceDB;
+
+            be->be.sync                 = pgendDoSync;
             be->be.export               = NULL;
             be->be.percentage           = NULL;
             be->be.events_pending       = pgendEventsPending;
@@ -2229,47 +2329,31 @@ pgendDisable (PGBackend *be)
    if (1 < be->nest_count) return;
 
    /* save hooks */
-   be->snr.book_load            = be->be.book_load;
-   be->snr.price_load           = be->be.price_load;
+   be->snr.load	                = be->be.load;
    be->snr.session_end          = be->be.session_end;
    be->snr.destroy_backend      = be->be.destroy_backend;
-   be->snr.book_transfer_begin  = be->be.book_transfer_begin;
-   be->snr.book_transfer_commit = be->be.book_transfer_commit;
-   be->snr.account_begin_edit   = be->be.account_begin_edit;
-   be->snr.account_commit_edit  = be->be.account_commit_edit;
-   be->snr.trans_begin_edit     = be->be.trans_begin_edit;
-   be->snr.trans_commit_edit    = be->be.trans_commit_edit;
-   be->snr.trans_rollback_edit  = be->be.trans_rollback_edit;
-   be->snr.price_begin_edit     = be->be.price_begin_edit;
-   be->snr.price_commit_edit    = be->be.price_commit_edit;
+   be->snr.begin	        = be->be.begin;
+   be->snr.commit 	        = be->be.commit;
+   be->snr.rollback	        = be->be.rollback;
+   be->snr.compile_query        = be->be.compile_query;
    be->snr.run_query            = be->be.run_query;
    be->snr.price_lookup         = be->be.price_lookup;
-   be->snr.sync_all             = be->be.sync_all;
-   be->snr.sync_group           = be->be.sync_group;
-   be->snr.sync_price           = be->be.sync_price;
+   be->snr.sync                 = be->be.sync;
    be->snr.export               = be->be.export;
    be->snr.percentage           = be->be.percentage;
    be->snr.events_pending       = be->be.events_pending;
    be->snr.process_events       = be->be.process_events;
 
-   be->be.book_load            = NULL;
-   be->be.price_load           = NULL;
+   be->be.load                 = NULL;
    be->be.session_end          = NULL;
    be->be.destroy_backend      = NULL;
-   be->be.book_transfer_begin  = NULL;
-   be->be.book_transfer_commit = NULL;
-   be->be.account_begin_edit   = NULL;
-   be->be.account_commit_edit  = NULL;
-   be->be.trans_begin_edit     = NULL;
-   be->be.trans_commit_edit    = NULL;
-   be->be.trans_rollback_edit  = NULL;
-   be->be.price_begin_edit     = NULL;
-   be->be.price_commit_edit    = NULL;
+   be->be.begin		       = NULL;
+   be->be.commit 	       = NULL;
+   be->be.rollback	       = NULL;
+   be->be.compile_query        = NULL;
    be->be.run_query            = NULL;
    be->be.price_lookup         = NULL;
-   be->be.sync_all             = NULL;
-   be->be.sync_group           = NULL;
-   be->be.sync_price           = NULL;
+   be->be.sync                 = NULL;
    be->be.export               = NULL;
    be->be.percentage           = NULL;
    be->be.events_pending       = NULL;
@@ -2290,24 +2374,16 @@ pgendEnable (PGBackend *be)
    if (be->nest_count) return;
 
    /* restore hooks */
-   be->be.book_load            = be->snr.book_load;
-   be->be.price_load           = be->snr.price_load;
+   be->be.load                 = be->snr.load;
    be->be.session_end          = be->snr.session_end;
    be->be.destroy_backend      = be->snr.destroy_backend;
-   be->be.book_transfer_begin  = be->snr.book_transfer_begin;
-   be->be.book_transfer_commit = be->snr.book_transfer_commit;
-   be->be.account_begin_edit   = be->snr.account_begin_edit;
-   be->be.account_commit_edit  = be->snr.account_commit_edit;
-   be->be.trans_begin_edit     = be->snr.trans_begin_edit;
-   be->be.trans_commit_edit    = be->snr.trans_commit_edit;
-   be->be.trans_rollback_edit  = be->snr.trans_rollback_edit;
-   be->be.price_begin_edit     = be->snr.price_begin_edit;
-   be->be.price_commit_edit    = be->snr.price_commit_edit;
+   be->be.begin  	       = be->snr.begin;
+   be->be.commit 	       = be->snr.commit;
+   be->be.rollback  	       = be->snr.rollback;
+   be->be.compile_query        = be->snr.compile_query;
    be->be.run_query            = be->snr.run_query;
    be->be.price_lookup         = be->snr.price_lookup;
-   be->be.sync_all             = be->snr.sync_all;
-   be->be.sync_group           = be->snr.sync_group;
-   be->be.sync_price           = be->snr.sync_price;
+   be->be.sync                 = be->snr.sync;
    be->be.export               = be->snr.export;
    be->be.percentage           = be->snr.percentage;
    be->be.events_pending       = be->snr.events_pending;

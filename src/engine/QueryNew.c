@@ -599,8 +599,21 @@ GList * gncQueryRun (QueryNew *q)
       Backend *be = book->backend;
 
       /* query the backend */
-      if (be && be->run_query)
-	(be->run_query) (be, q);
+      if (be) {
+	gpointer compiled_query = NULL;
+
+	/* XXX: The compiled query should be cached as part of
+	 * the compile_terms
+	 */
+
+	if (be->compile_query && be->run_query) {
+	  compiled_query = (be->compile_query) (be, q);
+	  (be->run_query) (be, compiled_query);
+	}
+
+	if (compiled_query && be->free_query)
+	  (be->free_query) (be, compiled_query);
+      }
 
       /* and then iterate over all the objects */
       gncObjectForeach (q->search_for, book, check_item_cb, &qcb);
