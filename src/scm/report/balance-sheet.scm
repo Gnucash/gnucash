@@ -64,11 +64,11 @@
 		    (collector 'merge balance #f)))
 		accountlist)
       collector))
-		  
+
   ;; options generator
   (define (balance-sheet-options-generator)
     (let ((options (gnc:new-options)))
-      
+
       ;; date at which to report balance
       (gnc:options-add-report-date!
        options gnc:pagename-general 
@@ -76,7 +76,7 @@
 
       ;; all about currencies
       (gnc:options-add-currency-selection!
-       options pagename-general
+       options gnc:pagename-general
        optname-show-foreign optname-report-currency
        "b")
 
@@ -132,9 +132,9 @@
 					     optname-show-parent-balance))
 	   (show-parent-total? (get-option gnc:pagename-display
 					   optname-show-parent-total))
-	   (show-fcur? (get-option pagename-general
+	   (show-fcur? (get-option gnc:pagename-general
 				   optname-show-foreign))
-	   (report-currency (get-option pagename-general
+	   (report-currency (get-option gnc:pagename-general
 					optname-report-currency))
 	   (to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
