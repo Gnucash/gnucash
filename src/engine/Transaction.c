@@ -2000,6 +2000,14 @@ xaccSplitGetDateReconciledTS (Split * split, Timespec *ts)
    *ts = (split->date_reconciled);
 }
 
+Timespec
+xaccSplitRetDateReconciledTS (Split * split)
+{
+   Timespec ts; ts.tv_sec=0; ts.tv_nsec=0;
+   if (!split) return ts;
+   return (split->date_reconciled);
+}
+
 /********************************************************************\
 \********************************************************************/
 

@@ -337,6 +337,7 @@ void          xaccSplitSetReconcile (Split *split, char reconciled_flag);
 void          xaccSplitSetDateReconciledSecs (Split *split, time_t time);
 void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
 void          xaccSplitGetDateReconciledTS (Split *split, Timespec *ts);
+Timespec      xaccSplitRetDateReconciledTS (Split *split);
 
 /* 
  * The following four functions set the prices and amounts.
