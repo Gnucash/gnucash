@@ -9,15 +9,17 @@
 #  include <time.h>
 #endif
 
-#include <glib.h>
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include <tree.h>
-#include <parser.h>
-#include <xmlmemory.h>
-#include <parserInternals.h>
+#include <glib.h>
+
+#include <gnome-xml/tree.h>
+#include <gnome-xml/parser.h>
+#include <gnome-xml/xmlmemory.h>
+#include <gnome-xml/parserInternals.h>
 
 #include "Account.h"
 #include "date.h"
@@ -36,7 +38,10 @@
 
 /* Hack to get going... */
 #include "FileIOP.h"
+
+#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
 #include <guile/gh.h>
+#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
 
 
 /* TODO
@@ -880,35 +885,60 @@ concatenate_child_result_chars(GSList *data_from_children) {
 /*********/
 /* double
    
+   RLB writes:
    We have to use guile because AFAICT, libc, and C in general isn't
    smart enough to actually parse it's own output, especially not
    portably (big surprise).
 
+   Linas writes:
+   I don't understand the claim; I'm just going to use 
+   atof or strtod to accomplish this.
+
  */
 
 static gboolean
-string_to_double(const char *str, double *result) {
-  /* FIXME: NOT THREAD SAFE - USES STATIC DATA */
-  static SCM string_to_number;
-  static gboolean ready = FALSE;
-
-  SCM conversion_result;
-  
+string_to_double(const char *str, double *result) 
+{
   g_return_val_if_fail(str, FALSE);
   g_return_val_if_fail(result, FALSE);
 
-  if(!ready) {
-    string_to_number = gh_eval_str("string->number");
-    scm_protect_object(string_to_number);
-    ready = TRUE;
-  }
+#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
+  {
+    /* FIXME: NOT THREAD SAFE - USES STATIC DATA */
+    static SCM string_to_number;
+    static gboolean ready = FALSE;
   
-  conversion_result = gh_call1(string_to_number, gh_str02scm(str));
-  if(!conversion_result == SCM_BOOL_F) {
-    return(FALSE);
-  }
+    SCM conversion_result;
+  
+    if(!ready) {
+      string_to_number = gh_eval_str("string->number");
+      scm_protect_object(string_to_number);
+      ready = TRUE;
+    }
+    
+    conversion_result = gh_call1(string_to_number, gh_str02scm(str));
+    if(!conversion_result == SCM_BOOL_F) {
+      return(FALSE);
+    }
+  
+    *result = gh_scm2double(conversion_result);
+  } 
+  
+#else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
+  {
+    char *endptr = 0x0;
+  
+    /* We're just going to use plain-old libc for the double conversion.
+     * There was some question as to whether libc is accurate enough
+     * in its printf function for doubles, but I don't understand
+     * how it couldn't be ...
+     */
+    
+    *result = strtod (str, &endptr);
+    if (endptr == str) return (FALSE);
+  } 
+#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
 
-  *result = gh_scm2double(conversion_result);
   return(TRUE);
 }
 

@@ -6,12 +6,13 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include <tree.h>
-#include <parser.h>
-#include <xmlmemory.h>
-#include <parserInternals.h>
+#include <gnome-xml/tree.h>
+#include <gnome-xml/parser.h>
+#include <gnome-xml/xmlmemory.h>
+#include <gnome-xml/parserInternals.h>
 
 #include "Account.h"
 #include "date.h"
@@ -30,7 +31,11 @@
 
 /* Hack to get going... */
 #include "FileIOP.h"
+
+
+#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
 #include <guile/gh.h>
+#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
 
 
 /* Pulled from the libxml-1.8.8 header */
@@ -84,14 +89,32 @@ xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
   return(TRUE);
 }
 
-static gboolean
-xml_add_double(xmlNodePtr p, const char *tag, const double value) {
-  /* FIXME: NOT THREAD SAFE - USES STATIC DATA */
 
+/*********/
+/* double
+   
+   RLB writes:
+   We have to use guile because AFAICT, libc, and C in general isn't
+   smart enough to actually parse it's own output, especially not
+   portably (big surprise).
+
+   Linas writes:
+   I don't understand the claim; I'm just going to use 
+   atof or strtod to accomplish this.
+
+ */
+
+
+static gboolean
+xml_add_double(xmlNodePtr p, const char *tag, const double value) 
+{
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(tag, FALSE);
 
+
+#ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
   {
+    /* FIXME: NOT THREAD SAFE - USES STATIC DATA */
     static SCM number_to_string;
     static gboolean ready = FALSE;
     const char *numstr;
@@ -114,7 +137,27 @@ xml_add_double(xmlNodePtr p, const char *tag, const double value) {
     }
   }
 
-    return(TRUE);
+#else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
+  {
+    int len;
+    char prtbuf[80];
+    xmlNodePtr child;
+  
+    /* we're just going to use plain-old libc for the double conversion.
+     * There was some question as to whether libc is accurate enough
+     * in its printf function for doubles, but I don't understand
+     * how it couldn't be ...
+     */
+    len = snprintf (prtbuf, 80, "%24.18g", value);
+    if (80 <=len) return (FALSE);
+    
+    child = xmlNewTextChild(p, NULL, tag, prtbuf);
+    g_return_val_if_fail(child, FALSE);
+  }
+
+#endif /* USE_GUILE_FOR_DOUBLE_CONVERSION */
+  
+  return(TRUE);
 }
 
 static gboolean
