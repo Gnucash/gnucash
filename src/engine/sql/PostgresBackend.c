@@ -322,15 +322,27 @@ static int ncalls = 0;
 static void 
 pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
 {
+   int call_count = ncalls;
+   int nact=0;
+   int total_txn=0, avoided_txn=0, fetched_txn=0;
    GList *node, *anode, *xaction_list= NULL, *acct_list = NULL;
 
    ENTER (" ");
    if (!be) return;
+
+   if (0 == ncalls) {
+      START_CLOCK (9, "starting at level 0");
+   } 
+   else 
+   {
+      REPORT_CLOCK (9, "call count %d", call_count);
+   }
    ncalls ++;
 
    SEND_QUERY (be, query_string, );
    xaction_list = pgendGetResults (be, query_cb, xaction_list);
    if (NULL == xaction_list) return;
+   REPORT_CLOCK (9, "fetched results at call %d", call_count);
 
    /* restore the transactions */
    for (node=xaction_list; node; node=node->next)
@@ -338,6 +350,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       Transaction *trans;
       int engine_data_is_newer;
       GUID *trans_guid = (GUID *)node->data;
+      total_txn ++;
 
       /* use markers to avoid redundant traversals of transactions we've
        * already checked recently. */
@@ -351,6 +364,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       }
       else
       {
+         avoided_txn ++;
          PINFO ("avoided scan");
          engine_data_is_newer = 1;
       }
@@ -362,6 +376,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       {
          GList *split_list, *snode;
          Timespec ts;
+         fetched_txn ++;
 
          ts = xaccTransRetDatePostedTS (trans);
 
@@ -405,6 +420,9 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
    }
    g_list_free(xaction_list);
 
+   PINFO ("Clocked total txn=%d avoided=%d fetched=%d", 
+           total_txn, avoided_txn, fetched_txn);
+   REPORT_CLOCK (9, "done gathering at call %d", call_count);
    if (NULL == acct_list) return;
 
    /* OK, at this point, we have a list of accounts, including the 
@@ -412,6 +430,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
     * do two queries: first, get the running balances to that point,
     * and then all of the splits from that date onwards.
     */
+   nact = 0;
    for (anode = acct_list; anode; anode = anode->next)
    {
       char *p;
@@ -430,11 +449,13 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       p = stpcpy (p, "';");
      
       pgendFillOutToCheckpoint (be, be->buff);
-
+      
       g_free (ae);
+      nact ++;
    }
    g_list_free(acct_list);
 
+   REPORT_CLOCK (9, "done w/ fillout at call %d, handled %d accounts", call_count, nact);
    LEAVE (" ");
 }
 
