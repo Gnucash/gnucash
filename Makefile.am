@@ -64,7 +64,7 @@ TAGS.stamp: etags.files $(shell cat etags.files)
 	touch TAGS.stamp
 
 TAGS:
-	find . -name '*.[ch]' -o -name '*.scm' | sort > etags.files.tmp
+	find . -path './debian' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
 	@if cmp --quiet etags.files etags.files.tmp; \
         then \
           echo "TAGS file list hasn't changed."; \
