@@ -11,6 +11,24 @@
 	* src/report/standard-reports/balance-sheet.scm: Use the report
 	name from the options instead of a hard coded report title.
 	
+2002-09-26  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/gnc-ofx-import.c: The default commodity and
+	account type are now preselected from OFX provided information 
+	when user choses to creates a new gnucash account in the account 
+	matcher dialog.  Fix a segfault when clicking cancel in the file
+	selection dialog.
+
+	* src/import-export/Account-matcher.c, gnc-generic-import.h:
+	-Fix the new_account_default_type parameter of
+	gnc_import_select_account() not selecting default type properly.
+	-Add auto_create parameter to gnc_import_select_account().  
+	If this parameter is 0 and the function is called, it will silently
+	return NULL if no matching account is found, instead of asking the
+	user to select or create an account.
+	-Clicking cancel will now cancel the import for the whole account
+	instead of having to click cancel for each transaction.
+
 2002-09-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-gui-query.c: Add routines to put up the
@@ -37,6 +55,33 @@
 	transaction-invocation and gnucash xfer dialog.
 
 	* src/gnome/dialog-transfer.[hc]: Add set_memo access function.
+
+2002-09-23  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/Transaction-matcher.c, generic-import.glade:
+	-Transactions just downloaded are now ignored from the matchlist.
+	-Reimplement transaction duplicate detection using unique-ID.
+	Transactions with a negative confidence are those that would normally
+	be completely ignored (will be a user preference).
+	-Added a split's memo column to downloaded list and match list
+	(will be possible to turn it off in user prefs)
+	-Fix segfault when togling buttons without a transaction selected.
+	-Fix action buttons refresh bugs.
+	-Grayout inapropriate selections for action list and change the look
+	of the buttons.
+	-The REPLACE action really works this time.
+
+	* src/import-export/generic-import.glade: Change the title of the
+	transaction matcher and change the look and alignment of
+	the action buttons.
+
+2002-09-22  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/gnc-generic-import.c: Remove obsolete file now
+	split into Account.c Transaction.c and Utilities.c
+
+	* src/import-export/generic-import.glade: Change label of "Online ID"
+	column to "Account ID" in the account matcher for consistency
 
 2002-09-19  Christian Stimming  <stimming@tuhh.de>
 
