@@ -218,8 +218,10 @@ static void actFinished (void *user_data)
   data->current_act++;
   gtk_entry_set_text (GTK_ENTRY (data->action_entry), _("Done"));
   gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
-			       (float) data->current_act / 
-			       (float) data->actions);
+			       (data->current_act < data->actions) ?
+			       ((float) data->current_act / 
+				(float) data->actions) : 
+			       1.0);
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
 }

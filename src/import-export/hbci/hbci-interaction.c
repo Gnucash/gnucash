@@ -43,6 +43,7 @@ void gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
   
   data = g_new0 (Inter_data, 1);
   data->parent = parent;
+  data->keepAlive = TRUE;
     
   // set HBCI_Interactor
   HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
