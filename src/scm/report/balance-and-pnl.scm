@@ -1,5 +1,7 @@
 ;; -*-scheme-*-
 
+(gnc:support "report/balance-and-pnl.scm")
+
 (gnc:depend "text-export.scm")
 
 (let ()

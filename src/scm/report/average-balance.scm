@@ -7,13 +7,15 @@
 ;;  these calculations and accepts no responsibility for direct
 ;;  or indirect losses incurred as a result of using this software.
 ;;
-;; Note that this code uses functions defined in "transaction-report.scm"
 ;; Matt Martin <matt.martin@ieee.org>
+
+(gnc:support "report/average-balance.scm")
 
 (use-modules (ice-9 regex))
 (require 'hash-table)
 
 (gnc:depend "structure.scm")
+(gnc:depend "report/transaction-report.scm")
 
 ;; Modify a date
 (define (moddate op adate delta)

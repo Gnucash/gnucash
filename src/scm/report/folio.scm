@@ -1,4 +1,6 @@
 
+(gnc:support "report/folio.scm")
+
 ;; I haven't finished converting this yet...
 
 ;(gnc:define-report

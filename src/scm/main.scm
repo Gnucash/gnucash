@@ -17,27 +17,7 @@
   (gnc:depend "text-export.scm")
   (gnc:depend "importqif.scm")
   (gnc:depend "report.scm")
-
-  ;; FIXME: These do not belong here, but for now, we're putting them
-  ;; here.  Later we need a generalization of gnc:load that takes a
-  ;; path specifier, and then we should have a gnc:*report-path* that
-  ;; determines where we look to load report files.  For now, though,
-  ;; I just want to get things going...
-  ;;
-  ;; Just load these since we might want to redefine them on the fly
-  ;; and we're going to change this mechanism anyway...
-  (let 
-      ((repdir 
-	(opendir (string-append gnc:_share-dir-default_ "/scm/report"))))
-    (while (let ((cf (readdir repdir)))
-	     (if (string? cf)
-		 (if (and 
-		      (not (directory? cf))
-		      (> (string-length cf) 4))
-		     (if (string=? (substring cf (- (string-length cf) 4) 
-					      (string-length cf)) ".scm")
-			 (gnc:load (string-append "report/" cf)))))
-             (string? cf)) ()))
+  (gnc:depend "report/report-list.scm")
 
   ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))

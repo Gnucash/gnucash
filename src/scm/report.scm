@@ -48,27 +48,29 @@
 
   (define menu (gnc:make-menu "_Reports" (list "_Settings")))
   (define menu-namer (gnc:new-menu-namer))
-
-  (gnc:add-extension menu)
-
-  (hash-for-each
-   (lambda (name report)
-     (if (gnc:debugging?)
-         (let ((options (false-if-exception (gnc:report-new-options report))))
-           (if options
-               (gnc:options-register-translatable-strings options))))
-     (define item
-       (gnc:make-menu-item
-        ((menu-namer 'add-name) name)
-        (string-append "Display the " name " report.")
-        (list "_Reports" "")
-        (lambda ()
+  (define (add-report-menu-item name report)
+    (let ((item #f))
+      (if (gnc:debugging?)
           (let ((options (false-if-exception (gnc:report-new-options report))))
-            (gnc:report-window (string-append "Report: " name)
-                               (lambda () (gnc:run-report name options))
-                               options)))))
-     (gnc:add-extension item))
-   *gnc:_report-info_*))
+            (if options
+                (gnc:options-register-translatable-strings options))))
+      
+      (set! item
+            (gnc:make-menu-item
+             ((menu-namer 'add-name) name)
+             (string-append "Display the " name " report.")
+             (list "_Reports" "")
+             (lambda ()
+               (let ((options (false-if-exception
+                               (gnc:report-new-options report))))
+                 (gnc:report-window (string-append "Report: " name)
+                                    (lambda () (gnc:run-report name options))
+                                    options)))))
+      (gnc:add-extension item)))
+  
+  (gnc:add-extension menu)
+  
+  (hash-for-each add-report-menu-item *gnc:_report-info_*))
 
 (define (gnc:define-report version name option-generator rendering-thunk)
   ;; For now the version is ignored, but in the future it'll let us

@@ -4,6 +4,8 @@
 ;; It illustrates the basic techniques used to create
 ;; new reports for GnuCash.
 
+(gnc:support "report/hello-world.scm")
+
 ;; Putting your functions in a (let ()) block hides them
 ;; from the rest of guile.
 (let ()

@@ -1,3 +1,38 @@
+2000-03-05  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/report/transaction-report.scm: add support for depend
+	mechanism.
+
+	* src/scm/report/hello-world.scm: add support for depend
+	mechanism.
+
+	* src/scm/report/folio.scm: add support for depend mechanism.
+
+	* src/scm/report/balance-and-pnl.scm: add support for depend
+	mechanism.
+
+	* src/scm/report/average-balance.scm: add support for depend
+	mechanism.
+
+	* src/scm/report.scm (gnc:report-menu-setup): fixed minor
+	non-r5rsism (defines must be at the beginning of a <body>).
+
+	* src/scm/report/report-list.scm: new file.  This is where all of
+	the reports that should be loaded at startup should be listed.
+
+	* src/scm/main.scm (gnc:startup): don't autoscan/load from the
+	report dir anymore.  Use the depend mechanism instead.  This isn't
+	as convenient, but it's safer.
+
+	* src/scm/hooks.scm (gnc:hook-run-danglers): added a little
+	debugging code.
+
+	* src/scm/extensions.scm (gnc:extensions-menu-setup): fixed minor
+	non-r5rsism (nested defines must be at the beginning of a <body>).
+
+	* make-gnucash-patch: allow the user to override the default
+	locations with environment variables.
+
 2000-03-04  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/guile/gnucash.c (main): load the locale from the environment

@@ -3,6 +3,8 @@
 ;; Report on all transactions in an account
 ;; Robert Merkel (rgmerk@mira.net)
 
+(gnc:support "report/transaction-report.scm")
+
 (require 'sort)
 
 ;hack alert - is this line necessary?

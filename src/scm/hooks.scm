@@ -31,7 +31,11 @@
 
 (define (gnc:hook-run-danglers hook . args)
   (gnc:debug "Running functions on hook " (gnc:hook-name-get hook))
-  (for-each (lambda (dangler) (apply dangler args))
+  (for-each (lambda (dangler)
+              (if (gnc:debugging?)
+                  (begin
+                    (display "  ") (display dangler) (newline)))
+              (apply dangler args))
             (gnc:hook-danglers-get hook)))
 
 ;;; Public

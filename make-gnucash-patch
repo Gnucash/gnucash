@@ -24,10 +24,23 @@ my $new = 'gnucash';
 # The directory where the above two directories reside
 my $gnc_home = '/usr/src/misc/gnc';
 
-
 ###########################################################
 # This section should not need to be modified.            #
 ###########################################################
+
+# Allow the user to override the defaults with evnt vars.
+
+if($ENV{'GNC_MAKEPATCH_OLD_DIR'}) {
+  $old = $ENV{'GNC_MAKEPATCH_OLD_DIR'};
+}
+
+if($ENV{'GNC_MAKEPATCH_NEW_DIR'}) {
+  $new = $ENV{'GNC_MAKEPATCH_NEW_DIR'};
+}
+
+if($ENV{'GNC_MAKEPATCH_HOME_DIR'}) {
+  $gnc_home = $ENV{'GNC_MAKEPATCH_HOME_DIR'};
+}
 
 # Switch to the home directory
 chdir $gnc_home or die "Can't cd!\n";
