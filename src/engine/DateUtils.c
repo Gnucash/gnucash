@@ -33,6 +33,11 @@
 
 #define BUFFSIZE 100
 
+
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 /* ======================================================== */
 char *
 xaccDateUtilGetStamp (time_t thyme)

@@ -86,7 +86,6 @@
   
 (define gnc:*arg-defs*
   (list
-   
    (list "version"
          'boolean
          (lambda (val)
@@ -188,25 +187,19 @@
          "FILE"
          (N_ "Load the given .scm file"))
 
-;    (cons "add-price-quotes"
-;          (cons 'string
-;                (lambda (val)
-;                  (set! gnc:*batch-mode-things-to-do*
-;                        (cons
-; 			(lambda ()
-; 			  (display (get-1-quote "NASDAQ" val)))
-; 			gnc:*batch-mode-things-to-do*)))))
-
-;   (cons "add-price-quotes"
-;         (cons 'string
-;               (lambda (val)
-;                 (set! gnc:*batch-mode-things-to-do*
-;                       (cons
-;			(lambda ()
-;			  (with-
-;			  (gnc:book-add-quotes
-;
-;			gnc:*batch-mode-things-to-do*)))))
+   (list "add-price-quotes"
+         'string
+         (lambda (val)
+           (set! gnc:*batch-mode-things-to-do*
+                 (cons
+                  (lambda ()
+                    (if (not (gnc:add-quotes-to-book-at-url val))
+                        (begin
+                          (gnc:error "Failed to add quotes to " val)
+                          (gnc:shutdown 1))))
+                  gnc:*batch-mode-things-to-do*)))
+         "FILE"
+         (N_ "Add price quotes to given FILE."))
 
    (list "load-user-config"
          'boolean

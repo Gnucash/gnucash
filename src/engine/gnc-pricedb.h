@@ -77,16 +77,15 @@ typedef struct _GNCPrice GNCPrice;
 
 /* allocation */
 GNCPrice *gnc_price_create(void);     /* create and initialize a price */
-#if 0
 GNCPrice *gnc_price_clone(GNCPrice* p);
-#endif
+
 void      gnc_price_ref(GNCPrice *p);
 void      gnc_price_unref(GNCPrice *p);
 
 /* setters */
 void gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_currency(GNCPrice *p, gnc_commodity *c);
-void gnc_price_set_time(GNCPrice *p, Timespec *t);
+void gnc_price_set_time(GNCPrice *p, Timespec t);
 void gnc_price_set_source(GNCPrice *p, const char *source);
 void gnc_price_set_type(GNCPrice *p, const char* type);
 void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
@@ -94,7 +93,7 @@ void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 /* getters */
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
-Timespec *      gnc_price_get_time(GNCPrice *p);
+Timespec        gnc_price_get_time(GNCPrice *p);
 const char *    gnc_price_get_source(GNCPrice *p);
 const char *    gnc_price_get_type(GNCPrice *p);
 gnc_numeric     gnc_price_get_value(GNCPrice *p);
@@ -147,7 +146,7 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
 GList      * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                         gnc_commodity *commodity,
                                         gnc_commodity *currency,
-                                        Timespec *t);
+                                        Timespec t);
 
 /* Call f once for each price in db, until and unless f returns FALSE.
    If stable_order is not FALSE, make sure the ordering of the

@@ -401,7 +401,6 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
 
     return TRUE;
   }
-
   new_comm = g_hash_table_lookup(cd->new_map, dpage->old_name);
   assert(new_comm);
     

@@ -86,7 +86,6 @@ gnc_price_unref(GNCPrice *p)
   }
 }
 
-#if 0
 GNCPrice *
 gnc_price_clone(GNCPrice* p)
 {
@@ -104,7 +103,6 @@ gnc_price_clone(GNCPrice* p)
   gnc_price_set_currency(new_p, gnc_price_get_currency(p));
   return(new_p);
 }
-#endif
 
 /* setters */
 void
@@ -128,11 +126,11 @@ gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)
 }
 
 void
-gnc_price_set_time(GNCPrice *p, Timespec *t)
+gnc_price_set_time(GNCPrice *p, Timespec t)
 {
   if(!p) return;
-  if(!timespec_equal(&(p->time), t)) {
-    p->time = *t;
+  if(!timespec_equal(&(p->time), &t)) {
+    p->time = t;
     if(p->db) p->db->dirty = TRUE;
   }
 }
@@ -183,11 +181,16 @@ gnc_price_get_commodity(GNCPrice *p)
   return p->commodity;
 }
 
-Timespec *
+Timespec
 gnc_price_get_time(GNCPrice *p)
 {
-  if(!p) return NULL;
-  return &(p->time);
+  if(!p) {
+    Timespec result;
+    result.tv_sec = 0;
+    result.tv_nsec = 0;
+    return result;
+  }
+  return p->time;
 }
 
 const char *
@@ -226,15 +229,15 @@ gnc_price_get_currency(GNCPrice *p)
 static gint
 compare_prices_by_date(gconstpointer a, gconstpointer b)
 {
-  Timespec *time_a;
-  Timespec *time_b;
+  Timespec time_a;
+  Timespec time_b;
   if(!a && !b) return 0;
   /* nothing is always less than something */
   if(!a) return -1;
   
   time_a = gnc_price_get_time((GNCPrice *) a);
   time_b = gnc_price_get_time((GNCPrice *) b);
-  return timespec_cmp(time_a, time_b);
+  return timespec_cmp(&time_a, &time_b);
 }
 
 gboolean
@@ -447,14 +450,14 @@ GList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                            gnc_commodity *c,
                            gnc_commodity *currency,
-                           Timespec *t)
+                           Timespec t)
 {
   GList *price_list;
   GList *result = NULL;
   GList *item = NULL;
   GHashTable *currency_hash;
 
-  if(!db || !c || !currency || !t) return NULL;
+  if(!db || !c || !currency) return NULL;
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
   if(!currency_hash) return NULL;
@@ -465,8 +468,8 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   item = price_list;
   while(item) {
     GNCPrice *p = item->data;
-    Timespec *price_time = gnc_price_get_time(p);
-    if(timespec_equal(price_time, t)) {
+    Timespec price_time = gnc_price_get_time(p);
+    if(timespec_equal(&price_time, &t)) {
       result = g_list_prepend(result, p);
       gnc_price_ref(p);
     }
@@ -687,11 +690,12 @@ gnc_pricedb_substitute_commodity(GNCPriceDB *db,
 
 /* Semi-lame debugging code */
 
-void
-gnc_price_print(GNCPrice *p, FILE *f)
+static void
+gnc_price_print(GNCPrice *p, FILE *f, int indent)
 {
   gnc_commodity *commodity;
   gnc_commodity *currency;
+  gchar *istr = NULL;           /* indent string */
   if(!p) return;
   if(!f) return;
 
@@ -700,24 +704,34 @@ gnc_price_print(GNCPrice *p, FILE *f)
   
   if(!commodity) return;
   if(!currency) return;
-  
-  fprintf(f, "  <pdb:price>\n");
-  fprintf(f, "    <pdb:commodity pointer=%p>\n", commodity);
-  fprintf(f, "      <cmdty:ref-space> %s</gnc:cmdty:ref-space>\n",
+
+  istr = g_strnfill(indent, ' ');
+
+  fprintf(f, "%s<pdb:price>\n", istr);
+  fprintf(f, "%s  <pdb:commodity pointer=%p>\n", istr, commodity);
+  fprintf(f, "%s    <cmdty:ref-space> %s</gnc:cmdty:ref-space>\n", istr,
           gnc_commodity_get_namespace(commodity));
-  fprintf(f, "      <cmdty:ref-id>%s</cmdty:ref-id>\n",
+  fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr,
           gnc_commodity_get_mnemonic(commodity));
-  fprintf(f, "    </pdb:commodity>\n");
-  fprintf(f, "    <pdb:currency pointer=%p>\n", currency);
-  fprintf(f, "      <cmdty:ref-space>%s</gnc:cmdty:ref-space>\n",
+  fprintf(f, "%s  </pdb:commodity>\n", istr);
+  fprintf(f, "%s  <pdb:currency pointer=%p>\n", istr, currency);
+  fprintf(f, "%s    <cmdty:ref-space>%s</gnc:cmdty:ref-space>\n", istr,
           gnc_commodity_get_namespace(currency));
-  fprintf(f, "      <cmdty:ref-id>%s</cmdty:ref-id>\n",
+  fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr,
           gnc_commodity_get_mnemonic(currency));
-  fprintf(f, "    </pdb:currency>\n");
-  fprintf(f, "    %s\n", gnc_price_get_source(p));
-  fprintf(f, "    %s\n", gnc_price_get_type(p));
-  fprintf(f, "    %g\n", gnc_numeric_to_double(gnc_price_get_value(p)));
-  fprintf(f, "  </pdb:price>\n");
+  fprintf(f, "%s  </pdb:currency>\n", istr);
+  fprintf(f, "%s  %s\n", istr, gnc_price_get_source(p));
+  fprintf(f, "%s  %s\n", istr, gnc_price_get_type(p));
+  fprintf(f, "%s  %g\n", istr, gnc_numeric_to_double(gnc_price_get_value(p)));
+  fprintf(f, "%s</pdb:price>\n", istr);
+
+  g_free(istr);
+}
+
+void
+gnc_price_print_stdout(GNCPrice *p, int indent)
+{
+  gnc_price_print(p, stdout, indent);
 }
 
 static gboolean

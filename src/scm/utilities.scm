@@ -28,6 +28,34 @@
           bin))
        (vector->list table))))
 
+(define (item-list->hash! lst hash
+			  getkey getval
+			  hashref hashset 
+			  list-duplicates?)
+  ;; Takes a list of the form (item item item item) and returns a hash
+  ;; formed by traversing the list, and getting the key and val from
+  ;; each item using the supplied get-key and get-val functions, and
+  ;; building a hash table from the result using the given hashref and
+  ;; hashset functions.  list-duplicates? determines whether or not in
+  ;; the resulting hash, the value for a given key is a list of all
+  ;; the values associated with that key in the input or just the
+  ;; first one encountered.
+
+  (define (handle-item item)
+    (let* ((key (getkey item))
+	   (val (getval item))
+	   (existing-val (hashref hash key)))
+
+      (if (not list-duplicates?)
+	  ;; ignore if not first value.
+	  (if (not existing-val) (hashset hash key val))
+	  ;; else result is list.
+	  (if existing-val
+	      (hashset hash key (cons val existing-val))
+	      (hashset hash key (list val))))))
+	      
+  (for-each handle-item lst)
+  hash)
 
 (define (directory? path)
   ;; This follows symlinks normally.
@@ -79,44 +107,42 @@ string and 'directories' must be a list of strings."
             (set! result file-name))))))
 
 (define (filteroutnulls lst)
-  (cond
-   ((null? lst) '())
-   ((eq? (car lst) #f) (filteroutnulls (cdr lst)))
-   (else
-    (cons (car lst) (filteroutnulls (cdr lst))))))
+  (filter values lst))
 
-(define (atom? x)
-  (and
-   (not (pair? x))
-   (not (null? x))))
-
-(define (flatten lst)
-  (cond
-   ((null? lst) '())
-   ((atom? lst) (list lst))
-   ((list? lst) 
-    (append (flatten (car lst)) 
-	    (flatten (cdr lst))))
-   (else lst)))
+(define (flatten tree)
+  ;; This is ugly, but efficient -- leaves nothing pending on the
+  ;; stack, and doesn't build intermediate results that it throws
+  ;; away.
+  (define result '())
+  (define (flatten-sub-tree tree)
+    (cond
+     ((null? tree) #t)
+     ((list? tree)
+      (flatten-sub-tree (car tree))
+      (flatten-sub-tree (cdr tree)))
+     (else
+      (set! result (cons tree result)))))
+  (flatten-sub-tree tree)
+  (reverse! result))
 
 (define (striptrailingwhitespace line)
-  (let
-      ((stringsize (string-length line)))
-    (if
-     (< stringsize 1)
-     ""
-     (let ((lastchar (string-ref line (- stringsize 1))))
-       (if
-	(char-whitespace? lastchar)
-	(striptrailingwhitespace (substring line 0  (- stringsize 1)))
-	line)))))
+  (substring line 0 (let loop ((pos (- (string-length line) 1)))
+                      (if (negative? pos)
+                          0
+                          (let ((candidate (string-ref line pos)))
+                            (if (char-whitespace? candidate)
+                                (loop (- pos 1))
+                                (+ pos 1)))))))
 
 (define (string-join lst joinstr)
-  (let ((len (length lst)))
-    (cond 
-     ((< 1 len)
-      (string-append (car lst) joinstr (string-join (cdr lst) joinstr)))
-     ((= 1 len)
-      (car lst))
-     (else
-      ""))))
+  ;; This should avoid a bunch of unnecessary intermediate string-appends.
+  ;; I'm presuming those are more expensive than cons...
+  (if (or (not (list? lst)) (null? lst))
+      ""
+      (apply string-append
+             (car lst)
+             (let loop ((remaining-elements (cdr lst)))
+               (if (null? remaining-elements)
+                   '()
+                   (cons joinstr (cons (car remaining-elements)
+                                       (loop (cdr remaining-elements)))))))))

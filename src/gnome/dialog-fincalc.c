@@ -678,7 +678,6 @@ gnc_ui_fincalc_dialog_create(void)
   button = lookup_widget (fcd->dialog, "close_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(close_button_clicked), fcd);
-
   fcd->payment_total_label = lookup_widget (fcd->dialog,
                                             "payment_total_label");
 

@@ -1,3 +1,99 @@
+2001-03-16  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/utilities.scm
+	(item-list->hash!): new - fancy (possibly over-customizable)
+	list->hash converter function.
+	(filteroutnulls): simplify via SRFI-1.
+	(flatten): speedup - avoid intermediate appends.
+	(striptrailingwhitespace): speedup - avoid intermediate substrings.
+	(string-join): speedup - (maybe), trade string-appends for conses.
+
+	* src/scm/process.scm
+	(gnc:run-sub-process): renamed from run-sub-process.
+	(gnc:cleanup-sub-process): new - take various steps to make sure
+	we don't leave a zombie lying around.
+
+	* src/scm/price-quotes.scm: substantial rework - now much smarter,
+	though still a bit too obfuscated.
+
+	* src/scm/engine-utilities.scm: various cleanups, speedups, and
+	new functions.
+	(gnc:filename->book): deleted.
+	(gnc:call-with-account-data-from-file): deleted.
+	(gnc:url->loaded-book): new function.
+
+	* src/scm/command-line.scm (gnc:*arg-defs*): add
+	--add-price-quotes option.
+
+	* src/quotes/finance-quote-helper.in: new file - renamed from
+	price-quote-helper.in.
+
+	* src/quotes/README: various updates.
+
+	* src/quotes/Quote_example.pl: document that we *don't* use the
+	"fetch" method in gnucash.
+
+	* src/quotes/gnc-prices: new file -- replaces gnc-prices.in and is
+	now just a wrapper for "gnucash --add-price-quotes".
+
+	* src/quotes/Makefile.am: accomodated renaming of
+	price-quote-helper to finance-quote-helper.  Also moved
+	finance-quote-helper to GNC_SHAREDIR from pkgdatadir.
+	(gncsharedir): grab GNC_SHAREDIR.
+	(gncshare_SCRIPTS): put finance-quote-helper in GNC_SHAREDIR.
+
+	* src/guile/gnc.gwp: wraped new quote timezone API.  Added new
+	gnc-book wrappers and new pricedb wrappers -- still not finished.
+
+	* src/gnome/gnc-dialogs.glade: add quote timezone menu.
+
+	* src/gnome/dialog-utils.h: added prototypes for timezone menu
+	funcs.
+
+	* src/gnome/dialog-utils.c: 
+	(known_timezones): new - list of quote timezones we support.
+	(gnc_find_timezone_menu_position): new.
+	(gnc_timezone_menu_position_to_string): new.
+	(gnc_ui_quote_tz_menu_create): new.
+
+	* src/gnome/dialog-account.c
+	(struct _AccountWindow): add quote_tz_menu.
+	(gnc_account_to_ui): support quote_tz_menu.
+	(gnc_ui_to_account): support quote_tz_menu.
+	(gnc_account_window_create): create quote_tz_menu.
+
+	* src/gnc-ui-util.h: warn to update price-quotes.scm when
+	PriceSourceCode changes.
+
+	* src/engine/io-gncbin-r.c
+	(cvt_potential_prices_to_pricedb_and_cleanup): Timespec* ->
+	Timespec for price time function(s).
+
+	* src/engine/gnc-pricedb.h: Timespec* -> Timespec for time
+	functions.
+
+	* src/engine/gnc-pricedb.c
+	(gnc_price_clone): re-enable, and Timespec* -> Timespec
+	(gnc_price_set_time): Timespec* -> Timespec
+	(gnc_price_get_time): Timespec* -> Timespec
+	(compare_prices_by_date): Timespec* -> Timespec
+	(gnc_pricedb_lookup_at_time): Timespec* -> Timespec
+	(gnc_price_print): minor fixes (still lame).
+	(gnc_price_print_stdout): new (for lame guile side debugging).
+
+	* src/engine/gnc-pricedb-xml-v1.c: change price time args/results
+	from Timespec* to Timespec (to be more guile friendly).
+
+	* src/engine/gnc-book.c (gnc_book_init): be more thorough.
+
+	* src/engine/Backend.h: warn to update gnc.gwp on some mods.
+
+	* src/engine/Account.h: support new funcs and update docs.
+
+	* src/engine/Account.c
+	(xaccAccountSetQuoteTZ): new.
+	(xaccAccountGetQuoteTZ): new.
+
 2001-03-16  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/transaction-report.scm: add line before

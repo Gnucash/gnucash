@@ -100,7 +100,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node)
   } else if(safe_strcmp("price:time", sub_node->name) == 0) {
     Timespec *t = dom_tree_to_timespec(sub_node);
     if(!t) return FALSE;
-    gnc_price_set_time(p, t);
+    gnc_price_set_time(p, *t);
     g_free(t);
   } else if(safe_strcmp("price:source", sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
@@ -344,7 +344,7 @@ gnc_price_to_dom_tree(const char *tag, GNCPrice *price)
   xmlNodePtr tmpnode;
   gnc_commodity *commodity;
   gnc_commodity *currency;
-  Timespec *timesp;
+  Timespec timesp;
   gnc_numeric value;
 
   if (!(tag && price)) return NULL;
@@ -364,7 +364,7 @@ gnc_price_to_dom_tree(const char *tag, GNCPrice *price)
   if(!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;
 
   timesp = gnc_price_get_time(price);
-  tmpnode = timespec_to_dom_tree("price:time", timesp);
+  tmpnode = timespec_to_dom_tree("price:time", &timesp);
   if(!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;
 
   sourcestr = gnc_price_get_source(price);

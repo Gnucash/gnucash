@@ -2,16 +2,7 @@
 
 
 void
-gnc_ui_account_picker_select_cb        (GtkTree         *tree,
-                                        GtkWidget       *widget,
-                                        gpointer         user_data);
-
-void
-gnc_ui_account_picker_ok_cb            (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_account_picker_cancel_cb        (GtkButton       *button,
+gnc_ui_qif_account_picker_new_cb       (GtkButton       *button,
                                         gpointer         user_data);
 
 void
@@ -99,7 +90,17 @@ gnc_ui_qif_import_cancel_cb            (GnomeDruid      *gnomedruid,
                                         gpointer         user_data);
 
 gboolean
+gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
 gnc_ui_qif_import_load_file_next_cb    (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_back_cb      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
@@ -163,14 +164,26 @@ gnc_ui_qif_import_categories_prepare_cb
                                         gpointer         arg1,
                                         gpointer         user_data);
 
+void
+gnc_ui_qif_import_category_line_select_cb
+                                        (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
 gboolean
-gnc_ui_qif_import_categories_next_cb   (GnomeDruidPage  *gnomedruidpage,
+gnc_ui_qif_import_memo_next_cb         (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
 void
-gnc_ui_qif_import_category_line_select_cb
-                                        (GtkCList        *clist,
+gnc_ui_qif_import_memo_prepare_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_import_memo_line_select_cb  (GtkCList        *clist,
                                         gint             row,
                                         gint             column,
                                         GdkEvent        *event,
@@ -183,24 +196,6 @@ gnc_ui_qif_import_currency_next_cb     (GnomeDruidPage  *gnomedruidpage,
 
 void
 gnc_ui_qif_import_commodity_prepare_cb (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-void
-gnc_ui_qif_import_finish_cb            (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-void
-gnc_help_window_search_button_cb       (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_help_window_search_help_button_cb  (GtkButton       *button,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_convert_cb           (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
@@ -220,65 +215,15 @@ gnc_ui_qif_import_duplicate_old_select_cb
                                         GdkEvent        *event,
                                         gpointer         user_data);
 
-gboolean
-gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_generic_back_cb      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_generic_back_cb      (GnomeDruidPage  *gnomedruidpage,
+void
+gnc_ui_qif_import_finish_cb            (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
 void
-gnc_ui_qif_import_memo_line_select_cb  (GtkCList        *clist,
-                                        gint             row,
-                                        gint             column,
-                                        GdkEvent        *event,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-gboolean
-gnc_ui_qif_import_memo_next_cb         (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
+gnc_help_window_search_button_cb       (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_qif_import_memo_prepare_cb      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-void
-gnc_ui_account_picker_new_cb           (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_qif_account_picker_new_cb       (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_qif_account_picker_ok_cb        (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_qif_account_picker_cancel_cb    (GtkButton       *button,
+gnc_help_window_search_help_button_cb  (GtkButton       *button,
                                         gpointer         user_data);

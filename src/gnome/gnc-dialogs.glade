@@ -5325,31 +5325,77 @@ Daily (365)
 	</child>
 
 	<widget>
-	  <class>GtkHBox</class>
-	  <name>source_box</name>
-	  <border_width>3</border_width>
+	  <class>GtkVBox</class>
+	  <name>vbox105</name>
 	  <homogeneous>False</homogeneous>
-	  <spacing>3</spacing>
+	  <spacing>0</spacing>
 
 	  <widget>
-	    <class>GtkLabel</class>
-	    <name>label813</name>
-	    <label>The source for price quotes:</label>
-	    <justify>GTK_JUSTIFY_RIGHT</justify>
-	    <wrap>False</wrap>
-	    <xalign>1</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
+	    <class>GtkHBox</class>
+	    <name>source_box</name>
+	    <border_width>3</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>3</spacing>
 	    <child>
 	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
+	      <expand>True</expand>
+	      <fill>True</fill>
 	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label813</name>
+	      <label>The source for price quotes:</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
 	  </widget>
 
 	  <widget>
-	    <class>Placeholder</class>
+	    <class>GtkHBox</class>
+	    <name>quote_tz_box</name>
+	    <border_width>3</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>3</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label847713</name>
+	      <label>Timezone for these quotes:</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
 	  </widget>
 	</widget>
       </widget>

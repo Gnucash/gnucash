@@ -140,8 +140,13 @@ gnc_book_init (GNCBook *book)
 
   book->topgroup = xaccMallocAccountGroup();
   book->pricedb = gnc_pricedb_create();
+  book->book_id = NULL;
   gnc_book_clear_error (book);
+  book->fullpath = NULL;
+  book->lockfile = NULL;
+  book->linkfile = NULL;
   book->lockfd = -1;
+  book->backend = NULL;
 }
 
 GNCBook *
@@ -173,6 +178,8 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
    if (!book) return;
    book->topgroup = grp;
 }
+
+/* ---------------------------------------------------------------------- */
 
 static int
 counter_thunk(Transaction *t, void *data)

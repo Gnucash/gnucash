@@ -81,7 +81,11 @@ struct _AccountWindow
 
   GtkWidget * type_list;
   GtkWidget * parent_tree;
+
+  /* These probably don't belong here anymore, but until we figure out
+     what we want, we'll leave them alone. */
   GtkWidget * source_menu;
+  GtkWidget * quote_tz_menu;
 
   GtkWidget * tax_related_button;
 
@@ -171,6 +175,19 @@ gnc_account_to_ui(AccountWindow *aw)
       gtk_option_menu_set_history (GTK_OPTION_MENU (aw->source_menu),
                                    gnc_get_source_code (price_src));
   }
+  {
+    const char* quote_tz = xaccAccountGetQuoteTZ (account);
+    guint pos = 0;
+    if(quote_tz) {
+      pos = gnc_find_timezone_menu_position(quote_tz);
+      if(pos == 0) {
+        PWARN("Unknown price quote timezone (%s), resetting to default.",
+              quote_tz);
+        xaccAccountSetQuoteTZ (account, NULL);
+      }
+    }
+    gtk_option_menu_set_history (GTK_OPTION_MENU (aw->quote_tz_menu), pos);
+  }
 }
 
 
@@ -231,6 +248,12 @@ gnc_ui_to_account(AccountWindow *aw)
       old_string = xaccAccountGetPriceSrc (account);
       if (safe_strcmp (string, old_string) != 0)
         xaccAccountSetPriceSrc (account, string);
+
+      code = gnc_option_menu_get_active (aw->quote_tz_menu);
+      string = gnc_timezone_menu_position_to_string(code);
+      old_string = xaccAccountGetQuoteTZ (account);
+      if (safe_strcmp (string, old_string) != 0)
+        xaccAccountSetQuoteTZ (account, string);
     }
   }
 
@@ -1331,6 +1354,10 @@ gnc_account_window_create(AccountWindow *aw)
   box = gtk_object_get_data(awo, "source_box");
   aw->source_menu = gnc_ui_source_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->source_menu, TRUE, TRUE, 0);
+
+  box = gtk_object_get_data(awo, "quote_tz_box");
+  aw->quote_tz_menu = gnc_ui_quote_tz_menu_create(aw_get_account (aw));
+  gtk_box_pack_start(GTK_BOX(box), aw->quote_tz_menu, TRUE, TRUE, 0);
 
   aw->type_list = gtk_object_get_data(awo, "type_list");
   gnc_account_type_list_create (aw);

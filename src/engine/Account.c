@@ -1979,8 +1979,50 @@ xaccAccountGetPriceSrc(Account *acc)
   t = xaccAccountGetType(acc);
   if((t == STOCK) || (t == MUTUAL)) 
   {
-    kvp_value *value = kvp_frame_get_slot(acc->kvp_data,
-                                            "old-price-source");
+    kvp_value *value = kvp_frame_get_slot(acc->kvp_data, "old-price-source");
+    if(value) return (kvp_value_get_string(value));
+  }
+  return NULL;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountSetQuoteTZ(Account *acc, const char *tz) 
+{
+
+  if(!acc) return;
+  if(!tz) return;
+
+  xaccAccountBeginEdit(acc);
+  {
+    GNCAccountType t = xaccAccountGetType(acc);
+
+    if((t == STOCK) || (t == MUTUAL)) {
+      kvp_frame_set_slot_nc(acc->kvp_data,
+                           "old-quote-tz",
+                           kvp_value_new_string(tz));
+      mark_account (acc);
+    }
+  }
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+const char*
+xaccAccountGetQuoteTZ(Account *acc) 
+{
+  GNCAccountType t;
+  if(!acc) return NULL;
+
+  t = xaccAccountGetType(acc);
+  if((t == STOCK) || (t == MUTUAL)) 
+  {
+    kvp_value *value = kvp_frame_get_slot(acc->kvp_data, "old-quote-tz");
     if(value) return (kvp_value_get_string(value));
   }
   return NULL;

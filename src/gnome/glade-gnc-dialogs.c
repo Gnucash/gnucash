@@ -3401,8 +3401,11 @@ create_Account_Dialog (void)
   GtkWidget *frame30;
   GtkWidget *parent_scroll;
   GtkWidget *frame31;
+  GtkWidget *vbox105;
   GtkWidget *source_box;
   GtkWidget *label813;
+  GtkWidget *quote_tz_box;
+  GtkWidget *label847713;
   GtkWidget *frame32;
   GtkWidget *scrolledwindow9;
   GtkWidget *notes_text;
@@ -3602,12 +3605,19 @@ create_Account_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox75), frame31, FALSE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame31), 3);
 
+  vbox105 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox105);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox105", vbox105,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox105);
+  gtk_container_add (GTK_CONTAINER (frame31), vbox105);
+
   source_box = gtk_hbox_new (FALSE, 3);
   gtk_widget_ref (source_box);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "source_box", source_box,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (source_box);
-  gtk_container_add (GTK_CONTAINER (frame31), source_box);
+  gtk_box_pack_start (GTK_BOX (vbox105), source_box, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (source_box), 3);
 
   label813 = gtk_label_new (_("The source for price quotes:"));
@@ -3618,6 +3628,23 @@ create_Account_Dialog (void)
   gtk_box_pack_start (GTK_BOX (source_box), label813, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label813), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label813), 1, 0.5);
+
+  quote_tz_box = gtk_hbox_new (FALSE, 3);
+  gtk_widget_ref (quote_tz_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "quote_tz_box", quote_tz_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (quote_tz_box);
+  gtk_box_pack_start (GTK_BOX (vbox105), quote_tz_box, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (quote_tz_box), 3);
+
+  label847713 = gtk_label_new (_("Timezone for these quotes:"));
+  gtk_widget_ref (label847713);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847713", label847713,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847713);
+  gtk_box_pack_start (GTK_BOX (quote_tz_box), label847713, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label847713), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label847713), 1, 0.5);
 
   frame32 = gtk_frame_new (_("Notes"));
   gtk_widget_ref (frame32);

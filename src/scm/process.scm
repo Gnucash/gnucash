@@ -38,7 +38,7 @@
 ;;;   (run-sub-process "/bin/date" "--rfc-822")
 ;;;
 
-(define (run-sub-process envt path . args)
+(define (gnc:run-sub-process envt path . args)
   (let ((parent-to-child-pipe (false-if-exception (pipe)))
         (child-to-parent-pipe (false-if-exception (pipe))))
     (if (not (and parent-to-child-pipe
@@ -71,6 +71,32 @@
                          (apply execle path envt args)
                          (apply execl path args)))
                     (exit 1))))))))
+
+(define (gnc:cleanup-sub-process pid clean-secs)
+  ;; Try to be nice, until it's time not to be nice.  If this function
+  ;; returns, child is dead dead dead.  Returns child result status
+  ;; (i.e. the status from waitpid)
+  (let ((waitopt (logior WNOHANG WUNTRACED)))
+    (let loop ((wait-result (waitpid pid waitopt))
+               (kill-level #f))
+      (if (not (zero? (car wait-result)))
+          wait-result
+          (begin
+            (cond
+             ;; one more chance to die quietly.
+             ((not kill-level)
+              (sleep clean-secs)
+              (loop (waitpid pid waitopt) SIGINT))
+             ;; whip out the hammer.
+             ((= kill-level SIGINT)
+              (kill pid SIGINT)
+              (sleep clean-secs)
+              (loop (waitpid waitopt) SIGKILL))
+             ;; cut the cord on the piano.
+             (else
+              (kill pid SIGKILL)
+              (sleep clean-secs)
+              (loop (waitpid waitopt) SIGKILL))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;

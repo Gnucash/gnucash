@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-
+/* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_NO_BACKEND,   /* Backend * pointer was null the err routine */
@@ -52,6 +52,7 @@ typedef enum {
   ERR_SQL_MISSING_DATA,        /* database doesn't contain expected data */
 
 } GNCBackendError;
+/* NOTE: if you modify GNCBackendError, please update src/scm/gnc.gwp */
 
 
 #endif /* __XACC_BACKEND_H__ */

@@ -327,16 +327,26 @@ const char *   xaccAccountGetLastNum (Account *account);
 void           xaccAccountSetLastNum (Account *account, const char *num);
 
 /* The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
-  are used to get and set a string that identifies the current source
-  for investment pricing info.  Currently supported values include
-  "yahoo", "fidelity", "troweprice", etc.
- 
-  Since prices are not going to be stored in the accounts in the
-  future, and since the whole commodities infrastructure is changing
-  radically as we speak, this interface is not long for this world. */
+   are used to get and set a string that identifies the Finance::Quote
+   backend that should be used to retrieve online prices.  See
+   price-quotes.scm for more information.
+
+   xaccAccountGetQuoteTZ() and xaccAccountSetQuoteTZ() set the
+   timezone to be used when interpreting the results from a given
+   Finance::Quote backend.  Unfortunately, the upstream sources don't
+   label their output, so the user has to specify this bit.
+
+   Since prices are not going to be stored in the accounts in the
+   future, and since the whole commodities infrastructure is changing
+   radically as we speak, this interface is not long for this
+   world. */
 
 void         xaccAccountSetPriceSrc (Account *account, const char *src);
 const char * xaccAccountGetPriceSrc (Account *account);
+
+void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
+const char * xaccAccountGetQuoteTZ (Account *account);
+
 
 gpointer xaccAccountForEachSplit(Account *account,
                                  gpointer (*thunk)(Split *s, gpointer data),

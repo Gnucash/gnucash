@@ -74,6 +74,9 @@ const char * gnc_get_reconcile_str (char reconciled_flag);
 
 
 /* Price source functions *******************************************/
+
+/* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
+   as well. */
 typedef enum
 {
   SOURCE_NONE = 0,
@@ -86,6 +89,8 @@ typedef enum
   SOURCE_TIAA_CREF,
   NUM_SOURCES
 } PriceSourceCode;
+/* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
+   as well. */
 
 const char * gnc_get_source_name (PriceSourceCode source);
 const char * gnc_get_source_code_name (PriceSourceCode source);

@@ -23,40 +23,19 @@
 
 (gnc:support "engine-utilities.scm")
 
-(define (gnc:filename->book filename)
-  "Returns a book on success and #f on failure"
-  (let* ((session (gnc:malloc-session)))
-    (if (not session)
-        #f
-        (begin
-          (gnc:init-session session)
-          (let ((account-group (gnc:session-begin-file session filename)))
-            (if (not account-group)
-                (begin
-                  (display (list 'serr (gnc:session-get-error session)))
-                  (newline)
-                  (gnc:session-destroy session)
-                  #f)
-                (begin
-                  (gnc:session-end session)
-                  (gnc:session-destroy session)
-                  account-group)))))))
+(define (gnc:url->loaded-book url ignore-lock? create-if-needed?)
+  ;; Return a <gnc:Book*> representing the data stored at the given
+  ;; url or #f on failure -- this should later be changed to returning
+  ;; the symbol representing the book error...  On success, the book
+  ;; will already be loaded.
 
-(define (gnc:call-with-account-data-from-file filename proc)
-  ;; calls proc with one argument, the account group representing the
-  ;; data in filename.  If there's an error, this procedure throws an
-  ;; exception of type misc-error (for now).  Otherwise, the return
-  ;; value is the result of the call to proc.
-  ;;
-  ;; This procedure does not currently handle any acceptions thrown by
-  ;; the sub-procedures that it calls.
-
-  (let ((account-group (gnc:filename->account-group filename)))
-    (if (not account-group)
-        (throw 'misc-error)
-        (let ((result (proc account-group)))
-          (gnc:free-account-group account-group)
-          result))))
+  (let* ((book (gnc:book-new))
+         (result (and book
+                      (gnc:book-begin book url ignore-lock? create-if-needed?)
+                      (gnc:book-load book)
+                      book)))
+    (or result
+        (begin (gnc:book-destroy book) #f))))
 
 ; (define (gnc:account-transactions-for-each thunk account)
 ;   ;; You must call gnc:group-reset-write-flags on the account group
@@ -83,15 +62,6 @@
             (set! retval (cons (thunk (car splits)) retval))
             (loop (cdr splits)))))
     (reverse retval)))
-
-;;(define (gnc:group-map-accounts thunk group)
-;;  (let ((retval '()))
-;;    (let loop ((accounts (or (gnc:group-get-subaccounts group) '())))
-;;      (if (not (null? accounts))
-;;          (begin 
-;;            (set! retval (cons (thunk (car accounts)) retval))
-;;            (loop (cdr accounts)))))
-;;    (reverse retval)))
 
 (define (gnc:group-map-accounts thunk group)
   (let ((accounts (or (gnc:group-get-subaccounts group) '())))
