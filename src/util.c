@@ -108,6 +108,13 @@ dateCB( Widget mw, XtPointer cd, XtPointer cb )
           cbs->doit = False;
         }
         break;
+
+      case 0x0:
+        /* if delete key (for example) is hit, then input string */
+        /* will be an empty string. In such a case, allow the input */
+        cbs->doit = True;
+        break;
+
       default:
         /* only accept the input if it is a number */
         cbs->doit = isNum(input);

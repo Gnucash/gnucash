@@ -594,6 +594,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   String name = XmTextGetString(accData->name);
   String desc = XmTextGetString(accData->desc);
   
+#ifdef SHOULDNT_BE_BROKEN_ANYMORE
   {
     /* since portfolio & mutual not fully implemented, provide warning */
     int warn = 0;
@@ -615,6 +616,7 @@ Do you want to continue anyway?\n");
     if (!do_it_anyway) return;
     }
   }
+#endif /* SHOULDNT_BE_BROKEN_ANYMORE */
 
   /* The account has to have a name! */
   if( strcmp( name, "" ) == 0 ) {

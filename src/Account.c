@@ -277,6 +277,18 @@ insertTransaction( Account *acc, Transaction *trans )
 double xaccGetAmount (Account *acc, Transaction *trans)
 {
    double themount; /* amount */
+
+   themount = xaccGetShareAmount (acc, trans);
+   themount *= trans->share_price;
+   return themount;
+}
+    
+/********************************************************************\
+\********************************************************************/
+
+double xaccGetShareAmount (Account *acc, Transaction *trans)
+{
+   double themount; /* amount */
    if (NULL == trans) return 0.0;
    if (NULL == acc) return 0.0;
       
@@ -287,7 +299,7 @@ double xaccGetAmount (Account *acc, Transaction *trans)
    if ( trans->debit == ((struct _account *) acc) ) {
       themount = - (trans->damount);
    } else {
-      printf ("Internal Error: xaccGetAmount: missing double entry \n");
+      printf ("Internal Error: xaccGetShareAmount: missing double entry \n");
       printf ("this error should not occur. Please report the problem. \n");
       themount = 0.0;  /* punt */
    }
@@ -297,7 +309,7 @@ double xaccGetAmount (Account *acc, Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
-void xaccSetAmount (Account *acc, Transaction *trans, double themount)
+void xaccSetShareAmount (Account *acc, Transaction *trans, double themount)
 {
    /* for a double-entry, determine if this is a credit or a debit */
    if ( trans->credit == ((struct _account *) acc) ) {
@@ -310,6 +322,17 @@ void xaccSetAmount (Account *acc, Transaction *trans, double themount)
       printf ("this error should not occur. Please report the problem. \n");
       trans->damount = 0.0; /* punt */
    }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void xaccSetAmount (Account *acc, Transaction *trans, double themount)
+{
+   if (0.0 < trans->share_price) {
+     themount /= trans->share_price;
+     xaccSetShareAmount (acc, trans, themount);
+  }
 }
 
 /********************************************************************\
@@ -379,11 +402,25 @@ double xaccGetShareBalance (Account *acc, Transaction *trans)
  * xaccRecomputeBalance                                             *
  *   recomputes the partial balances and the current balance for    *
  *   this account.                                                  *
-
-The current balance is always the current share balance times the
-current share price.  The share price for bank accounts is always 1.0,
-so, for bank acccounts, the current balance is always equal to the current
-share balance.
+ * 
+ * The way the computation is done depends on whether the partial
+ * balances are for a monetary account (bank, cash, etc.) or a 
+ * certificate account (stock portfolio, mutual fund).  For bank
+ * accounts, the invarient amount is the dollar amount. For share
+ * accounts, the invarient amount is the number of shares. For
+ * share accounts, the share price fluctuates, and the current 
+ * value of such an account is the number of shares times the current 
+ * share price.
+ * 
+ * Part of the complexity of this computatation stems from the fact 
+ * xacc uses a double-entry system, meaning that one transaction
+ * appears in two accounts: one account is debited, and the other 
+ * is credited.  When the transaction represents a sale of shares,
+ * or a purchase of shares, some care must be taken to compute 
+ * balances correctly.  For a sale of shares, the stock account must
+ * be debited in shares, but the bank account must be credited 
+ * in dollars.  Thus, two different mechanisms must be used to
+ * compute balances, depending on account type.
  *                                                                  *
  * Args:   account -- the account for which to recompute balances   *
  * Return: void                                                     *
@@ -394,33 +431,67 @@ xaccRecomputeBalance( Account * acc )
   int  i; 
   double  dbalance    = 0.0;
   double  dcleared_balance = 0.0;
-  Transaction *trans;
+  double  share_balance    = 0.0;
+  double  share_cleared_balance = 0.0;
+  double  amt = 0.0;
+  Transaction *trans, *last_trans;
+  Account *tracc;
   
   if( NULL == acc ) return;
 
   for( i=0; (trans=getTransaction(acc,i)) != NULL; i++ ) {
-    dbalance += xaccGetAmount (acc, trans);
+
+    /* compute both dollar and share balances */
+    amt = xaccGetShareAmount (acc, trans);
+    share_balance += amt;
+    dbalance += amt * (trans->share_price);
     
     if( trans->reconciled != NREC ) {
-      dcleared_balance += xaccGetAmount (acc, trans);
+      share_cleared_balance += amt;
+      dcleared_balance += amt * (trans->share_price);
     }
 
-    if (acc == (Account *) trans->credit) {
-      trans -> credit_share_balance = dbalance;
-      trans -> credit_share_cleared_balance = dcleared_balance;
-      trans -> credit_balance = trans->share_price * dbalance;
-      trans -> credit_cleared_balance = trans->share_price * dcleared_balance;
+    tracc = (Account *) trans->credit;
+    if (tracc == acc) {
+      /* For bank accounts, the invarient subtotal is the dollar
+       * amount.  For stock accoounts, the invarient is the share amount */
+      if ( (PORTFOLIO == tracc->type) || ( MUTUAL == tracc->type) ) {
+        trans -> credit_share_balance = share_balance;
+        trans -> credit_share_cleared_balance = share_cleared_balance;
+        trans -> credit_balance = trans->share_price * share_balance;
+        trans -> credit_cleared_balance = trans->share_price * share_cleared_balance;
+      } else {
+        trans -> credit_share_balance = dbalance;
+        trans -> credit_share_cleared_balance = dcleared_balance;
+        trans -> credit_balance = dbalance;
+        trans -> credit_cleared_balance = dcleared_balance;
+      }
     }
-    if (acc == (Account *) trans->debit) {
-      trans -> debit_share_balance = dbalance;
-      trans -> debit_share_cleared_balance = dcleared_balance;
-      trans -> debit_balance = trans->share_price * dbalance;
-      trans -> debit_cleared_balance = trans->share_price * dcleared_balance;
+    tracc = (Account *) trans->debit;
+    if (tracc == acc) {
+      if ( (PORTFOLIO == tracc->type) || ( MUTUAL == tracc->type) ) {
+        trans -> debit_share_balance = share_balance;
+        trans -> debit_share_cleared_balance = share_cleared_balance;
+        trans -> debit_balance = trans->share_price * share_balance;
+        trans -> debit_cleared_balance = trans->share_price * share_cleared_balance;
+      } else {
+        trans -> debit_share_balance = dbalance;
+        trans -> debit_share_cleared_balance = dcleared_balance;
+        trans -> debit_balance = dbalance;
+        trans -> debit_cleared_balance = dcleared_balance;
+      }
     }
+
+    last_trans = trans;
   }
 
-  acc -> balance = dbalance;
-  acc -> cleared_balance = dcleared_balance;
+  if ( (PORTFOLIO == acc->type) || ( MUTUAL == acc->type) ) {
+    acc -> balance = share_balance * (last_trans->share_price);
+    acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
+  } else {
+    acc -> balance = dbalance;
+    acc -> cleared_balance = dcleared_balance;
+  }
     
   return;
 }

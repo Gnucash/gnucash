@@ -39,16 +39,19 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9f:
+As of version 0.9g:
 ---------------
-Mutual fund and Stock Portfolio handling
-is implemented, but is in alpha state: many features are
-missing, and others are broken.   Transfers between funds and
-bank accounts are not properly supported.  Also, tabbing between 
-fields for mutual funds does not work correctly.  One planned
-addition is an indication of the type of transaction (Buy, 
-Cap Gain, Dividend Reinvest, etc.) But it is not clear when 
-this will be added.
+Bare-bones Mutual Fund and Stock Portfolio handling
+is implemented. 
+Working Features:
+-- transfers between bank account & fund work
+-- save to disk, restore from disk.
+
+Bugs:
+-- tabbing between fields for mutual funds does not work correctly. 
+
+Planned additions:
+-- Indicate type of transaction (Buy, Cap Gain, Dividend Reinvest, etc.)
 
 --------
 An alpha version of import from Quicken files is also present,

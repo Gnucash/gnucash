@@ -79,7 +79,7 @@ Boolean havePixels = False;
 void
 refreshMainWindow( void )
   {
-  int   i,j,nrows;
+  int   i,nrows;
   char  buf[BUFSIZE];
   
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
@@ -91,14 +91,10 @@ refreshMainWindow( void )
     String rows[3];
     Transaction *trans=NULL;
     Account *acc = getAccount( data, i );
-    double dbalance = 0.0;
-    double share_balance = 0.0;
+    double dbalance;
     
-    j=0;
-    while( (trans = getTransaction(acc,j++)) != NULL ) {
-      share_balance += xaccGetAmount (acc, trans);
-      dbalance = share_balance * trans->share_price;
-    }
+    xaccRecomputeBalance (acc);
+    dbalance = acc->balance;
     
     if( 0.0 > dbalance )
       sprintf( buf,"-$%.2f\0", DABS(dbalance) );

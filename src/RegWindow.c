@@ -238,20 +238,47 @@ regRefresh( RegWindow *regData )
 
       newData[row+1][RECN_CELL_C] = XtNewString("");
       
-      themount = xaccGetAmount (acc, trans);
-
-      /* hack alert -- share amounts should have three digits */
-      if( 0.0 > themount )
+      /* ----------------------------------- */
+      /* display depends on account type */
+      switch(acc->type)
         {
-        sprintf( buf, "%.2f ", -themount );
-        newData[row][PAY_CELL_C] = XtNewString(buf);
-        newData[row][DEP_CELL_C] = XtNewString("");
-        }
-      else
-        {
-        sprintf( buf, "%.2f ", themount );
-        newData[row][PAY_CELL_C] = XtNewString("");
-        newData[row][DEP_CELL_C] = XtNewString(buf);
+        case BANK:
+        case CASH:
+        case ASSET:
+        case CREDIT:
+        case LIABILITY:
+          themount = xaccGetAmount (acc, trans);
+          if( 0.0 > themount )
+            {
+            sprintf( buf, "%.2f ", -themount );
+            newData[row][PAY_CELL_C] = XtNewString(buf);
+            newData[row][DEP_CELL_C] = XtNewString("");
+            }
+          else
+            {
+            sprintf( buf, "%.2f ", themount );
+            newData[row][PAY_CELL_C] = XtNewString("");
+            newData[row][DEP_CELL_C] = XtNewString(buf);
+            }
+          break;
+        case PORTFOLIO:
+        case MUTUAL:
+          themount = xaccGetShareAmount (acc, trans);
+          if( 0.0 > themount )
+            {
+            sprintf( buf, "%.3f ", -themount );
+            newData[row][PAY_CELL_C] = XtNewString(buf);
+            newData[row][DEP_CELL_C] = XtNewString("");
+            }
+          else
+            {
+            sprintf( buf, "%.3f ", themount );
+            newData[row][PAY_CELL_C] = XtNewString("");
+            newData[row][DEP_CELL_C] = XtNewString(buf);
+            }
+          break;
+        default:
+          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
         }
       
       newData[row+1][PAY_CELL_C] = XtNewString("");
@@ -277,13 +304,11 @@ regRefresh( RegWindow *regData )
           newData[row+1][PRIC_CELL_C] = XtNewString("");
           newData[row][SHRS_CELL_C]   = XtNewString("");
           newData[row+1][SHRS_CELL_C] = XtNewString("");
-/*
-          newData[row][ACTN_CELL_C]   = XtNewString("");
-          newData[row+1][ACTN_CELL_C] = XtNewString("");
-*/
+          /* newData[row][ACTN_CELL_C]   = XtNewString(""); */
+          /* newData[row+1][ACTN_CELL_C] = XtNewString(""); */
           break;
         default:
-          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", regData->acc->type);
+          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
         }
       }
 
@@ -384,9 +409,9 @@ regRecalculateBalance( RegWindow *regData )
           (PORTFOLIO == acc->type) ) 
         {
 #ifdef USE_NO_COLOR
-        sprintf( buf, "%.2f ", share_balance );
+        sprintf( buf, "%.3f ", share_balance );
 #else
-        sprintf( buf, "%.2f ", DABS(share_balance) );
+        sprintf( buf, "%.3f ", DABS(share_balance) );
         
         /* Set the color of the text, depending on whether the
          * balance is negative or positive */
@@ -552,7 +577,7 @@ regSaveTransaction( RegWindow *regData, int position )
     sscanf( amount, "%f", &val );
     themount -= val;
     
-    xaccSetAmount (acc, trans, themount);
+    xaccSetShareAmount (acc, trans, themount);
 
     /* Reset so there is only one field filled */
     if( 0.0 > themount )
@@ -897,7 +922,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
         acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
-        /* acc -> colWidths[ACTN_CELL_C] = 6;   /* action (category) */
+        /* acc -> colWidths[ACTN_CELL_C] = 6;   /* action (Buy/Sell)*/
         break;
       }
     
@@ -953,7 +978,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> rows[0][PRIC_CELL_C] = "Price";
         acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
-        /* acc -> rows[0][ACTN_CELL_C] = "Cat";   /* action */
+        /* acc -> rows[0][ACTN_CELL_C] = "Action";   /* action */
         break;
       }
     
@@ -1251,22 +1276,24 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
   Account   *acc     = regData->acc;
+  Transaction *trans;
   
-  if( getTransaction(acc,regData->lastTrans) != NULL )
+  trans = getTransaction (acc, regData->lastTrans );
+  if( NULL != trans)
     {
     char *msg = "Are you sure you want\nto delete this transaction?";
     
     if( verifyBox( toplevel, msg ) )
       {
-      Transaction *trans;
-      trans = getTransaction (acc, regData->lastTrans );
+      Account * cred = (Account *) (trans->credit);
+      Account * deb = (Account *) (trans->debit);
       
       /* remove the transaction from both accounts */
-      REMOVE_TRANS ((trans->credit), trans);
-      REMOVE_TRANS ((trans->debit), trans);
+      REMOVE_TRANS (cred, trans);
+      REMOVE_TRANS (deb, trans);
 
-      RECALC_BALANCE ((trans->debit));
-      RECALC_BALANCE ((trans->credit));
+      RECALC_BALANCE (deb);
+      RECALC_BALANCE (cred);
 
       /* Delete the transaction */
       freeTransaction (trans);
