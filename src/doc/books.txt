@@ -6,9 +6,9 @@
                 Linas Vepstas December 2001
 
 
-A top, unimplemented request for gnucash is the ability to 'close 
+A top, unimplemented request for GnuCash is the ability to 'close 
 the books', that is, to add support for 'accounting periods'.
-Support for books has been added to the gnucash engine; however, 
+Support for books has been added to the GnuCash engine; however, 
 it has not yet been exposed to the user via the GUI.  This file
 reviews the implementation design choices and the current design 
 status.
@@ -192,7 +192,7 @@ But now we have enough info to propose the final solution:
 Plan A:
 -------
 The kvp markup of plan C coupled to the multi-file solution of plan F.
-In initial startup of gnucash, only the 'current' book is loaded.  
+In initial startup of GnuCash, only the 'current' book is loaded.  
 If user asks for a report that requires data from old books, then
 we have to pause to load one or more of the older books.   
 
@@ -231,10 +231,10 @@ I am not aware of any con's to plan A at this point.
 Implementation Notes:
 ---------------------
 Plan A has been implemented in the engine. 
--- The postgres backend has been modified to support multiple books.
+-- The Postgres backend has been modified to support multiple books.
    All books are stored in the same database; there is no performance
-   penalty for storing all books together in the same SQL dataase,
-   because they can be easily picked apart by an appropirate SQL query.
+   penalty for storing all books together in the same SQL database,
+   because they can be easily picked apart by an appropriate SQL query.
 -- The xml-file backend can store multiple books, but there is currently
    no support for spreading things out across multiple files (for
    faster load, by not loading old books).  The XML format
