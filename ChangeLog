@@ -1,3 +1,39 @@
+2001-04-17  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/utilities.scm (string-split): used to be string-split-on
+	in qif-utils.scm
+
+	* src/scm/qif-import/qif-utils.scm: move string-split-on to
+	utilities.scm as string-split to better match string-join.
+
+	* src/scm/qif-import/qif-to-gnc.scm (qif-import:qif-to-gnc):
+	string-split-on -> string-split.
+
+	* src/scm/qif-import/qif-dialog-utils.scm
+	(qif-import:get-all-accts): string-split-on -> string-split.
+
+	* src/scm/price-quotes.scm (yahoo-get-historical-quotes): new
+	function - retrieve lists of historical quote information.
+
+	* src/scm/bootstrap.scm.in (%load-path): add new guile-modules
+	directory so we can use-modules from there.
+
+	* src/guile/Makefile.am (CLEANFILES): add gnucash.c so it goes
+	away on "make clean" in addition to "make distclean".
+
+	* src/engine/gnc-pricedb.c: minor doc updates.
+
+	* src/engine/gnc-pricedb.h: much more documentation.
+
+	* lib/guile-www: new directory - contains guile-www CVS module.
+	Used by new historical quote function.  Several new files added.
+	Installed to new install directory GNC_SHAREDIR/guile-modules such
+	that it is available via (use-modules (www main)), etc.
+
+	* lib/Makefile.am (SUBDIRS): add guile-www
+
+	* configure.in (AC_OUTPUT): add lib/guile-www/Makefile
+
 2001-04-17  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/file-history.c: fix bug

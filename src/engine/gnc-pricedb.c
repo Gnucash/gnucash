@@ -295,13 +295,12 @@ gnc_price_list_destroy(GList *prices)
 /****************************************************************************/
 /* GNCPriceDB functions
 
-   A pricedb is a hash mapping price commodities (of type
-   gnc_commodity*) to hashes mapping price currencies (of type
-   gnc_commodity*) to price lists.  The top-level key is the commodity
+   Structurally a GNCPriceDB contains a hash mapping price commodities
+   (of type gnc_commodity*) to hashes mapping price currencies (of
+   type gnc_commodity*) to GNCPrice lists (see gnc-pricedb.h for a
+   description of GNCPrice lists).  The top-level key is the commodity
    you want the prices for, and the second level key is the commodity
    that the value is expressed in terms of.
-
-   See the header for other info.
 
  */
 

@@ -9,6 +9,8 @@
 
 (gnc:support "qif-import/qif-to-gnc.scm")
 
+(gnc:depend "utilities.scm")
+
 (define (gnc:qif-fuzzy= num-1 num-2)
   (< (abs (- num-1 num-2)) .00000001))
 
@@ -252,12 +254,12 @@
                    (lambda (a b)
                      (let ((a-depth 
                             (length 
-                             (string-split-on (qif-map-entry:gnc-name a) 
-                                              separator)))
+                             (string-split (qif-map-entry:gnc-name a) 
+                                           separator)))
                            (b-depth 
                             (length 
-                             (string-split-on (qif-map-entry:gnc-name b) 
-                                              separator))))
+                             (string-split (qif-map-entry:gnc-name b) 
+                                           separator))))
                        (< a-depth b-depth)))))
        
        ;; make all the accounts 

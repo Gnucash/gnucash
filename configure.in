@@ -551,6 +551,7 @@ AC_OUTPUT(
           doc-tools/Makefile
           intl/Makefile
           lib/Makefile
+          lib/guile-www/Makefile
           macros/Makefile
 	  po/Makefile.in
           po/Makefile

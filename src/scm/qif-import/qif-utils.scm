@@ -60,19 +60,6 @@
         (newstr (make-string 1 new)))
     (regexp-substitute/global #f rexpstr str 'pre newstr 'post)))
 
-(define (string-split-on str char)
-  (let ((parts '())
-        (first-char #f))
-    (let loop ((last-char (string-length str)))
-      (set! first-char (string-rindex str char 0 last-char))
-      (if first-char 
-          (begin 
-            (set! parts (cons (substring str (+ 1 first-char) last-char) 
-                              parts))
-            (loop first-char))
-          (set! parts (cons (substring str 0 last-char) parts))))    
-    parts))
-
 (define (string-to-canonical-symbol str)
   (string->symbol 
    (string-downcase

@@ -146,3 +146,16 @@ string and 'directories' must be a list of strings."
                    '()
                    (cons joinstr (cons (car remaining-elements)
                                        (loop (cdr remaining-elements)))))))))
+
+(define (string-split str char)
+  (let ((parts '())
+        (first-char #f))
+    (let loop ((last-char (string-length str)))
+      (set! first-char (string-rindex str char 0 last-char))
+      (if first-char 
+          (begin 
+            (set! parts (cons (substring str (+ 1 first-char) last-char) 
+                              parts))
+            (loop first-char))
+          (set! parts (cons (substring str 0 last-char) parts))))    
+    parts))

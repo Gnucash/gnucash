@@ -9,6 +9,8 @@
 
 (gnc:support "qif-import/qif-dialog-utils.scm")
 
+(gnc:depend "utilities.scm")
+
 (use-modules (ice-9 regex))
 
 (define (default-stock-acct brokerage security)
@@ -696,8 +698,8 @@
               (if (qif-map-entry:display? v)
                   (set! accts 
                         (cons 
-                         (cons (string-split-on (qif-map-entry:gnc-name v) 
-                                                separator)
+                         (cons (string-split (qif-map-entry:gnc-name v) 
+                                             separator)
                                (qif-map-entry:new-acct? v))
                          accts)))
               #f)
@@ -709,7 +711,7 @@
      (lambda (acct)
        (set! accts 
              (cons 
-              (cons (string-split-on 
+              (cons (string-split 
                      (gnc:account-get-full-name acct)
                      separator)
                     #f)
