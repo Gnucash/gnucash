@@ -337,6 +337,26 @@ check_double (void)
 /* ======================================================= */
 
 static void
+check_neg (void)
+{
+	gnc_numeric a = gnc_numeric_create(2, 6);
+	gnc_numeric b = gnc_numeric_create(1, 4);
+	gnc_numeric c = gnc_numeric_neg (a);
+	gnc_numeric d = gnc_numeric_neg (b);
+
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (-2,6), c, 
+                   a, "expected %s = %s = -(%s)");
+
+	check_unary_op (gnc_numeric_eq,
+	                gnc_numeric_create (-1,4), d, 
+                   b, "expected %s = %s = -(%s)");
+
+}
+
+/* ======================================================= */
+
+static void
 check_add_subtract (void)
 {
   gnc_numeric a = gnc_numeric_create(2, 6);
@@ -379,6 +399,12 @@ check_add_subtract (void)
   check_binary_op (gnc_numeric_create(8,100), 
                    gnc_numeric_sub(a, b, 100, GNC_HOW_RND_ROUND),
 						 a, b, "expected %s got %s = %s - %s for sub 100ths (banker's)");
+  
+  /* This test has failed before */
+  gnc_numeric c = gnc_numeric_neg (b);
+  gnc_numeric z = gnc_numeric_zero();
+  check_binary_op (c, gnc_numeric_add_fixed(z,c),
+						 z, c, "expected %s got %s = %s + %s for add fixed");
   
 #if CHECK_ERRORS_TOO
   gnc_numeric c;
@@ -608,6 +634,7 @@ run_test (void)
 	check_equality_operator ();
 	check_rounding();
 	check_double();
+	check_neg();
 	check_add_subtract();
 	check_mult_div ();
 }
