@@ -1008,16 +1008,14 @@ xaccGroupGetDepth (AccountGroup *grp)
 void
 xaccSplitsBeginStagedTransactionTraversals (GList *splits)
 {
-  Transaction *trans;
   GList *lp;
 
-  if (splits == NULL) return;
-
-  for(lp = splits; lp; lp = lp->next)
+  for (lp = splits; lp; lp = lp->next)
   {
     Split *s = lp->data;
-    trans = s->parent;
-    if (trans != NULL)
+    Transaction *trans = s->parent;
+
+    if (trans)
       trans->marker = 0;
   }
 }
@@ -1163,7 +1161,6 @@ xaccGroupVisitUnvisitedTransactions (AccountGroup *g,
   if (!visited_txns) return(FALSE);
 
   list = xaccGroupGetSubAccounts (g);
-  if (!list) return(TRUE);
 
   for (node = list; node && keep_going; node = node->next)
   {
@@ -1188,11 +1185,11 @@ xaccGroupForEachTransaction (AccountGroup *g,
 
   if (!g) return(FALSE);
   if (!proc) return(FALSE);
-  
+
   visited_txns = guid_hash_table_new();
   if (visited_txns)
     result = xaccGroupVisitUnvisitedTransactions(g, proc, data, visited_txns);
-  
+
   /* cleanup */
   if (visited_txns)
     g_hash_table_destroy(visited_txns);  
