@@ -60,46 +60,12 @@ int
 main(int argc, char ** argv) {
   gnc_numeric a = gnc_numeric_create(1, 3);
   gnc_numeric b = gnc_numeric_create(1, 4);
-  gnc_numeric c;
   gnc_numeric d = gnc_numeric_create(1, 2);
   
   gnc_numeric err;
   int i;
   gint64 v;
 
-  printf("add 100ths (banker's): %s + %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_add(a, b, 100,
-                                           GNC_RND_ROUND)));
-  
-  c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_ROUND, &err);
-  printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(c),
-         gnc_numeric_print(err));
-  
-  printf("sub exact : %s - %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_sub(a, b, GNC_DENOM_AUTO, 
-                                           GNC_DENOM_EXACT)));
-  
-  printf("sub least : %s - %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_sub(a, b, 
-                                           GNC_DENOM_AUTO, 
-                                           GNC_DENOM_REDUCE)));
-  
-  printf("sub 100ths : %s - %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_sub(a, b, 100,
-                                           GNC_RND_ROUND)));
-  
-  c = gnc_numeric_sub_with_error(a, b, 100, GNC_RND_FLOOR, &err);
-  printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(c),
-         gnc_numeric_print(err));
-  
   printf("mul exact : %s * %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, 
@@ -233,16 +199,100 @@ main(int argc, char ** argv) {
 }
 #endif
 
+/* Make sure that the equivalence operator we use for 
+ * later tests actually works */
 static void
-run_test (void)
+check_equality_operator (void)
+{
+	gnc_numeric a = gnc_numeric_create (42, 58);
+	gnc_numeric b = gnc_numeric_create (42, 58);
+	gnc_numeric c = gnc_numeric_create (40, 58);
+	
+	do_test (gnc_numeric_eq(a, a), "expected self-equivalence");
+	do_test (gnc_numeric_eq(a, b), "expected equivalence");
+	do_test (0 == gnc_numeric_eq(a, c), "expected inequivalence");
+}
+	
+static void
+check_add_subtract (void)
 {
   gnc_numeric a = gnc_numeric_create(1, 3);
   gnc_numeric b = gnc_numeric_create(1, 4);
 
-  check_binary_op (gnc_numeric_create(9,12), 
+  check_binary_op (gnc_numeric_create(7,12), 
                    gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s + %s for add exact");
   
+  check_binary_op (gnc_numeric_create(58,100), 
+                   gnc_numeric_add(a, b, 100, GNC_RND_ROUND),
+						 a, b, "expected %s got %s = %s + %s for add 100ths (banker's)");
+  
+  check_binary_op (gnc_numeric_create(1,12), 
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s - %s for sub exact");
+  
+  check_binary_op (gnc_numeric_create(1,12), 
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s - %s for sub least");
+  
+  check_binary_op (gnc_numeric_create(8,100), 
+                   gnc_numeric_sub(a, b, 100, GNC_RND_ROUND),
+						 a, b, "expected %s got %s = %s - %s for add 100ths (banker's)");
+  
+#if CHECK_ERRORS_TOO
+  gnc_numeric c;
+  c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
+         gnc_numeric_print(a), gnc_numeric_print(b),
+         gnc_numeric_print(c),
+         gnc_numeric_print(err));
+  
+  c = gnc_numeric_sub_with_error(a, b, 100, GNC_RND_FLOOR, &err);
+  printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
+         gnc_numeric_print(a), gnc_numeric_print(b),
+         gnc_numeric_print(c),
+         gnc_numeric_print(err));
+  
+#endif
+
+	/* Add and subtract some random numbers */
+	int i;
+	for (i=0; i<1000; i++)
+	{
+		gnc_numeric e;
+		gint64 deno = rand() +1;
+		gint64 na = get_random_gint64();
+		gint64 nb = get_random_gint64();
+		gint64 ne;
+
+		/* avoid overflow; */
+		na /=2;
+		nb /=2;
+		
+		a = gnc_numeric_create(na, deno);
+		b = gnc_numeric_create(nb, deno);
+
+		/* Add */
+		ne = na+nb;
+		e = gnc_numeric_create(ne, deno);
+		check_binary_op (e,
+                   gnc_numeric_add(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s + %s for exact addition");
+
+		/* Subtract */
+		ne = na-nb;
+		e = gnc_numeric_create(ne, deno);
+		check_binary_op (e,
+                   gnc_numeric_sub(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s - %s for exact subtraction");
+	}
+}
+
+static void
+run_test (void)
+{
+	check_equality_operator ();
+	check_add_subtract();
 }
 
 static void

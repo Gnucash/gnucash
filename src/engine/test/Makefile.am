@@ -25,6 +25,7 @@ TESTS = \
   test-link \
   test-load-engine \
   test-guid \
+  test-numeric \
   test-date \
   test-object \
   test-commodities \
@@ -63,6 +64,7 @@ noinst_PROGRAMS = \
   test-group-vs-book \
   test-load-engine \
   test-lots \
+  test-numeric \
   test-object \
   test-period \
   test-query \
