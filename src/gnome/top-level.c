@@ -197,7 +197,7 @@ gnucash_ui_init(void)
 
     restargc = argv_length(restargv);
  
-    gnome_init_with_popt_table("GnuCash", NULL, restargc, restargv,
+    gnome_init_with_popt_table("GnuCash", VERSION, restargc, restargv,
                                nullPoptTable, 0, &returnedPoptContext);
     gnome_is_initialized = TRUE;
 

@@ -1,3 +1,11 @@
+2001-03-18  Dave Peticolas  <dave@krondo.com>
+
+	* AUTHORS: update author info
+
+	* doc/sgml/C/xacc-about.sgml: update author info
+
+	* src/gnome/top-level.c: add VERSION arg to gnome_init
+
 2001-03-16  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/scm/utilities.scm
