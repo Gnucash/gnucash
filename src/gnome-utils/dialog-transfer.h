@@ -66,6 +66,9 @@ void gnc_xfer_dialog_select_from_account(XferDialog *xferData,
 void gnc_xfer_dialog_select_to_account(XferDialog *xferData,
                                        Account *account);
 
+void gnc_xfer_dialog_select_from_currency(XferDialog *xferData, gnc_commodity *cur);
+void gnc_xfer_dialog_select_to_currency(XferDialog *xferData, gnc_commodity *cur);
+
 /* prevent the user from changing an account tree */
 void gnc_xfer_dialog_lock_from_account_tree(XferDialog *xferData );
 void gnc_xfer_dialog_lock_to_account_tree(XferDialog *xferData );
@@ -88,10 +91,11 @@ void gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
 /* Indicate that this is just trying to obtain the to_amount, so make
  * the Transfer Information read-only and the dialog will NOT create a
  * new transaction.  Pass in the location to store the resulting
- * to_amount when the dialog is complete.  The caller should call the
- * dialog 'run' function to make sure to_amount pointer remains valid.
+ * exchange_rate when the dialog is complete.  The caller should call
+ * the dialog 'run' function to make sure exch_rate pointer remains
+ * valid.
  */
 void gnc_xfer_dialog_is_exchange_dialog(XferDialog *xferData,
-					gnc_numeric * to_amount);
+					gnc_numeric * exch_rate);
 
 #endif

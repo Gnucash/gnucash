@@ -65,8 +65,12 @@ struct _xferDialog
   GtkWidget * description_entry;
   GtkWidget * memo_entry;
 
+  GtkWidget *	from_window;
   GNCAccountTree * from;
+  gnc_commodity *	from_commodity;
+  GtkWidget *	to_window;
   GNCAccountTree * to;
+  gnc_commodity *	to_commodity;
 
   QuickFill * qf;     /* Quickfill on transfer descriptions, 
                          defaults to matching on the "From" account. */
@@ -95,10 +99,15 @@ struct _xferDialog
 
   GtkTooltips *tips;
 
-  /* Where to store the "to_amount" at exit (in lieu of
+  /* Where to store the "exchange_rate" at exit (in lieu of
    * creating a transaction)
    */
-  gnc_numeric * to_amount;
+  gnc_numeric * exch_rate;
+
+  /* a place to store the result quality (ok or cancel) because gnome_dialog_run
+   * doesn't seem to work right for this function
+   */
+  gboolean *	result_p;
 };
 
 struct _acct_list_item
@@ -174,22 +183,18 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 {
   Account *to_account;
   Account *from_account;
-  const gnc_commodity *to_commodity = NULL;
-  const gnc_commodity *from_commodity = NULL;
   gboolean curr_active;
 
   from_account = 
     gnc_account_tree_get_current_account(GNC_ACCOUNT_TREE(xferData->from));
-  if(from_account != NULL)
-    from_commodity = xaccAccountGetCommodity(from_account);
 
   to_account = 
     gnc_account_tree_get_current_account(GNC_ACCOUNT_TREE(xferData->to));
-  if(to_account != NULL)
-    to_commodity = xaccAccountGetCommodity(to_account);
 
-  curr_active = (from_account != NULL) && (to_account != NULL)
-    && !gnc_commodity_equiv(from_commodity, to_commodity);
+  curr_active = (xferData->exch_rate ||
+		 ((from_account != NULL) && (to_account != NULL)))
+		 && !gnc_commodity_equiv(xferData->from_commodity,
+					 xferData->to_commodity);
 
   gtk_widget_set_sensitive(xferData->curr_transfer_frame, curr_active);
   gtk_widget_set_sensitive(xferData->price_edit,
@@ -202,7 +207,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
   gtk_widget_set_sensitive(xferData->amount_radio, curr_active);
 
   gnc_xfer_dialog_set_price_auto (xferData, curr_active,
-                                  from_commodity, to_commodity);
+                                  xferData->from_commodity, xferData->to_commodity);
 
   if (!curr_active)
   {
@@ -273,12 +278,14 @@ gnc_xfer_dialog_from_tree_select_cb(GNCAccountTree *tree,
 {
   XferDialog *xferData = data;
   GNCPrintAmountInfo print_info;
-  const gnc_commodity *commodity;
+  gnc_commodity *commodity;
 
   account = gnc_account_tree_get_current_account(tree);
   commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
 		     gnc_commodity_get_printname(commodity));
+
+  xferData->from_commodity = commodity;
 
   gnc_xfer_dialog_curr_acct_activate(xferData);
 
@@ -301,12 +308,14 @@ gnc_xfer_dialog_to_tree_select_cb(GNCAccountTree *tree,
 {
   XferDialog *xferData = data;
   GNCPrintAmountInfo print_info;
-  const gnc_commodity *commodity;
+  gnc_commodity *commodity;
 
   account = gnc_account_tree_get_current_account(tree);
   commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
 		     gnc_commodity_get_printname(commodity));
+
+  xferData->to_commodity = commodity;
 
   gnc_xfer_dialog_curr_acct_activate(xferData);
 
@@ -348,6 +357,11 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
   scroll_win = gnc_glade_lookup_widget (xferData->dialog,
                                         (direction == XFER_DIALOG_TO) ?
                                         "to_window" : "from_window");
+
+  if (direction == XFER_DIALOG_TO)
+    xferData->to_window = scroll_win;
+  else
+    xferData->from_window = scroll_win;
 
   gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
@@ -902,6 +916,35 @@ gnc_xfer_dialog_select_to_account(XferDialog *xferData, Account *account)
   gnc_xfer_dialog_select_account(xferData, account, XFER_DIALOG_TO);
 }
 
+void
+gnc_xfer_dialog_select_from_currency(XferDialog *xferData, gnc_commodity *cur)
+{
+  if (!xferData) return;
+  if (!cur) return;
+
+  gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
+		     gnc_commodity_get_printname(cur));
+
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->amount_edit),
+                                gnc_commodity_get_fraction (cur));
+
+  xferData->from_commodity = cur;
+
+  gnc_xfer_dialog_curr_acct_activate(xferData);
+}
+
+void
+gnc_xfer_dialog_select_to_currency(XferDialog *xferData, gnc_commodity *cur)
+{
+  gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
+		     gnc_commodity_get_printname(cur));
+
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
+				gnc_commodity_get_fraction (cur));
+
+  xferData->to_commodity = cur;
+  gnc_xfer_dialog_curr_acct_activate(xferData);
+}
 
 static void
 gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
@@ -910,6 +953,7 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
 {
   GNCAccountTree *tree;
   GtkWidget *show_button;
+  GtkWidget *scroll_win;
 
   if (xferData == NULL)
     return;
@@ -918,10 +962,12 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
   {
     case XFER_DIALOG_FROM:
       tree = xferData->from;
+      scroll_win = xferData->from_window;
       show_button = xferData->from_show_button;
       break;
     case XFER_DIALOG_TO:
       tree = xferData->to;
+      scroll_win = xferData->to_window;
       show_button = xferData->to_show_button;
       break;
     default:
@@ -932,7 +978,7 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
   gtk_widget_set_sensitive( GTK_WIDGET(show_button), FALSE );
 
   if (hide) {
-    gtk_widget_hide( GTK_WIDGET(tree) );
+    gtk_widget_hide( scroll_win );
     gtk_widget_hide( GTK_WIDGET(show_button) );
   }
 }
@@ -1001,10 +1047,11 @@ gnc_xfer_dialog_hide_to_account_tree(XferDialog *xferData)
  *   will NOT create a transaction when it is closed)               *
  *                                                                  *
  * Args:   xferData - xfer dialog structure                         *
+ *         exch_rate - place to store the exchange rate at exit     *
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *to_amount)
+gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *exch_rate)
 {
   if (!xferData) return;
 
@@ -1014,7 +1061,7 @@ gnc_xfer_dialog_is_exchange_dialog (XferDialog *xferData, gnc_numeric *to_amount
   gtk_widget_set_sensitive (xferData->description_entry, FALSE);
   gtk_widget_set_sensitive (xferData->memo_entry, FALSE);
 
-  xferData->to_amount = to_amount;
+  xferData->exch_rate = exch_rate;
 }
 
 /********************************************************************\
@@ -1174,8 +1221,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
-  from_commodity = xaccAccountGetCommodity(from_account);
-  to_commodity = xaccAccountGetCommodity(to_account);
+  from_commodity = xferData->from_commodity;
+  to_commodity = xferData->to_commodity;
 
   curr_trans = !gnc_commodity_equiv(from_commodity, to_commodity);
 
@@ -1221,9 +1268,10 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  if (xferData->to_amount)
+  if (xferData->exch_rate)
   {
-    *(xferData->to_amount) = to_amount;
+    *(xferData->exch_rate) = gnc_numeric_div (to_amount, amount,
+					      GNC_DENOM_LCD, GNC_RND_ROUND);
   }
   else
   {
@@ -1274,6 +1322,10 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   /* Refresh everything */
   gnc_resume_gui_refresh ();
+
+  /* Tell the caller that this is "ok" */
+  if (xferData->result_p)
+    *(xferData->result_p) = TRUE;
 
   gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 }
@@ -1658,13 +1710,16 @@ find_xfer (gpointer find_data, gpointer user_data)
  */
 gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
 {
+  gboolean result_ok = FALSE;
+
   if( xferData )
   {
+    xferData->result_p = &result_ok;
     while( TRUE )
     {
-      gint result = gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
+      gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
 
-      if( result == 0 )
+      if( result_ok == TRUE )
       {
         /* See if the dialog is still there.  For various reasons, the
          * user could have hit OK but remained in the dialog.  We don't

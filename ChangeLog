@@ -35,6 +35,18 @@
 
 	* business-ledger/gncEntryLedger.c -- delay setting *new = FALSE until
 	  just before we call the "new account" dialog.	  
+
+	* src/gnome-utils/dialog-transfer -- update the dialog to enable
+	  and "exchange dialog" -- limited use from the register.  This is
+	  a first pass at getting multi-currency transactions to work from
+	  the register.
+	* register/ledger-core/split-register* -- hooks to deal with
+	  multi-currency transactions better.  Remember the implicit
+	  exchange rates and recompute the split values, so when you enter
+	  an amount it gets converted properly and you see what you type
+	  (mostly).  Call out to the exchange (transfer) dialog when you
+	  create a split to an account different than the transaction
+	  currency.  This is a partial fix for 97690.
 	
 2002-12-01  Joshua Sled  <jsled@asynchronous.org>
 

@@ -335,24 +335,14 @@ gnc_split_register_save_price_cell (BasicCell * bcell,
   sd->do_scrub = TRUE;
 }
 
-static void
-gnc_split_register_save_debcred_cell (BasicCell * bcell,
-                                      gpointer save_data,
-                                      gpointer user_data)
+gnc_numeric
+gnc_split_register_debcred_cell_value (SplitRegister *reg)
 {
-  SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   PriceCell *cell;
   gnc_numeric new_amount;
   gnc_numeric credit;
   gnc_numeric debit;
-
-  g_return_if_fail (gnc_basic_cell_has_name (bcell, DEBT_CELL) ||
-                    gnc_basic_cell_has_name (bcell, CRED_CELL));
-
-  if (sd->handled_dc)
-    return;
-
+  
   cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                   CRED_CELL);
   credit = gnc_price_cell_get_value (cell);
@@ -363,7 +353,91 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
 
   new_amount = gnc_numeric_sub_fixed (debit, credit);
 
-  xaccSplitSetValue (sd->split, new_amount);
+  return new_amount;
+}
+
+static gnc_numeric
+gnc_split_register_get_rate_cell (SplitRegister *reg, const char *cell_name)
+{
+  PriceCell *rate_cell;
+
+  rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout,
+						      cell_name);
+  if (rate_cell)
+    return gnc_price_cell_get_value (rate_cell);
+
+  /* Uhh, just return '1' */
+  return gnc_numeric_create (100,100);
+}
+
+static gboolean
+gnc_split_register_split_needs_amount (Split *split)
+{
+  Transaction *txn = xaccSplitGetParent (split);
+  Account *acc = xaccSplitGetAccount (split);
+
+  return gnc_split_register_needs_conv_rate (txn, acc);
+}
+
+static void
+gnc_split_register_save_debcred_cell (BasicCell * bcell,
+                                      gpointer save_data,
+                                      gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+  SplitRegister *reg = user_data;
+  Account *acc;
+  gnc_numeric new_amount, convrate, oldconvrate, value;
+
+  g_return_if_fail (gnc_basic_cell_has_name (bcell, DEBT_CELL) ||
+                    gnc_basic_cell_has_name (bcell, CRED_CELL));
+
+  if (sd->handled_dc)
+    return;
+
+  new_amount = gnc_split_register_debcred_cell_value (reg);
+
+  /* How to interpret new_amount depends on our view of this
+   * transaction.  If we're sitting in an account with the same
+   * commodity as the transaction, then we can set the Value and then
+   * compute the amount.  Otherwise we are setting the "converted
+   * value".  This means we need to convert new_amount to the actual
+   * 'value' by dividing by the convrate in order to set the value.
+   */
+
+  convrate = xaccSplitGetAmount (sd->split);
+  value = xaccSplitGetValue (sd->split);
+  if (! gnc_numeric_zero_p (value))
+    oldconvrate = gnc_numeric_div (convrate, value, GNC_DENOM_LCD, GNC_RND_ROUND);
+  else
+    oldconvrate = gnc_numeric_create (100,100);
+
+  acc = gnc_split_register_get_default_account (reg);
+  if (gnc_split_register_needs_conv_rate (sd->trans, acc)) {
+    gnc_commodity *curr;
+
+    /* convert the amount to the Value ... */
+    convrate = gnc_split_register_get_conv_rate (sd->trans, acc);
+    curr = xaccTransGetCurrency (sd->trans);
+    value = gnc_numeric_div (new_amount, convrate,
+			     gnc_commodity_get_fraction (curr),
+			     GNC_RND_ROUND);
+    xaccSplitSetValue (sd->split, value);
+  } else
+    xaccSplitSetValue (sd->split, new_amount);
+
+  /* Now re-compute the Amount -- We may need to convert from the Value back
+   * to the amount here using the conversion in the rate-cell.
+   */
+  value = xaccSplitGetValue (sd->split);
+
+  if (gnc_split_register_split_needs_amount (sd->split)) {
+    acc = xaccSplitGetAccount (sd->split);
+    new_amount = gnc_numeric_mul (value, oldconvrate,
+				  xaccAccountGetCommoditySCU (acc),
+				  GNC_RND_ROUND);
+    xaccSplitSetAmount (sd->split, new_amount);
+  }
 
   sd->handled_dc = TRUE;
   sd->do_scrub = TRUE;
@@ -374,7 +448,9 @@ gnc_split_register_save_cells (gpointer save_data,
                                gpointer user_data)
 {
   SRSaveData *sd = save_data;
+  SplitRegister *reg = user_data;
   Split *other_split;
+  gnc_numeric rate = gnc_numeric_zero();
 
   g_return_if_fail (sd != NULL);
 
@@ -385,6 +461,8 @@ gnc_split_register_save_cells (gpointer save_data,
 
   xaccSplitScrub (sd->split);
 
+  rate = gnc_split_register_get_rate_cell (reg, RATE_CELL);
+
   if (other_split && !sd->reg_expanded)
   {
     gnc_numeric value = xaccSplitGetValue (sd->split);
@@ -392,8 +470,29 @@ gnc_split_register_save_cells (gpointer save_data,
     value = gnc_numeric_neg (value);
 
     xaccSplitSetValue (other_split, value);
+    if (gnc_split_register_split_needs_amount (other_split) &&
+	! gnc_numeric_zero_p (rate))
+    {
+      Account *acc = xaccSplitGetAccount (other_split);
+      gnc_numeric amount;
+
+      amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
+				GNC_RND_ROUND);
+      xaccSplitSetAmount (other_split, amount);
+    }
 
     xaccSplitScrub (other_split);
+  }
+  else if (gnc_split_register_split_needs_amount (sd->split) &&
+	   ! gnc_numeric_zero_p (rate))
+  {
+    Account *acc = xaccSplitGetAccount (sd->split);
+    gnc_numeric value, amount;
+
+    value = xaccSplitGetValue (sd->split);
+    amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
+			      GNC_RND_ROUND);
+    xaccSplitSetAmount (sd->split, amount);
   }
 }
 

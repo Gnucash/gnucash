@@ -37,6 +37,7 @@
 #include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "table-allgui.h"
+#include "dialog-transfer.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -742,7 +743,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           SRSaveData *sd;
 
           sd = gnc_split_register_save_data_new (trans, blank_split,
-					    info->trans_expanded);
+					 (info->trans_expanded ||
+					  reg->style == REG_STYLE_AUTO_LEDGER ||
+					  reg->style == REG_STYLE_JOURNAL));
           gnc_table_save_cells (reg->table, sd);
           gnc_split_register_save_data_destroy (sd);
         }
@@ -955,6 +958,84 @@ gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *
   }
 }
 
+static Account *
+gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name)
+{
+  BasicCell *cell;
+  const char *name;
+  gboolean dummy;
+
+  cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
+  if (!cell)
+    return NULL;
+  name = gnc_basic_cell_get_value (cell);
+  return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
+}
+
+/* This function checks to see if we need to determine an exchange rate.
+ * If we need to determine an exchange rate, then pop up the dialog.
+ * If the dialog does not complete successfully, then return TRUE.
+ * Return FALSE in all other cases (meaning "move on")
+ */
+static gboolean
+gnc_split_register_handle_exchange (SplitRegister *reg, VirtualLocation virt_loc)
+{
+  Transaction *txn;
+  Account *xfer_acc;
+  gnc_commodity *txn_cur, *xfer_com;
+  gnc_numeric amount, exch_rate = gnc_numeric_zero();
+  XferDialog *xfer;
+  gboolean used_mxfrm = FALSE;
+  PriceCell *rate_cell;
+  
+  /* Make sure we NEED this for this type of register */
+  rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+  if (!rate_cell)
+    return FALSE;
+
+  /* Grab the xfer account */
+  xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL);
+  if (!xfer_acc) {
+    used_mxfrm = TRUE;
+    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL);
+  }
+
+  if (!xfer_acc)
+    goto done;
+
+  /* Grab the txn currency */
+  txn = gnc_split_register_get_current_trans (reg);
+
+  /* Check if the commodities are the same */
+  txn_cur = xaccTransGetCurrency (txn);
+  xfer_com = xaccAccountGetCommodity (xfer_acc);
+
+  if (gnc_commodity_equal (txn_cur, xfer_com))
+    goto done;
+
+  /* Ok, we need to grab the exchange rate */
+  amount = gnc_split_register_debcred_cell_value (reg);
+
+  xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
+  gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
+
+  gnc_xfer_dialog_select_to_account (xfer, xfer_acc);
+  gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
+  gnc_xfer_dialog_hide_to_account_tree (xfer);
+  gnc_xfer_dialog_hide_from_account_tree (xfer);
+
+  gnc_xfer_dialog_set_amount (xfer, amount);
+  gnc_xfer_dialog_set_description (xfer, "Test Desc");
+
+  if (gnc_xfer_dialog_run_until_done (xfer) == FALSE)
+    return TRUE;
+
+  /* Set the RATE_CELL on this cursor */
+ done:
+  gnc_price_cell_set_value (rate_cell, exch_rate);
+  return FALSE;
+}
+
 static gboolean
 gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                              gncTableTraversalDir dir,
@@ -1074,6 +1155,10 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     if (gnc_table_move_tab (reg->table, &virt_loc, TRUE))
       break;
 
+    /* Deal with the exchange-rate */
+    if (gnc_split_register_handle_exchange (reg, reg->table->current_cursor_loc))
+      return TRUE;
+
     *p_new_virt_loc = reg->table->current_cursor_loc;
     (p_new_virt_loc->vcell_loc.virt_row)++;
     p_new_virt_loc->phys_row_offset = 0;
@@ -1121,6 +1206,11 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
      * on the line. Thus, we want to go ahead and add the new
      * split and end up on the new blank split of the current
      * transaction. */
+
+    /* Deal with the exchange-rate */
+    if (gnc_split_register_handle_exchange (reg, reg->table->current_cursor_loc))
+      return TRUE;
+
     info->cursor_hint_trans = trans;
     info->cursor_hint_split = split;
     info->cursor_hint_trans_split =
@@ -1132,9 +1222,24 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
   } while (FALSE);
 
-  /* Check for going off the end */
-  gnc_table_find_close_valid_cell (reg->table, &virt_loc,
-                                   info->exact_traversal);
+
+  {
+    int old_virt_row;
+
+    old_virt_row = virt_loc.vcell_loc.virt_row;
+    
+    /* Check for going off the end */
+    gnc_table_find_close_valid_cell (reg->table, &virt_loc,
+				     info->exact_traversal);
+
+
+    /* Did we change vertical position? */
+    if (virt_loc.vcell_loc.virt_row != old_virt_row)
+      /* Deal with the exchange-rate */
+      if (gnc_split_register_handle_exchange (reg, reg->table->current_cursor_loc))
+	return TRUE;
+  }
+
 
   /* Same transaction, no problem */
   new_trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);

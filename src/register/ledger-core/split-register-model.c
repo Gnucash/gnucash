@@ -897,6 +897,31 @@ gnc_split_register_get_notes_help (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
+                                   gboolean translate,
+                                   gboolean *conditionally_changed,
+                                   gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  Split *split;
+  gnc_numeric amount, value, convrate;
+
+  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  if (!split)
+    return NULL;
+
+  amount = xaccSplitGetAmount (split);
+  value = xaccSplitGetValue (split);
+
+  if (gnc_numeric_zero_p (value))
+    return "";
+
+  convrate = gnc_numeric_div (amount, value, GNC_DENOM_LCD, GNC_RND_ROUND);
+
+  return xaccPrintAmount (convrate, gnc_split_value_print_info (split, FALSE));
+}
+
+static const char *
 gnc_split_register_get_recn_entry (VirtualLocation virt_loc,
                                    gboolean translate,
                                    gboolean *conditionally_changed,
@@ -1259,6 +1284,58 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (total, gnc_split_amount_print_info (split, FALSE));
 }
 
+/* returns TRUE if you need to convert the split's value to the local
+ * (account) display currency.  Returns FALSE if you can just use the
+ * split->value directly.
+ */
+gboolean
+gnc_split_register_needs_conv_rate (Transaction *txn, Account *acc)
+{
+  gnc_commodity *txn_cur, *acc_com;
+
+  /* if txn->currency == acc->commodity, then return FALSE */
+  acc_com = xaccAccountGetCommodity (acc);
+  txn_cur = xaccTransGetCurrency (txn);
+  if (txn_cur && acc_com && gnc_commodity_equal (txn_cur, acc_com))
+    return FALSE;
+
+  return TRUE;
+}
+
+/* Compute the conversion rate for the transaction to this account.
+ * Any "split value" (which is in the transaction currency),
+ * multiplied by this conversion rate, will give you the value you
+ * should display for this account.
+ */
+gnc_numeric
+gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
+{
+  gnc_numeric amount, value, convrate;
+  GList *splits;
+  Split *s;
+
+  /* We need to compute the conversion rate into _this account_.  So,
+   * find the first split into this account, compute the conversion
+   * rate (based on amount/value), and then return this conversion
+   * rate.
+   */
+  splits = xaccTransGetSplitList(txn);
+  for (; splits; splits = splits->next) {
+    s = splits->data;
+    
+    if (xaccSplitGetAccount (s) != acc)
+      continue;
+
+    amount = xaccSplitGetAmount (s);
+    value = xaccSplitGetValue (s);
+    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    return convrate;
+  }
+
+  PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
+  return gnc_numeric_create (100, 100);
+}
+
 /* Convert the amount/value of the Split for viewing in the account --
  * in particular we want to convert the Split to be in to_commodity.
  * Returns the amount.
@@ -1267,14 +1344,10 @@ static gnc_numeric
 gnc_split_register_convert_amount (Split *split, Account * account,
 				   gnc_commodity * to_commodity)
 {
-  gnc_commodity *currency, *acc_com;
+  gnc_commodity *acc_com;
   Transaction *txn;
-  Timespec date;
   gnc_numeric amount, value, convrate;
-  GList * price_list, *splits;
   Account * split_acc;
-  gboolean div = FALSE;
-  Split *s;
 
   amount = xaccSplitGetAmount (split);
 
@@ -1308,25 +1381,11 @@ gnc_split_register_convert_amount (Split *split, Account * account,
    * compute the conversion rate (based on amount/value), and then multiply
    * this times the split value.
    */
-  splits = xaccTransGetSplitList(txn);
-  for (; splits; splits = splits->next) {
-    s = splits->data;
-    
-    if (xaccSplitGetAccount (s) != account)
-      continue;
-
-    amount = xaccSplitGetAmount (s);
-    value = xaccSplitGetValue (s);
-    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-
-    value = xaccSplitGetValue (split);
-    return gnc_numeric_mul (value, convrate,
-			    gnc_commodity_get_fraction (to_commodity),
-			    GNC_RND_ROUND);    
-  }
-
-  /* If we reach here, do what we USED to do */
-  return xaccSplitGetValue (split);
+  convrate = gnc_split_register_get_conv_rate (txn, account);
+  value = xaccSplitGetValue (split);
+  return gnc_numeric_mul (value, convrate,
+			  gnc_commodity_get_fraction (to_commodity),
+			  GNC_RND_ROUND);    
 }
 
 static const char *
@@ -1354,6 +1413,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   if (!split)
   {
     gnc_numeric imbalance;
+    Account *acc;
 
     imbalance = xaccTransGetImbalance (trans);
 
@@ -1372,9 +1432,18 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
       *conditionally_changed = TRUE;
 
     imbalance = gnc_numeric_abs (imbalance);
-    imbalance = gnc_numeric_convert (imbalance,
-                                     gnc_commodity_get_fraction (currency),
-                                     GNC_RND_ROUND);
+
+    acc = gnc_split_register_get_default_account (reg);
+    if (gnc_split_register_needs_conv_rate (trans, acc)) {
+      imbalance = gnc_numeric_mul (imbalance,
+				   gnc_split_register_get_conv_rate (trans, acc),
+				   gnc_commodity_get_fraction (currency),
+				   GNC_RND_ROUND);
+    } else {
+      imbalance = gnc_numeric_convert (imbalance,
+				       gnc_commodity_get_fraction (currency),
+				       GNC_RND_ROUND);
+    }
 
     return xaccPrintAmount (imbalance,
                             gnc_split_value_print_info (split, FALSE));
@@ -1487,6 +1556,13 @@ gnc_split_register_get_ddue_io_flags (VirtualLocation virt_loc,
   }
 
   return XACC_CELL_ALLOW_READ_ONLY;
+}
+
+static CellIOFlags
+gnc_split_register_get_rate_io_flags (VirtualLocation virt_loc,
+                                         gpointer user_data)
+{
+  return XACC_CELL_ALLOW_NONE;
 }
 
 static CellIOFlags
@@ -1811,6 +1887,10 @@ gnc_split_register_model_new (void)
                                      NOTES_CELL);
 
   gnc_table_model_set_entry_handler (model,
+                                     gnc_split_register_get_rate_entry,
+                                     RATE_CELL);
+
+  gnc_table_model_set_entry_handler (model,
                                      gnc_split_register_get_recn_entry,
                                      RECN_CELL);
 
@@ -2026,6 +2106,11 @@ gnc_split_register_model_new (void)
    * due-date for transactions that credit the RECEIVABLE or debit
    * the PAYABLE account type.
    */
+  gnc_table_model_set_io_flags_handler
+                                 (model,
+                                  gnc_split_register_get_rate_io_flags,
+                                  RATE_CELL);
+
   gnc_table_model_set_io_flags_handler
                                  (model,
                                   gnc_split_register_get_ddue_io_flags,

@@ -82,6 +82,7 @@ typedef enum
 #define NOTES_CELL "notes"
 #define NUM_CELL   "num"
 #define PRIC_CELL  "price"
+#define RATE_CELL  "exchrate"
 #define RECN_CELL  "reconcile"
 #define SHRS_CELL  "shares"
 #define TBALN_CELL "trans-balance"

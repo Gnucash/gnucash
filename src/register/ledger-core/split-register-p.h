@@ -158,4 +158,13 @@ gboolean gnc_split_register_recn_cell_confirm (char old_flag, gpointer data);
 
 CursorClass gnc_split_register_cursor_name_to_class (const char *cursor_name);
 
+gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
+
+/* Determine if we need to perform any conversion on the splits in this
+ * transaction, and if so, what conversion we need
+ */
+gboolean gnc_split_register_needs_conv_rate (Transaction *txn, Account *acc);
+gnc_numeric gnc_split_register_get_conv_rate (Transaction *txn, Account *acc);
+
+
 #endif
