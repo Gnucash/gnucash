@@ -198,7 +198,7 @@ install:
   #	$(INSTALL_DATA) Docs/*.phtml ${GNC_SHAREDIR}/Docs
 	$(INSTALL_DATA) Docs/*.gif ${GNC_SHAREDIR}/Docs
   #	$(INSTALL_DATA) Docs/*.jpg ${GNC_SHAREDIR}/Docs
-	$(INSTALL_DATA) Docs/*.xpm ${GNC_SHAREDIR}/Docs
+  #	$(INSTALL_DATA) Docs/*.xpm ${GNC_SHAREDIR}/Docs
 	$(INSTALL_DATA) Docs/*.css ${GNC_SHAREDIR}/Docs
 	@mkdir -p ${GNC_SHAREDIR}/Docs/images
   # 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/images
