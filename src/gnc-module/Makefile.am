@@ -10,7 +10,6 @@ libgncmodule_la_LDFLAGS = -module
 libgncmodule_la_LIBADD = \
   -L../core-utils -L../core-utils/.libs -lcore-utils \
   ${G_WRAP_LINK_ARGS} \
-  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   -lltdl
 
