@@ -14,6 +14,7 @@ CREATE TABLE gncAccount (
 	security	VARCHAR(8)
 );
 
+-- initialize with just enough bogus data to run the demo
 INSERT INTO  gncaccount (accountguid,accountName,description) values
                     ('asdfasdf','banky','some bogo bank');
 INSERT INTO  gncaccount (accountguid,accountName,description) values
