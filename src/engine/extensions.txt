@@ -8,7 +8,7 @@ of the changes that will come soon to the interfaces.
 Accounting Periods
 ------------------
 Acconting periods are implemented by creating a structure that
-describes the accounting period, and then assigning ever traansaction to
+describes the accounting period, and then assigning every traansaction to
 at least one period.
 
 typedef struct _accountingPeriod {
@@ -21,6 +21,13 @@ typedef struct _accountingPeriod {
 
 The Transaction struct has to be extended with a period guid.
 Every transaction can belong to at most one accounting period.
+
+In addition, each chart of accounts needs to be extended with 
+an accounting period as well.  This allows 'old' accounts to be deleted
+from 'open books', without having to delete that same account from old
+closed books.  Basically, a new chart of accounts needs to be written
+out/read from the engine for each new accounting period.
+
 
 
 Changes to Transaction Structure
