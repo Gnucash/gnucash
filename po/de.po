@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2003-02-10 20:24+0100\n"
-"PO-Revision-Date: 2003-02-10 20:46+0100\n"
+"POT-Creation-Date: 2003-02-14 21:35+0100\n"
+"PO-Revision-Date: 2003-02-14 21:38+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1234,7 +1234,7 @@ msgstr "Gebuchtes Konto"
 
 #: src/business/business-gnome/glade/invoice.glade.h:48
 #: src/gnome-utils/window-help.c:665 src/gnome/glade/register.glade.h:45
-#: src/import-export/hbci/glade/hbci.glade.h:122
+#: src/import-export/hbci/glade/hbci.glade.h:128
 #: src/report/report-gnome/window-report.c:868
 msgid "Print"
 msgstr "Drucken"
@@ -3392,7 +3392,7 @@ msgstr "Neuen Kontenrahmen erstellen"
 
 #: src/gnome/glade/account.glade.h:36
 #: src/import-export/generic-import.glade.h:30
-#: src/import-export/hbci/glade/hbci.glade.h:82
+#: src/import-export/hbci/glade/hbci.glade.h:88
 #: src/import-export/qif-import/qif.glade.h:88
 msgid "New?"
 msgstr "Neu?"
@@ -4467,7 +4467,7 @@ msgid "Mortgage/Loan Repayment Setup"
 msgstr "Einrichtung Hypothek/Darlehen-Tilgung"
 
 #: src/gnome/glade/sched-xact.glade.h:112
-#: src/import-export/hbci/glade/hbci.glade.h:81
+#: src/import-export/hbci/glade/hbci.glade.h:87
 #: src/report/report-gnome/report.glade.h:12
 msgid "Name:"
 msgstr "Name:"
@@ -7278,7 +7278,9 @@ msgstr "Datum eingeben:"
 msgid ""
 "Enter the IDs given from your bank here. Please make sure the spelling is "
 "correct. "
-msgstr "Geben Sie hier die exakten Benutzerinformationen ein, die Ihre Bank Ihnen mitgeteilt hat."
+msgstr ""
+"Geben Sie hier die exakten Benutzerinformationen ein, die Ihre Bank Ihnen "
+"mitgeteilt hat."
 
 #: src/import-export/hbci/glade/hbci.glade.h:36
 msgid "Execute Later (unimpl.)"
@@ -7349,6 +7351,27 @@ msgstr ""
 
 #: src/import-export/hbci/glade/hbci.glade.h:51
 msgid ""
+"If you already have an OpenHBCI configuration file (e.g. from 'aqmoney'), \n"
+"please select it here. GnuCash will continue to use your existing "
+"configuration.\n"
+"\n"
+"If you do not yet have an OpenHBCI configuration file, please specify a file "
+"name here. \n"
+"A new OpenHBCI configuration file with that name will be created when this "
+"HBCI \n"
+"Setup finishes."
+msgstr ""
+"Wenn Sie bereits eine OpenHBCI Konfigurations-Datei haben (z.B. aus\n"
+"'aqmoney'), dann wählen Sie hier bitte diese Datei. GnuCash wird dann\n"
+"diese Datei und Ihre existierende Konfiguration weiterverwenden.\n"
+"\n"
+"Wenn Sie noch keine OpenHBCI Konfigurations-Datei haben, geben Sie\n"
+"hier bitte einen Dateinamen an. Eine neue OpenHBCI\n"
+"Konfigurations-Datei mit diesem Namen wird dann nach Ende dieser HBCI\n"
+"Einrichtung erstellt werden."
+
+#: src/import-export/hbci/glade/hbci.glade.h:57
+msgid ""
 "If you have a Chip Card but are not sure about the exact User ID and "
 "Customer ID, you can \n"
 "use the tool 'hbcicard' from the libchipcard package to read these numbers "
@@ -7358,11 +7381,13 @@ msgstr ""
 "und Kundennummer unsicher sind, können Sie diese mit dem Programm\n"
 "'hbcicard' aus dem Paket libchipcard von der Chipkarte auslesen."
 
-#: src/import-export/hbci/glade/hbci.glade.h:53
+#: src/import-export/hbci/glade/hbci.glade.h:59
 msgid "If your bank did not specify a Customer ID, enter the User ID here."
-msgstr "Wenn Ihre Bank keine Kundennummer angegeben hat, geben Sie hier bitte die Benutzerkennung ein."
+msgstr ""
+"Wenn Ihre Bank keine Kundennummer angegeben hat, geben Sie hier bitte die "
+"Benutzerkennung ein."
 
-#: src/import-export/hbci/glade/hbci.glade.h:54
+#: src/import-export/hbci/glade/hbci.glade.h:60
 msgid ""
 "In order to setup HBCI access to your bank, OpenHBCI first has to \n"
 "retrieve the cryptographic public keys of your bank. You will need \n"
@@ -7390,7 +7415,7 @@ msgstr ""
 "Sie können dann den Verlauf der HBCI Verbindung im HBCI Verbindungs-Fenster "
 "beobachten. "
 
-#: src/import-export/hbci/glade/hbci.glade.h:66
+#: src/import-export/hbci/glade/hbci.glade.h:72
 msgid ""
 "In order to update your list of HBCI-enabled accounts, your bank\n"
 "server will be contacted and will be queried for the \n"
@@ -7407,47 +7432,47 @@ msgstr ""
 "können dann den Verlauf der HBCI Verbindung im HBCI\n"
 "Verbindungs-Fenster beobachten."
 
-#: src/import-export/hbci/glade/hbci.glade.h:72
+#: src/import-export/hbci/glade/hbci.glade.h:78
 msgid "Ini-Letter Server"
 msgstr "Ini-Brief Server"
 
-#: src/import-export/hbci/glade/hbci.glade.h:73
+#: src/import-export/hbci/glade/hbci.glade.h:79
 msgid "Ini-Letter User"
 msgstr "Ini-Brief Benutzer"
 
-#: src/import-export/hbci/glade/hbci.glade.h:74
+#: src/import-export/hbci/glade/hbci.glade.h:80
 msgid "Initial HBCI Setup"
 msgstr "Grundlegende HBCI Einrichtung"
 
-#: src/import-export/hbci/glade/hbci.glade.h:75
+#: src/import-export/hbci/glade/hbci.glade.h:81
 msgid "Initial HBCI Setup Finished"
 msgstr "Grundlegende HBCI Einrichtung beendet"
 
-#: src/import-export/hbci/glade/hbci.glade.h:76
+#: src/import-export/hbci/glade/hbci.glade.h:82
 msgid "Internet Address"
 msgstr "Internetadresse"
 
-#: src/import-export/hbci/glade/hbci.glade.h:77
+#: src/import-export/hbci/glade/hbci.glade.h:83
 msgid "Last retrieval date"
 msgstr "Letztes Abrufdatum"
 
-#: src/import-export/hbci/glade/hbci.glade.h:78
+#: src/import-export/hbci/glade/hbci.glade.h:84
 msgid "Log Messages"
 msgstr "Protokoll"
 
-#: src/import-export/hbci/glade/hbci.glade.h:79
+#: src/import-export/hbci/glade/hbci.glade.h:85
 msgid "Match HBCI accounts with GnuCash accounts"
 msgstr "HBCI Konten mit GnuCash Konten zuordnen"
 
-#: src/import-export/hbci/glade/hbci.glade.h:80
+#: src/import-export/hbci/glade/hbci.glade.h:86
 msgid "Name (optional)"
 msgstr "Name (optional)"
 
-#: src/import-export/hbci/glade/hbci.glade.h:83
+#: src/import-export/hbci/glade/hbci.glade.h:89
 msgid "Now"
 msgstr "Jetzt"
 
-#: src/import-export/hbci/glade/hbci.glade.h:84
+#: src/import-export/hbci/glade/hbci.glade.h:90
 msgid ""
 "Now the setup for all HBCI accounts that are matching\n"
 "to a Gnucash account is finished. You can now invoke HBCI actions\n"
@@ -7468,7 +7493,7 @@ msgstr ""
 "\n"
 "Klicken Sie jetzt 'Fertig'."
 
-#: src/import-export/hbci/glade/hbci.glade.h:92
+#: src/import-export/hbci/glade/hbci.glade.h:98
 msgid ""
 "Now you need to send your cryptographic public keys to the bank\n"
 "server. Once you press 'Next', you public keys are sent to the \n"
@@ -7504,7 +7529,7 @@ msgstr ""
 "Ihre Schlüssel an die Bank schicken zu lassen. Sie können dann den\n"
 "Verlauf der HBCI Verbindung im HBCI Verbindungs-Fenster beobachten."
 
-#: src/import-export/hbci/glade/hbci.glade.h:106
+#: src/import-export/hbci/glade/hbci.glade.h:112
 msgid ""
 "Now you need to sign your (the User's) Ini-Letter and send it to your "
 "bank. \n"
@@ -7530,73 +7555,73 @@ msgstr ""
 "\n"
 "Klicken Sie jetzt 'Fertig'."
 
-#: src/import-export/hbci/glade/hbci.glade.h:115
+#: src/import-export/hbci/glade/hbci.glade.h:121
 msgid "Online Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
-#: src/import-export/hbci/glade/hbci.glade.h:116
+#: src/import-export/hbci/glade/hbci.glade.h:122
 msgid "OpenHBCI Configuration File"
 msgstr "OpenHBCI Konfigurations-Datei"
 
-#: src/import-export/hbci/glade/hbci.glade.h:117
+#: src/import-export/hbci/glade/hbci.glade.h:123
 msgid "Originator Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: src/import-export/hbci/glade/hbci.glade.h:118
+#: src/import-export/hbci/glade/hbci.glade.h:124
 msgid "Originator Name"
 msgstr "Auftraggeber: Name, Vorname"
 
-#: src/import-export/hbci/glade/hbci.glade.h:119
+#: src/import-export/hbci/glade/hbci.glade.h:125
 msgid "Path to Key File"
 msgstr "Pfad zur Schlüssel-Datei"
 
-#: src/import-export/hbci/glade/hbci.glade.h:120
+#: src/import-export/hbci/glade/hbci.glade.h:126
 msgid "Payment Purpose (only for recipient)"
 msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
-#: src/import-export/hbci/glade/hbci.glade.h:121
+#: src/import-export/hbci/glade/hbci.glade.h:127
 msgid "Payment Purpose continued"
 msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
-#: src/import-export/hbci/glade/hbci.glade.h:123
+#: src/import-export/hbci/glade/hbci.glade.h:129
 msgid "Print Ini-Letter of User"
 msgstr "Ini-Brief des Benutzers drucken"
 
 #. src/import-export/qif-import/qif-file.scm
 #: intl-scm/guile-strings.c:2850 intl-scm/guile-strings.c:2856
-#: intl-scm/guile-strings.c:2864 src/import-export/hbci/glade/hbci.glade.h:124
+#: intl-scm/guile-strings.c:2864 src/import-export/hbci/glade/hbci.glade.h:130
 msgid "Progress"
 msgstr "Verlauf"
 
-#: src/import-export/hbci/glade/hbci.glade.h:125
+#: src/import-export/hbci/glade/hbci.glade.h:131
 msgid "Public Keys will be retrieved"
 msgstr "Öffentliche Schlüssel werden abgerufen"
 
-#: src/import-export/hbci/glade/hbci.glade.h:126
+#: src/import-export/hbci/glade/hbci.glade.h:132
 msgid "RDH Medium (Key File)"
 msgstr "RDH Medium (Schlüssel-Datei)"
 
-#: src/import-export/hbci/glade/hbci.glade.h:127
+#: src/import-export/hbci/glade/hbci.glade.h:133
 msgid "Recipient Account Number"
 msgstr "Konto-Nr. des Empfängers"
 
-#: src/import-export/hbci/glade/hbci.glade.h:128
+#: src/import-export/hbci/glade/hbci.glade.h:134
 msgid "Recipient Bank Code"
 msgstr "Bankleitzahl"
 
-#: src/import-export/hbci/glade/hbci.glade.h:129
+#: src/import-export/hbci/glade/hbci.glade.h:135
 msgid "Recipient Name"
 msgstr "Empfänger: Name, Vorname / Firma"
 
-#: src/import-export/hbci/glade/hbci.glade.h:130
+#: src/import-export/hbci/glade/hbci.glade.h:136
 msgid "Security Medium"
 msgstr "Sicherheits-Medium"
 
-#: src/import-export/hbci/glade/hbci.glade.h:131
+#: src/import-export/hbci/glade/hbci.glade.h:137
 msgid "Server Address"
 msgstr "Server-Adresse"
 
-#: src/import-export/hbci/glade/hbci.glade.h:132
+#: src/import-export/hbci/glade/hbci.glade.h:138
 msgid ""
 "This druid helps you setting up your HBCI connection with your bank.\n"
 "\n"
@@ -7645,7 +7670,7 @@ msgstr ""
 "Klicken Sie 'Abbruch', wenn Sie jetzt keine HBCI Verbindung einrichten\n"
 "möchten."
 
-#: src/import-export/hbci/glade/hbci.glade.h:152
+#: src/import-export/hbci/glade/hbci.glade.h:158
 msgid ""
 "This is the Ini-Letter of you, the user. Please print out a paper copy \n"
 "by pressing 'Print'. Then press 'Next'."
@@ -7662,11 +7687,11 @@ msgstr ""
 #: intl-scm/guile-strings.c:2656 intl-scm/guile-strings.c:2700
 #: intl-scm/guile-strings.c:3096 intl-scm/guile-strings.c:3128
 #: intl-scm/guile-strings.c:3146 intl-scm/guile-strings.c:3198
-#: src/import-export/hbci/glade/hbci.glade.h:154
+#: src/import-export/hbci/glade/hbci.glade.h:160
 msgid "To"
 msgstr "Bis"
 
-#: src/import-export/hbci/glade/hbci.glade.h:155
+#: src/import-export/hbci/glade/hbci.glade.h:161
 msgid ""
 "Update \n"
 "account list"
@@ -7674,39 +7699,39 @@ msgstr ""
 "Kontoliste\n"
 "aktualisieren"
 
-#: src/import-export/hbci/glade/hbci.glade.h:157
+#: src/import-export/hbci/glade/hbci.glade.h:163
 msgid "User ID (\"Benutzerkennung\")"
 msgstr "Benutzerkennung"
 
-#: src/import-export/hbci/glade/hbci.glade.h:158
+#: src/import-export/hbci/glade/hbci.glade.h:164
 msgid "User Identification"
 msgstr "Benutzerinformationen"
 
-#: src/import-export/hbci/glade/hbci.glade.h:159
+#: src/import-export/hbci/glade/hbci.glade.h:165
 msgid "User Keys will be sent"
 msgstr "Schlüssel des Benutzers werden gesendet"
 
-#: src/import-export/hbci/glade/hbci.glade.h:160
+#: src/import-export/hbci/glade/hbci.glade.h:166
 msgid "Verify Ini-Letter from Server"
 msgstr "Ini-Brief des Servers prüfen"
 
-#: src/import-export/hbci/glade/hbci.glade.h:161
+#: src/import-export/hbci/glade/hbci.glade.h:167
 msgid "Version"
 msgstr "Version"
 
-#: src/import-export/hbci/glade/hbci.glade.h:162
+#: src/import-export/hbci/glade/hbci.glade.h:168
 msgid "at Bank"
 msgstr "der Bank"
 
-#: src/import-export/hbci/glade/hbci.glade.h:163
+#: src/import-export/hbci/glade/hbci.glade.h:169
 msgid "my-bank"
 msgstr "meine bank"
 
-#: src/import-export/hbci/glade/hbci.glade.h:164
+#: src/import-export/hbci/glade/hbci.glade.h:170
 msgid "something"
 msgstr "irgendwas"
 
-#: src/import-export/hbci/glade/hbci.glade.h:165
+#: src/import-export/hbci/glade/hbci.glade.h:171
 msgid "www.hbci-kernel.de"
 msgstr "www.hbci-kernel.de"
 
