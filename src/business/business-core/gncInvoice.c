@@ -750,7 +750,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   GList *splitinfo = NULL;
   gnc_numeric total;
   gboolean reverse;
-  const char *name, *type;
+  const char *name, *type, *lot_title;
   Account *ccard_acct = NULL;
   GncOwner *owner;
 
@@ -791,12 +791,18 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   if (!lot)
     lot = gnc_lot_new (invoice->inst.book);
 
+  type = gncInvoiceGetType (invoice);
+
+  /* Set the lot title */
+  lot_title = g_strdup_printf ("%s %s", type, gncInvoiceGetID (invoice));
+  gnc_lot_set_title (lot, lot_title);
+  g_free (lot_title);
+
   /* Create a new transaction */
   txn = xaccMallocTransaction (invoice->inst.book);
   xaccTransBeginEdit (txn);
 
   name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
-  type = gncInvoiceGetType (invoice);
 
   /* Set Transaction Description (Owner Name) , Num (invoice ID), Currency */
   xaccTransSetDescription (txn, name ? name : "");

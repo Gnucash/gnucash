@@ -1,5 +1,10 @@
 2003-01-02  Derek Atkins  <derek@ihtfp.com>
 
+	* src/business/business-core/gncInvoice.c: set the lot title to
+	  "<Invoice Type> <Invoice ID>" (e.g., "Invoice 000001" or
+	  "Bill I2-34") when posting an invoice.  We already assume
+	  one invoice to a lot.
+
 	* src/business/business-reports/aging.scm:  When computing the aging
 	  report, ignore splits that belong to closed lots.  This way we wont
 	  get the wrong values when the invoice falls outside the 360-day
