@@ -1,3 +1,11 @@
+2000-03-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/SplitLedger.c (xaccSRDuplicateCurrent): new function to
+ 	duplicate the current split or transaction.
+
+	* src/gnome/window-report.c (gnc_run_report): set the busy cursor
+	while running the report generator.
+
 2000-03-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-main.c (gnc_ui_refresh_statusbar): revise the

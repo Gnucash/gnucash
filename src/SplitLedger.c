@@ -647,6 +647,7 @@ xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
 Split *
 xaccSRDuplicateCurrent (SplitRegister *reg)
 {
+#ifdef GNOME
   SRInfo *info = xaccSRGetInfo(reg);
   CursorType cursor_type;
   unsigned int changed;
@@ -778,6 +779,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   gnc_refresh_main_window();
 
   return return_split;
+#endif
 }
 
 /* ======================================================== */
