@@ -100,6 +100,7 @@ struct _AccountWindow
   GtkWidget * quote_tz_menu;
 
   GtkWidget * tax_related_button;
+  GtkWidget * placeholder_button;
 
   gint component_id;
 };
@@ -143,7 +144,7 @@ gnc_account_to_ui(AccountWindow *aw)
   Account *account = aw_get_account (aw);
   gnc_commodity * commodity;
   const char *string;
-  gboolean tax_related;
+  gboolean tax_related, placeholder;
   gint pos = 0;
 
   if (!account)
@@ -179,6 +180,10 @@ gnc_account_to_ui(AccountWindow *aw)
   tax_related = xaccAccountGetTaxRelated (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->tax_related_button),
                                 tax_related);
+
+  placeholder = xaccAccountGetPlaceholder (account);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->placeholder_button),
+                                placeholder);
 
   if ((STOCK != aw->type) && (MUTUAL != aw->type) && (CURRENCY != aw->type))
     return;
@@ -274,7 +279,7 @@ gnc_ui_to_account(AccountWindow *aw)
   Account *parent_account;
   const char *old_string;
   const char *string;
-  gboolean tax_related;
+  gboolean tax_related, placeholder;
   gnc_numeric balance;
   gboolean use_equity;
   time_t date;
@@ -366,6 +371,10 @@ gnc_ui_to_account(AccountWindow *aw)
   tax_related =
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
   xaccAccountSetTaxRelated (account, tax_related);
+
+  placeholder =
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->placeholder_button));
+  xaccAccountSetPlaceholder (account, placeholder);
 
   parent_account =
     gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE(aw->parent_tree));
@@ -1658,6 +1667,7 @@ gnc_account_window_create(AccountWindow *aw)
 		     GTK_SIGNAL_FUNC(gnc_parent_tree_select), aw);
 
   aw->tax_related_button = gtk_object_get_data (awo, "tax_related_button");
+  aw->placeholder_button = gtk_object_get_data (awo, "placeholder_button");
 
   box = gtk_object_get_data(awo, "opening_balance_box");
   amount = gnc_amount_edit_new ();

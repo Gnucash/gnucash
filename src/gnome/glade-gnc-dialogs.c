@@ -3416,7 +3416,9 @@ create_Account_Dialog (void)
   GtkWidget *frame32;
   GtkWidget *scrolledwindow9;
   GtkWidget *notes_text;
+  GtkWidget *hbox104;
   GtkWidget *tax_related_button;
+  GtkWidget *placeholder_button;
   GtkWidget *label8477388;
   GtkWidget *vbox118;
   GtkWidget *opening_balance_frame;
@@ -3439,6 +3441,9 @@ create_Account_Dialog (void)
   GtkWidget *button63;
   GtkWidget *cancel_button;
   GtkWidget *button72;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
 
   Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
@@ -3730,13 +3735,29 @@ create_Account_Dialog (void)
   gtk_container_add (GTK_CONTAINER (scrolledwindow9), notes_text);
   gtk_text_set_editable (GTK_TEXT (notes_text), TRUE);
 
+  hbox104 = gtk_hbox_new (TRUE, 0);
+  gtk_widget_ref (hbox104);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox104", hbox104,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox104);
+  gtk_box_pack_start (GTK_BOX (vbox75), hbox104, FALSE, FALSE, 0);
+
   tax_related_button = gtk_check_button_new_with_label (_("Tax Related"));
   gtk_widget_ref (tax_related_button);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "tax_related_button", tax_related_button,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (tax_related_button);
-  gtk_box_pack_start (GTK_BOX (vbox75), tax_related_button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox104), tax_related_button, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (tax_related_button), 3);
+
+  placeholder_button = gtk_check_button_new_with_label (_("Placeholder"));
+  gtk_widget_ref (placeholder_button);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "placeholder_button", placeholder_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (placeholder_button);
+  gtk_box_pack_start (GTK_BOX (hbox104), placeholder_button, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (placeholder_button), 3);
+  gtk_tooltips_set_tip (tooltips, placeholder_button, _("This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."), NULL);
 
   label8477388 = gtk_label_new (_("General Information"));
   gtk_widget_ref (label8477388);
@@ -3900,6 +3921,8 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (button72);
   GTK_WIDGET_SET_FLAGS (button72, GTK_CAN_DEFAULT);
+
+  gtk_object_set_data (GTK_OBJECT (Account_Dialog), "tooltips", tooltips);
 
   return Account_Dialog;
 }

@@ -315,6 +315,12 @@ gnc_error_dialog_parented(GtkWindow *parent, const char *message)
   gnome_dialog_run_and_close(GNOME_DIALOG(error_box));
 }
 
+void 
+gnc_error_dialog_parented2(gncUIWidget parent, const char *message)
+{
+    gnc_error_dialog_parented(GTK_WINDOW(parent), message);
+}
+
 
 static void
 gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)

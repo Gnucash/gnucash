@@ -631,16 +631,15 @@ ComboDirect (BasicCell *bcell,
         find_pos = -1;
         if (*cursor_position < bcell->value_len)
         {
-                int i = *cursor_position + 1; 
+                int i = *cursor_position;
 
                 while (bcell->value_w[i])
                 {
-                        if (bcell->value_w[i] == box->complete_char)
+                        if (bcell->value_w[i++] == box->complete_char)
                         {
                                 find_pos = i;
                                 break;
                         }
-                        i++;
                 }
         }
 

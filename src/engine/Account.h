@@ -271,6 +271,10 @@ const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
 void            xaccAccountSetTaxUSPayerNameSource (Account *account,
                                                     const char *source);
 
+gboolean        xaccAccountGetPlaceholder (Account *account);
+void            xaccAccountSetPlaceholder (Account *account,
+                                           gboolean option);
+
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed
  * after use. The fully qualified name of an account is the concatenation

@@ -1462,8 +1462,21 @@ LedgerTraverse (Table *table,
                                           cell->cell.value,
                                           account_separator);
     if (account)
-      break;
+    {
+      if (xaccAccountGetPlaceholder (account))
+      {
+        const char *format = _("The account %s does not allow transactions.\n");
+	char *message;
+	gboolean result;
 
+	message = g_strdup_printf (format, name);
+
+	gnc_error_dialog_parented2 (xaccSRGetParent (reg),
+				    message);
+      }
+      break;
+    }
+    else
     {
       const char *format = _("The account %s does not exist.\n"
                              "Would you like to create it?");
@@ -5024,7 +5037,7 @@ LoadXferCell (ComboCell * cell,
         (secu && (gnc_commodity_equiv (secu,base_security))))
     {
       name = xaccAccountGetFullName (account, account_separator);
-      if (name != NULL)
+      if ((name != NULL) && !xaccAccountGetPlaceholder (account))
       {
         xaccAddComboCellMenuItem (cell, name);
         g_free(name);

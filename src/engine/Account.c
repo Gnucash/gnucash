@@ -1763,6 +1763,40 @@ xaccAccountsHaveCommonCurrency(Account *account_1, Account *account_2)
 \********************************************************************/
 
 gboolean
+xaccAccountGetPlaceholder (Account *account)
+{
+  kvp_value *kvp;
+  char *setting;
+
+  if ( ( account )                                      &&
+       ( kvp = kvp_frame_get_slot (account->kvp_data, "placeholder" ) ) &&
+       ( kvp_value_get_type (kvp) == KVP_TYPE_STRING ) && 
+       ( setting = kvp_value_get_string(kvp) ) &&
+       ( !strcmp( setting, "true" ) ) )
+      return TRUE;
+
+  return FALSE;
+}
+
+void
+xaccAccountSetPlaceholder (Account *account, gboolean option)
+{
+  if (!account)
+    return;
+
+  xaccAccountBeginEdit (account);
+  kvp_frame_set_slot_nc(account->kvp_data, "placeholder",
+			kvp_value_new_string (option ? "true" : "false"));
+
+  mark_account (account);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+gboolean
 xaccAccountHasAncestor (Account *account, Account * ancestor)
 {
   Account *parent;
