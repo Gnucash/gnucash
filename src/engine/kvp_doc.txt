@@ -46,11 +46,18 @@ Use:  kvp subdirectory holding info relating to accounting periods, including
       the 'twin' of an open/closed account, pointers to the open-balance
       transactions, the closing dates, etc.
 
+Name: /book/accounting-period
+Type: string, enum {none, week, month, quarter, trimester, year}
+Entities: Book
+Use:  An enumerated identifier indicating how often books are supposed
+      to be closed.  This key will typically be present only in an
+      open book, as it seems meaningless in a closed book.
+
 Name: /book/close-date
 Type: Timespec
 Entities: Book
-Use:  The posted closing date of this book.  This book only contains transactions
-      whose posted date is earlier than this closing date.
+Use:  The posted closing date of this book.  This book only contains 
+      transactions whose posted date is earlier than this closing date.
 
 Name: /book/closed-acct
 Type: GUID
