@@ -51,5 +51,4 @@ int gnc_unsetenv(const char *name);
 #error "Must have setenv or putenv."
 #endif
 
-
 #endif

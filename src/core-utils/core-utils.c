@@ -31,6 +31,8 @@
  * see header for info.
 \********************************************************************/
 
+#ifndef HAVE_SETENV
+
 int
 gnc_setenv(const char *name, const char *value, int overwrite)
 {
@@ -76,3 +78,4 @@ gnc_unsetenv(const char *name)
   return result;
 }
 
+#endif
