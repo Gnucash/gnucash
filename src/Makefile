@@ -31,8 +31,8 @@ INCLPATH = -I.. \
            -I/usr/X11R6/include \
            -I./../include \
            -I./../lib/ComboBox-1.33 \
-           -I./../lib/XmHTML-1.1.0/src
-#           -I./../lib/libhtmlw 
+           -I./../lib/XmHTML-1.1.0/src \
+           -I./../lib/libhtmlw 
 CFLAGS   = -O2 -DCELL_WIDGETS=1
 LFLAGS   = -O2
 LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm

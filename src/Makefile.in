@@ -31,8 +31,8 @@ INCLPATH = -I.. \
            -I@x_includes@ \
            -I@srcdir@/../include \
            -I@srcdir@/../lib/ComboBox-1.33 \
-           -I@srcdir@/../lib/XmHTML-1.1.0/src
-#           -I@srcdir@/../lib/libhtmlw 
+           -I@srcdir@/../lib/XmHTML-1.1.0/src \
+           -I@srcdir@/../lib/libhtmlw 
 CFLAGS   = @cflags@ -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
