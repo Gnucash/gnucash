@@ -502,6 +502,15 @@ xaccAccountGetGUID (Account *account)
   return &account->guid;
 }
 
+GUID
+xaccAccountReturnGUID (Account *account)
+{
+  if (!account)
+    return *xaccGUIDNULL();
+
+  return account->guid;
+}
+
 /********************************************************************\
 \********************************************************************/
 

@@ -36,6 +36,9 @@
 
 (define-module (gnucash report taxtxf))
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 (require 'printf)

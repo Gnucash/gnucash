@@ -33,6 +33,9 @@
 
 (use-modules (srfi srfi-1))
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 ;; account summary report
 ;; prints a table of account information with clickable 
 ;; links to open the corresponding register window.

@@ -849,6 +849,14 @@ description of the nature of a particular account.")
 
   (gw:wrap-function
    mod
+   'gnc:account-get-guid
+   '<gnc:guid-scm>
+   "xaccAccountReturnGUID"
+   '((<gnc:Account*> a))
+   "Get the GUID of Account a.")
+
+  (gw:wrap-function
+   mod
    'gnc:account-get-type-string
    '(<gw:m-chars-callee-owned> gw:const)
    "xaccAccountGetTypeStr"

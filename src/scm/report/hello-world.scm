@@ -9,6 +9,9 @@
 
 (define-module (gnucash report hello-world))
 
+(use-modules (gnucash gnc-module))
+(gnc:module-load "gnucash/engine" 0)
+
 ;; This function will generate a set of options that GnuCash
 ;; will use to display a dialog where the user can select
 ;; values for your report's parameters.
@@ -396,7 +399,9 @@ new, totally cool report, consult the mailing list %s.")
          (gnc:html-markup/format
           (_ "The number option formatted as currency is %s.")
           (gnc:html-markup-b
-           (gnc:amount->string num-val (gnc:default-print-info #f)))))))
+           (gnc:amount->string
+            (gnc:make-gnc-numeric (inexact->exact num-val) 1)
+            (gnc:default-print-info #f)))))))
 
       ;; you can add as many objects as you want.  Here's another 
       ;; one.  We'll make a single-column table of the selected list 

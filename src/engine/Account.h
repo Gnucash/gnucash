@@ -140,12 +140,15 @@ void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
 /*
  * The xaccAccountGetGUID() subroutine will return the
  *    globally unique id associated with that account.
+ *    xaccAccountReturnGUID() returns the same as a
+ *    struct.
  *
  * The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account.
  */
 const GUID * xaccAccountGetGUID (Account *account);
+GUID         xaccAccountReturnGUID (Account *account);
 Account    * xaccAccountLookup (const GUID *guid);
 
 /*

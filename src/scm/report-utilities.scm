@@ -19,16 +19,12 @@
 
 (gnc:support "report-utilities.scm")
 
-(define (gnc:amount->string amount info)
-  (d-gnc:amount->string-helper (exact->inexact amount) info))
-
-(define (gnc:commodity-amount->string amount info)
-  (gnc:amount->string-helper amount info))
+(define gnc:amount->string gnc:amount->string-helper)
 
 ;; pair is a list of one gnc:commodity and one gnc:numeric
 ;; value. Deprecated -- use <gnc-monetary> instead.
 (define (gnc:commodity-value->string pair)
-  (gnc:commodity-amount->string 
+  (gnc:amount->string 
    (cadr pair) (gnc:commodity-print-info (car pair) #t)))
 
 ;; Just for convenience. But in reports you should rather stick to the
