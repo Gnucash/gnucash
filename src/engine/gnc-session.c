@@ -501,26 +501,25 @@ gnc_session_save (GNCSession *session)
 
     if (be->sync_all)
     {
-        (be->sync_all)(be, session->book);
-        if (save_error_handler(be, session))
-          return;
+      (be->sync_all)(be, session->book);
+      if (save_error_handler(be, session))
+        return;
     }
-    else
-    {
-        if (be->sync_group && gnc_book_get_group (session->book))
-        {
-            (be->sync_group)(be, gnc_book_get_group (session->book));
-            if (save_error_handler(be, session))
-              return;
-        }
 
-        if (be->sync_price && gnc_book_get_pricedb (session->book))
-        {
-            (be->sync_price)(be, gnc_book_get_pricedb (session->book));
-            if(save_error_handler(be, session))
-              return;
-        }
+    if (be->sync_group && gnc_book_get_group (session->book))
+    {
+      (be->sync_group)(be, gnc_book_get_group (session->book));
+      if (save_error_handler(be, session))
+        return;
     }
+
+    if (be->sync_price && gnc_book_get_pricedb (session->book))
+    {
+      (be->sync_price)(be, gnc_book_get_pricedb (session->book));
+      if(save_error_handler(be, session))
+        return;
+    }
+
     return;
   } 
 
