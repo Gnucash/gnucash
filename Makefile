@@ -45,7 +45,7 @@ CFLAGS = $(LFLAGS) -I../include -I../libhtmlw -I../Xbae-4.6.2-linas \
 
 	 # -DDEBUGMEMORY -DUSEDEBUG
 	 # -DUSEQUICKFILL # -DUSE_NO_COLOR -DDEBUGMEMORY -DUSEDEBUG
-LFLAGS = -g -L/usr/local/lib -L/usr/X11/lib
+LFLAGS = -g -L/usr/local/lib -L/usr/X11/lib -L../lib
 LIBS   = -lXm -lXmu -lXt -lXpm -lXext -lSM -lICE -lX11 
 
 ######################################################################
