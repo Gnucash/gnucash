@@ -148,6 +148,14 @@ You can specify a particular access mode by specifying the URL
 
 postgres://localhost/dbname?mode=whatever
 
+You can alternate between multi-user and single-user modes for
+the same database.  Just be sure that all users have logged off,
+otherwise gnucash won't let you log on in single-user mode. 
+Users are 'logged off' automatically when they exist gnucash.
+In case they have crashed, (and thus apear to still be logged
+in), you can log them off manually by issuing  the following:
+
+echo "UPDATE gncsession SET time_off='NOW' WHERE time_off = 'infinity';" | psql dbname
 
 Other Options
 -------------
@@ -338,7 +346,5 @@ multi-user mode is fundamentally broken unless they are fixed.
    but this is currently unimplmented in the engine.  Alternately, 
    we could call 'Scrub' at appropriate times.
     
-   
-   
-============================= END OF FILE ========================
 
+============================= END OF FILE ========================
