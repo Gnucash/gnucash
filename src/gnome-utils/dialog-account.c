@@ -618,6 +618,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   gchar *account_field_name;
   gchar *account_field_value;
   gchar *value_str;
+  gboolean dummy;
 
   if (fs == NULL) return;
   if (fs->account == account) return;
@@ -631,7 +632,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
     account_field_name = g_strdup("");
 
   account_field_value =
-    gnc_ui_account_get_field_value_string(account, fs->field);
+    gnc_ui_account_get_field_value_string(account, fs->field, &dummy);
   if (!account_field_value)
     account_field_value = g_strdup("");
 
