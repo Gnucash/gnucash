@@ -100,7 +100,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 				   owner->owner.undefined);
   gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
   if (label)
-    gtk_label_set_text (GTK_LABEL (label), gncObjectGetTypeLabel (type_name));
+    gtk_label_set_text (GTK_LABEL (label), _(gncObjectGetTypeLabel (type_name)));
 
   return edit;
 }
