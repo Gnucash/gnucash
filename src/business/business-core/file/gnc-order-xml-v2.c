@@ -246,26 +246,23 @@ static GncOrder*
 dom_tree_to_order (xmlNodePtr node, GNCBook *book)
 {
     struct order_pdata order_pdata;
-    GncOrder *orderToRet;
     gboolean successful;
 
-    orderToRet = gncOrderCreate(book);
-
-    order_pdata.order = orderToRet;
+    order_pdata.order = gncOrderCreate(book);
     order_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, order_handlers_v2,
                                          &order_pdata);
-    gncOrderCommitEdit (orderToRet);
+    gncOrderCommitEdit (order_pdata.order);
 
     if (!successful)
     {
         PERR ("failed to parse order tree");
-        gncOrderDestroy (orderToRet);
-        orderToRet = NULL;
+        gncOrderDestroy (order_pdata.order);
+        order_pdata.order = NULL;
     }
 
-    return orderToRet;
+    return order_pdata.order;
 }
 
 static gboolean

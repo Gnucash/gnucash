@@ -25,29 +25,22 @@
 const char * gnc_entry_ledger_type_string_getter (char flag)
 {
   switch (flag) {
-  case '0': return _("$");
-  case '1': return _("%");
-  case '2': return _("+$");
-  case '3': return _("+%");
+  case '1': return _("$");
+  case '2': return _("%");
   default:
     return "?";
   };
 }
 
-static void load_tax_type_cells (GncEntryLedger *ledger)
+const char * gnc_entry_ledger_how_string_getter (char flag)
 {
-  RecnCell *cell;
-
-  if (!ledger) return;
-
-  cell = (RecnCell *)
-    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTYPE_CELL);
-
-  if (!cell) return;
-
-  gnc_recn_cell_set_valid_flags (cell, "01", '1');
-  gnc_recn_cell_set_flag_order (cell, "01");
-  gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
+  switch (flag) {
+  case '1': return _("<");
+  case '2': return _("=");
+  case '3': return _(">");
+  default:
+    return "?";
+  };
 }
 
 static void load_discount_type_cells (GncEntryLedger *ledger)
@@ -61,23 +54,40 @@ static void load_discount_type_cells (GncEntryLedger *ledger)
 
   if (!cell) return;
 
-  gnc_recn_cell_set_valid_flags (cell, "0123", '1');
-  gnc_recn_cell_set_flag_order (cell, "1032");
+  gnc_recn_cell_set_valid_flags (cell, "12", '2');
+  gnc_recn_cell_set_flag_order (cell, "21");
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_type_string_getter);
 }
 
-static void load_inv_type_cells (GncEntryLedger *ledger)
+static void load_discount_how_cells (GncEntryLedger *ledger)
 {
   RecnCell *cell;
 
   if (!ledger) return;
 
   cell = (RecnCell *)
-    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_INV_CELL);
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DISHOW_CELL);
 
   if (!cell) return;
 
-  gnc_recn_cell_set_valid_flags (cell, " X", ' ');
+  gnc_recn_cell_set_valid_flags (cell, "123", '1');
+  gnc_recn_cell_set_flag_order (cell, "123");
+  gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_how_string_getter);
+}
+
+static void load_inv_type_cells (GncEntryLedger *ledger, char *cell_name,
+				 gboolean default_is_true)
+{
+  RecnCell *cell;
+
+  if (!ledger) return;
+
+  cell = (RecnCell *)
+    gnc_table_layout_get_cell (ledger->table->layout, cell_name);
+
+  if (!cell) return;
+
+  gnc_recn_cell_set_valid_flags (cell, " X", (default_is_true ? 'X' : ' '));
   gnc_recn_cell_set_flag_order (cell, " X");
 }
 
@@ -119,16 +129,30 @@ static void load_xfer_type_cells (GncEntryLedger *ledger)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACCT_CELL);
   gnc_combo_cell_clear_menu (cell);
   load_xfer_cell (cell, group);
+}
+
+static void load_taxtable_type_cells (GncEntryLedger *ledger)
+{
+  GList *list;
+  ComboCell *cell;
 
   cell = (ComboCell *)
-    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXACC_CELL);
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTABLE_CELL);
   gnc_combo_cell_clear_menu (cell);
-  load_xfer_cell (cell, group);
+  
+  list = gncTaxTableGetTables (ledger->book);
+  for ( ; list ; list = list->next ) {
+    GncTaxTable *table = list->data;
+    const char *name = gncTaxTableGetName (table);
+    if (name != NULL)
+      gnc_combo_cell_add_menu_item (cell, (char*)name);
+  }
 }
 
 void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 {
   load_xfer_type_cells (ledger);
+  load_taxtable_type_cells (ledger);
 }
 
 /* XXX (FIXME): This should be in a config file! */
@@ -152,9 +176,11 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   /* Load up cells */
   load_discount_type_cells (ledger);
-  load_tax_type_cells (ledger);
-  load_inv_type_cells (ledger);
-  load_xfer_type_cells (ledger);
+  load_discount_how_cells (ledger);
+  load_inv_type_cells (ledger, ENTRY_INV_CELL, FALSE);
+  load_inv_type_cells (ledger, ENTRY_TAXABLE_CELL, TRUE);
+  load_inv_type_cells (ledger, ENTRY_TAXINCLUDED_CELL, FALSE);
+  gnc_entry_ledger_load_xfer_cells (ledger);
 
   blank_entry = gnc_entry_ledger_get_blank_entry (ledger);
 

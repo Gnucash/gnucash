@@ -335,26 +335,23 @@ static GncInvoice*
 dom_tree_to_invoice (xmlNodePtr node, GNCBook *book)
 {
     struct invoice_pdata invoice_pdata;
-    GncInvoice *invoiceToRet;
     gboolean successful;
 
-    invoiceToRet = gncInvoiceCreate(book);
-
-    invoice_pdata.invoice = invoiceToRet;
+    invoice_pdata.invoice = gncInvoiceCreate(book);
     invoice_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, invoice_handlers_v2,
                                          &invoice_pdata);
-    gncInvoiceCommitEdit (invoiceToRet);
+    gncInvoiceCommitEdit (invoice_pdata.invoice);
 
     if (!successful)
     {
         PERR ("failed to parse invoice tree");
-        gncInvoiceDestroy (invoiceToRet);
-        invoiceToRet = NULL;
+        gncInvoiceDestroy (invoice_pdata.invoice);
+        invoice_pdata.invoice = NULL;
     }
 
-    return invoiceToRet;
+    return invoice_pdata.invoice;
 }
 
 static gboolean

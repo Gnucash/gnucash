@@ -88,7 +88,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
     gnc_error_dialog_parented (GTK_WINDOW (ntt->dialog), message);
     return;
   }
-  if (ntt->type == GNC_TAX_TYPE_PERCENT &&
+  if (ntt->type == GNC_AMT_TYPE_PERCENT &&
       gnc_numeric_compare (amount,
 			   gnc_numeric_create (100, 1)) > 0) {
     message = _("Percentage amount must be between 0 and 100.");
@@ -185,15 +185,15 @@ static GtkWidget *
 make_menu (GtkWidget *omenu, NewTaxTable *ntt)
 {
   GtkWidget *menu, *value, *percent;
-  int current = ntt->type;
+  int current = ntt->type - 1;
 
   menu = gtk_menu_new ();
-  value= add_menu_item (menu, ntt, _("Value $"), GNC_TAX_TYPE_VALUE);
-  percent = add_menu_item (menu, ntt, _("Percent %"), GNC_TAX_TYPE_PERCENT);
+  value = add_menu_item (menu, ntt, _("Value $"), GNC_AMT_TYPE_VALUE);
+  percent = add_menu_item (menu, ntt, _("Percent %"), GNC_AMT_TYPE_PERCENT);
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT ((current == GNC_TAX_TYPE_VALUE ?
+  gtk_signal_emit_by_name (GTK_OBJECT ((current == GNC_AMT_TYPE_VALUE-1 ?
 					value : percent)), "activate", ntt);
   gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
   return menu;
@@ -218,7 +218,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   if (entry)
     ntt->type = gncTaxTableEntryGetType (entry);
   else
-    ntt->type = GNC_TAX_TYPE_PERCENT;
+    ntt->type = GNC_AMT_TYPE_PERCENT;
 
   /* Open and read the XML */
   xml = gnc_glade_xml_new ("tax-tables.glade", "New Tax Table Dialog");
@@ -232,6 +232,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   box = glade_xml_get_widget (xml, "amount_box");
   ntt->amount_entry = widget = gnc_amount_edit_new ();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (widget), TRUE);
+  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (widget), 100000);
   gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
 
   box = glade_xml_get_widget (xml, "account_frame");
@@ -320,7 +321,7 @@ tax_table_entries_refresh (TaxTableWindow *ttw, gboolean new_table)
 
     row_text[0] = xaccAccountGetFullName (acc, gnc_get_account_separator ());
     switch (gncTaxTableEntryGetType (entry)) {
-    case GNC_TAX_TYPE_PERCENT:
+    case GNC_AMT_TYPE_PERCENT:
      row_text[1] =
        g_strdup_printf ("%s%%",
 			xaccPrintAmount (amount,

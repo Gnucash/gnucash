@@ -253,26 +253,23 @@ static GncVendor*
 dom_tree_to_vendor (xmlNodePtr node, GNCBook *book)
 {
     struct vendor_pdata vendor_pdata;
-    GncVendor *vendorToRet;
     gboolean successful;
 
-    vendorToRet = gncVendorCreate(book);
-
-    vendor_pdata.vendor = vendorToRet;
+    vendor_pdata.vendor = gncVendorCreate(book);
     vendor_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, vendor_handlers_v2,
                                          &vendor_pdata);
-    gncVendorCommitEdit (vendorToRet);
+    gncVendorCommitEdit (vendor_pdata.vendor);
 
     if (!successful)
     {
         PERR ("failed to parse vendor tree");
-        gncVendorDestroy (vendorToRet);
-        vendorToRet = NULL;
+        gncVendorDestroy (vendor_pdata.vendor);
+        vendor_pdata.vendor = NULL;
     }
 
-    return vendorToRet;
+    return vendor_pdata.vendor;
 }
 
 static gboolean

@@ -63,6 +63,11 @@ static const char * get_distype_label (VirtualLocation virt_loc, gpointer data)
   return _("DT");
 }
 
+static const char * get_dishow_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("DH");
+}
+
 static const char * get_pric_label (VirtualLocation virt_loc, gpointer data)
 {
   return _("Unit Price");
@@ -73,19 +78,19 @@ static const char * get_qty_label (VirtualLocation virt_loc, gpointer data)
   return _("Quantity");
 }
 
-static const char * get_taxacc_label (VirtualLocation virt_loc, gpointer data)
+static const char * get_taxtable_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Tax Account");
+  return _("Tax Table");
 }
 
-static const char * get_taxtype_label (VirtualLocation virt_loc, gpointer data)
+static const char * get_taxable_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("TT");
+  return _("T?");
 }
 
-static const char * get_tax_label (VirtualLocation virt_loc, gpointer data)
+static const char * get_taxincluded_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Tax");
+  return _("TI");
 }
 
 static const char * get_inv_label (VirtualLocation virt_loc, gpointer data)
@@ -201,6 +206,28 @@ static const char * get_distype_entry (VirtualLocation virt_loc,
   }
 }
 
+static const char * get_dishow_entry (VirtualLocation virt_loc,
+				    gboolean translate,
+				    gboolean *conditionally_changed,
+				    gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  GncEntry *entry;
+  char type;
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  type = gncEntryGetDiscountHow (entry);
+
+  if (translate) {
+    return gnc_entry_ledger_how_string_getter (type + '0');
+  } else {
+    static char s[2];
+    s[0] = '0' + type;
+    s[1] = '\0';
+    return s;
+  }
+}
+
 static const char * get_pric_entry (VirtualLocation virt_loc,
 				    gboolean translate,
 				    gboolean *conditionally_changed,
@@ -237,62 +264,98 @@ static const char * get_qty_entry (VirtualLocation virt_loc,
   return xaccPrintAmount (qty, gnc_default_print_info (FALSE));
 }
 
-static const char * get_taxacc_entry (VirtualLocation virt_loc,
+static const char * get_taxable_entry (VirtualLocation virt_loc,
 				    gboolean translate,
 				    gboolean *conditionally_changed,
 				    gpointer user_data)
 {
-  char * name = NULL;
-
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
+  static char s[2] = { ' ', '\0' };
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  if (gncEntryGetTaxable (entry))
+    s[0] = 'X';
+  else
+    s[0] = ' ';
 
-  g_free (name);
-  name = xaccAccountGetFullName (gncEntryGetTaxAccount (entry),
-				 gnc_get_account_separator ());
-  return name;
+  return s;
 }
 
-static const char * get_taxtype_entry (VirtualLocation virt_loc,
+static gboolean
+gnc_entry_ledger_get_taxable_value (VirtualLocation virt_loc,
 				    gboolean translate,
 				    gboolean *conditionally_changed,
 				    gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
-  GncEntry *entry;
-  char type;
+  gboolean is_current;
 
-  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  type = gncEntryGetTaxType (entry);
-
-  if (translate) {
-    return gnc_entry_ledger_type_string_getter (type + '0');
-  } else {
-    static char s[2];
-    s[0] = '0' + type;
-    s[1] = '\0';
-    return s;
+  is_current = virt_cell_loc_equal(ledger->table->current_cursor_loc.vcell_loc,
+				   virt_loc.vcell_loc);
+  if (is_current)
+    return gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXABLE_CELL);
+  else {
+    const char *valstr =
+      get_taxable_entry (virt_loc, translate, conditionally_changed,
+			 user_data);
+    if (valstr && *valstr == 'X')
+      return TRUE;
   }
+  return FALSE;
 }
 
-static const char * get_tax_entry (VirtualLocation virt_loc,
+static const char * get_taxtable_entry (VirtualLocation virt_loc,
 				    gboolean translate,
 				    gboolean *conditionally_changed,
 				    gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry;
-  gnc_numeric tax;
+  GncTaxTable *table;
+  gboolean taxable;
+
+  /* load the cell properly; just shadow the value */
+  if (!conditionally_changed) {
+    taxable = gnc_entry_ledger_get_taxable_value (virt_loc, translate,
+						  conditionally_changed,
+						  user_data);
+    if (!taxable)
+      return NULL;
+  }
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  tax = gncEntryGetTax (entry);
+  table = gncEntryGetTaxTable (entry);
+  
+  return gncTaxTableGetName (table);
+}
 
-  if (gnc_numeric_zero_p (tax))
-    return NULL;
+static const char * get_taxincluded_entry (VirtualLocation virt_loc,
+				    gboolean translate,
+				    gboolean *conditionally_changed,
+				    gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  GncEntry *entry;
+  static char s[2] = { ' ', '\0' };
+  gboolean taxable;
 
-  return xaccPrintAmount (tax, gnc_default_print_info (FALSE));
+  /* load the cell properly; just shadow the value */
+  if (!conditionally_changed) {
+    taxable = gnc_entry_ledger_get_taxable_value (virt_loc, translate,
+						  conditionally_changed,
+						  user_data);
+    if (!taxable)
+      return NULL;
+  }
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  if (gncEntryGetTaxIncluded (entry))
+    s[0] = 'X';
+  else
+    s[0] = ' ';
+
+  return s;
 }
 
 static const char * get_inv_entry (VirtualLocation virt_loc,
@@ -433,14 +496,21 @@ static char * get_disc_help (VirtualLocation virt_loc, gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
   const char *help;
-  GncEntry *entry;
+  gint type;
 
-  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+  type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
 
-  if (GNC_ENTRY_INTERP_IS_VALUE (gncEntryGetDiscountType (entry)))
+  switch (type) {
+  case GNC_AMT_TYPE_VALUE:
     help = _("Enter the Discount Amount");
-  else
+    break;
+  case GNC_AMT_TYPE_PERCENT:
     help = _("Enter the Discount Percent");
+    break;
+  default:
+    help = _("Enter the Discount ... unknown type");
+    break;
+  }
 
   return g_strdup (help);
 }
@@ -454,20 +524,39 @@ static char * get_distype_help (VirtualLocation virt_loc, gpointer user_data)
   type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
 
   switch (type) {
-  case GNC_ENTRY_INTERP_VALUE:
+  case GNC_AMT_TYPE_VALUE:
     help = _("Discount Type: Monetary Value");
     break;
-  case GNC_ENTRY_INTERP_PERCENT:
+  case GNC_AMT_TYPE_PERCENT:
     help = _("Discount Type: Percent");
-    break;
-  case GNC_ENTRY_INTERP_VALUE | GNC_ENTRY_PRETAX_FLAG:
-    help = _("Discount Type: Pre-Tax Monetary Value");
-    break;
-  case GNC_ENTRY_INTERP_PERCENT | GNC_ENTRY_PRETAX_FLAG:
-    help = _("Discount Type: Pre-Tax Percent");
     break;
   default:
     help = _("Select the Discount Type");
+    break;
+  }
+  return g_strdup (help);
+}
+
+static char * get_dishow_help (VirtualLocation virt_loc, gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  const char *help;
+  gint type;
+
+  type = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
+
+  switch (type) {
+  case GNC_DISC_PRETAX:
+    help = _("Tax computed after discount is applied");
+    break;
+  case GNC_DISC_SAMETIME:
+    help = _("Discount and tax both applied on pretax value");
+    break;
+  case GNC_DISC_POSTTAX:
+    help = _("Discount computed after tax is applied");
+    break;
+  default:
+    help = _("Select how to compute the Discount and Taxes");
     break;
   }
   return g_strdup (help);
@@ -497,52 +586,32 @@ static char * get_qty_help (VirtualLocation virt_loc, gpointer user_data)
   return g_strdup (help);
 }
 
-static char * get_taxacc_help (VirtualLocation virt_loc, gpointer user_data)
+static char * get_taxtable_help (VirtualLocation virt_loc, gpointer user_data)
 {
   GncEntryLedger *ledger = user_data;
   const char *help;
 
   help = gnc_table_get_entry (ledger->table, virt_loc);
   if (!help || *help == '\0')
-    help = _("Enter the Account for tax holdings or choose one from the list");
+    help = _("Enter the Tax Table to apply to this entry");
 
   return g_strdup (help);
 }
 
-static char * get_taxtype_help (VirtualLocation virt_loc, gpointer user_data)
+static char * get_taxable_help (VirtualLocation virt_loc, gpointer user_data)
 {
-  GncEntryLedger *ledger = user_data;
   const char *help;
-  gint type;
 
-  type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+  help = _("Is this entry taxable?");
 
-  switch (type) {
-  case GNC_ENTRY_INTERP_VALUE:
-    help = _("Tax Type: Monetary Value");
-    break;
-  case GNC_ENTRY_INTERP_PERCENT:
-    help = _("Tax Type: Percent");
-    break;
-  default:
-    help = _("Select the Tax Type");
-    break;
-  }
   return g_strdup (help);
 }
 
-static char * get_tax_help (VirtualLocation virt_loc, gpointer user_data)
+static char * get_taxincluded_help (VirtualLocation virt_loc, gpointer user_data)
 {
-  GncEntryLedger *ledger = user_data;
   const char *help;
-  GncEntry *entry;
 
-  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-
-  if (GNC_ENTRY_INTERP_IS_VALUE (gncEntryGetDiscountType (entry)))
-    help = _("Enter the Tax Amount");
-  else
-    help = _("Enter the Tax Percent");
+  help = _("Is the tax already included in the price of this entry?");
 
   return g_strdup (help);
 }
@@ -643,6 +712,31 @@ static CellIOFlags get_value_io_flags (VirtualLocation virt_loc,
 				       gpointer user_data)
 {
   return XACC_CELL_ALLOW_SHADOW;
+}
+
+static CellIOFlags get_tax_io_flags (VirtualLocation virt_loc,
+				     gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  gboolean taxable;
+
+  taxable = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXABLE_CELL);
+
+  /* Only print the taxtable and taxincluded cells if taxable is true */
+  if (taxable)
+    return get_standard_io_flags (virt_loc, user_data);
+
+  /* Shadow the value, so the cell is loaded properly */
+  return XACC_CELL_ALLOW_SHADOW;
+}
+
+static CellIOFlags get_taxincluded_io_flags (VirtualLocation virt_loc,
+					     gpointer user_data)
+{
+  CellIOFlags flags = get_tax_io_flags (virt_loc, user_data);
+  if (flags == XACC_CELL_ALLOW_SHADOW)
+    return flags;
+  return flags | XACC_CELL_ALLOW_EXACT_ONLY;
 }
 
 /* GET BG_COLORS */
@@ -759,6 +853,16 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+					 ENTRY_DISHOW_CELL, TRUE)) {
+    gint type;
+
+    type = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
+
+    if (type != -1)
+      gncEntrySetDiscountHow (entry, type);
+  }
+
+  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
 					  ENTRY_PRIC_CELL, TRUE)) {
     gnc_numeric amount;
 
@@ -775,31 +879,30 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-					 ENTRY_TAXACC_CELL, TRUE)) {
-    Account *acc;
+					 ENTRY_TAXABLE_CELL, TRUE)) {
+    gboolean taxable;
 
-    acc = gnc_entry_ledger_get_account (ledger, ENTRY_TAXACC_CELL);
+    taxable = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXABLE_CELL);
+    gncEntrySetTaxable (entry, taxable);
+  }
 
-    if (acc != NULL)
-      gncEntrySetTaxAccount (entry, acc);
+  /* XXX: Only (re-set) these if taxable is TRUE? */
+  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+					 ENTRY_TAXTABLE_CELL, TRUE)) {
+    GncTaxTable *table;
+
+    table = gnc_entry_ledger_get_taxtable (ledger, ENTRY_TAXTABLE_CELL);
+    if (table)
+      gncEntrySetTaxTable (entry, table);
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-					 ENTRY_TAXTYPE_CELL, TRUE)) {
-    gint type;
+					 ENTRY_TAXINCLUDED_CELL, TRUE)) {
+    gboolean taxincluded;
 
-    type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
-
-    if (type != -1)
-      gncEntrySetTaxType (entry, type);
-  }
-
-  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-					 ENTRY_TAX_CELL, TRUE)) {
-    gnc_numeric amount;
-
-    if (gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &amount))
-	gncEntrySetTax (entry, amount);
+    taxincluded = gnc_entry_ledger_get_checkmark (ledger,
+						  ENTRY_TAXINCLUDED_CELL);
+    gncEntrySetTaxIncluded (entry, taxincluded);
   }
 
   {
@@ -839,16 +942,17 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     gpointer io_flags_handler;
   } models[] = {
     { ENTRY_ACCT_CELL, get_acct_entry, get_acct_label, get_acct_help, get_standard_io_flags },
-    { ENTRY_ACTN_CELL, get_actn_entry, get_actn_label, get_actn_help,  get_standard_io_flags },
-    { ENTRY_DATE_CELL, get_date_entry, get_date_label, get_date_help,  get_standard_io_flags },
-    { ENTRY_DESC_CELL, get_desc_entry, get_desc_label, get_desc_help,  get_standard_io_flags },
-    { ENTRY_DISC_CELL, get_disc_entry, get_disc_label, get_disc_help,  get_standard_io_flags },
+    { ENTRY_ACTN_CELL, get_actn_entry, get_actn_label, get_actn_help, get_standard_io_flags },
+    { ENTRY_DATE_CELL, get_date_entry, get_date_label, get_date_help, get_standard_io_flags },
+    { ENTRY_DESC_CELL, get_desc_entry, get_desc_label, get_desc_help, get_standard_io_flags },
+    { ENTRY_DISC_CELL, get_disc_entry, get_disc_label, get_disc_help, get_standard_io_flags },
     { ENTRY_DISTYPE_CELL, get_distype_entry, get_distype_label, get_distype_help,  get_typecell_io_flags },
-    { ENTRY_PRIC_CELL, get_pric_entry, get_pric_label, get_pric_help,  get_standard_io_flags },
-    { ENTRY_QTY_CELL, get_qty_entry, get_qty_label, get_qty_help,  get_standard_io_flags },
-    { ENTRY_TAXACC_CELL, get_taxacc_entry, get_taxacc_label, get_taxacc_help,  get_standard_io_flags },
-    { ENTRY_TAXTYPE_CELL, get_taxtype_entry, get_taxtype_label, get_taxtype_help,  get_typecell_io_flags },
-    { ENTRY_TAX_CELL, get_tax_entry, get_tax_label, get_tax_help,  get_standard_io_flags },
+    { ENTRY_DISHOW_CELL, get_dishow_entry, get_dishow_label, get_dishow_help, get_typecell_io_flags },
+    { ENTRY_PRIC_CELL, get_pric_entry, get_pric_label, get_pric_help, get_standard_io_flags },
+    { ENTRY_QTY_CELL, get_qty_entry, get_qty_label, get_qty_help, get_standard_io_flags },
+    { ENTRY_TAXABLE_CELL, get_taxable_entry, get_taxable_label, get_taxable_help,  get_typecell_io_flags },
+    { ENTRY_TAXTABLE_CELL, get_taxtable_entry, get_taxtable_label, get_taxtable_help, get_tax_io_flags },
+    { ENTRY_TAXINCLUDED_CELL, get_taxincluded_entry, get_taxincluded_label, get_taxincluded_help, get_taxincluded_io_flags },
     { ENTRY_INV_CELL, get_inv_entry, get_inv_label, get_inv_help, get_inv_io_flags },
     { ENTRY_VALUE_CELL, get_value_entry, get_value_label, get_value_help, get_value_io_flags },
     { ENTRY_TAXVAL_CELL, get_taxval_entry, get_taxval_label, get_taxval_help, get_value_io_flags },

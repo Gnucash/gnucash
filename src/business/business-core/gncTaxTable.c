@@ -25,6 +25,7 @@ struct _gncTaxTable {
   char *	name;
   GList *	entries;
 
+  Timespec	modtime;	/* internal date of last modtime */
   gint64	refcount;
   GNCBook *	book;
   GncTaxTable *	parent;		/* if non-null, we are an immutable child */
@@ -36,7 +37,7 @@ struct _gncTaxTable {
 struct _gncTaxTableEntry {
   GncTaxTable *	table;
   Account *	account;
-  GncTaxType	type;
+  GncAmountType	type;
   gnc_numeric	amount;
 };
 
@@ -70,6 +71,13 @@ mark_table (GncTaxTable *table)
   table->dirty = TRUE;
 
   gnc_engine_generate_event (&table->guid, GNC_EVENT_MODIFY);
+}
+
+G_INLINE_FUNC void mod_table (GncTaxTable *table);
+G_INLINE_FUNC void
+mod_table (GncTaxTable *table)
+{
+  timespecFromTime_t (&table->modtime, time(NULL));
 }
 
 /* Create/Destroy Functions */
@@ -140,6 +148,7 @@ void gncTaxTableSetParent (GncTaxTable *table, GncTaxTable *parent)
 {
   if (!table) return;
   table->parent = parent;
+  table->refcount = 0;
   gncTaxTableMakeInvisible (table);
 }
 
@@ -152,14 +161,16 @@ void gncTaxTableSetChild (GncTaxTable *table, GncTaxTable *child)
 void gncTaxTableIncRef (GncTaxTable *table)
 {
   if (!table) return;
+  if (table->parent) return;	/* children dont need refcounts */
   table->refcount++;
 }
 
 void gncTaxTableDecRef (GncTaxTable *table)
 {
   if (!table) return;
+  if (table->parent) return;	/* children dont need refcounts */
   table->refcount--;
-  g_return_if_fail (table->refcount < 0);
+  g_return_if_fail (table->refcount >= 0);
 }
 
 void gncTaxTableSetRefcount (GncTaxTable *table, gint64 refcount)
@@ -180,17 +191,21 @@ void gncTaxTableEntrySetAccount (GncTaxTableEntry *entry, Account *account)
   if (!entry || !account) return;
   if (entry->account == account) return;
   entry->account = account;
-  if (entry->table)
+  if (entry->table) {
     mark_table (entry->table);
+    mod_table (entry->table);
+  }
 }
 
-void gncTaxTableEntrySetType (GncTaxTableEntry *entry, GncTaxType type)
+void gncTaxTableEntrySetType (GncTaxTableEntry *entry, GncAmountType type)
 {
   if (!entry) return;
   if (entry->type == type) return;
   entry->type = type;
-  if (entry->table)
+  if (entry->table) {
     mark_table (entry->table);
+    mod_table (entry->table);
+  }
 }
 
 void gncTaxTableEntrySetAmount (GncTaxTableEntry *entry, gnc_numeric amount)
@@ -198,8 +213,10 @@ void gncTaxTableEntrySetAmount (GncTaxTableEntry *entry, gnc_numeric amount)
   if (!entry) return;
   if (gnc_numeric_eq (entry->amount, amount)) return;
   entry->amount = amount;
-  if (entry->table)
+  if (entry->table) {
     mark_table (entry->table);
+    mod_table (entry->table);
+  }
 }
 
 void gncTaxTableAddEntry (GncTaxTable *table, GncTaxTableEntry *entry)
@@ -213,6 +230,7 @@ void gncTaxTableAddEntry (GncTaxTable *table, GncTaxTableEntry *entry)
   table->entries = g_list_insert_sorted (table->entries, entry,
 					 (GCompareFunc)gncTaxTableEntryCompare);
   mark_table (table);
+  mod_table (table);
 }
 
 void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry)
@@ -221,6 +239,7 @@ void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry)
   entry->table = NULL;
   table->entries = g_list_remove (table->entries, entry);
   mark_table (table);
+  mod_table (table);
 }
 
 void gncTaxTableChanged (GncTaxTable *table)
@@ -344,6 +363,13 @@ gint64 gncTaxTableGetRefcount (GncTaxTable *table)
   return table->refcount;
 }
 
+Timespec gncTaxTableLastModified (GncTaxTable *table)
+{
+  Timespec ts = { 0 , 0 };
+  if (!table) return ts;
+  return table->modtime;
+}
+
 gboolean gncTaxTableGetInvisible (GncTaxTable *table)
 {
   if (!table) return FALSE;
@@ -356,9 +382,9 @@ Account * gncTaxTableEntryGetAccount (GncTaxTableEntry *entry)
   return entry->account;
 }
 
-GncTaxType gncTaxTableEntryGetType (GncTaxTableEntry *entry)
+GncAmountType gncTaxTableEntryGetType (GncTaxTableEntry *entry)
 {
-  if (!entry) return GNC_TAX_TYPE_NONE;
+  if (!entry) return 0;
   return entry->type;
 }
 
@@ -397,6 +423,72 @@ int gncTaxTableCompare (GncTaxTable *a, GncTaxTable *b)
   if (!b) return 1;
   return safe_strcmp (a->name, b->name);
 }
+
+
+/*
+ * This will add value to the account-value for acc, creating a new
+ * list object if necessary
+ */
+GList *gncAccountValueAdd (GList *list, Account *acc, gnc_numeric value)
+{
+  GList *li;
+  GncAccountValue *res = NULL;
+
+  g_return_val_if_fail (acc, list);
+  g_return_val_if_fail (gnc_numeric_check (value) == GNC_ERROR_OK, list);
+
+  /* Try to find the account in the list */
+  for (li = list; li; li = li->next) {
+    res = li->data;
+    if (res->account == acc) {
+      res->value = gnc_numeric_add (res->value, value, GNC_DENOM_AUTO,
+				    GNC_DENOM_LCD);
+      return list;
+    }
+  }
+  /* Nope, didn't find it. */
+
+  res = g_new0 (GncAccountValue, 1);
+  res->account = acc;
+  res->value = value;
+  return g_list_prepend (list, res);
+}
+
+/* Merge l2 into l1.  l2 is not touched. */
+GList *gncAccountValueAddList (GList *l1, GList *l2)
+{
+  GList *li;
+
+  for (li = l2; li; li = li->next ) {
+    GncAccountValue *val = li->data;
+    l1 = gncAccountValueAdd (l1, val->account, val->value);
+  }
+
+  return l1;
+}
+
+/* return the total for this list */
+gnc_numeric gncAccountValueTotal (GList *list)
+{
+  gnc_numeric total = gnc_numeric_zero ();
+
+  for ( ; list ; list = list->next) {
+    GncAccountValue *val = list->data;
+    total = gnc_numeric_add (total, val->value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+  }
+  return total;
+}
+
+/* Destroy a list of accountvalues */
+void gncAccountValueDestroy (GList *list)
+{
+  GList *node;
+  for ( node = list; node ; node = node->next)
+    g_free (node->data);
+
+  g_list_free (list);
+}
+
 
 /* Package-Private functions */
 

@@ -65,6 +65,35 @@ Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 				     gnc_get_account_separator ());
 }
 
+GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,
+					     const char *cell_name)
+{
+  const char * name =
+    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+
+  return gncTaxTableLookupByName (ledger->book, name);
+}
+
+gboolean gnc_entry_ledger_get_checkmark (GncEntryLedger *ledger,
+					 const char * cell_name)
+{
+  const char *value =
+    gnc_table_layout_get_cell_value (ledger->table->layout, cell_name);
+
+  if (!value || *value == '\0')
+    return FALSE;
+
+  switch (*value) {
+  case 'X':
+    return TRUE;
+  case ' ':
+    return FALSE;
+  default:
+    g_warning ("Invalid checkmark character: %d", *value);
+    return FALSE;
+  }
+}
+
 char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name)
 {
   const char *value =
@@ -157,11 +186,6 @@ gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
   gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DISC_CELL),
-     1000000);
-
-  gnc_price_cell_set_fraction
-    ((PriceCell *)
-     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAX_CELL),
      1000000);
 
   gnc_price_cell_set_fraction
@@ -440,26 +464,44 @@ void
 gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
 				gnc_numeric *value, gnc_numeric *tax_value)
 {
-  gnc_numeric qty, price, discount, tax;
-  gint disc_type, tax_type;
+  gnc_numeric qty, price, discount;
+  gint disc_type, disc_how;
+  gboolean taxable, taxincluded;
+  GncTaxTable *table;
+  GList *taxes = NULL;
 
   gnc_entry_ledger_get_numeric (ledger, ENTRY_QTY_CELL, &qty);
   gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &price);
   gnc_entry_ledger_get_numeric (ledger, ENTRY_DISC_CELL, &discount);
-  gnc_entry_ledger_get_numeric (ledger, ENTRY_TAX_CELL, &tax);
 
   disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
-  tax_type = gnc_entry_ledger_get_type (ledger, ENTRY_TAXTYPE_CELL);
+  disc_how = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
 
-  gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
-			  value, tax_value, NULL);
+  /* If we're so early in the process that we don't have info, stop now */
+  if (disc_type < 0 || disc_how < 0) {
+    if (value)
+      *value = gnc_numeric_zero ();
+    if (tax_value)
+      *tax_value = gnc_numeric_zero ();
+    return;
+  }
+
+  taxable = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXABLE_CELL);
+  taxincluded = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXINCLUDED_CELL);
+  table = gnc_entry_ledger_get_taxtable (ledger, ENTRY_TAXTABLE_CELL);
+  
+  gncEntryComputeValue (qty, price, (taxable ? table : NULL), taxincluded,
+			discount, disc_type, disc_how,
+			value, NULL, &taxes);
 
   /* Now convert the values to the proper denomination */
   if (value)
     *value = gnc_numeric_convert (*value, 100 /* XXX */, GNC_RND_ROUND);
 
-  if (tax_value)
+  if (tax_value) {
+    *tax_value = gncAccountValueTotal (taxes);
     *tax_value = gnc_numeric_convert (*tax_value, 100 /* XXX */, GNC_RND_ROUND);
+  }
 }
 
 gboolean

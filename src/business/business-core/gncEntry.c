@@ -32,23 +32,27 @@ struct _gncEntry {
   char *	action;
   gnc_numeric 	quantity;
   gnc_numeric 	price;
-  gnc_numeric 	tax;
-  gint		tax_type;
   gnc_numeric 	discount;
-  gint		disc_type;
+  GncAmountType	disc_type;
+  GncDiscountHow disc_how;
   Account *	account;
-  Account *	taxaccount;
+
+  gboolean	taxable;
+  gboolean	taxincluded;
+  GncTaxTable *	tax_table;
 
   GncOrder *	order;
   GncInvoice *	invoice;
 
   gnc_numeric	value;
   gnc_numeric	value_rounded;
+  GList *	tax_values;
   gnc_numeric	tax_value;
   gnc_numeric	tax_value_rounded;
   gnc_numeric	disc_value;
   gnc_numeric	disc_value_rounded;
   gboolean	values_dirty;
+  Timespec	taxtable_modtime;
 
   gboolean	dirty;
 };
@@ -69,33 +73,6 @@ struct _gncEntry {
 
 static void addObj (GncEntry *entry);
 static void remObj (GncEntry *entry);
-
-static char * typeStrs[] = {
-  N_("Value"),
-  N_("Percent"),
-  N_("Value/Pretax"),
-  N_("Percent/Pretax")
-};
-
-const char *gncEntryGetTaxTypeStr (gint type)
-{
-  return typeStrs[type & 0x01];	/* Only 0, 1 */
-}
-
-const char *gncEntryGetDiscountTypeStr (gint type)
-{
-  return typeStrs[type & 0x03];	/* Only 0, 1, 2, 3 */
-}
-
-gint gncEntryGetTypeFromStr (const char *type)
-{
-  gint i;
-  for (i = 0; i < 3; i++)
-    if (!safe_strcmp (typeStrs[i], type))
-      return i;
-
-  return -1;
-}
 
 G_INLINE_FUNC void mark_entry (GncEntry *entry);
 G_INLINE_FUNC void
@@ -124,11 +101,11 @@ GncEntry *gncEntryCreate (GNCBook *book)
     gnc_numeric zero = gnc_numeric_zero ();
     entry->quantity = zero;
     entry->price = zero;
-    entry->tax = zero;
     entry->discount = zero;
   }
-  entry->tax_type = GNC_ENTRY_INTERP_PERCENT;
-  entry->disc_type = GNC_ENTRY_INTERP_PERCENT;
+  entry->disc_type = GNC_AMT_TYPE_PERCENT;
+  entry->disc_how = GNC_DISC_PRETAX;
+  entry->taxable = TRUE;
   entry->dirty = FALSE;
   entry->values_dirty = TRUE;
 
@@ -148,6 +125,8 @@ void gncEntryDestroy (GncEntry *entry)
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
+  if (entry->tax_values)
+    gncAccountValueDestroy (entry->tax_values);
   remObj (entry);
 
   g_free (entry);
@@ -209,14 +188,6 @@ void gncEntrySetPrice (GncEntry *entry, gnc_numeric price)
   mark_entry (entry);
 }
 
-void gncEntrySetTax (GncEntry *entry, gnc_numeric tax)
-{
-  if (!entry) return;
-  entry->tax = tax;
-  entry->values_dirty = TRUE;
-  mark_entry (entry);
-}
-
 void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
 {
   if (!entry) return;
@@ -229,13 +200,6 @@ void gncEntrySetAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
   entry->account = acc;
-  mark_entry (entry);
-}
-
-void gncEntrySetTaxAccount (GncEntry *entry, Account *acc)
-{
-  if (!entry) return;
-  entry->taxaccount = acc;
   mark_entry (entry);
 }
 
@@ -259,22 +223,49 @@ void gncEntrySetInvoice (GncEntry *entry, GncInvoice *invoice)
   mark_entry (entry);
 }
 
-void gncEntrySetTaxType (GncEntry *entry, gint type)
+void gncEntrySetTaxable (GncEntry *entry, gboolean taxable)
 {
   if (!entry) return;
-  if (type < 0 || type > 1) return;
-
-  entry->tax_type = type;
+  entry->taxable = taxable;
   entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
-void gncEntrySetDiscountType (GncEntry *entry, gint type)
+void gncEntrySetTaxIncluded (GncEntry *entry, gboolean taxincluded)
 {
   if (!entry) return;
-  if (type < 0 || type > 3) return;
+  entry->taxincluded = taxincluded;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table)
+{
+  if (!entry) return;
+  if (entry->tax_table == table) return;
+  if (entry->tax_table)
+    gncTaxTableDecRef (entry->tax_table);
+  if (table)
+    gncTaxTableIncRef (table);
+  entry->tax_table = table;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetDiscountType (GncEntry *entry, GncAmountType type)
+{
+  if (!entry) return;
 
   entry->disc_type = type;
+  entry->values_dirty = TRUE;
+  mark_entry (entry);
+}
+
+void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how)
+{
+  if (!entry) return;
+
+  entry->disc_how = how;
   entry->values_dirty = TRUE;
   mark_entry (entry);
 }
@@ -295,12 +286,14 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   gncEntrySetAction (dest, src->action);
   dest->quantity		= src->quantity;
   dest->price			= src->price;
-  dest->tax			= src->tax;
-  dest->tax_type		= src->tax_type;
   dest->discount		= src->discount;
   dest->disc_type		= src->disc_type;
   dest->account			= src->account;
-  dest->taxaccount		= src->taxaccount;
+  dest->taxable			= src->taxable;
+  dest->taxincluded		= src->taxincluded;
+
+  if (src->tax_table)
+    gncEntrySetTaxTable (dest, src->tax_table);
 
   if (src->order)
     gncOrderAddEntry (src->order, dest);
@@ -363,12 +356,6 @@ gnc_numeric gncEntryGetPrice (GncEntry *entry)
   return entry->price;
 }
 
-gnc_numeric gncEntryGetTax (GncEntry *entry)
-{
-  if (!entry) return gnc_numeric_zero();
-  return entry->tax;
-}
-
 gnc_numeric gncEntryGetDiscount (GncEntry *entry)
 {
   if (!entry) return gnc_numeric_zero();
@@ -379,12 +366,6 @@ Account * gncEntryGetAccount (GncEntry *entry)
 {
   if (!entry) return NULL;
   return entry->account;
-}
-
-Account * gncEntryGetTaxAccount (GncEntry *entry)
-{
-  if (!entry) return NULL;
-  return entry->taxaccount;
 }
 
 GncInvoice * gncEntryGetInvoice (GncEntry *entry)
@@ -399,16 +380,34 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
   return entry->order;
 }
 
-gint gncEntryGetTaxType (GncEntry *entry)
-{
-  if (!entry) return 0;
-  return entry->tax_type;
-}
-
-gint gncEntryGetDiscountType (GncEntry *entry)
+GncAmountType gncEntryGetDiscountType (GncEntry *entry)
 {
   if (!entry) return 0;
   return entry->disc_type;
+}
+
+GncDiscountHow gncEntryGetDiscountHow (GncEntry *entry)
+{
+  if (!entry) return 0;
+  return entry->disc_how;
+}
+
+gboolean gncEntryGetTaxable (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->taxable;
+}
+
+gboolean gncEntryGetTaxIncluded (GncEntry *entry)
+{
+  if (!entry) return FALSE;
+  return entry->taxincluded;
+}
+
+GncTaxTable * gncEntryGetTaxTable (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return entry->tax_table;
 }
 
 GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
@@ -418,49 +417,202 @@ GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
 			   guid, _GNC_MOD_NAME);
 }
 
+/*
+ * This is the logic of computing the total for an Entry, so you know
+ * what values to put into various Splits or to display in the ledger.
+ * In other words, we combine the quantity, unit-price, discount and
+ * taxes together, depending on various flags.
+ *
+ * There are four potental ways to combine these numbers:
+ * Discount:     Pre-Tax   Post-Tax
+ *   Tax   :     Included  Not-Included
+ *
+ * The process is relatively simple:
+ *
+ *  1) compute the agregate price (price*qty)
+ *  2) if taxincluded, then back-compute the agregate pre-tax price
+ *  3) apply discount and taxes in the appropriate order
+ *  4) return the requested results.
+ *
+ * step 2 can be done with agregate taxes; no need to compute them all
+ * unless the caller asked for the tax_value.
+ *
+ * Note that the returned "value" is such that value + tax == "total
+ * to pay," which means in the case of tax-included that the returned
+ * "value" may be less than the agregate price, even without a
+ * discount.  If you want to display the tax-included value, you need
+ * to add the value and taxes together.  In other words, the value is
+ * the amount the merchant gets; the taxes are the amount the gov't
+ * gets, and the customer pays the sum or value + taxes.
+ *
+ * The discount return value is just for entertainment -- you may way
+ * to let a consumer know how much they saved.
+ */
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
-			   gnc_numeric tax, gint tax_type,
-			   gnc_numeric discount, gint discount_type,
-			   gnc_numeric *value, gnc_numeric *tax_value,
-			   gnc_numeric *discount_value)
+			   GncTaxTable *tax_table, gboolean tax_included,
+			   gnc_numeric discount, GncAmountType discount_type,
+			   GncDiscountHow discount_how,
+			   gnc_numeric *value, gnc_numeric *discount_value,
+			   GList **tax_value)
 {
-  gnc_numeric	subtotal;
-  gnc_numeric	this_value;
+  gnc_numeric	aggregate;
+  gnc_numeric	pretax;
+  gnc_numeric	result;
+  gnc_numeric	tax;
   gnc_numeric	percent = gnc_numeric_create (100, 1);
+  gnc_numeric	tpercent = gnc_numeric_zero ();
+  gnc_numeric	tvalue = gnc_numeric_zero ();
 
-  /* Compute the value */
+  GList * 	entries = gncTaxTableGetEntries (tax_table);
+  GList * 	node;
 
-  subtotal = gnc_numeric_mul (qty, price, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+  /* Step 1: compute the aggregate price */
 
-  if (GNC_ENTRY_INTERP_IS_PERCENT (discount_type)) {
-    discount = gnc_numeric_div (discount, percent, GNC_DENOM_AUTO, 
+  aggregate = gnc_numeric_mul (qty, price, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+
+  /* Step 2: compute the pre-tax aggregate */
+
+  /* First, compute the aggregate tpercent and tvalue numbers */
+  for (node = entries; node; node = node->next) {
+    GncTaxTableEntry *entry = node->data;
+    gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
+
+    switch (gncTaxTableEntryGetType (entry)) {
+    case GNC_AMT_TYPE_VALUE:
+      tvalue = gnc_numeric_add (tvalue, amount, GNC_DENOM_AUTO,
 				GNC_DENOM_LCD);
-    discount = gnc_numeric_mul (subtotal, discount, GNC_DENOM_AUTO,
-				GNC_DENOM_LCD);
+      break;
+    case GNC_AMT_TYPE_PERCENT:
+      tpercent = gnc_numeric_add (tpercent, amount, GNC_DENOM_AUTO,
+				  GNC_DENOM_LCD);
+      break;
+    default:
+      g_warning ("Unknown tax type: %d", gncTaxTableEntryGetType (entry));
+    }
+  }
+  /* now we need to convert from 5% -> .05 */
+  tpercent = gnc_numeric_div (tpercent, percent, GNC_DENOM_AUTO,
+			      GNC_DENOM_LCD);
+
+  /* Next, actually compute the pre-tax aggregate value based on the
+   * taxincluded flag.
+   */
+  if (tax_table && tax_included) {
+    /* Back-compute the pre-tax aggregate value.
+     * We know that aggregate = pretax + pretax*tpercent + tvalue, so
+     * pretax = (aggregate-tvalue)/(1+tpercent)
+     */
+    pretax = gnc_numeric_sub (aggregate, tvalue, GNC_DENOM_AUTO,
+			      GNC_DENOM_LCD);
+    pretax = gnc_numeric_div (pretax,
+			      gnc_numeric_add (tpercent,
+					       gnc_numeric_create (1, 1),
+					       GNC_DENOM_AUTO, GNC_DENOM_LCD),
+			      GNC_DENOM_AUTO, GNC_DENOM_LCD);
+  } else {
+    pretax = aggregate;
   }
 
-  this_value = gnc_numeric_sub (subtotal, discount, GNC_DENOM_AUTO,
-				GNC_DENOM_LCD);
-  if (discount_type & GNC_ENTRY_PRETAX_FLAG)
-    subtotal = this_value;
+  /* Step 3:  apply discount and taxes in the appropriate order */
 
-  /* Save the discount and value return values */
+  /*
+   * There are two ways to apply discounts and taxes.  In one way, you
+   * always compute the discount off the pretax number, and compute
+   * the taxes off of either the pretax value or "pretax-discount"
+   * value.  In the other way, you always compute the tax on "pretax",
+   * and compute the discount on either "pretax" or "pretax+taxes".
+   *
+   * I don't know which is the "correct" way.
+   */
+
+  /*
+   * Type:	discount	tax
+   * PRETAX	pretax		pretax-discount
+   * SAMETIME	pretax		pretax
+   * POSTTAX	pretax+tax	pretax
+   */
+
+  switch (discount_how) {
+  case GNC_DISC_PRETAX:
+  case GNC_DISC_SAMETIME:
+    /* compute the discount from pretax */
+
+    if (discount_type == GNC_AMT_TYPE_PERCENT) {
+      discount = gnc_numeric_div (discount, percent, GNC_DENOM_AUTO, 
+				  GNC_DENOM_LCD);
+      discount = gnc_numeric_mul (pretax, discount, GNC_DENOM_AUTO,
+				  GNC_DENOM_LCD);
+    }
+
+    result = gnc_numeric_sub (pretax, discount, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+
+    /* Figure out when to apply the tax, pretax or pretax-discount */
+    if (discount_how == GNC_DISC_PRETAX)
+      pretax = result;
+    break;
+
+  case GNC_DISC_POSTTAX:
+    /* compute discount on pretax+taxes */
+
+    if (discount_type == GNC_AMT_TYPE_PERCENT) {
+      gnc_numeric after_tax;
+
+      tax = gnc_numeric_mul (pretax, tpercent, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      after_tax = gnc_numeric_add (pretax, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      after_tax = gnc_numeric_add (after_tax, tvalue, GNC_DENOM_AUTO,
+				   GNC_DENOM_LCD);
+      discount = gnc_numeric_div (discount, percent, GNC_DENOM_AUTO,
+				  GNC_DENOM_LCD);
+      discount = gnc_numeric_mul (after_tax, discount, GNC_DENOM_AUTO,
+				  GNC_DENOM_LCD);
+    }
+
+    result = gnc_numeric_sub (pretax, discount, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    break;
+
+  default:
+    g_warning ("unknown DiscountHow value: %d", discount_how);
+  }
+
+  /* Step 4:  return the requested results. */
+
+  /* result == amount merchant gets
+   * discount == amount of discount
+   * need to compute taxes (based on 'pretax') if the caller wants it.
+   */
 
   if (discount_value != NULL)
     *discount_value = discount;
 
   if (value != NULL)
-    *value = this_value;
+    *value = result;
 
-  /* Now... Compute the tax value (if the caller wants it) */
+  /* Now... Compute the list of tax values (if the caller wants it) */
 
   if (tax_value != NULL) {
-    if (GNC_ENTRY_INTERP_IS_PERCENT (tax_type)) {
-      tax = gnc_numeric_div (tax, percent, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-      tax = gnc_numeric_mul (subtotal, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-    }
+    GList *	taxes = NULL;
 
-    *tax_value = tax;
+    for (node = entries; node; node = node->next) {
+      GncTaxTableEntry *entry = node->data;
+      Account *acc = gncTaxTableEntryGetAccount (entry);
+      gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
+
+      g_return_if_fail (acc);
+
+      switch (gncTaxTableEntryGetType (entry)) {
+      case GNC_AMT_TYPE_VALUE:
+	taxes = gncAccountValueAdd (taxes, acc, amount);
+	break;
+      case GNC_AMT_TYPE_PERCENT:
+	amount = gnc_numeric_div (amount, percent, GNC_DENOM_AUTO,
+				  GNC_DENOM_LCD);
+	tax = gnc_numeric_mul (pretax, amount, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+	taxes = gncAccountValueAdd (taxes, acc, tax);
+	break;
+      default:
+      }
+    }
+    *tax_value = taxes;
   }
 
   return;
@@ -484,36 +636,56 @@ gncEntryRecomputeValues (GncEntry *entry)
 {
   int denom;
 
+  /* See if the tax table changed since we last computed values */
+  if (entry->tax_table) {
+    Timespec modtime = gncTaxTableLastModified (entry->tax_table);
+    if (timespec_cmp (&entry->taxtable_modtime, &modtime)) {
+      entry->values_dirty = TRUE;
+      entry->taxtable_modtime = modtime;
+    }
+  }
+
   if (!entry->values_dirty)
     return;
 
+  if (entry->tax_values) {
+    gncAccountValueDestroy (entry->tax_values);
+    entry->tax_values = NULL;
+  }
+
   gncEntryComputeValue (entry->quantity, entry->price,
-			entry->tax, entry->tax_type,
+			(entry->taxable ? entry->tax_table : NULL),
+			entry->taxincluded,
 			entry->discount, entry->disc_type,
-			&(entry->value), &(entry->tax_value),
-			&(entry->disc_value));
+			entry->disc_how,
+			&(entry->value), &(entry->disc_value),
+			&(entry->tax_values));
 
   denom = get_commodity_denom (entry);
   entry->value_rounded = gnc_numeric_convert (entry->value, denom,
 					      GNC_RND_ROUND);
-  entry->tax_value_rounded = gnc_numeric_convert (entry->tax_value, denom,
-					      GNC_RND_ROUND);
   entry->disc_value_rounded = gnc_numeric_convert (entry->disc_value, denom,
+					      GNC_RND_ROUND);
+  entry->tax_value = gncAccountValueTotal (entry->tax_values);
+  entry->tax_value_rounded = gnc_numeric_convert (entry->tax_value, denom,
 					      GNC_RND_ROUND);
   entry->values_dirty = FALSE;
 }
 
 void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
-		       gnc_numeric *tax_value, gnc_numeric *discount_value)
+		       gnc_numeric *discount_value, gnc_numeric *tax_value,
+		       GList **tax_values)
 {
   if (!entry) return;
   gncEntryRecomputeValues (entry);
   if (value)
     *value = entry->value;
-  if (tax_value)
-    *tax_value = entry->tax_value;
   if (discount_value)
     *discount_value = entry->disc_value;
+  if (tax_value)
+    *tax_value = entry->tax_value;
+  if (tax_values)
+    *tax_values = entry->tax_values;
 }
 
 gnc_numeric gncEntryReturnValue (GncEntry *entry)
@@ -528,6 +700,13 @@ gnc_numeric gncEntryReturnTaxValue (GncEntry *entry)
   if (!entry) return gnc_numeric_zero();
   gncEntryRecomputeValues (entry);
   return entry->tax_value_rounded;
+}
+
+GList * gncEntryReturnTaxValues (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  gncEntryRecomputeValues (entry);
+  return entry->tax_values;
 }
 
 gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry)

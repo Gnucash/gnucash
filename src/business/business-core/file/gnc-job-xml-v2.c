@@ -208,26 +208,23 @@ static GncJob*
 dom_tree_to_job (xmlNodePtr node, GNCBook *book)
 {
     struct job_pdata job_pdata;
-    GncJob *jobToRet;
     gboolean successful;
 
-    jobToRet = gncJobCreate(book);
-
-    job_pdata.job = jobToRet;
+    job_pdata.job = gncJobCreate(book);
     job_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, job_handlers_v2,
                                          &job_pdata);
-    gncJobCommitEdit (jobToRet);
+    gncJobCommitEdit (job_pdata.job);
 
     if (!successful)
     {
         PERR ("failed to parse job tree");
-        gncJobDestroy (jobToRet);
-        jobToRet = NULL;
+        gncJobDestroy (job_pdata.job);
+        job_pdata.job = NULL;
     }
 
-    return jobToRet;
+    return job_pdata.job;
 }
 
 static gboolean

@@ -395,23 +395,6 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
   gncInvoiceSetPostedTxn (invoice, txn);
 }
 
-#define GET_OR_ADD_ACCVAL(list,t_acc,res) { \
-	GList *li; \
-	res = NULL; \
-    	for (li = list; li; li = li->next) { \
-		res = li->data; \
-      		if (res->acc == t_acc) \
-			break; \
-		res = NULL; \
-    	} \
-	if (!res) { \
-		res = g_new0 (struct acct_val, 1); \
-		res->acc = t_acc; \
-		res->val = gnc_numeric_zero (); \
-		list = g_list_append (list, res); \
-	} \
-}
-
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *post_date, Timespec *due_date,
 				       const char * memo)
@@ -423,10 +406,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   gnc_numeric total;
   gboolean reverse;
   const char *name;
-  struct acct_val {
-    Account *	acc;
-    gnc_numeric val;
-  } *acc_val;
 
   if (!invoice || !acc) return NULL;
 
@@ -462,57 +441,55 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   total = gnc_numeric_zero();
   for (iter = gncInvoiceGetEntries(invoice); iter; iter = iter->next) {
     gnc_numeric value, tax;
+    GList *taxes;
     GncEntry * entry = iter->data;
     Account *this_acc;
 
-    /* Obtain the Entry Value and TaxValue */
-    gncEntryGetValue (entry, &value, &tax, NULL);
+    /* Stabilize the TaxTable in this entry */
+    gncEntrySetTaxTable (entry,
+			 gncTaxTableReturnChild (gncEntryGetTaxTable (entry),
+						 TRUE));
+
+    /* Obtain the Entry's Value and TaxValues */
+    gncEntryGetValue (entry, &value, NULL, &tax, &taxes);
 
     /* add the value for the account split */
     this_acc = gncEntryGetAccount (entry);
     if (this_acc) {
-      /* Find the account value for this_acc.  If we haven't seen this
-       * account before, create a new total and add to list
-       */
-      GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
-
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
-	acc_val->val = gnc_numeric_add (acc_val->val, value, GNC_DENOM_AUTO,
-					GNC_DENOM_LCD);
+	splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
 	total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
       } else
 	g_warning ("bad value in our entry");
     }
 
-    /* Repeat for the TaxValue */
-    this_acc = gncEntryGetTaxAccount (entry);
-    if (this_acc) {
+    /* now merge in the TaxValues */
+    splitinfo = gncAccountValueAddList (splitinfo, taxes);
 
-      GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
-      if (gnc_numeric_check (tax) == GNC_ERROR_OK) {
-	acc_val->val = gnc_numeric_add_fixed (acc_val->val, tax);
-	total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
-      } else
-	g_warning ("bad tax in our entry");
-    }
+    /* ... and add the tax total */
+    if (gnc_numeric_check (tax) == GNC_ERROR_OK) 
+      total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    else
+      g_warning ("bad tax in our entry");
+
   } /* for */
 
   /* Iterate through the splitinfo list and generate the splits */
   for (iter = splitinfo; iter; iter = iter->next) {
     Split *split;
-    acc_val = iter->data;
+    GncAccountValue *acc_val = iter->data;
 
     split = xaccMallocSplit (invoice->book);
     /* set action and memo? */
 
     xaccSplitSetMemo (split, memo);
 
-    xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->val)
-				   : acc_val->val),
+    xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
+				   : acc_val->value),
 			   invoice->common_commodity);
-    xaccAccountBeginEdit (acc_val->acc);
-    xaccAccountInsertSplit (acc_val->acc, split);
-    xaccAccountCommitEdit (acc_val->acc);
+    xaccAccountBeginEdit (acc_val->account);
+    xaccAccountInsertSplit (acc_val->account, split);
+    xaccAccountCommitEdit (acc_val->account);
     xaccTransAppendSplit (txn, split);
   }
 
@@ -540,6 +517,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   gncInvoiceSetPostedAcc (invoice, acc);
 
   xaccTransCommitEdit (txn);
+
+  gncAccountValueDestroy (splitinfo);
 
   return txn;
 }

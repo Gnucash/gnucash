@@ -44,6 +44,7 @@
 #include "gncEntryP.h"
 #include "gncOrderP.h"
 #include "gncInvoiceP.h"
+#include "gncTaxTableP.h"
 #include "gnc-entry-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
@@ -65,12 +66,13 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_action_string "entry:action"
 #define entry_qty_string "entry:qty"
 #define entry_price_string "entry:price"
-#define entry_tax_string "entry:tax"
-#define entry_taxtype_string "entry:taxtype"
 #define entry_discount_string "entry:discount"
 #define entry_disctype_string "entry:disc-type"
+#define entry_dischow_string "entry:disc-how"
 #define entry_acct_string "entry:acct"
-#define entry_taxacc_string "entry:taxacc"
+#define entry_taxable_string "entry:taxable"
+#define entry_taxincluded_string "entry:taxincluded"
+#define entry_taxtable_string "entry:taxtable"
 #define entry_order_string "entry:order"
 #define entry_invoice_string "entry:invoice"
 
@@ -94,6 +96,7 @@ entry_dom_tree_create (GncEntry *entry)
     xmlNodePtr ret;
     Timespec ts;
     Account *acc;
+    GncTaxTable *taxtable;
     GncOrder *order;
     GncInvoice *invoice;
 
@@ -115,24 +118,26 @@ entry_dom_tree_create (GncEntry *entry)
 
     maybe_add_numeric (ret, entry_qty_string, gncEntryGetQuantity (entry));
     maybe_add_numeric (ret, entry_price_string, gncEntryGetPrice (entry));
-    maybe_add_numeric (ret, entry_tax_string, gncEntryGetTax (entry));
-
-    xmlAddChild(ret, int_to_dom_tree(entry_taxtype_string,
-				     gncEntryGetTaxType (entry)));
 
     maybe_add_numeric (ret, entry_discount_string, gncEntryGetDiscount (entry));
     xmlAddChild(ret, int_to_dom_tree(entry_disctype_string,
 				     gncEntryGetDiscountType (entry)));
+    xmlAddChild(ret, int_to_dom_tree(entry_dischow_string,
+				     gncEntryGetDiscountHow (entry)));
 
     acc = gncEntryGetAccount (entry);
     if (acc)
       xmlAddChild (ret, guid_to_dom_tree (entry_acct_string,
 					  xaccAccountGetGUID (acc)));
 
-    acc = gncEntryGetTaxAccount (entry);
-    if (acc)
-      xmlAddChild (ret, guid_to_dom_tree (entry_taxacc_string,
-					  xaccAccountGetGUID (acc)));
+    xmlAddChild(ret, int_to_dom_tree(entry_taxable_string,
+				     gncEntryGetTaxable (entry)));
+    xmlAddChild(ret, int_to_dom_tree(entry_taxincluded_string,
+				     gncEntryGetTaxIncluded (entry)));
+    taxtable = gncEntryGetTaxTable (entry);
+    if (taxtable)
+      xmlAddChild (ret, guid_to_dom_tree (entry_taxtable_string,
+					  gncTaxTableGetGUID (taxtable)));
 
     order = gncEntryGetOrder (entry);
     if (order)
@@ -262,26 +267,6 @@ entry_price_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_tax_handler (xmlNodePtr node, gpointer entry_pdata)
-{
-    struct entry_pdata *pdata = entry_pdata;
-
-    return set_numeric(node, pdata->entry, gncEntrySetTax);
-}
-
-static gboolean
-entry_taxtype_handler (xmlNodePtr node, gpointer entry_pdata)
-{
-    struct entry_pdata *pdata = entry_pdata;
-    gint64 val;
-
-    dom_tree_to_integer(node, &val);
-    gncEntrySetTaxType(pdata->entry, (int)val);
-
-    return TRUE;
-}
-
-static gboolean
 entry_discount_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
@@ -297,6 +282,18 @@ entry_disctype_handler (xmlNodePtr node, gpointer entry_pdata)
 
     dom_tree_to_integer(node, &val);
     gncEntrySetDiscountType(pdata->entry, (gint)val);
+
+    return TRUE;
+}
+
+static gboolean
+entry_dischow_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    gint64 val;
+
+    dom_tree_to_integer(node, &val);
+    gncEntrySetDiscountHow(pdata->entry, (gint)val);
 
     return TRUE;
 }
@@ -319,19 +316,47 @@ entry_acct_handler (xmlNodePtr node, gpointer entry_pdata)
 }
 
 static gboolean
-entry_taxacc_handler (xmlNodePtr node, gpointer entry_pdata)
+entry_taxable_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    gint64 val;
+
+    dom_tree_to_integer(node, &val);
+    gncEntrySetTaxable(pdata->entry, (gint)val);
+
+    return TRUE;
+}
+
+static gboolean
+entry_taxincluded_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    gint64 val;
+
+    dom_tree_to_integer(node, &val);
+    gncEntrySetTaxIncluded(pdata->entry, (gint)val);
+
+    return TRUE;
+}
+
+static gboolean
+entry_taxtable_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
     GUID *guid;
-    Account * acc;
+    GncTaxTable *taxtable;
 
     guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
-    acc = xaccAccountLookup (guid, pdata->book);
-    g_free (guid);
-    g_return_val_if_fail (acc, FALSE);
+    taxtable = gncTaxTableLookup (pdata->book, guid);
+    if (!taxtable) {
+      taxtable = gncTaxTableCreate (pdata->book);
+      gncTaxTableSetGUID (taxtable, guid);
+    } else
+      gncTaxTableDecRef (taxtable);
+    gncEntrySetTaxTable (pdata->entry, taxtable);
 
-    gncEntrySetTaxAccount (pdata->entry, acc);
+    g_free(guid);
     return TRUE;
 }
 
@@ -383,12 +408,13 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_action_string, entry_action_handler, 0, 0 },
     { entry_qty_string, entry_qty_handler, 0, 0 },
     { entry_price_string, entry_price_handler, 0, 0 },
-    { entry_tax_string, entry_tax_handler, 0, 0 },
-    { entry_taxtype_string, entry_taxtype_handler, 0, 0 },
     { entry_discount_string, entry_discount_handler, 0, 0 },
     { entry_disctype_string, entry_disctype_handler, 0, 0 },
+    { entry_dischow_string, entry_dischow_handler, 0, 0 },
     { entry_acct_string, entry_acct_handler, 0, 0 },
-    { entry_taxacc_string, entry_taxacc_handler, 0, 0 },
+    { entry_taxable_string, entry_taxable_handler, 0, 0 },
+    { entry_taxincluded_string, entry_taxincluded_handler, 0, 0 },
+    { entry_taxtable_string, entry_taxtable_handler, 0, 0 },
     { entry_order_string, entry_order_handler, 0, 0 },
     { entry_invoice_string, entry_invoice_handler, 0, 0 },
     { NULL, 0, 0, 0 }
@@ -398,26 +424,23 @@ static GncEntry*
 dom_tree_to_entry (xmlNodePtr node, GNCBook *book)
 {
     struct entry_pdata entry_pdata;
-    GncEntry *entryToRet;
     gboolean successful;
 
-    entryToRet = gncEntryCreate(book);
-
-    entry_pdata.entry = entryToRet;
+    entry_pdata.entry = gncEntryCreate(book);
     entry_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, entry_handlers_v2,
                                          &entry_pdata);
-    gncEntryCommitEdit (entryToRet);
+    gncEntryCommitEdit (entry_pdata.entry);
 
     if (!successful)
     {
         PERR ("failed to parse entry tree");
-        gncEntryDestroy (entryToRet);
-        entryToRet = NULL;
+        gncEntryDestroy (entry_pdata.entry);
+        entry_pdata.entry = NULL;
     }
 
-    return entryToRet;
+    return entry_pdata.entry;
 }
 
 static gboolean

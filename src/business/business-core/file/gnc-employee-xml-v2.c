@@ -275,26 +275,23 @@ static GncEmployee*
 dom_tree_to_employee (xmlNodePtr node, GNCBook *book)
 {
     struct employee_pdata employee_pdata;
-    GncEmployee *employeeToRet;
     gboolean successful;
 
-    employeeToRet = gncEmployeeCreate(book);
-
-    employee_pdata.employee = employeeToRet;
+    employee_pdata.employee = gncEmployeeCreate(book);
     employee_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, employee_handlers_v2,
                                          &employee_pdata);
-    gncEmployeeCommitEdit (employeeToRet);
+    gncEmployeeCommitEdit (employee_pdata.employee);
 
     if (!successful)
     {
         PERR ("failed to parse employee tree");
-        gncEmployeeDestroy (employeeToRet);
-        employeeToRet = NULL;
+        gncEmployeeDestroy (employee_pdata.employee);
+        employee_pdata.employee = NULL;
     }
 
-    return employeeToRet;
+    return employee_pdata.employee;
 }
 
 static gboolean

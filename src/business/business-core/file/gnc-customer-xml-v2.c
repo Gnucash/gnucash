@@ -309,26 +309,23 @@ static GncCustomer*
 dom_tree_to_customer (xmlNodePtr node, GNCBook *book)
 {
     struct customer_pdata cust_pdata;
-    GncCustomer *custToRet;
     gboolean successful;
 
-    custToRet = gncCustomerCreate(book);
-
-    cust_pdata.customer = custToRet;
+    cust_pdata.customer = gncCustomerCreate(book);
     cust_pdata.book = book;
 
     successful = dom_tree_generic_parse (node, customer_handlers_v2,
                                          &cust_pdata);
-    gncCustomerCommitEdit (custToRet);
+    gncCustomerCommitEdit (cust_pdata.customer);
 
     if (!successful)
     {
         PERR ("failed to parse customer tree");
-        gncCustomerDestroy (custToRet);
-        custToRet = NULL;
+        gncCustomerDestroy (cust_pdata.customer);
+        cust_pdata.customer = NULL;
     }
 
-    return custToRet;
+    return cust_pdata.customer;
 }
 
 static gboolean

@@ -21,6 +21,7 @@
 #include "gncJobP.h"
 #include "gncOrderP.h"
 #include "gncOwnerP.h"
+#include "gncTaxTableP.h"
 #include "gncVendorP.h"
 
 /* version of the gnc module system interface we require */

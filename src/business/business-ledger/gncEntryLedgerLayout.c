@@ -51,6 +51,8 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     gboolean expandable;
     gboolean span;
   } cells[] = {
+    { ENTRY_INV_CELL, RECN_CELL_TYPE_NAME, N_("sample:X")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_DATE_CELL, DATE_CELL_TYPE_NAME, N_("sample:12/12/2000")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_DESC_CELL, QUICKFILL_CELL_TYPE_NAME,
@@ -62,19 +64,19 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_PRIC_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999,999.00") + 7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
-    { ENTRY_TAX_CELL, PRICE_CELL_TYPE_NAME, N_("sample:9,999.00") + 7,
-      CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_DISC_CELL, PRICE_CELL_TYPE_NAME, N_("sample:9,999.00") + 7,
-      CELL_ALIGN_RIGHT, FALSE, FALSE },
-    { ENTRY_ACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
-      CELL_ALIGN_RIGHT, FALSE, FALSE },
-    { ENTRY_TAXACC_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Tax:Account")+7,
-      CELL_ALIGN_RIGHT, FALSE, FALSE },
-    { ENTRY_TAXTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample:TT")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_DISTYPE_CELL, RECN_CELL_TYPE_NAME, N_("sample(DT):+%")+11,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
-    { ENTRY_INV_CELL, RECN_CELL_TYPE_NAME, N_("sample:X")+7,
+    { ENTRY_DISHOW_CELL, RECN_CELL_TYPE_NAME, N_("sample(DH):+%")+11,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_ACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_TAXABLE_CELL, RECN_CELL_TYPE_NAME, N_("sample:T?")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_TAXINCLUDED_CELL, RECN_CELL_TYPE_NAME, N_("sample:TI")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_TAXTABLE_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Tax Table 1")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_VALUE_CELL, PRICE_CELL_TYPE_NAME, N_("sample:999,999.00")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
@@ -100,7 +102,7 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_INVOICE_ENTRY:
   case GNCENTRY_INVOICE_VIEWER:
-    num_cols = 14;
+    num_cols = 15;
     break;
   default:
     g_assert (FALSE);
@@ -119,7 +121,6 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
 					TableLayout *layout)
 {
   CellBlock *curs;
-  int x = 0;
 
   switch (ledger->type) {
   case GNCENTRY_ORDER_ENTRY:
@@ -128,20 +129,21 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
   case GNCENTRY_INVOICE_VIEWER:
 
     curs = gnc_table_layout_get_cursor (layout, "cursor");
-    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_ACCT_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_DISTYPE_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_DISC_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXTYPE_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_TAX_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXACC_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, x++);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXVAL_CELL, 0, x++);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 0);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 1);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_ACCT_CELL, 0, 4);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, 5);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, 6);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DISTYPE_CELL, 0, 7);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DISHOW_CELL, 0, 8);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DISC_CELL, 0, 9);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXABLE_CELL, 0, 10);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXINCLUDED_CELL, 0, 11);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXTABLE_CELL, 0, 12);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 13);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_TAXVAL_CELL, 0, 14);
 
     break;
 

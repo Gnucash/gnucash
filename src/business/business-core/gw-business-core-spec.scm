@@ -337,30 +337,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:entry-get-tax
-   '<gnc:numeric>
-   "gncEntryGetTax"
-   '((<gnc:GncEntry*> entry))
-   "Return the Entry's Tax")
-
-  (gw:wrap-function
-   ws
-   'gnc:entry-get-tax-type
-   '<gw:int>
-   "gncEntryGetTaxType"
-   '((<gnc:GncEntry*> entry))
-   "Return the Entry's tax type")
-
-  (gw:wrap-function
-   ws
-   'gnc:entry-get-tax-type-string
-   '(<gw:mchars> callee-owned const)
-   "gncEntryGetTaxTypeStr"
-   '((<gw:int> tax-type))
-   "Return the Entry's Tax Type String")
-
-  (gw:wrap-function
-   ws
    'gnc:entry-get-discount
    '<gnc:numeric>
    "gncEntryGetDiscount"
@@ -374,14 +350,6 @@
    "gncEntryGetDiscountType"
    '((<gnc:GncEntry*> entry))
    "Return the Entry's discount type")
-
-  (gw:wrap-function
-   ws
-   'gnc:entry-get-discount-type-string
-   '(<gw:mchars> callee-owned const)
-   "gncEntryGetDiscountTypeStr"
-   '((<gw:int> discount-type))
-   "Return the Entry's Discount Type String")
 
   (gw:wrap-function
    ws

@@ -125,22 +125,15 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
 static gboolean
 gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
 {
-  gnc_numeric value, tax_value;
+  gnc_numeric value;
 
   /* Compute the value and tax value of the current cursor */
-  gnc_entry_ledger_compute_value (ledger, &value, &tax_value);
+  gnc_entry_ledger_compute_value (ledger, &value, NULL);
 
   /* If there is a value, make sure there is an account */
   if (! gnc_numeric_zero_p (value)) {
     if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_ACCT_CELL,
 					      _("an Account")))
-      return FALSE;
-  }
-
-  /* If there is a tax value, make sure there is a tax account */
-  if (! gnc_numeric_zero_p (tax_value)) {
-    if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_TAXACC_CELL,
-					      _("a Tax Account")))
       return FALSE;
   }
 
@@ -260,35 +253,22 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
   cell_name = gnc_table_get_current_cell_name (ledger->table);
 
-  /* See if we are leaving an account field */
+  /* See if we are leaving the account field */
   do
   {
     ComboCell *cell;
     Account *account;
     char *name;
 
-    if (!gnc_cell_name_equal (cell_name, ENTRY_ACCT_CELL) &&
-        !gnc_cell_name_equal (cell_name, ENTRY_TAXACC_CELL))
+    if (!gnc_cell_name_equal (cell_name, ENTRY_ACCT_CELL))
       break;
 
-    cell = NULL;
+    if (!gnc_table_layout_get_cell_changed (ledger->table->layout,
+					    ENTRY_ACCT_CELL, FALSE))
+      break;
 
-    if (gnc_cell_name_equal (cell_name, ENTRY_ACCT_CELL))
-    {
-      if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                             ENTRY_ACCT_CELL, FALSE))
-        cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
-                                                        ENTRY_ACCT_CELL);
-    }
-
-    if (gnc_cell_name_equal (cell_name, ENTRY_TAXACC_CELL))
-    {
-      if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-                                             ENTRY_TAXACC_CELL, FALSE))
-        cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
-                                                        ENTRY_TAXACC_CELL);
-    }
-
+    cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
+						    ENTRY_ACCT_CELL);
     if (!cell)
       break;
 
@@ -296,7 +276,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     if (!name || *name == '\0')
       break;
 
-    account = xaccGetAccountFromFullName (gnc_get_current_group (),
+    account = xaccGetAccountFromFullName (gnc_book_get_group (ledger->book),
                                           cell->cell.value,
                                           gnc_get_account_separator ());
     if (account)
@@ -321,6 +301,55 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     gnc_combo_cell_set_value (cell, name);
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
     g_free (name);
+
+  } while (FALSE);
+
+
+  /* See if we are leaving the TaxTable field */
+  do
+  {
+    ComboCell *cell;
+    GncTaxTable *table;
+    char *name;
+
+    if (!gnc_cell_name_equal (cell_name, ENTRY_TAXTABLE_CELL))
+      break;
+
+    if (!gnc_table_layout_get_cell_changed (ledger->table->layout,
+					    ENTRY_TAXTABLE_CELL, FALSE))
+      break;
+
+    cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
+						    ENTRY_TAXTABLE_CELL);
+    if (!cell)
+      break;
+
+    name = cell->cell.value;
+    if (!name || *name == '\0')
+      break;
+
+    table = gncTaxTableLookupByName (ledger->book, cell->cell.value);
+    if (table)
+      break;
+
+    {
+      const char *format = _("The tax table %s does not exist.\n"
+                             "Would you like to create it?");
+      if (!gnc_verify_dialog_parented (ledger->parent, TRUE, format, name))
+        break;
+    }
+
+    ledger->full_refresh = FALSE;
+
+    //    table = gnc_ui_new_tax_table_from_name (name); XXX
+    if (!table)
+      break;
+
+    ledger->full_refresh = TRUE;
+
+    name = (char *)gncTaxTableGetName (table);
+    gnc_combo_cell_set_value (cell, name);
+    gnc_basic_cell_set_changed (&cell->cell, TRUE);
 
   } while (FALSE);
 

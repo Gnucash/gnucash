@@ -11,21 +11,26 @@ typedef struct _gncEntry GncEntry;
 
 #include "date.h"
 #include "gnc-book.h"
+#include "gncTaxTable.h"
 #include "gncOrder.h"
 #include "gncInvoice.h"
 
 #define GNC_ENTRY_MODULE_NAME "gncEntry"
 
-/* How to interpret the Discount and Tax numbers..  You can interpret
- * the as a VALUE or a PERCENT.  Similarly, you can set the PRETAX
- * bit if you want the discount to be applied before a percentage-tax.
- */
-#define GNC_ENTRY_INTERP_VALUE		0x00
-#define GNC_ENTRY_INTERP_PERCENT	0x01
-#define GNC_ENTRY_PRETAX_FLAG		0x02
 
-#define GNC_ENTRY_INTERP_IS_VALUE(x)	(((x)&0x01) == GNC_ENTRY_INTERP_VALUE)
-#define GNC_ENTRY_INTERP_IS_PERCENT(x)	(((x)&0x01) == GNC_ENTRY_INTERP_PERCENT)
+/* How to apply the discount and taxes.  There are three distinct ways to
+ * apply them:
+ *
+ * Type:	discount	tax
+ * PRETAX	pretax		pretax-discount
+ * SAMETIME	pretax		pretax
+ * POSTTAX	pretax+tax	pretax
+ */
+typedef enum {
+  GNC_DISC_PRETAX = 1,
+  GNC_DISC_SAMETIME,
+  GNC_DISC_POSTTAX
+} GncDiscountHow;
 
 /* Create/Destroy Functions */
 
@@ -40,13 +45,14 @@ void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
 void gncEntrySetPrice (GncEntry *entry, gnc_numeric price);
-void gncEntrySetTax (GncEntry *entry, gnc_numeric tax);
-void gncEntrySetTaxType (GncEntry *entry, gint type);
 void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount);
-void gncEntrySetDiscountType (GncEntry *entry, gint type);
+void gncEntrySetDiscountType (GncEntry *entry, GncAmountType type);
+void gncEntrySetDiscountHow (GncEntry *entry, GncDiscountHow how);
+void gncEntrySetTaxable (GncEntry *entry, gboolean taxable);
+void gncEntrySetTaxIncluded (GncEntry *entry, gboolean tax_included);
+void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table);
 
 void gncEntrySetAccount (GncEntry *entry, Account *acc);
-void gncEntrySetTaxAccount (GncEntry *entry, Account *acc);
 
 /* Get Functions */
 
@@ -58,35 +64,45 @@ const char * gncEntryGetDescription (GncEntry *entry);
 const char * gncEntryGetAction (GncEntry *entry);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);
 gnc_numeric gncEntryGetPrice (GncEntry *entry);
-gnc_numeric gncEntryGetTax (GncEntry *entry);
-gint gncEntryGetTaxType (GncEntry *entry);
-const char * gncEntryGetTaxTypeStr (gint type);
 gnc_numeric gncEntryGetDiscount (GncEntry *entry);
-gint gncEntryGetDiscountType (GncEntry *entry);
-const char * gncEntryGetDiscountTypeStr (gint type);
+GncAmountType gncEntryGetDiscountType (GncEntry *entry);
+GncDiscountHow gncEntryGetDiscountHow (GncEntry *entry);
+gboolean gncEntryGetTaxable (GncEntry *entry);
+gboolean gncEntryGetTaxIncluded (GncEntry *entry);
+GncTaxTable * gncEntryGetTaxTable (GncEntry *entry);
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
+/* The first three return the rounded values -- the last returns the
+ * list of unrounded account-values.  The list belongs to the entry
+ * and will be destroyed, so use it quickly.
+ */
 gnc_numeric gncEntryReturnValue (GncEntry *entry);
-gnc_numeric gncEntryReturnTaxValue (GncEntry *entry);
 gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry);
+gnc_numeric gncEntryReturnTaxValue (GncEntry *entry);
+GList * gncEntryReturnTaxValues (GncEntry *entry);
 
-/* Compute the Entry value, tax-value, and discount_value, based on the
- * quantity, price, discount, tax, and discount/tax types.  Note that
- * the value is the after-discount value.
+/* Compute the Entry value, tax-value, and discount_value, based on
+ * the quantity, price, discount, tax-table, and types.  The value is
+ * the amount the merchant gets, the taxes are what the gov't gets,
+ * and the discount is how much the customer saved.
+ *
+ * The tax_values list is the property of the entry and will be
+ * destroyed automatically, so use it quickly.  Note that all return
+ * values from these two functions are NOT rounded.
  */
 void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
-		       gnc_numeric *tax_value, gnc_numeric *discount);
+		       gnc_numeric *discount, gnc_numeric *tax_value,
+		       GList **tax_values);
 void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
-			   gnc_numeric tax, gint tax_type,
-			   gnc_numeric discount, gint discount_type,
-			   gnc_numeric *value, gnc_numeric *tax_value,
-			   gnc_numeric *discount_value);
-
-gint gncEntryGetTypeFromStr (const char *type);
+			   GncTaxTable *tax_table, gboolean tax_included,
+			   gnc_numeric discount, GncAmountType discount_type,
+			   GncDiscountHow discount_how,
+			   /* return values */
+			   gnc_numeric *value, gnc_numeric *discount_value,
+			   GList **tax_values);
 
 Account * gncEntryGetAccount (GncEntry *entry);
-Account * gncEntryGetTaxAccount (GncEntry *entry);
 
 GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);

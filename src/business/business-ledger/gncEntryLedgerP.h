@@ -40,15 +40,20 @@ GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,
 				       VirtualCellLocation vcell_loc);
 Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 					const char * cell_name);
+GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,
+					     const char *cell_name);
 
 gint gnc_entry_ledger_get_type (GncEntryLedger *ledger,
 				const char * cell_name);
+gboolean gnc_entry_ledger_get_checkmark (GncEntryLedger *ledger,
+					 const char * cell_name);
 char gnc_entry_ledger_get_inv (GncEntryLedger *ledger, const char * cell_name);
 gboolean gnc_entry_ledger_get_numeric (GncEntryLedger *ledger,
 				       const char *cell_name,
 				       gnc_numeric *value);
 
 const char * gnc_entry_ledger_type_string_getter (char flag);
+const char * gnc_entry_ledger_how_string_getter (char flag);
 
 gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
 				      VirtualCellLocation *vcell_loc);

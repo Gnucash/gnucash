@@ -1,3 +1,12 @@
+2002-06-16  Derek Atkins   <derek@ihtfp.com>
+
+	Integrate the tax table into the gncEntry object; change how taxes
+	and discounts are computed, stored, and returned.  Fix the Entry
+	XML code to save/load the new taxtable data (not backwards
+	compatible).  Integrate new changes into the entry-ledger.
+
+	fix some bugs in the business xml code.  fix some memory leaks.
+
 2002-06-14  Derek Atkins   <derek@ihtfp.com>
 
 	* business-core/file/gnc-tax-table-xml-v2.*: Create a preliminary
