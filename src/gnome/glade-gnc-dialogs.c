@@ -7288,7 +7288,6 @@ create_Prices_Dialog (void)
 {
   GtkWidget *Prices_Dialog;
   GtkWidget *vbox121;
-  GtkWidget *hbox104;
   GtkWidget *frame50;
   GtkWidget *vbox122;
   GtkWidget *scrolledwindow32;
@@ -7299,10 +7298,15 @@ create_Prices_Dialog (void)
   GtkWidget *label8477418;
   GtkWidget *label8477419;
   GtkWidget *label8477420;
+  GtkWidget *hbox108;
+  GSList *price_sort_radio_group = NULL;
+  GtkWidget *sort_by_commodity_radio;
+  GtkWidget *radiobutton10;
   GtkWidget *hbuttonbox5;
   GtkWidget *add_button;
   GtkWidget *remove_button;
   GtkWidget *edit_button;
+  GtkWidget *get_quotes_button;
   GtkWidget *hbuttonbox4;
   GtkWidget *close_button;
   GtkTooltips *tooltips;
@@ -7317,22 +7321,15 @@ create_Prices_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "vbox121", vbox121);
   gtk_widget_show (vbox121);
 
-  hbox104 = gtk_hbox_new (FALSE, 2);
-  gtk_widget_ref (hbox104);
-  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "hbox104", hbox104,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox104);
-  gtk_box_pack_start (GTK_BOX (vbox121), hbox104, TRUE, TRUE, 0);
-
   frame50 = gtk_frame_new (_("Prices"));
   gtk_widget_ref (frame50);
   gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "frame50", frame50,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame50);
-  gtk_box_pack_start (GTK_BOX (hbox104), frame50, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox121), frame50, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame50), 3);
 
-  vbox122 = gtk_vbox_new (FALSE, 0);
+  vbox122 = gtk_vbox_new (FALSE, 5);
   gtk_widget_ref (vbox122);
   gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "vbox122", vbox122,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -7405,6 +7402,30 @@ create_Prices_Dialog (void)
   gtk_widget_show (label8477420);
   gtk_clist_set_column_widget (GTK_CLIST (price_list), 5, label8477420);
 
+  hbox108 = gtk_hbox_new (TRUE, 10);
+  gtk_widget_ref (hbox108);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "hbox108", hbox108,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox108);
+  gtk_box_pack_start (GTK_BOX (vbox122), hbox108, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox108), 3);
+
+  sort_by_commodity_radio = gtk_radio_button_new_with_label (price_sort_radio_group, _("Sort by Commodity"));
+  price_sort_radio_group = gtk_radio_button_group (GTK_RADIO_BUTTON (sort_by_commodity_radio));
+  gtk_widget_ref (sort_by_commodity_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "sort_by_commodity_radio", sort_by_commodity_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (sort_by_commodity_radio);
+  gtk_box_pack_start (GTK_BOX (hbox108), sort_by_commodity_radio, FALSE, FALSE, 0);
+
+  radiobutton10 = gtk_radio_button_new_with_label (price_sort_radio_group, _("Sort by Date"));
+  price_sort_radio_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton10));
+  gtk_widget_ref (radiobutton10);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "radiobutton10", radiobutton10,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton10);
+  gtk_box_pack_start (GTK_BOX (hbox108), radiobutton10, FALSE, FALSE, 0);
+
   hbuttonbox5 = gtk_hbutton_box_new ();
   gtk_widget_ref (hbuttonbox5);
   gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "hbuttonbox5", hbuttonbox5,
@@ -7438,6 +7459,16 @@ create_Prices_Dialog (void)
   gtk_widget_show (edit_button);
   gtk_container_add (GTK_CONTAINER (hbuttonbox5), edit_button);
   GTK_WIDGET_SET_FLAGS (edit_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, edit_button, _("Edit the current price."), NULL);
+
+  get_quotes_button = gtk_button_new_with_label (_("Get Quotes"));
+  gtk_widget_ref (get_quotes_button);
+  gtk_object_set_data_full (GTK_OBJECT (Prices_Dialog), "get_quotes_button", get_quotes_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (get_quotes_button);
+  gtk_container_add (GTK_CONTAINER (hbuttonbox5), get_quotes_button);
+  GTK_WIDGET_SET_FLAGS (get_quotes_button, GTK_CAN_DEFAULT);
+  gtk_tooltips_set_tip (tooltips, get_quotes_button, _("Get new online quotes for stock accounts."), NULL);
 
   hbuttonbox4 = GNOME_DIALOG (Prices_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (Prices_Dialog), "hbuttonbox4", hbuttonbox4);

@@ -150,7 +150,7 @@ GNCBackendError xaccBackendGetError (Backend *be);
 /*
  * The xaccGetAccountBackend() subroutine will find the
  *    persistent-data storage backend associated with this account.
- *    This routine traverses up the account heirarchy until it
+ *    This routine traverses up the account hierarchy until it
  *    finds and account-group node that has a backend associated with
  *    it.  The assumption is that all accounts in that account-group
  *    share a common back-end.

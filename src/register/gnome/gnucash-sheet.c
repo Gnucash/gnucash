@@ -1745,7 +1745,9 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
-        gnc_table_move_vertical_position (sheet->table, &virt_loc, 1);
+        if (!gnc_table_move_vertical_position (sheet->table, &virt_loc, 1))
+                return;
+
         if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
                 return;
 
@@ -1772,7 +1774,10 @@ gnucash_register_goto_next_trans_row (GnucashRegister *reg)
 
         do
         {
-                gnc_table_move_vertical_position (sheet->table, &virt_loc, 1);
+                if (!gnc_table_move_vertical_position (sheet->table,
+                                                       &virt_loc, 1))
+                        return;
+
                 if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
                         return;
 

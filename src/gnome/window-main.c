@@ -268,7 +268,7 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       childwin->app = new_app;
       gnome_app_add_toolbar(GNOME_APP(childwin->app), 
                             GTK_TOOLBAR(childwin->toolbar),
-                            "Toolbar", GNOME_DOCK_ITEM_BEH_NORMAL,
+                            "Toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE,
                             GNOME_DOCK_TOP, 1, 0, 0);
       gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
                             gnc_get_toolbar_style());
@@ -277,7 +277,7 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       childwin->app = new_app;
       gnome_app_add_toolbar(GNOME_APP(childwin->app), 
                             GTK_TOOLBAR(childwin->toolbar),
-                            "Toolbar", GNOME_DOCK_ITEM_BEH_NORMAL,
+                            "Toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE,
                             GNOME_DOCK_TOP, 1, 0, 0);
       gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
                             gnc_get_toolbar_style());

@@ -1,4 +1,18 @@
+2001-04-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-price-editor.c: button for online quotes
+
+	* src/scm/price-quotes.scm: handle missing lib errors. i18n
+	some strings
+
+	* src/quotes/finance-quote-helper.in: return error symbol when
+	libraries are missing.
+
+	* src/guile/guile-util.c (gnc_book_to_scm): new func
+
 2001-04-15  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/gnome/gnucash-sheet.c: some more error checking
 
 	* src/gnome/top-level.c: check for no children when creating default
 	window

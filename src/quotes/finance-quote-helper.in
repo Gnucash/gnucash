@@ -116,7 +116,9 @@ sub check_modules {
   print STDERR "\n";
   print STDERR "Run 'update-finance-quote' as root to install them.\n";
 
-  exit 1
+  print "missing-lib";
+
+  exit 1;
 }
 
 sub schemify_string {

@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <guile/gh.h>
 #include <time.h>
 
 #include "FileDialog.h"
@@ -38,6 +39,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "gnc-ui.h"
+#include "guile-util.h"
 #include "messages.h"
 
 
@@ -50,6 +52,8 @@ typedef struct
 {
   GtkWidget * dialog;
   GtkWidget * price_dialog;
+
+  GtkWidget * sort_radio;
 
   GtkWidget * price_list;
   GtkWidget * edit_button;
@@ -131,7 +135,7 @@ price_compare (gconstpointer a, gconstpointer b)
 
   result = timespec_cmp (&ts_a, &ts_b);
   if (result)
-    return result;
+    return -result;
 
   SAFE_STRCMP (gnc_price_get_type (price_a),
                gnc_price_get_type (price_b));
@@ -144,10 +148,30 @@ price_compare (gconstpointer a, gconstpointer b)
 }
 
 static int
+price_date_compare (gconstpointer a, gconstpointer b)
+{
+  GNCPrice *price_a = (GNCPrice *) a;
+  GNCPrice *price_b = (GNCPrice *) b;
+  Timespec ts_a;
+  Timespec ts_b;
+  gint result;
+
+  ts_a = gnc_price_get_time (price_a);
+  ts_b = gnc_price_get_time (price_b);
+
+  result = timespec_cmp (&ts_a, &ts_b);
+  if (result)
+    return -result;
+
+  return price_compare (a, b);
+}
+
+static int
 gnc_prices_load_prices (PricesDialog *pdb_dialog)
 {
   gnc_commodity *current_commodity;
   GNCPrintAmountInfo print_info;
+  gboolean sort_commodity;
   GNCPrice *old_price;
   GNCBook *book;
   GList *prices;
@@ -162,7 +186,11 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
   gnc_pricedb_foreach_price (gnc_book_get_pricedb (book),
                              load_price_helper, &prices, FALSE);
 
-  prices = g_list_sort (prices, price_compare);
+  sort_commodity = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON (pdb_dialog->sort_radio));
+
+  prices = g_list_sort (prices,
+                        sort_commodity ? price_compare : price_date_compare);
 
   gtk_clist_freeze (GTK_CLIST (pdb_dialog->price_list));
 
@@ -514,6 +542,29 @@ add_clicked (GtkWidget *widget, gpointer data)
 }
 
 static void
+get_quotes_clicked (GtkWidget *widget, gpointer data)
+{
+  PricesDialog *pdb_dialog = data;
+  GNCBook *book = gncGetCurrentBook ();
+  SCM quotes_func;
+  SCM book_scm;
+
+  quotes_func = gh_eval_str ("gnc:book-add-quotes");
+  if (!gh_procedure_p (quotes_func))
+    return;
+
+  book_scm = gnc_book_to_scm (book);
+  if (gh_scm2bool (gh_not (book_scm)))
+    return;
+
+  gnc_set_busy_cursor (NULL, TRUE);
+  gh_call1 (quotes_func, book_scm);
+  gnc_unset_busy_cursor (NULL);
+
+  gnc_gui_refresh_all ();
+}
+
+static void
 gnc_prices_select_price_cb (GtkCList *clist, gint row, gint col,
                             GdkEventButton *event, gpointer data)
 {
@@ -625,6 +676,15 @@ prices_set_min_widths (PricesDialog *pdb_dialog)
       gtk_clist_set_column_min_width (GTK_CLIST (pdb_dialog->price_list),
                                       i, width + 5);
     }
+}
+
+static void
+sort_commodity_toggled_cb (GtkToggleButton *togglebutton,
+                           gpointer user_data)
+{
+  PricesDialog *pdb_dialog = user_data;
+
+  gnc_prices_load_prices (pdb_dialog);
 }
 
 static void
@@ -758,6 +818,13 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   {
     GtkWidget *button;
 
+    button = lookup_widget (dialog, "sort_by_commodity_radio");
+    pdb_dialog->sort_radio = button;
+
+    gtk_signal_connect (GTK_OBJECT (button), "toggled",
+                        GTK_SIGNAL_FUNC (sort_commodity_toggled_cb),
+                        pdb_dialog);
+
     button = lookup_widget (dialog, "edit_button");
     pdb_dialog->edit_button = button;
 
@@ -774,6 +841,11 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (add_clicked), pdb_dialog);
+
+    button = lookup_widget (dialog, "get_quotes_button");
+
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        GTK_SIGNAL_FUNC (get_quotes_clicked), pdb_dialog);
   }
 
   gnc_prices_load_prices (pdb_dialog);

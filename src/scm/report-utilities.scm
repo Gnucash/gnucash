@@ -114,7 +114,7 @@
     (cons 'credit-line (_ "Credit-Lines")))
    type))
 
-;; Returns the depth of the current account heirarchy, that is, the
+;; Returns the depth of the current account hierarchy, that is, the
 ;; maximum level of subaccounts in the current-group.
 (define (gnc:get-current-group-depth)
   ;; Given a list of accounts, this function determines the maximum

@@ -45,13 +45,16 @@
   ;;
   ;; i.e. ("YAHOO" "RHAT" "LNUX" "IBM")
   ;;
-  ;; This function will return #f on catastrophic failure, or a list
+  ;; This function will return #f on catastrophic failure or a list
   ;; where, for each element in requests, the output list will contain
-  ;; a quote-result element.  This element will be #f if the
-  ;; corresponding method call fails, or a list otherwise.  A
-  ;; quote-result list will contain the symbol representing the item
-  ;; being quoted, followed by an alist detailing the quote data from
-  ;; finance-quote-helper.
+  ;; a quote-result element. This element will be #f or an error
+  ;; symbol if the corresponding method call fails, or a list
+  ;; otherwise. A quote-result list will contain the symbol
+  ;; representing the item being quoted, followed by an alist
+  ;; detailing the quote data from finance-quote-helper.
+  ;;
+  ;; Possible error symbols and their meanings are:
+  ;;   missing-lib    One of the required perl libs is missing
   ;;
   ;; So for the example method call above, the resulting item in the
   ;; output list might look like this:
@@ -69,12 +72,12 @@
   ;; about it's output.
 
   (let ((quoter #f))
-    
+
     (define (start-quoter)
       (set! quoter (gnc:run-sub-process #f
                                         gnc:*finance-quote-helper*
                                         gnc:*finance-quote-helper*)))
-    
+
     (define (get-quotes)
       (and quoter
            (let ((to-child (caddr quoter))
@@ -347,10 +350,10 @@
                         (map fq-call-data->fq-call fq-call-data)))
          (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
          (commod-tz-quote-triples
-          (and fq-results
+          (and fq-results (not (member 'missing-lib fq-results))
                (fq-results->commod-tz-quote-triples fq-call-data fq-results)))
-         ;; At this point commod-quote-pairs will either be #f or a
-         ;; list of items.  Each item will either be (commodity
+         ;; At this point commod-tz-quote-triples will either be #f or a
+         ;; list of items. Each item will either be (commodity
          ;; timezone quote-data) or (#f . problem-commodity)
          (problem-syms
           (and commod-tz-quote-triples
@@ -362,49 +365,69 @@
                                   ":"
                                   (gnc:commodity-get-mnemonic (cdr cq-pair)))))
                            commod-tz-quote-triples)))
+         ;; strip out the "bad" ones from above.
+         (ok-syms
+          (and commod-tz-quote-triples
+               (filter car commod-tz-quote-triples)))
          (keep-going? #t))
 
     (cond
+     ((member 'missing-lib fq-results)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog
+           (_ "You are missing some needed Perl libraries.
+Run 'update-finance-quote' as root to install them."))
+          (gnc:warn (_ "You are missing some needed Perl libraries.
+Run 'update-finance-quote' as root to install them.") "\n")))
      ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
       (gnc:error-dialog
-       (string-append
-        (_ "Unable to get quotes or diagnose the problem.\n")
-        (_ "Sorry."))
-       (set! keep-going? #f)))
+       (_ "Unable to get quotes or diagnose the problem."))
+       (set! keep-going? #f))
      ((not commod-tz-quote-triples)
-      (gnc:warn (_ "Unable to get quotes or diagnose the problem.\n")
-                (_ "Sorry."))
+      (gnc:warn (_ "Unable to get quotes or diagnose the problem."))
       (set! keep-going? #f))
      ((not (null? problem-syms))
       (if (gnc:ui-is-running?)
-          (set!
-           keep-going?
-           (gnc:verify-dialog
-            (call-with-output-string
-             (lambda (p)
-               (display "Unable to retrieve quotes for these items:" p)
-               (newline p)
-               (display "  " p)
-               (display (string-join problem-syms "\n  ") p)
-               (newline p)
-               (display "Continue using only the good quotes?" p)))
-            #t))
+          (if (and ok-syms (not (null? ok-syms)))
+              (set!
+               keep-going?
+               (gnc:verify-dialog
+                (call-with-output-string
+                 (lambda (p)
+                   (display (_ "Unable to retrieve quotes for these items:") p)
+                   (newline p)
+                   (display "  " p)
+                   (display (string-join problem-syms "\n  ") p)
+                   (newline p)
+                   (display (_ "Continue using only the good quotes?") p)))
+                #t))
+              (begin
+                (gnc:error-dialog
+                 (call-with-output-string
+                  (lambda (p)
+                    (display
+                     (_ "Unable to retrieve quotes for these items:") p)
+                    (newline p)
+                    (display "  " p)
+                    (display (string-join problem-syms "\n  ") p))))
+                (set! keep-going? #f)))
           (gnc:warn
            (call-with-output-string
             (lambda (p)
-              (display "Unable to retrieve quotes for these items:" p)
+              (display (_ "Unable to retrieve quotes for these items:") p)
               (newline p)
               (display "  " p)
               (display (string-join problem-syms "\n  ") p)
               (newline p)
-              (display "Continuing with good quotes.\n" p)))))))
-    
+              (display (_ "Continuing with good quotes.") p)
+              (newline p)))))))
+
     (if
      keep-going?
      (let ((prices (map (lambda (triple)
                           (commodity-tz-quote-triple->price book triple))
-                        ;; strip out the "bad" ones from above.
-                        (filter car commod-tz-quote-triples))))
+                        ok-syms)))
        (if (any string? prices)
            (if (gnc:ui-is-running?)
                (set!
@@ -412,22 +435,23 @@
                 (gnc:verify-dialog
                  (call-with-output-string
                   (lambda (p)
-                    (display "Unable to create prices for these items:" p)
+                    (display (_ "Unable to create prices for these items:") p)
                     (newline p)
                     (display "  " p)
                     (display (string-join (filter string? prices) "\n  ") p)
                     (newline p)
-                    (display "Add remaining good quotes?" p)))
+                    (display (_ "Add remaining good quotes?") p)))
                  #t))
                (gnc:warn
                 (call-with-output-string
                  (lambda (p)
-                   (display "Unable to create prices for these items:" p)
+                   (display (_ "Unable to create prices for these items:") p)
                    (newline p)
                    (display "  " p)
                    (display (string-join (filter string? prices) "\n  ") p)
                    (newline p)
-                   (display "Adding remaining good quotes.\n" p))))))
+                   (display (_ "Adding remaining good quotes.") p)
+                   (newline p))))))
 
        (if keep-going?
            (book-add-prices! book (filter
