@@ -162,20 +162,20 @@ gnc_ui_acct_tree_fill(GtkTree *item, AccountGroup *accts, int subtree)
 void
 gnc_ui_refresh_tree() {
 
-  /** This is ugly... how do we do this nicer? */
-  GList *items;
+  GList   *list;
+
+  /* Make sure we are at the top of the tree */
+   
+  list = GTK_TREE( GTK_TREE_ROOT_TREE ( mwindow->maintree ) )->children;
+
+  gtk_tree_remove_items ( GTK_TREE_ROOT_TREE( mwindow->maintree ), list);
   
-  mwindow->maintree = GTK_TREE_ROOT_TREE ( mwindow->maintree );
-  
-  items = GTK_TREE_SELECTION ( mwindow->maintree );
-  
-  gtk_tree_clear_items ( mwindow->maintree, 0, g_list_length(items) );  
-  
-  mwindow->root_item = mwindow->maintree;  
-    
+  /* Refill Tree with fresh data */
+
   gnc_ui_acct_tree_fill(mwindow->root_item,
                         xaccSessionGetGroup(current_session),
-                        -1); 
+                       -1); 
+ 
 
 }
 
@@ -343,7 +343,7 @@ static GnomeUIInfo filemenu[] = {
        {GNOME_APP_UI_ITEM, 
        N_("New"), N_("Create New File."),
        NULL, NULL, NULL, 
-       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_ABOUT,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_NEW,
        0, 0, NULL},
        {GNOME_APP_UI_ITEM,
        N_("Open"), N_("Open File."),
@@ -351,10 +351,21 @@ static GnomeUIInfo filemenu[] = {
        GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
        0,0, NULL},
        {GNOME_APP_UI_ITEM,
+       N_("Save"), N_("Save File."),
+       file_cmd_save, NULL, NULL,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_SAVE,
+       0, 0, NULL},
+       {GNOME_APP_UI_ITEM,
        N_("Import"), N_("Import QIF File."),
        file_cmd_import, NULL, NULL,
        GNOME_APP_PIXMAP_NONE, NULL,
        0, 0, NULL},
+       GNOMEUIINFO_SEPARATOR,
+       {GNOME_APP_UI_ITEM,
+       N_("Quit"), N_("Quit Gnucash."),
+       gnc_shutdown, NULL, NULL,
+       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_QUIT,
+       0, 0, NULL},       
        GNOMEUIINFO_END             
 };
 

@@ -346,7 +346,7 @@ accWindow (AccountGroup *grp) {
   
   gnome_dialog_button_connect (GNOME_DIALOG (accData->dialog), 1,
                                GTK_SIGNAL_FUNC (gnc_ui_accWindow_cancelled_callback), 
-                               accData->dialog);
+                               accData);
   
                        
   /*** End of Callbacks *********************************************/  

@@ -20,7 +20,7 @@
 \********************************************************************/
 
 #include "MenuCommands.h"
-// #incldue "FileDialog.h"
+#include "FileDialog.h"
 
 /* hack alert --  the right way to imoplement the missing function
  * below is to move the file src/motif/FileDialog.c to some
@@ -32,24 +32,24 @@
 void
 file_cmd_open (GtkWidget *widget, gpointer data)
 {
-  // gncFileOpen();
+  gncFileOpen();
 }
 
 void
 file_cmd_import (GtkWidget *widget, gpointer data)
 {
-   // gncFileQIFImport();
+  gncFileQIFImport();
 }
 
 void
 file_cmd_save(GtkWidget *widget, gpointer data)
 {
-   // gncFileSave();
+  gncFileSave();
 }
 
 void file_cmd_quit (GtkWidget *widget, gpointer data)
 {
-  // gncFileQuit();
+  //gncFileQuit();
   //gnucash_shutdown(NULL, NULL);
   gtk_main_quit();
 }
