@@ -580,9 +580,9 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
  * Return: first new line after end of transaction                  * 
 \********************************************************************/
 
-#define XACC_ACTION(q,x)			\
-   if (!strncmp (&qifline[1], q, strlen(q))) {	\
-      trans->action = XtNewString(x);		\
+#define XACC_ACTION(q,x)				\
+   if (!strncmp (&qifline[1], q, strlen(q))) {		\
+      trans->credit_split.action = XtNewString(x);	\
    } else
 
 
@@ -600,17 +600,12 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    double adjust = 0.0;
 
    if (!acc) return NULL;
-   trans = mallocTransaction ();
 
    qifline = xaccReadQIFLine (fd);
-
-   if (!qifline) {
-      xaccRemoveTransaction ((Account *) trans->debit, trans);
-      xaccRemoveTransaction ((Account *) trans->credit_split.acc, trans);
-      freeTransaction (trans);
-      return NULL;
-   }
+   if (!qifline) return NULL;
    if ('!' == qifline [0]) return qifline;
+
+   trans = mallocTransaction ();
 
    /* scan for transaction date, description, type */
    while (qifline) {
@@ -628,7 +623,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* I == share price */
      if ('I' == qifline [0]) {   
-         trans -> share_price = xaccParseQIFAmount (&qifline[1]); 
+         trans -> credit_split.share_price = xaccParseQIFAmount (&qifline[1]); 
      } else 
 
      /* L == name of acount from which transfer occured */
@@ -672,7 +667,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('O' == qifline [0]) {   
         double pute;
         adjust = xaccParseQIFAmount (&qifline[1]);
-        pute = (trans->damount) * (trans->share_price);
+        pute = (trans->credit_split.damount) * (trans->credit_split.share_price);
         if (isneg) pute = -pute;
 
         printf ("QIF Warning: Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
@@ -685,8 +680,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* Q == number of shares */
      if ('Q' == qifline [0]) {   
-         trans -> damount = xaccParseQIFAmount (&qifline[1]);  
-         if (isneg) trans -> damount = - (trans->damount);
+         trans -> credit_split.damount = xaccParseQIFAmount (&qifline[1]);  
+         if (isneg) trans -> credit_split.damount = - (trans->credit_split.damount);
          got_share_quantity = 1;
      } else 
 
@@ -698,6 +693,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
          split -> damount = 0.0;      /* amount is double */
          split -> share_price= 1.0;   /* share_price is double */
          split -> reconciled = NREC;  /* reconciled is byte */
+         split -> parent = trans;     /* parent transaction */
          split -> acc = (struct _account *) xaccGetXferQIFAccount (acc, qifline);
 
          xaccAppendSplit (trans, split);
@@ -710,8 +706,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('T' == qifline [0]) {   
          /* ignore T for stock transactions, since T is a dollar amount */
          if (0 == got_share_quantity) {
-            trans -> damount = xaccParseQIFAmount (&qifline[1]);  
-            if (isneg) trans -> damount = - (trans->damount);
+            trans -> credit_split.damount = xaccParseQIFAmount (&qifline[1]);  
+            if (isneg) trans -> credit_split.damount = - (trans->credit_split.damount);
          }
      } else 
 
@@ -743,7 +739,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
            double parse, pute;
            int got, wanted;
            parse = xaccParseQIFAmount (&qifline[1]);
-           pute = (trans->damount) * (trans->share_price);
+           pute = (trans->credit_split.damount) * (trans->credit_split.share_price);
            if (isneg) pute = -pute;
    
            wanted = (int) (100.0 * parse + 0.5);
@@ -773,16 +769,14 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
     * if we see something else, assume the worst, free the last 
     * transaction, and return */
    if ('!' == qifline[0]) {
-      xaccRemoveTransaction ((Account *) trans->debit, trans);
-      xaccRemoveTransaction ((Account *) trans->credit_split.acc, trans);
       freeTransaction (trans);
       return qifline;
    }
 
    XACC_PREP_NULL_STRING (trans->num);
-   XACC_PREP_NULL_STRING (trans->credit_split.memo);
    XACC_PREP_NULL_STRING (trans->description);
-   XACC_PREP_NULL_STRING (trans->action);
+   XACC_PREP_NULL_STRING (trans->credit_split.memo);
+   XACC_PREP_NULL_STRING (trans->credit_split.action);
 
 
    /* fundamentally differnt handling for securities and non-securities */
@@ -792,15 +786,20 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
        * then it is a defacto transfer between the brokerage account 
        * and the stock account.  */
       if (share_xfer) {
+         if (!split) {
+            split = xaccMallocSplit ();
+            xaccAppendSplit (trans, split);
+         }
+
          /* Insert the transaction into the main brokerage 
           * account as a debit, unless an alternate account
           * was specified. */
          if (xfer_acc) {
-            trans->debit = (struct _account *) xfer_acc;
-            insertTransaction (xfer_acc, trans);
+            split->acc = (struct _account *) xfer_acc;
+            xaccInsertSplit (xfer_acc, split);
          } else {
-            trans->debit = (struct _account *) acc;
-            insertTransaction (acc, trans);
+            split->acc = (struct _account *) acc;
+            xaccInsertSplit (acc, split);
          }
 
          /* normally, the security account is pointed at by 
@@ -808,7 +807,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * But, just in case its missing, avoid a core dump */
          if (sub_acc) {
             trans->credit_split.acc = (struct _account *) sub_acc;
-            insertTransaction (sub_acc, trans);
+            xaccInsertSplit (sub_acc, split);
          }
       } else {
 
@@ -820,10 +819,10 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * main account gets it */
          if (xfer_acc) {
             trans->credit_split.acc = (struct _account *) xfer_acc;
-            insertTransaction (xfer_acc, trans);
+            xaccInsertSplit (xfer_acc, &(trans->credit_split));
          } else {
             trans->credit_split.acc = (struct _account *) acc;
-            insertTransaction( acc, trans );
+            xaccInsertSplit (acc, &(trans->credit_split));
          }
       }
 
@@ -831,13 +830,17 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       /* if we are here, its not a security, but an ordinary account */
       /* if a transfer account was specified,  it is the debited account */
       if (xfer_acc) {
-         trans->debit = (struct _account *) xfer_acc;
-         insertTransaction (xfer_acc, trans);
+         if (!split) {
+            split = xaccMallocSplit ();
+            xaccAppendSplit (trans, split);
+         }
+         split->acc = (struct _account *) xfer_acc;
+         xaccInsertSplit (xfer_acc, split);
       }
 
       /* the transaction itself appears as a credit */
       trans->credit_split.acc = (struct _account *) acc;
-      insertTransaction( acc, trans );
+      xaccInsertSplit (acc, &(trans->credit_split));
    }
 
    return qifline;
