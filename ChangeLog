@@ -3,12 +3,17 @@
 	* src/business/business-reports/business-reports.scm -- need to
 	  load business-gnome module, which loads gnome-utils module, for
 	  a couple HTML definitions (which should eventually be moved
-	  elsewhere so that the reports themselves don't depend on
+	  elsewhere) so that the reports themselves don't depend on
 	  gnome...  This fixes Wilddev's report problem.
 
 	* src/business/business-ledger/gncEntryLedgerModel.c -- relabel
 	  the "Account" column to "Income Account" or "Expense Account"
 	  to better encourage the user to "choose wisely".
+
+	* src/business/business-ledger/gncEntryLedgerLoad.c -- limit the
+	  accounts in the pull-down list to accounts that are NOT
+	  placeholder, A/R, A/P, Cash, Bank, or Equity accounts.  This
+	  is also to encourage the user to "choose wisely" :)
 	
 2003-01-21  David Hampton  <hampton@employees.org>
 

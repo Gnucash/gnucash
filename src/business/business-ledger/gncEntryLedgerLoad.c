@@ -96,7 +96,14 @@ static void load_xfer_cell (ComboCell * cell, AccountGroup * grp)
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
     if (name != NULL) {
-      gnc_combo_cell_add_menu_item (cell, name);
+      GNCAccountType type = xaccAccountGetType (account);
+
+      /* Dont add placeholder, A/R, A/P, Bank, Cash, or Equity accounts */
+      if (! (xaccAccountGetPlaceholder (account) ||
+	     type == PAYABLE || type == RECEIVABLE ||
+	     type == CASH || type == BANK || type == EQUITY) )
+	gnc_combo_cell_add_menu_item (cell, name);
+
       g_free(name);
     }
   }
