@@ -1,3 +1,9 @@
+2003-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-lot-p.h: some strange platforms assume "char" is
+	  0..255 instead of -128..127.  Force a "signed char" to make sure
+	  we get the latter interpretation.
+
 2003-02-04  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: Add heuristic for duplicate matching by check number.  
