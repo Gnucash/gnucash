@@ -623,6 +623,7 @@ AC_OUTPUT(
           accounts/Makefile
           accounts/C/Makefile
           accounts/de_DE/Makefile
+          accounts/es_ES/Makefile
           accounts/pt_PT/Makefile
           debian/Makefile
           doc/Makefile
