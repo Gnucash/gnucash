@@ -166,6 +166,7 @@ extern Pixel negPixel;
 #define PRIC_CELL_ID  11
 #define SHRS_CELL_ID  12
 #define BALN_CELL_ID  13
+#define VALU_CELL_ID  14
 
 /* the actual cell location is pulled out of the location array */
 #define DATE_CELL_C  (regData->cellColLocation[DATE_CELL_ID])
@@ -182,6 +183,7 @@ extern Pixel negPixel;
 #define PRIC_CELL_C  (regData->cellColLocation[PRIC_CELL_ID])
 #define SHRS_CELL_C  (regData->cellColLocation[SHRS_CELL_ID])
 #define BALN_CELL_C  (regData->cellColLocation[BALN_CELL_ID]) 
+#define VALU_CELL_C  (regData->cellColLocation[VALU_CELL_ID]) 
 
 #define DATE_CELL_R  (regData->cellRowLocation[DATE_CELL_ID])
 #define YEAR_CELL_R  (regData->cellRowLocation[YEAR_CELL_ID])
@@ -197,6 +199,7 @@ extern Pixel negPixel;
 #define PRIC_CELL_R  (regData->cellRowLocation[PRIC_CELL_ID])
 #define SHRS_CELL_R  (regData->cellRowLocation[SHRS_CELL_ID])
 #define BALN_CELL_R  (regData->cellRowLocation[BALN_CELL_ID]) 
+#define VALU_CELL_R  (regData->cellRowLocation[VALU_CELL_ID]) 
 
 
 /** CELL MACROS *****************************************************/
@@ -220,9 +223,6 @@ extern Pixel negPixel;
         /* Deposit cell     */
 #define IN_DEP_CELL(R,C) (RMOD(R,DEP_CELL_R) && (C==DEP_CELL_C))  
 
-        /* Balance cell     */
-#define IN_BALN_CELL(R,C) (RMOD(R,BALN_CELL_R) && (C==BALN_CELL_C))  
-
         /* Price cell       */
 #define IN_PRIC_CELL(R,C) (RMOD(R,PRIC_CELL_R) && (C==PRIC_CELL_C))  
 
@@ -235,6 +235,12 @@ extern Pixel negPixel;
         /* Transfer cell    */
 #define IN_XFRM_CELL(R,C) (RMOD(R,XFRM_CELL_R) && (C==XFRM_CELL_C))  
 #define IN_XTO_CELL(R,C) (RMOD(R,XTO_CELL_R) && (C==XTO_CELL_C))  
+
+        /* Balance cell     */
+#define IN_BALN_CELL(R,C) (RMOD(R,BALN_CELL_R) && (C==BALN_CELL_C))  
+
+        /* Transaction Value cell     */
+#define IN_VALU_CELL(R,C) (RMOD(R,VALU_CELL_R) && (C==VALU_CELL_C))  
 
         /* Memo cell        */
 #define IN_MEMO_CELL(R,C) (RMOD(R,MEMO_CELL_R) && (C==MEMO_CELL_C))  
@@ -489,9 +495,12 @@ regRefresh( RegWindow *regData )
         case INCOME:
         case EXPENSE:
         case EQUITY:
+        case GEN_LEDGER:
+        case INC_LEDGER:
           break;
         case STOCK:
         case MUTUAL:
+        case PORTFOLIO:
           sprintf( buf, "%.2f ", trans->share_price );
           newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
 
@@ -690,8 +699,9 @@ regRecalculateBalance( RegWindow *regData )
       XbaeMatrixSetCell( reg, position+BALN_CELL_R, BALN_CELL_C, buf );
 
       /* update share balances too ... */
-      if( (MUTUAL == regData->type) ||
-          (STOCK  == regData->type) ) 
+      if( (MUTUAL    == regData->type) ||
+          (STOCK     == regData->type) || 
+          (PORTFOLIO == regData->type) ) 
         {
 #ifdef USE_NO_COLOR
         sprintf( buf, "%.3f ", share_balance );
@@ -1120,7 +1130,9 @@ regSaveTransaction( RegWindow *regData, int position )
 
   /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
-      ((MUTUAL == regData->type) || (STOCK==regData->type)) )
+      ((MUTUAL    == regData->type) || 
+       (STOCK     == regData->type) ||
+       (PORTFOLIO == regData->type)) )
     {
     String price;
     float val=0.0;  /* must be float for sscanf to work */
@@ -1585,8 +1597,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellColLocation [XTO_CELL_ID]  = -1;
         regData->cellColLocation [PRIC_CELL_ID] = 7;
         regData->cellColLocation [SHRS_CELL_ID] = 8;
-        regData->cellColLocation [BALN_CELL_ID] = 9;
-        regData -> numCols = 10;
+        regData->cellColLocation [VALU_CELL_ID] = 9;
+        regData->cellColLocation [BALN_CELL_ID] = 10;
+        regData -> numCols = 11;
         break;
 
       case INC_LEDGER:
@@ -1602,8 +1615,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellColLocation [XTO_CELL_ID]  = 2;
         regData->cellColLocation [PRIC_CELL_ID] = 7;
         regData->cellColLocation [SHRS_CELL_ID] = 8;
-        regData->cellColLocation [BALN_CELL_ID] = 9;
-        regData -> numCols = 10;
+        regData->cellColLocation [VALU_CELL_ID] = 9;
+        regData->cellColLocation [BALN_CELL_ID] = 10;
+        regData -> numCols = 11;
         break;
 
       default:
@@ -1625,6 +1639,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     regData->cellRowLocation [RECN_CELL_ID] = 0;
     regData->cellRowLocation [PAY_CELL_ID]  = 0;
     regData->cellRowLocation [DEP_CELL_ID]  = 0;
+    regData->cellRowLocation [VALU_CELL_ID] = 0;
     regData->cellRowLocation [BALN_CELL_ID] = 0;
 
     switch(regData->type)
@@ -1637,23 +1652,36 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case INCOME:
       case EXPENSE:
       case EQUITY:
+        regData->cellRowLocation [XTO_CELL_ID]  = -1;
         regData->cellRowLocation [PRIC_CELL_ID] = -1;
         regData->cellRowLocation [SHRS_CELL_ID] = -1;
-        regData->cellRowLocation [XTO_CELL_ID]  = -1;
+        regData->cellRowLocation [VALU_CELL_ID] = -1; 
         break;
 
       case STOCK:
       case MUTUAL:
+        regData->cellRowLocation [XTO_CELL_ID]  = -1;
         regData->cellRowLocation [PRIC_CELL_ID] = 0;
         regData->cellRowLocation [SHRS_CELL_ID] = 0;
-        regData->cellRowLocation [XTO_CELL_ID]  = -1;
+        regData->cellRowLocation [VALU_CELL_ID] = 0; 
         break;
 
-      case PORTFOLIO:
       case INC_LEDGER:
       case GEN_LEDGER:
         regData->cellRowLocation [XTO_CELL_ID]  = 1;
         regData->cellRowLocation [DEP_CELL_ID]  = 1;  /* shift credit down */
+        regData->cellRowLocation [BALN_CELL_ID] = 1;  /* shift balance down */
+        regData->cellRowLocation [PRIC_CELL_ID] = -1;
+        regData->cellRowLocation [SHRS_CELL_ID] = -1;
+        regData->cellRowLocation [VALU_CELL_ID] = -1; 
+        break;
+
+      case PORTFOLIO:
+        regData->cellRowLocation [XTO_CELL_ID]  = 1;
+        regData->cellRowLocation [DEP_CELL_ID]  = 1;  /* shift credit down */
+        regData->cellRowLocation [PRIC_CELL_ID] = 1;
+        regData->cellRowLocation [SHRS_CELL_ID] = 1;
+        regData->cellRowLocation [VALU_CELL_ID] = 1;  /* shift value down */
         regData->cellRowLocation [BALN_CELL_ID] = 1;  /* shift balance down */
         break;
 
@@ -1689,7 +1717,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case MUTUAL:
       case PORTFOLIO:
         regData -> columnWidths[PRIC_CELL_C] = 8;   /* price */
-        regData -> columnWidths[SHRS_CELL_C] = 8;   /* share balance */
+        regData -> columnWidths[SHRS_CELL_C] = 10;  /* share balance */
+        regData -> columnWidths[VALU_CELL_C] = 10;  /* transaction value */
         break;
       }
     
@@ -1724,7 +1753,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case MUTUAL:
       case PORTFOLIO:
         regData -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
-        regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
+        regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share baln */
+        regData -> alignments[VALU_CELL_C] = XmALIGNMENT_END;  /* trans value */
         break;
       }
     
@@ -1766,6 +1796,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case PORTFOLIO:
         regData -> columnLabels[0][PRIC_CELL_C] = "Price";
         regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
+        regData -> columnLabels[0][VALU_CELL_C] = "Value";
         break;
       }
     
@@ -2218,8 +2249,9 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
           !IN_XFRM_CELL(row,col) && !IN_ACTN_CELL(row,col) &&
-          !((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) &&
-          !((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) &&
+          !((STOCK     == regData->type) && IN_PRIC_CELL(row,col)) &&
+          !((MUTUAL    == regData->type) && IN_PRIC_CELL(row,col)) &&
+          !((PORTFOLIO == regData->type) && IN_PRIC_CELL(row,col)) &&
           !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
