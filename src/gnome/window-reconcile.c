@@ -443,7 +443,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
      * until the user is done with the dialog box.
      */
     cb_data.account = account;
-    cb_data.gae     = (GNCAmountEdit *)end_value;
+    cb_data.gae     = GNC_AMOUNT_EDIT (end_value);
 
     /* need to get a callback on date changes to update the recn balance */
     gtk_signal_connect ( GTK_OBJECT (date_value), "date_changed",
