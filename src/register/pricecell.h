@@ -76,6 +76,9 @@ double       xaccGetPriceCellValue (PriceCell *cell);
 /* updates amount, string format is three decimal places */
 void         xaccSetPriceCellValue (PriceCell *cell, double amount);
 
+/* Sets the cell as blank, regardless of the blank_zero value */
+void         xaccSetPriceCellBlank (PriceCell *cell);
+
 /* determines whether 0 values are left blank or printed.
  * defaults to true. */
 void         xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean);

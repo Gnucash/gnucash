@@ -1,3 +1,16 @@
+2000-05-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/pricecell.c: allow the cell to be blanked directly.
+
+	* src/SplitLedger.c (xaccSRLoadRegEntry): explicitly blank the
+	balance cell for the blank split.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): don't blank zeros
+	on the balance cell by default.
+
+	* src/gnome/window-main.c (gnc_main_create_menus): rename the
+	'Help' menu item to 'Manual'.
+
 2000-05-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/guile/i18n.h.in: always include locale.h

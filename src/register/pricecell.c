@@ -239,14 +239,19 @@ xaccPriceCellPrintValue (PriceCell *cell)
 double
 xaccGetPriceCellValue (PriceCell *cell)
 {
-  assert(cell != NULL);
+  if (cell == NULL)
+    return 0.0;
 
   return cell->amount;
 }
 
-void xaccSetPriceCellValue (PriceCell * cell, double amt)
+void
+xaccSetPriceCellValue (PriceCell * cell, double amt)
 {
    char *buff;
+
+   if (cell == NULL)
+     return;
 
    cell->amount = amt;
    buff = xaccPriceCellPrintValue (cell);
@@ -255,6 +260,19 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
 
    /* set the cell color to red if the value is negative */
    COLORIZE (cell, amt);
+}
+
+void
+xaccSetPriceCellBlank (PriceCell *cell)
+{
+  if (cell == NULL)
+    return;
+
+  cell->amount = 0.0;
+
+  SET ( &(cell->cell), "");
+
+  COLORIZE (cell, 0.0);
 }
 
 /* ================================================ */
@@ -318,9 +336,17 @@ static void
 PriceSetValue (BasicCell *_cell, const char *str)
 {
    PriceCell *cell = (PriceCell *) _cell;
-   double amt = xaccParseAmount (str, cell->monetary);
+   double amount;
 
-   xaccSetPriceCellValue (cell, amt);
+   if (str == NULL)
+     str = "";
+
+   if (!cell->blank_zero && (*str == '\0'))
+     xaccSetPriceCellBlank(cell);
+   else {
+     amount = xaccParseAmount (str, cell->monetary);
+     xaccSetPriceCellValue (cell, amount);
+   }
 }
 
 /* --------------- end of file ---------------------- */

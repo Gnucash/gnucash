@@ -1120,6 +1120,9 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
    reg->shrsCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
 
+   /* by default, don't blank zeros on the balance cell. */
+   xaccSetPriceCellBlankZero(reg->balanceCell, GNC_F);
+
    /* The reconcile cell should only be entered with the pointer,
     * and only then when the user clicks directly on the cell.
     */

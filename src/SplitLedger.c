@@ -1759,7 +1759,11 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
                (EXPENSE_REGISTER == typo)) { 
          baln = -baln;
       }
-      xaccSetPriceCellValue (reg->balanceCell, baln);
+
+      if (split == info->blank_split)
+        xaccSetPriceCellBlank (reg->balanceCell);
+      else
+        xaccSetPriceCellValue (reg->balanceCell, baln);
 
       xaccSetPriceCellValue (reg->shrsCell, xaccSplitGetShareBalance (split));
 

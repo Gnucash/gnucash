@@ -218,6 +218,8 @@
 #define TOOLTIP_JUMP_TRANS_N   N_("Jump to the corresponding transaction in "\
                                   "the other account")
 #define TOOLTIP_JUMP_TRANS      _(TOOLTIP_JUMP_TRANS_N)
+#define TOOLTIP_MAN_N          N_("Open the GnuCash Manual")
+#define TOOLTIP_MAN             _(TOOLTIP_MAN_N)
 #define TOOLTIP_MULTI_LINE_N   N_("Show transactions on multiple lines with "\
                                   "one line for each split")
 #define TOOLTIP_MULTI_LINE      _(TOOLTIP_MULTI_LINE_N)
@@ -338,6 +340,8 @@
 #define HELP_MENU_STR             _(HELP_MENU_STR_N)
 #define JUMP_MENU_STR_N          N_("_Jump")
 #define JUMP_MENU_STR             _(JUMP_MENU_STR_N)
+#define MAN_MENU_STR_N           N_("_Manual")
+#define MAN_MENU_STR              _(MAN_MENU_STR_N)
 #define NEW_MENU_STR_N           N_("_New")
 #define NEW_MENU_STR              _(NEW_MENU_STR_N)
 #define NEW_ACC_MENU_STR          _("_New Account")

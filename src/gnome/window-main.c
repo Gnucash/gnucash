@@ -915,7 +915,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   static GnomeUIInfo helpmenu[] = {
     {
       GNOME_APP_UI_ITEM,
-      HELP_MENU_STR_N, TOOLTIP_HELP_N,
+      MAN_MENU_STR_N, TOOLTIP_MAN_N,
       gnc_ui_help_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
