@@ -1,4 +1,5 @@
 /********************************************************************\
+ * kvp_frame.h -- Implements a key-value frame system               *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,7 +21,7 @@
 /** @addtogroup Engine
     @{ */
 /** @file kvp_frame.h
-    @brief A key-value frame system for gnucash
+    @brief A key-value frame system
     @author Copyright (C) 2000 Bill Gribble
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 */
@@ -470,14 +471,19 @@ KvpValue   * kvp_value_copy(const KvpValue * value);
 /** @name KvpValue Value access */
 /*@{*/
 /** You probably shouldn't be using these low-level routines */
-/** Value accessors. Those for GUID, binary, GList, KvpFrame and
-  string are non-copying -- the caller can modify the value directly.
 
-  Note that the above non-copying list did not include the
-  get_string() function. But in fact that function has always been a
-  non-copying one -- therefore don't free the result unless you want
-  to delete the whole KvpFrame by yourself. */
 KvpValueType kvp_value_get_type(const KvpValue * value);
+
+
+/** Value accessors. Those for GUID, binary, GList, KvpFrame and
+ *   string are non-copying -- the caller can modify the value 
+ *   directly. Just don't free it, or you screw up everything.
+ *   Note that if another value is stored at the key location
+ *   that this value came from, then this value will be 
+ *   uncermoniously deleted, and you will be left pointing to 
+ *   garbage.  So don't store values at the same time you are
+ *   examining thier contents.
+ */
 
 gint64      kvp_value_get_gint64(const KvpValue * value);
 double      kvp_value_get_double(const KvpValue * value);

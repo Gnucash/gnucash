@@ -127,76 +127,60 @@ xaccScrubSubSplitPrice (Split *split)
 
 #if LATER
 
-/** The gnc_kvp_array_find_guid() routine walks the array pointed
- *    at by array_root.  It looks for the array entry that has the
+/** The gnc_kvp_bag_find_by_guid() routine examines the bag pointed
+ *    located at root.  It looks for a frame in that bag that has the
  *    guid value of "desired_guid" filed under the key name "guid_name".
- *    If it find that matching guid, then it returns the integer value
- *    of the array element.  If it is not found, or if there is any
- *    other error, then a negative value is returned.
+ *    If it finds that matching guid, then it returns a pointer to 
+ *    the KVP frame that contains it.  If it is not found, or if there
+ *    is any other error, NULL is returned.
  */
 
-int gnc_kvp_array_find_guid (KvpFrame *array_root, 
+KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
                          const char *guid_name, GUID *desired_guid);
-int
-gnc_kvp_array_find_guid (KvpFrame *array_root, 
+
+#define MATCH_GUID(elt) {                                       \
+  KvpFrame *fr = kvp_value_get_frame (elt);                     \
+  if (fr) {                                                     \
+     GUID *guid = kvp_frame_get_guid (fr, guid_name);           \
+     if (guid && guid_equal (desired_guid, guid)) return fr;    \
+  }                                                             \
+} 
+
+KvpFrame *
+gnc_kvp_bag_find_by_guid (KvpFrame *root, const char * path,
                          const char *guid_name, GUID *desired_guid)
 {
-  KvpValue *va;
-  gint64 i, ncopies;
+  KvpValue *arr;
+  KvpValueType valtype;
+  GList *node;
 
-  va = kvp_frame_get_value (array_root, "ncopies");
-  if (!va) return -1;
-  ncopies = kvp_value_get_gint64 (va, "ncopies");
-
-  for (i=0; i<ncopies; i++)
+  arr = kvp_frame_get_value (root, path);
+  valtype = kvp_value_get_type (arr);
+  if (KVP_TYPE_FRAME == valtype)
   {
-    char buff[32];
-    KvpFrame *fr;
-    GUID *guid;
-
-    snprintf (buff, 32, GNC_SCANF_LLD, i);
-    fr = kvp_frame_get_slot (array_root, buff);
-    if (!fr) continue;
-
-    guid = kvp_frame_get_guid (fr, guid_name);
-    if (!guid) continue;
-
-    if (guid_equal (desired_guid, guid)) return i;
+    MATCH_GUID (arr);
+    return NULL;
   }
-  return -1;
+
+  /* Its gotta be a single isolated frame, or a list of them. */
+  if (KVP_TYPE_GLIST != valtype) return NULL;
+
+  for (node = kvp_value_get_glist(arr); node; node=node->next)
+  {
+    KvpValue *va = arr->data;
+    MATCH_GUID (va);
+  }
+  return NULL;
 }
 
 
-/** Remove the array element from the array.  The contents associated
- *     with that index are deleted, and the size of the array is
- *     diminished by one.
+/** Remove the given frame from the bag.  The frame is removed,
+ *  however, it is not deleted. 
  */
 
 void
-gnc_kvp_array_remove_index (KvpFrame *array_root, int elt)
+gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path, KvpFrame *fr)
 {
-  char eltname[32], endname[32];
-  KvpValue *va;
-  gint64 ncopies;
-  KvpFrame *eltfr, *endfr;
-
-  /* Get the array length */
-  va = kvp_frame_get_value (array_root, "ncopies");
-  if (!va) return;
-  ncopies = kvp_value_get_gint64 (va, "ncopies");
-  if ((0 > elt) || (ncopies <= elt)) return;
-
-  /* Get the element in question */
-  snprintf (eltname, 32, GNC_SCANF_LLD, elt);
-  eltfr = kvp_frame_get_slot (array_root, eltname);
-  if (!eltfr) return;
-
-  snprintf (endname, 32, GNC_SCANF_LLD, --ncopies);
-  endfr = kvp_frame_get_slot (array_root, endname);
-
-  kvp_frame_set_fr_nc (array_root, 
-
-  kvp_frame_set_gint64 (array_root, "ncopies", ncopies);
 }
 
 /* Remove the guid of b from a */
