@@ -1,3 +1,7 @@
+2003-07-30  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/scm/help-topics-index.scm: Commit Jon Lapham's doc changes.
+
 2003-07-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/date.c: back port a change to gnc-date.c.
