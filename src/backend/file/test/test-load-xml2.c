@@ -7,13 +7,13 @@
 #include <dirent.h>
 #include <string.h>
 
-#include "io-gncxml-v2.h"
-#include "gnc-engine.h"
-#include "gnc-book.h"
-
-#include "gnc-book.h"
 #include "Backend.h"
 #include "TransLog.h"
+#include "gnc-book.h"
+#include "gnc-book.h"
+#include "gnc-engine.h"
+#include "gnc-module.h"
+#include "io-gncxml-v2.h"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
@@ -63,13 +63,15 @@ test_load_file(const char *filename)
     gnc_book_destroy(book);
 }
 
-int
-main(int argc, char **argv)
+static void
+guile_main(int argc, char **argv)
 {
     const char *location = "test-files/xml2";
     DIR *xml2_dir;
     
-    gnc_engine_init(argc, argv);
+    gnc_module_system_init();
+    gnc_module_load("gnucash/engine", 0);
+
     xaccLogDisable();
     
     if((xml2_dir = opendir(location)) == NULL)
@@ -102,8 +104,15 @@ main(int argc, char **argv)
             }
         }
     }
+
     closedir(xml2_dir);
-    
+
     print_test_results();
     exit(get_rv());
+}
+
+int
+main(int argc, char ** argv) {
+  gh_enter(argc, argv, guile_main);
+  return 0;
 }
