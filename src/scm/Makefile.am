@@ -11,7 +11,6 @@ gnc_regular_scm_files = \
   c-interface.scm \
   command-line.scm \
   config-var.scm \
-  currencies.scm \
   date-utilities.scm \
   depend.scm \
   doc.scm \
