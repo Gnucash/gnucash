@@ -1,3 +1,7 @@
+2001-03-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gfec.c: add missing include
+
 2001-03-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/reconcile-list.{ch}: automatically mark cleared
