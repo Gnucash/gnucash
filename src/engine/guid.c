@@ -372,9 +372,12 @@ guid_init_only_salt(const void *salt, size_t salt_len)
   guid_initialized = TRUE;
 }
 
+#define GUID_PERIOD 5000
+
 void
 guid_new(GUID *guid)
 {
+  static int counter = 0;
   struct md5_ctx ctx;
 
   if (guid == NULL)
@@ -389,6 +392,23 @@ guid_new(GUID *guid)
 
   /* update the global context */
   init_from_time();
+
+  if (counter == 0)
+  {
+    FILE *fp;
+
+    fp = fopen ("/dev/urandom", "r");
+    if (fp == NULL)
+      return;
+
+    init_from_stream(fp, 32);
+
+    fclose(fp);
+
+    counter = GUID_PERIOD;
+  }
+
+  counter--;
 }
 
 /* needs 32 bytes exactly, doesn't print a null char */
