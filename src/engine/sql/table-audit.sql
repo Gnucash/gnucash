@@ -12,12 +12,15 @@
 --
 
 -- audit trail tables
--- The change may be 'a' -- add, 'd' -- delete/drop, 'm' -- modify
+-- The change field may be 'a' -- add, 'd' -- delete/drop, 'm' -- modify
+-- The objtype field may be 'a' -- account, 'c' -- commodity, 'e' -- entry,
+--                          'k' -- kvp, 'p' -- price, 't' -- transaction
 
 CREATE TABLE gncAuditTrail (
 	sessionGuid		CHAR(32)  NOT NULL,   -- who changed it
 	date_changed 		DATETIME,   -- when they changed it
-        change			CHAR NOT NULL      
+        change			CHAR NOT NULL,
+        objtype			CHAR NOT NULL
 );
 
 -- would love to inherit, but can't because this wrecks the primary key

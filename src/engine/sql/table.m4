@@ -5,7 +5,7 @@ changecom(`/*', `*/')
 /* data dictionary for the gnucash tables */
 /* sql table description and manipulation macros */
 
-define(`account', `gncAccount, Account, Account,
+define(`account', `gncAccount, Account, Account, a,
        accountName,    , char *, xaccAccountGetName(ptr),
        accountCode,    , char *, xaccAccountGetCode(ptr),
        description,    , char *, xaccAccountGetDescription(ptr),
@@ -16,7 +16,7 @@ define(`account', `gncAccount, Account, Account,
        accountGUID, KEY, GUID *, xaccAccountGetGUID(ptr),
        ')
 
-define(`split', `gncEntry, Split, Split,
+define(`split', `gncEntry, Split, Split, e,
        accountGUID,     , GUID *,   xaccAccountGetGUID(xaccSplitGetAccount(ptr)),
        transGUID,       , GUID *,   xaccTransGetGUID(xaccSplitGetParent(ptr)),
        memo,            , char *,   xaccSplitGetMemo(ptr),
@@ -35,7 +35,7 @@ define(`split', `gncEntry, Split, Split,
 /* date_entered,    , Timespec, xaccTransRetDateEnteredTS(ptr), */
 /* as one might have guessed                                    */
 
-define(`transaction', `gncTransaction, Transaction, Transaction,
+define(`transaction', `gncTransaction, Transaction, Transaction, t,
        num,            , char *,   xaccTransGetNum(ptr),
        description,    , char *,   xaccTransGetDescription(ptr),
        currency,       , commod,   gnc_commodity_get_unique_name(xaccTransGetCurrency(ptr)),
@@ -47,7 +47,7 @@ define(`transaction', `gncTransaction, Transaction, Transaction,
        ')
 
 
-define(`modity', `gncCommodity, Commodity, gnc_commodity, 
+define(`modity', `gncCommodity, Commodity, gnc_commodity, c,
        namespace,    , char *, gnc_commodity_get_namespace(ptr),
        fullname,     , char *, gnc_commodity_get_fullname(ptr),
        mnemonic,     , char *, gnc_commodity_get_mnemonic(ptr),
@@ -57,7 +57,7 @@ define(`modity', `gncCommodity, Commodity, gnc_commodity,
        ')
        
 
-define(`price', `gncPrice, Price, GNCPrice,
+define(`price', `gncPrice, Price, GNCPrice, p,
        commodity,    , commod,   gnc_commodity_get_unique_name(gnc_price_get_commodity(ptr)),
        currency,     , commod,   gnc_commodity_get_unique_name(gnc_price_get_currency(ptr)),
        time,         , Timespec, gnc_price_get_time(ptr),
@@ -70,7 +70,7 @@ define(`price', `gncPrice, Price, GNCPrice,
        ')
        
 
-define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint,
+define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint, x,
        balance,             , int64,    ptr->balance,
        cleared_balance,     , int64,    ptr->cleared_balance,
        reconciled_balance,  , int64,    ptr->reconciled_balance,
@@ -81,7 +81,7 @@ define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint,
        ')
        
 
-define(`session', `gncSession, Session, void,
+define(`session', `gncSession, Session, void, x,
        session_mode,        , char *, pgendSessionGetMode(be),
        hostname,            , char *, pgendGetHostname(be),
        login_name,          , char *, pgendGetUsername(be),
@@ -91,7 +91,7 @@ define(`session', `gncSession, Session, void,
        sessionGUID,      KEY, GUID *, be->sessionGuid,
        ')
        
-define(`kvp_gint64', `gncKVPvalue_int64, KVPint64, store_data_t,
+define(`kvp_gint64', `gncKVPvalue_int64, KVPint64, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , int64,  ptr->u.ival,
        iguid,            KEY, int32,  ptr->iguid,
@@ -99,14 +99,14 @@ define(`kvp_gint64', `gncKVPvalue_int64, KVPint64, store_data_t,
        ')
        
 
-define(`kvp_double', `gncKVPvalue_dbl, KVPdouble, store_data_t,
+define(`kvp_double', `gncKVPvalue_dbl, KVPdouble, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , double, ptr->u.dbl,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
        
-define(`kvp_numeric', `gncKVPvalue_numeric, KVPnumeric, store_data_t,
+define(`kvp_numeric', `gncKVPvalue_numeric, KVPnumeric, store_data_t, k,
        type,                , char *, ptr->stype,
        num,                 , int64,  ptr->u.numeric.num,
        denom,               , int64,  ptr->u.numeric.denom,
@@ -114,14 +114,14 @@ define(`kvp_numeric', `gncKVPvalue_numeric, KVPnumeric, store_data_t,
        ipath,            KEY, int32,  ptr->ipath,
        ')
        
-define(`kvp_string', `gncKVPvalue_str, KVPstring, store_data_t,
+define(`kvp_string', `gncKVPvalue_str, KVPstring, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , char *, ptr->u.str,
        iguid,            KEY, int32,  ptr->iguid,
        ipath,            KEY, int32,  ptr->ipath,
        ')
        
-define(`kvp_guid', `gncKVPvalue_guid, KVPguid, store_data_t,
+define(`kvp_guid', `gncKVPvalue_guid, KVPguid, store_data_t, k,
        type,                , char *, ptr->stype,
        data,                , char *, ptr->u.str,
        iguid,            KEY, int32,  ptr->iguid,
@@ -133,8 +133,9 @@ define(`kvp_guid', `gncKVPvalue_guid, KVPguid, store_data_t,
 define(`tablename', $1)
 define(`func_name', $2)
 define(`xacc_type', $3)
+define(`obj_type',  $4)
 
-define(`firstrec', `shift(shift(shift($@)))')
+define(`firstrec', `shift(shift(shift(shift($@))))')
 define(`nextrec', `shift(shift(shift(shift($@))))')
 
 /* -------- */
@@ -403,6 +404,7 @@ pgendStoreAudit`'func_name($@)`' (PGBackend *be,
    /* sqlBuild_Set_GUID (be->builder, "sessionGUID", be->sessionGuid); */
    sqlBuild_Set_Str (be->builder, "sessionGUID", be->session_guid_str);
    sqlBuild_Set_Char (be->builder, "change", update);
+   sqlBuild_Set_Char (be->builder, "objtype", ''`obj_type($@)''`);
 
    buf = sqlBuild_Query (be->builder);
    SEND_QUERY (be,buf, );

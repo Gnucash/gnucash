@@ -135,6 +135,7 @@ typedef struct _event {
    Timespec stamp;
    GNCEngineEventType type;
    GUID guid;
+   GNCIdType obj_type;
 } Event; 
 
 
@@ -148,6 +149,8 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    Timespec ts;
    GNCEngineEventType type;
    char change = (DB_GET_VAL("change",j))[0];
+   char objtype = (DB_GET_VAL("objtype",j))[0];
+   GNCIdType obj_type = GNC_ID_NONE;
 
    guid_str = DB_GET_VAL("guid",j);
    PINFO ("event %c for %s", change, guid_str);
@@ -161,6 +164,16 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       default:
          PERR ("unknown change type %c for guid=%s", change, guid_str);
          return data;
+   }
+   switch (objtype)
+   {
+      case 'a': obj_type = GNC_ID_ACCOUNT; break;
+      case 'c': obj_type = GNC_ID_NONE; break;  /* should be commodity */
+      case 'e': obj_type = GNC_ID_SPLIT; break;
+      case 'p': obj_type = GNC_ID_PRICE; break;
+      case 't': obj_type = GNC_ID_TRANS; break;
+      case 'x': obj_type = GNC_ID_NONE; break;
+      case ' ': obj_type = GNC_ID_NONE; break;
    }
 
    string_to_guid (guid_str, &guid);
@@ -179,6 +192,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
             ev->type = type;
             ev->guid = guid;
             ev->stamp = ts;
+            ev->obj_type = obj_type;
          }
          return (gpointer) list;
       }
@@ -189,6 +203,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    ev->type = type;
    ev->guid = guid;
    ev->stamp = ts;
+   ev->obj_type = obj_type;
 
    /* add it to our list */
    list = g_list_prepend (list, ev);
@@ -200,8 +215,8 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {								\
    char *p;							\
    p = be->buff; *p = 0;					\
-   p = stpcpy (p, "SELECT change, date_changed, " #guid_name 	\
-                  " AS guid  FROM " #table			\
+   p = stpcpy (p, "SELECT objtype, change, date_changed, " 	\
+                  #guid_name " AS guid  FROM " #table		\
                   "  WHERE sessionGuid <> '");			\
    p = stpcpy (p, be->session_guid_str);			\
    p = stpcpy (p, "' AND date_changed >= '");			\
