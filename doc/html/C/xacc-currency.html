@@ -2,22 +2,24 @@
 
 <html>
   <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+
     <title></title>
-    <link rel="stylesheet" title="normal" type="text/css" href= 
+    <link rel="stylesheet" title="normal" type="text/css" href=
     "gnucash.css">
 
     <title>Currency Handling and Double Entry Bookkeeping</title>
   </head>
 
   <body>
-    <h1> Currency Handling and Double Entry Bookkeeping</h1>
+    <h1>Currency Handling and Double Entry Bookkeeping</h1>
 
-    <p>A <a href="xacc-double.html"> Double Entry bookkeeping
+    <p>A <a href="xacc-double.html">Double Entry bookkeeping
     system</a> stores both values, and requires that all
-    transactions balance, as described in the <a href= 
-    "xacc-double.html#IDENTITY"> Double Entry Identity.</a></p>
+    transactions balance, as described in the <a href=
+    "xacc-double.html#IDENTITY">Double Entry Identity.</a></p>
 
-    <p> When we introduce the notion of having multiple currencies,
+    <p>When we introduce the notion of having multiple currencies,
     or stocks that may vary in price, the identities get a little
     more complicated, and we introduce the following formulae:</p>
 
@@ -34,7 +36,7 @@
 
     <ul>
       <li>
-        <i> <b>SpendAcct:</b> (an ordinary bank/cash acct valued in
+        <i><b>SpendAcct:</b> (an ordinary bank/cash acct valued in
         USD)</i> 
 <pre>
 <i>Date      xfer from       memo                cost
@@ -44,7 +46,7 @@
       </li>
 
       <li>
-        <i> <b>JPYAcct</b>: (a currency trading account valued in
+        <i><b>JPYAcct</b>: (a currency trading account valued in
         yen)</i> 
 <pre>
 <i>Date      xfer from       memo                purchase   rate
@@ -55,16 +57,16 @@
     </ul>
 
     <p>The engine links together all three of these values <tt>
-    (1.0, 150, 0.00667)</tt> permanently and makes it impossible
-    to change one without changing another, so that the grand total
-    is always zero, thereby guaranteeing satisfaction of the <a
-    href="xacc-double.html#IDENTITY"> double entry accounting
+    (1.0, 150, 0.00667)</tt> permanently and makes it impossible to
+    change one without changing another, so that the grand total is
+    always zero, thereby guaranteeing satisfaction of the <a href=
+    "xacc-double.html#IDENTITY">double entry accounting
     identity.</a></p>
 
-    <h1> ISO Currency Codes</h1>
+    <h1>ISO Currency Codes</h1>
     <a name="ISOCURR"></a> 
 
-    <p> More currencies than you thought possible...</p>
+    <p>More currencies than you thought possible...</p>
 
     <table border="1">
       <tr>
@@ -1202,7 +1204,7 @@
     </table>
     <hr>
 
-    <p> Return to <a href="xacc-main.html"> Main Documentation
+    <p>Return to <a href="xacc-main.html">Main Documentation
     Page.</a></p>
   </body>
 </html>
