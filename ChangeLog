@@ -1,3 +1,17 @@
+2000-05-14  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/guile/guile-util.c: added several interface functions to
+	src/scm/engine-interface.scm.
+
+	* src/Refresh.c (gnc_account_glist_ui_refresh): added a refresh
+	function that takes glib lists. Much more convenient.
+
+	* src/SplitLedger.c: add functionality for transaction
+	cut/copy/paste.
+
+	* src/MultiLedger.c (ledgerIsMember): always return true
+	for SEARCH_LEDGERS. Simple, but safe.
+
 2000-05-12  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* Makefile.in: add -follow arguments to find commands

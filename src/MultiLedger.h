@@ -26,6 +26,8 @@
 
 #include "config.h"
 
+#include <glib.h>
+
 #include "Account.h"
 #include "Query.h"
 #include "splitreg.h"
@@ -87,6 +89,7 @@ xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_acc,
  */
 void        xaccAccountDisplayRefresh (Account *acc);
 void        xaccAccListDisplayRefresh (Account **acc);
+void        xaccAccGListDisplayRefresh (GList *accounts);
 
 /* 
  * redisplay/redraw all windows that contain this transaction

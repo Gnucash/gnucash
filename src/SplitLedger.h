@@ -147,16 +147,16 @@ gncBoolean xaccSRGetTransSplitRowCol (SplitRegister *reg,
 
 Split * xaccSRDuplicateCurrent (SplitRegister *reg);
 
+void    xaccSRCopyCurrent  (SplitRegister *reg);
+void    xaccSRCutCurrent   (SplitRegister *reg);
+void    xaccSRPasteCurrent (SplitRegister *reg);
+
 void    xaccSRDeleteCurrentSplit (SplitRegister *reg);
 void    xaccSRDeleteCurrentTrans (SplitRegister *reg);
 void    xaccSREmptyCurrentTrans  (SplitRegister *reg);
 
 void    xaccSRCancelCursorSplitChanges (SplitRegister *reg);
 void    xaccSRCancelCursorTransChanges (SplitRegister *reg);
-
-void    xaccSRCopyCurrent  (SplitRegister *reg);
-void    xaccSRCutCurrent   (SplitRegister *reg);
-void    xaccSRPasteCurrent (SplitRegister *reg);
 
 void    xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                             Account *default_source_acc);

@@ -117,6 +117,9 @@ static void gnc_register_check_close(RegWindow *regData);
 static void cutCB(GtkWidget *w, gpointer data);
 static void copyCB(GtkWidget *w, gpointer data);
 static void pasteCB(GtkWidget *w, gpointer data);
+static void cutTransCB(GtkWidget *w, gpointer data);
+static void copyTransCB(GtkWidget *w, gpointer data);
+static void pasteTransCB(GtkWidget *w, gpointer data);
 static void startRecnCB(GtkWidget *w, gpointer data);
 static void xferCB(GtkWidget *w, gpointer data);
 static void editCB(GtkWidget *w, gpointer data);
@@ -1119,6 +1122,29 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_MENU_CUT_ITEM(cutCB, NULL),
     GNOMEUIINFO_MENU_COPY_ITEM(copyCB, NULL),
     GNOMEUIINFO_MENU_PASTE_ITEM(pasteCB, NULL),
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      CUT_TRANS_STR_N, TOOLTIP_CUT_TRANS_N,
+      cutTransCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      COPY_TRANS_STR_N, TOOLTIP_COPY_TRANS_N,
+      copyTransCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      PASTE_TRANS_STR_N, TOOLTIP_PASTE_TRANS_N,
+      pasteTransCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
   };
 
   static GnomeUIInfo account_menu[] =
@@ -1859,6 +1885,7 @@ cutCB(GtkWidget *w, gpointer data)
   gnucash_register_cut_clipboard(regData->reg);
 }
 
+
 /********************************************************************\
  * copyCB -- copy the selection to the clipboard                    *
  *                                                                  *
@@ -1874,6 +1901,7 @@ copyCB(GtkWidget *w, gpointer data)
   gnucash_register_copy_clipboard(regData->reg);
 }
 
+
 /********************************************************************\
  * pasteCB -- paste the clipboard to the selection                  *
  *                                                                  *
@@ -1888,6 +1916,55 @@ pasteCB(GtkWidget *w, gpointer data)
 
   gnucash_register_paste_clipboard(regData->reg);
 }
+
+
+/********************************************************************\
+ * cutTransCB -- cut the current transaction to the clipboard       *
+ *                                                                  *
+ * Args:    w - the widget that called us                           *
+ *       data - the data struct for this register                   *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+cutTransCB(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  xaccSRCutCurrent(regData->ledger->ledger);
+}
+
+
+/********************************************************************\
+ * copyTransCB -- copy the current transaction to the clipboard     *
+ *                                                                  *
+ * Args:    w - the widget that called us                           *
+ *       data - the data struct for this register                   *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+copyTransCB(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  xaccSRCopyCurrent(regData->ledger->ledger);
+}
+
+
+/********************************************************************\
+ * pasteTransCB -- paste the transaction clipboard to the selection *
+ *                                                                  *
+ * Args:    w - the widget that called us                           *
+ *       data - the data struct for this register                   *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+pasteTransCB(GtkWidget *w, gpointer data)
+{
+  RegWindow *regData = data;
+
+  xaccSRPasteCurrent(regData->ledger->ledger);
+}
+
 
 /********************************************************************\
  * startAdjBCB -- open up the adjust balance window... called       *

@@ -1,25 +1,7 @@
 Solaris hints:
 ------------- 
-If the Makefile won't work, try the following:
-   The Makefile won't work unless SHELL=/bin/bash for me (Solaris 2.5.1).
-   That is:
-        make motif SHELL=/bin/bash
 
-Alan Orndorff writes:
+Use bash when running configure and GNU make 'gmake' to build:
 
-in /src/motif/makefile
-
-If you want to get further before we have a chance to fix this, you
-could just change those $(wildcard foo) statements to $(shell find
-"foo") statements
-
-This will leave two unresolved dependancies.
-
-/usr/local/lib/libiberty.a contains asprintf, so
-vi /src/motif/Makefile and added -liberty to it
-
-In gnucash.c changed setenv to putenv and changed
-the parms from (variable, variable,1)
-to (variable) on both lines
-
-
+bash ./configure
+gmake SHELL=/bin/bash

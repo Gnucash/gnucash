@@ -24,12 +24,16 @@
 
 #include "config.h"
 
+#include <glib.h>
+
 #include "top-level.h"
 
 
 void gnc_account_ui_refresh(Account *account);
 
 void gnc_account_list_ui_refresh(Account **account_list);
+
+void gnc_account_glist_ui_refresh(GList *accounts);
 
 void gnc_group_ui_refresh(AccountGroup *group);
 

@@ -28,13 +28,12 @@ INCLPATH = -I. \
            -I./register \
            -I./guile \
            -Ireports \
-           -I@prefix@/lib/glib/include \
            -I@prefix@/include
 
 GNOME_CFLAGS += -I./gnome
 MOTIF_CFLAGS += -I./motif
 
-CFLAGS = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS} ${GUILE_COMPILE_ARGS} ${G_WRAP_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS} ${GUILE_COMPILE_ARGS} ${G_WRAP_COMPILE_ARGS} ${GLIB_CFLAGS}
 
 ######################################################################
 # See Makefile.common for information about these variables.

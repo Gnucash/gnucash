@@ -245,7 +245,9 @@
    (trans-splits 0)))
 
 ;; Copy a scheme representation of a transaction onto a C transaction.
-(define (gnc:transaction-scm-onto-transaction trans-scm trans)
+;; guid-mapping, if present, must be an alist, mapping guids to guids.
+;; This list is used to use alternate account guids when creating splits.
+(define (gnc:transaction-scm-onto-transaction trans-scm trans . guid-mapping)
   (if (pointer-token-null? trans)
       #f
       (begin
@@ -254,10 +256,8 @@
         (gnc:transaction-begin-edit trans 1)
 
         ;; copy in the transaction values
-        (let ((date-posted (gnc:transaction-scm-get-date-posted trans-scm))
-              (description (gnc:transaction-scm-get-description trans-scm))
+        (let ((description (gnc:transaction-scm-get-description trans-scm))
               (docref      (gnc:transaction-scm-get-docref trans-scm)))
-          (if date-posted (gnc:transaction-set-date-posted trans date-posted))
           (if description (gnc:transaction-set-description trans description))
           (if docref      (gnc:transaction-set-docref trans docref)))
 
@@ -272,9 +272,16 @@
         ;; order as in the original transaction. This is important.
         (let loop ((split-scms (gnc:transaction-scm-get-split-scms trans-scm)))
           (if (pair? split-scms)
-              (let ((new-split (gnc:split-create)))
+              (let* ((new-split (gnc:split-create))
+                     (split-scm (car split-scms))
+                     (old-guid  (gnc:split-scm-get-account-guid split-scm))
+                     (new-guid  (assoc-ref guid-mapping old-guid)))
+                (if (not new-guid)
+                    (set! new-guid old-guid))
                 (gnc:transaction-append-split trans new-split)
-                (gnc:split-scm-onto-split (car split-scms) new-split)
+                (gnc:split-scm-set-account-guid split-scm new-guid)
+                (gnc:split-scm-onto-split split-scm new-split)
+                (gnc:split-scm-set-account-guid split-scm old-guid)
                 (loop (cdr split-scms)))))
 
         ;; close the transaction

@@ -128,6 +128,9 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 
    if (acc == reg->leader) return 1;
 
+   /* Simple hack. Always return true for search registers. */
+   if (reg->type == SEARCH_LEDGER) return 1;
+
    if (! (reg->displayed_accounts)) return 0; 
 
    n = 0;
@@ -304,7 +307,7 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
 }
 
 /********************************************************************\
- * xaccLedgerDisplayLedger                                          *
+ * xaccLedgerDisplayGeneral                                         *
  *   opens up a ledger window for a list of accounts                *
  *                                                                  *
  * Args:   lead_acc - the account associated with this register     *
@@ -559,6 +562,26 @@ xaccAccListDisplayRefresh (Account **acc_list)
       RefreshAllRegs (acc);
       i++; acc = acc_list[i];
    }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccGListDisplayRefresh (GList *accounts)
+{
+  GList *node;
+
+  node = accounts;
+  while (node) {
+    MarkDirtyAllRegs (node->data);
+    node = node->next;
+  }
+  node = accounts;
+  while (node) {
+    RefreshAllRegs (node->data);
+    node = node->next;
+  }
 }
 
 /********************************************************************\

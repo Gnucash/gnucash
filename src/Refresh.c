@@ -86,6 +86,21 @@ gnc_account_list_ui_refresh(Account **account_list)
    }
 }
 
+/* ------------------------------------------------------ */
+void
+gnc_account_glist_ui_refresh(GList *accounts)
+{
+  GList *node;
+
+  xaccAccGListDisplayRefresh(accounts);
+
+  node = accounts;
+  while (node != NULL)
+  {
+    recnRefresh(node->data);
+    node = node->next;
+  }
+}
 
 /* ------------------------------------------------------ */
 void

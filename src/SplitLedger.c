@@ -99,6 +99,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <glib.h>
 #include <guile/gh.h>
 
 #include "top-level.h"
@@ -183,10 +184,14 @@ static char account_separator = ':';
 static SRReverseBalanceCallback reverse_balance = NULL;
 
 /* The copied split or transaction, if any */
+static CursorType copied_type = CURSOR_NONE;
 static SCM copied_item = SCM_UNDEFINED;
+static GUID copied_leader_guid;
 
 /* static prototypes */
 static void xaccSRLoadRegEntry (SplitRegister *reg, Split *split);
+static gncBoolean xaccSRSaveRegEntryToSCM (SplitRegister *reg,
+                                           SCM trans_scm, SCM split_scm);
 static Transaction * xaccSRGetTrans (SplitRegister *reg,
                                      int phys_row, int phys_col);
 
@@ -276,6 +281,51 @@ xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
   reverse_balance = callback;
 }
 
+
+static GList *
+gnc_trans_prepend_account_list(Transaction *trans, GList *accounts)
+{
+  Account *account;
+  Split *split;
+  int i = 0;
+
+  if (trans == NULL)
+    return accounts;
+
+  do
+  {
+    split = xaccTransGetSplit(trans, i);
+
+    if (split == NULL)
+      return accounts;
+
+    account = xaccSplitGetAccount(split);
+    if (account != NULL)
+      accounts = g_list_prepend(accounts, account);
+
+    i++;
+  } while(1);
+}
+
+static int
+gnc_trans_split_index(Transaction *trans, Split *split)
+{
+  Split *s;
+  int i = 0;
+
+  do
+  {
+    s = xaccTransGetSplit(trans, i);
+
+    if (s == split)
+      return i;
+
+    if (s == NULL)
+      return -1;
+
+    i++;
+  } while(1);
+}
 
 /* Uses the scheme split copying routines */
 static void
@@ -832,25 +882,17 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   if (cursor_type == CURSOR_SPLIT)
   {
     Split *new_split;
-    Account *account;
 
     /* We are on a split in an expanded transaction.
      * Just copy the split and add it to the transaction. */
 
     new_split = xaccMallocSplit();
 
-    gnc_copy_split_onto_split(split, new_split);
-
-    account = xaccSplitGetAccount(split);
-
     xaccTransBeginEdit(trans, GNC_T);
-    xaccAccountBeginEdit(account, GNC_T);
-
     xaccTransAppendSplit(trans, new_split);
-    xaccAccountInsertSplit(account, new_split);
-
-    xaccAccountCommitEdit(account);
     xaccTransCommitEdit(trans);
+
+    gnc_copy_split_onto_split(split, new_split);
 
     return_split = new_split;
   }
@@ -858,19 +900,10 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   {
     Transaction *new_trans;
     int split_index;
-    int num_splits;
-    int i;
 
     /* We are on a transaction row. Copy the whole transaction. */
 
-    split_index = -1;
-    num_splits = xaccTransCountSplits(trans);
-    for (i = 0; i < num_splits; i++)
-      if (xaccTransGetSplit(trans, i) == split)
-      {
-        split_index = i;
-        break;
-      }
+    split_index = gnc_trans_split_index(trans, split);
 
     /* we should *always* find the split, but be paranoid */
     if (split_index < 0)
@@ -881,8 +914,7 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     gnc_copy_trans_onto_trans(trans, new_trans);
 
     /* This shouldn't happen, but be paranoid. */
-    num_splits = xaccTransCountSplits(new_trans);
-    if (split_index >= num_splits)
+    if (split_index >= xaccTransCountSplits(new_trans))
       split_index = 0;
 
     return_split = xaccTransGetSplit(new_trans, split_index);
@@ -893,6 +925,228 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
   gnc_refresh_main_window();
 
   return return_split;
+}
+
+/* ======================================================== */
+
+void
+xaccSRCopyCurrent (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  CursorType cursor_type;
+  unsigned int changed;
+  Transaction *trans;
+  Split *split;
+  SCM new_item;
+
+  split = xaccSRGetCurrentSplit(reg);
+  trans = xaccSRGetCurrentTrans(reg);
+
+  /* This shouldn't happen, but be paranoid. */
+  if (trans == NULL)
+    return;
+
+  cursor_type = xaccSplitRegisterGetCursorType(reg);
+
+  /* Can't do anything with this. */
+  if (cursor_type == CURSOR_NONE)
+    return;
+
+  /* This shouldn't happen, but be paranoid. */
+  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+    return;
+
+  changed = xaccSplitRegisterGetChangeFlag(reg);
+
+  /* See if we were asked to copy an unchanged blank split. Don't. */
+  if (!changed && ((split == NULL) || (split == info->blank_split)))
+    return;
+
+  /* Ok, we are now ready to make the copy. */
+
+  if (cursor_type == CURSOR_SPLIT)
+  {
+    /* We are on a split in an expanded transaction. Just copy the split. */
+    new_item = gnc_copy_split(split);
+
+    if (new_item != SCM_UNDEFINED)
+    {
+      if (changed)
+        xaccSRSaveRegEntryToSCM(reg, SCM_UNDEFINED, new_item);
+
+      copied_leader_guid = *xaccGUIDNULL();
+    }
+  }
+  else
+  {
+    /* We are on a transaction row. Copy the whole transaction. */
+    new_item = gnc_copy_trans(trans);
+
+    if (new_item != SCM_UNDEFINED)
+    {
+      if (changed)
+      {
+        int split_index;
+        SCM split_scm;
+
+        split_index = gnc_trans_split_index(trans, split);
+        if (split_index >= 0)
+          split_scm = gnc_trans_scm_get_split_scm(new_item, split_index);
+        else
+          split_scm = SCM_UNDEFINED;
+
+        xaccSRSaveRegEntryToSCM(reg, new_item, split_scm);
+      }
+
+      copied_leader_guid = *xaccAccountGetGUID(info->default_source_account);
+    }
+  }
+
+  if (new_item == SCM_UNDEFINED)
+    return;
+
+  /* unprotect the old object, if any */
+  if (copied_item != SCM_UNDEFINED)
+    scm_unprotect_object(copied_item);
+
+  copied_item = new_item;
+  scm_protect_object(copied_item);
+
+  copied_type = cursor_type;
+}
+
+/* ======================================================== */
+
+void
+xaccSRCutCurrent (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  CursorType cursor_type;
+  unsigned int changed;
+  Transaction *trans;
+  Split *split;
+
+  split = xaccSRGetCurrentSplit(reg);
+  trans = xaccSRGetCurrentTrans(reg);
+
+  /* This shouldn't happen, but be paranoid. */
+  if (trans == NULL)
+    return;
+
+  cursor_type = xaccSplitRegisterGetCursorType(reg);
+
+  /* Can't do anything with this. */
+  if (cursor_type == CURSOR_NONE)
+    return;
+
+  /* This shouldn't happen, but be paranoid. */
+  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+    return;
+
+  changed = xaccSplitRegisterGetChangeFlag(reg);
+
+  /* See if we were asked to cut an unchanged blank split. Don't. */
+  if (!changed && ((split == NULL) || (split == info->blank_split)))
+    return;
+
+  xaccSRCopyCurrent(reg);
+
+  if (cursor_type == CURSOR_SPLIT)
+    xaccSRDeleteCurrentSplit(reg);
+  else
+    xaccSRDeleteCurrentTrans(reg);
+}
+
+/* ======================================================== */
+
+void
+xaccSRPasteCurrent (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  GList *accounts = NULL;
+  CursorType cursor_type;
+  Transaction *trans;
+  Split *split;
+
+  if (copied_type == CURSOR_NONE)
+    return;
+
+  split = xaccSRGetCurrentSplit(reg);
+  trans = xaccSRGetCurrentTrans(reg);
+
+  /* This shouldn't happen, but be paranoid. */
+  if (trans == NULL)
+    return;
+
+  cursor_type = xaccSplitRegisterGetCursorType(reg);
+
+  /* Can't do anything with this. */
+  if (cursor_type == CURSOR_NONE)
+    return;
+
+  /* This shouldn't happen, but be paranoid. */
+  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+    return;
+
+  if (cursor_type == CURSOR_SPLIT) {
+    if (copied_type == CURSOR_TRANS)
+      return;
+
+    accounts = gnc_trans_prepend_account_list(trans, NULL);
+
+    if (split == NULL)
+    { /* We are on a null split in an expanded transaction. */
+      split = xaccMallocSplit();
+
+      xaccTransBeginEdit(trans, GNC_T);
+      xaccTransAppendSplit(trans, split);
+      xaccTransCommitEdit(trans);
+    }
+
+    gnc_copy_split_scm_onto_split(copied_item, split);
+  }
+  else {
+    const GUID *new_guid;
+    int split_index;
+    int num_splits;
+
+    if (copied_type == CURSOR_SPLIT)
+      return;
+
+    accounts = gnc_trans_prepend_account_list(trans, NULL);
+
+    /* in pasting, the old split is deleted. */
+    if (split == info->blank_split)
+      info->blank_split = NULL;
+
+    split_index = gnc_trans_split_index(trans, split);
+
+    if ((info->default_source_account != NULL) &&
+        (xaccGUIDType(&copied_leader_guid) != GNC_ID_NULL))
+    {
+      new_guid = xaccAccountGetGUID(info->default_source_account);
+      gnc_copy_trans_scm_onto_trans_with_new_account(copied_item, trans,
+                                                     &copied_leader_guid,
+                                                     new_guid);
+    }
+    else
+      gnc_copy_trans_scm_onto_trans(copied_item, trans);
+
+    num_splits = xaccTransCountSplits(trans);
+    if (split_index >= num_splits)
+      split_index = 0;
+
+    info->cursor_hint_trans = trans;
+    info->cursor_hint_split = xaccTransGetSplit(trans, split_index);
+  }
+
+  accounts = gnc_trans_prepend_account_list(trans, accounts);
+
+  /* Refresh the GUI. */
+  gnc_account_glist_ui_refresh(accounts);
+  gnc_refresh_main_window();
+
+  g_list_free(accounts);
 }
 
 /* ======================================================== */
@@ -1373,13 +1627,12 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 gncBoolean
 xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 {
-   Account *account_refresh[5];
+   GList *refresh_accounts = NULL;
    SRInfo *info = xaccSRGetInfo(reg);
    Split *split;
    Transaction *trans;
    unsigned int changed;
    int style;
-   int i;
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
@@ -1387,13 +1640,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
    changed = xaccSplitRegisterGetChangeFlag (reg);
    if (!changed)
      return GNC_F;
-
-   /* HACK. This list will be used to refresh changed accounts.
-    * The list is 5 long for: 2 accounts for xfrm, 2 accounts
-    * for mxfrm, 1 account for NULL. This can go away once we
-    * have engine change callbacks. */
-   for (i = 0; i < 5; i++)
-     account_refresh[i] = NULL;
 
    style = (reg->type) & REG_STYLE_MASK;   
 
@@ -1533,9 +1779,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
         if ((currency != NULL) || (security != NULL)) {
           xaccAccountInsertSplit (new_acc, split);
 
-          /* HACK. */
-          account_refresh[0] = old_acc;
-          account_refresh[1] = new_acc;
+          refresh_accounts = g_list_prepend(refresh_accounts, old_acc);
+          refresh_accounts = g_list_prepend(refresh_accounts, new_acc);
         }
         else {
           char *message = NULL;
@@ -1608,15 +1853,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
            if ((currency != NULL) || (security != NULL)) {
              xaccAccountInsertSplit (new_acc, other_split);
 
-             /* HACK. */
-             if (account_refresh[0] == NULL) {
-               account_refresh[0] = old_acc;
-               account_refresh[1] = new_acc;
-             }
-             else {
-               account_refresh[2] = old_acc;
-               account_refresh[3] = new_acc;
-             }
+             refresh_accounts = g_list_prepend(refresh_accounts, old_acc);
+             refresh_accounts = g_list_prepend(refresh_accounts, new_acc);
            }
            else {
              char *message = NULL;
@@ -1809,9 +2047,10 @@ xaccSRSaveRegEntry (SplitRegister *reg, Transaction *new_trans)
 
    xaccSplitRegisterClearChangeFlag(reg);
 
-   if (account_refresh[0] != NULL) {
-     gnc_account_list_ui_refresh(account_refresh);
+   if (refresh_accounts != NULL) {
+     gnc_account_glist_ui_refresh(refresh_accounts);
      gnc_refresh_main_window();
+     g_list_free(refresh_accounts);
    }
 
    return GNC_T;
@@ -2246,13 +2485,16 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    if (info->cursor_hint_trans != NULL) {
      find_trans = info->cursor_hint_trans;
      find_split = info->cursor_hint_split;
-     save_phys_col = info->cursor_hint_phys_col;
    }
    else {
      find_trans = xaccSRGetCurrentTrans (reg);
      find_split = xaccSRGetCurrentSplit (reg);
-     save_phys_col = table->current_cursor_phys_col;
    }
+
+   if (info->cursor_hint_phys_col >= 0)
+     save_phys_col = info->cursor_hint_phys_col;
+   else
+     save_phys_col = table->current_cursor_phys_col;
 
    /* paranoia */
    if (save_phys_col < 0)
@@ -2458,10 +2700,11 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    if (!found_pending)
      info->pending_trans = NULL;
 
-   /* clear out the hint transaction and split. We want
-    * to know if it has been set from the move callback. */
+   /* clear out the hint transaction, split, and col. We want
+    * to know if it has been set from the move callback, etc. */
    info->cursor_hint_trans = NULL;
    info->cursor_hint_split = NULL;
+   info->cursor_hint_phys_col = -1;
 
    xaccRefreshTableGUI (table);
 
