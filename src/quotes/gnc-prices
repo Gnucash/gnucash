@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # FILE:
-# update_prices
+# gnc-prices
 #
 # FUNCTION:
 # go out to the net, fetch prices for any securities,
@@ -11,8 +11,9 @@
 # Created by Linas Vepstas January 1999
 # Copyright (c) 1999 Linas Vepstas
 
+# hack alert -- this pathname should *NOT* be hard-coded.
+use lib '/usr/lib/gnucash/';
 use Quote;
-use lib '../swig/perl5/';
 use gnucash;
 
 # --------------------------------------------------
