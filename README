@@ -4,18 +4,18 @@
 The version 1.3.x series of GnuCash are experimental development
 releases.  They may or may not work. Use at your own risk.
 
-The last stable, production version was gnucash-1.2.5 The next stable,
-production version will be gnucash-1.4.x
+The last stable, production version was gnucash-1.2.5.
+The next stable, production version will be gnucash-1.4.x
 
 ###########################################################################
 
 Table of Contents:
 
   - Overview
+  - Upgrading from 1.2.x
   - Dependencies
   - Invocation/running
   - Internationalization
-  - Other Tools
   - Building and Installing
   - Supported OSes
   - Additional Download Sites
@@ -39,23 +39,31 @@ Features include:
     can use GnuCash.  Type directly into the register,
     tab between fields, and use quick-fill to
     automatically complete the transaction.
+    The interface is customizable from within the 
+    application itself (no editing config files :) )
+  - Quicken File Import: Import Quicken QIF style files.
+    QIF files are automatically merged to eliminate 
+    duplicate transactions.
   - Reconcile window  with running reconciled 
     and cleared balances makes reconciliation easy.
   - Stock/Mutual Fund Portfolios:  Track stocks
     individually (one per account) or in portfolio
     of accounts (a group of accounts that can be 
     displayed together).  
+  - Get Stock & Mutual Fund quotes from various web sites, 
+    update portfolio automatically (more funds being added 
+    regularly).
+  - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
+    Valuation, Transaction Reports, or account balance tracking,
+    or export them as HTML.  You can write your own custom
+    report if you know a little Scheme.  Reports can now be performed
+    over an accounting period!
   - Multiple Currencies & Currency Trading: Multiple 
     currencies are supported and can be bought and
     sold (traded).  Currency movements between accounts
     are fully balanced when double-entry is enabled.
     (Some aspects of multiple currency support are not 
     fully implemented.)
-  - Quicken File Import: Import Quicken QIF style files.
-    QIF files are automatically merged to eliminate 
-    duplicate transactions.
-  - Reports: Display Balance Sheet, Profit&Loss, Portfolio 
-    Valuation, or print them as HTML.
   - Chart of Accounts: A master account can have a hierarchy
     of detail accounts underneath it.  This allows similar
     account types (e.g. Cash, Bank, Stock) to be grouped 
@@ -86,9 +94,6 @@ Features include:
   - Provides a byte-stream format, which allows accounts and
     account groups to be transmitted to other processes
     via pipes or sockets.
-  - Get Stock & Mutual Fund quotes from various web sites, 
-    update portfolio automatically (more funds being added 
-    regularly).
   - European date handling, French, German, Swedish, and Great
     Britain translations.
 
@@ -96,26 +101,29 @@ Features include:
 Home Page:
 http://gnucash.org/
 
-Original X-Accountant home page:
-http://www.cs.hmc.edu/~rclark/xacc
-
 Precompiled binaries:
-http://www.gnucash.org/pub/gnucash/redhat-6.x/1.2.5/
+http://www.gnucash.org/pub/gnucash/
 
 Development versions:
 http://www.gnucash.org/source_code.php3
 
+====================
+Upgrading from 1.2.x
+--------------------
+
+There are many, many changes from the 1.2 series - have a look at the
+NEWS file if you want more details.  However, the most crucial ones
+for installation are that GnuCash now requires the Gnome libraries
+instead of Motif, and guile is required.  See the "dependancies"
+section of this file for more detail.  The file format hasn't changed
+(but make a backup of your data anyway . . . )
+
+We hope you enjoy all the new features!
+
+
 ============
 Dependencies
 ------------
-
-Only the 1.2.5 Motif version of GnuCash is currently stable. The Gnome
-version is a development version, but will soon be stable enough for
-regular use. Development of the Motif version has ceased and has
-recently been removed from CVS.  Older versions may be retrieved from
-CVS should someone want to resume the work.  The next stable release
-will be a full Gnome version, but will only require that you have the
-Gnome libraries available, not that you be running a Gnome desktop.
 
 The following packages are required to be installed to run gnucash:
 
@@ -155,6 +163,14 @@ In addition, some perl modules need to be installed:
            http://linas.org/linux/gnucash (last resort)
            or sources at
            http://www.cpan.org/CPAN.html
+
+If you wish to use the Balance Tracker report and get nifty charts,
+you will need to install:
+
+   gnuplot:  A plotting program.
+	     RPM's and debs available from the distributors
+	     You can get the source from:
+             http://www.gnuplot.vt.edu/ 
 
 
 =======
@@ -241,13 +257,6 @@ fr_CH
 de_CH
 
 
-===========
-Other Tools
------------
-
-A tool to generate (ascii) reports from gnucash/xacc files can be found 
-at http://www.zeta.org.au/~grahamc/xacc_rpts.html.
-
 =====================
 Building & Installing
 ---------------------
@@ -266,6 +275,9 @@ following packages:
 
   SWIG: Used to autogenerate perl wrappers - available at www.swig.org
     need 1.1p5 or later ...
+
+  g-wrap: RPM's, debs, and source available at 
+          ftp://ftp.gnucash.org/pub/g-wrap.
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the
@@ -302,18 +314,8 @@ and there was also an experimental, but never finished qt interface.
 Both of these have been removed from the source tree during the
 process of migrating to automake, but anyone who is interested in
 resurrecting these bits can easily retrieve them from CVS.
-
-The Gnome version is receiving all of the current development effort,
-and will be the next stable release.  Note that although the next
-stable release will have a Gnome user interface, it will not require
-that you be running a Gnome desktop, just that you have the Gnome
-libraries available, an important distinction.
-
-Although the Gnome version is being actively developed, we cannot say
-for sure that it has reached the stability level of the 1.2.5 Motif
-version.  It certainly has has more features, and has worked well for
-many, but right now the older 1.2.5 Motif version is the official
-stable version, and has had more thorough testing.
+Note that while you need the Gnome libraries installed, you don't
+need to have a Gnome desktop.  
 
 Runtime and install destinations are separate.  The --prefix you
 specify to configure determines where the resulting binary will look
@@ -337,40 +339,51 @@ packages.
 ==============
 Supported OS's
 --------------
-GnuCash version 1.2.x is known to work in the following configs:
 
-GNU/Linux             -- Intel 
-FreeBSD               -- Intel
-OpenBSD               -- Intel
+GnuCash 1.3.x is known to work with the following operating systems:
 
-Xacc-1.0.18, the predecessor to GnuCash, is known to work on these additional
-platforms:
+GNU/Linux             -- x86 & Alpha
+Solaris		      -- Sparc
+FreeBSD               -- x86
 
-Slackware 3.4         -- Intel  w/ Mootif (OSF Motif 2.0.1)
+It probably works with the following :
+
+OpenBSD               -- x86 (needs to be confirmed one way or another)
+
+
+Previous versions have been known to work on the following platforms, but
+their current status is unknown:
+
 SGI IRIX              -- MIPS 
 IBM AIX 4.1.5         -- RS/6000   http://www-frec.bull.com/
 Unixware 7            -- Intel
 SCO OpenServer 5.0.4  -- Intel
-Solaris               -- Sparc  
 
 See ftp://ftp.gnucash.org/pub/xacc (high-bandwidth)
 or  http://linas.org/linux/gnucash (slow-www ) 
-for precompiled binaries for these platforms
+for precompiled (but *very old*) binaries for these platforms
 
+Gnucash can probably be made to work with most POSIX-ish platforms, 
+provided the libraries and toolchain are available.
 
 =========================
 Additional Download Sites
 -------------------------
 
-Precompiled binaries & pre-requisite packages can be found at
+Precompiled binaries & pre-requisite packages can be found at the
+following sites.  The gnucash versions here are all *extremely*
+old, and were indeed from gnucash's ancestor "xacc".
 
 IBM AIX 4.1.5 
       -- SMIT-installable images 
+      -- warning, this is from the 1.0 series of xacc
       http://www.bull.de/pub/
       see also http://www-frec.bull.com/
+      
 
 SCO OpenServer 5.0.4 
       http://www.sco.com/skunkware/osr5/x11/apps/xacc/VOLS.tar
+      -- this is from the 1.0 series of xacc
 
 Unixware 7
       -- use pkgadd to install
