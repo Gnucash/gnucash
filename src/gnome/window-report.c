@@ -191,7 +191,12 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   /* get the inst-report from the Scheme-side hash, and get its
    * options */
   inst_report   = gh_call1(find_report, gh_int2scm(report_id));
+  
+  if(inst_report == SCM_BOOL_F) {
+    return;
+  }
   inst_options  = gh_call1(get_options, inst_report); 
+
 
   /* get rid of the options dialog, unless it's just for a reload */
   if(!gh_eq_p(inst_options, win->scm_options)) {
@@ -321,8 +326,8 @@ gnc_report_window_history_destroy_cb(gnc_html_history_node * node,
      (node->type == URL_TYPE_REPORT) && 
      !strncmp("id=", node->location, 3)) {
     sscanf(node->location+3, "%d", &report_id);
-    printf("unreffing report %d and children\n", report_id);
-    gh_call1(remover, gh_int2scm(report_id));
+    /*    printf("unreffing report %d and children\n", report_id);
+          gh_call1(remover, gh_int2scm(report_id)); */
   }
   else {
     return;

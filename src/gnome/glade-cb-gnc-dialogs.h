@@ -219,3 +219,18 @@ gnc_ui_qif_import_duplicate_old_select_cb
                                         gint             column,
                                         GdkEvent        *event,
                                         gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_back_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);

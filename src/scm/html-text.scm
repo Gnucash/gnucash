@@ -47,7 +47,7 @@
 (define (gnc:make-html-text . body)
   (gnc:make-html-text-internal 
    body
-   (make-hash-table 7)))
+   (gnc:make-html-style-table)))
 
 (define gnc:html-text? 
   (record-predicate <html-text>))
@@ -75,7 +75,7 @@
               (apply gnc:make-html-data-style-info rest))
         (set! newstyle 
               (apply gnc:make-html-markup-style-info rest)))
-    (hash-set! (gnc:html-text-style text) tag newstyle)))
+    (gnc:html-style-table-set! (gnc:html-text-style text) tag newstyle)))
 
 (define (gnc:html-text-append! text . body) 
   (gnc:html-text-set-body-internal!
@@ -175,27 +175,33 @@
         rest)))))
 
 (define (gnc:html-text-render p doc)
-  (with-output-to-string
-    (lambda ()
-      (gnc:html-document-push-style doc (gnc:html-text-style p))
-      (for-each-in-order 
-       (lambda (elt)
-         (if (procedure? elt)
-             (display (elt doc))
-             (display (gnc:html-document-render-data doc elt))))
-       (gnc:html-text-body p))
-      (gnc:html-document-pop-style doc))))
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval)))))
+    (gnc:html-style-table-compile (gnc:html-text-style p)
+                                  (gnc:html-document-style-stack doc))
+    (gnc:html-document-push-style doc (gnc:html-text-style p))
+    (for-each-in-order 
+     (lambda (elt)
+       (if (procedure? elt)
+           (push (elt doc))
+           (push (gnc:html-document-render-data doc elt))))
+     (gnc:html-text-body p))
+    (gnc:html-document-pop-style doc)
+    (gnc:html-style-table-uncompile (gnc:html-text-style p))
+    retval))
 
 (define (gnc:html-text-render-markup doc markup attrib end-tag? . entities)
-  (with-output-to-string 
-    (lambda ()
-      (display (gnc:html-document-markup-start doc markup attrib))
-      (for-each-in-order 
-       (lambda (elt) 
-         (if (procedure? elt)
-             (display (elt doc))
-             (display (gnc:html-document-render-data doc elt))))
-       entities)
-      (if end-tag? 
-          (display (gnc:html-document-markup-end doc markup))))))
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval)))))
+    (push (gnc:html-document-markup-start doc markup attrib))
+    (for-each-in-order 
+     (lambda (elt) 
+       (if (procedure? elt)
+           (push (elt doc))
+           (push (gnc:html-document-render-data doc elt))))
+     entities)
+    (if end-tag? 
+        (push (gnc:html-document-markup-end doc markup)))
+    retval))
+
 

@@ -160,104 +160,114 @@
                  (display " ")))
              nlist)))))
   
-  (with-output-to-string
-    (lambda ()
-      (let ((title (gnc:html-piechart-title piechart))
-            (subtitle (gnc:html-piechart-subtitle piechart))
-            (url-1
-             (catenate-escaped-strings 
-              (gnc:html-piechart-button-1-slice-urls piechart)))
-            (url-2 
-             (catenate-escaped-strings 
-              (gnc:html-piechart-button-2-slice--urls piechart)))
-            (url-3
-             (catenate-escaped-strings 
-              (gnc:html-piechart-button-3-slice--urls piechart)))
-            (legend-1
-             (catenate-escaped-strings 
-              (gnc:html-piechart-button-1-legend-urls piechart)))
-            (legend-2 
-             (catenate-escaped-strings 
-              (gnc:html-piechart-button-2-legend-urls piechart)))
-            (legend-3
-             (catenate-escaped-strings 
-              (gnc:html-piechart-button-3-legend-urls piechart)))
-            (data 
-             (ensure-positive-numbers (gnc:html-piechart-data piechart)))
-            (labels 
-             (catenate-escaped-strings (gnc:html-piechart-labels piechart)))
-            (colors 
-             (catenate-escaped-strings (gnc:html-piechart-colors piechart))))
-        (if (and (list? data) 
-                 (not (null? data)))
-            (begin 
-              (display "<object classid=\"gnc-guppi-pie\" width=")
-              (display (gnc:html-piechart-width piechart))
-              (display " height=") 
-              (display (gnc:html-piechart-height piechart))
-              (display ">\n")
-              (if title
-                  (begin 
-                    (display "  <param name=\"title\" value=\"")
-                    (display title) (display "\">\n")))
-              (if subtitle
-                  (begin 
-                    (display "  <param name=\"subtitle\" value=\"")
-                    (display subtitle) (display "\">\n")))
-              (if (and data (list? data))
-                  (begin 
-                    (display "  <param name=\"datasize\" value=\"")
-                    (display (length data)) (display "\">\n")
-                    (display "  <param name=\"data\" value=\"")
-                    (for-each-in-order 
-                     (lambda (datum)
-                       (display datum)
-                       (display " "))
-                     data)
-                    (display "\">\n")))
-              (if (and (string? colors)
-                       (> (string-length colors) 0))
-                  (begin 
-                    (display "  <param name=\"colors\" value=\"")
-                    (dispaly colors)
-                    (display "\">\n")))
-              (if (and (string? labels)
-                       (> (string-length labels) 0))
-                  (begin 
-                    (display "  <param name=\"labels\" value=\"")
-                    (display labels)
-                    (display "\">\n")))
-              (if url-1 
-                  (begin 
-                    (display "  <param name=\"slice_urls_1\" value=\"")
-                    (display url-1)
-                    (display "\">\n")))
-              (if url-2
-                  (begin 
-                    (display "  <param name=\"slice_urls_2\" value=\"")
-                    (display url-2)
-                    (display "\">\n")))
-              (if url-3 
-                  (begin 
-                    (display "  <param name=\"slice_urls_3\" value=\"")
-                    (display url-3)
-                    (display "\">\n")))
-              (if legend-1 
-                  (begin 
-                    (display "  <param name=\"legend_urls_1\" value=\"")
-                    (display legend-1)
-                    (display "\">\n")))
-              (if legend-2
-                  (begin 
-                    (display "  <param name=\"legend_urls_2\" value=\"")
-                    (display legend-2)
-                    (display "\">\n")))
-              (if legend-3 
-                  (begin 
-                    (display "  <param name=\"legend_urls_3\" value=\"")
-                    (display legend-3)
-                    (display "\">\n")))
-              (display "Unable to display pie chart\n")
-              (display "</object>"))
-            " ")))))
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval))))
+         (title (gnc:html-piechart-title piechart))
+         (subtitle (gnc:html-piechart-subtitle piechart))
+         (url-1
+          (catenate-escaped-strings 
+           (gnc:html-piechart-button-1-slice-urls piechart)))
+         (url-2 
+          (catenate-escaped-strings 
+           (gnc:html-piechart-button-2-slice--urls piechart)))
+         (url-3
+          (catenate-escaped-strings 
+           (gnc:html-piechart-button-3-slice--urls piechart)))
+         (legend-1
+          (catenate-escaped-strings 
+           (gnc:html-piechart-button-1-legend-urls piechart)))
+         (legend-2 
+          (catenate-escaped-strings 
+           (gnc:html-piechart-button-2-legend-urls piechart)))
+         (legend-3
+          (catenate-escaped-strings 
+           (gnc:html-piechart-button-3-legend-urls piechart)))
+         (data 
+          (ensure-positive-numbers (gnc:html-piechart-data piechart)))
+         (labels 
+          (catenate-escaped-strings (gnc:html-piechart-labels piechart)))
+         (colors 
+          (catenate-escaped-strings (gnc:html-piechart-colors piechart))))
+    (if (and (list? data) 
+             (not (null? data)))
+        (begin 
+          (push "<object classid=\"gnc-guppi-pie\" width=")
+          (push (gnc:html-piechart-width piechart))
+          (push " height=") 
+          (push (gnc:html-piechart-height piechart))
+          (push ">\n")
+          (if title
+              (begin 
+                (push "  <param name=\"title\" value=\"")
+                (push title) (push "\">\n")))
+          (if subtitle
+              (begin 
+                (push "  <param name=\"subtitle\" value=\"")
+                (push subtitle) (push "\">\n")))
+          (if (and data (list? data))
+              (begin 
+                (push "  <param name=\"datasize\" value=\"")
+                (push (length data)) (push "\">\n")
+                (push "  <param name=\"data\" value=\"")
+                (for-each-in-order 
+                 (lambda (datum)
+                   (push datum)
+                   (push " "))
+                 data)
+                (push "\">\n")))
+          (if (and (string? colors)
+                   (> (string-length colors) 0))
+              (begin 
+                (push "  <param name=\"colors\" value=\"")
+                (dispaly colors)
+                (push "\">\n")))
+          (if (and (string? labels)
+                   (> (string-length labels) 0))
+              (begin 
+                (push "  <param name=\"labels\" value=\"")
+                (push labels)
+                (push "\">\n")))
+          (if url-1 
+              (begin 
+                (push "  <param name=\"slice_urls_1\" value=\"")
+                (push url-1)
+                (push "\">\n")))
+          (if url-2
+              (begin 
+                (push "  <param name=\"slice_urls_2\" value=\"")
+                (push url-2)
+                (push "\">\n")))
+          (if url-3 
+              (begin 
+                (push "  <param name=\"slice_urls_3\" value=\"")
+                (push url-3)
+                (push "\">\n")))
+          (if legend-1 
+              (begin 
+                (push "  <param name=\"legend_urls_1\" value=\"")
+                (push legend-1)
+                (push "\">\n")))
+          (if legend-2
+              (begin 
+                (push "  <param name=\"legend_urls_2\" value=\"")
+                (push legend-2)
+                (push "\">\n")))
+          (if legend-3 
+              (begin 
+                (push "  <param name=\"legend_urls_3\" value=\"")
+                (push legend-3)
+                (push "\">\n")))
+          (push "Unable to display pie chart\n")
+          (push "</object>"))
+        " ")
+    retval))
+
+
+
+
+
+
+
+
+
 

@@ -468,6 +468,14 @@ transaction.") #t))
   ))
 
 
+;; QIF Import options. 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "QIF Import") (N_ "Verbose documentation")
+  "a" (N_ "Show some documentation-only pages in QIF Import druid")
+  #t))
+
+
 ;;; Configuation variables
 
 (define gnc:*arg-show-version*

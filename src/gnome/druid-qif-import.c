@@ -34,6 +34,7 @@
 #include "druid-qif-import.h"
 #include "dialog-account-picker.h"
 #include "dialog-commodity.h"
+#include "global-options.h"
 #include "window-help.h"
 #include "messages.h"
 #include "gnc-ui.h"
@@ -78,8 +79,13 @@ struct _qifimportwindow {
   GtkWidget * match_duplicates_page;
   GtkWidget * end_page;
 
-  GList     * pages;
-  
+  GList     * pre_comm_pages;
+  GList     * commodity_pages;
+  GList     * post_comm_pages;
+  GList     * doc_pages;
+
+  gboolean  show_doc_pages;
+
   SCM       imported_files;
   SCM       selected_file;
 
@@ -117,6 +123,15 @@ static GdkColor std_bg_color = { 0, 39835, 49087, 40092 };
 static GdkColor std_logo_bg_color = { 0, 65535, 65535, 65535 };
 static GdkColor std_title_color =  { 0, 65535, 65535, 65535 };
 
+#define NUM_PRE_PAGES 11
+#define NUM_POST_PAGES 3
+#define NUM_DOC_PAGES  5
+
+static GnomeDruidPage *
+get_named_page(QIFImportWindow * w, const char * name) {
+  GtkObject * o = GTK_OBJECT(w->window);
+  return GNOME_DRUID_PAGE(gtk_object_get_data(o, name));
+}
 
 /********************************************************************
  * gnc_ui_qif_import_druid_make() 
@@ -127,12 +142,27 @@ QIFImportWindow *
 gnc_ui_qif_import_druid_make(void)  {
   
   QIFImportWindow * retval;
-  GtkObject * wobj;
+  GtkObject       * wobj;
   SCM  load_map_prefs;
   SCM  mapping_info;
-  SCM  lookup_option;
-  SCM  lookup_value;
+  int  i;
 
+  char * pre_page_names[NUM_PRE_PAGES] = {
+    "start_page", "load_file_page", "date_format_page", "account_name_page",
+    "loaded_files_page", "account_doc_page", "account_match_page", 
+    "category_doc_page", "category_match_page", "currency_page",
+    "commodity_doc_page"
+  };
+
+  char * post_page_names[NUM_POST_PAGES] = {
+    "match_doc_page", "match_duplicates_page", "end_page"
+  };
+
+  char * doc_page_names[NUM_DOC_PAGES] = {
+    "start_page", "account_doc_page", "category_doc_page", 
+    "commodity_doc_page", "match_doc_page"    
+  };
+  
   retval = g_new0(QIFImportWindow, 1);
   
   retval->window = create_QIF_Import_Druid();
@@ -165,35 +195,36 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->old_transaction_list = 
     gtk_object_get_data(wobj, "old_transaction_list");
   
-  retval->start_page = gtk_object_get_data(wobj, "start_page");
-  retval->load_file_page = gtk_object_get_data(wobj, "load_file_page");
-  retval->loaded_files_page = gtk_object_get_data(wobj, "loaded_files_page");
-  retval->date_format_page  = gtk_object_get_data(wobj, "date_format_page"); 
-  retval->account_name_page  = gtk_object_get_data(wobj, "account_name_page"); 
-  retval->account_doc_page  = gtk_object_get_data(wobj, "account_doc_page"); 
-  retval->account_match_page = 
-    gtk_object_get_data(wobj, "account_match_page"); 
-  retval->category_doc_page  = gtk_object_get_data(wobj, "category_doc_page"); 
-  retval->category_match_page = 
-    gtk_object_get_data(wobj, "category_match_page"); 
-  retval->currency_page  = gtk_object_get_data(wobj, "currency_page");  
-  retval->commodity_doc_page  = 
-    gtk_object_get_data(wobj, "commodity_doc_page");  
-  retval->match_doc_page  = 
-    gtk_object_get_data(wobj, "match_doc_page");  
-  retval->match_duplicates_page  = 
-    gtk_object_get_data(wobj, "match_duplicates_page");  
-  retval->end_page  = gtk_object_get_data(wobj, "end_page");
+  retval->pre_comm_pages   = NULL;
+  retval->post_comm_pages  = NULL;
+  retval->doc_pages        = NULL;
+  retval->commodity_pages = NULL;
+
+  retval->show_doc_pages = 
+    gnc_lookup_boolean_option(_("QIF Import"),
+                              _("Verbose documentation"),
+                              TRUE);
   
-  retval->pages = NULL;
-  
+  for(i=0; i < NUM_PRE_PAGES; i++) {
+    retval->pre_comm_pages = 
+      g_list_append(retval->pre_comm_pages, 
+                    gtk_object_get_data(wobj, pre_page_names[i]));
+  }
+  for(i=0; i < NUM_POST_PAGES; i++) {
+    retval->post_comm_pages = 
+      g_list_append(retval->post_comm_pages, 
+                    gtk_object_get_data(wobj, post_page_names[i]));
+  }
+  for(i=0; i < NUM_DOC_PAGES; i++) {
+    retval->doc_pages = 
+      g_list_append(retval->doc_pages, 
+                    gtk_object_get_data(wobj, doc_page_names[i]));
+  }
   gtk_object_set_data(wobj, "qif_window_struct", retval);
   
   /* load the saved-state of the mappings from Quicken accounts and
    * categories to gnucash accounts */
   load_map_prefs = gh_eval_str("qif-import:load-map-prefs");
-  lookup_option = gh_eval_str("gnc:lookup-global-option");
-  lookup_value  = gh_eval_str("gnc:option-value");
 
   mapping_info = gh_call0(load_map_prefs);
   retval->gnc_acct_info    = gh_car(mapping_info);
@@ -217,6 +248,11 @@ gnc_ui_qif_import_druid_make(void)  {
                                  gnc_commodity_get_printname
                                  (gnc_locale_default_currency()));
   
+  if(!retval->show_doc_pages) {
+    gnome_druid_set_page(GNOME_DRUID(retval->druid),
+                         get_named_page(retval, "load_file_page"));
+  }
+
   gtk_widget_show_all(retval->window);
   
   return retval;
@@ -233,6 +269,8 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
   if (!window)
     return;
 
+  /* FIXME -- commodity pages */
+
   gtk_widget_destroy(window->window);
 
   scm_unprotect_object(window->imported_files);
@@ -247,6 +285,160 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
   scm_unprotect_object(window->match_transactions);
 
   g_free(window);
+}
+
+static GtkWidget * 
+get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
+  GList     * current = NULL;
+  GList     * next;
+  int       where = 0;
+  
+  if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
+    if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
+      if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
+        /* where are we? */
+        printf("QIF import: I'm lost!\n");
+        return FALSE;
+      }
+      else {
+        where = 3;
+      }
+    }
+    else {
+      where = 2;
+    }
+  }
+  else {
+    where = 1;
+  }
+  
+  next = current->next;
+  while(!next ||
+        (!wind->show_doc_pages &&
+         g_list_find(wind->doc_pages, next->data))) {
+    if(next && next->next) {
+      next = next->next;
+    }
+    else {
+      where ++;
+      switch(where) {
+      case 2:
+        next = wind->commodity_pages;
+        break;
+      case 3:
+        next = wind->post_comm_pages;
+        break;
+      default:
+        printf("QIF import: something fishy.\n");
+        next = NULL;
+        break;
+      }              
+    }
+  }
+         
+  if(next) return (GtkWidget *)next->data;
+  else return NULL;
+}
+
+static GtkWidget * 
+get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
+  GList     * current = NULL;
+  GList     * prev;
+  int       where = 0;
+  
+  if((current = g_list_find(wind->pre_comm_pages, page)) == NULL) {
+    if((current = g_list_find(wind->commodity_pages, page)) == NULL) {
+      if((current = g_list_find(wind->post_comm_pages, page)) == NULL) {
+        /* where are we? */
+        printf("QIF import: I'm lost!\n");
+        return FALSE;
+      }
+      else {
+        where = 3;
+      }
+    }
+    else {
+      where = 2;
+    }
+  }
+  else {
+    where = 1;
+  }
+  
+  prev = current->prev;
+  while(!prev ||
+        (!wind->show_doc_pages &&
+         g_list_find(wind->doc_pages, prev->data))) {
+    if(prev && prev->prev) {
+      prev = prev->prev;
+    }
+    else {
+      where --;
+      switch(where) {
+      case 1:
+        prev = g_list_last(wind->pre_comm_pages);
+        break;
+      case 2:
+        prev = g_list_last(wind->commodity_pages);
+        break;
+      default:
+        printf("QIF import: something fishy.\n");
+        prev = NULL;
+        break;
+      }              
+    }
+  }
+  if(prev)
+    return (GtkWidget *)prev->data;
+  else 
+    return NULL;
+}
+
+
+/********************************************************************
+ * gnc_ui_qif_import_generic_next_cb
+ * close the QIF Import druid window
+ ********************************************************************/
+
+gboolean
+gnc_ui_qif_import_generic_next_cb(GnomeDruidPage * page, gpointer arg1, 
+                                  gpointer user_data) {
+  GtkWidget * druid = GTK_WIDGET(user_data);
+  QIFImportWindow * wind =
+    gtk_object_get_data(GTK_OBJECT(druid), "qif_window_struct");
+  GtkWidget * next_page = get_next_druid_page(wind, page);
+  
+  if(next_page) {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         GNOME_DRUID_PAGE(next_page));
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/********************************************************************
+ * gnc_ui_qif_import_generic_back_cb
+ * close the QIF Import druid window
+ ********************************************************************/
+
+gboolean
+gnc_ui_qif_import_generic_back_cb(GnomeDruidPage * page, gpointer arg1, 
+                                  gpointer user_data) {
+  GtkWidget * druid = GTK_WIDGET(user_data);
+  QIFImportWindow * wind =
+    gtk_object_get_data(GTK_OBJECT(druid), "qif_window_struct");
+  GtkWidget * back_page = get_prev_druid_page(wind, page);
+  
+  if(back_page) {
+    gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                         GNOME_DRUID_PAGE(back_page));
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
 }
 
 
@@ -465,19 +657,18 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
     if(ask_date_format) {
       /* we need to get a date format, so go to the next page */
-      return FALSE;
+      return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
     }
     else if(gh_call1(check_from_acct, gh_car(imported_files)) != SCM_BOOL_T) {
       /* skip to the "ask account name" page */
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->account_name_page));
+                           get_named_page(wind, "account_name_page"));
       return TRUE;
     }
     else {
       /* skip ahead to the "loaded files" page */
       gnome_druid_set_page(GNOME_DRUID(wind->druid), 
-                           GNOME_DRUID_PAGE(wind->loaded_files_page));
-      
+                           get_named_page(wind, "loaded_files_page"));
       return TRUE;      
     }
   }
@@ -506,7 +697,7 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
   else {
     /* skip ahead to the "loaded files" page */
     gnome_druid_set_page(GNOME_DRUID(wind->druid), 
-                         GNOME_DRUID_PAGE(wind->loaded_files_page));
+                         get_named_page(wind, "loaded_files_page"));
     
     return TRUE;      
   }
@@ -568,7 +759,7 @@ gnc_ui_qif_import_load_another_cb(GtkButton * button,
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
   
   gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                       GNOME_DRUID_PAGE(wind->load_file_page));
+                       get_named_page(wind, "load_file_page"));
   gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
                                     TRUE, TRUE, TRUE); 
 }
@@ -977,6 +1168,137 @@ gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
 }
 
 
+/****************************************************************
+ * gnc_ui_qif_import_convert
+ * do the work of actually translating QIF xtns to GNC xtns.  Fill in 
+ * the match page if there are matches. 
+ ****************************************************************/
+
+static gboolean
+gnc_ui_qif_import_convert(QIFImportWindow * wind) {
+
+  SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
+  SCM   find_duplicates = gh_eval_str("gnc:group-find-duplicates");
+  SCM   retval;
+  SCM   current_xtn;
+
+  GnomeDruidPage * gtkpage;
+  QIFDruidPage * page;
+  GList        * pageptr;
+  Transaction  * gnc_xtn;
+  Split        * gnc_split;
+
+  char * mnemonic = NULL; 
+  char * namespace = NULL;
+  char * fullname = NULL;
+  gchar * row_text[4] = { NULL, NULL, NULL, NULL };
+  int  rownum;
+
+  /* get the default currency */
+  char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
+
+
+  /* busy cursor */
+  gnc_suspend_gui_refresh ();
+  gnc_set_busy_cursor(NULL);
+
+  /* get any changes to the imported stocks */
+  for(pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next) {
+    gtkpage   = GNOME_DRUID_PAGE(pageptr->data); 
+    page      = gtk_object_get_data(GTK_OBJECT(gtkpage), "page_struct");
+    
+    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
+    namespace = gtk_entry_get_text(GTK_ENTRY(page->new_type_entry));
+    fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
+    
+    gnc_commodity_set_namespace(page->commodity, namespace);
+    gnc_commodity_set_fullname(page->commodity, fullname);
+    gnc_commodity_set_mnemonic(page->commodity, mnemonic);
+
+    gnc_commodity_table_insert(gnc_engine_commodities(), page->commodity);
+  }
+  
+  /* call a scheme function to do the work.  The return value is an
+   * account group containing all the new accounts and transactions */
+  retval = gh_apply(qif_to_gnc, 
+                    SCM_LIST5(wind->imported_files,
+                              wind->acct_map_info, 
+                              wind->cat_map_info,
+                              wind->stock_hash,
+                              gh_str02scm(currname)));
+
+  gnc_unset_busy_cursor(NULL);
+
+  if(retval == SCM_BOOL_F) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->window),
+                              _("An error occurred while importing "
+                                "QIF transactions into Gnucash.  Your "
+                                "accounts are unchanged."));    
+    scm_unprotect_object(wind->imported_account_group);
+    wind->imported_account_group = SCM_BOOL_F;
+    scm_protect_object(wind->imported_account_group);
+  }
+  else {
+    scm_unprotect_object(wind->imported_account_group);
+    wind->imported_account_group = retval;
+    scm_protect_object(wind->imported_account_group);
+
+    /* now detect duplicate transactions */ 
+    gnc_set_busy_cursor(NULL);
+    retval = gh_call2(find_duplicates, 
+                      gh_eval_str("(gnc:get-current-group)"),
+                      wind->imported_account_group);
+    gnc_unset_busy_cursor(NULL);
+    
+    scm_unprotect_object(wind->match_transactions);
+    wind->match_transactions = retval;
+    scm_protect_object(wind->match_transactions);
+    
+    /* skip to the last page if we couldn't find duplicates 
+     * in the new group */
+    if((retval == SCM_BOOL_F) ||
+       (gh_null_p(retval))) {
+
+      gnc_resume_gui_refresh();
+      return FALSE;
+    }
+
+    /* otherwise, make up the display for the duplicates page */
+    gtk_clist_clear(GTK_CLIST(wind->new_transaction_list));
+    gtk_clist_freeze(GTK_CLIST(wind->new_transaction_list));
+
+    while(!gh_null_p(retval)) {
+      current_xtn = gh_caar(retval);
+      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
+      gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
+
+      row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
+      row_text[1] = xaccTransGetDescription(gnc_xtn);
+
+      if(xaccTransCountSplits(gnc_xtn) > 2) {
+        row_text[2] = g_strdup(_("(split)")); 
+      }
+      else {
+        row_text[2] = 
+          xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
+                          gnc_account_value_print_info
+                          (xaccSplitGetAccount(gnc_split), TRUE));
+      }
+
+      rownum = gtk_clist_append(GTK_CLIST(wind->new_transaction_list),
+                                row_text);      
+      
+      retval      = gh_cdr(retval); 
+    }
+    
+    gtk_clist_thaw(GTK_CLIST(wind->new_transaction_list));        
+    gtk_clist_select_row(GTK_CLIST(wind->new_transaction_list), 0, 0);
+  }  
+  gnc_resume_gui_refresh();
+  return TRUE;
+}
+
+
 /********************************************************************
  * gnc_ui_qif_import_categories_next_cb
  ********************************************************************/
@@ -990,30 +1312,55 @@ gnc_ui_qif_import_categories_next_cb(GnomeDruidPage * page,
 
   SCM any_new   = gh_eval_str("qif-import:any-new-accts?");
   SCM any_stock = gh_eval_str("qif-import:any-new-stock-accts?");
+  int show_matches;
 
   /* if any accounts are new, ask about the currency; else,
    * just skip that page */
   if((gh_call1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
      (gh_call1(any_new, wind->cat_map_info) == SCM_BOOL_T)) {
-    return FALSE;
+    /* go to currency page */ 
+    return gnc_ui_qif_import_generic_next_cb(page, arg1, user_data);
   }
   else {
-    /* if we need to look at stocks, do that, otherwise go 
-     * to the end page */
+    /* if we need to look at stocks, do that, otherwise import
+     * xtns and go to the duplicates page */
     if(gh_call1(any_stock, wind->acct_map_info) == SCM_BOOL_T) {
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->commodity_doc_page));
+      if(wind->show_doc_pages) {
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "commodity_doc_page"));
+      }
+      else {
+        gnc_ui_qif_import_commodity_prepare_cb(page, arg1, user_data);
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             GNOME_DRUID_PAGE(wind->commodity_pages->data));
+      }
       return TRUE;
     }
     else {
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->match_doc_page));
+      /* it's time to import the accounts. */
+      show_matches = gnc_ui_qif_import_convert(wind);
+      
+      if(show_matches) {
+        if(wind->show_doc_pages) {
+          /* check for matches .. the docpage does it automatically */ 
+          gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                               get_named_page(wind, "match_doc_page"));
+        }
+        else {
+          gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                               get_named_page(wind, "match_duplicates_page"));
+        }
+      }
+      else {
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "end_page"));
+      }
       return TRUE;
     }
   }
 }
 
-
+  
 /********************************************************************
  * gnc_ui_qif_import_currency_next_cb
  ********************************************************************/
@@ -1025,16 +1372,43 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
   SCM any_stock = gh_eval_str("qif-import:any-new-stock-accts?");
-  
+  int show_matches;
+
   if(gh_call1(any_stock, wind->acct_map_info) == SCM_BOOL_T) {
-    return FALSE;
+    if(wind->show_doc_pages) {
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "commodity_doc_page"));
+    }
+    else {
+      gnc_ui_qif_import_commodity_prepare_cb(page, arg1, user_data);
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           GNOME_DRUID_PAGE(wind->commodity_pages->data));
+    }
+    return TRUE;
   }
   else {
-    gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                         GNOME_DRUID_PAGE(wind->match_doc_page));
+    /* it's time to import the accounts. */
+    show_matches = gnc_ui_qif_import_convert(wind);
+    
+    if(show_matches) {
+      if(wind->show_doc_pages) {
+        /* check for matches .. the docpage does it automatically */ 
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "match_doc_page"));
+      }
+      else {
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "match_duplicates_page"));
+      }
+    }
+    else {
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "end_page"));
+    }
     return TRUE;
   }
 }
+
 
 static gboolean
 gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
@@ -1087,7 +1461,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   QIFDruidPage   * new_page;
   
   /* only set up once */
-  if(wind->pages) return;
+  if(wind->commodity_pages) return;
 
   /* make a list of the new stocks that we need info about */
   setup_info       = gh_call1(setup_stock_hash, wind->acct_map_info);  
@@ -1108,7 +1482,8 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
                        GTK_SIGNAL_FUNC(gnc_ui_qif_import_comm_check_cb),
                        wind->window);
     
-    wind->pages = g_list_append(wind->pages, new_page);
+    wind->commodity_pages = g_list_append(wind->commodity_pages, 
+                                          new_page->page);
 
     gnome_druid_insert_page(GNOME_DRUID(wind->druid),
                             back_page, 
@@ -1230,136 +1605,6 @@ make_qif_druid_page(gnc_commodity * comm) {
   return retval;
 }
 
-
-/****************************************************************
- * qif_import_convert_cb
- * do the work of actually translating QIF xtns to GNC xtns.
- ****************************************************************/
-
-gboolean
-gnc_ui_qif_import_convert_cb(GnomeDruidPage * gpage, 
-                             gpointer arg1, 
-                             gpointer user_data) {
-  SCM   qif_to_gnc = gh_eval_str("qif-import:qif-to-gnc");
-  SCM   find_duplicates = gh_eval_str("gnc:group-find-duplicates");
-  SCM   retval;
-  SCM   current_xtn;
-  QIFImportWindow * wind = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
-  QIFDruidPage * page;
-  GList        * pageptr;
-  Transaction  * gnc_xtn;
-  Split        * gnc_split;
-
-  char * mnemonic = NULL; 
-  char * namespace = NULL;
-  char * fullname = NULL;
-  gchar * row_text[4] = { NULL, NULL, NULL, NULL };
-  int  rownum;
-
-  /* get the default currency */
-  char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
-
-
-  /* busy cursor */
-  gnc_suspend_gui_refresh ();
-  gnc_set_busy_cursor(NULL);
-
-  /* get any changes to the imported stocks */
-  for(pageptr = wind->pages; pageptr; pageptr=pageptr->next) {
-    page      = (QIFDruidPage *)(pageptr->data); 
-
-    mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gtk_entry_get_text(GTK_ENTRY(page->new_type_entry));
-    fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
-    
-    gnc_commodity_set_namespace(page->commodity, namespace);
-    gnc_commodity_set_fullname(page->commodity, fullname);
-    gnc_commodity_set_mnemonic(page->commodity, mnemonic);
-
-    gnc_commodity_table_insert(gnc_engine_commodities(), page->commodity);
-  }
-  
-  /* call a scheme function to do the work.  The return value is an
-   * account group containing all the new accounts and transactions */
-  retval = gh_apply(qif_to_gnc, 
-                    SCM_LIST5(wind->imported_files,
-                              wind->acct_map_info, 
-                              wind->cat_map_info,
-                              wind->stock_hash,
-                              gh_str02scm(currname)));
-
-  gnc_unset_busy_cursor(NULL);
-
-  if(retval == SCM_BOOL_F) {
-    gnc_error_dialog_parented(GTK_WINDOW(wind->window),
-                              _("An error occurred while importing "
-                                "QIF transactions into Gnucash.  Your "
-                                "accounts are unchanged."));    
-    scm_unprotect_object(wind->imported_account_group);
-    wind->imported_account_group = SCM_BOOL_F;
-    scm_protect_object(wind->imported_account_group);
-  }
-  else {
-    scm_unprotect_object(wind->imported_account_group);
-    wind->imported_account_group = retval;
-    scm_protect_object(wind->imported_account_group);
-
-    /* now detect duplicate transactions */ 
-    gnc_set_busy_cursor(NULL);
-    retval = gh_call2(find_duplicates, 
-                      gh_eval_str("(gnc:get-current-group)"),
-                      wind->imported_account_group);
-    gnc_unset_busy_cursor(NULL);
-    
-    scm_unprotect_object(wind->match_transactions);
-    wind->match_transactions = retval;
-    scm_protect_object(wind->match_transactions);
-    
-    /* skip to the last page if we couldn't find duplicates 
-     * in the new group */
-    if((retval == SCM_BOOL_F) ||
-       (gh_null_p(retval))) {
-      gnome_druid_set_page(GNOME_DRUID(wind->druid),
-                           GNOME_DRUID_PAGE(wind->end_page));
-      gnc_resume_gui_refresh();
-      return TRUE;
-    }
-
-    /* otherwise, make up the display for the duplicates page */
-    gtk_clist_clear(GTK_CLIST(wind->new_transaction_list));
-    gtk_clist_freeze(GTK_CLIST(wind->new_transaction_list));
-
-    while(!gh_null_p(retval)) {
-      current_xtn = gh_caar(retval);
-      gnc_xtn     = (Transaction *)gw_wcp_get_ptr(current_xtn);
-      gnc_split   = xaccTransGetSplit(gnc_xtn, 0);  
-
-      row_text[0] = gnc_print_date(xaccTransRetDatePostedTS(gnc_xtn));
-      row_text[1] = xaccTransGetDescription(gnc_xtn);
-
-      if(xaccTransCountSplits(gnc_xtn) > 2) {
-        row_text[2] = g_strdup(_("(split)")); 
-      }
-      else {
-        row_text[2] = 
-          xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
-                          gnc_account_value_print_info
-                          (xaccSplitGetAccount(gnc_split), TRUE));
-      }
-
-      rownum = gtk_clist_append(GTK_CLIST(wind->new_transaction_list),
-                                row_text);      
-      
-      retval      = gh_cdr(retval); 
-    }
-    
-    gtk_clist_thaw(GTK_CLIST(wind->new_transaction_list));        
-    gtk_clist_select_row(GTK_CLIST(wind->new_transaction_list), 0, 0);
-  }  
-  gnc_resume_gui_refresh();
-  return FALSE;
-}
 
 static void
 refresh_old_transactions(QIFImportWindow * wind, int selection) {

@@ -212,6 +212,24 @@
 (define (gnc:find-report id) 
   (hash-ref  *gnc:_reports_* id))
 
+(define (gnc:report-tree-collapse tree)
+  (let ((retval '()))
+    (define (do-list list)
+      (for-each
+       (lambda (elt)
+         (if (string? elt)
+             (set! retval (cons elt retval))
+             (if (not (list? elt))
+                 (set! retval
+                       (cons (with-output-to-string 
+                               (lambda () (display elt)))
+                             retval))
+                 (do-list elt))))
+       list))
+    (do-list tree)
+    retval))
+
+
 (define (gnc:report-run id)
   (define (dumper key . args)
     (let ((stack (make-stack #t dumper)))
@@ -228,10 +246,10 @@
    (lambda (key . args)
      #f)))
 
+
 (define (gnc:report-run-unsafe id)
   (let ((report (gnc:find-report id))
-        (start-time #f)
-        (end-time #f))
+        (start-time (gettimeofday)))
     (if report
         (if (and (not (gnc:report-dirty? report))
                  (gnc:report-ctext report))
@@ -252,34 +270,24 @@
                                             (_ "General") (_ "Stylesheet")))))
                          (stylesheet 
                           (gnc:html-style-sheet-find stylesheet-name))
-                         (doc #f)
-                         (html #f))
-                    (display "rerunning report.\n")
-
-                    (if (gnc:debugging?)
-                        (set! start-time (gettimeofday)))
-                    (set! doc (renderer report))
-                    (if (gnc:debugging?)
-                        (begin 
-                          (set! end-time (gettimeofday))
-                          (display "time to generate report: ")
-                          (display (gnc:time-elapsed start-time end-time))
-                          (newline)
-                          (set! start-time (gettimeofday))))
+                         (doc (renderer report))
+                         (html #f)
+                         (formlist #f)
+                         (collapsed-list #f))
                     
                     (gnc:html-document-set-style-sheet! doc stylesheet)
-                    (set! html (gnc:html-document-render doc))
-                    (if (gnc:debugging?)
-                        (begin 
-                          (set! end-time (gettimeofday))
-                          (display "time to render report to HTML: ")
-                          (display (gnc:time-elapsed start-time end-time))
-                          (newline)))
-
+                    (set! formlist (gnc:html-document-render doc))
+                    (set! collapsed-list (gnc:report-tree-collapse formlist))
+                    (set! html (apply string-append collapsed-list))
                     (gnc:report-set-ctext! report html)
                     (gnc:report-set-dirty?! report #f)
+                    
+                    (display "total time to run report: ")
+                    (display (gnc:time-elapsed start-time (gettimeofday)))
+                    (newline)
+
                     html)
                   #f)))
         #f)))
-  
+
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)

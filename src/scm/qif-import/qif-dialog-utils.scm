@@ -432,6 +432,79 @@
                                    (qif-map-entry:qif-name b)))))
     retval))
 
+;; UNFINISHED (and currently not connected to anything)
+;; this one's like the other display builders, it just looks at the
+;; payee and memo too.  
+
+(define (qif-dialog:make-memo-display qif-files memo-hash gnc-acct-info)
+  (let ((retval '()))
+
+    ;; clear the display flags for existing items 
+    (for-each 
+     (lambda (bin)
+       (for-each 
+        (lambda (elt)
+          (qif-map-entry:set-display?! (cdr elt) #f))
+        bin))
+     (vector->list memo-hash))
+
+    ;; iterate over every imported transaction.  If there's no
+    ;; category in the transaction, look at the payee to get a clue.
+    ;; of there's no payee, look at the split memo.
+    (for-each 
+     (lambda (file) 
+       (for-each 
+        (lambda (xtn)
+          (let ((payee (qif-xtn:payee xtn))
+                (splits (qif-xtn:splits xtn)))
+            (for-each 
+             (lambda (split)
+               (let ((cat (qif-split:category split))
+                     (memo (qif-split:memo split)))
+                 ;; for each split: if there's a category, do nothing.
+                 ;; if there's a payee, use that as the
+                 ;; key. otherwise, use the split memo.
+                 (cond ((and cat 
+                             (or (not (string? cat))
+                                 (string=? cat "")))
+                        (set! key-string #f))
+                       (payee 
+                        (set! key-string payee))
+                       (memo
+                        (set! ley-string memo)))
+                 
+                 (if key-string 
+                     (let ((entry (hash-ref memo-hash key-string)))
+                       (if (not entry)
+                           (set! entry
+                                 (qif-import:guess-acct 
+                                  payee 
+                                  (if (> (qif-split:amount split) 0)
+                                      (list GNC-INCOME-TYPE)
+                                      (list GNC-EXPENSE-TYPE)))))
+                       (qif-map-entry:set-display?! entry #t)
+                       (hash-set! memo-hash key-string entry)))))
+             splits)))
+        (qif-file:xtns file)))
+     qif-files)
+
+    ;; build display list 
+    (for-each 
+     (lambda (bin)
+       (for-each 
+        (lambda (elt)
+          (if (qif-map-entry:display? (cdr elt))
+              (set! retval (cons (cdr elt) retval))))
+        bin))
+     (vector->list memo-hash))
+    
+    ;; sort by qif memo/payee name 
+    (set! retval (sort retval 
+                       (lambda (a b)
+                         (string<? (qif-map-entry:qif-name a)
+                                   (qif-map-entry:qif-name b)))))
+    retval))
+
 
 (define (qif-dialog:qif-file-loaded? filename list-of-files) 
   (let ((status (map 

@@ -128,7 +128,8 @@
               (apply gnc:make-html-data-style-info rest))
         (set! newstyle 
               (apply gnc:make-html-markup-style-info rest)))
-    (hash-set! (gnc:html-style-sheet-style sheet) tag newstyle)))
+    (gnc:html-style-table-set! 
+     (gnc:html-style-sheet-style sheet) tag newstyle)))
 
 (define (gnc:make-html-style-sheet template-name style-sheet-name)
   (let* ((template (gnc:html-style-sheet-template-find template-name)))
@@ -137,7 +138,7 @@
                    style-sheet-name
                    ((gnc:html-style-sheet-template-options-generator template))
                    (gnc:html-style-sheet-template-renderer template)
-                   (make-hash-table 7))))
+                   (gnc:make-html-style-table))))
           ;; set up the fallback data styles for every rendered document 
           (gnc:html-style-sheet-set-style! 
            rv "<string>" 
@@ -177,7 +178,9 @@
     ;; swap the original document's default styles with the style 
     ;; sheet document styles 
     ;; ... first push the style sheet template document's style on the 
-    ;; stack
+    ;; stack (compiling before pushing)
+    (gnc:html-style-table-compile (gnc:html-document-style newdoc)
+                                  (gnc:html-document-style-stack newdoc))
     (gnc:html-document-push-style newdoc (gnc:html-document-style newdoc))
     
     ;; ... then set the rendered document's style to be the user

@@ -1,3 +1,27 @@
+2001-02-08  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/druid-qif-import.c: restructure druid a bit to 
+	allow more flexible navigation (in particular, so we can have 
+	a global pref to skip documentation pages)
+
+	* src/scm/html-*.scm: change rendering model to speed up reports.
+	use a "string tree" instead of the old with-output-to-string and
+	compile style tables where possible.  Strangely enough, alists
+	are faster than hash tables.
+
+	* src/scm/html-table.scm: clean up row/col style stuff a little.
+	semantics changed a wee bit: now row style takes precedence over
+	column style.  this was necessary for performance.
+
+	* src/scm/prefs.scm: add a global pref to skip doc pages in the 
+	QIF importer. 
+
+	* src/scm/report.scm: shuffle around a bit for the new rendering
+	model.
+
+	* src/gnome/window-report.c: back out some overly-aggressive
+	memory reclamation.  I need to figure out how to do this right.
+
 2001-02-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/date-utilities.scm Added (gnc:timepair-previous-day).

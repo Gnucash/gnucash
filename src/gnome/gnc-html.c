@@ -864,6 +864,7 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
     printf("POST submit: m='%s', a='%s', e='%s'\n",
            method, action, encoding);
   }
+  return TRUE;
 }
 
 
@@ -911,6 +912,7 @@ gnc_html_open_report(gnc_html * html, const gchar * location,
   gnc_html_history_append(html->history,
                           gnc_html_history_node_new(URL_TYPE_REPORT, 
                                                     location, label));
+  
   g_free(html->base_location);
   html->base_type     = URL_TYPE_FILE;
   html->base_location = NULL;

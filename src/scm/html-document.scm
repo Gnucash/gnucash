@@ -44,7 +44,7 @@
   (gnc:make-html-document-internal 
    #f                    ;; the stylesheet 
    '()                   ;; style stack
-   (make-hash-table 7)   ;; document style info
+   (gnc:make-html-style-table) ;; document style info
    ""                    ;; document title
    '()                   ;; subobjects 
    ))
@@ -90,7 +90,7 @@
               (apply gnc:make-html-data-style-info rest))
         (set! newstyle 
               (apply gnc:make-html-markup-style-info rest)))
-    (hash-set! (gnc:html-document-style doc) tag newstyle)))
+    (gnc:html-style-table-set! (gnc:html-document-style doc) tag newstyle)))
 
 
 (define (gnc:html-document-render doc) 
@@ -100,29 +100,36 @@
         (gnc:html-style-sheet-render stylesheet doc)
      
         ;; otherwise, do the trivial render. 
-        (with-output-to-string 
-          (lambda ()
-            (gnc:html-document-push-style doc (gnc:html-document-style doc))
-            (display "<html>\n")
-            (display "<head>\n")
-            (let ((title (gnc:html-document-title doc)))
-              (if title 
-                  (display (string-append "<title>" title "</title>\n"))))
-            (display "</head>\n")
+        (let* ((retval '())
+               (push (lambda (l) (set! retval (cons l retval)))))
+          ;; compile the doc style 
+          (gnc:html-style-table-compile (gnc:html-document-style doc)
+                                        (gnc:html-document-style-stack doc))
+          ;; push it 
+          (gnc:html-document-push-style doc (gnc:html-document-style doc))
 
-            ;; this lovely little number just makes sure that <body>
-            ;; attributes like bgcolor get included 
-            (display ((gnc:html-markup/no-end "body") doc))
-            
-            ;; now render the children
-            (for-each-in-order 
-             (lambda (child) 
-               (display (gnc:html-object-render child doc)))
-             (gnc:html-document-objects doc))
-            (display "</body>\n")
-            (display "</html>\n")
-            (gnc:html-document-pop-style doc))))))
-    
+          (push "<html>\n")
+          (push "<head>\n")
+          (let ((title (gnc:html-document-title doc)))
+            (if title 
+                (push (list "</title>" title "<title>\n"))))
+          (push "</head>\n")
+          
+          ;; this lovely little number just makes sure that <body>
+          ;; attributes like bgcolor get included 
+          (push ((gnc:html-markup/no-end "body") doc))
+          
+          ;; now render the children
+          (for-each-in-order 
+           (lambda (child) 
+             (push (gnc:html-object-render child doc)))
+           (gnc:html-document-objects doc))
+          (push "</body>\n")
+          (push "</html>\n")
+          (gnc:html-document-pop-style doc)
+          (gnc:html-style-table-uncompile (gnc:html-document-style doc))
+          retval))))
+
 (define (gnc:html-document-push-style doc style)
   (gnc:html-document-set-style-stack! 
    doc (cons style (gnc:html-document-style-stack doc))))
@@ -131,9 +138,6 @@
   (if (not (null? (gnc:html-document-style-stack doc)))
       (gnc:html-document-set-style-stack! 
        doc (cdr (gnc:html-document-style-stack doc)))))
-
-(define (gnc:html-document-set-markup-style! doc tag style-info)
-  (hash-set! (gnc:html-document-style doc) tag style-info)) 
 
 (define (gnc:html-document-add-object! doc obj)
   (gnc:html-document-set-objects! 
@@ -145,7 +149,33 @@
   (gnc:html-document-set-objects!
    doc
    (append (gnc:html-document-objects doc) objects)))
-           
+
+(define (gnc:html-document-fetch-markup-style doc markup)
+  (let ((style-info #f))
+    (if (not (null? (gnc:html-document-style-stack doc)))
+        (set! style-info 
+              (gnc:html-style-table-fetch 
+               (car (gnc:html-document-style-stack doc))
+               (cdr (gnc:html-document-style-stack doc))
+               markup)))
+    (if (not style-info)
+        (gnc:make-html-markup-style-info)
+        style-info)))
+
+(define (gnc:html-document-fetch-data-style doc markup)
+  (let ((style-info #f))
+    (if (not (null? (gnc:html-document-style-stack doc)))
+        (set! style-info 
+              (gnc:html-style-table-fetch 
+               (car (gnc:html-document-style-stack doc))
+               (cdr (gnc:html-document-style-stack doc))
+               markup)))
+    (if (not style-info)
+        (gnc:make-html-data-style-info
+         (lambda (datum parms)
+           (sprintf #f "%a %a" markup datum))
+         #f)
+        style-info)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  markup-rendering functions : markup-start and markup-end return
@@ -156,32 +186,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:html-document-markup-start doc markup . rest)
-  (let ((childinfo #f)
+  (let ((childinfo (gnc:html-document-fetch-markup-style doc markup))
         (extra-attrib 
          (if (not (null? rest))
              rest #f))
         (show-result #f))
-    
-    ;; merge the style stack to get a complete markup-style-info 
-    ;; record ... should we cache these? 
-    (for-each-in-order 
-     (lambda (newstyle)
-       (if newstyle 
-           (let ((parentinfo 
-                  (hash-ref newstyle markup)))
-             (if (and (gnc:html-markup-style-info? parentinfo)
-                      (or 
-                       (gnc:html-markup-style-info-inheritable? parentinfo)
-                       (eq? newstyle 
-                            (car (gnc:html-document-style-stack doc)))))
-                 (set! childinfo 
-                       (gnc:html-markup-style-info-merge 
-                        childinfo parentinfo))))))
-     (gnc:html-document-style-stack doc))
-    
-    (if (not childinfo) 
-        (set! childinfo 
-              (gnc:make-html-markup-style-info)))
     
     ;; now generate the start tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
@@ -189,71 +198,52 @@
           (face  (gnc:html-markup-style-info-font-face childinfo))
           (size  (gnc:html-markup-style-info-font-size childinfo))
           (color (gnc:html-markup-style-info-font-color childinfo)))
-
+      
       ;; "" tags mean "show no tag"; #f tags means use default.
       (cond ((not tag)
              (set! tag markup))
             ((string=? tag "")
              (set! tag #f)))
       
-      (with-output-to-string
-        (lambda ()
-          (if tag 
-              (begin 
-                (display "\n<")
-                (display tag)
-                (if attr
-                    (hash-fold 
-                     (lambda (key value prior)
-                       (display (sprintf #f " %a=%a" key value))
-                       #t)
-                     #f
-                     attr))
-                (if extra-attrib
-                    (for-each
-                     (lambda (attr)
-                       (if (string? attr)
-                           (begin
-                             (display " ") (display attr))))
-                     extra-attrib))
-                (display ">")))
-          (if (or face size color)
-              (begin 
-                (display "<font ")
-                (if face
-                    (begin 
-                      (display "face=\"") (display face) (display "\" ")))
-                (if size
-                    (begin 
-                      (display "size=\"") (display size) (display "\" ")))
-                (if color
-                    (begin 
-                      (display "color=\"") (display color) (display "\" ")))
-                (display ">"))))))))
+      (let* ((retval '())
+             (push (lambda (l) (set! retval (cons l retval)))))
+        (if tag 
+            (begin 
+              (push "\n<")
+              (push tag)
+              (if attr
+                  (hash-fold 
+                   (lambda (key value prior)
+                     (push " ") (push key) (push "=")
+                     (push value)
+                     #t)
+                   #f
+                   attr))
+              (if extra-attrib
+                  (for-each
+                   (lambda (attr)
+                     (if (string? attr)
+                         (begin
+                           (push " ") (push attr))))
+                   extra-attrib))
+              (push ">")))
+        (if (or face size color)
+            (begin 
+              (push "<font ")
+              (if face
+                  (begin 
+                    (push "face=\"") (push face) (push "\" ")))
+              (if size
+                  (begin 
+                    (push "size=\"") (push size) (push "\" ")))
+              (if color
+                  (begin 
+                    (push "color=\"") (push color) (push "\" ")))
+              (push ">")))
+        retval))))
 
 (define (gnc:html-document-markup-end doc markup)
-  (let ((childinfo #f))
-    ;; merge the style stack to get a complete markup-style-info 
-    ;; record ... should we cache these? 
-    (for-each-in-order 
-     (lambda (newstyle)
-       (if newstyle 
-           (let ((parentinfo 
-                  (hash-ref newstyle markup)))
-             (if (and (gnc:html-markup-style-info? parentinfo)
-                      (or
-                       (gnc:html-markup-style-info-inheritable? parentinfo)
-                       (eq? newstyle
-                            (car (gnc:html-document-style-stack doc)))))
-                 (set! childinfo 
-                       (gnc:html-markup-style-info-merge 
-                        childinfo parentinfo))))))
-     (gnc:html-document-style-stack doc))
-    
-    (if (not childinfo) 
-        (set! childinfo 
-              (gnc:make-html-markup-style-info)))
-    
+  (let ((childinfo  (gnc:html-document-fetch-markup-style doc markup)))
     ;; now generate the end tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
           (face  (gnc:html-markup-style-info-font-face childinfo))
@@ -264,16 +254,17 @@
              (set! tag markup))
             ((string=? tag "")
              (set! tag #f)))
-      (with-output-to-string
-        (lambda ()
-          (if (or face size color)
-              (display "</font>\n"))
-          (if tag 
-              (begin 
-                (display "</")
-                (display tag)
-                ;; newline after every close tag... just temporary
-                (display ">\n"))))))))
+      (let* ((retval '())
+             (push (lambda (l) (set! retval (cons l retval)))))
+        (if (or face size color)
+            (push "</font>\n"))
+        (if tag 
+            (begin 
+              (push "</")
+              (push tag)
+              ;; newline after every close tag... just temporary
+              (push ">\n")))
+        retval))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  html-document-render-data 
@@ -291,27 +282,11 @@
      ((boolean? data)
       (set! data-type "<boolean>"))
      ((record? data)
-      (set! data-type (record-type-name (record-type-descriptor data)))))
+      (set! data-type (record-type-name (record-type-descriptor data))))
+     (#t 
+      (set! data-type "<generic>")))
     
-    ;; for data, we just want to find the first style stack
-    ;; frame that has a renderer 
-    (let loop ((stack (gnc:html-document-style-stack doc)))
-      (let* ((style (car stack))
-             (info #f))
-        (if style 
-            (set! info (hash-ref style data-type)))
-        (if (and info 
-                 (gnc:html-data-style-info? info))
-            (set! style-info info)
-            (if (not (null? (cdr stack)))
-                (loop (cdr stack))))))
-    
-    (if (not style-info)
-        (set! style-info
-              (gnc:make-html-data-style-info
-               (lambda (datum parms)
-                 (sprintf #f "%a %a" data-type datum))
-               #f)))
+    (set! style-info (gnc:html-document-fetch-data-style doc data-type))
     
     ((gnc:html-data-style-info-renderer style-info)
      data (gnc:html-data-style-info-data style-info))))
@@ -388,4 +363,9 @@
       ((gnc:html-object-renderer obj) (gnc:html-object-data obj) doc)
       (let ((htmlo (gnc:make-html-object obj)))
         (gnc:html-object-render htmlo doc))))
+
+
+
+
+
 

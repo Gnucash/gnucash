@@ -225,86 +225,89 @@
                  (display " ")))
              nlist)))))
   
-  (with-output-to-string
-    (lambda ()
-      (let ((title (gnc:html-barchart-title barchart))
-            (subtitle (gnc:html-barchart-subtitle barchart))
-            (x-label (gnc:html-barchart-x-axis-label barchart))
-            (y-label (gnc:html-barchart-y-axis-label barchart))
-            (data (gnc:html-barchart-data barchart))
-            (row-labels (catenate-escaped-strings 
-                         (gnc:html-barchart-row-labels barchart)))
-            (col-labels (catenate-escaped-strings 
-                         (gnc:html-barchart-col-labels barchart)))
-            (col-colors (catenate-escaped-strings 
-                         (gnc:html-barchart-col-colors barchart))))
-        (if (and (list? data)
-                 (not (null? data)))
-            (begin 
-              (display "<object classid=\"gnc-guppi-bar\" width=")
-              (display (gnc:html-barchart-width barchart))
-              (display " height=") 
-              (display (gnc:html-barchart-height barchart))
-              (display ">\n")
-              (if title
-                  (begin 
-                    (display "  <param name=\"title\" value=\"")
-                    (display title) (display "\">\n")))
-              (if subtitle
-                  (begin 
-                    (display "  <param name=\"subtitle\" value=\"")
-                    (display subtitle) (display "\">\n")))
-              (if (and data (list? data))
-                  (let ((rows (length data))
-                        (cols 0))
-                    (display "  <param name=\"data_rows\" value=\"")
-                    (display rows) (display "\">\n")
-                    (if (list? (car data))
-                        (begin 
-                          (set! cols (length (car data)))
-                          (display "  <param name=\"data_cols\" value=\"")
-                          (display cols)
-                          (display "\">\n")))           
-                    (display "  <param name=\"data\" value=\"")
-                    (let loop ((col 0))
-                      (for-each-in-order 
-                       (lambda (row)
-                         (display (ensure-numeric (list-ref-safe row col)))
-                         (display " "))
-                       data)
-                      (if (< col (- cols 1))
-                          (loop (+ 1 col))))
-                    (display "\">\n")))
-              (if (and (string? x-label) (> (string-length x-label) 0))
-                  (begin 
-                    (display "  <param name=\"x_axis_label\" value=\"")
-                    (display x-label)
-                    (display "\">\n")))
-              (if (and (string? y-label) (> (string-length y-label) 0))
-                  (begin 
-                    (display "  <param name=\"y_axis_label\" value=\"")
-                    (display y-label)
-                    (display "\">\n")))
-              (if (and (string? col-colors) (> (string-length col-colors) 0))
-                  (begin 
-                    (display "  <param name=\"col_colors\" value=\"")
-                    (display col-colors)
-                    (display "\">\n")))
-              (if (and (string? row-labels) (> (string-length row-labels) 0))
-                  (begin 
-                    (display "  <param name=\"row_labels\" value=\"")
-                    (display row-labels)
-                    (display "\">\n")))
-              (if (and (string? col-labels) (> (string-length col-labels) 0))
-                  (begin 
-                    (display "  <param name=\"col_labels\" value=\"")
-                    (display col-labels)
-                    (display "\">\n")))
-              (let ((rot? (gnc:html-barchart-row-labels-rotated? barchart)))
-                (display "  <param name=\"rotate_row_labels\" value=\"")
-                (if rot? 
-                    (display "1\">\n")
-                    (display "0\">\n")))
-              (display "Unable to display bar chart\n")
-              (display "</object>"))
-            " ")))))
+  
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval))))
+         (title (gnc:html-barchart-title barchart))
+         (subtitle (gnc:html-barchart-subtitle barchart))
+         (x-label (gnc:html-barchart-x-axis-label barchart))
+         (y-label (gnc:html-barchart-y-axis-label barchart))
+         (data (gnc:html-barchart-data barchart))
+         (row-labels (catenate-escaped-strings 
+                      (gnc:html-barchart-row-labels barchart)))
+         (col-labels (catenate-escaped-strings 
+                      (gnc:html-barchart-col-labels barchart)))
+         (col-colors (catenate-escaped-strings 
+                      (gnc:html-barchart-col-colors barchart))))
+    (if (and (list? data)
+             (not (null? data)))
+        (begin 
+          (push "<object classid=\"gnc-guppi-bar\" width=")
+          (push (gnc:html-barchart-width barchart))
+          (push " height=") 
+          (push (gnc:html-barchart-height barchart))
+          (push ">\n")
+          (if title
+              (begin 
+                (push "  <param name=\"title\" value=\"")
+                (push title) (push "\">\n")))
+          (if subtitle
+              (begin 
+                (push "  <param name=\"subtitle\" value=\"")
+                (push subtitle) (push "\">\n")))
+          (if (and data (list? data))
+              (let ((rows (length data))
+                    (cols 0))
+                (push "  <param name=\"data_rows\" value=\"")
+                (push rows) (push "\">\n")
+                (if (list? (car data))
+                    (begin 
+                      (set! cols (length (car data)))
+                      (push "  <param name=\"data_cols\" value=\"")
+                      (push cols)
+                      (push "\">\n")))           
+                (push "  <param name=\"data\" value=\"")
+                (let loop ((col 0))
+                  (for-each-in-order 
+                   (lambda (row)
+                     (push (ensure-numeric (list-ref-safe row col)))
+                     (push " "))
+                   data)
+                  (if (< col (- cols 1))
+                      (loop (+ 1 col))))
+                (push "\">\n")))
+          (if (and (string? x-label) (> (string-length x-label) 0))
+              (begin 
+                (push "  <param name=\"x_axis_label\" value=\"")
+                (push x-label)
+                (push "\">\n")))
+          (if (and (string? y-label) (> (string-length y-label) 0))
+              (begin 
+                (push "  <param name=\"y_axis_label\" value=\"")
+                (push y-label)
+                (push "\">\n")))
+          (if (and (string? col-colors) (> (string-length col-colors) 0))
+              (begin 
+                (push "  <param name=\"col_colors\" value=\"")
+                (push col-colors)
+                (push "\">\n")))
+          (if (and (string? row-labels) (> (string-length row-labels) 0))
+              (begin 
+                (push "  <param name=\"row_labels\" value=\"")
+                (push row-labels)
+                (push "\">\n")))
+          (if (and (string? col-labels) (> (string-length col-labels) 0))
+              (begin 
+                (push "  <param name=\"col_labels\" value=\"")
+                (push col-labels)
+                (push "\">\n")))
+          (let ((rot? (gnc:html-barchart-row-labels-rotated? barchart)))
+            (push "  <param name=\"rotate_row_labels\" value=\"")
+            (if rot? 
+                (push "1\">\n")
+                (push "0\">\n")))
+          (push "Unable to push bar chart\n")
+          (push "</object>"))
+        " ")
+    retval))
+
