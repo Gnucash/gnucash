@@ -27,10 +27,10 @@
   (let ((user-paths (list
                      (list (getenv "HOME") ".gnucash" "html")))
         (locale-paths (map (lambda (prefix)
-                             (list gnc:_help-dir-default_ prefix))
+                             (list gnc:_install-help-dir_ prefix))
                            (gnc:locale-prefixes)))
         (base-paths (list
-                     (list gnc:_help-dir-default_))))
+                     (list gnc:_install-help-dir_))))
     (map (lambda (paths) (apply build-path paths))
          (append user-paths locale-paths base-paths))))
 
