@@ -100,8 +100,6 @@ struct _GNCOptionInfo
 /**** PROTOTYPES *************************************************/
 char * gnc_ui_get_account_field_name(int field);
 
-char * gnc_ui_get_account_full_name(Account *account, const char *separator);
-
 char * gnc_ui_get_account_field_value_string(Account *account, int field);
 
 double gnc_ui_get_account_full_balance(Account *account);
@@ -142,5 +140,13 @@ GtkWidget * gnc_build_option_menu(GNCOptionInfo *option_info,
 				  gint num_options);
 
 GtkToolbarStyle gnc_get_toolbar_style();
+
+void gnc_get_deficit_color(GdkColor *color);
+void gnc_set_label_color(GtkWidget *label, double value);
+
+char gnc_get_account_separator();
+
+void gnc_get_window_size(const char *prefix, int *width, int *height);
+void gnc_save_window_size(const char *prefix, int width, int height);
 
 #endif

@@ -1,6 +1,6 @@
-/*******************************************************************\
- * window-main.h -- public GNOME main window functions              *
- * Copyright (C) 1998,1999 Linas Vepstas                            *
+/********************************************************************\
+ * extensions.h -- functions to build the dynamic extensions        *
+ * Copyright (C) 1999 Rob Browning         	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -17,21 +17,12 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __WINDOW_MAIN_H__
-#define __WINDOW_MAIN_H__
+#ifndef __EXTENSIONS_H__
+#define __EXTENSIONS_H__
 
-#include "account-tree.h"
+#include <guile/gh.h>
 
-
-/** PROTOTYPES ******************************************************/
-
-void mainWindow(void);
-
-GNCAccountTree * gnc_get_current_account_tree();
-
-Account * gnc_get_current_account();
-GList *   gnc_get_current_accounts();
-
-void gnc_ui_mainWindow_save_size();
+void gnc_add_extension(SCM extension);
+void gnc_extensions_shutdown();
 
 #endif

@@ -93,6 +93,8 @@ void gnc_reconcile_list_commit(GNCReconcileList *list);
 
 void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 
+gboolean gnc_reconcile_list_changed(GNCReconcileList *list);
+
 
 #ifdef __cplusplus
 }

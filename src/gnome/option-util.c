@@ -739,6 +739,284 @@ gnc_option_multiple_selection(GNCOption *option)
 }
 
 
+/********************************************************************\
+ * gnc_option_get_range_info                                        *
+ *   returns the range info for a number range option in the pointer*
+ *   arguments. NULL arguments are ignored. Use only for number     *
+ *   range options.                                                 *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: true if everything went ok :)                           *
+\********************************************************************/
+gboolean gnc_option_get_range_info(GNCOption *option,
+                                   double *lower_bound,
+                                   double *upper_bound,
+                                   int    *num_decimals,
+                                   double *step_size)
+{
+  SCM list;
+  SCM value;
+
+  initialize_getters();
+
+  list = gh_call1(getters.option_data, option->guile_option);
+
+  if (!gh_list_p(list) || gh_null_p(list))
+    return FALSE;
+
+  /* lower bound */
+  value = gh_car(list);
+  list = gh_cdr(list);
+
+  if (!gh_number_p(value))
+    return FALSE;
+
+  if (lower_bound != NULL)
+    *lower_bound = gh_scm2double(value);
+
+  if (!gh_list_p(list) || gh_null_p(list))
+    return FALSE;
+
+  /* upper bound */
+  value = gh_car(list);
+  list = gh_cdr(list);
+
+  if (!gh_number_p(value))
+    return FALSE;
+
+  if (upper_bound != NULL)
+    *upper_bound = gh_scm2double(value);
+
+  if (!gh_list_p(list) || gh_null_p(list))
+    return FALSE;
+
+  /* number of decimals */
+  value = gh_car(list);
+  list = gh_cdr(list);
+
+  if (!gh_number_p(value))
+    return FALSE;
+
+  if (num_decimals != NULL)
+    *num_decimals = gh_scm2int(value);
+
+  if (!gh_list_p(list) || gh_null_p(list))
+    return FALSE;
+
+  /* step size */
+  value = gh_car(list);
+  list = gh_cdr(list);
+
+  if (!gh_number_p(value))
+    return FALSE;
+
+  if (step_size != NULL)
+    *step_size = gh_scm2double(value);
+
+  return TRUE;
+}
+
+
+/********************************************************************\
+ * gnc_option_color_range                                           *
+ *   returns the color range for rgba values.                       *
+ *   Only use this for color options.                               *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: color range for the option                              *
+\********************************************************************/
+gdouble
+gnc_option_color_range(GNCOption *option)
+{
+  SCM list;
+  SCM value;
+
+  initialize_getters();
+
+  list = gh_call1(getters.option_data, option->guile_option);
+  if (!gh_list_p(list) || gh_null_p(list))
+    return 0.0;
+
+  value = gh_car(list);
+  if (!gh_number_p(value))
+    return 0.0;
+
+  return gh_scm2double(value);
+}
+
+
+/********************************************************************\
+ * gnc_option_use_alpha                                             *
+ *   returns true if the color option should use alpha transparency *
+ *   Only use this for color options.                               *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: true if alpha transparency should be used               *
+\********************************************************************/
+gdouble
+gnc_option_use_alpha(GNCOption *option)
+{
+  SCM list;
+  SCM value;
+
+  initialize_getters();
+
+  list = gh_call1(getters.option_data, option->guile_option);
+  if (!gh_list_p(list) || gh_null_p(list))
+    return FALSE;
+
+  list = gh_cdr(list);
+  if (!gh_list_p(list) || gh_null_p(list))
+    return FALSE;
+
+  value = gh_car(list);
+  if (!gh_boolean_p(value))
+    return FALSE;
+
+  return gh_scm2bool(value);
+}
+
+
+/********************************************************************\
+ * gnc_option_get_color_argb                                        *
+ *   returns the argb value of a color option                       *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: argb value of option                                    *
+\********************************************************************/
+uint32
+gnc_option_get_color_argb(GNCOption *option)
+{
+  gdouble red, green, blue, alpha;
+  uint32 color = 0;
+
+  if (!gnc_option_get_color_info(option, FALSE, &red, &green, &blue, &alpha))
+    return 0;
+
+  color |= (uint32) (alpha * 255.0);
+  color <<= 8;
+
+  color |= (int) (red * 255.0);
+  color <<= 8;
+
+  color |= (int) (green * 255.0);
+  color <<= 8;
+
+  color |= (int) (blue * 255.0);
+
+  return color;
+}
+
+
+/********************************************************************\
+ * gnc_option_get_color_info                                        *
+ *   gets the color information from a color option. rgba values    *
+ *   returned are between 0.0 and 1.0.                              *
+ *                                                                  *
+ * Args: option      - option to get info from                      *
+ *       use_default - use the default or current value             *
+ *       red         - where to store the red value                 *
+ *       blue        - where to store the blue value                *
+ *       green       - where to store the green value               *
+ *       alpha       - where to store the alpha value               *
+ * Return: true if everything went ok                               *
+\********************************************************************/
+gboolean
+gnc_option_get_color_info(GNCOption *option,
+                          gboolean use_default,
+                          gdouble *red,
+                          gdouble *green,
+                          gdouble *blue,
+                          gdouble *alpha)
+{
+  gdouble scale;
+  gdouble rgba;
+  SCM getter;
+  SCM value;
+
+  if (option == NULL)
+    return FALSE;
+
+  if (use_default)
+    getter = gnc_option_default_getter(option);
+  else
+    getter = gnc_option_getter(option);
+  if (getter == SCM_UNDEFINED)
+    return FALSE;
+
+  value = gh_call0(getter);
+  if (!gh_list_p(value) || gh_null_p(value) || !gh_number_p(gh_car(value)))
+    return FALSE;
+
+  scale = gnc_option_color_range(option);
+  if (scale <= 0.0)
+    return FALSE;
+
+  scale = 1.0 / scale;
+
+  rgba = gh_scm2double(gh_car(value));
+  if (red != NULL)
+    *red = MIN(1.0, rgba * scale);
+
+  value = gh_cdr(value);
+  if (!gh_list_p(value) || gh_null_p(value) || !gh_number_p(gh_car(value)))
+    return FALSE;
+
+  rgba = gh_scm2double(gh_car(value));
+  if (green != NULL)
+    *green = MIN(1.0, rgba * scale);
+
+  value = gh_cdr(value);
+  if (!gh_list_p(value) || gh_null_p(value) || !gh_number_p(gh_car(value)))
+    return FALSE;
+
+  rgba = gh_scm2double(gh_car(value));
+  if (blue != NULL)
+    *blue = MIN(1.0, rgba * scale);
+
+  value = gh_cdr(value);
+  if (!gh_list_p(value) || gh_null_p(value) || !gh_number_p(gh_car(value)))
+    return FALSE;
+
+  rgba = gh_scm2double(gh_car(value));
+  if (alpha != NULL)
+    *alpha = MIN(1.0, rgba * scale);
+
+  return TRUE;
+}
+
+
+/********************************************************************\
+ * gnc_option_set_default                                           *
+ *   set the option to its default value                            *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_option_set_default(GNCOption *option)
+{
+  SCM default_getter;
+  SCM setter;
+  SCM value;
+
+  if (option == NULL)
+    return;
+
+  default_getter = gnc_option_default_getter(option);
+  if (default_getter == SCM_UNDEFINED)
+    return;
+
+  value = gh_call0(default_getter);
+
+  setter = gnc_option_setter(option);
+  if (setter == SCM_UNDEFINED)
+    return;
+
+  gh_call1(setter, value);
+}
+
+
 static gint
 compare_sections(gconstpointer a, gconstpointer b)
 {
@@ -970,8 +1248,8 @@ gnc_get_option_section_option(GNCOptionSection *section, int i)
  * Returns: given option, or NULL if none                           *
 \********************************************************************/
 GNCOption *
-gnc_option_db_get_option_by_name(GNCOptionDB *odb, char *section_name,
-                                 char *name)
+gnc_option_db_get_option_by_name(GNCOptionDB *odb, const char *section_name,
+                                 const char *name)
 {
   GSList *section_node;
   GSList *option_node;
@@ -981,7 +1259,10 @@ gnc_option_db_get_option_by_name(GNCOptionDB *odb, char *section_name,
   gint result;
   char *node_name;
 
-  section_key.section_name = section_name;
+  if (odb == NULL)
+    return NULL;
+
+  section_key.section_name = (char *) section_name;
 
   section_node = g_slist_find_custom(odb->option_sections, &section_key,
 				     compare_sections);
@@ -1043,6 +1324,33 @@ gnc_option_db_get_option_by_SCM(GNCOptionDB *odb, SCM guile_option)
 }
 
 
+static SCM
+gnc_option_valid_value(GNCOption *option, SCM value)
+{
+  SCM validator;
+  SCM result, ok;
+
+  validator = gnc_option_value_validator(option);
+
+  result = gh_call1(validator, value);
+  if (!gh_list_p(result) || gh_null_p(result))
+    return SCM_UNDEFINED;
+
+  ok = gh_car(result);
+  if (!gh_boolean_p(ok))
+    return SCM_UNDEFINED;
+
+  if (!gh_scm2bool(ok))
+    return SCM_UNDEFINED;
+
+  result = gh_cdr(result);
+  if (!gh_list_p(result) || gh_null_p(result))
+    return SCM_UNDEFINED;
+
+  return gh_car(result);
+}
+
+
 static void
 gnc_commit_option(GNCOption *option)
 {
@@ -1057,7 +1365,7 @@ gnc_commit_option(GNCOption *option)
   validator = gnc_option_value_validator(option);
 
   result = gh_call1(validator, value);
-  if (!gh_list_p(result))
+  if (!gh_list_p(result) || gh_null_p(result))
   {
     PERR("gnc_commit_option: bad validation result\n");
     return;
@@ -1172,8 +1480,10 @@ gnc_option_db_commit(GNCOptionDB *odb)
  * Return: gboolean option value                                    *
 \********************************************************************/
 gboolean
-gnc_option_db_lookup_boolean_option(GNCOptionDB *odb, char *section,
-                                    char *name, gboolean default_value)
+gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
+                                    const char *section,
+                                    const char *name,
+                                    gboolean default_value)
 {
   GNCOption *option;
   SCM getter;
@@ -1210,8 +1520,10 @@ gnc_option_db_lookup_boolean_option(GNCOptionDB *odb, char *section,
  * Return: char * option value                                      *
 \********************************************************************/
 char *
-gnc_option_db_lookup_string_option(GNCOptionDB *odb, char *section,
-                                   char *name, char *default_value)
+gnc_option_db_lookup_string_option(GNCOptionDB *odb,
+                                   const char *section,
+                                   const char *name,
+                                   const char *default_value)
 {
   GNCOption *option;
   SCM getter;
@@ -1251,8 +1563,10 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb, char *section,
  * Return: char * option value                                      *
 \********************************************************************/
 char *
-gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb, char *section,
-                                        char *name, char *default_value)
+gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
+                                        const char *section,
+                                        const char *name,
+                                        const char *default_value)
 {
   GNCOption *option;
   SCM getter;
@@ -1296,8 +1610,11 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb, char *section,
  * Return: time_t approximation of set_value                        *
 \********************************************************************/
 time_t
-gnc_option_db_lookup_date_option(GNCOptionDB *odb, char *section, char *name,
-                                 Timespec *set_value, Timespec *default_value)
+gnc_option_db_lookup_date_option(GNCOptionDB *odb,
+                                 const char *section,
+                                 const char *name,
+                                 Timespec *set_value,
+                                 Timespec *default_value)
 {
   GNCOption *option;
   Timespec temp;
@@ -1333,6 +1650,161 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb, char *section, char *name,
   return set_value->tv_sec;
 }
 
+
+/********************************************************************\
+ * gnc_option_db_lookup_number_range_option                         *
+ *   looks up a number range option. If present, returns its value  *
+ *   as a gdouble, otherwise returns the default_value.             *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       default   - default value if not found                     *
+ * Return: gdouble representation of value                          *
+\********************************************************************/
+gdouble
+gnc_option_db_lookup_number_range_option(GNCOptionDB *odb,
+                                         const char *section,
+                                         const char *name,
+                                         gdouble default_value)
+{
+  GNCOption *option;
+  SCM getter;
+  SCM value;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+
+  if (option != NULL)
+  {
+    getter = gnc_option_getter(option);
+    if (getter != SCM_UNDEFINED)
+    {
+      value = gh_call0(getter);
+      if (gh_number_p(value))
+	return gh_scm2double(value);
+    }
+  }
+
+  return default_value;
+}
+
+
+/********************************************************************\
+ * gnc_option_db_lookup_color_option                                *
+ *   looks up a color option. If present, returns its value in the  *
+ *   color variable, otherwise leaves the color variable alone.     *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       red       - where to store the red value                   *
+ *       blue      - where to store the blue value                  *
+ *       green     - where to store the green value                 *
+ *       alpha     - where to store the alpha value                 *
+ * Return: true if option was found                                 *
+\********************************************************************/
+gboolean gnc_option_db_lookup_color_option(GNCOptionDB *odb,
+                                           const char *section,
+                                           const char *name,
+                                           gdouble *red,
+                                           gdouble *green,
+                                           gdouble *blue,
+                                           gdouble *alpha)
+{
+  GNCOption *option;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+
+  return gnc_option_get_color_info(option, FALSE, red, green, blue, alpha);
+}
+
+
+/********************************************************************\
+ * gnc_option_db_lookup_color_option_argb                           *
+ *   looks up a color option. If present, returns its argb value,   *
+ *   otherwise returns the given default value.                     *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       default_value - default value to return if problem         *
+ * Return: argb value                                               *
+\********************************************************************/
+uint32 gnc_option_db_lookup_color_option_argb(GNCOptionDB *odb,
+                                              const char *section,
+                                              const char *name,
+                                              uint32 default_value)
+{
+  GNCOption *option;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+  if (option == NULL)
+    return default_value;
+
+  return gnc_option_get_color_argb(option);
+}
+
+
+/********************************************************************\
+ * gnc_option_db_set_option_default                                 *
+ *   set the option to its default value                            *
+ *                                                                  *
+ * Args: odb     - option database to search in                     *
+ *       section - section name of option                           *
+ *       name    - name of option                                   *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_option_db_set_option_default(GNCOptionDB *odb,
+                                 const char *section,
+                                 const char *name)
+{
+  GNCOption *option;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+
+  gnc_option_set_default(option);
+}
+
+/********************************************************************\
+ * gnc_option_db_set_number_range_option                            *
+ *   sets the number range option to the given value. If successful *
+ *   returns TRUE, otherwise FALSE.                                 *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       value     - value to set to                                *
+ * Return: success indicator                                        *
+\********************************************************************/
+gboolean
+gnc_option_db_set_number_range_option(GNCOptionDB *odb,
+                                      const char *section,
+                                      const char *name,
+                                      gdouble value)
+{
+  GNCOption *option;
+  SCM scm_value;
+  SCM setter;
+
+  option = gnc_option_db_get_option_by_name(odb, section, name);
+  if (option == NULL)
+    return FALSE;
+
+  scm_value = gh_double2scm(value);
+
+  scm_value = gnc_option_valid_value(option, scm_value);
+  if (scm_value == SCM_UNDEFINED)
+    return FALSE;
+
+  setter = gnc_option_setter(option);
+  if (setter == SCM_UNDEFINED)
+    return FALSE;
+
+  gh_call1(setter, scm_value);
+
+  return TRUE;
+}
 
 /********************************************************************\
  * gnc_account_list_to_scm                                          *

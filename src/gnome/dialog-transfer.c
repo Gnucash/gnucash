@@ -93,7 +93,7 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
 				 GTK_POLICY_AUTOMATIC, 
 				 GTK_POLICY_AUTOMATIC);
-    
+
   gtk_box_pack_start(GTK_BOX(vbox), scrollWin, TRUE, TRUE, 0);
   gtk_container_add(GTK_CONTAINER(scrollWin), accountTree);
 
@@ -122,6 +122,32 @@ gnc_xfer_dialog_create_tree_frame(Account *initial, gchar *title,
 		     (gpointer) accountTree);
 
   return frame;
+}
+
+
+static gboolean
+gnc_xfer_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
+{
+  GtkEntry *entry = GTK_ENTRY(widget);
+  gchar *new_string;
+  gchar *string;
+  double value;
+
+  string = gtk_entry_get_text(entry);
+
+  if ((string == NULL) || (*string == 0))
+    return FALSE;
+
+  value = xaccParseAmount(string, GNC_T);
+
+  new_string = xaccPrintAmount(value, PRTSEP);
+
+  if (safe_strcmp(string, new_string) == 0)
+    return FALSE;
+
+  gtk_entry_set_text(entry, new_string);
+
+  return FALSE;
 }
 
 
@@ -184,6 +210,9 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
       amount = gtk_entry_new();
       gtk_box_pack_start(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
       xferData->amount_entry = amount;
+
+      gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",
+                         GTK_SIGNAL_FUNC(gnc_xfer_update_cb), NULL);
 
       gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(amount));
     }
@@ -261,6 +290,9 @@ gnc_xfer_dialog_create(GtkWidget * parent, Account * initial,
     gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
   }
 
+  /* allow grow and shrink, no auto-shrink */
+  gtk_window_set_policy(GTK_WINDOW(dialog), TRUE, TRUE, FALSE);
+
   return dialog;
 }
 
@@ -295,6 +327,8 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
 
   gtk_widget_show_all(dialog);
 
+  gtk_widget_grab_focus(xferData.amount_entry);
+
   gnc_account_tree_select_account(xferData.from, initial, TRUE);
   gnc_account_tree_select_account(xferData.to, initial, TRUE);
 
@@ -327,11 +361,7 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
     }
 
     string = gtk_entry_get_text(GTK_ENTRY(xferData.amount_entry));
-    if (sscanf(string, "%lf", &amount) != 1)
-    {
-      gnc_error_dialog_parented(GTK_WINDOW(dialog), AMOUNT_NUM_MSG);
-      continue;
-    }
+    amount = xaccParseAmount(string, GNC_T);
 
     time = gnome_date_edit_get_date(GNOME_DATE_EDIT(xferData.date_entry));
 

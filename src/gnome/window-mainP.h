@@ -30,11 +30,14 @@ typedef struct _GNCMainInfo GNCMainInfo;
 struct _GNCMainInfo
 {
   GtkWidget *account_tree;
-  GtkWidget *balance_label;
+  GtkWidget *assets_label;
+  GtkWidget *profits_label;
 
   SCM tree_change_callback_1;
   SCM tree_change_callback_2;
   SCM toolbar_change_callback;
+
+  GSList *account_sensitives;
 };
 
 

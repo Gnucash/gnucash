@@ -469,6 +469,23 @@ gnc_reconcile_list_unselect_all(GNCReconcileList *list)
 }
 
 
+/********************************************************************\
+ * gnc_reconcile_list_changed                                       *
+ *   returns true if any splits have been reconciled                *
+ *                                                                  *
+ * Args: list - list to get changed status for                      *
+ * Returns: true if any reconciled splits                           *
+\********************************************************************/
+gboolean
+gnc_reconcile_list_changed(GNCReconcileList *list)
+{
+  g_return_val_if_fail(list != NULL, FALSE);
+  g_return_val_if_fail(GTK_IS_GNC_RECONCILE_LIST(list), FALSE);
+
+  return g_hash_table_size(list->reconciled) != 0;
+}
+
+
 static void
 gnc_reconcile_list_fill(GNCReconcileList *list)
 {
@@ -480,6 +497,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   int account_type;
   double amount;
   char recn_str[2];
+  short shares = PRTSEP;
   char recn;
   int row;
   int i;
@@ -488,6 +506,10 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   num_splits = xaccAccountGetNumSplits(list->account);
   strings[4] = recn_str;
   strings[5] = NULL;
+
+  if ((account_type == STOCK) || (account_type == MUTUAL) ||
+      (account_type == CURRENCY))
+    shares |= PRTSHR;
 
   for (i = 0; i < num_splits; i++)
   {
@@ -512,7 +534,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = xaccTransGetDateStr(trans);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = g_strdup_printf("%.2f", DABS(amount));
+    strings[3] = xaccPrintAmount(DABS(amount), shares);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
 
@@ -522,8 +544,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     gtk_clist_set_row_data(GTK_CLIST(list), row, (gpointer) split);
 
     gnc_reconcile_list_set_row_style(list, row, reconciled);
-
-    g_free(strings[3]);
 
     list->num_splits++;
   }

@@ -210,6 +210,8 @@ gnc_report_error_dialog(const char *message)
   else
     text = g_strconcat(REPORT_ERR_MSG, "\n\n", message, NULL);
 
+  PERR("gnc_report_error_dialog: error running report.\n%s\n", message);
+
   gnc_error_dialog_parented(parent, text);
 
   if (message != NULL)
@@ -285,7 +287,11 @@ gnc_report_properties_cb(GtkWidget *widget, gpointer data)
   ReportData *report_data = data;
 
   if (report_data->option_dialog == NULL)
+  {
+    GtkWidget *window = gnc_html_window_get_window(reportwindow);
+    gnc_info_dialog_parented(GTK_WINDOW(window), REPORT_NOPARM_MSG);
     return;
+  }
 
   gtk_widget_show_all(report_data->option_dialog);
   gdk_window_raise(GTK_WIDGET(report_data->option_dialog)->window);
@@ -423,7 +429,7 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
         NULL,
         GNOME_APP_PIXMAP_STOCK,
         GNOME_STOCK_PIXMAP_CONVERT,
-        0,0, NULL
+        0, 0, NULL
       }
     };
 

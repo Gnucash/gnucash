@@ -39,6 +39,7 @@
 #include "window-main.h"
 #include "dialog-utils.h"
 #include "account-tree.h"
+#include "global-options.h"
 #include "query-user.h"
 #include "messages.h"
 #include "util.h"
@@ -306,6 +307,8 @@ gnc_ui_accWindow_account_tree_box_create(AccWindow * accData)
   gtk_clist_column_titles_hide(GTK_CLIST(accountTree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(accountTree));
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(accountTree));
+  gnc_account_tree_expand_account(GNC_ACCOUNT_TREE(accountTree),
+                                  accData->newAccount);
 
   accData->tree = GNC_ACCOUNT_TREE(accountTree);
 
@@ -481,9 +484,13 @@ accWindow (AccountGroup *this_is_not_used)
   xaccAccountSetName(accData->newAccount, NEW_TOP_ACCT_STR);
 
   dialog = gnc_accWindow_create(accData);
-  if (last_width > 0)
-    gtk_window_set_default_size(GTK_WINDOW(dialog), last_width, last_height);
 
+  if (last_width == 0)
+    gnc_get_window_size("account_add_win", &last_width, &last_height);
+
+  gtk_window_set_default_size(GTK_WINDOW(dialog), last_width, last_height);
+
+  gtk_widget_grab_focus(GTK_WIDGET(accData->edit_info.name_entry));
   gtk_widget_show_all(dialog);
 
   gnc_account_tree_select_account(accData->tree, accData->parentAccount, TRUE);
@@ -531,6 +538,8 @@ accWindow (AccountGroup *this_is_not_used)
 
   gdk_window_get_geometry(dialog->window, NULL, NULL,
                           &last_width, &last_height, NULL);
+
+  gnc_save_window_size("account_add_win", last_width, last_height);
 
   gtk_widget_destroy(dialog);
   g_free(accData);

@@ -20,8 +20,14 @@
 #ifndef __OPTION_UTIL_H__
 #define __OPTION_UTIL_H__
 
+#include "config.h"
+
 #include <gnome.h>
 #include <guile/gh.h>
+
+#include "gnc-common.h"
+#include "date.h"
+
 
 typedef struct _GNCOption GNCOption;
 struct _GNCOption
@@ -69,13 +75,34 @@ SCM    gnc_option_getter(GNCOption *option);
 SCM    gnc_option_setter(GNCOption *option);
 SCM    gnc_option_default_getter(GNCOption *option);
 SCM    gnc_option_value_validator(GNCOption *option);
+
 int    gnc_option_num_permissible_values(GNCOption *option);
 int    gnc_option_permissible_value_index(GNCOption *option, SCM value);
 SCM    gnc_option_permissible_value(GNCOption *option, int index);
 char * gnc_option_permissible_value_name(GNCOption *option, int index);
 char * gnc_option_permissible_value_description(GNCOption *option, int index);
+
 gboolean gnc_option_show_time(GNCOption *option);
+
 gboolean gnc_option_multiple_selection(GNCOption *option);
+
+gboolean gnc_option_get_range_info(GNCOption *option,
+                                   double *lower_bound,
+                                   double *upper_bound,
+                                   int    *num_decimals,
+                                   double *step_size);
+
+gdouble  gnc_option_color_range(GNCOption *option);
+gdouble  gnc_option_use_alpha(GNCOption *option);
+uint32   gnc_option_get_color_argb(GNCOption *option);
+gboolean gnc_option_get_color_info(GNCOption *option,
+                                   gboolean use_default,
+                                   gdouble *red,
+                                   gdouble *green,
+                                   gdouble *blue,
+                                   gdouble *alpha);
+
+void gnc_option_set_default(GNCOption *option);
 
 guint gnc_option_db_num_sections(GNCOptionDB *odb);
 
@@ -87,7 +114,8 @@ GNCOptionSection * gnc_option_db_get_section(GNCOptionDB *odb, gint i);
 GNCOption * gnc_get_option_section_option(GNCOptionSection *section, int i);
 
 GNCOption * gnc_option_db_get_option_by_name(GNCOptionDB *odb,
-                                             char *section_name, char *name);
+                                             const char *section_name,
+                                             const char *name);
 
 GNCOption * gnc_option_db_get_option_by_SCM(GNCOptionDB *odb,
                                             SCM guile_option);
@@ -98,15 +126,52 @@ void     gnc_option_db_clean(GNCOptionDB *odb);
 void gnc_option_db_commit(GNCOptionDB *odb);
 
 gboolean gnc_option_db_lookup_boolean_option(GNCOptionDB *odb,
-                                             char *section, char *name,
+                                             const char *section,
+                                             const char *name,
                                              gboolean default_value);
 
-char * gnc_option_db_lookup_string_option(GNCOptionDB *odb, char *section,
-                                          char *name, char *default_value);
+char * gnc_option_db_lookup_string_option(GNCOptionDB *odb,
+                                          const char *section,
+                                          const char *name,
+                                          const char *default_value);
 
 char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
-                                               char *section, char *name,
-                                               char *default_value);
+                                               const char *section,
+                                               const char *name,
+                                               const char *default_value);
+
+time_t gnc_option_db_lookup_date_option(GNCOptionDB *odb,
+                                        const char *section,
+                                        const char *name,
+                                        Timespec *set_value,
+                                        Timespec *default_value);
+
+gdouble gnc_option_db_lookup_number_range_option(GNCOptionDB *odb,
+                                                 const char *section,
+                                                 const char *name,
+                                                 gdouble default_value);
+
+gboolean gnc_option_db_lookup_color_option(GNCOptionDB *odb,
+                                           const char *section,
+                                           const char *name,
+                                           gdouble *red,
+                                           gdouble *green,
+                                           gdouble *blue,
+                                           gdouble *alpha);
+
+uint32 gnc_option_db_lookup_color_option_argb(GNCOptionDB *odb,
+                                              const char *section,
+                                              const char *name,
+                                              uint32 default_value);
+
+void gnc_option_db_set_option_default(GNCOptionDB *odb,
+                                      const char *section,
+                                      const char *name);
+
+gboolean gnc_option_db_set_number_range_option(GNCOptionDB *odb,
+                                               const char *section,
+                                               const char *name,
+                                               gdouble value);
 
 /* private */
 

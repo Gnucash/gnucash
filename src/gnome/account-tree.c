@@ -29,6 +29,7 @@
 #include "AccWindow.h"
 #include "FileDialog.h"
 #include "window-main.h"
+#include "dialog-utils.h"
 #include "account-treeP.h"
 #include "util.h"
 
@@ -36,6 +37,7 @@
 static GtkCTreeClass *parent_class = NULL;
 static guint account_tree_signals[LAST_SIGNAL];
 
+static GSList *account_trees = NULL;
 
 GtkType
 gnc_account_tree_get_type()
@@ -73,7 +75,13 @@ gnc_account_tree_get_type()
 GtkWidget *
 gnc_account_tree_new()
 {
-  return GTK_WIDGET(gtk_type_new(gnc_account_tree_get_type()));
+  GtkWidget *tree;
+
+  tree = GTK_WIDGET(gtk_type_new(gnc_account_tree_get_type()));
+
+  account_trees = g_slist_prepend(account_trees, tree);
+
+  return tree;
 }
 
 
@@ -92,7 +100,7 @@ gnc_account_tree_new_with_root(Account * root)
 {
   GNCAccountTree *tree;
 
-  tree = GNC_ACCOUNT_TREE(gtk_type_new(gnc_account_tree_get_type()));
+  tree = GNC_ACCOUNT_TREE(gnc_account_tree_new());
   tree->root_account = root;
 
   return GTK_WIDGET(tree);
@@ -150,9 +158,7 @@ gnc_account_tree_init(GNCAccountTree *tree)
     tree->deficit_style = gtk_style_copy(style);
     style = tree->deficit_style;
 
-    style->fg[GTK_STATE_NORMAL].red   = 50000;
-    style->fg[GTK_STATE_NORMAL].green = 0;
-    style->fg[GTK_STATE_NORMAL].blue  = 0;
+    gnc_get_deficit_color(&style->fg[GTK_STATE_NORMAL]);
 
     gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
   }
@@ -311,6 +317,26 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 }
 
 
+static void
+refresh_helper(gpointer tree, gpointer unused)
+{
+  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
+}
+
+/********************************************************************\
+ * gnc_account_tree_refresh_all                                     *
+ *   refreshes the account tree                                     *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_refresh_all()
+{
+  g_slist_foreach(account_trees, refresh_helper, NULL);
+}
+
+
 /********************************************************************\
  * gnc_account_tree_set_view_info                                   *
  *   installs a new view information and refreshes the tree         *
@@ -346,6 +372,21 @@ gnc_account_tree_get_view_info(GNCAccountTree *tree, AccountViewInfo *info)
   assert(info != NULL);
 
   *info = tree->avi;
+}
+
+
+void
+gnc_account_tree_expand_account(GNCAccountTree *tree, Account *account)
+{
+  GtkCTree *ctree = GTK_CTREE(tree);
+  GtkCTreeNode *node;
+
+  /* Get the node with the account */
+  node = gtk_ctree_find_by_row_data(ctree, NULL, account);
+  if (node == NULL)
+    return;
+
+  gtk_ctree_expand(ctree, node);
 }
 
 
@@ -453,6 +494,26 @@ gnc_account_tree_remove_account(GNCAccountTree *tree, Account *account)
 
   if (node != NULL)
     gtk_ctree_remove_node(GTK_CTREE(tree), node);
+}
+
+
+static void
+remove_helper(gpointer tree, gpointer account)
+{
+  gnc_account_tree_remove_account(GNC_ACCOUNT_TREE(tree), account);
+}
+
+/********************************************************************\
+ * gnc_account_tree_remove_account_all                              *
+ *   removes an account from all account trees                      *
+ *                                                                  *
+ * Args: account - account to be inserted                           *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_account_tree_remove_account_all(Account *account)
+{
+  g_slist_foreach(account_trees, remove_helper, account);
 }
 
 
@@ -826,8 +887,13 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
 #if !USE_NO_COLOR
   {
     GtkStyle *style;
+    double balance;
+    gboolean deficit;
 
-    if (gnc_ui_get_account_full_balance(acc) < 0)
+    balance = gnc_ui_get_account_full_balance(acc);
+    deficit = (balance < 0) && !DEQ(balance, 0);
+
+    if (deficit)
       style = tree->deficit_style;
     else
       style = gtk_widget_get_style(GTK_WIDGET(tree));
@@ -849,6 +915,8 @@ static void
 gnc_account_tree_destroy(GtkObject *object)
 {
   GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
+
+  account_trees = g_slist_remove(account_trees, tree);
 
   if (tree->deficit_style != NULL)
   {

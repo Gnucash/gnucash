@@ -35,12 +35,17 @@
 #include "RegWindow.h"
 #include "window-reconcile.h"
 #include "window-register.h"
+#include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "reconcile-list.h"
+#include "global-options.h"
 #include "Refresh.h"
 #include "query-user.h"
 #include "window-help.h"
 #include "enriched-messages.h"
+#include "AccWindow.h"
+#include "AdjBWindow.h"
+#include "Scrub.h"
 #include "util.h"
 
 
@@ -50,7 +55,10 @@ struct _RecnWindow
   Account *account;         /* The account that we are reconciling  */
   double  ddiff;            /* The amount to reconcile              */
 
-  GtkWidget *dialog;        /* The reconcile window                 */
+  GtkWidget *window;        /* The reconcile window                 */
+
+  GtkWidget *toolbar;
+  SCM toolbar_change_callback_id;
 
   GtkWidget *starting;      /* The starting balance                 */
   GtkWidget *ending;        /* The ending balance                   */
@@ -62,20 +70,30 @@ struct _RecnWindow
   GtkWidget *debit;         /* Debit matrix show unreconciled debit */
   GtkWidget *credit;        /* Credit matrix, shows credits...      */
 
+  GtkWidget *edit_item;     /* Edit transaction menu item           */
+  GtkWidget *delete_item;   /* Delete transaction menu item         */
+
+  GtkWidget *edit_popup;    /* Edit transaction popup menu item     */
+  GtkWidget *delete_popup;  /* Delete transaction popup menu item   */
+
   GtkWidget *edit_button;   /* Edit transaction button              */
   GtkWidget *delete_button; /* Delete transaction button            */
 
   char * symbol;            /* Currency symbol or 's' for shares    */
+
+  gboolean delete_refresh;  /* do a refresh upon a window deletion  */
 };
 
 /** PROTOTYPES ******************************************************/
 static double recnRecalculateBalance( RecnWindow *recnData );
 
 static void recnClose(GtkWidget *w, gpointer data);
-static void recnOkCB(GtkWidget *w, gpointer data);
+static void recnFinishCB(GtkWidget *w, gpointer data);
 static void recnCancelCB(GtkWidget *w, gpointer data);
 
-static void gnc_reconcile_window_set_button_sensitivity(RecnWindow *recnData);
+static void gnc_reconcile_window_set_sensitivity(RecnWindow *recnData);
+static char *gnc_recn_make_window_name(Account *account);
+static void gnc_recn_set_window_name(RecnWindow *recnData);
 
 /** GLOBALS *********************************************************/
 
@@ -106,7 +124,9 @@ recnRefresh(Account *account)
   gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->debit));
   gnc_reconcile_list_refresh(GNC_RECONCILE_LIST(recnData->credit));
 
-  gnc_reconcile_window_set_button_sensitivity(recnData);
+  gnc_reconcile_window_set_sensitivity(recnData);
+
+  gnc_recn_set_window_name(recnData);
 
   recnRecalculateBalance(recnData);
 }
@@ -127,20 +147,24 @@ recnRecalculateBalance(RecnWindow *recnData)
   double ddebit  = 0.0;
   double dcredit = 0.0;
   double ddiff   = 0.0;
-  short shares = PRTSYM;
+  short shares = PRTSYM | PRTSEP;
   int account_type;
-  
+
   account_type = xaccAccountGetType(recnData->account);
-  if ((account_type == STOCK ) || (account_type == MUTUAL))
+  if ((account_type == STOCK ) || (account_type == MUTUAL) ||
+      (account_type == CURRENCY))
     shares |= PRTSHR;
 
   value = xaccAccountGetReconciledBalance(recnData->account);
   amount = xaccPrintAmount(value, shares);
+  gnc_set_label_color(recnData->starting, value);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
 
-  amount = xaccPrintAmount(value - recnData->ddiff, shares);
+  value -= recnData->ddiff;
+  amount = xaccPrintAmount(value, shares);
+  gnc_set_label_color(recnData->ending, value);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
-  
+
   ddebit = gnc_reconcile_list_reconciled_balance
     (GNC_RECONCILE_LIST(recnData->debit));
   dcredit = gnc_reconcile_list_reconciled_balance
@@ -155,11 +179,35 @@ recnRecalculateBalance(RecnWindow *recnData)
 
   ddiff = recnData->ddiff + dcredit - ddebit;
   amount = xaccPrintAmount(ddiff, shares);
+  gnc_set_label_color(recnData->difference, ddiff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
 
   return ddiff;
 }
 
+static gboolean
+gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
+                         gpointer data)
+{
+  GtkEntry *entry = GTK_ENTRY(widget);
+  gint shares = GPOINTER_TO_INT(data);
+  gchar *new_string;
+  gchar *string;
+  double value;
+
+  string = gtk_entry_get_text(entry);
+
+  value = xaccParseAmount(string, GNC_T);
+
+  new_string = xaccPrintAmount(value, shares & ~PRTSYM);
+
+  if (safe_strcmp(string, new_string) == 0)
+    return FALSE;
+
+  gtk_entry_set_text(entry, new_string);
+
+  return FALSE;
+}
 
 /********************************************************************\
  * startRecnWindow                                                  *
@@ -181,9 +229,8 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
   char *amount, *title;
   double dendBalance, value;
   int result;
-  short shares = PRTSYM;
+  short shares = PRTSYM | PRTSEP;
   int account_type;
-  gchar *string;
 
   /* Get the previous ending balance.  Use the published
    * account interface for this, since the ending balance
@@ -192,20 +239,21 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
   dendBalance = xaccAccountGetReconciledBalance(account);
 
   account_type = xaccAccountGetType(account);
-  if ((account_type == STOCK) || (account_type == MUTUAL))
+  if ((account_type == STOCK) || (account_type == MUTUAL) ||
+      (account_type == CURRENCY))
     shares |= PRTSHR;
 
   amount = xaccPrintAmount(dendBalance, shares);
 
   /* Create the dialog box... */
-  asprintf(&title, "%s: %s", xaccAccountGetName(account), RECONCILE_STR);
+  title = gnc_recn_make_window_name(account);
 
   dialog = gnome_dialog_new(title,
                             GNOME_STOCK_BUTTON_OK,
                             GNOME_STOCK_BUTTON_CANCEL,
                             NULL);
-  free(title);
-  
+  g_free(title);
+
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
   gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
   gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
@@ -222,9 +270,13 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     end_value = gtk_entry_new();
 
-    amount = xaccPrintAmount(dendBalance - *diff, shares & PRTSHR);
+    amount = xaccPrintAmount(dendBalance - *diff, shares & ~PRTSYM);
     gtk_entry_set_text(GTK_ENTRY(end_value), amount);
     gtk_editable_select_region(GTK_EDITABLE(end_value), 0, -1);
+
+    gtk_signal_connect(GTK_OBJECT(end_value), "focus-out-event",
+                       GTK_SIGNAL_FUNC(gnc_start_recn_update_cb),
+                       GINT_TO_POINTER((gint) shares));
 
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
                                  GTK_EDITABLE(end_value));
@@ -258,18 +310,13 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
 
     if (result == 0) /* ok button */
     {
+      gchar *string;
+
       string = gtk_entry_get_text(GTK_ENTRY(end_value));
 
-      if(sscanf(string, "%lf", &value) == 1)
-      {
-        *diff = dendBalance - value;
-        break;
-      }
-      else
-      {
-        gnc_error_dialog_parented(GTK_WINDOW(parent), BALANCE_NUM_MSG);
-        continue;
-      }
+      value = xaccParseAmount(string, GNC_T);
+
+      *diff = dendBalance - value;
     }
 
     /* cancel or delete */
@@ -283,7 +330,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *diff)
 
 
 static void
-gnc_reconcile_window_set_button_sensitivity(RecnWindow *recnData)
+gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
 {
   gboolean sensitive = FALSE;
   GNCReconcileList *list;
@@ -296,6 +343,12 @@ gnc_reconcile_window_set_button_sensitivity(RecnWindow *recnData)
   if (gnc_reconcile_list_get_current_split(list) != NULL)
     sensitive = TRUE;
 
+  gtk_widget_set_sensitive(recnData->edit_item, sensitive);
+  gtk_widget_set_sensitive(recnData->delete_item, sensitive);
+
+  gtk_widget_set_sensitive(recnData->edit_popup, sensitive);
+  gtk_widget_set_sensitive(recnData->delete_popup, sensitive);
+
   gtk_widget_set_sensitive(recnData->edit_button, sensitive);
   gtk_widget_set_sensitive(recnData->delete_button, sensitive);
 }
@@ -306,7 +359,7 @@ gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
 {
   RecnWindow *recnData = (RecnWindow *) data;
 
-  gnc_reconcile_window_set_button_sensitivity(recnData);
+  gnc_reconcile_window_set_sensitivity(recnData);
   recnRecalculateBalance(recnData);
 }
 
@@ -378,6 +431,19 @@ gnc_reconcile_window_create_list_frame(Account *account,
 }
 
 
+static GtkWidget *
+gnc_recn_create_status_bar(RecnWindow *recnData)
+{
+  GtkWidget *statusbar;
+
+  statusbar = gnome_appbar_new(GNC_F, /* no progress bar */
+			       GNC_T, /* has status area */
+			       GNOME_PREFERENCES_USER);
+
+  return statusbar;
+}
+
+
 static Split *
 gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 {
@@ -407,7 +473,7 @@ gnc_ui_reconcile_window_change_cb(GtkButton *button, gpointer data)
   RecnWindow *recnData = (RecnWindow *) data;
   double ddiff = recnData->ddiff;
   
-  if (startRecnWindow(recnData->dialog, recnData->account, &ddiff))
+  if (startRecnWindow(recnData->window, recnData->account, &ddiff))
   {
     recnData->ddiff = ddiff;
     recnRecalculateBalance(recnData);
@@ -445,7 +511,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
   {
     gboolean result;
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->dialog),
+    result = gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
                                         TRANS_DEL2_MSG, GNC_F);
 
     if (!result)
@@ -483,7 +549,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 static void
 gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
 {
-  RecnWindow *recnData = (RecnWindow *) data;
+  RecnWindow *recnData = data;
   RegWindow *regData;
   Split *split;
 
@@ -501,6 +567,348 @@ gnc_ui_reconcile_window_edit_cb(GtkButton *button, gpointer data)
 }
 
 
+static char *
+gnc_recn_make_window_name(Account *account)
+{
+  char *fullname;
+  char *title;
+
+  fullname = xaccAccountGetFullName(account, gnc_get_account_separator());
+  title = g_strconcat(fullname, " - ", RECONCILE_STR, NULL);
+
+  free(fullname);
+
+  return title;
+}
+
+static void
+gnc_recn_set_window_name(RecnWindow *recnData)
+{
+  char *title;
+
+  title = gnc_recn_make_window_name(recnData->account);
+
+  gtk_window_set_title(GTK_WINDOW(recnData->window), title);
+
+  g_free(title);
+}
+
+static void 
+gnc_recn_edit_account_cb(GtkWidget * w, gpointer data)
+{
+  RecnWindow *recnData = data;
+  Account *account = recnData->account;
+
+  if (account == NULL)
+    return;
+
+  editAccWindow(account);
+}
+
+static void 
+gnc_recn_xfer_cb(GtkWidget * w, gpointer data)
+{
+  RecnWindow *recnData = data;
+  Account *account = recnData->account;
+
+  if (account == NULL)
+    return;
+
+  gnc_xfer_dialog(recnData->window, account);
+}
+
+static void 
+gnc_recn_adjust_cb(GtkWidget * w, gpointer data)
+{
+  RecnWindow *recnData = data;
+  Account *account = recnData->account;
+
+  if (account == NULL)
+    return;
+
+  adjBWindow(account);
+}
+
+static void
+gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
+{
+  RecnWindow *recnData = data;
+  Account *account = recnData->account;
+
+  if (account == NULL)
+    return;
+
+  xaccAccountTreeScrubOrphans(account);
+  xaccAccountTreeScrubImbalance(account);
+
+  gnc_account_ui_refresh(account);
+  gnc_refresh_main_window();
+}
+
+static void
+gnc_recn_open_cb(GtkWidget *widget, gpointer data)
+{
+  RecnWindow *recnData = data;
+  Account *account = recnData->account;
+  RegWindow *regData;
+
+  regData = regWindowSimple(account);
+  gnc_register_raise(regData);
+}
+
+static GtkWidget *
+gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
+{
+  GtkWidget *menubar;
+  GtkAccelGroup *accel_group;
+
+  GnomeUIInfo reconcile_menu[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      END_BALN_MENU_E_STR, TOOLTIP_ADJUST_END,
+      gnc_ui_reconcile_window_change_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      FINISH_MENU_STR, TOOLTIP_RECN_FINISH,
+      recnFinishCB, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'f', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      CANCEL_MENU_STR, TOOLTIP_RECN_CANCEL,
+      recnCancelCB, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo account_menu[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      OPEN_ACC_MENU_STR, TOOLTIP_OPEN_ACC,
+      gnc_recn_open_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      EDIT_ACC_MENU_STR, TOOLTIP_EDIT_REG,
+      gnc_recn_edit_account_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      TRANSFER_MENU_E_STR, TOOLTIP_TRANSFER,
+      gnc_recn_xfer_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      ADJ_BALN_MENU_E_STR, TOOLTIP_ADJUST,
+      gnc_recn_adjust_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      SCRUB_MENU_STR, TOOLTIP_SCRUB_ACCT,
+      gnc_recn_scrub_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo transaction_menu[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      NEW_MENU_STR, TOOLTIP_NEW_TRANS,
+      gnc_ui_reconcile_window_new_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'n', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      EDIT_MENU_STR, TOOLTIP_EDIT_TRANS,
+      gnc_ui_reconcile_window_edit_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'e', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      DELETE_MENU_STR, TOOLTIP_DEL_TRANS,
+      gnc_ui_reconcile_window_delete_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      'd', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo help_menu[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      HELP_MENU_STR, TOOLTIP_HELP,
+      gnc_ui_reconcile_window_help_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  GnomeUIInfo reconcile_window_menu[] =
+  {
+    GNOMEUIINFO_SUBTREE(RECONCILE_MENU_STR, reconcile_menu),
+    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR, account_menu),
+    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR, transaction_menu),
+    GNOMEUIINFO_MENU_HELP_TREE(help_menu),
+    GNOMEUIINFO_END
+  };
+
+  menubar = gtk_menu_bar_new();
+
+  accel_group = gtk_accel_group_new();
+  gtk_accel_group_attach(accel_group, GTK_OBJECT(recnData->window));
+
+  gnome_app_fill_menu(GTK_MENU_SHELL(menubar), reconcile_window_menu,
+  		      accel_group, TRUE, 0);
+
+  gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
+                                      reconcile_window_menu);
+
+  recnData->edit_item = transaction_menu[1].widget;
+  recnData->delete_item = transaction_menu[2].widget;
+
+  return menubar;
+}
+
+
+static GtkWidget *
+gnc_recn_create_popup_menu(RecnWindow *recnData)
+{
+  GtkWidget *popup;
+
+  GnomeUIInfo transaction_menu[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      NEW_MENU_STR, TOOLTIP_NEW_TRANS,
+      gnc_ui_reconcile_window_new_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
+      'n', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      EDIT_MENU_STR, TOOLTIP_EDIT_TRANS,
+      gnc_ui_reconcile_window_edit_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PROPERTIES,
+      'e', GDK_CONTROL_MASK, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      DELETE_MENU_STR, TOOLTIP_DEL_TRANS,
+      gnc_ui_reconcile_window_delete_cb, recnData, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
+      'd', GDK_CONTROL_MASK, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  popup = gnome_popup_menu_new(transaction_menu);
+
+  recnData->edit_popup = transaction_menu[1].widget;
+  recnData->delete_popup = transaction_menu[2].widget;
+
+  return popup;
+}
+
+
+static void
+gnc_recn_refresh_toolbar(RecnWindow *recnData)
+{
+  GtkToolbarStyle tbstyle;
+
+  if ((recnData == NULL) || (recnData->toolbar == NULL))
+    return;
+
+  tbstyle = gnc_get_toolbar_style();
+
+  gtk_toolbar_set_style(GTK_TOOLBAR(recnData->toolbar), tbstyle);
+}
+
+static void
+gnc_toolbar_change_cb(void *data)
+{
+  RecnWindow *recnData = data;
+
+  gnc_recn_refresh_toolbar(recnData);
+}
+
+static GtkWidget *
+gnc_recn_create_tool_bar(RecnWindow *recnData)
+{
+  GtkWidget *toolbar;
+  GnomeUIInfo toolbar_info[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      NEW_STR, TOOLTIP_NEW_TRANS,
+      gnc_ui_reconcile_window_new_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      EDIT_STR, TOOLTIP_EDIT_TRANS,
+      gnc_ui_reconcile_window_edit_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PROPERTIES,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      DELETE_STR, TOOLTIP_DEL_TRANS,
+      gnc_ui_reconcile_window_delete_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      OPEN_STR, TOOLTIP_OPEN_ACC,
+      gnc_recn_open_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  toolbar = gtk_toolbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+
+  gnome_app_fill_toolbar_with_data(GTK_TOOLBAR(toolbar), toolbar_info,
+                                   NULL, recnData);
+
+  recnData->toolbar = toolbar;
+
+  recnData->edit_button = toolbar_info[1].widget;
+  recnData->delete_button = toolbar_info[2].widget;
+
+  return toolbar;
+}
+
+
 /********************************************************************\
  * recnWindow                                                       *
  *   opens up the window to reconcile an account                    *
@@ -513,8 +921,10 @@ RecnWindow *
 recnWindow(GtkWidget *parent, Account *account)
 {
   RecnWindow *recnData;
+  GtkWidget *statusbar;
+  GtkWidget *vbox;
+  GtkWidget *dock;
   double ddiff = 0.0;
-  gchar *title = NULL;
   
   FETCH_FROM_LIST(RecnWindow, recnList, account, account, recnData);
 
@@ -528,117 +938,99 @@ recnWindow(GtkWidget *parent, Account *account)
   }
 
   recnData->ddiff = ddiff;
-  
-  asprintf(&title, "%s: %s", xaccAccountGetName(account), RECONCILE_STR);
-  
-  recnData->dialog = gnome_dialog_new(title,
-                                      GNOME_STOCK_BUTTON_OK,
-                                      GNOME_STOCK_BUTTON_CANCEL,
-                                      GNOME_STOCK_BUTTON_HELP,
-                                      NULL);
-  free(title);
+  recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  recnData->delete_refresh = FALSE;
+
+  gnc_recn_set_window_name(recnData);
+
+  vbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(recnData->window), vbox);
+
+  dock = gnome_dock_new();
+  gtk_box_pack_start(GTK_BOX(vbox), dock, TRUE, TRUE, 0);
+
+  statusbar = gnc_recn_create_status_bar(recnData);
+  gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
   /* here we connect the "destroy" event to a signal handler.  
    * This event occurs when we call gtk_widget_destroy() on the window,
    * or if we return 'FALSE' in the "delete_event" callback.
    * Eventually executed by gnome_dialog_close() */
-  gtk_signal_connect (GTK_OBJECT (recnData->dialog), "destroy",
+  gtk_signal_connect (GTK_OBJECT (recnData->window), "destroy",
                       GTK_SIGNAL_FUNC(recnClose), (gpointer) recnData);
 
-  /* Ok is default */
-  gnome_dialog_set_default(GNOME_DIALOG(recnData->dialog), 0);
-
-  /* Buttons don't close automatically */
-  gnome_dialog_set_close(GNOME_DIALOG(recnData->dialog), FALSE);
-
-  /* destroy, don't hide */
-  gnome_dialog_close_hides(GNOME_DIALOG(recnData->dialog), FALSE);
-  
-  gnome_dialog_button_connect(GNOME_DIALOG(recnData->dialog), 0,
-                              GTK_SIGNAL_FUNC(recnOkCB),
-                              (gpointer) recnData);
-
-  gnome_dialog_button_connect(GNOME_DIALOG(recnData->dialog), 1,
-                              GTK_SIGNAL_FUNC(recnCancelCB),
-                              (gpointer) recnData);
-
-  gnome_dialog_button_connect(GNOME_DIALOG(recnData->dialog), 2,
-                              GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_help_cb),
-                              NULL);
-
+  /* The menu bar */
   {
-    GtkTooltips *tooltips;
+    GtkWidget *dock_item;
+    GtkWidget *menubar;
+
+    dock_item = gnome_dock_item_new("menu", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+
+    menubar = gnc_recn_create_menu_bar(recnData, statusbar);
+    gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
+    gtk_container_add(GTK_CONTAINER(dock_item), menubar);
+
+    gnome_dock_add_item (GNOME_DOCK(dock), GNOME_DOCK_ITEM(dock_item),
+                         GNOME_DOCK_TOP, 0, 0, 0, TRUE);
+  }
+
+  /* The tool bar */
+  {
+    GtkWidget *dock_item;
+    GtkWidget *toolbar;
+    SCM id;
+
+    dock_item = gnome_dock_item_new("toolbar", GNOME_DOCK_ITEM_BEH_EXCLUSIVE);
+
+    toolbar = gnc_recn_create_tool_bar(recnData);
+    gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
+    gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
+
+    id = gnc_register_option_change_callback(gnc_toolbar_change_cb, recnData,
+                                             "General", "Toolbar Buttons");
+    recnData->toolbar_change_callback_id = id;
+
+    gnome_dock_add_item (GNOME_DOCK(dock), GNOME_DOCK_ITEM(dock_item),
+                         GNOME_DOCK_TOP, 1, 0, 0, TRUE);
+  }
+
+  /* The main area */
+  {
+    GtkWidget *frame = gtk_frame_new(NULL);
     GtkWidget *main_area = gtk_vbox_new(FALSE, 10);
     GtkWidget *debcred_area = gtk_hbox_new(FALSE, 15);
     GtkWidget *debits_frame;
     GtkWidget *credits_frame;
+    GtkWidget *popup;
 
-    tooltips = gtk_tooltips_new();
+    gnome_dock_set_client_area(GNOME_DOCK(dock), frame);
+
+    gtk_container_add(GTK_CONTAINER(frame), main_area);
+    gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
 
     debits_frame = gnc_reconcile_window_create_list_frame
       (account, RECLIST_DEBIT, recnData,
        &recnData->debit, &recnData->total_debit);
+
     credits_frame = gnc_reconcile_window_create_list_frame
       (account, RECLIST_CREDIT, recnData,
        &recnData->credit, &recnData->total_credit);
 
-    gtk_container_set_border_width(GTK_CONTAINER(main_area), 5);
-    gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(recnData->dialog)->vbox),
-                       main_area, TRUE, TRUE, 0);
+    popup = gnc_recn_create_popup_menu(recnData);
+    gnome_popup_menu_attach(popup, recnData->debit, recnData);
+    gnome_popup_menu_attach(popup, recnData->credit, recnData);
 
     gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(debcred_area), debits_frame, TRUE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(debcred_area), credits_frame, TRUE, FALSE, 0);
 
     {
-      GtkWidget *hbox, *title_vbox, *value_vbox, *button;
-      GtkWidget *totals_hbox, *frame, *title, *value, *bbox;
+      GtkWidget *hbox, *title_vbox, *value_vbox;
+      GtkWidget *totals_hbox, *frame, *title, *value;
 
       /* lower horizontal bar below reconcile lists */
       hbox = gtk_hbox_new(FALSE, 5);
       gtk_box_pack_start(GTK_BOX(main_area), hbox, FALSE, FALSE, 0);
-
-      bbox = gtk_hbutton_box_new();
-      gtk_button_box_set_spacing(GTK_BUTTON_BOX(bbox), 10);
-      gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
-
-      gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
-
-      button = gtk_button_new_with_label(NEW_STR);
-      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gtk_tooltips_set_tip(tooltips, button, TOOLTIP_NEW_TRANS, NULL);
-      gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_new_cb),
-                         recnData);
-
-      button = gtk_button_new_with_label(EDIT_STR);
-      recnData->edit_button = button;
-      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gtk_tooltips_set_tip(tooltips, button, TOOLTIP_EDIT_TRANS, NULL);
-      gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_edit_cb),
-                         recnData);
- 
-      button = gtk_button_new_with_label(DELETE_STR);
-      recnData->delete_button = button;
-      gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-      gtk_tooltips_set_tip(tooltips, button, TOOLTIP_DEL_TRANS, NULL);
-      gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                         GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_delete_cb),
-                         recnData);
-
-      {
-        gchar *s = g_strconcat(END_BALN_STR, "...", NULL);
-
-        button = gtk_button_new_with_label(s);
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-        gtk_tooltips_set_tip(tooltips, button, TOOLTIP_ADJUST_END, NULL);
-        gtk_signal_connect(GTK_OBJECT(button), "clicked",
-                           GTK_SIGNAL_FUNC(gnc_ui_reconcile_window_change_cb),
-                           recnData);
-
-        g_free(s);
-      }
 
       /* frame to hold totals */
       frame = gtk_frame_new(NULL);
@@ -712,7 +1104,12 @@ recnWindow(GtkWidget *parent, Account *account)
     }
   }
 
-  gtk_widget_show_all(recnData->dialog);
+  /* Allow grow, allow shrink, auto-shrink */
+  gtk_window_set_policy(GTK_WINDOW(recnData->window), TRUE, TRUE, TRUE);
+
+  gtk_widget_show_all(recnData->window);
+
+  gnc_recn_refresh_toolbar(recnData);
     
   return recnData;
 }
@@ -730,15 +1127,15 @@ gnc_ui_reconcile_window_raise(RecnWindow * recnData)
   if (recnData == NULL)
     return;
 
-  if (recnData->dialog == NULL)
+  if (recnData->window == NULL)
     return;
 
-  gtk_widget_show(recnData->dialog);
+  gtk_widget_show(recnData->window);
 
-  if (recnData->dialog->window == NULL)
+  if (recnData->window->window == NULL)
     return;
 
-  gdk_window_raise(recnData->dialog->window);
+  gdk_window_raise(recnData->window->window);
 }
 
 
@@ -757,7 +1154,7 @@ xaccDestroyRecnWindow(Account *account)
   if (recnData == NULL)
     return;
 
-  gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
+  gtk_widget_destroy(recnData->window);
 }
 
 
@@ -773,45 +1170,63 @@ xaccDestroyRecnWindow(Account *account)
 static void 
 recnClose(GtkWidget *w, gpointer data)
 {
-  RecnWindow *recnData = (RecnWindow *) data;
+  RecnWindow *recnData = data;
   Account *account = recnData->account;
-  
+  SCM id;
+
   REMOVE_FROM_LIST(RecnWindow, recnList, account, account);
+
+  id = recnData->toolbar_change_callback_id;
+  gnc_unregister_option_change_callback_id(id);
+
+  if (recnData->delete_refresh)
+    gnc_account_ui_refresh(recnData->account);
+
   free(recnData);
 }
 
 
 /********************************************************************\
- * recnOkCB                                                         *
- *   saves account stuff, when the user clicks "Ok"                 *
+ * recnFinishCB                                                     *
+ *   saves reconcile information                                    *
  *                                                                  *
  * Args:   w    - the widget that called us                         *
  *         data - the data struct for this window                   *
  * Return: none                                                     *
 \********************************************************************/
 static void 
-recnOkCB(GtkWidget *w, gpointer data)
+recnFinishCB(GtkWidget *w, gpointer data)
 {
-  RecnWindow  *recnData = (RecnWindow *) data;
+  RecnWindow  *recnData = data;
 
   if (!DEQ(recnRecalculateBalance(recnData), 0.0))
-    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->dialog),
+    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
                                     RECN_BALN_WARN, GNC_F))
       return;
 
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->credit));
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->debit));
 
-  /* refresh the register window */
-  xaccAccountDisplayRefresh(recnData->account);
+  recnData->delete_refresh = TRUE;
   
-  gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
+  gtk_widget_destroy(recnData->window);
 }
 
 static void 
 recnCancelCB(GtkWidget *w, gpointer data)
 {
-  RecnWindow  *recnData = (RecnWindow *) data;
+  RecnWindow *recnData = data;
+  gboolean changed = FALSE;
 
-  gnome_dialog_close(GNOME_DIALOG(recnData->dialog));
+  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->credit)))
+    changed = TRUE;
+  if (gnc_reconcile_list_changed(GNC_RECONCILE_LIST(recnData->debit)))
+    changed = TRUE;
+
+  if (changed)
+    if (!gnc_verify_dialog_parented(GTK_WINDOW(recnData->window),
+                                    RECN_CANCEL_WARN, GNC_F))
+      return;
+
+  gtk_widget_destroy(recnData->window);
 }

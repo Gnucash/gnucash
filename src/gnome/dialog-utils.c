@@ -618,34 +618,6 @@ gnc_ui_get_account_full_balance(Account *account)
 }
 
 
-char * gnc_ui_get_account_full_name(Account *account, const char *separator)
-{
-  Account *a;
-  gchar **names, *name;
-  gint num = 0;
-
-  assert(account != NULL);
-
-  /* Figure out how many names */
-  for (a = account; a != NULL; a = xaccAccountGetParentAccount(a))
-    num++;
-
-  /* allocate the memory, plus one for null termination */
-  names = g_new0(gchar *, num + 1);
-
-  /* Make the names array */
-  for (a = account, num--; a != NULL;
-       a = xaccAccountGetParentAccount(a), num--)
-    names[num] = xaccAccountGetName(a);
-
-  name = g_strjoinv(separator, names);
-
-  g_free(names);
-
-  return name;
-}
-
-
 char * gnc_ui_get_account_field_value_string(Account *account, int field)
 {
   assert(account != NULL);
@@ -789,4 +761,151 @@ gnc_get_toolbar_style()
     free(style_string);
 
   return tbstyle;
+}
+
+
+/********************************************************************\
+ * gnc_get_deficit_color                                            *
+ *   fill in the 3 color values for the color of deficit values     *
+ *                                                                  *
+ * Args: color - color structure                                    *
+ * Returns: none                                                    *
+ \*******************************************************************/
+void
+gnc_get_deficit_color(GdkColor *color)
+{
+  color->red   = 50000;
+  color->green = 0;
+  color->blue  = 0;
+}
+
+
+/********************************************************************\
+ * gnc_set_label_color                                              *
+ *   sets the color of the label given the value                    *
+ *                                                                  *
+ * Args: label - gtk label widget                                   *
+ *       value - value to use to set color                          *
+ * Returns: none                                                    *
+ \*******************************************************************/
+void
+gnc_set_label_color(GtkWidget *label, double value)
+{
+#if !USE_NO_COLOR
+  gboolean deficit;
+  GdkColormap *cm = gtk_widget_get_colormap(GTK_WIDGET(label));
+  GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(label));
+
+  style = gtk_style_copy(style);
+
+  deficit = (value < 0) && !DEQ(value, 0);
+
+  if (deficit)
+  {
+    gnc_get_deficit_color(&style->fg[GTK_STATE_NORMAL]);
+    gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
+  }
+  else
+    style->fg[GTK_STATE_NORMAL] = style->black;
+
+  gtk_widget_set_style(label, style);
+#endif
+}
+
+
+/********************************************************************\
+ * gnc_get_toolbar_style                                            *
+ *   returns the current account separator character                *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: account separator character                             *
+ \*******************************************************************/
+char
+gnc_get_account_separator()
+{
+  char separator = ':';
+  char *string;
+
+  string = gnc_lookup_multichoice_option("General",
+                                         "Account Separator",
+                                         "colon");
+
+  if (safe_strcmp(string, "colon") == 0)
+    separator = ':';
+  else if (safe_strcmp(string, "slash") == 0)
+    separator = '/';
+  else if (safe_strcmp(string, "backslash") == 0)
+    separator = '\\';
+  else if (safe_strcmp(string, "dash") == 0)
+    separator = '-';
+  else if (safe_strcmp(string, "period") == 0)
+    separator = '.';
+
+  if (string != NULL)
+    free(string);
+
+  return separator;
+}
+
+
+/********************************************************************\
+ * gnc_get_window_size                                              *
+ *   returns the window size to use for the given option prefix,    *
+ *   if window sizes are being saved, otherwise returns 0 for both. *
+ *                                                                  *
+ * Args: prefix - the option name prefix                            *
+ *       width  - pointer to width                                  *
+ *       height - pointer to height                                 *
+ * Returns: nothing                                                 *
+ \*******************************************************************/
+void
+gnc_get_window_size(const char *prefix, int *width, int *height)
+{
+  int w, h;
+  char *name;
+
+  if (gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE))
+  {
+    name = g_strconcat(prefix, "_width", NULL);
+    w = gnc_lookup_number_range_option("__gui", name, 0.0);
+    g_free(name);
+
+    name = g_strconcat(prefix, "_height", NULL);
+    h = gnc_lookup_number_range_option("__gui", name, 0.0);
+    g_free(name);
+  }
+  else
+  {
+    w = 0;
+    h = 0;
+  }
+
+  if (width != NULL)
+    *width = w;
+
+  if (height != NULL)
+    *height = h;
+}
+
+void
+gnc_save_window_size(const char *prefix, int width, int height)
+{
+  char *name;
+  gboolean save;
+
+  save = gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE);
+
+  name = g_strconcat(prefix, "_width", NULL);
+  if (save)
+    gnc_set_number_range_option("__gui", name, width);
+  else
+    gnc_set_option_default("__gui", name);
+  g_free(name);
+
+  name = g_strconcat(prefix, "_height", NULL);
+  if (save)
+    gnc_set_number_range_option("__gui", name, height);
+  else
+    gnc_set_option_default("__gui", name);
+  g_free(name);
 }

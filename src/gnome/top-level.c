@@ -30,9 +30,10 @@
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
-#include "scripts_menu.h"
+#include "extensions.h"
 #include "window-help.h"
 #include "window-report.h"
+#include "dialog-utils.h"
 #include "FileIO.h"
 #include "FileBox.h"
 #include "FileDialog.h"
@@ -44,6 +45,8 @@
 #include "util.h"
 #include "date.h"
 #include "AccWindow.h"
+#include "SplitLedger.h"
+#include "splitreg.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -51,6 +54,10 @@ static void gnc_configure_date_format_cb(void *);
 static void gnc_configure_date_format(void);
 static void gnc_configure_newacc_currency_cb(void *);
 static void gnc_configure_newacc_currency(void);
+static void gnc_configure_account_separator_cb(void *);
+static void gnc_configure_account_separator(void);
+static void gnc_configure_register_colors_cb(void *);
+static void gnc_configure_register_colors(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -64,6 +71,8 @@ static int gnome_is_terminating = FALSE;
 
 static SCM date_callback_id = SCM_UNDEFINED;
 static SCM currency_callback_id = SCM_UNDEFINED;
+static SCM account_separator_callback_id = SCM_UNDEFINED;
+static SCM register_colors_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -123,6 +132,17 @@ gnucash_ui_init()
                                           NULL, "International",
                                           "Default Currency");
 
+    gnc_configure_account_separator();
+    account_separator_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_account_separator_cb,
+                                          NULL, "General",
+                                          "Account Separator");
+
+    gnc_configure_register_colors();
+    register_colors_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_register_colors_cb,
+                                          NULL, "Register Colors", NULL);
+
     mainWindow();
 
     gnucash_style_init();
@@ -143,6 +163,7 @@ gnc_ui_shutdown (void)
   {
     gnome_is_terminating = TRUE;
     gnc_ui_destroy_all_subwindows();
+    gnc_ui_mainWindow_save_size();
     gtk_widget_hide(app);
     gtk_main_quit();
   }
@@ -168,6 +189,8 @@ gnc_ui_destroy (void)
 
   gnc_unregister_option_change_callback_id(date_callback_id);
   gnc_unregister_option_change_callback_id(currency_callback_id);
+  gnc_unregister_option_change_callback_id(account_separator_callback_id);
+  gnc_unregister_option_change_callback_id(register_colors_callback_id);
 
   if (app != NULL)
   {
@@ -291,7 +314,7 @@ gnc_configure_date_format (void)
 
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets default currency to
- *    the current value on the scheme size
+ *    the current value on the scheme side
  *  
  * Args: Nothing
  * Returns: Nothing
@@ -320,6 +343,123 @@ gnc_configure_newacc_currency(void)
 
   if (newacc_def_currency != NULL)
     free(newacc_def_currency);
+}
+
+/* gnc_configure_account_separator_cb
+ *    Callback called when options change - sets account separator
+ *    to the current value on the scheme side
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_account_separator_cb(void *data)
+{
+  gnc_configure_account_separator();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+}
+
+/* gnc_configure_account_separator
+ *    sets the accoutn separator to the
+ *    current value on the scheme side
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_account_separator(void)
+{
+  char separator = gnc_get_account_separator();
+
+  xaccSRSetAccountSeparator(separator);
+}
+
+/* gnc_configure_register_colors_cb
+ *    Callback called when options change - sets
+ *    register colors to their guile values
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_register_colors_cb(void *data)
+{
+  gnc_configure_register_colors();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+}
+
+/* gnc_configure_register_colors_cb
+ *    sets register colors to their guile values
+ *  
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_register_colors(void)
+{
+  SplitRegisterColors reg_colors;
+
+  reg_colors.single_cursor_passive_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Single mode default even row background",
+                                 0xccccff);
+
+  reg_colors.single_cursor_passive_bg_color2 =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Single mode default odd row background",
+                                 0xccccff);
+
+  reg_colors.single_cursor_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Single mode active background",
+                                 0xffdddd);
+
+  reg_colors.double_cursor_passive_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Double mode default even row background",
+                                 0xccccff);
+
+  reg_colors.double_cursor_passive_bg_color2 =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Double mode default odd row background",
+                                 0xffffff);
+
+  reg_colors.double_alternate_virt =
+    gnc_lookup_boolean_option("Register Colors",
+                              "Double mode colors alternate with transactions",
+                              FALSE);
+
+  reg_colors.double_cursor_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Double mode active background",
+                                 0xffdddd);
+
+  reg_colors.trans_cursor_passive_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Multi mode default transaction background",
+                                 0xccccff);
+
+  reg_colors.trans_cursor_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Multi mode active transaction background",
+                                 0xffdddd);
+
+  reg_colors.split_cursor_passive_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Multi mode default split background",
+                                 0xffffff);
+
+  reg_colors.split_cursor_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Multi mode active split background",
+                                 0xffffdd);
+
+  reg_colors.header_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Header background",
+                                 0xffffff);
+
+  xaccSetSplitRegisterColors(reg_colors);
 }
 
 /****************** END OF FILE **********************/

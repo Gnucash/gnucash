@@ -96,6 +96,8 @@ GtkWidget * gnc_account_tree_new_with_root (Account *account);
 
 void gnc_account_tree_refresh (GNCAccountTree *tree);
 
+void gnc_account_tree_refresh_all (void);
+
 void gnc_account_tree_set_view_info(GNCAccountTree *tree,
 				    AccountViewInfo *info);
 
@@ -107,11 +109,16 @@ gboolean gnc_account_tree_select_accounts(GNCAccountTree *tree,
                                           GList          *account_list,
                                           gboolean        show_last);
 
+void gnc_account_tree_expand_account (GNCAccountTree *tree,
+                                      Account *account);
+
 void gnc_account_tree_insert_account (GNCAccountTree *tree,
 				      Account *account);
 
 void gnc_account_tree_remove_account (GNCAccountTree *tree,
 				      Account *account);
+
+void gnc_account_tree_remove_account_all(Account *account);
 
 void gnc_account_tree_show_categories (GNCAccountTree *tree);
 

@@ -34,15 +34,20 @@
 #include "Refresh.h"
 #include "FileDialog.h"
 #include "dialog-utils.h"
+#include "account-tree.h"
+#include "window-help.h"
 #include "messages.h"
 #include "util.h"
-#include "account-tree.h"
+
 
 /* From Account.c. One day, maybe this will be configurable. */
 extern int unsafe_ops;
 
 /* List of Open edit windows */
 static EditAccWindow ** editAccList = NULL;
+
+static gint last_width = 0;
+static gint last_height = 0;
 
 
 struct _editaccwindow
@@ -72,6 +77,11 @@ gnc_ui_EditAccWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
   editAccData->top_level_account = NULL;
 
   free(editAccData);
+
+  gdk_window_get_geometry(GTK_WIDGET(dialog)->window, NULL, NULL,
+                          &last_width, &last_height, NULL);
+
+  gnc_save_window_size("account_edit_win", last_width, last_height);
 
   /* really close */
   return FALSE;
@@ -105,6 +115,12 @@ gnc_filter_parent_accounts(Account *account, gpointer data)
 
   return xaccAccountTypesCompatible(xaccAccountGetType(account),
                                     xaccAccountGetType(editAccData->account));
+}
+
+static void 
+gnc_ui_EditAccWindow_help_cb(GtkWidget *widget, gpointer data)
+{
+  helpWindow(NULL, HELP_STR, HH_ACCEDIT);
 }
 
 static void
@@ -229,6 +245,8 @@ gnc_ui_create_parent_acc_frame(EditAccWindow *editAccData)
   gnc_account_tree_set_filter(GNC_ACCOUNT_TREE(tree),
                               gnc_filter_parent_accounts, editAccData);
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
+  gnc_account_tree_expand_account(GNC_ACCOUNT_TREE(tree),
+                                  editAccData->top_level_account);
   editAccData->parent_tree = tree;
 
   /* the initial setting should be the *parent* of the current account */
@@ -259,25 +277,34 @@ editAccWindow(Account *acc)
   
   FETCH_FROM_LIST (EditAccWindow, editAccList, acc, account, editAccData);
 
-  name = gnc_ui_get_account_full_name(acc, ":");
+  name = xaccAccountGetFullName(acc, gnc_get_account_separator());
   title = g_strconcat(name, " - ", EDIT_ACCT_STR, NULL);
 
   dialog = gnome_dialog_new(title,
 			    GNOME_STOCK_BUTTON_OK,
 			    GNOME_STOCK_BUTTON_CANCEL,
+			    GNOME_STOCK_BUTTON_HELP,
 			    NULL);
 
-  g_free(name);
+  free(name);
   g_free(title);
 
   editAccData->dialog  = dialog;
   editAccData->account = acc;
   
+  if (last_width == 0)
+    gnc_get_window_size("account_edit_win", &last_width, &last_height);
+
+  gtk_window_set_default_size(GTK_WINDOW(dialog), last_width, last_height);
+
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
 
   /* destroy, don't hide */
   gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
+
+  /* allow grow and shrink, no auto-shrink */
+  gtk_window_set_policy(GTK_WINDOW(dialog), TRUE, TRUE, FALSE);
 
   vbox = GNOME_DIALOG(editAccData->dialog)->vbox;
 
@@ -308,7 +335,7 @@ editAccWindow(Account *acc)
 
   /* Parent Account entry */
   widget = gnc_ui_create_parent_acc_frame(editAccData);
-  gtk_box_pack_start(GTK_BOX(vbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
 
   /* source menu */
   widget = gnc_ui_account_source_box_create_from_account
@@ -338,9 +365,15 @@ editAccWindow(Account *acc)
     (GNOME_DIALOG(dialog), 1,
      GTK_SIGNAL_FUNC(gnc_ui_EditAccWindow_cancel_cb), editAccData);
 
+  gnome_dialog_button_connect
+    (GNOME_DIALOG(dialog), 2,
+     GTK_SIGNAL_FUNC(gnc_ui_EditAccWindow_help_cb), editAccData);
+
   gtk_signal_connect(GTK_OBJECT(dialog), "close",
 		     GTK_SIGNAL_FUNC (gnc_ui_EditAccWindow_close_cb),
 		     editAccData);
+
+  gtk_widget_grab_focus(GTK_WIDGET(editAccData->edit_info.name_entry));
 
   gtk_widget_show_all(dialog);
 

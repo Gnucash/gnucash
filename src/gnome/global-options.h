@@ -20,8 +20,11 @@
 #ifndef __GLOBAL_OPTIONS_H__
 #define __GLOBAL_OPTIONS_H__
 
+#include "config.h"
+
 #include <gnome.h>
 
+#include "gnc-common.h"
 #include "option-util.h"
 
 
@@ -36,17 +39,32 @@ SCM gnc_register_option_change_callback(OptionChangeCallback callback,
 
 void gnc_unregister_option_change_callback_id(SCM callback_id);
 
-GNCOption * gnc_get_option_by_name(char *section_name, char *name);
+GNCOption * gnc_get_option_by_name(const char *section_name, const char *name);
 GNCOption * gnc_get_option_by_SCM(SCM guile_option);
 
-gboolean gnc_lookup_boolean_option(char *section, char *name,
+gboolean gnc_lookup_boolean_option(const char *section, const char *name,
 				   gboolean default_value);
 
-char * gnc_lookup_string_option(char *section, char *name,
+char * gnc_lookup_string_option(const char *section, const char *name,
 				char *default_value);
 
-char * gnc_lookup_multichoice_option(char *section, char *name,
+char * gnc_lookup_multichoice_option(const char *section, const char *name,
                                      char *default_value);
+
+gdouble gnc_lookup_number_range_option(const char *section, const char *name,
+                                       gdouble default_value);
+
+gboolean gnc_lookup_color_option(const char *section, const char *name,
+                                 gdouble *red, gdouble *green,
+                                 gdouble *blue, gdouble *alpha);
+
+uint32 gnc_lookup_color_option_argb(const char *section, const char *name,
+                                    uint32 default_value);
+
+void gnc_set_option_default(const char *section, const char *name);
+
+gboolean gnc_set_number_range_option(const char *section, const char *name,
+                                     gdouble value);
 
 /* private */
 

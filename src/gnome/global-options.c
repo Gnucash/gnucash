@@ -27,6 +27,7 @@
 #include "option-util.h"
 #include "query-user.h"
 #include "guile-util.h"
+#include "window-help.h"
 #include "messages.h"
 #include "util.h"
 
@@ -123,7 +124,7 @@ gnc_unregister_option_change_callback_id(SCM callback_id)
  * Returns: given option, or NULL if none                           *
 \********************************************************************/
 GNCOption *
-gnc_get_option_by_name(char *section_name, char *name)
+gnc_get_option_by_name(const char *section_name, const char *name)
 {
   return gnc_option_db_get_option_by_name(global_options,
                                           section_name, name);
@@ -155,7 +156,8 @@ gnc_get_option_by_SCM(SCM guile_option)
  * Return: gboolean option value                                    *
 \********************************************************************/
 gboolean
-gnc_lookup_boolean_option(char *section, char *name, gboolean default_value)
+gnc_lookup_boolean_option(const char *section, const char *name,
+                          gboolean default_value)
 {
   return gnc_option_db_lookup_boolean_option(global_options, section,
                                              name, default_value);
@@ -174,7 +176,8 @@ gnc_lookup_boolean_option(char *section, char *name, gboolean default_value)
  * Return: char * option value                                      *
 \********************************************************************/
 char *
-gnc_lookup_string_option(char *section, char *name, char *default_value)
+gnc_lookup_string_option(const char *section, const char *name,
+                         char *default_value)
 {
   return gnc_option_db_lookup_string_option(global_options, section,
                                             name, default_value);
@@ -194,10 +197,107 @@ gnc_lookup_string_option(char *section, char *name, char *default_value)
  * Return: char * option value                                      *
 \********************************************************************/
 char *
-gnc_lookup_multichoice_option(char *section, char *name, char *default_value)
+gnc_lookup_multichoice_option(const char *section, const char *name,
+                              char *default_value)
 {
   return gnc_option_db_lookup_multichoice_option(global_options, section,
                                                  name, default_value);
+}
+
+
+/********************************************************************\
+ * gnc_lookup_number_range_option                                   *
+ *   looks up a number range option. If present, return its value   *
+ *   as a gdouble, otherwise returns default_value.                 *
+ *                                                                  *
+ * Args: section - section name of option                           *
+ *       name    - name of option                                   *
+ *       default - default value if not found                       *
+ * Return: char * option value                                      *
+\********************************************************************/
+gdouble
+gnc_lookup_number_range_option(const char *section, const char *name,
+                               gdouble default_value)
+{
+  return gnc_option_db_lookup_number_range_option(global_options, section,
+                                                  name, default_value);
+}
+
+
+/********************************************************************\
+ * gnc_lookup_color_option                                          *
+ *   looks up a color option. If present, returns its value in the  *
+ *   color variable, otherwise leaves the color variable alone.     *
+ *                                                                  *
+ * Args: section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       red       - where to store the red value                   *
+ *       blue      - where to store the blue value                  *
+ *       green     - where to store the green value                 *
+ *       alpha     - where to store the alpha value                 *
+ * Return: true if option was found                                 *
+\********************************************************************/
+gboolean gnc_lookup_color_option(const char *section, const char *name,
+                                 gdouble *red, gdouble *green,
+                                 gdouble *blue, gdouble *alpha)
+{
+  return gnc_option_db_lookup_color_option(global_options, section, name,
+                                           red, green, blue, alpha);
+}
+
+
+/********************************************************************\
+ * gnc_lookup_color_option_argb                                     *
+ *   looks up a color option. If present, returns its argb value,   *
+ *   otherwise returns the given default value.                     *
+ *                                                                  *
+ * Args: odb       - option database to search in                   *
+ *       section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       default_value - default value to return if problem         *
+ * Return: argb value                                               *
+\********************************************************************/
+uint32
+gnc_lookup_color_option_argb(const char *section, const char *name,
+                             uint32 default_value)
+{
+  return gnc_option_db_lookup_color_option_argb(global_options, section, name,
+                                                default_value);
+}
+
+
+/********************************************************************\
+ * gnc_set_option_default                                           *
+ *   set the option to its default value                            *
+ *                                                                  *
+ * Args: section - section name of option                           *
+ *       name    - name of option                                   *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_set_option_default(const char *section, const char *name)
+{
+  gnc_option_db_set_option_default(global_options, section, name);
+}
+
+
+/********************************************************************\
+ * gnc_set_number_range_option                                      *
+ *   sets the number range option to the given value. If successful *
+ *   returns TRUE, otherwise FALSE.                                 *
+ *                                                                  *
+ * Args: section   - section name of option                         *
+ *       name      - name of option                                 *
+ *       value     - value to set to                                *
+ * Return: success indicator                                        *
+\********************************************************************/
+gboolean
+gnc_set_number_range_option(const char *section, const char *name,
+                            gdouble value)
+{
+  return gnc_option_db_set_number_range_option(global_options,
+                                               section, name,
+                                               value);
 }
 
 
@@ -231,7 +331,7 @@ static void
 gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
 			   gint arg1, gpointer user_data)
 {
-  gnome_ok_dialog("Help on properties");
+  helpWindow(NULL, HELP_STR, HH_GLOBPREFS);
 }
 
 /* Options dialog... this should house all of the config options     */

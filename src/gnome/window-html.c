@@ -324,8 +324,8 @@ struct _HTMLWindow
 
   HTMLHistory *history;
 
-  HTMLAnchorCB anchor_cb;
-  HTMLJumpCB   jump_cb;
+  HTMLAnchorCB    anchor_cb;
+  HTMLJumpCB      jump_cb;
 };
 
 

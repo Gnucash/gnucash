@@ -92,12 +92,7 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
   gchar * string;
 
   string = gtk_entry_get_text(GTK_ENTRY(adjBData->balance_entry));
-
-  if(sscanf(string, "%lf", &new_balance) != 1)
-  {
-    gnc_error_dialog_parented(GTK_WINDOW(adjBData->dialog), BALANCE_NUM_MSG);
-    return;
-  }
+  new_balance = xaccParseAmount(string, GNC_T);
 
   time = gnome_date_edit_get_date(GNOME_DATE_EDIT(adjBData->date_entry));
 
@@ -129,6 +124,29 @@ gnc_ui_AdjBWindow_ok_cb(GtkWidget * widget, gpointer data)
 }
 
 
+static gboolean
+gnc_adjust_update_cb(GtkWidget *widget, GdkEventFocus *event, gpointer data)
+{
+  GtkEntry *entry = GTK_ENTRY(widget);
+  gchar *new_string;
+  gchar *string;
+  double value;
+
+  string = gtk_entry_get_text(entry);
+
+  value = xaccParseAmount(string, GNC_T);
+
+  new_string = xaccPrintAmount(value, PRTSEP);
+
+  if (safe_strcmp(string, new_string) == 0)
+    return FALSE;
+
+  gtk_entry_set_text(entry, new_string);
+
+  return FALSE;
+}
+
+
 /********************************************************************\
  * adjBWindow                                                       *
  *   opens up the window to adjust the balance                      *
@@ -145,7 +163,7 @@ adjBWindow(Account *account)
    
   FETCH_FROM_LIST(AdjBWindow, adjBList, account, account, adjBData);
 
-  name = gnc_ui_get_account_full_name(account, ":");
+  name = xaccAccountGetFullName(account, gnc_get_account_separator());
   title = g_strconcat(name, " - ", ADJ_BALN_STR, NULL);
 
   dialog = gnome_dialog_new(title,
@@ -153,7 +171,7 @@ adjBWindow(Account *account)
 			    GNOME_STOCK_BUTTON_CANCEL,
 			    NULL);
 
-  g_free(name);
+  free(name);
   g_free(title);
 
   adjBData->account = account;
@@ -170,7 +188,6 @@ adjBWindow(Account *account)
   frame = gtk_frame_new(NULL);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
   gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
-  gtk_widget_show(frame);
 
   {
     GtkWidget *hbox, *vbox;
@@ -181,16 +198,13 @@ adjBWindow(Account *account)
     hbox = gtk_hbox_new(FALSE, 5);
     gtk_container_set_border_width(GTK_CONTAINER(hbox), 10);
     gtk_container_add(GTK_CONTAINER(frame), hbox);
-    gtk_widget_show(hbox);
 
     /* Label box */
     vbox = gtk_vbox_new(TRUE, 3);
-    gtk_widget_show(vbox);
 
     /* Date label */
     label = gtk_label_new(DATE_STR);
     gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    gtk_widget_show(label);
     gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 
     /* new balance label */
@@ -198,24 +212,27 @@ adjBWindow(Account *account)
     label = gtk_label_new(string);
     g_free(string);
     gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
-    gtk_widget_show(label);
     gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
     /* Edit widget box */
     vbox = gtk_vbox_new(TRUE, 3);
-    gtk_widget_show(vbox);
 
     date = gnome_date_edit_new(time(NULL), FALSE, FALSE);
-    gtk_widget_show(date);
     gtk_box_pack_start(GTK_BOX(vbox), date, TRUE, TRUE, 0);
     adjBData->date_entry = date;
 
     amount = gtk_entry_new();
-    gtk_widget_show(amount);
     gtk_box_pack_start(GTK_BOX(vbox), amount, TRUE, TRUE, 0);
     adjBData->balance_entry = amount;
+
+    gtk_entry_set_text(GTK_ENTRY(amount), xaccPrintAmount(0.0, PRTSEP));
+    gtk_entry_select_region(GTK_ENTRY(amount), 0, -1);
+
+    gtk_signal_connect(GTK_OBJECT(amount), "focus-out-event",
+                       GTK_SIGNAL_FUNC(gnc_adjust_update_cb), NULL);
+
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(amount));
 
     gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
@@ -233,7 +250,9 @@ adjBWindow(Account *account)
 		     GTK_SIGNAL_FUNC (gnc_ui_adjBWindow_close_cb),
 		     adjBData);
 
-  gtk_widget_show(dialog);
+  gtk_widget_grab_focus(adjBData->balance_entry);
+
+  gtk_widget_show_all(dialog);
 
   return adjBData;
 }

@@ -122,6 +122,38 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 
     g_list_free(list);
   }
+  else if (safe_strcmp(type, "number-range") == 0)
+  {
+    GtkSpinButton *spinner;
+    gdouble d_value;;
+
+    spinner = GTK_SPIN_BUTTON(option->widget);
+
+    if (gh_number_p(value))
+    {
+      d_value = gh_scm2double(value);
+      gtk_spin_button_set_value(spinner, d_value);
+    }
+    else
+      bad_value = TRUE;
+  }
+  else if (safe_strcmp(type, "color") == 0)
+  {
+    gdouble red, green, blue, alpha;
+
+    if (gnc_option_get_color_info(option, use_default,
+                                  &red, &green, &blue, &alpha))
+    {
+      GnomeColorPicker *picker;
+
+      picker = GNOME_COLOR_PICKER(option->widget);
+
+      gnome_color_picker_set_d(picker, red, green, blue, alpha);
+    }
+    else
+      bad_value = TRUE;
+
+  }
   else
   {
     PERR("gnc_option_set_ui_value: Unknown type. Ignoring.\n");
@@ -201,10 +233,38 @@ gnc_option_get_ui_value(GNCOption *option)
 
     g_list_free(list);
   }
+  else if (safe_strcmp(type, "number-range") == 0)
+  {
+    GtkSpinButton *spinner;
+    gdouble value;
+
+    spinner = GTK_SPIN_BUTTON(option->widget);
+
+    value = gtk_spin_button_get_value_as_float(spinner);
+
+    result = gh_double2scm(value);
+  }
+  else if (safe_strcmp(type, "color") == 0)
+  {
+    GnomeColorPicker *picker;
+    gdouble red, green, blue, alpha;
+    gdouble scale;
+
+    picker = GNOME_COLOR_PICKER(option->widget);
+
+    gnome_color_picker_get_d(picker, &red, &green, &blue, &alpha);
+
+    scale = gnc_option_color_range(option);
+
+    result = gh_eval_str("()");
+    result = gh_cons(gh_double2scm(alpha * scale), result);
+    result = gh_cons(gh_double2scm(blue * scale), result);
+    result = gh_cons(gh_double2scm(green * scale), result);
+    result = gh_cons(gh_double2scm(red * scale), result);
+  }
   else
   {
-    PERR("gnc_option_get_ui_value: "
-	 "Unknown type for refresh. Ignoring.\n");
+    PERR("gnc_option_get_ui_value: Unknown type for refresh. Ignoring.\n");
   }
 
   free(type);
@@ -435,6 +495,19 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
 }
 
 static void
+gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
+                            guint arg3, guint arg4, gpointer data)
+{
+  GtkWidget *pbox;
+  GNCOption *option = data;
+
+  option->changed = TRUE;
+
+  pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
 gnc_option_set_ui_widget(GNCOption *option,
                          GtkBox *page_box,
                          GtkTooltips *tooltips)
@@ -579,6 +652,75 @@ gnc_option_set_ui_widget(GNCOption *option,
     gtk_clist_set_row_height(GTK_CLIST(value), 0);
     gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
   }
+  else if (safe_strcmp(type, "number-range") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+    GtkAdjustment *adj;
+    gdouble lower_bound = G_MINDOUBLE;
+    gdouble upper_bound = G_MAXDOUBLE;
+    gdouble step_size = 1.0;
+    int num_decimals = 0;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+
+    gnc_option_get_range_info(option, &lower_bound, &upper_bound,
+                              &num_decimals, &step_size);
+    adj = GTK_ADJUSTMENT(gtk_adjustment_new(lower_bound, lower_bound,
+                                            upper_bound, step_size,
+                                            step_size * 5.0,
+                                            step_size * 5.0));
+    value = gtk_spin_button_new(adj, step_size, num_decimals);
+    gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value), TRUE);
+
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "changed",
+		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option, tooltips),
+		     FALSE, FALSE, 0);
+  }
+  else if (safe_strcmp(type, "color") == 0)
+  {
+    GtkWidget *label;
+    gchar *colon_name;
+    gboolean use_alpha;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    g_free(colon_name);
+
+    enclosing = gtk_hbox_new(FALSE, 5);
+
+    use_alpha = gnc_option_use_alpha(option);
+
+    value = gnome_color_picker_new();
+    gnome_color_picker_set_title(GNOME_COLOR_PICKER(value), name);
+    gnome_color_picker_set_use_alpha(GNOME_COLOR_PICKER(value), use_alpha);
+
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "color-set",
+		       GTK_SIGNAL_FUNC(gnc_option_color_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option, tooltips),
+		     FALSE, FALSE, 0);
+  }
   else
   {
     PERR("gnc_option_set_ui_widget: Unknown type. Ignoring.\n");
@@ -617,9 +759,14 @@ gnc_options_dialog_append_page(GnomePropertyBox *propertybox,
   GtkWidget *page_label;
   GtkWidget *page_content_box;
   gint num_options;
+  gchar *name;
   gint i;
 
-  page_label = gtk_label_new(gnc_option_section_name(section));
+  name = gnc_option_section_name(section);
+  if (strncmp(name, "__", 2) == 0)
+    return;
+
+  page_label = gtk_label_new(name);
   gtk_widget_show(page_label);
 
   page_content_box = gtk_vbox_new(FALSE, 5);
@@ -652,10 +799,12 @@ gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
 {
   GtkTooltips *tooltips;
   GNCOptionSection *section;
-  gint num_sections = gnc_option_db_num_sections(odb);
+  gint num_sections;
   gint i;
 
   tooltips = gtk_tooltips_new();
+
+  num_sections = gnc_option_db_num_sections(odb);
 
   for (i = 0; i < num_sections; i++)
   {
