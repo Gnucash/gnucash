@@ -713,6 +713,10 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
     /* Mark the book as saved */
     gnc_book_mark_saved (book);
 
+    /* fix price quote sources */
+    xaccGroupScrubQuoteSources (gnc_book_get_group(book),
+				gnc_book_get_commodity_table(book));
+
     /* Fix account and transaction commodities */
     xaccGroupScrubCommodities (gnc_book_get_group(book));
 

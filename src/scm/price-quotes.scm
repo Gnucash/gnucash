@@ -353,38 +353,9 @@
 
 (define (gnc:book-add-quotes book)
 
-  (define (find-quotables group)
-    ;; Return a list of accounts for whose commodities we should get
-    ;; quotes.
-    (define (quotable-currency-account? a)
-      (let ((commodity (gnc:account-get-commodity a)))
-        (equal? (gnc:commodity-get-namespace commodity) "ISO4217")))
-
-    (define (quotable-account? a)
-      (let ((type (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type a)
-                                                      #f))
-	    (src (gnc:account-get-price-src a))
-	    (balance (not (gnc:numeric-zero-p (gnc:account-get-balance a)))))
-
-        (if (not type) (set! type '()))
-        (if (symbol? type) (set! type (list type)))
-        (if (and src
-		 (or (memq 'stock type)
-		     (memq 'mutual-fund type)
-		     (and (memq 'currency type)
-                          (quotable-currency-account? a))))
-	    a
-	    #f)))
-
-    (let ((quotables (filter quotable-account? (gnc:group-get-subaccounts group))))
-      (if (null? quotables)
-	  #f
-	  quotables))
-    )
-
-  (define (accounts->fq-call-data account-list)
-    ;; Take a list of accounts that should be "quotable" -- i.e. they
-    ;; have a price-source, and are of the right type, and return a
+  (define (book->commodity->fq-call-data book)
+    ;; Call helper that walks all of the defined commodities to see if
+    ;; any are marked for quote retrieval.  This function returns a
     ;; list of info needed for the relevant Finance::Quote calls, and
     ;; a list of the corresponding commodities.  Also perform a bit of
     ;; optimization, merging calls for symbols to the same
@@ -400,51 +371,42 @@
     ;;                     (commodity-4 currency-4 tz-4) ...)
     ;;  ...)
 
-  (define (account->fq-cmd account)
-    ;; Returns (cons fq-method-sym
-    ;;               (list commodity currency assumed-timezone-str))
-    (let* ((commodity (gnc:account-get-commodity account))
-           (currency (gnc:default-currency))
-           (src (and account (gnc:account-get-price-src account)))
-           (tz (gnc:account-get-quote-tz account))
-	   (fq-method-sym (and src (gnc:price-source-internal2fq src)))
-           (mnemonic (and commodity (gnc:commodity-get-mnemonic commodity))))
-      (and
-       commodity
-       currency
-       fq-method-sym
-       mnemonic
-       (list fq-method-sym commodity currency tz))))
+    (let* ((ct (gnc:book-get-commodity-table book))
+	   (big-list (gnc:commodity-table-get-quotable-commodities-info ct ""))
+	   (commodity-list #f)
+	   (currency-list (filter
+			   (lambda (a) (not (equal? (cadr a) (caddr a))))
+			   (call-with-values 
+			   (lambda () (partition!
+				       (lambda (cmd)
+					 (not (string=? (car cmd) "currency")))
+				       big-list))
+			   (lambda (a b) (set! commodity-list a) b))))
+	   (quote-hash (make-hash-table 31)))
 
-  (let* ((big-list (delete #f (map account->fq-cmd account-list)))
-         (cmd-list #f)
-         (currency-cmd-list (call-with-values 
-                             (lambda () (partition!
-                                         (lambda (cmd)
-                                           (not (equal? (car cmd) "currency")))
-                                         big-list))
-                             (lambda (a b) (set! cmd-list a) b)))
-         (cmd-hash (make-hash-table 31)))
+      (if (null? big-list)
+	  #f
+	  (begin
 
-    ;; Now collect symbols going to the same backend.
-    (item-list->hash! cmd-list cmd-hash car cdr hash-ref hash-set! #t)
+	    ;; Now collect symbols going to the same backend.
+	    (item-list->hash! commodity-list quote-hash car cdr hash-ref hash-set! #t)
 
-    ;; Now translate to just what finance-quote-helper expects.
-    (append
-     (hash-fold
-      (lambda (key value prior-result)
-        (cons (cons key value)
-              prior-result))
-      '()
-      cmd-hash)
-     (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
-          currency-cmd-list))))
+	    ;; Now translate to just what finance-quote-helper expects.
+	    (append
+	     (hash-fold
+	      (lambda (key value prior-result)
+		(cons (cons key value)
+		      prior-result))
+	      '()
+	      quote-hash)
+	     (map (lambda (cmd) (cons (car cmd) (list (cdr cmd))))
+		  currency-list))))))
 
   (define (fq-call-data->fq-calls fq-call-data)
-    ;; take an output element from accounts->fq-call-data and return a
-    ;; list where the gnc_commodities have been converted to their
-    ;; fq-suitable symbol strings.  i.e. turn the former into the
-    ;; latter:
+    ;; take an output element from book->commodity->fq-call-data and
+    ;; return a list where the gnc_commodities have been converted to
+    ;; their fq-suitable symbol strings.  i.e. turn the former into
+    ;; the latter:
     ;;
     ;; ("yahoo" (commodity-1 currency-1 tz-1)
     ;;          (commodity-2 currency-2 tz-2) ...)
@@ -613,8 +575,7 @@
   ;; now, they'll result in funny formatting.
 
   (let* ((group (gnc:book-get-group book))
-         (quotables (and group (find-quotables group)))
-         (fq-call-data (and quotables (accounts->fq-call-data quotables)))
+         (fq-call-data (book->commodity->fq-call-data book))
          (fq-calls (and fq-call-data
                         (apply append
                                (map fq-call-data->fq-calls fq-call-data))))
@@ -642,11 +603,11 @@
          (keep-going? #t))
 
     (cond
-     ((eq? quotables #f)
+     ((eq? fq-call-data #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog  (_ "No accounts marked for quote retrieval."))
-	  (gnc:warn (_ "No accounts marked for quote retrieval."))))
+          (gnc:error-dialog  (_ "No commodities marked for quote retrieval."))
+	  (gnc:warn (_ "No commodities marked for quote retrieval."))))
      ((eq? fq-results #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)

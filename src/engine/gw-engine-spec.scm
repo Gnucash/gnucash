@@ -921,22 +921,6 @@ Expenses) are given numeric codes in corresponding ``number ranges.''")
 
 (gw:wrap-function
  ws
- 'gnc:account-get-price-src
- '(<gw:mchars> callee-owned const)
- "xaccAccountGetPriceSrc"
- '((<gnc:Account*> a))
- "Get the account's price source, if any.")
-
-(gw:wrap-function
- ws
- 'gnc:account-get-quote-tz
- '(<gw:mchars> callee-owned const)
- "xaccAccountGetQuoteTZ"
- '((<gnc:Account*> a))
- "Get the quote source's timezone, if any.")
-
-(gw:wrap-function
- ws
  'gnc:account-get-children
  '<gnc:AccountGroup*>
  "xaccAccountGetChildren"
@@ -2189,7 +2173,16 @@ of having a parent transaction with which one is working...")
  "gnc_commodity_table_get_commodities"
  '((<gnc:commodity-table*> table)
    ((<gw:mchars> caller-owned const) namespace))
- "Return a list of all the namespaces in the table.")
+ "Return a list of all the commodities in a given namespace in the table.")
+
+(gw:wrap-function
+ ws
+ 'gnc:commodity-table-get-quotable-commodities
+ '(gw:glist-of <gnc:commodity*> caller-owned)
+ "gnc_commodity_table_get_quotable_commodities"
+ '((<gnc:commodity-table*> table)
+   ((<gw:mchars> caller-owned const) namespace))
+ "Return a list of all the quotable commodities in a given namespace in the table.")
 
 (gw:wrap-function
  ws

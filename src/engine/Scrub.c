@@ -571,6 +571,67 @@ xaccGroupScrubCommodities (AccountGroup *group)
 
 /* ================================================================ */
 
+static gboolean
+check_quote_source (gnc_commodity *com, gpointer data)
+{
+  gboolean *commodity_has_quote_src = (gboolean *)data;
+  if (com && !gnc_commodity_is_iso(com))
+    *commodity_has_quote_src |= gnc_commodity_get_quote_flag(com);
+  return TRUE;
+}
+
+static gpointer
+move_quote_source (Account *account, gpointer data)
+{
+  gnc_commodity *com;
+  gboolean new_style = GPOINTER_TO_INT(data);
+  const char *source, *tz;
+
+  com = xaccAccountGetCommodity(account);
+  if (!com)
+    return NULL;
+
+  if (!new_style) {
+    source = dxaccAccountGetPriceSrc(account);
+    if (!source || !*source)
+      return NULL;
+    tz = dxaccAccountGetQuoteTZ(account);
+
+    PINFO("to %8s from %s", gnc_commodity_get_mnemonic(com),
+	  xaccAccountGetName(account));
+    gnc_commodity_set_quote_flag(com, TRUE);
+    gnc_commodity_set_quote_source(com, source);
+    gnc_commodity_set_quote_tz(com, tz);
+  }
+
+  dxaccAccountSetPriceSrc(account, NULL);
+  dxaccAccountSetQuoteTZ(account, NULL);
+  return NULL;
+}
+
+
+void
+xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
+{
+  ENTER(" ");
+  gboolean new_style = FALSE;
+
+  if (!group || !table) {
+    LEAVE("Oops")
+    return;
+  }
+
+  gnc_commodity_table_foreach_commodity (table, check_quote_source, &new_style);
+
+  xaccAccountGroupBeginEdit (group);
+  xaccGroupForEachAccount (group, move_quote_source,
+			   GINT_TO_POINTER(new_style), TRUE);
+  xaccAccountGroupCommitEdit (group);
+  LEAVE("Migration done");
+}
+
+/* ================================================================ */
+
 Account *
 xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
                   const char *name_root)

@@ -51,7 +51,7 @@ static short module = MOD_GUI;
  * Returns: the menu                                                *
  \*******************************************************************/
 GtkWidget *
-gnc_ui_source_menu_create(Account *account)
+gnc_ui_source_menu_create(void)
 {
   gint i;
   GtkMenu   *menu;
@@ -118,7 +118,7 @@ gnc_timezone_menu_position_to_string(guint pos)
 }
 
 GtkWidget *
-gnc_ui_quote_tz_menu_create(Account *account)
+gnc_ui_quote_tz_menu_create(void)
 {
   GtkMenu   *menu;
   GtkWidget *item;

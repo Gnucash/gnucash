@@ -56,10 +56,14 @@ const gchar *commodity_version_string = "2.0.0";
 #define cmdty_name           "cmdty:name"
 #define cmdty_xcode          "cmdty:xcode"
 #define cmdty_fraction       "cmdty:fraction"
+#define cmdty_get_quotes     "cmdty:get_quotes"
+#define cmdty_quote_source   "cmdty:quote_source"
+#define cmdty_quote_tz       "cmdty:quote_tz"
 
 xmlNodePtr
 gnc_commodity_dom_tree_create(const gnc_commodity *com)
 {
+    const char *string;
     xmlNodePtr ret;
 
     ret = xmlNewNode(NULL, gnc_commodity_string);
@@ -88,6 +92,15 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
                                      gnc_commodity_get_fraction(com)));
 
+    if (gnc_commodity_get_quote_flag(com))
+      xmlNewChild(ret, NULL, cmdty_get_quotes, NULL);
+    string = gnc_commodity_get_quote_source(com);
+    if (string)
+      xmlAddChild(ret, text_to_dom_tree(cmdty_quote_source, string));
+    string = gnc_commodity_get_quote_tz(com);
+    if (string)
+      xmlAddChild(ret, text_to_dom_tree(cmdty_quote_tz, string));
+
     return ret;
 }
 
@@ -104,6 +117,8 @@ struct com_char_handler com_handlers[] = {
     { cmdty_id,           gnc_commodity_set_mnemonic },
     { cmdty_name,         gnc_commodity_set_fullname },
     { cmdty_xcode,        gnc_commodity_set_exchange_code },
+    { cmdty_quote_source, gnc_commodity_set_quote_source },
+    { cmdty_quote_tz,     gnc_commodity_set_quote_tz },
     { 0, 0 }
 };
 
@@ -120,6 +135,14 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
         {
             gnc_commodity_set_fraction(com, val);
         }
+        xmlFree (string);
+    }
+    else if(safe_strcmp(node->name, cmdty_get_quotes) == 0)
+    {
+        char *string;
+
+        string = xmlNodeGetContent (node->xmlChildrenNode);
+	gnc_commodity_set_quote_flag(com, TRUE);
         xmlFree (string);
     }
     else 

@@ -1489,6 +1489,11 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
   }
   acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
+  if (gnc_commodity_is_iso(com)) {
+    /* compatability hack - Gnucash 1.8 gets currency quotes when a
+       non-default currency is assigned to an account.  */
+    gnc_commodity_set_quote_flag(com, TRUE);
+  }
 }
 
 void
@@ -2894,7 +2899,7 @@ xaccAccountSetLastNum (Account *account, const char *num)
 \********************************************************************/
 
 void
-xaccAccountSetPriceSrc(Account *acc, const char *src)
+dxaccAccountSetPriceSrc(Account *acc, const char *src)
 {
   if(!acc) return;
 
@@ -2917,7 +2922,7 @@ xaccAccountSetPriceSrc(Account *acc, const char *src)
 \********************************************************************/
 
 const char*
-xaccAccountGetPriceSrc(Account *acc) 
+dxaccAccountGetPriceSrc(Account *acc) 
 {
   GNCAccountType t;
   if(!acc) return NULL;
@@ -2935,10 +2940,9 @@ xaccAccountGetPriceSrc(Account *acc)
 \********************************************************************/
 
 void
-xaccAccountSetQuoteTZ(Account *acc, const char *tz) 
+dxaccAccountSetQuoteTZ(Account *acc, const char *tz) 
 {
   if(!acc) return;
-  if(!tz) return;
 
   xaccAccountBeginEdit(acc);
   {
@@ -2947,7 +2951,7 @@ xaccAccountSetQuoteTZ(Account *acc, const char *tz)
     if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
       kvp_frame_set_slot_nc(acc->kvp_data,
                             "old-quote-tz",
-                            kvp_value_new_string(tz));
+                            tz ? kvp_value_new_string(tz) : NULL);
       mark_account (acc);
     }
   }
@@ -2959,7 +2963,7 @@ xaccAccountSetQuoteTZ(Account *acc, const char *tz)
 \********************************************************************/
 
 const char*
-xaccAccountGetQuoteTZ(Account *acc) 
+dxaccAccountGetQuoteTZ(Account *acc) 
 {
   GNCAccountType t;
   if(!acc) return NULL;

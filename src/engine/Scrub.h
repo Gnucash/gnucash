@@ -105,4 +105,19 @@ void xaccAccountScrubCommodity (Account *account);
  * of all accounts & transactions in the group. */
 void xaccGroupScrubCommodities (AccountGroup *group);
 
+/** This routine will migrate the information about price quote
+ *  sources from the account data structures to the commodity data
+ *  structures.  It first checks to see if this is necessary since,
+ *  for the time being, the quote information will still be written
+ *  out as part of the account.  Just in case anyone needs to fall
+ *  back from CVS to a production version of code.
+ *
+ *  @param group A pointer to the account group containing all
+ *  accounts in the current book.
+ *
+ *  @param table A pointer to the commodity table for the current
+ *  book.
+ */
+void xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table);
+
 #endif /* XACC_SCRUB_H */

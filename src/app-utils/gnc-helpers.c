@@ -26,11 +26,13 @@
 #include <libguile.h>
 #include "guile-mappings.h"
 #include <string.h>
+#include <g-wrap-wct.h>
 
 #include "gnc-engine-util.h"
 #include "engine-helpers.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
+#include "global-options.h"
 
 
 static short module = MOD_SX;
@@ -116,6 +118,45 @@ gnc_printinfo_p(SCM info_scm)
   free (symbol);
 
   return retval;
+}
+
+/* This is a scaled down version of the routine that would be needed
+ * to fully convert a gnc-commodity to a scheme data structure.  In an
+ * attempt to optimize the speed of price quote retrieval, this
+ * routine only converts the fields that price-quotes.scm uses. Since
+ * it converts these fields all at once, it should prevent multiple
+ * transitions back and forth from Scheme to C (via g-wrap) to extract
+ * the data from a pointers to a gnc-commodity (the older method).
+ * This is *not* a reversible conversion as it drops data.
+ *
+ * When this routine was written, gnucash retrieved all quotes into
+ * the user's default currency.  (Did earlier version do any
+ * different?)  This routine inserts that default currency into the
+ * returned structure as another optimization.
+ */
+SCM
+gnc_quoteinfo2scm(gnc_commodity *comm)
+{
+  const char *source, *tz;
+  SCM info_scm = SCM_EOL, comm_scm, def_comm_scm;
+
+  if (!comm)
+    return SCM_EOL;
+
+  source = gnc_price_source_internal2fq (gnc_commodity_get_quote_source (comm));
+  tz = gnc_commodity_get_quote_tz (comm);
+  comm_scm = gw_wcp_assimilate_ptr (comm, scm_c_eval_string("<gnc:commodity*>"));
+  def_comm_scm = gw_wcp_assimilate_ptr (gnc_default_currency (),
+					scm_c_eval_string("<gnc:commodity*>"));
+
+  if (tz)
+    info_scm = scm_cons (scm_makfrom0str (tz), info_scm);
+  else
+    info_scm = scm_cons (SCM_BOOL_F, info_scm);
+  info_scm = scm_cons (def_comm_scm, info_scm);
+  info_scm = scm_cons (comm_scm, info_scm);
+  info_scm = scm_cons (scm_makfrom0str (source), info_scm);
+  return info_scm;
 }
 
 const char *

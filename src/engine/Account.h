@@ -232,16 +232,20 @@ const char *   xaccAccountGetLastNum (Account *account);
  */
 char *         xaccAccountGetFullName (Account *account, const char separator);
 
-/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
-    are used to get and set a string that identifies the Finance::Quote
-    backend that should be used to retrieve online prices.  See
-    price-quotes.scm for more information.*/
-void         xaccAccountSetPriceSrc (Account *account, const char *src);
-/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
-    are used to get and set a string that identifies the Finance::Quote
-    backend that should be used to retrieve online prices.  See
-    price-quotes.scm for more information.*/
-const char * xaccAccountGetPriceSrc (Account *account);
+/** Set a string that identifies the Finance::Quote backend that
+ *  should be used to retrieve online prices.  See price-quotes.scm
+ *  for more information
+ *
+ *  @deprecated Price quote information is now stored on the
+ *  commodity, not the account. */
+void        dxaccAccountSetPriceSrc (Account *account, const char *src);
+/** Get a string that identifies the Finance::Quote backend that
+ *  should be used to retrieve online prices.  See price-quotes.scm
+ *  for more information.
+ *
+ *  @deprecated Price quote information is now stored on the
+ *  commodity, not the account. */
+const char * dxaccAccountGetPriceSrc (Account *account);
 
 /** Returns a per-account flag: Prior to reconciling an account which
     charges or pays interest, this flag tells whether to prompt the
@@ -717,18 +721,20 @@ void DxaccAccountSetCurrencySCU (Account *account, int frac);
  * it. */
 int  DxaccAccountGetCurrencySCU (Account *account);
 
-/**   xaccAccountGetQuoteTZ() and xaccAccountSetQuoteTZ() set the
-      timezone to be used when interpreting the results from a given
-      Finance::Quote backend.  Unfortunately, the upstream sources don't
-      label their output, so the user has to specify this bit.
-      
-      @deprecated Since prices are not going to be stored in the accounts in the
-      future, and since the whole commodities infrastructure is changing
-      radically as we speak, this interface is not long for this
-      world. */
-void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
-/** @deprecated */
-const char * xaccAccountGetQuoteTZ (Account *account);
+/** Set the timezone to be used when interpreting the results from a
+ *  given Finance::Quote backend.  Unfortunately, the upstream sources
+ *  don't label their output, so the user has to specify this bit.
+ *
+ *  @deprecated Price quote information is now stored on the
+ *  commodity, not the account. */
+void         dxaccAccountSetQuoteTZ (Account *account, const char *tz);
+/** Get the timezone to be used when interpreting the results from a
+ *  given Finance::Quote backend.  Unfortunately, the upstream sources
+ *  don't label their output, so the user has to specify this bit.
+ *
+ *  @deprecated Price quote information is now stored on the
+ *  commodity, not the account. */
+const char * dxaccAccountGetQuoteTZ (Account *account);
 /**@}*/
 
 

@@ -117,11 +117,10 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
     {
       retval=gnc_ui_select_commodity_modal_full(NULL,
 						NULL,
-						_("Please select a commodity to match the following exchange code.\nPlease note that the exchange code of the commodity you select will be overwritten.\n"),
+						_("Please select a commodity to match the following exchange specific code.\nPlease note that the exchange code of the commodity you select will be overwritten.\n"),
 						exchange_code,
 						default_fullname,
-						default_mnemonic,
-						0);
+						default_mnemonic);
       
     }
   if (retval != NULL&&

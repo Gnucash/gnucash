@@ -51,6 +51,10 @@ struct gnc_commodity_s {
   int       fraction;
   char    * unique_name;  
   gint16    mark;           /* user-defined mark, handy for traversals */
+
+  gboolean  quote_flag;	    /* user wants price quotes */
+  char    * quote_source;   /* current/old source of quotes */
+  char    * quote_tz;
 };
 
 struct gnc_commodity_namespace_s {
@@ -116,11 +120,9 @@ gnc_commodity_destroy(gnc_commodity * cm)
 {
   if(!cm) return;
 
+  /* Set at creation */
   g_free(cm->fullname);
   cm->fullname = NULL;
-
-  g_free(cm->printname);
-  cm->printname = NULL;
 
   g_free(cm->namespace);
   cm->namespace = NULL;
@@ -130,6 +132,17 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   g_free(cm->mnemonic);
   cm->mnemonic = NULL;
+
+  /* Set through accessor functions */
+  g_free(cm->quote_source);
+  cm->quote_source = NULL;
+
+  g_free(cm->quote_tz);
+  cm->quote_tz = NULL;
+
+  /* Automatically generated */
+  g_free(cm->printname);
+  cm->printname = NULL;
 
   g_free(cm->unique_name);
   cm->unique_name = NULL;
@@ -233,6 +246,41 @@ gnc_commodity_get_mark(const gnc_commodity * cm)
 }
 
 /********************************************************************
+ * gnc_commodity_get_quote_flag
+ ********************************************************************/
+
+gboolean
+gnc_commodity_get_quote_flag(const gnc_commodity *cm)
+{
+  if(!cm) return FALSE;
+  return (cm->quote_flag);
+}
+
+/********************************************************************
+ * gnc_commodity_get_quote_source
+ ********************************************************************/
+
+const char*
+gnc_commodity_get_quote_source(const gnc_commodity *cm)
+{
+  if(!cm) return NULL;
+  if (!cm->quote_source && gnc_commodity_is_iso(cm))
+    return "CURRENCY";
+  return cm->quote_source;
+}
+
+/********************************************************************
+ * gnc_commodity_get_quote_tz
+ ********************************************************************/
+
+const char*
+gnc_commodity_get_quote_tz(const gnc_commodity *cm) 
+{
+  if(!cm) return NULL;
+  return cm->quote_tz;
+}
+
+/********************************************************************
  * gnc_commodity_set_mnemonic
  ********************************************************************/
 
@@ -309,7 +357,7 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction)
 }
 
 /********************************************************************
- * gnc_commodity_get_mark
+ * gnc_commodity_set_mark
  ********************************************************************/
 
 void
@@ -318,6 +366,65 @@ gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark)
   if(!cm) return;
   cm->mark = mark;
 }
+
+/********************************************************************
+ * gnc_commodity_set_quote_flag
+ ********************************************************************/
+
+void
+gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
+{
+  ENTER ("(cm=%p, flag=%d)", cm, flag);
+
+  if(!cm) return;
+  cm->quote_flag = flag;
+  LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_set_quote_source
+ ********************************************************************/
+
+void
+gnc_commodity_set_quote_source(gnc_commodity *cm, const char *src)
+{
+  ENTER ("(cm=%p, src=%s)", cm, src);
+
+  if(!cm) return;
+  if (cm->quote_source) {
+    g_free(cm->quote_source);
+    cm->quote_source = NULL;
+  }
+
+  if (src && *src)
+    cm->quote_source = g_strdup(src);
+  LEAVE(" ");
+}
+
+/********************************************************************
+ * gnc_commodity_set_quote_tz
+ ********************************************************************/
+
+void
+gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz) 
+{
+  ENTER ("(cm=%p, tz=%s)", cm, tz);
+
+  if(!cm) return;
+
+  if (cm->quote_tz) {
+    g_free(cm->quote_tz);
+    cm->quote_tz = NULL;
+  }
+
+  if (tz && *tz)
+    cm->quote_tz = g_strdup(tz);
+  LEAVE(" ");
+}
+
+/********************************************************************\
+\********************************************************************/
+
 
 /********************************************************************
  * gnc_commodity_equiv
@@ -553,7 +660,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     gnc_commodity_set_fraction (c, gnc_commodity_get_fraction (comm));
     gnc_commodity_set_exchange_code (c,
                                      gnc_commodity_get_exchange_code (comm));
-
+    gnc_commodity_set_quote_flag (c, gnc_commodity_get_quote_flag (comm));
+    gnc_commodity_set_quote_source (c, gnc_commodity_get_quote_source (comm));
+    gnc_commodity_set_quote_tz (c, gnc_commodity_get_quote_tz (comm));
     gnc_commodity_destroy (comm);
 
     return c;
@@ -602,7 +711,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
 /********************************************************************
  * gnc_commodity_table_has_namespace
- * see if any commodities in the namespace exist 
+ * see if the commodities namespace exists. May have zero commodities.
  ********************************************************************/
 
 int
@@ -690,16 +799,65 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 {
   gnc_commodity_namespace * ns = NULL; 
 
-  if(table) { 
-    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
-  }
-
-  if(ns) {
-    return g_hash_table_values(ns->table);
-  }
-  else {
+  if (!table)
     return NULL;
+
+  ns = g_hash_table_lookup(table->table, (gpointer)namespace);
+  if (!ns)
+    return NULL;
+
+  return g_hash_table_values(ns->table);
+}
+
+/********************************************************************
+ * gnc_commodity_table_get_quotable_commodities
+ * list commodities in a given namespace that get price quotes
+ ********************************************************************/
+
+static void 
+get_quotables_helper1(gpointer key, gpointer value, gpointer data) 
+{
+  gnc_commodity *comm = value; 
+  GList ** l = data;
+
+  if (!comm->quote_flag)
+    return;
+  *l = g_list_prepend(*l, value);
+}
+
+static gboolean 
+get_quotables_helper2 (gnc_commodity *comm, gpointer data)
+{
+  GList ** l = data;
+
+  if (!comm->quote_flag)
+    return TRUE;
+  *l = g_list_prepend(*l, comm);
+  return TRUE;
+}
+
+GList * 
+gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
+					     const char * namespace)
+{
+  gnc_commodity_namespace * ns = NULL; 
+  GList * l = NULL;
+
+  ENTER("table=%p, namespace=%s", table, namespace);
+  if (!table)
+    return NULL;
+
+  if (namespace && *namespace) {
+    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
+    DEBUG("ns=%p", ns);
+    if (ns)
+      g_hash_table_foreach(ns->table, &get_quotables_helper1, (gpointer) &l);
+  } else {
+    gnc_commodity_table_foreach_commodity(table, get_quotables_helper2,
+					  (gpointer) &l);
   }
+  LEAVE("list head %p", l);
+  return l;
 }
 
 /********************************************************************
@@ -764,29 +922,6 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   }
 }
 
-void
-gnc_commodity_table_remove_non_iso (gnc_commodity_table *t)
-{
-  GList *namespaces;
-  GList *node;
-
-  if (!t) return;
-
-  namespaces = gnc_commodity_table_get_namespaces (t);
-
-  for (node = namespaces; node; node = node->next)
-  {
-    char *ns = node->data;
-
-    if (safe_strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
-      continue;
-
-    gnc_commodity_table_delete_namespace (t, ns);
-  }
-
-  g_list_free (namespaces);
-}
-
 /********************************************************************
  * gnc_commodity_table_foreach_commodity
  * call user-defined function once for every commodity in every
@@ -819,7 +954,7 @@ iter_namespace (gpointer key, gpointer value, gpointer user_data)
 }
 
 gboolean 
-gnc_commodity_table_foreach_commodity (gnc_commodity_table * tbl,
+gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
                           gboolean (*f)(gnc_commodity *, gpointer),
                           gpointer user_data)
 {

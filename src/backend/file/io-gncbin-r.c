@@ -871,7 +871,7 @@ readAccInfo(int fd, Account *acc, int token) {
   if ((acc_type == STOCK) || (acc_type == MUTUAL)) {
     const char *tmp = readString( fd, token );
     if(NULL == tmp) return(FALSE);
-    if(strlen(tmp) > 0) xaccAccountSetPriceSrc(acc, tmp);
+    if(strlen(tmp) > 0) dxaccAccountSetPriceSrc(acc, tmp);
     free((char *) tmp);
   }
   return(TRUE);
