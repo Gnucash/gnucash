@@ -2623,7 +2623,8 @@ if eval "test \"`echo '$''{'ac_cv_lib_guile'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   for GNC_TEST_LIBS in "-lguile" "-lguile -ldl" "-lguile -lqthreads" \
-        "-lguile -ltermcap" "-lguile -lqthreads -ltermcap"; do
+        "-lguile -ltermcap" "-lguile -lqthreads -ltermcap" \
+        "-lguile -lreadline -lncurses"; do
         if test x"${GUILELIBS}" != x; then
 #           AC_MSG_RESULT([found in ${GUILELIBS}])
             ac_cv_lib_guile=${GUILELIBS}
@@ -2631,14 +2632,14 @@ else
         else
             LIBS="${GNC_TEST_LIBS} ${GNC_LIBS_SAFE}"
             cat > conftest.$ac_ext <<EOF
-#line 2635 "configure"
+#line 2636 "configure"
 #include "confdefs.h"
 #include<guile/gh.h>
 int main() {
 gh_eval_file;
 ; return 0; }
 EOF
-if { (eval echo configure:2642: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2643: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   GUILELIBS="${GNC_TEST_LIBS}"
 else
@@ -2665,7 +2666,7 @@ fi
 ### Plotutils
 
 echo $ac_n "checking for openpl in -lplot""... $ac_c" 1>&6
-echo "configure:2669: checking for openpl in -lplot" >&5
+echo "configure:2670: checking for openpl in -lplot" >&5
 ac_lib_var=`echo plot'_'openpl | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2673,7 +2674,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lplot $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2677 "configure"
+#line 2678 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2684,7 +2685,7 @@ int main() {
 openpl()
 ; return 0; }
 EOF
-if { (eval echo configure:2688: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2689: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2768,7 +2769,7 @@ GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
 GTKSHEET_DIR="gtksheet-5.7"
 
 
-CFLAGS="${CFLAGS} -Werror"
+# CFLAGS="${CFLAGS} -Werror"
 
 
 

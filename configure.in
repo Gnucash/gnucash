@@ -279,7 +279,8 @@ AC_MSG_CHECKING([for guile])
 GNC_LIBS_SAFE=${LIBS}
 AC_CACHE_CHECK([for guile], ac_cv_lib_guile,    
     for GNC_TEST_LIBS in "-lguile" "-lguile -ldl" "-lguile -lqthreads" \
-        "-lguile -ltermcap" "-lguile -lqthreads -ltermcap"; do
+        "-lguile -ltermcap" "-lguile -lqthreads -ltermcap" \
+        "-lguile -lreadline -lncurses"; do
         if test x"${GUILELIBS}" != x; then
 #           AC_MSG_RESULT([found in ${GUILELIBS}])
             ac_cv_lib_guile=${GUILELIBS}
