@@ -3,7 +3,10 @@ SUBDIRS = intl  m4  macros debian doc-tools doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles @GNC_TAGS_FILE@
+GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
+GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
+
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles
 
 doc_DATA = \
   AUTHORS \
@@ -84,22 +87,37 @@ cscope.files:
 cscope.out: cscope.files
 	cscope -b
 
-if GNC_TAGS_FILE
+if GNC_ETAGS_FILE
 
-TAGS:
+etags:
         # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
         # now use the contents of etags.files to re-make TAGS if needed.
-	${MAKE} -f Makefile.TAGS TAGS
+	${MAKE} -f Makefile.TAGS etags
 
 else
 
-TAGS:
-	@echo "You must ./configure with --enable-etags to use TAGS."
+etags:
+	@echo "You must ./configure with --enable-etags to use ctags."
 
 endif
 
-.PHONY: TAGS
+if GNC_CTAGS_FILE
+
+ctags:
+        # make sure etags.files is up to date.
+	${MAKE} -f Makefile.TAGS etags.files
+        # now use the contents of etags.files to re-make TAGS if needed.
+	${MAKE} -f Makefile.TAGS ctags
+
+else
+
+ctags:
+	@echo "You must ./configure with --enable-ctags to use ctags."
+
+endif
+
+.PHONY: etags ctags
 
 ACLOCAL_AMFLAGS = -I m4
 

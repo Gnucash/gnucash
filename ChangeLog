@@ -1,4 +1,20 @@
-2002-11-29  David Hampton  <hampton@employees.org>
+2002-11-30  Matthew Vanecek <mevanecek@yahoo.com>
+
+	* Makefile.am: Added the GNC_CTAGS_FILE token, and added the
+        ctags target.  Changed the TAGS target to etags, and
+	GNC_TAGS_FILE to GNC_ETAGS_FILE.  Removed GNC_TAGS_FILE from the
+	noinst_DATA variable.  This makes tag building a manual target.
+	Run "make ctags" for Vi tags, or "make etags" for Emacs TAGS.
+
+	* Makefile.TAGS:  Changed the TAGS target to etags, and added
+	the ctags target.
+
+	* configure.in:  Added the --enable-ctags option.
+
+	* .cvsignore:  Added tags to .cvsignore.  tags is the file created
+	by ctags.
+
+02-11-29  David Hampton  <hampton@employees.org>
 
 	* src/report/standard-reports/transaction.scm: Fix the grand
 	totals in the transaction report when there is more than one type

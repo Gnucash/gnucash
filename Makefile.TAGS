@@ -22,5 +22,8 @@ etags.files: $(shell find . -type d)
 
 # we don't need an etags.files dep here b/c you always call this after
 # re-generating etags.files if needed from the top-level Makefile.am.
-TAGS: $(shell cat etags.files)
+etags: $(shell cat etags.files)
 	etags `cat etags.files`
+
+ctags: $(shell cat etags.files)
+	ctags `cat etags.files`
