@@ -421,11 +421,12 @@ xaccCheckDateOrder (Account * acc, Split *split )
 {
   int outOfOrder = 0;
   Split *s;
-  Split *prevSplit;
-  Split *nextSplit;
+  Split *prevSplit = NULL;
+  Split *nextSplit = NULL;
   int position;
 
   if (NULL == acc) return 0;
+  if (NULL == split) return 0;
 
   /* find the split's location in the array */
   position = 0;
@@ -438,12 +439,15 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   if (!s) {
      printf ("Internal Error: xaccCheckDateOrder(): ");
-     printf (" split not present in account \n");
+     printf (" split %s not present in account \n", split);
      return 0;
   }
 
-  prevSplit = acc->splits [position-1];
-  nextSplit = acc->splits [position+1];
+  /* if zeroth split, then there is no previous */
+  if (0 < position) prevSplit = acc->splits [position-1];
+
+  /* if last split, OK, since array is null terminated, and last+1 is null */
+  nextSplit = acc->splits [position+1];  
 
   /* figure out if the transactions are out of order */
   if (NULL != prevSplit) {
