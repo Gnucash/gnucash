@@ -1828,7 +1828,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   }
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
-
+ 
   /* Show the dialog */
   gtk_widget_show_all (iw->dialog);
 

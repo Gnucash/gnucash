@@ -143,8 +143,8 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
   case GNCENTRY_INVOICE_VIEWER:
 
     curs = gnc_table_layout_get_cursor (layout, "cursor");
-    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 0);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 1);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 1);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
     gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
     gnc_table_layout_set_cell (layout, curs, ENTRY_IACCT_CELL, 0, 4);
@@ -165,8 +165,8 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
   case GNCENTRY_BILL_VIEWER:
 
     curs = gnc_table_layout_get_cursor (layout, "cursor");
-    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 0);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 1);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 1);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
     gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
     gnc_table_layout_set_cell (layout, curs, ENTRY_BACCT_CELL, 0, 4);

@@ -16,6 +16,7 @@
 #include "combocell.h"
 #include "messages.h"
 #include "global-options.h"
+#include "gnc-component-manager.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -179,9 +180,14 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_BILL_ENTRY:
+
+      gnc_suspend_gui_refresh ();
+
       blank_entry = gncEntryCreate (ledger->book);
       gncEntrySetDate (blank_entry, ledger->last_date_entered);
       ledger->blank_entry_guid = *gncEntryGetGUID (blank_entry);
+
+      gnc_resume_gui_refresh ();
 
       {
 	GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
@@ -246,6 +252,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  gncEntrySetBillTaxIncluded (blank_entry, taxincluded);
 	}
       }
+
       break;
     default:
       ledger->blank_entry_guid = *xaccGUIDNULL ();
