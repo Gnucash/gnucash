@@ -221,6 +221,9 @@ edit_clicked (GtkWidget *widget, gpointer data)
 
   if (!cd->commodity)
     return;
+
+  if (gnc_ui_edit_commodity_modal (cd->commodity, cd->dialog))
+    gnc_gui_refresh_all ();
 }
 
 static void

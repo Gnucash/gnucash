@@ -468,12 +468,35 @@ gnc_ui_edit_commodity_create(gnc_commodity *commodity,
                              gnc_commodity_callback callback, 
                              void * callback_data) {
   CommodityWindow *retval;
+  const char *str;
+  char *namespace;
 
   g_return_val_if_fail (commodity != NULL, NULL);
 
   retval = gnc_ui_new_commodity_create (NULL, callback, callback_data);
 
   retval->edit_commodity = commodity;
+
+  str = gnc_commodity_get_fullname (commodity);
+  gtk_entry_set_text (GTK_ENTRY (retval->fullname_entry),
+                      str ? str : "");
+
+  str = gnc_commodity_get_mnemonic (commodity);
+  gtk_entry_set_text (GTK_ENTRY (retval->mnemonic_entry),
+                      str ? str : "");
+
+  namespace = gnc_ui_update_namespace_picker
+    (retval->namespace_combo,
+     gnc_commodity_get_namespace (commodity),
+     FALSE, TRUE);
+  g_free (namespace);
+
+  str = gnc_commodity_get_exchange_code (commodity);
+  gtk_entry_set_text (GTK_ENTRY (retval->code_entry),
+                      str ? str : "");
+
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (retval->fraction_spinbutton),
+                             gnc_commodity_get_fraction (commodity));
 
   return retval;
 }
@@ -550,9 +573,12 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
   CommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "commodity_struct");
 
-  char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
+  const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
   const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
-  char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
+  const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
+  const char * code      = gtk_entry_get_text(GTK_ENTRY(w->code_entry));
+  int fraction = gtk_spin_button_get_value_as_int
+    (GTK_SPIN_BUTTON(w->fraction_spinbutton));
 
   gnc_commodity * c;
 
@@ -570,17 +596,27 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
     c = gnc_commodity_table_lookup (gnc_engine_commodities(),
                                     namespace, mnemonic);
 
-    if (c) {
+    if ((!w->edit_commodity && c) ||
+        (w->edit_commodity && c && (c != w->edit_commodity))) {
       gnc_warning_dialog_parented (dialog,
                                    _("That commodity already exists."));
       return;
     }
 
-    c = gnc_commodity_new(fullname, namespace, mnemonic,
-                          gtk_entry_get_text
-                          (GTK_ENTRY(w->code_entry)),
-                          gtk_spin_button_get_value_as_int
-                          (GTK_SPIN_BUTTON(w->fraction_spinbutton)));
+    if (!w->edit_commodity) {
+      c = gnc_commodity_new(fullname, namespace, mnemonic, code, fraction);
+    }
+    else {
+      c = w->edit_commodity;
+
+      gnc_commodity_table_remove (gnc_engine_commodities(), c);
+
+      gnc_commodity_set_fullname (c, fullname);
+      gnc_commodity_set_mnemonic (c, mnemonic);
+      gnc_commodity_set_namespace (c, namespace);
+      gnc_commodity_set_exchange_code (c, code);
+      gnc_commodity_set_fraction (c, fraction);
+    }
 
     /* remember the commodity */
     c = gnc_commodity_table_insert(gnc_engine_commodities(), c);
