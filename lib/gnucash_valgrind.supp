@@ -1,0 +1,2575 @@
+{
+   Guile1
+   Memcheck:Cond
+   obj:/usr/lib/libguile.so.12.3.0
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+   fun:scm_igc
+}
+{
+   Guile2
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+   fun:scm_igc
+}
+{
+   Guile3
+   Memcheck:Value4
+   fun:scm_gc_mark
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+   fun:scm_igc
+}
+{
+   Guile4
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_mark_locations
+}
+{
+   Guile5
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+}
+{
+   Guile6
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   obj:/usr/lib/libguile.so.12.3.0
+   fun:scm_gc_mark
+}
+{
+   Guile7
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+}
+{
+   Guile8
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_igc
+   fun:scm_gc_for_newcell
+   fun:scm_cons
+}
+{
+   Guile9
+   Memcheck:Cond
+   fun:scm_gc_mark
+   obj:/usr/lib/libguile.so.12.3.0
+   fun:scm_gc_mark
+   fun:scm_threads_mark_stacks
+}
+{
+   Guile10
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_igc
+   fun:scm_gc_for_newcell
+}
+{
+   Guile11
+   Memcheck:Cond
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_gc_mark
+   fun:scm_igc
+}
+{
+   Guile-all
+   Memcheck:Cond
+   obj:/usr/lib/libguile.so.12.3.0
+}
+{
+   Foo0
+   Memcheck:Cond
+   fun:_dl_relocate_object
+   obj:/lib/libc-2.3.2.so
+   fun:_dl_catch_error
+   fun:_dl_open
+}
+{
+   Foo1
+   Memcheck:Value4
+   fun:scm_markstream
+   fun:scm_gc_mark
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+}
+{
+   Foo2
+   Memcheck:Value4
+   fun:scm_markcdr
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+   fun:scm_igc
+}
+{
+   Foo3
+   Memcheck:Value4
+   obj:/usr/lib/libguile.so.12.3.0
+   fun:scm_c_hook_run
+   fun:scm_igc
+   fun:scm_must_malloc
+}
+{
+   Foo4
+   Memcheck:Addr1
+   fun:memcpy
+   obj:/usr/lib/libltdl.so.3.1.0
+   fun:lt_dlopen
+   fun:gnc_module_get_info
+}
+{
+   Foo5
+   Memcheck:Value4
+   obj:/usr/lib/libguile.so.12.3.0
+   fun:scm_mark_locations
+   fun:scm_threads_mark_stacks
+   fun:scm_igc
+}
+{
+   Foo6
+   Memcheck:Addr1
+   fun:memcpy
+   obj:/usr/lib/libltdl.so.3.1.0
+   fun:lt_dlopen
+   fun:gnc_module_load_common
+}
+{
+   Foo7
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+   fun:xaccGUIDNewEntityTable
+   fun:xaccGUIDNew
+}
+{
+   Foo8
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_new
+}
+{
+   Foo9
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_new
+   fun:gnc_get_current_session
+}
+{
+   Foo10
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+}
+{
+   Foo11
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_new
+}
+{
+   Foo12
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_destroy
+}
+{
+   Foo13
+   Memcheck:Cond
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+}
+{
+   Foo14
+   Memcheck:Value4
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+}
+{
+   Foo15
+   Memcheck:Overlap
+   fun:memcpy
+   obj:/usr/lib/libltdl.so.3.1.0
+   fun:lt_dlopen
+   fun:gnc_module_get_info
+}
+{
+   Foo16
+   Memcheck:Param
+   writev(vector[...])
+   obj:/lib/libc-2.3.2.so
+   fun:_X11TransSocketWritev
+   fun:_X11TransWritev
+   fun:_XSend
+}
+{
+   Foo17
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_destroy
+}
+{
+   Foo18
+   Memcheck:Overlap
+   fun:memcpy
+   obj:/usr/lib/libltdl.so.3.1.0
+   fun:lt_dlopen
+   fun:gnc_module_load_common
+}
+{
+   Foo19
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_destroy
+}
+{
+   Foo20
+   Memcheck:Value4
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+}
+{
+   Foo21
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_new
+   fun:gnc_post_file_open
+}
+{
+   Foo22
+   Memcheck:Cond
+   fun:guid_equal
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+   fun:sixtp_sax_end_handler
+}
+{
+   Foo23
+   Memcheck:Cond
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+}
+{
+   Foo24
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_destroy
+}
+{
+   Foo25
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_load
+}
+{
+   Foo26
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_load
+   fun:gnc_post_file_open
+}
+{
+   Foo27
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gnc_book_new
+   fun:gnc_session_load
+}
+{
+   Foo28
+   Memcheck:Cond
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+   fun:sixtp_sax_end_handler
+   obj:/usr/lib/libxml.so.1.8.17
+}
+{
+   Foo29
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo30
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo31
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo32
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo33
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo34
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo35
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo36
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_set_guid
+   fun:gnc_book_id_end_handler
+}
+{
+   Foo37
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+}
+{
+   Foo38
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+   fun:dom_tree_to_account
+}
+{
+   Foo39
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+}
+{
+   Foo40
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+}
+{
+   Foo41
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccAccountSetGUID
+   fun:account_id_handler
+}
+{
+   Foo42
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccAccountSetGUID
+   fun:account_id_handler
+}
+{
+   Foo43
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccAccountSetGUID
+   fun:account_id_handler
+}
+{
+   Foo44
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccAccountSetGUID
+   fun:account_id_handler
+}
+{
+   Foo45
+   Memcheck:Cond
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+   fun:xaccGUIDNewEntityTable
+   fun:xaccGUIDNew
+}
+{
+   Foo46
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   Foo47
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   Foo48
+   Memcheck:Cond
+   fun:gnc_account_tree_insert_row
+   fun:gnc_account_tree_fill
+   fun:gnc_account_tree_fill
+   fun:gnc_account_tree_fill
+}
+{
+   Foo49
+   Memcheck:Cond
+   obj:/usr/lib/libgtk-1.2.so.0.9.1
+   obj:/usr/lib/libgtk-1.2.so.0.9.1
+   obj:/usr/lib/libgtk-1.2.so.0.9.1
+   obj:/usr/lib/libgtk-1.2.so.0.9.1
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:isspace_str
+   fun:allow_and_ignore_only_whitespace
+   fun:sixtp_sax_characters_handler
+   obj:/usr/lib/libxml.so.1.8.17
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:gnc_price_create
+   fun:price_parse_xml_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gnc_price_create
+   fun:price_parse_xml_end_handler
+   fun:sixtp_sax_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gnc_price_create
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gnc_price_create
+   fun:price_parse_xml_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_price_set_guid
+   fun:price_parse_xml_sub_node
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccAccountSetGUID
+   fun:account_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+   fun:gnc_transaction_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccTransSetGUID
+   fun:trn_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+   fun:trn_splits_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+   fun:gnc_schedXaction_end_handler
+   fun:sixtp_sax_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:_IO_vfprintf
+   fun:_IO_vsprintf
+   fun:_IO_sprintf
+   fun:guid_to_string
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:_IO_vfprintf
+   fun:_IO_vsprintf
+   fun:_IO_sprintf
+   fun:guid_to_string
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncCustomerCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncCustomerCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncCustomerCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:gncCustomerSetGUID
+   fun:customer_guid_handler
+   fun:dom_tree_generic_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gncCustomerSetGUID
+   fun:customer_guid_handler
+   fun:dom_tree_generic_parse
+   fun:gnc_customer_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncCustomerSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncCustomerSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:guid_g_hash_table_equal
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:guid_equal
+   fun:guid_g_hash_table_equal
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncCustomerSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncCustomerSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncCustomerSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:gncJobSetGUID
+   fun:job_guid_handler
+   fun:dom_tree_generic_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gncJobSetGUID
+   fun:job_guid_handler
+   fun:dom_tree_generic_parse
+   fun:gnc_job_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:gncTaxTableSetGUID
+   fun:taxtable_guid_handler
+   fun:dom_tree_generic_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gncTaxTableSetGUID
+   fun:taxtable_guid_handler
+   fun:dom_tree_generic_parse
+   fun:gnc_taxtable_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:gncInvoiceSetGUID
+   fun:invoice_guid_handler
+   fun:dom_tree_generic_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gncInvoiceSetGUID
+   fun:invoice_guid_handler
+   fun:dom_tree_generic_parse
+   fun:gnc_invoice_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:gncEntrySetGUID
+   fun:entry_guid_handler
+   fun:dom_tree_generic_parse
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gncEntrySetGUID
+   fun:entry_guid_handler
+   fun:dom_tree_generic_parse
+   fun:gnc_entry_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gnc_account_tree_insert_row
+   fun:gnc_account_tree_fill
+   fun:gnc_account_tree_refresh
+   fun:gnc_acct_tree_window_new
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:add_event
+   fun:gnc_cm_event_handler
+   fun:gnc_engine_generate_event_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:add_event
+   fun:gnc_cm_event_handler
+   fun:gnc_engine_generate_event_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup
+   fun:add_event
+   fun:gnc_cm_event_handler
+   fun:gnc_engine_generate_event_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:add_event
+   fun:gnc_cm_event_handler
+   fun:gnc_engine_generate_event_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+   fun:xaccSplitLookup
+   fun:gnc_split_register_get_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+   fun:xaccSplitLookup
+   fun:gnc_split_register_get_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:add_event
+   fun:gnc_cm_event_handler
+   fun:gnc_engine_generate_event_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:add_event
+   fun:gnc_cm_event_handler
+   fun:gnc_engine_generate_event_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccRemoveEntity
+   fun:xaccSplitDestroy
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccRemoveEntity
+   fun:xaccSplitDestroy
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gtk_accelerator_name
+   obj:/usr/lib/libgtk-1.2.so.0.9.1
+   fun:g_hash_table_foreach
+   fun:gtk_item_factory_dump_items
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitSetGUID
+   fun:spl_id_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:dom_tree_to_split
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:dom_tree_to_transaction
+   fun:tt_trn_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+   fun:xaccSchedXactionMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+   fun:gnc_schedXaction_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+   fun:gnc_schedXaction_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+   fun:gnc_schedXaction_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+   fun:gnc_schedXaction_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccSchedXactionMalloc
+   fun:gnc_schedXaction_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccInitAccount
+   fun:xaccMallocAccount
+   fun:xaccSchedXactionMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreeAccount
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+   fun:dom_tree_to_freqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:xaccSchedXactionSetFreqSpec
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncJobCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncJobCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncJobCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gncBusinessRemoveObject
+   fun:remObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncJobSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncJobSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncJobSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncJobSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncJobSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncTaxTableCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncTaxTableCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncTaxTableSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncTaxTableSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncTaxTableSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncTaxTableSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncTaxTableSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncInvoiceCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncInvoiceCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncInvoiceCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncInvoiceSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncInvoiceSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncInvoiceSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncInvoiceSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncInvoiceSetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncEntryCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncEntryCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:gncBusinessAddObject
+   fun:addObj
+   fun:gncEntryCreate
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncEntrySetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncEntrySetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncEntrySetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncEntrySetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:gncBusinessRemoveObject
+   fun:remObj
+   fun:gncEntrySetGUID
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccSplitDestroy
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccSplitDestroy
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccRemoveEntity
+   fun:xaccTransCommitEdit
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   obj:/usr/lib/libglib-1.2.so.0.0.10
+   fun:xaccRemoveEntity
+   fun:xaccTransCommitEdit
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:gnc_book_destroy
+   fun:gnc_session_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gnc_account_tree_insert_row
+   fun:gnc_account_tree_fill
+   fun:gnc_account_tree_fill
+   fun:gnc_account_tree_refresh
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccTransCommitEdit
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccTransCommitEdit
+   fun:xaccAccountCommitEdit
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccStoreEntity
+   fun:gnc_price_create
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:gnc_price_create
+   fun:price_parse_xml_end_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:gnc_account_tree_insert_row
+   fun:gnc_account_tree_fill
+   fun:gnc_account_tree_refresh
+   fun:refresh_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:gnc_split_register_load
+   fun:gnc_ledger_display_refresh_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocTransaction
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+   fun:xaccGUIDType
+   fun:gnc_cm_event_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+   fun:xaccGUIDType
+   fun:gnc_cm_event_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+   fun:xaccGUIDType
+   fun:gnc_cm_event_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+   fun:xaccGUIDType
+   fun:gnc_cm_event_handler
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_lookup
+   fun:xaccGUIDTypeEntityTable
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:_IO_vfprintf
+   fun:_IO_vsprintf
+   fun:_IO_sprintf
+   fun:guid_to_string_buff
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:_IO_vfprintf
+   fun:_IO_vsprintf
+   fun:_IO_sprintf
+   fun:guid_to_string_buff
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:_IO_vfprintf
+   fun:_IO_vsprintf
+   fun:_IO_sprintf
+   fun:guid_to_string_buff
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:_IO_vfprintf
+   fun:_IO_vsprintf
+   fun:_IO_sprintf
+   fun:guid_to_string_buff
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:guid_g_hash_table_equal
+   fun:g_hash_table_lookup
+   fun:add_event
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:guid_equal
+   fun:guid_g_hash_table_equal
+   fun:g_hash_table_lookup
+   fun:add_event
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:gnc_split_register_load
+   fun:gnc_ledger_display_refresh_internal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_insert
+   fun:xaccStoreEntity
+   fun:xaccMallocSplit
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:guid_equal
+   fun:id_compare
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+   fun:xaccSplitLookup
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+   fun:xaccSplitLookup
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup
+   fun:xaccLookupEntity
+   fun:xaccSplitLookup
+   fun:gnc_split_register_load
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:xaccStoreEntity
+   fun:xaccFreqSpecInit
+   fun:xaccFreqSpecMalloc
+   fun:gnc_frequency_save_state
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:gnc_sxed_update_cal
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:subSpecsListMapDelete
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:subSpecsListMapDelete
+}
+{
+   <insert a suppression name here>
+   Memcheck:Cond
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:subSpecsListMapDelete
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_lookup_extended
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:subSpecsListMapDelete
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:subSpecsListMapDelete
+}
+{
+   <insert a suppression name here>
+   Memcheck:Value4
+   fun:g_hash_table_remove
+   fun:xaccRemoveEntity
+   fun:xaccFreqSpecFree
+   fun:subSpecsListMapDelete
+}
+{
+   <insert a suppression name here>
+   Memcheck:Addr2
+   fun:gnucash_sheet_style_destroy
+   fun:destroy_style_helper
+   fun:g_hash_table_foreach
+   fun:gnucash_sheet_clear_styles
+}

@@ -595,7 +595,9 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
         /* based on value, parse widget values into FreqSpec */
         switch ( uift ) {
         case UIFREQ_NONE:
-                /* hmmm... shouldn't really be allowed. */
+                xaccFreqSpecSetNone( fs );
+                xaccFreqSpecSetUIType( fs, uift );
+                g_date_free( gd );
                 break;
         case UIFREQ_ONCE:
                 xaccFreqSpecSetOnceDate( fs, gd );
