@@ -1,3 +1,13 @@
+
+/* 
+ * Major Hack Alert ---
+ * this whole file & design needs to be replaced with
+ * something that can handle seconds (actually, milliseconds
+ * to keep the banks happy).
+ *
+ * There a lot of lint here and it needs major overhaul in general.
+ */
+
 /********************************************************************\
  * date.h -- utility functions to handle the date (adjusting, get   * 
  *           current date, etc.) for xacc (X-Accountant)            *
@@ -98,6 +108,13 @@ Date*  todaysDate( Date *date );
 **/
 int    daysInMonth( int month , int year );
 int    datecmp( Date *date1, Date *date2 );
+
+#define DATE_SHORT 0
+#define DATE_YEAR  1
+#define DATE_FULL  2
+
+int    sscandate( const char *in_string, Date *date, int flags);
+
 
 /** GLOBALS *********************************************************/
 

@@ -521,6 +521,24 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
    }
 }
 
+void
+xaccTransSetDateToday (Transaction *trans)
+{
+   Date d;
+
+   todaysDate (&d);
+   xaccTransSetDate (trans, d.day, d.month, d.year);
+}
+
+void
+xaccTransSetDateStr (Transaction *trans, char *str)
+{
+   Date d;
+
+   sscandate (str, &d, DATE_FULL);
+   xaccTransSetDate (trans, d.day, d.month, d.year);
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -586,12 +604,6 @@ xaccTransSetReconcile (Transaction *trans, char recn)
    MARK_SPLIT (&(trans->source_split));
 }
 
-void
-xaccTransSetDateToday (Transaction *trans)
-{
-   todaysDate( &(trans->date) );
-}
-
 /********************************************************************\
 \********************************************************************/
 Split *
@@ -600,6 +612,47 @@ xaccTransGetSourceSplit (Transaction *trans)
    return (&(trans->source_split));
 }
 
+Split *
+xaccTransGetDestSplit (Transaction *trans, int i) 
+{
+   return (trans->dest_splits[i]);
+}
+
+char *
+xaccTransGetNum (Transaction *trans)
+{
+   return (trans->num);
+}
+
+char * 
+xaccTransGetDescription (Transaction *trans)
+{
+   return (trans->description);
+}
+
+char *
+xaccTransGetDateStr (Transaction *trans)
+{
+
+   char buf [100];
+   sprintf( buf, "%2d/%2d/%02d",
+             trans->date.month,
+             trans->date.day,
+             (trans->date.year%100) );
+   return strdup (buf);
+}
+
+int 
+xaccTransCountSplits (Transaction *trans)
+{
+   return (xaccCountSplits (trans->dest_splits));
+}
+
+int
+xaccTransIsSource (Transaction *trans, Split *split)
+{
+   return (split == &(trans->source_split));
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -625,6 +678,46 @@ xaccSplitSetReconcile (Split *split, char recn)
 {
    split->reconciled = recn;
    MARK_SPLIT (split);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+/* return the parent transaction of the split */
+Transaction * 
+xaccSplitGetParent (Split *split)
+{
+   return (split->parent);
+}
+
+Account *
+xaccSplitGetAccount (Split *split)
+{
+   return (split->acc);
+}
+
+char 
+xaccSplitGetReconcile (Split *split)
+{
+   return (split->reconciled);
+}
+
+double
+xaccSplitGetAmount (Split * split)
+{
+   return (split->damount);
+}
+
+double
+xaccSplitGetValue (Split * split)
+{
+   return ((split->damount) * (split->share_price));
+}
+
+double
+xaccSplitGetSharePrice (Split * split)
+{
+   return (split->share_price);
 }
 
 /************************ END OF ************************************\

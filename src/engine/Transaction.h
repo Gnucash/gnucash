@@ -59,15 +59,15 @@ typedef struct _transaction  Transaction;
  *    is stored in proper date order in the accounts.
  */
 
-Split       * xaccMallocSplit (void);
-void          xaccInitSplit   (Split *);    /* clears a split struct */
-void          xaccFreeSplit   (Split *);    /* frees memory */
-int           xaccCountSplits (Split **sarray);
-
 Transaction * xaccMallocTransaction (void);       /* mallocs and inits */
 void          xaccInitTransaction (Transaction *);/* clears a trans struct */
 
+/* freeTransaction only does so if the transaction is not part of an
+ * account. (i.e. if none of the member splits are in an account). */
+void          xaccFreeTransaction (Transaction *);
+
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
+void          xaccTransSetDateStr (Transaction *, char *);
 
 /* set the transaction date to the current system time. */
 void          xaccTransSetDateToday (Transaction *);
@@ -78,24 +78,38 @@ void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
 void          xaccTransSetReconcile (Transaction *, char);
 
-/* return pointer to the source split */
-Split *       xaccTransGetSourceSplit (Transaction *);
-
-void          xaccSplitSetMemo (Split *, const char *);
-void          xaccSplitSetAction (Split *, const char *);
-void          xaccSplitSetReconcile (Split *, char);
-
-/* freeTransaction only does so if the transaction is not part of an
- * account. (i.e. if none of the member splits are in an account). */
-void          xaccFreeTransaction (Transaction *);
-
-void xaccTransAppendSplit (Transaction *, Split *);
-void xaccTransRemoveSplit (Transaction *, Split *);
+void          xaccTransAppendSplit (Transaction *, Split *);
+void          xaccTransRemoveSplit (Transaction *, Split *);
 
 /* recompute the total transaction value, based
  * on the sum of the debit splits that belong to this
  * transaction. */
 void xaccTransRecomputeAmount (Transaction *);
+
+/* ------------- gets --------------- */
+/* return pointer to the source split */
+Split *       xaccTransGetSourceSplit (Transaction *);
+Split *       xaccTransGetDestSplit (Transaction *trans, int i);
+
+char *        xaccTransGetNum (Transaction *);
+char *        xaccTransGetDescription (Transaction *trans);
+char *        xaccTransGetDateStr (Transaction *);
+
+/* return the number of destination splits */
+int           xaccTransCountSplits (Transaction *trans);
+
+/* returns non-zero value if split is source split */
+int           xaccTransIsSource (Transaction *, Split *);
+
+
+Split       * xaccMallocSplit (void);
+void          xaccInitSplit   (Split *);    /* clears a split struct */
+void          xaccFreeSplit   (Split *);    /* frees memory */
+int           xaccCountSplits (Split **sarray);
+
+void          xaccSplitSetMemo (Split *, const char *);
+void          xaccSplitSetAction (Split *, const char *);
+void          xaccSplitSetReconcile (Split *, char);
 
 /* The following two functions set the amount on the split */
 void         xaccSetAmount (Split *, double);
@@ -124,6 +138,15 @@ double xaccGetBalance (Split *);
 double xaccGetClearedBalance (Split *);
 double xaccGetReconciledBalance (Split *);
 double xaccGetShareBalance (Split *);
+
+/* return teh parent transaction of the split */
+Transaction * xaccSplitGetParent (Split *);
+
+/* return the value of the reconcile flag */
+char          xaccSplitGetReconcile (Split *split);
+double        xaccSplitGetAmount (Split * split);
+double        xaccSplitGetValue (Split * split);
+double        xaccSplitGetSharePrice (Split * split);
 
 /********************************************************************\
  * sorting comparison function

@@ -240,5 +240,41 @@ datecmp( Date *date1, Date *date2 )
     }
   }
 
+/********************************************************************\
+ * sscandate                                                        *
+ *   parses a date from a given string                              *
+ *                                                                  *
+ * Args:   in_string -- the string to parse                         *
+ *         date -- the date into which the parsed date is placed    *
+ *         flag -- indicates whether to parse the whole of the      *
+ *                 or a portion. Valid values are:                  *
+                   DATE_SHORT, DATE_YEAR and DATE_FULL              *
+ * Return: number of characters read from string                    *
+\********************************************************************/
+int
+sscandate( const char *in_string, Date *date, int flags )
+{
+  int *a,*b,*c; /* pointers to address of day, month and year vars */
+  int ret;
+
+#ifdef UK_DATES
+  a=&date->day; b=&date->month; c=&date->year;
+#else
+  a=&date->month; b=&date->day; c=&date->year;
+#endif
+
+  switch (flags)
+    {
+    case DATE_SHORT:
+      ret=sscanf( in_string, "%d/%d", a, b ); break;
+    case DATE_YEAR:
+      ret=sscanf( in_string, "%d", c ); break;
+    case DATE_FULL:
+      ret=sscanf( in_string, "%d/%d/%d", a, b, c); break;
+    }
+  return ret;
+}
+
+
 /********************** END OF FILE *********************************\
 \********************************************************************/
