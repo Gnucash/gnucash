@@ -105,6 +105,22 @@ extern void _egg_marshal_VOID__OBJECT_ENUM_BOXED (GClosure     *closure,
 /* VOID:BOXED (eggmarshalers.list:15) */
 #define _egg_marshal_VOID__BOXED	g_cclosure_marshal_VOID__BOXED
 
+/* BOOLEAN:BOOLEAN (eggmarshalers.list:16) */
+extern void _egg_marshal_BOOLEAN__BOOLEAN (GClosure     *closure,
+                                           GValue       *return_value,
+                                           guint         n_param_values,
+                                           const GValue *param_values,
+                                           gpointer      invocation_hint,
+                                           gpointer      marshal_data);
+
+/* BOOLEAN:OBJECT,STRING,STRING (eggmarshalers.list:17) */
+extern void _egg_marshal_BOOLEAN__OBJECT_STRING_STRING (GClosure     *closure,
+                                                        GValue       *return_value,
+                                                        guint         n_param_values,
+                                                        const GValue *param_values,
+                                                        gpointer      invocation_hint,
+                                                        gpointer      marshal_data);
+
 G_END_DECLS
 
 #endif /* ___egg_marshal_MARSHAL_H__ */

@@ -39,8 +39,6 @@ typedef struct EggEditableToolbarClass EggEditableToolbarClass;
 typedef struct EggEditableToolbar EggEditableToolbar;
 typedef struct EggEditableToolbarPrivate EggEditableToolbarPrivate;
 
-#define EGG_TOOLBAR_ITEM_TYPE "application/x-toolbar-item"
-
 struct EggEditableToolbar
 {
   GtkVBox parent_object;

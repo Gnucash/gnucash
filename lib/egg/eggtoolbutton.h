@@ -55,9 +55,10 @@ struct _EggToolButton
 struct _EggToolButtonClass
 {
   EggToolItemClass parent_class;
-
+ 
   GType button_type;
 
+  /* signal */
   void       (* clicked)             (EggToolButton    *tool_item);
 };
 
@@ -77,8 +78,6 @@ G_CONST_RETURN gchar *egg_tool_button_get_stock_id      (EggToolButton *button);
 void		      egg_tool_button_set_icon_set      (EggToolButton *button,
 							 GtkIconSet    *icon_set);
 GtkIconSet *          egg_tool_button_get_icon_set      (EggToolButton *button);
-void                  egg_tool_button_set_icon_set      (EggToolButton *button,
-							 GtkIconSet    *icon_set);
 void                  egg_tool_button_set_icon_widget (EggToolButton *button,
 						       GtkWidget     *icon);
 GtkWidget *           egg_tool_button_get_icon_widget (EggToolButton *button);
@@ -86,9 +85,6 @@ GtkWidget *           egg_tool_button_get_icon_widget (EggToolButton *button);
 void                  egg_tool_button_set_label_widget (EggToolButton *button,
 							GtkWidget     *label_widget);
 GtkWidget *           egg_tool_button_get_label_widget (EggToolButton *button);
-
-/* internal function */
-gchar *              _egg_tool_button_get_label_text  (EggToolButton *button);
 
 G_END_DECLS
 

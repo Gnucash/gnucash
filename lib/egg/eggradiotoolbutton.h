@@ -45,13 +45,17 @@ struct _EggRadioToolButtonClass
 };
 
 GType        egg_radio_tool_button_get_type       (void) G_GNUC_CONST;
-EggToolItem *egg_radio_tool_button_new            (GSList      *group);
-EggToolItem *egg_radio_tool_button_new_from_stock (GSList      *group,
-						   const gchar *stock_id);
 
-GSList *egg_radio_tool_button_get_group (EggRadioToolButton *button);
-void    egg_radio_tool_button_set_group (EggRadioToolButton *button,
-					 GSList             *group);
+EggToolItem *egg_radio_tool_button_new                        (GSList             *group);
+EggToolItem *egg_radio_tool_button_new_from_stock             (GSList             *group,
+							       const gchar        *stock_id);
+EggToolItem *egg_radio_tool_button_new_from_widget            (GtkWidget          *group,
+							       const gchar        *stock_id);
+EggToolItem *egg_radio_tool_button_new_with_stock_from_widget (GtkWidget          *group);
+GSList *     egg_radio_tool_button_get_group                  (EggRadioToolButton *button);
+void         egg_radio_tool_button_set_group                  (EggRadioToolButton *button,
+							       GSList             *group);
+
 
 
 #endif /* __EGG_RADIO_TOOL_BUTTON_H__ */

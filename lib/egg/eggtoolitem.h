@@ -61,12 +61,13 @@ struct _EggToolItemClass
 {
   GtkBinClass parent_class;
 
-  gboolean   (* create_menu_proxy) (EggToolItem  *tool_item);
-  void       (* toolbar_reconfigured) (EggToolItem   *tool_item);
-  void	     (* set_tooltip)	     (EggToolItem    *tool_item,
-				      GtkTooltips    *tooltips,
-				      const gchar    *tip_text,
-				      const gchar    *tip_private);
+  /* signals */
+  gboolean   (* create_menu_proxy)    (EggToolItem *tool_item);
+  void       (* toolbar_reconfigured) (EggToolItem *tool_item);
+  gboolean   (* set_tooltip)	      (EggToolItem *tool_item,
+				       GtkTooltips *tooltips,
+				       const gchar *tip_text,
+				       const gchar *tip_private);
 };
 
 GType        egg_tool_item_get_type (void);

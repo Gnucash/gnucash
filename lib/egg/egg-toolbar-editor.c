@@ -494,11 +494,11 @@ parse_item_list (EggToolbarEditor *t,
     {
       if (xmlStrEqual (child->name, "toolitem"))
 	{
-	  xmlChar *verb;
+	  xmlChar *name;
 
-	  verb = xmlGetProp (child, "verb");
-	  egg_toolbar_editor_add_action (t, verb);
-	  xmlFree (verb);
+	  name = xmlGetProp (child, "name");
+	  egg_toolbar_editor_add_action (t, name);
+	  xmlFree (name);
 	}
       child = child->next;
     }

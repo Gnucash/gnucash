@@ -23,6 +23,7 @@
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtktogglebutton.h>
+#include <gtk/gtkstock.h>
 
 #ifndef _
 #  define _(s) (s)
@@ -37,7 +38,6 @@ enum {
 
 static void egg_toggle_tool_button_init       (EggToggleToolButton      *button);
 static void egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass);
-static void egg_toggle_tool_button_finalize   (GObject                  *object);
 
 static gboolean egg_toggle_tool_button_create_menu_proxy (EggToolItem *button);
 
@@ -89,7 +89,6 @@ egg_toggle_tool_button_class_init (EggToggleToolButtonClass *klass)
   toolitem_class = (EggToolItemClass *)klass;
   toolbutton_class = (EggToolButtonClass *)klass;
 
-  object_class->finalize = egg_toggle_tool_button_finalize;
   toolitem_class->create_menu_proxy = egg_toggle_tool_button_create_menu_proxy;
   toolbutton_class->button_type = GTK_TYPE_TOGGLE_BUTTON;
   
@@ -110,54 +109,63 @@ egg_toggle_tool_button_init (EggToggleToolButton *button)
 			   G_CALLBACK (button_toggled), button, 0);
 }
 
-static void
-egg_toggle_tool_button_finalize (GObject *object)
-{
-  EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (object);
-  
-  if (button->menu_item)
-    g_object_remove_weak_pointer (G_OBJECT (button->menu_item),
-				  (gpointer *)&(button->menu_item));
-
-  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
-}
-
 static gboolean
 egg_toggle_tool_button_create_menu_proxy (EggToolItem *item)
 {
+  EggToolButton *tool_button = EGG_TOOL_BUTTON (item);
+  EggToggleToolButton *toggle_tool_button = EGG_TOGGLE_TOOL_BUTTON (item);
   GtkWidget *menu_item = NULL;
+  GtkStockItem stock_item;
+  gboolean use_mnemonic = TRUE;
+  const char *label = "";
 
-  EggToggleToolButton *button = EGG_TOGGLE_TOOL_BUTTON (item);
-  gchar *label;
-
-  label = _egg_tool_button_get_label_text (EGG_TOOL_BUTTON (item));
+  if (tool_button->label_widget && GTK_IS_LABEL (tool_button->label_widget))
+    label = gtk_label_get_label (GTK_LABEL (tool_button->label_widget));
+  else if (tool_button->label_text)
+    {
+      label = tool_button->label_text;
+      use_mnemonic = tool_button->use_underline;
+    }
+  else if (tool_button->stock_id && gtk_stock_lookup (tool_button->stock_id, &stock_item))
+    label = stock_item.label;
   
-  menu_item = gtk_check_menu_item_new_with_mnemonic (label);
-  g_free (label);
+  if (use_mnemonic)
+    menu_item = gtk_check_menu_item_new_with_mnemonic (label);
+  else
+    menu_item = gtk_check_menu_item_new_with_label (label);
 
-  g_object_ref (menu_item);
-  gtk_object_sink (GTK_OBJECT (menu_item));
-  
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-				  button->active);
+				  toggle_tool_button->active);
 
-  g_signal_connect_object (menu_item, "activate",
-			   G_CALLBACK (menu_item_activated),
-			   EGG_TOOL_BUTTON (button), 0);
+  g_signal_connect_closure_by_id (menu_item,
+				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
+				  g_cclosure_new_object (G_CALLBACK (menu_item_activated),
+							 G_OBJECT (toggle_tool_button)),
+				  FALSE);
 
   egg_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
-
-  g_object_unref (menu_item);
   
   return TRUE;
 }
 
+/* There are two activatable widgets, a toggle button and a menu item.
+ *
+ * If a widget is activated and the state of the tool button is the same as
+ * the new state of the activated widget, then the other widget was the one
+ * that was activated by the user and updated the tool button's state.
+ *
+ * If the state of the tool button is not the same as the new state of the
+ * activated widget, then the activation was activated by the user, and the
+ * widget needs to make sure the tool button is updated before the other
+ * widget is activated. This will make sure the other widget a tool button
+ * in a state that matches its own new state.
+ */
 static void
 menu_item_activated (GtkWidget           *menu_item,
 		     EggToggleToolButton *toggle_tool_button)
 {
   EggToolButton *tool_button = EGG_TOOL_BUTTON (toggle_tool_button);
-  gboolean menu_active = GTK_CHECK_MENU_ITEM (menu_item)->active;
+  gboolean menu_active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item));
 
   if (toggle_tool_button->active != menu_active)
     {
@@ -184,7 +192,7 @@ button_toggled (GtkWidget           *widget,
        
       if ((menu_item =
 	   egg_tool_item_get_proxy_menu_item (EGG_TOOL_ITEM (toggle_tool_button), MENU_ID)))
-	  {
+	{
 	  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
 					  toggle_tool_button->active);
 	}
@@ -213,7 +221,6 @@ egg_toggle_tool_button_new_from_stock (const gchar *stock_id)
   
   button = g_object_new (EGG_TYPE_TOGGLE_TOOL_BUTTON,
 			 "stock_id", stock_id,
-			 "use_underline", TRUE,
 			 NULL);
   
   return EGG_TOOL_ITEM (button);

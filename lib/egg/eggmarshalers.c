@@ -476,3 +476,85 @@ _egg_marshal_VOID__OBJECT_ENUM_BOXED (GClosure     *closure,
 
 /* VOID:BOXED (eggmarshalers.list:15) */
 
+/* BOOLEAN:BOOLEAN (eggmarshalers.list:16) */
+void
+_egg_marshal_BOOLEAN__BOOLEAN (GClosure     *closure,
+                               GValue       *return_value,
+                               guint         n_param_values,
+                               const GValue *param_values,
+                               gpointer      invocation_hint,
+                               gpointer      marshal_data)
+{
+  typedef gboolean (*GMarshalFunc_BOOLEAN__BOOLEAN) (gpointer     data1,
+                                                     gboolean     arg_1,
+                                                     gpointer     data2);
+  register GMarshalFunc_BOOLEAN__BOOLEAN callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+  gboolean v_return;
+
+  g_return_if_fail (return_value != NULL);
+  g_return_if_fail (n_param_values == 2);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_BOOLEAN__BOOLEAN) (marshal_data ? marshal_data : cc->callback);
+
+  v_return = callback (data1,
+                       g_marshal_value_peek_boolean (param_values + 1),
+                       data2);
+
+  g_value_set_boolean (return_value, v_return);
+}
+
+/* BOOLEAN:OBJECT,STRING,STRING (eggmarshalers.list:17) */
+void
+_egg_marshal_BOOLEAN__OBJECT_STRING_STRING (GClosure     *closure,
+                                            GValue       *return_value,
+                                            guint         n_param_values,
+                                            const GValue *param_values,
+                                            gpointer      invocation_hint,
+                                            gpointer      marshal_data)
+{
+  typedef gboolean (*GMarshalFunc_BOOLEAN__OBJECT_STRING_STRING) (gpointer     data1,
+                                                                  gpointer     arg_1,
+                                                                  gpointer     arg_2,
+                                                                  gpointer     arg_3,
+                                                                  gpointer     data2);
+  register GMarshalFunc_BOOLEAN__OBJECT_STRING_STRING callback;
+  register GCClosure *cc = (GCClosure*) closure;
+  register gpointer data1, data2;
+  gboolean v_return;
+
+  g_return_if_fail (return_value != NULL);
+  g_return_if_fail (n_param_values == 4);
+
+  if (G_CCLOSURE_SWAP_DATA (closure))
+    {
+      data1 = closure->data;
+      data2 = g_value_peek_pointer (param_values + 0);
+    }
+  else
+    {
+      data1 = g_value_peek_pointer (param_values + 0);
+      data2 = closure->data;
+    }
+  callback = (GMarshalFunc_BOOLEAN__OBJECT_STRING_STRING) (marshal_data ? marshal_data : cc->callback);
+
+  v_return = callback (data1,
+                       g_marshal_value_peek_object (param_values + 1),
+                       g_marshal_value_peek_string (param_values + 2),
+                       g_marshal_value_peek_string (param_values + 3),
+                       data2);
+
+  g_value_set_boolean (return_value, v_return);
+}
+

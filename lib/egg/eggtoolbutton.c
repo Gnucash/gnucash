@@ -52,22 +52,24 @@ enum {
   PROP_ICON_WIDGET,
 };
 
-static void egg_tool_button_init       (EggToolButton      *button,
-					EggToolButtonClass *klass);
-static void egg_tool_button_class_init (EggToolButtonClass *klass);
+static void egg_tool_button_init          (EggToolButton      *button,
+					   EggToolButtonClass *klass);
+static void egg_tool_button_class_init    (EggToolButtonClass *klass);
+static void egg_tool_button_size_request  (GtkWidget          *widget,
+					   GtkRequisition     *requisition);
+static void egg_tool_button_size_allocate (GtkWidget          *widget,
+					   GtkAllocation      *allocation);
+static void egg_tool_button_set_property  (GObject            *object,
+					   guint               prop_id,
+					   const GValue       *value,
+					   GParamSpec         *pspec);
+static void egg_tool_button_get_property  (GObject            *object,
+					   guint               prop_id,
+					   GValue             *value,
+					   GParamSpec         *pspec);
+static void egg_tool_button_finalize      (GObject            *object);
 
-
-static void egg_tool_button_set_property (GObject      *object,
-					  guint         prop_id,
-					  const GValue *value,
-					  GParamSpec   *pspec);
-static void egg_tool_button_get_property (GObject      *object,
-					  guint         prop_id,
-					  GValue       *value,
-					  GParamSpec   *pspec);
-static void egg_tool_button_finalize     (GObject      *object);
-static void egg_tool_button_parent_set (GtkWidget *widget, GtkWidget *parent);
-
+static void egg_tool_button_toolbar_reconfigured (EggToolItem *tool_item);
 static gboolean   egg_tool_button_create_menu_proxy (EggToolItem     *item);
 static void       button_clicked                    (GtkWidget       *widget,
 						     EggToolButton   *button);
@@ -121,10 +123,11 @@ egg_tool_button_class_init (EggToolButtonClass *klass)
   object_class->get_property = egg_tool_button_get_property;
   object_class->finalize = egg_tool_button_finalize;
 
-  widget_class->parent_set = egg_tool_button_parent_set;
+  widget_class->size_request = egg_tool_button_size_request;
+  widget_class->size_allocate = egg_tool_button_size_allocate;
 
   tool_item_class->create_menu_proxy = egg_tool_button_create_menu_proxy;
-  tool_item_class->toolbar_reconfigured = egg_tool_button_construct_contents;
+  tool_item_class->toolbar_reconfigured = egg_tool_button_toolbar_reconfigured;
   
   klass->button_type = GTK_TYPE_BUTTON;
 
@@ -182,7 +185,8 @@ egg_tool_button_class_init (EggToolButtonClass *klass)
 }
 
 static void
-egg_tool_button_init (EggToolButton *button, EggToolButtonClass *klass)
+egg_tool_button_init (EggToolButton      *button,
+		      EggToolButtonClass *klass)
 {
   EggToolItem *toolitem = EGG_TOOL_ITEM (button);
   
@@ -202,6 +206,82 @@ egg_tool_button_init (EggToolButton *button, EggToolButtonClass *klass)
 }
 
 static void
+egg_tool_button_size_request (GtkWidget      *widget,
+			      GtkRequisition *requisition)
+{
+  GtkWidget *child = GTK_BIN (widget)->child;
+
+  if (child && GTK_WIDGET_VISIBLE (child))
+    {
+      gtk_widget_size_request (child, requisition);
+    }
+  else
+    {
+      requisition->width = 0;
+      requisition->height = 0;
+    }
+  
+  requisition->width += GTK_CONTAINER (widget)->border_width * 2;
+  requisition->height += GTK_CONTAINER (widget)->border_width * 2;  
+}
+
+static void
+egg_tool_button_size_allocate (GtkWidget     *widget,
+			       GtkAllocation *allocation)
+{
+  EggToolItem *toolitem = EGG_TOOL_ITEM (widget);
+  GtkAllocation child_allocation;
+  gint border_width;
+  GtkWidget *child = GTK_BIN (widget)->child;
+
+  widget->allocation = *allocation;
+  border_width = GTK_CONTAINER (widget)->border_width;
+
+  if (toolitem->drag_window && GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (toolitem->drag_window,
+                            widget->allocation.x + border_width,
+                            widget->allocation.y + border_width,
+                            widget->allocation.width - border_width * 2,
+                            widget->allocation.height - border_width * 2);
+  
+  if (child && GTK_WIDGET_VISIBLE (child))
+    {
+      child_allocation.x = allocation->x + border_width;
+      child_allocation.y = allocation->y + border_width;
+      child_allocation.width = allocation->width - 2 * border_width;
+      child_allocation.height = allocation->height - 2 * border_width;
+      
+      gtk_widget_size_allocate (child, &child_allocation);
+    }
+}
+
+static gchar *
+elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p;
+  gboolean last_underscore;
+
+  q = result = g_malloc (strlen (original) + 1);
+  last_underscore = FALSE;
+  
+  for (p = original; *p; p++)
+    {
+      if (!last_underscore && *p == '_')
+	last_underscore = TRUE;
+      else
+	{
+	  last_underscore = FALSE;
+	  *q++ = *p;
+	}
+    }
+  
+  *q = '\0';
+  
+  return result;
+}
+
+static void
 egg_tool_button_construct_contents (EggToolItem *tool_item)
 {
   EggToolButton *button = EGG_TOOL_BUTTON (tool_item);
@@ -213,6 +293,14 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
   GtkIconSize icon_size;
   GtkWidget *box = NULL;
 
+  if (egg_tool_item_get_proxy_menu_item (tool_item, MENU_ID))
+    {
+      /* Remove item, so it will be recreated on the next
+       * create_proxy_menu_item()
+       */
+      egg_tool_item_set_proxy_menu_item (tool_item, MENU_ID, NULL);
+    }
+  
   if (button->icon_widget && button->icon_widget->parent)
     {
       gtk_container_remove (GTK_CONTAINER (button->icon_widget->parent),
@@ -247,10 +335,29 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 	}
       else
 	{
-	  gchar *text = _egg_tool_button_get_label_text (button);
-	  label = gtk_label_new (text);
-	  g_free (text);
+	  GtkStockItem stock_item;
+	  gboolean elide = TRUE;
+	  gchar *label_text;
 
+	  if (button->label_text)
+	    {
+	      label_text = button->label_text;
+	      elide = button->use_underline;
+	    }
+	  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
+	    label_text = stock_item.label;
+	  else
+	    label_text = "";
+
+	  if (elide)
+	    label_text = elide_underscores (label_text);
+	  else
+	    label_text = g_strdup (label_text);
+
+	  label = gtk_label_new (label_text);
+
+	  g_free (label_text);
+	  
 	  gtk_widget_show (label);
 	}
     }
@@ -265,30 +372,30 @@ egg_tool_button_construct_contents (EggToolItem *tool_item)
 	}
       else if (button->icon_widget)
 	{
-	  if (GTK_IS_IMAGE (button->icon_widget))
+	  icon = button->icon_widget;
+	  
+	  if (GTK_IS_IMAGE (icon))
 	    {
-	      GtkImage *image = GTK_IMAGE (button->icon_widget);
+	      GtkImage *image = GTK_IMAGE (icon);
 	      GtkImageType storage_type = gtk_image_get_storage_type (image);
 	      
-	      /* FIXME: this seems a bit dubious. We are changing a widget that the
-	       * user passed in. It's probably better to create a new image instead.
-	       */
-
 	      if (storage_type == GTK_IMAGE_STOCK)
 		{
 		  gchar *stock_id;
 		  gtk_image_get_stock (image, &stock_id, NULL);
-		  gtk_image_set_from_stock (image, stock_id, icon_size);
+
+		  icon = gtk_image_new_from_stock (stock_id, icon_size);
+		  gtk_widget_show (icon);
 		}
 	      else if (storage_type == GTK_IMAGE_ICON_SET)
 		{
 		  GtkIconSet *icon_set;
 		  gtk_image_get_icon_set (image, &icon_set, NULL);
-		  gtk_image_set_from_icon_set (image, icon_set, icon_size);
+		  
+		  icon = gtk_image_new_from_icon_set (icon_set, icon_size);
+		  gtk_widget_show (icon);
 		}
 	    }
-	  
-	  icon = button->icon_widget;
 	}
       else if (button->stock_id)
 	{
@@ -415,14 +522,24 @@ egg_tool_button_create_menu_proxy (EggToolItem *item)
   EggToolButton *button = EGG_TOOL_BUTTON (item);
   GtkWidget *menu_item;
   GtkWidget *menu_image = NULL;
-  gchar *label;
+  GtkStockItem stock_item;
+  gboolean use_mnemonic = TRUE;
+  const char *label = "";
 
-  label = _egg_tool_button_get_label_text (button);
-  menu_item = gtk_image_menu_item_new_with_label (label);
-  g_free (label);
-
-  g_object_ref (menu_item);
-  gtk_object_sink (GTK_OBJECT (menu_item));
+  if (button->label_widget && GTK_IS_LABEL (button->label_widget))
+    label = gtk_label_get_label (GTK_LABEL (button->label_widget));
+  else if (button->label_text)
+    {
+      label = button->label_text;
+      use_mnemonic = button->use_underline;
+    }
+  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
+    label = stock_item.label;
+  
+  if (use_mnemonic)
+    menu_item = gtk_image_menu_item_new_with_mnemonic (label);
+  else
+    menu_item = gtk_image_menu_item_new_with_label (label);
 
   if (button->icon_set)
     {
@@ -454,28 +571,28 @@ egg_tool_button_create_menu_proxy (EggToolItem *item)
   if (menu_image)
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), menu_image);
 
-  g_signal_connect_object (menu_item, "activate",
-			   G_CALLBACK (gtk_button_clicked),
-			   EGG_TOOL_BUTTON (button)->button,
-			   G_CONNECT_SWAPPED);
+  g_signal_connect_closure_by_id (menu_item,
+				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
+				  g_cclosure_new_object_swap (G_CALLBACK (gtk_button_clicked),
+							      G_OBJECT (EGG_TOOL_BUTTON (button)->button)),
+				  FALSE);
 
   egg_tool_item_set_proxy_menu_item (EGG_TOOL_ITEM (button), MENU_ID, menu_item);
-
-  g_object_unref (menu_item);
   
   return TRUE;
 }
 
 static void
-egg_tool_button_parent_set (GtkWidget *widget, GtkWidget *parent)
+button_clicked (GtkWidget     *widget,
+		EggToolButton *button)
 {
-  egg_tool_button_construct_contents (EGG_TOOL_ITEM (widget));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
-button_clicked (GtkWidget *widget, EggToolButton *button)
+egg_tool_button_toolbar_reconfigured (EggToolItem *tool_item)
 {
-  g_signal_emit_by_name (button, "clicked");
+  egg_tool_button_construct_contents (tool_item);
 }
 
 EggToolItem *
@@ -507,19 +624,19 @@ void
 egg_tool_button_set_label (EggToolButton *button,
 			   const gchar   *label)
 {
+  gchar *old_label;
+  
   g_return_if_fail (EGG_IS_TOOL_BUTTON (button));
 
-  if (label != button->label_text)
-    {
-      if (button->label_text)
-	g_free (button->label_text);
-      
-      button->label_text = g_strdup (label);
+  old_label = button->label_text;
 
-      egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
+  button->label_text = g_strdup (label);
+  egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
       
-      g_object_notify (G_OBJECT (button), "label");
-    }
+  g_object_notify (G_OBJECT (button), "label");
+
+  if (old_label)
+    g_free (old_label);
 }
 
 G_CONST_RETURN gchar *
@@ -560,19 +677,18 @@ void
 egg_tool_button_set_stock_id (EggToolButton *button,
 			      const gchar   *stock_id)
 {
+  gchar *old_stock_id;
+  
   g_return_if_fail (EGG_IS_TOOL_BUTTON (button));
 
-  if (button->stock_id != stock_id)
-    {
-      if (button->stock_id)
-	g_free (button->stock_id);
+  old_stock_id = button->stock_id;
 
-      button->stock_id = g_strdup (stock_id);
-      
-      egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
+  button->stock_id = g_strdup (stock_id);
+  egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
+  
+  g_object_notify (G_OBJECT (button), "stock_id");
 
-      g_object_notify (G_OBJECT (button), "stock_id");
-    }
+  g_free (old_stock_id);
 }
 
 G_CONST_RETURN gchar *
@@ -598,8 +714,13 @@ egg_tool_button_set_icon_widget (EggToolButton *button,
 	g_object_unref (G_OBJECT (button->icon_widget));
 
       if (icon)
-	button->icon_widget = g_object_ref (icon);
+	{
+	  g_object_ref (icon);
+	  gtk_object_sink (GTK_OBJECT (icon));
+	}
 
+      button->icon_widget = icon;
+	
       if (button->icon_widget && button->icon_set)
 	{
 	  gtk_icon_set_unref (button->icon_set);
@@ -627,7 +748,13 @@ egg_tool_button_set_label_widget (EggToolButton *button,
       if (button->label_widget)
 	g_object_unref (button->label_widget);
 
-      button->label_widget = g_object_ref (label_widget);
+      if (label_widget)
+	{
+	  g_object_ref (label_widget);
+	  gtk_object_sink (GTK_OBJECT (label_widget));
+	}
+
+      button->label_widget = label_widget;
 
       egg_tool_button_construct_contents (EGG_TOOL_ITEM (button));
       
@@ -687,48 +814,4 @@ egg_tool_button_get_icon_set (EggToolButton *button)
   g_return_val_if_fail (EGG_IS_TOOL_BUTTON (button), NULL);
   
   return button->icon_set;
-}
-
-static gchar *
-elide_underscores (const gchar *original)
-{
-  gchar *q, *result;
-  const gchar *p;
-  gboolean last_underscore;
-
-  q = result = g_malloc (strlen (original) + 1);
-  last_underscore = FALSE;
-  
-  for (p = original; *p; p++)
-    {
-      if (!last_underscore && *p == '_')
-	last_underscore = TRUE;
-      else
-	{
-	  last_underscore = FALSE;
-	  *q++ = *p;
-	}
-    }
-  
-  *q = '\0';
-  
-  return result;
-}
-
-gchar *
-_egg_tool_button_get_label_text  (EggToolButton *button)
-{
-  GtkStockItem stock_item;
-
-  if (button->label_text)
-    {
-      if (button->use_underline)
-	return elide_underscores (button->label_text);
-      else
-	return g_strdup (button->label_text);
-    }
-  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
-    return elide_underscores (stock_item.label);
-  else
-    return g_strdup ("");
 }

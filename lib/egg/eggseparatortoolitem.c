@@ -5,11 +5,10 @@
 #  define _(s) (s)
 #endif
 
-static void egg_separator_tool_item_init       (EggSeparatorToolItem *self);
 static void egg_separator_tool_item_class_init (EggSeparatorToolItemClass*class);
 
-static void       egg_separator_tool_item_add               (GtkContainer *container,
-							     GtkWidget    *child);
+static void egg_separator_tool_item_add (GtkContainer *container,
+					 GtkWidget    *child);
 
 static GObjectClass *parent_class = NULL;
 
@@ -31,7 +30,7 @@ egg_separator_tool_item_get_type (void)
 	  NULL,
 	  sizeof (EggSeparatorToolItem),
 	  0, /* n_preallocs */
-	  (GInstanceInitFunc) egg_separator_tool_item_init
+	  (GInstanceInitFunc) NULL,
 	};
 
       type = g_type_register_static (EGG_TYPE_TOOL_ITEM,
@@ -55,12 +54,8 @@ egg_separator_tool_item_class_init (EggSeparatorToolItemClass *class)
 }
 
 static void
-egg_separator_tool_item_init (EggSeparatorToolItem *self)
-{
-}
-
-static void
-egg_separator_tool_item_add (GtkContainer *container, GtkWidget *child)
+egg_separator_tool_item_add (GtkContainer *container,
+			     GtkWidget    *child)
 {
   g_warning("attempt to add a child to an EggSeparatorToolItem");
 }

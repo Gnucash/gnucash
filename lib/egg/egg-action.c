@@ -3,6 +3,14 @@
 #include "eggintl.h"
 
 
+/* some code for making arbitrary GtkButtons that act like toolbar
+ * buttons */
+static GtkWidget *tool_button_new       (GType        button_type,
+					 const gchar *text,
+					 GtkWidget   *icon);
+static GtkWidget *tool_button_get_label (GtkWidget   *button);
+static GtkWidget *tool_button_get_icon  (GtkWidget   *button);
+
 enum {
   ACTIVATE,
   LAST_SIGNAL
@@ -501,8 +509,8 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
     }
   else if (EGG_IS_TOOL_BUTTON (proxy))
     {
-      /*GtkWidget *label;
-      GtkWidget *icon;*/
+      GtkWidget *label;
+      GtkWidget *icon;
       /* toolbar button specific synchronisers ... */
 
       /* synchronise the label */
@@ -694,7 +702,7 @@ void
 egg_action_disconnect_proxy (EggAction *action,
 			     GtkWidget *proxy)
 {
-  /*EggAction *prev_action;*/
+  EggAction *prev_action;
 
   g_return_if_fail (EGG_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
@@ -757,4 +765,203 @@ void
 egg_action_set_accel_path (EggAction *action, const gchar *accel_path)
 {
   action->accel_quark = g_quark_from_string(accel_path);
+}
+
+/* ---- code to create sort-of-toolbar-buttons ---- */
+
+static GtkWidget *
+tool_button_get_label (GtkWidget *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+
+  return g_object_get_data (G_OBJECT (button), "tool-button-label");
+}
+
+static GtkWidget *
+tool_button_get_icon (GtkWidget *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+
+  return g_object_get_data (G_OBJECT (button), "tool-button-icon");
+}
+
+static void
+tool_button_parent_set (GtkWidget *button, GtkWidget *old_parent)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *icon;
+
+  box   = g_object_get_data (G_OBJECT (button), "tool-button-box");
+  label = g_object_get_data (G_OBJECT (button), "tool-button-label");
+  icon  = g_object_get_data (G_OBJECT (button), "tool-button-icon");
+
+  if (button->parent && GTK_IS_TOOLBAR (button->parent))
+    {
+      GtkReliefStyle relief = GTK_RELIEF_NORMAL;
+      GList *tmp;
+
+      /* set button relief to match toolbar */
+      gtk_widget_style_get (GTK_WIDGET (button->parent),
+			    "button_relief", &relief, NULL);
+      gtk_button_set_relief (GTK_BUTTON (button), relief);
+
+      /* set the button style */
+      switch (gtk_toolbar_get_style (GTK_TOOLBAR (button->parent)))
+	{
+	case GTK_TOOLBAR_ICONS:
+	  if (icon && !GTK_WIDGET_VISIBLE (icon))
+	    gtk_widget_show (icon);
+	  if (label && GTK_WIDGET_VISIBLE (label))
+	    gtk_widget_hide (label);
+	  break;
+
+	case GTK_TOOLBAR_TEXT:
+	  if (icon && GTK_WIDGET_VISIBLE (icon))
+	    gtk_widget_hide (icon);
+	  if (label && !GTK_WIDGET_VISIBLE (label))
+	    gtk_widget_show (label);
+	  break;
+
+	case GTK_TOOLBAR_BOTH:
+	  if (icon && !GTK_WIDGET_VISIBLE (icon))
+	    gtk_widget_show (icon);
+	  if (label && !GTK_WIDGET_VISIBLE (label))
+	    gtk_widget_show (label);
+
+	  if (GTK_IS_HBOX (box))
+	    {
+	      if (icon)
+		{
+		  g_object_ref (icon);
+		  gtk_container_remove (GTK_CONTAINER (box), icon);
+		}
+	      if (label)
+		{
+		  g_object_ref (label);
+		  gtk_container_remove (GTK_CONTAINER (box), label);
+		}
+	      gtk_container_remove (GTK_CONTAINER (button), box);
+	      box = gtk_vbox_new (FALSE, 0);
+
+	      gtk_widget_show (box);
+
+	      if (label)
+		{
+		  gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
+		  g_object_unref (label);
+		}
+	      if (icon)
+		{
+		  gtk_box_pack_end (GTK_BOX (box), icon, FALSE, FALSE, 0);
+		  g_object_unref (label);
+		}
+	      gtk_container_add (GTK_CONTAINER (button), box);
+	      g_object_set_data (G_OBJECT (button), "tool-button-box", box);
+	    }
+	  break;
+
+	case GTK_TOOLBAR_BOTH_HORIZ:
+	  if (icon && !GTK_WIDGET_VISIBLE (icon))
+	    gtk_widget_show (icon);
+	  if (label && !GTK_WIDGET_VISIBLE (label))
+	    gtk_widget_show (label);
+
+	  if (GTK_IS_VBOX (box))
+	    {
+	      if (icon)
+		{
+		  g_object_ref (icon);
+		  gtk_container_remove (GTK_CONTAINER (box), icon);
+		}
+	      if (label)
+		{
+		  g_object_ref (label);
+		  gtk_container_remove (GTK_CONTAINER (box), label);
+		}
+	      gtk_container_remove (GTK_CONTAINER (button), box);
+	      box = gtk_hbox_new (FALSE, 0);
+
+	      gtk_widget_show (box);
+
+	      if (label)
+		{
+		  gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
+		  g_object_unref (label);
+		}
+	      if (icon)
+		{
+		  gtk_box_pack_end (GTK_BOX (box), icon, FALSE, FALSE, 0);
+		  g_object_unref (label);
+		}
+	      gtk_container_add (GTK_CONTAINER (button), box);
+	      g_object_set_data (G_OBJECT (button), "tool-button-box", box);
+	    }
+	  break;
+	}
+
+      /* set the icon size */
+      icon = tool_button_get_icon (button);
+      if (GTK_IS_IMAGE (icon) &&
+	  gtk_image_get_storage_type (GTK_IMAGE (icon)) == GTK_IMAGE_STOCK)
+	{
+	  gchar *stock_id;
+
+	  gtk_image_get_stock (GTK_IMAGE (icon), &stock_id, NULL);
+	  stock_id = g_strdup (stock_id);
+	  gtk_image_set_from_stock (GTK_IMAGE (icon), stock_id,
+				    GTK_TOOLBAR (button->parent)->icon_size);
+	  g_free (stock_id);
+	}
+
+      /* gross hack!!! */
+      for (tmp = GTK_TOOLBAR (button->parent)->children; tmp; tmp = tmp->next)
+	{
+	  GtkToolbarChild *tool_child = tmp->data;
+
+	  if (tool_child->widget == button)
+	    {
+	      tool_child->type  = GTK_TOOLBAR_CHILD_BUTTON;
+	      tool_child->icon  = icon;
+	      tool_child->label = label;
+	      break;
+	    }
+	}
+    }
+}
+
+static GtkWidget *
+tool_button_new (GType button_type, const gchar *text, GtkWidget *icon)
+{
+  GtkWidget *button;
+  GtkWidget *vbox;
+  GtkWidget *label;
+
+  g_return_val_if_fail (g_type_is_a (button_type, GTK_TYPE_BUTTON), NULL);
+
+  button = g_object_new (button_type, NULL);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (button), vbox);
+  gtk_widget_show (vbox);
+
+  label = gtk_label_new (text);
+  gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
+  gtk_box_pack_end (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+  if (!icon)
+    icon = gtk_image_new();
+  gtk_box_pack_end (GTK_BOX (vbox), icon, FALSE, FALSE, 0);
+
+  g_object_set_data (G_OBJECT (button), "tool-button-box", vbox);
+  g_object_set_data (G_OBJECT (button), "tool-button-label", label);
+  g_object_set_data (G_OBJECT (button), "tool-button-icon", icon);
+
+  g_signal_connect (button, "parent_set",
+		    G_CALLBACK (tool_button_parent_set), NULL);
+
+  GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
+
+  return button;
 }

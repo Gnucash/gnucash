@@ -72,30 +72,9 @@ egg_menu_merge_get_type (void)
   return type;
 }
 
-static GObjectClass *parent_class = NULL;
-
-static void
-egg_menu_merge_finalize (GObject *object)
-{
-  EggMenuMerge *merge;
-
-  merge = EGG_MENU_MERGE (object);
-  if (merge->update_tag != 0)
-    {
-      g_source_remove(merge->update_tag);
-    }
-}
-
 static void
 egg_menu_merge_class_init (EggMenuMergeClass *class)
 {
-  GObjectClass *object_class;
-
-  parent_class = g_type_class_peek_parent (class);
-  object_class = G_OBJECT_CLASS(class);
-
-  object_class->finalize     = egg_menu_merge_finalize;
-
   if (!merge_node_chunk)
     merge_node_chunk = g_mem_chunk_create(EggMenuMergeNode, 64,
 					  G_ALLOC_AND_FREE);
@@ -216,6 +195,14 @@ get_child_node(EggMenuMerge *self, GNode *parent,
 		  /* if undecided about node type, set it */
 		  if (NODE_INFO(child)->type == EGG_MENU_MERGE_UNDECIDED)
 		    NODE_INFO(child)->type = node_type;
+		  
+		  /* warn about type mismatch */
+		  if (NODE_INFO(child)->type != EGG_MENU_MERGE_UNDECIDED &&
+		      NODE_INFO(child)->type != node_type)
+		    g_warning("node type doesn't match %d (%s is type %d)",
+			      node_type, NODE_INFO(child)->name,
+			      NODE_INFO(child)->type);
+		  
 		  return child;
 		}
 	    }
@@ -945,10 +932,15 @@ update_node (EggMenuMerge *self, GNode *node)
 
   info = NODE_INFO(node);
 
+  g_print("update_node name=%s dirty=%d (", info->name, info->dirty);
   for (tmp = info->uifiles; tmp != NULL; tmp = tmp->next)
     {
-      /*NodeUIReference *ref = tmp->data;*/
+      NodeUIReference *ref = tmp->data;
+      g_print("%s:%u", g_quark_to_string(ref->action_quark), ref->merge_id);
+      if (tmp->next)
+	g_print(", ");
     }
+  g_print(")\n");
 
   if (NODE_INFO(node)->dirty)
     {
@@ -989,7 +981,11 @@ update_node (EggMenuMerge *self, GNode *node)
 	  goto recurse_children;
 	}
       
+      if (info->action)
+	g_object_unref (info->action);
       info->action = action;
+      if (info->action)
+	g_object_ref (info->action);
 
       switch (info->type)
 	{
@@ -1023,15 +1019,8 @@ update_node (EggMenuMerge *self, GNode *node)
 	      {
 		GtkWidget *menushell;
 		gint pos;
-		GNode *parent;
 
-		parent = node->parent;
-
-		if (parent && NODE_INFO (parent)->type == EGG_MENU_MERGE_POPUPS)
-		  {
-		    info->proxy = gtk_menu_new();
-		  }
-		else if (find_menu_position(node, &menushell, &pos))
+		if (find_menu_position(node, &menushell, &pos))
 		  {
 		    GtkWidget *menu;
 		    info->proxy = egg_action_create_menu_item (info->action);
@@ -1283,6 +1272,8 @@ do_updates(EggMenuMerge *self)
    *    the proxy is reconnected to the new action (or a new proxy widget
    *    is created and added to the parent container).
    */
+
+  g_message("do_updates");
 
   update_node (self, self->root_node);
 

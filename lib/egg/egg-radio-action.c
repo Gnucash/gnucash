@@ -1,5 +1,4 @@
 #include "egg-radio-action.h"
-#include "eggradiotoolbutton.h"
 
 static void egg_radio_action_init       (EggRadioAction *action);
 static void egg_radio_action_class_init (EggRadioActionClass *class);
@@ -46,9 +45,6 @@ egg_radio_action_class_init (EggRadioActionClass *class)
   parent_class = g_type_class_peek_parent (class);
   object_class = G_OBJECT_CLASS (class);
   action_class = EGG_ACTION_CLASS (class);
-
-  action_class->menu_item_type = GTK_TYPE_RADIO_MENU_ITEM;
-  action_class->toolbar_item_type = EGG_TYPE_RADIO_TOOL_BUTTON;
 
   object_class->finalize = egg_radio_action_finalize;
 

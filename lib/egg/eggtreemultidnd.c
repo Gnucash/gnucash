@@ -391,6 +391,8 @@ egg_tree_multi_drag_button_press_event (GtkWidget      *widget,
 	  priv_data->drag_data_get_handler =
 	    g_signal_connect (G_OBJECT (tree_view), "drag_data_get", G_CALLBACK (egg_tree_multi_drag_drag_data_get), NULL);
 	}
+
+      gtk_tree_path_free (path);
       
       return TRUE;
     }

@@ -21,7 +21,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include "gdk/gdktypes.h"
+#include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS
 
@@ -37,9 +37,12 @@ typedef struct EggToolbarsModelClass EggToolbarsModelClass;
 typedef struct EggToolbarsModel EggToolbarsModel;
 typedef struct EggToolbarsModelPrivate EggToolbarsModelPrivate;
 
+#define EGG_TOOLBAR_ITEM_TYPE "application/x-toolbar-item"
+
 typedef enum
 {
-	EGG_TB_MODEL_NOT_REMOVABLE = 1
+  EGG_TB_MODEL_NOT_REMOVABLE = 1,
+  EGG_TB_MODEL_ICONS_ONLY = 2
 } EggTbModelFlags;
 
 struct EggToolbarsModel
@@ -61,16 +64,25 @@ struct EggToolbarsModelClass
 			    int position);
   void (* toolbar_added)   (EggToolbarsModel *group,
 			    int position);
+  void (* toolbar_changed) (EggToolbarsModel *group,
+			    int position);
   void (* toolbar_removed) (EggToolbarsModel *group,
 			    int position);
 
   /* Virtual Table */
-  const char * (* add_item) (EggToolbarsModel *t,
-			     int	       toolbar_position,
-			     int               position,
-			     GdkAtom           type,
-			     const char       *item_name);
-
+  gboolean (* add_item)    (EggToolbarsModel *t,
+			    int	              toolbar_position,
+			    int               position,
+			    const char       *id,
+			    const char       *type);
+  char * (* get_item_type) (EggToolbarsModel *t,
+			    GdkAtom           dnd_type);
+  char * (* get_item_id)   (EggToolbarsModel *t,
+			    const char       *type,
+			    const char       *name);
+  char * (* get_item_name) (EggToolbarsModel *t,
+			    const char       *type,
+			    const char       *id);
 };
 
 GType		  egg_toolbars_model_get_type       (void);
@@ -78,7 +90,8 @@ EggToolbarsModel *egg_toolbars_model_new	    (void);
 void              egg_toolbars_model_load           (EggToolbarsModel *t,
 						     const char *xml_file);
 void              egg_toolbars_model_save           (EggToolbarsModel *t,
-						     const char *xml_file);
+						     const char *xml_file,
+						     const char *version);
 int               egg_toolbars_model_add_toolbar    (EggToolbarsModel *t,
 						     int               position,
 						     const char       *name);
@@ -90,11 +103,19 @@ void              egg_toolbars_model_set_flags      (EggToolbarsModel *t,
 void              egg_toolbars_model_add_separator  (EggToolbarsModel *t,
 						     int               toolbar_position,
 						     int               position);
-const char	 *egg_toolbars_model_add_item       (EggToolbarsModel *t,
+char             *egg_toolbars_model_get_item_type  (EggToolbarsModel *t,
+				                     GdkAtom           dnd_type);
+char             *egg_toolbars_model_get_item_id    (EggToolbarsModel *t,
+						     const char       *type,
+			                             const char       *name);
+char             *egg_toolbars_model_get_item_name  (EggToolbarsModel *t,
+						     const char       *type,
+			                             const char       *id);
+gboolean	  egg_toolbars_model_add_item       (EggToolbarsModel *t,
 						     int	       toolbar_position,
 				                     int               position,
-						     GdkAtom           type,
-						     const char       *item_name);
+						     const char       *id,
+						     const char       *type);
 void		  egg_toolbars_model_remove_toolbar (EggToolbarsModel *t,
 						     int               position);
 void		  egg_toolbars_model_remove_item    (EggToolbarsModel *t,

@@ -50,6 +50,7 @@ struct _EggToggleToolButtonClass
 {
   EggToolButtonClass parent_class;
 
+  /* signal */
   void (* toggled) (EggToggleToolButton *button);
 };
 
