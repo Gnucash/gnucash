@@ -24,13 +24,14 @@ noinst_HEADERS = \
 
 libgncmod_ledger_core_la_LDFLAGS = -module
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
-
-INCLUDES = \
-   -I${top_srcdir}/src \
-   -I${top_srcdir}/src/engine \
-   -I${top_srcdir}/src/guile \
-   -I${top_srcdir}/src/gnc-module \
-   -I${top_srcdir}/src/app-utils \
-   -I${top_srcdir}/src/register/register-core \
-   ${GNOME_INCLUDEDIR}
+CFLAGS = \
+  @CFLAGS@ \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/guile \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/register/register-core \
+  ${GUILE_INCS} \
+  ${GNOME_INCLUDEDIR} \
+  ${GLIB_CFLAGS}
