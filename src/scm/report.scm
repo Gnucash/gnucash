@@ -38,12 +38,16 @@
 (define *gnc:_reports_* (make-hash-table 23))
 (define *gnc:_report-next-serial_* 0)
 
+;; Define those strings here to make changes easier and avoid typos.
 (define gnc:menuname-asset-liability
   (N_ "_Assets & Liabilities"))
-(define gnc:menuname-income-expense
+(define gnc:menuname-income-expense 
   (N_ "_Income & Expense"))
-(define gnc:menuname-taxes
-  (N_ "_Taxes"))
+(define gnc:menuname-taxes (N_ "_Taxes"))
+(define gnc:pagename-general (N_ "General"))
+(define gnc:optname-reportname (N_ "Report name"))
+
+
 
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
@@ -190,12 +194,12 @@
   (let ((generator (gnc:report-template-options-generator report-template))
         (namer 
          (gnc:make-string-option 
-          (N_ "General") (N_ "Report name") "0a"
+          gnc:pagename-general gnc:optname-reportname "0a"
           (N_ "Enter a descriptive name for this report")
           (_ (gnc:report-template-name report-template))))
         (stylesheet 
          (gnc:make-multichoice-option 
-          (N_ "General") (N_ "Stylesheet") "0b"
+          gnc:pagename-general (N_ "Stylesheet") "0b"
           (N_ "Select a stylesheet for the report.")
           (string->symbol (N_ "Default"))
           (map 
@@ -363,21 +367,21 @@
 (define (gnc:report-name report) 
   (gnc:option-value
    (gnc:lookup-option (gnc:report-options report)
-                      (N_ "General") (N_ "Report name"))))
+                      gnc:pagename-general gnc:optname-reportname)))
 
 (define (gnc:report-stylesheet report)
   (gnc:html-style-sheet-find 
    (symbol->string (gnc:option-value
                     (gnc:lookup-option 
                      (gnc:report-options report)
-                     (N_ "General") 
+                     gnc:pagename-general 
                      (N_ "Stylesheet"))))))
 
 (define (gnc:report-set-stylesheet! report stylesheet)
   (gnc:option-set-value
    (gnc:lookup-option 
     (gnc:report-options report)
-    (N_ "General") 
+    gnc:pagename-general 
     (N_ "Stylesheet"))
    (string->symbol 
     (gnc:html-style-sheet-name stylesheet))))

@@ -30,20 +30,34 @@
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
 ;; report, thus needing them twice.
-(let ((reportname-income (N_ "Income Barchart"))
-      (reportname-expense (N_ "Expense Barchart"))
-      (reportname-assets (N_ "Asset Barchart"))
-      (reportname-liabilities (N_ "Liability Barchart"))
-      ;; The names are used in the menu, as labels and as identifiers.
+(let ((menuname-income (N_ "Income Barchart"))
+      (menuname-expense (N_ "Expense Barchart"))
+      (menuname-assets (N_ "Asset Barchart"))
+      (menuname-liabilities (N_ "Liability Barchart"))
+      ;; The names are used in the menu
 
-      ;; The titels here are only printed as titles of the report.
-      (reporttitle-income (_ "Income Accounts"))
-      (reporttitle-expense (_ "Expense Accounts"))
-      (reporttitle-assets (_ "Asset Accounts"))
-      (reporttitle-liabilities (_ "Liability/Equity Accounts"))
+      ;; The menu statusbar tips.
+      (menutip-income 
+       (N_ "Shows a barchart with the Income per interval \
+developing over time"))
+      (menutip-expense 
+       (N_ "Shows a barchart with the Expenses per interval \
+developing over time"))
+      (menutip-assets 
+       (N_ "Shows a barchart with the Assets developing over time"))
+      (menutip-liabilities 
+       (N_ "Shows a barchart with the Liability and Equity balance \
+developing over time"))
+
+      ;; The names here are used 1. for internal identification, 2. as
+      ;; tab labels, 3. as default for the 'Report name' option which
+      ;; in turn is used for the printed report title.
+      (reportname-income (N_ "Income Over Time"))
+      (reportname-expense (N_ "Expense Over Time"))
+      (reportname-assets (N_ "Assets Over Time"))
+      (reportname-liabilities (N_ "Liabilities/Equity Over Time"))
 
       ;; Option names
-      (pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-stepsize (N_ "Step Size"))
@@ -68,14 +82,14 @@
 
       ;; General tab
       (gnc:options-add-date-interval!
-       options pagename-general
+       options gnc:pagename-general
        optname-from-date optname-to-date "a")
 
       (gnc:options-add-interval-choice! 
-       options pagename-general optname-stepsize "b" 'MonthDelta)
+       options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
       (gnc:options-add-currency! 
-       options pagename-general optname-report-currency "c")
+       options gnc:pagename-general optname-report-currency "c")
 
       ;; Accounts tab
       (add-option
@@ -120,7 +134,7 @@
        options pagename-display 
        optname-plot-width optname-plot-height "c" 400 400)
 
-      (gnc:options-set-default-section options pagename-general)
+      (gnc:options-set-default-section options gnc:pagename-general)
 
       options))
 
@@ -137,7 +151,7 @@
   ;; *really* complicated.
 
   (define (category-barchart-renderer report-obj reportname 
-				      account-types report-title do-intervals?)
+				      account-types do-intervals?)
     ;; A helper functions for looking up option values.
     (define (get-option section name)
       (gnc:option-value 
@@ -146,13 +160,17 @@
     
     (let ((to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
-                        (get-option pagename-general optname-to-date))))
+                        (get-option gnc:pagename-general 
+				    optname-to-date))))
 	  (from-date-tp (gnc:timepair-start-day-time 
 			 (gnc:date-option-absolute-time
-                          (get-option pagename-general optname-from-date))))
-	  (interval (get-option pagename-general optname-stepsize))
-	  (report-currency (get-option pagename-general
+                          (get-option gnc:pagename-general 
+				      optname-from-date))))
+	  (interval (get-option gnc:pagename-general optname-stepsize))
+	  (report-currency (get-option gnc:pagename-general
 				       optname-report-currency))
+	  (report-title (get-option gnc:pagename-general 
+				    gnc:optname-reportname))
 
 	  (accounts (get-option pagename-accounts optname-accounts))
 	  (account-levels (get-option pagename-accounts optname-levels))
@@ -363,15 +381,69 @@
 	 chart
 	 (gnc:assign-colors (length all-data)))
 
-	(let ((urls (map (lambda (pair)
-			   (if (string? (car pair))
-			       other-anchor
-			       (gnc:account-anchor-text (car pair))))
-			 all-data)))
-	  (gnc:html-barchart-set-button-1-bar-urls! chart urls)
-	  (gnc:html-barchart-set-button-1-legend-urls! chart urls))
+	;; set the URLs; the slices are links to other reports
+	(let ((urls
+	       (map 
+		(lambda (pair)
+		  (if (string? (car pair))
+		      other-anchor
+		      (let* ((acct (car pair))
+			     (subaccts 
+			      (gnc:account-get-immediate-subaccounts acct)))
+			(if (null? subaccts)
+			    ;; if leaf-account, make this an anchor
+			    ;; to the register.
+			    (gnc:account-anchor-text acct)
+			    ;; if non-leaf account, make this a link
+			    ;; to another report which is run on the
+			    ;; immediate subaccounts of this account
+			    ;; (and including this account).
+			    (gnc:make-report-anchor
+			     reportname
+			     (gnc:report-options report-obj) 
+			     (list
+			      (list pagename-accounts optname-accounts
+				    (cons acct subaccts))
+			      (list pagename-accounts optname-levels
+				    (+ 1 tree-depth))
+			      (list gnc:pagename-general 
+				    gnc:optname-reportname
+				    ((if show-fullname?
+					 gnc:account-get-full-name
+					 gnc:account-get-name) acct))))))))
+		all-data)))
+	  (gnc:html-barchart-set-button-1-bar-urls! chart (append urls urls)))
+
+	;; The legend urls always point to the registers.
+	(gnc:html-barchart-set-button-1-legend-urls! 
+	 chart (map 
+		(lambda (pair)
+		  (if (string? (car pair))
+		      other-anchor
+		      (gnc:account-anchor-text (car pair))))
+		all-data))
 
 	(gnc:html-document-add-object! document chart) 
+
+	(if (gnc:option-value 
+	     (gnc:lookup-global-option "General" 
+				       "Display \"Tip of the Day\""))
+	    (gnc:html-document-add-object! 
+	     document 
+	     (gnc:make-html-text 
+	      (gnc:html-markup-p 
+	       "If you don't see a stacked barchart i.e. you only see \
+lots of thin bars next to each other for each date, then you \
+should upgrade Guppi to version 0.35.4 or, \
+if that isn't out yet, use the Guppi CVS version.")
+	      (gnc:html-markup-p
+	       "Double-click on any legend box opens the register \
+to that account. Double-click on a bar opens either the \
+register or, if the account has subaccounts, opens \
+another barchart report with precisely those subaccounts.")
+	      (gnc:html-markup-p "Remove this text by disabling \
+the global Preference \"Display Tip of the Day\"."))))
+	
 	document)))
 
   (for-each 
@@ -379,24 +451,26 @@
      (gnc:define-report
       'version 1
       'name (car l)
-      'menu-path (if (cadddr l)
-		     (list gnc:menuname-income-expense)
-		     (list gnc:menuname-asset-liability))
+      'menu-path (if (caddr l)
+                     (list gnc:menuname-income-expense)
+                     (list gnc:menuname-asset-liability))
+      'menu-name (cadddr l)
+      'menu-tip (car (cddddr l))
       'options-generator (lambda () (options-generator (cadr l)))
       'renderer (lambda (report-obj)
 		  (category-barchart-renderer report-obj 
-					      (car l) 
-					      (cadr l)
-					      (caddr l)
-					      (cadddr l)))))
+				     (car l) 
+				     (cadr l)
+				     (caddr l)))))
    (list 
-    ;; reportname, account-types, reporttitle, do-intervals?
-    (list reportname-income '(income) reporttitle-income #t)
-    (list reportname-expense '(expense) reporttitle-expense #t)
+    ;; reportname, account-types, do-intervals?, 
+    ;; menu-reportname, menu-tip
+    (list reportname-income '(income) #t menuname-income menutip-income)
+    (list reportname-expense '(expense) #t menuname-expense menutip-expense)
     (list reportname-assets 
 	  '(asset bank cash checking savings money-market 
 		  stock mutual-fund currency)
-	  reporttitle-assets #f)
+	  #f menuname-assets menutip-assets)
     (list reportname-liabilities 
 	  '(liability credit credit-line equity)
-	  reporttitle-liabilities #f))))
+	  #f menuname-liabilities menutip-liabilities))))

@@ -52,13 +52,9 @@ balance at a given time"))
       (reportname-assets (N_ "Assets"))
       (reportname-liabilities (N_ "Liabilities/Equity"))
 
-      (pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-report-currency (N_ "Report's currency"))
-
-      ;; defined in report.scm
-      (optname-reportname "Report name")
 
       (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
@@ -82,14 +78,14 @@ balance at a given time"))
 
       (if do-intervals?
 	  (gnc:options-add-date-interval!
-	   options pagename-general
+	   options gnc:pagename-general
 	   optname-from-date optname-to-date "a")
 	  (gnc:options-add-report-date!
-	   options pagename-general
+	   options gnc:pagename-general
 	   optname-to-date "a"))
 
       (gnc:options-add-currency! 
-       options pagename-general optname-report-currency "b")
+       options gnc:pagename-general optname-report-currency "b")
       
       (add-option
        (gnc:make-account-list-option
@@ -132,7 +128,7 @@ balance at a given time"))
        options pagename-display 
        optname-plot-width optname-plot-height "d" 500 250)
 
-      (gnc:options-set-default-section options pagename-general)      
+      (gnc:options-set-default-section options gnc:pagename-general)      
 
       options))
 
@@ -153,17 +149,19 @@ balance at a given time"))
     ;; Get all options
     (let ((to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
-                        (op-value pagename-general optname-to-date))))
+                        (op-value gnc:pagename-general optname-to-date))))
 	  (from-date-tp (if do-intervals?
 			    (gnc:timepair-start-day-time 
 			     (gnc:date-option-absolute-time 
-			      (op-value pagename-general optname-from-date)))
+			      (op-value gnc:pagename-general 
+					optname-from-date)))
 			    '()))
 	  (accounts (op-value pagename-accounts optname-accounts))
 	  (account-levels (op-value pagename-accounts optname-levels))
-	  (report-currency (op-value pagename-general
+	  (report-currency (op-value gnc:pagename-general
 				     optname-report-currency))
-	  (report-title (op-value pagename-general optname-reportname))
+	  (report-title (op-value gnc:pagename-general 
+				  gnc:optname-reportname))
 
 	  (show-fullname? (op-value pagename-display optname-fullname))
 	  (show-total? (op-value pagename-display optname-show-total))
@@ -311,7 +309,8 @@ balance at a given time"))
 			      (cons acct subaccts))
 			(list pagename-accounts optname-levels
 			      (+ 1 tree-depth))
-			(list pagename-general optname-reportname
+			(list gnc:pagename-general 
+			      gnc:optname-reportname
 			      ((if show-fullname?
 				   gnc:account-get-full-name
 				   gnc:account-get-name) acct))))))))

@@ -1,3 +1,17 @@
+2001-04-15  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report.scm: Defined global identifiers for some option
+	names.
+
+	* src/scm/report/category-barchart.scm: Added menu tips, menu
+	names. Use Reportname option for report title. Added an
+	explanatory text (only for devel info, will be removed again in
+	some weeks).
+
+	* src/scm/html-barchart.scm: Fix bug.
+
+	* src/gnome/gnc-html-guppi.c (guppi_bar_1_callback): Fix bug.
+
 2001-04-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/path.scm: version the .gnucash/config* files.

@@ -295,7 +295,9 @@ guppi_bar_1_callback(gint row, gint col, gpointer user_data) {
   struct guppi_chart_data * chart = user_data;
   guppi_generic_callback(chart->parent, 
                          chart->data_1_callbacks,
-                         (col*row) + col);  
+                         /* (chart->cols * row)+ FIXME: would require
+                            to store col number.*/
+			 col);  
 }
 
 static void
@@ -303,7 +305,8 @@ guppi_bar_2_callback(gint row, gint col, gpointer user_data) {
   struct guppi_chart_data * chart = user_data;
   guppi_generic_callback(chart->parent, 
                          chart->data_1_callbacks,
-                         (col*row) + col);  
+                         /* (chart->cols * row)+ FIXME: see above*/
+                         col);  
 }
 
 static void
@@ -311,7 +314,8 @@ guppi_bar_3_callback(gint row, gint col, gpointer user_data) {
   struct guppi_chart_data * chart = user_data;
   guppi_generic_callback(chart->parent, 
                          chart->data_1_callbacks,
-                         (col*row) + col);  
+                         /* (chart->cols * row)+ FIXME: see above*/
+                         col);  
 }
 
 static GPtrArray * 

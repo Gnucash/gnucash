@@ -136,6 +136,10 @@
 (define gnc:html-barchart-set-subtitle!
   (record-modifier <html-barchart> 'subtitle))
 
+;; Note: ATM you can specify one url per column, but this url will be
+;; used for all of the rows. Otherwise we could have cols*rows urls
+;; (quite a lot), but this first requires fixing
+;; guppi_bar_1_callback() in gnome/gnc-html-guppi.c .
 (define gnc:html-barchart-button-1-bar-urls
   (record-accessor <html-barchart> 'button-1-bar-urls))
 
@@ -335,12 +339,12 @@
           (if url-2
               (begin 
                 (push "  <param name=\"bar_urls_2\" value=\"")
-                (push url-1)
+                (push url-2)
                 (push "\">\n")))
           (if url-3
               (begin 
                 (push "  <param name=\"bar_urls_3\" value=\"")
-                (push url-1)
+                (push url-3)
                 (push "\">\n")))
           (if legend-1 
               (begin 
