@@ -68,7 +68,7 @@
  *   reconciled  ::== char                                          * 
  *   amount      ::== double                                        * 
  *   share_price ::== double                                        * 
- *   account     ::= int                                            *
+ *   account     ::== int                                           *
  *   String      ::== size (char)^size                              * 
  *   size        ::== int                                           * 
  *   Date        ::== year month day                                * 
@@ -92,7 +92,7 @@
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
 #define RFLAGS  O_RDONLY
-#define VERSION 4
+#define VERSION 5
 
 /** GLOBALS *********************************************************/
 
