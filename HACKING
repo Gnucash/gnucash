@@ -26,7 +26,9 @@ General:
  * When creating a new file, the style of existing files should be
    followed.
 
- * When creating lots of new files in a new directory, use the GNU
+ * When creating lots of new files in a new directory, you may use
+   your own coding standards, but please try to stick as closely as
+   possible to the GNU coding standards.
 
  * Do not submit patches that consist of (gratuitous) stylistic changes.
 
