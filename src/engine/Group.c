@@ -378,7 +378,7 @@ xaccAppendAccounts (AccountGroup *grp, GList **accounts_p)
 
     *accounts_p = g_list_append (*accounts_p, account);
 
-    xaccApppendAccounts (account->children, accounts_p);
+    xaccAppendAccounts (account->children, accounts_p);
   }
 }
 
