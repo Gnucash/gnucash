@@ -35,6 +35,7 @@
 #include "config.h"
 #include "date.h"
 
+/* hack alert -- this should be turned into user-configurable parameter .. */
 DateFormat dateFormat = DATE_FORMAT_US;
 
 /********************************************************************\
@@ -58,20 +59,29 @@ DateFormat dateFormat = DATE_FORMAT_US;
 void 
 printDate (char * buff, int day, int month, int year)
 {
+
+  /* Note that when printing year, we use %-4d in format string;
+   * this causes a one, two or three-digit year to be left-adjusted
+   * when printed (i.e. padded with blanks on the right).  This is 
+   * important while the user is editing the year, since erasing a 
+   * digit can temporarily cause a three-digit year, and having the 
+   * blank on the left is a real pain for the user.  So pad on the 
+   * right.
+   */
   switch(dateFormat)
     {
     case DATE_FORMAT_UK:
-      sprintf (buff, "%2d/%2d/%4d", day, month, year);
+      sprintf (buff, "%2d/%2d/%-4d", day, month, year);
       break;
     case DATE_FORMAT_CE:
-      sprintf (buff, "%2d.%2d.%4d", day, month, year);
+      sprintf (buff, "%2d.%2d.%-4d", day, month, year);
       break;
     case DATE_FORMAT_ISO:
       sprintf (buff, "%04d-%02d-%02d", year, month, day);
       break;
     case DATE_FORMAT_US:
     default:
-      sprintf (buff, "%2d/%2d/%4d", month, day, year);
+      sprintf (buff, "%2d/%2d/%-4d", month, day, year);
       break;
     }
 }
