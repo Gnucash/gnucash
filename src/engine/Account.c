@@ -1603,46 +1603,6 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   }
 }
 
-void 
-DxaccAccountSetCurrencySCU (Account * acc, int scu) 
-{
-  if (!acc) return;
-
-  xaccAccountBeginEdit(acc);
-  kvp_frame_set_slot_nc(acc->kvp_data, "old-currency-scu",
-                        kvp_value_new_gint64(scu));
-  mark_account (acc);
-  acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-}
-
-int
-DxaccAccountGetCurrencySCU (Account * acc) 
-{
-  KvpValue *v;
-
-  if (!acc) return 0;
-
-  v = kvp_frame_get_slot(acc->kvp_data, "old-currency-scu");
-  if (v) return kvp_value_get_gint64 (v);
-
-  return 0;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountDeleteOldData (Account *account)
-{
-  if (!account) return;
-
-  kvp_frame_set_slot_nc (account->kvp_data, "old-currency", NULL);
-  kvp_frame_set_slot_nc (account->kvp_data, "old-security", NULL);
-  kvp_frame_set_slot_nc (account->kvp_data, "old-currency-scu", NULL);
-  kvp_frame_set_slot_nc (account->kvp_data, "old-security-scu", NULL);
-}
-
 /********************************************************************\
 \********************************************************************/
 

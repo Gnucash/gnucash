@@ -657,6 +657,17 @@ xaccAccountScrubCommodity (Account *account)
 
 /* ================================================================ */
 
+static void
+xaccAccountDeleteOldData (Account *account)
+{
+  if (!account) return;
+
+  kvp_frame_set_slot_nc (account->kvp_data, "old-currency", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-security", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-currency-scu", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-security-scu", NULL);
+}
+
 static int
 scrub_trans_currency_helper (Transaction *t, gpointer data)
 {

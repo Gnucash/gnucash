@@ -424,10 +424,6 @@ gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 /** @{ */
 KvpFrame * xaccAccountGetSlots (Account *account);
 void xaccAccountSetSlots_nc(Account *account, KvpFrame *frame);
-
-/** Delete any old data in the account's kvp data.
- * This includes the old currency and security fields. */
-void xaccAccountDeleteOldData (Account *account);
 /** @} */
 
 /* ------------------ */
@@ -701,16 +697,6 @@ void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
 gnc_commodity * DxaccAccountGetCurrency (Account *account);
-
-
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-void DxaccAccountSetCurrencySCU (Account *account, int frac);
-/** @deprecated The current API associates only one thing with an
- * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
- * it. */
-int  DxaccAccountGetCurrencySCU (Account *account);
 
 /** Set the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources
