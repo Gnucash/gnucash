@@ -270,7 +270,7 @@ Books will be closed on midnight of the selected date.</label>
 	      <name>book notes text</name>
 	      <tooltip>Enter notes that describe this book.</tooltip>
 	      <can_focus>True</can_focus>
-	      <editable>False</editable>
+	      <editable>True</editable>
 	      <text></text>
 	    </widget>
 	  </widget>
