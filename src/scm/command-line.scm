@@ -239,7 +239,7 @@ the current value of the path.")
            (set! gnc:*batch-mode-things-to-do*
                  (cons
                   (lambda ()
-                    (gnc:depend "price-quotes.scm")
+                    (gnc:use-guile-module-here! '(gnucash price-quotes))
                     (if (not (gnc:add-quotes-to-book-at-url val))
                         (begin
                           (gnc:error "Failed to add quotes to " val)
