@@ -467,6 +467,27 @@
           (set-tm:isdst now -1)
 	  (gnc:date->timepair now)))))
 
+(define (gnc:get-end-cur-fin-year)
+  (let ((now (localtime (current-time))))
+    (if (< (tm:mon now) 6)
+	(begin
+	  (set-tm:sec now 59)
+	  (set-tm:min now 59)
+	  (set-tm:hour now 23)
+	  (set-tm:mday now 30)
+	  (set-tm:mon now 5)
+          (set-tm:isdst now -1)
+	  (gnc:date->timepair now))
+	(begin
+	  (set-tm:sec now 59)
+	  (set-tm:min now 59)
+	  (set-tm:hour now 23)
+	  (set-tm:mday now 30)
+	  (set-tm:mon now 5)
+	  (set-tm:year now (+ (tm:year now) 1))
+          (set-tm:isdst now -1)
+	  (gnc:date->timepair now)))))
+
 (define (gnc:get-start-this-month)
   (let ((now (localtime (current-time))))
     (set-tm:sec now 0)
@@ -686,6 +707,13 @@
      (N_ "End of the previous Financial year/Accounting Period"))
 
     (gnc:reldate-string-db 
+     'store 'end-cur-fin-year-string 
+     (N_ "End Current Financial Year"))
+    (gnc:reldate-string-db 
+     'store 'end-cur-fin-year-desc 
+     (N_ "End of the current Financial year/Accounting Period"))
+
+    (gnc:reldate-string-db 
      'store 'start-this-month-string 
      (N_ "Start of this month"))
     (gnc:reldate-string-db 
@@ -806,6 +834,10 @@
 		   (gnc:reldate-string-db 'lookup 'end-prev-fin-year-string)
 		   (gnc:reldate-string-db 'lookup 'end-prev-fin-year-desc)
 		   gnc:get-end-prev-fin-year)
+	   (vector 'end-cur-fin-year
+		   (gnc:reldate-string-db 'lookup 'end-cur-fin-year-string)
+		   (gnc:reldate-string-db 'lookup 'end-cur-fin-year-desc)
+		   gnc:get-end-cur-fin-year)
 	   (vector 'start-this-month
 		   (gnc:reldate-string-db 'lookup 'start-this-month-string)
 		   (gnc:reldate-string-db 'lookup 'start-this-month-desc)

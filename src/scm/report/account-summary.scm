@@ -35,21 +35,20 @@
 
 ;; first define all option's names such that typos etc. are no longer
 ;; possible.
-(let ((pagename-general (N_ "General"))
-      (optname-date (N_ "Date"))
+(let ((optname-date (N_ "Date"))
       (optname-display-depth (N_ "Account Display Depth"))
 
       (optname-show-foreign (N_ "Show Foreign Currencies/Shares of Stock"))
       (optname-report-currency (N_ "Report's currency"))
+      (optname-price-source (N_ "Price Source"))
 
-      (pagename-accounts (N_ "Accounts"))
       (optname-show-subaccounts (N_ "Always show sub-accounts"))
       (optname-accounts (N_ "Account"))
 
-      (pagename-display (N_ "Display"))
       (optname-group-accounts (N_ "Group the accounts"))
       (optname-show-parent-balance (N_ "Show balances for parent accounts"))
-      (optname-show-parent-total (N_ "Show subtotals")))
+      (optname-show-parent-total (N_ "Show subtotals"))
+      (optname-show-rates (N_ "Show Exchange Rates")))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; options generator
@@ -62,16 +61,20 @@
     (let* ((options (gnc:new-options)))
       ;; date at which to report balance
       (gnc:options-add-report-date!
-       options pagename-general optname-date "a")
+       options gnc:pagename-general optname-date "a")
 
       ;; all about currencies
       (gnc:options-add-currency!
-       options pagename-general 
+       options gnc:pagename-general 
        optname-report-currency "b")
+
+      (gnc:options-add-price-source! 
+       options gnc:pagename-general
+       optname-price-source "c" 'weighted-average)
 
       ;; accounts to work on
       (gnc:options-add-account-selection! 
-       options pagename-accounts 
+       options gnc:pagename-accounts 
        optname-display-depth optname-show-subaccounts
        optname-accounts "a" 1
        (lambda ()
@@ -83,19 +86,19 @@
       
       ;; with or without grouping
       (gnc:options-add-group-accounts!      
-       options pagename-display optname-group-accounts "b" #t)
+       options gnc:pagename-display optname-group-accounts "b" #t)
       
       ;; new options here
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-display optname-show-parent-balance 
+	gnc:pagename-display optname-show-parent-balance 
 	"c" (N_ "Show balances for parent accounts") #t))
 
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-display optname-show-parent-total
+	gnc:pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #t))
 
       (gnc:register-option 
@@ -104,8 +107,14 @@
 	gnc:pagename-display optname-show-foreign 
 	"e" (N_ "Display the account's foreign currency amount?") #f))
 
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	gnc:pagename-display optname-show-rates
+	"f" (N_ "Show the exchange rates used") #t))
+
       ;; Set the general page as default option tab
-      (gnc:options-set-default-section options pagename-general)      
+      (gnc:options-set-default-section options gnc:pagename-general)      
 
       options))
   
@@ -120,23 +129,27 @@
        (gnc:lookup-option 
         (gnc:report-options report-obj) pagename optname)))
     
-    (let ((display-depth (get-option pagename-accounts 
+    (let ((display-depth (get-option gnc:pagename-accounts 
 				     optname-display-depth ))
-	  (show-subaccts? (get-option pagename-accounts
+	  (show-subaccts? (get-option gnc:pagename-accounts
 				      optname-show-subaccounts))
-	  (accounts (get-option pagename-accounts optname-accounts))
-          (do-grouping? (get-option pagename-display
+	  (accounts (get-option gnc:pagename-accounts optname-accounts))
+          (do-grouping? (get-option gnc:pagename-display
 				    optname-group-accounts))
-          (show-parent-balance? (get-option pagename-display
+          (show-parent-balance? (get-option gnc:pagename-display
 					    optname-show-parent-balance))
-          (show-parent-total? (get-option pagename-display
+          (show-parent-total? (get-option gnc:pagename-display
 					  optname-show-parent-total))
-	  (show-fcur? (get-option pagename-display optname-show-foreign))
-	  (report-currency (get-option pagename-general 
+	  (show-fcur? (get-option gnc:pagename-display optname-show-foreign))
+	  (report-currency (get-option gnc:pagename-general 
 				       optname-report-currency))
+	  (price-source (get-option gnc:pagename-general
+				    optname-price-source))
+	  (show-rates? (get-option gnc:pagename-display 
+				   optname-show-rates))
           (date-tp (gnc:timepair-end-day-time 
 		    (gnc:date-option-absolute-time
-                     (get-option pagename-general 
+                     (get-option gnc:pagename-general 
                                  optname-date))))
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
@@ -149,9 +162,8 @@
 				  (gnc:get-current-group-depth)
 				  display-depth)
 				(if do-grouping? 1 0)))
-		 (exchange-alist (gnc:make-exchange-alist 
-				  report-currency date-tp))
-		 (exchange-fn (gnc:make-exchange-function exchange-alist))
+		 (exchange-fn (gnc:case-exchange-fn 
+			       price-source report-currency date-tp))
 		 ;; do the processing here
 		 (table (gnc:html-build-acct-table 
 			 #f date-tp 
@@ -165,16 +177,18 @@
 	    ;; add the table 
 	    (gnc:html-document-add-object! doc table)
 
-	    ;; add the currency information
-	    ;(gnc:html-print-exchangerates! 
-	    ; txt report-currency exchange-alist)
+	    ;; add currency information
+	    (if show-rates?
+		(gnc:html-document-add-object! 
+		 doc ;;(gnc:html-markup-p
+		 (gnc:html-make-exchangerates 
+		  report-currency exchange-fn 
+		  (append-map 
+		   (lambda (a)
+		     (gnc:group-get-subaccounts
+		      (gnc:account-get-children a)))
+		   accounts)))))
 
-	    ;;(if show-fcur?
-	    (gnc:html-document-add-object! 
-	     doc ;;(gnc:html-markup-p
-	     (gnc:html-make-exchangerates 
-	      report-currency exchange-fn accounts)));;)
-	  
 	  ;; error condition: no accounts specified
 	  (gnc:html-document-add-object! 
 	   doc 

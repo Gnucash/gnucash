@@ -61,6 +61,10 @@
        options gnc:pagename-general
        optname-report-currency "b")
 
+      (gnc:options-add-price-source! 
+       options gnc:pagename-general
+       optname-price-source "c" 'weighted-average)
+
       ;; accounts to work on
       (gnc:options-add-account-selection! 
        options gnc:pagename-accounts
@@ -135,6 +139,8 @@
 				  optname-show-foreign))
 	  (report-currency (get-option gnc:pagename-general
 				       optname-report-currency))
+	  (price-source (get-option gnc:pagename-general
+				    optname-price-source))
 	  (show-rates? (get-option gnc:pagename-display 
 				   optname-show-rates))
           (to-date-tp (gnc:timepair-end-day-time 
@@ -160,9 +166,8 @@
 				    display-depth)
 				(if do-grouping? 1 0)))
 		 ;; calculate the exchange rates
-		 (exchange-alist (gnc:make-exchange-alist 
-				  report-currency to-date-tp))
-		 (exchange-fn (gnc:make-exchange-function exchange-alist))
+		 (exchange-fn (gnc:case-exchange-fn
+			       price-source report-currency to-date-tp))
 		 ;; do the processing here
 		 (table (gnc:html-build-acct-table 
 			 from-date-tp to-date-tp 

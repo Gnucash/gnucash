@@ -180,16 +180,8 @@
 			   (gnc:get-current-group-depth) 
 			   display-depth))
 	   ;; calculate the exchange rates  
-	   (exchange-fn 
-	    (case price-source
-	      ('weighted-average (gnc:make-exchange-function 
-				  (gnc:make-exchange-alist 
-				   report-currency to-date-tp)))
-	      ('pricedb-latest gnc:exchange-by-pricedb-latest)
-	      ('pricedb-nearest (lambda (foreign domestic)
-				  (gnc:exchange-by-pricedb-nearest
-				   foreign domestic to-date-tp)))
-	      (else (gnc:warn "balance-sheet: bad price-source value"))))
+	   (exchange-fn (gnc:case-exchange-fn 
+			 price-source report-currency to-date-tp))
 	   (totals-get-balance (lambda (account)
 				 (gnc:account-get-comm-balance-at-date 
 				  account to-date-tp #f))))

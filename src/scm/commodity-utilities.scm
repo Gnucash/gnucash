@@ -543,6 +543,22 @@
 	domestic date))
       #f))
 
+;; Return a ready-to-use function. Which one is determined by the
+;; value of 'source-option', whose possible values are set in
+;; gnc:options-add-price-source!.
+(define (gnc:case-exchange-fn 
+	 source-option report-currency to-date-tp)
+  (case source-option
+    ('weighted-average (gnc:make-exchange-function 
+			(gnc:make-exchange-alist 
+			 report-currency to-date-tp)))
+    ('pricedb-latest gnc:exchange-by-pricedb-latest)
+    ('pricedb-nearest (lambda (foreign domestic)
+			(gnc:exchange-by-pricedb-nearest
+			 foreign domestic to-date-tp)))
+    (else (gnc:warn "gnc:case-exchange-gn: bad price-source value"))))
+
+
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the

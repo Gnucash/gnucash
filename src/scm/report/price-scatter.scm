@@ -113,7 +113,7 @@
   (define (renderer report-obj)
 
     ;; This is a helper function for looking up option values.
-    (define (op-value section name)
+    (define (get-option section name)
       (gnc:option-value 
        (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
@@ -125,29 +125,29 @@
 
     (let* ((to-date-tp (gnc:timepair-end-day-time 
 			(gnc:date-option-absolute-time
-                         (op-value gnc:pagename-general 
+                         (get-option gnc:pagename-general 
 				   optname-to-date))))
 	   (from-date-tp (gnc:timepair-start-day-time 
 			  (gnc:date-option-absolute-time
-                           (op-value gnc:pagename-general 
+                           (get-option gnc:pagename-general 
 				     optname-from-date))))
-	   (interval (op-value gnc:pagename-general optname-stepsize))
-	   (report-title (op-value gnc:pagename-general 
+	   (interval (get-option gnc:pagename-general optname-stepsize))
+	   (report-title (get-option gnc:pagename-general 
 				   gnc:optname-reportname))
 
-	   (height (op-value gnc:pagename-display optname-plot-height))
-	   (width (op-value gnc:pagename-display optname-plot-width))
-	   (marker (op-value gnc:pagename-display optname-marker))
+	   (height (get-option gnc:pagename-display optname-plot-height))
+	   (width (get-option gnc:pagename-display optname-plot-width))
+	   (marker (get-option gnc:pagename-display optname-marker))
 	   (mcolor 
 	    (gnc:color-option->hex-string
 	     (gnc:lookup-option (gnc:report-options report-obj)
 				gnc:pagename-display optname-markercolor)))
 	   
-           (report-currency (op-value pagename-price
+           (report-currency (get-option pagename-price
                                       optname-report-currency))
-	   (price-commodity (op-value pagename-price
+	   (price-commodity (get-option pagename-price
 				      optname-price-commodity))
-	   (price-source (op-value pagename-price
+	   (price-source (get-option pagename-price
 				   optname-price-source))
 
 	   (dates-list (gnc:make-date-list

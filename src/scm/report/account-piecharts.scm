@@ -55,6 +55,7 @@ balance at a given time"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-report-currency (N_ "Report's currency"))
+      (optname-price-source (N_ "Price Source"))
 
       (optname-accounts (N_ "Accounts"))
       (optname-levels (N_ "Show Accounts until level"))
@@ -85,6 +86,10 @@ balance at a given time"))
       (gnc:options-add-currency! 
        options gnc:pagename-general optname-report-currency "b")
       
+      (gnc:options-add-price-source! 
+       options gnc:pagename-general
+       optname-price-source "c" 'weighted-average)
+
       (add-option
        (gnc:make-account-list-option
 	gnc:pagename-accounts optname-accounts
@@ -139,7 +144,7 @@ balance at a given time"))
 			     account-types do-intervals?)
     
     ;; This is a helper function for looking up option values.
-    (define (op-value section name)
+    (define (get-option section name)
       (gnc:option-value 
        (gnc:lookup-option 
 	(gnc:report-options report-obj) section name)))
@@ -147,25 +152,27 @@ balance at a given time"))
     ;; Get all options
     (let ((to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
-                        (op-value gnc:pagename-general optname-to-date))))
+                        (get-option gnc:pagename-general optname-to-date))))
 	  (from-date-tp (if do-intervals?
 			    (gnc:timepair-start-day-time 
 			     (gnc:date-option-absolute-time 
-			      (op-value gnc:pagename-general 
+			      (get-option gnc:pagename-general 
 					optname-from-date)))
 			    '()))
-	  (accounts (op-value gnc:pagename-accounts optname-accounts))
-	  (account-levels (op-value gnc:pagename-accounts optname-levels))
-	  (report-currency (op-value gnc:pagename-general
+	  (accounts (get-option gnc:pagename-accounts optname-accounts))
+	  (account-levels (get-option gnc:pagename-accounts optname-levels))
+	  (report-currency (get-option gnc:pagename-general
 				     optname-report-currency))
-	  (report-title (op-value gnc:pagename-general 
+	  (price-source (get-option gnc:pagename-general
+				    optname-price-source))
+	  (report-title (get-option gnc:pagename-general 
 				  gnc:optname-reportname))
 
-	  (show-fullname? (op-value gnc:pagename-display optname-fullname))
-	  (show-total? (op-value gnc:pagename-display optname-show-total))
-	  (max-slices (op-value gnc:pagename-display optname-slices))
-	  (height (op-value gnc:pagename-display optname-plot-height))
-	  (width (op-value gnc:pagename-display optname-plot-width))
+	  (show-fullname? (get-option gnc:pagename-display optname-fullname))
+	  (show-total? (get-option gnc:pagename-display optname-show-total))
+	  (max-slices (get-option gnc:pagename-display optname-slices))
+	  (height (get-option gnc:pagename-display optname-plot-height))
+	  (width (get-option gnc:pagename-display optname-plot-width))
 
 	  (document (gnc:make-html-document))
 	  (chart (gnc:make-html-piechart))
@@ -191,10 +198,8 @@ balance at a given time"))
 	     account to-date-tp subaccts?)))
 
       ;; Define more helper variables.
-      (let* ((exchange-alist (gnc:make-exchange-alist
-			      report-currency to-date-tp))
-	     (exchange-fn-internal 
-	      (gnc:make-exchange-function exchange-alist))
+      (let* ((exchange-fn (gnc:case-exchange-fn 
+			   price-source report-currency to-date-tp))
 	     (tree-depth (if (equal? account-levels 'all)
 			     (gnc:get-current-group-depth)
 			     account-levels))
@@ -204,7 +209,7 @@ balance at a given time"))
 
 	;; Converts a commodity-collector into one single double
 	;; number, depending on the report currency and the
-	;; exchange-alist calculated above. Returns the absolute value
+	;; exchange-fn calculated above. Returns the absolute value
 	;; as double.
 	(define (collector->double c)
 	  ;; Future improvement: Let the user choose which kind of
@@ -216,7 +221,7 @@ balance at a given time"))
 		(gnc:gnc-monetary-amount
 		 (gnc:sum-collector-commodity 
 		  c report-currency 
-		  exchange-fn-internal)))))
+		  exchange-fn)))))
 
 	;; Calculates all account's balances. Returns a list of
 	;; balance <=> account pairs, like '((10.0 Earnings) (142.5

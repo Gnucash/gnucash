@@ -1,5 +1,24 @@
 2001-05-12  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/report/pnl.scm, account-piecharts.scm,
+	account-summary.scm: Added price-source option. Use new function
+	gnc:case-exchange-fn.
+
+	* src/scm/date-utilities.scm (gnc:get-end-cur-fin-year): added
+	function.
+
+	* src/scm/options-utilities.scm (gnc:options-add-date-interval!):
+	changed the order of relative dates - which order is best?
+
+	* src/scm/report/balance-sheet.scm: use new function
+	gnc:case-exchange-fn.
+
+	* src/scm/commodity-utilities.scm (gnc:case-exchange-fn): add
+	function.
+
+	* src/scm/report/price-scatter.scm: adapted helper function name
+	to other reports.
+
 	* src/scm/report/price-scatter.scm: Extended option to use the
 	pricedb as a price source.
 
