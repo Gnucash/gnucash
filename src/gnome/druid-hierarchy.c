@@ -464,7 +464,17 @@ static void
 select_all_clicked (GtkButton       *button,
                     gpointer         user_data)
 {
-  gtk_clist_select_all (get_account_types_clist ());
+  //  gtk_clist_select_all (get_account_types_clist ());
+  GtkCList *clist;
+  gint row;
+
+  /* Walk the list; select the rows that are not "excluded" */
+  clist = get_account_types_clist ();
+  for (row = 0; row < clist->rows; row++) {
+    GncExampleAccount *gea = gtk_clist_get_row_data (clist, row);
+    if (! gea->exclude_from_select_all)
+      gtk_clist_select_row (clist, row, 0);
+  }
 }
 
 static void

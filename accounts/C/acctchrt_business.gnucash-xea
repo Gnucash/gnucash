@@ -8,7 +8,8 @@
     </gnc-act:short-description>
     <gnc-act:long-description>
      Users running a business want to select this instead of other choices.  This includes all the accounts you need to run a most businesses, including Payables, Receivables, Income, and Expenses.
-  </gnc-act:long-description>    
+    </gnc-act:long-description>
+    <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">c53764b4dc9f08210475c5d8ae54cb91</act:id>

@@ -2,6 +2,13 @@
 
 	* src/scm/main.scm -- mention bugzilla in the unstable message
 
+	* src/backend/file/io-example-account.[ch]: add a flag that signifies
+	  that an account-tree should NOT be included by "select-all"
+	* src/gnome/druid-hierachy.c: ignore account-trees that are
+	  marked for exclusion from "select-all".
+	* accounts/C/acctchrt_business.gnucash-xea: mark this account as
+	  "excluded from select-all"
+	
 2003-01-04  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-account-xml-v2.c: 

@@ -54,6 +54,7 @@ static short module = MOD_IO;
 #define GNC_ACCOUNT_SHORT "gnc-act:short-description"
 #define GNC_ACCOUNT_LONG "gnc-act:long-description"
 #define GNC_ACCOUNT_TITLE "gnc-act:title"
+#define GNC_ACCOUNT_EXCLUDEP "gnc-act:exclude-from-select-all"
 
 void
 gnc_destroy_example_account(GncExampleAccount *gea)
@@ -271,6 +272,28 @@ gnc_long_descrip_sixtp_parser_create(void)
 }
 
 static gboolean
+gnc_excludep_end_handler(gpointer data_for_children,
+                             GSList* data_from_children, GSList* sibling_data,
+                             gpointer parent_data, gpointer global_data,
+                             gpointer *result, const gchar *tag)
+{
+    GncExampleAccount *gea =
+    (GncExampleAccount*)((gxpf_data*)global_data)->parsedata;
+    gint64 val;
+
+    dom_tree_to_integer ((xmlNodePtr)data_for_children, &val);
+    gea->exclude_from_select_all = (dom_tree_to_integer ? TRUE : FALSE);
+    
+    return TRUE;
+}
+
+static sixtp*
+gnc_excludep_sixtp_parser_create(void)
+{
+    return sixtp_dom_parser_new(gnc_excludep_end_handler, NULL, NULL);
+}
+
+static gboolean
 gnc_title_end_handler(gpointer data_for_children,
                              GSList* data_from_children, GSList* sibling_data,
                              gpointer parent_data, gpointer global_data,
@@ -322,6 +345,7 @@ gnc_read_example_account(GNCBook *book, const gchar *filename)
            GNC_ACCOUNT_TITLE, gnc_titse_sixtp_parser_create(),
            GNC_ACCOUNT_SHORT, gnc_short_descrip_sixtp_parser_create(),
            GNC_ACCOUNT_LONG, gnc_long_descrip_sixtp_parser_create(),
+	   GNC_ACCOUNT_EXCLUDEP, gnc_excludep_sixtp_parser_create(),
            "gnc:account", gnc_account_sixtp_parser_create(),
            NULL, NULL))
     {
@@ -355,6 +379,19 @@ write_string_part(FILE *out, const char *tag, const char *data)
     xmlFreeNode(node);
 }
 
+static void
+write_bool_part(FILE *out, const char *tag, gboolean data)
+{
+    xmlNodePtr node;
+
+    node = int_to_dom_tree(tag, data);
+
+    xmlElemDump(out, NULL, node);
+    fprintf(out, "\n");
+
+    xmlFreeNode(node);
+}
+
 gboolean
 gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 {
@@ -375,6 +412,8 @@ gnc_write_example_account(GncExampleAccount *gea, const gchar *filename)
 
     write_string_part(out, GNC_ACCOUNT_LONG, gea->long_description);
     
+    write_bool_part(out, GNC_ACCOUNT_EXCLUDEP, gea->exclude_from_select_all);
+
     write_account_group(out, gea->group, NULL);
 
     fprintf(out, "</" GNC_ACCOUNT_STRING ">\n\n");
