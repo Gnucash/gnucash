@@ -181,6 +181,11 @@
 	      currency-accounts end-date-tp c report-currency)))
      commodity-list)))
 
+;; Helper for warnings below.
+(define (commodity-numeric->string commodity numeric)
+  (gnc:monetary->string
+   (gnc:make-gnc-monetary commodity numeric)))
+
 ;; Get the instantaneous prices for the 'price-commodity', measured in
 ;; amounts of the 'report-currency'. The prices are taken from all
 ;; splits in 'currency-accounts' up until the date

@@ -1,3 +1,10 @@
+2001-05-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/portfolio.scm: Added price-source option. Added
+	code to use prices from transactions.
+
+	* src/scm/commodity-utilities.scm: fix warnings.
+
 2001-05-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/FileDialog.c (gncPostFileOpen): fix bug -- current_book
