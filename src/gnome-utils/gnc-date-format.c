@@ -72,7 +72,7 @@ static gint date_format_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_date_format_init         (GNCDateFormat      *gdf);
 static void gnc_date_format_class_init   (GNCDateFormatClass *class);
-static void gnc_date_format_destroy      (GtkObject          *object);
+static void gnc_date_format_finalize      (GObject          *object);
 static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
 /* Used by glade_xml_signal_autoconnect_full */
@@ -112,9 +112,8 @@ gnc_date_format_get_type (void)
 static void
 gnc_date_format_class_init (GNCDateFormatClass *class)
 {
+  GObjectClass   *gobject_class = (GObjectClass *) class;
   GtkObjectClass *object_class = (GtkObjectClass *) class;
-
-  object_class = (GtkObjectClass*) class;
 
   parent_class = gtk_type_class (gtk_hbox_get_type ());
 
@@ -129,7 +128,7 @@ gnc_date_format_class_init (GNCDateFormatClass *class)
 		  G_TYPE_NONE,
 		  0);
 
-  object_class->destroy = gnc_date_format_destroy;
+  gobject_class->finalize = gnc_date_format_finalize;
 
   class->format_changed = NULL;
 }
@@ -187,7 +186,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
 }
 
 static void
-gnc_date_format_destroy (GtkObject *object)
+gnc_date_format_finalize (GObject *object)
 {
   GNCDateFormat *gdf;
 
@@ -198,8 +197,8 @@ gnc_date_format_destroy (GtkObject *object)
 
   g_free(gdf->priv);
 
-  if (GTK_OBJECT_CLASS(parent_class)->destroy)
-    (* GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+  if (G_OBJECT_CLASS(parent_class)->finalize)
+    (* G_OBJECT_CLASS(parent_class)->finalize) (object);
 }
 
 

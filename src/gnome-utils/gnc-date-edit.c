@@ -426,8 +426,8 @@ gnc_date_edit_destroy (GtkObject *object)
 
 	if (gde->cal_popup != NULL) {
 		gtk_widget_destroy (gde->cal_popup);
+		gde->cal_popup = NULL;
 	}
-	gde->cal_popup = NULL;
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
 		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);

@@ -45,7 +45,7 @@ enum
 
 static void gnc_general_select_init         (GNCGeneralSelect      *gsl);
 static void gnc_general_select_class_init   (GNCGeneralSelectClass *class);
-static void gnc_general_select_destroy      (GtkObject             *object);
+static void gnc_general_select_finalize     (GObject               *object);
 
 static GtkHBoxClass *parent_class;
 static guint general_select_signals[LAST_SIGNAL];
@@ -104,10 +104,10 @@ gnc_general_select_forall (GtkContainer *container, gboolean include_internals,
 static void
 gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 {
-	GtkObjectClass *object_class = (GtkObjectClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
 	GtkContainerClass *container_class = (GtkContainerClass *) klass;
 
-	object_class = (GtkObjectClass*) klass;
+	object_class = (GObjectClass*) klass;
 
 	parent_class = gtk_type_class (gtk_hbox_get_type ());
 
@@ -122,7 +122,7 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 
 	container_class->forall = gnc_general_select_forall;
 
-	object_class->destroy = gnc_general_select_destroy;
+	object_class->finalize = gnc_general_select_finalize;
 
         klass->changed = NULL;
 }
@@ -134,7 +134,7 @@ gnc_general_select_init (GNCGeneralSelect *gsl)
 }
 
 static void
-gnc_general_select_destroy (GtkObject *object)
+gnc_general_select_finalize (GObject *object)
 {
         GNCGeneralSelect *gsl;
 
@@ -146,8 +146,8 @@ gnc_general_select_destroy (GtkObject *object)
         gsl->entry = NULL;
         gsl->button = NULL;
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		GTK_OBJECT_CLASS (parent_class)->destroy (object);
+	if (G_OBJECT_CLASS (parent_class)->finalize)
+		G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

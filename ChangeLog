@@ -1,3 +1,25 @@
+2003-11-08  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gnc-file.c: Give immediate feedback when the user
+	clicks on the quit button.
+
+	* src/engine/gnc-event.c: Protect the generate_event function from
+	a handler unregistering itself during a callback.
+	
+	* src/gnome-utils/dialog-account.c: Don't access the account tree
+	model directly.  Use the view functions no new functionality can
+	easily be added to the view.
+
+	* src/gnome-utils/dialog-options.c: Clean up after the main
+	preferences dialog is closed.
+
+	* src/gnome-utils/gnc-date-edit.c:
+	* src/gnome-utils/gnc-date-format.c:
+	* src/gnome-utils/gnc-dense-cal.c:
+	* src/gnome-utils/gnc-general-select.c:
+	* src/gnome-utils/gtkselect.c: Convert some destroy functions to
+	finalize functions.  Destroy can be called multiple times in gtk2.
+
 2003-11-01  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-hierarchy.c: 

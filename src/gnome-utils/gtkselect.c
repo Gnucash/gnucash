@@ -100,14 +100,22 @@ gtk_select_class_init (GtkSelectClass * klass)
 }
 
 static void
-gtk_select_destroy (GtkObject * select)
+gtk_select_destroy (GtkObject * object)
 {
-  gtk_widget_destroy (GTK_SELECT (select)->popwin);
-  g_object_unref (GTK_SELECT (select)->popwin);
-  g_object_unref (GTK_SELECT (select)->empty);
+  GtkSelect *select = GTK_SELECT (object);
+
+  if (select->popwin) {
+    gtk_widget_destroy (select->popwin);
+    g_object_unref (select->popwin);
+    select->popwin = NULL;
+  }
+  if (select->empty) {
+    g_object_unref (GTK_SELECT (select)->empty);
+    select->empty = NULL;
+  }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (parent_class)->destroy) (select);
+    (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 #if 0

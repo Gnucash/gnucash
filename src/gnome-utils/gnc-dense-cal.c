@@ -100,6 +100,7 @@ static short module = MOD_SX;
 
 static void gnc_dense_cal_class_init (GncDenseCalClass *class);
 static void gnc_dense_cal_init (GncDenseCal *dcal);
+static void gnc_dense_cal_finalize (GObject *object);
 static void gnc_dense_cal_destroy (GtkObject *object);
 static void gnc_dense_cal_realize (GtkWidget *widget);
 static void gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal );
@@ -243,6 +244,7 @@ gnc_dense_cal_class_init (GncDenseCalClass *class)
 			      G_TYPE_NONE,
 			      0);
 
+        object_class->finalize = gnc_dense_cal_finalize;
         gtkobject_class->destroy = gnc_dense_cal_destroy;
         widget_class->realize = gnc_dense_cal_realize;
         widget_class->expose_event = gnc_dense_cal_expose;
@@ -473,22 +475,48 @@ gnc_dense_cal_destroy (GtkObject *object)
         g_return_if_fail (GNC_IS_DENSE_CAL (object));
 
         dcal = GNC_DENSE_CAL(object);
-        if ( dcal->drawbuf )
+        if ( dcal->drawbuf ) {
                 gdk_pixmap_unref( dcal->drawbuf );
+		dcal->drawbuf = NULL;
+	}
 
         /* FIXME: we have a bunch of cleanup to do, here. */
         /* monthLabelFont, dayLabelFont */
-        gdk_font_unref( dcal->monthLabelFont );
-        gdk_font_unref( dcal->dayLabelFont );
+        if ( dcal->monthLabelFont ) {
+		gdk_font_unref( dcal->monthLabelFont );
+		dcal->monthLabelFont = NULL;
+	}
+        if ( dcal->dayLabelFont ) {
+		gdk_font_unref( dcal->dayLabelFont );
+		dcal->dayLabelFont = NULL;
+	}
         /* month labels */
-        for ( i=0; i < 12; i++ ) {
-                gdk_pixmap_unref( dcal->monthLabels[i] );
+	if ( dcal->monthLabels[0] ) {
+        	for ( i=0; i < 12; i++ ) {
+                	gdk_pixmap_unref( dcal->monthLabels[i] );
+                	dcal->monthLabels[i] = NULL;
+		}
         }
         /* mark data */
         gdc_free_all_mark_data( dcal );
 
         if (GTK_OBJECT_CLASS (parent_class)->destroy)
                 (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+gnc_dense_cal_finalize (GObject *object)
+{
+        GncDenseCal *dcal;
+        g_return_if_fail (object != NULL);
+        g_return_if_fail (GNC_IS_DENSE_CAL (object));
+
+        /* mark data */
+        dcal = GNC_DENSE_CAL(object);
+        gdc_free_all_mark_data( dcal );
+
+        if (G_OBJECT_CLASS (parent_class)->finalize)
+                (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
