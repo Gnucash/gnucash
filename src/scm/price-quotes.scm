@@ -274,21 +274,29 @@
     (define (get-quotes)
       (and quoter
            (let ((to-child (caddr quoter))
-                 (from-child (cadr quoter)))
+                 (from-child (cadr quoter))
+                 (results #f))
              (map
               (lambda (request)
-                (write (list 'handling-request request))
-                (newline)
-                ;; we need to display the first element (the method, so it
-                ;; won't be quoted) and then write the rest
-                (display #\( to-child)
-                (display (car request) to-child)
-                (display " " to-child)
-                (for-each (lambda (x) (write x to-child)) (cdr request))
-                (display #\) to-child)
-                (newline to-child)
-                (force-output to-child)
-                (read from-child))
+		(catch
+		 #t
+		 (lambda ()
+		   (write (list 'handling-request request))
+		   (newline)
+		   ;; we need to display the first element (the method, so it
+		   ;; won't be quoted) and then write the rest
+		   (display #\( to-child)
+		   (display (car request) to-child)
+		   (display " " to-child)
+		   (for-each (lambda (x) (write x to-child)) (cdr request))
+		   (display #\) to-child)
+		   (newline to-child)
+		   (force-output to-child)
+		   (set! results (read from-child))
+;;		   (write (list 'results results)) (newline)
+		   results)
+		 (lambda (key . args)
+		   key)))
              requests))))
 
     (define (kill-quoter)
@@ -597,7 +605,7 @@
                                (map fq-call-data->fq-calls fq-call-data))))
          (fq-results (and fq-calls (gnc:fq-get-quotes fq-calls)))
          (commod-tz-quote-triples
-          (and fq-results (not (member 'missing-lib fq-results))
+          (and fq-results (list? (car fq-results))
                (fq-results->commod-tz-quote-triples fq-call-data fq-results)))
          ;; At this point commod-tz-quote-triples will either be #f or a
          ;; list of items. Each item will either be (commodity
@@ -627,6 +635,18 @@
 Run 'update-finance-quote' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
 Run 'update-finance-quote' as root to install them.") "\n")))
+     ((member 'system-error fq-results)
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog
+           (_ "There was a system error while retrieving the price quotes."))
+          (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
+     ((not (list? (car fq-results)))
+      (set! keep-going? #f)
+      (if (gnc:ui-is-running?)
+          (gnc:error-dialog
+           (_ "There was an unknown error while retrieving the price quotes."))
+          (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
      ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
       (gnc:error-dialog
        (_ "Unable to get quotes or diagnose the problem."))

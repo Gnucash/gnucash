@@ -1,3 +1,13 @@
+2002-12-04  David Hampton  <hampton@employees.org>
+
+	* src/quotes/finance-quote-helper.in (schemify_quote): Allow stock
+	index names to be passed though from gnucash to
+	Finance::Quote. Necessary but not sufficient to solve #88118.
+
+	* src/scm/price-quotes.scm ((gnc:fq-get-quotes)): Beef up the
+	error handling. Should now print a warning message if the price
+	quote lookup fails, instead of crashing. #100186
+
 2002-12-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-p.h:

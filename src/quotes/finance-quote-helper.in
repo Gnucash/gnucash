@@ -65,7 +65,7 @@ use FileHandle;
 
 # For example:
 
-#  $ echo '(yahoo "CSCO" "JDSU")' | ./price-quote-helper
+#  $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./finance-quote-helper
 # (("CSCO" (symbol . "CSCO")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
 #          (last . 20.375)
@@ -73,12 +73,16 @@ use FileHandle;
 #  ("JDSU" (symbol . "JDSU")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
 #          (last . 23.5625)
-#          (currency . "USD")))
+#          (currency . "USD"))
+# ("^IXIC" (symbol . ^IXIC)
+#          (gnc:time-no-zone . 2002-12-04 17:16:00)
+#          (last . 1430.35)
+#          (currency . failed-conversion)))
 
 # On error, the overall result may be #f, or on individual errors, the
 # list sub-item for a given symbol may be #f, like this:
 
-#  $ echo '(yahoo "CSCO" "JDSU")' | ./price-quote-helper
+#  $ echo '(yahoo "CSCO" "JDSU")' | ./finance-quote-helper
 # (#f
 #  ("JDSU" (symbol . "JDSU")
 #          (gnc:time-no-zone . "2001-03-13 19:27:00")
@@ -278,8 +282,9 @@ sub parse_input_line {
 
   # Make sure we have an opening ( preceeded only by whitespace.
   # and followed by a one word method name composed of [a-z_]+.
+  # Also allow the '.' and '^' characters for stock indices.
   # Kill off the whitespace if we do and grab the command.
-  if($input !~ s/^\s*\(\s*([a-z_]+)\s+//o) { return 0; }
+  if($input !~ s/^\s*\(\s*([\.\^a-z_]+)\s+//o) { return 0; }
 
   my $quote_method_name = $1;
 
