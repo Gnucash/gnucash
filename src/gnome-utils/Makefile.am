@@ -151,7 +151,7 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: .scm-links gw-gnome-utils-
 	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
 	  (set! %load-path (cons \"${top_srcdir}/src/app-utils\" %load-path)) \
 	  (primitive-load \"./gw-gnome-utils-spec.scm\") \
-	  (gw:generate-module \"gw-gnome-utils\")"
+	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
 CLEANFILES = gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h \
