@@ -14,6 +14,7 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 
+xmlNodePtr text_to_dom_tree(const char *tag, const char *str);
 xmlNodePtr guid_to_dom_tree(const char *tag, const GUID* gid);
 xmlNodePtr commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c);
 xmlNodePtr timespec_to_dom_tree(const char *tag, const Timespec *spec);

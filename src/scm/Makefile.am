@@ -38,6 +38,8 @@ gnc_regular_scm_files = \
   options-utilities.scm \
   path.scm \
   prefs.scm \
+  price-quotes.scm \
+  process.scm \
   report.scm \
   report-html.scm \
   report-utilities.scm \

@@ -31,47 +31,26 @@
 #define __IO_GNCBIN_H__
 
 #include "Backend.h"
-#include "Group.h"
-#include "FileIO.h"
+#include "gnc-book.h"
 
 /** PROTOTYPES ******************************************************/
 
 /*
- * The xaccReadAccountGroupFD() and xaccWriteAccountGroupFD()
- * routines read and write the GnuCash "xacc" byte stream (file) 
- * format.  This is a binary format that exactly represents all of the 
- * data that can appear in the AccountGroup structure as a sequence of 
- * bytes.  The Read and Write routines are exact inverses of each other: 
- * that is, there is no loss of data involved in converting an 
- * AccountGroup into a byte stream and back again.  These routines
- * can be thought of as implementing a kind of "object persistance"
- * for the AccountGroup object.  Note that these routines can also
- * be used to provide inter-process communication using either pipes or 
- * sockets.  That is, by writing into a socket or pipe with the 
- * xaccWriteAccountGroupFD() routine, and reading from it at the other 
- * end with the xaccReadAccountGroupFD() routine, an exact duplicate of 
- * the AccountGroup can be created in a different process.
+ * NOTE: These routines should not be used directly for file IO.  They
+ *    are not inherently safe against file-locking errors.  For direct
+ *    file IO, the gnc-book's higher level functions should be used.
  *
- * NOTE: These routines should not be used directly for file IO.
- *    They are not inherently safe against file-locking errors.
- *    For direct file IO, the Session object should be used.
+ * gnc_book_load_from_binfile() will load the financial data
+ *   represented by the book's file_path into the indicated book.
  *
- * The xaccReadOldBinAccountGroupFile() method will read the "xacc"
- *    format byte stream from the indicated file, and build and return
- *    the corresponding AccountGroup structure.
- *
- *    If a read error occurred during reading, the returned value 
- *    may or may not be null. Use the xaccGetOldBinFileIOError() routine 
- *    to check for read errors.
- *
- * The xaccGetOldBinFileIOError() method will return an error code for
- *    any error detected that occured during reading or writing.  It
- *    will reset the error code after being called.  The current
- *    implementation can be thought of as a "stack of depth one", and
- *    this routine as a "pop".  Future implementations may have a
- *    deeper stack.
+ * gnc_book_get_binfile_io_error() will return an error code for any
+ *   error detected that occured during reading or writing.  It will
+ *   reset the error code after being called.  The current
+ *   implementation can be thought of as a "stack of depth one", and
+ *   this routine as a "pop".  Future implementations may have a
+ *   deeper stack.
  *     */
-AccountGroup  *xaccReadGncBinAccountGroupFile  (const char *filename);
-GNCBackendError xaccGetGncBinFileIOError (void);
+void            gnc_book_load_from_binfile(GNCBook *book);
+GNCBackendError gnc_book_get_binfile_io_error(void);
 
 #endif /* __IO_GNCBIN_H__ */

@@ -125,7 +125,7 @@ static void
 gnc_account_to_ui(AccountWindow *aw)
 {
   Account *account = aw_get_account (aw);
-  const gnc_commodity * commodity;
+  gnc_commodity * commodity;
   const char *string;
   gboolean tax_related;
   gint pos = 0;
@@ -179,7 +179,7 @@ static void
 gnc_ui_to_account(AccountWindow *aw)
 {
   Account *account = aw_get_account (aw);
-  const gnc_commodity *commodity;
+  gnc_commodity *commodity;
   Account *parent_account;
   const char *old_string;
   const char *string;
@@ -280,7 +280,7 @@ gnc_finish_ok (AccountWindow *aw,
   /* do it all again, if needed */
   if (aw->dialog_type == NEW_ACCOUNT && aw->subaccount_names)
   {
-    const gnc_commodity *commodity;
+    gnc_commodity *commodity;
     Account *parent;
     Account *account;
     GList *node;
@@ -440,11 +440,11 @@ static void
 gnc_account_change_currency_security(Account *account,
                                      GHashTable *change_currency,
                                      GHashTable *change_security,
-                                     const gnc_commodity * currency,
-                                     const gnc_commodity * security)
+                                     gnc_commodity * currency,
+                                     gnc_commodity * security)
 {
-  const gnc_commodity * old_currency;
-  const gnc_commodity * old_security;
+  gnc_commodity * old_currency;
+  gnc_commodity * old_security;
   gboolean new_currency;
   gboolean new_security;
   GSList *stack;
@@ -782,8 +782,8 @@ gnc_edit_account_ok(AccountWindow *aw)
   GNCAccountType current_type;
 
   const char *name;
-  const gnc_commodity * currency;
-  const gnc_commodity * security;
+  gnc_commodity * currency;
+  gnc_commodity * security;
 
   /* check for valid name */
   name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
@@ -1483,7 +1483,7 @@ static AccountWindow *
 gnc_ui_new_account_window_internal (Account *base_account,
                                     GList *subaccount_names)
 {
-  const gnc_commodity *commodity;
+  gnc_commodity *commodity;
   AccountWindow *aw;
   Account *account;
 

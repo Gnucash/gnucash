@@ -48,7 +48,7 @@ typedef struct {
         GtkWidget *entry;  /* display of commodity name */
         GtkWidget *button; /* button for popping up commodity window */
 
-        const gnc_commodity *selected_commodity;
+        gnc_commodity *selected_commodity;
 } GNCCommodityEdit;
 
 typedef struct {
@@ -60,9 +60,9 @@ guint      gnc_commodity_edit_get_type       (void);
 GtkWidget *gnc_commodity_edit_new            (void);
 
 void       gnc_commodity_edit_set_commodity  (GNCCommodityEdit *gce,
-                                              const gnc_commodity *commodity);
+                                              gnc_commodity *commodity);
 
-const gnc_commodity * gnc_commodity_edit_get_commodity (GNCCommodityEdit *gce);
+gnc_commodity * gnc_commodity_edit_get_commodity (GNCCommodityEdit *gce);
 
 END_GNOME_DECLS
 

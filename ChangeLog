@@ -1,3 +1,241 @@
+2001-02-24  Rob Browning  <rlb@cs.utexas.edu>
+
+	* configure.in (AC_ARG_ENABLE): add --enable-error-on-warning.
+	Enables -Werror and whatever else is needed for super-strict
+	checks.  I'm compiling with this now, and I urge everyone else to
+	as well.  We do have a few aggravating things we still ignore,
+	like unused variables, but as of today, the whole codebase
+	compiles successfully with this turned on.
+	(AC_CHECK_PROG): Add a check for etags.
+	(AC_ARG_WITH): --with-perl-includes - don't die if CORE not found.
+	I install modules in a local directory and use --perl-includes to
+	enable gnucash to find Finance::Quote at runtime, but there won't
+	be a CORE file.
+	(AC_CHECK_LIB): popt - note required Debian -dev package. 
+
+	* macros/autogen.sh (conf_flags): omit --enable-compile-warnings.
+	This was adding flags that overrode our configure.in settings;
+	specifically, this kept --enable-error-on-warning from working.
+
+	* Makefile.am (noinst_DATA): add optional TAGS target.
+	(DISTCLEANFILES): add tags cleanup bits.
+	(TAGS): Add fancy TAGS handling.  TAGS file is only built if you
+	have etags available, and now it takes into account
+	additions/deletions of files in addition to modifications.
+
+	* src/engine/gnc-engine-util.c
+	(g_hash_table_key_value_pairs): new - returns a GSList of all the
+	key value pairs in a given hash table so you can manipulate them.
+	(g_hash_table_kv_pair_free_gfunc): new - g_slist_foreach helper
+	for deleting key value hash pairs when you're finished with the
+	results from g_hash_table_key_value_pairs.  You'll still need to
+	call g_slist_free as well to delete the spine of the list.
+
+	* src/engine/NetIO.c: comment out various bits of the code that's
+	incompatible with the recent gnc-book changes.  Linas said he'd
+	fix it later.
+
+	* src/scm/price-quotes.scm: new file - not used yet.
+
+	* src/scm/price-quotes.scm: new file - launch a sub-process you
+	can talk to bidirectionally from scheme read/write.
+
+	* src/scm/command-line.scm: (disabled) support for getting prices.
+
+	* src/scm/command-line.scm
+	(gnc:group-map-accounts): implementation simplified dramatically,
+	probably should be dropped entirely, in favor of just calling (map
+	thunk (gnc:group-get-subaccounts group)) -- which is what's in the
+	replacement code.
+
+	* src/quotes/price-quote-helper.in: new file.
+
+	* src/Backend.h: Delete ERR_FILEIO_MISC (use ERR_BACKEND_MISC).
+	Replace ERR_FILEIO_ALLOC with ERR_BACKEND_ALLOC.
+
+	* src/engine/gnc-book.c: add support for GNCPriceDB element.  Move
+	still relevant FileIO bits here.  Add support for gnc-book
+	clean/dirty checking instead of just Group checking.
+
+	* src/engine/gnc-book.h: fixes for gnc-book marking, private
+	header, and addition of pricedb.
+
+	* src/engine/gnc-book-p.h: new file - private book functions.
+
+	* src/engine/Ledger-xml-parser-v1.c
+	(ledger_data_after_child_handler): new function to handle grabbing
+	the pricedb when we hit it.
+
+	* src/FileDialog.c: Various fixes to replace uses of the top level
+	AccountGroup with the parent GNCBook.  Also add support for
+	reading/writing the GNCPriceDB.  This file still needs a lot of
+	work.  Much of it should become a proper file IO Backend.
+
+	* src/guile/gnc.gwp: Add <gnc:Book*>.  Add gnc:get-current-book.
+	Add gnc:book-get-group. Add gnc:account-get-price-src.
+
+	* src/gnome/druid-commodity.c (finish_helper): add support for
+	GNCPriceDB.
+
+	* src/engine/sixtp-writers.h: add support for GNCPriceDB.
+
+	* src/engine/sixtp-to-dom-parser.c
+	(sixtp_dom_parser_new): change signature to add fail and result
+	cleanup functions.  These can be NULL, in which case they're
+	ignored.  Also modify overall scheme to clean internal garbage up
+	properly in case of failure.
+
+	* src/engine/sixtp-parsers.h
+	(sixtp_dom_parser_new): change signature.
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_text): minor fixes.
+
+	* src/engine/sixtp-dom-generators.c
+	(text_to_dom_tree): new function.
+
+	* src/engine/sixtp-dom-generators.h
+	(text_to_dom_tree): new prototype.
+
+	* src/engine/io-gncxml-w.c: add support for pricedb and using
+	GNCBook at top level rather than Group.
+
+	* src/engine/io-gncxml.h: support migration from top level Group
+	to top level GNCBook.
+
+	* src/engine/io-gncbin-r.c: add support for detecting legacy
+	prices and migrating them to the new pricedb.  Replace top level
+	uses of a Group with a GNCBook.
+
+	* src/engine/io-gncbin.h: support pricedb and gnc-book changes.
+
+	* src/engine/io-gncxml-p.h: new file - private header.
+
+	* src/engine/io-gncxml-r.c: move bits to private header.  Make
+	changes to support move from top level to Group to top level
+	GNCBook.
+
+	* src/gnome/druid-qif-import.c: -Werror fixes.
+
+	* src/engine/gnc-pricedb.h: new file.
+
+	* src/engine/gnc-pricedb-p.h: new file.
+
+	* src/engine/gnc-pricedb.c: new file.
+
+	* src/engine/gnc-pricedb-xml-v1.c: new file.
+
+	* src/engine/gnc-engine-util.h: accomodate new functions.
+
+	* src/engine/gnc-commodity-xml-v2.c
+	(gnc_commodity_sixtp_parser_create): fix sixtp_dom_parser_new call.
+
+	* src/engine/gnc-account-xml-v2.c
+	(gnc_account_end_handler): -Werror fixes.
+	(gnc_account_sixtp_parser_create): fix sixtp_dom_parser_new call.
+
+	* src/engine/date.h (timespec_equal): add back.
+
+	* src/engine/date.c (timespec_equal): add back.
+
+	* src/engine/Commodity-xml-parser-v1.c
+	(xml_add_commodity_ref): cleanup.
+
+	* src/FileIO.h: deleted.
+
+	* src/FileIOP.h: deleted.
+
+	* src/FileIO.c: deleted.
+
+	* src/test/test-dom-parser1.c: fixes for new sixtp_dom_parser_new.
+
+	* src/test/test-xml-account.c: fixes for new sixtp_dom_parser_new.
+
+	* src/test/test-xml-commodity.c: fixes for new sixtp_dom_parser_new.
+
+	* src/guile/option-util.h: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/guile/option-util.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/guile/guile-util.h: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/guile/guile-util.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/guile/global-options.h: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/guile/global-options.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/window-register.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/window-main.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/gnc-currency-edit.h: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/gnc-currency-edit.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/gnc-commodity-edit.h: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/gnc-commodity-edit.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/druid-commodity.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/dialog-account.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/gnome/dialog-options.c: remove consts from gnc_commoditities
+	(after consultation with Bill).
+
+	* src/gnome/dialog-commodity.h: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnome/dialog-commodity.c: remove consts from
+	gnc_commoditities (after consultation with Bill).
+
+	* src/gnc-ui-util.h: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/gnc-ui-util.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/engine/Transaction.h: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/engine/Transaction.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/engine/Scrub.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/AccountP.h: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/Account.h: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/Account.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/SplitLedger.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/EuroUtils.h: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
+	* src/EuroUtils.c: remove consts from gnc_commoditities (after
+	consultation with Bill).
+
 2001-02-23  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/qif-import/qif-dialog-utils.scm: Be more flexible

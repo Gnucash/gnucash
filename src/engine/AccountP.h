@@ -111,8 +111,8 @@ struct _account {
    * messages will print to the screen if things don't go well.
 
 */
-  const gnc_commodity * currency;
-  const gnc_commodity * security;
+  gnc_commodity * currency;
+  gnc_commodity * security;
   int  currency_scu;
   int  security_scu;
 

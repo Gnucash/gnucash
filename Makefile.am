@@ -3,7 +3,7 @@ SUBDIRS = macros debian doc-tools doc intl lib src po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
-noinst_DATA = make-gnucash-patch
+noinst_DATA = make-gnucash-patch @GNC_TAGS_FILE@
 
 doc_DATA = \
   AUTHORS \
@@ -43,7 +43,8 @@ make-gnucash-patch: make-gnucash-patch.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-DISTCLEANFILES += cscope.files cscope.out etags.files make-gnucash-patch
+DISTCLEANFILES += \
+  TAGS.stamp cscope.files cscope.out etags.files make-gnucash-patch
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -51,8 +52,24 @@ cscope.files:
 cscope.out: cscope.files
 	cscope -b
 
-TAGS: etags.files
-	etags `cat etags.files`
+if GNC_TAGS_FILE
 
-etags.files:
-	find . -name '*.[ch]' -o -name '*.scm' > etags.files
+TAGS.stamp: etags.files $(shell cat etags.files)
+	etags `cat etags.files`
+	touch TAGS.stamp
+
+TAGS:
+	find . -name '*.[ch]' -o -name '*.scm' | sort > etags.files.tmp
+	@if cmp --quiet etags.files etags.files.tmp; \
+        then \
+          echo "TAGS file list hasn't changed."; \
+          rm -f etags.files.tmp; \
+        else \
+          echo "TAGS file list has changed."; \
+          mv etags.files.tmp etags.files; \
+        fi
+	${MAKE} TAGS.stamp
+
+.PHONY: TAGS
+
+endif

@@ -202,7 +202,7 @@ gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
  *
  * Returns the selected currency.
  */
-const gnc_commodity *
+gnc_commodity *
 gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 {
         const char *mnemonic;

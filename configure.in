@@ -126,9 +126,18 @@ AC_SUBST(GNC_ACCOUNTS_DIR)
 # We should always see these errors...
 CFLAGS="${CFLAGS} -Wall"
 
+AC_ARG_ENABLE(error-on-warning,
+  [  --enable-error-on-warning    treat compile warnings as errors],
+  [case "${enableval}" in
+     yes) CFLAGS="${CFLAGS} -Werror"; enable_compile_warnings=no ;;
+     no)  ;;
+     *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
+   esac])
+
 # This has to come after AC_PROG_CC
 if test ${GCC}x = yesx
 then
+  CFLAGS="${CFLAGS} -Wno-unused"
   CFLAGS="${CFLAGS} -Werror-implicit-function-declaration"
 fi
 
@@ -173,11 +182,15 @@ AC_ARG_WITH( help-prefix,
 
 AC_SUBST(GNC_HELPDIR)
 
+### --------------------------------------------------------------------------
+### Check for etags
+
+AC_CHECK_PROG(GNC_TAGS_FILE, etags, TAGS)
+AM_CONDITIONAL(GNC_TAGS_FILE, test x${GNC_TAGS_FILE} = xTAGS)
 
 ### --------------------------------------------------------------------------
 ### Check for glade
 
-# Check for glade
 AC_ARG_WITH(glade,
   [  --with-glade=FILE            which glade executable to use ],
   GLADE="${with_glade}")
@@ -233,10 +246,6 @@ PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
 AC_ARG_WITH( perl-includes, 
   [  --with-perl-includes=DIR     specify where to look for perl includes],
        PERLINCL="$with_perl_includes" )
-
-if test ! -d ${PERLINCL}/CORE; then
-  AC_MSG_ERROR([Missing directory ${PERLINCL}/CORE in the perl include directory])
-fi
 AC_SUBST(PERLINCL)
 
 
@@ -390,11 +399,12 @@ AC_SUBST(GTK_XIM_FLAGS)
 ### --------------------------------------------------------------------------
 ### popt
 
-AC_CHECK_LIB(popt, poptStrippedArgv,, AC_MSG_ERROR([
+AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 
   popt 1.5 or newer is required to build gnucash. You can download
-  the latest version from ftp://people.redhat.com/sopwith/popt/
-]))
+  the latest version from ftp://people.redhat.com/sopwith/popt/, or if
+  you're running Debian, install the libpopt-dev pacakge.
+])])
 
 ### --------------------------------------------------------------------------
 ## For now, we just presume you're using the GNOME version.  The other

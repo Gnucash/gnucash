@@ -1049,9 +1049,10 @@ xaccIsCommonCurrency(const gnc_commodity * currency_1,
   return (c1c2 == 1) || (c1s2 == 1) || (s1c2 == 1) || (s1s2 == 1);
 }
 
-static const gnc_commodity *
-FindCommonExclSCurrency (GList *splits, const gnc_commodity * ra, 
-                         const gnc_commodity * rb, Split *excl_split)
+static gnc_commodity *
+FindCommonExclSCurrency (GList *splits,
+                         gnc_commodity * ra, gnc_commodity * rb,
+                         Split *excl_split)
 {
   GList *node;
 
@@ -1060,7 +1061,7 @@ FindCommonExclSCurrency (GList *splits, const gnc_commodity * ra,
   for (node = splits; node; node = node->next)
   {
     Split *s = node->data;
-    const gnc_commodity * sa, * sb;
+    gnc_commodity * sa, * sb;
 
     if (s == excl_split)
       continue;
@@ -1113,17 +1114,16 @@ FindCommonExclSCurrency (GList *splits, const gnc_commodity * ra,
  * don't exclude one split from the splitlist when looking for a
  * common currency.  
  */
-static const gnc_commodity *
-FindCommonCurrency (GList *splits,
-                    const gnc_commodity * ra, const gnc_commodity * rb)
+static gnc_commodity *
+FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
 {
   return FindCommonExclSCurrency(splits, ra, rb, NULL);
 }
 
-const gnc_commodity *
+gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans)
 {
-  const gnc_commodity *ra, *rb, *retval;
+  gnc_commodity *ra, *rb, *retval;
   Split *split;
 
   if (!trans) return NULL;
@@ -1161,16 +1161,16 @@ xaccTransFindCommonCurrency (Transaction *trans)
   return retval;
 }
 
-const gnc_commodity *
-xaccTransIsCommonCurrency (Transaction *trans, const gnc_commodity * ra)
+gnc_commodity *
+xaccTransIsCommonCurrency (Transaction *trans, gnc_commodity * ra)
 {
   if (!trans) return NULL;
   return FindCommonCurrency (trans->splits, ra, NULL);
 }
 
-const gnc_commodity *
+gnc_commodity *
 xaccTransIsCommonExclSCurrency (Transaction *trans, 
-				const gnc_commodity * ra, 
+				gnc_commodity * ra, 
                                 Split *excl_split)
 {
   if (!trans) return NULL;
@@ -1182,7 +1182,7 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 /* The new routine for setting the common currency */
 
 void
-xaccTransSetCurrency (Transaction *trans, const gnc_commodity *curr)
+xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 {
   if (!trans || !curr) return;
 

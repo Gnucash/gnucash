@@ -272,7 +272,7 @@ gnc_account_end_handler(gpointer data_for_children,
         }
     }
     
-    xmlFreeNode(result);
+    xmlFreeNode((xmlNodePtr) result);
 
     return successful;
 }
@@ -280,5 +280,5 @@ gnc_account_end_handler(gpointer data_for_children,
 sixtp*
 gnc_account_sixtp_parser_create(void)
 {
-    return sixtp_dom_parser_new(gnc_account_end_handler);
+    return sixtp_dom_parser_new(gnc_account_end_handler, NULL, NULL);
 }

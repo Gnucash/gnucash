@@ -16,9 +16,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (import-old-currencies from-filename) 
-  (if (gnc:commodity-table-has-namespace 
-       (gnc:engine-commodities)
-       "GNC_LEGACY_CURRENCIES")
+  (if (gnc:commodity-table-has-namespace  (gnc:engine-commodities)
+                                          "GNC_LEGACY_CURRENCIES")
       (gnc:import-legacy-commodities from-filename)))
 
 (gnc:hook-add-dangler gnc:*file-opened-hook* import-old-currencies)

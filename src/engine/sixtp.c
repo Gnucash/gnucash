@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <glib.h>
 
 #include <stdarg.h>
@@ -328,7 +330,7 @@ sixtp_sax_start_handler(void *user_data,
   gchar *next_parser_tag = NULL;
   gboolean lookup_success = FALSE;
   sixtp_stack_frame *new_frame = NULL;
-  
+
   g_return_if_fail(pdata->parsing_ok);
 
   current_frame = (sixtp_stack_frame *) pdata->stack->data;

@@ -1184,7 +1184,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
   char * mnemonic = NULL; 
   char * namespace = NULL;
   char * fullname = NULL;
-  gchar * row_text[4] = { NULL, NULL, NULL, NULL };
+  const gchar * row_text[4] = { NULL, NULL, NULL, NULL };
   int  rownum;
 
   /* get the default currency */
@@ -1281,7 +1281,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
       }
 
       rownum = gtk_clist_append(GTK_CLIST(wind->new_transaction_list),
-                                row_text);      
+                                (gchar **) row_text);      
       
       retval      = gh_cdr(retval); 
     }
@@ -1662,7 +1662,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
   SCM          selected;
   Transaction  * gnc_xtn;
   Split        * gnc_split;
-  gchar        * row_text[4] = { NULL, NULL, NULL, NULL };
+  const gchar  * row_text[4] = { NULL, NULL, NULL, NULL };
   int          rownum;
 
   gtk_clist_column_titles_passive (GTK_CLIST(wind->old_transaction_list));
@@ -1703,7 +1703,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
       }
       
       rownum = gtk_clist_append(GTK_CLIST(wind->old_transaction_list),
-                                row_text);
+                                (gchar **) row_text);
 
       gnc_clist_set_check (GTK_CLIST(wind->old_transaction_list),
                            rownum, 3, selected != SCM_BOOL_F);

@@ -100,7 +100,7 @@ PriceSourceCode gnc_get_source_code (const char * codename);
 struct lconv * gnc_localeconv (void);
 
 /* Returns the default currency of the current locale. */
-const gnc_commodity * gnc_locale_default_currency (void);
+gnc_commodity * gnc_locale_default_currency (void);
 
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);
@@ -123,7 +123,7 @@ int gnc_locale_decimal_places (void);
 
 typedef struct _GNCPrintAmountInfo
 {
-  const gnc_commodity *commodity;  /* may be NULL */
+  gnc_commodity *commodity;  /* may be NULL */
 
   guint8 max_decimal_places;
   guint8 min_decimal_places;
@@ -137,7 +137,7 @@ typedef struct _GNCPrintAmountInfo
 
 GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 
-GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
+GNCPrintAmountInfo gnc_commodity_print_info (gnc_commodity *commodity,
                                              gboolean use_symbol);
 
 GNCPrintAmountInfo gnc_account_quantity_print_info (Account *account,

@@ -25,6 +25,7 @@ typedef enum {
                             /* or no backend handler (ENOSYS) */
   ERR_BACKEND_LOCKED,       /* in use by another user (ETXTBSY) */
   ERR_BACKEND_NO_SUCH_DB,   /* the named database doesn't exist */
+  ERR_BACKEND_ALLOC,        /* internal memory allocation failure */
   ERR_BACKEND_MISC,         /* undetermined error */
 
   /* fileio errors */
@@ -34,8 +35,6 @@ typedef enum {
   ERR_FILEIO_FILE_NOT_FOUND, /* not found / no such file */
   ERR_FILEIO_FILE_TOO_NEW,   /* file version newer than what we can read */
   ERR_FILEIO_FILE_TOO_OLD,   /* file version so old we can't read it */
-  ERR_FILEIO_ALLOC,          /* ?? */
-  ERR_FILEIO_MISC,           /* unknown weird error */
 
   /* network errors */
   ERR_NETIO_NO_CONNECTION,      /* network failure, can't connect to server */

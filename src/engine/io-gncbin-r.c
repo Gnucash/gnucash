@@ -108,7 +108,9 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "GNCIdP.h"
+#include "gnc-pricedb.h"
 
+#include "gnc-book-p.h"
 
 #define PERMS   0666
 #define WFLAGS  (O_WRONLY | O_CREAT | O_TRUNC)
@@ -152,11 +154,95 @@ static AccountGroup *maingrp;     /* temporary holder for file
    in our handling of keys and values here.  We use int32s and
    pointers interchangably ATM, and that may be problematic on some
    architectures...
+
+   Only used *during* file read process.
 */
 
-/* used while reading */
 static GHashTable *ids_to_finished_accounts;
 static GHashTable *ids_to_unfinished_accounts;
+
+/** PriceDB bits ******************************************************/
+/* Commodity prices (stock quotes, etc.) used to be stored as zero
+   quantity (damount) splits inside the relevant accounts.  Now we
+   used the pricedb.  potential_quotes is where we put the info from
+   all these "quote splits" while reading, until we have a chance to
+   cram them into the pricedb.  We can't do it any sooner because
+   until we finish reading the file, the Account*'s havent' been
+   filled out and so their commodities and types may not have been
+   initilized yet.
+
+   This shouldn't be a static global but see comments above RE ids_to*
+   hashes.  */
+
+typedef struct {
+  Split *split;
+  gnc_numeric price;
+} GNCPotentialQuote;
+
+static GSList     *potential_quotes;
+
+static void
+mark_potential_quote(Split *s, double price, double quantity)
+{
+  static int count = 0;
+
+  if((price != 0) && DEQ(quantity, 0)){
+    GNCPotentialQuote *q = g_new0(GNCPotentialQuote, 1);
+    q->split = s;
+    q->price = double_to_gnc_numeric(price,
+				     GNC_DENOM_AUTO,
+				     GNC_DENOM_SIGFIGS(9) | GNC_RND_ROUND);
+    potential_quotes = g_slist_prepend(potential_quotes, q);
+  }
+}
+
+static gboolean
+cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
+{
+  GSList *item = potential_quotes;
+
+  *prices = gnc_pricedb_create();
+  if (!*prices) return FALSE;
+
+  while(item)
+  {
+    GNCPotentialQuote *q = (GNCPotentialQuote *) item->data;
+    Account *split_acct = xaccSplitGetAccount(q->split);
+    GNCAccountType acct_type = xaccAccountGetType(split_acct);
+
+    /* at this point, we already know it's a split with a zero amount */
+    if((acct_type == STOCK) ||
+       (acct_type == MUTUAL) ||
+       (acct_type == CURRENCY)) {
+      /* this is a quote -- file it in the db and kill the split */
+      Transaction *txn = xaccSplitGetParent(q->split);
+      GNCPrice *price = gnc_price_create();
+      Timespec time = xaccTransRetDateEnteredTS(txn);
+
+      gnc_price_set_commodity(price, xaccAccountGetSecurity(split_acct));
+      gnc_price_set_currency(price, xaccAccountGetCurrency(split_acct));
+      gnc_price_set_time(price, &time);
+      gnc_price_set_source(price, "old-file-import");
+      gnc_price_set_type(price, "unknown");
+      gnc_price_set_value(price, q->price);
+      if(!gnc_pricedb_add_price(*prices, price)) {
+        PERR("problem adding price to pricedb.\n");
+      }
+      gnc_price_unref(price);
+
+      xaccTransBeginEdit(txn);
+      xaccSplitDestroy(q->split);
+      xaccTransCommitEdit(txn);
+    }
+    g_free(item->data);
+    item->data = NULL;
+    item = item->next;
+  }
+  g_slist_free(potential_quotes);
+  potential_quotes = NULL;
+
+  return TRUE;
+}
 
 /** PROTOTYPES ******************************************************/
 static Account     *locateAccount (int acc_id); 
@@ -197,8 +283,8 @@ static int           readTSDate( int fd, Timespec *, int token );
 
 /*******************************************************/
 
-GNCBackendError 
-xaccGetGncBinFileIOError (void)
+GNCBackendError
+gnc_book_get_binfile_io_error(void)
 {
    /* reset the error code */
    int rc = error_code;
@@ -307,15 +393,15 @@ gnc_commodity_import_legacy(const char * currency_name) {
 \********************************************************************/
 
 /********************************************************************\
- * xaccReadAccountGroup                                             * 
  *   reads in the data from file descriptor                         *
  *                                                                  * 
- * Args:   fd -- the file descriptor to read the data from          * 
+ * Args:   book -- the book in which to store the data              *
+ *         fd -- the file descriptor to read the data from          * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
-static AccountGroup *
-xaccReadAccountGroup(int fd)
-  {
+static gboolean
+gnc_load_financials_from_fd(GNCBook *book, int fd)
+{
   int  err=0;
   int  token=0;
   int  num_unclaimed;
@@ -328,7 +414,7 @@ xaccReadAccountGroup(int fd)
   if( 0 > fd ) 
     {
     error_code = ERR_FILEIO_FILE_NOT_FOUND;
-    return NULL;
+    return FALSE;
     }
 
   /* Read in the file format token */
@@ -336,7 +422,7 @@ xaccReadAccountGroup(int fd)
   if( sizeof(int) != err ) 
     {
     error_code = ERR_FILEIO_FILE_EMPTY;
-    return NULL;
+    return FALSE;
     }
   XACC_FLIP_INT (token);
   
@@ -350,35 +436,32 @@ xaccReadAccountGroup(int fd)
    * with, warn the user */
   if( VERSION < token ) {
     error_code = ERR_FILEIO_FILE_TOO_NEW;
-    return NULL;
+    return FALSE;
   }
   
   /* FIXME: is this OK (i.e. direct hashes for ints?) */
   ids_to_finished_accounts = g_hash_table_new(g_direct_hash, g_direct_equal);
   if(!ids_to_finished_accounts) {
-    error_code = ERR_FILEIO_ALLOC;
-    return(NULL);
+    error_code = ERR_BACKEND_ALLOC;
+    return FALSE;
   }
 
   ids_to_unfinished_accounts = g_hash_table_new(g_direct_hash, g_direct_equal);
   if(!ids_to_unfinished_accounts) {
-    error_code = ERR_FILEIO_ALLOC;
+    error_code = ERR_BACKEND_ALLOC;
 
     g_hash_table_destroy(ids_to_finished_accounts);
     ids_to_finished_accounts = NULL;
 
-    return(NULL);
+    return FALSE;
   }
+
+  potential_quotes = NULL;
 
   /* disable logging during load; otherwise its just a mess */
   xaccLogDisable();
   holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
-
-  /* mark the newly read group as saved, since the act of putting 
-   * it together will have caused it to be marked up as not-saved. 
-   */
-  xaccGroupMarkSaved (grp);
 
   /* auto-number the accounts, if they are not already numbered */
   xaccGroupDepthAutoCode (grp);
@@ -409,11 +492,35 @@ xaccReadAccountGroup(int fd)
   g_hash_table_destroy(ids_to_unfinished_accounts);
   ids_to_unfinished_accounts = NULL;
 
+  {
+    GNCPriceDB *tmpdb;
+    if(cvt_potential_prices_to_pricedb_and_cleanup(&tmpdb)) {
+      GNCPriceDB *db = gnc_book_get_pricedb(book);
+      if(db) gnc_pricedb_destroy(db);
+      gnc_book_set_pricedb(book, tmpdb);
+    } else {
+      PWARN("pricedb import failed.");
+      error_code = ERR_BACKEND_MISC;
+      gnc_pricedb_destroy(tmpdb);
+    }
+  }
+
   /* set up various state that is not normally stored in the byte stream */
   xaccRecomputeGroupBalance (grp);
 
   xaccLogEnable();
-  return grp;
+
+  {
+    AccountGroup *g = gnc_book_get_group(book);
+    if (g) xaccFreeAccountGroup(g);
+    gnc_book_set_group(book, grp);
+  }
+
+  /* mark the newly read book as saved, since the act of putting it
+   * together will have caused it to be marked up as not-saved.  */
+  gnc_book_mark_saved(book);
+
+  return (error_code == ERR_BACKEND_NO_ERR);
 }
 
 /********************************************************************\
@@ -423,25 +530,30 @@ xaccReadAccountGroup(int fd)
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
-AccountGroup *
-xaccReadGncBinAccountGroupFile( const char *datafile )
-  {
+void
+gnc_book_load_from_binfile(GNCBook *book)
+{
   int  fd;
-  AccountGroup *grp = 0x0;
+
+  const gchar *datafile = gnc_book_get_file_path(book);
+  if(!datafile) {
+    error_code = ERR_BACKEND_MISC;
+    return;
+  }
 
   maingrp = 0x0;
   error_code = ERR_BACKEND_NO_ERR;
 
   fd = open( datafile, RFLAGS, 0 );
-  if( 0 > fd ) 
-    {
+  if( 0 > fd ) {
     error_code = ERR_FILEIO_FILE_NOT_FOUND;
-    return NULL;
-    }
-  grp = xaccReadAccountGroup (fd);
+    return;
+  }
+
+  if(!gnc_load_financials_from_fd(book, fd)) return;
 
   close(fd);
-  return grp;
+  return;
 }
 
 /********************************************************************\
@@ -644,17 +756,15 @@ readAccount( int fd, AccountGroup *grp, int token )
   
   DEBUG ("expecting %d transactions \n", numTrans);
   /* read the transactions */
-  for( i=0; i<numTrans; i++ )
-    {
+  for( i=0; i<numTrans; i++ ) {
     Transaction *trans;
     trans = readTransaction( fd, acc, token );
-    if( trans == NULL )
-      {
+    if(trans == NULL ) {
       PERR ("Short Transaction Read: \n"
-            "\texpected %d got %d transactions \n",numTrans,i);
+            "\texpected %d got %d transactions \n", numTrans, i);
       break;
-      }
     }
+  }
   
   /* Not needed now.  Since we always look in ids_to_finished_accounts
    * first, it doesn't matter if we don't ever delete anything from
@@ -802,7 +912,7 @@ xaccTransSetAction (Transaction *trans, const char *action)
 \********************************************************************/
 
 static Transaction *
-readTransaction( int fd, Account *acc, int token )
+readTransaction( int fd, Account *acc, int revision)
   {
   int err=0;
   int acc_id;
@@ -821,13 +931,7 @@ readTransaction( int fd, Account *acc, int token )
   trans = xaccMallocTransaction();
   xaccTransBeginEdit (trans);  
 
-  /* add in one split -- xaccMallocTransaction no longer auto-creates them. */
-  {
-    Split *s = xaccMallocSplit ();
-    xaccTransAppendSplit (trans, s);
-  }
-
-  tmp = readString( fd, token );
+  tmp = readString( fd, revision );
   if (NULL == tmp)
     {
     PERR ("Premature end of Transaction at num");
@@ -838,9 +942,9 @@ readTransaction( int fd, Account *acc, int token )
   xaccTransSetNum (trans, tmp);
   free (tmp);
   
-  if (7 >= token) {
+  if (revision <= 7) {
      time_t secs;
-     secs = readDMYDate( fd, token );
+     secs = readDMYDate( fd, revision );
      if( 0 == secs )
        {
        PERR ("Premature end of Transaction at date");
@@ -855,7 +959,7 @@ readTransaction( int fd, Account *acc, int token )
      int rc;
 
      /* read posted date first ... */
-     rc = readTSDate( fd, &ts, token );
+     rc = readTSDate( fd, &ts, revision );
      if( -1 == rc )
        {
        PERR ("Premature end of Transaction at date");
@@ -866,7 +970,7 @@ readTransaction( int fd, Account *acc, int token )
      xaccTransSetDateTS (trans, &ts);
 
      /* then the entered date ... */
-     rc = readTSDate( fd, &ts, token );
+     rc = readTSDate( fd, &ts, revision );
      if( -1 == rc )
        {
        PERR ("Premature end of Transaction at date");
@@ -877,7 +981,7 @@ readTransaction( int fd, Account *acc, int token )
      xaccTransSetDateEnteredTS (trans, &ts);
   }
   
-  tmp = readString( fd, token );
+  tmp = readString( fd, revision );
   if( NULL == tmp )
     {
     PERR ("Premature end of Transaction at description");
@@ -892,8 +996,8 @@ readTransaction( int fd, Account *acc, int token )
      deprecated, and we don't think anyone ever used them anyway, but
      to be safe, if we find one, we store it in the old-docref slot, a
      la old-price-source. */
-  if (8 <= token) {
-     tmp = readString( fd, token );
+  if (revision >= 8) {
+     tmp = readString( fd, revision );
      if( NULL == tmp ) {
        PERR ("Premature end of Transaction at docref");
        xaccTransDestroy(trans);
@@ -916,17 +1020,10 @@ readTransaction( int fd, Account *acc, int token )
    * moved to splits. Thus, vast majority of stuff below 
    * is skipped 
    */
-  if (4 >= token) 
-    { 
-    Split * s;
+  if (revision <= 4) { 
+    Split* s;
 
-    /* The code below really wants to assume that there are a pair
-     * of splits in every transaction, so make it so. 
-     */
-    s = xaccMallocSplit ();
-    xaccTransAppendSplit (trans, s);
-
-    tmp = readString( fd, token );
+    tmp = readString( fd, revision );
     if( NULL == tmp )
       {
       PERR ("Premature end of Transaction at memo");
@@ -941,9 +1038,9 @@ readTransaction( int fd, Account *acc, int token )
     free (tmp);
     
     /* action first introduced in version 3 of the file format */
-    if (3 <= token) 
+    if (revision >= 3) 
        {
-       tmp = readString( fd, token );
+       tmp = readString( fd, revision );
        if( NULL == tmp )
          {
          PERR ("Premature end of Transaction at action");
@@ -973,12 +1070,21 @@ readTransaction( int fd, Account *acc, int token )
       xaccTransCommitEdit (trans);
       return NULL;
       }
+
+    /* The code below really wants to assume that there are a pair
+     * of splits in every transaction, so make it so. 
+     */
+    s = xaccMallocSplit ();
+    xaccTransAppendSplit (trans, s);
+    s = xaccMallocSplit ();
+    xaccTransAppendSplit (trans, s);
+    
     s = xaccTransGetSplit (trans, 0);
     xaccSplitSetReconcile (s, recn);
     s = xaccTransGetSplit (trans, 1);
     xaccSplitSetReconcile (s, recn);
-    
-    if( 1 >= token ) {
+
+    if(revision <= 1) {
       /* Note: this is for version 0 of file format only.
        * What used to be reconciled, is now cleared... transactions
        * aren't reconciled until you get your bank statement, and
@@ -996,8 +1102,9 @@ readTransaction( int fd, Account *acc, int token )
      * with the amount recorded as pennies.
      * Version 2 and above store the share amounts and 
      * prices as doubles. */
-    if (1 == token) {
+    if (1 == revision) {
       int amount;
+      
       err = read( fd, &amount, sizeof(int) );
       if( sizeof(int) != err )
         {
@@ -1010,7 +1117,12 @@ readTransaction( int fd, Account *acc, int token )
       num_shares = 0.01 * ((double) amount); /* file stores pennies */
       s = xaccTransGetSplit (trans, 0);
       DxaccSplitSetShareAmount (s, num_shares);
+
+      /* Version 1 files did not do double-entry */
+      s = xaccTransGetSplit (trans, 0);
+      xaccAccountInsertSplit( acc, s );
     } else {
+      Account *peer_acc;
       double damount;
   
       /* first, read number of shares ... */
@@ -1037,15 +1149,12 @@ readTransaction( int fd, Account *acc, int token )
       XACC_FLIP_DOUBLE (damount);
       share_price = damount;
       s = xaccTransGetSplit (trans, 0);
+
       DxaccSplitSetSharePriceAndAmount (s, share_price, num_shares);
-    }  
-  
-    DEBUG ("num_shares %f \n", num_shares);
-  
-    /* Read the account numbers for double-entry */
-    /* These are first used in Version 2 of the file format */
-    if (1 < token) {
-      Account *peer_acc;
+
+      /* Read the account numbers for double-entry */
+      /* These are first used in Version 2 of the file format */
+      
       /* first, read the credit account number */
       err = read( fd, &acc_id, sizeof(int) );
       if( err != sizeof(int) )
@@ -1064,6 +1173,8 @@ readTransaction( int fd, Account *acc, int token )
       s = xaccTransGetSplit (trans, 0);
       if (peer_acc) xaccAccountInsertSplit( peer_acc, s);
   
+      mark_potential_quote(s, share_price, num_shares);
+
       /* next read the debit account number */
       err = read( fd, &acc_id, sizeof(int) );
       if( err != sizeof(int) )
@@ -1077,74 +1188,50 @@ readTransaction( int fd, Account *acc, int token )
       DEBUG ("debit %d\n", acc_id);
       peer_acc = locateAccount (acc_id);
       if (peer_acc) {
-         Split *split;
-         s = xaccTransGetSplit (trans, 0);
-         split = xaccTransGetSplit (trans, 1);
-
+         Split *s0 = xaccTransGetSplit (trans, 0);
+         Split *s1 = xaccTransGetSplit (trans, 1);
+         
          /* duplicate many of the attributes in the credit split */
-         DxaccSplitSetSharePriceAndAmount (split, share_price, -num_shares);
-         xaccSplitSetReconcile (split, xaccSplitGetReconcile (s));
-         xaccSplitSetMemo (split, xaccSplitGetMemo (s));
-         xaccSplitSetAction (split, xaccSplitGetAction (s));
-         xaccAccountInsertSplit (peer_acc, split);
+         DxaccSplitSetSharePriceAndAmount (s1, share_price, -num_shares);
+         xaccSplitSetReconcile (s1, xaccSplitGetReconcile (s0));
+         xaccSplitSetMemo (s1, xaccSplitGetMemo (s0));
+         xaccSplitSetAction (s1, xaccSplitGetAction (s0));
+         xaccAccountInsertSplit (peer_acc, s1);
+         mark_potential_quote(s1, share_price, -num_shares);
       }
-  
-    } else {
-
-      /* Version 1 files did not do double-entry */
-      s = xaccTransGetSplit (trans, 0);
-      xaccAccountInsertSplit( acc, s );
     }
   } else { /* else, read version 5 and above files */
-    Split *split;
-    int offset = 0;
+
     const char *notes = NULL;
 
-    if (5 == token) 
-    {
-      Split *s = trans->splits->data;
-
+    if (revision == 5) {
       /* Version 5 files included a split that immediately
        * followed the transaction, before the destination splits.
        * Later versions don't have this. */
-      offset = 1;
-      split = readSplit (fd, token);
-      xaccRemoveEntity(&s->guid);
-      xaccFreeSplit (s);
-      trans->splits->data = split;
-      split->parent = trans;
+      Split *split = readSplit (fd, revision);
+      xaccTransAppendSplit(trans, split);
     }
-
+    
     /* read number of splits */
     err = read( fd, &(numSplits), sizeof(int) );
-    if( err != sizeof(int) )
-    {
+    if( err != sizeof(int) ) {
       PERR ("Premature end of Transaction at num-splits");
       xaccTransDestroy(trans);
       xaccTransCommitEdit (trans);
       return NULL;
     }
     XACC_FLIP_INT (numSplits);
-    for (i=0; i<numSplits; i++) {
-        split = readSplit (fd, token);
-        if (0 == i+offset) {
-           Split *s = trans->splits->data;
-           /* the first split has been malloced. just replace it */
-           xaccRemoveEntity (&s->guid);
-           xaccFreeSplit (s);
-           trans->splits->data = split;
-           split->parent = trans;
-        } else {
-           xaccTransAppendSplit(trans, split);
-        }
-
-        if (!notes) {
-          notes = xaccSplitGetMemo (split);
-          if (notes)
-            xaccTransSetNotes (trans, notes);
-        }
-     }
+    for (i = 0; i < numSplits; i++) {
+      Split *split = readSplit(fd, revision);
+      xaccTransAppendSplit(trans, split);
+      
+      if(!notes) {
+        notes = xaccSplitGetMemo (split);
+        if(notes) xaccTransSetNotes (trans, notes);
+      }
+    }
   }
+
   xaccTransCommitEdit (trans);  
 
   return trans;
@@ -1275,6 +1362,7 @@ readSplit ( int fd, int token )
     return NULL;
   }
   XACC_FLIP_DOUBLE (share_price);
+
   DxaccSplitSetSharePriceAndAmount (split, share_price, num_shares);
 
   DEBUG ("num_shares %f \n", num_shares);
@@ -1293,6 +1381,7 @@ readSplit ( int fd, int token )
   peer_acc = locateAccount (acc_id);
   xaccAccountInsertSplit (peer_acc, split);
 
+  mark_potential_quote(split, share_price, num_shares);
   return split;
 }
 
@@ -1486,7 +1575,7 @@ xaccWriteGncBinAccountGroup(FILE *f, AccountGroup *grp )
 
   accounts_to_ids = g_hash_table_new(g_direct_hash, g_direct_equal);
   if(!accounts_to_ids) {
-    error_code = ERR_FILEIO_ALLOC;
+    error_code = ERR_BACKEND_ALLOC;
     return(-1);
   }
 

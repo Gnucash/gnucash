@@ -38,11 +38,11 @@ void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
 
 void gnc_ui_new_commodity_destroy(NewCommodityWindow * w);
 
-const gnc_commodity * 
-gnc_ui_select_commodity_modal(const gnc_commodity * orig_sel, 
+gnc_commodity * 
+gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
                               GtkWidget * parent);
 
-const gnc_commodity * 
+gnc_commodity * 
 gnc_ui_new_commodity_modal(const char * default_namespace, 
                            GtkWidget * parent);
 

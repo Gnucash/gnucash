@@ -115,6 +115,10 @@ concatenate_child_result_chars(GSList *data_from_children) {
    I don't understand the claim; I'm just going to use 
    atof or strtod to accomplish this.
 
+   RLB writes: FIXME: OK, but at the very least this may cause a
+   locale dependency.  Whoever fixes that, please delete this whole
+   comment block.
+
  */
 
 gboolean

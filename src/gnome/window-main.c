@@ -105,7 +105,7 @@ static GNCMainInfo * gnc_get_main_info(void);
  * kept around for the duration of the calculation. There may, in fact
  * be better ways to do this, but none occurred. */
 struct _GNCCurrencyAcc {
-  const gnc_commodity * currency;
+  gnc_commodity * currency;
   gnc_numeric assets;
   gnc_numeric profits;
 };
@@ -117,7 +117,7 @@ typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
  * currency, plus (eventually) one for the default currency
  * accumulation (like the EURO). */
 struct _GNCCurrencyItem {
-  const gnc_commodity * currency;
+  gnc_commodity * currency;
   GtkWidget *listitem;
   GtkWidget *assets_label;
   GtkWidget *profits_label;
@@ -132,7 +132,7 @@ typedef struct _GNCCurrencyItem GNCCurrencyItem;
  * only handles a single currency.
  */
 static GNCCurrencyItem *
-gnc_ui_build_currency_item(const gnc_commodity * currency)
+gnc_ui_build_currency_item(gnc_commodity * currency)
 {
   GtkWidget *label;
   GtkWidget *topbox;
@@ -200,7 +200,7 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
  * This will search the given list, and if no accumulator is found,
  * will allocate a fresh one. */
 static GNCCurrencyAcc *
-gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
+gnc_ui_get_currency_accumulator(GList **list, gnc_commodity * currency)
 {
   GList *current;
   GNCCurrencyAcc *found;
@@ -231,7 +231,7 @@ gnc_ui_get_currency_accumulator(GList **list, const gnc_commodity * currency)
  * the item into the list. */
 
 static GNCCurrencyItem *
-gnc_ui_get_currency_item(GList **list, const gnc_commodity * currency,
+gnc_ui_get_currency_item(GList **list, gnc_commodity * currency,
                          GtkWidget *holder)
 {
   GList *current;
@@ -261,9 +261,9 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   gnc_numeric amount;
   AccountGroup *children;
   GNCAccountType account_type;  
-  const gnc_commodity * account_currency;
-  const gnc_commodity * default_currency;
-  const gnc_commodity * euro_commodity;
+  gnc_commodity * account_currency;
+  gnc_commodity * default_currency;
+  gnc_commodity * euro_commodity;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyAcc *euro_accum = NULL;
   GList *list;
@@ -368,7 +368,7 @@ gnc_ui_refresh_statusbar (void)
   AccountGroup *group;
   char asset_string[256];
   char profit_string[256];
-  const gnc_commodity * default_currency;
+  gnc_commodity * default_currency;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyItem *currency_item;
   GList *currency_list;
@@ -1368,7 +1368,7 @@ gnc_main_create_summary_bar (GnomeApp *app, GNCMainInfo *main_info)
 {
   GtkWidget *summarybar;
   GtkWidget *combo_box;
-  const gnc_commodity * default_currency;
+  gnc_commodity * default_currency;
   GNCCurrencyItem *def_item;
 
   summarybar = gtk_hbox_new (FALSE, 5);

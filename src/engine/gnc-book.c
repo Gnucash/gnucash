@@ -44,12 +44,19 @@
 
 #include "Backend.h"
 #include "BackendP.h"
-#include "FileIO.h"
 #include "Group.h"
 #include "NetIO.h"
 #include "Scrub.h"
 #include "TransLog.h"
+#include "gnc-engine-util.h"
+#include "gnc-pricedb-p.h"
+#include "DateUtils.h"
+#include "io-gncxml.h"
+#include "io-gncbin.h"
+
+
 #include "gnc-book.h"
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
@@ -58,6 +65,7 @@ static short module = MOD_IO;
 struct _gnc_book
 {
   AccountGroup *topgroup;
+  GNCPriceDB *pricedb;
 
   /* the requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
@@ -88,7 +96,7 @@ struct _gnc_book
   Backend *backend;
 };
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 static void
 gnc_book_clear_error (GNCBook *book)
@@ -102,7 +110,7 @@ gnc_book_push_error (GNCBook *book, GNCBackendError err)
   book->last_err = err;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 GNCBackendError
 gnc_book_get_error (GNCBook * book)
@@ -121,31 +129,28 @@ gnc_book_pop_error (GNCBook * book)
   return err;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 static void
 gnc_book_init (GNCBook *book)
 {
-  if (!book) return;
+  if(!book) return;
 
-  book->topgroup = xaccMallocAccountGroup ();
+  book->topgroup = xaccMallocAccountGroup();
+  book->pricedb = gnc_pricedb_create();
   gnc_book_clear_error (book);
   book->lockfd = -1;
-};
+}
 
 GNCBook *
 gnc_book_new (void)
 {
-  GNCBook *book;
-
-  book = g_new0(GNCBook, 1);
-
-  gnc_book_init (book);
-
+  GNCBook *book = g_new0(GNCBook, 1);
+  gnc_book_init(book);
   return book;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 gnc_commodity_table*
 gnc_book_get_commodity_table(GNCBook *book)
@@ -167,7 +172,23 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
    book->topgroup = grp;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
+
+GNCPriceDB *
+gnc_book_get_pricedb(GNCBook *book)
+{
+  if(!book) return NULL;
+  return book->pricedb;
+}
+
+void
+gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
+{
+  if(!book) return;
+  book->pricedb = db;
+}
+
+/* ---------------------------------------------------------------------- */
 
 Backend * 
 xaccGNCBookGetBackend (GNCBook *book)
@@ -176,7 +197,7 @@ xaccGNCBookGetBackend (GNCBook *book)
    return book->backend;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 const char *
 gnc_book_get_file_path (GNCBook *book)
@@ -185,7 +206,7 @@ gnc_book_get_file_path (GNCBook *book)
    return book->fullpath;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 const char *
 gnc_book_get_url (GNCBook *book)
@@ -194,8 +215,16 @@ gnc_book_get_url (GNCBook *book)
    return book->book_id;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
+void
+gnc_book_mark_saved(GNCBook *book)
+{
+  xaccGroupMarkSaved(gnc_book_get_group(book));
+  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
+}
+
+/* ---------------------------------------------------------------------- */
 static gboolean
 gnc_book_get_file_lock (GNCBook *book)
 {
@@ -266,7 +295,104 @@ gnc_book_get_file_lock (GNCBook *book)
   return TRUE;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
+
+/* Load financial data from a file into the book, automtically
+   detecting the format of the file, if possible.  Return FALSE on
+   error, and set the error parameter to indicate what went wrong if
+   it's not NULL.  This function does not manage file locks in any
+   way. */
+
+static gboolean
+gnc_book_load_from_file(GNCBook *book)
+{
+  const gchar *name = gnc_book_get_file_path(book);
+  if(!name) return FALSE;
+
+  if(gnc_is_xml_data_file(name)) {
+    if(gnc_book_load_from_xml_file(book)) {
+      return TRUE;
+    } else {
+      gnc_book_push_error(book, ERR_BACKEND_MISC);
+      return FALSE;
+    }
+  } else {
+    /* presume it's an old-style binary file */
+    GNCBackendError error;
+
+    gnc_book_load_from_binfile(book);
+    error = gnc_book_get_binfile_io_error();
+
+    if(error == ERR_BACKEND_NO_ERR) {
+      return TRUE;
+    } else {
+      gnc_book_push_error(book, error);
+      return FALSE;
+    }
+  }
+  /* Should never get here */
+  gnc_book_push_error(book, ERR_BACKEND_MISC);
+  return FALSE;
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* Write the financial data in a book to a file, returning FALSE on
+   error and setting the error_result to indicate what went wrong if
+   it's not NULL.  This function does not manage file locks in any
+   way.
+
+  If make_backup is true, write out a time-stamped copy of the file
+  into the same directory as the indicated file, with a filename of
+  "file.YYYYMMDDHHMMSS.xac" where YYYYMMDDHHMMSS is replaced with the
+  current year/month/day/hour/minute/second. */
+
+static gboolean
+gnc_book_write_to_file(GNCBook *book,
+                       gboolean make_backup)
+{
+  const gchar *datafile = gnc_book_get_file_path(book);
+
+  if(!gnc_book_write_to_xml_file(book, datafile)) {
+    gnc_book_push_error(book, ERR_BACKEND_MISC);
+    return FALSE;
+  }
+
+  if(!make_backup) {
+    return TRUE;
+  } else {
+    char * timestamp;
+    int filenamelen;
+    char * backup;
+    
+    /* also, write a time-stamped backup file */
+    /* tag each filename with a timestamp */
+    timestamp = xaccDateUtilGetStampNow ();
+    
+    filenamelen = strlen (datafile) + strlen (timestamp) + 6;
+    
+    backup = (char *) malloc (filenamelen);
+    strcpy (backup, datafile);
+    strcat (backup, ".");
+    strcat (backup, timestamp);
+    strcat (backup, ".xac");
+    free (timestamp);
+    
+    if(gnc_book_write_to_xml_file(book, backup)) {
+      free (backup);
+      return TRUE;
+    } else {
+      gnc_book_push_error(book, ERR_BACKEND_MISC);
+      free (backup);
+      return FALSE;
+    }
+  }
+  /* Should never get here */
+  gnc_book_push_error(book, ERR_BACKEND_MISC);
+  return FALSE;
+}
+
+/* ---------------------------------------------------------------------- */
 
 static gboolean
 gnc_book_begin_file (GNCBook *book, const char * filefrag,
@@ -305,7 +431,7 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
   return TRUE;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 gboolean
 gnc_book_begin (GNCBook *book, const char * book_id, 
@@ -450,12 +576,12 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   return rc;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 gboolean
 gnc_book_load (GNCBook *book)
 {
-  GNCBackendError retval;
+  GNCBackendError backend_err;
 
   if (!book) return FALSE;
   if (!book->book_id) return FALSE;
@@ -479,25 +605,25 @@ gnc_book_load (GNCBook *book)
     xaccGroupMarkDoFree (book->topgroup);
     xaccFreeAccountGroup (book->topgroup);
     book->topgroup = NULL;
+    gnc_pricedb_destroy(book->pricedb);
+    book->pricedb = NULL;
 
     xaccLogSetBaseName(book->fullpath);
+
     gnc_book_clear_error (book);
-    book->topgroup = xaccReadAccountGroupFile (book->fullpath,
-                                               &retval);
-    if (ERR_BACKEND_NO_ERR != retval) gnc_book_push_error (book, retval);
+    gnc_book_load_from_file(book);
+
     xaccLogEnable();
 
-    if (!book->topgroup || (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR))
-    {
-      return FALSE;
-    }
+    if (!book->topgroup) return FALSE;
+    if (!book->pricedb) return FALSE;
+    if (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR) return FALSE;
 
     xaccGroupScrubSplits (book->topgroup);
 
     LEAVE("book_id=%s", book->book_id);
     return TRUE;
   }
-
   else if ((strncmp(book->book_id, "http://", 7) == 0) ||
            (strncmp(book->book_id, "https://", 8) == 0) ||
            (strncmp(book->book_id, "postgres://", 11) == 0))
@@ -545,7 +671,19 @@ gnc_book_load (GNCBook *book)
   }  
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
+
+gboolean
+gnc_book_not_saved(GNCBook *book)
+{
+  if(!book) return FALSE;
+
+  return(xaccGroupNotSaved(book->topgroup)
+         ||
+         gnc_pricedb_dirty(book->pricedb));
+}
+
+/* ---------------------------------------------------------------------- */
 
 gboolean
 gnc_book_save_may_clobber_data (GNCBook *book)
@@ -562,12 +700,11 @@ gnc_book_save_may_clobber_data (GNCBook *book)
   return FALSE;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 void
 gnc_book_save (GNCBook *book)
 {
-  GNCBackendError retval;
   Backend *be;
   if (!book) return;
 
@@ -579,27 +716,26 @@ gnc_book_save (GNCBook *book)
    * then give the user the option to save to disk. 
    */
   be = book->backend;
-  if (be && be->sync && book->topgroup)
-  {
-     /* if invoked as SaveAs(), then backend not yet set */
-     xaccGroupSetBackend (book->topgroup, be);
+  if (be && be->sync && book->topgroup) {
+    GNCBackendError err;
+    
+    /* if invoked as SaveAs(), then backend not yet set */
+    xaccGroupSetBackend (book->topgroup, be);
 
-     (be->sync)(be, book->topgroup);
-     retval = xaccBackendGetError(be);
-
-     if (ERR_BACKEND_NO_ERR != retval) 
-     {
-       gnc_book_push_error (book, retval);
-
-       /* we close the backend here ... isn't this a bit harsh ??? */
-       if (be->book_end)
-       {
-          (be->book_end)(be);
-       }
-     }
-     return;
+    (be->sync)(be, book->topgroup);
+    err = xaccBackendGetError(be);
+    
+    if (ERR_BACKEND_NO_ERR != err) {
+      gnc_book_push_error (book, err);
+      
+      /* we close the backend here ... isn't this a bit harsh ??? */
+      if (be->book_end) {
+        (be->book_end)(be);
+      }
+    }
+    return;
   } 
-
+  
   /* if the fullpath doesn't exist, either the user failed to initialize,
    * or the lockfile was never obtained. Either way, we can't write. */
   gnc_book_clear_error (book);
@@ -610,16 +746,15 @@ gnc_book_save (GNCBook *book)
     return;
   }
 
-  if (book->topgroup)
-  {
-    xaccWriteAccountGroupFile (book->fullpath, book->topgroup,
-                                               TRUE, &retval);
-    if (ERR_BACKEND_NO_ERR != retval) gnc_book_push_error (book, retval);
+  if (book->topgroup) {
+    if(!gnc_book_write_to_file(book, TRUE)) {
+      gnc_book_push_error (book, ERR_BACKEND_MISC);
+    }
   }
   LEAVE(" ");
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 void
 gnc_book_end (GNCBook *book)
@@ -677,6 +812,10 @@ gnc_book_destroy (GNCBook *book)
 
   xaccFreeAccountGroup (book->topgroup);
   book->topgroup = NULL;
+
+  gnc_pricedb_destroy (book->pricedb);
+  book->pricedb = NULL;
+
   xaccLogEnable();
 
   g_free (book);
@@ -684,7 +823,7 @@ gnc_book_destroy (GNCBook *book)
 }
 
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 /* 
  * If $HOME/.gnucash/data directory doesn't exist, then create it.
  */
@@ -723,7 +862,7 @@ MakeHomeDir (void)
   g_free (data);
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 /* XXX hack alert -- we should be yanking this out of some config file */
 static char * searchpaths[] =
 {
@@ -858,7 +997,7 @@ xaccResolveFilePath (const char * filefrag)
   return NULL;
 }
 
-/* ============================================================== */
+/* ---------------------------------------------------------------------- */
 
 char * 
 xaccResolveURL (const char * pathfrag)
@@ -886,5 +1025,3 @@ xaccResolveURL (const char * pathfrag)
 
   return (xaccResolveFilePath (pathfrag));
 }
-
-/* ==================== END OF FILE ================== */

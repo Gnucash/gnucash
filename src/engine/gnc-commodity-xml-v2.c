@@ -141,5 +141,5 @@ gnc_commodity_end_handler(gpointer data_for_children,
 sixtp*
 gnc_commodity_sixtp_parser_create(void)
 {
-    return sixtp_dom_parser_new(gnc_commodity_end_handler);
+    return sixtp_dom_parser_new(gnc_commodity_end_handler, NULL, NULL);
 }

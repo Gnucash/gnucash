@@ -253,8 +253,7 @@ int           xaccTransCountSplits (Transaction *trans);
  * */
 
 #define xaccTransGetCurrency xaccTransFindCommonCurrency
-void xaccTransSetCurrency (Transaction *trans, 
-                           const gnc_commodity *curr);
+void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 
 /* ---------
  * and now for the 'old' routines 
@@ -281,7 +280,7 @@ gboolean xaccIsCommonCurrency(const gnc_commodity * currency_1,
  *    If all of the splits share both a common security and a common currency,
  *    then the string name for the currency is returned.
  */
-const gnc_commodity * xaccTransFindCommonCurrency (Transaction *trans);
+gnc_commodity * xaccTransFindCommonCurrency (Transaction *trans);
 
 /* The xaccTransIsCommonCurrency () method compares the input commodity
  *    to the currency/security denominations of all splits in the
@@ -299,8 +298,8 @@ const gnc_commodity * xaccTransFindCommonCurrency (Transaction *trans);
  *    common. This routine is useful in dealing with securities of
  *    differing types as they are moved across accounts.
  */
-const gnc_commodity * xaccTransIsCommonCurrency(Transaction *trans,
-                                                const gnc_commodity * curr);
+gnc_commodity * xaccTransIsCommonCurrency(Transaction *trans,
+                                          gnc_commodity *curr);
 
 /* The xaccTransIsCommonExclSCurrency () method compares the input
  *    string to the currency/security denominations of all splits in
@@ -312,9 +311,9 @@ const gnc_commodity * xaccTransIsCommonCurrency(Transaction *trans,
  *    that split is of no relevance when determining whether the new
  *    entry has a common currency with the other splits.
  */
-const gnc_commodity * 
+gnc_commodity * 
 xaccTransIsCommonExclSCurrency (Transaction *trans, 
-                                const gnc_commodity * currency, 
+                                gnc_commodity * currency, 
                                 Split *excl_split);
 
 /* The xaccTransGetImbalance() method returns the total value of the

@@ -54,10 +54,11 @@
 #define __GNC_BOOK_H__
 
 #include "Group.h"
-#include "FileIO.h"
+#include "Backend.h"
+#include "gnc-pricedb.h"
 
+/** TYPES **********************************************************/
 
-/** TYPEDEFS ********************************************************/
 typedef struct _gnc_book GNCBook;
 
 /** PROTOTYPES ******************************************************/
@@ -116,14 +117,9 @@ gboolean gnc_book_load (GNCBook *book);
 GNCBackendError gnc_book_get_error (GNCBook *book);
 GNCBackendError gnc_book_pop_error (GNCBook *book);
 
-/* The gnc_book_get_group() method will return the current top-level 
- *    account group.
- * 
- * The gnc_book_set_group() method will set the topgroup to a new value.
- */
-AccountGroup * gnc_book_get_group (GNCBook *book);
-void           gnc_book_set_group (GNCBook *book, AccountGroup *topgroup);
 
+AccountGroup *gnc_book_get_group (GNCBook *book);
+GNCPriceDB   *gnc_book_get_pricedb (GNCBook *book);
 
 /*
  * gnc_book_get_commodity_table returns the commodity table associated with
@@ -147,6 +143,12 @@ gnc_commodity_table* gnc_book_get_commodity_table(GNCBook *book);
  */
 const char * gnc_book_get_file_path (GNCBook *book);
 const char * gnc_book_get_url (GNCBook *book);
+
+/*
+ * The gnc_book_not_saved() subroutine will return TRUE
+ *    if any data in the book hasn't been saved to long-term storage.
+ */
+gboolean gnc_book_not_saved(GNCBook *book);
 
 /* FIXME: This isn't as thorough as we might want it to be... */
 gboolean gnc_book_save_may_clobber_data (GNCBook *book);

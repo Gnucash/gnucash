@@ -215,23 +215,23 @@ const char *   xaccAccountGetNotes (Account *account);
  * amount of the Account's commodity involved) into the Transaction's
  * balancing currency.  */
 #define xaccAccountGetCommodity xaccAccountGetEffectiveSecurity
-void xaccAccountSetCommodity (Account *account, const gnc_commodity *comm);
+void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 
 /* Soon-to-be-deprecated currency/security access routines.
  * The future API will associate only one thing with an account:
  * the 'commodity'.  Use xaccAccountGetCommodity() to fetch it.
  */
 /* these two funcs take control of thier gnc_commodity args.  Don't free */
-void xaccAccountSetCurrency (Account *account, const gnc_commodity *currency);
-void xaccAccountSetSecurity (Account *account, const gnc_commodity *security);
+void xaccAccountSetCurrency (Account *account, gnc_commodity *currency);
+void xaccAccountSetSecurity (Account *account, gnc_commodity *security);
 void xaccAccountSetCurrencySCU (Account *account, int frac);
 void xaccAccountSetSecuritySCU (Account *account, int frac);
 int  xaccAccountGetCurrencySCU (Account *account);
 int  xaccAccountGetSecuritySCU (Account *account);
 
-const gnc_commodity * xaccAccountGetCurrency (Account *account);
-const gnc_commodity * xaccAccountGetSecurity (Account *account);
-const gnc_commodity * xaccAccountGetEffectiveSecurity (Account *account);
+gnc_commodity * xaccAccountGetCurrency (Account *account);
+gnc_commodity * xaccAccountGetSecurity (Account *account);
+gnc_commodity * xaccAccountGetEffectiveSecurity (Account *account);
 
 AccountGroup * xaccAccountGetChildren (Account *account);
 AccountGroup * xaccAccountGetParent (Account *account);

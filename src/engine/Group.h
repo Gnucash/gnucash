@@ -70,6 +70,7 @@ void    xaccGroupMergeAccounts (AccountGroup *grp);
 gboolean xaccGroupNotSaved  (AccountGroup *grp);
 void     xaccGroupMarkSaved (AccountGroup *grp);
 void     xaccGroupMarkNotSaved (AccountGroup *grp);
+
 void     xaccGroupMarkDoFree (AccountGroup *grp);
 
 /*

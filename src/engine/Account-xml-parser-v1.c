@@ -132,14 +132,14 @@ account_restore_end_handler(gpointer data_for_children,
 
 static gboolean
 account_restore_after_child_handler(gpointer data_for_children,
-                           GSList* data_from_children,
-                           GSList* sibling_data,
-                           gpointer parent_data,
-                           gpointer global_data,
-                           gpointer *result,
-                           const gchar *tag,
-                           const gchar *child_tag,
-                           sixtp_child_result *child_result)
+                                    GSList* data_from_children,
+                                    GSList* sibling_data,
+                                    gpointer parent_data,
+                                    gpointer global_data,
+                                    gpointer *result,
+                                    const gchar *tag,
+                                    const gchar *child_tag,
+                                    sixtp_child_result *child_result)
 {
   Account *a = (Account *) data_for_children;
   g_return_val_if_fail(a, FALSE);
@@ -172,12 +172,12 @@ account_restore_after_child_handler(gpointer data_for_children,
 
 static void
 account_restore_fail_handler(gpointer data_for_children,
-                         GSList* data_from_children,
-                         GSList* sibling_data,
-                         gpointer parent_data,
-                         gpointer global_data,
-                         gpointer *result,
-                         const gchar *tag)
+                             GSList* data_from_children,
+                             GSList* sibling_data,
+                             gpointer parent_data,
+                             gpointer global_data,
+                             gpointer *result,
+                             const gchar *tag)
 {
   Account *acc = (Account *) *result;
   if(acc) xaccFreeAccount(acc);

@@ -16,9 +16,12 @@
 #include "gnc-xml-helper.h"
 #include "Account.h"
 #include "Query.h"
+#include "gnc-pricedb.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
 
 #include "io-gncxml.h"
+#include "io-gncxml-p.h"
 
 #include "sixtp.h"
 #include "sixtp-stack.h"
@@ -48,33 +51,7 @@
 
 */
 
-/* static short module = MOD_IO; */
-
-/* ========================================================== */
-
-typedef enum {
-  GNC_PARSE_ERR_NONE,
-  GNC_PARSE_ERR_BAD_VERSION,
-} GNCParseErr;
-
-typedef struct {
-  /* have we gotten the file version yet? */
-  gboolean seen_version;
-  gint64 version;
-
-  /* top level <gnc-data> parser - we need this so we can set it up
-     after we see the file version. */
-  sixtp *gnc_parser;
-
-  /* The account group */
-  AccountGroup *account_group;
-
-  /* The query */
-  Query *query;
-  
-  GNCParseErr error;
-} GNCParseStatus;
-
+static short module = MOD_IO;
 
 /* ================================================================= */
 /* <version> (lineage <gnc>)
@@ -283,6 +260,7 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
   global_parse_status->seen_version = FALSE;
   global_parse_status->gnc_parser = gnc_pr;
   global_parse_status->account_group = NULL;
+  global_parse_status->pricedb = NULL;
   global_parse_status->query = NULL;
   global_parse_status->error = GNC_PARSE_ERR_NONE;
 
@@ -292,16 +270,18 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 /* ================================================================== */
 
 gboolean
-gncxml_read(const gchar *filename,
-            AccountGroup **result_group) 
+gnc_book_load_from_xml_file(GNCBook *book)
 {
   gboolean parse_ok;
   gpointer parse_result = NULL;
   sixtp *top_level_pr;
   GNCParseStatus global_parse_status;
+  const gchar *filename;
 
+  g_return_val_if_fail(book, FALSE);
+
+  filename = gnc_book_get_file_path(book);
   g_return_val_if_fail(filename, FALSE);
-  g_return_val_if_fail(result_group, FALSE);
 
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
   g_return_val_if_fail(top_level_pr, FALSE);
@@ -314,8 +294,29 @@ gncxml_read(const gchar *filename,
   
   sixtp_destroy(top_level_pr);
 
-  if(parse_ok && global_parse_status.account_group) {
-    *result_group = global_parse_status.account_group;
+  if(parse_ok) {
+    if(!global_parse_status.account_group)
+      return FALSE;
+
+    {
+      AccountGroup *g = gnc_book_get_group(book);
+
+      if(g) xaccFreeAccountGroup(g);
+      gnc_book_set_group(book, global_parse_status.account_group);
+    }
+
+    if(global_parse_status.pricedb)
+    {
+      GNCPriceDB *db = gnc_book_get_pricedb(book);
+
+      if(db) gnc_pricedb_destroy(db);
+
+      gnc_book_set_pricedb(book, global_parse_status.pricedb);
+    }
+    else
+    {
+      gnc_book_set_pricedb(book, gnc_pricedb_create());
+    }
     return(TRUE);
   } else {
     return(FALSE);
@@ -323,6 +324,40 @@ gncxml_read(const gchar *filename,
 }
 
 /* ================================================================== */
+
+gboolean
+gnc_is_xml_data_file(const gchar *filename) 
+{
+  FILE *f = NULL;
+  char first_chunk[256];
+  const char* cursor = NULL;
+  ssize_t num_read;
+  gboolean result = FALSE;
+
+  g_return_val_if_fail(filename, result);
+
+  f = fopen(filename, "r");
+  g_return_val_if_fail(f, result);
+
+  num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
+  if(num_read == 0) goto cleanup_and_exit;
+  first_chunk[num_read] = '\0';
+
+  cursor = first_chunk;
+  while(*cursor && isspace(*cursor)) cursor++;
+  
+  if(cursor && strncmp(cursor, "<?xml", 5) == 0) {
+    result = TRUE;
+  }
+
+ cleanup_and_exit:
+  if(f) fclose(f);
+  return(result);
+}
+
+/* ================================================================== */
+
+#if 0
 
 static GNCParseStatus*
 read_from_buf(char *bufp, int bufsz)
@@ -389,36 +424,6 @@ gncxml_read_query (char * bufp, int bufsz)
     return ret;
 }
 
-/* ================================================================== */
-
-gboolean
-is_gncxml_file(const gchar *filename) 
-{
-  FILE *f = NULL;
-  char first_chunk[256];
-  const char* cursor = NULL;
-  ssize_t num_read;
-  gboolean result = FALSE;
-
-  g_return_val_if_fail(filename, result);
-
-  f = fopen(filename, "r");
-  g_return_val_if_fail(f, result);
-
-  num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
-  if(num_read == 0) goto cleanup_and_exit;
-  first_chunk[num_read] = '\0';
-
-  cursor = first_chunk;
-  while(*cursor && isspace(*cursor)) cursor++;
-  
-  if(cursor && strncmp(cursor, "<?xml", 5) == 0) {
-    result = TRUE;
-  }
-
- cleanup_and_exit:
-  if(f) fclose(f);
-  return(result);
-}
+#endif
 
 /* ======================= END OF FILE ============================== */

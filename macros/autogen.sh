@@ -168,7 +168,7 @@ do
   fi
 done
 
-conf_flags="--enable-maintainer-mode --enable-compile-warnings" #--enable-iso-c
+conf_flags="--enable-maintainer-mode" # --enable-compile-warnings --enable-iso-c
 
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure $conf_flags "$@" ...

@@ -496,7 +496,7 @@ close_handler (gpointer user_data)
 FinCalcDialog *
 gnc_ui_fincalc_dialog_create(void)
 {
-  const gnc_commodity *commodity;
+  gnc_commodity *commodity;
   GNCPrintAmountInfo print_info;
   FinCalcDialog *fcd;
   GtkObject *fcdo;

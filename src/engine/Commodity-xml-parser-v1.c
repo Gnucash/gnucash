@@ -95,14 +95,14 @@ commodity_restore_start_handler(GSList* sibling_data, gpointer parent_data,
 
 static gboolean
 commodity_restore_after_child_handler(gpointer data_for_children,
-                           GSList* data_from_children,
-                           GSList* sibling_data,
-                           gpointer parent_data,
-                           gpointer global_data,
-                           gpointer *result,
-                           const gchar *tag,
-                           const gchar *child_tag,
-                           sixtp_child_result *child_result)
+                                      GSList* data_from_children,
+                                      GSList* sibling_data,
+                                      gpointer parent_data,
+                                      gpointer global_data,
+                                      gpointer *result,
+                                      const gchar *tag,
+                                      const gchar *child_tag,
+                                      sixtp_child_result *child_result)
 {
   CommodityParseInfo *cpi = (CommodityParseInfo *) data_for_children;
 
@@ -367,31 +367,37 @@ generic_gnc_commodity_lookup_parser_new(void)
 /* WRITING */
 
 gboolean
-xml_add_commodity_ref(xmlNodePtr p, const char *tag, const gnc_commodity *c) {
+xml_add_commodity_ref(xmlNodePtr p, const char *tag, const gnc_commodity *c)
+{
   xmlNodePtr c_xml = NULL;
-  gboolean ok = FALSE;
+  xmlNodePtr tmp_xml = NULL;
+  const gchar *namestr;
+  const gchar *idstr;
 
-  if(p && tag) {
-    if(!c) {
-      ok = TRUE;
-    } else {
-      c_xml= xmlNewTextChild(p, NULL, tag, NULL);
-      if(c_xml) {
-        const gchar *namestr = gnc_commodity_get_namespace(c);
-        if(namestr) {
-          xmlNodePtr namespace_xml = xmlNewTextChild(c_xml, NULL, "space", namestr);
-          if(namespace_xml) {
-            const gchar *idstr = gnc_commodity_get_mnemonic(c);
-            xmlNodePtr id_xml = xmlNewTextChild(c_xml, NULL, "id", idstr);
-            if(id_xml) ok = TRUE;
-          }
-        }
-      }
-    }
-  }
+  if (!(p && tag)) return FALSE;
+  if (!c) return TRUE;
+
+  namestr = gnc_commodity_get_namespace(c);
+  idstr = gnc_commodity_get_mnemonic(c);
   
-  if(!ok && c_xml) xmlFreeNode(c_xml);
-  return(TRUE);
+  if(!(namestr && idstr)) return FALSE;
+
+  c_xml= xmlNewNode(NULL, tag);
+  if(!c_xml) return FALSE;
+
+  tmp_xml = xmlNewTextChild(c_xml, NULL, "space", namestr);
+  if(!tmp_xml) {
+    xmlFreeNode(c_xml);
+    return FALSE;
+  }
+  tmp_xml = xmlNewTextChild(c_xml, NULL, "id", idstr);
+  if(!tmp_xml) {
+    xmlFreeNode(c_xml);
+    return FALSE;
+  }
+
+  xmlAddChild(p, c_xml);
+  return TRUE;
 }
 
 /* ============================================================== */

@@ -1,11 +1,20 @@
+#include "config.h"
 
+#include <string.h>
+
+#include "gnc-engine-util.h"
+#include "gnc-pricedb.h"
+#include "io-gncxml-p.h"
 #include "sixtp.h"
-
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 
 #include "Group.h"
 #include "TransLog.h"
+
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_IO;
 
 /****************************************************************************/
 /****************************************************************************/
@@ -45,6 +54,38 @@ ledger_data_start_handler(GSList* sibling_data, gpointer parent_data,
 
   *data_for_children = ag;
   return(ag != NULL);
+}
+
+static gboolean
+ledger_data_after_child_handler(gpointer data_for_children,
+                                GSList* data_from_children,
+                                GSList* sibling_data,
+                                gpointer parent_data,
+                                gpointer global_data,
+                                gpointer *result,
+                                const gchar *tag,
+                                const gchar *child_tag,
+                                sixtp_child_result *child_result)
+{
+  if(!child_result) return(TRUE);
+
+  /* if we see the pricedb, deal with it */
+  if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(TRUE);
+  if(strcmp(child_result->tag, "pricedb") == 0) {
+    GNCPriceDB *pdb = (GNCPriceDB *) child_result->data;
+    GNCParseStatus *status = (GNCParseStatus *) global_data;
+
+    g_return_val_if_fail(pdb, FALSE);
+    g_return_val_if_fail(status, FALSE);
+
+    if(status->pricedb) {
+      PERR("hit pricedb twice in data file.");
+      return FALSE;
+    }
+    status->pricedb = pdb;
+    child_result->should_cleanup = FALSE;
+  }
+  return(TRUE);
 }
 
 static gboolean
@@ -111,6 +152,7 @@ ledger_data_parser_new(void)
            sixtp_new(), FALSE,
            SIXTP_START_HANDLER_ID, ledger_data_start_handler,
            SIXTP_CHARACTERS_HANDLER_ID, allow_and_ignore_only_whitespace,
+           SIXTP_AFTER_CHILD_HANDLER_ID, ledger_data_after_child_handler,
            SIXTP_END_HANDLER_ID, ledger_data_end_handler,
            SIXTP_CLEANUP_RESULT_ID, ledger_data_result_cleanup,
            SIXTP_FAIL_HANDLER_ID, ledger_data_fail_handler,
@@ -123,6 +165,7 @@ ledger_data_parser_new(void)
   if(!sixtp_add_some_sub_parsers(
          top_level, TRUE,
          "commodity", commodity_restore_parser_new(),
+         "pricedb", gnc_pricedb_parser_new(),
          "account", gnc_account_parser_new(),
          "transaction", gnc_transaction_parser_new(),
          0))

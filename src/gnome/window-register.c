@@ -2113,7 +2113,7 @@ static void
 gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 {
   RegWindow *regData = data;
-  const gnc_commodity * currency;
+  gnc_commodity * currency;
   GNCPrintAmountInfo print_info;
   gnc_numeric amount;
   Account *leader;

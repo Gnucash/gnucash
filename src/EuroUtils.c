@@ -67,8 +67,7 @@ static gnc_euro_rate_struct _gnc_euro_rate_[] =
 };
 
 static int 
-_gnc_euro_rate_compare_(const void * key, 
-                        const void * value)
+_gnc_euro_rate_compare_(const void * key, const void * value)
 {
   const gnc_commodity * curr = key;
   const gnc_euro_rate_struct * euro = value;
@@ -83,7 +82,8 @@ _gnc_euro_rate_compare_(const void * key,
 /* ------------------------------------------------------ */
 
 gboolean
-gnc_is_euro_currency(const gnc_commodity * currency) {
+gnc_is_euro_currency(gnc_commodity * currency)
+{
 
   gnc_euro_rate_struct *result;
   const char *namespace;
@@ -113,7 +113,7 @@ gnc_is_euro_currency(const gnc_commodity * currency) {
 /* ------------------------------------------------------ */
 
 gnc_numeric
-gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value) {
+gnc_convert_to_euro(gnc_commodity * currency, gnc_numeric value) {
 
   gnc_euro_rate_struct *result;
   const char *namespace;
@@ -150,7 +150,7 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value) {
 /* ------------------------------------------------------ */
 
 gnc_numeric
-gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value) {
+gnc_convert_from_euro(gnc_commodity * currency, gnc_numeric value) {
 
   gnc_euro_rate_struct * result;
   const char *namespace;
@@ -186,7 +186,7 @@ gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value) {
 
 /* ------------------------------------------------------ */
 
-const gnc_commodity *
+gnc_commodity *
 gnc_get_euro (void)
 {
   return gnc_commodity_table_lookup (gnc_engine_commodities (),

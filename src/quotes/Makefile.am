@@ -1,5 +1,6 @@
 
 bin_SCRIPTS = gnc-prices
+pkgdata_SCRIPTS=price-quote-helper
 
 perllibdir = ${GNC_LIBDIR}/perl
 
@@ -8,8 +9,8 @@ perlsharedir = ${GNC_SHAREDIR}/perl
 EXTRA_DIST = \
   .cvsignore \
   Quote_example.pl \
-  gnc-prices-2.in \
   gnc-prices.in \
+  price-qupte-helper.in \
   value_portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution
@@ -26,3 +27,13 @@ gnc-prices: gnc-prices.in
 	mv $@.tmp $@
 
 CLEANFILES += gnc-prices
+
+price-quote-helper: price-quote-helper.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
+CLEANFILES += price-quote-helper

@@ -28,7 +28,6 @@
 #include "Backend.h"
 #include "FileBox.h"
 #include "FileDialog.h"
-#include "FileIO.h"
 #include "Group.h"
 #include "file-history.h"
 #include "gnc-component-manager.h"
@@ -37,6 +36,8 @@
 #include "gnc-ui.h"
 #include "messages.h"
 
+/* FIXME: this is wrong.  This file should not need this include. */
+#include "gnc-book-p.h"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -113,11 +114,6 @@ show_book_error (GNCBackendError io_error, const char *newfile)
       if (gnc_verify_dialog (fmt, TRUE)) { uh_oh = FALSE; }
       break;
 
-    case ERR_FILEIO_MISC:
-      fmt = _("There was an error during file I/O.");
-      gnc_error_dialog (fmt);
-      break;
-
     case ERR_SQL_BAD_LOCATION:
       fmt = _("Can't parse the database URL\n   %s\n");
       buf = g_strdup_printf (fmt, newfile);
@@ -192,7 +188,6 @@ void
 gncFileNew (void)
 {
   GNCBook *book;
-  AccountGroup *group;
 
   /* If user attempts to start a new session before saving results of
    * the last one, prompt them to clean up their act. */
@@ -200,7 +195,6 @@ gncFileNew (void)
     return;
 
   book = gncGetCurrentBook ();
-  group = gnc_book_get_group (book);
 
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
@@ -221,14 +215,8 @@ gncFileNew (void)
 gboolean
 gncFileQuerySave (void)
 {
-  GNCBook *book;
-  AccountGroup *group;
-  gncUIWidget app;
-
-  book = gncGetCurrentBook ();
-  group = gnc_book_get_group (book);
-
-  app = gnc_get_ui_data ();
+  GNCBook *book = gncGetCurrentBook();
+  gncUIWidget app = gnc_get_ui_data();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -236,8 +224,7 @@ gncFileQuerySave (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (xaccGroupNotSaved (group))
-  {
+  while (gnc_book_not_saved(book)) {
     GNCVerifyResult result;
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
@@ -386,7 +373,6 @@ gncPostFileOpen (const char * filename)
                gh_eval_str("gnc:*file-opened-hook*"),
                gh_str02scm(newfile)); 
   }
-
   g_free (newfile);
 
   gnc_engine_resume_events ();
@@ -469,7 +455,7 @@ gncFileSave (void)
 
   gnc_history_add_file (newfile);
 
-  xaccGroupMarkSaved (gnc_book_get_group (book));
+  gnc_book_mark_saved(book);
   LEAVE (" ");
 }
 
@@ -479,6 +465,7 @@ void
 gncFileSaveAs (void)
 {
   AccountGroup *group;
+  GNCPriceDB *pdb;
   GNCBook *new_book;
   GNCBook *book;
   const char *filename;
@@ -510,7 +497,8 @@ gncFileSaveAs (void)
   }
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
-  group = gnc_book_get_group (book);
+  group = gnc_book_get_group(book);
+  pdb = gnc_book_get_pricedb(book);
 
   new_book = gnc_book_new ();
   gnc_book_begin (new_book, newfile, FALSE, FALSE);
@@ -552,7 +540,8 @@ gncFileSaveAs (void)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  gnc_book_set_group (book, NULL);
+  gnc_book_set_group(book, NULL);
+  gnc_book_set_pricedb(book, NULL);
   gnc_book_destroy (book);
   current_book = new_book;
 
@@ -581,7 +570,8 @@ gncFileSaveAs (void)
   }
 
   /* OK, save the data to the file ... */
-  gnc_book_set_group (new_book, group);
+  gnc_book_set_group(new_book, group);
+  gnc_book_set_pricedb(new_book, pdb);
   gncFileSave ();
 
   g_free (newfile);

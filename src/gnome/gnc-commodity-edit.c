@@ -141,7 +141,7 @@ static void
 select_currency_cb(GtkButton * button, gpointer user_data)
 {
         GNCCommodityEdit *gce = user_data;
-        const gnc_commodity *new_commodity;
+        gnc_commodity *new_commodity;
         GtkWidget *toplevel;
 
         toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
@@ -202,7 +202,7 @@ gnc_commodity_edit_new (void)
  */
 void
 gnc_commodity_edit_set_commodity (GNCCommodityEdit *gce,
-                                  const gnc_commodity *commodity)
+                                  gnc_commodity *commodity)
 {
         const char *text;
 
@@ -225,7 +225,7 @@ gnc_commodity_edit_set_commodity (GNCCommodityEdit *gce,
  *
  * Returns the commodity currently selected by the widget.
  */
-const gnc_commodity *
+gnc_commodity *
 gnc_commodity_edit_get_commodity (GNCCommodityEdit *gce)
 {
         g_return_val_if_fail(gce != NULL, NULL);

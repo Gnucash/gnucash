@@ -11,6 +11,19 @@
 #include "kvp_frame.h"
 
 xmlNodePtr
+text_to_dom_tree(const char *tag, const char *str)
+{
+  xmlNodePtr result;
+
+  g_return_val_if_fail(tag, NULL);
+  g_return_val_if_fail(str, NULL);
+  result = xmlNewNode(NULL, tag);
+  g_return_val_if_fail(result, NULL);
+  xmlNodeAddContent(result, str);
+  return result;
+}
+
+xmlNodePtr
 guid_to_dom_tree(const char *tag, const GUID* gid)
 {
     char *guid_str;

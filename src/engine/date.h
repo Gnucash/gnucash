@@ -77,10 +77,10 @@ typedef struct timespec64 Timespec;
 
 /** Prototypes ******************************************************/
 
-/* The timespec_cmp() routine returns 0 if ta equals tb, 
- *     -1 if ta<tb, and +1 if ta>tb 
- */
-int timespec_cmp (const Timespec *ta, const Timespec *tb);
+/* strict equality */
+gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
+/* comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
+int      timespec_cmp(const Timespec *ta, const Timespec *tb);
 
 void setDateFormat(DateFormat df);
 

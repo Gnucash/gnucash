@@ -59,8 +59,10 @@ struct _xmlend {
 Backend *xmlendNew (void);
 
 
+#if 0
+
 /* ==================================================================== */
-/* Perform vaious validty checks on the reply:
+/* Perform various validty checks on the reply:
  *   -- was the content type text/gnc-xml ?
  *   -- was there a reply body, of positive length?
  *   -- did the body appear to contain gnc xml data?
@@ -202,7 +204,8 @@ xmlbeBookLoad (Backend *bend)
   if (0 >= len) return NULL;
 
   bufp = ghttp_get_body(request);
-  grp = gncxml_read_from_buf ((char *)bufp, len);
+
+  grp = gnc_book_load_from_buf ((char *)bufp, len);
 
   LEAVE(" ");
   return grp;
@@ -272,9 +275,12 @@ xmlbeBookEnd (Backend *b)
 
 /* ==================================================================== */
 
+#endif
+
 Backend *
 xmlendNew (void)
 {
+#if 0
   XMLBackend *be;
 
   be = (XMLBackend *) malloc (sizeof (XMLBackend));
@@ -300,7 +306,8 @@ xmlendNew (void)
   be->query_url = NULL;
 
   return (Backend *) be;
+#endif
+  return NULL;
 }
-
 
 /* ============================== END OF FILE ======================== */

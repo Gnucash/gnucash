@@ -1,8 +1,5 @@
 /********************************************************************\
- * FileIOP.h -- private header for binary file i/o                  *
- *              datafile for gnucash (X-Accountant)                 *
- * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * gnc-book-p.h -- private functions for gnc books.                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,11 +17,25 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
-#ifndef __XACC_FILEIO_P_H__
-#define __XACC_FILEIO_P_H__
+/*
+ * HISTORY:
+ * Created 2001 by Rob Browning
+ * Copyright (c) 2001 Rob Browning
+ */
 
+#ifndef __GNC_BOOK_P_H__
+#define __GNC_BOOK_P_H__
+
+#include "gnc-book.h"
+#include "gnc-pricedb.h"
 #include "Group.h"
 
-#endif /* __XACC_FILEIO_P_H__ */
+void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
+void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
+
+void gnc_book_mark_saved(GNCBook *book);
+
+#endif /* __GNC_BOOK_P_H__ */

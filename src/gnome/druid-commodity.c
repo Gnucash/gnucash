@@ -38,7 +38,12 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
+#include "gnc-pricedb-p.h"
 
+#include "gnc-engine-util.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
 
 struct _commoditydruid {
   GtkWidget  * window; 
@@ -395,7 +400,6 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   }
 }
 
-
 static void 
 finish_helper(gpointer key, gpointer value, gpointer data) {
   CommodityDruid * cd = data;
@@ -404,10 +408,21 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
                                                   key);
   GList          * accts;
   GList          * node;
+  GNCBook        * book = gncGetCurrentBook();
+
+  if(!book) {
+    PERR("finish_helper - no current book.");
+    return;
+  }
 
   /* key is the old mnemonic, value is a pointer to the gnc_commodity 
    * structure. */
   gnc_commodity_table_insert(gnc_engine_commodities(), comm);
+
+  /* s/old commodity/new commodity/g  in the pricedb */
+  gnc_pricedb_substitute_commodity(gnc_book_get_pricedb(book),
+				   old_comm,
+				   comm);
 
   /* now replace all the accounts using old_comm with new_comm */
   accts = xaccGroupGetSubAccounts(gncGetCurrentGroup());

@@ -23,8 +23,8 @@
 
 (gnc:support "engine-utilities.scm")
 
-(define (gnc:filename->account-group filename)
-  "Returns an account group on success and #f on failure"
+(define (gnc:filename->book filename)
+  "Returns a book on success and #f on failure"
   (let* ((session (gnc:malloc-session)))
     (if (not session)
         #f
@@ -84,13 +84,15 @@
             (loop (cdr splits)))))
     (reverse retval)))
 
+;;(define (gnc:group-map-accounts thunk group)
+;;  (let ((retval '()))
+;;    (let loop ((accounts (or (gnc:group-get-subaccounts group) '())))
+;;      (if (not (null? accounts))
+;;          (begin 
+;;            (set! retval (cons (thunk (car accounts)) retval))
+;;            (loop (cdr accounts)))))
+;;    (reverse retval)))
+
 (define (gnc:group-map-accounts thunk group)
-  (let ((retval '()))
-    (let loop ((accounts (or (gnc:group-get-subaccounts group) '())))
-      (if (not (null? accounts))
-          (begin 
-            (set! retval (cons (thunk (car accounts)) retval))
-            (loop (cdr accounts)))))
-    (reverse retval)))
-
-
+  (let ((accounts (or (gnc:group-get-subaccounts group) '())))
+    (map thunk accounts)))

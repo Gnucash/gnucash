@@ -14,7 +14,7 @@
  * e.g. even some simple #define macros might help here ...
  *
  * HISTORY:
- * Initial code by Rob L. Browning 4Q 2000
+ * Initial code by Rob Browning 4Q 2000
  * Tuneups by James LewisMoss Dec 2000-Feb 2001
  * Generic I/O hack by Linas Vepstas January 2001
  *
@@ -81,6 +81,8 @@ static const gchar *gncxml_emacs_trailer =
 "<!-- mode: xml        -->\n"
 "<!-- End:             -->\n";
 
+/* ============================================================== */
+
 static gboolean
 gncxml_append_emacs_trailer(const gchar *filename)
 {
@@ -98,6 +100,7 @@ gncxml_append_emacs_trailer(const gchar *filename)
     return fclose(toappend);
 }
     
+#if 0
 /* =============================================================== */
 /* create a new xml document and poke all the query terms into it. */
 
@@ -134,16 +137,20 @@ gncxml_new_query_doc (Query *q)
   return doc;
 }
 
+#endif
+
 /* =============================================================== */
 /* create a new xml document and poke all account & txn data into it. */
 
 static xmlDocPtr
-gncxml_newdoc (AccountGroup *group, int do_txns)
+gncxml_newdoc (GNCBook *book, int do_txns)
 {
   xmlDocPtr doc;
   xmlNodePtr ledger_data;
   xmlNodePtr tmpnode;
-  
+  AccountGroup *group = gnc_book_get_group(book);
+  GNCPriceDB *pricedb = gnc_book_get_pricedb(book);
+
   doc = xmlNewDoc("1.0");
   doc->xmlRootNode = xmlNewDocNode(doc, NULL, "gnc", NULL);
    
@@ -162,7 +169,13 @@ gncxml_newdoc (AccountGroup *group, int do_txns)
   }
 
   if(!xml_add_commodity_restorers(ledger_data)) {
-    PERR ("couldn't commodity restore");
+    PERR ("couldn't create commodity restorers");
+    xmlFreeDoc(doc);
+    return 0x0;
+  }
+
+  if(!xml_add_gnc_pricedb(ledger_data, "pricedb", pricedb)) {
+    PERR ("couldn't create pricedb");
     xmlFreeDoc(doc);
     return 0x0;
   }
@@ -183,6 +196,8 @@ gncxml_newdoc (AccountGroup *group, int do_txns)
 
   return doc;
 }
+
+#if 0
 
 /* =============================================================== */
 
@@ -229,18 +244,20 @@ gncxml_write_query_to_buf (Query *q, char **bufp, int *sz)
   PINFO ("wrote %d bytes", *sz);
 }
 
+#endif
+
 /* =============================================================== */
 /* write the account group to a filename */
 
 gboolean
-gncxml_write(AccountGroup *group, const gchar *filename) 
+gnc_book_write_to_xml_file(GNCBook *book, const gchar *filename) 
 {
   xmlDocPtr doc;
   int status;
 
-  if (!group || !filename) return FALSE;
+  if(!filename) return FALSE;  
 
-  doc = gncxml_newdoc (group, 1);
+  doc = gncxml_newdoc (book, 1);
   if (!doc) return FALSE;
 
   xmlIndentTreeOutput = TRUE;

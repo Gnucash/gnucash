@@ -195,7 +195,7 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   }
   else if (safe_strcmp(type, "currency") == 0)
   {
-    const gnc_commodity *commodity;
+    gnc_commodity *commodity;
 
     commodity = gnc_scm_to_commodity (value);
     if (commodity)
@@ -206,7 +206,7 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   }
   else if (safe_strcmp(type, "commodity") == 0)
   {
-    const gnc_commodity *commodity;
+    gnc_commodity *commodity;
 
     commodity = gnc_scm_to_commodity (value);
     if (commodity)
@@ -480,7 +480,7 @@ gnc_option_get_ui_value(GNCOption *option)
   }
   else if (safe_strcmp(type, "currency") == 0)
   {
-    const gnc_commodity *commodity;
+    gnc_commodity *commodity;
 
     commodity =
       gnc_currency_edit_get_currency(GNC_CURRENCY_EDIT(option->widget));
@@ -489,7 +489,7 @@ gnc_option_get_ui_value(GNCOption *option)
   }
   else if (safe_strcmp(type, "commodity") == 0)
   {
-    const gnc_commodity *commodity;
+    gnc_commodity *commodity;
 
     commodity =
       gnc_commodity_edit_get_commodity(GNC_COMMODITY_EDIT(option->widget));

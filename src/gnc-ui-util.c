@@ -216,7 +216,7 @@ gnc_ui_get_account_field_value_string (Account *account,
       break;
     case ACCOUNT_BALANCE_EURO :
       {
-	const gnc_commodity * account_currency = 
+	gnc_commodity * account_currency = 
           xaccAccountGetCurrency(account);
         gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
 	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
@@ -237,7 +237,7 @@ gnc_ui_get_account_field_value_string (Account *account,
       break;
     case ACCOUNT_TOTAL_EURO :
       {
-	const gnc_commodity * account_currency =
+	gnc_commodity * account_currency =
           xaccAccountGetCurrency(account);
 	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
 	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
@@ -411,7 +411,7 @@ gnc_localeconv (void)
   return &lc;
 }
 
-const gnc_commodity *
+gnc_commodity *
 gnc_locale_default_currency (void)
 {
   static gnc_commodity * currency;
@@ -526,7 +526,7 @@ is_decimal_fraction (int fraction, guint8 *max_decimal_places_p)
 }
 
 GNCPrintAmountInfo
-gnc_commodity_print_info (const gnc_commodity *commodity,
+gnc_commodity_print_info (gnc_commodity *commodity,
                           gboolean use_symbol)
 {
   GNCPrintAmountInfo info;

@@ -368,14 +368,17 @@ dom_tree_to_kvp_frame(xmlNodePtr node)
 gchar *
 dom_tree_to_text(xmlNodePtr tree)
 {
-  /* Expect *only* text and comment sibling nodes.  Ignore comment
-     nodes and collapse text nodes into one string.  Return NULL if
-     expectations are unsatisfied.
+  /* Expect *only* text and comment sibling nodes in the given tree --
+     which actually may only be a "list".  i.e. if you're trying to
+     extract bar from <foo>bar</foo>, pass in <foo>->xmlChildrenNode
+     to this function.  This expectation is different from the rest of
+     the dom_tree_to_* converters...
+
+     Ignores comment nodes and collapse text nodes into one string.
+     Returns NULL if expectations are unsatisfied.
 
      If there are a lot of text sub-nodes, this algorithm may be
-     inefficient because it'll reallocate a lot.
-
-  */
+     inefficient as it will reallocate a lot.  */
 
   gboolean ok = TRUE;
   xmlNodePtr current;
@@ -392,7 +395,9 @@ dom_tree_to_text(xmlNodePtr tree)
     case XML_COMMENT_NODE:
       break;
     default:
-      PERR("dom_tree_to_text: hit illegal node type while extracting text.");
+      PERR("dom_tree_to_text: hit illegal node while extracting text.");
+      PERR("  (name %s) (type %d) (content %s)", 
+           current->name, current->type, current->content);
       current = NULL;
       ok = FALSE;
       break;

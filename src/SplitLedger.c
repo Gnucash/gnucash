@@ -426,7 +426,7 @@ gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
     if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
     {
       Account *account = xaccSplitGetAccount(split);
-      const gnc_commodity *currency, *security;
+      gnc_commodity *currency, *security;
 
       if (account == NULL)
         return split;
@@ -611,7 +611,7 @@ gnc_split_get_value_denom (Split *split)
   denom = xaccAccountGetCurrencySCU (xaccSplitGetAccount (split));
   if (denom == 0)
   {
-    const gnc_commodity *commodity = gnc_locale_default_currency ();
+    gnc_commodity *commodity = gnc_locale_default_currency ();
     denom = gnc_commodity_get_fraction (commodity);
     if (denom == 0)
       denom = 100;
@@ -628,7 +628,7 @@ gnc_split_get_quantity_denom (Split *split)
   denom = xaccAccountGetSecuritySCU (xaccSplitGetAccount (split));
   if (denom == 0)
   {
-    const gnc_commodity *commodity = gnc_locale_default_currency ();
+    gnc_commodity *commodity = gnc_locale_default_currency ();
     denom = gnc_commodity_get_fraction (commodity);
     if (denom == 0)
       denom = 100;
@@ -660,7 +660,7 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
   }
 
   {
-    const gnc_commodity *commodity;
+    gnc_commodity *commodity;
     int fraction;
 
     xaccSetPriceCellFraction (reg->sharesCell, 10000);
@@ -3245,8 +3245,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     if ((new_acc != NULL) && (old_acc != new_acc))
     {
-      const gnc_commodity * currency = NULL;
-      const gnc_commodity * security = NULL;
+      gnc_commodity * currency = NULL;
+      gnc_commodity * security = NULL;
 
       currency = xaccAccountGetCurrency(new_acc);
       currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
@@ -3319,8 +3319,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
       if ((new_acc != NULL) && (old_acc != new_acc))
       {
-        const gnc_commodity * currency = NULL;
-        const gnc_commodity * security = NULL;
+        gnc_commodity * currency = NULL;
+        gnc_commodity * security = NULL;
 
         currency = xaccAccountGetCurrency(new_acc);
         currency = xaccTransIsCommonExclSCurrency(trans, 
@@ -4831,8 +4831,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 static void 
 LoadXferCell (ComboCell * cell,  
               AccountGroup * grp,
-              const gnc_commodity * base_currency,
-              const gnc_commodity * base_security)
+              gnc_commodity * base_currency,
+              gnc_commodity * base_security)
 {
   gboolean load_everything;
   GList *list;
@@ -4853,8 +4853,8 @@ LoadXferCell (ComboCell * cell,
   for (node = list; node; node = node->next)
   {
     Account *account = node->data;
-    const gnc_commodity * curr;
-    const gnc_commodity * secu;
+    gnc_commodity * curr;
+    gnc_commodity * secu;
     char *name;
 
     curr = xaccAccountGetCurrency (account);
@@ -4891,7 +4891,7 @@ xaccLoadXferCell (ComboCell *cell,
                   AccountGroup *grp, 
                   Account *base_account)
 {
-  const gnc_commodity * curr, * secu;
+  gnc_commodity * curr, * secu;
 
   curr = xaccAccountGetCurrency (base_account);
   secu = xaccAccountGetSecurity (base_account);

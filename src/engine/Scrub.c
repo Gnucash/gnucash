@@ -375,7 +375,7 @@ static Account *
 GetOrMakeAccount (AccountGroup *root, Transaction *trans,
                   const char *name_root)
 {
-  const gnc_commodity * currency;
+  gnc_commodity * currency;
   char * accname;
   Account * acc;
 

@@ -19,6 +19,8 @@
 
 (define gnc:*command-line-remaining* #f)
 
+(gnc:depend "price-quotes.scm")
+
 ;;(use-modules (ice-9 getopt-long))
 
 ;;(define (gnc:is-boolean-arg? arg)
@@ -168,6 +170,26 @@
                  (set! gnc:*batch-mode-things-to-do*
                        (cons (lambda () (load val))
                              gnc:*batch-mode-things-to-do*)))))
+
+;    (cons "add-price-quotes"
+;          (cons 'string
+;                (lambda (val)
+;                  (set! gnc:*batch-mode-things-to-do*
+;                        (cons
+; 			(lambda ()
+; 			  (display (get-1-quote "NASDAQ" val)))
+; 			gnc:*batch-mode-things-to-do*)))))
+
+;   (cons "add-price-quotes"
+;         (cons 'string
+;               (lambda (val)
+;                 (set! gnc:*batch-mode-things-to-do*
+;                       (cons
+;			(lambda ()
+;			  (with-
+;			  (gnc:book-add-quotes
+;
+;			gnc:*batch-mode-things-to-do*)))))
 
    (cons "load-user-config"
          (cons 'boolean gnc:load-user-config-if-needed))

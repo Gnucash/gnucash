@@ -78,10 +78,10 @@ select_modal_callback(const gnc_commodity * arg, void * data) {
  * gnc_ui_select_commodity_modal()
  ********************************************************************/
 
-const gnc_commodity *
-gnc_ui_select_commodity_modal(const gnc_commodity * orig_sel,
+gnc_commodity *
+gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
                               GtkWidget * parent) {  
-  const gnc_commodity * retval = NULL;
+  gnc_commodity * retval = NULL;
 
   SelectCommodityWindow * win = 
     gnc_ui_select_commodity_create(orig_sel, &select_modal_callback, &retval);
@@ -406,7 +406,7 @@ new_modal_callback(const gnc_commodity * arg, void * data) {
  * gnc_ui_new_commodity_modal()
  ********************************************************************/
 
-const gnc_commodity *
+gnc_commodity *
 gnc_ui_new_commodity_modal(const char * selected_namespace,
                            GtkWidget * parent) {  
   gnc_commodity * retval = NULL;

@@ -11,7 +11,6 @@ libgncengine_la_SOURCES = \
   Account.c \
   Backend.c \
   DateUtils.c \
-  FileIO.c \
   Group.c \
   NetIO.c \
   Query.c \
@@ -35,6 +34,8 @@ libgncengine_la_SOURCES = \
   gnc-engine-util.c \
   gnc-event.c \
   gnc-numeric.c \
+  gnc-pricedb.c \
+  gnc-pricedb-xml-v1.c \
   sixtp-dom-generators.c \
   sixtp-dom-parsers.c \
   sixtp-kvp-parser.c \
@@ -56,8 +57,6 @@ noinst_HEADERS = \
   AccountP.h \
   BackendP.h \
   DateUtils.h \
-  FileIO.h \
-  FileIOP.h \
   GNCId.h \
   GNCIdP.h \
   Group.h \
@@ -83,6 +82,7 @@ noinst_HEADERS = \
   gnc-event.h \
   gnc-event-p.h \
   gnc-numeric.h \
+  gnc-pricedb.h \
   gnc-xml-helper.h \
   gnc-xml.h \
   sixtp-dom-generators.h \

@@ -1147,7 +1147,7 @@ update_split_currency(Account * acc)
  */
 
 void 
-xaccAccountSetCommodity (Account * acc, const gnc_commodity * com) 
+xaccAccountSetCommodity (Account * acc, gnc_commodity * com) 
 {
   if ((!acc) || (!com)) return;
 
@@ -1180,7 +1180,7 @@ xaccAccountSetCommodity (Account * acc, const gnc_commodity * com)
 /* below follow the old, deprecated currency/security routines. */
 
 void 
-xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
+xaccAccountSetCurrency (Account * acc, gnc_commodity * currency) {
 
   if ((!acc) || (!currency)) return;
   
@@ -1200,7 +1200,7 @@ xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
 }
 
 void 
-xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
+xaccAccountSetSecurity (Account *acc, gnc_commodity * security) {
   
   if ((!acc) || (!security)) return;
   
@@ -1383,14 +1383,14 @@ xaccAccountGetNotes (Account *acc)
   return(NULL);
 }
 
-const gnc_commodity * 
+gnc_commodity * 
 xaccAccountGetCurrency (Account *acc)
 {
   if (!acc) return NULL;
   return (acc->currency);
 }
 
-const gnc_commodity * 
+gnc_commodity * 
 xaccAccountGetEffectiveSecurity (Account *acc)
 {
   if (!acc) return NULL;
@@ -1401,7 +1401,7 @@ xaccAccountGetEffectiveSecurity (Account *acc)
   return (acc->security);
 }
 
-const gnc_commodity *
+gnc_commodity *
 xaccAccountGetSecurity (Account *account)
 {
   if (!account) return NULL;

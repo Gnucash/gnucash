@@ -21,12 +21,18 @@ static gboolean dom_start_handler(
     if(parent_data == NULL)
     {
         thing = xmlNewNode(global_namespace, tag);
+        /* only publish the result if we're the parent */
+        *result = thing;
     }
     else
     {
-        thing = xmlNewChild((xmlNodePtr)parent_data, global_namespace,
-                            tag, NULL);
+        thing = xmlNewChild((xmlNodePtr) parent_data,
+                            global_namespace,
+                            tag,
+                            NULL);
+        *result = NULL;
     }
+    *data_for_children = thing;
 
     if(attrs != NULL)
     {
@@ -36,10 +42,32 @@ static gboolean dom_start_handler(
             atptr += 2;
         }
     }
+    return TRUE;
+}
 
-    *result = thing;
-    *data_for_children = thing;
-    
+static void
+dom_fail_handler(gpointer data_for_children,
+                 GSList* data_from_children,
+                 GSList* sibling_data,
+                 gpointer parent_data,
+                 gpointer global_data,
+                 gpointer *result,
+                 const gchar *tag)
+{
+  if(*result) xmlFreeNode(*result);
+}
+
+
+static gboolean is_whitespace(const char *text, int len)
+{
+    int i;
+    for(i = 0; i < len; i++)
+    {
+        if(!isspace(text[i]))
+        {
+            return FALSE;
+        }
+    }
     return TRUE;
 }
 
@@ -55,7 +83,10 @@ static gboolean dom_chars_handler(
         
 }
 
-sixtp* sixtp_dom_parser_new(sixtp_end_handler ender)
+sixtp *
+sixtp_dom_parser_new(sixtp_end_handler ender,
+                     sixtp_result_handler cleanup_result_by_default_func,
+                     sixtp_result_handler cleanup_result_on_fail_func)
 {
     sixtp *top_level;
 
@@ -66,9 +97,20 @@ sixtp* sixtp_dom_parser_new(sixtp_end_handler ender)
                        SIXTP_START_HANDLER_ID, dom_start_handler,
                        SIXTP_CHARACTERS_HANDLER_ID, dom_chars_handler,
                        SIXTP_END_HANDLER_ID, ender,
+                       SIXTP_FAIL_HANDLER_ID, dom_fail_handler,
                        SIXTP_NO_MORE_HANDLERS)))
     {
         return NULL;
+    }
+
+    if(cleanup_result_by_default_func)
+    {
+      sixtp_set_cleanup_result(top_level, cleanup_result_by_default_func);
+    }
+
+    if(cleanup_result_by_default_func)
+    {
+      sixtp_set_result_fail(top_level, cleanup_result_on_fail_func);
     }
 
     if(!sixtp_add_sub_parser(top_level, SIXTP_MAGIC_CATCHER, top_level))
@@ -79,4 +121,3 @@ sixtp* sixtp_dom_parser_new(sixtp_end_handler ender)
 
     return top_level;
 }
-
