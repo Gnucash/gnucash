@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Expenses associated with renting a home
-        (rent, renter's insurance)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you rent a home
+    or apartment (rent, renter's insurance).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Expenses</act:name>
   <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>

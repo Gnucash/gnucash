@@ -5,8 +5,12 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Expenses associated with owning a home
-        (insurance, taxes, home repair) 
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you own a home.
+    This set provides a group of accounts to track home expenses
+    (insurance, taxes, home repair).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Expenses</act:name>
   <act:id type="new">84732f5fdd27b6463d75bf958e3a4b06</act:id>

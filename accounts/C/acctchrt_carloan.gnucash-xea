@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Accounts for car loan and associated interest
-        (car loan, car loan interest)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    a car loan (car loan, car loan interest).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
   <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>

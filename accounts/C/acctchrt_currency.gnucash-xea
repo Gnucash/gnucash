@@ -5,8 +5,13 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Account for trading and converting a foreign currency
-        (note: account currently in DEM; edit account to change currency)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you convert
+    foreign currencies.
+
+    Note: account currently in DEM; edit account to change currency.
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">b3c65be1c5d163746ddc0c506f3f4619</act:id>

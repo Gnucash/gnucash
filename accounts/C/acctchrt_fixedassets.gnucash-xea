@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Accounts for tracking large fixed assets
-        (house, vehicle, other assets)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    large fixed assets (house, vehicle, vacation home, other assets).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">64b6276c060185131cecbd1ac6218440</act:id>

@@ -5,8 +5,12 @@
     </gnc-act:title>
     <gnc-act:short-description>
       A basic set of accounts most commonly used
-      (checking, savings, cash, credit card, income, common expenses)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    Most users will want to select this set of accounts.  It includes
+    most commonly used accounts (checking, savings, cash, credit card,
+    income, common expenses).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>

@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Accounts for school loan and associated interest
-        (education loan, education loan interest)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    an educational loan (education loan, education loan interest).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
   <act:id type="new">4e7e8e39487ad4aba0b62c2232c577c5</act:id>

@@ -5,8 +5,12 @@
     </gnc-act:title>
     <gnc-act:short-description>
      Retirement account with related investment accounts for spouse
-        (stock, bond, mutual fund, index fund)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    investments in a spouse's name(stock, bond, mutual fund, index
+    fund, interest, dividend).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">96d9b17add59eb4c7edec7ed241af755</act:id>

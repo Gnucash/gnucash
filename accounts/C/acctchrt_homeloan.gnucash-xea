@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
      Accounts for home loan and associated interest 
-        (mortgage loan, mortgage interest)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    a home loan (mortgage loan, mortgage interest).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
   <act:id type="new">6664763bd1ea41462cba5ef856d9c00c</act:id>

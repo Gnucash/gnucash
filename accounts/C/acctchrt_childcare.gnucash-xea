@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       An account for tracking childcare costs
-        (childcare)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    childcare expenses.
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Expenses</act:name>
   <act:id type="new">ee8238ee2c2ce590160761df09b99b72</act:id>

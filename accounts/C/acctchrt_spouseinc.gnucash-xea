@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
      Accounts for tracking spouse's income separately
-        (salary(spouse), taxes (spouse)) 
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    a working spouse (salary(spouse), taxes (spouse)).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Income</act:name>
   <act:id type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:id>

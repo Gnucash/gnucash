@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Retirement account with related investment subaccounts
-        (stock, bond, mutual fund, index fund)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    retirement accounts (stock, bond, mutual fund, index fund).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:id>

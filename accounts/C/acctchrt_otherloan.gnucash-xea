@@ -5,8 +5,11 @@
     </gnc-act:title>
     <gnc-act:short-description>
       Accounts for tracking other loans and associated interest
-        (other loan, other loan interest)
     </gnc-act:short-description>
+    <gnc-act:long-description>
+    You would want to select these set of accounts if you have
+    something other than a home loan (other loan, other loan interest).
+  </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Liabilities</act:name>
   <act:id type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
