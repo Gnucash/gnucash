@@ -52,6 +52,7 @@ GNCInteractor *gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
   data = g_new0 (GNCInteractor, 1);
   data->parent = parent;
   data->keepAlive = TRUE;
+  data->cache_valid = FALSE;
   data->cache_pin = 
     gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
 			      "HBCI Remember PIN in memory",
@@ -123,12 +124,19 @@ void GNCInteractor_delete(GNCInteractor *data)
   data->dialog = NULL;
 }
 
+void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value)
+{
+  g_assert(i);
+  i->cache_valid = value;
+}
+
 void GNCInteractor_erasePIN(GNCInteractor *i)
 {
   g_assert(i);
   if (i->pw != NULL)
     g_free (memset (i->pw, 0, strlen (i->pw)));
   i->pw = NULL;
+  i->cache_valid = FALSE;
   i->user = NULL;
 }
 void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
@@ -207,7 +215,7 @@ static int msgInputPin(const HBCI_User *user,
       g_free (msgstr);
     }
     else {
-      if (user && (user == data->user)) {
+      if (data->cache_valid && user && (user == data->user)) {
 	/* Cached user matches, so use cached PIN. */
 	/*printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));*/
 	*pinbuf = g_strdup (data->pw);
