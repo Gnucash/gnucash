@@ -6,6 +6,7 @@
 
 static char *  PriceMV (char * input)
 {
+   printf (" price mv called %s \n", input);
    return strdup (input);
 }
 

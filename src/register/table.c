@@ -65,11 +65,11 @@ xaccInitTable (Table * table, int numentries)
    for (i=0; i<num_phys_rows; i++) {
       table->entries[i] = (char **) malloc (num_phys_cols * sizeof (char *));
       for (j=0; j<num_phys_cols; j++) {
+         table->entries[i][j] = NULL;
          table->entries[i][j] = strdup ("");
       }
    }
 }
-
 
 /* ==================================================== */
 /* hack alert -- will core dump if numrows has changed, etc. */
@@ -103,13 +103,104 @@ xaccRefreshHeader (Table *table)
 
 /* ==================================================== */
 
+static void
+enterCB (Widget mw, XtPointer cd, XtPointer cb)
+{
+   Table *table;
+   XbaeMatrixDefaultActionCallbackStruct *cbs;
+   int row, col;
+
+   table = (Table *) cd;
+   cbs = (XbaeMatrixDefaultActionCallbackStruct *)cb;
+
+   row = cbs->row;
+   col = cbs->column;
+
+   if (XbaeEnterCellReason != cbs->reason) return;
+
+   printf ("enter %d %d \n", row, col);
+}
+
+/* ==================================================== */
+/* this routine calls the individual cell callbacks */
+
+static void
+modifyCB (Widget mw, XtPointer cd, XtPointer cb)
+{
+   Table *table;
+   XbaeMatrixModifyVerifyCallbackStruct *cbs;
+   int row, col;
+   CellBlock *arr;
+
+   table = (Table *) cd;
+   cbs = (XbaeMatrixModifyVerifyCallbackStruct *) cb;
+
+   row = cbs->row;
+   col = cbs->column;
+
+   if (XbaeModifyVerifyReason != cbs->reason) return;
+
+   printf ("modify %d %d %s \n", row, col, cbs->verify->text->ptr);
+
+   /* compute the cell location */
+   arr = table->header;
+   if (arr) {
+      row -= arr->numRows;
+   }
+
+   /* call the cell callback */
+   arr = table->cursor;
+   if (arr) {
+     row %= arr->numRows;
+     if (0 > col) return;
+     if (col >= arr->numCols) return;
+     if (arr->cells[row][col]) {
+        char * (*mv) (char *);
+        mv = arr->cells[row][col]->modify_verify;
+        if (mv) {
+           char * tmp;
+           tmp = (*mv) ("haha");
+        }
+     }
+   }
+   
+   
+}
+
+/* ==================================================== */
+
+static void
+traverseCB (Widget mw, XtPointer cd, XtPointer cb)
+{
+   Table *table;
+   XbaeMatrixDefaultActionCallbackStruct *cbs;
+   int row, col;
+
+   table = (Table *) cd;
+   cbs = (XbaeMatrixDefaultActionCallbackStruct *)cb;
+
+   row = cbs->row;
+   col = cbs->column;
+
+   if (XbaeTraverseCellReason != cbs->reason) return;
+
+   printf ("traverse %d %d \n", row, col);
+}
+
+
+/* ==================================================== */
+
 Widget
 xaccCreateTable (Table *table, Widget parent, char * name) 
 {
    unsigned char * alignments;
    short * widths;
+   Widget reg;
 
    if (!table) return 0;
+
+   /* make sure that the table is consistent */
+   xaccInitTable (table, table->numEntries);
 
    /* if a header exists, get alignments, widths from there */
    alignments = NULL;
@@ -126,7 +217,7 @@ xaccCreateTable (Table *table, Widget parent, char * name)
    /* copy header data into entries cache */
    xaccRefreshHeader (table);
 
-   table->reg = XtVaCreateWidget( name,
+   reg = XtVaCreateWidget( name,
                   xbaeMatrixWidgetClass,  parent,
                   XmNcells,               table->entries,
                   XmNfixedRows,           table->num_header_rows,
@@ -145,9 +236,14 @@ xaccCreateTable (Table *table, Widget parent, char * name)
                   XmNnavigationType,      XmEXCLUSIVE_TAB_GROUP,  
                   NULL);
     
-   XtManageChild (table->reg);
+   XtManageChild (reg);
 
-   return (table->reg);
+   XtAddCallback (reg, XmNenterCellCallback, enterCB, (XtPointer)table);
+   XtAddCallback (reg, XmNmodifyVerifyCallback, modifyCB, (XtPointer)table);
+   XtAddCallback (reg, XmNtraverseCellCallback, traverseCB, (XtPointer)table);
+
+   table->reg = reg;
+   return (reg);
 }
 
 /* ==================================================== */
