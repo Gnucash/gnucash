@@ -177,16 +177,11 @@ xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter)
 static void
 configLabels (SplitRegister *reg)
 {
-  SplitRegisterType type;
-  char *string;
-
-  type = reg->type;
-
   LABEL (DATE,     _("Date"));
   LABEL (NUM,      _("Num"));
   LABEL (DESC,     _("Description"));
   LABEL (RECN,     _("Reconciled:R"+11));
-  LABEL (SHRBALN,  _("Total Shares"));
+  LABEL (SHRBALN,  _("Share Balance"));
   LABEL (BALN,     _("Balance"));
   LABEL (ACTN,     _("Action"));
   LABEL (XFRM,     _("Account"));
@@ -197,30 +192,44 @@ configLabels (SplitRegister *reg)
   LABEL (PRIC,     _("Price"));
   LABEL (SHRS,     _("Shares"));
   LABEL (MXFRM,    _("Transfer"));
-  LABEL (TCRED,    _("Total"));
-  LABEL (TDEBT,    _("Total"));
-  LABEL (TSHRS,    _("Total"));
-  LABEL (TSHRBALN, _("Total Shares"));
+  LABEL (TCRED,    _("Tot Debit"));
+  LABEL (TDEBT,    _("Tot Credit"));
+  LABEL (TSHRS,    _("Tot Shares"));
+  LABEL (TSHRBALN, _("Share Balance"));
   LABEL (TBALN,    _("Balance"));
   LABEL (NOTES,    _("Notes"));
 
   if (debit_getter != NULL)
   {
-    string = debit_getter(type);
+    char *string = debit_getter (reg->type);
     if (string != NULL)
     {
+      char *tstring;
+
       LABEL (DEBT, string);
-      free(string);
+
+      tstring = g_strdup_printf (_("Tot %s"), string);
+      LABEL (TDEBT, tstring);
+
+      g_free (tstring);
+      free (string);
     }
   }
 
   if (credit_getter != NULL)
   {
-    string = credit_getter(type);
+    char *string = credit_getter (reg->type);
     if (string != NULL)
     {
+      char *tstring;
+
       LABEL (CRED, string);
-      free(string);
+
+      tstring = g_strdup_printf (_("Tot %s"), string);
+      LABEL (TCRED, tstring);
+
+      g_free (tstring);
+      free (string);
     }
   }
 }
