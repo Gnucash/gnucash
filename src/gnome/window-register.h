@@ -28,6 +28,9 @@
 
 /** STRUCTS *********************************************************/
 typedef struct _RegWindow RegWindow;
+/* Getters */
+GtkWidget *gnc_RegWindow_window (RegWindow *data);
+GNCLedgerDisplay *gnc_RegWindow_ledger (RegWindow *data);
 
 /** PROTOTYPES ******************************************************/
 RegWindow * regWindowSimple(Account *account);

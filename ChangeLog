@@ -1,3 +1,15 @@
+2002-09-17  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/window-register.c (regWindowLedger): Uses the
+	menu_setup_with_data introduced below.
+
+	* src/gnome-utils/gnc-menu-extensions.[hc]
+	(gnc_extensions_menu_setup_with_data): Added, so that windows can
+	pass userdata on to the extension menu's callback functions.
+
+	* src/gnome/window-register.[hc]: Add getter functions for RegWindow
+	data.
+
 2002-09-17  David Hampton  <hampton@employees.org>
 
 	Add progress bar to main window.  Shows progress of read, write

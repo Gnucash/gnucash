@@ -124,6 +124,17 @@ struct _RegWindow
 
   RegDateWindow *date_window;
 };
+GtkWidget *gnc_RegWindow_window (RegWindow *data)
+{
+  g_assert(data);
+  return data->window;
+}
+GNCLedgerDisplay *gnc_RegWindow_ledger (RegWindow *data)
+{
+  g_assert(data);
+  return data->ledger;
+}
+
 
 
 /* This static indicates the debugging module that this .o belongs to.   */
@@ -1486,7 +1497,9 @@ regWindowLedger (GNCLedgerDisplay *ledger)
 				    regData);
   /* libglade should do this next line */
   GNOME_APP(register_window)->menubar = glade_xml_get_widget (xml, "menubar1");
-  gnc_extensions_menu_setup(GNOME_APP(register_window), WINDOW_NAME_REGISTER);
+  gnc_extensions_menu_setup_with_data(GNOME_APP(register_window), 
+				      WINDOW_NAME_REGISTER,
+				      regData);
 
 
   regData->ledger = ledger;

@@ -33,7 +33,29 @@
 
 void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
 void gnc_add_scm_extension(SCM extension);
+
+/* This is called from the window initializing code, when the actual
+ * menu items stored by the above functions should now be inserted in
+ * the menu of the GnomeApp app.
+ *
+ * app - The GnomeApp to add the stored menu items
+ * prefix - The prefix of the window that is currently being set up.
+ */
 void gnc_extensions_menu_setup(GnomeApp * app, gchar *prefix);
+/* This is called from the window initializing code, when the actual
+ * menu items stored by the above functions should now be inserted in
+ * the menu of the GnomeApp app.
+ *
+ * Use this function when your menu callbacks needs some user_data
+ * pointer in order to access window-related data.
+ *
+ * app - The GnomeApp to add the stored menu items
+ * prefix - The prefix of the window that is currently being set up.
+ * user_data - The user data to be passed on to menu item's callback functions.
+ */
+void gnc_extensions_menu_setup_with_data(GnomeApp * app, 
+					 gchar *prefix, 
+					 gpointer user_data);
 void gnc_extensions_shutdown(void);
 
 #endif

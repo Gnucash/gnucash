@@ -346,6 +346,13 @@ gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
 void
 gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
 {
+  gnc_extensions_menu_setup_with_data (app, window, NULL);
+}
+
+void
+gnc_extensions_menu_setup_with_data(GnomeApp * app, 
+				    gchar *window, gpointer user_data)
+{
   GSList        * l = NULL;
   ExtensionInfo * info;
 
@@ -354,7 +361,7 @@ gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
     if ((strcmp(info->window, window) != 0) &&
 	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
       continue;
-    gnome_app_insert_menus(app, info->path, info->info);
+    gnome_app_insert_menus_with_data(app, info->path, info->info, user_data);
     gnome_app_install_menu_hints(app, info->info); 
   }
 }
