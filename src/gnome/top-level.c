@@ -143,8 +143,8 @@ static const char* gnc_scheme_remaining_var = "gnc:*command-line-remaining*";
 static char**
 gnc_get_remaining_argv(int prelen, const char **prependargv)
 {
-    SCM rem = gh_lookup(gnc_scheme_remaining_var);
-    return gnc_scheme_list_to_nulltermcharpp(prelen, prependargv, rem);
+    SCM rem = gh_eval_str (gnc_scheme_remaining_var);
+    return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, rem);
 }
 
 static void
@@ -365,7 +365,7 @@ gnc_ui_show_main_window(void)
   {
     SCM run_danglers = gh_eval_str("gnc:hook-run-danglers");
     SCM hook = gh_eval_str("gnc:*main-window-opened-hook*");
-    SCM window = gw_wcp_assimilate_ptr(app, gh_lookup("<gnc:UIWidget>"));
+    SCM window = gw_wcp_assimilate_ptr(app, gh_eval_str("<gnc:UIWidget>"));
     gh_call2(run_danglers, hook, window); 
   }
   return 0;
