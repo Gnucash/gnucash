@@ -30,7 +30,9 @@
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (optname-accounts (N_ "Accounts"))
+      (optname-price-commodity (N_ "Price of Commodity"))
+
+      ;;      (optname-accounts (N_ "Accounts"))
 
       (optname-inc-exp (N_ "Show Income/Expense"))
       (optname-show-profit (N_ "Show Net Profit"))
@@ -57,20 +59,28 @@
       (gnc:options-add-interval-choice! 
        options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
-      (add-option
-       (gnc:make-account-list-option
-	gnc:pagename-accounts optname-accounts
-	"c"
-	(N_ "Report on these accounts, if chosen account level allows.")
-	(lambda ()
-	  (gnc:group-get-subaccounts (gnc:get-current-group)))
-	(lambda (accounts)
-	  (list #t
-		accounts))
-	#t))
+;      (add-option
+;       (gnc:make-account-list-option
+;	gnc:pagename-accounts optname-accounts
+;	"c"
+;	(N_ "Report on these accounts, if chosen account level allows.")
+;	(lambda ()
+;	  (gnc:group-get-subaccounts (gnc:get-current-group)))
+;	(lambda (accounts)
+;	  (list #t
+;		accounts))
+;	#t))
 
       (gnc:options-add-currency! 
        options gnc:pagename-general optname-report-currency "d")
+      
+      (add-option
+       (gnc:make-currency-option 
+	gnc:pagename-general optname-price-commodity
+	"e"
+	(N_ "Calculate the price of this commodity.")
+	(gnc:locale-default-currency)))
+      
       
       (gnc:options-add-plot-size! 
        options gnc:pagename-display 
@@ -111,6 +121,12 @@
       (gnc:option-value 
        (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+    ;; small helper for the warnings below
+    (define (commodity-numeric->string c n)
+      (gnc:monetary->string
+       (gnc:make-gnc-monetary c n)))
+
+
     (let* ((to-date-tp (gnc:timepair-end-day-time 
 			(gnc:date-option-absolute-time
                          (op-value gnc:pagename-general 
@@ -120,7 +136,7 @@
                            (op-value gnc:pagename-general 
 				     optname-from-date))))
 	   (interval (op-value gnc:pagename-general optname-stepsize))
-	   (accounts (op-value gnc:pagename-accounts optname-accounts))
+;	   (accounts (op-value gnc:pagename-accounts optname-accounts))
 
 	   (height (op-value gnc:pagename-display optname-plot-height))
 	   (width (op-value gnc:pagename-display optname-plot-width))
@@ -132,6 +148,8 @@
 	   
            (report-currency (op-value gnc:pagename-general
                                       optname-report-currency))
+	   (price-commodity (op-value gnc:pagename-general 
+				      optname-price-commodity))
 
 	   (dates-list (gnc:make-date-list
 			(gnc:timepair-end-day-time from-date-tp) 
@@ -139,7 +157,12 @@
                         (eval interval)))
 	   
 	   (document (gnc:make-html-document))
-	   (chart (gnc:make-html-scatter)))
+	   (chart (gnc:make-html-scatter))
+	   (currency-accounts 
+	    (filter gnc:account-has-shares? (gnc:group-get-subaccounts
+					     (gnc:get-current-group))))
+	   (data '((1.0 1.0) (1.1 1.2) (1.2 1.4) (1.3 1.6) 
+		   (2.0 1.0) (2.1 1.2) (2.2 1.4) (2.3 1.6))))
       
       (gnc:html-scatter-set-title! 
        chart (_ "Price Plot (Test)"))
@@ -155,13 +178,129 @@
       ;;(gnc:html-scatter-set-markercolor! chart mcolor)
       (gnc:html-scatter-set-y-axis-label!
        chart (gnc:commodity-get-mnemonic report-currency))
+      (gnc:html-scatter-set-x-axis-label!
+       chart (case interval
+	       ('DayDelta (N_ "Days"))
+	       ('WeekDelta (N_ "Weeks"))
+	       ('TwoWeekDelta (N_ "Double-Weeks"))
+	       ('MonthDelta (N_ "Months"))
+	       ('YearDelta (N_ "Years"))))
 
+      (if 
+       (not (gnc:commodity-equiv? report-currency price-commodity))
+       (begin
+	 (if (not (null? currency-accounts))
+	     ;; This is an experiment, and if the code is good, it could
+	     ;; go into commodity-utilities.scm or even start a new file.
+	     (set!
+	      data
+	      ;; go through all splits; convert all splits into a
+	      ;; price. 
+	      (map
+	       (lambda (a)
+		 (let* ((transaction-comm (gnc:transaction-get-commodity 
+					   (gnc:split-get-parent a)))
+			(account-comm (gnc:account-get-commodity 
+				       (gnc:split-get-account a)))
+			(share-amount (gnc:split-get-share-amount a))
+			(value-amount (gnc:split-get-value a))
+			(transaction-date (gnc:transaction-get-date-posted
+					   (gnc:split-get-parent a)))
+			(foreignlist
+			 (if (gnc:commodity-equiv? transaction-comm 
+						   price-commodity)
+			     (list account-comm
+				   (gnc:numeric-neg share-amount)
+				   (gnc:numeric-neg value-amount))
+			     (list transaction-comm
+				   value-amount
+				   share-amount))))
+		   
+;		   (warn "render-scatterplot: value " 
+;			 (commodity-numeric->string
+;			  (first foreignlist) (second foreignlist))
+;			 " bought shares "
+;			 (commodity-numeric->string
+;			  price-commodity (third foreignlist)))
+		   
+		   (list
+		    transaction-date
+		    (if (not (gnc:commodity-equiv? (first foreignlist) 
+						   report-currency))
+			(begin
+			  (warn "render-scatterplot: " 
+				"Sorry, currency exchange not yet implemented:"
+				(commodity-numeric->string
+				 (first foreignlist) (second foreignlist))
+				" (buying "
+				(commodity-numeric->string
+				 price-commodity (third foreignlist))
+				") =? "
+				(commodity-numeric->string
+				 report-currency (gnc:numeric-zero)))
+			  (gnc:numeric-zero))
+			(gnc:numeric-div 
+			 (second foreignlist)
+			 (third foreignlist)
+			 GNC-DENOM-AUTO 
+			 (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
+	       ;; Get all the interesting splits
+	       (gnc:get-match-commodity-splits 
+		currency-accounts 
+		to-date-tp price-commodity))))
+
+	 (set! data (filter
+		     (lambda (x) (gnc:timepair-lt from-date-tp (first x)))
+		     data))
+
+	 ;; some output
+;	 (warn (map (lambda (x) (list
+;				 (gnc:timepair-to-datestring (car x))
+;				 (gnc:numeric-to-double (second x))))
+;		    data))
+
+	 ;; convert the gnc:numeric's to doubles
+	 (set! data (map (lambda (x) 
+			   (list (first x) 
+				 (gnc:numeric-to-double (second x))))
+			 data))
+
+	 ;; convert the dates to the weird x-axis scaling of the
+	 ;; scatterplot
+	 (set! data
+	       (map (lambda (x)
+		      (list
+		       (/ (- (car (first x))
+			     (car from-date-tp))
+			  ;; FIXME: These hard-coded values are more
+			  ;; or less totally bogus. OTOH this whole
+			  ;; scaling thing is totally bogus as well,
+			  ;; so this doesn't matter too much.
+			  (case interval
+			    ('DayDelta 86400)
+			    ('WeekDelta 604800)
+			    ('TwoWeekDelta 1209600)
+			    ('MonthDelta 2628000)
+			    ('YearDelta 31536000)))
+		       (second x)))
+		    data))
+	 ))
+      
       (gnc:html-scatter-set-data! 
-       chart
-       '((1.0 1.0) (1.1 1.2) (1.2 1.4) (1.3 1.6) 
-	 (2.0 1.0) (2.1 1.2) (2.2 1.4) (2.3 1.6)))
+       chart data)
 
       (gnc:html-document-add-object! document chart) 
+      
+      (gnc:html-document-add-object! 
+       document 
+       (gnc:make-html-text 
+	(gnc:html-markup-p 
+	 "This report calculates the 'prices of commodity' transactions \
+versus the 'report commodity'. (I.e. it won't work if there's another \
+commodity involved in between.) The prices shown are the actual values, \
+i.e. there is no averaging at all. This scaling of the x-axis looks so \
+weird that \
+we should rather throw it out before 1.6 is released, I guess (cstim).")))
 
       document))
 

@@ -33,10 +33,12 @@
 ;; the exchange rate for different commodities by determining the
 ;; weighted average of all currency transactions.
 
-;; Returns a list of all splits in the currency-accounts up to
-;; end-date which have two *different* commodities involved.
-(define (gnc:get-all-commodity-splits 
-	 currency-accounts end-date-tp)
+;; Returns a list of all splits in the 'currency-accounts' up to
+;; 'end-date-tp' which have two different commodities involved, one of
+;; which is equivalent to 'commodity' (the latter constraint only if
+;; 'commodity' != #f ).
+(define (gnc:get-match-commodity-splits 
+	 currency-accounts end-date-tp commodity)
   (let ((query (gnc:malloc-query))
 	(splits #f))
     
@@ -53,16 +55,32 @@
 		  ;; Filter such that we get only those splits
 		  ;; which have two *different* commodities
 		  ;; involved.
-		  (lambda (s) (not (gnc:commodity-equiv? 
-				    (gnc:transaction-get-commodity 
-				     (gnc:split-get-parent s))
-				    (gnc:account-get-commodity 
-				     (gnc:split-get-account s)))))
+		  (lambda (s) (let ((trans-comm
+				     (gnc:transaction-get-commodity 
+				      (gnc:split-get-parent s)))
+				    (acc-comm
+				     (gnc:account-get-commodity 
+				      (gnc:split-get-account s))))
+				(and
+				 (not (gnc:commodity-equiv? 
+				       trans-comm acc-comm))
+				 (or
+				  commodity
+				  (gnc:commodity-equiv?
+				   commodity trans-comm)
+				  (gnc:commodity-equiv?
+				   commodity acc-comm)))))
 		  (gnc:glist->list 
 		   (gnc:query-get-splits query) 
 		   <gnc:Split*>)))
     (gnc:free-query query)
     splits))
+
+;; Returns a list of all splits in the currency-accounts up to
+;; end-date which have two *different* commodities involved.
+(define (gnc:get-all-commodity-splits 
+	 currency-accounts end-date-tp)
+  (gnc:get-match-commodity-splits currency-accounts end-date-tp #f))
 
 
 ;; Go through all toplevel non-report-commodity balances in sumlist

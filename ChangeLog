@@ -1,3 +1,16 @@
+2001-05-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/price-scatter.scm: More experiments with scatter
+	plots which are working now. Doesn't look too nice though.
+
+	* src/scm/commodity-utilities.scm
+	(gnc:get-match-commodity-splits): new function.
+
+	* src/scm/date-utilities.scm (gnc:date->timepair): new
+	function. Code cleanup.
+
+	* src/guile/gnc.gwp: more price handling functions.
+
 2001-05-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/splitreg.c: set action cell to autosize
