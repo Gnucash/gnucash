@@ -103,18 +103,18 @@ gnc_lot_destroy (GNCLot *lot)
 const GUID * 
 gnc_lot_get_guid (GNCLot *lot)
 {
-	if (!lot) return NULL;
-	return &lot->guid;
+   if (!lot) return NULL;
+   return &lot->guid;
 }
 
 void
 gnc_lot_set_guid (GNCLot *lot, GUID uid)
 {
-	if (!lot) return;
+   if (!lot) return;
 
-	if (guid_equal (&lot->guid, &uid)) return;
+   if (guid_equal (&lot->guid, &uid)) return;
 
-	xaccRemoveEntity(lot->book->entity_table, &lot->guid);
+   xaccRemoveEntity(lot->book->entity_table, &lot->guid);
    lot->guid = uid;
    xaccStoreEntity(lot->book->entity_table, lot, &lot->guid, GNC_ID_LOT);
 }
@@ -139,8 +139,8 @@ gnc_lot_get_account (GNCLot *lot)
 kvp_frame *
 gnc_lot_get_slots (GNCLot *lot)
 {
-	if (!lot) return NULL;
-	return lot->kvp_data;
+   if (!lot) return NULL;
+   return lot->kvp_data;
 }
 
 /* ============================================================= */
@@ -189,7 +189,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    acc = xaccSplitGetAccount (split);
    if (NULL == lot->account)
    {
-      lot->account = acc;
+      xaccAccountInsertLot (acc, lot);
    }
    else if (lot->account != acc)
    {
@@ -200,11 +200,11 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
       return;
    }
 
-	if (split->lot)
-	{
-		gnc_lot_remove_split (split->lot, split);
-	}
-	split->lot = lot;
+   if (split->lot)
+   {
+      gnc_lot_remove_split (split->lot, split);
+   }
+   split->lot = lot;
 
    lot->splits = g_list_append (lot->splits, split);
 }
@@ -215,7 +215,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    if (!lot || !split) return;
 
    lot->splits = g_list_remove (lot->splits, split);
-	split->lot = NULL;
+   split->lot = NULL;
 
    if (NULL == lot->splits)
    {

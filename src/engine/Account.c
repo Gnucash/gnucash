@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.c -- Account data structure implementation               *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -39,6 +39,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-lot.h"
+#include "gnc-lot-p.h"
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
 #include "messages.h"
@@ -98,6 +99,7 @@ xaccInitAccount (Account * acc, GNCBook *book)
   acc->commodity_scu = 0;
 
   acc->splits = NULL;
+  acc->lots = NULL;
 
   acc->version = 0;
   acc->version_check = 0;
@@ -273,6 +275,21 @@ xaccFreeAccount (Account *acc)
     acc->children = NULL;
   }
 
+  /* remove lots -- although these should be gone by now. */
+  if (acc->lots)
+  {
+    PERR (" instead of calling xaccFreeAccount(), please call \n"
+          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+  
+    for (lp=acc->lots; lp; lp=lp->next)
+    {
+      GNCLot *lot = lp->data;
+      gnc_lot_destroy (lot);
+    }
+    g_list_free (acc->lots);
+    acc->lots = NULL;
+  }
+
   /* Next, clean up the splits */
   /* NB there shouldn't be any splits by now ... they should 
    * have been all been freed by CommitEdit().  We can remove this
@@ -388,6 +405,8 @@ xaccAccountCommitEdit (Account *acc)
    * and then the splits ... */
   if (acc->do_free)
   {
+    GList *lp;
+	 
     acc->editlevel++;
 
     /* First, recursively free children */
@@ -406,6 +425,15 @@ xaccAccountCommitEdit (Account *acc)
       xaccSplitDestroy (s);
       xaccTransCommitEdit (t);
     }
+
+    /* the lots should be empty by now */
+    for (lp=acc->lots; lp; lp=lp->next)
+    {
+      GNCLot *lot = lp->data;
+      gnc_lot_destroy (lot);
+    }
+    g_list_free (acc->lots);
+    acc->lots = NULL;
 
     acc->core_dirty = TRUE;
     acc->editlevel--;
@@ -903,6 +931,47 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 
     xaccClearMarkDown (account, val);
   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountInsertLot (Account *acc, GNCLot *lot)
+{
+	GList *sl;
+   Account * old_acc = NULL;
+
+   if (!acc || !lot) return;
+
+   /* pull it out of the old account */
+   if (lot->account && lot->account != acc)
+   {
+      old_acc = lot->account;
+      xaccAccountBeginEdit (old_acc);
+      old_acc->lots = g_list_remove (old_acc->lots, lot);
+      
+   }
+   
+   xaccAccountBeginEdit(acc);
+   lot->account = acc;
+   acc->lots = g_list_prepend (acc->lots, lot);
+
+   /* Move all slots over to the new account.  At worst,
+    * this is a no-op. */
+   if (lot->splits)
+   {
+      for (sl = lot->splits; sl; sl=sl->next)
+      {
+			Split *s = sl->data;
+         if (s->acc != acc)
+         {
+            xaccAccountInsertSplit (acc, s);
+         }
+      }
+   }
+   xaccAccountCommitEdit(acc);
+   xaccAccountCommitEdit(old_acc);
 }
 
 /********************************************************************\

@@ -163,6 +163,7 @@ xaccDupeSplit (Split *s)
 
   split->parent = s->parent;
   split->acc = s->acc;
+  split->lot = s->lot;
 
   split->memo = g_cache_insert (gnc_engine_get_string_cache(), s->memo);
   split->action = g_cache_insert (gnc_engine_get_string_cache(), s->action);
@@ -205,6 +206,7 @@ xaccFreeSplit (Split *split)
   split->amount      = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
   split->parent      = NULL;
+  split->lot         = NULL;
   xaccSplitSetAccount(split, NULL);
   
   split->date_reconciled.tv_sec = 0;

@@ -1,7 +1,7 @@
 /********************************************************************\
  * Account.h -- Account handling public routines                    *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2002 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -200,6 +200,14 @@ Account * xaccAccountLookupTwin (Account *acc,  GNCBook *book);
 gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
 
 /* ------------------ */
+/* The xaccAccountInsertLot() method will register the indicated lot 
+ *    with this account.   Any splits later inserted into this lot must 
+ *    belong to this account.  If the lot is already in another account,
+ *    the lot, and all of the splits in it, will be moved from that
+ *    account to this account.
+ */
+void xaccAccountInsertLot (Account *, GNCLot *);
+
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 

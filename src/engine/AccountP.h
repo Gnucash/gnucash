@@ -1,7 +1,7 @@
 /********************************************************************\
  * AccountP.h -- Account engine-private data structure              *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2001, Linas Vepstas <linas@linas.org>         *
+ * Copyright (C) 1997-2002, Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -122,6 +122,7 @@ struct account_s
   guint32  version_check;  /* data aging timestamp */
 
   SplitList *splits;       /* list of split pointers */
+  LotList   *lots;         /* list of lot pointers */
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;

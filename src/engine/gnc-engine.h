@@ -41,6 +41,7 @@ typedef struct gnc_session_struct    GNCSession;
 
 typedef GList                  AccountList;
 typedef GList                  BookList;
+typedef GList                  LotList;
 typedef GList                  SplitList;
 typedef GList                  TransList;
 
