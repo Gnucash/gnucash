@@ -38,9 +38,10 @@ Features
                 as a single transactional entity, allowing
                 all edits to be committed or rejected as
                 a whole.
--- Motif & C based
--- GUI code segregated, theoretically making port to 
-                Qt, GTK easy.
+-- C language implementation.
+-- Identical function available via Motif or GTK.  The GUI 
+                code segregated, theoretically making port to 
+                Qt easy.
 
 
 Philosophy
@@ -82,7 +83,7 @@ are completely "GUI-independent"; that is, they
 depend on the underlying table to display the text.
 Cells which require additional GUI elements (e.g.
 pull-down menus) must implement the proper GUI
-handling on their own (using e.g. motif, GTK or Qt).
+handling on their own (using e.g. Motif, GTK or Qt).
 
 Cellblock
 ---------
@@ -151,8 +152,8 @@ bank, credit-card, stock, general ledger, etc.
 
 Portability Notes
 -----------------
-The register should be easily portable to Qt or GTK.
-Most of the files contain no motif code, and thus do not 
+The register should be easily portable to Qt.  Most of 
+the files contain no Motif or GTK code, and thus do not 
 require any porting.  All Motif-specific code appears in 
 the file "table-motif.c" and "combocell.c".  All that 
 table-motif.c does is to set up the XbaeMatrix Motif widget,
