@@ -317,6 +317,7 @@ the account instead of opening a register." #f))
   'default
   (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
         #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
+        #(asset-expense "Asset & Expense" "Reverse Asset and Expense Accounts")
         #(none "None" "Don't reverse any accounts"))))
 
 

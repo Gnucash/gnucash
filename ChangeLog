@@ -1,3 +1,11 @@
+2000-04-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/prefs.scm: add an assets-expense choice to which kinds of
+	accounts are sign-reversed.
+
+	* src/gnome/top-level.c (gnc_configure_reverse_balance): handle the
+	asset-expense choice.
+
 2000-04-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/register/gnome/gnucash-style.c (gnucash_style_layout_init):

@@ -1,7 +1,7 @@
 /********************************************************************\
  * dialog-utils.h -- utility functions for creating dialogs         *
  *                   for GnuCash                                    *
- * Copyright (C) 1999 Linas Vepstas                                 *
+ * Copyright (C) 1999-2000 Linas Vepstas                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -14,9 +14,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA        *
- * 02111-1307, USA                                                  *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __DIALOG_UTILS_H__
@@ -57,7 +60,7 @@ struct _AccountFieldStrings
 };
 
 
-enum
+typedef enum
 {
   SOURCE_NONE = 0,
   SOURCE_YAHOO,
@@ -68,10 +71,10 @@ enum
   SOURCE_ASX,
   SOURCE_TIAA_CREF,
   NUM_SOURCES
-};
+} PriceSourceCode;
 
 
-enum
+typedef enum
 {
   ACCOUNT_TYPE = 0,
   ACCOUNT_NAME,
@@ -83,7 +86,7 @@ enum
   ACCOUNT_BALANCE, /* with sign reversal */
   ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
   NUM_ACCOUNT_FIELDS
-};
+} AccountFieldCode;
 
 
 /* option button callback function */

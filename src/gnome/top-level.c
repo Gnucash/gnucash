@@ -589,6 +589,11 @@ gnc_configure_reverse_balance(void)
     reverse_type[INCOME]    = GNC_T;
     reverse_type[CREDIT]    = GNC_T;
   }
+  else if (safe_strcmp(choice, "asset-expense") == 0)
+  {
+    reverse_type[ASSET]   = GNC_T;
+    reverse_type[EXPENSE] = GNC_T;
+  }
   else if (safe_strcmp(choice, "none") == 0)
   {
   }
