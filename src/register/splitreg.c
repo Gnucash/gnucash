@@ -49,7 +49,8 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
-static gncBoolean only_debit_credit_labels = FALSE;
+static SRStringGetter debit_getter = NULL;
+static SRStringGetter credit_getter = NULL;
 
 typedef struct _CellBuffer CellBuffer;
 struct _CellBuffer
@@ -163,19 +164,25 @@ static SplitRegisterColors reg_colors = {
 
 /* ============================================== */
 
-void
-xaccSplitRegisterSetLabelMode(gncBoolean only_debit_credit)
-{
-  only_debit_credit_labels = only_debit_credit;
-}
-
-/* ============================================== */
-
 #define LABEL(NAME,label)					\
 {								\
    BasicCell *hcell;						\
    hcell = reg->header_label_cells[NAME##_CELL];		\
    xaccSetBasicCellValue (hcell, label);			\
+}
+
+/* ============================================== */
+
+void
+xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter)
+{
+  debit_getter = getter;
+}
+
+void
+xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter)
+{
+  credit_getter = getter;
 }
 
 /* ============================================== */
@@ -185,80 +192,49 @@ xaccSplitRegisterSetLabelMode(gncBoolean only_debit_credit)
 static void
 configLabels (SplitRegister *reg)
 {
-   BasicCell *hc;
-   int type = (reg->type) & REG_TYPE_MASK;
+  BasicCell *hc;
+  int type = (reg->type) & REG_TYPE_MASK;
+  char *string;
 
-   LABEL (DATE,  DATE_STR);
-   LABEL (NUM,   NUM_STR);
-   LABEL (DESC,  DESC_STR);
-   LABEL (RECN,  "R");
-   LABEL (SHRS,  TOTAL_SHARES_STR);
-   LABEL (BALN,  BALN_STR);
-   LABEL (ACTN,  ACTION_STR);
-   LABEL (XFRM,  XFRM_STR);
-   LABEL (MXFRM, XFRM_STR);
-   LABEL (XTO,   XFTO_STR);
-   LABEL (MEMO,  MEMO_STR);
-   LABEL (CRED,  CREDIT_STR);
-   LABEL (DEBT,  DEBIT_STR);
-   LABEL (PRIC,  PRICE_STR);
-   LABEL (VALU,  VALUE_STR);
+  LABEL (DATE,  DATE_STR);
+  LABEL (NUM,   NUM_STR);
+  LABEL (DESC,  DESC_STR);
+  LABEL (RECN,  "R");
+  LABEL (SHRS,  TOTAL_SHARES_STR);
+  LABEL (BALN,  BALN_STR);
+  LABEL (ACTN,  ACTION_STR);
+  LABEL (XFRM,  XFRM_STR);
+  LABEL (MXFRM, XFRM_STR);
+  LABEL (XTO,   XFTO_STR);
+  LABEL (MEMO,  MEMO_STR);
+  LABEL (CRED,  CREDIT_STR);
+  LABEL (DEBT,  DEBIT_STR);
+  LABEL (PRIC,  PRICE_STR);
+  LABEL (VALU,  VALUE_STR);
 
+  if (debit_getter != NULL)
+  {
+    string = debit_getter(type);
 
-   /* setup custom labels for the debit/credit columns */
-   if (!only_debit_credit_labels) {
-     switch (type) {
-       case BANK_REGISTER:
-         LABEL (DEBT, DEPOSIT_STR);
-         LABEL (CRED, PAYMENT_STR);
-         break;
-       case CASH_REGISTER:
-         LABEL (DEBT, RECEIVE_STR);
-         LABEL (CRED, SPEND_STR);
-         break;
-       case ASSET_REGISTER:
-         LABEL (DEBT, DEBIT_STR);
-         LABEL (CRED, CREDIT_STR);
-         break;
-       case CREDIT_REGISTER:
-         LABEL (DEBT, PAYMENT_STR);
-         LABEL (CRED, CHARGE_STR);
-         break;
-       case LIABILITY_REGISTER:
-         LABEL (DEBT, DEBIT_STR);
-         LABEL (CRED, CREDIT_STR);
-         break;
-       case INCOME_LEDGER:  
-       case INCOME_REGISTER:
-         LABEL (DEBT, CHARGE_STR);
-         LABEL (CRED, INCOME_STR);
-         break;
-       case EXPENSE_REGISTER:
-         LABEL (DEBT, EXPENSE_STR);
-         LABEL (CRED, REBATE_STR);
-         break;
-       case STOCK_REGISTER:
-       case PORTFOLIO_LEDGER:
-       case CURRENCY_REGISTER:
-         LABEL (DEBT, BOUGHT_STR);
-         LABEL (CRED, SOLD_STR);
-         break;
-       case GENERAL_LEDGER:  
-       case EQUITY_REGISTER:
-       case SEARCH_LEDGER:
-         LABEL (DEBT, DEBIT_STR);
-         LABEL (CRED, CREDIT_STR);
-         break;
-       default:
-         break;
-     }
-   }
+    LABEL (DEBT, string);
 
-   /* copy debit, dredit strings to ndebit, ncredit cells */
-   hc = reg->header_label_cells[DEBT_CELL];
-   LABEL (NDEBT,  hc->value);
-   hc = reg->header_label_cells[CRED_CELL];
-   LABEL (NCRED,  hc->value);
+    free(string);
+  }
+
+  if (credit_getter != NULL)
+  {
+    string = credit_getter(type);
+
+    LABEL (CRED, string);
+
+    free(string);
+  }
+
+  /* copy debit, dredit strings to ndebit, ncredit cells */
+  hc = reg->header_label_cells[DEBT_CELL];
+  LABEL (NDEBT,  hc->value);
+  hc = reg->header_label_cells[CRED_CELL];
+  LABEL (NCRED,  hc->value);
 }
 
 /* ============================================== */

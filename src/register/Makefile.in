@@ -1,4 +1,4 @@
-# Makefile -- makefile for xacc/src/register                       
+# Makefile -- makefile for gnucash/src/register                       
 # Copyright (C) 1997 Robin Clark                                   
 # Copyright (C) 1998, 1999, 2000 Linas Vepstas                                 
 #                                                                  
@@ -13,13 +13,11 @@
 # GNU General Public License for more details.                     
 #                                                                  
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software      
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
-#                                                                  
-#   Author: Robin Clark                                            
-# Internet: rclark@rush.aero.org                                   
-#  Address: 609 8th Street                                         
-#           Huntington Beach, CA 92648-4632                        
+# along with this program; if not, contact:
+#
+# Free Software Foundation           Voice:  +1-617-542-5942
+# 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+# Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 include @top_srcdir@/Makefile.init
 
@@ -38,8 +36,8 @@ CFLAGS := @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH} ${CPPFLAGS}
 
 ######################################################################
 # See Makefile.common for information about these variables.
-COMMON_SRCS := basiccell.c cellblock.c \
-	       datecell.c pricecell.c QuickFill.c quickfillcell.c \
+COMMON_SRCS := basiccell.c cellblock.c datecell.c \
+	       pricecell.c QuickFill.c quickfillcell.c \
 	       recncell.c splitreg.c numcell.c \
                table-allgui.c table-html.c textcell.c
 MOTIF_SRCS := table-motif.c combocell-motif.c quickfillcell-motif.c

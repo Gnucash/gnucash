@@ -119,10 +119,10 @@
       (map thunk gnc:*credit-strings*)))
 
 (define (gnc:get-debit-string type)
-  (assoc-ref gnc:*debit-strings* type))
+  (gnc:_ (assoc-ref gnc:*debit-strings* type)))
 
 (define (gnc:get-credit-string type)
-  (assoc-ref gnc:*debit-strings* type))
+  (gnc:_ (assoc-ref gnc:*credit-strings* type)))
 
 
 ;; Main Window options
@@ -211,11 +211,6 @@ the account instead of opening a register." #f))
         #(auto_single "Auto Single" "Single line mode with a multi-line cursor")
         #(auto_double "Auto Double" "Double line mode with a multi-line cursor")
         )))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Register" "Always use debit/credit labels"
-  "aa" "Only use 'debit' and 'credit' as register column titles." #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -381,6 +376,11 @@ the account instead of opening a register." #f))
   (list #(default "Income & Expense" "Reverse Income and Expense Accounts")
         #(credit "Credit Accounts" "Reverse Credit Card, Liability, Equity, and Income Accounts")
         #(none "None" "Don't reverse any accounts"))))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Use accounting labels"
+  "e" "Only use 'debit' and 'credit' instead of informal synonyms." #f))
 
 
 ;; Configuation variables

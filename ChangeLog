@@ -1,3 +1,16 @@
+2000-05-17  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c (gnc_recn_create_tool_bar): add a
+	'Finish' reconcile button to the toolbar.
+
+	* src/register/splitreg.c (configLabels): use callbacks to get
+	debit/credit headings.
+
+	* src/guile/guile-util.c: new functions to access guile
+	debit/credit synonyms by account type.
+
+	* src/scm/prefs.scm: added debit/credit synonym configuration.
+
 2000-05-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/engine/guid/guid.h: change the GUID struct to a union with

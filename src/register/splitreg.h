@@ -61,21 +61,24 @@
 /* defined register types */
 /* "registers" are single-account display windows.
  * "ledgers" are multiple-account display windows */
-#define BANK_REGISTER       1
-#define CASH_REGISTER       2
-#define ASSET_REGISTER      3
-#define CREDIT_REGISTER     4
-#define LIABILITY_REGISTER  5
-#define INCOME_REGISTER     6
-#define EXPENSE_REGISTER    7
-#define EQUITY_REGISTER     8
-#define STOCK_REGISTER      9
-#define CURRENCY_REGISTER   10
+typedef enum
+{
+  BANK_REGISTER       =  1,
+  CASH_REGISTER       =  2,
+  ASSET_REGISTER      =  3,
+  CREDIT_REGISTER     =  4,
+  LIABILITY_REGISTER  =  5,
+  INCOME_REGISTER     =  6,
+  EXPENSE_REGISTER    =  7,
+  EQUITY_REGISTER     =  8,
+  STOCK_REGISTER      =  9,
+  CURRENCY_REGISTER   = 10,
 
-#define GENERAL_LEDGER      11
-#define INCOME_LEDGER       12
-#define PORTFOLIO_LEDGER    13
-#define SEARCH_LEDGER       14
+  GENERAL_LEDGER      = 11,
+  INCOME_LEDGER       = 12,
+  PORTFOLIO_LEDGER    = 13,
+  SEARCH_LEDGER       = 14
+} SplitRegisterType;
 
 #define REG_TYPE_MASK       0xff
 
@@ -212,6 +215,10 @@ struct _SplitRegisterColors
   uint32 header_bg_color;
 };
 
+typedef char* (*SRStringGetter) (SplitRegisterType);
+
+void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
+void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
 SplitRegister * xaccMallocSplitRegister (int type);
 void            xaccInitSplitRegister (SplitRegister *, int type);
@@ -220,10 +227,6 @@ void            xaccDestroySplitRegister (SplitRegister *);
 
 void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 void            xaccSplitRegisterConfigColors (SplitRegister *reg);
-
-/* determines whether the register uses only debit/credit as labels
- * or uses 'informal' names like deposit/payment, etc. */
-void            xaccSplitRegisterSetLabelMode(gncBoolean only_debit_credit);
 
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);

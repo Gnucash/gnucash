@@ -50,6 +50,7 @@
 #include "date.h"
 #include "AccWindow.h"
 #include "SplitLedger.h"
+#include "guile-util.h"
 #include "splitreg.h"
 
 
@@ -66,8 +67,7 @@ static void gnc_configure_register_borders_cb(void *);
 static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
-static void gnc_configure_debit_credit_labels_cb(void *);
-static void gnc_configure_debit_credit_labels(void);
+static void gnc_configure_sr_label_callbacks();
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -85,7 +85,6 @@ static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
-static SCM debit_credit_labels_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -170,11 +169,7 @@ gnucash_ui_init()
                                           NULL, "General",
                                           "Reversed-balance account types");
 
-    gnc_configure_debit_credit_labels();
-    debit_credit_labels_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_debit_credit_labels_cb,
-                                          NULL, "Register",
-                                          "Always use debit/credit labels");
+    gnc_configure_sr_label_callbacks();
 
     mainWindow();
 
@@ -226,7 +221,6 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);  
   gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
-  gnc_unregister_option_change_callback_id(debit_credit_labels_callback_id);  
 
   if (app != NULL)
   {
@@ -280,6 +274,61 @@ gnucash_ui_select_file()
 }
 
 /* ============================================================== */
+
+static GNCAccountType
+sr_type_to_account_type(SplitRegisterType sr_type)
+{
+  switch (sr_type)
+  {
+    case BANK_REGISTER:
+      return BANK;
+    case CASH_REGISTER:
+      return CASH;
+    case ASSET_REGISTER:
+      return ASSET;
+    case CREDIT_REGISTER:
+      return CREDIT;
+    case LIABILITY_REGISTER:
+      return LIABILITY;
+    case INCOME_LEDGER:  
+    case INCOME_REGISTER:
+      return INCOME;
+    case EXPENSE_REGISTER:
+      return EXPENSE;
+    case STOCK_REGISTER:
+    case PORTFOLIO_LEDGER:
+      return STOCK;
+    case CURRENCY_REGISTER:
+      return CURRENCY;
+    case GENERAL_LEDGER:  
+      return NO_TYPE;
+    case EQUITY_REGISTER:
+      return EQUITY;
+    case SEARCH_LEDGER:
+      return NO_TYPE;
+    default:
+      return NO_TYPE;
+  }
+}
+
+static char *
+gnc_sr_debit_string(SplitRegisterType sr_type)
+{
+  return gnc_get_debit_string(sr_type_to_account_type(sr_type));
+}
+
+static char *
+gnc_sr_credit_string(SplitRegisterType sr_type)
+{
+  return gnc_get_credit_string(sr_type_to_account_type(sr_type));
+}
+
+static void
+gnc_configure_sr_label_callbacks()
+{
+  xaccSplitRegisterSetDebitStringGetter(gnc_sr_debit_string);
+  xaccSplitRegisterSetCreditStringGetter(gnc_sr_credit_string);
+}
 
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets dateFormat to the current
@@ -624,38 +673,6 @@ gnc_configure_reverse_balance(void)
 
   if (choice != NULL)
     free(choice);
-}
-
-/* gnc_configure_debit_credit_labels_cb
- *    Callback called when options change - sets
- *    register debit/credit labels
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_debit_credit_labels_cb(void *not_used)
-{
-  gnc_configure_debit_credit_labels();
-}
-
-/* gnc_configure_debit_credit_labels
- *    sets usage of debit/credit labels
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_debit_credit_labels(void)
-{
-  gncBoolean only_debit_credit_labels;
-
-  only_debit_credit_labels =
-    gnc_lookup_boolean_option("Register",
-                              "Always use debit/credit labels",
-                              GNC_F);
-
-  xaccSplitRegisterSetLabelMode(only_debit_credit_labels);
 }
 
 /****************** END OF FILE **********************/
