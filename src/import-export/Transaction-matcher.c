@@ -177,7 +177,7 @@ if(transaction_info==matcher->selected_trans_info)
 	  gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split)));
   transaction_info->clist_text[DOWNLOADED_CLIST_AMOUNT]=transaction_info->amount_text;
 
-  transaction_info->clist_text[DOWNLOADED_CLIST_DESCRIPTION]==xaccTransGetDescription(transaction_info->trans);
+  transaction_info->clist_text[DOWNLOADED_CLIST_DESCRIPTION]=xaccTransGetDescription(transaction_info->trans);
   transaction_info->clist_text[DOWNLOADED_CLIST_MEMO]=xaccSplitGetMemo(transaction_info->first_split);
  
 

@@ -1,3 +1,10 @@
+2002-10-22  Derek Atkins  <derek@ihtfp.com>
+   Fix a bunch of compiler warnings:
+	* Transaction-matcher.c: use "=" not "==" to set a variable
+	* gncmod-generic-import.c: comment out unused variable "engine"
+	* dialog-scheduledxaction.c: comment out unused function
+	* gnc-splash.[ch]: change splash-update to take a const string
+
 2002-10-22  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/gnc-glossary.txt, po/glossary/*: Update glossary

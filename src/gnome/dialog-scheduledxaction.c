@@ -1893,6 +1893,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         g_string_free( nextDate, TRUE );
 }
 
+#if notused
 static
 gncUIWidget
 sxe_ledger_get_parent( GNCLedgerDisplay *ld )
@@ -1902,6 +1903,7 @@ sxe_ledger_get_parent( GNCLedgerDisplay *ld )
         sxed = gnc_ledger_display_get_user_data( ld );
         return sxed->dialog;
 }
+#endif
 
 /********************************************************************\
  * gnc_register_check_close                                         *

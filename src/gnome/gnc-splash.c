@@ -106,7 +106,7 @@ gnc_destroy_splash_screen (void)
 }
 
 void
-gnc_update_splash_screen (gchar *string)
+gnc_update_splash_screen (const gchar *string)
 {
   if (progress)
   {
