@@ -108,6 +108,10 @@ Splits
 * Split Getters::               
 * Split Setters::               
 
+Transactions
+
+* General Transaction API::     
+
 Register
 
 * Cells::                       

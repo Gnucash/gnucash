@@ -843,6 +843,67 @@ parent Account. @xref{Accounts}.
 @section Transactions
 @tindex Transaction
 
+A Transaction is the Engine abstraction of an accounting entry in a
+Journal. In accounting terms, a Transaction is a Journal Entry. As
+such, it contains the following pieces of information:
+
+@table @asis
+
+@item A list of Ledger Entries, or Splits
+The list of debits and credits which make up this Transaction. As in
+accounting, a Transaction is balanced when the sum of the debits equals
+the sum of the credits.
+
+@item The entry date
+The date the transaction was entered into GnuCash.
+
+@item The post date
+The date the transaction was posted. This is often the date the
+transaction was recorded by the bank, or the date the user initiated
+the transaction (i.e., wrote the check, made the ATM withdrawal).
+
+@item A transaction number field
+This field is intended to hold a transaction number, such as a
+check number or an ID assigned by a bank to an electronic transfer.
+
+@item A description
+A textual description of the transaction.
+
+@end table
+
+In addition to the above, Transactions contain a key-value pair frame.
+
+
+@menu
+* General Transaction API::     
+@end menu
+
+
+@node General Transaction API,  , Transactions, Transactions
+@subsection General Transaction API
+
+@deftypefun {Transaction *} xaccMallocTransaction (void)
+Allocate, initialize, and return a new Transaction.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccTransGetGUID (Transaction * @var{trans})
+Return the GUID of @var{trans}.
+@end deftypefun 
+
+@deftypefun {Transaction *} xaccTransLookup (const GUID * @var{guid})
+Return the Transaction associated with @var{GUID}, or @code{NULL} if
+there is no such Transaction.
+@end deftypefun
+
+@deftypefun {kvp_value *} xaccTransGetSlot(Transaction * @var{trans}, const char * @var{key})
+Return the @code{kvp_value} associated with @var{key} in @var{trans}.
+If there is none, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun void xaccTransSetSlot(Split * @var{trans}, const char * @var{key}, const kvp_value * @var{value})
+Associate a copy of @var{value} with @var{key} in @var{trans}.
+@end deftypefun
+
 
 @node Accounts, Account Groups, Transactions, Engine
 @section Accounts
