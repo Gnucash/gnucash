@@ -34,6 +34,7 @@
 #include "messages.h"
 #include "pricecell.h"
 #include "split-register-control.h"
+#include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "splitreg.h"
 #include "table-allgui.h"
@@ -667,10 +668,13 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         info->blank_split_edited = TRUE;
 
-        if (reg->template)
-          xaccSRSaveChangedTemplateCells (reg, trans, blank_split);
-        else
-          xaccSRSaveChangedCells (reg, trans, blank_split);
+        {
+          SRSaveData *sd;
+
+          sd = gnc_split_register_save_data_new (trans, blank_split);
+          gnc_table_save_cells (reg->table, sd);
+          gnc_split_register_save_data_destroy (sd);
+        }
 
         gnc_resume_gui_refresh ();
 

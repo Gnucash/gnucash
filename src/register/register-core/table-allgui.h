@@ -211,6 +211,8 @@ gboolean       gnc_table_get_cell_location (Table *table,
                                             VirtualCellLocation vcell_loc,
                                             VirtualLocation *virt_loc);
 
+void           gnc_table_save_cells (Table *table, gpointer save_data);
+
 
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);

@@ -135,12 +135,8 @@ void sr_set_cell_fractions (SplitRegister *reg, Split *split);
 CellBlock * sr_get_passive_cursor (SplitRegister *reg);
 CellBlock * sr_get_active_cursor (SplitRegister *reg);
 
-void xaccSRSaveChangedCells (SplitRegister *reg,
-                             Transaction *trans,
-                             Split *split);
+void sr_set_last_num (SplitRegister *reg, const char *num);
 
-void xaccSRSaveChangedTemplateCells (SplitRegister *reg,
-                                     Transaction *trans,
-                                     Split *split);
+Account * gnc_split_register_get_account (SplitRegister *reg, int cell_type);
 
 #endif

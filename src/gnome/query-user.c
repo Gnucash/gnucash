@@ -330,8 +330,8 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
 
  display a group of radio_buttons and return the index of
  the selected one
-
 */
+
 int
 gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
                                         const char *title, 
@@ -389,9 +389,10 @@ gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
 		       &radio_result);
   }
 
-  dialog = gnome_dialog_new(title,
-			    GNOME_STOCK_BUTTON_OK,
-			    NULL);
+  dialog = gnome_dialog_new (title,
+                             GNOME_STOCK_BUTTON_OK,
+                             GNOME_STOCK_BUTTON_CANCEL,
+                             NULL);
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));

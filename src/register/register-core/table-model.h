@@ -81,6 +81,9 @@ typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
 typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
                                          gpointer user_data);
 
+typedef void (*TableSaveHandler) (gpointer save_data,
+                                  gpointer user_data);
+
 typedef gpointer (*VirtCellDataAllocator)   (void);
 typedef void     (*VirtCellDataDeallocator) (gpointer cell_data);
 typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
@@ -94,6 +97,7 @@ typedef struct
   TableGetBGColorHandler bg_color_handler;
   TableGetCellBorderHandler cell_border_handler;
   TableConfirmHandler confirm_handler;
+  TableSaveHandler save_handler;
 
   gpointer handler_user_data;
 

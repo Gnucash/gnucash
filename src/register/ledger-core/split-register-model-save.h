@@ -1,6 +1,5 @@
 /********************************************************************\
- * query-user.h -- functions for creating dialogs for GnuCash       * 
- * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
+ * split-register-model-save.h -- split register model object       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,16 +17,24 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
-#ifndef QUERY_USER_H
-#define QUERY_USER_H
+#ifndef SPLIT_REGISTER_MODEL_SAVE_H
+#define SPLIT_REGISTER_MODEL_SAVE_H
 
-void gnc_info_dialog(const char *message);
-void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
+#include "Transaction.h"
+#include "table-model.h"
 
-void gnc_warning_dialog(const char *message);
 
-void gnc_error_dialog_parented(GtkWindow *parent, const char *message);
+void gnc_split_register_model_add_save_handlers (TableModel *model);
+void gnc_template_register_model_add_save_handlers (TableModel *model);
+
+typedef struct sr_save_data SRSaveData;
+
+SRSaveData * gnc_split_register_save_data_new (Transaction *trans,
+                                               Split *split);
+
+void gnc_split_register_save_data_destroy (SRSaveData *sd);
 
 #endif

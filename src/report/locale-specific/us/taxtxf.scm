@@ -405,7 +405,7 @@
 ;; returns 'html if html is chosen, 'txf if txf is chosen,
 ;; and #f otherwise
 (define (choose-export-format)
-  (let ((choice (gnc:choose_radio_option_dialog_parented
+  (let ((choice (gnc:choose-radio-option-dialog-parented
                  #f
                  (_ "Choose export format")
                  (_ "Choose the export format for this report:")

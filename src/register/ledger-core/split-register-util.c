@@ -403,3 +403,15 @@ sr_get_active_cursor (SplitRegister *reg)
 
   return gnc_table_layout_get_cursor (reg->table->layout, cursor_name);
 }
+
+void
+sr_set_last_num (SplitRegister *reg, const char *num)
+{
+  Account *account;
+
+  account = sr_get_default_account (reg);
+  if (!account)
+    return;
+
+  xaccAccountSetLastNum (account, num);
+}

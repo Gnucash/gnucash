@@ -1,3 +1,12 @@
+2001-08-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/query-user.c
+	(gnc_choose_radio_option_dialog_parented): add a cancel button
+
+	* src/guile/gw-gnc-spec.scm: fix api naming
+
+	* src/report/locale-specific/us/taxtxf.scm: fix api naming
+
 2001-08-20  Dave Peticolas  <dave@krondo.com>
 
 	* others: xaccGetAccountRoot->xaccAccountGetRoot

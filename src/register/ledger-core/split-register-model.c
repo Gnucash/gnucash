@@ -34,6 +34,7 @@
 #include "pricecell.h"
 #include "recncell.h"
 #include "split-register-model.h"
+#include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "messages.h"
 
@@ -1059,6 +1060,8 @@ gnc_split_register_model_new (void)
   model->cell_data_deallocator = gnc_split_register_guid_free;
   model->cell_data_copy        = gnc_split_register_guid_copy;
 
+  gnc_split_register_model_add_save_handlers (model);
+
   return model;
 }
 
@@ -1069,7 +1072,9 @@ gnc_template_register_model_new (void)
 
   model = gnc_split_register_model_new ();
 
-  model->entry_handler     = gnc_template_register_get_entry;
+  model->entry_handler = gnc_template_register_get_entry;
+
+  gnc_template_register_model_add_save_handlers (model);
 
   return model;
 }

@@ -272,7 +272,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 CellIOFlags
 gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->model->io_flag_handler)
+  if (!table || !table->model->io_flag_handler)
     return XACC_CELL_ALLOW_NONE;
 
   return table->model->io_flag_handler (virt_loc,
@@ -282,7 +282,7 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->model->label_handler)
+  if (!table || !table->model->label_handler)
     return "";
 
   return table->model->label_handler (virt_loc,
@@ -292,7 +292,7 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 guint32
 gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
-  if (!table->model->fg_color_handler)
+  if (!table || !table->model->fg_color_handler)
     return 0x0; /* black */
 
   return table->model->fg_color_handler (virt_loc,
@@ -303,7 +303,7 @@ guint32
 gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                         gboolean *hatching)
 {
-  if (!table->model->bg_color_handler)
+  if (!table || !table->model->bg_color_handler)
     return 0xffffff; /* white */
 
   return table->model->bg_color_handler (virt_loc, hatching,
@@ -314,7 +314,7 @@ void
 gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                        PhysicalCellBorders *borders)
 {
-  if (!table->model->cell_border_handler)
+  if (!table || !table->model->cell_border_handler)
     return;
 
   table->model->cell_border_handler (virt_loc, borders,
@@ -438,6 +438,15 @@ gnc_table_get_cell_location (Table *table,
     }
 
   return FALSE;
+}
+
+void
+gnc_table_save_cells (Table *table, gpointer save_data)
+{
+  if (!table || !table->model->save_handler)
+    return;
+
+  table->model->save_handler (save_data, table->model->handler_user_data);
 }
 
 void 
