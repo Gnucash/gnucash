@@ -1,0 +1,59 @@
+<ARTICLE ID="XACC-PREFERENCES">
+
+<ARTHEADER>
+<TITLE>Preferências</TITLE>
+</ARTHEADER>
+
+<PARA>Você pode personalizar o comportamento do GnuCash alterando 
+    as definições nesta janela. Todas as definições são automaticamente 
+    gravadas pelo que as alterações se mantêm em futuras sessões.
+
+    </PARA>
+<PARA>Para modificar definições, basta clicar para seleccionar a página 
+    apropriada, depois realizar as modificações necessárias e carregar no 
+    botão "Aplicar" para ver as modificações tomarem efeito. Clicar no "OK" aplica 
+    as alterações, fechando a janela de propriedades de seguida. O botão de 
+    "Fechar" limita-se a fechar a janela sem aplicar as últimas modificações.
+
+    </PARA>
+<PARA>As definições encontram-se agrupadas nas seguintes categorias:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Campos de Contas:</EMPHASIS> define que campos são apresentados 
+      na lista de contas da janela principal.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Tipos de Contas:</EMPHASIS> define que tipos de contas são 
+      apresentados na janela principal.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Genérico:</EMPHASIS> tudo o que não se encaixar em mais lado 
+      nenhum.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Internacional:</EMPHASIS> Opções relacionadas com os formatos 
+      de visualisação de data e hora.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Registo:</EMPHASIS> Opções relacionadas com a aparência por 
+      defeito do registo de transacções.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

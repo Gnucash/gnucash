@@ -1,0 +1,29 @@
+
+<ARTICLE ID="XACC-BALANCESHEET">
+<ARTHEADER>
+<TITLE>Folha de Saldos</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Folha de Saldos</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-baln.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Este relatório resume os seus activos, passivos e 
+    saldos iniciais.
+
+    </PARA>
+<PARA>Pode seleccionar a data até à qual a Folha de Saldos deve 
+    ser calculada utilizando o botão "preferências" na barra de 
+    ferramentas. O defeito é hoje.
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

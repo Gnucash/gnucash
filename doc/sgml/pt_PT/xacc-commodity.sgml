@@ -1,0 +1,50 @@
+<ARTICLE ID="XACC-COMMODITY">
+
+<ARTHEADER>
+<TITLE>Criar um "activo"</TITLE>
+</ARTHEADER>
+
+<PARA>O Gnucash representa moedas nacionais, acções, certificados de aforro 
+e todos os outros activos transaccionáveis utilizando uma estrutura unificada. 
+Nesta janela, você irá especificar as propriedades de um novo activo. 
+</PARA>
+
+<para>O <emphasis>nome comleto</emphasis> do activo é um nome reconhecível 
+tal como "Escudos Portugueses " ou "Acções EDP". </para>
+
+<para>O <emphasis>símbolo ou abreviatura</emphasis> para o bem é o símbolo
+do "ticker" (para acções), símbolo ISO de moeda (para moedas nacionais), 
+ou outra abreviatura única para o activo. Caso o activo seja transaccionável 
+em qualquer bolsa, é importante utilizar o mesmo identificativo que é utilizado 
+nessa bolsa. </para>
+
+<para>O <emphasis>tipo</emphasis> de um activo é o grupo ou nomenclatura 
+a que pertencem. Por exemplo, moedas nacionais são do tipo ISO4217. Este é 
+um standard internacional que define símbolos únicos de três letras para cada 
+moeda. Outros tipos inlcuem BVLP, AMEX, NYSE, NASDAQ, e EUREX para as acções 
+transaccionadas nessas bolsas, e FUND para certificados de Aforro (FUND pode 
+não se aplicar em Portugal). Se o seu activo não for de um destes tipos, pode 
+criar um novo tipo introduzindo-o na caixa.</para>
+
+<para>O <emphasis>código</emphasis> do activo é um código numérico ou 
+alfa-numérico que é utilizado para identificar o bem. O código CUSIP, por 
+exemplo, é um identificador de valor numérico único e que está associado 
+a todas as acções, obrigações, certificados de aforro, e à maior parte das 
+opções, futuros, e activos transaccionáveis. Este código não é obrigatório.</para>
+
+<para>A <emphasis>fracção transaccionável</emphasis> é a mais pequena 
+unidade transaccionável do activo, expresso como uma fracção de uma 
+unidade nominal. Para Euros, por exemplo, a fracção transaccionada é "1/100", 
+porque saldos bancários e a moeda é contada até ao centésimo (1/100) de Euro. 
+Este valor é utilizado como defeito de resolução para as contas definidas 
+neste activo, mas pode ser ignorada caso a contabilização de uma conta em 
+particular requeira uma fracção diferente. Por exemplo, a posse de acções pode 
+ser reconhecida nalgumas correctoras em 1/1000 de uma acção, apesar de que as 
+transacções reais sobre a acção são em valores inteiros de número de acções 
+(a posse de fracções de acção é um truque contabilístico da correctora, 
+no papel).</para>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

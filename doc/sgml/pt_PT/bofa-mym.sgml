@@ -1,0 +1,35 @@
+<ARTICLE ID="BOFA-MYM">
+<ARTHEADER>
+<TITLE>Importar Ficheiros MYM</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Conversão do Managing Your Money para o GnuCash </TITLE>
+
+<PARA> Ken Yamaguchi amavelmente disponibilizou um script em Perl que
+permite converter dados da aplicação <APPLICATION>Managing Your Money 
+2.x</APPLICATION> para o formato QIF, que por sua vez pode ser importado
+para o <APPLICATION>GnuCash</APPLICATION>. Foi testado com a 1.3.99 e
+funcionou correctamente. O script está disponível em: </PARA>
+
+<PARA><ULINK URL="http://www-cad.eecs.berkeley.edu/~gooch/mymdump.html">
+http://www-cad.eecs.berkeley.edu/~gooch/mymdump.html</ULINK> </PARA>
+
+</SECT1>
+<SECT1 ID="XACC-DUPETXNS">
+<TITLE> Transacções Duplicadas</TITLE>
+<PARA> Ken também escreveu um script que remove transacções duplicadas
+já ao nível do ficheiro QIF. GnuCash é muito rígido com duplicados, e 
+este script é útil para importar com sucesso um conjunto de ficheiros QIF 
+disponibilizados por um banco para periodos de tempo coincidentes, por 
+exemplo. Este script está disponível em: </PARA>
+
+<PARA><ULINK URL="http://www-cad.eecs.berkeley.edu/~gooch/qifuniq.html">
+http://www-cad.eecs.berkeley.edu/~gooch/qifuniq.html</ULINK>
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

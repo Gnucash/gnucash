@@ -1,0 +1,66 @@
+<ARTICLE ID="XACC-BALANCEREPORT">
+
+<ARTHEADER>
+<TITLE>Relatório de Controlo de Saldos</TITLE>
+</ARTHEADER>
+
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-av-baln.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+    </PARA>
+
+<PARA>Os parâmetros deste relatório incluem:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>As datas de início e final do período contabilístico.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>A duração de cada "passo", ou intrevalo no período contabilístico.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>As contas sobre as quais o relatório deve ser gerado. Se mais de
+      uma conta for seleccionada, o somatório de todos os saldos das 
+      contas seleccionadas é utilizado. <EMPHASIS>Nota: Alguém pode 
+      certificar-se de que isto está correcto?</EMPHASIS>
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        Que aspecto do relatório deverá ser tornado em gráfico. 
+        Estão disponíveis três gráficos: 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Saldo médio durante o intrevalo
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Lucro/Prejuizo Líquido durante o intrevalo
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Lucros e Prejuizos durante o intrevalo
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,22 @@
+
+<ARTICLE ID="XACC-ADJBALWIN">
+<ARTHEADER>
+<TITLE>Janela de Ajuste de Saldo</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Janela de Ajuste de Saldo</TITLE>
+<PARA>Janela de Ajuste de Saldo. Utilize-a para ajustar o saldo. Introduza 
+    um montante em escudos (ou na moeda da conta), e uma entrada de registo 
+    será criada definindo o saldo para o novo valor. 
+
+    </PARA>
+<PARA><EMPHASIS>Documentar melhor este ponto.</EMPHASIS>
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

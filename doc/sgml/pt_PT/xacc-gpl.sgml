@@ -1,0 +1,373 @@
+<ARTICLE ID="XACC-GPL">
+
+<ARTHEADER>
+<TITLE>Licença Pública Geral GNU</TITLE>
+</ARTHEADER>
+
+<SECT1>
+<TITLE>Licença Pública Geral GNU</TITLE>
+
+<SECT2>
+<TITLE>Versão 2, Junho 1991</TITLE>
+
+<PARA>Copyright (C) 1989, 1991 Free Software Foundation, Inc. 675
+      Mass Ave, Cambridge, MA 02139, USA 
+      </PARA>
+
+<PARA>A qualquer pessoa é permitido copiar e distribuir exemplares 
+      verbatim deste documento de licenciamento, não sendo no entanto 
+      permitido altera-lo.
+    </PARA>
+
+<SECT3>
+<TITLE><ANCHOR ID="SEC001">Preâmbulo</TITLE>
+
+<PARA>As licenças da maioria das aplicações são definidas por forma a 
+    impedi-lo de o partilhar ou modificar. Por contraste, a Licença 
+    Pública Geral GNU destina-se a garantir a sua liberdade de partilhar 
+    e modificar aplicações livres--a assegurar-se de que as aplicações 
+    são livres para todos os seus utilizadores. Esta Licença Pública Geral 
+    aplica-se à maioria das aplicações da Free Software Foundation (Fundação 
+    das Aplicações Livres) e a outras aplicações cujos autores se decidam a 
+    utiliza-la. (Algumas outras aplicações da Free Software Foundation estão 
+    cobertas pela Licença Pública Geral de Biblioteca GNU.) Você também a pode 
+    aplicar às suas aplicações.
+
+    </PARA>
+<PARA>Quando falamos de aplicações livres (free), referimo-nos a 
+    liberdade, não preço. A nossa Licença Pública Geral é destinada 
+    a garantir que você possui a liberdade de distribuir cópias de 
+    aplicações livres (e cobrar por este serviço, se assim o desejar), 
+    que você receba o código-fonte ou o consiga obter se o desejar, que 
+    pode modificar a aplicação ou utilizar partes da mesma em novas 
+    aplicações livres; e para que saiba que pode fazer estas coisas.
+
+    </PARA>
+<PARA>Para proteger os seus direitos, temos de definir restrições que 
+    proibam a qualquer pessoa negar-lhe estes direitos ou pedir-lhe para 
+    desistir destes direitos. Estas restrições traduzem-se em algumas 
+    responsabilidades para si caso distribua cópias da aplicação, ou se 
+    a modificar.
+
+    </PARA>
+<PARA>Por exemplo, caso distribua cópias de uma aplicação, quer seja 
+    gratuitamente ou por um preço, tem de dar às pessoas todos os 
+    direitos que tem. Tem de se certificar de que eles, também, recebem 
+    ou podem obter o código-fonte. E tem de lhes mostrar estes termos 
+    para que conhecam os seus direitos.
+
+    </PARA>
+<PARA>Nós protegemos os seus direitos com dois passos: (1) direitos de 
+    autor para a aplicação e (2) oferecemos-lhe esta licença que lhe dá 
+    a autorização legal de copiar, distribuir e/ou modificar a aplicação.
+
+    </PARA>
+<PARA>Também, para a protecção de cada autor e a sua, queremos 
+    certificar-nos de que toda a gente compreende que não existe 
+    garantia para aplicações livres. Se a aplicação é modificada 
+    por terceiros e redistribuida, queremos que os seus receptores 
+    saibam que não possuem o original, pelo que quaisquer problemas 
+    introduzidos por terceiros não irão interferir na reputação do 
+    autor original.
+
+    </PARA>
+<PARA>Finalmente, qualquer aplicação livre é constantemente ameaçada 
+    por patentes de aplicações. Nos desejamos evitar o perigo de 
+    redistribuidores de um programa livre adquirirem individualmente 
+    licenças de patente, tornando no fundo a aplicação proprietária. 
+    Para prevenir isto, tornamos claro que qualquer patente tem de ser 
+    licenciada para usufruto livre de qualquer pessoa ou então não ser 
+    licenciado de todo.
+    </PARA>
+<PARA>Os termos e condições precisas para cópia, distribuição e 
+    modificação seguem-se.
+
+
+    </PARA>
+</SECT3>
+
+<SECT3>
+<TITLE><ANCHOR ID="SEC002">TERMOS E CONDIÇÕES DA LICENÇA PÚBLICA 
+    GERAL GNU PARA COPIA, DISTRIBUIÇÃO E MODIFICAÇÃO</TITLE>
+<PARA>0. Esta Licença aplica-se a qualquer aplicação ou outro trabalho 
+    que contenha um aviso colcado pelo detentor dos direitos de autor 
+    dizendo que pode ser distribuida de acordo com os termos da Licença 
+    Pública Geral. A "Aplicação", abaixo, refere-se a qualquer tipo de 
+    aplicação ou trabalho, e um "trabalho baseado na Aplicação" significa 
+    ou a Aplicação ou trabalhos derivados sob a lei de direito de autor: 
+    quer dizer, um trabalho que contenha a Aplicação ou parte dela, que 
+    exacta ou modificações e/ou tranduzida para outros idiomas. (De aqui em 
+    diante, tradução é incluida sem quaisquer limitações no termo 
+    "modificação".) Cada licenciado é referido como "você".
+
+    </PARA>
+<PARA>Outras actividades que não cópia, distribuição e modificação 
+    não são cobertas por esta Licença; estão fora do seu âmbito. O 
+    acto de executar a Aplicação não está restringido, e o resultado 
+    da Aplicação está coberto apenas se os seus conteúdos constituirem 
+    um trabalho baseado na Aplicação (independentemente de ter sido 
+    feito executando a Aplicação). Isto ser verdade depende do que a 
+    Aplicação faz.
+
+    </PARA>
+<PARA>1. Você pode copiar e distribuir cópias verbatim (inalteradas) 
+    do código-fonte da Aplicação tal como o recebeu, em qualquer meio, 
+    desde que você menifesta e apropriadamente publique em cada cópia 
+    um aviso de direitos de autor apropriado e uma desresponsabilização 
+    de garantia; mantenha intactos todos os avisos que se referem a 
+    esta Licença e à falta de qualquer garantia; e dê a quaisquer outros 
+    receptores da Aplicação uma cópia desta Licença junto com a Aplicação.
+
+    </PARA>
+<PARA>Você pode cobrar um montante pelo acto físico de transferir a 
+    cópia, e pode por sua livre opção oferecer protecção de garantia 
+    em troca de um honorário.
+
+    </PARA>
+<PARA>2. Você pode modificar as suas copias da Aplicação ou qualquer 
+    parte da mesma, criando assim um trabalho baseado na Aplicação, e 
+    copiar e distribuir tais modificações ou trabalho sob os termos da 
+    Secção 1 acima, desde que garanta todas as seguintes condições:
+
+    <BLOCKQUOTE>
+<PARA>      a) Tem de fazer com que os ficheiros modificados contenham 
+      avisos destacados de que você os modificou e a data de qualquer 
+      modificação. 
+
+      </PARA>
+<PARA>b) Tem de fazer com que qualquer trabalho que distribua ou publique, 
+      queno seu todo ou em parte contenha ou seja derivado da Aplicação 
+      ou qualquer parte dela, seja licenciado como um todo sem custos 
+      para terceiros e sob os termos desta Licença.
+
+      </PARA>
+<PARA>c) Se a aplicação modificada costuma ler comandos interactivamente 
+      quando executada, tem de fazer com que ela, quando iniciar a
+      sua execução para tal uso interactivo na sua forma mais simples, 
+      imprima ou mostre um anúncio incluindo um aviso apropriado de 
+      direitos de autor e de que não existe garantia (ou então, dizendo 
+      que você oferece garantia) e que os utilizadores podem redistribuir 
+      a aplicação sob estas condições, e instruindo o utilizador em como 
+      ler uma cópia desta Licença. (Excepção: se a própria Aplicação é 
+      interactiva mas normalmente não imprime tal anúncio, o seu trabalho 
+      baseado na Aplicação não é obrigado a imprimir o anúncio.)
+    </PARA>
+</BLOCKQUOTE>
+
+    Estes requisitos aplicam-se também ao trabalho modificado como um 
+    todo. Se secções identificáveis desse trabalho não forem derivadas 
+    da Aplicação, e podem razoavelmente ser consideradas independentes 
+    e um trabalho separado em si, então esta Licença, e os seus termos,
+    não se aplicam a essas secções queando as distribuir como trabalhos 
+    separados. Mas quando distribuir as mesmas secções como parte de um 
+    todo que seja baseado na Aplicação, a distribuição do todo tem de ser 
+    sob os termos desta Licença, cujas permissões para outros licenciados 
+    seja extensível para o todo, e assim para cada uma de todas as partes 
+    independentemente de quem as programou. 
+
+    </PARA>
+<PARA>Assim, não é intenção desta secção reclamar direitor ou contestar 
+    os seus direitos pelo trabalho inteiramente escrito por si; mas sim,
+    a intenção é a de exercer o direito de controlar a distribuição de 
+    trabalhos derivados ou aglutinadores baseados na Aplicação.
+
+    </PARA>
+<PARA>Adicionalmente, a simples agregação de outro trabalho não baseado 
+    na Aplicação com esta (ou com um trabalho baseado na Aplicação) 
+    num volume de armazenamento ou meio de distribuição não faz com que 
+    o outro trabalho seja abrangido pelo âmbito desta Licença.
+
+    </PARA>
+<PARA>3. Você pode copiar e distribuir a Aplicação (ou trabalho baseado 
+    nela, sob a Secção 2) em formato de código ou como executável sob 
+    os termos das Secções 1 e 2 acima desde que cumpra também umas das 
+    seguintes condições:
+
+    <BLOCKQUOTE>
+<PARA>      a) A acompanhe com o correspondente código-fonte completo 
+      e interpretável por uma máquina, que tem de ser distribuido de 
+      acordo com os termos das Secções 1 e 2 acima num meio utilizado 
+      habitualmente para permuta de aplicações; ou, 
+
+      </PARA>
+<PARA>b) Acompanha-lo de uma oferta por escrito, válida por pelo menos 
+      três anos, de dar a quaisquer terceiros, por um preço não superior 
+      ao custo de fisicamente realizar a distribuição, uma cópia completa 
+      e processável por uma máquina do correspondente código-fonte, a 
+      ser distribuido sob os termos das Secções 1 e 2 acima num meio 
+      habitualmente utilizado para permuta de aplicações; ou, 
+
+      </PARA>
+<PARA>c) Acompanha-lo da informação que recebeu sobre a oferta de 
+      distribuição do correspondente código-fonte. (Esta alternativa 
+      é permitida apenas para distribuições não comerciais e apenas se 
+      você receber o programa em código ou executável com tal oferta, 
+      de acordo com a Sub-secção b acima.)
+    </PARA>
+</BLOCKQUOTE>
+
+    </PARA>
+<PARA>O código-fonte de um trabalho é o formato ideal do mesmo para 
+    lhe realizar modificações. Para um trabalho executável, código-
+    fonte completo significa todo o código-fonte para todos os módulos 
+    que contém, mais quaisquer ficheiros de definição de interface 
+    associados, mais os scripts utilizados para controlar a compilação 
+    e instalação do executável. No entanto, como excepção especial, o 
+    código-fonte distribuido não necessita de incluir nada que seja 
+    normalmente distribuido (quer em código-fonte ou em binário) com os 
+    componentes principais (compilador, kernel, etc.) do sistema operativo
+    em que o executável corre, a menos que esse mesmo componente acompanhe 
+    o executável.
+
+    </PARA>
+<PARA>Se a distribuição do executável ou binário for feito oferecendo 
+    acesso à cópia através de um local designado, então oferecer 
+    acesso equivalente à cópia do código-fonte do mesmo local conta 
+    como distribuição do código-fonte, mesmo que terceiros não sejam 
+    obrigados a copiar o código-fonte junto com o binário ou executável.
+
+    4. Você não poderá copiar, modificar, sublicenciar, ou distribir a 
+    Aplicação excepto tal como expressamente permitido sob esta Licença. 
+    Qualquer outra tentativa de copiar, modificar, sublicenciar ou 
+    distribuir a Aplicação é proibida, e irá automaticamente terminar os 
+    seus direitos sob esta Licença. No entanto, terceiros que tenham 
+    recebido cópias, ou direitos, de si sob esta Licença não terão as suas 
+    licenças terminadas desde que tais terceiros mantenham completa 
+    aderência à Lincença. 
+
+    </PARA>
+<PARA>5. Você não é obrigado a aceitar esta Licença, visto não a ter 
+    assinado. No entanto, nada mais lhe dá permissões para modificar 
+    ou distribuir a Aplicação ou trabalhos dela derivados. Estas acções 
+    são proibidas por lei caso não aceite esta Licença. Assim sendo, ao 
+    modificar ou distribuir a Aplicação (ou qualquer trabalho baseado 
+    nela), você indica a sua aceitação desta Licença para o fazer, e todos 
+    os seus termos e condições para cópia, distribuição ou modificação 
+    da Aplicação ou trabalhos baseados na mesma.
+
+    </PARA>
+<PARA>6. De cada vez que redistribuir a Aplicação (ou qualquer trabalho 
+    baseado na Aplicação), o receptor automaticamente recebe uma licença 
+    do licenciador original para copiar, distribuir ou modificar a 
+    Aplicação sujeita a estes termos e condições. Você não poderá impor 
+    restrições adicionais à execução dos direitos do receptor aqui 
+    mencionados. Você não é responsável por obrigar terceiros a cumprirem 
+    com os termos da Licença.
+
+    </PARA>
+<PARA>7. Se, como consequência de um julgamento em tribunal ou alegação 
+    de quebra de patente ou qualquer outra razão (não limitada a questões 
+    de patentes), forem impostas condições sobre sí (quer por ordem judiciosa, 
+    acordo ou qualquer outra) isso contradiz as condições desta Licença, 
+    pelo que elas não o desobrigam das condições desta Licença. Se não puder 
+    realizar a distribuição por forma a satisfazer simultaneamente as suas 
+    obrigações sob esta Licença e quaisquer outras obrigações pertinentes, 
+    então como consequência você não puderá de todo distribuir a Aplicação. 
+    Por exemplo, se uma licença de patente não permitisse a redistribuição 
+    livre de royalties da Aplicação por parte de todos os que recebam cópias 
+    directa ou indirectamente através de sí, então a única forma de você poder 
+    satisfazer tanto essa licença como esta Licença seria abstendo-se totalmente 
+    de redistribuir a Aplicação.
+
+    </PARA>
+<PARA>Se qualquer porção desta secção for tornada inválida ou não 
+    obrigatória sob qualquer circunstância particular, o saldo da 
+    secção deve ser aplicado e a globalidade da secção deverá ser 
+    aplicada em todas as outras circunstâncias.
+
+    </PARA>
+<PARA>Não é a intenção desta secção induzi-lo a infringir quaisquer 
+    patentes ou outras exigências de reclamação de direitos ou de 
+    contestar a validade de tais reclamações; esta secção tem o único 
+    propósito de proteger a integridade do sistema de distribuição livre 
+    de aplicações, que é implementado através da prática de licenças 
+    públicas. Muitas pessoas realizaram contribuições generosas para a 
+    vasta gama de aplicações distribuida através desse sistema para a 
+    aplicação consistente e duradoura desse sistema; depende do autor/doador 
+    decidir se ele ou ela deseja distribuir a aplicação através de 
+    qualquer outro sistema e uma licença não pode impor tal escolha.
+
+    Esta secção destina-se a tronar perfeitamente claro o que se pensa ser 
+    uma consequência do restante desta Licença. 
+
+    </PARA>
+<PARA>8. Se a distribuição e/ou usufruto da Aplicação estiver restringida 
+    em determinados países quer seja por patentes ou por interfaces com 
+    direitos de autor, o detentor original dos direitos de autor que 
+    colocar a Aplicação sob esta Licença poderá adicionar uma limitação 
+    geográfica explícita excluindo esses países, por forma a que a distribuição 
+    seja permitida apenas nos ou entre os países assim não excluídos. Em tal 
+    caso, esta Licença incorpora a limitação como se fosse escrita no corpo 
+    desta Licença.
+
+    </PARA>
+<PARA>9. A Fundação para as Aplicações Livres (The Free Software 
+    Foundation) poderá publicar versões revistas e/ou novas da 
+    Licença Pública Geral, de tempos a tempos. Tais novas versões 
+    serão semelhantes à versão actual em espírito, mas poderão diferir 
+    em detalhes para referir novos problemas ou preocupações.
+
+    </PARA>
+<PARA>A cada versão é dado um número de versão distinto. Se a Aplicação 
+    especificar um número de versão desta Licença que se aplique e 
+    "qualquer versão posterior", você pode optar seguir os termos e condições 
+    ou dessa versão ou de qualquer versão mais recente publicada pela 
+    Free Software Foundation. Se a Aplicação não especificar um número de 
+    versão desta Licença, poderá escolher qualquer versão alguma vez publicada 
+    pela Free Software Foundation.
+
+    </PARA>
+<PARA>10. Se desejar incorporar partes da aplicação em outras aplicações 
+    livres cujas condições de distribuição sejam diferentes, escreva 
+    ao autor pedindo permissão. Para aplicações que cujos direitos de autor 
+    pertençam à Free Software Foundation, escreva para a Free Software 
+    Foundation; nós às vezes abrimos excepções nestes casos. A nossa decisão 
+    será governada pelos dois objectivos de preservar o estatuto livre de 
+    todos os derivados das nossas aplicações livres e o de promover a partilha 
+    e reutilização das aplicações em geral.
+
+    </PARA>
+</SECT3>
+
+<SECT3>
+<TITLE><ANCHOR ID="SEC003">NÃO É DADA GARANTIA</TITLE>
+<PARA>11. COMO A APLICAÇÃO É LICENCIADA LIVRE DE CUSTOS, NÃO É DADA 
+    QUALQUER GARANTIA PARA A APLICAÇÃO, ATÉ AO PERMITIDO PELA LEGISLAÇÃO 
+    APLICÁVEL. EXCEPTO ONDE INDICADO O CONTRÁRIO POR ESCRITO OS DETENTORES 
+    DOS DIREITOS DE AUTOR E/OU TERCEIROS DISPONIBILIZAM A APLICAÇÃO 
+    COMO ESTÁ" SEM QUALQUER TIPO DE GARANTIA, QUER EXPRESSA QUER IMPLÍCITA,
+    INCLUINDO, MAS NAO LIMITADO A, AS GARANTIAS IMPLÍCITAS DE MERCADORIAS 
+    E ADEQUAÇÃO PARA UM DETERMINADO PROPÓSITO. A TOTALIDADE DO RISCO RELATIVO 
+    À QUALIDADE E PERFORMANCE DA APLICAÇÃO É INTEIRAMENTE SEU. CASO A 
+    APLICAÇÃO SE MOSTRE COM DEFEITOS, VOCÊ ASSUME OS CUSTOS DE QUALQUER 
+    SERVIÇO, REPARAÇÃO OU CORRECÇÃO NECESSÁRIA.
+
+    </PARA>
+<PARA>12. EM QUALQUER EVENTUALIDADE EXCEPTO SE REQUERIDO PELA LEGISLAÇÃO 
+    APLICÁVEL OU ACORDADO POR ESCRITO IRÁ QUALQUER DETENTOR DE DIREITOS 
+    DE AUTOR, OU QUAISQUER TERCEIROS QUE POSSAM MODIFICAR E/OU REDISTRIBUIR 
+    A APLICAÇÃO TAL COMO PERMITIDO ACIMA, SER RESPONSÁVEL POR ESTRAGOS, 
+    INCLUINDO QUAISQUER DANOS GERAIS, ESPECIAIS, ACIDENTAIS OU COMO CONSEQUÊNCIA 
+    DA UTILIZAÇÃO OU INCAPACIDADE DE UTILIZAÇÃO DA APLICAÇÃO (INCLUINDO MAS NÃO 
+    LIMITADO À PERCA DE DADOS OU DADOS SEREM COMPUTADOS INCORRECTAMENTE OU PREJUIZOS 
+    INCORRIDOS POR SÍ OU POR TERCEIROS OU UMA FALHA DA APLICAÇÃO EM OPERAR 
+    COM QUAISQUER OUTRAS APLICAÇÕES), MESMO QUE TAL DETENTOR OU OUTRO TERCEIRO 
+    TENHA SIDO ADVERTIDO DA POSSIBILIDADE DE TAIS DANOS.
+
+    </PARA>
+</SECT3>
+
+<SECT3>
+<TITLE>FIM DOS TERMOS E CONDIÇÕES</TITLE>
+<PARA></PARA>
+</SECT3>
+
+</SECT2>
+
+</SECT1>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

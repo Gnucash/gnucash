@@ -1,0 +1,69 @@
+
+<ARTICLE ID="XACC-DATEINPUT">
+<ARTHEADER>
+<TITLE>Introdução de Datas</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Introdução de Datas</TITLE>
+<PARA>    A célula de data reconhece os seguintes atalhos de teclado: 
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><KEYSYM>+, =</KEYSYM> incrementa dias
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>_ , -</KEYSYM> decrementa dias
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>} , ]</KEYSYM> incrementa meses
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>{ , [</KEYSYM> decrementa meses
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>M , m</KEYSYM> início do mês
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>H , h</KEYSYM> final do mês
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>Y , y</KEYSYM> início do ano
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>R , r</KEYSYM> final do ano
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYSYM>T , t</KEYSYM> hoje
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>O GnuCash pode ser configurado para utilizar os mais 
+    variados formatos de introdução de datas através da 
+    <LINK LINKEND="XACC-PREFERENCES">definição de preferências</LINK>.
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

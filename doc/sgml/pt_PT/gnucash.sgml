@@ -1,0 +1,88 @@
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity xaccabout system "xacc-about.sgml">
+<!entity xaccaccountedit system "xacc-accountedit.sgml">
+<!entity xaccacctypes system "xacc-acctypes.sgml">
+<!entity xaccnewacctwin system "xacc-newacctwin.sgml">
+<!entity xaccadjbalwin system "xacc-adjbalwin.sgml">
+<!entity xaccapar system "xacc-apar.sgml">
+<!entity xacccommodity system "xacc-commodity.sgml">
+<!entity xaccdepreciation system "xacc-depreciation.sgml">
+<!entity xaccbalancereport system "xacc-balancereport.sgml">
+<!entity xaccbalancesheet system "xacc-balancesheet.sgml">
+<!entity xacccurrencyhandling system "xacc-currencyhandling.sgml">
+<!entity xaccdoubleentry system "xacc-doubleentry.sgml">
+<!entity xacceuro system "xacc-euro.sgml">
+<!entity xaccdateinput system "xacc-dateinput.sgml">
+<!entity xacchierarchicalreport system "xacc-hierarchical-report.sgml">
+<!entity xaccincomeexpense system "xacc-incomeexpense.sgml">
+<!entity xacclocatingtxns system "xacc-locatingtxns.sgml">
+<!entity xaccpreferences system "xacc-preferences.sgml">
+<!entity xaccchartofaccts system "xacc-chartofaccts.sgml">
+<!entity xaccuserdocs system "xacc-userdocs.sgml">
+<!entity xaccmainwin system "xacc-mainwin.sgml">
+<!entity xaccpnl system "xacc-pnl.sgml">
+<!entity xaccportfolioreport system "xacc-portfolio-report.sgml">
+<!entity xaccprintcheck system "xacc-print-check.sgml">
+<!entity xaccprint system "xacc-print.sgml">
+<!entity xaccqifimport system "xacc-qif-import.sgml">
+<!entity xaccquicken system "xacc-quicken.sgml">
+<!entity xaccrecnwin system "xacc-recnwin.sgml">
+<!entity xaccregwin system "xacc-regwin.sgml">
+<!entity xaccregwinkbd system "xacc-regwin-kbd.sgml">
+<!entity xaccreports system "xacc-reports.sgml">
+<!entity xaccticker system "xacc-ticker.sgml">
+<!entity xacctaxreport system "xacc-tax-report.sgml">
+<!entity xacctransreport system "xacc-trans-report.sgml">
+<!entity xacctxfexportanomalies system "xacc-txf-export-anomalies.sgml">
+<!entity xacctxfexportreport system "xacc-txf-export-report.sgml">
+<!entity xaccdochack system "xacc-dochack.sgml">
+<!entity xaccy2k system "xacc-y2k.sgml">
+<!entity xaccgpl system "xacc-gpl.sgml">
+<!entity bofamym system "bofa-mym.sgml">
+]>
+
+<BOOK ID="index">
+<TITLE>Manual do Utilizador GnuCash</TITLE>
+
+&xaccabout;
+&xaccaccountedit;
+&xaccacctypes;
+&xaccnewacctwin;
+&xaccadjbalwin;
+&xaccapar;
+&xaccdepreciation;
+&xaccbalancereport;
+&xaccbalancesheet;
+&xacccommodity;
+&xacccurrencyhandling;
+&xaccdoubleentry;
+&xacceuro;
+&xaccdateinput;
+&xacchierarchicalreport;
+&xaccincomeexpense;
+&xacclocatingtxns;
+&xaccpreferences;
+&xaccchartofaccts;
+&xaccuserdocs;
+&xaccmainwin;
+&xaccpnl;
+&xaccportfolioreport;
+&xaccprintcheck;
+&xaccprint;
+&xaccqifimport;
+&xaccquicken;
+&xaccrecnwin;
+&xaccregwin;
+&xaccregwinkbd;
+&xaccreports;
+&xacctaxreport;
+&xaccticker;
+&xacctransreport;
+&xacctxfexportanomalies;
+&xacctxfexportreport;
+&xaccdochack;
+&xaccy2k;
+&xaccgpl;
+&bofamym;
+
+</book>

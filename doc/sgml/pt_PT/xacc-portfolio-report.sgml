@@ -1,0 +1,26 @@
+
+<ARTICLE ID="XACC-PORTFOLIO-REPORT">
+<ARTHEADER>
+<TITLE>Relatório de Portfólio de Acções</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Relatório de Portfólio de Acções</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-folio.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>Este relatório resume o valor actual do seu portfólio de acções.
+
+    </PARA>
+<PARA>De momento não existem opções para este relatório.
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,36 @@
+
+<ARTICLE ID="XACC-ACCOUNTEDIT">
+<ARTHEADER>
+<TITLE>Editar uma Conta</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Editar uma Conta</TITLE>
+<PARA>A janela de "Editar Conta" permite-lhe modificar propriedades
+    de uma conta. Aceda-lhe através do botão "Editar" na barra de
+    ferramentas da janela principal, no menu "Contas", ou por atalhos
+    de teclado. Para uma descrição da utilidade das várias propriedades, 
+    veja a informação sobre <LINK LINKEND="XACC-NEWACCTWIN">Novas Contas</LINK>.
+
+    </PARA>
+<PARA><EMPHASIS>Informação de conta</EMPHASIS> pode ser modificada escrevendo
+    no campo apropriado. O tipo de conta não pode ser modificado.
+
+    </PARA>
+<PARA>Uma nova <EMPHASIS>Conta Pai</EMPHASIS> pode ser seleccionada. Apenas 
+    as contas que podem realmente ser pai da conta actual são mostradas.
+
+    </PARA>
+<PARA>A fonte de <EMPHASIS>Cotações de Acções</EMPHASIS> pode ser seleccionada. Veja <LINK LINKEND="XACC-TICKER">o ticker</LINK> para mais 
+    informações.
+
+    </PARA>
+<PARA><EMPHASIS>Notas</EMPHASIS> sobre a conta podem ser editadas.
+
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,160 @@
+<ARTICLE ID="XACC-REPORTS">
+<ARTHEADER>
+<TITLE>Relatórios</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Relatórios</TITLE>
+<PARA>Uma variedade de relatórios financeiros pode ser seleccionada no 
+    menu de "Relatórios":
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-BALANCESHEET">Folha de Balanço:</LINK>Mostra 
+      Activos, Passívos e Saldos Iniciais.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PNL">Estado de Proveitos e Prejuizos:</LINK>mostra 
+      Receitas e Despesas ao longo de um período seleccionável.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TRANS-REPORT">Relatório de 
+      Transacções:</LINK>mostra transacções sobre uma conta, apresentadas de 
+      várias formas.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-PORTFOLIO-REPORT">Portfólio de Acções:</LINK>
+      disponibiliza um resumo rápido das suas acções, o seu valor actual e 
+      mais-valias obtidas.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TAX-REPORT">Relatório de Impostos:</LINK>
+      mostra Receitas e Despesas tributáveis ou dedutíveis.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-TXF-EXPORT-REPORT">Relatório de Exportação TXF:</LINK>
+      exporta um ficheiro .TXF que pode ser importado para o TaxCut ou TurboTax.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-HIERARCHICAL-REPORT">Relatório Hierárquico:</LINK>
+      mostra as contas num formato hierárquico.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><APPLICATION>Histórico de Saldos:</APPLICATION> 
+      acompanha o saldo de uma ou mais contas ao longo do tempo, suportando 
+      gráficos representativos (se tiver o <APPLICATION>gnuplot</APPLICATION>
+      instalado).
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-REPORTWINDOW">
+<TITLE>A Janela de Relatório</TITLE>
+<PARA>    Após ter seleccionado um relatório, uma janela de relatório surgirá: 
+
+    </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/reportwin.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+    </PARA>
+<PARA>O relatório é apresentado numa janela redimensionável e com barras de 
+    rolamento. Para controlar o relatório, pode utilizar os botões da barra 
+    de ferramentas no topo da janela:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Retroceder</EMPHASIS> e <EMPHASIS>Avançar</EMPHASIS> permitem-lhe 
+      ver o conteudo anterior da janela, tal como um navegador (browser) de internet
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Parâmetros</EMPHASIS> faz surgir uma janela que lhe permite 
+        modificar a informação apresentada no relatório: 
+
+        </PARA>
+<PARA><INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/report-option.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT>
+
+        </PARA>
+<PARA>Veja a ajuda específica para cada relatório para mais detalhes sobre 
+        as opções disponíveis.
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><ANCHOR ID="EXPORT"><EMPHASIS>Exportar</EMPHASIS> permite-lhe exportar 
+      o conteudo do relatório para um ficheiro HTML para posterior visualização 
+      ou impressão.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Fechar</EMPHASIS> fecha a janela de relatório.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+
+<SECT1 ID="XACC-CUSTOMREPORTS">
+<TITLE> Construir relatórios personalizados</TITLE>
+
+<PARA> É possível escrever os seus proprios relatórios para suprir as 
+suas necessidades, caso saiba programar um pouco. Terá de saber Scheme (uma 
+linguagem de programação semelhante a LISP), sendo uma óptima ideia ter por 
+perto uma cópia do código-fonte do <application>GnuCash</application>.
+</PARA>
+
+<PARA>O interface de relatórios encontra-se presentemente por documentar, mas 
+poderá ter uma boa ideia de como funciona examinando o ficheiro <filename>
+src/scm/report/hello-world.scm </filename> na árvore de código do 
+<application>GnuCash</application>.
+</PARA>
+
+<PARA>Também terá de aceder a dados do "motor" para obter informação 
+para o seu relatório. Isto é conseguido através de um conjunto de funções 
+de envolvimento (wrapper) Scheme que se encontram documentadas no ficheiro 
+<filename>src/g-wrap/gnc.html</filename>. Poderá desejar examinar alguns dos 
+outros relatórios em <filename> src/scm/report </filename> para uma indicação 
+de como as funções são utilizadas.
+</PARA>
+
+<PARA>De momento, os relatórios são gerados criando internamente HTML e 
+renderizando-o num objecto de HTML. (Versões futuras do GnuCash irão suportar, 
+esperamos, um sistema mais flexível).  </PARA>
+
+<PARA>Caso necessite de mais informação, ou tenha deenvolvido um novo relatório 
+que possa ser útil para outros, por favor contact a lista de desenvolvimento do 
+GnuCash em <email> gnucash-devel@gnucash.org </email>.
+
+</PARA>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

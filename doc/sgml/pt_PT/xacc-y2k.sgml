@@ -1,0 +1,44 @@
+<ARTICLE ID="XACC-Y2K">
+
+<ARTHEADER>
+<TITLE>Preparação do GnuCash para o Ano 2000</TITLE>
+</ARTHEADER>
+
+<PARA>A versão 1.1.25 e posteriores do GnuCash armazenam todas as datas 
+como segundos e nanosegundos, onde os segundos são armazenados como 
+inteiros de 64 bits com sinal. Isto deverá ser suficiente para guardar 
+datas de um passado distante bem como de um futuro longinquo, desde que 
+não caiam <EMPHASIS>demasiado</EMPHASIS> longe, em ordens de magnitude, das 
+estimativas dos cosmólogos em relação à idade do universo.  </PARA>
+
+<PARA>O formato de ficheiro para a versão 1.1.25 e posteriores armazena 
+as datas no formato supra-citado.  </PARA>
+
+<PARA>Algumas das rotinas internas utilizam a função <FUNCTION>time_t</FUNCTION> 
+para exprimir segundos. Note que na maior parte dos SOs, este é um valor de 32-bit, 
+e está assim limitado à época Unix, aproximadamente Dezembro 1901 até Janeiro 
+2038. Será razoável admitir que a <FUNCTION>time_t</FUNCTION> será migrada até essa 
+altura para a utilização de valores de 64 bit.  </PARA>
+
+<PARA>Ficheiros de salvaguarda e de registo (log) são marcados com hora (time-stamped) 
+utilizando a rotina standard Unix<FUNCTION>ctime()</FUNCTION>, que recebe um argumento
+do tipo <FUNCTION>time_t</FUNCTION>. Assim, os mecanismos de salvaguarda e registo 
+poderão ter problemas em 2038, assumindo que o seu Unix actual continuará em serviço 
+até essa data sem qualquer modificação.
+</PARA>
+
+<PARA>Note que o GnuCash também reconhece correctamente o 29 de Fevereiro de 2000
+como sendo "dia bissexto", outra das "datas críticas do Ano 2000".  </PARA>
+
+<PARA>Isto é tudo muito sugestivo de que o GnuCash deverá assimilar razoavelmente 
+bem a transicção para o novo milénio, quer você considere que tal toma lugar em 
+2000 ou em 2001...  </PARA>
+
+<PARA>Questões do Ano 2000 são descritas em mais detalhe em <ULINK URL=
+"http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux e o Ano 2000.</ULINK> </PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

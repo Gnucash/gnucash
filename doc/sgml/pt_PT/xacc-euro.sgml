@@ -1,0 +1,140 @@
+
+<ARTICLE ID="XACC-EURO">
+<ARTHEADER>
+<TITLE>GnuCash e o EURO</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>GnuCash e o EURO</TITLE>
+<SECT2>
+<TITLE>Introdução</TITLE>
+<PARA>A 1 de Janeiro de 1999, onze países membros da União Europeia 
+    formaram uma União Económica e Monetária (UEM) e começaram a utilizar 
+    uma moeda única - o euro. Estes países indexaram as taxas de câmbio 
+    das suas moedas nacionais à do euro e estão a partilhar essa nova 
+    moeda.
+    No entanto, notas e moedas euro não estarão disponíveis até 1 de 
+    Janeiro de 2001. Até lá, as velhas moedas e notas nacionais (Francos 
+    Franceses, Escudos Portugueses, etc.) continuarão a circular. Mas 
+    legalmente, eles são uma parte do euro. O seu valor em euro é 
+    completamente fixo. Todos os tipos de transacções financeiras que não 
+    envolvam dinheiro tal como cheques e transferências podem ser feitas 
+    em euro.
+    Poderá encontrar mais informação sobre o euro em: 
+    <ULINK URL="http://europa.eu.int/euro">http://europa.eu.int/euro</ULINK> .
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Países Membros e Taxas de Câmbio na UEM</TITLE>
+<PARA>    <ANCHOR ID="EUROISOCURR"> 
+    A seguinte tabela mostra os países membros da UEM e a 
+    respectiva taxa de câmbio do euro para a sua antiga 
+    moeda nacional. É esperado que mais países se venham a 
+    juntar à UEM.
+
+    <TABLE>
+<TITLE>Taxas de Câmbio da UEM</TITLE>
+<TGROUP COLS="4">
+<THEAD>
+<ROW>
+<ENTRY>País</ENTRY>
+<ENTRY>Código ISO</ENTRY>
+<ENTRY>Descrição</ENTRY>
+<ENTRY>Taxa Câmbio</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>        </ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Áustria</ENTRY>
+<ENTRY>ATS</ENTRY>
+<ENTRY>Schilling Austríaco</ENTRY>
+<ENTRY>1 euro = 13.7603 S</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Bélgica</ENTRY>
+<ENTRY>BEF</ENTRY>
+<ENTRY>Franco Belga</ENTRY>
+<ENTRY>1 euro = 40.3399 bfrs</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Finlândia</ENTRY>
+<ENTRY>FIM</ENTRY>
+<ENTRY>Marco Finlandês</ENTRY>
+<ENTRY>1 euro = 5.94573 Fmk</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>França</ENTRY>
+<ENTRY>FRF</ENTRY>
+<ENTRY>Franco Francês</ENTRY>
+<ENTRY>1 euro = 6.55957 FF</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Alemanha</ENTRY>
+<ENTRY>DEM</ENTRY>
+<ENTRY>Marco Alemão</ENTRY>
+<ENTRY>1 euro = 1.95538 DM</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Irlanda</ENTRY>
+<ENTRY>IEP</ENTRY>
+<ENTRY>Libra Irlandesa</ENTRY>
+<ENTRY>1 euro = 0.787564 Ir. &pound;</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Itália</ENTRY>
+<ENTRY>ITL</ENTRY>
+<ENTRY>Lira Italiana</ENTRY>
+<ENTRY>1 euro = 1936.27 Lit</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Luxemburgo</ENTRY>
+<ENTRY>LUF</ENTRY>
+<ENTRY>Franco Luxemburguês</ENTRY>
+<ENTRY>1 euro = 40.3399 lfrs</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Holanda</ENTRY>
+<ENTRY>NLG</ENTRY>
+<ENTRY>Guilda Holandesa</ENTRY>
+<ENTRY>1 euro = 2.20371 hfl</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Portugal</ENTRY>
+<ENTRY>PTE</ENTRY>
+<ENTRY>Escudo Português</ENTRY>
+<ENTRY>1 euro = 200.482 Esc</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Espanha</ENTRY>
+<ENTRY>ESP</ENTRY>
+<ENTRY>Peseta Espanhola</ENTRY>
+<ENTRY>1 euro = 166.386 Ptas</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Suporte para o EURO no GnuCash</TITLE>
+<PARA>Você pode activar suporte para o euro no GnuCash na categoria 
+    internacional da janela de <LINK LINKEND="XACC-PREFERENCES">preferências</LINK>.
+    Se a localização do seu sistema especificar uma das 
+    <LINK LINKEND="EUROISOCURR">moedas membro do UEM</LINK>, o suporte para 
+    euro estará activo por defeito.
+
+    </PARA>
+<PARA>ARRANJAR: Actualizar documentação com imagens de ecrã e etc.
+
+</PARA>
+</SECT2>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

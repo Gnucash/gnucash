@@ -1,0 +1,254 @@
+
+<ARTICLE ID="XACC-LOCATINGTXNS">
+<ARTHEADER>
+<TITLE>Encontrar transacções com a janela "Procurar Transacções"</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Encontrar transacções com a janela "Procurar Transacções"</TITLE>
+<PARA>Bill Gribble &lt;grib@billgribble.com&gt;</PARA>
+<ANCHOR ID="FINDOVERVIEW">
+<SECT2>
+<TITLE>Resumo</TITLE>
+<PARA>    
+    </PARA>
+<PARA>A janela de Procurar Transacções permite-lhe procurar 
+transacções que coincidam com critérios por si especificados, incluindo:
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Conta(s) afectadas pela transacção, </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Montante da transacção,</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>  Data </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Campo de notas</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Descrição da transacção</PARA>
+</LISTITEM>
+</ITEMIZEDLIST></PARA>
+<PARA> etc.  
+
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Pode abrir a janela de <EMPHASIS> Procurar Transacções </EMPHASIS> 
+carregando no botão "Procurar" na janela principal do GnuCash ou em 
+qualquer janela de registo.
+
+</PARA>
+<PARA> Os resultados da sua busca serão mostrados num registo semelhante 
+aos utilizados para mostrar as suas contas, com o título de janela de 
+"Resultados da Procura".
+
+    </PARA>
+<PARA>Prima novamente o botão "Procurar" dentro de um registo de Resultados 
+de Procura para adicionar restrições à condição que gerou os resultados 
+apresentados nessa janela.  </PARA>
+<PARA> Ao comninar várias pesquisas, pode contruir condições muito 
+sofisticadas para que apresentem exactamente o subconjunto de 
+transacções que deseja visualisar.</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>      
+    <ANCHOR ID="HOW-TO-FIND"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>Como utilizar a janela de Procurar Transacções</TITLE>
+<PARA>    </PARA>
+<PARA>A janela de Procurar Transacções tem duas secções principais.  
+
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> A parte superior da janela é um conjunto de pastas que lhe 
+permitem especificar as restrições para a sua procura.  </PARA>
+<PARA> Veja <LINK LINKEND="SETUP">Configurar uma procura</LINK> 
+para mais detalhes sobre cada tipo de procura. 
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>A parte inferior da janela é uma zona de selecção que lhe 
+permite especificar como os resultados da pesquisa deverão ser 
+combinados com os de qualquer procura anterior.</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Se obtiver a janela de Procurar Transacções primindo o botão 
+Procurar na janela principal do GnuCash ou em qualquer registo normal, 
+a única opção disponível será a de "Nova Procura".  Se seleccionar 
+Procurar dentro de um registo de Resultados de Procura as outras opções 
+estarão disponíveis; veja <LINK LINKEND="MODIFY">Modificar a sua procura</LINK> 
+para mais detalhes.
+
+    </PARA>
+<PARA>As consultas mais simples podem ser conseguidas directamente com 
+apenas uma invocação da janela de Procurar Transacções. A janela tem 
+nove pastas, cada uma representando especificamente um campo da transacção 
+(ou parcela) por que pode procurar.  Se especificar condições sobre vários 
+campos (por exemplo, seleccionando uma ou mais contas na pasta de Contas 
+e também introduzindo um intrevalo de datas na pasta de Data), a transacção 
+tem de coincidir com todas as condições que especificar para que seja mostrada.
+
+    </PARA>
+<PARA>Se as procuras simples não forem específicas o suficiente, pode combina-las 
+primindo o botão Procurar numa janela de resultados da procura e seleccionando 
+qualquer "Tipo de Procura" excepto "Nova Procura".
+
+      <ANCHOR ID="SETUP"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>Configurar uma Procura</TITLE>
+<PARA>    </PARA>
+<PARA>Pode procurar transacções por qualquer um dos (ou todos os) 
+critérios seguintes.  Cada um tem uma pasta na janela onde você 
+pode inserir o(s) valor(es) de busca e método de comparação. 
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Contas afectadas pela transacção
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Data de efectivação da transacção
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> O texto no campo de Descrição
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> O texto no campo de Número
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> O Montante das parcelas da transacção
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> O texto no campo de Notas
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Número de acções numa transacção de acções
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Preço da Acção numa transacção de acções
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> O texto no campo da Acção
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Se especificar multiplos critérios na procura, todos os 
+critérios têm de ser verdadeiros para que a transacção seja mostrada.
+
+    <ANCHOR ID="ACCOUNTSEARCH"></PARA>
+<SECT3>
+<TITLE>Procuras por Conta</TITLE>
+<PARA>Na pasta de contas, seleccione as contas relevantes e depois 
+escolha se deseja visualisar transacções que afectem Qualquer, Todas 
+ou Nenhuma destas contas.
+      
+    </PARA>
+<PARA>Se seleccionar "Todas" as contas na lista no topo da pasta, as 
+únicas transacções que serão mostradas são as que afectarem todas as 
+contas seleccionadas.  </PARA>
+<PARA> Por exemplo, se seleccionar <EMPHASIS>Minha Conta à Ordem</EMPHASIS> 
+e <EMPHASIS> Minha Conta VISA</EMPHASIS> e depois escolher <EMPHASIS>Todas</EMPHASIS>, apenas transferências da Conta à Ordem para a Visa serão mostradas.
+
+    </PARA>
+<PARA>Se seleccionar "Qualquer" da caixa, transacções que afectem 
+qualquer uma das contas serão mostradas.  Por exemplo, se seleccionar "Minha 
+COnta à Ordem" e "Minha Conta VISA" e depois seleccionar "Qualquer", a sua 
+conta à ordem e conta VISA serão mostradas conjuntamente na janela de 
+Resultados da Procura.
+      
+    </PARA>
+</SECT3>
+<SECT3 ID="DATE">
+<TITLE>Procuras por Data</TITLE>
+<PARA>Na pasta de Data, pode especificar um intrevalo de datas para as 
+transacções que deseja encontrar.  Os campos de ano, mês e dia estão na 
+ordem que especificar em <GUIMENU> Preferências:Internacional:Formato da Data</GUIMENU>.
+
+    </PARA>
+<PARA>De dejea localizar qualquer transacção antes de uma determinada data,
+especifique a sua data na segunda zona de entrada e introduza uma data passada 
+distante na primeira zona de entrada.  A data por defeito é 1 de Janeiro de 1900, 
+que deverá ser distante o suficiente para as necessidades da maioria das pessoas.  </PARA>
+<PARA>Da mesma forma, se deseja encontrar transacções após uma determinada data,
+coloque-a na primeira zona de entrada e coloque uma data posterior à sua última 
+transacção na segunda zona.
+
+      <ANCHOR ID="AMOUNT"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Procuras por Montante</TITLE>
+<PARA>As procuras nas pastas de Montante, Acções e Preço permitem-lhe 
+procurar por quantidades específicas em vários campos das transacções.  
+Tem de introduzir o montante (na caixa de entrada) e o tipo de comparação 
+(com o menu de opções à esquerda da caixa de entrada).  O montante na 
+caixa de entrada é sempre positivo.
+
+    </PARA>
+<PARA>Para a pasta de Montante, tem de indicar se está interessado em 
+débitos, créditos ou ambos.
+
+      <ANCHOR ID="STRING"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Procuras por Texto</TITLE>
+<PARA>Nas pastas Descrição, Número, Notas e Acção, pode especificar 
+um texto que será comparado com o campo respectivo das parcelas e 
+transacções.  <ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Por defeito, o tipo de comparação utilizada é indiferente à 
+capitalização e sobre pedaços do texto. </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Caso seleccione "Coincidir Capitalização" no botão de opção, a busca 
+será por um pedaço de texto que coincida, incluindo na capitalização.  </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Se o botão de "Expressão Regular" for seleccionado, a procura 
+interpreta o texto que introduzir como uma expressão regular extendida 
+POSIX; a indiferença ou não à capitalização é ainda determinada pelo 
+botão "Coincidir Capitalização".</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    <ANCHOR ID="MODIFY"></PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>Modificar a sua procura</TITLE>
+<PARA>    </PARA>
+<PARA>Primir o botão "Procurar" dentro da janela de Resultados da Procura 
+permitir-lhe-á modificar ou substituir os critérios de procura a utilizar 
+dentro daquela janela. As funcionalidades de procura são as mesmas, mas 
+tem novas opções sobre como utilizar os resultados da busca.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Nova Procura.</EMPHASIS> Se seleccionar "Nova Procura", a procura
+actual será substituida pela que especificar, e os resultados serão mostrados na 
+janela de Resultados de Procura existente.
+
+</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+  </PARA>
+</SECT2>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

@@ -1,0 +1,559 @@
+
+<ARTICLE ID="XACC-QIF-IMPORT">
+<ARTHEADER>
+<TITLE>Importar Dados do Quicken Para o GnuCash</TITLE>
+<AUTHOR>
+<FIRSTNAME>Bill</FIRSTNAME>
+<SURNAME>Gribble</SURNAME>
+</AUTHOR>
+</ARTHEADER>
+<SECT1 ID="QIF">
+<TITLE> Importar Dados do Quicken Para o GnuCash</TITLE>
+<SECT2 ID="OVERVIEW">
+<TITLE>Introdução</TITLE>
+<PARA>    </PARA>
+<PARA>O Quicken é uma das aplicações mais vendidas da história do 
+Universo. Praticamente quase toda a gente que já possuiu um PC ou Mac 
+desde o final dos 80's já teve uma cópia algures, e muitas pessoas 
+utilizam-no realmente para manter um registo das suas finanças. Porquê? 
+Porque funciona bastante bem e a Intuit tem (um reconhecimento) feito um 
+bom trabalho actualizando a aplicação para fazer o que as pessoas desejam.
+
+    </PARA>
+<PARA>Eles fizeram um trabalho tão bom que, na verdade, muitos utilizadores 
+de Linux mantêm uma partição Windows nas suas máquinas só para poderem utilizar 
+o Quicken e os mais recentes jogos. Por isso lhe queremos dar uma forma de passar 
+todos os seus dados do Quicken para o GnuCash e remover mais uma barreira que 
+o impeça de colocar um belo sistema de ficheiros <FUNCTION> ext2 </FUNCTION> 
+naquela partição Windows.
+
+    </PARA>
+<PARA>O problema é que o GnuCash é um verdadeiro sistema contabilístico de 
+dupla-entrada e o Quicken tem uma visão muito simplista sobre o que é uma conta, 
+o que é uma transacção, e, mais crítico, tem uma grave falha no seu modelo de 
+dados, isto é, <EMPHASIS> o que grava nos ficheiros de dados</EMPHASIS>. 
+
+</PARA>
+<PARA> Simplificando, os ficheiros QIF não contêm informação suficiente para 
+reconstruir completa e precisamente a sua hierarquia de contas Quicken no 
+sistema de dupla-entrada do GnuCash sem que se utilizem alguns pressupostos 
+no código de importação bem como algum apoio, dado por sí.
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Os ficheiros QIF omitem pequenas coisas que podem ser inferidas com 
+bastante precisão ao se examinarem os dados.
+
+</PARA>
+<PARA> Por exemplo, estão os valores no formato de ponto decimal [1,000.00 ==
+1000] ou no formato Europeu de vírgula decimal [1.000,00 == 1000]?  </PARA>
+<PARA> Ou são as datas <SCREEN> m/d/y </SCREEN> ou <SCREEN> y/m/d</SCREEN>?
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> Mais problemático são coisas vitais onde existem poucas possibilidades 
+de adivinhar.
+
+</PARA>
+<PARA> Por exemplo, determinar a moeda em que o ficheiro está denominado.
+
+</PARA>
+<PARA> Ou que <EMPHASIS> conta </EMPHASIS> o ficheiro descreve.
+
+</PARA>
+</LISTITEM>
+</ITEMIZEDLIST></PARA>
+<PARA> O importador QIF do GnuCash faz um excelente trabalho a inferir o que pode, 
+mas você <EMPHASIS> tem </EMPHASIS> de estar com atenção. Felizmente, o sistema 
+está desenhado por forma a que você possa corrigir quaisquer problemas <EMPHASIS>
+antes</EMPHASIS> das suas modificações serem inseridas nas contas do GnuCash. Nada é 
+feito às suas contas do GnuCash até que você prima o botão "OK" final.
+    </PARA>
+<PARA>Na próxima secção, darei uma visão geral do ficheiro QIF e das suas 
+"funcionalidades". Isto poderá parecer desnecessariamente técnico, mas se 
+você pelo menos fizer uma leitura rápida será muito mais facilmente capaz 
+de compreender o que se está a passar se tiver de "saltar nos buracos da 
+estrada" para fazer um ficheiro problemático funcionar, e como poderá seguir 
+correctamente na edição de ficheiros QIF em problemas mesmo difíceis.
+
+    </PARA>
+<PARA>Existem dois "caminhos" principais para utilizar o importador QIF do GnuCash.
+<ITEMIZEDLIST>
+<LISTITEM>
+<PARA> Um deles é "Eu sou um utilizador do Quicken e estou a migrar para o GnuCash".
+
+</PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> O outro é "Eu estou a descarregar umas actualizações do meu banco em 
+ficheiros QIF".
+
+</PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+</PARA>
+<PARA> Este documento foca-se principalmente no primeiro caso, visto ser mais 
+provável os utilizadores iniciados necessitarem de ajuda e na verdade você 
+não pode começar a utilizar o GnuCash enquanto não importar os dados antigos. 
+Felizmente, uma vez aprendendo o primeiro caminho, o segundo será facílimo.
+      
+
+</PARA>
+</SECT2>
+<SECT2 ID="INTRO">
+<TITLE>Introdução ao ficheiro QIF</TITLE>
+<PARA>    
+    </PARA>
+<PARA>Os ficheiros QIF são ficheiros de texto simples formatados como pares 
+"etiqueta-valor". No início de cada linha existe uma "etiqueta" de caracter 
+único seguida imediatamente por um "valor", que se extende até ao final da 
+linha.  </PARA>
+<PARA> Não tenha medo de abrir um ficheiro QIF utilizando o <APPLICATION> less </APPLICATION>
+ou o editor de texto de sua preferência caso esteja a ter problemas em importar 
+correctamente dados do Quicken; são grandes as probabilidades de um simples 
+procurar-e-substituir corrigirem qulquer problema que possa estar a ter com o 
+ficheiro QIF. E um procurar-e-substituir de expressões regulares fará o resto.
+
+    </PARA>
+<PARA>Colecções de pares etiqueta-valor constituem registos de vários tipos. 
+Existem registos pata armazenar os nomes e descrições das suas contas e das 
+categorias de receitas e despesas que definiu no Quicken. Existem registos 
+para definir "classes" do Quicken (uma espécie de sub-contas, uma espécie de 
+categorias, mas não exactamente qualquer uma delas). E existem registos para 
+descrever transacções.
+
+    </PARA>
+<PARA>Aqui está um registo de transacção típico do Quicken:
+    <LITERAL REMAP="TT"><MSGTEXT>
+<LITERALLAYOUT>      !Type:Bank     
+      D6/20/97
+      T-500
+      N1012
+      C*
+      M
+      P
+      L[Visa]
+      ^
+    </LITERALLAYOUT>
+</MSGTEXT></LITERAL>
+
+    </PARA>
+<PARA>A etiqueta ! denota o início de uma secção de registos de um 
+determinado tipo. Neste caso, transacções de Banco (Bank). "Type:Cat" 
+significa uma secção de descrições de Categorias, "Account" significa 
+descrições de contas, e por aí em diante.  
+
+    </PARA>
+<PARA>A etiqueta D denota a data. Note a coadunação com o "problema" do 
+Ano 2000. Aqui está uma "característica" adorável de algumas versões do 
+Quicken e datas em 2000:
+      <LITERAL REMAP="TT"><MSGTEXT>
+<LITERALLAYOUT>      D1/ 1' 0
+      T-640.00
+      CX
+      N511
+      PJoe Bob
+      LRent:Apartment
+      ^
+      </LITERALLAYOUT>
+</MSGTEXT></LITERAL>
+
+    </PARA>
+<PARA>Auuu! Felizmente o importador QIF do GnuCash consegue gerir todos os 
+formatos de datas estranhos que a lista de programadores do GnuCash encontrou.
+
+    </PARA>
+<PARA>O campo T é o montante "Total" da transacção. Se existirem parcelas, 
+a some de todas os montantes das parcelas encontra-se num campo T. Dinheiro 
+que está a sair da conta está negativo.  
+
+    </PARA>
+<PARA>O campo N é um "Número", que é normalmente um número de cheque ou 
+qualquer outro número identificativo da transacção. 
+
+    </PARA>
+<PARA>O campo C representa o estado de limpa/reconciliada da transacção. 
+Um x ou X neste campo significa que a transacção está "Limpa", um * 
+significa que a transacção está "Reconciliada". 
+      
+    </PARA>
+<PARA>O campo M são as notas (memo) da transacção. 
+
+    </PARA>
+<PARA>O campo P é o destinarário (a quem foi pago). 
+
+    </PARA>
+<PARA>O campo L é a linha da Categoria/Conta. Se o valor neste campo 
+estiver delimitado por parêntesis rectos, como [Visa], significa que 
+esta transacção é uma transferência para a conta do Quicken chamada Visa. 
+Se não existirem parêntesis rectos , a transacção está na Categoria 
+indicada (como por exemplo Renda:Apartamento).  
+
+    </PARA>
+<PARA>A etiqueta ^ significa Fim de Registo.  
+
+    </PARA>
+<PARA>Os utilizadores Quicken que estiverem a aproveitar as Classes 
+verão um caracter de barra (/) seguido do nome da classe no final da 
+linha da Categoria (como por exemplo [Visa]/Projecto)
+      
+    </PARA>
+<PARA>Se uma transacção tiver "parcelas", significando que esta é uma 
+única transacção "nesta" conta mas está "dividida" por múltiplas contas 
+de fonte/destino, então as parcelas estarão descritas com campos S para 
+a categoria/conta/classe de cada parcela, um campo $ para o montante da 
+parcela, e um campo E para uma nota (memo) da parcela. O total de todos 
+os campos $ num registo de transacção deverão ser iguais ao campo T.
+
+      </PARA>
+<PARA>Note que em nenhum lado do registo de transacção, nem em mais parte 
+alguma do ficheiro, o Quicken armazena o nome da conta que o ficheiro 
+descreve. Não me pergunte porque o não faz, pois eu também não sei. O Microsoft 
+Money (que também consegue gravar ficheiros QIF) utiliza um "truque" para 
+colocar a informação no ficheiro. Se a primeira transacção de Banco no 
+ficheiro tiver como destinarário do pagamento "Opening Balance" (Saldo 
+Inicial), a linha L conterá o nome da conta que o ficheiro descreve:
+
+    <LITERAL REMAP="TT"><MSGTEXT>
+<LITERALLAYOUT>      !Type:Bank
+      D12/03/95
+      T4,706.57
+      CX
+      POpening Balance
+      L[New Bank]
+      ^
+    </LITERALLAYOUT>
+</MSGTEXT></LITERAL>
+
+</PARA>
+<PARA>Os registos de Saldo Inicial são tratados de forma especial, 
+visto não significarem o que parecem indicar (se interpretar o registo 
+à letra, como uma transferência de $4706.57 do [New Bank] para o [New 
+Bank], o seu saldo são uns maravilhosos $0.00). Na secção de <LINK LINKEND="DIALOG-ACCOUNTS">
+Pastas de Contas</LINK> existe um debate sobre o que fazemos com eles.
+
+      </PARA>
+<SECT3>
+<TITLE>Exportações Quicken de Multi-conta</TITLE>
+<PARA>O Quicken e alguns outros programas que utilizam QIF como formato 
+de exportação sabem como armazenar o histórico de múltiplas contas num 
+único ficheiro QIF. Eles fazem-no antecedendo o conjunto de transacções 
+de/para essa conta com um registo "!Account".
+
+</PARA>
+<PARA>O Importador QIF deverá ser capaz de processar correctamente estes 
+ficheiros. Você poderá reparar que a "Conta QIF Defeito" parece algo aleatória;
+para exportações de múltiplas contas, a conta inferida é a primeira conta 
+com um registo de Saldo Inicial. No entanto, visto que o Quicken indica 
+especificamente a conta pata cada transacção numa exportação de múltiplas contas, 
+a probabilidade de você obter incorrectamente transacções na conta de defeito 
+são reduzidas.
+
+      <ANCHOR ID="HOW-TO-QIF"></PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>Como utilizar a janela de Importação QIF</TITLE>
+<PARA>    </PARA>
+<PARA>O guia de "Início Rápido": Para carregar os seus ficheiros, prima 
+o botão "Seleccionar ..." na pasta Ficheiros para encontrar o ficheiro, 
+depois prima o botão "Carregar iIcheiro" no fundo da pasta para o carregar.
+
+</PARA>
+<PARA>Repita isto até que todos os seus ficheiros estejam carregados (leia 
+a explicação abaixo para saber porque deverá carregar todos os ficheiros 
+simultaneamente). Verifique as janelas de Contas e Categorias e efectue 
+correcções, se necessário. Depois prima o grande botão OK.
+
+
+    </PARA>
+<PARA>Porque precisa de carregar todos os ficheiros simultaneamente: 
+      
+    </PARA>
+<PARA>Existem dois tipos diferentes de ficheiros QIF: aqueles que descrevem 
+uma conta e os que descrevem várias contas. Ambos os tipos tentam estar 
+"completos" ao representar todas as transacções que envolvem cada conta que 
+representam. O que isto significa é que se você tiver várias contas no 
+Quicken, com transferências entre elas, as transacções vão surgir em várias 
+contas. Isto significa que se você não conseguir apanhar todas as transacções 
+duplicadas irá acabar por ficar com saldos errados no GnuCash. Isso será 
+um problema.
+
+</PARA>
+<PARA>No sentido de conseguir a melhor replicação possível da sua árvore de 
+contas do Quicken, exporte tudo o conseguir do Quicken e depois importe tudo 
+numa única sessão, quer seja num único ficheiro QIF representando todas as 
+contas em conjunto ou com um ficheiro por conta. A <LINK LINKEND="DIALOG-FILES">
+Pasta de FIcheiros</LINK> do importador irá permitir-lhe carregar tantos 
+ficheiros QIF quantos desejar, e certificar-se de que a moeda, nome de conta 
+Quicken, etc. estão correctos para cada uma. O importador consegue fazer um bom 
+trabalho a apanhar referências cruzadas e marca-las.
+
+</PARA>
+<PARA>O importador é programado primariamente em Guile, e pode ser um pouco lento 
+com ficheiros QIF grandes. Carregar Ficheiro demora na minha máquina 5-6 segundos 
+para um ficheiro QIF com cerca de 1000 transacções.
+
+    </PARA>
+<PARA>Uma vez você tendo carregado todos os ficheiros no importador, vá até à 
+<LINK LINKEND="DIALOG-ACCOUNTS">Pasta de Contas</LINK>, e depois à <LINK LINKEND="DIALOG-CATEGORIES">Pasta de Categorias</LINK>, e verifique que 
+o importador irá colocar as suas transacções Quicken no local correcto. Você 
+pode clicar para surgir uma janela e modificar o nome/tipo da conta de destino 
+do GnuCash para qualquer conta QIF. Não tenha medo de modificar estas contas de 
+destino; elas são apenas inferições feitas pelo importador baseadas no nome e 
+tipo da conta QIF. O mapeamento de contas Quicken para contas GnuCash é escrito 
+para um ficheiro de preferências quando primir "OK", pelo que se importar outros 
+ficheiros Quicken que descrevam as mesmas contas não terá de estar novamente a 
+corrigir o importador.
+
+    </PARA>
+<PARA>Certifique-se (especialmente na pasta de Contas) de que os nomes de 
+contas QIF e número de transacções fazem sentido. Se verificar que uma conta 
+QIF é mencionada por dois nomes distintos, certifique-se de que a "Conta QIF" 
+para cada ficheiro na pasta de Ficheiros é o que está à espera. Se a Conta 
+QIF para um ficheiro estiver errada, o importador não será capaz de comparar 
+transferências correctamente e os seus saldos ficarão errados. Se a Conta QIF 
+de um ficheiro estiver errada, seleccione o ficheiro na Pasta de Ficheiros, 
+tire o visto da caixa "Auto", e edite a caixa de texto para conter o nome 
+correcto, depois prima novamente "Carregar Ficheiro". Ser-lhe-á pedido para 
+confirmar a nova leitura do ficheiro e depois estará feito. Volte para a pasta 
+de Contas, veja se isso corrigiu o problema, repetindo se necessário.
+
+    </PARA>
+<PARA>Quanto estiver contente com o mapeamento de contas (verifique-as duas vezes, 
+e não se esqueça de gravar a sua sessão GnuCash primeiro para jogar pelo seguro), 
+então e apenas então prima OK. Se carregar no Cancelar a qualquer momento, as suas 
+contas não serão tocadas.
+
+    </PARA>
+<PARA>Novamente, o importador foi programado principalmente em Guile, e poderá 
+ser um pouco lento com ficheiros QIF grandes. Demora 3-4 segundos a meter 1000 
+transacções no GnuCash num Celeron 433, proporcionalmente mais em processadores 
+mais lentos. Felizmente, você apenas tem de fazer uma importação assim tão 
+grande esporadicamente, pelo que não estou muito preocupado.
+
+      <ANCHOR ID="DIALOG-FILES"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>A Pasta "Ficheiros"</TITLE>
+<PARA>    
+    </PARA>
+<PARA>A primeira coisa a fazer é carregar todos os seus ficheiros. Prima 
+"Seleccionar Ficheiro", seleccione-o, depois defina a conta, moeda, separador 
+decimal, e campos de data, e prima "Carregar Ficheiro". O campo Moeda por 
+defeito fica com a definição da moeda de defeito do GnuCash (definida na pasta 
+Internacional na janela de Preferências). Tente primeiro detectar automaticamente 
+o separador, formato de data, e nome de conta. O separador decimal e formato de 
+data ficarão em "Auto-detectar" caso o auto-detector não tenha 100 porcento de 
+certeza em relação à resposta certa; nesse caso, terá de fazer uma selecção manual. 
+Provavelmente você sabe qual é o separador decimal correcto; se estiver nos EUA ou 
+Inglaterra, será definitivamente um "ponto". Quase todos os ficheiros QIF dos EUA 
+que já vi têm a data no formato m/d/y, pelo que tente isto se a auto-detecção não 
+funcionar.
+
+    </PARA>
+<PARA>Para voltar para um ficheiro que tenha carregado anteriormente, seleccione 
+o seu nome na lista de ficheiros à esquerda. Se modificar definições para um ficheiro 
+previamente carregado, prima novamente "Carregar Ficheiro" para o reler com as novas 
+definições. Não se esqueça de desligar o "Auto" na entrada de Conta QIF se a 
+introduzir manualmente.
+
+    </PARA>
+<PARA>Se não existir um registo de Saldo Inicial no registo, o nome de conta é 
+inferido a partir do nome do ficheiro: qualquer extensão .qif é removida, e todas 
+as barras e sublinhados são modificados para espaços. Se se quiser poupar de 
+reintroduzir manualmente o nome, grave o ficheiro com um nome que será compreendido 
+correctamente (por ex. grave a conta "Minha Conta Bancária" como Minha-Conta-Bancaria.qif 
+ou Minha_Conta_Bancaria.qif).
+
+<ANCHOR ID="DIALOG-ACCOUNTS"></PARA>
+</SECT2>
+<SECT2 ID="DIALOG-CATEGORIES">
+<TITLE>As Pastas de "Contas" e "Categorias"</TITLE>
+<PARA>    </PARA>
+<PARA>Cada linha na apresentação da pasta de Contas representa um mapeamento 
+de uma conta Quicken para uma conta GnuCash. Da mesma forma, a pasta da 
+apresentação de Categorias mostra mapeamentos de categorias Quicken para contas 
+GnuCash. Apenas contas QIF referenciadas por um ou mais registos de transacções 
+são apresentados. O nome da conta GnuCash é mostrado no formato de "nome 
+completo", incluindo o nome de todas as contas pai separadas pelo seu caracter 
+separador de defeito (geralmente ":").
+
+    </PARA>
+<PARA>A primeira coisa a verificar é a coluna de nomes de contas Quicken. 
+Certifique-se de que não ha duplicados com nomes ligeiramente diferentes. 
+Se uma transacção QIF fizer uma transferência para [Conta Ordem], e você 
+importou um ficheiro chamado conta-ordem.qif, poderá ter uma entrada para 
+"conta ordem" e outra para "Conta Ordem". Se estas entradas se referirem à 
+mesma conta, terá de regressar à pasta Ficheiros e reler o conta-ordem.qif 
+com o nome de conta Quicken correcto, Conta Ordem.
+
+    </PARA>
+<PARA>Assim que tiver todas as contas Quicken a fazer sentido, verifique a coluna 
+de contas GnuCash. A conta GnuCash de defeito para cada conta Quicken é determinada 
+por um procedimento em passos que faz a melhor inferição possível baseada nos dados 
+disponíveis. As possibilidades tentadas são as seguintes (em ordem de preferência):
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Mapeamentos gravados de sessões de importação anteriores. De cada vez que 
+você prime "OK" na janela de importação, os mapeamentos que seleccionou são 
+gravados para servirem na próxima vez que importar ficheiros. Até agora, o 
+ficheiro chama-se sempre ~/.gnucash/qif-accounts-map. Se obtiver mapeamentos 
+de defeito estranhos (por exemplo, se modificar o nome de uma conta e o importador 
+desejar continuar a criar uma conta nova com o nome antigo) apague este ficheiro. 
+Está na minha lista de desejos fazer isto trabalhar com menos problemas.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Contas semelhantes da sua árvore de contas existente no GnuCash. "Semelhantes" 
+significa que os tipos de contas são compatíveis e pode-se assumir com elevado grau 
+de certeza de que os nomes se referem à mesma coisa. Semelhanças exactas de caminho 
+completo são as preferidas, seguidas de semelhanças insensíveis à capitalização, 
+seguidas de semelhanças com contas pai adicionadas (por ex.  a conta QIF Visa é 
+semelhante à conta GnuCash Cartões Crédito:Visa), seguida de várias semelhanças por 
+comparação de partes dos nomes. Se você conhecer uma boa heurística para isto, por 
+favor diga-me. 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Conta nova. O nome da conta nova é actualmente apenas o mesmo nome que o da 
+conta Quicken; novamente, se conhecer uma boa heurística para melhorar isto, diga-me. 
+Já pensei em o fazer procurar sub-árvores onde inserir a conta (se todas as contas 
+de cartões de crédito existentes são filhas de uma conta, fazer a conta nova como 
+filha dessa conta, etc). Isto está na minha lista de desejos a implementar. 
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Verifique tanto o nome de cada conta GnuCash para cada conta QIF como també o 
+tipe. Se não gostar de algum deles, clique na seta na visualisação que contiver o 
+mapeamento que não lhe agrada. Verá a janela de <LINK LINKEND="DIALOG-PICKER">Selecção 
+de Contas</LINK> que lhe permitirá modificar a conta.
+
+<ANCHOR ID="DIALOG-PICKER"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>O Selector de Contas</TITLE>
+<PARA>    </PARA>
+<PARA>Este selector de conta não está a funcionar prefeitamente. A ideia é de que você 
+pode seleccionar uma conta existente a partir da visualisação de árvore, ou introduzir 
+nas caixas abaixo informação para uma nova conta. No entanto, de momento é possível 
+fazer coisas Muito Más tais como especificar uma subconta de uma conta existente com um 
+tipo que não é compatível com o do pai. Assim que eu perceber como quero por esta janela 
+a funcionar eu corrijo isto. Eu testei as piores coisas que você pode fazer e nada 
+terrível aconteceu, excepto que a árvore de contas poderá estar num estado que nunca 
+poderia ter sido conseguido através da aplicação em sí (uma conta de Cartão de Crédito 
+como filha de uma conta Bancária, por exemplo). Não o faça. Eu vou corrigir isto brevemente.
+
+<ANCHOR ID="OK-BUTTON"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>O Botão "OK"</TITLE>
+<PARA>    </PARA>
+<PARA>Na realidade tudo acontece apenas quando você prime o botão "OK", pelo que ele 
+tem direito a uma secção só para si. 
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Primeiro fazemos um "marcar e limpar" para eliminar as metades duplicadas 
+das transferências nas transacções carregadas do Quicken. 
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>É criada uma árvore de contas GnuCash que espelha a sua árvore de contas 
+existente e inclui quaisquer novas contas adicionadas pelos seus mapeamentos 
+nas Contas e Categorias.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Todas as transacções QIF são convertidas em parcelas GnuCash e enfiadas 
+para dentro da nova árvore de contas.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Finalmente, é pedido ao motor do GnuCash para juntar a árvore de contas 
+antiga com a nova árvore de contas. 
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+<ANCHOR ID="MOREHINTS"></PARA>
+</SECT2>
+<SECT2>
+<TITLE>Mais dicas</TITLE>
+<PARA>    <ANCHOR ID="OPENING-BALANCE"></PARA>
+<SECT3>
+<TITLE>Saldo Inicial</TITLE>
+<PARA>Se os seus ficheiros Quicken tiverem registos de "Saldo Inicial", você 
+verá na pasta de Contas uma conta chamada "Saldo Inicial". Justificar a 
+origem dos saldos inicials é uma espécie de problema, quando se pensa nisso, 
+pois eles vêm de contas que estão fora do âmbito do universo GnuCash. A 
+sugestão que eu vi na lista de programadores do GnuCash foi a fazer a Saldos 
+Iniciais apontar para uma conta GnuCash chamada "Ganhos Retidos", do tipo 
+Passivo. Eu não percebo isto completamente, mas parece-me razoável, e é o 
+defeito para contas chamadas "Saldo Inicial".
+
+    <ANCHOR ID="EMPTY-CATEGORY"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Categoria vazia</TITLE>
+<PARA>Na vista de Categorias, você poderá verificar uma entrada vazia nas 
+Categorias QIF. As transacções Quicken não são obrigadas a ter uma Categoria, 
+mas as transacções GnuCash são obrigadas a ter uma fonte e um destino. A 
+categoria vazia permite-lhe seleccionar para que conta GnuCash todas as 
+transacções sem categoria vão. Isto geralmente são vários cheques que você 
+passou, levantamentos de dinheiro, etc., pelo que provavelmente você quererá 
+po-las na conta "Outras Despesas" ou algo semelhante. poderá fazer sentido 
+colocar isto numa conta de passivo; diga-me se tiver uma boa explicação sobre 
+como isto deveria ser.
+
+    <ANCHOR ID="DIVIDEND-CATEGORY"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Categoria de Dividendos</TITLE>
+<PARA>As transacções de acções do Quicken têm um padrão reconhecível para pagamento 
+de dividendos. Se o importador conseguir dizer com toda a certeza que uma transacção 
+é uma transferência de dividendos então por defeito irá criar uma conta de receitas 
+de "Dividendos". Esta categoria normalmente não está presente no ficheiro Quicken, 
+pelo que está a ser criada a partir do nada.
+
+      <ANCHOR ID="FUND-FAMILIES"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Famílias de fundos</TITLE>
+<PARA>O Quicken tem a abstracção de uma única conta representar uma "família de 
+fundos" com o objectivo de permitir mais facilmente transferir entre cárias contas 
+dentro da mesma família. O Importador GnuCash irá SEMPRE perceber isto erradamente 
+da primeira vez, porque o Quicken coloca explicitamente a informação incorrecta no 
+ficheiro. A conta "cobertor" que representa a família de fundos como um todo deveria 
+provavelmente ser uma conta Bancária, visto as transferências de e para ela no 
+ficheiro Quicken estão denominadas em moeda e não em acções. O saldo de tal conta é 
+suposto ser sempre de zero visto você apenas a utilizar como intermediária entre 
+duas contas na família. Se tudo correr bem eu corrigirei este problema a partir do 
+momento em que alguem me diga como deveria isto funcionar.
+      
+      <ANCHOR ID="BROKERAGE-ACCOUNTS"></PARA>
+</SECT3>
+<SECT3>
+<TITLE>Contas em corretoras</TITLE>
+<PARA>Contas em correctoras são algo que realmente me confunde. Basicamente, o meu 
+raciocínio é de que a conta de corretora em si deveria ser provavelmente uma conta 
+Bancária. A única coisa estranha é em coisas como dividendos pagos em títulos sobre 
+a conta de corretagem. Se você estiver a utilizar uma conta de Dividendos, poderá 
+perder a informação sobre de onde o dividendo veio. O importador tenta gravar esta 
+informação colocando o nome do título no campo "Destinatário" (que no GnuCash surge 
+no campo de Descrição para a transacção). Caso tenha uma ideia melhor avise-me.
+    
+  </PARA>
+</SECT3>
+</SECT2>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

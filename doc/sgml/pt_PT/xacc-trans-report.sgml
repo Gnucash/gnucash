@@ -1,0 +1,142 @@
+<ARTICLE ID="XACC-TRANS-REPORT">
+
+<ARTHEADER>
+<TITLE>Relatório de Transacções</TITLE>
+</ARTHEADER>
+
+<PARA>O relatório de transacções lista os detalhes das transacções 
+    numa conta específica durante um período de tempo, num formato 
+    adequado para visualização e exportação.
+
+    </PARA>
+<PARA>Opções definíveis para este relatório incluem:
+    
+    <ITEMIZEDLIST>
+
+<LISTITEM><PARA> <EMPHASIS>Apresentar:</EMPHASIS>Seleccione campos a apresentar 
+no relatório. As hipóteses incluem:
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Data</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Número</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Descrição</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Nota</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Conta</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Outra Conta</EMPHASIS>
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Montante</EMPHASIS> - note que pode escolher visualização 
+          de montantes em coluna única ou em coluna dupla. Em coluna dupla 
+          os créditos e débitos são apresentados em colunas separadas.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Títulos das Colunas</EMPHASIS> - Texto que designa os campos 
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Totais</EMPHASIS> - campos numéricos que serão somados.
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Opções de Relatório:</EMPHASIS> Isto é para opções gerais do relatório,
+        incluindo: 
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Data Até e Data Desde:</EMPHASIS> o intrevalo de datas a ser 
+          coberto pelo relatório.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Conta:</EMPHASIS> a(s) conta(s) sobre as quais gerar o 
+          relatório.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Estilo:</EMPHASIS> Escolha de entre linha única (em 
+          que todas as transacções serão apresentadas numa linha única), 
+          ou linha múltipla (em que cada parcela de uma transacção é 
+          visualizada numa linha distinta).
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>        <EMPHASIS>Ordenação:</EMPHASIS>
+
+        <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><EMPHASIS>Chave Primária de Ordenação:</EMPHASIS> o campo a 
+          ordenar primeiro.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Ordem Primária de Ordenação:</EMPHASIS> a ordem em que 
+          ordenar. "Ascendente" especifica do mais pequeno para o maior,
+          ordenação alfabética, mais antigo-&gt;recente, ou as contas 
+          mais pequenas primeiro. Descendente provoca o efeito contrário.
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Chave Secundária de Ordenação:</EMPHASIS> o campo por que  
+          ordenar as chaves primárias a ordenar forem iguais 
+
+          </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><EMPHASIS>Ordem Secundária de Ordenação:</EMPHASIS> a ordem em que 
+          ordenar a chave secundária de ordenação.
+        </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

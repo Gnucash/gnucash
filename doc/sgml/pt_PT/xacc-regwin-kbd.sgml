@@ -1,0 +1,76 @@
+<ARTICLE ID="XACC-REGWIN-KBD">
+
+<ARTHEADER>
+<TITLE>Atalhos de Teclado do Registo</TITLE>
+</ARTHEADER>
+
+<PARA>    As seguintes teclas podem ser utilizadas para movimentação 
+    no registo: <EMPHASIS>Por favor verifique que nenhuma foi esquecida</EMPHASIS> 
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><KEYCAP>Seta Direita, Seta Esquerda</KEYCAP>move um campo para a direita 
+      ou esquerda
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Home</KEYCAP> move para o início do campo 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>End</KEYCAP> move para a direita do campo 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>TAB</KEYCAP> move para o campo seguinte 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Shift + TAB</KEYCAP> move para o campo anterior 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Enter, Seta para Baixo</KEYCAP> move para a transacção seguinte 
+      (se necessário, uma nova transacção em branco será criada)
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Seta para Cima</KEYCAP> move para a transacção anterior 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Page Up</KEYCAP> move um ecrã para cima 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Page Down</KEYCAP> move um ecrã para baixo 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Shift + Page Up</KEYCAP>Vai para a primeira transacção 
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA><KEYCAP>Shift + Page Down</KEYCAP>Vai para a última transacção (em branco) 
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

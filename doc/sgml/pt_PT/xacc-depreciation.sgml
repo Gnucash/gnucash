@@ -1,0 +1,753 @@
+
+<ARTICLE ID="XACC-DEPRECIATION">
+<ARTHEADER>
+<TITLE>Depreciação e Ganhos de Capital</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE>Depreciação e Ganhos de Capital</TITLE>
+<PARA>
+Caso detenha bens para fins empresariais, a sua desvalorização com o passar 
+do tempo pode ser tratada como uma dedução para fins fiscais, denominada 
+Depreciação. Por outro lado, caso detenha bens como propriedades, itens de 
+colecção (tais como obras de arte), e investimentos (tais como acções em 
+empresas), poderá ve-los aumentar o seu valor ao longo do tempo. Neste caso, 
+terá de reconhecer -- para fins fiscais -- o que se chama de 
+<EMPHASIS>Ganhos de Capital</EMPHASIS>
+</PARA>
+
+<PARA>Esta secção discute a gestão de depreciações e valorizações 
+    de bens no GnuCash. Também proporciona uma breve introdução 
+    a questões relacionadas com o fisco.
+    </PARA>
+
+<PARA><EMPHASIS>Atenção:</EMPHASIS> <EMPHASIS>tenha em atenção que cada país poderá 
+    ter políticas fiscais <EMPHASIS>substancialmente</EMPHASIS> diferentes para a 
+    gestão destes aspectos; tudo o que este documento pode realmente oferecer são 
+    algumas ideias subjacentes para o ajudar a aplicar as suas políticas "favoritas" 
+    fiscais/de depreciação.</EMPHASIS>
+
+    </PARA>
+<PARA>A valorização e depreciação de bens é de certo modo tratada de 
+    forma diferente:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA><LINK LINKEND="XACC-DEPRECIATION">Depreciação</LINK> 
+        é <EMPHASIS>normalmente</EMPHASIS> reconhecida (o termo 
+        técnico é <EMPHASIS>incorrida</EMPHASIS>) como uma despesa 
+        constante, que gradualmente reduz o valor de um activo 
+        no sentido do valor zero. 
+        A depreciação é normalmente apenas calculada sobre activos 
+        utilizados para fins profissionais ou por empresas, visto 
+        geralmente os governos não permitirem a reclamação de deduções 
+        por depreciações sobre activos pessoais, e é irrelevante alguém 
+        se preocupar com todo o trabalho se não puder realizar deduções.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA> <LINK LINKEND="APPR">Ganhos de Capital,</LINK> que poderiam ser chamados 
+        de <EMPHASIS>apreciações no valor de bens,</EMPHASIS> normalmente <EMPHASIS>
+        não</EMPHASIS> são reconhecidos até que o bem seja vendido, e nesse 
+        <EMPHASIS>instante,</EMPHASIS> a totalidade do ganho torna-se um 
+        recebimento. 
+        Os governos tendem a se mostrar <EMPHASIS>muito interessados</EMPHASIS> 
+        em tributar ganhos de capital de uma forma ou de outra.
+        (Como sempre, existem excepções. Se você detiver uma obrigação que paga 
+        a totalidade dos seus juros na maturidade, muitas vezes o fisco requer 
+        que você reconheça o juro anualmente, recusando que isto seja tratado 
+        como um ganho de capital. As frases <EMPHASIS>juro reconhecido,</EMPHASIS> 
+        ou <EMPHASIS>juro imputado</EMPHASIS> são muitas vezes utilizadas para 
+        afujentar aqueles que são sensíveis a tais coisas...)
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT1>
+<SECT1 ID="XACC-CAPITALGAINS">
+<TITLE> Ganhos de Capital - Apreciação de Activos</TITLE>
+<PARA>    <ANCHOR ID="APPR"> 
+    </PARA>
+<PARA>A apreciação de activos é normalmente um assunto difícil pois, 
+    para alguns tipos de activos, é difícil de estimar correctamente 
+    um aumento de valor <EMPHASIS>até que o activo seja realmente vendido.</EMPHASIS>
+
+    Se você investir em <LINK LINKEND="XACC-TICKER">títulos</LINK>
+    transaccionados diariamente em mercados abertos tais como bolsas 
+    de valores, os preços são normalmente bastante exactos, e vender 
+    o activo a preços de mercado pode ser tão simples como telefonar 
+    ao corrector e emitir uma <EMPHASIS>Ordem de Mercado.</EMPHASIS>
+    Por outro lado, apartamentos o seu bairro são vendidos com menos 
+    frequência. Tais vendas tendem a involver um considerável esforço 
+    financeiro, e envolvem negociações, o que significa que estimativas 
+    têm tendência a ser menos precisas. Da mesma forma, vender um 
+    automóvel usado involve um processo de negociação que torna o preço 
+    final um pouco menos previsível.
+
+    </PARA>
+<PARA>O valor de objectos de colecção tais como joias, obras de arte, 
+    cromos de baseball, e "Bonecas Barbie" são mais difíceis de estimar.
+    O mercado para tais objectos é de certa forma menos aberto que o 
+    mercado de títulos.
+    Pior ainda são activos únicos. Muitas vezes as fábricas possuem prensas 
+    e tintas personalizadas para construir um produto muito específico que 
+    custa centenas ou milhares de contos; este equipamento pode <EMPHASIS>
+    não ter qualquer valor</EMPHASIS> fora desse contexto muito específico. 
+    Em tais casos, vários valores discordantes poderão ser associados ao 
+    activo, <EMPHASIS>nenhum</EMPHASIS> deles distintamente correcto.
+
+    </PARA>
+<PARA>Vamos supor que você compra um bem que se espera venha a 
+    valorizar, digamos uma pintura de Degas, e deseja acompanha-la. 
+    (A empresa de seguros irá preocupar-se com isto, mesmo que mais 
+    ninguém o faça.)
+    Acompanhar devidamente a valorização contínua do Degas irá requerer 
+    pelo menos três, muito possivelmente as seguintes quatro contas 
+    (mais uma conta bancária ou de dinheiro onde o dinheiro da compra 
+    sairá):
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Uma conta de <EMPHASIS>Custo do Activo</EMPHASIS> para acompanhar o 
+      custo original da pintura.
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Uma conta de <EMPHASIS>Ganhos Reconhecidos Não Realizados em Activos
+      </EMPHASIS> para acompanhar aumentos de valor.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Uma conta de <EMPHASIS>Receitas Reconhecidas de Ganhos em Activos</EMPHASIS> 
+      onde registar a parte de receita dos ganhos anuais nas suas riquezas.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Uma conta de <EMPHASIS>Receitas de Ganhos Realizados em Activos</EMPHASIS> 
+      onde registar as receitas realizadas quando vender o activo.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Os <EMPHASIS>ganhos reconhecidos</EMPHASIS> provavelmente não irão afectar 
+    o seu rendimento tributável para fins de imposto de <EMPHASIS>rendimentos</EMPHASIS>, 
+    apesar de poder ter algum efeito sobre os impostos de <EMPHASIS>propriedade</EMPHASIS>.
+
+    </PARA>
+<SECT2>
+<TITLE>A Gestão de Ganhos de Capital Gains no GnuCash</TITLE>
+<PARA>    </PARA>
+<SECT3>
+<TITLE>A Aquisição</TITLE>
+<PARA>Primeiro, crie a <EMPHASIS>conta de custo do activo</EMPHASIS>. 
+    Para registar a aquisição, transfira o montante que pagou por 
+    esta pintura da sua conta bancária para esta conta de activo.
+
+    </PARA>
+<PARA>Um mês mais tarde, você tem razão para suspeitar de que o valor do 
+    seu quadro aumentou em 250cts. Por forma a registar esta transferência 
+    você transfere 250cts da sua conta de receitas <EMPHASIS>reconhecidas 
+    em ganhos de activos</EMPHASIS> para a sua conta de activos.
+    A sua janela principal assemelhar-se-á à seguinte:
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-main1.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Janela proncipal após a compra e valorização</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>e a sua conta de activos irá assemelhar-se a:
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-asset1.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Conta de activos após compra e valorização</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Enquanto Detém o Activo</TITLE>
+<PARA>A valorização do activo é uma espécie de receita mas <EMPHASIS>não 
+    </EMPHASIS> é dinheiro na mão. As pessoas que ficaram "ricas" em 1999 
+    com as OPAs de empresas relacionadas com o Linux tais como a Red Hat
+    Software e a VA Linux Systems podem certificar isto. Eles detêm opções 
+    ou acções que estão <EMPHASIS>teoricamente</EMPHASIS> avaliadas em 
+    milhões de dólares USD. Na verdade não são milionários; os principais 
+    participantes têm de se manter com as acções por pelo menos seis meses 
+    antes de vender <EMPHASIS>qualquer</EMPHASIS> tranche. O facto de que 
+    eles <EMPHASIS>não podem</EMPHASIS> vender significa que apesar de 
+    teoricamente poderem valer milhões de dólares no papel, eles não 
+    possuem qualquer forma legal de <EMPHASIS>receberem</EMPHASIS> esses 
+    milhões.
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Vender o Activo</TITLE>
+<PARA>Vamos supor que decorrido mais um mês os preços para pinturas 
+    de Degas subiram mais um pouco, no seu caso cerca de 500cts, você 
+    estima. Você normalmente regista os 500cts como uma receita tal como 
+    fez acima, decidindo depois vender a pintura.
+
+    </PARA>
+<PARA>Surgem três possibilidades:
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>A sua estimativa optimista do valor da pintura estava correcta. 
+       A conta de receitas é deixada inalterada (ou talvez seja transferido 
+       o saldo de uma receita de <EMPHASIS>Ganho Reconhecido</EMPHASIS> para 
+       uma conta de receita de <EMPHASIS>Ganho Realizado</EMPHASIS>), e o 
+       registo surgiria como se segue:
+        <TABLE>
+<TITLE>Converter um Ganho Reconhecido num Ganho Realizado</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Conta</ENTRY>
+<ENTRY>Montante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Dinheiro</ENTRY>
+<ENTRY>3.350.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-2.200.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Realizados</ENTRY>
+<ENTRY>-1.150.000$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+        </PARA>
+<PARA>Se quaisquer montantes tivessem sido reconhecidos como <EMPHASIS>Ganhos 
+        Reconhecidos</EMPHASIS>, o montante do activo deveria ser saldado, anulado 
+        por um valor <EMPHASIS>negativo</EMPHASIS> pelas receitas em <EMPHASIS>Ganhos 
+        Reconhecidos</EMPHASIS>. Se o total que tinha sido reconhecido fosse 1.000cts, 
+        então a transacção poderia assemelhar-se à seguinte:
+
+        <TABLE>
+<TITLE>Ganho Reconhecido Torna-se Prejuizo Realizado</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Conta</ENTRY>
+<ENTRY>Montante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Dinheiro</ENTRY>
+<ENTRY>3.350.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-2.200.000</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganho Reconhecido em Activo</ENTRY>
+<ENTRY>-1.000.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Realizados</ENTRY>
+<ENTRY>-1.150.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Reconhecidos</ENTRY>
+<ENTRY>1.000.000$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+        </PARA>
+<PARA>Note que as duas contas de receitas se saldam uma à outra por forma a 
+        que a receita <EMPHASIS>actual</EMPHASIS> resultante da transacção 
+        seja apenas 150cts. Os restantes 1.000cts tinham sido previamente 
+        reconhecidos como <EMPHASIS>Receitas de Ganhos Reconhecidos</EMPHASIS>.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Você estava excessivamente optimista quanto ao valor da pintura. Em vez 
+      dos 3.350cts que você pensava a pintura valer, apenas lhe oferecem 
+        2.900cts. Mas ainda assim você decide vender, pois você dá mais valor 
+        aos 2.900cts do que à pintura. Os números mudam ligeiramente, mas 
+        não de forma dramática.
+
+        <TABLE>
+<TITLE>Ganhos Reconhecidos Tornam-se Ganhos Realizados</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Conta</ENTRY>
+<ENTRY>Montante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Dinheiro</ENTRY>
+<ENTRY>2.900.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-2.200.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganho Reconhecido em Activo</ENTRY>
+<ENTRY>-1.000.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Realizados</ENTRY>
+<ENTRY>-700.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Reconhecidos</ENTRY>
+<ENTRY>1.000.000$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+        </PARA>
+<PARA>Note que as duas contas de receitas se saldam uma à outra por forma 
+        a que a receita <EMPHASIS>actual</EMPHASIS> resultante da 
+        transacção se torna num <EMPHASIS>prejuízo</EMPHASIS> de 300cts.
+        Isso está correcto, visto você ter previamente reconhecido 
+        1.000cts de receitas.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Você consegue vender a sua pintura por mais do que alguma vez julgou 
+      concebível. O valor adicional é, novamente, registado como um ganho, 
+      <EMPHASIS>por ex.</EMPHASIS> uma receita.
+
+        <TABLE>
+<TITLE>Ganho Reconhecido Torna-se num Óptimo Ganho Realizado</TITLE>
+<TGROUP COLS="2">
+<THEAD>
+<ROW>
+<ENTRY>Conta</ENTRY>
+<ENTRY>Montante</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>Dinheiro</ENTRY>
+<ENTRY>10.000.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Pintura</ENTRY>
+<ENTRY>-2.200.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Ganho Reconhecido em Activo</ENTRY>
+<ENTRY>-1.000.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Realizados</ENTRY>
+<ENTRY>-7.800.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>Receita de Ganhos Reconhecidos</ENTRY>
+<ENTRY>1.000.000$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Na prática, é muito importante manter o <EMPHASIS>Ganho Reconhecido 
+    em Activo</EMPHASIS> separado da <EMPHASIS>Receita de Ganhos Realizados
+    </EMPHASIS>, visto a primeira ser muito provavelmente ignorada pelas 
+    autoridades fiscais, que apenas se preocuparão em o tributar pelos 
+    <EMPHASIS>Ganhos Realizados</EMPHASIS>.
+
+    </PARA>
+<PARA>Abaixo, mostraos o segundo caso abordado.
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-main2.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Janela principal após a venda</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/appr-asset2.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Conta de activo após a venda</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>Cuidado com a Avaliação</TITLE>
+<PARA>Como vimos neste exemplo, para activos não financeiros, poderá 
+    ser difícil estimar correctamente o ``verdadeiro'' valor de um 
+    activo.
+    É muito fácil imaginar-se rico baseado em estimativas questionáveis 
+    que não refletem "dinheiro no banco".
+    </PARA>
+
+<PARA>Quando estiver a gerir a valorização de activos,
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Seja cuidadoso com as suas estimativas de valor. 
+      Não se agracie com pensamentos positivos.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Nunca, nunca, conte com os montantes que não tiver no banco ou em 
+      dinheiro. Até ter realmente vendido o seu activo e recebido o 
+      dinheiro, quaisquer valores no papel (ou padrões magnéticos no seu 
+      disco rígido) não são mais do que exactamente isso.
+      Se pudesse realisticamente convencer um banqueiro a lhe emprestar 
+      dinheiro, utilizando os activos como penhor, isso é uma prova 
+      razoavelmente credível de que os activos têm valor, pois os credores 
+      são profissionais desconfiados de sobre-estimatívas de valor dúbias.
+      Esteja atento: demasiadas empresas que parecem ser "lucrativas" no 
+      papel abrem falência por ficarem sem <EMPHASIS>dinheiro</EMPHASIS>, 
+      precisamente porque "activos valiosos" não eram a mesma coisa que dinheiro.
+      
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Tributação de Ganhos de Capital</TITLE>
+<PARA>    </PARA>
+<PARA>As políticas de tributação variam consideravelmente de país para 
+    país, pelo que é virtualmente impossível dizer algo que seja 
+    universavelmente útil.
+    No entanto, é <EMPHASIS>habitual</EMPHASIS> que receitas geradas por 
+    ganhos de capital não estejam sujeitas a tributação até à data em que 
+    o activo é realmente vendido, e por vezes nem sequer nessa altura.
+
+    Detentores de imóveis na América do Norte <EMPHASIS>normalmente</EMPHASIS> 
+    descobrem que quando vendem residências pessoais, os ganhos de capital que 
+    possam advir estão isentos. Parece que outros países tratam a venda de 
+    imóveis de forma distinta, tributando as pessoas em tais ganhos. As 
+    autoridades Alemãs, por exemplo, tributam tais ganhos apenas se detivesse 
+    esse imóvel à menos de dez anos.
+
+    </PARA>
+
+<PARA><ULINK URL="mailto:cbbrowne@hex.net">Eu tenho</ULINK> uma história 
+dos tempos em que preparava declarações de impostos em que uma família vendeu 
+uma quinta, e experava uma <EMPHASIS>considerável</EMPHASIS> entrega ao fisco 
+que acabou por se mostrar virtualmente nula pois eles detinham a propriedade 
+desde antes de 1971 (aqui se mostra um "Dia de Avaliação" crítico no Canadá) e 
+devido à quinta ser uma <EMPHASIS>leitaria</EMPHASIS>, com algumas deduções 
+resultantes <EMPHASIS>verdadeiramente peculiares</EMPHASIS>.  
+O objectivo desta história é de que enquanto que a apresentação aqui ser 
+verdadeiramente simples, a tributação por vezes é terrivelmente complicada...  </PARA>
+
+</SECT2>
+</SECT1>
+<SECT1 ID="XACC-DEPR">
+<TITLE>Depreciação de Activos</TITLE>
+<PARA>Comparado com as estimativas muitas vezes incertas que têm de 
+    ser feitas no que toca a valorizações de activos, estamos em solo 
+    bastante mais firme neste ponto.
+
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Os governos tendem a definir regras precisas sobre como é esperado 
+      que você calcule as depreciações para fins fiscais.
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>É fácil procurar em referências tais como o "Diário da República" 
+      (tabelas de amortização) estimativas sobre quanto um automóvel 
+      deverá valer ao fim de 3 anos de utilização.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>Visto a depreciação de activos ser muitas vezes guiada por 
+    políticas fiscais, a discussão sobre depreciação irá focar-se 
+    nessa direcção, nalguns dos mais comuns esquemas de cálculo de 
+    depreciações.
+
+    </PARA>
+<PARA>Apesar de existirem algumas discussões sobre como conseguir 
+    automatizar o cálculo e a criação de transacções para gerir coisas 
+    como a depreciação, não existe ainda qualquer código que funcione, 
+    pelo que por hora, terá de realizar os cálculos manualmente.
+
+    </PARA>
+<SECT2>
+<TITLE>Esquemas de Depreciação</TITLE>
+<SECT3>
+<TITLE>Depreciação Linear</TITLE>
+<PARA>Depreciação linear (amortização a quotas constantes) reduz o valor de 
+    um activo num valor fixo por cada período até que o valor líquido seja zero. 
+    Este é o cálculo <EMPHASIS>mais simples</EMPHASIS>, já que você estima um 
+    tempo de vida útil, e simplesmente divide o custo de forma equitativa ao 
+    longo desse tempo de vida.
+
+    </PARA>
+<PARA><EMPHASIS>Exemplo:</EMPHASIS> Você comprou um computador por 
+    300cts e deseja desvaloriza-lo ao longo de um período de 5 anos. 
+    A cada ano o montante de desvalorização é de 60cts, levando aos 
+    seguintes cálculos:
+    
+
+    <TABLE>
+<TITLE>Exemplo 1</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Ano</ENTRY>
+<ENTRY>Desvalorização</ENTRY>
+<ENTRY>Valor Remanescente</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>1</ENTRY>
+<ENTRY>60.000$</ENTRY>
+<ENTRY>240.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>2</ENTRY>
+<ENTRY>60.000$</ENTRY>
+<ENTRY>180.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>3</ENTRY>
+<ENTRY>60.000$</ENTRY>
+<ENTRY>120.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>4</ENTRY>
+<ENTRY>60.000$</ENTRY>
+<ENTRY>60.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>5</ENTRY>
+<ENTRY>60.000$</ENTRY>
+<ENTRY>0$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Depreciação Geométrica</TITLE>
+<PARA>A cada período o activo é depreciado por uma percentagem fixa 
+    do seu valor no preíodo anterior. Neste esquema o valor remanescente 
+    de um activi decresce exponencialmente deixando um valor no final que 
+    é maior do que zero ( <EMPHASIS>por ex.</EMPHASIS> - um valor de 
+    revenda ou resídual).
+
+    </PARA>
+<PARA><EMPHASIS>Atenção: As autoridades fiscais podem requerer (ou permitir) 
+    uma percentagem maior no primeiro período.</EMPHASIS> Por outro lado, no 
+    Canadá, isto é ao contrário, já que eles apenas permitem uma <EMPHASIS>
+    metade</EMPHASIS> de "Amortização do Custo do Capital" no primeiro ano.
+    O resultado desta aproximação é a de que o valor do activo se deprecia 
+    mais rapidamente no início do que no final o que é <EMPHASIS>provavelmente</EMPHASIS> mais reaçista para a maioria dos activos do que um esquema 
+    linear. Isto é definitivamente verdade para automóveis.
+
+    </PARA>
+<PARA><EMPHASIS>Exemplo:</EMPHASIS> Aproveitamos o exemplo anterior,
+    com uma depreciação anual de 30%.
+
+    <TABLE>
+<TITLE>Exemplo 2</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Ano</ENTRY>
+<ENTRY>Desvalorização</ENTRY>
+<ENTRY>Valor Remanescente</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>1</ENTRY>
+<ENTRY>90.000$</ENTRY>
+<ENTRY>210.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>2</ENTRY>
+<ENTRY>63.000$</ENTRY>
+<ENTRY>147.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>3</ENTRY>
+<ENTRY>44.100$</ENTRY>
+<ENTRY>102.900$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>4</ENTRY>
+<ENTRY>30.870$</ENTRY>
+<ENTRY>72.030$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>5</ENTRY>
+<ENTRY>21.609$</ENTRY>
+<ENTRY>50.421$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT3>
+<SECT3>
+<TITLE>Soma de dígitos</TITLE>
+<PARA>Um terceiro método utilizado principalmente em países Anglo/Saxónicos 
+    é o método de "soma de dígitos". Aqui está um exemplo:
+
+    </PARA>
+<PARA><EMPHASIS>Exemplo:</EMPHASIS> Primeiro divida o valor do activo pelo 
+    somatório dos anos de utilização, <EMPHASIS>por ex.</EMPHASIS> para o nosso 
+    exemplo anterior com um valor de activo de 300cts que é utilizado por um período 
+    de cinco anos obterá 300.000$/(1+2+3+4+5)=20.000$. A depreciação e valor do 
+    activo são então calculados como se segue:
+
+    <TABLE>
+<TITLE>Exemplo 3</TITLE>
+<TGROUP COLS="3">
+<THEAD>
+<ROW>
+<ENTRY>Ano</ENTRY>
+<ENTRY>Desvalorização</ENTRY>
+<ENTRY>Valor Remanescente</ENTRY>
+</ROW>
+</THEAD>
+<TBODY>
+<ROW>
+<ENTRY>1</ENTRY>
+<ENTRY>20.000*5=100.000$</ENTRY>
+<ENTRY>200.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>2</ENTRY>
+<ENTRY>20.000*4=80.000$</ENTRY>
+<ENTRY>120.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>3</ENTRY>
+<ENTRY>20.000*3=60.000$</ENTRY>
+<ENTRY>60.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>4</ENTRY>
+<ENTRY>20.000*2=40.000$</ENTRY>
+<ENTRY>20.000$</ENTRY>
+</ROW>
+<ROW>
+<ENTRY>5</ENTRY>
+<ENTRY>20.000*1=20.000$</ENTRY>
+<ENTRY>0$</ENTRY>
+</ROW>
+</TBODY>
+</TGROUP>
+</TABLE>
+
+    </PARA>
+</SECT3>
+</SECT2>
+<SECT2>
+<TITLE>A Gestão da Depreciação no GnuCash</TITLE>
+<PARA>No sentido de manter registo da depreciação de um activo, você 
+    necessita de (Note: Em Portugal, o P.O.C. refere as contas como sendo 
+    de Amortizações Acumuladas e Amortizações do Execício) : 
+    <ITEMIZEDLIST>
+<LISTITEM>
+<PARA>Uma conta de <EMPHASIS>Custo do Activo</EMPHASIS> para manter um registo 
+      do valor original;
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Uma conta de <EMPHASIS>Depreciação Acumulada</EMPHASIS> onde 
+      depositar a soma dos montantes de todas as depreciações anuais;
+
+      </PARA>
+</LISTITEM>
+<LISTITEM>
+<PARA>Uma conta de despesas de <EMPHASIS>Custos de Depreciação</EMPHASIS> onde 
+      registar as despesas períodicas de desvalorização.
+    </PARA>
+</LISTITEM>
+</ITEMIZEDLIST>
+
+    </PARA>
+<PARA>O primeiro passo consiste em registar a aquisição do seu activo 
+    transferindo o dinheiro da sua conta de banco para a conta de 
+    <EMPHASIS>custo do activo</EMPHASIS>. De seguida, em cada período 
+    contabilístico você regista a desvalorização como uma despesa na 
+    conta apropriada.
+    As duas janelas abaixo mostram a sua conta de activo e a janela principal 
+    após o terceiro ano de desvalorização utilizando o método da "soma de 
+    dígitos" para o exemplo anterior.
+    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/depr-asset.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Conta de Avtivo após depreciação</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+     <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/depr-main.png">
+</IMAGEOBJECT>
+<TEXTOBJECT>
+<PHRASE>Janela principal após depreciação</PHRASE>
+</TEXTOBJECT>
+</INLINEMEDIAOBJECT>
+    
+
+    </PARA>
+</SECT2>
+<SECT2>
+<TITLE>Uma Chamada de Atenção</TITLE>
+<PARA>Visto a desvalorização (amortizações) e os impostos serem intimamente 
+    relacionadas, você poderá não ter sempre a possibilidade de escolha quanto 
+    ao seu método de preferência. Corrigir cálculos errados irá custar muito 
+    mais tempo e trabalho do que realizar os cálculos certos à primeira, pelo 
+    que se planeia depreciar (amortizar) activos, será aconselhável certificar-se 
+    de que métodos a lei lhe permite <EMPHASIS>ou obriga</EMPHASIS> a utilizar.
+
+</PARA>
+</SECT2>
+</SECT1>
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->
