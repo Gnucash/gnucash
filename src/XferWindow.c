@@ -2,6 +2,7 @@
  * XferWindow.c -- the transfer window for xacc (X-Accountant)      *
  *                     (for transferring between accounts)          *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -416,91 +417,55 @@ void
 xferCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   XferWindow  *xferData = (XferWindow *)cd;
-  Transaction *toTrans, *fromTrans;
+  Transaction *trans;
   Account *acc;
   String  str;
-  int     dollar=0,cent=0,pos=0;
+  float   val=0.0;
 
   data->saved = False;
   
-  /* "toTrans" is the transfer transaction that goes into the to account,
-   * and "fromTrans" goes into the from account */
-  toTrans   = (Transaction *)_malloc(sizeof(Transaction));
-  fromTrans = (Transaction *)_malloc(sizeof(Transaction));
+  /* a double-entry transfer -- just one record, two accounts */
+  trans   = mallocTransaction();
   
-  /* Create the "toTrans" transaction */
+  /* Create the transaction */
   str = XmTextGetString(xferData->date);
-  todaysDate(&(toTrans->date));
-  sscanf( str, "%d/%d/%d", &(toTrans->date.month), 
-          &(toTrans->date.day), &(toTrans->date.year) );
+  todaysDate(&(trans->date));
+  sscanf( str, "%d/%d/%d", &(trans->date.month), 
+          &(trans->date.day), &(trans->date.year) );
   str = XmTextGetString(xferData->amount);
-  sscanf( str, "%d.%2d", &dollar, &cent );
-  toTrans->damount     = ((double) dollar) + 0.01 * ((double) cent);
-  toTrans->num         = XtNewString("");
+  sscanf( str, "%f", &val );  /* sscanf must take float not double arg */
+  trans->damount     = val;
+  trans->num         = XtNewString("");
   
-  /* Get the memo, and add the "from" account name to it */
-  {
-  String  memo = NULL;
-  /* Note, don't use _malloc/_free here, because otherwise it
-   * would mess up the memory accounting if memory debugging
-   * is turned on */
+  trans->memo        = XmTextGetString(xferData->memo);
+  trans->description = XmTextGetString(xferData->desc);
+  trans->catagory    = 0;
+  trans->reconciled  = NREC;
+  
+  /* make note of which accounts this was transfered from & to */
+  trans->debit       = (struct _account *) getAccount(data,xferData->from);
+  trans->credit      = (struct _account *) getAccount(data,xferData->to);
+
+
+  /* insert transaction into from acount */
   acc = getAccount(data,xferData->from);
-  str = XmTextGetString(xferData->memo);
-  memo = (String)malloc(strlen(str)+
-                        strlen(acc->accountName)+
-                        strlen("[From: ] ") );
-  sprintf( memo, "[From: %s] %s\0", acc->accountName, str );
-  toTrans->memo = memo;
-  free(str);
-  }
-  
-  toTrans->description = XmTextGetString(xferData->desc);
-  toTrans->catagory    = 0;
-  toTrans->reconciled  = NREC;
-  
-  acc = getAccount(data,xferData->to);
-  pos = insertTransaction( acc, toTrans );
-  
-  /* Refresh the "to" account register window */
-  regRefresh(acc->regData);
-  /* Refresh the "to" account reconcile window */
-  recnRefresh(acc->recnData);
-  
-  /* Create the "fromTrans" transaction */
-  str = XmTextGetString(xferData->date);
-  todaysDate(&(fromTrans->date));
-  sscanf( str, "%d/%d/%d", &(fromTrans->date.month), 
-          &(fromTrans->date.day), &(fromTrans->date.year) );
-  fromTrans->damount     = -1.0*toTrans->damount;
-  fromTrans->num         = XtNewString("");
-  
-  /* Get the memo, and add the "to" account name to it */
-  {
-  String  memo = NULL;
-  /* Note, don't use _malloc/_free here, because otherwise it
-   * would mess up the memory accounting if memory debugging
-   * is turned on */
-  acc = getAccount(data,xferData->to);
-  str = XmTextGetString(xferData->memo);
-  memo = (String)malloc(strlen(str)+
-                        strlen(acc->accountName)+
-                        strlen("[To: ] ") );
-  sprintf( memo, "[To: %s] %s\0", acc->accountName, str );
-  fromTrans->memo = memo;
-  free(str);
-  }
-  
-  fromTrans->description = XmTextGetString(xferData->desc);
-  fromTrans->catagory    = 0;
-  fromTrans->reconciled  = NREC;
-  
-  acc = getAccount(data,xferData->from);
-  pos = insertTransaction( acc, fromTrans );
+  insertTransaction( acc, trans );
   
   /* Refresh the "from" account register window */
   regRefresh(acc->regData);
   /* Refresh the "from" account reconcile window */
   recnRefresh(acc->recnData);
   
+  /* insert transaction into to acount */
+  acc = getAccount(data,xferData->to);
+  insertTransaction( acc, trans );
+
+  /* Refresh the "to" account register window */
+  regRefresh(acc->regData);
+  /* Refresh the "to" account reconcile window */
+  recnRefresh(acc->recnData);
+
   refreshMainWindow();
   }
+
+/* ********************** END OF FILE *************************/

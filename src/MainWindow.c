@@ -96,7 +96,7 @@ refreshMainWindow( void )
     
     j=0;
     while( (trans = getTransaction(acc,j++)) != NULL ) {
-      share_balance += trans->damount;
+      share_balance += xaccGetAmount (acc, trans);
       dbalance = share_balance * trans->share_price;
     }
     

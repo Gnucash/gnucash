@@ -81,6 +81,7 @@ recnRefresh( RecnWindow *recnData )
     int   i,nrows;
     char  buf[BUFSIZE];
     Transaction *trans;
+    Account *acc = recnData->acc;
     
     /* NOTE: an improvement of the current design would be to use the
      *       user-data in the rows to detect where transactions need
@@ -97,12 +98,13 @@ recnRefresh( RecnWindow *recnData )
     
     /* Add the non-reconciled transactions */
     i=0;
-    while( (trans=getTransaction(recnData->acc,i++)) != NULL )
+    while( (trans=getTransaction(acc,i++)) != NULL )
       {
       String rows[5];
       
       if( trans->reconciled != YREC )
         {
+        double themount = xaccGetAmount (acc, trans);
         sprintf( buf, "%c", trans->reconciled );
         rows[0] = XtNewString(buf);
         rows[1] = trans->num;
@@ -112,10 +114,10 @@ recnRefresh( RecnWindow *recnData )
                  (trans->date.year%100) );
         rows[2] = XtNewString(buf);
         rows[3] = trans->description;
-        sprintf( buf, "%.2f\0", DABS(trans->damount) );
+        sprintf( buf, "%.2f\0", DABS(themount) );
         rows[4] = XtNewString(buf);
         
-        if( 0.0 > trans->damount)
+        if( 0.0 > themount)
           {
           XtVaGetValues( recnData->debit, XmNrows, &nrows, NULL );
           XbaeMatrixAddRows( recnData->debit, nrows, rows, NULL, NULL, 1 );
@@ -146,6 +148,7 @@ void
 recnRecalculateBalance( RecnWindow *recnData )
   {
   Transaction *trans;
+  Account *acc = recnData ->acc;
   char buf[BUFSIZE];
   int  i,nrows;
   double ddebit  = 0.0;
@@ -160,7 +163,7 @@ recnRecalculateBalance( RecnWindow *recnData )
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
-      ddebit += trans->damount;
+      ddebit += xaccGetAmount (acc, trans);
       }
     }
   
@@ -172,7 +175,7 @@ recnRecalculateBalance( RecnWindow *recnData )
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
-      dcredit += trans->damount;
+      dcredit += xaccGetAmount (acc, trans);
       }
     }
   
@@ -236,7 +239,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
   j=0;
   while( (trans = getTransaction(acc,j++)) != NULL )
     if( trans->reconciled == YREC )
-      dendBalance += trans->damount;
+      dendBalance += xaccGetAmount (acc, trans);
   
   /* Create the dialog box... XmNdeleteResponse is set to
    * XmDESTROY so the dialog's memory is freed when it is closed */
@@ -387,10 +390,10 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
   /* Get the amount from the "end-balance" field */
   {
   String str;
-  int    dollar=0,cent=0;
+  float val=0.0;
   str = XmTextGetString(newB);
-  sscanf( str, "%d.%2d", &dollar, &cent );
-  *diff = dendBalance - (((double) dollar) + 0.01 * ((double) cent));
+  sscanf( str, "%f", &val ); /* sscanf must take float not double as arg */
+  *diff = dendBalance - ((double) val);
   }
   
   XtDestroyWidget(dialog);

@@ -50,7 +50,7 @@ An alpha version of import from quicken files is also present,
 but it is very broken, and many/most quicken formats are not
 supported.
 
-Note: in general, transfers between accounts are not handled 
-properly as a double-entry system, and so deletion of a 
-transfer is not handled properly.
+An alpha-level double-entry system has been created. Its use 
+is not currently forced.  It is used only during transfers 
+between accounts.  It is not saved to file, or read from file.
 

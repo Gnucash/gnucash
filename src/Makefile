@@ -28,19 +28,12 @@
 
 OBJS = main.o util.o date.o MainWindow.o RegWindow.o BuildMenu.o \
        AccWindow.o FileIO.o Account.o Data.o XferWindow.o FileBox.o \
-       QuickFill.o Reports.o RecnWindow.o HelpWindow.o AdjBWindow.o QIFIO.o
-
-HOBJS = hack.o util.o date.o MainWindow.o RegWindow.o BuildMenu.o \
-       FileIO.o Account.o Data.o XferWindow.o FileBox.o \
-       QuickFill.o Reports.o RecnWindow.o HelpWindow.o AdjBWindow.o 
+       QuickFill.o Reports.o RecnWindow.o HelpWindow.o AdjBWindow.o \
+       QIFIO.o Transaction.o
 
 SRCS = ${OBJS:.o=.c}
 
 TARGET = ../xacc
-
-# hack: $(HOBJS) 
-# 	@echo "++++++"
-# 	$(CC) $(HOBJS) $(LFLAGS) $(LIBS) ../libhtmlw/libhtmlw.a -o $@
 
 default: $(TARGET)
 
@@ -90,12 +83,12 @@ main.o: /usr/X11/include/Xm/Manager.h /usr/X11/include/Xm/Gadget.h
 main.o: /usr/X11/include/Xm/TxtPropCv.h /usr/X11/include/Xm/VendorS.h
 main.o: /usr/X11/include/Xm/XmIm.h ../include/BuildMenu.h
 main.o: /usr/X11/include/Xm/PushB.h /usr/X11/include/Xm/Separator.h
-main.o: ../include/RegWindow.h ../include/Account.h ../include/main.h
-main.o: ../include/date.h ../include/QuickFill.h ../include/FileIO.h
+main.o: ../include/RegWindow.h ../include/Account.h ../include/QuickFill.h
+main.o: ../include/Transaction.h ../include/date.h ../include/FileIO.h
 main.o: ../include/Data.h ../include/FileBox.h ../include/util.h
 main.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
 main.o: /usr/include/errno.h /usr/include/linux/errno.h
-main.o: /usr/include/asm/errno.h
+main.o: /usr/include/asm/errno.h ../include/main.h
 util.o: /usr/X11/include/X11/X11/X11/X.h /usr/X11/include/X11/X11/Xlib.h
 util.o: /usr/include/sys/types.h /usr/include/linux/types.h
 util.o: /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h
@@ -126,8 +119,10 @@ util.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
 util.o: /usr/X11/include/Xm/PanedW.h /usr/X11/include/Xm/Form.h
 util.o: /usr/X11/include/Xm/BulletinB.h /usr/X11/include/Xm/PushB.h
 util.o: /usr/X11/include/Xm/DialogS.h /usr/X11/include/Xm/RowColumn.h
-util.o: /usr/X11/include/Xm/MessageB.h ../include/util.h /usr/include/errno.h
-util.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+util.o: /usr/X11/include/Xm/MessageB.h /usr/X11/include/Xbae/Matrix.h
+util.o: /usr/X11/include/Xbae/patchlevel.h ../include/util.h
+util.o: /usr/include/errno.h /usr/include/linux/errno.h
+util.o: /usr/include/asm/errno.h
 date.o: /usr/include/time.h /usr/include/features.h /usr/include/sys/cdefs.h
 date.o: /usr/include/sys/time.h /usr/include/linux/types.h
 date.o: /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h
@@ -200,16 +195,17 @@ MainWindow.o: /usr/X11/include/X11/X11/RectObjP.h
 MainWindow.o: /usr/X11/include/Xm/ColorP.h /usr/X11/include/Xm/AccColorT.h
 MainWindow.o: /usr/X11/include/Xm/BaseClassP.h
 MainWindow.o: /usr/X11/include/Xm/ExtObjectP.h /usr/X11/include/Xm/List.h
-MainWindow.o: /usr/X11/include/Xm/RowColumn.h ../include/main.h
-MainWindow.o: ../include/date.h ../include/util.h /usr/include/stdio.h
-MainWindow.o: /usr/include/libio.h /usr/include/_G_config.h
-MainWindow.o: /usr/include/errno.h /usr/include/linux/errno.h
-MainWindow.o: /usr/include/asm/errno.h ../include/Data.h ../include/Account.h
-MainWindow.o: ../include/QuickFill.h ../include/FileIO.h ../include/FileBox.h
-MainWindow.o: ../include/BuildMenu.h /usr/X11/include/Xm/PushB.h
-MainWindow.o: /usr/X11/include/Xm/Separator.h ../include/MainWindow.h
-MainWindow.o: ../include/RegWindow.h ../include/XferWindow.h
-MainWindow.o: ../include/HelpWindow.h
+MainWindow.o: /usr/X11/include/Xm/RowColumn.h /usr/X11/include/Xbae/Matrix.h
+MainWindow.o: /usr/X11/include/Xbae/patchlevel.h ../include/main.h
+MainWindow.o: ../include/date.h ../include/Transaction.h ../include/util.h
+MainWindow.o: /usr/include/stdio.h /usr/include/libio.h
+MainWindow.o: /usr/include/_G_config.h /usr/include/errno.h
+MainWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+MainWindow.o: ../include/Data.h ../include/Account.h ../include/QuickFill.h
+MainWindow.o: ../include/FileIO.h ../include/FileBox.h ../include/BuildMenu.h
+MainWindow.o: /usr/X11/include/Xm/PushB.h /usr/X11/include/Xm/Separator.h
+MainWindow.o: ../include/MainWindow.h ../include/RegWindow.h
+MainWindow.o: ../include/XferWindow.h ../include/HelpWindow.h
 RegWindow.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
 RegWindow.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
 RegWindow.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
@@ -251,13 +247,14 @@ RegWindow.o: /usr/X11/include/X11/X11/ConstrainP.h
 RegWindow.o: /usr/X11/include/X11/X11/ObjectP.h
 RegWindow.o: /usr/X11/include/X11/X11/RectObjP.h /usr/X11/include/Xm/ColorP.h
 RegWindow.o: /usr/X11/include/Xm/AccColorT.h /usr/X11/include/Xm/BaseClassP.h
-RegWindow.o: /usr/X11/include/Xm/ExtObjectP.h ../include/main.h
-RegWindow.o: ../include/date.h ../include/util.h /usr/include/errno.h
-RegWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
-RegWindow.o: ../include/Data.h ../include/Account.h ../include/QuickFill.h
-RegWindow.o: ../include/MainWindow.h ../include/BuildMenu.h
-RegWindow.o: /usr/X11/include/Xm/Separator.h ../include/RecnWindow.h
-RegWindow.o: ../include/AdjBWindow.h
+RegWindow.o: /usr/X11/include/Xm/ExtObjectP.h /usr/X11/include/Xbae/Matrix.h
+RegWindow.o: /usr/X11/include/Xbae/patchlevel.h ../include/main.h
+RegWindow.o: ../include/date.h ../include/Transaction.h ../include/util.h
+RegWindow.o: /usr/include/errno.h /usr/include/linux/errno.h
+RegWindow.o: /usr/include/asm/errno.h ../include/Data.h ../include/Account.h
+RegWindow.o: ../include/QuickFill.h ../include/MainWindow.h
+RegWindow.o: ../include/BuildMenu.h /usr/X11/include/Xm/Separator.h
+RegWindow.o: ../include/RecnWindow.h ../include/AdjBWindow.h
 BuildMenu.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
 BuildMenu.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
 BuildMenu.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
@@ -340,8 +337,9 @@ AccWindow.o: /usr/X11/include/Xm/AccColorT.h /usr/X11/include/Xm/BaseClassP.h
 AccWindow.o: /usr/X11/include/Xm/ExtObjectP.h /usr/X11/include/Xm/ToggleB.h
 AccWindow.o: /usr/X11/include/Xm/PushB.h /usr/X11/include/Xm/Text.h
 AccWindow.o: /usr/include/stdio.h /usr/include/libio.h
-AccWindow.o: /usr/include/_G_config.h ../include/Account.h ../include/main.h
-AccWindow.o: ../include/date.h ../include/QuickFill.h ../include/Data.h
+AccWindow.o: /usr/include/_G_config.h ../include/Account.h
+AccWindow.o: ../include/QuickFill.h ../include/Transaction.h
+AccWindow.o: ../include/date.h ../include/Data.h ../include/main.h
 AccWindow.o: ../include/util.h /usr/include/errno.h
 AccWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
 FileIO.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
@@ -373,11 +371,11 @@ FileIO.o: /usr/X11/include/Xm/Gadget.h /usr/X11/include/Xm/TxtPropCv.h
 FileIO.o: /usr/X11/include/Xm/VendorS.h /usr/X11/include/Xm/XmIm.h
 FileIO.o: /usr/include/fcntl.h /usr/include/gnu/types.h
 FileIO.o: /usr/include/linux/fcntl.h /usr/include/asm/fcntl.h
-FileIO.o: ../include/main.h ../include/date.h ../include/util.h
-FileIO.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
-FileIO.o: /usr/include/errno.h /usr/include/linux/errno.h
-FileIO.o: /usr/include/asm/errno.h ../include/Account.h
-FileIO.o: ../include/QuickFill.h ../include/Data.h
+FileIO.o: ../include/main.h ../include/date.h ../include/Transaction.h
+FileIO.o: ../include/util.h /usr/include/stdio.h /usr/include/libio.h
+FileIO.o: /usr/include/_G_config.h /usr/include/errno.h
+FileIO.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+FileIO.o: ../include/Account.h ../include/QuickFill.h ../include/Data.h
 Account.o: ../include/util.h /usr/X11/include/Xm/Xm.h
 Account.o: /usr/X11/include/X11/Intrinsic.h /usr/X11/include/X11/X11/Xlib.h
 Account.o: /usr/include/sys/types.h /usr/include/linux/types.h
@@ -409,13 +407,15 @@ Account.o: /usr/X11/include/Xm/VendorS.h /usr/X11/include/Xm/XmIm.h
 Account.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
 Account.o: /usr/include/errno.h /usr/include/linux/errno.h
 Account.o: /usr/include/asm/errno.h ../include/main.h ../include/date.h
-Account.o: ../include/Data.h ../include/Account.h ../include/QuickFill.h
-Data.o: ../include/Data.h ../include/Account.h ../include/main.h
-Data.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
-Data.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
-Data.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
-Data.o: /usr/include/asm/posix_types.h /usr/include/asm/types.h
-Data.o: /usr/include/sys/bitypes.h /usr/X11/include/X11/X11/X11/X.h
+Account.o: ../include/Transaction.h ../include/Data.h ../include/Account.h
+Account.o: ../include/QuickFill.h
+Data.o: ../include/Data.h ../include/Account.h ../include/QuickFill.h
+Data.o: ../include/Transaction.h /usr/X11/include/Xm/Xm.h
+Data.o: /usr/X11/include/X11/Intrinsic.h /usr/X11/include/X11/X11/Xlib.h
+Data.o: /usr/include/sys/types.h /usr/include/linux/types.h
+Data.o: /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h
+Data.o: /usr/include/asm/types.h /usr/include/sys/bitypes.h
+Data.o: /usr/X11/include/X11/X11/X11/X.h
 Data.o: /usr/X11/include/X11/X11/X11/Xfuncproto.h
 Data.o: /usr/X11/include/X11/X11/X11/Xosdefs.h
 Data.o: /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h
@@ -436,10 +436,10 @@ Data.o: /usr/X11/include/Xm/DragIcon.h /usr/X11/include/Xm/DropTrans.h
 Data.o: /usr/X11/include/Xm/DragOverS.h /usr/X11/include/Xm/Primitive.h
 Data.o: /usr/X11/include/Xm/Manager.h /usr/X11/include/Xm/Gadget.h
 Data.o: /usr/X11/include/Xm/TxtPropCv.h /usr/X11/include/Xm/VendorS.h
-Data.o: /usr/X11/include/Xm/XmIm.h ../include/date.h ../include/QuickFill.h
-Data.o: ../include/util.h /usr/include/stdio.h /usr/include/libio.h
-Data.o: /usr/include/_G_config.h /usr/include/errno.h
-Data.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+Data.o: /usr/X11/include/Xm/XmIm.h ../include/date.h ../include/util.h
+Data.o: /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h
+Data.o: /usr/include/errno.h /usr/include/linux/errno.h
+Data.o: /usr/include/asm/errno.h
 XferWindow.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
 XferWindow.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
 XferWindow.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
@@ -484,10 +484,10 @@ XferWindow.o: /usr/X11/include/Xm/ExtObjectP.h /usr/X11/include/Xm/PushB.h
 XferWindow.o: /usr/X11/include/Xm/Text.h /usr/include/stdio.h
 XferWindow.o: /usr/include/libio.h /usr/include/_G_config.h
 XferWindow.o: ../include/BuildMenu.h /usr/X11/include/Xm/Separator.h
-XferWindow.o: ../include/Account.h ../include/main.h ../include/date.h
-XferWindow.o: ../include/QuickFill.h ../include/Data.h ../include/util.h
-XferWindow.o: /usr/include/errno.h /usr/include/linux/errno.h
-XferWindow.o: /usr/include/asm/errno.h
+XferWindow.o: ../include/Account.h ../include/QuickFill.h
+XferWindow.o: ../include/Transaction.h ../include/date.h ../include/Data.h
+XferWindow.o: ../include/main.h ../include/util.h /usr/include/errno.h
+XferWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
 FileBox.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
 FileBox.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
 FileBox.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
@@ -551,8 +551,8 @@ QuickFill.o: /usr/X11/include/Xm/VendorS.h /usr/X11/include/Xm/XmIm.h
 QuickFill.o: /usr/include/stdio.h /usr/include/libio.h
 QuickFill.o: /usr/include/_G_config.h /usr/include/errno.h
 QuickFill.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
-QuickFill.o: ../include/main.h ../include/date.h ../include/Account.h
-QuickFill.o: ../include/QuickFill.h
+QuickFill.o: ../include/main.h ../include/date.h ../include/Transaction.h
+QuickFill.o: ../include/Account.h ../include/QuickFill.h
 Reports.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
 Reports.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
 Reports.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
@@ -640,10 +640,12 @@ RecnWindow.o: /usr/X11/include/X11/X11/ObjectP.h
 RecnWindow.o: /usr/X11/include/X11/X11/RectObjP.h
 RecnWindow.o: /usr/X11/include/Xm/ColorP.h /usr/X11/include/Xm/AccColorT.h
 RecnWindow.o: /usr/X11/include/Xm/BaseClassP.h
-RecnWindow.o: /usr/X11/include/Xm/ExtObjectP.h ../include/Data.h
-RecnWindow.o: ../include/Account.h ../include/main.h ../include/date.h
-RecnWindow.o: ../include/QuickFill.h ../include/RegWindow.h
-RecnWindow.o: ../include/MainWindow.h ../include/util.h /usr/include/errno.h
+RecnWindow.o: /usr/X11/include/Xm/ExtObjectP.h /usr/X11/include/Xbae/Matrix.h
+RecnWindow.o: /usr/X11/include/Xbae/patchlevel.h ../include/Data.h
+RecnWindow.o: ../include/Account.h ../include/QuickFill.h
+RecnWindow.o: ../include/Transaction.h ../include/date.h
+RecnWindow.o: ../include/RegWindow.h ../include/MainWindow.h
+RecnWindow.o: ../include/main.h ../include/util.h /usr/include/errno.h
 RecnWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
 HelpWindow.o: /usr/include/sys/types.h /usr/include/linux/types.h
 HelpWindow.o: /usr/include/linux/posix_types.h /usr/include/asm/posix_types.h
@@ -683,8 +685,8 @@ HelpWindow.o: /usr/X11/include/Xm/XmIm.h /usr/X11/include/Xm/DialogS.h
 HelpWindow.o: /usr/X11/include/Xm/PanedW.h /usr/X11/include/Xm/Frame.h
 HelpWindow.o: /usr/X11/include/Xm/Form.h /usr/X11/include/Xm/BulletinB.h
 HelpWindow.o: /usr/X11/include/Xm/PushB.h /usr/X11/include/X11/xpm.h
-HelpWindow.o: ../include/main.h ../include/date.h ../include/util.h
-HelpWindow.o: /usr/include/stdio.h /usr/include/libio.h
+HelpWindow.o: ../include/main.h ../include/date.h ../include/Transaction.h
+HelpWindow.o: ../include/util.h /usr/include/stdio.h /usr/include/libio.h
 HelpWindow.o: /usr/include/_G_config.h /usr/include/errno.h
 HelpWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
 HelpWindow.o: ../libhtmlw/HTML.h
@@ -732,7 +734,74 @@ AdjBWindow.o: /usr/X11/include/X11/X11/RectObjP.h
 AdjBWindow.o: /usr/X11/include/Xm/ColorP.h /usr/X11/include/Xm/AccColorT.h
 AdjBWindow.o: /usr/X11/include/Xm/BaseClassP.h
 AdjBWindow.o: /usr/X11/include/Xm/ExtObjectP.h ../include/main.h
-AdjBWindow.o: ../include/date.h ../include/util.h /usr/include/errno.h
-AdjBWindow.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
-AdjBWindow.o: ../include/Data.h ../include/Account.h ../include/QuickFill.h
-AdjBWindow.o: ../include/MainWindow.h
+AdjBWindow.o: ../include/date.h ../include/Transaction.h ../include/util.h
+AdjBWindow.o: /usr/include/errno.h /usr/include/linux/errno.h
+AdjBWindow.o: /usr/include/asm/errno.h ../include/Data.h ../include/Account.h
+AdjBWindow.o: ../include/QuickFill.h ../include/MainWindow.h
+QIFIO.o: /usr/X11/include/Xm/Xm.h /usr/X11/include/X11/Intrinsic.h
+QIFIO.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
+QIFIO.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
+QIFIO.o: /usr/include/asm/posix_types.h /usr/include/asm/types.h
+QIFIO.o: /usr/include/sys/bitypes.h /usr/X11/include/X11/X11/X11/X.h
+QIFIO.o: /usr/X11/include/X11/X11/X11/Xfuncproto.h
+QIFIO.o: /usr/X11/include/X11/X11/X11/Xosdefs.h
+QIFIO.o: /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h
+QIFIO.o: /usr/X11/include/X11/X11/Xutil.h
+QIFIO.o: /usr/X11/include/X11/X11/Xresource.h /usr/include/string.h
+QIFIO.o: /usr/include/features.h /usr/include/sys/cdefs.h
+QIFIO.o: /usr/X11/include/X11/X11/Core.h /usr/X11/include/X11/X11/Composite.h
+QIFIO.o: /usr/X11/include/X11/X11/Constraint.h
+QIFIO.o: /usr/X11/include/X11/X11/Object.h /usr/X11/include/X11/X11/RectObj.h
+QIFIO.o: /usr/X11/include/X11/Shell.h /usr/X11/include/X11/X11/SM/SMlib.h
+QIFIO.o: /usr/X11/include/X11/SM/SM.h /usr/X11/include/X11/ICE/ICElib.h
+QIFIO.o: /usr/X11/include/X11/ICE/ICE.h /usr/X11/include/X11/Xatom.h
+QIFIO.o: /usr/X11/include/Xm/XmStrDefs.h /usr/X11/include/X11/StringDefs.h
+QIFIO.o: /usr/X11/include/Xm/VirtKeys.h /usr/X11/include/Xm/Transfer.h
+QIFIO.o: /usr/X11/include/Xm/DragDrop.h /usr/X11/include/Xm/DragC.h
+QIFIO.o: /usr/X11/include/Xm/Display.h /usr/X11/include/Xm/DropSMgr.h
+QIFIO.o: /usr/X11/include/Xm/DragIcon.h /usr/X11/include/Xm/DropTrans.h
+QIFIO.o: /usr/X11/include/Xm/DragOverS.h /usr/X11/include/Xm/Primitive.h
+QIFIO.o: /usr/X11/include/Xm/Manager.h /usr/X11/include/Xm/Gadget.h
+QIFIO.o: /usr/X11/include/Xm/TxtPropCv.h /usr/X11/include/Xm/VendorS.h
+QIFIO.o: /usr/X11/include/Xm/XmIm.h /usr/include/fcntl.h
+QIFIO.o: /usr/include/gnu/types.h /usr/include/linux/fcntl.h
+QIFIO.o: /usr/include/asm/fcntl.h ../include/main.h ../include/date.h
+QIFIO.o: ../include/Transaction.h ../include/util.h /usr/include/stdio.h
+QIFIO.o: /usr/include/libio.h /usr/include/_G_config.h /usr/include/errno.h
+QIFIO.o: /usr/include/linux/errno.h /usr/include/asm/errno.h
+QIFIO.o: ../include/Account.h ../include/QuickFill.h ../include/Data.h
+Transaction.o: ../include/Transaction.h /usr/X11/include/Xm/Xm.h
+Transaction.o: /usr/X11/include/X11/Intrinsic.h
+Transaction.o: /usr/X11/include/X11/X11/Xlib.h /usr/include/sys/types.h
+Transaction.o: /usr/include/linux/types.h /usr/include/linux/posix_types.h
+Transaction.o: /usr/include/asm/posix_types.h /usr/include/asm/types.h
+Transaction.o: /usr/include/sys/bitypes.h /usr/X11/include/X11/X11/X11/X.h
+Transaction.o: /usr/X11/include/X11/X11/X11/Xfuncproto.h
+Transaction.o: /usr/X11/include/X11/X11/X11/Xosdefs.h
+Transaction.o: /usr/lib/gcc-lib/i486-linux/2.7.2/include/stddef.h
+Transaction.o: /usr/X11/include/X11/X11/Xutil.h
+Transaction.o: /usr/X11/include/X11/X11/Xresource.h /usr/include/string.h
+Transaction.o: /usr/include/features.h /usr/include/sys/cdefs.h
+Transaction.o: /usr/X11/include/X11/X11/Core.h
+Transaction.o: /usr/X11/include/X11/X11/Composite.h
+Transaction.o: /usr/X11/include/X11/X11/Constraint.h
+Transaction.o: /usr/X11/include/X11/X11/Object.h
+Transaction.o: /usr/X11/include/X11/X11/RectObj.h
+Transaction.o: /usr/X11/include/X11/Shell.h
+Transaction.o: /usr/X11/include/X11/X11/SM/SMlib.h
+Transaction.o: /usr/X11/include/X11/SM/SM.h /usr/X11/include/X11/ICE/ICElib.h
+Transaction.o: /usr/X11/include/X11/ICE/ICE.h /usr/X11/include/X11/Xatom.h
+Transaction.o: /usr/X11/include/Xm/XmStrDefs.h
+Transaction.o: /usr/X11/include/X11/StringDefs.h
+Transaction.o: /usr/X11/include/Xm/VirtKeys.h /usr/X11/include/Xm/Transfer.h
+Transaction.o: /usr/X11/include/Xm/DragDrop.h /usr/X11/include/Xm/DragC.h
+Transaction.o: /usr/X11/include/Xm/Display.h /usr/X11/include/Xm/DropSMgr.h
+Transaction.o: /usr/X11/include/Xm/DragIcon.h /usr/X11/include/Xm/DropTrans.h
+Transaction.o: /usr/X11/include/Xm/DragOverS.h
+Transaction.o: /usr/X11/include/Xm/Primitive.h /usr/X11/include/Xm/Manager.h
+Transaction.o: /usr/X11/include/Xm/Gadget.h /usr/X11/include/Xm/TxtPropCv.h
+Transaction.o: /usr/X11/include/Xm/VendorS.h /usr/X11/include/Xm/XmIm.h
+Transaction.o: ../include/date.h ../include/util.h /usr/include/stdio.h
+Transaction.o: /usr/include/libio.h /usr/include/_G_config.h
+Transaction.o: /usr/include/errno.h /usr/include/linux/errno.h
+Transaction.o: /usr/include/asm/errno.h

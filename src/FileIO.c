@@ -78,7 +78,7 @@ char        *readString( int fd, int token );
 Date        *readDate( int fd, int token );
 
 int writeAccount( int fd, Account *account );
-int writeTransaction( int fd, Transaction *trans );
+int writeTransaction( int fd, Account *, Transaction *trans );
 int writeString( int fd, char *str );
 int writeDate( int fd, Date *date );
 
@@ -292,7 +292,7 @@ readTransaction( int fd, int token )
   {
   int err=0;
   Date *date;
-  Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
+  Transaction *trans = mallocTransaction();
   int amount;
   
   trans->num = readString( fd, token );
@@ -551,7 +551,7 @@ writeAccount( int fd, Account *acc )
   
   for( i=0; i<numTrans; i++ )
     {
-    err = writeTransaction( fd, getTransaction(acc,i) );
+    err = writeTransaction( fd, acc, getTransaction(acc,i) );
     if( err == -1 )
       return err;
     }
@@ -564,11 +564,12 @@ writeAccount( int fd, Account *acc )
  *   saves the data for a transaction to the datafile               *
  *                                                                  * 
  * Args:   fd       - the filedescriptor of the data file           * 
+ *         acc      - the account that the trans came from          * 
  *         trans    - the transaction data to save                  * 
  * Return: -1 on failure                                            * 
 \********************************************************************/
 int
-writeTransaction( int fd, Transaction *trans )
+writeTransaction( int fd, Account * acc, Transaction *trans )
   {
   int err=0;
   int tmp;
@@ -599,7 +600,7 @@ writeTransaction( int fd, Transaction *trans )
   if( err != sizeof(char) )
     return -1;
   
-  tmp = (int) (100.0 * (trans->damount));  /* file stores pennies */
+  tmp = (int) (100.0 * xaccGetAmount (acc, trans));  /* file stores pennies */
   XACC_FLIP_INT (tmp);
   err = write( fd, &tmp, sizeof(int) );
   if( err != sizeof(int) )

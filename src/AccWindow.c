@@ -633,15 +633,12 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
     }
   
   /* Add an opening balance transaction (as the first transaction) */
-  trans = (Transaction *)_malloc(sizeof(Transaction));
+  trans = mallocTransaction();
   
   todaysDate( &(trans->date) );
   trans->num         = XtNewString("");
   trans->description = XtNewString("Opening Balance\0");
   trans->memo        = XtNewString("");
-  trans->catagory    = 0;
-  trans->reconciled  = NREC;
-  trans->damount     = 0.0;
   
   /* add the new transaction to the account */
   insertTransaction( acc, trans );

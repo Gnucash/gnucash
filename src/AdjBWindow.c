@@ -269,9 +269,9 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   Transaction *trans, *tempTrans;
   Account *acc;
   String   str;
-  int      dollar=0,cent=0;
+  float    val = 0.0;
   int      pos=0;
-  double   damount=0.0,dcurrAmount=0.0;
+  double   themount=0.0,dcurrAmount=0.0;
   int      i;
   
   data->saved = False;
@@ -286,8 +286,8 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   sscanf( str, "%d/%d/%d", &(trans->date.month), 
           &(trans->date.day), &(trans->date.year) );
   str = XmTextGetString(adjBData->balance);
-  sscanf( str, "%d.%2d", &dollar, &cent );
-  damount = ((double) dollar) + 0.01 * ((double) cent);
+  sscanf( str, "%f", &val );  /* sscanf must take float not double as arg */
+  themount = val;
   
   /* fill out the rest of the fields */
   trans->num         = XtNewString("");
@@ -303,9 +303,9 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   for( i=0; i<pos; i++ )
     {
     tempTrans = getTransaction(acc,i);
-    dcurrAmount += tempTrans->damount;
+    dcurrAmount += xaccGetAmount (acc, trans);
     }
-  trans->damount = damount - dcurrAmount;
+  xaccSetAmount (acc, trans, themount - dcurrAmount);
   
   /* Refresh the account register window */
   regRefresh(acc->regData);

@@ -60,7 +60,7 @@ default :
 	@cd src ; $(MAKE) $(OPTIONS)
 
 clean :
-	rm -f *~ *.bak
+	rm -f core junk tmp *~ *.bak
 	@cd include ; rm -f *~
 	@cd help    ; rm -f *~
 	@cd libhtmlw ; $(MAKE) clean

@@ -1,6 +1,7 @@
 /********************************************************************\
  * Account.c -- the Account data structure                          *
  * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -79,8 +80,18 @@ freeAccount( Account *acc )
     
     freeQuickFill(acc->qfRoot);
     
-    for( i=0; i<acc->numTrans; i++ )
-      _free( acc->transaction[i] );
+    for( i=0; i<acc->numTrans; i++ ) {
+      Transaction *trans = acc->transaction[i];
+      struct _account * _acc = (struct _account *) acc; 
+
+      /* free the transaction only if its not 
+       * a part of a double entry */
+      if (trans->credit == _acc) trans->credit = NULL;
+      if (trans->debit  == _acc) trans->debit  = NULL;
+      if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
+        freeTransaction( trans );
+      }
+    }
     
     _free( acc->transaction );
     
@@ -113,6 +124,7 @@ removeTransaction( Account *acc, int num )
   if( acc != NULL )
     {
     int  i,j;
+    struct _account * _acc = (struct _account *) acc; 
     Transaction **oldTrans = acc->transaction;
 
     /* Set this flag, so we know we need to save the data file: */
@@ -136,7 +148,13 @@ removeTransaction( Account *acc, int num )
         }
       }
       
-    _free(oldTrans);
+    _free (oldTrans);
+
+    /* if this is a double-entry transaction, be sure to
+     * unmark it. */
+    if (trans->credit == _acc) trans->credit = NULL;
+    if (trans->debit  == _acc) trans->debit  = NULL;
+
     }
   return trans;
   }
@@ -153,8 +171,36 @@ insertTransaction( Account *acc, Transaction *trans )
     int  i,j;
     Date *dj,*dt;
     int  inserted = False;
+    struct _account * _acc = (struct _account *) acc; 
     Transaction **oldTrans = acc->transaction;
     
+    /* provide a default behavior for double-entry insertion */
+    /* If this appears to be a new transaction, then default
+     * it to being a credit.  If this transaction is already
+     * in another account, assume this is the other half. 
+     * This algoriothm is not robust against internal programming
+     * errors ... various bizarre situations can sneak by without
+     * warning ... however, this will do for now. 
+     */
+    
+    if ( !((_acc == trans->debit) || (_acc == trans->credit)) ) {
+      if ( (NULL == trans->debit) && (NULL == trans->credit) ) {
+        trans->credit = _acc;
+      } else {
+        if (NULL == trans->debit) {
+          trans->debit = _acc;
+        } else
+        if (NULL == trans->credit) {
+          trans->credit = _acc;
+        } else 
+        {
+          printf ("Internal Error: insertTransaction: inserting transaction \n");
+          printf ("that already exists! \n");
+          printf ("This error should not occur, please report it \n");
+        }
+      }
+    }
+
     /* mark the data file as needing to be saved: */
     if( data != NULL )
       data->saved = False;
@@ -204,8 +250,43 @@ insertTransaction( Account *acc, Transaction *trans )
   return position;
   }
 
+/********************************************************************\
+\********************************************************************/
 
+double xaccGetAmount (Account *acc, Transaction *trans)
+{
+   double themount; /* amount */
+      
+   /* for a double-entry, determine if this is a credit or a debit */
+   if ( trans->credit == ((struct _account *) acc) ) {
+      themount = trans->damount;
+   } else 
+   if ( trans->debit == ((struct _account *) acc) ) {
+      themount = - (trans->damount);
+   } else {
+      printf ("Internal Error: xaccGetAmount: missing double entry \n");
+      printf ("this error should not occur. Please report the problem. \n");
+      themount = 0.0;  /* punt */
+   }
+   return themount;
+}
+    
+/********************************************************************\
+\********************************************************************/
 
+void xaccSetAmount (Account *acc, Transaction *trans, double themount)
+{
+   /* for a double-entry, determine if this is a credit or a debit */
+   if ( trans->credit == ((struct _account *) acc) ) {
+      trans->damount = themount;
+   } else 
+   if ( trans->debit == ((struct _account *) acc) ) {
+      trans->damount = - themount;
+   } else {
+      printf ("Internal Error: xaccSetAmount: missing double entry \n");
+      printf ("this error should not occur. Please report the problem. \n");
+      trans->damount = 0.0; /* punt */
+   }
+}
 
-
-
+/* -------------------- end of file --------------- */

@@ -43,6 +43,7 @@
 #include "BuildMenu.h"
 #include "RecnWindow.h"
 #include "AdjBWindow.h"
+#include "Transaction.h"
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
@@ -101,46 +102,56 @@ extern Pixel negPixel;
 #define MOD_SHRS  0x20
 #define MOD_PRIC  0x40
 #define MOD_MEMO  0x80
-#define MOD_NEW   0x100
-#define MOD_ALL   0x1ff
+#define MOD_ACTN  0x100
+#define MOD_NEW   0x200
+#define MOD_ALL   0x3ff
 
-/* ??? TODO: Use these #defines, instead of hard-coding cell
- * locations throughout the code */ 
+/* These defines are indexes into the column location array */
+#define DATE_COL_ID  0
+#define NUM_COL_ID   1
+#define DESC_COL_ID  2
+#define RECN_COL_ID  3
+#define PAY_COL_ID   4
+#define DEP_COL_ID   5
+#define PRIC_COL_ID  6
+#define SHRS_COL_ID  7
+#define BALN_COL_ID  8 
+#define ACTN_COL_ID  9 
+
+/* the actual column location is pulled out of the column location array */
 #define DATE_CELL_R  0
-#define DATE_CELL_C  0
+#define DATE_CELL_C  (acc->columnLocation[DATE_COL_ID])
 #define NUM_CELL_R   0
-#define NUM_CELL_C   1
+#define NUM_CELL_C   (acc->columnLocation[NUM_COL_ID])
 #define DESC_CELL_R  0
-#define DESC_CELL_C  2
+#define DESC_CELL_C  (acc->columnLocation[DESC_COL_ID])
 #define RECN_CELL_R  0
-#define RECN_CELL_C  3
+#define RECN_CELL_C  (acc->columnLocation[RECN_COL_ID])
 #define PAY_CELL_R   0
-#define PAY_CELL_C   4
+#define PAY_CELL_C   (acc->columnLocation[PAY_COL_ID])
 #define DEP_CELL_R   0
-#define DEP_CELL_C   5
-
-#define PRIC_CELL_C   6
-#define SHRS_CELL_C   7
-
+#define DEP_CELL_C   (acc->columnLocation[DEP_COL_ID])
 #define BALN_CELL_R  0
-/* #define BALN_CELL_C  6 */
-#define BALN_CELL_C  ((acc->numCols) -1)   /* the last column */
+#define BALN_CELL_C  (acc->columnLocation[BALN_COL_ID]) 
 
+#define PRIC_CELL_C   (acc->columnLocation[PRIC_COL_ID])
+#define SHRS_CELL_C   (acc->columnLocation[SHRS_COL_ID])
+#define ACTN_CELL_C   (acc->columnLocation[ACTN_COL_ID])
 
+/* these columns/rows are still hard coded ... should be switched over, I guess */
 #define MEMO_CELL_R  1
 #define MEMO_CELL_C  2
 
 /** COOL MACROS *****************************************************/
-#define IN_DATE_CELL(R,C) (((R-1)%2==0) && (C==0))  /* Date cell        */
-#define IN_NUM_CELL(R,C)  (((R-1)%2==0) && (C==1))  /* Number cell      */
-#define IN_DESC_CELL(R,C) (((R-1)%2==0) && (C==2))  /* Description cell */
-#define IN_RECN_CELL(R,C) (((R-1)%2==0) && (C==3))  /* Reconciled cell  */
-#define IN_PAY_CELL(R,C)  (((R-1)%2==0) && (C==4))  /* Payment cell     */
-#define IN_DEP_CELL(R,C)  (((R-1)%2==0) && (C==5))  /* Deposit cell     */
-/* #define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==6))  /* Balance cell     */
+#define IN_DATE_CELL(R,C) (((R-1)%2==0) && (C==DATE_CELL_C))  /* Date cell        */
+#define IN_NUM_CELL(R,C)  (((R-1)%2==0) && (C==NUM_CELL_C))   /* Number cell      */
+#define IN_DESC_CELL(R,C) (((R-1)%2==0) && (C==DESC_CELL_C))  /* Description cell */
+#define IN_RECN_CELL(R,C) (((R-1)%2==0) && (C==RECN_CELL_C))  /* Reconciled cell  */
+#define IN_PAY_CELL(R,C)  (((R-1)%2==0) && (C==PAY_CELL_C))   /* Payment cell     */
+#define IN_DEP_CELL(R,C)  (((R-1)%2==0) && (C==DEP_CELL_C))   /* Deposit cell     */
 #define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==BALN_CELL_C))  /* Balance cell     */
-#define IN_PRIC_CELL(R,C) (((R-1)%2==0) && (C==PRIC_CELL_C))  /* Balance cell     */
-#define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==0))  /* Year cell        */
+#define IN_PRIC_CELL(R,C) (((R-1)%2==0) && (C==PRIC_CELL_C))  /* Price cell       */
+#define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==DATE_CELL_C))  /* Year cell        */
 #define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==2))  /* Memo cell        */
 #define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C==3))  /* cell after memo  */
 
@@ -167,6 +178,7 @@ regRefresh( RegWindow *regData )
     String **data = NULL;
     String **newData;
     Account *acc;
+    double themount;  /* amount */
     
     XtVaGetValues( regData->reg, XmNrows, &nrows, NULL );
     XtVaGetValues( regData->reg, XmNcells, &data, NULL );
@@ -226,15 +238,18 @@ regRefresh( RegWindow *regData )
 
       newData[row+1][RECN_CELL_C] = XtNewString("");
       
-      if( 0.0 > trans->damount )
+      themount = xaccGetAmount (acc, trans);
+
+      /* hack alert -- share amounts should have three digits */
+      if( 0.0 > themount )
         {
-        sprintf( buf, "%.2f ", (-1.0*(trans->damount)) );
+        sprintf( buf, "%.2f ", -themount );
         newData[row][PAY_CELL_C] = XtNewString(buf);
         newData[row][DEP_CELL_C] = XtNewString("");
         }
       else
         {
-        sprintf( buf, "%.2f ", (trans->damount) );
+        sprintf( buf, "%.2f ", themount );
         newData[row][PAY_CELL_C] = XtNewString("");
         newData[row][DEP_CELL_C] = XtNewString(buf);
         }
@@ -340,11 +355,11 @@ regRecalculateBalance( RegWindow *regData )
   
   for( i=0; (trans=getTransaction(regData->acc,i)) != NULL; i++ )
     {
-    share_balance += trans->damount;
+    share_balance += xaccGetAmount (acc, trans);
     dbalance = trans -> share_price * share_balance;
     
     if( trans->reconciled != NREC ) {
-      share_clearedBalance += trans->damount;
+      share_clearedBalance += xaccGetAmount (acc, trans);
       dclearedBalance = trans->share_price * share_clearedBalance;
     }
     
@@ -381,11 +396,11 @@ regRecalculateBalance( RegWindow *regData )
           XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, negPixel );
         else
           XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, posPixel );
-        }
 #endif
       
-      /* Put the value in the cell */
-      XbaeMatrixSetCell( reg, position, SHRS_CELL_C, buf );
+        /* Put the value in the cell */
+        XbaeMatrixSetCell( reg, position, SHRS_CELL_C, buf );
+        }
 
       position+=2;            /* each transaction has two rows */
       }
@@ -427,13 +442,15 @@ regSaveTransaction( RegWindow *regData, int position )
   char buf[BUFSIZE];
   int  newPosition;
   int  row = (position * 2) + 1;
-  
+  Account *acc;
   Transaction *trans;
-  trans = getTransaction( regData->acc, position );
+
+  acc = regData->acc;
+  trans = getTransaction( acc, position );
   
   /* If anything changes, we have to set this flag, so we
    * remember to prompt the user to save! */
-  if( regData->changed != MOD_NONE )
+  if( MOD_NONE != regData->changed )
     data->saved = False;
   
   if( trans == NULL )
@@ -445,17 +462,8 @@ regSaveTransaction( RegWindow *regData, int position )
     if( !(regData->changed & MOD_ALL) )
       return;
     
-    trans = (Transaction *)_malloc(sizeof(Transaction));
-    
-    /* fill in some sane defaults */
-    trans->num         = NULL;
-    trans->description = NULL;
-    trans->memo        = NULL;
-    trans->catagory    = 0;
-    trans->reconciled  = NREC;
-    trans->damount     = 0.0;
-    trans->share_price = 1.0;
-    
+    trans = mallocTransaction();
+    trans->credit = (struct _account *) acc;
     regData->changed = MOD_ALL;
     }
   if( regData->changed & MOD_NUM )
@@ -477,10 +485,34 @@ regSaveTransaction( RegWindow *regData, int position )
   
   if( regData->changed & MOD_MEMO )
     {
+    String tmp;
+    String  memo = NULL;
     DEBUG("MOD_MEMO");
     /* ... the memo ... */
     XtFree( trans->memo );
-    trans->memo = XtNewString( XbaeMatrixGetCell(regData->reg,row+1,MEMO_CELL_C) );
+
+    tmp = XbaeMatrixGetCell(regData->reg,row+1,MEMO_CELL_C);
+
+    /* if its a transfer, indicate where its from ... */
+    if ((NULL != trans->debit) && (NULL != trans->credit)) {
+      Account *fromAccount = NULL;
+      if (((struct _account *) acc) == trans->debit) {
+          fromAccount = (Account *) trans->credit;
+        } else {
+          fromAccount = (Account *) trans->debit;
+        }
+
+        /* Get the memo, and add the "from" account name to it */
+        memo = (String)malloc (strlen(tmp)+
+                               strlen(fromAccount->accountName)+
+                               strlen("[From: ] ") );
+
+        sprintf( memo, "[From: %s] %s\0", fromAccount->accountName, tmp);
+    
+        trans->memo = memo;
+      } else {
+        trans->memo = XtNewString( tmp );
+      }
     }
   
   if( regData->changed & MOD_RECN )
@@ -497,28 +529,32 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     String amount;
     float val=0.0;  /* must be float for sscanf to work */
+    double themount = 0.0;
+
     DEBUG("MOD_AMNT");
     /* ...and the amounts */
     amount = XbaeMatrixGetCell(regData->reg,row,DEP_CELL_C);
     sscanf( amount, "%f", &val );
-    trans->damount = val;
+    themount = val;
     
     val = 0.0;
     amount = XbaeMatrixGetCell(regData->reg,row,PAY_CELL_C); 
     sscanf( amount, "%f", &val );
-    trans->damount -= val;
+    themount -= val;
     
+    xaccSetAmount (acc, trans, themount);
+
     /* Reset so there is only one field filled */
-    if( 0.0 > trans->damount )
+    if( 0.0 > themount )
       {
 /* hack alert -- keep 3 digits for share amounts */
-      sprintf( buf, "%.2f ", (-1.0*(trans->damount)) );
+      sprintf( buf, "%.2f ", -themount );
       XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, buf );
       XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, "" );
       }
     else
       {
-      sprintf( buf, "%.2f ", (trans->damount) );
+      sprintf( buf, "%.2f ", themount );
       XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, "" );
       XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, buf );
       }
@@ -526,7 +562,9 @@ regSaveTransaction( RegWindow *regData, int position )
     regRecalculateBalance(regData);
     }
 
-  if( regData->changed & MOD_PRIC )
+  /* ignore MOD_PRIC if for non-stock accounts */
+  if( (regData->changed & MOD_PRIC) &&
+      ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
     {
     String price;
     float val=0.0;  /* must be float for sscanf to work */
@@ -538,7 +576,6 @@ regSaveTransaction( RegWindow *regData, int position )
     price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
     sscanf( price, "%f", &val );
     trans->share_price = val;
-printf ("got share price %f \n", val);
     
     sprintf( buf, "%.2f ", trans->share_price );
     XbaeMatrixSetCell( regData->reg, row, PRIC_CELL_C, buf );
@@ -575,8 +612,8 @@ printf ("got share price %f \n", val);
     {
     Transaction *prevTrans;
     Transaction *nextTrans;
-    prevTrans = getTransaction( regData->acc, position-1 );
-    nextTrans = getTransaction( regData->acc, position+1 );
+    prevTrans = getTransaction( acc, position-1 );
+    nextTrans = getTransaction( acc, position+1 );
 
     DEBUG("MOD_DATE");
     /* read in the date stuff... */
@@ -605,9 +642,9 @@ printf ("got share price %f \n", val);
       
       /* We don't need to remove if it isn't in the transaction list */
       if( !(regData->changed & MOD_NEW) )
-        removeTransaction( regData->acc, position );
+        removeTransaction( acc, position );
       
-      insertTransaction( regData->acc, trans );
+      insertTransaction( acc, trans );
       
       regRefresh(regData);
       }
@@ -628,8 +665,8 @@ printf ("got share price %f \n", val);
   regData->changed   = 0;
 
   /* If the reconcile window is open, update it!!! */
-  if( regData->acc->recnData != NULL )
-    recnRefresh( regData->acc->recnData );
+  if( acc->recnData != NULL )
+    recnRefresh( acc->recnData );
   
   return;
   }
@@ -772,7 +809,8 @@ regWindow( Widget parent, Account *acc )
     String **data;
     int i,j;
     /* ----------------------------------- */
-    /* set up number of displayed columns */
+    /* define where each column shows up, and total number of columns. */
+    /* the number on the right hand side is the physical location of the column */
     switch(acc->type)
       {
       case BANK:
@@ -780,11 +818,29 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+        acc->columnLocation [DATE_COL_ID] = 0;
+        acc->columnLocation [NUM_COL_ID]  = 1;
+        acc->columnLocation [DESC_COL_ID] = 2;
+        acc->columnLocation [RECN_COL_ID] = 3;
+        acc->columnLocation [PAY_COL_ID]  = 4;
+        acc->columnLocation [DEP_COL_ID]  = 5;
+        acc->columnLocation [BALN_COL_ID] = 6;
         acc -> numCols = 7;
+
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> numCols = 9;
+        acc->columnLocation [DATE_COL_ID] = 0;
+        acc->columnLocation [NUM_COL_ID]  = 1;
+        acc->columnLocation [ACTN_COL_ID] = 2;
+        acc->columnLocation [DESC_COL_ID] = 3;
+        acc->columnLocation [RECN_COL_ID] = 4;
+        acc->columnLocation [PAY_COL_ID]  = 5;
+        acc->columnLocation [DEP_COL_ID]  = 6;
+        acc->columnLocation [PRIC_COL_ID] = 7;
+        acc->columnLocation [SHRS_COL_ID] = 8;
+        acc->columnLocation [BALN_COL_ID] = 9;
+        acc -> numCols = 10;
         break;
       default:
         fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
@@ -799,7 +855,7 @@ regWindow( Widget parent, Account *acc )
     acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
     acc -> colWidths[PAY_CELL_C]  = 8;   /* the widths of columns */
     acc -> colWidths[DEP_CELL_C]  = 8;   /* the widths of columns */
-    acc -> colWidths[BALN_CELL_C] = 8;   /* the widths of columns */
+    acc -> colWidths[BALN_CELL_C] = 8;   /* $ balance */
 
     switch(acc->type)
       {
@@ -813,7 +869,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
         acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
-        acc -> colWidths[BALN_CELL_C] = 8;   /* $ balance */
+        acc -> colWidths[ACTN_CELL_C] = 6;   /* action (category) */
         break;
       }
     
@@ -841,7 +897,7 @@ regWindow( Widget parent, Account *acc )
       case MUTUAL:
         acc -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         acc -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
-        acc -> alignments[BALN_CELL_C] = XmALIGNMENT_END;  /* $balance */
+        acc -> alignments[ACTN_CELL_C] = XmALIGNMENT_BEGINNING;  /* action */
         break;
       }
     
@@ -856,6 +912,7 @@ regWindow( Widget parent, Account *acc )
     acc -> rows[0][DATE_CELL_C] = "Date";
     acc -> rows[0][NUM_CELL_C]  = "Num";
     acc -> rows[0][DESC_CELL_C] = "Description";
+    acc -> rows[0][BALN_CELL_C] = "Balance";
     switch(acc->type)
       {
       case BANK:
@@ -863,13 +920,12 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
-        acc -> rows[0][BALN_CELL_C] = "Balance";
         break;
       case PORTFOLIO:
       case MUTUAL:
         acc -> rows[0][PRIC_CELL_C] = "Price";
         acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
-        acc -> rows[0][BALN_CELL_C] = "Balance";
+        acc -> rows[0][ACTN_CELL_C] = "Cat";
         break;
       }
     
@@ -1435,13 +1491,16 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
             {
             tcbs->next_column = PAY_CELL_C;
             if( regData->qf != NULL )
-              if( regData->qf->trans != NULL )
-                if( 0.0 > regData->qf->trans->damount )
+              if( regData->qf->trans != NULL ) {
+                double themount;
+                themount = xaccGetAmount (acc, regData->qf->trans);
+                if( 0.0 > themount )
                   {
-                  sprintf( buf, "%.2f ", (-1.0*(regData->qf->trans->damount)) );
+                  sprintf( buf, "%.2f ", - themount );
                   XbaeMatrixSetCell( reg, tcbs->next_row, 
                                      tcbs->next_column, buf );
                   }
+               }
             }
           
           if( IN_PAY_CELL(row,col) )
@@ -1463,13 +1522,16 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               {
               tcbs->next_column = DEP_CELL_C;
               if( regData->qf != NULL )
-                if( regData->qf->trans != NULL )
-                  if( 0.0 <= regData->qf->trans->damount )
+                if( regData->qf->trans != NULL ) {
+                  double themount;
+                  themount = xaccGetAmount (acc, regData->qf->trans);
+                  if( 0.0 <= themount )
                     {
-                    sprintf( buf, "%.2f ", (regData->qf->trans->damount) );
+                    sprintf( buf, "%.2f ", themount );
                     XbaeMatrixSetCell( reg, tcbs->next_row, 
                                        tcbs->next_column, buf );
                     }
+                }
               }
             }
           
@@ -1631,8 +1693,8 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
         count++;
     if( count >= 1 )
       {
-      XbaeMatrixEditCell( mw, row+1, DATE_CELL_C );
-      XbaeMatrixSelectCell( mw, row+1, DATE_CELL_C );
+      XbaeMatrixEditCell( mw, row+1, col );
+      XbaeMatrixSelectCell( mw, row+1, col );
       }
     }
     break;
