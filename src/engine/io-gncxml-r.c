@@ -1578,7 +1578,7 @@ add_all_kvp_value_parsers_as_sub_nodes(sixtp *p,
   sixtp_add_sub_parser(p, "binary", child_pr);
 
   sixtp_add_sub_parser(p, "glist", glist_parser);
-  sixtp_add_sub_parser(p, "kvp-frame", kvp_frame_parser);
+  sixtp_add_sub_parser(p, "frame", kvp_frame_parser);
 
   return(TRUE);
 }
@@ -1647,6 +1647,8 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
   guint64 key_node_count;
   gchar *key = NULL;
   sixtp_child_result *value_cr = NULL;
+  kvp_value *value = NULL;
+  gboolean delete_value = FALSE;
 
   g_return_val_if_fail(f, FALSE);
 
@@ -1662,6 +1664,15 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
       key = (char *) cr->data;
       key_node_count++;
     } else {
+      if(is_child_result_from_node_named(cr, "frame")) {
+        kvp_frame *frame = cr->data;
+        value = kvp_value_new_frame (frame);
+        delete_value = TRUE;
+      } else {
+        value = cr->data;
+        delete_value = FALSE;
+      }
+
       value_cr = cr;
     }
   }
@@ -1669,7 +1680,9 @@ kvp_frame_slot_end_handler(gpointer data_for_children,
   if(key_node_count != 1) return(FALSE);
 
   value_cr->should_cleanup = TRUE;
-  kvp_frame_set_slot(f, key, (kvp_value *) value_cr->data);
+  kvp_frame_set_slot(f, key, value);
+  if (delete_value)
+    kvp_value_delete (value);
   return(TRUE);
 }
 
