@@ -24,7 +24,7 @@
 (define (gnc:leap-year? year)
   (if (= (remainder year 4) 0)
       (if (= (remainder year 100) 0)
-	  (if (= (remainder year 400) 0) #t #f)
+	  (if (= (remainder (+ year 1900) 400) 0) #t #f)
 	  #t)
       #f))
 
@@ -47,10 +47,31 @@
        (/ (gnc:date-get-year-day lt) (* 1.0 (gnc:days-in-year 
 					     (gnc:date-get-year lt)))))))
 
+;; return the number of years (in floating point format) between two dates.
+(define (gnc:date-year-delta caltime1 caltime2)
+  (let* ((lt1 (localtime caltime1))
+	 (lt2 (localtime caltime2))
+	 (day1 (gnc:date-get-year-day lt1))
+	 (day2 (gnc:date-get-year-day lt2))
+	 (year1 (gnc:date-get-year lt1))
+	 (year2 (gnc:date-get-year lt2))
+	 (dayadj1 (if (and (not (gnc:leap-year? year1))
+			   (>= day1 59))
+		      (+ day1 1)
+		      day1))
+	 (dayadj2 (if (and (not (gnc:leap-year? year2))
+			   (>= day2 59))
+		      (+ day2 1)
+		      day2)))
+    (+ (- (gnc:date-get-year lt2) (gnc:date-get-year lt1))
+       (/ (- dayadj2 dayadj1) 
+	  366.0))))
+
 ;; convert a date in seconds since 1970 into # of months since 1970
 (define (gnc:date-to-month-fraction caltime)
   (let ((lt (localtime caltime)))
     (+ (* 12 (- (gnc:date-get-year lt) 1970.0))
+       (gnc:date-get-month lt)
        (/ (- (gnc:date-get-month-day lt) 1.0) (gnc:days-in-month 
 					       (gnc:date-get-month lt)
 					       (gnc:date-get-year lt))))))
@@ -60,10 +81,10 @@
 (define (gnc:date-to-week-fraction caltime)
   (/ (- (/ (/ caltime 3600.0) 24) 3) 7))
 
-;; convert a date in seconds since 1970 into # of days since Jan 1, 1970
+;; convert a date in seconds since 1970 into # of days since Feb 28, 1970
 ;; ignoring leap-seconds
 (define (gnc:date-to-day-fraction caltime)
-  (/ (/ caltime 3600.0) 24))
+  (- (/ (/ caltime 3600.0) 24) 59))
 
 ;; Modify a date
 (define (moddate op adate delta)

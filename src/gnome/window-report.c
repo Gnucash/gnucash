@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
+ * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -35,6 +36,7 @@
 #include "option-util.h"
 #include "guile-util.h"
 #include "dialog-options.h"
+#include "ui-callbacks.h"
 #include "query-user.h"
 #include "messages.h"
 #include "util.h"
@@ -222,13 +224,20 @@ static char *
 gnc_run_report(ReportData *report_data)
 {
   SCM result, nil;
+  gncUIWidget window;
 
   if (!gh_procedure_p(report_data->rendering_thunk))
     return NULL;
 
+  window = gnc_html_window_get_window(reportwindow);
+
+  gnc_set_busy_cursor(window);
+
   nil = gh_eval_str("()");
   result = gfec_apply(report_data->rendering_thunk, nil,
                       gnc_report_error_dialog);
+
+  gnc_unset_busy_cursor(window);
 
   if (!gh_string_p(result))
     return NULL;

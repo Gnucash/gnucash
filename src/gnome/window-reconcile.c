@@ -118,7 +118,7 @@ void
 recnRefresh(Account *account)
 {
   RecnWindow *recnData; 
-  
+
   FIND_IN_LIST (RecnWindow, recnList, account, account, recnData);
   if (recnData == NULL)
     return;

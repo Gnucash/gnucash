@@ -78,9 +78,8 @@ static short module = MOD_ENGINE;
 \********************************************************************/
 
 void
-xaccInitSplit( Split * split )
-  {
-  
+xaccInitSplit(Split * split)
+{
   /* fill in some sane defaults */
   split->acc         = NULL;
   split->parent      = NULL;
@@ -104,18 +103,18 @@ xaccInitSplit( Split * split )
   split->cost_basis                = 0.0;
 
   split->tickee = 0;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
 
 Split *
-xaccMallocSplit( void )
-  {
+xaccMallocSplit(void)
+{
   Split *split = (Split *)_malloc(sizeof(Split));
   xaccInitSplit (split);
   return split;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -160,7 +159,7 @@ xaccCloneSplit (Split *s)
 
 void
 xaccFreeSplit( Split *split )
-  {
+{
   if (!split) return;
 
   if (split->memo) free (split->memo);
@@ -477,7 +476,7 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
       }
    }
 
-   /* be more precise -- the value depends on the curency 
+   /* be more precise -- the value depends on the currency 
     * we want it expressed in.
     */
    if (!safe_strcmp(s->acc->currency, base_currency)) {

@@ -38,6 +38,29 @@
     ((gnc:budget-year) (gnc:date-to-year-fraction caltime))
     (else (gnc:debug "undefined period type in budget!") #f)))
 
+(define (gnc:date-N-delta caltime1 caltime2 type)
+  (case type
+    ((gnc:budget-day) 
+     (- (gnc:date-to-day-fraction caltime2) 
+	(gnc:date-to-day-fraction caltime1)))
+    ((gnc:budget-week) 
+     (- (gnc:date-to-week-fraction caltime2)
+	(gnc:date-to-week-fraction caltime1)))
+    ((gnc:budget-month) 
+     (- (gnc:date-to-month-fraction caltime2)
+	(gnc:date-to-month-fraction caltime1)))
+    ((gnc:budget-year) (gnc:date-year-delta caltime1 caltime2))
+    (else (gnc:debug "undefined period type in budget!") #f)))
+
+;; returns the "day number" of the specified period.
+(define (gnc:date-to-N-remainder caltime type)
+  (case type
+    ((gnc:budget-day) 0)
+    ((gnc:budget-week) (gnc:date-get-week-day (localtime caltime)))
+    ((gnc:budget-month) (gnc:date-get-month-day (localtime caltime)))
+    ((gnc:budget-year) (gnc:date-get-year-day (localtime caltime)))
+    (else (gnc:debug "undefined period type in budget!") #f)))
+
 ;; describe a time type
 (define (gnc:date-describe-type type)
   (case type
@@ -60,20 +83,23 @@
 (define budget-entry-structure
   (make-record-type 
    "budget-entry-structure" 
-   '(description amount accounts period period-type budget-type)))
+   '(description amount accounts period period-type budget-type
+		 trigger-day)))
 
-(define (make-budget-entry desc amt acct per ptype budget-type)
+(define (make-budget-entry desc amt acct per ptype budget-type trig-day)
   ((record-constructor budget-entry-structure) 
-   desc amt acct per ptype budget-type))
+   desc amt acct per ptype budget-type trig-day))
 
 (define gnc:budget-entries
   (list
    (make-budget-entry "lunch" 8 '("Food:Lunch") 1 
-		      'gnc:budget-day 'gnc:budget-recurring)
+		      'gnc:budget-day 'gnc:budget-recurring 0)
    (make-budget-entry "junk food" 0.50 '("Food:Junk") 1 
-		      'gnc:budget-day 'gnc:budget-recurring)
+		      'gnc:budget-day 'gnc:budget-recurring 0)
    (make-budget-entry "car repairs" 2500 '("Car:Repairs") 5
-		      'gnc:budget-year 'gnc:budget-contingency)))
+		      'gnc:budget-year 'gnc:budget-contingency 0)
+   (make-budget-entry "rent" 312.50 '("Household:Rent") 1
+		      'gnc:budget-month 'gnc:budget-trigger 15)))
 
 (define (budget-entry-get-description budget-entry)
   ((record-accessor budget-entry-structure 'description) budget-entry))
@@ -89,6 +115,9 @@
 
 (define (budget-entry-get-period-type budget-entry)
   ((record-accessor budget-entry-structure 'period-type) budget-entry))
+
+(define (budget-entry-get-trigger-day budget-entry)
+  ((record-accessor budget-entry-structure 'trigger-day) budget-entry))
 
 (define (budget-description-html-proc)
   (lambda (budget-line)
@@ -120,6 +149,10 @@
      (gnc:date-describe-type 
       (budget-entry-get-period-type (budget-line-get-entry budget-line))))))
 
+(define (budget-trigger-day-html-proc)
+  (lambda (budget-line)
+    (html-number-cell
+     #f #f "%i" (budget-entry-get-trigger-day (budget-line-get-entry budget-line)))))
 
 ;; budget report:  a vector with indexes corresponding to the budget
 ;; 0 - actual:  the amount spend / recieved
@@ -135,11 +168,11 @@
   (make-record-type 
    "budget-report-structure" 
    '(actual budgeted num-periods minimum-expected maximum-expected 
-	    time-remaining)))
+	    time-remaining num-triggers)))
 
 (define (make-empty-budget-report)
   ((record-constructor budget-report-structure) 
-   0 0 0 0 0 0))
+   0 0 0 0 0 0 0))
 
 (define (budget-report-get-actual brep)
   ((record-accessor budget-report-structure 'actual) brep))
@@ -159,6 +192,9 @@
 (define (budget-report-get-time-remaining brep)
   ((record-accessor budget-report-structure 'time-remaining) brep))
 
+(define (budget-report-get-num-triggers brep)
+  ((record-accessor budget-report-structure 'num-triggers) brep))
+
 (define (budget-actual-html-proc)
   (lambda (budget-line)
     (html-currency-cell #f #f (budget-report-get-actual 
@@ -171,7 +207,7 @@
 
 (define (budget-num-periods-html-proc)
   (lambda (budget-line)
-    (html-number-cell #f #f "%.1f" (budget-report-get-num-periods
+    (html-number-cell #f #f "%.6f" (budget-report-get-num-periods
 				    (budget-line-get-report budget-line)))))
 
 (define (budget-minimum-expected-html-proc)
@@ -188,6 +224,11 @@
   (lambda (budget-line)
     (html-number-cell #f #f "%.1f" (budget-report-get-time-remaining
 				    (budget-line-get-report budget-line)))))
+
+(define (budget-num-triggers-html-proc)
+  (lambda (budget-line)
+    (html-number-cell #f #f "%.0f" (budget-report-get-num-triggers
+				  (budget-line-get-report budget-line)))))
 
 (define budget-line-structure
   (make-record-type "budget-line-structure"
@@ -212,13 +253,11 @@
 ;; calculate the # of periods on a budget line.
 ;; dates are in # seconds after 1970
 (define (budget-calculate-periods! budget-line begin-date end-date)
-  (let* ((entry (budget-line-get-entry budget-line))
-	 (N-type (budget-entry-get-period-type entry))
-	 (begin-N (gnc:date-to-N-fraction begin-date N-type))
-	 (end-N (gnc:date-to-N-fraction end-date N-type)))
+  (let ((entry (budget-line-get-entry budget-line)))
     ((record-modifier budget-report-structure 'num-periods)
      (budget-line-get-report budget-line)
-     (/ (- end-N begin-N)
+     (/ (gnc:date-N-delta begin-date end-date 
+			  (budget-entry-get-period-type entry))
 	(budget-entry-get-period entry)))))
 
 ;; calculate the budgeted value.
@@ -234,7 +273,7 @@
 (define (budget-calculate-expected! budget-line)
   (let ((brep (budget-line-get-report budget-line))
 	(entry (budget-line-get-entry budget-line)))
- ; fixme: contingency type budget entries may have a lower minimum
+					; fixme: contingency type budget entries may have a lower minimum
     ((record-modifier budget-report-structure 'minimum-expected) brep
      (* (budget-entry-get-amount entry)		    
 	(floor (budget-report-get-num-periods brep))))
@@ -251,6 +290,20 @@
     ((record-modifier budget-report-structure 'time-remaining) brep
      (* (- (ceiling periods) periods) 
 	(budget-entry-get-period entry)))))
+
+;; calculate the number of times the trigger day occurs in the budget
+;; period
+(define (budget-calculate-num-triggers! budget-line begin-date end-date)
+  (let* ((entry (budget-line-get-entry budget-line))
+	 (brep (budget-line-get-report budget-line))
+	 (N-type (budget-entry-get-period-type entry))
+	 (trigger-day (budget-entry-get-trigger-day entry)))
+    ((record-modifier budget-report-structure 'num-triggers) brep
+     (+	-1
+	(if (<= (gnc:date-to-N-remainder begin-date N-type) trigger-day) 1 0)
+	(if (>= (gnc:date-to-N-remainder end-date N-type) trigger-day) 1 0)
+	(- (floor (gnc:date-to-N-fraction end-date N-type))
+	   (floor (gnc:date-to-N-fraction begin-date N-type)))))))
 
 ;; given an account name, return the budget line
 ;; return #f if there is no budget line for that account
@@ -369,9 +422,10 @@
 	  (budget-calculate-periods! line begin-date-secs end-date-secs)
 	  (budget-calculate-budgeted! line)
 	  (budget-calculate-expected! line)
-	  (budget-calculate-time-remaining! line)))
+	  (budget-calculate-time-remaining! line)
+	  (budget-calculate-num-triggers! line begin-date-secs end-date-secs)))
       budget-list)
-   
+     
      (gnc:debug "c")
      
      (let ((report-headers '())
@@ -386,12 +440,14 @@
 				"Period"
 				""
 				"Actual"
+				"Trigger Day"
 				"Budgeted"
 				"Number of Periods"
 				"Lower Limit"
 				"Upper Limit"
 				"Time Remaining"
-				""))
+				""
+				"Num Triggers"))
 	  (set! report-procs (list
 			      budget-description-html-proc
 			      budget-amount-html-proc
@@ -399,12 +455,14 @@
 			      budget-period-html-proc	
 			      budget-period-type-html-proc
 			      budget-actual-html-proc
+			      budget-trigger-day-html-proc
 			      budget-budgeted-html-proc
 			      budget-num-periods-html-proc
 			      budget-minimum-expected-html-proc
 			      budget-maximum-expected-html-proc
 			      budget-time-remaining-html-proc
-			      budget-period-type-html-proc)))
+			      budget-period-type-html-proc
+			      budget-num-triggers-html-proc)))
 	 ((balancing)
 	  (set! report-headers (list
 				"Description"

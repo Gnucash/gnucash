@@ -31,6 +31,7 @@
 
 #include <gnome.h>
 
+#include "gnome-top-level.h"
 #include "MultiLedger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"

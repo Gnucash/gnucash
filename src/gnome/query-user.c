@@ -205,9 +205,64 @@ gnc_foundation_query_dialog(const gchar *title,
 }
 
 /********************************************************************\
+ * gnc_ok_cancel_dialog_parented                                    *
+ *   display a message, and asks the user to press "Ok" or "Cancel" *
+ *                                                                  *
+ * NOTE: This function does not return until the dialog is closed   *
+ *                                                                  *
+ * Args:   parent  - the parent window                              *
+ *         message - the message to display                         *
+ *         default - the button that will be the default            *
+ * Return: the result the user selected                             *
+\********************************************************************/
+GNCVerifyResult
+gnc_ok_cancel_dialog_parented(gncUIWidget parent, const char *message,
+                              GNCVerifyResult default_result)
+{
+  GtkWidget *dialog = NULL;
+  gint default_button;
+  gint result;
+  
+  dialog = gnome_message_box_new(message,
+                                 GNOME_MESSAGE_BOX_QUESTION,
+                                 GNOME_STOCK_BUTTON_OK,
+                                 GNOME_STOCK_BUTTON_CANCEL,
+                                 NULL);
+
+  switch (default_result)
+  {
+    case GNC_VERIFY_OK:
+      default_button = 0;
+      break;
+    case GNC_VERIFY_CANCEL:
+      default_button = 1;
+      break;
+    default:
+      PWARN("gnc_verify_cancel_dialog: bad default button\n");
+      default_button = 0;
+      break;
+  }
+
+  gnome_dialog_set_default(GNOME_DIALOG(dialog), default_button);
+  if (parent != NULL)
+    gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(parent));
+
+  result = gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
+
+  switch (result)
+  {
+    case 0:
+      return GNC_VERIFY_OK;
+    case 1:
+    default:
+      return GNC_VERIFY_CANCEL;
+  }
+}
+
+/********************************************************************\
  * gnc_verify_cancel_dialog                                         *
  *   display a message, and asks the user to press "Yes", "No", or  *
- *   "Cancel"
+ *   "Cancel"                                                       *
  *                                                                  *
  * NOTE: This function does not return until the dialog is closed   *
  *                                                                  *

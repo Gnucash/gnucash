@@ -255,6 +255,67 @@ xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
 }
 
 
+/* copies basic split values from 'from' split to 'to' split.
+ * doesn't copy reconciled flag, or open the parent transactions
+ * for editing. Does *not* insert the 'to' split into an account!! */
+static void
+gnc_copy_split(Split *from, Split *to)
+{
+  if ((from == NULL) || (to == NULL))
+    return;
+
+  xaccSplitSetMemo(to, xaccSplitGetMemo(from));
+  xaccSplitSetAction(to, xaccSplitGetAction(from));
+  xaccSplitSetDocref(to, xaccSplitGetDocref(from));
+  xaccSplitSetSharePriceAndAmount(to,
+                                  xaccSplitGetSharePrice(from),
+                                  xaccSplitGetShareAmount(from));
+}
+
+/* copies the basic transaction values and the splits from the
+ * 'from' trans to the 'to' trans. Any existing splits in the
+ * 'to' trans are deleted. Does *not* open the 'to' trans for
+ * editing!!! Splits are copied using gnc_copy_split above.
+ * The new splits will be in exactly the same order as in
+ * the 'from' transaction. */
+static void
+gnc_copy_trans(Transaction *from, Transaction *to)
+{
+  Split *from_split, *to_split;
+  Timespec timespec;
+  int num_splits;
+  int i;
+
+  if ((from == NULL) || (to == NULL))
+    return;
+
+  /* remove the old splits */
+  to_split = xaccTransGetSplit(to, 0);
+  while (to_split != NULL)
+  {
+    xaccSplitDestroy(to_split);
+    to_split = xaccTransGetSplit(to, 0);
+  }
+
+  /* add in the new splits */
+  num_splits = xaccTransCountSplits(from);
+  for (i = 0; i < num_splits; i++)
+  {
+    from_split = xaccTransGetSplit(from, i);
+
+    to_split = xaccMallocSplit();
+    gnc_copy_split(from_split, to_split);
+
+    xaccTransAppendSplit(to, to_split);
+  }
+
+  /* now do the transaction-specific values */
+  xaccTransGetDateTS(from, &timespec);
+  xaccTransSetDateTS(to, &timespec);
+  xaccTransSetDescription(to, xaccTransGetDescription(from));
+  xaccTransSetDocref(to, xaccTransGetDocref(from));
+}
+
 /* ======================================================== */
 /* this callback gets called when the user clicks on the gui
  * in such a way as to leave the current transaction, and to 
@@ -583,6 +644,144 @@ xaccSRGetSplitRowCol (SplitRegister *reg, Split *split,
 
 /* ======================================================== */
 
+Split *
+xaccSRDuplicateCurrent (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo(reg);
+  CursorType cursor_type;
+  unsigned int changed;
+  Transaction *trans;
+  Split *return_split;
+  Split *split;
+
+  split = xaccSRGetCurrentSplit(reg);
+  trans = xaccSplitGetParent(split);
+
+  /* This shouldn't happen, but be paranoid. */
+  if (trans == NULL)
+    return NULL;
+
+  cursor_type = xaccSplitRegisterGetCursorType(reg);
+
+  /* Can't do anything with this. */
+  if (cursor_type == CURSOR_NONE)
+    return NULL;
+
+  /* This shouldn't happen, but be paranoid. */
+  if ((split == NULL) && (cursor_type == CURSOR_TRANS))
+    return NULL;
+
+  changed = xaccSplitRegisterGetChangeFlag(reg);
+
+  /* See if we were asked to duplicate an unchanged blank split.
+   * There's no point in doing that! */
+  if (!changed && ((split == NULL) || (split == info->blank_split)))
+    return NULL;
+
+  /* If the cursor has been edited, we are going to have to commit
+   * it before we can duplicate. Make sure the user wants to do that. */
+  if (changed)
+  {
+    GNCVerifyResult result;
+
+    result = gnc_ok_cancel_dialog_parented(xaccSRGetParent(reg),
+                                           TRANS_CHANGED_MSG,
+                                           GNC_VERIFY_OK);
+
+    if (result == GNC_VERIFY_CANCEL)
+      return NULL;
+
+    xaccSRSaveRegEntry(reg, NULL);
+
+    /* If the split is NULL, then we were on a blank split row
+     * in an expanded transaction. The new split (created by
+     * xaccSRSaveRegEntry above) will be the last split in the
+     * current transaction, as it was just added. */
+    if (split == NULL)
+      split = xaccTransGetSplit(trans, xaccTransCountSplits(trans) - 1);
+  }
+
+  /* Ok, we are now ready to make the copy. */
+
+  if (cursor_type == CURSOR_SPLIT)
+  {
+    Split *new_split;
+    Account *account;
+
+    /* We are on a split in an expanded transaction.
+     * Just copy the split and add it to the transaction. */
+
+    new_split = xaccMallocSplit();
+
+    gnc_copy_split(split, new_split);
+
+    account = xaccSplitGetAccount(split);
+
+    xaccTransBeginEdit(trans, GNC_T);
+    xaccAccountBeginEdit(account, GNC_T);
+
+    xaccTransAppendSplit(trans, new_split);
+    xaccAccountInsertSplit(account, new_split);
+
+    xaccAccountCommitEdit(account);
+    xaccTransCommitEdit(trans);
+
+    return_split = new_split;
+  }
+  else
+  {
+    Transaction *new_trans;
+    int num_splits;
+    int i;
+
+    /* We are on a transaction row. Copy the whole transaction. */
+
+    new_trans = xaccMallocTransaction();
+
+    xaccTransBeginEdit(new_trans, GNC_T);
+
+    gnc_copy_trans(trans, new_trans);
+
+    num_splits = xaccTransCountSplits(trans);
+    return_split = NULL;
+
+    /* Link the new splits into the accounts. */
+    for (i = 0; i < num_splits; i++)
+    {
+      Account *account;
+      Split *old_split;
+      Split *new_split;
+
+      old_split = xaccTransGetSplit(trans, i);
+      account = xaccSplitGetAccount(old_split);
+
+      new_split = xaccTransGetSplit(new_trans, i);
+
+      xaccAccountBeginEdit(account, GNC_T);
+      xaccAccountInsertSplit(account, new_split);
+      xaccAccountCommitEdit(account);
+
+      /* Returned split is the transaction split */
+      if (old_split == split)
+        return_split = new_split;
+    }
+
+    xaccTransCommitEdit(new_trans);
+
+    /* This shouldn't happen, but be paranoid. */
+    if (return_split == NULL)
+      return_split = xaccTransGetSplit(new_trans, 0);
+  }
+
+  /* Refresh the GUI. */
+  gnc_transaction_ui_refresh(trans);
+  gnc_refresh_main_window();
+
+  return return_split;
+}
+
+/* ======================================================== */
+
 void
 xaccSRDeleteCurrentSplit (SplitRegister *reg)
 {
@@ -598,8 +797,8 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
     return;
 
   /* If we just deleted the blank split, clean up. The user is
-   * allowed to delete the blank split as a method for discarding any
-   * edits they may have made to it. */
+   * allowed to delete the blank split as a method for discarding
+   * any edits they may have made to it. */
   if (split == info->blank_split)
   {
     account = xaccSplitGetAccount(split);
@@ -609,8 +808,7 @@ xaccSRDeleteCurrentSplit (SplitRegister *reg)
 
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
-   * their register windows after the deletion.
-   */
+   * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
   num_splits = xaccTransCountSplits(trans);
   affected_accounts = (Account **) malloc((num_splits + 1) *

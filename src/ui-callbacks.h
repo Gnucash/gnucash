@@ -32,7 +32,8 @@ typedef enum
 {
   GNC_VERIFY_NO,
   GNC_VERIFY_YES,
-  GNC_VERIFY_CANCEL
+  GNC_VERIFY_CANCEL,
+  GNC_VERIFY_OK
 } GNCVerifyResult;
 
 
@@ -42,6 +43,11 @@ GNCVerifyResult
 gnc_verify_cancel_dialog_parented(gncUIWidget parent,
                                   const char *message,
                                   GNCVerifyResult default_result);
+
+GNCVerifyResult
+gnc_ok_cancel_dialog_parented(gncUIWidget parent,
+                              const char *message,
+                              GNCVerifyResult default_result);
 
 void gnc_warning_dialog_parented(gncUIWidget parent, const char *message);
 
