@@ -22,6 +22,8 @@
 #ifndef PGEND_VERSION_H
 #define PGEND_VERSION_H
 
+#include "PostgresBackend.h"
+
 /* The pgendVersionIsCurrent() routine ... Are we up to date ? 
  *   Return 0 if we are at db version. Return +1 if we are newer.
  *   Return -1 if we are older and so we can't run.

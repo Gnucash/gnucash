@@ -33,13 +33,16 @@ handle versions
 #include "Backend.h"
 #include "BackendP.h"
 
+#include "version.h"
 #include "putil.h"
 
 static short module = MOD_BACKEND; 
 
 /* ============================================================= */
 
-#define PGEND_CURRENT_MAJOR_VERSION 1
+#define PGEND_CURRENT_MAJOR_VERSION  1
+#define PGEND_CURRENT_MINOR_VERSION  1
+#define PGEND_CURRENT_REV_VERSION    1
 
 /* ============================================================= */
 /* see if the version table exists, if not, create it */
@@ -47,9 +50,8 @@ static short module = MOD_BACKEND;
 static gpointer
 version_table_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   return TRUE;
+   return (gpointer) TRUE;
 }
-
 
 static void
 pgendVersionTable (PGBackend *be)
@@ -62,7 +64,7 @@ pgendVersionTable (PGBackend *be)
 
    p = "SELECT tablename FROM pg_tables WHERE tablename='gncVersion';";
    SEND_QUERY (be,p, );
-   table_exists = pgendGetResults (be, version_table_cb, FALSE);
+   table_exists = (gboolean) pgendGetResults (be, version_table_cb, FALSE);
    
    if (table_exists) return;
 
@@ -101,12 +103,15 @@ version_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 static pgendVersion
 pgendGetVersion (PGBackend *be)
 {
+   char * p;
    pgendVersion vers;
    
+   vers.major = 0;
+   vers.minor = 0;
+   vers.rev = 0;
    p = "SELECT major,minor,rev FROM gncVersion ORDER BY "
        " major DESC, minor DESC, rev DESC LIMIT 1;";
-   SEND_QUERY (be,p, );
-   vers.major = 0;
+   SEND_QUERY (be,p, vers);
    pgendGetResults (be, version_version_cb, &vers);
    return vers;
 }
@@ -118,7 +123,7 @@ static gpointer
 get_iguid_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    int fin = atoi(DB_GET_VAL ("iguid", j));
-   return fin;
+   return (gpointer) fin;
 }
 
 
@@ -127,7 +132,7 @@ static void
 put_iguid_in_tables (PGBackend *be)
 {
    char *p, buff[200];
-   int iguid;
+   guint iguid;
 	
    p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,0,'Start Put iGUID in Main Tables');";
@@ -162,7 +167,7 @@ put_iguid_in_tables (PGBackend *be)
 
    p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
    SEND_QUERY (be,p, );
-   iguid = pgendGetResults (be, get_iguid_cb, 0);
+   iguid = (guint32) pgendGetResults (be, get_iguid_cb, 0);
    iguid ++;
 
    sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);
@@ -177,29 +182,46 @@ put_iguid_in_tables (PGBackend *be)
 }
 
 /* ============================================================= */
+/* Are we up to date ? */
+/* Return 0 if we are at db version. Return +1 if we are newer.
+ * Return -1 if we are older and so we can't run.
+ */
 
-void
-pgendForwardVersion (PGBackend *be)
+int
+pgendVersionIsCurrent (PGBackend *be)
 {
    pgendVersion vers;
    
    pgendVersionTable(be);
-   
    vers = pgendGetVersion(be);
 
    if (1 > vers.major)
    {
       PERR ("something in the database is broken\n");
-      return;
+      return -1;
    }
+   if ((PGEND_CURRENT_MAJOR_VERSION == vers.major) &&
+       (PGEND_CURRENT_MINOR_VERSION <= vers.minor)) return 0;
    
    /* check to see if this client can connect */
    if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
    {
       PINFO ("you need a newer gnucash client to connect "
 	     "to this database");
-      return;
+      return -1;
    }
+
+   return +1;
+}
+
+/* ============================================================= */
+
+void
+pgendUpgradeDB (PGBackend *be)
+{
+   pgendVersion vers;
+   
+   vers = pgendGetVersion(be);
 
    /* start adding features to bring database up to date */
    if (1 == vers.major)
