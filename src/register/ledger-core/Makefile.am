@@ -39,6 +39,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/dialog-account \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   ${GUILE_INCS} \

@@ -12,6 +12,10 @@
 	  prove to myself that there is no real dependency on src/gnome
 	  by removing top-level.h and window-main.h and recompiling....
 	  no warnings were output by the compiler.
+
+	* dialog-account.[ch] -- add "destroy-window" callback registration.
+	  remove dependencies on register/ledger
+	* split-register.c -- register "destroy-window" callback
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 

@@ -127,6 +127,7 @@
 #include "split-register-model.h"
 #include "split-register-model-save.h"
 #include "table-allgui.h"
+#include "dialog-account.h"
 
 
 /** static variables ******************************************************/
@@ -2112,6 +2113,9 @@ gnc_split_register_init (SplitRegister *reg,
   TableLayout *layout;
   TableModel *model;
   TableControl *control;
+
+  /* Register 'destroy' callback */
+  gnc_ui_register_account_destroy_callback (gnc_ledger_display_destroy_by_account);
 
   reg->sr_info = NULL;
 
