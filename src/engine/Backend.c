@@ -25,6 +25,7 @@
 #include <stdarg.h>
 #include <glib.h>
 
+#include "Backend.h"
 #include "BackendP.h"
 
 /* static short module = MOD_ENGINE; */
@@ -111,7 +112,6 @@ xaccInitBackend(Backend *be)
     be->compile_query = NULL;
     be->free_query = NULL;
     be->run_query = NULL;
-    be->price_lookup = NULL;
 
     be->sync = NULL;
 
@@ -123,6 +123,8 @@ xaccInitBackend(Backend *be)
     be->error_msg = NULL;
     be->percentage = NULL;
 
+    /* XXX remove these */
+    be->price_lookup = NULL;
     be->export = NULL;
 }
 

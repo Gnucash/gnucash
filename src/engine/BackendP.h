@@ -44,9 +44,8 @@
 
 #include "Backend.h"
 #include "QueryNew.h"
+#include "gnc-book.h"
 #include "gnc-session.h"
-
-#include "gnc-pricedb.h"
 
 /*
  * The session_begin() routine gives the backend a second initialization
@@ -243,7 +242,6 @@ struct backend_s
   gpointer (*compile_query) (Backend *, QueryNew *);
   void (*free_query) (Backend *, gpointer);
   void (*run_query) (Backend *, gpointer);
-  void (*price_lookup) (Backend *, GNCPriceLookup *);
 
   void (*sync) (Backend *, GNCBook *);
 
@@ -257,7 +255,20 @@ struct backend_s
   GNCBackendError last_err;
   char * error_msg;
 
-  /* Export should really _NOT_ be here, but is left here for now */
+  /* XXX price_lookup should be removed during the redesign
+   * of the SQL backend... prices can now be queried using
+   * the generic query mechanism.
+   *
+   * Note the correct signature for this call is 
+   * void (*price_lookup) (Backend *, GNCPriceLookup *);
+   * we use gpointer to avoid an unwanted include file dependency. 
+   */
+  void (*price_lookup) (Backend *, gpointer);
+
+  /* XXX Export should really _NOT_ be here, but is left here for now.
+   * I'm not sure where this should be going to. It should be
+   * removed ASAP. 
+   */
   void (*export) (Backend *, GNCBook *);
 };
 
