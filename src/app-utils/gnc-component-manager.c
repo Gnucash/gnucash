@@ -265,10 +265,17 @@ gnc_cm_event_handler (GUID *entity,
 {
   GNCIdType id_type;
 
+#if CM_DEBUG
+  fprintf (stderr, "event_handler: event %d, guid %s\n", event_type,
+	   guid_to_string(entity));
+#endif
   add_event (&changes, entity, event_type, TRUE);
 
   id_type = xaccGUIDType (entity, gnc_get_current_book ());
   g_return_if_fail (id_type);
+#if CM_DEBUG
+    fprintf (stderr, "               guid type: %s\n", id_type);
+#endif
 
   if (safe_strcmp (id_type, GNC_ID_SPLIT) == 0)
   {
@@ -281,10 +288,6 @@ gnc_cm_event_handler (GUID *entity,
     add_event_type (&changes, id_type, event_type, TRUE);
 
   got_events = TRUE;
-
-#if CM_DEBUG
-  fprintf (stderr, "event: %d\n", event_type);
-#endif
 
   if (suspend_counter == 0)
     gnc_gui_refresh_internal (FALSE);
@@ -731,7 +734,7 @@ gnc_gui_refresh_internal (gboolean force)
   }
 
 #if CM_DEBUG
-  fprintf (stderr, "refresh!\n");
+  fprintf (stderr, "%srefresh!\n", force ? "forced " : "");
 #endif
 
   list = find_component_ids_by_class (NULL);
@@ -744,22 +747,46 @@ gnc_gui_refresh_internal (gboolean force)
       continue;
 
     if (!ci->refresh_handler &&
-        !SCM_PROCEDUREP (ci->refresh_handler_scm))
+        !SCM_PROCEDUREP (ci->refresh_handler_scm)) {
+#if CM_DEBUG
+      fprintf (stderr, "no handlers for %s:%d\n", ci->component_class, ci->component_id);
+#endif
       continue;
+    }
 
     if (force)
     {
-      if (ci->refresh_handler)
+      if (ci->refresh_handler) {
+#if CM_DEBUG
+	fprintf (stderr, "calling %s:%d C handler\n", ci->component_class, ci->component_id);
+#endif
         ci->refresh_handler (NULL, ci->user_data);
-      else
+      } else {
+#if CM_DEBUG
+	fprintf (stderr, "calling %s:%d SCM handler\n", ci->component_class, ci->component_id);
+#endif
         scm_call_0 (ci->refresh_handler_scm);
+      }
     }
     else if (changes_match (&ci->watch_info, &changes_backup))
     {
-      if (ci->refresh_handler)
+      if (ci->refresh_handler) {
+#if CM_DEBUG
+	fprintf (stderr, "calling %s:%d C handler\n", ci->component_class, ci->component_id);
+#endif
         ci->refresh_handler (changes_backup.entity_events, ci->user_data);
-      else
+      } else {
+#if CM_DEBUG
+	fprintf (stderr, "calling %s:%d SCM handler\n", ci->component_class, ci->component_id);
+#endif
         scm_call_0 (ci->refresh_handler_scm);
+      }
+    }
+    else
+    {
+#if CM_DEBUG
+      fprintf (stderr, "no match for %s:%d\n", ci->component_class, ci->component_id);
+#endif
     }
   }
 
