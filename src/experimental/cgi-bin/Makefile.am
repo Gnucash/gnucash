@@ -9,8 +9,6 @@ LDADD = 			\
   ../../engine/libgncengine.la 	\
   -lxml -lghttp -lglib -lfcgi
 
-INCLUDES =
-
 hello_SOURCES = \
   hello.c
 
@@ -32,8 +30,6 @@ noinst_HEADERS =
 EXTRA_DIST = \
   .cvsignore \
   README 
-
-CFLAGS = @CFLAGS@ 
 
 #  glib puts its header files in a bizarre place ...
 INCLUDES = 			\

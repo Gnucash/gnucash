@@ -205,24 +205,36 @@ gnc_get_ea_locale_dir(const char *top_dir)
     gchar *ret;
     gchar *locale;
     struct stat buf;
-
+    int i;
+    
+#ifdef HAVE_LC_MESSAGES
     locale = g_strdup(setlocale(LC_MESSAGES, NULL));
+#else
+    /*
+     * Mac OS X 10.1 and earlier, not only doesn't have LC_MESSAGES
+     * setlocale can sometimes return NULL instead of "C"
+     */
+    locale = g_strdup(setlocale(LC_ALL, NULL) ? 
+		      setlocale(LC_ALL, NULL) : "C");
+#endif
 
+    i = strlen(locale);
     ret = g_strdup_printf("%s/%s", top_dir, locale);
 
-    if(stat(ret, &buf) != 0 && (strlen (locale) > 2))
-    {
-        g_free (ret);
-        locale[2] = '\0';
-        ret = g_strdup_printf("%s/%s", top_dir, locale);
+    while (stat(ret, &buf) != 0)
+    { 
+	i--;
+	if (i<1) 
+	{
+	    g_free(ret);
+	    ret = g_strdup_printf("%s/%s", top_dir, default_locale);
+	    break;
+	}
+	locale[i] = '\0';
+	g_free(ret);
+	ret = g_strdup_printf("%s/%s", top_dir, locale);
     }
-
-    if(stat(ret, &buf) != 0)
-    {
-        g_free (ret);
-        ret = g_strdup_printf("%s/%s", top_dir, default_locale);
-    }
-
+    
     g_free(locale);
 
     return ret;
@@ -540,9 +552,11 @@ on_finalAccountCTree_tree_select_row   (GtkCTree        *ctree,
                                         gpointer         user_data)
 {
   Account *account;
+  GtkToggleButton *placeholder_button;
   GNCAmountEdit *balance_edit;
   GNCPrintAmountInfo print_info;
   gnc_numeric balance;
+  gboolean is_placeholder;
 
   balance_edit = gnc_new_user_get_balance_editor ();
 
@@ -559,7 +573,11 @@ on_finalAccountCTree_tree_select_row   (GtkCTree        *ctree,
     return;
   }
 
-  gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), TRUE);
+  is_placeholder = xaccAccountGetPlaceholder (account);
+  placeholder_button = gnc_new_user_get_placeholder_checkbox ();
+  gtk_toggle_button_set_active(placeholder_button, is_placeholder);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), !is_placeholder);
 
   balance = gnc_new_user_get_balance (account);
 
@@ -591,7 +609,7 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
 {
   Account *account;
   GNCAmountEdit *balance_edit;
-  gboolean result;
+  gboolean result, placeholder;
 
   balance_edit = gnc_new_user_get_balance_editor ();
 
@@ -610,11 +628,12 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
     const char *string;
 
     balance = gnc_amount_edit_get_amount (balance_edit);
+    placeholder = xaccAccountGetPlaceholder (account);
 
     print_info = gnc_account_value_print_info (account, FALSE);
     string = xaccPrintAmount (balance, print_info);
 
-    if (gnc_numeric_zero_p (balance))
+    if (gnc_numeric_zero_p (balance) || placeholder)
       string = "";
 
     gtk_ctree_node_set_text (ctree, GTK_CTREE_NODE (node), 2, string);
@@ -644,6 +663,29 @@ on_finalAccountCTree_tree_unselect_row (GtkCTree        *ctree,
     gtk_entry_set_text (GTK_ENTRY (entry), "");
 
     gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
+  }
+}
+
+void
+on_finalAccountCTree_tree_placeholder_toggled (GtkToggleButton *button,
+					       gpointer   user_data)
+{
+  gboolean state;
+  Account *account;
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
+  GNCAmountEdit *balance_edit;
+
+  state = gtk_toggle_button_get_active(button);
+  if (((ctree = gnc_new_user_get_final_account_tree ()) != NULL) &&
+      ((node = gtk_ctree_node_nth (ctree, GTK_CLIST(ctree)->focus_row)) != NULL) &&
+      ((account = gtk_ctree_node_get_row_data (ctree, node)) != NULL)) {
+          xaccAccountSetPlaceholder (account, state);
+  }
+
+  balance_edit = gnc_new_user_get_balance_editor ();
+  if (balance_edit) {
+      gtk_widget_set_sensitive(GTK_WIDGET(balance_edit), !state);
   }
 }
 

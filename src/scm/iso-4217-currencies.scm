@@ -33,6 +33,7 @@
 ( "Burundi Franc" "franc" "centime" "ISO4217" "BIF" "108" 100 100 )
 ( "CFA Franc BEAC" "franc" "centime" "ISO4217" "XAF" "950" 100 100 )
 ( "CFA Franc BCEAO" "franc" "centime" "ISO4217" "XOF" "952" 100 100 )
+( "CFP Franc Pacifique" "franc" "centime" "ISO4217" "XPF" "953" 100 100 )
 ( "Canadian Dollar" "dollar" "cent" "ISO4217" "CAD" "124" 100 100 )
 ( "Cape Verde Escudo" "escudo" "centavo" "ISO4217" "CVE" "132" 100 100 )
 ( "Cayman Islands Dollar" "dollar" "cent"  "ISO4217" "KYD" "136" 100 100 )
@@ -169,4 +170,7 @@
 ( "Yugoslav Dinar" "dinar" "para"  "ISO4217" "YUM"  890 100 100)
 ( "Zambian Kwacha" "kwacha" "ngwee"  "ISO4217" "ZMK" "894" 100 100 )
 ( "Zimbabwe Dollar" "dollar" "cent" "ISO4217" "ZWD" "716" 100 100 )
-
+( "Silver" "ounce" "ounce" "ISO4217" "XAG" "961" 1 1000000 )
+( "Gold" "ounce" "ounce" "ISO4217" "XAU" "959" 1 1000000 )
+( "Palladium" "ounce" "ounce" "ISO4217" "XPD" "964" 1 1000000 )
+( "Platinum" "ounce" "ounce" "ISO4217" "XPT" "962" 1 1000000 )

@@ -128,6 +128,16 @@ password, *NOT* your unix login name and password.
 
 (A GUI dialog to prompt for your password hasn't been implemented yet.)
 
+Note that you (or your SQL database admin) will have to make sure
+that access permissions on the various GnuCash tables have been set 
+appropriately.  Typically, this will be by starting the 'psql'
+shell, listing all relations with \z, and then issueing
+a 'GRANT ALL on gncAccount TO someuser;', and so on, for each 
+relation.   Failing to do this will result in lots of unhappiness.
+The sysadmin will also need to make sure that TCP/IP connections
+are properly enabled in the postgres server hba.conf file.
+
+
 Access Modes
 ------------
 There are four different ways or 'modes' in which to access your 
@@ -202,6 +212,41 @@ shouldn't get wacky, but if you've been running a long time
 and something weird has happened, then a periodic cleanup 
 is good to have.  Maybe this should be automated ...)
 
+Performance
+-----------
+In 'single-user-update' mode,  data loads from the sql database 
+should be 1.5x faster than comparable loads from the XML flat file, 
+at least for medium datasets (measured at 3.5 seconds on a 700MHz 
+Athalon a dataset with 3K transactions and 150 accounts, vs. 4.8 
+seconds loading from file; postgres version 7.1.2).  
+
+Hitting the 'save' button is a no-op and takes no cpu cycles.
+(date is saved as its modified, so a global save is not needed).
+
+'exit' will stall for a few seconds, while a 'vacuum analyze' is 
+issued.  The 'vacuum' reclaims storage, and 'analyze' does some 
+performance tuning.  Doing this regularly improves performance 
+about 20% in the cases I looked at.
+
+---------
+Accounts are restored roughly at the rate of 50-75 per second
+(for above hardware/software config).
+
+---------
+Performance in multi-user mode is still a can of worms, and will 
+be a good bit slower for now. The working assumptions are that
+there are millions of transactions, so you can't load all of them.  
+But to load only a subset is hard, in several ways. First, its
+technically hard to figure out what subset to load.  Then, once
+this is done, it takes about 12 millisecs to load one transaction 
+when loading them one at a time (on an Athalon 700MHz). This is
+about 75 transactions a second. Of this, 90% of the cpu cycles 
+are burned in the postgres server, so 'basic' tuning won't do 
+the trick ... some different algorithm is needed.
+
+Handy for raw-file-loading performance measurement is the the 
+script 'scan-acct.pl' in src/optional/swig/examples'
+
 
 To Be Done
 ----------
@@ -213,9 +258,6 @@ access).
 
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).  
-
--- change code for initial db access. We should query the pg_database
-   table to see if the database already exists.
 
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
    If user hits 'save' in the single-user or multi-user mode, it 
@@ -259,11 +301,6 @@ access).
    there will be other debilitating conditions if the backend disappears,
    leaving the engine in a possibly confused state.
 
-   For example, if postgres user is misconfigured, the LOCK TABLE
-   will fail on session validate, and FINISH_QUERY will close the
-   connection.  Subsequent sql will core dump gnucash, even though this 
-   is a sysadmin error.
-
 -- during open of register window, a query of splits is typically run
    twice (once during open -- LedgerDisplayInternal(), and again
    during LedgerDisplayRefresh()) this results in twice as much data 
@@ -290,15 +327,40 @@ Most of the items on this list are 'good-to-fix' but are not
 truly critical.  They may result in abberations, but general
 operation is probably OK.
 
+-- when an account is edited, price lookups happen *twice* !!
+   once when opend for edit, and again when committed !!
+   (the first one is due to gnc_account_tree_refresh ()
+   called by gnc_account_window_create() near dialog-account.c:1642)
+
+-- nice-to-have performance improvement:
+   many queries are needlessly duplicated, even in multi-user mode.
+   They are duplicated just in case some other user has modified
+   the data.  But if we last checked just a few seconds ago,
+   we don't really need to update, not yet.  We can wait a few 
+   seconds ...  doing this uniformly can cut down on sql traffic.
+   (This is particularly egregious for price queries).  Implement this 
+   by putting a datestamp in along with the version number.  Let
+   the backend check the datastamp, and if its aged less than 
+   15 seconds, skip doing the sql query.)
+
+   DONE --- but we need to detect redundant price queries .. ughh
+
 -- if always in multi-mode, then initial checkpoints not set up.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
 
--- put marks on transactions during FillOut
-
 -- NOTIFY is not updating main window balances ...
 
 -- implement price change events
+
+-- implement a version table so that we can be upwardly compatible 
+   with future database changes.
+
+-- use FOREIGN KEY to ensure that table integrity is maintained.
+
+-- use table constraint ON DELETE to make sure we have no
+   dangling splits when a transaction is deleted.  As added 
+   benefit, this might simplify some logic.
 
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
@@ -322,8 +384,8 @@ operation is probably OK.
    backend can't contact its server, then we should just save up caches,
    and then when contact with backend re-established, we should spit
    them out.  The pgendSync routine should more or less do the trick;
-   note, however, that the file format needs to save the version number
-   ...
+   note, however, that the XML file format needs to save the version 
+   number ...
 
 -- Implement various advanced database features, such as checking the
    user's permission to view/edit account by account ... (hmmm this
@@ -353,16 +415,6 @@ operation is probably OK.
    data, but so what?  versioning is at least partly a people-management
    problem.  Anyway, what's there now should be pretty good & should
    work for now.  Except its mostly untested.
-
--- review & match up against docs at 
-   http://www.lupercalia.net/gnc-db/
-
--- nice-to-have performance improvement:
-   many queries are needlessly duplicated, even in multi-user mode.
-   They are duplicated just in case some other user has modified
-   the data.  But if we last checked just a few seconds ago,
-   we don't really need to update, not yet.  We can wait a few 
-   seconds ...  doing this uniformly can cut down on sql traffic.
 
 -- use version numbers for commodities.  Right now, multi-user
    updates of commodities are not detected (this seem OK for

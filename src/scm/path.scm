@@ -19,8 +19,10 @@
   (let* ((locale (setlocale LC_MESSAGES))
          (strings (cond ((not (string? locale)) ())
                         ((equal? locale "C") ())
-                        ((<= (string-length locale) 2) (list locale))
-                        (else (list (substring locale 0 2) locale)))))
+                        ((<= (string-length locale) 4) (list locale))
+                        (else (list (substring locale 0 2)
+                                    (substring locale 0 5)
+                                    locale)))))
     (reverse (cons "C" strings))))
 
 (define (gnc:default-doc-dirs)
@@ -52,9 +54,14 @@
                   '())))))
     (apply append (map path-interpret new-path))))
 
+(define (gnc:make-dir dir)
+  (if (access? dir X_OK)
+      #t
+      (false-if-exception (mkdir dir #o700))))
+
 (define (gnc:make-home-dir)
   (let ((home-dir (build-path (getenv "HOME") ".gnucash")))
-    (if (access? home-dir X_OK) #t (mkdir home-dir #o700))))
+    (gnc:make-dir home-dir)))
 
 (define gnc:current-config-auto
   (build-path (getenv "HOME") ".gnucash" "config-1.6.auto"))

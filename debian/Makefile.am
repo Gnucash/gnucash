@@ -5,7 +5,6 @@ EXTRA_DIST = \
   README.debian \
   changelog \
   control \
-  control_fr \
   copyright \
   dirs \
   gnucash.menu \

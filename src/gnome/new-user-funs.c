@@ -98,6 +98,14 @@ gnc_new_user_get_balance_editor(void)
   return gtk_object_get_data (GTK_OBJECT (newUserDialog), "balance_editor");
 }
 
+GtkToggleButton *
+gnc_new_user_get_placeholder_checkbox (void)
+{
+  if (!newUserDialog) return NULL;
+
+  return gtk_object_get_data (GTK_OBJECT (newUserDialog), "placeholder");
+}
+
 gboolean
 gnc_new_user_dialog_is_new_user(void)
 {

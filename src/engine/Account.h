@@ -249,6 +249,9 @@ gnc_numeric     xaccAccountGetShareBalance (Account *account);
 gnc_numeric     xaccAccountGetShareClearedBalance (Account *account);
 gnc_numeric     xaccAccountGetShareReconciledBalance (Account *account);
 
+void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
+
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 gnc_numeric     xaccAccountGetShareBalanceAsOfDate (Account *account,
                                                     time_t date);
@@ -256,7 +259,7 @@ gnc_numeric     xaccAccountGetShareBalanceAsOfDate (Account *account,
 Split *         xaccAccountGetSplit (Account *account, int i);
 int             xaccAccountGetNumSplits (Account *account);
 
-GList*          xaccAccountGetSplitList (Account *account);
+SplitList*      xaccAccountGetSplitList (Account *account);
 
 gboolean        xaccAccountGetTaxRelated (Account *account);
 void            xaccAccountSetTaxRelated (Account *account,
@@ -267,6 +270,10 @@ void            xaccAccountSetTaxUSCode (Account *account, const char *code);
 const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
 void            xaccAccountSetTaxUSPayerNameSource (Account *account,
                                                     const char *source);
+
+gboolean        xaccAccountGetPlaceholder (Account *account);
+void            xaccAccountSetPlaceholder (Account *account,
+                                           gboolean option);
 
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed
@@ -355,8 +362,9 @@ void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
 const char * xaccAccountGetQuoteTZ (Account *account);
 
 
+typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
 gpointer xaccAccountForEachSplit(Account *account,
-                                 gpointer (*thunk)(Split *s, gpointer data),
+                                 SplitCallback,
                                  gpointer data);
 
 /* Traverse all of the transactions in the given account.  Continue
@@ -372,10 +380,10 @@ gpointer xaccAccountForEachSplit(Account *account,
    
    The result of this function will not be FALSE IFF every relevant
    transaction was traversed exactly once.  */
-gboolean
-xaccAccountForEachTransaction(Account *account,
-                              gboolean (*proc)(Transaction *t, void *data),
-                              void *data);
+typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
+gboolean xaccAccountForEachTransaction(Account *account,
+                                       TransactionCallback,
+                                       void *data);
 
 /* Visit every transaction in the account that hasn't already been
    visited exactly once.  visited_txns must be a hash table created
@@ -388,8 +396,7 @@ xaccAccountForEachTransaction(Account *account,
    transaction was traversed exactly once.  */
 gboolean
 xaccAccountVisitUnvisitedTransactions(Account *account,
-                                      gboolean (*proc)(Transaction *t,
-                                                       void *data),
+                                      TransactionCallback,
                                       void *data,
                                       GHashTable *visited_txns);
 

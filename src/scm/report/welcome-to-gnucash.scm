@@ -37,7 +37,7 @@
        (gnc:lookup-option options section name) value))
 
     (set! options (gnc:report-options (gnc:find-report view)))
-    (set-option! "General" "Report name" "Welcome to GnuCash 1.6")
+    (set-option! "General" "Report name" (_ "Welcome to GnuCash 1.6"))
     (set-option! "General" "Number of columns" 2)
 
     ;; mark the reports as needing to be saved 

@@ -8,16 +8,15 @@ Short instructions:
 You'll need to be root.  (It is possible to avoid this requirement,
 but I haven't done the work to the RPM.)
 
+cp gnucash-x.x.x.tar.gz /usr/src/redhat/SOURCES
+cp gnucash.spec /usr/src/redhat/SPECS
 cd /usr/src/redhat/SOURCES
-tar -zxvf xacc-1.x.tar.gz
-cp xacc-1.x/rpm/xacc.spec ../SPECS
-cp xacc-1.x/rpm/xacc.wmconfig .
-
 cd /usr/src/redhat/SPECS
-rpm -ba xacc.spec
+rpm -ba gnucash.spec
 
 wait a bit, and a new binary rpm will be in
 /usr/src/redhat/RPMS/<arch> and a new src.rpm will be in
 /usr/src/redhat/SRPMS.
 
-
+There is also an alternative spec file to build gnucash with sql support. If
+you want this just use gnucash-sql.spec instead of the normal one.

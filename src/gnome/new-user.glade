@@ -553,6 +553,25 @@ accounts may have an opening balance.</label>
 	    </child>
 
 	    <widget>
+	      <class>GtkCheckButton</class>
+	      <name>placeholder</name>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>toggled</name>
+		<handler>on_finalAccountCTree_tree_placeholder_toggled</handler>
+		<last_modification_time>Sat, 06 Apr 2002 22:22:19 GMT</last_modification_time>
+	      </signal>
+	      <label>Placeholder</label>
+	      <active>False</active>
+	      <draw_indicator>True</draw_indicator>
+	      <child>
+		<padding>2</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
 	      <class>GtkFrame</class>
 	      <name>frame3</name>
 	      <label>Opening Balance</label>

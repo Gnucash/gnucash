@@ -15,14 +15,14 @@ SUBDIRS = \
   test
 
 # Engine Makefile.am file.
-bin_PROGRAMS = gnucash
+bin_PROGRAMS = gnucash gnucash-make-guids
 
 # libraries show up twice because they both provide functions for
 # other libs and use functions from other libs.  These mutual
 # dependencies need to go away.  The libgwrap one in particular is a
 # problem with the current version of gwrap, and will go away when
 # that's fixed.
-LDADD = \
+gnucash_LDADD = \
   gnome/libgncgnome.a \
   register/libgncregister.a \
   register/gnome/libgncregistergnome.a \
@@ -31,13 +31,13 @@ LDADD = \
   calculation/libgnccalc.a \
   engine/libgncengine.la \
   ${GNOMEUI_LIBS} \
+  ${GUPPI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GTKHTML_LIBS} \
   ${GHTTP_LIBS} \
-  ${GUPPI_LIBS} \
   ${DB_LIBS} \
   ${INTLLIBS} \
   ${EFENCE_LIBS}
@@ -50,7 +50,18 @@ gnucash_SOURCES = \
   gnc-component-manager.c \
   gnc-exp-parser.c \
   gnc-main.c \
-  gnc-ui-util.c
+  gnc-ui-util.c \
+  messages.c
+
+gnucash_make_guids_LDADD = \
+  engine/libgncengine.la \
+  ${DL_LIB} \
+  ${GNOME_XML_LIB} \
+  ${GLIB_LIBS} \
+  ${INTLLIBS}
+
+gnucash_make_guids_SOURCES = \
+  gnucash-make-guids.c
 
 noinst_HEADERS = \
   AccWindow.h \

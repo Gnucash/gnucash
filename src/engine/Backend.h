@@ -49,9 +49,16 @@ typedef enum {
   ERR_BACKEND_CANT_CONNECT, /* bad dbname/login/passwd or network failure */
   ERR_BACKEND_CONN_LOST,    /* Lost connection to server */
   ERR_BACKEND_LOCKED,       /* in use by another user (ETXTBSY) */
+  ERR_BACKEND_TOO_NEW,      /* file/db version newer than what we can read */
   ERR_BACKEND_DATA_CORRUPT, /* data in db is corrupt */
   ERR_BACKEND_SERVER_ERR,   /* error in response from server */
   ERR_BACKEND_ALLOC,        /* internal memory allocation failure */
+  ERR_BACKEND_PERM,         /* user login successful, but no permissions 
+                             * to access the desired object */
+  ERR_BACKEND_MODIFIED,     /* commit of object update failed because 
+                             * another user has modified the object */
+  ERR_BACKEND_MOD_DESTROY,  /* commit of object update failed because 
+                             * another user has deleted the object */
   ERR_BACKEND_MISC,         /* undetermined error */
 
   /* fileio errors */
@@ -59,7 +66,6 @@ typedef enum {
   ERR_FILEIO_FILE_EMPTY,     /* file exists, is readable, but is empty */
   ERR_FILEIO_FILE_LOCKERR,   /* mangled locks (unspecified error) */
   ERR_FILEIO_FILE_NOT_FOUND, /* not found / no such file */
-  ERR_FILEIO_FILE_TOO_NEW,   /* file version newer than what we can read */
   ERR_FILEIO_FILE_TOO_OLD,   /* file version so old we can't read it */
   ERR_FILEIO_UNKNOWN_FILE_TYPE,
   
@@ -70,6 +76,8 @@ typedef enum {
 
   /* database errors */
   ERR_SQL_MISSING_DATA = 3000,  /* database doesn't contain expected data */
+  ERR_SQL_DB_TOO_OLD,           /* database is old and needs upgrading */
+  ERR_SQL_DB_BUSY,              /* database is busy, cannot upgrade version */
 
   /* RPC errors */
   ERR_RPC_HOST_UNK = 4000,	/* Host unknown */

@@ -9,6 +9,7 @@ aclocal.m4
 configure
 config.cache
 config.guess
+config.rpath
 config.sub
 config.log
 config.status
@@ -24,6 +25,7 @@ ltconfig
 ltmain.sh
 make-gnucash-patch
 stamp-h
+stamp-h1
 stamp-h.in
 install-stamp
 tags

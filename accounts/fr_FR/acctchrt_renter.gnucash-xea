@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Dépenses de location 
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Dépenses associées avec la location d'un logement
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Vous devriez sélectionner cet ensemble de comptes si vous louez une maison ou un appartement (location, assurance du locataire).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Dépenses</act:name>
+  <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dépenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assurance</act:name>
+  <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assurance</act:description>
+  <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assurance locative</act:name>
+  <act:id type="new">a4c93c964b8322d534e35b7054cbda4d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assurance locative</act:description>
+  <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Location</act:name>
+  <act:id type="new">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Location</act:description>
+  <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

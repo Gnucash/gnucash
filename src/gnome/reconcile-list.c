@@ -29,6 +29,7 @@
 #include "FileDialog.h"
 #include "date.h"
 #include "dialog-utils.h"
+#include "global-options.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "reconcile-list.h"
@@ -98,6 +99,7 @@ GtkWidget *
 gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 {
   GNCReconcileList *list;
+  gboolean include_children;
 
   g_assert(account != NULL);
   g_assert((type == RECLIST_DEBIT) || (type == RECLIST_CREDIT));
@@ -113,6 +115,20 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 
   /* match the account */
   xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);
+
+  include_children = xaccAccountGetReconcileChildrenStatus(account);
+  if(include_children)
+  {
+    /* match child accounts */
+    AccountGroup *account_group = xaccAccountGetChildren(account);
+    GList *children_list = xaccGroupGetSubAccounts(account_group);
+    GList *node;
+
+    for (node = children_list; node; node = node->next)
+      xaccQueryAddSingleAccountMatch (list->query, node->data, QUERY_OR);
+
+    g_list_free (children_list);
+  }
 
   if (type == RECLIST_CREDIT)
     DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
@@ -242,10 +258,88 @@ gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
 }
 
 static void
+gnc_reconcile_list_toggle_row(GNCReconcileList *list, gint row)
+{
+  Split *split, *current;
+
+  g_assert (IS_GNC_RECONCILE_LIST(list));
+  g_assert (list->reconciled != NULL);
+
+  if (list->no_toggle)
+    return;
+
+  split = gtk_clist_get_row_data (GTK_CLIST(list), row);
+  current = g_hash_table_lookup (list->reconciled, split);
+
+  list->current_split = split;
+
+  if (current == NULL)
+    g_hash_table_insert (list->reconciled, split, split);
+  else
+    g_hash_table_remove (list->reconciled, split);
+
+  update_toggle (GTK_CLIST (list), row);
+}
+
+static void
+gnc_reconcile_list_toggle_children(Account *account, GNCReconcileList *list, Split *split)
+{
+  AccountGroup *account_group;
+  GList *child_accounts, *node;
+  Transaction *transaction;
+
+  /*
+   * Need to get all splits in this transaction and identify any that are
+   * in the same heirarchy as the account being reconciled (not necessarily
+   * the account this split is from.)
+   *
+   * For each of these splits toggle them all to the same state.
+   */
+  account_group = xaccAccountGetChildren(account);
+  child_accounts = xaccGroupGetSubAccounts(account_group);
+  child_accounts = g_list_prepend(child_accounts, account);
+  transaction = xaccSplitGetParent(split);
+  for(node = xaccTransGetSplitList(transaction); node; node = node->next)
+  {
+    Split *other_split;
+    Transaction *other_transaction;
+    Account *other_account;
+    GNCReconcileList *current_list;
+    gint row;
+    GtkCList *split_list;
+
+    other_split = node->data;
+    other_transaction = xaccSplitGetParent(other_split);
+    other_account = xaccSplitGetAccount(other_split);
+    if(other_split == split)
+      continue;
+    /* Check this 'other' account in in the same heirarchy */
+    if(!g_list_find(child_accounts,other_account))
+      continue;
+    /* Search our sibling list for this spliti first.  We search the 
+     * sibling list first because that it where it is most likely to be.
+     */
+    current_list = list->sibling;
+    row = gtk_clist_find_row_from_data(GTK_CLIST(&current_list->clist), other_split);
+    if(row == -1) {
+      /* Not in the sibling list, try this list */
+      current_list = list;
+      row = gtk_clist_find_row_from_data(GTK_CLIST(&current_list->clist), other_split);
+      if(row == -1)
+	/* We can't find it, nothing more I can do about it */
+	continue;
+    }
+    gnc_reconcile_list_toggle_row(current_list, row);
+  }
+}
+
+static void
 gnc_reconcile_list_toggle (GNCReconcileList *list)
 {
   Split *split, *current;
   gint row;
+  Account * account;
+  gboolean include_children;
 
   g_assert (IS_GNC_RECONCILE_LIST(list));
   g_assert (list->reconciled != NULL);
@@ -265,6 +359,10 @@ gnc_reconcile_list_toggle (GNCReconcileList *list)
     g_hash_table_remove (list->reconciled, split);
 
   update_toggle (GTK_CLIST (list), row);
+
+  include_children = xaccAccountGetReconcileChildrenStatus(list->account);
+  if(include_children)
+    gnc_reconcile_list_toggle_children(list->account, list, split);
 
   gtk_signal_emit (GTK_OBJECT (list),
                    reconcile_list_signals[TOGGLE_RECONCILED], split);
@@ -655,8 +753,13 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   GNCPrintAmountInfo print_info;
   GNCAccountType account_type;
   Transaction *trans;
+  gboolean auto_check;
   GList *splits;
   Split *split;
+
+  auto_check = gnc_lookup_boolean_option ("Reconcile",
+                                          "Check off cleared transactions",
+                                          TRUE);
 
   account_type = xaccAccountGetType (list->account);
   strings[5] = NULL;
@@ -701,7 +804,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[3] = xaccPrintAmount (gnc_numeric_abs (amount), print_info);
     strings[4] = "";
 
-    if (list->first_fill && recn == CREC)
+    if (list->first_fill && auto_check && recn == CREC)
       g_hash_table_insert (list->reconciled, split, split);
 
     row = gtk_clist_append (GTK_CLIST(list), (gchar **) strings);

@@ -3,33 +3,34 @@
 <ARTHEADER>
 <TITLE>Fontes de Cotações</TITLE>
 </ARTHEADER>
-
 <sect1>
-<TITLE>Fontes de Cotações</TITLE>
+<TITLE>Fontes de Cotações para Actualização Automática de Preços</TITLE>
 
-<para><emphasis>ESTE MATERIAL TEM DE SER REESCRITO PARA A 1.6!!!</emphasis
-</para>
-
-<PARA>O GnuCash disponibiliza um sistema de obtenção de cotações 
-algo rudimentar.
-Se uma <LINK LINKEND="STOCKACCT">conta de acções</LINK> do GnuCash 
-estiver correctamente configurada, e o computador estiver conectado à 
-Internet, o programa <APPLICATION>gnc-prices</APPLICATION> poderá ser 
-utilizado para carregar cotações de acções e outros papeis, a partir de 
-vários servidores na web, directamente para o GnuCash.
+<PARA>Para obter actualizações automáticas de preços da internet para 
+<LINK LINKEND="STOCKACCT">contas de acções</LINK>, você necessita de 
+definir apropriadamente a fonte de cotações.  Isto pode ser feito na 
+nova janela de conta, quando a conta é criada, ou modificado em qualquer 
+altura seleccionando a conta na janela de contas, e escolhendo "editar 
+conta" do menu principal.  Ambas as janelas têm uma secção chamada 
+"Fonte de Cotações".
 </PARA>
 
-<PARA>Isto é o que tem a fazer:
+<para>Para activar a actualização automática de preços, faça o seguinte:</para>
 
 <ITEMIZEDLIST>
   <LISTITEM>
-    <PARA>Crie uma conta e marque-a como sendo do tipo "Fundos de  
-      Investimento" ou "Acções".
+      <para>
+        Cretifique-se que a caixa de selecção "obter cotações online" está picada.
+        
     </PARA>
   </LISTITEM>
   <LISTITEM>
-    <PARA>Introduza um símbolo de ticker válido na caixa denominada "Activo:"
-     </PARA>
+    <PARA>Introduza um símbolo de ticker válido na caixa de texto marcada 
+    "Activo:" Um símbolo de ticker é o código que identifica a acção ou 
+    fundo - usando um exemplo familiar, o símbolo de ticker da International 
+    Business Machines é IBM, listado na Bolsa de Nova York. Dando outro exemplo, 
+    a McDonald's Corpororation é MCD e a Electricidade de Portugal é EDP.
+  </para>
   </LISTITEM>
   <LISTITEM>
     <PARA>Seleccione uma fonte de cotações a partir do menu de selecção. De momento 
@@ -46,6 +47,7 @@ vários servidores na web, directamente para o GnuCash.
     informação incorrecta!). Caso seleccione Yahoo Europa, deverá adicionar 
     o código de mercado para o activo, tal como PA para Paris, BE para 
     Berlim, etc. Exemplo: 12150.PA (um papel Peugeot no mercado de Paris).
+    A tabela abaixo lista os códigos para os vários mercados.
     </PARA>
   </LISTITEM>
   <LISTITEM>
@@ -72,15 +74,25 @@ vários servidores na web, directamente para o GnuCash.
       Group</EMPHASIS> deverão estar em dólares americanos (USD).
         </PARA>
 </LISTITEM>
-</ITEMIZEDLIST>
-      
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+    </itemizedlist>
+  </para>
+      </listitem>
 
-<caution>
-          <para>Note que a BVL não é suportada pelo Yahoo Europa.</para>
-</caution>
+<listitem>      
+<para>Seleccione a configuração correcta de fuso-horário (CORRIGIR: QUAL É A CONFIGURAÇÃO 
+CORRECTA DE FUSO-HORÁRIO???)
+        </para></listitem>
+  </ITEMIZEDLIST>
+
+<note>
+<para>Instruções para actualizar as cotações encontram-se na documentação 
+no <link linkend="xacc-price-editor">editor de cotações</link>.
+</para>
+</note>
+
+<note>
+<PARA>Note que a BVL não é suportada pelo Yahoo Europa.</PARA>
+</note>
 
     <TABLE>
 <TITLE>Lista de Códigos para os Mercados Europeus</TITLE>
@@ -234,61 +246,6 @@ vários servidores na web, directamente para o GnuCash.
 </TGROUP>
 </TABLE>
 
-</PARA>
-
-<PARA>Uma imagem simples é mostrada abaixo:
-<INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/ticker-a.png">
-</IMAGEOBJECT>
-<TEXTOBJECT>
-<PHRASE>Diagrama Simples</PHRASE>
-</TEXTOBJECT>
-</INLINEMEDIAOBJECT>
-
-    </PARA>
-<PARA>Para actualizar os preços armazenados num ficheiro de conta gnucash, execute 
-    o comando de consola <APPLICATION>gnc-price</APPLICATION>, especificando o nome 
-    do ficheiro; por exemplo:
-<COMMAND>    gnc-prices minhascontas.xac</COMMAND>
-
-    </PARA>
-<PARA>Executar este comando irá imprimir várias mensagens de diagnóstico 
-    para o ecrã à medida que os dados são carregados. Apenas funcionará 
-    quando o computador estiver conectado à Internet. É possível funcionar 
-    em conjunto com firewalls e servidores proxy estilo masquerading.
-
-    </PARA>
-<PARA>O comando pode ser executado várias vezes no mesmo dia; no entanto, 
-    irá actualizar as contas no máximo uma vez com os mais recentes dados 
-    da sessão.
-
-    Assim, se o <APPLICATION>gnc-prices</APPLICATION> for executado na 
-    Sexta-Feira, Sábado, Domingo e Segunda-Feira, apenas duas entradas 
-    serão feitas: uma contendo os dados de Sexta-feira, e outra com os 
-    dados de Segunda-Feira, visto as execuções de Sábado e Domingo apenas 
-    devolverem as cotações de fecho de Sexta-feira.
-
-    </PARA>
-<PARA>Para impedir o <APPLICATION>gnc-prices</APPLICATION> de actualizar 
-    uma conta, deixando-o actualizar outra, simplesmente marque a fonte 
-    de cotações para essa conta como <SCREEN>(nenhuma)</SCREEN>. Pode faze-lo 
-    a partir da janela <GUIMENU>Editar Conta</GUIMENU>.
-
-    </PARA>
-<PARA>Após correr o <APPLICATION>gnc-prices</APPLICATION> durante uns dias, as 
-    suas contas começarão a ter a seguinte aparência:
-     <INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/ticker-b.png">
-</IMAGEOBJECT>
-<TEXTOBJECT>
-<PHRASE>Últimas Listagens do Ticker</PHRASE>
-</TEXTOBJECT>
-</INLINEMEDIAOBJECT>
-
-
-</PARA>
 </SECT1>
 </ARTICLE>
 

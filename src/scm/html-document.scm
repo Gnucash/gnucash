@@ -235,8 +235,10 @@
              (push (lambda (l) (set! retval (cons l retval))))
              (add-internal-tag (lambda (tag) (push "<") (push tag) (push ">")))
              (add-attribute
-              (lambda (key value prior) (push " ") (push key) (push "=")
-                      (push value) #t))
+              (lambda (key value prior) (push " ") (push key) 
+		      (if value (begin (push "=")
+				       (push value)))
+		      #t))
              (addextraatt
               (lambda (attr)
                 (cond ((string? attr) (push " ") (push attr))

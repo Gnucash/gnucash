@@ -100,6 +100,7 @@ struct _AccountWindow
   GtkWidget * quote_tz_menu;
 
   GtkWidget * tax_related_button;
+  GtkWidget * placeholder_button;
 
   gint component_id;
 };
@@ -143,7 +144,7 @@ gnc_account_to_ui(AccountWindow *aw)
   Account *account = aw_get_account (aw);
   gnc_commodity * commodity;
   const char *string;
-  gboolean tax_related;
+  gboolean tax_related, placeholder;
   gint pos = 0;
 
   if (!account)
@@ -179,6 +180,10 @@ gnc_account_to_ui(AccountWindow *aw)
   tax_related = xaccAccountGetTaxRelated (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->tax_related_button),
                                 tax_related);
+
+  placeholder = xaccAccountGetPlaceholder (account);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->placeholder_button),
+                                placeholder);
 
   if ((STOCK != aw->type) && (MUTUAL != aw->type) && (CURRENCY != aw->type))
     return;
@@ -274,7 +279,7 @@ gnc_ui_to_account(AccountWindow *aw)
   Account *parent_account;
   const char *old_string;
   const char *string;
-  gboolean tax_related;
+  gboolean tax_related, placeholder;
   gnc_numeric balance;
   gboolean use_equity;
   time_t date;
@@ -366,6 +371,10 @@ gnc_ui_to_account(AccountWindow *aw)
   tax_related =
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
   xaccAccountSetTaxRelated (account, tax_related);
+
+  placeholder =
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->placeholder_button));
+  xaccAccountSetPlaceholder (account, placeholder);
 
   parent_account =
     gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE(aw->parent_tree));
@@ -1639,6 +1648,14 @@ gnc_account_window_create(AccountWindow *aw)
   aw->parent_tree = gnc_account_tree_new_with_root(aw->top_level_account);
   gtk_clist_column_titles_hide(GTK_CLIST(aw->parent_tree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(aw->parent_tree));
+
+  /* hack alert -- why do we need to refresh just to put up an account 
+   * edit window?  This refresh triggers a massive retraversal
+   * of the price database (presumably to compute account balances)
+   * and can suck up a lot of cpu juice from the SQL backend as 
+   * a result.  We should only refresh the account names, not
+   * the balances here.
+   */
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(aw->parent_tree));
   gnc_account_tree_expand_account(GNC_ACCOUNT_TREE(aw->parent_tree),
                                   aw->top_level_account);
@@ -1650,6 +1667,7 @@ gnc_account_window_create(AccountWindow *aw)
 		     GTK_SIGNAL_FUNC(gnc_parent_tree_select), aw);
 
   aw->tax_related_button = gtk_object_get_data (awo, "tax_related_button");
+  aw->placeholder_button = gtk_object_get_data (awo, "placeholder_button");
 
   box = gtk_object_get_data(awo, "opening_balance_box");
   amount = gnc_amount_edit_new ();

@@ -4,6 +4,7 @@
 lib_LTLIBRARIES = libgnc_postgres.la
 libgnc_postgres_la_LDFLAGS = -version-info 7:0:7
 
+libgnc_postgres_la_LIBADD = ../libgncengine.la
 
 libgnc_postgres_la_SOURCES = \
   PostgresBackend.c \
@@ -15,7 +16,8 @@ libgnc_postgres_la_SOURCES = \
   gncquery.c \
   kvp-sql.c \
   price.c \
-  txn.c
+  txn.c \
+  txnmass.c
 
 noinst_HEADERS = \
   PostgresBackend.h \
@@ -28,7 +30,8 @@ noinst_HEADERS = \
   kvp-sql.h \
   price.h \
   putil.h \
-  txn.h
+  txn.h \
+  txnmass.h
 
 EXTRA_DIST = \
   .cvsignore \
