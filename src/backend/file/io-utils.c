@@ -66,14 +66,14 @@ write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
         AccountGroup *newgrp;
         
         accnode = gnc_account_dom_tree_create((Account*)(node->data),
-					      gd && gd->exporting);
+                                              gd && gd->exporting);
 
         xmlElemDump(out, NULL, accnode);
         fprintf(out, "\n");
 
         xmlFreeNode(accnode);
-	gd->counter.accounts_loaded++;
-	run_callback(gd, "account");
+        gd->counter.accounts_loaded++;
+        run_callback(gd, "account");
 
         newgrp = xaccAccountGetChildren((Account*)(node->data));
 
