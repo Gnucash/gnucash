@@ -38,21 +38,40 @@ that the partitioned accounts, transactions and splits are really
 moved to a new book -- things like entity tables must be cleared
 and repopulated correctly.
 
-An equity transfer is made ...
-key-value pairs are set ...
-The sched xactions are not copied ...
+This routine intentionally does not copy scheduled/recurring 
+transactions.
+
+TBD:
+-- Make an equity transfer so that we can carry forward the balances.
+-- set kvp values indicating that the books were split.
 
  */
 GNCBook * gnc_book_partition (GNCBook *, Query *);
 
-void xaccBookInsertTrans (GNCBook *book, Transaction *trans);
+/* The gnc_book_insert_trans() routine takes an existing transaction
+ *    that is located in one book, and moves it to another book.
+ *    It moves all of the splits as well.  In the course of the 
+ *    move, the transaction is literally deleted from the first 
+ *    book as its placed into the second.  The transaction and
+ *    split GUID's are not changed in the move.  This routine 
+ *    assumes that twin accounts already exist in both books 
+ *    (and can be located with the standard twining proceedure).
+ */
+
+void gnc_book_insert_trans (GNCBook *book, Transaction *trans);
 
 #endif XACC_PERIOD_H
 
+#include "AccountP.h"
 #include "gnc-book-p.h"
+#include "gnc-engine-util.h"
+#include "gnc-event-p.h"
 #include "GroupP.h"
+#include "kvp-util-p.h"
 #include "TransactionP.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
 
 /* ================================================================ */
 /* reparent transaction to new book, and do it so backends 
@@ -60,12 +79,15 @@ void xaccBookInsertTrans (GNCBook *book, Transaction *trans);
 */
 
 void
-xaccBookInsertTrans (GNCBook *book, Transaction *trans)
+gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 {
    Transaction *newtrans;
    GList *node;
 
-   if (!trans) return;
+   if (!trans || !book) return;
+   
+   /* if this is the same book, its a no-op. */
+   if (trans->book == book) return;
 
    newtrans = xaccDupeTransaction (trans);
 
@@ -112,6 +134,7 @@ xaccBookInsertTrans (GNCBook *book, Transaction *trans)
 GNCBook * 
 gnc_book_partition (GNCBook *existing_book, Query *query)
 {
+   time_t now;
    GList *split_list, *snode;
    GNCBook *partition_book;
    AccountGroup *part_topgrp;
@@ -135,11 +158,16 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
       Split *s = snode->data;
       Transaction *trans = s->parent;
 
-      xaccBookInsertTrans (partition_book, trans);
+      gnc_book_insert_trans (partition_book, trans);
 
    }
    xaccAccountGroupCommitEdit (existing_book->topgroup);
    xaccAccountGroupCommitEdit (partition_book->topgroup);
+
+   /* make note of the sibling books */
+   now = time(0);
+   gnc_kvp_gemini (existing_book->kvp_data, NULL, &partition_book->guid, now);
+   gnc_kvp_gemini (partition_book->kvp_data, NULL, &existing_book->guid, now);
 
    return partition_book;
 }
