@@ -14,8 +14,11 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -540,6 +543,15 @@ gnc_configure_reverse_balance_cb(void *not_used)
 }
 
 static gncBoolean reverse_type[NUM_ACCOUNT_TYPES];
+
+gncBoolean
+gnc_reverse_balance_type(int type)
+{
+  if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
+    return GNC_F;
+
+  return reverse_type[type];
+}
 
 gncBoolean
 gnc_reverse_balance(Account *account)
