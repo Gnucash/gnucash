@@ -1,3 +1,17 @@
+2004-06-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/main-window.scm, src/scm/main.scm: Added example Menu
+	item "File -> Save all reports" that will call the new report
+	saving function for all reports. Reports are appended to
+	~/.gnucash/saved-reports-1.8 . This would need more work so that
+	not all reports are saved but only the currently selected one --
+	any volunteer may feel free to add that.
+
+	* src/report/report-system/report.scm, report-system.scm: Added
+	gnc:report-generate-saved-forms that will generate the scheme code
+	necessary to create a new report from the saved options of an old
+	report (merged from 1-8-branch).
+
 2004-06-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/paths.scm: create gnc:current-saved-reports, as

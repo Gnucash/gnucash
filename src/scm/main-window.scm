@@ -162,6 +162,18 @@ the account instead of opening a register.") #f))
               (force-output)))
           (gnc:mdi-save (gnc:mdi-get-current) book-url)))))
 
+(define (gnc:main-window-save-report)
+  (let ((conf-file-name gnc:current-saved-reports))
+    ;;(display conf-file-name)
+    (with-output-to-port (open-file conf-file-name "a")
+      (lambda ()
+	(hash-fold
+	 (lambda (k v p)
+	   (display
+	    (gnc:report-generate-saved-forms v)))
+	 #t *gnc:_reports_*)
+	(force-output)))))
+
 (define (gnc:main-window-book-close-handler session)
     (gnc:main-window-save-state session)
 

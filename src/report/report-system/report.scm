@@ -135,6 +135,12 @@
 	    (gnc:report-template-name templ))
         #f)))
 
+(define (gnc:report-template-renderer/name template-name)
+  (let ((templ (hash-ref *gnc:_report-templates_* template-name)))
+    (if templ
+	(gnc:report-template-renderer templ)
+        #f)))
+
 (define (gnc:report-template-new-options report-template)
   (let ((generator (gnc:report-template-options-generator report-template))
         (namer 
@@ -352,6 +358,31 @@
    (simple-format 
     #f "  (gnc:restore-report ~S ~S options))\n"
     (gnc:report-id report) (gnc:report-type report))))
+
+(define (gnc:report-generate-saved-forms report)
+  ;; clean up the options if necessary.  this is only needed 
+  ;; in special cases.  
+  (let* ((template 
+          (hash-ref  *gnc:_report-templates_* 
+                     (gnc:report-type report)))
+         (thunk (gnc:report-template-options-cleanup-cb template)))
+    (if thunk 
+        (thunk report)))
+  
+  ;; save them 
+  (string-append 
+   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+   (simple-format #f ";; Options for saved report ~S, based on template ~S\n"
+		  (gnc:report-name report) (gnc:report-type report))
+   (simple-format
+    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/name ~S)))\n"
+    (gnc:report-type report))
+   (gnc:generate-restore-forms (gnc:report-options report) "options")
+   "  options))\n"
+   (simple-format 
+    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'options-generator options-gen\n  'renderer (gnc:report-template-renderer/name ~S)))\n\n"
+    (gnc:report-name report)
+    (gnc:report-type report))))
 
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
