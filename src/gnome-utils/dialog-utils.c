@@ -642,9 +642,6 @@ gtk_window_present (GtkWindow *window)
   }
 }
 
-#define GDK_MODIFIER_CHECK (GDK_CONTROL_MASK | GDK_MOD1_MASK | \
-			    GDK_MOD2_MASK    | GDK_MOD3_MASK | \
-			    GDK_MOD4_MASK    | GDK_MOD5_MASK)
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
@@ -667,13 +664,10 @@ gnc_handle_date_accelerator (GdkEventKey *event,
                   tm->tm_mon + 1,
                   tm->tm_year + 1900);
 
-  /* Alphabetic keys cannot have modifiers, or they must be passed on
-     to the system. */
-  if ((gdk_keyval_is_upper(event->keyval) ||
-       gdk_keyval_is_lower(event->keyval)) &&
-      (event->state & GDK_MODIFIER_CHECK))
-      return FALSE;
-
+  /* 
+   * Check those keys where the code does different things depending
+   * upon the modifiers.
+   */
   switch (event->keyval)
   {
     case GDK_KP_Add:
@@ -687,7 +681,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_add_years (&gdate, 1);
       else
         g_date_add_days (&gdate, 1);
-      break;
+      g_date_to_struct_tm (&gdate, tm);
+      return TRUE;
 
     case GDK_minus:
       if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
@@ -725,8 +720,25 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         g_date_subtract_years (&gdate, 1);
       else
         g_date_subtract_days (&gdate, 1);
-      break;
+      g_date_to_struct_tm (&gdate, tm);
+      return TRUE;
 
+    default:
+      break;
+  }
+
+  /*
+   * Control and Alt key combinations should be ignored by this
+   * routine so that the menu system gets to handle them.  This
+   * prevents weird behavior of the menu accelerators (i.e. work in
+   * some widgets but not others.)
+   */
+  if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    return FALSE;
+
+  /* Now check for the remaining keystrokes. */
+  switch (event->keyval)
+  {
     case GDK_braceright:
     case GDK_bracketright:
       /* increment month */
