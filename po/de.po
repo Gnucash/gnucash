@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-12-30 02:00+0100\n"
-"PO-Revision-Date: 2002-12-30 02:13+0100\n"
+"POT-Creation-Date: 2002-12-30 18:28+0100\n"
+"PO-Revision-Date: 2002-12-30 18:29+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -10458,8 +10458,8 @@ msgstr "Systemweite Ländereinstellung"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:570
-msgid "Default Currency"
-msgstr "Standardwährung"
+msgid "New Account Default Currency"
+msgstr "Standardwährung für neue Konten"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:572

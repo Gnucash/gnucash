@@ -354,7 +354,7 @@ gnc_default_currency (void)
   gnc_commodity *currency;
 
   currency = gnc_lookup_currency_option ("International",
-                                         "Default Currency", NULL);
+                                         "New Account Default Currency", NULL);
   if (currency)
     return currency;
 

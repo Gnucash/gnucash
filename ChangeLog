@@ -1,5 +1,10 @@
 2002-12-30  Christian Stimming  <stimming@tuhh.de>
 
+	* src/app-utils/prefs.scm, src/app-utils/global-options.c: Rename
+	"Default currency" option to "New Account default currency" since
+	*everybody* asks about that one.  Was reported in #102043, 
+	#100466, #99364, #87729.
+
 	* src/business/business-gnome/dialog-invoice.c
 	(gnc_invoice_id_changed_cb): More i18n fixes. Don't split up
 	strings.

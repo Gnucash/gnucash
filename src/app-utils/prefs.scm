@@ -160,7 +160,7 @@
 
 (gnc:register-configuration-option
  (gnc:make-currency-option
-  (N_ "International") (N_ "Default Currency")
+  (N_ "International") (N_ "New Account Default Currency")
   "b" (N_ "Default currency for new accounts")
   (gnc:locale-default-iso-currency-code)))
 
