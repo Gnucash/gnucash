@@ -80,6 +80,9 @@ gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
   if (cb_cell == NULL)
     return;
 
+  cb_cell->cell = NULL;
+  cb_cell->cell_type = -1;
+
   g_free(cb_cell->label);
   cb_cell->label = NULL;
 

@@ -978,6 +978,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->cursor_journal_double = NULL;
   reg->cursor_split = NULL;
 
+  xaccDestroyBasicCell     (reg->nullCell);
   xaccDestroyDateCell      (reg->dateCell);
   xaccDestroyNumCell       (reg->numCell);
   xaccDestroyQuickFillCell (reg->descCell);
@@ -999,6 +1000,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyPriceCell     (reg->tbalanceCell);
   xaccDestroyQuickFillCell (reg->notesCell);
 
+  reg->nullCell     = NULL;
   reg->dateCell     = NULL;
   reg->numCell      = NULL;
   reg->descCell     = NULL;

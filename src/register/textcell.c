@@ -69,11 +69,6 @@ xaccMallocTextCell (void)
 void
 xaccInitTextCell (BasicCell *cell)
 {
-   xaccInitBasicCell (cell);
-
-   g_free (cell->value);
-   cell->value = g_strdup ("");
-
    cell->modify_verify = TextMV;
 }
 

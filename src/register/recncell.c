@@ -54,6 +54,8 @@ static RecnCellStringGetter string_getter = NULL;
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
+static void RecnSetValue (BasicCell *_cell, const char *value);
+
 
 /* ================================================ */
 
@@ -107,12 +109,23 @@ RecnEnter (BasicCell *_cell,
 
 /* ================================================ */
 
+static void
+xaccInitRecnCell (RecnCell *cell)
+{
+  xaccInitBasicCell(&cell->cell);
+
+  xaccRecnCellSetFlag(cell, NREC);
+
+  cell->cell.enter_cell = RecnEnter;
+  cell->cell.set_value = RecnSetValue;
+}
+
 RecnCell *
 xaccMallocRecnCell (void)
 {
   RecnCell * cell;
 
-  cell = g_new(RecnCell, 1);
+  cell = g_new0 (RecnCell, 1);
 
   xaccInitRecnCell (cell);
 
@@ -152,19 +165,6 @@ RecnSetValue (BasicCell *_cell, const char *value)
   }
 
   xaccRecnCellSetFlag (cell, flag);
-}
-
-/* ================================================ */
-
-void
-xaccInitRecnCell (RecnCell *cell)
-{
-  xaccInitBasicCell(&cell->cell);
-
-  xaccRecnCellSetFlag(cell, NREC);
-
-  cell->cell.enter_cell = RecnEnter;
-  cell->cell.set_value = RecnSetValue;
 }
 
 /* ================================================ */

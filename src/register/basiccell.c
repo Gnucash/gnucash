@@ -67,13 +67,13 @@ BasicCellHelpValue(BasicCell *cell)
 
 /* ===================================================== */
 
-void
-xaccInitBasicCell (BasicCell *cell)
+static void
+xaccClearBasicCell (BasicCell *cell)
 {
   cell->changed = 0;
   cell->conditionally_changed = 0;
 
-  cell->value = g_strdup("");
+  cell->value = NULL;
   cell->blank_help = NULL;
   cell->set_value = NULL;
   cell->enter_cell = NULL;
@@ -83,11 +83,21 @@ xaccInitBasicCell (BasicCell *cell)
   cell->realize = NULL;
   cell->move = NULL;
   cell->destroy = NULL;
-  cell->get_help_value = BasicCellHelpValue;
+  cell->get_help_value = NULL;
 
   cell->is_popup = FALSE;
 
   cell->gui_private = NULL;
+}
+
+void
+xaccInitBasicCell (BasicCell *cell)
+{
+  xaccClearBasicCell (cell);
+
+  cell->value = g_strdup ("");
+
+  cell->get_help_value = BasicCellHelpValue;
 }
 
 /* ===================================================== */
@@ -107,7 +117,7 @@ xaccDestroyBasicCell (BasicCell *cell)
   cell->blank_help = NULL;
 
   /* help prevent access to freed memory */
-  xaccInitBasicCell (cell);
+  xaccClearBasicCell (cell);
 
   /* free the object itself */
   g_free (cell);
@@ -121,14 +131,16 @@ xaccSetBasicCellValue (BasicCell *cell, const char *val)
   CellSetValueFunc cb;
 
   cb = cell->set_value;
-  if (cb) {
+  if (cb)
+  {
     /* avoid recursion by disabling the  
      * callback while it's being called. */
     cell->set_value = NULL;
     cb (cell, val);
     cell->set_value = cb;
   }
-  else {
+  else
+  {
     g_free (cell->value);
     if (val)
       cell->value = g_strdup (val);
@@ -145,13 +157,12 @@ xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
   if (cell == NULL)
     return;
 
-  if (cell->blank_help != NULL)
-    g_free(cell->blank_help);
+  g_free (cell->blank_help);
 
   if (blank_help == NULL)
     cell->blank_help = NULL;
   else
-    cell->blank_help = g_strdup(blank_help);
+    cell->blank_help = g_strdup (blank_help);
 }
 
 /* ===================================================== */

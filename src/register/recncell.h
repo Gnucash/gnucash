@@ -50,7 +50,6 @@ typedef struct _RecnCell
 } RecnCell;
 
 RecnCell * xaccMallocRecnCell (void);
-void       xaccInitRecnCell (RecnCell *cell);
 void       xaccDestroyRecnCell (RecnCell *cell);
 
 void       xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag);

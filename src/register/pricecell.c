@@ -199,7 +199,7 @@ xaccMallocPriceCell (void)
 {
    PriceCell *cell;
 
-   cell = g_new(PriceCell, 1);
+   cell = g_new0 (PriceCell, 1);
 
    xaccInitPriceCell (cell);
 

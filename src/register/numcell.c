@@ -161,7 +161,7 @@ xaccMallocNumCell (void)
 {
   NumCell *cell;
 
-  cell = g_new(NumCell, 1);
+  cell = g_new0 (NumCell, 1);
 
   xaccInitNumCell (cell);
 

@@ -170,7 +170,7 @@ xaccMallocQuickFillCell (void)
 {
    QuickFillCell *cell;
 
-   cell = g_new(QuickFillCell, 1);
+   cell = g_new0 (QuickFillCell, 1);
 
    xaccInitQuickFillCell (cell);
 
