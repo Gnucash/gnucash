@@ -49,13 +49,13 @@ xml_add_str(xmlNodePtr p, const char *tag, const char *str,
             gboolean include_if_empty) {
   xmlNodePtr child;
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
   if(!str && !include_if_empty) return(TRUE); 
   if((strlen(str) == 0)  && !include_if_empty) return(TRUE);
 
   child = xmlNewTextChild(p, NULL, tag, str);
-  if(!child) return(FALSE);
+  g_return_val_if_fail(child, FALSE);
 
   return(TRUE);
 }
@@ -71,16 +71,16 @@ xml_add_character(xmlNodePtr p, const char *tag, const char c) {
 static gboolean
 xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
   xmlNodePtr val_xml;
-  const gchar *numstr;
+  char num_string[22];
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
-  
-  numstr = g_strdup_printf("%lld", value);
-  if(!numstr) return(FALSE);
-  val_xml = xmlNewTextChild(p, NULL, tag, numstr);
-  g_free((char *) numstr);
-  if(!val_xml) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+
+  g_snprintf(num_string, sizeof (num_string), "%lld", value);
+
+  val_xml = xmlNewTextChild(p, NULL, tag, num_string);
+  g_return_val_if_fail(val_xml, FALSE);
+
   return(TRUE);
 }
 
@@ -88,8 +88,8 @@ static gboolean
 xml_add_double(xmlNodePtr p, const char *tag, const double value) {
   /* FIXME: NOT THREAD SAFE - USES STATIC DATA */
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
 
   {
     static SCM number_to_string;
@@ -110,7 +110,7 @@ xml_add_double(xmlNodePtr p, const char *tag, const double value) {
     } else {
       xmlNodePtr child = xmlNewTextChild(p, NULL, tag, numstr);
       free((void *) numstr);
-      if(!child) return(FALSE);
+      g_return_val_if_fail(child, FALSE);
     }
   }
 
@@ -122,19 +122,19 @@ xml_add_gnc_numeric(xmlNodePtr p, const char *tag, const gnc_numeric n) {
   char *numstr;
   xmlNodePtr child;
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
 
   /* fprintf(stderr, "WRITE GNUM S: %lld/%lld -> ", n.num, n.denom); */
 
   numstr = gnc_numeric_to_string(n);
-  if(!numstr) return(FALSE);
+  g_return_val_if_fail(numstr, FALSE);
 
   /* fprintf(stderr, "%s\n", numstr); */
 
   child = xmlNewTextChild(p, NULL, tag, numstr);
   g_free(numstr); numstr = FALSE;
-  if(!child) return(FALSE);
+  g_return_val_if_fail(child, FALSE);
 
   return(TRUE);
 }
@@ -143,9 +143,9 @@ xml_add_gnc_numeric(xmlNodePtr p, const char *tag, const gnc_numeric n) {
 static gboolean
 xml_add_guid(xmlNodePtr p, const char *tag, const GUID *guid) {
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
-  if(!guid) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+  g_return_val_if_fail(guid, FALSE);
 
   {
     const char *guidstr;
@@ -155,11 +155,11 @@ xml_add_guid(xmlNodePtr p, const char *tag, const GUID *guid) {
       guidstr = NULL;
     } else {
       guidstr = guid_to_string(guid);
-      if(!guidstr) return(FALSE);
+      g_return_val_if_fail(guidstr, FALSE);
     }
 
     child = xmlNewTextChild(p, NULL, tag, guidstr);
-    if(!child) return(FALSE);
+    g_return_val_if_fail(child, FALSE);
     if(guidstr) free((void *) guidstr);
   }
   return(TRUE);
@@ -179,9 +179,9 @@ xml_add_editable_timespec(xmlNodePtr p,
                          Still, it's bogus, we ought to have
                          astrftime... */
   
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
-  if(!ts) return(FALSE); 
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+  g_return_val_if_fail(ts, FALSE); 
   if(!include_if_zero && (ts->tv_sec == 0) && (ts->tv_nsec == 0)) return TRUE;
 
   tmp_timet = ts->tv_sec;
@@ -193,19 +193,19 @@ xml_add_editable_timespec(xmlNodePtr p,
   if(num_written == 0) return(FALSE);
   
   timespec_xml= xmlNewTextChild(p, NULL, tag, NULL);
-  if(!timespec_xml) return(FALSE);
+  g_return_val_if_fail(timespec_xml, FALSE);
 
   secs_xml = xmlNewTextChild(timespec_xml, NULL, "s", secs_str);
-  if(!secs_xml) return(FALSE);
+  g_return_val_if_fail(secs_xml, FALSE);
   
   if(ts->tv_nsec) {
     xmlNodePtr nsec_xml;
-    gchar *nsec_str = g_strdup_printf("%ld", ts->tv_nsec);
+    char num_string[22];
 
-    if(!nsec_str) return(FALSE);
-    nsec_xml = xmlNewTextChild(timespec_xml, NULL, "ns", nsec_str);
-    if(!nsec_xml) return(FALSE);
-    g_free(nsec_str);
+    g_snprintf(num_string, sizeof (num_string), "%ld", ts->tv_nsec);
+
+    nsec_xml = xmlNewTextChild(timespec_xml, NULL, "ns", num_string);
+    g_return_val_if_fail(nsec_xml, FALSE);
   }
 
   return(TRUE);
@@ -244,11 +244,11 @@ xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
   xmlNodePtr comm_xml;
   xmlNodePtr rst_xml;
 
-  if(!p) return(FALSE);
-  if(!c) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(c, FALSE);
 
   comm_xml = xmlNewTextChild(p, NULL, "commodity", NULL);  
-  if(!comm_xml) return(FALSE);
+  g_return_val_if_fail(comm_xml, FALSE);
 
   rst_xml = xmlNewTextChild(comm_xml, NULL, "restore", NULL);  
   if(!rst_xml) {
@@ -302,10 +302,10 @@ xml_add_commodity_restorers(xmlNodePtr p) {
   GList *namespaces;
   GList *lp;
 
-  if(!p) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
 
   commodities = gnc_engine_commodities();
-  if(!commodities) return(FALSE);
+  g_return_val_if_fail(commodities, FALSE);
 
   namespaces = g_list_sort(gnc_commodity_table_get_namespaces(commodities),
                            compare_namespaces);
@@ -354,13 +354,13 @@ xml_add_binary(xmlNodePtr p,
 
   xmlNodePtr value_xml;
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
-  if(!format) return(FALSE);
-  if(!data) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+  g_return_val_if_fail(format, FALSE);
+  g_return_val_if_fail(data, FALSE);
 
   value_xml = xmlNewTextChild(p, NULL, tag, NULL);
-  if(!value_xml) return(FALSE);
+  g_return_val_if_fail(value_xml, FALSE);
   
   if(size == 0) return(TRUE);
 
@@ -413,12 +413,12 @@ xml_add_kvp_glist(xmlNodePtr p, const char *tag, GList *lst) {
   xmlNodePtr list_xml;  
   GList *cursor;
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
-  if(!lst) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+  g_return_val_if_fail(lst, FALSE);
   
   list_xml = xmlNewTextChild(p, NULL, tag, NULL);
-  if(!list_xml) return(FALSE);
+  g_return_val_if_fail(list_xml, FALSE);
 
   for(cursor = lst; cursor; cursor = cursor->next) {
     kvp_value * val = (kvp_value *) cursor->data;
@@ -437,8 +437,8 @@ xml_add_kvp_frame(xmlNodePtr p, const char *tag,
 static gboolean
 xml_add_kvp_value(xmlNodePtr p, kvp_value *val) {
 
-  if(!p) return(FALSE);
-  if(!val) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(val, FALSE);
   
   switch(kvp_value_get_type(val)) {
   case KVP_TYPE_GINT64:
@@ -460,7 +460,7 @@ xml_add_kvp_value(xmlNodePtr p, kvp_value *val) {
     {
       guint64 size;
       void *binary_data = kvp_value_get_binary(val, &size);
-      if(!binary_data) return(FALSE);
+      g_return_val_if_fail(binary_data, FALSE);
       return(xml_add_binary(p, "binary", "hex", binary_data, size));
     }
     break;
@@ -483,15 +483,15 @@ xml_add_kvp_slot(xmlNodePtr p, const char *key, kvp_value *val) {
   xmlNodePtr slot_xml;
   xmlNodePtr key_xml;
 
-  if(!p) return(FALSE);
-  if(!key) return(FALSE);
-  if(!val) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(key, FALSE);
+  g_return_val_if_fail(val, FALSE);
 
   slot_xml = xmlNewTextChild(p, NULL, "s", NULL);
-  if(!slot_xml) return(FALSE);
+  g_return_val_if_fail(slot_xml, FALSE);
 
   key_xml = xmlNewTextChild(slot_xml, NULL, "k", key);
-  if(!key_xml) return(FALSE);
+  g_return_val_if_fail(key_xml, FALSE);
 
   return(xml_add_kvp_value(slot_xml, val));
 }
@@ -519,12 +519,12 @@ xml_add_kvp_frame(xmlNodePtr p,
   xmlNodePtr kvp_xml;
   kvp_value_foreach_info info;
 
-  if(!p) return(FALSE);
-  if(!tag) return(FALSE);
-  if(!kvpf) return(FALSE); 
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(tag, FALSE);
+  g_return_val_if_fail(kvpf, FALSE); 
 
   kvp_xml = xmlNewNode(NULL, tag);
-  if(!kvp_xml) return(FALSE);
+  g_return_val_if_fail(kvp_xml, FALSE);
 
   info.node = kvp_xml;
   info.keycount = 0;
@@ -544,11 +544,11 @@ static gboolean
 xml_add_transaction_split(xmlNodePtr p, Split* s) {
   xmlNodePtr split_xml;
 
-  if(!p) return(FALSE);
-  if(!s) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(s, FALSE);
 
   split_xml = xmlNewTextChild(p, NULL, "split", NULL);  
-  if(!split_xml) return(FALSE);
+  g_return_val_if_fail(split_xml, FALSE);
 
   if(!xml_add_guid(split_xml, "guid", xaccSplitGetGUID(s)))
     return(FALSE);
@@ -606,14 +606,14 @@ xml_add_txn_restore(xmlNodePtr p, Transaction* t) {
   xmlNodePtr txn_xml;
   xmlNodePtr restore_xml;
 
-  if(!p) return(FALSE);
-  if(!t) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(t, FALSE);
 
   txn_xml = xmlNewTextChild(p, NULL, "transaction", NULL);  
-  if(!txn_xml) return(FALSE);
+  g_return_val_if_fail(txn_xml, FALSE);
 
   restore_xml = xmlNewTextChild(txn_xml, NULL, "restore", NULL);  
-  if(!restore_xml) return(FALSE);
+  g_return_val_if_fail(restore_xml, FALSE);
 
   if(!xml_add_guid(restore_xml, "guid", xaccTransGetGUID(t)))
     return(FALSE);
@@ -670,14 +670,14 @@ static gboolean
 xml_add_account_restorer(xmlNodePtr p, Account* a) {
   xmlNodePtr acct_xml;
 
-  if(!p) return(FALSE);
-  if(!a) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(a, FALSE);
 
   acct_xml = xmlNewTextChild(p, NULL, "account", NULL);  
-  if(!acct_xml) return(FALSE);
+  g_return_val_if_fail(acct_xml, FALSE);
 
   acct_xml = xmlNewTextChild(acct_xml, NULL, "restore", NULL);  
-  if(!acct_xml) return(FALSE);
+  g_return_val_if_fail(acct_xml, FALSE);
   
   if(!xml_add_str(acct_xml, "name",
                   xaccAccountGetName(a), FALSE))
@@ -709,7 +709,7 @@ xml_add_account_restorer(xmlNodePtr p, Account* a) {
     Account *parent = xaccAccountGetParentAccount(a);
     if(parent) {
       xmlNodePtr parent_xml = xmlNewTextChild(acct_xml, NULL, "parent", NULL);  
-      if(!parent_xml) return(FALSE);
+      g_return_val_if_fail(parent_xml, FALSE);
       if(!xml_add_guid(parent_xml, "guid", xaccAccountGetGUID(parent)))
         return(FALSE);
     }
@@ -737,8 +737,8 @@ xml_add_account_restorers(xmlNodePtr p, AccountGroup *g) {
   GList *list;
   GList *node;
   
-  if(!p) return(FALSE);
-  if(!g) return(FALSE);
+  g_return_val_if_fail(p, FALSE);
+  g_return_val_if_fail(g, FALSE);
 
   list = xaccGroupGetAccountList (g);
 
