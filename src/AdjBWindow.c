@@ -307,18 +307,15 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   /* fill out the rest of the fields */
   xaccTransSetDescription (trans, ADJ_BALN_STR);
   xaccTransSetReconcile (trans, NREC);
-  
-  pos = insertTransaction( acc, trans );
-  
-  /* figure out what the amount for this transaction... figure out
-   * the current balance, and take the diff from amount */
-  dcurrAmount = 0.0;
-  for( i=0; i<pos; i++ )
-    {
-    tempTrans = getTransaction(acc,i);
-    dcurrAmount += xaccGetAmount (acc, tempTrans);
-    }
-  xaccSetAmount (acc, trans, themount - dcurrAmount);
+
+  xaccInsertSplit (acc, &(trans->credit_split));
+
+  /* compute the dollar amount this transaction should have.
+   * it will be the difference between the current balance, and
+   * the desired balance.  */
+  dcurrAmount = xaccGetBalance (&(trans->credit_split));
+
+  xaccSetAmount (split, dcurrAmount - themount);
   
   /* Refresh the account register window */
   regRefresh(acc->regData);

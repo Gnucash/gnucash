@@ -37,7 +37,7 @@
 \********************************************************************/
 
 /********************************************************************\
- * initSplit
+ * xaccInitSplit
  * Initialize a splitaction structure
 \********************************************************************/
 
@@ -111,6 +111,47 @@ xaccCountSplits (Split **tarray)
       split = tarray[nsplit];
    }
    return nsplit;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void xaccSetShareAmount (Split *s, double amt)
+{
+   s -> damount = amt;
+}
+
+void xaccSetAmount (Split *s, double amt)
+{
+   /* remember, damount is actually share price */
+   s -> damount = amt / (s->share_price);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+double xaccGetBalance (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->balance;
+}
+
+double xaccGetClearedBalance (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->cleared_balance;
+}
+
+double xaccGetReconciledBalance (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->reconciled_balance;
+}
+
+double xaccGetShareBalance (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->share_balance;
 }
 
 /********************************************************************\
@@ -200,6 +241,38 @@ implemented and tested.
 }
 
 /********************************************************************\
+ * Walk the debit-splits array, and compute the new 
+ * credit amounts based on that.
+\********************************************************************/
+
+void
+xaccTransRecomputeAmount (Transaction *trans)
+{
+  Split *s;
+  int i = 0;
+  double amount = 0.0;
+
+  s = trans->debit_splits[i];
+  while (s) {
+    amount += s->share_price * s->damount;
+    i++;
+    s = trans->debit_splits[i];
+  }
+
+  /* if there is just one split, then the credited 
+   * and the debited splits should match up. */
+  if (1 == i) {
+    s = trans->debit_splits[0];
+    trans -> credit_split.damount = - (s->damount);
+    trans -> credit_split.share_price = s->share_price;
+  } else {
+    trans -> credit_split.damount = -amount;
+    trans -> credit_split.share_price = 1.0;
+  }
+  
+}
+
+/********************************************************************\
 \********************************************************************/
 void
 xaccAppendSplit (Transaction *trans, Split *split) 
@@ -210,6 +283,7 @@ xaccAppendSplit (Transaction *trans, Split *split)
    if (!trans) return;
    if (!split) return;
    
+   /* first, insert the split into the array */
    split->parent = (struct _transaction *) trans;
    num = xaccCountSplits (trans->debit_splits);
 
@@ -222,6 +296,9 @@ xaccAppendSplit (Transaction *trans, Split *split)
    trans->debit_splits[num+1] = NULL;
 
    if (oldarray) _free (oldarray);
+
+   /* bring dollar amounts into synchrony */
+   xaccTransRecomputeAmount (trans);
 }
 
 /********************************************************************\
@@ -249,6 +326,9 @@ xaccRemoveSplit (Split *split)
      s = trans->debit_splits[n];
    }
    trans->debit_splits[i] = NULL;
+
+   /* bring dollar amounts into synchrony */
+   xaccTransRecomputeAmount (trans);
 
    /* hack alert -- we should also remove it from the account */
 }

@@ -66,11 +66,6 @@ mallocAccount( void )
   acc->description = NULL;
   acc->notes       = NULL;
   
-  /* transction array should be null-terminated */
-  acc->numTrans    = 0;
-  acc->transaction = (Transaction **) _malloc (sizeof (Transaction *));
-  acc->transaction[0] = NULL;
-  
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
   acc->splits[0]   = NULL;
@@ -95,8 +90,10 @@ mallocAccount( void )
 void
 freeAccount( Account *acc )
 {
-  int i;
-  Split *s;
+  int i=0, j=0;
+  Split *s, *debit_s;
+  int dont_free_transaction = 0;
+  struct _account * _acc = (struct _account *) acc; 
 
   if (NULL == acc) return;
     
@@ -109,40 +106,40 @@ freeAccount( Account *acc )
   
   freeQuickFill(acc->qfRoot);
   
-  /* free up splits */
-  /* hack alert -- this is incomplete and broken, 
-   * and interacts badly with the free-transaction code
-   * immediately below. Should be corrected when final
-   * split work is completed. */
+  /* any split pointing at this account needs to be unmarked */
   i=0;
   s = acc->splits[0];
   while (s) {
-    struct _account * _acc = (struct _account *) acc; 
-    if (_acc == s->acc) s->acc = NULL;
+    s->acc = NULL;
     i++;
     s = acc->splits[i];
   }
-  _free (acc->splits);
-  acc->numSplits = 0;
-  
-  /* free transactions */
-  for( i=0; i<acc->numTrans; i++ ) {
-    Transaction *trans = acc->transaction[i];
-    struct _account * _acc = (struct _account *) acc; 
 
-    if (!trans) continue;
-    /* free the transaction only if its not 
-     * a part of a double entry */
-    if (_acc == trans->credit_split.acc) trans->credit_split.acc = NULL;
-    if (_acc == trans->debit) trans->debit  = NULL;
-    if ( (NULL == trans->debit) && (NULL == trans->credit_split.acc) ) {
+  /* search for orphaned transactions, and delete them */
+  i=0;
+  s = acc->splits[0];
+  while (s) {
+    Transaction *trans =  (Transaction *) s->parent;
+
+    j=0;
+    debit_s = trans->debit_splits[0];
+    while (debit_s) {
+      if (debit_s->acc) { dont_free_transaction = 1; break; }
+      j++;
+      debit_s = trans->debit_splits[j];
+    }
+
+    if ( (!dont_free_transaction) && (NULL == trans->credit_split.acc) ) {
       freeTransaction( trans );
     }
+
+    i++;
+    s = acc->splits[i];
   }
 
-  
-  /* free the array of pointers */
-  _free( acc->transaction );
+  /* free up array of split pointers */
+  _free (acc->splits);
+  acc->splits = NULL;
   
   /* zero out values, just in case stray 
    * pointers are pointing here. */
@@ -159,9 +156,6 @@ freeAccount( Account *acc )
   acc->accountName = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
-  
-  acc->numTrans    = 0;
-  acc->transaction = NULL; 
   
   /* hack alert -- shouldn't we destroy this widget ??? */
   acc->arrowb   = NULL;  
@@ -185,198 +179,6 @@ xaccGetAccountID (Account *acc)
 {
   if (!acc) return -1;
   return acc->id;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-Transaction *
-getTransaction( Account *acc, int num )
-  {
-  if( NULL == acc ) return NULL;
-
-  if( (num >= 0) && (num < acc->numTrans) )
-    return acc->transaction[num];
-  else
-    return NULL;
-  }
-
-/********************************************************************\
-\********************************************************************/
-
-int
-getNumOfTransaction( Account *acc, Transaction *trans )
-  {
-  int i;
-  for (i=0; i<acc->numTrans; i++) {
-      if (trans == acc->transaction[i]) return i;
-    }
-  return -1;
-  }
-
-/********************************************************************\
-\********************************************************************/
-
-Transaction *
-removeTransaction( Account *acc, int num )
-{
-  Transaction *trans = NULL;
-  Transaction **oldTrans;
-  int  i,j;
-
-  if (NULL == acc) return NULL;
-
-  oldTrans = acc->transaction;
-
-  /* check for valid number */
-  if( (0 > num) || (num >= acc->numTrans) ) return NULL;
-
-  /* Set this flag, so we know we need to save the data file: */
-  if( NULL != acc->parent ) acc->parent->saved = False;
-    
-  acc->numTrans--;
-
-  acc->transaction = (Transaction **)_malloc(((acc->numTrans)+1)*
-                                               sizeof(Transaction *));
-     
-  trans = oldTrans[acc->numTrans];/* In case we are deleting last in
-                                     * old array */
-  for( i=0,j=0; i<acc->numTrans; i++,j++ ) {
-    if( j != num ) {
-      acc->transaction[i] = oldTrans[j];
-    } else {
-      trans = oldTrans[j];
-      i--;
-    }
-  }
-
-  /* make sure the array is NULL terminated */
-  acc->transaction[acc->numTrans] = NULL;
-
-  _free (oldTrans);
-
-  /* if this is a double-entry transaction, be sure to
-   * unmark it. */
-  if (((Account *)trans->credit_split.acc) == acc)
-       trans->credit_split.acc = NULL;
-  if (((Account *)trans->debit)  == acc) trans->debit  = NULL;
-
-  return trans;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccRemoveTransaction( Account *acc, Transaction *trans)
-{
-  int i;
-
-  if (!acc) return;
-  if (!trans) return;
-
-  i = getNumOfTransaction (acc, trans);
-  if (0 <= i) {
-    removeTransaction (acc, i);
-  }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-int
-insertTransaction( Account *acc, Transaction *trans )
-  {
-  int position=-1;
-  int  i,j;
-  int  inserted = False;
-  Transaction **oldTrans;
-
-  if (NULL == acc) {
-    printf ("Internal Error: insertTransaction(): \n");
-    printf (" no account specified ! \n");
-    return -1;
-  }
-    
-  /*  
-   * If the transaction hasn't already been marked as a debit
-   * or a credit to this account, then provide a default
-   * behavior for double-entry insertion.
-   *
-   * If this appears to be a new transaction, then default
-   * it to being a credit.  If this transaction is already
-   * in another account, assume this is the other half. 
-   */
-  
-  if ( (acc != (Account *) trans->credit_split.acc) &&
-       (acc != (Account *) trans->debit) ) {
-
-    if (NULL == trans->credit_split.acc) {
-      trans->credit_split.acc = (struct _account *) acc;
-    } else 
-    if (NULL == trans->debit) {
-      trans->debit = (struct _account *) acc;
-    } else
-    {
-      printf ("Internal Error: insertTransaction(): \n");
-      printf ("can't insert a transaction more than twice! \n");
-      printf ("This error should not occur, please report it \n");
-    }
-  }
-
-  if (trans->debit == trans->credit_split.acc) {
-    printf ("Internal Error: insertTransaction(): \n");
-    printf ("debited and credit accounts cannot be the same\n");
-    return -1;
-  }
-
-  /* mark the data file as needing to be saved: */
-  if( acc->parent != NULL ) acc->parent->saved = False;
-  
-  acc->numTrans++;
-  oldTrans = acc->transaction;
-  acc->transaction = (Transaction **)_malloc(((acc->numTrans) + 1) *
-                                             sizeof(Transaction *));
-  
-  /* dt is the date of the transaction we are inserting, and dj
-   * is the date of the "cursor" transaction... we want to insert
-   * the new transaction before the first transaction of the same
-   * or later date.  The !inserted bit is a bit of a kludge to 
-   * make sure we only insert the new transaction once! */
-  for( i=0,j=0; i<acc->numTrans; i++,j++ )
-    {
-    /* if we didn't do this, and we needed to insert into the
-     * last spot in the array, we would walk off the end of the
-     * old array, which is no good! */
-    if( j>=(acc->numTrans-1) )
-      {
-      position = i;
-      acc->transaction[i] = trans;
-      break;
-      }
-    else
-      {
-      if( (xaccTransOrder (&(oldTrans[j]),&trans) > 0) && !inserted )
-        {
-        position = i;
-        acc->transaction[i] = trans;
-        j--;
-        inserted = True;
-        }
-      else
-        acc->transaction[i] = oldTrans[j];
-      }
-    }
-  
-  /* make sure the array is NULL terminated */
-  acc->transaction[acc->numTrans] = NULL;
-
-  _free(oldTrans);
-
-  if( position != -1 )
-    qfInsertTransaction( acc->qfRoot, trans );
-  
-  return position;
 }
 
 /********************************************************************\
@@ -440,184 +242,7 @@ xaccInsertSplit ( Account *acc, Split *split )
   qfInsertTransaction( acc->qfRoot, trans );
 }
 
-/********************************************************************\
-\********************************************************************/
 
-Account *
-xaccGetOtherAccount( Account *acc, Transaction *trans )
-{
-  if (NULL == acc) return NULL;
-
-  if (acc == ((Account *) trans->debit)) {
-     return ((Account *) trans->credit_split.acc);
-  } else
-  if (acc == ((Account *) trans->credit_split.acc)) {
-     return ((Account *) trans->debit);
-  } else {
-     printf ("Internal Error: xaccGetOtherAccount(): inconsistent entry \n");
-  }
-
-  return NULL;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-double xaccGetAmount (Account *acc, Transaction *trans)
-{
-   double themount; /* amount */
-
-   themount = xaccGetShareAmount (acc, trans);
-   themount *= trans->share_price;
-   return themount;
-}
-    
-/********************************************************************\
-\********************************************************************/
-
-double xaccGetShareAmount (Account *acc, Transaction *trans)
-{
-   double themount; /* amount */
-   struct _account *_acc = (struct _account *) acc;
-
-   if (NULL == trans) return 0.0;
-   if (NULL == acc) return 0.0;
-      
-   /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit_split.acc == _acc ) {
-      themount = trans->damount;
-   } else 
-   if ( trans->debit == _acc ) {
-      themount = - (trans->damount);
-   } else {
-      printf ("Internal Error: xaccGetShareAmount: missing double entry \n");
-      printf ("this error should not occur. Please report the problem. \n");
-      printf ("acc=%p deb=%p cred=%p\n", 
-             acc, trans->debit, trans->credit_split.acc);
-      themount = 0.0;  /* punt */
-   }
-   return themount;
-}
-    
-/********************************************************************\
-\********************************************************************/
-
-void xaccSetShareAmount (Account *acc, Transaction *trans, double themount)
-{
-   struct _account *_acc = (struct _account *) acc;
-
-   /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit_split.acc == _acc ) {
-      trans->damount = themount;
-   } else 
-   if ( trans->debit == _acc ) {
-      trans->damount = - themount;
-   } else {
-      printf ("Internal Error: xaccSetShareAmount: missing double entry \n");
-      printf ("this error should not occur. Please report the problem. \n");
-      trans->damount = 0.0; /* punt */
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void xaccSetAmount (Account *acc, Transaction *trans, double themount)
-{
-   if (0.0 < trans->share_price) {
-     themount /= trans->share_price;
-     xaccSetShareAmount (acc, trans, themount);
-  }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-double xaccGetBalance (Account *acc, Transaction *trans)
-{
-   double themount; /* amount */
-   struct _account *_acc = (struct _account *) acc;
-      
-   /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit_split.acc == _acc ) {
-      themount = trans->credit_balance;
-   } else 
-   if ( trans->debit == _acc ) {
-      themount = trans->debit_balance;
-   } else {
-      printf ("Internal Error: xaccGetBalance: missing double entry \n");
-      printf ("this error should not occur. Please report the problem. \n");
-      themount = 0.0;  /* punt */
-   }
-   return themount;
-}
-    
-/********************************************************************\
-\********************************************************************/
-
-double xaccGetClearedBalance (Account *acc, Transaction *trans)
-{
-   double themount; /* amount */
-   struct _account *_acc = (struct _account *) acc;
-
-   /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit_split.acc == _acc ) {
-      themount = trans->credit_cleared_balance;
-   } else 
-   if ( trans->debit == _acc ) {
-      themount = trans->debit_cleared_balance;
-   } else {
-      printf ("Internal Error: xaccGetClearedBalance: missing double entry \n");
-      printf ("this error should not occur. Please report the problem. \n");
-      themount = 0.0;  /* punt */
-   }
-   return themount;
-}
-    
-/********************************************************************\
-\********************************************************************/
-
-double xaccGetReconciledBalance (Account *acc, Transaction *trans)
-{
-   double themount; /* amount */
-   struct _account *_acc = (struct _account *) acc;
-      
-   /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit_split.acc == _acc ) {
-      themount = trans->credit_reconciled_balance;
-   } else 
-   if ( trans->debit == _acc ) {
-      themount = trans->debit_reconciled_balance;
-   } else {
-      printf ("Internal Error: xaccGetReconciledBalance: missing double entry \n");
-      printf ("this error should not occur. Please report the problem. \n");
-      themount = 0.0;  /* punt */
-   }
-   return themount;
-}
-    
-/********************************************************************\
-\********************************************************************/
-
-double xaccGetShareBalance (Account *acc, Transaction *trans)
-{
-   double themount; /* amount */
-   struct _account *_acc = (struct _account *) acc;
-      
-   /* for a double-entry, determine if this is a credit or a debit */
-   if ( trans->credit_split.acc == _acc ) {
-      themount = trans->credit_share_balance;
-   } else 
-   if ( trans->debit == _acc ) {
-      themount = trans->debit_share_balance;
-   } else {
-      printf ("Internal Error: xaccGetShareBalance: missing double entry \n");
-      printf ("this error should not occur. Please report the problem. \n");
-      themount = 0.0;  /* punt */
-   }
-   return themount;
-}
-    
 /********************************************************************\
  * xaccRecomputeBalance                                             *
  *   recomputes the partial balances and the current balance for    *
@@ -649,7 +274,7 @@ double xaccGetShareBalance (Account *acc, Transaction *trans)
 void
 xaccRecomputeBalance( Account * acc )
 {
-  int  i; 
+  int  i = 0; 
   double  dbalance    = 0.0;
   double  dcleared_balance = 0.0;
   double  dreconciled_balance = 0.0;
@@ -657,75 +282,56 @@ xaccRecomputeBalance( Account * acc )
   double  share_cleared_balance = 0.0;
   double  share_reconciled_balance = 0.0;
   double  amt = 0.0;
-  Transaction *trans, *last_trans=NULL;
-  Account *tracc;
+  Split *split, *last_split;
   
   if( NULL == acc ) return;
 
-  for( i=0; (trans=getTransaction(acc,i)) != NULL; i++ ) {
+  split = acc->splits[0];
+  while (split) {
 
     /* compute both dollar and share balances */
-    amt = xaccGetShareAmount (acc, trans);
+    amt = split->damount;
     share_balance += amt;
-    dbalance += amt * (trans->share_price);
+    dbalance += amt * (split->share_price);
     
-    if( NREC != trans->credit_split.reconciled ) {
+    if( NREC != split -> reconciled ) {
       share_cleared_balance += amt;
-      dcleared_balance += amt * (trans->share_price);
+      dcleared_balance += amt * (split->share_price);
     }
 
-    if( YREC == trans->credit_split.reconciled ) {
+    if( YREC == split -> reconciled ) {
       share_reconciled_balance += amt;
-      dreconciled_balance += amt * (trans->share_price);
+      dreconciled_balance += amt * (split->share_price);
     }
 
-    tracc = (Account *) trans->credit_split.acc;
-    if (tracc == acc) {
-      /* For bank accounts, the invarient subtotal is the dollar
-       * amount.  For stock accoounts, the invarient is the share amount */
-      if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
-        trans -> credit_share_balance = share_balance;
-        trans -> credit_share_cleared_balance = share_cleared_balance;
-        trans -> credit_share_reconciled_balance = share_reconciled_balance;
-        trans -> credit_balance = trans->share_price * share_balance;
-        trans -> credit_cleared_balance = trans->share_price * share_cleared_balance;
-        trans -> credit_reconciled_balance = trans->share_price * share_reconciled_balance;
-      } else {
-        trans -> credit_share_balance = dbalance;
-        trans -> credit_share_cleared_balance = dcleared_balance;
-        trans -> credit_share_reconciled_balance = dreconciled_balance;
-        trans -> credit_balance = dbalance;
-        trans -> credit_cleared_balance = dcleared_balance;
-        trans -> credit_reconciled_balance = dreconciled_balance;
-      }
-    }
-    tracc = (Account *) trans->debit;
-    if (tracc == acc) {
-      if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
-        trans -> debit_share_balance = share_balance;
-        trans -> debit_share_cleared_balance = share_cleared_balance;
-        trans -> debit_share_reconciled_balance = share_reconciled_balance;
-        trans -> debit_balance = trans->share_price * share_balance;
-        trans -> debit_cleared_balance = trans->share_price * share_cleared_balance;
-        trans -> debit_reconciled_balance = trans->share_price * share_reconciled_balance;
-      } else {
-        trans -> debit_share_balance = dbalance;
-        trans -> debit_share_cleared_balance = dcleared_balance;
-        trans -> debit_share_reconciled_balance = dreconciled_balance;
-        trans -> debit_balance = dbalance;
-        trans -> debit_cleared_balance = dcleared_balance;
-        trans -> debit_reconciled_balance = dreconciled_balance;
-      }
+    /* For bank accounts, the invarient subtotal is the dollar
+     * amount.  For stock accoounts, the invarient is the share amount */
+    if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
+      split -> share_balance = share_balance;
+      split -> share_cleared_balance = share_cleared_balance;
+      split -> share_reconciled_balance = share_reconciled_balance;
+      split -> balance = split->share_price * share_balance;
+      split -> cleared_balance = split->share_price * share_cleared_balance;
+      split -> reconciled_balance = split->share_price * share_reconciled_balance;
+    } else {
+      split -> share_balance = dbalance;
+      split -> share_cleared_balance = dcleared_balance;
+      split -> share_reconciled_balance = dreconciled_balance;
+      split -> balance = dbalance;
+      split -> cleared_balance = dcleared_balance;
+      split -> reconciled_balance = dreconciled_balance;
     }
 
-    last_trans = trans;
+    last_split = split;
+    i++;
+    split = acc->splits[i];
   }
 
   if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
-    if (last_trans) {
-       acc -> balance = share_balance * (last_trans->share_price);
-       acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
-       acc -> reconciled_balance = share_reconciled_balance * (last_trans->share_price);
+    if (last_split) {
+       acc -> balance = share_balance * (last_split->share_price);
+       acc -> cleared_balance = share_cleared_balance * (last_split->share_price);
+       acc -> reconciled_balance = share_reconciled_balance * (last_split->share_price);
     } else {
        acc -> balance = 0.0;
        acc -> cleared_balance = 0.0;
@@ -752,37 +358,46 @@ xaccRecomputeBalance( Account * acc )
 \********************************************************************/
 
 int
-xaccCheckDateOrder (Account * acc, Transaction *trans )
+xaccCheckDateOrder (Account * acc, Split *split )
 {
   int outOfOrder = 0;
-  Transaction *prevTrans;
-  Transaction *nextTrans;
+  Split *s;
+  Split *prevSplit;
+  Split *nextSplit;
   int position;
 
   if (NULL == acc) return 0;
 
-  position = getNumOfTransaction (acc, trans);
-  if (-1 == position) {
-    printf ("Internal Error: xaccCheckDateOrder(): \n");
-    printf ("transaction not present in the account !\n");
-    return 0;
+  /* find the split's location in the array */
+  position = 0;
+  s = acc->splits[0];
+  while (s) {
+     if (s == split) break;
+     position ++;
+     s = acc->splits[position];
   }
 
-  prevTrans = getTransaction( acc, position-1 );
-  nextTrans = getTransaction( acc, position+1 );
+  if (!s) {
+     printf ("Internal Error: xaccCheckDateOrder(): ");
+     printf (" split not present in account \n");
+     return 0;
+  }
+
+  prevSplit = acc->splits [position-1];
+  nextSplit = acc->splits [position+1];
 
   /* figure out if the transactions are out of order */
-  if (NULL != prevTrans) {
-    if( xaccTransOrder (&prevTrans, &trans) >0 ) outOfOrder = True;
+  if (NULL != prevSplit) {
+    if( xaccTransOrder (&(prevSplit->parent), &(split->parent)) >0 ) outOfOrder = True;
   }
-  if (NULL != nextTrans) {
-    if( xaccTransOrder (&trans, &nextTrans) >0 ) outOfOrder = True;
+  if (NULL != nextSplit) {
+    if( xaccTransOrder (&(split->parent), &(nextSplit->parent)) >0 ) outOfOrder = True;
   }
 
   /* take care of re-ordering, if necessary */
   if( outOfOrder ) {
     removeTransaction( acc, position );
-    insertTransaction( acc, trans );
+    insertTransaction( acc, split );
     return 1;
   }
   return 0;
@@ -902,8 +517,8 @@ xaccConsolidateTransactions (Account * acc)
          if (strcmp (ta->description, tb->description)) continue;
          if (strcmp (ta->credit_split.memo, tb->credit_split.memo)) continue;
          if (strcmp (ta->action, tb->action)) continue;
-         if (0 == DEQ(ta->damount, tb->damount)) continue;
-         if (0 == DEQ(ta->share_price, tb->share_price)) continue;
+         if (0 == DEQ(ta->credit_split.damount, tb->credit_split.damount)) continue;
+         if (0 == DEQ(ta->credit_split.share_price, tb->credit_split.share_price)) continue;
 
          /* if we got to here, then there must be a duplicate. */
          /* before deleting it, remove it from the other 
