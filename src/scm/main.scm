@@ -472,7 +472,7 @@ string and 'directories' must be a list of strings."
    (gnc:make-menu-item 
     (_ "_Style Sheets...")
     (_ "Edit report style sheets.")
-    (list gnc:window-name-main "Edit" "Preferences...")
+    (list gnc:window-name-main "Edit" "_Preferences...")
     (lambda ()
       (gnc:style-sheet-dialog-open))))
 

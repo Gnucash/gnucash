@@ -10,6 +10,9 @@
 	* qif-io-core/test/Makefile.am: add app-file and backend/file dirs to tests
 	* fix test-import-phase-1.scm: load app-file for symbols, fix
 	  the commodity table; fix the "file save" portion
+
+	* src/scm/main.scm -- fix menu issue for LANG=de_DE.. "Preferences" is
+	  really "_Preferences"
 	
 2002-09-29  Joshua Sled  <jsled@asynchronous.org>
 
