@@ -1,3 +1,9 @@
+2003-04-12  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-commodity-matcher.c: Fix debian bug #187061
+	Crash during import of investment accounts. Patch pulled from head, 
+	also fixes http://bugzilla.gnome.org/show_bug.cgi?id=103075
+
 2003-04-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Transaction.c: xaccSplitGetCorrAccountCode() should
