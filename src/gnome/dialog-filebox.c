@@ -95,7 +95,11 @@ fileBox(const char * title, const char * filter)
 
   fileBox = gtk_file_selection2_new (title);
 
-  /* hack alert -- this is hard coding the filter... BAD very BAD */
+  /* hack alert -- this is hard coding the filter... BAD very BAD ?????? */
+  /* XXX FIXME the second argument 'filter' should be used to filter the
+   * file selection box since it specifies the suffix of the files that
+   * should be displayed ... 
+   */
   gtk_file_selection2_show_file_types(GTK_FILE_SELECTION2(fileBox));
   gtk_file_selection2_set_file_types (GTK_FILE_SELECTION2(fileBox), gnucash_types);
   
