@@ -377,8 +377,11 @@ gnc_combo_cell_use_quickfill_cache (ComboCell * cell, QuickFill *shared_qf)
 	box = cell->cell.gui_private;
 	if (NULL == box) return;
 
-	box->use_quickfill_cache = TRUE;
-	gnc_quickfill_destroy (box->qf);
+	if (FALSE == box->use_quickfill_cache)
+	{
+		box->use_quickfill_cache = TRUE;
+		gnc_quickfill_destroy (box->qf);
+	}
 	box->qf = shared_qf;
 }
 
