@@ -390,6 +390,7 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    BASIC (num,     Text,      NUM);
    FANCY (desc,    QuickFill, DESC);
    BASIC (recn,    Recn,      RECN);
+   FANCY (shrs,    Price,     SHRS);
    FANCY (balance, Price,     BALN);
 
    /* set the color of the cells in the transaction cursor */
@@ -402,6 +403,7 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
     * the cell default will override ehte cursor
     */
    reg->descCell ->  cell.bg_color = 0xccccff;
+   reg->shrsCell ->  cell.bg_color = 0xccccff;
    reg->balanceCell->cell.bg_color = 0xccccff;
    reg->dateCell ->  cell.bg_color = 0xccccff;
    reg->numCell ->        bg_color = 0xccccff;
@@ -434,7 +436,6 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    BASIC (recs,    Recn,      RECS);
    FANCY (credit,  Price,     CRED);
    FANCY (debit,   Price,     DEBT);
-   FANCY (shrs,    Price,     SHRS);
    FANCY (price,   Price,     PRIC);
    FANCY (value,   Price,     VALU);
 
