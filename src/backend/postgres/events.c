@@ -109,6 +109,11 @@ pgendEventsPending (Backend *bend)
          be->do_account ++;
       } 
       else
+      if (0 == strcasecmp ("gncBook", note->relname))
+      {
+         be->do_book ++;
+      } 
+      else
       if (0 == strcasecmp ("gncSession", note->relname))
       {
          be->do_session ++;
@@ -167,6 +172,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    switch (objtype)
    {
       case 'a': obj_type = GNC_ID_ACCOUNT; break;
+      case 'b': obj_type = GNC_ID_BOOK; break;
       case 'c': obj_type = GNC_ID_NONE; break;  /* should be commodity */
       case 'e': obj_type = GNC_ID_SPLIT; break;
       case 'p': obj_type = GNC_ID_PRICE; break;
@@ -240,7 +246,7 @@ pgendProcessEvents (Backend *bend)
 
    ENTER (" ");
 
-   /* get all recent events from teh SQL db. */
+   /* Get all recent events from the SQL db. */
    if (be->do_account)
    {
       GET_EVENTS (accountGuid, gncAccountTrail, be->last_account);
@@ -441,7 +447,7 @@ pgendSessionSetupNotifies (PGBackend *be)
 {
    char *p;
 
-   /* get latest times from the database; this to avoid clock 
+   /* Get latest times from the database; this to avoid clock 
     * skew between database and this local process */
    p = "SELECT date_changed FROM gncAuditTrail* ORDER BY date_changed DESC LIMIT 1;";
    SEND_QUERY (be, p, );
@@ -449,7 +455,7 @@ pgendSessionSetupNotifies (PGBackend *be)
 
    p = "LISTEN gncSession;\nLISTEN gncAccount;\n"
        "LISTEN gncPrice;\nLISTEN gncTransaction;\n"
-       "LISTEN gncCheckpoint;";
+       "LISTEN gncCheckpoint;\nLISTEN gncBook;\n";
    SEND_QUERY (be, p, );
    FINISH_QUERY(be->connection);
 }

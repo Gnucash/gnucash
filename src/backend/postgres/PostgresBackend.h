@@ -85,6 +85,7 @@ struct _pgend {
 
    /* notify counters */
    int do_account;
+   int do_book;
    int do_checkpoint;
    int do_price;
    int do_session;

@@ -70,14 +70,13 @@ static short module = MOD_BACKEND;
  *
  */
 
-static void
+void
 pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
-                         gboolean do_mark, 
                          gboolean do_check_version)
 {
    if (!be || !book) return;
 
-   ENTER ("acct=%p, mark=%d", book, do_mark);
+   ENTER ("book=%p", book);
 
    if (do_check_version)
    {
@@ -101,6 +100,29 @@ pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
    }
    LEAVE(" ");
 }
+
+void
+pgendStoreBook (PGBackend *be, GNCBook *book)
+{
+   char *p;
+   ENTER ("be=%p, book=%p", be, book);
+   if (!be || !book) return;
+
+   /* lock it up so that we store atomically */
+   p = "BEGIN;\n"
+       "LOCK TABLE gncBook IN EXCLUSIVE MODE;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+
+   pgendStoreBookNoLock (be, book, TRUE);
+
+   p = "COMMIT;\n"
+       "NOTIFY gncBook;";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+   LEAVE(" ");
+}
+
 
 /* ============================================================= */
 /*           BOOK GETTERS (SETTERS ARE ABOVE)                    */

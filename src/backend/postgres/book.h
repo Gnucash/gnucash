@@ -30,6 +30,7 @@
 #include "PostgresBackend.h"
 
 void pgendGetBook (PGBackend *be, GNCBook *book);
-// void pgendStoreBook (PGBackend *be, GNCBook *book);
+void pgendStoreBookNoLock (PGBackend *be, GNCBook *book, int do_check_version);
+void pgendStoreBook (PGBackend *be, GNCBook *book);
 
 #endif /* POSTGRES_BOOK_H */
