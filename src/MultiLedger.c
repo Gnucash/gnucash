@@ -458,8 +458,8 @@ xaccRegisterCountHack (SplitRegister *splitreg)
    while (regData) {
       if (splitreg == regData->ledger) {
         xaccSRCountRows (splitreg, 
-                      xaccAccountGetSplitList (regData->leader),
-                      regData->leader);      
+			 xaccQueryGetSplits (regData->query),
+			 regData->leader);      
         return;
       }
       n++; regData = fullList[n];
