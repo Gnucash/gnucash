@@ -62,11 +62,15 @@ void    xaccGroupMergeAccounts (AccountGroup *grp);
  *
  * The xaccGroupMarkNotSaved() subroutine will mark
  *    the given group as not having been saved.
+ *
+ * The xaccGroupMarkDoFree() subroutine will mark
+ *    all accounts in the group as being destroyed.
  */
 
 gboolean xaccGroupNotSaved  (AccountGroup *grp);
 void     xaccGroupMarkSaved (AccountGroup *grp);
 void     xaccGroupMarkNotSaved (AccountGroup *grp);
+void     xaccGroupMarkDoFree (AccountGroup *grp);
 
 /*
  * The xaccRemoveAccount() subroutine will remove the indicated

@@ -659,6 +659,10 @@ gnc_book_destroy (GNCBook *book)
   if (book->backend) g_free(book->backend);
   xaccGroupSetBackend (book->topgroup, NULL);
 
+  /* mark the accounts as being freed
+   * to avoid tons of balance recomputations. */
+  xaccGroupMarkDoFree (book->topgroup);
+
   xaccFreeAccountGroup (book->topgroup);
   book->topgroup = NULL;
   xaccLogEnable();

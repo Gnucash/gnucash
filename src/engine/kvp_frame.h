@@ -66,7 +66,7 @@ kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
  *    associating it with 'key'.
  * The kvp_frame_set_slot_nc() routine puts the value (without copying
  *    it) into the frame, associating it with 'key'.  This routine is
- *    handy for aviding excess memory allocations & frees.
+ *    handy for avoiding excess memory allocations & frees.
  */
 void          kvp_frame_set_slot(kvp_frame * frame, 
                                  const char * key, const kvp_value * value);
@@ -75,7 +75,7 @@ void          kvp_frame_set_slot_nc(kvp_frame * frame,
 kvp_value   * kvp_frame_get_slot(kvp_frame * frame, 
                                  const char * key);
 
-/* The kvp_frame_set_slot_path() routines walk the heirarchy,
+/* The kvp_frame_set_slot_path() routines walk the hierarchy,
  * using the key falues to pick each branch.  When the terminal node
  * is reached, the value is copied into it.
  */

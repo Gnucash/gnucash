@@ -681,7 +681,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
  * value of such an account is the number of shares times the       *
  * current share price.                                             *
  *                                                                  *
- * Part of the complexity of this computatation stems from the fact *
+ * Part of the complexity of this computation stems from the fact   *
  * xacc uses a double-entry system, meaning that one transaction    *
  * appears in two accounts: one account is debited, and the other   *
  * is credited.  When the transaction represents a sale of shares,  *
@@ -700,7 +700,7 @@ price_xfer(Split * s, gnc_numeric share_count) {
   gnc_numeric temp;
   if(!gnc_numeric_zero_p(s->damount)) {
     temp = gnc_numeric_div(s->value, s->damount,
-                           GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+                           1000000, GNC_DENOM_LCD);
     temp = gnc_numeric_mul(share_count, temp,
                            gnc_numeric_denom(s->value),
                            GNC_RND_ROUND);
@@ -726,6 +726,7 @@ xaccAccountRecomputeBalance (Account * acc)
   if(NULL == acc) return;
   if(acc->editlevel > 0) return;
   if(!acc->balance_dirty) return;
+  if(acc->do_free) return;
 
   dbalance =                 acc->starting_balance;
   dcleared_balance =         acc->starting_cleared_balance;
@@ -765,7 +766,7 @@ xaccAccountRecomputeBalance (Account * acc)
       split -> share_reconciled_balance = share_reconciled_balance;
       split -> balance = price_xfer(split, share_balance);
       split -> cleared_balance = price_xfer(split, share_cleared_balance);
-      split -> reconciled_balance = 
+      split -> reconciled_balance =
         price_xfer(split, share_reconciled_balance);
     }
     else {

@@ -157,6 +157,26 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
 \********************************************************************/
 
 void
+xaccGroupMarkDoFree (AccountGroup *grp)
+{
+  GList *node;
+
+  if (!grp) return;
+
+  for (node = grp->accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    account->do_free = TRUE;
+
+    xaccGroupMarkDoFree (account->children); 
+  }
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
 xaccFreeAccountGroup (AccountGroup *grp)
 {
   if (!grp) return;
