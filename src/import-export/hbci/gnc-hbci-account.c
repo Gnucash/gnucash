@@ -147,8 +147,10 @@ void *list_HBCI_Account_foreach(GList *h_list,
 				void *user_data)
 {
   GList *iter;
+  void *res;
+
   g_assert(func_cb);
-  void *res = NULL;
+  res = NULL;
 
   if (!h_list) return NULL;
 

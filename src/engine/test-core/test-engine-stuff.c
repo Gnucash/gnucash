@@ -873,14 +873,17 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
     Account *acc, *bcc;
     Split *s;
+    gnc_commodity *com;
+    int scu;
+    gnc_numeric num;
 
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
 
     /* Set up two splits whose values really are opposites. */
-    gnc_commodity *com = xaccTransGetCurrency (trn);
-    int scu = gnc_commodity_get_fraction(com);
-    gnc_numeric num = get_random_gnc_numeric();
+    com = xaccTransGetCurrency (trn);
+    scu = gnc_commodity_get_fraction(com);
+    num = get_random_gnc_numeric();
 
     if (!do_bork()) num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
 
@@ -1317,6 +1320,7 @@ get_random_transaction_with_currency(QofBook *book,
                                      GList *account_list)
 {
     Transaction* ret;
+    KvpFrame *f;
 
     if (!account_list) 
     {
@@ -1338,7 +1342,7 @@ get_random_transaction_with_currency(QofBook *book,
     trn_add_ran_timespec(ret, xaccTransSetDatePostedTS);
     trn_add_ran_timespec(ret, xaccTransSetDateEnteredTS);
 
-    KvpFrame *f = get_random_kvp_frame();
+    f = get_random_kvp_frame();
     xaccTransSetSlots_nc(ret, f);
 
     add_random_splits(book, ret, account_list);
