@@ -1,3 +1,10 @@
+2005-01-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	src/tax/us/gncmod-tax-us.c: For German tax categories, make sure
+	the module name will match the de_DE locale or will fall back to
+	us module name all the time.
+
 2004-12-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/tax/us/txf-de_DE.scm: Add Tax TXF categories for the de_DE
