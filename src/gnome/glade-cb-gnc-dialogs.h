@@ -105,13 +105,13 @@ gnc_ui_print_check_dialog_help_cb      (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-gnc_ui_find_transactions_dialog_early_date_select_cb
-                                        (GtkButton       *button,
+gnc_ui_find_transactions_dialog_early_date_toggle_cb
+                                        (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
 
 void
-gnc_ui_find_transactions_dialog_late_date_select_cb
-                                        (GtkButton       *button,
+gnc_ui_find_transactions_dialog_late_date_toggle_cb
+                                        (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
 
 void
@@ -143,20 +143,4 @@ gnc_ui_select_date_dialog_ok_cb        (GtkButton       *button,
 
 void
 gnc_ui_select_date_dialog_cancel_cb    (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_ui_qif_import_account_line_select_cb
-                                        (GtkCList        *clist,
-                                        gint             row,
-                                        gint             column,
-                                        GdkEvent        *event,
-                                        gpointer         user_data);
-
-void
-gnc_ui_qif_import_category_line_select_cb
-                                        (GtkCList        *clist,
-                                        gint             row,
-                                        gint             column,
-                                        GdkEvent        *event,
                                         gpointer         user_data);

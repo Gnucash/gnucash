@@ -1,3 +1,13 @@
+2001-04-26  gettextize  <bug-gnu-utils@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.10.37.
+	* cat-id-tbl.c: Remove file.
+	* stamp-cat-id: Remove file.
+
+2000-09-04  Linas Vepstas  <linas@linas.org>
+
+	* Added Juan Manuel García Molina's es.po translations
+
 2000-04-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* extract-macros.perl.in: fix this to handle N_ macros.

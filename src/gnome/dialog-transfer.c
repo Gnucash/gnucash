@@ -327,7 +327,7 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
   time_t time;
   gint result;
 
-  if (xaccGroupGetNumAccounts(gncGetCurrentGroup()) < 2)
+  if (xaccGetNumAccounts(gncGetCurrentGroup()) < 2)
   {
     gnc_error_dialog(XFER_NSF_MSG);
     return;

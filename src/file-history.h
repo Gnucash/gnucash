@@ -27,6 +27,6 @@
 
 void gnc_history_add_file(char *);
 void gnc_history_update_menu();
-char * gnc_history_get_last();
+const char * gnc_history_get_last();
 
 #endif

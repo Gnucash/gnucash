@@ -1,0 +1,62 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta name="GENERATOR" content="Mozilla/4.75 [en] (X11; U; Linux 2.2.14-15mdk i686) [Netscape]">
+    <title>Tax Report</title>
+    <link rel="stylesheet" title="normal" type="text/css" href=
+      "gnucash.css">
+  </head>
+  <body>
+    
+    <h1>
+      Tax Report</h1>
+    
+    <a href="xacc-tax-report-example.html"><img SRC="image/report-tax.png"
+	ALT="click for Full Report"></a>
+    
+    <p>This report allows you to view all tax related Income and Expenses.
+      Up to fifteen sub-accounts are displayed. Lower sub-accounts are ignored.
+    </p>
+    <p><b>NOTE:</b> For this to work, the user has to segregate taxable and
+      not taxable income to different accounts, as well as deductible
+      and non deductible expenses. The user also must Set the Tax Status
+      of each tax related account.  The "Set/Reset Tax Status:"
+      parameter does this. There is a taxreport.xac file in the examples
+      directory, which shows one way this can be set up.
+    </p>
+    
+    <img SRC="image/report-tax-options.png" >
+    
+    <p>Parameters for this report include:</p>
+    <ul>
+      <li>The start and end dates - default: Year-to-Date.</li>
+      <li>Alternate Period: (Year is relative to From:)
+	<ul>
+	  <li>Use From - To (default)</li>
+	  <li>1st, 2nd, 3rd, 4th Estimated Tax Quarters (From: year)</li>
+	  <li>Last Year (year before From: year)</li>
+	  <li>1st, 2nd, 3rd, 4th Estimated Tax Quarters for Last Year</li>
+	</ul></li>
+      <li>The accounts for which the report is to be produced. If no
+	account is selected, all tax related accounts are displayed. Non-tax
+	related accounts are not displaied, even if selected, though tax
+	related sub-accounts will be displaied.</li>
+      <li>Suppress $0.00 values</li>
+      <li>Display Full account names</li>
+      <li>Set/Reset Tax Status of selected accounts. (No op is none selected)
+	<ul>
+	  <li>No Change (default)</li>
+	  <li>Set Tax Related</li>
+	  <li>Reset Tax Related</li>
+	  <li>Set Tax Related & sub-accounts</li>
+	  <li>Reset Tax Related & sub-accounts</li>
+	</ul></li>
+    </ul>
+    <p> I plan to add export capability to TaxCut and TurboTax, as soon
+      as I can get a hold of the spec for .txf files.</p>
+    <hr>
+    <p>Return to <a href="xacc-main.html">Main Documentation Page.</a>
+  </body>
+</html>

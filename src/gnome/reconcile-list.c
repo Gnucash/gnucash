@@ -125,6 +125,7 @@ gnc_reconcile_list_init(GNCReconcileList *list)
   list->current_split = NULL;
   list->no_toggle = FALSE;
   list->always_unselect = FALSE;
+  list->first_fill = TRUE;
   list->query = NULL;
 
   while (titles[list->num_columns] != NULL)
@@ -624,6 +625,9 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[2] = (char *) xaccTransGetDescription(trans);
     strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
 
+    if (list->first_fill && recn == CREC)
+      g_hash_table_insert (list->reconciled, split, split);
+
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
 
     g_snprintf(recn_str, 2, "%c", reconciled ? YREC : recn);
@@ -634,5 +638,9 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     gnc_reconcile_list_set_row_style(list, row, reconciled);
 
     list->num_splits++;
+
+    free (strings[0]);
   }
+
+  list->first_fill = FALSE;
 }

@@ -65,6 +65,24 @@ xaccParseDate (struct tm *parsed, const char * datestr)
    parsed->tm_mday = iday;
    parsed->tm_mon = imonth-1;
    parsed->tm_year = iyear-1900;
+   parsed->tm_sec = 0;
+   parsed->tm_min = 0;
+   parsed->tm_hour = 0;
+   parsed->tm_isdst = -1;
+
+  if (mktime (parsed) == -1)
+  {
+    time_t secs = time (NULL);
+
+    *parsed = *localtime (&secs);
+
+    parsed->tm_sec = 0;
+    parsed->tm_min = 0;
+    parsed->tm_hour = 0;
+    parsed->tm_isdst = -1;
+  }
+
+  mktime (parsed);
 }
 
 /* ================================================ */
@@ -142,6 +160,10 @@ DateCellHelpValue(BasicCell *bcell)
       time.tm_mday = cell->date.tm_mday;
       time.tm_mon  = cell->date.tm_mon;
       time.tm_year = cell->date.tm_year;
+      time.tm_sec = 0;
+      time.tm_min = 0;
+      time.tm_hour = 0;
+      time.tm_isdst = -1;
     }
 
     xaccValidateDate(&time, GNC_F);

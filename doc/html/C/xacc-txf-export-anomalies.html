@@ -1,0 +1,69 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta name="GENERATOR" content="Mozilla/4.75 [en] (X11; U; Linux 2.2.14-15mdk i686) [Netscape]">
+    <title>TXF Export - Known Anomalies and Limitations</title>
+    <link rel="stylesheet" title="normal" type="text/css" href=
+      "gnucash.css">
+  </head>
+  <body>
+    
+    <h1>TXF Export - Known Anomalies and Limitations</h1>
+    
+    <p><b>TaxCut 1999</b></p>
+    <ul>
+      <li><b>Code: N488 "^ Sched B \ Div. income, cap gain distrib."<br>
+	Code: N286 "^ Sched B \ Dividend income"</b><br>
+	These two codes, from the same payer, are not correlated. The
+	user will have to adjust for this after import.</li>
+
+    </ul>
+
+    <p><b>TaxCut 1999, 2000</b></p>
+    <ul>
+      <li><b>Code: N521 "  F1040 \ Federal estimated tax, qrtrly"</b><br>
+      	Does not accept the date field and does not import the
+	individual payment amounts, only the total. The date and
+	individual payment amounts, only matter if you have to compute
+	the penalty.</li>
+      <li><b>Code: N460 "  W-2 \ Salary or wages, self"<br>
+	  Code: N506 "  W-2 \ Salary or wages, spouse"</b><br>
+	and other related codes.<br>
+	Information from only one job may be imported.</li>
+
+    </ul>
+
+    <p><b>TurboTax 1999, 2000</b></p>
+    <ul>
+      <li><b>Code: N521 "  F1040 \ Federal estimated tax, qrtrly"</b><br>
+      	Does not accept the dates outside of the tax year. This is a
+	problem for the last payment that is due Jan 15.  GnuCash
+	changes the the date of the last payment to Dec 31. The user
+	will have to adjust for this after import. The date only matters
+	if you have to compute the penalty.</li>
+    </ul>
+
+    <p><b>TXF Tax eXport Format</b></p>
+    <ul>
+      <li><b>Duplicate Codes</b><br>
+	Most codes are not supposed to appear more than once.  GnuCash
+	issues an error message if it detects this, but will still
+	export the data.  These are not handled the same by TaxCut and
+	TurboTax.
+	<ul>
+	  <li><b>TurboTax</b><br>
+	    Sums the duplicate codes.</li>
+	  <li><b>TaxCut</b><br>
+	    Keeps only the <b>LAST</b> of the duplicate codes. i.e., "Job
+	    One" is ignored and "Job Two" is kept.</li>
+	</ul>
+      </li>
+    </ul>
+
+    <hr>
+
+    <p>Return to <a href="xacc-main.html">Main Documentation Page.</a>
+  </body>
+</html>

@@ -33,6 +33,7 @@ enum
 {
   SELECT_ITEM,
   CHANGE_ITEM,
+  ACTIVATE_ITEM,
   KEY_PRESS_EVENT,
   LAST_SIGNAL
 };
@@ -161,6 +162,7 @@ static void
 gnc_item_list_init(GNCItemList *item_list)
 {
         item_list->clist = NULL;
+        item_list->box   = NULL;
 }
 
 
@@ -229,7 +231,7 @@ gnc_item_list_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
                                 return FALSE;
 
                         gtk_signal_emit(GTK_OBJECT(item_list),
-                                        gnc_item_list_signals[SELECT_ITEM],
+                                        gnc_item_list_signals[ACTIVATE_ITEM],
                                         string);
 
                         return TRUE;
@@ -283,6 +285,16 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 			       GTK_TYPE_NONE, 1,
 			       GTK_TYPE_POINTER);
 
+	gnc_item_list_signals[ACTIVATE_ITEM] =
+		gtk_signal_new("activate_item",
+			       GTK_RUN_LAST,
+			       object_class->type,
+			       GTK_SIGNAL_OFFSET(GNCItemListClass,
+						 activate_item),
+			       gtk_marshal_NONE__POINTER,
+			       GTK_TYPE_NONE, 1,
+			       GTK_TYPE_POINTER);
+
 	gnc_item_list_signals[KEY_PRESS_EVENT] =
 		gtk_signal_new ("key_press_event",
 				GTK_RUN_LAST,
@@ -299,6 +311,7 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 
         item_list_class->select_item = NULL;
         item_list_class->change_item = NULL;
+        item_list_class->activate_item = NULL;
         item_list_class->key_press_event = NULL;
 }
 
@@ -382,6 +395,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
         item_list = GNC_ITEM_LIST(item);
 
 	item_list->clist = GTK_CLIST(clist);
+        item_list->box = hbox;
 
 	gtk_signal_connect_after(GTK_OBJECT(hbox), "button_press_event",
 				 GTK_SIGNAL_FUNC(gnc_item_list_button_event),

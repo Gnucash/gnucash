@@ -53,8 +53,8 @@ gnucash_header_update (GnomeCanvasItem *item, double *affine,
 
         item->x1 = 0;
         item->y1 = 0;
-        item->x2 = INT_MAX;
-        item->y2 = INT_MAX;
+        item->x2 = INT_MAX/2 -1;
+        item->y2 = INT_MAX/2 -1;
 }
 
 
@@ -165,7 +165,7 @@ gnucash_header_request_redraw (GnucashHeader *header)
 {
         GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
 
-        gnome_canvas_request_redraw (canvas, 0, 0, INT_MAX, INT_MAX);
+        gnome_canvas_request_redraw (canvas, 0, 0, INT_MAX/2 -1, INT_MAX/2 -1);
 }
 
 

@@ -1036,7 +1036,9 @@ item_edit_show_list (ItemEdit *item_edit)
         gint y_offset;
         gint list_x, list_y;
         gint list_height;
+        gint list_width;
         gint view_height;
+        gint view_width;
 
         g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
@@ -1046,6 +1048,7 @@ item_edit_show_list (ItemEdit *item_edit)
 
         sheet = item_edit->sheet;
         view_height = GTK_WIDGET(sheet)->allocation.height;
+        view_width  = GTK_WIDGET(sheet)->allocation.width;
         gnome_canvas_get_scroll_offsets(GNOME_CANVAS(sheet), NULL, &y_offset);
         item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
@@ -1085,11 +1088,24 @@ item_edit_show_list (ItemEdit *item_edit)
 
         gtk_widget_grab_focus(GTK_WIDGET(item_edit->item_list->clist));
 
+        gtk_widget_size_request (item_edit->item_list->box, NULL);
+
         /* Make sure the list gets shown/sized correctly */
         while (gtk_events_pending())
                 gtk_main_iteration();
 
         gnc_item_list_show_selected(item_edit->item_list);
+
+        list_width = GTK_WIDGET(item_edit->item_list->clist)->allocation.width;
+        if (list_width > (view_width - list_x))
+        {
+                list_x -= (list_width - (view_width - list_x));
+                list_x  = MAX (0, list_x);
+
+                gnome_canvas_item_set(GNOME_CANVAS_ITEM(item_edit->item_list),
+                                      "x", (gdouble) list_x,
+                                      NULL);
+        }
 }
 
 
