@@ -651,13 +651,26 @@ gnc_main_window_sched_xaction_cb (GtkWidget *widget, gpointer data)
   gnc_ui_scheduled_xaction_dialog_create();
 }
 
-static void
-gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data) {
+static
+void
+gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data)
+{
+  gint ret;
+  
   const char *nothing_to_do_msg =
-    _( "There are no Scheduled Transactions to deal with." );
-  if ( ! gnc_ui_sxsincelast_dialog_create() ) {
+    _( "There are no Scheduled Transactions to be entered at this time." );
+  const char *no_dialog_but_created_msg =
+    _( "There are no Scheduled Transactions to be entered at this time.\n"
+       "(%d %s automatically created)" );
+  
+  ret = gnc_ui_sxsincelast_dialog_create();
+  if ( ret == 0 ) {
     gnc_info_dialog( nothing_to_do_msg );
-  }
+  } else if ( ret < 0 ) {
+    gnc_info_dialog( no_dialog_but_created_msg,
+                     -(ret), -(ret) == 1 ? _("transaction") : _("transactions") );
+  } /* else { this else [>0 means dialog was created] intentionally left
+     * blank. } */
 }
 
 static

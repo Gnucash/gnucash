@@ -49,6 +49,7 @@
 
 #include "config.h"
 
+#include <limits.h>
 #include <gnome.h>
 #include <glib.h>
 
@@ -110,6 +111,7 @@
 #define CANCEL_BUTTON "cancel_button"
 #define VARIABLE_TABLE "variables_table"
 #define AUTO_CREATE_VBOX "ac_vbox"
+#define TO_CREATE_TXN_REG_FRAME "to_create_txn_reg_frame"
 #define CREATED_VBOX "created_vbox"
 #define WHAT_TO_DO_VBOX "what_to_do_vbox"
 #define WHAT_TO_DO_PROGRESS "creation_progress"
@@ -247,6 +249,8 @@ typedef struct _sxSinceLastData {
         GladeXML *gxml;
 
         GtkProgressBar *prog;
+        GtkStatusbar *toCreateFormula;
+        guint formulaCtxId;
         GtkStatusbar *toCreateStatus;
         guint statusCtxId;
 
@@ -279,15 +283,19 @@ typedef struct _sxSinceLastData {
         GNCLedgerDisplay *created_ledger;
         GNCRegWidget *created_regWidget;
 
+        GNCLedgerDisplay *to_create_ledger;
+        GNCRegWidget *to_create_regWidget;
+
 } sxSinceLastData;
 
 static void sxsincelast_init( sxSinceLastData *sxsld );
 static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
+static void create_to_create_ledger( sxSinceLastData *sxsld );
 static gncUIWidget sxsld_ledger_get_parent( GNCLedgerDisplay *ld );
 static void gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld );
 
-static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
+static gint sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
 static void sxsincelast_close_handler( gpointer ud );
 
@@ -377,10 +385,18 @@ static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
  **/
-gboolean
+void
 gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
 {
-        return gnc_ui_sxsincelast_dialog_create();
+        const char *no_dialog_but_created_msg =
+                _( "There are no Scheduled Transactions to be entered at this time.\n"
+                   "(%d %s automatically created)" );
+        gint ret;
+        ret = gnc_ui_sxsincelast_dialog_create();
+        if ( ret < 0 ) {
+                gnc_info_dialog( no_dialog_but_created_msg,
+                                 -(ret), -(ret) == 1 ? _("transaction") : _("transactions") );
+        }
 }
 
 static gboolean
@@ -396,21 +412,28 @@ show_handler (const char *class, gint component_id,
 }
 
 /**
- * Returns TRUE if the dialogs were created, FALSE if not.  The caller
- * probably wants to use this to inform the user in the manner appropriate to
- * the calling context.
+ * @return The magnitude of the return value is the number of auto-created,
+ * no-notification scheduled transactions created.  This value is positive if
+ * there are additionally other SXes which need user interaction and the
+ * Druid has been displayed, or negative if there are not, and no Druid
+ * window was realized.  In the case where there the dialog has been
+ * displayed but no auto-create-no-notify transactions have been created,
+ * INT_MAX [limits.h] is returned.  0 is treated as negative, with no
+ * transactions created and no dialog displayed.  The caller can use this
+ * value as appropriate to inform the user.
  *
- * [i.e., for book-open-hook: do nothing; for menu-selection: display an info
+ * [e.g., for book-open-hook: do nothing; for menu-selection: display an info
  *  dialog stating there's nothing to do.]
  **/
-gboolean
+gint
 gnc_ui_sxsincelast_dialog_create()
 {
+        int autoCreateCount;
         sxSinceLastData        *sxsld;
 
 	if (gnc_forall_gui_components (DIALOG_SXSINCELAST_CM_CLASS,
 				       show_handler, NULL))
-		return TRUE;
+		return 0;
 
 
 	sxsld = g_new0( sxSinceLastData, 1 );
@@ -418,9 +441,10 @@ gnc_ui_sxsincelast_dialog_create()
         sxsld->toCreateList = sxsld->reminderList = sxsld->toRemoveList = NULL;
         sxsld->sxInitStates = g_hash_table_new( g_direct_hash, g_direct_equal );
 
-        if ( ! sxsincelast_populate( sxsld ) ) {
+        autoCreateCount = sxsincelast_populate( sxsld );
+        if ( autoCreateCount <= 0 ) {
                 g_free( sxsld );
-                return FALSE;
+                return autoCreateCount;
         }
 
         sxsld->gxml = gnc_glade_xml_new( SX_GLADE_FILE,
@@ -432,7 +456,7 @@ gnc_ui_sxsincelast_dialog_create()
                 GNOME_DRUID( glade_xml_get_widget( sxsld->gxml,
                                                    SXSLD_DRUID_GLADE_NAME ) );
         sxsincelast_init( sxsld );
-        return TRUE;
+        return autoCreateCount;
 }
 
 static void 
@@ -950,6 +974,9 @@ to_create_prep( GnomeDruidPage *druid_page,
         clean_variable_table( sxsld );
         add_to_create_list_to_gui( sxsld->toCreateList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
+
+        
+        
         gnome_druid_set_buttons_sensitive(
                 sxsld->sincelast_druid,
                 ( gnc_sxsld_get_appropriate_page( sxsld,
@@ -1552,6 +1579,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
 
         create_autoCreate_ledger( sxsld );
         create_created_ledger( sxsld );
+        create_to_create_ledger( sxsld );
 
         {
                 int width, height;
@@ -1723,11 +1751,13 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
         toCreateInstance *tci;
         GtkCTree *ct;
         GtkCTreeNode *sxNode;
+        GtkCTreeNode *firstToBeProcessedRow;
         char *rowText[ TO_CREATE_LIST_WIDTH ];
         GList *insts;
 
         ct = GTK_CTREE( glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ) );
 
+        firstToBeProcessedRow = NULL;
         for ( ; toCreateList ; toCreateList = toCreateList->next ) {
                 tct = (toCreateTuple*)toCreateList->data;
 
@@ -1782,13 +1812,21 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                                                            rowText,
                                                            0, NULL, NULL, NULL, NULL,
                                                            TRUE, FALSE );
+                        if ( !allVarsBound && !firstToBeProcessedRow ) {
+                                firstToBeProcessedRow = tci->node;
+                        }
                         gtk_ctree_node_set_row_data( ct, tci->node, tci );
                         g_free( rowText[0] );
                 }
         }
 
-        /* FIXME: Simulate a 'next' button press to get the right "first
-         * thing" hilighted */
+        /* Setup the first thing to be processed, or disable controls. */
+        if ( firstToBeProcessedRow ) {
+                gtk_ctree_select( ct, firstToBeProcessedRow );
+                sxsld_set_sensitive_tci_controls( sxsld, TRUE );
+        } else {
+                sxsld_set_sensitive_tci_controls( sxsld, FALSE );
+        }
 }
 
 static
@@ -1991,31 +2029,28 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
 }
 
 /**
- * Returns TRUE if there's some populated in the dialog to show to the user,
- * FALSE if not.
+ * @see gnc_ui_sxsincelast_dialog_create for the return value definition.
  **/
-static gboolean
+static
+gint
 sxsincelast_populate( sxSinceLastData *sxsld )
 {
-
+        int toRet = 0;
+        gboolean onlyNoNotify = TRUE;
         GList *sxList, *instanceList, *l, **containingList;
         SchedXaction *sx;
         GDate end, endPlusReminders;
         gint daysInAdvance;
         gboolean autocreateState, notifyState;
-        gboolean showIt;
         toCreateTuple *tct;
         toCreateInstance *tci;
 
-        showIt = FALSE;
-
         instanceList = NULL;
-
         sxList = gnc_book_get_schedxactions( gnc_get_current_book () );
 
         if ( sxList == NULL ) {
                 DEBUG( "No scheduled transactions to populate." );
-                return FALSE;
+                return toRet;
         }
 
         for ( ; sxList; sxList = sxList->next ) {
@@ -2027,7 +2062,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                         PERR( "Why are we able to find a SX initial state "
                               "hash entry for something we're seeing for "
                               "the first time?" );
-                        return FALSE;
+                        return toRet;
                 }
                 {
                         void *sx_state;
@@ -2059,6 +2094,8 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                         postponed = gnc_sx_get_defer_instances( sx );
 
                         for ( l = postponed; l; l = l->next ) {
+                                onlyNoNotify = FALSE;
+
                                 tci = g_new0( toCreateInstance, 1 );
                                 tci->sxStateData = (void*)l->data;
                                 tci->date        = g_date_new();
@@ -2096,6 +2133,13 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                 tct = g_new0( toCreateTuple, 1 );
                 tct->sx = sx;
                 for ( l = instanceList ; l; l = l->next ) {
+
+                        /* only count the no-notify txns for this. */
+                        if ( autocreateState && !notifyState ) {
+                                onlyNoNotify &= (!notifyState);
+                                toRet++;
+                        }
+
                         tci = (toCreateInstance*)l->data;
                         tci->parentTCT = tct;
                         
@@ -2108,16 +2152,32 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 
                 /* abstractly place the TCT onto the afore-determined list. */
                 *containingList = g_list_append( *containingList, tct );
-
-                /* Report RE:showing the dialog iff there's stuff in it to
-                 * show. */
-                showIt |= ( (g_list_length(sxsld->autoCreateList) > 0)
-                            || (g_list_length(sxsld->toCreateList) > 0) );
         }
-        showIt |= ( g_list_length( sxsld->reminderList ) > 0
-                    || g_list_length( sxsld->toRemoveList ) > 0 );
 
-        return showIt;
+        /* Return appropriately. */
+        {
+                gboolean stuffToDo = 
+                        ( g_list_length( sxsld->toRemoveList )    > 0
+                          || g_list_length( sxsld->reminderList ) > 0
+                          || g_list_length( sxsld->toCreateList ) > 0 );
+                if ( onlyNoNotify && !stuffToDo ) {
+                        toRet = -(toRet);
+                }
+
+                if ( toRet == 0
+                     && ( stuffToDo
+                          || g_list_length( sxsld->autoCreateList ) > 0 ) ) {
+                        toRet = INT_MAX;
+                }
+        }
+
+        /* if we're about to return a negative value [indicating only
+         * auto-create no-notify txns], then actually create them. */
+        if ( toRet < 0 ) {
+                process_auto_create_list( sxsld->autoCreateList, sxsld );
+        }
+
+        return toRet;
 }
 
 static void
@@ -2728,16 +2788,14 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
         toCreateInstance *tci;
         sxSinceLastData *sxsld;
 
+
         /* FIXME: this should more gracefully deal with multiple 'row-select'
          * signals from double/triple-clicks. */
         sxsld = (sxSinceLastData*)user_data;
 
         tci = (toCreateInstance*)gtk_ctree_node_get_row_data( ct, node );
-        if ( tci == NULL ) {
-                PERR( "Given row-selection for row w/o "
-                      "bound toCreateInstance." );
-                return;
-        }
+        g_assert( tci );
+
         sxsld->curSelTCI = tci;
         sxsld_set_sensitive_tci_controls( sxsld, TRUE );
         /* set real sensitivity based on the state of the TCI; when we change
@@ -2755,6 +2813,17 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 sxsld_disposition_changed( GTK_MENU_SHELL(
                                                    gtk_option_menu_get_menu( optMenu ) ),
                                            sxsld );
+        }
+
+        /* Setup the query for the to-create register to only show the
+         * transaction[s] associated with this lineitem. */
+        {
+                gchar *sxGUIDstr;
+                sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID( tci->parentTCT->sx ) );
+
+                sxsld->to_create_ledger = gnc_ledger_display_template_gl( sxGUIDstr );
+                gnc_regWidget_set_ledger_display( sxsld->to_create_regWidget,
+                                                  sxsld->to_create_ledger );
         }
 
         /* Get the count of variables; potentially remove the system-defined
@@ -3499,6 +3568,50 @@ create_created_ledger( sxSinceLastData *sxsld )
 
         /* force a refresh */
         gnc_ledger_display_refresh( sxsld->created_ledger );
+}
+
+static void
+create_to_create_ledger( sxSinceLastData *sxsld )
+{
+        SplitRegister *splitreg;
+        GtkWidget *txn_reg_frame;
+        Query *q;
+
+        q = xaccMallocQuery();
+        sxsld->to_create_ledger = gnc_ledger_display_query( q,
+                                                            GENERAL_LEDGER,
+                                                            REG_STYLE_LEDGER );
+        xaccFreeQuery( q );
+        gnc_ledger_display_set_handlers( sxsld->to_create_ledger,
+                                         NULL,
+                                         sxsld_ledger_get_parent );
+        gnc_ledger_display_set_user_data( sxsld->to_create_ledger, (gpointer)sxsld );
+        splitreg = gnc_ledger_display_get_split_register( sxsld->to_create_ledger );
+        /* FIXME: make configurable? */
+        gnucash_register_set_initial_rows( 4 );
+
+        sxsld->to_create_regWidget =
+          GNC_REGWIDGET(gnc_regWidget_new( sxsld->to_create_ledger,
+                                           GTK_WINDOW( sxsld->sincelast_window ),
+                                           CAP_SCHEDULE ));
+
+        txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
+        gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
+                           GTK_WIDGET( sxsld->to_create_regWidget ) );
+
+
+        /* configure... */
+        /* don't use double-line */
+        /* FIXME */
+        gnc_split_register_config( splitreg,
+                                   splitreg->type, splitreg->style,
+                                   FALSE );
+
+        /* don't show present/future divider [by definition, not necessary] */
+        gnc_split_register_show_present_divider( splitreg, FALSE );
+
+        /* force a refresh */
+        gnc_ledger_display_refresh( sxsld->to_create_ledger );
 }
 
 static

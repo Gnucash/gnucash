@@ -1,3 +1,27 @@
+2002-10-26  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_tc_row_sel): Place
+	the template transaction associated with the SX in the window,
+	fixing Bug#93900.
+
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_populate): Process
+	the auto-create transactions if there are only auto-create,
+	no-notify SXes as a result of the since-last-run-dialog
+	invocation; fixes bug #96944.
+	
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_populate): Changed
+	return-value from sxsincelast_populate to reflect all the possible
+	conditions, allowing...
+
+	* src/gnome/window-main.c (gnc_main_window_sched_xaction_slr_cb):
+	Changed since-last-run-dialog-create return-value handling; fixes
+	Bug#90060.
+
+	* src/gnome/dialog-sxsincelast.c (add_to_create_list_to_gui):
+	Setup of to-create page more correct; the first item which needs
+	interaction is selected, or the widgets are set to inactive.
+	Fixes Bug#96669 and Bug#96665.
+
 2002-10-26  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-kvp.h,

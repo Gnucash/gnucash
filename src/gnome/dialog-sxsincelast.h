@@ -23,8 +23,22 @@
 #ifndef DIALOG_SXSINCELAST_H
 #define DIALOG_SXSINCELAST_H
 
-gboolean gnc_ui_sxsincelast_dialog_create( void );
-gboolean gnc_ui_sxsincelast_guile_wrapper( char* );
+/**
+ * @return The magnitude of the return value is the number of auto-created,
+ * no-notification scheduled transactions created.  This value is positive if
+ * there are additionally other SXes which need user interaction and the
+ * Druid has been displayed, or negative if there are not, and no Druid
+ * window was realized.  In the case where there the dialog has been
+ * displayed but no auto-create-no-notify transactions have been created,
+ * INT_MAX [limits.h] is returned.  0 is treated as negative, with no
+ * transactions created and no dialog displayed.  The caller can use this
+ * value as appropriate to inform the user.
+ *
+ * [e.g., for book-open-hook: do nothing; for menu-selection: display an info
+ *  dialog stating there's nothing to do.]
+ **/
+gint gnc_ui_sxsincelast_dialog_create( void );
+void gnc_ui_sxsincelast_guile_wrapper( char* );
 
 /**
  * Returns the varaibles from the Splits of the given SchedXaction as the

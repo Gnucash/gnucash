@@ -250,14 +250,7 @@ by the user closing the window.")
 
   (gw:wrap-function
    ws
-   'gnc:sx-sincelast-create
-   '<gw:bool>
-   "gnc_ui_sxsincelast_dialog_create" '()
-   "Wrapper to open the since-last-run dialog from a book-open hook." )
-
-  (gw:wrap-function
-   ws
    'gnc:sx-since-last-run-wrapper
-   '<gw:bool>
+   '<gw:void>
    "gnc_ui_sxsincelast_guile_wrapper" '(((<gw:mchars> caller-owned) bookfile))
    "Wrapper to open the since-last-run dialog from a book-open hook." ))

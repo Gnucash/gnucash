@@ -124,6 +124,7 @@ struct _RegWindow
   sort_type_t sort_type;
 
   RegDateWindow *date_window;
+  /* pcd = "print check dialog" */
   gpointer pcd;
   gboolean read_only;
 };

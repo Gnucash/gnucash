@@ -4119,17 +4119,63 @@ Postpone
 		</widget>
 
 		<widget>
-		  <class>GtkStatusbar</class>
-		  <name>to_create_status</name>
-		  <border_width>5</border_width>
+		  <class>GtkHBox</class>
+		  <name>hbox175</name>
+		  <homogeneous>False</homogeneous>
+		  <spacing>0</spacing>
 		  <child>
 		    <padding>0</padding>
 		    <expand>False</expand>
 		    <fill>False</fill>
 		  </child>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label847967</name>
+		    <label>Value:</label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
+		    <xpad>3</xpad>
+		    <ypad>3</ypad>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
+
+		  <widget>
+		    <class>GtkStatusbar</class>
+		    <name>to_create_status</name>
+		    <border_width>3</border_width>
+		    <child>
+		      <padding>0</padding>
+		      <expand>True</expand>
+		      <fill>True</fill>
+		    </child>
+		  </widget>
 		</widget>
 	      </widget>
 	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkFrame</class>
+	  <name>to_create_txn_reg_frame</name>
+	  <label>Transaction</label>
+	  <label_xalign>0.05</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>Placeholder</class>
 	  </widget>
 	</widget>
       </widget>
