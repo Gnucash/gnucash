@@ -25,11 +25,11 @@
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
 */
 
-#ifndef GNC_QUERYOBJECT_H
-#define GNC_QUERYOBJECT_H
+#ifndef QOF_QUERYOBJECT_H
+#define QOF_QUERYOBJECT_H
 
+#include "qofquery.h"
 #include "qofquerycore.h"
-#include "QueryNew.h"
 
 /** This structure is for each queriable parameter in an object
  *
@@ -47,7 +47,7 @@ typedef struct query_object_def {
 /** This function is the default sort function for a particular object type */
 typedef int (*QuerySort)(gpointer, gpointer);
 
-/** This function registers a new Gnucash Object with the QueryNew
+/** This function registers a new Gnucash Object with the QofQuery
  * subsystem.  In particular it registers the set of parameters and
  * converters to query the type-specific data.  Both "params" and
  * "converters" are NULL-terminated arrays of structures.  Either
@@ -90,4 +90,4 @@ QofQueryAccess gncQueryObjectGetParameterGetter (GNCIdTypeConst obj_name,
 					      const char *parameter);
 
 
-#endif /* GNC_QUERYOBJECT_H */
+#endif /* QOF_QUERYOBJECT_H */

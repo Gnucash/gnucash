@@ -31,7 +31,6 @@
 #include "Account.h"
 #include "Backend.h"
 #include "Group.h"
-#include "QueryNewP.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-date.h"
@@ -40,6 +39,8 @@
 #include "gnc-numeric.h"
 #include "guile-mappings.h"
 #include "qofbook.h"
+#include "qofquery.h"
+#include "qofquery-p.h"
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
 
@@ -863,16 +864,16 @@ gnc_scm2kvp_frame (SCM frame_scm)
 }
 
 static SCM
-gnc_queryterm2scm (QueryNewTerm_t qt)
+gnc_queryterm2scm (QofQueryTerm_t qt)
 {
   SCM qt_scm = SCM_EOL;
   QofQueryPredData *pd = NULL;
 
-  qt_scm = scm_cons (gnc_query_path2scm (gncQueryTermGetParamPath (qt)),
+  qt_scm = scm_cons (gnc_query_path2scm (qof_query_term_get_param_path (qt)),
 		    qt_scm);
-  qt_scm = scm_cons (SCM_BOOL (gncQueryTermIsInverted (qt)), qt_scm);
+  qt_scm = scm_cons (SCM_BOOL (qof_query_term_is_inverted (qt)), qt_scm);
 
-  pd = gncQueryTermGetPredData (qt);
+  pd = qof_query_term_get_pred_data (qt);
   qt_scm = scm_cons (scm_str2symbol (pd->type_name), qt_scm);
   qt_scm = scm_cons (gnc_query_compare2scm (pd->how), qt_scm);
 
@@ -1146,11 +1147,11 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
   } while (FALSE);
 
   if (pd) {
-    q = gncQueryCreate ();
-    gncQueryAddTerm (q, path, pd, QUERY_OR);
+    q = qof_query_create ();
+    qof_query_add_term (q, path, pd, QOF_QUERY_OR);
     if (inverted) {
-      Query *outq = gncQueryInvert (q);
-      gncQueryDestroy (q);
+      Query *outq = qof_query_invert (q);
+      qof_query_destroy (q);
       q = outq;
     }
   } else {
@@ -1245,7 +1246,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       query_term_scm = SCM_CDR (query_term_scm);
       end = gnc_timepair2timespec (scm);
 
-      xaccQueryAddDateMatchTS (q, use_start, start, use_end, end, QUERY_OR);
+      xaccQueryAddDateMatchTS (q, use_start, start, use_end, end, QOF_QUERY_OR);
 
       ok = TRUE;
 
@@ -1279,15 +1280,15 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO, GNC_RND_ROUND);
 
       if (!safe_strcmp (pr_type, "pr-price")) {
-	xaccQueryAddSharePriceMatch (q, val, how, QUERY_OR);
+	xaccQueryAddSharePriceMatch (q, val, how, QOF_QUERY_OR);
 	ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-shares")) {
-	xaccQueryAddSharesMatch (q, val, how, QUERY_OR);
+	xaccQueryAddSharesMatch (q, val, how, QOF_QUERY_OR);
 	ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-value")) {
-	xaccQueryAddValueMatch (q, val, amt_sgn, how, QUERY_OR);
+	xaccQueryAddValueMatch (q, val, amt_sgn, how, QOF_QUERY_OR);
 	ok = TRUE;
 
       } else {
@@ -1319,7 +1320,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       account_guids = gnc_scm2guid_glist (scm);
 
-      xaccQueryAddAccountGUIDMatch (q, account_guids, how, QUERY_OR);
+      xaccQueryAddAccountGUIDMatch (q, account_guids, how, QOF_QUERY_OR);
 
       gnc_guid_glist_free (account_guids);
 
@@ -1356,22 +1357,22 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
       if (!safe_strcmp (pr_type, "pr-action")) {
 	xaccQueryAddActionMatch (q, matchstring, case_sens, use_regexp,
-				 QUERY_OR);
+				 QOF_QUERY_OR);
 	ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-desc")) {
 	xaccQueryAddDescriptionMatch (q, matchstring, case_sens,
-				      use_regexp, QUERY_OR);
+				      use_regexp, QOF_QUERY_OR);
 	ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-memo")) {
 	xaccQueryAddMemoMatch (q, matchstring, case_sens, use_regexp,
-			       QUERY_OR);
+			       QOF_QUERY_OR);
 	ok = TRUE;
 
       } else if (!safe_strcmp (pr_type, "pr-num")) {        
 	xaccQueryAddNumberMatch (q, matchstring, case_sens, use_regexp,
-				 QUERY_OR);
+				 QOF_QUERY_OR);
 	ok = TRUE;
 
       } else {
@@ -1389,7 +1390,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       query_term_scm = SCM_CDR (query_term_scm);
       how = gnc_scm2cleared_match_how (scm);
 
-      xaccQueryAddClearedMatch (q, how, QUERY_OR);
+      xaccQueryAddClearedMatch (q, how, QOF_QUERY_OR);
       ok = TRUE;
 
     } else if (!safe_strcmp (pd_type, "pd-balance")) {
@@ -1404,7 +1405,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       if (gnc_scm2balance_match_how (scm, &how) == FALSE)
 	break;
 
-      xaccQueryAddBalanceMatch (q, how, QUERY_OR);
+      xaccQueryAddBalanceMatch (q, how, QOF_QUERY_OR);
       ok = TRUE;
 
     } else if (!safe_strcmp (pd_type, "pd-guid")) {
@@ -1427,7 +1428,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       id_type = g_strdup (tmp);
       if (tmp) free (tmp);
 
-      xaccQueryAddGUIDMatch (q, &guid, id_type, QUERY_OR);
+      xaccQueryAddGUIDMatch (q, &guid, id_type, QOF_QUERY_OR);
       ok = TRUE;
 
     } else if (!safe_strcmp (pd_type, "pd-kvp")) {
@@ -1464,7 +1465,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
       query_term_scm = SCM_CDR (query_term_scm);
       value = gnc_scm2kvp_value (scm);
 
-      xaccQueryAddKVPMatch (q, path, value, how, where, QUERY_OR);
+      xaccQueryAddKVPMatch (q, path, value, how, where, QOF_QUERY_OR);
 
       gnc_query_path_free (path);
       kvp_value_delete (value);
@@ -1526,7 +1527,7 @@ gnc_query_terms2scm (GList *terms)
 
     for (and_node = or_node->data; and_node; and_node = and_node->next)
     {
-      QueryNewTerm_t qt = and_node->data;
+      QofQueryTerm_t qt = and_node->data;
       SCM qt_scm;
 
       qt_scm = gnc_queryterm2scm (qt);
@@ -1568,7 +1569,7 @@ gnc_scm2query_and_terms (SCM and_terms, query_version_t vers)
 
       if (q_and)
       {
-        q_new = xaccQueryMerge (q, q_and, QUERY_AND);
+        q_new = xaccQueryMerge (q, q_and, QOF_QUERY_AND);
 
         if (q_new)
         {
@@ -1610,7 +1611,7 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 
       if (q_or)
       {
-        q_new = xaccQueryMerge (q, q_or, QUERY_OR);
+        q_new = xaccQueryMerge (q, q_or, QOF_QUERY_OR);
 
         if (q_new)
         {
@@ -1625,18 +1626,18 @@ gnc_scm2query_or_terms (SCM or_terms, query_version_t vers)
 }
 
 static SCM
-gnc_query_sort2scm (QueryNewSort_t qs)
+gnc_query_sort2scm (QofQuerySort_t qs)
 {
   SCM sort_scm = SCM_EOL;
   GSList *path;
 
-  path = gncQuerySortGetParamPath (qs);
+  path = qof_query_sort_get_param_path (qs);
   if (path == NULL)
     return SCM_BOOL_F;
 
   sort_scm = scm_cons (gnc_query_path2scm (path), sort_scm);
-  sort_scm = scm_cons (scm_int2num (gncQuerySortGetSortOptions (qs)), sort_scm);
-  sort_scm = scm_cons (SCM_BOOL (gncQuerySortGetIncreasing (qs)), sort_scm);
+  sort_scm = scm_cons (scm_int2num (qof_query_sort_get_sort_options (qs)), sort_scm);
+  sort_scm = scm_cons (SCM_BOOL (qof_query_sort_get_increasing (qs)), sort_scm);
 
   return scm_reverse (sort_scm);
 }
@@ -1702,22 +1703,22 @@ gnc_query2scm (Query *q)
 {
   SCM query_scm = SCM_EOL;
   SCM pair;
-  QueryNewSort_t s1, s2, s3;
+  QofQuerySort_t s1, s2, s3;
 
   if (!q) return SCM_BOOL_F;
 
   /* terms */
-  pair = scm_cons (gnc_query_terms2scm (gncQueryGetTerms (q)), SCM_EOL);
+  pair = scm_cons (gnc_query_terms2scm (qof_query_get_terms (q)), SCM_EOL);
   pair = scm_cons (scm_str2symbol ("terms"), pair);
   query_scm = scm_cons (pair, query_scm);
 
   /* search-for */
-  pair = scm_cons (scm_str2symbol (gncQueryGetSearchFor (q)), SCM_EOL);
+  pair = scm_cons (scm_str2symbol (qof_query_get_search_for (q)), SCM_EOL);
   pair = scm_cons (scm_str2symbol ("search-for"), pair);
   query_scm = scm_cons (pair, query_scm);
 
   /* sorts... */
-  gncQueryGetSorts (q, &s1, &s2, &s3);
+  qof_query_get_sorts (q, &s1, &s2, &s3);
 
   /* primary-sort */
   pair = scm_cons (gnc_query_sort2scm (s1), SCM_EOL);
@@ -1735,7 +1736,7 @@ gnc_query2scm (Query *q)
   query_scm = scm_cons (pair, query_scm);
 
   /* max results */
-  pair = scm_cons (scm_int2num (gncQueryGetMaxResults (q)), SCM_EOL);
+  pair = scm_cons (scm_int2num (qof_query_get_max_results (q)), SCM_EOL);
   pair = scm_cons (scm_str2symbol ("max-results"), pair);
   query_scm = scm_cons (pair, query_scm);
 
@@ -1932,8 +1933,8 @@ gnc_scm2query_v1 (SCM query_scm)
     s2 = gnc_query_sort_to_list (secondary_sort);
     s3 = gnc_query_sort_to_list (tertiary_sort);
 
-    gncQuerySetSortOrder (q, s1, s2, s3);
-    gncQuerySetSortIncreasing (q, primary_increasing, secondary_increasing,
+    qof_query_set_sort_order (q, s1, s2, s3);
+    qof_query_set_sort_increasing (q, primary_increasing, secondary_increasing,
 			       tertiary_increasing);
     xaccQuerySetMaxSplits (q, max_splits);
 
@@ -2052,11 +2053,11 @@ gnc_scm2query_v2 (SCM query_scm)
   }
 
   if (ok && search_for) {
-    gncQuerySearchFor (q, search_for);
-    gncQuerySetSortOrder (q, sp1, sp2, sp3);
-    gncQuerySetSortOptions (q, so1, so2, so3);
-    gncQuerySetSortIncreasing (q, si1, si2, si3);
-    gncQuerySetMaxResults (q, max_results);
+    qof_query_search_for (q, search_for);
+    qof_query_set_sort_order (q, sp1, sp2, sp3);
+    qof_query_set_sort_options (q, so1, so2, so3);
+    qof_query_set_sort_increasing (q, si1, si2, si3);
+    qof_query_set_max_results (q, max_results);
 
     return q;
   }

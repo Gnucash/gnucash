@@ -294,7 +294,7 @@ gboolean qof_book_register (void)
 {
   static QueryObjectDef params[] = {
     { QOF_BOOK_KVP, QOF_QUERYCORE_KVP, (QofQueryAccess)qof_book_get_slots },
-    { QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)qof_book_get_guid },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofQueryAccess)qof_book_get_guid },
     { NULL },
   };
 
