@@ -1,3 +1,31 @@
+2003-08-13  Matt Vanecek   <mevanecek@yahoo.com>
+
+    * src/backend/postgres/PostgresBackend.c pgend_session_begin():
+      Moved the pgendUpdgradeDB() call outside of the SQL transaction,
+      because the upgrades performed each have their own separate
+      transaction.
+
+    * src/backend/postgres/newtables.h: A little bit of cleanup. Also
+      changed all the INSERTs to specify column names, to prevent
+      problems with column orders between old/new tables.
+
+    * src/backend/postgres/table-audit.sql: Moved bookGuid in
+      gncPriceTrail to be the second column.
+      
+    * src/backend/postgres/table-create.sql: Moved bookGuid in
+      gncPrice to be the second column.
+
+    * src/backend/postgres/upgrade.c: (re)Added transaction control
+      to each upgrade function.  Also, the following fixes came out
+      of regression testing:
+    - add_multiple_book_support():  Removed the "NOT NULL" from the 
+      ADD COLUMN statements, and placed them in an ALTER TABLE...SET
+      NULL construct.  The original is not supported in Postgresql
+      and fails to execute.
+    - Changed the stpcpy() to use g_strdup_printf() instead, for dynamic
+      query assembly.
+    - Made a few cosmetic changes to comparisons for readability.
+    
 2003-08-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-splash.[ch]:

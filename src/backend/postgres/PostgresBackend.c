@@ -2204,10 +2204,10 @@ pgend_session_begin (QofBackend *backend,
                qof_backend_set_error (&be->be, ERR_SQL_DB_BUSY);
                return;
              }
-             pgendUpgradeDB (be);
              p = "COMMIT;\n";
              SEND_QUERY (be,p, );
              FINISH_QUERY(be->connection);
+             pgendUpgradeDB (be);
            }
            else
            {
