@@ -254,7 +254,7 @@ enum gnc_split_reg_signal_enum {
   LAST_SIGNAL
 };
 
-static gint gnc_split_reg_signals[LAST_SIGNAL] = { 0 };
+static guint gnc_split_reg_signals[LAST_SIGNAL] = { 0 };
 
 static void
 gnc_split_reg_class_init( GNCSplitRegClass *class )

@@ -496,7 +496,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
                             KvpValue * new_value) 
 {
   KvpValue * old_value;
-  char *last_key;
+  char *last_key = NULL;
 
   if (new_value)
   {

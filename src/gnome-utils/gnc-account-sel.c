@@ -42,7 +42,7 @@ enum
         LAST_SIGNAL
 };
 
-static gint account_sel_signals [LAST_SIGNAL] = { 0 };
+static guint account_sel_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_account_sel_init         (GNCAccountSel      *gas);
 static void gnc_account_sel_class_init   (GNCAccountSelClass *class);

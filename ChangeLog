@@ -1,3 +1,7 @@
+2004-12-31  Derek Atkins  <derek@ihtfp.com>
+
+	John Ellson's patch to fix some gcc4 warnings (bug #162582).
+
 2004-12-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/tax/us/txf-de_DE.scm: Add Tax TXF categories for the de_DE

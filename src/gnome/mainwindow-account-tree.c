@@ -38,7 +38,7 @@ enum {
       LAST_SIGNAL
     };
 
-static gint mainwinaccounttree_signals[LAST_SIGNAL] = { 0 };
+static guint mainwinaccounttree_signals[LAST_SIGNAL] = { 0 };
 
 static void
 unselect_account_callback(GNCAccountTree *tree, Account *account, gpointer user_data)

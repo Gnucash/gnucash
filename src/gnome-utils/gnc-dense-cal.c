@@ -94,7 +94,7 @@ enum gnc_dense_cal_signal_enum {
   LAST_SIGNAL
 };
 
-static gint gnc_dense_cal_signals[LAST_SIGNAL] = { 0 };
+static guint gnc_dense_cal_signals[LAST_SIGNAL] = { 0 };
 
 static short module = MOD_SX;
 
@@ -119,29 +119,29 @@ static gint gnc_dense_cal_motion_notify( GtkWidget      *widget,
 static gint gnc_dense_cal_button_press( GtkWidget *widget,
                                         GdkEventButton *evt );
 
-static const inline int day_width_at( GncDenseCal *dcal, guint xScale );
-static const inline int day_width( GncDenseCal *dcal );
-static const inline int day_height_at( GncDenseCal *dcal, guint yScale );
-static const inline int day_height( GncDenseCal *dcal );
-static const inline int week_width_at( GncDenseCal *dcal, guint xScale );
-static const inline int week_width( GncDenseCal *dcal );
-static const inline int week_height_at( GncDenseCal *dcal, guint yScale );
-static const inline int week_height( GncDenseCal *dcal );
-static const inline int col_width_at( GncDenseCal *dcal, guint xScale );
-static const inline int col_width( GncDenseCal *dcal );
+static inline int day_width_at( GncDenseCal *dcal, guint xScale );
+static inline int day_width( GncDenseCal *dcal );
+static inline int day_height_at( GncDenseCal *dcal, guint yScale );
+static inline int day_height( GncDenseCal *dcal );
+static inline int week_width_at( GncDenseCal *dcal, guint xScale );
+static inline int week_width( GncDenseCal *dcal );
+static inline int week_height_at( GncDenseCal *dcal, guint yScale );
+static inline int week_height( GncDenseCal *dcal );
+static inline int col_width_at( GncDenseCal *dcal, guint xScale );
+static inline int col_width( GncDenseCal *dcal );
 
-static const inline int col_height( GncDenseCal *dcal );
-static const inline int num_cols( GncDenseCal *dcal );
+static inline int col_height( GncDenseCal *dcal );
+static inline int num_cols( GncDenseCal *dcal );
 /**
  * Returns the total number of weeks to display in the calendar [irrespective
  * of columns/weeks-per-col].
  **/
-static const inline int num_weeks( GncDenseCal *dcal );
+static inline int num_weeks( GncDenseCal *dcal );
 /**
  * Returns the number of weeks per column.  Note that this is the number of
  * weeks needed to display the longest column.
  **/
-static const int num_weeks_per_col( GncDenseCal *dcal );
+static int num_weeks_per_col( GncDenseCal *dcal );
 
 /** hotspot calculation **/
 static gint wheres_this( GncDenseCal *dcal, int x, int y );
@@ -1087,55 +1087,55 @@ gnc_dense_cal_motion_notify( GtkWidget      *widget,
         return TRUE;
 }
 
-static const inline int
+static inline int
 day_width_at( GncDenseCal *dcal, guint xScale )
 {
         return xScale + MINOR_BORDER_SIZE;
 }
 
-static const inline int
+static inline int
 day_width( GncDenseCal *dcal )
 {
         return day_width_at( dcal, dcal->x_scale );
 }
 
-static const inline int
+static inline int
 day_height_at( GncDenseCal *dcal, guint yScale )
 {
         return yScale + MINOR_BORDER_SIZE;
 }
 
-static const inline int
+static inline int
 day_height( GncDenseCal *dcal )
 {
         return day_height_at( dcal, dcal->y_scale );
 }
 
-static const inline int
+static inline int
 week_width_at( GncDenseCal *dcal, guint xScale )
 {
         return day_width_at(dcal, xScale) * 7;
 }
 
-static const inline int
+static inline int
 week_width( GncDenseCal *dcal )
 {
         return week_width_at( dcal, dcal->x_scale );
 }
 
-static const inline int
+static inline int
 week_height_at( GncDenseCal *dcal, guint yScale )
 {
         return day_height_at(dcal, yScale);
 }
 
-static const inline int
+static inline int
 week_height( GncDenseCal *dcal )
 {
         return week_height_at(dcal, dcal->y_scale);
 }
 
-static const inline int
+static inline int
 col_width_at( GncDenseCal *dcal, guint xScale )
 {
         return (week_width_at(dcal, xScale)
@@ -1143,33 +1143,33 @@ col_width_at( GncDenseCal *dcal, guint xScale )
                 + COL_BORDER_SIZE);
 }
 
-static const inline int
+static inline int
 col_width( GncDenseCal *dcal )
 {
         return col_width_at( dcal, dcal->x_scale );
 }
 
-static const inline int
+static inline int
 col_height( GncDenseCal *dcal )
 {
         return week_height(dcal)
                 * num_weeks_per_col(dcal);
 }
 
-static const inline int
+static inline int
 num_cols( GncDenseCal *dcal )
 {
         return ceil( (float)dcal->numMonths / (float)dcal->monthsPerCol );
 }
 
-static const inline int
+static inline int
 num_weeks( GncDenseCal *dcal )
 {
         /* FIXME: calculate, remove 'recompute_extents' */
         return dcal->num_weeks;
 }
 
-static const
+static
 int num_weeks_per_col( GncDenseCal *dcal )
 {
         int num_weeks_toRet, numCols, i;

@@ -44,7 +44,7 @@ typedef enum {
   LAST_SIGNAL
 } GNCF_Signals;
 
-static gint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
+static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 /** Private Prototypes ********************/
 

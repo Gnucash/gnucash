@@ -53,7 +53,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static gint date_edit_signals [LAST_SIGNAL] = { 0 };
+static guint date_edit_signals [LAST_SIGNAL] = { 0 };
 
 
 static void gnc_date_edit_init         (GNCDateEdit      *gde);
@@ -140,7 +140,7 @@ static void
 day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
 {
 	char buffer [40];
-	gint year, month, day;
+	guint year, month, day;
 
 	gtk_calendar_get_date (calendar, &year, &month, &day);
 
