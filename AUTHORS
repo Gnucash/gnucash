@@ -183,6 +183,7 @@ Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
+Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> messages  British translations
