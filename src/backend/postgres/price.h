@@ -28,9 +28,9 @@
 
 void pgendGetAllCommodities (PGBackend *be);
 void pgendGetCommodity (PGBackend *be, const char * unique_name);
-void pgendStorePriceDB (PGBackend *be, GNCPriceDB *prdb);
-void pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb);
-GNCPriceDB * pgendGetAllPrices (PGBackend *be, GNCPriceDB *prdb);
+void pgendStorePriceDB (PGBackend *be, GNCBook *book);
+void pgendStorePriceDBNoLock (PGBackend *be, GNCBook *book);
+void pgendGetAllPricesInBook (PGBackend *be, GNCBook *);
 void pgendPriceFind (Backend *bend, GNCPriceLookup *look);
 
 

@@ -249,26 +249,31 @@ pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
 static gpointer
 get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *node;
-   GNCBook *book;
+   GNCBook *book = data; 
    Account *parent;
    Account *acc;
-   GUID acct_guid, book_guid;
+   GUID acct_guid;
 
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
 
-   /* First, find the book that pertains to this account */
-   book_guid = nullguid;  /* just in case the read fails ... */
-   string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);
-
-   book = NULL;
-   for (node=be->blist; node; node=node->next)
+   if (NULL == book)
    {
-      book = node->data;
-      if (guid_equal (&book->guid, &book_guid)) break;
+      GList *node;
+      GUID book_guid;
+
+      /* First, find the book that pertains to this account */
+      book_guid = nullguid;  /* just in case the read fails ... */
+      string_to_guid (DB_GET_VAL("bookGUID",j), &book_guid);
+
       book = NULL;
+      for (node=be->blist; node; node=node->next)
+      {
+         book = node->data;
+         if (guid_equal (&book->guid, &book_guid)) break;
+         book = NULL;
+      }
+      if (!book) return data;
    }
-   if (!book) return NULL;
 
    /* Next, lets see if we've already got this account */
    acct_guid = nullguid;  /* just in case the read fails ... */
@@ -326,7 +331,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    xaccAccountCommitEdit(acc);
 
-   return acc;
+   return data;
 }
 
 void
@@ -383,7 +388,7 @@ pgendGetAllAccountsInBook (PGBackend *be, GNCBook *book)
    p = guid_to_string_buff (gnc_book_get_guid(book), p);
    p = stpcpy (p, "';");
    SEND_QUERY (be, buff, );
-   pgendGetResults (be, get_account_cb, NULL);
+   pgendGetResults (be, get_account_cb, book);
 
    topgrp = gnc_book_get_group (book);
    pgendGetAllAccountKVP (be, topgrp);
@@ -446,7 +451,8 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
       pbuff = stpcpy (pbuff, "';");
 
       SEND_QUERY (be,be->buff, 0);
-      acc = pgendGetResults (be, get_account_cb, NULL);
+      pgendGetResults (be, get_account_cb, NULL);
+      acc = pgendAccountLookup (be, acct_guid);
 
       /* restore any kvp data associated with the transaction and splits */
       if (acc)

@@ -220,6 +220,22 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
 }
 
 /* ============================================================= */
+
+static void 
+pgend_set_book (PGBackend *be, GNCBook *book)
+{
+   GList *node;
+   be->book = book;
+
+   for (node=be->blist; node; node=node->next)
+   {
+      if (book == node->data) return;
+   }
+
+   be->blist = g_list_prepend (be->blist, book);
+}
+
+/* ============================================================= */
 /* This routine finds the commodity by parsing a string
  * of the form NAMESPACE::MNEMONIC
  */
@@ -386,7 +402,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* use markers to avoid redundant traversals of transactions we've
     * already checked recently. */
-   trans = xaccTransLookup (&trans_guid, be->book);
+   trans = pgendTransLookup (be, &trans_guid);
    if (NULL != trans)
    {
       if (0 != trans->marker)
@@ -703,7 +719,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    xaccAccountGroupBeginEdit (grp);
    for (node=xaction_list; node; node=node->next)
    {
-      pgendCopyTransactionToEngine (be, (GUID *)node->data);
+      xxxpgendCopyTransactionToEngine (be, (GUID *)node->data);
       xaccGUIDFree (node->data);
    }
    g_list_free(xaction_list);
@@ -771,7 +787,7 @@ pgendSync (Backend *bend, GNCBook *book)
 
    ENTER ("be=%p, grp=%p", be, grp);
 
-   be->book = book;
+   pgend_set_book (be, book);
    be->version_check = (guint32) time(0);
 
    /* For the multi-user modes, we allow a save only once,
@@ -858,7 +874,7 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
 
    ENTER ("be=%p, grp=%p", be, grp);
 
-   be->book = book;
+   pgend_set_book (be, book);
 
    /* hack alert -- we shouldn't be doing a global delete, 
     * we should only be deleting the stuff that's in this particular 
@@ -944,15 +960,11 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
 static void
 pgendSyncPriceDB (Backend *bend, GNCBook *book)
 {
-   GNCPriceDB *prdb;
    PGBackend *be = (PGBackend *)bend;
    ENTER ("be=%p", be);
    if (!be) return;
 
-   be->book = book;
-   prdb = gnc_book_get_pricedb (book);
-   if (!prdb) return;
-
+   pgend_set_book (be, book);
    be->version_check = (guint32) time(0);
 
    /* for the multi-user modes, we allow a save only once,
@@ -966,13 +978,13 @@ pgendSyncPriceDB (Backend *bend, GNCBook *book)
    }
    be->freshly_created_prdb = FALSE;
 
-   pgendStorePriceDB (be, prdb);
+   pgendStorePriceDB (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
 
-   pgendGetAllPrices (be, prdb);
+   pgendGetAllPricesInBook (be, book);
 
    /* re-enable events */
    pgendEnable(be);
@@ -1001,23 +1013,23 @@ pgendSyncPriceDB (Backend *bend, GNCBook *book)
 static void
 pgendSyncPriceDBSingleFile (Backend *bend, GNCBook *book)
 {
-   GNCPriceDB *prdb;
-   char *p;
+   char buff[400], *p;
    PGBackend *be = (PGBackend *)bend;
    ENTER ("be=%p", be);
 
-   be->book = book;
-   prdb = gnc_book_get_pricedb (book);
-   if (!prdb) return;
+   pgend_set_book (be, book);
     
-   p = "BEGIN;\n"
-       "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
-       "DELETE FROM gncPrice;\n";
-   SEND_QUERY (be,p, );
+   p = buff;
+   p = stpcpy (p, "BEGIN;\n"
+                  "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
+                  "DELETE FROM gncPrice WHERE bookGuid='\n");
+   p = guid_to_string_buff (gnc_book_get_guid(book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
    FINISH_QUERY(be->connection);
 
    /* Store accounts and commodities */
-   pgendStorePriceDBNoLock (be, prdb);
+   pgendStorePriceDBNoLock (be, book);
 
    p = "COMMIT;";
    SEND_QUERY (be,p, );
@@ -1392,17 +1404,15 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
 
    pgendKVPInit(be);
 
-   be->book = book;
-
    if (be->blist) 
    {
       /* XXX not clear what this means ... should we free old books ?? */
       PWARN ("old book list not empty ");
       g_list_free (be->blist);
+      be->blist = NULL;
    }
+   pgend_set_book (be, book);
    pgendGetBook (be, book);
-
-   be->blist = g_list_append (NULL, book);
 
    pgendGetAllAccountsInBook (be, book);
 
@@ -1438,7 +1448,7 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   be->book = book;
+   pgend_set_book (be, book);
 
    pgendKVPInit(be);
 
@@ -1471,20 +1481,17 @@ static void
 pgend_price_load_single (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
-   GNCPriceDB *db;
 
    if (!be || !book) return;
 
-   be->book = book;
+   pgend_set_book (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   db = gnc_book_get_pricedb (book);
-
-   pgendGetAllPrices (be, db);
+   pgendGetAllPricesInBook (be, book);
 
    /* re-enable events */
    pgendEnable(be);
@@ -1555,11 +1562,15 @@ pgend_session_begin (Backend *backend,
    pgendInit (be);
 
    be->session = session;
-   be->book = gnc_session_get_book(session);
 
    if (be->blist) 
-     g_list_free (be->blist);
-   be->blist = g_list_append (NULL, be->book);
+   {
+      /* XXX not clear what this means ... should we free old books ?? */
+      PWARN ("old book list not empty ");
+      g_list_free (be->blist);
+      be->blist = NULL;
+   }
+   pgend_set_book (be, gnc_session_get_book(session));
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
