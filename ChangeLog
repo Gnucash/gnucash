@@ -5,6 +5,11 @@
 	  but print out a "Balance" line if there is a non-zero balance as
 	  of the start date.
 
+	Nikos Charonitakis's account chart updates:
+	* accounts/el_GR/Makefile.am: added new carloan account chart
+	* accounts/el_GR/acctchrt_common.gnucash-xea: updated account chart
+	* accounts/el_GR/acctchrt_carloan.gnucash-xea: new car loan chart
+	
 2003-05-21  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:
