@@ -669,7 +669,7 @@ static char * int64_to_string (gpointer object, QueryAccess get)
 {
   gint64 num = ((query_int64_getter)get)(object);
 
-  return g_strdup_printf (GNC_SCANF_LLD, num);
+  return g_strdup_printf (GNC_SCANF_LLD, (long long int) num);
 }
 
 /* QUERYCORE_DOUBLE */

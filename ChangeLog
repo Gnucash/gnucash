@@ -1,3 +1,7 @@
+2004-09-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/QueryCore.c: Fix for x86_64.
+
 2004-09-25  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in, src/import-export/hbci/hbci-interaction.c: Major
