@@ -817,6 +817,7 @@ gnc_register_date_window (RegWindow *regData, gboolean show_all)
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
 		       GTK_SIGNAL_FUNC(gnc_register_date_cb), regData);
   }
+  gtk_widget_show_all(dvbox);
 
   return regDateData;
 }
