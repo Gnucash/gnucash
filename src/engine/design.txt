@@ -1,0 +1,397 @@
+This document is becoming obsolete. Please refer to the design
+documentation in src/doc/design for a complete description of the
+Engine architecture.
+
+Accounting Engine
+-----------------
+This document reviews the operation of, and various design points 
+pertinent to the GnuCash accounting engine.  The latest version
+of this document can be found in the engine source-code directory.
+
+Stocks, non-Currency-Denominated Assets
+---------------------------------------
+The engine includes support for non-currency-denominated assets, 
+such as stocks, bonds, mutual funds, inventory.  This is done with
+two values in the Split structure:
+
+   double share_price;
+   double damount;
+
+"damount" is the number of shares/items.  It is an "immutable" quantity,
+in that it cannot change except by transfer (sale/purchase).  It is the
+quantity that is used when computing balances.
+
+"share_price" is the price of the item in question.  The share-price is
+of course subject to fluctuation.
+
+The net-value of a split is the product of "damount" and "share_price".
+The currency balance of an account is the sum of all "damounts" times
+the latest, newest share-price.
+
+Currency accounts should use a share price of 1.0 for all splits.
+
+To maintain the double-entry consistency, one must have the following
+hold true:
+
+   0.0 == sum of all split values.
+
+If all splits are in the same currency, then this becomes:
+
+   0.0 == sum of all ((split->damount) * (split->share_price))  
+
+Thus, for example, the purchase of shares can be represented as:
+
+   source:
+   debit ABC Bank for $1045  (1045 dollars * dollar "price" of 1.00)
+   
+   destination:
+   credit PQR Stock for $1000 (100 shares at $10 per share)
+   credit StockBroker category $45 in fees
+
+If the splits are in mixed currencies and securities, then there must
+be at least one common currency/security between all of them.  Thus, 
+for example:
+
+   source:
+   debit ABC Bank for $1045  (1045 dollars * dollar "price" of 1.00)
+   
+   destination:
+   credit VolkTrader for 2000 DM (1000 dollars at 2.0 mark per dollar)
+   credit Fees category $45 in fees
+
+If the "currency" field is set to "DM" for the VolksTrader account, 
+and the "security" field is set to "USD", while the currency for ABC bank is
+"USD", then the balancing equation becomes: 
+
+0.0 = 1045 * $1.00 - $1000 - 45 * $1.00
+
+Note that we ignored the price when adding the second split.
+
+Recoding a Stock Price
+----------------------
+A stock price may be recorded in a brokerage account with a single
+split that has zero value:
+(share price) * (zero shares) == (zero dollars)
+This transaction does not violate the rules that all transactions must
+have zero value.  This transaction is ideal for recording prices.  Its
+the only transaction type that may have a single split; everything else
+requires at least two splits to balance. (at least when double-entry
+is enabled).
+
+Recording a Stock Split
+-----------------------
+Stock splits (i.e. when a company issues x shares of new stock for every
+share already owned) may be recorded with a pair of journal entries as
+follows:
+
+(-old num shrs) * (old price) + (new num shrs) * (new price) == 0.0
+where each journal entry credits/debits the same account.
+Of course  (new num shrs) == (1+x) * (old num shrs)
+and the price goes inversely.
+
+Stock Options
+-------------
+Stock options are not currently supported.  To support them, the
+following needs to be added:
+
+A stock option is an option to purchase stock at a specified price.
+Options have an expiration date.  When you purchase an option it is 
+pretty much like buying stock.  However, some extra information needs 
+to be recorded.  To fully record an option purchase, you need to record 
+the underlying stock that the option is on, the strike price (i.e. the 
+price that the underlying stock can be purchases for), an expiration date, 
+and whether the option is a put or a call.  A put option is the option 
+to sell stock at the strike price, and a call option is the option to 
+purchase stock at the strike price.  Once an option is bought, it can 
+have one of three dispositions: it can be sold, in which case, it is 
+pretty much just like a stock transaction.  It can expire, in which 
+case the option is worthless, and (IIRC) can be/is treated as a sale 
+at a zero price.  Thirdly, it can be exercised, which is a single 
+transaction whereby stock is purchased at the strike price, and
+the option becomes worthless.
+
+Another point: with standardized options one option contract represents
+the ability to purchase (with a call option) or sell (with a put option) 
+100 shares of the underlying stock.  
+
+
+Error Reporting
+---------------
+The error reporting architecture (partially implemented), uses a globally
+visible subroutine to return an error.  In the naivest possible implementation,
+the error reporting mechanism would look like this:
+
+    int error_num;   /* global error number */
+
+    int xaccGetError (void) { return error_num; }
+
+    void xaccSomeFunction (Args *various_args) {
+        if (bad_thing_happened) error_num = 42;
+    }  
+
+Many programmers are used to a different interface, e.g.
+
+    int xaccSomeFunction (Args *various_args) {
+        if (bad_thing_happened) return (42);
+    }  
+
+Because of this, it is important to explain why the former design was 
+choosen over the latter.  Let us begin by listing how the choosen design 
+is as good as, and in many ways can be better to the later design.
+
+ (1) Allows programmer to check for errors asynchronously, e.g. outside
+     of a performance critical loop, or far away, after the return of
+     several subroutines.
+ (2) (with the right implementation) Allows reporting of multiple, complex
+     errors.  For example, it can be used to implement a trace mechanism.
+ (3) (with the right implementation) Can be thread safe.
+ (4) Allows errors that occurred deep in the implementation to be reported
+     up to much higher levels without requiring baggage in the middle.
+
+The right implementation for (2) is to implement not a single
+variable, but a stack or a ring (circular queue) on which error codes
+are placed, and from which error codes can be retreived.  The right
+implementation for (3) is the use pthread_getspecific() to define a
+per-thread global and/or ring/queue.
+
+
+Engine Isolation
+----------------
+Goals of engine isolation:
+  o Hide the engine behind an API so that multiple, pluggable engines
+    could be created, e.g. SQL or CORBA.
+  o Engine users are blocked from being able to put engine internal
+    structures in an inconsistent state.  Updates are "atomic".
+
+Some half-finished thoughts about the engine API:
+
+-- The engine structures should not be accessible to any code outside 
+   of the engine.  Thus, the engine structures have been moved to 
+   AccountP.h, TransactionP.h, etc.
+   The *P.h files should not be included by code outside of the engine.
+
+-- The down-side of hiding is that it can hurt performance.  Even trivial data 
+   accesses require a subroutine call.  Maybe a smarter idea would be to leave
+   the structures exposed, allow direct manipulation, and then "copy-in" and
+   "copy-out" the structures into parallel structures when a hidden back end
+   needs to be invoked.
+
+-- the upside of hiding behind an API is that the engine can be 
+   instrumented with extension language (perl, scheme, tcl, python) hooks 
+   for pre/post processing of the data.  To further enable such hooks, we 
+   should probably surround all operations on structures with "begin-edit" 
+   and "end-edit" calls.
+
+-- begin/end braces could potentially be useful for two-phase commit schemes.
+   where "end-edit" is replaced by "commit-edit" or "reject-edit".
+
+
+Reconciliation
+--------------
+The 'reconcile' state of a transaction can have one of the following values:
+
+/* Values for the reconciled field in Transaction: */
+#define NREC 'n'              /* not reconciled or cleared */
+#define CREC 'c'              /* The transaction has been cleared */
+#define YREC 'y'              /* The transaction has been reconciled */
+#define FREC 'f'              /* frozen into accounting period */
+
+(Note that FREC is not yet used/implemented ...)
+
+The process of reconciliation works as follows:
+1) User enters new transaction.  All splits are marked 'n' for 'new'
+   or 'no, not yet reconciled'.
+2) User beleives that the transaction has cleared the bank, 
+   e.g. that a cheque written out has been deposited/cashed.
+   User clicks in the 'R' column in the register gui,
+   marking the split 'c' for 'cleared'.   User can freely 
+   toggle this flag from the GUI with essentially no penalty,
+   no complaints.  This is a 'safe' operation.  Note that the
+   register shows the 'cleared' subtotal, which is, essentially, 
+   a guess of the banks view of the account balance. 
+3) When user gets the bank statement, user launches the 
+   reconcile dialogue.  This dialogue is used to match transactions
+   on the bank statement with which is recorded locally.  
+   Reconciled transactions are marked with a 'y'.  
+   Note that once a transaction has been marked 'y', and the 
+   user has 'finished' with the reconcile dialogue, then it 
+   should be 'hard' to change the reconcile state from
+   the ordinary register dialogue.  It should be sort-of
+   'set in stone'.  (The engine does NOT enforce this,
+   only the gui enforces this.)
+4) When the books are closed, all splits should be marked 
+   'frozen', and become truly un-editable.  The engine should
+   enforce 'frozen', and just plain not allow editing of closed
+   books, period.  The only wat to change this would have been
+   to re-open the book. (and the reopening of a book would
+   change all 'f' to 'y'.)
+   
+About storing dates associated with reconcile:
+> I think that there should be a date stamp attached to the reconciliation
+> field so that as well as knowing that it has been reconciled, you also 
+> know *when* it was reconciled.
+> 
+> This isn't so important for personal finances for the periodic user; I
+> have in the past wanted to know when a particular transaction was 
+> reconciled.  This is useful if you want to trace back from the 
+> electronic record to determine when the item actually cleared through 
+> the bank.
+> 
+> This means that I can look at Cheque #428, written Jan 1/97, cashed in May 
+> 1997 (it sat in someone's desk for a while) in the computer system and say 
+> "Ah.  It was marked as reconciled on June 12th/97. That was when I did the 
+> reconciliation of the May bank statements.  Ergo, the cheque cleared in May, 
+> and that's the statement to go to to find a copy of the cheque..."
+> 
+> It's not terribly important for cheques that get cashed right away; it *is* 
+> for things that hang around uncashed for a while.
+
+If the above is implemented, what date should be stored if the user
+toggles the recn flag a few time?  The date of the last toggle?
+The very first date that it was recn'ed?
+
+
+Automatic Backup
+----------------
+The following has been implemented:
+
+Have (by default) xacc create a backup file
+filename-timestamp.xac on every save.  This will eat up some disk
+space until you go back and kill the older versions, but it's
+better than not realizing that the data's subtly corrupt a week
+later. 
+
+A lot of small-office/home systems do this. primarily useful as a
+historical record, in case you accidentally wipe out something, and
+don't spot it until later.  Limited usefulness, but very nice in case
+you accidentally delete an entire account.  
+
+To a limited degree, it provides atomicity/consistency/etc at the
+course-grained account-group level.
+
+
+Transaction Processing
+----------------------
+There is a rudimentary level of "TP" build in, via the routines
+xaccTransBeginEdit(), xaccTransRollbackEdit(), and xaccTransCommitEdit(),
+which allow changes to be made to a transaction, and then commited,
+or rejected at the end.  Handy for the GUI, if the user makes a bunch
+of changes which they don't want to keep; also handy for an SQL back end,
+where the Commit() routine triggers the actual update of the SQL database.
+
+Note: 'Commit' is sometimes called 'post' in other systems:  The
+act of 'commiting' a transaction is the same as 'posting' the
+transaction to the general ledger.
+
+Some important implementation details to understand:  the GUI currently
+uses begin/end as a convenience, and thus, may hold a transaction in
+the 'edit' state for a portentially long time (minutes or hours).
+Thus, begin/end should not map naively to a table-lock/unlock.
+Instead, an optimistic-locking scheme, as below, is prefered.
+
+The SQL back-end should implement posting entirely in the 
+'Commit()' routine.  The pseudo-algorithms should look as follows:
+
+	BeginEdit () {
+		// save a copy of what it was before we start editing
+		old_transaction = this;
+	}
+
+	SetValue (float amount) {
+		// some example editing done here
+		this->value = amount;
+	}
+
+	Commit () {
+		LockTable();
+		current = QueryTransaction();
+		// check ton make sure that what the sql db stores
+		// is identical to what we have on record as the
+		// 'original' tansaction.  If its not, then someone
+		// got in there and modified it while we weren't
+		// looking; so we better report this back toi user.
+		if (current != old_transaction) Error(); Unlock(); return err;
+
+		// otherwise, all is OK, we have successfully obtained
+		// the lock and validated the data, so now just update things.
+                StoreTransaction (new_transaction);
+		UnlockTable();
+		old_transaction = NULL;
+	}
+
+	Rollback () {
+		// throw away the edits
+		this = old_transaction;
+		old_transaction = NULL;
+	}
+
+The GUI should check to make sure that the Commit() routine didn't fail.
+If it did fail, then the GUI should pop up a notice to the user stating
+that the fundamental underlying data has changed, and that the user
+should try doing the edit again.  (It might be nice to indicate which 
+other human user might have changed the data so that they could
+coordinate as needed.)
+
+
+
+Journal Logs
+------------
+The following has been implemented; see TransLog.c for details.
+
+Transaction logs.  The idea was that every time a transaction 
+was called that would cause a data update, the information that 
+was updated would be dumped out into an "append only" log file.
+
+This somewhat parallels what better database systems do to ensure
+integrity; Oracle, for instance, has what is called an "archive log." 
+You have a copy of the database "synced up" as at some point in time, 
+and can apply "archive logs" to bring that old copy of the database 
+up to date should something go wrong to trash today's copy.
+
+In effect, you'd have things like
+
+=== 97/01/01 04:32:00 === Add Transaction ==== [whatever was added] ====
+=== 97/01/01 04:32:02 === Delete Transaction ==== [whatever was deleted] ====
+
+It also is a useful debugging tool, as if you make sure that the 
+"log_transaction()" call starts by opening the log file, writes, and
+then closes and syncs, you know what is going on with the data even if
+horrible things happen to the "master" database file.
+
+Session Mgmt
+------------
+To allow the user of the engine some guarantee of atomic updates, 
+serialized file I/O, related miscellany, the concept of a session
+is supported.  No file IO can be performed until a session has 
+been created, and file updates are not guaranteed atomic unless
+performed within a SessionBegin/SessionEnd pair.
+
+Note that (in the current implementation) data can be manipulated 
+outside of the session; its just that it cannot be saved/made persistent.
+
+The goal of session management is to ensure that e.g. two users don't end 
+up editing the same file at the same time, or, e.g. that an automatic
+stock-quote update daemon running under a different pid doesn't trash 
+data being currently edited by the user.
+
+
+Remaining Work Items
+--------------------
+To find other remaining work items in the code, grep for the string 
+"hack alert".
+
+
+Ideas for engine enhancements:
+-----------------------------
+  1) Have (by default) gnucash immediately re-read a file after every
+     write, and compare the two resulting AccountGroups for equality.
+
+     During development, this is a good idea, as it will help uncover
+     thinko's more quickly, instead of letting them hide for weeks or months
+     (as the last one did).  Its not a bad self-consistency check when
+     monkeying with the internals, damn the performance.
+
+     It can be removed/disabled for product versions.
+
+
+This document is dated May 2000
