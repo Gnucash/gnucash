@@ -546,8 +546,8 @@ gnc_ui_delete_account (Account *account)
 {
   gnc_suspend_gui_refresh ();
 
-  xaccRemoveAccount (account);
-  xaccFreeAccount (account);
+  xaccAccountBeginEdit (account);
+  xaccAccountDestroy (account);
 
   gnc_resume_gui_refresh ();
 }

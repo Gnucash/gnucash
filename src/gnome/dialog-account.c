@@ -1078,7 +1078,8 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
     case NEW_ACCOUNT:
       if (account != NULL)
       {
-        xaccFreeAccount (account);
+        xaccAccountBeginEdit (account);
+        xaccAccountDestroy (account);
         aw->account = *xaccGUIDNULL ();
       }
 
@@ -1096,7 +1097,8 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
   gnc_unregister_gui_component (aw->component_id);
 
-  xaccFreeAccount (aw->top_level_account);
+  xaccAccountBeginEdit (aw->top_level_account);
+  xaccAccountDestroy (aw->top_level_account);
   aw->top_level_account = NULL;
 
   gnc_resume_gui_refresh ();
