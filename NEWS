@@ -1,5 +1,12 @@
 Version history:
 ------- -------
+ 1.5.4  - 01 April 2001
+         o several new & improved reports/graphs
+         o online price quotes now work
+         o new main window display
+         o Spanish & Portuguese translations of the manual
+         o many bug fixes
+
  1.5.3  - 25 February 2001
          o new XML file format
          o better support for importing qifs from online banks
