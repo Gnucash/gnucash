@@ -27,6 +27,7 @@
 #define GENERIC_IMPORT_H
 
 #include "Account.h"
+#include "Transaction-matcher.h"
 
 /* The gnc_import_select_account():
 
@@ -123,23 +124,15 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 				    char * default_fullname,
 				    char * default_mnemonic);
 
-/* Your import module should create a new transaction in the current book,
-   add as many splits as it knows about, and associate each split with an 
-   account.  It should then call gnc_import_add_trans() with that transaction
-   if a transaction with the same online_id kvp_frame exists in any of the
-   transaction's split's accounts, the transaction will be destroyed.  
-   Otherwise it will be added.
-   Not yet implemented:  GUI to balance the transaction using heuristics
-*/
-void gnc_import_add_trans(Transaction *trans);
-
 /* Setter and getter functions for the online_id kvp_frame for 
    Accounts and Transactions.
 */ 
-gchar * gnc_import_get_acc_online_id(Account * account);
-void gnc_import_set_acc_online_id(Account * account, gchar * string_value);
-gchar * gnc_import_get_trans_online_id(Transaction * transaction);
-void gnc_import_set_trans_online_id(Transaction * transaction, gchar * string_value);
+const gchar * gnc_import_get_acc_online_id(Account * account);
+void gnc_import_set_acc_online_id(Account * account, 
+				  const gchar * string_value);
+const gchar * gnc_import_get_trans_online_id(Transaction * transaction);
+void gnc_import_set_trans_online_id(Transaction * transaction, 
+				    const gchar * string_value);
 
 typedef enum _gnc_match_probability{
   CERTAIN,

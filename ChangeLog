@@ -1,3 +1,16 @@
+2002-11-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/Transaction-matcher.c: Refactor *a lot* of the
+	code -- try to separate GUI-dependent tasks from GUI-independent
+	ones, and make many functions publically reachable by declaring
+	them in the header file.
+
+	* src/import-export/gnc-generic-import.h, *.h: Move some function
+	into new Transaction-Matcher.h (which is included from here for
+	now), and add some const's at the kvp functions.
+
+	* src/gnome-utils/dialog-utils.h: Added many comments for docs.
+
 2002-11-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/dialog-account-pick.[hc]: Move the account

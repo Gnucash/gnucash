@@ -45,7 +45,7 @@ static short module = MOD_IMPORT;
  * Account and Transaction 
 \********************************************************************/
 
-gchar * gnc_import_get_acc_online_id(Account * account)
+const gchar * gnc_import_get_acc_online_id(Account * account)
 {
   gchar * string = NULL;
   kvp_frame * frame;
@@ -56,7 +56,8 @@ gchar * gnc_import_get_acc_online_id(Account * account)
   return string;
 }
 
-void gnc_import_set_acc_online_id(Account * account, gchar * string_value)
+void gnc_import_set_acc_online_id(Account * account, 
+				  const gchar * string_value)
 {
   kvp_frame * frame;
   kvp_value * value;
@@ -74,7 +75,7 @@ void gnc_import_set_acc_online_id(Account * account, gchar * string_value)
   return;
 }
 
-gchar * gnc_import_get_trans_online_id(Transaction * transaction)
+const gchar * gnc_import_get_trans_online_id(Transaction * transaction)
 {
   gchar * string = NULL;
   kvp_frame * frame;
@@ -85,7 +86,8 @@ gchar * gnc_import_get_trans_online_id(Transaction * transaction)
   return string;
 }
 
-void gnc_import_set_trans_online_id(Transaction * transaction, gchar * string_value)
+void gnc_import_set_trans_online_id(Transaction * transaction, 
+				    const gchar * string_value)
 {
   kvp_frame * frame;
   kvp_value * value;

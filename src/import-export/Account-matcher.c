@@ -77,7 +77,7 @@ static void acct_tree_add_accts(AccountGroup * accts, GtkCTree * tree, GtkCTreeN
       current_acct = xaccGroupGetAccount(accts, i);
       acctinfo[0]=(gchar *)xaccAccountGetName(current_acct);
       acctinfo[1]=g_strdup(xaccAccountGetTypeStr(xaccAccountGetType(current_acct)));
-      acctinfo[2]=gnc_import_get_acc_online_id(current_acct);
+      acctinfo[2]=g_strdup(gnc_import_get_acc_online_id(current_acct));
       //printf("acct_tree_add_acct(): %s%s",xaccAccountGetName(current_acct),"\n");
       node = gtk_ctree_insert_node         (tree,
 					    parent,
@@ -175,7 +175,7 @@ gnc_ui_generic_account_picker_unselect_cb(GtkCTree   * tree,
 
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {
-  gchar * current_online_id = gnc_import_get_acc_online_id(acct);
+  const gchar * current_online_id = gnc_import_get_acc_online_id(acct);
   if( (current_online_id != NULL
        && param_online_id != NULL )
       && strcmp( current_online_id, param_online_id ) == 0 )

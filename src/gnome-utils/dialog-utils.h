@@ -47,8 +47,18 @@ struct _GNCOptionInfo
 
 
 /**** PROTOTYPES *************************************************/
+
+/********************************************************************\
+ * Create the menu of stock quote sources                           *
+ *                                                                  *
+ * Args:    account - account to use to set default choice          *
+ * Returns: the menu                                                *
+ \*******************************************************************/
 GtkWidget * gnc_ui_source_menu_create (Account *account);
 
+/********************************************************************\
+ * price quote timezone handling
+ */
 guint       gnc_find_timezone_menu_position(const gchar *timezone);
 gchar *     gnc_timezone_menu_position_to_string(guint pos);
 GtkWidget * gnc_ui_quote_tz_menu_create (Account *account);
@@ -56,8 +66,23 @@ GtkWidget * gnc_ui_quote_tz_menu_create (Account *account);
 GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 
+
+/********************************************************************\
+ * Returns a GnomePixmap widget given a pixmap filename             *
+ *                                                                  *
+ * Args: Filename of pixmap file                                    *
+ * Returns: GnomePixmap widget or NULL if there was a problem       *
+ \*******************************************************************/
 GtkWidget * gnc_get_pixmap (const char *name);
+
+/********************************************************************\
+ * Returns a GdkImlibImage object given a pixmap filename           *
+ *                                                                  *
+ * Args: Filename of pixmap file                                    *
+ * Returns: GdkImlibImage or NULL if there was a problem            *
+ \*******************************************************************/
 GdkImlibImage * gnc_get_gdk_imlib_image (const char *name);
+
 
 GtkToolbarStyle gnc_get_toolbar_style (void);
 GnomeMDIMode    gnc_get_mdi_mode(void);
@@ -65,9 +90,38 @@ GnomeMDIMode    gnc_get_mdi_mode(void);
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 
+
+/********************************************************************\
+ * Returns the window size to use for the given option prefix,      *
+ * if window sizes are being saved, otherwise returns 0 for both.   *
+ *                                                                  *
+ * Args: prefix - the option name prefix                            *
+ *       width  - pointer to width                                  *
+ *       height - pointer to height                                 *
+ * Returns: nothing                                                 *
+ \*******************************************************************/
 void gnc_get_window_size (const char *prefix, int *width, int *height);
+
+/********************************************************************\
+ * Save the window size into options whose names are determined     *
+ * by the string prefix.                                            *
+ *                                                                  *
+ * Args: prefix - determines the options used to save the values    *
+ *       width  - width of the window to save                       *
+ *       height - height of the window to save                      *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void gnc_save_window_size (const char *prefix, int width, int height);
 
+
+/********************************************************************\
+ * Fill the user data values in the menu structure with the given   *
+ * value. The filling is done recursively.                          *
+ *                                                                  *
+ * Args: info - the menu to fill                                    *
+ *       data - the value to fill with                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
 
 void gnc_option_menu_init (GtkWidget * option_menu);
@@ -76,22 +130,33 @@ void gnc_option_menu_init_w_signal(GtkWidget * w,
 				   gpointer cb_data);
 int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
+/********************************************************************\
+ * Adjust the window size if it is bigger than the screen size.     *
+ *                                                                  *
+ * Args: window - the window to adjust                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void gnc_window_adjust_for_screen (GtkWindow * window);
+
 void gtk_window_present (GtkWindow * window); /* Remove me for GTK 2.0 */
+
 
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);
 
 
-/* This function sets or clears a check mark in a GtkCList row.
+/* This function sets a pixmap of a set or cleared check mark in a
+ * cell of a GtkCList row.
+ *
  * There are some restrictions on using this function. If you mix
  * this function with gtk_clist_{insert, prepend, remove} before
  * the clist is realized, then the checks may appear in the wrong
  * place. Stick to gtk_clist_append, or use gnc_clist_set_check
  * after you have built the list. This only applies to unrealized
  * widgets. */
-void gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked);
+void gnc_clist_set_check (GtkCList *list, int row, int col, 
+			  gboolean checked);
 
 /* This function is similar to gtk_clist_columns_autosize, but
  * also takes into account the column titles. */
