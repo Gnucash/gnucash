@@ -766,12 +766,7 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
   /* XXX this looks fishy and weird to me ... */
   PINFO("acct=%p", account);
   xaccAccountBeginEdit (account);
-  qof_entity_remove (account->inst.book->entity_table, &account->inst.entity.guid);
-
-  account->inst.entity.guid = *guid;
-
-  qof_entity_store (account->inst.book->entity_table, account,
-                   &account->inst.entity.guid, GNC_ID_ACCOUNT);
+  qof_entity_set_guid (&account->inst.entity, guid);
   account->inst.dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
