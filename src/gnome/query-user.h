@@ -23,9 +23,6 @@
 #ifndef __QUERY_USER_H__
 #define __QUERY_USER_H__
 
-gboolean gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
-                                    gboolean yes_is_default);
-
 void gnc_info_dialog(const char *message);
 void gnc_info_dialog_parented(GtkWindow *parent, const char *message);
 

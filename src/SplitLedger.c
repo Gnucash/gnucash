@@ -1847,7 +1847,20 @@ xaccSRPasteCurrent (SplitRegister *reg)
     return;
 
   if (cursor_class == CURSOR_SPLIT) {
+    const char *message = _("You are about to overwrite an existing split.\n"
+                            "Are you sure you want to do that?");
+    gboolean result;
+
     if (copied_class == CURSOR_TRANS)
+      return;
+
+    if (split != NULL)
+      result = gnc_verify_dialog_parented(xaccSRGetParent(reg),
+                                          message, FALSE);
+    else
+      result = TRUE;
+
+    if (!result)
       return;
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);
@@ -1864,12 +1877,26 @@ xaccSRPasteCurrent (SplitRegister *reg)
     gnc_copy_split_scm_onto_split(copied_item, split);
   }
   else {
+    const char *message = _("You are about to overwrite an existing "
+                            "transaction.\n"
+                            "Are you sure you want to do that?");
+    gboolean result;
+
     const GUID *new_guid;
     int trans_split_index;
     int split_index;
     int num_splits;
 
     if (copied_class == CURSOR_SPLIT)
+      return;
+
+    if (split != blank_split)
+      result = gnc_verify_dialog_parented(xaccSRGetParent(reg),
+                                          message, FALSE);
+    else
+      result = TRUE;
+
+    if (!result)
       return;
 
     accounts = gnc_trans_prepend_account_list(trans, NULL);

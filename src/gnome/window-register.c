@@ -2304,8 +2304,7 @@ deleteCB(GtkWidget *widget, gpointer data)
     buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
                           xaccTransGetDescription(trans));
 
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
-                                        buf, FALSE);
+    result = gnc_verify_dialog_parented(regData->window, buf, FALSE);
 
     g_free(buf);
 
@@ -2323,7 +2322,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   if ((xaccTransCountSplits(trans) <= 2) &&
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
-    result = gnc_verify_dialog_parented(GTK_WINDOW(regData->window),
+    result = gnc_verify_dialog_parented(regData->window,
                                         TRANS_DEL2_MSG, FALSE);
 
     if (!result)
@@ -2405,8 +2404,7 @@ gnc_register_check_close(RegWindow *regData)
   pending_changes = xaccSRHasPendingChanges(regData->ledger->ledger);
   if (pending_changes)
   {
-    if (gnc_verify_dialog_parented
-        (GTK_WINDOW(regData->window), TRANS_CHANGED_MSG, TRUE))
+    if (gnc_verify_dialog_parented(regData->window, TRANS_CHANGED_MSG, TRUE))
       recordCB(regData->window, regData);
     else
       xaccSRCancelCursorTransChanges(regData->ledger->ledger);

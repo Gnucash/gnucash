@@ -287,7 +287,7 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
       if(gh_call2(qif_file_loaded, scm_filename, wind->imported_files)
          == SCM_BOOL_T) {
         if(gnc_verify_dialog_parented
-           (GTK_WINDOW(wind->dialog),
+           (wind->dialog,
             _("QIF File already loaded. Reload with current settings?"), 
             TRUE)) {
           imported_files = 

@@ -325,7 +325,7 @@ gnc_report_export(ReportData *report_data)
     gboolean result;
 
     message = g_strdup_printf(FMB_EEXIST_MSG, export_filename);
-    result = gnc_verify_dialog_parented(parent, message, FALSE);
+    result = gnc_verify_dialog_parented(GTK_WIDGET(parent), message, FALSE);
     g_free(message);
 
     if (!result)
