@@ -1,3 +1,12 @@
+2003-07-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif/...
+	  more work on the new qif importer.  structure it into a parent
+	  context that contains a "list of files" (each file has its own
+	  context).  Add some tests to actually test the code.  It
+	  actually loads a basic qif file, now.  Still need to perform
+	  merging (internal and into GNC) as well as the qif-to-gnc maps.
+
 2003-07-17  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/gnc-backend-file.c:  Don't need to set the
