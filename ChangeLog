@@ -3,6 +3,14 @@
 	* src/report/standard-reports/advanced-portfolio.scm:
 	  Deal properly when there are no prices for a commodity.
 
+	* src/business/business-reports/owner-report.scm:
+	  Supply a start date (as well as an end date) and don't print
+	  invoices that occur prior to the start date or after the end date.
+	  The aging information ignores the start date, but not the end date.
+	  This means the aging information will always be acurate through the
+	  end date (even if all the invoices and payments are not displayed).
+	  Fixes #108731.
+	
 2003-05-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/printing/print-check.scm: some finer adjustments on

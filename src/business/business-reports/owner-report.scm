@@ -173,7 +173,7 @@
 ;;
 ;; Return a pair of (date . value)
 ;;
-(define (add-txn-row table txn acc column-vector row-style inv-str reverse?)
+(define (add-txn-row table txn acc column-vector row-style inv-str reverse? start-date)
   (let* ((type (gnc:transaction-get-txn-type txn))
 	 (date (gnc:transaction-get-date-posted txn))
 	 (due-date #f)
@@ -197,36 +197,40 @@
     (if reverse?
 	(set! value (gnc:numeric-neg value)))
 
-    (if invoice
-	(set! due-date (gnc:invoice-get-date-due invoice)))
+    (if (gnc:timepair-later start-date date)
+	(begin
+	  
+	  (if invoice
+	      (set! due-date (gnc:invoice-get-date-due invoice)))
 
-    (if (date-col column-vector)
-	(addto! row-contents (gnc:print-date date)))
-    (if (date-due-col column-vector)
-	(addto! row-contents 
-		(if (and due-date
-			 (not (equal? due-date (cons 0 0))))
-		    (gnc:print-date due-date)
-		    "")))
-    (if (num-col column-vector)
-	(addto! row-contents (gnc:transaction-get-num txn)))
-    (if (type-col column-vector)
-	(addto! row-contents type-str))
-    (if (memo-col column-vector)
-	(addto! row-contents (gnc:split-get-memo split)))
-    (if (value-col column-vector)
-	(addto! row-contents
-		(gnc:make-html-table-cell/markup "number-cell"
-		 (gnc:make-gnc-monetary
-		  currency value))))
+	  (if (date-col column-vector)
+	      (addto! row-contents (gnc:print-date date)))
+	  (if (date-due-col column-vector)
+	      (addto! row-contents 
+		      (if (and due-date
+			       (not (equal? due-date (cons 0 0))))
+			  (gnc:print-date due-date)
+			  "")))
+	  (if (num-col column-vector)
+	      (addto! row-contents (gnc:transaction-get-num txn)))
+	  (if (type-col column-vector)
+	      (addto! row-contents type-str))
+	  (if (memo-col column-vector)
+	      (addto! row-contents (gnc:split-get-memo split)))
+	  (if (value-col column-vector)
+	      (addto! row-contents
+		      (gnc:make-html-table-cell/markup "number-cell"
+						       (gnc:make-gnc-monetary
+							currency value))))
 
-    (gnc:html-table-append-row/markup! table row-style
-                                       (reverse row-contents))
+	  (gnc:html-table-append-row/markup! table row-style
+					     (reverse row-contents))
+	  ))
     (cons date value)
     ))
 
 
-(define (make-txn-table options query acc report-date)
+(define (make-txn-table options query acc start-date end-date)
   (let ((txns (gnc:query-get-transactions query 'query-txn-match-any))
 	(used-columns (build-column-used options))
 	(odd-row? #t)
@@ -253,7 +257,7 @@
 	  (or (equal? type gnc:transaction-type-invoice)
 	      (equal? type gnc:transaction-type-payment))
 	  (let ((dv (add-txn-row table txn acc used-columns row-style
-				 inv-str reverse?)))
+				 inv-str reverse? start-date)))
 
 	    (set! odd-row? (not odd-row?))
 	    (set! total (gnc:numeric-add-fixed total (cdr dv)))
@@ -274,7 +278,7 @@
 		    "total-number-cell"
 		    (gnc:make-gnc-monetary currency total)))))
 
-    (let* ((interval-vec (list->vector (make-interval-list report-date))))
+    (let* ((interval-vec (list->vector (make-interval-list end-date))))
       (gnc:html-table-append-row/markup!
        table
        "grand-total"
@@ -311,9 +315,9 @@
 					(N_ "The account to search for transactions")
 					#f #f acct-type-list))
 
-  (gnc:options-add-report-date!
+  (gnc:options-add-date-interval!
    gnc:*report-options* gnc:pagename-general
-   (N_ "To") "a")
+   (N_ "From") (N_ "To") "a")
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -382,7 +386,7 @@
                          (line-helper rest)))))
   (line-helper (string->list string)))
 
-(define (setup-query q owner account)
+(define (setup-query q owner account end-date)
   (let* ((guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
 
     (gnc:query-add-guid-match
@@ -401,6 +405,7 @@
      guid 'query-or)
 
     (gnc:query-add-single-account-match q account 'query-and)
+    (gnc:query-add-date-match-timepair q #f end-date #t end-date 'query-and)
     (gnc:query-set-book q (gnc:get-current-book))
     q))
 
@@ -485,7 +490,10 @@
 	 (query (gnc:malloc-query))
 	 (account (opt-val owner-page acct-string))
 	 (owner (opt-val owner-page owner-string))
-	 (report-date (gnc:timepair-end-day-time 
+	 (start-date (gnc:timepair-start-day-time 
+		       (gnc:date-option-absolute-time
+			(opt-val gnc:pagename-general (N_ "From")))))
+	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (title #f)
@@ -503,7 +511,7 @@
 
     (if (gnc:owner-is-valid? owner)
 	(begin
-	  (setup-query query owner account)
+	  (setup-query query owner account end-date)
 
 	  (set! title (gnc:html-markup
 		       "!" 
@@ -518,7 +526,7 @@
 	  (if account
 	      (begin
 		(set! table (make-txn-table (gnc:report-options report-obj)
-					    query account report-date))
+					    query account start-date end-date))
 		(gnc:html-table-set-style!
 		 table "table"
 		 'attribute (list "border" 1)
@@ -541,6 +549,17 @@
 	   (make-owner-table owner))
 
 	  (make-break! document)
+
+	  (gnc:html-document-add-object!
+	   document
+	   (gnc:make-html-text
+	    (string-append
+	     (_ "Date Range")
+	     ": "
+	     (gnc:print-date start-date)
+	     " - "
+	     (gnc:print-date end-date))))
+
 	  (make-break! document)
 
 	  (gnc:html-document-add-object! document table))
