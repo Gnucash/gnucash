@@ -107,9 +107,17 @@ void        xaccConsolidateTransactions (Account *);
 void xaccMoveFarEnd (Split *, Account *);
 void xaccMoveFarEndByName (Split *, const char *);
 
-char * xaccAccountGetName (Account *);
-AccountGroup *xaccAccountGetChildren (Account *);
-AccountGroup *xaccAccountGetParent (Account *);
+void xaccAccountSetType (Account *, int);
+void xaccAccountSetName (Account *, char *);
+void xaccAccountSetDescription (Account *, char *);
+void xaccAccountSetNotes (Account *, char *);
+
+int            xaccAccountGetType (Account *);
+char *         xaccAccountGetName (Account *);
+char *         xaccAccountGetDescription (Account *);
+char *         xaccAccountGetNotes (Account *);
+AccountGroup * xaccAccountGetChildren (Account *);
+AccountGroup * xaccAccountGetParent (Account *);
 
 /** GLOBALS *********************************************************/
 

@@ -23,6 +23,8 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include <string.h>
+
 #include "config.h"
 
 #include "Account.h"
@@ -623,6 +625,40 @@ xaccConsolidateTransactions (Account * acc)
 /********************************************************************\
 \********************************************************************/
 
+void 
+xaccAccountSetType (Account *acc, int tip)
+{
+   if (!acc) return;
+   acc->type = tip;
+}
+
+void 
+xaccAccountSetName (Account *acc, char *str)
+{
+   if (!acc) return;
+   if (acc->accountName) free (acc->accountName);
+   acc->accountName = strdup (str);
+}
+
+void 
+xaccAccountSetDescription (Account *acc, char *str)
+{
+   if (!acc) return;
+   if (acc->description) free (acc->description);
+   acc->description = strdup (str);
+}
+
+void 
+xaccAccountSetNotes (Account *acc, char *str)
+{
+   if (!acc) return;
+   if (acc->notes) free (acc->notes);
+   acc->notes = strdup (str);
+}
+
+/********************************************************************\
+\********************************************************************/
+
 AccountGroup *
 xaccAccountGetChildren (Account *acc)
 {
@@ -635,11 +671,28 @@ xaccAccountGetParent (Account *acc)
    return (acc->parent);
 }
 
+int
+xaccAccountGetType (Account *acc)
+{
+   return (acc->type);
+}
 
 char *
 xaccAccountGetName (Account *acc)
 {
    return (acc->accountName);
+}
+
+char * 
+xaccAccountGetDescription (Account *acc)
+{
+   return (acc->description);
+}
+
+char * 
+xaccAccountGetNotes (Account *acc)
+{
+   return (acc->notes);
 }
 
 /*************************** END OF FILE **************************** */
