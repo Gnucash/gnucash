@@ -861,6 +861,7 @@ xaccAccountSetStartingBalance(Account *acc,
         break;
      default:
   }
+
   acc->balance_dirty = TRUE;
 }
 
@@ -876,15 +877,19 @@ xaccAccountSetStartingBalance(Account *acc,
 \********************************************************************/
 
 void
-xaccAccountFixSplitDateOrder (Account * acc, Split *split ) 
+xaccAccountFixSplitDateOrder (Account * acc, Split *split) 
 {
   if (NULL == acc) return;
   if (NULL == split) return;
 
-  {
-    acc->sort_dirty = TRUE;
-    acc->balance_dirty = TRUE;
-  }
+  if (acc->do_free) return;
+
+  acc->sort_dirty = TRUE;
+  acc->balance_dirty = TRUE;
+
+  if (acc->editlevel > 0) return;
+
+  xaccAccountBringUpToDate (acc);
 }
 
 /********************************************************************\

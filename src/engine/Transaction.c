@@ -1366,17 +1366,8 @@ xaccTransCommitEdit (Transaction *trans)
 
    /* ------------------------------------------------- */
    /* Make sure all associated splits are in proper order
-    * in their accounts. */
-   for (node = trans->splits; node; node = node->next) {
-     split = node->data;
-     xaccAccountFixSplitDateOrder(split->acc, split);
-   }
-
-   /* Recompute the account balances. */
-   for (node = trans->splits; node; node = node->next) {
-     split = node->data;
-     xaccAccountRecomputeBalance (split->acc); 
-   }
+    * in their accounts with the correct balances. */
+   xaccTransFixSplitDateOrder (trans);
 
    trans->do_free = FALSE;
    xaccTransWriteLog (trans, 'C');
