@@ -446,8 +446,12 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    /* do some misc cell config */
 
    /* balance cell does not accept input; its display only.  */
-   reg->recsCell->input_output = XACC_CELL_ALLOW_NONE;
-   reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
+   /* however, we *do* want it to shadow the true cell contents when 
+    * the cursor is repositioned.  Othewise, it will just display 
+    * whatever previous bogus value it contained.
+    */
+   reg->recsCell->input_output = XACC_CELL_ALLOW_SHADOW;
+   reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
 
    /* the debit/credit/value cells show blank if value is 0.00 */
    reg->debitCell->blank_zero = 1;
