@@ -1,204 +1,204 @@
 
-<ARTICLE ID="XACC-APAR">
-<ARTHEADER>
-<TITLE>Contas a Pagar/Contas a Receber</TITLE>
-</ARTHEADER>
-<SECT1 ID="XACC-AP-AR">
-<TITLE>Contas a Pagar e Contas a Receber</TITLE>
-<PARA>C/R (Contas a Receber) e C/P (Contas a Pagar) são utilizadas 
+<article id="xacc-apar">
+<artheader>
+<title>Contas a Pagar/Contas a Receber</title>
+</artheader>
+<sect1 id="xacc-ap-ar">
+<title>Contas a Pagar e Contas a Receber</title>
+<para>C/R (Contas a Receber) e C/P (Contas a Pagar) são utilizadas 
     por empresas para registar vendas pelas quais não serão imediatamente 
     pagas, ou para registar contas que receberam, mas apenas irão pagar 
     mais tarde. Este tipo de contas é utilizado principalmente quando 
     você tem muitas facturas e recibos a entrar e sair, e não lhes deseja 
-    perder o controlo apenas porque não as paga/é pago imediatamente. 
-    Para a maior parte dos utilizadores domésticos, C/R e C/P são demasiado 
+    perder o controlo apenas porque não as paga/é pago imediatamente.</para> 
+    <para>Para a maior parte dos utilizadores domésticos, C/R e C/P são demasiado 
     complicadas e confusas para valerem o esforço.
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-ARDEF">
-<TITLE> Contas a Receber</TITLE>
-<PARA>Vamos assumir que em vez de requerer que os seus clientes 
-    lhe paguem <EMPHASIS>imediatamente,</EMPHASIS> em dinheiro, 
+    </para>
+</sect1>
+<sect1 id="xacc-ardef">
+<title> Contas a Receber</title>
+<para>Vamos assumir que em vez de requerer que os seus clientes 
+    lhe paguem <emphasis>imediatamente,</emphasis> em dinheiro, 
     lhes emite uma factura e lhes dá 30 dias para efectuar o pagamento. 
     (Após 30 dias, podemos começar a cobrar juros e a enviar cartas de 
     caloteiro :-)). Quando efectuamos uma venda, as duas contas afectadas 
-    são <EMPHASIS>Vendas</EMPHASIS> (uma conta de receitas) e 
-    <EMPHASIS>Contas a Receber.</EMPHASIS> Contas a Receber são 
+    são <emphasis>Vendas</emphasis> (uma conta de receitas) e 
+    <emphasis>Contas a Receber.</emphasis> Contas a Receber são 
     activos, mas não são líquidos pois não os pode vender imediatamente, 
     e certamente não são dinheiro. Quando o cliente paga a factura, você 
     transfere o montante de C/R para Dinheiro. Isto é feito em dois passos 
     pois você decidiu efectuar a sua contabilidade na base da efectivação  
     e não no do dinheiro. Isto deve-se a que a maioria das suas transacções 
     não se baseiam apenas em dinheiro trocar de mãos, mas antes em 
-    <EMPHASIS>contrair obrigações (ou dívidas).</EMPHASIS>
-    </PARA>
+    <emphasis>contrair obrigações (ou dívidas).</emphasis>
+    </para>
 
-<PARA>Em operações mais sofisticadas, pode existir uma muito mais 
+<para>Em operações mais sofisticadas, pode existir uma muito mais 
     complexa sequência de documentos gerados e acompanhados:
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>Um cliente envia uma <EMPHASIS>Ordem de Compra</EMPHASIS>,
+    <itemizedlist>
+<listitem>
+<para>Um cliente envia uma <emphasis>Ordem de Compra</emphasis>,
       que autoriza a compra.
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Uma <EMPHASIS>Ordem de Produção</EMPHASIS> calendariza a produção 
+      </para>
+</listitem>
+<listitem>
+<para>Uma <emphasis>Ordem de Produção</emphasis> calendariza a produção 
       do que quer que seja que o cliente deseja adquirir.
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Uma <EMPHASIS>Guia de Remessa</EMPHASIS> é emitida, para enviar os 
+      </para>
+</listitem>
+<listitem>
+<para>Uma <emphasis>Guia de Remessa</emphasis> é emitida, para enviar os 
       bens para o cliente.
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Uma vez enviados, uma <EMPHASIS>Factura</EMPHASIS> é emitida, representando 
-      um <EMPHASIS>pedido de pagamento</EMPHASIS>.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+      </para>
+</listitem>
+<listitem>
+<para>Uma vez enviados, uma <emphasis>Factura</emphasis> é emitida, representando 
+      um <emphasis>pedido de pagamento</emphasis>.
+    </para>
+</listitem>
+</itemizedlist>
 
-    </PARA>
-<PARA>As vendas são registadas assim que ocorrem. Infelizmente, você 
+    </para>
+<para>As vendas são registadas assim que ocorrem. Infelizmente, você 
     pode acabar por vender produtos a operadores mal-intencionados 
     desconhecendo tal facto, e ficar com uma "dívida incobrável". 
     Por forma a determinar que partes das Contas a Receber parecem 
     estar mais em risco, é normal organizar as C/R baseadas na "idade" 
     das dívidas, sendo comum a segmentação em várias idades, de 
     pagamentos em aberto à 0-30 dias, em aberto à 31-60 dias, 61-90 dias, 
-    e depois aqueles que estão <EMPHASIS>mesmo atrasados.</EMPHASIS>
+    e depois aqueles que estão <emphasis>mesmo atrasados.</emphasis>
     A dada altura, poderá tornar-se óbvio que o cliente nunca irá pagar 
-    o que deve, e temos de registar a dívida como <EMPHASIS>Dívida Incobrável.</EMPHASIS>
+    o que deve, e temos de registar a dívida como <emphasis>Dívida Incobrável.</emphasis>
     Nessa altura, é normal registar a entrada da seguinte forma:
     (Atenção às especificidades da lei portuguesa sobre prazos de incobrabilidade)
-    <TABLE>
-<TITLE>Exemplo de Custo de Dívida Incobrável</TITLE>
-<TGROUP COLS="3">
-<THEAD>
-<ROW>
-<ENTRY>Conta</ENTRY>
-<ENTRY>Déb.</ENTRY>
-<ENTRY>Créd.</ENTRY>
-</ROW>
-</THEAD>
-<TBODY>
-<ROW>
-<ENTRY>Custo de Dív. Incobrável</ENTRY>
-<ENTRY>100,000$</ENTRY>
-<ENTRY>        </ENTRY>
-</ROW>
-<ROW>
-<ENTRY>        </ENTRY>
-</ROW>
-<ROW>
-<ENTRY>Contas a Receber</ENTRY>
-<ENTRY>        </ENTRY>
-<ENTRY>100,000$</ENTRY>
-</ROW>
-</TBODY>
-</TGROUP>
-</TABLE>
+    <table>
+<title>Exemplo de Custo de Dívida Incobrável</title>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Conta</entry>
+<entry>Déb.</entry>
+<entry>Créd.</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Custo de Dív. Incobrável</entry>
+<entry>100,000$</entry>
+<entry>        </entry>
+</row>
+<row>
+<entry>        </entry>
+</row>
+<row>
+<entry>Contas a Receber</entry>
+<entry>        </entry>
+<entry>100,000$</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 
-    </PARA>
-<PARA>Poderia ter reduzido as <EMPHASIS>Receitas de Vendas</EMPHASIS>, mas 
+    </para>
+<para>Poderia ter reduzido as <emphasis>Receitas de Vendas</emphasis>, mas 
     as empresas tendem a preferir controlar especificamente os montantes 
     que vão perdendo para maus clientes.
 
-    </PARA>
-<PARA><EMPHASIS>Aviso: <EMPHASIS>Conceito Contabilístico Avançado.</EMPHASIS> 
+    </para>
+<para><emphasis>Aviso: <emphasis>Conceito Contabilístico Avançado.</emphasis> 
     Dívidas Incobráveis são um exemplo de uma "contra-conta". Não nos 
-    referimos a <EMPHASIS>montantes pagos aos rebeldes na Niquerágua,</EMPHASIS> 
+    referimos a <emphasis>montantes pagos aos rebeldes na Niquerágua,</emphasis> 
     mas antes ao conceito de que a conta é uma conta de receita que é 
     esperado conter um saldo oposto ao que normalmente deveria, para que 
     contra-balance o saldo de outra conta de receitas. 
-    <LINK LINKEND="XACC-DEPRECIATION">Amortizações Acumuladas,</LINK> utilizada 
+    <link linkend="xacc-depreciation">Amortizações Acumuladas,</link> utilizada 
     para reduzir o valor de um activo ao longo do tempo, é outro exemplo de 
-    uma contra-conta.</EMPHASIS>
+    uma contra-conta.</emphasis>
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-AR">
-<TITLE> Contas a Pagar</TITLE>
-<PARA>Para ver como a Contas a Pagar funciona, inverta o cenário das 
-    Contas a Receber; troque o cliente com o vendedor.
+    </para>
+</sect1>
+<sect1 id="xacc-ar">
+<title> Contas a Pagar</title>
+<para>Para ver como a Contas a Pagar funciona, inverta o cenário das 
+    Contas a Receber: troque o cliente com o vendedor.
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA>Se comprar mercadorias "por conta," a contabilidade por efectivação 
+    <itemizedlist>
+<listitem>
+<para>Se comprar mercadorias "por conta," a contabilidade por efectivação 
       requer que registe a despesa imediatamente. Em vez de diminuir o 
-      dinheiro, coloque o crédito na conta <EMPHASIS>Contas a Pagar</EMPHASIS>.
+      dinheiro, coloque o crédito na conta <emphasis>Contas a Pagar</emphasis>.
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Passadas três semanas, chega a factura. Você emite um pagamento, 
-      <EMPHASIS>debitando C/P e creditando Dinheiro.</EMPHASIS>
+      </para>
+</listitem>
+<listitem>
+<para>Passadas três semanas, chega a factura. Você emite um pagamento, 
+      <emphasis>debitando C/P e creditando Dinheiro.</emphasis>
       
       
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+    </para>
+</listitem>
+</itemizedlist>
 
-    </PARA>
-</SECT1>
-<SECT1 ID="XACC-PREPAIDEXPENSES">
-<TITLE> Despesas Pré-Pagas</TITLE>
-<PARA>    </PARA>
-<PARA>As mesmas técnicas são utilizadas para despesas pré-pagas.
+    </para>
+</sect1>
+<sect1 id="xacc-prepaidexpenses">
+<title> Despesas Pré-Pagas</title>
+<para>    </para>
+<para>O mesmo tipo de técnicas são utilizadas para despesas pré-pagas.
     Se tiver de pagar seis meses de renda antecipadamente, isso é
     tratado como um "activo diferido".
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA> No momento do pagamento, você <EMPHASIS>debita</EMPHASIS> 
-        <EMPHASIS>Renda Pré-Paga</EMPHASIS> pelo montante pago,
-        que é um <EMPHASIS>crédito</EMPHASIS> ao <EMPHASIS>Dinheiro.</EMPHASIS> 
-        Isto coloca um belo rombo na sua conta de Dinheiro, mas <EMPHASIS>realmente</EMPHASIS> 
+    <itemizedlist>
+<listitem>
+<para> No momento do pagamento, você <emphasis>debita</emphasis> 
+        <emphasis>Renda Pré-Paga</emphasis> pelo montante pago,
+        que é um <emphasis>crédito</emphasis> ao <emphasis>Dinheiro.</emphasis> 
+        Isto coloca um belo rombo na sua conta de Dinheiro, mas <emphasis>realmente</emphasis> 
         é apresentada nas contas como um activo, e não existem mais pagamentos 
         a efectuar nos próximos seis meses.
       
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Todos os meses, o saldo da <EMPHASIS>Renda Pré-Paga</EMPHASIS> é 
-      reduzido <EMPHASIS>debitando</EMPHASIS> <EMPHASIS>Despesas de Renda</EMPHASIS> 
-      e <EMPHASIS>creditando</EMPHASIS> <EMPHASIS>Renda Pré-Paga</EMPHASIS>.
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+      </para>
+</listitem>
+<listitem>
+<para>Todos os meses, o saldo da <emphasis>Renda Pré-Paga</emphasis> é 
+      reduzido <emphasis>debitando</emphasis> <emphasis>Despesas de Renda</emphasis> 
+      e <emphasis>creditando</emphasis> <emphasis>Renda Pré-Paga</emphasis>.
+    </para>
+</listitem>
+</itemizedlist>
 
-    </PARA>
-<PARA>Da mesma forma, as empresas retêm impostos sobre os ordenados dos 
+    </para>
+<para>Da mesma forma, as empresas retêm impostos sobre os ordenados dos 
     funcionários (IRS), e guardam-nos numa conta bancária especial.
 
-    <ITEMIZEDLIST>
-<LISTITEM>
-<PARA><EMPHASIS>Esse</EMPHASIS> dinheiro não é da empresa, pelo que é feito um 
-      <EMPHASIS>débito</EMPHASIS> à conta de <EMPHASIS>Dinheiro</EMPHASIS> e um 
-      <EMPHASIS>Crédito</EMPHASIS> a um Passivo Diferido, nomeadamente, 
-      <EMPHASIS>Retenção de Impostos Sobre o Rendimento</EMPHASIS>.
+    <itemizedlist>
+<listitem>
+<para><emphasis>Esse</emphasis> dinheiro não é da empresa, pelo que é feito um 
+      <emphasis>débito</emphasis> à conta de <emphasis>Dinheiro</emphasis> e um 
+      <emphasis>Crédito</emphasis> a um Passivo Diferido, nomeadamente, 
+      <emphasis>Retenção de Impostos Sobre o Rendimento</emphasis>.
 
-      </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Quando a empresa envia ao Governo o seu cheque de trimestral de impostos 
-      sobre os rendimentos, <EMPHASIS>Retenção de Impostos Sobre o Rendimento</EMPHASIS>
-      diminui, tal como o balanço da <EMPHASIS>Conta de Cheques</EMPHASIS>.
+      </para>
+</listitem>
+<listitem>
+<para>Quando a empresa envia ao Governo o seu cheque de trimestral de impostos 
+      sobre os rendimentos, <emphasis>Retenção de Impostos Sobre o Rendimento</emphasis>
+      diminui, tal como o balanço da <emphasis>Conta de Cheques</emphasis>.
       
       
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+    </para>
+</listitem>
+</itemizedlist>
 
 
-</PARA>
-</SECT1>
-</ARTICLE>
+</para>
+</sect1>
+</article>
 
 <!-- Local variables: -->
 <!-- sgml-parent-document: "gnucash.sgml" -->

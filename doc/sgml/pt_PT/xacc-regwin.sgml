@@ -164,7 +164,7 @@
     mas não reconciliada. Você pode alterar o estado de reconciliação
     entre '<LITERAL>n</LITERAL>' e '<LITERAL>c</LITERAL>' clicando no
     campo (<GUILABEL>R</GUILABEL>); pode defini-lo como '<LITERAL>y</LITERAL>'
-    utilizando a <LINKLINKEND=XACC-RECNWIN>Janela de Reconciliação</LINK>.
+    utilizando a <LINK LINKEND=XACC-RECNWIN>Janela de Reconciliação</LINK>.
 
     </PARA>
 <PARA>No fundo da janela de conta, existem dois saldos correntes:

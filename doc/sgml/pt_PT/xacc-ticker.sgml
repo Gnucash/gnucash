@@ -76,9 +76,12 @@ vários servidores na web, directamente para o GnuCash.
 </LISTITEM>
 </ITEMIZEDLIST>
 
-    <TABLE>
-<TITLE>Lista de Códigos para os Mercados Europeus</TITLE>
+<note>
 <PARA>Note que a BVL não é suportada pelo Yahoo Europa.</PARA>
+</note>
+
+<TABLE>
+<TITLE>Lista de Códigos para os Mercados Europeus</TITLE>
 <TGROUP COLS="2">
 <THEAD>
 <ROW>
