@@ -139,7 +139,11 @@ remove_guids (Split *sa, Split *sb)
                     "peer_guid", &sb->guid);
    if (!ksub) 
    {
-      PERR ("merging splits that didn't have correct gemini values!");
+      PERR ("merging splits that didn't have correct gemini values!\n"
+            "looking for guid=%s\n"
+            "bag held: %s", 
+            guid_to_string (&sb->guid),
+            kvp_frame_to_string (sa->kvp_data));
       return;
    }
    gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
@@ -331,6 +335,54 @@ rethin:
 
   LEAVE (" deleted=%d", splits_deleted);
   return splits_deleted;
+}
+
+/* ============================================================== */
+
+void
+xaccAccountScrubLots (Account *acc)
+{
+  LotList *node;
+  if (!acc) return;
+  if (FALSE == xaccAccountHasTrades (acc)) return;
+                                                                                
+  ENTER ("acc=%s", acc->accountName);
+  xaccAccountBeginEdit(acc);
+  xaccAccountAssignLots (acc);
+
+  for (node = acc->lots; node; node=node->next)
+  {
+    GNCLot *lot = node->data;
+    xaccScrubLot (lot);
+  }
+  xaccAccountCommitEdit(acc);
+  LEAVE ("acc=%s", acc->accountName);
+}
+
+/* ============================================================== */
+
+static gpointer 
+lot_scrub_cb (Account *acc, gpointer data)
+{
+   if (FALSE == xaccAccountHasTrades (acc)) return NULL;
+   xaccAccountScrubLots (acc);
+   return NULL;
+}
+
+void 
+xaccGroupScrubLots (AccountGroup *grp)
+{
+   if (!grp) return;
+   xaccGroupForEachAccount (grp, lot_scrub_cb, NULL, TRUE);
+}
+
+void 
+xaccAccountTreeScrubLots (Account *acc)
+{
+   if (!acc) return;
+
+   xaccGroupScrubLots (acc->children);
+   xaccAccountScrubLots (acc);
 }
 
 /* ========================== END OF FILE  ========================= */

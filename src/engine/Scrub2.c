@@ -221,43 +221,4 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
 
-/* ============================================================== */
-
-static gpointer 
-lot_scrub_cb (Account *acc, gpointer data)
-{
-   if (FALSE == xaccAccountHasTrades (acc)) return NULL;
-   xaccAccountAssignLots (acc);
-   xaccAccountScrubDoubleBalance (acc);
-   return NULL;
-}
-
-void 
-xaccGroupScrubLotsBalance (AccountGroup *grp)
-{
-   if (!grp) return;
-   xaccGroupForEachAccount (grp, lot_scrub_cb, NULL, TRUE);
-}
-
-void 
-xaccAccountScrubLotsBalance (Account *acc)
-{
-   if (!acc) return;
-   if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountAssignLots (acc);
-   xaccAccountScrubDoubleBalance (acc);
-}
-
-void 
-xaccAccountTreeScrubLotsBalance (Account *acc)
-{
-   if (!acc) return;
-
-   xaccGroupScrubLotsBalance (acc->children);
-   
-   if (FALSE == xaccAccountHasTrades (acc)) return;
-   xaccAccountAssignLots (acc);
-   xaccAccountScrubDoubleBalance (acc);
-}
-
 /* =========================== END OF FILE ======================= */

@@ -38,23 +38,6 @@
 
 #include "gnc-engine.h"
 
-/** The xaccGroupScrubLotsBalance() routine walks the
- *   account tree, and invokes xaccAccountScrubLots()
- *   and xaccAccountScrubDoubleBalance() on all accounts 
- *   that are trading accounts.  
- * The xaccAccountTreeScrubLotsBalance() does the same.
- * The xaccAccountScrubLotsBalance() will do the same, 
- *   except that it won't descend down to the account 
- *   children.
- *
- * Most GUI routines will want to use one of these 
- * xacc[*]ScrubLotsBalance() routines, instead of the
- * component ScrubLots() and ScrubDoubleBalance() routines,
- * since it usually makes sense to call these together.
- */
-void xaccGroupScrubLotsBalance (AccountGroup *grp);
-void xaccAccountScrubLotsBalance (Account *acc);
-void xaccAccountTreeScrubLotsBalance (Account *acc);
 
 /** The xaccAccountAssignLots() routine will walk over all of
  *   the splits in an account, and make sure that each belongs

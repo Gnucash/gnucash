@@ -29,11 +29,50 @@
  * Provides a set of functions and utilities for checking and
  * repairing ('scrubbing clean') the usage of Cap Gains
  * transactions in stock and commodity accounts.  
+ *
+ * NOTE: Unless you have special needs, the functions you are looking
+ * for and almost certainly want to use are either xaccScrubLot() or
+ * xaccAccountScrubLots().
  */
 #ifndef XACC_SCRUB3_H
 #define XACC_SCRUB3_H
 
 #include "gnc-engine.h"
+
+/** The xaccScrubLot() routine makes sure that the indicated lot is
+ *    self-consistent and properly balanced, and fixes it if its not.
+ *    This is an important routine to call if the amount of any split
+ *    in the lot is changed.  That's because (obviously) changing 
+ *    split values is gaurenteed to throw off lot balances.
+ *    This routine may end up closing the lot, or at least trying
+ *    to. It will also cause cap gains to be recomputed.
+ *
+ *    Scrubbing the lot may cause subsplits to be merged together,
+ *    i.e. for splits to be deleted.  This routine returns true if
+ *    any splits were deleted.
+ */
+gboolean xaccScrubLot (GNCLot *lot);
+
+/** The xaccAccountScrubLots() routine makes sure that every split
+ *    in the account is assigned to a lot, and that then, every
+ *    lot is self-consistent (by calling xaccScrubLot() on each lot).
+ *
+ *    This routine is the primary routine for ensuring that the 
+ *    lot structure, and the cap-gains for an account are in good 
+ *    order.
+ *
+ * The xaccGroupScrubLots() routine walks the account tree, and invokes 
+ *    xaccAccountScrubLots() on all accounts that are trading accounts.
+ * The xaccAccountTreeScrubLots() does the same.
+ *
+ * Most GUI routines will want to use one of these xacc[*]ScrubLots()
+ * routines, instead of the various component routines, since it will 
+ * usually makes sense to work only with these high-level routines.
+ */
+void xaccAccountScrubLots (Account *acc);
+void xaccGroupScrubLots (AccountGroup *grp);
+void xaccAccountTreeScrubLots (Account *acc);
+
 
 /** If a split has been pulled apart to make it fit into two (or more)
  * lots, then it becomes theoretically possible for each subsplit to
@@ -70,20 +109,6 @@ void xaccScrubSubSplitPrice (Split *split);
 gboolean xaccScrubMergeSubSplits (Split *split);
 gboolean xaccScrubMergeTransSubSplits (Transaction *txn);
 gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
-
-/** The xaccScrubLot() routine makes sure that the indicated lot is
- *    self-consistent and properly balanced, and fixes it if its not.
- *    This is an important routine to call if the amount of any split
- *    in the lot is changed.  That's because (obviously) changing 
- *    split values is gaurenteed to throw off lot balances.
- *    This routine may end up closing the lot, or at least trying
- *    to. It will also cause cap gains to be recomputed.
- *
- *    Scrubbing the lot may cause subsplits to be merged together,
- *    i.e. for splits to be deleted.  This routine returns true if
- *    any splits were deleted.
- */
-gboolean xaccScrubLot (GNCLot *lot);
 
 #endif /* XACC_SCRUB3_H */
 /** @} */
