@@ -1,3 +1,15 @@
+2001-04-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-commodities.c: more work
+
+	* src/engine/gnc-commodity.c (gnc_commodity_table_remove): new func
+
+	* src/engine/gnc-commodity.h: add ASX namespace
+
+	* src/gnome/dialog-commodity.c (gnc_ui_edit_commodity_modal): new
+	func. unfinished. rename some functions to reflect that it's also
+	an editing dialog now.
+
 2001-04-11  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm (render-month-subheading):

@@ -4605,7 +4605,7 @@ Daily (365)
 
 <widget>
   <class>GnomeDialog</class>
-  <name>New Commodity Dialog</name>
+  <name>Commodity Dialog</name>
   <title>New Currency/Security</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
@@ -4652,9 +4652,9 @@ Daily (365)
 	<can_focus>True</can_focus>
 	<signal>
 	  <name>clicked</name>
-	  <handler>gnc_ui_new_commodity_ok_cb</handler>
-	  <data>New_Commodity_Dialog</data>
-	  <last_modification_time>Tue, 08 Aug 2000 17:10:45 GMT</last_modification_time>
+	  <handler>gnc_ui_commodity_ok_cb</handler>
+	  <data>Commodity_Dialog</data>
+	  <last_modification_time>Wed, 11 Apr 2001 09:03:12 GMT</last_modification_time>
 	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
       </widget>
@@ -4666,9 +4666,9 @@ Daily (365)
 	<can_focus>True</can_focus>
 	<signal>
 	  <name>clicked</name>
-	  <handler>gnc_ui_new_commodity_cancel_cb</handler>
-	  <data>New_Commodity_Dialog</data>
-	  <last_modification_time>Tue, 08 Aug 2000 17:11:18 GMT</last_modification_time>
+	  <handler>gnc_ui_commodity_cancel_cb</handler>
+	  <data>Commodity_Dialog</data>
+	  <last_modification_time>Wed, 11 Apr 2001 09:03:18 GMT</last_modification_time>
 	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
       </widget>
@@ -4680,9 +4680,9 @@ Daily (365)
 	<can_focus>True</can_focus>
 	<signal>
 	  <name>clicked</name>
-	  <handler>gnc_ui_new_commodity_help_cb</handler>
-	  <data>New_Commodity_Dialog</data>
-	  <last_modification_time>Tue, 08 Aug 2000 17:12:03 GMT</last_modification_time>
+	  <handler>gnc_ui_commodity_help_cb</handler>
+	  <data>Commodity_Dialog</data>
+	  <last_modification_time>Wed, 11 Apr 2001 09:03:24 GMT</last_modification_time>
 	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_HELP</stock_button>
       </widget>
@@ -4858,6 +4858,7 @@ Daily (365)
 	    <class>GtkEntry</class>
 	    <child_name>GtkCombo:entry</child_name>
 	    <name>namespace_entry</name>
+	    <tooltip>Enter the type of commodity. For stocks, this is often an exchange on which the stock is traded. You can choose an existing type from the list or enter a new type with the keyboard.</tooltip>
 	    <can_focus>True</can_focus>
 	    <editable>True</editable>
 	    <text_visible>True</text_visible>
@@ -11445,8 +11446,24 @@ Unknown
 	  <spacing>0</spacing>
 
 	  <widget>
+	    <class>GtkCheckButton</class>
+	    <name>show_currencies_button</name>
+	    <border_width>3</border_width>
+	    <can_focus>True</can_focus>
+	    <label>Show National Currencies</label>
+	    <active>False</active>
+	    <draw_indicator>True</draw_indicator>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
 	    <class>GtkScrolledWindow</class>
 	    <name>scrolledwindow33</name>
+	    <border_width>3</border_width>
 	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
 	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
 	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
@@ -11537,6 +11554,7 @@ Unknown
 	  <widget>
 	    <class>GtkHButtonBox</class>
 	    <name>hbuttonbox7</name>
+	    <border_width>3</border_width>
 	    <layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
 	    <spacing>30</spacing>
 	    <child_min_width>85</child_min_width>

@@ -436,6 +436,30 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
 }
 
 /********************************************************************
+ * gnc_commodity_table_remove
+ * remove a commodity from the table. 
+ ********************************************************************/
+
+void
+gnc_commodity_table_remove(gnc_commodity_table * table,
+                           gnc_commodity * comm)
+{
+  gnc_commodity_namespace * nsp;
+  gnc_commodity *c;
+
+  if (!table) return;
+  if (!comm) return;
+
+  c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
+  if (c != comm) return;
+
+  nsp = g_hash_table_lookup (table->table, comm->namespace);
+  if (!nsp) return;
+
+  g_hash_table_remove (nsp->table, comm->mnemonic);
+}
+
+/********************************************************************
  * gnc_commodity_table_has_namespace
  * see if any commodities in the namespace exist 
  ********************************************************************/

@@ -36,6 +36,7 @@ typedef struct _gnc_commodity_table     gnc_commodity_table;
 #define GNC_COMMODITY_NS_EUREX  "EUREX"
 #define GNC_COMMODITY_NS_MUTUAL "FUND"
 #define GNC_COMMODITY_NS_AMEX   "AMEX"
+#define GNC_COMMODITY_NS_ASX    "ASX"
 
 /* gnc_commodity functions */
 gnc_commodity * gnc_commodity_new(const char * fullname, 
@@ -77,9 +78,12 @@ gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * fullname);
 gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
                                            gnc_commodity * comm);
+void            gnc_commodity_table_remove(gnc_commodity_table * table,
+                                           gnc_commodity * comm);
 
 int       gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
                                             const char * namespace);
+
 guint gnc_commodity_table_get_size(gnc_commodity_table* tbl);
 guint gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl);
 

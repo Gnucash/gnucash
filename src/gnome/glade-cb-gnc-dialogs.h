@@ -247,3 +247,27 @@ gnc_edit_column_view_move_down_cb      (GtkButton       *button,
 void
 gnc_column_view_edit_size_cb           (GtkButton       *button,
                                         gpointer         user_data);
+
+void
+gnc_ui_new_commodity_ok_cb             (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_new_commodity_cancel_cb         (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_new_commodity_help_cb           (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_commodity_ok_cb                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_commodity_cancel_cb             (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_commodity_help_cb               (GtkButton       *button,
+                                        gpointer         user_data);

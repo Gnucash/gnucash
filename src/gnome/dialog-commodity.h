@@ -30,13 +30,13 @@
 #include "gnc-engine.h"
 
 typedef struct _selectcommoditywindow SelectCommodityWindow;
-typedef struct _newcommoditywindow NewCommodityWindow;
+typedef struct _commoditywindow CommodityWindow;
 
 typedef void (* gnc_commodity_callback)(const gnc_commodity *, void * data);
  
 void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
 
-void gnc_ui_new_commodity_destroy(NewCommodityWindow * w);
+void gnc_ui_commodity_destroy(CommodityWindow * w);
 
 gnc_commodity * 
 gnc_ui_select_commodity_modal(gnc_commodity * orig_sel, 
@@ -45,6 +45,10 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
 gnc_commodity * 
 gnc_ui_new_commodity_modal(const char * default_namespace, 
                            GtkWidget * parent);
+
+gboolean
+gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
+                            GtkWidget * parent);
 
 char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
                                       const char * sel,

@@ -50,6 +50,8 @@ typedef struct
   GtkWidget * edit_button;
   GtkWidget * remove_button;
 
+  gboolean show_currencies;
+
   gnc_commodity *commodity;
   gboolean new;
 } CommoditiesDialog;
@@ -106,6 +108,10 @@ gnc_load_namespace (gpointer data, gpointer user_data)
   GList *commodities;
   GList *node;
 
+  if (!cd->show_currencies &&
+      safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+    return;
+
   ct = gnc_engine_commodities ();
 
   commodities = gnc_commodity_table_get_commodities (ct, namespace);
@@ -134,7 +140,23 @@ gnc_load_namespace (gpointer data, gpointer user_data)
   g_list_free (commodities);
 }
 
-static guint
+static void
+gnc_commodities_set_sensitives (CommoditiesDialog *cd)
+{
+  gboolean sensitive;
+
+  if (cd->commodity &&
+      safe_strcmp (gnc_commodity_get_namespace (cd->commodity),
+                   GNC_COMMODITY_NS_ISO) != 0)
+    sensitive = TRUE;
+  else
+    sensitive = FALSE;
+
+  gtk_widget_set_sensitive (cd->edit_button, sensitive);
+  gtk_widget_set_sensitive (cd->remove_button, sensitive);
+}
+
+static void
 gnc_commodities_load_commodities (CommoditiesDialog *cd)
 {
   gnc_commodity_table *ct;
@@ -169,14 +191,9 @@ gnc_commodities_load_commodities (CommoditiesDialog *cd)
     gtk_clist_moveto (GTK_CLIST (cd->commodity_list),
                       new_row, 0, 0.5, 0.0);
 
-  size = gnc_commodity_table_get_size (ct);
-
-  gtk_widget_set_sensitive (cd->edit_button, size != 0);
-  gtk_widget_set_sensitive (cd->remove_button, size != 0);
-
   g_list_free (namespaces);
 
-  return size;
+  gnc_commodities_set_sensitives (cd);
 }
 
 static void
@@ -209,18 +226,84 @@ edit_clicked (GtkWidget *widget, gpointer data)
 static void
 remove_clicked (GtkWidget *widget, gpointer data)
 {
+  GList *node;
+  GList *accounts;
+  gboolean do_delete;
+  gboolean can_delete;
   CommoditiesDialog *cd = data;
-  const char *message = _("Are you sure you want to delete the\n"
-                          "current commodity?");
 
   if (!cd->commodity)
     return;
+
+  accounts = xaccGroupGetSubAccounts (gncGetCurrentGroup ());
+  can_delete = TRUE;
+  do_delete = FALSE;
+
+  for (node = accounts; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    if (cd->commodity == xaccAccountGetCurrency (account))
+    {
+      can_delete = FALSE;
+      break;
+    }
+
+    if (cd->commodity == xaccAccountGetSecurity (account))
+    {
+      can_delete = FALSE;
+      break;
+    }
+  }
+
+  if (!can_delete)
+  {
+    const char *message = _("That commodity is currently used by\n"
+                            "at least one of your accounts. You may\n"
+                            "not delete it.");
+
+    gnc_warning_dialog_parented (cd->dialog, message);
+  }
+  else
+  {
+    const char *message = _("Are you sure you want to delete the\n"
+                            "current commodity?");
+
+    do_delete = gnc_verify_dialog_parented (cd->dialog, message, TRUE);
+  }
+
+  if (do_delete)
+  {
+    gnc_commodity_table *ct = gnc_engine_commodities ();
+
+    gnc_commodity_table_remove (ct, cd->commodity);
+    gnc_commodity_destroy (cd->commodity);
+    cd->commodity = NULL;
+
+    gnc_commodities_load_commodities (cd);
+  }
+
+  g_list_free (accounts);
 }
 
 static void
 add_clicked (GtkWidget *widget, gpointer data)
 {
   CommoditiesDialog *cd = data;
+  gnc_commodity *commodity;
+  const char *namespace;
+
+  if (cd->commodity)
+    namespace = gnc_commodity_get_namespace (cd->commodity);
+  else
+    namespace = NULL;
+
+  commodity = gnc_ui_new_commodity_modal (namespace, cd->dialog);
+  if (commodity)
+  {
+    cd->commodity = commodity;
+    gnc_commodities_load_commodities (cd);
+  }
 }
 
 static void
@@ -232,10 +315,7 @@ select_commodity_cb (GtkCList *clist, gint row, gint col,
   cd->commodity = gtk_clist_get_row_data (clist, row);
   cd->new = FALSE;
 
-  gtk_widget_set_sensitive (cd->edit_button,
-                            cd->commodity != NULL);
-  gtk_widget_set_sensitive (cd->remove_button,
-                            cd->commodity != NULL);
+  gnc_commodities_set_sensitives (cd);
 }
 
 static void
@@ -247,8 +327,7 @@ unselect_commodity_cb (GtkCTree *ctre, gint row, gint col,
   cd->commodity = NULL;
   cd->new = FALSE;
 
-  gtk_widget_set_sensitive (cd->edit_button, FALSE);
-  gtk_widget_set_sensitive (cd->remove_button, FALSE);
+  gnc_commodities_set_sensitives (cd);
 }
 
 static void
@@ -275,6 +354,16 @@ commodities_set_min_widths (CommoditiesDialog *cd)
       gtk_clist_set_column_min_width (GTK_CLIST (cd->commodity_list),
                                       i, width + 5);
     }
+}
+
+static void
+show_currencies_toggled (GtkToggleButton *toggle, gpointer data)
+{
+  CommoditiesDialog *cd = data;
+
+  cd->show_currencies = gtk_toggle_button_get_active (toggle);
+
+  gnc_commodities_load_commodities (cd);
 }
 
 static void
@@ -332,6 +421,11 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (add_clicked), cd);
+
+    button = lookup_widget (dialog, "show_currencies_button");
+
+    gtk_signal_connect (GTK_OBJECT (button), "toggled",
+                        GTK_SIGNAL_FUNC (show_currencies_toggled), cd);
   }
 
   gnc_commodities_load_commodities (cd);
