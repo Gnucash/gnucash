@@ -56,8 +56,8 @@
 /* New or old Guile Smob for G-wrap */
 #undef GWRAP_OLD_GUILE_SMOB
 
-/* The db2 database library */
-#undef HAVE_DB2
+/* The db1 database library */
+#undef PREFER_DB1
 
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML

@@ -28,6 +28,7 @@ src/gnome/gnc-datedelta.c
 src/gnome/gnc-dateedit.c
 src/gnome/print-session.c
 src/gnome/reconcile-list.c
+src/gnome/window-help.c
 src/gnome/window-main.c
 src/gnome/window-reconcile.c
 src/gnome/window-register.c

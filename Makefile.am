@@ -35,10 +35,6 @@ EXTRA_DIST = \
   old/country.sql \
   old/currencynames \
   old/Gnucash.app-defaults \
-  old/gnome/graph/Makefile \
-  old/gnome/graph/colors.c \
-  old/gnome/graph/design.txt \
-  old/gnome/graph/plot-test.c \
   old/perl-reports/report-baln.phtml \
   old/perl-reports/report-folio.phtml \
   old/perl-reports/report-formtest.html \
@@ -60,7 +56,7 @@ make-gnucash-patch: make-gnucash-patch.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-CLEANFILES +=  cscope.files etags.files make-gnucash-patch
+CLEANFILES += cscope.files etags.files make-gnucash-patch
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files

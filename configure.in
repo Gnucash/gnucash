@@ -216,14 +216,42 @@ LIBS="$LIBS -lm"
 
 
 ### --------------------------------------------------------------------------
-DB2_LIBS="-ldb2"
+### Berkeley db
+AC_ARG_ENABLE(prefer-db1, [  --enable-prefer-db1     Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
 
-AC_CHECK_LIB(db2, db_open,
-             AC_DEFINE(HAVE_DB2),
-             AC_MSG_ERROR([Cannot find db2. See the README for more info.]),
-             $DB2_LIBS)
+DB_LIBS=
+AC_CHECK_FUNC(dbopen, [],
+if test "$prefer_db1" = "yes"; then
+ AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
+  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
+   AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+  )
+ )
+else
+ AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
+  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
+   AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
+  )
+ )
+fi
+)
 
-AC_SUBST(DB2_LIBS)
+dnl look for db headers
+if test "$prefer_db1" = "yes"; then
+	AC_CHECK_HEADERS(db_185.h db1/db.h)
+	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h" = nono; then
+	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
+	fi
+	AC_DEFINE(PREFER_DB1)
+else
+	AC_CHECK_HEADERS(db.h db_185.h db1/db.h)
+
+	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h" = nonono; then
+	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
+	fi
+fi
+
+AC_SUBST(DB_LIBS)
 
 
 ### --------------------------------------------------------------------------

@@ -26,15 +26,42 @@
 \********************************************************************/
 
 #include "config.h"
-#include <gnome.h>
 
-#include <guile/gh.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <gnome.h>
+#include <guile/gh.h>
 #include <limits.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <db2/db.h>
+
+/* needed for db.h with 'gcc -ansi -pedantic' */
+#ifndef _BSD_SOURCE
+#  define _BSD_SOURCE 1
+#endif
+
+#ifdef PREFER_DB1
+#ifdef HAVE_DB1_DB_H
+# include <db1/db.h>
+#else
+# ifdef HAVE_DB_185_H
+#  include <db_185.h>
+# else
+#  include <db.h>
+# endif
+#endif
+#else
+#ifdef HAVE_DB_185_H
+# include <db_185.h>
+#else
+# ifdef HAVE_DB_H
+#  include <db.h>
+# else
+#  include <db1/db.h>
+# endif
+#endif
+#endif
 
 #include "glade-gnc-dialogs.h"
 #include "glade-cb-gnc-dialogs.h"
@@ -344,16 +371,16 @@ gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
   /* initialize search key/value */
   memset(&key, 0, sizeof(DBT));
   memset(&value, 0, sizeof(DBT));
+
   key.data    = search_string;
   key.size    = strlen(search_string);
-  value.flags = DB_DBT_MALLOC;
 
   /* do the search */
   if(help->index_db) {
-    err = help->index_db->get(help->index_db, NULL, &key, &value, 0);
+    err = help->index_db->get(help->index_db, &key, &value, 0);
   }
 
-  if((err == 0) || (err == DB_NOTFOUND)) {
+  if(err == 0) {
     /* the data in the DB is a newline-separated list of filenames */
     show_search_results(help, value.data);    
   }
@@ -361,13 +388,15 @@ gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
 
 void
 gnc_help_window_search_help_button_cb(GtkButton * button, gpointer data) {
+#if 0
   GtkObject       * hw   = data;
   gnc_help_window * help = gtk_object_get_data(hw, "help_window_struct");
-  
+#endif
+
   printf("help on help\n");
 }
 
-void
+static void
 gnc_help_window_search_result_select_cb(GtkWidget * list, GtkWidget * child,
                                         gpointer user_data) {
   gnc_help_window * help = user_data;
@@ -385,15 +414,12 @@ gnc_help_window_new() {
   
   gnc_help_window * help = g_new0(gnc_help_window, 1);
   GtkObject       * tlo;
-  DB_INFO         dbinfo;
-  DB_ENV          dbenv;
   char            * indexfile;
-  int             err;
   GnomeUIInfo     toolbar_data[] = 
   {
     { GNOME_APP_UI_ITEM,
-      _("Back"),
-      _("Move back one step in the history"),
+      N_("Back"),
+      N_("Move back one step in the history"),
       gnc_help_window_back_cb, help,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -401,8 +427,8 @@ gnc_help_window_new() {
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      _("Forward"),
-      _("Move forward one step in the history"),
+      N_("Forward"),
+      N_("Move forward one step in the history"),
       gnc_help_window_fwd_cb, help,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -411,8 +437,8 @@ gnc_help_window_new() {
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      _("Print"),
-      _("Print Help window"),
+      N_("Print"),
+      N_("Print Help window"),
       gnc_help_window_print_cb, help,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -421,8 +447,8 @@ gnc_help_window_new() {
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      _("Close"),
-      _("Close this Help window"),
+      N_("Close"),
+      N_("Close this Help window"),
       gnc_help_window_destroy_cb, help,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -476,12 +502,10 @@ gnc_help_window_new() {
                      (gpointer)help);
 
   indexfile = gncFindFile("help-search-index.db");
-  if((err = db_open(indexfile,
-                    DB_UNKNOWN, DB_RDONLY, 0644, 
-                    NULL, NULL, &(help->index_db))) != 0) {
+  help->index_db = dbopen(indexfile, O_RDONLY, 0644, DB_HASH, NULL);
+  if (!help->index_db) {
     PERR("Failed to open help index DB '%s' : %s\n",
-         indexfile, strerror(err));
-    help->index_db = NULL;
+         indexfile, strerror(errno));
   }
   g_free(indexfile);
 
@@ -508,7 +532,7 @@ gnc_help_window_destroy(gnc_help_window * help) {
                                 (gpointer)help);
   /* close the help index db */
   if(help->index_db) {
-    help->index_db->close(help->index_db, 0);
+    help->index_db->close(help->index_db);
   }
 
   /* take care of the gnc-html object specially */
@@ -550,6 +574,3 @@ gnc_ui_destroy_help_windows() {
     gnc_help_window_destroy((gnc_help_window *)(open_help_windows->data));
   }
 }
-
-
-

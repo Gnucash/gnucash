@@ -24,6 +24,7 @@
 #define __GNC_HELP_WINDOW_H__
 
 #include <gnome.h>
+
 #include "gnc-html.h"
 
 typedef struct _gnc_help_window gnc_help_window;
@@ -32,7 +33,7 @@ typedef struct _gnc_help_window gnc_help_window;
 
 void helpWindow(GtkWidget *parent, const char *title, const char * htmlfile);
 
-gnc_help_window  * gnc_help_window_new();
+gnc_help_window  * gnc_help_window_new(void);
 void             gnc_help_window_destroy(gnc_help_window * help);
 void             gnc_help_window_show_help(gnc_help_window * hw, 
                                            const gchar * loc,
