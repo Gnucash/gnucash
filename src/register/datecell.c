@@ -398,6 +398,45 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
 
 /* ================================================ */
 
+#define THIRTY_TWO_YEARS 0x3c30fc00L
+
+void 
+xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
+{
+   char buff[30];
+   struct tm * stm;
+
+   /* try to deal with dates earlier than December 1901 
+    * or later than Jan 2038. Note that this blows off 
+    * centenial leap years. */
+   if ((0x80000000L > secs) || (0x7fffffffL < secs)) 
+   {
+      int yrs;
+      time_t rem;
+      rem = secs % THIRTY_TWO_YEARS;
+      yrs = secs / THIRTY_TWO_YEARS;
+      stm = localtime (&rem);
+      cell->date = *stm;
+      cell->date.tm_year += 32 * yrs;
+   } else {
+      /* OK, time value is an unsigned 32-bit int */
+      time_t sicko;
+      sicko = secs;
+      stm = localtime (&sicko);
+      cell->date = *stm;
+   }
+
+   printDate (buff, cell->date.tm_mday, 
+                    cell->date.tm_mon+1, 
+                    cell->date.tm_year+1900);
+
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
+
+}
+
+/* ================================================ */
+
 static void 
 setDateCellValue (BasicCell *_cell, const char *str)
 {
