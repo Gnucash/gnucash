@@ -1,61 +1,42 @@
-;;; -*-scheme-*-
-(use-modules (g-wrap))
+(define-module (g-wrapped gw-report-gnome-spec))
 
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 
-(define-module (g-wrapped gw-report-gnome-spec)
-  :use-module (g-wrap))
+(use-modules (g-wrap))
+
+(use-modules (g-wrap gw-standard-spec))
+(use-modules (g-wrap gw-wct-spec))
+(use-modules (g-wrap gw-glib-spec))
 
 (use-modules (g-wrapped gw-engine-spec))
-(use-modules (g-wrapped gw-glib-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
 
-(let ((mod (gw:new-module "gw-report-gnome")))
-  (define (standard-c-call-gen result func-call-code)
-    (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
-  
-  (define (add-standard-result-handlers! type c->scm-converter)
-    (define (standard-pre-handler result)
-      (let* ((ret-type-name (gw:result-get-proper-c-type-name result))
-             (ret-var-name (gw:result-get-c-name result)))
-        (list "{\n"
-              "    " ret-type-name " " ret-var-name ";\n")))
-    
-    (gw:type-set-pre-call-result-ccodegen! type standard-pre-handler)
-    
-    (gw:type-set-post-call-result-ccodegen!
-     type
-     (lambda (result)
-       (let* ((scm-name (gw:result-get-scm-name result))
-              (c-name (gw:result-get-c-name result)))
-         (list
-          (c->scm-converter scm-name c-name)
-          "  }\n")))))
-  
-  (gw:module-depends-on mod "gw-runtime")
-  (gw:module-depends-on mod "gw-engine")
-  (gw:module-depends-on mod "gw-glib")
-  (gw:module-depends-on mod "gw-gnome-utils")
+(let ((ws (gw:new-wrapset "gw-report-gnome")))
 
-  (gw:module-set-guile-module! mod '(g-wrapped gw-report-gnome))
+  (gw:wrapset-depends-on ws "gw-standard")
+  (gw:wrapset-depends-on ws "gw-wct")
+  (gw:wrapset-depends-on ws "gw-glib")
 
-  (gw:module-set-declarations-ccodegen!
-   mod
-   (lambda (client-only?)
+  (gw:wrapset-depends-on ws "gw-engine")
+  (gw:wrapset-depends-on ws "gw-gnome-utils")
+
+  (gw:wrapset-set-guile-module! ws '(g-wrapped gw-report-gnome))
+
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset)
      (list
       "#include <dialog-column-view.h>\n"
       "#include <dialog-style-sheet.h>\n"
       "#include <window-report.h>\n")))
 
-  (let ((nnt (gw:wrap-non-native-type
-              mod
-              '<gnc:report-window*>
-              "gnc_report_window*" "const gnc_report_window*")))
-    #t)
+  (gw:wrap-as-wct ws
+                  '<gnc:report-window*>
+                  "gnc_report_window*" "const gnc_report_window*")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:report-window
    '<gw:void>
    "reportWindow"
@@ -63,7 +44,7 @@
    "Show report window")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:report-window-reload
    '<gw:void>
    "gnc_report_window_reload"
@@ -71,7 +52,7 @@
    "Force reload of a report window")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:report-window-add-edited-report
    '<gw:void>
    "gnc_report_window_add_edited_report"
@@ -79,7 +60,7 @@
    "Add a report to the list of reports with open editors")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:print-report
    '<gw:void>
    "gnc_print_report"
@@ -87,7 +68,7 @@
    "Print a report with dialog support")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:report-raise-editor
    '<gw:void>
    "gnc_report_raise_editor"
@@ -95,7 +76,7 @@
    "Raise the report's editor window")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:main-window-open-report
    '<gw:void>
    "gnc_main_window_open_report"
@@ -103,7 +84,7 @@
    "Show report window")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:default-options-editor
    '<gnc:UIWidget>
    "gnc_report_window_default_params_editor"
@@ -111,7 +92,7 @@
    "Default options editor window for reports")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:style-sheet-dialog-open
    '<gw:void>
    "gnc_style_sheet_dialog_open"
@@ -119,7 +100,7 @@
    "Show the style sheet editor window.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:column-view-edit-options
    '<gnc:UIWidget>
    "gnc_column_view_edit_options"
