@@ -115,6 +115,7 @@ EXTRA_DIST = \
   gnc-dir.h.in \
   ${glade_DATA} \
   ${gwmod_DATA} \
+  ${gncmod_DATA} \
   ${gncscm_DATA}
 
 dialog-utils.c: gnc-dir.h
