@@ -136,7 +136,7 @@
         (gnc:print-session-text ps (number-to-words amount 100)))
       
       (gnc:print-session-done ps)       
-      (gnc:print-dialog-create ps)))
+      (gnc:print-session-print ps)))
 
   (gnc:print-check-dialog-create print-check-callback))
 

@@ -54,12 +54,9 @@ struct _gnc_html {
   GtkWidget * container;
   GtkWidget * html;
 
+  gchar     * current_link;         /* link under mouse pointer */
 
-  /* the current_link is ... ???? */
-  gchar     * current_link; 
-
-  /* the base location is ... ???? */
-  URLType   base_type;
+  URLType   base_type;              /* base of URL (path - filename) */
   gchar     * base_location;
 
   /* callbacks */
@@ -68,10 +65,7 @@ struct _gnc_html {
   GncHTMLFlyoverCB  flyover_cb;
   GncHTMLButtonCB   button_cb;
 
-
-  /* the difference between request and requests is ... ?? */
-  ghttp_request     * request; 
-  GList             * requests;
+  GList             * requests;     /* outstanding ghttp requests */
 
   gpointer          flyover_cb_data;
   gpointer          load_cb_data;
@@ -950,7 +944,6 @@ gnc_html_new() {
                     GTK_WIDGET(retval->html));
   
   retval->history   = gnc_html_history_new();
-  retval->request   = ghttp_request_new();
 
   /* signals */
   gtk_signal_connect(GTK_OBJECT(retval->html), "url_requested",
@@ -1025,12 +1018,14 @@ gnc_html_cancel(gnc_html * html) {
 
 void
 gnc_html_destroy(gnc_html * html) {
+
+  if(!html) return;
+
+  /* cancel any outstanding HTTP requests */
+  gnc_html_cancel(html);
+  
   gtk_widget_unref(html->container);
   gnc_html_history_destroy(html->history);
-  if(html->request) {
-    ghttp_request_destroy(html->request);
-  }
-
   g_free(html->current_link);
   g_free(html->base_location);
   g_free(html);
