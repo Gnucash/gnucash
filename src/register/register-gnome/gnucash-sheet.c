@@ -313,7 +313,7 @@ gnucash_sheet_y_pixel_to_block (GnucashSheet *sheet, int y)
         VirtualCellLocation vcell_loc = { 1, 0 };
 
         for (;
-             vcell_loc.virt_row < sheet->num_virt_rows - 1;
+             vcell_loc.virt_row < sheet->num_virt_rows;
              vcell_loc.virt_row++)
         {
                 SheetBlock *block;
@@ -352,7 +352,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
         sheet->num_visible_phys_rows = 0;
 
         for ( vcell_loc.virt_row = sheet->top_block, vcell_loc.virt_col = 0;
-              vcell_loc.virt_row < sheet->num_virt_rows - 1;
+              vcell_loc.virt_row < sheet->num_virt_rows;
               vcell_loc.virt_row++ )
         {
                 SheetBlock *block;
@@ -405,8 +405,10 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
         y = block->origin_y;
         block_height = block->style->dimensions->height;
 
-        if ((cy <= y) && (cy + height >= y + block_height))
+        if ((cy <= y) && (cy + height >= y + block_height)) {
+	        gnucash_sheet_compute_visible_range (sheet);
                 return;
+	}
 
         if (y > cy)
                 y -= height - MIN (block_height, height);
@@ -477,8 +479,10 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
         block_height = (end_block->origin_y +
                         end_block->style->dimensions->height) - y;
 
-        if ((cy <= y) && (cy + height >= y + block_height))
+        if ((cy <= y) && (cy + height >= y + block_height)) {
+	        gnucash_sheet_compute_visible_range (sheet);
                 return;
+	}
 
         if (y > cy)
                 y -= height - MIN (block_height, height);

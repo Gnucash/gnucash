@@ -140,6 +140,20 @@ static void load_taxtable_type_cells (GncEntryLedger *ledger)
   }
 }
 
+static void
+gnc_entry_ledger_show_entry (GncEntryLedger *ledger,
+			     VirtualCellLocation start_loc)
+{
+  VirtualCellLocation end_loc;
+  int v_row;
+
+  end_loc = start_loc;
+  v_row = end_loc.virt_row + 1;
+  end_loc.virt_row = MIN (v_row, ledger->table->num_virt_rows - 1);
+
+  gnc_table_show_range (ledger->table, start_loc, end_loc);
+}
+
 void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 {
   load_xfer_type_cells (ledger);
@@ -388,8 +402,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
 
   gnc_table_refresh_gui (table, TRUE);
-
-  /* Show_entry ??? */
+  gnc_entry_ledger_show_entry (ledger, table->current_cursor_loc.vcell_loc);
 
   /* Set completion character */
   gnc_combo_cell_set_complete_char
@@ -404,7 +417,4 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
-
-  /* Set the confirmation callbacks and load the combo cells */
 }
-

@@ -44,6 +44,15 @@
 	* src/backend/postgres/test/Makefile.am: include run-tests.sh in
 	  the distribution.
 
+	* src/register/register-gnome/gnucash-sheet.c: fix a fencepost
+	  error where it assumed there would be at least two "visible
+	  rows" per block, so search through the end rather than skipping
+	  the last row.  This fixes the page-up/page-down problem with
+	  invoices.  Also add more places where the visible range is computed.
+
+	* src/business/business-ledger/gncEntryLedgerLoad.c: add code to
+	  "show_range()" which should fix the page-up/page-down problem.
+	
 2003-01-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/QueryNew.h: add QUERY_PARAM_ACTIVE
