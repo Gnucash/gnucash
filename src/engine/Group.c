@@ -1,5 +1,5 @@
 /********************************************************************\
- * Group.c -- the main data structure of the program                *
+ * Group.c -- chart of accounts (heirarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *

@@ -1,5 +1,5 @@
 /********************************************************************\
- * Transaction.h -- defines transaction for xacc (X-Accountant)     *
+ * Transaction.h -- api for transactions & splits (journal entries) *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *

@@ -1,5 +1,5 @@
 /********************************************************************\
- * kvp_frame.h -- a key-value frame system for gnucash.
+ * kvp_frame.h -- a key-value frame system for gnucash.             *
  * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

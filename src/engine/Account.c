@@ -1,5 +1,5 @@
 /********************************************************************\
- * Account.c -- the Account data structure                          *
+ * Account.c -- Account data structure implementation               *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *

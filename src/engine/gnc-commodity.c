@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc_commodity.c -- representing tradable commodities             *
+ * gnc-commodity.c -- api for tradable commodities (incl. currency) *
  * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *

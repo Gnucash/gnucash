@@ -1,5 +1,5 @@
 /********************************************************************\
- * AccountP.h -- the Account data structure                         *
+ * AccountP.h -- Account engine-private data structure              *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000, Linas Vepstas <linas@linas.org>         *
  *                                                                  *

@@ -1,5 +1,5 @@
 /********************************************************************\
- * FileIO.c -- read from and writing to a datafile for gnucash      *
+ * FileIO.c -- read and write binary format file for gnucash        *
  *             (GnuCash/X-Accountant)                               *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *

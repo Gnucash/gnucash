@@ -1,3 +1,6 @@
+/*
+ * io-gncxml.h -- api for new XML-based file format
+ */
 #ifndef __IO_GNCXML_H__
 #define __IO_GNCXML_H__
 

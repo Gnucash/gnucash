@@ -1,3 +1,6 @@
+/*
+ * io-gncxml-w.c -- write XML-format gnucash data file
+ */
 
 #define _GNU_SOURCE
 

@@ -1,3 +1,7 @@
+/*
+ * io-gncxml-r.c -- read XML-format gnucash data file
+ */
+
 #ifndef _GNU_SOURCE
 #  define _GNU_SOURCE
 #  include <time.h>

@@ -1,5 +1,5 @@
 /********************************************************************\
- * TransactionP.h -- defines transaction for xacc (X-Accountant)    *
+ * TransactionP.h -- private header for transaction & splits        *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  * Copyright (C) 2000 Bill Gribble                                  *

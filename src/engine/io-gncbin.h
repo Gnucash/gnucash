@@ -1,5 +1,5 @@
 /********************************************************************\
- * io-gncbin.h -- read from and writing to a datafile for gnucash   *
+ * io-gncbin.h -- read and write (old format) binary datafile       *
  *             (X-Accountant)                                       *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998, 1999 Linas Vepstas                           *

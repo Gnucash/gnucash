@@ -1,5 +1,5 @@
 /********************************************************************\
- * Transaction.c -- the transaction data structure                  *
+ * Transaction.c -- transaction & split implementation              *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *

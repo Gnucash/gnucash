@@ -1,5 +1,5 @@
 /********************************************************************\
- * FileIOP.h -- private header to read from and writing to a        *
+ * FileIOP.h -- private header for binary file i/o                  *
  *              datafile for gnucash (X-Accountant)                 *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998, 1999 Linas Vepstas                           *

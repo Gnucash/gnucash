@@ -1,5 +1,5 @@
 /********************************************************************\
- * Group.h -- the main data structure of the program                *
+ * Group.h -- chart of accounts (heirarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *

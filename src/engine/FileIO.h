@@ -1,5 +1,5 @@
 /********************************************************************\
- * FileIO.h -- read from and writing to a datafile for gnucash      *
+ * FileIO.h -- read and write binary format file for gnucash        *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998, 1999 Linas Vepstas                           *
  * Copyright (C) 1999, 2000 Rob Browning                            *

@@ -1,5 +1,5 @@
 /********************************************************************\
- * Account.h -- the Account data structure                          *
+ * Account.h -- Account handling public routines                    *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
