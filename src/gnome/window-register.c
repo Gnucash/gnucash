@@ -2020,8 +2020,6 @@ regWindowLedger (xaccLedgerDisplay *ledger)
   xaccLedgerDisplayRefresh (ledger);
   gnc_reg_refresh_toolbar (regData);
 
-  gnc_register_jump_to_blank (regData);
-
   gnc_window_adjust_for_screen (GTK_WINDOW(register_window));
 
   return regData;

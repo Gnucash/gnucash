@@ -268,19 +268,21 @@ get_today_midnight (void)
  * SplitRegister directly. If additional user data is needed, just add
  * it to the SRInfo structure above. */
 static void
-xaccSRInitRegisterData(SplitRegister *reg)
+xaccSRInitRegisterData (SplitRegister *reg)
 {
   SRInfo *info;
 
   if (reg == NULL)
     return;
 
-  info = g_new0(SRInfo, 1);
+  info = g_new0 (SRInfo, 1);
 
   info->blank_split_guid = *xaccGUIDNULL ();
   info->pending_trans_guid = *xaccGUIDNULL ();
   info->default_account = *xaccGUIDNULL ();
+
   info->last_date_entered = get_today_midnight ();
+
   info->first_pass = TRUE;
   info->full_refresh = TRUE;
 
@@ -288,32 +290,32 @@ xaccSRInitRegisterData(SplitRegister *reg)
 }
 
 static void
-xaccSRDestroyRegisterData(SplitRegister *reg)
+xaccSRDestroyRegisterData (SplitRegister *reg)
 {
   if (reg == NULL)
     return;
 
-  g_free(reg->user_data);
+  g_free (reg->user_data);
 
   reg->user_data = NULL;
 }
 
 static SRInfo *
-xaccSRGetInfo(SplitRegister *reg)
+xaccSRGetInfo (SplitRegister *reg)
 {
   if (!reg)
     return NULL;
 
   if (reg->user_data == NULL)
-    xaccSRInitRegisterData(reg);
+    xaccSRInitRegisterData (reg);
 
   return reg->user_data;
 }
 
 static gncUIWidget
-xaccSRGetParent(SplitRegister *reg)
+xaccSRGetParent (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
+  SRInfo *info = xaccSRGetInfo (reg);
 
   if (reg == NULL)
     return NULL;
@@ -321,13 +323,13 @@ xaccSRGetParent(SplitRegister *reg)
   if (info->get_parent == NULL)
     return NULL;
 
-  return info->get_parent(info->user_data);
+  return info->get_parent (info->user_data);
 }
 
 void
-xaccSRSetData(SplitRegister *reg, void *user_data,
-              SRGetParentCallback get_parent,
-              SRSetHelpCallback set_help)
+xaccSRSetData (SplitRegister *reg, void *user_data,
+               SRGetParentCallback get_parent,
+               SRSetHelpCallback set_help)
 {
   SRInfo *info = xaccSRGetInfo (reg);
 
@@ -1622,7 +1624,8 @@ LedgerDestroy (SplitRegister *reg)
    gnc_suspend_gui_refresh ();
 
    /* be sure to destroy the "blank split" */
-   if (blank_split != NULL) {
+   if (blank_split != NULL)
+   {
       /* split destroy will automatically remove it
        * from its parent account */
       trans = xaccSplitGetParent (blank_split);
@@ -1643,7 +1646,8 @@ LedgerDestroy (SplitRegister *reg)
    }
 
    /* be sure to take care of any open transactions */
-   if (pending_trans != NULL) {
+   if (pending_trans != NULL)
+   {
       if (xaccTransIsOpen(pending_trans))
         xaccTransRollbackEdit (pending_trans);
 
@@ -1698,7 +1702,8 @@ xaccSRGetTransSplit (SplitRegister *reg,
 
   while (TRUE)
   {
-    if ((0 > vcell_loc.virt_row) || (0 > vcell_loc.virt_col)) {
+    if ((0 > vcell_loc.virt_row) || (0 > vcell_loc.virt_col))
+    {
       PERR ("bad row \n");
       return NULL;
     }
@@ -2099,6 +2104,8 @@ xaccSRDuplicateCurrent (SplitRegister *reg)
     info->cursor_hint_split = return_split;
     info->cursor_hint_trans_split = trans_split;
     info->cursor_hint_cursor_class = CURSOR_CLASS_TRANS;
+
+    info->trans_expanded = FALSE;
   }
 
   /* Refresh the GUI. */
@@ -2282,7 +2289,8 @@ xaccSRPasteCurrent (SplitRegister *reg)
   if ((split == NULL) && (cursor_class == CURSOR_CLASS_TRANS))
     return;
 
-  if (cursor_class == CURSOR_CLASS_SPLIT) {
+  if (cursor_class == CURSOR_CLASS_SPLIT)
+  {
     const char *message = _("You are about to overwrite an existing split.\n"
                             "Are you sure you want to do that?");
     gboolean result;
@@ -2466,8 +2474,11 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
     blank_split = NULL;
 
     gnc_resume_gui_refresh ();
+
     return;
   }
+
+  info->trans_expanded = FALSE;
 
   gnc_suspend_gui_refresh ();
 
@@ -2682,7 +2693,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   if (MOD_MEMO & changed)
     gnc_split_scm_set_memo(split_scm, reg->memoCell->cell.value);
 
-  if (MOD_XFRM & changed) {
+  if (MOD_XFRM & changed)
+  {
     Account *new_account;
     char *new_name;
 
@@ -2698,11 +2710,14 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   if (reg->style == REG_STYLE_LEDGER)
     other_split_scm = gnc_trans_scm_get_other_split_scm(trans_scm, split_scm);
 
-  if (MOD_MXFRM & changed) {
+  if (MOD_MXFRM & changed)
+  {
     other_split_scm = gnc_trans_scm_get_other_split_scm(trans_scm, split_scm);
 
-    if (other_split_scm == SCM_UNDEFINED) {
-      if (gnc_trans_scm_get_num_splits(trans_scm) == 1) {
+    if (other_split_scm == SCM_UNDEFINED)
+    {
+      if (gnc_trans_scm_get_num_splits(trans_scm) == 1)
+      {
         Split *temp_split;
 
         temp_split = xaccMallocSplit ();
@@ -2713,7 +2728,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
       }
     }
 
-    if (other_split_scm != SCM_UNDEFINED) {
+    if (other_split_scm != SCM_UNDEFINED)
+    {
       Account *new_account;
 
       new_account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
@@ -2725,7 +2741,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     }
   }
 
-  if (MOD_AMNT & changed) {
+  if (MOD_AMNT & changed)
+  {
     gnc_numeric new_value;
     gnc_numeric credit;
     gnc_numeric debit;
@@ -2737,11 +2754,13 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     gnc_split_scm_set_value (split_scm, new_value);
   }
 
-  if (MOD_PRIC & changed) {
+  if (MOD_PRIC & changed)
+  {
     /* do nothing for now */
   }
 
-  if (MOD_SHRS & changed) {
+  if (MOD_SHRS & changed)
+  {
     gnc_numeric shares = xaccGetPriceCellValue(reg->sharesCell);
 
     gnc_split_scm_set_quantity (split_scm, shares);
@@ -4668,6 +4687,18 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   if (split == find_trans_split)
     new_trans_split_row = vcell_loc.virt_row;
 
+  /* go to blank on first pass */
+  if (info->first_pass)
+  {
+    new_split_row = -1;
+    new_trans_split_row = -1;
+    new_trans_row = -1;
+
+    save_loc.vcell_loc = vcell_loc;
+    save_loc.phys_row_offset = 0;
+    save_loc.phys_col_offset = 0;
+  }
+
   sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
                       start_primary_color, FALSE, info->blank_split_edited,
                       find_trans, find_split, find_class, &new_split_row,
@@ -4911,24 +4942,24 @@ xaccSRCheckReconciled (SplitRegister *reg)
   if (reg == NULL)
     return TRUE;
 
-  changed = xaccSplitRegisterGetChangeFlag(reg);
+  changed = xaccSplitRegisterGetChangeFlag (reg);
   if (!changed)
     return TRUE;
 
-  split = xaccSRGetCurrentSplit(reg);
+  split = xaccSRGetCurrentSplit (reg);
   if (split == NULL)
     return TRUE;
 
   if (!trans_has_reconciled_splits (xaccSplitGetParent (split)))
     return TRUE;
 
-  confirm = gnc_lookup_boolean_option("Register",
-                                      "Confirm before changing reconciled",
-                                      TRUE);
+  confirm = gnc_lookup_boolean_option ("Register",
+                                       "Confirm before changing reconciled",
+                                       TRUE);
   if (!confirm)
     return TRUE;
 
-  return gnc_verify_dialog_parented(xaccSRGetParent(reg), message, FALSE);
+  return gnc_verify_dialog_parented (xaccSRGetParent (reg), message, FALSE);
 }
 
 /* ======================================================== */
