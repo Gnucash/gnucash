@@ -559,7 +559,7 @@ xaccDestroyLedgerDisplay (Account *acc)
 }
 
 /********************************************************************\
- * closexaccLedgerDisplay                                                   *
+ * xaccLedgerDisplayClose                                           *
  *   frees memory allocated for an regWindow, and other cleanup     *
  *   stuff                                                          *
  *                                                                  *
@@ -575,6 +575,9 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   
   /* Save any unsaved changes */
   xaccSRSaveRegEntry (regData->ledger);
+
+  /* refresh the register windows if there were changes */
+  xaccSRRedrawRegEntry (regData->ledger);
 
   xaccDestroySplitRegister (regData->ledger);
   
