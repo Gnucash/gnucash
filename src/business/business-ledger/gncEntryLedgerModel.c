@@ -344,7 +344,6 @@ static const char * get_value_entry (VirtualLocation virt_loc,
 
     gncEntryGetValue (entry, &value, NULL);
   }
-
   if (gnc_numeric_zero_p (value))
     return NULL;
 
@@ -548,12 +547,6 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   switch (ledger->type) {
-  case GNCENTRY_ORDER_VIEWER:
-  case GNCENTRY_INVOICE_VIEWER:
-    /* Viewers are always immutable, but don't worry about that here */
-    /* XXX: Can this be part of default? */
-    return XACC_CELL_ALLOW_ALL;
-
   case GNCENTRY_ORDER_ENTRY:
     {
       GncEntry *entry =
@@ -575,12 +568,8 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
 static CellIOFlags get_typecell_io_flags (VirtualLocation virt_loc,
 					  gpointer user_data)
 {
-  CellIOFlags retval = get_standard_io_flags (virt_loc, user_data);
-
-  if (retval & XACC_CELL_ALLOW_ALL)
-    retval |= XACC_CELL_ALLOW_EXACT_ONLY;
-
-  return retval;
+  return (get_standard_io_flags (virt_loc, user_data) |
+	  XACC_CELL_ALLOW_EXACT_ONLY);
 }
 
 static CellIOFlags get_inv_io_flags (VirtualLocation virt_loc,
