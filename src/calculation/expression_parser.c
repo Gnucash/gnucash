@@ -51,11 +51,13 @@
  *
  * 1: trans_numeric - this function translates the text string into a numeric in the desired
  *                     representation and returns a pointer to the representation as a (void *)
- *                     this function has three parameters passed:
+ *                     this function has four parameters passed:
  *                     1: digit_str -- the actual text string of the numeric to be converted
  *                                 to the internal representation
  *                     2: radix_point -- the ASCII character used to represent the radix point
- *                     3: rstr -- a pointer to a location in which to return a pointer to the
+ *                     3: group character -- the ASCII character used to separate and group digits to the
+ *                              left of the radix
+ *                     4: rstr -- a pointer to a location in which to return a pointer to the
  *                             first character not part of the numeric string translated
  *                             If this pointer is NULL, do not return a value. This parameter
  *                             is the same as the second parameter of the standard C library
@@ -285,7 +287,6 @@
  *
  */
 
-#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -379,6 +380,7 @@ void  exit_parser(
 void *vp)
 {
     parser_env_ptr pe = (parser_env_ptr)(vp);
+    unsigned       j;
     var_store_ptr  vars,
                    bv;
 
@@ -421,8 +423,9 @@ void          *vp)
 	unsigned       ret = FALSE;
 	parser_env_ptr pe = (parser_env_ptr)vp;
 	var_store_ptr  nv,
-                       tv;
-
+	               tv,
+	               sv,
+	               uv;
 	
 	for ( nv = pe->named_vars , tv = NULL ; nv ; tv = nv , nv = nv->next_var ) {
         if ( strcmp(nv->variable_name,var_name) == 0 ) {
@@ -518,6 +521,7 @@ parser_env_ptr       pe)
 static var_store_ptr  get_named_var(
 parser_env_ptr        pe)
 {
+    unsigned      cntr;
     var_store_ptr retp = NULL,
                   bv;
 
@@ -661,7 +665,7 @@ parser_env_ptr pe)
         ao = pe->asn_op;
         if ( vl->variable_name ) {
             next_token(pe);
-            add_sub_op(pe);
+            assignment_op(pe);
             vr = pop(pe);
             vl->assign_flag = ASSIGNED_TO;
             if ( ao ) {
