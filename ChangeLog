@@ -1,3 +1,11 @@
+2003-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.[ch]: add APIs to get
+	  TotalSubtotal() and TotalTax().
+	* src/business/business-gnome/dialog-invoice.c: Add Subtotal and Tax
+	  labels in the summary bar to print the Invoice's total amounts.
+	Fixes #113769.
+
 2003-05-29  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: OpenHBCI version 0.9.11 is required now. Earlier
