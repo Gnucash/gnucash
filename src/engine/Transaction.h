@@ -194,6 +194,37 @@ void          xaccTransGetDateEnteredTS (Transaction *, struct timespec *);
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
 
+/* The xaccTransFindCommonCurrency () method returns a string value 
+ *    indicating a currency denomination that all of the splits in this
+ *    transaction have in common.  This routine is useful in dealing
+ *    with currency trading accounts and/or with "stock boxes", where
+ *    securities of differing types are moved accross accounts.
+ *    It returns NULL if the transaction is internally inconsistent.
+ *    (This should never ??? happen, as it would be an internal error).
+ *
+ *    If all of the splits share both a common security and a common currency,
+ *    then the string name for the currency is returned.
+ */
+char * xaccTransFindCommonCurrency (Transaction *trans);
+
+/* The xaccTransIsCommonCurrency () method compares the input string
+ *    to the currency/security denominations of all splits in the
+ *    transaction, and returns the input string if it is common with
+ *    all the splits, otherwise, it returns NULL.
+ *
+ *    Note that this routine is *not* merely a string compare on the
+ *    value returned by cTransFindCommonCurrency().  This is because
+ *    all of the splits in a transaction may share *both* a common
+ *    currency and a common security.  If the desired match is the
+ *    security, a simple string match won't reveal this fact.
+ *
+ *    This routine is useful in dealing
+ *    with currency trading accounts and/or with "stock boxes", where
+ *    transaction have in common.  This routine is useful in dealing
+ *    securities of differing types are moved accross accounts.
+ */
+char * xaccTransIsCommonCurrency (Transaction *trans, char * currency);
+
 /* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */

@@ -30,7 +30,7 @@ CFLAGS   = @CFLAGS@ ${INCLPATH}
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := AccInfo.c Account.c DateUtils.c FileIO.c Group.c LedgerUtils.c \
-              QIFIO.c Query.c Transaction.c TransLog.c date.c util.c
+              QIFIO.c Query.c Scrub.c Transaction.c TransLog.c date.c util.c
 ######################################################################
 
 all: default

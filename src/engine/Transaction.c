@@ -569,6 +569,97 @@ ComputeValue (Split **sarray, Split * skip_me, char * base_currency)
    return value;
 }
 
+/********************************************************************\
+\********************************************************************/
+
+static char *
+FindCommonCurrency (Split **slist, char * ra, char * rb)
+{
+  Split *s;
+  int i = 0;
+
+  if (!slist) return NULL;
+
+  if (rb && (0x0==rb[0])) rb = 0x0;
+  
+  i=0; s = slist[0];
+  while (s) {
+    char *sa, *sb;
+  
+    /* ahh -- stupid users may not want or use the double entry 
+     * features of this engine.  So, in particular, there
+     * may be the occasional split without a parent account. 
+     * Well, that's ok,  we'll just go with the flow. 
+     */
+    if (force_double_entry) {
+       assert (s->acc);
+    } else {
+       i++; s=slist[i]; continue;
+    }
+  
+    sa = s->acc->currency;
+    sb = s->acc->security;
+    if (sb && (0x0==sb[0])) sb = 0x0;
+
+    if (ra && rb) {
+       int aa = safe_strcmp (ra,sa);
+       int ab = safe_strcmp (ra,sb);
+       int ba = safe_strcmp (rb,sa);
+       int bb = safe_strcmp (rb,sb);
+       if ( (!aa) && bb) rb = 0x0;
+       else
+       if ( (!ab) && ba) rb = 0x0;
+       else
+       if ( (!ba) && ab) ra = 0x0;
+       else
+       if ( (!bb) && aa) ra = 0x0;
+       else
+       if ( aa && bb && ab && ba ) { ra=0x0; rb=0x0; }
+
+       if (!ra) { ra=rb; rb=0x0; }
+    } 
+    else
+    if (ra && !rb) {
+       int aa = safe_strcmp (ra,sa);
+       int ab = safe_strcmp (ra,sb);
+       if ( aa && ab )  ra= 0x0;
+    }
+
+    if ((!ra) && (!rb)) return NULL;
+    i++; s = slist[i];
+  }
+
+  return (ra);
+}
+
+
+char *
+xaccTransFindCommonCurrency (Transaction *trans)
+{
+  char *ra, *rb, *com;
+
+  assert (trans->splits);
+  assert (trans->splits[0]);
+  assert (trans->splits[0]->acc);
+
+  ra = trans->splits[0]->acc->currency;
+  rb = trans->splits[0]->acc->security;
+
+  com = FindCommonCurrency (trans->splits, ra, rb);
+  return com;
+}
+
+char *
+xaccTransIsCommonCurrency (Transaction *trans, char * ra)
+{
+  char *com;
+  com = FindCommonCurrency (trans->splits, ra, NULL);
+  return com;
+}
+
+/********************************************************************\
+\********************************************************************/
+
 /* hack alert -- the algorithm used in this rebalance routine
  * is less than intuitive, and could use some write-up.  
  * Maybe it does indeed do the right thing, but that is
@@ -589,7 +680,6 @@ xaccSplitRebalance (Split *split)
   int i = 0;
   double value = 0.0;
   char *base_currency=0x0;
-  char *ra=0x0, *rb =0x0;
 
   trans = split->parent;
 
@@ -602,6 +692,7 @@ xaccSplitRebalance (Split *split)
 
   if (DEFER_REBALANCE & (trans->open)) return;
   if (split->acc) {
+    char *ra, *rb;
     if (ACC_DEFER_REBALANCE & (split->acc->open)) return;
     assert (trans->splits);
     assert (trans->splits[0]);
@@ -610,69 +701,27 @@ xaccSplitRebalance (Split *split)
      * and which one(s) all of the splits have in common.  */
     ra = split->acc->currency;
     rb = split->acc->security;
-    if (rb && (0x0==rb[0])) rb = 0x0;
-  
-    i=0; s = trans->splits[0];
-    while (s) {
-      char *sa, *sb;
-  
-      /* ahh -- stupid users may not want or use the double entry 
-       * features of this engine.  So, in particular, there
-       * may be the occasional split without a parent account. 
-       * Well, that's ok,  we'll just go with the flow. 
-       */
-      if (force_double_entry) {
-         assert (s->acc);
-      } else {
-         i++; s=trans->splits[i]; continue;
+    base_currency = FindCommonCurrency (trans->splits, ra, rb);
+
+    if (!base_currency) {
+      PERR ("Internal Error: SplitRebalance(): no common split currencies \n");
+      s = trans->splits[0];
+      while (s) {
+        if (s->acc) {
+          PERR ("\taccount=%s currency=%s security=%s\n",
+                s->acc->accountName, s->acc->currency, s->acc->security);
+        } else {
+          PERR ("\t*** No parent account *** \n");
+        }
+        i++; s = trans->splits[i];
       }
-  
-      sa = s->acc->currency;
-      sb = s->acc->security;
-      if (sb && (0x0==sb[0])) sb = 0x0;
-  
-      if (ra && rb) {
-         int aa = safe_strcmp (ra,sa);
-         int ab = safe_strcmp (ra,sb);
-         int ba = safe_strcmp (rb,sa);
-         int bb = safe_strcmp (rb,sb);
-         if ( (!aa) && bb) rb = 0x0;
-         else
-         if ( (!ab) && ba) rb = 0x0;
-         else
-         if ( (!ba) && ab) ra = 0x0;
-         else
-         if ( (!bb) && aa) ra = 0x0;
-         else
-         if ( aa && bb && ab && ba ) { ra=0x0; rb=0x0; }
-  
-         if (!ra) { ra=rb; rb=0x0; }
-      } 
-      else
-      if (ra && !rb) {
-         int aa = safe_strcmp (ra,sa);
-         int ab = safe_strcmp (ra,sb);
-         if ( aa && ab )  ra= 0x0;
-      }
-  
-    if ((!ra) && (!rb)) {
-        PERR ("Internal Error: SplitRebalance(): "
-              " no common split currencies \n");
-        PERR ("\tbase acc=%s cur=%s base_sec=%s\n"
-              "\tacc=%s scur=%s ssec=%s \n", 
-            split->acc->accountName, split->acc->currency, split->acc->security,
-            s->acc->accountName, s->acc->currency, s->acc->security );
-        assert (0);
-        return;
-      }
-      i++; s = trans->splits[i];
+      assert (0);
+      return;
     }
   } else {
     assert (trans->splits);
     assert (trans->splits[0]);
   }
-
-  base_currency = ra;
 
   if (split == trans->splits[0]) {
     /* The indicated split is the source split.
@@ -836,7 +885,7 @@ xaccTransCommitEdit (Transaction *trans)
        (trans->orig->date_posted.tv_sec  != trans->date_posted.tv_sec))
    {
 
-      DEBUG ("xaccTransCommitEdit(): date changed to %u %s\n",
+      DEBUG ("xaccTransCommitEdit(): date changed to %lu %s\n",
              trans->date_posted.tv_sec, ctime (&trans->date_posted.tv_sec));
       /* since the date has changed, we need to be careful to 
        * make sure all associated splits are in proper order
