@@ -157,6 +157,7 @@ gnc_engine_generate_event_internal (QofEntity *entity,
 				    GNCEngineEventType event_type)
 {
   GList *node;
+  GList *next_node = NULL;
 
   g_return_if_fail(entity);
 
@@ -177,10 +178,11 @@ gnc_engine_generate_event_internal (QofEntity *entity,
       return;
   }
 
-  for (node = handlers; node; node = node->next)
+  for (node = handlers; node; node = next_node)
   {
     HandlerInfo *hi = node->data;
 
+    next_node = node->next;
     PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
     if (hi->handler)
       hi->handler ((GUID *)&entity->guid, entity->e_type, event_type, hi->user_data);
