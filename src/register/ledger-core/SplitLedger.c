@@ -3657,13 +3657,9 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
   {
     PriceCell *cell;
     gnc_numeric amount;
-    gnc_numeric price;
 
     cell = (PriceCell *) gnc_register_get_cell (reg, SHRS_CELL);
     amount = xaccGetPriceCellValue (cell);
-
-    cell = (PriceCell *) gnc_register_get_cell (reg, PRIC_CELL);
-    price  = xaccGetPriceCellValue (cell);
 
     DEBUG ("SHRS");
 
