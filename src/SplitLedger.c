@@ -338,23 +338,39 @@ printf ("save split is %p \n", split);
     * display, we just reparent the indicated split, its it,
     * and that's that.  For a two-line display, we want to reparent
     * the "other" split, but only if there is one ...
+    * XFRM is the straight split, MXFRM is the mirrored split.
     */
    if (MOD_XFRM & changed) {
-      Account *old_acc=NULL, *new_acc=NULL;
       Split *split_to_modify = NULL;
 
-      if ((REG_MULTI_LINE == style) ||
-          (REG_SINGLE_DYNAMIC == style) || 
-          (REG_DOUBLE_DYNAMIC == style))
-      {
-         split_to_modify = split;
-      } else {
-         split_to_modify = xaccGetOtherSplit(split);
-      }
+      split_to_modify = split;
 
       /* split to modify may be null if its a mutli-split transaction,
        * and a single-line or two-line display.  Then do nothing */
       if (split_to_modify) {
+         Account *old_acc=NULL, *new_acc=NULL;
+
+         /* do some reparenting. Insertion into new account will automatically
+          * delete from the old account */
+         old_acc = xaccSplitGetAccount (split_to_modify);
+         new_acc = xaccGetAccountByName (trans, reg->xfrmCell->cell.value);
+         xaccAccountInsertSplit (new_acc, split_to_modify);
+   
+         /* make sure any open windows of the old account get redrawn */
+         xaccAccountDisplayRefresh (old_acc);
+      }
+   }
+
+   if (MOD_MXFRM & changed) {
+      Split *split_to_modify = NULL;
+
+      split_to_modify = xaccGetOtherSplit(split);
+
+      /* split to modify may be null if its a mutli-split transaction,
+       * and a single-line or two-line display.  Then do nothing */
+      if (split_to_modify) {
+         Account *old_acc=NULL, *new_acc=NULL;
+
          /* do some reparenting. Insertion into new account will automatically
           * delete from the old account */
          old_acc = xaccSplitGetAccount (split_to_modify);
@@ -446,6 +462,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       xaccSetComboCellValue (reg->actionCell, "");
       xaccSetBasicCellValue (reg->memoCell, "");
       xaccSetComboCellValue (reg->xfrmCell, "");
+      xaccSetComboCellValue (reg->mxfrmCell, "");
       xaccSetDebCredCellValue (reg->debitCell, 
                                reg->creditCell, 0.0);
       xaccSetDebCredCellValue (reg->ndebitCell, 
@@ -489,21 +506,18 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
        * For a multi-line display, show the account for each member split.  
        * For a one or two-line display, show the other account, but only    
        * if there are exactly two splits.                                   
+       * xfrm is the "straight" display, "mxfrm" is the "mirrored" display.
        */
-      if ((REG_MULTI_LINE == style) ||
-          (REG_SINGLE_DYNAMIC == style) || 
-          (REG_DOUBLE_DYNAMIC == style))
+      accname = xaccAccountGetName (xaccSplitGetAccount (split));
+      xaccSetComboCellValue (reg->xfrmCell, accname);
       {
-         accname = xaccAccountGetName (xaccSplitGetAccount (split));
-         xaccSetComboCellValue (reg->xfrmCell, accname);
-      } else {
          Split *s = xaccGetOtherSplit (split);
          if (s) {
             accname = xaccAccountGetName (xaccSplitGetAccount (s));
          } else {
             accname = SPLIT_STR;
          }
-         xaccSetComboCellValue (reg->xfrmCell, accname);
+         xaccSetComboCellValue (reg->mxfrmCell, accname);
       }
    
       xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));

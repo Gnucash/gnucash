@@ -60,11 +60,15 @@
 #define NCRED_CELL     14
 #define NDEBT_CELL     15
 
+/* MXFRM is the "mirrored" transfer-from account */
+#define MXFRM_CELL     16
+
 
 #define DATE_CELL_WIDTH    11
 #define NUM_CELL_WIDTH      7
 #define ACTN_CELL_WIDTH     7
 #define XFRM_CELL_WIDTH    14
+#define MXFRM_CELL_WIDTH   14
 #define XTO_CELL_WIDTH     14
 #define DESC_CELL_WIDTH    29
 #define MEMO_CELL_WIDTH    29
@@ -102,6 +106,7 @@ configLabels (SplitRegister *reg)
    LABEL (NUM,   NUM_STR);
    LABEL (ACTN,  NUM_STR);
    LABEL (XFRM,  XFRM_STR);
+   LABEL (MXFRM, XFRM_STR);
    LABEL (XTO,   XFTO_STR);
    LABEL (DESC,  DESC_STR);
    LABEL (MEMO,  DESC_STR);
@@ -238,7 +243,7 @@ configLayout (SplitRegister *reg)
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (MXFRM,  mxfrm,    2,  0);
          FANCY (DESC,   desc,     3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -255,7 +260,7 @@ configLayout (SplitRegister *reg)
          FANCY (BALN,   balance,  7,  0);
   
          FANCY (ACTN,   action,   1,  1);
-         FANCY (XFRM,   xfrm,     2,  1);
+         FANCY (MXFRM,  mxfrm,    2,  1);
          BASIC (MEMO,   memo,     3,  1);
 
          curs = reg->trans_cursor;
@@ -282,7 +287,7 @@ configLayout (SplitRegister *reg)
          curs = reg->single_cursor;
          FANCY (DATE,   date,     0,  0);
          BASIC (NUM,    num,      1,  0);
-         FANCY (XFRM,   xfrm,     2,  0);
+         FANCY (MXFRM,  mxfrm,    2,  0);
          FANCY (DESC,   desc,     3,  0);
          BASIC (RECN,   recn,     4,  0);
          FANCY (DEBT,   debit,    5,  0);
@@ -306,7 +311,7 @@ configLayout (SplitRegister *reg)
          FANCY (BALN,   balance,  10, 0);
 
          FANCY (ACTN,   action,   1,  1);
-         FANCY (XFRM,   xfrm,     2,  1);
+         FANCY (MXFRM,  mxfrm,    2,  1);
          BASIC (MEMO,   memo,     3,  1);
 
          /* only the transaction cursor gets used */
@@ -539,6 +544,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (NUM);
    HDR (ACTN);
    HDR (XFRM);
+   HDR (MXFRM);
    HDR (XTO);
    HDR (DESC);
    HDR (MEMO);
@@ -565,6 +571,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    NEW (balance, Price);
 
    NEW (xfrm,    Combo);
+   NEW (mxfrm,   Combo);
    NEW (xto,     Combo);
    NEW (action,  Combo);
    NEW (memo,    Text);
@@ -743,6 +750,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    xaccDestroyComboCell     (reg->actionCell);
    xaccDestroyComboCell     (reg->xfrmCell);
+   xaccDestroyComboCell     (reg->mxfrmCell);
    xaccDestroyComboCell     (reg->xtoCell);
    xaccDestroyBasicCell     (reg->memoCell);
    xaccDestroyPriceCell     (reg->creditCell);
@@ -762,6 +770,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 
    reg->actionCell  = NULL;
    reg->xfrmCell    = NULL;
+   reg->mxfrmCell   = NULL;
    reg->xtoCell     = NULL;
    reg->memoCell    = NULL;
    reg->creditCell  = NULL;
@@ -785,19 +794,20 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
    unsigned int changed = 0;
 
    /* be careful to use bitwise ands and ors to assemble bit flag */
-   changed |= MOD_DATE & reg->dateCell->cell.changed;
-   changed |= MOD_NUM  & reg->numCell->changed;
-   changed |= MOD_DESC & reg->descCell->cell.changed;
-   changed |= MOD_RECN & reg->recnCell->changed;
+   changed |= MOD_DATE  & reg->dateCell->cell.changed;
+   changed |= MOD_NUM   & reg->numCell->changed;
+   changed |= MOD_DESC  & reg->descCell->cell.changed;
+   changed |= MOD_RECN  & reg->recnCell->changed;
 
-   changed |= MOD_ACTN & reg->actionCell->cell.changed;
-   changed |= MOD_XFRM & reg->xfrmCell->cell.changed;
-   changed |= MOD_XTO  & reg->xtoCell->cell.changed; 
-   changed |= MOD_MEMO & reg->memoCell->changed;
-   changed |= MOD_AMNT & reg->creditCell->cell.changed;
-   changed |= MOD_AMNT & reg->debitCell->cell.changed;
-   changed |= MOD_PRIC & reg->priceCell->cell.changed;
-   changed |= MOD_VALU & reg->valueCell->cell.changed; 
+   changed |= MOD_ACTN  & reg->actionCell->cell.changed;
+   changed |= MOD_XFRM  & reg->xfrmCell->cell.changed;
+   changed |= MOD_MXFRM & reg->mxfrmCell->cell.changed;
+   changed |= MOD_XTO   & reg->xtoCell->cell.changed; 
+   changed |= MOD_MEMO  & reg->memoCell->changed;
+   changed |= MOD_AMNT  & reg->creditCell->cell.changed;
+   changed |= MOD_AMNT  & reg->debitCell->cell.changed;
+   changed |= MOD_PRIC  & reg->priceCell->cell.changed;
+   changed |= MOD_VALU  & reg->valueCell->cell.changed; 
 
    changed |= MOD_NAMNT & reg->ncreditCell->cell.changed;
    changed |= MOD_NAMNT & reg->ndebitCell->cell.changed;
