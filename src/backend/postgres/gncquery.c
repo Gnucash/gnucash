@@ -496,7 +496,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    /* determine whther the query will need to reference the account
     * or commodity tables.  If it doesn't need them, then we can gain
     * a significant performance improvement by not specifying them.
-    * The exact reason why this affect performance is a bit of a 
+    * The exact reason why this affects performance is a bit of a 
     * mystery to me ... */
    qterms = xaccQueryGetTerms (q);
 
@@ -555,14 +555,14 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
       }
    }
 
-   /* determine wther the requested sort order needs this table */
+   /* determine whether the requested sort order needs this table */
    need_account = need_account || sql_sort_need_account (q);
    need_entry = need_entry || sql_sort_need_entry (q);
-   
+
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
    sq->pq = stpcpy(sq->pq, 
-               "SELECT DISTINCT gncTransaction.* ");
+                   "SELECT DISTINCT gncTransaction.* ");
 
    /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
    sq->pq = sql_sort_distinct (sq->pq, xaccQueryGetPrimarySortOrder(q));
@@ -588,7 +588,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    if (need_entry)
    {
       sq->pq = stpcpy(sq->pq, 
-              " gncEntry.transGuid = gncTransaction.transGuid AND ");
+                      " gncEntry.transGuid = gncTransaction.transGuid AND ");
    }
    sq->pq = stpcpy(sq->pq, "  ( ");
 
@@ -698,6 +698,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                CLR_TERM (CLEARED_CLEARED, CREC);
                CLR_TERM (CLEARED_RECONCILED, YREC);
                CLR_TERM (CLEARED_FROZEN, FREC);
+               CLR_TERM (CLEARED_VOIDED, VREC);
 
                sq->pq = stpcpy (sq->pq, ") ");
                break;
