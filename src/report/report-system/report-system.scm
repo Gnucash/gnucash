@@ -13,6 +13,8 @@
 (use-modules (srfi srfi-19))
 (use-modules (gnucash gnc-module))
 
+(use-modules (g-wrapped gw-glib))
+
 (require 'hash-table)
 
 (gnc:module-load "gnucash/engine" 0)
