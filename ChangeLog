@@ -1,3 +1,9 @@
+2000-07-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-reconcile.c: After reconciliation, if the
+	account is a credit card account, automatically pop up a transfer
+	window with the appropriate amount and accounts.
+
 2000-07-21  Dave Peticolas  <dave@krondo.com>
 
 	* src/calculation/fin.c: Some cleanup and renaming of function

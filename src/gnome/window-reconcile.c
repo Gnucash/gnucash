@@ -1544,6 +1544,69 @@ recnClose(GtkWidget *w, gpointer data)
 
 
 /********************************************************************\
+ * find_payment_account                                             *
+ *   find an account that 'looks like' a payment account for the    *
+ *   given account. This really only makes sense for credit card    *
+ *   accounts.                                                      *
+ *                                                                  *
+ * Args:   account - the account to look in                         *
+ * Return: a candidate payment account or NULL if none was found    *
+\********************************************************************/
+static Account *
+find_payment_account(Account *account)
+{
+  int i;
+
+  if (account == NULL)
+    return NULL;
+
+  i = xaccAccountGetNumSplits(account);
+  /* Search backwards to find the latest payment */
+  for (i -= 1; i >= 0; i--)
+  {
+    Transaction *trans;
+    Split *split;
+    int num_splits;
+    int j;
+
+    split = xaccAccountGetSplit(account, i);
+    if (split == NULL)
+      continue;
+
+    /* ignore 'purchases' */
+    if (xaccSplitGetShareAmount(split) <= 0.0)
+      continue;
+
+    trans = xaccSplitGetParent(split);
+    if (trans == NULL)
+      continue;
+
+    num_splits = xaccTransCountSplits(trans);
+    for (j = 0; j < num_splits; j++)
+    {
+      GNCAccountType type;
+      Account *a;
+      Split *s;
+
+      s = xaccTransGetSplit(trans, j);
+      if ((s == NULL) || (s == split))
+        continue;
+
+      a = xaccSplitGetAccount(s);
+      if ((a == NULL) || (a == account))
+        continue;
+
+      type = xaccAccountGetType(a);
+      if ((type == BANK) || (type == CASH) || (type == ASSET))
+        return a;
+    }
+  }
+
+  return NULL;
+}
+
+
+/********************************************************************\
  * recnFinishCB                                                     *
  *   saves reconcile information                                    *
  *                                                                  *
@@ -1568,6 +1631,22 @@ recnFinishCB(GtkWidget *w, gpointer data)
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->debit), date);
 
   recnData->delete_refresh = TRUE;
+
+  if ((xaccAccountGetType(recnData->account) == CREDIT) &&
+      (recnData->new_ending < 0.0) &&
+      !DEQ(recnData->new_ending, 0.0))
+  {
+    XferDialog *xfer;
+    Account *account;
+
+    xfer = gnc_xfer_dialog(NULL, recnData->account);
+
+    gnc_xfer_dialog_set_amount(xfer, -recnData->new_ending);
+
+    account = find_payment_account(recnData->account);
+    if (account != NULL)
+      gnc_xfer_dialog_select_from_account(xfer, account);
+  }
 
   gtk_widget_destroy(recnData->window);
 }
