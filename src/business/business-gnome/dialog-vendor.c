@@ -433,8 +433,6 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
     addr = gncVendorGetAddr (vendor);
 
     gtk_entry_set_text (GTK_ENTRY (vw->id_entry), gncVendorGetID (vendor));
-    gtk_entry_set_editable (GTK_ENTRY (vw->id_entry), FALSE);
-
     gtk_entry_set_text (GTK_ENTRY (vw->company_entry), gncVendorGetName (vendor));
 
     /* Setup Address */

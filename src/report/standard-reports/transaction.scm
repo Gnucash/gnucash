@@ -7,6 +7,8 @@
 ;; More contributions by Christian Stimming <stimming@tuhh.de>
 ;; Modified to support the intersection of two account lists by
 ;; Michael T. Garrison Stuber
+;; Modified account names display by Tomas Pospisek
+;; <tpo_deb@sourcepole.ch> with a lot of help from "warlord"
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -111,31 +113,48 @@
      subheading-style
      (list heading-cell))))
 
-(define (render-account-full-name-subheading 
-         split table width subheading-style)
+;; display an account name depending on the options the user has set
+(define (account-namestring account show-account-code show-account-name show-account-full-name)
+  ;;# on multi-line splits we can get an empty (#f) account
+  (if (not account)
+        (_ "Split")
+        (string-append 
+           ;; display account code?
+           (if show-account-code
+                 (string-append (gnc:account-get-code account) " ")
+                 "")
+           ;; display account name?
+           (if show-account-name
+                 ;; display full account name?
+                 (if show-account-full-name
+                      (gnc:account-get-full-name account)
+                      (gnc:account-get-name account))
+                 ""))))
+
+;; render an account subheading - column-vector determines what is displayed
+(define (render-account-subheading
+         split table width subheading-style column-vector)
   (let ((account (gnc:split-get-account split)))
     (add-subheading-row (gnc:make-html-text
                          (gnc:html-markup-anchor
-                          (gnc:account-anchor-text account)
-                          (gnc:account-get-full-name account)))
+                           (gnc:account-anchor-text account)
+                           (account-namestring account
+                                               (used-sort-account-code      column-vector)
+                                               #t
+                                               (used-sort-account-full-name column-vector))))
                         table width subheading-style)))
 
-(define (render-account-code-subheading split table 
-                                        width subheading-style)
-  (add-subheading-row (gnc:account-get-code
-                       (gnc:split-get-account split))
-                      table width subheading-style))
-
-(define (render-corresponding-account-name-subheading 
-         split table width subheading-style)
-  (add-subheading-row (gnc:split-get-corr-account-full-name split)
-                      table width subheading-style))
-
-
-(define (render-corresponding-account-code-subheading 
-         split table width subheading-style)
-  (add-subheading-row (gnc:split-get-corr-account-code split)
-                      table width subheading-style))
+(define (render-corresponding-account-subheading 
+         split table width subheading-style column-vector)
+  (let ((account (gnc:split-get-account (gnc:split-get-other-split split))))
+    (add-subheading-row (gnc:make-html-text
+                         (gnc:html-markup-anchor
+                           (gnc:account-anchor-text account)
+                           (account-namestring account
+                                               (used-sort-account-code      column-vector)
+                                               #t
+                                               (used-sort-account-full-name column-vector))))
+                        table width subheading-style)))
 
 (define (render-month-subheading split table width subheading-style)
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
@@ -174,32 +193,23 @@
 
 (define (total-string str) (string-append (_ "Total For ") str))
 
-(define (render-account-full-name-subtotal 
-         table width split total-collector subtotal-style)
-  (let ((name-string (total-string (gnc:account-get-full-name
-                                    (gnc:split-get-account split)))))
-    
+(define (render-account-subtotal 
+         table width split total-collector subtotal-style column-vector)
     (add-subtotal-row table width 
-                      name-string total-collector subtotal-style)))
+                      (total-string (account-namestring (gnc:split-get-account split)
+                                                        (used-sort-account-code      column-vector)
+                                                        #t
+                                                        (used-sort-account-full-name column-vector)))
+                      total-collector subtotal-style))
 
-(define (render-account-code-subtotal
+(define (render-corresponding-account-subtotal
          table width split total-collector subtotal-style)
-  (let ((code-string (total-string (gnc:account-get-code
-                                    (gnc:split-get-account split)))))
-    (add-subtotal-row table width 
-                      code-string total-collector subtotal-style)))
-
-(define (render-corresponding-account-name-subtotal
-         table width split total-collector subtotal-style)
-  (add-subtotal-row table width
-                    (total-string 
-                     (gnc:split-get-corr-account-full-name split))
-                    total-collector subtotal-style))
-
-(define (render-corresponding-account-code-subtotal
-         table width split total-collector subtotal-style)
-  (add-subtotal-row table width (total-string 
-                                 (gnc:split-get-corr-account-code split))
+    (add-subtotal-row table width
+                      (total-string (account-namestring (gnc:split-get-account 
+                                                          (gnc:split-get-other-split split))
+                                                        (used-sort-account-code      column-vector)
+                                                        #t
+                                                        (used-sort-account-full-name column-vector)))
                     total-collector subtotal-style))
 
 (define (render-month-subtotal
@@ -239,9 +249,9 @@
   (vector-ref columns-used 2))
 (define (used-description columns-used)
   (vector-ref columns-used 3))
-(define (used-account columns-used)
+(define (used-account-name columns-used)
   (vector-ref columns-used 4))
-(define (used-other-account columns-used)
+(define (used-other-account-name columns-used)
   (vector-ref columns-used 5))	
 (define (used-shares columns-used)
   (vector-ref columns-used 6))	
@@ -257,11 +267,20 @@
   (vector-ref columns-used 11))
 (define (used-account-full-name columns-used)
   (vector-ref columns-used 12))
-
 (define (used-memo columns-used)
   (vector-ref columns-used 13))
+(define (used-account-code columns-used)
+  (vector-ref columns-used 14))
+(define (used-other-account-code columns-used)
+  (vector-ref columns-used 15))
+(define (used-other-account-full-name columns-used)
+  (vector-ref columns-used 16))
+(define (used-sort-account-code columns-used)
+  (vector-ref columns-used 17))
+(define (used-sort-account-full-name columns-used)
+  (vector-ref columns-used 18))
 
-(define columns-used-size 14)
+(define columns-used-size 19)
 
 (define (num-columns-required columns-used)  
   (do ((i 0 (+ i 1)) 
@@ -282,9 +301,9 @@
         (vector-set! column-list 2 #t))
     (if (opt-val (N_ "Display") (N_ "Description"))
         (vector-set! column-list 3 #t))
-    (if (opt-val (N_ "Display") (N_ "Account"))
+    (if (opt-val (N_ "Display") (N_ "Account Name"))
         (vector-set! column-list 4 #t))
-    (if (opt-val (N_ "Display") (N_ "Other Account"))
+    (if (opt-val (N_ "Display") (N_ "Other Account Name"))
         (vector-set! column-list 5 #t))
     (if (opt-val (N_ "Display") (N_ "Shares"))
         (vector-set! column-list 6 #t))
@@ -302,6 +321,16 @@
         (vector-set! column-list 12 #t))
     (if (opt-val (N_ "Display") (N_ "Memo"))
         (vector-set! column-list 13 #t))
+    (if (opt-val (N_ "Display") (N_ "Account Code"))
+        (vector-set! column-list 14 #t))
+    (if (opt-val (N_ "Display") (N_ "Other Account Code"))
+        (vector-set! column-list 15 #t))
+    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name?"))
+        (vector-set! column-list 16 #t))
+    (if (opt-val (N_ "Sorting") (N_ "Show Account Code?"))
+        (vector-set! column-list 17 #t))
+    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name?"))
+        (vector-set! column-list 18 #t))
     column-list))
 
 (define (make-heading-list column-vector)
@@ -316,9 +345,9 @@
         (addto! heading-list (_ "Description")))
     (if (used-memo column-vector)
         (addto! heading-list (_ "Memo")))
-    (if (used-account column-vector)
+    (if (or (used-account-name column-vector) (used-account-code column-vector))
         (addto! heading-list (_ "Account")))
-    (if (used-other-account column-vector)
+    (if (or (used-other-account-name column-vector) (used-other-account-code column-vector))
         (addto! heading-list (_ "Transfer from/to")))
     (if (used-shares column-vector)
         (addto! heading-list (_ "Shares")))
@@ -381,17 +410,18 @@
         (addto! row-contents
                 (gnc:split-get-memo split)))
     
-    (if (used-account column-vector)
-        (if (used-account-full-name column-vector)
-            (addto! row-contents (gnc:account-get-full-name account))
-            (addto! row-contents (gnc:account-get-name account))))
+    (if (or (used-account-name column-vector) (used-account-code column-vector))
+       (addto! row-contents (account-namestring account
+                                                (used-account-code      column-vector)
+                                                (used-account-name      column-vector)
+                                                (used-account-full-name column-vector))))
     
-    (if (used-other-account column-vector)
-        (if (used-account-full-name column-vector)
-            
-            (addto! row-contents (gnc:split-get-corr-account-full-name 
-                                  split))
-            (addto! row-contents (gnc:split-get-corr-account-name split))))
+    (if (or (used-other-account-name column-vector) (used-other-account-code column-vector))
+       (addto! row-contents (account-namestring (gnc:split-get-account
+                                                   (gnc:split-get-other-split split))
+                                                (used-other-account-code      column-vector)
+                                                (used-other-account-name      column-vector)
+                                                (used-other-account-full-name column-vector))))
     
     (if (used-shares column-vector)
         (addto! row-contents (gnc:split-get-amount split)))
@@ -543,28 +573,35 @@
          (list (vector 'none
                        (N_ "None")
                        (N_ "Do not sort"))
+
                (vector 'account-name
                        (N_ "Account Name")
                        (N_ "Sort & subtotal by account name"))
+
                (vector 'account-code
                        (N_ "Account Code")
                        (N_ "Sort & subtotal by account code"))
+
                (vector 'date
                        (N_ "Date")
                        (N_ "Sort by date"))
+
                (vector 'exact-time
                        (N_ "Exact Time")
                        (N_ "Sort by exact time"))
-	       (vector 'reconciled-date
-		       (N_ "Reconciled Date")
-		       (N_ "Sort by the Reconciled Date"))
+
+               (vector 'reconciled-date
+                       (N_ "Reconciled Date")
+                       (N_ "Sort by the Reconciled Date"))
+
                (vector 'register-order
-		       (N_ "Register Order")
-		       (N_ "Sort as with the register"))
+                       (N_ "Register Order")
+                       (N_ "Sort as with the register"))
+
                (vector 'corresponding-acc-name 
                        (N_ "Other Account Name")
                        (N_ "Sort by account transferred from/to's name"))
-               
+
                (vector 'corresponding-acc-code
                        (N_ "Other Account Code")
                        (N_ "Sort by account transferred from/to's code"))
@@ -614,6 +651,20 @@
         (gnc:option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          (if (member x date-sorting-types) #t #f)))))
+    
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting (N_ "Show Full Account Name?")
+      "a1" 
+      (N_ "Show the full account name for subtotals and subtitles?")
+      #f))
+    
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting (N_ "Show Account Code?")
+      "a2" 
+      (N_ "Show the account code for subtotals and subtitles?")
+      #f))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -683,27 +734,28 @@
    ;; One list per option here with: option-name, sort-tag,
    ;; help-string, default-value
    (list
-    (list (N_ "Date") "a" (N_ "Display the date?") #t)
-    (list (N_ "Reconciled Date") "a2" (N_ "Display the reconciled date?") #f)
-    (list (N_ "Num")  "b" (N_ "Display the check number?") #t)
-    (list (N_ "Description") "c" (N_ "Display the description?") #t)
-    (list (N_ "Memo") "d" (N_ "Display the memo?") #t)
-    (list (N_ "Account") "e" (N_ "Display the account?") #f)
-    (list (N_ "Use Full Account Name?") "f" 
-          (N_ "Display the full account name") #t)
-    (list (N_ "Other Account") "g" 
-          (N_ "Display the other account?\
+    (list (N_ "Date")                         "a"  (N_ "Display the date?") #t)
+    (list (N_ "Reconciled Date")              "a2" (N_ "Display the reconciled date?") #f)
+    (list (N_ "Num")                          "b"  (N_ "Display the check number?") #t)
+    (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
+    (list (N_ "Memo")                         "d"  (N_ "Display the memo?") #t)
+    (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
+    (list (N_ "Use Full Account Name?")       "f"  (N_ "Display the full account name") #t)
+    (list (N_ "Account Code")                 "g"  (N_ "Display the account code") #f)
+    (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name?\
  (if this is a split transaction, this parameter is guessed).") #f)
-    (list (N_ "Shares") "h" (N_ "Display the number of shares?") #f)
-    (list (N_ "Price") "i" (N_ "Display the shares price?") #f)
+    (list (N_ "Use Full Other Account Name?") "i"  (N_ "Display the full account name") #t)
+    (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code") #f)
+    (list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
+    (list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
     ;; note the "Amount" multichoice option in between here
-    (list (N_ "Running Balance") "k" (N_ "Display a running balance") #f)
-    (list (N_ "Totals") "l" (N_ "Display the totals?") #t)))
+    (list (N_ "Running Balance")              "n"  (N_ "Display a running balance") #f)
+    (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)))
 
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     gnc:pagename-display (N_ "Amount")
-    "j" (N_ "Display the amount?")  
+    "m" (N_ "Display the amount?")  
     'single
     (list
      (vector 'none (N_ "None") (N_ "No amount display"))
@@ -713,7 +765,7 @@
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     gnc:pagename-display (N_ "Sign Reverses?")
-    "m" (N_ "Reverse amount display for certain account types")
+    "p" (N_ "Reverse amount display for certain account types")
     'credit-accounts
     (list 
      (vector 'none (N_ "None") (N_ "Don't change any displayed amounts"))
@@ -777,7 +829,8 @@ Credit Card, and Income accounts")))))
                           secondary-subtotal-renderer)
   
  (let ((work-to-do (length splits))
-       (work-done 0))
+       (work-done 0)
+       (used-columns (build-column-used options)))
   (define (get-account-types-to-reverse options)
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
@@ -823,8 +876,9 @@ Credit Card, and Income accounts")))))
                                   primary-subtotal-collector 
                                   secondary-subtotal-collector 
                                   total-collector)
-    (set! work-done (+ 1 work-done))
+
     (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+    (set! work-done (+ 1 work-done))
     (if (null? splits)
         (begin
           (gnc:html-table-append-row/markup!
@@ -885,14 +939,14 @@ Credit Card, and Income accounts")))))
 
                 (primary-subtotal-renderer table width current
                                            primary-subtotal-collector
-                                           def:primary-subtotal-style)
+                                           def:primary-subtotal-style used-columns)
 
                 (primary-subtotal-collector 'reset #f #f)
 
                 (if next
                     (begin 
                       (primary-subheading-renderer
-                       next table width def:primary-subtotal-style)
+                       next table width def:primary-subtotal-style used-columns)
 
                       (if secondary-subtotal-pred
                           (secondary-subheading-renderer
@@ -933,7 +987,6 @@ Credit Card, and Income accounts")))))
                                   total-collector))))
 
   (let* ((table (gnc:make-html-table))
-         (used-columns (build-column-used options))
          (width (num-columns-required used-columns))
          (multi-rows? (transaction-report-multi-rows-p options))
          (account-types-to-reverse
@@ -947,7 +1000,7 @@ Credit Card, and Income accounts")))))
         (begin
           (if primary-subheading-renderer 
               (primary-subheading-renderer
-               (car splits) table width def:primary-subtotal-style))
+               (car splits) table width def:primary-subtotal-style used-columns))
           (if secondary-subheading-renderer
               (secondary-subheading-renderer
                (car splits) table width def:secondary-subtotal-style))
@@ -982,46 +1035,47 @@ Credit Card, and Income accounts")))))
     ;; subtotal functions. Each entry: (cons
     ;; 'sorting-key-option-value (vector 'query-sorting-key
     ;; subtotal-function subtotal-renderer))
-    (list (cons 'account-name  (vector 
-                                (list gnc:split-account-fullname)
-                                split-account-full-name-same-p 
-                                render-account-full-name-subheading
-                                render-account-full-name-subtotal))
-          (cons 'account-code  (vector 
-                                (list gnc:split-account gnc:account-code)
-                                split-account-code-same-p
-                                render-account-code-subheading
-                                render-account-code-subtotal))
-          (cons 'exact-time    (vector
-				(list gnc:split-trans gnc:trans-date-posted)
-				#f #f #f))
-          (cons 'date          (vector
-                                (list gnc:split-trans gnc:trans-date-posted)
-				#f #f #f))
-	  (cons 'reconciled-date (vector
-				  (list gnc:split-date-reconciled) #f #f #f))
-	  (cons 'register-order 
-		 (vector
-		  (list gnc:query-default-sort)
-		  #f 
-		  #f 
-		  #f))
-          (cons 'corresponding-acc-name
-                (vector (list gnc:split-corr-account-fullname)
-                        split-same-corr-account-full-name-p 
-                        render-corresponding-account-name-subheading
-                        render-corresponding-account-name-subtotal))
-          (cons 'corresponding-acc-code
-                (vector (list gnc:split-corr-account-code)
-                        split-same-corr-account-code-p 
-                        render-corresponding-account-code-subheading
-                        render-corresponding-account-code-subtotal))
-          (cons 'amount (vector (list gnc:split-value) #f #f #f))
-          (cons 'description (vector (list gnc:split-trans gnc:trans-desc)
-				     #f #f #f))
-          (cons 'number (vector (list gnc:split-trans gnc:trans-num) #f #f #f))
-          (cons 'memo   (vector (list gnc:split-memo) #f #f #f))
-          (cons 'none   (vector '() #f #f #f))))
+;;  (let* ((used-columns (build-column-used options))) ;; tpo: gives unbound variable options?
+    (let* ((used-columns (build-column-used (gnc:report-options report-obj))))
+      (list (cons 'account-name  (vector 
+                                  (list gnc:split-account-fullname)
+                                  split-account-full-name-same-p 
+                                  render-account-subheading
+                                  render-account-subtotal))
+            (cons 'account-code  (vector 
+                                  (list gnc:split-account gnc:account-code)
+                                  split-account-code-same-p
+                                  render-account-subheading
+                                  render-account-subtotal))
+            (cons 'exact-time    (vector
+                                  (list gnc:split-trans gnc:trans-date-posted)
+                                  #f #f #f))
+            (cons 'date          (vector
+                                  (list gnc:split-trans gnc:trans-date-posted)
+                                  #f #f #f))
+            (cons 'reconciled-date (vector
+                                  (list gnc:split-date-reconciled)
+                                  #f #f #f))
+            (cons 'register-order (vector
+                                  (list gnc:query-default-sort)
+                                  #f #f #f))
+            (cons 'corresponding-acc-name
+                                 (vector
+                                  (list gnc:split-corr-account-fullname)
+                                  split-same-corr-account-full-name-p 
+                                  render-corresponding-account-subheading
+                                  render-corresponding-account-subtotal))
+            (cons 'corresponding-acc-code
+                                 (vector
+                                  (list gnc:split-corr-account-code)
+                                  split-same-corr-account-code-p 
+                                  render-corresponding-account-subheading
+                                  render-corresponding-account-subtotal))
+            (cons 'amount        (vector (list gnc:split-value) #f #f #f))
+            (cons 'description   (vector (list gnc:split-trans gnc:trans-desc) #f #f #f))
+            (cons 'number        (vector (list gnc:split-trans gnc:trans-num) #f #f #f))
+            (cons 'memo          (vector (list gnc:split-memo) #f #f #f))
+            (cons 'none          (vector '() #f #f #f)))))
 
   (define date-comp-funcs-assoc-list
     ;; Extra list for date option. Each entry: (cons

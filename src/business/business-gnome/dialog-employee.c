@@ -512,8 +512,6 @@ gnc_employee_new_window (GNCBook *bookp,
     addr = gncEmployeeGetAddr (employee);
 
     gtk_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
-    gtk_entry_set_editable (GTK_ENTRY (ew->id_entry), FALSE);
-
     gtk_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
 
     /* Setup Address */

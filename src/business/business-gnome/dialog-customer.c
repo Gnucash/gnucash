@@ -557,8 +557,6 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
     shipaddr = gncCustomerGetShipAddr (cust);
 
     gtk_entry_set_text (GTK_ENTRY (cw->id_entry), gncCustomerGetID (cust));
-    gtk_entry_set_editable (GTK_ENTRY (cw->id_entry), FALSE);
-
     gtk_entry_set_text (GTK_ENTRY (cw->company_entry), gncCustomerGetName (cust));
 
     /* Setup Address */

@@ -1,3 +1,18 @@
+2003-04-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.scm: Applied Tomas
+	  Pospisek's patch to the transaction report (fixes bug #110598)
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: fix the description
+	  of gnc:mdi-show-progress.
+
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	  Enable changing the "ID" for different business objects.
+	  Fixes #108563.
+	
 2003-04-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c,
