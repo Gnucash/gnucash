@@ -31,6 +31,8 @@
 #include <Xm/PushB.h>
 #include <Xm/LabelGP.h>
 
+#include "config.h"
+
 #include "Reports.h"
 #include "util.h"
 
@@ -46,7 +48,6 @@ simpleReportWindow( Widget parent )
   {
   Widget    dialog, form, frame, rc, widget, 
             label, buttonform;
-  int  position;  /* ???? */
   setBusyCursor( parent );
   
   /* force the size of the dialog so it is not resizable */
@@ -96,7 +97,6 @@ simpleReportWindow( Widget parent )
 				 XmNrightAttachment,  XmATTACH_FORM,
 				 NULL );
   
-  position = 1;                    /* puts the buttons in the right place */
   
   /* The "Ok" button */
   widget = XtVaCreateManagedWidget( "Ok", 
@@ -104,9 +104,9 @@ simpleReportWindow( Widget parent )
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
-				    XmNleftPosition,       position,
+				    XmNleftPosition,       1,
 				    XmNrightAttachment,    XmATTACH_POSITION,
-				    XmNrightPosition,      position+1,
+				    XmNrightPosition,      2,
 				    XmNshowAsDefault,      True,
 				    NULL );
   

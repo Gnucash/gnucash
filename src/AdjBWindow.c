@@ -30,6 +30,8 @@
 #include <Xm/PushB.h>
 #include <Xm/LabelGP.h>
 
+#include "config.h"
+
 #include "Account.h"
 #include "Data.h"
 #include "date.h"

@@ -1,6 +1,6 @@
-/*******************************************************************\
- * Destroy.c -- utilities for the window destruction (X-Accountant) *
- * Copyright (C) 1997 Linas Vepstas                                 *
+/********************************************************************\
+ * config.h -- configuration defines for xacc                       *
+ * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -16,43 +16,34 @@
  * along with this program; if not, write to the Free Software      *
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
  *                                                                  *
+ *   Author: Rob Clark                                              *
+ * Internet: rclark@cs.hmc.edu                                      *
+ *  Address: 609 8th Street                                         *
+ *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#include "config.h"
 
-#include "Account.h"
-#include "AccWindow.h"
-#include "AdjBWindow.h"
-#include "Data.h"
-#include "LedgerUtils.h"
-#include "RegWindow.h"
-#include "RecnWindow.h"
-#include "util.h"
+#ifndef __XACC_CONFIG_H__
+#define __XACC_CONFIG_H__
 
-   
-/* ------------------------------------------------------ */
-void
-xaccAccountWindowDestroy (Account *acc)
-{
-   int nacc;
-   int i, n;
+/* Are we bigendian */
+#undef  WORDS_BIGENDIAN     
 
-   if (!acc) return;
+/* Do some memory debugging stuff */
+#define  DEBUG_MEMORY        
 
-   /* recursively destroy windows associated with children */
-   if (acc->children) {
-      for (i=0; i<acc->children->numAcc; i++) {
-         xaccAccountWindowDestroy (acc->children->account[i]);
-      }
-   }
+/* Enable debugging stuff */
+#define  USE_DEBUG           
 
-   xaccDestroyRegWindow (acc->regData);
-   xaccDestroyRegWindow (acc->regLedger);
-   xaccDestroyRecnWindow (acc->recnData);
-   xaccDestroyAdjBWindow (acc->adjBData);
-   xaccDestroyEditAccWindow (acc->editAccData);
-   xaccDestroyEditNotesWindow (acc->editNotesData);
+/* Enable quickfill in register window */
+#define  USE_QUICKFILL       
 
-}
+/* Don't color the balance depending on whether positive
+ * or negative */
+#define  USE_NO_COLOR        
 
-/************************** END OF FILE *************************/
+/* If configure found libXpm, then use it */
+#define  HAVE_XPM            
+
+
+#endif

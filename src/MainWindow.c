@@ -35,6 +35,8 @@
 #include <Xm/Text.h>
 #include <Xbae/Matrix.h>
 
+#include "config.h"
+
 #include "AdjBWindow.h"
 #include "Account.h"
 #include "AccWindow.h"
@@ -77,7 +79,7 @@ char *account_type_name[] =
 
 /* Pixel values are used to color the balance field text 
  * when computing the balance */
-#ifndef USE_NO_COLOR
+#if !USE_NO_COLOR
 #  define POSITIVE_BALANCE "black"
 #  define NEGATIVE_BALANCE "red"
 Pixel   posPixel, negPixel;
@@ -147,7 +149,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
     XtVaGetValues (acctrix, XmNrows, &currow, NULL);
     XbaeMatrixAddRows( acctrix, currow, cols, NULL, NULL, 1 );
     
-#ifndef USE_NO_COLOR
+#if !USE_NO_COLOR
     /* Set the color of the text, depending on whether the
      * balance is negative or positive */
     if( 0.0 > dbalance )
@@ -480,7 +482,7 @@ mainWindow( Widget parent )
    * If they haven't already been initialize, initialize the Pixel  *
    * values that are used for foreground colors for the balance     *
   \******************************************************************/
-#ifndef USE_NO_COLOR
+#if !USE_NO_COLOR
   if( !havePixels )
     {
     XrmValue colorValue, pixelValue;

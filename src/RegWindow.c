@@ -34,6 +34,8 @@
 #include <Xm/Text.h>
 #include <Xbae/Matrix.h>
 
+#include "config.h"
+
 #include "Account.h"
 #include "Action.h"
 #include "AdjBWindow.h"
@@ -795,7 +797,7 @@ regRecalculateBalance( RegWindow *regData )
     }
 
     if( reg != NULL ) {
-#ifdef USE_NO_COLOR
+#if USE_NO_COLOR
       sprintf( buf, "%.2f ", prt_balance );
 #else
       sprintf( buf, "%.2f ", DABS(prt_balance) );
@@ -832,14 +834,14 @@ regRecalculateBalance( RegWindow *regData )
           if (DEQ (0.0, value)) {
             buf[0] = 0x0;
           } else {
-#ifdef USE_NO_COLOR
+#if USE_NO_COLOR
             sprintf( buf, "%.2f ", value );
 #else
             sprintf( buf, "%.2f ", DABS(value) );
 #endif
           }
         
-#ifndef USE_NO_COLOR
+#if !USE_NO_COLOR
           /* Set the color of the text, depending on whether the
            * balance is negative or positive */
           if( 0.0 > value ) {
@@ -856,7 +858,7 @@ regRecalculateBalance( RegWindow *regData )
           /* ------------------------------------ */
           /* now show the share balance */
           share_balance = xaccGetShareBalance (acc, trans);
-#ifdef USE_NO_COLOR
+#if USE_NO_COLOR
           sprintf( buf, "%.3f ", share_balance );
 #else
           sprintf( buf, "%.3f ", DABS(share_balance) );
@@ -889,7 +891,7 @@ regRecalculateBalance( RegWindow *regData )
            * account belongs on this ledger */
           value = trans->damount * trans->share_price;
 
-#ifndef USE_NO_COLOR
+#if !USE_NO_COLOR
           /* Set the color of the text, depending on whether the
            * value is negative or positive. Remebr that we flip 
            * the color value for debit cells */
@@ -906,7 +908,7 @@ regRecalculateBalance( RegWindow *regData )
           }
 #endif
           value = trans->damount * trans->share_price;
-#ifdef USE_NO_COLOR
+#if USE_NO_COLOR
           value = -value;  /* flip sign for debit accounts */
 #else 
           value = DABS(value);
@@ -923,7 +925,7 @@ regRecalculateBalance( RegWindow *regData )
           XbaeMatrixSetCell( reg, position+VDEB_CELL_R, VDEB_CELL_C, buf );
 
           value = trans->damount * trans->share_price;
-#ifdef USE_NO_COLOR
+#if USE_NO_COLOR
           value = +value;  /* DO NOT flip sign for credit accounts */
 #else 
           value = DABS(value);
@@ -964,7 +966,7 @@ regRecalculateBalance( RegWindow *regData )
           }
 
           if (show) {
-#ifdef USE_NO_COLOR
+#if USE_NO_COLOR
             sprintf( buf, "%.3f ", share_balance );
 #else
             sprintf( buf, "%.3f ", DABS(share_balance) );
@@ -2736,7 +2738,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
        * Also, in certain cells (like the date), we need to take care
        * of special accelerator keys... */
       
-#ifdef USEQUICKFILL
+#if USE_QUICKFILL
       /* This part only works with the patched Xbae-Matrix widget */
       if( IN_DESC_CELL(row,col) )
         {
@@ -2754,7 +2756,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
            * the safe side, rescan the description field,
            * to ensure that quickfill works correctly for
            * the data that is actually in the cell */
-          regData->qf = acc->qfRoot;
+          regData->qf = (regData->blackacc[0])->qfRoot;
           for( i=0; i<regData->insert; i++ )
             regData->qf = getQuickFill( regData->qf, mvcbs->prev_text[i] );
           }
@@ -2763,7 +2765,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         /* this will core dump, since ptr is NULL */
         /* this is not fixed, since the fix is not obvious to me ... */
         input = (mvcbs->verify->text->ptr)[0];
-
+	
         /* go to qf's child node that corresponds to the
          * last character inputed by the user */
         regData->qf = getQuickFill( regData->qf, input );
@@ -2779,9 +2781,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           XbaeMatrixSetCell( mw, row, col, str );
           XbaeMatrixRefreshCell( mw, row, col );
-/*
           XbaeMatrixSetCursorPosition( mw, regData->insert+1 );
-*/
           }
         else
           {
@@ -2792,9 +2792,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           
           XbaeMatrixSetCell( mw, row, col, str );
           XbaeMatrixRefreshCell( mw, row, col );
-/*
           XbaeMatrixSetCursorPosition( mw, regData->insert );
-*/
           }
         }
 #endif	
