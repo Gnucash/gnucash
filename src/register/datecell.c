@@ -367,6 +367,17 @@ xaccInitDateCell (DateCell *cell)
 
 /* ================================================ */
 
+void
+xaccDestroyDateCell (DateCell *cell)
+{
+   cell->date.tm_mday = 0;
+   cell->date.tm_mon = 0;
+   cell->date.tm_year = 0;
+   xaccDestroyBasicCell ( &(cell->cell));
+}
+
+/* ================================================ */
+
 void 
 xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
 {
