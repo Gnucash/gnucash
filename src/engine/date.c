@@ -323,6 +323,53 @@ char dateSeparator ()
 }
 
 /********************************************************************\
+ * iso 8601 datetimes should look like 1998-07-02 11:00:00.68-05
+\********************************************************************/
+
+Timespec
+gnc_iso8601_to_timespec(const char *str)
+{
+  Timespec ts;
+  struct tm stm;
+  long int nsec =0;
+
+  ts.tv_sec=0;
+  ts.tv_nsec=0;
+  if (!str) return ts;
+
+  stm.tm_year = atoi(str) - 1900;
+  str = strchr (str, '-'); if (str) { str++; } else { return ts; }
+  stm.tm_mon = atoi(str) - 1;
+  str = strchr (str, '-'); if (str) { str++; } else { return ts; }
+  stm.tm_mday = atoi(str);
+
+  str = strchr (str, ' '); if (str) { str++; } else { return ts; }
+  stm.tm_hour = atoi(str);
+  str = strchr (str, ':'); if (str) { str++; } else { return ts; }
+  stm.tm_min = atoi(str);
+  str = strchr (str, ':'); if (str) { str++; } else { return ts; }
+  stm.tm_sec = atoi (str);
+
+  /* the decimal point, optionally present ... */
+  /* hack alert -- we should count number of decimal places, */
+  if (strchr (str, '.')) 
+  { 
+     str = strchr (str, '.') +1;
+     nsec = atoi(str) *10000000;
+  }
+  stm.tm_isdst = -1;
+
+  str += strcspn (str, "+-");
+  stm.tm_hour += atoi(str);
+
+  /* compute number of seconds */
+  ts.tv_sec = mktime (&stm);
+  ts.tv_nsec = nsec;
+
+  return ts;
+}
+
+/********************************************************************\
 \********************************************************************/
 
 time_t 

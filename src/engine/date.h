@@ -139,4 +139,10 @@ Timespec gnc_dmy2timespec (int day, int month, int year);
 /* Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (int day, int month, int year);
 
+/* convert ISO-8601 style date/time string to Timespec 
+ * for example: 1998-07-17 11:00:00.68-05 
+ * is 680 milliseconds after 11 o'clock, central daylight time 
+ */
+Timespec gnc_iso8601_to_timespec(const char *);
+
 #endif /* __XACC_DATE_H__ */
