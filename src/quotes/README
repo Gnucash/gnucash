@@ -7,6 +7,10 @@ value_portfolio is a stand-alone perl script for updating and printing
     purchase price.
     (from Christopher B. Browne, cbbrowne@hex.net)
 
+update_prices is a stand-alone perl script  for updating the prices
+    of stocks and mutual funds in a gnucash file. Its rather lame at the
+    moment.
+
 Finance::Quote
     This is a perl 5 module that will pull one or more stock and/or mutual
     fund quotes from a variety of sources, including Yahoo! Finance.  

@@ -1,0 +1,89 @@
+#!/usr/bin/perl -w
+#
+# gnucash perl thing
+
+use Quote;
+use lib '../swig/perl5/';
+use gnucash;
+
+# --------------------------------------------------
+
+sub account_flatlist 
+{
+   local ($grp) = $_[0];
+   local ($naccts) = gnucash::xaccGroupGetNumAccounts ($grp);
+   local ($n);
+   local (@acctlist, @childlist);
+   local ($children);
+
+   foreach $n (0..$naccts-1) {
+      $acct = gnucash::xaccGroupGetAccount ($grp, $n);
+      push (@acctlist, $acct);
+      $children = gnucash::xaccAccountGetChildren ($acct);
+      if ($children) { 
+         @childlist = &account_flatlist ($children);
+         push (@acctlist, @childlist);
+      }
+   }
+
+   return (@acctlist);
+}
+
+# --------------------------------------------------
+
+sub setprice 
+{
+   local ($acct)  = $_[0];
+   local ($dayte) = $_[1];
+   local ($price) = $_[2];
+
+   $trans = gnucash::xaccMallocTransaction();
+   gnucash::xaccTransBeginEdit ($trans, 1);
+   gnucash::xaccTransSetDescription ($trans, "aPrice");
+   gnucash::xaccTransSetDateStr ($trans,$dayte);
+
+   $split = gnucash::xaccTransGetSplit ($trans, 0);
+   gnucash::xaccSplitSetSharePriceAndAmount ($split, $price, 0.0);
+   gnucash::xaccTransCommitEdit ($trans);
+
+   gnucash::xaccAccountBeginEdit ($acct, 1);
+   gnucash::xaccAccountInsertSplit ($acct, $split);
+$tyme = gnucash::xaccTransGetDate ($trans);
+$dat = gnucash::xaccTransGetDateStr ($trans);
+print "yooo $dayte $tyme $dat\n";
+   gnucash::xaccAccountCommitEdit ($acct);
+}
+
+# --------------------------------------------------
+
+
+die "Usage: $0 <gnucash-filename>" if $#ARGV < 0;
+
+# open the file, read all of the accounts
+$sess = gnucash::xaccMallocSession ();
+$grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
+
+die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
+
+# get a flat list of accounts
+@acctlist = &account_flatlist ($grp);
+
+foreach $acct (@acctlist) {
+      $name = gnucash::xaccAccountGetName ($acct);
+      print "Found account $name\n";
+      $type = gnucash::xaccAccountGetType ($acct);
+      if ($type == $gnucash::STOCK) {
+         $security = gnucash::xaccAccountGetSecurity ($acct);
+         %quotes = &Quote::yahoo ($security);
+         $price = $quotes {$security, "last"};
+         $dayte = $quotes {$security, "date"};
+         print "\t$security last=$price at $dayte\n";
+         if ($price) {
+            &setprice ($acct, $dayte, $price);
+         }
+      }
+}
+
+gnucash::xaccSessionSave ($sess);
+gnucash::xaccSessionEnd ($sess);
+
