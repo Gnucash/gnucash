@@ -1,0 +1,26 @@
+# -*-Makefile-*-
+
+# These are in a separate file because we need to do one, and then the
+# other and we need to only consider the files listed inside
+# etags.files as valid dependencies *after* we've updated etags.files.
+
+# i.e. TAGS: etags.files $(shell cat etags.files) doesn't work right
+# because etags.files contents are expanded before it's re-generated.
+
+# The $(shell find . -type d) dependency seems to be pointless -- it
+# always fires.  It appears that someone's always touching something.
+etags.files: $(shell find . -type d)
+	find . -path './debian' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
+	@if cmp --quiet etags.files etags.files.tmp; \
+        then \
+          echo "TAGS file list hasn't changed."; \
+          rm -f etags.files.tmp; \
+        else \
+          echo "TAGS file list has changed."; \
+          mv etags.files.tmp etags.files; \
+        fi
+
+# we don't need an etags.files dep here b/c you always call this after
+# re-generating etags.files if needed from the top-level Makefile.am.
+TAGS: $(shell cat etags.files)
+	etags `cat etags.files`
