@@ -1142,7 +1142,7 @@ Credit Card, and Income accounts")))))
 
 	  ;;This should probably a cond or a case to allow for different filter types.
 	  ;;(gnc:warn "Filter Mode: " filter-mode)
-	  (if (string=? filter-mode "include")
+	  (if (eq? filter-mode 'include)
 	      (begin
 		;;(gnc:warn "Including Filter Accounts")
 		(set! splits (filter (lambda (split) 
@@ -1151,7 +1151,7 @@ Credit Card, and Income accounts")))))
 		)
 	      )
 
-	  (if (string=? filter-mode "exclude")
+	  (if (eq? filter-mode 'exclude)
 	      (begin
 		;;(gnc:warn "Excluding Filter Accounts")
 		(set! splits (filter (lambda (split) 
