@@ -24,9 +24,14 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
 static void realizeCombo (struct _BasicCell *bcell, void *w, int width);
 static void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (struct _BasicCell *bcell);
+static void setComboValue (struct _BasicCell *bcell, const char *value);
 static const char * enterCombo (struct _BasicCell *bcell, const char *value);
 static const char * leaveCombo (struct _BasicCell *bcell, const char *value);
 
+#define SET(cell,str) { 			\
+   if ((cell)->value) free ((cell)->value);	\
+   (cell)->value = strdup (str);		\
+}
 
 /* =============================================== */
 
@@ -42,6 +47,7 @@ void xaccInitComboCell (ComboCell *cell)
 {
    xaccInitBasicCell ( &(cell->cell));
    cell->cell.realize = realizeCombo;
+   cell->cell.set_value = setComboValue;
    cell->menuitems = (char **) malloc (sizeof (char *));
    cell->menuitems[0] = NULL;
 }
@@ -97,7 +103,7 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
 {
    PopBox * box;
 
-   xaccSetBasicCellValue (&(cell->cell), str);
+   SET (&(cell->cell), str);
    box = (PopBox *) (cell->cell.gui_private);
 
    if (str) {
@@ -113,6 +119,15 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
    } else {
       XmComboBoxClearItemSelection (box->combobox);
    }
+}
+
+/* =============================================== */
+
+static void
+setComboValue (struct _BasicCell *_cell, const char *str)
+{
+   ComboCell * cell = (ComboCell *) _cell;
+   xaccSetComboCellValue (cell, str);
 }
 
 /* =============================================== */
@@ -341,6 +356,12 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
    cell = (ComboCell *) cd;
    box = (PopBox *) (cell->cell.gui_private);
 
+   if ((0 > box->currow) || (0 > box->curcol)) {
+/*
+      printf ("Internal Error: ComboBox: incorrect cell location \n");
+      return;
+*/
+   }
    /* check the reason, because the unslect callback 
     * doesn't even have a value field! */
    if ( (XmCR_SINGLE_SELECT == selection->reason) ||
@@ -349,9 +370,9 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
    }
    if (!choice) choice = XtNewString ("");
 
+printf ("combo selectcb choice %s at %d %d  \n", choice, box->currow, box->curcol);
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
-   xaccSetBasicCellValue (&(cell->cell), choice);
-printf ("celectcb choice %s \n", choice);
+   SET (&(cell->cell), choice);
    XtFree (choice);
 
    /* a diffeent way of getting the user's selection ... */

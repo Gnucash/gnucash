@@ -473,7 +473,7 @@ table->current_cursor_col,
 virt_row, virt_col);
 
       /* before leaving, the current virtual position,
-       * commit any aedits that have been accumulated 
+       * commit any edits that have been accumulated 
        * in the cursor */
       xaccCommitCursor (table);
       xaccMoveCursorGUI (table, virt_row, virt_col);

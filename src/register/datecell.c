@@ -1,9 +1,24 @@
 
+/*
+ * FILE:
+ * datecell.c
+ *
+ * HISTORY:
+ * Copyright (c) 1998 Linas Vepstas
+ */
+
 #include <string.h>
 #include <time.h>
 
 #include "basiccell.h"
 #include "datecell.h"
+
+static void setDateCellValue (struct _BasicCell *, const char *);
+
+#define SET(cell,str) { 			\
+   if ((cell)->value) free ((cell)->value);	\
+   (cell)->value = strdup (str);		\
+}
 
 #define DATE_SEP '/'
 
@@ -256,7 +271,9 @@ DateMV (struct _BasicCell *_cell,
 
    prtDate (buff, date->tm_mday, date->tm_mon+1, date->tm_year+1900);
 
-   xaccSetBasicCellValue (&(cell->cell), buff);
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
+
    datestr = strdup (buff);
    
    return datestr;
@@ -279,7 +296,9 @@ DateLeave (struct _BasicCell *_cell, const char * curr)
                   cell->date.tm_mon+1, 
                   cell->date.tm_year+1900);
 
-   xaccSetBasicCellValue (&(cell->cell), buff);
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
+
    retval = strdup (buff);
    return retval;
 }
@@ -312,11 +331,12 @@ xaccInitDateCell (DateCell *cell)
    cell->date = *now;
    prtDate (buff, now->tm_mday, now->tm_mon+1, now->tm_year+1900);
  
-   xaccSetBasicCellValue (&(cell->cell), buff);
+   SET (&(cell->cell), buff);
  
    cell->cell.enter_cell = DateEnter;
    cell->cell.modify_verify = DateMV;
    cell->cell.leave_cell = DateLeave;
+   cell->cell.set_value = setDateCellValue;
 }
 
 /* ================================================ */
@@ -337,7 +357,27 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
    cell->date.tm_year = dada.tm_year;
 
    prtDate (buff, dada.tm_mday, dada.tm_mon+1, dada.tm_year+1900);
-   xaccSetBasicCellValue (&(cell->cell), buff);
+
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
+}
+
+/* ================================================ */
+
+static void 
+setDateCellValue (struct _BasicCell *_cell, const char *str)
+{
+   DateCell *cell = (DateCell *) _cell;
+   char buff[30];
+
+   xaccParseDate (&(cell->date), str);
+
+   prtDate (buff, cell->date.tm_mday, 
+                  cell->date.tm_mon+1, 
+                  cell->date.tm_year+1900);
+
+   if (cell->cell.value) free (cell->cell.value);
+   cell->cell.value = strdup (buff);
 }
 
 /* ============== END OF FILE ===================== */

@@ -4,6 +4,21 @@
 #include "basiccell.h"
 #include "quickfillcell.h"
 
+#define SET(cell,str) { 			\
+   if ((cell)->value) free ((cell)->value);	\
+   (cell)->value = strdup (str);		\
+}
+
+/* ================================================ */
+
+static void 
+quick_set (struct _BasicCell *_cell,
+           const char *val) 
+{
+   QuickFillCell *cell = (QuickFillCell *) _cell;
+   xaccSetQuickFillCellValue (cell, val);
+}
+
 /* ================================================ */
 /* when entering new cell, reset pointer to root    */
 
@@ -61,7 +76,7 @@ quick_modify (struct _BasicCell *_cell,
       if (cell->qf) retval = strdup (cell->qf->text);
    }
 
-   xaccSetBasicCellValue (&(cell->cell), retval);
+   SET (&(cell->cell), retval);
    return retval;
 }
 
@@ -104,15 +119,16 @@ xaccInitQuickFillCell (QuickFillCell *cell)
    cell->cell.enter_cell    = quick_enter;
    cell->cell.modify_verify = quick_modify;
    cell->cell.leave_cell    = quick_leave;
+   cell->cell.set_value     = quick_set;
 }
 
 /* ================================================ */
 
 void
-xaccSetQuickFillCellValue (QuickFillCell *cell, char * value)
+xaccSetQuickFillCellValue (QuickFillCell *cell, const char * value)
 {
    xaccQFInsertText (cell->qfRoot, value);
-   xaccSetBasicCellValue (&(cell->cell), value);
+   SET (&(cell->cell), value);
 }
 
 /* =============== END OF FILE ==================== */

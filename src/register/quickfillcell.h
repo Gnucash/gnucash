@@ -32,7 +32,7 @@ typedef struct _QuickFillCell {
 QuickFillCell *  xaccMallocQuickFillCell (void);
 void             xaccInitQuickFillCell (QuickFillCell *);
 
-void             xaccSetQuickFillCellValue (QuickFillCell *, char *);
+void             xaccSetQuickFillCellValue (QuickFillCell *, const char *);
 
 #endif /* __XACC_FILL_CELL_C__ */
 

@@ -1,10 +1,21 @@
 
 #include <string.h>
 
+#include "util.h"
+
 #include "basiccell.h"
 #include "pricecell.h"
 
+static void PriceSetValue (struct _BasicCell *, const char *);
+static void Set (BasicCell *, const char *);
+
 #define DECIMAL_PT  '.'
+
+
+#define SET(cell,str) { 			\
+   if ((cell)->value) free ((cell)->value);	\
+   (cell)->value = strdup (str);		\
+}
 
 /* ================================================ */
 /* This callback only allows numbers with a single
@@ -16,7 +27,7 @@ PriceMV (struct _BasicCell *_cell,
          const char *change, 
          const char *newval)
 {
-   BasicCell *cell = (BasicCell *) _cell;
+   PriceCell *cell = (PriceCell *) _cell;
 
    /* accept the newval string if user action was delete, etc. */
    if (change) {
@@ -33,8 +44,9 @@ PriceMV (struct _BasicCell *_cell,
       }
    }
 
-   /* hack alert - should parse the float pt value  */
-   xaccSetBasicCellValue (cell, newval);
+   /* parse the float pt value  and store it */
+   cell->amount = xaccParseUSAmount (newval);
+   SET ((&(cell->cell)), newval);
    return newval; 
 }
 
@@ -57,9 +69,10 @@ xaccInitPriceCell (PriceCell *cell)
    xaccInitBasicCell( &(cell->cell));
    cell->amount = 0.0;
 
-   xaccSetBasicCellValue ( &(cell->cell), "0.0");
+   SET ( &(cell->cell), "0.0");
 
    cell->cell.modify_verify = PriceMV;
+   cell->cell.set_value = PriceSetValue;
 }
 
 /* ================================================ */
@@ -69,7 +82,7 @@ void xaccSetPriceCellValue (PriceCell * cell, double amt)
    char buff[40];
    cell->amount = amt;
    sprintf (buff, "%.3f", amt);
-   xaccSetBasicCellValue ( &(cell->cell), buff);
+   SET ( &(cell->cell), buff);
 }
 
 /* ================================================ */
@@ -79,7 +92,7 @@ void xaccSetAmountCellValue (PriceCell * cell, double amt)
    char buff[40];
    cell->amount = amt;
    sprintf (buff, "%.2f", amt);
-   xaccSetBasicCellValue ( &(cell->cell), buff);
+   SET ( &(cell->cell), buff);
 }
 
 /* ================================================ */
@@ -93,13 +106,29 @@ void xaccSetDebCredCellValue (PriceCell * deb,
 
    if (0.0 <= amt) {
       sprintf (buff, "%.2f", amt);
-      xaccSetBasicCellValue ( &(cred->cell), buff);
-      xaccSetBasicCellValue ( &(deb->cell), "");
+      SET ( &(cred->cell), buff);
+      SET ( &(deb->cell), "");
    } else {
       sprintf (buff, "%.2f", -amt);
-      xaccSetBasicCellValue ( &(cred->cell), "");
-      xaccSetBasicCellValue ( &(deb->cell), buff);
+      SET ( &(cred->cell), "");
+      SET ( &(deb->cell), buff);
    }
+}
+
+/* ================================================ */
+
+static void 
+PriceSetValue (struct _BasicCell *_cell, const char *str)
+{
+   char buff[40];
+   PriceCell *cell = (PriceCell *) _cell;
+
+   SET (((BasicCell *)_cell), str);
+
+   cell->amount = xaccParseUSAmount (str);
+
+   sprintf (buff, "%.2f", cell->amount);
+   SET ( &(cell->cell), buff);
 }
 
 /* --------------- end of file ---------------------- */
