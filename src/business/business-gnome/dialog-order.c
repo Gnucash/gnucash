@@ -45,6 +45,8 @@ struct _order_select_window {
 };
 
 typedef struct _order_window {
+  GladeXML *	xml;
+
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -66,6 +68,8 @@ typedef struct _order_window {
   GncOwner	owner;
 
 } OrderWindow;
+
+static void gnc_order_update_window (OrderWindow *ow);
 
 static GncOrder *
 ow_get_order (OrderWindow *ow)
@@ -136,16 +140,14 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   return TRUE;
 }
 
-static void
-gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
+static gboolean
+gnc_order_window_ok_save (OrderWindow *ow)
 {
-  OrderWindow *ow = data;
-
   if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
-    return;
+    return FALSE;
 
   if (!gnc_order_window_verify_ok (ow))
-    return;
+    return FALSE;
   
   /* Now save it off */
   {
@@ -155,8 +157,20 @@ gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
 
     }
     ow->created_order = order;
-    ow->order_guid = *xaccGUIDNULL ();
   }
+  return TRUE;
+}
+
+static void
+gnc_order_window_ok_cb (GtkWidget *widget, gpointer data)
+{
+  OrderWindow *ow = data;
+
+  if (!gnc_order_window_ok_save (ow))
+    return;
+
+  /* Ok, we don't need this anymore */
+  ow->order_guid = *xaccGUIDNULL ();
 
   gnc_close_gui_component (ow->component_id);
 }
@@ -189,10 +203,10 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
   /* Ok, go make an invoice */
   gnc_invoice_new (ow->dialog, &(ow->owner), ow->book); 
 
-  /* XXX: now refresh this window, it's possible a number of
-   * entries have changed
-   */
-  return;
+  /* XXX: This should really be unparented */
+
+  /* refresh the window */
+  gnc_order_update_window (ow);
 }
 
 static void
@@ -205,12 +219,9 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
   gboolean non_inv = FALSE;
   Timespec ts;
 
-  if (!gnc_entry_ledger_check_close (ow->dialog, ow->ledger))
-    return;
-
   /* Make sure the order is ok */
   if (!gnc_order_window_verify_ok (ow))
-      return;
+    return;
 
   /* Make sure we can close the order. Are there any uninvoiced entries? */
   order = ow_get_order (ow);
@@ -249,8 +260,15 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 
   gncOrderSetDateClosed (order, &ts);
 
-  /* And close the order */
-  return gnc_order_window_ok_cb (widget, data);
+  /* save it off */
+  gnc_order_window_ok_save (ow);
+
+  /* Reset the type; change to read-only */
+  ow->dialog_type = VIEW_ORDER;
+  gnc_entry_ledger_set_readonly (ow->ledger);
+
+  /* And redisplay the window */
+  gnc_order_update_window (ow);
 }
 
 static void
@@ -381,16 +399,98 @@ gnc_configure_register_colors (void)
   gnc_entry_ledger_set_colors (reg_colors);
 }
 
+static void
+gnc_order_update_window (OrderWindow *ow)
+{
+  GncOrder *order;
+  GncOwner *owner;
+  gboolean hide_cd = FALSE;
+
+  order = ow_get_order (ow);
+  owner = gncOrderGetOwner (order);
+
+  gtk_widget_show_all (ow->dialog);
+
+  {
+    const char *string;
+    Timespec ts, ts_zero = {0,0};
+    time_t tt;
+    gint pos = 0;
+
+    string = gncOrderGetNotes (order);
+    gtk_editable_delete_text (GTK_EDITABLE (ow->notes_text), 0, -1);
+    gtk_editable_insert_text (GTK_EDITABLE (ow->notes_text), string,
+			      strlen (string), &pos);
+
+    ts = gncOrderGetDateOpened (order);
+    if (timespec_equal (&ts, &ts_zero)) {
+      tt = time(NULL);
+    } else {
+      tt = ts.tv_sec;		/* XXX */
+    }
+    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->opened_date), tt);
+
+    ts = gncOrderGetDateClosed (order);
+    if (timespec_equal (&ts, &ts_zero)) {
+      tt = time(NULL);
+      hide_cd = TRUE;
+    } else {
+      tt = ts.tv_sec;		/* XXX */
+    }
+    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->closed_date), tt);
+
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
+                                gncOrderGetActive (order));
+
+  }
+
+  gnc_gui_component_watch_entity_type (ow->component_id,
+				       GNC_ORDER_MODULE_NAME,
+				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (ow->ledger), TRUE);
+
+  if (hide_cd) {
+    GtkWidget *hide;
+
+    gtk_widget_hide_all (ow->closed_date);
+    hide = glade_xml_get_widget (ow->xml, "cd_label");
+    gtk_widget_hide_all (hide);
+
+    hide = glade_xml_get_widget (ow->xml, "hide1");
+    gtk_widget_hide_all (hide);
+    hide = glade_xml_get_widget (ow->xml, "hide2");
+    gtk_widget_hide_all (hide);
+  }
+
+  if (ow->dialog_type == VIEW_ORDER) {
+    GtkWidget *hide;
+
+    /* Setup viewer for read-only access */
+    gtk_widget_set_sensitive (ow->id_entry, FALSE);
+    gtk_widget_set_sensitive (ow->opened_date, FALSE);
+    gtk_widget_set_sensitive (ow->closed_date, FALSE);
+    gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
+
+    /* Hide the 'close order' button */
+    hide = glade_xml_get_widget (ow->xml, "close_order_button");
+    gtk_widget_hide_all (hide);
+    hide = glade_xml_get_widget (ow->xml, "cancel_button");
+    gtk_widget_hide_all (hide);
+    hide = glade_xml_get_widget (ow->xml, "new_invoice_button");
+    gtk_widget_hide_all (hide);
+  }
+}
+
 static OrderWindow *
 gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 		      OrderDialogType type, GncOrder *order, GncOwner *owner)
 {
   OrderWindow *ow;
   GladeXML *xml;
-  GtkWidget *label, *hbox, *vbox, *regWidget, *cd_label;
+  GtkWidget *label, *hbox, *vbox, *regWidget;
   GncEntryLedger *entry_ledger = NULL;
   GnomeDialog *owd;
-  gboolean hide_cd = FALSE;
 
   gnc_configure_register_colors ();
 
@@ -407,7 +507,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   gncOwnerCopy (owner, &(ow->owner));
 
   /* Find the dialog */
-  xml = gnc_glade_xml_new ("order.glade", "Order Entry Dialog");
+  ow->xml = xml = gnc_glade_xml_new ("order.glade", "Order Entry Dialog");
   ow->dialog = glade_xml_get_widget (xml, "Order Entry Dialog");
   owd = GNOME_DIALOG (ow->dialog);
 
@@ -420,7 +520,6 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   ow->opened_date = glade_xml_get_widget (xml, "opened_date");
   ow->closed_date = glade_xml_get_widget (xml, "closed_date");
   ow->active_check = glade_xml_get_widget (xml, "active_check");
-  cd_label = glade_xml_get_widget (xml, "cd_label");
 
   hbox = glade_xml_get_widget (xml, "owner_hbox");
   label = glade_xml_get_widget (xml, "owner_label");
@@ -521,80 +620,14 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 		      GTK_SIGNAL_FUNC (gnc_order_owner_changed_cb),
 		      ow);
 
+  gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
+
   /* Set the Reference */
   gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
-  {
-    const char *string;
-    Timespec ts, ts_zero = {0,0};
-    time_t tt;
-    gint pos = 0;
+  /* Now fill in a lot of the pirces and display properly */
+  gnc_order_update_window (ow);
 
-    string = gncOrderGetNotes (order);
-    gtk_editable_delete_text (GTK_EDITABLE (ow->notes_text), 0, -1);
-    gtk_editable_insert_text (GTK_EDITABLE (ow->notes_text), string,
-			      strlen (string), &pos);
-
-    ts = gncOrderGetDateOpened (order);
-    if (timespec_equal (&ts, &ts_zero)) {
-      tt = time(NULL);
-    } else {
-      tt = ts.tv_sec;		/* XXX */
-    }
-    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->opened_date), tt);
-
-    ts = gncOrderGetDateClosed (order);
-    if (timespec_equal (&ts, &ts_zero)) {
-      tt = time(NULL);
-      hide_cd = TRUE;
-    } else {
-      tt = ts.tv_sec;		/* XXX */
-    }
-    gnome_date_edit_set_time (GNOME_DATE_EDIT (ow->closed_date), tt);
-
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
-                                gncOrderGetActive (order));
-
-  }
-
-  gnc_gui_component_watch_entity_type (ow->component_id,
-				       GNC_ORDER_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
-  gtk_widget_show_all (ow->dialog);
-  gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);
-
-  if (hide_cd) {
-    GtkWidget *hide;
-
-    gtk_widget_hide_all (ow->closed_date);
-    gtk_widget_hide_all (cd_label);
-
-    hide = glade_xml_get_widget (xml, "hide1");
-    gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (xml, "hide2");
-    gtk_widget_hide_all (hide);
-  }
-
-  if (type == VIEW_ORDER) {
-    GtkWidget *hide;
-
-    /* Setup viewer for read-only access */
-    gtk_widget_set_sensitive (ow->id_entry, FALSE);
-    gtk_widget_set_sensitive (ow->opened_date, FALSE);
-    gtk_widget_set_sensitive (ow->closed_date, FALSE);
-    gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
-
-    /* Hide the 'close order' button */
-    hide = glade_xml_get_widget (xml, "close_order_button");
-    gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (xml, "cancel_button");
-    gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (xml, "new_invoice_button");
-    gtk_widget_hide_all (hide);
-  }
-  
   return ow;
 }
 

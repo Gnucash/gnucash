@@ -36,8 +36,15 @@ gnc_module_description(void)
 int
 gnc_module_init(int refcount) 
 {
-  /* load business-core: we depend on it */
+  /* load business-core: we depend on it -- and it depends on the engine */
   if (!gnc_module_load ("gnucash/business-core", 0)) {
+    return FALSE;
+  }
+  /* We also depend on app-utils and gnome-utils modules */
+  if (!gnc_module_load ("gnucash/app-utils", 0)) {
+    return FALSE;
+  }
+  if (!gnc_module_load ("gnucash/gnome-utils", 0)) {
     return FALSE;
   }
 
