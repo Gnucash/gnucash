@@ -149,6 +149,11 @@ foreach $acct (@acctlist) {
                 $price = $quotes {$security, "nav"};
                 last QUOTE;
             }
+            if ("VANGUARD" eq $quotesrc) { 
+                %quotes = &Quote::vanguard ($security); 
+                $price = $quotes {$security, "nav"};
+                last QUOTE;
+            }
             next ACCTLOOP;  # no quote available, go to next account
          }
          $dayte = $quotes {$security, "date"};

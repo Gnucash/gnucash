@@ -428,9 +428,10 @@ Finance::Quote - Get stock and mutual fund quotes from various exchanges
 =head1 SYNOPSIS
 
   use Finance::Quote;
-  %quotes = Quote::yahoo @symbols;	# Get quotes for a bunch of symbols
-  %quotes = Quote::fidelity @symbols;	# Get quotes for a bunch of symbols
+  %quotes = Quote::yahoo @symbols;	# Get NYSE quotes from Yahoo
+  %quotes = Quote::fidelity @symbols;	# Get quotes from Fidelity Investments
   %quotes = Quote::troweprice @symbols;	# Get quotes from T. Rowe Price
+  %quotes = Quote::vanguard @symbols;	# Get quotes from the Vanguard Group
   print ("the last price was ", $quotes {"IBM", "last"} );
 
 =head1 DESCRIPTION
