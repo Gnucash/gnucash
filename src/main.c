@@ -159,7 +159,7 @@ main( int argc, char *argv[] )
   
   if( NULL == topgroup )
     {
-    topgroup = mallocAccountGroup();   /* the file could not be found */
+    topgroup = xaccMallocAccountGroup();   /* the file could not be found */
     topgroup->new = True;
     }
   

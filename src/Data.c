@@ -64,7 +64,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
 /********************************************************************\
 \********************************************************************/
 AccountGroup *
-mallocAccountGroup( void )
+xaccMallocAccountGroup( void )
   {
   AccountGroup *grp = (AccountGroup *)_malloc(sizeof(AccountGroup));
   
@@ -76,7 +76,7 @@ mallocAccountGroup( void )
 /********************************************************************\
 \********************************************************************/
 void
-freeAccountGroup( AccountGroup *grp )
+xaccFreeAccountGroup( AccountGroup *grp )
 {
   int i;
   if (NULL == grp) return;
@@ -84,7 +84,7 @@ freeAccountGroup( AccountGroup *grp )
   if (grp == topgroup) topgroup = NULL;  /* safety device */
 
   for( i=0; i<grp->numAcc; i++ ) {
-    freeAccount( grp->account[i] );
+    xaccFreeAccount( grp->account[i] );
   }
     
   _free( grp->account );
@@ -394,7 +394,7 @@ xaccRemoveAccount (Account *acc)
        * the group as well (unless its a root group) */
       if (grp->parent) {
          xaccRemoveGroup (grp);
-         freeAccountGroup (grp);
+         xaccFreeAccountGroup (grp);
        }
     }
     
@@ -413,7 +413,7 @@ xaccInsertSubAccount( Account *adult, Account *child )
 
   /* if a container for the children doesn't yet exist, add it */
   if (NULL == adult->children) {
-    adult->children = mallocAccountGroup();
+    adult->children = xaccMallocAccountGroup();
   }
 
   /* set back-pointer to parent */
@@ -537,7 +537,7 @@ xaccMergeAccounts (AccountGroup *grp)
                   acc_b->children = NULL;
                } else {
                   xaccConcatGroups (ga, gb);
-                  freeAccountGroup (gb);
+                  xaccFreeAccountGroup (gb);
                   acc_b->children = NULL;
                }
             }
@@ -557,7 +557,7 @@ xaccMergeAccounts (AccountGroup *grp)
 
             /* free the account structure itself */
             acc_b->numSplits = 0;
-            freeAccount (acc_b);
+            xaccFreeAccount (acc_b);
             grp->account[j] = grp->account[grp->numAcc -1];
             grp->account[grp->numAcc -1] = NULL;
             grp->numAcc --;

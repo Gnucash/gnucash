@@ -51,7 +51,7 @@ int next_free_unique_account_id = 0;
 /********************************************************************\
 \********************************************************************/
 Account *
-mallocAccount( void )
+xaccMallocAccount( void )
   {
   Account *acc = (Account *)_malloc(sizeof(Account));
   
@@ -83,7 +83,7 @@ mallocAccount( void )
 /********************************************************************\
 \********************************************************************/
 void
-freeAccount( Account *acc )
+xaccFreeAccount( Account *acc )
 {
   int i=0, j=0;
   Split *s, *debit_s;
@@ -93,7 +93,7 @@ freeAccount( Account *acc )
   if (NULL == acc) return;
     
   /* recursively free children */
-  freeAccountGroup (acc->children);
+  xaccFreeAccountGroup (acc->children);
 
   free(acc->accountName);
   free(acc->description);

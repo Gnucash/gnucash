@@ -937,8 +937,8 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       datafile = NULL;
       /* destroy open windows first, before destroying the group itself */
       xaccGroupWindowDestroy (grp);
-      freeAccountGroup (grp);
-      grp = mallocAccountGroup();
+      xaccFreeAccountGroup (grp);
+      grp = xaccMallocAccountGroup();
       grp->new = True;             /* so we have to do a "SaveAs" when
                                     * the file is first saved */
       topgroup = grp;
@@ -981,13 +981,13 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
               break;
            case ERR_FILEIO_FILE_TOO_OLD:
               if (!verifyBox( toplevel, FILE_TOO_OLD_MSG )) {
-                 freeAccountGroup (newgrp);
+                 xaccFreeAccountGroup (newgrp);
                  newgrp = NULL;
               }
               break;
            case ERR_FILEIO_FILE_BAD_READ:
               if (!verifyBox( toplevel, FILE_BAD_READ_MSG )) {
-                 freeAccountGroup (newgrp);
+                 xaccFreeAccountGroup (newgrp);
                  newgrp = NULL;
               }
               break;
@@ -999,7 +999,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         if (newgrp) {
           /* destroy open windows first, before destroying the group itself */
           xaccGroupWindowDestroy (grp);
-          freeAccountGroup (grp);
+          xaccFreeAccountGroup (grp);
           topgroup = newgrp;
         }
       }
@@ -1023,7 +1023,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       
         if( NULL == topgroup ) {
           /* no topgroup exists */
-          topgroup = mallocAccountGroup();
+          topgroup = xaccMallocAccountGroup();
         }
 
         /* since quicken will not export all accounts 
@@ -1070,7 +1070,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       
       /* destroy open windows first, before destroying the group itself */
       xaccGroupWindowDestroy (grp);
-      freeAccountGroup (grp);
+      xaccFreeAccountGroup (grp);
       topgroup = NULL;
       XtUnmapWidget(toplevel);     /* make it disappear quickly */
       XtDestroyWidget(toplevel);
@@ -1176,7 +1176,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
              * windows, if they are open */
             xaccAccountWindowDestroy (selected_acc);
             xaccRemoveAccount (selected_acc);
-            freeAccount (selected_acc);
+            xaccFreeAccount (selected_acc);
             selected_acc = NULL;
             refreshMainWindow();
             }

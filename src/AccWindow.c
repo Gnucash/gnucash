@@ -118,7 +118,7 @@ accWindow( Widget parent )
   
   accData = (AccWindow *)_malloc(sizeof(AccWindow));
 
-  accData->newacc = mallocAccount();
+  accData->newacc = xaccMallocAccount();
   
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
@@ -372,7 +372,7 @@ closeAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
 
-  if(accData->newacc) freeAccount (accData->newacc);  
+  if(accData->newacc) xaccFreeAccount (accData->newacc);  
 
   xaccFreeAccountMenu (accData->accMenu);
   _free(accData);

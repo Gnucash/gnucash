@@ -306,7 +306,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 
    if (!grp) return 0x0;
    do { 
-      acc = mallocAccount();
+      acc = xaccMallocAccount();
       if (cat) { 
          qifline = xaccReadQIFCategory (fd, acc);
       } else {
@@ -315,11 +315,11 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
       if ('!' == qifline [0]) break;
 
       if (-1 == acc->type) {  /* free up malloced data if unknown account type */
-         freeAccount(acc); 
+         xaccFreeAccount(acc); 
          continue;
       }
       if (!qifline) {  /* free up malloced data if the read bombed. */
-         freeAccount(acc); 
+         xaccFreeAccount(acc); 
          continue;
       }
 
@@ -516,7 +516,7 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
 
    /* if not, create it */
    if (!xfer_acc) {
-      xfer_acc = mallocAccount ();
+      xfer_acc = xaccMallocAccount ();
       xfer_acc->accountName = XtNewString (qifline);
       xfer_acc->description = XtNewString ("");
       xfer_acc->notes = XtNewString ("");
@@ -557,7 +557,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
 
    /* if not, create it */
    if (!xfer_acc) {
-      xfer_acc = mallocAccount ();
+      xfer_acc = xaccMallocAccount ();
       xfer_acc->accountName = XtNewString (qifline);
       xfer_acc->description = XtNewString ("");
       xfer_acc->notes = XtNewString ("");
@@ -905,11 +905,11 @@ xaccReadQIFData( char *datafile )
     return NULL;
     }
 
-  grp = mallocAccountGroup();
+  grp = xaccMallocAccountGroup();
   
   while (qifline) {
      if (STRSTR (qifline, "Type:Bank")) {
-        Account *acc   = mallocAccount();
+        Account *acc   = xaccMallocAccount();
         DEBUG ("got bank\n");
 
         acc->type = BANK;
@@ -935,7 +935,7 @@ xaccReadQIFData( char *datafile )
      } else
 
      if (STRSTR (qifline, "Type:Invst")) {
-        Account *acc   = mallocAccount();
+        Account *acc   = xaccMallocAccount();
         DEBUG ("got Invst\n");
 
         acc->type = BANK;
@@ -980,15 +980,15 @@ xaccReadQIFData( char *datafile )
         } else {
            /* read account name, followed by dollar data ... */
            Account *preexisting;
-           Account *acc   = mallocAccount();
+           Account *acc   = xaccMallocAccount();
            DEBUG ("got account\n");
            qifline = xaccReadQIFAccount (fd, acc);
            if (!qifline) {  /* free up malloced data if the read bombed. */
-              freeAccount(acc); 
+              xaccFreeAccount(acc); 
               continue;
            }
            if (-1 == acc->type) {  /* free up malloced data if unknown account type */
-              freeAccount(acc); 
+              xaccFreeAccount(acc); 
               continue;
            }
 
@@ -996,7 +996,7 @@ xaccReadQIFData( char *datafile )
             * if we do, use it, otherwise create it */
            preexisting = xaccGetAccountFromName (grp, acc->accountName);
            if (preexisting) {
-              freeAccount (acc);
+              xaccFreeAccount (acc);
               acc = preexisting;
            } else {
               insertAccount( grp, acc );

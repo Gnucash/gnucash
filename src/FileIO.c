@@ -235,7 +235,7 @@ xaccReadData( char *datafile )
     return NULL;
   }
   
-  holder = mallocAccountGroup();
+  holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
 
   /* the number of unclaimed accounts should be zero if the 
@@ -247,12 +247,12 @@ xaccReadData( char *datafile )
     error_code = ERR_FILEIO_FILE_BAD_READ;
 
     /* create a lost account, put the missing accounts there */
-    acc = mallocAccount();
+    acc = xaccMallocAccount();
     acc -> accountName = strdup (LOST_ACC_STR);
     acc -> children = (struct _account_group *) holder;
     insertAccount (grp, acc);
   } else {
-    freeAccountGroup (holder);
+    xaccFreeAccountGroup (holder);
     holder = NULL;
   }
 
@@ -275,7 +275,7 @@ readGroup (int fd, Account *aparent, int token)
   int  numAcc;
   int  err=0;
   int  i;
-  AccountGroup *grp = mallocAccountGroup();
+  AccountGroup *grp = xaccMallocAccountGroup();
   
   ENTER ("readGroup");
 
@@ -287,7 +287,7 @@ readGroup (int fd, Account *aparent, int token)
   err = read( fd, &numAcc, sizeof(int) );
   if( sizeof(int) != err ) 
     {
-    freeAccountGroup (grp);
+    xaccFreeAccountGroup (grp);
     return NULL;
     }
   XACC_FLIP_INT (numAcc);
@@ -341,7 +341,7 @@ readAccount( int fd, AccountGroup *grp, int token )
     XACC_FLIP_INT (accID);
     acc = locateAccount (accID);
   } else {
-    acc = mallocAccount();
+    acc = xaccMallocAccount();
     insertAccount (holder, acc);
   }
   
@@ -431,7 +431,7 @@ locateAccount (int acc_id)
 
    /* if neither, then it does not yet exist.  Create it.
     * Put it in the drunk tank. */
-   acc = mallocAccount ();
+   acc = xaccMallocAccount ();
    acc->id = acc_id;
    insertAccount (holder, acc);
 
