@@ -38,6 +38,7 @@ gncscmmod_DATA = \
    register.scm \
    standard-reports.scm \
    trial-balance.scm \
+   general-journal.scm \
    general-ledger.scm \
    transaction.scm 
 
