@@ -21,6 +21,7 @@
  *                                                                  *
  *******************************************************************/
 
+#define _GNU_SOURCE
 #include <limits.h>
 #include <string.h>
 #include <stdint.h>
@@ -43,6 +44,7 @@ struct _gnc_commodity {
   char   * printname;
   char   * exchange_code;  /* CUSIP or other identifying code */
   int    fraction;
+  char   * unique_name;  
 };
 
 struct _gnc_commodity_namespace {
@@ -78,6 +80,10 @@ gnc_commodity_new(const char * fullname,
                                       retval->mnemonic,
                                       retval->fullname);
   
+  retval->unique_name = g_strdup_printf("%s::%s",
+                                      retval->namespace,
+                                      retval->mnemonic);
+  
   return retval;
 }
 
@@ -94,6 +100,7 @@ gnc_commodity_destroy(gnc_commodity * cm) {
   g_free(cm->namespace);
   g_free(cm->exchange_code);
   g_free(cm->mnemonic);
+  g_free(cm->unique_name);
   g_free(cm);
 }
 
@@ -141,6 +148,16 @@ gnc_commodity_get_fullname(const gnc_commodity * cm) {
 }
 
 
+/********************************************************************
+ * gnc_commodity_get_unique_name
+ ********************************************************************/
+
+const char *
+gnc_commodity_get_unique_name(const gnc_commodity * cm) {
+  if(!cm) return NULL;
+  return cm->unique_name;
+}
+
 
 /********************************************************************
  * gnc_commodity_get_exchange_code
@@ -177,6 +194,10 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
   g_free(cm->printname);
   cm->printname = g_strdup_printf("%s:%s (%s)", 
                                   cm->namespace, cm->mnemonic, cm->fullname);
+
+  g_free(cm->unique_name);
+  cm->unique_name = g_strdup_printf("%s::%s", 
+                                  cm->namespace, cm->mnemonic);
 }
 
 /********************************************************************
@@ -186,8 +207,16 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
 void
 gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
   if(!cm) return;
+
   g_free(cm->namespace);
   cm->namespace = g_strdup(namespace);
+
+  g_free(cm->printname);
+  cm->printname = g_strdup_printf("%s:%s (%s)", 
+                                  cm->namespace, cm->mnemonic, cm->fullname);
+  g_free(cm->unique_name);
+  cm->unique_name = g_strdup_printf("%s::%s", 
+                                  cm->namespace, cm->mnemonic);
 }
 
 /********************************************************************

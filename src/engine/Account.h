@@ -191,6 +191,31 @@ void xaccAccountSetName (Account *account, const char *name);
 void xaccAccountSetCode (Account *account, const char *code);
 void xaccAccountSetDescription (Account *account, const char *desc);
 void xaccAccountSetNotes (Account *account, const char *notes);
+
+GNCAccountType xaccAccountGetType (Account *account);
+const char *   xaccAccountGetName (Account *account);
+const char *   xaccAccountGetCode (Account *account);
+const char *   xaccAccountGetDescription (Account *account);
+const char *   xaccAccountGetNotes (Account *account);
+
+/* New commodity access routines.
+ * In the near future, there will only be one commodity associated
+ * with an account, rather than two.  Use the 
+ * xaccAccountSetCommodity() and xaccAccountGetCommodity() 
+ * routines to set and fetch it.
+ *
+ * Basically, the next version of the engine will eliminate the 
+ * 'currency' field of the Account structure.  Instead, the common
+ * currency will be stored with the transaction.  This will 
+ * vastly simplify inter-account transfers.
+ */
+#define xaccAccountGetCommodity xaccAccountGetEffectiveSecurity
+void xaccAccountSetCommodity (Account *account, const gnc_commodity *comm);
+
+/* Soon-to-be-deprecated currency/security access routines.
+ * The future API will associate only one thing with an account:
+ * the 'commodity'.  Use xaccAccountGetCommodity() to fetch it.
+ */
 void xaccAccountSetCurrency (Account *account, const gnc_commodity *currency);
 void xaccAccountSetSecurity (Account *account, const gnc_commodity *security);
 void xaccAccountSetCurrencySCU (Account *account, int frac);
@@ -198,11 +223,6 @@ void xaccAccountSetSecuritySCU (Account *account, int frac);
 int  xaccAccountGetCurrencySCU (Account *account);
 int  xaccAccountGetSecuritySCU (Account *account);
 
-GNCAccountType xaccAccountGetType (Account *account);
-const char *   xaccAccountGetName (Account *account);
-const char *   xaccAccountGetCode (Account *account);
-const char *   xaccAccountGetDescription (Account *account);
-const char *   xaccAccountGetNotes (Account *account);
 const gnc_commodity * xaccAccountGetCurrency (Account *account);
 const gnc_commodity * xaccAccountGetSecurity (Account *account);
 const gnc_commodity * xaccAccountGetEffectiveSecurity (Account *account);

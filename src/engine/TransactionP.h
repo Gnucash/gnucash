@@ -153,6 +153,17 @@ struct _transaction
    * it's NULL until accessed. */
   kvp_frame * kvp_data;
 
+
+  /* The common_currency field indicates the currency type that
+   * all of the splits in this transaction share in common.  This
+   * field is going to replace the currency field in the account
+   * structures.  However, right now we are in a transition period:
+   * we store it here an in the account, and test its value dynamically
+   * for correctness.  If we can run for a few months without errors,
+   * then we'll make the conversion permanent.
+   */
+  const gnc_commodity *common_currency;
+
   GList * splits; /* list of splits */
 
   /* marker is used to track the progress of transaction traversals. 

@@ -555,6 +555,7 @@ xaccInitTransaction (Transaction * trans)
   trans->num         = g_cache_insert(gnc_string_cache, "");
   trans->description = g_cache_insert(gnc_string_cache, "");
 
+  trans->common_currency = NULL;
   trans->splits = NULL;
 
   trans->date_entered.tv_sec  = 0;
@@ -1096,7 +1097,7 @@ FindCommonCurrency (GList *splits,
 const gnc_commodity *
 xaccTransFindCommonCurrency (Transaction *trans)
 {
-  const gnc_commodity * ra, * rb;
+  const gnc_commodity *ra, *rb, *retval;
   Split *split;
 
   if (!trans) return NULL;
@@ -1110,7 +1111,21 @@ xaccTransFindCommonCurrency (Transaction *trans)
   ra = xaccAccountGetCurrency (split->acc);
   rb = xaccAccountGetSecurity (split->acc);
 
-  return FindCommonCurrency (trans->splits, ra, rb);
+  retval = FindCommonCurrency (trans->splits, ra, rb);
+
+  /* compare this value to what we think should be the 'right' value */
+  if (!trans->common_currency)
+  {
+    trans->common_currency = retval;
+  }
+  else if (!gnc_commodity_equiv (retval,trans->common_currency))
+  {
+    PWARN ("expected common currency %s but found %s\n",
+        gnc_commodity_get_unique_name (trans->common_currency),
+        gnc_commodity_get_unique_name (retval));
+  }
+
+  return retval;
 }
 
 const gnc_commodity *
@@ -1127,6 +1142,39 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 {
   if (!trans) return NULL;
   return FindCommonExclSCurrency (trans->splits, ra, NULL, excl_split);
+}
+
+/********************************************************************\
+\********************************************************************/
+/* The new routine for setting the common currency */
+
+void
+xaccTransSetCurrency (Transaction *trans, const gnc_commodity *curr)
+{
+  if (!trans || !curr) return;
+
+  if (trans->common_currency)
+  {
+     PWARN ("currency already set\n");
+     if (!gnc_commodity_equiv (curr,trans->common_currency))
+     {
+       PWARN ("asked to change from common currency %s to %s\n"
+              "doing so hasn't been test and may orrupt the system\n",
+           gnc_commodity_get_unique_name (trans->common_currency),
+           gnc_commodity_get_unique_name (curr));
+     }
+  }
+  else
+  {
+    trans->common_currency = curr;
+
+    /* The following code will be obsolete when we finally eliminate
+     * the storage of the currency with the account. But in the meanwhile.
+     * we will try to keep it in sync, so that both the old and new ways
+     * work.
+     */
+    
+  }
 }
 
 /********************************************************************\

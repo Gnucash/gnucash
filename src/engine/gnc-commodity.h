@@ -51,6 +51,7 @@ const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
 const char * gnc_commodity_get_fullname(const gnc_commodity * cm);
 const char * gnc_commodity_get_printname(const gnc_commodity * cm);
 const char * gnc_commodity_get_exchange_code(const gnc_commodity * cm);
+const char * gnc_commodity_get_unique_name(const gnc_commodity * cm);
 int   gnc_commodity_get_fraction(const gnc_commodity * cm);
 
 void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);

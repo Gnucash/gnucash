@@ -103,6 +103,7 @@ xaccInitAccount (Account * acc)
 
   xaccGUIDNew(&acc->guid);
   xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
+  LEAVE ("guid=%s\n", guid_to_string(&acc->guid));
 }
 
 /********************************************************************\
@@ -341,6 +342,7 @@ xaccAccountSetGUID (Account *account, GUID *guid)
 {
   if (!account || !guid) return;
 
+  PINFO("acct=%p guid=%s", account, guid_to_string(guid));
   xaccRemoveEntity(&account->guid);
 
   account->guid = *guid;
@@ -967,6 +969,50 @@ update_split_currency(Account * acc) {
 				     GNC_RND_ROUND);
   }
 }
+
+/********************************************************************\
+\********************************************************************/
+/* This is an experimental implementation of set commodity.  In the
+ * long haul, it will need to set the one and only commodity field.
+ * But in the interim phase, we try to guess right ...
+ */
+
+void 
+xaccAccountSetCommodity (Account * acc, const gnc_commodity * com) 
+{
+  if ((!acc) || (!com)) return;
+  if (!acc->currency)
+  {
+     xaccAccountSetCurrency (acc, com);
+     if (acc->security)
+     {
+        PWARN ("security was set, but currency wasn't");
+     }
+     return;
+  }
+
+  if (gnc_commodity_equiv(com, acc->currency)) return;
+
+  if (!acc->security)
+  {
+     xaccAccountSetSecurity (acc, com);
+     return;
+  }
+
+  if (gnc_commodity_equiv(com, acc->security)) return;
+  
+  PWARN ("unexpected, don't know what to do\n"
+         "\tacc->currecny=%s\n"
+         "\tacc->security=%s\n"
+         "\tset commodity=%s\n",
+         gnc_commodity_get_unique_name (acc->currency),
+         gnc_commodity_get_unique_name (acc->security),
+         gnc_commodity_get_unique_name (com));
+}
+
+/********************************************************************\
+\********************************************************************/
+/* below follow the old, deprecated currency/security routines. */
 
 void 
 xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {

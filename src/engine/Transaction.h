@@ -226,6 +226,33 @@ Timespec      xaccTransRetDatePostedTS (Transaction *trans);
  */
 int           xaccTransCountSplits (Transaction *trans);
 
+/* --------------------------------------------------------------- */
+/* Commmodities.  Most of the commodty routines below are/will
+ * be obsolescent.  They will all be replaced by two routines:
+ * xaccTransSet/GetCurrency().  
+ * The xaccTransGetCurrency() routine will give the same result
+ * as xaccTransFindCommonCurrency(), except that 'finding' won't
+ * be necessary: the common currency will be stored with the 
+ * transaction.  This will guarentee that a common currency is 
+ * always avaiable, thus eliminating the need for many of the other
+ * checks and comparisons.
+ *
+ * Note side effect: the Account structure will no longer store
+ * a currency.   Meanwhile, we'll be in a transition period, where
+ * we store teh currency both in the account and the transaction. 
+ * Warning messages will print to the screen if things don't go well.
+ * If there are no warnings after a few months, then we'll make the
+ * transition permanent.  Meanwhile, the xaccTransSetCurrency()
+ * will attempt to do 'the right thing'.
+ */
+
+#define xaccTransGetCurrency xaccTransFindCommonCurrency
+void xaccTransSetCurrency (Transaction *trans, 
+                           const gnc_commodity *curr);
+
+/* ---------
+ * and now for the 'old' routines 
+ * --------- */
 
 /* xaccIsCommonCurrency returns true if the given currency/security
  * pairs have a currency in common. It uses the same method as
