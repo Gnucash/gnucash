@@ -1,5 +1,8 @@
 2002-12-23  David Hampton  <hampton@employees.org>
 
+	* macros/autogen.sh: Enable -Werror for all builds.
+	
+
 	* src/app-file/gnc-file.c: Add missing error message.
 
 	* src/backend/file/sixtp-dom-parsers.c:
