@@ -94,7 +94,7 @@ qof_book_destroy (QofBook *book)
 {
   if (!book) return;
 
-  ENTER ("book=%p", book);
+  ENTER ("book=%p etable=%p", book, book->entity_table);
   gnc_engine_force_event (&book->guid, QOF_ID_BOOK, GNC_EVENT_DESTROY);
 
   qof_object_book_end (book);
