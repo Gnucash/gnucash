@@ -162,6 +162,15 @@ gint gnc_register_gui_component_scm (const char * component_class,
                                      SCM refresh_handler,
                                      SCM close_handler);
 
+/* gnc_gui_component_set_session
+ *   Set the associated session of this component
+ *
+ * component_id: id of component which is watching the entity
+ * session:      the session this component is associated with
+ */
+void
+gnc_gui_component_set_session (gint component_id, gpointer session);
+
 /* gnc_gui_component_watch_entity
  *   Add an entity to the list of those being watched by the component.
  *   Only entities with refresh handlers should add watches.
@@ -287,6 +296,15 @@ void gnc_close_gui_component (gint component_id);
  */
 void gnc_close_gui_component_by_data (const char *component_class,
                                       gpointer user_data);
+
+/* gnc_close_gui_component_by_session
+ *   Invoke the close handler for components with the given session
+ *
+ * session:         session to close
+ *                  all components with that session
+ *                  are closed.
+ */
+void gnc_close_gui_component_by_session (gpointer session);
 
 /* gnc_find_gui_components
  *   Search for components in the specified class.

@@ -1806,6 +1806,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
                                                  refresh_handler,
                                                  close_handler, aw);
 
+  gnc_gui_component_set_session (aw->component_id, gnc_get_current_session());
   gnc_gui_component_watch_entity_type (aw->component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
@@ -2045,6 +2046,7 @@ gnc_ui_edit_account_window(Account *account)
                                                  refresh_handler,
                                                  close_handler, aw);
 
+  gnc_gui_component_set_session (aw->component_id, gnc_get_current_session());
   gnc_gui_component_watch_entity_type (aw->component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);

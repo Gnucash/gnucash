@@ -1,3 +1,17 @@
+2003-01-05  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-component-manager.c: New functions for
+	attaching a session to a component, for finding all components
+	with a given session, and for closing all components with a given
+	session.
+
+	* src/gnome-utils/dialog-account.c: Attach session values to the
+	components for "New Account" and "Edit Account" windows. #103531
+
+	* src/app-file/gnc-file.c (gnc_file_new): Before destroying the
+	session, call new routine to close any open components related to
+	this session. #102531
+
 2003-01-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main.scm -- mention bugzilla in the unstable message

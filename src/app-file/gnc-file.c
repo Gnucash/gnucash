@@ -278,6 +278,7 @@ gnc_file_new (void)
 	    gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
 	    SCM_BOOL_F));
 
+  gnc_close_gui_component_by_session (session);
   gnc_session_destroy (session);
 
   /* start a new book */

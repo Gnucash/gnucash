@@ -58,6 +58,7 @@ typedef struct
 
   char *component_class;
   gint component_id;
+  gpointer session;
 } ComponentInfo;
 
 
@@ -366,6 +367,23 @@ find_components_by_data (gpointer user_data)
   return list;
 }
 
+static GList *
+find_components_by_session (gpointer session)
+{
+  GList *list = NULL;
+  GList *node;
+
+  for (node = components; node; node = node->next)
+  {
+    ComponentInfo *ci = node->data;
+
+    if (ci->session == session)
+      list = g_list_prepend (list, ci);
+  }
+
+  return list;
+}
+
 static ComponentInfo *
 gnc_register_gui_component_internal (const char * component_class)
 {
@@ -392,6 +410,7 @@ gnc_register_gui_component_internal (const char * component_class)
 
   ci->component_class = g_strdup (component_class);
   ci->component_id = component_id;
+  ci->session = NULL;
 
   components = g_list_prepend (components, ci);
 
@@ -808,6 +827,39 @@ gnc_close_gui_component_by_data (const char *component_class,
     if (component_class &&
         safe_strcmp (component_class, ci->component_class) != 0)
       continue;
+
+    gnc_close_gui_component (ci->component_id);
+  }
+
+  g_list_free (list);
+}
+
+void
+gnc_gui_component_set_session (gint component_id, gpointer session)
+{
+  ComponentInfo *ci;
+
+  ci = find_component (component_id);
+  if (!ci)
+  {
+    PERR ("component not found");
+    return;
+  }
+
+  ci->session = session;
+}
+
+void
+gnc_close_gui_component_by_session (gpointer session)
+{
+  GList *list;
+  GList *node;
+
+  list = find_components_by_session (session);
+
+  for (node = list; node; node = node->next)
+  {
+    ComponentInfo *ci = node->data;
 
     gnc_close_gui_component (ci->component_id);
   }
