@@ -1334,16 +1334,7 @@ etc ...
 
       <dd>
         A module is necessary to allow data to be fetched from an
-        SQL database, and for that database to be updated. Some
-        thoughts: SQL databases do not need to be locked during
-        editing: instead, an optimistic approach, similar to that
-        employed by CVS (concurrent version system, a mechanism for
-        storing versions of source code) could be used: if the
-        edits conflict with changes made by others, the edit could
-        be rejected en-masse, allowing the user to merge and
-        correct their changes. This is a very important note:
-        updating SQL does NOT require locks to be held for long
-        periods of time! 
+        SQL database, and for that database to be updated. 
 
         <p> There has been <em> much</em> discussion about this on
         mailing lists both for GnuCash and <a href= 
@@ -1355,11 +1346,9 @@ etc ...
             Those SQL databases available on Linux tend to involve
             considerable <em> administrative</em> overhead in terms
             of getting them set up. 
-
-            <p> This may be a minor cost to a business enterprise
+            This may be a minor cost to a business enterprise
             that hires DataBase Administrators.</p>
-
-            <p> It is <em> not</em> acceptable to require this of
+            It is <em> not</em> acceptable to require this of
             naive users that may find "simple" things like</p>
 <pre>
 % su -
@@ -1371,27 +1360,47 @@ Password:
             to be challenging.
           </li>
 
-          <li>The <em> real</em> need may be to use an embedded
+          <li>It might be useful to use an embedded
           database engine like unto <a href= 
-          "http://www.sleepycat.com/"> Sleepycat DB,</a> <a href= 
+          "http://www.sleepycat.com/"> Sleepycat DB</a>, <a href= 
           "ftp://koobera.math/uic.edu/www.cdb.html"> cdb,</a> or
           something like <a href= 
-          "http://www.opengroup.org/public/prods/dmm4.htm"> Open
-          Group - ISAM.</a></li>
+          "http://www.opengroup.org/public/prods/dmm4.htm">
+          ISAM</a> (Note CQL++ supports ISAM access methds), 
+          or even an embedded SQL engine such as 
+          <a href="http://www.ispras.ru/~knizhnik/gigabase.html">GigaBASE</a>.
+          The point of doing so would be to to provide a uniform,
+          more-easily-extensible, more portable interface to the data.
+          </li>
 
           <li>
             GnuCash presently uses a document-oriented model, where
             the <em>entire</em> set of books are loaded in, and
             dumped out, all at one fell swoop. 
+            GnuCash needs to be modified to access the database in a
+            transactional manner.  This at least partly implemented
+            with the Begin()/End() constructs in the engine.
+            <p>
+        Some transactional thoughts: entire SQL tables/databases 
+        do not need to be locked while the user is editing a transaction
+        via the GUI.
+        Instead, an optimistic approach, similar to that
+        employed by CVS (concurrent version system, a mechanism for
+        storing versions of source code) could be used: if the
+        edits conflict with changes made by others, the edit could
+        be rejected en-masse, allowing the user to merge and
+        correct their changes. This is a very important note:
+        updating SQL does NOT require locks to be held for long
+        periods of time! 
 
-            <p> Changing GnuCash to be suited to use a DBMS in
-            other than a "load-it-all" / "dump-it-all" manner, but
-            to rather update the database in a transactional
-            manner.</p>
+           <li>
+The SQL engine chosen should be fully transactional, passing the 'ACID'
+test (Atomicity, Consistency, Isolation, Durability).  
+Note that <a href="http://openacs.org/why-not-mysql.html">MySQL 
+doesn't pass the 'ACID' test</a>.
+<p>
 
-            <p> That being said, it may be possible to recast the
-            GnuCash <tt>engine</tt> functionality so as to handle
-            storage in a transactional manner.</p>
+
           </li>
         </ul>
       </dd>
@@ -1529,7 +1538,7 @@ internationalized text rendering for gtk.
       RPM's</a></li>
 
       <li><a href="http://www.sabotage.net/security/ecash/lucre/">
-      -lucre</a> a publiclyly  available version of e-cash.</li>
+      -lucre</a> a publicaly  available version of e-cash.</li>
 
       <li><a href="http://www.openapplications.org/">Open
       Applications Group</a> is developing specs for accounting
@@ -1587,6 +1596,9 @@ internationalized text rendering for gtk.
 
       <li><a href="http://www.im.lcs.mit.edu/~magnus/ml/">Maxwell's
       Lemur -- a GTK based table widget</a></li>
+
+      <li><a href="http://www.ispras.ru/~knizhnik/gigabase.html">GigaBASE</a>
+      embeddabale SQL database.
 
     </ul>
     <h1>Historical References</h1>
