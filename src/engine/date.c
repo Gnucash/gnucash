@@ -102,6 +102,14 @@ printDateSecs (char * buff, time_t t)
 }
 
 
+char * 
+xaccPrintDateSecs (time_t t)
+{
+   char buff[100];
+   printDateSecs (buff, t);
+   return strdup (buff);
+}
+
 /**
  * scanDate
  *    Convert a string into  day / month / year integers according to

@@ -91,6 +91,8 @@ typedef enum
 void printDate (char * buff, int day, int month, int year);
 void printDateSecs (char * buff, time_t secs);
 
+char * xaccPrintDateSecs (time_t secs);
+
 void scanDate (const char *buff, int *day, int *monty, int *year);
 char dateSeparator(void);
 
