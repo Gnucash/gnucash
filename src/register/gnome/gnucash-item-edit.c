@@ -383,7 +383,8 @@ item_edit_event (GnomeCanvasItem *item, GdkEvent *event)
 int
 item_edit_get_toggle_offset (int row_height)
 {
-        return row_height - 10 + 3;
+        /* sync with item_edit_update */
+        return row_height - (2 * (CELL_VPADDING + 1)) + 3;
 }
 
 static void
