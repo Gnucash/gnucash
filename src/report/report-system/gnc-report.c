@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <guile/gh.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "gnc-report.h"

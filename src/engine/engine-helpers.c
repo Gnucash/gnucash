@@ -2166,7 +2166,7 @@ gint64
 gnc_scm_to_gint64(SCM num)
 {
 #if GUILE_LONG_LONG_OK 
-  return scm_num2long_long(num, (char *) SCM_ARG1, "gnc_scm_to_gint64");
+  return scm_num2long_long(num, SCM_ARG1, "gnc_scm_to_gint64");
 #else
   static SCM bits00to15_mask = SCM_BOOL_F;
   SCM magnitude  = scm_abs(num);

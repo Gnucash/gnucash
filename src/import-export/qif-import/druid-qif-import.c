@@ -1460,7 +1460,10 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   /* this shouldn't happen, but DTRT if it does */
   if(gh_null_p(wind->new_stocks)) {
     printf("somehow got to commodity doc page with nothing to do... BUG!\n");
-    show_matches = gnc_ui_qif_import_convert(wind);
+    if (gnc_ui_qif_import_convert(wind))
+      show_matches = SCM_BOOL_T;
+    else
+      show_matches = SCM_BOOL_F;
     
     if(show_matches) {
       if(wind->show_doc_pages) {
