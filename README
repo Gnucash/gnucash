@@ -265,7 +265,7 @@ Rob Browning <rlb@cs.utexas.edu> abused everyone for not using perl,
 
 Fixes & Patches:
 ----------------
-Fred Baube <fred@moremagic.com> for Java port
+Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <linux@cyberramp.net> for GnoMoney & GTK port
