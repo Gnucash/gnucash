@@ -54,15 +54,33 @@
  *    they want to keep their data files.
  *
  * 6) In the future, this class is probably a good place to manage 
- *    a portion of the user authentication porcess, and hold user
+ *    a portion of the user authentication process, and hold user
  *    credentials/cookies/keys/tokens.  This is because at the 
  *    coarsest level, authorization can happen at the datastore
  *    level: i.e. does this user even have the authority to connect
  *    to and open this datastore?
  *
+ * A breif note about books & sessions:
+ * A book encapsulates the datasets manipulated by GnuCash.  A book
+ * holds the actual data.  By contrast, the session mediates the
+ * connection between a book (the thing that lives in virtual memory
+ * in the local process) and the datastore (the place where book
+ * data lives permanently, e.g., file, database).
+ *
+ * In the current design, a session may hold multiple books.  For 
+ * now, exactly what this means is somewhat vague, and code in  
+ * various places makes some implicit assumptions: first, only
+ * one book is 'current' and open for editing.  Next, its assumed 
+ * that all of the books in a session are related in some way.
+ * i.e. that they are all earlier accounting periods of the
+ * currently open book.  In particular, the backends probably 
+ * make that assumption, in order to store the different accounting
+ * periods in a clump so that one can be found, given another.
+ *
+ *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998, 1999, 2001, 2002 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
  */
 
@@ -127,7 +145,7 @@ void gnc_session_begin (GNCSession *session, const char * book_id,
  *    to use with this URL/datastore.   When the URL points at a file, 
  *    then this routine would load the data from the file.  With remote
  *    backends, e.g. network or SQL, this would load only enough data
- *    to make teh book actually usable; it would not cause *all* of the
+ *    to make the book actually usable; it would not cause *all* of the
  *    data to be loaded.
  */
 void gnc_session_load (GNCSession *session);

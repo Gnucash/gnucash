@@ -37,20 +37,21 @@
 
 struct gnc_session_struct
 {
-  /* The book is the cache for the underlying gnucash dataset. */
-  GNCBook *book;
+  /* A book holds pointers to the various types of datasets used
+   * by GnuCash.  A session may have open multiple books.  */
+  GList *books;
 
   /* the requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
    */
   char *book_id;
 
-  /* if any book subroutine failed, this records the failure reason 
+  /* If any book subroutine failed, this records the failure reason 
    * (file not found, etc).
-   * This is a 'stack' that is one deep.
-   * FIXME: This is a hack.  I'm trying to move us away from static
-   * global vars. This may be a temp fix if we decide to integrate
-   * FileIO errors into GNCBook errors. 
+   * This is a 'stack' that is one deep.  (Should be deeper ??)
+   * FIXME: Each backend has its own error stack. The session
+   * and the backends should all be using (or making it look like)
+   * there is only one stack.
    */
   GNCBackendError last_err;
   char *error_message;
@@ -65,15 +66,16 @@ struct gnc_session_struct
 };
 
 
+/* 
+ * gnc_session_set_book() has funny semantics.
+ * The session stores a list of books.  If you call this routine
+ * with a book that is closed, then its added to the list.  If
+ * you call this routine with a book that is open, then the
+ * old list is blown away.
+ */
 void gnc_session_set_book (GNCSession *session, GNCBook *book);
 
 Backend * gnc_session_get_backend (GNCSession *session);
-
-/*
- * used by backends to mark the notsaved as FALSE just after 
- * loading.  Do not use otherwise!
- */
-
 
 void gnc_session_push_error (GNCSession *session, GNCBackendError err,
                              const char *message);

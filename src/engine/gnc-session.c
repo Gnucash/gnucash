@@ -55,14 +55,26 @@
 
 static short module = MOD_IO;
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
+/* error handling routines */
 
 static void
 gnc_session_clear_error (GNCSession *session)
 {
+  GNCBackendError err;
+
   session->last_err = ERR_BACKEND_NO_ERR;
   g_free(session->error_message);
   session->error_message = NULL;
+
+  /* pop the stack on the backend as well. */
+  if (session->backend)
+  {
+    do
+    {
+       err = xaccBackendGetError (session->backend);
+    } while (ERR_BACKEND_NO_ERR != err);
+  }
 }
 
 void
@@ -80,8 +92,22 @@ gnc_session_push_error (GNCSession *session, GNCBackendError err,
 GNCBackendError
 gnc_session_get_error (GNCSession * session)
 {
+  GNCBackendError err;
+
   if (!session) return ERR_BACKEND_NO_BACKEND;
-  return session->last_err;
+
+  /* if we have a local error, return that. */
+  if (ERR_BACKEND_NO_ERR != session->last_err)
+  {
+    return session->last_err;
+  }
+
+  /* maybe we should return a no-backend error ??? */
+  if (! session->backend) return ERR_BACKEND_NO_ERR;
+
+  err = xaccBackendGetError (session->backend);
+  session->last_err = err;
+  return err;
 }
 
 static const char *
@@ -106,20 +132,20 @@ gnc_session_pop_error (GNCSession * session)
 
   if (!session) return ERR_BACKEND_NO_BACKEND;
 
-  err = session->last_err;
+  err = gnc_session_get_error(session);
   gnc_session_clear_error(session);
 
   return err;
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 static void
 gnc_session_init (GNCSession *session)
 {
   if (!session) return;
 
-  session->book = gnc_book_new ();
+  session->books = g_list_append (NULL, gnc_book_new ());
   session->book_id = NULL;
   session->fullpath = NULL;
   session->logpath = NULL;
@@ -139,25 +165,46 @@ gnc_session_new (void)
 GNCBook *
 gnc_session_get_book (GNCSession *session)
 {
+   GList *node;
    if (!session) return NULL;
-   return session->book;
+
+   for (node=session->books; node; node=node->next)
+   {
+      GNCBook *book = node->data;
+      if ('y' == book->book_open) return book;
+   }
+   return NULL;
 }
 
 void
-gnc_session_set_book (GNCSession *session, GNCBook *book)
+gnc_session_set_book (GNCSession *session, GNCBook *addbook)
 {
+  GList *node;
   if (!session) return;
 
-  ENTER (" sess=%p book=%p", session, book);
-  /* Do not free the old book here unless you also fix
-   * all the other uses of gnc_session_set_book! */
+  ENTER (" sess=%p book=%p", session, addbook);
 
-  if (session->book == book)
-    return;
+  /* See if this book is already there ... */
+  for (node=session->books; node; node=node->next)
+  {
+     GNCBook *book = node->data;
+     if (addbook == book) return;
+  }
 
-  session->book = book;
+  if ('y' == addbook->book_open)
+  {
+    /* hack alert -- someone should free all the books in the list,
+     * but it should probably not be us ... since the books backends
+     * should be shutdown first, etc */
+    g_list_free (session->books);
+    session->books = g_list_append (NULL, addbook);
+  }
+  else 
+  {
+    session->books = g_list_append (session->books, addbook);
+  }
 
-  gnc_book_set_backend (book, session->backend);
+  gnc_book_set_backend (addbook, session->backend);
   LEAVE (" ");
 }
 
@@ -181,6 +228,8 @@ gnc_session_get_url (GNCSession *session)
    if (!session) return NULL;
    return session->book_id;
 }
+
+/* ====================================================================== */
 
 static void
 gnc_session_int_backend_load_error(GNCSession *session,
@@ -222,9 +271,14 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
 
     if(be_new_func) 
     {
+      GList *node;
       session->backend = be_new_func();
 
-      gnc_book_set_backend (session->book, session->backend);
+      for (node=session->books; node; node=node->next)
+      {
+         GNCBook *book = node->data;
+         gnc_book_set_backend (book, session->backend);
+      }
     }
     else
     {
@@ -243,14 +297,16 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   LEAVE (" ");
 }
 
+/* ====================================================================== */
+
 void
 gnc_session_begin (GNCSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
   if (!session) return;
 
-  ENTER (" sess=%p book=%p ignore_lock=%d, book-id=%s", 
-         session, session->book, ignore_lock,
+  ENTER (" sess=%p ignore_lock=%d, book-id=%s", 
+         session, ignore_lock,
          book_id ? book_id : "(null)");
 
   /* clear the error condition of previous errors */
@@ -260,25 +316,26 @@ gnc_session_begin (GNCSession *session, const char * book_id,
   if (gnc_session_get_url(session))
   {
     gnc_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
-    LEAVE("bad book url");
+    LEAVE("push error book is already open ");
     return;
   }
 
   /* seriously invalid */
   if (!book_id)
   {
-    gnc_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
-    LEAVE("bad book_id");
+    gnc_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+    LEAVE("push error missing book_id");
     return;
   }
   /* Store the sessionid URL  */
   session->book_id = g_strdup (book_id);
 
+  /* ResolveURL tries to find the file in the file system. */
   session->fullpath = xaccResolveURL(book_id);
   if (!session->fullpath)
   {
     gnc_session_push_error (session, ERR_FILEIO_FILE_NOT_FOUND, NULL);
-    LEAVE("bad fullpath");
+    LEAVE("push error: can't resolve file path");
     return;  
   }
   PINFO ("filepath=%s", session->fullpath ? session->fullpath : "(null)");
@@ -345,17 +402,23 @@ gnc_session_begin (GNCSession *session, const char * book_id,
           return;
       }
   }
-  LEAVE (" sess=%p book=%p book-id=%s", 
-         session, session->book, 
-         book_id ? book_id : "(null)");
+
+  /* No backend was found. That's bad. */
+  if (NULL == session->backend)
+  {
+    gnc_session_push_error (session, ERR_BACKEND_BAD_URL, NULL);
+  }
+  LEAVE (" sess=%p book-id=%s", 
+         session,  book_id ? book_id : "(null)");
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 void
 gnc_session_load (GNCSession *session)
 {
-  GNCBook *oldbook;
+  GNCBook *newbook;
+  BookList *oldbooks, *node;
   Backend *be;
 
   if (!session) return;
@@ -368,9 +431,10 @@ gnc_session_load (GNCSession *session)
   /* At this point, we should are supposed to have a valid book 
    * id and a lock on the file. */
 
-  oldbook = session->book;
-  session->book = gnc_book_new ();
-  PINFO ("new book=%p", session->book);
+  oldbooks = session->books;
+  newbook = gnc_book_new();
+  session->books = g_list_append (NULL, newbook);
+  PINFO ("new book=%p", newbook);
 
   xaccLogSetBaseName(session->logpath);
 
@@ -395,54 +459,76 @@ gnc_session_load (GNCSession *session)
 
       if (be->book_load) 
       {
-          be->book_load (be, session->book);
+          be->book_load (be, newbook);
 
           gnc_session_push_error (session, xaccBackendGetError(be), NULL);
       }
 
       if (be->price_load) 
       {
-          be->price_load (be, session->book);
+          be->price_load (be, newbook);
 
           gnc_session_push_error(session, xaccBackendGetError(be), NULL);
       }
 
-      gnc_book_set_backend (session->book, be);
+      gnc_book_set_backend (newbook, be);
 
       /* we just got done loading, it can't possibly be dirty !! */
-      gnc_book_mark_saved (session->book);
+      gnc_book_mark_saved (newbook);
 
       xaccLogEnable();
   }
 
-  if (!gnc_book_get_group (session->book))
+  /* Technically, the following tests can never succeed, because a group
+   * and pricedb is always allocated when a book is created.  So even
+   * if the load fails, there will be a topgroup and a pricedb. */
+  if (!gnc_book_get_group (newbook))
   {
-      /* ?? should we restore the oldbook here ?? */
-      LEAVE("topgroup NULL");
+      /* Something broke, put back the old stuff */
+      gnc_book_set_backend (newbook, NULL);
+      gnc_book_destroy (newbook);
+      g_list_free (session->books);
+      session->books = oldbooks;
+      PERR("topgroup NULL");
       return;
   }
   
-  if (!gnc_book_get_pricedb (session->book))
+  if (!gnc_book_get_pricedb (newbook))
   {
-      /* ?? should we restore the oldbook here ?? */
-      LEAVE("pricedb NULL");
+      /* Something broke, put back the old stuff */
+      gnc_book_set_backend (newbook, NULL);
+      gnc_book_destroy (newbook);
+      g_list_free (session->books);
+      session->books = oldbooks;
+      PERR("pricedb NULL");
       return;
   }
 
   if (gnc_session_get_error(session) != ERR_BACKEND_NO_ERR)
   {
+      /* Something broke, put back the old stuff */
+      gnc_book_set_backend (newbook, NULL);
+      gnc_book_destroy (newbook);
+      g_list_free (session->books);
+      session->books = oldbooks;
       LEAVE("error from backend %d", gnc_session_get_error(session));
       return;
   }
 
   xaccLogDisable();
-  gnc_book_set_backend (oldbook, NULL);
-  gnc_book_destroy (oldbook);
+  for (node=oldbooks; node; node=node->next)
+  {
+     GNCBook *ob = node->data;
+     gnc_book_set_backend (ob, NULL);
+     gnc_book_destroy (ob);
+  }
   xaccLogEnable();
 
   LEAVE ("sess = %p, book_id=%s", session, gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 }
+
+/* ====================================================================== */
 
 gboolean
 gnc_session_save_may_clobber_data (GNCSession *session)
@@ -482,48 +568,56 @@ save_error_handler(Backend *be, GNCSession *session)
 void
 gnc_session_save (GNCSession *session)
 {
+  GList *node;
   Backend *be;
 
   if (!session) return;
 
-  ENTER ("sess=%p book=%p book_id=%s", 
-         session, session->book,
+  ENTER ("sess=%p book_id=%s", 
+         session, 
          gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
-  /* if there is a backend, and the backend is reachablele
+  /* If there is a backend, and the backend is reachable
    * (i.e. we can communicate with it), then synchronize with 
    * the backend.  If we cannot contact the backend (e.g.
    * because we've gone offline, the network has crashed, etc.)
    * then give the user the option to save to disk. 
+   *
+   * hack alert -- FIXME -- XXX the code below no longer
+   * does what the words above say.  This needs fixing.
    */
   be = session->backend;
   if (be)
   {
-    /* if invoked as SaveAs(), then backend not yet set */
-    gnc_book_set_backend (session->book, be);
-
-    if (be->sync_all)
+    for (node = session->books; node; node=node->next)
     {
-      (be->sync_all)(be, session->book);
-      if (save_error_handler(be, session))
-        return;
-    }
+      GNCBook *abook = node->data;
 
-    if (be->sync_group)
-    {
-      (be->sync_group)(be, session->book);
-      if (save_error_handler(be, session))
-        return;
+      /* if invoked as SaveAs(), then backend not yet set */
+      gnc_book_set_backend (abook, be);
+  
+      if (be->sync_all)
+      {
+        (be->sync_all)(be, abook);
+        if (save_error_handler(be, session)) return;
+      }
+  
+      if (be->sync_group)
+      {
+        (be->sync_group)(be, abook);
+        if (save_error_handler(be, session)) return;
+      }
+  
+      if (be->sync_price)
+      {
+        (be->sync_price)(be, abook);
+        if(save_error_handler(be, session)) return;
+      }
     }
-
-    if (be->sync_price)
-    {
-      (be->sync_price)(be, session->book);
-      if(save_error_handler(be, session))
-        return;
-    }
-
+    
+    /* If we got to here, then the backend saved everything 
+     * just fine, and we are done. So return. */
     return;
   } 
 
@@ -540,7 +634,7 @@ gnc_session_save (GNCSession *session)
   LEAVE(" ");
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 void
 gnc_session_end (GNCSession *session)
@@ -574,9 +668,10 @@ gnc_session_end (GNCSession *session)
 void 
 gnc_session_destroy (GNCSession *session) 
 {
+  GList *node;
   if (!session) return;
 
-  ENTER ("sess=%p book=%p book_id=%s", session, session->book,
+  ENTER ("sess=%p book_id=%s", session, 
          gnc_session_get_url(session)
          ? gnc_session_get_url(session) : "(null)");
 
@@ -593,10 +688,14 @@ gnc_session_destroy (GNCSession *session)
       g_free(session->backend);
   }
 
-  gnc_book_set_backend (session->book, NULL);
+  for (node=session->books; node; node=node->next)
+  {
+    GNCBook *book = node->data;
+    gnc_book_set_backend (book, NULL);
+    gnc_book_destroy (book);
+  }
 
-  gnc_book_destroy (session->book);
-  session->book = NULL;
+  session->books = NULL;
 
   xaccLogEnable();
 
@@ -605,26 +704,40 @@ gnc_session_destroy (GNCSession *session)
   LEAVE ("sess=%p", session);
 }
 
+/* ====================================================================== */
+/* this call is weird. */
+
 void
 gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 {
-  GNCBook *book_1, *book_2;
+  GList *books_1, *books_2, *node;
 
   if (session_1 == session_2) return;
   if (!session_1 || !session_2) return;
 
   ENTER ("sess1=%p sess2=%p", session_1, session_2);
 
-  book_1 = session_1->book;
-  book_2 = session_2->book;
+  books_1 = session_1->books;
+  books_2 = session_2->books;
 
-  session_1->book = book_2;
-  session_2->book = book_1;
+  session_1->books = books_2;
+  session_2->books = books_1;
 
-  gnc_book_set_backend (book_1, session_2->backend);
-  gnc_book_set_backend (book_2, session_1->backend);
+  for (node=books_1; node; node=node->next)
+  {
+    GNCBook *book_1 = node->data;
+    gnc_book_set_backend (book_1, session_2->backend);
+  }
+  for (node=books_2; node; node=node->next)
+  {
+    GNCBook *book_2 = node->data;
+    gnc_book_set_backend (book_2, session_1->backend);
+  }
+
   LEAVE (" ");
 }
+
+/* ====================================================================== */
 
 gboolean
 gnc_session_events_pending (GNCSession *session)
@@ -646,7 +759,7 @@ gnc_session_process_events (GNCSession *session)
   return session->backend->process_events (session->backend);
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 /* 
  * If $HOME/.gnucash/data directory doesn't exist, then create it.
  */
@@ -685,7 +798,8 @@ MakeHomeDir (void)
   g_free (data);
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
+
 /* XXX hack alert -- we should be yanking this out of some config file */
 static char * searchpaths[] =
 {
@@ -770,6 +884,8 @@ xaccUserPathPathGenerator(char *pathbuf, int which)
         return TRUE;
     }
 }
+
+/* ====================================================================== */
 
 char * 
 xaccResolveFilePath (const char * filefrag)
@@ -873,7 +989,7 @@ xaccResolveFilePath (const char * filefrag)
   return NULL;
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 char * 
 xaccResolveURL (const char * pathfrag)
@@ -903,7 +1019,7 @@ xaccResolveURL (const char * pathfrag)
   return (xaccResolveFilePath (pathfrag));
 }
 
-/* ---------------------------------------------------------------------- */
+/* ====================================================================== */
 
 /* this should go in a separate binary to create a rpc server */
 
@@ -938,3 +1054,5 @@ gnc_run_rpc_server (void)
 
   /* XXX How do we force an exit? */
 }
+
+/* =================== END OF FILE ====================================== */
