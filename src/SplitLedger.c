@@ -333,68 +333,61 @@ xaccSRSetReverseBalanceCallback(SRReverseBalanceCallback callback)
 static GList *
 gnc_trans_prepend_account_list(Transaction *trans, GList *accounts)
 {
-  Account *account;
-  Split *split;
-  int i = 0;
+  GList *node;
 
   if (trans == NULL)
     return accounts;
 
-  do
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
   {
-    split = xaccTransGetSplit(trans, i);
-
-    if (split == NULL)
-      return accounts;
+    Split *split = node->data;
+    Account *account;
 
     account = xaccSplitGetAccount(split);
     if (account != NULL)
       accounts = g_list_prepend(accounts, account);
+  }
 
-    i++;
-  } while (TRUE);
+  return accounts;
 }
 
 static GList *
 gnc_trans_prepend_split_list(Transaction *trans, GList *splits)
 {
-  Split *split;
-  int i = 0;
+  GList *node;
 
   if (trans == NULL)
     return splits;
 
-  do
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
   {
-    split = xaccTransGetSplit(trans, i);
+    Split *split = node->data;
 
     if (split == NULL)
       return splits;
 
     splits = g_list_prepend(splits, split);
+  }
 
-    i++;
-  } while (TRUE);
+  return splits;
 }
 
 static int
 gnc_trans_split_index(Transaction *trans, Split *split)
 {
-  Split *s;
-  int i = 0;
+  GList *node;
+  int i;
 
-  do
+  for (i = 0, node = xaccTransGetSplitList (trans); node;
+       i++, node = node->next)
   {
-    s = xaccTransGetSplit(trans, i);
+    Split *s = node->data;
 
     if (s == split)
       return i;
+  }
 
-    if (s == NULL)
-      return -1;
-
-    i++;
-  } while (TRUE);
+  return -1;
 }
 
 /* Uses the scheme split copying routines */
@@ -445,7 +438,7 @@ gnc_find_split_in_trans_by_memo(Transaction *trans, const char *memo,
     if (unit_price)
     {
       gnc_numeric price = xaccSplitGetSharePrice(split);
-      if (gnc_numeric_equal (price, gnc_numeric_create (1, 1)))
+      if (!gnc_numeric_equal (price, gnc_numeric_create (1, 1)))
         continue;
     }
 
@@ -3500,6 +3493,7 @@ sr_add_transaction (SplitRegister *reg,
                     CellBlock *lead_cursor,
                     gboolean visible_splits,
                     gboolean start_primary_color,
+                    gboolean sort_splits,
                     gboolean add_blank,
                     Split *find_split,
                     CursorClass find_class,
@@ -3513,6 +3507,7 @@ sr_add_transaction (SplitRegister *reg,
                     CellBlock *lead_cursor,
                     gboolean visible_splits,
                     gboolean start_primary_color,
+                    gboolean sort_splits,
                     gboolean add_blank,
                     Split *find_split,
                     CursorClass find_class,
@@ -3528,17 +3523,56 @@ sr_add_transaction (SplitRegister *reg,
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  if (sort_splits)
   {
-    Split *secondary = node->data;
+    /* first debits */
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+      Split *secondary = node->data;
 
-    if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
-      *new_split_row = vcell_loc->virt_row;
+      if (gnc_numeric_negative_p (xaccSplitGetValue (secondary)))
+        continue;
 
-    gnc_table_set_vcell (reg->table, reg->cursor_split,
-                         xaccSplitGetGUID (secondary),
-                         visible_splits, TRUE, *vcell_loc);
-    vcell_loc->virt_row++;
+      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
+        *new_split_row = vcell_loc->virt_row;
+
+      gnc_table_set_vcell (reg->table, reg->cursor_split,
+                           xaccSplitGetGUID (secondary),
+                           visible_splits, TRUE, *vcell_loc);
+      vcell_loc->virt_row++;
+    }
+
+    /* then credits */
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+      Split *secondary = node->data;
+
+      if (!gnc_numeric_negative_p (xaccSplitGetValue (secondary)))
+        continue;
+
+      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
+        *new_split_row = vcell_loc->virt_row;
+
+      gnc_table_set_vcell (reg->table, reg->cursor_split,
+                           xaccSplitGetGUID (secondary),
+                           visible_splits, TRUE, *vcell_loc);
+      vcell_loc->virt_row++;
+    }
+  }
+  else
+  {
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+      Split *secondary = node->data;
+
+      if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
+        *new_split_row = vcell_loc->virt_row;
+
+      gnc_table_set_vcell (reg->table, reg->cursor_split,
+                           xaccSplitGetGUID (secondary),
+                           visible_splits, TRUE, *vcell_loc);
+      vcell_loc->virt_row++;
+    }
   }
 
   if (!add_blank)
@@ -3720,8 +3754,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       new_trans_split_row = vcell_loc.virt_row;
 
     sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                        start_primary_color, TRUE, find_split, find_class,
-                        &new_split_row, &vcell_loc);
+                        start_primary_color, TRUE, TRUE, find_split,
+                        find_class, &new_split_row, &vcell_loc);
 
     if (!multi_line)
       start_primary_color = !start_primary_color;
@@ -3740,7 +3774,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     new_trans_split_row = vcell_loc.virt_row;
 
   sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                      start_primary_color, info->blank_split_edited,
+                      start_primary_color, FALSE, info->blank_split_edited,
                       find_split, find_class, &new_split_row, &vcell_loc);
 
   /* resize the table to the sizes we just counted above */
