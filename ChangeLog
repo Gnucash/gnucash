@@ -1,3 +1,8 @@
+2004-04-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/Makefile.am: look in ${srcdir} for build-config.scm.in
+	  Fixes #141129
+
 2004-04-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-system/html-utilities.scm:
