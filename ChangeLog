@@ -63,6 +63,12 @@
 	  billterms option menu is used so it will change properly if
 	  you change the invoice's owner.  Fixes #115290.
 
+	* src/report/standard-reports/account-piecharts.scm: Don't use
+	  gnc:reverse-account-balance? to determine whether to reverse
+	  the balance -- base it purely on the report type.  Otherwise
+	  certain reports doesn't work right when the "reverse account
+	  balances" is set in certain ways.  Fixes #107472.
+
 2003-06-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/io-gncxml-v2.c: make the book-string an extern
