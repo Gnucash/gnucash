@@ -123,7 +123,7 @@ gnucash/gnucash.rtf: $(GNUCASH_SGML_FILES)
 	db2rtf gnucash.sgml
 
 gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
-	-(db2html gnucash.sgml \
+	-(db2html -V %root-filename%=index ${srcdir}/gnucash.sgml \
 	  && cp $(GNUCASH_HTML_FILES) gnucash \
 	  && mkdir -p gnucash/image \
 	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
