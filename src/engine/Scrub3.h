@@ -78,8 +78,12 @@ gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
  *    split values is gaurenteed to throw off lot balances.
  *    This routine may end up closing the lot, or at least trying
  *    to. It will also cause cap gains to be recomputed.
+ *
+ *    Scrubbing the lot may cause subsplits to be merged together,
+ *    i.e. for splits to be deleted.  This routine returns true if
+ *    any splits were deleted.
  */
-void xaccScrubLot (GNCLot *lot);
+gboolean xaccScrubLot (GNCLot *lot);
 
 #endif /* XACC_SCRUB3_H */
 /** @} */
