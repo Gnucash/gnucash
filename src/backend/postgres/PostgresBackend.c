@@ -1579,28 +1579,34 @@ pgend_price_load_single (Backend *bend, GNCBook *book)
 static void
 pgend_do_load_single (Backend *bend, GNCBook *book)
 {
+  ENTER ("be=%p", bend);
   pgend_book_load_single (bend, book);
   pgend_price_load_single (bend, book);
 
   /* XXX: Other things to load here.... (dynamic data) */
+  LEAVE ("be=%p", bend);
 }
 
 static void
 pgendDoSyncSingleFile (Backend *bend, GNCBook *book)
 {
-   pgendSyncSingleFile (bend, book);
-   pgendSyncPriceDBSingleFile (bend, book);
+  ENTER ("be=%p", bend);
+  pgendSyncSingleFile (bend, book);
+  pgendSyncPriceDBSingleFile (bend, book);
 
-   /* XXX: Other data types */
+  /* XXX: Other data types */
+  LEAVE ("be=%p", bend);
 }
 
 static void
 pgendDoSync (Backend *bend, GNCBook *book)
 {
-   pgendSync (bend, book);
-   pgendSyncPriceDB (bend, book);
+  ENTER ("be=%p", bend);
+  pgendSync (bend, book);
+  pgendSyncPriceDB (bend, book);
 
-   /* XXX: Other data types */
+  /* XXX: Other data types */
+  LEAVE ("be=%p", bend);
 }
 
 static void
@@ -1608,6 +1614,7 @@ pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
 {
   PGBackend *be = (PGBackend*)bend;
 
+  ENTER ("be=%p, type=%s", bend, type);
   if (!safe_strcmp (type, GNC_ID_PERIOD))
     return pgend_book_transfer_begin (bend, object);
 
@@ -1624,6 +1631,7 @@ pgend_do_begin (Backend *bend, GNCIdTypeConst type, gpointer object)
   }
 
   /* XXX: Add dynamic plug-in here */
+  LEAVE ("be=%p, type=%s", bend, type);
 }
 
 static void
@@ -1631,6 +1639,7 @@ pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
 {
   PGBackend *be = (PGBackend*)bend;
 
+  ENTER ("be=%p, type=%s", bend, type);
   if (!safe_strcmp (type, GNC_ID_PERIOD))
     return pgend_book_transfer_commit (bend, object);
 
@@ -1653,6 +1662,7 @@ pgend_do_commit (Backend *bend, GNCIdTypeConst type, gpointer object)
   }
 
   /* XXX: Add dynamic plug-in here */
+  LEAVE ("be=%p, type=%s", bend, type);
 }
 
 static void
@@ -1660,6 +1670,7 @@ pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
 {
   PGBackend *be = (PGBackend*)bend;
 
+  ENTER ("be=%p, type=%s", bend, type);
   switch (be->session_mode) {
   case MODE_EVENT:
   case MODE_POLL:
@@ -1675,6 +1686,7 @@ pgend_do_rollback (Backend *bend, GNCIdTypeConst type, gpointer object)
   }
 
   /* XXX: Add dynamic plug-in here */
+  LEAVE ("be=%p, type=%s", bend, type);
 }
 
 /* ============================================================= */
