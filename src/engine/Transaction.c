@@ -97,6 +97,7 @@ xaccInitSplit( Split * split )
   split->share_cleared_balance     = 0.0;
   split->share_reconciled_balance  = 0.0;
 
+  split->tickee = 0;
   }
 
 /********************************************************************\
@@ -314,6 +315,7 @@ xaccInitTransaction( Transaction * trans )
   trans->date_posted.tv_sec  = 0;
   trans->date_posted.tv_nsec = 0;
 
+  trans->write_flag  = 0;
   trans->open        = 0;
   trans->orig = NULL;
   }
