@@ -95,6 +95,7 @@ distclean: clean
 	rm -f gnucash gnucash.motif gnucash.motif.static \
         gnucash.gnome gnucash.gnome.static gnucash.qt
 	rm -f config.cache config.log config.status config.h
+	rm -f src/guile/path-defaults.h    
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
 
@@ -128,7 +129,7 @@ install-opt:
 # stamp-install-opt-build, but that's somewhat messy too.
 gnucash.motif gnucash.motif.static gnucash.gnome gnucash.gnome.static:
 	@echo Rebuilding binary to handle install site specific dependencies. 
-	rm -f gnucash.${FLAVOR}
+	rm -f gnucash.${FLAVOR} src/guile/path-defaults.h    
 	${MAKE} DOCDIR=${DOCDIR} BINDIR=${BINDIR} CONFIGDIR=${CONFIGDIR} \
           SHAREDIR=${SHAREDIR} ${FLAVOR}
 .PHONY: gnucash.motif gnucash.motif.static gnucash.gnome gnucash.gnome.static
