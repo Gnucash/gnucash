@@ -94,11 +94,13 @@ CLEANFILES += gnucash.engine.i
 
 gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ gnucash.engine.i
+
 CLEANFILES += gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c
 
 gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
                              gnucash-engine-perl5_wrap_int.c
 	cat gnucash-swig-defines.c gnucash-engine-perl5_wrap_int.c > $@
+
 CLEANFILES += gnucash-engine-perl5_wrap.c
 
 CLEANFILES += gnucash.pm gnucash.so
