@@ -57,8 +57,9 @@ dfree( void *ptr )
 void*
 dmalloc( size_t size )
   {
-  char *ptr = (char *)malloc(size);
   int i;
+  char *ptr;
+  ptr = (char *)malloc(size);
   for( i=0; i<size; i++ )
     ptr[i] = '.';
   

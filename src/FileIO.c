@@ -242,6 +242,7 @@ readAccountGroup (int fd, AccountGroup *parent, int token)
     }
   XACC_FLIP_INT (numAcc);
   
+  DEBUGCMD ((printf ("Info: readGroup(): expecting %d accounts \n", numAcc)));
   /* malloc the accounts, in preparation for reading.
    * Mmalloc all of them; they will be needed for up front
    * for inserting the double-entry transactions */
@@ -348,6 +349,7 @@ readAccount( int fd, Account *acc, int token )
     }
   XACC_FLIP_INT (numTrans);
   
+  DEBUGCMD ((printf ("Info: readAccount(): expecting %d transactions \n", numTrans)));
   /* read the transactions */
   for( i=0; i<numTrans; i++ )
     {
