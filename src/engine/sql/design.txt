@@ -53,3 +53,15 @@ deleted transactions,etc. are really deleted from the database.  This
 is because in this mode, the backend never finds out about deletions.
 If you want incremental deletion, then use the 'Single Update' mode.
 
+
+m4 macros
+---------
+Some of the code is auto-gen'ed from m4 macros.  This mopstly just
+simplifies some rather repetitive, cut-n-paste code that's identical
+from function to function.  If you can think of a better way ...
+
+string escapes
+--------------
+Any string is valid; the builder.c routine sqlBuilder_escape() converts
+single-quotes and backslashes to escaped quotes & backslashes to prevent
+sql corruption.

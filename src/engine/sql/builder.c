@@ -25,20 +25,83 @@
 
 static short module = MOD_BACKEND;
 
+/* ================================================ */
+
 struct _builder {
    sqlBuild_QType qtype;
 
+   /* pointers the the tail end of two different assembly areas */
    char * ptag;
    char * pval;
 
+   /* sql needs commas to separate values */
    short  tag_need_comma;
    short  val_need_comma;
 
+   /* pointers to the start of two different assembly areas. */
    char * tag_base;
    char * val_base;
    size_t buflen;
+
+   /* pointer to temp memory used for escaping arguments */
+   char * escape;
+   size_t esc_buflen;
 };
 
+/* ================================================ */
+/* escape single-quote marks and backslashes so that the 
+ * database SQL parser doesn't puke on the query string 
+ */
+
+static const char *
+sqlBuilder_escape (sqlBuilder *b, const char *str)
+{
+   const char *p, *src_head;
+   char *dst_tail;
+   size_t len, slen;
+   
+   /* if nothing to escape, just return */
+   len = strlen (str);
+   slen = strcspn (str, "\\\'");
+   if (len == slen) return str;
+
+   /* count to see how much space we'll need */
+   p = str + slen +1;
+   while (*p)
+   {
+      len ++;
+      p += 1 + strcspn (p, "\\\'");
+   }
+
+   /* get more space, if needed */
+   if (len >= b->esc_buflen)
+   {
+      b->escape = g_realloc(b->escape, len+100);
+      b->esc_buflen = len+100;
+   }
+
+   /* copy and escape */
+   src_head = (char *) str;
+   dst_tail = b->escape;
+   p = src_head + strcspn (p, "\\\'");
+   while (*p)
+   {
+      size_t cp_len = p - src_head;
+
+      strncpy (dst_tail, src_head, cp_len);
+      dst_tail += cp_len;
+      *dst_tail = '\\';
+      dst_tail ++;
+      *dst_tail = *p;
+      dst_tail ++;
+
+      src_head = p+1;
+      p = src_head + strcspn (src_head, "\\\'");
+   }
+   *dst_tail = 0;
+
+   return b->escape;
+}
 
 /* ================================================ */
 
@@ -64,6 +127,10 @@ sqlBuilder_new (void)
 
    b->tag_need_comma = 0;
    b->val_need_comma = 0;
+
+   /* the escape area */
+   b->escape = g_malloc (INITIAL_BUFSZ);
+   b->esc_buflen = INITIAL_BUFSZ;
    return (b);
 }
 
@@ -73,8 +140,9 @@ void
 sqlBuilder_destroy (sqlBuilder*b)
 {
    if (!b) return;
-   g_free (b->tag_base);
-   g_free (b->val_base);
+   g_free (b->tag_base);   b->tag_base = NULL;
+   g_free (b->val_base);   b->val_base = NULL;
+   g_free (b->escape);     b->escape = NULL;
    g_free (b);
 }
 
@@ -133,6 +201,8 @@ sqlBuild_Set_Str (sqlBuilder *b, const char *tag, const char *val)
 {
    if (!b || !tag) return;
    if (!val) val= "";
+
+   val = sqlBuilder_escape (b, val);
 
    if (b->tag_need_comma) b->ptag = stpcpy(b->ptag, ", ");
    b->tag_need_comma = 1;
@@ -254,6 +324,7 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 {
    if (!b || !tag || !val) return;
 
+   val = sqlBuilder_escape (b, val);
    switch (b->qtype) 
    {
       case SQL_INSERT:

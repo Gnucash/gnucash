@@ -23,6 +23,7 @@
 #include <pgsql/libpq-fe.h>  
 
 #include "AccountP.h"
+#include "Backend.h"
 #include "BackendP.h"
 #include "Group.h"
 #include "gnc-book.h"
@@ -1706,6 +1707,19 @@ pgendSessionGetMode (PGBackend *be)
 }
 
 /* ============================================================= */
+/* Instead of loading the book, just set the lock error */
+
+static AccountGroup *
+pgend_book_load_single_lockerr (Backend *bend)
+{
+   PGBackend *be = (PGBackend *)bend;
+   if (!be) return NULL;
+
+   xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
+   return NULL;
+}
+
+/* ============================================================= */
 /* Determine whether we can start a session of the desired type.
  * The logic used is as follows:
  * -- if there is any session at all, and we want single
@@ -1720,8 +1734,9 @@ pgendSessionGetMode (PGBackend *be)
  */
 
 static gboolean
-pgendSessionCanStart (PGBackend *be)
+pgendSessionCanStart (PGBackend *be, int break_lock)
 {
+   char *lock_holder = NULL;
    gboolean retval = TRUE;
    PGresult *result;
    int i, nrows;
@@ -1762,7 +1777,10 @@ pgendSessionCanStart (PGBackend *be)
                PWARN ("This database is already opened by \n"
                       "\t%s@%s (%s) in mode %s on %s \n",
                       username, hostname, gecos, mode, datestr);
+               PWARN ("The above messages should be handled by the GUI\n");
          
+               lock_holder = g_strdup (DB_GET_VAL("sessionGUID",j));
+
                retval = FALSE;
             }
          }
@@ -1770,6 +1788,27 @@ pgendSessionCanStart (PGBackend *be)
       PQclear (result);
       i++;
    } while (result);
+
+   /* If just one other user has a lock, then will go ahead and 
+    * break the lock... If the user approved.  I don't like this
+    * but that's what the GUI is set up to do ...
+    */
+   PINFO ("break_lock=%d nrows=%d lock_holder=%s\n", 
+           break_lock, nrows, lock_holder);
+   if (break_lock && (1==nrows) && lock_holder)
+   {
+      p = be->buff; *p=0;
+      p = stpcpy (p, "UPDATE gncSession SET time_off='NOW' "
+                     "WHERE sessionGuid='");
+      p = stpcpy (p, lock_holder);
+      p = stpcpy (p, "';");
+     
+      SEND_QUERY (be,be->buff, retval);
+      FINISH_QUERY(be->connection);
+      retval = TRUE;
+   }
+
+   if (lock_holder) g_free (lock_holder);
 
    LEAVE (" ");
    return retval;
@@ -1783,7 +1822,7 @@ pgendSessionCanStart (PGBackend *be)
  */
 
 static gboolean
-pgendSessionValidate (PGBackend *be)
+pgendSessionValidate (PGBackend *be, int break_lock)
 {
    gboolean retval = FALSE;
    char *p;
@@ -1801,11 +1840,12 @@ pgendSessionValidate (PGBackend *be)
    FINISH_QUERY(be->connection);
 
    /* check to see if we can start a session of the desired type.  */
-   if (FALSE == pgendSessionCanStart (be))
+   if (FALSE == pgendSessionCanStart (be, break_lock))
    {
       /* this error should be treated just like the 
        * file-lock error from the GUI perspective */
-      xaccBackendSetError (&be->be, ERR_SQL_BUSY);
+      be->be.book_load = pgend_book_load_single_lockerr;
+      xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
       retval = FALSE;
    } else {
 
@@ -1929,7 +1969,7 @@ pgend_book_load_single (Backend *bend)
 /* ============================================================= */
 
 static void
-pgend_session_begin (GNCBook *sess, const char * sessionid)
+pgend_session_begin (GNCBook *sess, const char * sessionid, int ignore_lock)
 {
    int rc;
    PGBackend *be;
@@ -2008,10 +2048,11 @@ pgend_session_begin (GNCBook *sess, const char * sessionid)
    /* check the connection status */
    if (CONNECTION_BAD == PQstatus(be->connection))
    {
-      PERR("Connection to database '%s' failed:\n"
+      PWARN("Connection to database '%s' failed:\n"
            "\t%s", 
            be->dbName, PQerrorMessage(be->connection));
       PQfinish (be->connection);
+      be->connection = NULL;
       xaccBackendSetError (&be->be, ERR_SQL_CANT_CONNECT);
       return;
    }
@@ -2027,7 +2068,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid)
    /* hack alert -- we hard-code the access mode here,
     * but it should be user-adjustable.  */
    be->session_mode = MODE_SINGLE_UPDATE;
-   rc = pgendSessionValidate (be);
+   rc = pgendSessionValidate (be, ignore_lock);
 
    /* set up pointers for appropriate behaviour */
    /* In single mode, we load all transactions right away.

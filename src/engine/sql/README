@@ -1,7 +1,8 @@
 
 This directory contains experimental code for sql/postgres
-support.  The code 'functions' but doesn't handle enough types 
-(e.g. dates, currencies) to be usable.  
+support.  The code 'functions' and does many things but is still
+missing an assortment of features, and may be buggy and crash a lot.
+
 
 postgres install instructions
 -----------------------------
@@ -12,29 +13,26 @@ postgres install instructions
 
 Gnucash-specific install steps
 ------------------------------
-A) run the script gnc-init.sh
+A) install the m4 macro processor if you don't already have it.
+B) run the script gnc-init.sh
    This script will automatically create the needed tables
 
-B) edit gnc-book.c and #define SQLHACK
-C) edit src/Makefile.am and add  engine/sql/libgnc_postgres.la 
-   and -lpq to LDADD
-D) cd src/engine/sql; m4 table.m4 > autogen.c; make
-E) cd ../../..; make; make install
 
-
-
-Development Notes
------------------
-The m4 macros are just automated ways of 'converting' an SQL table
-to a c struct, and back again.  macros because this is cut-n-paste code.
-
-This code only implements writing to the DB, not reading.  
-
--- 
 
 To Bo Done
 ----------
--- Implement acount and transaction deletion. Deleting an account or
+-- bug: transaction memo in double line mode is lost.
+-- create database if it don't exist; provide user dialog for this.
+
+-- allow user to enter url in gui dialog
+-- handle kvp frames
+-- implement account commit edit (actually, the check&rollback part)
+-- fix excessive use of account commit by engine
+-- provide support for more query types in gncquery.c
+-- optimize for quantity of sql traffic -- there's a lot of it,
+   much of it proably un-needed.
+
+-- Implement account and transaction deletion. Deleting an account or
    transaction doesn't remove it from the database.
    (done with split delete)
 
@@ -77,14 +75,8 @@ To Bo Done
 
 -- store account balances in database.  This will be tricky ...
    -- split query gets hard ... 
--- urlencode all strings (escape single-quote mark)
+
 -- review multiuser operation for correctness 
--- allow user to enter url in gui dialog
--- handle kvp frames
--- implement account commit edit (actually, the check&rollback part)
--- provide support for more query types in gncquery.c
--- optimize for quantity of sql traffic -- there's a lot of it,
-   much of it proably un-needed.
 
 -- fix caching in the face of lost contact to the backend.  If the
    backend can't contact its server, then we should just save up caches,
