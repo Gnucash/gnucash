@@ -15,7 +15,7 @@
 
 #include "glade-cb-gnc-dialogs.h"
 #include "glade-gnc-dialogs.h"
-#include "glade-support-gnc-dialogs.h"
+#include "glade-support.h"
 
 GtkWidget*
 create_QIF_Import_Account_Picker (void)
