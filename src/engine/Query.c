@@ -194,6 +194,16 @@ xaccQuerySetMaxSplits (Query *q, int max)
 
 /* ================================================== */
 
+void  
+xaccQuerySetDateRange (Query *q, time_t early, time_t late)
+{
+   if (!q) return;
+   q->earliest.tv_sec = early;
+   q->latest.tv_sec = late;
+}
+
+/* ================================================== */
+
 #define PROLOG 					\
   char *da, *db;				\
   Transaction *ta;				\
@@ -634,7 +644,7 @@ xaccQueryGetSplits (Query *q)
 time_t
 xaccQueryGetEarliestDateFound (Query *q)
 {
-   if (!q) return NULL;
+   if (!q) return 0;
 
    return ((time_t) q->earliest_found.tv_sec);
 }
@@ -642,7 +652,7 @@ xaccQueryGetEarliestDateFound (Query *q)
 time_t
 xaccQueryGetLatestDateFound (Query *q)
 {
-   if (!q) return NULL;
+   if (!q) return ULONG_MAX;
 
    return ((time_t) q->latest_found.tv_sec);
 }
