@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2002-11-05 23:49+0100\n"
-"PO-Revision-Date: 2002-11-05 23:51+0100\n"
+"POT-Creation-Date: 2002-11-06 19:14+0100\n"
+"PO-Revision-Date: 2002-11-06 19:30+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -503,7 +503,7 @@ msgstr "Löschen"
 
 #: src/gnome/glade/sched-xact.glade.h:60
 msgid "Disposition?"
-msgstr ""
+msgstr "Veräußerung?"
 
 #: src/gnome/glade/sched-xact.glade.h:61
 msgid "Do you..."
@@ -843,11 +843,11 @@ msgstr "Verschieben"
 
 #: src/gnome/glade/sched-xact.glade.h:137
 msgid "Principal"
-msgstr ""
+msgstr "Endbetrag Kapital"
 
 #: src/gnome/glade/sched-xact.glade.h:138
 msgid "Principal To:"
-msgstr ""
+msgstr "Endbetrag Kapital bis:"
 
 #: src/gnome/glade/fincalc.glade.h:26 src/gnome/glade/sched-xact.glade.h:139
 msgid "Quarterly"
@@ -987,6 +987,14 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit\n"
 "the created Scheduled Transactions directly."
 msgstr ""
+"Dieser Assistent ist eine Schritt-für-Schritt Anleitung, um die\n"
+"Rückzahlung eines Darlehens in GnuCash einzurichten. Sie können die\n"
+"Parameter Ihres Darlehens und der Rückzahlungsraten angeben. Mit\n"
+"diesen Informationen werden die entsprechenden Terminierten Buchungen\n"
+"erstellt.\n"
+"\n"
+"Wenn Sie einen Irrtum machen oder später Änderungen machen möchten,\n"
+"können Sie die erstellte Terminierte Buchung direkt ändern."
 
 #: src/gnome/glade/sched-xact.glade.h:178
 msgid "This window should never be realized."
@@ -2906,7 +2914,7 @@ msgstr "über Treuhandkonto?"
 
 #: src/gnome/druid-loan.c:712
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr "Wollen Sie den Darlehen/Hypothek-Druiden wirklich abbrechen?"
+msgstr "Wollen Sie den Darlehen-Assistent wirklich abbrechen?"
 
 #: src/gnome/dialog-transfer.c:325
 msgid "Show the income and expense accounts"
@@ -5528,7 +5536,7 @@ msgid ""
 "Press 'Cancel' if you do not wish to setup any \n"
 "HBCI connection now."
 msgstr ""
-"Dieser Druide hilft Ihnen, die HBCI Verbindung mit Ihrer Bank\n"
+"Dieser Assistent hilft Ihnen, die HBCI Verbindung mit Ihrer Bank\n"
 "einzurichten.\n"
 "\n"
 "Zunächst müssen Sie bei Ihrer Bank die Freischaltung des HBCI Zugangs\n"
@@ -5670,7 +5678,7 @@ msgstr ""
 "(Bank-Server) zu kontaktieren. Stattdessen sollten Sie den Vorfall\n"
 "Ihrer Bank melden. Um die Fehlersuche zu erleichtern, sollten Sie\n"
 "diesen fehlerhaften Ini-Brief ausdrucken und Ihrer Bank\n"
-"einreichen. Bitte beenden Sie den HBCI Einrichtungs-Druiden nun."
+"einreichen. Bitte beenden Sie den HBCI Einrichtungs-Assistent nun."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:674 intl-scm/guile-strings.c:2550
@@ -7254,6 +7262,9 @@ msgid ""
 "Are you sure you want to close it out before\n"
 "you invoice all the entries?"
 msgstr ""
+"Diese Bestellung enthält Posten, für die noch keine Rechnung erstellt wurde. "
+"Sind Sie sicher, daß sie die Bestellung schließen wollen, auch wenn noch "
+"nicht für alle Posten eine Rechnung erstellt wurde?"
 
 #. Ok, we can close this.  Ask for verification and set the closed date
 #: src/business/business-gnome/dialog-order.c:266
@@ -7290,7 +7301,7 @@ msgstr "Eröffnungsdatum"
 
 #: src/business/business-gnome/dialog-order.c:849
 msgid "Owner Name "
-msgstr "Name Eigentümer"
+msgstr "Mandantname"
 
 #: src/business/business-gnome/dialog-order.c:851
 #: src/business/business-gnome/glade/order.glade.h:13
@@ -7402,7 +7413,7 @@ msgstr "Zahlung verarbeiten"
 
 #: src/business/business-gnome/dialog-invoice.c:2024
 msgid "Invoice Owner"
-msgstr "Rechnung"
+msgstr "Rechnungsmandant"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:2998
@@ -7435,18 +7446,18 @@ msgstr "Gebucht"
 #: src/business/business-gnome/glade/customer.glade.h:1
 #: src/business/business-gnome/glade/vendor.glade.h:1
 msgid "(taxincluded)"
-msgstr ""
+msgstr "(incl. Steuer)"
 
 #: src/business/business-gnome/glade/customer.glade.h:2
 #: src/business/business-gnome/glade/vendor.glade.h:2
 msgid "(taxtables)"
-msgstr ""
+msgstr "(Steuertabelle)"
 
 #: src/business/business-gnome/glade/customer.glade.h:3
 #: src/business/business-gnome/glade/invoice.glade.h:2
 #: src/business/business-gnome/glade/vendor.glade.h:3
 msgid "(terms)"
-msgstr ""
+msgstr "(Bedingungen)"
 
 #: src/business/business-gnome/glade/customer.glade.h:4
 #: src/business/business-gnome/glade/employee.glade.h:3
@@ -7497,7 +7508,7 @@ msgstr "Kundennummer: "
 
 #: src/business/business-gnome/glade/customer.glade.h:12
 msgid "Discount: "
-msgstr "Rabatt: "
+msgstr "Skonto: "
 
 #: src/business/business-gnome/glade/customer.glade.h:13
 #: src/business/business-gnome/glade/employee.glade.h:8
@@ -7527,7 +7538,7 @@ msgstr "Neuer Kunde"
 #: src/business/business-gnome/glade/customer.glade.h:19
 #: src/business/business-gnome/glade/vendor.glade.h:13
 msgid "Override the global Tax Table?"
-msgstr ""
+msgstr "Globale Steuertabelle ignorieren?"
 
 #: src/business/business-gnome/glade/customer.glade.h:20
 #: src/business/business-gnome/glade/employee.glade.h:18
@@ -7565,7 +7576,7 @@ msgstr "Welche Steuertabelle soll bei diesem Kunden angewandt werden?"
 #: src/business/business-gnome/glade/order.glade.h:1
 #: src/business/business-gnome/glade/payment.glade.h:1
 msgid "(owner)"
-msgstr "(Eigentümer)"
+msgstr "(Mandant)"
 
 #: src/business/business-gnome/glade/invoice.glade.h:8
 msgid "Cancel the current entry"
@@ -7617,7 +7628,7 @@ msgstr "Diese Rechnung bearbeiten."
 
 #: src/business/business-gnome/glade/invoice.glade.h:29
 msgid "Enter a payment for the owner of this Invoice"
-msgstr "Geben Sie eine Zahlung für den Eigentümer dieser Rechnung ein"
+msgstr "Geben Sie eine Zahlung für den Mandanten dieser Rechnung ein"
 
 #: src/business/business-gnome/glade/invoice.glade.h:31
 msgid "Invoice Entries"
@@ -7660,7 +7671,7 @@ msgstr "Neue Rechnung"
 
 #: src/business/business-gnome/glade/invoice.glade.h:43
 msgid "Open a company report window for the owner of this Invoice"
-msgstr ""
+msgstr "Einen Firmenbericht für den Mandant dieser Rechnung öffnen"
 
 #: src/business/business-gnome/glade/invoice.glade.h:45
 msgid "Post"
@@ -7825,15 +7836,15 @@ msgstr "Welche Steuertabelle soll bei diesem Zulieferer angewendet werden?"
 
 #: src/business/business-gnome/glade/job.glade.h:4
 msgid "Job Active"
-msgstr ""
+msgstr "Auftrag aktiv"
 
 #: src/business/business-gnome/glade/job.glade.h:5
 msgid "Job Dialog"
-msgstr ""
+msgstr "Auftrag-Dialog"
 
 #: src/business/business-gnome/glade/job.glade.h:6
 msgid "Job Information"
-msgstr ""
+msgstr "Auftragsinformationen"
 
 #: src/business/business-gnome/dialog-job.c:538
 #: src/business/business-gnome/dialog-job.c:548
@@ -7848,27 +7859,27 @@ msgstr "Auftragsnummer"
 
 #: src/business/business-gnome/glade/job.glade.h:9
 msgid "Owner Information"
-msgstr ""
+msgstr "Mandanteninformationen"
 
 #: src/business/business-gnome/glade/employee.glade.h:1
 msgid "Access Control"
-msgstr ""
+msgstr "Zugriffskontrolle"
 
 #: src/business/business-gnome/glade/employee.glade.h:2
 msgid "Access Control List"
-msgstr ""
+msgstr "Zugriffskontroll-Liste"
 
 #: src/business/business-gnome/glade/employee.glade.h:5
 msgid "Billing"
-msgstr ""
+msgstr "Rechnung ausstellen"
 
 #: src/business/business-gnome/glade/employee.glade.h:6
 msgid "Default Hours per Day: "
-msgstr ""
+msgstr "Voreinstellung Stunden pro Tag: "
 
 #: src/business/business-gnome/glade/employee.glade.h:7
 msgid "Default Rate: "
-msgstr ""
+msgstr "Voreinstellung Stundenlohn: "
 
 #: src/business/business-gnome/glade/employee.glade.h:9
 msgid "Employee"
@@ -7880,11 +7891,11 @@ msgstr "Mitarbeiternummer: "
 
 #: src/business/business-gnome/glade/employee.glade.h:13
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 #: src/business/business-gnome/glade/employee.glade.h:14
 msgid "Language: "
-msgstr ""
+msgstr "Sprache: "
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2706 intl-scm/guile-strings.c:2708
@@ -7903,11 +7914,11 @@ msgstr "(Art)"
 
 #: src/business/business-gnome/glade/billterms.glade.h:2
 msgid "Absolute Day-of-the-month"
-msgstr ""
+msgstr "Absoluter Tag des Monats"
 
 #: src/business/business-gnome/glade/billterms.glade.h:3
 msgid "Cancel your changes"
-msgstr ""
+msgstr "Änderungen verwerfen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:4
 msgid "Choose the type of Billing Term"
@@ -7927,7 +7938,7 @@ msgstr "Neue Zahlungsbedingungen erstellen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:8
 msgid "Cutoff Day: "
-msgstr ""
+msgstr "Stichtag Monatswechsel: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:11
 msgid "Delete the current Billing Term"
@@ -7940,23 +7951,23 @@ msgstr "Beschreibung: "
 #: src/business/business-gnome/glade/billterms.glade.h:14
 #, no-c-format
 msgid "Discount %: "
-msgstr ""
+msgstr "Skonto in Prozent: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:15
 msgid "Discount Day: "
-msgstr ""
+msgstr "Stichtag Skonto: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:16
 msgid "Discount Days: "
-msgstr ""
+msgstr "Tage für Skonto: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:17
 msgid "Due Day: "
-msgstr ""
+msgstr "Fälligkeitstag: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:18
 msgid "Due Days: "
-msgstr ""
+msgstr "Fälligkeitstage: "
 
 #: src/business/business-gnome/glade/billterms.glade.h:19
 msgid "Edit the current Billing Term"
@@ -7968,12 +7979,12 @@ msgstr "Neue Zahlungsbedingungen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:24
 msgid "Number of days from now"
-msgstr ""
+msgstr "Anzahl Tage von jetzt an gerechnet"
 
 #: src/business/business-gnome/dialog-billterms.c:481
 #: src/business/business-gnome/glade/billterms.glade.h:25
 msgid "Proximo"
-msgstr ""
+msgstr "Im nächsten Monat"
 
 #: src/business/business-gnome/glade/billterms.glade.h:26
 msgid "Table"
@@ -7981,7 +7992,7 @@ msgstr "Tabelle"
 
 #: src/business/business-gnome/glade/billterms.glade.h:27
 msgid "Term Definition"
-msgstr ""
+msgstr "Definition Zahlungsbedingungen"
 
 #: src/business/business-gnome/glade/billterms.glade.h:29
 msgid ""
@@ -7989,10 +8000,13 @@ msgid ""
 "bills are applied to the following month.  Negative values count backwards "
 "from the end of the month."
 msgstr ""
+"Der Stichtag, um Rechnungen für den folgenden Monat zu buchen. D.h., nach "
+"dem Stichtag werden Rechnung im folgenden Monat berechnet. Negative Werte "
+"zählen vom Monatsende rückwärts."
 
 #: src/business/business-gnome/glade/billterms.glade.h:30
 msgid "The day of the month bills are due"
-msgstr ""
+msgstr "Tag des Monats, an dem Rechnungen fällig werden"
 
 #: src/business/business-gnome/glade/billterms.glade.h:31
 msgid "The description of the Billing Term, printed on invoices"
@@ -8002,49 +8016,53 @@ msgstr ""
 
 #: src/business/business-gnome/glade/billterms.glade.h:32
 msgid "The discount percentage applied if paid early."
-msgstr ""
+msgstr "Prozent Skonto bei früher Zahlung"
 
 #: src/business/business-gnome/glade/billterms.glade.h:33
-msgid "The internal name of the Biling Term."
-msgstr ""
+msgid "The internal name of the Billing Term."
+msgstr "Interner Name für die Zahlungsbedingungen."
 
 #: src/business/business-gnome/glade/billterms.glade.h:34
 msgid "The last day of the month for the early payment discount."
-msgstr ""
+msgstr "Letzter Tag im Monat für Frühzahlungs-Skonto."
 
 #: src/business/business-gnome/glade/billterms.glade.h:35
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
 msgstr ""
+"Die Anzahl der Tage nach dem Rechnungsdatum, in denen ein Skonto für "
+"frühzeitige Zahlung gewährt wird."
 
 #: src/business/business-gnome/glade/billterms.glade.h:36
 msgid "The number of days to pay the bill after the post date."
 msgstr ""
+"Die Anzahl der Tage nach Ausstellung, in denen die Rechnung gezahlt werden "
+"soll."
 
 #: src/business/business-gnome/glade/billterms.glade.h:37
 msgid "The percentage discount applied for early payment."
-msgstr ""
+msgstr "Prozent Skonto bei früher Zahlung."
 
 #: src/business/business-gnome/glade/billterms.glade.h:38
 msgid "Type Menu"
-msgstr ""
+msgstr "Auswahl Art"
 
 #: src/business/business-gnome/glade/date-close.glade.h:2
 msgid "Question"
-msgstr ""
+msgstr "Frage"
 
 #: src/business/business-gnome/glade/date-close.glade.h:3
 msgid "acct"
-msgstr ""
+msgstr "Konto"
 
 #: src/business/business-gnome/glade/date-close.glade.h:4
 msgid "duedate"
-msgstr ""
+msgstr "Fällig"
 
 #: src/business/business-gnome/glade/date-close.glade.h:5
 msgid "postd"
-msgstr ""
+msgstr "Gebucht"
 
 #: src/business/business-gnome/dialog-date-close.c:49
 msgid "No Account selected.  Please try again."
@@ -8121,10 +8139,11 @@ msgstr "Sie müssen eine Rechnungsadresse eingeben."
 #: src/business/business-gnome/dialog-customer.c:247
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
 msgstr ""
+"Skonto-Prozent muß zwischen 0 und 100 liegen oder frei gelassen werden."
 
 #: src/business/business-gnome/dialog-customer.c:252
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es leer lassen."
+msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 
 #: src/business/business-gnome/dialog-customer.c:330
 msgid "Edit Customer"
@@ -8136,12 +8155,12 @@ msgstr "Kunde anzeigen/bearbeiten"
 
 #: src/business/business-gnome/dialog-customer.c:777
 msgid "Customer's Jobs"
-msgstr ""
+msgstr "Aufträge des Kunden"
 
 #.    { N_("Customer's Orders"), order_customer_cb},
 #: src/business/business-gnome/dialog-customer.c:779
 msgid "Customer's Invoices"
-msgstr ""
+msgstr "Rechnungen des Kunden"
 
 #: src/business/business-gnome/dialog-customer.c:789
 msgid "Shipping Contact"
@@ -8167,27 +8186,27 @@ msgstr "Kontaktadresse"
 #: src/business/business-gnome/business-urls.c:60
 #, c-format
 msgid "Entity type does not match Customer: %s"
-msgstr ""
+msgstr "Entity type passt nicht zu Kunde: %s"
 
 #: src/business/business-gnome/business-urls.c:110
 #, c-format
 msgid "Entity type does not match Vendor: %s"
-msgstr ""
+msgstr "Entity type passt nicht zu Zulieferer: %s"
 
 #: src/business/business-gnome/business-urls.c:160
 #, c-format
 msgid "Entity type does not match Invoice: %s"
-msgstr ""
+msgstr "Entity type passt nicht zu Rechnung: %s"
 
 #: src/business/business-gnome/business-urls.c:228
 #, c-format
 msgid "No such owner entity: %s"
-msgstr ""
+msgstr "Ungültige Entity: %s"
 
 #: src/business/business-gnome/business-urls.c:255
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr ""
+msgstr "Entity type passt nicht %s: %s"
 
 #: src/business/business-gnome/business-urls.c:265
 #, c-format
@@ -8197,12 +8216,12 @@ msgstr "Fehlerhafte URL %s"
 #: src/business/business-gnome/business-urls.c:277
 #, c-format
 msgid "No such Account entity: %s"
-msgstr ""
+msgstr "Ungültige Konto Entity: %s"
 
 #: src/business/business-gnome/business-urls.c:285
 #, c-format
 msgid "Entity is not Account entity: %s"
-msgstr ""
+msgstr "Entity ist kein Konto: %s"
 
 #: src/business/business-gnome/dialog-job.c:104
 msgid "The Job must be given a name."
@@ -8210,7 +8229,7 @@ msgstr "Der Auftrag muß einen Namen erhalten."
 
 #: src/business/business-gnome/dialog-job.c:113
 msgid "You must choose an owner for this job."
-msgstr "Sie müssen einen Eigentümer für diesen Auftrag auswählen."
+msgstr "Sie müssen einen Mandanten für diesen Auftrag auswählen."
 
 #: src/business/business-gnome/dialog-job.c:212
 msgid "Edit Job"
@@ -8233,17 +8252,18 @@ msgstr "Rechnungen anzeigen"
 
 #: src/business/business-gnome/dialog-job.c:530
 msgid "Owner's Name"
-msgstr "Eigentümer-Name"
+msgstr "Mandantname"
 
 #: src/business/business-gnome/dialog-job.c:532
 msgid "Only Active?"
-msgstr ""
+msgstr "Nur aktive?"
 
 #: src/business/business-gnome/dialog-payment.c:123
 msgid ""
 "You must enter the amount of the payment.  The payment amount must be "
 "greater than zero."
 msgstr ""
+"Sie müssen den Zahlungsbetrag angeben. Der Betrag muß größer als Null sein."
 
 #: src/business/business-gnome/dialog-payment.c:132
 msgid "You must select a company for payment processing."
@@ -8290,10 +8310,11 @@ msgstr ""
 #, c-format
 msgid "Term \"%s\" is in use.  You cannot delete it."
 msgstr ""
+"Zahlungsbedingung \"%s\" ist in Benutzung. Sie können sie nicht löschen."
 
 #: src/business/business-gnome/search-owner.c:148
 msgid "You have not selected an owner"
-msgstr "Sie haben keinen Eigentümer ausgewählt"
+msgstr "Sie haben keinen Mandanten ausgewählt"
 
 #: src/business/business-gnome/dialog-vendor.c:176
 msgid "You must enter a payment address."
@@ -8309,25 +8330,25 @@ msgstr "Zulieferer anzeigen/bearbeiten"
 
 #: src/business/business-gnome/dialog-vendor.c:634
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "Aufträge Zulieferer"
 
 #.    { N_("Vendor Orders"), order_vendor_cb},
 #: src/business/business-gnome/dialog-vendor.c:636
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "Rechnungen Zulieferer"
 
 #: src/business/business-gnome/dialog-vendor.c:637
 msgid "Pay Bill"
-msgstr ""
+msgstr "Rechnung zahlen"
 
 #: src/business/business-gnome/dialog-vendor.c:648
 msgid "Vendor ID"
-msgstr ""
+msgstr "Zulieferernummer"
 
 #. XXX: change this based on the ledger type
 #: src/business/business-ledger/gncEntryLedger.c:153
 msgid "Hours"
-msgstr ""
+msgstr "Stunden"
 
 #: src/business/business-ledger/gncEntryLedger.c:154
 msgid "Project"
@@ -8399,15 +8420,15 @@ msgstr ""
 #: intl-scm/guile-strings.c:2910 intl-scm/guile-strings.c:2950
 #: src/business/business-ledger/gncEntryLedgerModel.c:59
 msgid "Discount"
-msgstr "Rabatt"
+msgstr "Skonto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:64
 msgid "Discount Type"
-msgstr "Rabattart"
+msgstr "Skontoart"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:69
 msgid "Discount How"
-msgstr ""
+msgstr "Berechnung Skonto"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:2908
@@ -8423,21 +8444,21 @@ msgstr "Anzahl"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:89
 msgid "Taxable?"
-msgstr ""
+msgstr "Incl. MWSt.?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:94
 msgid "Tax Included?"
-msgstr ""
+msgstr "Incl. MWSt.?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:99
 msgid "Invoiced?"
-msgstr ""
+msgstr "Rechnung erhalten?"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:3026
 #: src/business/business-ledger/gncEntryLedgerModel.c:104
 msgid "Subtotal"
-msgstr ""
+msgstr "Zwischensumme"
 
 #. src/business/business-reports/invoice.scm
 #: intl-scm/guile-strings.c:2912 intl-scm/guile-strings.c:2956
@@ -8448,7 +8469,7 @@ msgstr "Steuern"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:114
 msgid "Billable?"
-msgstr ""
+msgstr "In Rechnung gestellt?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:477
 msgid ""
@@ -8467,43 +8488,43 @@ msgstr "Geben Sie die Beschreibung des Postens ein"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:541
 msgid "Enter the Discount Amount"
-msgstr ""
+msgstr "Geben Sie den Skonto-Betrag ein"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:544
 msgid "Enter the Discount Percent"
-msgstr ""
+msgstr "Geben Sie den Skonto-Prozentsatz ein"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:547
 msgid "Enter the Discount ... unknown type"
-msgstr ""
+msgstr "Geben Sie den Skontoart ... unbekannt ein"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:564
 msgid "Discount Type: Monetary Value"
-msgstr ""
+msgstr "Skontoart: Geldbetrag"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:567
 msgid "Discount Type: Percent"
-msgstr ""
+msgstr "Skontoart: Prozentsatz"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:570
 msgid "Select the Discount Type"
-msgstr ""
+msgstr "Wählen Sie die Skontoart"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:586
 msgid "Tax computed after discount is applied"
-msgstr ""
+msgstr "MWSt-Berechnung nach Anwendung des Skonto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:589
 msgid "Discount and tax both applied on pretax value"
-msgstr ""
+msgstr "Skonto und MWSt. beides auf Nettobetrag anwenden"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:592
 msgid "Discount computed after tax is applied"
-msgstr ""
+msgstr "Skonto auf Brutto-Betrag anwenden"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:595
 msgid "Select how to compute the Discount and Taxes"
-msgstr ""
+msgstr "Wählen Sie, wie Skonto und MWSt berechnet werden"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:608
 msgid "Enter the unit-Price for this Entry"
@@ -8516,22 +8537,23 @@ msgstr "Geben Sie die Anzahl Einheiten für diesen Posten ein"
 #: src/business/business-ledger/gncEntryLedgerModel.c:632
 msgid "Enter the Tax Table to apply to this entry"
 msgstr ""
+"Geben Sie die Steuertabelle ein, die auf diesen Posten angewendet werden soll"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:641
 msgid "Is this entry taxable?"
-msgstr ""
+msgstr "Wird dieser Posten besteuert?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:650
 msgid "Is the tax already included in the price of this entry?"
-msgstr ""
+msgstr "Ist der Preis des Postens inclusive MWSt.?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:665
 msgid "Is this entry Invoiced?"
-msgstr ""
+msgstr "Wurde dieser Posten in Rechnung gestellt?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:669
 msgid "Include this entry on this invoice?"
-msgstr ""
+msgstr "Diesen Posten in die Rechnung einschließen?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:672
 msgid "Unknown EntryLedger Type"
@@ -8539,11 +8561,11 @@ msgstr "Unbekannter EntryLedger typ"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:685
 msgid "The subtotal value of this entry "
-msgstr ""
+msgstr "Zwischensumme dieses Postens"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:697
 msgid "The total tax of this entry "
-msgstr ""
+msgstr "Gesamte MWSt dieses Postens "
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:706
 msgid "Is this entry billable to a customer or job?"
@@ -13309,12 +13331,12 @@ msgstr "Rechnungsbericht Quelltext-Datei neu laden"
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2722
 msgid "Reload owner report"
-msgstr "Eigentümer-Bericht neu laden"
+msgstr "Mandantenbericht neu laden"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2724
 msgid "Reload owner report scheme file"
-msgstr "Eigentümer-Bericht Quelltext-Datei neu laden"
+msgstr "Mandantenbericht Quelltext-Datei neu laden"
 
 #. src/business/business-gnome/business-gnome.scm
 #: intl-scm/guile-strings.c:2726
