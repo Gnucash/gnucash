@@ -683,7 +683,8 @@ xaccSchedXactionDestroySequenceState( void *stateData )
 void*
 gnc_sx_create_temporal_state_snapshot( SchedXaction *sx )
 {
-        temporalStateData *toRet = g_new0( temporalStateData, 1 );
+        temporalStateData *toRet =
+                g_new0( temporalStateData, 1 );
         toRet->last_date       = sx->last_date;
         toRet->start_date      = sx->start_date;
         toRet->end_date        = sx->end_date;

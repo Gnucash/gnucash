@@ -1,3 +1,18 @@
+2002-08-05  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c (add_reminders_to_gui): The SX
+	nodes in the reminders tree are now not selectable, as is
+	appropriate.
+	(create_each_transaction_helper): Fixed a nasty problem with
+	freeing a static string.
+	(sxsincelast_populate): Be better about cleaning up after ourself
+	during the initial instance generation.  Be better about writing
+	clean, generic code.
+	(processSelectedReminderList): Be better about writing clean,
+	generic code.
+	(to_create_prep): Empty the variable table when we transition into
+	the page; closes Bug#84689.
+
 2002-08-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.[hc]: Added hbci functions

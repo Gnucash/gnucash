@@ -830,6 +830,7 @@ to_create_prep( GnomeDruidPage *druid_page,
         w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST );
         gtk_clist_freeze( GTK_CLIST(w) );
         gtk_clist_clear( GTK_CLIST(w) );
+        clean_variable_table( sxsld );
         add_to_create_list_to_gui( sxsld->toCreateList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
         gnome_druid_set_buttons_sensitive(
@@ -1265,8 +1266,6 @@ generate_instances( SchedXaction *sx,
         while ( g_date_valid(&gd)
                 && g_date_compare( &gd, end ) <= 0 ) {
 
-                g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, &gd );
-
                 tci = g_new0( toCreateInstance, 1 );
 
                 tci->dirty = FALSE;
@@ -1287,8 +1286,6 @@ generate_instances( SchedXaction *sx,
                 rt->instanceList = NULL;
                 while ( g_date_valid(&gd)
                         && g_date_compare( &gd, reminderEnd ) <= 0 ) {
-
-                        g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, &gd );
 
                         rit = g_new0( reminderInstanceTuple, 1 );
                         rit->endDate     = g_date_new();
@@ -1535,6 +1532,9 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                                                 NULL, NULL, NULL, NULL, /* pixmaps */
                                                 FALSE, /* leafP */
                                                 TRUE ); /* expandedP */
+                /* The SX node itself isn't selectable; only the
+                 * instances. */
+                gtk_ctree_node_set_selectable( ctree, sxNode, FALSE );
                 for ( instances = rt->instanceList;
                       instances;
                       instances = instances->next ) {
@@ -1633,6 +1633,7 @@ static void
 processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
 {
         GList *list = NULL;
+        GList **containingList;
         reminderInstanceTuple *rit;
         toCreateTuple *tct;
         toCreateInstance *tci;
@@ -1649,67 +1650,42 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
 
                 xaccSchedXactionGetAutoCreate( rit->parentRT->sx,
                                                &autoCreateOpt, &notifyOpt );
-                /* FIXME: c'mon, jsled, this is easy enough to
-                 * cleanup... remove that extra level of hierarchy. */
+                containingList = ( autoCreateOpt
+                                   ? &sxsld->autoCreateList
+                                   : &sxsld->toCreateList );
+                for ( list = *containingList;
+                      list;
+                      list = list->next ) {
+                        tct = (toCreateTuple*)list->data;
+                        /* Find any already-existing toCreateTuples to add to...*/
+                        if ( tct->sx == rit->parentRT->sx ) {
+                                break;
+                        }
+                }
+                if ( !list ) {
+                        tct = g_new0( toCreateTuple, 1 );
+                        tct->sx = rit->parentRT->sx;
+                        *containingList =
+                                g_list_append( *containingList, tct );
+                }
+
+                tci = g_new0( toCreateInstance, 1 );
+                tci->dirty       = FALSE;
+                tci->parentTCT   = tct;
+                tci->date        = rit->occurDate;
+                tci->varBindings = NULL;
+                tci->instanceNum = rit->instanceNum;
+                tci->node        = NULL;
+                
+                tct->instanceList =
+                        g_list_append( tct->instanceList, tci );
+                
+                /* special auto-create-opt processing; process it now. */
                 if ( autoCreateOpt ) {
-                        for ( list = sxsld->autoCreateList;
-                              list;
-                              list = list->next ) {
-                                tct = (toCreateTuple*)list->data;
-                                /* Find any already-existing toCreateTuples to add to...*/
-                                if ( tct->sx == rit->parentRT->sx ) {
-                                        break;
-                                }
-                        }
-                        if ( !list ) {
-                                tct = g_new0( toCreateTuple, 1 );
-                                tct->sx = rit->parentRT->sx;
-                                sxsld->autoCreateList =
-                                        g_list_append( sxsld->autoCreateList, tct );
-                        }
-
-                        tci = g_new0( toCreateInstance, 1 );
-                        tci->dirty       = FALSE;
-                        tci->parentTCT   = tct;
-                        tci->date        = rit->occurDate;
-                        tci->varBindings = NULL;
-                        tci->instanceNum = rit->instanceNum;
-                        tci->node        = NULL;
-
-                        tct->instanceList =
-                                g_list_append( tct->instanceList, tci );
-
                         list = NULL;
                         list = g_list_append( list, tct );
                         process_auto_create_list( list, sxsld );
                         list = NULL;
-                } else {
-                        for ( list = sxsld->toCreateList;
-                              list;
-                              list = list->next ) {
-                                tct = (toCreateTuple*)list->data;
-                                /* Find any already-existing toCreateTuples to add to...*/
-                                if ( tct->sx == rit->parentRT->sx ) {
-                                        break;
-                                }
-                        }
-                        if ( !list ) {
-                                tct = g_new0( toCreateTuple, 1 );
-                                tct->sx = rit->parentRT->sx;
-                                sxsld->toCreateList =
-                                        g_list_append( sxsld->toCreateList, tct );
-                        }
-                        tci = g_new0( toCreateInstance, 1 );
-                        tci->dirty       = FALSE;
-                        tci->parentTCT   = tct;
-                        tci->date        = rit->occurDate;
-                        tci->node        = NULL;
-                        tci->varBindings = NULL;
-                        tci->instanceNum = rit->instanceNum;
-
-                        tct->instanceList =
-                                g_list_append( tct->instanceList, tci );
-
                 }
 
                 /* save the resultant just-created TCI in the RIT in case
@@ -1726,7 +1702,7 @@ static gboolean
 sxsincelast_populate( sxSinceLastData *sxsld )
 {
 
-        GList *sxList, *instanceList;
+        GList *sxList, *instanceList, *l, **containingList;
         SchedXaction *sx;
         void *sx_state;
         GDate end, endPlusReminders;
@@ -1782,31 +1758,27 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 
                 xaccSchedXactionGetAutoCreate( sx, &autocreateState,
                                                &notifyState );
-                if ( autocreateState ) {
-                        tct = g_new0( toCreateTuple, 1 );
-                        tct->sx = sx;
-                        for ( ; instanceList; instanceList = instanceList->next ) {
-                                tci = (toCreateInstance*)instanceList->data;
-                                tci->parentTCT = tct;
-                                tct->instanceList =
-                                        g_list_append( tct->instanceList,
-                                                       tci );
-                        }
-                        sxsld->autoCreateList =
-                                g_list_append( sxsld->autoCreateList,
-                                               tct );
-                } else {
-                        tct = g_new0( toCreateTuple, 1 );
-                        tct->sx = sx;
-                        for ( ; instanceList; instanceList = instanceList->next ) {
-                                tci = (toCreateInstance*)instanceList->data;
-                                tci->parentTCT = tct;
-                                tct->instanceList =
-                                        g_list_append( tct->instanceList, tci );
-                        }
-                        sxsld->toCreateList =
-                                g_list_append( sxsld->toCreateList, tct );
+                /* Figure out the appropriate list to place the new TCT on. */
+                containingList = ( autocreateState
+                                   ? &sxsld->autoCreateList
+                                   : &sxsld->toCreateList );
+
+                tct = g_new0( toCreateTuple, 1 );
+                tct->sx = sx;
+                for ( l = instanceList ; l; l = l->next ) {
+                        tci = (toCreateInstance*)l->data;
+                        tci->parentTCT = tct;
+                        
+                        tct->instanceList =
+                                g_list_append( tct->instanceList, tci );
                 }
+
+                g_list_free( instanceList );
+                instanceList = NULL;
+
+                /* abstractly place the TCT onto the afore-determined list. */
+                *containingList = g_list_append( *containingList, tct );
+
                 /* Report RE:showing the dialog iff there's stuff in it to
                  * show. */
                 showIt |= ( (g_list_length(sxsld->autoCreateList) > 0)
@@ -2022,7 +1994,11 @@ create_each_transaction_helper( Transaction *t, void *d )
         }
         varIValue = g_new0( gnc_numeric, 1 );
         *varIValue = gnc_numeric_create( tci->instanceNum, 1 );
-        g_hash_table_insert( actualVars, "i", varIValue );
+
+        /* It's really important that we strdup "i" here, so we can
+         * generically cleanup with a simple 'foreach' that blindly frees the
+         * keys, below. */
+        g_hash_table_insert( actualVars, g_strdup("i"), varIValue );
 
         newT = xaccMallocTransaction(gnc_get_current_book ());
         xaccTransBeginEdit( newT );
@@ -2052,6 +2028,8 @@ create_each_transaction_helper( Transaction *t, void *d )
 
 
                 /* from-transaction of splits */
+                /* FIXME: is this true? -- seems like it should be the other
+                 * way around; perhaps this is the reason for Bug#89879? */
                 /* This needs to be before the value setting [below] so the
                  * balance calculations can work. */
                 {
