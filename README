@@ -190,6 +190,29 @@ Examples of other funny configure options:
               --with-xmhtml-libraries=/home/rlb/XmHTML-1.1.5/src
 
 
+
+Flag --with-gtk-config.  The way gtk phiolosphy goes,
+you should *only* specify the config program location and
+rely on it to tell you the right CFLAGS and XLIBS values.
+
+Runtime and install destinations are separate.  The --prefix
+you specify to configure determines where the resulting binary
+will look for things at runtime.  The prefix you give to make
+install (i.e. make prefix=foo install) only determines where the
+files are placed.  If this location is different from the
+configure --prefix value, then gnucash won't work until it's moved
+to that location.  This feature is mostly useful for package
+builders, but it shouldn't hurt anyone else.
+
+Only the location of startup.scm is hardcoded into the
+binary, and even that can be overriden with --startup-file on the
+command line.  The other defaults are now in startup.scm.
+path-defaults.h is now gone.  The startup file setting is in
+gnucash.h, generated from gnucash.h.in.
+
+
+
+
 Status:
 -------
 As of version 1.0.18:

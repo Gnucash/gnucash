@@ -1,4 +1,4 @@
-AC_INIT(src/guile/gnucash.h)
+AC_INIT(src/guile/gnucash.h.in)
 
 ### check for various programs, and stuff (do this first because later
 ### commands depend on them):
@@ -32,12 +32,10 @@ X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
 MOTIF_LIBS="-lXm"
 
 # Let the user specify gtk paths:
-AC_ARG_WITH( gtk, 
-       [  --with-gtk=PATH       specify where to look for gtk includes and libs],
-	GTK_BIN="$with_gtk/bin/"
-       	X_LIBS="${X_LIBS} -L$with_gtk/lib"
-	X_CFLAGS="$X_CFLAGS -I$with_gtk/include" )
-AC_SUBST(GTK_BIN)
+AC_ARG_WITH( gtk-config, 
+  [  --with-gtk-config=executable  which gtk-config to use to find gtk ],
+  GTK_CONFIG_BIN="$with_gtk/bin/")
+AC_SUBST(GTK_CONFIG_BIN)
 
 # Let the user specify imlib paths:
 AC_ARG_WITH( imlib, 
@@ -114,9 +112,9 @@ AC_ARG_WITH( gnome-libraries,
        X_LIBS="${X_LIBS} -L$with_gnome_libraries" )
 
 AC_ARG_WITH( opt-style-install,
-       [  --with-opt-style-install   install everything in subdirs of --prefix],
-       OPT_STYLE_INSTALL=1,
-       OPT_STYLE_INSTALL=0)
+  [  --with-opt-style-install   install everything in subdirs of --prefix],
+  OPT_STYLE_INSTALL=1,
+  OPT_STYLE_INSTALL=0)
 AC_SUBST(OPT_STYLE_INSTALL)
 
 # *******************************************
@@ -184,9 +182,50 @@ AC_SUBST(HAVE_PLOTUTILS)
 
 AC_SUBST(MOTIF_LIBS)
 
+#############################################################
+### Set up the install style and all the default paths... ###
+
+if test ${OPT_STYLE_INSTALL} = 1
+then
+  GNC_DOCDIR=${prefix}/doc
+  GNC_BINDIR=${prefix}/bin
+  GNC_CONFIGDIR=${sysconfdir}
+  GNC_SHAREDIR=${datadir}
+else
+  GNC_DOCDIR=${prefix}/doc/gnucash
+  GNC_BINDIR=${prefix}/bin
+  GNC_CONFIGDIR=${sysconfdir}/gnucash
+  GNC_SHAREDIR=${datadir}/gnucash
+  GNC_STARTUP_FILE=`eval echo ${datadir}/startup.scm`
+fi
+
+AC_SUBST(GNC_DOCDIR)
+AC_SUBST(GNC_BINDIR)
+AC_SUBST(GNC_CONFIGDIR)
+AC_SUBST(GNC_SHAREDIR)
+
+# We have to eval these because they are the *runtime* (not install
+# time) defaults, and they're substituted into startup.scm and gnucash.h
+# directly, so:
+#  1) We don't want them to change if you do
+#     make prefix=foo install
+#  2) They are normally defined in terms of $prefix so we need to expand
+#     that before substituting into those source files.  I wish I knew how
+#     to force a recursive expansion...
+#
+GNC_STARTUP_FILE=`eval echo ${GNC_SHAREDIR}/scm/startup.scm`
+GNC_DOC_DIR_DEFAULT=`eval echo ${GNC_DOCDIR}`
+GNC_SHARE_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}`
+GNC_CONFIG_DIR_DEFAULT=`eval echo ${GNC_CONFIGDIR}`
+
+AC_SUBST(GNC_STARTUP_FILE)
+AC_SUBST(GNC_DOC_DIR_DEFAULT)
+AC_SUBST(GNC_SHARE_DIR_DEFAULT)
+AC_SUBST(GNC_CONFIG_DIR_DEFAULT)
+
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile src/swig/Makefile src/swig/guile/Makefile lib/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/guile/gnucash.h src/scm/startup.scm src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile src/swig/Makefile src/swig/guile/Makefile lib/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash

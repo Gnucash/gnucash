@@ -49,7 +49,6 @@ motif: ${MOTIF_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) motif
 	@cd reports;           $(MAKE) default
-	@cd guile;             $(MAKE) path-defaults.h
 	@cd swig;              $(MAKE) guile
 	@cd guile;             $(MAKE) default
 	@cd motif;             $(MAKE) motif
@@ -58,16 +57,15 @@ gnome: ${GNOME_OBJS}
 	@cd engine;            $(MAKE) default
 	@cd register;          $(MAKE) gnome
 	@cd reports;           $(MAKE) default
-	@cd guile;             $(MAKE) path-defaults.h
-	@cd swig;              $(MAKE) guile
+	@cd swig;  	           $(MAKE) guile
 	@cd guile;             $(MAKE) default
 	@cd gnome;             $(MAKE) gnome
 
 qt: $(QT_OBJS)
-	@cd engine;	       $(MAKE) default
-	@cd register;	       $(MAKE) qt
+	@cd engine;	           $(MAKE) default
+	@cd register;	         $(MAKE) qt
 	@cd reports;           $(MAKE) default
-	@cd qt;		       $(MAKE) qt
+	@cd qt;		             $(MAKE) qt
 
 .PHONY: default qt gnome motif all
 
