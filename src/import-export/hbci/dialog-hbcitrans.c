@@ -676,7 +676,7 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, AB_BANKING *api,
 	(td->parent, 
 	 FALSE,
 	 "%s",
-	 _("The job was successfully sent to the bank, but the \n"
+	 _("The job was sent to the bank successfully, but the \n"
 	   "bank is refusing to execute the job. Please check \n"
 	   "the log window for the exact error message of the \n"
 	   "bank. The line with the error message contains a \n"
@@ -684,13 +684,15 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, AB_BANKING *api,
 	   "\n"
 	   "Do you want to enter the job again?"));
 
+    if (AB_Job_GetStatus (job) == AB_Job_StatusPending)
+      AB_Banking_DelPendingJob(api, job);
+
     AB_Transaction_free (td->hbci_trans);
     td->hbci_trans = NULL;
   }
   /* Watch out! The job *has* to be removed from the queue
      here because otherwise it might be executed again. */
-  AB_Banking_DequeueJob(api, job);
-  /* AB_Banking_DequeueJob(api, job); */
+  /* FIXME: need to do AB_Banking_DequeueJob(api, job); */
   return successful;
 }
 

@@ -227,11 +227,13 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
    GNC transaction is done here, once for each AB_TRANSACTION.  */
 static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
 {
-  time_t current_time, tt1, tt2; 
+  time_t current_time;
+  /* time_t tt1, tt2; */
   /*struct tm tm1, tm2;*/
   Account *gnc_acc;
   GNCBook *book;
   Transaction *gnc_trans;
+  const GWEN_TIME *valutaDate, *normalDate;
   Split *split;
   struct trans_list_data *data = user_data;
   g_assert(data);
@@ -250,17 +252,22 @@ static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
     gnc_import_set_trans_online_id(gnc_trans, data.fi_id);
     }*/
 
-  tt1 = GWEN_Time_toTime_t (AB_Transaction_GetDate(h_trans));
-  tt2 = GWEN_Time_toTime_t (AB_Transaction_GetValutaDate(h_trans));
+  normalDate = AB_Transaction_GetDate(h_trans);
+  valutaDate = AB_Transaction_GetValutaDate(h_trans);
+  if (normalDate && !valutaDate)
+    valutaDate = normalDate;
+  /* Watch out -- any of the GWEN_TIME may be NULL */
+  /*   tt1 = GWEN_Time_toTime_t (normalDate); */
+  /*   tt2 = GWEN_Time_toTime_t (valutaDate); */
   /*printf("Date? %s ValutaDate? %s", ctime(&tt1), ctime(&tt2));*/
-  /*tm1 = GWEN_TIME_to_tm (AB_Transaction_date(h_trans));
-    tm2 = GWEN_TIME_to_tm (AB_Transaction_valutaDate(h_trans));
-    printf("Date asc %s ValutaDate asc %s", asctime(&tm1), asctime(&tm2));*/
   
   
   /* Date / Time */
-  xaccTransSetDateSecs
-    (gnc_trans, GWEN_Time_toTime_t (AB_Transaction_GetValutaDate (h_trans)));
+  if (valutaDate)
+    xaccTransSetDateSecs
+      (gnc_trans, GWEN_Time_toTime_t (valutaDate));
+  else
+    printf("trans_list_cb: Oops, date 'valutaDate' was NULL.\n");
     
   current_time = time(NULL);
   xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
@@ -294,10 +301,13 @@ static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
     
   {
     /* Amount into the split */
+    const AB_VALUE *h_value = AB_Transaction_GetValue (h_trans);
     gnc_numeric gnc_amount = double_to_gnc_numeric
-      (AB_Value_GetValue (AB_Transaction_GetValue (h_trans)),
+      (h_value ? AB_Value_GetValue (h_value) : 0.0,
        xaccAccountGetCommoditySCU(gnc_acc),
        GNC_RND_ROUND);
+    if (!h_value)
+      printf("trans_list_cb: Oops, value was NULL. Using 0.\n");
     xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
   }
     
