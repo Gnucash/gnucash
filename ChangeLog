@@ -1,3 +1,8 @@
+2002-02-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/el.po: Updated Greek translation by Nikos Charonitakis
+	<charosn@her.forthnet.gr>.
+
 2002-02-17  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-utilities.scm: Added support for surpressing zero
