@@ -84,7 +84,7 @@ typedef enum {
 /* Deprecated backwards compat tokens; do not use these in new code. */
 #define kvp_frame KvpFrame
 #define kvp_value KvpValue
-// #define kvp_value_t KvpValueType
+#define kvp_value_t KvpValueType
   
 
 /** @name KvpFrame Constructors */
@@ -136,7 +136,7 @@ void          kvp_frame_set_slot(KvpFrame * frame,
 void          kvp_frame_set_slot_nc(KvpFrame * frame, 
                                     const char * key, KvpValue * value);
 
-/** The kvp_frame_set_slot_path() routines walk the hierarchy,
+/** The kvp_frame_set_slot_path() routine walks the hierarchy,
  * using the key values to pick each branch.  When the terminal node
  * is reached, the value is copied into it.
  */
@@ -144,13 +144,27 @@ void          kvp_frame_set_slot_path (KvpFrame *frame,
                                        const KvpValue *value,
                                        const char *first_key, ...);
 
-/** The kvp_frame_set_slot_path() routines walk the hierarchy,
- * using the key values to pick each branch.  When the terminal node
- * is reached, the value is copied into it.
+/** The kvp_frame_set_slot_path_gslist() routine walks the hierarchy,
+ *  using the key values to pick each branch.  When the terminal node
+ *  is reached, the value is copied into it.
  */
 void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
                                               const KvpValue *value,
                                               GSList *key_path);
+
+/** The kvp_frame_add_url_encoding()routine will parse the
+ *  value string, assuming it to be URL-encoded in the standard way,
+ *  turning it into a set of key-value pairs, and adding those to the
+ *  indicated frame.  URL-encoded strings are the things that are
+ *  returned by web browsers when a form is filled out.  For example,
+ *  'start-date=June&end-date=November' consists of two keys, 
+ *  'start-date' and 'end-date', which have the values 'June' and 
+ *  'November', respectively.  This routine also handles % encoding.
+ *
+ *  This routine treats all values as strings; it does *not* attempt
+ *  to perform any type-conversion.
+ * */
+void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /*@}*/
 
 
@@ -318,7 +332,7 @@ gint          kvp_value_compare(const KvpValue *va, const KvpValue *vb);
 /*@}*/
 
 
-gchar* KvpValueTypeo_string(const KvpValue *val);
+gchar* kvp_value_to_string(const KvpValue *val);
 
 /** Manipulator: 
  *

@@ -1,7 +1,7 @@
 /********************************************************************
  * kvp_frame.c -- a key-value frame system for gnucash.             *
  * Copyright (C) 2000 Bill Gribble                                  *
- * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
+ * Copyright (C) 2001,2003Linas Vepstas <linas@linas.org>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -39,19 +39,23 @@
 
 
  /* Note that we keep the keys for this hash table in a GCache
-  * (gnc_string_cache), as it is likely we will see the same keys
-  * over and over again  */
-struct _KvpFrame {
+  * (gnc_string_cache), as it is very likely we will see the 
+  * same keys over and over again  */
+
+struct _KvpFrame 
+{
   GHashTable  * hash;
 };
 
 
-typedef struct {
+typedef struct 
+{
   void        *data;
   int         datasize;
-} kvp_value_binary_data;
+} KvpValueBinaryData;
 
-struct _KvpValue {
+struct _KvpValue 
+{
   KvpValueType type;
   union {
     gint64 int64;
@@ -60,7 +64,7 @@ struct _KvpValue {
     gchar *str;
     GUID *guid;
     Timespec timespec;
-    kvp_value_binary_data binary;
+    KvpValueBinaryData binary;
     GList *list;
     KvpFrame *frame;    
   } value;
@@ -326,6 +330,80 @@ kvp_frame_set_slot_path_gslist (KvpFrame *frame,
     if (!frame)
       return;
   }
+}
+
+/* ============================================================ */
+/* decode url-encoded string, do it in place
+ * + == space
+ * %xx == asci char where xx is hexadecimal ascii value
+ */
+
+static void
+decode (char *enc)
+{
+	char * p, *w;
+
+	/* Loop, convert +'s to blanks */
+	p = strchr (enc, '+');
+	while (p)
+	{
+		*p = ' ';
+		p = strchr (p, '+');
+	}
+	
+	p = strchr (enc, '%');
+	w = p;
+
+	while (p)
+	{
+		int ch,cl;
+		p++;
+		ch = *p - 0x30;               /* ascii 0 = 0x30 */
+		if (9 < ch) ch -= 0x11 + 10;  /* uppercase A = 0x41 */
+		if (16 < ch) ch -= 0x20;      /* lowercase a = 0x61 */
+
+		p++;
+		cl = *p - 0x30;               /* ascii 0 = 0x30 */
+		if (9 < cl) cl -= 0x11 + 10;  /* uppercase A = 0x41 */
+		if (16 < cl) cl -= 0x20;      /* lowercase a = 0x61 */
+
+		*w = (char) (ch<<4 | cl);
+		
+		w++;
+		*w = 0x0;    /* null-terminate in case loop terminates */
+		p = strchr (p, '%');
+	}
+}
+
+void     
+kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
+{
+	char *buff, *p;
+	if (!frame || !enc) return;
+
+	/* Loop over all key-value pairs in the encoded string */
+	buff = g_strdup (enc);
+	p = buff;
+	while (*p)
+	{
+		char *n, *v;
+		n = strchr (p, '&');  /* n = next key-value */
+		if (n) *n = 0x0;
+
+		v = strchr (p, '=');  /* v =  pointer to value */
+		if (!v) break;
+		*v = 0x0;
+		v ++;
+		
+		decode (p);
+		decode (v);
+		kvp_frame_set_slot_nc (frame, p, kvp_value_new_string(v));
+
+		if (!n) break; /* no next key, we are done */
+		p = n++;
+	}
+	
+	g_free(buff);
 }
 
 /* ============================================================ */
@@ -1007,7 +1085,7 @@ kvp_value_glist_to_string(const GList *list)
     {
         gchar *tmp3;
 
-        tmp3 = KvpValueTypeo_string((KvpValue *)cursor->data);
+        tmp3 = kvp_value_to_string((KvpValue *)cursor->data);
         tmp2 = g_strdup_printf("%s %s,", tmp1, tmp3 ? tmp3 : "");
         g_free(tmp1);
         g_free(tmp3);
@@ -1021,7 +1099,7 @@ kvp_value_glist_to_string(const GList *list)
 }
 
 gchar*
-KvpValueTypeo_string(const KvpValue *val)
+kvp_value_to_string(const KvpValue *val)
 {
     gchar *tmp1;
     gchar *tmp2;
@@ -1104,7 +1182,7 @@ kvp_frame_to_string_helper(gpointer key, gpointer value, gpointer data)
     gchar **str = (gchar**)data;
     gchar *old_data = *str;
 
-    tmp_val = KvpValueTypeo_string((KvpValue *)value);
+    tmp_val = kvp_value_to_string((KvpValue *)value);
 
     *str = g_strdup_printf("%s    %s => %s,\n",
                            *str ? *str : "",
@@ -1143,4 +1221,5 @@ kvp_frame_get_hash(const KvpFrame *frame)
     g_return_val_if_fail (frame != NULL, NULL);
     return frame->hash;
 }
+
 /* ========================== END OF FILE ======================= */
