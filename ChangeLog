@@ -1,3 +1,9 @@
+2001-02-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/Transaction.h: Added xaccSplitGetAmount to be used
+	instead of SplitGetShareAmount. Added some explanatory comments
+	about our commodity restructuring.
+
 2001-02-22  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-dom-parser1.c: Move generic funcs to test-stuff.c

@@ -379,10 +379,12 @@ Timespec      xaccSplitRetDateReconciledTS (Split *split);
  * invoking any of them will cause other splits in the transaction
  * to be modified so that the net value of the transaction is zero. 
  *
- * The xaccSplitSetShareAmount() method sets the number of shares
- *     that the split should have.  
+ * The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
+ *     sets the amount in the account's commodity that the split
+ *     should have.
  *
- * The xaccSplitSetSharePrice() method sets the price of the split.
+ * The xaccSplitSetSharePrice() method sets the price of the
+ *     split. DEPRECATED - set the value and amount instead.
  *
  * The xaccSplitSetValue() method adjusts the number of shares in 
  *     the split so that the number of shares times the share price
@@ -392,8 +394,7 @@ Timespec      xaccSplitRetDateReconciledTS (Split *split);
  *     update the share price and the number of shares. This 
  *     is a utility routine that is equivalent to a xaccSplitSetSharePrice()
  *     followed by and xaccSplitSetAmount(), except that it incurs the
- *     processing overhead of balancing only once, instead of twice.
- */
+ *     processing overhead of balancing only once, instead of twice.  */
 
 void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
                                                double amount);
@@ -405,6 +406,7 @@ void         DxaccSplitSetBaseValue (Split *split, double value,
 
 void         xaccSplitSetSharePriceAndAmount (Split *split, gnc_numeric price,
                                               gnc_numeric amount);
+#define xaccSplitSetAmount xaccSplitSetShareAmount
 void         xaccSplitSetShareAmount (Split *split, gnc_numeric amount);
 void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
@@ -460,6 +462,7 @@ double        DxaccSplitGetShareAmount (Split * split);
 double        DxaccSplitGetSharePrice (Split * split);
 double        DxaccSplitGetValue (Split * split);
 
+#define xaccSplitGetAmount xaccSplitGetShareAmount
 gnc_numeric   xaccSplitGetShareAmount (Split * split);
 gnc_numeric   xaccSplitGetSharePrice (Split * split);
 gnc_numeric   xaccSplitGetValue (Split * split);
