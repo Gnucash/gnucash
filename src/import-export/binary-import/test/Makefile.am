@@ -3,7 +3,7 @@ TESTS =  \
 #  test-load-module
 
 TESTS_ENVIRONMENT= \
-   GNC_MODULE_PATH=../../engine:../../gnc-module:../../calculation:.. \
+   GNC_MODULE_PATH=${top_srcdir}/src/engine:${top_srcdir/src/gnc-module:${top_srcdir}/src/calculation:.. \
    GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:../../engine:..:../../gnc-module:${top_srcdir}/lib \
    LTDL_LIBRARY_PATH=.. \
    LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/calculation:${top_srcdir}/src/calculation/.libs
@@ -18,8 +18,11 @@ LDADD = \
   -L${top_srcdir}/src/app-file -L${top_srcdir}/src/app-file/.libs \
   -L${top_srcdir}/src/app-file/gnome -L${top_srcdir}/src/app-file/gnome/.libs \
    ${top_srcdir}/src/gnc-module/libgncmodule.la \
+   ${top_srcdir}/src/calculation/libgncmod-calculation.la \
    ${top_srcdir}/src/engine/libgncmod-engine.la \
+   ${top_srcdir}/src/network-utils/libgncmod-network-utils.la \
    ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+   ${top_srcdir}/src/app-file/libgncmod-app-file.la \
    ${top_srcdir}/src/app-file/gnome/libgncmod-app-file-gnome.la \
    ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
    ../libgncmod-binary-import.la \

@@ -48,6 +48,7 @@
 static short module = MOD_GUI;
 
 static GNCBook *current_book = NULL;
+static GNCCanCancelSaveCB can_cancel_cb = NULL;
 
 
 static GNCBook *
@@ -299,7 +300,7 @@ gnc_file_query_save (void)
     const char *message = _("Changes have been made since the last "
                             "Save. Save the data to file?");
 
-    if (gnc_ui_can_cancel_save ())
+    if (can_cancel_cb && can_cancel_cb ())
       result = gnc_verify_cancel_dialog (message, GNC_VERIFY_YES);
     else
     {
@@ -709,4 +710,10 @@ gnc_file_quit (void)
 
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
+}
+
+void
+gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb)
+{
+  can_cancel_cb = cb;
 }

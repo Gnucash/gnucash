@@ -108,8 +108,6 @@ void        gnc_ui_shutdown (void);
 void        gnc_ui_destroy_all_subwindows (void);
 gncUIWidget gnc_ui_get_toplevel (void);
 
-gboolean    gnc_ui_can_cancel_save (void);
-
 /* Changing the GUI Cursor ******************************************/
 
 void gnc_set_busy_cursor(gncUIWidget w, gboolean update_now);

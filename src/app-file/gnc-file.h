@@ -112,6 +112,8 @@
 #ifndef GNC_FILE_H
 #define GNC_FILE_H
 
+#include <glib.h>
+
 #include "gnc-book.h"
 
 void gnc_file_new (void);
@@ -124,5 +126,8 @@ gboolean gnc_file_open_file (const char *filename);
 gboolean gnc_file_query_save (void);
 
 void gnc_file_quit (void);
+
+typedef gboolean (*GNCCanCancelSaveCB) (void);
+void gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb);
 
 #endif /* GNC_FILE_H */

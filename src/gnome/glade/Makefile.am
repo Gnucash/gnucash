@@ -1,7 +1,7 @@
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
 	account.glade \
-	commodity.glade \
+	commodities.glade \
 	fincalc.glade \
 	find.glade \
 	help.glade \

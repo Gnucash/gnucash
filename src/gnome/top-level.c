@@ -137,7 +137,7 @@ gnc_ui_get_data (void)
   return app;
 }
 
-gboolean
+static gboolean
 gnc_ui_can_cancel_save (void)
 {
   return gnc_main_window_can_cancel_save (app);
@@ -541,6 +541,8 @@ gnucash_ui_init(void)
     gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
+
+    gnc_file_set_can_cancel_callback (gnc_ui_can_cancel_save);
 
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();

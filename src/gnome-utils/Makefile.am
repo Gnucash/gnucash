@@ -81,6 +81,10 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUPPI_LIBS} \
   ${GLIB_LIBS}
 
+gladedir = $(GNC_GLADE_DIR)
+glade_DATA = \
+  commodity.glade
+
 EXTRA_DIST = \
   .cvsignore \
   gnc-dir.h.in

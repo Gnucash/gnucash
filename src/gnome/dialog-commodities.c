@@ -369,7 +369,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   GtkWidget *dialog;
   GladeXML *xml;
 
-  xml = gnc_glade_xml_new ("commodity.glade", "Commodities Dialog");
+  xml = gnc_glade_xml_new ("commodities.glade", "Commodities Dialog");
 
   dialog = glade_xml_get_widget (xml, "Commodities Dialog");
   cd->dialog = dialog;
