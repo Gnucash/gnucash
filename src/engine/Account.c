@@ -154,7 +154,9 @@ xaccCloneAccountSimple(const Account *from, GNCBook *book)
 
     ret->kvp_data    = kvp_frame_copy(from->kvp_data);
 
-    xaccAccountSetCommodity (ret, from->commodity);
+    ret->commodity    = from->commodity;
+    ret->commodity_scu = from->commodity_scu;
+    ret->core_dirty   = TRUE;
 
     gnc_engine_generate_event (&ret->guid, GNC_EVENT_CREATE);
 
@@ -188,7 +190,9 @@ xaccCloneAccount (const Account *from, GNCBook *book)
 
     ret->kvp_data    = kvp_frame_copy(from->kvp_data);
 
-    xaccAccountSetCommodity (ret, from->commodity);
+    ret->commodity    = from->commodity;
+    ret->commodity_scu = from->commodity_scu;
+    ret->core_dirty   = TRUE;
 
     /* make a note of where the copy came from */
     gnc_kvp_gemini (ret->kvp_data, &from->guid, &from->book->guid, now);
