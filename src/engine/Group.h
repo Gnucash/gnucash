@@ -120,8 +120,8 @@ Account * xaccGroupGetAccount (AccountGroup *group, int index);
  *    be freed by the caller.
  */
 
-GList * xaccGroupGetSubAccounts (AccountGroup *grp);
-GList * xaccGroupGetAccountList (AccountGroup *grp);
+AccountList * xaccGroupGetSubAccounts (AccountGroup *grp);
+AccountList * xaccGroupGetAccountList (AccountGroup *grp);
 
 /* 
  * The xaccGetAccountFromName() subroutine fetches the
@@ -237,7 +237,7 @@ gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
  */
 
 void xaccGroupBeginStagedTransactionTraversals(AccountGroup *grp);
-void xaccSplitsBeginStagedTransactionTraversals(GList *splits);
+void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
 void xaccAccountBeginStagedTransactionTraversals(Account *account);
 
 /* xaccTransactionTraverse() checks the stage of the given transaction.

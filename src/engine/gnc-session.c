@@ -220,11 +220,14 @@ gnc_session_int_backend_load_error(GNCSession *session,
 static void
 gnc_session_load_backend(GNCSession * session, char * backend_name)
 {
-  GNCModule  mod;
+  GNCModule  mod = 0;
   Backend    *(* be_new_func)(void);
   char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 
   /* FIXME: this needs to be smarter with version numbers. */
+  /* FIXME: this should use dlopen(), instead of guile/scheme, 
+   *    to load the modules.  Right now, this requires the engine to
+   *    link to scheme, which is an obvious architecture flaw. */
   mod = gnc_module_load(mod_name, 0);
 
   if (mod) 

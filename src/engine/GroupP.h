@@ -56,7 +56,7 @@ struct account_group_s
 
   Account *parent;         /* back-pointer to parent */
 
-  GList *accounts;         /* list of account pointers */
+  AccountList *accounts;   /* list of account pointers */
 
   Backend *backend;        /* persistant storage backend */
 

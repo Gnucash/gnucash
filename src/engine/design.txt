@@ -2,6 +2,25 @@ This document is becoming obsolete. Please refer to the design
 documentation in src/doc/design for a complete description of the
 Engine architecture.
 
+Architecture Flaw
+-----------------
+A few areas in the engine are marked 'FIXME: architecture flaw'.
+What does this really mean?  There is a Soviet joke from the 1960's:
+
+A westerner in Moscow stops a man to ask him the time. The man puts
+down his breifcase, and flicks his wrist to look at his watch.  "The
+time is 7:03, the temperature is 12 degrees C, the air presssure is
+950 mmHg and falling."  The westerner remarks with considerable 
+interest, "Why, that's a mighty fine watch you have there! We don't
+have anything like that in the America!" The Soviet responds, "Why 
+yes, this demonstrates the superiority of Soviet engineering over
+decadent captalist design."  Stooping to pick up his breifcase, 
+he mumbles half to himself, "If only these batteries weren't so heavy."
+
+There are a few places where the engine requires the use of guile.
+These should be eliminated.
+
+
 Accounting Engine
 -----------------
 This document reviews the operation of, and various design points 

@@ -54,30 +54,30 @@ typedef enum {GNC_TR_EXP_MISC,
                
 void gnc_tracking_associate_income_accounts(Account *stock_account, 
                                             GNCTrackingIncomeCategory category, 
-                                             GList *account_list);
+                                            AccountList *account_list);
 
 
 void gnc_tracking_asssociate_expense_account(Account *stock_account,
                                              GNCTrackingExpenseCategory category,
-                                             GList *account_list);
+                                             AccountList *account_list);
 
 /* 
  * returns a list of account *'s, 
  * returns null if no association specified 
  */
 
-GList *gnc_tracking_find_expense_accounts(Account *stock_account, 
+AccountList *gnc_tracking_find_expense_accounts(Account *stock_account, 
                                                     GNCTrackingExpenseCategory category);
 
-GList *gnc_tracking_find_income_accounts(Account *stock_account, 
+AccountList *gnc_tracking_find_income_accounts(Account *stock_account, 
                                                     GNCTrackingIncomeCategory category);
 
 /* for ROI purposes we don't care about categories, these are "grab
 all" for that purpose */
  
-GList *gnc_tracking_find_all_expense_accounts(Account *stock_account);
+AccountList *gnc_tracking_find_all_expense_accounts(Account *stock_account);
 
-GList *gnc_tracking_find_all_income_accounts(Account *stock_account);
+AccountList *gnc_tracking_find_all_income_accounts(Account *stock_account);
 
 
 /* 

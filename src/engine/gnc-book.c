@@ -76,6 +76,10 @@ gnc_book_init (GNCBook *book, GNCSession *session)
   book->sx_notsaved = FALSE;
   book->template_group = xaccMallocAccountGroup(session);
 
+  /* FIXME: the gnc_engine_commodity_table_new() routine invokes
+   * guile/scheme to load the default list of currencies.  This 
+   * forces the engine to link to guile, which is an obvious 
+   * architecture flaw.  */
   book->commodity_table = gnc_engine_commodity_table_new ();
 
   xaccGroupSetBook (book->topgroup, book);

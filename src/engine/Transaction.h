@@ -47,6 +47,8 @@ typedef struct account_s       Account;
 typedef struct account_group_s AccountGroup;
 typedef struct split_s         Split;
 typedef struct transaction_s   Transaction;
+typedef GList                  AccountList;
+typedef GList                  SplitList;
 
 
 /** PROTOTYPES ******************************************************/
@@ -202,7 +204,7 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 /* The xaccTransGetSplitList() method returns a GList of the splits
  * in a transaction.  This list must not be modified.  Do *NOT* free
  * this list when you are done with it. */
-GList *       xaccTransGetSplitList (Transaction *trans);
+SplitList *   xaccTransGetSplitList (Transaction *trans);
 
 /* These routines return the Num (or ID field), the description, 
  * the notes, and the date field.

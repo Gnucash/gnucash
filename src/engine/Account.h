@@ -244,7 +244,7 @@ gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
 
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 
-GList*          xaccAccountGetSplitList (Account *account);
+SplitList*      xaccAccountGetSplitList (Account *account);
 
 gboolean        xaccAccountGetTaxRelated (Account *account);
 void            xaccAccountSetTaxRelated (Account *account,
