@@ -1,5 +1,9 @@
 2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
-	* src/import-export/ofx/gnc-ofx-import.c: Dynamically generate
+	* src/import-export/Transaction-matcher.c: Fix previous patch.  
+	gcc 3.2 is too forgiving...
+
+2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/Transaction-matcher.c: Dynamically generate
 	a pixmap to display match confidence graphically.
 
 2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>

@@ -177,22 +177,15 @@ static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog
   gchar * red_bar = ("brrrrb ");
   gchar * black_bar = ("bbbbbb ");
   const gint num_colors = 5;
-  gchar * size_str = g_new0(gchar,255);
-  sprintf(size_str,"%d%s%d%s%d%s",width_each_bar*score/*width*/," ",height," ",num_colors," 1"/*characters per pixel*/);
-  gchar * none_color_str =  g_new0(gchar,255);
-  strcpy(none_color_str,"  c None");
-  gchar * green_color_str =  g_new0(gchar,255);
-  strcpy(green_color_str,"g c green");
-  gchar * yellow_color_str = g_new0(gchar,255);
-  strcpy(yellow_color_str,"y c yellow");
-  gchar * red_color_str = g_new0(gchar,255);
-  strcpy(red_color_str,"r c red");
-  gchar * black_color_str = g_new0(gchar,255);
-  strcpy(black_color_str,"b c black");
+  gchar * size_str = g_strdup_printf("%d%s%d%s%d%s",width_each_bar*score/*width*/," ",height," ",num_colors," 1"/*characters per pixel*/);
+  gchar * none_color_str = g_strdup_printf("  c None");
+  gchar * green_color_str = g_strdup_printf("g c green");
+  gchar * yellow_color_str = g_strdup_printf("y c yellow");
+  gchar * red_color_str = g_strdup_printf("r c red");
+  gchar * black_color_str = g_strdup_printf("b c black");
   gchar * xpm[2+num_colors+height];
-  DEBUG("Begin");
-  printf("%s\n",size_str);
-  
+
+  /*DEBUG("Begin");*/
   xpm[0]=size_str;
   xpm[1]=none_color_str;
   xpm[2]=green_color_str;
@@ -226,7 +219,7 @@ static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog
 	    }
 	}
     }  
-    DEBUG("Test");
+
     if(score!=0)
       {
 	retval =  gdk_pixmap_colormap_create_from_xpm_d    (NULL,
@@ -240,7 +233,6 @@ static  GdkPixmap* gen_probability_pixmap(gint score, struct _transmatcherdialog
       /*DEBUG("free_loop i=%d%s%s",i,": ",xpm[i]);*/
       g_free(xpm[i]);
     }
-  DEBUG("End");
 
   return retval;
 }
