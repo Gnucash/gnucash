@@ -74,8 +74,10 @@ Stock Split Dialog
 ------------------------------------------------------------------------------
 | Area          | Description                                   | Developer  |
 ------------------------------------------------------------------------------
-| Main Window   | New registers should open in new top-level    |            |
-|               | windows.                                      |            |
+| Main Window   | - New registers should open in new top-level  |            |
+|               |   windows.                                    |            |
+|               | - Summary bar isn't shown, even when option in|            |
+|               |   view is checked.                            |            |
 ------------------------------------------------------------------------------
 | Register Core | - Can navigate, enter transactions, etc.      |            |
 | MOSTLY        | - Insertion point not shown.                  |            |
@@ -117,8 +119,15 @@ Stock Split Dialog
 |               |    GLib-GObject-WARNING **: gsignal.c:989: no |            |
 |               |    emission of signal "key-press-event" to    |            |
 |               |    stop for instance `0x855a240'              |            |
+|               | - Word wrap on transaction cells appears to be|            |
+|               |    on.  Eg. Long account names are truncated  |            |
+|               |    to the last space.  Specifically an account|            |
+|               |    Named: "Assets:XXXXXX Credit Union:XXXXXXX"|            |
+|               |    is truncated to "Assets:XXXXXX Credit" with|            |
+|               |    no hope of seeing the remainder of the     |            |
+|               |    text.  PJK                                 |            |
 ------------------------------------------------------------------------------
-| Find          | Can generate a query in the dialog.           |            |
+| Find          | - Can generate a query in the dialog.         |            |
 | SOMEWHAT      |                                               |            |
 | FUNCTIONAL    |                                               |            |
 ------------------------------------------------------------------------------
@@ -142,6 +151,8 @@ Stock Split Dialog
 |               |     libgoffice.                               |            |
 |               | - Save/restore in unknown state; believed to  |            |
 |               |     crash on re-start.                        |            |
+|               | - First report sets reportname text for tab   |            |
+|               |     but no other report can change it.        |            |
 ------------------------------------------------------------------------------
 | Importing     | HBCI - Needs new HTTP support [gnet]          |            |
 ------------------------------------------------------------------------------
@@ -162,6 +173,11 @@ Stock Split Dialog
 |               |     tabs?  Have to think about this some more.|            |
 |               | - Probably more TODO but these are the main   |            |
 |               |     points.                                   |            |
+------------------------------------------------------------------------------
+| Preferences   | - Business -> Accumulate splits on Post?      |            |
+|               |     option not present.  Not sure if this is  |            |
+|               |     intentionally missing. PJK                |            |
+|               |[ tested after g2 merge of 30 Dec 04?  -derek ]|            |
 ------------------------------------------------------------------------------
 | Hierarchy     | - Doesn't let you complete the conflict       |            |
 | Merge         |     resolution process, thus you can never    |            |
@@ -196,5 +212,9 @@ Stock Split Dialog
 |               |   long-term?)                                 |            |
 ------------------------------------------------------------------------------
 | Print Preview | Print-preview support.                        |            |
+------------------------------------------------------------------------------
+| File Menu     | Rename "New Account Tree" to "Display Account |            |
+|               |   Tree" as "New" gives the impression that    |            |
+|               |   a creation of something will occur.  PJK    |            |
 ------------------------------------------------------------------------------
 
