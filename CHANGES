@@ -1,5 +1,8 @@
 Version history:
 ------- -------
+ 1.0.18 - 17 Feb 98
+         o Fix Quicken QIF import to recognize "transaction cleared" flag.
+
  1.0.17 - 14 Feb 98
          o Fix core dump when deleting account with open register windows.
          o Fix core dump when transfering money to deleted (non-existant) account.

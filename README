@@ -184,13 +184,21 @@ Linux Debian
 
 That's all folks!
 
-Credits:
---------
+Main Developers:
+----------------
 Robin Clark <rclark@hmc.edu> for original xacc
 Linas Vepstas <linas@lins.org> for extensive enhancements
-Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
-Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+
+Fixes & Patches:
+----------------
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
-Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
+Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
+Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
+Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
+... and I am sure that I have missed many others ...
 
