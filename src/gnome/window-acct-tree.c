@@ -490,7 +490,7 @@ gnc_acct_tree_window_menu_scrub_cb(GtkWidget * widget,
 
   if (account == NULL)
   {
-    const char *message = _("You must select an account to scrub.");
+    const char *message = _("You must select an account to check and repair.");
     gnc_error_dialog (message);
     return;
   }
@@ -512,7 +512,7 @@ gnc_acct_tree_window_menu_scrub_sub_cb(GtkWidget * widget,
   
   if (account == NULL)
   {
-    const char *message = _("You must select an account to scrub.");
+    const char *message = _("You must select an account to check and repair.");
     gnc_error_dialog(message);
     return;
   }
@@ -786,25 +786,27 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("Scrub A_ccount"),
-      N_("Identify and fix problems in the account"),
+      N_("Check & Repair A_ccount"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this account"),
       gnc_acct_tree_window_menu_scrub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Scrub Su_baccounts"),
-      N_("Identify and fix problems in the account "
-         "and its subaccounts"),
+      N_("Check & Repair Su_baccounts"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in this account and its subaccounts"),
       gnc_acct_tree_window_menu_scrub_sub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Scrub A_ll"),
-      N_("Identify and fix problems in all the accounts"),
+      N_("Check & Repair A_ll"),
+      N_("Check for and repair unbalanced transactions and orphan splits "
+	 "in all accounts"),
       gnc_acct_tree_window_menu_scrub_all_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -882,7 +884,7 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
-    GNOMEUIINFO_SUBTREE(N_("_Scrub"), dup_scrub),
+    GNOMEUIINFO_SUBTREE(N_("_Check & Repair"), dup_scrub),
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
