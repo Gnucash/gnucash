@@ -40,8 +40,16 @@
           (lambda (new-option)
             (gnc:register-option options new-option))))
 
+;    (add-option
+;     (gnc:make-internal-option "__reg" this-acc #f))
+
     (add-option
-     (gnc:make-internal-option "__reg" this-acc #f))
+     (gnc:make-account-list-option
+      "__reg" this-acc
+      "" ""
+      (lambda () '())
+      #f
+      #f))				   
 
     (aging-options-generator options)))
 
@@ -74,8 +82,9 @@
   (let* ((receivables-account (op-value "__reg" this-acc)))
     (gnc:debug "receivables-account" receivables-account)
 
-    (if (not receivables-account)
-	(set! receivables-account (find-first-receivable-account)))
+    (if (null? receivables-account)
+	(set! receivables-account (find-first-receivable-account))
+	(set! receivables-account (car receivables-account)))
 
     (aging-renderer report-obj receivables-account #t)))
 
@@ -91,7 +100,7 @@
   (let* ((options (gnc:make-report-options "Receivable Aging"))
 	 (acct-op (gnc:lookup-option options "__reg" this-acc)))
 
-    (gnc:option-set-value acct-op acct)
+    (gnc:option-set-value acct-op (list acct))
     (gnc:make-report "Receivable Aging" options)))
 
 (export gnc:receivables-report-create-internal)
