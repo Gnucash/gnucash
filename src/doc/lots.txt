@@ -274,13 +274,54 @@ lots so that all lots belonging to an account can be quickly retreived.
 (In principle, the lots can be found by scanning every split in the
 account, but this is a painful process.)
 
+FIFO's
+======
+What is a FIFO ...?
+old gnucash-1.4 code has fifo in Queue.c
+also fifo's in 
+business/business-core/gncInvoice.c's PostInvoice and ApplyPayment
+
+xaccAccountFindOpenLots
+
+Conversion
+==========
+When Lots are finally put into production, old GnuCash datasets
+will need to be converted.   Conversion will be done by running 
+all splits in an account through an accounting FIFO.  The goal
+of the FIFO is to match up purchases and sales so that these can
+be assigned to a Lot.
+
+The conversion algorithm will work as follows:
+
+for each account {
+   loop over splits {
+      // perform the 'double-balance' check
+      if (split commodity != transaction currency) account needs conversion
+   }
+   if account needs conversion
+   for each split {
+      If (split amount > 0)  create new lot, put split in lot.
+      If (split amount < 0)  find oldest lot, put split in that lot
+   }
+}
+
+
+GUI
+===
+GUI forr handling Lots is needed:
+GUI support to attach a split to a Lot, or
+to view an account in lot-mode...
+
 
 Status
 ======
 Core support for Lots in the engine is complete (April 2002).  
 See src/engine/gnc-lot.h for the public API.
-FIFO's have not been started.
-The XML backend support for lot is complete (but untested).
+FIFO's have been started.
+The XML backend support for lot is complete (April 2002).
 The Postgres backend does not yet support lots.
+
+No GUI yet.
+
 
 -------------------------- end of file ------------------------------
