@@ -503,6 +503,17 @@ close_handler (gpointer user_data)
   gnome_dialog_close (GNOME_DIALOG (fcd->dialog));
 }
 
+static void
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  FinCalcDialog *fcd = user_data;
+
+  if (!fcd)
+    return;
+  gtk_window_present (GTK_WINDOW(fcd->dialog));
+}
+
 FinCalcDialog *
 gnc_ui_fincalc_dialog_create(void)
 {
@@ -516,6 +527,10 @@ gnc_ui_fincalc_dialog_create(void)
   GtkWidget *hbox;
   GtkWidget *edit;
   GladeXML  *xml;
+
+  if (gnc_forall_gui_components (DIALOG_FINCALC_CM_CLASS,
+				 show_handler, NULL))
+      return;
 
   commodity = gnc_default_currency ();
 

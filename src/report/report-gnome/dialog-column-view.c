@@ -220,8 +220,8 @@ gnc_column_view_edit_options(SCM options, SCM view) {
 
   ptr = gh_call1(get_editor, view);
   if(ptr != SCM_BOOL_F) {
-    GtkWidget * w = gw_wcp_get_ptr(ptr);
-    gdk_window_raise(GTK_WIDGET(w)->window);
+    GtkWindow * w = gw_wcp_get_ptr(ptr);
+    gtk_window_present(w);
     return NULL;
   }
   else {

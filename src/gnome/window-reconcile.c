@@ -2008,12 +2008,7 @@ gnc_ui_reconcile_window_raise(RecnWindow * recnData)
   if (recnData->window == NULL)
     return;
 
-  gtk_widget_show(recnData->window);
-
-  if (recnData->window->window == NULL)
-    return;
-
-  gdk_window_raise(recnData->window->window);
+  gtk_window_present(GTK_WINDOW(recnData->window));
 }
 
 

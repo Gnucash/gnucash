@@ -213,12 +213,7 @@ gnc_register_raise (RegWindow *regData)
   if (regData->window == NULL)
     return;
 
-  gtk_widget_show (regData->window);
-
-  if (regData->window->window == NULL)
-    return;
-
-  gdk_window_raise (regData->window->window);
+  gtk_window_present (GTK_WINDOW(regData->window));
 }
 
 
@@ -671,8 +666,7 @@ gnc_register_show_date_window(RegWindow *regData)
   if (regDateData->window == NULL)
     return;
 
-  gtk_widget_show_all(regDateData->window);
-  gdk_window_raise(GTK_WIDGET(regDateData->window)->window);
+  gtk_window_present(GTK_WINDOW(regDateData->window));
 }
 
 static RegDateWindow *

@@ -27,6 +27,7 @@
 #include <gnome.h>
 
 #include "dialog-totd.h"
+#include "dialog-utils.h"	/* remove with GTK 2.0 */
 #include "global-options.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
@@ -76,7 +77,7 @@ void gnc_ui_totd_dialog_create_and_run(void)
   }
   else
   {
-    gdk_window_raise(win->window);
+    gtk_window_present(GTK_WINDOW(win));
   }
   return;
 }

@@ -551,8 +551,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
                                          (gpointer)sxd );
         if ( alreadyExisting != NULL ) {
                 sxd = (SchedXactionDialog*)alreadyExisting->data;
-                gtk_widget_show( sxd->dialog );
-                gdk_window_raise( sxd->dialog->window );
+                gtk_window_present( GTK_WINDOW(sxd->dialog) );
                 g_list_free( alreadyExisting );
                 return sxd;
         }
@@ -723,8 +722,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                  sx );
         if ( alreadyExists ) {
                 sxed = (SchedXactionEditorDialog*)alreadyExists->data;
-                gtk_widget_show( sxed->dialog );
-                gdk_window_raise( sxed->dialog->window );
+                gtk_window_present( GTK_WINDOW(sxed->dialog) );
                 g_list_free( alreadyExists );
                 return sxed;
         }

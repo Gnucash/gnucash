@@ -50,6 +50,8 @@
 
 #include <g-wrap-wct.h>
 
+#define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
+
 struct _qifimportwindow {
   GtkWidget * window;
   GtkWidget * druid;
@@ -144,6 +146,8 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
     return;
 
   /* FIXME -- commodity pages */
+
+  gnc_unregister_gui_component_by_data(DRUID_QIF_IMPORT_CM_CLASS, window);
 
   gtk_widget_destroy(window->window);
 
@@ -1679,9 +1683,24 @@ gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w) {
 
 /* ======================================================== */
 
+static void
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  QIFImportWindow *qif_win = user_data;
+
+  if (!qif_win)
+    return;
+  gtk_window_present (GTK_WINDOW(qif_win->window));
+}
+
 void
 gnc_file_qif_import (void) 
 {
+  if (gnc_forall_gui_components (DRUID_QIF_IMPORT_CM_CLASS,
+				 show_handler, NULL))
+      return;
+
   /* pop up the QIF File Import dialog box */
   gnc_ui_qif_import_druid_make();
 }
@@ -1919,8 +1938,10 @@ gnc_ui_qif_import_druid_make(void)  {
 
   gnc_druid_set_colors (GNOME_DRUID (retval->druid));
 
+  gnc_register_gui_component(DRUID_QIF_IMPORT_CM_CLASS, NULL, NULL, retval);
+
   gtk_widget_show_all(retval->window);
-  gdk_window_raise (retval->window->window);
+  gtk_window_present (GTK_WINDOW(retval->window));
 
   return retval;
 }

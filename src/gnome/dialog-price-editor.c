@@ -885,7 +885,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   if (parent != NULL)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
 
-  /* default to ok */
+  /* default to 'close' button */
   gnome_dialog_set_default (GNOME_DIALOG(dialog), 0);
 
   /* price tree */
@@ -979,6 +979,23 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_prices_load_prices (pdb_dialog);
 }
 
+static void
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  PricesDialog *pdb_dialog = user_data;
+
+  if (!pdb_dialog)
+    return;
+
+  gtk_window_present (GTK_WINDOW(pdb_dialog->dialog));
+
+  /* Price edit window might not be realized */
+  if (pdb_dialog->price_dialog) {
+    gtk_window_present (GTK_WINDOW(pdb_dialog->price_dialog));
+  }
+}
+
 /********************************************************************\
  * gnc_prices_dialog                                                *
  *   opens up a window to edit price information                    *
@@ -991,6 +1008,9 @@ gnc_prices_dialog (GtkWidget * parent)
 {
   PricesDialog *pdb_dialog;
   gint component_id;
+
+  if (gnc_forall_gui_components (DIALOG_PRICES_CM_CLASS, show_handler, NULL))
+      return;
 
   pdb_dialog = g_new0 (PricesDialog, 1);
 

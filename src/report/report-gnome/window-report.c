@@ -1014,8 +1014,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
 
   ptr = gh_call1(get_editor, report);
   if(ptr != SCM_BOOL_F) {
-    GtkWidget * w = gw_wcp_get_ptr(ptr);
-    gdk_window_raise(GTK_WIDGET(w)->window);
+    GtkWindow * w = gw_wcp_get_ptr(ptr);
+    gtk_window_present(w);
     return NULL;
   }
   else {
@@ -1075,7 +1075,7 @@ void
 gnc_report_raise_editor(SCM report) {
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM editor = gh_call1(get_editor, report);
-  gdk_window_raise(GTK_WIDGET(gw_wcp_get_ptr(editor))->window);
+  gtk_window_present(gw_wcp_get_ptr(editor));
 }
 
 static gboolean

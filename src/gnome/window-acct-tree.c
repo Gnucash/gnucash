@@ -1112,8 +1112,8 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
   GNCAcctTreeWin * win = data;
 
   if(win->editor_dialog) {
-    gdk_window_raise(GTK_WIDGET
-                     (gnc_options_dialog_widget(win->editor_dialog))->window);
+    gtk_window_present(GTK_WINDOW
+                     (gnc_options_dialog_widget(win->editor_dialog)));
   }
   else {
     win->editor_dialog = gnc_options_dialog_new(TRUE, NULL);

@@ -460,6 +460,17 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_commodities_load_commodities (cd);
 }
 
+static void
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  CommoditiesDialog *cd = user_data;
+
+  if (!cd)
+    return;
+  gtk_window_present (GTK_WINDOW(cd->dialog));
+}
+
 /********************************************************************\
  * gnc_commodities_dialog                                           *
  *   opens up a window to edit price information                    *
@@ -472,6 +483,10 @@ gnc_commodities_dialog (GtkWidget * parent)
 {
   CommoditiesDialog *cd;
   gint component_id;
+
+  if (gnc_forall_gui_components (DIALOG_COMMODITIES_CM_CLASS,
+				 show_handler, NULL))
+      return;
 
   cd = g_new0 (CommoditiesDialog, 1);
 

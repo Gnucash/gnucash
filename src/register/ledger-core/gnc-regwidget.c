@@ -258,12 +258,7 @@ gnc_register_raise (GNCRegWidget *rw)
   if (rw->window == NULL)
     return;
 
-  gtk_widget_show (rw->window);
-
-  if (rw->window->window == NULL)
-    return;
-
-  gdk_window_raise (rw->window->window);
+  gtk_window_present (GTK_WINDOW(rw->window));
 }
 
 /********************************************************************\

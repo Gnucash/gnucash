@@ -1914,7 +1914,7 @@ gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data)
   if (window->apply_cb)
     window->apply_cb (window, window->apply_cb_data);
 
-  button = button = gnc_options_dialog_get_apply_button (window->container);
+  button = gnc_options_dialog_get_apply_button (window->container);
   if (button)
     gtk_widget_set_sensitive (button, FALSE);
 }
@@ -2194,6 +2194,5 @@ gnc_show_options_dialog(void)
                                      &options_dialog);
   }
 
-  gtk_widget_show(options_dialog->container);
-  gdk_window_raise(options_dialog->container->window);
+  gtk_window_present(GTK_WINDOW(options_dialog->container));
 }
