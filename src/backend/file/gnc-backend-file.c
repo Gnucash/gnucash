@@ -245,11 +245,12 @@ gnc_file_be_get_file_lock (FileBackend *be)
     char pathbuf[PATH_MAX];
     char *path = NULL;
     int rc;
+    GNCBackendError be_err;
 
     rc = stat (be->lockfile, &statbuf);
     if (!rc)
     {
-        /* oops .. file is all locked up  .. */
+        /* oops .. file is locked by another user  .. */
         xaccBackendSetError ((Backend*)be, ERR_BACKEND_LOCKED);
         return FALSE;
     }
@@ -257,8 +258,18 @@ gnc_file_be_get_file_lock (FileBackend *be)
     be->lockfd = open (be->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
     if (be->lockfd < 0)
     {
-        /* oops .. file is all locked up  .. */
-        xaccBackendSetError ((Backend*)be, ERR_BACKEND_LOCKED);
+        /* oops .. we can't create the lockfile .. */
+        switch (errno) {
+	case EACCES:
+	case EROFS:
+	case ENOSPC:
+	  be_err = ERR_BACKEND_READONLY;
+	  break;
+	default:
+	  be_err = ERR_BACKEND_LOCKED;
+	  break;
+	}
+        xaccBackendSetError ((Backend*)be, be_err);
         return FALSE;
     }
 
