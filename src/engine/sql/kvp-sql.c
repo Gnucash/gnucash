@@ -419,7 +419,7 @@ static gpointer
 int64_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    KVP_HANDLER_SETUP;
-   kv = kvp_value_new_gint64 (atoll (DB_GET_VAL ("data", j)));
+   kv = kvp_value_new_gint64 (strtoll (DB_GET_VAL ("data", j), NULL, 0));
    KVP_HANDLER_TAKEDOWN;
 }
 
@@ -436,8 +436,8 @@ numeric_handler (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    gnc_numeric gn;
    KVP_HANDLER_SETUP;
-   gn.num = atoll (DB_GET_VAL ("num", j));
-   gn.denom = atoll (DB_GET_VAL ("denom", j));
+   gn.num = strtoll (DB_GET_VAL ("num", j), NULL, 0);
+   gn.denom = strtoll (DB_GET_VAL ("denom", j), NULL, 0);
    kv = kvp_value_new_gnc_numeric (gn);
    KVP_HANDLER_TAKEDOWN;
 }

@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <stdlib.h>
 #include <string.h>
 #include <libpq-fe.h>  
 
@@ -273,8 +274,8 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    gnc_price_set_source (pr, DB_GET_VAL("source",j));
    gnc_price_set_type (pr, DB_GET_VAL("type",j));
 
-   num = atoll (DB_GET_VAL("valueNum", j));
-   denom = atoll (DB_GET_VAL("valueDenom", j));
+   num = strtoll (DB_GET_VAL("valueNum", j), NULL, 0);
+   denom = strtoll (DB_GET_VAL("valueDenom", j), NULL, 0);
    value = gnc_numeric_create (num, denom);
    gnc_price_set_value (pr, value);
 
