@@ -579,11 +579,9 @@
          (done #f))
         
     (if bank-xtn?
-        (let ((near (qif-xtn:from-acct xtn)))
-          (set! far-acct-name (qif-split:category split))
-          (if near
-              (set! near-acct-name near)
-              (set! near-acct-name (qif-file:default-account qif-file))))
+        (begin 
+          (set! near-acct-name (qif-xtn:from-acct xtn))
+          (set! far-acct-name (qif-split:category split)))
         
         (let ((qif-accts 
                (qif-split:accounts-affected split xtn))
@@ -596,11 +594,14 @@
               ;; transactions to match up.  Quicken thinks the near
               ;; and far accounts are different than we do.
               (case action
-                ((intincx divx cglongx cgshortx miscincx miscexpx)
+                ((intincx divx cglongx cgshortx miscincx miscexpx sellx)
                  (set! amount (- amount))
                  (set! near-acct-name (qif-xtn:from-acct xtn))
                  (set! far-acct-name (qif-split:category split)))
-                ((xout sellx)
+                ((buyx)
+                 (set! near-acct-name (qif-xtn:from-acct xtn))
+                 (set! far-acct-name (qif-split:category split)))
+                ((xout)
                  (set! amount (- amount)))))
           (set! amount (- amount commission))))
     
@@ -619,7 +620,7 @@
                   (set! done #t)))
             ;; iterate with the next split
             (if (and (not done)
-                     (not (null? (cdr splits))))
+                       (not (null? (cdr splits))))
                 (split-loop (cdr splits)))))
       
       ;; iterate with the next transaction
@@ -774,6 +775,8 @@
              (length (qif-xtn:splits other-xtn)))
           (qif-xtn:mark-split xtn split)
           (qif-xtn:mark-split other-xtn other-split))))))
+  
+    
 
 (define (qif-xtn:mark-split xtn split)
   (qif-split:set-mark! split #t)

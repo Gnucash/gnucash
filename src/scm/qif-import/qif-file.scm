@@ -154,6 +154,7 @@
                       ;; S : split category 
                       ((#\S)
                        (set! current-split (make-qif-split))
+                       (set! default-split #f)
                        (qif-split:set-category! current-split value)
                        (qif-xtn:set-splits! 
                         current-xtn
@@ -192,6 +193,7 @@
                        (if (qif-xtn:date current-xtn)
                            (qif-file:add-xtn! self current-xtn))
                        (set! current-xtn (make-qif-xtn))
+                       (set! current-split #f)
                        (set! default-split (make-qif-split)))))
                    
                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -310,13 +312,12 @@
               ;; and this is if we read a null or eof line 
               (if (and (not heinous-error)
                        (not (eof-object? line)))
-                  (line-loop))))))
+                  (line-loop))))))    
     
     ;; now reverse the transaction list so xtns are in the same order that 
     ;; they were in the file.  This is important in a few cases. 
     (qif-file:set-xtns! self (reverse (qif-file:xtns self)))
     return-val))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:process-opening-balance-xtn self xtn
@@ -395,6 +396,7 @@
                    (display elt))
                  lst))))))
     (set! start-time (gettimeofday))
+    
     (and 
      ;; fields of categories. 
      (check-and-parse-field 
@@ -470,7 +472,7 @@
       set-error)
      
      ;; this one's a little tricky... it checks and sets all the 
-     ;; split amounts for the transaction together.
+     ;; split amounts for the transaction together.     
      (check-and-parse-field 
       qif-xtn:split-amounts qif-xtn:set-split-amounts!
       qif-parse:check-number-formats '(decimal comma) 
