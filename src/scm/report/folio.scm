@@ -22,8 +22,8 @@
           (set-tm:min bdtime 59)
           (set-tm:hour bdtime 23)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f))
 
     gnc:*folio-report-options*)
 

@@ -21,7 +21,6 @@
 \********************************************************************/
 
 #include <top-level.h>
-
 #include <gnome.h>
 
 #include "dialog-options.h"
@@ -42,6 +41,89 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
+typedef enum {
+  GNC_RD_WID_AB_BUTTON_POS = 0,
+  GNC_RD_WID_AB_WIDGET_POS,
+  GNC_RD_WID_REL_BUTTON_POS,
+  GNC_RD_WID_REL_WIDGET_POS} GNCRdPositions;
+
+static void
+gnc_option_changed_cb(GtkEditable *editable, gpointer data)
+{
+  GtkWidget *raw, *pbox;
+  GNCOption *option = data;
+
+  raw = GTK_WIDGET(editable);
+  option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
+
+  pbox = gtk_widget_get_toplevel(raw);
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void 
+gnc_date_option_changed_cb(GtkWidget *dummy, gpointer data)
+{
+  GtkWidget *pbox;
+  GNCOption *option = data;
+  option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
+
+  pbox = gtk_widget_get_toplevel(option->widget);
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static void
+gnc_date_option_set_select_method(GNCOption *option, gboolean use_absolute,
+                                  gboolean set_buttons)
+{
+  GList* widget_list;
+  GtkWidget *ab_button, *rel_button, *rel_widget, *ab_widget;
+ 
+  widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
+  ab_button = g_list_nth_data(widget_list, GNC_RD_WID_AB_BUTTON_POS);
+  ab_widget = g_list_nth_data(widget_list, GNC_RD_WID_AB_WIDGET_POS);
+  rel_button = g_list_nth_data(widget_list, GNC_RD_WID_REL_BUTTON_POS);
+  rel_widget = g_list_nth_data(widget_list, GNC_RD_WID_REL_WIDGET_POS);
+
+  if(use_absolute)
+  {
+    gtk_widget_set_sensitive(ab_widget, TRUE);
+    gtk_widget_set_sensitive(rel_widget, FALSE);
+    if(set_buttons)
+    {
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ab_button), TRUE);
+    }
+  }
+  else
+  {
+    gtk_widget_set_sensitive(rel_widget, TRUE);
+    gtk_widget_set_sensitive(ab_widget, FALSE);
+    if (set_buttons)
+    {
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(rel_button), TRUE);
+    }
+  }
+}
+
+static void 
+gnc_rd_option_ab_set_cb(GtkWidget *widget, gpointer *raw_option)
+{
+  GNCOption *option = (GNCOption *) raw_option;
+  gnc_date_option_set_select_method(option, TRUE, FALSE);
+  gnc_date_option_changed_cb(widget, option);
+}
+
+static void
+gnc_rd_option_rel_set_cb(GtkWidget *widget, gpointer *raw_option)
+{
+  GNCOption *option = (GNCOption *) raw_option;
+  gnc_date_option_set_select_method(option, FALSE, FALSE);
+  gnc_date_option_changed_cb(widget, option);
+  return;
+}
 
 /********************************************************************\
  * gnc_option_set_ui_value                                          *
@@ -120,15 +202,95 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   }
   else if (safe_strcmp(type, "date") == 0)
   {
-    Timespec ts;
-
-    if (gnc_timepair_p(value))
+    SCM symbol;
+    int index;
+    char *date_option_type;
+    char *symbol_str;
+    
+    date_option_type = gnc_option_date_option_get_subtype(option);
+    
+    if (gh_vector_p(value))
     {
-      ts = gnc_timepair2timespec(value);
-      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
+      symbol = gh_vector_ref(value, gh_int2scm(0));
+      if(gh_symbol_p(symbol))
+      {
+	symbol_str = gh_symbol2newstr(symbol, NULL);
+	if (safe_strcmp(symbol_str, "relative") == 0)
+	{
+	  index = gnc_option_permissible_value_index(option, gh_vector_ref(value, gh_int2scm(2)));
+	  if (safe_strcmp(date_option_type, "relative") == 0)
+	  {      
+	    gtk_object_set_data(GTK_OBJECT(option->widget),
+                                "gnc_multichoice_index",
+				GINT_TO_POINTER(index));
+	    gtk_option_menu_set_history(GTK_OPTION_MENU(option->widget),
+                                        index);
+	  }
+	  else if (safe_strcmp(date_option_type, "both") == 0)
+	  {
+	    GList *widget_list;
+	    GtkWidget *rel_date_widget;
+	    widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
+	    rel_date_widget = g_list_nth_data(widget_list,
+                                              GNC_RD_WID_REL_WIDGET_POS);
+	    gnc_date_option_set_select_method(option, FALSE, TRUE);
+	    gtk_object_set_data(GTK_OBJECT(rel_date_widget),
+                                "gnc_multichoice_index",
+				GINT_TO_POINTER(index));
+	    gtk_option_menu_set_history(GTK_OPTION_MENU(rel_date_widget),
+                                        index);
+	  }
+	  else
+	  {
+	    bad_value = TRUE;
+	  }
+	}
+	else if (safe_strcmp(symbol_str, "absolute") == 0)
+	{ 
+	  Timespec ts;
+	  SCM tp;
+	  tp = gh_vector_ref(value, gh_int2scm(1));
+	  if (gnc_timepair_p(tp))
+	  {
+	    ts = gnc_timepair2timespec(tp);
+	    
+	    if (safe_strcmp(date_option_type, "absolute") == 0)
+	    {
+	      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
+	    }
+	    else if (safe_strcmp(date_option_type, "both") == 0)
+	    {
+	      GList *widget_list;
+	      GtkWidget *ab_widget;
+	      widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
+	      ab_widget = g_list_nth_data(widget_list,
+                                          GNC_RD_WID_AB_WIDGET_POS);
+	      gnc_date_option_set_select_method(option, TRUE, TRUE);
+	      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
+	    }
+	    else
+	    {
+	      bad_value = TRUE;
+	    }
+	  }
+	  else
+	  {
+	    bad_value = TRUE;
+	  }
+	}
+	else
+	{
+	  bad_value = TRUE;
+	}
+	free(symbol_str);
+      }
+    
     }
     else
+    {
       bad_value = TRUE;
+    }
+    g_free(date_option_type);
   }
   else if (safe_strcmp(type, "account-list") == 0)
   {
@@ -292,14 +454,57 @@ gnc_option_get_ui_value(GNCOption *option)
   }
   else if (safe_strcmp(type, "date") == 0)
   {
-    Timespec ts;
+    int index;
+    SCM type, val;
+    char *subtype =  gnc_option_date_option_get_subtype(option);
+    if(safe_strcmp(subtype, "relative") == 0)
+    {
+      index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(option->widget),
+						  "gnc_multichoice_index"));
+      type = gh_symbol2scm("relative");
+      val = gnc_option_permissible_value(option, index);
+      result = gh_cons(type, val);
+    }
+    else if (safe_strcmp(subtype, "absolute") == 0)
+    { 		      
+      Timespec ts;
+      
+      ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(option->widget));
+      ts.tv_nsec = 0;
+      
+      result = gh_cons(gh_symbol2scm("absolute"), gnc_timespec2timepair(ts));
+    }
+    else if (safe_strcmp(subtype, "both") == 0)
+    {
+      Timespec ts;
+      int index;
+      SCM val;
+      GList *widget_list;
+      GtkWidget *ab_button, *rel_widget, *ab_widget;
+      widget_list = gtk_container_children(GTK_CONTAINER(option->widget));
+      ab_button = g_list_nth_data(widget_list,  GNC_RD_WID_AB_BUTTON_POS);
+      ab_widget = g_list_nth_data(widget_list,  GNC_RD_WID_AB_WIDGET_POS);
+      rel_widget = g_list_nth_data(widget_list, GNC_RD_WID_REL_WIDGET_POS);
 
-    ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(option->widget));
-    ts.tv_nsec = 0;
-
-    result = gnc_timespec2timepair(ts);
+      /* if it's an absolute date */
+      if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ab_button)))
+      {
+	ts.tv_sec = gnc_date_edit_get_date(GNC_DATE_EDIT(ab_widget));
+	ts.tv_nsec = 0;
+	result = gh_cons(gh_symbol2scm("absolute"), gnc_timespec2timepair(ts));
+      }
+      else 
+      {
+	index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(rel_widget),
+						    "gnc_multichoice_index"));
+	val = gnc_option_permissible_value(option, index);
+	result = gh_cons(gh_symbol2scm("relative"), val);
+      }
+    }
+    g_free(subtype);
   }
-  else if (safe_strcmp(type, "account-list") == 0)
+  
+else if (safe_strcmp(type, "account-list") == 0)
   {
     GNCAccountTree *tree;
     GList *list;
@@ -385,7 +590,7 @@ gnc_option_get_ui_value(GNCOption *option)
  *   GUI option.                                                    *
  *                                                                  *
  * Args: section     - section of option                            *
- *       name        - name of option
+ *       name        - name of option                               *
  *       selectable  - if false, update the widget so that it       *
  *                     cannot be selected by the user.  If true,    *
  *                     update the widget so that it can be selected.*
@@ -451,19 +656,6 @@ gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
 
-static void
-gnc_option_changed_cb(GtkEditable *editable, gpointer data)
-{
-  GtkWidget *pbox;
-  GNCOption *option = data;
-
-  option->changed = TRUE;
-
-  gnc_option_call_option_widget_changed_proc(option);
-
-  pbox = gtk_widget_get_toplevel(GTK_WIDGET(editable));
-  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
-}
 
 static void
 gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
@@ -493,6 +685,154 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
   gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
 }
 
+static void
+gnc_option_rd_combo_cb(GtkWidget *w, gint index, gpointer data)
+{
+  
+  GtkWidget *widget, *pbox, *omenu;
+  GList *children;
+  GNCOption *option = data;
+  gpointer _current;
+  gint current;
+
+  children = gtk_container_children(GTK_CONTAINER(option->widget));
+  widget = g_list_nth_data(children, GNC_RD_WID_REL_WIDGET_POS);
+				     
+  _current = gtk_object_get_data(GTK_OBJECT(widget),
+                                 "gnc_multichoice_index");
+  current = GPOINTER_TO_INT(_current);
+
+  if (current == index)
+    return;
+
+  gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+  gtk_object_set_data(GTK_OBJECT(widget), "gnc_multichoice_index",
+                      GINT_TO_POINTER(index));
+
+  option->changed = TRUE;
+
+  gnc_option_call_option_widget_changed_proc(option);
+
+  omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
+  pbox = gtk_widget_get_toplevel(omenu);
+  gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));
+}
+
+static GtkWidget *
+gnc_option_create_date_widget (GNCOption *option)
+{
+  GtkWidget * box = NULL;
+  GtkWidget *rel_button= NULL, *ab_button=NULL;
+  GtkWidget *rel_widget=NULL, *ab_widget=NULL;
+  GtkWidget *entry;
+  gboolean show_time, use24;
+  GNCOptionInfo *info;
+  char *type;
+  char **raw_strings;
+  char **raw;
+  int num_values;
+  type = gnc_option_date_option_get_subtype(option);
+  show_time = gnc_option_show_time(option);
+  use24 = gnc_lookup_boolean_option("International", 
+				    "Use 24-hour time format", FALSE);
+  if(safe_strcmp(type, "relative") != 0)
+  {
+    ab_widget = gnc_date_edit_new(time(NULL), show_time, use24);
+    entry = GNC_DATE_EDIT(ab_widget)->date_entry;
+    gtk_signal_connect(GTK_OBJECT(entry), "changed",
+		       GTK_SIGNAL_FUNC(gnc_date_option_changed_cb), option);
+    if (show_time)
+    {
+      entry = GNC_DATE_EDIT(ab_widget)->time_entry;
+      gtk_signal_connect(GTK_OBJECT(entry), "changed",
+		       GTK_SIGNAL_FUNC(gnc_date_option_changed_cb), option);
+    }
+  }
+    
+  if(safe_strcmp(type, "absolute") != 0)
+  { 
+    int i;
+    num_values = gnc_option_num_permissible_values(option);
+    
+    g_return_val_if_fail(num_values >= 0, NULL);
+    
+    info = g_new0(GNCOptionInfo, num_values);
+    raw_strings = g_new0(char *, num_values * 2);
+    raw = raw_strings;
+    
+    for (i = 0; i < num_values; i++)
+    {
+      *raw = gnc_option_permissible_value_name(option, i);
+      if (*raw != NULL)
+	info[i].name = _(*raw);
+      else
+	info[i].name = "";
+      
+      raw++;
+      
+      *raw = gnc_option_permissible_value_description(option, i);
+      if (*raw != NULL)
+        info[i].tip = _(*raw);
+      else
+        info[i].tip = "";
+      if(safe_strcmp(type, "both") == 0)
+      {
+        info[i].callback = gnc_option_rd_combo_cb;
+      }
+      else 
+      {
+        info[i].callback = gnc_option_multichoice_cb;
+      }
+      info[i].user_data = option;
+    }
+
+    rel_widget = gnc_build_option_menu(info, num_values);
+  
+    for (i = 0; i < num_values * 2; i++)
+      if (raw_strings[i] != NULL)
+        free(raw_strings[i]);
+
+    g_free(raw_strings);
+    g_free(info);
+  }  
+  if(safe_strcmp(type, "absolute") == 0)
+  {
+    free(type);
+    option->widget = ab_widget;
+    return ab_widget;
+  }
+  else if (safe_strcmp(type, "relative") == 0)
+  {
+    option->widget = rel_widget;
+    free(type);
+
+    return rel_widget;
+  }
+  else if (safe_strcmp(type, "both") == 0)
+  {
+    box = gtk_hbox_new(FALSE, 5);
+    ab_button = gtk_radio_button_new(NULL);
+    gtk_signal_connect(GTK_OBJECT(ab_button), "toggled",
+		       GTK_SIGNAL_FUNC(gnc_rd_option_ab_set_cb), option);
+    rel_button = gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(ab_button));
+    gtk_signal_connect(GTK_OBJECT(rel_button), "toggled",
+		       GTK_SIGNAL_FUNC(gnc_rd_option_rel_set_cb), option);
+    gtk_box_pack_start(GTK_BOX(box), ab_button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), ab_widget, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), rel_button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), rel_widget, FALSE, FALSE, 0);
+    free(type);
+    option->widget = box;
+    return box;
+  }
+  else /* can't happen */
+  {
+    return NULL;
+  }
+}
+
+				 
+  
 static GtkWidget *
 gnc_option_create_multichoice_widget(GNCOption *option)
 {
@@ -529,6 +869,7 @@ gnc_option_create_multichoice_widget(GNCOption *option)
 
     info[i].callback = gnc_option_multichoice_cb;
     info[i].user_data = option;
+    raw++;
   }
 
   widget = gnc_build_option_menu(info, num_values);
@@ -536,7 +877,7 @@ gnc_option_create_multichoice_widget(GNCOption *option)
   for (i = 0; i < num_values * 2; i++)
     if (raw_strings[i] != NULL)
       free(raw_strings[i]);
-
+  
   g_free(raw_strings);
   g_free(info);
 
@@ -614,7 +955,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
   if (multiple_selection)
     gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_MULTIPLE);
-  else
+  else 
     gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_BROWSE);
 
   scroll_win = gtk_scrolled_window_new(NULL, NULL);
@@ -962,11 +1303,8 @@ gnc_option_set_ui_widget(GNCOption *option,
   }
   else if (safe_strcmp(type, "date") == 0)
   {
-    GtkWidget *entry;
     GtkWidget *label;
     gchar *colon_name;
-    gboolean show_time;
-    gboolean use24;
 
     colon_name = g_strconcat(name, ":", NULL);
     label= gtk_label_new(colon_name);
@@ -975,33 +1313,19 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     enclosing = gtk_hbox_new(FALSE, 5);
 
-    show_time = gnc_option_show_time(option);
-    use24 = gnc_lookup_boolean_option("International",
-                                      "Use 24-hour time format", FALSE);
-
-    value = gnc_date_edit_new(time(NULL), show_time, use24);
+    value = gnc_option_create_date_widget(option);
 
     option->widget = value;
-    gnc_option_set_ui_value(option, FALSE);
-
-    entry = GNC_DATE_EDIT(value)->date_entry;
-    gtk_tooltips_set_tip(tooltips, entry, documentation, NULL);
-    gtk_signal_connect(GTK_OBJECT(entry), "changed",
-		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
-
-    if (show_time)
-    {
-      entry = GNC_DATE_EDIT(value)->time_entry;
-      gtk_tooltips_set_tip(tooltips, entry, documentation, NULL);
-      gtk_signal_connect(GTK_OBJECT(entry), "changed",
-                         GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
-    }
 
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
-		     FALSE, FALSE, 0);
+		     FALSE, FALSE, 0);  
+
+    gtk_box_pack_start(page_box, enclosing, FALSE, FALSE, 5);
+    packed = TRUE;  
+    gnc_option_set_ui_value(option, FALSE);
   }
   else if (safe_strcmp(type, "account-list") == 0)
   {

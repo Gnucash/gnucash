@@ -46,8 +46,9 @@
             (set-tm:hour bdtime 0)
             (set-tm:mday bdtime 1)
             (set-tm:mon bdtime 0)
-            (cons (car (mktime bdtime)) 0)))
-        #f))
+            (cons 'absolute (cons (car (mktime bdtime)) 0))))
+        #f 
+	'absolute #f))
 
       ;; to-date
       (gnc:register-runavg-option
@@ -59,8 +60,8 @@
             (set-tm:sec bdtime 59)
             (set-tm:min bdtime 59)
             (set-tm:hour bdtime 23)
-            (cons (car (mktime bdtime)) 0)))
-        #f))
+            (cons 'absolute (cons (car (mktime bdtime)) 0))))
+        #f 'absolute #f))
 
       ;; account(s) to do report on
 
@@ -322,8 +323,8 @@
                                         value)))))
       (let ((acctcurrency "USD")
             (acctname "")
-            (begindate (gov-fun "From"))
-            (enddate (gnc:timepair-end-day-time (gov-fun "To")))
+            (begindate (gnc:date-option-absolute-time (gov-fun "From")))
+            (enddate (gnc:timepair-end-day-time (gnc:date-option-absolute-time(gov-fun "To"))))
             (stepsize (eval (gov-fun "Step Size")))
             (plotstr (eval (gov-fun "Plot Type")))
             (accounts (gov-fun "Account"))

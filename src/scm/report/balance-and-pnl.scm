@@ -47,8 +47,8 @@
           (set-tm:min bdtime 59)
           (set-tm:hour bdtime 23)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute(cons time 0)))))
+      #f 'absolute #f))
     gnc:*balsht-report-options*)
 
   (define  (pnl-options-generator)
@@ -81,8 +81,8 @@
           (set-tm:min bdtime 59)
           (set-tm:hour bdtime 23)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f))
     gnc:*pnl-report-options*)
 
   (define (render-level-2-account level-2-account l2-value)
@@ -128,10 +128,10 @@
 					 balance-sheet?)
 
     (let* ((from-option (gnc:lookup-option options "Report Options" "From"))
-           (from-value (if from-option (gnc:option-value from-option) #f))
+           (from-value (if from-option (gnc:date-option-absolute-time (gnc:option-value from-option)) #f))
            (to-value (gnc:timepair-end-day-time
-                      (gnc:option-value
-                       (gnc:lookup-option options "Report Options" "To")))))
+                      (gnc:date-option-absolute-time (gnc:option-value
+                       (gnc:lookup-option options "Report Options" "To"))))))
 
       (define (handle-level-1-account account options)
         (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))

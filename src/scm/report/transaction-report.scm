@@ -406,6 +406,8 @@
       (gnc:register-option gnc:*transaction-report-options* new-option))
     ;; from date
     ;; hack alert - could somebody set this to an appropriate date?
+    (display "Got here 1")
+
     (gnc:register-trep-option
      (gnc:make-date-option
       "Report Options" "From"
@@ -418,15 +420,16 @@
           (set-tm:mday bdtime 1)
           (set-tm:mon bdtime 0)
           (let ((time (car (mktime bdtime))))
-            (cons time 0))))
-      #f))
+            (cons 'absolute (cons time 0)))))
+      #f 'absolute #f))    
+    (display "Got here 1a")
     ;; to-date
     (gnc:register-trep-option
      (gnc:make-date-option
       "Report Options" "To"
       "b" "Report items up to and including this date"
-      (lambda () (cons (current-time) 0))
-      #f))
+      (lambda () (cons 'absolute (cons (current-time) 0)))
+      #f 'absolute #f))
 
     ;; account to do report on
     (gnc:register-trep-option
@@ -444,6 +447,7 @@
                 (else ()))))
       #f #t))
 
+    (display "got here 2")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       "Report Options" "Style"
@@ -518,7 +522,7 @@
 	(list
 	 #(ascend "Ascending" "smallest to largest, earliest to latest")
 	 #(descend "Descending" "largest to smallest, latest to earliest"))))
-       
+       (display "Got here 3")
       (gnc:register-trep-option
        (gnc:make-multichoice-option
 	"Sorting" "Secondary Key"
@@ -587,13 +591,15 @@
 
     (gnc:options-set-default-section gnc:*transaction-report-options*
                                      "Report Options")
-
+    (display "tr-report-options =")
+    (display gnc:*transaction-report-options*)
+    (display "\n")
     gnc:*transaction-report-options*)
 
 
   (define (gnc:trep-renderer options)
-    (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
-           (enddate (gnc:lookup-option options "Report Options" "To"))
+    (let* ((begindate (gnc:date-option-absolute-time (gnc:lookup-option options "Report Options" "From")))
+           (enddate (gnc:date-option-absolute-time (gnc:lookup-option options "Report Options" "To")))
            (tr-report-account-op (gnc:lookup-option
                                   options "Report Options" "Account"))
            (tr-report-primary-key-op (gnc:lookup-option options

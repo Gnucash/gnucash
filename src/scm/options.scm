@@ -39,18 +39,36 @@
          ;; on success, and (#f "failure-message") on failure. If #t,
          ;; the supplied value will be used by the gui to set the option.
          value-validator
-         option-data
-         ;; This function should return a list of all the strings in the
-         ;; option other than the section, name, and documentation-string
-         ;; that might be displayed to the user (and thus should be
+	 ;;; free-form storage depending on type.
+         option-data 
+	 ;; If this is a "multiple choice" type of option,
+	 ;; this should be a vector of the following five functions
+	 ;; one taking no arguments giving the number of choices
+         ;; one taking one argument, a non-negative integer, that
+         ;; returns the scheme value (usually a symbol) matching the
+         ;; nth choice
+         ;;
+	 ;; one taking one argument, a non-negative integer,
+	 ;; that returns the string matching the nth choice
+         ;;
+	 ;; the third takes one argument and returns the description
+	 ;; containing the nth choice
+	 ;;
+	 ;; the fourth giving a possible value and returning the index
+	 ;; if an option doesn't use these,  this should just be a #f
+	 option-data-fns
+         ;; This function should return a list of all the strings
+         ;; in the option other than the section, name, (define
+         ;; (list-lookup list item) and documentation-string that
+         ;; might be displayed to the user (and thus should be
          ;; translated).
          strings-getter
          ;; This function will be called when the GUI representation
-         ;; of the option is changed.  This will normally occure before
+         ;; of the option is changed.  This will normally occur before
          ;; the setter is called, because setters are only called when
-         ;; the user selects "OK" or "Apply".  Therefore, this callback
-         ;; shouldn't be used to make changes to the actual options
-         ;; database.
+         ;; the user selects "OK" or "Apply".  Therefore, this
+         ;; callback shouldn't be used to make changes to the actual
+         ;; options database.
          option-widget-changed-proc)
   (let ((changed-callback #f))
     (vector section
@@ -58,14 +76,15 @@
             sort-tag
             type
             documentation-string
-            getter
-            (lambda args
+            getter            
+	    (lambda args
               (apply setter args)
               (if changed-callback (changed-callback)))
             default-getter
             generate-restore-form
             value-validator
             option-data
+	    option-data-fns
             (lambda (callback) (set! changed-callback callback))
             strings-getter
             option-widget-changed-proc)))
@@ -88,21 +107,49 @@
   (vector-ref option 7))
 (define (gnc:option-generate-restore-form option)
   (vector-ref option 8))
-(define (gnc:option-value-validator option)
+(define (gnc:option-value-validator option)  
   (vector-ref option 9))
 (define (gnc:option-data option)
-  (vector-ref option 10))
+    (vector-ref option 10))
+(define (gnc:option-data-fns option)
+  (vector-ref option 11))
+
 (define (gnc:option-set-changed-callback option callback)
-  (let ((cb-setter (vector-ref option 11)))
+ (let ((cb-setter (vector-ref option 12)))
     (cb-setter callback)))
 (define (gnc:option-strings-getter option)
-  (vector-ref option 12))
-(define (gnc:option-widget-changed-proc option)
   (vector-ref option 13))
+(define (gnc:option-widget-changed-proc option)
+  (vector-ref option 14))
 
 (define (gnc:option-value option)
   (let ((getter (gnc:option-getter option)))
     (getter)))
+
+(define (gnc:option-index-get-name option index)
+  (let* ((option-data-fns (gnc:option-data-fns option))
+	 (name-fn (vector-ref option-data-fns 2)))
+    (name-fn index)))
+
+(define (gnc:option-index-get-description option index)
+  (let* ((option-data-fns (gnc:option-data-fns option))
+	 (name-fn (vector-ref option-data-fns 3)))
+    (name-fn index)))
+
+(define (gnc:option-index-get-value option index)
+  (let* ((option-data-fns (gnc:option-data-fns option))
+	 (name-fn (vector-ref option-data-fns 1)))
+    (name-fn index)))
+
+(define (gnc:option-value-get-index option value)
+  (let* ((option-data-fns (gnc:option-data-fns option))
+	 (name-fn (vector-ref option-data-fns 4)))
+    (name-fn value)))
+		  
+(define (gnc:option-number-of-indices option)
+  (let* ((option-data-fns (gnc:option-data-fns option))
+	 (name-fn (vector-ref option-data-fns 0)))
+    (name-fn)))
 
 (define (gnc:option-default-value option)
   (let ((getter (gnc:option-default-getter option)))
@@ -137,13 +184,14 @@
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "string-option: not a string"))))
-     #f #f #f)))
+     #f #f #f #f)))
 
-;; font options store fonts as strings a la the X Logical
-;; Font Description. You should always provide a default
-;; value, as currently there seems to be no way to go from
-;; an actual font to a logical font description, and thus
-;; there is no way for the gui to pick a default value.
+;;; font options store fonts as strings a la the X Logical
+;;; Font Description. You should always provide a default
+;;; value, as currently there seems to be no way to go from
+;;; an actual font to a logical font description, and thus
+;;; there is no way for the gui to pick a default value.
+
 (define (gnc:make-font-option
 	 section
 	 name
@@ -153,15 +201,19 @@
   (let* ((value default-value)
          (value->string (lambda () (gnc:value->string value))))
     (gnc:make-option
-     section name sort-tag 'font documentation-string
+     section
+     name
+     sort-tag
+     'font
+     documentation-string
      (lambda () value)
      (lambda (x) (set! value x))
      (lambda () default-value)
-     (gnc:restore-form-generator value->string)
+     (gnc:restore-form-generator value->string)     
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "font-option: not a string"))))
-     #f #f #f)))
+     #f #f #f #f)))
 
 ;; currency options use a specialized widget for entering currencies
 ;; in the GUI implementation.
@@ -169,29 +221,29 @@
 	 section
 	 name
 	 sort-tag
-         documentation-string
-	 default-value)
-  (let* ((value default-value)
-         (value->string (lambda () (gnc:value->string value))))
-    (gnc:make-option
-     section name sort-tag 'currency documentation-string
-     (lambda () value)
-     (lambda (x) (set! value x))
-     (lambda () default-value)
-     (gnc:restore-form-generator value->string)
-     (lambda (x)
-       (cond ((string? x)(list #t x))
-             (else (list #f "currency-option: not a currency code"))))
-     #f #f #f)))
+          documentation-string
+ 	 default-value)
+   (let* ((value default-value)
+          (value->string (lambda () (gnc:value->string value))))
+     (gnc:make-option
+      section name sort-tag 'currency documentation-string
+      (lambda () value)
+      (lambda (x) (set! value x))
+      (lambda () default-value)
+      (gnc:restore-form-generator value->string)
+      (lambda (x)
+        (cond ((string? x)(list #t x))
+              (else (list #f "currency-option: not a currency code"))))
+      #f #f #f #f)))
 
 (define (gnc:make-simple-boolean-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-value)
+ 	 section
+ 	 name
+ 	 sort-tag
+ 	 documentation-string
+ 	 default-value)
   (let* ((value default-value)
-         (value->string (lambda () (gnc:value->string value))))
+	 (value->string (lambda () (gnc:value->string value))))
     (gnc:make-option
      section name sort-tag 'boolean documentation-string
      (lambda () value)
@@ -200,9 +252,9 @@
      (gnc:restore-form-generator value->string)
      (lambda (x)
        (if (boolean? x)
-           (list #t x)
-           (list #f "boolean-option: not a boolean")))
-     #f #f #f)))
+	   (list #t x)
+	   (list #f "boolean-option: not a boolean")))
+     #f #f #f #f))) 
 
 
 ;; Complex boolean options are the same as simple boolean options,
@@ -220,63 +272,114 @@
 ;; setter-function-called-cb is checked here.
 
 (define (gnc:make-complex-boolean-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-value
-    setter-function-called-cb
-    option-widget-changed-cb)
-  (let* ((value default-value)
-         (value->string (lambda () (gnc:value->string value))))
-    (gnc:make-option
-     section name sort-tag 'boolean documentation-string
-     (lambda () value)
-     (if (procedure? setter-function-called-cb)
-       (lambda (x) (set! value x)
-                   (setter-function-called-cb x))
-       (lambda (x) (set! value x)))
-     (lambda () default-value)
-     (gnc:restore-form-generator value->string)
-     (lambda (x)
-       (if (boolean? x)
-           (list #t x)
-           (list #f "boolean-option: not a boolean")))
-     #f #f (lambda (x) (option-widget-changed-cb x)))))
+ 	 section
+ 	 name
+ 	 sort-tag
+ 	 documentation-string
+ 	 default-value
+     setter-function-called-cb
+     option-widget-changed-cb)
+   (let* ((value default-value)
+          (value->string (lambda () (gnc:value->string value))))
+     (gnc:make-option
+      section name sort-tag 'boolean documentation-string
+      (lambda () value)
+      (lambda (x) (set! value x)
+                  (setter-function-called-cb x))
+      (lambda () default-value)
+      (gnc:restore-form-generator value->string)
+      (lambda (x)
+        (if (boolean? x)
+            (list #t x)
+            (list #f "boolean-option: not a boolean")))
+      #f #f #f (lambda (x) (option-widget-changed-cb x)))))
 
 
-;; date options use the option-data as a boolean value. If true,
-;; the gui should allow the time to be entered as well.
+;; subtype should be on of 'relative 'absolute or 'both
+;; relative-date-list should be the list of relative dates permitted
+;; gnc:all-relative-dates contains a list of all relative dates.
+
 (define (gnc:make-date-option
          section
          name
-         sort-tag
+         sort-tag 
          documentation-string
          default-getter
-         show-time)
-
+         show-time
+	 subtype
+	 relative-date-list)
   (define (date-legal date)
-    (and (pair? date) (exact? (car date)) (exact? (cdr date))))
-
+    (and (pair? date) 
+	 (or 
+	  (and (eq? 'relative (car date)) (symbol? (cdr date)))
+          (and (eq? 'absolute (car date)) 
+		    (pair? (cdr date)) 
+		    (exact? (cadr date)) 
+		    (exact? (cddr date))))))
+  (define (list-lookup list item)
+    (cond
+     ((null? list) #f)
+     ((eq? item (car list)) 0)
+     (else (+ 1 (list-lookup (cdr list) item)))))
   (let* ((value (default-getter))
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name sort-tag 'date documentation-string
-     (lambda () value)
+    (lambda () 
+       (if (eq? (car value) 'relative)
+   
+	   (vector 'relative (gnc:get-absolute-from-relative-date
+                              (cdr value)) (cdr value))
+	   (vector 'absolute (cdr value))))
      (lambda (date)
        (if (date-legal date)
            (set! value date)
-           (gnc:error "Illegal date value set")))
+          (gnc:error "Illegal date value set")))
      default-getter
      (gnc:restore-form-generator value->string)
      (lambda (date)
        (if (date-legal date)
            (list #t date)
-           (list #f "date-option: illegal date")))
-     show-time #f #f)))
+          (list #f "date-option: illegal date")))
+     (vector subtype show-time relative-date-list) 
+     (vector (lambda () (length relative-date-list))
+       (lambda (x) (list-ref relative-date-list x))
+       (lambda (x) (gnc:get-relative-date-string
+                    (list-ref relative-date-list x)))
+       (lambda (x) (gnc:get-relative-date-desc
+                    (list-ref relative-date-list x)))
+       (lambda (x) (list-lookup relative-date-list x)))
+     #f
+     #f)))
 
-;; account-list options use the option-data as a boolean value.  If
+(define (gnc:get-rd-option-data-subtype option-data)
+  (vector-ref option-data 0))
+
+(define (gnc:get-rd-option-data-show-time option-data)
+  (vector-ref option-data 1))
+
+(define (gnc:get-rd-option-data-rd-list option-data)
+  (vector-ref option-data 2))
+
+(define (gnc:date-option-get-subtype option)
+  (if (eq? (gnc:option-type option) 'date)
+      (gnc:get-rd-option-data-subtype (gnc:option-data option))
+      (gnc:error "Not a date option")))
+
+(define (gnc:date-option-show-time? option)
+  (if (eq? (gnc:option-type option) 'date)
+      (gnc:get-rd-option-data-show-time (gnc:option-data option))
+      (gnc:error "Not a date option")))
+
+(define (gnc:date-option-absolute-time option-value)
+  (vector-ref option-value 1))
+(define (gnc:date-option-value-type option-value)
+  (vector-ref option-value 0))
+(define (gnc:date-option-relative-time option-value)
+  (vector-ref option-value 2))
+
+;; account-list options use the option-data as a boolean value. If
 ;; true, the gui should allow the user to select multiple accounts.
 ;; Internally, values are always a list of guids. Externally, both
 ;; guids and account pointers may be used to set the value of the
@@ -294,6 +397,7 @@
     (if (string? item)
         item
         (gnc:account-get-guid item)))
+
   (define (convert-to-account item)
     (if (string? item)
         (gnc:account-lookup item)
@@ -322,7 +426,13 @@
      (lambda () (map convert-to-account (default-getter)))
      #f
      validator
-     multiple-selection #f #f)))
+     multiple-selection #f #f #f)))
+
+(define (gnc:multichoice-list-lookup list item )
+    (cond
+     ((null? list) #f)
+     ((eq? item (vector-ref (car list) 0)) 0)
+     (else (+ 1 (gnc:multichoice-list-lookup (cdr list) item)))))
 
 ;; multichoice options use the option-data as a list of vectors.
 ;; Each vector contains a permissible value (scheme symbol), a
@@ -334,7 +444,6 @@
          documentation-string
          default-value
          ok-values)
-
   (define (multichoice-legal val p-vals)
     (cond ((null? p-vals) #f)
           ((eq? val (vector-ref (car p-vals) 0)) #t)
@@ -364,6 +473,12 @@
            (list #t x)
            (list #f "multichoice-option: illegal choice")))
      ok-values
+     (vector (lambda () (length ok-values))
+       (lambda (x) (vector-ref (list-ref ok-values x) 0))
+       (lambda (x) (vector-ref (list-ref ok-values x) 1))
+       (lambda (x) (vector-ref (list-ref ok-values x) 2))
+       (lambda (x)
+	 (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (multichoice-strings ok-values)) #f)))
 
 ;; list options use the option-data in the same way as multichoice
@@ -411,7 +526,12 @@
        (if (list-legal x)
            (list #t x)
            (list #f "list-option: illegal value")))
-     ok-values
+     ok-values     
+     (vector (lambda () (length ok-values))
+       (lambda (x) (vector-ref (list-ref ok-values x) 0))
+       (lambda (x) (vector-ref (list-ref ok-values x) 1))
+       (lambda (x) (vector-ref (ref ok-values x) 2))
+       (lambda (x) (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (list-strings ok-values)) #f)))
 
 ;; number range options use the option-data as a list whose
@@ -441,7 +561,7 @@
               (list #t x))
              (else (list #f "number-range-option: out of range"))))
      (list lower-bound upper-bound num-decimals step-size)
-     #f #f)))
+     #f #f #f)))
 
 (define (gnc:make-internal-option
          section
@@ -456,7 +576,7 @@
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (x) (list #t x))
-     #f #f #f)))
+     #f #f #f #f)))
 
 ;; Color options store rgba values in a list.
 ;; The option-data is a list, whose first element
@@ -502,7 +622,7 @@
      (gnc:restore-form-generator value->string)
      validate-color
      (list range use-alpha)
-     #f #f)))
+     #f #f #f)))
 
 (define (gnc:color->html color range)
 
@@ -568,7 +688,7 @@
        new-option
        (lambda () (option-changed section name)))))
 
-  ; Call (thunk option) for each option in the database
+;   Call (thunk option) for each option in the database
   (define (options-for-each thunk)
     (define (section-for-each section-hash thunk)
       (hash-for-each

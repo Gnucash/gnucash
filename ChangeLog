@@ -1,3 +1,37 @@
+2000-08-30  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/hello-world.scm: A couple of new functions to test the relative
+	and combination date style options.
+
+	* src/scm/report/*.scm: Modified date options to take the new function.  Most
+	are still using absolute options at this stage, will get modified to use relative
+	dates later.
+
+	* src/scm/options.scm (gnc:make-option): new argument (option-data-fns) 
+	for manipulating multi-choice style options.  Changes
+	to option-makers to either support this.  
+	(gnc:make-date-option): modified to support relative and combination dates.
+
+	* src/scm/date-utilities.scm: Extensive additions for manipulating 
+	relative dates.
+
+	* src/guile/option-util.c: Support for new relative-date and
+	combination options , and use of scheme getters
+	rather than direct data structure manipulation.
+	(gnc_oiption_db_lookup_date_option): modified to
+	support relative and combination date options.
+	(gnc_option_date_option_get_subtype: new function.
+
+	* src/guile/guile-util.c (gnc_timepair2timespec): Check to make
+	sure it's a timepair before doing conversion.
+
+	* src/gnome/dialog-options.c: Extensive changes to support relative
+	and combination date options.  Also changed multichoice callback
+	to use wrapped scheme getter rather than directly manipulating
+	scheme data structure.
+
+	* make-gnucash-patch.in: Exclude generated HTML.
+
 2000-08-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Group.c (xaccGetAccountRoot): remove unnecessary

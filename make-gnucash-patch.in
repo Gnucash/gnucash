@@ -160,5 +160,6 @@ src/optional/swig/gnucash.engine_wrap.doc
 src/optional/swig/libgncswig.la
 src/quotes/gnc-prices
 src/scm/bootstrap.scm
+doc/sgml/C/gnucash
 stamp-cat-id
 stamp-h
