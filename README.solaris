@@ -1,8 +1,51 @@
-Solaris hints:
-------------- 
-If the Makefile won't work, try the following:
-   The Makefile won't work unless SHELL=/bin/bash for me (Solaris 2.5.1).
-   That is:
-        make motif SHELL=/bin/bash
+Hi!
 
+This is a binary distribution of the X accountant program. The sources are
+available at http://www.gnucash.org/xacc/download/xacc-1.0.17.tar.gz as
+of 1999-02-17, however if you can't find them there feel free to request
+a copy of the source from me, my email address is trask@tinaa.com.
 
+I did not write any of this software. All I did was download it from the
+location mentioned above, compile it, install it, and package it up in
+Solaris pkgadd format.
+
+My system is a SparcStation 20 running Solaris 2.6 with all the latest
+patches. I compiled the package with GCC 2.8.1, and used the Motif libs
+provided by the operating system. This binary distribution, as of this
+writing, has NOT been tested on any other system. It may or may not work
+for you.
+
+I provide ABSOLUTELY NO WARRANTY! See the file COPYING in this distribution
+for details.
+
+Bug reports, feature requests, and random Xacc discussion should be 
+directed at the xacc mailing list. See http://www.gnucash.org/xacc/ for
+details.
+
+The only problems that you should contact me about are:
+  - Packaging errors... for instance if pkgadd chokes when you try to 
+    install this or something.
+  - Total failure to run... if this software doesn't work AT ALL, ie it
+    core dumps immediately when you try to run it or something, it is 
+    probably because it has some dependancy on the way my particular
+    system is configured. If this happens to you, PLEASE send mail to me
+    (trask@tinaa.com) as soon as possible so I can stop distributing this.
+
+The README file in the source distribution says:
+
+> xacc seems to be having problems with:
+> Solaris -- Sparc  -- won't compile due to va-args in XmHTML
+
+This is a simple and common problem when compiling various software under
+Solaris using gcc... all you have to do is edit the Makefiles and remove
+all of the "-I/usr/include" references. This is explained in the solaris
+FAQ at http://www.wins.uva.nl/pub/solaris/solaris2.html, question 5.9.
+
+So, if my package won't work for you, now you know how to get it to 
+compile for yourself. :-)
+
+The directory dist-docs contains the original README, COPYRIGHT, and some
+other files included with the source distibution.
+
+Happy Hunting, -Chris
+<trask@tinaa.com>
