@@ -828,13 +828,13 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
   {
     gncint128 nume = mult128(a.num, b.denom);
     gncint128 deno = mult128(b.num, a.denom);
-    if ((0 == nume.hi) && (0 == deno.hi))
+    if ((0 == nume.carry) && (0 == deno.carry))
     {
       quotient.num = nume.lo;
       if (nume.isneg) quotient.num = -quotient.num;
       quotient.denom = deno.lo;
     }
-    else if (0 == deno.hi)
+    else if (0 == deno.carry)
     {
        quotient = reduce128 (nume, deno.lo);
     }
@@ -1385,6 +1385,9 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
   return(str + num_read);
 }
 
+/********************************************************************
+ *  gnc_numeric misc testing
+ ********************************************************************/
 #ifdef _GNC_NUMERIC_TEST
 
 static char *
@@ -1438,49 +1441,6 @@ main(int argc, char ** argv) {
          gnc_numeric_print(c),
          gnc_numeric_print(err));
   
-  printf("7/16 as float: %e\n",
-         gnc_numeric_to_double(gnc_numeric_create(7, 16)));
-  
-  printf("add LCM: %s + %s = %s\n",
-         gnc_numeric_print(b), gnc_numeric_print(d),
-         gnc_numeric_print(gnc_numeric_add(b, d, GNC_DENOM_AUTO,
-                                           GNC_DENOM_LCD)));
- 
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(1.1234567890123, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(.011234567890123, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(1123.4567890123, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("float to 6 sigfigs: %s\n",
-         gnc_numeric_print(double_to_gnc_numeric(1.1234567890123e-5, 
-                                                 GNC_DENOM_AUTO, 
-                                                 GNC_DENOM_SIGFIGS(6) |
-                                                 GNC_RND_ROUND)));
-  printf("add to 4 sigfigs: %s + %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_add(a, b, 
-                                           GNC_DENOM_AUTO, 
-                                           GNC_DENOM_SIGFIGS(4) |
-                                           GNC_RND_ROUND)));
-  
-   
-  v = 1000000;
-  a = gnc_numeric_create(1*v, v);
-  b = gnc_numeric_create(10000000*v, v);
-  printf("multiply (LCD): %s * %s = %s\n",
-	 gnc_numeric_print(a), gnc_numeric_print(b),
-	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD)));
-
   printf("multiply (EXACT): %s * %s = %s\n",
 	 gnc_numeric_print(a), gnc_numeric_print(b),
 	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT)));
