@@ -278,7 +278,7 @@ ultostr (unsigned long val, int base)
     if (10>broke[i]) {
        buf[places-1-i] = 0x30+broke[i];  /* ascii digit zero */
     } else {
-       buf[places-1-i] = 0x41-10+broke[i];  /* ascii capaital A */
+       buf[places-1-i] = 0x41-10+broke[i];  /* ascii capital A */
     }
   }
   buf[places] = 0x0;
