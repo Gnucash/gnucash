@@ -23,34 +23,48 @@
 #ifndef QOF_ID_H
 #define QOF_ID_H 
 
-/** @addtogroup Entity
+/** @addtogroup Entity 
     @{ */
+/** @addtogroup Entities
+
+    This file defines an API that adds types to the GUID's.
+    GUID's with types can be used to identify and reference 
+    typed entities.  
+
+    The idea here is that a GUID can be used to uniquely identify
+    some thing.  By adding a type, one can then talk about the 
+    type of thing identified.  By adding a collection, one can
+    then work with a handle to a collection of things of a given
+    type, each uniquely identified by a given ID.  QOF Entities
+    can be used independently of any other part of the system.
+    In particular, Entities can be useful even if one is not using
+    the Query ond Object parts of the QOF system.
+  
+    Identifiers are globally-unique and permanent, i.e., once
+    an entity has been assigned an identifier, it retains that same
+    identifier for its lifetime.
+    Identifiers can be encoded as hex strings. 
+   
+    GUID Identifiers are 'typed' with strings.  The native ids used 
+    by QOF are defined below. An id with type QOF_ID_NONE does not 
+    refer to any entity, although that may change (???). An id with 
+    type QOF_ID_NULL does not refer to any entity, and will never refer
+    to any entity. An identifier with any other type may refer to an
+    actual entity, but that is not guaranteed (??? Huh?).  If an id 
+    does refer to an entity, the type of the entity will match the 
+    type of the identifier. 
+
+    If you have a type name, and you want to have a way of finding
+    a collection that is associated with that type, then you must use
+    Books.
+
+ @{ */
 /** @file qofid.h
     @brief QOF entity type identification system 
     @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu> 
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 */
 
-/** This file defines an API that adds types to the GUID's.
- *  GUID's with types can be used to identify and reference 
- *  typed entities.
- *
- * GUID Identifiers can be used to reference QOF Objects.
- * Identifiers are globally-unique and permanent, i.e., once
- * an entity has been assigned an identifier, it retains that same
- * identifier for its lifetime.
- *
- * Identifiers can be encoded as hex strings. 
- *
- * GUID Identifiers are 'typed' with strings.  The native ids used 
- * by QOF are defined below. An id with type QOF_ID_NONE does not 
- * refer to any entity, although that may change (???). An id with 
- * type QOF_ID_NULL does not refer to any entity, and will never refer
- * to any entity. An identifier with any other type may refer to an
- * actual entity, but that is not guaranteed (??? Huh?).  If an id 
- * does refer to an entity, the type of the entity will match the 
- * type of the identifier. 
- */
 
 #include <string.h>
 #include "guid.h"
@@ -107,17 +121,21 @@ struct QofEntity_s
 	QofCollection  * collection;
 };
 
+/** @name QOF Entity Initialization & Shutdown 
+ @{ */
 /** Initialise the memory associated with an entity */
 void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
                                                                                 
 /** Release the data associated with this entity. Dont actually free
  * the memory associated with the instance. */
 void qof_entity_release (QofEntity *);
+ /* @} */
 
 /* Return the GUID of this entity */
 const GUID * qof_entity_get_guid (QofEntity *);
 
-/** collections of entities */
+/** @name Collections of Entities 
+ @{ */
 QofCollection * qof_collection_new (QofIdType type);
 void qof_collection_destroy (QofCollection *col);
 
@@ -145,8 +163,10 @@ void qof_collection_set_data (QofCollection *col, gpointer user_data);
 
 /* Return value of 'dirty' flag on collection */
 gboolean qof_collection_is_dirty (QofCollection *col);
+/** @} */
 
 
 #endif /* QOF_ID_H */
+/** @} */
 /** @} */
 

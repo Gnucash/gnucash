@@ -18,11 +18,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Entity
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Object_Private
+    Private interfaces, not meant to be used by applications. 
+    @{ */
+/** @name  Objects_Private
     @{ */
 /** @file qofobject-p.h
  * @brief the Core Object Registration/Lookup Private Interface
- *
  * @author Copyright (c) 2001,2002, Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -32,7 +36,7 @@
 #include "qofbook.h"
 #include "qofobject.h"
 
-/* To be called from within the book */
+/** To be called from within the book */
 void qof_object_book_begin (QofBook *book);
 void qof_object_book_end (QofBook *book);
 
@@ -40,4 +44,6 @@ gboolean qof_object_is_dirty (QofBook *book);
 void qof_object_mark_clean (QofBook *book);
 
 #endif /* QOF_OBJECT_P_H_ */
+/** @} */
+/** @} */
 /** @} */

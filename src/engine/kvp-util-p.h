@@ -28,7 +28,10 @@
 #include "guid.h"
 #include "kvp_frame.h"
 
-/** @addtogroup KVP_Util
+/** @addtogroup KVP
+    @{ */
+/** @addtogroup KVP_Private
+    Private interfaces, not meant to be used by applications.
     @{ */
 /* @file kvp-util-p.h
  * @brief misc odd-job kvp utils engine-private routines
@@ -37,6 +40,8 @@
  * -- these routines are private to the engine. The should not be used 
  *    outside of the engine.
  */
+/** @name KvpBag Bags of GUID Pointers */
+/* @{ */
 
 /** The gnc_kvp_bag_add() routine is used to maintain a collection 
  *  of pointers in a kvp tree.
@@ -102,5 +107,7 @@ KvpFrame * gnc_kvp_bag_find_by_guid (KvpFrame *root,  const char * path,
 void gnc_kvp_bag_remove_frame (KvpFrame *root, const char *path,
                                KvpFrame *fr);
 
+/* @} */
+/* @} */
 /* @} */
 #endif /* XACC_KVP_UTIL_P_H */

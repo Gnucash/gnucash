@@ -27,7 +27,20 @@
 #include <glib.h>
 #include <stddef.h>
 
+/** @addtogroup Entity
+    @{ */
 /** @addtogroup GUID
+    Globally Unique ID's provide a way to uniquely identify 
+    some thing.  A GUID is a unique, cryptographically
+    random 128-bit value.  The identifier is so random that
+    it is safe to assume that there is no other such item
+    on the planet Earth, and indeed, not even in the Galaxy
+    or beyond.
+
+    QOF GUID's can be used independently of any other subsystem
+    in QOF.   In particular, they do not require the use of
+    other parts of the object subsystem.
+
     @{ */
 /** @file guid.h
     @brief  globally unique ID User API 
@@ -44,7 +57,7 @@ typedef union _GUID
 } GUID;
 
 
-/* number of characters needed to encode a guid as a string
+/** number of characters needed to encode a guid as a string
  * not including the null terminator. */
 #define GUID_ENCODING_LENGTH 32
 
@@ -180,5 +193,6 @@ guint guid_hash_to_guint(gconstpointer ptr);
 
 GHashTable *guid_hash_table_new(void);
 
+/* @} */
 /* @} */
 #endif

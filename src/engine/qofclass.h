@@ -20,20 +20,44 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Entity
+/** @addtogroup Object
     @{ */
 
-/** @file qofclass.h
-    @brief API for registering paramters on objects 
-    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
-    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
-
+/** @addtogroup Class
   This file defines a class messaging system reminiscent of
   traditional OO-style setter and getter interfaces to object 
   properties.  A C-language object can declare a collection
   of setters and getters on itself that can then be used 
   to perform run-time (as opposed to compile-time) bindings 
   to the object.
+
+  To put it differently, a QOF class is a set of parameter
+  getters and setters that are associated with an object type. 
+  Given a pointer to some thing, the setters and getters can
+  be used to get and set values out of that thing.  Note
+  that the pointer to "some thing" need not be a pointer
+  to a QOF Entity or Instance (although QOF classes are
+  more interesting when used with Entities/Instances).
+  What "some thing" is defined entirely by the programmer
+  declaring a new QOF Class.
+
+  Because a QOF Class associates getters and setters with
+  a type, one can then ask, at run time, what paramters
+  are associated with a given type, even if those paramters
+  were not known at compile time.  Thus, a QOF Class is 
+  sort-of like a DynAny implementation.  QOF classes can
+  be used to provide "object introspection", i.e. asking 
+  object to describe itself.
+
+  The QOF Query subsystem depends on QOF classes having been
+  declared; the Query uses the getters to get values associated
+  with particular instances.
+@{ */
+
+/** @file qofclass.h
+    @brief API for registering paramters on objects 
+    @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef QOF_CLASS_H
@@ -171,4 +195,5 @@ QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
 
 
 #endif /* QOF_CLASS_H */
+/* @} */
 /* @} */

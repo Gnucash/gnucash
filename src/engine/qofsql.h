@@ -20,7 +20,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Query_SQL
+/** @addtogroup Query
     @{ */
 /**
     @file qofsql.h
@@ -36,6 +36,8 @@
 #include <qof/qofbook.h>
 #include <qof/qofquery.h>
 
+/** @addtogroup SQL SQL Interface to Query
+  @{ */
 typedef struct _QofSqlQuery QofSqlQuery;
 
 /** Create a new SQL-syntax query machine.
@@ -139,5 +141,6 @@ GList * qof_sql_query_rerun (QofSqlQuery *query);
  */
 void qof_sql_query_set_kvp (QofSqlQuery *, KvpFrame *);
 
+/** @} */
 #endif /* QOF_SQL_QUERY_H */
 /** @} */

@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Query_Core_Predicates
+/** @addtogroup Query
     @{ */
                                                                                 
 /** @file qofquerycore.h
@@ -138,7 +138,8 @@ struct _QofQueryPredData {
 };
 
 
-/** Core Data Type Predicates */
+/** @name Core Data Type Predicates 
+    @{ */
 QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, 
                                               const char *str,
                                               QofStringMatch options,
@@ -186,4 +187,5 @@ void qof_query_core_predicate_free (QofQueryPredData *pdata);
 char * qof_query_core_to_string (QofType, gpointer object, QofParam *getter);
 
 #endif /* QOF_QUERYCORE_H */
+/* @} */
 /* @} */

@@ -21,14 +21,9 @@
 \********************************************************************/
 
 /** @addtogroup Backend
- *     @{ */
-/** @file qofsession.h
- * @brief Encapsulates a connection to a backednd (persistent store)
- * @author Copyright (c) 1998, 1999, 2001, 2002 Linas Vepstas <linas@linas.org>
- * @author Copyright (c) 2000 Dave Peticolas
  *
- * FUNCTION:
- * Encapsulates a connection to a storage backend.  That is, it
+ * The QOF Session 
+ * encapsulates a connection to a storage backend.  That is, it
  * manages the connection to a persistant data store; whereas
  * the backend is the thing that performs the actual datastore 
  * access.
@@ -63,7 +58,7 @@
  *    level: i.e. does this user even have the authority to connect
  *    to and open this datastore?
  *
- * A breif note about books & sessions:
+ * A brief note about books & sessions:
  * A book encapsulates the datasets manipulated by GnuCash.  A book
  * holds the actual data.  By contrast, the session mediates the
  * connection between a book (the thing that lives in virtual memory
@@ -80,6 +75,13 @@
  * make that assumption, in order to store the different accounting
  * periods in a clump so that one can be found, given another.
  *
+ *  @{ 
+ */
+
+/** @file qofsession.h
+ * @brief Encapsulates a connection to a backend (persistent store)
+ * @author Copyright (c) 1998, 1999, 2001, 2002 Linas Vepstas <linas@linas.org>
+ * @author Copyright (c) 2000 Dave Peticolas
  */
 
 #ifndef QOF_SESSION_H
@@ -154,14 +156,20 @@ typedef void (*QofPercentageFunc) (const char *message, double percent);
 void qof_session_load (QofSession *session,
 		       QofPercentageFunc percentage_func);
 
-/* XXX session_export really doesn't belong here */
+/** XXX session_export really doesn't belong here */
 gboolean qof_session_export (QofSession *tmp_session,
 			     QofSession *real_session,
 			     QofPercentageFunc percentage_func);
 
+/** @name Session Errors 
+ @{ */
 /** The qof_session_get_error() routine can be used to obtain the reason
  *    for any failure.  Calling this routine returns the current error.
- *
+ */
+QofBackendError qof_session_get_error (QofSession *session);
+const char * qof_session_get_error_message(QofSession *session);
+
+/**
  * The qof_session_pop_error() routine can be used to obtain the reason
  *    for any failure.  Calling this routine resets the error value.  
  *
@@ -171,9 +179,8 @@ gboolean qof_session_export (QofSession *tmp_session,
  *
  *    See qofbackend.h for a listing of returned errors.
  */
-QofBackendError qof_session_get_error (QofSession *session);
-const char * qof_session_get_error_message(QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
+/* @} */
 
 /** The qof_session_add_book() allows additional books to be added to
  *    a session. 
@@ -216,7 +223,10 @@ gboolean qof_session_save_may_clobber_data (QofSession *session);
  *    more than a write to the file of the current AccountGroup & etc.
  *    For the SQL backend, this is typically a no-op (since all data
  *    has already been written out to the database.
- *
+ */
+void     qof_session_save (QofSession *session,
+			   QofPercentageFunc percentage_func);
+/**
  * The qof_session_end() method will release the session lock. For the
  *    file backend, it will *not* save the account group to a file. Thus, 
  *    this method acts as an "abort" or "rollback" primitive.  However,
@@ -224,20 +234,22 @@ gboolean qof_session_save_may_clobber_data (QofSession *session);
  *    been written out before this, and so this routines wouldn't 
  *    roll-back anything; it would just shut the connection.
  */
-void     qof_session_save (QofSession *session,
-			   QofPercentageFunc percentage_func);
 void     qof_session_end  (QofSession *session);
 
+/** @name Event Handling
+ @{ */
 /** The qof_session_events_pending() method will return TRUE if the backend
  *    has pending events which must be processed to bring the engine
  *    up to date with the backend.
- *
- * The qof_session_process_events() method will process any events indicated
+ */
+gboolean qof_session_events_pending (QofSession *session);
+
+/**  The qof_session_process_events() method will process any events indicated
  *    by the qof_session_events_pending() method. It returns TRUE if the
  *    engine was modified while engine events were suspended.
  */
-gboolean qof_session_events_pending (QofSession *session);
 gboolean qof_session_process_events (QofSession *session);
+/* @} */
 
 /** The xaccResolveFilePath() routine is a utility that will accept
  *    a fragmentary filename as input, and resolve it into a fully
@@ -252,7 +264,8 @@ gboolean qof_session_process_events (QofSession *session);
 char * xaccResolveFilePath (const char * filefrag);
 char * xaccResolveURL (const char * pathfrag);
 
-/** Run the RPC Server */
+/** Run the RPC Server 
+ *  @deprecated  will go away */
 void gnc_run_rpc_server (void);
 
 #endif /* QOF_SESSION_H */

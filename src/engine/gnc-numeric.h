@@ -1,4 +1,5 @@
 /********************************************************************
+ * gnc-numeric.h - An exact-number library for gnucash              *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -19,6 +20,19 @@
  *******************************************************************/
 
 /** @addtogroup Numeric
+    The 'Numeric' functions provide a way of working with rational
+    numbers while maintaining strict control over rounding errors
+    when adding rationals with different denominators.  The Numeric
+    class is primarily used for working with monetary amounts, 
+    where the denominator typically represents the smallest fraction
+    of the currency (e.g. pennies, centimes).  The numeric class
+    can handle any fraction (e.g. twelfth's) and is not limited
+    to fractions that are powers of ten.
+
+    Please refer to the GnuCash texinfo documentation for details 
+    on the numeric functions.  (The texinfo will someday be
+    brought inline, here, into this file).
+
     @{ */
 /** @file gnc-numeric.h
     @brief An exact-rational-number library for gnucash.
@@ -35,7 +49,7 @@ struct _gnc_numeric {
   gint64  denom;
 };
 
-/** @brief An exact-number type for gnucash. 
+/** @brief An exact-number type
  *
  * This is a rational number, defined by nominator and denominator. */
 typedef struct _gnc_numeric gnc_numeric;

@@ -22,7 +22,7 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-/** @addtogroup Engine
+/** @addtogroup Trace
     @{ */
 
 /** @file gnc-trace.h 
@@ -133,11 +133,13 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
  * handle.
  */
 
+/** Log an fatal error */
 #define FATAL(format, args...) {                     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
       "Fatal Error: %s(): " format, FUNK , ## args); \
 }
 
+/** Log an serious error */
 #define PERR(format, args...) {                    \
   if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
@@ -145,6 +147,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
   }                                                \
 }
 
+/** Log an warning */
 #define PWARN(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
@@ -152,6 +155,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
   }                                                \
 }
 
+/** Print an informational note */
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
@@ -159,6 +163,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
   }                                                \
 }
 
+/** Print an debugging message */
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
@@ -166,6 +171,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
   }                                                \
 }
 
+/** Print an function entry debugging message */
 #define ENTER(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
@@ -173,6 +179,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
   }                                                \
 }
 
+/** Print an function exit debugging message */
 #define LEAVE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
@@ -180,6 +187,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
   }                                                \
 }
 
+/** Print an function trace debugging message */
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
@@ -190,7 +198,7 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
 #define DEBUGCMD(x) { if (gnc_should_log (module, GNC_LOG_DEBUG)) { (x); }}
 
 /* -------------------------------------------------------- */
-/* Infrastructure to make timing measurements for critical peices 
+/** Infrastructure to make timing measurements for critical peices 
  * of code. Used for only for performance tuning & debugging. 
  */
 
@@ -209,18 +217,21 @@ void gnc_report_clock_total (int clockno,
                              const char *function_name,
                              const char *format, ...);
 
+/** start a particular timer */
 #define START_CLOCK(clockno,format, args...) {              \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_start_clock (clockno, module, GNC_LOG_INFO,         \
              __FUNCTION__, format , ## args);               \
 }
 
+/** report elapsed time since last report on a particular timer */
 #define REPORT_CLOCK(clockno,format, args...) {             \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_report_clock (clockno, module, GNC_LOG_INFO,        \
              __FUNCTION__, format , ## args);               \
 }
 
+/** report total elapsed time since timer started */
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \

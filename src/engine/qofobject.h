@@ -19,11 +19,24 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Entity
+/** @addtogroup Object
+    @{ */
+/** @addtogroup Objects
+    QOF Objects provide the means for associating
+    a storage backend to a set of QOF Entities.   While an entity
+    can be though of as an identified instance of some thing,  the
+    QOF Object provides for a way to associate instances with
+    a storage backend.  Storage might be file or SQL storage.
+
+    QOF Objects are also used by the query system .... 
+    
+    XXX todo, we should split out the storage aspects of this 
+    thing from the 'foreach' that query depends on.  These are
+    kinad unrelated concepts.
+
     @{ */
 /** @file qofobject.h
  * @brief the Core Object Registration/Lookup Interface
- *
  * @author Copyright (c) 2001,2002, Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -33,7 +46,7 @@
 #include "qofbook.h"
 #include "qofid.h"
 
-/* Defines the version of the core object object registration
+/** Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version
  * of the interface will load properly
  */
@@ -84,9 +97,11 @@ struct _QofObject
 
 /* -------------------------------------------------------------- */
 
-/** Initialize the object registration subsystem */
+/** @name Initialize the object registration subsystem */
+/** @{ */
 void qof_object_initialize (void);
 void qof_object_shutdown (void);
+/** @} */
 
 /** Invoke the callback 'cb' on every object class definition.
  *  The user_data pointer is passed back to the callback.
@@ -101,10 +116,9 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
                          QofEntityForeachCB cb, gpointer user_data);
 
+/** @return a Human-readable string name for on object */
 const char * qof_object_printable (QofIdTypeConst type_name, gpointer obj);
 
-
-/* REGISTRATION AND REG-LOOKUP FUNCTIONS */
 
 /** Register new types of object objects */
 gboolean qof_object_register (const QofObject *object);
@@ -131,4 +145,5 @@ void qof_object_foreach_backend (const char *backend_name,
                                  gpointer user_data);
 
 #endif /* QOF_OBJECT_H_ */
+/** @} */
 /** @} */

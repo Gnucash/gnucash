@@ -20,19 +20,26 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/** @addtogroup KVP_Util
+/** @addtogroup KVP
     @{ */
 /** @file kvp-util.h 
-    @brief GnuCash KVP utility functions */
+    @brief GnuCash KVP utility functions 
+ */
+/**  @name Hash Utilities */
+/* @{ */
 
 #ifndef GNC_KVP_UTIL_H
 #define GNC_KVP_UTIL_H
 
 #include "config.h"
 
-/***********************************************************************\
+typedef struct {
+  gpointer key;
+  gpointer value;
+} GHashTableKVPair;
 
-  g_hash_table_key_value_pairs(hash): Returns a GSList* of all the
+/** 
+  Returns a GSList* of all the
   keys and values in a given hash table.  Data elements of lists are
   actual hash elements, so be careful, and deallocation of the
   GHashTableKVPairs in the result list are the caller's
@@ -45,15 +52,11 @@
 
 */
 
-typedef struct {
-  gpointer key;
-  gpointer value;
-} GHashTableKVPair;
-
 GSList *g_hash_table_key_value_pairs(GHashTable *table);
 void g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data);
 
 /***********************************************************************/
 
+/* @} */
 /* @} */
 #endif /* GNC_KVP_UTIL_H */

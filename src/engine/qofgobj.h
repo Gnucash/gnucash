@@ -23,20 +23,24 @@
 #ifndef QOF_GOBJ_H
 #define QOF_GOBJ_H
 
-/** @addtogroup GObject
+/** @addtogroup Object
     @{ */
+/** @addtogroup GObject GLib GObjects
+    The API defined in this file allows a user to register any
+    GLib GObject (and any object derived from one, e.g. GTK/Gnome)
+    with the QOF system, as a QOF Object Class.  This allows
+    the QOF Query routines to be used to search over collections
+    of GObjects.
+ 
+    XXX Only GObject properties are searchable, data and other 
+    hanging off the GObject is not.  Fix this. This needs fixing.
+
+@{ */
 /** @file qofgobj.h
     @brief QOF to GLib GObject mapping
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
 
-/** The API defined in this file allows a user to register any
- *  GLib GObject (and any object derived from one, e.g. GTK/Gnome)
- *  with the QOF system so that it becomes searchable.  
- *
- * XXX Only GObject properties are searchable, data and other 
- * hanging off the GObject is not.  Fix this.
- */  
 
 #include <glib-object.h>
 #include <qof/qofbook.h>
@@ -78,5 +82,6 @@ void qof_gobject_register (QofType type, GObjectClass *obclass);
 void qof_gobject_register_instance (QofBook *book, QofType, GObject *);
 
 #endif /* QOF_GOBJ_H */
+/** @} */
 /** @} */
 

@@ -20,7 +20,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/* @addtogroup Query_XML
+/** @addtogroup Query
    @{ */
 /** @file qofquery-serialize.h
     @brief Convert QofQuery to XML
@@ -33,11 +33,14 @@
 #include <qof/qofquery.h>
 #include <libxml/tree.h>
 
+/** @addtogroup XML Serialize Queries to/from XML */
+/* @{ */
 /** Take the query passed as input, and serialize it into XML.
  *  The DTD used will be a very qofquery specific DTD
  *  This is NOT the XQuery XML.
  */
 xmlNodePtr qof_query_to_xml (QofQuery *q);
+/* @} */
 
 #endif /* QOF_QUERY_SERIALIZE_H */
 /* @} */

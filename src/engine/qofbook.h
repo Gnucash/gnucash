@@ -1,4 +1,5 @@
 /********************************************************************\
+ * qofbook.h -- Encapsulate all the information about a dataset.    *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -17,15 +18,21 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup Object
+    @{ */
 /** @addtogroup Book
+    A QOF Book is a dataset.  It provides a single handle 
+    through which all the various collections of entities
+    can be found.   In particular, given only the type of
+    the entity, the collection can be found.
+    
+    Books also provide the 'natural' place to working with
+    a storage backend, as a book can encapsulate everything 
+    held in storage.
     @{ */
 /** @file qofbook.h
- * @brief dataset access (an "accounting book")
- * Encapsulate all the information about a dataset.
- * See src/docs/books.txt for implementation overview.
+ * @brief Encapsulate all the information about a dataset.
  *
- * HISTORY:
- * Created by Linas Vepstas December 1998
  * @author Copyright (c) 1998, 1999, 2001, 2003 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  */
@@ -139,4 +146,5 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
 
 #endif /* QOF_BOOK_H */
+/** @} */
 /** @} */

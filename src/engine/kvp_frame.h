@@ -19,23 +19,8 @@
  *                                                                  *
 \********************************************************************/
 /** @addtogroup KVP
-    @{ */
-/** @file kvp_frame.h
-    @brief A key-value frame system
-    @author Copyright (C) 2000 Bill Gribble
-    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
-*/
 
-#ifndef KVP_FRAME_H
-#define KVP_FRAME_H
-
-#include <glib.h>
-
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-
-/** a KvpFrame is a set of associations between character strings
+ * A KvpFrame is a set of associations between character strings
  * (keys) and KvpValue structures.  A KvpValue is a union with
  * possible types enumerated in the KvpValueType enum, and includes, 
  * among other things, ints, doubles, strings, guid's, lists, time
@@ -61,10 +46,27 @@
  * a key such as 'some/key' or 'some/./other/../key' because you
  * may get unexpected results.
  * 
- * In almost all cases, you want to be using the kvp_frame_set_gint64()
- * routine or one of its brothers.  Most of the other routines provide
- * only low-level access.
- */
+ * To set a value into a frame, you will want to use one of the 
+ * kvp_frame_set_xxx() routines.  Most of the other routines provide
+ * only low-level access that you probably shouldn't use.
+ 
+@{ */
+/** @file kvp_frame.h
+    @brief A key-value frame system
+    @author Copyright (C) 2000 Bill Gribble
+    @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+*/
+
+#ifndef KVP_FRAME_H
+#define KVP_FRAME_H
+
+#include <glib.h>
+
+#include "gnc-date.h"
+#include "gnc-numeric.h"
+#include "guid.h"
+
+/** Opaque frame structure */
 typedef struct _KvpFrame KvpFrame;
 
 /** A KvpValue is a union with possible types enumerated in the

@@ -21,6 +21,12 @@
 \********************************************************************/
 /** @addtogroup Entity
     @{ */
+/** @addtogroup Instance
+    Qof Instances are a derived type of QofEntity.  The Instance
+    adds some common features and functions that most objects
+    will want to use.
+
+    @{ */
 /** @file qofinstance.h 
  *  @brief Object instance holds common fields that most gnucash objects use.
  * 
@@ -88,5 +94,6 @@ void qof_instance_gemini (QofInstance *to, QofInstance *from);
  */
 QofInstance * qof_instance_lookup_twin (QofInstance *src, QofBook *book);
 
+/* @} */
 /* @} */
 #endif /* QOF_INSTANCE_H */
