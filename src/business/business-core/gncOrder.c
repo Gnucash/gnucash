@@ -122,17 +122,17 @@ void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
   order->dirty = TRUE;
 }
 
-void gncOrderSetDateOpened (GncOrder *order, Timespec *date)
+void gncOrderSetDateOpened (GncOrder *order, Timespec date)
 {
-  if (!order || !date) return;
-  order->opened = *date;
+  if (!order) return;
+  order->opened = date;
   order->dirty = TRUE;
 }
 
-void gncOrderSetDateClosed (GncOrder *order, Timespec *date)
+void gncOrderSetDateClosed (GncOrder *order, Timespec date)
 {
-  if (!order || !date) return;
-  order->closed = *date;
+  if (!order) return;
+  order->closed = date;
   order->dirty = TRUE;
 }
 

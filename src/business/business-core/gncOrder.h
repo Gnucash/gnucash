@@ -24,8 +24,8 @@ void gncOrderDestroy (GncOrder *order);
 
 void gncOrderSetID (GncOrder *order, const char *id);
 void gncOrderSetOwner (GncOrder *order, GncOwner *owner);
-void gncOrderSetDateOpened (GncOrder *order, Timespec *date);
-void gncOrderSetDateClosed (GncOrder *order, Timespec *date);
+void gncOrderSetDateOpened (GncOrder *order, Timespec date);
+void gncOrderSetDateClosed (GncOrder *order, Timespec date);
 void gncOrderSetNotes (GncOrder *order, const char *notes);
 void gncOrderSetReference (GncOrder *order, const char *reference);
 void gncOrderSetActive (GncOrder *order, gboolean active);

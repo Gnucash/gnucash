@@ -233,6 +233,8 @@
 				 (address (gnc:customer-get-addr customer))
 				 (invoice (gnc:invoice-create book))
 				 (owner (gnc:owner-create))
+				 (job (gnc:job-create book))
+				 (order (gnc:order-create book))
 				 (group (gnc:book-get-group book))
 				 (inc-acct (gnc:malloc-account book))
 				 (bank-acct (gnc:malloc-account book))
@@ -254,9 +256,26 @@
 			    ;; Create the Invoice
 			    (gnc:invoice-set-id invoice "000012")
 			    (gnc:invoice-set-owner invoice owner)
+			    (gnc:invoice-set-terms invoice "Net-30")
 			    (gnc:invoice-set-date-opened
 			     invoice (cons (current-time) 0))
 
+			    ;; Create the Job
+			    (gnc:job-set-id job "000025")
+			    (gnc:job-set-name job "Test Job")
+			    (gnc:job-set-reference job "Customer's ref#")
+			    (gnc:job-set-owner job owner)
+
+			    ;; MODIFY THE OWNER
+			    (gnc:owner-init-job owner job)
+
+			    ;; Create the Order
+			    (gnc:order-set-id order "001342")
+			    (gnc:order-set-owner order owner)
+			    (gnc:order-set-reference order "Customer's ref#")
+			    (gnc:order-set-date-opened
+			     order (cons (current-time) 0))
+			    
 			    ;; Create the A/R account
 			    (gnc:account-set-type ar-acct 'receivable)
 			    (gnc:account-set-name ar-acct "A/R")
@@ -284,6 +303,9 @@
 			    (gnc:account-set-commodity tax-acct
 						       (gnc:default-currency))
 			    (gnc:group-insert-account group tax-acct)
+
+			    ;; Launch the order editor
+			    (gnc:order-edit #f order)
 
 			    ;; Launch the invoice editor
 			    (gnc:invoice-edit #f invoice)

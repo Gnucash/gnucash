@@ -421,6 +421,14 @@
    '((<gnc:GncInvoice*> invoice) (<gnc:time-pair> date))
    "Set the Invoice-Opened Date")
 
+  (gw:wrap-function
+   ws
+   'gnc:invoice-set-terms
+   '<gw:void>
+   "gncInvoiceSetTerms"
+   '((<gnc:GncInvoice*> invoice) ((<gw:mchars> callee-owned const) id))
+   "Set the Invoice Terms")
+
   ; Get Functions
 
   (gw:wrap-function
@@ -507,6 +515,50 @@
   ;; gncJob.h
   ;;
 
+  ; Set Functions
+
+  (gw:wrap-function
+   ws
+   'gnc:job-create
+   '<gnc:GncJob*>
+   "gncJobCreate"
+   '((<gnc:Book*> book))
+   "Create a new Job")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-set-id
+   '<gw:void>
+   "gncJobSetID"
+   '((<gnc:GncJob*> job) ((<gw:mchars> callee-owned const) id))
+   "Set the job ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-set-name
+   '<gw:void>
+   "gncJobSetName"
+   '((<gnc:GncJob*> job) ((<gw:mchars> callee-owned const) name))
+   "Set the job Name")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-set-reference
+   '<gw:void>
+   "gncJobSetReference"
+   '((<gnc:GncJob*> job) ((<gw:mchars> callee-owned const) reference))
+   "Set the job Reference")
+
+  (gw:wrap-function
+   ws
+   'gnc:job-set-owner
+   '<gw:void>
+   "gncJobSetOwner"
+   '((<gnc:GncJob*> job) (<gnc:GncOwner*> owner))
+   "Set the job Owner")
+
+  ; Get Functions
+
   (gw:wrap-function
    ws
    'gnc:job-get-id
@@ -542,6 +594,50 @@
   ;;
   ;; gncOrder.h
   ;;
+
+  ; Set Functions
+
+  (gw:wrap-function
+   ws
+   'gnc:order-create
+   '<gnc:GncOrder*>
+   "gncOrderCreate"
+   '((<gnc:Book*> book))
+   "Create a new order")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-set-id
+   '<gw:void>
+   "gncOrderSetID"
+   '((<gnc:GncOrder*> order) ((<gw:mchars> callee-owned const) id))
+   "Set the Order ID")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-set-owner
+   '<gw:void>
+   "gncOrderSetOwner"
+   '((<gnc:GncOrder*> order) (<gnc:GncOwner*> owner))
+   "Set the Order Owner")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-set-date-opened
+   '<gw:void>
+   "gncOrderSetDateOpened"
+   '((<gnc:GncOrder*> order) (<gnc:time-pair> date))
+   "Set the Order's Opened Date")
+
+  (gw:wrap-function
+   ws
+   'gnc:order-set-reference
+   '<gw:void>
+   "gncOrderSetReference"
+   '((<gnc:GncOrder*> order) ((<gw:mchars> callee-owned const) id))
+   "Set the Order Reference")
+
+  ; Get Functions
 
   (gw:wrap-function
    ws

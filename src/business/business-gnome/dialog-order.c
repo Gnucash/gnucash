@@ -109,7 +109,7 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 
   tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ow->opened_date));
   timespecFromTime_t (&ts, tt);
-  gncOrderSetDateOpened (order, &ts);
+  gncOrderSetDateOpened (order, ts);
 
   if (ow->active_check)
     gncOrderSetActive (order, gtk_toggle_button_get_active
@@ -271,7 +271,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
   if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &ts))
     return;
 
-  gncOrderSetDateClosed (order, &ts);
+  gncOrderSetDateClosed (order, ts);
 
   /* save it off */
   gnc_order_window_ok_save (ow);

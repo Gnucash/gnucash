@@ -231,22 +231,32 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Tax")
-    "k" (N_ "Display the entry's tax") #f))
+    "l" (N_ "Display the entry's tax") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Tax Value")
-    "k" (N_ "Display the entry's monetary tax") #f))
+    "m" (N_ "Display the entry's monetary tax") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Value")
-    "k" (N_ "Display the entry's value") #t))
+    "n" (N_ "Display the entry's value") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Totals")
-    "l" (N_ "Display the totals?") #t))
+    "p" (N_ "Display the totals?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "References")
+    "s" (N_ "Display the invoice references?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Terms")
+    "t" (N_ "Display the invoice terms?") #t))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -475,10 +485,11 @@
 	 (invoice (opt-val "__reg" "invoice"))
 	 (owner (gnc:invoice-get-owner invoice))
 	 (entries (gnc:invoice-get-entries invoice))
+	 (references? (opt-val "Display" "References"))
 	 (title (string-append (_ "Invoice #") (gnc:invoice-get-id invoice))))
 
     (define (add-order o)
-      (if (not (member o orders))
+      (if (and references? (not (member o orders)))
 	  (addto! orders o)))
 
     (set! table (make-entry-table entries
@@ -517,6 +528,17 @@
 
     (make-break! document)
     (make-break! document)
+
+    (if (opt-val "Display" "Terms")
+	(let ((terms (gnc:invoice-get-terms invoice)))
+	  (if (and terms (> (string-length terms) 0))
+	      (gnc:html-document-add-object!
+	       document
+	       (gnc:make-html-text
+		(string-append
+		 (_ "Terms") ":&nbsp;" 
+		 (string-expand terms #\newline "<br>")))))))
+
     (make-break! document)
 
     (gnc:html-document-add-object! document table)
