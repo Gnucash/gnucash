@@ -462,6 +462,8 @@ gnc_set_label_color(GtkWidget *label, double value)
     style->fg[GTK_STATE_NORMAL] = style->black;
 
   gtk_widget_set_style(label, style);
+
+  gtk_style_unref(style);
 #endif
 }
 
