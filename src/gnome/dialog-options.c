@@ -772,7 +772,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     colon_name = g_strconcat(name, ":", NULL);
     label = gtk_label_new(colon_name);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);
@@ -797,7 +797,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     colon_name = g_strconcat(name, ":", NULL);
     label= gtk_label_new(colon_name);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);
@@ -821,7 +821,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     colon_name = g_strconcat(name, ":", NULL);
     label= gtk_label_new(colon_name);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);
@@ -915,7 +915,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     colon_name = g_strconcat(name, ":", NULL);
     label = gtk_label_new(colon_name);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);
@@ -928,6 +928,45 @@ gnc_option_set_ui_widget(GNCOption *option,
                                             step_size * 5.0));
     value = gtk_spin_button_new(adj, step_size, num_decimals);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value), TRUE);
+
+    {
+      GtkStyle *style;
+      gdouble biggest;
+      gint num_digits;
+
+      biggest = ABS(lower_bound);
+      biggest = MAX(biggest, ABS(upper_bound));
+
+      num_digits = 0;
+      while (biggest >= 1)
+      {
+        num_digits++;
+        biggest = biggest / 10;
+      }
+
+      if (num_digits == 0)
+        num_digits = 1;
+
+      num_digits += num_decimals + 1;
+
+      style = gtk_widget_get_style(value);
+      if (style != NULL)
+      {
+        gchar *string;
+        gint width;
+
+        string = g_strnfill(num_digits, '8');
+
+        width = gdk_text_measure(style->font, string, num_digits);
+
+        /* sync with gtkspinbutton.c. why doesn't it do this itself? */
+        width += 11 + (2 * style->klass->xthickness);
+
+        g_free(string);
+
+        gtk_widget_set_usize(value, width, 0);
+      }
+    }
 
     option->widget = value;
     gnc_option_set_ui_value(option, FALSE);
@@ -949,7 +988,7 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     colon_name = g_strconcat(name, ":", NULL);
     label = gtk_label_new(colon_name);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
     enclosing = gtk_hbox_new(FALSE, 5);

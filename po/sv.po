@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.3.2\n"
-"POT-Creation-Date: 2000-03-19 17:00-0800\n"
+"POT-Creation-Date: 2000-03-20 00:19-0800\n"
 "PO-Revision-Date: 2000-03-02 10:23+0100\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -445,7 +445,7 @@ msgstr "Radera det valda kontot"
 msgid "Delete the current transaction"
 msgstr "Radera den aktuella transaktionen"
 
-#: messages-i18n.c:73 po/guile_strings.txt:108
+#: messages-i18n.c:73 po/guile_strings.txt:110
 msgid "Show transactions on two lines with more information"
 msgstr "Visa transaktioner på två rader med mer information"
 
@@ -591,7 +591,7 @@ msgstr "Ställ tillbaka detta alternativ till sitt standardvärde"
 msgid "Show all of the transactions in the account"
 msgstr "Visa alla transaktioner i kontot"
 
-#: messages-i18n.c:108 po/guile_strings.txt:112
+#: messages-i18n.c:108 po/guile_strings.txt:114
 msgid "Show transactions on single lines"
 msgstr "Visa transaktioner på enkla rader"
 
@@ -805,7 +805,7 @@ msgstr "Kontotyp"
 msgid "Adjust Balance"
 msgstr "Kontosaldo"
 
-#: messages-i18n.c:161 po/guile_strings.txt:235
+#: messages-i18n.c:161 po/guile_strings.txt:238
 msgid "Auto Double"
 msgstr "Automatisk dubbel"
 
@@ -1018,7 +1018,7 @@ msgstr "Visa tidigaste"
 msgid "Show Latest"
 msgstr "Visa senaste"
 
-#: messages-i18n.c:213 po/guile_strings.txt:143
+#: messages-i18n.c:213 po/guile_strings.txt:145
 msgid "Single Line"
 msgstr "En rad"
 
@@ -1122,7 +1122,7 @@ msgstr "Värdestegring"
 msgid "Phone"
 msgstr "Telefon"
 
-#: messages-i18n.c:238 po/guile_strings.txt:130
+#: messages-i18n.c:238 po/guile_strings.txt:132
 #: src/gnome/glade-account-picker.c:165
 msgid "Asset"
 msgstr "Tillgång"
@@ -1143,7 +1143,7 @@ msgstr "Bakåt"
 msgid "Balance"
 msgstr "Saldo"
 
-#: messages-i18n.c:243 po/guile_strings.txt:82
+#: messages-i18n.c:243 po/guile_strings.txt:83
 #: src/gnome/glade-account-picker.c:159
 msgid "Bank"
 msgstr "Bank"
@@ -1165,7 +1165,7 @@ msgstr "Köpa"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: messages-i18n.c:248 po/guile_strings.txt:101
+#: messages-i18n.c:248 po/guile_strings.txt:103
 #: src/gnome/glade-account-picker.c:162
 msgid "Cash"
 msgstr "Kontant"
@@ -1200,7 +1200,7 @@ msgstr ""
 msgid "Create"
 msgstr "Skapa"
 
-#: messages-i18n.c:256 po/guile_strings.txt:188
+#: messages-i18n.c:256 po/guile_strings.txt:191
 #: src/gnome/glade-account-picker.c:168
 msgid "Credit"
 msgstr "Kredit"
@@ -1209,7 +1209,7 @@ msgstr "Kredit"
 msgid "Credits"
 msgstr "Krediter"
 
-#: messages-i18n.c:258 po/guile_strings.txt:97
+#: messages-i18n.c:258 po/guile_strings.txt:99
 #: src/gnome/glade-account-picker.c:180
 msgid "Currency"
 msgstr "Valuta"
@@ -1247,7 +1247,7 @@ msgstr "Insättning"
 msgid "Depreciation"
 msgstr "Värdeminskning"
 
-#: messages-i18n.c:267 po/guile_strings.txt:113
+#: messages-i18n.c:267 po/guile_strings.txt:115
 msgid "Description"
 msgstr "Beskrivning"
 
@@ -1286,7 +1286,7 @@ msgstr "Utjämning"
 msgid "Exit"
 msgstr "Avsluta"
 
-#: messages-i18n.c:276 po/guile_strings.txt:247
+#: messages-i18n.c:276 po/guile_strings.txt:250
 #: src/gnome/glade-account-picker.c:186
 msgid "Expense"
 msgstr "Utgift"
@@ -1295,7 +1295,7 @@ msgstr "Utgift"
 msgid "Export"
 msgstr "Export"
 
-#: messages-i18n.c:278 po/guile_strings.txt:270
+#: messages-i18n.c:278 po/guile_strings.txt:274
 msgid "Extensions"
 msgstr "Utvidgningar"
 
@@ -1312,7 +1312,7 @@ msgstr "Ny fil"
 msgid "Forward"
 msgstr "Framåt"
 
-#: messages-i18n.c:282 po/guile_strings.txt:91
+#: messages-i18n.c:282 po/guile_strings.txt:93
 msgid "From"
 msgstr "Från"
 
@@ -1328,7 +1328,7 @@ msgstr "Hjälp"
 msgid "Import"
 msgstr "Importera"
 
-#: messages-i18n.c:286 po/guile_strings.txt:183
+#: messages-i18n.c:286 po/guile_strings.txt:186
 #: src/gnome/glade-account-picker.c:183
 msgid "Income"
 msgstr "Inkomst"
@@ -1345,7 +1345,7 @@ msgstr "Ränta"
 msgid "Jump"
 msgstr "Hoppa"
 
-#: messages-i18n.c:290 po/guile_strings.txt:146
+#: messages-i18n.c:290 po/guile_strings.txt:148
 #: src/gnome/glade-account-picker.c:171
 msgid "Liability"
 msgstr "Skuld"
@@ -1379,7 +1379,7 @@ msgstr "Nej"
 msgid "(none)"
 msgstr "(ingen)"
 
-#: messages-i18n.c:298 po/guile_strings.txt:157
+#: messages-i18n.c:298 po/guile_strings.txt:159
 msgid "Notes"
 msgstr "Anteckningar"
 
@@ -1451,11 +1451,11 @@ msgstr "Förlika"
 msgid "Record"
 msgstr "Spara"
 
-#: messages-i18n.c:316 po/guile_strings.txt:161
+#: messages-i18n.c:316 po/guile_strings.txt:164
 msgid "Register"
 msgstr "Register"
 
-#: messages-i18n.c:317 po/guile_strings.txt:156
+#: messages-i18n.c:317 po/guile_strings.txt:158
 msgid "Report"
 msgstr "Rapport"
 
@@ -1475,7 +1475,7 @@ msgstr "Besparingar"
 msgid "Scrub"
 msgstr "Städa upp"
 
-#: messages-i18n.c:322 po/guile_strings.txt:142
+#: messages-i18n.c:322 po/guile_strings.txt:144
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -1507,7 +1507,7 @@ msgstr "Delning"
 msgid "STCG"
 msgstr ""
 
-#: messages-i18n.c:330 po/guile_strings.txt:269
+#: messages-i18n.c:330 po/guile_strings.txt:272
 #: src/gnome/glade-account-picker.c:174
 msgid "Stock"
 msgstr "Aktie"
@@ -1524,7 +1524,7 @@ msgstr "Överskott"
 msgid "Teller"
 msgstr "Kassör"
 
-#: messages-i18n.c:334 po/guile_strings.txt:228
+#: messages-i18n.c:334 po/guile_strings.txt:231
 msgid "To"
 msgstr "Till"
 
@@ -1536,7 +1536,7 @@ msgstr "Idag"
 msgid "Total"
 msgstr "Totalt"
 
-#: messages-i18n.c:337 po/guile_strings.txt:230
+#: messages-i18n.c:337 po/guile_strings.txt:233
 #: src/gnome/glade-qif-import.c:354 src/gnome/glade-qif-import.c:408
 msgid "Type"
 msgstr "Typ"
@@ -1779,62 +1779,67 @@ msgid "Background Color"
 msgstr "Bakgrundsfärg"
 
 #: po/guile_strings.txt:62
+#, c-format
+msgid "The number option formatted as currency is %s."
+msgstr ""
+
+#: po/guile_strings.txt:63
 msgid "Income/Salary/Taxable"
 msgstr "Inkomst/Lön/Taxerbar"
 
-#: po/guile_strings.txt:63
+#: po/guile_strings.txt:64
 #, fuzzy
 msgid "There are no selected accounts in the account list option."
 msgstr "Öppna det valda kontot och alla underkonton"
 
-#: po/guile_strings.txt:64
+#: po/guile_strings.txt:65
 #, fuzzy
 msgid "This page shows your net worth."
 msgstr "Denna sida visar dina vinster och förluster."
 
-#: po/guile_strings.txt:65
+#: po/guile_strings.txt:66
 #, fuzzy
 msgid "_Budget"
 msgstr "Köpte"
 
-#: po/guile_strings.txt:66
+#: po/guile_strings.txt:67
 msgid "Continental Europe: dd.mm.yyyy"
 msgstr "Kontinentaleuropa: dd.mm.åååå"
 
-#: po/guile_strings.txt:67
+#: po/guile_strings.txt:68
 msgid "account_edit_win_height"
 msgstr "account_edit_win_height"
 
-#: po/guile_strings.txt:68
+#: po/guile_strings.txt:69
 msgid "Import QIF File - Scripted in Guile."
 msgstr "Importera QIF fil - Skriptad i Guile."
 
-#: po/guile_strings.txt:69
+#: po/guile_strings.txt:70
 msgid "Show Horizontal Borders"
 msgstr "Visa horisontella kanter"
 
-#: po/guile_strings.txt:70
+#: po/guile_strings.txt:71
 msgid "Sort by check/transaction number"
 msgstr "Sortera efter check/transaktions-nummer"
 
-#: po/guile_strings.txt:71
+#: po/guile_strings.txt:72
 msgid "The background color for the active transaction in double mode"
 msgstr "Bakgrundsfärgen för den aktiva transaktionen deubbelradsläge"
 
-#: po/guile_strings.txt:72
+#: po/guile_strings.txt:73
 msgid "Register Colors"
 msgstr "Registerfärger"
 
-#: po/guile_strings.txt:73
+#: po/guile_strings.txt:74
 #, fuzzy, c-format
 msgid "The boolean option is %s."
 msgstr "Detta är ett boolskt alternativ."
 
-#: po/guile_strings.txt:74
+#: po/guile_strings.txt:75
 msgid "Multi mode default transaction background"
 msgstr "Standardbakgrund för transaktioner i flerradsläge"
 
-#: po/guile_strings.txt:75
+#: po/guile_strings.txt:76
 msgid ""
 "Double clicking on an account with children expands the account instead of "
 "opening a register."
@@ -1842,47 +1847,52 @@ msgstr ""
 "Att dubbelklicka på ett konto med underkonton expanderar kontot istället för "
 "att öppna ett register."
 
-#: po/guile_strings.txt:76
+#: po/guile_strings.txt:77
 msgid "The background color for the active transaction in single mode"
 msgstr "Bakgrundsfärgen för den aktiva transaktionen i enkelradsläge"
 
-#: po/guile_strings.txt:77
+#: po/guile_strings.txt:78
 msgid "Credit Accounts"
 msgstr "Kreditkonton"
 
-#: po/guile_strings.txt:78
+#: po/guile_strings.txt:79
 msgid "Sort by description"
 msgstr "Sortera efter beskrivning"
 
-#: po/guile_strings.txt:79
+#: po/guile_strings.txt:80
 msgid "largest to smallest, latest to earliest"
 msgstr "största till minsta, senaste till tidigaste"
 
-#: po/guile_strings.txt:80
+#: po/guile_strings.txt:81
 msgid "Secondary Key"
 msgstr "Sekundärnyckel"
 
-#: po/guile_strings.txt:81
+#: po/guile_strings.txt:82
 msgid "Save window sizes and positions."
 msgstr "Spara fönsterstorlekar och positioner."
 
-#: po/guile_strings.txt:83
+#: po/guile_strings.txt:84
+#, fuzzy
+msgid "Number Option"
+msgstr "Rapport alternativ"
+
+#: po/guile_strings.txt:85
 msgid "Reverse Income and Expense Accounts"
 msgstr "Kasta om inkomst och utgiftskonton."
 
-#: po/guile_strings.txt:84
+#: po/guile_strings.txt:86
 msgid "Europe"
 msgstr "Europa"
 
-#: po/guile_strings.txt:85
+#: po/guile_strings.txt:87
 msgid "Add in sub-accounts of each selected"
 msgstr "Addera underkonton till varje vald"
 
-#: po/guile_strings.txt:86
+#: po/guile_strings.txt:88
 msgid "Day"
 msgstr "Dag"
 
-#: po/guile_strings.txt:87
+#: po/guile_strings.txt:89
 msgid ""
 "This is for testing. Your reports probably shouldn't have an option like "
 "this."
@@ -1890,414 +1900,419 @@ msgstr ""
 "Detta är bara för testning. Dina rapporter skall troligen inte\n"
 "ha ett alternativ som det här."
 
-#: po/guile_strings.txt:88
+#: po/guile_strings.txt:90
 msgid "Average"
 msgstr "Genomsnitt"
 
-#: po/guile_strings.txt:89
+#: po/guile_strings.txt:91
 #, fuzzy
 msgid "The items selected in the list option are:"
 msgstr "Detta är ett kontolist-alternativ"
 
-#: po/guile_strings.txt:90
+#: po/guile_strings.txt:92
 msgid "A_ccount Balance Tracker"
 msgstr "_Saldospårare"
 
-#: po/guile_strings.txt:92
+#: po/guile_strings.txt:94
 msgid "Start of reporting period"
 msgstr ""
 
-#: po/guile_strings.txt:93
+#: po/guile_strings.txt:95
 msgid "Sort by EXACT entry time"
 msgstr "Sortera efter den EXAKTA inmatningstiden"
 
-#: po/guile_strings.txt:94
+#: po/guile_strings.txt:96
 msgid "account_add_win_width"
 msgstr "account_add_win_width"
 
-#: po/guile_strings.txt:95
+#: po/guile_strings.txt:97
 msgid "Full"
 msgstr ""
 
-#: po/guile_strings.txt:96
+#: po/guile_strings.txt:98
 msgid "Multi mode default split background"
 msgstr "Standardbakgrund för delning i flerradsläge"
 
-#: po/guile_strings.txt:98
+#: po/guile_strings.txt:100
 msgid "Week"
 msgstr "Vecka"
 
-#: po/guile_strings.txt:99
+#: po/guile_strings.txt:101
 msgid "Get number at each one of these"
 msgstr "Hämta ett nummer vid varje av dessa"
 
-#: po/guile_strings.txt:100
+#: po/guile_strings.txt:102
 msgid "Crash the report"
 msgstr "Krascha rapporten"
 
-#: po/guile_strings.txt:102
+#: po/guile_strings.txt:104
 msgid "Step Size"
 msgstr "Stegstorlek"
 
-#: po/guile_strings.txt:103
+#: po/guile_strings.txt:105
 msgid "Hello, World!"
 msgstr "Hej, Världen!"
 
-#: po/guile_strings.txt:104
+#: po/guile_strings.txt:106
 msgid "ISO"
 msgstr "ISO"
 
-#: po/guile_strings.txt:105
+#: po/guile_strings.txt:107
 msgid "A report useful for balancing the budget"
 msgstr ""
 
-#: po/guile_strings.txt:106
+#: po/guile_strings.txt:108
 msgid "Date Format Display"
 msgstr "Visa datum format"
 
-#: po/guile_strings.txt:107
+#: po/guile_strings.txt:109
 msgid "Reversed-balance account types"
 msgstr "Kontotyper för omkastat saldo"
 
-#: po/guile_strings.txt:109
+#: po/guile_strings.txt:111
 msgid "Account fields to display"
 msgstr "Kontofält att visa"
 
-#: po/guile_strings.txt:110
+#: po/guile_strings.txt:112
 #, fuzzy
 msgid "Account Balance Tracker"
 msgstr "_Saldospårare"
 
-#: po/guile_strings.txt:111
+#: po/guile_strings.txt:113
 msgid "Report Options"
 msgstr "Rapport alternativ"
 
-#: po/guile_strings.txt:114
+#: po/guile_strings.txt:116
 msgid "Calculate balance sheet up to this date"
 msgstr ""
 
-#: po/guile_strings.txt:115
+#: po/guile_strings.txt:117
 msgid "Alternate the even and odd colors with each transaction, not each row"
 msgstr "Alternera udda och jämna färger med varje transaktion, inte varje rad"
 
-#: po/guile_strings.txt:116
+#: po/guile_strings.txt:118
 msgid "Gain/Loss"
 msgstr "Vinst/Förlust"
 
-#: po/guile_strings.txt:117
+#: po/guile_strings.txt:119
 msgid "Transfer from/to"
 msgstr "Överföring från/till"
 
-#: po/guile_strings.txt:118
+#: po/guile_strings.txt:120
 msgid "Text only"
 msgstr "Bara text"
 
-#: po/guile_strings.txt:119
+#: po/guile_strings.txt:121
 msgid "Toolbar Buttons"
 msgstr "Verktygsfältknappar"
 
-#: po/guile_strings.txt:120
+#: po/guile_strings.txt:122
 msgid "Report Items from this date"
 msgstr "Rapportera saker från detta datum"
 
-#: po/guile_strings.txt:121
+#: po/guile_strings.txt:123
 msgid ""
 "The default background color for transactions in multi-line mode and the "
 "auto modes"
 msgstr "Standardbakgrundsfärgen för transaktioner i flerradsläge och autolägen"
 
-#: po/guile_strings.txt:122
+#: po/guile_strings.txt:124
 msgid "Fourth Options"
 msgstr "Fjärde alternativet"
 
-#: po/guile_strings.txt:123
+#: po/guile_strings.txt:125
 msgid "Sort by this criterion first"
 msgstr "Sortera efter detta kriterium först"
 
-#: po/guile_strings.txt:124
+#: po/guile_strings.txt:126
 msgid "Ugly option"
 msgstr "Fula alternativ"
 
-#: po/guile_strings.txt:125
+#: po/guile_strings.txt:127
 msgid "How are you doing on your budget?"
 msgstr ""
 
-#: po/guile_strings.txt:126
+#: po/guile_strings.txt:128
 msgid "Save Translatable Strings"
 msgstr "Spara översättningsbara strängar"
 
-#: po/guile_strings.txt:127
+#: po/guile_strings.txt:129
 msgid "Save strings that need to be translated"
 msgstr "Spara strängar som måste översättas"
 
-#: po/guile_strings.txt:128
+#: po/guile_strings.txt:130
 msgid "Number of Rows"
 msgstr "Antal rader"
 
-#: po/guile_strings.txt:129
+#: po/guile_strings.txt:131
 msgid "/ (Slash)"
 msgstr "/ (Snedstreck)"
 
-#: po/guile_strings.txt:131
+#: po/guile_strings.txt:133
 msgid "Use 24-hour time format"
 msgstr "Använd 24-timmars tidsformat"
 
-#: po/guile_strings.txt:132
+#: po/guile_strings.txt:134
 msgid "Date Format"
 msgstr "Datumformat"
 
-#: po/guile_strings.txt:133
+#: po/guile_strings.txt:135
 msgid "A list option"
 msgstr "Ett listalternativ"
 
-#: po/guile_strings.txt:134
+#: po/guile_strings.txt:136
 msgid "ISO Standard: yyyy-mm-dd"
 msgstr "ISO standard: åååå-mm-dd"
 
-#: po/guile_strings.txt:135
+#: po/guile_strings.txt:137
 msgid "Default Currency"
 msgstr "Standardvaluta"
 
-#: po/guile_strings.txt:136
+#: po/guile_strings.txt:138
 msgid "Do transaction report on this account"
 msgstr "Gör transaktionsrapport på detta kontot"
 
-#: po/guile_strings.txt:137
+#: po/guile_strings.txt:139
 msgid "Single mode default even row background"
 msgstr "Alternera färger för transaktioner i enkelradsläge"
 
-#: po/guile_strings.txt:138
+#: po/guile_strings.txt:140
 msgid "Double mode default even row background"
 msgstr "Standardbakgrund för udda rader i dubbelradsläge"
 
-#: po/guile_strings.txt:139
+#: po/guile_strings.txt:141
 #, fuzzy, c-format
 msgid "The multi-choice option is %s."
 msgstr "Detta är ett flervalsalternativ."
 
-#: po/guile_strings.txt:140
+#: po/guile_strings.txt:142
 msgid "Double mode colors alternate with transactions"
 msgstr "Alternera färger för transaktioner i dubbelradsläge"
 
-#: po/guile_strings.txt:141
+#: po/guile_strings.txt:143
 msgid "General"
 msgstr "Allmän"
 
-#: po/guile_strings.txt:144
+#: po/guile_strings.txt:146
 msgid "Sub-Accounts"
 msgstr "Underkonton"
 
-#: po/guile_strings.txt:145
+#: po/guile_strings.txt:147
 #, c-format
 msgid "The date and time option is %s."
 msgstr ""
 
-#: po/guile_strings.txt:147
+#: po/guile_strings.txt:149
 msgid "End of reporting period"
 msgstr ""
 
-#: po/guile_strings.txt:148
+#: po/guile_strings.txt:150
 msgid "Don't reverse any accounts"
 msgstr "Kasta inte om några konton"
 
-#: po/guile_strings.txt:149
+#: po/guile_strings.txt:151
 msgid "Good option"
 msgstr "Goda alternativ"
 
-#: po/guile_strings.txt:150
+#: po/guile_strings.txt:152
 msgid "US"
 msgstr "US"
 
-#: po/guile_strings.txt:151
+#: po/guile_strings.txt:153
 msgid "account_edit_win_width"
 msgstr "account_edit_win_width"
 
-#: po/guile_strings.txt:152
+#: po/guile_strings.txt:154
 #, fuzzy
 msgid "Ba_lance sheet"
 msgstr "_Saldoblad"
 
-#: po/guile_strings.txt:153
+#: po/guile_strings.txt:155
 msgid "Help for first option"
 msgstr "Hjälp för första alternativet"
 
-#: po/guile_strings.txt:154
+#: po/guile_strings.txt:156
 msgid "Number"
 msgstr "Nummer"
 
-#: po/guile_strings.txt:155
+#: po/guile_strings.txt:157
 msgid "Show both icons and text"
 msgstr "Visa både ikoner och text"
 
-#: po/guile_strings.txt:158
+#: po/guile_strings.txt:160
+#, fuzzy, c-format
+msgid "The number option is %s."
+msgstr "Detta är ett datumalternativ"
+
+#: po/guile_strings.txt:161
 #, fuzzy, c-format
 msgid "The string option is %s."
 msgstr "Detta är ett strängalternativ"
 
-#: po/guile_strings.txt:159
+#: po/guile_strings.txt:162
 msgid "_Reports"
 msgstr "_Rapporter"
 
-#: po/guile_strings.txt:160
+#: po/guile_strings.txt:163
 msgid "Single mode active background"
 msgstr "Aktiv bakgrund i enkelradsläge"
 
-#: po/guile_strings.txt:162
+#: po/guile_strings.txt:165
 msgid "Year"
 msgstr "År"
 
-#: po/guile_strings.txt:163
+#: po/guile_strings.txt:166
 msgid "Profit and Loss"
 msgstr "Vinst och förlust"
 
-#: po/guile_strings.txt:164
+#: po/guile_strings.txt:167
 msgid "Month"
 msgstr "Månad"
 
-#: po/guile_strings.txt:165
+#: po/guile_strings.txt:168
 msgid "Multi mode active transaction background"
 msgstr "Bakgrund för aktiv transaktion i flerradsläge"
 
-#: po/guile_strings.txt:166
+#: po/guile_strings.txt:169
 msgid ". (Period)"
 msgstr ". (Punkt)"
 
-#: po/guile_strings.txt:167
+#: po/guile_strings.txt:170
 msgid "Primary Sort Order"
 msgstr "Primär sorteringsordning"
 
-#: po/guile_strings.txt:168
+#: po/guile_strings.txt:171
 msgid "Descending"
 msgstr "Fallande"
 
-#: po/guile_strings.txt:169
+#: po/guile_strings.txt:172
 msgid "This is a date option"
 msgstr "Detta är ett datumalternativ"
 
-#: po/guile_strings.txt:170
+#: po/guile_strings.txt:173
 msgid "Two Week"
 msgstr "Två veckor"
 
-#: po/guile_strings.txt:171
+#: po/guile_strings.txt:174
 msgid "Save Window Geometry"
 msgstr "Spara fönstergeometri"
 
-#: po/guile_strings.txt:172
+#: po/guile_strings.txt:175
 msgid "Income\\Salary\\Taxable"
 msgstr "Inkomst\\Lön\\Taxerbar"
 
-#: po/guile_strings.txt:173
+#: po/guile_strings.txt:176
 msgid "Code"
 msgstr "Kod"
 
-#: po/guile_strings.txt:174
+#: po/guile_strings.txt:177
 #, fuzzy
 msgid "Balance sheet"
 msgstr "_Saldoblad"
 
-#: po/guile_strings.txt:175
+#: po/guile_strings.txt:178
 msgid "Export data as text."
 msgstr "Exportera data som text"
 
-#: po/guile_strings.txt:176
+#: po/guile_strings.txt:179
 #, fuzzy
 msgid "Balance Sheet"
 msgstr "_Saldoblad"
 
-#: po/guile_strings.txt:177
+#: po/guile_strings.txt:180
 msgid "- (Dash)"
 msgstr "- (Bindestreck)"
 
-#: po/guile_strings.txt:178
+#: po/guile_strings.txt:181
 msgid "Order of primary sorting"
 msgstr "Primär sorteringsordning"
 
-#: po/guile_strings.txt:179
+#: po/guile_strings.txt:182
 msgid "Default Currency For New Accounts"
 msgstr "Standardvaluta för nya konton"
 
-#: po/guile_strings.txt:180
+#: po/guile_strings.txt:183
 msgid "Sort by this criterion second"
 msgstr "Sortera sedan efter detta kriterium"
 
-#: po/guile_strings.txt:181
+#: po/guile_strings.txt:184
 msgid "true"
 msgstr ""
 
-#: po/guile_strings.txt:182
+#: po/guile_strings.txt:185
 msgid "Income.Salary.Taxable"
 msgstr "Inkomst.Lön.Taxerbar"
 
-#: po/guile_strings.txt:184
+#: po/guile_strings.txt:187
 msgid "The Ugly"
 msgstr "Den fula"
 
-#: po/guile_strings.txt:185
+#: po/guile_strings.txt:188
 msgid "By default, show horizontal borders on the cells."
 msgstr "Visa horisontella kanter i celler som standard."
 
-#: po/guile_strings.txt:186
+#: po/guile_strings.txt:189
 msgid ": (Colon)"
 msgstr ": (Kolon)"
 
-#: po/guile_strings.txt:187
+#: po/guile_strings.txt:190
 msgid "By default, show vertical borders on the cells."
 msgstr "Visa vertikala kanter i celler som standard."
 
-#: po/guile_strings.txt:189
+#: po/guile_strings.txt:192
 msgid "Ascending"
 msgstr "Stigande"
 
-#: po/guile_strings.txt:190
+#: po/guile_strings.txt:193
 msgid "The Bad"
 msgstr "Det onda"
 
-#: po/guile_strings.txt:191
+#: po/guile_strings.txt:194
 msgid "Just a Date Option"
 msgstr "Bara ett datumalternativ"
 
-#: po/guile_strings.txt:192
+#: po/guile_strings.txt:195
 #, fuzzy
 msgid "The accounts selected in the account list option are:"
 msgstr "Detta är ett kontolist-alternativ"
 
-#: po/guile_strings.txt:193
+#: po/guile_strings.txt:196
 #, c-format
 msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
 
-#: po/guile_strings.txt:194
+#: po/guile_strings.txt:197
 msgid "The default background color for even rows in single mode"
 msgstr "Standardbakgrundsfärgen för jämna rader i enkelradsläge"
 
-#: po/guile_strings.txt:195
+#: po/guile_strings.txt:198
 msgid "The default background color for even rows in double mode"
 msgstr "Standardbakgrundsfärgen för jämna rader i dubbelradsläge"
 
-#: po/guile_strings.txt:196
+#: po/guile_strings.txt:199
 #, fuzzy
 msgid "Display the Budget report."
 msgstr "Visa saldoblad rapport."
 
-#: po/guile_strings.txt:197
+#: po/guile_strings.txt:200
 msgid "_Hello, World"
 msgstr "_Hello, World"
 
-#: po/guile_strings.txt:198
+#: po/guile_strings.txt:201
 msgid "First Option"
 msgstr "Första alternativet"
 
-#: po/guile_strings.txt:199
+#: po/guile_strings.txt:202
 msgid "Double line mode with multi-line cursor"
 msgstr "Läge för dubbla rader med flerrads markör"
 
-#: po/guile_strings.txt:200
+#: po/guile_strings.txt:203
 msgid "Single line mode with multi-line cursor"
 msgstr "Läge för enkelrader med flerrads markör"
 
-#: po/guile_strings.txt:201
+#: po/guile_strings.txt:204
 msgid ""
 "Show transactions on multiple lines with one line for each split in the "
 "transaction"
@@ -2305,241 +2320,241 @@ msgstr ""
 "Visa transaktioner över flera rader med en rad för varje delning i "
 "transaktionen"
 
-#: po/guile_strings.txt:202
+#: po/guile_strings.txt:205
 msgid "account_add_win_height"
 msgstr "account_add_win_height"
 
-#: po/guile_strings.txt:203
+#: po/guile_strings.txt:206
 msgid "Plot Type"
 msgstr "Graftyp"
 
-#: po/guile_strings.txt:204
+#: po/guile_strings.txt:207
 #, fuzzy
 msgid "Budget"
 msgstr "Köpte"
 
-#: po/guile_strings.txt:205
+#: po/guile_strings.txt:208
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
 msgstr ""
 "Välj om man skall visa ikoner, text, eller både och för verktygsfältknappar"
 
-#: po/guile_strings.txt:206
+#: po/guile_strings.txt:209
 msgid "Show text only"
 msgstr "Visa bara text"
 
-#: po/guile_strings.txt:207
+#: po/guile_strings.txt:210
 msgid "Icons and Text"
 msgstr "Ikoner och text"
 
-#: po/guile_strings.txt:208
+#: po/guile_strings.txt:211
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "Automatiskt höja listor för konton eller händelser vid inmatning."
 
-#: po/guile_strings.txt:209
+#: po/guile_strings.txt:212
 msgid "Sort by account transferred from/to's name"
 msgstr "Sortera efter kontots överförings från/till namn"
 
-#: po/guile_strings.txt:210
+#: po/guile_strings.txt:213
 msgid "Net Gain"
 msgstr "Nettovinst"
 
-#: po/guile_strings.txt:211
+#: po/guile_strings.txt:214
 msgid "The fourth option rules!"
 msgstr "Det fjärde alternativet regerar!"
 
-#: po/guile_strings.txt:212
+#: po/guile_strings.txt:215
 msgid "This is a date option with time"
 msgstr "Detta är ett datumalternativ med tid"
 
-#: po/guile_strings.txt:213
+#: po/guile_strings.txt:216
 msgid "The header background color"
 msgstr "Rubrikernas bakgrundsfärg"
 
-#: po/guile_strings.txt:214
+#: po/guile_strings.txt:217
 msgid "Sort by memo"
 msgstr "Sortera efter memo"
 
-#: po/guile_strings.txt:215
+#: po/guile_strings.txt:218
 msgid "Third Option"
 msgstr "Tredje alternativet"
 
-#: po/guile_strings.txt:216
+#: po/guile_strings.txt:219
 msgid "Choose the default mode for register windows"
 msgstr "Välj standardläge för registerfönster"
 
-#: po/guile_strings.txt:217
+#: po/guile_strings.txt:220
 msgid "Default number of register rows to display."
 msgstr "Antalet registerrader som visas som standard."
 
-#: po/guile_strings.txt:218
+#: po/guile_strings.txt:221
 #, fuzzy
 msgid "Report end date"
 msgstr "Sortera efter datum"
 
-#: po/guile_strings.txt:219
+#: po/guile_strings.txt:222
 msgid "None"
 msgstr "Ingen"
 
-#: po/guile_strings.txt:220
+#: po/guile_strings.txt:223
 msgid "Export data as text (Danger: Unfinished)"
 msgstr "Exportera data som text (Fara: Inte färdigt)"
 
-#: po/guile_strings.txt:221
+#: po/guile_strings.txt:224
 msgid "Primary Key"
 msgstr "Primärnyckel"
 
-#: po/guile_strings.txt:222
+#: po/guile_strings.txt:225
 msgid "Time and Date Option"
 msgstr "Tid och datumalternativ"
 
-#: po/guile_strings.txt:223
+#: po/guile_strings.txt:226
 msgid "Single mode default odd row background"
 msgstr "Bakgrund för udda rader i enradsläge"
 
-#: po/guile_strings.txt:224
+#: po/guile_strings.txt:227
 msgid "Double mode default odd row background"
 msgstr "Bakgrund för udda rader i dubbelradsläge"
 
-#: po/guile_strings.txt:225
+#: po/guile_strings.txt:228
 msgid "The character used to separate fully-qualified account names"
 msgstr "Tecknet som används för att separera helt kvantifierade kontonamn"
 
-#: po/guile_strings.txt:226
+#: po/guile_strings.txt:229
 msgid "__gui"
 msgstr "__gui"
 
-#: po/guile_strings.txt:227
+#: po/guile_strings.txt:230
 #, fuzzy
 msgid "Report start date"
 msgstr "Rapportera saker från detta datum"
 
-#: po/guile_strings.txt:229
+#: po/guile_strings.txt:232
 msgid "smallest to largest, earliest to latest"
 msgstr "minsta till största, tidigaste till senaste"
 
-#: po/guile_strings.txt:231
+#: po/guile_strings.txt:234
 msgid "\\ (Backslash)"
 msgstr "\\ (bakåtlutande snedstreck)"
 
-#: po/guile_strings.txt:232
+#: po/guile_strings.txt:235
 msgid "Icons only"
 msgstr "Bara ikoner"
 
-#: po/guile_strings.txt:233
+#: po/guile_strings.txt:236
 msgid "Help for third option"
 msgstr "Hjälp för det tredje alternativet"
 
-#: po/guile_strings.txt:234
+#: po/guile_strings.txt:237
 msgid "Default Register Mode"
 msgstr "Standardläge för register"
 
-#: po/guile_strings.txt:236
+#: po/guile_strings.txt:239
 msgid "main_win_width"
 msgstr "main_win_width"
 
-#: po/guile_strings.txt:237
+#: po/guile_strings.txt:240
 msgid "Sort by amount"
 msgstr "Sortera efter belopp"
 
-#: po/guile_strings.txt:238
+#: po/guile_strings.txt:241
 msgid "This is an account list option"
 msgstr "Detta är ett kontolist-alternativ"
 
-#: po/guile_strings.txt:239
+#: po/guile_strings.txt:242
 msgid "Average Balance"
 msgstr "Genomsnittligt saldo"
 
-#: po/guile_strings.txt:240
+#: po/guile_strings.txt:243
 msgid "Show All Transactions"
 msgstr "Visa alla transaktioner"
 
-#: po/guile_strings.txt:241
+#: po/guile_strings.txt:244
 msgid "Display the Profit and Loss report."
 msgstr "Visa vinst och förlust-rapporten."
 
-#: po/guile_strings.txt:242
+#: po/guile_strings.txt:245
 msgid "Display the Account Balance Tracker report."
 msgstr "Visa rapport med saldospårning."
 
-#: po/guile_strings.txt:243
+#: po/guile_strings.txt:246
 msgid "2Week"
 msgstr "2Veckor"
 
-#: po/guile_strings.txt:244
+#: po/guile_strings.txt:247
 msgid "Nothing"
 msgstr "Inget"
 
-#: po/guile_strings.txt:245
+#: po/guile_strings.txt:248
 msgid "You have selected no values in the list option."
 msgstr ""
 
-#: po/guile_strings.txt:246
+#: po/guile_strings.txt:249
 #, fuzzy
 msgid "false"
 msgstr "Stäng"
 
-#: po/guile_strings.txt:248
+#: po/guile_strings.txt:251
 msgid "An account list option"
 msgstr "Ett kontolist-alternativ"
 
-#: po/guile_strings.txt:249
+#: po/guile_strings.txt:252
 msgid "Multi Choice Option"
 msgstr "Flervalsalternativ"
 
-#: po/guile_strings.txt:250
+#: po/guile_strings.txt:253
 msgid "This is a color option"
 msgstr "Detta är ett färgalternativ"
 
-#: po/guile_strings.txt:251
+#: po/guile_strings.txt:254
 msgid "QIF File Import (Danger: Unfinished)"
 msgstr "QIF Fil importering (Fara: Inte färdig)"
 
-#: po/guile_strings.txt:252
+#: po/guile_strings.txt:255
 msgid "Make No Plot"
 msgstr "Skapa ingen graf"
 
-#: po/guile_strings.txt:253
+#: po/guile_strings.txt:256
 msgid "Bad option"
 msgstr "Onda alternativ"
 
-#: po/guile_strings.txt:254
+#: po/guile_strings.txt:257
 msgid "Display the Balance sheet report."
 msgstr "Visa saldoblad rapport."
 
-#: po/guile_strings.txt:255
+#: po/guile_strings.txt:258
 msgid "Display the Account Transactions report."
 msgstr "Visa kontots transaktionsrapport."
 
-#: po/guile_strings.txt:256
+#: po/guile_strings.txt:259
 #, fuzzy
 msgid "Net"
 msgstr "Nytt"
 
-#: po/guile_strings.txt:257
+#: po/guile_strings.txt:260
 msgid "Have a nice day!"
 msgstr ""
 
-#: po/guile_strings.txt:258
+#: po/guile_strings.txt:261
 msgid "This is a list option"
 msgstr "Detta är ett listalternativ"
 
-#: po/guile_strings.txt:259
+#: po/guile_strings.txt:262
 msgid "Order of Secondary sorting"
 msgstr "Ordning på sekundär sortering"
 
-#: po/guile_strings.txt:260
+#: po/guile_strings.txt:263
 msgid "Help for second option"
 msgstr "Hjälp för andra alternativet"
 
-#: po/guile_strings.txt:261
+#: po/guile_strings.txt:264
 msgid "reg_stock_win_width"
 msgstr "reg_stock_win_width"
 
-#: po/guile_strings.txt:262
+#: po/guile_strings.txt:265
 msgid "Report items up to and including this date"
 msgstr "Rapportera saker till och med denna datum"
 
-#: po/guile_strings.txt:263
+#: po/guile_strings.txt:266
 #, c-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
@@ -2547,30 +2562,35 @@ msgid ""
 "list, see %s."
 msgstr ""
 
-#: po/guile_strings.txt:264
+#: po/guile_strings.txt:267
 msgid ""
 "The background color for an active transaction in multi-line mode and the "
 "auto modes"
 msgstr "Bakgrundsfärgen för en aktiv transaktion i flerradsläge och autolägen"
 
-#: po/guile_strings.txt:265
+#: po/guile_strings.txt:268
 msgid "This is a multi choice option."
 msgstr "Detta är ett flervalsalternativ."
 
-#: po/guile_strings.txt:266
+#: po/guile_strings.txt:269
 msgid "Income & Expense"
 msgstr "Inkomst & Utgift"
 
-#: po/guile_strings.txt:267
+#: po/guile_strings.txt:270
 #, fuzzy
 msgid "Hello, World"
 msgstr "Hej, Världen!"
 
-#: po/guile_strings.txt:268
+#: po/guile_strings.txt:271
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
 msgstr "Kasta om Kreditkort-, Skuld-, Utjämning- och Inkomst-konton"
 
-#: po/guile_strings.txt:271
+#: po/guile_strings.txt:273
+#, fuzzy
+msgid "This is a number option."
+msgstr "Detta är ett boolskt alternativ."
+
+#: po/guile_strings.txt:275
 msgid "Multi mode active split background"
 msgstr "Bakgrund för aktiv delning i flerradsläge"
 

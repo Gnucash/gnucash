@@ -81,16 +81,20 @@
       (lambda () (cons (current-time) 0))
       #t))
 
-;    (gnc:register-hello-world-option
-;     (gnc:make-number-range-option
-;      "Hello, World!" "Number Option"
-;      "ee" "This is a number option."
-;      150.00 ;; default
-;      0.0    ;; lower bound
-;      2000.0 ;; upper bound
-;      2.0    ;; number of decimals
-;      0.01   ;; step size
-;      ))
+    ;; This is a number range option. The user can enter a number
+    ;; between a lower and upper bound given below. There are also
+    ;; arrows the user can click to go up or down, the amount changed
+    ;; by a single click is given by the step size.
+    (gnc:register-hello-world-option
+     (gnc:make-number-range-option
+      "Hello, World!" "Number Option"
+      "ee" "This is a number option."
+      1500.0  ;; default
+      0.0     ;; lower bound
+      10000.0 ;; upper bound
+      2.0     ;; number of decimals
+      0.01    ;; step size
+      ))
 
     ;; This is a color option, defined by rgba values. A color value
     ;; is a list where the elements are the red, green, blue, and
@@ -221,6 +225,7 @@
           (string-val   (op-value "Hello, World!" "String Option"))
           (date-val     (op-value "Hello, World!" "Just a Date Option"))
           (date2-val    (op-value "Hello, World!" "Time and Date Option"))
+          (num-val      (op-value "Hello, World!" "Number Option"))
           (color-op     (get-op   "Hello, World!" "Background Color"))
           (accounts     (op-value "Hello Again"   "An account list option"))
           (list-val     (op-value "Hello Again"   "A list option"))
@@ -268,6 +273,11 @@
          (make-para 'date-string (bold date-string))
 
          (make-para 'time-date-string (bold date-string2))
+
+         (make-para 'num-string-1 (bold (number->string num-val)))
+
+         (make-para 'num-string-2
+                    (bold (gnc:amount->formatted-string num-val #f)))
 
          (list-option-list list-val)
 
@@ -317,6 +327,9 @@
   (string-db 'store 'string-string "The string option is %s.")
   (string-db 'store 'date-string "The date option is %s.")
   (string-db 'store 'time-date-string "The date and time option is %s.")
+  (string-db 'store 'num-string-1 "The number option is %s.")
+  (string-db 'store 'num-string-2
+             "The number option formatted as currency is %s.")
   (string-db 'store 'nice-day "Have a nice day!")
 
   (string-db 'store 'true "true")

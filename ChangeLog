@@ -1,5 +1,8 @@
 2000-03-19  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/gnome/dialog-options.c (gnc_option_set_ui_widget): request
+	a reasonable size for the number-range widget.
+
 	* src/FileDialog.c (gncFileQuerySave): return a boolean value
  	indicating whether the user wants to proceed or cancel. The uses
  	of this function have been updated to respond appropriately.
