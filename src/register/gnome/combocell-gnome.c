@@ -726,17 +726,46 @@ moveCombo (BasicCell *bcell, VirtualLocation virt_loc)
 {
 	PopBox *box = bcell->gui_private;
 
-	combo_disconnect_signals((ComboCell *) bcell);
+	combo_disconnect_signals ((ComboCell *) bcell);
 
-	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
-			      "is_combo", FALSE, NULL);
-
-	item_edit_set_list(box->item_edit, NULL);
+	item_edit_set_popup (box->item_edit, NULL, NULL,
+                             NULL, NULL, NULL, NULL);
 
         box->list_popped = FALSE;
 }
 
 /* =============================================== */
+
+static int
+get_popup_height (GnomeCanvasItem *item,
+                  int space_available,
+                  int row_height,
+                  gpointer user_data)
+{
+        return (space_available / row_height) * row_height;
+}
+
+static void
+popup_autosize (GnomeCanvasItem *item,
+                gpointer user_data)
+{
+        gnc_item_list_autosize (GNC_ITEM_LIST (item));
+}
+
+static void
+popup_set_focus (GnomeCanvasItem *item,
+                 gpointer user_data)
+{
+        gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (item)->clist));
+}
+
+static void
+popup_post_show (GnomeCanvasItem *item,
+                 gpointer user_data)
+{
+        gnc_item_list_autosize (GNC_ITEM_LIST (item));
+        gnc_item_list_show_selected (GNC_ITEM_LIST (item));
+}
 
 static gboolean
 enterCombo (BasicCell *bcell,
@@ -748,22 +777,22 @@ enterCombo (BasicCell *bcell,
 	PopBox *box = bcell->gui_private;
 
         if ((box->ignore_string != NULL) &&
-            (safe_strcmp(bcell->value, box->ignore_string) == 0))
+            (safe_strcmp (bcell->value, box->ignore_string) == 0))
                 return FALSE;
 
 	gnc_combo_sync_edit_list (box);
         gnc_combo_sort_edit_list (box);
 
-	item_edit_set_list(box->item_edit, box->item_list);
-
-	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
-			      "is_combo", TRUE, NULL);
+	item_edit_set_popup (box->item_edit,
+                             GNOME_CANVAS_ITEM (box->item_list),
+                             get_popup_height, popup_autosize,
+                             popup_set_focus, popup_post_show, NULL);
 
         block_list_signals (cell);
 	gnc_item_list_select (box->item_list, bcell->value);
         unblock_list_signals (cell);
 
-	combo_connect_signals((ComboCell *) bcell);
+	combo_connect_signals (cell);
 
         *cursor_position = -1;
         *start_selection = 0;
@@ -779,12 +808,10 @@ leaveCombo (BasicCell *bcell)
 {
 	PopBox *box = bcell->gui_private;
 
-	combo_disconnect_signals((ComboCell *) bcell);
+	combo_disconnect_signals ((ComboCell *) bcell);
 
-	gnome_canvas_item_set(GNOME_CANVAS_ITEM(box->item_edit),
-			      "is_combo", FALSE, NULL);
-
-	item_edit_set_list(box->item_edit, NULL);
+	item_edit_set_popup (box->item_edit, NULL, NULL, NULL,
+                             NULL, NULL, NULL);
 
         box->list_popped = FALSE;
 

@@ -302,6 +302,8 @@ void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
 
 CellAlignment  gnc_table_get_align (Table *table, VirtualLocation virt_loc);
 
+gboolean       gnc_table_is_popup (Table *table, VirtualLocation virt_loc);
+
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);
 

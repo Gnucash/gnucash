@@ -305,6 +305,27 @@ gnc_table_get_align (Table *table, VirtualLocation virt_loc)
 
 /* ==================================================== */
 
+gboolean
+gnc_table_is_popup (Table *table, VirtualLocation virt_loc)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (vcell == NULL)
+    return FALSE;
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+  if (cb_cell == NULL || cb_cell->cell == NULL)
+    return FALSE;
+
+  return cb_cell->cell->is_popup;
+}
+
+/* ==================================================== */
+
 void 
 gnc_table_set_size (Table * table, int virt_rows, int virt_cols)
 {

@@ -1510,25 +1510,29 @@ void
 xaccSplitDestroy (Split *split)
 {
    Transaction *trans;
-   gboolean ismember = FALSE;
 
    if (!split) return;
 
    trans = split->parent;
-   assert (trans);
-   assert (trans->splits);
+
    check_open (trans);
 
    xaccRemoveEntity (&split->guid);
 
-   ismember = (g_list_find (trans->splits, split) != NULL);
-
-   assert (ismember);
+   if (trans)
+   {
+     gboolean ismember = (g_list_find (trans->splits, split) != NULL);
+     assert (ismember);
+   }
 
    mark_split (split);
-   xaccTransRemoveSplit (trans, split);
+
+   if (trans)
+     xaccTransRemoveSplit (trans, split);
+
    xaccAccountRemoveSplit (split->acc, split);
    xaccAccountRecomputeBalance (split->acc);
+
    xaccFreeSplit (split);
 }
 

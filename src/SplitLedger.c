@@ -851,13 +851,13 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   else if (!info->hint_set_by_traverse)
   {
     /* The transaction where we are moving to */
-    new_trans = xaccSRGetTrans(reg, new_virt_loc.vcell_loc);
+    new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
 
     /* The split we are moving to */
-    new_split = sr_get_split(reg, new_virt_loc.vcell_loc);
+    new_split = sr_get_split (reg, new_virt_loc.vcell_loc);
 
     /* The split at the transaction line we are moving to */
-    new_trans_split = xaccSRGetTransSplit(reg, new_virt_loc.vcell_loc, NULL);
+    new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
 
     new_class = xaccSplitRegisterGetCursorClass (reg, new_virt_loc.vcell_loc);
   }
@@ -904,15 +904,14 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
 
       result = gnc_verify_dialog_parented (xaccSRGetParent (reg),
                                            message, TRUE);
-      if (result)
-      {
-        new_trans = old_trans;
-        new_split = old_split;
-        new_trans_split = old_trans_split;
-        new_class = old_class;
-        new_virt_loc = table->current_cursor_loc;
-      }
-      else
+
+      new_trans = old_trans;
+      new_split = old_split;
+      new_trans_split = old_trans_split;
+      new_class = old_class;
+      new_virt_loc = table->current_cursor_loc;
+
+      if (!result)
       {
         xaccTransScrubImbalance (old_trans, gncGetCurrentGroup ());
         saved = TRUE;
@@ -951,6 +950,11 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     }
     else
       new_virt_loc.vcell_loc = reg->table->current_cursor_loc.vcell_loc;
+
+    new_trans = xaccSRGetTrans (reg, new_virt_loc.vcell_loc);
+    new_split = sr_get_split (reg, new_virt_loc.vcell_loc);
+    new_trans_split = xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, NULL);
+    new_class = xaccSplitRegisterGetCursorClass (reg, new_virt_loc.vcell_loc);
   }
   else if (info->traverse_to_new)
   {
@@ -2408,9 +2412,9 @@ xaccSRDeleteCurrentTrans (SplitRegister *reg)
 void
 xaccSREmptyCurrentTrans (SplitRegister *reg)
 {
-  SRInfo *info = xaccSRGetInfo(reg);
-  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-  Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  SRInfo *info = xaccSRGetInfo (reg);
+  Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
+  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   Transaction *trans;
   Account *account;
   GList *splits;
@@ -2418,7 +2422,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
   Split *split;
 
   /* get the current split based on cursor position */
-  split = xaccSRGetCurrentSplit(reg);
+  split = xaccSRGetCurrentSplit (reg);
   if (split == NULL)
     return;
 
@@ -2428,12 +2432,12 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
   if (split == blank_split)
   {
     trans = xaccSplitGetParent (blank_split);
-    account = xaccSplitGetAccount(split);
+    account = xaccSplitGetAccount (split);
 
     /* Make sure we don't commit this later on */
     if (trans == pending_trans)
     {
-      info->pending_trans_guid = *xaccGUIDNULL();
+      info->pending_trans_guid = *xaccGUIDNULL ();
       pending_trans = NULL;
     }
 
@@ -2443,7 +2447,7 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
 
-    info->blank_split_guid = *xaccGUIDNULL();
+    info->blank_split_guid = *xaccGUIDNULL ();
     blank_split = NULL;
 
     gnc_resume_gui_refresh ();
@@ -2455,26 +2459,26 @@ xaccSREmptyCurrentTrans (SplitRegister *reg)
   /* make a copy of all of the accounts that will be  
    * affected by this deletion, so that we can update
    * their register windows after the deletion. */
-  trans = xaccSplitGetParent(split);
+  trans = xaccSplitGetParent (split);
 
-  splits = xaccTransGetSplitList (trans);
+  splits = g_list_copy (xaccTransGetSplitList (trans));
 
-  xaccTransBeginEdit(trans);
+  xaccTransBeginEdit (trans);
   for (node = splits; node; node = node->next)
     if (node->data != split)
-      xaccSplitDestroy(node->data);
-  xaccTransCommitEdit(trans);
+      xaccSplitDestroy (node->data);
+  xaccTransCommitEdit (trans);
 
   /* Check pending transaction */
   if (trans == pending_trans)
   {
-    info->pending_trans_guid = *xaccGUIDNULL();
+    info->pending_trans_guid = *xaccGUIDNULL ();
     pending_trans = NULL;
   }
 
   gnc_resume_gui_refresh ();
 
-  g_list_free(splits);
+  g_list_free (splits);
 }
 
 /* ======================================================== */

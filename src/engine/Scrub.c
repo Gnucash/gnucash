@@ -278,6 +278,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
 
   {
     Account *account;
+    GList *node;
 
     imbalance = xaccTransGetImbalance (trans);
     if (gnc_numeric_zero_p (imbalance))
@@ -285,12 +286,26 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
 
     account = GetOrMakeAccount (root, trans, _("Imbalance"));
 
-    /* put split into account before setting split value */
-    balance_split = xaccMallocSplit();
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+      Split *split = node->data;
 
-    xaccAccountBeginEdit (account);
-    xaccAccountInsertSplit (account, balance_split);
-    xaccAccountCommitEdit (account);
+      if (xaccSplitGetAccount (split) == account)
+      {
+        balance_split = split;
+        break;
+      }
+    }
+
+    /* put split into account before setting split value */
+    if (!balance_split)
+    {
+      balance_split = xaccMallocSplit();
+
+      xaccAccountBeginEdit (account);
+      xaccAccountInsertSplit (account, balance_split);
+      xaccAccountCommitEdit (account);
+    }
   }
 
   PINFO ("unbalanced transaction: %s",
@@ -318,19 +333,32 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root)
       new_value = gnc_numeric_sub_fixed (new_value, imbalance);
 
       xaccSplitSetValue (balance_split, new_value);
+
+      if (gnc_numeric_zero_p (new_value))
+      {
+        xaccSplitDestroy (balance_split);
+        balance_split = NULL;
+      }
     }
 
     commodity = xaccAccountGetSecurity (account);
-    if (gnc_commodity_equiv (common_currency, commodity))
+    if (balance_split && gnc_commodity_equiv (common_currency, commodity))
     {
       gnc_numeric new_share_amount = xaccSplitGetShareAmount (balance_split);
 
       new_share_amount = gnc_numeric_sub_fixed (new_share_amount, imbalance);
 
       xaccSplitSetShareAmount (balance_split, new_share_amount);
+
+      if (gnc_numeric_zero_p (new_share_amount))
+      {
+        xaccSplitDestroy (balance_split);
+        balance_split = NULL;
+      }
     }
 
-    xaccTransAppendSplit (trans, balance_split);
+    if (balance_split)
+      xaccTransAppendSplit (trans, balance_split);
 
     if (!trans_was_open)
       xaccTransCommitEdit (trans);

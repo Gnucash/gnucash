@@ -43,8 +43,6 @@ enum {
         ARG_0,
         ARG_SHEET,     /* The Sheet argument      */
         ARG_GTK_ENTRY, /* The GtkEntry argument   */
-        ARG_IS_COMBO,  /* Should this be a combo? */
-        ARG_IS_DATE,   /* Should this be a date?  */
 };
 
 /* values for selection info */
@@ -210,7 +208,7 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->bg_rect.width = wd - (2 * CELL_HPADDING);
         info->bg_rect.height = hd - (2 * CELL_VPADDING - info->font->descent);
 
-        toggle_space = (item_edit->is_combo || item_edit->is_date) ?
+        toggle_space = item_edit->is_popup ? 
                 item_edit->popup_toggle.toggle_offset : 0;
 
         info->text_rect.x = dx;
@@ -376,8 +374,8 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 		  int flags)
 {
         ItemEdit *item_edit = ITEM_EDIT (item);
-        gint x, y, w, h;
         gint toggle_x, toggle_y, toggle_width, toggle_height;
+        gint x, y, w, h;
 
         if (GNOME_CANVAS_ITEM_CLASS (item_edit_parent_class)->update)
                 (*GNOME_CANVAS_ITEM_CLASS(item_edit_parent_class)->update)
@@ -390,7 +388,7 @@ item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
         item->x2 = x + w;
         item->y2 = y + h;
 
-	if (!item_edit->is_combo && !item_edit->is_date)
+	if (!item_edit->is_popup)
 		return;
 
 	toggle_height = h - 10;
@@ -448,8 +446,7 @@ item_edit_init (ItemEdit *item_edit)
         item_edit->clipboard = NULL;
 
         item_edit->has_selection = FALSE;
-        item_edit->is_combo = FALSE;
-        item_edit->is_date = FALSE;
+        item_edit->is_popup = FALSE;
         item_edit->show_popup = FALSE;
 
 	item_edit->popup_toggle.toggle_button = NULL;
@@ -458,7 +455,12 @@ item_edit_init (ItemEdit *item_edit)
 	item_edit->popup_toggle.arrow = NULL;
 	item_edit->popup_toggle.signals_connected = FALSE;
 
-	item_edit->item_list = NULL;
+        item_edit->popup_item = NULL;
+        item_edit->get_popup_height = NULL;
+        item_edit->popup_autosize = NULL;
+        item_edit->popup_set_focus = NULL;
+        item_edit->popup_post_show = NULL;
+        item_edit->popup_user_data = NULL;
 
 	item_edit->gc = NULL;
 	item_edit->style = NULL;
@@ -678,6 +680,10 @@ item_edit_configure (ItemEdit *item_edit)
         item_edit->virt_loc.phys_row_offset = cursor->row;
         item_edit->virt_loc.phys_col_offset = cursor->col;
 
+        if (!gnc_table_is_popup (item_edit->sheet->table, item_edit->virt_loc))
+                item_edit_set_popup (item_edit, NULL, NULL, NULL,
+                                     NULL, NULL, NULL);
+
         item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
 }
 
@@ -799,43 +805,45 @@ item_edit_paste_primary (ItemEdit *item_edit, guint32 time)
 
 
 static void
-item_edit_show_popup_toggle (ItemEdit *item_edit, gint x, gint y,
-                             gint width, gint height, GtkAnchorType anchor)
+item_edit_show_popup_toggle (ItemEdit *item_edit,
+                             gint x, gint y,
+                             gint width, gint height,
+                             GtkAnchorType anchor)
 {
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
+	g_return_if_fail (IS_ITEM_EDIT (item_edit));
 
 	gnome_canvas_item_raise_to_top
                 (item_edit->popup_toggle.toggle_button_item);
 
-	gnome_canvas_item_set(item_edit->popup_toggle.toggle_button_item,
-			      "x", (gdouble) x,
-			      "y", (gdouble) y,
-			      "width", (gdouble) width,
-			      "height", (gdouble) height,
-			      "anchor", anchor,
-			      NULL);
+	gnome_canvas_item_set (item_edit->popup_toggle.toggle_button_item,
+                               "x", (gdouble) x,
+                               "y", (gdouble) y,
+                               "width", (gdouble) width,
+                               "height", (gdouble) height,
+                               "anchor", anchor,
+                               NULL);
 }
 
 
 static void
 item_edit_hide_popup_toggle (ItemEdit *item_edit)
 {
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
+	g_return_if_fail (IS_ITEM_EDIT(item_edit));
 
 	/* safely out of the way */
-	gnome_canvas_item_set(item_edit->popup_toggle.toggle_button_item,
-			      "x", -10000.0, NULL);
+	gnome_canvas_item_set (item_edit->popup_toggle.toggle_button_item,
+                               "x", -10000.0, NULL);
 }
 
 
 static gboolean
 key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	ItemEdit *item_edit = ITEM_EDIT(data);
+	ItemEdit *item_edit = ITEM_EDIT (data);
 
-	gtk_signal_emit_stop_by_name(GTK_OBJECT(widget), "key_press_event");
+	gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "key_press_event");
 
-	gtk_widget_event(GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
+	gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
 
 	return TRUE;
 }
@@ -844,7 +852,7 @@ key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 static void
 item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 {
-	ItemEdit *item_edit = ITEM_EDIT(data);
+	ItemEdit *item_edit = ITEM_EDIT (data);
 
 	item_edit->show_popup = gtk_toggle_button_get_active (button);
 
@@ -940,48 +948,6 @@ item_edit_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
                 item_edit_set_editor (item_edit, GTK_VALUE_POINTER (*arg));
                 break;
 
-        case ARG_IS_COMBO:
-                item_edit->is_combo = GTK_VALUE_BOOL (*arg);
-
-		if (!item_edit->is_combo)
-                {
-			item_edit->show_popup = FALSE;
-
-			disconnect_popup_toggle_signals (item_edit);
-
-			item_edit_hide_popup (item_edit);
-			item_edit_hide_popup_toggle (item_edit);
-		}
-		else
-                {
-                        g_assert (!item_edit->is_date);
-                        connect_popup_toggle_signals (item_edit);
-                }
-
-                item_edit_configure (item_edit);
-		break;
-
-        case ARG_IS_DATE:
-                item_edit->is_date = GTK_VALUE_BOOL (*arg);
-
-		if (!item_edit->is_date)
-                {
-			item_edit->show_popup = FALSE;
-
-			disconnect_popup_toggle_signals (item_edit);
-
-			item_edit_hide_popup (item_edit);
-			item_edit_hide_popup_toggle (item_edit);
-		}
-		else
-                {
-                        g_assert (!item_edit->is_combo);
-			connect_popup_toggle_signals (item_edit);
-                }
-
-                item_edit_configure (item_edit);
-		break;
-
         default:
                 break;
         }
@@ -1006,10 +972,6 @@ item_edit_class_init (ItemEditClass *item_edit_class)
                                  GTK_ARG_WRITABLE, ARG_SHEET);
         gtk_object_add_arg_type ("ItemEdit::GtkEntry", GTK_TYPE_POINTER,
                                  GTK_ARG_WRITABLE, ARG_GTK_ENTRY);
-        gtk_object_add_arg_type ("ItemEdit::is_combo", GTK_TYPE_BOOL,
-                                 GTK_ARG_WRITABLE, ARG_IS_COMBO);
-        gtk_object_add_arg_type ("ItemEdit::is_date", GTK_TYPE_BOOL,
-                                 GTK_ARG_WRITABLE, ARG_IS_DATE);
 
         object_class->set_arg = item_edit_set_arg;
         object_class->destroy = item_edit_destroy;
@@ -1140,7 +1102,6 @@ item_edit_show_popup (ItemEdit *item_edit)
 {
         GtkToggleButton *toggle;
         GtkAnchorType popup_anchor;
-        GnomeCanvasItem *item;
         GnucashSheet *sheet;
         gint x, y, w, h;
         gint y_offset;
@@ -1153,18 +1114,12 @@ item_edit_show_popup (ItemEdit *item_edit)
         g_return_if_fail (item_edit != NULL);
 	g_return_if_fail (IS_ITEM_EDIT(item_edit));
 
-        if (!item_edit->is_combo && !item_edit->is_date)
-                return;
-
-        if (item_edit->is_combo && !item_edit->item_list)
-                return;
-
-        if (item_edit->is_date && !item_edit->date_picker)
+        if (!item_edit->is_popup)
                 return;
 
         sheet = item_edit->sheet;
-        view_height = GTK_WIDGET(sheet)->allocation.height;
-        gnome_canvas_get_scroll_offsets(GNOME_CANVAS(sheet), NULL, &y_offset);
+        view_height = GTK_WIDGET (sheet)->allocation.height;
+        gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &y_offset);
         item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
 	popup_x = x;
@@ -1185,36 +1140,16 @@ item_edit_show_popup (ItemEdit *item_edit)
                 popup_height = down_height;
         }
 
-        if (item_edit->is_combo)
-        {
-                if (up_height > down_height)
-                        popup_height = up_height;
-                else
-                        popup_height = down_height;
+        if (item_edit->get_popup_height)
+                popup_height = item_edit->get_popup_height
+                        (item_edit->popup_item, popup_height, h,
+                         item_edit->popup_user_data);
 
-                popup_height = (popup_height / h) * h;
+        if (item_edit->popup_autosize)
+                item_edit->popup_autosize (item_edit->popup_item,
+                                           item_edit->popup_user_data);
 
-                item = GNOME_CANVAS_ITEM(item_edit->item_list);
-        }
-        else
-        {
-                GtkWidget *cal = GTK_WIDGET (item_edit->date_picker->calendar);
-                GtkRequisition req;
-
-                req.height = 0;
-                req.width = 0;
-
-                gtk_widget_size_request (cal, &req);
-
-                popup_height = req.height;
-
-                item = GNOME_CANVAS_ITEM (item_edit->date_picker);
-        }
-
-        if (item_edit->is_combo)
-                gnc_item_list_autosize (item_edit->item_list);
-
-        gnome_canvas_item_set (item,
+        gnome_canvas_item_set (item_edit->popup_item,
                                "x", (gdouble) popup_x,
                                "y", (gdouble) popup_y,
                                "height", (gdouble) popup_height,
@@ -1233,22 +1168,17 @@ item_edit_show_popup (ItemEdit *item_edit)
 	gtk_arrow_set (item_edit->popup_toggle.arrow,
                        GTK_ARROW_UP, GTK_SHADOW_OUT);
 
-        if (item_edit->is_combo)
-                gtk_widget_grab_focus
-                        (GTK_WIDGET (item_edit->item_list->clist));
-        else
-                gtk_widget_grab_focus
-                        (GTK_WIDGET (item_edit->date_picker->calendar));
+        if (item_edit->popup_set_focus)
+                item_edit->popup_set_focus (item_edit->popup_item,
+                                            item_edit->popup_user_data);
 
         /* Make sure the popup gets shown/sized correctly */
         while (gtk_events_pending())
                 gtk_main_iteration();
 
-        if (item_edit->is_combo)
-        {
-                gnc_item_list_autosize (item_edit->item_list);
-                gnc_item_list_show_selected (item_edit->item_list);
-        }
+        if (item_edit->popup_post_show)
+                item_edit->popup_post_show (item_edit->popup_item,
+                                            item_edit->popup_user_data);
 }
 
 
@@ -1258,16 +1188,10 @@ item_edit_hide_popup (ItemEdit *item_edit)
         g_return_if_fail(item_edit != NULL);
 	g_return_if_fail(IS_ITEM_EDIT(item_edit));
 
-	if (item_edit->item_list)
-                gnome_canvas_item_set
-                        (GNOME_CANVAS_ITEM(item_edit->item_list),
-                         "x", -10000.0, NULL);
-        else if (item_edit->date_picker)
-                gnome_canvas_item_set
-                        (GNOME_CANVAS_ITEM(item_edit->date_picker),
-                         "x", -10000.0, NULL);
-        else
+        if (!item_edit->is_popup)
                 return;
+
+        gnome_canvas_item_set (item_edit->popup_item, "x", -10000.0, NULL);
 
 	gtk_arrow_set (item_edit->popup_toggle.arrow,
                        GTK_ARROW_DOWN, GTK_SHADOW_IN);
@@ -1278,35 +1202,47 @@ item_edit_hide_popup (ItemEdit *item_edit)
                 (item_edit->popup_toggle.toggle_button, FALSE);
 }
 
-
 void
-item_edit_set_list (ItemEdit *item_edit, GNCItemList *item_list)
+item_edit_set_popup (ItemEdit        *item_edit,
+                     GnomeCanvasItem *popup_item,
+                     GetPopupHeight   get_popup_height,
+                     PopupAutosize    popup_autosize,
+                     PopupSetFocus    popup_set_focus,
+                     PopupPostShow    popup_post_show,
+                     gpointer         popup_user_data)
 {
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
-	g_return_if_fail((item_list == NULL) || IS_GNC_ITEM_LIST(item_list));
+	g_return_if_fail (IS_ITEM_EDIT(item_edit));
 
-	item_edit_hide_popup (item_edit);
-	item_edit->item_list = item_list;
+        if (item_edit->is_popup)
+                item_edit_hide_popup (item_edit);
+
+        item_edit->is_popup = popup_item != NULL;
+
+        item_edit->popup_item       = popup_item;
+        item_edit->get_popup_height = get_popup_height;
+        item_edit->popup_autosize   = popup_autosize;
+        item_edit->popup_set_focus  = popup_set_focus;
+        item_edit->popup_post_show  = popup_post_show;
+        item_edit->popup_user_data  = popup_user_data;
+
+        if (item_edit->is_popup)
+                connect_popup_toggle_signals (item_edit);
+        else
+        {
+                disconnect_popup_toggle_signals (item_edit);
+
+                item_edit_hide_popup (item_edit);
+                item_edit_hide_popup_toggle (item_edit);
+        }
+
         item_edit_update (GNOME_CANVAS_ITEM (item_edit), NULL, NULL, 0);
 }
-
-void
-item_edit_set_date_picker (ItemEdit *item_edit, GNCDatePicker *gdp)
-{
-	g_return_if_fail(IS_ITEM_EDIT(item_edit));
-	g_return_if_fail((gdp == NULL) || IS_GNC_DATE_PICKER(gdp));
-
-	item_edit_hide_popup (item_edit);
-	item_edit->date_picker = gdp;
-        item_edit_update (GNOME_CANVAS_ITEM (item_edit), NULL, NULL, 0);
-}
-
 
 void
 item_edit_set_has_selection (ItemEdit *item_edit, gboolean has_selection)
 {
-        g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(IS_ITEM_EDIT(item_edit));
+        g_return_if_fail (item_edit != NULL);
+        g_return_if_fail (IS_ITEM_EDIT (item_edit));
 
         item_edit->has_selection = has_selection;
 }

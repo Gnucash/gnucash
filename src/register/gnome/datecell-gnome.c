@@ -159,6 +159,7 @@ DateCellHelpValue (BasicCell *bcell)
       time.tm_min = 0;
       time.tm_hour = 0;
       time.tm_isdst = -1;
+
       mktime (&time);
     }
 
@@ -760,15 +761,36 @@ moveDate (BasicCell *bcell, VirtualLocation virt_loc)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  gnome_canvas_item_set (GNOME_CANVAS_ITEM (box->item_edit),
-                         "is_date", FALSE, NULL);
-
-  item_edit_set_date_picker (box->item_edit, NULL);
+  item_edit_set_popup (box->item_edit, NULL, NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
 }
 
 /* =============================================== */
+
+static int
+get_popup_height (GnomeCanvasItem *item,
+                  int space_available,
+                  int row_height,
+                  gpointer user_data)
+{
+  GtkWidget *cal = GTK_WIDGET (GNC_DATE_PICKER (item)->calendar);
+  GtkRequisition req;
+
+  req.height = 0;
+  req.width = 0;
+
+  gtk_widget_size_request (cal, &req);
+
+  return req.height;
+}
+
+static void
+popup_set_focus (GnomeCanvasItem *item,
+                 gpointer user_data)
+{
+  gtk_widget_grab_focus (GTK_WIDGET (GNC_DATE_PICKER (item)->calendar));
+}
 
 static gboolean
 enterDate (BasicCell *bcell,
@@ -779,10 +801,8 @@ enterDate (BasicCell *bcell,
   DateCell *cell = (DateCell *) bcell;
   PopBox *box = bcell->gui_private;
 
-  item_edit_set_date_picker (box->item_edit, box->date_picker);
-
-  gnome_canvas_item_set (GNOME_CANVAS_ITEM(box->item_edit),
-                         "is_date", TRUE, NULL);
+  item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
+                       get_popup_height, NULL, popup_set_focus, NULL, NULL);
 
   block_picker_signals (cell);
   gnc_date_picker_set_date (box->date_picker,
@@ -805,10 +825,7 @@ leaveDate (BasicCell *bcell)
 
   date_picker_disconnect_signals ((DateCell *) bcell);
 
-  gnome_canvas_item_set (GNOME_CANVAS_ITEM(box->item_edit),
-                         "is_date", FALSE, NULL);
-
-  item_edit_set_date_picker (box->item_edit, NULL);
+  item_edit_set_popup (box->item_edit, NULL, NULL, NULL, NULL, NULL, NULL);
 
   box->calendar_popped = FALSE;
 }

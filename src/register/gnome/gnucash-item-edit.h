@@ -32,6 +32,21 @@
 #define IS_ITEM_EDIT(o)         (GTK_CHECK_TYPE((o), item_edit_get_type ()))
 
 
+typedef int (*GetPopupHeight) (GnomeCanvasItem *item,
+                               int space_available,
+                               int row_height,
+                               gpointer user_data);
+
+typedef void (*PopupAutosize) (GnomeCanvasItem *item,
+                               gpointer user_data);
+
+typedef void (*PopupSetFocus) (GnomeCanvasItem *item,
+                               gpointer user_data);
+
+typedef void (*PopupPostShow) (GnomeCanvasItem *item,
+                               gpointer user_data);
+
+
 typedef struct _PopupToggle PopupToggle;
 struct _PopupToggle
 {
@@ -61,14 +76,17 @@ typedef struct
 
         gboolean has_selection;
 
-	gboolean is_combo;
-        gboolean is_date;
+	gboolean is_popup;
 	gboolean show_popup;
 
 	PopupToggle popup_toggle;
 
-        GNCItemList   *item_list;
-        GNCDatePicker *date_picker;
+        GnomeCanvasItem *popup_item;
+        GetPopupHeight   get_popup_height;
+        PopupAutosize    popup_autosize;
+        PopupSetFocus    popup_set_focus;
+        PopupPostShow    popup_post_show;
+        gpointer         popup_user_data;
 
         GdkGC *gc;
 
@@ -93,8 +111,13 @@ GnomeCanvasItem *item_edit_new (GnomeCanvasGroup *parent,
 GNCItemList * item_edit_new_list (ItemEdit *item_edit);
 GNCDatePicker * item_edit_new_date_picker (ItemEdit *item_edit);
 
-void item_edit_set_list (ItemEdit *item_edit, GNCItemList *item_list);
-void item_edit_set_date_picker (ItemEdit *item_edit, GNCDatePicker *gdp);
+void item_edit_set_popup (ItemEdit        *item_edit,
+                          GnomeCanvasItem *popup_item,
+                          GetPopupHeight   get_popup_height,
+                          PopupAutosize    popup_autosize,
+                          PopupSetFocus    popup_set_focus,
+                          PopupPostShow    popup_post_show,
+                          gpointer         popup_user_data);
 
 void item_edit_show_popup (ItemEdit *item_edit);
 void item_edit_hide_popup (ItemEdit *item_edit);
