@@ -199,6 +199,7 @@ typedef struct store_data_s {
    } u;
 } store_data_t;
 
+#include "kvp-autogen.h"
 #include "kvp-autogen.c"
 
 static void 

@@ -26,11 +26,14 @@ libgncmod_backend_postgres_la_SOURCES = \
 noinst_HEADERS = \
   PostgresBackend.h \
   account.h \
+  base-autogen.h \
   builder.h \
   checkpoint.h \
+  check-autogen.h \
   escape.h \
   events.h \
   gncquery.h \
+  kvp-autogen.h \
   kvp-sql.h \
   price.h \
   putil.h \
@@ -42,10 +45,13 @@ EXTRA_DIST = \
   .cvsignore \
   README \
   base-objects.m4 \
+  base-objects-header.m4 \
   check-objects.m4 \
+  check-objects-header.m4 \
   design.txt \
   functions.sql \
   kvp-objects.m4 \
+  kvp-objects-header.m4 \
   table.m4 \
   table-audit.sql \
   table-create.sql \
@@ -58,21 +64,27 @@ AM_CFLAGS = -I.. -I../.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS}
 # Some of the required C files are built with the m4 pre-processor
 # As a result, we need to manually specify dependencies, clean targets.
 
-PostgresBackend.o: base-autogen.c table-audit.c table-create.c table-version.c table-drop.c functions.c
-PostgresBackend.lo: base-autogen.c table-audit.c table-create.c table-version.c table-drop.c functions.c
+PostgresBackend.o: base-autogen.c base-autogen.h table-audit.c table-create.c table-version.c table-drop.c functions.c
+PostgresBackend.lo: base-autogen.c base-autogen.h table-audit.c table-create.c table-version.c table-drop.c functions.c
 
-checkpoint.o: check-autogen.c
-checkpoint.lo: check-autogen.c
+checkpoint.o: check-autogen.c check-autogen.h
+checkpoint.lo: check-autogen.c check-autogen.h
 
-kvp-sql.o: kvp-autogen.c
-kvp-sql.lo: kvp-autogen.c
+kvp-sql.o: kvp-autogen.c kvp-autogen.h
+kvp-sql.lo: kvp-autogen.c kvp-autogen.h
 
+base-autogen.h: table.m4 base-objects-header.m4
+	m4 base-objects-header.m4 > base-autogen.h
 base-autogen.c:	table.m4 base-objects.m4
 	m4 base-objects.m4 > base-autogen.c
 
+check-autogen.h: table.m4 check-objects-header.m4
+	m4 check-objects-header.m4 > check-autogen.h
 check-autogen.c: table.m4 check-objects.m4
 	m4 check-objects.m4 > check-autogen.c
 
+kvp-autogen.h:	table.m4 kvp-objects-header.m4
+	m4 kvp-objects-header.m4 > kvp-autogen.h
 kvp-autogen.c:	table.m4 kvp-objects.m4
 	m4 kvp-objects.m4 > kvp-autogen.c
 
@@ -106,5 +118,6 @@ table-version.c: table-version.sql
 	cat table-version.sql >> table-version.c
 	echo \" >> table-version.c
 
-CLEANFILES = base-autogen.c check-autogen.c kvp-autogen.c \
+CLEANFILES = base-autogen.c base-autogen.h check-autogen.c check-autogen.h \
+             kvp-autogen.c kvp-autogen.h \
              table-drop.c table-create.c table-version.c functions.c

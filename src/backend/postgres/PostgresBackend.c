@@ -214,6 +214,7 @@ get_version_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 /* ============================================================= */
 /* include the auto-generated code */
 
+#include "base-autogen.h"
 #include "base-autogen.c"
 
 static const char *table_audit_str = 
