@@ -15,7 +15,6 @@ libgw_gnc_la_LDFLAGS = -module
 
 libgncgnome_la_LDFLAGS = -module
 libgncgnome_la_LIBADD = ./libgncguile.la ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS} ${GUILE_LIBS}
-libgncgnome_la_DEPENDENCIES = gw-gnc.h 
 
 libgncgnome_la_SOURCES = \
   argv-list-converters.c \
