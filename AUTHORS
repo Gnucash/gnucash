@@ -126,6 +126,7 @@ Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch
+Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches

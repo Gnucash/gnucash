@@ -29,7 +29,7 @@
 static void
 usage (void)
 {
-  fprintf (stderr, "Usage: gnucash-make-guids [number-to-make (default is 100)]");
+  fprintf (stderr, "Usage: gnucash-make-guids [number-to-make (default is 100)]\n");
   exit (1);
 }
 

@@ -446,7 +446,7 @@
 	  (set-tm:hour now 0)
 	  (set-tm:mday now 1)
 	  (set-tm:mon now 6)
-	  (set-tm:year now (- (tm:year now) 2))
+	  (set-tm:year now (- (tm:year now) 1))
           (set-tm:isdst now -1)
 	  (gnc:date->timepair now)))))
 

@@ -1,5 +1,11 @@
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
+	* AUTHORS: credits
+
+	* doc/sgml/C/xacc-about.sgml: credits
+
+	* src/scm/date-utilities.scm: Nicholas Lee's bug fix
+
 	* src/.cvsignore: adjust for new program
 
 	* rpm/gnucash.spec.in: adjust for new program

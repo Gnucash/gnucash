@@ -601,6 +601,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>nj.lee@plumtree.co.nz</email> Nicholas Lee</glossterm>
+<glossdef>
+<para>scheme bug fix</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
 <glossdef>
 <para>for fixing a hang</para>
