@@ -182,11 +182,11 @@ static
 gboolean
 add_schedXaction_local(sixtp_gdv2 *data, SchedXaction *sx)
 {
-        GList        *list;
-        list = gnc_book_get_schedxactions( data->book );
-        list = g_list_append( list, sx );
-        gnc_book_set_schedxactions( data->book, list );
-        return TRUE;
+    GList *list;
+    list = gnc_book_get_schedxactions( data->book );
+    list = g_list_append( list, sx );
+    gnc_book_set_schedxactions( data->book, list );
+    return TRUE;
 }
 
 static
@@ -194,40 +194,41 @@ gboolean
 add_template_transaction_local( sixtp_gdv2 *data,
                                 gnc_template_xaction_data *txd )
 {
-        GList                *n;
-        Account                *tmpAcct;
-        AccountGroup        *acctGroup;
+    GList *n;
+    Account *tmpAcct;
+    AccountGroup *acctGroup;
 
-        // expect a struct of:
-        //  . template accounts.
-        //  . transactions in those accounts.
-        for ( n = txd->accts; n; n = n->next ) {
-                if ( xaccAccountGetParent( (Account*)n->data ) == NULL ) {
-                        // remove the gnc_book_init-created account of
-                        // the same name
-                        acctGroup =
-                                gnc_book_get_template_group( data->book );
-                        tmpAcct =
-                                xaccGetAccountFromName( acctGroup,
-                                                        xaccAccountGetName( (Account*)n->data ) );
-                        if ( tmpAcct != NULL ) {
-                                xaccGroupRemoveAccount( acctGroup, tmpAcct );
-                        }
+    /* expect a struct of: */
+    /* . template accounts. */
+    /* . transactions in those accounts. */
+    for ( n = txd->accts; n; n = n->next ) {
+        if ( xaccAccountGetParent( (Account*)n->data ) == NULL ) {
+            /* remove the gnc_book_init-created account of the same name */
+            acctGroup =
+            gnc_book_get_template_group( data->book );
+            tmpAcct =
+            xaccGetAccountFromName( acctGroup,
+                                    xaccAccountGetName( (Account*)n->data ) );
+            if ( tmpAcct != NULL ) {
+                xaccGroupRemoveAccount( acctGroup, tmpAcct );
+            }
 
-                        xaccGroupInsertAccount( acctGroup, (Account*)n->data );
-                }
-
-                // This doesn't care about the "AccountCommitEdit-at-end"
-                // paradigm of the normal accounts/transactions so much,
-                // because there's only one template Account.
-                xaccAccountCommitEdit( (Account*)n->data );
+            xaccGroupInsertAccount( acctGroup, (Account*)n->data );
         }
 
-        for ( n = txd->transactions; n; n = n->next ) {
-                // insert transactions into accounts
-                add_transaction_local( data, (Transaction*)n->data );
-        }
-        return TRUE;
+        /*
+          This doesn't care about the "AccountCommitEdit-at-end"
+          paradigm of the normal accounts/transactions so much,
+          because there's only one template Account.
+        */
+        xaccAccountCommitEdit( (Account*)n->data );
+    }
+
+    for ( n = txd->transactions; n; n = n->next ) {
+        /* insert transactions into accounts */
+        add_transaction_local( data, (Transaction*)n->data );
+    }
+    return TRUE;
 }
 
 static gboolean
@@ -594,7 +595,8 @@ write_pricedb(FILE *out, GNCBook *book)
 }
 
 static gboolean
-xml_add_trn_data(Transaction *t, gpointer data) {
+xml_add_trn_data(Transaction *t, gpointer data)
+{
     xmlNodePtr node;
 
     node = gnc_transaction_dom_tree_create(t);
@@ -609,45 +611,44 @@ xml_add_trn_data(Transaction *t, gpointer data) {
 static void
 write_transactions(FILE *out, GNCBook *book)
 {
-        xaccGroupForEachTransaction(gnc_book_get_group(book),
-                                    xml_add_trn_data,
-                                    (gpointer) out);
+    xaccGroupForEachTransaction(gnc_book_get_group(book),
+                                xml_add_trn_data,
+                                (gpointer) out);
 }
 
 static void
 write_template_transaction_data( FILE *out, GNCBook *book )
 {
-        AccountGroup *ag;
-        GList *gl;
-        gboolean hasTemplateTransactionData = FALSE;
+    AccountGroup *ag;
+    GList *gl;
+    gboolean hasTemplateTransactionData = FALSE;
 
-        ag = gnc_book_get_template_group(book);
-        gl = xaccGroupGetSubAccounts( ag );
-        while ( !hasTemplateTransactionData &&
-                (gl != NULL) ) {
-                hasTemplateTransactionData |=
-                        (xaccAccountGetSplitList( (Account*)gl->data ) != NULL);
-                gl = gl->next;
-        }
+    ag = gnc_book_get_template_group(book);
+    gl = xaccGroupGetSubAccounts( ag );
+    while ( !hasTemplateTransactionData && (gl != NULL) )
+    {
+        hasTemplateTransactionData |=
+        (xaccAccountGetSplitList( (Account*)gl->data ) != NULL);
+        gl = gl->next;
+    }
 
-        if ( hasTemplateTransactionData ) {
-                fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
-                write_account_group( out, gnc_book_get_template_group(book) );
-                xaccGroupForEachTransaction( ag,
-                                             xml_add_trn_data,
-                                             (gpointer)out );
-                fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
-        }
+    if ( hasTemplateTransactionData )
+    {
+        fprintf( out, "<%s>\n", TEMPLATE_TRANSACTION_TAG );
+        write_account_group( out, gnc_book_get_template_group(book) );
+        xaccGroupForEachTransaction( ag, xml_add_trn_data, (gpointer)out );
+        fprintf( out, "</%s>\n", TEMPLATE_TRANSACTION_TAG );
+    }
 }
 
 static void
 write_schedXactions( FILE *out, GNCBook *book )
 {
-    GList                *schedXactions;
-    SchedXaction        *tmpSX;
-    xmlNodePtr                node;
+    GList *schedXactions;
+    SchedXaction *tmpSX;
+    xmlNodePtr node;
 
-    // get list of scheduled transactions from GNCBook
+    /* get list of scheduled transactions from GNCBook */
     schedXactions = gnc_book_get_schedxactions( book );
 
     if ( schedXactions == NULL )

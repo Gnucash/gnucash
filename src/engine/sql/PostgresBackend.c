@@ -1211,7 +1211,7 @@ db_exists_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 static void
-pgend_session_begin (GNCBook *sess, const char * sessionid, 
+pgend_session_begin (Backend *backend, GNCBook *book, const char * sessionid, 
                     gboolean ignore_lock, gboolean create_new_db)
 {
    int really_do_create = 0;
@@ -1224,9 +1224,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    char *p;
    gboolean db_exists = FALSE;
 
-   if (!sess) return;
-   be = (PGBackend *) xaccGNCBookGetBackend (sess);
-
+   if (!backend) return;
+   be = (PGBackend*)backend;
+   
    ENTER("be=%p, sessionid=%s", be,
          sessionid ? sessionid : "(null)");
 
@@ -1928,24 +1928,9 @@ pgendInit (PGBackend *be)
    guid_to_string_buff (&nullguid, be->session_guid_str);
 
    /* generic backend handlers */
+   xaccInitBackend((Backend*)be);
    be->be.book_begin = pgend_session_begin;
-   be->be.book_load = NULL;
-   be->be.price_load = NULL;
    be->be.book_end = pgend_session_end;
-
-   be->be.account_begin_edit = NULL;
-   be->be.account_commit_edit = NULL;
-   be->be.trans_begin_edit = NULL;
-   be->be.trans_commit_edit = NULL;
-   be->be.trans_rollback_edit = NULL;
-   be->be.price_begin_edit = NULL;
-   be->be.price_commit_edit = NULL;
-   be->be.run_query = NULL;
-   be->be.price_lookup = NULL;
-   be->be.sync = NULL;
-   be->be.sync_price = NULL;
-   be->be.events_pending = NULL;
-   be->be.process_events = NULL;
 
    be->nest_count = 0;
    pgendDisable(be);

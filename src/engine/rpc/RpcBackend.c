@@ -855,14 +855,15 @@ static gboolean rpcend_process_events (Backend *bend)
   return changed;
 }
 
-static void rpcend_book_begin (GNCBook *book, const char *book_id, 
+static void rpcend_book_begin (Backend *backend, GNCBook *book,
+                               const char *book_id, 
 			       gboolean ignore_lock, gboolean create)
 {
   RPCBackend *be;
   char *url, *start, *end, *rest;
 
   if (!book) return;
-  be = (RPCBackend *) xaccGNCBookGetBackend (book);
+  be = (RPCBackend *) backend;
   VERIFY_BEV (be);
 
   ENTER("be=%p, id=%s, ignore=%s, create=%s", be,
@@ -974,9 +975,8 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
 static void
 rpcendInit (RPCBackend *be)
 {
-  memset (be, 0, sizeof (*be));
-
   /* The only callback that should work is Begin */
+  xaccInitBackend((Backend*)be);
   be->be.book_begin = rpcend_book_begin;
 
   rpcendDisable (be);

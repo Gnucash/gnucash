@@ -53,13 +53,15 @@
 #ifndef GNC_BOOK_H
 #define GNC_BOOK_H
 
-#include "Group.h"
-#include "Backend.h"
 #include "gnc-pricedb.h"
+#include "Backend.h"
+#include "Group.h"
 
 /** TYPES **********************************************************/
 
-typedef struct _gnc_book GNCBook;
+struct gnc_book_struct;
+
+typedef struct gnc_book_struct GNCBook;
 
 /** PROTOTYPES ******************************************************/
 
@@ -201,18 +203,6 @@ gboolean gnc_book_process_events (GNCBook *book);
  */
 char * xaccResolveFilePath (const char * filefrag);
 char * xaccResolveURL (const char * pathfrag);
-
-/*
- * Determine the load file type
- */
-typedef enum 
-{
-    GNC_BOOK_NOT_OURS,
-    GNC_BOOK_BIN_FILE,
-    GNC_BOOK_XML1_FILE,
-    GNC_BOOK_XML2_FILE,
-} GNCBookFileType;
-GNCBookFileType gnc_book_determine_file_type(GNCBook *book);
 
 /* Run the RPC Server */
 void gnc_run_rpc_server (void);

@@ -36,14 +36,13 @@
 #include "config.h"
 
 #include <dlfcn.h>
-#include <fcntl.h>
-#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
-#include <errno.h>
+
+#include <glib.h>
 
 #include "Backend.h"
 #include "BackendP.h"
@@ -64,45 +63,6 @@
 
 static short module = MOD_IO;
 
-struct _gnc_book
-{
-  AccountGroup *topgroup;
-  GNCPriceDB *pricedb;
-  GList *sched_xactions;
-  AccountGroup *template_group;
-
-  /* the requested book id, in the form or a URI, such as
-   * file:/some/where, or sql:server.host.com:555
-   */
-  char *book_id;
-
-  /* if any book subroutine failed, this records the failure reason 
-   * (file not found, etc).
-   * This is a 'stack' that is one deep.
-   * FIXME: This is a hack.  I'm trying to move us away from static
-   * global vars. This may be a temp fix if we decide to integrate
-   * FileIO errors into GNCBook errors. 
-   */
-  GNCBackendError last_err;
-  char *error_message;
-    
-  /* ---------------------------------------------------- */
-  /* the following struct members apply only for file-io */
-  /* these should be moved to a file-io backend. */
-  /* the fully-resolved path to the file */
-  char *fullpath;
-
-  /* name of lockfile, and filedescr */
-  char * lockfile;
-  char * linkfile;
-  int lockfd;
-
-  /* ---------------------------------------------------- */
-  /* This struct member applies for network, rpc and SQL i/o */
-  /* It is not currently used for file i/o, but it should be. */
-  Backend *backend;
-};
-
 /* ---------------------------------------------------------------------- */
 
 static void
@@ -116,14 +76,12 @@ gnc_book_clear_error (GNCBook *book)
   }
 }
 
-static void
+void
 gnc_book_push_error (GNCBook *book, GNCBackendError err, char *message)
 {
   book->last_err = err;
   book->error_message = message;
 }
-
-/* ---------------------------------------------------------------------- */
 
 GNCBackendError
 gnc_book_get_error (GNCBook * book)
@@ -176,9 +134,6 @@ gnc_book_init (GNCBook *book)
   book->book_id = NULL;
   gnc_book_clear_error (book);
   book->fullpath = NULL;
-  book->lockfile = NULL;
-  book->linkfile = NULL;
-  book->lockfd = -1;
   book->backend = NULL;
 }
 
@@ -250,6 +205,8 @@ gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
   book->pricedb = db;
 }
 
+/* ---------------------------------------------------------------------- */
+
 GList *
 gnc_book_get_schedxactions( GNCBook *book )
 {
@@ -314,459 +271,55 @@ gnc_book_mark_saved(GNCBook *book)
   gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
 }
 
+
 /* ---------------------------------------------------------------------- */
-static gboolean
-gnc_book_get_file_lock (GNCBook *book)
+
+static void
+gnc_book_int_backend_load_error(GNCBook *book, char *message, char *dll_err)
 {
-  struct stat statbuf;
-  char pathbuf[PATH_MAX];
-  char *path = NULL;
-  int rc;
-
-  rc = stat (book->lockfile, &statbuf);
-  if (!rc)
-  {
-    /* oops .. file is all locked up  .. */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-    return FALSE;
-  }
-
-  book->lockfd = open (book->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
-  if (book->lockfd < 0)
-  {
-    /* oops .. file is all locked up  .. */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-    return FALSE;
-  }
-
-  /* OK, now work around some NFS atomic lock race condition 
-   * mumbo-jumbo.  We do this by linking a unique file, and 
-   * then examing the link count.  At least that's what the 
-   * NFS programmers guide suggests. 
-   * Note: the "unique filename" must be unique for the
-   * triplet filename-host-process, otherwise accidental 
-   * aliases can occur.
-   */
-
-  /* apparently, even this code may not work for some NFS
-   * implementations. In the long run, I am told that 
-   * ftp.debian.org
-   *  /pub/debian/dists/unstable/main/source/libs/liblockfile_0.1-6.tar.gz
-   * provides a better long-term solution.
-   */
-
-  strcpy (pathbuf, book->lockfile);
-  path = strrchr (pathbuf, '.');
-  sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
-
-  rc = link (book->lockfile, pathbuf);
-  if (rc)
-  {
-    /* If hard links aren't supported, just allow the lock. */
-    if (errno == EOPNOTSUPP || errno == EPERM)
-    {
-      book->linkfile = NULL;
-      return TRUE;
-    }
-
-    /* Otherwise, something else is wrong. */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-    unlink (pathbuf);
-    close (book->lockfd);
-    unlink (book->lockfile);
-    return FALSE;
-  }
-
-  rc = stat (book->lockfile, &statbuf);
-  if (rc)
-  {
-    /* oops .. stat failed!  This can't happen! */
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-    unlink (pathbuf);
-    close (book->lockfd);
-    unlink (book->lockfile);
-    return FALSE;
-  }
-
-  if (statbuf.st_nlink != 2)
-  {
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-    unlink (pathbuf);
-    close (book->lockfd);
-    unlink (book->lockfile);
-    return FALSE;
-  }
-
-  book->linkfile = g_strdup (pathbuf);
-
-  return TRUE;
+    PWARN (message, dll_err ? dll_err : "");
+    g_free(book->fullpath);
+    book->fullpath = NULL;
+    g_free(book->book_id);
+    book->book_id = NULL;
+    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
 }
 
-/* ---------------------------------------------------------------------- */
-
-static gboolean
-is_gzipped_file(const gchar *name)
+static void
+gnc_book_int_load_backend(GNCBook *book, char *libname, char* funcname,
+                          char *libloaderrmsg)
 {
-    unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
-
-    if(fd == 0)
-    {
-        return FALSE;
-    }
-
-    if(read(fd, buf, 2) != 2)
-    {
-        return FALSE;
-    }
-
-    if(buf[0] == 037 && buf[1] == 0213)
-    {
-        return TRUE;
-    }
     
-    return FALSE;
-}
-    
-GNCBookFileType
-gnc_book_determine_file_type(GNCBook *book)
-{
-    const gchar *name = gnc_book_get_file_path(book);
-    if(gnc_is_xml_data_file_v2(name)) {
-        return GNC_BOOK_XML2_FILE;
-    } else if(gnc_is_xml_data_file(name)) {
-        return GNC_BOOK_XML1_FILE;
-    } else if(is_gzipped_file(name)) {
-        return GNC_BOOK_XML2_FILE;
-    } else {
-        return GNC_BOOK_BIN_FILE;
-    }
-}
-
-
-/* Load financial data from a file into the book, automtically
-   detecting the format of the file, if possible.  Return FALSE on
-   error, and set the error parameter to indicate what went wrong if
-   it's not NULL.  This function does not manage file locks in any
-   way. */
-
-static gboolean
-happy_or_push_error(GNCBook *book, gboolean errret, GNCBackendError errcode)
-{
-    if(errret) {
-        return TRUE;
-    } else {
-        gnc_book_push_error(book, errcode, NULL);
-        return FALSE;
-    }
-}
-
-static gboolean
-gnc_book_load_from_file(GNCBook *book)
-{
-  const gchar *name = gnc_book_get_file_path(book);
-  if(!name) return FALSE;
-
-  switch (gnc_book_determine_file_type(book))
-  {
-  case GNC_BOOK_XML2_FILE:
-      return happy_or_push_error(book,
-                                 gnc_book_load_from_xml_file_v2(book, NULL),
-                                 ERR_BACKEND_MISC);
-  case GNC_BOOK_XML1_FILE:
-      return happy_or_push_error(book,
-                                 gnc_book_load_from_xml_file(book),
-                                 ERR_BACKEND_MISC);
-  case GNC_BOOK_BIN_FILE:
-  {
-    /* presume it's an old-style binary file */
-    GNCBackendError error;
-
-    gnc_book_load_from_binfile(book);
-    error = gnc_book_get_binfile_io_error();
-
-    if(error == ERR_BACKEND_NO_ERR) {
-      return TRUE;
-    } else {
-      gnc_book_push_error(book, error, NULL);
-      return FALSE;
-    }
-  }
-  default:
-      g_warning("File not any known type");
-      gnc_book_push_error(book, ERR_FILEIO_UNKNOWN_FILE_TYPE, NULL);
-      return FALSE;
-      break;
-  }
-}
-
-/* ---------------------------------------------------------------------- */
-
-/* Write the financial data in a book to a file, returning FALSE on
-   error and setting the error_result to indicate what went wrong if
-   it's not NULL.  This function does not manage file locks in any
-   way.
-
-  If make_backup is true, write out a time-stamped copy of the file
-  into the same directory as the indicated file, with a filename of
-  "file.YYYYMMDDHHMMSS.xac" where YYYYMMDDHHMMSS is replaced with the
-  current year/month/day/hour/minute/second. */
-
-static gboolean
-copy_file(const char *orig, const char *bkup)
-{
-    static int buf_size = 1024;
-    char buf[buf_size];
-    int orig_fd;
-    int bkup_fd;
-    ssize_t count_write;
-    ssize_t count_read;
-
-    orig_fd = open(orig, O_RDONLY);
-    if(orig_fd == -1)
+    char * dll_err;
+    void * dll_handle;
+    Backend * (*be_new)(void);
+ 
+    /* open and resolve all symbols now (we don't want mystery 
+     * failure later) */
+    dll_handle = dlopen (libname, RTLD_NOW);
+    if (! dll_handle) 
     {
-        return FALSE;
-    }
-    bkup_fd = creat(bkup, 0600);
-    if(bkup_fd == -1)
-    {
-        close(orig_fd);
-        return FALSE;
-    }
+        char *errmsg;
 
-    do
-    {
-        count_read = read(orig_fd, buf, buf_size);
-        if(count_read == -1 && errno != EINTR)
-        {
-            close(orig_fd);
-            close(bkup_fd);
-            return FALSE;
-        }
-
-        if(count_read > 0)
-        {
-            count_write = write(bkup_fd, buf, count_read);
-            if(count_write == -1)
-            {
-                close(orig_fd);
-                close(bkup_fd);
-                return FALSE;
-            }
-        }
-    } while(count_read > 0);
-
-    close(orig_fd);
-    close(bkup_fd);
-    
-    return TRUE;
-}
-        
-static gboolean
-gnc_int_link_or_make_backup(GNCBook *book, const char *orig, const char *bkup)
-{
-    int err_ret = link(orig, bkup);
-    if(err_ret != 0)
-    {
-        if(errno == EPERM || errno == EOPNOTSUPP)
-        {
-            err_ret = copy_file(orig, bkup);
-        }
-
-        if(!err_ret)
-        {
-            gnc_book_push_error(
-                book, ERR_BACKEND_MISC,
-                g_strdup_printf("unable to make file backup from %s to %s: %s",
-                                orig, bkup,
-                                strerror(errno) ? strerror(errno) : ""));
-            return FALSE;
-        }
+        errmsg = g_strdup_printf(" can't load library: %%s\n%s",
+                                 libloaderrmsg);
+        dll_err = dlerror();
+        gnc_book_int_backend_load_error(book, errmsg, dll_err);
+        g_free(errmsg);
+        return;
     }
 
-    return TRUE;
-}
-
-static gboolean
-gnc_book_backup_file(GNCBook *book)
-{
-    gboolean bkup_ret;
-    char *timestamp;
-    char *backup;
-    const char *datafile = gnc_book_get_file_path(book);
-    struct stat statbuf;
-    int rc;
-
-    rc = stat (datafile, &statbuf);
-    if (rc)
-      return (errno == ENOENT);
-
-    if(gnc_book_determine_file_type(book) == GNC_BOOK_BIN_FILE)
+    be_new = dlsym (dll_handle, funcname);
+    dll_err = dlerror();
+    if (dll_err) 
     {
-        /* make a more permament safer backup */
-        const char *back = "-binfmt.bkup";
-        char *bin_bkup = g_new(char, strlen(datafile) + strlen(back) + 1);
-        strcpy(bin_bkup, datafile);
-        strcat(bin_bkup, back);
-        bkup_ret = gnc_int_link_or_make_backup(book, datafile, bin_bkup);
-        g_free(bin_bkup);
-        if(!bkup_ret)
-        {
-            return FALSE;
-        }
+        gnc_book_int_backend_load_error(book, " can't find symbol: %s\n",
+                                        dll_err);
+        return;
     }
 
-    timestamp = xaccDateUtilGetStampNow ();
-    backup = g_new (char, strlen (datafile) + strlen (timestamp) + 6);
-    strcpy (backup, datafile);
-    strcat (backup, ".");
-    strcat (backup, timestamp);
-    strcat (backup, ".xac");
-    g_free (timestamp);
-
-    bkup_ret = gnc_int_link_or_make_backup(book, datafile, backup);
-    g_free(backup);
-
-    return bkup_ret;
+    book->backend = (*be_new) ();
 }
-
-static gboolean
-gnc_book_write_to_file(GNCBook *book,
-                       gboolean make_backup)
-{
-  const gchar *datafile = gnc_book_get_file_path(book);
-  char *tmp_name;
-
-  tmp_name = g_new(char, strlen(datafile) + 12);
-  strcpy(tmp_name, datafile);
-  strcat(tmp_name, ".tmp-XXXXXX");
-
-  if(!mktemp(tmp_name))
-  {
-      gnc_book_push_error(book, ERR_BACKEND_MISC,
-                          g_strdup("unable to create temporary file name"));
-      return FALSE;
-  }
-  
-  if(make_backup)
-  {
-      if(!gnc_book_backup_file(book))
-      {
-          return FALSE;
-      }
-  }
-  
-  if(gnc_book_write_to_xml_file_v2(book, tmp_name)) 
-  {
-      if(unlink(datafile) != 0 && errno != ENOENT)
-      {
-          gnc_book_push_error(
-              book, ERR_BACKEND_MISC,
-              g_strdup_printf("unable to unlink filename %s: %s",
-                              datafile ? datafile : "(null)",
-                              strerror(errno) ? strerror(errno) : ""));
-          g_free(tmp_name);
-          return FALSE;
-      }
-      if(!gnc_int_link_or_make_backup(book, tmp_name, datafile))
-      {
-          g_free(tmp_name);
-          return FALSE;
-      }
-      if(unlink(tmp_name) != 0)
-      {
-          gnc_book_push_error(
-              book, ERR_BACKEND_MISC,
-              g_strdup_printf("unable to unlink temp filename %s: %s",
-                              tmp_name ? tmp_name : "(null)",
-                              strerror(errno) ? strerror(errno) : ""));
-          g_free(tmp_name);
-          return FALSE;
-      }
-      g_free(tmp_name);
-      return TRUE;
-  }
-  else
-  {
-      if(unlink(tmp_name) != 0)
-      {
-          gnc_book_push_error(
-              book, ERR_BACKEND_MISC,
-              g_strdup_printf("unable to unlink temp_filename %s: %s",
-                              tmp_name ? tmp_name : "(null)",
-                              strerror(errno) ? strerror(errno) : ""));
-          /* already in an error just flow on through */
-      }
-      g_free(tmp_name);
-      return FALSE;
-  }
-}
-
-/* ---------------------------------------------------------------------- */
-
-static gboolean
-gnc_book_begin_file (GNCBook *book, const char * filefrag,
-                     gboolean ignore_lock)
-{
-  char *dirname;
-  char *p;
-
-  ENTER (" filefrag=%s", filefrag ? filefrag : "(null)");
-
-  /* Try to find or build an absolute file path */
-
-  book->fullpath = xaccResolveFilePath (filefrag);
-  if (!book->fullpath)
-  {
-    gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
-    return FALSE;    /* ouch */
-  }
-
-  /* Make sure the directory is there */
-
-  dirname = g_strdup (book->fullpath);
-  p = strrchr (dirname, '/');
-  if (p && p != dirname)
-  {
-    struct stat statbuf;
-    int rc;
-
-    *p = '\0';
-
-    rc = stat (dirname, &statbuf);
-    if (rc != 0 || !S_ISDIR(statbuf.st_mode))
-    {
-      gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
-      g_free (book->fullpath); book->fullpath = NULL;
-      g_free (dirname);
-      return FALSE;
-    }
-  }
-  g_free (dirname);
-
-  /* Store the sessionid URL also ... */
-  book->book_id = g_strconcat ("file:", filefrag, NULL);
-
-  /* ---------------------------------------------------- */
-  /* We should now have a fully resolved path name.
-   * Lets see if we can get a lock on it. */
-
-  book->lockfile = g_strconcat(book->fullpath, ".LCK", NULL);
-
-  if (!ignore_lock && !gnc_book_get_file_lock (book))
-  {
-    gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-    g_free (book->book_id);  book->book_id = NULL;
-    g_free (book->fullpath); book->fullpath = NULL;
-    g_free (book->lockfile); book->lockfile = NULL;
-    return FALSE;
-  }
-
-  LEAVE (" ");
-  return TRUE;
-}
-
-/* ---------------------------------------------------------------------- */
 
 gboolean
 gnc_book_begin (GNCBook *book, const char * book_id, 
@@ -782,9 +335,10 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   gnc_book_clear_error (book);
 
   /* check to see if this session is already open */
-  if (book->book_id)
+  if (gnc_book_get_url(book))
   {
     gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
+    LEAVE("bad book url");
     return FALSE;
   }
 
@@ -792,166 +346,70 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   if (!book_id)
   {
     gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
+    LEAVE("bad book_id");
     return FALSE;
   }
+  /* Store the sessionid URL  */
+  book->book_id = g_strdup (book_id);
 
-  /* check to see if this is a type we know how to handle */
-  if (!strncmp(book_id, "file:", 5))
+  book->fullpath = xaccResolveFilePath(book_id);
+  if (!book->fullpath)
   {
-    /* add 5 to space past 'file:' */
-    rc = gnc_book_begin_file (book, book_id + 5, ignore_lock);
-    return rc;
-  }
-
-  /* -------------------------------------------------- */
-  if ((!strncmp(book_id, "http://", 7)) ||
-      (!strncmp(book_id, "https://", 8)) ||
-      (!strncmp(book_id, "postgres://", 11)) ||
-      (!strncmp(book_id, "rpc://", 6)))
-  {
-    char *p, *filefrag;
-
-    /* Store the sessionid URL  */
-    book->book_id = g_strdup (book_id);
-
-    /* We create a local filepath that correspnds to the URL.
-     * This filepath is handy for logs, lock-files and other 
-     * goodies that need to be stored in the local filesystem.
-     * The local filename is generated by converting slashes 
-     * in the URL to commas.
-     */
-    filefrag = g_strdup (book_id);
-    p = strchr (filefrag, '/');
-    while (p) {
-       *p = ',';
-       p = strchr (filefrag, '/');
-    }
-    book->fullpath = xaccResolveFilePath (filefrag);
-    g_free (filefrag);
-    if (!book->fullpath)
-    {
       gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
+      LEAVE("bad fullpath");
       return FALSE;    /* ouch */
-    }
-
-    PINFO ("filepath=%s\n", book->fullpath ? book->fullpath : "(null)");
-
-    /* load different backend based on URL.  We should probably
-     * dynamically load these based on some config file ... */
-    if ((!strncmp(book_id, "http://", 7)) ||
-        (!strncmp(book_id, "https://", 8)))
-    {
+  }
+  PINFO ("filepath=%s", book->fullpath ? book->fullpath : "(null)");
+  
+  /* check to see if this is a type we know how to handle */
+  if (!g_strncasecmp(book_id, "file:", 5) ||
+      *book_id == '/')
+  {
+      book->backend = gncBackendInit_file(book_id, NULL);
+  }
+  /* load different backend based on URL.  We should probably
+   * dynamically load these based on some config file ... */
+  else if ((!g_strncasecmp(book_id, "http://", 7)) ||
+           (!g_strncasecmp(book_id, "https://", 8)))
+  {
       /* create the backend */
       book->backend = xmlendNew();
-    } else 
-    if (!strncmp(book_id, "postgres://", 11))
-    {
-      char * dll_err;
-      void * dll_handle;
-      Backend * (*pg_new)(void);
- 
-      /* open and resolve all symbols now (we don't want mystery 
-       * failure later) */
-      dll_handle = dlopen ("libgnc_postgres.so", RTLD_NOW);
-      if (! dll_handle) 
-      {
-        dll_err = dlerror();
-        PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
-        PWARN ("Maybe you don't have postgres installed?\n"
-               "The postgres backend can't be used until this config problem is fixed");
-        g_free(book->fullpath);
-        book->fullpath = NULL;
-        g_free(book->book_id);
-        book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
-        return FALSE;
-      }
-
-      /* For the postgres backend, do the equivalent of 
-       * the statically loaded
-       * book->backend = pgendNew (); */
-      pg_new = dlsym (dll_handle, "pgendNew");
-      dll_err = dlerror();
-      if (dll_err) 
-      {
-        PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
-        g_free(book->fullpath);
-        book->fullpath = NULL;
-        g_free(book->book_id);
-        book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
-        return FALSE;
-      }
-
-      book->backend = (*pg_new) ();
-    } else
-    if (!strncmp(book_id, "rpc://", 6))
-    {
-      char * dll_err;
-      void * dll_handle;
-      Backend * (*rpc_new)(void);
- 
-      /* open and resolve all symbols now (we don't want mystery 
-       * failure later) */
-      dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
-      if (! dll_handle) 
-      {
-        dll_err = dlerror();
-        PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
-        g_free(book->fullpath);
-        book->fullpath = NULL;
-        g_free(book->book_id);
-        book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
-        return FALSE;
-      }
-
-      /* For the rpc backend, do the equivalent of 
-       * the statically loaded
-       * book->backend = rpcendNew (); */
-      rpc_new = dlsym (dll_handle, "rpcendNew");
-      dll_err = dlerror();
-      if (dll_err) 
-      {
-        PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
-        g_free(book->fullpath);
-        book->fullpath = NULL;
-        g_free(book->book_id);
-        book->book_id = NULL;
-        gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
-        return FALSE;
-      }
-
-      book->backend = (*rpc_new) ();
-    }
-
-    /* if there's a begin method, call that. */
-    if (book->backend && book->backend->book_begin)
-    {
-      GNCBackendError err;
-
-      (book->backend->book_begin)(book, book->book_id, ignore_lock,
-                                  create_if_nonexistent);
-
-      err = xaccBackendGetError(book->backend);
-      if (ERR_BACKEND_NO_ERR != err)
-      {
-        g_free(book->fullpath);
-        book->fullpath = NULL;
-        g_free(book->book_id);
-        book->book_id = NULL;
-        gnc_book_push_error (book, err, NULL);
-        return FALSE;
-      }
-    }
-    return TRUE;
+  }
+  else if (!g_strncasecmp(book_id, "postgres://", 11))
+  {
+      gnc_book_int_load_backend(
+          book, "libgnc_postgres.so", "pgendNew",
+          "Maybe you don't have postgres installed?\n"
+          "The postgres backend can't be used until this "
+          "config problem is fixed");
+  }
+  else if (!g_strncasecmp(book_id, "rpc://", 6))
+  {
+      gnc_book_int_load_backend( book, "libgnc_rpc.so", "rpcendNew", "");
   }
 
-  /* -------------------------------------------------- */
-
-  /* otherwise, lets just assume its a file. */
-  rc = gnc_book_begin_file (book, book_id, ignore_lock);
-  return rc;
+  /* if there's a begin method, call that. */
+  if (book->backend && book->backend->book_begin)
+  {
+      int err;
+      (book->backend->book_begin)(book->backend, book,
+                                  gnc_book_get_url(book), ignore_lock,
+                                  create_if_nonexistent);
+      PINFO("Run book_begin on backend");
+      err = xaccBackendGetError(book->backend);
+      if (err != ERR_BACKEND_NO_ERR)
+      {
+          g_free(book->fullpath);
+          book->fullpath = NULL;
+          g_free(book->book_id);
+          book->book_id = NULL;
+          gnc_book_push_error (book, err, NULL);
+          LEAVE("backend error");
+          return FALSE;
+      }
+  }
+  LEAVE(" ");
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -960,21 +418,14 @@ gboolean
 gnc_book_load (GNCBook *book)
 {
   GNCBackendError backend_err;
+  Backend *be;
 
   if (!book) return FALSE;
-  if (!book->book_id) return FALSE;
+  if (!gnc_book_get_url(book)) return FALSE;
 
-  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
+  ENTER ("book_id=%s", gnc_book_get_url(book)
+         ? gnc_book_get_url(book) : "(null)");
 
-  if (strncmp(book->book_id, "file:", 5) == 0)
-  {
-    if (!book->lockfile)
-    {
-      gnc_book_push_error (book, ERR_BACKEND_LOCKED, NULL);
-      return FALSE;
-    }
-  }
-      
   /* At this point, we should are supposed to have a valid book 
    * id and a lock on the file. */
 
@@ -990,68 +441,64 @@ gnc_book_load (GNCBook *book)
 
   gnc_book_clear_error (book);
 
-  if (strncmp(book->book_id, "file:", 5) == 0)
+  /* This code should be sufficient to initialize *any* backend,
+   * whether http, postgres, or anything else that might come along.
+   * Basically, the idea is that by now, a backend has already been
+   * created & set up.  At this point, we only need to get the
+   * top-level account group out of the backend, and that is a
+   * generic, backend-independent operation.
+   */
+  be = book->backend;
+
+  /* Starting the session should result in a bunch of accounts
+   * and currencies being downloaded, but probably no transactions;
+   * The GUI will need to do a query for that.
+   */
+  if (be)
   {
-    xaccLogDisable();
-    gnc_book_load_from_file(book);
-
-    /* we just got done loading, it can't possibly be dirty !! */
-    gnc_book_mark_saved(book);
-    xaccLogEnable();
-
-  }
-  else if ((strncmp(book->book_id, "http://", 7) == 0) ||
-           (strncmp(book->book_id, "https://", 8) == 0) ||
-           (strncmp(book->book_id, "postgres://", 11) == 0) ||
-           (strncmp(book->book_id, "rpc://", 6)) == 0)
-  {
-    /* This code should be sufficient to initialize *any* backend,
-     * whether http, postgres, or anything else that might come along.
-     * Basically, the idea is that by now, a backend has already been
-     * created & set up.  At this point, we only need to get the
-     * top-level account group out of the backend, and that is a
-     * generic, backend-independent operation.
-     */
-    Backend *be = book->backend;
-
-    /* Starting the session should result in a bunch of accounts
-     * and currencies being downloaded, but probably no transactions;
-     * The GUI will need to do a query for that.
-     */
-    if (be && be->book_load) 
-    {
-       xaccLogDisable();
-       xaccLogSetBaseName(book->fullpath);
-
-       book->topgroup = (be->book_load) (be);
-       xaccGroupSetBackend (book->topgroup, be);
-       gnc_book_push_error(book, xaccBackendGetError(be), NULL);
-
-       if (be->price_load) 
-       {
+      xaccLogDisable();
+      if(be->book_load) 
+      {
+          xaccLogSetBaseName(book->fullpath);
+          
+          book->topgroup = (be->book_load) (be);
+          xaccGroupSetBackend (book->topgroup, be);
+          gnc_book_push_error(book, xaccBackendGetError(be), NULL);
+      }
+    
+      if (be->price_load) 
+      {
           book->pricedb = (be->price_load) (be);
-
+          
           /* we just got done loading, it can't possibly be dirty !! */
           gnc_book_mark_saved(book);
-
+          
           xaccPriceDBSetBackend (book->pricedb, be);
           gnc_book_push_error(book, xaccBackendGetError(be), NULL);
-       }
-       xaccLogEnable();
-    }
+      }
+      xaccLogEnable();
+  }
 
-  } 
-  else
+  if (!book->topgroup)
   {
-    gnc_book_push_error (book, ERR_BACKEND_NO_BACKEND, NULL);
-    return FALSE;
-  }  
+      LEAVE("topgroup NULL");
+      return FALSE;
+  }
+  
+  if (!book->pricedb)
+  {
+      LEAVE("pricedb NULL");
+      return FALSE;
+  }
 
-  if (!book->topgroup) return FALSE;
-  if (!book->pricedb) return FALSE;
-  if (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR) return FALSE;
+  if (gnc_book_get_error(book) != ERR_BACKEND_NO_ERR)
+  {
+      LEAVE("error from backend %d", gnc_book_get_error(book));
+      return FALSE;
+  }
 
-  LEAVE("book_id=%s", book->book_id ? book->book_id : "(null)");
+  LEAVE("book_id=%s", gnc_book_get_url(book)
+        ? gnc_book_get_url(book) : "(null)");
   return TRUE;
 }
 
@@ -1086,6 +533,26 @@ gnc_book_save_may_clobber_data (GNCBook *book)
 
 /* ---------------------------------------------------------------------- */
 
+static gboolean
+save_error_handler(Backend *be, GNCBook *book)
+{
+    int err;
+    err = xaccBackendGetError(be);
+    
+    if (ERR_BACKEND_NO_ERR != err)
+    {
+        gnc_book_push_error (book, err, NULL);
+      
+        /* we close the backend here ... isn't this a bit harsh ??? */
+        if (be->book_end)
+        {
+            (be->book_end)(be);
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
 void
 gnc_book_save (GNCBook *book)
 {
@@ -1093,7 +560,8 @@ gnc_book_save (GNCBook *book)
 
   if (!book) return;
 
-  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
+  ENTER ("book_id=%s", gnc_book_get_url(book)
+         ? gnc_book_get_url(book) : "(null)");
 
   /* if there is a backend, and the backend is reachablele
    * (i.e. we can communicate with it), then synchronize with 
@@ -1108,36 +576,25 @@ gnc_book_save (GNCBook *book)
     xaccGroupSetBackend (book->topgroup, be);
     xaccPriceDBSetBackend (book->pricedb, be);
 
-    if (be->sync && book->topgroup) {
-      GNCBackendError err;
-      (be->sync)(be, book->topgroup);
-      err = xaccBackendGetError(be);
-    
-      if (ERR_BACKEND_NO_ERR != err) {
-        gnc_book_push_error (book, err, NULL);
-      
-        /* we close the backend here ... isn't this a bit harsh ??? */
-        if (be->book_end) {
-          (be->book_end)(be);
-          return;
-        }
-      }
+    if(be->all_sync)
+    {
+        (be->all_sync)(be, book->topgroup, book->pricedb);
+        if(save_error_handler(be, book))
+            return;
     }
-
-    if (be->sync_price && book->pricedb) {
-      GNCBackendError err;
-      (be->sync_price)(be, book->pricedb);
-      err = xaccBackendGetError(be);
-    
-      if (ERR_BACKEND_NO_ERR != err) {
-        gnc_book_push_error (book, err, NULL);
-      
-        /* we close the backend here ... isn't this a bit harsh ??? */
-        if (be->book_end) {
-          (be->book_end)(be);
-          return;
+    else
+    {
+        if (be->sync && book->topgroup) {
+            (be->sync)(be, book->topgroup);
+            if(save_error_handler(be, book))
+                return;
         }
-      }
+
+        if (be->sync_price && book->pricedb) {
+            (be->sync_price)(be, book->pricedb);
+            if(save_error_handler(be, book))
+                return;
+        }
     }
     return;
   } 
@@ -1152,11 +609,6 @@ gnc_book_save (GNCBook *book)
     return;
   }
 
-  if (book->topgroup) {
-    if(!gnc_book_write_to_file(book, TRUE)) {
-      gnc_book_push_error (book, ERR_BACKEND_MISC, NULL);
-    }
-  }
   LEAVE(" ");
 }
 
@@ -1167,7 +619,8 @@ gnc_book_end (GNCBook *book)
 {
   if (!book) return;
 
-  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
+  ENTER ("book_id=%s", gnc_book_get_url(book)
+         ? gnc_book_get_url(book) : "(null)");
 
   /* close down the backend first */
   if (book->backend && book->backend->book_end)
@@ -1177,26 +630,6 @@ gnc_book_end (GNCBook *book)
 
   gnc_book_clear_error (book);
 
-  if (book->linkfile)
-    unlink (book->linkfile);
-
-  if (book->lockfd > 0)
-    close (book->lockfd);
-
-  if (book->lockfile)
-    unlink (book->lockfile);
-
-  g_free (book->book_id);
-  book->book_id = NULL;
-
-  g_free (book->fullpath);
-  book->fullpath = NULL;
-
-  g_free (book->lockfile);
-  book->lockfile = NULL;
-
-  g_free (book->linkfile);
-  book->linkfile = NULL;
   LEAVE(" ");
 }
 
@@ -1205,13 +638,22 @@ gnc_book_destroy (GNCBook *book)
 {
   if (!book) return;
 
-  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
+  ENTER ("book_id=%s", gnc_book_get_url(book)
+         ? gnc_book_get_url(book) : "(null)");
 
   xaccLogDisable();
   gnc_book_end (book);
 
   /* destroy the backend */
-  if (book->backend) g_free(book->backend);
+  if (book->backend && book->backend->destroy_backend)
+  {
+      book->backend->destroy_backend(book->backend);
+  }
+  else
+  {
+      g_free(book->backend);
+  }
+  
   xaccGroupSetBackend (book->topgroup, NULL);
   xaccPriceDBSetBackend (book->pricedb, NULL);
 
@@ -1301,93 +743,155 @@ static char * searchpaths[] =
    NULL,
 };
 
+typedef gboolean (*pathGenerator)(char *pathbuf, int which);
+
+gboolean
+xaccAddEndPath(char *pathbuf, const char *ending, int len)
+{
+    if(len + strlen(pathbuf) >= PATH_MAX)
+        return FALSE;
+          
+    strcat (pathbuf, ending);
+    return TRUE;
+}
+
+gboolean
+xaccCmdPathGenerator(char *pathbuf, int which)
+{
+    if(which != 0)
+    {
+        return FALSE;
+    }
+    else
+    {
+        /* try to find a file by this name in the cwd ... */
+        if (getcwd (pathbuf, PATH_MAX) == NULL)
+            return FALSE;
+
+        strcat (pathbuf, "/");
+        return TRUE;
+    }
+}
+
+gboolean
+xaccDataPathGenerator(char *pathbuf, int which)
+{
+    char *path;
+    
+    if(which != 0)
+    {
+        return FALSE;
+    }
+    else
+    {
+        path = getenv ("HOME");
+        if (!path)
+            return FALSE;
+
+        if (PATH_MAX <= (strlen (path) + 20))
+            return FALSE;
+
+        strcpy (pathbuf, path);
+        strcat (pathbuf, "/.gnucash/data/");
+        return TRUE;
+    }
+}
+
+gboolean
+xaccUserPathPathGenerator(char *pathbuf, int which)
+{
+    char *path = NULL;
+    
+    if(searchpaths[which] == NULL)
+    {
+        return FALSE;
+    }
+    else
+    {
+        path = searchpaths[which];
+        
+        if (PATH_MAX <= strlen(path))
+            return FALSE;
+
+        strcpy (pathbuf, path);
+        return TRUE;
+    }
+}
+
 char * 
-xaccResolveFilePath (const char * filefrag)
+xaccResolveFilePath (const char * filefrag_tmp)
 {
   struct stat statbuf;
   char pathbuf[PATH_MAX];
-  char *path = NULL;
-  int namelen, len;
-  int i, rc;
+  char *filefrag;
+  pathGenerator gens[4];
+  int namelen;
+  int i;
 
   /* seriously invalid */
-  if (!filefrag) return NULL;
+  if (!filefrag_tmp)
+  {
+      PERR("filefrag is NULL");
+      return NULL;
+  }
 
-  ENTER ("filefrag=%s", filefrag);
+  ENTER ("filefrag=%s", filefrag_tmp);
 
   /* ---------------------------------------------------- */
   /* OK, now we try to find or build an absolute file path */
 
   /* check for an absolute file path */
-  if ('/' == *filefrag)
-    return g_strdup (filefrag);
+  if (*filefrag_tmp == '/')
+    return g_strdup (filefrag_tmp);
 
+  if (!g_strncasecmp(filefrag_tmp, "file:", 5))
+  {
+      char *ret = g_new(char, strlen(filefrag_tmp) - 5 + 1);
+      strcpy(ret, filefrag_tmp + 5);
+      return ret;
+  }
+
+  {
+    char *p;
+      
+    filefrag = g_strdup (filefrag_tmp);
+    p = strchr (filefrag, '/');
+    while (p) {
+        *p = ',';
+        p = strchr (filefrag, '/');
+    }
+  }
+  
   /* get conservative on the length so that sprintf(getpid()) works ... */
   /* strlen ("/.LCK") + sprintf (%x%d) */
   namelen = strlen (filefrag) + 25; 
 
-  for (i = -2; TRUE ; i++) 
+  gens[0] = xaccCmdPathGenerator;
+  gens[1] = xaccDataPathGenerator;
+  gens[2] = xaccUserPathPathGenerator;
+  gens[3] = NULL;
+
+  for (i = 0; gens[i] != NULL; i++) 
   {
-    switch (i)
-    {
-      case -2:
-        /* try to find a file by this name in the cwd ... */
-        path = getcwd (pathbuf, PATH_MAX);
-        if (!path)
-          continue;
-
-        len = strlen (path) + namelen;
-        if (PATH_MAX <= len)
-          continue;
-
-        strcat (path, "/");
-        break;
-
-      case -1:
-        /* look for something in $HOME/.gnucash/data */
-        path = getenv ("HOME");
-        if (!path)
-          continue;
-
-        len = strlen (path) + namelen + 20;
-        if (PATH_MAX <= len)
-          continue;
-
-        strcpy (pathbuf, path);
-        strcat (pathbuf, "/.gnucash/data/");
-        path = pathbuf;
-        break;
-
-      default:
-        /* OK, check the user-configured paths */
-        path = searchpaths[i];
-        if (path)
-        {
-          len = strlen (path) + namelen;
-          if (PATH_MAX <= len)
-            continue;
-
-          strcpy (pathbuf, path);
-          path = pathbuf;
-        }
-        break;
-    }
-
-    if (!path) break;
-
-    /* lets see if we found the file here ... */
-    /* haral: if !S_ISREG: there is something with that name 
-     * but it's not a regular file */
-    strcat (path, filefrag);
-    rc = stat (path, &statbuf);
-    if ((!rc) && (S_ISREG(statbuf.st_mode)))
-      return (g_strdup (path));
+      int j;
+      for(j = 0; gens[i](pathbuf, j) ; j++)
+      {
+          if(xaccAddEndPath(pathbuf, filefrag, namelen))
+          {
+              int rc = stat (pathbuf, &statbuf);
+              if ((!rc) && (S_ISREG(statbuf.st_mode)))
+              {
+                  g_free(filefrag);
+                  return (g_strdup (pathbuf));
+              }
+          }
+      }
   }
+  /* OK, we didn't find the file. */
 
   /* make sure that the gnucash home dir exists. */
   MakeHomeDir();
 
-  /* OK, we didn't find the file. */
   /* If the user specified a simple filename (i.e. no slashes in it)
    * then create the file.  But if it has slashes in it, then creating
    * a bunch of directories seems like a bad idea; more likely, the user
@@ -1396,31 +900,18 @@ xaccResolveFilePath (const char * filefrag)
     return NULL;
 
   /* Lets try creating a new file in $HOME/.gnucash/data */
-  path = getenv ("HOME");
-  if (path)
+  if (xaccDataPathGenerator(pathbuf, 0))
   {
-    len = strlen (path) + namelen + 50;
-    if (PATH_MAX > len)
-    {
-      strcpy (pathbuf, path);
-      strcat (pathbuf, "/.gnucash/data/");
-      strcat (pathbuf, filefrag);
-      return (g_strdup (pathbuf));
-    }
+      if(xaccAddEndPath(pathbuf, filefrag, namelen))
+          return (g_strdup (pathbuf));
   } 
 
   /* OK, we still didn't find the file */
   /* Lets try creating a new file in the cwd */
-  path = getcwd (pathbuf, PATH_MAX);
-  if (path)
+  if (xaccCmdPathGenerator(pathbuf, 0))
   {
-    len = strlen (path) + namelen;
-    if (PATH_MAX > len)
-    {
-      strcat (path, "/");
-      strcat (path, filefrag);
-      return (g_strdup (path));
-    }
+      if(xaccAddEndPath(pathbuf, filefrag, namelen))
+          return (g_strdup (pathbuf));
   }
 
   return NULL;
@@ -1441,15 +932,15 @@ xaccResolveURL (const char * pathfrag)
    * to make sure hte uri is in good form...
    */
 
-  if (!strncmp (pathfrag, "http://", 7)      ||
-      !strncmp (pathfrag, "https://", 8)     ||
-      !strncmp (pathfrag, "postgres://", 11) ||
-      !strncmp (pathfrag, "rpc://", 6))
+  if (!g_strncasecmp (pathfrag, "http://", 7)      ||
+      !g_strncasecmp (pathfrag, "https://", 8)     ||
+      !g_strncasecmp (pathfrag, "postgres://", 11) ||
+      !g_strncasecmp (pathfrag, "rpc://", 6))
   {
     return g_strdup(pathfrag);
   }
 
-  if (!strncmp (pathfrag, "file:", 5)) {
+  if (!g_strncasecmp (pathfrag, "file:", 5)) {
     return (xaccResolveFilePath (pathfrag+5));
   }
 
@@ -1457,6 +948,8 @@ xaccResolveURL (const char * pathfrag)
 }
 
 /* ---------------------------------------------------------------------- */
+
+/* this should go in a separate binary to create a rpc server */
 
 void
 gnc_run_rpc_server (void)

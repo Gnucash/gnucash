@@ -30,6 +30,7 @@ libgncengine_la_SOURCES = \
   gnc-account-xml-v2.c \
   gnc-associate-account.c \
   gnc-book.c \
+  gnc-book-file.c \
   gnc-commodity-xml-v2.c \
   gnc-commodity.c \
   gnc-engine-util.c \

@@ -29,13 +29,62 @@
 #ifndef GNC_BOOK_P_H
 #define GNC_BOOK_P_H
 
+#include "Group.h"
+#include "Backend.h"
+#include "BackendP.h"
+#include "gnc-pricedb.h"
+#include "TransLog.h"
+#include "gnc-engine-util.h"
+#include "gnc-pricedb-p.h"
+#include "DateUtils.h"
+#include "io-gncxml.h"
+#include "io-gncbin.h"
+#include "io-gncxml-v2.h"
+
+#include "gnc-engine.h"
+#include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-pricedb.h"
 #include "Group.h"
+
+struct gnc_book_struct
+{
+  AccountGroup *topgroup;
+  GNCPriceDB *pricedb;
+  GList *sched_xactions;
+  AccountGroup *template_group;
+
+  /* the requested book id, in the form or a URI, such as
+   * file:/some/where, or sql:server.host.com:555
+   */
+  char *book_id;
+
+  /* if any book subroutine failed, this records the failure reason 
+   * (file not found, etc).
+   * This is a 'stack' that is one deep.
+   * FIXME: This is a hack.  I'm trying to move us away from static
+   * global vars. This may be a temp fix if we decide to integrate
+   * FileIO errors into GNCBook errors. 
+   */
+  GNCBackendError last_err;
+  char *error_message;
+
+  char *fullpath;
+
+  /* ---------------------------------------------------- */
+  /* This struct member applies for network, rpc and SQL i/o */
+  /* It is not currently used for file i/o, but it should be. */
+  Backend *backend;
+};
+
 
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
 void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 
 void gnc_book_mark_saved(GNCBook *book);
+
+void gnc_book_push_error (GNCBook *book, GNCBackendError err, char *message);
+
+Backend* gncBackendInit_file(const char *book_id, void *data);
 
 #endif /* GNC_BOOK_P_H */

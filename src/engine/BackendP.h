@@ -156,15 +156,14 @@
  *    a stack) of all the errors that have occurred.
  */
 
-typedef struct _backend Backend;
-
 struct _backend 
 {
-  void (*book_begin) (GNCBook *, const char *book_id, 
+  void (*book_begin) (Backend *be, GNCBook *book, const char *book_id, 
                       gboolean ignore_lock, gboolean create_if_nonexistent);
   AccountGroup * (*book_load) (Backend *);
   GNCPriceDB * (*price_load) (Backend *);
   void (*book_end) (Backend *);
+  void (*destroy_backend) (Backend *);
 
   void (*account_begin_edit) (Backend *, Account *);
   void (*account_commit_edit) (Backend *, Account *);
@@ -177,12 +176,13 @@ struct _backend
 
   void (*run_query) (Backend *, Query *);
   void (*price_lookup) (Backend *, GNCPriceLookup *);
+  void (*all_sync) (Backend *, AccountGroup *, GNCPriceDB *);
   void (*sync) (Backend *, AccountGroup *);
   void (*sync_price) (Backend *, GNCPriceDB *);
 
   gboolean (*events_pending) (Backend *be);
   gboolean (*process_events) (Backend *be);
-
+    
   GNCBackendError last_err;
 };
 
@@ -224,5 +224,7 @@ Backend * xaccGNCBookGetBackend (GNCBook *book);
  */
 void xaccPriceDBSetBackend (GNCPriceDB *prdb, Backend *be);
 Backend * xaccPriceDBGetBackend (GNCPriceDB *prdb);
+
+void xaccInitBackend(Backend *be);
 
 #endif /* XACC_BACKEND_P_H */

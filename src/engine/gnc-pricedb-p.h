@@ -26,6 +26,7 @@
 
 #include <glib.h>
 
+#include "gnc-book.h"
 #include "BackendP.h"
 #include "gnc-pricedb.h"
 

@@ -173,4 +173,35 @@ xaccPriceDBGetBackend (GNCPriceDB *prdb)
   return prdb->backend;
 }
 
+/***********************************************************************/
+/* Get a clean backend */
+void
+xaccInitBackend(Backend *be)
+{
+    be->book_begin = NULL;
+    be->book_load = NULL;
+    be->price_load = NULL;
+    be->book_end = NULL;
+    be->destroy_backend = NULL;
+
+    be->account_begin_edit = NULL;
+    be->account_commit_edit = NULL;
+    be->trans_begin_edit = NULL;
+    be->trans_commit_edit = NULL;
+    be->trans_rollback_edit = NULL;
+    be->price_begin_edit = NULL;
+    be->price_commit_edit = NULL;
+
+    be->run_query = NULL;
+    be->price_lookup = NULL;
+    be->all_sync = NULL;
+    be->sync = NULL;
+    be->sync_price = NULL;
+
+    be->events_pending = NULL;
+    be->process_events = NULL;
+
+    be->last_err = ERR_BACKEND_NO_ERR;
+}
+
 /************************* END OF FILE ********************************/
