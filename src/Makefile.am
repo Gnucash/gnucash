@@ -10,13 +10,13 @@ SUBDIRS = \
   tax \
   app-utils \
   gnome-utils \
+  gnome \
   app-file \
   register \
   import-export \
   report \
   experimental \
   guile \
-  gnome \
   scm \
   quotes \
   pixmaps \
@@ -31,19 +31,10 @@ bin_PROGRAMS = gnucash
 # problem with the current version of gwrap, and will go away when
 # that's fixed.
 gnucash_LDADD = \
-  -Lengine -Lengine/.libs \
-  -Lgnc-module -Lgnc-module/.libs \
-  -Lcalculation -Lcalculation/.libs \
-  -Lnetwork-utils -Lnetwork-utils/.libs \
-  -Lapp-utils -Lapp-utils/.libs \
-  -Lapp-file -Lapp-file/.libs \
-  -Lapp-file/gnome -Lapp-file/gnome/.libs \
-  -Lgnome -Lgnome/.libs \
   gnc-module/libgncmodule.la \
   gnome-utils/libgncmod-gnome-utils.la \
   app-utils/libgncmod-app-utils.la \
   app-file/libgncmod-app-file.la \
-  app-file/gnome/libgncmod-app-file-gnome.la \
   engine/libgncmod-engine.la \
   engine/libgw-engine.la \
   engine/libgw-glib.la \

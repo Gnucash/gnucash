@@ -3,6 +3,12 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-register-core.la
 
 libgncmod_register_core_la_LDFLAGS = -module
+libgncmod_register_core_la_LIBADD = \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${GLIB_LIBS}
 
 libgncmod_register_core_la_SOURCES = \
   gncmod-register-core.c \
@@ -20,6 +26,7 @@ libgncmod_register_core_la_SOURCES = \
   table-control.c \
   table-layout.c \
   table-model.c
+
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \

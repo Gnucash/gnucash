@@ -109,6 +109,10 @@ GNOME_CHECK_GUILE
 GNOME_PRINT_CHECK
 GNOME_XML_CHECK
 
+# gnome-print-check appears tobe sort of b0rked for the time being
+GNOME_PRINT_CFLAGS=`${GNOME_CONFIG} --cflags print`
+
+
 #AC_CHECK_HEADER(libxml/xmlversion.h, [
 #  HAVE_XML_VERSION_HEADER=1
 #  AC_DEFINE(HAVE_XML_VERSION_HEADER)
@@ -687,8 +691,8 @@ GNUCASH_NETWORK_UTILS_LIBS="${GHTTP_LIBS} ${GNOME_LIBDIR} ${GNOME_LIBS} ${GNOMEU
 AC_SUBST(GNUCASH_NETWORK_UTILS_CFLAGS)
 AC_SUBST(GNUCASH_NETWORK_UTILS_LIBS)
 
-GNUCASH_GNOME_UTILS_CFLAGS="${GNUCASH_APP_UTILS_CFLAGS} ${GNUCASH_NETWORK_UTILS_CFLAGS} ${GNOME_PRINT_CFLAGS} ${GNOME_INCLUDEDIR} ${GUPPI_CFLAGS}"
-GNUCASH_GNOME_UTILS_LIBS="${GNUCASH_APP_UTILS_LIBS} ${GNUCASH_NETWORK_UTILS_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GNOME_PRINT_LIBS} ${GTKHTML_LIBS} ${GLADE_LIBS} ${GUPPI_LIBS} -lgncmod-gnome-utils"
+GNUCASH_GNOME_UTILS_CFLAGS="${GNUCASH_APP_UTILS_CFLAGS} ${GNUCASH_NETWORK_UTILS_CFLAGS} ${GNOME_PRINT_CFLAGS} ${GNOME_INCLUDEDIR} ${GUPPI_CFLAGS} ${GDK_PIXBUF_CFLAGS}"
+GNUCASH_GNOME_UTILS_LIBS="${GNUCASH_APP_UTILS_LIBS} ${GNUCASH_NETWORK_UTILS_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GNOME_PRINT_LIBS} ${GTKHTML_LIBS} ${GLADE_LIBS} ${GUPPI_LIBS} ${GDK_PIXBUF_LIBS} -lgncmod-gnome-utils"
 
 AC_SUBST(GNUCASH_GNOME_UTILS_CFLAGS)
 AC_SUBST(GNUCASH_GNOME_UTILS_LIBS)
@@ -737,6 +741,7 @@ AC_OUTPUT(
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile
+          src/app-file/test/Makefile
           src/app-file/gnome/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
@@ -750,6 +755,7 @@ AC_OUTPUT(
           src/backend/postgres/test/Makefile
           src/backend/rpc/Makefile
           src/calculation/Makefile 
+          src/calculation/test/Makefile 
           src/doc/Makefile
           src/doc/design/Makefile
           src/doc/xml/Makefile
@@ -780,6 +786,7 @@ AC_OUTPUT(
           src/import-export/binary-import/Makefile
           src/import-export/binary-import/test/Makefile
           src/import-export/qif-import/Makefile
+          src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
           src/network-utils/Makefile

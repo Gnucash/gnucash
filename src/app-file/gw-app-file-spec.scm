@@ -42,7 +42,9 @@
    mod
    (lambda (client-only?)
      (list
-      "#include <gnc-file.h>\n")))
+      "#include <gnc-file.h>\n"
+      "#include <gnc-file-history.h>\n"
+      "#include <gnc-file-dialog.h>\n")))
 
 
   (gw:wrap-function
@@ -69,4 +71,24 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
    "gnc_file_open_file"
    '(((<gw:m-chars-caller-owned> gw:const) filename))
    "Open filename.")
+
+  (gw:wrap-function
+   mod
+   'gnc:history-get-last
+   '(<gw:m-chars-callee-owned> gw:const)
+   "gnc_history_get_last"
+   '()
+   "Get the last file opened by the user.")
+
+  (gw:wrap-function
+   mod
+   'gnc:file-selection-dialog
+   '(<gw:m-chars-callee-owned> gw:const)
+   "gnc_file_dialog"
+   '(((<gw:m-chars-caller-owned> gw:const) title)
+     ((<gw:m-chars-caller-owned> gw:const) filter)
+     ((<gw:m-chars-caller-owned> gw:const) default))
+   "Lets the user select a file. Dialog has given title, filter,
+or default name. Either filter, default, or both should be NULL.")
+
   )

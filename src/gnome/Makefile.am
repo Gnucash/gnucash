@@ -1,6 +1,13 @@
 SUBDIRS = glade
 
-lib_LTLIBRARIES = libgncgnome.la
+lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la
+
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
+
+libgw_gnc_la_SOURCES = gw-gnc.c
+libgw_gnc_la_LIBADD = ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
+libgw_gnc_la_LDFLAGS = -module
 
 libgncgnome_la_LDFLAGS = -module
 
@@ -109,6 +116,7 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_INCLUDEDIR} \
   ${GNOME_PRINT_CFLAGS} \
+  ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GHTTP_CFLAGS} \
   ${GLADE_CFLAGS} \
@@ -129,3 +137,21 @@ gnucash.keys: gnucash.keys.in
             -e 's:@-icondir-@:${appicondir}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
+
+noinst_DATA = .scm-links
+
+.scm-links: 
+	rm -f gnucash g-wrapped
+	ln -sf . gnucash 
+	ln -sf . g-wrapped 
+	touch .scm-links
+CLEANFILES = .scm-links gnucash g-wrapped
+
+gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: gw-gnc-spec.scm .scm-links
+	FLAVOR=gnome guile -c \
+          "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+           (set! %load-path (cons \"../engine\" %load-path)) \
+           (primitive-load \"./gw-gnc-spec.scm\") \
+           (gw:generate-module \"gw-gnc\")"
+BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
+CLEANFILES += gw-gnc.scm gw-gnc.h gw-gnc.c 

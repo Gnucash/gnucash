@@ -12,7 +12,7 @@ gncinclude_HEADERS = \
 
 libgncmod_report_system_la_LDFLAGS = -module
 libgncmod_report_system_la_LIBADD = \
-  -L../../gnc-module -L../../gnc-module/.libs -lgncmodule \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${GLIB_LIBS} \
   ${GUILE_LIBS} 
 

@@ -9,7 +9,7 @@ LDADD = \
 libgncmod_test_engine_la_SOURCES = gncmod-test-engine.c test-engine-stuff.c
 libgncmod_test_engine_la_LDFLAGS = -module
 libgncmod_test_engine_la_LIBADD = \
-  -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs -lgncmodule \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${GLIB_LIBS}
 
 noinst_HEADERS=test-engine-stuff.h

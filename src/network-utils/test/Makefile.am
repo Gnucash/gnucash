@@ -8,14 +8,12 @@ TESTS_ENVIRONMENT= \
    LTDL_LIBRARY_PATH=.. \
    LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs
 
-LDADD = \
-  -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
-   ${top_srcdir}/src/gnc-module/libgncmodule.la \
-   ../libgncmod-network-utils.la \
-  -lltdl
 
 noinst_PROGRAMS = \
   test-link-module
+
+test_link_module_SOURCES=test-link-module.c
+test_link_module_LDADD=../libgncmod-network-utils.la
 
 #EXTRA_DIST = test-load-module
 

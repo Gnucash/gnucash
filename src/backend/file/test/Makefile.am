@@ -19,7 +19,7 @@ TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine:${top_srcdir}/src/gnc-module:${top_srcdir}/src/backend/file" \
   GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/scm:${top_srcdir}/src/guile" \
   LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/backend/file/.libs:${top_srcdir}/src/guile:${top_srcdir}/src/guile/.libs
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file:${top_srcdir}/src/guile
 
 noinst_LTLIBRARIES = libgnc-test-file-stuff.la
 
@@ -41,9 +41,7 @@ noinst_PROGRAMS = \
 
 noinst_HEADERS = test-file-stuff.h
 
-LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
-        -L${top_srcdir}/src/engine -L${top_srcdir}/src/engine/.libs \
-        ${top_srcdir}/src/test-core/libgncmod-test.la \
+LDADD = ${top_srcdir}/src/test-core/libgncmod-test.la \
         ${top_srcdir}/src/gnc-module/libgncmodule.la \
         ${top_srcdir}/src/engine/libgncmod-engine.la \
         ${top_srcdir}/src/engine/libgw-engine.la \

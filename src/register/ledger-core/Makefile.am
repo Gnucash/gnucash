@@ -23,6 +23,8 @@ noinst_HEADERS = \
   split-register-p.h
 
 libgncmod_ledger_core_la_LDFLAGS = -module
+libgncmod_ledger_core_la_LIBADD = \
+  ${top_srcdir}/src/gnome/libgncgnome.la 
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \

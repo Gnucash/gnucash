@@ -41,9 +41,9 @@ gncinclude_HEADERS = \
 libgncmod_app_utils_la_LDFLAGS = -module
 
 libgncmod_app_utils_la_LIBADD = \
-  -L../gnc-module -L../gnc-module/.libs -lgncmodule \
-  -L../engine -L../engine/.libs -lgncmod-engine \
-  -L../calculation -L../calculation/.libs -lgncmod-calculation \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_srcdir}/src/calculation/libgncmod-calculation.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 

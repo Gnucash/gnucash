@@ -1,4 +1,4 @@
-SUBDIRS = . gnome
+SUBDIRS = gnome . test
 
 pkglib_LTLIBRARIES = libgncmod-app-file.la libgw-app-file.la
 
@@ -27,18 +27,18 @@ noinst_HEADERS = gnc-file-p.h
 libgncmod_app_file_la_LDFLAGS = -module
 
 libgncmod_app_file_la_LIBADD = \
-  -L../gnc-module -L../gnc-module/.libs -lgncmodule \
-  -L../engine -L../engine/.libs -lgncmod-engine \
-  -L../calculation -L../calculation/.libs -lgncmod-calculation \
-  -L../app-utils -L../app-utils/.libs -lgncmod-app-utils \
+  ../gnc-module/libgncmodule.la \
+  ../engine/libgncmod-engine.la \
+  ../report/report-system/libgncmod-report-system.la \
+  ../app-utils/libgncmod-app-utils.la \
+  ../calculation/libgncmod-calculation.la \
+  ../gnome-utils/libgncmod-gnome-utils.la \
+  ./gnome/libgnc-app-file-gnome.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
 libgw_app_file_la_SOURCES = gw-app-file.c
 libgw_app_file_la_LDFLAGS = -module
-
-#gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-#gncmod_DATA = app-file.scm 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-app-file-spec.scm gw-app-file.scm

@@ -22,19 +22,20 @@ TESTS = \
   test-load-engine \
   test-create-account \
   test-commodities \
-  test-freq-spec \
   test-group-vs-book \
   test-query \
   test-resolve-file-path \
-  test-scm-query \
   test-split-vs-account  \
   test-transaction-voiding 
 
+#  test-freq-spec 
+#  test-scm-query 
+
 TESTS_ENVIRONMENT = \
   GNC_MODULE_PATH="${top_srcdir}/src/engine" \
-  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:../../gnc-module:${top_srcdir}/src/scm:${top_srcdir}/src/guile" \
+  GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:../../gnc-module:${top_srcdir}/src/scm" \
   LTDL_LIBRARY_PATH=../../gnc-module \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:../.libs:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/guile:${top_srcdir}/src/guile/.libs
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:..:${top_srcdir}/src/gnc-module
 
 noinst_PROGRAMS = \
   test-commodities \

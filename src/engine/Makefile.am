@@ -1,7 +1,7 @@
 SUBDIRS = . test-core test 
 
 pkglib_LTLIBRARIES = \
-  libgncmod-engine.la libgw-glib.la libgw-engine.la libgw-kvp.la
+ libgw-glib.la libgw-engine.la libgw-kvp.la libgncmod-engine.la 
 
 AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GNUCASH_ENGINE_BASE_CFLAGS}
 
@@ -81,7 +81,11 @@ noinst_HEADERS = \
   md5.h
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS}
+libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
+ ${top_srcdir}/src/gnc-module/libgncmodule.la \
+ ${top_srcdir}/src/engine/libgw-engine.la \
+ ${top_srcdir}/src/engine/libgw-glib.la \
+ ${top_srcdir}/src/engine/libgw-kvp.la 
 
 libgw_glib_la_SOURCES = gw-glib.c glib-helpers.c
 libgw_glib_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}

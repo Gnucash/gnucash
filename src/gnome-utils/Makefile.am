@@ -14,7 +14,9 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
-  ${GTKHTML_CFLAGS}
+  ${GDK_PIXBUF_CFLAGS} \
+  ${GTKHTML_CFLAGS} \
+  ${G_WRAP_COMPILE_ARGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   cursors.c \
@@ -67,11 +69,11 @@ noinst_HEADERS = \
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
 libgncmod_gnome_utils_la_LIBADD = \
-  -L../gnc-module -L../gnc-module/.libs -lgncmodule \
-  -L../engine -L../engine/.libs -lgncmod-engine \
-  -L../calculation -L../calculation/.libs -lgncmod-calculation \
-  -L../network-utils -L../network-utils/.libs -lgncmod-network-utils \
-  -L../app-utils -L../app-utils/.libs -lgncmod-app-utils \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_srcdir}/src/calculation/libgncmod-calculation.la \
+  ${top_srcdir}/src/network-utils/libgncmod-network-utils.la \
+  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GNOME_PRINT_LIBS} \

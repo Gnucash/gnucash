@@ -1,6 +1,7 @@
 (define-module (g-wrapped gw-gnome-utils-spec))
 
 (use-modules (g-wrap))
+(use-modules (g-wrapped gw-glib-spec))
 (use-modules (g-wrapped gw-engine-spec))
 
 (debug-set! maxdepth 100000)
@@ -30,6 +31,7 @@
   
   (gw:module-depends-on mod "gw-runtime")
   (gw:module-depends-on mod "gw-engine")
+  (gw:module-depends-on mod "gw-glib")
 
   (gw:module-set-guile-module! mod '(g-wrapped gw-gnome-utils))
 
@@ -39,6 +41,9 @@
      (list 
       "#include <gnc-mdi-utils.h>\n"
       "#include <print-session.h>\n"
+      "#include <gnc-menu-extensions.h>\n"
+      "#include <gnc-html.h>\n"
+      "#include <gnc-ui.h>\n"
       )))
 
   (let ((nnt (gw:wrap-non-native-type
@@ -145,4 +150,33 @@
    "gnc_print_session_print"
    '((<gnc:PrintSession*> p))
    "Show the GNOME print dialog to start printing.")
+ (gw:wrap-function
+   mod
+   'gnc:error-dialog
+   '<gw:void>
+   "gnc_error_dialog"
+   '(((<gw:m-chars-caller-owned> gw:const) message))
+   "Show ok dialog box with given error message.")
+
+  (gw:wrap-function
+   mod
+   'gnc:verify-dialog
+   '<gw:bool>
+   "gnc_verify_dialog"
+   '(((<gw:m-chars-caller-owned> gw:const) message) (<gw:bool> yes_is_default))
+   "Show yes/no dialog box with given message.")
+
+  (gw:wrap-function
+   mod
+   'gnc:add-extension
+   '<gw:void>
+   "gnc_add_extension"
+   '((<gw:scm> extension))
+   "")
+
+  (gw:wrap-function 
+   mod
+   'gnc:html-encode-string 
+   '<glib:g-chars-caller-owned> 
+   "gnc_html_encode_string" '(((<gw:m-chars-caller-owned> gw:const) bookname)))
 )

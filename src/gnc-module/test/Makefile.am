@@ -19,10 +19,10 @@ TESTS = \
   test-scm-init 
 
 TESTS_ENVIRONMENT = \
-  GNC_MODULE_PATH=${PWD}/mod-foo:${PWD}/mod-bar:${PWD}/mod-baz:${PWD}/misc-mods \
+  GNC_MODULE_PATH=${PWD}/mod-foo:${PWD}/mod-bar:${PWD}/mod-baz:${PWD}/misc-mods:${top_srcdir}/src/import-export/qif-import \
   GUILE_LOAD_PATH=..:${G_WRAP_MODULE_DIR} \
   LTDL_LIBRARY_PATH=../ \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:mod-foo:mod-foo/.libs:mod-bar:mod-bar/.libs:mod-baz:mod-baz/.libs:..:../.libs
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/app-file:mod-foo:mod-foo/.libs:mod-bar:mod-bar/.libs:mod-baz:mod-baz/.libs:..:../.libs
 
 noinst_PROGRAMS = \
   test-load-c \

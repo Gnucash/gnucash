@@ -1,5 +1,4 @@
 (define-module (gnucash engine))
-(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (g-wrapped gw-engine))
 (use-modules (g-wrapped gw-runtime))
 

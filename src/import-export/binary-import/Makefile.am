@@ -31,24 +31,12 @@ gncinclude_HEADERS = \
 libgncmod_binary_import_la_LDFLAGS = -module
 
 libgncmod_binary_import_la_LIBADD = \
-  -L${top_srcdir}/src/gnc-module \
-  -L${top_srcdir}/src/gnc-module/.libs \
-  -lgncmodule \
-  -L${top_srcdir}/src/engine \
-  -L${top_srcdir}/src/engine/.libs \
-  -lgncmod-engine \
-  -L${top_srcdir}/src/calculation \
-  -L${top_srcdir}/src/calculation/.libs \
-  -lgncmod-calculation \
-  -L${top_srcdir}/src/app-utils \
-  -L${top_srcdir}/src/app-utils/.libs \
-  -lgncmod-app-utils \
-  -L${top_srcdir}/src/app-file \
-  -L${top_srcdir}/src/app-file/.libs \
-  -lgncmod-app-file \
-  -L${top_srcdir}/src/gnome-utils \
-  -L${top_srcdir}/src/gnome-utils/.libs \
-  -lgncmod-gnome-utils \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
+  ${top_srcdir}/src/calculation/libgncmod-calculation.la \
+  ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GNOMEUI_LIBS} \
   ${GNOME_LIBDIR} \
   ${GUILE_LIBS} \

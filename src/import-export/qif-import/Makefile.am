@@ -1,3 +1,4 @@
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES=libgncmod-qif-import.la
 
@@ -10,8 +11,13 @@ noinst_HEADERS = \
   dialog-account-picker.h \
   druid-qif-import.h
 
-libgncmod_qif_import_la_LDFLAGS = \
-  -module \
+libgncmod_qif_import_la_LDFLAGS = -module 
+
+libgncmod_qif_import_la_LIBADD = \
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_srcdir}/src/app-file/libgncmod-app-file.la \
+  ${top_srcdir}/src/gnc-module/libgncmodule.la \
+  ${top_srcdir}/src/engine/libgncmod-engine.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${GLIB_LIBS} \
@@ -50,6 +56,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
+  ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS}
 
 EXTRA_DIST = \

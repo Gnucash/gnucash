@@ -48,5 +48,5 @@ noinst_HEADERS = \
 
 libgncmod_backend_file_la_LDFLAGS = -module
 libgncmod_backend_file_la_LIBADD = \
-   ${GLIB_LIBS} ${GNOME_XML_LIB}  \
-   -L../../engine -L../../engine/.libs -lgncmod-engine
+   ${GLIB_LIBS} ${GNOME_XML_LIB} \
+   ${top_srcdir}/src/engine/libgncmod-engine.la 

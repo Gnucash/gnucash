@@ -42,12 +42,21 @@ gnc_module_init(int refcount) {
     return FALSE;
   }
 
+  printf("loaded gnc modules .. \n");
+
   /* load the report generation scheme code */
+  if(gh_eval_str("(use-modules (gnucash report taxtxf))") 
+     == SCM_BOOL_F) {
+    printf("failed to load (gnucash report taxtxf)\n");
+    return FALSE;
+  }
+  printf("loaded taxtxf module\n");
+  
   if(gh_eval_str("(use-modules (gnucash report locale-specific us))") 
      == SCM_BOOL_F) {
     return FALSE;
   }
-  
+
   return TRUE;
 }
 
