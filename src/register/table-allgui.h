@@ -124,7 +124,7 @@ struct _Table {
 
   /* callback that is called when the cursor is moved */
   /* hack alert -- this should be a callback list, actually */
-  void (*move_cursor) (Table *, void *client_data);
+  void (*move_cursor) (Table *, int new_phys_row, int new_phys_col, void *client_data);
   void * client_data;
 
   /* string values for each cell, 

@@ -335,12 +335,6 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    int new_virt_row, new_virt_col;
    CellBlock *curs;
 
-   /* call the callback, allowing the app to commit any changes 
-    * associated with the current location of the cursor.   */
-   if (table->move_cursor) {
-      (table->move_cursor) (table, table->client_data);
-   }
-
    /* Change the cell background colors to thier "passive" values.
     * This denotes that the cursor has left this location (which means more or
     * less the same thing as "the current location is no longer being edited.")
@@ -367,6 +361,13 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
       }
    }
 
+   /* call the callback, allowing the app to commit any changes 
+    * associated with the current location of the cursor.   */
+   if (table->move_cursor) {
+      (table->move_cursor) (table, new_phys_row, new_phys_col, 
+                            table->client_data);
+   }
+
    /* check for out-of-bounds conditions (which may be deliberate) */
    if ((0 > new_phys_row) || (0 > new_phys_col) ||
       (new_phys_row >= table->num_phys_rows) ||
@@ -378,7 +379,7 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
       new_virt_col = table->locators[new_phys_row][new_phys_col]->virt_col;
    }
 
-   /* invalidate the cursor for now; we'll set it the the correct values below */
+   /* invalidate the cursor for now; we'll fix it back up below */
    table->current_cursor_phys_row = -1;
    table->current_cursor_phys_col = -1;
    table->current_cursor_virt_row = -1;
