@@ -312,6 +312,7 @@ static int inputBoxCB(AB_BANKING *ab,
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
   g_assert(maxLen > minsize);
+  data->msgBoxError = flags & AB_BANKING_MSG_FLAGS_TYPE_ERROR;
 
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
@@ -391,6 +392,7 @@ static int getTanCB(AB_BANKING *ab,
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
   g_assert(maxLen > minsize);
+  data->msgBoxError = 0;
 
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
@@ -500,6 +502,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
+  data->msgBoxError = flags & AB_BANKING_MSG_FLAGS_TYPE_ERROR;
   
   text = gnc_hbci_utf8ToLatin1(data, utf8text);
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
