@@ -1,7 +1,7 @@
 /********************************************************************\
- * dialog-account-picker.c -- window for picking a Gnucash account  *
- *                           (GnuCash)                              *
- * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * dialog-account-picker.c -- window for picking a Gnucash account  * 
+ * from the QIF importer.                                           *
+ * Copyright (C) 2000-2001 Bill Gribble <grib@billgribble.com>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,243 +25,246 @@
 
 #include <gnome.h>
 #include <stdio.h>
-
-#include "dialog-account-picker.h"
-
 #include <guile/gh.h>
 
-#include "FileDialog.h"
-#include "Group.h"
-#include "Account.h"
+#include "dialog-account-picker.h"
+#include "druid-qif-import.h"
 
+#include "gnc-ui-util.h"
 #include "dialog-utils.h"
 #include "query-user.h"
 
+struct _accountpickerdialog {
+  GtkWidget       * dialog;
+  GtkWidget       * treeview;
+  QIFImportWindow * qif_wind;
+  SCM             map_entry;  
+  gchar           * selected_name;
+};
 
 static void
-build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
-  GList        * accts;
-  GList        * node;
-  AccountGroup * children;
-  GtkWidget    * tree_item;
-  GtkWidget    * sub_tree;
+row_data_destroy_cb(gpointer data) {
+  g_free(data);
+}
+
+static void
+acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
+                    char * base_name) {
+  char         * acctinfo[2];
+  char         * acctname;
+  char         sep[2] = " ";
+  GtkCTreeNode * node; 
+  gboolean     leafnode;
+  SCM          current;
   
-  accts = xaccGroupGetSubAccounts(group);
+  sep[0] = gnc_get_account_separator();
 
-  for (node = accts; node; node = node->next) {
-    Account *account = node->data;
+  while(!gh_null_p(accts)) {
+    current = gh_car(accts);
 
-    if(group == xaccAccountGetParent(account)) {
-      tree_item = gtk_tree_item_new_with_label(xaccAccountGetName(account));
-
-      gtk_object_set_user_data(GTK_OBJECT(tree_item), account);
-
-      gtk_tree_append(GTK_TREE(tree), tree_item);
-      children = xaccAccountGetChildren(account);
-
-      if(children && (xaccGroupGetNumAccounts(children) > 0)) {
-        sub_tree = gtk_tree_new();
-        gtk_signal_connect(GTK_OBJECT(sub_tree), "select_child",
-                           GTK_SIGNAL_FUNC(gnc_ui_account_picker_select_cb),
-                           picker);        
-        build_acct_tree(children, sub_tree, picker);
-        gtk_tree_item_set_subtree(GTK_TREE_ITEM(tree_item),
-                                  sub_tree);
-      }
-      gtk_widget_show(tree_item);
+    if(gh_null_p(current)) {
+      printf(" ** BUG in acct tree .. grib fix me! (everybody else ignore)\n");
+      accts = gh_cdr(accts);
+      continue;
     }
-  }
 
-  g_list_free (accts);
+    acctinfo[0] = gh_scm2newstr(gh_car(current), NULL);
+    if(gh_cadr(current) == SCM_BOOL_T) {
+      acctinfo[1] = "*";
+    }
+    else {
+      acctinfo[1] = " ";
+    }
+    
+    if(!gh_null_p(gh_caddr(current))) {
+      leafnode = FALSE;
+    }
+    else {
+      leafnode = TRUE;
+    }
+    
+    node = gtk_ctree_insert_node(tree, parent, NULL, 
+                                 acctinfo, 2,
+                                 NULL, NULL, NULL, NULL,
+                                 leafnode, TRUE);
+
+    /* set some row data */ 
+    if(base_name && (strlen(base_name) > 0)) {
+      acctname =  g_strjoin(sep, base_name, acctinfo[0], NULL);
+    }
+    else {
+      acctname = g_strdup(acctinfo[0]);
+    }
+    gtk_ctree_node_set_row_data_full(tree, node,
+                                     acctname,
+                                     row_data_destroy_cb);
+    if(!leafnode) {
+      acct_tree_add_accts(gh_caddr(current), tree, node, acctname);
+    }
+    
+    accts = gh_cdr(accts);      
+  }
 }
 
 static gint
-close_cb (GnomeDialog *dialog, gpointer data)
-{
-  gtk_main_quit ();
-
-  return FALSE;
+test_str_cmp(gconstpointer a, gconstpointer b) {
+  return strcmp(a, b);
 }
 
-/****************************************************************\
- * accountPickerBox
- * select an account from the ones that the engine knows about. 
- * this is sort of like fileBox... it returns a string for the 
- * account name or NULL on cancel.  It's modal.
-\****************************************************************/
+static void
+build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
+  SCM  get_accts = gh_eval_str("qif-import:get-all-accts");
+  SCM  acct_tree = gh_call1(get_accts, 
+                            gnc_ui_qif_import_druid_get_mappings(import));
+  GtkCTreeNode * new_sel;
+
+  gtk_clist_clear(GTK_CLIST(picker->treeview));
+  acct_tree_add_accts(acct_tree, GTK_CTREE(picker->treeview), NULL, NULL);
+  
+  if(picker->selected_name) {
+    new_sel =
+      gtk_ctree_find_by_row_data_custom(GTK_CTREE(picker->treeview),
+                                        NULL,
+                                        picker->selected_name,
+                                        &test_str_cmp);
+    
+    gtk_ctree_select(GTK_CTREE(picker->treeview), new_sel);
+  }
+}
+
+static void
+new_child_string_cb(char * string, gpointer data) {
+  if(string) {
+    strncpy(data, string, 250);
+  }
+  else {
+    *(char *)data = 0;
+  }
+}
+
+void
+gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) {
+  QIFAccountPickerDialog * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data),
+                        "account_picker_struct");
+  SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!");
+  char name[251] = "";
+  char sep[2] = " ";
+  int  retval    = -1;
+  char * fullname = NULL;
+
+  GtkWidget * dlg = gnome_request_dialog(FALSE, 
+                                         _("Enter a name for the account"), 
+                                         "", 250,
+                                         &new_child_string_cb, &name[0],
+                                         NULL);
+  retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
+  sep[0] = gnc_get_account_separator();
+
+  /* retval is 0 if the 'ok' button was clicked */
+  if(retval == 0) {
+    if(wind->selected_name && (strlen(wind->selected_name) > 0)) {
+      fullname = g_strjoin(sep, wind->selected_name, name, NULL);
+    }
+    else {
+      fullname = g_strdup(name);
+    }
+    wind->selected_name = g_strdup(fullname);
+    gh_call2(name_setter, wind->map_entry, gh_str02scm(fullname));
+    g_free(fullname);
+  }
+
+  build_acct_tree(wind, wind->qif_wind);
+
+}
+
+static void
+gnc_ui_qif_account_picker_select_cb(GtkCTree   * tree,
+                                    GtkCTreeNode  * node,
+                                    gint column,
+                                    gpointer  user_data) {
+  QIFAccountPickerDialog * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data),
+                        "account_picker_struct");
+  SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!");
+
+  g_free(wind->selected_name);
+  wind->selected_name = 
+    g_strdup(gtk_ctree_node_get_row_data(tree, node));
+
+  gh_call2(name_setter, wind->map_entry, gh_str02scm(wind->selected_name));
+}
+
+
+static void
+gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
+                                      GtkCTreeNode  * node,
+                                      gint column,
+                                      gpointer  user_data) {
+  QIFAccountPickerDialog * wind = 
+    gtk_object_get_data(GTK_OBJECT(user_data),
+                        "account_picker_struct");
+  g_free(wind->selected_name);
+  wind->selected_name = NULL;
+}
+
+/****************************************************************
+ * accountPickerBox 
+ * select an account from the ones that the engine knows about, plus
+ * the ones that will be created newly by the QIF import.  this is
+ * sort of like fileBox... it returns a string for the account name or
+ * NULL on cancel.  It's modal.
+ ****************************************************************/
 
 SCM
-accountPickerBox(char * initial_selection, int initial_type) {  
-
+qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry) {  
   QIFAccountPickerDialog * wind;
-
-  AccountGroup * topgroup; 
-  Account      * selected;
-  GtkWidget    * treeitem  = gtk_tree_item_new_with_label(_("All Accounts"));
-  GtkWidget    * subtree   = gtk_tree_new();
-  SCM          infolist;
-
+  SCM save_entry   = gh_eval_str("qif-map-entry:clone");
+  SCM init_pick    = gh_eval_str("qif-map-entry:gnc-name");
+  SCM saved_entry  = gh_call1(save_entry, map_entry);
+  int retval = -1;
+  char * scmname;
   wind = g_new0(QIFAccountPickerDialog, 1);
 
   wind->dialog     = create_QIF_Import_Account_Picker();
   wind->treeview   = 
     gtk_object_get_data(GTK_OBJECT(wind->dialog), "account_tree");
-  wind->acct_entry = 
-    gtk_object_get_data(GTK_OBJECT(wind->dialog), "acct_entry");
-  wind->descript_entry  = 
-    gtk_object_get_data(GTK_OBJECT(wind->dialog), "acct_description_entry");
-  wind->type_picker = 
-    gtk_object_get_data(GTK_OBJECT(wind->dialog), "acct_type_picker");
+  wind->qif_wind   = qif_wind;
 
-  gtk_object_set_data(GTK_OBJECT(wind->dialog), "account-picker-dialog",
+  wind->map_entry  = map_entry;
+  
+  scmname = gh_scm2newstr(gh_call1(init_pick, map_entry), NULL);
+  wind->selected_name = g_strdup(scmname);
+  free(scmname);
+
+  scm_protect_object(wind->map_entry);
+
+  gtk_object_set_data(GTK_OBJECT(wind->dialog), "account_picker_struct",
                       wind);
 
-  gtk_signal_connect(GTK_OBJECT(subtree), "select_child",
-                     GTK_SIGNAL_FUNC(gnc_ui_account_picker_select_cb),
+  gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_select_row",
+                     GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_select_cb),
                      wind->dialog);
 
-  gtk_signal_connect (GTK_OBJECT (wind->dialog), "close",
-                      GTK_SIGNAL_FUNC (close_cb), NULL);
+  gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_unselect_row",
+                     GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_unselect_cb),
+                     wind->dialog);
 
-  /* do some setup */
-  topgroup = gncGetCurrentGroup();
-  gtk_tree_append(GTK_TREE(wind->treeview), treeitem);
-  gtk_widget_show(treeitem);
-
-  build_acct_tree(topgroup, subtree, wind->dialog);
-  gtk_tree_item_set_subtree(GTK_TREE_ITEM(treeitem), subtree);
-
-  gtk_tree_set_view_lines(GTK_TREE(wind->treeview), TRUE);
-  gtk_tree_item_expand(GTK_TREE_ITEM(treeitem));
-
-  gnc_option_menu_init(wind->type_picker);
-
-  if(initial_selection) {
-    selected = xaccGetAccountFromFullName(topgroup, initial_selection, ':');
-    gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), initial_selection);
-
-    if(selected) {
-      if(xaccAccountGetDescription(selected)) {
-        gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
-                           xaccAccountGetDescription(selected));
-      }
-      gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
-                                  xaccAccountGetType(selected));
-      infolist = SCM_LIST3(gh_str02scm(initial_selection),
-                           gh_int2scm(xaccAccountGetType(selected)),
-                           gh_str02scm(xaccAccountGetDescription(selected)));
-    }
-    else {
-      gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), "");
-      gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
-                                  initial_type);
-      infolist = SCM_LIST3(gh_str02scm(initial_selection),
-                           gh_int2scm(initial_type),
-                           gh_str02scm(""));
-    }
-
-    scm_protect_object(infolist);
-    wind->scm_acct_info = infolist;
-  }
-
-  /* make sure the window is modal, then wait on it */
-  gtk_window_set_modal(GTK_WINDOW(wind->dialog), TRUE);
-  gtk_widget_show(GTK_WIDGET(wind->treeview));
-  gtk_widget_show(GTK_WIDGET(wind->dialog));
-  gtk_main();
-
-  infolist = wind->scm_acct_info;
-
-  /* destroy the window */
-  scm_unprotect_object(wind->scm_acct_info);
+  /* update the tree display with all the existing accounts plus all
+   * the ones the QIF importer thinks it will be creating.  this will
+   * also select the map_entry line. */
+  build_acct_tree(wind, qif_wind);
+  
+  retval = gnome_dialog_run_and_close(GNOME_DIALOG(wind->dialog));  
+  
+  scm_unprotect_object(wind->map_entry);
+  g_free(wind->selected_name);
   g_free(wind);
 
-  return infolist;
-}
-
-void
-gnc_ui_account_picker_select_cb(GtkTree   * tree,
-                                GtkWidget * widget,
-                                gpointer  user_data) {
-  QIFAccountPickerDialog * wind;
-  Account      * gnc_acct;
-  const char   * description;
-  char         * name;
-  int          acct_type;
-  SCM          infolist;
-
-  wind = gtk_object_get_data(GTK_OBJECT(user_data),
-                             "account-picker-dialog");
-
-  gnc_acct = gtk_object_get_user_data(GTK_OBJECT(widget));
-
-  name = xaccAccountGetFullName (gnc_acct, ':');
-  if (name == NULL)
-    name = g_strdup ("");
-
-  gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), name);
-
-  description = xaccAccountGetDescription(gnc_acct);
-  if (description == NULL)
-    description = "";
-
-  acct_type = xaccAccountGetType(gnc_acct);
-
-  gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
-                     description);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
-                              acct_type);
-  infolist = SCM_LIST3(gh_str02scm(name),
-                       gh_int2scm(acct_type),
-                       gh_str02scm((char *) description));
-  scm_protect_object(infolist);
-
-  scm_unprotect_object(wind->scm_acct_info);
-  wind->scm_acct_info = infolist;
-
-  g_free (name);
-}
-
-void
-gnc_ui_account_picker_ok_cb(GtkButton *button,
-                            gpointer   user_data) {
-  QIFAccountPickerDialog * wind;
-
-  char         * selected_acct;
-  char         * description;
-  int          acct_type;
-  SCM          infolist;
-
-  wind = gtk_object_get_data(GTK_OBJECT(user_data),
-                             "account-picker-dialog");
-
-  selected_acct = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
-  description = gtk_entry_get_text(GTK_ENTRY(wind->descript_entry));
-
-  acct_type = gnc_option_menu_get_active(wind->type_picker);
-  gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
-                     description);
-  infolist = SCM_LIST3(gh_str02scm(selected_acct),
-                       gh_int2scm(acct_type),
-                       gh_str02scm(description));
-  scm_protect_object(infolist);
-
-  scm_unprotect_object(wind->scm_acct_info);
-  wind->scm_acct_info = infolist;
-
-  gnome_dialog_close (GNOME_DIALOG (wind->dialog));
-}
-
-void
-gnc_ui_account_picker_cancel_cb(GtkButton * button,
-                                gpointer    user_data) {
-  QIFAccountPickerDialog * wind = 
-    gtk_object_get_data(GTK_OBJECT(user_data), "account-picker-dialog");
-
-  scm_unprotect_object(wind->scm_acct_info);
-
-  wind->scm_acct_info = SCM_BOOL_F;
-  scm_protect_object(wind->scm_acct_info);
-
-  gnome_dialog_close (GNOME_DIALOG (wind->dialog));
+  if(retval == 0) {
+    return map_entry;
+  }
+  else {
+    return saved_entry;
+  }
 }

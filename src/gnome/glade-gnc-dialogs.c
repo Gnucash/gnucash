@@ -24,27 +24,19 @@ create_QIF_Import_Account_Picker (void)
   GtkWidget *vbox1;
   GtkWidget *vbox2;
   GtkWidget *frame1;
-  GtkWidget *scrolledwindow1;
-  GtkWidget *viewport1;
+  GtkWidget *scrolledwindow24;
   GtkWidget *account_tree;
-  GtkWidget *hbox5;
-  GtkWidget *vbox4;
-  GtkWidget *label1;
-  GtkWidget *label2;
-  GtkWidget *label3;
-  GtkWidget *vbox5;
-  GtkWidget *acct_entry;
-  GtkWidget *acct_description_entry;
-  GtkWidget *acct_type_picker;
-  GtkWidget *acct_type_picker_menu;
-  GtkWidget *glade_menuitem;
+  GtkWidget *label847711;
+  GtkWidget *label847712;
+  GtkWidget *button78;
   GtkWidget *hbuttonbox1;
   GtkWidget *button1;
   GtkWidget *button2;
 
   QIF_Import_Account_Picker = gnome_dialog_new (_("Select Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "QIF_Import_Account_Picker", QIF_Import_Account_Picker);
-  gtk_window_set_policy (GTK_WINDOW (QIF_Import_Account_Picker), TRUE, TRUE, FALSE);
+  gtk_window_set_default_size (GTK_WINDOW (QIF_Import_Account_Picker), 300, 400);
+  gtk_window_set_policy (GTK_WINDOW (QIF_Import_Account_Picker), TRUE, TRUE, TRUE);
 
   vbox1 = GNOME_DIALOG (QIF_Import_Account_Picker)->vbox;
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "vbox1", vbox1);
@@ -57,139 +49,51 @@ create_QIF_Import_Account_Picker (void)
   gtk_widget_show (vbox2);
   gtk_box_pack_start (GTK_BOX (vbox1), vbox2, TRUE, TRUE, 0);
 
-  frame1 = gtk_frame_new (_("Accounts"));
+  frame1 = gtk_frame_new (_("Select or add a Gnucash account"));
   gtk_widget_ref (frame1);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "frame1", frame1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame1);
   gtk_box_pack_start (GTK_BOX (vbox2), frame1, TRUE, TRUE, 0);
 
-  scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_ref (scrolledwindow1);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "scrolledwindow1", scrolledwindow1,
+  scrolledwindow24 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow24);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "scrolledwindow24", scrolledwindow24,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (scrolledwindow1);
-  gtk_container_add (GTK_CONTAINER (frame1), scrolledwindow1);
-  gtk_widget_set_usize (scrolledwindow1, 250, 200);
+  gtk_widget_show (scrolledwindow24);
+  gtk_container_add (GTK_CONTAINER (frame1), scrolledwindow24);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow24), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-  viewport1 = gtk_viewport_new (NULL, NULL);
-  gtk_widget_ref (viewport1);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "viewport1", viewport1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (viewport1);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow1), viewport1);
-
-  account_tree = gtk_tree_new ();
+  account_tree = gtk_ctree_new (2, 0);
   gtk_widget_ref (account_tree);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "account_tree", account_tree,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (account_tree);
-  gtk_container_add (GTK_CONTAINER (viewport1), account_tree);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow24), account_tree);
+  gtk_clist_set_column_width (GTK_CLIST (account_tree), 0, 214);
+  gtk_clist_set_column_width (GTK_CLIST (account_tree), 1, 48);
+  gtk_clist_column_titles_show (GTK_CLIST (account_tree));
 
-  hbox5 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox5);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "hbox5", hbox5,
+  label847711 = gtk_label_new (_("Account"));
+  gtk_widget_ref (label847711);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "label847711", label847711,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox5);
-  gtk_box_pack_start (GTK_BOX (vbox1), hbox5, FALSE, FALSE, 0);
+  gtk_widget_show (label847711);
+  gtk_clist_set_column_widget (GTK_CLIST (account_tree), 0, label847711);
 
-  vbox4 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox4);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "vbox4", vbox4,
+  label847712 = gtk_label_new (_("New?"));
+  gtk_widget_ref (label847712);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "label847712", label847712,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox4);
-  gtk_box_pack_start (GTK_BOX (hbox5), vbox4, TRUE, TRUE, 5);
+  gtk_widget_show (label847712);
+  gtk_clist_set_column_widget (GTK_CLIST (account_tree), 1, label847712);
 
-  label1 = gtk_label_new (_("Selected account:"));
-  gtk_widget_ref (label1);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "label1", label1,
+  button78 = gtk_button_new_with_label (_("New Account (child of selected) ..."));
+  gtk_widget_ref (button78);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "button78", button78,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label1);
-  gtk_box_pack_start (GTK_BOX (vbox4), label1, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label1), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (label1), 1, 0.5);
-
-  label2 = gtk_label_new (_("Description:"));
-  gtk_widget_ref (label2);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "label2", label2,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label2);
-  gtk_box_pack_start (GTK_BOX (vbox4), label2, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label2), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (label2), 1, 0.5);
-
-  label3 = gtk_label_new (_("Account type:"));
-  gtk_widget_ref (label3);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "label3", label3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label3);
-  gtk_box_pack_start (GTK_BOX (vbox4), label3, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label3), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (label3), 1, 0.5);
-
-  vbox5 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox5);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "vbox5", vbox5,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox5);
-  gtk_box_pack_start (GTK_BOX (hbox5), vbox5, TRUE, TRUE, 0);
-
-  acct_entry = gtk_entry_new ();
-  gtk_widget_ref (acct_entry);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "acct_entry", acct_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (acct_entry);
-  gtk_box_pack_start (GTK_BOX (vbox5), acct_entry, FALSE, FALSE, 0);
-
-  acct_description_entry = gtk_entry_new ();
-  gtk_widget_ref (acct_description_entry);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "acct_description_entry", acct_description_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (acct_description_entry);
-  gtk_box_pack_start (GTK_BOX (vbox5), acct_description_entry, FALSE, FALSE, 0);
-
-  acct_type_picker = gtk_option_menu_new ();
-  gtk_widget_ref (acct_type_picker);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Account_Picker), "acct_type_picker", acct_type_picker,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (acct_type_picker);
-  gtk_box_pack_start (GTK_BOX (vbox5), acct_type_picker, FALSE, FALSE, 0);
-  gtk_widget_set_usize (acct_type_picker, 150, 30);
-  acct_type_picker_menu = gtk_menu_new ();
-  glade_menuitem = gtk_menu_item_new_with_label (_("Bank"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Cash"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Asset"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Credit"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Liability"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Stock"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Mutual"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Currency"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Income"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Expense"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  glade_menuitem = gtk_menu_item_new_with_label (_("Equity"));
-  gtk_widget_show (glade_menuitem);
-  gtk_menu_append (GTK_MENU (acct_type_picker_menu), glade_menuitem);
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (acct_type_picker), acct_type_picker_menu);
+  gtk_widget_show (button78);
+  gtk_box_pack_start (GTK_BOX (vbox1), button78, FALSE, FALSE, 0);
 
   hbuttonbox1 = GNOME_DIALOG (QIF_Import_Account_Picker)->action_area;
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "hbuttonbox1", hbuttonbox1);
@@ -213,14 +117,8 @@ create_QIF_Import_Account_Picker (void)
   gtk_widget_show (button2);
   GTK_WIDGET_SET_FLAGS (button2, GTK_CAN_DEFAULT);
 
-  gtk_signal_connect (GTK_OBJECT (account_tree), "select_child",
-                      GTK_SIGNAL_FUNC (gnc_ui_account_picker_select_cb),
-                      QIF_Import_Account_Picker);
-  gtk_signal_connect (GTK_OBJECT (button1), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_account_picker_ok_cb),
-                      QIF_Import_Account_Picker);
-  gtk_signal_connect (GTK_OBJECT (button2), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_account_picker_cancel_cb),
+  gtk_signal_connect (GTK_OBJECT (button78), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb),
                       QIF_Import_Account_Picker);
 
   return QIF_Import_Account_Picker;
@@ -3939,6 +3837,23 @@ create_QIF_Import_Druid (void)
   GtkWidget *label838;
   GtkWidget *label839;
   GtkWidget *label829;
+  GtkWidget *memo_doc_page;
+  GdkColor memo_doc_page_bg_color = { 0, 39321, 49087, 39578 };
+  GdkColor memo_doc_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor memo_doc_page_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox39;
+  GtkWidget *label847707;
+  GtkWidget *memo_match_page;
+  GdkColor memo_match_page_bg_color = { 0, 39321, 49087, 39578 };
+  GdkColor memo_match_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor memo_match_page_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *druid_vbox40;
+  GtkWidget *label847713;
+  GtkWidget *scrolledwindow25;
+  GtkWidget *memo_page_list;
+  GtkWidget *label847708;
+  GtkWidget *label847709;
+  GtkWidget *label847710;
   GtkWidget *currency_page;
   GdkColor currency_page_bg_color = { 0, 39321, 49087, 39578 };
   GdkColor currency_page_logo_bg_color = { 0, 65535, 65535, 65535 };
@@ -4239,7 +4154,7 @@ create_QIF_Import_Druid (void)
   gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (account_doc_page), &account_doc_page_bg_color);
   gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (account_doc_page), &account_doc_page_logo_bg_color);
   gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (account_doc_page), &account_doc_page_title_color);
-  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (account_doc_page), _("Your accounts and stock holdings"));
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (account_doc_page), _("Accounts and stock holdings"));
 
   druid_vbox13 = GNOME_DRUID_PAGE_STANDARD (account_doc_page)->vbox;
   gtk_widget_ref (druid_vbox13);
@@ -4407,6 +4322,95 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label829);
   gtk_box_pack_start (GTK_BOX (druid_vbox4), label829, FALSE, FALSE, 3);
+
+  memo_doc_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (memo_doc_page);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "memo_doc_page", memo_doc_page,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (memo_doc_page);
+  gnome_druid_append_page (GNOME_DRUID (qif_import_druid), GNOME_DRUID_PAGE (memo_doc_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (memo_doc_page), &memo_doc_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (memo_doc_page), &memo_doc_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (memo_doc_page), &memo_doc_page_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (memo_doc_page), _("Payees and memos"));
+
+  druid_vbox39 = GNOME_DRUID_PAGE_STANDARD (memo_doc_page)->vbox;
+  gtk_widget_ref (druid_vbox39);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox39", druid_vbox39,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox39);
+
+  label847707 = gtk_label_new (_("QIF files dowloaded from banks and other financial institutions may not have\ninformation about Accounts and Categories which would allow them to be\ncorrectly assigned to Gnucash accounts.  \n\nIn the following page, you will see the text that appears in the Payee and \nMemo fields of transactions with no QIF Account or Category.   By default\nthese transactions are assigned to the 'Unspecified' account in Gnucash. \nIf you select a different account, it will be remembered for future QIF \nfiles. "));
+  gtk_widget_ref (label847707);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label847707", label847707,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847707);
+  gtk_box_pack_start (GTK_BOX (druid_vbox39), label847707, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label847707), GTK_JUSTIFY_LEFT);
+
+  memo_match_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (memo_match_page);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "memo_match_page", memo_match_page,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (memo_match_page);
+  gnome_druid_append_page (GNOME_DRUID (qif_import_druid), GNOME_DRUID_PAGE (memo_match_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (memo_match_page), &memo_match_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (memo_match_page), &memo_match_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (memo_match_page), &memo_match_page_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (memo_match_page), _("Match payees/memos to Gnucash accounts"));
+
+  druid_vbox40 = GNOME_DRUID_PAGE_STANDARD (memo_match_page)->vbox;
+  gtk_widget_ref (druid_vbox40);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "druid_vbox40", druid_vbox40,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (druid_vbox40);
+
+  label847713 = gtk_label_new (_("This doesn't actually affect the QIF import yet. \nGive it a couple more days :)"));
+  gtk_widget_ref (label847713);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label847713", label847713,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847713);
+  gtk_box_pack_start (GTK_BOX (druid_vbox40), label847713, FALSE, FALSE, 0);
+
+  scrolledwindow25 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow25);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "scrolledwindow25", scrolledwindow25,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow25);
+  gtk_box_pack_start (GTK_BOX (druid_vbox40), scrolledwindow25, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow25), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  memo_page_list = gtk_clist_new (3);
+  gtk_widget_ref (memo_page_list);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "memo_page_list", memo_page_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (memo_page_list);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow25), memo_page_list);
+  gtk_clist_set_column_width (GTK_CLIST (memo_page_list), 0, 285);
+  gtk_clist_set_column_width (GTK_CLIST (memo_page_list), 1, 228);
+  gtk_clist_set_column_width (GTK_CLIST (memo_page_list), 2, 72);
+  gtk_clist_column_titles_show (GTK_CLIST (memo_page_list));
+
+  label847708 = gtk_label_new (_("QIF payee/memo"));
+  gtk_widget_ref (label847708);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label847708", label847708,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847708);
+  gtk_clist_set_column_widget (GTK_CLIST (memo_page_list), 0, label847708);
+
+  label847709 = gtk_label_new (_("Gnucash account name"));
+  gtk_widget_ref (label847709);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label847709", label847709,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847709);
+  gtk_clist_set_column_widget (GTK_CLIST (memo_page_list), 1, label847709);
+
+  label847710 = gtk_label_new (_("New?"));
+  gtk_widget_ref (label847710);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label847710", label847710,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847710);
+  gtk_clist_set_column_widget (GTK_CLIST (memo_page_list), 2, label847710);
 
   currency_page = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_ref (currency_page);
@@ -4717,13 +4721,31 @@ create_QIF_Import_Druid (void)
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_categories_prepare_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (category_match_page), "next",
-                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_categories_next_cb),
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_next_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (category_match_page), "back",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_back_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (category_page_list), "select_row",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_category_line_select_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (memo_doc_page), "next",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_next_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (memo_doc_page), "back",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_back_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (memo_match_page), "next",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_memo_next_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (memo_match_page), "back",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_back_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (memo_match_page), "prepare",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_memo_prepare_cb),
+                      QIF_Import_Druid);
+  gtk_signal_connect (GTK_OBJECT (memo_page_list), "select_row",
+                      GTK_SIGNAL_FUNC (gnc_ui_qif_import_memo_line_select_cb),
                       QIF_Import_Druid);
   gtk_signal_connect (GTK_OBJECT (currency_page), "next",
                       GTK_SIGNAL_FUNC (gnc_ui_qif_import_currency_next_cb),

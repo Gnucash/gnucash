@@ -9,8 +9,6 @@
 
 (gnc:support "qif-import/qif-to-gnc.scm")
 
-(define gnc:*default-denom* 100000)
-
 (define (gnc:qif-fuzzy= num-1 num-2)
   (< (abs (- num-1 num-2)) .00000001))
 
@@ -50,8 +48,9 @@
     (if same-gnc-account 
         (if (and (gnc:commodity-equiv? 
                   currency (gnc:account-get-currency same-gnc-account))
-                 (gnc:commodity-equiv? 
-                  security (gnc:account-get-security same-gnc-account))
+                 (or (eq? (gnc:account-get-security same-gnc-account) #f)
+                     (gnc:commodity-equiv? 
+                      security (gnc:account-get-security same-gnc-account)))
                  (list? allowed-types)
                  (memq (gnc:account-get-type same-gnc-account)
                        allowed-types))
@@ -168,173 +167,196 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:qif-to-gnc qif-files-list 
-                               qif-acct-map qif-cat-map stock-map 
+                               qif-acct-map qif-cat-map 
+                               qif-memo-map stock-map 
                                default-currency-name)
-  (false-if-exception 
-   (let* ((old-group (gnc:get-current-group))
-          (new-group (gnc:malloc-account-group))
-          (gnc-acct-hash (make-hash-table 20))
-          (separator (string-ref (gnc:account-separator-char) 0))
-          (default-currency 
-            (gnc:commodity-table-find-full 
-             (gnc:engine-commodities) 
-             GNC_COMMODITY_NS_ISO default-currency-name))
-          (sorted-accounts-list '())
-          (markable-xtns '())
-          (sorted-qif-files-list 
-           (sort qif-files-list 
-                 (lambda (a b)
-                   (> (length (qif-file:xtns a)) 
-                      (length (qif-file:xtns b))))))
-          (progress-dialog #f)
-          (work-to-do 0)
-          (work-done 0))
-     
-     ;; first, build a local account tree that mirrors the gnucash
-     ;; accounts in the mapping data.  we need to iterate over the
-     ;; cat-map and the acct-map to build the list
-     (for-each 
-      (lambda (bin)
-        (for-each 
-         (lambda (hashpair)
-           (let* ((acctinfo (cdr hashpair)))
-             (if (qif-map-entry:display? acctinfo)
-                 (set! sorted-accounts-list 
-                       (cons acctinfo sorted-accounts-list)))))
-         bin))
-      (vector->list qif-acct-map))
-     
-     (for-each 
-      (lambda (bin)
-        (for-each 
-         (lambda (hashpair)
-           (let* ((acctinfo (cdr hashpair)))
-             (if (qif-map-entry:display? acctinfo)
-                 (set! sorted-accounts-list 
-                       (cons acctinfo sorted-accounts-list)))))
-         bin))
-      (vector->list qif-cat-map))
-     
-
-     ;; sort the account info on the depth of the account path.  if a
-     ;; short part is explicitly mentioned, make sure it gets created
-     ;; before the deeper path, which will create the parent accounts
-     ;; without the information about their type.
-     (set! sorted-accounts-list 
-           (sort sorted-accounts-list 
-                 (lambda (a b)
-                   (let ((a-depth 
-                          (length 
-                           (string-split-on (qif-map-entry:gnc-name a) 
-                                            separator)))
-                         (b-depth 
-                          (length 
-                           (string-split-on (qif-map-entry:gnc-name b) 
-                                            separator))))
-                     (< a-depth b-depth)))))
-     
-     ;; make all the accounts 
-     (for-each 
-      (lambda (acctinfo)
-        (let* ((security 
-                (and stock-map 
-                     (hash-ref stock-map 
-                               (qif-import:get-account-name 
-                                (qif-map-entry:qif-name acctinfo)))))
-               (ok-types (qif-map-entry:allowed-types acctinfo))
-               (equity? (memq GNC-EQUITY-TYPE ok-types)))
-          
-          (cond ((and equity? security)  ;; a "retained holdings" acct
-                 (qif-import:find-or-make-acct acctinfo 
-                                               security security
-                                               gnc-acct-hash 
-                                               old-group new-group))
-                (security 
-                 (qif-import:find-or-make-acct 
-                  acctinfo default-currency security
-                  gnc-acct-hash old-group new-group))
-                (#t 
-                 (qif-import:find-or-make-acct 
-                  acctinfo default-currency default-currency
-                  gnc-acct-hash old-group new-group)))))
-      sorted-accounts-list)
-     
-     ;; before trying to mark transactions, prune down the list of 
-     ;; ones to match. 
-     (for-each 
-      (lambda (qif-file)
-        (for-each 
-         (lambda (xtn)
-           (set! work-to-do (+ 1 work-to-do))
-           (let splitloop ((splits (qif-xtn:splits xtn)))             
-             (if (qif-split:category-is-account? (car splits))
-                 (begin 
-                   (set! markable-xtns (cons xtn markable-xtns))
-                   (set! work-to-do (+ 1 work-to-do)))
-                 (if (not (null? (cdr splits)))
-                     (splitloop (cdr splits))))))
-         (qif-file:xtns qif-file)))
-      qif-files-list)
-     
-     (if (> work-to-do 100)
-         (begin 
-           (set! progress-dialog (gnc:progress-dialog-new #f #f))
-           (gnc:progress-dialog-set-title progress-dialog "Progress")
-           (gnc:progress-dialog-set-heading progress-dialog
-                                            "Importing transactions...")
-           (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
-     
-
-     ;; now run through the markable transactions marking any
-     ;; duplicates.  marked transactions/splits won't get imported.
-     (if (> (length markable-xtns) 1)
-         (let xloop ((xtn (car markable-xtns))
-                     (rest (cdr markable-xtns)))
-           (set! work-done (+ 1 work-done))
-           (if progress-dialog 
-               (begin 
-                 (gnc:progress-dialog-set-value 
-                  progress-dialog (* 100 (/ work-done work-to-do)))
-                 (gnc:progress-dialog-update progress-dialog))) 
-           (if (not (qif-xtn:mark xtn))
-               (qif-import:mark-matching-xtns xtn rest))
-           (if (not (null? (cdr rest)))
-               (xloop (car rest) (cdr rest)))))
-     
-     ;; iterate over files. Going in the sort order by number of 
-     ;; transactions should give us a small speed advantage.
-     (for-each 
-      (lambda (qif-file)
-        (for-each 
-         (lambda (xtn)
-           (set! work-done (+ 1 work-done))
-           (if progress-dialog 
-               (begin 
-                 (gnc:progress-dialog-set-value 
-                  progress-dialog (* 100 (/ work-done work-to-do)))
-                 (gnc:progress-dialog-update progress-dialog))) 
-           (if (not (qif-xtn:mark xtn))
-               (begin 
-                 ;; create and fill in the GNC transaction
-                 (let ((gnc-xtn (gnc:transaction-create)))
-                   (gnc:transaction-begin-edit gnc-xtn)
-                   
-                   ;; build the transaction
-                   (qif-import:qif-xtn-to-gnc-xtn 
-                    xtn qif-file gnc-xtn gnc-acct-hash 
-                    qif-acct-map qif-cat-map)
-                   
-                   ;; rebalance and commit everything
-                   (gnc:transaction-commit-edit gnc-xtn)))))
-         (qif-file:xtns qif-file)))
-      sorted-qif-files-list)
-     
-     ;; get rid of the progress dialog 
-     (if progress-dialog
-         (gnc:progress-dialog-destroy progress-dialog))
-     
-     new-group)))
+  (define (dumper key . args)
+    (let ((stack (make-stack #t dumper)))
+      (display-backtrace stack (current-error-port))
+      (apply display-error stack (current-error-port) args)
+      (throw 'ignore)))
   
+  (catch 
+   'ignore
+   (lambda () 
+     (lazy-catch #t 
+                 (lambda () (qif-import:qif-to-gnc-unsafe 
+                             qif-files-list 
+                             qif-acct-map qif-cat-map
+                             qif-memo-map stock-map
+                             default-currency-name))
+                 dumper))
+   (lambda (key . args)
+     #f)))
+
+(define (qif-import:qif-to-gnc-unsafe qif-files-list 
+                                      qif-acct-map qif-cat-map qif-memo-map
+                                      stock-map 
+                                      default-currency-name)
+  (let* ((old-group (gnc:get-current-group))
+         (new-group (gnc:malloc-account-group))
+         (gnc-acct-hash (make-hash-table 20))
+         (separator (string-ref (gnc:account-separator-char) 0))
+         (default-currency 
+           (gnc:commodity-table-find-full 
+            (gnc:engine-commodities) 
+            GNC_COMMODITY_NS_ISO default-currency-name))
+         (sorted-accounts-list '())
+         (markable-xtns '())
+         (sorted-qif-files-list 
+          (sort qif-files-list 
+                (lambda (a b)
+                  (> (length (qif-file:xtns a)) 
+                     (length (qif-file:xtns b))))))
+         (progress-dialog #f)
+         (work-to-do 0)
+         (work-done 0))
+    
+    ;; first, build a local account tree that mirrors the gnucash
+    ;; accounts in the mapping data.  we need to iterate over the
+    ;; cat-map and the acct-map to build the list
+    (for-each 
+     (lambda (bin)
+       (for-each 
+        (lambda (hashpair)
+          (let* ((acctinfo (cdr hashpair)))
+            (if (qif-map-entry:display? acctinfo)
+                (set! sorted-accounts-list 
+                      (cons acctinfo sorted-accounts-list)))))
+        bin))
+     (vector->list qif-acct-map))
+    
+    (for-each 
+     (lambda (bin)
+       (for-each 
+        (lambda (hashpair)
+          (let* ((acctinfo (cdr hashpair)))
+            (if (qif-map-entry:display? acctinfo)
+                (set! sorted-accounts-list 
+                      (cons acctinfo sorted-accounts-list)))))
+        bin))
+     (vector->list qif-cat-map))
+    
+
+    ;; sort the account info on the depth of the account path.  if a
+    ;; short part is explicitly mentioned, make sure it gets created
+    ;; before the deeper path, which will create the parent accounts
+    ;; without the information about their type.
+    (set! sorted-accounts-list 
+          (sort sorted-accounts-list 
+                (lambda (a b)
+                  (let ((a-depth 
+                         (length 
+                          (string-split-on (qif-map-entry:gnc-name a) 
+                                           separator)))
+                        (b-depth 
+                         (length 
+                          (string-split-on (qif-map-entry:gnc-name b) 
+                                           separator))))
+                    (< a-depth b-depth)))))
+    
+    ;; make all the accounts 
+    (for-each 
+     (lambda (acctinfo)
+       (let* ((security 
+               (and stock-map 
+                    (hash-ref stock-map 
+                              (qif-import:get-account-name 
+                               (qif-map-entry:qif-name acctinfo)))))
+              (ok-types (qif-map-entry:allowed-types acctinfo))
+              (equity? (memq GNC-EQUITY-TYPE ok-types)))
+         
+         (cond ((and equity? security)  ;; a "retained holdings" acct
+                (qif-import:find-or-make-acct acctinfo 
+                                              security security
+                                              gnc-acct-hash 
+                                              old-group new-group))
+               (security 
+                (qif-import:find-or-make-acct 
+                 acctinfo default-currency security
+                 gnc-acct-hash old-group new-group))
+               (#t 
+                (qif-import:find-or-make-acct 
+                 acctinfo default-currency default-currency
+                 gnc-acct-hash old-group new-group)))))
+     sorted-accounts-list)
+    
+    ;; before trying to mark transactions, prune down the list of 
+    ;; ones to match. 
+    (for-each 
+     (lambda (qif-file)
+       (for-each 
+        (lambda (xtn)
+          (set! work-to-do (+ 1 work-to-do))
+          (let splitloop ((splits (qif-xtn:splits xtn)))             
+            (if (qif-split:category-is-account? (car splits))
+                (begin 
+                  (set! markable-xtns (cons xtn markable-xtns))
+                  (set! work-to-do (+ 1 work-to-do)))
+                (if (not (null? (cdr splits)))
+                    (splitloop (cdr splits))))))
+        (qif-file:xtns qif-file)))
+     qif-files-list)
+    
+    (if (> work-to-do 100)
+        (begin 
+          (set! progress-dialog (gnc:progress-dialog-new #f #f))
+          (gnc:progress-dialog-set-title progress-dialog "Progress")
+          (gnc:progress-dialog-set-heading progress-dialog
+                                           "Importing transactions...")
+          (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+    
+
+    ;; now run through the markable transactions marking any
+    ;; duplicates.  marked transactions/splits won't get imported.
+    (if (> (length markable-xtns) 1)
+        (let xloop ((xtn (car markable-xtns))
+                    (rest (cdr markable-xtns)))
+          (set! work-done (+ 1 work-done))
+          (if progress-dialog 
+              (begin 
+                (gnc:progress-dialog-set-value 
+                 progress-dialog (* 100 (/ work-done work-to-do)))
+                (gnc:progress-dialog-update progress-dialog))) 
+          (if (not (qif-xtn:mark xtn))
+              (qif-import:mark-matching-xtns xtn rest))
+          (if (not (null? (cdr rest)))
+              (xloop (car rest) (cdr rest)))))
+    
+    ;; iterate over files. Going in the sort order by number of 
+    ;; transactions should give us a small speed advantage.
+    (for-each 
+     (lambda (qif-file)
+       (for-each 
+        (lambda (xtn)
+          (set! work-done (+ 1 work-done))
+          (if progress-dialog 
+              (begin 
+                (gnc:progress-dialog-set-value 
+                 progress-dialog (* 100 (/ work-done work-to-do)))
+                (gnc:progress-dialog-update progress-dialog))) 
+          (if (not (qif-xtn:mark xtn))
+              (begin 
+                ;; create and fill in the GNC transaction
+                (let ((gnc-xtn (gnc:transaction-create)))
+                  (gnc:transaction-begin-edit gnc-xtn)
+                  
+                  ;; build the transaction
+                  (qif-import:qif-xtn-to-gnc-xtn 
+                   xtn qif-file gnc-xtn gnc-acct-hash 
+                   qif-acct-map qif-cat-map)
+                  
+                  ;; rebalance and commit everything
+                  (gnc:transaction-commit-edit gnc-xtn)))))
+        (qif-file:xtns qif-file)))
+     sorted-qif-files-list)
+    
+    ;; get rid of the progress dialog 
+    (if progress-dialog
+        (gnc:progress-dialog-destroy progress-dialog))
+    
+    new-group))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; qif-import:qif-xtn-to-gnc-xtn
 ;; translate a single transaction to a set of gnucash splits and 
@@ -358,8 +380,9 @@
         (qif-cleared (qif-xtn:cleared qif-xtn))
         (amt-cvt (lambda (n)
                    (if n
-                       (gnc:double-to-gnc-numeric n gnc:*default-denom* 
-                                                  GNC-RND-ROUND)
+                       (gnc:double-to-gnc-numeric 
+                        n GNC-DENOM-AUTO
+                        (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND))
                        (gnc:numeric-zero))))
         (n- (lambda (n) (gnc:numeric-neg n)))
         (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))

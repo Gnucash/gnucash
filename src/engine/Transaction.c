@@ -64,9 +64,7 @@
  */
 int force_double_entry = 0;
 
-/* arbitrary price per share increment FIXME */
-#define PRICE_DENOM 1000000
-
+#define PRICE_SIGFIGS 6
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
@@ -377,7 +375,8 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
   xaccSplitSetSharePriceAndAmount
     (s,
-     double_to_gnc_numeric(price, PRICE_DENOM, GNC_RND_ROUND),
+     double_to_gnc_numeric(price, GNC_DENOM_AUTO, 
+                           GNC_DENOM_SIGFIGS(PRICE_SIGFIGS) | GNC_RND_ROUND),
      double_to_gnc_numeric(amt, get_security_denom(s), GNC_RND_ROUND));
 }
 
@@ -399,7 +398,9 @@ void
 DxaccSplitSetSharePrice (Split *s, double amt) 
 {
   xaccSplitSetSharePrice
-    (s, double_to_gnc_numeric(amt, PRICE_DENOM, GNC_RND_ROUND));
+    (s, double_to_gnc_numeric(amt, GNC_DENOM_AUTO,
+                              GNC_DENOM_SIGFIGS(PRICE_SIGFIGS) |
+                              GNC_RND_ROUND));
 }
 
 void 
@@ -428,7 +429,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
                                 GNC_DENOM_REDUCE);
   }
   else {
-    old_price = gnc_numeric_create(PRICE_DENOM, PRICE_DENOM);
+    old_price = gnc_numeric_create(1, 1);
   }
   
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), 
@@ -465,7 +466,7 @@ DxaccSplitSetValue (Split *s, double damt)
                                 GNC_DENOM_REDUCE);
   }
   else {
-    old_price = gnc_numeric_create(PRICE_DENOM, PRICE_DENOM);
+    old_price = gnc_numeric_create(1, 1);
   }
 
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), 
@@ -2185,11 +2186,13 @@ xaccSplitGetValue (Split * split) {
 gnc_numeric
 xaccSplitGetSharePrice (Split * split) {
   if(!split || gnc_numeric_zero_p(split->damount)) {
-    return gnc_numeric_create(PRICE_DENOM, PRICE_DENOM);
+    return gnc_numeric_create(1, 1);
   }
   return gnc_numeric_div(split->value, 
                          split->damount,
-                         PRICE_DENOM, GNC_RND_ROUND);
+                         GNC_DENOM_AUTO, 
+                         GNC_DENOM_SIGFIGS(PRICE_SIGFIGS) |
+                         GNC_RND_ROUND);
 }
 
 /********************************************************************\

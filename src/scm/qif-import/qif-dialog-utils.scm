@@ -15,46 +15,59 @@
   (string-append brokerage (gnc:account-separator-char) security))
 
 (define (default-dividend-acct brokerage security)
-  (string-append "Dividends" (gnc:account-separator-char) 
+  (string-append (_ "Dividends") (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char) 
                  security))
 
 (define (default-interest-acct brokerage security) 
-  (string-append "Interest" (gnc:account-separator-char) 
+  (string-append (_ "Interest") (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char)  
                  security))
 
 (define (default-capital-return-acct brokerage security) 
-  (string-append "Cap Return" (gnc:account-separator-char) 
+  (string-append (_ "Cap Return") (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char)  
                  security))
 
 (define (default-cglong-acct brokerage security)
-  (string-append "Cap. gain (long)" (gnc:account-separator-char) 
+  (string-append (_ "Cap. gain (long)") (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char) 
                  security))
 
 (define (default-cgmid-acct brokerage security)
-  (string-append "Cap. gain (mid)" (gnc:account-separator-char) 
+  (string-append (_ "Cap. gain (mid)") (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char) 
                  security))
 
 (define (default-cgshort-acct brokerage security)
-  (string-append "Cap. gain (short)" (gnc:account-separator-char) 
+  (string-append (_ "Cap. gain (short)") (gnc:account-separator-char) 
                  brokerage (gnc:account-separator-char) 
                  security))
 
-(define (default-equity-holding security) "Retained Earnings")
+(define (default-equity-holding security) (_ "Retained Earnings"))
 
-(define (default-equity-account) "Retained Earnings")  
+(define (default-equity-account) (_ "Retained Earnings"))  
 
 (define (default-commission-acct brokerage) 
-  (string-append "Commissions" (gnc:account-separator-char) 
+  (string-append (_ "Commissions") (gnc:account-separator-char) 
                  brokerage))
 
 (define (default-margin-interest-acct brokerage) 
-  (string-append "Margin Interest" (gnc:account-separator-char) 
+  (string-append (_ "Margin Interest") (gnc:account-separator-char) 
                  brokerage))
+
+(define (default-unspec-acct)
+  (_ "Unspecified"))
+
+(define (qif-import:gnc-account-exists map-entry acct-list)
+  (let ((retval #f))
+    (for-each 
+     (lambda (acct)
+       (if (string=? (qif-map-entry:gnc-name map-entry)
+                     (car acct))
+           (set! retval #t)))
+     acct-list)
+    retval))
 
 ;; the account-display is a 3-columned list of accounts in the QIF
 ;; import dialog (the "Account" page of the notebook).  Column 1 is
@@ -63,16 +76,20 @@
 ;; translation.  Sorted on # transactions, then alpha.
 
 (define (qif-dialog:make-account-display qif-files acct-hash gnc-acct-info) 
-  ;; first, clear the "display" flags in the acct-hash.  If there's 
-  ;; nothing to show any more, don't. 
+  ;; first, clear the "display" flags in the acct-hash and set up the
+  ;; new-file? flags.  If there's nothing to show any more, don't.
   (for-each 
    (lambda (bin)
      (for-each 
       (lambda (elt)
-        (qif-map-entry:set-display?! (cdr elt) #f))
+        (qif-map-entry:set-display?! (cdr elt) #f)
+        (qif-map-entry:set-new-acct?! 
+         (cdr elt)
+         (if (qif-import:gnc-account-exists (cdr elt) gnc-acct-info)
+             #f #t)))                                                    
       bin))
    (vector->list acct-hash))
-
+  
   (let ((retval '()))    
     ;; we want to make two passes here.  The first pass picks the
     ;; explicit Account descriptions out of each file.  These are the
@@ -359,10 +376,14 @@
    (lambda (bin)
      (for-each 
       (lambda (elt)
-        (qif-map-entry:set-display?! (cdr elt) #f))
+        (qif-map-entry:set-display?! (cdr elt) #f)
+        (qif-map-entry:set-new-acct?! 
+         (cdr elt)
+         (if (qif-import:gnc-account-exists (cdr elt) gnc-acct-info)
+             #f #t)))                                                    
       bin))
    (vector->list cat-hash))
-
+  
   (let ((retval '())
         (entry #f))
     ;; get the Cat entries from each file 
@@ -438,16 +459,19 @@
 
 (define (qif-dialog:make-memo-display qif-files memo-hash gnc-acct-info)
   (let ((retval '()))
-
     ;; clear the display flags for existing items 
     (for-each 
      (lambda (bin)
        (for-each 
         (lambda (elt)
+          (qif-map-entry:set-new-acct?! 
+           (cdr elt)
+           (if (qif-import:gnc-account-exists (cdr elt) gnc-acct-info)
+               #f #t))                                       
           (qif-map-entry:set-display?! (cdr elt) #f))
         bin))
      (vector->list memo-hash))
-
+    
     ;; iterate over every imported transaction.  If there's no
     ;; category in the transaction, look at the payee to get a clue.
     ;; of there's no payee, look at the split memo.
@@ -460,34 +484,42 @@
             (for-each 
              (lambda (split)
                (let ((cat (qif-split:category split))
-                     (memo (qif-split:memo split)))
+                     (memo (qif-split:memo split))
+                     (key-string #f))
                  ;; for each split: if there's a category, do nothing.
                  ;; if there's a payee, use that as the
                  ;; key. otherwise, use the split memo.
                  (cond ((and cat 
                              (or (not (string? cat))
-                                 (string=? cat "")))
+                                 (not (string=? cat ""))))
                         (set! key-string #f))
                        (payee 
                         (set! key-string payee))
                        (memo
-                        (set! ley-string memo)))
+                        (set! key-string memo)))
                  
                  (if key-string 
                      (let ((entry (hash-ref memo-hash key-string)))
                        (if (not entry)
-                           (set! entry
-                                 (qif-import:guess-acct 
-                                  payee 
-                                  (if (> (qif-split:amount split) 0)
-                                      (list GNC-INCOME-TYPE)
-                                      (list GNC-EXPENSE-TYPE)))))
+                           (begin 
+                             (set! entry (make-qif-map-entry))
+                             (qif-map-entry:set-qif-name! entry key-string)
+                             (qif-map-entry:set-gnc-name!
+                              entry (default-unspec-acct))
+                             (qif-map-entry:set-new-acct?!
+                              entry (if (qif-import:gnc-account-exists 
+                                         entry gnc-acct-info)
+                                        #f #t))
+                             (qif-map-entry:set-allowed-types!
+                              entry (if (> (qif-split:amount split) 0)
+                                         (list GNC-INCOME-TYPE)
+                                         (list GNC-EXPENSE-TYPE)))))
                        (qif-map-entry:set-display?! entry #t)
                        (hash-set! memo-hash key-string entry)))))
              splits)))
         (qif-file:xtns file)))
      qif-files)
-
+    
     ;; build display list 
     (for-each 
      (lambda (bin)
@@ -612,6 +644,88 @@
      (vector->list hash-table))
     (list newhash (sort names string<?))))
 
+
+;; this is used within the dialog to get a list of all the new
+;; accounts the importer thinks it's going to make.  Passed to the
+;; account picker.
+;; 
+;; returned is a tree-structured list of all the old and new 
+;; accounts like so :
+;;  (name new? children)
+
+(define (qif-import:get-all-accts extra-maps) 
+  (define (cvt-to-tree path new?)
+    (if (null? path)
+        '()
+        (list (car path) new? 
+              (if (null? (cdr path)) '()
+                  (list (cvt-to-tree (cdr path) new?))))))
+  
+  (define (merge-into-tree tree path new?)
+    (if (null? path)
+        tree
+        (if (null? tree)
+            (list (cvt-to-tree path new?))
+            (let ((newtree '()))
+              (let loop ((tree-elt (car tree))
+                         (tree-left (cdr tree)))
+                (if (string=? (car path) (car tree-elt))
+                    (let ((old-children (caddr tree-elt)))
+                      (set! newtree
+                            (cons (list (car path)
+                                        (and new? (cadr tree-elt))
+                                        (merge-into-tree 
+                                         old-children (cdr path) new?))
+                                  (append newtree tree-left))))
+                    (begin 
+                      (set! newtree (cons tree-elt newtree))
+                      (if (not (null? tree-left))
+                          (loop (car tree-left) (cdr tree-left))
+                          (set! newtree (cons (cvt-to-tree path new?)
+                                              newtree))))))
+              newtree))))
+
+  (let ((accts '())
+        (acct-tree '())
+        (separator (string-ref (gnc:account-separator-char) 0)))
+    ;; get the new accounts from the account map
+    (for-each 
+     (lambda (acctmap)
+       (if acctmap 
+           (hash-fold
+            (lambda (k v p)
+              (if (qif-map-entry:display? v)
+                  (set! accts 
+                        (cons 
+                         (cons (string-split-on (qif-map-entry:gnc-name v) 
+                                                separator)
+                               (qif-map-entry:new-acct? v))
+                         accts)))
+              #f)
+            #f acctmap)))
+     extra-maps)
+    
+    ;; get the old accounts from the current account group
+    (for-each 
+     (lambda (acct)
+       (set! accts 
+             (cons 
+              (cons (string-split-on 
+                     (gnc:account-get-full-name acct)
+                     separator)
+                    #f)
+              accts)))
+     (gnc:group-get-subaccounts (gnc:get-current-group)))
+
+    ;; now build a tree structure 
+    (for-each 
+     (lambda (acct)
+       (set! acct-tree
+             (merge-into-tree acct-tree (car acct) (cdr acct))))
+     accts)
+    
+    ;; we're done 
+    acct-tree))
 
 (define (qif-import:refresh-match-selection matches item)
   (if (> item -1)

@@ -1026,7 +1026,8 @@ DxaccPrintAmount (double dval, GNCPrintAmountInfo info)
 {
   gnc_numeric val;
 
-  val = double_to_gnc_numeric (dval, 10000, GNC_RND_ROUND);
+  val = double_to_gnc_numeric (dval, GNC_DENOM_AUTO,
+                               GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
 
   return xaccPrintAmount (val, info);
 }
@@ -1036,7 +1037,8 @@ DxaccSPrintAmount (char * bufp, double dval, GNCPrintAmountInfo info)
 {
   gnc_numeric val;
 
-  val = double_to_gnc_numeric (dval, 10000, GNC_RND_ROUND);
+  val = double_to_gnc_numeric (dval, GNC_DENOM_AUTO, 
+                               GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
 
   return xaccSPrintAmount (bufp, val, info);
 }

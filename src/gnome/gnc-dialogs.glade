@@ -30,9 +30,11 @@
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
+  <default_width>300</default_width>
+  <default_height>400</default_height>
   <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
+  <auto_shrink>True</auto_shrink>
   <auto_close>False</auto_close>
   <hide_on_close>False</hide_on_close>
 
@@ -70,12 +72,6 @@
 	<name>button1</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<signal>
-	  <name>clicked</name>
-	  <handler>gnc_ui_account_picker_ok_cb</handler>
-	  <data>QIF_Import_Account_Picker</data>
-	  <last_modification_time>Thu, 02 Mar 2000 23:02:59 GMT</last_modification_time>
-	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
       </widget>
 
@@ -84,12 +80,6 @@
 	<name>button2</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<signal>
-	  <name>clicked</name>
-	  <handler>gnc_ui_account_picker_cancel_cb</handler>
-	  <data>QIF_Import_Account_Picker</data>
-	  <last_modification_time>Thu, 02 Mar 2000 23:03:18 GMT</last_modification_time>
-	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
       </widget>
     </widget>
@@ -108,7 +98,7 @@
       <widget>
 	<class>GtkFrame</class>
 	<name>frame1</name>
-	<label>Accounts</label>
+	<label>Select or add a Gnucash account</label>
 	<label_xalign>0</label_xalign>
 	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	<child>
@@ -119,31 +109,46 @@
 
 	<widget>
 	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow1</name>
-	  <width>250</width>
-	  <height>200</height>
-	  <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <name>scrolledwindow24</name>
+	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
 	  <widget>
-	    <class>GtkViewport</class>
-	    <name>viewport1</name>
+	    <class>GtkCTree</class>
+	    <name>account_tree</name>
+	    <can_focus>True</can_focus>
+	    <columns>2</columns>
+	    <column_widths>214,48</column_widths>
+	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	    <show_titles>True</show_titles>
 	    <shadow_type>GTK_SHADOW_IN</shadow_type>
 
 	    <widget>
-	      <class>GtkTree</class>
-	      <name>account_tree</name>
-	      <signal>
-		<name>select_child</name>
-		<handler>gnc_ui_account_picker_select_cb</handler>
-		<data>QIF_Import_Account_Picker</data>
-		<last_modification_time>Thu, 02 Mar 2000 21:32:14 GMT</last_modification_time>
-	      </signal>
-	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	      <view_mode>GTK_TREE_VIEW_LINE</view_mode>
-	      <view_line>True</view_line>
+	      <class>GtkLabel</class>
+	      <child_name>CTree:title</child_name>
+	      <name>label847711</name>
+	      <label>Account</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CTree:title</child_name>
+	      <name>label847712</name>
+	      <label>New?</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
 	    </widget>
 	  </widget>
 	</widget>
@@ -151,146 +156,22 @@
     </widget>
 
     <widget>
-      <class>GtkHBox</class>
-      <name>hbox5</name>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
+      <class>GtkButton</class>
+      <name>button78</name>
+      <can_focus>True</can_focus>
+      <signal>
+	<name>clicked</name>
+	<handler>gnc_ui_qif_account_picker_new_cb</handler>
+	<data>QIF_Import_Account_Picker</data>
+	<last_modification_time>Sat, 10 Feb 2001 21:26:10 GMT</last_modification_time>
+      </signal>
+      <label>New Account (child of selected) ...</label>
+      <relief>GTK_RELIEF_NORMAL</relief>
       <child>
 	<padding>0</padding>
 	<expand>False</expand>
 	<fill>False</fill>
       </child>
-
-      <widget>
-	<class>GtkVBox</class>
-	<name>vbox4</name>
-	<homogeneous>True</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>5</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label1</name>
-	  <label>Selected account:</label>
-	  <justify>GTK_JUSTIFY_RIGHT</justify>
-	  <wrap>False</wrap>
-	  <xalign>1</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label2</name>
-	  <label>Description:</label>
-	  <justify>GTK_JUSTIFY_RIGHT</justify>
-	  <wrap>False</wrap>
-	  <xalign>1</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label3</name>
-	  <label>Account type:</label>
-	  <justify>GTK_JUSTIFY_RIGHT</justify>
-	  <wrap>False</wrap>
-	  <xalign>1</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-      </widget>
-
-      <widget>
-	<class>GtkVBox</class>
-	<name>vbox5</name>
-	<homogeneous>True</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkEntry</class>
-	  <name>acct_entry</name>
-	  <can_focus>True</can_focus>
-	  <editable>True</editable>
-	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
-	  <text></text>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkEntry</class>
-	  <name>acct_description_entry</name>
-	  <can_focus>True</can_focus>
-	  <editable>True</editable>
-	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
-	  <text></text>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkOptionMenu</class>
-	  <name>acct_type_picker</name>
-	  <width>150</width>
-	  <height>30</height>
-	  <can_focus>True</can_focus>
-	  <items>Bank
-Cash
-Asset
-Credit
-Liability
-Stock
-Mutual
-Currency
-Income
-Expense
-Equity
-</items>
-	  <initial_choice>0</initial_choice>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-      </widget>
     </widget>
   </widget>
 </widget>
@@ -5967,7 +5848,7 @@ in that program.
 	<name>next</name>
 	<handler>gnc_ui_qif_import_generic_next_cb</handler>
 	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 06 Feb 2001 17:07:56 GMT</last_modification_time>
+	<last_modification_time>Fri, 09 Feb 2001 17:04:25 GMT</last_modification_time>
       </signal>
       <signal>
 	<name>back</name>
@@ -6132,7 +6013,7 @@ of the QIF import process. </label>
 	<data>QIF_Import_Druid</data>
 	<last_modification_time>Tue, 06 Feb 2001 17:08:52 GMT</last_modification_time>
       </signal>
-      <title>Your accounts and stock holdings</title>
+      <title>Accounts and stock holdings</title>
       <title_color>255,255,255</title_color>
       <background_color>153,191,153</background_color>
       <logo_background_color>255,255,255</logo_background_color>
@@ -6379,9 +6260,9 @@ within GnuCash.</label>
       </signal>
       <signal>
 	<name>next</name>
-	<handler>gnc_ui_qif_import_categories_next_cb</handler>
+	<handler>gnc_ui_qif_import_generic_next_cb</handler>
 	<data>QIF_Import_Druid</data>
-	<last_modification_time>Tue, 05 Sep 2000 17:18:38 GMT</last_modification_time>
+	<last_modification_time>Fri, 09 Feb 2001 17:04:56 GMT</last_modification_time>
       </signal>
       <signal>
 	<name>back</name>
@@ -6491,6 +6372,193 @@ within GnuCash.</label>
 	    <expand>False</expand>
 	    <fill>False</fill>
 	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>memo_doc_page</name>
+      <signal>
+	<name>next</name>
+	<handler>gnc_ui_qif_import_generic_next_cb</handler>
+	<data>QIF_Import_Druid</data>
+	<last_modification_time>Fri, 09 Feb 2001 16:17:27 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>back</name>
+	<handler>gnc_ui_qif_import_generic_back_cb</handler>
+	<data>QIF_Import_Druid</data>
+	<last_modification_time>Fri, 09 Feb 2001 16:17:45 GMT</last_modification_time>
+      </signal>
+      <title>Payees and memos</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,154</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox39</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label847707</name>
+	  <label>QIF files dowloaded from banks and other financial institutions may not have
+information about Accounts and Categories which would allow them to be
+correctly assigned to Gnucash accounts.  
+
+In the following page, you will see the text that appears in the Payee and 
+Memo fields of transactions with no QIF Account or Category.   By default
+these transactions are assigned to the 'Unspecified' account in Gnucash. 
+If you select a different account, it will be remembered for future QIF 
+files. </label>
+	  <justify>GTK_JUSTIFY_LEFT</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>memo_match_page</name>
+      <signal>
+	<name>next</name>
+	<handler>gnc_ui_qif_import_memo_next_cb</handler>
+	<data>QIF_Import_Druid</data>
+	<last_modification_time>Fri, 09 Feb 2001 17:05:14 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>back</name>
+	<handler>gnc_ui_qif_import_generic_back_cb</handler>
+	<data>QIF_Import_Druid</data>
+	<last_modification_time>Fri, 09 Feb 2001 16:18:32 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>prepare</name>
+	<handler>gnc_ui_qif_import_memo_prepare_cb</handler>
+	<data>QIF_Import_Druid</data>
+	<last_modification_time>Fri, 09 Feb 2001 16:39:58 GMT</last_modification_time>
+      </signal>
+      <title>Match payees/memos to Gnucash accounts</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,154</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox40</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label847713</name>
+	  <label>This doesn't actually affect the QIF import yet. 
+Give it a couple more days :)</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkScrolledWindow</class>
+	  <name>scrolledwindow25</name>
+	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	  <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkCList</class>
+	    <name>memo_page_list</name>
+	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>select_row</name>
+	      <handler>gnc_ui_qif_import_memo_line_select_cb</handler>
+	      <data>QIF_Import_Druid</data>
+	      <last_modification_time>Fri, 09 Feb 2001 16:28:31 GMT</last_modification_time>
+	    </signal>
+	    <columns>3</columns>
+	    <column_widths>285,228,72</column_widths>
+	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	    <show_titles>True</show_titles>
+	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847708</name>
+	      <label>QIF payee/memo</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847709</name>
+	      <label>Gnucash account name</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <child_name>CList:title</child_name>
+	      <name>label847710</name>
+	      <label>New?</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	    </widget>
+	  </widget>
 	</widget>
       </widget>
     </widget>

@@ -317,8 +317,10 @@
        " = "
        (gnc:commodity-value->string 
 	(list common-commodity 
+              ;; convert to 6 significant figures
 	      (gnc:numeric-convert 
-	       ;; FIXME: remove the constant 100000
-	       (cadr pair) 100000 GNC-RND-ROUND))))))
+	       (cadr pair) 
+               GNC-DENOM-AUTO 
+               (logor (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))))))
    alist))
 

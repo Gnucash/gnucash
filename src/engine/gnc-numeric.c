@@ -475,6 +475,8 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
   gint64      remainder;  
   gint64      sign;
   gint        denom_neg=0;
+  double      ratio, logratio;
+  double      sigfigs;
 
   if(gnc_numeric_check(in)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -500,6 +502,23 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
       }
       break;
       
+    case GNC_DENOM_SIGFIG:
+      ratio    = gnc_numeric_to_double(in);
+      logratio = log10(ratio);
+      logratio = ((logratio > 0.0) ? 
+                  (floor(logratio)+1.0) : (ceil(logratio)));
+      sigfigs  = GNC_NUMERIC_GET_SIGFIGS(how);
+
+      if(sigfigs-logratio >= 0) {
+        denom    = (gint64)(pow(10, sigfigs-logratio));
+      }
+      else {
+        denom    = -((gint64)(pow(10, logratio-sigfigs)));
+      }
+      
+      how = how & ~GNC_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
+      break;
+
     case GNC_DENOM_LCD:
       /* this is a no-op. */
     default:
@@ -573,7 +592,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
           out.num = out.num + 1;
         }
       }
-      else if((2 * remainder * denom) > in.denom) {
+      else if((2 * remainder) > temp.denom) {
         out.num = out.num + 1;
       }
       break;
@@ -584,7 +603,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
           out.num = out.num + 1;
         }
       }
-      else if((2 * remainder * denom) >= in.denom) {
+      else if((2 * remainder ) >= temp.denom) {
         out.num = out.num + 1;
       }
       break;
@@ -601,10 +620,10 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
         }        
       }
       else {
-        if((2 * remainder * denom) > in.denom) {
+        if((2 * remainder ) > temp.denom) {
           out.num = out.num + 1;
         }
-        else if((2 * remainder * denom) == in.denom) {
+        else if((2 * remainder) == temp.denom) {
           if(out.num % 2) {
             out.num = out.num + 1;
           }
@@ -780,6 +799,23 @@ double_to_gnc_numeric(double in, gint64 denom, gint how) {
   gint64 int_part=0;
   double frac_part;
   gint64 frac_int=0;
+  double logval; 
+  double sigfigs;
+
+  if((denom == GNC_DENOM_AUTO) && (how & GNC_DENOM_SIGFIG)) {
+    logval   = log10(in);
+    logval   = ((logval > 0.0) ? 
+                (floor(logval)+1.0) : (ceil(logval)));
+    sigfigs  = GNC_NUMERIC_GET_SIGFIGS(how);
+    if(sigfigs-logval >= 0) {
+      denom    = (gint64)(pow(10, sigfigs-logval));
+    }
+    else {
+      denom    = -((gint64)(pow(10, logval-sigfigs)));
+    }
+
+    how =  how & ~GNC_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
+  }
 
   int_part  = (gint64)(floor(fabs(in)));
   frac_part = in - (double)int_part;
@@ -787,7 +823,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how) {
   int_part = int_part * denom;
   frac_part = frac_part * (double)denom;
 
-  switch(how) {
+  switch(how & GNC_NUMERIC_RND_MASK) {
   case GNC_RND_FLOOR:
     frac_int = (gint64)floor(frac_part);
     break;
@@ -853,7 +889,7 @@ gnc_numeric_create(gint64 num, gint64 denom) {
 gnc_numeric
 gnc_numeric_error(int error_code) {
   if(abs(error_code) < 5) {
-    PERR("%s", _numeric_error_strings[ - error_code]);
+    //    PERR("%s", _numeric_error_strings[ - error_code]);
   }
   return gnc_numeric_create(error_code, 0LL);
 }
@@ -1180,7 +1216,35 @@ main(int argc, char ** argv) {
          gnc_numeric_print(b), gnc_numeric_print(d),
          gnc_numeric_print(gnc_numeric_add(b, d, GNC_DENOM_AUTO,
                                            GNC_DENOM_LCD)));
+ 
+  printf("float to 6 sigfigs: %s\n",
+         gnc_numeric_print(double_to_gnc_numeric(1.1234567890123, 
+                                                 GNC_DENOM_AUTO, 
+                                                 GNC_DENOM_SIGFIGS(6) |
+                                                 GNC_RND_ROUND)));
+  printf("float to 6 sigfigs: %s\n",
+         gnc_numeric_print(double_to_gnc_numeric(.011234567890123, 
+                                                 GNC_DENOM_AUTO, 
+                                                 GNC_DENOM_SIGFIGS(6) |
+                                                 GNC_RND_ROUND)));
+  printf("float to 6 sigfigs: %s\n",
+         gnc_numeric_print(double_to_gnc_numeric(1123.4567890123, 
+                                                 GNC_DENOM_AUTO, 
+                                                 GNC_DENOM_SIGFIGS(6) |
+                                                 GNC_RND_ROUND)));
+  printf("float to 6 sigfigs: %s\n",
+         gnc_numeric_print(double_to_gnc_numeric(1.1234567890123e-5, 
+                                                 GNC_DENOM_AUTO, 
+                                                 GNC_DENOM_SIGFIGS(6) |
+                                                 GNC_RND_ROUND)));
+  printf("add to 4 sigfigs: %s + %s = %s\n",
+         gnc_numeric_print(a), gnc_numeric_print(b),
+         gnc_numeric_print(gnc_numeric_add(a, b, 
+                                           GNC_DENOM_AUTO, 
+                                           GNC_DENOM_SIGFIGS(4) |
+                                           GNC_RND_ROUND)));
   
+   
   return 0;
 }
 #endif

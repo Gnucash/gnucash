@@ -88,7 +88,8 @@ gnc_exp_parser_init (void)
       double dvalue;
 
       dvalue = gh_scm2double (val_scm);
-      value = double_to_gnc_numeric (dvalue, 10000, GNC_RND_FLOOR);
+      value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
+                                     GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
     }
     else if (gh_string_p (val_scm))
     {

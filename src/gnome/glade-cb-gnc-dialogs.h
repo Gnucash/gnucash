@@ -234,3 +234,51 @@ gboolean
 gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_back_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_import_memo_line_select_cb  (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_generic_next_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+gboolean
+gnc_ui_qif_import_memo_next_cb         (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_import_memo_prepare_cb      (GnomeDruidPage  *gnomedruidpage,
+                                        gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_ui_account_picker_new_cb           (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_account_picker_new_cb       (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_account_picker_ok_cb        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_qif_account_picker_cancel_cb    (GtkButton       *button,
+                                        gpointer         user_data);

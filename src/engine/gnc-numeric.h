@@ -34,8 +34,9 @@ struct _gnc_numeric {
 typedef struct _gnc_numeric gnc_numeric;
 
 /* bitmasks for HOW flags */
-#define GNC_NUMERIC_RND_MASK   0x0000000f
-#define GNC_NUMERIC_DENOM_MASK 0x000000f0
+#define GNC_NUMERIC_RND_MASK     0x0000000f
+#define GNC_NUMERIC_DENOM_MASK   0x000000f0
+#define GNC_NUMERIC_SIGFIGS_MASK 0x0000ff00
 
 /* rounding/truncation modes for operations */
 enum { 
@@ -54,8 +55,12 @@ enum {
   GNC_DENOM_EXACT  = 0x10, 
   GNC_DENOM_REDUCE = 0x20,
   GNC_DENOM_LCD    = 0x30,
-  GNC_DENOM_FIXED  = 0x40
+  GNC_DENOM_FIXED  = 0x40,
+  GNC_DENOM_SIGFIG = 0x50
 };
+
+/* bits 8-15 of 'how' are reserved for the number of significant
+ * digits to use in the output with GNC_DENOM_SIGFIG */ 
 
 /* errors */
 enum {
@@ -69,6 +74,8 @@ enum {
 #define GNC_DENOM_AUTO 0
 
 #define GNC_DENOM_RECIPROCAL( a ) (- ( a ))
+#define GNC_DENOM_SIGFIGS( a ) ( ((( a ) & 0xff) << 8) | GNC_DENOM_SIGFIG)
+#define GNC_NUMERIC_GET_SIGFIGS( a ) ( (( a ) & 0xff00 ) >> 8)
 
 /* make a gnc_numeric from numerator and denominator */
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);

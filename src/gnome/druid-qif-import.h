@@ -32,5 +32,5 @@
 
 QIFImportWindow * gnc_ui_qif_import_druid_make(void);
 void              gnc_ui_qif_import_druid_destroy (QIFImportWindow * window);
-
+SCM               gnc_ui_qif_import_druid_get_mappings(QIFImportWindow * w);
 #endif

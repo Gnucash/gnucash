@@ -1,3 +1,31 @@
+2001-02-12  Bill Gribble  <grib@billgribble.com>
+
+	* src/engine/gnc-numeric.{c,h}, src/scm/gnc-numeric.scm: add
+	support for a new auto-denom type, GNC_DENOM_SIGFIGS(x), where x
+	is the number of "significant figures" you want in the output.
+	This means that the output denominator will always be a poewr of
+	10, but which power is determined by the magnitude of the
+	argument.
+
+	* src/engine/Transaction.c, src/gnc-exp-parser.c,
+	src/gnc-ui-util.c: make minor changes to use GNC_DENOM_SIGFIGS
+	where appropriate.
+
+	* src/gnome/dialog-account-picker.{c,h}: totally rewritten QIF
+	import account picker.  this one is much less likely to get you
+	into trouble.  Still some rough edges but MUCH better than
+	the old one.
+	
+	* src/gnome/druid-qif-import.c: fixes.  Add memo/payee matching
+	(but it's not hooked up to the import yet so don't get that 
+	excited).
+
+	* src/scm/qif-import/qif-dialog-utils.scm: memo mapping stuff,
+	i18n fixes.
+
+	* src/scm/qif-import/qif-to-gnc.scm: update error catching; print
+	backtrace on failure. 
+	
 2001-02-09  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/commodity-utilities.scm: Functions to calculate exchange

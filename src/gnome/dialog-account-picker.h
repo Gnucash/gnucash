@@ -24,24 +24,12 @@
 #ifndef __DIALOG_ACCOUNT_PICKER_H_
 #define __DIALOG_ACCOUNT_PICKER_H_
 
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
-
 #include <guile/gh.h>
+#include "druid-qif-import.h"
 
-SCM accountPickerBox(char *initial_pick, int initial_type);
+SCM qif_account_picker_dialog(QIFImportWindow * wind, SCM initial_sel);
 
-typedef struct _accountpickerdialog {
-  
-  GtkWidget * dialog;
-  GtkWidget * treeview;
-  GtkWidget * acct_entry;
-  GtkWidget * descript_entry;
-  GtkWidget * type_picker;
-
-  SCM scm_acct_info;
-
-} QIFAccountPickerDialog;
+typedef struct _accountpickerdialog QIFAccountPickerDialog;
 
 
 #endif

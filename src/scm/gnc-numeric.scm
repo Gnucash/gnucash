@@ -23,7 +23,7 @@
 
 (gnc:support "gnc-numeric.scm")
 
-;; use 'logor' in guile to bit-combine RND and DENOM flags.
+;; use 'logior' in guile to bit-combine RND and DENOM flags.
 
 (define GNC-RND-FLOOR           1)
 (define GNC-RND-CEIL            2)
@@ -38,6 +38,10 @@
 (define GNC-DENOM-REDUCE       32)
 (define GNC-DENOM-FIXED        64)
 (define GNC-DENOM-LCD          48)
+(define GNC-DENOM-SIGFIG       80)
+
+(define (GNC-DENOM-SIGFIGS n)
+  (logior GNC-DENOM-SIGFIG (* n 256)))
 
 (define GNC-ERROR-OK            0)
 (define GNC-ERROR-ARG          -1)

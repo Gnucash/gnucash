@@ -507,6 +507,16 @@
 (define (make-qif-map-entry)
   (make-simple-obj <qif-map-entry>))
 
+(define (qif-map-entry:clone orig)
+  (let ((me (make-qif-map-entry)))
+    (qif-map-entry:set-qif-name! me (qif-map-entry:qif-name orig))
+    (qif-map-entry:set-allowed-types! me (qif-map-entry:allowed-types orig))
+    (qif-map-entry:set-description! me (qif-map-entry:description orig))
+    (qif-map-entry:set-gnc-name! me (qif-map-entry:gnc-name orig))
+    (qif-map-entry:set-new-acct?! me (qif-map-entry:new-acct? orig))
+    (qif-map-entry:set-display?! me (qif-map-entry:display? orig))
+    me))
+
 (define qif-map-entry:qif-name
   (simple-obj-getter <qif-map-entry> 'qif-name))
 

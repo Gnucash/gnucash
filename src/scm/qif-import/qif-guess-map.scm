@@ -62,7 +62,7 @@
   ;;    (shortname fullname account) format.
   ;;  - a hash of QIF account name to gnucash account info
   ;;  - a hash of QIF category to gnucash account info
-  ;;  - a hash of QIF memo/payee to gnucash account info   <-- not yet
+  ;;  - a hash of QIF memo/payee to gnucash account info  
   ;;    (older saved prefs may not have this one)
   (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))
          (pref-filename (build-path pref-dir "qif-accounts-map"))
@@ -92,18 +92,16 @@
                   (set! qif-cat-hash (make-hash-table 20))
                   (set! qif-cat-hash (qif-import:read-map qif-cat-list)))
 
-;;;              (set! qif-memo-list (safe-read))
-;;;              (if (not (list? qif-cat-list))
-;;;                  (set! qif-memo-hash (make-hash-table 20))
-;;;                  (set! qif-memo-hash (qif-import:read-map qif-memo-list)))
-                  
-;;;              (set! results 
-;;;                    (list qif-account-hash qif-cat-hash qif-memo-hash)))))
+              (set! qif-memo-list (safe-read))
+              (if (not (list? qif-memo-list))
+                  (set! qif-memo-hash (make-hash-table 20))
+                  (set! qif-memo-hash (qif-import:read-map qif-memo-list)))
+              
               (set! results 
-                    (list qif-account-hash qif-cat-hash)))))
+                    (list qif-account-hash qif-cat-hash qif-memo-hash)))))
         (begin 
           (set! results (list (make-hash-table 20)
-;;;                              (make-hash-table 20)
+                              (make-hash-table 20)
                               (make-hash-table 20)))))
     
     ;; now build the list of all known account names 
@@ -111,7 +109,6 @@
            (all-account-info (extract-all-account-info all-accounts #f)))
       (set! results (cons all-account-info results)))
     results))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  dump the mapping hash tables to a file.  The hash tables are 
@@ -146,7 +143,7 @@
      tablist)
     table))
 
-(define (qif-import:save-map-prefs acct-map cat-map) ;; memo-map)
+(define (qif-import:save-map-prefs acct-map cat-map memo-map)
   (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))
          (pref-filename (build-path pref-dir "qif-accounts-map"))
          (save-ok #f))
@@ -175,8 +172,8 @@
             (display ";;; map from QIF categories to GNC accounts") (newline)
             (qif-import:write-map cat-map)
             
-;;;         (display ";;; map from QIF payee/memo to GNC accounts") (newline)
-;;;         (qif-import:write-map memo-map)
+            (display ";;; map from QIF payee/memo to GNC accounts") (newline)
+            (qif-import:write-map memo-map)
             (newline))))))
 
 
@@ -314,5 +311,5 @@
               (not (string=? qif-acct "")))
          (list qif-acct (car allowed-types)))
         (#t 
-         (list "Unspecified" (car allowed-types)))))
+         (list (default-unspec-acct) (car allowed-types)))))
 
