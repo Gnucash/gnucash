@@ -194,6 +194,15 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 /********************************************************
  * Now all the callback functions 
  */
+static const char *username_from_user(const HBCI_User *user)
+{
+  return (user ? 
+	  (HBCI_User_name (user) ? HBCI_User_name (user) :
+	   (HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	    _("Unknown"))) :
+	  _("Newly created user"));
+}
+
 static int msgInputPin(const HBCI_User *user,
 		       char **pinbuf,
 		       int minsize,
@@ -207,10 +216,7 @@ static int msgInputPin(const HBCI_User *user,
   g_assert(data);
 
   while (TRUE) {
-    const char *username = 
-      (HBCI_User_name (user) ? HBCI_User_name (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     g_assert (username);
     
     if (newPin) {
@@ -331,10 +337,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
   g_assert(data);
 
   if (user != NULL) {
-    const char *username = 
-      (HBCI_User_name (user) ? HBCI_User_name (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
@@ -407,10 +410,7 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
   g_assert(data);
 
   if (user != NULL) {
-    const char *username = 
-      (HBCI_User_name (user) ? HBCI_User_name (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
@@ -527,10 +527,7 @@ msgStartInputPinViaKeypadCB(const HBCI_User *user, void *user_data)
 
   /* Create message string */
   if (user != NULL) {
-    const char *username = 
-      (HBCI_User_name (user) ? HBCI_User_name (user) :
-       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	_("Unknown")));
+    const char *username = username_from_user(user);
     bank = HBCI_User_bank (user);
     if (bank != NULL) {
       /* xgettext:c-format */	    
