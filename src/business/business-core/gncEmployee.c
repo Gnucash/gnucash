@@ -408,7 +408,7 @@ static const char * _gncEmployeePrintable (gpointer item)
   if (!item) return NULL;
 
   v = item;
-  return v->username;
+  return gncAddressGetName(v->addr);
 }
 
 static GncObject_t gncEmployeeDesc = {

@@ -257,7 +257,7 @@
 
 	    <widget>
 	      <class>GtkLabel</class>
-	      <name>label21</name>
+	      <name>job_label</name>
 	      <label>Job</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
@@ -1720,7 +1720,7 @@
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label18</name>
+		<name>job_label</name>
 		<label>Job</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>

@@ -28,6 +28,10 @@
   "__gui" "bill_reg_width" 0))
 
 (gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "voucher_reg_width" 0))
+
+(gnc:register-configuration-option
  (gnc:make-number-range-option
   gnc:*business-label* (N_ "Number of Rows")
   "a" (N_ "Default number of register rows to display in Invoices.")

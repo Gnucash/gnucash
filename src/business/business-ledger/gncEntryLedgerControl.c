@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerControl.c -- Control for GncEntry ledger
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -75,6 +75,7 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
       gncInvoiceAddEntry (ledger->invoice, blank_entry);
       break;
     case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
       /* Anything entered on an invoice entry must be part of the invoice! */
       gncBillAddEntry (ledger->invoice, blank_entry);
       break;
@@ -148,6 +149,7 @@ gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
 	return FALSE;
       break;
     case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
       if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_BACCT_CELL,
 						_("an Account")))
 	return FALSE;
@@ -227,6 +229,7 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
   case GNCENTRY_ORDER_ENTRY:
   case GNCENTRY_INVOICE_ENTRY:
   case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
 
     /* There must be a blank entry */
     if (blank_entry == NULL)
@@ -289,6 +292,8 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
       break;
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
       cell_name = ENTRY_BACCT_CELL;
       break;
     default:

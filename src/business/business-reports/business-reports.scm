@@ -28,6 +28,9 @@
 (define (gnc:vendor-anchor-text vendor)
   (guid-ref gnc:url-type-vendor (gnc:vendor-get-guid vendor)))
 
+(define (gnc:employee-anchor-text employee)
+  (guid-ref gnc:url-type-employee (gnc:employee-get-guid employee)))
+
 (define (gnc:invoice-anchor-text invoice)
   (guid-ref gnc:url-type-invoice (gnc:invoice-get-guid invoice)))
 
@@ -40,6 +43,9 @@
 
       ((gnc-owner-vendor)
        (gnc:vendor-anchor-text (gnc:owner-get-vendor owner)))
+
+      ((gnc-owner-employee)
+       (gnc:employee-anchor-text (gnc:owner-get-employee owner)))
 
       ((gnc-owner-job)
        (gnc:job-anchor-text (gnc:owner-get-job owner)))
@@ -58,7 +64,12 @@
        (set! ref "owner=c:"))
 
       ((gnc-owner-vendor)
-       (set! ref "owner=v:")))
+       (set! ref "owner=v:"))
+
+      ((gnc-owner-employee)
+       (set! ref "owner=e:"))
+
+      (else (set! ref "unknown-type=")))
 
     (if ref
 	(begin

@@ -20,12 +20,16 @@
 #include "window-help.h"
 #include "dialog-search.h"
 #include "search-param.h"
+#include "gnc-account-sel.h"
 
 #include "gncAddress.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
+#include "gncOwner.h"
 
 #include "dialog-employee.h"
+#include "dialog-invoice.h"
+#include "dialog-payment.h"
 
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
@@ -61,6 +65,8 @@ struct _employee_window {
   GtkWidget *	workday_amount;
   GtkWidget *	rate_amount;
   GtkWidget *	currency_edit;
+  GtkWidget *	ccard_acct_check;
+  GtkWidget *	ccard_acct_sel;
 
   GtkWidget *	active_check;
 
@@ -71,7 +77,6 @@ struct _employee_window {
   gint		component_id;
   GNCBook *	book;
   GncEmployee *	created_employee;
-
 };
 
 static GncEmployee *
@@ -127,6 +132,13 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 		       (GNC_AMOUNT_EDIT (ew->rate_amount)));
   gncEmployeeSetCurrency (employee, gnc_currency_edit_get_currency
 			  (GNC_CURRENCY_EDIT (ew->currency_edit)));
+
+  /* Fill in the CCard Acct */
+  gncEmployeeSetCCard (employee,
+		       (gtk_toggle_button_get_active
+			(GTK_TOGGLE_BUTTON (ew->ccard_acct_check)) ?
+			gnc_account_sel_get_account
+			(GNC_ACCOUNT_SEL (ew->ccard_acct_sel)) : NULL));
 
   gncEmployeeCommitEdit (employee);
   gnc_resume_gui_refresh ();
@@ -278,6 +290,23 @@ gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
+gnc_employee_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data)
+{
+  EmployeeWindow *ew = data;
+
+  if (!ew)
+    return;
+
+  if (gtk_toggle_button_get_active (button)) {
+    gtk_widget_set_sensitive (ew->ccard_acct_sel, TRUE);
+    gtk_widget_show (ew->ccard_acct_sel);
+  } else {
+    gtk_widget_set_sensitive (ew->ccard_acct_sel, TRUE);
+    gtk_widget_hide (ew->ccard_acct_sel);
+  }
+}
+
+static void
 gnc_employee_window_close_handler (gpointer user_data)
 {
   EmployeeWindow *ew = user_data;
@@ -327,6 +356,8 @@ gnc_employee_new_window (GNCBook *bookp,
   GnomeDialog *ewd;
   gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
+  GList *acct_types;
+  Account *ccard_acct;
 
   /*
    * Find an existing window for this employee.  If found, bring it to
@@ -417,6 +448,21 @@ gnc_employee_new_window (GNCBook *bookp,
   hbox = glade_xml_get_widget (xml, "rate_hbox");
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
+  /* CCard Account Selection */
+  ew->ccard_acct_check = glade_xml_get_widget (xml, "ccard_check");
+
+  edit = gnc_account_sel_new();
+  acct_types = g_list_prepend(NULL, (gpointer)CREDIT);
+  gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL(edit), acct_types);
+  g_list_free (acct_types);
+
+  ew->ccard_acct_sel = edit;
+  gtk_widget_show (edit);
+
+  hbox = glade_xml_get_widget (xml, "ccard_acct_hbox");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
+
   /* Setup Dialog for Editing */
   gnome_dialog_set_default (ewd, 0);
 
@@ -452,6 +498,9 @@ gnc_employee_new_window (GNCBook *bookp,
 
   gtk_signal_connect(GTK_OBJECT (ew->username_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_employee_name_changed_cb), ew);
+
+  gtk_signal_connect(GTK_OBJECT (ew->ccard_acct_check), "toggled",
+		     GTK_SIGNAL_FUNC(gnc_employee_ccard_acct_toggled_cb), ew);
 
   /* Setup initial values */
   if (employee != NULL) {
@@ -509,6 +558,16 @@ gnc_employee_new_window (GNCBook *bookp,
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (ew->rate_amount),
 			      gncEmployeeGetRate (employee));
 
+
+  ccard_acct = gncEmployeeGetCCard (employee);
+  if (ccard_acct == NULL) {
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->ccard_acct_check), FALSE);
+    gtk_widget_set_sensitive (ew->ccard_acct_sel, FALSE);
+  } else {
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ew->ccard_acct_check), TRUE);
+    gnc_account_sel_set_account (GNC_ACCOUNT_SEL (ew->ccard_acct_sel), ccard_acct);
+  }
+
   /* XXX: Set the ACL */
 
   gnc_gui_component_watch_entity_type (ew->component_id,
@@ -516,6 +575,9 @@ gnc_employee_new_window (GNCBook *bookp,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_show_all (ew->dialog);
+
+  if (ccard_acct == NULL)
+    gtk_widget_hide (ew->ccard_acct_sel);
 
   return ew;
 }
@@ -546,6 +608,44 @@ gnc_ui_employee_edit (GncEmployee *employee)
 }
 
 /* Functions for employee selection widgets */
+
+static void
+invoice_employee_cb (gpointer *employee_p, gpointer user_data)
+{
+  struct _employee_select_window *sw = user_data;
+  GncOwner owner;
+  GncEmployee *employee;
+
+  g_return_if_fail (employee_p && user_data);
+
+  employee = *employee_p;
+
+  if (!employee)
+    return;
+
+  gncOwnerInitEmployee (&owner, employee);
+  gnc_invoice_search (NULL, &owner, sw->book);
+  return;
+}
+
+static void
+payment_employee_cb (gpointer *employee_p, gpointer user_data)
+{
+  struct _employee_select_window *sw = user_data;
+  GncOwner owner;
+  GncEmployee *employee;
+
+  g_return_if_fail (employee_p && user_data);
+
+  employee = *employee_p;
+
+  if (!employee)
+    return;
+
+  gncOwnerInitEmployee (&owner, employee);
+  gnc_ui_payment_new (&owner, sw->book);
+  return;
+}
 
 static void
 edit_employee_cb (gpointer *employee_p, gpointer user_data)
@@ -596,6 +696,8 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   static GList *columns = NULL;
   static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Employee"), edit_employee_cb},
+    { N_("Expense Vouchers"), invoice_employee_cb},
+    { N_("Process Payment"), payment_employee_cb},
     { NULL },
   };
 
@@ -605,20 +707,20 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   if (params == NULL) {
     params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
 				       EMPLOYEE_ID, NULL);
-    params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
-				       type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
 				       type, EMPLOYEE_USERNAME, NULL);
+    params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
+				       type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
   }
 
   /* Build the column list in reverse order */
   if (columns == NULL) {
-    columns = gnc_search_param_prepend (columns, _("Name"), NULL, type,
-					EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
     columns = gnc_search_param_prepend (columns, _("Username"), NULL, type,
 					EMPLOYEE_USERNAME, NULL);
     columns = gnc_search_param_prepend (columns, _("ID #"), NULL, type,
 					EMPLOYEE_ID, NULL);
+    columns = gnc_search_param_prepend (columns, _("Name"), NULL, type,
+					EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
   }
 
   /* Build the queries */
