@@ -116,6 +116,7 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
 
     message = g_strdup_printf (format, cell_msg);
     gnc_error_dialog_parented (GTK_WINDOW (ledger->parent), message);
+    g_free(message);
 
     return FALSE;
   }

@@ -90,6 +90,7 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 			     "Please try again..."),
 			   xaccAccountGetTypeStr (xaccAccountGetType (acc)));
 	gnc_error_dialog_parented (GTK_WINDOW (ddc->dialog), message);
+	g_free (message);
 	g_free (name);
 	name = xaccAccountGetFullName (acc, gnc_get_account_separator ());
 	acc = NULL;

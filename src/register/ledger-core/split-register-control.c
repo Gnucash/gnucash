@@ -933,6 +933,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
 	gnc_error_dialog_parented (gnc_split_register_get_parent (reg),
 				   message);
+	g_free(message);
       }
       break;
     }
@@ -947,6 +948,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
       result = gnc_verify_dialog_parented (gnc_split_register_get_parent (reg),
                                            message, TRUE);
+      g_free(message);
       if (!result)
         break;
     }
