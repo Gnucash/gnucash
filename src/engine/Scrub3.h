@@ -21,19 +21,24 @@
 
 /** @addtogroup Engine
     @{ */
+/** @addtogroup Scrub
+    @{ */
+
 /** @file Scrub3.h
  *  @breif Hiogh-Level API for imposing Lot constraints
  *  @author Created by Linas Vepstas Sept 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
- *
- * Provides the high-level API for checking and repairing ('scrubbing 
- * clean') the usage of Lots and Cap Gains transactions in stock and 
- * commodity accounts.  
  */
 #ifndef XACC_SCRUB3_H
 #define XACC_SCRUB3_H
 
 #include "gnc-engine.h"
+
+/** @name High-Level Lot Constraint
+ * Provides the high-level API for checking and repairing ('scrubbing 
+ * clean') the usage of Lots and Cap Gains transactions in stock and 
+ * commodity accounts.  
+ @{ */
 
 /** The xaccScrubLot() routine makes sure that the indicated lot is
  *    self-consistent and properly balanced, and fixes it if its not.
@@ -69,5 +74,7 @@ void xaccAccountScrubLots (Account *acc);
 void xaccGroupScrubLots (AccountGroup *grp);
 void xaccAccountTreeScrubLots (Account *acc);
 
+/** @} */
 #endif /* XACC_SCRUB3_H */
+/** @} */
 /** @} */

@@ -38,6 +38,7 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup PriceDB  Price Database
+    @ingroup Engine
     The PriceDB is intended to be a database of price quotes, or more
     specifically, a database of GNCPrices.  For the time being, it is
     still a fairly simple database supporting only fairly simple
@@ -57,6 +58,7 @@
 */
 
 /** @addtogroup Price  Prices
+    @ingroup Engine
     Each price in the database represents an "instantaneous" quote for
     a given commodity with respect to another commodity.  For example,
     a given price might represent the value of LNUX in USD on
@@ -122,7 +124,7 @@
 
 /* ================================================================ */
 
-/** @addtogroup Price  Prices
+/** @addtogroup Price
  @{ */
 
 /** */
@@ -229,6 +231,7 @@ void     gnc_price_list_destroy(GList *prices);
 
 gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
 /**  @} */
+/**  @}  end of the Price doxygen group */
 
 /* ================================================================ */
 /** @addtogroup PriceDB
