@@ -28,7 +28,47 @@
 #ifndef __XACC_QUEUE_H__
 #define __XACC_QUEUE_H__
 
+#include "Transaction.h"
+
+typedef struct _Queue Queue;
+
+/*
+ * The xaccQueuePushHead() routine pushes a split onto the head 
+ *    of the queue.
+ *
+ * The xaccQueuePopTailShares() routine removes the indicated
+ *    number of shares from the bottom of the queue.  If the queue
+ *    does not contain that many shares, it dequeues all of the 
+ *    shares. This routine returns the actual number of shares dequeued.
+ *    Use this routine for FIFO accounting.
+ *
+ * The xaccQueuePopTailValue() routine removes the indicated
+ *    value from the bottom of the queue.  If the value of the queue is less
+ *    than this amount, the value of the queue is set to zero, and the
+ *    actual value poped is returned.
+ *    Use this routine for FIFO accounting.
+ *
+ * The xaccQueuePopHeadShares() and xaccQueuePopHeadValue() routines
+ *    behave in the same way as the *Tail* versions, except that they act
+ *    on the head of the queue.  Use these routines for LIFO accounting.
+ *
+ * The xaccQueueGetValue() routine returns the value of the queue.
+ * The xaccQueueGetShares() routine returns the number of shares in the queue.
+ */
+
+Queue * xaccMallocQueue (void);
+void xaccInitQueue (Queue *q);
+void xaccFreeQueue (Queue *q);
+
 void xaccQueuePushHead (Split *s);
+
+double xaccQueuePopHeadShares (Queue *, double);
+double xaccQueuePopHeadValue (Queue *, double);
+double xaccQueuePopTailShares (Queue *, double);
+double xaccQueuePopTailValue (Queue *, double);
+
+double xaccQueueGetValue (Queue *);
+double xaccQueueGetShares (Queue *);
 
 #endif /* __XACC_QUEUE_H__ */
 
@@ -56,8 +96,11 @@ struct _Queue {
 
    double head_amount;
    double head_price;
+   Timespec head_date;
+
    double tail_amount;
    double tail_price;
+   Timespec tail_date;
 
 };
 
@@ -88,6 +131,11 @@ xaccInitQueue (Queue *q)
    q->tail_amount = 0.0;
    q->head_price = 0.0;
    q->tail_price = 0.0;
+
+   q->head_date.tv_sec = 0;
+   q->head_date.tv_nsec = 0;
+   q->tail_date.tv_sec = 0;
+   q->tail_date.tv_nsec = 0;
 }
 
 /* ================================================== */
@@ -111,10 +159,68 @@ xaccFreeQueue (Queue *q)
 }
 
 /* ================================================== */
+/* get more memory, if needed */
+
+static void
+ExtendHead (Queue * q)
+{
+   Split **list, **newlist;
+   int i, len, tail;
+
+   /* if there's room to push one more item on the list, its a no-op */
+   if (1+(q->head_split) < q->list_len) return;
+
+   /* see if there's room at the bottom to slide the whole list down. */
+   /* as a rule of thumb, we'll shoot for a half-full queue */
+   if (2*(q->tail_split) > q->list_len) 
+   {
+      len = q->head_split - q->tail_split + 1;
+      list = q->split_list;
+      tail = q->tail_split;
+      for (i=0; i<len; i++) {
+         list[i] = list[i+tail]; 
+      }
+      q->tail_split = 0;
+      q->head_split = len-1;
+      return;
+   }
+
+   /* if we got to here, we need to malloc more memory.
+   newlist = (Split **) malloc (2*(q->list_len)*sizeof (Split *));
+   q->list_len *= 2;
+
+   len = q->head_split - q->tail_split + 1;
+   list = q->split_list;
+   tail = q->tail_split;
+   for (i=0; i<len; i++) {
+      newlist[i] = list[i+tail]; 
+   }
+
+   q->split_list = newlist;
+   free(list);
+   return;
+}
+
+/* ================================================== */
 
 void 
-xaccQueuePushHead (Split *s)
+xaccQueuePushHead (Queue *q, Split *s)
 {
+  if (!q || !s) return;
+
+  /* I'm too lazy to code up a more complex feature that no one will use ... */
+  /* If you are reading this, you are invited to do so yourself :-) */
+  if ( !DEQ (q->head_amount, 0.0)) {
+    PERR ("xaccQueuePushHead(): The current implementation does not\n"
+          "\tsupport pushing onto a queue that has been popped \n");
+    return;
+  }
+
+  /* make room, if need be */
+  ExtendHead (q);
+
+  q->head_split ++;
+  q->split_list [ q->head_list ] = s;
 }
 
 /* ================ END OF FILE  ==================== */
