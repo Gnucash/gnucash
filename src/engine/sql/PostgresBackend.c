@@ -1296,10 +1296,21 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 /* ============================================================= */
 /* ============================================================= */
 
+static gboolean 
+foreach_price_cb (GNCPrice *pr, gpointer bend)
+{
+   PGBackend *be = (PGBackend *) bend;
+
+   pgendPutOnePriceOnly (be, pr);
+   
+   return TRUE;
+}
+
 static void
 pgendStorePriceDBNoLock (PGBackend *be, GNCPriceDB *prdb)
 {
-   PERR ("not implemented");
+   gnc_pricedb_foreach_price (prdb, foreach_price_cb,
+                              (gpointer) be, FALSE);
 }
 
 static void
@@ -2288,7 +2299,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       /* check the connection status */
       if (CONNECTION_BAD == PQstatus(be->connection))
       {
-         PERR("Can't connect to database 'gnucash':\n"
+         PERR("Can't connect to database 'template1':\n"
               "\t%s", 
               PQerrorMessage(be->connection));
          PQfinish (be->connection);
