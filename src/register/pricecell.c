@@ -16,6 +16,9 @@ PriceMV (struct _BasicCell *_cell,
          const char *change, 
          const char *newval)
 {
+   BasicCell *cell = (BasicCell *) _cell;
+
+   /* accept the newval string if user action was delete, etc. */
    if (change) {
       /* if change is a decimal point, then count decimal points */
       if (DECIMAL_PT == change[0]) {
@@ -23,18 +26,16 @@ PriceMV (struct _BasicCell *_cell,
          for (i=0; 0 != newval[i]; i++) {
             if (DECIMAL_PT == newval[i]) count ++;
          }
-         if (1 >= count) return newval;
-         return NULL;
-
+         if (1 < count) return NULL;
       } else {
          /* accept numeric, reject non-alpha edits */
-         if (isdigit (change[0])) return newval;
-         return NULL;
+         if (! (isdigit (change[0]))) return NULL;
       }
-   } else {
-      /* accept the newval string if user action was delete, etc. */
-      return newval; 
    }
+
+   /* hack alert - should parse the float pt value  */
+   xaccSetBaicCellValue (cell, newval);
+   return newval; 
 }
 
 /* ================================================ */

@@ -102,7 +102,7 @@ typedef struct _BasicCell {
 BasicCell * xaccMallocBasicCell (void);
 void         xaccInitBasicCell (BasicCell *);
 
-void         xaccSetBasicCellValue (BasicCell *, char *);
+void         xaccSetBasicCellValue (BasicCell *, const char *);
 
 #endif /* __XACC_BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

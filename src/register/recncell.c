@@ -14,6 +14,7 @@
 static const char * 
 ToggleRecn (struct _BasicCell *_cell, const char *cur_val)
 {
+   BasicCell *cell = (BasicCell *) _cell;
    char buff[2];
 
    if (NREC == cur_val[0]) {
@@ -23,6 +24,7 @@ ToggleRecn (struct _BasicCell *_cell, const char *cur_val)
    }
    buff[1] = 0x0;
    
+   xaccSetBasicCellValue (cell, buff);
    return strdup (buff);
 }
 

@@ -14,6 +14,9 @@ TextMV (struct _BasicCell *_cell,
         const char *change, 
         const char *newval)
 {
+   BasicCell *cell = (BasicCell *) _cell;
+
+   xaccSetBasicCellValue (cell, newval);
    return newval;
 }
 
@@ -33,10 +36,12 @@ xaccMallocTextCell (void)
 void
 xaccInitTextCell (BasicCell *cell)
 {
-  if (cell->value) free (cell->value);
-  cell->value = strdup ("");
+   xaccInitBasicCell (cell);
 
-  cell->modify_verify = TextMV;
+   if (cell->value) free (cell->value);
+   cell->value = strdup ("");
+
+   cell->modify_verify = TextMV;
 }
 
 /* --------------- end of file ---------------------- */

@@ -239,6 +239,8 @@ DateMV (struct _BasicCell *_cell,
    sprintf (buff, "%d/%d/%d", date->tm_mday, 
                               date->tm_mon+1, 
                               date->tm_year+1900);
+
+   xaccSetBasicCellValue (&(cell->cell), buff);
    datestr = strdup (buff);
    
    return datestr;

@@ -28,6 +28,7 @@ quick_modify (struct _BasicCell *_cell,
         const char *newval)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
+   char * retval = (char *) newval;
 
    /* if user typed the very first letter into this
     * cell, then make sure that the quick-fill is set to 
@@ -57,14 +58,11 @@ quick_modify (struct _BasicCell *_cell,
       }
 
       /* if a match found, return it */
-      if (cell->qf) {
-         return (strdup (cell->qf->text));
-      } else {
-         return newval;
-      }
-   } else {
-      return newval;
+      if (cell->qf) retval = strdup (cell->qf->text);
    }
+
+   xaccSetBasicCellValue (&(cell->cell), retval);
+   return retval;
 }
 
 /* ================================================ */

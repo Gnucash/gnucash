@@ -27,7 +27,7 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->gui_private = NULL;
 }
 
-void xaccSetBasicCellValue (BasicCell *cell, char *val)
+void xaccSetBasicCellValue (BasicCell *cell, const char *val)
 {
    if (cell->value) free (cell->value);
    cell->value = strdup (val);
