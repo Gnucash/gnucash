@@ -158,6 +158,7 @@ gnc_history_get_last(void)
 void
 gnc_history_update_menu(void)
 {
+  GtkWidget *app_w;
   GnomeApp *app;
   GnomeUIInfo *menu;
   char *path;
@@ -167,9 +168,11 @@ gnc_history_update_menu(void)
   int count;
   int i, n;
 
-  app = GNOME_APP(gnc_get_ui_data());
-  if (app == NULL)
+  app_w = gnc_get_ui_data ();
+  if (!app_w)
     return;
+
+  app = GNOME_APP (app_w);
 
   gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
                               7, 1 + num_menu_entries);

@@ -794,6 +794,8 @@ gnc_ui_mainWindow_save_size(void)
   int height = 0;
 
   app = gnc_get_ui_data();
+  if (!app)
+    return;
 
   gdk_window_get_geometry(GTK_WIDGET(app)->window, NULL, NULL,
                           &width, &height, NULL);
@@ -1314,20 +1316,29 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
 }
 
 static GNCMainInfo *
-gnc_get_main_info(void)
+gnc_get_main_info (void)
 {
-  GtkObject *app = GTK_OBJECT(gnc_get_ui_data());
+  GtkWidget *app = gnc_get_ui_data ();
 
-  return gtk_object_get_data(app, "gnc_main_info");
+  if (!app)
+    return NULL;
+
+  return gtk_object_get_data (GTK_OBJECT (app), "gnc_main_info");
 }
 
 static void
 gnc_configure_toolbar(void *data)
 {
-  GnomeApp *app = GNOME_APP(gnc_get_ui_data());
+  GtkWidget *app_w = gnc_get_ui_data ();
+  GnomeApp *app;
   GnomeDockItem *di;
   GtkWidget *toolbar;
   GtkToolbarStyle tbstyle;
+
+  if (!app_w)
+    return;
+
+  app = GNOME_APP (app_w);
 
   di = gnome_app_get_dock_item_by_name(app, GNOME_APP_TOOLBAR_NAME);
   if (di == NULL)

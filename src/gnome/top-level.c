@@ -76,7 +76,6 @@ static void gnc_configure_register_borders_cb(void *);
 static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
-static void gnc_configure_sr_label_callbacks(void);
 static void gnc_configure_auto_raise_cb(void *);
 static void gnc_configure_auto_raise(void);
 static void gnc_configure_negative_color_cb(void *);
@@ -272,8 +271,6 @@ gnucash_ui_init(void)
                                           NULL, "Register",
                                           "Register hint font");
 
-    gnc_configure_sr_label_callbacks();
-
     xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
 
     mainWindow();
@@ -412,61 +409,6 @@ gnc_register_default_hint_font(void)
 }
 
 /* ============================================================== */
-
-static GNCAccountType
-sr_type_to_account_type(SplitRegisterType sr_type)
-{
-  switch (sr_type)
-  {
-    case BANK_REGISTER:
-      return BANK;
-    case CASH_REGISTER:
-      return CASH;
-    case ASSET_REGISTER:
-      return ASSET;
-    case CREDIT_REGISTER:
-      return CREDIT;
-    case LIABILITY_REGISTER:
-      return LIABILITY;
-    case INCOME_LEDGER:  
-    case INCOME_REGISTER:
-      return INCOME;
-    case EXPENSE_REGISTER:
-      return EXPENSE;
-    case STOCK_REGISTER:
-    case PORTFOLIO_LEDGER:
-      return STOCK;
-    case CURRENCY_REGISTER:
-      return CURRENCY;
-    case GENERAL_LEDGER:  
-      return NO_TYPE;
-    case EQUITY_REGISTER:
-      return EQUITY;
-    case SEARCH_LEDGER:
-      return NO_TYPE;
-    default:
-      return NO_TYPE;
-  }
-}
-
-static char *
-gnc_sr_debit_string(SplitRegisterType sr_type)
-{
-  return gnc_get_debit_string(sr_type_to_account_type(sr_type));
-}
-
-static char *
-gnc_sr_credit_string(SplitRegisterType sr_type)
-{
-  return gnc_get_credit_string(sr_type_to_account_type(sr_type));
-}
-
-static void
-gnc_configure_sr_label_callbacks(void)
-{
-  xaccSplitRegisterSetDebitStringGetter(gnc_sr_debit_string);
-  xaccSplitRegisterSetCreditStringGetter(gnc_sr_credit_string);
-}
 
 /* gnc_configure_date_format_cb
  *    Callback called when options change - sets dateFormat to the current
