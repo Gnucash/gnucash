@@ -45,6 +45,10 @@ AC_ARG_WITH( motif-libraries,
        [  --with-motif-libraries=DIR   specify where to look for motif libs],
        X_LIBS="${X_LIBS} -L$with_motif_libraries" )
 
+AC_ARG_WITH( xmhtml-libraries, 
+       [  --with-xmhtml-libraries=DIR   specify where to look for xmhtml libs],
+       X_LIBS="${X_LIBS} -L$with_xmhtml_libraries" )
+
 # Let the user specify gnome paths:
 # -I...libgnomesupport is to fix bug in gnome-1.3 release
 AC_ARG_WITH( gnome, 
@@ -90,7 +94,11 @@ AC_CHECK_LIB(png, png_read_image,
 
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
-        AC_DEFINE(HAVE_XPM,0), -L $x_libraries -lX11)
+        AC_DEFINE(HAVE_XPM,0), -L $x_libraries -lX11) 
+
+AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
+        AC_DEFINE(HAVE_XMHTML,1) X_LIBS="-lXmHTML $X_LIBS",
+        AC_DEFINE(HAVE_XMHTML,0), -lXm -L $x_libraries -lXext -lX11) 
 
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
