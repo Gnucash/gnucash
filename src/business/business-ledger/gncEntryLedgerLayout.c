@@ -70,7 +70,9 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
       CELL_ALIGN_LEFT, FALSE, FALSE },
     { ENTRY_DISHOW_CELL, RECN_CELL_TYPE_NAME, N_("sample(DH):+%")+11,
       CELL_ALIGN_LEFT, FALSE, FALSE },
-    { ENTRY_ACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
+    { ENTRY_IACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
+      CELL_ALIGN_RIGHT, FALSE, FALSE },
+    { ENTRY_BACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_TAXABLE_CELL, RECN_CELL_TYPE_NAME, N_("sample:T?")+7,
       CELL_ALIGN_LEFT, FALSE, FALSE },
@@ -139,7 +141,7 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 1);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
     gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_ACCT_CELL, 0, 4);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_IACCT_CELL, 0, 4);
     gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, 5);
     gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, 6);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DISTYPE_CELL, 0, 7);
@@ -161,7 +163,7 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 1);
     gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
     gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
-    gnc_table_layout_set_cell (layout, curs, ENTRY_ACCT_CELL, 0, 4);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_BACCT_CELL, 0, 4);
     gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, 5);
     gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, 6);
     gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 7);

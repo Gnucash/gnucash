@@ -634,7 +634,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gncEntryGetValue (entry, &value, NULL, &tax, &taxes);
 
     /* add the value for the account split */
-    this_acc = gncEntryGetAccount (entry);
+    this_acc = (reverse ? gncEntryGetInvAccount (entry) :
+		gncEntryGetBillAccount (entry));
     if (this_acc) {
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
 	splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);

@@ -58,7 +58,8 @@ void gncEntrySetTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetBillable (GncEntry *entry, gboolean billable);
 void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto);
 
-void gncEntrySetAccount (GncEntry *entry, Account *acc);
+void gncEntrySetInvAccount (GncEntry *entry, Account *acc);
+void gncEntrySetBillAccount (GncEntry *entry, Account *acc);
 
 /* Get Functions */
 
@@ -111,7 +112,8 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 			   gnc_numeric *value, gnc_numeric *discount_value,
 			   GList **tax_values);
 
-Account * gncEntryGetAccount (GncEntry *entry);
+Account * gncEntryGetInvAccount (GncEntry *entry);
+Account * gncEntryGetBillAccount (GncEntry *entry);
 
 GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);

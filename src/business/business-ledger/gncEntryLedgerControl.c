@@ -137,9 +137,21 @@ gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
 
   /* If there is a value, make sure there is an account */
   if (! gnc_numeric_zero_p (value)) {
-    if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_ACCT_CELL,
-					      _("an Account")))
-      return FALSE;
+    switch (ledger->type) {
+    case GNCENTRY_INVOICE_ENTRY:
+      if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_IACCT_CELL,
+						_("an Account")))
+	return FALSE;
+      break;
+    case GNCENTRY_BILL_ENTRY:
+      if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_BACCT_CELL,
+						_("an Account")))
+	return FALSE;
+      break;
+    default:
+      g_warning ("Unhandled ledger type");
+      break;
+    }
   }
 
   return TRUE;
@@ -265,16 +277,34 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     ComboCell *cell;
     Account *account;
     char *name;
+    char *cell_name = NULL;
 
-    if (!gnc_cell_name_equal (cell_name, ENTRY_ACCT_CELL))
+    switch (ledger->type) {
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+      cell_name = ENTRY_IACCT_CELL;
+      break;
+    case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_BILL_VIEWER:
+      cell_name = ENTRY_BACCT_CELL;
+      break;
+    default:
+      g_warning ("Unhandled ledger type");
+      break;
+    }
+
+    if (!cell_name)
+      break;
+
+    if (!gnc_cell_name_equal (cell_name, cell_name))
       break;
 
     if (!gnc_table_layout_get_cell_changed (ledger->table->layout,
-					    ENTRY_ACCT_CELL, FALSE))
+					    cell_name, FALSE))
       break;
 
     cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
-						    ENTRY_ACCT_CELL);
+						    cell_name);
     if (!cell)
       break;
 
@@ -390,7 +420,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
     /* Verify that the cursor is ok.  If we can't save the cell, don't move! */
     if (!gnc_entry_ledger_verify_can_save (ledger)) {
-      break;
+      return TRUE;
     }
 
     (p_new_virt_loc->vcell_loc.virt_row)++;

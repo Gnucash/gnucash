@@ -127,7 +127,12 @@ static void load_xfer_type_cells (GncEntryLedger *ledger)
     return;
 
   cell = (ComboCell *)
-    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACCT_CELL);
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
+  gnc_combo_cell_clear_menu (cell);
+  load_xfer_cell (cell, group);
+
+  cell = (ComboCell *)
+    gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
   gnc_combo_cell_clear_menu (cell);
   load_xfer_cell (cell, group);
 }

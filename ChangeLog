@@ -1,3 +1,11 @@
+2002-07-11  Derek Atkins  <derek@ihtfp.com>
+
+	* change gncEntry->account into gncEntry->invAccount and
+	  gncEntry->billAccount.  Change the register so that Bills use
+	  the BillAccount and Invoices use the InvoiceAccount.  This
+	  allows the same Entry to have both an "expense" and "income"
+	  account to offset each other.
+
 2002-07-10  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/druid-loan.[ch]: Added; Initial implementation of

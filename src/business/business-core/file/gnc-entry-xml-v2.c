@@ -70,7 +70,8 @@ const gchar *entry_version_string = "2.0.0";
 #define entry_discount_string "entry:discount"
 #define entry_disctype_string "entry:disc-type"
 #define entry_dischow_string "entry:disc-how"
-#define entry_acct_string "entry:acct"
+#define entry_invacct_string "entry:i-acct"
+#define entry_billacct_string "entry:b-acct"
 #define entry_taxable_string "entry:taxable"
 #define entry_taxincluded_string "entry:taxincluded"
 #define entry_taxtable_string "entry:taxtable"
@@ -132,9 +133,14 @@ entry_dom_tree_create (GncEntry *entry)
 				      gncEntryDiscountHowToString (
 				     gncEntryGetDiscountHow (entry))));
 
-    acc = gncEntryGetAccount (entry);
+    acc = gncEntryGetInvAccount (entry);
     if (acc)
-      xmlAddChild (ret, guid_to_dom_tree (entry_acct_string,
+      xmlAddChild (ret, guid_to_dom_tree (entry_invacct_string,
+					  xaccAccountGetGUID (acc)));
+
+    acc = gncEntryGetBillAccount (entry);
+    if (acc)
+      xmlAddChild (ret, guid_to_dom_tree (entry_billacct_string,
 					  xaccAccountGetGUID (acc)));
 
     xmlAddChild(ret, int_to_dom_tree(entry_taxable_string,
@@ -177,6 +183,7 @@ struct entry_pdata
 {
   GncEntry *entry;
   GNCBook *book;
+  Account *acc;
 };
 
 static gboolean
@@ -224,6 +231,26 @@ set_boolean(xmlNodePtr node, GncEntry* entry,
     if (!dom_tree_to_integer(node, &val))
       return FALSE;
     func (entry, (gboolean)val);
+    return TRUE;
+}
+
+static gboolean
+set_account(xmlNodePtr node, struct entry_pdata *pdata,
+	    void (*func)(GncEntry *entry, Account *acc))
+{
+    GUID *guid;
+    Account * acc;
+
+    guid = dom_tree_to_guid (node);
+    g_return_val_if_fail (guid, FALSE);
+    acc = xaccAccountLookup (guid, pdata->book);
+    g_free (guid);
+    g_return_val_if_fail (acc, FALSE);
+
+    if (func)
+      func (pdata->entry, acc);
+    else
+      pdata->acc = acc;
     return TRUE;
 }
 
@@ -357,17 +384,25 @@ static gboolean
 entry_acct_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    GUID *guid;
-    Account * acc;
+    /* XXX: try to figure out if this is an 'invoice' or a 'bill' --
+     * we have to wait until the end!
+     */
 
-    guid = dom_tree_to_guid (node);
-    g_return_val_if_fail (guid, FALSE);
-    acc = xaccAccountLookup (guid, pdata->book);
-    g_free (guid);
-    g_return_val_if_fail (acc, FALSE);
+    return set_account (node, pdata, NULL);
+}
 
-    gncEntrySetAccount (pdata->entry, acc);
-    return TRUE;
+static gboolean
+entry_invacct_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    return set_account (node, pdata, gncEntrySetInvAccount);
+}
+
+static gboolean
+entry_billacct_handler (xmlNodePtr node, gpointer entry_pdata)
+{
+    struct entry_pdata *pdata = entry_pdata;
+    return set_account (node, pdata, gncEntrySetBillAccount);
 }
 
 static gboolean
@@ -501,7 +536,9 @@ static struct dom_tree_handler entry_handlers_v2[] = {
     { entry_discount_string, entry_discount_handler, 0, 0 },
     { entry_disctype_string, entry_disctype_handler, 0, 0 },
     { entry_dischow_string, entry_dischow_handler, 0, 0 },
-    { entry_acct_string, entry_acct_handler, 0, 0 },
+    { "entry:acct", entry_acct_handler, 0, 0 },
+    { entry_invacct_string, entry_invacct_handler, 0, 0 },
+    { entry_billacct_string, entry_billacct_handler, 0, 0 },
     { entry_taxable_string, entry_taxable_handler, 0, 0 },
     { entry_taxincluded_string, entry_taxincluded_handler, 0, 0 },
     { entry_taxtable_string, entry_taxtable_handler, 0, 0 },
@@ -521,9 +558,16 @@ dom_tree_to_entry (xmlNodePtr node, GNCBook *book)
 
     entry_pdata.entry = gncEntryCreate(book);
     entry_pdata.book = book;
+    entry_pdata.acc = NULL;
 
     successful = dom_tree_generic_parse (node, entry_handlers_v2,
                                          &entry_pdata);
+    if (entry_pdata.acc != NULL) {
+      if (gncEntryGetBill (entry_pdata.entry))
+	gncEntrySetBillAccount (entry_pdata.entry, entry_pdata.acc);
+      else
+	gncEntrySetInvAccount (entry_pdata.entry, entry_pdata.acc);
+    }
     gncEntryCommitEdit (entry_pdata.entry);
 
     if (!successful)

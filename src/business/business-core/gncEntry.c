@@ -36,7 +36,8 @@ struct _gncEntry {
   gnc_numeric 	discount;
   GncAmountType	disc_type;
   GncDiscountHow disc_how;
-  Account *	account;
+  Account *	invaccount;
+  Account *	bilaccount;
 
   gboolean	taxable;
   gboolean	taxincluded;
@@ -249,11 +250,19 @@ void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
   mark_entry (entry);
 }
 
-void gncEntrySetAccount (GncEntry *entry, Account *acc)
+void gncEntrySetInvAccount (GncEntry *entry, Account *acc)
 {
   if (!entry) return;
-  if (entry->account == acc) return;
-  entry->account = acc;
+  if (entry->invaccount == acc) return;
+  entry->invaccount = acc;
+  mark_entry (entry);
+}
+
+void gncEntrySetBillAccount (GncEntry *entry, Account *acc)
+{
+  if (!entry) return;
+  if (entry->bilaccount == acc) return;
+  entry->bilaccount = acc;
   mark_entry (entry);
 }
 
@@ -376,7 +385,8 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
   dest->price			= src->price;
   dest->discount		= src->discount;
   dest->disc_type		= src->disc_type;
-  dest->account			= src->account;
+  dest->invaccount		= src->invaccount;
+  dest->bilaccount		= src->bilaccount;
   dest->taxable			= src->taxable;
   dest->taxincluded		= src->taxincluded;
   dest->billable		= src->billable;
@@ -461,10 +471,16 @@ gnc_numeric gncEntryGetDiscount (GncEntry *entry)
   return entry->discount;
 }
 
-Account * gncEntryGetAccount (GncEntry *entry)
+Account * gncEntryGetInvAccount (GncEntry *entry)
 {
   if (!entry) return NULL;
-  return entry->account;
+  return entry->invaccount;
+}
+
+Account * gncEntryGetBillAccount (GncEntry *entry)
+{
+  if (!entry) return NULL;
+  return entry->bilaccount;
 }
 
 GncInvoice * gncEntryGetInvoice (GncEntry *entry)

@@ -115,7 +115,7 @@ static const char * get_billable_label (VirtualLocation virt_loc, gpointer data)
 
 /* GET_ENTRY */
 
-static const char * get_acct_entry (VirtualLocation virt_loc,
+static const char * get_iacct_entry (VirtualLocation virt_loc,
 				    gboolean translate,
 				    gboolean *conditionally_changed,
 				    gpointer user_data)
@@ -128,7 +128,25 @@ static const char * get_acct_entry (VirtualLocation virt_loc,
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
   g_free (name);
-  name = xaccAccountGetFullName (gncEntryGetAccount (entry),
+  name = xaccAccountGetFullName (gncEntryGetInvAccount (entry),
+				 gnc_get_account_separator ());
+  return name;
+}
+
+static const char * get_bacct_entry (VirtualLocation virt_loc,
+				    gboolean translate,
+				    gboolean *conditionally_changed,
+				    gpointer user_data)
+{
+  static char *name = NULL;
+
+  GncEntryLedger *ledger = user_data;
+  GncEntry *entry;
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+  g_free (name);
+  name = xaccAccountGetFullName (gncEntryGetBillAccount (entry),
 				 gnc_get_account_separator ());
   return name;
 }
@@ -826,13 +844,23 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
   /* copy the contents from the cursor to the split */
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
-					 ENTRY_ACCT_CELL, TRUE)) {
+					 ENTRY_IACCT_CELL, TRUE)) {
     Account *acc;
 
-    acc = gnc_entry_ledger_get_account (ledger, ENTRY_ACCT_CELL);
+    acc = gnc_entry_ledger_get_account (ledger, ENTRY_IACCT_CELL);
 
     if (acc != NULL)
-      gncEntrySetAccount (entry, acc);
+      gncEntrySetInvAccount (entry, acc);
+  }
+
+  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+					 ENTRY_BACCT_CELL, TRUE)) {
+    Account *acc;
+
+    acc = gnc_entry_ledger_get_account (ledger, ENTRY_BACCT_CELL);
+
+    if (acc != NULL)
+      gncEntrySetBillAccount (entry, acc);
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
@@ -983,7 +1011,8 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     gpointer help_handler;
     gpointer io_flags_handler;
   } models[] = {
-    { ENTRY_ACCT_CELL, get_acct_entry, get_acct_label, get_acct_help, get_standard_io_flags },
+    { ENTRY_IACCT_CELL, get_iacct_entry, get_acct_label, get_acct_help, get_standard_io_flags },
+    { ENTRY_BACCT_CELL, get_bacct_entry, get_acct_label, get_acct_help, get_standard_io_flags },
     { ENTRY_ACTN_CELL, get_actn_entry, get_actn_label, get_actn_help, get_standard_io_flags },
     { ENTRY_DATE_CELL, get_date_entry, get_date_label, get_date_help, get_standard_io_flags },
     { ENTRY_DESC_CELL, get_desc_entry, get_desc_label, get_desc_help, get_standard_io_flags },

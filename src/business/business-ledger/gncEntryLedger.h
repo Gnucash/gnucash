@@ -34,7 +34,8 @@ typedef struct entry_ledger_colors
   guint32 secondary_active_bg_color;
 } GncEntryLedgerColors;
 
-#define ENTRY_ACCT_CELL		"account"
+#define ENTRY_IACCT_CELL	"inv-account"
+#define ENTRY_BACCT_CELL	"bill-account"
 #define ENTRY_ACTN_CELL		"action"
 #define ENTRY_DATE_CELL		"date"
 #define ENTRY_DESC_CELL		"description"
