@@ -4,13 +4,13 @@
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 
-(define-module (g-wrapped gw-app-file-spec)
+(define-module (g-wrapped gw-app-file-gnome-spec)
   :use-module (g-wrap))
 
 (use-modules (g-wrapped gw-engine-spec))
 (use-modules (g-wrapped gw-glib-spec))
 
-(let ((mod (gw:new-module "gw-app-file")))
+(let ((mod (gw:new-module "gw-app-file-gnome")))
   (define (standard-c-call-gen result func-call-code)
     (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
 
@@ -36,37 +36,32 @@
   (gw:module-depends-on mod "gw-engine")
   (gw:module-depends-on mod "gw-glib")
 
-  (gw:module-set-guile-module! mod '(g-wrapped gw-app-file))
+  (gw:module-set-guile-module! mod '(g-wrapped gw-app-file-gnome))
 
   (gw:module-set-declarations-ccodegen!
    mod
    (lambda (client-only?)
      (list
-      "#include <gnc-file.h>\n")))
+      "#include <gnc-file-dialog.h>\n"
+      "#include <gnc-file-history.h>\n")))
 
 
   (gw:wrap-function
    mod
-   'gnc:file-query-save
-   '<gw:bool>
-   "gnc_file_query_save"
+   'gnc:history-get-last
+   '(<gw:m-chars-callee-owned> gw:const)
+   "gnc_history_get_last"
    '()
-   "Query the user whether to save the current file, and save
-if they say 'Yes'. The return is false if the user says 'Cancel'.")
+   "Get the last file opened by the user.")
 
   (gw:wrap-function
    mod
-   'gnc:file-quit
-   '<gw:void>
-   "gnc_file_quit"
-   '()
-   "Stop working with the current file.")
-
-  (gw:wrap-function
-   mod
-   'gnc:file-open-file
-   '<gw:bool>
-   "gnc_file_open_file"
-   '(((<gw:m-chars-caller-owned> gw:const) filename))
-   "Open filename.")
+   'gnc:file-selection-dialog
+   '(<gw:m-chars-callee-owned> gw:const)
+   "gnc_file_dialog"
+   '(((<gw:m-chars-caller-owned> gw:const) title)
+     ((<gw:m-chars-caller-owned> gw:const) filter)
+     ((<gw:m-chars-caller-owned> gw:const) default))
+   "Lets the user select a file. Dialog has given title, filter,
+or default name. Either filter, default, or both should be NULL.")
   )

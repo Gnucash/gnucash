@@ -50,6 +50,21 @@ static short module = MOD_GUI;
 static GNCSession * current_session = NULL;
 static GNCCanCancelSaveCB can_cancel_cb = NULL;
 
+static GNCHistoryAddFileFunc history_add_file_func = NULL;
+static GNCHistoryGetLastFunc history_get_last_func = NULL;
+
+static GNCFileDialogFunc file_dialog_func = NULL;
+
+
+void
+gnc_file_set_handlers (GNCHistoryAddFileFunc history_add_file_func_in,
+                       GNCHistoryGetLastFunc history_get_last_func_in,
+                       GNCFileDialogFunc file_dialog_func_in)
+{
+  history_add_file_func = history_add_file_func_in;
+  history_get_last_func = history_get_last_func_in;
+  file_dialog_func = file_dialog_func_in;
+}
 
 static GNCSession *
 gnc_get_current_session_internal (void)
@@ -223,17 +238,21 @@ static void
 gnc_add_history (GNCSession * session)
 {
   char *url;
+  char *file;
 
   if (!session) return;
+  if (!history_add_file_func) return;
 
   url = xaccResolveURL (gnc_session_get_url (session));
   if (!url)
     return;
 
   if (strncmp (url, "file:", 5) == 0)
-    gnc_history_add_file (url + 5);
+    file = url + 5;
   else
-    gnc_history_add_file (url);
+    file = url;
+
+  history_add_file_func (file);
 
   g_free (url);
 }
@@ -477,12 +496,20 @@ gboolean
 gnc_file_open (void)
 {
   const char * newfile;
+  const char * last;
   gboolean result;
 
   if (!gnc_file_query_save ())
     return FALSE;
 
-  newfile = gnc_file_dialog (_("Open"), NULL, gnc_history_get_last ());
+  if (!file_dialog_func)
+  {
+    PWARN ("no file dialog function");
+    return FALSE;
+  }
+
+  last = history_get_last_func ? history_get_last_func () : NULL;
+  newfile = file_dialog_func (_("Open"), NULL, last);
   result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
@@ -570,7 +597,14 @@ gnc_file_save_as (void)
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
   ENTER(" ");
-  filename = gnc_file_dialog (_("Save"), "*.gnc", NULL);
+
+  if (!file_dialog_func)
+  {
+    PWARN ("no file dialog func");
+    return;
+  }
+
+  filename = file_dialog_func (_("Save"), "*.gnc", NULL);
   if (!filename) return;
 
   /* Check to see if the user specified the same file as the current

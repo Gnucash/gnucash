@@ -11,7 +11,9 @@
 #include <libguile/strports.h>
 #include <libguile/modules.h>
 
+#include "gnc-file-dialog.h"
 #include "gnc-file-p.h"
+#include "gnc-file-history.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
@@ -24,26 +26,48 @@ int gnc_module_revision = 0;
 int gnc_module_age      = 0;
 
 char *
-gnc_module_path(void) {
+gnc_module_path(void)
+{
   return g_strdup("gnucash/app-file/gnome");
 }
 
 char * 
-gnc_module_description(void) {
+gnc_module_description(void)
+{
   return g_strdup("Application level file interface for Gnome");
 }
 
+static void
+lmod(char * mn) 
+{
+  char * form = g_strdup_printf("(use-modules %s)\n", mn);
+  gh_eval_str(form);
+  g_free(form);
+}
+
 int
-gnc_module_init(int refcount) {
+gnc_module_init(int refcount)
+{
   /* load the calculation module (we depend on it) */
   if(!gnc_module_load("gnucash/app-file", 0)) {
     return FALSE;
   }
 
+  lmod ("(g-wrapped gw-app-file-gnome)");
+
+  if (refcount == 0)
+    gnc_file_set_handlers (gnc_history_add_file,
+                           gnc_history_get_last,
+                           gnc_file_dialog);
+
   return TRUE;
 }
 
 int
-gnc_module_end(int refcount) {
+gnc_module_end(int refcount)
+{
+  if (refcount == 0)
+    gnc_file_set_handlers (NULL, NULL, NULL);
+
   return TRUE;
 }

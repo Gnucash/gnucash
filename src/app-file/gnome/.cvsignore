@@ -4,3 +4,8 @@ Makefile.in
 *.la
 .deps
 .libs
+.scm-links
+gw-app-file-gnome.c
+gw-app-file-gnome.scm
+gw-app-file-gnome.h
+gw-app-file-gnome.html
