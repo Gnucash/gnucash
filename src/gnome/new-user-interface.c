@@ -215,7 +215,7 @@ create_newUserDialog (void)
   gtk_widget_show (hbox1);
   gtk_box_pack_start (GTK_BOX (druid_vbox1), hbox1, TRUE, TRUE, 0);
 
-  frame1 = gtk_frame_new (_("Long Description"));
+  frame1 = gtk_frame_new (_("Detailed Description"));
   gtk_widget_set_name (frame1, "frame1");
   gtk_widget_ref (frame1);
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "frame1", frame1,

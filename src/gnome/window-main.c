@@ -24,14 +24,20 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <gnome.h>
 #include <guile/gh.h>
+#include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "gfec.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
 #include "gnucash.h"
+#include "io-utils.h"
 #include "top-level.h"
 #include "extensions.h"
 
@@ -54,12 +60,12 @@
 #include "window-register.h"
 #include "window-report.h"
 
-#include "mainwindow-account-tree.h"
-#include "gnc-component-manager.h"
-#include "option-util.h"
-#include "global-options.h"
-#include "query-user.h"
 #include "file-history.h"
+#include "global-options.h"
+#include "gnc-component-manager.h"
+#include "mainwindow-account-tree.h"
+#include "option-util.h"
+#include "query-user.h"
 
 #define WINDOW_MAIN_CM_CLASS "window-main"
 
@@ -70,10 +76,9 @@ static void gnc_main_window_create_menus(GNCMainInfo * maininfo);
  * Shut down the Gnucash ui windows 
  ********************************************************************/
 
-static int
+static void
 gnc_main_window_destroy_cb(GtkObject * w) {
   gnc_shutdown (0);
-  return TRUE;
 }
 
 
@@ -695,6 +700,112 @@ gnc_main_window_file_import_cb(GtkWidget * widget) {
 }
 
 static void
+gnc_main_window_file_export_cb(GtkWidget * widget) {
+  const char *filename;
+  struct stat statbuf;
+  gboolean ok;
+  FILE *file;
+  int rc;
+
+  filename =  fileBox (_("Export"), NULL, NULL);
+  if (!filename)
+    return;
+
+  rc = stat (filename, &statbuf);
+
+  /* Check for an error that isn't a non-existant file. */
+  if (rc != 0 && errno != ENOENT)
+  {
+    const char *message = _("You cannot save to that filename.");
+    char *string;
+
+    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
+    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+                               string);
+    g_free (string);
+    return;
+  }
+
+  /* Check for a file that isn't a regular file. */
+  if (rc == 0 && !S_ISREG (statbuf.st_mode))
+  {
+    const char *message = _("You cannot save to that file.");
+
+    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+                               message);
+    return;
+  }
+
+  if (rc == 0)
+  {
+    const char *format = _("The file \n    %s\n already exists.\n"
+                           "Are you sure you want to overwrite it?");
+    char *string;
+    gboolean result;
+
+    string = g_strdup_printf (format, filename);
+    result = gnc_verify_dialog_parented (gtk_widget_get_toplevel (widget),
+                                         string, FALSE);
+    g_free (string);
+
+    if (!result)
+      return;
+  }
+
+  file = fopen (filename, "w");
+  if (!file)
+  {
+    const char *message = _("You cannot save to that file.");
+    char *string;
+
+    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
+    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+                               string);
+    g_free (string);
+    return;
+  }
+
+  ok = FALSE;
+
+  do
+  {
+    rc = fputs ("<?xml version=\"1.0\"?>\n", file);
+    if (rc == EOF)
+      break;
+
+    rc = fputs ("<gnc-v2>\n", file);
+    if (rc == EOF)
+      break;
+
+    write_accounts (file, gncGetCurrentBook ());
+
+    rc = fputs ("<\\gnc-v2>\n", file);
+    if (rc == EOF)
+      break;
+
+    write_emacs_trailer (file);
+
+    rc = fclose (file);
+    if (rc != 0)
+      break;
+
+    ok = TRUE;
+  } while (FALSE);
+
+  if (!ok)
+  {
+    const char *message = _("There was an error saving the file.");
+    char *string;
+
+    string = g_strconcat (message, "\n\n", strerror (errno), NULL);
+    gnc_error_dialog_parented (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+                               string);
+    g_free (string);
+    return;
+  }
+}
+
+static void
 gnc_main_window_file_shutdown_cb(GtkWidget * widget) {
   gnc_shutdown(0);
 }
@@ -810,6 +921,14 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     GNOMEUIINFO_MENU_OPEN_ITEM(gnc_main_window_file_open_cb, NULL),
     GNOMEUIINFO_MENU_SAVE_ITEM(gnc_main_window_file_save_cb, NULL),
     GNOMEUIINFO_MENU_SAVE_AS_ITEM(gnc_main_window_file_save_as_cb, NULL),
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Export Accounts..."),
+      N_("Export the account hierarchy to a new file"),
+      gnc_main_window_file_export_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,

@@ -31,11 +31,11 @@
          (sub-income-pie (gnc:make-report "Income Accounts"))
          (sub-bar (gnc:make-report "Income/Expense Chart"))
          (options #f))
-    
+
     (define (set-option! section name value)
       (gnc:option-set-value 
        (gnc:lookup-option options section name) value))
-    
+
     (set! options (gnc:report-options (gnc:find-report view)))
     (set-option! "General" "Report name" "Welcome to GnuCash 1.6")
     (set-option! "General" "Number of columns" 2)
@@ -67,15 +67,13 @@
       (gnc:html-document-add-object! 
        doc
        (gnc:make-html-text 
-        (gnc:html-markup-h2 "Welcome to GnuCash 1.6!")
-        (gnc:html-markup-p 
-         "GnuCash 1.6 has lots of nice features. Here are a few.")
-        (gnc:html-markup-p 
-         "I know this is ugly.")))
+        (gnc:html-markup-h2 (_ "Welcome to GnuCash 1.6!"))
+        (gnc:html-markup-p
+         (_ "GnuCash 1.6 has lots of nice features. Here are a few."))))
       doc))
 
   (gnc:define-report 
-   'name "Welcome to GnuCash 1.6"
+   'name (N_ "Welcome to GnuCash 1.6")
    'in-menu? #f
    'options-generator options
    'renderer renderer))
