@@ -1,0 +1,23 @@
+This is the new OFX import module.  It's still very young, but it is now ready for other people to test.
+Note: You should also read src/import-export/generic-import-design.txt
+
+Implemented features (some of these are from the generic import module):
+-OFX file selection
+-Account matching, using unique OFX account ID
+-Account creation
+-Transaction duplicate matching, using the unique OFX transaction ID only.
+-Saving of ALL transaction data currently supported by LibOFX.  When no gnucash equivalent, it is put in the Transaction's Note field.  You must have double-line mode enabled to view the notes field.
+
+Unimplemented features:
+-Account currency compatibility check
+-Automaticaly set sane defaults when creating new account (parent account, sibling, currency, etc.)
+-Transaction fuzzy matching and split balancing
+
+To compile:
+./autogen.sh --enable-ofx
+make
+If sucessfull, an item will apear in Gnucash's File/Import submenu.
+
+You must have LibOFX > 0.23 installed. http://step.polymtl.ca/~bock/libofx/
+LibOFX depends on OpenSP , read LibOFX's "INSTALL" file.  LibOFX needs a recent version (1.5pre5 as of this writing, 1.4 might work).
+I suggest you first run your ofx file thru ofxdump before you try it from GnuCash.diff -up 'gnucash_orig/src/import-export/ofx/gnc-ofx-import.c' 'gnucash_test/src/import-export/ofx/gnc-ofx-import.c'

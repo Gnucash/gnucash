@@ -30,6 +30,7 @@
 #include <sys/time.h>
 
 #include <glib.h>
+#include <guile/gh.h>
 #include <gmodule.h>
 
 #include "libofx.h"
@@ -43,6 +44,12 @@
  * gnc_file_ofx_import
  * Entry point
 \********************************************************************/
+
+SCM  scm_gnc_file_ofx_import ()
+{
+  gnc_file_ofx_import();
+  return SCM_EOL;
+}
 
 void gnc_file_ofx_import (void)
 {

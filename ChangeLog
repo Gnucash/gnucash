@@ -1,5 +1,13 @@
 2002-06-24  David Hampton  <hampton@employees.org>
 
+	* src/import-export/ofx/Makefile.am:
+	* src/import-export/ofx/README:
+	* src/import-export/ofx/gnc-ofx-import.c:
+	* src/import-export/ofx/gnc-ofx-import.h:
+	* src/import-export/ofx/gncmod-ofx-import.c:
+	* src/import-export/ofx/ofx-import.scm: Benoit Gregoire's changes
+	to make the OFX import module build its own menu item at runtime.
+	
 	* src/gnome-utils/gnc-mdi-utils.c: 
 	* src/gnome/dialog-price-edit-db.c: 
 	* src/gnome/window-acct-tree.c: 

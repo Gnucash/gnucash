@@ -8,6 +8,7 @@
 #include <glib.h>
 #include <guile/gh.h>
 
+#include "gnc-ofx-import.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
@@ -46,6 +47,8 @@ gnc_module_init(int refcount)
   {
     return FALSE;
   }
+    gh_eval_str("(load-from-path \"ofx/ofx-import.scm\")");
+    gh_new_procedure("gnc:ofx-import",   scm_gnc_file_ofx_import,   0, 0, 0);
   return TRUE;
 }
 

@@ -18,6 +18,11 @@ libgncmod_ofx_la_LIBADD = \
   ${GLIB_LIBS} \
   -lofx -lstdc++
 
+gncscmdir = ${GNC_SCM_INSTALL_DIR}/ofx
+
+gncscm_DATA = \
+	ofx-import.scm
+
 #gladedir = ${GNC_GLADE_DIR}
 #glade_DATA = ofx.glade
 
