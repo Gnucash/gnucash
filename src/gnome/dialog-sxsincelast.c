@@ -1805,7 +1805,7 @@ sx_obsolete_close_handler(gpointer user_data)
   g_list_free(sxsld->actual_to_remove);
   sxsld->actual_to_remove = NULL;
   
-  gnome_dialog_close(sxsld->dlg_obsolete);
+  gnome_dialog_close(GNOME_DIALOG(sxsld->dlg_obsolete));
 
   /* FIXME: clean up everything else */
 }
