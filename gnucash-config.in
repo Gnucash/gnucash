@@ -15,6 +15,7 @@ Options:
 	[--libs]
 	[--cflags]
         [--ld-library-path]
+        [--scm-module-dir]
 Libraries:
 	engine
         network-utils
@@ -39,9 +40,6 @@ while test $# -gt 0; do
   esac
 
   case $1 in
-    --ld-library-path)
-      echo_ld_library_path=yes
-      ;;
     --prefix=*)
       prefix=$optarg
       if test $exec_prefix_set = no ; then
@@ -67,6 +65,12 @@ while test $# -gt 0; do
       ;;
     --libs)
       echo_libs=yes
+      ;;
+    --ld-library-path)
+      echo_ld_library_path=yes
+      ;;
+    --scm-module-dir)
+      echo_scm_module_dir=yes
       ;;
     engine)
       lib_engine=yes
@@ -202,4 +206,8 @@ fi
 if test "$echo_ld_library_path" = "yes"; then
     path="$libdir:$GNC_LIBDIR:$GNC_MODULE_DIR"
     echo $path
+fi
+
+if test "$echo_scm_module_dir" = "yes"; then
+   echo $GNC_SHAREDIR/guile-modules
 fi
