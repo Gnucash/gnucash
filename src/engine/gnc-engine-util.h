@@ -80,6 +80,14 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
+
+typedef void (*GNCGuiMessage) (const gchar *format, va_list args);
+void gnc_set_warning_message (GNCGuiMessage func);
+void gnc_set_error_message (GNCGuiMessage func);
+
+gboolean gnc_send_gui_warning (const gchar *format, ...);
+gboolean gnc_send_gui_error (const gchar *format, ...);
+
 /* FIXME: these logging functions should proably get replaced by
  * the glib.h g_error(), etc functions. That way, we would have
  * unified logging mechanism, instead of having some messages
@@ -111,6 +119,11 @@ void gnc_log (gncModuleType module, gncLogLevel log_level,
   if (gnc_should_log (module, GNC_LOG_WARNING))    \
     gnc_log (module, GNC_LOG_WARNING, "Warning",   \
              __FUNCTION__, format, ## args);       \
+}
+
+#define PWARN_GUI(format, args...) {               \
+  if (!gnc_send_gui_error(format, ## args))        \
+    PWARN(format, ## args);                        \
 }
 
 #define PINFO(format, args...) {                   \

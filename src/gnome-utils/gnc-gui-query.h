@@ -32,10 +32,14 @@ gnc_info_dialog_parented(GtkWindow *parent,
 
 extern void
 gnc_warning_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+extern void
+gnc_warning_dialog_va(const char *format, va_list args);
 
 
 extern void
 gnc_error_dialog(const char *format, ...) G_GNUC_PRINTF (1, 2);
+extern void
+gnc_error_dialog_va(const char *format, va_list args);
 extern void
 gnc_error_dialog_parented(GtkWindow *parent,
 			  const char *forrmat, ...) G_GNUC_PRINTF (2, 3);

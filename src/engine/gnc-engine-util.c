@@ -454,5 +454,51 @@ g_hash_table_kv_pair_free_gfunc(gpointer data, gpointer user_data)
 }
 
 
+/********************************************************************\
+  Callbacks so that the engine can display gui messages.
+\********************************************************************/
+
+static GNCGuiMessage gnc_gui_warning_func = NULL;
+static GNCGuiMessage gnc_gui_error_func = NULL;
+
+void gnc_set_warning_message (GNCGuiMessage func)
+{
+  gnc_gui_warning_func = func;
+}
+
+void gnc_set_error_message (GNCGuiMessage func)
+{
+  gnc_gui_error_func = func;
+}
+
+gboolean
+gnc_send_gui_warning(const gchar *format, ...)
+{
+  va_list args;
+
+  if (!gnc_gui_warning_func)
+    return(FALSE);
+
+  va_start(args, format);
+  gnc_gui_warning_func(format, args);
+  va_end(args);
+  return(TRUE);
+}
+
+gboolean
+gnc_send_gui_error(const gchar *format, ...)
+{
+  va_list args;
+
+  if (!gnc_gui_error_func)
+    return(FALSE);
+
+  va_start(args, format);
+  gnc_gui_error_func(format, args);
+  va_end(args);
+  return(TRUE);
+}
+
+
 /************************* END OF FILE ******************************\
 \********************************************************************/

@@ -14,6 +14,8 @@
 
 #include "dialog-options.h"
 #include "gnc-html.h"
+#include "gnc-engine-util.h"
+#include "gnc-gui-query.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_gnome_utils_LTX_gnc_module_system_interface = 0;
@@ -80,10 +82,15 @@ libgncmod_gnome_utils_LTX_gnc_module_init(int refcount) {
     gnc_html_initialize ();
   }
 
+  gnc_set_warning_message(gnc_warning_dialog_va);
+  gnc_set_error_message(gnc_error_dialog_va);
   return TRUE;
 }
 
 int
-libgncmod_gnome_utils_LTX_gnc_module_end(int refcount) {
+libgncmod_gnome_utils_LTX_gnc_module_end(int refcount)
+{
+  gnc_set_warning_message(NULL);
+  gnc_set_error_message(NULL);
   return TRUE;
 }

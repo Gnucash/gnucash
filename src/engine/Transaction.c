@@ -1666,11 +1666,9 @@ xaccTransCommitEdit (Transaction *trans)
         /* XXX hack alert -- turn this into a gui dialog */
         if (ERR_BACKEND_MODIFIED == errcode)
         {
-           PWARN("Another user has modified this transaction\n"
-                 "\tjust a moment ago. Please look at their changes,\n"
-                 "\tand try again, if needed.\n"
-                 "\t(This dialog should be a gui dialog and \n"
-                 "\tshould check for errors)\n");
+           PWARN_GUI(_("Another user has modified this transaction\n"
+		       "\tjust a moment ago. Please look at their changes,\n"
+		       "\tand try again, if needed.\n"));
         }
 
         /* push error back onto the stack */

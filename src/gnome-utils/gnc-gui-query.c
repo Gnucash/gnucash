@@ -359,6 +359,9 @@ gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
   GtkWidget *warning_box = NULL;
   gchar *buffer;
 
+  if (parent == NULL)
+    parent = GTK_WIDGET(gnc_ui_get_toplevel());
+
   buffer = g_strdup_vprintf(format, args);
   warning_box = gnome_warning_dialog_parented(buffer, GTK_WINDOW(parent));
   g_free(buffer);
@@ -367,12 +370,18 @@ gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 }
 
 void 
+gnc_warning_dialog_va(const gchar *format, va_list args)
+{
+  gnc_warning_dialog_common(NULL, format, args);
+}
+
+void 
 gnc_warning_dialog(const gchar *format, ...)
 {
   va_list args;
 
   va_start(args, format);
-  gnc_warning_dialog_common(gnc_ui_get_toplevel(), format, args);
+  gnc_warning_dialog_common(NULL, format, args);
   va_end(args);
 }
 
@@ -382,8 +391,7 @@ gnc_warning_dialog_parented(GtkWidget *parent, const gchar *format, ...)
   va_list args;
 
   va_start(args, format);
-  gnc_warning_dialog_common(parent ? parent : gnc_ui_get_toplevel(),
-			    format, args);
+  gnc_warning_dialog_common(parent, format, args);
   va_end(args);
 }
 
@@ -403,8 +411,13 @@ gnc_warning_dialog_parented(GtkWidget *parent, const gchar *format, ...)
 static void 
 gnc_error_dialog_common(GtkWindow *parent, const gchar *format, va_list args)
 {
-  GtkWidget *error_box = NULL;
+  GtkWidget *top_window, *error_box = NULL;
   gchar *buffer;
+
+  if (parent == NULL) {
+    top_window = gnc_ui_get_toplevel();
+    parent = top_window ? GTK_WINDOW(top_window) : NULL;
+  }
 
   buffer = g_strdup_vprintf(format, args);
   error_box = gnome_error_dialog_parented(buffer, parent);
@@ -414,15 +427,18 @@ gnc_error_dialog_common(GtkWindow *parent, const gchar *format, va_list args)
 }
 
 void 
+gnc_error_dialog_va(const gchar *format, va_list args)
+{
+  gnc_error_dialog_common(NULL, format, args);
+}
+
+void 
 gnc_error_dialog(const gchar *format, ...)
 {
-  GtkWidget *parent;
   va_list args;
 
-  parent = gnc_ui_get_toplevel();
-
   va_start(args, format);
-  gnc_error_dialog_common(parent ? GTK_WINDOW(parent) : NULL, format, args);
+  gnc_error_dialog_common(NULL, format, args);
   va_end(args);
 }
 
@@ -432,8 +448,7 @@ gnc_error_dialog_parented(GtkWindow *parent, const gchar *format, ...)
   va_list args;
 
   va_start(args, format);
-  gnc_error_dialog_common(parent ? parent : GTK_WINDOW(gnc_ui_get_toplevel()),
-			  format, args);
+  gnc_error_dialog_common(parent, format, args);
   va_end(args);
 }
 
