@@ -7167,10 +7167,9 @@ msgstr "Zellen-Füllung"
 msgid "Table border width"
 msgstr "Tabellen-Randbreite"
 
-# FIXME: what kind of string is this ?!??
 #: src/scm/report/guile-strings.c:452 src/scm/report/guile-strings.c:511
 msgid "Bevel depth on tables"
-msgstr "Breite des Tabellenrands"
+msgstr "Breite der Tabellenkanten"
 
 #: src/scm/report/guile-strings.c:489
 msgid "Prepared by: "
