@@ -1,6 +1,7 @@
 /********************************************************************\
  * Query.h : api for finding transactions                           *
  * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
+ * Copyright 2002 Linas Vepstas <linas@linas.org>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,8 +29,11 @@
 #include <glib.h>
 #include <regex.h>
 
-#include "Account.h" 
-#include "Transaction.h" 
+#include "date.h" 
+#include "gnc-engine.h" 
+#include "GNCId.h" 
+#include "guid.h" 
+#include "kvp_frame.h" 
 
 typedef enum {
   QUERY_AND=1,
@@ -60,14 +64,15 @@ typedef enum {
 } sort_type_t;  
 
 typedef enum {
-  PD_DATE=1,
+  PD_ACCOUNT=1, 
   PD_AMOUNT,
-  PD_ACCOUNT, 
-  PD_STRING,
-  PD_CLEARED,
   PD_BALANCE,
+  PD_BOOK,
+  PD_CLEARED,
+  PD_DATE,
   PD_GUID,
   PD_KVP,
+  PD_STRING,
   PD_MISC
 } pd_type_t;
 
@@ -75,17 +80,18 @@ typedef enum {
   PR_ACCOUNT=1,
   PR_ACTION,
   PR_BALANCE,
+  PR_BOOK,
   PR_CLEARED,
   PR_DATE,
   PR_DESC,
   PR_GUID,
   PR_KVP,
   PR_MEMO,
-  PR_MISC,
   PR_NUM,
   PR_PRICE,
   PR_SHRS,   /* FIXME: misnamed, should be PR_QUANT or PR_AMOUNT */
   PR_VALUE,   
+  PR_MISC,
 } pr_type_t;
 
 typedef enum {
@@ -106,6 +112,12 @@ typedef enum {
   AMT_SGN_MATCH_CREDIT, 
   AMT_SGN_MATCH_DEBIT
 } amt_match_sgn_t;
+
+typedef enum {
+  BOOK_MATCH_ALL=1,
+  BOOK_MATCH_ANY,
+  BOOK_MATCH_NONE
+} book_match_t;
 
 typedef enum {
   CLEARED_NO         = 1 << 0,
@@ -157,11 +169,10 @@ typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
-  int             use_start;
-  Timespec        start;
-  int             use_end;
-  Timespec        end;
-} DatePredicateData;
+  acct_match_t    how;
+  AccountList     *accounts;
+  AccountGUIDList *account_guids;
+} AccountPredicateData;
 
 typedef struct {
   pd_type_t       type;
@@ -176,20 +187,17 @@ typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
-  acct_match_t    how;
-  GList           *accounts;
-  GList           *account_guids;
-} AccountPredicateData;
+  balance_match_t how;
+} BalancePredicateData;
 
 typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
-  int             case_sens;
-  int             use_regexp;
-  char           *matchstring;
-  regex_t         compiled;
-} StringPredicateData;
+  book_match_t    how;
+  BookList        *books;
+  BookGUIDList    *book_guids;
+} BookPredicateData;
 
 typedef struct {
   pd_type_t       type;
@@ -202,16 +210,19 @@ typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
-  balance_match_t how;
-} BalancePredicateData;
+  GUID            guid;
+  GNCIdType       id_type;
+} GUIDPredicateData;
 
 typedef struct {
   pd_type_t       type;
   pr_type_t       term_type;
   int             sense;
-  GUID            guid;
-  GNCIdType       id_type;
-} GUIDPredicateData;
+  int             use_start;
+  Timespec        start;
+  int             use_end;
+  Timespec        end;
+} DatePredicateData;
 
 typedef struct {
   pd_type_t         type;
@@ -231,17 +242,28 @@ typedef struct {
   int             data;
 } MiscPredicateData;
 
+typedef struct {
+  pd_type_t       type;
+  pr_type_t       term_type;
+  int             sense;
+  int             case_sens;
+  int             use_regexp;
+  char           *matchstring;
+  regex_t         compiled;
+} StringPredicateData;
+
 typedef union { 
   pd_type_t            type;
   BasePredicateData    base;
-  DatePredicateData    date;
-  AmountPredicateData  amount;
   AccountPredicateData acct;
-  StringPredicateData  str;
-  ClearedPredicateData cleared;
+  AmountPredicateData  amount;
   BalancePredicateData balance;
+  BookPredicateData    book;
+  ClearedPredicateData cleared;
+  DatePredicateData    date;
   GUIDPredicateData    guid;
   KVPPredicateData     kvp;
+  StringPredicateData  str;
   MiscPredicateData    misc;
 } PredicateData;
 
@@ -325,12 +347,17 @@ void    xaccQueryPrint(Query *q);
  *  match-adding API 
  *******************************************************************/
 
-void xaccQueryAddAccountMatch(Query * q, GList * accounts,
+void xaccQueryAddAccountMatch(Query *, AccountList *,
                               acct_match_t how, QueryOp op);
-void xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
+void xaccQueryAddAccountGUIDMatch(Query *, AccountGUIDList *,
+                                  acct_match_t, QueryOp);
+void xaccQueryAddSingleAccountMatch(Query *, Account *, QueryOp);
+
+void xaccQueryAddBookMatch(Query * q, BookList *,
+                              acct_match_t how, QueryOp op);
+void xaccQueryAddBookGUIDMatch(Query *, BookGUIDList *,
                                   acct_match_t how, QueryOp op);
-void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
-                                    QueryOp op);
+void xaccQueryAddSingleBookMatch(Query *, GNCBook *, QueryOp);
 
 void xaccQueryAddDescriptionMatch(Query * q, const char * matchstring, 
                                   int case_sens, int use_regexp, QueryOp op);

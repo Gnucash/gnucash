@@ -1,6 +1,7 @@
 /********************************************************************\
  * Query.c : api for finding transactions                           *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (C) 2002 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -82,6 +83,7 @@ struct _querystruct {
 static int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccBalanceMatchPredicate(Split * s, PredicateData * pd);
+static int  xaccBookMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccClearedMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
 static int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
@@ -1537,6 +1539,9 @@ xaccQueryGetPredicate (pr_type_t term_type)
     case PR_BALANCE:
       p = & xaccBalanceMatchPredicate;
       break;
+    case PR_BOOK:
+      p = & xaccBookMatchPredicate;
+      break;
     case PR_CLEARED:
       p = & xaccClearedMatchPredicate;
       break;
@@ -1574,6 +1579,28 @@ xaccQueryGetPredicate (pr_type_t term_type)
   return p;
 }
 
+/* =========================================================== */
+
+#define ADD_TERM(qt) {                             \
+  Query     * qs  = xaccMallocQuery();             \
+  Query     * qr;                                  \
+                                                   \
+  xaccInitQuery(qs, qt);                           \
+  xaccQuerySetGroup(qs, q->acct_group);            \
+                                                   \
+  if(xaccQueryHasTerms(q))                         \
+  {                                                \
+    qr = xaccQueryMerge(q, qs, op);                \
+  }                                                \
+  else                                             \
+  {                                                \
+    qr = xaccQueryMerge(q, qs, QUERY_OR);          \
+  }                                                \
+  xaccQuerySwapTerms(q, qr);                       \
+  xaccFreeQuery(qs);                               \
+  xaccFreeQuery(qr);                               \
+}
+
 /********************************************************************
  * xaccQueryAddPredicate
  * Add a predicate an existing query. 
@@ -1584,25 +1611,12 @@ xaccQueryAddPredicate (Query * q,
                        PredicateData *pred,
                        QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->data   = *pred;
   qt->p = xaccQueryGetPredicate (qt->data.base.term_type);
   
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -1614,9 +1628,7 @@ void
 xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
                          QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                       = & xaccAccountMatchPredicate;
   qt->data.type               = PD_ACCOUNT;
@@ -1626,19 +1638,7 @@ xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
   qt->data.acct.accounts      = NULL;
   qt->data.acct.account_guids = account_list_to_guid_list (accounts);
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
-  xaccQuerySwapTerms(q, qr);
-
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -1650,9 +1650,7 @@ void
 xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
                              acct_match_t how, QueryOp op)
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                       = & xaccAccountMatchPredicate;
   qt->data.type               = PD_ACCOUNT;
@@ -1662,19 +1660,7 @@ xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
   qt->data.acct.accounts      = NULL;
   qt->data.acct.account_guids = copy_guid_list (account_guids);
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
-  xaccQuerySwapTerms(q, qr);
-
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -1685,9 +1671,7 @@ xaccQueryAddAccountGUIDMatch(Query * q, GList * account_guids,
 void
 xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
                                QueryOp op) {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                   = & xaccAccountMatchPredicate;
   qt->data.type           = PD_ACCOUNT;
@@ -1698,18 +1682,7 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   qt->data.acct.account_guids
     = account_list_to_guid_list (qt->data.acct.accounts);
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -1722,9 +1695,7 @@ void
 xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
                              int case_sens, int use_regexp,
                              QueryOp op) {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccDescriptionMatchPredicate;
@@ -1750,19 +1721,7 @@ xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
     }
   }
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -1776,9 +1735,7 @@ xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                       int case_sens, int use_regexp,
                       QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccMemoMatchPredicate;
@@ -1804,19 +1761,7 @@ xaccQueryAddMemoMatch(Query * q, const char * matchstring,
     }
   }
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -1833,9 +1778,7 @@ xaccQueryAddDateMatchTS(Query * q,
                         Timespec ets,
                         QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                   = & xaccDateMatchPredicate;
   qt->data.type           = PD_DATE;
@@ -1846,18 +1789,7 @@ xaccQueryAddDateMatchTS(Query * q,
   qt->data.date.start     = sts;  
   qt->data.date.end       = ets;
   
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -1915,9 +1847,7 @@ void
 xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccNumberMatchPredicate;
@@ -1943,19 +1873,7 @@ xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
     }
   }
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -1967,9 +1885,7 @@ void
 xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
                         int use_regexp, QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   int       flags = REG_EXTENDED;
 
   qt->p                    = & xaccActionMatchPredicate;
@@ -1995,19 +1911,7 @@ xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
     }
   }
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -2023,9 +1927,7 @@ DxaccQueryAddValueMatch(Query * q, double amt,
                          amt_match_t how,
                          QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                     = & xaccValueMatchPredicate;
   qt->data.type             = PD_AMOUNT;
@@ -2035,18 +1937,7 @@ DxaccQueryAddValueMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = amt_sgn;
   qt->data.amount.amount    = amt;
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -2061,9 +1952,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
                             amt_match_t how,
                             QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   
   qt->p                     = & xaccSharePriceMatchPredicate;
   qt->data.type             = PD_AMOUNT;
@@ -2073,18 +1962,7 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
  
 
@@ -2099,9 +1977,7 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
                         amt_match_t how,
                         QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   
   qt->p                     = & xaccSharesMatchPredicate;
   qt->data.type             = PD_AMOUNT;
@@ -2111,18 +1987,7 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
   qt->data.amount.amt_sgn   = AMT_SGN_MATCH_EITHER;
   qt->data.amount.amount    = amt;
   
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 
@@ -2136,9 +2001,7 @@ void
 xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
                       QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                   = p;
   qt->data.type           = PD_MISC;
@@ -2147,19 +2010,7 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
   qt->data.misc.how       = how;
   qt->data.misc.data      = data;
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -2171,9 +2022,7 @@ void
 xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
                          QueryOp op) 
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   
   qt->p                   = & xaccClearedMatchPredicate;
   qt->data.type           = PD_CLEARED;
@@ -2181,18 +2030,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
   qt->data.base.sense     = 1;
   qt->data.cleared.how    = how;
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-  
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -2203,9 +2041,7 @@ xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
 void
 xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                   = & xaccBalanceMatchPredicate;
   qt->data.type           = PD_BALANCE;
@@ -2213,18 +2049,7 @@ xaccQueryAddBalanceMatch(Query * q, balance_match_t how, QueryOp op)
   qt->data.base.sense     = 1;
   qt->data.balance.how    = how;
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -2236,9 +2061,7 @@ void
 xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
                       GNCIdType id_type, QueryOp op)
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
 
   qt->p                   = & xaccGUIDMatchPredicate;
   qt->data.type           = PD_GUID;
@@ -2247,18 +2070,7 @@ xaccQueryAddGUIDMatch(Query * q, const GUID *guid,
   qt->data.guid.guid      = guid ? *guid : *xaccGUIDNULL ();
   qt->data.guid.id_type   = id_type;
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /********************************************************************
@@ -2270,9 +2082,7 @@ void
 xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
                      kvp_match_t how, kvp_match_where_t where, QueryOp op)
 {
-  Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
-  Query     * qr;
   GSList    * node;
 
   qt->p                   = &xaccKVPMatchPredicate;
@@ -2287,18 +2097,7 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
   for (node = qt->data.kvp.path; node; node = node->next)
     node->data = g_strdup (node->data);
 
-  xaccInitQuery(qs, qt);
-  xaccQuerySetGroup(qs, q->acct_group);
-
-  if(xaccQueryHasTerms(q)) {
-    qr = xaccQueryMerge(q, qs, op);
-  }
-  else {
-    qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }
-  xaccQuerySwapTerms(q, qr);
-  xaccFreeQuery(qs);
-  xaccFreeQuery(qr);
+  ADD_TERM(qt);
 }
 
 /*******************************************************************
@@ -2412,10 +2211,30 @@ value_match_predicate(double splitamt, PredicateData * pd)
   return 0;
 }
 
+/*******************************************************************
+ *  xaccBookMatchPredicate 
+ *******************************************************************/
+
+static int 
+xaccBookMatchPredicate(Split * s, PredicateData * pd)
+{
+  g_return_val_if_fail(s && pd, FALSE);
+  g_return_val_if_fail(pd->type == PD_BOOK, FALSE);
+
+PERR ("not implemented");
+  switch(pd->book.how)
+  {
+    case BOOK_MATCH_ALL:
+    case BOOK_MATCH_ANY:
+    case BOOK_MATCH_NONE:
+  }
+  return 1;
+}
 
 /*******************************************************************
  *  xaccAccountMatchPredicate 
  *******************************************************************/
+
 static int 
 xaccAccountMatchPredicate(Split * s, PredicateData * pd)
 {
