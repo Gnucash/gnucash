@@ -1,3 +1,12 @@
+2000-04-30  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Queue.c (xaccQueueGetShares): computation should start
+	at the tail split, not at split 0.
+	(xaccQueueGetValue): ditto.
+
+	* src/scm/report/average-balance.scm: track stock account balances,
+	i.e. value, not cost.
+
 2000-04-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/register/splitreg.c: add a flag determining whether to use

@@ -1,19 +1,3 @@
-/*
- * FILE:
- * Queue.c
- *
- * DESCRIPTION:
- * Provide simple FIFO/LIFO cost-basis accounting support.
- *
- * RESTRICTIONS:
- * -- Does not support use with mixed currencies.
- * -- Does not check for or warn mixed currency use.
- * -- Does not allow pushhead after a pophead has occured.
- *
- * HISTORY:
- * created by Linas Vepstas January 1999
- * Copyright (c) 1999, 2000 Linas Vepstas
- */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -32,6 +16,23 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
+
+/*
+ * FILE:
+ * Queue.c
+ *
+ * DESCRIPTION:
+ * Provide simple FIFO/LIFO cost-basis accounting support.
+ *
+ * RESTRICTIONS:
+ * -- Does not support use with mixed currencies.
+ * -- Does not check for or warn mixed currency use.
+ * -- Does not allow pushhead after a pophead has occured.
+ *
+ * HISTORY:
+ * created by Linas Vepstas January 1999
+ * Copyright (c) 1999, 2000 Linas Vepstas
+ */
 
 #include <limits.h>
 #include <stdlib.h>
@@ -160,7 +161,6 @@ ExtendHead (Queue * q)
 
    q->split_list = newlist;
    free(list);
-   return;
 }
 
 /* ================================================== */
@@ -360,18 +360,18 @@ xaccQueueGetShares (Queue *q)
 {
    Split **list;
    double shrs = 0.0;
-   int i, len, tail;
+   int i;
+
    if (!q) return 0.0;
 
    shrs += q->head_amount;
    shrs += q->tail_amount;
-   
-   len = q->head_split - q->tail_split + 1;
+
    list = q->split_list;
-   tail = q->tail_split;
-   for (i=0; i<len; i++) {
+
+   for (i = q->tail_split; i <= q->head_split; i++)
       shrs += list[i]->damount;
-   }
+
    return shrs;
 }
 
@@ -380,18 +380,18 @@ xaccQueueGetValue (Queue *q)
 {
    Split **list;
    double val = 0.0;
-   int i, len, tail;
+   int i;
+
    if (!q) return 0.0;
 
    val += q->head_amount * q->head_price;
    val += q->tail_amount * q->tail_price;
-   
-   len = q->head_split - q->tail_split + 1;
+
    list = q->split_list;
-   tail = q->tail_split;
-   for (i=0; i<len; i++) {
+
+   for (i = q->tail_split; i <= q->head_split; i++)
       val += list[i]->damount * list[i]->share_price;
-   }
+
    return val;
 }
 
