@@ -61,24 +61,17 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
   
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI_daterange_dialog");
 
-  g_assert
-    (dialog = glade_xml_get_widget (xml, "HBCI_daterange_dialog"));
+  dialog = glade_xml_get_widget (xml, "HBCI_daterange_dialog");
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
 
-  g_assert 
-    (heading_label  = glade_xml_get_widget (xml, "heading_label"));
-  g_assert 
-    (last_retrieval_button  = glade_xml_get_widget (xml, "last_retrieval_button"));
-  g_assert 
-    (first_button  = glade_xml_get_widget (xml, "first_button"));
-  g_assert 
-    (info.enter_from_button  = glade_xml_get_widget (xml, "enter_from_button"));
-  g_assert 
-    (info.enter_to_button  = glade_xml_get_widget (xml, "enter_to_button"));
-  g_assert 
-    (now_button  = glade_xml_get_widget (xml, "now_button"));
+  heading_label  = glade_xml_get_widget (xml, "heading_label");
+  last_retrieval_button  = glade_xml_get_widget (xml, "last_retrieval_button");
+  first_button  = glade_xml_get_widget (xml, "first_button");
+  info.enter_from_button  = glade_xml_get_widget (xml, "enter_from_button");
+  info.enter_to_button  = glade_xml_get_widget (xml, "enter_to_button");
+  now_button  = glade_xml_get_widget (xml, "now_button");
 
   info.from_dateedit = gnc_date_edit_new_ts (*from_date, FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (glade_xml_get_widget 

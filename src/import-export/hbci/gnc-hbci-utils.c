@@ -49,7 +49,7 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   if (!filename)
       return NULL;
   if (!allowNewFile && 
-      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK))) 
+      (!g_file_test (filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) 
     {
       /* ENOENT is "No such file or directory" */
       gchar *errstring = g_strdup_printf ("%s: %s", filename, strerror (ENOENT));

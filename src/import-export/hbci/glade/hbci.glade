@@ -2614,7 +2614,7 @@ Press 'Finish' now.</text>
 	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
 	  <widget>
-	    <class>GtkText</class>
+	    <class>GtkTextView</class>
 	    <name>log_text</name>
 	    <can_focus>True</can_focus>
 	    <editable>False</editable>

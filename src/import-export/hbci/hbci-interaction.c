@@ -38,6 +38,11 @@
 
 #include "dialog-pass.h"
 
+#include <openhbci.h>
+#ifndef OPENHBCI_VERSION_BUILD
+#  define OPENHBCI_VERSION_BUILD 0
+#endif
+
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
 
@@ -93,7 +98,12 @@ void GNCInteractor_show(GNCInteractor *i)
 void GNCInteractor_hide(GNCInteractor *i)
 {
   g_assert(i);
-  gtk_widget_hide_all (i->dialog);
+  if (gtk_toggle_button_get_active 
+      (GTK_TOGGLE_BUTTON (i->close_checkbutton)))
+    gtk_widget_hide_all (i->dialog);
+  gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
+			  gtk_toggle_button_get_active 
+			  (GTK_TOGGLE_BUTTON (i->close_checkbutton)));
 }
 
 void GNCInteractor_delete(GNCInteractor *data)
@@ -104,7 +114,7 @@ void GNCInteractor_delete(GNCInteractor *data)
     gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
 			    gtk_toggle_button_get_active 
 			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
-    g_object_unref (GTK_OBJECT (data->dialog));
+    gtk_object_unref (GTK_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
   
@@ -242,7 +252,7 @@ static int msgInputPin(const HBCI_User *user,
     if (!retval)
       break;
     
-    if (strlen(passwd) < minsize) {
+    if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
 	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"
@@ -276,7 +286,7 @@ static int msgInputPin(const HBCI_User *user,
 
 
 static int msgInsertMediumOrAbort(const HBCI_User *user, 
-				MediumType t, 
+				MediumType mtype, 
 				void *user_data)
 {
   GNCInteractor *data = user_data;
@@ -291,21 +301,67 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
        (HBCI_User_userId (user) ? HBCI_User_userId (user) :
 	_("Unknown")));
     b = HBCI_User_bank (user);
-    if (b != NULL) 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-				   "user '%s' at bank '%s'."), 
-				 username, bank_to_str (b));
-    else 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert chip card for \n"
-				   "user '%s' at unknown bank."), 
-				 username);
+    switch (mtype) 
+      {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile:
+#else /* openhbci > 0.9.9.5 */
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
+				       "user '%s' at bank '%s' can be accessed."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
+				       "user '%s' at unknown bank can be accessed."), 
+				     username);
+	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard:
+#else /* openhbci > 0.9.9.5 */
+      case MediumDDVCard:
+      case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
+      default:
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert chip card for \n"
+				       "user '%s' at bank '%s'."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert chip card for \n"
+				       "user '%s' at unknown bank."), 
+				     username);
+    }
   }
   else 
-    msgstr = g_strdup ( _("Please insert chip card for \n"
-			  "unknown user at unknown bank."));
-      
+    switch (mtype) 
+      {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile:
+#else /* openhbci > 0.9.9.5 */
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
+	msgstr = g_strdup ( _("Please make sure the key file for \n"
+			      "unknown user at unknown bank can be accessed."));
+	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard:
+#else /* openhbci > 0.9.9.5 */
+      case MediumDDVCard:
+      case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
+      default:
+	msgstr = g_strdup ( _("Please insert chip card for \n"
+			      "unknown user at unknown bank."));
+      }
+    
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK, 
 					  msgstr);
@@ -316,7 +372,7 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 
 
 static int msgInsertCorrectMediumOrAbort(const HBCI_User *user, 
-				       MediumType t, 
+				       MediumType mtype, 
 				       void *user_data)
 {
   GNCInteractor *data = user_data;
@@ -331,21 +387,70 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
        (HBCI_User_userId (user) ? HBCI_User_userId (user) :
 	_("Unknown")));
     b = HBCI_User_bank (user);
-    if (b != NULL) 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-				   "user '%s' at bank '%s'."), 
-				 username, bank_to_str (b));
-    else 
-      /* xgettext:c-format */	    
-      msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
-				   "user '%s' at unknown bank."), 
-				 username);
+    switch (mtype) 
+      {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile: 
+#else /* openhbci > 0.9.9.5 */
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
+				       "file for user '%s' at bank '%s'. Please make \n"
+				       "sure the correct key file can be accessed."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
+				       "file for user '%s' at unknown bank. Please make \n"
+				       "sure the correct key file can be accessed."), 
+				     username);
+	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard: 
+#else /* openhbci > 0.9.9.5 */
+      case MediumDDVCard:
+      case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
+      default:
+	if (b != NULL) 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
+				       "user '%s' at bank '%s'."), 
+				     username, bank_to_str (b));
+	else 
+	  /* xgettext:c-format */	    
+	  msgstr = g_strdup_printf ( _("Please insert the correct chip card for \n"
+				       "user '%s' at unknown bank."), 
+				     username);
+      }
   }
   else 
-    msgstr = g_strdup ( _("Please insert the correct chip card for \n"
-			  "unknown user at unknown bank."));
-      
+    switch (mtype) 
+      {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile: 
+#else /* openhbci > 0.9.9.5 */
+      case MediumRDHFile:
+      case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
+	msgstr = g_strdup ( _("The key file does not seem to be the correct \n"
+			      "file for unknown user at unknown bank. Please make \n"
+			      "sure the correct key file can be accessed."));
+	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard: 
+#else /* openhbci > 0.9.9.5 */
+      case MediumDDVCard:
+      case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
+      default:
+	msgstr = g_strdup ( _("Please insert the correct chip card for \n"
+			      "unknown user at unknown bank."));
+      }
+  
   retval = gnc_ok_cancel_dialog_parented (data->parent,
 					  GNC_VERIFY_OK,
 					  msgstr);

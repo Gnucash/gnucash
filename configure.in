@@ -777,13 +777,20 @@ then
     GNOME_INIT
     GNOME_COMPILE_WARNINGS
 
+    # Look for libgnomeui by pkg-config
+    PKG_CHECK_MODULES(GNOMEUI, libgnomeui-2.0)
+    AS_SCRUB_INCLUDE(GNOMEUI_CFLAGS)
+    AC_SUBST(GNOMEUI_CFLAGS)
+    AC_SUBST(GNOMEUI_LIBS)
+
     # look for gdk-pixbuf
     PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
     AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
     AC_SUBST(GDK_PIXBUF_CFLAGS)
     AC_SUBST(GDK_PIXBUF_LIBS)
 
-    # Gnome-Print
+    # Gnome-Print -- some people already have/need libgnomeprint-2.2
+    #PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2)
     PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0)
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_CFLAGS)
