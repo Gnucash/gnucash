@@ -150,7 +150,7 @@ the account instead of opening a register.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-list-option
-  "Main Window" "Account fields to display"
+  (N_ "Main Window") (N_ "Account fields to display")
   "c" ""
   (list 'description 'total)
   (list (list->vector (list 'type        (N_ "Type") ""))
@@ -167,8 +167,8 @@ the account instead of opening a register.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  "International" "Date Format"
-  "a" "Date Format Display" 'us
+  (N_ "International") (N_ "Date Format")
+  "a" (N_ "Date Format Display") 'us
   (list (list->vector (list 'us
                             (N_ "US")
                             (N_ "US-style: mm/dd/yyyy")))
@@ -368,8 +368,8 @@ transaction.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  "General" "Toolbar Buttons"
-  "b" "Choose whether to display icons, text, or both for toolbar buttons"
+  (N_ "General") (N_ "Toolbar Buttons")
+  "b" (N_ "Choose whether to display icons, text, or both for toolbar buttons")
   'icons_and_text
   (list (list->vector
          (list 'icons_and_text
@@ -506,42 +506,42 @@ transaction.") #t))
 
 (define gnc:*arg-show-version*
   (gnc:make-config-var
-   "Show version."
+   (N_ "Show version.")
    (lambda (var value) (if (boolean? value) (list value) #f))
    eq?
    #f))
 
 (define gnc:*arg-show-usage*
   (gnc:make-config-var
-   "Generate an argument summary."
+   (N_ "Generate an argument summary.")
    (lambda (var value) (if (boolean? value) (list value) #f))
    eq?
    #f))
 
 (define gnc:*arg-show-help*
   (gnc:make-config-var
-   "Generate an argument summary."
+   (N_ "Generate an argument summary.")
    (lambda (var value) (if (boolean? value) (list value) #f))
    eq?
    #f))
 
 (define gnc:*arg-no-file*
   (gnc:make-config-var
-   "Don't load any file, including autoloading the last file."
+   (N_ "Don't load any file, including autoloading the last file.")
    (lambda (var value) (if (boolean? value) (list value) #f))
    eq?
    #f))
 
 (define gnc:*config-dir*
   (gnc:make-config-var
-   "Configuration directory."
+   (N_ "Configuration directory.")
    (lambda (var value) (if (string? value) (list value) #f))
    string=?
    gnc:_config-dir-default_))
 
 (define gnc:*share-dir*
   (gnc:make-config-var
-   "Shared files directory."
+   (N_ "Shared files directory.")
    (lambda (var value) (if (string? value) (list value) #f))
    string=?
    gnc:_share-dir-default_))
@@ -551,7 +551,7 @@ transaction.") #t))
   (set! 
    gnc:*debugging?*
    (gnc:make-config-var
-    "Enable debugging code."
+    (N_ "Enable debugging code.")
     (lambda (var value) (if (boolean? value) (list value) #f))
     eq?
     #f))
@@ -559,7 +559,7 @@ transaction.") #t))
 
 (define gnc:*loglevel*
   (gnc:make-config-var
-   "Logging level from 0 (least logging) to 5 (most logging)."
+   (N_ "Logging level from 0 (least logging) to 5 (most logging).")
    (lambda (var value) (if (exact? value) (list value) #f))
    eq?
    #f))
@@ -569,10 +569,10 @@ transaction.") #t))
   (set!
    gnc:*load-path*
    (gnc:make-config-var
-    "A list of strings indicating the load path for (gnc:load name).
+    (N_ "A list of strings indicating the load path for (gnc:load name).
 Each element must be a string representing a directory or a symbol
 where 'default expands to the default path, and 'current expands to
-the current value of the path."
+the current value of the path.")
     (lambda (var value)
       (let ((result (gnc:_expand-load-path_ value)))
         (if (list? result)
@@ -585,10 +585,10 @@ the current value of the path."
 (define gnc:*doc-path*
 
   (gnc:make-config-var
-   "A list of strings indicating where to look for html and parsed-html files
+   (N_ "A list of strings indicating where to look for html and parsed-html files
 Each element must be a string representing a directory or a symbol
 where 'default expands to the default path, and 'current expands to
-the current value of the path."
+the current value of the path.")
    (lambda (var value)
      (let ((result (gnc:_expand-doc-path_ value)))
        (if (list? result)

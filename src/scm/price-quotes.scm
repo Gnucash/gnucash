@@ -27,6 +27,13 @@
 (gnc:depend "utilities.scm")
 (gnc:depend "engine-utilities.scm")
 
+;; Note From: Dave Peticolas <dave@krondo.com> Date: Sun, 01 Apr 2001
+;; Those aren't pricedb functions, those are online quote functions,
+;; i.e., low-level functions for getting online-quotes and putting
+;; them into the price db.  Reports should not be using those
+;; functions, they should be using the price db. See
+;; src/engine/gnc-pricedb.h
+
 (define gnc:*finance-quote-helper*
   (string-append (gnc:config-var-value-get gnc:*share-dir*)
                  "/finance-quote-helper"))

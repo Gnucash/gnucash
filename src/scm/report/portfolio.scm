@@ -37,8 +37,7 @@
 	#t))
 
       (gnc:options-add-currency! 
-       options (N_ "General" "Report Currency") "c")
-
+       options (N_ "General") (N_ "Report Currency") "c")
 
       (gnc:options-set-default-section options "General")      
       options))
