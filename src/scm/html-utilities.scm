@@ -55,7 +55,7 @@
 
     ;; If start-date == #f then balance-at-date will be used (for
     ;; balance reports), otherwise balance-interval (for profit and
-    ;; loss reports)
+    ;; loss reports). Returns a commodity-collector.
     (define (my-get-balance account)
       (if start-date
 	  (gnc:account-get-comm-balance-interval
@@ -72,6 +72,14 @@
 	       (let ((parent (gnc:account-get-parent-account a)))
 		 (and parent
 		      (show-acct? parent))))))
+
+    ;; sort an account list. Currently this uses only the account-code
+    ;; field, but anyone feel free to add more options to this.
+    (define (sort-fn accts)
+      (sort accts
+	    (lambda (a b) 
+	      (string<? (gnc:account-get-code a)
+			(gnc:account-get-code b)))))
     
     ;; The following functions are defined inside build-acct-table
     ;; to avoid passing tons of arguments which are constant anyway
@@ -90,18 +98,11 @@
        (gnc:html-make-empty-cells (- tree-depth current-depth))
        ;; the account balance
        (list 
-	;; get the account balance, then exchange everything into
-	;; the report-commodity
-	(let ((balance (my-get-balance acct)))
-	  (balance 'format 
-		   (lambda (curr val) 
-		     (if (not (gnc:commodity-equiv? report-commodity curr))
-			 (balance 'add report-commodity 
-				  (cadr (exchange-fn (list curr val) 
-						     report-commodity)))))
-		   #f)
-	  (gnc:commodity-value->string 
-	   (balance 'getpair report-commodity #f))))
+	(gnc:commodity-value->string 
+	 ;; get the account balance, then exchange everything into
+	 ;; the report-commodity via gnc:add-collector-commodity
+	 (gnc:add-collector-commodity (my-get-balance acct) 
+				      report-commodity exchange-fn)))
        (gnc:html-make-empty-cells (- current-depth 1))))
     
     ;; Adds rows to the table. Therefore it goes through the list of
@@ -117,16 +118,14 @@
 			    (gnc:html-table-append-row!
 			     table 
 			     (make-row acct current-depth)))
-			(let ((children 
-			       (gnc:account-get-immediate-subaccounts acct)))
-			  (if (not (null? children))
-			      (traverse-accounts! 
-			       children (+ 1 current-depth))))))
-		    accnts)))
+			(traverse-accounts! 
+			 (gnc:account-get-immediate-subaccounts acct)
+			 (+ 1 current-depth))))
+		    (sort-fn accnts))))
     
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; functions for table with foreign commodities visible
-
+    
     ;; adds all appropriate rows to the table which belong to one
     ;; account, i.e. one row for each commodity. (Note: Multiple
     ;; commodities come from subaccounts with different commodities.) Is
@@ -199,12 +198,10 @@
 		      (begin
 			(if (show-acct? acct)
 			    (add-commodity-rows! acct current-depth))
-			(let* ((children 
-				(gnc:account-get-immediate-subaccounts acct)))
-			  (if (not (null? children))
-			      (traverse-accounts-fcur! 
-			       children (+ 1 current-depth))))))
-		    accnts)))
+			(traverse-accounts-fcur! 
+			 (gnc:account-get-immediate-subaccounts acct)
+			 (+ 1 current-depth))))
+		    (sort-fn accnts))))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
@@ -212,7 +209,60 @@
     (if show-other-curr?
 	(traverse-accounts-fcur! topl-accounts 1)
 	(traverse-accounts! topl-accounts 1))
-    
+
+    ;; Show the total sum.
+    (if show-total?
+	(let ((total-collector (make-commodity-collector)))
+	  (for-each (lambda (acct)
+		      (total-collector 'merge (my-get-balance acct) #f))
+		    (filter show-acct? topl-accounts))
+	  (if show-other-curr?
+	      (begin
+		;; Show other currencies. Then show the report's
+		;; currency in the first line.
+		(gnc:html-table-append-row! 
+		 table
+		 (append (list (gnc:make-html-table-cell/size 
+				1 tree-depth (_ "Total")))
+			 (gnc:html-make-empty-cells 
+			  (+ 1 (* 2 (- tree-depth 1))))
+			 (list (gnc:commodity-value->string 
+				(total-collector 'getpair 
+						 report-commodity #f)))))
+		;; Additional lines, one for each foreign currency.
+		(total-collector
+		 'format 
+		 (lambda (curr val)
+		   (if (gnc:commodity-equiv? curr report-commodity)
+		       '()
+		       (gnc:html-table-append-row! 
+			table
+			(append
+			 ;; print no account name, and then leave
+			 ;; subbalance columns empty, i.e. make
+			 ;; tree-d + 2*(tree-d - 1) empty cells.
+			 (gnc:html-make-empty-cells  
+			  (- (* 3 tree-depth) 2))
+			 (list
+			  ;; print the account balance in the
+			  ;; respective commodity
+			  (gnc:commodity-value->string (list curr val))
+			  (gnc:commodity-value->string 
+			   (exchange-fn (list curr val) 
+					report-commodity)))))))
+		 #f))
+	      ;; Show no other currencies. Then just calculate one
+	      ;; total via add-collector-commodity and show it.
+	      (gnc:html-table-append-row! 
+	       table
+	       (append (list (gnc:make-html-table-cell/size 
+			      1 tree-depth (_ "Total")))
+		       (gnc:html-make-empty-cells (- tree-depth 1))
+		       (list (gnc:commodity-value->string 
+			      (gnc:add-collector-commodity 
+			       total-collector report-commodity 
+			       exchange-fn))))))))
+	  
     ;; set default alignment to right, and override for the name
     ;; columns
     (gnc:html-table-set-style! 

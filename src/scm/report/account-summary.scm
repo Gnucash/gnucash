@@ -174,7 +174,7 @@
 		 (table (gnc:html-build-acct-table 
 			 #f date-tp 
 			 tree-depth show-subaccts? accounts 
-			 #f do-subtotals?
+			 #t do-subtotals?
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; set some column headers 
@@ -196,15 +196,16 @@
 	     (lambda (pair)
 	       (gnc:html-text-append! 
 		txt
-		(_ "Exchange rate ")
-		(gnc:commodity-value->string 
-		 (list (car pair) (gnc:numeric-create 1 1)))
-		" = "
-		(gnc:commodity-value->string 
-		 (list report-currency 
-		       (gnc:numeric-convert 
-			;; FIXME: remove the constant 100000
-			(cadr pair) 100000 GNC-RND-ROUND)))))
+		(gnc:html-markup-p
+		 (_ "Exchange rate ")
+		 (gnc:commodity-value->string 
+		  (list (car pair) (gnc:numeric-create 1 1)))
+		 " = "
+		 (gnc:commodity-value->string 
+		  (list report-currency 
+			(gnc:numeric-convert 
+			 ;; FIXME: remove the constant 100000
+			 (cadr pair) 100000 GNC-RND-ROUND))))))
 	     exchange-alist)
 
 	    ;;(if show-fcur?

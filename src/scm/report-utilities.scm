@@ -261,7 +261,9 @@
     (lambda (action amount)  ;;; Dispatch function
       (case action
 	('add (if (gnc:gnc-numeric? amount) 
-		  (set! value (gnc:numeric-add-fixed amount value))))
+		  (set! value (gnc:numeric-add-fixed amount value))
+		  (gnc:warn 
+		   "numeric-collector called with wrong argument: " amount)))
 	('total value)
 	(else (gnc:warn "bad numeric-collector action: " action))))))
 
@@ -526,14 +528,37 @@
 					  (gnc:get-current-group))))
 	(query (gnc:malloc-query))
 	(splits #f)
-	;; sumlist: an association list. each element has a commodity
-	;; as key, and a pair of two value-collectors as value, e.g. (
-	;; (USD (400 .  1000)) (FRF (300 . 100)) ) whers USD is a
+	;; sumlist: a multilevel association list. Each element has a
+	;; commodity as key, and another alist as a value. The
+	;; value-alist's elements consist of a commodity as a key, and
+	;; a pair of two value-collectors as value, e.g. with only the
+	;; report-commodity DEM in the outer alist: ( {DEM ( [USD (400
+	;; .  1000)] [FRF (300 . 100)] ) } ) where DEM,USD,FRF are
 	;; <gnc:commodity> and the numbers are a value-collector which
 	;; in turn store a <gnc:numeric>. In the example, USD 400 were
-	;; bought for an amount of 1000 of the report-commodity.
-	(sumlist '()))
-    
+	;; bought for an amount of DEM 1000, FRF 300 were bought for
+	;; DEM 100. The reason for the outer alist is that there might
+	;; be commodity transactions which do not involve the
+	;; report-commodity, but which can still be calculated after
+	;; *all* transactions are processed.
+	(sumlist (list (list report-commodity '()))))
+
+    (define (make-newrate unknown-coll un->known-coll known-pair)
+      (let ((a (make-numeric-collector))
+	    (b (make-numeric-collector)))
+	(a 'add (unknown-coll 'total #f))
+	(b 'add 
+	   (gnc:numeric-div
+	    (gnc:numeric-mul 
+	     (un->known-coll 'total #f) 
+	     ((cdadr known-pair) 'total #f)
+	     0 GNC-DENOM-REDUCE)
+	    ((caadr known-pair) 'total #f)
+	    0 GNC-DENOM-REDUCE))
+	;; in other words: (/ (* (caadr c) (cdadr pair-b)) (caadr
+	;; pair-b) ))
+	(cons a b)))
+
     (if (not (null? curr-accounts))
 	(begin
 	  (gnc:query-set-group query (gnc:get-current-group))
@@ -559,6 +584,11 @@
 			 <gnc:Split*>)))
 	  (gnc:free-query query)
 
+;	  (warn "report-commodity is " 
+;		(gnc:commodity-value->string 
+;		 (list report-commodity (gnc:numeric-zero)))
+;		report-commodity)
+	  
 	  ;; Now go through all splits and add up all value-amounts
 	  ;; and share-amounts
 	  (for-each 
@@ -567,36 +597,135 @@
 				       (gnc:split-get-parent a)))
 		    (account-comm (gnc:account-get-commodity 
 				   (gnc:split-get-account a)))
-		    (foreignlist 
-		     ;; this will adjust the signs appropriately
-		     (if (gnc:commodity-equiv? transaction-comm
-					       report-commodity)
-			 (list account-comm 
-			       (gnc:numeric-neg
-				(gnc:split-get-share-amount a))
-			       (gnc:numeric-neg
-				(gnc:split-get-value a))) 
-			 (list transaction-comm 
-			       (gnc:split-get-value a) 
-			       (gnc:split-get-share-amount a))))
-		    ;; commodity already existing in sumlist?
-		    (pair (assoc (car foreignlist) sumlist)))
-	       ;; if not, create a new entry in sumlist.
-	       (if (not pair)
-		   (begin
-		     (set! 
-		      pair (list (car foreignlist)
-				 (cons (make-numeric-collector) 
-				       (make-numeric-collector))))
-		     (set! sumlist (cons pair sumlist))))
-	       ;;(display (gnc:commodity-value->string (list (car
-	       ;;foreignlist) (cadr foreignlist)))
-	       ;;(gnc:commodity-value->string (list report-commodity
-	       ;;(caddr foreignlist)))))))
-	       ((caadr pair) 'add (cadr foreignlist))
-	       ((cdadr pair) 'add (caddr foreignlist))))
+		    (share-amount (gnc:split-get-share-amount a))
+		    (value-amount (gnc:split-get-value a))
+		    (tmp (assoc transaction-comm sumlist))
+		    (comm-list 
+		     (if (not tmp) 
+			 (begin
+;			   (warn "not found " 
+;				 (gnc:commodity-value->string 
+;				  (list account-comm share-amount))
+;				 ", trying "
+;				 (gnc:commodity-value->string 
+;				  (list transaction-comm value-amount))
+;				 sumlist)
+			   (assoc account-comm sumlist))
+			 tmp)))
+;	       (if comm-list
+;		   (warn "looking for toplevel comm: " 
+;			 (gnc:commodity-value->string 
+;			  (list (car comm-list) (gnc:numeric-zero))))
+;		   (warn "not comm-list"))
+		   
+	       
+	       ;; entry exists already in comm-list?
+	       (if (not comm-list)
+		   ;; no, create sub-alist from scratch
+		   (let ((pair (list transaction-comm
+				     (cons (make-numeric-collector)
+					   (make-numeric-collector)))))
+;		     (warn "XX " (gnc:commodity-value->string 
+;			    (list transaction-comm value-amount))
+;			   (gnc:commodity-value->string 
+;			    (list account-comm share-amount)))
+		     ((caadr pair) 'add value-amount)
+		     ((cdadr pair) 'add share-amount)
+		     (set! comm-list (list account-comm (list pair)))
+		     (set! sumlist (cons comm-list sumlist)))
+		   ;; yes, check for second currency.
+		   (let* 
+		       ((foreignlist 
+			 ;; this will adjust the signs appropriately
+			 (if (gnc:commodity-equiv? transaction-comm
+						   (car comm-list))
+			     (list account-comm 
+				   (gnc:numeric-neg share-amount)
+				   (gnc:numeric-neg value-amount))
+			     (list transaction-comm 
+				   value-amount 
+				   share-amount)))
+			;; second commodity already existing in comm-list?
+			(pair (assoc (car foreignlist) (cadr comm-list))))
+;		     (warn "current transaction "
+;			   (gnc:commodity-value->string 
+;			    (list (car foreignlist) (cadr foreignlist)))
+;			   (gnc:commodity-value->string 
+;			    (list (car comm-list) (caddr foreignlist))))
+		     ;; if not, create a new entry in comm-list.
+		     (if (not pair)
+			 (begin
+			   ;;(warn "ZZ ")
+			   (set! 
+			    pair (list (car foreignlist)
+				       (cons (make-numeric-collector) 
+					     (make-numeric-collector))))
+			   (set! 
+			    comm-list (list (car comm-list) 
+					    (cons pair (cadr comm-list))))
+			   (set! 
+			    sumlist (cons comm-list 
+					  (alist-delete 
+					   (car comm-list) sumlist)))))
+		     ;;(display (gnc:commodity-value->string (list (car
+		     ;;foreignlist) (cadr foreignlist)))
+		     ;;(gnc:commodity-value->string (list report-commodity
+		     ;;(caddr foreignlist)))))))
+		     ((caadr pair) 'add (cadr foreignlist))
+		     ;;(warn "ZZ6 " sumlist)
+		     ((cdadr pair) 'add (caddr foreignlist))))))
 	   splits)))
-  sumlist))
+
+    ;; Now go through all additional toplevel non-report-commodity
+    ;; balances and add them to report-commodity, if possible.
+    (let ((reportlist (cadr (assoc report-commodity sumlist))))
+      (for-each
+       (lambda (l)
+	 (if (not (gnc:commodity-equiv? (car l) report-commodity))
+	     (for-each
+	      (lambda (c)
+		(let ((pair-a (assoc (car l) reportlist))
+		       (pair-b (assoc (car c) reportlist))
+		       (rate (gnc:numeric-zero)))
+		  (if (and (not pair-a) (not pair-b))
+		      (warn "can't calculate rate for"
+			    (gnc:commodity-value->string 
+			     (list (car c) (caadr c)))
+			    " = "
+			    (gnc:commodity-value->string 
+			     (list (car l) (cdadr c)))
+			    " to "
+			    (gnc:commodity-value->string 
+			     (list report-commodity (gnc:numeric-zero))))
+		      (if (and pair-a pair-b)
+			  (warn "Oops - what went wrong? Both are found:"
+				(gnc:commodity-value->string 
+				 (list (car c) (caadr c)))
+				" = "
+				(gnc:commodity-value->string 
+				 (list (car l) (cdadr c))))
+			  (let 
+			      ((newrate
+				(if (not pair-a)
+				    (list (car l)
+					  (make-newrate (cdadr c) 
+							(caadr c) pair-b))
+				    (list (car c)
+					  (make-newrate (caadr c) 
+							(cdadr c) pair-a)))))
+;			    (warn "created new rate"
+;				  (gnc:commodity-value->string 
+;				   (list (car newrate) 
+;					 ((caadr newrate) 'total #f)))
+;				  " = "
+;				  (gnc:commodity-value->string 
+;				   (list report-commodity 
+;					 ((cdadr newrate) 'total #f))))
+			    (set! reportlist (cons newrate reportlist)))))))
+	      (cadr l))))
+       sumlist)
+
+      reportlist)))
 
 ;; Anybody feel free to reimplement any of these functions, either in
 ;; scheme or in C. -- cstim
@@ -611,12 +740,22 @@
        ;;(display (gnc:commodity-value->string (list (car e) ((caadr
        ;;e) 'total #f))) (gnc:commodity-value->string (list
        ;;report-commodity ((cdadr e) 'total #f))))
+;       (warn "rate"
+;	     (gnc:commodity-value->string 
+;	      (list (car e) 
+;		    ((caadr e) 'total #f)))
+;	     " = "
+;	     (gnc:commodity-value->string 
+;	      (list report-commodity 
+;		    ((cdadr e) 'total #f))))
+       
        (list (car e) 
-	     (gnc:numeric-div ((cdadr e) 'total #f) 
-			      ((caadr e) 'total #f)
-			      ;; 0 stands for GNC_DENOM_AUTO
-			      0
-			      GNC-DENOM-REDUCE))))
+	     (gnc:numeric-abs
+	      (gnc:numeric-div ((cdadr e) 'total #f) 
+			       ((caadr e) 'total #f)
+			       ;; 0 stands for GNC_DENOM_AUTO
+			       0
+			       GNC-DENOM-REDUCE)))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
 ;; This one returns the ready-to-use function for calculation of the
@@ -636,3 +775,20 @@
 				    ;; not a durable solution
 				    100 GNC-RND-ROUND)))
 	     '())))))
+
+;; Adds all different commodities in the commodity-collector <foreign>
+;; by using the exchange rates of <exchange-fn> to calculate the
+;; exchange rates to the commodity <domestic>. Returns the
+;; two-element-list with the domestic commodity and its corresponding
+;; balance, like (gnc:commodity* gnc:numeric).
+(define (gnc:add-collector-commodity foreign domestic exchange-fn)
+  (let ((balance (make-commodity-collector)))
+    (foreign
+     'format 
+     (lambda (curr val) 
+       (if (gnc:commodity-equiv? domestic curr)
+	   (balance 'add domestic val)
+	   (balance 'add domestic 
+		    (cadr (exchange-fn (list curr val) domestic)))))
+     #f)
+    (balance 'getpair domestic #f)))
