@@ -1,5 +1,7 @@
 2001-05-02  Dave Peticolas  <dave@krondo.com>
 
+	* README.cvs: add README about cvs write access
+
 	* src/scm/report/net-barchart.scm: same as below
 
 	* src/scm/report/category-barchart.scm: same as below
