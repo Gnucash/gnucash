@@ -4,8 +4,6 @@
 <TITLE>The Register Window</TITLE>
 </ARTHEADER>
 
-<SECT1>
-<TITLE>The Register Window</TITLE>
 <MEDIAOBJECT>
 <IMAGEOBJECT>
 <IMAGEDATA FILEREF="image/regwin-single.png">
@@ -44,7 +42,7 @@
     information and replace it with the correct information.
 
     </PARA>
-</SECT1>
+
 <SECT1 ID="XACC-MANTXN">
 <TITLE>Manipulating Transactions</TITLE>
 <PARA>You can manipulate transactions with the toolbar buttons or the
