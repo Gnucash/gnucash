@@ -59,38 +59,36 @@ typedef struct _ComboCell
 } ComboCell;
 
 
-BasicCell *  xaccMallocComboCell (void);
-void         xaccInitComboCell (ComboCell *cell);
+BasicCell *  gnc_combo_cell_new (void);
+void         gnc_combo_cell_init (ComboCell *cell);
 
-void         xaccSetComboCellValue (ComboCell *cell, const char *value);
+void         gnc_combo_cell_set_value (ComboCell *cell, const char *value);
 
-void         xaccClearComboCellMenu (ComboCell *cell);
-void         xaccAddComboCellMenuItem (ComboCell *cell, char * menustr);
+void         gnc_combo_cell_clear_menu (ComboCell *cell);
+void         gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr);
 
 /* Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
-void         xaccComboCellSetStrict (ComboCell *cell, gboolean strict);
+void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);
 
 /* Sets a character used for special completion processing. */
-void         xaccComboCellSetCompleteChar (ComboCell *cell,
-                                           char complete_char);
+void         gnc_combo_cell_set_complete_char (ComboCell *cell,
+                                               char complete_char);
 
 /* Add a string to a list of strings which, if the cell has that value,
  * will cause the cell to be uneditable on 'enter'. If the cell has
  * that value, the ignore_help string will be returned by the
  * help handler. */
-void         xaccComboCellAddIgnoreString (ComboCell *cell,
-                                           const char *ignore_string,
-                                           const char *ignore_help);
+void         gnc_combo_cell_add_ignore_string (ComboCell *cell,
+                                               const char *ignore_string,
+                                               const char *ignore_help);
 
 /* Determines whether the popup list autosizes itself or uses
  * all available space. FALSE by default. */
-void         xaccComboCellSetAutoSize (ComboCell *cell, gboolean autosize);
+void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
 
 /* Determines whether combocells are automatically raised upon typing.
  * Defaults to false. This is a 'class' method. */
-void         xaccComboCellSetAutoPop (gboolean auto_pop_combos);
+void         gnc_combo_cell_set_autopop (gboolean auto_pop_combos);
 
-#endif /* COMBO_CELL_H */
-
-/* --------------- end of file ---------------------- */
+#endif

@@ -49,7 +49,7 @@ gnc_register_init (void)
 
   gnc_register_add_cell_type (BASIC_CELL_TYPE_NAME, gnc_basic_cell_new);
 
-  gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, xaccMallocComboCell);
+  gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, gnc_combo_cell_new);
 
   gnc_register_add_cell_type (DATE_CELL_TYPE_NAME, xaccMallocDateCell);
 

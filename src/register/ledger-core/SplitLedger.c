@@ -3867,12 +3867,12 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   xaccSRShowTrans (reg, table->current_cursor_loc.vcell_loc);
 
   /* set the completion character for the xfer cells */
-  xaccComboCellSetCompleteChar
+  gnc_combo_cell_set_complete_char
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
      gnc_get_account_separator ());
 
-  xaccComboCellSetCompleteChar
+  gnc_combo_cell_set_complete_char
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
      gnc_get_account_separator ());
@@ -3915,7 +3915,7 @@ LoadXferCell (ComboCell * cell, AccountGroup * grp)
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
     if (name != NULL)
     {
-      xaccAddComboCellMenuItem (cell, name);
+      gnc_combo_cell_add_menu_item (cell, name);
       g_free(name);
     }
   }
@@ -3942,12 +3942,12 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
-  xaccClearComboCellMenu (cell);
+  gnc_combo_cell_clear_menu (cell);
   LoadXferCell (cell, group);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
-  xaccClearComboCellMenu (cell);
+  gnc_combo_cell_clear_menu (cell);
   LoadXferCell (cell, group);
 }
 

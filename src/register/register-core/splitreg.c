@@ -111,89 +111,89 @@ configAction (SplitRegister *reg)
     case BANK_REGISTER:
       /* broken ! FIXME bg */
     case SEARCH_LEDGER:  
-      xaccAddComboCellMenuItem (cell, _("Deposit"));
-      xaccAddComboCellMenuItem (cell, _("Withdraw"));
-      xaccAddComboCellMenuItem (cell, _("Check"));
-      xaccAddComboCellMenuItem (cell, _("Int"));
-      xaccAddComboCellMenuItem (cell, _("ATM"));
-      xaccAddComboCellMenuItem (cell, _("Teller"));
+      gnc_combo_cell_add_menu_item (cell, _("Deposit"));
+      gnc_combo_cell_add_menu_item (cell, _("Withdraw"));
+      gnc_combo_cell_add_menu_item (cell, _("Check"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM"));
+      gnc_combo_cell_add_menu_item (cell, _("Teller"));
       /* Action: Point Of Sale */
-      xaccAddComboCellMenuItem (cell, _("POS"));
-      xaccAddComboCellMenuItem (cell, _("Phone"));
-      xaccAddComboCellMenuItem (cell, _("Online"));
+      gnc_combo_cell_add_menu_item (cell, _("POS"));
+      gnc_combo_cell_add_menu_item (cell, _("Phone"));
+      gnc_combo_cell_add_menu_item (cell, _("Online"));
       /* Action: Automatic Deposit ?!? */
-      xaccAddComboCellMenuItem (cell, _("AutoDep"));
-      xaccAddComboCellMenuItem (cell, _("Wire"));
-      xaccAddComboCellMenuItem (cell, _("Credit"));
-      xaccAddComboCellMenuItem (cell, _("Direct Debit"));
-      xaccAddComboCellMenuItem (cell, _("Transfer"));
+      gnc_combo_cell_add_menu_item (cell, _("AutoDep"));
+      gnc_combo_cell_add_menu_item (cell, _("Wire"));
+      gnc_combo_cell_add_menu_item (cell, _("Credit"));
+      gnc_combo_cell_add_menu_item (cell, _("Direct Debit"));
+      gnc_combo_cell_add_menu_item (cell, _("Transfer"));
       break;
     case CASH_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
     case ASSET_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
-      xaccAddComboCellMenuItem (cell, _("Fee"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Fee"));
       break;
     case CREDIT_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("ATM"));
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Credit"));
-      xaccAddComboCellMenuItem (cell, _("Fee"));
-      xaccAddComboCellMenuItem (cell, _("Int"));
-      xaccAddComboCellMenuItem (cell, _("Online"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("ATM"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Credit"));
+      gnc_combo_cell_add_menu_item (cell, _("Fee"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Online"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
     case LIABILITY_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
-      xaccAddComboCellMenuItem (cell, _("Loan"));
-      xaccAddComboCellMenuItem (cell, _("Int"));
-      xaccAddComboCellMenuItem (cell, _("Payment"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Loan"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
       break;
     case INCOME_LEDGER:
     case INCOME_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
-      xaccAddComboCellMenuItem (cell, _("Int"));
-      xaccAddComboCellMenuItem (cell, _("Payment"));
-      xaccAddComboCellMenuItem (cell, _("Rebate"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Payment"));
+      gnc_combo_cell_add_menu_item (cell, _("Rebate"));
       break;
     case EXPENSE_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
     case GENERAL_LEDGER:
     case EQUITY_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
-      xaccAddComboCellMenuItem (cell, _("Equity"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Equity"));
       break;
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
     case CURRENCY_REGISTER:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
-      xaccAddComboCellMenuItem (cell, _("Price"));
-      xaccAddComboCellMenuItem (cell, _("Fee"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Price"));
+      gnc_combo_cell_add_menu_item (cell, _("Fee"));
       /* Action: Dividend */
-      xaccAddComboCellMenuItem (cell, _("Div")); 
-      xaccAddComboCellMenuItem (cell, _("Int"));
+      gnc_combo_cell_add_menu_item (cell, _("Div")); 
+      gnc_combo_cell_add_menu_item (cell, _("Int"));
       /* Action: Long Term Capital Gains */
-      xaccAddComboCellMenuItem (cell, _("LTCG"));
+      gnc_combo_cell_add_menu_item (cell, _("LTCG"));
       /* Action: Short Term Capital Gains */
-      xaccAddComboCellMenuItem (cell, _("STCG"));
-      xaccAddComboCellMenuItem (cell, _("Income"));
+      gnc_combo_cell_add_menu_item (cell, _("STCG"));
+      gnc_combo_cell_add_menu_item (cell, _("Income"));
       /* Action: Distribution */
-      xaccAddComboCellMenuItem (cell, _("Dist")); 
-      xaccAddComboCellMenuItem (cell, _("Split"));
+      gnc_combo_cell_add_menu_item (cell, _("Dist")); 
+      gnc_combo_cell_add_menu_item (cell, _("Split"));
       break;
 
     default:
-      xaccAddComboCellMenuItem (cell, _("Buy"));
-      xaccAddComboCellMenuItem (cell, _("Sell"));
+      gnc_combo_cell_add_menu_item (cell, _("Buy"));
+      gnc_combo_cell_add_menu_item (cell, _("Sell"));
       break;
   }
 }
@@ -822,7 +822,7 @@ xaccInitSplitRegister (SplitRegister *reg,
     const char *help = _("This transaction has multiple splits; "
                          "press the Split button to see them all");
 
-    xaccComboCellAddIgnoreString
+    gnc_combo_cell_add_ignore_string
       ((ComboCell *)
        gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
        _("-- Split Transaction --"), help);
@@ -832,14 +832,14 @@ xaccInitSplitRegister (SplitRegister *reg,
     const char *help = _("This transaction is a stock split; "
                          "press the Split button to see details");
 
-    xaccComboCellAddIgnoreString
+    gnc_combo_cell_add_ignore_string
       ((ComboCell *)
        gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
        _("-- Stock Split --"), help);
   }
 
   /* the action cell */
-  xaccComboCellSetAutoSize
+  gnc_combo_cell_set_autosize
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
@@ -882,7 +882,7 @@ xaccInitSplitRegister (SplitRegister *reg,
      gnc_default_share_print_info ());
 
   /* The action cell should accept strings not in the list */
-  xaccComboCellSetStrict
+  gnc_combo_cell_set_strict
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
 

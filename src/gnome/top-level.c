@@ -742,7 +742,7 @@ gnc_configure_auto_raise (void)
 
   auto_pop = gnc_lookup_boolean_option("Register", "Auto-Raise Lists", TRUE);
 
-  xaccComboCellSetAutoPop(auto_pop);
+  gnc_combo_cell_set_autopop (auto_pop);
 }
 
 /* gnc_configure_negative_color_cb

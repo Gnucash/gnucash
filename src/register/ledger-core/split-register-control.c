@@ -750,8 +750,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                                                 ACTN_CELL, TRUE))
         {
           cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
-          xaccSetComboCellValue ((ComboCell *) cell,
-                                 xaccSplitGetAction (auto_split));
+          gnc_combo_cell_set_value ((ComboCell *) cell,
+                                    xaccSplitGetAction (auto_split));
         }
 
         /* auto-complete the account name */
@@ -759,7 +759,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split),
                                            gnc_get_account_separator ());
-        xaccSetComboCellValue ((ComboCell *) cell, fullname);
+        gnc_combo_cell_set_value ((ComboCell *) cell, fullname);
         g_free(fullname);
 
         gnc_basic_cell_set_changed (cell, TRUE);
@@ -926,7 +926,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     info->full_refresh = TRUE;
 
     name = xaccAccountGetFullName (account, gnc_get_account_separator ());
-    xaccSetComboCellValue (cell, name);
+    gnc_combo_cell_set_value (cell, name);
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
     g_free (name);
 
