@@ -366,7 +366,7 @@ pgendGetAllAccountKVP (PGBackend *be, AccountGroup *grp)
 {
    if (!grp) return;
 
-   xaccGroupForEachAccountDeeply (grp, restore_cb, be);
+   xaccGroupForEachAccount (grp, restore_cb, be, TRUE);
 }
 
 /* ============================================================= */
