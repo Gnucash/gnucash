@@ -131,11 +131,15 @@ single copy of the source tree:
 
 sorry, no "make install" yet.
 
+libXm.so.2.0 version of the lesstif libraries can be found at
+http://rufus.w3.org/linux/RPM/libXm.so.2.0.html
+Note, however, that lesstif 0.82 has been reported to cause 
+core dumps in xacc.
 
 
 Status:
 -------
-As of version 1.0.16:
+As of version 1.0.18:
 
 xacc is known to work in the following configs:
 Linux 2.0.x           -- Intel  w/ RedHat Motif
