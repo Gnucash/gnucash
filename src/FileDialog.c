@@ -338,6 +338,14 @@ gncPostFileOpen (const char * filename)
         /* user told us to ignore locks. So ignore them. */
         gnc_book_begin (new_book, newfile, TRUE, FALSE);
      }
+     else
+     {
+        /* Can't use the given file, so just create a new
+         * database so that the user will get a window that
+         * they can click "Exit" on.
+         */
+        gncFileNew();
+     }
   }
 
   /* if the database doesn't exist, ask the user ... */
