@@ -76,7 +76,7 @@ depend:
 	@echo make depend is now superfluous.
 
 CLEAN_SUBDIRS += lib src
-TRASH += *~ *.o *.bak
+TRASH += TAGS *~ *.o *.bak
 
 DIST_TRASH += Makefile *~ *.o *.bak share/scm gnucash.bin
 DIST_TRASH += gnucash.motif gnucash.motif.static

@@ -513,18 +513,7 @@ gnc_ui_add_account ( GtkWidget *widget, gpointer data )
   toplevel = gtk_widget_get_toplevel(GTK_WIDGET(widget));
   account  = gtk_object_get_data(GTK_OBJECT(app), "selected_account");
 
-  /* FIXME: Right now this really is not doing anything        */
-  /*        The new account dialog should use this information */  
-  /*        to set the parent account...                       */
-  if (account)
-  {
-    accWindow((AccountGroup *)account);
-  }
-  else
-  {
-    accWindow(NULL);
-  }
-  
+  accWindow((AccountGroup*)account);
 }
 
 static void
@@ -573,12 +562,14 @@ gnc_ui_delete_account_cb ( GtkWidget *widget, gpointer data )
      gnome_dialog_button_connect (GNOME_DIALOG (msgbox), 0,
                                   GTK_SIGNAL_FUNC (gnc_ui_delete_account_finish_cb), 
                                   account);
+     gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
      gtk_widget_show ( msgbox );
   }
   else
   {
     GtkWidget *msgbox;
     msgbox = gnome_message_box_new(ACC_DEL_MSG, GNOME_MESSAGE_BOX_ERROR, "Ok", NULL);
+    gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
     gtk_widget_show ( msgbox );    
   }
 }
@@ -602,8 +593,9 @@ gnc_ui_mainWindow_toolbar_open ( GtkWidget *widget, gpointer data )
     GtkWidget *msgbox;
     msgbox = gnome_message_box_new ( " You must select an account to open first. ",
                                      GNOME_MESSAGE_BOX_ERROR, "Ok", NULL );
+    gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
     gtk_widget_show ( msgbox );    
-  }  
+  }
 }
 
 static void
@@ -623,6 +615,7 @@ gnc_ui_mainWindow_toolbar_edit ( GtkWidget *widget, gpointer data )
   {
     GtkWidget *msgbox;
     msgbox = gnome_message_box_new(ACC_EDIT_MSG, GNOME_MESSAGE_BOX_ERROR, "Ok", NULL);
+    gtk_window_set_modal(GTK_WINDOW(msgbox) ,TRUE );
     gtk_widget_show ( msgbox );    
   }  
 }

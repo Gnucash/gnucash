@@ -30,16 +30,29 @@ So here is the law:
 17 August 1998
 
 
+Things we actually do care about:
+
+ * Don't use dangling if clauses.  i.e. don't do this...
+
+   if(x) {
+     foo();
+     bar();
+   } else
+     baz();
+
+
+
+
 Rob's Style conventions (for anyone who cares):
 
 Scheme:
-  * all gnucash functions and global variables are prefixed with gnc:
-  * all global variables are enclosed in ** (i.e. gnc:*load-path*)
-  * all private functions are enclosed in __ (i.e. gnc:_do-not-call_)
-  * all C functions exported via swig have underscores in place of dashes
+ * all gnucash functions and global variables are prefixed with gnc:
+ * all global variables are enclosed in ** (i.e. gnc:*load-path*)
+ * all private functions are enclosed in __ (i.e. gnc:_do-not-call_)
+ * all C functions exported via swig have underscores in place of dashes
 
 C:
-  * all gnucash functions and global variables are prefixed with gnc_
-  * all private functions are enclosed in __ (i.e. _gnc_do_not_call_)
-  * use static functions whenever possible
-  * use const whenever possible
+ * all gnucash functions and global variables are prefixed with gnc_
+ * all private functions are enclosed in __ (i.e. _gnc_do_not_call_)
+ * use static functions whenever possible
+ * use const whenever possible
