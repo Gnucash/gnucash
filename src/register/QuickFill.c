@@ -45,7 +45,7 @@ static short module = MOD_REGISTER;
 \********************************************************************/
 
 static int 
-CHAR_TO_INDEX( char c )
+CHAR_TO_INDEX( unsigned char c )
 {
   int index = toupper(c);
 
