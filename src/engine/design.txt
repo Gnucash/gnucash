@@ -335,6 +335,60 @@ or rejected at the end.  Handy for the GUI, if the user makes a bunch
 of changes which they don't want to keep; also handy for an SQL back end,
 where the Commit() routine triggers the actual update of the SQL database.
 
+Note: 'Commit' is sometimes called 'post' in other systems:  The
+act of 'commiting' a transaction is the same as 'posting' the
+transaction to the general ledger.
+
+Some important implementation details to understand:  the GUI currently
+uses begin/end as a convenience, and thus, may hold a transaction in
+the 'edit' state for a portentially long time (minutes or hours).
+Thus, begin/end should not map naively to a table-lock/unlock.
+Instead, an optimistic-locking scheme, as below, is prefered.
+
+The SQL back-end should implement posting entirely in the 
+'Commit()' routine.  The pseudo-algorithms should look as follows:
+
+	BeginEdit () {
+		// save a copy of what it was before we start editing
+		old_transaction = this;
+	}
+
+	SetValue (float amount) {
+		// some example editing done here
+		this->value = amount;
+	}
+
+	Commit () {
+		LockTable();
+		current = QueryTransaction();
+		// check ton make sure that what the sql db stores
+		// is identical to what we have on record as the
+		// 'original' tansaction.  If its not, then someone
+		// got in there and modified it while we weren't
+		// looking; so we better report this back toi user.
+		if (current != old_transaction) Error(); Unlock(); return err;
+
+		// otherwise, all is OK, we have successfully obtained
+		// the lock and validated the data, so now just update things.
+                StoreTransaction (new_transaction);
+		UnlockTable();
+		old_transaction = NULL;
+	}
+
+	Rollback () {
+		// throw away the edits
+		this = old_transaction;
+		old_transaction = NULL;
+	}
+
+The GUI should check to make sure that the Commit() routine didn't fail.
+If it did fail, then the GUI should pop up a notice to the user stating
+that the fundamental underlying data has changed, and that the user
+should try doing the edit again.  (It might be nice to indicate which 
+other human user might have changed the data so that they could
+coordinate as needed.)
+
+
 
 Journal Logs
 ------------
