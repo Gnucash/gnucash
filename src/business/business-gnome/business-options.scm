@@ -71,6 +71,11 @@
 	     (gnc:error "Illegal invoice value set"))))
      (lambda () (convert-to-invoice (default-getter)))
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
      validator
      #f #f #f #f)))
 
@@ -125,6 +130,11 @@
 	     (gnc:error "Illegal customer value set"))))
      (lambda () (convert-to-customer (default-getter)))
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
      validator
      #f #f #f #f)))
 
@@ -179,6 +189,11 @@
 	     (gnc:error "Illegal vendor value set"))))
      (lambda () (convert-to-vendor (default-getter)))
      (gnc:restore-form-generator value->string)
+     (lambda (f p) (gnc:kvp-frame-set-slot-path f value p))
+     (lambda (f p)
+       (let ((v (gnc:kvp-frame-get-slot-path f p)))
+	 (if (and v (string? v))
+	     (set! value v))))
      validator
      #f #f #f #f)))
 
@@ -267,6 +282,16 @@
 	       (gnc:error "Illegal owner value set"))))
        (lambda () (convert-to-owner (default-getter)))
        (gnc:restore-form-generator value->string)
+       (lambda (f p)
+	 (gnc:kvp-frame-set-slot-path f (symbol->string (car value))
+				      (append p '("type")))
+	 (gnc:kvp-frame-set-slot-path f (cdr value)
+				      (append p '("value"))))
+       (lambda (f p)
+	 (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
+	       (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
+	   (if (and t v (string? t) (string? v))
+	       (set! value (cons (string->symbol t) v)))))
        validator
        owner-type #f #f #f))))
 

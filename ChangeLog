@@ -1,3 +1,11 @@
+2002-07-07  Derek Atkins  <derek@ihtfp.com>
+
+	* options.scm: change gnc:make-option; add two new args, scm->kvp
+	  and kvp->scp.  Implement these two methods for most of the options.
+	* app-utils.scm: export the kvp->scm and scm->kvp procedures
+	* business-options.scm: Implement the kvp->scm and scm->kvp methods
+	  for the business options.
+
 2002-07-06  Derek Atkins  <derek@ihtfp.com>
 
 	* gw-kvp-spec.scm: wrap kvp_slot_set_slot_path_gslist(),
