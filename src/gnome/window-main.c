@@ -1456,12 +1456,12 @@ mainWindow()
 
   gtk_container_add(GTK_CONTAINER(scrolled_win),
                     GTK_WIDGET(main_info->account_tree));
-  
+
   /* Attach delete and destroy signals to the main window */  
   gtk_signal_connect (GTK_OBJECT (app), "delete_event",
                       GTK_SIGNAL_FUNC (gnc_ui_mainWindow_delete_cb),
                       NULL);
-  
+
   gtk_signal_connect (GTK_OBJECT (app), "destroy_event",
                       GTK_SIGNAL_FUNC (gnc_ui_mainWindow_destroy_event_cb),
                       NULL);

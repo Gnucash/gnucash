@@ -45,6 +45,7 @@ create_QIF_Import_Account_Picker (void)
   QIF_Import_Account_Picker = gnome_dialog_new (_("Select Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "QIF_Import_Account_Picker", QIF_Import_Account_Picker);
   gtk_window_set_policy (GTK_WINDOW (QIF_Import_Account_Picker), TRUE, TRUE, FALSE);
+  gnome_dialog_close_hides (GNOME_DIALOG (QIF_Import_Account_Picker), TRUE);
 
   vbox1 = GNOME_DIALOG (QIF_Import_Account_Picker)->vbox;
   gtk_object_set_data (GTK_OBJECT (QIF_Import_Account_Picker), "vbox1", vbox1);
@@ -4383,7 +4384,7 @@ create_QIF_Import_Druid (void)
   gtk_box_pack_start (GTK_BOX (hbox69), qif_filename_entry, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (qif_filename_entry, GTK_CAN_DEFAULT);
 
-  button71 = gtk_button_new_with_label (_("Select ..."));
+  button71 = gtk_button_new_with_label (_("Select..."));
   gtk_widget_ref (button71);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "button71", button71,
                             (GtkDestroyNotify) gtk_widget_unref);

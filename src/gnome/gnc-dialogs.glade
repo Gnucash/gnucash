@@ -33,7 +33,7 @@
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
   <auto_close>False</auto_close>
-  <hide_on_close>False</hide_on_close>
+  <hide_on_close>True</hide_on_close>
 
   <widget>
     <class>GtkVBox</class>
@@ -6275,7 +6275,7 @@ worry if your data is in multiple files.
 	      <data>QIF_Import_Druid</data>
 	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
 	    </signal>
-	    <label>Select ...</label>
+	    <label>Select...</label>
 	    <child>
 	      <padding>3</padding>
 	      <expand>False</expand>

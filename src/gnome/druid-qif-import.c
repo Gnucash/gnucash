@@ -159,12 +159,12 @@ gnc_ui_qif_import_druid_make(void)  {
   load_map_prefs = gh_eval_str("qif-import:load-map-prefs");
   lookup_option = gh_eval_str("gnc:lookup-global-option");
   lookup_value  = gh_eval_str("gnc:option-value");
-  
+
   mapping_info = gh_call0(load_map_prefs);
   retval->gnc_acct_info    = gh_car(mapping_info);
   retval->acct_map_info    = gh_cadr(mapping_info);
   retval->cat_map_info     = gh_caddr(mapping_info);
-  
+
   scm_protect_object(retval->imported_files);
   scm_protect_object(retval->selected_file);
   scm_protect_object(retval->gnc_acct_info);
@@ -790,27 +790,26 @@ gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
   SCM   new_acct_info;
   char  * gnc_name;
   int   initial_type; 
-  
+
   /* find the <qif-map-entry> corresponding to the selected row */
   selected_acct = gh_list_ref(wind->acct_display_info,
                               gh_int2scm(row));
-  
+
   /* call the account picker to get the new account */
   gnc_name     = gh_scm2newstr(gh_call1(get_gnc_name, selected_acct), NULL);
   initial_type = 
     gh_scm2int(gh_car(gh_call1(get_allowed_types, selected_acct)));
-  
+
   new_acct_info = accountPickerBox(gnc_name, initial_type);
-  
+
   if(gh_list_p(new_acct_info)) {
     gh_call2(set_gnc_name, selected_acct, gh_car(new_acct_info));
     gh_call2(set_allowed_types, selected_acct, 
              SCM_LIST1(gh_cadr(new_acct_info)));    
     gh_call2(set_description, selected_acct, gh_caddr(new_acct_info));    
   }
-  
-  update_accounts_page(wind);
 
+  update_accounts_page(wind);
 }
 
 
@@ -1224,4 +1223,3 @@ gncFileQIFImport (void)
   /* pop up the QIF File Import dialog box */
   gnc_ui_qif_import_druid_make();
 }
-
