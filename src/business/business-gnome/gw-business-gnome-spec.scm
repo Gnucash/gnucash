@@ -1,10 +1,15 @@
-(define-module (g-wrapped gw-business-gnome-spec))
+;;; -*-scheme-*-
+
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 
+(define-module (g-wrapped gw-business-gnome-spec)
+  :use-module (g-wrap))
+
 (use-modules (g-wrap))
 
-(use-modules (g-wrap gw-standard))
+(use-modules (g-wrap gw-standard-spec))
+(use-modules (g-wrap gw-wct-spec))
 
 (use-modules (g-wrapped gw-business-core-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
