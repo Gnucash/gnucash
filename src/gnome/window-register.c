@@ -859,8 +859,7 @@ regWindowLedger( GNCLedgerDisplay *ledger )
   /* The menu bar. Menu extension setup needs to come *after* that. */
   gnc_register_setup_menu_widgets( regData, xml );
   gnc_extensions_menu_setup_with_data( GNOME_APP(register_window),
-				       WINDOW_NAME_REGISTER,
-				       regData );
+                                       WINDOW_NAME_REGISTER, regData );
 
   /* The tool bar */
   {
@@ -908,11 +907,18 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     if (*width == 0)
       gnc_get_window_size (prefix, width, NULL);
 
-    gtk_window_set_default_size (GTK_WINDOW(register_window), *width, 0);
+    gtk_window_set_default_size (GTK_WINDOW(regData->window), *width, 0);
   }
 
-  gtk_widget_show_all( GTK_WIDGET(regData->gsr) );
-  gnc_window_adjust_for_screen( GTK_WINDOW(register_window) );
+  gtk_widget_show_all( GTK_WIDGET(regData->window) );
+  gnc_window_adjust_for_screen( GTK_WINDOW(regData->window) );
+
+  {
+    SplitRegister *sr = gnc_ledger_display_get_split_register( regData->ledger );
+    gnc_split_register_config( sr, sr->type, sr->style, sr->use_double_line );
+    gnc_ledger_display_refresh( regData->ledger );
+  }
+
 
   return regData;
 }

@@ -1,3 +1,14 @@
+2002-11-11  Joshua Sled  <jsled@phoenix.asynchronous.org>
+
+	* src/gnome/window-register.c (regWindowLedger): If we
+	gtk_widget_show_all the correct widget [the window], then it's
+	available for setting its size and changing the style and whatnot.
+
+	* src/gnome/orig-window-register.c (regWindowLedger): Hack for
+	Bug#97640; re-init the style after we've shown the widgets to
+	affect a "style change", which lets the GUI nature of the cells
+	[combos, autocomplete] init and function.
+
 2002-11-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/Transaction-matcher.c: Make newly imported
