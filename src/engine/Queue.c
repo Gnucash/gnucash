@@ -5,6 +5,11 @@
  * DESCRIPTION:
  * Provide simple FIFO/LIFO cost-basis accounting support.
  *
+ * RESTRICTIONS:
+ * -- Does not support use with mixed currencies.
+ * -- Does not check for or warn mixed currency use.
+ * -- Does not allow pushhead after a pophead has occured.
+ *
  * HISTORY:
  * created by Linas Vepstas January 1999
  * Copyright (c) 1999 Linas Vepstas
@@ -126,7 +131,7 @@ xaccInitQueue (Queue *q)
    q->split_list = (Split **) malloc (INITIAL_LENGTH * sizeof (Split *));
    q->list_len = INITIAL_LENGTH;
    q->head_split = -1;
-   q->tail_split = -1;
+   q->tail_split = 0;
    q->head_amount = 0.0;
    q->tail_amount = 0.0;
    q->head_price = 0.0;
@@ -149,7 +154,7 @@ xaccFreeQueue (Queue *q)
    q->split_list = 0x0;
    q->list_len = -1;
    q->head_split = -1;
-   q->tail_split = -1;
+   q->tail_split = 0;
    q->head_amount = 0.0;
    q->tail_amount = 0.0;
    q->head_price = 0.0;
@@ -221,6 +226,120 @@ xaccQueuePushHead (Queue *q, Split *s)
 
   q->head_split ++;
   q->split_list [ q->head_list ] = s;
+}
+
+/* ================================================== */
+
+double 
+xaccQueuePopTailShares (Queue *q, double shrs)
+{
+   int tp, hp;
+   Split **list;
+   double rshrs = 0.0;
+   if (!q) return 0.0;
+
+   /* the tail holds enough to do it in one go. */
+   if (q->tail_amount > shrs) {
+      q->tail_amount -= shrs;
+      return shrs;
+   }
+
+   /* use up the tail shares first ... */
+   shrs -= q->tail_amount;
+   rshrs += q->tail_amount;
+   q->tail_amount = 0.0;
+   q->tail_price = 0.0;
+   q->tail_date.tv_sec = 0;
+   q->tail_date.tv_nsec = 0;
+
+   /* start poping */
+   tp = q->tail_split;
+   hp = q->head_split;
+   list = q->split_list;
+   while (tp <= hp)
+   {
+      /* the tail holds enough to do it in one go. */
+      if ((list[tp]->damount) > shrs) {
+         q->tail_amount = list[tp]->damount - shrs;
+         q->tail_price = list[tp]->share_price;
+         assert (list[tp]->parent);
+         q->tail_date = list[tp]->parent->date_posted;
+         rshrs += shrs;
+         tp++;
+         q->tail_split = tp;
+         return rshrs;
+      }
+
+      /* well, well need use up this entire split ... */
+      shrs -= (list[tp]->damount);
+      rshrs += (list[tp]->damount);
+      tp++;
+   }
+
+   /* oops, if we got to hear, we've used up all of the splits.
+    * give em whatever we've got on the head, and then we're outta here.
+    */
+   q->tail_split = 0;
+   q->head_split = -1;
+
+   /* the head holds enough to do it in one go. */
+   if (q->head_amount > shrs) {
+      q->head_amount -= shrs;
+      rshrs += shrs;
+      return shrs;
+   }
+
+   /* use up whats left of the head shares */
+   shrs -= q->head_amount;
+   rshrs += q->head_amount;
+   q->head_amount = 0.0;
+   q->head_price = 0.0;
+   q->head_date.tv_sec = 0;
+   q->head_date.tv_nsec = 0;
+
+   return rshrs;
+}
+
+/* ================================================== */
+
+double
+xaccQueueGetShares (Queue *q)
+{
+   Split **list;
+   int shrs = 0.0;
+   int i, len;
+   if (!q) return 0.0;
+
+   shrs += q->head_shares;
+   shrs += q->tail_shares;
+   
+   len = q->head_split - q->tail_split + 1;
+   list = q->split_list;
+   tail = q->tail_split;
+   for (i=0; i<len; i++) {
+      shrs += list[i]->damount;
+   }
+   return shrs;
+}
+
+double 
+xaccQueueGetValue (Queue *q)
+{
+   Split **list;
+   int shrs = 0.0;
+   int i, len;
+   if (!q) return 0.0;
+
+   shrs += q->head_shares * q->head_price;
+   shrs += q->tail_shares * q->tail_price;
+   
+   len = q->head_split - q->tail_split + 1;
+   list = q->split_list;
+   tail = q->tail_split;
+   for (i=0; i<len; i++) {
+      shrs += list[i]->damount * list[i]->share_price;
+   }
+   return shrs;
 }
 
 /* ================ END OF FILE  ==================== */
