@@ -19,6 +19,7 @@ localstatedir=@localstatedir@
 sysconfdir=@sysconfdir@
 
 includedir=@includedir@
+mandir=@mandir@
 
 ABSOLUTE_TOP_SRCDIR=@ABSOLUTE_TOP_SRCDIR@
 
@@ -49,7 +50,3 @@ GNC_MANDIR=@GNC_MANDIR@
 HAVE_PLOTUTILS=@HAVE_PLOTUTILS@
 GLIB_CONFIG_BIN=@GLIB_CONFIG_BIN@
 GNOME_CONFIG_BIN=@GNOME_CONFIG_BIN@
-
-# Local Variables:
-# mode: makefile
-# End:

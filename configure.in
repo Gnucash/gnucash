@@ -512,21 +512,21 @@ then
   GNC_DOCDIR='${prefix}/doc'
   GNC_BINDIR='${prefix}/bin'
   GNC_LIBDIR='${prefix}/lib'
-  GNC_CONFIGDIR=${sysconfdir}
-  GNC_SHAREDIR=${datadir}
+  GNC_CONFIGDIR='${sysconfdir}'
+  GNC_SHAREDIR='${datadir}'
 else
   GNC_DOCDIR='${prefix}/doc/gnucash'
   GNC_BINDIR='${prefix}/bin'
   GNC_LIBDIR='${prefix}/lib/gnucash'
-  GNC_CONFIGDIR=${sysconfdir}/gnucash
-  GNC_SHAREDIR=${datadir}/gnucash
+  GNC_CONFIGDIR='${sysconfdir}/gnucash'
+  GNC_SHAREDIR='${datadir}/gnucash'
 fi
 
 GNC_EXPANDED_LIBDIR=`gnc_recursively_expand_var "${GNC_LIBDIR}"`
 GNC_EXPANDED_CONFIGDIR=`gnc_recursively_expand_var "${GNC_CONFIGDIR}"`
 GNC_EXPANDED_SHAREDIR=`gnc_recursively_expand_var "${GNC_SHAREDIR}"`
 
-GNC_MANDIR=${mandir}
+GNC_MANDIR='${mandir}'
 
 AC_SUBST(GNC_DOCDIR)
 AC_SUBST(GNC_BINDIR)
