@@ -1,47 +1,27 @@
-;;; -*-scheme-*-
-(use-modules (g-wrap))
-
+(define-module (g-wrapped gw-business-gnome-spec))
 (debug-set! maxdepth 100000)
 (debug-set! stack    2000000)
 
-(define-module (g-wrapped gw-business-gnome-spec)
-  :use-module (g-wrap))
+(use-modules (g-wrap))
+
+(use-modules (g-wrap gw-standard))
 
 (use-modules (g-wrapped gw-business-core-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
 
-(let ((mod (gw:new-module "gw-business-gnome")))
-  (define (standard-c-call-gen result func-call-code)
-    (list (gw:result-get-c-name result) " = " func-call-code ";\n"))
-  
-  (define (add-standard-result-handlers! type c->scm-converter)
-    (define (standard-pre-handler result)
-      (let* ((ret-type-name (gw:result-get-proper-c-type-name result))
-             (ret-var-name (gw:result-get-c-name result)))
-        (list "{\n"
-              "    " ret-type-name " " ret-var-name ";\n")))
-    
-    (gw:type-set-pre-call-result-ccodegen! type standard-pre-handler)
-    
-    (gw:type-set-post-call-result-ccodegen!
-     type
-     (lambda (result)
-       (let* ((scm-name (gw:result-get-scm-name result))
-              (c-name (gw:result-get-c-name result)))
-         (list
-          (c->scm-converter scm-name c-name)
-          "  }\n")))))
-  
-  (gw:module-depends-on mod "gw-runtime")
-  (gw:module-depends-on mod "gw-business-core")
-  (gw:module-depends-on mod "gw-engine")
-  (gw:module-depends-on mod "gw-gnome-utils")
+(let ((ws (gw:new-wrapset "gw-business-gnome")))
 
-  (gw:module-set-guile-module! mod '(g-wrapped gw-business-gnome))
+  (gw:wrapset-depends-on ws "gw-standard")
 
-  (gw:module-set-declarations-ccodegen!
-   mod
-   (lambda (client-only?)
+  (gw:wrapset-depends-on ws "gw-business-core")
+  (gw:wrapset-depends-on ws "gw-engine")
+  (gw:wrapset-depends-on ws "gw-gnome-utils")
+
+  (gw:wrapset-set-guile-module! ws '(g-wrapped gw-business-gnome))
+
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset)
      (list
       "#include <dialog-customer.h>\n"
       "#include <dialog-employee.h>\n"
@@ -51,19 +31,19 @@
       "#include <dialog-vendor.h>\n"
       )))
 
-  (gw:module-set-init-ccodegen!
-   mod
-   (lambda (client-only?) 
-     (if client-only? 
+  (gw:wrapset-add-cs-initializers!
+   ws
+   (lambda (wrapset client-wrapset status-var) 
+     (if client-wrapset
          '()
          (gw:inline-scheme '(use-modules (gnucash business-gnome))))))
-
+  
   ;;
   ;; dialog-customer.h
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:customer-new
    '<gnc:GncCustomer*>
    "gnc_customer_new"
@@ -71,7 +51,7 @@
    "Dialog: create a new GncCustomer.  Parent may be NULL.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:customer-edit
    '<gw:void>
    "gnc_customer_edit"
@@ -80,7 +60,7 @@
 
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:customer-select
    '<gnc:GncCustomer*>
    "gnc_customer_edit_new_select"
@@ -93,7 +73,7 @@
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:employee-new
    '<gnc:GncEmployee*>
    "gnc_employee_new"
@@ -101,7 +81,7 @@
    "Dialog: create a new GncEmployee.  Parent may be NULL.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:employee-edit
    '<gw:void>
    "gnc_employee_edit"
@@ -110,7 +90,7 @@
 
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:employee-select
    '<gnc:GncEmployee*>
    "gnc_employee_edit_new_select"
@@ -123,7 +103,7 @@
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:job-new
    '<gnc:GncJob*>
    "gnc_job_new"
@@ -132,7 +112,7 @@
    "Dialog: create a new GncJob.  Parent and Customer may be NULL.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:job-edit
    '<gw:void>
    "gnc_job_edit"
@@ -144,7 +124,7 @@
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:job-select
    '<gnc:GncJob*>
    "gnc_ui_select_job_new"
@@ -157,7 +137,7 @@
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:order-new
    '<gnc:GncOrder*>
    "gnc_order_new"
@@ -165,7 +145,7 @@
    "Dialog: create a new GncOrder.  Parent may be NULL.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:order-edit
    '<gw:void>
    "gnc_order_edit"
@@ -174,7 +154,7 @@
 
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:order-select
    '<gnc:GncOrder*>
    "gnc_order_edit_new_select"
@@ -187,7 +167,7 @@
   ;;
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:vendor-new
    '<gnc:GncVendor*>
    "gnc_vendor_new"
@@ -195,7 +175,7 @@
    "Dialog: create a new GncVendor.  Parent may be NULL.")
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:vendor-edit
    '<gw:void>
    "gnc_vendor_edit"
@@ -204,7 +184,7 @@
 
 
   (gw:wrap-function
-   mod
+   ws
    'gnc:vendor-select
    '<gnc:GncVendor*>
    "gnc_vendor_edit_new_select"
