@@ -42,6 +42,7 @@ libgncgnome_la_SOURCES = \
   druid-hierarchy.c \
   druid-loan.c \
   druid-stock-split.c \
+  gnc-embedded-window.c \
   gnc-main-window.c \
   gnc-plugin.c \
   gnc-plugin-account-tree.c \
@@ -87,6 +88,7 @@ noinst_HEADERS = \
   druid-hierarchy.h \
   druid-loan.h \
   druid-stock-split.h \
+  gnc-embedded-window.h \
   gnc-main-window.h \
   gnc-plugin.h \
   gnc-plugin-account-tree.h \
