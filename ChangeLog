@@ -39,6 +39,16 @@
 	* .../business-gnome/dialog-employee.c:
 	  Use new ...Currency() functions
 	More prep to fix #101001
+
+	* .../business-gnome/business-gnome.scm:
+	  Fix the Extensions hooks to connect menus properly when GNC_DEBUG=1
+	* .../business-gnome/dialog-customer.c:
+	* .../business-gnome/dialog-vendor.c:
+	* .../business-gnome/dialog-employee.c:
+	* .../business-gnome/glade/customer.glade:
+	* .../business-gnome/glade/vendor.glade:
+	* .../business-gnome/glade/employee.glade:
+	  Add ability to edit currency in the UI.  Fixes #101001
 	
 2003-01-12  David Hampton  <hampton@employees.org>
 

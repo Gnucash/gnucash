@@ -11,6 +11,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
+#include "gnc-currency-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -70,6 +71,7 @@ struct _customer_window {
   GtkWidget *	shipfax_entry;
   GtkWidget *	shipemail_entry;
 
+  GtkWidget *	currency_edit;
   GtkWidget *	terms_menu;
   GtkWidget *	discount_amount;
   GtkWidget *	credit_amount;
@@ -169,7 +171,10 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
   gncCustomerSetNotes (cust, gtk_editable_get_chars
 		       (GTK_EDITABLE (cw->notes_text), 0, -1));
 
-  /* Parse and set the terms, discount, and credit amounts */
+  /* Parse and set the currency, terms, discount, and credit amounts */
+  gncCustomerSetCurrency (cust,
+			  gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT
+							     (cw->currency_edit)));
   gncCustomerSetTerms (cust, cw->terms);
   gncCustomerSetDiscount (cust, gnc_amount_edit_get_amount
 			  (GNC_AMOUNT_EDIT (cw->discount_amount)));
@@ -403,6 +408,12 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
     }
   }
   
+  /* Find the default currency */
+  if (cust)
+    currency = gncCustomerGetCurrency (cust);
+  else
+    currency = gnc_default_currency ();
+
   /*
    * No existing customer window found.  Build a new one.
    */
@@ -451,6 +462,14 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   cw->taxtable_check = glade_xml_get_widget (xml, "taxtable_button");
   cw->taxtable_menu = glade_xml_get_widget (xml, "taxtable_menu");
 
+  /* Currency */
+  edit = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(edit), currency);
+  cw->currency_edit = edit;
+
+  hbox = glade_xml_get_widget (xml, "currency_box");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
   /* DISCOUNT: Percentage Value */
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
@@ -466,7 +485,6 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   /* CREDIT: Monetary Value */
   edit = gnc_amount_edit_new();
-  currency = gnc_default_currency ();
   print_info = gnc_commodity_print_info (currency, FALSE);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
@@ -581,7 +599,6 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   } else {
     cust = gncCustomerCreate (bookp);
-    gncCustomerSetCurrency (cust, currency);
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
     cw->dialog_type = NEW_CUSTOMER;

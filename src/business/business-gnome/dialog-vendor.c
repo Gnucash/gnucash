@@ -10,6 +10,7 @@
 
 #include "dialog-utils.h"
 #include "global-options.h"
+#include "gnc-currency-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -59,6 +60,7 @@ struct _vendor_window {
   GtkWidget *	fax_entry;
   GtkWidget *	email_entry;
   GtkWidget *	terms_menu;
+  GtkWidget *	currency_edit;
 
   GtkWidget *	active_check;
   GtkWidget *	taxincluded_menu;
@@ -136,6 +138,9 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
   gncVendorSetNotes (vendor, gtk_editable_get_chars
 		       (GTK_EDITABLE (vw->notes_text), 0, -1));
   gncVendorSetTerms (vendor, vw->terms);
+  gncVendorSetCurrency (vendor,
+			gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT
+							   (vw->currency_edit)));
 
   gncVendorSetTaxTableOverride
     (vendor, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (vw->taxtable_check)));
@@ -306,6 +311,8 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   VendorWindow *vw;
   GladeXML *xml;
   GnomeDialog *vwd;
+  GtkWidget *edit, *hbox;
+  gnc_commodity *currency;
 
   /*
    * Find an existing window for this vendor.  If found, bring it to
@@ -323,6 +330,12 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
     }
   }
   
+  /* Find the default currency */
+  if (vendor)
+    currency = gncVendorGetCurrency (vendor);
+  else
+    currency = gnc_default_currency ();
+
   /*
    * No existing employee window found.  Build a new one.
    */
@@ -360,6 +373,14 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   vw->taxtable_check = glade_xml_get_widget (xml, "taxtable_button");
   vw->taxtable_menu = glade_xml_get_widget (xml, "taxtable_menu");
+
+  /* Currency */
+  edit = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(edit), currency);
+  vw->currency_edit = edit;
+
+  hbox = glade_xml_get_widget (xml, "currency_box");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
   /* Setup Dialog for Editing */
   gnome_dialog_set_default (vwd, 0);
@@ -445,7 +466,6 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   } else {
     vendor = gncVendorCreate (bookp);
-    gncVendorSetCurrency (vendor, gnc_default_currency ());
     vw->vendor_guid = *gncVendorGetGUID (vendor);
 
     vw->dialog_type = NEW_VENDOR;

@@ -11,6 +11,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
+#include "gnc-currency-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -59,6 +60,7 @@ struct _employee_window {
 
   GtkWidget *	workday_amount;
   GtkWidget *	rate_amount;
+  GtkWidget *	currency_edit;
 
   GtkWidget *	active_check;
 
@@ -123,6 +125,8 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 		       (GNC_AMOUNT_EDIT (ew->workday_amount)));
   gncEmployeeSetRate (employee, gnc_amount_edit_get_amount
 		       (GNC_AMOUNT_EDIT (ew->rate_amount)));
+  gncEmployeeSetCurrency (employee, gnc_currency_edit_get_currency
+			  (GNC_CURRENCY_EDIT (ew->currency_edit)));
 
   gncEmployeeCommitEdit (employee);
   gnc_resume_gui_refresh ();
@@ -169,11 +173,6 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   EmployeeWindow *ew = data;
 
-  /* Check for valid id */
-  if (check_entry_nonempty (ew->dialog, ew->id_entry,
-			    _("The Employee must be given an ID.")))
-    return;
-
   /* Check for valid username */
   if (check_entry_nonempty (ew->dialog, ew->username_entry,
 		   _("You must enter a username.")))
@@ -192,6 +191,13 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
     const char *msg = _("You must enter an address.");
     gnc_error_dialog_parented (GTK_WINDOW (ew->dialog), msg);
     return;
+  }
+
+  /* Set the employee id if one has not been chosen */
+  if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0) {
+    gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
+			g_strdup_printf ("%.6lld",
+					 gncEmployeeNextID (ew->book)));
   }
 
   /* Now save it off */
@@ -338,6 +344,12 @@ gnc_employee_new_window (GNCBook *bookp,
     }
   }
   
+  /* Find the default currency */
+  if (employee)
+    currency = gncEmployeeGetCurrency (employee);
+  else
+    currency = gnc_default_currency ();
+
   /*
    * No existing employee window found.  Build a new one.
    */
@@ -371,6 +383,14 @@ gnc_employee_new_window (GNCBook *bookp,
   ew->language_entry = glade_xml_get_widget (xml, "language_entry");
   ew->active_check = glade_xml_get_widget (xml, "active_check");
 
+  /* Currency */
+  edit = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(edit), currency);
+  ew->currency_edit = edit;
+
+  hbox = glade_xml_get_widget (xml, "currency_box");
+  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
   /* WORKDAY: Value */
   edit = gnc_amount_edit_new();
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
@@ -386,7 +406,6 @@ gnc_employee_new_window (GNCBook *bookp,
 
   /* RATE: Monetary Value */
   edit = gnc_amount_edit_new();
-  currency = gnc_default_currency ();
   print_info = gnc_commodity_print_info (currency, FALSE);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
@@ -472,12 +491,9 @@ gnc_employee_new_window (GNCBook *bookp,
 				  ew);
   } else {
     employee = gncEmployeeCreate (bookp);
-    gncEmployeeSetCurrency (employee, currency);
     ew->employee_guid = *gncEmployeeGetGUID (employee);
 
     ew->dialog_type = NEW_EMPLOYEE;
-    gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
-			g_strdup_printf ("%.6lld", gncEmployeeNextID(bookp)));
     ew->component_id =
       gnc_register_gui_component (DIALOG_NEW_EMPLOYEE_CM_CLASS,
 				  gnc_employee_window_refresh_handler,

@@ -235,19 +235,19 @@
 
     (define employee-menu
       (gnc:make-menu (N_ "Employees")
-		     (list "Extensions" "")))
+		     (list main-window "Extensions" "")))
 
     (define new-employee-item
       (gnc:make-menu-item (N_ "New Employee")
 			  (N_ "New Employee")
-			  (list "Extensions" "Employees" "")
+			  (list main-window "Extensions" "Employees" "")
 			  (lambda ()
 			    (gnc:employee-new (gnc:get-current-book)))))
 
     (define find-employee-item
       (gnc:make-menu-item (N_ "Find Employee")
 			  (N_ "Find Employee")
-			  (list "Extensions" "Employees" "")
+			  (list main-window "Extensions" "Employees" "")
 			  (lambda ()
 			    (gnc:employee-search last-employee
 					       (gnc:get-current-book)))))
@@ -262,7 +262,7 @@
   (define test-search
     (gnc:make-menu-item (N_ "Test Search Dialog")
 			(N_ "Test Search Dialog")
-			(list "Extensions" "")
+			(list main-window "Extensions" "")
 			(lambda ()
 			  (gnc:search-dialog-test))))
 
@@ -270,7 +270,7 @@
   (define reload-invoice
     (gnc:make-menu-item (N_ "Reload invoice report")
 			(N_ "Reload invoice report scheme file")
-			(list "Extensions" "")
+			(list main-window "Extensions" "")
 			(lambda ()
 			  (let ((m (current-module)))
 			    (load-from-path "gnucash/report/invoice.scm")
@@ -279,7 +279,7 @@
   (define reload-owner
     (gnc:make-menu-item (N_ "Reload owner report")
 			(N_ "Reload owner report scheme file")
-			(list "Extensions" "")
+			(list main-window "Extensions" "")
 			(lambda ()
 			  (let ((m (current-module)))
 			    (load-from-path "gnucash/report/owner-report.scm")
@@ -288,7 +288,7 @@
   (define reload-receivable
     (gnc:make-menu-item (N_ "Reload receivable report")
 			(N_ "Reload receivable report scheme file")
-			(list "Extensions" "")
+			(list main-window "Extensions" "")
 			(lambda ()
 			  (let ((m (current-module)))
 			    (load-from-path "gnucash/report/aging.scm")
@@ -299,7 +299,7 @@
   (define init-data
     (gnc:make-menu-item (N_ "Initialize Test Data")
 			(N_ "Initialize Test Data")
-			(list "Extensions" "")
+			(list main-window "Extensions" "")
 			(lambda ()
 			  (let* ((book (gnc:get-current-book))
 				 (customer (gnc:customer-create book))
