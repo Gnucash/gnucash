@@ -2,8 +2,9 @@
 #
 ######################################################################
 #********************************************************************
-#* Makefile -- makefile for xacc/src                                *
+#* Makefile -- makefile for xacc/src/engine                         *
 #* Copyright (C) 1997 Robin Clark                                   *
+#* Copyright (C) 1998 Linas Vepstas                                 *
 #*                                                                  *
 #* This program is free software; you can redistribute it and/or    *
 #* modify it under the terms of the GNU General Public License as   *
@@ -33,15 +34,15 @@ INCLPATH = -I/usr/include \
            -I./../../include \
            -I./../..
 
-CFLAGS   = -g 
-LFLAGS   = -g
-LIBS     = -lm
+CFLAGS   = -O2 
+LFLAGS   = -O2
+LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib 
 TARGET   = ../libengine.a
 
 ######################################################################
 SRCS = Account.c FileIO.c Group.c LedgerUtils.c QIFIO.c \
-       Transaction.c date.c util.c 
+       Transaction.c date.c util.c
 OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
@@ -63,6 +64,6 @@ clean:
 	rm -f *.o *~ *.bak
 
 distclean: clean
-	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h
+	rm -f $(TARGET) Makefile Makefile.bak config.h
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.

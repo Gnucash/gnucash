@@ -32,11 +32,13 @@ INCLPATH = -I/usr/include \
            -I./engine \
            -I./register \
            -I/usr/local/include \
-           -I./../include 
+           -I/usr/X11R6/include/. \
+           -I./../include \
 
-CFLAGS   = -g
-LFLAGS   = -g
 
+CFLAGS   = -O2 
+LFLAGS   = -O2
+LIBS     = -lXpm -lXm -lXmu -lXt -lXext  -lSM -lICE -lX11  -lpng -ljpeg -lz -lm
 
 ######################################################################
 SRCS = Ledger.c
@@ -48,7 +50,6 @@ default: $(OBJS)
 	@cd register;          $(MAKE) default
 	@cd motif;             $(MAKE) default
 
-
 .c.o:
 	@echo "+++"
 	$(CC) -c $(CFLAGS) $(INCLPATH) $<
@@ -59,12 +60,12 @@ depend:
 	@cd register;          $(MAKE) depend
 	@cd motif;             $(MAKE) depend
 
-
 clean:
 	rm -f *.o *~ *.bak
 	@cd engine;            $(MAKE) clean
 	@cd register;          $(MAKE) clean
 	@cd motif;             $(MAKE) clean
+
 
 distclean: clean
 	rm -f $(TARGET) $(STATIC) Makefile Makefile.bak config.h

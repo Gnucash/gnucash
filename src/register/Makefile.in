@@ -38,8 +38,7 @@ INCLPATH = -I/usr/include \
            -I@srcdir@/../../lib/ComboBox-1.33 \
            -I@srcdir@/../../lib/Xbae-4.6.2-linas 
 
-# CFLAGS   = -g -DCELL_WIDGETS=1
-CFLAGS   = @cflags@ 
+CFLAGS   = @cflags@  -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
 LIBPATH  = -L/lib -L/usr/lib -L/usr/local/lib 
