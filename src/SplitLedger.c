@@ -123,6 +123,9 @@ struct _SRInfo
   /* A split used to remember where to put the cursor */
   Split *cursor_hint_split;
 
+  /* A column used to remember which column to put the cursor */
+  int cursor_hint_phys_col;
+
   /* The default account where new splits are added */
   Account *default_source_account;
 
@@ -477,6 +480,8 @@ LedgerMoveCursor (Table *table,
 
     new_split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
     info->cursor_hint_split = new_split;
+
+    info->cursor_hint_phys_col = new_phys_col;
 
     xaccRegisterRefresh (reg);
 
@@ -2087,19 +2092,19 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       lead_cursor = reg->double_cursor;
    }
 
-   /* figure out the transaction we are going to. */
+   /* figure out where we are going to. */
    if (info->cursor_hint_trans != NULL) {
      find_trans = info->cursor_hint_trans;
      find_split = info->cursor_hint_split;
+     save_phys_col = info->cursor_hint_phys_col;
    }
    else {
      find_trans = xaccSRGetCurrentTrans (reg);
      find_split = xaccSRGetCurrentSplit (reg);
+     save_phys_col = table->current_cursor_phys_col;
    }
 
-   /* save the current physical column; we'll
-    * try to get back here after the refresh. */
-   save_phys_col = table->current_cursor_phys_col;
+   /* paranoia */
    if (save_phys_col < 0)
      save_phys_col = 0;
 
@@ -2226,7 +2231,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
         found_pending = GNC_T;
    } else {
       Transaction *trans;
-      double last_price = 0.0;
 
       trans = xaccMallocTransaction ();
 
