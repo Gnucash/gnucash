@@ -144,20 +144,20 @@ architectural goals.
     languages (perl, tcl, guile).  Such an interface, laying in
     between the transaction data, and the GUI that manipulates
     it, should allow for the easy creation of modules, and for
-    modifying the behaviour of the application.  Using
+    modifying the behavior of the application.  Using
     <a href="http://starship.skyport.net/crew/beazley/swig.html">
     SWIG</a> should simplify the actual implementation.
     <p>
 
 <dt><b>Multi-user Support</b>
-<dd>Mutli-user support should be added with either an SQL backend 
-    to the engine, and/or through CORBA interfaces to teh engine. 
+<dd>Multi-user support should be added with either an SQL backend 
+    to the engine, and/or through CORBA interfaces to the engine. 
     Project Kontor and also FreeMoney is working on SQL schemas;
     Kontor is also working on Java RMI/CORBA interfaces.
     <p>
     The following industrial-strength features are still needed:
     <ul>
-    <li>transaction-oriented queing of updates
+    <li>transaction-oriented queuing of updates
     <li>event subscription channel for updates
     <li>user authentication
     <li>user authorization
@@ -192,7 +192,7 @@ architectural goals.
 <dd>Provide the SGML DTD parsers to handle the OFX reports that many
     banking institutions are providing, or will soon be providing, to
     retail customers.  See below for OFX references.  OFX is an open spec
-    from Microsot, Intuit, & Checkfree, and will be supported by Integrion.
+    from Microsoft, Intuit, & Checkfree, and will be supported by Integrion.
     The OFX DTD's are included in the 1.1 distributions. See 
     <a href="http://www.ofx.org">OFX HomePage</a> for details.
     <p>
@@ -337,10 +337,10 @@ immediately, independent of the major goals.
     and use the printing abilities of the browser.  In an ideal
     situation, the user should be able to create custom reports.
     <p>
-    Other output format possibilites include SGML and XML.  In the
+    Other output format possibilities include SGML and XML.  In the
     long run, these are preferable to HTML, since DSSSL and 
     <a href="http://www.jclark.com/jade/"> Jade (James DSSSL Engine</a>
-    can be used to convert to RTF, PostScript, etc.  XML is the wave 
+    can be used to convert to RTF, Postscript, etc.  XML is the wave 
     of the future.
     <p>
     The hard part of reporting is designing a configurable interface.
@@ -369,7 +369,7 @@ immediately, independent of the major goals.
 <dt><b>Accounting Periods</b>
 <dd>Ability to permanently lock records as non-editable.  This should
     be straight-forward by using the "reconciled" field to hold
-    "locked", and not alllowing the gui to edit locked records.
+    "locked", and not allowing the GUI to edit locked records.
     <p>
 
 <dt><b>Quicken(TM) Export</b>
@@ -378,7 +378,7 @@ immediately, independent of the major goals.
 
 <dt><b>Tab-delimited ASCII file format</b>
 <dd>People *like* to be able to read file contents in ASCII. There are
-    many unix tools for manipulating ASCII.  An ASCII equivalent of the
+    many Unix tools for manipulating ASCII.  An ASCII equivalent of the
     current file format should be easy to develop ... just substitute
     the writes with printf's.  The tab-delimited format should 
     be compatible with that of /rdb.  The /rdb format is like so:
@@ -390,7 +390,7 @@ immediately, independent of the major goals.
     etc ...
 </pre>
     Its a very simple, very basic flat table format.  It should match
-    the SQL schemas in order to minimize I/O complexity and incompatability.
+    the SQL schemas in order to minimize I/O complexity and incompatibility.
     <p>
 
 <dt><b>Splits</b>
@@ -400,7 +400,7 @@ immediately, independent of the major goals.
     to a set of splits, with each split having it's own distinct
     credited account, memo field and currency value.  Suggestion is to
     leave the debited account pointer in the main transaction, and have one
-    credited account pointer in each of the splits.  Also, sugget
+    credited account pointer in each of the splits.  Also, suggest
     leaving a "cleared" flag in the main transaction, *and* putting a
     separate cleared flag in each split as well.  This allows the
     cleared flag to be independently set for both the debited & credited
@@ -454,7 +454,7 @@ Your name here as project contributor!
 <li>Jeremy Collins <linux@cyberramp.net>, originator of the GnoMoney
     project, is working on a GTK port.
 <li><a href="mailto:rlb@cs.utexas.edu">Rob Browning (rlb@cs.utexas.edu)</a>
-    ex-cbb'er, has begun work on a gtk-based graphing package.
+    ex-cbb'er, has begun work on a GTK-based graphing package.
 <li>Robin Clark <rclark@cs.hmc.edu>, the *original* X-Accountant author,
     is creating a register widget in QT/KDE
 <li>Henning Spruth <henning@regent.e-technik.tu-muenchen.de> 
@@ -467,7 +467,7 @@ Your name here as project contributor!
     GTK ledger/register/spread-sheet infrastructure.
 <li>Michael Newlyn Blake <Michael.Blake@Frogtown.Com> hopes to putter 
     around with QIF export.
-<li>Brian Cooper <bcooper@dnaco.net> Gtk port of interface.
+<li>Brian Cooper <bcooper@dnaco.net> GTK port of interface.
 </ul>
 This list only mentions the currently active developers; many, many others
 have contributed fixes and patches.  I've tried to credit them in the README.
@@ -497,7 +497,7 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
     do advance on-line banking.
 <li><a href="http://www.openapplications.org/">Open Applications Group</a>
     is developing specs for accounting systems.
-<li><a href="http://www.ibm.com/java/sanfrancisco">IBM San Franscisco</a>
+<li><a href="http://www.ibm.com/java/sanfrancisco">IBM San Francisco</a>
     Java classes for accounting.
 <li><a href="http://www.integrion.com/">Integrion</a>, a 16-bank + IBM
     consortium aimed at building up on-line banking infrastructure.
@@ -508,7 +508,7 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
 <li><a href="ftp.gnu.org:/pub/gnu/plotutils/">Gnu Plotutils</a>
     needed for building the graphing portions of the code.
 <li><a href="http://www.im.lcs.mit.edu/~magnus/ml/">partly finished
-    GTK grid widget</a> may be better than clist, gtktable.
+    GTK grid widget</a> may be better than Clint, gtktable.
 <li><a href="http://www.transaction.net/money/">How Money Works</a>
 <li><a href="http://www.chieti.com/lpc/">Linux Projects Catalogue</a>
 <li><a href="http://www.projects.ml.org/">Another Linux Project
@@ -521,12 +521,12 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
     SQL table layout</a>.
 <li><a href="mailto:carew@hotmail.com">Evan Carew
     (carew@hotmail.com)</a> is working on an accounting SQL table
-    layout.  Evan has strong coporate accounting experience.
+    layout.  Evan has strong corporate accounting experience.
 
 </ul>
 
 <hr>
-Draft version 0.18 March 1998<br>
+Draft version 0.19 March 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
