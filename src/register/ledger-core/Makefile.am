@@ -5,6 +5,7 @@ libgncmod_ledger_core_la_SOURCES=\
   SplitLedger.c \
   MultiLedger.c \
   split-register-control.c \
+  split-register-model.c \
   split-register-util.c
 
 noinst_HEADERS = \
@@ -12,6 +13,7 @@ noinst_HEADERS = \
   RegWindow.h \
   SplitLedger.h \
   split-register-control.h \
+  split-register-model.h \
   split-register-p.h
 
 libgncmod_ledger_core_la_LDFLAGS=-module

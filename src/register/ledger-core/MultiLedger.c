@@ -37,6 +37,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "split-register-control.h"
+#include "split-register-model.h"
 
 
 #define REGISTER_SINGLE_CM_CLASS     "register-single"
@@ -486,38 +487,6 @@ xaccLedgerDisplayParent (void *user_data)
   return regData->get_parent (regData);
 }
 
-static gpointer
-xaccMLGUIDMalloc (void)
-{
-  GUID *guid;
-
-  guid = xaccGUIDMalloc ();
-
-  *guid = *xaccGUIDNULL ();
-
-  return guid;
-}
-
-static void
-xaccMLGUIDFree (gpointer _guid)
-{
-  xaccGUIDFree (_guid);
-}
-
-static void
-xaccMLGUIDCopy (gpointer _to, gconstpointer _from)
-{
-  GUID *to = _to;
-  const GUID *from = _from;
-
-  g_return_if_fail (to != NULL);
-
-  if (from == NULL)
-    *to = *xaccGUIDNULL ();
-  else
-    *to = *from;
-}
-
 static void
 ledger_set_watches (xaccLedgerDisplay *ld, GList *splits)
 {
@@ -789,29 +758,10 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
    * The main register window itself                                *
   \******************************************************************/
 
-  /* xaccMallocSplitRegister will malloc & initialize the register,
-   * but will not do the gui init */
-  ld->model = gnc_table_model_new ();
-
-  ld->model->label_handler       = xaccSRGetLabelHandler;
-  ld->model->fg_color_handler    = xaccSRGetFGColorHandler;
-  ld->model->bg_color_handler    = xaccSRGetBGColorHandler;
-  ld->model->cell_border_handler = xaccSRGetCellBorderHandler;
-  ld->model->handler_user_data   = NULL;
-  /* The following handlers are changed in template mode. */
-  if ( templateMode ) {
-    ld->model->entry_handler     = xaccSRTemplateGetEntryHandler;
-    ld->model->io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
-    ld->model->confirm_handler   = xaccSRTemplateConfirmHandler;
-  } else {
-    ld->model->entry_handler     = xaccSRGetEntryHandler;
-    ld->model->io_flag_handler   = xaccSRGetIOFlagsHandler;
-    ld->model->confirm_handler   = xaccSRConfirmHandler;
-  }
-
-  ld->model->cell_data_allocator   = xaccMLGUIDMalloc;
-  ld->model->cell_data_deallocator = xaccMLGUIDFree;
-  ld->model->cell_data_copy        = xaccMLGUIDCopy;
+  if (templateMode)
+    ld->model = gnc_template_register_model_new ();
+  else
+    ld->model = gnc_split_register_model_new ();
 
   ld->control = gnc_split_register_control_new ();
 
@@ -969,5 +919,3 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *ld)
 
   gnc_close_gui_component (ld->component_id);
 }
-
-/************************** END OF FILE *************************/

@@ -271,9 +271,6 @@ gnc_table_show_range (Table *table,
         gnucash_sheet_show_range (sheet, start_loc, end_loc);
 }
 
-/* ================== end of file ======================= */
-
-
 /*
   Local Variables:
   c-basic-offset: 8

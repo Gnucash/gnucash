@@ -196,30 +196,8 @@ const char * xaccSRGetCreditString (SplitRegister *reg);
 gboolean xaccSRFullRefreshOK (SplitRegister *reg);
 void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
 
-const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
-                                    gboolean translate,
-                                    gboolean *changed,
-                                    gpointer user_data);
-const char * xaccSRTemplateGetEntryHandler (VirtualLocation virt_loc,
-					    gboolean translate,
-					    gboolean *changed,
-					    gpointer user_data);
-const char * xaccSRGetLabelHandler (VirtualLocation virt_loc,
-                                    gpointer user_data);
-CellIOFlags  xaccSRGetIOFlagsHandler (VirtualLocation virt_loc,
-                                      gpointer user_data);
 CellIOFlags  xaccSRTemplateGetIOFlagsHandler (VirtualLocation virt_loc,
 					      gpointer user_data);
-guint32      xaccSRGetFGColorHandler (VirtualLocation virt_loc,
-                                      gpointer user_data);
-guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,
-                                      gboolean *hatching,
-                                      gpointer user_data);
-void         xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
-                                         PhysicalCellBorders *borders,
-                                         gpointer user_data);
-gboolean     xaccSRConfirmHandler (VirtualLocation virt_loc,
-                                   gpointer user_data);
 gboolean     xaccSRTemplateConfirmHandler (VirtualLocation virt_loc,
 					   gpointer user_data);
 
@@ -228,6 +206,5 @@ gboolean     xaccSRTemplateConfirmHandler (VirtualLocation virt_loc,
 void gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 			       gboolean use_cut_semantics,
 			       gboolean do_commit);
-
 
 #endif /* XACC_SPLIT_LEDGER_H */
