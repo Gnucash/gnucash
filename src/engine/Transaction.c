@@ -535,11 +535,20 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 {
    int i, num;
    Split **oldarray;
+   Transaction *oldtrans;
 
    if (!trans) return;
    if (!split) return;
+
+   /* first, make sure that the split isn't already inserted 
+    * elsewhere. If so, then remove it. */
+   oldtrans = split->parent;
+   if (oldtrans) {
+      xaccTransRemoveSplit (oldtrans, split);
+      xaccTransRebalance (oldtrans);
+   }
    
-   /* first, insert the split into the array */
+   /* now, insert the split into the array */
    split->parent = trans;
    num = xaccCountSplits (trans->splits);
 
