@@ -8,6 +8,9 @@
 	  although it may not help if strptime() is doesn't like the
 	  spaces.  Attempt to fix #103147, but it's probably a strptime
 	  bug.
+
+	* src/business/business-gnome/dialog-invoice.c -- make the Notes
+	  field editable for new invoices.  Fixes #103345
 	
 2003-01-12  Derek Atkins  <derek@ihtfp.com>
 
