@@ -274,6 +274,22 @@ xaccSplitAsString(Split *split, const char prefix[]) {
   return(result);
 }
 
+static char *
+xaccTransGetDateStr (Transaction *trans)
+{
+   char buf [MAX_DATE_LENGTH];
+   struct tm *date;
+   time_t secs;
+
+   secs = xaccTransGetDate (trans);
+
+   date = localtime (&secs);
+
+   printDate(buf, date->tm_mday, date->tm_mon+1, date->tm_year +1900);
+
+   return strdup (buf);
+}
+
 char *
 xaccTransAsString(Transaction *txn, const char prefix[]) {
   char *result = NULL;

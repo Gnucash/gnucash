@@ -227,12 +227,6 @@ void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
 
 void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
-/* The xaccTransGetDateStr() method will return a malloc'ed string
- *    representing the posted date of the transaction, or NULL if
- *    the argument is NULL.
- */
-char *        xaccTransGetDateStr (Transaction *trans);
-
 /* The xaccTransCountSplits() method returns the number of splits
  * in a transaction.
  */
