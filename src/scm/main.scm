@@ -30,7 +30,14 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
-;; from bootstrap.scm
+;; files we can load from the top-level because they're "well behaved"
+;; (these should probably be in modules eventually)
+(load-from-path "doc.scm")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Exports
+
+;; from main.scm
 (export gnc:version)
 (export gnc:debugging?)
 (export gnc:warn)
@@ -44,8 +51,8 @@
 (export string-split)
 (export string-join)
 (export gnc:backtrace-if-exception)
-
-;; from main.scm
+(export gnc:find-file)
+(export gnc:find-localized-file)
 (export gnc:main)
 
 ;; from path.scm
@@ -54,8 +61,10 @@
 
 ;; from command-line.scm
 (export gnc:*command-line-remaining*)
-(export gnc:*config-dir*)
-(export gnc:*share-dir*)
+
+(export gnc:*config-path*)
+(export gnc:*share-path*)
+(export gnc:*doc-path*)
 
 ;; from doc.scm
 (export gnc:find-doc-file)
@@ -171,7 +180,7 @@
 	  (if existing-val
 	      (hashset hash key (cons val existing-val))
 	      (hashset hash key (list val))))))
-	      
+  
   (for-each handle-item lst)
   hash)
 
@@ -201,6 +210,18 @@
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
 
+(define (gnc:flatten tree)
+  (let ((result '()))
+    (let loop ((remaining-items tree))
+      (cond
+       ((null? remaining-items) #t)
+       ((list? remaining-items)
+        (loop (car remaining-items))
+        (loop (cdr remaining-items)))
+       (else
+        (set! result (cons remaining-items result)))))
+    (reverse! result)))
+
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
     (let ((stack (make-stack #t dumper)))
@@ -209,13 +230,13 @@
       (throw 'ignore)))
   
   (catch 
-   'ignore
-   (lambda () 
-     (lazy-catch #t 
-                 (lambda () (apply proc args))
-                 dumper))
-   (lambda (key . args)
-     #f)))
+      'ignore
+    (lambda () 
+      (lazy-catch #t 
+                  (lambda () (apply proc args))
+                  dumper))
+    (lambda (key . args)
+      #f)))
 
 ;;;; Status output functions.
 
@@ -253,27 +274,14 @@
     (gnc:msg stuff "-- Elapsed time: " delta "seconds.")
     (set! gnc:*last-time* now)))
 
+(define (build-path . elements)
+  (string-join elements "/"))
 
-(define (build-path firstelement . restofpath)
-  (define separator "/")
-  (define (bp first rest)
-    (if (null? rest)
-	first
-	(bp 	
-	 (string-append first separator (car rest))
-	 (cdr rest))))
-  (if (null? restofpath)
-      firstelement
-      (bp 
-       (string-append firstelement separator
-		      (car restofpath))
-       (cdr restofpath))))
-
-(define (gnc:find-in-directories file directories)
+(define (gnc:find-file file directories)
   "Find file named 'file' anywhere in 'directories'.  'file' must be a
 string and 'directories' must be a list of strings."
 
-  (gnc:debug "gnc:find-in-directories looking for " file " in " directories)
+  (gnc:debug "gnc:find-file looking for " file " in " directories)
 
   (do ((rest directories (cdr rest))
        (finished? #f)
@@ -288,19 +296,37 @@ string and 'directories' must be a list of strings."
             (set! finished? #t)
             (set! result file-name))))))
 
+(define (gnc:find-localized-file file base-directories)
+  ;; Find file in path in base directories, or in any localized subdir
+  ;; thereof.
+
+  (define (locale-prefixes)
+    (let* ((locale (setlocale LC_MESSAGES))
+           (strings (cond ((not (string? locale)) '())
+                          ((equal? locale "C") '())
+                          ((<= (string-length locale) 2) (list locale))
+                          (else (list (substring locale 0 2) locale)))))
+      (reverse (cons "C" strings))))
+
+  (let loop ((prefixes (locale-prefixes))
+             (dirs base-directories))
+    (if (null? dirs)
+        #f
+        (or (gnc:find-file file (map (lambda (prefix)
+                                       (build-path (list (car dirs) prefix)))
+                                     prefixes))
+            (gnc:find-file file (car dirs))
+            (loop prefixes (cdr dirs))))))
+
 (define (gnc:print-unstable-message)
-  (newline)
-  (newline)
-  (display (_ "This is a development version. It may or may not work."))
-  (newline)
-  (display (_ "Report bugs and other problems to gnucash-devel@gnucash.org."))
-  (newline)
-  (display (sprintf #f (_ "The last stable version was %s.") "GnuCash 1.6.4"))
-  (newline)
-  (display (sprintf #f (_ "The next stable version will be %s.")
-                    "GnuCash 1.8.0"))
-  (newline)
-  (newline))
+  (display
+   (string-append
+    "\n\n"
+    (_ "This is a development version. It may or may not work.\n")
+    (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
+    (_ "The last stable version was ") "GnuCash 1.6.4" "\n"
+    (_ "The next stable version will be ") "GnuCash 1.8.0"
+    "\n\n")))
 
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
@@ -363,7 +389,7 @@ string and 'directories' must be a list of strings."
     (lambda ()
       (gnc:style-sheet-dialog-open))))
 
-;  (gnc:add-extension tax-menu)
+  ;; (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
   (gnc:add-extension utility-menu)
@@ -383,16 +409,6 @@ string and 'directories' must be a list of strings."
 (define (gnc:startup)
   (gnc:debug "starting up.")
   (gnc:setup-debugging)
-
-  (let ((envdir (getenv "GNC_CONFIG_DIR")))
-    (if envdir
-        (set! gnc:_install-config-dir_ envdir)))
-  (let ((envdir (getenv "GNC_SHARE_DIR")))
-    (if envdir
-        (set! gnc:_install-share-dir_ envdir)))
-  (let ((envdir (getenv "GNC_HELP_DIR")))
-    (if envdir
-        (set! gnc:_install-help-dir_ envdir)))
 
   ;; initialize the gnucash module system 
   (gnc:module-system-init)
@@ -428,11 +444,17 @@ string and 'directories' must be a list of strings."
 
     ;; Now we can load a bunch of files.
     (load-from-path "path.scm")
-    (load-from-path "command-line.scm")
-    (load-from-path "doc.scm")
-    (load-from-path "main-window.scm")
-    (load-from-path "tip-of-the-day.scm")
-    (load-from-path "printing/print-check.scm")
+
+    ;; files we should be able to load from the top-level because
+    ;; they're "well behaved" (these should probably be in modules
+    ;; eventually)
+    (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
+    (gnc:initialize-config-vars)
+    (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
+    (load-from-path "tip-of-the-day.scm") ;; depends on app-utils (config-var...)
+    (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
+
+    (gnc:initialize-tip-of-the-day)
 
     (gnc:use-guile-module-here! '(gnucash price-quotes))
     (set-current-module original-module))
@@ -538,8 +560,8 @@ string and 'directories' must be a list of strings."
       (display "gnucash: unknown batch-mode item - ignoring.")
       (newline))))
 
-;;  (statprof-reset 0 50000) ;; 20 times/sec
-;;  (statprof-start)
+  ;;  (statprof-reset 0 50000) ;; 20 times/sec
+  ;;  (statprof-start)
 
   ;; Now the fun begins.
   (gnc:startup)
@@ -566,3 +588,5 @@ string and 'directories' must be a list of strings."
       (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))
 
   (gnc:shutdown 0))
+
+
