@@ -431,6 +431,7 @@ pgend_account_commit_edit (Backend * bend,
    {
       parent = xaccAccountGetParent(acct);
       if (parent) parent->saved = 1;
+      LEAVE ("account not written because not dirty");
       return;
    }
 

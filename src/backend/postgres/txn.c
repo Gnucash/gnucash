@@ -142,7 +142,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    char * p;
 
    if (!be || !trans) return;
-   ENTER ("trans=%p", trans);
+   ENTER ("trans=%p do_check=%d", trans, do_check_version);
 
    /* don't update the database if the database is newer ... */
    if (do_check_version)
@@ -217,6 +217,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    /* Update the rest */
    start = xaccTransGetSplitList(trans);
 
+   PINFO ("split-list=%p, do_free=%d", start, trans->do_free);
    if ((start) && !(trans->do_free))
    {
       gnc_commodity *com;
