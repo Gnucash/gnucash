@@ -329,7 +329,28 @@
 					(if show-fcur? '("right") '())
 					'("right")
 					(if show-fcur? '("right") '())
-					'("right"))))))
+					'("right")))))
+	   (handle-collector-merging
+	    (lambda (parent-coll action child-coll)
+	      (parent-coll
+	       action
+	       (if show-fcur?
+		   child-coll 
+		   (let ((collector (make-currency-collector)))
+		     (child-coll 
+		      'format 
+		      (lambda (curr val)
+			(collector
+			 'add report-currency
+			 (if (equal? curr report-currency)
+			     val
+			     (* val (let ((pair 
+					   (assoc curr exchange-alist)))
+				      (if (not pair) 
+					  default-exchange-rate (cadr pair)))))))
+		      #f)
+		     collector))
+	       #f))))
     
       (define (handle-level-1-account account options)
 	(let ((type (gnc:account-type->symbol (gnc:account-get-type account))))
@@ -355,8 +376,10 @@
 
                 (if (not balance-sheet?)
                     (set! account-balance (- account-balance)))
-                (l1-collector 'add (gnc:account-get-currency account)
-				   account-balance)
+		(let ((this-collector (make-currency-collector)))
+		  (this-collector 'add (gnc:account-get-currency account)
+				  account-balance)
+		  (handle-collector-merging l1-collector 'merge this-collector))
                 (l1-collector 'merge l2-collector #f)
                 (l0-collector 'merge l1-collector #f)
                 (let ((level-1-output
@@ -375,6 +398,7 @@
     (define (handle-level-2-account account options)
       (let
 	  ((type (gnc:account-type->symbol (gnc:account-get-type account)))
+	   (this-balance (make-currency-collector))
 	   (balance (make-currency-collector))
 	   (rawbal
 	    (if balance-sheet?
@@ -383,26 +407,27 @@
 		 account 
 		 from-value
 		 to-value #f))))
-	(balance 'add 
+	(this-balance 'add 
                  (gnc:account-get-currency account)
 		 (if balance-sheet? 
 		     rawbal
 		     (- rawbal)))
+	(handle-collector-merging balance 'merge this-balance)
 	(if (is-it-on-balance-sheet? type balance-sheet?)
 	    ;; Ignore
 	    '()
 	    ;; add in balances for any sub-sub groups
 	    (let ((grandchildren (gnc:account-get-children account)))
 	      (if (not (pointer-token-null? grandchildren))
-		  (balance (if balance-sheet? 'merge 'minusmerge) 
-			   (if balance-sheet? 
-			       (gnc:group-get-curr-balance-at-date grandchildren 
-								   to-value)
-			       (gnc:group-get-curr-balance-interval grandchildren
-								    from-value
-								    to-value))
-			   #f))
-	      (l2-collector 'merge balance #f)
+		  (handle-collector-merging
+		   balance (if balance-sheet? 'merge 'minusmerge) 
+		   (if balance-sheet? 
+		       (gnc:group-get-curr-balance-at-date grandchildren 
+							   to-value)
+		       (gnc:group-get-curr-balance-interval grandchildren
+							    from-value
+							    to-value))))
+	      (handle-collector-merging l2-collector 'merge balance)
               (render-level-2-account 
 	       account balance report-currency exchange-alist
 	       report-row-align)))))
