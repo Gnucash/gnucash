@@ -89,6 +89,7 @@ Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 A. Alper Atici <alper_atici@yahoo.com> Turkish translation
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
+Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
 Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
@@ -121,6 +122,7 @@ Jan-Uwe Finck <jufi@nerdnet.de> for messages German translation
 Kevin Finn <kevinfinn@mediaone.net> auto-decimal point, options, auto interest xfer patches
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
+Todd T. Fries <todd@flare.fries.net> OpenBSD fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
 Hans de Graaff <hans@degraaff.org> XML patches
 Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
@@ -154,6 +156,7 @@ Chao-Hsiung Liao <pesder.liao@msa.hinet.net> Traditional Chinese translation
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Volodymyr M. Lisivka <lvm@mystery.lviv.net> Ukrainian translation
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
+Lionel Elie Mamane <lionel@mamane.lu> Patches for gcc2.95 macro compatibility
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
@@ -177,6 +180,7 @@ Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
+Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
