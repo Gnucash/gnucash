@@ -277,24 +277,12 @@ access).
    If user hits 'save' in the single-user or multi-user mode, it 
    should be a no-op (since the saves have already occurred).  Only 
    a 'save-as' requires a from-scratch sync.
+   ?? Maybe this has already been fixed in the redesigned session 
+   & backend  ???
 
 -- document how to use the version/extension tables to allow
    seamless upwards compatibility in the face of database schema
    changes.
-
--- clear up end/destroy semantics.  After book_end is called,
-   its not possible to start a new session, since there are
-   uninitialized pointers.  Unless to book is deleted immediately,
-   everything is hosed.  This is a generic backend design problem,
-   not just an sql backend problem, that needs fixing.
-   (??? Maybe this has been fixed now, in the redesigned
-   gnc-book/gnc-session code ??? Maybe we just need to cleanup in 
-   the postgres backend ??)
-   NOTE: (dave_p) In the redesigned book/session code, if
-                  gnc_session_begin is called on a session
-                  with a backend, the backend destroy function
-                  is called before creating a new backend.
-                  This seems to work ok in test-db.c.
 
 -- allow user to enter URL in GUI dialog.  User can currently type URL
    into the file dialog window; it would be nice to have something 
