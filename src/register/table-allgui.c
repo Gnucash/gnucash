@@ -576,14 +576,31 @@ void
 xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
 {
    int virt_row, virt_col;
+   int do_commit = 0;
 
-   /* compute the virtual position */
-   virt_row = table->locators[phys_row][phys_col]->virt_row;
-   virt_col = table->locators[phys_row][phys_col]->virt_col;
+   if (!table) return;
 
-   if ((virt_row != table->current_cursor_virt_row) ||
-       (virt_col != table->current_cursor_virt_col)) {
+   /* Someone may be trying to intentionally invalidate the cursor, 
+    * in which case the physical addresses could be out of bounds.
+    * For example, in order to unmap it in preparation for a reconfig. 
+    * So, if the specified location is out of bounds, then
+    * the cursor MUST be moved. 
+    */
 
+   if ((0 > phys_row) || (0 > phys_col)) do_commit = 1;
+   if (phys_row >= table->num_phys_rows) do_commit = 1;
+   if (phys_col >= table->num_phys_cols) do_commit = 1;
+
+   /* Hmm, phys position is valid. Check the virtual position. */
+   if (!do_commit) {
+      virt_row = table->locators[phys_row][phys_col]->virt_row;
+      virt_col = table->locators[phys_row][phys_col]->virt_col;
+
+      if ((virt_row != table->current_cursor_virt_row) ||
+          (virt_col != table->current_cursor_virt_col)) do_commit = 1;
+   }
+
+   if (do_commit) {
       /* before leaving the current virtual position,
        * commit any edits that have been accumulated 
        * in the cursor */

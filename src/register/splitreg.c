@@ -636,6 +636,11 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 void
 xaccConfigSplitRegister (SplitRegister *reg, int newtype)
 {
+   if (!reg) return;
+
+   /* before reconfiguring, clean up any messy state that may be lying about */
+   xaccVerifyCursorPosition (reg->table, -1, -1);
+
    reg->type = newtype;
    configLayout (reg);
    configCursors (reg);
