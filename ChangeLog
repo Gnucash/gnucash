@@ -1,3 +1,9 @@
+2003-07-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/gnc-backend-file.c:  Don't need to set the
+	  backend error directly after calling gnc_file_be_get_file_lock(),
+	  as get_file_lock will set the backend error itself.
+
 2003-07-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.c: change the description

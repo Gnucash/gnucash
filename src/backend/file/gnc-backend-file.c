@@ -136,7 +136,6 @@ file_session_begin(Backend *be_start, GNCSession *session, const char *book_id,
 
     if (!ignore_lock && !gnc_file_be_get_file_lock (be))
     {
-        xaccBackendSetError (be_start, ERR_BACKEND_LOCKED);
         g_free (be->lockfile); be->lockfile = NULL;
         return;
     }
