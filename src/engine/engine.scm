@@ -1,5 +1,6 @@
 (define-module (gnucash engine))
 (use-modules (g-wrapped gw-engine))
+(use-modules (g-wrapped gw-runtime))
 
 (export GNC-RND-FLOOR)
 (export GNC-RND-CEIL)
