@@ -1,0 +1,31 @@
+
+                  Financial Constraints in GnuCash
+                  --------------------------------
+                  Linas Vepstas <linas@linas.org>
+                        September 2003
+ 
+
+Overview:
+---------
+The GnuCash Engine implements a set of financial constraints so
+that a set of basic/core accounting rules are obeyed.  The best
+known example is the "double-entry" constraint: the total value
+of a transaction must always be zero.  A more mundane example
+is that cap gains are recorded on the date that they occur: or,
+more plainly: the posted date on the transaction that records
+cap gains is the same as the posted date of the transaction that
+caused the gains.  At this time, these constraints are 
+implemented in an ad-hoc manner.  The goal of this document is
+to list and document as many of these constraints as possible,
+and to review the framework in which they operate.  A possible
+future direction is to formalize the framework, so that it becomes
+easier to add and work with new types of constraints.
+
+
+Introduction:
+-------------
+
+two very different types of constraints: GUI 
+Constraints and Financial Constraints.  The GUI Constraints are
+implemented as 'events', and are used to make sure that the GUI 
+is appropriately
