@@ -6,6 +6,9 @@
 </TITLE>
 
 </ARTHEADER>
+
+    <sect1>
+      <title></title>
 <PARA>
   <ULINK URL="xacc-tax-report-example.html">
     <INLINEMEDIAOBJECT>
@@ -66,7 +69,7 @@
     </ITEMIZEDLIST>
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
