@@ -718,7 +718,7 @@ xaccMainWindowRedisplayBalance (void)
          case LIABILITY:
             assets += acc->balance;
             if (acc->children) {
-               profits += acc->children->balance; 
+               assets += acc->children->balance; 
             }
             break;
          case INCOME:
