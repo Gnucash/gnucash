@@ -1,4 +1,7 @@
 /********************************************************************\
+ * Query.c : api for finding transactions                           *
+ * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -14,791 +17,1695 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-/*
- * FILE:
- * Query.c
- *
- * DESCRIPTION:
- * Provide a simple query engine interface.
- * Note that the query engine is officially a part of the transaction engine, 
- * and thus has direct access to internal structures.
- *
- * HISTORY:
- * created by Linas Vepstas Sept 1998
- * Copyright (c) 1998-2000 Linas Vepstas
- */
+#include <ctype.h>
+#include <glib.h>
+#include <sys/types.h>
+#include <regex.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <string.h>
+#include <math.h>
 
-#include <limits.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <strings.h>
+#include <assert.h>
 
-#include "config.h"
-
-#include "Account.h"
-#include "AccountP.h"
-#include "Query.h"
-#include "Transaction.h"
+#include "gnc-common.h"
 #include "TransactionP.h"
-#include "util.h"
+#include "Transaction.h"
+#include "Account.h"
+#include "Group.h"
+#include "Query.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static void 
+print_query(Query * q) {
+  int   i, j;
+  GList * aterms;
+  QueryTerm * qt;
 
-/* ================================================== */
+  printf("Query: max splits = %d\n", q->max_splits);
+  for(i=0; i < g_list_length(q->terms); i++) {
+    aterms = g_list_nth_data(q->terms, i);
+    printf("(");
+    for(j=0; j < g_list_length(aterms); j++) {
+      qt = (QueryTerm *)g_list_nth_data(aterms, j);
+      if(!qt->sense) printf("~");
+      printf("%d ", qt->data.type);
+    }
+    printf(")");
+    if((i + 1) < g_list_length(q->terms)) {
+      printf(" | ");
+    }
+  }
+  printf("\n");
+}
 
-struct _Query
-{
-   Account ** acc_list;
 
-   /* maximum number of splits to return */
-   int max_num_splits;
+/********************************************************************
+ * xaccMallocQuery 
+ ********************************************************************/
 
-   /* the earliest, and the latest transaction dates to include */
-   Timespec earliest;
-   Timespec latest;
+Query * 
+xaccMallocQuery(void) {
+  Query * qp     = g_new0(Query, 1);
+  xaccInitQuery(qp, NULL);
+  return qp;
+}
 
-   Timespec earliest_found;
-   Timespec latest_found;
 
-   int (*sort_func)(const void*, const void *);
+/********************************************************************
+ * xaccInitQuery
+ ********************************************************************/
 
-   char changed;     /* flag, has the query changed? */
-   Split **split_list;
-};
+void
+xaccInitQuery(Query * q, QueryTerm * initial_term) {
+  GList * or  = NULL;
+  GList * and = NULL;
+  
+  if(initial_term) {
+    or   = g_list_alloc();
+    and  = g_list_alloc();
+    and->data = initial_term;
+    or->data  = and;
+  }
 
-/* ================================================== */
+  q->terms      = or;
+  q->split_list = NULL;
+  q->changed    = 1;
+  
+  q->max_splits = -1;
+
+  q->primary_sort = BY_STANDARD;
+  q->secondary_sort = BY_NONE;
+  q->tertiary_sort = BY_NONE;
+
+}
+
+
+/********************************************************************
+ * xaccQuerySwapTerms
+ * swaps the terms fields of two queries, mostly to 
+ * allow quick pass-off of results.
+ ********************************************************************/
+
+void
+xaccQuerySwapTerms(Query * q1, Query * q2) {
+  GList * g;
+  g = q1->terms;
+  q1->terms = q2->terms;
+  q2->terms = g;
+
+  q1->changed = 1;
+  q2->changed = 1;
+}
+
+
+/********************************************************************
+ * xaccQuerySingleTerm
+ * initialize the query with 1 term 
+ ********************************************************************/
+
+void
+xaccQuerySingleTerm(Query * q, QueryTerm * qt) {
+  GList * or  = NULL;
+  GList * and = NULL;
+  
+  or   = g_list_alloc();
+  and  = g_list_alloc();
+  and->data = qt;
+  or->data  = and;
+  q->terms = or;
+    
+}
+
+
+/********************************************************************
+ * xaccQueryHasTerms
+ * returns the number of terms in the query, which is generally
+ * used as a truth test.
+ ********************************************************************/
+
+int
+xaccQueryHasTerms(Query * q) {
+  return g_list_length(q->terms);    
+}
+
+
+/********************************************************************
+ * xaccFreeQuery 
+ * note that the terms list is freed, so you must have newly 
+ * allocated it 
+ ********************************************************************/
+
+void    
+xaccFreeQuery(Query * q) {
+  int i;
+  GList * gl = q->terms;
+  for(i=0; i < g_list_length(gl); i++) {
+    g_list_free(g_list_nth_data(gl, i));
+  }
+  g_list_free(gl);
+  g_free(q);
+}
+
+static QueryTerm *
+copy_query_term(QueryTerm * qt) {
+  QueryTerm * nqt = g_new0(QueryTerm, 1);
+  memcpy(nqt, qt, sizeof(QueryTerm));
+  return nqt;
+}
+
+static GList * 
+deep_copy_terms(GList * t) {
+  GList * r = NULL;
+  int   i;
+  for(i=0; i < g_list_length(t); i++) {
+    r = g_list_append(r, g_list_copy(g_list_nth_data(t, i)));
+  }
+  return r;  
+}
+
+
+/********************************************************************
+ * xaccQueryInvert 
+ * return a newly-allocated Query object which is the 
+ * logical inverse of the original.
+ ********************************************************************/
 
 Query *
-xaccMallocQuery (void)
-{
-   Query * ret;
-   ret =  (Query *) _malloc (sizeof (Query));
-   xaccInitQuery (ret);
-   return ret;
-}
-
-/* ================================================== */
-
-static int Sort_STANDARD_NONE_NONE (Split **, Split **);
-
-#ifndef LONG_LONG_MAX
-#define LONG_LONG_MAX 0x7fffffffffffffffLL
-#endif
-#ifndef LONG_LONG_MIN
-#define LONG_LONG_MIN (- (0x7fffffffffffffffLL) -1)
-#endif
-
-void 
-xaccInitQuery (Query *q)
-{
-   if (!q) return;
-
-   q->acc_list = NULL;
-   q->split_list = NULL;
-   q->changed = 0; 
-   q->max_num_splits = INT_MAX;
-
-   q->earliest.tv_sec = LONG_LONG_MIN;
-   q->earliest.tv_nsec = 0; 
-
-   /* Its a signed, 64-bit int */
-   q->latest.tv_sec = LONG_LONG_MAX;
-   q->latest.tv_nsec = 0; 
-
-   q->earliest_found.tv_sec = LONG_LONG_MAX;
-   q->earliest_found.tv_nsec = 0; 
-
-   q->latest_found.tv_sec = LONG_LONG_MIN;
-   q->latest_found.tv_nsec = 0; 
-
-   q->sort_func = (int (*)(const void*, const void *)) Sort_STANDARD_NONE_NONE;
-}
-
-/* ================================================== */
-
-void 
-xaccFreeQuery (Query *q)
-{
-   if (!q) return;
-
-   if (q->acc_list) _free (q->acc_list);
-   q->acc_list = 0x0;
-
-   if (q->split_list) _free (q->split_list);
-   q->split_list = 0x0;
-
-   _free (q);
-}
-
-/* ================================================== */
-
-void
-xaccQuerySetAccounts (Query *q, Account **list)
-{
-   int i=0;
-   Account *acc;
-
-   if (!q) return;
-   q->changed = 1; 
-   if (q->acc_list) free (q->acc_list);
-   q->acc_list = NULL;
-   if (!list) return;
-
-   /* copy in the account list */
-   i=0; acc = list[0];
-   while (acc) {
-      i++;
-      acc = list[i];
-   }  
-
-   q->acc_list = (Account **) _malloc ( (i+1) * sizeof (Account *));
-
-   i=0; acc = list[0];
-   while (acc) {
-      q->acc_list[i] = acc;
-      i++;
-      acc = list[i];
-   }  
-   q->acc_list[i] = NULL;
-}
-
-/* ================================================== */
-
-void
-xaccQueryAddAccount (Query *q, Account *addme)
-{
-   int i=0;
-   Account *acc;
-   Account **oldlist;
-
-   if (!q || !addme) return;
-   q->changed = 1; 
-   
-   oldlist = q->acc_list;
-   i = 0;
-   if (oldlist) {
-      i=0; acc = oldlist[0];
-      while (acc) {
-         i++;  acc = oldlist[i];
-      }  
-   }
-
-   q->acc_list = (Account **) _malloc ( (i+2) * sizeof (Account *));
-
-   i=0; 
-   if (oldlist) {
-      acc = oldlist[0];
-      while (acc) {
-         q->acc_list[i] = acc;
-         i++;  acc = oldlist[i];
-      }  
-      free (oldlist);
-   }
-   q->acc_list[i] = addme;
-   i++;
-   q->acc_list[i] = NULL;
-}
-
-/* ================================================== */
-
-void  
-xaccQuerySetMaxSplits (Query *q, int max)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->max_num_splits = max;
-}
-
-/* ================================================== */
-
-void  
-xaccQuerySetDateRange (Query *q, time_t early, time_t late)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->earliest.tv_sec = early;
-   q->latest.tv_sec = late;
-}
-
-void  
-xaccQuerySetDateRangeL (Query *q, long long early, long long late)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->earliest.tv_sec = early;
-   q->latest.tv_sec = late;
-}
-
-void
-xaccQuerySetEarliest (Query *q, time_t earliest)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->earliest.tv_sec = earliest;
-}
-
-void
-xaccQuerySetLatest (Query *q, time_t latest)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->latest.tv_sec = latest;
-}
-
-void
-xaccQuerySetEarliestTS (Query *q, Timespec earliest)
-{
-  if (!q) return;
-  q->changed = 1;
-  q->earliest = earliest;
-}
-
-void
-xaccQuerySetLatestTS (Query *q, Timespec latest)
-{
-  if (!q) return;
-  q->changed = 1;
-  q->latest = latest;
-}
-
-time_t
-xaccQueryGetEarliest (Query *q)
-{
-  assert(q != NULL);
-
-  return q->earliest.tv_sec;
-}
-
-time_t
-xaccQueryGetLatest (Query *q)
-{
-  assert(q != NULL);
-
-  return q->latest.tv_sec;
-}
-
-/* ================================================== */
-
-void
-xaccQueryShowEarliestDateFound (Query *q)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->earliest.tv_sec = LONG_LONG_MIN;
-   q->earliest.tv_nsec = 0; 
-}
-
-void
-xaccQueryShowLatestDateFound (Query *q)
-{
-   if (!q) return;
-   q->changed = 1; 
-   q->latest.tv_sec = LONG_LONG_MAX;
-   q->latest.tv_nsec = 0; 
-}
-
-/* ================================================== */
-
-/* ================================================== */
-/* Note that the sort order for a transaction that is
- * currently being edited is based on its old values, 
- * not in its current edit values.  This is somewhat
- * arbitrary, but it does alleviate annoying behaviour 
- * in the GUI, behaviour that could not be easily
- * rectified there.
- */
-
-#define PROLOG 					\
-  Transaction *ta;				\
-  Transaction *tb;				\
-  int retval;					\
-						\
-  if ( (*sa) && !(*sb) ) return -1;		\
-  if ( !(*sa) && (*sb) ) return +1;		\
-  if ( !(*sa) && !(*sb) ) return 0;		\
-						\
-  ta = (*sa)->parent;				\
-  tb = (*sb)->parent;				\
-  if (ta->orig) ta = ta->orig;			\
-  if (tb->orig) tb = tb->orig;			\
-						\
-  if ( (ta) && !(tb) ) return -1;		\
-  if ( !(ta) && (tb) ) return +1;		\
-  if ( !(ta) && !(tb) ) return 0;		\
-
-
-#define CSTANDARD {                             \
-  retval = xaccSplitDateOrder(sa, sb);          \
-  if (retval) return retval;                    \
-}
-
-#define CDATE {					\
-  /* if dates differ, return */			\
-  if ( (ta->date_posted.tv_sec) <		\
-       (tb->date_posted.tv_sec)) {		\
-    return -1;					\
-  } else					\
-  if ( (ta->date_posted.tv_sec) >		\
-       (tb->date_posted.tv_sec)) {		\
-    return +1;					\
-  }						\
-						\
-  /* else, seconds match. check nanoseconds */	\
-  if ( (ta->date_posted.tv_nsec) <		\
-       (tb->date_posted.tv_nsec)) {		\
-    return -1;					\
-  } else					\
-  if ( (ta->date_posted.tv_nsec) >		\
-       (tb->date_posted.tv_nsec)) {		\
-    return +1;					\
-  }						\
-}
-
-#define CNUM {					\
-  /* sort on transaction number */		\
-  char *da, *db;                                \
-  unsigned long n1;                             \
-  unsigned long n2;                             \
-  da = ta->num;					\
-  db = tb->num;					\
-  if (gnc_strisnum(da)) {                       \
-    if (!gnc_strisnum(db)) {                    \
-      return -1;                                \
-    }                                           \
-    sscanf(da, "%lu", &n1);                     \
-    sscanf(db, "%lu", &n2);                     \
-    if (n1 < n2) {                              \
-      return -1;                                \
-    }                                           \
-    if (n1 == n2) {                             \
-      return 0;                                 \
-    }                                           \
-    return +1;                                  \
-  }                                             \
-  if (gnc_strisnum(db)) {                       \
-    return +1;                                  \
-  }                                             \
-  if (!da && db) {				\
-    return -1;					\
-  }     					\
-  if (da && !db) {				\
-    return +1;					\
-  }						\
-  if (!da && !db) {                             \
-    return 0;                                   \
-  }                                             \
-  retval = strcmp (da, db);			\
-  return retval;                                \
-}
-
-#define CMEMO {					\
-  /* sort on memo strings */			\
-  char *da, *db;                                \
-  da = (*sa)->memo;				\
-  db = (*sb)->memo;				\
-  if (da && db) {				\
-    retval = strcmp (da, db);			\
-    /* if strings differ, return */		\
-    if (retval) return retval;			\
-  } else					\
-  if (!da && db) {				\
-    return -1;					\
-  } else					\
-  if (da && !db) {				\
-    return +1;					\
-  }						\
-}
-
-#define CDESC {					\
-  /* sort on transaction strings */		\
-  char *da, *db;                                \
-  da = ta->description;				\
-  db = tb->description;				\
-  if (da && db) {				\
-    retval = strcmp (da, db);			\
-    /* if strings differ, return */		\
-    if (retval) return retval;			\
-  } else					\
-  if (!da && db) {				\
-    return -1;					\
-  } else					\
-  if (da && !db) {				\
-    return +1;					\
-  }						\
-}
-
-#define CAMOUNT {				\
-  double fa, fb;				\
-  fa = ((*sa)->damount) * ((*sa)->share_price); \
-  fb = ((*sb)->damount) * ((*sb)->share_price); \
-  if (fa < fb) {				\
-    return -1;					\
-  } else   					\
-  if (fa > fb) {				\
-    return +1;					\
-  }						\
-}
-
-#define CNONE
-
-#define DECLARE(ONE,TWO,THREE)			\
-static int Sort_##ONE##_##TWO##_##THREE		\
-   (Split **sa, Split **sb) 			\
-{						\
-   PROLOG; 					\
-   C##ONE; C##TWO; C##THREE;			\
-   return 0;					\
-}
-
-/* ================================================== */
-/*
-#!/usr/bin/perl
-#
-# This is a short perl script that prints all permutations 
-# of three out of five objects; should be easy to generalize to more.
-# It was used to generate the code below.
-
-sub rotate {
-  local ($n, $i);
-  $n = $_[0];
-
-  $tmp = $arr[0];
-  for ($i=0; $i<$n-1; $i++) {
-     $arr[$i] = $arr[$i+1];
-  }
-  $arr[$n-1] = $tmp;
-}
-
-sub recur {
-  local ($n, $i);
-  $n = $_[0];
-
-  if (3>=$n) { 
-    print "DECLARE ($arr[4], $arr[3], $arr[2])\n";
-    return; 
-  }
-
-  for ($i=0; $i<$n-1; $i++) {
-    &rotate ($n-1);
-    &recur ($n-1);
-  }
-}
-
-# @arr=(1..5);
-@arr=(DESC,MEMO,AMOUNT,NUM,DATE);
-
-&recur (6);
-*/
-
-/* ================================================== */
-/* Define the sorting comparison functions */
-
-DECLARE (STANDARD, NONE, NONE)
-DECLARE (DESC, MEMO, AMOUNT)
-DECLARE (DESC, MEMO, NUM)
-DECLARE (DESC, MEMO, DATE)
-DECLARE (DESC, AMOUNT, NUM)
-DECLARE (DESC, AMOUNT, DATE)
-DECLARE (DESC, AMOUNT, MEMO)
-DECLARE (DESC, NUM, DATE)
-DECLARE (DESC, NUM, MEMO)
-DECLARE (DESC, NUM, AMOUNT)
-DECLARE (DESC, DATE, MEMO)
-DECLARE (DESC, DATE, AMOUNT)
-DECLARE (DESC, DATE, NUM)
-DECLARE (MEMO, AMOUNT, NUM)
-DECLARE (MEMO, AMOUNT, DATE)
-DECLARE (MEMO, AMOUNT, DESC)
-DECLARE (MEMO, NUM, DATE)
-DECLARE (MEMO, NUM, DESC)
-DECLARE (MEMO, NUM, AMOUNT)
-DECLARE (MEMO, DATE, DESC)
-DECLARE (MEMO, DATE, AMOUNT)
-DECLARE (MEMO, DATE, NUM)
-DECLARE (MEMO, DESC, AMOUNT)
-DECLARE (MEMO, DESC, NUM)
-DECLARE (MEMO, DESC, DATE)
-DECLARE (AMOUNT, NUM, DATE)
-DECLARE (AMOUNT, NUM, DESC)
-DECLARE (AMOUNT, NUM, MEMO)
-DECLARE (AMOUNT, DATE, DESC)
-DECLARE (AMOUNT, DATE, MEMO)
-DECLARE (AMOUNT, DATE, NUM)
-DECLARE (AMOUNT, DESC, MEMO)
-DECLARE (AMOUNT, DESC, NUM)
-DECLARE (AMOUNT, DESC, DATE)
-DECLARE (AMOUNT, MEMO, NUM)
-DECLARE (AMOUNT, MEMO, DATE)
-DECLARE (AMOUNT, MEMO, DESC)
-DECLARE (NUM, DATE, DESC)
-DECLARE (NUM, DATE, MEMO)
-DECLARE (NUM, DATE, AMOUNT)
-DECLARE (NUM, DESC, MEMO)
-DECLARE (NUM, DESC, AMOUNT)
-DECLARE (NUM, DESC, DATE)
-DECLARE (NUM, MEMO, AMOUNT)
-DECLARE (NUM, MEMO, DATE)
-DECLARE (NUM, MEMO, DESC)
-DECLARE (NUM, AMOUNT, DATE)
-DECLARE (NUM, AMOUNT, DESC)
-DECLARE (NUM, AMOUNT, MEMO)
-DECLARE (DATE, DESC, MEMO)
-DECLARE (DATE, DESC, AMOUNT)
-DECLARE (DATE, DESC, NUM)
-DECLARE (DATE, MEMO, AMOUNT)
-DECLARE (DATE, MEMO, NUM)
-DECLARE (DATE, MEMO, DESC)
-DECLARE (DATE, AMOUNT, NUM)
-DECLARE (DATE, AMOUNT, DESC)
-DECLARE (DATE, AMOUNT, MEMO)
-DECLARE (DATE, NUM, DESC)
-DECLARE (DATE, NUM, MEMO)
-DECLARE (DATE, NUM, AMOUNT)
-
-/* ================================================== */
-
-#define DECIDE(ONE,TWO,THREE)						\
-   if ((BY_##ONE == arga) && (BY_##TWO==argb) && (BY_##THREE==argc)) {	\
-      q->sort_func = (int (*)(const void*, const void *)) 		\
-         Sort_##ONE##_##TWO##_##THREE;					\
-   } else
-
-
-void 
-xaccQuerySetSortOrder (Query *q, int arga, int argb, int argc)
-{
-   if (!q) return;
-   q->changed = 1; 
-
-   DECIDE (STANDARD, NONE, NONE)
-   DECIDE (DESC, MEMO, AMOUNT)
-   DECIDE (DESC, MEMO, NUM)
-   DECIDE (DESC, MEMO, DATE)
-   DECIDE (DESC, AMOUNT, NUM)
-   DECIDE (DESC, AMOUNT, DATE)
-   DECIDE (DESC, AMOUNT, MEMO)
-   DECIDE (DESC, NUM, DATE)
-   DECIDE (DESC, NUM, MEMO)
-   DECIDE (DESC, NUM, AMOUNT)
-   DECIDE (DESC, DATE, MEMO)
-   DECIDE (DESC, DATE, AMOUNT)
-   DECIDE (DESC, DATE, NUM)
-   DECIDE (MEMO, AMOUNT, NUM)
-   DECIDE (MEMO, AMOUNT, DATE)
-   DECIDE (MEMO, AMOUNT, DESC)
-   DECIDE (MEMO, NUM, DATE)
-   DECIDE (MEMO, NUM, DESC)
-   DECIDE (MEMO, NUM, AMOUNT)
-   DECIDE (MEMO, DATE, DESC)
-   DECIDE (MEMO, DATE, AMOUNT)
-   DECIDE (MEMO, DATE, NUM)
-   DECIDE (MEMO, DESC, AMOUNT)
-   DECIDE (MEMO, DESC, NUM)
-   DECIDE (MEMO, DESC, DATE)
-   DECIDE (AMOUNT, NUM, DATE)
-   DECIDE (AMOUNT, NUM, DESC)
-   DECIDE (AMOUNT, NUM, MEMO)
-   DECIDE (AMOUNT, DATE, DESC)
-   DECIDE (AMOUNT, DATE, MEMO)
-   DECIDE (AMOUNT, DATE, NUM)
-   DECIDE (AMOUNT, DESC, MEMO)
-   DECIDE (AMOUNT, DESC, NUM)
-   DECIDE (AMOUNT, DESC, DATE)
-   DECIDE (AMOUNT, MEMO, NUM)
-   DECIDE (AMOUNT, MEMO, DATE)
-   DECIDE (AMOUNT, MEMO, DESC)
-   DECIDE (NUM, DATE, DESC)
-   DECIDE (NUM, DATE, MEMO)
-   DECIDE (NUM, DATE, AMOUNT)
-   DECIDE (NUM, DESC, MEMO)
-   DECIDE (NUM, DESC, AMOUNT)
-   DECIDE (NUM, DESC, DATE)
-   DECIDE (NUM, MEMO, AMOUNT)
-   DECIDE (NUM, MEMO, DATE)
-   DECIDE (NUM, MEMO, DESC)
-   DECIDE (NUM, AMOUNT, DATE)
-   DECIDE (NUM, AMOUNT, DESC)
-   DECIDE (NUM, AMOUNT, MEMO)
-   DECIDE (DATE, DESC, MEMO)
-   DECIDE (DATE, DESC, AMOUNT)
-   DECIDE (DATE, DESC, NUM)
-   DECIDE (DATE, MEMO, AMOUNT)
-   DECIDE (DATE, MEMO, NUM)
-   DECIDE (DATE, MEMO, DESC)
-   DECIDE (DATE, AMOUNT, NUM)
-   DECIDE (DATE, AMOUNT, DESC)
-   DECIDE (DATE, AMOUNT, MEMO)
-   DECIDE (DATE, NUM, DESC)
-   DECIDE (DATE, NUM, MEMO)
-   DECIDE (DATE, NUM, AMOUNT)
-   {
-      printf ("Error: xaccQuerySetSortOrder(): "
-         "Invalid or unsupported sort order specified \n");
-   }
-}
-
-/* ================================================== */
-
-static void
-SortSplits (Query *q, Split **slist)
-{
-  int nsplits =0;
+xaccQueryInvert(Query * q) {
+  Query  * retval;
+  Query  * right, * left, * iright, * ileft;
+  QueryTerm * qt;
+  GList  * aterms;
+  GList  * new_oterm;
+  int    num_or_terms;
+  int    i;
+
+  num_or_terms = g_list_length(q->terms);
   
-  if (!q) return;
-  if (!q->sort_func) return;
+  /*  printf("inverting query: ");
+      print_query(q); */
 
-  nsplits = 0;
-  while (slist[nsplits]) nsplits ++;
+  switch(num_or_terms) {
+  case 0:
+    retval = xaccMallocQuery();
+    retval->max_splits     = q->max_splits;
+    retval->acct_group     = q->acct_group;
+    retval->split_list     = NULL; 
+    retval->terms          = NULL;
+    retval->changed        = 1;
+    break;
 
-  /* run the sort routine on the array */
-  qsort (slist, nsplits, sizeof (Split *), q->sort_func);
+    /* this is demorgan expansion for a single AND expression. */
+    /* !(abc) = !a + !b + !c */
+  case 1:
+    retval = xaccMallocQuery();
+    retval->max_splits     = q->max_splits;
+    retval->acct_group     = q->acct_group;
+    retval->split_list     = NULL; 
+    retval->terms          = NULL;
+    retval->changed        = 1;
+
+    aterms = g_list_nth_data(q->terms, 0);
+    new_oterm = NULL;
+    for(i = 0; i < g_list_length(aterms); i++) {
+      qt = copy_query_term(g_list_nth_data(aterms, i));
+      qt->sense = !(qt->sense);
+      new_oterm = g_list_append(NULL, qt);
+      retval->terms = g_list_append(retval->terms, new_oterm);
+    }
+    break;
+
+    /* if there are multiple OR-terms, we just recurse by 
+     * breaking it down to !(a + b + c) = 
+     * !a * !(b + c) = !a * !b * !c.  */
+  default:
+    right        = xaccMallocQuery();
+    right->terms = deep_copy_terms(g_list_nth(q->terms, 1));
+    
+    left         = xaccMallocQuery();
+    left->terms  = g_list_append(NULL, 
+                                 g_list_copy(g_list_nth_data(q->terms, 0)));
+    
+    iright       = xaccQueryInvert(right);
+    ileft        = xaccQueryInvert(left);
+    
+    retval = xaccQueryMerge(iright, ileft, QUERY_AND);
+    retval->max_splits     = q->max_splits;
+    retval->acct_group     = q->acct_group;
+    retval->changed        = 1;
+    
+    xaccFreeQuery(iright);
+    xaccFreeQuery(ileft);
+    xaccFreeQuery(right);
+    xaccFreeQuery(left);
+    break;
+  }  
+  return retval;
 
 }
 
-/* ================================================== */
+
+/********************************************************************
+ * xaccQueryMerge
+ * combine 2 Query objects by the logical operation in "op".
+ ********************************************************************/
+
+Query * 
+xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
+  
+  Query * retval = NULL;
+  Query * i1, * i2;
+  Query * t1, * t2;
+  int i, j;
+
+  /*  printf("merging queries: op=%d\n", op);
+      print_query(q1);
+      print_query(q2); */
+
+  switch(op) {
+  case QUERY_OR:
+    retval = xaccMallocQuery();
+    retval->terms = 
+      g_list_concat(deep_copy_terms(q1->terms), deep_copy_terms(q2->terms));
+    retval->max_splits     = q1->max_splits;
+    retval->split_list     = NULL; /* fixme */
+    retval->changed        = 1;
+    retval->acct_group     = q1->acct_group;
+    break;
+    
+  case QUERY_AND:
+    retval = xaccMallocQuery();
+    retval->max_splits     = q1->max_splits;
+    retval->split_list     = NULL; /* fixme */
+    retval->changed        = 1;
+    retval->acct_group     = q1->acct_group;
+    
+    for(i=0; i < g_list_length(q1->terms); i++) {
+      for(j=0; j < g_list_length(q2->terms); j++) {
+        retval->terms = 
+          g_list_append(retval->terms, 
+                        g_list_concat
+                        (g_list_copy(g_list_nth_data(q1->terms, i)),
+                         g_list_copy(g_list_nth_data(q2->terms, j))));
+      }
+    }
+    break;
+
+  case QUERY_NAND:
+    /* !(a*b) = (!a + !b) */
+    i1     = xaccQueryInvert(q1);
+    i2     = xaccQueryInvert(q2);
+    retval = xaccQueryMerge(i1, i2, QUERY_OR);
+    xaccFreeQuery(i1);
+    xaccFreeQuery(i2);
+    break;
+    
+  case QUERY_NOR:
+    /* !(a+b) = (!a*!b) */
+    i1     = xaccQueryInvert(q1);
+    i2     = xaccQueryInvert(q2);
+    retval = xaccQueryMerge(i1, i2, QUERY_AND);
+    xaccFreeQuery(i1);
+    xaccFreeQuery(i2);
+    break;
+    
+  case QUERY_XOR:
+    /* a xor b = (a * !b) + (!a * b) */
+    i1     = xaccQueryInvert(q1);
+    i2     = xaccQueryInvert(q2);
+    t1     = xaccQueryMerge(q1, i2, QUERY_AND);
+    t2     = xaccQueryMerge(i1, q2, QUERY_AND);
+    retval = xaccQueryMerge(t1, t2, QUERY_OR);
+
+    xaccFreeQuery(i1);
+    xaccFreeQuery(i2);
+    xaccFreeQuery(t1);
+    xaccFreeQuery(t2);     
+    break;
+  }
+
+  return retval;
+}
+
+
+/* this sort function just puts account queries at the top of the
+ * list.  this lets us skip accounts that have no chance. */
+static gint
+query_sort_func(gconstpointer pa, gconstpointer pb) {
+  const QueryTerm * a = pa;
+  const QueryTerm * b = pb;
+  if(a->data.type == PD_ACCOUNT) {
+    return -1;
+  }
+  else if(b->data.type == PD_ACCOUNT) {
+    return 1;
+  }
+  else if(a->data.type == PD_AMOUNT) {
+    return -1;
+  }
+  else if(b->data.type == PD_AMOUNT) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+static int 
+acct_query_matches(QueryTerm * qt, Account * acct) {
+  Account ** ptr;
+  int     account_in_set = 0;
+  int     first_account = 1;
+
+  assert(qt && acct);
+  assert(qt->data.type == PD_ACCOUNT);
+  assert(qt->data.acct.accounts);
+
+  for(ptr = qt->data.acct.accounts; *ptr ; ptr++) {
+    if(acct == *ptr) {
+      account_in_set = 1;
+      break;
+    }
+    first_account = 0;
+  }
+  
+  /* if we need the query to match "ALL" accounts, we only return 
+   * true for the first acct in the set. */
+  switch(qt->data.acct.how) {
+  case ACCT_MATCH_ALL:
+    return (account_in_set && first_account);
+    break;
+
+  case ACCT_MATCH_ANY:
+    return account_in_set;
+    break;
+
+  case ACCT_MATCH_NONE:
+    return !account_in_set;
+    break;
+  }
+
+  return 0;
+}
+
+static Query * split_sort_query = NULL;
+
+
+static int
+split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
+  Split       * sa = (Split *)ga;
+  Split       * sb = (Split *)gb;
+  Transaction * ta;
+  Transaction * tb;
+  int retval;
+  unsigned long n1;                             
+  unsigned long n2;                             
+  char   *da, *db;                               
+  double fa, fb;                                
+  
+  if(sa && !sb)  return -1; 
+  if(!sa && sb)  return 1; 
+  if(!sa && !sb) return 0; 
+
+  ta = sa->parent; 
+  tb = sb->parent; 
+
+  if (ta->orig) ta = ta->orig; 
+  if (tb->orig) tb = tb->orig; 
+                                                
+  if ( (ta) && !(tb) ) return -1; 
+  if ( !(ta) && (tb) ) return +1; 
+  if ( !(ta) && !(tb) ) return 0; 
+
+
+  switch(how) {
+  case BY_STANDARD:
+    return xaccSplitDateOrder(&sa, &sb);
+    break;
+
+  case BY_DATE:
+    /* if dates differ, return */ 
+    if ( (ta->date_posted.tv_sec) < 
+         (tb->date_posted.tv_sec)) { 
+      return -1; 
+    } 
+    else if ((ta->date_posted.tv_sec) > 
+             (tb->date_posted.tv_sec)) { 
+      return +1; 
+    } 
+    
+    /* else, seconds match. check nanoseconds */ 
+    if ( (ta->date_posted.tv_nsec) < 
+         (tb->date_posted.tv_nsec)) { 
+      return -1; 
+    } 
+    else if ( (ta->date_posted.tv_nsec) > 
+              (tb->date_posted.tv_nsec)) { 
+      return +1; 
+    }
+    return 0;
+    break;
+
+  case BY_NUM:
+    /* sort on transaction number */              
+    da = ta->num;                                 
+    db = tb->num;                                 
+    if (gnc_strisnum(da)) {                       
+      if (!gnc_strisnum(db)) {                    
+        return -1;                                
+      }                                           
+      sscanf(da, "%lu", &n1);                     
+      sscanf(db, "%lu", &n2);                     
+      if (n1 < n2) {                              
+        return -1;                                
+      }                                           
+      if (n1 == n2) {                             
+        return 0;                                 
+      }                                           
+      return +1;                                  
+    }                                             
+    if (gnc_strisnum(db)) {                       
+      return +1;                                  
+    }                                             
+    if (!da && db) {                              
+      return -1;                                  
+    }                                             
+    if (da && !db) {                              
+      return +1;                                  
+    }                                             
+    if (!da && !db) {                             
+      return 0;                                   
+    } 
+    return strcmp (da, db); 
+    
+    break;
+
+  case BY_MEMO:
+    /* sort on memo strings */                    
+    da = sa->memo;                             
+    db = sb->memo;                             
+    if (da && db) {                               
+      return strcmp (da, db);                   
+    } 
+    else if (!da && db) {                              
+      return -1;                                  
+    } 
+    else if (da && !db) {                              
+      return +1;                                  
+    }                                             
+    else {
+      return 0;
+    }
+    break;
+
+  case BY_DESC:
+    /* sort on transaction strings */             
+    da = ta->description;                         
+    db = tb->description;   
+    
+    if (da && db) {                               
+      retval = strcmp (da, db);                   
+      /* if strings differ, return */             
+      if (retval) return retval;                  
+    } 
+    else if (!da && db) {                              
+      return -1;                                  
+    } 
+    else if (da && !db) {                              
+      return +1;                                  
+    }         
+    else {
+      return 0;
+    }
+    break;
+    
+  case BY_AMOUNT:    
+    fa = (sa->damount) * (sa->share_price); 
+    fb = (sb->damount) * (sb->share_price); 
+    if (fa < fb) { 
+      return -1; 
+    } 
+    else if (fa > fb) { 
+      return +1; 
+    } 
+    else {
+      return 0;
+    }
+    break;
+    
+  case BY_NONE:
+    return 0;
+    break;
+  }
+
+  return 0;
+}
+
+static int
+split_sort_func(gconstpointer a, gconstpointer b) {
+  int retval; 
+
+  assert(split_sort_query);
+  
+  retval = split_cmp_func(split_sort_query->primary_sort, a, b);
+  if((retval == 0) && 
+     (split_sort_query->secondary_sort != BY_NONE)) {
+    retval = split_cmp_func(split_sort_query->secondary_sort, a, b);
+    if((retval == 0) &&
+       (split_sort_query->tertiary_sort != BY_NONE)) {       
+      return split_cmp_func(split_sort_query->tertiary_sort, a, b);
+    }
+    else {
+      return retval;
+    }
+  }
+  else {
+    return retval;
+  }
+}
+
+
+/********************************************************************
+ * xaccQueryCheckSplit
+ * check a single split against the query.  This is a short-circuited
+ * and-or check, so sorting it with best criteria first is a win.
+ ********************************************************************/
+
+int
+xaccQueryCheckSplit(Query * q, Split * s) {
+  GList     * and_ptr;
+  GList     * or_ptr;
+  QueryTerm * qt;
+  int       and_terms_ok=1;
+  
+  for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) {
+    and_terms_ok = 1;
+    for(and_ptr = or_ptr->data; and_ptr; and_ptr = and_ptr->next) {
+      qt = (QueryTerm *)(and_ptr->data);
+      if(((qt->p)(s, &(qt->data))) != qt->sense) {
+        and_terms_ok = 0;
+        break;
+      }
+    }
+    if(and_terms_ok) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+
+/********************************************************************
+ * xaccQueryGetSplits
+ * Run the search.
+ ********************************************************************/
 
 Split **
-xaccQueryGetSplits (Query *q)
-{
-   int i=0, j=0, k=0;
-   int nstart, nret, nsplits;
-   Split *s, **slist;
-   Account *acc;
+xaccQueryGetSplits(Query * q) {
+  GList     * matching_splits=NULL;
+  GList     * or_ptr, * and_ptr, * mptr;  
+  Account   ** all_accts, ** ptr;
+  Account   * current;
+  Split     ** splits;
+  Split     ** sptr;
+  QueryTerm * qt;
+  
+  int       total_splits_checked = 0;
+  int       split_count = 0;
+  int       acct_ok;
+  int       posn;
 
-   ENTER ("xaccQueryGetSplits()\n");
+  struct timeval start, end;
+  
+  gettimeofday(&start, NULL);
 
-   if (!q) return NULL;
+  /* tmp hack alert */
+  q->changed = 1;
 
-   /* tmp hack alert */
-   q->changed = 1;
-   /* if not changed then don't recompute cache */
-   if (!(q->changed)) return q->split_list;
-   q->changed = 0;
+  if(q->changed == 0) {
+    return q->split_list;
+  }
 
-   if (q->split_list) _free (q->split_list);
-   q->split_list = NULL;
+  /* prioritize the query terms for a faster search.  This
+   * will put account queries at the top of the AND chains. */
 
-   /* count up the number of splits we'll have to deal with.
-    * Try to limit the CPU pain by trimming out stuff that's 
-    * too early and too late now. 
-    */
-   nsplits = 0;
-   if (q->acc_list) {
-      i=0; acc = q->acc_list[0];
-      while (acc) {
-
-         /* now go through the splits */
-         j=0; s = acc->splits[0];
-         while (s) {
-            if (s->parent->date_posted.tv_sec > q->latest.tv_sec) {
-               break;
-            }
-            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
-               nsplits ++;
-            }
-            j++; s = acc->splits[j];
-         }
-         i++; acc = q->acc_list[i];
+  /* FIXME : sort for securities queries and eliminate non-
+   * security accounts */
+  for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
+    and_ptr = or_ptr->data;
+    or_ptr->data = g_list_sort(and_ptr, query_sort_func);
+  }
+  
+  /* iterate over accounts */
+  all_accts = xaccGetAccounts(q->acct_group);
+  for(ptr = all_accts; *ptr; ptr++) {
+    current = *ptr;
+    
+    /* first, check this account to see if we need to look at it at
+     * all.  If the query is "ANY" matching or "NONE" matching, you
+     * get what you expect; if it's "ALL" matching, only the first
+     * account in the query matches.  This could be optimized to only
+     * look at the smallest account. */
+    acct_ok = 0;
+    for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
+      and_ptr = or_ptr->data;
+      qt = and_ptr->data;
+      
+      if(qt->data.type == PD_ACCOUNT) {
+        if(acct_query_matches(qt, current)) {
+          acct_ok = 1;
+          break;
+        }
       }
-   }
+      else {
+        /* if the first query term isn't an account, then we have to
+         * look at every split in every account. */
 
-   /* OK, now get some storage ... concatenate all of the accounts in */
-   slist = (Split **) malloc ((nsplits+1) * sizeof (Split *));
-
-   k=0;
-   if (q->acc_list) {
-      i=0; acc = q->acc_list[0];
-      while (acc) {
-
-         /* now go through the splits */
-         j=0; s = acc->splits[0];
-         while (s) {
-            if (s->parent->date_posted.tv_sec > q->latest.tv_sec) {
-               break;
-            }
-            if (s->parent->date_posted.tv_sec >= q->earliest.tv_sec) {
-               slist[k] = s; k++;
-            }
-            j++; s = acc->splits[j];
-         }
-         i++; acc = q->acc_list[i];
+        /* FIXME : security accounts can be ruled out */
+        acct_ok = 1;
+        break;
       }
-   }
-   slist[k] = NULL;
+    }
+    
+    if(acct_ok) {
+      splits = xaccAccountGetSplitList(current);
 
-   DEBUG ("xaccQueryGetSplits(): will sort %d splits\n", nsplits);
+      /* iterate over splits */
+      for(sptr = splits; *sptr; sptr++) {
+        if(xaccQueryCheckSplit(q, *sptr)) {
+          matching_splits = g_list_append(matching_splits, *sptr);
+          split_count++;
+        }
+        total_splits_checked++;
+      }      
+    }
+  }
 
-   /* sort them ... */
-   SortSplits (q, slist);
+  /* now sort the matching splits based on the search criteria 
+   * split_sort_query is an unforgivable use of static global data...
+   * I just can't figure out how else to do this sanely. */
+  split_sort_query = q;
+  g_list_sort(matching_splits, split_sort_func);
 
-   /* make sure we don't return too many splits */
-   nret = nsplits;
-   if (nret > q->max_num_splits) {
-      nret = q->max_num_splits;
-      q->split_list =  (Split **) malloc ((nret+1) * sizeof (Split *));
-   
-      /* return only the last few splits */
-      nstart = nsplits - nret;
-      if (0 > nstart) nstart = 0;
+  /* crop the list to limit the number of splits */
+  if((split_count > q->max_splits) && (q->max_splits > -1)) {
+    if(q->max_splits > 0) {
+      mptr = g_list_nth(matching_splits, q->max_splits - 1);
+      g_list_free(mptr->next);
+      mptr->next = NULL;
+    }
+    split_count = q->max_splits;
+  }
+  
+  /* convert the g_list into a split array. */
+  splits = g_new0(Split *, split_count+1);
+  posn = 0;
+  for(mptr = matching_splits; mptr; mptr=mptr->next) {
+    splits[posn] = mptr->data;
+    posn++;
+  }
+  splits[split_count] = NULL;
+  g_list_free(matching_splits);
 
-      /* copy over */
-      i=nstart; s = slist[i];
-      j = 0;
-      while (s) { 
-         q->split_list [j] = s;
-         j++; i++; s = slist [i];
-      }
-      q->split_list [j] = NULL;
+  gettimeofday(&end, NULL);
 
-      /* cleanup memory */
-      free (slist);
-   } else {
+  printf("xaccQueryGetSplits: elapsed time = %e ms\n",
+         (end.tv_sec - start.tv_sec)*1000.0 +
+         (end.tv_usec - start.tv_usec)/1000.0);
+  printf("xaccQueryGetSplits: %d splits checked, %d splits matched.\n",
+         total_splits_checked, split_count);
 
-      /* avoid excess mallocs, copies, etc. */
-      q->split_list = slist;
-   }
-
-   /* gather some data about what we just found */
-   /* serious Y2K hack alert -- this should be ULONG_MAX not LONG_MAX */
-   q->earliest_found.tv_sec = LONG_MAX; 
-   q->earliest_found.tv_nsec = 0; 
-   q->latest_found.tv_sec = 0;
-   q->latest_found.tv_nsec = 0; 
-
-   slist = q->split_list;
-   i=0; s=slist[0];
-   while (s) {
-      if (q->earliest_found.tv_sec > s->parent->date_posted.tv_sec) {
-         q->earliest_found.tv_sec = s->parent->date_posted.tv_sec;
-      }
-      if (q->latest_found.tv_sec < s->parent->date_posted.tv_sec) {
-         q->latest_found.tv_sec = s->parent->date_posted.tv_sec;
-      }
-      i++; s=slist[i];
-   }
-
-   LEAVE ("xaccQueryGetSplits(): returning  %d splits\n", nret);
-
-   return q->split_list;
+  q->changed = 0;
+  if(q->split_list) {
+    g_free(q->split_list);
+  }
+  q->split_list = splits;
+  
+  return splits;
 }
 
-/* ================================================== */
 
+/********************************************************************
+ * xaccQueryAddAccountMatch
+ * Add an account filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddAccountMatch(Query * q, Account ** acclist, acct_match_t how,
+                         QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccAccountMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type           = PD_ACCOUNT;
+  qt->data.acct.how       = how;
+  qt->data.acct.accounts  = acclist;
+
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
+ * xaccQueryAddSingleAccountMatch
+ * Add an account filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
+                               QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Account   ** acctlist = g_new0(Account *, 2);
+  Query     * qr;
+
+  acctlist[0] = acct;
+  acctlist[1] = NULL;
+  
+  qt->p      = & xaccAccountMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type           = PD_ACCOUNT;
+  qt->data.acct.how       = ACCT_MATCH_ANY;
+  qt->data.acct.accounts  = acctlist;
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddDescriptionMatch
+ * Add a description filter to an existing query
+ ********************************************************************/
+
+void
+xaccQueryAddDescriptionMatch(Query * q, char * matchstring,
+                             int case_sens, int use_regexp,
+                             QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  char      * teststr;
+  char      * src, * dest;
+  int       flags = REG_EXTENDED;
+
+  qt->p      = & xaccDescriptionMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type            = PD_STRING;
+  qt->data.str.case_sens   = case_sens;
+  qt->data.str.use_regexp  = use_regexp;
+  qt->data.str.matchstring = strdup(matchstring);
+
+  if(!case_sens) {
+    flags |= REG_ICASE;
+  }
+
+  if(use_regexp) {
+    regcomp(&qt->data.str.compiled, matchstring, flags);
+  }
+  else if(!case_sens) {
+    teststr = g_new0(char, strlen(matchstring)+1);
+    dest    = teststr;
+    for(src=matchstring; *src; src++) {
+      *dest = tolower(*src);
+      dest++;      
+    }
+    *dest = 0;    
+    qt->data.str.matchstring = teststr;
+  }
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddMemoMatch
+ * Add a memo conparison to an existing query
+ ********************************************************************/
+
+void
+xaccQueryAddMemoMatch(Query * q, char * matchstring,
+                      int case_sens, int use_regexp,
+                      QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  char      * teststr;
+  char      * src, * dest;
+  int       flags = REG_EXTENDED;
+
+  qt->p      = & xaccMemoMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type            = PD_STRING;
+  qt->data.str.case_sens   = case_sens;
+  qt->data.str.use_regexp  = use_regexp;
+  qt->data.str.matchstring = strdup(matchstring);
+
+  if(!case_sens) {
+    flags |= REG_ICASE;
+  }
+
+  if(use_regexp) {
+    regcomp(&qt->data.str.compiled, matchstring, flags);
+  }
+  else if(!case_sens) {
+    teststr = g_new0(char, strlen(matchstring)+1);
+    dest    = teststr;
+    for(src=matchstring; *src; src++) {
+      *dest = tolower(*src);
+      dest++;      
+    }
+    *dest = 0;    
+    qt->data.str.matchstring = teststr;
+  }
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddDateMatch
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatch(Query * q, 
+                      int sday, int smonth, int syear,
+                      int eday, int emonth, int eyear,
+                      QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccDateMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type           = PD_DATE;
+  qt->data.date.start     = gnc_dmy2timespec(sday, smonth, syear);
+  qt->data.date.end       = gnc_dmy2timespec(eday, emonth, eyear);
+
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
+ * xaccQueryAddDateMatchTS
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatchTS(Query * q, 
+                        Timespec sts,
+                        Timespec ets,
+                        QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccDateMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type           = PD_DATE;
+  qt->data.date.start     = sts;  
+  qt->data.date.end       = ets;
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+/********************************************************************
+ * xaccQueryAddDateMatchTT
+ * Add a date filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddDateMatchTT(Query * q, 
+                        time_t stt,
+                        time_t ett,
+                        QueryOp op) {
+  Query      * qs  = xaccMallocQuery(); 
+  QueryTerm  * qt  = g_new0(QueryTerm, 1);
+  Query      * qr;  
+  Timespec   sts;
+  Timespec   ets;
+  
+  sts.tv_sec  = (long long)stt;
+  sts.tv_nsec = 0;
+
+  ets.tv_sec  = (long long)ett;
+  ets.tv_nsec = 0;
+  
+  qt->p      = & xaccDateMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type           = PD_DATE;
+  qt->data.date.start     = sts;
+  qt->data.date.end       = ets;
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qr);
+  xaccFreeQuery(qs);
+}
+
+/********************************************************************
+ * xaccQueryAddNumberMatch
+ * Add a number-field filter 
+ ********************************************************************/
+void
+xaccQueryAddNumberMatch(Query * q, char * matchstring, int case_sens,
+                        int use_regexp, QueryOp op) {
+  
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  char      * teststr;
+  char      * src, * dest;
+  int       flags = REG_EXTENDED;
+
+  qt->p      = & xaccNumberMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type            = PD_STRING;
+  qt->data.str.case_sens   = case_sens;
+  qt->data.str.use_regexp  = use_regexp;
+  qt->data.str.matchstring = strdup(matchstring);
+
+  if(!case_sens) {
+    flags |= REG_ICASE;
+  }
+
+  if(use_regexp) {
+    regcomp(&qt->data.str.compiled, matchstring, flags);
+  }
+  else if(!case_sens) {
+    teststr = g_new0(char, strlen(matchstring)+1);
+    dest    = teststr;
+    for(src=matchstring; *src; src++) {
+      *dest = tolower(*src);
+      dest++;      
+    }
+    *dest = 0;    
+    qt->data.str.matchstring = teststr;
+  }
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddActionMatch
+ * Add a action-field filter 
+ ********************************************************************/
+void
+xaccQueryAddActionMatch(Query * q, char * matchstring, int case_sens,
+                        int use_regexp, QueryOp op) {
+  
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  char      * teststr;
+  char      * src, * dest;
+  int       flags = REG_EXTENDED;
+
+  qt->p      = & xaccActionMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type            = PD_STRING;
+  qt->data.str.case_sens   = case_sens;
+  qt->data.str.use_regexp  = use_regexp;
+  qt->data.str.matchstring = strdup(matchstring);
+
+  if(!case_sens) {
+    flags |= REG_ICASE;
+  }
+
+  if(use_regexp) {
+    regcomp(&qt->data.str.compiled, matchstring, flags);
+  }
+  else if(!case_sens) {
+    teststr = g_new0(char, strlen(matchstring)+1);
+    dest    = teststr;
+    for(src=matchstring; *src; src++) {
+      *dest = tolower(*src);
+      dest++;      
+    }
+    *dest = 0;    
+    qt->data.str.matchstring = teststr;
+  }
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }        
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddAmountMatch
+ * Add a value filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddAmountMatch(Query * q, double amt, 
+                        amt_match_sgn_t amt_sgn, 
+                        amt_match_t how,
+                        QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = & xaccAmountMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type             = PD_AMOUNT;
+  qt->data.amount.how       = how;
+  qt->data.amount.amt_sgn   = amt_sgn;
+  qt->data.amount.amount    = amt;
+
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddSharePriceMatch
+ * Add a share-price filter to an existing query. 
+ ********************************************************************/
+
+void
+xaccQueryAddSharePriceMatch(Query * q, double amt, 
+                            amt_match_t how,
+                            QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  
+  qt->p      = & xaccSharePriceMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type             = PD_AMOUNT;
+  qt->data.amount.how       = how;
+  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amount    = amt;
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+ 
+/********************************************************************
+ * xaccQueryAddSharesMatch
+ * Add a share-price filter to an existing query. 
+ ********************************************************************/
+ 
+void
+xaccQueryAddSharesMatch(Query * q, double amt, 
+                        amt_match_t how,
+                        QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+  
+  qt->p      = & xaccSharesMatchPredicate;
+  qt->sense  = 1;
+  qt->data.type             = PD_AMOUNT;
+  qt->data.amount.how       = how;
+  qt->data.amount.amt_sgn   = 0;
+  qt->data.amount.amount    = amt;
+  
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/********************************************************************
+ * xaccQueryAddMiscMatch
+ * Add an arbitrary predicate to a query.  You really shouldn't
+ * do this. 
+ ********************************************************************/
+
+void
+xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
+                      QueryOp op) {
+  Query     * qs  = xaccMallocQuery(); 
+  QueryTerm * qt  = g_new0(QueryTerm, 1);
+  Query     * qr;
+
+  qt->p      = p;
+  qt->sense  = 1;
+  qt->data.type           = PD_MISC;
+  qt->data.misc.how       = how;
+  qt->data.misc.data      = data;
+
+  xaccQuerySingleTerm(qs, qt);
+  if(xaccQueryHasTerms(q)) {
+    qr = xaccQueryMerge(q, qs, op);
+  }
+  else {
+    qr = xaccQueryMerge(q, qs, QUERY_OR);
+  }
+  
+  xaccQuerySwapTerms(q, qr);
+  xaccFreeQuery(qs);
+  xaccFreeQuery(qr);
+}
+
+
+/*******************************************************************
+ *  xaccQueryPurgeTerms
+ *  delete any terms of a particular type
+ *******************************************************************/
+
+void
+xaccQueryPurgeTerms(Query * q, pd_type_t type) {
+  QueryTerm * qt;
+  GList * or;
+  GList * and;
+
+  for(or = q->terms; or; or = or->next) {
+    for(and = or->data; and; and = and->next) {
+      qt = and->data;
+      if(qt->data.type == type) {
+        if(g_list_length(or->data) == 1) {          
+          q->terms = g_list_remove_link(q->terms, or);          
+          or = q->terms;
+          break;
+        }
+        else {
+          or->data = g_list_remove_link(or->data, and);
+          and = or->data;
+          if(!and) break;
+        }
+        q->changed = 1;
+        g_free(qt);
+      }
+    }
+    if(!or) break; 
+  }
+}
+
+
+/*******************************************************************
+ *  xaccQueryClear
+ *  remove all terms from a query. 
+ *******************************************************************/
+
+void
+xaccQueryClear(Query * q) {
+  Query * q2 = xaccMallocQuery();
+  xaccQuerySwapTerms(q, q2);
+  q->changed = 1;
+  xaccFreeQuery(q2);
+}
+
+
+/*******************************************************************
+ *  string_match_predicate
+ *  internal subroutine for description and memo matching
+ *******************************************************************/
+
+static int
+string_match_predicate(char * s, PredicateData * pd) {
+  regmatch_t match;
+  char       * teststr; 
+  char       * src, * dest;
+
+  assert(s && pd && (pd->type == PD_STRING));
+
+  if(!pd->str.matchstring) return 0;
+
+  if(pd->str.use_regexp) {
+    if(!regexec(&pd->str.compiled, s, 1, &match, 0)) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+  else if(pd->str.case_sens) {
+    if(strstr(s, pd->str.matchstring)) return 1;
+    else return 0;
+  }
+  else {
+    /* fix this: need a case-insensitive strstr */
+    teststr = g_new0(char, strlen(s)+1);
+    dest    = teststr;
+    for(src=s; *src; src++) {
+      *dest = tolower(*src);
+      dest++;      
+    }
+    *dest = 0;
+
+    if(strstr(teststr, pd->str.matchstring)) return 1;
+    else return 0;
+  }
+
+}
+
+
+/*******************************************************************
+ *  value_match_predicate
+ *******************************************************************/
+int 
+value_match_predicate(double splitamt, PredicateData * pd) {
+  switch(pd->amount.how) {
+  case AMT_MATCH_ATLEAST:
+    return fabs(splitamt) >= pd->amount.amount;
+    break;
+  case AMT_MATCH_ATMOST:
+    return fabs(splitamt) <= pd->amount.amount;
+    break;
+  case AMT_MATCH_EXACTLY:
+    return fabs(fabs(splitamt) - fabs(pd->amount.amount)) < .0001;
+    break;
+  }
+
+  return 0;
+}
+
+
+/*******************************************************************
+ *  xaccAccountMatchPredicate 
+ *******************************************************************/
+int 
+xaccAccountMatchPredicate(Split * s, PredicateData * pd) { 
+  Transaction * parent;
+  Split       * split;
+  Account     * split_acct;
+  Account     ** acct;
+  int         i;
+  int         numsplits;
+
+  assert(s && pd);
+  assert(pd->type == PD_ACCOUNT);
+
+  parent    = xaccSplitGetParent(s);
+  assert(parent);
+
+  switch(pd->acct.how) {
+  case ACCT_MATCH_ALL:
+    /* there must be a split in parent that matches each of the 
+     * accounts listed in pd. */
+    numsplits = xaccTransCountSplits(parent);
+    for(acct=pd->acct.accounts; *acct; acct++) {
+      for(i=0; i < numsplits; i++) {
+        split = xaccTransGetSplit(parent, i);
+        if(*acct == xaccSplitGetAccount(split)) {
+          /* break here means we found a match before running out 
+           * of splits (success) */
+          break;
+        }
+      }
+      if(i == numsplits) {
+        /* break here means we ran out of splits before finding 
+         * an account (failure) */
+        break;
+      }
+    }
+    if(*acct) return 0;
+    else return 1;
+
+    break;
+
+  case ACCT_MATCH_ANY:
+    /* s must match an account in pd */
+    split_acct = xaccSplitGetAccount(s);
+    for(acct = pd->acct.accounts; *acct; acct++) {
+      if(*acct == split_acct) {
+        break;
+      }
+    }
+    if(*acct) return 1;
+    else return 0;
+    break;
+
+  case ACCT_MATCH_NONE:
+    /* s must match an account in pd */
+    split_acct = xaccSplitGetAccount(s);
+    for(acct = pd->acct.accounts; *acct; acct++) {
+      if(*acct == split_acct) {
+        break;
+      }
+    }
+    if(*acct) return 0;
+    else return 1;
+    break;
+  }
+
+  return 0;
+}
+
+
+/*******************************************************************
+ *  xaccDescriptionMatchPredicate 
+ *******************************************************************/
+int
+xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
+  Transaction * parent;
+  char        * descript;
+  
+  assert(s && pd);  
+  assert(pd->type == PD_STRING);
+
+  parent = xaccSplitGetParent(s);
+  assert(parent);
+
+  descript = xaccTransGetDescription(parent);
+  return string_match_predicate(descript, pd);
+}
+
+/*******************************************************************
+ *  xaccNumberMatchPredicate 
+ *******************************************************************/
+int
+xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
+  Transaction * parent;
+  char        * number;
+  
+  assert(s && pd);  
+  assert(pd->type == PD_STRING);
+
+  parent = xaccSplitGetParent(s);
+  assert(parent);
+
+  number = xaccTransGetNum(parent);
+  return string_match_predicate(number, pd);
+}
+
+/*******************************************************************
+ *  xaccActionMatchPredicate 
+ *******************************************************************/
+int
+xaccActionMatchPredicate(Split * s, PredicateData * pd) {
+  char        * action;
+  
+  assert(s && pd);  
+  assert(pd->type == PD_STRING);
+
+  action = xaccSplitGetAction(s);
+  return string_match_predicate(action, pd);
+}
+
+
+/*******************************************************************
+ *  xaccMemoMatchPredicate 
+ *******************************************************************/
+int
+xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
+  char        * memo;
+  
+  assert(s && pd);  
+  memo = xaccSplitGetMemo(s);
+  
+  return string_match_predicate(memo, pd);
+}
+
+
+/*******************************************************************
+ *  xaccAmountMatchPredicate 
+ *******************************************************************/
+int
+xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
+  double splitamt;
+
+  assert(s && pd);
+  assert(pd->type == PD_AMOUNT);
+
+  splitamt = xaccSplitGetValue(s);
+  
+  switch(pd->amount.amt_sgn) {
+  case AMT_SGN_MATCH_CREDIT:
+    if(splitamt < 0.0) return 0;
+    break;
+  case AMT_SGN_MATCH_DEBIT:
+    if(splitamt > 0.0) return 0;
+    break;
+  default:
+    break;
+  }  
+  return value_match_predicate(splitamt, pd);  
+}
+
+/*******************************************************************
+ *  xaccSharePriceMatchPredicate 
+ *******************************************************************/
+int
+xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
+  double   splitamt;
+  Account  * acct;
+  int      type;
+
+  assert(s && pd);
+  assert(pd->type == PD_AMOUNT);
+  
+  acct = xaccSplitGetAccount(s);
+  type = xaccAccountGetType(acct);
+
+  if((type != STOCK) && (type != MUTUAL)) {
+    return 0;
+  }
+  splitamt = xaccSplitGetSharePrice(s);
+  
+  return value_match_predicate(splitamt, pd);  
+}
+
+
+/*******************************************************************
+ *  xaccSharesMatchPredicate 
+ *******************************************************************/
+int
+xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
+  double   splitamt;
+  Account  * acct;
+  int      type;
+
+  assert(s && pd);
+  assert(pd->type == PD_AMOUNT);
+  
+  acct = xaccSplitGetAccount(s);
+  type = xaccAccountGetType(acct);
+
+  if((type != STOCK) && (type != MUTUAL)) {
+    return 0;
+  }
+
+  splitamt = xaccSplitGetShareAmount(s);
+  
+  return value_match_predicate(splitamt, pd);  
+}
+
+
+/*******************************************************************
+ *  xaccDateMatchPredicate 
+ *******************************************************************/
+int
+xaccDateMatchPredicate(Split * s, PredicateData * pd) {
+  Timespec transtime;
+
+  assert(s && pd);
+  assert(pd->type == PD_DATE);
+  
+  xaccTransGetDateTS(xaccSplitGetParent(s), &transtime);
+  
+  return ((transtime.tv_sec >= pd->date.start.tv_sec) &&
+          (transtime.tv_sec <= pd->date.end.tv_sec));
+}
+
+
+/*******************************************************************
+ *  xaccQuerySetSortOrder
+ *******************************************************************/
+void
+xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
+                      sort_type_t secondary, sort_type_t tertiary) {
+  q->primary_sort   = primary;
+  q->secondary_sort = secondary;
+  q->tertiary_sort  = tertiary;
+
+  q->changed = 1;
+}
+
+
+/*******************************************************************
+ *  xaccQuerySetMaxSplits
+ *******************************************************************/
+void
+xaccQuerySetMaxSplits(Query * q, int n) {
+  q->max_splits = n;
+}
+
+
+/*******************************************************************
+ *  xaccQuerySetGroup
+ *******************************************************************/
+void
+xaccQuerySetGroup(Query * q, AccountGroup * g) {
+  q->acct_group = g;
+}
+
+
+/*******************************************************************
+ *  xaccQueryGetEarliestDateFound
+ *******************************************************************/
 time_t
-xaccQueryGetEarliestDateFound (Query *q)
-{
-   if (!q) return 0;
+xaccQueryGetEarliestDateFound(Query * q) {
+  Split  ** sp;
+  time_t earliest = LONG_MAX;
 
-   return ((time_t) q->earliest_found.tv_sec);
+  if(!q->split_list) { return 0; }
+
+  for(sp = q->split_list; *sp; sp++) {
+    if((*sp)->parent->date_posted.tv_sec < earliest) {
+      earliest = (*sp)->parent->date_posted.tv_sec;
+    }
+  }
+  return earliest;
 }
 
+/*******************************************************************
+ *  xaccQueryGetEarliestDateFound
+ *******************************************************************/
 time_t
-xaccQueryGetLatestDateFound (Query *q)
-{
-   if (!q) return ULONG_MAX;
+xaccQueryGetLatestDateFound(Query * q) {
+  Split  ** sp;
+  time_t latest = 0;
 
-   return ((time_t) q->latest_found.tv_sec);
+  if(!q->split_list) { return 0; }
+
+  for(sp = q->split_list; *sp; sp++) {
+    if((*sp)->parent->date_posted.tv_sec > latest) {
+      latest = (*sp)->parent->date_posted.tv_sec;
+    }
+  }
+  return latest;
 }
 
-/* ================ END OF FILE  ==================== */
+#if 0
+int
+main(int argc, char ** argv) {
+  Query * q = xaccMallocQuery();
+  Query * q2 = xaccMallocQuery();
+  Query * r;
+
+  printf("testing queries...\n");
+
+  xaccQueryAddMiscMatch(q, NULL, 1);
+  xaccQueryAddMiscMatch(q, NULL, 2);
+  xaccQueryAddMiscMatch(q, NULL, 3);
+  print_query(q);
+
+  xaccQueryAddMiscMatch(q2, NULL, 4);
+  xaccQueryAddMiscMatch(q2, NULL, 5);
+  xaccQueryAddMiscMatch(q2, NULL, 6);
+  print_query(q2);
+
+  printf("AND of two simple queries:\n");
+
+  r = xaccQueryMerge(q, q2, QUERY_AND);
+  print_query(r);
+
+  printf("OR of two simple queries:\n");
+
+  r = xaccQueryMerge(q, q2, QUERY_OR);
+  print_query(r);
+
+  printf("NAND of two simple queries:\n");
+  r = xaccQueryMerge(q, q2, QUERY_NAND);
+  print_query(r);
+
+  printf("XOR of two simple queries:\n");
+  r = xaccQueryMerge(q, q2, QUERY_XOR);
+  print_query(r);
+    
+}
+#endif

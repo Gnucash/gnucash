@@ -72,7 +72,7 @@ GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
 	      window-report.c global-options.c \
 	      dialog-qif-import.c glade-gnc-dialogs.c \
 	      dialog-account-picker.c print-session.c \
-	      dialog-print-check.c
+	      dialog-print-check.c dialog-find-transactions.c
 ######################################################################
 
 all: gnome

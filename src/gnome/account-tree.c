@@ -132,7 +132,13 @@ gnc_account_tree_init(GNCAccountTree *tree)
 				     tree->balance_column,
 				     GTK_JUSTIFY_RIGHT);
   gtk_clist_set_column_justification(GTK_CLIST(tree),
+				     tree->balance_column + 1,
+				     GTK_JUSTIFY_RIGHT);
+  gtk_clist_set_column_justification(GTK_CLIST(tree),
 				     tree->total_column,
+				     GTK_JUSTIFY_RIGHT);
+  gtk_clist_set_column_justification(GTK_CLIST(tree),
+				     tree->total_column + 1,
 				     GTK_JUSTIFY_RIGHT);
 
   {
@@ -738,9 +744,11 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 
   tree->balance_column = i;
   tree->column_fields[i++] = ACCOUNT_BALANCE;
+  tree->column_fields[i++] = ACCOUNT_BALANCE_EURO;
 
   tree->total_column = i;
   tree->column_fields[i++] = ACCOUNT_TOTAL;
+  tree->column_fields[i++] = ACCOUNT_TOTAL_EURO;
 
   tree->column_fields[i++] = ACCOUNT_NOTES;
 
@@ -966,8 +974,12 @@ gnc_account_tree_insert_row(GNCAccountTree *tree,
       style = gtk_widget_get_style(GTK_WIDGET(tree));
 
     if (style != NULL)
+    {
       gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
 				    tree->total_column, style);
+      gtk_ctree_node_set_cell_style(GTK_CTREE(tree), node,
+				    tree->total_column + 1, style);
+    }
   }
 #endif
 

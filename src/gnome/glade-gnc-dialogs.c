@@ -38,10 +38,12 @@ create_QIF_File_Import_Dialog (void)
   GtkWidget *radix_format_label;
   GtkWidget *date_format_label;
   GtkWidget *vbox4;
+  GtkWidget *hbox33;
   GtkWidget *qif_filename_entry;
+  GtkWidget *file_select_btn;
   GtkWidget *hbox11;
-  GtkWidget *qif_account_auto_check;
   GtkWidget *qif_account_entry;
+  GtkWidget *qif_account_auto_check;
   GtkWidget *qif_currency_entry;
   GtkWidget *qif_radix_picker;
   GtkWidget *qif_radix_picker_menu;
@@ -49,7 +51,6 @@ create_QIF_File_Import_Dialog (void)
   GtkWidget *qif_date_picker;
   GtkWidget *qif_date_picker_menu;
   GtkWidget *hbox9;
-  GtkWidget *file_select_btn;
   GtkWidget *add_file_button;
   GtkWidget *label69;
   GtkWidget *scrolledwindow2;
@@ -161,7 +162,7 @@ create_QIF_File_Import_Dialog (void)
   gtk_label_set_justify (GTK_LABEL (label1), GTK_JUSTIFY_RIGHT);
   gtk_misc_set_alignment (GTK_MISC (label1), 1, 0.5);
 
-  label679 = gtk_label_new (_("QIF Account:"));
+  label679 = gtk_label_new (_("Default QIF acct:"));
   gtk_widget_ref (label679);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "label679", label679,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -204,13 +205,27 @@ create_QIF_File_Import_Dialog (void)
   gtk_widget_show (vbox4);
   gtk_box_pack_start (GTK_BOX (hbox10), vbox4, TRUE, TRUE, 5);
 
+  hbox33 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox33);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "hbox33", hbox33,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox33);
+  gtk_box_pack_start (GTK_BOX (vbox4), hbox33, FALSE, FALSE, 0);
+
   qif_filename_entry = gtk_entry_new ();
   gtk_widget_ref (qif_filename_entry);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_filename_entry", qif_filename_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (qif_filename_entry);
-  gtk_box_pack_start (GTK_BOX (vbox4), qif_filename_entry, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox33), qif_filename_entry, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (qif_filename_entry, GTK_CAN_DEFAULT);
+
+  file_select_btn = gtk_button_new_with_label (_("Select ..."));
+  gtk_widget_ref (file_select_btn);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "file_select_btn", file_select_btn,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (file_select_btn);
+  gtk_box_pack_start (GTK_BOX (hbox33), file_select_btn, FALSE, FALSE, 3);
 
   hbox11 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox11);
@@ -219,6 +234,13 @@ create_QIF_File_Import_Dialog (void)
   gtk_widget_show (hbox11);
   gtk_box_pack_start (GTK_BOX (vbox4), hbox11, TRUE, TRUE, 0);
 
+  qif_account_entry = gtk_entry_new ();
+  gtk_widget_ref (qif_account_entry);
+  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_account_entry", qif_account_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (qif_account_entry);
+  gtk_box_pack_start (GTK_BOX (hbox11), qif_account_entry, FALSE, FALSE, 0);
+
   qif_account_auto_check = gtk_check_button_new_with_label (_("Auto"));
   gtk_widget_ref (qif_account_auto_check);
   gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_account_auto_check", qif_account_auto_check,
@@ -226,13 +248,6 @@ create_QIF_File_Import_Dialog (void)
   gtk_widget_show (qif_account_auto_check);
   gtk_box_pack_start (GTK_BOX (hbox11), qif_account_auto_check, FALSE, FALSE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (qif_account_auto_check), TRUE);
-
-  qif_account_entry = gtk_entry_new ();
-  gtk_widget_ref (qif_account_entry);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "qif_account_entry", qif_account_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (qif_account_entry);
-  gtk_box_pack_start (GTK_BOX (hbox11), qif_account_entry, TRUE, TRUE, 0);
 
   qif_currency_entry = gtk_entry_new ();
   gtk_widget_ref (qif_currency_entry);
@@ -289,13 +304,6 @@ create_QIF_File_Import_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox9);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox9, FALSE, FALSE, 5);
-
-  file_select_btn = gtk_button_new_with_label (_("Select file"));
-  gtk_widget_ref (file_select_btn);
-  gtk_object_set_data_full (GTK_OBJECT (QIF_File_Import_Dialog), "file_select_btn", file_select_btn,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (file_select_btn);
-  gtk_box_pack_start (GTK_BOX (hbox9), file_select_btn, TRUE, TRUE, 5);
 
   add_file_button = gtk_button_new_with_label (_("Load file"));
   gtk_widget_ref (add_file_button);
@@ -692,10 +700,13 @@ create_Print_Preview_Dialog (void)
 {
   GtkWidget *Print_Preview_Dialog;
   GtkWidget *dialog_vbox3;
+  GtkWidget *frame14;
   GtkWidget *scrolledwindow4;
   GtkWidget *preview_canvas;
   GtkWidget *dialog_action_area3;
   GtkWidget *button5;
+  GtkWidget *button29;
+  GtkWidget *button30;
 
   Print_Preview_Dialog = gnome_dialog_new (_("Print Preview"), NULL);
   gtk_object_set_data (GTK_OBJECT (Print_Preview_Dialog), "Print_Preview_Dialog", Print_Preview_Dialog);
@@ -705,13 +716,19 @@ create_Print_Preview_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (Print_Preview_Dialog), "dialog_vbox3", dialog_vbox3);
   gtk_widget_show (dialog_vbox3);
 
+  frame14 = gtk_frame_new (_("Print Preview"));
+  gtk_widget_ref (frame14);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "frame14", frame14,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame14);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox3), frame14, TRUE, TRUE, 0);
+
   scrolledwindow4 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_ref (scrolledwindow4);
   gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "scrolledwindow4", scrolledwindow4,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow4);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox3), scrolledwindow4, TRUE, TRUE, 0);
-  gtk_widget_set_usize (scrolledwindow4, 500, 250);
+  gtk_container_add (GTK_CONTAINER (frame14), scrolledwindow4);
   gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow4), 1);
 
   gdk_rgb_init ();
@@ -740,6 +757,22 @@ create_Print_Preview_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (button5);
   GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Print_Preview_Dialog), _("Zoom in"));
+  button29 = g_list_last (GNOME_DIALOG (Print_Preview_Dialog)->buttons)->data;
+  gtk_widget_ref (button29);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "button29", button29,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button29);
+  GTK_WIDGET_SET_FLAGS (button29, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Print_Preview_Dialog), _("Zoom out"));
+  button30 = g_list_last (GNOME_DIALOG (Print_Preview_Dialog)->buttons)->data;
+  gtk_widget_ref (button30);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "button30", button30,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button30);
+  GTK_WIDGET_SET_FLAGS (button30, GTK_CAN_DEFAULT);
 
   gtk_signal_connect (GTK_OBJECT (button5), "clicked",
                       GTK_SIGNAL_FUNC (gnc_ui_print_preview_OK_cb),
@@ -1122,25 +1155,37 @@ create_Print_Check_Dialog (void)
   GtkWidget *label709;
   GtkWidget *vbox14;
   GtkWidget *label703;
+  GtkObject *payee_x_entry_adj;
   GtkWidget *payee_x_entry;
+  GtkObject *date_x_entry_adj;
   GtkWidget *date_x_entry;
+  GtkObject *amount_words_x_entry_adj;
   GtkWidget *amount_words_x_entry;
+  GtkObject *amount_numbers_x_entry_adj;
   GtkWidget *amount_numbers_x_entry;
+  GtkObject *memo_x_entry_adj;
   GtkWidget *memo_x_entry;
+  GtkObject *check_position_entry_adj;
   GtkWidget *check_position_entry;
+  GtkObject *date_format_entry_adj;
   GtkWidget *date_format_entry;
   GtkWidget *units_picker;
   GtkWidget *units_picker_menu;
-  GtkWidget *vbox1y6;
-  GtkWidget *label704;
+  GtkWidget *vbox38;
+  GtkWidget *label744;
+  GtkObject *payee_y_entry_adj;
   GtkWidget *payee_y_entry;
+  GtkObject *date_y_entry_adj;
   GtkWidget *date_y_entry;
+  GtkObject *amount_words_y_entry_adj;
   GtkWidget *amount_words_y_entry;
+  GtkObject *amount_numbers_y_entry_adj;
   GtkWidget *amount_numbers_y_entry;
+  GtkObject *memo_y_entry_adj;
   GtkWidget *memo_y_entry;
-  GtkWidget *label712;
-  GtkWidget *label715;
-  GtkWidget *label710;
+  GtkWidget *label745;
+  GtkWidget *label746;
+  GtkWidget *label747;
   GtkWidget *dialog_action_area6;
   GtkWidget *button21;
   GtkWidget *button22;
@@ -1213,7 +1258,7 @@ create_Print_Check_Dialog (void)
   gtk_widget_show (check_format_picker);
   gtk_box_pack_start (GTK_BOX (vbox12), check_format_picker, FALSE, FALSE, 0);
   check_format_picker_menu = gtk_menu_new ();
-  glade_menuitem = gtk_menu_item_new_with_label (_("Quicken/QuickBooks (tm)"));
+  glade_menuitem = gtk_menu_item_new_with_label (_("Quicken/QuickBooks (tm) US-Letter"));
   gtk_widget_show (glade_menuitem);
   gtk_menu_append (GTK_MENU (check_format_picker_menu), glade_menuitem);
   glade_menuitem = gtk_menu_item_new_with_label (_("Custom"));
@@ -1382,7 +1427,7 @@ create_Print_Check_Dialog (void)
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "vbox14", vbox14,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox14);
-  gtk_box_pack_start (GTK_BOX (hbox16), vbox14, FALSE, FALSE, 2);
+  gtk_box_pack_start (GTK_BOX (hbox16), vbox14, FALSE, TRUE, 2);
 
   label703 = gtk_label_new (_("x"));
   gtk_widget_ref (label703);
@@ -1391,61 +1436,68 @@ create_Print_Check_Dialog (void)
   gtk_widget_show (label703);
   gtk_box_pack_start (GTK_BOX (vbox14), label703, FALSE, FALSE, 0);
 
-  payee_x_entry = gtk_entry_new ();
+  payee_x_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  payee_x_entry = gtk_spin_button_new (GTK_ADJUSTMENT (payee_x_entry_adj), 1, 3);
   gtk_widget_ref (payee_x_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "payee_x_entry", payee_x_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (payee_x_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), payee_x_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (payee_x_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (payee_x_entry), TRUE);
 
-  date_x_entry = gtk_entry_new ();
+  date_x_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  date_x_entry = gtk_spin_button_new (GTK_ADJUSTMENT (date_x_entry_adj), 1, 3);
   gtk_widget_ref (date_x_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "date_x_entry", date_x_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (date_x_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), date_x_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (date_x_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_x_entry), TRUE);
 
-  amount_words_x_entry = gtk_entry_new ();
+  amount_words_x_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  amount_words_x_entry = gtk_spin_button_new (GTK_ADJUSTMENT (amount_words_x_entry_adj), 1, 3);
   gtk_widget_ref (amount_words_x_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "amount_words_x_entry", amount_words_x_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (amount_words_x_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), amount_words_x_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (amount_words_x_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (amount_words_x_entry), TRUE);
 
-  amount_numbers_x_entry = gtk_entry_new ();
+  amount_numbers_x_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  amount_numbers_x_entry = gtk_spin_button_new (GTK_ADJUSTMENT (amount_numbers_x_entry_adj), 1, 3);
   gtk_widget_ref (amount_numbers_x_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "amount_numbers_x_entry", amount_numbers_x_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (amount_numbers_x_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), amount_numbers_x_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (amount_numbers_x_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (amount_numbers_x_entry), TRUE);
 
-  memo_x_entry = gtk_entry_new ();
+  memo_x_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  memo_x_entry = gtk_spin_button_new (GTK_ADJUSTMENT (memo_x_entry_adj), 1, 3);
   gtk_widget_ref (memo_x_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "memo_x_entry", memo_x_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (memo_x_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), memo_x_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (memo_x_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (memo_x_entry), TRUE);
 
-  check_position_entry = gtk_entry_new ();
+  check_position_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  check_position_entry = gtk_spin_button_new (GTK_ADJUSTMENT (check_position_entry_adj), 1, 3);
   gtk_widget_ref (check_position_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "check_position_entry", check_position_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (check_position_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), check_position_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (check_position_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (check_position_entry), TRUE);
 
-  date_format_entry = gtk_entry_new ();
+  date_format_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  date_format_entry = gtk_spin_button_new (GTK_ADJUSTMENT (date_format_entry_adj), 1, 3);
   gtk_widget_ref (date_format_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "date_format_entry", date_format_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (date_format_entry);
   gtk_box_pack_start (GTK_BOX (vbox14), date_format_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (date_format_entry, 100, -2);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_format_entry), TRUE);
 
   units_picker = gtk_option_menu_new ();
   gtk_widget_ref (units_picker);
@@ -1467,81 +1519,87 @@ create_Print_Check_Dialog (void)
   gtk_widget_show (glade_menuitem);
   gtk_menu_append (GTK_MENU (units_picker_menu), glade_menuitem);
   gtk_option_menu_set_menu (GTK_OPTION_MENU (units_picker), units_picker_menu);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (units_picker), 1);
 
-  vbox1y6 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox1y6);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "vbox1y6", vbox1y6,
+  vbox38 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox38);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "vbox38", vbox38,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox1y6);
-  gtk_box_pack_start (GTK_BOX (hbox16), vbox1y6, FALSE, FALSE, 2);
+  gtk_widget_show (vbox38);
+  gtk_box_pack_start (GTK_BOX (hbox16), vbox38, FALSE, TRUE, 2);
 
-  label704 = gtk_label_new (_("y"));
-  gtk_widget_ref (label704);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label704", label704,
+  label744 = gtk_label_new (_("y"));
+  gtk_widget_ref (label744);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label744", label744,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label704);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), label704, FALSE, FALSE, 0);
+  gtk_widget_show (label744);
+  gtk_box_pack_start (GTK_BOX (vbox38), label744, FALSE, FALSE, 0);
 
-  payee_y_entry = gtk_entry_new ();
+  payee_y_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  payee_y_entry = gtk_spin_button_new (GTK_ADJUSTMENT (payee_y_entry_adj), 1, 3);
   gtk_widget_ref (payee_y_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "payee_y_entry", payee_y_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (payee_y_entry);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), payee_y_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (payee_y_entry, 100, -2);
+  gtk_box_pack_start (GTK_BOX (vbox38), payee_y_entry, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (payee_y_entry), TRUE);
 
-  date_y_entry = gtk_entry_new ();
+  date_y_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  date_y_entry = gtk_spin_button_new (GTK_ADJUSTMENT (date_y_entry_adj), 1, 3);
   gtk_widget_ref (date_y_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "date_y_entry", date_y_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (date_y_entry);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), date_y_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (date_y_entry, 100, -2);
+  gtk_box_pack_start (GTK_BOX (vbox38), date_y_entry, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_y_entry), TRUE);
 
-  amount_words_y_entry = gtk_entry_new ();
+  amount_words_y_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  amount_words_y_entry = gtk_spin_button_new (GTK_ADJUSTMENT (amount_words_y_entry_adj), 1, 3);
   gtk_widget_ref (amount_words_y_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "amount_words_y_entry", amount_words_y_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (amount_words_y_entry);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), amount_words_y_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (amount_words_y_entry, 100, -2);
+  gtk_box_pack_start (GTK_BOX (vbox38), amount_words_y_entry, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (amount_words_y_entry), TRUE);
 
-  amount_numbers_y_entry = gtk_entry_new ();
+  amount_numbers_y_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  amount_numbers_y_entry = gtk_spin_button_new (GTK_ADJUSTMENT (amount_numbers_y_entry_adj), 1, 3);
   gtk_widget_ref (amount_numbers_y_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "amount_numbers_y_entry", amount_numbers_y_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (amount_numbers_y_entry);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), amount_numbers_y_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (amount_numbers_y_entry, 100, -2);
+  gtk_box_pack_start (GTK_BOX (vbox38), amount_numbers_y_entry, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (amount_numbers_y_entry), TRUE);
 
-  memo_y_entry = gtk_entry_new ();
+  memo_y_entry_adj = gtk_adjustment_new (0, 0, 100000, 0.1, 10, 10);
+  memo_y_entry = gtk_spin_button_new (GTK_ADJUSTMENT (memo_y_entry_adj), 1, 3);
   gtk_widget_ref (memo_y_entry);
   gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "memo_y_entry", memo_y_entry,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (memo_y_entry);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), memo_y_entry, FALSE, FALSE, 0);
-  gtk_widget_set_usize (memo_y_entry, 100, -2);
+  gtk_box_pack_start (GTK_BOX (vbox38), memo_y_entry, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (memo_y_entry), TRUE);
 
-  label712 = gtk_label_new ("");
-  gtk_widget_ref (label712);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label712", label712,
+  label745 = gtk_label_new ("");
+  gtk_widget_ref (label745);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label745", label745,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label712);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), label712, FALSE, FALSE, 0);
+  gtk_widget_show (label745);
+  gtk_box_pack_start (GTK_BOX (vbox38), label745, FALSE, FALSE, 0);
 
-  label715 = gtk_label_new ("");
-  gtk_widget_ref (label715);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label715", label715,
+  label746 = gtk_label_new (_("                                  "));
+  gtk_widget_ref (label746);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label746", label746,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label715);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), label715, FALSE, FALSE, 0);
+  gtk_widget_show (label746);
+  gtk_box_pack_start (GTK_BOX (vbox38), label746, FALSE, FALSE, 0);
 
-  label710 = gtk_label_new ("");
-  gtk_widget_ref (label710);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label710", label710,
+  label747 = gtk_label_new (_("                    "));
+  gtk_widget_ref (label747);
+  gtk_object_set_data_full (GTK_OBJECT (Print_Check_Dialog), "label747", label747,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label710);
-  gtk_box_pack_start (GTK_BOX (vbox1y6), label710, FALSE, FALSE, 0);
+  gtk_widget_show (label747);
+  gtk_box_pack_start (GTK_BOX (vbox38), label747, FALSE, FALSE, 0);
 
   dialog_action_area6 = GNOME_DIALOG (Print_Check_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (Print_Check_Dialog), "dialog_action_area6", dialog_action_area6);
@@ -1584,5 +1642,1024 @@ create_Print_Check_Dialog (void)
                       Print_Check_Dialog);
 
   return Print_Check_Dialog;
+}
+
+GtkWidget*
+create_Find_Transactions (void)
+{
+  GtkWidget *Find_Transactions;
+  GtkWidget *dialog_vbox7;
+  GtkWidget *notebook2;
+  GtkWidget *frame6;
+  GtkWidget *match_accounts_vbox;
+  GtkWidget *hbox26;
+  GtkWidget *label751;
+  GtkWidget *account_match_picker;
+  GtkWidget *account_match_picker_menu;
+  GtkWidget *glade_menuitem;
+  GtkWidget *label743;
+  GtkWidget *account_match_scroller;
+  GtkWidget *label716;
+  GtkWidget *frame11;
+  GtkWidget *vbox39;
+  GtkWidget *label754;
+  GtkWidget *hbox29;
+  GtkObject *date_start_entry_1_adj;
+  GtkWidget *date_start_entry_1;
+  GtkWidget *label755;
+  GtkObject *date_start_entry_2_adj;
+  GtkWidget *date_start_entry_2;
+  GtkWidget *label756;
+  GtkObject *date_start_entry_3_adj;
+  GtkWidget *date_start_entry_3;
+  GtkWidget *button33;
+  GtkWidget *hbox30;
+  GtkObject *date_end_entry_1_adj;
+  GtkWidget *date_end_entry_1;
+  GtkWidget *label757;
+  GtkObject *date_end_entry_2_adj;
+  GtkWidget *date_end_entry_2;
+  GtkWidget *label758;
+  GtkObject *date_end_entry_3_adj;
+  GtkWidget *date_end_entry_3;
+  GtkWidget *button32;
+  GtkWidget *label768;
+  GtkWidget *frame8;
+  GtkWidget *vbox16;
+  GtkWidget *label752;
+  GtkWidget *description_entry;
+  GtkWidget *vbox41;
+  GtkWidget *description_case_toggle;
+  GtkWidget *description_regexp_toggle;
+  GtkWidget *label718;
+  GtkWidget *frame15;
+  GtkWidget *vbox42;
+  GtkWidget *label761;
+  GtkWidget *number_entry;
+  GtkWidget *vbox43;
+  GtkWidget *number_case_toggle;
+  GtkWidget *number_regexp_toggle;
+  GtkWidget *label760;
+  GtkWidget *frame9;
+  GtkWidget *vbox18;
+  GtkWidget *hbox17;
+  GtkWidget *label753;
+  GtkWidget *credit_debit_picker;
+  GtkWidget *credit_debit_picker_menu;
+  GtkWidget *label726;
+  GtkWidget *hbox28;
+  GtkWidget *amount_comp_picker;
+  GtkWidget *amount_comp_picker_menu;
+  GtkObject *amount_entry_adj;
+  GtkWidget *amount_entry;
+  GtkWidget *label750;
+  GtkWidget *label719;
+  GtkWidget *frame10;
+  GtkWidget *vbox22;
+  GtkWidget *label759;
+  GtkWidget *memo_entry;
+  GtkWidget *vbox40;
+  GtkWidget *memo_case_toggle;
+  GtkWidget *memo_regexp_toggle;
+  GtkWidget *label771;
+  GtkWidget *frame18;
+  GtkWidget *vbox45;
+  GtkWidget *label765;
+  GtkWidget *hbox31;
+  GtkWidget *shares_comp_picker;
+  GtkWidget *shares_comp_picker_menu;
+  GtkObject *shares_entry_adj;
+  GtkWidget *shares_entry;
+  GtkWidget *label766;
+  GtkWidget *label764;
+  GtkWidget *frame19;
+  GtkWidget *vbox46;
+  GtkWidget *label769;
+  GtkWidget *hbox32;
+  GtkWidget *price_comp_picker;
+  GtkWidget *price_comp_picker_menu;
+  GtkObject *price_entry_adj;
+  GtkWidget *price_entry;
+  GtkWidget *label770;
+  GtkWidget *label767;
+  GtkWidget *frame20;
+  GtkWidget *vbox50;
+  GtkWidget *label772;
+  GtkWidget *action_entry;
+  GtkWidget *vbox51;
+  GtkWidget *action_case_toggle;
+  GtkWidget *action_regexp_toggle;
+  GtkWidget *label720;
+  GtkWidget *hbox20;
+  GtkWidget *hbox23;
+  GtkWidget *frame12;
+  GtkWidget *vbox24;
+  GSList *vbox24_group = NULL;
+  GtkWidget *new_search_radiobutton;
+  GtkWidget *narrow_search_radiobutton;
+  GtkWidget *add_search_radiobutton;
+  GtkWidget *delete_search_radiobutton;
+  GtkWidget *dialog_action_area7;
+  GtkWidget *button26;
+  GtkWidget *button27;
+  GtkWidget *button28;
+
+  Find_Transactions = gnome_dialog_new (_("Find Transactions"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Find_Transactions), "Find_Transactions", Find_Transactions);
+  gtk_window_set_policy (GTK_WINDOW (Find_Transactions), TRUE, TRUE, FALSE);
+
+  dialog_vbox7 = GNOME_DIALOG (Find_Transactions)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Find_Transactions), "dialog_vbox7", dialog_vbox7);
+  gtk_widget_show (dialog_vbox7);
+
+  notebook2 = gtk_notebook_new ();
+  gtk_widget_ref (notebook2);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "notebook2", notebook2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (notebook2);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox7), notebook2, TRUE, TRUE, 0);
+
+  frame6 = gtk_frame_new (_("Match Accounts"));
+  gtk_widget_ref (frame6);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame6", frame6,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame6);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame6);
+
+  match_accounts_vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (match_accounts_vbox);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "match_accounts_vbox", match_accounts_vbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (match_accounts_vbox);
+  gtk_container_add (GTK_CONTAINER (frame6), match_accounts_vbox);
+
+  hbox26 = gtk_hbox_new (FALSE, 5);
+  gtk_widget_ref (hbox26);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox26", hbox26,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox26);
+  gtk_box_pack_start (GTK_BOX (match_accounts_vbox), hbox26, FALSE, FALSE, 0);
+
+  label751 = gtk_label_new (_("Find transactions affecting"));
+  gtk_widget_ref (label751);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label751", label751,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label751);
+  gtk_box_pack_start (GTK_BOX (hbox26), label751, FALSE, FALSE, 5);
+
+  account_match_picker = gtk_option_menu_new ();
+  gtk_widget_ref (account_match_picker);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "account_match_picker", account_match_picker,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_match_picker);
+  gtk_box_pack_start (GTK_BOX (hbox26), account_match_picker, FALSE, FALSE, 0);
+  account_match_picker_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("All"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (account_match_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Any"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (account_match_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("None"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (account_match_picker_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (account_match_picker), account_match_picker_menu);
+  gtk_option_menu_set_history (GTK_OPTION_MENU (account_match_picker), 1);
+
+  label743 = gtk_label_new (_("selected accounts:"));
+  gtk_widget_ref (label743);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label743", label743,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label743);
+  gtk_box_pack_start (GTK_BOX (hbox26), label743, FALSE, FALSE, 0);
+
+  account_match_scroller = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (account_match_scroller);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "account_match_scroller", account_match_scroller,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_match_scroller);
+  gtk_box_pack_start (GTK_BOX (match_accounts_vbox), account_match_scroller, TRUE, TRUE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_match_scroller), GTK_POLICY_ALWAYS, GTK_POLICY_AUTOMATIC);
+
+  label716 = gtk_label_new (_("Account"));
+  gtk_widget_ref (label716);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label716", label716,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label716);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 0), label716);
+
+  frame11 = gtk_frame_new (_("Match Date"));
+  gtk_widget_ref (frame11);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame11", frame11,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame11);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame11);
+
+  vbox39 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_ref (vbox39);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox39", vbox39,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox39);
+  gtk_container_add (GTK_CONTAINER (frame11), vbox39);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox39), 5);
+
+  label754 = gtk_label_new (_("Find transactions occurring between the dates:"));
+  gtk_widget_ref (label754);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label754", label754,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label754);
+  gtk_box_pack_start (GTK_BOX (vbox39), label754, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label754), 7.45058e-09, 0.5);
+
+  hbox29 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox29);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox29", hbox29,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox29);
+  gtk_box_pack_start (GTK_BOX (vbox39), hbox29, FALSE, FALSE, 0);
+
+  date_start_entry_1_adj = gtk_adjustment_new (1, 1, 10000, 1, 10, 10);
+  date_start_entry_1 = gtk_spin_button_new (GTK_ADJUSTMENT (date_start_entry_1_adj), 1, 0);
+  gtk_widget_ref (date_start_entry_1);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_entry_1", date_start_entry_1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_start_entry_1);
+  gtk_box_pack_start (GTK_BOX (hbox29), date_start_entry_1, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_start_entry_1), TRUE);
+
+  label755 = gtk_label_new (_("/"));
+  gtk_widget_ref (label755);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label755", label755,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label755);
+  gtk_box_pack_start (GTK_BOX (hbox29), label755, FALSE, FALSE, 5);
+
+  date_start_entry_2_adj = gtk_adjustment_new (1, 1, 10000, 1, 10, 10);
+  date_start_entry_2 = gtk_spin_button_new (GTK_ADJUSTMENT (date_start_entry_2_adj), 1, 0);
+  gtk_widget_ref (date_start_entry_2);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_entry_2", date_start_entry_2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_start_entry_2);
+  gtk_box_pack_start (GTK_BOX (hbox29), date_start_entry_2, FALSE, FALSE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (date_start_entry_2), TRUE);
+
+  label756 = gtk_label_new (_("/"));
+  gtk_widget_ref (label756);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label756", label756,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label756);
+  gtk_box_pack_start (GTK_BOX (hbox29), label756, FALSE, FALSE, 5);
+
+  date_start_entry_3_adj = gtk_adjustment_new (1900, 0, 10000, 1, 10, 10);
+  date_start_entry_3 = gtk_spin_button_new (GTK_ADJUSTMENT (date_start_entry_3_adj), 1, 0);
+  gtk_widget_ref (date_start_entry_3);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_start_entry_3", date_start_entry_3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_start_entry_3);
+  gtk_box_pack_start (GTK_BOX (hbox29), date_start_entry_3, FALSE, FALSE, 0);
+
+  button33 = gtk_button_new_with_label (_("Select ..."));
+  gtk_widget_ref (button33);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button33", button33,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button33);
+  gtk_box_pack_start (GTK_BOX (hbox29), button33, FALSE, FALSE, 0);
+
+  hbox30 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox30);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox30", hbox30,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox30);
+  gtk_box_pack_start (GTK_BOX (vbox39), hbox30, FALSE, FALSE, 0);
+
+  date_end_entry_1_adj = gtk_adjustment_new (1, 0, 10000, 1, 10, 10);
+  date_end_entry_1 = gtk_spin_button_new (GTK_ADJUSTMENT (date_end_entry_1_adj), 1, 0);
+  gtk_widget_ref (date_end_entry_1);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_entry_1", date_end_entry_1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_end_entry_1);
+  gtk_box_pack_start (GTK_BOX (hbox30), date_end_entry_1, FALSE, FALSE, 0);
+
+  label757 = gtk_label_new (_("/"));
+  gtk_widget_ref (label757);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label757", label757,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label757);
+  gtk_box_pack_start (GTK_BOX (hbox30), label757, FALSE, FALSE, 5);
+
+  date_end_entry_2_adj = gtk_adjustment_new (1, 0, 10000, 1, 10, 10);
+  date_end_entry_2 = gtk_spin_button_new (GTK_ADJUSTMENT (date_end_entry_2_adj), 1, 0);
+  gtk_widget_ref (date_end_entry_2);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_entry_2", date_end_entry_2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_end_entry_2);
+  gtk_box_pack_start (GTK_BOX (hbox30), date_end_entry_2, FALSE, FALSE, 0);
+
+  label758 = gtk_label_new (_("/"));
+  gtk_widget_ref (label758);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label758", label758,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label758);
+  gtk_box_pack_start (GTK_BOX (hbox30), label758, FALSE, FALSE, 5);
+
+  date_end_entry_3_adj = gtk_adjustment_new (2100, 0, 10000, 1, 10, 10);
+  date_end_entry_3 = gtk_spin_button_new (GTK_ADJUSTMENT (date_end_entry_3_adj), 1, 0);
+  gtk_widget_ref (date_end_entry_3);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "date_end_entry_3", date_end_entry_3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (date_end_entry_3);
+  gtk_box_pack_start (GTK_BOX (hbox30), date_end_entry_3, FALSE, FALSE, 0);
+
+  button32 = gtk_button_new_with_label (_("Select ..."));
+  gtk_widget_ref (button32);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button32", button32,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button32);
+  gtk_box_pack_start (GTK_BOX (hbox30), button32, FALSE, FALSE, 0);
+
+  label768 = gtk_label_new (_("Date"));
+  gtk_widget_ref (label768);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label768", label768,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label768);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 1), label768);
+
+  frame8 = gtk_frame_new (_("Match Description"));
+  gtk_widget_ref (frame8);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame8", frame8,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame8);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame8);
+
+  vbox16 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox16);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox16", vbox16,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox16);
+  gtk_container_add (GTK_CONTAINER (frame8), vbox16);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox16), 5);
+
+  label752 = gtk_label_new (_("Find transactions whose Description matches:"));
+  gtk_widget_ref (label752);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label752", label752,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label752);
+  gtk_box_pack_start (GTK_BOX (vbox16), label752, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label752), 7.45058e-09, 0.5);
+
+  description_entry = gtk_entry_new ();
+  gtk_widget_ref (description_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "description_entry", description_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (description_entry);
+  gtk_box_pack_start (GTK_BOX (vbox16), description_entry, FALSE, FALSE, 0);
+
+  vbox41 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox41);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox41", vbox41,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox41);
+  gtk_box_pack_start (GTK_BOX (vbox16), vbox41, TRUE, TRUE, 0);
+
+  description_case_toggle = gtk_check_button_new_with_label (_("Case sensitive"));
+  gtk_widget_ref (description_case_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "description_case_toggle", description_case_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (description_case_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox41), description_case_toggle, FALSE, FALSE, 0);
+
+  description_regexp_toggle = gtk_check_button_new_with_label (_("Regular expression"));
+  gtk_widget_ref (description_regexp_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "description_regexp_toggle", description_regexp_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (description_regexp_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox41), description_regexp_toggle, FALSE, FALSE, 0);
+
+  label718 = gtk_label_new (_("Description"));
+  gtk_widget_ref (label718);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label718", label718,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label718);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 2), label718);
+
+  frame15 = gtk_frame_new (_("Match Description"));
+  gtk_widget_ref (frame15);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame15", frame15,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame15);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame15);
+
+  vbox42 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox42);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox42", vbox42,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox42);
+  gtk_container_add (GTK_CONTAINER (frame15), vbox42);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox42), 5);
+
+  label761 = gtk_label_new (_("Find transactions whose Number matches:"));
+  gtk_widget_ref (label761);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label761", label761,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label761);
+  gtk_box_pack_start (GTK_BOX (vbox42), label761, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label761), 7.45058e-09, 0.5);
+
+  number_entry = gtk_entry_new ();
+  gtk_widget_ref (number_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "number_entry", number_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (number_entry);
+  gtk_box_pack_start (GTK_BOX (vbox42), number_entry, FALSE, FALSE, 0);
+
+  vbox43 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox43);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox43", vbox43,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox43);
+  gtk_box_pack_start (GTK_BOX (vbox42), vbox43, TRUE, TRUE, 0);
+
+  number_case_toggle = gtk_check_button_new_with_label (_("Case sensitive"));
+  gtk_widget_ref (number_case_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "number_case_toggle", number_case_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (number_case_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox43), number_case_toggle, FALSE, FALSE, 0);
+
+  number_regexp_toggle = gtk_check_button_new_with_label (_("Regular expression"));
+  gtk_widget_ref (number_regexp_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "number_regexp_toggle", number_regexp_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (number_regexp_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox43), number_regexp_toggle, FALSE, FALSE, 0);
+
+  label760 = gtk_label_new (_("Number"));
+  gtk_widget_ref (label760);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label760", label760,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label760);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label760);
+
+  frame9 = gtk_frame_new (_("Match Amount"));
+  gtk_widget_ref (frame9);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame9", frame9,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame9);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame9);
+
+  vbox18 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox18);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox18", vbox18,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox18);
+  gtk_container_add (GTK_CONTAINER (frame9), vbox18);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox18), 5);
+
+  hbox17 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox17);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox17", hbox17,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox17);
+  gtk_box_pack_start (GTK_BOX (vbox18), hbox17, FALSE, FALSE, 0);
+
+  label753 = gtk_label_new (_("Find "));
+  gtk_widget_ref (label753);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label753", label753,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label753);
+  gtk_box_pack_start (GTK_BOX (hbox17), label753, FALSE, FALSE, 0);
+
+  credit_debit_picker = gtk_option_menu_new ();
+  gtk_widget_ref (credit_debit_picker);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "credit_debit_picker", credit_debit_picker,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (credit_debit_picker);
+  gtk_box_pack_start (GTK_BOX (hbox17), credit_debit_picker, FALSE, FALSE, 0);
+  credit_debit_picker_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("Credit or Debit"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (credit_debit_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Credit"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (credit_debit_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Debit"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (credit_debit_picker_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (credit_debit_picker), credit_debit_picker_menu);
+
+  label726 = gtk_label_new (_("splits having amounts of:"));
+  gtk_widget_ref (label726);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label726", label726,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label726);
+  gtk_box_pack_start (GTK_BOX (hbox17), label726, FALSE, FALSE, 5);
+
+  hbox28 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox28);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox28", hbox28,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox28);
+  gtk_box_pack_start (GTK_BOX (vbox18), hbox28, FALSE, FALSE, 0);
+
+  amount_comp_picker = gtk_option_menu_new ();
+  gtk_widget_ref (amount_comp_picker);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "amount_comp_picker", amount_comp_picker,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (amount_comp_picker);
+  gtk_box_pack_start (GTK_BOX (hbox28), amount_comp_picker, FALSE, FALSE, 0);
+  amount_comp_picker_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("At least"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (amount_comp_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("At most "));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (amount_comp_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Exactly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (amount_comp_picker_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (amount_comp_picker), amount_comp_picker_menu);
+
+  amount_entry_adj = gtk_adjustment_new (0, 0, 1e+07, 0.01, 10, 10);
+  amount_entry = gtk_spin_button_new (GTK_ADJUSTMENT (amount_entry_adj), 1, 2);
+  gtk_widget_ref (amount_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "amount_entry", amount_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (amount_entry);
+  gtk_box_pack_start (GTK_BOX (hbox28), amount_entry, TRUE, TRUE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (amount_entry), TRUE);
+
+  label750 = gtk_label_new ("");
+  gtk_widget_ref (label750);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label750", label750,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label750);
+  gtk_box_pack_start (GTK_BOX (hbox28), label750, TRUE, TRUE, 0);
+
+  label719 = gtk_label_new (_("Amount"));
+  gtk_widget_ref (label719);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label719", label719,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label719);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label719);
+
+  frame10 = gtk_frame_new (_("Match Memo"));
+  gtk_widget_ref (frame10);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame10", frame10,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame10);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame10);
+
+  vbox22 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox22);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox22", vbox22,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox22);
+  gtk_container_add (GTK_CONTAINER (frame10), vbox22);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox22), 5);
+
+  label759 = gtk_label_new (_("Find splits whose Memo matches:"));
+  gtk_widget_ref (label759);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label759", label759,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label759);
+  gtk_box_pack_start (GTK_BOX (vbox22), label759, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label759), 7.45058e-09, 0.5);
+
+  memo_entry = gtk_entry_new ();
+  gtk_widget_ref (memo_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "memo_entry", memo_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (memo_entry);
+  gtk_box_pack_start (GTK_BOX (vbox22), memo_entry, FALSE, FALSE, 0);
+
+  vbox40 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox40);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox40", vbox40,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox40);
+  gtk_box_pack_start (GTK_BOX (vbox22), vbox40, TRUE, TRUE, 0);
+
+  memo_case_toggle = gtk_check_button_new_with_label (_("Case sensitive"));
+  gtk_widget_ref (memo_case_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "memo_case_toggle", memo_case_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (memo_case_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox40), memo_case_toggle, FALSE, FALSE, 0);
+
+  memo_regexp_toggle = gtk_check_button_new_with_label (_("Regular expression"));
+  gtk_widget_ref (memo_regexp_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "memo_regexp_toggle", memo_regexp_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (memo_regexp_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox40), memo_regexp_toggle, FALSE, FALSE, 0);
+
+  label771 = gtk_label_new (_("Memo"));
+  gtk_widget_ref (label771);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label771", label771,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label771);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label771);
+
+  frame18 = gtk_frame_new (_("Match number of shares"));
+  gtk_widget_ref (frame18);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame18", frame18,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame18);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame18);
+
+  vbox45 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox45);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox45", vbox45,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox45);
+  gtk_container_add (GTK_CONTAINER (frame18), vbox45);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox45), 5);
+
+  label765 = gtk_label_new (_("Find securities transactions of:"));
+  gtk_widget_ref (label765);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label765", label765,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label765);
+  gtk_box_pack_start (GTK_BOX (vbox45), label765, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label765), 7.45058e-09, 0.5);
+
+  hbox31 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox31);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox31", hbox31,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox31);
+  gtk_box_pack_start (GTK_BOX (vbox45), hbox31, FALSE, FALSE, 0);
+
+  shares_comp_picker = gtk_option_menu_new ();
+  gtk_widget_ref (shares_comp_picker);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "shares_comp_picker", shares_comp_picker,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (shares_comp_picker);
+  gtk_box_pack_start (GTK_BOX (hbox31), shares_comp_picker, FALSE, FALSE, 0);
+  shares_comp_picker_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("At least"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (shares_comp_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("At most"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (shares_comp_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Exactly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (shares_comp_picker_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (shares_comp_picker), shares_comp_picker_menu);
+
+  shares_entry_adj = gtk_adjustment_new (0, 0, 1e+07, 1, 10, 10);
+  shares_entry = gtk_spin_button_new (GTK_ADJUSTMENT (shares_entry_adj), 1, 3);
+  gtk_widget_ref (shares_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "shares_entry", shares_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (shares_entry);
+  gtk_box_pack_start (GTK_BOX (hbox31), shares_entry, TRUE, TRUE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (shares_entry), TRUE);
+
+  label766 = gtk_label_new (_("shares"));
+  gtk_widget_ref (label766);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label766", label766,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label766);
+  gtk_box_pack_start (GTK_BOX (hbox31), label766, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label766), 0.02, 0.5);
+
+  label764 = gtk_label_new (_("Shares"));
+  gtk_widget_ref (label764);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label764", label764,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label764);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label764);
+
+  frame19 = gtk_frame_new (_("Match share price"));
+  gtk_widget_ref (frame19);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame19", frame19,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame19);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame19);
+
+  vbox46 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox46);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox46", vbox46,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox46);
+  gtk_container_add (GTK_CONTAINER (frame19), vbox46);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox46), 5);
+
+  label769 = gtk_label_new (_("Find securities transactions with share price of:"));
+  gtk_widget_ref (label769);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label769", label769,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label769);
+  gtk_box_pack_start (GTK_BOX (vbox46), label769, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label769), 7.45058e-09, 0.5);
+
+  hbox32 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox32);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox32", hbox32,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox32);
+  gtk_box_pack_start (GTK_BOX (vbox46), hbox32, FALSE, FALSE, 0);
+
+  price_comp_picker = gtk_option_menu_new ();
+  gtk_widget_ref (price_comp_picker);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "price_comp_picker", price_comp_picker,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_comp_picker);
+  gtk_box_pack_start (GTK_BOX (hbox32), price_comp_picker, FALSE, FALSE, 0);
+  price_comp_picker_menu = gtk_menu_new ();
+  glade_menuitem = gtk_menu_item_new_with_label (_("At least"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (price_comp_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("At most"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (price_comp_picker_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Exactly"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (price_comp_picker_menu), glade_menuitem);
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (price_comp_picker), price_comp_picker_menu);
+
+  price_entry_adj = gtk_adjustment_new (0, 0, 1e+07, 1, 10, 10);
+  price_entry = gtk_spin_button_new (GTK_ADJUSTMENT (price_entry_adj), 1, 2);
+  gtk_widget_ref (price_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "price_entry", price_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (price_entry);
+  gtk_box_pack_start (GTK_BOX (hbox32), price_entry, TRUE, TRUE, 0);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (price_entry), TRUE);
+
+  label770 = gtk_label_new ("");
+  gtk_widget_ref (label770);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label770", label770,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label770);
+  gtk_box_pack_start (GTK_BOX (hbox32), label770, TRUE, TRUE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label770), 0.02, 0.5);
+
+  label767 = gtk_label_new (_("Price"));
+  gtk_widget_ref (label767);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label767", label767,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label767);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label767);
+
+  frame20 = gtk_frame_new (_("Match Action"));
+  gtk_widget_ref (frame20);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame20", frame20,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame20);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame20);
+
+  vbox50 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox50);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox50", vbox50,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox50);
+  gtk_container_add (GTK_CONTAINER (frame20), vbox50);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox50), 5);
+
+  label772 = gtk_label_new (_("Find transactions whose Action matches:"));
+  gtk_widget_ref (label772);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label772", label772,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label772);
+  gtk_box_pack_start (GTK_BOX (vbox50), label772, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label772), 7.45058e-09, 0.5);
+
+  action_entry = gtk_entry_new ();
+  gtk_widget_ref (action_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "action_entry", action_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (action_entry);
+  gtk_box_pack_start (GTK_BOX (vbox50), action_entry, FALSE, FALSE, 0);
+
+  vbox51 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox51);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox51", vbox51,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox51);
+  gtk_box_pack_start (GTK_BOX (vbox50), vbox51, TRUE, TRUE, 0);
+
+  action_case_toggle = gtk_check_button_new_with_label (_("Case sensitive"));
+  gtk_widget_ref (action_case_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "action_case_toggle", action_case_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (action_case_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox51), action_case_toggle, FALSE, FALSE, 0);
+
+  action_regexp_toggle = gtk_check_button_new_with_label (_("Regular expression"));
+  gtk_widget_ref (action_regexp_toggle);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "action_regexp_toggle", action_regexp_toggle,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (action_regexp_toggle);
+  gtk_box_pack_start (GTK_BOX (vbox51), action_regexp_toggle, FALSE, FALSE, 0);
+
+  label720 = gtk_label_new (_("Action"));
+  gtk_widget_ref (label720);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "label720", label720,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label720);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label720);
+
+  hbox20 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox20);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox20", hbox20,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox20);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox7), hbox20, FALSE, FALSE, 0);
+
+  hbox23 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (hbox23);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "hbox23", hbox23,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox23);
+  gtk_box_pack_start (GTK_BOX (hbox20), hbox23, FALSE, FALSE, 0);
+
+  frame12 = gtk_frame_new (_("Type of search"));
+  gtk_widget_ref (frame12);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "frame12", frame12,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame12);
+  gtk_box_pack_start (GTK_BOX (hbox23), frame12, FALSE, FALSE, 0);
+
+  vbox24 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox24);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "vbox24", vbox24,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox24);
+  gtk_container_add (GTK_CONTAINER (frame12), vbox24);
+
+  new_search_radiobutton = gtk_radio_button_new_with_label (vbox24_group, _("New search"));
+  vbox24_group = gtk_radio_button_group (GTK_RADIO_BUTTON (new_search_radiobutton));
+  gtk_widget_ref (new_search_radiobutton);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "new_search_radiobutton", new_search_radiobutton,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (new_search_radiobutton);
+  gtk_box_pack_start (GTK_BOX (vbox24), new_search_radiobutton, FALSE, FALSE, 0);
+
+  narrow_search_radiobutton = gtk_radio_button_new_with_label (vbox24_group, _("Refine current search"));
+  vbox24_group = gtk_radio_button_group (GTK_RADIO_BUTTON (narrow_search_radiobutton));
+  gtk_widget_ref (narrow_search_radiobutton);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "narrow_search_radiobutton", narrow_search_radiobutton,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (narrow_search_radiobutton);
+  gtk_box_pack_start (GTK_BOX (vbox24), narrow_search_radiobutton, FALSE, FALSE, 0);
+
+  add_search_radiobutton = gtk_radio_button_new_with_label (vbox24_group, _("Add results to current search"));
+  vbox24_group = gtk_radio_button_group (GTK_RADIO_BUTTON (add_search_radiobutton));
+  gtk_widget_ref (add_search_radiobutton);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "add_search_radiobutton", add_search_radiobutton,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (add_search_radiobutton);
+  gtk_box_pack_start (GTK_BOX (vbox24), add_search_radiobutton, FALSE, FALSE, 0);
+
+  delete_search_radiobutton = gtk_radio_button_new_with_label (vbox24_group, _("Delete results from current search"));
+  vbox24_group = gtk_radio_button_group (GTK_RADIO_BUTTON (delete_search_radiobutton));
+  gtk_widget_ref (delete_search_radiobutton);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "delete_search_radiobutton", delete_search_radiobutton,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (delete_search_radiobutton);
+  gtk_box_pack_start (GTK_BOX (vbox24), delete_search_radiobutton, FALSE, FALSE, 0);
+
+  dialog_action_area7 = GNOME_DIALOG (Find_Transactions)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Find_Transactions), "dialog_action_area7", dialog_action_area7);
+  gtk_widget_show (dialog_action_area7);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area7), GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area7), 8);
+
+  gnome_dialog_append_button_with_pixmap (GNOME_DIALOG (Find_Transactions),
+                                          _("Find"), GNOME_STOCK_PIXMAP_SEARCH);
+  button26 = g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data;
+  gtk_widget_ref (button26);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button26", button26,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button26);
+  GTK_WIDGET_SET_FLAGS (button26, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Find_Transactions), GNOME_STOCK_BUTTON_CANCEL);
+  button27 = g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data;
+  gtk_widget_ref (button27);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button27", button27,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button27);
+  GTK_WIDGET_SET_FLAGS (button27, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Find_Transactions), GNOME_STOCK_BUTTON_HELP);
+  button28 = g_list_last (GNOME_DIALOG (Find_Transactions)->buttons)->data;
+  gtk_widget_ref (button28);
+  gtk_object_set_data_full (GTK_OBJECT (Find_Transactions), "button28", button28,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button28);
+  GTK_WIDGET_SET_FLAGS (button28, GTK_CAN_DEFAULT);
+
+  gtk_signal_connect (GTK_OBJECT (button33), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_early_date_select_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (button32), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_late_date_select_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (new_search_radiobutton), "toggled",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_search_type_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (narrow_search_radiobutton), "toggled",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_search_type_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (add_search_radiobutton), "toggled",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_search_type_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (delete_search_radiobutton), "toggled",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_search_type_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (button26), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_ok_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (button27), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_cancel_cb),
+                      Find_Transactions);
+  gtk_signal_connect (GTK_OBJECT (button28), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_find_transactions_dialog_help_cb),
+                      Find_Transactions);
+
+  return Find_Transactions;
+}
+
+GtkWidget*
+create_Select_Date (void)
+{
+  GtkWidget *Select_Date;
+  GtkWidget *dialog_vbox8;
+  GtkWidget *vbox47;
+  GtkWidget *calendar1;
+  GtkWidget *button37;
+  GtkWidget *dialog_action_area8;
+  GtkWidget *button34;
+  GtkWidget *button36;
+
+  Select_Date = gnome_dialog_new (_("Select Date"), NULL);
+  gtk_object_set_data (GTK_OBJECT (Select_Date), "Select_Date", Select_Date);
+  gtk_window_set_policy (GTK_WINDOW (Select_Date), FALSE, FALSE, FALSE);
+
+  dialog_vbox8 = GNOME_DIALOG (Select_Date)->vbox;
+  gtk_object_set_data (GTK_OBJECT (Select_Date), "dialog_vbox8", dialog_vbox8);
+  gtk_widget_show (dialog_vbox8);
+
+  vbox47 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox47);
+  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "vbox47", vbox47,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox47);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox8), vbox47, TRUE, TRUE, 0);
+
+  calendar1 = gtk_calendar_new ();
+  gtk_widget_ref (calendar1);
+  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "calendar1", calendar1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (calendar1);
+  gtk_box_pack_start (GTK_BOX (vbox47), calendar1, TRUE, TRUE, 0);
+  gtk_calendar_display_options (GTK_CALENDAR (calendar1),
+                                GTK_CALENDAR_SHOW_HEADING
+                                | GTK_CALENDAR_SHOW_DAY_NAMES);
+
+  button37 = gtk_button_new_with_label (_("Today"));
+  gtk_widget_ref (button37);
+  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "button37", button37,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button37);
+  gtk_box_pack_start (GTK_BOX (vbox47), button37, FALSE, FALSE, 0);
+
+  dialog_action_area8 = GNOME_DIALOG (Select_Date)->action_area;
+  gtk_object_set_data (GTK_OBJECT (Select_Date), "dialog_action_area8", dialog_action_area8);
+  gtk_widget_show (dialog_action_area8);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area8), GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area8), 8);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Select_Date), GNOME_STOCK_BUTTON_OK);
+  button34 = g_list_last (GNOME_DIALOG (Select_Date)->buttons)->data;
+  gtk_widget_ref (button34);
+  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "button34", button34,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button34);
+  GTK_WIDGET_SET_FLAGS (button34, GTK_CAN_DEFAULT);
+
+  gnome_dialog_append_button (GNOME_DIALOG (Select_Date), GNOME_STOCK_BUTTON_CANCEL);
+  button36 = g_list_last (GNOME_DIALOG (Select_Date)->buttons)->data;
+  gtk_widget_ref (button36);
+  gtk_object_set_data_full (GTK_OBJECT (Select_Date), "button36", button36,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (button36);
+  GTK_WIDGET_SET_FLAGS (button36, GTK_CAN_DEFAULT);
+
+  gtk_signal_connect (GTK_OBJECT (button37), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_select_date_dialog_today_cb),
+                      Select_Date);
+  gtk_signal_connect (GTK_OBJECT (button34), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_select_date_dialog_ok_cb),
+                      Select_Date);
+  gtk_signal_connect (GTK_OBJECT (button36), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_ui_select_date_dialog_cancel_cb),
+                      Select_Date);
+
+  return Select_Date;
 }
 

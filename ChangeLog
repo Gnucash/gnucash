@@ -1,4 +1,24 @@
+2000-04-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-edit.c: figure out all the accounts affected
+	by a currency/security/type change and ask the user whether the
+	needed changes should be made.
+
+	* src/gnome/dialog-utils.c (gnc_fill_menu_with_data): also recurse
+	for GNOME_APP_UI_SUBTREE_STOCK.
+
+	* src/gnome/top-level.c (gnc_configure_reverse_balance): change
+	asset-expense to all debit accounts.
+
+	* src/register/numcell.c: include <limits.h> per Eric Hanchrow's
+	fix.
+
 2000-04-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/g-wrap/gnc.gwp: wrap functions for getting account guids and
+	looking up accounts by guids.
+
+	* src/g-wrap/gnc-helpers.c: add helper functions for using guids.
 
 	* src/scm/prefs.scm: add an assets-expense choice to which kinds of
 	accounts are sign-reversed.

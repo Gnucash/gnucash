@@ -33,7 +33,9 @@
      guessed-date-format 
      y2k-threshold
      currency            ;; this is a string.. no checking 
-     xtns                ;; 
+     default-acct-xtns
+     accts-mentioned
+     xtns                
      accounts 
      cats
      classes)))
@@ -95,6 +97,18 @@
 (define (qif-file:set-currency! self value)
   (simple-obj-setter self <qif-file> 'currency value))
 
+(define (qif-file:default-acct-xtns self)
+  (simple-obj-getter self <qif-file> 'default-acct-xtns))
+
+(define (qif-file:set-default-acct-xtns! self value)
+  (simple-obj-setter self <qif-file> 'default-acct-xtns value))
+
+(define (qif-file:accts-mentioned self)
+  (simple-obj-getter self <qif-file> 'accts-mentioned))
+
+(define (qif-file:set-accts-mentioned! self value)
+  (simple-obj-setter self <qif-file> 'accts-mentioned value))
+
 (define (qif-file:cats self)
   (simple-obj-getter self <qif-file> 'cats))
 
@@ -128,6 +142,8 @@
     (qif-file:set-guessed-date-format! self date-format)    
     (qif-file:set-currency! self currency)
     (qif-file:set-y2k-threshold! self 50)
+    (qif-file:set-default-acct-xtns! self 0)
+    (qif-file:set-accts-mentioned! self '())
     (qif-file:set-xtns! self '())
     (qif-file:set-accounts! self '())
     (qif-file:set-cats! self '())
@@ -209,7 +225,6 @@
 ;;  [N] number (check number, sell, or buy)
 ;;  [C] cleared    : parsed (x/X/*) ;
 ;;  [T] amount     : parsed, units are currency from <qif-file>. 
-;;  [M] memo       : string 
 ;;  [I] share price : parsed
 ;;  [Q] number of shares
 ;;  [Y] name of security 
@@ -221,8 +236,8 @@
 (define <qif-xtn>
   (make-simple-class 
    'qif-xtn
-   '(date payee address number cleared memo 
-          share-price num-shares security-name adjustment 
+   '(date payee address number cleared  
+          from-acct share-price num-shares security-name adjustment 
           splits bank-xtn? mark)))
 
 (define (qif-xtn? self)
@@ -257,6 +272,12 @@
 
 (define (qif-xtn:set-cleared! self value)
   (simple-obj-setter self <qif-xtn> 'cleared value))
+
+(define (qif-xtn:from-acct self)
+  (simple-obj-getter self <qif-xtn> 'from-acct))
+
+(define (qif-xtn:set-from-acct! self value)
+  (simple-obj-setter self <qif-xtn> 'from-acct value))
 
 (define (qif-xtn:share-price self)
   (simple-obj-getter self <qif-xtn> 'share-price))
@@ -333,6 +354,7 @@
         (begin 
           (display "qif-import: failed to reparse stock info")
           (newline)
+          (qif-xtn:print self)
           (set! reparse-ok 
                 (list #f "Could not autodetect radix format."))))
     
@@ -358,7 +380,7 @@
                                                 (qif-xtn:date self))))
     (if (string? (qif-xtn:date self))
         (begin 
-          (display "qif-import: failed to reparse date")
+          (display "qif-import: failed to reparse date ")
           (write (qif-xtn:date self)) (newline)
           (set! reparse-ok 
                 (list #f "Could not autodetect date format."))))
@@ -378,7 +400,7 @@
 (define <qif-acct>
   (make-simple-class 
    'qif-acct
-   '(name type description limit)))
+   '(name type description limit budget)))
 
 (define (qif-acct:name self)
   (simple-obj-getter self <qif-acct> 'name))
@@ -403,6 +425,12 @@
 
 (define (qif-acct:set-limit! self value)
   (simple-obj-setter self <qif-acct> 'limit value))
+
+(define (qif-acct:budget self)
+  (simple-obj-getter self <qif-acct> 'budget))
+
+(define (qif-acct:set-budget! self value)
+  (simple-obj-setter self <qif-acct> 'budget value))
 
 (define (make-qif-acct)
   (make-simple-obj <qif-acct>))
@@ -539,6 +567,29 @@
 
 
 (define (qif-file:add-xtn! self xtn)
+  (let ((from (qif-xtn:from-acct xtn)))
+    (if from
+        (if (not (member from (qif-file:accts-mentioned self)))
+            (qif-file:set-accts-mentioned! 
+             self (cons from (qif-file:accts-mentioned self))))
+        (let ((defs (qif-file:default-acct-xtns self)))
+          (qif-file:set-default-acct-xtns! self (+ 1 defs))
+          (if (and (eq? 0 defs)                   
+                   (not (member (qif-file:account self)
+                                (qif-file:accts-mentioned self))))
+              (qif-file:set-accts-mentioned! 
+               self (cons (qif-file:account self)
+                          (qif-file:accts-mentioned self)))))))
+  (for-each 
+   (lambda (split)
+     (if (and (qif-split:category-is-account? split)
+              (not (member (qif-split:category split)
+                           (qif-file:accts-mentioned self))))
+         (qif-file:set-accts-mentioned!
+          self (cons (qif-split:category split) 
+                     (qif-file:accts-mentioned self)))))
+   (qif-xtn:splits xtn))
+  
   (qif-file:set-xtns! self 
                       (cons xtn (qif-file:xtns self))))
 

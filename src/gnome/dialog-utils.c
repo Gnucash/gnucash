@@ -30,6 +30,7 @@
 #include "global-options.h"
 #include "messages.h"
 #include "util.h"
+#include "EuroUtils.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -598,8 +599,14 @@ char * gnc_ui_get_account_field_name(int field)
     case ACCOUNT_BALANCE :
       return BALN_STR;
       break;
+    case ACCOUNT_BALANCE_EURO :
+      return BALN_EURO_STR;
+      break;
     case ACCOUNT_TOTAL :
       return TOTAL_STR;
+      break;
+    case ACCOUNT_TOTAL_EURO :
+      return TOTAL_EURO_STR;
       break;
   }
 
@@ -671,11 +678,37 @@ char * gnc_ui_get_account_field_value_string(Account *account, int field)
 	return xaccPrintAmount(balance, PRTSYM | PRTSEP);
       }
       break;
+    case ACCOUNT_BALANCE_EURO :
+      {
+	/* hack alert -- this is not thread safe ... */
+	static char string[256];
+	char *account_currency = xaccAccountGetCurrency(account);
+        double balance = gnc_ui_account_get_balance(account, FALSE);
+	double euro_balance = gnc_convert_to_euro(account_currency, balance);
+
+	xaccSPrintAmountGeneral(string, euro_balance, PRTSYM | PRTSEP, 2, 2, "EURO");
+
+	return string;
+      }
+      break;
     case ACCOUNT_TOTAL :
       {
 	double balance = gnc_ui_account_get_balance(account, TRUE);
 
 	return xaccPrintAmount(balance, PRTSYM | PRTSEP);
+      }
+      break;
+    case ACCOUNT_TOTAL_EURO :
+      {
+	/* hack alert -- this is not thread safe ... */
+	static char string[256];
+	char *account_currency = xaccAccountGetCurrency(account);
+	double balance = gnc_ui_account_get_balance(account, TRUE);
+	double euro_balance = gnc_convert_to_euro(account_currency, balance);
+
+	xaccSPrintAmountGeneral(string, euro_balance, PRTSYM | PRTSEP, 2, 2, "EURO");
+
+	return string;
       }
       break;
   }
@@ -947,6 +980,7 @@ gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
     {
       case GNOME_APP_UI_RADIOITEMS:
       case GNOME_APP_UI_SUBTREE:
+      case GNOME_APP_UI_SUBTREE_STOCK:
         gnc_fill_menu_with_data((GnomeUIInfo *) info->moreinfo, data);
         break;
       case GNOME_APP_UI_ENDOFINFO:
@@ -959,3 +993,33 @@ gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
     info++;
   }
 }
+
+void
+gnc_option_menu_init(GtkWidget * w) {
+  GtkWidget * menu;
+  GtkWidget * active;
+  int i;
+
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
+  for(i = 0; i < g_list_length(GTK_MENU_SHELL(menu)->children); i++) {
+    gtk_option_menu_set_history(GTK_OPTION_MENU(w), i);
+    active = gtk_menu_get_active(GTK_MENU(menu));
+    gtk_object_set_data(GTK_OBJECT(active), 
+                        "option_index",
+                        GINT_TO_POINTER(i));
+  }
+  gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
+}
+
+int
+gnc_option_menu_get_active(GtkWidget * w) {
+  GtkWidget * menu;
+  GtkWidget * menuitem;
+
+  menu     = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
+  menuitem = gtk_menu_get_active(GTK_MENU(menu));
+  return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
+                                             "option_index"));
+}
+
+

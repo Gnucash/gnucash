@@ -191,34 +191,62 @@ balance is a whopping $0.00).  In the
 <a href="#dialog-accounts">Accounts Tab</a> section there's a discussion
 of what we do with them.
 
+      <h3>Multi-account Quicken exports</h3>
+
+    <p>Quicken and some other programs who use QIF as an export format
+know how to put the history of multiple accounts into a single QIF
+file.  They do this by prepending an "!Account" record before the
+set of transactions to/from that account.  
+
+    <p>The QIF Importer should be able to handle these files fine.
+You may notice that the "Default QIF Account" seems somewhat
+arbitrary; for multiple-account exports, the guessed account is the
+first one with an Opening Balance record.  However, since Quicken
+explicitly lists the account for every transaction in multi-account
+exports, you aren't likely to get any transactions in the default
+account other than those that are supposed to be there.
+
     <p><a href="#toc">Table of Contents</a>
       
       <a name="how-to"><h2>How to use the QIF Import dialog</h2></a>
     
-    <p>QIF files describe only one account, and try to be "complete"
-in representing all the transactions involving that account.  This is
-fine if you only have one account, but if you have multiple Quicken
-accounts and transfers between them, transactions will show up in
-multiple files.  This means that if you aren't smart about catching
-duplicate transactions you will end up with wrong balances in GnuCash.
-Definitely a bad thing.
+    <p>The "Quick Start" guide: To load your files, click the "Select
+..."  button in the Files tab to find the file, then click the "Load
+File" button at the bottom of the Files tab to actually load it.
+Repeat this until all your files are loaded (read the explanation
+below to see why you should load all your files at the same time).
+Check the Accounts and Categories dialogs and make corrections if
+necessary.  Then click the big OK button.
+
+
+    <p>Why you need to load all your files at the same time: 
+      
+    <p>There are two different types of QIF files: those that describe
+single accounts and those that describe multiple accounts.  Both kinds
+to try to be "complete" in representing all the transactions involving
+each account that they represent.  What this means is that if you have
+multiple Quicken accounts, with transfers between them, transactions
+will show up in multiple accounts.  This means that if you aren't
+smart about catching duplicate transactions you will end up with wrong
+balances in GnuCash.  Definitely a bad thing.
 
     <p>In order to get the best possible replication of your Quicken
 account tree, export everything you can from Quicken and then import
-it all in one session.  The importer's 
-<a href="#dialog-files">Files tab</a> will allow you to load
-as many QIF files as you want, and to make sure that the currency,
-Quicken account name, and so on are right for each one.  Then the
-importer can do a really good job of catching cross-references and
-marking them.
+it all in one session, either as a single QIF file representing all
+your accounts together or as a single file for each account.  The
+importer's <a href="#dialog-files">Files tab</a> will allow you to
+load as many QIF files as you want, and to make sure that the
+currency, Quicken account name, and so on are right for each one.  The
+importer can do a really good job of catching cross-references (which
+and marking them.
 
     <p>The importer is written mostly in Guile, and it can be a little
 slow on large QIF files.  Load File takes 5-6 seconds for a QIF file
 with 1000 or so transactions on my machine.
 
     <p>Once you have loaded all the files into the importer, go to the
-<a href="#dialog-accounts">Accounts tab</a>, and then to the 
-<a href="#dialog-categories">Categories tab</a>, and check that the
+<a href="#dialog-accounts">Accounts tab</a>, and then to the <a
+href="#dialog-categories">Categories tab</a>, and check that the
 importer is going to put your Quicken transactions in the right place.
 You can click to pop up a dialog and change the GnuCash destination
 account name/type for any QIF account.  Don't be afraid to change
@@ -280,21 +308,6 @@ all dashes and underscores are changed to spaces.  If you want to save
 yourself manually re-entering the name, save the file with a name that
 will get guessed correctly (i.e. save the account "My Bank Account" as
 My-Bank-Account.qif or My_Bank_Account.qif).
-
-    <p>GnuCash makes a hearty effort to interpret any QIF file that
-you throw at it, but you need to make sure that it's a normal DOS or
-Unix text file before trying to import.  The Mac version of Quicken
-saves files with Macintosh newline conventions, which really confuses
-the Guile reader.  Macintoshes use the carriage-return only (which
-usually prints as ^M), and the Unix convention requires a line feed
-(usually prints as ^J).  You can use "tr" to fix this problem, or a
-search and replace in your favorite text editor.  With tr,
-the command might look like 
-<pre>
-      cat macfile | tr 015 012 > unixfile
-</pre>
-
-    <p><a href="#toc">Table of Contents</a>
 
 <a name=dialog-accounts><h2>The "Accounts" and "Categories" Tabs</h2>
 

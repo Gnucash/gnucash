@@ -8,3 +8,5 @@ GtkWidget* create_Print_Preview_Dialog (void);
 GtkWidget* create_Print_Dialog (void);
 GtkWidget* create_Paper_Size_Selector_Dialog (void);
 GtkWidget* create_Print_Check_Dialog (void);
+GtkWidget* create_Find_Transactions (void);
+GtkWidget* create_Select_Date (void);

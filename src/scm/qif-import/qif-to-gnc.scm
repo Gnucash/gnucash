@@ -195,6 +195,11 @@
     ;; transactions should give us a small speed advantage.
     (for-each 
      (lambda (qif-file)
+       (display "Importing QIF xtns from ")
+       (display (qif-file:path qif-file)) (newline)
+       (display "Accounts mentioned: ")
+       (write (qif-file:accts-mentioned qif-file)) (newline)
+
        ;; within the file, iterate over transactions.  key things to
        ;; remember: if the L line in the transaction is a category,
        ;; it's a single-entry xtn and no need to look for the other
@@ -264,12 +269,15 @@
         (gnc:transaction-set-xnum gnc-xtn (qif-xtn:number qif-xtn)))
 
     ;; find the GNC account for the near end of the transaction 
-    ;; (all splits have the same near end)
     (if (qif-xtn:bank-xtn? qif-xtn)
         (begin 
-          (set! near-acct-info
-                (hash-ref qif-acct-map 
-                          (qif-file:account qif-file)))
+          (if (qif-xtn:from-acct qif-xtn)
+              (set! near-acct-info 
+                    (hash-ref qif-acct-map
+                              (qif-xtn:from-acct qif-xtn)))
+              (set! near-acct-info
+                    (hash-ref qif-acct-map 
+                              (qif-file:account qif-file))))
           (set! near-acct-name 
                 (list-ref near-acct-info 1))
           (set! near-acct (hash-ref gnc-acct-hash near-acct-name)))
@@ -290,7 +298,7 @@
            (eq? 'cleared cleared)
            (eq? 'reconciled cleared))
           (gnc:split-set-reconcile gnc-near-split #\c)))            
-        
+    
     ;; iterate over QIF splits 
     (for-each 
      (lambda (qif-split)
@@ -411,7 +419,7 @@
                 split
                 (qif-import:mark-matching-split split xtn qif-file qif-files))
                (qif-split:set-mark! split #t)))))
-     (qif-xtn:splits xtn))
+   (qif-xtn:splits xtn))
   (qif-xtn:set-mark! xtn #t))
 
 (define (qif-import:mark-matching-split split xtn qif-file qif-files)
@@ -425,10 +433,12 @@
         (done #f))
 
     (if bank-xtn?
-        (set! near-acct-name (qif-file:account qif-file))
+        (let ((near (qif-xtn:from-acct xtn)))
+          (if near
+              (set! near-acct-name near)
+              (set! near-acct-name (qif-file:account qif-file))))
         (set! near-acct-name (qif-xtn:security-name xtn)))
     
-
 ;;     (display "mark-matching-split : near-acct = ")
 ;;     (write near-acct-name)
 ;;     (display " far-acct = ") 
@@ -438,12 +448,20 @@
 ;;     (newline)
 
     ;; this is the grind loop.  Go over every unmarked split of every
-    ;; unmarked transaction of every file that's not this one.
+    ;; unmarked transaction of every file that has any transactions from
+    ;; the far-acct-name.
     (let file-loop ((files qif-files))
-      (if (and (not (eq? qif-file (car files)))
-               (or (not bank-xtn?)
-                   (string=? far-acct-name 
-                             (qif-file:account (car files)))))
+      (if (and
+           (member near-acct-name 
+                   (qif-file:accts-mentioned (car files)))
+           (member far-acct-name 
+                   (qif-file:accts-mentioned (car files))))
+          
+          ;;       (if (and (not (eq? qif-file (car files)))
+          ;;                (or (not bank-xtn?)
+          ;;                    (string=? far-acct-name 
+          ;;                              (qif-file:account (car files)))))
+          
           (let xtn-loop ((xtns (qif-file:xtns (car files))))
             (if (not (qif-xtn:mark (car xtns)))
                 (let split-loop ((splits (qif-xtn:splits (car xtns))))

@@ -84,7 +84,9 @@ typedef enum
   ACCOUNT_CURRENCY,
   ACCOUNT_SECURITY,
   ACCOUNT_BALANCE, /* with sign reversal */
+  ACCOUNT_BALANCE_EURO,
   ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
+  ACCOUNT_TOTAL_EURO,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
 
@@ -158,4 +160,6 @@ void gnc_save_window_size(const char *prefix, int width, int height);
 
 void gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data);
 
+void gnc_option_menu_init(GtkWidget * option_menu);
+int  gnc_option_menu_get_active(GtkWidget * option_menu);
 #endif

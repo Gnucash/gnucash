@@ -103,3 +103,44 @@ gnc_ui_print_check_dialog_cancel_cb    (GtkButton       *button,
 void
 gnc_ui_print_check_dialog_help_cb      (GtkButton       *button,
                                         gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_early_date_select_cb
+                                        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_late_date_select_cb
+                                        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_search_type_cb
+                                        (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_ok_cb  (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_cancel_cb
+                                        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_find_transactions_dialog_help_cb
+                                        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_select_date_dialog_today_cb     (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_select_date_dialog_ok_cb        (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_ui_select_date_dialog_cancel_cb    (GtkButton       *button,
+                                        gpointer         user_data);

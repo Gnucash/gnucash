@@ -1,4 +1,7 @@
 /********************************************************************\
+ * Query.h : api for finding transactions                           *
+ * Copyright 2000 Bill Gribble <grib@billgribble.com>               *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -14,31 +17,26 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-/*
- * FILE:
- * Query.h
- *
- * DESCRIPTION:
- * Provide a simple query engine interface.
- *
- * HISTORY:
- * created by Linas Vepstas Sept 1998
- * Copyright (c) 1998-2000 Linas Vepstas
- */
-
 #ifndef __GNUCASH_QUERY_H__
 #define __GNUCASH_QUERY_H__
 
 #include <time.h>
+#include <glib.h>
+#include <regex.h>
 
-#include "gnc-common.h"
-#include "Account.h"
-#include "Transaction.h"
+#include "gnc-common.h" 
+#include "Account.h" 
+#include "Transaction.h" 
 
-typedef struct _Query Query;
+typedef enum {
+  QUERY_AND,
+  QUERY_OR,
+  QUERY_NAND,
+  QUERY_NOR,
+  QUERY_XOR
+} QueryOp;
 
-/* sorting orders */
-enum {
+typedef enum {
   BY_STANDARD,
   BY_DATE,
   BY_NUM,
@@ -46,63 +44,179 @@ enum {
   BY_MEMO,
   BY_DESC,
   BY_NONE
-};
+} sort_type_t;  
 
-Query * xaccMallocQuery (void);
-void    xaccInitQuery (Query *);
-void    xaccFreeQuery (Query *);
+typedef enum { PD_DATE, PD_AMOUNT, PD_ACCOUNT, PD_STRING, PD_MISC } pd_type_t;
 
-/* The xaccSetAccountList() method is used to define the set
- *    of accounts the should be queried.
- */
-void xaccQuerySetAccounts (Query *, Account **list);
-void xaccQueryAddAccount (Query *, Account *acc);
+typedef enum { ACCT_MATCH_ALL, ACCT_MATCH_ANY, ACCT_MATCH_NONE } acct_match_t;
+typedef enum { AMT_MATCH_ATLEAST, AMT_MATCH_ATMOST, 
+               AMT_MATCH_EXACTLY } amt_match_t;
+typedef enum { AMT_SGN_MATCH_EITHER, AMT_SGN_MATCH_CREDIT, 
+               AMT_SGN_MATCH_DEBIT } amt_match_sgn_t;
+enum { STRING_MATCH_CASE=1, STRING_MATCH_REGEXP=2};
 
-/* The xaccQuerySetMaxSplits() method sets the maximum number
- *    of splits to return as a result of a query.
- */
-void  xaccQuerySetMaxSplits (Query *, int);
+/* the Query makes a subset of all splits based on 3 things: 
+ *   - an AND-OR tree of predicates which combine to make a 
+ *     split filter 
+ *   - a sorting order for the matched splits
+ *   - a chop limit which gives the maximum number of sorted
+ *     splits to return. */
 
-/* The xaccQuerySetDateRange() method sets the date range
- *    for the query.  The query will return only those splits
- *    that are within this date range. The arguments "earliest"
- *    and "latest" are seconds before or since 00:00:00 Jan 1 1970.
- */
-void xaccQuerySetDateRange (Query *, time_t earliest, time_t latest);
-#ifndef SWIG  /* swig chokes on long long */
-void xaccQuerySetDateRangeL (Query *, long long earliest, long long latest);
+typedef struct {
+  /* terms is a list of the OR-terms in a sum-of-products 
+   * logical expression. */
+  GList *  terms;  
+  
+  /* sorting and chopping is independent of the search filter */
+  sort_type_t primary_sort;
+  sort_type_t secondary_sort;
+  sort_type_t tertiary_sort;
+  int         max_splits;
+  
+  /* cache the results so we don't have to run the whole search 
+   * again until it's really necessary */
+  int      changed;
+  AccountGroup * acct_group;
+  Split ** split_list;
+} Query;
+
+typedef struct {
+  pd_type_t    type;
+  Timespec     start;
+  Timespec     end;
+} DatePredicateData;
+
+typedef struct {
+  pd_type_t       type;
+  amt_match_t     how;
+  amt_match_sgn_t amt_sgn;
+  double          amount;
+} AmountPredicateData;
+
+typedef struct {
+  pd_type_t    type;
+  acct_match_t how;
+  Account      ** accounts;
+} AccountPredicateData;
+
+typedef struct {
+  pd_type_t      type;
+  int            case_sens;
+  int            use_regexp;
+  char           * matchstring;
+  regex_t        compiled;
+} StringPredicateData;
+
+typedef struct {
+  pd_type_t  type;
+  int  how;
+  int  data;
+} MiscPredicateData;
+
+typedef union { 
+  pd_type_t            type;
+  DatePredicateData    date;
+  AmountPredicateData  amount;
+  AccountPredicateData acct;
+  StringPredicateData  str;
+  MiscPredicateData    misc;
+} PredicateData;
+
+typedef int (* Predicate)(Split * foo, PredicateData * bar);
+
+typedef struct {
+  Predicate     p;
+  PredicateData data;
+  int           sense;
+} QueryTerm;
+
+
+Query   * xaccMallocQuery(void);
+void    xaccInitQuery(Query * q, QueryTerm * initial_term);
+void    xaccFreeQuery(Query *);
+
+Query  * xaccQueryInvert(Query * q1);
+Query  * xaccQueryMerge(Query * q1, Query * q2, QueryOp op);
+void   xaccQuerySetGroup(Query * q, AccountGroup * group);
+void   xaccQuerySwapTerms(Query * q1, Query * q2);
+void   xaccQuerySingleTerm(Query * q, QueryTerm * qt);
+void   xaccQueryClear(Query * q);
+void   xaccQueryPurgeTerms(Query * q, pd_type_t type);
+
+int    xaccQueryHasTerms(Query * q);
+
+Split ** xaccQueryGetSplits(Query * q);
+
+/*******************************************************************
+ *  match-adding API 
+ *******************************************************************/
+
+void xaccQueryAddAccountMatch(Query * q, Account ** acclist,
+                              acct_match_t how, QueryOp op);
+void xaccQueryAddSingleAccountMatch(Query * q, Account * acct, 
+                                    QueryOp op);
+
+void xaccQueryAddDescriptionMatch(Query * q, char * matchstring, 
+                                  int case_sens, int use_regexp, QueryOp op);
+void xaccQueryAddNumberMatch(Query * q, char * matchstring, 
+                             int case_sens, int use_regexp, QueryOp op);
+void xaccQueryAddActionMatch(Query * q, char * matchstring, 
+                             int case_sens, int use_regexp, QueryOp op);
+void xaccQueryAddAmountMatch(Query * q, double amount, 
+                             amt_match_sgn_t amt_sgn,
+                             amt_match_t how, QueryOp op);
+void xaccQueryAddSharePriceMatch(Query * q, double amount, 
+                                 amt_match_t how, QueryOp op);
+void xaccQueryAddSharesMatch(Query * q, double amount, 
+                             amt_match_t how, QueryOp op);
+void xaccQueryAddDateMatch(Query * q, 
+                           int syear, int smonth, int sday, 
+                           int eyear, int emonth, int eday,
+                           QueryOp op);
+void xaccQueryAddDateMatchTS(Query * q, 
+                             Timespec sts, Timespec ets,
+                             QueryOp op);
+void xaccQueryAddDateMatchTT(Query * q, 
+                             time_t stt, time_t ett,
+                             QueryOp op);
+void xaccQueryAddMemoMatch(Query * q, char * matchstring, 
+                           int case_sens, int use_regexp, QueryOp op);
+void xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
+                           QueryOp op);
+
+
+/*******************************************************************
+ *  predicates for standard match types
+ *******************************************************************/
+
+int  xaccAccountMatchPredicate(Split * s, PredicateData * pd);
+int  xaccDescriptionMatchPredicate(Split * s, PredicateData * pd);
+int  xaccActionMatchPredicate(Split * s, PredicateData * pd);
+int  xaccNumberMatchPredicate(Split * s, PredicateData * pd);
+int  xaccAmountMatchPredicate(Split * s, PredicateData * pd);
+int  xaccDateMatchPredicate(Split * s, PredicateData * pd);
+int  xaccMemoMatchPredicate(Split * s, PredicateData * pd);
+int  xaccMiscMatchPredicate(Split * s, PredicateData * pd);
+int  xaccSharePriceMatchPredicate(Split * s, PredicateData * pd);
+int  xaccSharesMatchPredicate(Split * s, PredicateData * pd);
+
+/*******************************************************************
+ *  sort-related functions 
+ *******************************************************************/
+
+void xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
+                           sort_type_t secondary, sort_type_t tertiary);
+void xaccQuerySetMaxSplits(Query * q, int n);
+
+
+/*******************************************************************
+ *  compatibility interface with old Query API 
+ *******************************************************************/
+time_t xaccQueryGetEarliestDateFound(Query * q);
+time_t xaccQueryGetLatestDateFound(Query * q);
+
+
 #endif
 
-void xaccQuerySetEarliest (Query *, time_t earliest);
-void xaccQuerySetLatest   (Query *, time_t latest);
 
-void xaccQuerySetEarliestTS (Query *, Timespec earliest);
-void xaccQuerySetLatestTS   (Query *, Timespec latest);
 
-time_t xaccQueryGetEarliest (Query *);
-time_t xaccQueryGetLatest   (Query *);
-
-/* The xaccQueryShowEarliestDateFound function and its partner tell
- * the Query to use the earliest (resp. latest) splits found. */
-void xaccQueryShowEarliestDateFound (Query *);
-void xaccQueryShowLatestDateFound   (Query *);
-
-/* The xaccQuerySetSortOrder() method sets the sort order that
- *    should be used on the splits.  The three arguments should 
- *    be chosen from the enums above.  The first argument has the
- *    sort priority, the next the next, etc.
- */
-void xaccQuerySetSortOrder (Query *, int, int, int); 
-
-/* The xaccQueryGetSplits() method returns a list of splits
- *    matching the query and sorting criteria previously set up.
- */
-Split ** xaccQueryGetSplits (Query *);
-
-/* The xaccQueryGetEaliestDateFound() routine will return the 
- *    earliest date that appears in the list of returned splits.
- */
-time_t xaccQueryGetEarliestDateFound (Query *);
-time_t xaccQueryGetLatestDateFound (Query *);
-
-#endif /* __GNUCASH_QUERY_H__ */

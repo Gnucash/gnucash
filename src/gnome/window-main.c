@@ -46,6 +46,7 @@
 #include "dialog-transfer.h"
 #include "dialog-edit.h"
 #include "dialog-qif-import.h"
+#include "dialog-find-transactions.h"
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"
@@ -146,8 +147,9 @@ gnc_ui_refresh_statusbar()
   xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP);
   if(euro)
   {
-    strcat(asset_string, " / EURO");
-    strcat(asset_string, xaccPrintAmount(euro_assets, PRTSEP));
+    strcat(asset_string, " / ");
+    xaccSPrintAmountGeneral(asset_string + strlen(asset_string), euro_assets,
+			    PRTSYM | PRTSEP, 2, 2, "EURO");
   }
   gtk_label_set_text(GTK_LABEL(main_info->assets_label), asset_string);
   gnc_set_label_color(main_info->assets_label, assets);
@@ -155,8 +157,9 @@ gnc_ui_refresh_statusbar()
   xaccSPrintAmount(profit_string, profits, PRTSYM | PRTSEP);
   if(euro)
   {
-    strcat(profit_string, " / EURO");
-    strcat(profit_string, xaccPrintAmount(euro_profits, PRTSEP));
+    strcat(profit_string, " / ");
+    xaccSPrintAmountGeneral(profit_string + strlen(profit_string), euro_profits,
+			    PRTSYM | PRTSEP, 2, 2, "EURO");
   }
   gtk_label_set_text(GTK_LABEL(main_info->profits_label), profit_string);
   gnc_set_label_color(main_info->profits_label, profits);
@@ -169,6 +172,13 @@ gnc_refresh_main_window()
   gnc_ui_refresh_statusbar();
   gnc_account_tree_refresh_all();
 }
+
+static void
+gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data )
+{
+  gnc_ui_find_transactions_dialog_create(NULL);
+}
+
 
 static void
 gnc_ui_exit_cb ( GtkWidget *widget, gpointer data )
@@ -607,10 +617,18 @@ gnc_configure_account_tree(void *data)
       new_avi.show_field[ACCOUNT_SECURITY] = TRUE;
 
     else if (safe_strcmp(node->data, "balance") == 0)
+    {
       new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
+      if(gnc_lookup_boolean_option("International", "Enable EURO support", FALSE))
+	new_avi.show_field[ACCOUNT_BALANCE_EURO] = TRUE;
+    }
 
     else if (safe_strcmp(node->data, "total") == 0)
+    {
       new_avi.show_field[ACCOUNT_TOTAL] = TRUE;
+      if(gnc_lookup_boolean_option("International", "Enable EURO support", FALSE))
+	new_avi.show_field[ACCOUNT_TOTAL_EURO] = TRUE;
+    }
   }
 
   gnc_free_list_option_value(list);
@@ -707,6 +725,17 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       NULL,
       GNOME_APP_PIXMAP_STOCK,
       GNOME_STOCK_PIXMAP_REMOVE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      FIND_STR_N,
+      TOOLTIP_FIND_N,
+      gnc_ui_find_transactions_cb, 
+      NULL,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_SEARCH,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,

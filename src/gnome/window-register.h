@@ -1,6 +1,6 @@
 /*******************************************************************\
  * window-register.h -- public GnuCash register functions           *
- * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -13,12 +13,21 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #ifndef __WINDOW_REGISTER_H__
 #define __WINDOW_REGISTER_H__
+
+#include "RegWindow.h"
+#include "MultiLedger.h"
+
+RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
 
 void gnc_register_raise(RegWindow *regData);
 void gnc_register_jump_to_blank(RegWindow *regData);

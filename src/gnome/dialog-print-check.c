@@ -28,6 +28,7 @@
 #include "top-level.h"
 #include "messages_i18n.h"
 #include "dialog-print-check.h"
+#include "dialog-utils.h"
 #include "window-help.h"
 #include "print-session.h"
 #include "ui-callbacks.h"
@@ -46,9 +47,6 @@
 PrintCheckDialog * 
 gnc_ui_print_check_dialog_create(SCM callback) {
   PrintCheckDialog * pcd = g_new0(PrintCheckDialog, 1);  
-  GtkWidget        * menu;
-  GtkWidget        * active;
-  int              i;
 
   /* call the glade-defined creator */
   pcd->dialog = create_Print_Check_Dialog();
@@ -92,43 +90,11 @@ gnc_ui_print_check_dialog_create(SCM callback) {
 
   /* fix the option menus so we can diagnose which option is 
      selected */
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(pcd->format_picker));  
-  for(i = 0; i < CHECK_PRINT_NUM_FORMATS; i++) {
-    gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->format_picker), i);
-    active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), "option_index",
-                        GINT_TO_POINTER(i));
-  }
-  gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->format_picker), 0);
+  gnc_option_menu_init(pcd->format_picker);
+  gnc_option_menu_init(pcd->position_picker);
+  gnc_option_menu_init(pcd->dformat_picker);
+  gnc_option_menu_init(pcd->units_picker);
 
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(pcd->position_picker));  
-  for(i = 0; i < CHECK_PRINT_NUM_POSITIONS; i++) {
-    gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->position_picker), i);
-    active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), "option_index",
-                        GINT_TO_POINTER(i));
-  }
-  gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->position_picker), 0);
-
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(pcd->dformat_picker));  
-  for(i = 0; i < CHECK_PRINT_NUM_DATEFORMATS; i++) {
-    gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->dformat_picker), i);
-    active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), "option_index",
-                        GINT_TO_POINTER(i));
-  }
-  gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->dformat_picker), 0);
-  
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(pcd->units_picker));  
-  for(i = 0; i < CHECK_PRINT_NUM_UNITS; i++) {
-    gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->units_picker), i);
-    active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), "option_index",
-                        GINT_TO_POINTER(i));
-  }
-  gtk_option_menu_set_history(GTK_OPTION_MENU(pcd->units_picker), 0);
-  
-  
   /* set data so we can find the struct in callbacks */
   gtk_object_set_data(GTK_OBJECT(pcd->dialog), "print_check_structure",
                       pcd);

@@ -165,7 +165,9 @@
 
 ;; account-list options use the option-data as a boolean value.  If
 ;; true, the gui should allow the user to select multiple accounts.
-;; values are always a list of accounts.
+;; Internally, values are always a list of guids. Externally, both
+;; guids and account pointers may be used to set the value of the
+;; option. The option always returns a list of account pointers.
 (define (gnc:make-account-list-option
          section
          name
@@ -174,7 +176,17 @@
          default-getter
          value-validator
          multiple-selection)
-  (let ((option (default-getter))
+
+  (define (convert-to-guid item)
+    (if (string? item)
+        item
+        (gnc:account-get-guid item)))
+  (define (convert-to-account item)
+    (if (string? item)
+        (gnc:account-lookup item)
+        item))
+
+  (let ((option (map convert-to-guid (default-getter)))
         (option-set #f)
         (validator
          (if (not value-validator)
@@ -182,17 +194,19 @@
              value-validator)))
     (gnc:make-option
      section name sort-tag 'account-list documentation-string
-     (lambda () (if option-set option (default-getter)))
+     (lambda () (map convert-to-account (if option-set
+                                            option
+                                            (default-getter))))
      (lambda (account-list)
        (let* ((result (validator account-list))
               (valid (car result))
               (value (cadr result)))
          (if valid
              (begin
-               (set! option value)
+               (set! option (map convert-to-guid value))
                (set! option-set #t))
              (gnc:error "Illegal account list value set"))))
-     default-getter
+     (lambda () (map convert-to-account (default-getter)))
      #f
      validator
      multiple-selection #f)))

@@ -291,7 +291,7 @@ AC_ARG_WITH( imlib,
        X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
 
 ### --------------------------------------------------------------------------
-# The XmHTML widget is used by motif and gnome alike.
+# The XmHTML widget is used by motif.
 
 AC_ARG_WITH( xmhtml-includes, 
        [  --with-xmhtml-includes=DIR   specify where to look for xmhtml headers],
@@ -317,7 +317,12 @@ AC_CHECK_LIB(png, png_read_image,
 
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
-        AC_DEFINE(HAVE_XPM,0), $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS) 
+        AC_DEFINE(HAVE_XPM,0)
+        AC_MSG_WARN([Cannot find Xpm library -- gnome build disabled (not required for motif)]) 
+        GNOME_TARGET="gnome.disabled" 
+        GNOME_STATIC_TARGET="gnome.disabled",
+        $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS)
+
 
 # Don't build the xmhtml source if user already has it installed...
 # this is ugly, there must be a nicer way of setting this up ...
@@ -379,6 +384,18 @@ AC_SUBST(GTK_XMHTML)
  
 
 ### --------------------------------------------------------------------------
+EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
+    
+#check for libxml
+AC_CHECK_LIB(xml, xmlDefaultSAXHandlerInit,
+        ,
+        AC_MSG_WARN([Cannotfind libxml -- gnome build disabled (not required for motif)]) 
+	GNOME_TARGET="gnome.disabled" 
+	GNOME_STATIC_TARGET="gnome.disabled",
+        $EXTRALIBS)
+
+
+### --------------------------------------------------------------------------
 EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
 
 # check for gnome-print and enable it via HAVE_LIBGNOMEPRINT
@@ -386,7 +403,6 @@ EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
 AC_CHECK_LIB(gnomeprint, gnome_print_context_new, , , $EXTRALIBS)
 
 
-# XXX - should we export these here or later in the configure script?
 AC_SUBST(GNOME_TARGET)
 AC_SUBST(GNOME_STATIC_TARGET)
 

@@ -130,26 +130,19 @@ gnc_ui_EditAccWindow_help_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_edit_change_account_types(Account *account, Account *except, int type)
+gnc_edit_change_account_types(GHashTable *change_type, Account *account,
+                              Account *except, int type)
 {
   AccountGroup *children;
   int i, num_children;
 
-  if (account == NULL)
+  if ((change_type == NULL) || (account == NULL))
     return;
 
   if (account == except)
     return;
 
-  if (xaccAccountGetType(account) != type)
-  {
-    /* Just refreshing won't work. */
-    xaccDestroyLedgerDisplay(account);
-
-    xaccAccountBeginEdit(account, GNC_F);
-    xaccAccountSetType(account, type);
-    xaccAccountCommitEdit(account);
-  }
+  g_hash_table_insert(change_type, account, GINT_TO_POINTER(type));
 
   children = xaccAccountGetChildren(account);
   if (children == NULL)
@@ -159,7 +152,327 @@ gnc_edit_change_account_types(Account *account, Account *except, int type)
   for (i = 0; i < num_children; i++)
   {
     account = xaccGroupGetAccount(children, i);
-    gnc_edit_change_account_types(account, except, type);
+    gnc_edit_change_account_types(change_type, account, except, type);
+  }
+}
+
+static void
+change_func(gpointer key, gpointer value, gpointer field_code)
+{
+  Account *account = key;
+  AccountFieldCode field = GPOINTER_TO_INT(field_code);
+
+  if (account == NULL)
+    return;
+
+  xaccAccountBeginEdit(account, GNC_T);
+
+  switch (field)
+  {
+    case ACCOUNT_CURRENCY:
+      {
+        char * string = value;
+
+        xaccAccountSetCurrency(account, string);
+      }
+    break;
+    case ACCOUNT_SECURITY:
+      {
+        char * string = value;
+
+        xaccAccountSetSecurity(account, string);
+      }
+      break;
+    case ACCOUNT_TYPE:
+      {
+        int type = GPOINTER_TO_INT(value);
+
+        if (type == xaccAccountGetType(account))
+          break;
+
+        /* Just refreshing won't work. */
+        xaccDestroyLedgerDisplay(account);
+
+        xaccAccountSetType(account, type);
+      }
+      break;
+    default:
+      g_warning("unexpected account field code");
+      break;
+  }
+
+  xaccAccountCommitEdit(account);
+}
+
+static void
+make_account_changes(GHashTable *change_currency,
+                     GHashTable *change_security,
+                     GHashTable *change_type)
+{
+  if (change_currency != NULL)
+    g_hash_table_foreach(change_currency, change_func,
+                         GINT_TO_POINTER(ACCOUNT_CURRENCY));
+
+  if (change_security != NULL)
+    g_hash_table_foreach(change_security, change_func,
+                         GINT_TO_POINTER(ACCOUNT_SECURITY));
+
+  if (change_type != NULL)
+    g_hash_table_foreach(change_type, change_func,
+                         GINT_TO_POINTER(ACCOUNT_TYPE));
+}
+
+static void
+gnc_account_change_currency_security(Account *account,
+                                     GHashTable *change_currency,
+                                     GHashTable *change_security,
+                                     const char *currency,
+                                     const char *security)
+{
+  char *old_currency;
+  char *old_security;
+  gboolean new_currency;
+  gboolean new_security;
+  GSList *stack;
+
+  if ((account == NULL) || (currency == NULL) || (security == NULL))
+    return;
+
+  old_currency = xaccAccountGetCurrency(account);
+  old_security = xaccAccountGetSecurity(account);
+
+  if ((safe_strcmp(currency, old_currency) == 0) &&
+      (safe_strcmp(security, old_security) == 0))
+    return;
+
+  if (safe_strcmp(currency, old_currency) != 0)
+  {
+    g_hash_table_insert(change_currency, account, (char *) currency);
+    new_currency = TRUE;
+  }
+  else
+    new_currency = FALSE;
+
+  if (safe_strcmp(security, old_security) != 0)
+  {
+    g_hash_table_insert(change_security, account, (char *) security);
+    new_security = TRUE;
+  }
+  else
+    new_security = FALSE;
+
+  stack = g_slist_prepend(NULL, account);
+
+  while (stack != NULL)
+  {
+    Split *split;
+    GSList *pop;
+    gint i;
+
+    pop = stack;
+    account = pop->data;
+    stack = g_slist_remove_link(stack, pop);
+    g_slist_free_1(pop);
+
+    i = 0;
+    while ((split = xaccAccountGetSplit(account, i++)) != NULL)
+    {
+      Transaction *trans;
+      Split *s;
+      gint j;
+
+      trans = xaccSplitGetParent(split);
+      if (trans == NULL)
+        continue;
+
+      if (xaccTransIsCommonCurrency(trans, currency))
+        continue;
+
+      if (xaccTransIsCommonCurrency(trans, security))
+        continue;
+
+      j = 0;
+      while ((s = xaccTransGetSplit(trans, j++)) != NULL)
+      {
+        gboolean add_it = FALSE;
+        Account *a;
+
+        a = xaccSplitGetAccount(s);
+
+        if ((a == NULL) || (a == account))
+          continue;
+
+        if (g_hash_table_lookup(change_currency, a) != NULL)
+          continue;
+
+        if (g_hash_table_lookup(change_security, a) != NULL)
+          continue;
+
+        if (new_currency &&
+            (safe_strcmp(old_currency, xaccAccountGetCurrency(a)) == 0))
+        {
+          g_hash_table_insert(change_currency, a, (char *) currency);
+          add_it = TRUE;
+        }
+
+        if (new_security &&
+            (safe_strcmp(old_security, xaccAccountGetSecurity(a)) == 0))
+        {
+          g_hash_table_insert(change_security, a, (char *) security);
+          add_it = TRUE;
+        }
+
+        if (add_it)
+          stack = g_slist_prepend(stack, a);
+      }
+    }
+  }
+}
+
+typedef struct
+{
+  Account *account;
+  AccountFieldCode field;
+  GtkCList *list;
+  guint count;
+} FillStruct;
+
+static void
+fill_helper(gpointer key, gpointer value, gpointer data)
+{
+  Account *account = key;
+  FillStruct *fs = data;
+  gchar *strings[5];
+
+  if (fs == NULL)
+    return;
+
+  if (fs->account == account)
+    return;
+
+  strings[0] = xaccAccountGetFullName(account, gnc_get_account_separator());
+  strings[1] = gnc_ui_get_account_field_name(fs->field);
+  strings[2] = gnc_ui_get_account_field_value_string(account, fs->field);
+  strings[4] = NULL;
+
+  switch (fs->field)
+  {
+    case ACCOUNT_CURRENCY:
+    case ACCOUNT_SECURITY:
+      strings[3] = value;
+      break;
+    case ACCOUNT_TYPE:
+      strings[3] = xaccAccountGetTypeStr(GPOINTER_TO_INT(value));
+      break;
+    default:
+      g_warning("unexpected field type");
+      free(strings[0]);
+      return;
+  }
+
+  gtk_clist_append(fs->list, strings);
+  free(strings[0]);
+  fs->count++;
+}
+
+static guint
+fill_list(Account *account, GtkCList *list,
+          GHashTable *change, AccountFieldCode field)
+{
+  FillStruct fs;
+
+  if (change == NULL)
+    return 0;
+
+  fs.account = account;
+  fs.field = field;
+  fs.list = list;
+  fs.count = 0;
+
+  g_hash_table_foreach(change, fill_helper, &fs);
+
+  return fs.count;
+}
+
+static gboolean
+extra_change_verify(EditAccWindow *editAccData,
+                    GHashTable *change_currency,
+                    GHashTable *change_security,
+                    GHashTable *change_type)
+{
+  Account *account;
+  GtkCList *list;
+  gchar *titles[5];
+  guint size;
+
+  if (editAccData == NULL)
+    return FALSE;
+
+  account = editAccData->account;
+
+  titles[0] = ACCOUNT_STR;
+  titles[1] = FIELD_STR;
+  titles[2] = OLD_VALUE_STR;
+  titles[3] = NEW_VALUE_STR;
+  titles[4] = NULL;
+
+  list = GTK_CLIST(gtk_clist_new_with_titles(4, titles));
+
+  size = 0;
+  size += fill_list(account, list, change_currency, ACCOUNT_CURRENCY);
+  size += fill_list(account, list, change_security, ACCOUNT_SECURITY);
+  size += fill_list(account, list, change_type, ACCOUNT_TYPE);
+
+  if (size == 0)
+  {
+    gtk_widget_destroy(GTK_WIDGET(list));
+    return TRUE;
+  }
+
+  gtk_clist_column_titles_passive(list);
+  gtk_clist_set_sort_column(list, 0);
+  gtk_clist_sort(list);
+  gtk_clist_columns_autosize(list);
+
+  {
+    GtkWidget *dialog;
+    GtkWidget *scroll;
+    GtkWidget *label;
+    GtkWidget *frame;
+    GtkWidget *vbox;
+
+    dialog = gnome_dialog_new(VERIFY_CHANGES_STR,
+                              GNOME_STOCK_BUTTON_OK,
+                              GNOME_STOCK_BUTTON_CANCEL,
+                              NULL);
+
+    gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
+    gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
+    gnome_dialog_set_parent(GNOME_DIALOG(dialog),
+                            GTK_WINDOW(editAccData->dialog));
+    gtk_window_set_policy(GTK_WINDOW(dialog), TRUE, TRUE, TRUE);
+    gtk_window_set_default_size(GTK_WINDOW(dialog), 0, 300);
+
+    vbox = GNOME_DIALOG(dialog)->vbox;
+
+    label = gtk_label_new(VERIFY_CHANGE_MSG);
+    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+
+    frame = gtk_frame_new(NULL);
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+
+    scroll = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+                                   GTK_POLICY_NEVER, 
+                                   GTK_POLICY_AUTOMATIC);
+
+    gtk_container_add(GTK_CONTAINER(frame), scroll);
+    gtk_container_border_width(GTK_CONTAINER(scroll), 5);
+    gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(list));
+
+    gtk_widget_show_all(vbox);
+
+    return gnome_dialog_run_and_close(GNOME_DIALOG(dialog)) == 0;
   }
 }
 
@@ -168,6 +481,10 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
 {
   EditAccWindow *editAccData = (EditAccWindow *) data; 
   AccountFieldStrings strings;
+
+  GHashTable *change_currency;
+  GHashTable *change_security;
+  GHashTable *change_type;
 
   gboolean change_children;
   gboolean has_children;
@@ -180,8 +497,6 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
   AccountGroup *children;
 
   int current_type;
-
-  char *old;
 
   gnc_ui_extract_field_strings(&strings, &editAccData->edit_info);
 
@@ -216,6 +531,16 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
 
   account = editAccData->account;
 
+  change_currency = g_hash_table_new(NULL, NULL);
+  change_security = g_hash_table_new(NULL, NULL);
+  change_type     = g_hash_table_new(NULL, NULL);
+
+  gnc_account_change_currency_security(account,
+                                       change_currency,
+                                       change_security,
+                                       strings.currency,
+                                       strings.security);
+
   children = xaccAccountGetChildren(account);
   if (children == NULL)
     has_children = FALSE;
@@ -225,50 +550,6 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
     has_children = TRUE;
 
   current_type = xaccAccountGetType(account);
-
-  /* currency check */
-  old = xaccAccountGetCurrency(account);
-  if (old == NULL)
-    old = "";
-  if ((safe_strcmp(old, strings.currency) != 0) &&
-      (safe_strcmp(old, "") != 0))
-  {
-    gchar * s;
-    gboolean result;
-
-    s = g_strdup_printf(EDIT_CURRENCY_MSG, old, strings.currency);
-    result = gnc_verify_dialog_parented(GTK_WINDOW(editAccData->dialog),
-                                        s, GNC_T);
-    g_free(s);
-
-    if (!result)
-    {
-      gnc_ui_free_field_strings(&strings);
-      return;
-    }
-  }
-
-  /* security check */
-  old = xaccAccountGetSecurity(account);
-  if (old == NULL)
-    old = "";
-  if ((safe_strcmp(old, strings.security) != 0) &&
-      (safe_strcmp(old, "") != 0))
-  {
-    gchar * s;
-    gboolean result;
-
-    s = g_strdup_printf(EDIT_SECURITY_MSG, old, strings.security);
-    result = gnc_verify_dialog_parented(GTK_WINDOW(editAccData->dialog),
-                                        s, GNC_T);
-    g_free(s);
-
-    if (!result)
-    {
-      gnc_ui_free_field_strings(&strings);
-      return;
-    }
-  }
 
   /* If the account has children and the new type isn't compatible
    * with the old type, the children's types must be changed. */
@@ -292,34 +573,36 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
   else
     change_all = FALSE;
 
-  if (change_children || change_all)
+  if (change_children)
+    gnc_edit_change_account_types(change_type, account,
+                                  NULL, editAccData->type);
+
+  if (change_all)
   {
-    gchar *format_str;
-    gchar *warning_str;
-    gchar *type_str;
-    gboolean result;
+    Account *ancestor;
+    Account *temp;
 
-    if (change_all)
-      format_str = TYPE_WARN1_MSG;
-    else
-      format_str = TYPE_WARN2_MSG;
+    temp = new_parent;
 
-    type_str = xaccAccountGetTypeStr(editAccData->type);
-
-    warning_str = g_strdup_printf(format_str, type_str);
-
-    result = gnc_verify_dialog_parented(GTK_WINDOW(editAccData->dialog),
-                                        warning_str, GNC_T);
-
-    g_free(warning_str);
-
-    if (!result)
+    do
     {
-      gnc_ui_free_field_strings(&strings);
-      return;
-    }
+      ancestor = temp;
+      temp = xaccAccountGetParentAccount(ancestor);
+    } while (temp != NULL);
+
+    gnc_edit_change_account_types(change_type, ancestor,
+                                  account, editAccData->type);
   }
 
+  if (!extra_change_verify(editAccData, change_currency,
+                           change_security, change_type))
+  {
+    gnc_ui_free_field_strings(&strings);
+    g_hash_table_destroy(change_currency);
+    g_hash_table_destroy(change_security);
+    g_hash_table_destroy(change_type);
+    return;
+  }
 
   /* Everything checked out, perform the changes */
   xaccAccountBeginEdit(account, GNC_F);
@@ -343,30 +626,17 @@ gnc_ui_EditAccWindow_ok_cb(GtkWidget * widget, gpointer data)
 
   xaccAccountCommitEdit(account);
 
-  if (change_children)
-    gnc_edit_change_account_types(account, NULL, editAccData->type);
-
-  if (change_all)
-  {
-    Account *ancestor;
-    Account *temp;
-
-    temp = xaccAccountGetParentAccount(account);
-    do
-    {
-      ancestor = temp;
-      temp = xaccAccountGetParentAccount(ancestor);
-    } while (temp != NULL);
-
-    gnc_edit_change_account_types(ancestor, account, editAccData->type);
-  }
-
-  gnc_ui_free_field_strings(&strings);
+  make_account_changes(change_currency, change_security, change_type);
 
   gnc_refresh_main_window();
   gnc_group_ui_refresh(gncGetCurrentGroup());
 
   gnome_dialog_close(GNOME_DIALOG(editAccData->dialog));
+
+  gnc_ui_free_field_strings(&strings);
+  g_hash_table_destroy(change_currency);
+  g_hash_table_destroy(change_security);
+  g_hash_table_destroy(change_type);
 }
 
 static void 

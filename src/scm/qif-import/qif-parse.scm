@@ -1,4 +1,4 @@
-2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;  qif-parse.scm
 ;;;  routines to parse values and dates in QIF files. 
 ;;;
@@ -277,11 +277,16 @@
               (set! possibilities (delq 'm-d-y possibilities)))
           (if (or (not (number? n1)) (> n1 31))
               (set! possibilities (delq 'd-m-y possibilities)))
+          (if (or (not (number? n1)) (< n1 1))
+              (set! possibilities (delq 'd-m-y possibilities)))
+          (if (or (not (number? n1)) (< n1 1))
+              (set! possibilities (delq 'm-d-y possibilities)))
 
           (if (or (not (number? n2)) (> n2 12))
               (begin 
                 (set! possibilities (delq 'd-m-y possibilities))
                 (set! possibilities (delq 'y-m-d possibilities))))
+
           (if (or (not (number? n2)) (> n2 31))
               (begin 
                 (set! possibilities (delq 'm-d-y possibilities))
@@ -291,6 +296,12 @@
               (set! possibilities (delq 'y-d-m possibilities)))
           (if (or (not (number? n3)) (> n3 31))
               (set! possibilities (delq 'y-m-d possibilities)))
+
+          (if (or (not (number? n3)) (< n3 1))
+              (set! possibilities (delq 'y-m-d possibilities)))
+          (if (or (not (number? n3)) (< n3 1))
+              (set! possibilities (delq 'y-d-m possibilities)))
+
           
           ;; if there's exactly one possibility left, we've got a good
           ;; guess.  if there are no possibilities left, the date 

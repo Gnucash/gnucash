@@ -37,6 +37,11 @@ typedef struct _GUID
 } GUID;
 
 
+/* number of characters needed to encode a guid as a string
+ * not including the null terminator. */
+#define GUID_ENCODING_LENGTH 32
+
+
 /* Three functions to initialize the id generator. Only one needs to
  * be called. Calling any initialization function a second time will
  * reset the generator and erase the effect of the first call.

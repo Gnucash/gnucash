@@ -85,7 +85,7 @@
     (display "   ")
     (display slot)
     (display " : ")
-    (display (simple-obj-getter obj class slot))
+    (write (simple-obj-getter obj class slot))
     (newline))
    (vector-ref (cdr class) 2)))
 

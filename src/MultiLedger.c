@@ -31,6 +31,7 @@
 #include "Query.h"
 #include "SplitLedger.h"
 #include "Transaction.h"
+#include "FileDialog.h"
 #include "util.h"
 
 
@@ -371,13 +372,20 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
 
   /* set up the query filter */
   regData->query = xaccMallocQuery();
-  xaccQuerySetAccounts (regData->query, regData->displayed_accounts);
+  xaccQuerySetGroup(regData->query, gncGetCurrentGroup());
+  if(regData->displayed_accounts) {
+    xaccQueryAddAccountMatch(regData->query, 
+                             regData->displayed_accounts,
+                             ACCT_MATCH_ANY, QUERY_OR);
+  }
   if ((regData->leader != NULL) &&
-      !accListHasAccount(regData->displayed_accounts, regData->leader))
-    xaccQueryAddAccount (regData->query, regData->leader);
-
+      !accListHasAccount(regData->displayed_accounts, regData->leader)) {
+    xaccQueryAddSingleAccountMatch(regData->query, regData->leader,
+                                   QUERY_OR);
+  }
+  
   /* by default, display only thirty transactions */
-  xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS);
+  /* xaccQuerySetMaxSplits (regData->query, MAX_QUERY_SPLITS); */
 
   /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
@@ -427,7 +435,8 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
    * If the GUI wants to display yet other stuff, it's on its own. */
   regData->balance = xaccAccountGetBalance (regData->leader);
   regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
-  regData->reconciledBalance = xaccAccountGetReconciledBalance (regData->leader);
+  regData->reconciledBalance = 
+    xaccAccountGetReconciledBalance(regData->leader);
 
   /* OK, now tell this specific GUI window to redraw itself ... */
   if (regData->redraw)

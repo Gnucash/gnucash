@@ -168,7 +168,8 @@ char * gnc_locale_default_currency();
  *    printed to.  It returns the length of the printed string.
  *
  * The xaccSPrintAmountGeneral() routine is a more general version that
- *    allows the user to set the precision and the minimum trailing zeros.
+ *    allows the user to set the precision, the minimum trailing zeros,
+ *    and the currency symbol.
  *
  * The xaccPrintAmountArgs() routine is identical to xaccPrintAmount,
  *    except that the arguments are given as boolean values intead of
@@ -183,7 +184,8 @@ char * gnc_locale_default_currency();
 char * xaccPrintAmount (double val, short shrs);
 int xaccSPrintAmount (char *buf, double val, short shrs);
 int xaccSPrintAmountGeneral (char * bufp, double val, short shrs,
-                             int precision, int min_trailing_zeros);
+                             int precision, int min_trailing_zeros,
+                             char *curr_sym);
 char * xaccPrintAmountArgs (double val,
                             gncBoolean print_currency_symbol,
                             gncBoolean print_separators,

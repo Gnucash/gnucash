@@ -89,11 +89,9 @@ accountPickerBox(char * initial_selection, int initial_type) {
 
   AccountGroup * topgroup; 
   Account      * selected;
-  int          i;
   GtkWidget    * treeitem  = gtk_tree_item_new_with_label(_("All Accounts"));
   GtkWidget    * subtree   = gtk_tree_new();
   SCM          infolist;
-  GtkWidget    * active, * menu;
 
   wind = g_new0(QIFAccountPickerDialog, 1);
 
@@ -125,18 +123,7 @@ accountPickerBox(char * initial_selection, int initial_type) {
   gtk_tree_set_view_lines(GTK_TREE(wind->treeview), TRUE);
   gtk_tree_item_expand(GTK_TREE_ITEM(treeitem));
 
-  /* this is a pain in the butt but there's no other way to easily 
-   * find out the index of the optionmeny selection */
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(wind->type_picker));
-  for(i = 0; i < 11; i++) {
-    gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker), i);
-    active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), 
-                        "option_index",
-                        GINT_TO_POINTER(i));
-  }
-  
-  gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker), 0);
+  gnc_option_menu_init(wind->type_picker);
 
   if(initial_selection) {
     selected = xaccGetAccountFromFullName(topgroup, initial_selection, ':');
@@ -223,8 +210,6 @@ void
 gnc_ui_account_picker_ok_cb(GtkButton *button,
                             gpointer   user_data) {
   QIFAccountPickerDialog * wind;
-  GtkWidget    * type_menu;
-  GtkWidget    * menuitem;
 
   char         * selected_acct;
   char         * description;
@@ -237,16 +222,9 @@ gnc_ui_account_picker_ok_cb(GtkButton *button,
   selected_acct = gtk_entry_get_text(GTK_ENTRY(wind->acct_entry));
   description = gtk_entry_get_text(GTK_ENTRY(wind->descript_entry));
 
-  type_menu    = gtk_option_menu_get_menu(GTK_OPTION_MENU(wind->type_picker));
-  menuitem     = gtk_menu_get_active(GTK_MENU(type_menu));
-  acct_type    = (int)(gtk_object_get_data(GTK_OBJECT(menuitem),
-                                           "option_index"));
-  
+  acct_type    = gnc_option_menu_get_active(wind->type_picker);
   gtk_entry_set_text(GTK_ENTRY(wind->descript_entry), 
                      description);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(wind->type_picker),
-                              acct_type);
-
   infolist = SCM_LIST3(gh_str02scm(selected_acct),
                        gh_int2scm(acct_type),
                        gh_str02scm(description));

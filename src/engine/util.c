@@ -418,7 +418,7 @@ PrintAmt(char *buf, double val, int prec,
 
 int
 xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
-                         int min_trailing_zeros)
+                         int min_trailing_zeros, char *curr_sym)
 {
    struct lconv *lc;
 
@@ -447,7 +447,14 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
    }
    else
    {
-     currency_symbol = lc->currency_symbol;
+     if(curr_sym == NULL)
+     {
+       currency_symbol = lc->currency_symbol;
+     }
+     else
+     {
+       currency_symbol = curr_sym;
+     }
      if (val < 0.0)
      {
        cs_precedes  = lc->n_cs_precedes;
@@ -556,7 +563,7 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
    }
 
    return xaccSPrintAmountGeneral(bufp, val, shrs, precision,
-                                  min_trailing_zeros);
+                                  min_trailing_zeros, NULL);
 }
 
 char *

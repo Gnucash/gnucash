@@ -42,6 +42,7 @@
 #define HH_ACCEDIT   "xacc-accountedit.html"
 #define HH_QIFIMPORT "xacc-qif-import.html"
 #define HH_PRINTCHECK "xacc-print-check.html"
+#define HH_FIND_TRANSACTIONS "xacc-find-transactions.html"
 #define HH_PRINT "xacc-print.html"
 
 /** STRUCTS *********************************************************/

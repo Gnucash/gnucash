@@ -16,13 +16,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
  *                                                                  *
- *   Author: Rob Clark                                              *
- * Internet: rclark@cs.hmc.edu                                      *
- *  Address: 609 8th Street                                         *
- *           Huntington Beach, CA 92648-4632                        *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #define _GNU_SOURCE
@@ -51,6 +50,7 @@
 #include "table-html.h"
 #include "gnucash-sheet.h"
 #include "global-options.h"
+#include "dialog-find-transactions.h"
 #include "util.h"
 
 
@@ -130,6 +130,7 @@ static void dateCB(GtkWidget *w, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
 static void jump_cb(GtkWidget *widget, gpointer data);
 static void print_check_cb(GtkWidget * widget, gpointer data);
+static void gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data );
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
 
@@ -478,31 +479,33 @@ gnc_register_set_date_range(RegWindow *regData)
   gtk_widget_set_sensitive(regDateData->set_button, FALSE);
 
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_earliest);
-  if (gtk_toggle_button_get_active(toggle))
-    xaccQueryShowEarliestDateFound(regData->ledger->query);
-  else
-  {
-    time_t start;
 
+  xaccQueryPurgeTerms(regData->ledger->query, PD_DATE);
+    
+  if (!gtk_toggle_button_get_active(toggle)) {
+    time_t start;
+    
     start = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->start_date));
     start = gnc_register_min_day_time(start);
-
-    xaccQuerySetEarliest(regData->ledger->query, start);
+    
+    xaccQueryAddDateMatchTT(regData->ledger->query, 
+                            start, LONG_MAX,
+                            QUERY_AND);
   }
-
+  
   toggle = GTK_TOGGLE_BUTTON(regDateData->show_latest);
-  if (gtk_toggle_button_get_active(toggle))
-    xaccQueryShowLatestDateFound(regData->ledger->query);
-  else
-  {
+  if (!gtk_toggle_button_get_active(toggle)) {
     time_t end;
-
+    
     end = gnome_date_edit_get_date(GNOME_DATE_EDIT(regDateData->end_date));
     end = gnc_register_max_day_time(end);
-
-    xaccQuerySetLatest(regData->ledger->query, end);
+    
+    xaccQueryAddDateMatchTT(regData->ledger->query, 
+                            LONG_MIN,
+                            end,                            
+                            QUERY_AND);
   }
-
+  
   gnc_date_range_set_sensitivities(regData);
 }
 
@@ -809,6 +812,15 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
+      FIND_STR_N, TOOLTIP_FIND_N,
+      gnc_ui_find_transactions_cb, 
+      NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_SEARCH,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
       CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
       closeCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
@@ -825,6 +837,18 @@ gnc_register_create_tool_bar(RegWindow *regData)
   regData->toolbar = toolbar;
 
   return toolbar;
+}
+
+static void
+gnc_ui_find_transactions_cb ( GtkWidget *widget, gpointer data )
+{
+  RegWindow * regdata = data;
+  if(regdata->ledger->type == SEARCH_LEDGER) {
+    gnc_ui_find_transactions_dialog_create(regdata->ledger);
+  }
+  else {
+    gnc_ui_find_transactions_dialog_create(NULL);
+  }    
 }
 
 
@@ -1473,7 +1497,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   if (regData != NULL)
     return regData;
 
-  xaccQuerySetMaxSplits(ledger->query, INT_MAX);
+  /*  xaccQuerySetMaxSplits(ledger->query, INT_MAX); */
 
   regData = (RegWindow *) malloc(sizeof (RegWindow));
 
@@ -1502,7 +1526,10 @@ regWindowLedger(xaccLedgerDisplay *ledger)
 		     GTK_SIGNAL_FUNC (gnc_register_destroy_cb), regData);
 
   regData->date_window = gnc_register_date_window(regData);
-  gnc_register_set_date_range(regData);
+
+  if(ledger->type != SEARCH_LEDGER) {
+    gnc_register_set_date_range(regData);
+  }
 
   statusbar = gnc_register_create_status_bar(regData);
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);

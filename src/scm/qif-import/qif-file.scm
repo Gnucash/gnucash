@@ -22,8 +22,10 @@
   (let ((qstate-type #f)
         (current-xtn #f)
         (current-split #f)
+        (current-account-name #f)
         (default-split #f)
         (first-xtn #f)
+        (ignore-accounts #f)
         (line #f)
         (tag #f)
         (value #f)
@@ -36,7 +38,7 @@
       (lambda ()        
         ;; loop over lines
         (let line-loop ()
-          (set! line (read-line))
+          (set! line (read-delimited (string #\nl #\cr)))
           (if (and 
                (not (eof-object? line))
                (>= (string-length line) 1))
@@ -63,7 +65,12 @@
                         ((eq? qstate-type 'type:cat)
                          (set! current-xtn (make-qif-cat)))
                         ((eq? qstate-type 'account)
-                         (set! current-xtn (make-qif-acct)))))
+                         (set! current-xtn (make-qif-acct)))
+                        ((eq? qstate-type 'option:autoswitch)
+                         (set! ignore-accounts #t))
+                        ((eq? qstate-type 'clear:autoswitch)
+                         (set! ignore-accounts #f))))
+
 ;;;                        (#t 
 ;;;                         (display "qif-file:read-file can't handle ")
 ;;;                         (write qstate-type)
@@ -71,7 +78,7 @@
 ;;;                         (newline))))
                  
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                 ;; account transactions 
+                 ;; bank-account type transactions 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  
                  ((member qstate-type valid-acct-types)
@@ -179,17 +186,23 @@
                     
                     ;; ^ : end-of-record 
                     ((#\^)
-                     (if (and (qif-xtn:date current-xtn)
-                              (qif-split:amount default-split))
+                     (if (qif-xtn:date current-xtn)
                          (begin 
+                           (if (not (qif-split:amount default-split))
+                               (qif-split:set-amount! default-split 0.00))
+                           
                            (if (null? (qif-xtn:splits current-xtn))
                                (qif-xtn:set-splits! current-xtn
                                                     (list default-split)))
-                           (qif-file:add-xtn! self current-xtn))
-                         (begin
-                           (display "qif-file:read-file : discarding xtn")
-                           (newline)
-                           (qif-xtn:print current-xtn)))
+                           (if (and (not ignore-accounts)
+                                    current-account-name)
+                               (qif-xtn:set-from-acct! current-xtn 
+                                                       current-account-name))
+                           (qif-file:add-xtn! self current-xtn)))
+;                         (begin
+;                           (display "qif-file:read-file : discarding xtn")
+;                           (newline)
+;                           (qif-xtn:print current-xtn)))
                     
                      (if (and first-xtn
                               (string? (qif-xtn:payee current-xtn))
@@ -300,14 +313,18 @@
                      (qif-acct:set-limit! 
                       current-xtn (qif-file:parse-value/decimal self value)))
                     
+                    ;; B : budget amount.  not really supported. 
+                    ((#\B)
+                     (qif-acct:set-budget! 
+                      current-xtn (qif-file:parse-value/decimal self value)))
+                    
                     ((#\^)
+                     (if (not ignore-accounts)
+                         (set! current-account-name 
+                               (qif-acct:name current-xtn)))
                      (qif-file:add-account! self current-xtn)
 ;;;                    (qif-acct:print current-xtn)
-                     (set! current-xtn (make-qif-acct)))
-                    
-                    (else
-                     (display "qif-file:read-file : unknown Account slot ")
-                     (display tag) (newline))))
+                     (set! current-xtn (make-qif-acct)))))
                  
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ;; Category (Cat) transactions 

@@ -71,7 +71,7 @@
                  ;; increment the xtn count in place 
                  (list-set! entry 4
                             (+ (list-ref entry 4) 
-                               (length (qif-file:xtns file))))
+                               (qif-file:default-acct-xtns file)))
                  ;; make a new hash table entry for the account
                  ;; make it a Bank account by default. 
                  (hash-set! 
@@ -82,10 +82,10 @@
                                  GNC-CCARD-TYPE)
                            gnc-acct-info)
                           (list 
-                           (length (qif-file:xtns file)) 
+                           (qif-file:default-acct-xtns file)
                            #f)))))))
      qif-files)
-
+    
     ;; now make the second pass through the files, looking at the 
     ;; transactions.  Hopefully the accounts are all there already.
     ;; stock accounts can have both a category/account and another
@@ -110,7 +110,25 @@
                                                 GNC-MUTUAL-TYPE)
                                           gnc-acct-info)
                                          (list 1 xtn)))))))
-          
+          ;; if there's a from-acct, reference it 
+          (let ((from (qif-xtn:from-acct xtn))
+                (entry #f))
+            (if from
+                (begin 
+                  (set! entry (hash-ref acct-hash from))
+                  (if entry
+                      (list-set! entry 4
+                                 (+ 1 (list-ref entry 4)))
+                      (hash-set! acct-hash from 
+                                 (append (qif-import:guess-acct
+                                          from 
+                                          (list 
+                                           GNC-BANK-TYPE
+                                           GNC-CCARD-TYPE
+                                           GNC-STOCK-TYPE)
+                                          gnc-acct-info)
+                                         (list 1 #f)))))))
+                    
           ;; iterate over the splits doing the same thing. 
           (for-each 
            (lambda (split)
