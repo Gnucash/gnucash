@@ -89,8 +89,9 @@ gnc_plugin_create_page (GncPlugin *plugin,
 			const gchar *uri)
 {
 	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_GET_IFACE (plugin)->create_page != NULL, NULL);
 
+	if (!GNC_PLUGIN_GET_IFACE (plugin)->create_page)
+	  return NULL;
 	return GNC_PLUGIN_GET_IFACE (plugin)->create_page (plugin, uri);
 }
 
