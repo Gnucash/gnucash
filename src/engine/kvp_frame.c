@@ -120,6 +120,14 @@ kvp_frame_delete(kvp_frame * frame) {
   g_free(frame);
 }
 
+gboolean
+kvp_frame_is_empty(kvp_frame * frame) 
+{
+  if (!frame) return TRUE;
+  if (!frame->hash) return TRUE;
+  return FALSE;
+}
+
 static void
 kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data) {
   kvp_frame * dest = (kvp_frame *)user_data;
