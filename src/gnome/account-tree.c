@@ -32,11 +32,14 @@
 #include "FileDialog.h"
 #include "account-tree.h"
 #include "dialog-utils.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
 #include "gnucash.h"
 #include "messages.h"
 #include "window-main.h"
+
+#define ACCOUNT_TREE_CM_CLASS "account-tree"
 
 /* Signal codes */
 enum
@@ -51,7 +54,6 @@ enum
 /** Static Globals ****************************************************/
 static GtkCTreeClass *parent_class = NULL;
 static guint account_tree_signals[LAST_SIGNAL];
-static GSList *account_trees = NULL;
 
 
 /** Static function declarations **************************************/
@@ -80,7 +82,7 @@ static void gnc_account_tree_destroy(GtkObject *object);
 
 
 GtkType
-gnc_account_tree_get_type()
+gnc_account_tree_get_type (void)
 {
   static GtkType gnc_account_tree_type = 0;
 
@@ -106,6 +108,14 @@ gnc_account_tree_get_type()
 }
 
 
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  GNCAccountTree *tree = user_data;
+
+  gnc_account_tree_refresh (tree);
+}
+
 /********************************************************************\
  * gnc_account_tree_new                                             *
  *   creates the account tree                                       *
@@ -113,13 +123,20 @@ gnc_account_tree_get_type()
  * Returns: the account tree widget, or NULL if there was a problem.*
 \********************************************************************/
 GtkWidget *
-gnc_account_tree_new()
+gnc_account_tree_new (void)
 {
   GtkWidget *tree;
+  gint component_id;
 
   tree = GTK_WIDGET(gtk_type_new(gnc_account_tree_get_type()));
 
-  account_trees = g_slist_prepend(account_trees, tree);
+  component_id = gnc_register_gui_component (ACCOUNT_TREE_CM_CLASS,
+                                             refresh_handler, NULL,
+                                             tree);
+
+  gnc_gui_component_watch_entity_type (component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   return tree;
 }
@@ -137,21 +154,21 @@ gnc_account_tree_new()
 \********************************************************************/
 
 GtkWidget *
-gnc_account_tree_new_with_root(Account * root)
+gnc_account_tree_new_with_root (Account * root)
 {
   GNCAccountTree *tree;
 
-  tree = GNC_ACCOUNT_TREE(gnc_account_tree_new());
-  tree->root_account = root;
+  tree = GNC_ACCOUNT_TREE (gnc_account_tree_new ());
+  tree->root_account = *xaccAccountGetGUID (root);
 
-  return GTK_WIDGET(tree);
+  return GTK_WIDGET (tree);
 }
 
 
 static void
-gnc_account_tree_init(GNCAccountTree *tree)
+gnc_account_tree_init (GNCAccountTree *tree)
 {
-  tree->root_account     = NULL;
+  tree->root_account     = *xaccGUIDNULL ();
   tree->current_accounts = NULL;
   tree->ignore_unselect  = FALSE;
   tree->filter           = NULL;
@@ -328,6 +345,7 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
   GList         *current_accounts;
   GtkAdjustment *adjustment;
   gfloat         save_value = 0.0;
+  Account       *root_account;
 
   adjustment = gtk_clist_get_vadjustment(GTK_CLIST(tree));
   if (adjustment != NULL)
@@ -341,9 +359,11 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   gtk_clist_clear(clist);
 
+  root_account = xaccAccountLookup (&tree->root_account);
+
   gnc_account_tree_fill(tree, expanded_accounts,
 			gnc_account_tree_insert_row(tree, NULL, NULL,
-						    tree->root_account),
+						    root_account),
 			gncGetCurrentGroup());
 
   gtk_clist_columns_autosize(clist);
@@ -363,26 +383,6 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   g_hash_table_destroy(expanded_accounts);
   g_list_free(current_accounts);
-}
-
-
-static void
-refresh_helper(gpointer tree, gpointer unused)
-{
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(tree));
-}
-
-/********************************************************************\
- * gnc_account_tree_refresh_all                                     *
- *   refreshes the account tree                                     *
- *                                                                  *
- * Args: none                                                       *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_account_tree_refresh_all()
-{
-  g_slist_foreach(account_trees, refresh_helper, NULL);
 }
 
 
@@ -590,63 +590,6 @@ gnc_account_tree_select_accounts(GNCAccountTree *tree,
   gtk_clist_thaw(GTK_CLIST(tree));
 
   return result;
-}
-
-
-/********************************************************************\
- * gnc_account_tree_remove_account                                  *
- *   removes an account from the tree                               *
- *                                                                  *
- * Args: tree - tree to be modified                                 *
- *       account - account to be inserted                           *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_account_tree_remove_account(GNCAccountTree *tree, Account *account)
-{
-  GtkCTreeNode *node;
-
-  node = gtk_ctree_find_by_row_data(GTK_CTREE(tree),
-				    NULL, account);
-
-  if (node != NULL)
-    gtk_ctree_remove_node(GTK_CTREE(tree), node);
-}
-
-
-static void
-remove_helper(gpointer tree, gpointer account)
-{
-  gnc_account_tree_remove_account(GNC_ACCOUNT_TREE(tree), account);
-}
-
-/********************************************************************\
- * gnc_account_tree_remove_account_all                              *
- *   removes an account from all account trees                      *
- *                                                                  *
- * Args: account - account to be inserted                           *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_account_tree_remove_account_all(Account *account)
-{
-  g_slist_foreach(account_trees, remove_helper, account);
-}
-
-
-/********************************************************************\
- * gnc_account_tree_insert_account                                  *
- *   inserts a new account into the tree                            *
- *                                                                  *
- * Args: tree - tree to insert account                              *
- *       account - account to be inserted                           *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_account_tree_insert_account(GNCAccountTree *tree, Account *account)
-{
-  /* for now, just punt. Maybe we'll do it faster later. */
-  gnc_account_tree_refresh(tree);
 }
 
 
@@ -1067,7 +1010,7 @@ gnc_account_tree_destroy(GtkObject *object)
 {
   GNCAccountTree *tree = GNC_ACCOUNT_TREE(object);
 
-  account_trees = g_slist_remove(account_trees, tree);
+  gnc_unregister_gui_component_by_data (ACCOUNT_TREE_CM_CLASS, tree);
 
   if (tree->deficit_style != NULL)
   {

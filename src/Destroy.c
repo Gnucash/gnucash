@@ -28,14 +28,14 @@
 
    
 /* ------------------------------------------------------ */
-void
+static void
 xaccAccountWindowDestroySimple (Account *account)
 {
   xaccDestroyLedgerDisplay (account);
 }
 
 /* ------------------------------------------------------ */
-void
+static void
 xaccAccountWindowDestroy (Account *account)
 {
   AccountGroup *account_children;

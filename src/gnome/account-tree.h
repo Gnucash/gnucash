@@ -60,18 +60,18 @@ struct _GNCAccountTree
 
   AccountViewInfo avi;
 
-  gint    num_columns;
-  gint    balance_column;
-  gint    total_column;
-  gint    column_fields[NUM_ACCOUNT_FIELDS];
+  gint num_columns;
+  gint balance_column;
+  gint total_column;
+  gint column_fields[NUM_ACCOUNT_FIELDS];
 
   const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
 
   GtkStyle *deficit_style;
 
-  Account *root_account;
+  GUID root_account;
 
-  GList   *current_accounts;
+  GList * current_accounts;
 
   gboolean ignore_unselect;
 };
@@ -102,8 +102,6 @@ GtkWidget * gnc_account_tree_new_with_root (Account *account);
 
 void gnc_account_tree_refresh (GNCAccountTree *tree);
 
-void gnc_account_tree_refresh_all (void);
-
 void gnc_account_tree_set_view_info(GNCAccountTree *tree,
 				    AccountViewInfo *info);
 
@@ -120,14 +118,6 @@ void gnc_account_tree_expand_account (GNCAccountTree *tree,
 
 void gnc_account_tree_toggle_account_expansion (GNCAccountTree *tree,
                                                 Account *account);
-
-void gnc_account_tree_insert_account (GNCAccountTree *tree,
-				      Account *account);
-
-void gnc_account_tree_remove_account (GNCAccountTree *tree,
-				      Account *account);
-
-void gnc_account_tree_remove_account_all(Account *account);
 
 void gnc_account_tree_show_income_expense (GNCAccountTree *tree);
 

@@ -454,7 +454,7 @@ gnc_ui_refresh_statusbar (void)
 }
 
 static void
-gnc_refresh_main_window_title()
+gnc_refresh_main_window_title (void)
 {
   GtkWidget *main_window;
   GNCBook *book;
@@ -480,13 +480,12 @@ gnc_refresh_main_window_title()
 }
 
 void
-gnc_refresh_main_window()
+gnc_refresh_main_window (void)
 {
-  xaccRecomputeGroupBalance(gncGetCurrentGroup());
-  gnc_ui_refresh_statusbar();
-  gnc_history_update_menu();
-  gnc_account_tree_refresh_all();
-  gnc_refresh_main_window_title();
+  xaccRecomputeGroupBalance (gncGetCurrentGroup());
+  gnc_ui_refresh_statusbar ();
+  gnc_history_update_menu ();
+  gnc_refresh_main_window_title ();
 }
 
 static void
@@ -542,8 +541,6 @@ gnc_ui_add_account (GtkWidget *widget, gpointer data)
 static void
 gnc_ui_delete_account (Account *account)
 {
-  xaccAccountWindowDestroy (account);
-
   gnc_suspend_gui_refresh ();
 
   xaccRemoveAccount (account);
@@ -668,12 +665,12 @@ gnc_ui_mainWindow_transfer(GtkWidget *widget, gpointer data)
 static void
 gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
 {
-  Account *account = gnc_get_current_account();
+  Account *account = gnc_get_current_account ();
 
   if (account == NULL)
   {
     const char *message = _("You must select an account to scrub.");
-    gnc_error_dialog(message);
+    gnc_error_dialog (message);
     return;
   }
 
@@ -689,7 +686,7 @@ gnc_ui_mainWindow_scrub(GtkWidget *widget, gpointer data)
 static void
 gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
 {
-  Account *account = gnc_get_current_account();
+  Account *account = gnc_get_current_account ();
 
   if (account == NULL)
   {
@@ -710,7 +707,7 @@ gnc_ui_mainWindow_scrub_sub(GtkWidget *widget, gpointer data)
 static void
 gnc_ui_mainWindow_scrub_all(GtkWidget *widget, gpointer data)
 {
-  AccountGroup *group = gncGetCurrentGroup();
+  AccountGroup *group = gncGetCurrentGroup ();
 
   gnc_suspend_gui_refresh ();
 
@@ -1387,7 +1384,6 @@ mainWindow()
 {
   GNCMainInfo *main_info;
   GtkWidget *app = gnc_get_ui_data();
-  GtkWidget *account_tree;
   GtkWidget *statusbar;
   int width = 0;
   int height = 0;
@@ -1448,9 +1444,8 @@ mainWindow()
 
   /* create scrolled window */
 
-  account_tree = gnc_mainwin_account_tree_new();
-  main_info->account_tree = account_tree;
-  gnome_app_set_contents(GNOME_APP(app), account_tree);
+  main_info->account_tree = gnc_mainwin_account_tree_new();
+  gnome_app_set_contents(GNOME_APP(app), main_info->account_tree);
 
 
   gnc_main_create_menus(GNOME_APP(app), main_info->account_tree, main_info);
@@ -1484,7 +1479,9 @@ mainWindow()
 
   gnc_configure_account_tree(NULL);
 
-  gnc_refresh_main_window();
+  gnc_refresh_main_window ();
+  gnc_account_tree_refresh
+    (GNC_MAINWIN_ACCOUNT_TREE (main_info->account_tree)->acc_tree);
 
   gnc_account_set_sensititives(main_info, FALSE);
 

@@ -27,8 +27,6 @@
 #include "Account.h"
 #include "Group.h"
 
-void xaccAccountWindowDestroy (Account *acc);
-void xaccAccountWindowDestroySimple (Account *acc);
 void xaccGroupWindowDestroy (AccountGroup *grp);
 
 

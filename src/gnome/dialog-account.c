@@ -106,7 +106,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
 static void make_account_changes(GHashTable *change_currency,
                                  GHashTable *change_security,
                                  GHashTable *change_type);
-static void gnc_ui_refresh_edit_account_window (AccountWindow *aw);
+static void gnc_ui_refresh_account_window (AccountWindow *aw);
 
 
 /** Implementation *******************************************************/
@@ -1476,7 +1476,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     }
   }
 
-  gnc_ui_refresh_edit_account_window (aw);
+  gnc_ui_refresh_account_window (aw);
 }
 
 
@@ -1500,6 +1500,8 @@ gnc_ui_new_account_window_internal (Account *base_account,
   else
     aw->type = last_used_account_type;
 
+  gnc_suspend_gui_refresh ();
+
   if (subaccount_names)
   {
     GList *node;
@@ -1510,8 +1512,6 @@ gnc_ui_new_account_window_internal (Account *base_account,
     for (node = aw->subaccount_names; node; node = node->next)
       node->data = g_strdup (node->data);
   }
-
-  gnc_suspend_gui_refresh ();
 
   gnc_account_window_create (aw);
   gnc_account_to_ui (aw);
@@ -1758,14 +1758,14 @@ gnc_ui_destroy_account_add_windows (void)
 
 
 /********************************************************************\
- * gnc_ui_refresh_edit_account_window                               *
+ * gnc_ui_refresh_account_window                                    *
  *   refreshes the edit window                                      *
  *                                                                  *
  * Args:   aw - the account window to refresh                       *
  * Return: none                                                     *
 \********************************************************************/
 static void
-gnc_ui_refresh_edit_account_window (AccountWindow *aw)
+gnc_ui_refresh_account_window (AccountWindow *aw)
 {
   if (aw == NULL)
     return;
