@@ -130,17 +130,23 @@ gnc_module_system_setup_load_path(void)
 
 void
 gnc_module_system_init(void) 
-
 {
   if(loaded_modules == NULL) 
   {
     loaded_modules = g_hash_table_new(g_direct_hash, g_direct_equal);
-    lt_dlinit();
     
-    gnc_module_system_setup_load_path();
-    
-    /* now crawl the GNC_MODULE_PATH to find likely libraries */
-    gnc_module_system_refresh();
+    if(lt_dlinit() == 0)
+    {
+      gnc_module_system_setup_load_path();
+      
+      /* now crawl the GNC_MODULE_PATH to find likely libraries */
+      gnc_module_system_refresh();
+    }
+    else
+    {
+      /* FIXME: there's no way to report this error to the caller. */
+      g_warning ("gnc module system couldn't initialize libltdl");
+    }
   }
 }
 
