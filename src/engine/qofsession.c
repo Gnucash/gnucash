@@ -69,7 +69,47 @@
 #endif /* GNUCASH */
 
 static QofSession * current_session = NULL;
+static GHookList * session_closed_hooks = NULL;
 static short module = MOD_BACKEND;
+
+/* ====================================================================== */
+/* hook routines */
+
+void
+qof_session_add_close_hook (GFunc fn, gpointer data)
+{
+  GHook *hook;
+
+  if (session_closed_hooks == NULL) {
+    session_closed_hooks = malloc(sizeof(GHookList));
+    g_hook_list_init (session_closed_hooks, sizeof(GHook));
+  }
+
+  hook = g_hook_alloc(session_closed_hooks);
+  if (!hook)
+    return;
+
+  hook->func = (GHookFunc)fn;
+  hook->data = data;
+  g_hook_append(session_closed_hooks, hook);
+}
+
+void
+qof_session_call_close_hooks (QofSession *session)
+{
+  GHook *hook;
+  GFunc fn;
+
+  if (session_closed_hooks == NULL)
+    return;
+
+  hook = g_hook_first_valid (session_closed_hooks, FALSE);
+  while (hook) {
+    fn = (GFunc)hook->func;
+    fn(session, hook->data);
+    hook = g_hook_next_valid (session_closed_hooks, hook, FALSE);
+  }
+}
 
 /* ====================================================================== */
 /* error handling routines */

@@ -255,5 +255,19 @@ char * xaccResolveURL (const char * pathfrag);
 /** Run the RPC Server */
 void gnc_run_rpc_server (void);
 
+/** Register a function to be called just before a session is closed.
+ *
+ *  @param fn The function to be called.  The function definition must
+ *  be func(gpointer session, gpointer user_data);
+ *
+ *  @param data The data to be passed to the function. */
+void qof_session_add_close_hook (GFunc fn, gpointer data);
+
+/** Call all registered session close hooks, informing them that the
+ *  specified session is about to be closed.
+ *
+ *  @param session A pointer to the session being closed. */
+void qof_session_call_close_hooks (QofSession *session);
+
 #endif /* QOF_SESSION_H */
 /** @} */

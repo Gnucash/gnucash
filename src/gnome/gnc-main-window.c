@@ -276,6 +276,20 @@ static GQuark window_type = 0;
  *                                                          *
  ************************************************************/
 
+static void
+gnc_main_window_save_window (GncMainWindow *window, gpointer session)
+{
+  DEBUG("window %p", window);
+}
+
+static void
+gnc_main_window_shutdown (gpointer session, gpointer user_data)
+{
+  DEBUG("session %p (%s)", session, qof_session_get_url (session));
+  g_list_foreach (active_windows, (GFunc)gnc_main_window_save_window, session);
+}
+
+
 /** Look through the list of pages installed in this window and see if
  *  the specified page is there.
  *
@@ -637,6 +651,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 			g_cclosure_marshal_VOID__OBJECT,
 			G_TYPE_NONE, 1,
 			G_TYPE_OBJECT);
+
+	qof_session_add_close_hook(gnc_main_window_shutdown, NULL);
 }
 
 static void

@@ -282,6 +282,7 @@ gnc_file_new (void)
    * disable events so we don't get spammed by redraws. */
   gnc_engine_suspend_events ();
   
+  qof_session_call_close_hooks(session);
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
              scm_c_eval_string("gnc:*book-closed-hook*"),
              (session ?
@@ -371,6 +372,7 @@ gnc_post_file_open (const char * filename)
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
   current_session  = qof_session_get_current_session();
+  qof_session_call_close_hooks(current_session);
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
              scm_c_eval_string("gnc:*book-closed-hook*"),
              (current_session ?
@@ -857,6 +859,7 @@ gnc_file_quit (void)
    * transactions during shutdown would cause massive redraws */
   gnc_engine_suspend_events ();
 
+  qof_session_call_close_hooks(session);
   scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
              scm_c_eval_string("gnc:*book-closed-hook*"),
              (session ?
