@@ -903,8 +903,10 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
     if (reg && reg->table)
       gnc_table_save_state (reg->table);
 
-    gtk_widget_hide_all( gsr->window );
-    gtk_widget_destroy( gsr->window );
+    /*
+     * Don't destroy the window here any more.  The register no longer
+     * owns it.
+     */
   }
   gnc_ledger_display_set_user_data (ledger, NULL);
 }
