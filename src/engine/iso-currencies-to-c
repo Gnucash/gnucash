@@ -50,9 +50,7 @@ exec guile -s $0 "$@"
          namespace
          mnemonic 
          exchange-code
-         smallest-fraction
-         fullname
-         fullname))
+         smallest-fraction))
 
       (begin
         (display "Bad currency data at form: ")
