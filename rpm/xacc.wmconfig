@@ -1,3 +1,0 @@
-xacc name "X-Accountant"
-xacc exec "xacc &"
-xacc group Applications/Finance
