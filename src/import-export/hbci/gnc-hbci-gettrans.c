@@ -107,7 +107,9 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     AB_Banking_EnqueueJob(api, job);
 
     /* Execute Outbox. */
-    if (!gnc_AB_BANKING_execute (parent, api, job, interactor)) {
+    if (!gnc_AB_BANKING_execute (parent, api, job, interactor) ||
+	(AB_Job_GetStatus(job) == AB_Job_StatusError) ||
+	GNCInteractor_hadErrors (interactor)) {
       /* AB_BANKING_executeOutbox failed. */
       gnc_hbci_cleanup_job(api, job);
       return;
