@@ -94,4 +94,10 @@ gboolean gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger
 
 void gnc_entry_ledger_reset_query (GncEntryLedger *ledger);
 
+GncEntry * gnc_entry_ledger_get_blank_entry (GncEntryLedger *ledger);
+
+gboolean gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger,
+					      GncEntry *entry,
+					      VirtualCellLocation *vcell_loc);
+
 #endif /* GNC_ENTRY_LEDGER_H */

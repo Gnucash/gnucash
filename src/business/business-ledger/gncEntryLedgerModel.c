@@ -334,7 +334,7 @@ static const char * get_value_entry (VirtualLocation virt_loc,
   } else {
     GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
-    if (entry == gncEntryLookup (ledger->book, &(ledger->blank_entry_guid)))
+    if (entry == gnc_entry_ledger_get_blank_entry (ledger))
       return NULL;
 
     gncEntryGetValue (entry, &value, NULL);
@@ -357,7 +357,7 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
   } else {
     GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
-    if (entry == gncEntryLookup (ledger->book, &(ledger->blank_entry_guid)))
+    if (entry == gnc_entry_ledger_get_blank_entry (ledger))
       return NULL;
 
     gncEntryGetValue (entry, NULL, &value);

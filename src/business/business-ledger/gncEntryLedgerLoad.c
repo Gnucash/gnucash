@@ -156,7 +156,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
   load_inv_type_cells (ledger);
   load_xfer_type_cells (ledger);
 
-  blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
+  blank_entry = gnc_entry_ledger_get_blank_entry (ledger);
 
   if (blank_entry == NULL) {
     switch (ledger->type) {

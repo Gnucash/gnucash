@@ -33,7 +33,7 @@ gnc_entry_ledger_clear_blank_entry (GncEntryLedger *ledger)
 
   if (!ledger) return;
 
-  entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
+  entry = gnc_entry_ledger_get_blank_entry (ledger);
   if (entry)
     gncEntryDestroy (entry);
 
@@ -42,6 +42,14 @@ gnc_entry_ledger_clear_blank_entry (GncEntryLedger *ledger)
 }
 
 /** Exported Functions ***************************************************/
+
+GncEntry *
+gnc_entry_ledger_get_blank_entry (GncEntryLedger *ledger)
+{
+  if (!ledger) return NULL;
+  return gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
+}
+		 
 
 Account * gnc_entry_ledger_get_account (GncEntryLedger *ledger,
 					const char * cell_name)
@@ -442,4 +450,47 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
 
   gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
 			  value, tax_value);
+}
+
+gboolean
+gnc_entry_ledger_get_entry_virt_loc (GncEntryLedger *ledger, GncEntry *entry,
+				     VirtualCellLocation *vcell_loc)
+{
+  Table *table;
+  int v_row;
+  int v_col;
+
+  if ((ledger == NULL) || (entry == NULL))
+    return FALSE;
+
+  table = ledger->table;
+
+  /* go backwards because typically you search for entries at the end */
+
+  for (v_row = table->num_virt_rows - 1; v_row > 0; v_row--)
+    for (v_col = 0; v_col < table->num_virt_cols; v_col++)
+    {
+      VirtualCellLocation vc_loc = { v_row, v_col };
+      VirtualCell *vcell;
+      GncEntry *e;
+
+      vcell = gnc_table_get_virtual_cell (table, vc_loc);
+      if (vcell == NULL)
+        continue;
+
+      if (!vcell->visible)
+        continue;
+
+      e = gncEntryLookup (ledger->book, vcell->vcell_data);
+
+      if (e == entry)
+      {
+        if (vcell_loc)
+          *vcell_loc = vc_loc;
+
+        return TRUE;
+      }
+    }
+
+  return FALSE;
 }

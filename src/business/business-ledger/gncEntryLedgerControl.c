@@ -32,7 +32,7 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
 
   if (!ledger) return FALSE;
 
-  blank_entry = gncEntryLookup (ledger->book, &(ledger->blank_entry_guid));
+  blank_entry = gnc_entry_ledger_get_blank_entry (ledger);
 
   entry = gnc_entry_ledger_get_current_entry (ledger);
   if (entry == NULL) return FALSE;
@@ -173,7 +173,7 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
     gnc_entry_ledger_display_refresh (ledger);
 
     if (ledger->traverse_to_new)
-      new_entry = gncEntryLookup (ledger->book, &ledger->blank_entry_guid);
+      new_entry = gnc_entry_ledger_get_blank_entry (ledger);
 
     /* if the entry we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
@@ -199,7 +199,7 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
   GncEntry *entry;
   GncEntry *blank_entry;
 
-  blank_entry = gncEntryLookup (ledger->book, &ledger->blank_entry_guid);
+  blank_entry = gnc_entry_ledger_get_blank_entry (ledger);
 
   /* auto-completion is only triggered by a tab out */
   if (dir != GNC_TABLE_TRAVERSE_RIGHT)

@@ -392,6 +392,25 @@ duplicateCB (GtkWidget *widget, gpointer data)
 static void
 blank_entry_cb (GtkWidget *widget, gpointer data)
 {
+  InvoiceWindow *iw = data;
+
+  if (!iw || !iw->ledger)
+    return;
+
+  if (!gnc_entry_ledger_commit_entry (iw->ledger))
+    return;
+
+  {
+    VirtualCellLocation vcell_loc;
+    GncEntry *blank;
+
+    blank = gnc_entry_ledger_get_blank_entry (iw->ledger);
+    if (blank == NULL)
+      return;
+
+    if (gnc_entry_ledger_get_entry_virt_loc (iw->ledger, blank, &vcell_loc))
+      gnucash_register_goto_virt_cell (iw->reg, vcell_loc);
+  }
 }
 
 static void
