@@ -9,6 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-file \
+  -I${top_srcdir}/src/report/report-system \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
@@ -35,6 +36,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_srcdir}/src/gnc-module/libgncmodule.la \
   ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_srcdir}/src/app-file/libgncmod-app-file.la \
+  ${top_srcdir}/src/report/report-system/libgncmod-report-system.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_PRINT_LIBS} \

@@ -35,14 +35,17 @@
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
 #include "gnc-gui-query.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
+#include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
+#include "window-help.h"
 #include "window-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
@@ -1073,4 +1076,133 @@ gnc_report_raise_editor(SCM report) {
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM editor = gh_call1(get_editor, report);
   gdk_window_raise(GTK_WIDGET(gw_wcp_get_ptr(editor))->window);
+}
+
+static gboolean
+gnc_html_file_stream_cb (const char *location, char ** data)
+{
+  return (gncReadFile (location, data) > 0);
+}
+
+static gboolean
+gnc_html_report_stream_cb (const char *location, char ** data)
+{
+  gboolean ok;
+
+  ok = gnc_run_report_id_string (location, data);
+
+  if (!ok)
+    *data = g_strdup (_("<html><body><h3>Report error</h3>"
+                        "<p>An error occurred while running the report.</p>"
+                        "</body></html>"));
+
+  return ok;
+}
+
+static gboolean
+gnc_html_options_url_cb (const char *location, const char *label,
+                         gboolean new_window, GNCURLResult *result)
+{
+  SCM find_report  = gh_eval_str ("gnc:find-report");
+  SCM start_editor = gh_eval_str ("gnc:report-edit-options");
+  SCM report;
+  int report_id;
+
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="gnc-options:report-id=2676" */
+  if (strncmp ("report-id=", location, 10) == 0)
+  {
+    if (sscanf (location + 10, "%d", &report_id) != 1)
+    {
+      result->error_message =
+        g_strdup_printf (_("Badly formed options URL: %s"), location);
+
+      return FALSE;
+    }
+
+    report = gh_call1 (find_report, gh_int2scm (report_id));
+    if (report == SCM_UNDEFINED ||
+        report == SCM_BOOL_F)
+    {
+      result->error_message =
+        g_strdup_printf (_("Badly report id: %s"), location);
+
+      return FALSE;
+    }
+
+    gh_call1 (start_editor, report);
+
+    return TRUE;
+  }
+  else
+  {
+    result->error_message =
+      g_strdup_printf (_("Badly formed options URL: %s"), location);
+
+    return FALSE;
+  }
+}
+
+static gboolean
+gnc_html_report_url_cb (const char *location, const char *label,
+                        gboolean new_window, GNCURLResult *result)
+{
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  /* make a new window if necessary */ 
+  if (new_window)
+  {
+    char *url;
+
+    url = gnc_build_url (URL_TYPE_REPORT, location, label);
+    gnc_main_window_open_report_url (url, FALSE);
+    g_free (url);
+
+    result->load_to_stream = FALSE;
+  }
+  else
+  {
+    result->load_to_stream = TRUE;
+  }
+
+  return TRUE;
+}
+
+static gboolean
+gnc_html_help_url_cb (const char *location, const char *label,
+                      gboolean new_window, GNCURLResult *result)
+{
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  if (new_window)
+  {
+    gnc_help_window * help;
+
+    help = gnc_help_window_new ();
+    gnc_help_window_show_help (help, location, label);
+
+    result->load_to_stream = FALSE;
+  }
+  else
+    result->load_to_stream = TRUE;
+
+  return TRUE;
+}
+
+void
+gnc_report_init (void)
+{
+  gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
+  gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
+  gnc_html_register_stream_handler (URL_TYPE_REPORT, gnc_html_report_stream_cb);
+
+  gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
+  gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
+  gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
 }

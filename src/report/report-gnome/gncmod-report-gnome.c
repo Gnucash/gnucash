@@ -12,6 +12,8 @@
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 
+#include "window-report.h"
+
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;
 
@@ -58,6 +60,9 @@ gnc_module_init(int refcount) {
 
   lmod ("(g-wrapped gw-report-gnome)");
   lmod ("(gnucash report report-gnome)");
+
+  if (refcount == 0)
+    gnc_report_init ();
 
   return TRUE;
 }

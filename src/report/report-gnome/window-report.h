@@ -61,4 +61,6 @@ void       gnc_report_window_remove_edited_report(gnc_report_window * win,
                                                   SCM report);
 void       gnc_report_raise_editor(SCM report);
 
+void       gnc_report_init (void);
+
 #endif
