@@ -1,5 +1,7 @@
 2001-04-10  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/date.c (__EXTENSIONS__): add a define for solaris
+
 	* src/gnome/dialog-commodities.c: new file. commodity editor.
 	unfinished.
 
