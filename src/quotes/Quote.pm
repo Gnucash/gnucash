@@ -3,6 +3,7 @@
 #    Copyright (C) 1998, Dj Padzensky <djpadz@padz.net>
 #    Copyright (C) 1998, 1999 Linas Vepstas <linas@linas.org>
 #    Copyright (C) 2000 Yannick LE NY <y-le-ny@ifrance.com>
+#    Copyright (C) 2000, Paul Fenwick <pjf@schools.net.au>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -33,12 +34,13 @@ use vars qw($VERSION @EXPORT @ISA $TIMEOUT
             $FIDELITY_GANDI_URL $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL
             $FIDELITY_GLBND_URL $FIDELITY_MM_URL $FIDELITY_ASSET_URL
             $TROWEPRICE_URL
-            $VANGUARD_QUERY_URL $VANGUARD_CSV_URL @vanguard_ids);
+            $VANGUARD_QUERY_URL $VANGUARD_CSV_URL @vanguard_ids
+	    $ASX_URL);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
-$VERSION = '0.13';
+$VERSION = '0.14';
 @ISA = qw(Exporter);
 
 $YAHOO_URL = ("http://quote.yahoo.com/d?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
@@ -52,6 +54,7 @@ $FIDELITY_ASSET_URL = ("http://personal441.fidelity.com/gen/prices/asset.csv");
 $TROWEPRICE_URL = ("http://www.troweprice.com/funds/prices.csv");
 $VANGUARD_QUERY_URL = ("http://www.vanguard.com/cgi-bin/Custom/daily/custom/CustRpt?");
 $VANGUARD_CSV_URL = ("http://www.vanguard.com/cgi-bin/Custom?ACTION=Download&FileName=");
+$ASX_URL = ('http://www3.asx.com.au/nd50/nd_isapi_50.dll/JSP/EquitySearchResults.jsp?method=post&template=F1001&ASXCodes=');
 
 # Don't export; let user invoke with Quote::getquote syntax.
 # @EXPORT = qw(&yahoo, &fidelity);
@@ -529,6 +532,117 @@ sub vanguard
 
 # =======================================================================
 
+# Australian Stock Exchange (ASX)
+# The ASX provides free delayed quotes through their webpage.
+#
+# Maintainer of this section is Paul Fenwick <pjf@schools.net.au>
+#
+# TODO: It's possible to fetch multiple stocks in one operation.  It would
+#       be nice to do this, and should not be hard.
+sub asx {
+    my @stocks = @_;
+    my %info;
+
+    my $ua = LWP::UserAgent->new;
+    $ua->timeout($TIMEOUT) if defined $TIMEOUT;
+    $ua->env_proxy();
+
+    foreach my $stock (@stocks) {
+        my $reply = $ua->request(GET $ASX_URL.$stock)->content;
+
+	# Grab the date.  This is a pretty clunky way of doing it, but
+	# my mind's still in brain-saver mode.
+
+	my ($day, $month, $year) = $reply =~ /(\d\d?) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})/;
+
+	$_ = $month;
+	(s/January/1/    or
+	 s/February/2/   or
+	 s/March/3/      or
+	 s/April/4/      or
+	 s/May/5/        or
+	 s/June/6/       or
+	 s/July/7/       or
+	 s/August/8/     or
+	 s/September/9/  or
+	 s/October/10/   or
+	 s/November/11/ or
+	 s/December/12/  or (warn "Bizzare month $_ from ASX. Skipped $stock\n"
+	                          and return undef));
+
+	$info{$stock,"date"} = "$_/$day/$year"; # Silly 'merkin format.
+
+	# These first two steps aren't really needed, but are done for
+	# safety.
+	# Remove the bottom part of the page.
+	$reply =~ s#</table>\s*\n<table>.*$##s;
+	# Remove top of page.
+	$reply =~ s#.*<table##s;
+
+        # Now pluck out the headings.
+	my @headings;
+	while ($reply =~ m#<FONT +SIZE=2><B>([%\w ]*).*?</B>#g) {
+	    push @headings, $1;
+	}
+
+	# Now grab the values
+	my @values;
+	while ($reply =~ m#<td align=(left|right)><Font Size=2>(.*?)</Font>#g) {
+	    push @values, $2;
+	}
+
+	# Put the two together and we get shares information.
+	foreach my $heading (@headings) {
+	    my $value = shift @values;
+
+	    # Check the code that we got back.
+	    if ($heading =~ /ASX CODE/) {
+		if ($value ne $stock) {
+		    # Oops!  We got back a stock that we didn't want?
+		    warn "Bad stocks returned from the ASX.  ".
+			 "Wanted $stock but got $value.";
+		    return undef;
+		}
+		next;
+	    }
+
+	    # Convert ASX headings to labels we want to return.
+	    $_ = $heading;
+	    (s/LAST/last/)  or
+	    (s/BID/bid/)    or
+	    (s/OFFER/ask/)  or
+	    (s/OPEN/open/)  or
+	    (s/HIGH/high/)  or
+	    (s/LOW/low/)    or
+	    (s/LAST/last/)  or
+	    (s/PDC/close/)  or
+	    (s/%/p_change/) or
+	    (s/VOLUME/volume/) or (warn "Unknown heading from ASX: $_.  Skipped"
+	                           and next);
+
+	    # Clean the value
+	    $value =~ tr/$,%//d;
+
+	    # If the value if nbsp then skip it.  Some things are not
+	    # defined outside trading hours.
+
+            next if $value =~ /&nbsp;/;
+
+	    # Put the info into our hash.
+	    $info{$stock,$_} = $value;
+	}
+	$info{$stock,"name"} = $stock;	# ASX doesn't give names.  :(
+
+	# Outside of business hours, the last price is the same as the
+	# previous day's close.
+	$info{$stock,"last"} ||= $info{$stock,"close"};
+    }
+    return %info;
+}
+
+
+# =======================================================================
+
 1;
 
 __END__
@@ -546,6 +660,7 @@ Finance::Quote - Get stock and mutual fund quotes from various exchanges
   %quotes = Quote::fidelity @symbols;	 # Get quotes from Fidelity Investments
   %quotes = Quote::troweprice @symbols;	 # Get quotes from T. Rowe Price
   %quotes = Quote::vanguard @symbols;	 # Get quotes from the Vanguard Group
+  %quotes = Quote::asx @symbols;	 # Get quotes from the ASX.
   print ("the last price was ", $quotes {"IBM", "last"} );
 
 =head1 DESCRIPTION
@@ -558,10 +673,12 @@ may include one or more of the following elements:
 
     name         Company or Mutual Fund Name
     last         Last Price
+    high	 Highest trade today
+    low		 Lowest trade today
     date         Last Trade Date  (MM/DD/YY format)
     time         Last Trade Time
                  Change
-                 Percent Change
+    p_change     Percent Change from previous day's close
     volume       Volume
                  Average Daily Vol
     bid          Bid
@@ -581,6 +698,9 @@ may include one or more of the following elements:
 
 You may optionally override the default LWP timeout of 180 seconds by setting
 $Finance::Quote::TIMEOUT to your preferred value.
+
+Note that prices from the Australian Stock Exchange (ASX) are in
+Australian Dollars.
 
 =head1 FAQ
 
@@ -610,6 +730,7 @@ the value of the f parameter.
 Copyright 1998, Dj Padzensky
 Copyright 1998, 1999 Linas Vepstas
 Copyright 2000, Yannick LE NY (update for Yahoo Europe and YahooQuote)
+Copyright 2000, Paul Fenwick (update for ASX)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -626,6 +747,7 @@ information.
 Dj Padzensky (C<djpadz@padz.net>), PadzNet, Inc.
 Linas Vepstas (C<linas@linas.org>)
 Yannick LE NY (C<y-le-ny@ifrance.com>)
+Paul Fenwick (C<pjf@schools.net.au>)
 
 The Finance::YahooQuote home page can be found at
 http://www.padz.net/~djpadz/YahooQuote/

@@ -11,8 +11,11 @@
 # Created by Linas Vepstas January 1999
 # Copyright (c) 1999-2000 Linas Vepstas
 
-# hack alert -- this pathname should *NOT* be hard-coded.
+# hack alert -- this pathname should *NOT* be hard-coded, nor should the
+#               ones below it.
 use lib '/usr/lib/gnucash';
+use lib '/usr/local/lib/gnucash';
+use lib '/opt/gnucash/lib/gnucash';
 use Quote;
 use gnucash;
 
@@ -173,6 +176,11 @@ foreach $acct (@acctlist)
       {
         %quotes = &Quote::vanguard ($security);
         $price = $quotes {$security, "nav"};
+      }
+      elsif ("ASX" eq $quotesrc)
+      {
+        %quotes = &Quote::asx ($security);
+	$price  = $quotes {$security, "last"};
       }
       else
       {

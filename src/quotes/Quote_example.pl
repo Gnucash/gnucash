@@ -63,3 +63,12 @@ print "\n\n";
 
 
 # -----------------------------------
+
+# demo for ASX.  Grab the price of Coles-Myer and Telstra
+@funds = ("CML","TLS");
+%quotes = Quote::asx(@funds);
+foreach $f (@funds) {
+	print "ASX Price of $f is ".$quotes{$f,"last"}." at ".
+	      $quotes{$f,"date"}."\n";
+}
+print "\n\n";

@@ -544,15 +544,16 @@ Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
-Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint.
+Tyson Dowd   <tyson@tyse.net> for config/make patches & debian maint
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Paul Fenwick <pjf@schools.net.au> ASX support
 Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Bill Gribble <grib@billgribble.com> qif importation code
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
-Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work.
+Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
@@ -565,7 +566,7 @@ Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
-Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches.
+Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 G. Allen Morris III  <gam3@ann.softgams.com> for QIF core dump 
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port

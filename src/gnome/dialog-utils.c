@@ -201,6 +201,8 @@ gnc_get_source_name(gint source)
       return "T. Rowe Price";
     case SOURCE_VANGUARD :
       return "Vanguard";
+    case SOURCE_ASX :
+      return "ASX";
   }
 
   PWARN("Unknown source");
@@ -225,6 +227,8 @@ gnc_get_source_code_name(gint source)
       return "TRPRICE";
     case SOURCE_VANGUARD :
       return "VANGUARD";
+    case SOURCE_ASX :
+      return "ASX";
   }
 
   PWARN("Unknown source");
