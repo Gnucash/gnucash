@@ -350,6 +350,9 @@ string and 'directories' must be a list of strings."
   (gnc:debug "starting up (1).")
   (gnc:setup-debugging)
 
+  ;; before doing ANYTHING, set the locale!
+  (setlocale LC_ALL "")
+
   ;; initialize the gnucash module system 
   (gnc:module-system-init)
   
@@ -362,7 +365,6 @@ string and 'directories' must be a list of strings."
     
     (gnc:module-load "gnucash/app-utils" 0)
     (gnc:setup-gettext)
-    (setlocale LC_ALL "")
     ;; Now we can load a bunch of files.
     (load-from-path "path.scm")
     (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
