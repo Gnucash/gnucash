@@ -1961,6 +1961,8 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     sensitive = regData->ledger->ledger->style == REG_STYLE_LEDGER;
 
     gtk_widget_set_sensitive (regData->split_button, sensitive);
+    gtk_widget_set_sensitive (regData->split_menu_check, sensitive);
+    gtk_widget_set_sensitive (regData->split_popup_check, sensitive);
   }
 }
 
