@@ -92,10 +92,6 @@ PriceDirect (BasicCell *bcell,
     else
 	decimal_point = lc->decimal_point[0];
 
-    /* Only one decimal point allowed in price : */
-    if (strchr (bcell->value, decimal_point) != NULL)
-	return FALSE;
-
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
     newval = g_new (char, strlen(bcell->value) + 2);
@@ -113,9 +109,10 @@ PriceDirect (BasicCell *bcell,
     /* update the cursor position */
     (*cursor_position)++;
 
-    xaccSetBasicCellValue (bcell, newval);
+    g_free (bcell->value);
+    bcell->value = newval;
 
-    g_free(newval);
+    cell->need_to_parse = TRUE;
 
     return TRUE;
 }
