@@ -1,3 +1,10 @@
+2003-06-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/druid-qif-import.c:  raise the
+	  import window after choosing a file.  I think this fixes #114209
+	  but I couldn't reproduce the problem so I couldn't actually test
+	  the fix.
+
 2003-06-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/io-gncxml-v2.c: make the book-string an extern
