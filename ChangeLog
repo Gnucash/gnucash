@@ -1,3 +1,11 @@
+2001-04-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/transaction-report.scm: Added new options for
+	specifying whether a subtotal will be printed. Unfinished.
+
+	* src/scm/report.scm, src/scm/report/*.scm: Defined more string
+	constants for option names. Used them in the reports.
+
 2001-04-21  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/options.scm (gnc:make-multichoice-callback-option):

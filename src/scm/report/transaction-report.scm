@@ -1,16 +1,42 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; transaction-report.scm : Report on all transactions in account(s)
+;;
+;; Original report by Robert Merkel <rgmerk@mira.net>
+;; Contributions by Bryan Larsen <blarsen@ada-works.com>
+;; More contributions for new report generation code by Robert Merkel
+;; More contributions by Christian Stimming <stimming@tuhh.de>
+;;
+;; This program is free software; you can redistribute it and/or    
+;; modify it under the terms of the GNU General Public License as   
+;; published by the Free Software Foundation; either version 2 of   
+;; the License, or (at your option) any later version.              
+;;                                                                  
+;; This program is distributed in the hope that it will be useful,  
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
+;; GNU General Public License for more details.                     
+;;                                                                  
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
+;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'record)
 (gnc:support "report/transaction-report.scm")
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-;; -*-scheme-*-
-;; transaction-report.scm
-;; Report on all transactions in account(s)
-;; original report by Robert Merkel (rgmerk@mira.net)
-;; redone from scratch by Bryan Larsen (blarsen@ada-works.com)
-;; totally rewritten for new report generation code by Robert Merkel
-
-(let ()
+(let ((pagename-sorting (N_ "Sorting"))
+      (optname-prime-sortkey (N_ "Primary Key"))
+      (optname-prime-subtotal (N_ "Primary Subtotal"))
+      (optname-prime-subtotal-by (N_ "Primary Subtotal by"))
+      (optname-sec-sortkey (N_ "Secondary Key"))
+      (optname-sec-subtotal (N_ "Secondary Subtotal"))
+      (optname-sec-subtotal-by (N_ "Secondary Subtotal by")))
 
   (define-syntax addto!
     (syntax-rules ()
@@ -179,30 +205,30 @@
 	  (gnc:option-value 
 	   (gnc:lookup-option options section name)))
 	(let ((column-list (make-vector columns-used-size #f)))
-	  (if (opt-val (N_ "Display") (N_ "Date"))
+	  (if (opt-val gnc:pagename-display (N_ "Date"))
 	      (vector-set! column-list 0 #t))
-	  (if (opt-val (N_ "Display") (N_ "Num"))
+	  (if (opt-val gnc:pagename-display (N_ "Num"))
 	      (vector-set! column-list 1 #t))
-	  (if (opt-val (N_ "Display") (N_ "Description"))
+	  (if (opt-val gnc:pagename-display (N_ "Description"))
 	      (vector-set! column-list 2 #t))
-	  (if (opt-val (N_ "Display") (N_ "Account"))
+	  (if (opt-val gnc:pagename-display (N_ "Account"))
 	      (vector-set! column-list 3 #t))
-	  (if (opt-val (N_ "Display") (N_ "Other Account"))
+	  (if (opt-val gnc:pagename-display (N_ "Other Account"))
 	      (vector-set! column-list 4 #t))
-	  (if (opt-val (N_ "Display") (N_ "Shares"))
+	  (if (opt-val gnc:pagename-display (N_ "Shares"))
 	      (vector-set! column-list 5 #t))
-	  (if (opt-val (N_ "Display") (N_ "Price"))
+	  (if (opt-val gnc:pagename-display (N_ "Price"))
 	      (vector-set! column-list 6 #t))
-	  (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
+	  (let ((amount-setting (opt-val gnc:pagename-display (N_ "Amount"))))
 	    (if (eq? amount-setting 'single)
 	      (vector-set! column-list 7 #t))
 	    (if (eq? amount-setting 'double)
 		(begin 
 	      (vector-set! column-list 8 #t)
 	      (vector-set! column-list 9 #t))))
-	  (if (opt-val (N_ "Display") (N_ "Running Balance"))
+	  (if (opt-val gnc:pagename-display (N_ "Running Balance"))
 	      (vector-set! column-list 10 #t))
-	  (if (opt-val (N_ "Display")  (N_ "Use Full Account Name?"))
+	  (if (opt-val gnc:pagename-display  (N_ "Use Full Account Name?"))
 	      (vector-set! column-list 11 #t))
 	;  (gnc:debug "Column list:" column-list)
       column-list))
@@ -327,14 +353,31 @@
     (define (gnc:register-trep-option new-option)
       (gnc:register-option gnc:*transaction-report-options* new-option))
 
+    ;; General options
+
     (gnc:options-add-date-interval!
      gnc:*transaction-report-options*
-     (N_ "General") (N_ "From") (N_ "To") "a")
+     gnc:pagename-general (N_ "From") (N_ "To") "a")
+
+    ;; goonie: what does this one mean? Btw it crashes anyway...
+    (gnc:register-trep-option
+     (gnc:make-multichoice-option
+      gnc:pagename-general (N_ "Style")
+      "d" (N_ "Report style")
+      'single
+      (list (vector 'multi-line
+                    (N_ "Multi-Line")
+                    (N_ "Display N lines"))
+            (vector 'single
+                    (N_ "Single")
+                    (N_ "Display 1 line")))))
+
+    ;; Accounts options
 
     ;; account to do report on
     (gnc:register-trep-option
      (gnc:make-account-list-option
-      (N_ "General") (N_ "Account")
+      gnc:pagename-accounts (N_ "Account")
       "c" (N_ "Do transaction report on these accounts")
       (lambda ()
         ;; FIXME : gnc:get-current-accounts disappeared.
@@ -348,20 +391,14 @@
                 (else ()))))
       #f #t))
 
-    (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      (N_ "General") (N_ "Style")
-      "d" (N_ "Report style")
-      'single
-      (list (vector 'multi-line
-                    (N_ "Multi-Line")
-                    (N_ "Display N lines"))
-            (vector 'single
-                    (N_ "Single")
-                    (N_ "Display 1 line")))))
+    ;; Sorting options
 
-    (let ((key-choice-list 
-	   (list (vector 'account-name
+    (let ((options gnc:*transaction-report-options*)
+	  (key-choice-list 
+	   (list (vector 'none
+                         (N_ "None")
+                         (N_ "Do not sort"))
+		 (vector 'account-name
                          (N_ "Account Name(w/subtotal)")
                          (N_ "Sort & subtotal by account name"))
 		 (vector 'account-code
@@ -410,102 +447,139 @@
 		 
                  (vector 'memo
                          (N_ "Memo")
-                         (N_ "Sort by memo"))
-		 
-                 (vector 'none
-                         (N_ "None")
-                         (N_ "Do not sort")))))
+                         (N_ "Sort by memo"))))
+	  (subtotal-enabled '(account-name account-code date 
+					   corresponding-acc-name
+					   corresponding-acc-code)) 
+					   ;;description))
+	  (ascending-choice-list 
+	   (list
+	    (vector 'ascend
+		    (N_ "Ascending")
+		    (N_ "smallest to largest, earliest to latest"))
+	    (vector 'descend
+		    (N_ "Descending")
+		    (N_ "largest to smallest, latest to earliest"))))
+	  (subtotal-choice-list
+	   (list
+	    (vector 'by-week
+		    (N_ "By week")
+		    (N_ "By week"))
+	    (vector 'by-month
+		    (N_ "By month")
+		    (N_ "By month"))
+	    (vector 'by-year
+		    (N_ "By year")
+		    (N_ "By year")))))
 
       ;; primary sorting criterion
       (gnc:register-trep-option
-       (gnc:make-multichoice-option
-	(N_ "Sorting") (N_ "Primary Key")
+       (gnc:make-multichoice-callback-option
+	pagename-sorting optname-prime-sortkey
 	"a" (N_ "Sort by this criterion first")
 	'account-name
-	key-choice-list))
-     
+	key-choice-list #f
+	(lambda (x) 
+	  (gnc:set-option-selectable-by-name
+	   pagename-sorting optname-prime-subtotal
+	   (and (member x subtotal-enabled) #t)))))
+      
       (gnc:register-trep-option
        (gnc:make-multichoice-option
-	(N_ "Sorting") (N_ "Primary Sort Order")
+	pagename-sorting (N_ "Primary Sort Order")
 	"b" (N_ "Order of primary sorting")
 	'ascend
-	(list
-         (vector 'ascend
-		 (N_ "Ascending")
-		 (N_ "smallest to largest, earliest to latest"))
-	 (vector 'descend
-		 (N_ "Descending")
-		 (N_ "largest to smallest, latest to earliest")))))
-   
+	ascending-choice-list))
+
+      (gnc:register-trep-option
+       (gnc:make-complex-boolean-option
+	pagename-sorting optname-prime-subtotal
+	"c" 
+	(N_ "Subtotal according to the primary key?")
+	#t #f 
+	(lambda (x) (gnc:set-option-selectable-by-name 
+		     pagename-sorting optname-prime-subtotal-by 
+		     (and x 
+			  (equal?
+			   'date 
+			   (gnc:option-value
+			    (gnc:lookup-option
+			     options
+			     pagename-sorting optname-prime-sortkey))))))))
+      
       (gnc:register-trep-option
        (gnc:make-multichoice-option
-	(N_ "Sorting") (N_ "Secondary Key")
-	"c"
+	pagename-sorting optname-prime-subtotal-by
+	"d" (N_ "Subtotal by")
+	'by-month
+	subtotal-choice-list))
+      
+      ;; Secondary sorting criterion
+      (gnc:register-trep-option
+       (gnc:make-multichoice-callback-option
+	pagename-sorting optname-sec-sortkey
+	"e"
 	(N_ "Sort by this criterion second")
 	'date
-	key-choice-list)))
+	key-choice-list #f
+	(lambda (x) 
+	  (gnc:set-option-selectable-by-name
+	   pagename-sorting optname-sec-subtotal
+	   (and (member x subtotal-enabled) #t)))))
+      
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	pagename-sorting (N_ "Secondary Sort Order")
+	"f" (N_ "Order of Secondary sorting")
+	'ascend
+	ascending-choice-list))
+
+      (gnc:register-trep-option
+       (gnc:make-complex-boolean-option
+	pagename-sorting optname-sec-subtotal
+	"g" 
+	(N_ "Subtotal according to the secondary key?")
+	#t #f 
+	(lambda (x) (gnc:set-option-selectable-by-name 
+		       pagename-sorting optname-sec-subtotal-by x))))
+
+      (gnc:register-trep-option
+       (gnc:make-multichoice-option
+	pagename-sorting optname-sec-subtotal-by
+	"h" (N_ "Subtotal by")
+	'by-month
+	subtotal-choice-list)))
+
+    ;; Display options
+
+    (for-each
+     (lambda (l)
+       (gnc:register-trep-option
+	(gnc:make-simple-boolean-option
+	 gnc:pagename-display (car l) (cadr l) (caddr l) (cadddr l))))
+     ;; One list per option here with: option-name, sort-tag,
+     ;; help-string, default-value
+     (list
+      (list (N_ "Date") "a" (N_ "Display the date?") #t)
+      (list (N_ "Num")  "b" (N_ "Display the check number?") #t)
+      (list (N_ "Description") "c" (N_ "Display the description?") #t)
+      (list (N_ "Memo") "d" (N_ "Display the memo?") #t)
+      (list (N_ "Account") "e" (N_ "Display the account?") #t)
+      (list (N_ "Use Full Account Name?") "f" 
+	    (N_ "Display the full account name") #t)
+      (list (N_ "Other Account")"g" 
+	    (N_ "Display the other account?
+ (if this is a split transaction, this parameter is guessed).") #f)
+      (list (N_ "Shares") "h" (N_ "Display the number of shares?") #f)
+      (list (N_ "Price") "i" "Display the shares price?" #f)
+      ;; note the "Amount" multichoice option in between here
+      (list (N_ "Running Balance") "k" (N_ "Display a running balance") #f)
+      (list (N_ "Totals") "l" (N_ "Display the totals?") #t)))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      (N_ "Sorting") (N_ "Secondary Sort Order")
-      "d" (N_ "Order of Secondary sorting")
-      'ascend
-      (list
-       (vector 'ascend
-               (N_ "Ascending")
-               (N_ "smallest to largest, earliest to latest"))
-       (vector 'descend
-               (N_ "Descending")
-               (N_ "largest to smallest, latest to earliest")))))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Date")
-      "b" (N_ "Display the date?") #t))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Num")
-      "c" (N_ "Display the check number?") #t))
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Description")
-      "d" (N_ "Display the description?") #t))
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Memo")
-      "f" (N_ "Display the memo?") #t))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Account")
-      "g" (N_ "Display the account?") #t))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Use Full Account Name?")
-      "ga" (N_ "Display the full account name") #t))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Other Account")
-      "h" (N_ "Display the other account?
- (if this is a split transaction, this parameter is guessed).") #f))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Shares")
-      "ha" (N_ "Display the number of shares?") #f))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Price")
-      "hb" "Display the shares price?" #f))
-
-    (gnc:register-trep-option
-     (gnc:make-multichoice-option
-      (N_ "Display") (N_ "Amount")
-      "i" (N_ "Display the amount?")  
+      gnc:pagename-display (N_ "Amount")
+      "j" (N_ "Display the amount?")  
       'single
       (list
        (vector 'none (N_ "None") (N_ "No amount display"))
@@ -513,18 +587,8 @@
        (vector 'double (N_ "Double") (N_ "Two Column Display")))))
     
     (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Running Balance")
-      "k" (N_ "Display a running balance") #f))
-
-    (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
-      (N_ "Display") (N_ "Totals")
-      "l" (N_ "Display the totals?") #t))
-
-    (gnc:register-trep-option
      (gnc:make-multichoice-option
-      (N_ "Display") (N_ "Sign Reverses?")
+      gnc:pagename-display (N_ "Sign Reverses?")
       "m" "Reverse amount display for certain account types"
       'income-expense
       (list 
@@ -534,7 +598,9 @@
        (vector 'credit-accounts (N_ "Credit Accounts")
 	       (N_ "Reverse amount display for Liability, Equity, Credit Card,
 and Income accounts")))))
-      
+
+    ;; Color options
+
     (gnc:register-trep-option
      (gnc:make-color-option
       (N_ "Colors")  (N_ "Primary Subtotals/headings")
@@ -577,7 +643,7 @@ and Income accounts")))))
       #f))
 
     (gnc:options-set-default-section gnc:*transaction-report-options*
-                                     "General")
+                                     gnc:pagename-general)
 
    gnc:*transaction-report-options*)
 
@@ -635,7 +701,7 @@ and Income accounts")))))
       (vector-ref (cdr 
 		     (assq (gnc:option-value
                             (gnc:lookup-option options
-                                               (N_ "Sorting")
+                                               pagename-sorting
                                                (N_ "Primary Key")))
 			   comp-funcs-assoc-list)) 
 		  1))
@@ -644,7 +710,7 @@ and Income accounts")))))
       (vector-ref (cdr 
                    (assq (gnc:option-value
                           (gnc:lookup-option options
-                                             (N_ "Sorting")
+                                             pagename-sorting
                                              (N_ "Secondary Key")))
 			   comp-funcs-assoc-list))
 		  1))
@@ -653,7 +719,7 @@ and Income accounts")))))
       (vector-ref (cdr 
 		   (assq (gnc:option-value
                           (gnc:lookup-option options
-                                             (N_ "Sorting")
+                                             pagename-sorting
                                              (N_ "Primary Key")))
 			   comp-funcs-assoc-list))
 		  2))
@@ -662,7 +728,7 @@ and Income accounts")))))
       (vector-ref (cdr 
 		   (assq (gnc:option-value
                           (gnc:lookup-option options
-                                             (N_ "Sorting")
+                                             pagename-sorting
                                              (N_ "Secondary Key")))
 			   comp-funcs-assoc-list))
 		  2))
@@ -670,14 +736,14 @@ and Income accounts")))))
     (define (get-account-types-to-reverse options)
       (cdr (assq (gnc:option-value 
 		  (gnc:lookup-option options
-				     (N_ "Display")
+				     gnc:pagename-display
 				     (N_ "Sign Reverses?")))
 		 account-types-to-reverse-assoc-list)))
       
 
     (define (transaction-report-multi-rows-p options)
       (eq? (gnc:option-value
-            (gnc:lookup-option options (N_ "General") (N_ "Style")))
+            (gnc:lookup-option options gnc:pagename-general (N_ "Style")))
 	   'multi-line))
 
     (define (add-other-split-rows split table used-columns
@@ -857,17 +923,17 @@ and Income accounts")))))
        (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
     (let ((document (gnc:make-html-document))
-	  (c_accounts (opt-val "General" "Account"))
+	  (c_accounts (opt-val gnc:pagename-accounts "Account"))
 	  (begindate (gnc:timepair-start-day-time
 		      (gnc:date-option-absolute-time
-		       (opt-val "General" "From"))))
+		       (opt-val gnc:pagename-general "From"))))
 	  (enddate (gnc:timepair-end-day-time
 		    (gnc:date-option-absolute-time
-		     (opt-val "General" "To"))))
-	  (primary-key (opt-val "Sorting" "Primary Key"))
-	  (primary-order (opt-val "Sorting" "Primary Sort Order"))
-	  (secondary-key (opt-val "Sorting" "Secondary Key"))
-	  (secondary-order (opt-val "Sorting" "Secondary Sort Order"))
+		     (opt-val gnc:pagename-general "To"))))
+	  (primary-key (opt-val pagename-sorting "Primary Key"))
+	  (primary-order (opt-val pagename-sorting "Primary Sort Order"))
+	  (secondary-key (opt-val pagename-sorting "Secondary Key"))
+	  (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
 	  (splits '())
           (table '())
 	  (query (gnc:malloc-query)))

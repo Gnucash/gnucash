@@ -31,21 +31,17 @@
 
 ;; first define all option's names so that they are properly defined
 ;; in *one* place.
-(let* ((pagename-general (N_ "General"))
-       (optname-from-date (N_ "From"))
+(let* ((optname-from-date (N_ "From"))
        (optname-to-date (N_ "To"))
        
-       (pagename-accounts (N_ "Accounts"))
        (optname-display-depth (N_ "Account Display Depth"))
        (optname-show-subaccounts (N_ "Always show sub-accounts"))
        (optname-accounts (N_ "Account"))
 
-       (pagename-display (N_ "Display"))
        (optname-group-accounts (N_ "Group the accounts"))
        (optname-show-parent-balance (N_ "Show balances for parent accounts"))
        (optname-show-parent-total (N_ "Show subtotals"))
        
-       (pagename-currencies pagename-general)
        (optname-show-foreign (N_ "Show Foreign Currencies"))
        (optname-report-currency (N_ "Report's currency")))
   
@@ -55,18 +51,18 @@
       
       ;; date at which to report balance
       (gnc:options-add-date-interval!
-       options pagename-general 
+       options gnc:pagename-general 
        optname-from-date optname-to-date "a")
 
       ;; all about currencies
       (gnc:options-add-currency-selection!
-       options pagename-currencies
+       options gnc:pagename-general
        optname-show-foreign optname-report-currency
        "b")
 
       ;; accounts to work on
       (gnc:options-add-account-selection! 
-       options pagename-accounts
+       options gnc:pagename-accounts
        optname-display-depth optname-show-subaccounts
        optname-accounts "a" 2
        ;; FIXME: get income/expense accounts
@@ -77,23 +73,23 @@
 
       ;; with or without grouping
       (gnc:options-add-group-accounts!      
-       options pagename-display optname-group-accounts "b" #t)
+       options gnc:pagename-display optname-group-accounts "b" #t)
 
       ;; FIXME: new options here
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-display optname-show-parent-balance 
+	gnc:pagename-display optname-show-parent-balance 
 	"c" (N_ "Show balances for parent accounts") #f))
 
       (gnc:register-option 
        options
        (gnc:make-simple-boolean-option
-	pagename-display optname-show-parent-total
+	gnc:pagename-display optname-show-parent-total
 	"d" (N_ "Show subtotals for parent accounts") #t))
 
       ;; Set the general page as default option tab
-      (gnc:options-set-default-section options pagename-general)      
+      (gnc:options-set-default-section options gnc:pagename-general)      
 
       options))
   
@@ -109,29 +105,29 @@
         (gnc:report-options report-obj) pagename optname)))
 
     ;; get all option's values
-    (let ((display-depth (get-option pagename-accounts 
+    (let ((display-depth (get-option gnc:pagename-accounts 
 				     optname-display-depth))
-	  (show-subaccts? (get-option pagename-accounts
+	  (show-subaccts? (get-option gnc:pagename-accounts
 				      optname-show-subaccounts))
-	  (accounts (get-option pagename-accounts
+	  (accounts (get-option gnc:pagename-accounts
 				optname-accounts))
-          (do-grouping? (get-option pagename-display
+          (do-grouping? (get-option gnc:pagename-display
 				    optname-group-accounts))
-          (show-parent-balance? (get-option pagename-display
+          (show-parent-balance? (get-option gnc:pagename-display
 					    optname-show-parent-balance))
-          (show-parent-total? (get-option pagename-display
+          (show-parent-total? (get-option gnc:pagename-display
 					  optname-show-parent-total))
-	  (show-fcur? (get-option pagename-currencies
+	  (show-fcur? (get-option gnc:pagename-general
 				  optname-show-foreign))
-	  (report-currency (get-option pagename-currencies
+	  (report-currency (get-option gnc:pagename-general
 				       optname-report-currency))
           (to-date-tp (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
-                        (get-option pagename-general
+                        (get-option gnc:pagename-general
                                     optname-to-date))))
           (from-date-tp (gnc:timepair-start-day-time 
 			 (gnc:date-option-absolute-time
-                          (get-option pagename-general
+                          (get-option gnc:pagename-general
                                       optname-from-date))))
           (doc (gnc:make-html-document)))
       

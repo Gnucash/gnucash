@@ -56,11 +56,9 @@ balance at a given time"))
       (optname-to-date (N_ "To"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
       (optname-levels (N_ "Show Accounts until level"))
 
-      (pagename-display (N_ "Display"))
       (optname-fullname (N_ "Show long account names"))
       (optname-show-total (N_ "Show Totals"))
       (optname-slices (N_ "Maximum Slices"))
@@ -89,7 +87,7 @@ balance at a given time"))
       
       (add-option
        (gnc:make-account-list-option
-	pagename-accounts optname-accounts
+	gnc:pagename-accounts optname-accounts
 	"a"
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
@@ -104,28 +102,28 @@ balance at a given time"))
 	#t))
 
       (gnc:options-add-account-levels! 
-       options pagename-accounts optname-levels "b" 
+       options gnc:pagename-accounts optname-levels "b" 
        (N_ "Show accounts to this depth and not further") 
        2)
 
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-fullname
+        gnc:pagename-display optname-fullname
         "a" (N_ "Show the full account name in legend?") #f))
 
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-show-total
+        gnc:pagename-display optname-show-total
         "b" (N_ "Show the total balance in legend?") #t))
 
       (add-option
        (gnc:make-number-range-option
-        pagename-display optname-slices
+        gnc:pagename-display optname-slices
         "c" (N_ "Maximum number of slices in pie") 7
         2 24 0 1))
 
       (gnc:options-add-plot-size!
-       options pagename-display 
+       options gnc:pagename-display 
        optname-plot-width optname-plot-height "d" 500 250)
 
       (gnc:options-set-default-section options gnc:pagename-general)      
@@ -156,18 +154,18 @@ balance at a given time"))
 			      (op-value gnc:pagename-general 
 					optname-from-date)))
 			    '()))
-	  (accounts (op-value pagename-accounts optname-accounts))
-	  (account-levels (op-value pagename-accounts optname-levels))
+	  (accounts (op-value gnc:pagename-accounts optname-accounts))
+	  (account-levels (op-value gnc:pagename-accounts optname-levels))
 	  (report-currency (op-value gnc:pagename-general
 				     optname-report-currency))
 	  (report-title (op-value gnc:pagename-general 
 				  gnc:optname-reportname))
 
-	  (show-fullname? (op-value pagename-display optname-fullname))
-	  (show-total? (op-value pagename-display optname-show-total))
-	  (max-slices (op-value pagename-display optname-slices))
-	  (height (op-value pagename-display optname-plot-height))
-	  (width (op-value pagename-display optname-plot-width))
+	  (show-fullname? (op-value gnc:pagename-display optname-fullname))
+	  (show-total? (op-value gnc:pagename-display optname-show-total))
+	  (max-slices (op-value gnc:pagename-display optname-slices))
+	  (height (op-value gnc:pagename-display optname-plot-height))
+	  (width (op-value gnc:pagename-display optname-plot-width))
 
 	  (document (gnc:make-html-document))
 	  (chart (gnc:make-html-piechart))
@@ -276,7 +274,7 @@ balance at a given time"))
 					 options)
 		;; and set the destination accounts
 		(gnc:option-set-value
-		 (gnc:lookup-option options pagename-accounts 
+		 (gnc:lookup-option options gnc:pagename-accounts 
 				    optname-accounts)
 		 (map cadr finish))
                 (set! id (gnc:make-report reportname options))
@@ -308,9 +306,9 @@ balance at a given time"))
 		       reportname
 		       (gnc:report-options report-obj) 
 		       (list
-			(list pagename-accounts optname-accounts
+			(list gnc:pagename-accounts optname-accounts
 			      (cons acct subaccts))
-			(list pagename-accounts optname-levels
+			(list gnc:pagename-accounts optname-levels
 			      (+ 1 tree-depth))
 			(list gnc:pagename-general 
 			      gnc:optname-reportname

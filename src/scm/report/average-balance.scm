@@ -13,10 +13,7 @@
 (gnc:depend "report-utilities.scm")
 (gnc:depend "date-utilities.scm")
 
-(let ((pagename-general (N_ "General"))
-      (pagename-accounts (N_ "Accounts"))
-      (pagename-display (N_ "Display"))
-      (optname-subacct (N_ "Include Sub-Accounts"))
+(let ((optname-subacct (N_ "Include Sub-Accounts"))
       (optname-report-currency (N_ "Report Currency")))
   ;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Options
@@ -30,12 +27,12 @@
               (gnc:register-option options new-option))))      
 
       (gnc:options-add-date-interval!
-       options pagename-general (N_ "From") (N_ "To") "a")
+       options gnc:pagename-general (N_ "From") (N_ "To") "a")
 
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
-        pagename-accounts (N_ "Accounts")
+        gnc:pagename-accounts (N_ "Accounts")
         "d" (N_ "Do transaction report on this account")
         (lambda ()
           ;; FIXME : gnc:get-current-accounts disappeared
@@ -54,30 +51,30 @@
         #f #t))
 
       (gnc:options-add-interval-choice! 
-       options pagename-general (N_ "Step Size") "b" 'TwoWeekDelta)
+       options gnc:pagename-general (N_ "Step Size") "b" 'TwoWeekDelta)
 
       (register-option
        (gnc:make-simple-boolean-option
-        pagename-accounts optname-subacct
+        gnc:pagename-accounts optname-subacct
         "e" (N_ "Include sub-accounts of all selected accounts") #t))
 
       ;; Report currency
       (gnc:options-add-currency! 
-       options pagename-general optname-report-currency "f")
+       options gnc:pagename-general optname-report-currency "f")
       
       (register-option
        (gnc:make-simple-boolean-option
-        pagename-display (N_ "Show table")
+        gnc:pagename-display (N_ "Show table")
         "a" (N_ "Display a table of the selected data.") #f))
 
       (register-option
        (gnc:make-simple-boolean-option
-        pagename-display (N_ "Show plot")
+        gnc:pagename-display (N_ "Show plot")
         "b" (N_ "Display a graph of the selected data.") #t))
 
       (register-option
        (gnc:make-list-option
-        pagename-display (N_ "Plot Type")
+        gnc:pagename-display (N_ "Plot Type")
         "c" (N_ "The type of graph to generate") (list 'AvgBalPlot)
         (list (list->vector
                (list 'AvgBalPlot (N_ "Average") (N_ "Average Balance")))
@@ -87,11 +84,11 @@
                (list 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss"))))))
 
       (gnc:options-add-plot-size! 
-       options pagename-display (N_ "Plot Width") (N_ "Plot Height")
+       options gnc:pagename-display (N_ "Plot Width") (N_ "Plot Height")
        "d" 400 400)
 
       ;; Set the general page as default option tab
-      (gnc:options-set-default-section options pagename-general)      
+      (gnc:options-set-default-section options gnc:pagename-general)      
       
       options))
 
@@ -243,17 +240,18 @@
                (gnc:lookup-option (gnc:report-options report-obj) sec value))))
            (begindate  (gnc:timepair-start-day-time
 			(gnc:date-option-absolute-time 
-			 (opt-val pagename-general (N_ "From")))))
+			 (opt-val gnc:pagename-general (N_ "From")))))
            (enddate    (gnc:timepair-end-day-time 
 			(gnc:date-option-absolute-time 
-			 (opt-val pagename-general (N_ "To")))))
-           (stepsize   (eval (opt-val pagename-general (N_ "Step Size"))))
-           (accounts   (opt-val pagename-accounts (N_ "Accounts")))
-           (dosubs?    (opt-val pagename-accounts optname-subacct))
-	   (report-currency (opt-val pagename-general optname-report-currency))
-           (plot-type  (opt-val pagename-display (N_ "Plot Type")))
-           (show-plot? (opt-val pagename-display (N_ "Show plot")))
-           (show-table? (opt-val pagename-display (N_ "Show table")))
+			 (opt-val gnc:pagename-general (N_ "To")))))
+           (stepsize   (eval (opt-val gnc:pagename-general (N_ "Step Size"))))
+           (accounts   (opt-val gnc:pagename-accounts (N_ "Accounts")))
+           (dosubs?    (opt-val gnc:pagename-accounts optname-subacct))
+	   (report-currency (opt-val gnc:pagename-general 
+				     optname-report-currency))
+           (plot-type  (opt-val gnc:pagename-display (N_ "Plot Type")))
+           (show-plot? (opt-val gnc:pagename-display (N_ "Show plot")))
+           (show-table? (opt-val gnc:pagename-display (N_ "Show table")))
            (document   (gnc:make-html-document))
 	   (exchange-alist (gnc:make-exchange-alist
 			    report-currency enddate))
@@ -329,8 +327,10 @@
             ;; plot comes first. 
             (if show-plot?
                 (let ((barchart (gnc:make-html-barchart))
-                      (width (opt-val pagename-display (N_ "Plot Width")))
-                      (height (opt-val pagename-display (N_ "Plot Height")))
+                      (width (opt-val gnc:pagename-display 
+				      (N_ "Plot Width")))
+                      (height (opt-val gnc:pagename-display 
+				       (N_ "Plot Height")))
                       (col-labels '())
                       (col-colors '()))
                   (if (memq 'AvgBalPlot plot-type)

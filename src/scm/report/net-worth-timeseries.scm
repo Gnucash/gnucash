@@ -8,16 +8,13 @@
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-(let ((pagename-general (N_ "General"))
-      (optname-from-date (N_ "From"))
+(let ((optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
 
-      (pagename-display (N_ "Display"))
       (optname-sep-bars (N_ "Show Asset & Liability bars"))
       (optname-net-bars (N_ "Show net worth bars"))
       (optname-plot-width (N_ "Plot Width"))
@@ -32,15 +29,15 @@
               (gnc:register-option options new-option))))
 
       (gnc:options-add-date-interval!
-       options pagename-general
+       options gnc:pagename-general
        optname-from-date optname-to-date "a")
 
       (gnc:options-add-interval-choice! 
-       options pagename-general optname-stepsize "b" 'MonthDelta)
+       options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
       (add-option
        (gnc:make-account-list-option
-	pagename-accounts optname-accounts
+	gnc:pagename-accounts optname-accounts
 	"c"
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
@@ -55,24 +52,24 @@
 	#t))
 
       (gnc:options-add-currency! 
-       options pagename-general optname-report-currency "d")
+       options gnc:pagename-general optname-report-currency "d")
       
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-sep-bars
+        gnc:pagename-display optname-sep-bars
         "a" (N_ "Show the Asset and the Liability/Equity bars?") #t))
 
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-net-bars
+        gnc:pagename-display optname-net-bars
         "b" (N_ "Show a Net Worth bar?") #t))
 
 
       (gnc:options-add-plot-size! 
-       options pagename-display 
+       options gnc:pagename-display 
        optname-plot-width optname-plot-height "c" 500 400)
 
-      (gnc:options-set-default-section options pagename-general)
+      (gnc:options-set-default-section options gnc:pagename-general)
 
       options))
   
@@ -124,12 +121,12 @@
 
     (let* ((to-date-tp (gnc:timepair-end-day-time 
 			(gnc:date-option-absolute-time
-                         (op-value pagename-general optname-to-date))))
+                         (op-value gnc:pagename-general optname-to-date))))
 	   (from-date-tp (gnc:timepair-start-day-time 
 			  (gnc:date-option-absolute-time
-                           (op-value pagename-general optname-from-date))))
-	   (interval (op-value pagename-general optname-stepsize))
-	   (accounts (op-value pagename-accounts optname-accounts))
+                           (op-value gnc:pagename-general optname-from-date))))
+	   (interval (op-value gnc:pagename-general optname-stepsize))
+	   (accounts (op-value gnc:pagename-accounts optname-accounts))
 	   (classified-accounts (gnc:decompose-accountlist accounts))
 	   (asset-accounts
 	    (assoc-ref classified-accounts 'asset))
@@ -137,13 +134,13 @@
 	    (append
 	     (assoc-ref classified-accounts 'liability)
 	     (assoc-ref classified-accounts 'equity)))
-           (report-currency (op-value pagename-general
+           (report-currency (op-value gnc:pagename-general
                                       optname-report-currency))
 
-	   (show-sep? (op-value pagename-display optname-sep-bars))
-	   (show-net? (op-value pagename-display optname-net-bars))
-	   (height (op-value pagename-display optname-plot-height))
-	   (width (op-value pagename-display optname-plot-width))
+	   (show-sep? (op-value gnc:pagename-display optname-sep-bars))
+	   (show-net? (op-value gnc:pagename-display optname-net-bars))
+	   (height (op-value gnc:pagename-display optname-plot-height))
+	   (width (op-value gnc:pagename-display optname-plot-width))
 
 	   (document (gnc:make-html-document))
 	   (chart (gnc:make-html-barchart))

@@ -8,16 +8,13 @@
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-(let ((pagename-general (N_ "General"))
-      (optname-from-date (N_ "From"))
+(let ((optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
 
-      (pagename-display (N_ "Display"))
       (optname-inc-exp (N_ "Show Income/Expense"))
       (optname-show-profit (N_ "Show Net Profit"))
       (optname-stacked (N_ "Use Stacked Bars"))
@@ -33,15 +30,15 @@
               (gnc:register-option options new-option))))
 
       (gnc:options-add-date-interval!
-       options pagename-general
+       options gnc:pagename-general
        optname-from-date optname-to-date "a")
 
       (gnc:options-add-interval-choice! 
-       options pagename-general optname-stepsize "b" 'MonthDelta)
+       options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
       (add-option
        (gnc:make-account-list-option
-	pagename-accounts optname-accounts
+	gnc:pagename-accounts optname-accounts
 	"c"
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
@@ -54,28 +51,28 @@
 	#t))
 
       (gnc:options-add-currency! 
-       options pagename-general optname-report-currency "d")
+       options gnc:pagename-general optname-report-currency "d")
       
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-inc-exp
+        gnc:pagename-display optname-inc-exp
         "a" (N_ "Show Income and Expenses?") #t))
 
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-show-profit
+        gnc:pagename-display optname-show-profit
         "b" (N_ "Show the net profit?") #f))
 
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-stacked
+        gnc:pagename-display optname-stacked
         "ba" (N_ "Show barchart as stacked barchart?") #f))
 
       (gnc:options-add-plot-size! 
-       options pagename-display 
+       options gnc:pagename-display 
        optname-plot-width optname-plot-height "c" 400 400)
 
-      (gnc:options-set-default-section options pagename-general)
+      (gnc:options-set-default-section options gnc:pagename-general)
 
       options))
   
@@ -118,22 +115,22 @@
 
     (let* ((to-date-tp (gnc:timepair-end-day-time 
 			(gnc:date-option-absolute-time
-                         (op-value pagename-general
+                         (op-value gnc:pagename-general
                                    optname-to-date))))
 	   (from-date-tp (gnc:timepair-start-day-time
 			  (gnc:date-option-absolute-time
-                           (op-value pagename-general
+                           (op-value gnc:pagename-general
                                      optname-from-date))))
-	   (interval (op-value pagename-general optname-stepsize))
-	   (accounts (op-value pagename-accounts optname-accounts))
-           (report-currency (op-value pagename-general
+	   (interval (op-value gnc:pagename-general optname-stepsize))
+	   (accounts (op-value gnc:pagename-accounts optname-accounts))
+           (report-currency (op-value gnc:pagename-general
                                       optname-report-currency))
 
-	   (show-net? (op-value pagename-display optname-show-profit))
-	   (show-incexp? (op-value pagename-display optname-inc-exp))
-	   (stacked? (op-value pagename-display optname-stacked))
-	   (height (op-value pagename-display optname-plot-height))
-	   (width (op-value pagename-display optname-plot-width))
+	   (show-net? (op-value gnc:pagename-display optname-show-profit))
+	   (show-incexp? (op-value gnc:pagename-display optname-inc-exp))
+	   (stacked? (op-value gnc:pagename-display optname-stacked))
+	   (height (op-value gnc:pagename-display optname-plot-height))
+	   (width (op-value gnc:pagename-display optname-plot-width))
 
 	   (document (gnc:make-html-document))
 	   (chart (gnc:make-html-barchart))

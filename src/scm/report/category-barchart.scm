@@ -63,11 +63,9 @@ developing over time"))
       (optname-stepsize (N_ "Step Size"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (pagename-accounts (N_ "Accounts"))
       (optname-accounts (N_ "Accounts"))
       (optname-levels (N_ "Show Accounts until level"))
 
-      (pagename-display (N_ "Display"))
       (optname-fullname (N_ "Show long account names"))
       (optname-stacked (N_ "Use Stacked Bars"))
       (optname-slices (N_ "Maximum Bars"))
@@ -94,7 +92,7 @@ developing over time"))
       ;; Accounts tab
       (add-option
        (gnc:make-account-list-option
-	pagename-accounts optname-accounts
+	gnc:pagename-accounts optname-accounts
 	"a"
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
@@ -107,31 +105,31 @@ developing over time"))
 	#t))
       
       (gnc:options-add-account-levels! 
-       options pagename-accounts optname-levels "c" 
+       options gnc:pagename-accounts optname-levels "c" 
        (N_ "Show accounts to this depth and not further") 
        2)
 
       ;; Display tab
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-fullname
+        gnc:pagename-display optname-fullname
         "a" (N_ "Show the full account name in legend?") #f))
 
       (add-option
        (gnc:make-simple-boolean-option
-        pagename-display optname-stacked
+        gnc:pagename-display optname-stacked
         "b" 
 	(N_ "Show barchart as stacked barchart? (Guppi>=0.35.4 required)") 
 	#t))
 
       (add-option
        (gnc:make-number-range-option
-        pagename-display optname-slices
+        gnc:pagename-display optname-slices
         "c" (N_ "Maximum number of bars in the chart") 8
         2 24 0 1))
 
       (gnc:options-add-plot-size! 
-       options pagename-display 
+       options gnc:pagename-display 
        optname-plot-width optname-plot-height "c" 400 400)
 
       (gnc:options-set-default-section options gnc:pagename-general)
@@ -172,14 +170,14 @@ developing over time"))
 	  (report-title (get-option gnc:pagename-general 
 				    gnc:optname-reportname))
 
-	  (accounts (get-option pagename-accounts optname-accounts))
-	  (account-levels (get-option pagename-accounts optname-levels))
+	  (accounts (get-option gnc:pagename-accounts optname-accounts))
+	  (account-levels (get-option gnc:pagename-accounts optname-levels))
 	  
-	  (stacked? (get-option pagename-display optname-stacked))
-	  (show-fullname? (get-option pagename-display optname-fullname))
-	  (max-slices (get-option pagename-display optname-slices))
-	  (height (get-option pagename-display optname-plot-height))
-	  (width (get-option pagename-display optname-plot-width))
+	  (stacked? (get-option gnc:pagename-display optname-stacked))
+	  (show-fullname? (get-option gnc:pagename-display optname-fullname))
+	  (max-slices (get-option gnc:pagename-display optname-slices))
+	  (height (get-option gnc:pagename-display optname-plot-height))
+	  (width (get-option gnc:pagename-display optname-plot-width))
 	  
 	  (document (gnc:make-html-document))
 	  (chart (gnc:make-html-barchart))
@@ -355,7 +353,7 @@ developing over time"))
 		 (gnc:report-options report-obj) options)
 		;; and set the destination accounts
 		(gnc:option-set-value
-		 (gnc:lookup-option options pagename-accounts 
+		 (gnc:lookup-option options gnc:pagename-accounts 
 				    optname-accounts)
 		 (map car finish))
 		;; Set the URL to point to this report.
@@ -406,9 +404,9 @@ developing over time"))
 			     reportname
 			     (gnc:report-options report-obj) 
 			     (list
-			      (list pagename-accounts optname-accounts
+			      (list gnc:pagename-accounts optname-accounts
 				    (cons acct subaccts))
-			      (list pagename-accounts optname-levels
+			      (list gnc:pagename-accounts optname-levels
 				    (+ 1 tree-depth))
 			      (list gnc:pagename-general 
 				    gnc:optname-reportname
