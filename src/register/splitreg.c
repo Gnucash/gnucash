@@ -159,16 +159,19 @@ configAction (SplitRegister *reg)
   switch (reg->type)
   {
     case BANK_REGISTER:
-    case SEARCH_LEDGER:  /* broken ! FIXME bg */
+      /* broken ! FIXME bg */
+    case SEARCH_LEDGER:  
       xaccAddComboCellMenuItem (reg->actionCell, _("Deposit"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Withdraw"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Check"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
       xaccAddComboCellMenuItem (reg->actionCell, _("ATM"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Teller"));
+      /* Action: Point Of Sale */
       xaccAddComboCellMenuItem (reg->actionCell, _("POS"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Phone"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Online"));
+      /* Action: Automatic Deposit ?!? */
       xaccAddComboCellMenuItem (reg->actionCell, _("AutoDep"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Wire"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Credit"));
@@ -225,14 +228,16 @@ configAction (SplitRegister *reg)
       xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Price"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Div")); /* Dividend */
+      /* Action: Dividend */
+      xaccAddComboCellMenuItem (reg->actionCell, _("Div")); 
       xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
-      /* Long Term Capital Gains */
+      /* Action: Long Term Capital Gains */
       xaccAddComboCellMenuItem (reg->actionCell, _("LTCG"));
-      /* Short Term Capital Gains */
+      /* Action: Short Term Capital Gains */
       xaccAddComboCellMenuItem (reg->actionCell, _("STCG"));
       xaccAddComboCellMenuItem (reg->actionCell, _("Income"));
-      xaccAddComboCellMenuItem (reg->actionCell, _("Dist")); /* Distribution */
+      /* Action: Distribution */
+      xaccAddComboCellMenuItem (reg->actionCell, _("Dist")); 
       xaccAddComboCellMenuItem (reg->actionCell, _("Split"));
       break;
     default:
