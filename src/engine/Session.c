@@ -186,7 +186,7 @@ xaccSessionBegin (Session *sess, const char * sid)
 
 /* ============================================================== */
 
-AccountGroup *
+static AccountGroup *
 xaccSessionBeginSQL (Session *sess, const char * dbname)
 {
    Backend *be = NULL;

@@ -79,7 +79,7 @@ EXTRA_DIST = \
   gnc-dialogs.glade \
   gnucash.desktop
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${G_WRAP_COMPILE_ARGS} ${GNOME_PRINT_CFLAGS} ${GTKHTML_CFLAGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \
@@ -88,4 +88,7 @@ INCLUDES = \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/register \
-  -I${top_srcdir}/src/register/gnome
+  -I${top_srcdir}/src/register/gnome \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS}
+

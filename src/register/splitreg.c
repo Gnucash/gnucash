@@ -1388,7 +1388,7 @@ xaccSplitRegisterGetCursorType (SplitRegister *reg,
 
 /* ============================================== */
 
-CellType
+static CellType
 sr_cell_type (SplitRegister *reg, void * cell)
 {
   if (cell == reg->dateCell)
@@ -1578,7 +1578,7 @@ xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg, CellType cell_type,
 /* ============================================== */
 
 SplitRegisterBuffer *
-xaccMallocSplitRegisterBuffer ()
+xaccMallocSplitRegisterBuffer (void)
 {
   SplitRegisterBuffer *srb;
 

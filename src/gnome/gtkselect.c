@@ -732,7 +732,7 @@ gtk_select_prepend_items (GtkSelect *select, GList *items)
   gtk_list_prepend_items(GTK_LIST(select->list), copy);
 }
 
-void
+static void
 gtk_select_remove_items_internal (GtkSelect *select, GList *items,
 	       			  gboolean unref)
 {

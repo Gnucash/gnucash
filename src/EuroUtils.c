@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "EuroUtils.h"
+
 /* local structs */
 
 typedef struct _gnc_euro_rate_struct
@@ -62,7 +64,9 @@ static gnc_euro_rate_struct _gnc_euro_rate_[] =
   { "SCH",  13.7603 }   /* austrian schilling */
 };
 
-static int _gnc_euro_rate_compare_(const void *euro_rate_struct1, const void *euro_rate_struct2)
+static int
+_gnc_euro_rate_compare_(const void *euro_rate_struct1,
+                        const void *euro_rate_struct2)
 {
   return (strcasecmp(((const gnc_euro_rate_struct *)euro_rate_struct1)->currency,
 		     ((const gnc_euro_rate_struct *)euro_rate_struct2)->currency));
@@ -70,7 +74,8 @@ static int _gnc_euro_rate_compare_(const void *euro_rate_struct1, const void *eu
 
 /* ------------------------------------------------------ */
 
-int gnc_is_euro_currency(const char *currency)
+int
+gnc_is_euro_currency(const char *currency)
 {
   gnc_euro_rate_struct test_currency;
   gnc_euro_rate_struct *result;
@@ -92,7 +97,8 @@ int gnc_is_euro_currency(const char *currency)
 
 /* ------------------------------------------------------ */
 
-double gnc_convert_to_euro(const char *currency, double value)
+double
+gnc_convert_to_euro(const char *currency, double value)
 {
   gnc_euro_rate_struct test_currency;
   gnc_euro_rate_struct *result;
@@ -114,7 +120,8 @@ double gnc_convert_to_euro(const char *currency, double value)
 
 /* ------------------------------------------------------ */
 
-double gnc_convert_from_euro(const char *currency, double value)
+double
+gnc_convert_from_euro(const char *currency, double value)
 {
   gnc_euro_rate_struct test_currency;
   gnc_euro_rate_struct *result;

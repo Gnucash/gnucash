@@ -26,7 +26,7 @@
 #define MAX_HISTORY 4
 
 void gnc_history_add_file(char *);
-void gnc_history_update_menu();
-const char * gnc_history_get_last();
+void gnc_history_update_menu(void);
+const char * gnc_history_get_last(void);
 
 #endif

@@ -90,7 +90,7 @@ enum {
 };
 
 /** Static function declarations ***************************************/
-static GNCMainInfo * gnc_get_main_info();
+static GNCMainInfo * gnc_get_main_info(void);
 
 
 /* An accumulator for a given currency.
@@ -453,7 +453,7 @@ gnc_refresh_main_window()
 {
   xaccRecomputeGroupBalance(gncGetCurrentGroup());
   gnc_ui_refresh_statusbar();
-  gnc_history_update_menu(GNOME_APP(gnc_get_ui_data()));
+  gnc_history_update_menu();
   gnc_account_tree_refresh_all();
   gnc_refresh_main_window_title();
 }
@@ -743,7 +743,7 @@ gnc_ui_mainWindow_destroy_event_cb(GtkWidget *widget,
 }
 
 void
-gnc_ui_mainWindow_save_size()
+gnc_ui_mainWindow_save_size(void)
 {
   GtkWidget *app;
   int width = 0;
@@ -778,7 +778,7 @@ gnc_ui_mainWindow_destroy_cb(GtkObject *object, gpointer user_data)
 }
 
 GNCAccountTree *
-gnc_get_current_account_tree()
+gnc_get_current_account_tree(void)
 {
   GNCMainInfo *main_info;
 
@@ -790,14 +790,14 @@ gnc_get_current_account_tree()
 }
 
 Account *
-gnc_get_current_account()
+gnc_get_current_account(void)
 {
   GNCAccountTree * tree = gnc_get_current_account_tree();
   return gnc_account_tree_get_current_account(tree);
 }
 
 GList *
-gnc_get_current_accounts()
+gnc_get_current_accounts(void)
 {
   GNCAccountTree * tree = gnc_get_current_account_tree();
   return gnc_account_tree_get_current_accounts(tree);
@@ -1259,7 +1259,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
 }
 
 static GNCMainInfo *
-gnc_get_main_info()
+gnc_get_main_info(void)
 {
   GtkObject *app = GTK_OBJECT(gnc_get_ui_data());
 

@@ -1660,7 +1660,7 @@ gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
 /* Options dialog... this should house all of the config options     */
 /* like where the docs reside, and whatever else is deemed necessary */
 void
-gnc_show_options_dialog()
+gnc_show_options_dialog(void)
 {
   static GnomePropertyBox *options_dialog = NULL;
   GNCOptionDB *global_options;

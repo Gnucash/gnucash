@@ -32,8 +32,8 @@
 #include "messages_i18n.h"
 #include "print-session.h"
 #include "ui-callbacks.h"
+#include "glade-cb-gnc-dialogs.h"
 
-#ifdef HAVE_LIBGNOMEPRINT
 
 PrintPreviewDialog *
 gnc_ui_print_preview_create(PrintSession * ps) {
@@ -59,7 +59,7 @@ gnc_ui_print_preview_create(PrintSession * ps) {
 }
 
 void
-gnc_ui_print_preview_OK_cb(GtkWidget * widget, gpointer user_data) {
+gnc_ui_print_preview_OK_cb(GtkButton * button, gpointer user_data) {
   PrintPreviewDialog * ppd;
 
   if(user_data) {
@@ -119,14 +119,14 @@ gnc_ui_print_dialog_create(PrintSession * ps) {
 }
 
 void
-gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data) {
+gnc_ui_paper_dialog_cancel_cb(GtkButton * button, gpointer user_data) {
   PaperDialog * psd  = gtk_object_get_data(GTK_OBJECT(user_data),
                                            "paper_struct");
   gnc_ui_paper_dialog_destroy(psd);
 }
 
 void
-gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data) {
+gnc_ui_paper_dialog_ok_cb(GtkButton * button, gpointer user_data) {
   PaperDialog * psd  = gtk_object_get_data(GTK_OBJECT(user_data),
                                            "paper_struct");
   char * newpaper = g_strdup(gnome_paper_selector_get_name
@@ -173,7 +173,7 @@ gnc_ui_print_dialog_destroy(PrintDialog * pcd) {
 
 
 void
-gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
+gnc_ui_print_dialog_select_printer_cb(GtkButton * button, gpointer user_data) {
   PrintDialog  * pcd;
   GnomePrinter * printer;
   char         * printer_string;
@@ -206,7 +206,7 @@ gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, gpointer user_data) {
 }
 
 void
-gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, gpointer user_data) {
+gnc_ui_print_dialog_select_paper_cb(GtkButton * button, gpointer user_data) {
   PrintDialog * pcd;
 
   if(user_data) {
@@ -216,7 +216,7 @@ gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, gpointer user_data) {
 }
 
 void
-gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data) {
+gnc_ui_print_dialog_preview_cb(GtkButton * button, gpointer user_data) {
   PrintDialog * pcd;
   if(user_data) {
     pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    
@@ -225,7 +225,7 @@ gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data) {
 }
 
 void
-gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data) {
+gnc_ui_print_dialog_ok_cb(GtkButton * button, gpointer user_data) {
   PrintDialog * pcd;
   if(user_data) {
     pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    
@@ -241,7 +241,7 @@ gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data) {
 }
 
 void
-gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data) {
+gnc_ui_print_dialog_cancel_cb(GtkButton * button, gpointer user_data) {
   PrintDialog * pcd;
   if(user_data) {
     pcd = gtk_object_get_data(GTK_OBJECT(user_data), "print_struct");    
@@ -250,8 +250,7 @@ gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data) {
 }
 
 void
-gnc_ui_print_dialog_help_cb(GtkButton * button, 
-                                    gpointer user_data) {
+gnc_ui_print_dialog_help_cb(GtkButton * button, gpointer user_data) {
   helpWindow(NULL, HELP_STR, HH_PRINT);
 }
 
@@ -322,44 +321,3 @@ gnc_print_session_print(PrintSession * ps) {
   gnome_print_context_close(pc);
   gtk_object_unref(GTK_OBJECT(pc));
 }
-
-#else
-
-/* print preview dialog stuff */
-PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps) {
-  return NULL;
-}
-void gnc_ui_print_preview_OK_cb(GtkWidget * widget, gpointer user_data) { }
-void gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd) { }
-
-/* print check dialog stuff */
-PrintDialog * gnc_ui_print_dialog_create(PrintSession * ps) {
-  return NULL;
-}
-
-void gnc_ui_print_dialog_destroy(PrintDialog * pcd) { } 
-
-void gnc_ui_print_dialog_help_cb(GtkWidget * widget, gpointer user_data) { } 
-void gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, 
-                                           gpointer user_data) { } 
-void gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, 
-                                         gpointer user_data) { } 
-void gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data) {}
-void gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data) {}
-void gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data) {}
-void gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data) { }
-void gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data) {}
-
-/* printsession stuff */
-PrintSession * gnc_print_session_create() { return NULL; }
-void gnc_print_session_destroy(PrintSession * ps) {}
-
-void gnc_print_session_moveto(PrintSession * ps, double x, double y) {}
-void gnc_print_session_text(PrintSession * ps, char * text) {}
-void gnc_print_session_done(PrintSession * ps) {}
-
-void gnc_print_session_preview(PrintSession * ps) {}
-void gnc_print_session_print(PrintSession * ps) {}
-
-#endif
-

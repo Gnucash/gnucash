@@ -167,7 +167,6 @@ void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                          const Timespec *ts);
 
-
 /* set the Num and Description fields ... */
 void          xaccTransSetNum (Transaction *trans, const char *num);
 void          xaccTransSetDescription (Transaction *trans, const char *desc);

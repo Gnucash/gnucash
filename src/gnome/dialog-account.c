@@ -26,6 +26,7 @@
 #include <string.h>
 #include <gnome.h>
 
+#include "dialog-account.h"
 #include "AccWindow.h"
 #include "MainWindow.h"
 #include "FileDialog.h"
@@ -1278,7 +1279,7 @@ gnc_ui_set_default_new_account_currency(const char *currency)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_ui_destroy_account_add_windows()
+gnc_ui_destroy_account_add_windows(void)
 {
   GnomeDialog *dialog;
 

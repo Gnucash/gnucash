@@ -98,7 +98,7 @@ kvp_comp_func(gconstpointer v, gconstpointer v2) {
 }
 
 kvp_frame * 
-kvp_frame_new() {
+kvp_frame_new(void) {
   kvp_frame * retval = g_new0(kvp_frame, 1);
   retval->hash = g_hash_table_new(&kvp_hash_func, 
                                   &kvp_comp_func);
@@ -177,7 +177,7 @@ kvp_frame_get_slot(kvp_frame * frame, const char * slot) {
  ********************************************************************/
 
 kvp_list *
-kvp_list_new() {
+kvp_list_new(void) {
   kvp_list * retval = g_new0(kvp_list, 1);
   retval->list = NULL;
   return retval;
@@ -334,7 +334,7 @@ kvp_list_5(kvp_value * value1, kvp_value * value2,
  ********************************************************************/
 
 kvp_value *
-kvp_value_new() {
+kvp_value_new(void) {
   kvp_value * retval = g_new0(kvp_value, 1);
   retval->type = KVP_TYPE_NONE;
   return retval;

@@ -104,7 +104,7 @@ char * prettify (const char *);
 #if DEBUG_MEMORY
 void   *dmalloc( size_t size );
 void   dfree( void *ptr );
-size_t dcoresize();
+size_t dcoresize(void);
 #  define _malloc(x)   dmalloc(x)
 #  define _free(x)     dfree(x)
 #  define _coresize()  dcoresize()
@@ -197,10 +197,10 @@ gboolean gnc_strisnum(const char *s);
  * containing locale information. If no locale is set, the
  * structure is given default (en_US) values.
  */
-struct lconv * gnc_localeconv();
+struct lconv * gnc_localeconv(void);
 
 /* Returns the 3 character currency code of the current locale. */
-const char * gnc_locale_default_currency();
+const char * gnc_locale_default_currency(void);
 
 /* Return the number of decimal places for this locale. */
 int gnc_locale_decimal_places( void );

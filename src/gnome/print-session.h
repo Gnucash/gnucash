@@ -26,8 +26,6 @@
 
 #include "config.h"
 
-#ifdef HAVE_LIBGNOMEPRINT
-
 #include <gnome.h>
 #include <libgnomeprint/gnome-printer.h>
 #include <libgnomeprint/gnome-print.h>
@@ -67,41 +65,21 @@ typedef struct {
   PrintSession      * session;
 } PaperDialog;
 
-#else 
-
-/* type stubs for g-wrap */
-typedef int PrintSession;
-typedef int PrintPreviewDialog;
-typedef int PrintDialog;
-typedef int PaperDialog;
-#endif
 
 /* paper selector dialog */
-void gnc_ui_paper_dialog_cancel_cb(GtkWidget * widg, gpointer user_data);
-void gnc_ui_paper_dialog_ok_cb(GtkWidget * widg, gpointer user_data);
 PaperDialog * gnc_ui_paper_dialog_create(PrintSession * ps, GtkWidget * entry);
 void gnc_ui_paper_dialog_destroy(PaperDialog * psd);
 
 /* print preview dialog stuff */
 PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps);
-void gnc_ui_print_preview_OK_cb(GtkWidget * widget, gpointer user_data);
 void gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd);
 
 /* print check dialog stuff */
 PrintDialog * gnc_ui_print_dialog_create(PrintSession * ps);
 void gnc_ui_print_dialog_destroy(PrintDialog * pcd);
 
-void gnc_ui_print_dialog_select_printer_cb(GtkWidget * widget, 
-                                           gpointer user_data);
-void gnc_ui_print_dialog_select_paper_cb(GtkWidget * widget, 
-                                         gpointer user_data);
-void gnc_ui_print_dialog_preview_cb(GtkWidget * widget, gpointer user_data);
-void gnc_ui_print_dialog_ok_cb(GtkWidget * widget, gpointer user_data);
-void gnc_ui_print_dialog_cancel_cb(GtkWidget * widget, gpointer user_data);
-
-
 /* printsession stuff */
-PrintSession * gnc_print_session_create();
+PrintSession * gnc_print_session_create(void);
 void gnc_print_session_destroy(PrintSession * ps);
 
 void gnc_print_session_moveto(PrintSession * ps, double x, double y);

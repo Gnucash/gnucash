@@ -83,6 +83,9 @@ gnucash_register_set_initial_rows(guint num_rows)
 
 G_INLINE_FUNC gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
+                                       VirtualCellLocation vcell_loc);
+G_INLINE_FUNC gboolean
+gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
                                        VirtualCellLocation vcell_loc)
 {
         return (vcell_loc.virt_row < 1 ||
@@ -151,7 +154,7 @@ gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
 }
 
 
-void
+static void
 gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
 {
         if (sheet->item_editor != NULL) {
@@ -390,7 +393,7 @@ gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
 }
 
 
-void
+static void
 gnucash_sheet_set_top_row (GnucashSheet *sheet, gint new_top_row, gint align)
 {
         VirtualCellLocation new_row_loc = { new_top_row, 0 };
@@ -528,7 +531,7 @@ gnucash_sheet_y_pixel_to_block (GnucashSheet *sheet, int y)
 }
 
 
-void
+static void
 gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
 					 GnucashSheet *sheet)
 {

@@ -631,7 +631,7 @@ gnc_xfer_dialog(GtkWidget * parent, Account * initial)
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_ui_destroy_xfer_windows()
+gnc_ui_destroy_xfer_windows(void)
 {
   GnomeDialog *dialog;
 

@@ -332,7 +332,7 @@ void
 gncFileQIFImport (void)
 {
   /* pop up the QIF File Import dialog box */
-  gnc_ui_qif_import_dialog_make(NULL);
+  gnc_ui_qif_import_dialog_make();
 }
 
 /* ======================================================== */

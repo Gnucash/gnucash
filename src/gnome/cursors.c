@@ -38,7 +38,7 @@
  *       type - the type of cursor to make                          *
  * Return: none                                                     * 
 \********************************************************************/
-void
+static void
 gnc_ui_set_cursor (GdkWindow *win, int type)
 {
   GdkCursor *cursor = NULL;

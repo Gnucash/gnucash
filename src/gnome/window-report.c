@@ -453,7 +453,7 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
  * Return: none                                                     * 
 \********************************************************************/
 void
-gnc_ui_destroy_report_windows()
+gnc_ui_destroy_report_windows(void)
 {
   gnc_html_window_destroy(reportwindow);
   reportwindow = NULL;

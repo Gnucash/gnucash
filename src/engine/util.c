@@ -427,7 +427,7 @@ gnc_lconv_set_char(char *p_value, char default_value)
 }
 
 struct lconv *
-gnc_localeconv()
+gnc_localeconv(void)
 {
   static struct lconv lc;
   static gboolean lc_set = FALSE;
@@ -462,7 +462,7 @@ gnc_localeconv()
 }
 
 const char *
-gnc_locale_default_currency()
+gnc_locale_default_currency(void)
 {
   static char currency[4];
   static gboolean got_it = FALSE;
@@ -850,6 +850,8 @@ typedef enum
 } ParseState;
 
 #define done_state(state) (((state) == DONE_ST) || ((state) == NO_NUM_ST))
+
+G_INLINE_FUNC double fractional_multiplier (int num_decimals);
 
 G_INLINE_FUNC double
 fractional_multiplier (int num_decimals)

@@ -738,7 +738,7 @@ split_sort_func(gconstpointer a, gconstpointer b) {
  * and-or check, so sorting it with best criteria first is a win.
  ********************************************************************/
 
-int
+static int
 xaccQueryCheckSplit(Query * q, Split * s) {
   GList     * and_ptr;
   GList     * or_ptr;

@@ -35,13 +35,15 @@ EXTRA_DIST = \
   table-html.c \
   table-html.h
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@
 
 INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/guile \
-  -I${top_srcdir}/src/register/gnome
+  -I${top_srcdir}/src/register/gnome \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS}
 
 
 SUBDIRS = gnome

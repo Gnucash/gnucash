@@ -296,7 +296,7 @@ gboolean   xaccSplitRegisterGetCurrentCellPhysLoc (SplitRegister *reg,
                                                    PhysicalLocation *phys_loc);
 
 /* Functions for working with split register buffers */
-SplitRegisterBuffer * xaccMallocSplitRegisterBuffer ();
+SplitRegisterBuffer * xaccMallocSplitRegisterBuffer (void);
 void xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb);
 
 void xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb);

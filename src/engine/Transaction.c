@@ -970,7 +970,7 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
  * not at all obvious.
  */
 
-void
+static void
 xaccTransRebalance (Transaction * trans)
 {
   xaccSplitRebalance (trans->splits[0]);
@@ -1752,21 +1752,6 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
     * that until the commit phase, i.e. until the user has called the
     * xaccTransCommitEdit() routine.  So, for now, we are done.
     */
-}
-
-void
-xaccTransSetDateSecsL (Transaction *trans, long long secs)
-{
-   if (!trans) return;
-   CHECK_OPEN (trans);
-   DEBUGCMD ({ 
-      time_t sicko = secs;
-      PINFO ("addr=%p set date to %Lu %s \n",
-              trans, secs, ctime (&sicko));
-   })
-
-   trans->date_posted.tv_sec = secs;
-   trans->date_posted.tv_nsec = 0;
 }
 
 void

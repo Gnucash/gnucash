@@ -3321,8 +3321,8 @@ libdir='$install_libdir'\
 	  shift
 
 	  # Install the shared library and build the symlinks.
-	  $show "$install_prog$stripme $dir/$realname $destdir/$realname"
-	  $run eval "$install_prog$stripme $dir/$realname $destdir/$realname" || exit $?
+	  $show "$install_prog $dir/$realname $destdir/$realname"
+	  $run eval "$install_prog $dir/$realname $destdir/$realname" || exit $?
 
 	  if test $# -gt 0; then
 	    # Delete the old symlinks, and create new ones.

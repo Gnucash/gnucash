@@ -1,4 +1,7 @@
 Makefile
+Makefile.in
+aclocal.m4
+configure
 config.cache
 config.log
 config.status

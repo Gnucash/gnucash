@@ -32,6 +32,7 @@
 #include <math.h>
 
 #include "gnome-top-level.h"
+#include "window-register.h"
 #include "ui-callbacks.h"
 #include "MultiLedger.h"
 #include "MainWindow.h"
@@ -1027,8 +1028,7 @@ jump_cb(GtkWidget *widget, gpointer data)
 static void
 print_check_cb(GtkWidget * widget, gpointer data)
 {
-  RegWindow    * reg_data = (RegWindow *)data;
-#ifdef HAVE_LIBGNOMEPRINT
+  RegWindow    * reg_data = data;
   Split        * split    = xaccSRGetCurrentSplit(reg_data->ledger->ledger);
   Transaction  * trans    = xaccSplitGetParent(split);
 
@@ -1053,9 +1053,6 @@ print_check_cb(GtkWidget * widget, gpointer data)
                        gh_ulong2scm(date),
                        gh_str02scm(memo)));
   }
-#else
-  gnc_info_dialog_parented(GTK_WINDOW(reg_data->window), GNOME_PRINT_MSG);
-#endif
 }
 
 
@@ -2205,7 +2202,7 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
  * Args: parent - the parent window the dialog should use           *
  * Returns: DeleteType choice indicator                             *
  \*******************************************************************/
-DeleteType
+static DeleteType
 gnc_transaction_delete_query(GtkWindow *parent)
 {
   GtkWidget *dialog;

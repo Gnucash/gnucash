@@ -30,6 +30,7 @@
 #include <gtk/gtk.h>
 #include <gtkhtml/gtkhtml.h>
 
+#include "gnucash.h"
 #include "gnome-top-level.h"
 #include "window-main.h"
 #include "dialog-account.h"
@@ -74,7 +75,7 @@ static void gnc_configure_register_borders_cb(void *);
 static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
-static void gnc_configure_sr_label_callbacks();
+static void gnc_configure_sr_label_callbacks(void);
 static void gnc_configure_auto_raise_cb(void * foo) { }
 static void gnc_configure_auto_raise(void) { }
 static void gnc_configure_auto_decimal_cb(void *);
@@ -111,7 +112,7 @@ static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 /* ============================================================== */
 
 int 
-gnucash_ui_is_running()
+gnucash_ui_is_running(void)
 {
   return gnome_is_running;
 }
@@ -119,7 +120,7 @@ gnucash_ui_is_running()
 /* ============================================================== */
 
 int 
-gnucash_ui_is_terminating()
+gnucash_ui_is_terminating(void)
 {
   return gnome_is_terminating;
 }
@@ -127,7 +128,7 @@ gnucash_ui_is_terminating()
 /* ============================================================== */
 
 gncUIWidget
-gnc_get_ui_data()
+gnc_get_ui_data(void)
 {
   return app;
 }
@@ -140,7 +141,7 @@ gnc_get_ui_data()
    will be merged with the code in FMB_OPEN in MainWindow.c */
 
 int
-gnucash_ui_init()
+gnucash_ui_init(void)
 {
   int fake_argc = 1;
   char *fake_argv[] = {"gnucash"};
@@ -298,7 +299,7 @@ gnc_ui_destroy (void)
 /* ============================================================== */
 
 int
-gnc_ui_main()
+gnc_ui_main(void)
 {
   /* Initialize gnome */
   gnucash_ui_init();
@@ -329,7 +330,7 @@ gnucash_ui_open_file(const char name[])
 /* ============================================================== */
 
 int
-gnucash_ui_select_file()
+gnucash_ui_select_file(void)
 {
   gncFileOpen();
   return 1;
@@ -338,7 +339,7 @@ gnucash_ui_select_file()
 /* ============================================================== */
 
 const char *
-gnc_register_default_font()
+gnc_register_default_font(void)
 {
   return gnucash_style_get_default_register_font_name();
 }
@@ -346,7 +347,7 @@ gnc_register_default_font()
 /* ============================================================== */
 
 const char *
-gnc_register_default_hint_font()
+gnc_register_default_hint_font(void)
 {
   return gnucash_style_get_default_register_hint_font_name();
 }
@@ -402,7 +403,7 @@ gnc_sr_credit_string(SplitRegisterType sr_type)
 }
 
 static void
-gnc_configure_sr_label_callbacks()
+gnc_configure_sr_label_callbacks(void)
 {
   xaccSplitRegisterSetDebitStringGetter(gnc_sr_debit_string);
   xaccSplitRegisterSetCreditStringGetter(gnc_sr_credit_string);

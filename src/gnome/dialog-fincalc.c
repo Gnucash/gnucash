@@ -431,7 +431,7 @@ calc_future_value(GtkButton *button, FinCalcDialog *fcd)
 }
 
 FinCalcDialog *
-gnc_ui_fincalc_dialog_create()
+gnc_ui_fincalc_dialog_create(void)
 {
   FinCalcDialog *fcd;
   GtkObject *fcdo;

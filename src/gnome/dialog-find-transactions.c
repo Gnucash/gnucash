@@ -39,6 +39,7 @@
 #include "MultiLedger.h"
 #include "FileDialog.h"
 #include "splitreg.h"
+#include "glade-cb-gnc-dialogs.h"
 #include "dialog-find-transactions.h"
 #include "window-help.h"
 #include "Query.h"

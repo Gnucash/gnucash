@@ -25,7 +25,7 @@ EXTRA_DIST = \
   perl5_swig_annotations.i \
   gnucash-swig-defines.c
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} -Dbool=char
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} -Dbool=char
 
 INCLUDES = \
   -I@PERLINCL@/CORE \

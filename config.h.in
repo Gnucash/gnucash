@@ -47,9 +47,6 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
-/* Define if the X Window System is missing or not being used.  */
-#undef X_DISPLAY_MISSING
-
 /* Are we compiling for GNOME?  The answer right now is always yes... */
 #undef GNOME
 
@@ -63,19 +60,11 @@
  * or negative */
 #define USE_NO_COLOR        
 
-/* If configure found libXpm, then use it */
-#undef HAVE_XPM            
+/* is guile available */
+#undef HAVE_GUILE
 
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
-
-/* use gnomeprint if it's available */
-#undef HAVE_LIBGNOMEPRINT
-
-/* misc image and compression libs needed by html widget */
-#undef HAVE_ZLIB               
-#undef HAVE_PNG             
-#undef HAVE_JPEG            
 
 /* internationalization with gettext */ 
 #undef HAVE_GETTEXT
@@ -160,6 +149,9 @@
 
 /* Define if you have the i library (-li).  */
 #undef HAVE_LIBI
+
+/* Define if you have the m library (-lm).  */
+#undef HAVE_LIBM
 
 /* Name of package */
 #undef PACKAGE

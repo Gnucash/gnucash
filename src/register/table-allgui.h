@@ -236,6 +236,9 @@ void        gnc_table_destroy (Table *);
 /* These functions check the bounds of virtal and physical locations
  * in the table and return TRUE if they are out of bounds. If possible,
  * they are compiled inline. */
+G_INLINE_FUNC
+gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
+                                               VirtualCellLocation vcell_loc);
 G_INLINE_FUNC gboolean
 gnc_table_virtual_cell_out_of_bounds (Table *table,
                                       VirtualCellLocation vcell_loc)
@@ -249,6 +252,9 @@ gnc_table_virtual_cell_out_of_bounds (Table *table,
           (vcell_loc.virt_col >= table->num_virt_cols));
 }
 
+G_INLINE_FUNC gboolean
+gnc_table_physical_cell_out_of_bounds (Table *table,
+                                       PhysicalLocation phys_loc);
 G_INLINE_FUNC gboolean
 gnc_table_physical_cell_out_of_bounds (Table *table,
                                        PhysicalLocation phys_loc)

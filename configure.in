@@ -28,15 +28,14 @@ AM_INIT_AUTOMAKE(gnucash,1.5.0)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
-
-dnl Set of available languages.
-ALL_LINGUAS="de en_GB es fr it ja ru sv"
-
-AM_PROG_LIBTOOL
+AM_MAINTAINER_MODE
+AM_ACLOCAL_INCLUDE(macros)
 
 AC_PROG_INSTALL
-AC_PROG_RANLIB
 AC_PROG_CC
+AM_PROG_LIBTOOL
+
+AC_ARG_PROGRAM
 
 AC_ISC_POSIX
 AC_C_BIGENDIAN
@@ -45,6 +44,20 @@ AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h)
 AC_CHECK_FUNCS(stpcpy memcpy)   
+
+AM_PATH_GLIB
+
+GNOME_INIT
+
+GNOME_COMPILE_WARNINGS
+GNOME_CHECK_GUILE
+GNOME_PRINT_CHECK
+GNOME_XML_CHECK
+
+dnl Set of available languages.
+ALL_LINGUAS="de en_GB es fr it ja ru sv"
+AM_GNU_GETTEXT
+
 
 ### --------------------------------------------------------------------------
 ### Variables
@@ -108,6 +121,7 @@ AC_ARG_ENABLE( profile,
        CFLAGS="${CFLAGS} -pg"
        LDFLAGS="${LDFLAGS} -pg")
 
+
 ### --------------------------------------------------------------------------
 ### i18n
 AC_ARG_WITH( locale-dir, 
@@ -117,6 +131,7 @@ AC_ARG_WITH( locale-dir,
 
 AC_SUBST(LOCALE_DIR)
 
+
 ### --------------------------------------------------------------------------
 ### help files
 AC_ARG_WITH( help-prefix,
@@ -125,10 +140,6 @@ AC_ARG_WITH( help-prefix,
   GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
 
 AC_SUBST(GNC_HELPDIR)
-
-### --------------------------------------------------------------------------
-### Check for gettext
-AM_GNU_GETTEXT
 
 
 ### --------------------------------------------------------------------------
@@ -188,131 +199,15 @@ if test x"$SWIG" = xno; then
     AC_MSG_ERROR([Cannot find Swig. Try using the --with-swig flag.])
 fi
 
-### -------------------------------------------------------------------
-
-# Let the user specify glib paths:
-AC_ARG_WITH( glib-config, 
-  [  --with-glib-config=executable  which glib-config to use to find glib ],
-  GLIB_CONFIG_BIN="$with_glib_config")
-
-# If the user hasn't specified the binary, then try to find it.
-if test x"${GLIB_CONFIG_BIN}" = x
-then
-  AC_PATH_PROG(GLIB_CONFIG_BIN, glib-config, GLIB_CONFIG_NOT_FOUND)
-fi
-
-if test "${GLIB_CONFIG_BIN}"x != GLIB_CONFIG_NOT_FOUNDx
-then
-  GLIB_CFLAGS=`${GLIB_CONFIG_BIN} --cflags`
-  GLIB_LIBS=`${GLIB_CONFIG_BIN} --libs`
-fi
-
-AC_SUBST(GLIB_CONFIG_BIN)
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-
-# Let the user specify gnome paths:
-AC_ARG_WITH( gnome-config, 
-  [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
-  GNOME_CONFIG_BIN="$with_gnome_config")
-
-# If the user hasn't specified the binary, then try to find it.
-if test x"${GNOME_CONFIG_BIN}" = x
-then
-  AC_PATH_PROG(GNOME_CONFIG_BIN, gnome-config, GNOME_CONFIG_NOT_FOUND)
-fi
-AC_SUBST(GNOME_CONFIG_BIN)
 
 ### --------------------------------------------------------------------------
 ### Libraries
 LIBS="$LIBS -lm"
 
-# We're going to set up our own X configure variables.  These are only
-# used in side configure.  At the end, we use them to set X_LIBS.
-# This allows us to be careful about libarary ordering, in case that's
-# important.
-
-AC_PATH_XTRA
-if test x"$no_x" = xyes; then
-      AC_ERROR([Can not find X11 development headers or libraries.])
-fi
-
-
-# This is how to use the variables set by AC_PATH_XTRA:
-#	cc @X_CFLAGS@ -c -o foo.o foo.c
-#	cc @X_LIBS@ (-lfoo...) @X_PRE_LIBS@ -lX11 @X_EXTRA_LIBS@
-# (Perhaps X_LIBS should have been called X_LDFLAGS.)
-
-# XXX - Not all programs need all of these, surely.
-X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
 
 ### --------------------------------------------------------------------------
-### Gnome libs -- these are needed for the gnome builds
-# Let the user specify gnome paths:
-# -I...libgnomesupport is to fix bug in gnome-1.3 release
-#
-# I believe all the gnome configuration can and should be superceded by
-# --with-gnome-config.
-
-AC_ARG_WITH( gnome, 
-       [  --with-gnome=PATH       specify where to look for gnome includes and libs],
-       X_LIBS="${X_LIBS} -L$with_gnome/lib" X_CFLAGS="$X_CFLAGS -I$with_gnome/include -I$with_gnome/lib/gnome-libs/include" )
-
-AC_ARG_WITH( gnome-includes, 
-       [  --with-gnome-includes=DIR    specify where to look for gnome includes],
-       X_CFLAGS="${X_CFLAGS} -I$with_gnome_includes -I$with_gnome_includes/libgnomesupport" )
-
-AC_ARG_WITH( gnome-libraries, 
-       [  --with-gnome-libraries=DIR   specify where to look for gnome libs],
-       X_LIBS="${X_LIBS} -L$with_gnome_libraries" )
-
-
-# Let the user specify imlib paths:
-AC_ARG_WITH( imlib, 
-       [  --with-imlib=PATH       specify where to look for imlib includes and libs],
-       X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
-
-# the gtkhtml widget needs libz, libjpeg, and libpng.
-# it also uses #ifdef's not #if's so DONT #def to zero.
-AC_CHECK_LIB(z, deflateEnd,
-             AC_DEFINE(HAVE_ZLIB,1))
-AC_CHECK_LIB(jpeg, jpeg_read_scanlines,
-             AC_DEFINE(HAVE_JPEG,1))
-AC_CHECK_LIB(png, png_read_image,
-             AC_DEFINE(HAVE_PNG,1))
-
-# This should be done in the OTHER_LIBRARIES argument to AC_CHECK_LIB
-# if it's actually needed and Makefile.in's should be using
-# X_PRE_LIBS, X_LIBS, and X_EXTRA_LIBS, rather than relying on LIBS.
-# LIBS="-lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS $LIBS"
-
-AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
-        AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
-        AC_DEFINE(HAVE_XPM,0)
-        AC_MSG_ERROR([Cannot find required Xpm library]),
-        $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS)
-
-### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs xml`
-    
-#check for libxml
-AC_CHECK_LIB(xml, xmlDefaultSAXHandlerInit,
-  NOT_USED="",
-  AC_MSG_ERROR([Cannot find libxml.  See the README for more info.]),
-  $EXTRALIBS)
-
-### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
-
-# check for gnome-print and enable it via HAVE_LIBGNOMEPRINT
-# if found
-AC_CHECK_LIB(gnomeprint, gnome_print_context_new,
-             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} print"
-             AC_DEFINE(HAVE_LIBGNOMEPRINT),
-             ,
-             $EXTRALIBS)
-### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml`
+GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
+GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
 
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
 # if found
@@ -320,10 +215,11 @@ AC_CHECK_LIB(gtkhtml, gtk_html_new,
              GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
              AC_DEFINE(HAVE_LIBGTKHTML),
              AC_MSG_ERROR([Cannot find gtkhtml.  See the README for more info.]),
-             $EXTRALIBS)
+             $GTKHTML_LIBS)
 
-AC_SUBST(GNOME_TARGET)
-AC_SUBST(GNOME_STATIC_TARGET)
+AC_SUBST(GTKHTML_LIBS)
+AC_SUBST(GTKHTML_CFLAGS)
+
 
 ### --------------------------------------------------------------------------
 ## For now, we just presume you're using the GNOME version.  The other
@@ -333,16 +229,6 @@ AC_SUBST(GNOME_STATIC_TARGET)
 GNOME=1
 AC_DEFINE(GNOME)
 
-GNOMEBUILDLIBS="gnomeui gnome xml ${GNOMEBUILDLIBS}"
-
-if test "${GNOME_CONFIG_BIN}"x != GNOME_CONFIG_NOT_FOUNDx
-then
-  GNOME_CFLAGS=`${GNOME_CONFIG_BIN} --cflags ${GNOMEBUILDLIBS}`
-  GNOME_LIBS=`${GNOME_CONFIG_BIN} --libs ${GNOMEBUILDLIBS}`
-fi
-
-AC_SUBST(GNOME_CFLAGS)
-AC_SUBST(GNOME_LIBS)
 
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
@@ -379,39 +265,9 @@ AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)
 AC_SUBST(G_WRAP_LINK_ARGS)
 
+
 ### --------------------------------------------------------------------------
-### Guile (libraries and executable)
-
-GUILE_COMPILE_ARGS=""
-GUILE_LINK_ARGS=""
-
-AC_PATH_PROG(GUILE_CONFIG,guile-config)
-
-if test -x "${GUILE_CONFIG}";
-then
-  # Find out what the guile compile and link flags are.
-  GUILE_COMPILE_ARGS=`${GUILE_CONFIG} compile`
-  GUILE_LINK_ARGS=`${GUILE_CONFIG} link`
-fi
-
-# Find the binary
-AC_PATH_PROG(GUILE, guile)
-
-if test x"${GUILE_COMPILE_ARGS}" = x || \
-   test x"${GUILE_LINK_ARGS}" = x || \
-   test ! -x "${GUILE}";
-then
-  AC_MSG_ERROR([
-
-  Guile does not appear to be installed.  It must be installed and
-  its binary directory must be in your PATH.])
-fi
-
-AC_SUBST(GUILE)
-AC_SUBST(GUILE_CONFIG)
-AC_SUBST(GUILE_COMPILE_ARGS)
-AC_SUBST(GUILE_LINK_ARGS)
-
+### Makefile creation
 
 AC_OUTPUT(
           dnl # Makefiles
@@ -420,8 +276,6 @@ AC_OUTPUT(
           doc/Makefile
           doc/examples/Makefile
           doc/html/Makefile
-          doc/html/C/Makefile
-          doc/html/C/image/Makefile
           doc/html/fr/Makefile
           doc/html/fr/image/Makefile
           doc/sgml/Makefile
@@ -429,6 +283,7 @@ AC_OUTPUT(
           doc/sgml/C/image/Makefile
           intl/Makefile
           lib/Makefile
+          macros/Makefile
 	  po/Makefile.in
           rpm/Makefile
           src/Makefile
@@ -459,8 +314,6 @@ AC_OUTPUT(
           src/scm/qif-import/Makefile
           src/scm/report/Makefile
           src/scm/srfi/Makefile
-          dnl # src/swig/Makefile
-          dnl # src/swig/perl5/Makefile
           dnl # non-makefiles
           dnl # Please read doc/build-system before adding *anything* here
           ,

@@ -85,6 +85,8 @@ PriceDirect (BasicCell *bcell,
 }
 
 
+void xaccPriceGUIInit (PriceCell *cell);
+
 void
 xaccPriceGUIInit (PriceCell *cell)
 {

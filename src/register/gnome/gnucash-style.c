@@ -593,7 +593,7 @@ layout_init_stock_ledger_double(GnucashSheet *sheet, SheetBlockStyle *style)
 
 /* FIXME:  read this from a config file */
 /* keep this in sync with splitreg.c */
-void
+static void
 gnucash_style_layout_init (GnucashSheet *sheet, SheetBlockStyle *style)
 {
         CellLayoutInfo *layout_info;
@@ -712,7 +712,7 @@ style_dimensions_new (SheetBlockStyle *style)
         return dimensions;
 }
 
-void
+static void
 style_dimensions_destroy (CellDimensions *dimensions)
 {
         int i;
@@ -1578,13 +1578,13 @@ gnucash_style_set_register_hint_font_name(const char *name)
 }
 
 const char *
-gnucash_style_get_default_register_font_name()
+gnucash_style_get_default_register_font_name(void)
 {
         return DEFAULT_FONT;
 }
 
 const char *
-gnucash_style_get_default_register_hint_font_name()
+gnucash_style_get_default_register_hint_font_name(void)
 {
         return HINT_FONT;
 }

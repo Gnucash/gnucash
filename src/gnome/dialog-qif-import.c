@@ -84,7 +84,7 @@ static void update_categories_page(QIFImportWindow * win);
 \********************************************************************/
 
 QIFImportWindow *
-gnc_ui_qif_import_dialog_make() 
+gnc_ui_qif_import_dialog_make(void)
 {
   QIFImportWindow * retval;
   

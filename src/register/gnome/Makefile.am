@@ -27,9 +27,10 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ ${GNOME_CFLAGS}
+CFLAGS = @CFLAGS@
 
 INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/register
+  -I${top_srcdir}/src/register \
+  ${GNOME_INCLUDEDIR}

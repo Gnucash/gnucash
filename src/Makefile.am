@@ -28,10 +28,13 @@ LDADD = \
   gnome/libgncgnome.a \
   calculation/libgnccalc.a \
   engine/libgncengine.la \
-  @GNOME_LIBS@ \
-  @G_WRAP_LINK_ARGS@ \
-  @GUILE_LINK_ARGS@ \
-  @INTLLIBS@
+  ${GNOMEUI_LIBS} \
+  ${GNOME_LIBDIR} \
+  ${GNOME_PRINT_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
+  ${GTKHTML_LIBS} \
+  ${INTLLIBS}
 
 gnucash_SOURCES = \
   MultiLedger.c \
@@ -66,7 +69,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
 
 INCLUDES = \
   -I./calculation \

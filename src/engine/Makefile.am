@@ -62,6 +62,6 @@ EXTRA_DIST = \
   extensions.txt \
   kvp_doc.txt
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 
 INCLUDES = -I..

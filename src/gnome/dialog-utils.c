@@ -394,7 +394,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
  * Returns: toolbar style                                           *
  \*******************************************************************/
 GtkToolbarStyle
-gnc_get_toolbar_style()
+gnc_get_toolbar_style(void)
 {
   GtkToolbarStyle tbstyle = GTK_TOOLBAR_BOTH;
   char *style_string;
@@ -474,7 +474,7 @@ gnc_set_label_color(GtkWidget *label, double value)
  * Returns: account separator character                             *
  \*******************************************************************/
 char
-gnc_get_account_separator()
+gnc_get_account_separator(void)
 {
   char separator = ':';
   char *string;
