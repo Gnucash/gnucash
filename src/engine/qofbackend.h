@@ -36,7 +36,9 @@
 #define QOF_BACKEND_H
 
 /** \brief The errors that can be reported to the GUI & other front-end users
-\warning If you modify QofBackendError, please update src/scm/gnc.gwp */
+ *  \warning If you modify QofBackendError, please update 
+ *   src/engine/gw-engine-spec.scm 
+*/
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
   ERR_BACKEND_NO_BACKEND,   /**< Backend * pointer was null the err routine 
