@@ -151,6 +151,7 @@ static double
 recnRecalculateBalance(RecnWindow *recnData)
 {
   char *amount;
+  char *currency;
   double debit;
   double credit;
   double starting;
@@ -168,11 +169,13 @@ recnRecalculateBalance(RecnWindow *recnData)
       (account_type == CURRENCY))
     shares |= PRTSHR;
 
+  currency = xaccAccountGetCurrency(recnData->account);
+
   /* update the starting balance */
   starting = xaccAccountGetReconciledBalance(recnData->account);
   if (reverse_balance)
     starting = -starting;
-  amount = xaccPrintAmount(starting, shares, NULL);
+  amount = xaccPrintAmount(starting, shares, currency);
   gnc_set_label_color(recnData->starting, starting);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
   if (reverse_balance)
@@ -182,7 +185,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   ending = recnData->new_ending;
   if (reverse_balance)
     ending = -ending;
-  amount = xaccPrintAmount(ending, shares, NULL);
+  amount = xaccPrintAmount(ending, shares, currency);
   gnc_set_label_color(recnData->ending, ending);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
   if (reverse_balance)
@@ -195,17 +198,17 @@ recnRecalculateBalance(RecnWindow *recnData)
     (GNC_RECONCILE_LIST(recnData->credit));
 
   /* Update the total debit and credit fields */
-  amount = xaccPrintAmount(DABS(debit), shares, NULL);
+  amount = xaccPrintAmount(DABS(debit), shares, currency);
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
-  amount = xaccPrintAmount(credit, shares, NULL);
+  amount = xaccPrintAmount(credit, shares, currency);
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
   /* update the reconciled balance */
   reconciled = starting + debit - credit;
   if (reverse_balance)
     reconciled = -reconciled;
-  amount = xaccPrintAmount(reconciled, shares, NULL);
+  amount = xaccPrintAmount(reconciled, shares, currency);
   gnc_set_label_color(recnData->reconciled, reconciled);
   gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
   if (reverse_balance)
@@ -215,7 +218,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   diff = ending - reconciled;
   if (reverse_balance)
     diff = -diff;
-  amount = xaccPrintAmount(diff, shares, NULL);
+  amount = xaccPrintAmount(diff, shares, currency);
   gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
   if (reverse_balance)
@@ -229,7 +232,10 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
                          gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY(widget);
-  gint shares = GPOINTER_TO_INT(data);
+  short shares = PRTSYM | PRTSEP;
+  Account *account = data;
+  int account_type;
+  char  *currency;
   gchar *new_string;
   gchar *string;
   double value;
@@ -238,7 +244,14 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
 
   value = xaccParseAmount(string, GNC_T);
 
-  new_string = xaccPrintAmount(value, shares & ~PRTSYM, NULL);
+  account_type = xaccAccountGetType(account);
+  if ((account_type == STOCK) || (account_type == MUTUAL) ||
+      (account_type == CURRENCY))
+    shares |= PRTSHR;
+
+  currency = xaccAccountGetCurrency(account);
+
+  new_string = xaccPrintAmount(value, shares & ~PRTSYM, currency);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -265,11 +278,11 @@ static gboolean
 startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
 {
   GtkWidget *dialog, *end_value;
-  char *amount, *title;
-  double dendBalance;
-  int result;
+  char *amount, *title, *currency;
   short shares = PRTSYM | PRTSEP;
+  double dendBalance;
   int account_type;
+  int result;
 
   /* Get the previous ending balance.  Use the published
    * account interface for this, since the ending balance
@@ -287,7 +300,9 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
       (account_type == CURRENCY))
     shares |= PRTSHR;
 
-  amount = xaccPrintAmount(dendBalance, shares, NULL);
+  currency = xaccAccountGetCurrency(account);
+
+  amount = xaccPrintAmount(dendBalance, shares, currency);
 
   /* Create the dialog box... */
   title = gnc_recn_make_window_name(account);
@@ -314,20 +329,19 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     end_value = gtk_entry_new();
 
-    amount = xaccPrintAmount(*new_ending, shares & ~PRTSYM, NULL);
+    amount = xaccPrintAmount(*new_ending, shares & ~PRTSYM, currency);
     gtk_entry_set_text(GTK_ENTRY(end_value), amount);
     gtk_editable_select_region(GTK_EDITABLE(end_value), 0, -1);
 
     gtk_signal_connect(GTK_OBJECT(end_value), "focus-out-event",
-                       GTK_SIGNAL_FUNC(gnc_start_recn_update_cb),
-                       GINT_TO_POINTER((gint) shares));
+                       GTK_SIGNAL_FUNC(gnc_start_recn_update_cb), account);
 
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog),
                                  GTK_EDITABLE(end_value));
 
-    gtk_misc_set_alignment(GTK_MISC(start_title), 0.95, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(start_value), 0, 0.5);
-    gtk_misc_set_alignment(GTK_MISC(end_title), 0.95, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(start_title), 1.0, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(start_value), 0.0, 0.5);
+    gtk_misc_set_alignment(GTK_MISC(end_title), 1.0, 0.5);
 
     gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
     gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
@@ -468,7 +482,7 @@ gnc_reconcile_window_create_list_frame(Account *account,
   gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new(TOTAL_C_STR);
-  gtk_misc_set_alignment(GTK_MISC(label), 0.95, 0.5);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 
   label = gtk_label_new("");
@@ -1105,42 +1119,42 @@ recnWindow(GtkWidget *parent, Account *account)
 
       /* starting balance title/value */
       title = gtk_label_new(START_BALN_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 3);
 
       value = gtk_label_new("");
       recnData->starting = value;
-      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 3);
 
       /* ending balance title/value */
       title = gtk_label_new(END_BALN_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
       value = gtk_label_new("");
       recnData->ending = value;
-      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
       /* reconciled balance title/value */
       title = gtk_label_new(RECONCILE_BALN_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
       value = gtk_label_new("");
       recnData->reconciled = value;
-      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
       /* difference title/value */
       title = gtk_label_new(DIFF_C_STR);
-      gtk_misc_set_alignment(GTK_MISC(title), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
       value = gtk_label_new("");
       recnData->difference = value;
-      gtk_misc_set_alignment(GTK_MISC(value), 0.95, 0.5);
+      gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
       gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
     }
 
