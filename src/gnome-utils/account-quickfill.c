@@ -32,7 +32,7 @@
 static short module = MOD_REGISTER;
 
 
-QuickFill *
+static QuickFill *
 gnc_quickfill_get_string_match_mb (QuickFill *qf, const char *str)
 {
   GdkWChar *wc_text;
