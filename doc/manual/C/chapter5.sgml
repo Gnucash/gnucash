@@ -1,0 +1,599 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
+]>
+
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: October 11, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Originally written by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+
+<book id="index">
+ <bookinfo>
+  <title>GnuCash User Guide</title>
+  <edition>v1.6.5</edition>
+  <authorgroup>
+
+    <author>
+     <firstname>Carol</firstname>
+     <surname>Champagne</surname>
+     <authorblurb>
+      <para>
+       <email>carol@io.com</email>
+      </para>
+     </authorblurb>
+    </author>
+
+    <author>
+     <firstname>Chris</firstname>
+     <surname>Lyttle</surname>
+     <authorblurb>
+      <para>
+       <email>chris@wilddev.net</email>
+      </para>
+     </authorblurb>
+    </author>
+
+  </authorgroup>
+
+  <copyright>
+   <year>2001</year>
+   <holder>Carol Champagne and Chris Lyttle</holder>
+  </copyright>
+
+ <!-- translators: uncomment this:
+
+  <copyright>
+   <year>2000</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+
+  <legalnotice id="legalnotice">
+   <para>
+    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
+   </para>
+   <para>
+    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+   </para>
+  </legalnotice>
+
+
+  <!-- this is the version of manual, not application --> 
+  <releaseinfo>
+   This is version 1.6.5 of the GnuCash User Guide.
+  </releaseinfo>
+
+</bookinfo>
+
+ <chapter id="chapter5">
+  <title>Chapter 5  Starting with Your Checkbook</title>
+  <para>
+  This chapter will give you all the specific information you need to manage your checkbook with GnuCash.   Managing your checkbook register is the first step of tracking your finances, and GnuCash makes it much easier to manage than the traditional paper register does.
+  </para>
+  <para>
+  For one thing, as discussed in (?Chapter 4), data entry of common transactions is practically done for you in GnuCash, because of its (? auto-completion) feature.  GnuCash keeps a running balance of each account, and it makes reconciling these accounts easy.    And the double-entry method helps you account for your spending by requiring a transfer account for withdrawals, so you can easily find out how much money you spend in different areas.
+  </para>
+  <para>
+  Once you are comfortable with using GnuCash for your checking and other bank accounts, you may wish to continue on with tracking other financial accounts.   (?Chapters 6 through 9) examine methods to manage your other accounts.
+  </para>
+  <sect1 id="setupacct1">
+   <title>5.1 Setting up Accounts (Discussion)</title>
+    <para>
+    The first step in managing your checkbook is to set up the necessary accounts.   You can either use the default GnuCash accounts or set up your own. For more detail on how to set up a new account, refer to (?Section 3.3).    For instructions on importing your accounts from another program, refer to (?Section 2.4).
+    </para>
+    <para>
+    Let?s start with the bank accounts you?ll need.   You need one GnuCash bank type account for each physical bank account you wish to track.   If you are setting up your own accounts or using the default GnuCash accounts, make sure that you have an opening balance transaction for each bank account you own.  The easiest way to get this number is to use the balance from your last bank statement as your opening balance.  (???You can enter this in the account information window automatically as part of setup, or you can enter a manual transaction directly in the account.  To enter the transaction manually, enter a transfer from an ?Opening Balances? account (type equity) to the bank account.  ***reword/update this when it becomes part of setup***)
+    </para>
+    <para>
+    The typical bank accounts you might track include:
+    </para>
+    <itemizedlist>
+    <listitem>
+    <para>
+    Checking --- any institutional account that provides check-writing privileges.
+    </para>
+    </listitem>
+    <listitem>
+    <para>
+    Savings --- an interest-bearing institutional account usually used to hold money for a longer term than checking accounts.
+    </para>
+    </listitem>
+    </itemizedlist>
+    <para>
+    Common transactions that affect these bank accounts are payments and deposits.    *Payments* are transfers of money out of the bank account, usually to an expense account.  *Deposits* are transfers of money into the bank account, usually from an income account.  You will need to set up income and expense accounts to track where that money comes from and where it goes.   Remember that a balanced transaction requires a transfer of an equal sum of money from at least one account to at least one other account.   So if you deposit money in your checking account, you must also enter the account that money comes from.  If you pay a bill from your checking account, you must also enter the account where that money goes.
+    </para>
+    <para>
+    The next sections cover specific payment and deposit transactions most often made, such as income deposits, checks, ATM withdrawals, service charges, and transfers of money to/from other bank accounts.
+    </para>
+  </sect1>
+  <sect1 id="entering1">
+  <title>5.2 Entering Deposits (Discussion)</title>
+  <para>
+  Most deposit transactions are entered as a transfer from an income account to a bank account.    Income may come from many sources, and it?s a good idea to set up a separate income type account for each different source.  For example, your income may come mainly from your paychecks,  but you may also receive interest on your savings.  In this case, you should have one income account for salary and another income account for interest income.
+  </para>
+  <para>
+  (?TIP: Be sure to check the ?Tax-Related? box in the Account Information Dialog when you set up taxable income accounts.   Some types of income, such as gift income, may not be considered taxable, so check the appropriate tax rules to determine what is taxable.  For ways to track capital gains income, refer to ?Chapter 7./TIP)
+  </para>
+  <para>
+  Before you start entering paycheck deposits, decide how much detail you want to track.   The basic level of detail is to enter your net pay, just like you would in your paper register.    This is easiest, but you can get even more information out of GnuCash if you enter your gross pay with deductions.  It takes a bit more effort to enter the deductions, but entering your tax withholding information throughout the year allows you to run useful tax status reports in GnuCash at any time.   These reports can help you determine whether you are withholding enough tax, and they can help you estimate your tax bill ahead of time.  If you are unsure about the level of detail, start by entering net pay.  You can always go back and edit your transactions later if you decide you want more detail.
+  </para>
+  <para>
+  For more information on entering transactions in general, refer to (?sections 4.3 and 4.4.)
+  </para>
+  <sect2 id="netpay2">
+  <title>5.2.1 Net Pay (How-To)</title>
+  <para>
+  Net pay is entered as a transfer of an amount of money from an income account to a bank account.
+  (?insert incomedep.png)
+  To enter a net pay transaction, you should:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the bank account register where you want to record a deposit (e.g. Checking).
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  On a blank line, fill in the deposit date and a number or action code (optional).
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  In the Description column, enter a transaction description such as ?Bob?s Salary? and/or the name of the company who is paying you.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  In the Transfer column, type or select the income account for this deposit.  (?NOTE: If you have not yet set up an income account, you can do it from here.  Just type in the name of the account you wish to create, and GnuCash will prompt you through the account setup.)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter your net pay amount in the Deposit column.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record the transaction.
+  </para>
+  </listitem>
+  </orderedlist>
+  <para>
+  GnuCash will automatically update your account balance to reflect an increase in the bank balance.
+  </para>
+  </sect2>
+  <sect2 id="grosspay2">
+  <title>5.2.2 Gross Pay (How-To)</title>
+  <para>
+  Gross Pay is entered as a transfer of money from an income account to multiple other accounts, so you will have to enter a multi-split transaction (see ? section 4.4).   The easiest way to enter this is to enter the deductions in the same order that they appear on your paycheck.
+  </para>
+  <para>
+  You will be splitting the income transfer between several expense type accounts and your bank account(s).  Typical expense accounts you will need include:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Income Tax
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Social Security
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Medicare
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Health Insurance
+  </para>
+  </listitem>
+  </orderedlist>
+  <para>
+  If you also contribute to a 401(k) or other retirement account through your employer, you should set up a bank type account for this type of deduction.   Similarly, if you track contributions to an employee stock purchase plan, set up a bank type account for your purchase plan.  More detail on tracking these and other investments is given in (?Chapter 7.)
+
+(?insert grossdep.png)
+  </para>
+  <para>
+  To enter a gross pay transaction:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Enter the date, optional number, and transaction description
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Click the Split button in the tool bar.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  The first split affects the current account, which is already filled in for you. On the first split line, enter an action code (optional) and a memo for the deposit.  Tab to the deposit column and enter your *net* pay---the amount being deposited in this bank account.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Now start entering your deductions.  Tab to the next split line and enter an optional action and memo for the first deduction.  Enter the account name for that deduction (e.g. FedTax) and enter the deduction amount under Deposit.  Continue entering additional deposit splits for your remaining deductions.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  When you have finished entering your deductions, tab to the next split line.  The amount appearing in the Withdrawal column is the total of your net pay plus deductions you have entered, and this total should equal your gross pay amount.   (If it does not, check to see that you have entered all of the deductions as shown on your pay stub.)  Fill in the optional action and memo, and select the income account for gross pay.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record this transaction.
+  </para>
+  </listitem>
+  </orderedlist>
+  </sect2>
+  <sect2 id="interest2">
+  <title>5.2.3 Interest Income (How-To)</title>
+  <para>
+  (???You typically will not enter interest income until you receive your bank statement, so the easiest way to enter this transaction is from the Reconcile dialog, as part of your statement reconciliation.  ***Discuss this more when this feature is added to reconcile.***)
+  </para>
+  <para>
+  To enter interest income, first create a separate income account for interest income.  To record interest paid to you,  enter this transaction as a transfer from the interest income account to the bank account.  This transaction is similar to the net pay one described in (?section 5.2.1.) , so refer to that section for more detail.
+  </para>
+  </sect2>
+  <sect2 id="other2">
+  <title>5.2.4 Other (Non-Income) Deposits (How-To)</title>
+  <para>
+  You may have other deposits that are not income, such as transfers of money in from other bank accounts, refunds on a purchase, or reimbursement for a work expense.
+  </para>
+  <para>
+  Transfers of money in from any other type of account are handled in the same manner as the other deposits we have covered:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the account receiving the deposit (e.g. checking)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter the date, number or action (optional), and description of the transaction.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If only one other account is involved in the transfer, enter the transfer account---in this case, enter the account you are transferring *from*.  For example, if it is a transfer from another bank account, select that bank account name.  If it is a refund or reimbursement on a purchase, select the expense account that you initially used to make the purchase.  Enter the deposit amount and skip to (?step 5).
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If more than one other account is involved in the transfer, click the Split button.  Tab to the first split and enter a memo and the total amount of the deposit being made.  Tab to the second split and begin entering the checks you are depositing or transfers you are making to the current account.  For each split, enter a transfer *from* account in the Account column, and enter the amounts being transferred in the Withdrawal column.  When you are finished entering your splits, the total of deposit splits should equal the total of withdrawal splits.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record the transaction.
+
+(?insert multdep.png)
+  </para>
+  </listitem>
+  </orderedlist>
+  </sect2>
+  </sect1>
+  <sect1 id="withdrawals1">
+  <title>5.3 Entering Withdrawals (Discussion)</title>
+  <para>
+  When you withdraw money from your bank account, for whatever reason, you are transferring money from your bank account to some other location.   In GnuCash, this other location is tracked as an account.   The more detailed accounts you create and use for your spending, the more information you will get about where your money goes.
+  </para>
+  <para>
+  Withdrawals take many forms.  ATM withdrawals are one of the most common transactions. Writing checks is one way to withdraw money to pay bills, to buy purchases, or to give to charity.  Depending on your bank, you might also have service charges, where the bank withdraws the money from your account.  Transfers of money out to another account are also withdrawals.  We will take a look at each of these types of withdrawals and how to record them in GnuCash.
+  </para>
+  <sect2 id="checkpay2">
+  <title>5.3.1 Check Payments (How-To)</title>
+  <para>
+  When you write a check, you are usually transferring money from your checking account to an expense.   Paying a bill, renewing a subscription, contributing to a charity and buying groceries are some common uses for checks.
+  </para>
+  <para>
+  To enter a check payment:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the checking account
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter a date, a check number and the payee (e.g. ABC Grocery Store) or a description of the transaction.  (?NOTE:  You can use the ?+? and ?-? keys to increment and decrement the check number while your cursor is in the Num field.)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If only one other account is involved (e.g. Groceries expense), enter that account name in the Transfer column.  If more accounts are involved, click the Split button instead of entering a transfer account.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If you entered a transfer account, Tab to the Withdrawal column and enter the amount.  Press Enter to record the transaction.
+(?insert check.png)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If you clicked the Split button, Tab to the first split, which affects the checking account.  Enter an optional action and memo, then enter the amount of the check in the Withdrawal column.  In this transaction, you are transferring money *from* checking *to* multiple other accounts.  For each other account involved in this transaction, enter a split and a deposit amount.  When you have finished entering your splits, the total deposits to other accounts should equal your total withdrawal from the checking account for this transaction. Press Enter to record the transaction.
+
+
+(?insert checkmult.png)
+  </para>
+  </listitem>
+  </orderedlist>
+  </sect2>
+  <sect2 id="atm2">
+  <title>5.3.2  ATM/Cash Withdrawals (Discussion, How-To)</title>
+  <para>
+  Cash withdrawals are handled as a transfer from a bank account to a cash account.  GnuCash provides special cash type accounts for tracking your cash purchases, so you should set up a cash account  to record your ATM and other cash withdrawals.
+  </para>
+  <para>
+  Cash accounts can be used for different levels of detail.  On a basic level of detail, you simply transfer money to it from your checking account.  That tells you how much money you took out of checking on a given day, but it doesn?t tell you where that cash was spent.    With a little more effort, you can use the cash account to record your cash purchases as well, so that you can see where that cash went.   You record these purchases as a transfer from the cash account to expense accounts.
+  </para>
+  <para>
+  Some people record every cash purchase, but this takes a lot of work.  An easier way is to record the purchases for which you have receipts, but then adjust the balance of the account to match what is in your wallet.  (?Section 5.6) explains how to adjust a cash account  balance.
+  </para>
+  <para>
+  It?s a good idea to at least set up a cash account for your withdrawals.  Then if you decide to track where your cash goes, you can enter transactions for the money you spend.  You determine what level of detail you want to use.
+  </para>
+  <para>
+  To enter an ATM or other cash withdrawal:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  On a blank line of the checking register, enter the date and an optional number or type (such as ATM) for your transaction.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter a description of the transaction, such as ?Cash withdrawal.? 
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  For the Transfer account, select or enter the name of your cash account.  This is the account you are transferring money *to*.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter the amount of the withdrawal in the Withdrawal column.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record the transaction.
+
+(?insert cashwd.png)
+  </para>
+  </listitem>
+  </orderedlist>
+  <para>
+  This is the basic transaction showing the money that you withdrew from your checking account.
+  </para>
+  <para>
+  At a little more detailed level, you can track where that money goes from the cash account.  To enter a cash purchase:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the cash account register.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  On a blank line, enter the date and a transaction number or type (optional), such as ?ATM.?
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter the payee name or transaction description in the Description column.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Select the accounr for your purchase in the Transfer column.  This is the account that you are transferring money *to.*  So if you pay cash for groceries, your transaction transfers money from the cash account to the groceries account.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter the amount under the Spend column.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record the transaction.
+(?insert cashpurch.png)
+  </para>
+  </listitem>
+  </orderedlist>
+  <para>
+  Now you have a more complete record of where your cash went.
+  </para>
+  </sect2>
+  <sect2 id="service2">
+  <title>5.3.3  Service Charges (How-To)</title>
+  <para>
+  (???You typically will not enter service charges until you receive your bank statement, so the easiest way to enter this transaction is from the Reconcile dialog, as part of your statement reconciliation.  ***Discuss this more when this feature is added to reconcile.***)
+  </para>
+  <para>
+  To enter a service charge, first create an expense type account for service charges.  To record service charges taken from your bank account,  enter this transaction as a transfer from the bank account to the service charge expense account.
+  </para>
+  </sect2>
+  <sect2 id="otherwith2">
+  <title>5.3.4  Other Withdrawals (How-To)</title>
+  <para>
+  You may have other types of withdrawals, such as transfers of money from your bank account to another account and automatic payment of bills.
+  </para>
+  <para>
+  Transfers of money out to any other type of account are handled in the same manner as the other withdrawals we have covered:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the account from which money is being transferred (e.g. checking)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter the date, number or type (optional), and description of the transaction.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If only one other account is involved in the transfer, enter the transfer account---in this case, enter the account you are transferring *to*.  For example, if it is a transfer to another bank account, select that bank account name.  If it is an automatic payment, select the account receiving that payment.  Enter the withdrawal amount and skip to (?step 5).
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  If more than one other account is involved in the transfer, click the Split button.  Tab to the first split and enter a memo and the total amount of the withdrawal being made.  Tab to the second split and begin entering the transfers you are making out of the current account.   For each split, enter a transfer *to* account in the Account column, and enter the amounts being transferred in the Deposit column.  When you are finished entering your splits, the total of deposit splits should equal the total of withdrawal splits.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record the transaction.
+  </para>
+  </listitem>
+  </orderedlist>
+  </sect2>
+  </sect1>
+  <sect1 id="printcheck1">
+  <title>5.4 Printing Checks (How-To)</title>
+  <para>
+  (???Document this when feature is completed...)
+  </para>
+  </sect1>
+  <sect1 id="reconcile1">
+  <title>5.5 Reconciling your Accounts (Discussion)</title>
+  <para>
+  GnuCash makes reconciliation of your bank account with your monthly bank statement much easier.    (?Section 4.6) gives instructions on how to reconcile your transactions with the monthly  bank statement.    This is the main reconciliation task that should be done every month.
+  </para>
+  <para>
+  But what about all those other accounts you created?  Should those be reconciled too?  If you receive a statement for the account, then you should consider reconciling that account.  Examples include the checking account statement, the savings account statement, and the credit card statement.  Credit card statements and credit card transactions are covered in the next (?chapter), so if you are interested in tracking your credit cards in GnuCash, take a look at the instructions provided there.
+  </para>
+  <para>
+  Income and expense accounts are usually not reconciled, because there is no statement to check them against.   You also don?t need to reconcile cash accounts, for the same reason.    With a cash account, though, you might want to adjust the balance every once in a while, so that your actual cash on hand matches the balance in your cash account.  Adjusting balances is covered in the next section.
+  </para>
+  </sect1>
+  <sect1 id="adjust1">
+  <title>5.6 Adjusting the Balance (How-To)</title>
+  <para>
+  If you are tracking your cash purchases in a cash account, you may occasionally want to adjust your cash account balance so that it matches the amount of cash you have on hand.  The easiest way to do this is to enter an adjusting transaction that transfers money from the cash account to an expense account that you want to use for adjustments:
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the account you wish to adjust (in this case, the cash account).
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Enter the date and a description of the adjusting transaction.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  In the Transfer column, enter the account you want to use for adjustments (e.g. Misc. expense).
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  In the Spend column, use GnuCash?s built-in calculator to get the adjustment amount.  Enter the current account balance minus the amount of actual cash-on-hand like this:  "100-50?.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Press Enter to record the transaction.  Note that GnuCash calculates the adjustment amount and updates the balance to match your actual cash-on-hand.
+  </para>
+  </listitem>
+  </orderedlist>
+  <para>
+  You can follow the same procedures for adjusting the balance of your bank accounts if you wish, but it is generally a better idea to reconcile bank accounts to a bank statement, so that you can find any errors and correct them.
+  </para>
+  </sect1>
+  <sect1 id="checktogether1">
+  <title>5.7 Putting It All Together (Examples of entering a transfer of money in from savings, a check for groceries, an ATM withdrawal, a service charge; then reconciling to a statement)</title>
+  <para>
+  In (?Chapter 4), you entered some transactions in your checking account.  In this chapter, we will add more transactions and then reconcile them.  So, let?s get started by opening the (?gcashdata) file you saved in the last chapter.  Your chart of accounts should look like this:
+(?insert chartaccts2.png)
+  </para>
+  <orderedlist>
+  <listitem>
+  <para>
+  Open the Savings account and enter an opening balance transaction for $1000.  To do this, you will enter the transfer account as ?Opening Balances? and the $1000 in the Deposit column:
+(?insert savings.png)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Now open the Checking account from the main window.  In the last chapter, you entered some paycheck transactions as deposits into Checking.  Now we will enter another kind of deposit---a transfer of money from Savings into Checking.  On a blank line, enter a transaction to transfer $500 from Savings to Checking.  Your Transfer account will be Savings, since you are in the Checking account.   Your Checking account should now look like this:
+(?insert transferin.png)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Now let?s write some checks on this account.  First, write a check to ?HomeTown Grocery? for $75.  Your transfer account is ?Groceries,? since all of this money is going to buy groceries.  Next, write a check to ?ABC Hardware? for $100, and split this amount between two expenses: ?Household? ($50) and "Tools? ($50).  You will need to create an expense type account for each of these, then enter splits for them.  Your checking account should now look like this;
+
+(?insert checkexamp.png)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Suppose you now need to withdraw some money.   You don?t have a cash account set up in your chart of accounts, so you will need to create one.  Create the account as ?Cash? as a top-level account of type cash.  From your Checking account register, enter an ATM type withdrawal to transfer $100 from Checking to Cash.
+(?insert ATM.png)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Now we are ready to reconcile this Checking account, using this sample bank statement:
+(?insert a picture of a sample bank statement here)
+  </para>
+  <para>
+  Select Account|Reconcile... from the menu, and fill in the Closing balance as (?$2620).  Click OK to begin reconciling the account.  Check off the entries as they appear on the sample statement.  When you have checked off all your entries, the reconcile window should look like this:
+
+(?insert reconexamp.png)
+  </para>
+  <para>
+  Notice that your reconciled balance differs from your ending balance by $5.00.  If you look at the sample bank statement, you will see there is a $5.00 service charge that has not been added to your Checking account.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  So click on the Checking register and add the $5.00 service charge to your Checking account.  On a blank line of the Checking register, enter a transaction to transfer $5.00 from Checking to a ?Service Charges? account.  ( You will need to create the ?Service Charges? account as type expense.)  Use the transaction date printed on the sample statement as the date you enter for this transaction.  Your Checking account should now look like this:
+(?insert servch.png)
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Click back on the Reconcile window, and you should see the service charge now under ?Funds Out.?  Click on it to mark it as reconciled, and note that the difference amount below now becomes "0.00.?  Click the Finish button on the tool bar to complete the reconciliation.   The Reconcile (?R?) column in your Checking register should now show ?y? for each transaction you just reconciled.
+  </para>
+  </listitem>
+  <listitem>
+  <para>
+  Go back to the main window and save your file.  Your chart of accounts is steadily growing, and it should now look like this:
+
+(?insert chartaccts3.png)
+  </para>
+  </listitem>
+  </orderedlist>
+  <para>
+  Notice that you have not yet used one of the accounts listed in your chart, the ?Credit Card? account.  Now that you know how to keep track of your bank and cash accounts in GnuCash, you may want to start tracking your credit cards as well.  GnuCash provides a special type of account for credit cards, and this is discussed in the next chapter.
+  </para>
+  </sect1>
+ </chapter>
+</book>
