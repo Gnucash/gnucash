@@ -15,11 +15,15 @@ AM_CFLAGS = \
   ${GNOME_PRINT_CFLAGS}
 
 libgncmod_report_gnome_la_SOURCES = \
+  dialog-column-view.c \
+  dialog-style-sheet.c \
   gncmod-report-gnome.c \
   window-report.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
+  dialog-column-view.h \
+  dialog-style-sheet.h \
   window-report.h
 
 libgncmod_report_gnome_la_LDFLAGS = -module
@@ -44,8 +48,12 @@ gncmod_DATA = report-gnome.scm
 
 noinst_DATA = .scm-links
 
+gladedir = $(GNC_GLADE_DIR)
+glade_DATA = report.glade
+
 EXTRA_DIST = \
   .cvsignore \
+  ${glade_DATA} \
   ${gwmod_DATA} \
   ${gncmod_DATA}
 
@@ -53,6 +61,7 @@ EXTRA_DIST = \
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+	ln -sf . report 
 	touch .scm-links
 
 gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: .scm-links gw-report-gnome-spec.scm
@@ -66,4 +75,4 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: .scm-links gw-report-gn
 
 BUILT_SOURCES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h
 CLEANFILES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h \
-             gw-report-gnome.html gnucash g-wrapped .scm-links
+             gw-report-gnome.html gnucash g-wrapped report .scm-links

@@ -44,6 +44,8 @@
    mod
    (lambda (client-only?)
      (list
+      "#include <dialog-column-view.h>\n"
+      "#include <dialog-style-sheet.h>\n"
       "#include <window-report.h>\n")))
 
   (let ((nnt (gw:wrap-non-native-type
@@ -91,4 +93,36 @@
    "gnc_report_raise_editor"
    '((<gw:scm> report))
    "Raise the report's editor window")
+
+  (gw:wrap-function
+   mod
+   'gnc:main-window-open-report
+   '<gw:void>
+   "gnc_main_window_open_report"
+   '((<gw:int> report-id) (<gw:bool> top-level))
+   "Show report window")
+
+  (gw:wrap-function
+   mod
+   'gnc:default-options-editor
+   '<gnc:UIWidget>
+   "gnc_report_window_default_params_editor"
+   '((<gw:scm> options) (<gw:scm> report))
+   "Default options editor window for reports")
+
+  (gw:wrap-function
+   mod
+   'gnc:style-sheet-dialog-open
+   '<gw:void>
+   "gnc_style_sheet_dialog_open"
+   '()
+   "Show the style sheet editor window.")
+
+  (gw:wrap-function
+   mod
+   'gnc:column-view-edit-options
+   '<gnc:UIWidget>
+   "gnc_column_view_edit_options"
+   '((<gw:scm> options) (<gw:scm> view))
+   "Create an editor for a column-view options object")
   )

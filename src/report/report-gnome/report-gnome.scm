@@ -16,6 +16,11 @@
 
 (export gnc:report-edit-options)
 
+(define (gnc:report-options-editor report) 
+  (if (equal? (gnc:report-type report) "Multicolumn View")
+      gnc:column-view-edit-options
+      gnc:default-options-editor))
+
 (define (gnc:report-edit-options report) 
   (let* ((editor-widg (gnc:report-editor-widget report)))
     (if editor-widg
