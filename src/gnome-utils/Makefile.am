@@ -40,7 +40,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-menu-extensions.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
-  print-session.c
+  print-session.c \
+  window-help.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -63,7 +64,8 @@ gncinclude_HEADERS = \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
   gtkselect.h \
-  print-session.h
+  print-session.h \
+  window-help.h
 
 noinst_HEADERS = \
   gnc-dir.h
@@ -84,7 +86,8 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${DB_LIBS}
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
 libgw_gnome_utils_la_LDFLAGS = -module
