@@ -57,6 +57,16 @@
       (gnc:html-table-set-num-rows-internal!
        t1 (length (gnc:html-table-data t1)))))
       
+  (define (accountlist-get-comm-balance-at-date accountlist date)
+    (let ((collector (gnc:make-commodity-collector)))
+      (for-each (lambda (account)
+		  (let ((balance 
+			(gnc:account-get-comm-balance-at-date 
+			 account date #f)))
+		    (collector 'merge balance #f)))
+		accountlist)
+      collector))
+		  
   ;; options generator
   (define (balance-sheet-options-generator)
     (let ((options (gnc:new-options)))
@@ -80,7 +90,7 @@
        (lambda ()
 	 (gnc:filter-accountlist-type 
 	  '(bank cash credit asset liability stock mutual-fund currency
-            equity )
+            equity income expense)
 	  (gnc:group-get-account-list (gnc:get-current-group)))))
 
       ;; with or without grouping
@@ -117,7 +127,7 @@
                         (list (if first-row
                                   (begin 
                                     (set! first-row #f)
-                                    (_ "Retained Earnings"))
+                                    (_ "Net Profit"))
                                   " ")
                               (gnc:make-gnc-monetary
                                commodity amount))))
@@ -129,7 +139,7 @@
 				   
 
     (define (add-subtotal-line
-             table total show-fcur? exchange-fn report-commodity)
+             table label total show-fcur? exchange-fn report-commodity)
       (if show-fcur?
 	  (let ((first-row #t))
 	    (total 'format
@@ -138,13 +148,13 @@
                       (list (if first-row
                                 (begin 
                                   (set! first-row #f)
-                                  (_ "Total Equity"))
+                                  label)
                                 " ")
                             (gnc:make-gnc-monetary
                              commodity amount))))
 		   #f))
 	  (gnc:html-table-append-row!
-           table (list (_ "Total Equity") 
+           table (list label
                        (gnc:sum-collector-commodity 
                         total report-commodity exchange-fn)))))
 
@@ -167,6 +177,11 @@
 	    (gnc:filter-accountlist-type
 	     '(equity)
 	     accounts))
+	   (income-expense-accounts
+	    (gnc:filter-accountlist-type
+	     '(income expense)
+	     accounts))
+	 
 ;	   (do-grouping? (get-option pagename-accounts
 ;				     optname-group-accounts))
 	   (do-subtotals? (get-option pagename-accounts
@@ -193,7 +208,8 @@
 				 (+ (gnc:get-current-group-depth) 
 				    (if do-grouping? 1 0))
 				 display-depth))
-		 ;; calculate the exchange rates
+		 ;; calculate the exchange rates  
+		 
 		 (exchange-alist (gnc:make-exchange-alist 
 				  report-currency to-date-tp))
 		 (exchange-fn (gnc:make-exchange-function exchange-alist))
@@ -209,8 +225,15 @@
 		 (equity-balance
 		  (gnc:accounts-get-comm-total-assets 
 		   equity-accounts my-get-balance))
+		 (sign-reversed-liability-balance
+		  (gnc:make-commodity-collector))
+		 (neg-retained-profit-balance 
+		  (accountlist-get-comm-balance-at-date
+		   income-expense-accounts
+		   to-date-tp))
 		 (retained-profit-balance (gnc:make-commodity-collector))
-		 (calc-equity-balance (gnc:make-commodity-collector))
+		 (total-equity-balance (gnc:make-commodity-collector))
+		 (equity-plus-liability (gnc:make-commodity-collector))
 
 		 ;; do the processing here
 		 (asset-table (gnc:html-build-acct-table 
@@ -227,8 +250,7 @@
 			tree-depth
 			show-subaccts?
 			liability-accounts
-			#f
-			#t
+			#f #f
 			gnc:accounts-get-comm-total-assets
 			(_ "Liabilities") #f #f
 			show-fcur? report-currency exchange-fn))
@@ -243,41 +265,52 @@
 		   gnc:accounts-get-comm-total-assets
 		   (_ "Equity") #f #f
 		   show-fcur? report-currency exchange-fn)))
-	    (retained-profit-balance 'merge
-				     asset-balance
+	    (retained-profit-balance 'minusmerge
+				     neg-retained-profit-balance
 				     #f)
-	    (retained-profit-balance 'merge
-			       liability-balance
-			       #f)
-	    (retained-profit-balance 'merge
-			       equity-balance
-			       #f)
-	    (calc-equity-balance 'merge
-				 asset-balance 
-				 #f)
-	    (calc-equity-balance 'merge
-				 liability-balance
-				 #f)
+	    (total-equity-balance 'minusmerge equity-balance #f)
+	    (total-equity-balance 'merge
+				  retained-profit-balance
+				  #f)
+	    (equity-plus-liability 'merge
+				   sign-reversed-liability-balance
+				   #f)
+	    (equity-plus-liability 'merge
+				   total-equity-balance
+				   #f)
+				  
+			       
+	    (sign-reversed-liability-balance 'minusmerge
+					     liability-balance
+					     #f)
 	    
 	    ;; add the tables
 	    (gnc:html-table-prepend-row! asset-table (list "Assets"))	    
 	    (gnc:html-table-append-row! asset-table (list "Liabilities"))
 	    (html-table-merge asset-table liability-table)
+	    (add-subtotal-line
+	     asset-table "Liabilities" 
+	     sign-reversed-liability-balance show-fcur? exchange-fn
+	     report-currency)
 	    (gnc:html-table-append-row! asset-table (list "Equity"))
 	    (html-table-merge asset-table equity-table)
 	    (add-retained-profits-line
              asset-table retained-profit-balance
              show-fcur? exchange-fn report-currency)
 	    (add-subtotal-line
-             asset-table calc-equity-balance show-fcur?
+             asset-table "Equity" total-equity-balance show-fcur?
              exchange-fn report-currency)
+	    (add-subtotal-line
+	     asset-table "Liabilities & Equity" equity-plus-liability
+	     show-fcur? exchange-fn report-currency)
 	    (gnc:html-document-add-object! doc asset-table)
-
+;	    (gnc:free-account-group income-expense-accounts-group)
 	    ;; add currency information
-	    (gnc:html-document-add-object! 
-	     doc ;;(gnc:html-markup-p
-	     (gnc:html-make-exchangerates 
-	      report-currency exchange-alist accounts #f)))
+;	    (gnc:html-document-add-object! 
+;	     doc ;;(gnc:html-markup-p
+;	     (gnc:html-make-exchangerates 
+;	      report-currency exchange-alist accounts #f)))
+)
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))
