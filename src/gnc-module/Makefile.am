@@ -14,9 +14,8 @@ libgncmodule_la_LIBADD = \
   -lltdl
 
 libgw_gnc_module_la_SOURCES = gw-gnc-module.c
-libgw_gnc_module_la_DEPENDENCIES = libgncmodule.la
 libgw_gnc_module_la_LDFLAGS = -module 
-libgw_gnc_module_la_LIBADD = \
+libgw_gnc_module_la_LIBADD = libgncmodule.la \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   ${GUILE_LIBS}

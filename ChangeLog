@@ -1,3 +1,8 @@
+2001-11-13  Robert Graham Merkel <rgmerk@mira.net>
+
+	* src/gnc-module/Makefile.am: libgw-gnc-module.la needs 
+          to be linked to libgncmodule.la
+
 2001-11-12  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/gnome/Makefile.am (noinst_HEADERS): add gw-gnc.h.
