@@ -57,6 +57,37 @@
 
 /* --------------------------------------------------------- */
 
+#define EXPERIMENTAL_ARRAY_SUPPORT
+#ifdef EXPERIMENTAL_ARRAY_SUPPORT
+
+// Creates a new perl array and puts 
+%typemap(perl5,out) SplitList * {
+    AV *myav;
+    SV **svs;
+    int i = 0,len = 0;
+    GList *node;
+
+    /* Figure out how many elements we have */
+    for (node=$source; node; node=node->next) { len++; }
+
+printf ("duude got a split list !!! length=%d \n", len);
+
+    svs = (SV **) malloc(len*sizeof(SV *));
+    for (i=0, node=$source; node; node=node->next, i++) 
+    { 
+        svs[i] = sv_newmortal();
+        sv_setref_pv (svs[i], "SplitPtr", node);
+    };
+    myav = av_make(len,svs);
+    free(svs);
+    $target = newRV((SV*)myav);
+    sv_2mortal($target);
+
+}
+#endif
+
+/* --------------------------------------------------------- */
+
 #ifdef DOESNT_WORK_DONT_KNOW_WHY
 // well, this sort of works ... it does create an array,
 // but it doesn't seem to be an array of SplitPtr,

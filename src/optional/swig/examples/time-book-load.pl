@@ -16,25 +16,27 @@ die "Usage: $0 <filename>" if $#ARGV < 0;
 print "Will load $ARGV[0]\n";
 
 gnucash::gnc_engine_init(0, $ARGV);
-$session = gnucash::gnc_book_new ();
+$session = gnc_session_new();
 
-$rc = gnucash::gnc_book_begin ($session, $ARGV[0], 1, 0);
+$rc = gnucash::gnc_session_begin ($session, $ARGV[0], 1, 0);
 if ($rc != 1) 
 {
-   $err = gnucash::gnc_book_get_error ($session);
+   $err = gnucash::gnc_session_get_error ($session);
    print "Could not find $ARGV[0], errrocode=$err\n";
 }
 
 $secs = time;
 
-$rc = gnucash::gnc_book_load ($session);
+$rc = gnucash::gnc_session_load ($session);
 die "Could not load $ARGV[0]\n" if $rc != 1;
 
 ($user,$sys,$cuser,$csys) = times;
 $elapsed = time() - $secs;
 print "time to load: user-cpu=$user sys-cpu=$sys elapsed(rounded to sec)=$elapsed\n";
 
-$grp = gnucash::gnc_book_get_group ($session);
+$book = gnc_session_get_book ($session);
+$grp = gnucash::gnc_book_get_group ($book);
+
 $numacc = gnucash::xaccGroupGetNumAccounts ($grp);
 print "Loaded $numacc accounts\n\n";
 
@@ -49,7 +51,8 @@ for ($i=0; $i<$numacc; $i++) {
 $fsecs = time;
 ($user,$sys,$cuser,$csys) = times;
 
-gnucash::gnc_book_end ($session);
+gnucash::gnc_book_destroy ($book);
+gnucash::gnc_session_destroy ($session);
 
 ($fuser,$fsys,$cuser,$csys) = times;
 $elapsed = time() - $secs;

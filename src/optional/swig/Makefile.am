@@ -40,7 +40,7 @@ AM_CFLAGS = \
 
 libgncswig_la_LIBADD = \
   -L${prefix}/lib/gnucash \
-  -lgncmod-engine -lxml \
+  -lgncmod-engine \
   ${GLIB_LIBS} 
 
 

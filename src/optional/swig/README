@@ -16,3 +16,19 @@ leaked memory like a sieve. (RLB)
 ./examples contains whatever examples we've accumulated to date.
 
 ----------------------
+
+Broken-ness:
+As of gnucash-1.7.x (november 2001) things got broken, because the 
+module design requires that the engine be linked to scheme.  The engine
+should not be linked to scheme.  The things that are broken are:
+
+-- gnc-book.c, line 79,  
+   book->commodity_table = gnc_engine_commodity_table_new ();
+   The commodity table initializer runs scheme code.  But it only needs
+   to do this to load a set of initial currencies; this could be 
+   done without scheme.
+
+-- gnc-session.c, line 219
+   mod = gnc_module_load(mod_name, 0);
+   loads te backend based on the backend name.  Not sure why guile
+   is needed, a simple dlopen should have sufficed.
